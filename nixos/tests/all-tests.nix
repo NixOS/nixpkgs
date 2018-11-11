@@ -21,15 +21,15 @@ let
     else {};
 in
 {
-  acme = handleTest ./acme.nix {};
+  acme = handleTestOn ["x86_64-linux"] ./acme.nix {};
   atd = handleTest ./atd.nix {};
   avahi = handleTest ./avahi.nix {};
-  bcachefs = handleTest ./bcachefs.nix {};
-  beegfs = handleTest ./beegfs.nix {};
+  bcachefs = handleTestOn ["x86_64-linux"] ./bcachefs.nix {}; # linux-4.18.2018.10.12 is unsupported on aarch64
+  beegfs = handleTestOn ["x86_64-linux"] ./beegfs.nix {}; # beegfs is unsupported on aarch64
   bind = handleTest ./bind.nix {};
   bittorrent = handleTest ./bittorrent.nix {};
   #blivet = handleTest ./blivet.nix {};   # broken since 2017-07024
-  boot = handleTest ./boot.nix {};
+  boot = handleTestOn ["x86_64-linux"] ./boot.nix {}; # syslinux is unsupported on aarch64
   boot-stage1 = handleTest ./boot-stage1.nix {};
   borgbackup = handleTest ./borgbackup.nix {};
   buildbot = handleTest ./buildbot.nix {};
@@ -51,7 +51,7 @@ in
   containers-physical_interfaces = handleTest ./containers-physical_interfaces.nix {};
   containers-restart_networking = handleTest ./containers-restart_networking.nix {};
   containers-tmpfs = handleTest ./containers-tmpfs.nix {};
-  couchdb = handleTest ./couchdb.nix {};
+  #couchdb = handleTest ./couchdb.nix {}; # spidermonkey-1.8.5 is marked as broken
   deluge = handleTest ./deluge.nix {};
   dhparams = handleTest ./dhparams.nix {};
   dnscrypt-proxy = handleTestOn ["x86_64-linux"] ./dnscrypt-proxy.nix {};
@@ -74,14 +74,14 @@ in
   firewall = handleTest ./firewall.nix {};
   flatpak = handleTest ./flatpak.nix {};
   fsck = handleTest ./fsck.nix {};
-  fwupd = handleTest ./fwupd.nix {};
+  fwupd = handleTestOn ["x86_64-linux"] ./fwupd.nix {}; # libsmbios is unsupported on aarch64
   gdk-pixbuf = handleTest ./gdk-pixbuf.nix {};
   gitea = handleTest ./gitea.nix {};
   gitlab = handleTest ./gitlab.nix {};
   gitolite = handleTest ./gitolite.nix {};
   gjs = handleTest ./gjs.nix {};
-  gnome3 = handleTest ./gnome3.nix {};
-  gnome3-gdm = handleTest ./gnome3-gdm.nix {};
+  gnome3 = handleTestOn ["x86_64-linux"] ./gnome3.nix {}; # libsmbios is unsupported on aarch64
+  gnome3-gdm = handleTestOn ["x86_64-linux"] ./gnome3-gdm.nix {}; # libsmbios is unsupported on aarch64
   gocd-agent = handleTest ./gocd-agent.nix {};
   gocd-server = handleTest ./gocd-server.nix {};
   grafana = handleTest ./grafana.nix {};
@@ -89,7 +89,7 @@ in
   hadoop.hdfs = handleTestOn [ "x86_64-linux" ] ./hadoop/hdfs.nix {};
   hadoop.yarn = handleTestOn [ "x86_64-linux" ] ./hadoop/yarn.nix {};
   haproxy = handleTest ./haproxy.nix {};
-  hardened = handleTest ./hardened.nix {};
+  #hardened = handleTest ./hardened.nix {}; # broken due useSandbox = true
   hibernate = handleTest ./hibernate.nix {};
   hitch = handleTest ./hitch {};
   hocker-fetchdocker = handleTest ./hocker-fetchdocker {};
