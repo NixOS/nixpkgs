@@ -136,9 +136,9 @@ rec {
         --prefix PATH : "$out/libexec/docker:$extraPath"
 
       # docker uses containerd now
-      ln -s ${docker-containerd}/bin/containerd $out/libexec/docker/docker-containerd
-      ln -s ${docker-containerd}/bin/containerd-shim $out/libexec/docker/docker-containerd-shim
-      ln -s ${docker-runc}/bin/runc $out/libexec/docker/docker-runc
+      ln -s ${docker-containerd}/bin/containerd $out/libexec/docker/containerd
+      ln -s ${docker-containerd}/bin/containerd-shim $out/libexec/docker/containerd-shim
+      ln -s ${docker-runc}/bin/runc $out/libexec/docker/runc
       ln -s ${docker-proxy}/bin/docker-proxy $out/libexec/docker/docker-proxy
       ln -s ${docker-tini}/bin/tini-static $out/libexec/docker/docker-init
 
