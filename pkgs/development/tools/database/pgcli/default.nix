@@ -1,26 +1,24 @@
 { lib, pythonPackages, fetchFromGitHub }:
 
 pythonPackages.buildPythonApplication rec {
-  name = "pgcli-${version}";
-  version = "1.11.0";
+  pname = "pgcli";
+  version = "2.0.0";
 
-  src = fetchFromGitHub {
-    owner = "dbcli";
-    repo = "pgcli";
-    rev = "v${version}";
-    sha256 = "01qcvl0iwabinq3sb4340js8v3sbwkbxi64sg4xy76wj8xr6kgsk";
+  src = pythonPackages.fetchPypi {
+    inherit pname version;
+    sha256 = "085fna5nc72nfj1gw0m4ia6wzayinqaffmjy3ajldha1727vqwzi";
   };
 
-  buildInputs = with pythonPackages; [ pytest mock ];
-  checkPhase = ''
-    mkdir /tmp/homeless-shelter
-    HOME=/tmp/homeless-shelter py.test tests -k 'not test_missing_rc_dir and not test_quoted_db_uri and not test_port_db_uri'
-  '';
-
   propagatedBuildInputs = with pythonPackages; [
-    cli-helpers click configobj humanize prompt_toolkit psycopg2
+    cli-helpers click configobj humanize prompt_toolkit_2 psycopg2
     pygments sqlparse pgspecial setproctitle keyring
   ];
+
+  checkInputs = with pythonPackages; [ pytest mock ];
+
+  checkPhase = ''
+    py.test
+  '';
 
   meta = with lib; {
     description = "Command-line interface for PostgreSQL";

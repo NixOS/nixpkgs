@@ -1754,6 +1754,11 @@
     email = "t@larkery.com";
     name = "Tom Hinton";
   };
+  hlolli = {
+    email = "hlolli@gmail.com";
+    github = "hlolli";
+    name = "Hlodver Sigurdsson";
+  };
   hodapp = {
     email = "hodapp87@gmail.com";
     github = "Hodapp87";
@@ -2685,6 +2690,11 @@
     email = "melanie.bianca.sigl@gmail.com";
     github = "melsigl";
     name = "Melanie B. Sigl";
+  };
+  melkor333 = {
+    email = "samuel@ton-kunst.ch";
+    github = "melkor333";
+    name = "Samuel Ruprecht";
   };
   metabar = {
     email = "softs@metabarcoding.org";

@@ -362,6 +362,8 @@ in {
 
   gidgethub = callPackage ../development/python-modules/gidgethub { };
 
+  gin-config = callPackage ../development/python-modules/gin-config { };
+
   globus-sdk = callPackage ../development/python-modules/globus-sdk { };
 
   goocalendar = callPackage ../development/python-modules/goocalendar { };
@@ -1148,6 +1150,8 @@ in {
 
   click-plugins = callPackage ../development/python-modules/click-plugins {};
 
+  click-repl = callPackage ../development/python-modules/click-repl { };
+
   click-threading = callPackage ../development/python-modules/click-threading {};
 
   cligj = callPackage ../development/python-modules/cligj { };
@@ -1693,8 +1697,6 @@ in {
   humanize = callPackage ../development/python-modules/humanize { };
 
   hupper = callPackage ../development/python-modules/hupper {};
-
-  hovercraft = callPackage ../development/python-modules/hovercraft { };
 
   hsaudiotag = callPackage ../development/python-modules/hsaudiotag { };
 
@@ -3233,7 +3235,11 @@ in {
 
   prettytable = callPackage ../development/python-modules/prettytable { };
 
-  prompt_toolkit = callPackage ../development/python-modules/prompt_toolkit { };
+  prompt_toolkit = self.prompt_toolkit_1;
+
+  prompt_toolkit_1 = callPackage ../development/python-modules/prompt_toolkit/1.nix { };
+
+  prompt_toolkit_2 = callPackage ../development/python-modules/prompt_toolkit { };
 
   protobuf = callPackage ../development/python-modules/protobuf {
     disabled = isPyPy;
@@ -3253,7 +3259,9 @@ in {
 
   psycopg2 = callPackage ../development/python-modules/psycopg2 {};
 
-  ptpython = callPackage ../development/python-modules/ptpython {};
+  ptpython = callPackage ../development/python-modules/ptpython {
+    prompt_toolkit = self.prompt_toolkit_2;
+  };
 
   publicsuffix = callPackage ../development/python-modules/publicsuffix {};
 

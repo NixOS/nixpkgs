@@ -2,14 +2,14 @@
 
 buildPythonPackage rec {
   pname = "brotli";
-  version = "1.0.5";
+  version = "1.0.7";
 
   # PyPI doesn't contain tests so let's use GitHub
   src = fetchFromGitHub {
     owner = "google";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0ssj7mnhpdpk7qnwr49qfd4gxhkmvbli5mhs274pz55cx1xp7xja";
+    sha256 = "1811b55wdfg4kbsjcgh1kc938g118jpvif97ilgrmbls25dfpvvw";
   };
 
   checkInputs = [ pytest ];
