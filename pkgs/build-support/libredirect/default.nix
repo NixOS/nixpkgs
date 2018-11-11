@@ -5,15 +5,14 @@ stdenv.mkDerivation {
 
   unpackPhase = "cp ${./libredirect.c} libredirect.c";
 
-  buildPhase =
-    ''
-      gcc -Wall -std=c99 -O3 -shared libredirect.c -o libredirect.so -fPIC -ldl
-    '';
+  buildPhase = ''
+    cc -Wall -std=c99 -O3 -shared libredirect.c -o libredirect.so -fPIC -ldl
+  '';
 
   installPhase = "mkdir -p $out/lib; cp libredirect.so $out/lib";
 
   meta = {
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
     description = "An LD_PRELOAD library to intercept and rewrite the paths in glibc calls";
     longDescription = ''
       libredirect is an LD_PRELOAD library to intercept and rewrite the paths in
