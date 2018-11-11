@@ -458,7 +458,7 @@ in
   acme-sh = callPackage ../tools/admin/acme.sh { };
 
   acoustidFingerprinter = callPackage ../tools/audio/acoustid-fingerprinter {
-    ffmpeg = ffmpeg_1;
+    ffmpeg = ffmpeg_2;
   };
 
   acpica-tools = callPackage ../tools/system/acpica-tools { };
