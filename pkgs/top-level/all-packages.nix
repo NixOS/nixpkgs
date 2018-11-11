@@ -2964,7 +2964,10 @@ with pkgs;
 
   gnu-pw-mgr = callPackage ../tools/security/gnu-pw-mgr { };
 
-  gnused = callPackage ../tools/text/gnused { };
+  gnused = if !stdenv.hostPlatform.isWindows then
+             callPackage ../tools/text/gnused { } # broken on Windows
+           else
+             gnused_422;
   # This is an easy work-around for [:space:] problems.
   gnused_422 = callPackage ../tools/text/gnused/422.nix { };
 
