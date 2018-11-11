@@ -12,7 +12,7 @@ stdenv.mkDerivation {
   installPhase = "mkdir -p $out/lib; cp libredirect.so $out/lib";
 
   meta = {
-    platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
+    platforms = stdenv.lib.platforms.unix;
     description = "An LD_PRELOAD library to intercept and rewrite the paths in glibc calls";
     longDescription = ''
       libredirect is an LD_PRELOAD library to intercept and rewrite the paths in
