@@ -6,7 +6,7 @@ stdenv.mkDerivation {
   unpackPhase = "cp ${./libredirect.c} libredirect.c";
 
   buildPhase = ''
-    cc -Wall -std=c99 -O3 -shared libredirect.c -o libredirect.so -fPIC -ldl
+    $CC -Wall -std=c99 -O3 -shared libredirect.c -o libredirect.so -fPIC -ldl
   '';
 
   installPhase = "mkdir -p $out/lib; cp libredirect.so $out/lib";
