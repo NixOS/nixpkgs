@@ -61,8 +61,11 @@ stdenv.mkDerivation rec {
     license = licenses.isc;
     platforms = platforms.linux;
     maintainers = with maintainers; [ rickynils obadz ekleog ];
-    tests = {
-      basic-functionality-and-dovecot-interaction = nixosTests.opensmtpd;
-    };
+    # https://github.com/NixOS/nixpkgs/issues/50230 must be resolved before
+    # this can be enabled.
+    #
+    # tests = {
+    #   basic-functionality-and-dovecot-interaction = nixosTests.opensmtpd;
+    # };
   };
 }
