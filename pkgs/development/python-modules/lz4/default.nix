@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "lz4";
-  version = "2.1.1";
+  version = "2.1.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "af46e2e5c002b3fbffa2ad69289aa61e46cab1a87c1d85bda44e822a1634defa";
+    sha256 = "ec265f7c3fc3df706e9579bde632ceeef9278858d7ae87c376a2954d11e9ea39";
   };
 
   buildInputs = [ nose ];
