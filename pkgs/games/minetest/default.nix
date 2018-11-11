@@ -4,19 +4,19 @@
 }:
 
 let
-  version = "0.4.16";
+  version = "0.4.17";
   sources = {
     src = fetchFromGitHub {
       owner = "minetest";
       repo = "minetest";
       rev = "${version}";
-      sha256 = "048m8as01bw4pnwfxx04wfnyljxq7ivk88l214zi18prrrkfamj3";
+      sha256 = "0ri9hyhvcnyyy2k83qvv543s10476g9fn3vcbjwvxjfqap9mkc5m";
     };
     data = fetchFromGitHub {
       owner = "minetest";
       repo = "minetest_game";
       rev = "${version}";
-      sha256 = "0alikzyjvj9hd8s3dd6ghpz0y982w2j0yd2zgd7a047mxw21hrcn";
+      sha256 = "1g8iw2pya32ifljbdx6z6rpcinmzm81i9minhi2bi1d500ailn7s";
     };
   };
 in stdenv.mkDerivation {
