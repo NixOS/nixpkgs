@@ -1848,7 +1848,6 @@ in
 
   cantata = libsForQt5.callPackage ../applications/audio/cantata {
     inherit vlc;
-    ffmpeg = ffmpeg_2;
   };
 
   can-utils = callPackage ../os-specific/linux/can-utils { };
