@@ -1,0 +1,302 @@
+diff -ru ../ebtables-v2.0.10-4.orig/extensions/ebt_802_3.c ./extensions/ebt_802_3.c
+--- ../ebtables-v2.0.10-4.orig/extensions/ebt_802_3.c	2018-11-02 22:33:49.240988662 -0700
++++ ./extensions/ebt_802_3.c	2018-11-03 22:34:09.226229728 -0700
+@@ -141,7 +141,7 @@
+ 	.extra_ops	= opts,
+ };
+ 
+-void _init(void)
++CONSTRUCTOR void _init(void)
+ {
+ 	ebt_register_match(&_802_3_match);
+ }
+Only in ./extensions: ebt_802_3.c~
+diff -ru ../ebtables-v2.0.10-4.orig/extensions/ebtable_broute.c ./extensions/ebtable_broute.c
+--- ../ebtables-v2.0.10-4.orig/extensions/ebtable_broute.c	2018-11-02 22:33:49.240988662 -0700
++++ ./extensions/ebtable_broute.c	2018-11-03 22:35:29.652874510 -0700
+@@ -23,7 +23,7 @@
+ 	.help		= print_help,
+ };
+ 
+-void _init(void)
++CONSTRUCTOR void _init(void)
+ {
+ 	ebt_register_table(&table);
+ }
+Only in ./extensions: ebtable_broute.c~
+diff -ru ../ebtables-v2.0.10-4.orig/extensions/ebtable_filter.c ./extensions/ebtable_filter.c
+--- ../ebtables-v2.0.10-4.orig/extensions/ebtable_filter.c	2018-11-02 22:33:49.240988662 -0700
++++ ./extensions/ebtable_filter.c	2018-11-03 22:35:33.936599450 -0700
+@@ -29,7 +29,7 @@
+ 	.help		= print_help,
+ };
+ 
+-void _init(void)
++CONSTRUCTOR void _init(void)
+ {
+ 	ebt_register_table(&table);
+ }
+Only in ./extensions: ebtable_filter.c~
+diff -ru ../ebtables-v2.0.10-4.orig/extensions/ebtable_nat.c ./extensions/ebtable_nat.c
+--- ../ebtables-v2.0.10-4.orig/extensions/ebtable_nat.c	2018-11-02 22:33:49.240988662 -0700
++++ ./extensions/ebtable_nat.c	2018-11-03 22:35:38.203326455 -0700
+@@ -30,7 +30,7 @@
+ 	.help		= print_help,
+ };
+ 
+-void _init(void)
++CONSTRUCTOR void _init(void)
+ {
+ 	ebt_register_table(&table);
+ }
+Only in ./extensions: ebtable_nat.c~
+diff -ru ../ebtables-v2.0.10-4.orig/extensions/ebt_among.c ./extensions/ebt_among.c
+--- ../ebtables-v2.0.10-4.orig/extensions/ebt_among.c	2018-11-02 22:33:49.240988662 -0700
++++ ./extensions/ebt_among.c	2018-11-03 22:34:16.845706025 -0700
+@@ -491,7 +491,7 @@
+ 	.extra_ops 	= opts,
+ };
+ 
+-void _init(void)
++CONSTRUCTOR void _init(void)
+ {
+ 	ebt_register_match(&among_match);
+ }
+Only in ./extensions: ebt_among.c~
+diff -ru ../ebtables-v2.0.10-4.orig/extensions/ebt_arp.c ./extensions/ebt_arp.c
+--- ../ebtables-v2.0.10-4.orig/extensions/ebt_arp.c	2018-11-02 22:33:49.240988662 -0700
++++ ./extensions/ebt_arp.c	2018-11-03 22:34:22.226338356 -0700
+@@ -362,7 +362,7 @@
+ 	.extra_ops	= opts,
+ };
+ 
+-void _init(void)
++CONSTRUCTOR void _init(void)
+ {
+ 	ebt_register_match(&arp_match);
+ }
+Only in ./extensions: ebt_arp.c~
+diff -ru ../ebtables-v2.0.10-4.orig/extensions/ebt_arpreply.c ./extensions/ebt_arpreply.c
+--- ../ebtables-v2.0.10-4.orig/extensions/ebt_arpreply.c	2018-11-02 22:33:49.240988662 -0700
++++ ./extensions/ebt_arpreply.c	2018-11-03 22:34:27.042010782 -0700
+@@ -133,7 +133,7 @@
+ 	.extra_ops	= opts,
+ };
+ 
+-void _init(void)
++CONSTRUCTOR void _init(void)
+ {
+ 	ebt_register_target(&arpreply_target);
+ }
+Only in ./extensions: ebt_arpreply.c~
+diff -ru ../ebtables-v2.0.10-4.orig/extensions/ebt_ip6.c ./extensions/ebt_ip6.c
+--- ../ebtables-v2.0.10-4.orig/extensions/ebt_ip6.c	2018-11-02 22:33:49.240988662 -0700
++++ ./extensions/ebt_ip6.c	2018-11-03 22:34:34.463508702 -0700
+@@ -556,7 +556,7 @@
+ 	.extra_ops	= opts,
+ };
+ 
+-void _init(void)
++CONSTRUCTOR void _init(void)
+ {
+ 	ebt_register_match(&ip6_match);
+ }
+Only in ./extensions: ebt_ip6.c~
+diff -ru ../ebtables-v2.0.10-4.orig/extensions/ebt_ip.c ./extensions/ebt_ip.c
+--- ../ebtables-v2.0.10-4.orig/extensions/ebt_ip.c	2018-11-02 22:33:49.240988662 -0700
++++ ./extensions/ebt_ip.c	2018-11-03 22:34:31.013741672 -0700
+@@ -338,7 +338,7 @@
+ 	.extra_ops	= opts,
+ };
+ 
+-void _init(void)
++CONSTRUCTOR void _init(void)
+ {
+ 	ebt_register_match(&ip_match);
+ }
+Only in ./extensions: ebt_ip.c~
+diff -ru ../ebtables-v2.0.10-4.orig/extensions/ebt_limit.c ./extensions/ebt_limit.c
+--- ../ebtables-v2.0.10-4.orig/extensions/ebt_limit.c	2018-11-02 22:33:49.240988662 -0700
++++ ./extensions/ebt_limit.c	2018-11-03 22:34:37.659293507 -0700
+@@ -212,7 +212,7 @@
+ 	.extra_ops	= opts,
+ };
+ 
+-void _init(void)
++CONSTRUCTOR void _init(void)
+ {
+ 	ebt_register_match(&limit_match);
+ }
+Only in ./extensions: ebt_limit.c~
+diff -ru ../ebtables-v2.0.10-4.orig/extensions/ebt_log.c ./extensions/ebt_log.c
+--- ../ebtables-v2.0.10-4.orig/extensions/ebt_log.c	2018-11-02 22:33:49.240988662 -0700
++++ ./extensions/ebt_log.c	2018-11-03 22:34:40.751085888 -0700
+@@ -217,7 +217,7 @@
+ 	.extra_ops	= opts,
+ };
+ 
+-void _init(void)
++CONSTRUCTOR void _init(void)
+ {
+ 	ebt_register_watcher(&log_watcher);
+ }
+Only in ./extensions: ebt_log.c~
+diff -ru ../ebtables-v2.0.10-4.orig/extensions/ebt_mark.c ./extensions/ebt_mark.c
+--- ../ebtables-v2.0.10-4.orig/extensions/ebt_mark.c	2018-11-02 22:33:49.240988662 -0700
++++ ./extensions/ebt_mark.c	2018-11-03 22:34:44.369843598 -0700
+@@ -172,7 +172,7 @@
+ 	.extra_ops	= opts,
+ };
+ 
+-void _init(void)
++CONSTRUCTOR void _init(void)
+ {
+ 	ebt_register_target(&mark_target);
+ }
+Only in ./extensions: ebt_mark.c~
+diff -ru ../ebtables-v2.0.10-4.orig/extensions/ebt_mark_m.c ./extensions/ebt_mark_m.c
+--- ../ebtables-v2.0.10-4.orig/extensions/ebt_mark_m.c	2018-11-02 22:33:49.240988662 -0700
++++ ./extensions/ebt_mark_m.c	2018-11-03 22:34:47.316646860 -0700
+@@ -121,7 +121,7 @@
+ 	.extra_ops	= opts,
+ };
+ 
+-void _init(void)
++CONSTRUCTOR void _init(void)
+ {
+ 	ebt_register_match(&mark_match);
+ }
+Only in ./extensions: ebt_mark_m.c~
+diff -ru ../ebtables-v2.0.10-4.orig/extensions/ebt_nat.c ./extensions/ebt_nat.c
+--- ../ebtables-v2.0.10-4.orig/extensions/ebt_nat.c	2018-11-02 22:33:49.240988662 -0700
++++ ./extensions/ebt_nat.c	2018-11-03 22:34:54.849146242 -0700
+@@ -231,7 +231,7 @@
+ 	.extra_ops	= opts_d,
+ };
+ 
+-void _init(void)
++CONSTRUCTOR void _init(void)
+ {
+ 	ebt_register_target(&snat_target);
+ 	ebt_register_target(&dnat_target);
+Only in ./extensions: ebt_nat.c~
+diff -ru ../ebtables-v2.0.10-4.orig/extensions/ebt_nflog.c ./extensions/ebt_nflog.c
+--- ../ebtables-v2.0.10-4.orig/extensions/ebt_nflog.c	2018-11-02 22:33:49.240988662 -0700
++++ ./extensions/ebt_nflog.c	2018-11-03 22:35:00.121797752 -0700
+@@ -166,7 +166,7 @@
+ 	.extra_ops = nflog_opts,
+ };
+ 
+-void _init(void)
++CONSTRUCTOR void _init(void)
+ {
+ 	ebt_register_watcher(&nflog_watcher);
+ }
+Only in ./extensions: ebt_nflog.c~
+diff -ru ../ebtables-v2.0.10-4.orig/extensions/ebt_pkttype.c ./extensions/ebt_pkttype.c
+--- ../ebtables-v2.0.10-4.orig/extensions/ebt_pkttype.c	2018-11-02 22:33:49.240988662 -0700
++++ ./extensions/ebt_pkttype.c	2018-11-03 22:35:04.007541931 -0700
+@@ -125,7 +125,7 @@
+ 	.extra_ops	= opts,
+ };
+ 
+-void _init(void)
++CONSTRUCTOR void _init(void)
+ {
+ 	ebt_register_match(&pkttype_match);
+ }
+Only in ./extensions: ebt_pkttype.c~
+diff -ru ../ebtables-v2.0.10-4.orig/extensions/ebt_redirect.c ./extensions/ebt_redirect.c
+--- ../ebtables-v2.0.10-4.orig/extensions/ebt_redirect.c	2018-11-02 22:33:49.240988662 -0700
++++ ./extensions/ebt_redirect.c	2018-11-03 22:35:07.397319462 -0700
+@@ -108,7 +108,7 @@
+ 	.extra_ops	= opts,
+ };
+ 
+-void _init(void)
++CONSTRUCTOR void _init(void)
+ {
+ 	ebt_register_target(&redirect_target);
+ }
+Only in ./extensions: ebt_redirect.c~
+diff -ru ../ebtables-v2.0.10-4.orig/extensions/ebt_standard.c ./extensions/ebt_standard.c
+--- ../ebtables-v2.0.10-4.orig/extensions/ebt_standard.c	2018-11-02 22:33:49.240988662 -0700
++++ ./extensions/ebt_standard.c	2018-11-03 22:35:11.480052356 -0700
+@@ -84,7 +84,7 @@
+ 	.extra_ops	= opts,
+ };
+ 
+-void _init(void)
++CONSTRUCTOR void _init(void)
+ {
+ 	ebt_register_target(&standard);
+ }
+Only in ./extensions: ebt_standard.c~
+diff -ru ../ebtables-v2.0.10-4.orig/extensions/ebt_stp.c ./extensions/ebt_stp.c
+--- ../ebtables-v2.0.10-4.orig/extensions/ebt_stp.c	2018-11-02 22:33:49.240988662 -0700
++++ ./extensions/ebt_stp.c	2018-11-03 22:35:16.024756104 -0700
+@@ -337,7 +337,7 @@
+ 	.extra_ops	= opts,
+ };
+ 
+-void _init(void)
++CONSTRUCTOR void _init(void)
+ {
+ 	ebt_register_match(&stp_match);
+ }
+Only in ./extensions: ebt_stp.c~
+diff -ru ../ebtables-v2.0.10-4.orig/extensions/ebt_ulog.c ./extensions/ebt_ulog.c
+--- ../ebtables-v2.0.10-4.orig/extensions/ebt_ulog.c	2018-11-02 22:33:49.240988662 -0700
++++ ./extensions/ebt_ulog.c	2018-11-03 22:35:19.966500080 -0700
+@@ -180,7 +180,7 @@
+ 	.extra_ops	= opts,
+ };
+ 
+-void _init(void)
++CONSTRUCTOR void _init(void)
+ {
+ 	ebt_register_watcher(&ulog_watcher);
+ }
+Only in ./extensions: ebt_ulog.c~
+diff -ru ../ebtables-v2.0.10-4.orig/extensions/ebt_vlan.c ./extensions/ebt_vlan.c
+--- ../ebtables-v2.0.10-4.orig/extensions/ebt_vlan.c	2018-11-02 22:33:49.240988662 -0700
++++ ./extensions/ebt_vlan.c	2018-11-03 22:35:25.074169583 -0700
+@@ -181,7 +181,7 @@
+ 	.extra_ops	= opts,
+ };
+ 
+-void _init(void)
++CONSTRUCTOR void _init(void)
+ {
+ 	ebt_register_match(&vlan_match);
+ }
+Only in ./extensions: ebt_vlan.c~
+diff -ru ../ebtables-v2.0.10-4.orig/include/ebtables.h ./include/ebtables.h
+--- ../ebtables-v2.0.10-4.orig/include/ebtables.h	2018-11-02 22:33:49.240988662 -0700
++++ ./include/ebtables.h	2018-11-03 22:30:30.614036051 -0700
+@@ -32,6 +32,8 @@
+  * The 4 lsb are more than enough to store the verdict. */
+ #define EBT_VERDICT_BITS 0x0000000F
+ 
++#define CONSTRUCTOR  __attribute__((constructor))
++
+ struct ebt_counter
+ {
+ 	uint64_t pcnt;
+Only in ./include: ebtables.h~
+diff -ru ../ebtables-v2.0.10-4.orig/include/ebtables_u.h ./include/ebtables_u.h
+--- ../ebtables-v2.0.10-4.orig/include/ebtables_u.h	2018-11-02 22:33:49.240988662 -0700
++++ ./include/ebtables_u.h	2018-11-03 22:33:44.302968358 -0700
+@@ -43,6 +43,8 @@
+ #define EBT_ALIGN(s) (((s) + (EBT_MIN_ALIGN-1)) & ~(EBT_MIN_ALIGN-1))
+ #define ERRORMSG_MAXLEN 128
+ 
++#define CONSTRUCTOR  __attribute__((constructor))
++
+ struct ebt_u_entries
+ {
+ 	int policy;
+Only in ./include: ebtables_u.h~
+Only in ./include/linux/netfilter_bridge: ebtables.h~
+Only in ./include/linux: netfilter_bridge.h~
+Only in .: useful_functions.c~

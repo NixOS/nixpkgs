@@ -13967,7 +13967,7 @@ with pkgs;
 
   lightum = callPackage ../os-specific/linux/lightum { };
 
-  ebtables = callPackage ../os-specific/linux/ebtables { };
+  ebtables = callPackage ../os-specific/linux/ebtables { enableStatic = stdenv.hostPlatform.isMusl; };
 
   facetimehd-firmware = callPackage ../os-specific/linux/firmware/facetimehd-firmware { };
 
