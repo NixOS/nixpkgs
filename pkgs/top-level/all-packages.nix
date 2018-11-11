@@ -11892,7 +11892,6 @@ in
   openct = callPackage ../development/libraries/openct { };
 
   opencv = callPackage ../development/libraries/opencv {
-    ffmpeg = ffmpeg_2;
     inherit (darwin) cf-private;
     inherit (darwin.apple_sdk.frameworks) Cocoa QTKit;
   };
