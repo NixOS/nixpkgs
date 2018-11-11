@@ -356,7 +356,7 @@ with pkgs;
       inherit contents compressor prepend;
     };
 
-  makeWrapper = makeSetupHook { deps = [ dieHook ]; }
+  makeWrapper = makeSetupHook { deps = [ dieHook ]; substitutions = { shell = pkgs.runtimeShell; }; }
                               ../build-support/setup-hooks/make-wrapper.sh;
 
   makeModulesClosure = { kernel, firmware, rootModules, allowMissing ? false }:
