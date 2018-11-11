@@ -27,6 +27,9 @@
 , # The root file system type.
   fsType ? "ext4"
 
+, # Filesystem label
+  label ? "nixos"
+
 , # The initial NixOS configuration file to be copied to
   # /etc/nixos/configuration.nix.
   configFile ? null
@@ -51,6 +54,9 @@ let format' = format; in let
   format = if format' == "qcow2-compressed" then "qcow2" else format';
 
   compress = optionalString (format' == "qcow2-compressed") "-c";
+
+  suffix = if config.nixpkgs.localSystem == config.nixpkgs.crossSystem
+           then "" else "-${config.nixpkgs.localSystem.config}";
 
   filename = "nixos." + {
     qcow2 = "qcow2";
@@ -134,9 +140,9 @@ let format' = format; in let
       # Get start & length of the root partition in sectors to $START and $SECTORS.
       eval $(partx $diskImage -o START,SECTORS --nr ${rootPartition} --pairs)
 
-      mkfs.${fsType} -F -L nixos $diskImage -E offset=$(sectorsToBytes $START) $(sectorsToKilobytes $SECTORS)K
+      mkfs.${fsType} -F -L ${label} $diskImage -E offset=$(sectorsToBytes $START) $(sectorsToKilobytes $SECTORS)K
     '' else ''
-      mkfs.${fsType} -F -L nixos $diskImage
+      mkfs.${fsType} -F -L ${label} $diskImage
     ''}
 
     root="$PWD/root"
@@ -178,7 +184,7 @@ let format' = format; in let
     nix-store --load-db < ${closureInfo}/registration
 
     echo "running nixos-install..."
-    nixos-install --root $root --no-bootloader --no-root-passwd \
+    nixos-install${suffix} --root $root --no-bootloader --no-root-passwd \
       --system ${config.system.build.toplevel} --channel ${channelSources} --substituters ""
 
     echo "copying staging root to image..."
@@ -227,7 +233,7 @@ in pkgs.vmTools.runInLinuxVM (
       ''}
 
       # Set up core system link, GRUB, etc.
-      NIXOS_INSTALL_BOOTLOADER=1 nixos-enter --root $mountPoint -- /nix/var/nix/profiles/system/bin/switch-to-configuration boot
+      NIXOS_INSTALL_BOOTLOADER=1 nixos-enter${suffix} --root $mountPoint -- /nix/var/nix/profiles/system/bin/switch-to-configuration boot
 
       # The above scripts will generate a random machine-id and we don't want to bake a single ID into all our images
       rm -f $mountPoint/etc/machine-id
