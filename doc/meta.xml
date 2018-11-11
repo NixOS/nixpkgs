@@ -255,6 +255,17 @@ meta.platforms = stdenv.lib.platforms.linux;
      <varname>tests</varname>
     </term>
     <listitem>
+     <warning>
+      <para>
+       This attribute is special in that it is not actually under the
+       <literal>meta</literal> attribute set but rather under the
+       <literal>passthru</literal> attribute set. This is due to a current
+       limitation of Nix, and will change as soon as Nixpkgs will be able to
+       depend on a new enough version of Nix. See
+       <link xlink:href="https://github.com/NixOS/nix/issues/2532">the relevant
+       issue</link> for more details.
+      </para>
+     </warning>
      <para>
       An attribute set with as values tests. A test is a derivation, which
       builds successfully when the test passes, and fails to build otherwise. A
@@ -269,7 +280,7 @@ meta.platforms = stdenv.lib.platforms.linux;
 { /* ... */, nixosTests }:
 {
   # ...
-  meta.tests = {
+  passthru.tests = {
     basic-functionality-and-dovecot-integration = nixosTests.opensmtpd;
   };
 }
