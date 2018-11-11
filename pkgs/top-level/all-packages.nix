@@ -13088,9 +13088,7 @@ in
 
   xdo = callPackage ../tools/misc/xdo { };
 
-  xineLib = callPackage ../development/libraries/xine-lib {
-    ffmpeg = ffmpeg_2;
-  };
+  xineLib = callPackage ../development/libraries/xine-lib { };
 
   xautolock = callPackage ../misc/screensavers/xautolock { };
 
