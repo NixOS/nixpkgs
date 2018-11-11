@@ -13645,7 +13645,7 @@ in
 
   lighttpd = callPackage ../servers/http/lighttpd { };
 
-  livepeer = callPackage ../servers/livepeer { ffmpeg = ffmpeg_3; };
+  livepeer = callPackage ../servers/livepeer { };
 
   lwan = callPackage ../servers/http/lwan { };
 
