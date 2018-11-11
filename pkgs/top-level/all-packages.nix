@@ -8113,9 +8113,7 @@ in
 
   inherit (ocamlPackages) reason;
 
-  renpy = callPackage ../development/interpreters/renpy {
-    ffmpeg = ffmpeg_2;
-  };
+  renpy = callPackage ../development/interpreters/renpy { };
 
   pixie = callPackage ../development/interpreters/pixie { };
   dust = callPackage ../development/interpreters/pixie/dust.nix { };
