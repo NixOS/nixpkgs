@@ -16221,9 +16221,7 @@ in
 
   bandwidth = callPackage ../tools/misc/bandwidth { };
 
-  baresip = callPackage ../applications/networking/instant-messengers/baresip {
-    ffmpeg = ffmpeg_1;
-  };
+  baresip = callPackage ../applications/networking/instant-messengers/baresip { };
 
   barrier = callPackage ../applications/misc/barrier {};
 
