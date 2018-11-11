@@ -2691,6 +2691,11 @@
     github = "melsigl";
     name = "Melanie B. Sigl";
   };
+  melkor333 = {
+    email = "samuel@ton-kunst.ch";
+    github = "melkor333";
+    name = "Samuel Ruprecht";
+  };
   metabar = {
     email = "softs@metabarcoding.org";
     name = "Celine Mercier";

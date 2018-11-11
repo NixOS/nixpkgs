@@ -6250,6 +6250,8 @@ with pkgs;
 
   wolf-shaper = callPackage ../applications/audio/wolf-shaper { };
 
+  wpgtk = callPackage ../tools/X11/wpgtk { };
+
   wring = nodePackages.wring;
 
   wrk = callPackage ../tools/networking/wrk { };
