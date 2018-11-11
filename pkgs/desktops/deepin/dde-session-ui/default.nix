@@ -1,18 +1,18 @@
 { stdenv, fetchFromGitHub, pkgconfig, qmake, qtsvg, qttools,
   qtx11extras, xkeyboard_config, xorg, lightdm_qt, gsettings-qt,
   dde-qt-dbus-factory, deepin-gettext-tools, dtkcore, dtkwidget,
-  hicolor-icon-theme }:
+  hicolor-icon-theme, deepin }:
 
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "dde-session-ui";
-  version = "4.5.1.10";
+  version = "4.6.1";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "0cr3g9jbgpp8k41i86lr4pg88gn690nzili7ah745vf1kdwvi1w0";
+    sha256 = "190dgrwr5ji2bjndg2bmggpyccdz6pa3acx86yqmxfmirx669w92";
   };
 
   nativeBuildInputs = [
@@ -45,10 +45,12 @@ stdenv.mkDerivation rec {
     find -type f -exec sed -i -e "s,Exec=/usr,Exec=$out," {} +
     find -type f -exec sed -i -e "s,/usr/share/dde-session-ui,$out/share/dde-session-ui," {} +
     sed -i global_util/xkbparser.h -e "s,/usr/share/X11/xkb/rules/base.xml,${xkeyboard_config}/share/X11/xkb/rules/base.xml,"
-    sed -i lightdm-deepin-greeter/Scripts/lightdm-deepin-greeter -e "s,/usr/bin/lightdm-deepin-greeter,$out/bin/lightdm-deepin-greeter,"
+    sed -i lightdm-deepin-greeter/scripts/lightdm-deepin-greeter -e "s,/usr/bin/lightdm-deepin-greeter,$out/bin/lightdm-deepin-greeter,"
     # fix default background url
     sed -i widgets/*.cpp boxframe/*.cpp -e 's,/usr/share/backgrounds/default_background.jpg,/usr/share/backgrounds/deepin/desktop.jpg,'
   '';
+
+  passthru.updateScript = deepin.updateScript { inherit name; };
 
   meta = with stdenv.lib; {
     description = "Deepin desktop-environment - Session UI module";

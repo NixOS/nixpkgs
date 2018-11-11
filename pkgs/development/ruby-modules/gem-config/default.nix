@@ -191,6 +191,10 @@ in
         [ darwin.apple_sdk.frameworks.CoreServices ];
   };
 
+  iconv = attrs: {
+    buildFlags = lib.optional stdenv.isDarwin "--with-iconv-dir=${libiconv}";
+  };
+
   # disable bundle install as it can't install anything in addition to what is
   # specified in pkgs/applications/misc/jekyll/Gemfile anyway. Also do chmod_R
   # to compensate for read-only files in site_template in nix store.
@@ -223,6 +227,12 @@ in
     postInstall = ''
       installPath=$(cat $out/nix-support/gem-meta/install-path)
       sed -e 's@ENV\["MAGIC_LIB"\] ||@ENV\["MAGIC_LIB"\] || "${file}/lib/libmagic.so" ||@' -i $installPath/lib/magic/api.rb
+    '';
+  };
+
+  metasploit-framework = attrs: {
+    preInstall = ''
+      export HOME=$TMPDIR
     '';
   };
 

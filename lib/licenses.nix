@@ -13,6 +13,11 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
    * add it to this list. The URL mentioned above is a good source for inspiration.
    */
 
+  abstyles = spdx {
+    spdxId = "Abstyles";
+    fullName = "Abstyles License";
+  };
+
   afl21 = spdx {
     spdxId = "AFL-2.1";
     fullName = "Academic Free License v2.1";

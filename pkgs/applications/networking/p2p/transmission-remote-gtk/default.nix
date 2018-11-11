@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   name = "transmission-remote-gtk-${version}";
-  version = "1.3.1";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "transmission-remote-gtk";
     repo = "transmission-remote-gtk";
     rev = "${version}";
-    sha256 = "02q0vl7achx9rpd0iv0347h838bwzm7aj4k04y88g3bh8fi3cddh";
+    sha256 = "126s7aqh9j06zvnwhjbql5x9ibz05pdrrzwb9c6h4qndvr8iqqff";
   };
 
   preConfigure = "./autogen.sh";

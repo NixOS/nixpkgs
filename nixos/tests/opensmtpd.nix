@@ -120,4 +120,6 @@ import ./make-test.nix {
     $smtp2->waitUntilFails('smtpctl show queue | egrep .');
     $client->succeed('check-mail-landed >&2');
   '';
+
+  meta.timeout = 30;
 }

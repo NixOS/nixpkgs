@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   name = "blackshades-elite-svn-29";
   src = fetchsvn {
     url = svn://svn.gna.org/svn/blackshadeselite/trunk;
-    rev = 29;
+    rev = "29";
     sha256 = "1lkws5pqpgcgdlar11waikp6y41z678457n9jcik7nhn53cjjr1s";
   };
 

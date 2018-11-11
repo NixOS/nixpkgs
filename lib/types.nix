@@ -169,6 +169,9 @@ rec {
         # s32 = sign 32 4294967296;
       };
 
+    # Alias of u16 for a port number
+    port = ints.u16;
+
     float = mkOptionType rec {
         name = "float";
         description = "floating point number";

@@ -5,20 +5,20 @@
 
 stdenv.mkDerivation rec {
   name = "psi-plus-${version}";
-  version = "1.3.422";
+  version = "1.4.404";
 
   src = fetchFromGitHub {
     owner = "psi-plus";
     repo = "psi-plus-snapshots";
     rev = "${version}";
-    sha256 = "193n3yvhp9m14irb49kg2rc4h7ypdmvidrgvv1i2n373iq751z05";
+    sha256 = "05dcr1i7ic6nff70w4zfpdcmwf19kkhgxm7mcznmlr484d5i1v2m";
   };
 
   resources = fetchFromGitHub {
     owner = "psi-plus";
     repo = "resources";
-    rev = "c0bfb8a025eeec82cd0a23a559e0aa3da15c3ec3";
-    sha256 = "1q7v01w085vk7ml6gwis7j409w6f5cplpm7c0ajs4i93c4j53xdf";
+    rev = "d623f57db35eb5af81ccdf69b2cbe1c437190f29";
+    sha256 = "024cyazyxka5vcbjrkkw32c5zw6aa70n50fdp6zh5v5c51d9ci8k";
   };
 
   postUnpack = ''

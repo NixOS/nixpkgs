@@ -18,6 +18,7 @@
   libGL,
   xclip,
   # Darwin Frameworks
+  cf-private,
   AppKit,
   CoreFoundation,
   CoreGraphics,
@@ -39,15 +40,6 @@ let
     libXrandr
     libGL
     libXi
-  ];
-  darwinFrameworks = [
-    AppKit
-    CoreFoundation
-    CoreGraphics
-    CoreServices
-    CoreText
-    Foundation
-    OpenGL
   ];
 in buildRustPackage rec {
   name = "alacritty-unstable-${version}";
@@ -71,7 +63,11 @@ in buildRustPackage rec {
   ];
 
   buildInputs = rpathLibs
-             ++ lib.optionals stdenv.isDarwin darwinFrameworks;
+    ++ lib.optionals stdenv.isDarwin [
+      AppKit CoreFoundation CoreGraphics CoreServices CoreText Foundation OpenGL
+      # Needed for CFURLResourceIsReachable symbols.
+      cf-private
+    ];
 
   outputs = [ "out" "terminfo" ];
 

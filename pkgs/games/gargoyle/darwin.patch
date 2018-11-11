@@ -1,33 +1,3 @@
-diff --git a/Jamshared b/Jamshared
-index 13db835..fd42928 100644
---- a/Jamshared
-+++ b/Jamshared
-@@ -79,7 +79,7 @@ if $(OS) = MACOSX
- {
-     actions together SharedLink bind NEEDLIBS
-     {
--        $(LINK) -headerpad_max_install_names $(FRAMEWORKS) $(MAINARCH) $(ALTARCH) -dynamiclib $(SHRLINKFLAGS) -install_name @executable_path/$(<:D=) -o $(<) $(>) $(NEEDLIBS) $(SHRLINKLIBS)
-+        $(LINK) $(FRAMEWORKS) $(MAINARCH) $(ALTARCH) -dynamiclib $(SHRLINKFLAGS) -install_name @executable_path/$(<:D=) -o $(<) $(>) $(NEEDLIBS) $(SHRLINKLIBS)
-     }
- }
- else
-diff --git a/tads/Jamfile b/tads/Jamfile
-index 1f8829d..d8455eb 100644
---- a/tads/Jamfile
-+++ b/tads/Jamfile
-@@ -33,8 +33,8 @@ if $(OS) = LINUX || $(OS) = SOLARIS
- 
- if $(OS) = MACOSX
- {
--    SubDirCcFlags -headerpad_max_install_names $(MAINARCH) $(ALTARCH) ;
--    LINKFLAGS = -headerpad_max_install_names $(MAINARCH) $(ALTARCH) ;
-+    SubDirCcFlags $(MAINARCH) $(ALTARCH) ;
-+    LINKFLAGS = $(MAINARCH) $(ALTARCH) ;
- }
- 
- SEARCH_SOURCE =
-diff --git a/garglk/fontmac.m b/garglk/fontmac.m
-index d6e1426..72304a3 100644
 --- a/garglk/fontmac.m
 +++ b/garglk/fontmac.m
 @@ -167,7 +167,7 @@ static void propfont(char *file, int style)
@@ -48,15 +18,6 @@ index d6e1426..72304a3 100644
          [fontFamilyDescriptor matchingFontDescriptorsWithMandatoryKeys: nil];
  
      for (NSFontDescriptor * sysfont in fontMatches)
-@@ -197,7 +197,7 @@ void fontreplace(char *font, int type)
- 
-         else if ([sysfont symbolicTraits] & NSFontItalicTrait)
-             style = FONTI;
--        
-+
-         /* find path for font */
-         CFURLRef urlRef = CTFontDescriptorCopyAttribute((CTFontDescriptorRef)sysfont, kCTFontURLAttribute);
-         if (!urlRef)
 @@ -259,7 +259,7 @@ void fontload(void)
  
      // obtain a list of all files in the Fonts directory
@@ -66,47 +27,9 @@ index d6e1426..72304a3 100644
  
      // create a collection to hold the registered font URLs
      gli_registered_fonts = [NSMutableArray new];
-diff --git a/garglk/launchmac.m b/garglk/launchmac.m
-index 68deca5..9f752ac 100644
 --- a/garglk/launchmac.m
 +++ b/garglk/launchmac.m
-@@ -72,14 +72,14 @@ char *winfilters[] =
-            height: (unsigned int) height
- {
-     [[self openGLContext] makeCurrentContext];
--    
-+
-     /* allocate new texture */
-     glDeleteTextures(1, &output);
-     glGenTextures(1, &output);
- 
-     /* bind target to texture */
--    glEnable(GL_TEXTURE_RECTANGLE_ARB);    
--    glBindTexture(GL_TEXTURE_RECTANGLE_ARB, output);  
-+    glEnable(GL_TEXTURE_RECTANGLE_ARB);
-+    glBindTexture(GL_TEXTURE_RECTANGLE_ARB, output);
- 
-     /* set target parameters */
-     glTexParameteri(GL_TEXTURE_RECTANGLE_ARB, GL_TEXTURE_STORAGE_HINT_APPLE, GL_STORAGE_CACHED_APPLE);
-@@ -460,7 +460,7 @@ static BOOL isTextbufferEvent(NSEvent * evt)
-     if (filter != FILTER_ALL)
-     {
-         NSArray * filterTypes = [NSArray arrayWithObject: [NSString stringWithCString: winfilters[filter]
--                                                                             encoding: NSUTF8StringEncoding]];        
-+                                                                             encoding: NSUTF8StringEncoding]];
-         [openDlg setAllowedFileTypes: filterTypes];
-         [openDlg setAllowsOtherFileTypes: NO];
-     }
-@@ -485,7 +485,7 @@ static BOOL isTextbufferEvent(NSEvent * evt)
-     if (filter != FILTER_ALL)
-     {
-         NSArray * filterTypes = [NSArray arrayWithObject: [NSString stringWithCString: winfilters[filter]
--                                                                             encoding: NSUTF8StringEncoding]];        
-+                                                                             encoding: NSUTF8StringEncoding]];
-         [saveDlg setAllowedFileTypes: filterTypes];
-         [saveDlg setAllowsOtherFileTypes: NO];
-     }
-@@ -518,7 +518,7 @@ static BOOL isTextbufferEvent(NSEvent * evt)
+@@ -556,7 +556,7 @@ static BOOL isTextbufferEvent(NSEvent * evt)
                           <GargoyleApp, NSApplicationDelegate, NSWindowDelegate>
  {
      BOOL openedFirstGame;
@@ -115,34 +38,6 @@ index 68deca5..9f752ac 100644
      NSConnection * link;
  }
  - (BOOL) launchFile: (NSString *) file;
-@@ -760,20 +760,20 @@ static BOOL isTextbufferEvent(NSEvent * evt)
- - (BOOL) launchFileDialog
- {
-     int result;
--    
-+
-     NSOpenPanel * openDlg = [NSOpenPanel openPanel];
- 
-     [openDlg setCanChooseFiles: YES];
-     [openDlg setCanChooseDirectories: NO];
-     [openDlg setAllowsMultipleSelection: NO];
-     [openDlg setTitle: [NSString stringWithCString: AppName encoding: NSUTF8StringEncoding]];
--    
-+
-     NSMutableArray *filterTypes = [NSMutableArray arrayWithCapacity:100];
--    
--    NSEnumerator *docTypeEnum = [[[[NSBundle mainBundle] infoDictionary] 
-+
-+    NSEnumerator *docTypeEnum = [[[[NSBundle mainBundle] infoDictionary]
-                                   objectForKey:@"CFBundleDocumentTypes"] objectEnumerator];
-     NSDictionary *docType;
--    
-+
-     while (docType = [docTypeEnum nextObject])
-     {
-         [filterTypes addObjectsFromArray:[docType objectForKey: @"CFBundleTypeExtensions"]];
-diff --git a/garglk/ttsmac.m b/garglk/ttsmac.m
-index 9f6ab0e..de3d6fe 100644
 --- a/garglk/ttsmac.m
 +++ b/garglk/ttsmac.m
 @@ -30,7 +30,7 @@
@@ -167,29 +62,3 @@ index 9f6ab0e..de3d6fe 100644
                  if ([lang isEqualToString: [attr objectForKey: NSVoiceLocaleIdentifier]])
                  {
                      [synth setVoice: voice];
-diff --git a/tads/tads3/vmtz.cpp b/tads/tads3/vmtz.cpp
-index 5e193a1..dce46f7 100644
---- a/tads/tads3/vmtz.cpp
-+++ b/tads/tads3/vmtz.cpp
-@@ -1985,5 +1985,5 @@ void CVmTimeZone::query(vmtzquery *result, int32_t dayno, int32_t daytime,
-              *   up until that moment
-              */
--            result->set(tcur > 0 ? tcur - 1 : tcur);
-+            result->set(tcur != 0 ? tcur - 1 : tcur);
-            return;
-        }
-diff --git a/terps/Jamfile b/terps/Jamfile
-index b5f6d52..2d1ccdb 100644
---- a/terps/Jamfile
-+++ b/terps/Jamfile
-@@ -185,8 +185,8 @@ if $(MAKE_GEAS) = yes
- 
-     if $(OS) = MACOSX
-     {
--        SubDirCcFlags -headerpad_max_install_names $(MAINARCH) $(ALTARCH) ;
--        LINKFLAGS = -headerpad_max_install_names $(MAINARCH) $(ALTARCH) ;
-+        SubDirCcFlags $(MAINARCH) $(ALTARCH) ;
-+        LINKFLAGS = $(MAINARCH) $(ALTARCH) ;
-     }
- 
-     SUBDIRC++FLAGS = $(SUBDIRCCFLAGS) ;

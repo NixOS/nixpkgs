@@ -10,11 +10,11 @@
 
 buildPythonPackage rec {
   pname = "patsy";
-  version = "0.5.0";
+  version = "0.5.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0fw888zd2s7f5zxm9f98ss93qhwv0sqnbdy21ipj33ccqgakhpz0";
+    sha256 = "149rbrdzwns0ay88caf1zsm1r53v1q5np1mrb36na50y432cw5gi";
   };
 
   checkInputs = [ nose parameterized ];

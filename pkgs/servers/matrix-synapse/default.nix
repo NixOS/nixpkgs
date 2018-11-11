@@ -1,47 +1,54 @@
-{ lib, stdenv, python2Packages, fetchurl, fetchFromGitHub
+{ lib, stdenv, python2
 , enableSystemd ? true
 }:
+
+with python2.pkgs;
+
 let
-  matrix-angular-sdk = python2Packages.buildPythonPackage rec {
-    name = "matrix-angular-sdk-${version}";
+  matrix-angular-sdk = buildPythonPackage rec {
+    pname = "matrix-angular-sdk";
     version = "0.6.8";
 
-    src = fetchurl {
-      url = "mirror://pypi/m/matrix-angular-sdk/matrix-angular-sdk-${version}.tar.gz";
+    src = fetchPypi {
+      inherit pname version;
       sha256 = "0gmx4y5kqqphnq3m7xk2vpzb0w2a4palicw7wfdr1q2schl9fhz2";
     };
+
+    # no checks from Pypi but as this is abandonware, there will be no
+    # new version anyway
+    doCheck = false;
   };
-  matrix-synapse-ldap3 = python2Packages.buildPythonPackage rec {
+
+  matrix-synapse-ldap3 = buildPythonPackage rec {
     pname = "matrix-synapse-ldap3";
     version = "0.1.3";
 
-    src = fetchFromGitHub {
-      owner = "matrix-org";
-      repo = "matrix-synapse-ldap3";
-      rev = "v${version}";
-      sha256 = "0ss7ld3bpmqm8wcs64q1kb7vxlpmwk9lsgq0mh21a9izyfc7jb2l";
+    src = fetchPypi {
+      inherit pname version;
+      sha256 = "0a0d1y9yi0abdkv6chbmxr3vk36gynnqzrjhbg26q4zg06lh9kgn";
     };
 
-    propagatedBuildInputs = with python2Packages; [ service-identity ldap3 twisted ];
+    propagatedBuildInputs = [ service-identity ldap3 twisted ];
 
-    checkInputs = with python2Packages; [ ldaptor mock ];
+    # ldaptor is not ready for py3 yet
+    doCheck = !isPy3k;
+    checkInputs = [ ldaptor mock ];
   };
-in python2Packages.buildPythonApplication rec {
-  name = "matrix-synapse-${version}";
+
+in buildPythonApplication rec {
+  pname = "matrix-synapse";
   version = "0.33.8";
 
-  src = fetchFromGitHub {
-    owner = "matrix-org";
-    repo = "synapse";
-    rev = "v${version}";
-    sha256 = "122ba09xkc1x35qaajcynkjikg342259rgy81m8abz0l8mcg4mkm";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "0j8knnqpkidkmpwr2i1k9cwlnwfqpzn3q6ysjvrwpa76hpfcg40l";
   };
 
   patches = [
     ./matrix-synapse.patch
   ];
 
-  propagatedBuildInputs = with python2Packages; [
+  propagatedBuildInputs = [
     bcrypt
     bleach
     canonicaljson
@@ -75,12 +82,12 @@ in python2Packages.buildPythonApplication rec {
     unpaddedbase64
   ] ++ lib.optional enableSystemd systemd;
 
+  # tests fail under py3 for now, but version 0.34.0 will use py3 by default
+  # https://github.com/matrix-org/synapse/issues/4036
   doCheck = true;
   checkPhase = "python -m twisted.trial test";
 
-  buildInputs = with python2Packages; [
-    mock setuptoolsTrial
-  ];
+  checkInputs = [ mock setuptoolsTrial ];
 
   meta = with stdenv.lib; {
     homepage = https://matrix.org;

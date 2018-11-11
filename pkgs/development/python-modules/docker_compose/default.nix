@@ -6,12 +6,12 @@
 , enum34, functools32,
 }:
 buildPythonApplication rec {
-  version = "1.22.0";
+  version = "1.23.1";
   pname = "docker-compose";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "915cdd0ea7aff349d27a8e0585124ac38695635201770a35612837b25e234677";
+    sha256 = "15jijx3md70b9xw8818xjm70nr9pc27p7v7is0yi6agf8scvvqkq";
   };
 
   # lots of networking and other fails

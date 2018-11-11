@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   name = "dmrconfig-${version}";
-  version = "2018-10-29";
+  version = "2018-11-07";
 
   src = fetchFromGitHub {
     owner = "sergev";
     repo = "dmrconfig";
-    rev = "4924d00283c3c81a4b8251669e42aecd96b6145a";
-    sha256 = "00a4hmbr71g0d4faskb8q96y6z212g2r4n533yvp88z8rq8vbxxn";
+    rev = "b58985d3c848b927e91699d97f96d9de014c3fc7";
+    sha256 = "083f21hz6vqjpndkn27nsjnhnc5a4bw0cr26ryfqcvz275rj4k18";
   };
 
   buildInputs = [
@@ -20,8 +20,10 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile --replace /usr/local/bin/dmrconfig $out/bin/dmrconfig
   '';
 
-  preInstall = ''
-    mkdir -p $out/bin
+  installPhase = ''
+    mkdir -p $out/bin $out/lib/udev/rules.d
+    make install
+    install 99-dmr.rules $out/lib/udev/rules.d/99-dmr.rules
   '';
 
   meta = with stdenv.lib; {

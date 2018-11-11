@@ -1,4 +1,4 @@
-{ lib, python3Packages, stdenv, writeTextDir, substituteAll, fetchpatch, targetPackages }:
+{ lib, python3Packages, stdenv, writeTextDir, substituteAll, targetPackages, fetchpatch }:
 
 python3Packages.buildPythonApplication rec {
   version = "0.46.1";
