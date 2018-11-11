@@ -1,6 +1,17 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl, enableDebug ? false, enableStatic ? false }:
 
-stdenv.mkDerivation rec {
+let staticBuildOpts = {
+      buildFlags = [ "static" ];
+
+      installPhase = ''
+        mkdir -p $out/bin
+        cp static $out/bin/ebtables
+
+        mkdir -p $out/etc
+        cp ethertypes $out/etc/ethertypes
+      '';
+    };
+in stdenv.mkDerivation (rec {
   name = "ebtables-${version}";
   version = "2.0.10-4";
 
@@ -12,16 +23,28 @@ stdenv.mkDerivation rec {
   makeFlags =
     [ "LIBDIR=$(out)/lib" "BINDIR=$(out)/sbin" "MANDIR=$(out)/share/man"
       "ETCDIR=$(out)/etc" "INITDIR=$(TMPDIR)" "SYSCONFIGDIR=$(out)/etc/sysconfig"
-      "LOCALSTATEDIR=/var"
+      "LOCALSTATEDIR=/var" "CC=${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc"
     ];
+
+  patches = lib.optional stdenv.hostPlatform.isMusl ./musl-compatibility.patch ++
+            lib.optional stdenv.hostPlatform.isAarch32 ./no-as-needed.patch;
 
   preBuild =
     ''
       substituteInPlace Makefile --replace '-o root -g root' ""
     '';
 
-  NIX_CFLAGS_COMPILE = "-Wno-error";
+  NIX_CFLAGS_COMPILE = lib.concatStringsSep " " (
+    ["-Wno-error"] ++
+    lib.optionals stdenv.hostPlatform.isMusl [
+      "-D__THROW="
+      "-Du_int8_t=uint8_t"
+      "-Du_int32_t=uint32_t"
+    ] ++
+    lib.optional enableDebug "-g3"
+  );
 
+  dontStrip = enableDebug;
   preInstall = "mkdir -p $out/etc/sysconfig";
 
   meta = with stdenv.lib; {
@@ -30,4 +53,4 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     platforms = platforms.linux;
   };
-}
+} // (if enableStatic then staticBuildOpts else {}))
