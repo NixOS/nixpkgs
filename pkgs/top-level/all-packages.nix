@@ -16199,7 +16199,6 @@ in
 
   avxsynth = callPackage ../applications/video/avxsynth {
     libjpeg = libjpeg_original; # error: 'JCOPYRIGHT_SHORT' was not declared in this scope
-    ffmpeg = ffmpeg_2;
   };
 
   awesome-4-0 = callPackage ../applications/window-managers/awesome {
