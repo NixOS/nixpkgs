@@ -30,11 +30,9 @@ buildPythonPackage rec {
 
   # Remove .pytest_cache when using py.test in a Nix build
   setupHook = writeText "pytest-hook" ''
-    pytestcachePhase() {
-        find $out -name .pytest_cache -type d -exec rm -rf {} +
-    }
-
-    preDistPhases+=" pytestcachePhase"
+    postFixupHooks+=(
+        'find $out -name .pytest_cache -type d -exec rm -rf {} +'
+    )
   '';
 
   meta = with stdenv.lib; {
