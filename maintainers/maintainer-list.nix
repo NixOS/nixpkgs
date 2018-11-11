@@ -1511,6 +1511,11 @@
     github = "fuuzetsu";
     name = "Mateusz Kowalczyk";
   };
+  fuwa = {
+    email = "echowss@gmail.com";
+    github = "fuwa0529";
+    name = "Haruka Akiyama";
+  };
   fuzzy-id = {
     email = "hacking+nixos@babibo.de";
     name = "Thomas Bach";
