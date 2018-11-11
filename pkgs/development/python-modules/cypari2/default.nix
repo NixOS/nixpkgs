@@ -12,11 +12,11 @@
 buildPythonPackage rec {
   pname = "cypari2";
   # upgrade may break sage, please test the sage build or ping @timokau on upgrade
-  version = "2.0.0";
+  version = "2.0.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "3512d8a78217dfd3ac431b470453342188f70b2053386678a1ec3c74aae7427a";
+    sha256 = "32fad615d773e9b5a9394c078ddc2c868e64e35f1ac9633ff90b456901b9d886";
   };
 
   # This differs slightly from the default python installPhase in that it pip-installs
