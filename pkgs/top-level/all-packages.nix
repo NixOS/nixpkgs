@@ -18272,9 +18272,7 @@ in
     wxGTK30 = wxGTK30.override { withWebKit  = true ; };
   };
 
-  moc = callPackage ../applications/audio/moc {
-    ffmpeg = ffmpeg_2;
-  };
+  moc = callPackage ../applications/audio/moc { };
 
   mod-distortion = callPackage ../applications/audio/mod-distortion { };
 
