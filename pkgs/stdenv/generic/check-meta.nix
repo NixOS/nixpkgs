@@ -170,12 +170,10 @@ let
       name = "test";
       check = x: x == {} || ( # Accept {} for tests that are unsupported
         isDerivation x &&
-        x ? meta.timeout &&
-        x ? meta.needsVMSupport
+        x ? meta.timeout
       );
       merge = lib.options.mergeOneOption;
     });
-    needsVMSupport = bool;
     timeout = int;
 
     # Weirder stuff that doesn't appear in the documentation?

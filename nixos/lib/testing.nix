@@ -70,8 +70,6 @@ in rec {
             mv $i $out/coverage-data/$(dirname $(dirname $i))
           done
         '';
-
-        meta.needsVMSupport = true;
     };
 
 
