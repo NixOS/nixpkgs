@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   };
 
-  buildInputs = [ six enum34 ];
+  propogatedBuildInputs = [ six enum34 ];
 
   # PyPI archive does not ship with tests
   doCheck= false;
