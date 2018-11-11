@@ -17,6 +17,8 @@ let
 
     buildOcaml = callPackage ../build-support/ocaml { };
 
+    buildDunePackage = callPackage ../build-support/ocaml/dune.nix {};
+
     alcotest = callPackage ../development/ocaml-modules/alcotest {};
 
     angstrom = callPackage ../development/ocaml-modules/angstrom { };
@@ -734,6 +736,8 @@ let
     variantslib_p4 = callPackage ../development/ocaml-modules/variantslib { };
 
     vg = callPackage ../development/ocaml-modules/vg { };
+
+    visitors = callPackage ../development/ocaml-modules/visitors { };
 
     wasm = callPackage ../development/ocaml-modules/wasm { };
 

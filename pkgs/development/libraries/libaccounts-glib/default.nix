@@ -1,29 +1,48 @@
-{ stdenv, fetchFromGitLab, autoconf, automake, glib
-, gtk-doc, libtool, libxml2, libxslt, pkgconfig, sqlite }:
+{ stdenv, fetchFromGitLab, meson, ninja, glib, check, python3, vala, gtk-doc, glibcLocales
+, libxml2, libxslt, pkgconfig, sqlite, docbook_xsl, docbook_xml_dtd_43, gobjectIntrospection }:
 
-let version = "1.23"; in
 stdenv.mkDerivation rec {
   name = "libaccounts-glib-${version}";
+  version = "1.24";
+
+  outputs = [ "out" "dev" "devdoc" "py" ];
 
   src = fetchFromGitLab {
-    sha256 = "11cvl3ch0y93756k90mw1swqv0ylr8qgalmvcn5yari8z4sg6cgg";
-    rev = "VERSION_${version}";
-    repo = "libaccounts-glib";
     owner = "accounts-sso";
+    repo = "libaccounts-glib";
+    rev = version;
+    sha256 = "0y8smg1rd279lrr9ad8b499i8pbkajmwd4xn41rdh9h93hs9apn7";
   };
 
-  buildInputs = [ glib libxml2 libxslt sqlite ];
-  nativeBuildInputs = [ autoconf automake gtk-doc libtool pkgconfig ];
+  # See: https://gitlab.com/accounts-sso/libaccounts-glib/merge_requests/22
+  patches = [ ./py-override.patch ];
 
-  postPatch = ''
-    NOCONFIGURE=1 ./autogen.sh
-  '';
+  nativeBuildInputs = [ 
+    check
+    docbook_xml_dtd_43
+    docbook_xsl
+    glibcLocales
+    gobjectIntrospection
+    gtk-doc
+    meson
+    ninja
+    pkgconfig
+    vala
+  ];
 
-  configurePhase = ''
-    HAVE_GCOV_FALSE="#" ./configure $configureFlags --prefix=$out
-  '';
+  buildInputs = [
+    glib
+    libxml2
+    libxslt
+    python3.pkgs.pygobject3
+    sqlite
+  ];
 
-  NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations"; # since glib-2.46
+  LC_ALL = "en_US.UTF-8";
+
+  mesonFlags = [
+    "-Dpy-overrides-dir=${placeholder ''py''}/${python3.sitePackages}/gi/overrides"
+  ];
 
   meta = with stdenv.lib; {
     description = "Library for managing accounts which can be used from GLib applications";

@@ -42,6 +42,15 @@ let
           password = "${cfg.defaultDatabase.password}"
       ''}
 
+      ${optionalString (cfg.alerta.enable) ''
+        [alerta]
+          enabled = true
+          url = "${cfg.alerta.url}"
+          token = "${cfg.alerta.token}"
+          environment = "${cfg.alerta.environment}"
+          origin = "${cfg.alerta.origin}"
+      ''}
+
       ${cfg.extraConfig}
     '';
   };
@@ -118,6 +127,35 @@ in
       password = mkOption {
         description = "The password to connect to the remote InfluxDB server";
         type = types.string;
+      };
+    };
+
+    alerta = {
+      enable = mkEnableOption "kapacitor alerta integration";
+
+      url = mkOption {
+        description = "The URL to the Alerta REST API";
+        default = "http://localhost:5000";
+        example = "http://localhost:5000";
+        type = types.string;
+      };
+
+      token = mkOption {
+        description = "Default Alerta authentication token";
+        type = types.str;
+        default = "";
+      };
+
+      environment = mkOption {
+        description = "Default Alerta environment";
+        type = types.str;
+        default = "Production";
+      };
+
+      origin = mkOption {
+        description = "Default origin of alert";
+        type = types.str;
+        default = "kapacitor";
       };
     };
   };

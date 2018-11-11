@@ -2,10 +2,11 @@
 
 buildGoPackage rec {
   name = "gocode-unstable-${version}";
-  version = "2018-10-22";
-  rev = "e893215113e5f7594faa3a8eb176c2700c921276";
+  version = "2018-11-05";
+  rev = "0af7a86943a6e0237c90f8aeb74a882e1862c898";
 
   goPackagePath = "github.com/mdempsky/gocode";
+  excludedPackages = ''internal/suggest/testdata'';
 
   # we must allow references to the original `go` package,
   # because `gocode` needs to dig into $GOROOT to provide completions for the
@@ -17,16 +18,10 @@ buildGoPackage rec {
 
     owner = "mdempsky";
     repo = "gocode";
-    sha256 = "1zsll7yghv64890k7skl0g2lg9rsaiisgrfnb8kshsxrcxi1kc2l";
+    sha256 = "0fxqn0v6dbwarn444lc1xrx5vfkcidi73f4ba7l4clsb9qdqgyam";
   };
 
   goDeps = ./deps.nix;
-
-  preBuild = ''
-    # getting an error building the testdata because they contain invalid files
-    # on purpose as part of the testing.
-    rm -r go/src/$goPackagePath/internal/suggest/testdata
-  '';
 
   meta = with stdenv.lib; {
     description = "An autocompletion daemon for the Go programming language";

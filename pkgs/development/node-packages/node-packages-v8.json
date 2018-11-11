@@ -2,6 +2,7 @@
   "alloy"
 , "asar"
 , "azure-cli"
+, "azure-functions-core-tools"
 , "bower"
 , "bower2nix"
 , "browserify"
@@ -67,6 +68,7 @@
 , "less-plugin-clean-css"
 , "live-server"
 , "livedown"
+, { "lumo-build-deps": "../interpreters/clojurescript/lumo" }
 , "madoko"
 , "mathjax"
 , "meat"
@@ -119,6 +121,7 @@
 , "tiddlywiki"
 , "titanium"
 , "triton"
+, "ttf2eot"
 , "typescript"
 , "typings"
 , "uglify-js"

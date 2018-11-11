@@ -180,7 +180,7 @@ stdenv.mkDerivation ({
 
   inherit patches;
 
-  hardeningDisable = [ "format" ];
+  hardeningDisable = [ "format" ] ++ stdenv.lib.optional stdenv.targetPlatform.isMusl "pie";
 
   outputs = [ "out" "lib" "man" "info" ];
   setOutputFlags = false;

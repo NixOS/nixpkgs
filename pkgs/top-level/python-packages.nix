@@ -166,6 +166,10 @@ in {
 
   agate-dbf = callPackage ../development/python-modules/agate-dbf { };
 
+  alerta = callPackage ../development/python-modules/alerta { };
+
+  alerta-server = callPackage ../development/python-modules/alerta-server { };
+
   phonenumbers = callPackage ../development/python-modules/phonenumbers { };
 
   agate-excel = callPackage ../development/python-modules/agate-excel { };
@@ -201,6 +205,8 @@ in {
   authres = callPackage ../development/python-modules/authres { };
 
   autograd = callPackage ../development/python-modules/autograd { };
+
+  autologging = callPackage ../development/python-modules/autologging { };
 
   automat = callPackage ../development/python-modules/automat { };
 
@@ -659,6 +665,8 @@ in {
   slackclient = callPackage ../development/python-modules/slackclient { };
 
   slicerator = callPackage ../development/python-modules/slicerator { };
+
+  snapcast = callPackage ../development/python-modules/snapcast { };
 
   spglib = callPackage ../development/python-modules/spglib { };
 
@@ -1139,6 +1147,8 @@ in {
   click-log = callPackage ../development/python-modules/click-log {};
 
   click-plugins = callPackage ../development/python-modules/click-plugins {};
+
+  click-repl = callPackage ../development/python-modules/click-repl { };
 
   click-threading = callPackage ../development/python-modules/click-threading {};
 
@@ -1685,8 +1695,6 @@ in {
   humanize = callPackage ../development/python-modules/humanize { };
 
   hupper = callPackage ../development/python-modules/hupper {};
-
-  hovercraft = callPackage ../development/python-modules/hovercraft { };
 
   hsaudiotag = callPackage ../development/python-modules/hsaudiotag { };
 
@@ -3747,8 +3755,11 @@ in {
     };
   };
 
+  prompt_toolkit = self.prompt_toolkit_1;
 
-  prompt_toolkit = callPackage ../development/python-modules/prompt_toolkit { };
+  prompt_toolkit_1 = callPackage ../development/python-modules/prompt_toolkit/1.nix { };
+
+  prompt_toolkit_2 = callPackage ../development/python-modules/prompt_toolkit { };
 
   protobuf = callPackage ../development/python-modules/protobuf {
     disabled = isPyPy;
@@ -3768,7 +3779,9 @@ in {
 
   psycopg2 = callPackage ../development/python-modules/psycopg2 {};
 
-  ptpython = callPackage ../development/python-modules/ptpython {};
+  ptpython = callPackage ../development/python-modules/ptpython {
+    prompt_toolkit = self.prompt_toolkit_2;
+  };
 
   publicsuffix = callPackage ../development/python-modules/publicsuffix {};
 
@@ -4462,6 +4475,8 @@ in {
       maintainers = with maintainers; [ ];
     };
   };
+
+  owslib = callPackage ../development/python-modules/owslib { };
 
   PyICU = buildPythonPackage rec {
     name = "PyICU-2.2";
