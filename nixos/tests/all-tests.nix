@@ -88,6 +88,7 @@ in
   graphite = handleTest ./graphite.nix {};
   hadoop.hdfs = handleTestOn [ "x86_64-linux" ] ./hadoop/hdfs.nix {};
   hadoop.yarn = handleTestOn [ "x86_64-linux" ] ./hadoop/yarn.nix {};
+  handbrake = handleTestOn ["x86_64-linux"] ./handbrake.nix {};
   haproxy = handleTest ./haproxy.nix {};
   #hardened = handleTest ./hardened.nix {}; # broken due useSandbox = true
   hibernate = handleTest ./hibernate.nix {};
