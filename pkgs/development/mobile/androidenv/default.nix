@@ -1,5 +1,5 @@
 { buildPackages, pkgs, pkgs_i686, targetPackages
-, includeSources ? true, licenseAccepted ? false
+, includeSources ? true
 }:
 
 # TODO: use callPackage instead of import to avoid so many inherits
@@ -68,7 +68,7 @@ rec {
 
     inherit platformTools buildTools support
             supportRepository platforms sysimages
-            addons sources includeSources licenseAccepted;
+            addons sources includeSources;
 
     stdenv_32bit = pkgs_i686.stdenv;
   };
