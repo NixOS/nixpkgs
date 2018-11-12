@@ -43,6 +43,7 @@ let
     go-lib = callPackage ./go-lib { };
     qt5dxcb-plugin = callPackage ./qt5dxcb-plugin { };
     qt5integration = callPackage ./qt5integration { };
+    startdde = callPackage ./startdde { };
 
   };
 
