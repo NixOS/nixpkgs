@@ -1516,6 +1516,8 @@ in {
 
   dopy = callPackage ../development/python-modules/dopy { };
 
+  dpath = callPackage ../development/python-modules/dpath { };
+
   dpkt = callPackage ../development/python-modules/dpkt {};
 
   urllib3 = callPackage ../development/python-modules/urllib3 {};
