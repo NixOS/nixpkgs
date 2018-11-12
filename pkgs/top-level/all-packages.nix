@@ -726,6 +726,8 @@ with pkgs;
    SDL = SDL_sixel;
   };
 
+  gremlin-console = callPackage ../applications/misc/gremlin-console { };
+
   gcsfuse = callPackage ../tools/filesystems/gcsfuse { };
 
   glyr = callPackage ../tools/audio/glyr { };
