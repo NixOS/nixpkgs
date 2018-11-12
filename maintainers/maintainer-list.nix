@@ -4263,6 +4263,11 @@
     github = "tex";
     name = "Milan Svoboda";
   };
+  tg-x = {
+    email = "*@tg-x.net";
+    github = "tg-x";
+    name = "TG ⊗ Θ";
+  };
   thall = {
     email = "niclas.thall@gmail.com";
     github = "thall";
