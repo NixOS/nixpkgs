@@ -1,6 +1,6 @@
-{ system, minimal ? false, config ? {} }:
+{ system, pkgs, minimal ? false, config ? {} }:
 
-with import ./build-vms.nix { inherit system minimal config; };
+with import ./build-vms.nix { inherit system pkgs minimal config; };
 with pkgs;
 
 let
@@ -70,8 +70,6 @@ in rec {
             mv $i $out/coverage-data/$(dirname $(dirname $i))
           done
         '';
-
-        meta.needsVMSupport = true;
     };
 
 

@@ -68,11 +68,8 @@ stdenv.mkDerivation rec {
     description = "Open source IMAP and POP3 email server written with security primarily in mind";
     maintainers = with stdenv.lib.maintainers; [ peti rickynils fpletz ];
     platforms = stdenv.lib.platforms.unix;
-    # https://github.com/NixOS/nixpkgs/issues/50230 must be resolved before
-    # this can be enabled.
-    #
-    # tests = {
-    #   opensmtpd-interaction = nixosTests.opensmtpd;
-    # };
+  };
+  passthru.tests = {
+    opensmtpd-interaction = nixosTests.opensmtpd;
   };
 }
