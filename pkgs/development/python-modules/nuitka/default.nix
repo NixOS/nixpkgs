@@ -22,9 +22,8 @@ in buildPythonPackage rec {
     sha256 = "01vm8mqhpdrwlxw6rxbg3wz51njq69yn862141mja00mllg3j7pg";
   };
 
-  buildInputs = stdenv.lib.optionals doCheck [ vmprof pyqt4 ];
-
-  propagatedBuildInputs = [ scons ];
+  checkInputs = [ vmprof pyqt4 ];
+  nativeBuildInputs = [ scons ];
 
   postPatch = ''
     patchShebangs tests/run-tests

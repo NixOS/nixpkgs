@@ -15,12 +15,10 @@ stdenv.mkDerivation rec {
     sed -i -e "s@ENV = dict.*@ENV = os.environ@g" SConstruct
   '';
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ scons openssl protobuf boost zlib ];
+  nativeBuildInputs = [ pkgconfig scons ];
+  buildInputs = [ openssl protobuf boost zlib ];
 
-  buildPhase = "scons";
-
-  installPhase = ''
+  postInstall = ''
     mkdir -p $out/bin
     cp build/rippled $out/bin/
   '';
