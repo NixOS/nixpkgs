@@ -6,8 +6,8 @@ stdenv.mkDerivation rec {
   version = "0.6.2";
 
   src = fetchFromGitHub {
-    owner = "saenzramiro";
-    repo = "rambox";
+    owner = "ramboxapp";
+    repo = "community-edition";
     rev = version;
     sha256 = "150vf62cp739l9dgpnksgpkffabs2wi15q217m3nai34irhwzk8m";
   };
