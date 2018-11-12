@@ -38,7 +38,10 @@ in {
     enable = mkEnableOption "nextcloud";
     hostName = mkOption {
       type = types.str;
-      description = "FQDN for the nextcloud instance.";
+      description = ''
+        FQDN for the nextcloud instance. Automatically added to
+        <literal>extraTrustedDomains</literal> are accepted.
+      '';
     };
     home = mkOption {
       type = types.str;
@@ -216,8 +219,8 @@ in {
         default = [];
         description = ''
           Trusted domains, from which the nextcloud installation will be
-          acessible.  You don't need to add
-          <literal>services.nextcloud.hostname</literal> here.
+          acessible.  You don't need to add either localhost or
+          <literal>services.nextcloud.hostName</literal> here.
         '';
       };
     };
