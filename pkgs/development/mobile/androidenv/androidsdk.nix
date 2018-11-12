@@ -41,10 +41,16 @@ stdenv.mkDerivation rec {
     }
     else throw "platform not ${stdenv.hostPlatform.system} supported!";
 
+  emulator = fetchurl {
+     url = "https://dl.google.com/android/repository/emulator-linux-4969155.zip";
+     sha256 = "0iw0j6j3w9zpfalsa7xq2czz4vzgq96zk2zddjhanwwx4p8fhrfd";
+  };
+
   buildCommand = ''
     mkdir -p $out/libexec
     cd $out/libexec
     unpackFile $src
+    unpackFile $emulator
     cd tools
 
     for f in monitor bin/monkeyrunner bin/uiautomatorviewer
@@ -76,13 +82,16 @@ stdenv.mkDerivation rec {
       # The emulators need additional libraries, which are dynamically loaded => let's wrap them
 
       ${stdenv.lib.optionalString (stdenv.hostPlatform.system == "x86_64-linux") ''
-        for i in emulator emulator-check
+        cd ..
+        for i in emulator/emulator* emulator/qemu/linux-x86_64/qemu-system-*
         do
+            patchelf --set-interpreter ${stdenv.cc.libc.out}/lib/ld-linux-x86-64.so.2 $i
             wrapProgram `pwd`/$i \
               --prefix PATH : ${stdenv.lib.makeBinPath [ file glxinfo ]} \
               --suffix LD_LIBRARY_PATH : `pwd`/lib:${makeLibraryPath [ stdenv.cc.cc libX11 libxcb libXau libXdmcp libXext libGLU_combined alsaLib zlib libpulseaudio dbus.lib ]} \
               --suffix QT_XKB_CONFIG_ROOT : ${xkeyboardconfig}/share/X11/xkb
         done
+        cd tools
       ''}
     ''}
 
@@ -93,7 +102,7 @@ stdenv.mkDerivation rec {
         # The monitor requires some more patching
 
         cd lib/monitor-x86
-        patchelf --set-interpreter ${stdenv.cc.libc.out}/lib/ld-linux.so.2 monitor
+        patchelf --set-interpreter ${stdenv_32bit.cc.libc.out}/lib/ld-linux.so.2 monitor
         patchelf --set-rpath ${makeLibraryPath [ libX11 libXext libXrender freetype fontconfig ]} libcairo-swt.so
 
         wrapProgram `pwd`/monitor \
@@ -256,6 +265,14 @@ stdenv.mkDerivation rec {
     done
 
     for i in $out/libexec/build-tools/*/*
+    do
+        if [ ! -d $i ] && [ -x $i ]
+        then
+            ln -sf $i $out/bin/$(basename $i)
+        fi
+    done
+
+    for i in $out/libexec/emulator/*
     do
         if [ ! -d $i ] && [ -x $i ]
         then
