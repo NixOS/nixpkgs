@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, removeReferencesTo, which, go_1_10, go-bindata, makeWrapper, rsync, utillinux
+{ stdenv, lib, fetchFromGitHub, removeReferencesTo, which, go, go-bindata, makeWrapper, rsync, utillinux
 , coreutils, kerberos, clang
 , components ? [
   "cmd/oc"
@@ -32,8 +32,8 @@ in stdenv.mkDerivation rec {
 };
 
   # go > 1.10
-  # [FATAL] [14:44:02+0000] Please install Go version go1.10 or use PERMISSIVE_GO=y to bypass this check.
-  buildInputs = [ removeReferencesTo makeWrapper which go_1_10 rsync go-bindata kerberos clang ];
+  # [FATAL] [14:44:02+0000] Please install Go version go or use PERMISSIVE_GO=y to bypass this check.
+  buildInputs = [ removeReferencesTo makeWrapper which go rsync go-bindata kerberos clang ];
 
   outputs = [ "out" ];
 
@@ -78,7 +78,7 @@ in stdenv.mkDerivation rec {
   '';
 
   preFixup = ''
-    find $out/bin -type f -exec remove-references-to -t ${go_1_10} '{}' +
+    find $out/bin -type f -exec remove-references-to -t ${go} '{}' +
   '';
 
   meta = with stdenv.lib; {
