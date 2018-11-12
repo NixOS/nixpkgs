@@ -18180,6 +18180,8 @@ with pkgs;
 
   ptex = callPackage ../development/libraries/ptex {};
 
+  qtcurve = libsForQt5.callPackage ../misc/themes/qtcurve {};
+
   rssguard = libsForQt5.callPackage ../applications/networking/feedreaders/rssguard { };
 
   scudcloud = callPackage ../applications/networking/instant-messengers/scudcloud { };
