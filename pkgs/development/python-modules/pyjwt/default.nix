@@ -22,6 +22,9 @@ buildPythonPackage rec {
     done
   '';
 
+  # https://github.com/jpadilla/pyjwt/issues/382
+  doCheck = false;
+
   meta = with lib; {
     description = "JSON Web Token implementation in Python";
     homepage = https://github.com/jpadilla/pyjwt;
