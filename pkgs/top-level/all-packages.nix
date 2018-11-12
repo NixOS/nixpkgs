@@ -18926,6 +18926,8 @@ with pkgs;
 
   setbfree = callPackage ../applications/audio/setbfree { };
 
+  sfxr-qt = libsForQt5.callPackage ../applications/audio/sfxr-qt { };
+
   shadowfox = callPackage ../tools/networking/shadowfox { };
 
   shfmt = callPackage ../tools/text/shfmt { };
