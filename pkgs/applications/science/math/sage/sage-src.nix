@@ -2,6 +2,12 @@
 , fetchFromGitHub
 , fetchpatch
 }:
+
+# This file is responsible for fetching the sage source and adding necessary patches.
+# It does not actually build anything, it just copies the patched sources to $out.
+# This is done because multiple derivations rely on these sources and they should
+# all get the same sources with the same patches applied.
+
 stdenv.mkDerivation rec {
   version = "8.4";
   name = "sage-src-${version}";
@@ -13,6 +19,8 @@ stdenv.mkDerivation rec {
     sha256 = "0gips1hagiz9m7s21bg5as8hrrm2x5k47h1bsq0pc46iplfwmv2d";
   };
 
+  # Patches needed because of particularities of nix or the way this is packaged.
+  # The goal is to upstream all of them and get rid of this list.
   nixPatches = [
     # https://trac.sagemath.org/ticket/25358
     (fetchpatch {
@@ -40,10 +48,16 @@ stdenv.mkDerivation rec {
     ./patches/Only-test-py2-py3-optional-tests-when-all-of-sage-is.patch
   ];
 
+  # Patches needed because of package updates. We could just pin the versions of
+  # dependencies, but that would lead to rebuilds, confusion and the burdons of
+  # maintaining multiple versions of dependencies. Instead we try to make sage
+  # compatible with never dependency versions when possible. All these changes
+  # should come from or be proposed to upstream. This list will probably never
+  # be empty since dependencies update all the time.
   packageUpgradePatches = let
-    # fetch a diff between base and rev on sage's git server
-    # used to fetch trac tickets by setting the base to the release and the
-    # revision to the last commit that should be included
+    # Fetch a diff between `base` and `rev` on sage's git server.
+    # Used to fetch trac tickets by setting the `base` to the last release and the
+    # `rev` to the last commit of the ticket.
     fetchSageDiff = { base, rev, ...}@args: (
       fetchpatch ({
         url = "https://git.sagemath.org/sage.git/patch?id2=${base}&id=${rev}";
@@ -65,8 +79,8 @@ stdenv.mkDerivation rec {
     # https://trac.sagemath.org/ticket/25260
     ./patches/numpy-1.15.1.patch
 
-    # ntl upgrade
-    # https://trac.sagemath.org/ticket/25532#comment:29
+    # needed for ntl update
+    # https://trac.sagemath.org/ticket/25532
     (fetchpatch {
       name = "lcalc-c++11.patch";
       url = "https://git.archlinux.org/svntogit/community.git/plain/trunk/sagemath-lcalc-c++11.patch?h=packages/sagemath&id=0e31ae526ab7c6b5c0bfacb3f8b1c4fd490035aa";
