@@ -9129,6 +9129,8 @@ with pkgs;
   arb = callPackage ../development/libraries/arb {};
   arb-git = callPackage ../development/libraries/arb/git.nix {};
 
+  argp-standalone = callPackage ../development/libraries/argp-standalone {};
+
   armadillo = callPackage ../development/libraries/armadillo {};
 
   arrow-cpp = callPackage ../development/libraries/arrow-cpp {};

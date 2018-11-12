@@ -216,6 +216,11 @@
     github = "alunduil";
     name = "Alex Brandt";
   };
+  amar1729 = {
+    email = "amar.paul16@gmail.com";
+    github = "amar1729";
+    name = "Amar Paul";
+  };
   ambrop72 = {
     email = "ambrop7@gmail.com";
     github = "ambrop72";
