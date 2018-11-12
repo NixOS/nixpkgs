@@ -1,6 +1,11 @@
-{ system ? builtins.currentSystem }:
-with import ../lib/testing.nix { inherit system; };
+{ system ? builtins.currentSystem,
+  config ? {},
+  pkgs ? import ../.. { inherit system config; }
+}:
+
+with import ../lib/testing.nix { inherit system pkgs; };
 with pkgs.lib;
+
 let
   postgresql-versions = pkgs.callPackages ../../pkgs/servers/sql/postgresql { };
   test-sql = pkgs.writeText "postgresql-test" ''

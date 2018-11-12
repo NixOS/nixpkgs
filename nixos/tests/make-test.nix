@@ -1,5 +1,9 @@
-f: { system ? builtins.currentSystem, ... } @ args:
+f: {
+  system ? builtins.currentSystem,
+  pkgs ? import ../.. { inherit system; config = {}; },
+  ...
+} @ args:
 
-with import ../lib/testing.nix { inherit system; };
+with import ../lib/testing.nix { inherit system pkgs; };
 
 makeTest (if pkgs.lib.isFunction f then f (args // { inherit pkgs; inherit (pkgs) lib; }) else f)

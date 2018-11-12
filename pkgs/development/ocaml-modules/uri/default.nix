@@ -11,8 +11,6 @@ buildDunePackage rec {
     sha256 = "1m845rwd70wi4iijkrigyz939m1x84ba70hvv0d9sgk6971w4kz0";
   };
 
-  unpackCmd = "tar -xjf $curSrc";
-
   buildInputs = [ ounit ];
   propagatedBuildInputs = [ ppx_sexp_conv re sexplib stringext ];
   doCheck = true;

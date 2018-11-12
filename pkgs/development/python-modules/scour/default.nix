@@ -1,8 +1,6 @@
-{ stdenv, python3 }:
+{ lib, buildPythonPackage, fetchPypi, six }:
 
-with python3.pkgs;
-
-buildPythonApplication rec {
+buildPythonPackage rec {
   pname = "scour";
   version = "0.37";
 
@@ -13,11 +11,13 @@ buildPythonApplication rec {
 
   propagatedBuildInputs = [ six ];
 
-  meta = with stdenv.lib; {
+  # No tests included in archive
+  doCheck = false;
+
+  meta = with lib; {
     description = "An SVG Optimizer / Cleaner ";
     homepage    = https://github.com/scour-project/scour;
     license     = licenses.asl20;
     maintainers = with maintainers; [ worldofpeace ];
-    platforms   = platforms.unix;
   };
 }

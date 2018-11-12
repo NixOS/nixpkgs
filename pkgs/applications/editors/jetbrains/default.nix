@@ -250,12 +250,12 @@ in
 
   clion = buildClion rec {
     name = "clion-${version}";
-    version = "2018.2.4"; /* updated by script */
+    version = "2018.2.5"; /* updated by script */
     description  = "C/C++ IDE. New. Intelligent. Cross-platform";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/cpp/CLion-${version}.tar.gz";
-      sha256 = "0ljzdjvlkm37gclny652nm7kw2hlyl1iiix6h44zq7fhszp5kmyr"; /* updated by script */
+      sha256 = "0brbwgyjh38ix8nr176glmc3kr7ndi8wppxqkb1c890jw5d3916j"; /* updated by script */
     };
     wmClass = "jetbrains-clion";
     update-channel = "CLion Release"; # channel's id as in http://www.jetbrains.com/updates/updates.xml
@@ -315,12 +315,12 @@ in
 
   phpstorm = buildPhpStorm rec {
     name = "phpstorm-${version}";
-    version = "2018.2.3"; /* updated by script */
+    version = "2018.2.5"; /* updated by script */
     description = "Professional IDE for Web and PHP developers";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/webide/PhpStorm-${version}.tar.gz";
-      sha256 = "1kdv3h749ly2sadixz3khaxrias3k72fi2ixrzniynwhgiqixz70"; /* updated by script */
+      sha256 = "0crr3056hlv9x2q1i1n00aavj53xkwkfy4lgyyphk81c0gly4dg1"; /* updated by script */
     };
     wmClass = "jetbrains-phpstorm";
     update-channel = "PhpStorm 2018.2";
@@ -367,12 +367,12 @@ in
 
   ruby-mine = buildRubyMine rec {
     name = "ruby-mine-${version}";
-    version = "2018.2.2"; /* updated by script */
+    version = "2018.2.4"; /* updated by script */
     description = "The Most Intelligent Ruby and Rails IDE";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/ruby/RubyMine-${version}.tar.gz";
-      sha256 = "0585dnbvmzxnj2am6b04lfw75rdhk0fby2cbj58pzzcjz5xlrhvq"; /* updated by script */
+      sha256 = "0dk3ch749ai5kyg9q8819ckrqw2jk4f656iqrkkpab9fjqfjylka"; /* updated by script */
     };
     wmClass = "jetbrains-rubymine";
     update-channel = "RubyMine 2018.2";
@@ -380,12 +380,12 @@ in
 
   webstorm = buildWebStorm rec {
     name = "webstorm-${version}";
-    version = "2018.2.3"; /* updated by script */
+    version = "2018.2.5"; /* updated by script */
     description = "Professional IDE for Web and JavaScript development";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/webstorm/WebStorm-${version}.tar.gz";
-      sha256 = "0y3a1p047knc598aamxxdmcf5nr86wk60w6nk2bhcasxjyqaw6r4"; /* updated by script */
+      sha256 = "0d4l2bf87i6kv45qmbw55hvcrnxr6zxjcjicbkjs2k01lv7y605c"; /* updated by script */
     };
     wmClass = "jetbrains-webstorm";
     update-channel = "WebStorm Release";
