@@ -50,6 +50,13 @@ in {
       default = false;
       description = "Enable if there is a TLS terminating proxy in front of nextcloud.";
     };
+    openFirewall = mkOption {
+      type = types.bool;
+      default = true;
+      description = ''
+        Whether to automatically open the specified ports in the firewall.
+      '';
+    };
 
     maxUploadSize = mkOption {
       default = "512M";
@@ -254,6 +261,10 @@ in {
           message = "Please specify exactly one of adminpass or adminpassFile";
         }
       ];
+    }
+
+    {
+      networking.firewall.allowedTCPPorts = if cfg.openFirewall then [ 80 443 ] else [];
     }
 
     { systemd.timers."nextcloud-cron" = {
