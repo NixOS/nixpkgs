@@ -3,10 +3,12 @@
 , glibmm, libsigcxx, lcms, boost, gettext, makeWrapper
 , gsl, python2, poppler, imagemagick, libwpg, librevenge
 , libvisio, libcdr, libexif, potrace, cmake, hicolor-icon-theme
+, scourSupport ? true
 }:
 
 let
-  python2Env = python2.withPackages(ps: with ps; [ numpy lxml ]);
+  python2Env = python2.withPackages(ps: with ps;
+    [ numpy lxml ] ++ stdenv.lib.optional scourSupport scour);
 in
 
 stdenv.mkDerivation rec {
