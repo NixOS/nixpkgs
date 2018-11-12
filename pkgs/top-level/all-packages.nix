@@ -142,7 +142,7 @@ with pkgs;
 
   dockerTools = callPackage ../build-support/docker { };
 
-  docker_compose = pythonPackages.docker_compose;
+  docker-compose = python3Packages.callPackage ../applications/virtualization/docker-compose {};
 
   docker-ls = callPackage ../tools/misc/docker-ls { };
 

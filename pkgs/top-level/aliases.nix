@@ -85,6 +85,7 @@ mapAliases ({
   docbook5_xsl = docbook_xsl_ns; # added 2018-04-25
   docbook_xml_xslt = docbook_xsl; # added 2018-04-25
   double_conversion = double-conversion; # 2017-11-22
+  docker_compose = docker-compose; # 2018-11-10
   dwarf_fortress = dwarf-fortress; # added 2016-01-23
   emacsMelpa = emacs25PackagesNg; # for backward compatibility
   emacsPackagesGen = emacsPackagesFor; # added 2018-08-18
