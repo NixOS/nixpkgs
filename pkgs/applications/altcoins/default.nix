@@ -81,6 +81,10 @@ rec {
 
   sumokoin = callPackage ./sumokoin.nix { };
 
+  wownero = callPackage ./wownero.nix {
+    inherit (darwin.apple_sdk.frameworks) CoreData IOKit PCSC;
+  };
+
   zcash = callPackage ./zcash {
     withGui = false;
     openssl = openssl_1_1;

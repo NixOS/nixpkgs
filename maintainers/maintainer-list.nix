@@ -1527,6 +1527,11 @@
     github = "ftrvxmtrx";
     name = "Siarhei Zirukin";
   };
+  fuerbringer = {
+    email = "severin@fuerbringer.info";
+    github = "fuerbringer";
+    name = "Severin Fürbringer";
+  };
   funfunctor = {
     email = "eocallaghan@alterapraxis.com";
     name = "Edward O'Callaghan";
@@ -1535,6 +1540,11 @@
     email = "fuuzetsu@fuuzetsu.co.uk";
     github = "fuuzetsu";
     name = "Mateusz Kowalczyk";
+  };
+  fuwa = {
+    email = "echowss@gmail.com";
+    github = "fuwa0529";
+    name = "Haruka Akiyama";
   };
   fuzzy-id = {
     email = "hacking+nixos@babibo.de";

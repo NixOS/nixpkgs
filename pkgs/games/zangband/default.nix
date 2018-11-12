@@ -1,28 +1,23 @@
 { stdenv, fetchurl, ncurses, flex, bison, autoconf, automake, m4, coreutils }:
 
 stdenv.mkDerivation rec {
-  name = "zangband-${version}";
-  version = "2.7.3";
+  name = pname + "-" + version;
+  pname = "zangband";
+  version = "2.7.4b";
 
   src = fetchurl {
-    url = "ftp://ftp.sunet.se/pub/games/Angband/Variant/ZAngband/zangband-${version}.tar.gz";
-    sha256 = "0654m8fzklsc8565sqdad76mxjsm1z9c280srq8863sd10af0bdq";
+    url = "mirror://sourceforge/project/${pname}/${pname}-src/${version}/${name}.tar.gz";
+    sha256 = "0kkz6f9myhjnr3308sdab8q186rd55lapvcp38w8qmakdbhc828j";
   };
 
   buildInputs = [
     ncurses flex bison autoconf automake m4
   ];
 
-  # fails during chmod due to broken permissions
-  dontMakeSourcesWritable = true;
-  postUnpack = ''
-    chmod a+rwX -R .
-  '';
-
   preConfigure = ''
     sed -re 's/ch(own|grp|mod)/true/' -i lib/*/makefile.zb makefile.in
     sed -e '/FIXED_PATHS/d' -i src/z-config.h
-    ./bootstrap
+    autoconf
   '';
 
   preInstall = ''
@@ -42,8 +37,8 @@ stdenv.mkDerivation rec {
       cd "$ZANGBAND_PATH"
       for i in $(find "$ORIG_PATH" -type f); do
         REL_PATH="''${i#$ORIG_PATH/}"
-	mkdir -p "$(dirname "$REL_PATH")"
-	ln -s "$i" "$REL_PATH" &>/dev/null
+        mkdir -p "$(dirname "$REL_PATH")"
+        ln -s "$i" "$REL_PATH" &>/dev/null
       done
       mkdir -p lib/user lib/save
       for i in lib/*/*.raw; do
@@ -59,5 +54,6 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Rogue-like game";
     license = stdenv.lib.licenses.unfree;
+    broken = true; # broken in runtime, will not get pass character generation
   };
 }

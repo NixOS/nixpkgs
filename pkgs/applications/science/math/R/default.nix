@@ -4,6 +4,7 @@
 , curl, Cocoa, Foundation, libobjc, libcxx, tzdata
 , withRecommendedPackages ? true
 , enableStrictBarrier ? false
+, javaSupport ? (!stdenv.hostPlatform.isAarch32 && !stdenv.hostPlatform.isAarch64)
 }:
 
 stdenv.mkDerivation rec {
@@ -17,9 +18,10 @@ stdenv.mkDerivation rec {
   buildInputs = [
     bzip2 gfortran libX11 libXmu libXt libXt libjpeg libpng libtiff ncurses
     pango pcre perl readline texLive xz zlib less texinfo graphviz icu
-    pkgconfig bison imake which jdk openblas curl
+    pkgconfig bison imake which openblas curl
   ] ++ stdenv.lib.optionals (!stdenv.isDarwin) [ tcl tk ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ Cocoa Foundation libobjc libcxx ];
+    ++ stdenv.lib.optionals stdenv.isDarwin [ Cocoa Foundation libobjc libcxx ]
+    ++ stdenv.lib.optional javaSupport jdk;
 
   patches = [ ./no-usr-local-search-paths.patch ];
 
@@ -47,7 +49,7 @@ stdenv.mkDerivation rec {
       CC=$(type -p cc)
       CXX=$(type -p c++)
       FC="${gfortran}/bin/gfortran" F77="${gfortran}/bin/gfortran"
-      JAVA_HOME="${jdk}"
+      ${stdenv.lib.optionalString javaSupport "JAVA_HOME=\"${jdk}\""}
       RANLIB=$(type -p ranlib)
       R_SHELL="${stdenv.shell}"
   '' + stdenv.lib.optionalString stdenv.isDarwin ''

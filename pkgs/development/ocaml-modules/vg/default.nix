@@ -32,8 +32,6 @@ stdenv.mkDerivation rec {
                           ++ optionals pdfBackend [ uutf otfm ]
                           ++ optionals htmlcBackend [ js_of_ocaml js_of_ocaml-ocamlbuild js_of_ocaml-ppx ];
 
-  unpackCmd = "tar xjf $src";
-
   buildPhase = topkg.buildPhase
     + " --with-uutf ${boolToString pdfBackend}"
     + " --with-otfm ${boolToString pdfBackend}"

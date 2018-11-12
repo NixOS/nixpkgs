@@ -45,7 +45,7 @@ default-package-overrides:
   - base-compat-batteries ==0.10.1
   # Newer versions don't work in LTS-12.x
   - cassava-megaparsec < 2
-  # LTS Haskell 12.17
+  # LTS Haskell 12.18
   - abstract-deque ==0.3
   - abstract-deque-tests ==0.3
   - abstract-par ==0.3.3
@@ -731,8 +731,8 @@ default-package-overrides:
   - fileplow ==0.1.0.0
   - filter-logger ==0.6.0.0
   - filtrable ==0.1.1.0
-  - fin ==0.0.1
   - Fin ==0.2.6.0
+  - fin ==0.0.1
   - FindBin ==0.0.5
   - find-clumpiness ==0.2.3.1
   - fingertree ==0.1.4.1
@@ -1010,8 +1010,8 @@ default-package-overrides:
   - hsdns ==1.7.1
   - hsebaysdk ==0.4.0.0
   - hsemail ==2
-  - hset ==2.2.0
   - HSet ==0.0.1
+  - hset ==2.2.0
   - hsexif ==0.6.1.6
   - hs-functors ==0.1.3.0
   - hs-GeoIP ==0.3
