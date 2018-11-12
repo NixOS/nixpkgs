@@ -101,9 +101,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  patches = nixPatches ++ packageUpgradePatches ++ [
-    ./patches/known-padics-bug.patch
-  ];
+  patches = nixPatches ++ packageUpgradePatches;
 
   postPatch = ''
     # make sure shebangs etc are fixed, but sage-python23 still works
