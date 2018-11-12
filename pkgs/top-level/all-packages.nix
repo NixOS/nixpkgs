@@ -21675,14 +21675,14 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Accelerate CoreGraphics CoreVideo;
   };
 
-  caffe2 = callPackage ../development/libraries/science/math/caffe2 {
+  caffe2 = callPackage ../development/libraries/science/math/caffe2 (rec {
     eigen3 = eigen3_3;
     inherit (python3Packages) python future six numpy pydot;
     protobuf = protobuf3_1;
-    python-protobuf = python3Packages.protobuf3_1;
+    python-protobuf = python3Packages.protobuf.override { inherit protobuf; };
     # Used only for image loading.
     opencv3 = opencv3WithoutCuda;
-  };
+  });
 
   cntk = callPackage ../applications/science/math/cntk rec {
     cudaSupport = pkgs.config.cudaSupport or false;

@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "0.81.5";
+  version = "0.82.0";
   components = {
     "abode" = ps: with ps; [  ];
     "ads" = ps: with ps; [  ];
@@ -137,6 +137,7 @@
     "binary_sensor.rpi_gpio" = ps: with ps; [  ];
     "binary_sensor.rpi_pfio" = ps: with ps; [  ];
     "binary_sensor.satel_integra" = ps: with ps; [  ];
+    "binary_sensor.sense" = ps: with ps; [  ];
     "binary_sensor.skybell" = ps: with ps; [  ];
     "binary_sensor.sleepiq" = ps: with ps; [  ];
     "binary_sensor.spc" = ps: with ps; [  ];
@@ -317,18 +318,20 @@
     "deconz" = ps: with ps; [  ];
     "deconz.config_flow" = ps: with ps; [  ];
     "deconz.const" = ps: with ps; [  ];
+    "deconz.gateway" = ps: with ps; [  ];
     "demo" = ps: with ps; [ aiohttp-cors ];
     "device_sun_light_trigger" = ps: with ps; [  ];
     "device_tracker" = ps: with ps; [  ];
     "device_tracker.actiontec" = ps: with ps; [  ];
     "device_tracker.aruba" = ps: with ps; [ pexpect ];
-    "device_tracker.asuswrt" = ps: with ps; [ pexpect ];
+    "device_tracker.asuswrt" = ps: with ps; [  ];
     "device_tracker.automatic" = ps: with ps; [ aiohttp-cors ];
     "device_tracker.bbox" = ps: with ps; [  ];
     "device_tracker.bluetooth_le_tracker" = ps: with ps; [  ];
     "device_tracker.bluetooth_tracker" = ps: with ps; [  ];
     "device_tracker.bmw_connected_drive" = ps: with ps; [  ];
     "device_tracker.bt_home_hub_5" = ps: with ps; [  ];
+    "device_tracker.bt_smarthub" = ps: with ps; [  ];
     "device_tracker.cisco_ios" = ps: with ps; [ pexpect ];
     "device_tracker.ddwrt" = ps: with ps; [  ];
     "device_tracker.demo" = ps: with ps; [  ];
@@ -407,6 +410,7 @@
     "fan.mqtt" = ps: with ps; [ paho-mqtt ];
     "fan.template" = ps: with ps; [  ];
     "fan.tuya" = ps: with ps; [  ];
+    "fan.wemo" = ps: with ps; [  ];
     "fan.wink" = ps: with ps; [  ];
     "fan.xiaomi_miio" = ps: with ps; [ construct ];
     "fan.zha" = ps: with ps; [  ];
@@ -417,7 +421,7 @@
     "foursquare" = ps: with ps; [ aiohttp-cors ];
     "freedns" = ps: with ps; [  ];
     "fritzbox" = ps: with ps; [  ];
-    "frontend" = ps: with ps; [ aiohttp-cors ruamel_yaml ];
+    "frontend" = ps: with ps; [ aiohttp-cors ];
     "gc100" = ps: with ps; [  ];
     "geo_location" = ps: with ps; [  ];
     "geo_location.demo" = ps: with ps; [  ];
@@ -433,6 +437,7 @@
     "google_assistant.trait" = ps: with ps; [  ];
     "google_domains" = ps: with ps; [  ];
     "graphite" = ps: with ps; [  ];
+    "greeneye_monitor" = ps: with ps; [  ];
     "group" = ps: with ps; [  ];
     "habitica" = ps: with ps; [  ];
     "hangouts" = ps: with ps; [  ];
@@ -492,6 +497,7 @@
     "image_processing.openalpr_local" = ps: with ps; [  ];
     "image_processing.opencv" = ps: with ps; [ numpy ];
     "image_processing.seven_segments" = ps: with ps; [  ];
+    "image_processing.tensorflow" = ps: with ps; [ numpy pillow protobuf ];
     "influxdb" = ps: with ps; [ influxdb ];
     "input_boolean" = ps: with ps; [  ];
     "input_datetime" = ps: with ps; [  ];
@@ -611,11 +617,11 @@
     "lock.wink" = ps: with ps; [  ];
     "lock.xiaomi_aqara" = ps: with ps; [  ];
     "lock.zwave" = ps: with ps; [  ];
-    "logbook" = ps: with ps; [ aiohttp-cors ruamel_yaml sqlalchemy ];
+    "logbook" = ps: with ps; [ aiohttp-cors sqlalchemy ];
     "logentries" = ps: with ps; [  ];
     "logger" = ps: with ps; [  ];
     "logi_circle" = ps: with ps; [  ];
-    "lovelace" = ps: with ps; [ ruamel_yaml ];
+    "lovelace" = ps: with ps; [  ];
     "lutron" = ps: with ps; [  ];
     "lutron_caseta" = ps: with ps; [  ];
     "mailbox" = ps: with ps; [ aiohttp-cors ];
@@ -740,7 +746,7 @@
     "notify.hangouts" = ps: with ps; [  ];
     "notify.hipchat" = ps: with ps; [  ];
     "notify.homematic" = ps: with ps; [ pyhomematic ];
-    "notify.html5" = ps: with ps; [ aiohttp-cors ruamel_yaml ];
+    "notify.html5" = ps: with ps; [ aiohttp-cors ];
     "notify.instapush" = ps: with ps; [  ];
     "notify.ios" = ps: with ps; [ aiohttp-cors zeroconf ];
     "notify.joaoapps_join" = ps: with ps; [  ];
@@ -789,8 +795,8 @@
     "openuv" = ps: with ps; [  ];
     "openuv.config_flow" = ps: with ps; [  ];
     "openuv.const" = ps: with ps; [  ];
-    "panel_custom" = ps: with ps; [ aiohttp-cors ruamel_yaml ];
-    "panel_iframe" = ps: with ps; [ aiohttp-cors ruamel_yaml ];
+    "panel_custom" = ps: with ps; [ aiohttp-cors ];
+    "panel_iframe" = ps: with ps; [ aiohttp-cors ];
     "persistent_notification" = ps: with ps; [  ];
     "pilight" = ps: with ps; [  ];
     "plant" = ps: with ps; [  ];
@@ -842,6 +848,7 @@
     "scene.wink" = ps: with ps; [  ];
     "script" = ps: with ps; [  ];
     "scsgate" = ps: with ps; [  ];
+    "sense" = ps: with ps; [  ];
     "sensor" = ps: with ps; [  ];
     "sensor.abode" = ps: with ps; [  ];
     "sensor.ads" = ps: with ps; [  ];
@@ -929,12 +936,13 @@
     "sensor.gearbest" = ps: with ps; [  ];
     "sensor.geizhals" = ps: with ps; [  ];
     "sensor.geo_rss_events" = ps: with ps; [  ];
-    "sensor.gitlab_ci" = ps: with ps; [  ];
+    "sensor.gitlab_ci" = ps: with ps; [ python-gitlab ];
     "sensor.gitter" = ps: with ps; [  ];
     "sensor.glances" = ps: with ps; [  ];
     "sensor.google_travel_time" = ps: with ps; [  ];
     "sensor.google_wifi" = ps: with ps; [  ];
     "sensor.gpsd" = ps: with ps; [  ];
+    "sensor.greeneye_monitor" = ps: with ps; [  ];
     "sensor.gtfs" = ps: with ps; [  ];
     "sensor.habitica" = ps: with ps; [  ];
     "sensor.haveibeenpwned" = ps: with ps; [  ];
@@ -975,6 +983,7 @@
     "sensor.lyft" = ps: with ps; [  ];
     "sensor.magicseaweed" = ps: with ps; [  ];
     "sensor.melissa" = ps: with ps; [  ];
+    "sensor.meteo_france" = ps: with ps; [  ];
     "sensor.metoffice" = ps: with ps; [  ];
     "sensor.mfi" = ps: with ps; [  ];
     "sensor.mhz19" = ps: with ps; [  ];
@@ -1017,7 +1026,7 @@
     "sensor.pilight" = ps: with ps; [  ];
     "sensor.plex" = ps: with ps; [  ];
     "sensor.pocketcasts" = ps: with ps; [  ];
-    "sensor.pollen" = ps: with ps; [  ];
+    "sensor.pollen" = ps: with ps; [ numpy ];
     "sensor.postnl" = ps: with ps; [  ];
     "sensor.pushbullet" = ps: with ps; [ pushbullet ];
     "sensor.pvoutput" = ps: with ps; [  ];
@@ -1096,7 +1105,7 @@
     "sensor.twitch" = ps: with ps; [  ];
     "sensor.uber" = ps: with ps; [  ];
     "sensor.uk_transport" = ps: with ps; [  ];
-    "sensor.upnp" = ps: with ps; [ aiohttp-cors ];
+    "sensor.upnp" = ps: with ps; [  ];
     "sensor.ups" = ps: with ps; [  ];
     "sensor.uptime" = ps: with ps; [  ];
     "sensor.uscis" = ps: with ps; [  ];
@@ -1124,7 +1133,6 @@
     "sensor.xbox_live" = ps: with ps; [  ];
     "sensor.xiaomi_aqara" = ps: with ps; [  ];
     "sensor.xiaomi_miio" = ps: with ps; [ construct ];
-    "sensor.yahoo_finance" = ps: with ps; [  ];
     "sensor.yr" = ps: with ps; [ xmltodict ];
     "sensor.yweather" = ps: with ps; [ yahooweather ];
     "sensor.zabbix" = ps: with ps; [  ];
@@ -1298,7 +1306,7 @@
     "unifi.errors" = ps: with ps; [  ];
     "upcloud" = ps: with ps; [  ];
     "updater" = ps: with ps; [ distro ];
-    "upnp" = ps: with ps; [ aiohttp-cors ];
+    "upnp" = ps: with ps; [  ];
     "upnp.config_flow" = ps: with ps; [  ];
     "upnp.const" = ps: with ps; [  ];
     "upnp.device" = ps: with ps; [  ];
@@ -1362,7 +1370,7 @@
     "zone.const" = ps: with ps; [  ];
     "zone.zone" = ps: with ps; [  ];
     "zoneminder" = ps: with ps; [  ];
-    "zwave" = ps: with ps; [ pydispatcher python_openzwave ];
+    "zwave" = ps: with ps; [ homeassistant-pyozw pydispatcher ];
     "zwave.config_flow" = ps: with ps; [  ];
     "zwave.const" = ps: with ps; [  ];
     "zwave.discovery_schemas" = ps: with ps; [  ];
