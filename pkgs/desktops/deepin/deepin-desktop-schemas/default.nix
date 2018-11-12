@@ -1,21 +1,22 @@
-{ stdenv, fetchFromGitHub, python, deepin-gtk-theme,
-  deepin-icon-theme, deepin-sound-theme, deepin-wallpapers, gnome3,
-  deepin }:
+{ stdenv, fetchFromGitHub, python3, gnome3, deepin-gtk-theme,
+  deepin-icon-theme, deepin-sound-theme, deepin-wallpapers, deepin }:
 
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "deepin-desktop-schemas";
-  version = "3.4.0";
+  version = "3.11.0";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "10x0rh9z925yzyp8h0vgmg4313smvran06lvr12c3931qkmkzwgq";
+    sha256 = "086fx62rmxv339k6jcf10mx5xi85732s3y3nz6240vc4x2vcjsgr";
   };
 
   nativeBuildInputs = [
-    python
+    python3
+    gnome3.glib.dev
+    deepin.setupHook
   ];
 
   buildInputs = [
@@ -27,12 +28,35 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
+    searchHardCodedPaths
+    patchShebangs .
+
     # fix default background url
-    sed -i '/picture-uri/s|/usr/share/backgrounds/default_background.jpg|$out/share/backgrounds/deepin/default.png|' \
+    sed -i -e 's,/usr/share/backgrounds/default_background.jpg,/usr/share/backgrounds/deepin/desktop.jpg,' \
       overrides/common/com.deepin.wrap.gnome.desktop.override
+      
+    fixPath ${deepin-wallpapers} /usr/share/backgrounds \
+      overrides/common/com.deepin.wrap.gnome.desktop.override
+
+    fixPath ${deepin-wallpapers} /usr/share/wallpapers/deepin \
+      schemas/com.deepin.dde.appearance.gschema.xml
+
+    # still hardcoded paths:
+    #   /etc/gnome-settings-daemon/xrandr/monitors.xml                                ? gnome3.gnome-settings-daemon
+    #   /usr/share/backgrounds/gnome/adwaita-lock.jpg                                 ? gnome3.gnome-backgrounds
+    #   /usr/share/backgrounds/gnome/adwaita-timed.xml                                gnome3.gnome-backgrounds
+    #   /usr/share/desktop-directories
   '';
 
   makeFlags = [ "PREFIX=$(out)" ];
+
+  doCheck = true;
+  checkTarget = "test";
+
+  postInstall = ''
+    glib-compile-schemas --strict $out/share/glib-2.0/schemas
+    searchHardCodedPaths $out
+  '';
 
   passthru.updateScript = deepin.updateScript { inherit name; };
 
