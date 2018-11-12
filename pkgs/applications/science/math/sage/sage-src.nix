@@ -31,6 +31,7 @@ stdenv.mkDerivation rec {
     # Revert the commit that made the sphinx build fork even in the single thread
     # case. For some yet unknown reason, that breaks the docbuild on nix and archlinux.
     # See https://groups.google.com/forum/#!msg/sage-packaging/VU4h8IWGFLA/mrmCMocYBwAJ.
+    # https://trac.sagemath.org/ticket/26608
     ./patches/revert-sphinx-always-fork.patch
 
     # Make sure py2/py3 tests are only run when their expected context (all "sage"
@@ -54,7 +55,7 @@ stdenv.mkDerivation rec {
   in [
     # New glpk version has new warnings, filter those out until upstream sage has found a solution
     # https://trac.sagemath.org/ticket/24824
-    ./patches/pari-stackwarn.patch # not actually necessary since tha pari upgrade, but necessary for the glpk patch to apply
+    ./patches/pari-stackwarn.patch # not actually necessary since the pari upgrade, but necessary for the glpk patch to apply
     (fetchpatch {
       url = "https://salsa.debian.org/science-team/sagemath/raw/58bbba93a807ca2933ca317501d093a1bb4b84db/debian/patches/dt-version-glpk-4.65-ignore-warnings.patch";
       sha256 = "0b9293v73wb4x13wv5zwyjgclc01zn16msccfzzi6znswklgvddp";
