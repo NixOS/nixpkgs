@@ -5,11 +5,16 @@ stdenv.mkDerivation {
 
   unpackPhase = "cp ${./libredirect.c} libredirect.c";
 
+  shlibext = stdenv.targetPlatform.extensions.sharedLibrary;
+
   buildPhase = ''
-    $CC -Wall -std=c99 -O3 -shared libredirect.c -o libredirect.so -fPIC -ldl
+    $CC -Wall -std=c99 -O3 -shared libredirect.c \
+      -o "libredirect$shlibext" -fPIC -ldl
   '';
 
-  installPhase = "mkdir -p $out/lib; cp libredirect.so $out/lib";
+  installPhase = ''
+    install -vD "libredirect$shlibext" "$out/lib/libredirect$shlibext"
+  '';
 
   meta = {
     platforms = stdenv.lib.platforms.unix;
