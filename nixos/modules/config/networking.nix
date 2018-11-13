@@ -260,9 +260,9 @@ in
             '';
 
       } // optionalAttrs config.services.resolved.enable {
-        # symlink the static version of resolv.conf as recommended by upstream:
+        # symlink the dynamic stub resolver of resolv.conf as recommended by upstream:
         # https://www.freedesktop.org/software/systemd/man/systemd-resolved.html#/etc/resolv.conf
-        "resolv.conf".source = "${pkgs.systemd}/lib/systemd/resolv.conf";
+        "resolv.conf".source = "/run/systemd/resolve/stub-resolv.conf";
       } // optionalAttrs (config.services.resolved.enable && dnsmasqResolve) {
         "dnsmasq-resolv.conf".source = "/run/systemd/resolve/resolv.conf";
       } // optionalAttrs (pkgs.stdenv.hostPlatform.libc == "glibc") {
