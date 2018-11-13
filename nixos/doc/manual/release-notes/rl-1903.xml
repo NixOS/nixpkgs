@@ -212,6 +212,14 @@
      <literal>hardware.ckb-next.*</literal>.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     The option <literal>services.xserver.displayManager.job.logToFile</literal> which was
+     previously set to <literal>true</literal> when using the display managers
+     <literal>lightdm</literal>, <literal>sddm</literal> or <literal>xpra</literal> has been
+     reset to the default value (<literal>false</literal>).
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
