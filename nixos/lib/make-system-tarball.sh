@@ -40,7 +40,7 @@ for ((n = 0; n < ${#objects[*]}; n++)); do
     symlink=${symlinks[$n]}
     if test "$symlink" != "none"; then
         mkdir -p $(dirname ./$symlink)
-        ln -s $object ./$symlink
+        ln -s --relative ./$object ./$symlink
     fi
 done
 

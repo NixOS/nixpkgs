@@ -4,6 +4,7 @@ use File::Copy;
 use File::Path;
 use File::Basename;
 use File::Slurp;
+use File::Spec;
 
 my $etc = $ARGV[0] or die;
 my $static = "/etc/static";
@@ -12,7 +13,13 @@ sub atomicSymlink {
     my ($source, $target) = @_;
     my $tmp = "$target.tmp";
     unlink $tmp;
-    symlink $source, $tmp or return 0;
+    # Create relative symlinks, so that the links can be followed if
+    # the NixOS installation is not mounted as filesystem root.
+    # Absolute symlinks violate the os-release format
+    # at https://www.freedesktop.org/software/systemd/man/os-release.html
+    # and break e.g. systemd-nspawn and os-prober.
+    my $rel = File::Spec->abs2rel($source, dirname $target);
+    symlink $rel, $tmp or return 0;
     rename $tmp, $target or return 0;
     return 1;
 }
@@ -30,7 +37,8 @@ sub isStatic {
 
     if (-l $path) {
         my $target = readlink $path;
-        return substr($target, 0, length "/etc/static/") eq "/etc/static/";
+        my $rel = File::Spec->abs2rel("/etc/static", dirname $path);
+        return substr($target, 0, length $rel) eq $rel;
     }
 
     if (-d $path) {
