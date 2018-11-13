@@ -3,7 +3,7 @@
 lib.makeScope pkgs.newScope (self: with self; {
   updateScript = callPackage ./update.nix { };
 
-  maintainers = with pkgs.lib.maintainers; [ lethalman jtojnar ];
+  maintainers = with pkgs.lib.maintainers; [ lethalman jtojnar hedning ];
 
   corePackages = with gnome3; [
     pkgs.desktop-file-utils
