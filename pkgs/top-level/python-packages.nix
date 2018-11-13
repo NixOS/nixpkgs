@@ -3530,6 +3530,8 @@ in {
 
   pgspecial = callPackage ../development/python-modules/pgspecial { };
 
+  pgpy = callPackage ../development/python-modules/pgpy { };
+
   pickleshare = buildPythonPackage rec {
     version = "0.7.4";
     name = "pickleshare-${version}";
