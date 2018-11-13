@@ -44,6 +44,17 @@ let
 
     ${cfg.extraConfig}
   '';
+
+  cli-wrapper = pkgs.stdenv.mkDerivation {
+    name = "murmurd-cli-wrapper";
+    buildInputs = [ pkgs.makeWrapper ];
+    buildCommand = ''
+      mkdir -p $out/bin
+      makeWrapper ${pkgs.murmur}/bin/murmurd "$out/bin/murmurd-service" \
+        --add-flags "-ini ${configFile}" \
+    '';
+  };
+
 in
 {
   options = {
@@ -245,6 +256,10 @@ in
       the file is not required anymore.
     '';
 
+    # expose the wrapper, mainly to allow the user to call $ murmurd-service -supw <password>
+    # on the very first run, a random SuperUser password is set and written to journal.
+    environment.systemPackages = [ cli-wrapper ];
+
     users.users.murmur = {
       description     = "Murmur Service user";
       home            = "/var/lib/murmur";
@@ -262,7 +277,7 @@ in
         RuntimeDirectory = "murmur";
         Restart   = "always";
         User      = "murmur";
-        ExecStart = "${pkgs.murmur}/bin/murmurd -ini ${configFile} -fg";
+        ExecStart = "${cli-wrapper}/bin/murmurd-service -fg";
         PermissionsStartOnly = true;
       };
     };

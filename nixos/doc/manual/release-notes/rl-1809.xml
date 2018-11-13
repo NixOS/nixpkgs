@@ -811,6 +811,13 @@ inherit (pkgs.nixos {
    </listitem>
    <listitem>
     <para>
+     <option>services.murmur</option> now exposes the <literal>murmurd-service</literal>
+     wrapping the executable with the config file,
+     mainly to allow to set the SuperUser password via <literal>sudo -u murmur murmurd-service -readsupw</literal>.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
      The Kubernetes package has been bumped to major version 1.11. Please
      consult the
      <link xlink:href="https://github.com/kubernetes/kubernetes/blob/release-1.11/CHANGELOG-1.11.md">release

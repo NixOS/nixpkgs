@@ -207,11 +207,12 @@
    </listitem>
    <listitem>
     <para>
-     The <option>services.murmur</option> now logs to the systemd journal
+     <option>services.murmur</option> now logs to the systemd journal
      instead of <filename>/var/log/murmur/murmurd.log</filename>.
-     This is achieved by having systemd run the daemon in foreground
-     instead of letting it fork to the background.
-     Therefore, the <option>services.murmur.pidfile</option> is now deprecated.
+     This means that in addition to <literal>root</literal> and the <literal>murmur</literal> user,
+     all users in the <literal>journal</literal> group have access to the initial SuperUser password
+     as long as that is in the journal.
+     The SuperUser password can now be easily changed with <literal>sudo -u murmur murmurd-service -readsupw</literal>.
     </para>
    </listitem>
    <listitem>
@@ -246,6 +247,21 @@
      <literal>veracrypt</literal>. VeraCrypt is backward-compatible with
      TrueCrypt volumes. Note that <literal>cryptsetup</literal> also
      supports loading TrueCrypt volumes.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+      <option>services.murmur</option> now exposes <literal>murmurd-service</literal>
+      which wraps the daemon executable with the service config file.
+      This allows to change the SuperUser password with
+      <literal>sudo -u murmur murmurd-service -readsupw</literal>.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     To be able to log the output of <option>services.murmur></option> to the journal,
+     the systemd service now runs the daemon in foreground instead of letting it fork to the background.
+     Therefore, the <option>services.murmur.pidfile</option> is now deprecated.
     </para>
    </listitem>
    <listitem>
