@@ -392,6 +392,10 @@ in {
 
   hdmedians = callPackage ../development/python-modules/hdmedians { };
 
+  hoomd-blue = toPythonModule (callPackage ../development/python-modules/hoomd-blue {
+    inherit python;
+  });
+
   httpsig = callPackage ../development/python-modules/httpsig { };
 
   i3ipc = callPackage ../development/python-modules/i3ipc { };

@@ -21378,12 +21378,15 @@ with pkgs;
 
   ### SCIENCE/MOLECULAR-DYNAMICS
 
+  dl-poly-classic-mpi = callPackage ../applications/science/molecular-dynamics/dl-poly-classic {
+    mpi = openmpi;
+  };
+
   lammps = callPackage ../applications/science/molecular-dynamics/lammps {
     fftw = fftw;
   };
 
-  lammps-mpi = appendToName "mpi" (lammps.override {
-    mpiSupport = true;
+  lammps-mpi = lowPrio (lammps.override {
     mpi = openmpi;
   });
 
