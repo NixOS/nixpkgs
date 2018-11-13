@@ -3,13 +3,20 @@
 with lib;
 
 let cfg = config.services.cloud-init;
-    path = with pkgs; [ cloud-init nettools utillinux e2fsprogs shadow openssh iproute ];
+    path = with pkgs; [
+      cloud-init
+      iproute
+      nettools
+      openssh
+      shadow
+      utillinux
+    ] ++ optional cfg.btrfs.enable btrfs-progs
+      ++ optional cfg.ext4.enable e2fsprogs
+    ;
 in
 {
   options = {
-
     services.cloud-init = {
-
       enable = mkOption {
         type = types.bool;
         default = false;
@@ -26,6 +33,22 @@ in
           public key provisioning, and cloud-init is useful for that
           parts. Thus, be wary that using cloud-init in NixOS might
           come as some cost.
+        '';
+      };
+
+      btrfs.enable = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Allow the cloud-init service to operate `btrfs` filesystem.
+        '';
+      };
+
+      ext4.enable = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          Allow the cloud-init service to operate `ext4` filesystem.
         '';
       };
 
