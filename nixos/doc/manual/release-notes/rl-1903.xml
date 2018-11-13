@@ -124,6 +124,15 @@
     </para>
    </listitem>
    <listitem>
+     <para>
+       The path of the init script in the docker image and the container tarballs changed from <filename>/init</filename> to <filename>/sbin/init</filename>.
+       This is one of the default search locations for <literal>lxc</literal> and <literal>systemd-nspawn</literal>
+       and removes the need for workarounds.
+       For docker, this should only affect you don't directly call another program
+       through <option>dockerTools.buildImage.config.Cmd</option>.
+     </para>
+   </listitem>
+   <listitem>
     <para>
      Buildbot now supports Python 3 and its packages have been moved to
      <literal>pythonPackages</literal>. The options
@@ -251,6 +260,17 @@
      In particular, this makes <filename>/etc/os-release</filename> adhere to
      <link xlink:href="https://www.freedesktop.org/software/systemd/man/os-release.html">the standard</link>.
     </para>
+   </listitem>
+   <listitem>
+     <para>
+      Running NixOS container tarballs via systemd-nspawn is now supported out of the box, even on non-NixOS hosts:
+      <screen language="commands"># nix-build nixos/release.nix -A containerTarball.x86_64-linux
+# sudo mkdir -p /var/lib/machines/mynixos
+# sudo tar -C /var/lib/machines/mynixos -xf result/tarball/nixos-system-x86_64-linux.tar.xz
+# sudo systemd-nspawn --boot --machine mynixos</screen>
+      Alternatively to building a <literal>containerTarball</literal> yourself, you can download them from
+      <link xlink:href="https://hydra.nixos.org/search?query=containerTarball">hydra</link>.
+     </para>
    </listitem>
   </itemizedlist>
  </section>
