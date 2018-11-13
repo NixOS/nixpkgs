@@ -1,6 +1,6 @@
 { stdenv, lib, fetchurl, clojure,
   nodejs, jre, unzip,  nodePackages,
-  python, openssl }:
+  python, openssl, pkgs }:
 
 let # packageJSON=./package.json;
     version = "1.9.0";
@@ -118,7 +118,7 @@ let # packageJSON=./package.json;
     '';
 
 
-    cljdeps   = import ./deps.nix;
+    cljdeps   = import ./deps.nix { inherit pkgs; };
     cljpaths  = cljdeps.makePaths {};
     classp    = cljdeps.makeClasspaths {
                   extraClasspaths=["src/js" "src/cljs/bundled" "src/cljs/snapshot"];
