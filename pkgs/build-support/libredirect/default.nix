@@ -1,4 +1,4 @@
-{ stdenv, coreutils }:
+{ stdenv, lib, coreutils }:
 
 stdenv.mkDerivation {
   name = "libredirect-0";
@@ -13,8 +13,10 @@ stdenv.mkDerivation {
   outputs = ["out" "hook"];
 
   buildPhase = ''
-    $CC -Wall -std=c99 -O3 -shared libredirect.c \
-      -o "$libName" -fPIC -ldl
+    $CC -Wall -std=c99 -O3 -fPIC -ldl -shared \
+      ${lib.optionalString stdenv.isDarwin "-Wl,-install_name,$out/lib/$libName"} \
+      -o "$libName" \
+      libredirect.c
 
     if [ -n "$doInstallCheck" ]; then
       $CC -Wall -std=c99 -O3 test.c -o test
