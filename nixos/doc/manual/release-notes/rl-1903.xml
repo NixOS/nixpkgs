@@ -207,6 +207,15 @@
    </listitem>
    <listitem>
     <para>
+     The <option>services.murmur</option> now logs to the systemd journal
+     instead of <filename>/var/log/murmur/murmurd.log</filename>.
+     This is achieved by having systemd run the daemon in foreground
+     instead of letting it fork to the background.
+     Therefore, the <option>services.murmur.pidfile</option> is now deprecated.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
      Package <literal>ckb</literal> is renamed to <literal>ckb-next</literal>,
      and options <literal>hardware.ckb.*</literal> are renamed to
      <literal>hardware.ckb-next.*</literal>.

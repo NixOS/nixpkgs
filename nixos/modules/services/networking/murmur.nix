@@ -12,8 +12,9 @@ let
     autobanTimeframe=${toString cfg.autobanTimeframe}
     autobanTime=${toString cfg.autobanTime}
 
-    logfile=/var/log/murmur/murmurd.log
-    pidfile=${cfg.pidfile}
+    # setting the logfile to blank makes murmur log on its stdout,
+    # and therefore to journald.
+    logfile=
 
     welcometext="${cfg.welcometext}"
     port=${toString cfg.port}
@@ -79,9 +80,9 @@ in
       };
 
       pidfile = mkOption {
-        type = types.path;
-        default = "/run/murmur/murmurd.pid";
-        description = "Path to PID file for Murmur daemon.";
+        type = types.nullOr types.path;
+        default = null;
+        visible = false;
       };
 
       welcometext = mkOption {
@@ -238,6 +239,12 @@ in
   };
 
   config = mkIf cfg.enable {
+    warnings = optional (cfg.pidfile != null) ''
+      config.services.murmur.pidfile is deprecated.
+      As the service does now run the daemon in foreground intead of letting it fork to the background,
+      the file is not required anymore.
+    '';
+
     users.users.murmur = {
       description     = "Murmur Service user";
       home            = "/var/lib/murmur";
@@ -251,19 +258,13 @@ in
       after       = [ "network-online.target "];
 
       serviceConfig = {
-        Type      = "forking";
+        Type      = "simple";
         RuntimeDirectory = "murmur";
-        PIDFile   = cfg.pidfile;
         Restart   = "always";
         User      = "murmur";
-        ExecStart = "${pkgs.murmur}/bin/murmurd -ini ${configFile}";
+        ExecStart = "${pkgs.murmur}/bin/murmurd -ini ${configFile} -fg";
         PermissionsStartOnly = true;
       };
-
-      preStart = ''
-        mkdir -p /var/log/murmur
-        chown -R murmur /var/log/murmur
-      '';
     };
   };
 }
