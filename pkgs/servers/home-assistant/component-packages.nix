@@ -20,7 +20,7 @@
     "alarm_control_panel.envisalink" = ps: with ps; [  ];
     "alarm_control_panel.homematicip_cloud" = ps: with ps; [  ];
     "alarm_control_panel.ialarm" = ps: with ps; [  ];
-    "alarm_control_panel.ifttt" = ps: with ps; [ aiohttp-cors ];
+    "alarm_control_panel.ifttt" = ps: with ps; [ aiohttp-cors pyfttt ];
     "alarm_control_panel.manual" = ps: with ps; [  ];
     "alarm_control_panel.manual_mqtt" = ps: with ps; [ paho-mqtt ];
     "alarm_control_panel.mqtt" = ps: with ps; [ paho-mqtt ];
@@ -328,7 +328,7 @@
     "device_tracker.automatic" = ps: with ps; [ aiohttp-cors ];
     "device_tracker.bbox" = ps: with ps; [  ];
     "device_tracker.bluetooth_le_tracker" = ps: with ps; [  ];
-    "device_tracker.bluetooth_tracker" = ps: with ps; [  ];
+    "device_tracker.bluetooth_tracker" = ps: with ps; [ bt_proximity ];
     "device_tracker.bmw_connected_drive" = ps: with ps; [  ];
     "device_tracker.bt_home_hub_5" = ps: with ps; [  ];
     "device_tracker.bt_smarthub" = ps: with ps; [  ];
@@ -482,7 +482,7 @@
     "hue.const" = ps: with ps; [  ];
     "hue.errors" = ps: with ps; [  ];
     "hydrawise" = ps: with ps; [  ];
-    "ifttt" = ps: with ps; [ aiohttp-cors ];
+    "ifttt" = ps: with ps; [ aiohttp-cors pyfttt ];
     "ihc" = ps: with ps; [  ];
     "ihc.const" = ps: with ps; [  ];
     "ihc.ihcdevice" = ps: with ps; [  ];
@@ -1121,7 +1121,7 @@
     "sensor.vultr" = ps: with ps; [ vultr ];
     "sensor.waqi" = ps: with ps; [  ];
     "sensor.waterfurnace" = ps: with ps; [  ];
-    "sensor.waze_travel_time" = ps: with ps; [  ];
+    "sensor.waze_travel_time" = ps: with ps; [ WazeRouteCalculator ];
     "sensor.whois" = ps: with ps; [  ];
     "sensor.wink" = ps: with ps; [  ];
     "sensor.wirelesstag" = ps: with ps; [  ];
