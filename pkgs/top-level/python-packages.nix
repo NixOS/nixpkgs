@@ -688,6 +688,8 @@ in {
 
   sslib = callPackage ../development/python-modules/sslib { };
 
+  sshpubkeys = callPackage ../development/python-modules/sshpubkeys { };
+
   statistics = callPackage ../development/python-modules/statistics { };
 
   sumo = callPackage ../development/python-modules/sumo { };
