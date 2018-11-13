@@ -8,11 +8,11 @@ stdenv.mkDerivation {
     cp ${./test.c} test.c
   '';
 
-  shlibext = stdenv.targetPlatform.extensions.sharedLibrary;
+  libName = "libredirect" + stdenv.targetPlatform.extensions.sharedLibrary;
 
   buildPhase = ''
     $CC -Wall -std=c99 -O3 -shared libredirect.c \
-      -o "libredirect$shlibext" -fPIC -ldl
+      -o "$libName" -fPIC -ldl
 
     if [ -n "$doInstallCheck" ]; then
       $CC -Wall -std=c99 -O3 test.c -o test
@@ -20,18 +20,18 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
-    install -vD "libredirect$shlibext" "$out/lib/libredirect$shlibext"
+    install -vD "$libName" "$out/lib/$libName"
   '';
 
   doInstallCheck = true;
 
   installCheckPhase = if stdenv.isDarwin then ''
     NIX_REDIRECTS="/foo/bar/test=${coreutils}/bin/true" \
-    DYLD_INSERT_LIBRARIES="$out/lib/libredirect$shlibext" \
+    DYLD_INSERT_LIBRARIES="$out/lib/$libName" \
     DYLD_FORCE_FLAT_NAMESPACE=1 ./test
   '' else ''
     NIX_REDIRECTS="/foo/bar/test=${coreutils}/bin/true" \
-    LD_PRELOAD="$out/lib/libredirect$shlibext" ./test
+    LD_PRELOAD="$out/lib/$libName" ./test
   '';
 
   meta = {
