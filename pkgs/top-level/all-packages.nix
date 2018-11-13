@@ -595,6 +595,8 @@ with pkgs;
 
   autoflake = callPackage ../development/tools/analysis/autoflake { };
 
+  autospotting = callPackage ../applications/misc/autospotting { };
+
   avfs = callPackage ../tools/filesystems/avfs { };
 
   avldrums-lv2 = callPackage ../applications/audio/avldrums-lv2 { };
