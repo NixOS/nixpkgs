@@ -1,5 +1,5 @@
 { stdenv, fetchurl, fetchgit
-, pkgconfig, makeWrapper, libtool, autoconf, automake
+, makeWrapper, pkgconfig, pruneLibtoolFiles, libtool, autoconf, automake
 , coreutils, libxml2, gnutls, perl, python2, attr
 , iproute, iptables, readline, lvm2, utillinux, systemd, libpciaccess, gettext
 , libtasn1, ebtables, libgcrypt, yajl, pmutils, libcap_ng, libapparmor
@@ -32,12 +32,12 @@ in stdenv.mkDerivation rec {
         fetchSubmodules = true;
       };
 
-  nativeBuildInputs = [ makeWrapper pkgconfig ];
+  nativeBuildInputs = [ makeWrapper pkgconfig pruneLibtoolFiles ]
+    ++ optionals (!buildFromTarball) [ libtool autoconf automake ];
+
   buildInputs = [
     libxml2 gnutls perl python2 readline gettext libtasn1 libgcrypt yajl
     libxslt xhtml1 perlPackages.XMLXPath curl libpcap
-  ] ++ optionals (!buildFromTarball) [
-    libtool autoconf automake
   ] ++ optionals stdenv.isLinux [
     libpciaccess lvm2 utillinux systemd libnl numad zfs
     libapparmor libcap_ng numactl attr parted
