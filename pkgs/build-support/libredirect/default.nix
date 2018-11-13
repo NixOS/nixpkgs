@@ -1,4 +1,4 @@
-{ stdenv, coreutils }:
+{ stdenv, lib, coreutils }:
 
 stdenv.mkDerivation {
   name = "libredirect-0";
@@ -8,11 +8,15 @@ stdenv.mkDerivation {
     cp ${./test.c} test.c
   '';
 
-  shlibext = stdenv.targetPlatform.extensions.sharedLibrary;
+  libName = "libredirect" + stdenv.targetPlatform.extensions.sharedLibrary;
+
+  outputs = ["out" "hook"];
 
   buildPhase = ''
-    $CC -Wall -std=c99 -O3 -shared libredirect.c \
-      -o "libredirect$shlibext" -fPIC -ldl
+    $CC -Wall -std=c99 -O3 -fPIC -ldl -shared \
+      ${lib.optionalString stdenv.isDarwin "-Wl,-install_name,$out/lib/$libName"} \
+      -o "$libName" \
+      libredirect.c
 
     if [ -n "$doInstallCheck" ]; then
       $CC -Wall -std=c99 -O3 test.c -o test
@@ -20,18 +24,26 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
-    install -vD "libredirect$shlibext" "$out/lib/libredirect$shlibext"
+    install -vD "$libName" "$out/lib/$libName"
+
+    mkdir -p "$hook/nix-support"
+    cat <<SETUP_HOOK > "$hook/nix-support/setup-hook"
+    ${if stdenv.isDarwin then ''
+    export DYLD_INSERT_LIBRARIES="$out/lib/$libName"
+    export DYLD_FORCE_FLAT_NAMESPACE=1
+    '' else ''
+    export LD_PRELOAD="$out/lib/$libName"
+    ''}
+    SETUP_HOOK
   '';
 
   doInstallCheck = true;
 
-  installCheckPhase = if stdenv.isDarwin then ''
-    NIX_REDIRECTS="/foo/bar/test=${coreutils}/bin/true" \
-    DYLD_INSERT_LIBRARIES="$out/lib/libredirect$shlibext" \
-    DYLD_FORCE_FLAT_NAMESPACE=1 ./test
-  '' else ''
-    NIX_REDIRECTS="/foo/bar/test=${coreutils}/bin/true" \
-    LD_PRELOAD="$out/lib/libredirect$shlibext" ./test
+  installCheckPhase = ''
+    (
+      source "$hook/nix-support/setup-hook"
+      NIX_REDIRECTS="/foo/bar/test=${coreutils}/bin/true" ./test
+    )
   '';
 
   meta = {
