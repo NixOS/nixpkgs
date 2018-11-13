@@ -520,6 +520,8 @@ in {
 
   py-cpuinfo = callPackage ../development/python-modules/py-cpuinfo { };
 
+  py-gfm = callPackage ../development/python-modules/py-gfm { };
+
   pydbus = callPackage ../development/python-modules/pydbus { };
 
   pydocstyle = callPackage ../development/python-modules/pydocstyle { };
