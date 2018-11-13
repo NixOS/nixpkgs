@@ -7101,6 +7101,8 @@ in {
 
   sqlalchemy_migrate = callPackage ../development/python-modules/sqlalchemy-migrate { };
 
+  sqlalchemy-utils = callPackage ../development/python-modules/sqlalchemy-utils { };
+
   sqlparse = buildPythonPackage rec {
     name = "sqlparse-${version}";
     version = "0.2.2";
