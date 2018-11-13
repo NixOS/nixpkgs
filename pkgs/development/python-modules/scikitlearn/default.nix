@@ -20,6 +20,7 @@ buildPythonPackage rec {
 
   LC_ALL="en_US.UTF-8";
 
+  doCheck = !stdenv.isAarch64;
   # Skip test_feature_importance_regression - does web fetch
   checkPhase = ''
     cd $TMPDIR
