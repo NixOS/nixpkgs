@@ -12465,7 +12465,7 @@ with pkgs;
   taglib-sharp = callPackage ../development/libraries/taglib-sharp { };
 
   talloc = callPackage ../development/libraries/talloc {
-    python = python2;
+    python = buildPackages.python2;
   };
 
   tclap = callPackage ../development/libraries/tclap {};
