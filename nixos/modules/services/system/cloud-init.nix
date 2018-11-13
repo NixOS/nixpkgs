@@ -10,15 +10,13 @@ let cfg = config.services.cloud-init;
       openssh
       shadow
       utillinux
-    ] ++ optional config.services.cloud-init.btrfs btrfs-progs
-      ++ optional config.services.cloud-init.ext4 e2fsprogs
+    ] ++ optional cfg.btrfs.enable btrfs-progs
+      ++ optional cfg.ext4.enable e2fsprogs
     ;
 in
 {
   options = {
-
     services.cloud-init = {
-
       enable = mkOption {
         type = types.bool;
         default = false;
@@ -38,7 +36,7 @@ in
         '';
       };
 
-      btrfs = mkOption {
+      btrfs.enable = mkOption {
         type = types.bool;
         default = false;
         description = ''
@@ -46,7 +44,7 @@ in
         '';
       };
 
-      ext4 = mkOption {
+      ext4.enable = mkOption {
         type = types.bool;
         default = true;
         description = ''
