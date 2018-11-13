@@ -91,6 +91,18 @@ if [ -z "$dontUseCmakeConfigure" -a -z "$configurePhase" ]; then
     configurePhase=cmakeConfigurePhase
 fi
 
+cmakeCheckPhase() {
+    runHook preCheck
+
+    ctest --extra-verbose
+
+    runHook postCheck
+}
+
+if [ -z "$dontUseCtest" -a -z "$checkPhase" ]; then
+    checkPhase=cmakeCheckPhase
+fi
+
 addEnvHooks "$targetOffset" addCMakeParams
 
 makeCmakeFindLibs(){
