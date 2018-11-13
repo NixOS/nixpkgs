@@ -20,10 +20,11 @@ stdenv.mkDerivation {
     configureFlagsArray+=("--mupenapi=$APIDIR" "--wxconfig=`type -P wx-config`")
   '';
 
+  NIX_CFLAGS_COMPILE = "-fpermissive";
+
   meta = {
     description = "GUI for the Mupen64Plus 2.0 emulator";
     license = stdenv.lib.licenses.gpl2Plus;
     homepage = https://bitbucket.org/auria/wxmupen64plus/wiki/Home;
-    broken = true;
   };
 }
