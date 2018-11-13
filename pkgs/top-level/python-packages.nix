@@ -2322,6 +2322,8 @@ in {
 
   flask_wtf = callPackage ../development/python-modules/flask-wtf { };
 
+  flexmock = callPackage ../development/python-modules/flexmock { };
+
   wtforms = callPackage ../development/python-modules/wtforms { };
 
   graph-tool = callPackage ../development/python-modules/graph-tool/2.x.x.nix { };
