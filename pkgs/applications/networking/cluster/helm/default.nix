@@ -1,14 +1,14 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ stdenv, buildGoPackage, fetchgit, git }:
 
 buildGoPackage rec {
   version = "2.11.0";
   name = "helm-${version}";
 
-  src = fetchFromGitHub {
-    owner = "helm";
-    repo = "helm";
+  src = fetchgit {
+    url = "https://www.github.com/helm/helm.git";
     rev = "v${version}";
-    sha256 = "1z810a6mxyrrw4i908dip8aqsj95c0kmv6xpb1wwhskg1zmf85wk";
+    sha256 = "1jjyyidffls0yzi00p7icg19f10wdrmcgb52migdy4kv2chvmrah";
+    leaveDotGit = "true";
   };
 
   goPackagePath = "k8s.io/helm";
@@ -30,6 +30,19 @@ buildGoPackage rec {
     # want DeepCopyObject() "k8s.io/apimachinery/pkg/runtime".Object
     rm -rf $NIX_BUILD_TOP/go/src/k8s.io/kubernetes/vendor
     rm -rf $NIX_BUILD_TOP/go/src/k8s.io/apiextensions-apiserver/vendor
+
+    # Helm uses these to know which version of the tiller docker image to install
+    # without it `helm init` fails
+    GIT_COMMIT=$(${git}/bin/git rev-parse HEAD)
+    GIT_SHA=$(${git}/bin/git rev-parse --short HEAD)
+    GIT_TAG="v${version}"
+    GIT_DIRTY="clean" # $(test -n "`${git}/bin/git status --porcelain`" && echo "dirty" || echo "clean")
+
+    # Explicitly needs to be empty to unset the default value
+    buildFlagsArray+=" -X k8s.io/helm/pkg/version.BuildMetadata="
+    buildFlagsArray+=" -X k8s.io/helm/pkg/version.Version=$GIT_TAG"
+    buildFlagsArray+=" -X k8s.io/helm/pkg/version.GitCommit=$GIT_COMMIT"
+    buildFlagsArray+=" -X k8s.io/helm/pkg/version.GitTreeState=$GIT_DIRTY"
   '';
 
   postInstall = ''
