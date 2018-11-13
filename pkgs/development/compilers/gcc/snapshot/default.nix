@@ -137,7 +137,7 @@ stdenv.mkDerivation ({
 
   libc_dev = stdenv.cc.libc_dev;
 
-  hardeningDisable = [ "format" ];
+  hardeningDisable = [ "format" "pie" ];
 
   postPatch =
     if targetPlatform != hostPlatform || stdenv.cc.libc != null then

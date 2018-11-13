@@ -185,7 +185,7 @@ stdenv.mkDerivation ({
 
   inherit patches;
 
-  hardeningDisable = [ "format" ] ++ stdenv.lib.optional stdenv.targetPlatform.isMusl "pie";
+  hardeningDisable = [ "format" "pie" ];
 
   outputs = if langJava || langGo then ["out" "man" "info"]
     else [ "out" "lib" "man" "info" ];
