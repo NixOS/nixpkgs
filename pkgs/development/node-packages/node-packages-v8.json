@@ -42,7 +42,6 @@
 , "http-server"
 , "ionic"
 , "ios-deploy"
-, "istanbul"
 , "imapnotify"
 , "jake"
 , "javascript-typescript-langserver"
