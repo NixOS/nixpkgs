@@ -452,7 +452,6 @@
   ./services/monitoring/riemann-tools.nix
   ./services/monitoring/scollector.nix
   ./services/monitoring/smartd.nix
-  ./services/monitoring/statsd.nix
   ./services/monitoring/sysstat.nix
   ./services/monitoring/systemhealth.nix
   ./services/monitoring/teamviewer.nix
