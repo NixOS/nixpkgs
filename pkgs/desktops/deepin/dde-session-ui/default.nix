@@ -1,18 +1,18 @@
 { stdenv, fetchFromGitHub, pkgconfig, qmake, qtsvg, qttools,
   qtx11extras, xkeyboard_config, xorg, lightdm_qt, gsettings-qt,
   dde-qt-dbus-factory, deepin-gettext-tools, dtkcore, dtkwidget,
-  hicolor-icon-theme, deepin }:
+  deepin-desktop-schemas, deepin, hicolor-icon-theme, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "dde-session-ui";
-  version = "4.6.2";
+  version = "4.8.7";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "1fxlrj7vv7nqllwpwc8mxiv9bfqcj9b2qwkpjaq326pfmg5p5lhq";
+    sha256 = "1kmwvfswwcpi2ig7hafl63qi759b95zs91xxk5sdxkz2zn2cnxqp";
   };
 
   nativeBuildInputs = [
@@ -20,6 +20,7 @@ stdenv.mkDerivation rec {
     qmake
     qttools
     deepin-gettext-tools
+    wrapGAppsHook
   ];
 
   buildInputs = [
@@ -35,6 +36,7 @@ stdenv.mkDerivation rec {
     xorg.libXtst
     xkeyboard_config
     hicolor-icon-theme
+    deepin-desktop-schemas
   ];
 
   postPatch = ''
