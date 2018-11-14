@@ -8,13 +8,6 @@ stdenv.mkDerivation rec {
     sha256 = "1vcahr9s6zv1hnrx2bgjnzcas2y951q90r1jvvv4q9v5kwfd6qb0";
   };
 
-  # Prevents errors such as "mainloop.c:89:15: error: expected ')'"
-  # Upstream issue https://lists.gnu.org/archive/html/info-mtools/2014-02/msg00000.html
-  patches = stdenv.lib.optional stdenv.isDarwin ./UNUSED-darwin.patch;
-
-  # fails to find X on darwin
-  configureFlags = stdenv.lib.optional stdenv.isDarwin "--without-x";
-
   doCheck = true;
 
   meta = with stdenv.lib; {
