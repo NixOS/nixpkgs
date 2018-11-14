@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "mtools-4.0.19";
+  name = "mtools-4.0.20";
 
   src = fetchurl {
     url = "mirror://gnu/mtools/${name}.tar.bz2";
-    sha256 = "1pqhv5l4fqj1d3698vajkccz65xqxs3991wpylbw7hm1kqcrgh8v";
+    sha256 = "1vcahr9s6zv1hnrx2bgjnzcas2y951q90r1jvvv4q9v5kwfd6qb0";
   };
 
   # Prevents errors such as "mainloop.c:89:15: error: expected ')'"
