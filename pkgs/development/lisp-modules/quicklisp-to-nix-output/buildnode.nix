@@ -7,7 +7,7 @@ rec {
 
   description = ''Tool for building up an xml dom nicely.'';
 
-  deps = [ args."alexandria" args."babel" args."buildnode-xhtml" args."cl-interpol" args."cl-ppcre" args."cl-unicode" args."closer-mop" args."closure-common" args."closure-html" args."collectors" args."cxml" args."cxml-dom" args."cxml-klacks" args."cxml-test" args."cxml-xml" args."flexi-streams" args."iterate" args."lisp-unit2" args."puri" args."split-sequence" args."swank" args."symbol-munger" args."trivial-features" args."trivial-gray-streams" ];
+  deps = [ args."alexandria" args."babel" args."buildnode-xhtml" args."cl-interpol" args."cl-ppcre" args."cl-unicode" args."closer-mop" args."closure-common" args."closure-html" args."collectors" args."cxml" args."cxml-dom" args."cxml-klacks" args."cxml-test" args."cxml-xml" args."flexi-streams" args."iterate" args."lisp-unit2" args."named-readtables" args."puri" args."split-sequence" args."swank" args."symbol-munger" args."trivial-features" args."trivial-gray-streams" ];
 
   src = fetchurl {
     url = ''http://beta.quicklisp.org/archive/buildnode/2017-04-03/buildnode-20170403-git.tgz'';
@@ -35,6 +35,7 @@ rec {
      (NAME cxml-test FILENAME cxml-test) (NAME cxml-xml FILENAME cxml-xml)
      (NAME flexi-streams FILENAME flexi-streams)
      (NAME iterate FILENAME iterate) (NAME lisp-unit2 FILENAME lisp-unit2)
+     (NAME named-readtables FILENAME named-readtables)
      (NAME puri FILENAME puri) (NAME split-sequence FILENAME split-sequence)
      (NAME swank FILENAME swank) (NAME symbol-munger FILENAME symbol-munger)
      (NAME trivial-features FILENAME trivial-features)
@@ -42,8 +43,9 @@ rec {
     DEPENDENCIES
     (alexandria babel buildnode-xhtml cl-interpol cl-ppcre cl-unicode
      closer-mop closure-common closure-html collectors cxml cxml-dom
-     cxml-klacks cxml-test cxml-xml flexi-streams iterate lisp-unit2 puri
-     split-sequence swank symbol-munger trivial-features trivial-gray-streams)
+     cxml-klacks cxml-test cxml-xml flexi-streams iterate lisp-unit2
+     named-readtables puri split-sequence swank symbol-munger trivial-features
+     trivial-gray-streams)
     VERSION 20170403-git SIBLINGS
     (buildnode-excel buildnode-html5 buildnode-kml buildnode-xhtml
      buildnode-xul)

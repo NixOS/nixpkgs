@@ -11,7 +11,8 @@ buildPythonPackage rec {
   };
 
   disabled = isPyPy;
-  buildInputs = [ gfortran pytest blas ];
+  nativeBuildInputs = [ gfortran pytest ];
+  buildInputs = [ blas ];
 
   patches = lib.optionals (python.hasDistutilsCxxPatch or false) [
     # We patch cpython/distutils to fix https://bugs.python.org/issue1222585

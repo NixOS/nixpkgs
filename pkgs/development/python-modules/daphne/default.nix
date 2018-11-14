@@ -4,7 +4,7 @@
 }:
 buildPythonPackage rec {
   pname = "daphne";
-  version = "2.1.0";
+  version = "2.2.2";
 
   disabled = !isPy3k;
 
@@ -12,7 +12,7 @@ buildPythonPackage rec {
     owner = "django";
     repo = pname;
     rev = version;
-    sha256 = "1lbpn0l796ar77amqy8dap30zxmsn6as8y2lbmp4lk8m9awscwi8";
+    sha256 = "1pr3b7zxjp2jx31lpiy1hfyprpmyiv2kd18n8x6kh6gd5nr0dgp8";
   };
 
   nativeBuildInputs = [ pytestrunner ];
@@ -21,9 +21,10 @@ buildPythonPackage rec {
 
   checkInputs = [ hypothesis pytest pytest-asyncio ];
 
+  doCheck = !stdenv.isDarwin; # most tests fail on darwin
+
   checkPhase = ''
-    # Other tests fail, seems to be due to filesystem access
-    py.test -k "test_cli or test_utils"
+    py.test
   '';
 
   meta = with stdenv.lib; {

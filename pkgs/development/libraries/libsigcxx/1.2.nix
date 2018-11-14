@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ m4];
 
   meta = {
-    homepage = http://libsigc.sourceforge.net/;
+    homepage = https://libsigcplusplus.github.io/libsigcplusplus/;
     description = "A typesafe callback system for standard C++";
     branch = "1.2";
     platforms = stdenv.lib.platforms.unix;

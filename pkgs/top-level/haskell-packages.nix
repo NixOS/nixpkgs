@@ -69,6 +69,11 @@ in {
       buildLlvmPackages = buildPackages.llvmPackages_5;
       llvmPackages = pkgs.llvmPackages_5;
     };
+    ghc844 = callPackage ../development/compilers/ghc/8.4.4.nix {
+      bootPkgs = packages.ghc821Binary;
+      buildLlvmPackages = buildPackages.llvmPackages_5;
+      llvmPackages = pkgs.llvmPackages_5;
+    };
     ghc861 = callPackage ../development/compilers/ghc/8.6.1.nix {
       bootPkgs = packages.ghc822;
       buildLlvmPackages = buildPackages.llvmPackages_6;
@@ -151,6 +156,11 @@ in {
     ghc843 = callPackage ../development/haskell-modules {
       buildHaskellPackages = bh.packages.ghc843;
       ghc = bh.compiler.ghc843;
+      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.4.x.nix { };
+    };
+    ghc844 = callPackage ../development/haskell-modules {
+      buildHaskellPackages = bh.packages.ghc844;
+      ghc = bh.compiler.ghc844;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.4.x.nix { };
     };
     ghc861 = callPackage ../development/haskell-modules {

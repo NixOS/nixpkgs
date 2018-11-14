@@ -78,6 +78,7 @@ in stdenv.mkDerivation rec {
     branch = "master";
     # x86_32 is an unsupported platform.
     # Enable generic build if you really want a JIT-less binary.
+    broken = stdenv.isDarwin;
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
   };
 }

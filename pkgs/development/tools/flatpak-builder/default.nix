@@ -29,6 +29,7 @@
 , libcap
 , libdwarf
 , libsoup
+, libyaml
 , ostree
 , patch
 , rpm
@@ -72,6 +73,7 @@ in stdenv.mkDerivation rec {
     libdwarf
     libsoup
     libxml2
+    libyaml
     ostree
   ];
 

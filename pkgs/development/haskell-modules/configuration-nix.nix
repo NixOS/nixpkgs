@@ -131,8 +131,16 @@ self: super: builtins.intersectAttrs super {
   x509-system = if pkgs.stdenv.hostPlatform.isDarwin && !pkgs.stdenv.cc.nativeLibc
     then let inherit (pkgs.darwin) security_tool;
       in pkgs.lib.overrideDerivation (addBuildDepend super.x509-system security_tool) (drv: {
+        # darwin.security_tool is broken in Mojave (#45042)
+
+        # We will use the system provided security for now.
+        # Beware this WILL break in sandboxes!
+
+        # TODO(matthewbauer): If someone really needs this to work in sandboxes,
+        # I think we can add a propagatedImpureHost dep here, but I’m hoping to
+        # get a proper fix available soonish.
         postPatch = (drv.postPatch or "") + ''
-          substituteInPlace System/X509/MacOS.hs --replace security ${security_tool}/bin/security
+          substituteInPlace System/X509/MacOS.hs --replace security /usr/bin/security
         '';
       })
     else super.x509-system;
@@ -510,4 +518,13 @@ self: super: builtins.intersectAttrs super {
   LDAP = dontCheck (overrideCabal super.LDAP (drv: {
     librarySystemDepends = drv.librarySystemDepends or [] ++ [ pkgs.cyrus_sasl.dev ];
   }));
+
+  # Expects z3 to be on path so we replace it with a hard
+  sbv = overrideCabal super.sbv (drv: {
+    postPatch = ''
+      sed -i -e 's|"z3"|"${pkgs.z3}/bin/z3"|' Data/SBV/Provers/Z3.hs'';
+  });
+
+  # The test-suite requires a running PostgreSQL server.
+  Frames-beam = dontCheck super.Frames-beam;
 }

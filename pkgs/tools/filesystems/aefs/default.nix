@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ fuse ];
 
   meta = with stdenv.lib; {
-    homepage = http://www.st.ewi.tudelft.nl/~dolstra/aefs/;
+    homepage = https://nixos.org/~edolstra/aefs/;
     description = "A cryptographic filesystem implemented in userspace using FUSE";
     platforms = platforms.linux;
     maintainers = [ maintainers.eelco ];

@@ -1,5 +1,5 @@
-{ stdenv, fetchFromGitHub, python3Packages, glfw, libunistring, harfbuzz,
-  fontconfig, pkgconfig, ncurses, imagemagick, xsel,
+{ stdenv, substituteAll, fetchFromGitHub, python3Packages, glfw, libunistring,
+  harfbuzz, fontconfig, pkgconfig, ncurses, imagemagick, xsel,
   libstartup_notification, libX11, libXrandr, libXinerama, libXcursor,
   libxkbcommon, libXi, libXext, wayland-protocols, wayland,
   which
@@ -28,10 +28,14 @@ buildPythonApplication rec {
 
   outputs = [ "out" "terminfo" ];
 
-  postPatch = ''
-    substituteInPlace kitty/utils.py \
-      --replace "find_library('startup-notification-1')" "'${libstartup_notification}/lib/libstartup-notification-1.so'"
+  patches = [
+    (substituteAll {
+      src = ./fix-paths.patch;
+      libstartup_notification = "${libstartup_notification}/lib/libstartup-notification-1.so";
+    })
+  ];
 
+  postPatch = ''
     substituteInPlace docs/Makefile \
       --replace 'python3 .. +launch $(shell which sphinx-build)' \
                 'PYTHONPATH=$PYTHONPATH:.. HOME=$TMPDIR/nowhere $(shell which sphinx-build)'

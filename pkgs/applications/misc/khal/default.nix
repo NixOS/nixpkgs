@@ -46,6 +46,10 @@ in with python.pkgs; buildPythonApplication rec {
   nativeBuildInputs = [ setuptools_scm pkgs.glibcLocales ];
   checkInputs = [ pytest ];
 
+  postInstall = ''
+    install -D misc/__khal $out/share/zsh/site-functions/__khal
+  '';
+
   checkPhase = ''
     py.test
   '';

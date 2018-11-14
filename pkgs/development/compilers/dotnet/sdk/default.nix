@@ -20,7 +20,11 @@ in
       sha256 = "1a8z9q69cd9a33j7fr7907abm5z4qiivw5k379cgsjmmvxwyvjia";
     };
 
-    unpackPhase = "tar xvzf $src";
+    unpackPhase = ''
+      mkdir src
+      cd src
+      tar xvzf $src
+    '';
 
     buildPhase = ''
       runHook preBuild

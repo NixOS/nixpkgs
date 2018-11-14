@@ -16,6 +16,10 @@ nodePackages // {
     '';
   };
 
+  jshint = nodePackages.jshint.override {
+    buildInputs = [ pkgs.phantomjs2 ];
+  };
+
   dat = nodePackages.dat.override {
     buildInputs = [ nodePackages.node-gyp-build ];
   };
@@ -78,6 +82,12 @@ nodePackages // {
     '';
   };
 
+  statsd = nodePackages.statsd.override {
+    # broken with node v8, dead upstream,
+    # see #45946 and https://github.com/etsy/statsd/issues/646
+    meta.broken = true;
+  };
+
   webdrvr = nodePackages.webdrvr.override {
     buildInputs = [ pkgs.phantomjs ];
 
@@ -95,6 +105,10 @@ nodePackages // {
     '';
 
     dontNpmInstall = true; # We face an error with underscore not found, but the package will work fine if we ignore this.
+  };
+
+  webtorrent-cli = nodePackages.webtorrent-cli.override {
+    buildInputs = [ nodePackages.node-gyp-build ];
   };
 
 }

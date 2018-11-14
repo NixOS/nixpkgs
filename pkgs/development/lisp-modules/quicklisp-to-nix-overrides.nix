@@ -48,7 +48,7 @@ in
   cl_plus_ssl = addNativeLibs [pkgs.openssl];
   cl-colors = skipBuildPhase;
   cl-libuv = addNativeLibs [pkgs.libuv];
-  cl-async-ssl = addNativeLibs [pkgs.openssl];
+  cl-async-ssl = addNativeLibs [pkgs.openssl (import ./openssl-lib-marked.nix)];
   cl-async-test = addNativeLibs [pkgs.openssl];
   clsql = x: {
     propagatedBuildInputs = with pkgs; [mysql.connector-c postgresql sqlite zlib];
@@ -143,7 +143,8 @@ $out/lib/common-lisp/query-fs"
       fiveam md5 usocket
     ];
     parasites = [
-      "simple-date/tests"
+      # Needs pomo? Wants to do queries unconditionally?
+      # "simple-date/tests"
     ];
   };
   cl-postgres = x: {

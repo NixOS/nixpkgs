@@ -10,8 +10,10 @@ stdenv.mkDerivation rec {
         license = licenses.isc;
         description = "Allows programs to be run independently from its controlling terminal";
         maintainers = with maintainers; [ pSub ];
-        platforms = platforms.linux;
+        platforms = platforms.unix;
     };
+
+    CFLAGS = stdenv.lib.optionalString stdenv.isDarwin "-D_DARWIN_C_SOURCE";
 
     src = fetchurl {
         url = "http://www.brain-dump.org/projects/abduco/${name}.tar.gz";

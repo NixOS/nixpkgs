@@ -251,9 +251,9 @@ let
     postInstall = ''
       echo checking syntax
       # check both with bash
-      ${pkgs.bash}/bin/sh -n $target
+      ${pkgs.buildPackages.bash}/bin/sh -n $target
       # and with ash shell, just in case
-      ${extraUtils}/bin/ash -n $target
+      ${pkgs.buildPackages.busybox}/bin/ash -n $target
     '';
 
     inherit udevRules extraUtils modulesClosure;

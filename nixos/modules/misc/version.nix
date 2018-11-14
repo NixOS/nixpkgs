@@ -5,7 +5,6 @@ with lib;
 let
   cfg = config.system.nixos;
 
-  revisionFile = "${toString pkgs.path}/.git-revision";
   gitRepo      = "${toString pkgs.path}/.git";
   gitCommitId  = lib.substring 0 7 (commitIdFromGitRepo gitRepo);
 in
@@ -37,9 +36,7 @@ in
     nixos.revision = mkOption {
       internal = true;
       type = types.str;
-      default = if pathIsDirectory gitRepo then commitIdFromGitRepo gitRepo
-                else if pathExists revisionFile then fileContents revisionFile
-                else "master";
+      default = lib.trivial.revisionWithDefault "master";
       description = "The Git revision from which this NixOS configuration was built.";
     };
 
@@ -68,7 +65,7 @@ in
     defaultChannel = mkOption {
       internal = true;
       type = types.str;
-      default = https://nixos.org/channels/nixos-unstable;
+      default = https://nixos.org/channels/nixos-18.09;
       description = "Default NixOS channel to which the root user is subscribed.";
     };
 

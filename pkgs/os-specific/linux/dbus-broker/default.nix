@@ -17,8 +17,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ dbus glib linuxHeaders systemd ];
 
-  PKG_CONFIG_SYSTEMD_SYSTEMDSYSTEMUNITDIR = "${placeholder "out"}/lib/systemd/system";
-  PKG_CONFIG_SYSTEMD_SYSTEMDUSERUNITDIR = "${placeholder "out"}/lib/systemd/user";
+  PKG_CONFIG_SYSTEMD_SYSTEMDSYSTEMUNITDIR = "lib/systemd/system";
+  PKG_CONFIG_SYSTEMD_SYSTEMDUSERUNITDIR = "lib/systemd/user";
 
   postInstall = ''
     install -Dm644 ../README $out/share/doc/dbus-broker/README

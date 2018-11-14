@@ -3,18 +3,16 @@
 , perl, MusicBrainz, MusicBrainzDiscID
 , makeWrapper }:
 
-let version = "2.8.1";
+let version = "2.9.2";
 in
   stdenv.mkDerivation {
     name = "abcde-${version}";
     src = fetchurl {
       url = "https://abcde.einval.com/download/abcde-${version}.tar.gz";
-      sha256 = "0f9bjs0phk23vry7gvh0cll9vl6kmc1y4fwwh762scfdvpbp3774";
+      sha256 = "13c5yvp87ckqgha160ym5rdr1a4divgvyqbjh0yb6ffclip6qd9l";
     };
 
     # FIXME: This package does not support `distmp3', `eject', etc.
-
-    patches = [ ./abcde.patch ];
 
     configurePhase = ''
       sed -i "s|^[[:blank:]]*prefix *=.*$|prefix = $out|g ;
@@ -22,41 +20,41 @@ in
               s|^[[:blank:]]*INSTALL *=.*$|INSTALL = install -c|g" \
         "Makefile";
 
-      # We use `cd-paranoia' from GNU libcdio, which contains a hyphen
-      # in its name, unlike Xiph's cdparanoia.
-      sed -i "s|^[[:blank:]]*CDPARANOIA=.*$|CDPARANOIA=cd-paranoia|g ;
-              s|^[[:blank:]]*DEFAULT_CDROMREADERS=.*$|DEFAULT_CDROMREADERS=\"cd-paranoia cdda2wav\"|g" \
-        "abcde"
+      echo 'CDPARANOIA=${libcdio-paranoia}/bin/cd-paranoia' >>abcde.conf
+      echo CDROMREADERSYNTAX=cdparanoia >>abcde.conf
 
       substituteInPlace "abcde" \
         --replace "/etc/abcde.conf" "$out/etc/abcde.conf"
-
     '';
 
-    buildInputs = [ makeWrapper ];
+    nativeBuildInputs = [ makeWrapper ];
 
-    propagatedBuildInputs = [ perl MusicBrainz MusicBrainzDiscID ];
+    buildInputs = [ perl MusicBrainz MusicBrainzDiscID ];
 
     installFlags = [ "sysconfdir=$(out)/etc" ];
 
     postFixup = ''
       for cmd in abcde cddb-tool abcde-musicbrainz-tool; do
-        wrapProgram "$out/bin/$cmd" --prefix PATH ":" \
-          ${stdenv.lib.makeBinPath [ "$out" which libcdio-paranoia cddiscid wget vorbis-tools id3v2 eyeD3 lame flac glyr ]}
+        wrapProgram "$out/bin/$cmd" \
+          --prefix PERL5LIB : "$PERL5LIB" \
+          --prefix PATH ":" ${stdenv.lib.makeBinPath [
+            "$out" which libcdio-paranoia cddiscid wget
+            vorbis-tools id3v2 eyeD3 lame flac glyr
+          ]}
       done
     '';
 
-    meta = {
+    meta = with stdenv.lib; {
       homepage = http://abcde.einval.com/wiki/;
-      license = stdenv.lib.licenses.gpl2Plus;
+      license = licenses.gpl2Plus;
+      maintainers = with maintainers; [ gebner ];
       description = "Command-line audio CD ripper";
-
       longDescription = ''
         abcde is a front-end command-line utility (actually, a shell
         script) that grabs tracks off a CD, encodes them to
         Ogg/Vorbis, MP3, FLAC, Ogg/Speex and/or MPP/MP+ (Musepack)
         format, and tags them, all in one go.
       '';
-      platforms = stdenv.lib.platforms.linux;
+      platforms = platforms.linux;
     };
   }

@@ -26,6 +26,7 @@ in stdenv.mkDerivation rec {
 
   configureFlags = [
     "--with-gnome=${if withGnome then "yes" else "no"}"
+    "--enable-absolute-paths"
   ];
 
   passthru = {

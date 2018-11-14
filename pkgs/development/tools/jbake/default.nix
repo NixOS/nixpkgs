@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ makeWrapper jre ];
 
+  postPatch = "patchShebangs .";
+
   installPhase = ''
     mkdir -p $out
     cp -vr * $out

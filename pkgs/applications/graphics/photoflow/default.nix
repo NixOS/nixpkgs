@@ -1,13 +1,13 @@
 { stdenv, fetchFromGitHub, gettext, glib, libxml2, pkgconfig, swig, automake, gobjectIntrospection, cmake, ninja, libtiff, libjpeg, fftw, exiv2, lensfun, gtkmm2, libraw, lcms2, libexif, vips, expat, pcre, pugixml }:
 
 stdenv.mkDerivation {
-  name = "photoflow-unstable-2018-03-06";
+  name = "photoflow-unstable-2018-08-28";
 
   src = fetchFromGitHub {
     owner = "aferrero2707";
     repo = "PhotoFlow";
-    rev = "f9bbea183fa02412d1d17075955d2284eeaf8174";
-    sha256 = "1fsk7kdmlkd64wcswbxrl87aqwmzqak6p3s38ggxzx2h51fa7lmf";
+    rev = "df03f2538ddd232e693c307db4ab63eb5bdfea38";
+    sha256 = "08ybhv08h24y4li8wb4m89xgrz1szlwpksf6vjharp8cznn4y4x9";
   };
 
   nativeBuildInputs = [
@@ -50,6 +50,7 @@ stdenv.mkDerivation {
     homepage = https://aferrero2707.github.io/PhotoFlow/;
     license = licenses.gpl3Plus;
     maintainers = [ maintainers.MtP ];
-    platforms = platforms.all;
+    platforms = platforms.linux;
+    broken = stdenv.isAarch64;
   };
 }

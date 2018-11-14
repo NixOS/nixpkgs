@@ -140,7 +140,7 @@ stdenv.mkDerivation rec {
     # Write pkgconfig aliases. Upstream report:
     # https://github.com/xianyi/OpenBLAS/issues/1740
     for alias in blas cblas lapack; do
-      cat <<EOF > $out/lib/pkgconfig/openblas-$alias.pc
+      cat <<EOF > $out/lib/pkgconfig/$alias.pc
 Name: $alias
 Version: ${version}
 Description: $alias provided by the OpenBLAS package.

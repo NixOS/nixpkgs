@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, blas, liblapack, gfortran }:
+{ stdenv, fetchFromGitHub, blas, liblapack, gfortran, fixDarwinDylibNames }:
 
 stdenv.mkDerivation rec {
   name = "scs-${version}";
@@ -11,24 +11,30 @@ stdenv.mkDerivation rec {
     sha256 = "17lbcmcsniqlyzgbzmjipfd0rrk25a8hzh7l5wl2wp1iwsd8c3a9";
   };
 
-  buildInputs = [ blas liblapack gfortran.cc.lib ];
-
   # Actually link and add libgfortran to the rpath
-  patchPhase = ''
-    sed -i 's/#-lgfortran/-lgfortran/' scs.mk
+  postPatch = ''
+    substituteInPlace scs.mk \
+      --replace "#-lgfortran" "-lgfortran" \
+      --replace "gcc" "cc"
   '';
+
+  nativeBuildInputs = stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
+
+  buildInputs = [ blas liblapack gfortran.cc.lib ];
 
   doCheck = true;
 
-  # Test demo requires passing any int as $1; 42 chosen arbitrarily
-  checkPhase = ''
-    ./out/demo_socp_indirect 42
+  # Test demo requires passing data and seed; numbers chosen arbitrarily.
+  postCheck = ''
+    ./out/demo_socp_indirect 42 0.42 0.42 42
   '';
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/lib
     cp -r include $out/
-    cp out/*.a out/*.so $out/lib/
+    cp out/*.a out/*.so out/*.dylib $out/lib/
+    runHook postInstall
   '';
 
   meta = with stdenv.lib; {

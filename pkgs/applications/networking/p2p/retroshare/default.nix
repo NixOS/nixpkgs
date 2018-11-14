@@ -54,5 +54,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.domenkozar ];
+    broken = true; # broken by libupnp: 1.6.21 -> 1.8.3 (#41684)
   };
 }

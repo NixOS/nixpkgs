@@ -1,5 +1,5 @@
 { stdenv, buildPackages, buildHaskellPackages, ghc
-, jailbreak-cabal, hscolour, cpphs, nodejs
+, jailbreak-cabal, hscolour, cpphs, nodejs, shellFor
 }:
 
 let
@@ -26,7 +26,7 @@ in
 , editedCabalFile ? null
 , enableLibraryProfiling ? true
 , enableExecutableProfiling ? false
-, profilingDetail ? "all-functions"
+, profilingDetail ? "exported-functions"
 # TODO enable shared libs for cross-compiling
 , enableSharedExecutables ? false
 , enableSharedLibraries ? (ghc.enableShared or false)
@@ -135,7 +135,7 @@ let
   buildFlagsString = optionalString (buildFlags != []) (" " + concatStringsSep " " buildFlags);
 
   defaultConfigureFlags = [
-    "--verbose" "--prefix=$out" "--libdir=\\$prefix/lib/\\$compiler" "--libsubdir=\\$pkgid"
+    "--verbose" "--prefix=$out" "--libdir=\\$prefix/lib/\\$compiler" "--libsubdir=\\$abi/\\$libname"
     (optionalString enableSeparateDataOutput "--datadir=$data/share/${ghc.name}")
     (optionalString enableSeparateDocOutput "--docdir=${docdir "$doc"}")
     "--with-gcc=$CC" # Clang won't work without that extra information.
@@ -173,8 +173,7 @@ let
     (optionalString (versionOlder "7.10" ghc.version && !isHaLVM) "-threaded")
   ];
 
-  isHaskellPkg = x: (x ? pname) && (x ? version) && (x ? env);
-  isSystemPkg = x: !isHaskellPkg x;
+  isHaskellPkg = x: x ? isHaskellLibrary;
 
   allPkgconfigDepends = pkgconfigDepends ++ libraryPkgconfigDepends ++ executablePkgconfigDepends ++
                         optionals doCheck testPkgconfigDepends ++ optionals doBenchmark benchmarkPkgconfigDepends;
@@ -191,20 +190,15 @@ let
                      optionals doCheck (testDepends ++ testHaskellDepends ++ testSystemDepends ++ testFrameworkDepends) ++
                      optionals doBenchmark (benchmarkDepends ++ benchmarkHaskellDepends ++ benchmarkSystemDepends ++ benchmarkFrameworkDepends);
 
-  allBuildInputs = propagatedBuildInputs ++ otherBuildInputs;
 
-  haskellBuildInputs = stdenv.lib.filter isHaskellPkg allBuildInputs;
-  systemBuildInputs = stdenv.lib.filter isSystemPkg allBuildInputs;
-
-  # When not cross compiling, also include Setup.hs dependencies.
-  ghcEnv = ghc.withPackages (p:
-    haskellBuildInputs ++ stdenv.lib.optional (!isCross) setupHaskellDepends);
+  allBuildInputs = propagatedBuildInputs ++ otherBuildInputs ++ depsBuildBuild;
+  isHaskellPartition =
+    stdenv.lib.partition isHaskellPkg allBuildInputs;
 
   setupCommand = "./Setup";
 
   ghcCommand' = if isGhcjs then "ghcjs" else "ghc";
   ghcCommand = "${ghc.targetPrefix}${ghcCommand'}";
-  ghcCommandCaps= toUpper ghcCommand';
 
   nativeGhcCommand = "${nativeGhc.targetPrefix}ghc";
 
@@ -214,8 +208,7 @@ let
       continue
     fi
   '';
-
-in
+in stdenv.lib.fix (drv:
 
 assert allPkgconfigDepends != [] -> pkgconfig != null;
 
@@ -428,6 +421,13 @@ stdenv.mkDerivation ({
 
     compiler = ghc;
 
+
+    getBuildInputs = {
+      inherit propagatedBuildInputs otherBuildInputs allPkgconfigDepends;
+      haskellBuildInputs = isHaskellPartition.right;
+      systemBuildInputs = isHaskellPartition.wrong;
+    };
+
     isHaskellLibrary = isLibrary;
 
     # TODO: ask why the split outputs are configurable at all?
@@ -438,23 +438,11 @@ stdenv.mkDerivation ({
     # TODO: fetch the self from the fixpoint instead
     haddockDir = self: if doHaddock then "${docdir self.doc}/html" else null;
 
-    env = stdenv.mkDerivation {
-      name = "interactive-${pname}-${version}-environment";
-      buildInputs = systemBuildInputs;
-      nativeBuildInputs = [ ghcEnv ] ++ nativeBuildInputs;
-      LANG = "en_US.UTF-8";
-      LOCALE_ARCHIVE = optionalString (stdenv.hostPlatform.libc == "glibc") "${glibcLocales}/lib/locale/locale-archive";
-      shellHook = ''
-        export NIX_${ghcCommandCaps}="${ghcEnv}/bin/${ghcCommand}"
-        export NIX_${ghcCommandCaps}PKG="${ghcEnv}/bin/${ghcCommand}-pkg"
-        # TODO: is this still valid?
-        export NIX_${ghcCommandCaps}_DOCDIR="${ghcEnv}/share/doc/ghc/html"
-        ${if isHaLVM
-            then ''export NIX_${ghcCommandCaps}_LIBDIR="${ghcEnv}/lib/HaLVM-${ghc.version}"''
-            else ''export NIX_${ghcCommandCaps}_LIBDIR="${ghcEnv}/lib/${ghcCommand}-${ghc.version}"''}
-        ${shellHook}
-      '';
+    env = shellFor {
+      packages = p: [ drv ];
+      inherit shellHook;
     };
+
   };
 
   meta = { inherit homepage license platforms; }
@@ -487,4 +475,5 @@ stdenv.mkDerivation ({
 // optionalAttrs (dontStrip)            { inherit dontStrip; }
 // optionalAttrs (hardeningDisable != []) { inherit hardeningDisable; }
 // optionalAttrs (stdenv.buildPlatform.libc == "glibc"){ LOCALE_ARCHIVE = "${glibcLocales}/lib/locale/locale-archive"; }
+)
 )

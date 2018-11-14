@@ -11,8 +11,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ automake autoconf which gnome3.vala libtool pkgconfig gobjectIntrospection ];
   buildInputs = [ graphviz glib gnome3.libgee expat ];
 
-  preConfigure = "./autogen.sh";
-
   passthru = {
     updateScript = gnome3.updateScript {
       packageName = "valadoc";
@@ -20,10 +18,10 @@ stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
-    description = "valadoc is a documentation generator for generating API documentation from Vala source code";
-    homepage = https://valadoc.org;
-    license = stdenv.lib.licenses.gpl2;
+    description = "A documentation generator for generating API documentation from Vala source code";
+    homepage    = https://valadoc.org;
+    license     = licenses.gpl2;
     maintainers = with maintainers; [ sternenseemann ];
-    platforms = with platforms; linux;
+    platforms   = platforms.linux;
   };
 }

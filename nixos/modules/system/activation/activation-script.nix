@@ -100,6 +100,52 @@ in
             exit $_status
           '';
       };
+    };
+
+    system.userActivationScripts = mkOption {
+      default = {};
+
+      example = literalExample ''
+        { plasmaSetup = {
+            text = '''
+              ${pkgs.libsForQt5.kservice}/bin/kbuildsycoca5"
+            ''';
+            deps = [];
+          };
+        }
+      '';
+
+      description = ''
+        A set of shell script fragments that are executed by a systemd user
+        service when a NixOS system configuration is activated. Examples are
+        rebuilding the .desktop file cache for showing applications in the menu.
+        Since these are executed every time you run
+        <command>nixos-rebuild</command>, it's important that they are
+        idempotent and fast.
+      '';
+
+      type = types.attrsOf types.unspecified;
+
+      apply = set: {
+        script = ''
+          unset PATH
+          for i in ${toString path}; do
+            PATH=$PATH:$i/bin:$i/sbin
+          done
+
+          _status=0
+          trap "_status=1 _localstatus=\$?" ERR
+
+          ${
+            let
+              set' = mapAttrs (n: v: if isString v then noDepEntry v else v) set;
+              withHeadlines = addAttributeName set';
+            in textClosureMap id (withHeadlines) (attrNames withHeadlines)
+          }
+
+          exit $_status
+        '';
+      };
 
     };
 
@@ -177,6 +223,14 @@ in
         source ${config.system.build.earlyMountScript}
       '';
 
+    systemd.user = {
+      services.nixos-activation = {
+        description = "Run user specific NixOS activation";
+        script = config.system.userActivationScripts.script;
+        unitConfig.ConditionUser = "!@system";
+        serviceConfig.Type = "oneshot";
+      };
+    };
   };
 
 }

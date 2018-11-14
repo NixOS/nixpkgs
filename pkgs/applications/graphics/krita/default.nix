@@ -3,7 +3,7 @@
 , kguiaddons, ki18n, kitemmodels, kitemviews, kwindowsystem
 , kio, kcrash
 , boost, libraw, fftw, eigen, exiv2, libheif, lcms2, gsl, openexr, giflib
-, openjpeg, opencolorio, vc, poppler_qt5, curl, ilmbase
+, openjpeg, opencolorio, vc, poppler, curl, ilmbase
 , qtmultimedia, qtx11extras
 , python3
 }:
@@ -23,7 +23,7 @@ mkDerivation rec {
     karchive kconfig kwidgetsaddons kcompletion kcoreaddons kguiaddons
     ki18n kitemmodels kitemviews kwindowsystem kio kcrash
     boost libraw fftw eigen exiv2 lcms2 gsl openexr libheif giflib
-    openjpeg opencolorio poppler_qt5 curl ilmbase
+    openjpeg opencolorio poppler curl ilmbase
     qtmultimedia qtx11extras
     python3
   ] ++ lib.optional (stdenv.hostPlatform.isi686 || stdenv.hostPlatform.isx86_64) vc;

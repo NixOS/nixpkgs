@@ -25,7 +25,7 @@ self: super:
 
   # GHCJS does not ship with the same core packages as GHC.
   # https://github.com/ghcjs/ghcjs/issues/676
-  stm = self.stm_2_4_5_0;
+  stm = self.stm_2_4_5_1;
   ghc-compact = self.ghc-compact_0_1_0_0;
 
   network = addBuildTools super.network (pkgs.lib.optional pkgs.buildPlatform.isDarwin pkgs.buildPackages.darwin.libiconv);

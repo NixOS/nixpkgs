@@ -11,8 +11,8 @@ mkDerivation {
   version = "0.19.0";
   src = fetchgit {
     url = "https://github.com/elm/compiler";
-    sha256 = "0s93z9vr0vp5w894ghc5s34nsq09sg1msf59zfiba87sid5vgjqy";
-    rev = "32059a289d27e303fa1665e9ada0a52eb688f302";
+    sha256 = "13jks6c6i80z71mjjfg46ri570g5ini0k3xw3857v6z66zcl56x4";
+    rev = "d5cbc41aac23da463236bbc250933d037da4055a";
   };
   isLibrary = false;
   isExecutable = true;

@@ -20,6 +20,7 @@ stdenv.mkDerivation {
     homepage = http://asio.sourceforge.net/;
     description = "Cross-platform C++ library for network and low-level I/O programming";
     license = licenses.boost;
+    broken = stdenv.isDarwin;  # test when updating to >=1.12.1
     platforms = platforms.unix;
   };
 }

@@ -102,10 +102,16 @@ import ./make-test.nix {
   testScript = ''
     startAll;
 
-    $client->waitForUnit("network.target");
+    $client->waitForUnit("network-online.target");
     $smtp1->waitForUnit('opensmtpd');
     $smtp2->waitForUnit('opensmtpd');
     $smtp2->waitForUnit('dovecot2');
+
+    # To prevent sporadic failures during daemon startup, make sure
+    # services are listening on their ports before sending requests
+    $smtp1->waitForOpenPort(25);
+    $smtp2->waitForOpenPort(25);
+    $smtp2->waitForOpenPort(143);
 
     $client->succeed('send-a-test-mail');
     $smtp1->waitUntilFails('smtpctl show queue | egrep .');

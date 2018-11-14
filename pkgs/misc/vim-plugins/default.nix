@@ -439,7 +439,7 @@ self = rec {
     # $ eval echo $(nix-instantiate --eval --expr 'with (import <nixpkgs>) {}; clang.default_cxx_stdlib_compile')
     preFixup = ''
       substituteInPlace "$out"/share/vim-plugins/clang_complete/plugin/clang_complete.vim \
-        --replace "let g:clang_library_path = '' + "''" + ''" "let g:clang_library_path='${llvmPackages.clang.cc}/lib/libclang.so'"
+        --replace "let g:clang_library_path = '' + "''" + ''" "let g:clang_library_path='${llvmPackages.clang.cc.lib}/lib/libclang.so'"
     '';
   };
 
@@ -3411,6 +3411,19 @@ self = rec {
       sha256 = "1nyrg87biwq6b3jk40fyjd5mlnl4pbvwsqi9095y8gjanf9a9dck";
     };
     dependencies = [];
+
+  };
+
+  jedi-vim = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "jedi-vim-2018-10-14";
+    src = fetchgit {
+      url = "https://github.com/davidhalter/jedi-vim";
+      rev = "b6dfc5fd49c26d4dbe9f54c814956567a7a9b3a8";
+      sha256 = "11wvynjl1m23vdp4wvirhmm7vnpji5affbyhwz67yjkvh6c42xqa";
+    };
+    dependencies = [];
+    # it'd be nice to check for python3 support in vim, but nobody else seems to care
+    buildInputs = [python3Packages.jedi];
 
   };
 

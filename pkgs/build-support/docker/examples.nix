@@ -141,4 +141,20 @@ rec {
     runAsRoot = ''echo "(runAsRoot)" > runAsRoot'';
     extraCommands = ''echo "(extraCommand)" > extraCommands'';
   };
+
+  # 9. Ensure that setting created to now results in a date which
+  # isn't the epoch + 1
+  unstableDate = pkgs.dockerTools.buildImage {
+    name = "unstable-date";
+    tag = "latest";
+    contents = [ pkgs.coreutils ];
+    created = "now";
+  };
+
+  # 10. Create a layered image
+  layered-image = pkgs.dockerTools.buildLayeredImage {
+    name = "layered-image";
+    tag = "latest";
+    config.Cmd = [ "${pkgs.hello}/bin/hello" ];
+  };
 }

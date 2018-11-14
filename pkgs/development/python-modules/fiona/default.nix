@@ -12,6 +12,8 @@ buildPythonPackage rec {
     sha256 = "a156129f0904cb7eb24aa0745b6075da54f2c31db168ed3bcac8a4bd716d77b2";
   };
 
+  CXXFLAGS = stdenv.lib.optionalString stdenv.cc.isClang "-std=c++11";
+
   buildInputs = [
     gdal
   ];

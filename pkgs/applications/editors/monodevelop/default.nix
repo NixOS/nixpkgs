@@ -76,5 +76,6 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     platforms = platforms.linux;
     maintainers = with maintainers; [ obadz ];
+    broken = true; # 2018-09-21, build has failed since 2018-03-08
   };
 }

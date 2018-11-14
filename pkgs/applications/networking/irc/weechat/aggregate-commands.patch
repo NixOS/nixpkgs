@@ -1,0 +1,110 @@
+diff --git a/src/core/wee-command.c b/src/core/wee-command.c
+index 91c3c068d..8105e4171 100644
+--- a/src/core/wee-command.c
++++ b/src/core/wee-command.c
+@@ -8345,10 +8345,20 @@ command_exec_list (const char *command_list)
+ void
+ command_startup (int plugins_loaded)
+ {
++    int i;
++
+     if (plugins_loaded)
+     {
+         command_exec_list (CONFIG_STRING(config_startup_command_after_plugins));
+-        command_exec_list (weechat_startup_commands);
++        if (weechat_startup_commands)
++        {
++            for (i = 0; i < weelist_size (weechat_startup_commands); i++)
++            {
++                command_exec_list (
++                    weelist_string (
++                        weelist_get (weechat_startup_commands, i)));
++            }
++        }
+     }
+     else
+         command_exec_list (CONFIG_STRING(config_startup_command_before_plugins));
+diff --git a/src/core/weechat.c b/src/core/weechat.c
+index f74598ad5..ff2e539d1 100644
+--- a/src/core/weechat.c
++++ b/src/core/weechat.c
+@@ -60,6 +60,7 @@
+ #include "wee-eval.h"
+ #include "wee-hdata.h"
+ #include "wee-hook.h"
++#include "wee-list.h"
+ #include "wee-log.h"
+ #include "wee-network.h"
+ #include "wee-proxy.h"
+@@ -102,7 +103,8 @@ int weechat_no_gnutls = 0;             /* remove init/deinit of gnutls      */
+                                        /* (useful with valgrind/electric-f.)*/
+ int weechat_no_gcrypt = 0;             /* remove init/deinit of gcrypt      */
+                                        /* (useful with valgrind)            */
+-char *weechat_startup_commands = NULL; /* startup commands (-r flag)        */
++struct t_weelist *weechat_startup_commands = NULL; /* startup commands      */
++                                                   /* (option -r)           */
+ 
+ 
+ /*
+@@ -152,9 +154,13 @@ weechat_display_usage ()
+           "  -h, --help               display this help\n"
+           "  -l, --license            display WeeChat license\n"
+           "  -p, --no-plugin          don't load any plugin at startup\n"
+-          "  -r, --run-command <cmd>  run command(s) after startup\n"
+-          "                           (many commands can be separated by "
+-          "semicolons)\n"
++          "  -P, --plugins <plugins>  load only these plugins at startup\n"
++          "                           (see /help weechat.plugin.autoload)\n"
++          "  -r, --run-command <cmd>  run command(s) after startup;\n"
++          "                           many commands can be separated by "
++          "semicolons,\n"
++          "                           this option can be given multiple "
++          "times\n"
+           "  -s, --no-script          don't load any script at startup\n"
+           "      --upgrade            upgrade WeeChat using session files "
+           "(see /help upgrade in WeeChat)\n"
+@@ -276,9 +282,10 @@ weechat_parse_args (int argc, char *argv[])
+         {
+             if (i + 1 < argc)
+             {
+-                if (weechat_startup_commands)
+-                    free (weechat_startup_commands);
+-                weechat_startup_commands = strdup (argv[++i]);
++                if (!weechat_startup_commands)
++                    weechat_startup_commands = weelist_new ();
++                weelist_add (weechat_startup_commands, argv[++i],
++                             WEECHAT_LIST_POS_END, NULL);
+             }
+             else
+             {
+@@ -616,6 +623,8 @@ weechat_shutdown (int return_code, int crash)
+         free (weechat_home);
+     if (weechat_local_charset)
+         free (weechat_local_charset);
++    if (weechat_startup_commands)
++        weelist_free (weechat_startup_commands);
+ 
+     if (crash)
+         abort ();
+diff --git a/src/core/weechat.h b/src/core/weechat.h
+index 9420ff415..cbb565a03 100644
+--- a/src/core/weechat.h
++++ b/src/core/weechat.h
+@@ -96,6 +96,8 @@
+ /* name of environment variable with an extra lib dir */
+ #define WEECHAT_EXTRA_LIBDIR "WEECHAT_EXTRA_LIBDIR"
+ 
++struct t_weelist;
++
+ /* global variables and functions */
+ extern int weechat_headless;
+ extern int weechat_debug_core;
+@@ -112,7 +114,7 @@ extern char *weechat_local_charset;
+ extern int weechat_plugin_no_dlclose;
+ extern int weechat_no_gnutls;
+ extern int weechat_no_gcrypt;
+-extern char *weechat_startup_commands;
++extern struct t_weelist *weechat_startup_commands;
+ 
+ extern void weechat_term_check ();
+ extern void weechat_shutdown (int return_code, int crash);

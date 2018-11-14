@@ -406,25 +406,25 @@ in {
       { source = configFile;
         target = "NetworkManager/NetworkManager.conf";
       }
-      { source = "${networkmanager-openvpn}/etc/NetworkManager/VPN/nm-openvpn-service.name";
+      { source = "${networkmanager-openvpn}/lib/NetworkManager/VPN/nm-openvpn-service.name";
         target = "NetworkManager/VPN/nm-openvpn-service.name";
       }
-      { source = "${networkmanager-vpnc}/etc/NetworkManager/VPN/nm-vpnc-service.name";
+      { source = "${networkmanager-vpnc}/lib/NetworkManager/VPN/nm-vpnc-service.name";
         target = "NetworkManager/VPN/nm-vpnc-service.name";
       }
-      { source = "${networkmanager-openconnect}/etc/NetworkManager/VPN/nm-openconnect-service.name";
+      { source = "${networkmanager-openconnect}/lib/NetworkManager/VPN/nm-openconnect-service.name";
         target = "NetworkManager/VPN/nm-openconnect-service.name";
       }
-      { source = "${networkmanager-fortisslvpn}/etc/NetworkManager/VPN/nm-fortisslvpn-service.name";
+      { source = "${networkmanager-fortisslvpn}/lib/NetworkManager/VPN/nm-fortisslvpn-service.name";
         target = "NetworkManager/VPN/nm-fortisslvpn-service.name";
       }
-      { source = "${networkmanager-l2tp}/etc/NetworkManager/VPN/nm-l2tp-service.name";
+      { source = "${networkmanager-l2tp}/lib/NetworkManager/VPN/nm-l2tp-service.name";
         target = "NetworkManager/VPN/nm-l2tp-service.name";
       }
-      { source = "${networkmanager_strongswan}/etc/NetworkManager/VPN/nm-strongswan-service.name";
+      { source = "${networkmanager_strongswan}/lib/NetworkManager/VPN/nm-strongswan-service.name";
         target = "NetworkManager/VPN/nm-strongswan-service.name";
       }
-      { source = "${networkmanager-iodine}/etc/NetworkManager/VPN/nm-iodine-service.name";
+      { source = "${networkmanager-iodine}/lib/NetworkManager/VPN/nm-iodine-service.name";
         target = "NetworkManager/VPN/nm-iodine-service.name";
       }
     ] ++ optional (cfg.appendNameservers == [] || cfg.insertNameservers == [])

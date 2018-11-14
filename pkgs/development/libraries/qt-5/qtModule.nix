@@ -8,7 +8,7 @@ args:
 
 let
   inherit (args) name;
-  version = if (args.version or null) == null then srcs."${name}".version else args.version;
+  version = args.version or srcs."${name}".version;
   src = args.src or srcs."${name}".src;
 in
 

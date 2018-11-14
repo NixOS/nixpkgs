@@ -1,15 +1,15 @@
 args @ { fetchurl, ... }:
 rec {
   baseName = ''dbd-postgres'';
-  version = ''cl-dbi-20180430-git'';
+  version = ''cl-dbi-20180831-git'';
 
   description = ''Database driver for PostgreSQL.'';
 
   deps = [ args."alexandria" args."bordeaux-threads" args."cl-annot" args."cl-postgres" args."cl-syntax" args."cl-syntax-annot" args."closer-mop" args."dbi" args."md5" args."named-readtables" args."split-sequence" args."trivial-garbage" args."trivial-types" args."usocket" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/cl-dbi/2018-04-30/cl-dbi-20180430-git.tgz'';
-    sha256 = ''0bjkba9z93h2sf9n40dvmw1p6nq2p3d5zw9w3zw9k1crn7a601sv'';
+    url = ''http://beta.quicklisp.org/archive/cl-dbi/2018-08-31/cl-dbi-20180831-git.tgz'';
+    sha256 = ''19cpzdzjjzm0if77dycsk8lj91ihwr51mbjmf3fx0wqwr8k5y0g9'';
   };
 
   packageName = "dbd-postgres";
@@ -18,9 +18,9 @@ rec {
   overrides = x: x;
 }
 /* (SYSTEM dbd-postgres DESCRIPTION Database driver for PostgreSQL. SHA256
-    0bjkba9z93h2sf9n40dvmw1p6nq2p3d5zw9w3zw9k1crn7a601sv URL
-    http://beta.quicklisp.org/archive/cl-dbi/2018-04-30/cl-dbi-20180430-git.tgz
-    MD5 1bc845e8738c4987342cb0f56200ba50 NAME dbd-postgres FILENAME
+    19cpzdzjjzm0if77dycsk8lj91ihwr51mbjmf3fx0wqwr8k5y0g9 URL
+    http://beta.quicklisp.org/archive/cl-dbi/2018-08-31/cl-dbi-20180831-git.tgz
+    MD5 2fc95bff95d3cd25e3afeb003ee009d2 NAME dbd-postgres FILENAME
     dbd-postgres DEPS
     ((NAME alexandria FILENAME alexandria)
      (NAME bordeaux-threads FILENAME bordeaux-threads)
@@ -37,5 +37,5 @@ rec {
     (alexandria bordeaux-threads cl-annot cl-postgres cl-syntax cl-syntax-annot
      closer-mop dbi md5 named-readtables split-sequence trivial-garbage
      trivial-types usocket)
-    VERSION cl-dbi-20180430-git SIBLINGS
+    VERSION cl-dbi-20180831-git SIBLINGS
     (cl-dbi dbd-mysql dbd-sqlite3 dbi-test dbi) PARASITES NIL) */
