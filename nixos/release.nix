@@ -1,6 +1,6 @@
 with import ../lib;
 
-{ nixpkgs ? { outPath = cleanSource ./..; revCount = 130979; shortRev = "gfedcba"; }
+{ nixpkgs ? { outPath = cleanSource ./..; revCount = 654321; shortRev = "gfedcba"; }
 , stableBranch ? false
 , supportedSystems ? [ "x86_64-linux" "aarch64-linux" ]
 , configuration ? {}
