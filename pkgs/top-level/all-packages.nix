@@ -7248,6 +7248,7 @@ with pkgs;
   rustracerd = callPackage ../development/tools/rust/racerd { };
   rust-bindgen = callPackage ../development/tools/rust/bindgen { };
   rust-cbindgen = callPackage ../development/tools/rust/cbindgen { };
+  rust-cbindgen_0_6_7 = callPackage ../development/tools/rust/cbindgen/0_6_7.nix { };
   rustup = callPackage ../development/tools/rust/rustup {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
