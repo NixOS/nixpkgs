@@ -10,6 +10,7 @@ let
     dde-api = callPackage ./dde-api { };
     dde-calendar = callPackage ./dde-calendar { };
     dde-daemon = callPackage ./dde-daemon { };
+    dde-dock = callPackage ./dde-dock { };
     dde-network-utils = callPackage ./dde-network-utils { };
     dde-qt-dbus-factory = callPackage ./dde-qt-dbus-factory { };
     dde-session-ui = callPackage ./dde-session-ui { };
