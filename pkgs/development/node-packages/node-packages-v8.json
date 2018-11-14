@@ -55,7 +55,6 @@
 , "json-server"
 , "js-yaml"
 , "karma"
-, { "kibana-authentication-proxy": "git://github.com/fangli/kibana-authentication-proxy.git" }
 , "lcov-result-merger"
 , "leetcode-cli"
 , "lerna"
