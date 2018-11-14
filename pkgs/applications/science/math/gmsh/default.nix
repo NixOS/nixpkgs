@@ -23,7 +23,7 @@ stdenv.mkDerivation {
   meta = {
     description = "A three-dimensional finite element mesh generator";
     homepage = http://gmsh.info/;
-    platforms = stdenv.lib.platforms.all;
+    platforms = [ "x86_64-linux" ];
     license = stdenv.lib.licenses.gpl2Plus;
   };
 }
