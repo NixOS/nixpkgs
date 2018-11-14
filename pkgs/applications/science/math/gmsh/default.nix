@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, blas, liblapack, gfortran, gmm, fltk, libjpeg
+{ stdenv, fetchurl, cmake, openblasCompat, gfortran, gmm, fltk, libjpeg
 , zlib, libGLU_combined, libGLU, xorg }:
 
 let version = "4.0.4"; in
@@ -11,11 +11,7 @@ stdenv.mkDerivation {
     sha256 = "1hvrls3xyxvn69kwicpvndrs0zhifcfkhfsxr8zkmhmn6fhnjhha";
   };
 
-  # The original CMakeLists tries to use some version of the Lapack lib
-  # that is supposed to work without Fortran but didn't for me.
-  patches = [ ./CMakeLists.txt.patch ];
-
-  buildInputs = [ cmake blas liblapack gmm fltk libjpeg zlib libGLU_combined
+  buildInputs = [ cmake openblasCompat gmm fltk libjpeg zlib libGLU_combined
     libGLU xorg.libXrender xorg.libXcursor xorg.libXfixes xorg.libXext
     xorg.libXft xorg.libXinerama xorg.libX11 xorg.libSM xorg.libICE
   ];
