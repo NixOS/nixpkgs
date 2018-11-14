@@ -9,7 +9,7 @@
 let optionals = stdenv.lib.optionals; in
 python3.pkgs.buildPythonApplication rec {
   pname = "quodlibet${tag}";
-  version = "4.1.0";
+  version = "4.2.0";
 
   # XXX, tests fail
   # https://github.com/quodlibet/quodlibet/issues/2820
@@ -17,7 +17,7 @@ python3.pkgs.buildPythonApplication rec {
 
   src = fetchurl {
     url = "https://github.com/quodlibet/quodlibet/releases/download/release-${version}/quodlibet-${version}.tar.gz";
-    sha256 = "1vcxx4sz5i4ag74pjpdfw7jkwxfb8jhvn8igcjwd5cccw4gscm2z";
+    sha256 = "0w64i999ipzgjb4c4lzw7jp792amd6km46wahx7m3bpzly55r3f6";
   };
 
   nativeBuildInputs = [ wrapGAppsHook gettext intltool ];

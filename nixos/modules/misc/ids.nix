@@ -331,6 +331,11 @@
       zeronet = 304;
       lirc = 305;
       lidarr = 306;
+      slurm = 307;
+      kapacitor = 308;
+      solr = 309;
+      alerta = 310;
+      minetest = 311;
 
       # When adding a uid, make sure it doesn't match an existing gid. And don't use uids above 399!
 
@@ -622,6 +627,11 @@
       zeronet = 304;
       lirc = 305;
       lidarr = 306;
+      slurm = 307;
+      kapacitor = 308;
+      solr = 309;
+      alerta = 310;
+      minetest = 311;
 
       # When adding a gid, make sure it doesn't match an existing
       # uid. Users and groups with the same name should have equal

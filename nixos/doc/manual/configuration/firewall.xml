@@ -34,13 +34,4 @@
   Similarly, UDP port ranges can be opened through
   <xref linkend="opt-networking.firewall.allowedUDPPortRanges"/>.
  </para>
-
- <para>
-  Also of interest is
-<programlisting>
-<xref linkend="opt-networking.firewall.allowPing"/> = true;
-</programlisting>
-  to allow the machine to respond to ping requests. (ICMPv6 pings are always
-  allowed.)
- </para>
 </section>

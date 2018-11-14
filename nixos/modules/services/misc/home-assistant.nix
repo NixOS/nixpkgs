@@ -157,6 +157,7 @@ in {
         Restart = "on-failure";
         ProtectSystem = "strict";
         ReadWritePaths = "${cfg.configDir}";
+        KillSignal = "SIGINT";
         PrivateTmp = true;
         RemoveIPC = true;
       };

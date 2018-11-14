@@ -75,6 +75,7 @@ stdenv.mkDerivation rec {
     # Some scripts used during the build need to have their shebangs patched
     ''
       patchShebangs ghc-${version}/utils/
+      patchShebangs ghc-${version}/configure
     '' +
 
     # Strip is harmful, see also below. It's important that this happens

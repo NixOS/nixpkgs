@@ -86,7 +86,7 @@ self: super: {
       name = "git-annex-${super.git-annex.version}-src";
       url = "git://git-annex.branchable.com/";
       rev = "refs/tags/" + super.git-annex.version;
-      sha256 = "069w4gdb104lc3vp48k3wywmgql56yc5g2g2i240xrr88in3qvqw";
+      sha256 = "0dnrihpdshrldais74jm5wjfw650i4va8znc1k2zq8gl9p4i8p39";
     };
   }).override {
     dbus = if pkgs.stdenv.isLinux then self.dbus else null;
@@ -242,12 +242,18 @@ self: super: {
   #   This is due to GenList having been removed from generic-random in 1.2.0.0
   # doJailbreak: Can be removed once https://github.com/haskell-nix/hnix/pull/329 is in (5.2 probably)
   #   This is due to hnix currently having an upper bound of <0.5 on deriving-compat, works just fine with our current version 0.5.1 though
-  hnix = dontCheck (doJailbreak (overrideCabal super.hnix (old: {
-    testHaskellDepends = old.testHaskellDepends or [] ++ [ pkgs.nix ];
-  })));
+  hnix =
+    generateOptparseApplicativeCompletion "hnix" (
+    dontCheck (doJailbreak (overrideCabal super.hnix (old: {
+      testHaskellDepends = old.testHaskellDepends or [] ++ [ pkgs.nix ];
+  }))));
 
   # Fails for non-obvious reasons while attempting to use doctest.
   search = dontCheck super.search;
+
+  # see https://github.com/LumiGuide/haskell-opencv/commit/cd613e200aa20887ded83256cf67d6903c207a60
+  opencv = dontCheck (appendPatch super.opencv ./patches/opencv-fix-116.patch);
+  opencv-extra = dontCheck (appendPatch super.opencv-extra ./patches/opencv-fix-116.patch);
 
   # https://github.com/ekmett/structures/issues/3
   structures = dontCheck super.structures;
@@ -370,6 +376,7 @@ self: super: {
   safecopy = dontCheck super.safecopy;
   sai-shape-syb = dontCheck super.sai-shape-syb;
   scp-streams = dontCheck super.scp-streams;
+  sdl2 = dontCheck super.sdl2; # the test suite needs an x server
   sdl2-ttf = dontCheck super.sdl2-ttf; # as of version 0.2.1, the test suite requires user intervention
   separated = dontCheck super.separated;
   shadowsocks = dontCheck super.shadowsocks;
@@ -712,7 +719,9 @@ self: super: {
   });
 
   # The standard libraries are compiled separately
-  idris = doJailbreak (dontCheck super.idris);
+  idris = generateOptparseApplicativeCompletion "idris" (
+    doJailbreak (dontCheck super.idris)
+  );
 
   # https://github.com/bos/math-functions/issues/25
   math-functions = dontCheck super.math-functions;
@@ -1046,7 +1055,20 @@ self: super: {
   vector-algorithms = dontCheck super.vector-algorithms;
 
   # The test suite attempts to use the network.
-  dhall = dontCheck super.dhall;
+  dhall =
+    generateOptparseApplicativeCompletion "dhall" (
+      dontCheck super.dhall
+  );
+
+  dhall-json =
+    generateOptparseApplicativeCompletions ["dhall-to-json" "dhall-to-yaml"] (
+      super.dhall-json
+  );
+
+  dhall-nix =
+    generateOptparseApplicativeCompletion "dhall-to-nix" (
+      super.dhall-nix
+  );
 
   # https://github.com/well-typed/cborg/issues/174
   cborg = doJailbreak super.cborg;
@@ -1063,14 +1085,18 @@ self: super: {
   # haddock-library_1_6_0 = doJailbreak (dontCheck super.haddock-library_1_6_0);
 
   # The tool needs a newer hpack version than the one mandated by LTS-12.x.
-  cabal2nix = super.cabal2nix.overrideScope (self: super: {
-    hpack = self.hpack_0_31_0;
-    yaml = self.yaml_0_11_0_0;
-  });
+  # Also generate shell completions.
+  cabal2nix = generateOptparseApplicativeCompletion "cabal2nix"
+    (super.cabal2nix.overrideScope (self: super: {
+      hpack = self.hpack_0_31_1;
+      yaml = self.yaml_0_11_0_0;
+    }));
   stack2nix = super.stack2nix.overrideScope (self: super: {
-    hpack = self.hpack_0_31_0;
+    hpack = self.hpack_0_31_1;
     yaml = self.yaml_0_11_0_0;
   });
+  # Break out of "aeson <1.3, temporary <1.3".
+  stack = generateOptparseApplicativeCompletion "stack" (doJailbreak super.stack);
 
   # https://github.com/pikajude/stylish-cabal/issues/11
   stylish-cabal = super.stylish-cabal.override { hspec = self.hspec_2_4_8; hspec-core = self.hspec-core_2_4_8; };
@@ -1111,6 +1137,9 @@ self: super: {
   # https://github.com/snapframework/xmlhtml/pull/37
   xmlhtml = doJailbreak super.xmlhtml;
 
+  # Generate shell completions
+  purescript = generateOptparseApplicativeCompletion "purs" super.purescript;
+
   # https://github.com/NixOS/nixpkgs/issues/46467
   safe-money-aeson = super.safe-money-aeson.overrideScope (self: super: { safe-money = self.safe-money_0_7; });
   safe-money-store = super.safe-money-store.overrideScope (self: super: { safe-money = self.safe-money_0_7; });
@@ -1149,5 +1178,8 @@ self: super: {
 
   # https://github.com/danfran/cabal-macosx/issues/13
   cabal-macosx = dontCheck super.cabal-macosx;
+
+  # https://github.com/DanielG/cabal-helper/issues/59
+  cabal-helper = doJailbreak super.cabal-helper;
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super

@@ -630,7 +630,7 @@ GEM
       pry (>= 0.10.4)
     public_suffix (3.0.3)
     pyu-ruby-sasl (0.0.3.3)
-    rack (1.6.10)
+    rack (1.6.11)
     rack-accept (0.4.5)
       rack (>= 0.4)
     rack-attack (4.4.1)

@@ -39,7 +39,19 @@ stdenv.mkDerivation rec {
     ./patches/Only-test-py2-py3-optional-tests-when-all-of-sage-is.patch
   ];
 
-  packageUpgradePatches = [
+  packageUpgradePatches = let
+    # fetch a diff between base and rev on sage's git server
+    # used to fetch trac tickets by setting the base to the release and the
+    # revision to the last commit that should be included
+    fetchSageDiff = { base, rev, ...}@args: (
+      fetchpatch ({
+        url = "https://git.sagemath.org/sage.git/patch?id2=${base}&id=${rev}";
+        # We don't care about sage's own build system (which builds all its dependencies).
+        # Exclude build system changes to avoid conflicts.
+        excludes = [ "build/*" ];
+      } // builtins.removeAttrs args [ "rev" "base" ])
+    );
+  in [
     # New glpk version has new warnings, filter those out until upstream sage has found a solution
     # https://trac.sagemath.org/ticket/24824
     ./patches/pari-stackwarn.patch # not actually necessary since tha pari upgrade, but necessary for the glpk patch to apply
@@ -64,6 +76,21 @@ stdenv.mkDerivation rec {
       name = "arb-2.15.1.patch";
       url = "https://git.sagemath.org/sage.git/patch/?id=30cc778d46579bd0c7537ed33e8d7a4f40fd5c31";
       sha256 = "13vc2q799dh745sm59xjjabllfj0sfjzcacf8k59kwj04x755d30";
+    })
+
+    # https://trac.sagemath.org/ticket/26326
+    # needs to be split because there is a merge commit in between
+    (fetchSageDiff {
+      name = "networkx-2.2-1.patch";
+      base = "8.4";
+      rev = "68f5ad068184745b38ba6716bf967c8c956c52c5";
+      sha256 = "112b5ywdqgyzgvql2jj5ss8la9i8rgnrzs8vigsfzg4shrcgh9p6";
+    })
+    (fetchSageDiff {
+      name = "networkx-2.2-2.patch";
+      base = "626485bbe5f33bf143d6dfba4de9c242f757f59b~1";
+      rev = "db10d327ade93711da735a599a67580524e6f7b4";
+      sha256 = "09v87id25fa5r9snfn4mv79syhc77jxfawj5aizmdpwdmpgxjk1f";
     })
   ];
 

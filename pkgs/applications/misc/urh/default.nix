@@ -1,4 +1,5 @@
-{ stdenv, fetchFromGitHub, python3Packages, hackrf, rtl-sdr }:
+{ stdenv, fetchFromGitHub, python3Packages
+, hackrf, rtl-sdr, airspy, limesuite }:
 
 python3Packages.buildPythonApplication rec {
   name = "urh-${version}";
@@ -11,7 +12,7 @@ python3Packages.buildPythonApplication rec {
     sha256 = "0cwbqcv0yffg6fa3g4zknwffa6119i6827w6jm74fhlfa9kwy34c";
   };
 
-  buildInputs = [ hackrf rtl-sdr ];
+  buildInputs = [ hackrf rtl-sdr airspy limesuite ];
   propagatedBuildInputs = with python3Packages; [
     pyqt5 numpy psutil cython pyzmq
   ];

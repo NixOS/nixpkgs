@@ -13,14 +13,14 @@ let
     sha256Hash = "117skqjax1xz9plarhdnrw2rwprjpybdc7mx7wggxapyy920vv5r";
   };
   betaVersion = {
-    version = "3.3.0.13"; # "Android Studio 3.3 Beta 1"
-    build = "182.5073496";
-    sha256Hash = "0bg1h0msd6mpkvirkg4pssa1ak32smv2rlxxsjdm3p29p8gg59px";
+    version = "3.3.0.15"; # "Android Studio 3.3 Beta 3"
+    build = "182.5105271";
+    sha256Hash = "03j3g39v1g4jf5q37bd50zfqsgjfnwnyhjgx8vkfwlg263vhhvdq";
   };
   latestVersion = { # canary & dev
-    version = "3.4.0.1"; # "Android Studio 3.4 Canary 2"
-    build = "183.5081642";
-    sha256Hash = "0ck6habkgnwbr10pr3bfy8ywm3dsm21k9jdj7g685v22sw0zy3yk";
+    version = "3.4.0.2"; # "Android Studio 3.4 Canary 3"
+    build = "183.5112304";
+    sha256Hash = "0dzk4ag1dirfq8l2q91j6hsfyi07wx52qcsmbjb9a2710rlwpdhp";
   };
 in rec {
   # Old alias

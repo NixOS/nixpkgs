@@ -443,6 +443,7 @@ stdenv.mkDerivation ({
 
     env = shellFor {
       packages = p: [ drv ];
+      inherit shellHook;
     };
 
   };

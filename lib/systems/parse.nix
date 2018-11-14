@@ -80,6 +80,7 @@ rec {
     armv8r   = { bits = 32; significantByte = littleEndian; family = "arm"; version = "8"; };
     armv8m   = { bits = 32; significantByte = littleEndian; family = "arm"; version = "8"; };
     aarch64  = { bits = 64; significantByte = littleEndian; family = "arm"; version = "8"; };
+    aarch64_be = { bits = 64; significantByte = bigEndian; family = "arm"; version = "8"; };
 
     i686     = { bits = 32; significantByte = littleEndian; family = "x86"; };
     x86_64   = { bits = 64; significantByte = littleEndian; family = "x86"; };
@@ -92,6 +93,7 @@ rec {
     powerpc  = { bits = 32; significantByte = bigEndian;    family = "power"; };
     powerpc64 = { bits = 64; significantByte = bigEndian; family = "power"; };
     powerpc64le = { bits = 64; significantByte = littleEndian; family = "power"; };
+    powerpcle = { bits = 32; significantByte = littleEndian; family = "power"; };
 
     riscv32  = { bits = 32; significantByte = littleEndian; family = "riscv"; };
     riscv64  = { bits = 64; significantByte = littleEndian; family = "riscv"; };
@@ -101,6 +103,10 @@ rec {
 
     wasm32   = { bits = 32; significantByte = littleEndian; family = "wasm"; };
     wasm64   = { bits = 64; significantByte = littleEndian; family = "wasm"; };
+    
+    alpha    = { bits = 64; significantByte = littleEndian; family = "alpha"; };
+
+    avr      = { bits = 8; family = "avr"; };
   };
 
   ################################################################################
@@ -117,6 +123,7 @@ rec {
     apple = {};
     pc = {};
 
+    none = {};
     unknown = {};
   };
 
@@ -200,6 +207,7 @@ rec {
     cygnus       = {};
     msvc         = {};
     eabi         = {};
+    elf         = {};
 
     androideabi  = {};
     android      = {
@@ -255,9 +263,16 @@ rec {
     setType "system" components;
 
   mkSkeletonFromList = l: {
+    "1" = if elemAt l 0 == "avr"
+      then { cpu = elemAt l 0; kernel = "none"; abi = "unknown"; }
+      else throw "Target specification with 1 components is ambiguous";
     "2" = # We only do 2-part hacks for things Nix already supports
       if elemAt l 1 == "cygwin"
         then { cpu = elemAt l 0;                      kernel = "windows";  abi = "cygnus";   }
+      else if (elemAt l 1 == "eabi")
+        then { cpu = elemAt l 0; vendor = "none"; kernel = "none"; abi = elemAt l 1; }
+      else if (elemAt l 1 == "elf")
+        then { cpu = elemAt l 0; vendor = "none"; kernel = "none"; abi = elemAt l 1; }
       else   { cpu = elemAt l 0;                      kernel = elemAt l 1;                   };
     "3" = # Awkwards hacks, beware!
       if elemAt l 1 == "apple"
@@ -268,6 +283,10 @@ rec {
         then { cpu = elemAt l 0; vendor = elemAt l 1; kernel = "windows";  abi = "gnu"; }
       else if hasPrefix "netbsd" (elemAt l 2)
         then { cpu = elemAt l 0; vendor = elemAt l 1;    kernel = elemAt l 2;                }
+      else if (elemAt l 2 == "eabi")
+        then { cpu = elemAt l 0; vendor = elemAt l 1; kernel = "none"; abi = elemAt l 2; }
+      else if (elemAt l 2 == "elf")
+        then { cpu = elemAt l 0; vendor = elemAt l 1; kernel = "none"; abi = elemAt l 2; }
       else throw "Target specification with 3 components is ambiguous";
     "4" =    { cpu = elemAt l 0; vendor = elemAt l 1; kernel = elemAt l 2; abi = elemAt l 3; };
   }.${toString (length l)}

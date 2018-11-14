@@ -15,13 +15,13 @@ let binPath = stdenv.lib.makeBinPath [
   ];
 in stdenv.mkDerivation rec {
   name = "debootstrap-${version}";
-  version = "1.0.109";
+  version = "1.0.110";
 
   src = fetchurl {
     # git clone git://git.debian.org/d-i/debootstrap.git
     # I'd like to use the source. However it's lacking the lanny script ? (still true?)
     url = "mirror://debian/pool/main/d/debootstrap/debootstrap_${version}.tar.gz";
-    sha256 = "117xgrv6mpszyndmsvkn4ynh57b2s40qc68bpmfmxggw58j42klw";
+    sha256 = "11bqy2dbqsy9fyx1i6lj0aj1pvq15y8kkwjfrp18k3nvy74y80ca";
   };
 
   nativeBuildInputs = [ makeWrapper ];

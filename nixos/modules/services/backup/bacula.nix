@@ -346,8 +346,12 @@ in {
       description = "Bacula File Daemon";
       wantedBy = [ "multi-user.target" ];
       path = [ pkgs.bacula ];
-      serviceConfig.ExecStart = "${pkgs.bacula}/sbin/bacula-fd -f -u root -g bacula -c ${fd_conf}";
-      serviceConfig.ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
+      serviceConfig = {
+        ExecStart = "${pkgs.bacula}/sbin/bacula-fd -f -u root -g bacula -c ${fd_conf}";
+        ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
+        LogsDirectory = "bacula";
+        StateDirectory = "bacula";
+      };
     };
 
     systemd.services.bacula-sd = mkIf sd_cfg.enable {
@@ -355,8 +359,12 @@ in {
       description = "Bacula Storage Daemon";
       wantedBy = [ "multi-user.target" ];
       path = [ pkgs.bacula ];
-      serviceConfig.ExecStart = "${pkgs.bacula}/sbin/bacula-sd -f -u bacula -g bacula -c ${sd_conf}";
-      serviceConfig.ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
+      serviceConfig = {
+        ExecStart = "${pkgs.bacula}/sbin/bacula-sd -f -u bacula -g bacula -c ${sd_conf}";
+        ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
+        LogsDirectory = "bacula";
+        StateDirectory = "bacula";
+      };
     };
 
     services.postgresql.enable = dir_cfg.enable == true;
@@ -366,8 +374,12 @@ in {
       description = "Bacula Director Daemon";
       wantedBy = [ "multi-user.target" ];
       path = [ pkgs.bacula ];
-      serviceConfig.ExecStart = "${pkgs.bacula}/sbin/bacula-dir -f -u bacula -g bacula -c ${dir_conf}";
-      serviceConfig.ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
+      serviceConfig = {
+        ExecStart = "${pkgs.bacula}/sbin/bacula-dir -f -u bacula -g bacula -c ${dir_conf}";
+        ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
+        LogsDirectory = "bacula";
+        StateDirectory = "bacula";
+      };
       preStart = ''
         if ! test -e "${libDir}/db-created"; then
             ${pkgs.postgresql}/bin/createuser --no-superuser --no-createdb --no-createrole bacula

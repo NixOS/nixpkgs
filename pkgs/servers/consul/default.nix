@@ -1,21 +1,26 @@
-{ stdenv, buildGoPackage, consul-ui, fetchFromGitHub }:
+{ stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   name = "consul-${version}";
-  version = "0.9.3";
+  version = "1.3.0";
   rev = "v${version}";
 
   goPackagePath = "github.com/hashicorp/consul";
 
+  # Note: Currently only release tags are supported, because they have the Consul UI
+  # vendored. See
+  #   https://github.com/NixOS/nixpkgs/pull/48714#issuecomment-433454834
+  # If you want to use a non-release commit as `src`, you probably want to improve
+  # this derivation so that it can build the UI's JavaScript from source.
+  # See https://github.com/NixOS/nixpkgs/pull/49082 for something like that.
+  # Or, if you want to patch something that doesn't touch the UI, you may want
+  # to apply your changes as patches on top of a release commit.
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = "consul";
     inherit rev;
-    sha256 = "1176frp7kimpycsmz9wrbizf46jgxr8jq7hz5w4q1x90lswvrxv3";
+    sha256 = "1zv84snvrjm74w3v3rr27linsbxj00m73xd047sb78a4766xs2h0";
   };
-
-  # Keep consul.ui for backward compatability
-  passthru.ui = consul-ui;
 
   preBuild = ''
     buildFlagsArray+=("-ldflags" "-X github.com/hashicorp/consul/version.GitDescribe=v${version} -X github.com/hashicorp/consul/version.Version=${version} -X github.com/hashicorp/consul/version.VersionPrerelease=")
@@ -26,6 +31,6 @@ buildGoPackage rec {
     homepage = https://www.consul.io/;
     platforms = platforms.linux ++ platforms.darwin;
     license = licenses.mpl20;
-    maintainers = with maintainers; [ pradeepchhetri ];
+    maintainers = with maintainers; [ pradeepchhetri vdemeester nh2 ];
   };
 }

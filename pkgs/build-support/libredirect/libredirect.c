@@ -119,6 +119,13 @@ int __xstat64(int ver, const char * path, struct stat64 * st)
     return __xstat64_real(ver, rewrite(path, buf), st);
 }
 
+int stat(const char * path, struct stat * st)
+{
+    int (*__stat_real) (const char *, struct stat *) = dlsym(RTLD_NEXT, "stat");
+    char buf[PATH_MAX];
+    return __stat_real(rewrite(path, buf), st);
+}
+
 int * access(const char * path, int mode)
 {
     int * (*access_real) (const char *, int mode) = dlsym(RTLD_NEXT, "access");

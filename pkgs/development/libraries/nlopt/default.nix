@@ -1,13 +1,20 @@
-{ fetchurl, stdenv, octave ? null }:
+{ fetchurl, stdenv, octave ? null, cmake }:
 
-stdenv.mkDerivation rec {
-  name = "nlopt-2.4.2";
+let
+
+  version = "2.5.0";
+
+in
+
+stdenv.mkDerivation {
+  name = "nlopt-${version}";
 
   src = fetchurl {
-    url = "http://ab-initio.mit.edu/nlopt/${name}.tar.gz";
-    sha256 = "12cfkkhcdf4zmb6h7y6qvvdvqjs2xf9sjpa3rl3bq76px4yn76c0";
+    url = "https://github.com/stevengj/nlopt/archive/v${version}.tar.gz";
+    sha256 = "1bmlsdzkw8xbigiihffyb0kdaqbyfn7dr8s5pdgavy7z05bpmpf6";
   };
 
+  nativeBuildInputs = [ cmake ];
   buildInputs = [ octave ];
 
   configureFlags = [
@@ -24,7 +31,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = {
-    homepage = http://ab-initio.mit.edu/nlopt/;
+    homepage = "https://nlopt.readthedocs.io/en/latest/";
     description = "Free open-source library for nonlinear optimization";
     license = stdenv.lib.licenses.lgpl21Plus;
     hydraPlatforms = stdenv.lib.platforms.linux;

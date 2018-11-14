@@ -63,11 +63,11 @@ self: super: {
   # more verbose but friendlier for Hydra.
   stack = (doJailbreak super.stack).override {
     Cabal = self.Cabal_2_4_0_1;
-    hpack = self.hpack_0_31_0.override { Cabal = self.Cabal_2_4_0_1; };
+    hpack = self.hpack_0_31_1.override { Cabal = self.Cabal_2_4_0_1; };
     yaml = self.yaml_0_11_0_0;
     hackage-security = self.hackage-security.override { Cabal = self.Cabal_2_4_0_1; };
   };
-  hpack_0_31_0 = super.hpack_0_31_0.override {
+  hpack_0_31_1 = super.hpack_0_31_1.override {
     yaml = self.yaml_0_11_0_0;
   };
 

@@ -89,7 +89,7 @@ GEM
     protected_attributes (1.1.4)
       activemodel (>= 4.0.1, < 5.0)
     public_suffix (3.0.3)
-    rack (1.6.10)
+    rack (1.6.11)
     rack-openid (1.4.2)
       rack (>= 1.1.0)
       ruby-openid (>= 2.1.8)
@@ -201,4 +201,4 @@ DEPENDENCIES
   yard
 
 BUNDLED WITH
-   1.16.3
+   1.16.4

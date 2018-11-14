@@ -19,7 +19,7 @@ in with pkgs; rec {
   tarMinimal = gnutar.override { acl = null; };
 
   busyboxMinimal = busybox.override {
-    useMusl = !targetPlatform.isRiscV;
+    useMusl = !stdenv.targetPlatform.isRiscV;
     enableStatic = true;
     enableMinimal = true;
     extraConfig = ''
@@ -44,7 +44,7 @@ in with pkgs; rec {
         set -x
         mkdir -p $out/bin $out/lib $out/libexec
 
-      '' + (if (hostPlatform.libc == "glibc") then ''
+      '' + (if (stdenv.hostPlatform.libc == "glibc") then ''
         # Copy what we need of Glibc.
         cp -d ${libc.out}/lib/ld*.so* $out/lib
         cp -d ${libc.out}/lib/libc*.so* $out/lib
@@ -75,7 +75,7 @@ in with pkgs; rec {
         find $out/include -name .install -exec rm {} \;
         find $out/include -name ..install.cmd -exec rm {} \;
         mv $out/include $out/include-glibc
-    '' else if (hostPlatform.libc == "musl") then ''
+    '' else if (stdenv.hostPlatform.libc == "musl") then ''
         # Copy what we need from musl
         cp ${libc.out}/lib/* $out/lib
         cp -rL ${libc.dev}/include $out
@@ -137,7 +137,7 @@ in with pkgs; rec {
         cp -d ${zlib.out}/lib/libz.so* $out/lib
         cp -d ${libelf}/lib/libelf.so* $out/lib
 
-      '' + lib.optionalString (hostPlatform != buildPlatform) ''
+      '' + lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
         # These needed for cross but not native tools because the stdenv
         # GCC has certain things built in statically. See
         # pkgs/stdenv/linux/default.nix for the details.
@@ -199,21 +199,21 @@ in with pkgs; rec {
     bootstrapTools = runCommand "bootstrap-tools.tar.xz" {} "cp ${build}/on-server/bootstrap-tools.tar.xz $out";
   };
 
-  bootstrapTools = if (hostPlatform.libc == "glibc") then
+  bootstrapTools = if (stdenv.hostPlatform.libc == "glibc") then
     import ./bootstrap-tools {
-      inherit (hostPlatform) system;
+      inherit (stdenv.buildPlatform) system; # Used to determine where to build
       inherit bootstrapFiles;
     }
-    else if (hostPlatform.libc == "musl") then
+    else if (stdenv.hostPlatform.libc == "musl") then
     import ./bootstrap-tools-musl {
-      inherit (hostPlatform) system;
+      inherit (stdenv.buildPlatform) system; # Used to determine where to build
       inherit bootstrapFiles;
     }
     else throw "unsupported libc";
 
   test = derivation {
     name = "test-bootstrap-tools";
-    inherit (hostPlatform) system;
+    inherit (stdenv.hostPlatform) system; # We cannot "cross test"
     builder = bootstrapFiles.busybox;
     args = [ "ash" "-e" "-c" "eval \"$buildCommand\"" ];
 
@@ -232,12 +232,12 @@ in with pkgs; rec {
       grep --version
       gcc --version
 
-    '' + lib.optionalString (hostPlatform.libc == "glibc") ''
+    '' + lib.optionalString (stdenv.hostPlatform.libc == "glibc") ''
       ldlinux=$(echo ${bootstrapTools}/lib/ld-linux*.so.?)
       export CPP="cpp -idirafter ${bootstrapTools}/include-glibc -B${bootstrapTools}"
       export CC="gcc -idirafter ${bootstrapTools}/include-glibc -B${bootstrapTools} -Wl,-dynamic-linker,$ldlinux -Wl,-rpath,${bootstrapTools}/lib"
       export CXX="g++ -idirafter ${bootstrapTools}/include-glibc -B${bootstrapTools} -Wl,-dynamic-linker,$ldlinux -Wl,-rpath,${bootstrapTools}/lib"
-    '' + lib.optionalString (hostPlatform.libc == "musl") ''
+    '' + lib.optionalString (stdenv.hostPlatform.libc == "musl") ''
       ldmusl=$(echo ${bootstrapTools}/lib/ld-musl*.so.?)
       export CPP="cpp -idirafter ${bootstrapTools}/include-libc -B${bootstrapTools}"
       export CC="gcc -idirafter ${bootstrapTools}/include-libc -B${bootstrapTools} -Wl,-dynamic-linker,$ldmusl -Wl,-rpath,${bootstrapTools}/lib"

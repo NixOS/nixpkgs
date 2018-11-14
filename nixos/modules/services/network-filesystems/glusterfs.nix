@@ -198,6 +198,9 @@ in
         install -m 0755 -d /var/log/glusterfs
       '';
 
+      # glustereventsd uses the `gluster` executable
+      path = [ glusterfs ];
+
       serviceConfig = {
         Type="simple";
         Environment="PYTHONPATH=${glusterfs}/usr/lib/python2.7/site-packages";

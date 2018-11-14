@@ -53,15 +53,20 @@ in rec {
   };
 
   ansible_2_5 = generic {
-    version = "2.5.2";
-    sha256  = "1r9sq30xz3jrvx6yqssj5wmkml1f75rx1amd7g89f3ryngrq6m59";
+    version = "2.5.11";
+    sha256  = "07rhgkl3a2ba59rqh9pyz1p661gc389shlwa2sw1m6wwifg4lm24";
   };
 
   ansible_2_6 = generic {
-    version = "2.6.2";
-    sha256  = "1y5gd9h641p6pphwd7j99yyqglyj23rkmid7wgzk62611754qzkl";
+    version = "2.6.7";
+    sha256  = "10pakw9k9wd3cy1qk3ah2253ph7c7h3qzpal4k0s5lschzgy2fh0";
   };
 
-  ansible2 = ansible_2_6;
+  ansible_2_7 = generic {
+    version = "2.7.1";
+    sha256  = "0fg95x2nr3j4rwnlyd2n03h91xx9fssi34c32356vk3z6ir395g7";
+  };
+
+  ansible2 = ansible_2_7;
   ansible  = ansible2;
 }

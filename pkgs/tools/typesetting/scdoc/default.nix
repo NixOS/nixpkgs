@@ -9,6 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "0a9sxifzsbj24kjnpc0525i91ni2vkwizhgvwx1m9shvfkiisnc6";
   };
 
+  patches = [ ./use-source-date-epoch.patch ];
+
   postPatch = ''
     substituteInPlace Makefile \
       --replace "-static" "" \

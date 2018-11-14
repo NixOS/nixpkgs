@@ -1,9 +1,9 @@
-{ stdenv, fetchFromGitHub, cmake, ninja, pkgconfig, vala, gtk3, libxml2, granite, webkitgtk, clutter-gtk
+{ stdenv, fetchFromGitHub, cmake, ninja, pkgconfig, vala_0_40, gtk3, libxml2, granite, webkitgtk, clutter-gtk
 , clutter-gst, libunity, libnotify, sqlite, gst_all_1, libsoup, json-glib, gnome3, gobjectIntrospection, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "vocal";
-  version = "2.2.0";
+  version = "2.3.0";
 
   name = "${pname}-${version}";
 
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     owner = "needle-and-thread";
     repo = pname;
     rev = version;
-    sha256 = "09cm4azyaa9fmfymygf25gf0klpm5p04k6bc1i90jhw0f1im8sgl";
+    sha256 = "1wkkyai14in4yk3q4qq23wk3l49px2xi8z819y3glna236qsq6qp";
   };
 
   nativeBuildInputs = [
@@ -20,13 +20,14 @@ stdenv.mkDerivation rec {
     libxml2
     ninja
     pkgconfig
-    vala
+    vala_0_40 # should be `elementary.vala` when elementary attribute set is merged
     wrapGAppsHook
   ];
 
   buildInputs = with gst_all_1; [
     clutter-gst
     clutter-gtk
+    gnome3.defaultIconTheme # should be `elementary.defaultIconTheme`when elementary attribute set is merged
     gnome3.libgee
     granite
     gst-plugins-base

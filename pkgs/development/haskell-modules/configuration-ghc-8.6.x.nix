@@ -46,7 +46,7 @@ self: super: {
 
   # LTS-12.x versions do not compile.
   base-orphans = self.base-orphans_0_8;
-  brick = doJailbreak super.brick_0_41_2;      # https://github.com/jtdaugherty/brick/pull/188
+  brick = self.brick_0_41_2;
   cassava-megaparsec = doJailbreak super.cassava-megaparsec;
   config-ini = doJailbreak super.config-ini;   # https://github.com/aisamanra/config-ini/issues/18
   contravariant = self.contravariant_1_5;
@@ -56,24 +56,25 @@ self: super: {
   hledger = doJailbreak super.hledger;
   hledger-lib = doJailbreak super.hledger-lib;
   hledger-ui = doJailbreak super.hledger-ui;
-  hpack = self.hpack_0_31_0;
+  hpack = self.hpack_0_31_1;
   hslua = self.hslua_1_0_1;
   hslua-module-text = self.hslua-module-text_0_2_0;
-  hspec = self.hspec_2_5_8;
-  hspec-core = self.hspec-core_2_5_8;
-  hspec-discover = self.hspec-discover_2_5_8;
+  hspec = self.hspec_2_6_0;
+  hspec-core = self.hspec-core_2_6_0;
+  hspec-discover = self.hspec-discover_2_6_0;
   hspec-megaparsec = doJailbreak super.hspec-megaparsec;  # newer versions need megaparsec 7.x
   hspec-meta = self.hspec-meta_2_5_6;
+  HTF = dontCheck super.HTF_0_13_2_5; # https://github.com/skogsbaer/HTF/issues/74
   JuicyPixels = self.JuicyPixels_3_3_2;
   lens = self.lens_4_17;
   megaparsec = dontCheck (doJailbreak super.megaparsec);
-  neat-interpolation = dontCheck super.neat-interpolation;  # test suite depends on broken HTF
   patience = markBrokenVersion "0.1.1" super.patience;
+  polyparse = self.polyparse_1_12_1;
   primitive = self.primitive_0_6_4_0;
   QuickCheck = self.QuickCheck_2_12_6_1;
   semigroupoids = self.semigroupoids_5_3_1;
   tagged = self.tagged_0_8_6;
-  vty = self.vty_5_25;
+  vty = self.vty_5_25_1;
   wizards = doJailbreak super.wizards;
   wl-pprint-extras = doJailbreak super.wl-pprint-extras;
   yaml = self.yaml_0_11_0_0;
@@ -96,34 +97,13 @@ self: super: {
   unicode-transforms = dontCheck super.unicode-transforms;
   monad-par = dontCheck super.monad-par;  # https://github.com/simonmar/monad-par/issues/66
 
-  # https://github.com/bmillwood/haskell-src-meta/pull/80
-  haskell-src-meta = doJailbreak super.haskell-src-meta;
-
-  # The official 1.12 release is broken and unmaintained.
-  polyparse = appendPatch (overrideCabal super.polyparse (drv: { editedCabalFile = null; })) (pkgs.fetchpatch {
-    url = https://github.com/bergmark/polyparse/commit/8a69ee7e57db798c106d8b56dce05b1dfc4fed37.patch;
-    sha256 = "11r73wx1w6bfrkrnk6r9k7rfzp6qrvkdikb2by37ld06c0w6nn57";
-  });
-
-  # https://github.com/skogsbaer/HTF/issues/69
-  HTF = markBrokenVersion "0.13.2.4" super.HTF;
-
   # https://github.com/jgm/skylighting/issues/55
   skylighting-core = dontCheck super.skylighting-core;
 
-  # https://github.com/joelburget/easytest/issues/12
-  easytest = appendPatch super.easytest (pkgs.fetchpatch {
-    url = https://github.com/joelburget/easytest/pull/13.patch;
-    sha256 = "0gnsgga8x2yxyg27pya6rhmxfsxf167vsi4xdj98fn8v0j7zz1v1";
-  });
-
   # https://github.com/jgm/pandoc/issues/4974
-  pandoc = doJailbreak super.pandoc_2_3_1;
+  pandoc = doJailbreak super.pandoc_2_4;
 
   # Break out of "yaml >=0.10.4.0 && <0.11".
   stack = doJailbreak super.stack;
-
-  # https://github.com/vimus/libmpd-haskell/issues/109
-  xmobar = disableCabalFlag (super.xmobar.override { libmpd = null; }) "with_mpd";
 
 }

@@ -11,29 +11,29 @@ let
     groups = [ "default" "unicorn" "ed25519" "metrics" ];
   };
 
-  version = "11.4.3";
+  version = "11.4.4";
 
   sources = if gitlabEnterprise then {
     gitlabDeb = fetchurl {
       url = "https://packages.gitlab.com/gitlab/gitlab-ee/packages/debian/stretch/gitlab-ee_${version}-ee.0_amd64.deb/download.deb";
-      sha256 = "1cw75qj508z6n00rqgqjzdm2013kyb7c57cypmq0m08nc6f3jspz";
+      sha256 = "15lpcdjcw6lpmzlhqnpd6pgaxh7wvx2mldjd1vqr414r4bcnhgy4";
     };
     gitlab = fetchFromGitLab {
       owner = "gitlab-org";
       repo = "gitlab-ee";
       rev = "v${version}-ee";
-      sha256 = "1vqc77whpbsifbm9vgcmpxnw13v8jz1s9q04i8jfv99c59fjlids";
+      sha256 = "046hchr7q4jnx3j4yxg3rdixfzlva35al3ci26pf9vxrbbl5y8cg";
     };
   } else {
     gitlabDeb = fetchurl {
       url = "https://packages.gitlab.com/gitlab/gitlab-ce/packages/debian/stretch/gitlab-ce_${version}-ce.0_amd64.deb/download.deb";
-      sha256 = "0vk03k42pp92h520wnynl9czcigjhj9m7y68z1x0gwqr9m61r7zm";
+      sha256 = "02p7azyjgb984bk491q6f4zk1mikbcd38rif08kl07bjjzzkir81";
     };
     gitlab = fetchFromGitLab {
       owner = "gitlab-org";
       repo = "gitlab-ce";
       rev = "v${version}";
-      sha256 = "1zvjz2gv2vwqqjz52zcvi0ap3d8rdbpgsqk9wv80hqq4v37a5gfx";
+      sha256 = "1hq9iyp0xrxwmncn61ja3pdj9h2hmdy1l63d1ic3r1dyacybaf2g";
     };
   };
 
@@ -63,17 +63,7 @@ stdenv.mkDerivation rec {
         --replace "ps -U" "${procps}/bin/ps -U"
 
     sed -i '/ask_to_continue/d' lib/tasks/gitlab/two_factor.rake
-
-    # required for some gems:
-    cat > config/database.yml <<EOF
-      production:
-        adapter: <%= ENV["GITLAB_DATABASE_ADAPTER"] || sqlite %>
-        database: gitlab
-        host: <%= ENV["GITLAB_DATABASE_HOST"] || "127.0.0.1" %>
-        password: <%= ENV["GITLAB_DATABASE_PASSWORD"] || "blerg" %>
-        username: gitlab
-        encoding: utf8
-    EOF
+    sed -ri -e '/log_level/a config.logger = Logger.new(STDERR)' config/environments/production.rb
   '';
 
   buildPhase = ''

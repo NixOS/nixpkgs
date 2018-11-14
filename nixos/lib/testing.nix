@@ -1,6 +1,6 @@
-{ system, minimal ? false, config ? {} }:
+{ system, pkgs, minimal ? false, config ? {} }:
 
-with import ./build-vms.nix { inherit system minimal config; };
+with import ./build-vms.nix { inherit system pkgs minimal config; };
 with pkgs;
 
 let
@@ -69,7 +69,7 @@ in rec {
             mkdir -p $out/coverage-data
             mv $i $out/coverage-data/$(dirname $(dirname $i))
           done
-        ''; # */
+        '';
     };
 
 

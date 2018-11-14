@@ -104,10 +104,15 @@ let version = "7-20170409";
             # In uclibc cases, libgomp needs an additional '-ldl'
             # and as I don't know how to pass it, I disable libgomp.
             "--disable-libgomp"
-          ] ++ [
-          "--enable-threads=posix"
-          "--enable-nls"
-          "--disable-decimal-float" # No final libdecnumber (it may work only in 386)
+          ]
+          ++ optional (targetPlatform.libc == "newlib") "--with-newlib"
+          ++ optional (targetPlatform.libc == "avrlibc") "--with-avrlibc"
+          ++ [
+            "--enable-threads=${if targetPlatform.isUnix then "posix"
+                                else if targetPlatform.isWindows then "win32"
+                                else "single"}"
+            "--enable-nls"
+            "--disable-decimal-float" # No final libdecnumber (it may work only in 386)
         ]));
     stageNameAddon = if crossStageStatic then "-stage-static" else "-stage-final";
     crossNameAddon = if targetPlatform != hostPlatform then "-${targetPlatform.config}" + stageNameAddon else "";
@@ -290,20 +295,20 @@ stdenv.mkDerivation ({
   EXTRA_TARGET_FLAGS = optionals
     (targetPlatform != hostPlatform && libcCross != null)
     ([
-      "-idirafter ${getDev libcCross}/include"
+      "-idirafter ${getDev libcCross}${libcCross.incdir or "/include"}"
     ] ++ optionals (! crossStageStatic) [
-      "-B${libcCross.out}/lib"
+      "-B${libcCross.out}${libcCross.libdir or "/lib"}"
     ]);
 
   EXTRA_TARGET_LDFLAGS = optionals
     (targetPlatform != hostPlatform && libcCross != null)
     ([
-      "-Wl,-L${libcCross.out}/lib"
+      "-Wl,-L${libcCross.out}${libcCross.libdir or "/lib"}"
     ] ++ (if crossStageStatic then [
-        "-B${libcCross.out}/lib"
+        "-B${libcCross.out}${libcCross.libdir or "/lib"}"
       ] else [
-        "-Wl,-rpath,${libcCross.out}/lib"
-        "-Wl,-rpath-link,${libcCross.out}/lib"
+        "-Wl,-rpath,${libcCross.out}${libcCross.libdir or "/lib"}"
+        "-Wl,-rpath-link,${libcCross.out}${libcCross.libdir or "/lib"}"
     ]));
 
   passthru =

@@ -1,10 +1,15 @@
-{ system ? builtins.currentSystem }:
+{ system ? builtins.currentSystem,
+  config ? {},
+  pkgs ? import ../.. { inherit system config; }
+}:
 
-with import ../lib/testing.nix { inherit system; };
+with import ../lib/testing.nix { inherit system pkgs; };
+with pkgs.lib;
+
 {
   test1 = makeTest {
     name = "rsyslogd-test1";
-    meta.maintainers = [ lib.maintainers.aanderse ];
+    meta.maintainers = [ maintainers.aanderse ];
 
     machine =
       { config, pkgs, ... }:
@@ -21,7 +26,7 @@ with import ../lib/testing.nix { inherit system; };
 
   test2 = makeTest {
     name = "rsyslogd-test2";
-    meta.maintainers = [ lib.maintainers.aanderse ];
+    meta.maintainers = [ maintainers.aanderse ];
 
     machine =
       { config, pkgs, ... }:
