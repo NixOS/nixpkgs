@@ -90,12 +90,6 @@ nodePackages // {
     buildInputs = [ pkgs.automake pkgs.autoconf nodePackages.node-gyp-build ];
   };
 
-  statsd = nodePackages.statsd.override {
-    # broken with node v8, dead upstream,
-    # see #45946 and https://github.com/etsy/statsd/issues/646
-    meta.broken = true;
-  };
-
   webdrvr = nodePackages.webdrvr.override {
     buildInputs = [ pkgs.phantomjs ];
 
