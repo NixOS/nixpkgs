@@ -86,6 +86,8 @@ in buildPythonApplication rec {
     description = "Persistent remote applications for X";
     platforms = platforms.linux;
     license = licenses.gpl2;
+    # https://github.com/NixOS/nixpkgs/pull/48872#issuecomment-433559636
+    broken = true;
     maintainers = with maintainers; [ tstrobel offline numinit ];
   };
 }
