@@ -42,8 +42,6 @@ in stdenv.mkDerivation rec {
   postInstall = ''
     install -Dm644 ${music} $out/share/games/dxx-rebirth/d2xr-sc55-music.dxa
     install -Dm644 -t $out/share/doc/dxx-rebirth *.txt
-
-    runHook postInstall
   '';
 
   meta = with stdenv.lib; {
