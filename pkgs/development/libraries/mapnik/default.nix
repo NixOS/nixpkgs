@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   # a distinct dev output makes python-mapnik fail
   outputs = [ "out" ];
 
-  nativeBuildInputs = [ python scons ];
+  nativeBuildInputs = [ python ];
 
   buildInputs =
     [ boost cairo freetype gdal harfbuzz icu libjpeg libpng libtiff
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   prefixKey = "PREFIX=";
 
-  sconsFlags = [
+  configureFlags = [
     "BOOST_INCLUDES=${boost.dev}/include"
     "BOOST_LIBS=${boost.out}/lib"
     "CAIRO_INCLUDES=${cairo.dev}/include"

@@ -75,7 +75,7 @@ if [ -z "$buildPhase" ]; then
     buildPhase=sconsBuildPhase
 fi
 
-if [ -z "$installPhase" ]; then
+if [ -z "$dontUseSconsInstall" -a -z "$installPhase" ]; then
     installPhase=sconsInstallPhase
 fi
 
