@@ -97,7 +97,7 @@ let
       appendToName mapDerivationAttrset lowPrio lowPrioSet hiPrio
       hiPrioSet;
     inherit (sources) pathType pathIsDirectory cleanSourceFilter
-      cleanSource sourceByRegex sourceFilesBySuffices
+      cleanSource cleanSourceForImport sourceByRegex sourceFilesBySuffices
       commitIdFromGitRepo cleanSourceWith pathHasContext
       canCleanSource;
     inherit (modules) evalModules closeModules unifyModuleSyntax

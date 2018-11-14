@@ -32,6 +32,18 @@ rec {
   #          cleanSource ./.
   cleanSource = src: cleanSourceWith { filter = cleanSourceFilter; inherit src; };
 
+  # Cleans the source if not operating in restrict-eval. This will make
+  # it possible to import from the cleaned source.
+  #
+  # Example:
+  #          cleanSourceForImport ./..
+  cleanSourceForImport = src:
+    # This is using a very ugly hack to know whether we're evaluating in restrict-mode.
+    # Please don't do this at home.
+    if builtins.pathExists "/"
+    then cleanSource src
+    else src;
+
   # Like `builtins.filterSource`, except it will compose with itself,
   # allowing you to chain multiple calls together without any
   # intermediate copies being put in the nix store.

@@ -1,6 +1,8 @@
 with import ../lib;
 
-{ nixpkgs ? { outPath = cleanSource ./..; revCount = 654321; shortRev = "gfedcba"; }
+# `revCount` and `shortRev` are placeholders, that should be filled
+# automatically for releases by passing the `nixpkgs` argument
+{ nixpkgs ? { outPath = cleanSourceForImport ./..; revCount = 654321; shortRev = "gfedcba"; }
 , stableBranch ? false
 , supportedSystems ? [ "x86_64-linux" "aarch64-linux" ]
 , configuration ? {}
