@@ -1,24 +1,24 @@
-{ stdenv, ocaml, findlib, jbuilder, lwt }:
+{ stdenv, fetchFromGitHub, buildDunePackage, lwt }:
 
-stdenv.mkDerivation rec {
-  version = "1.0.0";
-  name = "ocaml${ocaml.version}-lwt_log-${version}";
+buildDunePackage rec {
+  pname = "lwt_log";
+  version = "1.1.0";
 
-  inherit (lwt) src;
+  minimumOCamlVersion = "4.02";
 
-  buildInputs = [ ocaml findlib jbuilder ];
+  src = fetchFromGitHub {
+    owner = "aantron";
+    repo = pname;
+    rev = version;
+    sha256 = "1c58gkqfvyf2j11jwj2nh4iq999wj9xpnmr80hz9d0nk9fv333pi";
+  };
 
   propagatedBuildInputs = [ lwt ];
-
-  buildPhase = "jbuilder build -p lwt_log";
-
-  inherit (jbuilder) installPhase;
 
   meta = {
     description = "Lwt logging library (deprecated)";
     homepage = "https://github.com/aantron/lwt_log";
     license = stdenv.lib.licenses.lgpl21;
-    inherit (ocaml.meta) platforms;
     maintainers = [ stdenv.lib.maintainers.vbgl ];
   };
 }

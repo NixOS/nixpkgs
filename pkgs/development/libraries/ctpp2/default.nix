@@ -18,10 +18,11 @@ stdenv.mkDerivation rec {
 
   doCheck = false; # fails
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A high performance templating engine";
     homepage = http://ctpp.havoc.ru;
-    maintainers = with stdenv.lib.maintainers; [ robbinch ];
-    platforms = with stdenv.lib.platforms; linux;
+    maintainers = [ maintainers.robbinch ];
+    platforms = platforms.linux;
+    license = licenses.bsd2;
   };
 }

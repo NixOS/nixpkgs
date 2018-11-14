@@ -1,5 +1,5 @@
 { stdenv, castxml, fetchFromGitHub, buildPythonPackage,
-llvmPackages, clang }:
+llvmPackages }:
 buildPythonPackage rec {
   pname = "pygccxml";
   version = "1.9.1";

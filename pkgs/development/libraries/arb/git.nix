@@ -9,8 +9,8 @@ stdenv.mkDerivation rec {
     rev = "10bc615ce5999caf4723444b2b1219b74781d8a4";
     sha256 = "1xb40x3hv9nh76aizhskj5gdhalgn7r95a7zji2nn4ih3lmh40hl";
   };
-  buildInputs = [mpir gmp mpfr flint];
-  configureFlags = "--with-gmp=${gmp} --with-mpir=${mpir} --with-mpfr=${mpfr} --with-flint=${flint}";
+  buildInputs = [ mpir gmp mpfr flint ];
+  configureFlags = [ "--with-gmp=${gmp}" "--with-mpir=${mpir}" "--with-mpfr=${mpfr}" "--with-flint=${flint}" ];
   meta = {
     inherit version;
     description = ''A library for arbitrary-precision interval arithmetic'';

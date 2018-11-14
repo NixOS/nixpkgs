@@ -1,6 +1,5 @@
 { lib
 , buildPythonPackage
-, isPy3k
 , fetchPypi
 }:
 

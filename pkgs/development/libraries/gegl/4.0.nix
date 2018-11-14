@@ -3,17 +3,17 @@
 , libwebp, gnome3, libintl }:
 
 let
-  version = "0.4.4";
+  version = "0.4.12";
 in stdenv.mkDerivation rec {
   name = "gegl-${version}";
 
+  outputs = [ "out" "dev" "devdoc" ];
+  outputBin = "dev";
+
   src = fetchurl {
     url = "https://download.gimp.org/pub/gegl/${stdenv.lib.versions.majorMinor version}/${name}.tar.bz2";
-    sha256 = "143qwn92xc5wm09p9iwrpw9y0ahha5lcyx1bb0lzwcb1fgd4bjzq";
+    sha256 = "0ljqxc4iyy2hrj31pxcy1xp4xm5zbx1nigqisphmg4p8mcz2jrz9";
   };
-
-  # needs fonts otherwise, don't know how to pass them
-  configureFlags = [ "--disable-docs" ];
 
   enableParallelBuilding = true;
 

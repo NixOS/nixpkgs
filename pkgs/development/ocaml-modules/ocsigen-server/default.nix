@@ -36,7 +36,7 @@ stdenv.mkDerivation {
   ocaml_sqlite3 tree uutf makeWrapper camlp4 pgocaml camlzip ]
   ++ (param.buildInputs or []);
 
-  configureFlags = "--root $(out) --prefix /";
+  configureFlags = [ "--root $(out) --prefix /" ];
 
   dontAddPrefix = true;
 

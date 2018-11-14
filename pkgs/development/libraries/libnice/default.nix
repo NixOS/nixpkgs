@@ -12,7 +12,9 @@ stdenv.mkDerivation rec {
   buildInputs = [ gst_all_1.gstreamer gst_all_1.gst-plugins-base gnutls ];
   propagatedBuildInputs = [ glib gupnp-igd ];
 
-  meta = {
+  doCheck = false; # fails with "fatal error: nice/agent.h: No such file or directory"
+
+  meta = with stdenv.lib; {
     homepage = https://nice.freedesktop.org/wiki/;
     description = "The GLib ICE implementation";
     longDescription = ''
@@ -22,6 +24,7 @@ stdenv.mkDerivation rec {
 
       It provides a GLib-based library, libnice and a Glib-free library,
       libstun as well as GStreamer elements.'';
-    platforms = stdenv.lib.platforms.linux;
+    platforms = platforms.linux;
+    license = with licenses; [ lgpl21 mpl11 ];
   };
 }

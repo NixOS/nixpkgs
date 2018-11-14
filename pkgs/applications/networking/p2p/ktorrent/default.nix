@@ -2,7 +2,7 @@
 , extra-cmake-modules, qtbase, qtscript
 , karchive, kcrash, kdnssd, ki18n, kio, knotifications, knotifyconfig
 , kdoctools, kross, kcmutils, kwindowsystem
-, libktorrent, boost, taglib, libgcrypt, kplotting
+, libktorrent, taglib, libgcrypt, kplotting
 }:
 
 stdenv.mkDerivation rec {

@@ -13,6 +13,7 @@ extraBuildFlags=()
 
 mountPoint=/mnt
 channelPath=
+system=
 
 while [ "$#" -gt 0 ]; do
     i="$1"; shift 1

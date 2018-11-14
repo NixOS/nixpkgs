@@ -11,11 +11,11 @@ in
 
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
-  version = "3.16.1";
+  version = "3.18.1";
 
   src = fetchurl {
     url = "https://github.com/balabit/${pname}/releases/download/${name}/${name}.tar.gz";
-    sha256 = "0a9snxvs3fsv0gm5q9xkrcg0hwgs3c8q1rb434cnzn4qbqfnzvn7";
+    sha256 = "1y1v16vvyirh0qv4wzczqp8d3llh6dl63lz3irwib1qhh7x56dyn";
   };
 
   nativeBuildInputs = [ pkgconfig which ];
@@ -55,6 +55,8 @@ stdenv.mkDerivation rec {
   ];
 
   outputs = [ "out" "man" ];
+
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     homepage = https://www.balabit.com/network-security/syslog-ng/;

@@ -52,10 +52,13 @@
    </listitem>
   </itemizedlist>
   To see what channels are available, go to
-  <link
-xlink:href="https://nixos.org/channels"/>. (Note that the URIs of the
+  <link xlink:href="https://nixos.org/channels"/>. (Note that the URIs of the
   various channels redirect to a directory that contains the channel’s latest
-  version and includes ISO images and VirtualBox appliances.)
+  version and includes ISO images and VirtualBox appliances.) Please note that
+  during the release process, channels that are not yet released will be
+  present here as well. See the Getting NixOS page
+  <link xlink:href="https://nixos.org/nixos/download.html"/> to find the newest
+  supported stable release.
  </para>
  <para>
   When you first install NixOS, you’re automatically subscribed to the NixOS
@@ -109,7 +112,7 @@ nixos https://nixos.org/channels/nixos-unstable
    so in that case you will not be able to go back to your original channel.
   </para>
  </warning>
- <section>
+ <section xml:id="sec-upgrading-automatic">
   <title>Automatic Upgrades</title>
 
   <para>

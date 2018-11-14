@@ -28,7 +28,6 @@
 }:
 
 let
-  inherit (stdenv.lib) optional;
   wrapper = ./hoogle-local-wrapper.sh;
   isGhcjs = ghc.isGhcjs or false;
   opts = lib.optionalString;

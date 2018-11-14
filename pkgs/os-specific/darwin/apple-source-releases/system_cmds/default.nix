@@ -1,4 +1,4 @@
-{ stdenv, appleDerivation, xcbuild, lib, hostPlatform
+{ stdenv, appleDerivation, lib
 , Librpcsvc, apple_sdk, pam, CF, openbsm }:
 
 appleDerivation rec {

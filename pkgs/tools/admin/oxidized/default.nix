@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, ruby, git, bundlerApp }:
+{ lib, ruby, bundlerApp }:
 
 bundlerApp rec {
   pname = "oxidized";

@@ -6,7 +6,7 @@ import ./make-test.nix ({ pkgs, ... } : {
   };
 
   nodes = {
-    master = { config, pkgs, ... }: {
+    master = { pkgs, ... }: {
       services.mysql = {
         enable = true;
         initialDatabases = [ { name = "testdb"; schema = ./testdb.sql; } ];

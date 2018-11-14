@@ -2,16 +2,16 @@
 { stdenv, buildGoPackage, fetchgit }:
 
 buildGoPackage rec {
-  name = "pprof-${version}";
-  version = "2017-08-28";
-  rev = "d19a98b9bcec464f178b20da0f936cef7e15462e";
+  name = "pprof-unstable-${version}";
+  version = "2018-08-15";
+  rev = "781f11b1fcf71fae9d185e7189b5e686f575075a";
 
   goPackagePath = "github.com/google/pprof";
 
   src = fetchgit {
     inherit rev;
     url = "git://github.com/google/pprof";
-    sha256 = "0wh589fndvvidisy0jy19y0ykw4l05paqd53s8kli7h9zdcl11gq";
+    sha256 = "1nvzwcj6h4q0lsjlri3bym4axgv848w3xz57iz5p0wz9lcd5jsmf";
   };
 
   goDeps = ./deps.nix;

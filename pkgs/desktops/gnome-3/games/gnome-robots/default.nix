@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, gnome3, gtk3, wrapGAppsHook
-, librsvg, libcanberra-gtk3, intltool, itstool, libxml2, libgames-support
+, librsvg, libcanberra-gtk3, intltool, itstool, libxml2, libgnome-games-support
 , libgee}:
 
 stdenv.mkDerivation rec {
@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   version = "3.22.3";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-robots/${gnome3.versionBranch version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/gnome-robots/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
     sha256 = "0dzcjd7rdmlzgr6rmljhrbccwif8wj0cr1xcrrj7malj33098wwk";
   };
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
     gtk3 wrapGAppsHook intltool itstool librsvg libcanberra-gtk3
-    libxml2 gnome3.defaultIconTheme libgames-support libgee
+    libxml2 gnome3.defaultIconTheme libgnome-games-support libgee
   ];
 
   meta = with stdenv.lib; {

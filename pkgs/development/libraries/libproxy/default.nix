@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, pkgconfig, cmake, zlib
+{ stdenv, fetchFromGitHub, pkgconfig, cmake, zlib
 , dbus, networkmanager, spidermonkey_38, pcre, python2, python3
 , SystemConfiguration, CoreFoundation, JavaScriptCore }:
 

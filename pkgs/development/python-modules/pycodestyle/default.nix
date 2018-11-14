@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "pycodestyle";
-  version = "2.3.1";
+  version = "2.4.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0rk78b66p57ala26mdldl9lafr48blv5s659sah9q50qnfjmc8k8";
+    sha256 = "cbfca99bd594a10f674d0cd97a3d802a1fdef635d4361e1a2658de47ed261e3a";
   };
 
   meta = with lib; {

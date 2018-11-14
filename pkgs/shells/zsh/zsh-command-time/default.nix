@@ -18,8 +18,10 @@ stdenv.mkDerivation rec {
     sha256 = "1bvyjgz6bhgg1nwr56r50p6fblgah6yiql55pgm5abnn2h876fjq";
   };
 
+  phases = [ "installPhase" ];
+
   installPhase = ''
-    install -D $src/command-time.plugin.zsh --target-directory=$out/share/zsh-command-time
+    install -Dm444 $src/command-time.plugin.zsh --target-directory=$out/share/zsh-command-time
   '';
 
   meta = with stdenv.lib; {

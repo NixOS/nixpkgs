@@ -2,12 +2,15 @@
 
 buildPythonPackage rec {
   pname = "sarge";
-  version = "0.1.4";
+  version = "0.1.5.post0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "08s8896973bz1gg0pkr592w6g4p6v47bkfvws5i91p9xf8b35yar";
+    sha256 = "da8cc90883f8e5ab4af0d746438f608662f5f2a35da2e858517927edefa134b0";
   };
+
+  # No tests in PyPI tarball
+  doCheck = false;
 
   meta = with lib; {
     homepage = http://sarge.readthedocs.org/;

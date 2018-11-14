@@ -1,4 +1,4 @@
-{ stdenv, lib, buildGoPackage, fetchgit, fetchhg, fetchbzr, fetchsvn }:
+{ stdenv, buildGoPackage, fetchgit }:
 
 buildGoPackage rec {
   name = "wego-${version}";
@@ -14,4 +14,8 @@ buildGoPackage rec {
   };
 
   goDeps = ./deps.nix;
+
+  meta = {
+    license = stdenv.lib.licenses.isc;
+  };
 }

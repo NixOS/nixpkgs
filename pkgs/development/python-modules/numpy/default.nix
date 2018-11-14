@@ -1,17 +1,18 @@
-{lib, fetchPypi, python, buildPythonPackage, isPy27, isPyPy, gfortran, nose, blas, hostPlatform }:
+{ stdenv, lib, fetchPypi, python, buildPythonPackage, isPyPy, gfortran, pytest, blas }:
 
 buildPythonPackage rec {
   pname = "numpy";
-  version = "1.14.5";
+  version = "1.15.2";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "a4a433b3a264dbc9aa9c7c241e87c0358a503ea6394f8737df1683c7c9a102ac";
+    sha256 = "27a0d018f608a3fe34ac5e2b876f4c23c47e38295c47dd0775cc294cd2614bc1";
   };
 
   disabled = isPyPy;
-  buildInputs = [ gfortran nose blas ];
+  nativeBuildInputs = [ gfortran pytest ];
+  buildInputs = [ blas ];
 
   patches = lib.optionals (python.hasDistutilsCxxPatch or false) [
     # We patch cpython/distutils to fix https://bugs.python.org/issue1222585
@@ -20,7 +21,7 @@ buildPythonPackage rec {
     ./numpy-distutils-C++.patch
   ];
 
-  postPatch = lib.optionalString hostPlatform.isMusl ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isMusl ''
     # Use fenv.h
     sed -i \
       numpy/core/src/npymath/ieee754.c.src \
@@ -54,10 +55,6 @@ buildPythonPackage rec {
     ${python.interpreter} -c 'import numpy; numpy.test("fast", verbose=10)'
     popd
     runHook postCheck
-  '';
-
-  postInstall = ''
-    ln -s $out/bin/f2py* $out/bin/f2py
   '';
 
   passthru = {

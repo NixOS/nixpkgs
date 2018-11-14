@@ -1,4 +1,5 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig, intltool, itstool, libxml2, gtk3, openssl, gnome3
+{ stdenv, fetchurl, pkgconfig, intltool, itstool, libxml2, gtk3, openssl, gnome3
+, overrideCC, gcc6
 , mysqlSupport ? false, mysql ? null
 , postgresSupport ? false, postgresql ? null
 }:
@@ -6,12 +7,12 @@
 assert mysqlSupport -> mysql != null;
 assert postgresSupport -> postgresql != null;
 
-stdenv.mkDerivation rec {
+(if stdenv.isAarch64 then overrideCC stdenv gcc6 else stdenv).mkDerivation rec {
   name = "libgda-${version}";
   version = "5.2.4";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/libgda/${gnome3.versionBranch version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/libgda/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
     sha256 = "2cee38dd583ccbaa5bdf6c01ca5f88cc08758b9b144938a51a478eb2684b765e";
   };
 

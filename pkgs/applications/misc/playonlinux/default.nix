@@ -44,9 +44,9 @@ let
     ];
 
   ld32 =
-    if stdenv.system == "x86_64-linux" then "${stdenv.cc}/nix-support/dynamic-linker-m32"
-    else if stdenv.system == "i686-linux" then "${stdenv.cc}/nix-support/dynamic-linker"
-    else throw "Unsupported platform for PlayOnLinux: ${stdenv.system}";
+    if stdenv.hostPlatform.system == "x86_64-linux" then "${stdenv.cc}/nix-support/dynamic-linker-m32"
+    else if stdenv.hostPlatform.system == "i686-linux" then "${stdenv.cc}/nix-support/dynamic-linker"
+    else throw "Unsupported platform for PlayOnLinux: ${stdenv.hostPlatform.system}";
   ld64 = "${stdenv.cc}/nix-support/dynamic-linker";
   libs = pkgs: stdenv.lib.makeLibraryPath [ pkgs.xorg.libX11 ];
 
@@ -83,7 +83,7 @@ in stdenv.mkDerivation {
 
     bunzip2 $out/share/playonlinux/bin/check_dd_x86.bz2
     patchelf --set-interpreter $(cat ${ld32}) --set-rpath ${libs pkgsi686Linux} $out/share/playonlinux/bin/check_dd_x86
-    ${if stdenv.system == "x86_64-linux" then ''
+    ${if stdenv.hostPlatform.system == "x86_64-linux" then ''
       bunzip2 $out/share/playonlinux/bin/check_dd_amd64.bz2
       patchelf --set-interpreter $(cat ${ld64}) --set-rpath ${libs pkgs} $out/share/playonlinux/bin/check_dd_amd64
     '' else ''

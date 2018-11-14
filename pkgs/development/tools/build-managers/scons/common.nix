@@ -1,6 +1,6 @@
 { version, sha256 }:
 
-{ stdenv, fetchurl, fetchpatch, python2Packages }:
+{ stdenv, fetchurl, python2Packages }:
 
 let name = "scons";
 in python2Packages.buildPythonApplication {

@@ -1,8 +1,8 @@
-{ stdenv, buildPerlPackage, fetchgit, perl, openssl, perlPackages, gettext, python34Packages
+{ stdenv, fetchgit, perl, openssl, perlPackages, gettext, python3Packages
 # TODO: Remove extra dependencies once it is clear that they are NOT needed somewhere.
 , extraDependencies1 ? false, extraDependencies2 ? false, extraDependencies3 ? false }:
 
-buildPerlPackage {
+perlPackages.buildPerlPackage {
   name = "openxpki-git20150807";
 
   src = fetchgit {
@@ -11,22 +11,22 @@ buildPerlPackage {
     sha256 = "05bmhani2c7ays488xv3hx5xbxb612bnwq5rdjwmsj51xpaz454p";
   };
 
-  buildInputs = [ perl openssl gettext python34Packages.sphinx ];
+  buildInputs = [ perl openssl gettext python3Packages.sphinx ];
   propagatedBuildInputs = with perlPackages;
     [ # dependencies from Makefile.PL
-      libintlperl ConfigVersioned LWP TestSimple ClassAccessorChained IOSocketSSL ClassStd
+      libintl_perl ConfigVersioned LWP ClassAccessorChained IOSocketSSL ClassStd
       CGISession ConfigStd ConfigMerge Connector CryptCBC CryptOpenSSLAES CryptPKCS10
       DBDMock DataPassword DataSerializer DateTimeFormatDateParse IOPrompt
-      IPCShareLite JSON Log4Perl LWPProtocolconnect LWPProtocolhttps MailRFC822Address
-      Moose NetAddrIP NetDNS NetIP NetLDAP NetHTTP NetServer NetSSLeay ParamsValidate PathClass
+      IPCShareLite JSON LogLog4perl LWPProtocolConnect LWPProtocolHttps MailRFC822Address
+      Moose NetAddrIP NetDNS NetIP perlldap NetHTTP NetServer NetSSLeay ParamsValidate PathClass
       ProcProcessTable ProcSafeExec RegexpCommon SOAPLite Switch SysSigAction TemplateToolkit
       TestPod TestPodCoverage TextCSV_XS TimeHiRes Workflow XMLFilterXInclude XMLParser
       XMLSAX XMLSAXWriter XMLSimple XMLValidatorSchema ]
     ++ stdenv.lib.optionals extraDependencies1
     [ # dependencies from parsing through core/server
       ClassAccessor Carp PathTools DataDumper DateTime DateTimeFormatStrptime DBI DigestMD5
-      DigestSHA Encode ExceptionClass Exporter FilePath FileTemp Filter GetoptLong HTMLParser
-      ScalarListUtils MathBigInt Memoize MIMEBase64 NetSMTP PodUsage RTClientREST Socket
+      Encode ExceptionClass Exporter FilePath FileTemp Filter GetoptLong HTMLParser
+      ScalarListUtils MathBigInt Memoize libnet PodUsage RTClientREST Socket
       Storable XSLoader ]
     ++ stdenv.lib.optionals extraDependencies2
     [ # dependencies taken from Debian
@@ -34,11 +34,11 @@ buildPerlPackage {
       ConfigGitLike DevelStackTrace TreeDAGNode ClassObservable ClassFactory TimeDate ConfigAny
       CGIFast ClassISA YAML YAMLLibYAML AuthenSASL TextCSV FileFindRulePerl IODigest ]
     ++ stdenv.lib.optionals extraDependencies3
-    [ # dependencies taken from http://search.cpan.org/~alech/Bundle-OpenXPKI-0.06/lib/Bundle/OpenXPKI.pm
+    [ # dependencies taken from https://metacpan.org/pod/release/ALECH/Bundle-OpenXPKI-0.06/lib/Bundle/OpenXPKI.pm
       AttributeHandlers AttributeParamsValidate AutoLoader BC CGI CPAN CacheCache ClassClassgenclassgen
       ClassContainer ClassDataInheritable ClassSingleton ConvertASN1 DBDSQLite DBIxHTMLViewLATEST
       DBFile DataPage DataSpreadPagination DateTimeLocale DateTimeTimeZone DevelPPPort DevelSelfStubber
-      DevelSymdump Digest DigestSHA1 Env Error ExtUtilsCommand ExtUtilsConstant ExtUtilsInstall
+      DevelSymdump DigestSHA1 Env Error ExtUtilsCommand ExtUtilsConstant ExtUtilsInstall
       ExtUtilsMakeMaker FileCheckTree FilterSimple GoferTransporthttp HTMLMason HTMLTagset
       HTTPServerSimpleMason I18NCollate IO IPCSysV LocaleCodes LocaleMaketext LogDispatch MathBigRat
       MathComplex MathRound ModuleBuild ModuleBuildDeprecated NetPing PerlIOviaQuotedPrint PodChecker

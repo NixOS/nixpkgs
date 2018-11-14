@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pythonPackages, openssh, gnupg, unbound, libreswan }:
+{ stdenv, fetchFromGitHub, pythonPackages, unbound, libreswan }:
 
 let
   inherit (pythonPackages) python;

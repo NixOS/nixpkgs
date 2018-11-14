@@ -48,6 +48,36 @@
    </listitem>
    <listitem>
     <para>
+     Even if the libraries are linked using absolute paths and resolved via
+     their <literal>install_name</literal> correctly, tests can sometimes fail
+     to run binaries. This happens because the <varname>checkPhase</varname>
+     runs before the libraries are installed.
+    </para>
+    <para>
+     This can usually be solved by running the tests after the
+     <varname>installPhase</varname> or alternatively by using
+     <varname>DYLD_LIBRARY_PATH</varname>. More information about this variable
+     can be found in the <citerefentry>
+     <refentrytitle>dyld</refentrytitle>
+     <manvolnum>1</manvolnum></citerefentry> manpage.
+    </para>
+<programlisting>
+      dyld: Library not loaded: /nix/store/7hnmbscpayxzxrixrgxvvlifzlxdsdir-jq-1.5-lib/lib/libjq.1.dylib
+      Referenced from: /private/tmp/nix-build-jq-1.5.drv-0/jq-1.5/tests/../jq
+      Reason: image not found
+      ./tests/jqtest: line 5: 75779 Abort trap: 6
+    </programlisting>
+<programlisting>
+      stdenv.mkDerivation {
+        name = "libfoo-1.2.3";
+        # ...
+        doInstallCheck = true;
+        installCheckTarget = "check";
+      }
+    </programlisting>
+   </listitem>
+   <listitem>
+    <para>
      Some packages assume xcode is available and use <command>xcrun</command>
      to resolve build tools like <command>clang</command>, etc. This causes
      errors like <code>xcode-select: error: no developer tools were found at

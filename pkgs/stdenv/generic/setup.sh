@@ -211,7 +211,7 @@ isELF() {
     exec {fd}< "$fn"
     read -r -n 4 -u "$fd" magic
     exec {fd}<&-
-    if [[ "$magic" =~ ELF ]]; then return 0; else return 1; fi
+    if [ "$magic" = $'\177ELF' ]; then return 0; else return 1; fi
 }
 
 # Return success if the specified file is a script (i.e. starts with
@@ -220,7 +220,6 @@ isScript() {
     local fn="$1"
     local fd
     local magic
-    if ! [ -x /bin/sh ]; then return 0; fi
     exec {fd}< "$fn"
     read -r -n 2 -u "$fd" magic
     exec {fd}<&-
@@ -258,9 +257,17 @@ shopt -s nullglob
 
 # Set up the initial path.
 PATH=
+HOST_PATH=
 for i in $initialPath; do
     if [ "$i" = / ]; then i=; fi
     addToSearchPath PATH "$i/bin"
+
+    # For backward compatibility, we add initial path to HOST_PATH so
+    # it can be used in auto patch-shebangs. Unfortunately this will
+    # not work with cross compilation.
+    if [ -z "${strictDeps-}" ]; then
+        addToSearchPath HOST_PATH "$i/bin"
+    fi
 done
 
 if (( "${NIX_DEBUG:-0}" >= 1 )); then
@@ -272,7 +279,6 @@ fi
 if [ -z "${SHELL:-}" ]; then echo "SHELL not set"; exit 1; fi
 BASH="$SHELL"
 export CONFIG_SHELL="$SHELL"
-
 
 # Dummy implementation of the paxmark function. On Linux, this is
 # overwritten by paxctl's setup hook.
@@ -505,6 +511,10 @@ activatePackage() {
         addToSearchPath _PATH "$pkg/bin"
     fi
 
+    if [[ "$hostOffset" -eq 0 && -d "$pkg/bin" ]]; then
+        addToSearchPath HOST_PATH "$pkg/bin"
+    fi
+
     if [[ -f "$pkg/nix-support/setup-hook" ]]; then
         local oldOpts="$(shopt -po nounset)"
         set +u
@@ -661,6 +671,10 @@ substituteStream() {
                     echo "substituteStream(): ERROR: substitution variables must be valid Bash names, \"$varName\" isn't." >&2
                     return 1
                 fi
+                if [ -z ${!varName+x} ]; then
+                    echo "substituteStream(): ERROR: variable \$$varName is unset" >&2
+                    return 1
+                fi
                 pattern="@$varName@"
                 replacement="${!varName}"
                 ;;
@@ -794,11 +808,11 @@ _defaultUnpack() {
     else
 
         case "$fn" in
-            *.tar.xz | *.tar.lzma)
+            *.tar.xz | *.tar.lzma | *.txz)
                 # Don't rely on tar knowing about .xz.
                 xz -d < "$fn" | tar xf -
                 ;;
-            *.tar | *.tar.* | *.tgz | *.tbz2)
+            *.tar | *.tar.* | *.tgz | *.tbz2 | *.tbz)
                 # GNU tar can automatically select the decompression method
                 # (info "(tar) gzip").
                 tar xf "$fn"
@@ -1037,7 +1051,7 @@ checkPhase() {
         # Old bash empty array hack
         # shellcheck disable=SC2086
         local flagsArray=(
-            ${enableParallelBuilding:+-j${NIX_BUILD_CORES} -l${NIX_BUILD_CORES}}
+            ${enableParallelChecking:+-j${NIX_BUILD_CORES} -l${NIX_BUILD_CORES}}
             $makeFlags ${makeFlagsArray+"${makeFlagsArray[@]}"}
             ${checkFlags:-VERBOSE=y} ${checkFlagsArray+"${checkFlagsArray[@]}"}
             ${checkTarget}
@@ -1169,7 +1183,7 @@ installCheckPhase() {
         # Old bash empty array hack
         # shellcheck disable=SC2086
         local flagsArray=(
-            ${enableParallelBuilding:+-j${NIX_BUILD_CORES} -l${NIX_BUILD_CORES}}
+            ${enableParallelChecking:+-j${NIX_BUILD_CORES} -l${NIX_BUILD_CORES}}
             $makeFlags ${makeFlagsArray+"${makeFlagsArray[@]}"}
             $installCheckFlags ${installCheckFlagsArray+"${installCheckFlagsArray[@]}"}
             ${installCheckTarget:-installcheck}

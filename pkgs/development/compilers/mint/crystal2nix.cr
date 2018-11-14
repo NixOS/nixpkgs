@@ -7,7 +7,7 @@ end
 
 class ShardLock
   YAML.mapping(
-    version: String,
+    version: Float32,
     shards: Hash(String, Hash(String, String))
   )
 end

@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, bash, pkgconfig }:
+{ stdenv, fetchurl, pkgconfig }:
 
 stdenv.mkDerivation rec {
   name    = "capstone-${version}";
-  version = "3.0.4";
+  version = "3.0.5";
 
   src = fetchurl {
     url    = "https://github.com/aquynh/capstone/archive/${version}.tar.gz";
-    sha256 = "1whl5c8j6vqvz2j6ay2pyszx0jg8d3x8hq66cvgghmjchvsssvax";
+    sha256 = "1wbd1g3r32ni6zd9vwrq3kn7fdp9y8qwn9zllrrbk8n5wyaxcgci";
   };
 
   configurePhase = '' patchShebangs make.sh '';

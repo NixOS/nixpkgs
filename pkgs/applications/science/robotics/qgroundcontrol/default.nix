@@ -1,8 +1,8 @@
-{ stdenv, fetchgit, git,  espeak, SDL2, udev, doxygen, cmake
+{ stdenv, fetchgit, git,  SDL2, udev, doxygen
 , qtbase, qtlocation, qtserialport, qtdeclarative, qtconnectivity, qtxmlpatterns
 , qtsvg, qtquick1, qtquickcontrols, qtgraphicaleffects, qmake, qtspeech
-, makeWrapper, lndir
-, gst_all_1, qt-gstreamer1, pkgconfig, glibc
+, makeWrapper
+, gst_all_1, pkgconfig
 }:
 
 stdenv.mkDerivation rec {
@@ -37,6 +37,7 @@ stdenv.mkDerivation rec {
     cd ..
 
     mkdir -p $out/share/applications
+    sed 's/Exec=.*$/Exec=QGroundControl/g' --in-place deploy/qgroundcontrol.desktop
     cp -v deploy/qgroundcontrol.desktop $out/share/applications
 
     mkdir -p $out/bin

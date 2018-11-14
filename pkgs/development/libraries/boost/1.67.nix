@@ -1,7 +1,13 @@
-{ stdenv, callPackage, fetchurl, hostPlatform, buildPlatform, ... } @ args:
+{ stdenv, callPackage, fetchurl, fetchpatch, ... } @ args:
 
 callPackage ./generic.nix (args // rec {
   version = "1.67_0";
+
+  patches = [ (fetchpatch {
+    url = "https://github.com/boostorg/lockfree/commit/12726cda009a855073b9bedbdce57b6ce7763da2.patch";
+    sha256 = "0x65nkwzv8fdacj8sw5njl3v63jj19dirrpklbwy6qpsncw7fc7h";
+    stripLen = 1;
+  })];
 
   src = fetchurl {
     url = "mirror://sourceforge/boost/boost_1_67_0.tar.bz2";

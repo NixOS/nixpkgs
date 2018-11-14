@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, bash, cacert, zlib, buildRustPackage, curl, darwin
+{ stdenv, makeWrapper, bash, buildRustPackage, curl, darwin
 , version
 , src
 , platform
@@ -6,8 +6,7 @@
 }:
 
 let
-  inherit (stdenv.lib) getLib optionalString;
-  inherit (darwin) libiconv;
+  inherit (stdenv.lib) optionalString;
   inherit (darwin.apple_sdk.frameworks) Security;
 
   bootstrapping = versionType == "bootstrap";

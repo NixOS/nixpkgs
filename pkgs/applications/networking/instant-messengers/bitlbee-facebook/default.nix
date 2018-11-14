@@ -1,4 +1,4 @@
-{ fetchurl, fetchFromGitHub, stdenv, bitlbee, autoconf, automake, libtool, pkgconfig, glib, json-glib }:
+{ fetchFromGitHub, stdenv, bitlbee, autoconf, automake, libtool, pkgconfig, glib, json-glib }:
 
 with stdenv.lib;
 stdenv.mkDerivation rec {

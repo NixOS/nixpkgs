@@ -1,6 +1,6 @@
 { stdenv, fetchurl, fetchpatch, lib
 , pkgconfig, meson, ninja, gettext, gobjectIntrospection
-, python, gstreamer, orc, pango, libtheora, libvisual
+, python, gstreamer, orc, pango, libtheora
 , libintl, libopus
 , enableX11 ? stdenv.isLinux, libXv
 , enableWayland ? stdenv.isLinux, wayland
@@ -9,7 +9,8 @@
 , enableCdparanoia ? (!stdenv.isDarwin), cdparanoia }:
 
 stdenv.mkDerivation rec {
-  name = "gst-plugins-base-1.14.0";
+  name = "gst-plugins-base-${version}";
+  version = "1.14.2";
 
   meta = with lib; {
     description = "Base plugins and helper libraries";
@@ -21,7 +22,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "${meta.homepage}/src/gst-plugins-base/${name}.tar.xz";
-    sha256 = "0h39bcp7fcd9kgb189lxr8l0hm0almvzpzgpdh1jpq2nzxh4d43y";
+    sha256 = "0z0wy0p0nxxqhsis3n517d6ykldm02g7rca9fhq9kxb9m05yidx4";
   };
 
   outputs = [ "out" "dev" ];
@@ -56,6 +57,8 @@ stdenv.mkDerivation rec {
   '';
 
   enableParallelBuilding = true;
+
+  doCheck = false; # fails, wants DRI access for OpenGL
 
   patches = [
     (fetchpatch {

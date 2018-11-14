@@ -1,6 +1,5 @@
 { back, base, gui, gsmakeDerivation
 , fetchurl
-, sqlite
 , system_preferences
 }:
 let

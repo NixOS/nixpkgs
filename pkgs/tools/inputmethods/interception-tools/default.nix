@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchFromGitHub, pkgconfig, cmake, libyamlcpp,
+{ stdenv, fetchurl, pkgconfig, cmake, libyamlcpp,
   libevdev, udev }:
 
 let

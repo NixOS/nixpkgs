@@ -1,4 +1,4 @@
-{stdenv, xcodeenv, kitchensink, bundleId}:
+{xcodeenv, kitchensink, bundleId}:
 
 xcodeenv.simulateApp {
   name = "simulate-${kitchensink.name}";

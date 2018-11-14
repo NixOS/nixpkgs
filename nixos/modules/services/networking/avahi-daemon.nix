@@ -1,5 +1,5 @@
 # Avahi daemon.
-{ config, lib, utils, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
 with lib;
 
@@ -37,6 +37,7 @@ let
 
     [reflector]
     enable-reflector=${yesNo reflector}
+    ${extraConfig}
   '';
 
 in
@@ -173,6 +174,14 @@ in
         description = ''
           Number of resource records to be cached per interface. Use 0 to
           disable caching. Avahi daemon defaults to 4096 if not set.
+        '';
+      };
+
+      extraConfig = mkOption {
+        default = "";
+        type = types.lines;
+        description = ''
+          Extra config to append to avahi-daemon.conf.
         '';
       };
 

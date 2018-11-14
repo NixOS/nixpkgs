@@ -2,5 +2,8 @@
   "bower"
 , "coffee-script"
 , "grunt-cli"
+, "node-gyp"
+, "node-gyp-build"
+, "node-pre-gyp"
 , "pnpm"
 ]

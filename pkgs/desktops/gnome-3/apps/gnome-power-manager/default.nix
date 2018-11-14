@@ -7,6 +7,7 @@
 , meson
 , ninja
 , upower
+, python3
 , desktop-file-utils
 , wrapGAppsHook
 , gnome3 }:
@@ -18,7 +19,7 @@ in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
     sha256 = "20aee0b0b4015e7cc6fbabc3cbc4344c07c230fe3d195e90c8ae0dc5d55a2d4e";
   };
 
@@ -37,6 +38,7 @@ in stdenv.mkDerivation rec {
     gettext
 
     # needed by meson_post_install.sh
+    python3
     glib.dev
     desktop-file-utils
   ];

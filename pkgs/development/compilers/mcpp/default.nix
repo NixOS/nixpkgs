@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, mcpp }:
+{ stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   name = "mcpp-2.7.2";

@@ -9,9 +9,10 @@ stdenv.mkDerivation rec {
     sha256 = "0gg8mb9kxh3wggh7njj1gf90xy27p0yq2cw88wqar9hhg2fmwmi3";
   };
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = https://gitlab.com/mdds/mdds;
     description = "A collection of multi-dimensional data structure and indexing algorithm";
-    platforms = stdenv.lib.platforms.all;
+    platforms = platforms.all;
+    license = licenses.mit;
   };
 }

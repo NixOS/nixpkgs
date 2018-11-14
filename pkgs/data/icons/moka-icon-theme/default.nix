@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, meson, ninja, gtk3, faba-icon-theme }:
+{ stdenv, fetchFromGitHub, meson, ninja, gtk3, python3, faba-icon-theme }:
 
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "015l02im4mha5z91dbchxf6xkp66d346bg3xskwg0rh3lglhjsrd";
   };
 
-  nativeBuildInputs = [ meson ninja gtk3 faba-icon-theme ];
+  nativeBuildInputs = [ meson ninja gtk3 python3 faba-icon-theme ];
 
   postPatch = ''
     patchShebangs meson/post_install.py

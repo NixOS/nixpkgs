@@ -2,13 +2,13 @@
 
 pythonPackages.buildPythonPackage rec {
   pname = "ansible-lint";
-  version = "3.4.20";
+  version = "3.4.23";
 
   src = fetchFromGitHub {
     owner = "willthames";
     repo = "ansible-lint";
     rev = "v${version}";
-    sha256 = "0wgczijrg5azn2f63hjbkas1w0f5hbvxnk3ia53w69mybk0gy044";
+    sha256 = "0cnfgxh5m7alzm811hc95jigbca5vc1pf8fjazmsakmhdjyfbpb7";
   };
 
   propagatedBuildInputs = with pythonPackages; [ pyyaml six ] ++ [ ansible ];
@@ -18,6 +18,10 @@ pythonPackages.buildPythonPackage rec {
   postPatch = ''
     patchShebangs bin/ansible-lint
   '';
+
+   preBuild = ''
+     export HOME="$TMP"
+   '';
 
   checkPhase = ''
     nosetests test

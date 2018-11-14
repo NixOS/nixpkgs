@@ -1,5 +1,4 @@
-{ stdenv
-, sage-src
+{ sage-src
 , perl
 , buildPythonPackage
 , arb
@@ -48,6 +47,8 @@
 , singular
 , pip
 , jupyter_core
+, libhomfly
+, libbraiding
 }:
 
 buildPythonPackage rec {
@@ -110,6 +111,8 @@ buildPythonPackage rec {
     pip
     cython
     cysignals
+    libhomfly
+    libbraiding
   ];
 
   buildPhase = ''

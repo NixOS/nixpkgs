@@ -1,9 +1,9 @@
-{pkgs, pkgs_i686, xcodeVersion ? "9.2", xcodeBaseDir ? "/Applications/Xcode.app", tiVersion ? "7.1.0.GA"}:
+{pkgs, xcodeVersion ? "9.2", xcodeBaseDir ? "/Applications/Xcode.app", tiVersion ? "7.1.0.GA"}:
 
 rec {
   androidenv = pkgs.androidenv;
 
-  xcodeenv = if pkgs.stdenv.system == "x86_64-darwin" then pkgs.xcodeenv.override {
+  xcodeenv = if pkgs.stdenv.hostPlatform.system == "x86_64-darwin" then pkgs.xcodeenv.override {
     version = xcodeVersion;
     inherit xcodeBaseDir;
   } else null;

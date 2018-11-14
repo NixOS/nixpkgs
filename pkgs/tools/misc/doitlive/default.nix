@@ -1,15 +1,15 @@
-{ stdenv, pythonPackages }:
+{ stdenv, python3Packages }:
 
-pythonPackages.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "doitlive";
-  version = "3.0.3";
+  version = "4.1.0";
 
-  src = pythonPackages.fetchPypi {
+  src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256 = "19i16ca835rb3gal1sxyvpyilj9a80n6nikf0smlzmxck38x86fj";
+    sha256 = "0zkvmnv6adz0gyqiql8anpxnh8zzpqk0p2n0pf2kxy55010qs4wz";
   };
 
-  propagatedBuildInputs = with pythonPackages; [ click ];
+  propagatedBuildInputs = with python3Packages; [ click click-completion click-didyoumean ];
 
   # disable tests (too many failures)
   doCheck = false;

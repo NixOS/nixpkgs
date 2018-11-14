@@ -1,5 +1,4 @@
 { stdenv, fetchurl, nasm
-, hostPlatform
 }:
 
 stdenv.mkDerivation rec {
@@ -12,7 +11,7 @@ stdenv.mkDerivation rec {
   }; # github releases still need autotools, surprisingly
 
   patches =
-    stdenv.lib.optional (hostPlatform.libc or null == "msvcrt")
+    stdenv.lib.optional (stdenv.hostPlatform.libc or null == "msvcrt")
       ./mingw-boolean.patch;
 
   outputs = [ "bin" "dev" "out" "man" "doc" ];

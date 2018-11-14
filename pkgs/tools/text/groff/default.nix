@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl, groff
+{ stdenv, fetchurl, perl
 , ghostscript #for postscript and html output
 , psutils, netpbm #for html output
 , buildPackages

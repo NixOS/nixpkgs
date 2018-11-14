@@ -1,4 +1,4 @@
-{stdenv, fetchurl, jdk, python}:
+{ stdenv, fetchurl, jdk, python2 }:
 
 stdenv.mkDerivation {
   name = "antlr-2.7.7";
@@ -7,7 +7,8 @@ stdenv.mkDerivation {
     sha256 = "1ffvcwdw73id0dk6pj2mlxjvbg0662qacx4ylayqcxgg381fnfl5";
   };
   patches = [ ./2.7.7-fixes.patch ];
-  buildInputs = [jdk python];
+  buildInputs = [ jdk ];
+  nativeBuildInputs = [ python2 ];
 
   meta = with stdenv.lib; {
     description = "Powerful parser generator";
@@ -19,6 +20,7 @@ stdenv.mkDerivation {
       walk parse trees.
     '';
     homepage = http://www.antlr.org/;
+    license = licenses.bsd3;
     platforms = platforms.unix;
   };
 }

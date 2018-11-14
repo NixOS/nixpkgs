@@ -1,6 +1,5 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig, bison, flex, intltool, gtk, libical, dbus-glib
-, libnotify, popt, xfce
-}:
+{ stdenv, fetchurl, fetchpatch, pkgconfig, bison, flex, intltool, gtk, libical, dbus-glib, tzdata
+, libnotify, popt, xfce, hicolor-icon-theme }:
 
 stdenv.mkDerivation rec {
   name = "${p_name}-${ver_maj}.${ver_min}";
@@ -22,12 +21,18 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  postPatch = ''
+    substituteInPlace src/parameters.c        --replace "/usr/share/zoneinfo" "${tzdata}/share/zoneinfo"
+    substituteInPlace src/tz_zoneinfo_read.c  --replace "/usr/share/zoneinfo" "${tzdata}/share/zoneinfo"
+    substituteInPlace tz_convert/tz_convert.c --replace "/usr/share/zoneinfo" "${tzdata}/share/zoneinfo"
+  '';
+
+  postConfigure = "rm -rf libical"; # ensure pkgs.libical is used instead of one included in the orage sources
+
   nativeBuildInputs = [ pkgconfig intltool bison flex ];
 
   buildInputs = [ gtk libical dbus-glib libnotify popt xfce.libxfce4util
     xfce.xfce4-panel ];
-
-  preFixup = "rm $out/share/icons/hicolor/icon-theme.cache ";
 
   meta = {
     homepage = http://www.xfce.org/projects/;

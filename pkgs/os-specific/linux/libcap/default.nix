@@ -55,5 +55,6 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Library for working with POSIX capabilities";
     platforms = stdenv.lib.platforms.linux;
+    license = stdenv.lib.licenses.bsd3;
   };
 }

@@ -1,5 +1,5 @@
 { stdenv, fetchurl, which, ocsigen_server, ocsigen_deriving, ocaml, camlp4,
-  js_of_ocaml, lwt_react, cryptokit,
+  lwt_react, cryptokit,
   ipaddr, ocamlnet, lwt_ssl, ocaml_pcre,
   opaline, ppx_tools, ppx_deriving, findlib
 , js_of_ocaml-ocamlbuild, js_of_ocaml-ppx, js_of_ocaml-ppx_deriving_json

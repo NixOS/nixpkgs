@@ -1,7 +1,7 @@
 { stdenv, glib, fetchurl, fetchpatch, cyrus_sasl, gettext, openldap, ptlib, opal, libXv, rarian, intltool
-, perl, perlXMLParser, evolution-data-server, gnome-doc-utils, avahi, autoreconfHook
+, perlPackages, evolution-data-server, gnome-doc-utils, avahi, autoreconfHook
 , libsigcxx, gtk, dbus-glib, libnotify, libXext, xextproto, gnome3, boost, libsecret
-, pkgconfig, libxml2, videoproto, unixODBC, db, nspr, nss, zlib, hicolor-icon-theme
+, pkgconfig, libxml2, videoproto, unixODBC, db, nspr, nss, zlib
 , libXrandr, randrproto, which, libxslt, libtasn1, gmp, nettle, sqlite, makeWrapper }:
 
 stdenv.mkDerivation rec {
@@ -13,12 +13,13 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ cyrus_sasl gettext openldap ptlib opal libXv rarian intltool
-                  perl perlXMLParser evolution-data-server gnome-doc-utils avahi
+                  evolution-data-server gnome-doc-utils avahi
                   libsigcxx gtk dbus-glib libnotify libXext xextproto sqlite
                   gnome3.libsoup glib gnome3.defaultIconTheme boost
                   autoreconfHook pkgconfig libxml2 videoproto unixODBC db nspr
                   nss zlib libsecret libXrandr randrproto which libxslt libtasn1
-                  gmp nettle makeWrapper ];
+                  gmp nettle makeWrapper ]
+    ++ (with perlPackages; [ perl XMLParser ]);
 
   preAutoreconf = ''
     substituteInPlace configure.ac --replace AM_GCONF_SOURCE_2 ""
@@ -55,6 +56,7 @@ stdenv.mkDerivation rec {
     description = "VOIP/Videoconferencing app with full SIP and H.323 support";
     maintainers = [ maintainers.raskin ];
     platforms = platforms.linux;
+    license = licenses.gpl2Plus;
   };
 
   passthru = {

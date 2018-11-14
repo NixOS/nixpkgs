@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     "LIBSEPOLA=${stdenv.lib.getLib libsepol}/lib/libsepol.a"
   ];
 
-  meta = libsepol.meta // {
+  meta = removeAttrs libsepol.meta ["outputsToInstall"] // {
     description = "SELinux policy compiler";
   };
 }

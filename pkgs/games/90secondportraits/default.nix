@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip, love, lua, makeWrapper, makeDesktopItem }:
+{ stdenv, fetchurl, love, lua, makeWrapper, makeDesktopItem }:
 
 let
   pname = "90secondportraits";

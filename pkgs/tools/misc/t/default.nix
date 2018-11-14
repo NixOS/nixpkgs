@@ -1,4 +1,4 @@
-{ stdenv, lib, bundlerEnv, ruby }:
+{ lib, bundlerEnv, ruby }:
 
 bundlerEnv {
   name = "t-3.1.0";

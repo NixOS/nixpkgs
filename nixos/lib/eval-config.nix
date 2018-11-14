@@ -28,7 +28,7 @@
 
 let extraArgs_ = extraArgs; pkgs_ = pkgs;
     extraModules = let e = builtins.getEnv "NIXOS_EXTRA_MODULE_PATH";
-                   in if e == "" then [] else [(import (builtins.toPath e))];
+                   in if e == "" then [] else [(import e)];
 in
 
 let
@@ -36,7 +36,11 @@ let
     _file = ./eval-config.nix;
     key = _file;
     config = {
-      nixpkgs.localSystem = lib.mkDefault { inherit system; };
+      # Explicit `nixpkgs.system` or `nixpkgs.localSystem` should override
+      # this.  Since the latter defaults to the former, the former should
+      # default to the argument. That way this new default could propagate all
+      # they way through, but has the last priority behind everything else.
+      nixpkgs.system = lib.mkDefault system;
       _module.args.pkgs = lib.mkIf (pkgs_ != null) (lib.mkForce pkgs_);
     };
   };
@@ -49,7 +53,8 @@ in rec {
     inherit prefix check;
     modules = modules ++ extraModules ++ baseModules ++ [ pkgsModule ];
     args = extraArgs;
-    specialArgs = { modulesPath = ../modules; } // specialArgs;
+    specialArgs =
+      { modulesPath = builtins.toString ../modules; } // specialArgs;
   }) config options;
 
   # These are the extra arguments passed to every module.  In

@@ -128,11 +128,11 @@ stdenv.mkDerivation rec {
 
   GOOS = if stdenv.isDarwin then "darwin" else "linux";
   GOARCH = if stdenv.isDarwin then "amd64"
-           else if stdenv.system == "i686-linux" then "386"
-           else if stdenv.system == "x86_64-linux" then "amd64"
+           else if stdenv.hostPlatform.system == "i686-linux" then "386"
+           else if stdenv.hostPlatform.system == "x86_64-linux" then "amd64"
            else if stdenv.isAarch32 then "arm"
            else throw "Unsupported system";
-  GOARM = stdenv.lib.optionalString (stdenv.system == "armv5tel-linux") "5";
+  GOARM = stdenv.lib.optionalString (stdenv.hostPlatform.system == "armv5tel-linux") "5";
   GO386 = 387; # from Arch: don't assume sse2 on i686
   CGO_ENABLED = 0;
 

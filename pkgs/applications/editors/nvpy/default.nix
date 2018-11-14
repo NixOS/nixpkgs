@@ -1,4 +1,4 @@
-{ pkgs, fetchurl, tk, python2Packages }:
+{ pkgs, fetchurl, python2Packages }:
 
 let
   pythonPackages = python2Packages;

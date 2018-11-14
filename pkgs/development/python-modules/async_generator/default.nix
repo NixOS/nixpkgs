@@ -2,13 +2,13 @@
 
 buildPythonPackage rec {
   pname = "async_generator";
-  version = "1.9";
+  version = "1.10";
 
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b7d5465c6174fe86dba498ececb175f93a6097ffb7cc91946405e1f05b848371";
+    sha256 = "6ebb3d106c12920aaae42ccb6f787ef5eefdcdd166ea3d628fa8476abe712144";
   };
 
   checkInputs = [ pytest pytest-asyncio ];

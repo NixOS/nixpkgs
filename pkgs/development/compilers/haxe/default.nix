@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, bash, coreutils, ocaml, zlib, pcre, neko, camlp4 }:
+{ stdenv, fetchgit, coreutils, ocaml, zlib, pcre, neko, camlp4 }:
 
 let
   generic = { version, sha256, prePatch }:

@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, fetchpatch, coreutils
-, python3, python3Packages, substituteAll }:
+, python3Packages, substituteAll }:
 
 python3Packages.buildPythonApplication rec {
   name = "trash-cli-${version}";

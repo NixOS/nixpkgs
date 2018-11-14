@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "zsh-completions-${version}";
-  version = "0.27.0";
+  version = "0.29.0";
 
   src = fetchFromGitHub {
     owner = "zsh-users";
     repo = "zsh-completions";
     rev = "${version}";
-    sha256 = "1c2xx9bkkvyy0c6aq9vv3fjw7snlm0m5bjygfk5391qgjpvchd29";
+    sha256 = "0a4fdh10rhhjcy06qiyyy0xjvg7fapvy3pgif38wrjqvrddaj6pv";
   };
 
   installPhase= ''

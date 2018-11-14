@@ -1,4 +1,4 @@
-{ appleDerivation, libsecurity_cdsa_client, libsecurity_cdsa_plugin, libsecurity_cdsa_utilities, libsecurity_codesigning, libsecurity_utilities, perl }:
+{ appleDerivation, libsecurity_cdsa_client, libsecurity_cdsa_plugin, libsecurity_cdsa_utilities, libsecurity_utilities, perl }:
 appleDerivation {
   buildInputs = [
     libsecurity_utilities

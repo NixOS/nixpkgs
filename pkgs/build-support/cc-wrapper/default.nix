@@ -6,8 +6,10 @@
 # compiler and the linker just "work".
 
 { name ? ""
-, stdenvNoCC, nativeTools, propagateDoc ? !nativeTools, noLibc ? false, nativeLibc, nativePrefix ? ""
+, stdenvNoCC
 , cc ? null, libc ? null, bintools, coreutils ? null, shell ? stdenvNoCC.shell
+, nativeTools, noLibc ? false, nativeLibc, nativePrefix ? ""
+, propagateDoc ? cc != null && cc ? man
 , extraPackages ? [], extraBuildCommands ? ""
 , isGNU ? false, isClang ? cc.isClang or false, gnugrep ? null
 , buildPackages ? {}
@@ -45,14 +47,12 @@ let
   default_cxx_stdlib_compile = optionalString (targetPlatform.isLinux && !(cc.isGNU or false) && !nativeTools && cc ? gcc)
     "-isystem $(echo -n ${cc.gcc}/include/c++/*) -isystem $(echo -n ${cc.gcc}/include/c++/*)/$(${cc.gcc}/bin/gcc -dumpmachine)";
 
-  dashlessTarget = stdenv.lib.replaceStrings ["-"] ["_"] targetPlatform.config;
-
   # The "infix salt" is a arbitrary string added in the middle of env vars
   # defined by cc-wrapper's hooks so that multiple cc-wrappers can be used
   # without interfering. For the moment, it is defined as the target triple,
   # adjusted to be a valid bash identifier. This should be considered an
   # unstable implementation detail, however.
-  infixSalt = dashlessTarget;
+  infixSalt = replaceStrings ["-" "."] ["_" "_"] targetPlatform.config;
 
   expand-response-params =
     if buildPackages.stdenv.cc or null != null && buildPackages.stdenv.cc != "/dev/null"
@@ -77,7 +77,7 @@ stdenv.mkDerivation {
   preferLocalBuild = true;
 
   inherit cc libc_bin libc_dev libc_lib bintools coreutils_bin;
-  shell = getBin shell + stdenv.lib.optionalString (stdenv ? shellPath) stdenv.shellPath;
+  shell = getBin shell + shell.shellPath or "";
   gnugrep_bin = if nativeTools then "" else gnugrep;
 
   inherit targetPrefix infixSalt;
@@ -232,7 +232,7 @@ stdenv.mkDerivation {
       # compile, because it uses "#include_next <limits.h>" to find the
       # limits.h file in ../includes-fixed. To remedy the problem,
       # another -idirafter is necessary to add that directory again.
-      echo "-B${libc_lib}/lib/ -idirafter ${libc_dev}/include ${optionalString isGNU "-idirafter ${cc}/lib/gcc/*/*/include-fixed"}" > $out/nix-support/libc-cflags
+      echo "-B${libc_lib}${libc.libdir or "/lib/"} -idirafter ${libc_dev}${libc.incdir or "/include"} ${optionalString isGNU "-idirafter ${cc}/lib/gcc/*/*/include-fixed"}" > $out/nix-support/libc-cflags
 
       echo "${libc_lib}" > $out/nix-support/orig-libc
       echo "${libc_dev}" > $out/nix-support/orig-libc-dev
@@ -282,6 +282,20 @@ stdenv.mkDerivation {
 
     + optionalString targetPlatform.isMinGW ''
       hardening_unsupported_flags+=" stackprotector"
+    ''
+
+    + optionalString targetPlatform.isAvr ''
+      hardening_unsupported_flags+=" stackprotector pic"
+    ''
+
+    + optionalString (targetPlatform.libc == "newlib") ''
+      hardening_unsupported_flags+=" stackprotector fortify pie pic"
+    ''
+
+    + optionalString (libc != null && targetPlatform.isAvr) ''
+      for isa in avr5 avr3 avr4 avr6 avr25 avr31 avr35 avr51 avrxmega2 avrxmega4 avrxmega5 avrxmega6 avrxmega7 tiny-stack; do
+        echo "-B${getLib libc}/avr/lib/$isa" >> $out/nix-support/libc-cflags
+      done
     ''
 
     + ''

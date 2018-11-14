@@ -6,23 +6,19 @@ pythonPackages.buildPythonApplication rec {
 
   src = fetchFromGitHub {
     repo = "beets-alternatives";
-    owner = "geigerzaehler";
-    rev = "v${version}";
-    sha256 = "10za6h59pxa13y8i4amqhc6392csml0dl771lssv6b6a98kamsy7";
+    owner = "wisp3rwind";
+    # This is 0.8.2 with fixes against Beets 1.4.6 and Python 3 compatibility.
+    rev = "331eb406786a2d4dc3dd721a534225b087474b1e";
+    sha256 = "1avds2x5sp72c89l1j52pszprm85g9sm750jh1dhnyvgcbk91cb5";
   };
 
-  patches = [ ./alternatives-beets-1.4.6.patch ];
-
   postPatch = ''
-    sed -i -e '/install_requires/,/\]/{/beets/d}' setup.py
-    sed -i -e '/test_suite/d' setup.py
+    sed -i -e '/long_description/d' setup.py
   '';
 
   nativeBuildInputs = [ beets pythonPackages.nose ];
 
   checkPhase = "nosetests";
-
-  propagatedBuildInputs = with pythonPackages; [ futures ];
 
   meta = {
     description = "Beets plugin to manage external files";

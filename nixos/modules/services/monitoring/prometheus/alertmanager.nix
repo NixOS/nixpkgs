@@ -9,6 +9,15 @@ let
     if cfg.configText != null then
       pkgs.writeText "alertmanager.yml" cfg.configText
     else mkConfigFile;
+  cmdlineArgs = cfg.extraFlags ++ [
+    "--config.file ${alertmanagerYml}"
+    "--web.listen-address ${cfg.listenAddress}:${toString cfg.port}"
+    "--log.level ${cfg.logLevel}"
+    ] ++ (optional (cfg.webExternalUrl != null)
+      "--web.external-url ${cfg.webExternalUrl}"
+    ) ++ (optional (cfg.logFormat != null)
+      "--log.format ${cfg.logFormat}"
+  );
 in {
   options = {
     services.prometheus.alertmanager = {
@@ -99,6 +108,14 @@ in {
           Open port in firewall for incoming connections.
         '';
       };
+
+      extraFlags = mkOption {
+        type = types.listOf types.str;
+        default = [];
+        description = ''
+          Extra commandline options when launching the Alertmanager.
+        '';
+      };
     };
   };
 
@@ -111,11 +128,7 @@ in {
       after    = [ "network.target" ];
       script = ''
         ${pkgs.prometheus-alertmanager.bin}/bin/alertmanager \
-        --config.file ${alertmanagerYml} \
-        --web.listen-address ${cfg.listenAddress}:${toString cfg.port} \
-        --log.level ${cfg.logLevel} \
-        ${optionalString (cfg.webExternalUrl != null) ''--web.external-url ${cfg.webExternalUrl} \''}
-        ${optionalString (cfg.logFormat != null) "--log.format ${cfg.logFormat}"}
+          ${concatStringsSep " \\\n  " cmdlineArgs}
       '';
 
       serviceConfig = {

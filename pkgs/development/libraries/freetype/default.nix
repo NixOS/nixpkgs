@@ -1,5 +1,5 @@
-{ stdenv, lib, fetchurl, copyPathsToStore
-, hostPlatform
+{ stdenv, fetchurl
+, buildPackages
 , pkgconfig, which, makeWrapper
 , zlib, bzip2, libpng, gnumake, glib
 
@@ -10,7 +10,7 @@
 }:
 
 let
-  inherit (stdenv.lib) optional optionals optionalString;
+  inherit (stdenv.lib) optional optionalString;
 
 in stdenv.mkDerivation rec {
   name = "freetype-${version}";
@@ -50,6 +50,9 @@ in stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ];
 
   configureFlags = [ "--disable-static" "--bindir=$(dev)/bin" ];
+
+  # native compiler to generate building tool
+  CC_BUILD = "${buildPackages.stdenv.cc}/bin/cc";
 
   # The asm for armel is written with the 'asm' keyword.
   CFLAGS = optionalString stdenv.isAarch32 "-std=gnu99";

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, libminc, bicpl }:
+{ stdenv, fetchFromGitHub, cmake }:
 
 stdenv.mkDerivation rec {
   pname = "arguments";

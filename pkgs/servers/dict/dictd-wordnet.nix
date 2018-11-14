@@ -1,4 +1,4 @@
-{stdenv, fetchsvn, python, wordnet, writeScript}:
+{stdenv, python, wordnet, writeScript}:
 
 stdenv.mkDerivation rec {
   version = "542";

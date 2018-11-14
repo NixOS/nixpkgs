@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   name = "ncmpc-${version}";
-  version = "0.30";
+  version = "0.31";
 
   src = fetchFromGitHub {
     owner  = "MusicPlayerDaemon";
     repo   = "ncmpc";
     rev    = "v${version}";
-    sha256 = "0s2bynm5szrk8bjhg200mvsm2ny0wz9s10nx7r69y9y4jsxr8624";
+    sha256 = "09h1m9rkk89729i2d5zsfdc6rxajvikgsi3h99rwz2192gm457rj";
   };
 
   buildInputs = [ glib ncurses mpd_clientlib ];

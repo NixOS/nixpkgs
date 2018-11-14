@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
   version = "3.28.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/yelp/${gnome3.versionBranch version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/yelp/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
     sha256 = "033w5qnhm495pnvscnb3k2dagzgq4fsnzcrh0k2rgr10mw2mv2p8";
   };
 

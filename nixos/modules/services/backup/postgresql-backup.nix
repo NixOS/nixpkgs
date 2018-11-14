@@ -20,6 +20,8 @@ let
       '';
 
       script = ''
+        umask 0077 # ensure backup is only readable by postgres user
+
         if [ -e ${cfg.location}/${db}.sql.gz ]; then
           ${pkgs.coreutils}/bin/mv ${cfg.location}/${db}.sql.gz ${cfg.location}/${db}.prev.sql.gz
         fi

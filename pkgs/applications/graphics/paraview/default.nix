@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
     homepage = http://www.paraview.org/;
     description = "3D Data analysis and visualization application";
     license = stdenv.lib.licenses.free;
-    maintainers = with stdenv.lib.maintainers; [viric guibert];
+    maintainers = with stdenv.lib.maintainers; [guibert];
     platforms = with stdenv.lib.platforms; linux;
   };
 }

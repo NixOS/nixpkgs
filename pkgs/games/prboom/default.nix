@@ -1,20 +1,31 @@
-{stdenv, fetchurl, SDL, SDL_mixer, SDL_net, libGLU_combined}:
+{ stdenv, fetchurl, SDL, SDL_mixer, SDL_net
+, libGLU_combined ? assert false; null
+, useOpenGL ? stdenv.hostPlatform == stdenv.buildPlatform
+}:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "prboom-2.5.0";
   src = fetchurl {
     url = mirror://sourceforge/prboom/prboom-2.5.0.tar.gz;
     sha256 = "1bjb04q8dk232956k30qlpq6q0hxb904yh1nflr87jcc1x3iqv12";
   };
 
-  buildInputs = [ SDL SDL_mixer SDL_net libGLU_combined ];
-  crossAttrs = {
-    propagatedBuildInputs = [ SDL.crossDrv SDL_mixer.crossDrv SDL_net.crossDrv ];
-    configureFlags = "--disable-gl --disable-cpu-opt --without-x --disable-sdltest
-      ac_cv_type_uid_t=yes ac_cv_type_gid_t=yes";
+  buildInputs = [ SDL SDL_mixer SDL_net ]
+    ++ stdenv.lib.optional useOpenGL libGLU_combined;
 
-    postInstall = ''
-      mv $out/games/ $out/bin
-    '';
-  };
+  doCheck = stdenv.hostPlatform == stdenv.buildPlatform;
+
+  configureFlags = [
+    (stdenv.lib.enableFeature useOpenGL "gl")
+    (stdenv.lib.enableFeature doCheck "sdltest")
+  ] ++ stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    "--disable-cpu-opt"
+    "--without-x"
+    "ac_cv_type_uid_t=yes"
+    "ac_cv_type_gid_t=yes"
+  ];
+
+  postInstall = stdenv.lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+    mv $out/games/ $out/bin
+  '';
 }

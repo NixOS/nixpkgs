@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, cairo, libxml2, libxslt, gnome3, pango
+{ stdenv, fetchurl, pkgconfig, libxml2, libxslt, gnome3
 , gnome-doc-utils, intltool, libX11, which, itstool, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   version = "3.28.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/zenity/${gnome3.versionBranch version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/zenity/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
     sha256 = "0swavrkc5ps3fwzy6h6l5mmim0wwy10xrq0qqkay5d0zf9a965yv";
   };
 

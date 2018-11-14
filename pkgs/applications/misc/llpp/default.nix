@@ -1,5 +1,5 @@
 { stdenv, lib, makeWrapper, fetchgit, pkgconfig, ninja, ocaml, findlib, mupdf
-, lablgl, gtk3, openjpeg, jbig2dec, mujs, xsel, openssl, freetype, ncurses }:
+, gtk3, openjpeg, jbig2dec, mujs, xsel, openssl, freetype, ncurses }:
 
 assert lib.versionAtLeast (lib.getVersion ocaml) "4.02";
 

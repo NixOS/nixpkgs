@@ -1,35 +1,46 @@
-{ stdenv, fetchurl, glibc, sane-backends, qtbase, qtsvg, libXext, libX11, libXdmcp, libXau, libxcb, autoPatchelfHook }:
+{ stdenv, fetchurl, sane-backends, qtbase, qtsvg, nss, autoPatchelfHook, lib, makeWrapper }:
+
 let
-  version = "4.3.89";
+  version = "5.1.60";
+
 in stdenv.mkDerivation {
   name = "masterpdfeditor-${version}";
+
   src = fetchurl {
-    url = "https://get.code-industry.net/public/master-pdf-editor-${version}_qt5.amd64.tar.gz";
-    sha256 = "0k5bzlhqglskiiq86nmy18mnh5bf2w3mr9cq3pibrwn5pisxnxxc";
+    url = "https://code-industry.net/public/master-pdf-editor-${version}_qt5.amd64.tar.gz";
+    sha256 = "0br5f04klzpbd25igbjjj1dqasmrcrw2zsan5bv0ydnr2lmpb2fz";
   };
 
-  nativeBuildInputs = [ autoPatchelfHook ];
+  nativeBuildInputs = [ autoPatchelfHook makeWrapper ];
 
-  buildInputs = [ sane-backends qtbase qtsvg ];
+  buildInputs = [ nss qtbase qtsvg sane-backends stdenv.cc.cc ];
 
   dontStrip = true;
 
+  # Please remove this when #44047 is fixed
+  postInstall = ''
+    wrapProgram $out/bin/masterpdfeditor5 --prefix QT_PLUGIN_PATH : ${lib.getBin qtbase}/${qtbase.qtPluginPrefix}
+  '';
+
   installPhase = ''
-   p=$out/opt/masterpdfeditor
-   mkdir -p $out/bin $p $out/share/applications $out/share/pixmaps
+    runHook preInstall
 
-   substituteInPlace masterpdfeditor4.desktop \
-     --replace 'Exec=/opt/master-pdf-editor-4' "Exec=$out/bin" \
-     --replace 'Path=/opt/master-pdf-editor-4' "Path=$out/bin" \
-     --replace 'Icon=/opt/master-pdf-editor-4' "Icon=$out/share/pixmaps"
-   cp -v masterpdfeditor4.png $out/share/pixmaps/
-   cp -v masterpdfeditor4.desktop $out/share/applications
+    p=$out/opt/masterpdfeditor
+    mkdir -p $out/bin
 
-   cp -v masterpdfeditor4 $p/
-   ln -s $p/masterpdfeditor4 $out/bin/masterpdfeditor4
-   cp -v -r stamps templates lang fonts $p
+    substituteInPlace masterpdfeditor5.desktop \
+      --replace 'Exec=/opt/master-pdf-editor-5' "Exec=$out/bin" \
+      --replace 'Path=/opt/master-pdf-editor-5' "Path=$out/bin" \
+      --replace 'Icon=/opt/master-pdf-editor-5' "Icon=$out/share/pixmaps"
 
-   install -D license.txt $out/share/$name/LICENSE
+    install -Dm644 -t $out/share/pixmaps      masterpdfeditor5.png
+    install -Dm644 -t $out/share/applications masterpdfeditor5.desktop
+    install -Dm755 -t $p                      masterpdfeditor5
+    install -Dm644 license.txt $out/share/$name/LICENSE
+    ln -s $p/masterpdfeditor5 $out/bin/masterpdfeditor5
+    cp -v -r stamps templates lang fonts $p
+
+    runHook postInstall
   '';
 
   meta = with stdenv.lib; {

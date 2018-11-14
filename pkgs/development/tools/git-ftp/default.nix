@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, pandoc, man }:
+{ stdenv, fetchFromGitHub, pandoc, man }:
 stdenv.mkDerivation rec {
   name = "git-ftp-${version}";
   version = "1.5.1";

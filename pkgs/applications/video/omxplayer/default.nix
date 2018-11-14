@@ -1,6 +1,5 @@
 { stdenv, fetchurl
 , raspberrypifw, pcre, boost, freetype, zlib
-, hostPlatform
 }:
 
 let
@@ -14,7 +13,7 @@ let
     
     configurePlatforms = [];
     configureFlags = [
-      "--arch=${hostPlatform.parsed.cpu.name}"
+      "--arch=${stdenv.hostPlatform.parsed.cpu.name}"
     ] ++ stdenv.lib.optionals stdenv.hostPlatform.isAarch32 [
       # TODO be better with condition
       "--cpu=arm1176jzf-s"
@@ -46,8 +45,8 @@ let
       "--enable-hardcoded-tables"
       "--disable-runtime-cpudetect"
       "--disable-debug"
-      "--arch=${hostPlatform.parsed.cpu.name}"
-      "--target_os=${hostPlatform.parsed.kernel.name}"
+      "--arch=${stdenv.hostPlatform.parsed.cpu.name}"
+      "--target_os=${stdenv.hostPlatform.parsed.kernel.name}"
     ] ++ stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
       "--cross-prefix=${stdenv.cc.targetPrefix}"
       "--enable-cross-compile"

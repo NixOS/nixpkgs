@@ -32,9 +32,10 @@ python3Packages.buildPythonApplication rec {
   doCheck = false; # no tests
 
   meta = with stdenv.lib; {
-    homepage = https://gna.org/projects/pdfshuffler/;
+    homepage = https://sourceforge.net/p/pdfshuffler/wiki/Home;
     description = "Merge or split pdf documents and rotate, crop and rearrange their pages";
     platforms = platforms.linux;
     maintainers = with maintainers; [ mic92 ];
+    license = licenses.gpl3;
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl,  python27Packages, swig, gettext, pcsclite, qt48Full, yubikey-personalization }:
+{ stdenv, fetchurl,  python27Packages, pcsclite, yubikey-personalization }:
 
 python27Packages.buildPythonApplication rec {
     namePrefix = "";

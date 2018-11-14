@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, python3, which }:
+{ stdenv, fetchurl, python3, which }:
 
 stdenv.mkDerivation rec {
   name = "fatrace-${version}";

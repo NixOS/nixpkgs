@@ -1,18 +1,19 @@
-{ stdenv, fetchFromGitHub, ocaml, findlib, ocf, ptime,
-  uutf, uri, ppx_blob, xtmpl, ocaml_lwt, higlo, camlp4, omd
+{ stdenv, fetchFromGitLab, ocaml, findlib, ocf, ptime,
+  uutf, uri, ppx_blob, xtmpl, ocaml_lwt, higlo, omd
 }:
 
 stdenv.mkDerivation rec {
   name = "stog-${version}";
-  version = "0.17.0";
-  src = fetchFromGitHub {
+  version = "0.18.0";
+  src = fetchFromGitLab {
+    domain = "framagit.org";
     owner = "zoggy";
     repo = "stog";
-    rev = "release-${version}";
-    sha256 = "06fnl3im0rycn05w39adfmm7w4s8l3jrj43h8f8h3b56grh21x0d";
+    rev = version;
+    sha256 = "154gl3ljxqlw8wz1vmsyv8180igrl5bjq0wir7ybrnzq2cdflkv0";
   };
 
-  buildInputs = [ ocaml camlp4 uutf ];
+  buildInputs = [ ocaml uutf ];
   propagatedBuildInputs = [ findlib omd ppx_blob ocf ptime uri xtmpl ocaml_lwt higlo ];
 
   createFindlibDestdir = true;
@@ -21,7 +22,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "XML documents and web site compiler";
-    homepage = https://zoggy.github.io/stog/;
+    homepage = https://www.good-eris.net/stog;
     license = licenses.lgpl3;
     platforms = ocaml.meta.platforms or [];
     maintainers = with maintainers; [ regnat ];

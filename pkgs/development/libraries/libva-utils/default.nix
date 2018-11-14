@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, autoreconfHook, pkgconfig
+{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig
 , libdrm, libva
 }:
 

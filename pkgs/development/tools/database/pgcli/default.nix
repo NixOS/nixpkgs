@@ -1,30 +1,23 @@
 { lib, pythonPackages, fetchFromGitHub }:
 
 pythonPackages.buildPythonApplication rec {
-  name = "pgcli-${version}";
-  version = "1.6.0";
+  pname = "pgcli";
+  version = "2.0.0";
 
-  src = fetchFromGitHub {
-    sha256 = "0f1zv4kwi2991pclf8chrhgjwf8jkqxdh5ndc9qx6igh56iyyncz";
-    rev = "v${version}";
-    repo = "pgcli";
-    owner = "dbcli";
+  src = pythonPackages.fetchPypi {
+    inherit pname version;
+    sha256 = "085fna5nc72nfj1gw0m4ia6wzayinqaffmjy3ajldha1727vqwzi";
   };
 
-  buildInputs = with pythonPackages; [ pytest mock ];
-  checkPhase = ''
-    mkdir /tmp/homeless-shelter
-    HOME=/tmp/homeless-shelter py.test tests -k 'not test_missing_rc_dir and not test_quoted_db_uri and not test_port_db_uri'
-  '';
-
   propagatedBuildInputs = with pythonPackages; [
-    click configobj humanize prompt_toolkit psycopg2
-    pygments sqlparse pgspecial setproctitle
+    cli-helpers click configobj humanize prompt_toolkit_2 psycopg2
+    pygments sqlparse pgspecial setproctitle keyring
   ];
 
-  postPatch = ''
-    substituteInPlace setup.py --replace "==" ">="
-    rm tests/test_rowlimit.py
+  checkInputs = with pythonPackages; [ pytest mock ];
+
+  checkPhase = ''
+    py.test
   '';
 
   meta = with lib; {
@@ -35,5 +28,6 @@ pythonPackages.buildPythonApplication rec {
     '';
     homepage = https://pgcli.com;
     license = licenses.bsd3;
+    maintainers = with maintainers; [ dywedir ];
   };
 }

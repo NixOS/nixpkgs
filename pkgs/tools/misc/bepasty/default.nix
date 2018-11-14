@@ -1,15 +1,15 @@
-{ python
+{ python3Packages
 , lib
 }:
 
-with python.pkgs;
+with python3Packages;
 
 #We need to use buildPythonPackage here to get the PYTHONPATH build correctly.
 #This is needed for services.bepasty
 #https://github.com/NixOS/nixpkgs/pull/38300
 buildPythonPackage rec {
   pname = "bepasty";
-  version = "0.4.0";
+  version = "0.5.0";
 
   propagatedBuildInputs = [
     flask
@@ -22,9 +22,12 @@ buildPythonPackage rec {
     xstatic-jquery-ui
     xstatic-pygments
   ];
+
+  buildInputs = [ setuptools_scm ];
+
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0bs79pgrjlnkmjfyj2hllbx3rw757va5w2g2aghi9cydmsl7gyi4";
+    sha256 = "1y3smw9620w2ia4zfsl2svb9j7mkfgc8z1bzjffyk1w5vryhwikh";
   };
 
   checkInputs = [

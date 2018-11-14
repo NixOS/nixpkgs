@@ -1,4 +1,4 @@
-{ stdenv, lib, vscode-utils
+{ lib, vscode-utils
 
 , pythonUseFixed ? false, python  # When `true`, the python default setting will be fixed to specified.
                                   # Use version from `PATH` for default setting otherwise.
@@ -20,8 +20,8 @@ vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = {
     name = "python";
     publisher = "ms-python";
-    version = "2018.6.0";
-    sha256 = "a157399b45b40caa9e0b3432eaf3e7444ee4cb91497c139bcb740d42d61f9ae8";
+    version = "2018.10.1";
+    sha256 = "1j9nf09v31lmrjkxf7p1d78d064x6afzh0dvssmk3sjm2c5r432k";
   };
 
   postPatch = ''

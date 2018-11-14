@@ -1,5 +1,5 @@
 {
-  mkDerivation, lib, fetchurl, writeScript,
+  mkDerivation, lib,
   extra-cmake-modules,
   qtbase, qttools, shared-mime-info
 }:

@@ -11,7 +11,7 @@ in buildPythonApplication rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
     sha256 = "109px6phfizi2jqrc7d7k7j6nvmanbfp5lykqfrk2sky77sand0r";
   };
 

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchgit, pkgconfig, cmake
+{ stdenv, fetchgit, pkgconfig, cmake
 , libjpeg ? null
 , zlib ? null
 , libpng ? null

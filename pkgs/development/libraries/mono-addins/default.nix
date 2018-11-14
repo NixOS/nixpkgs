@@ -1,19 +1,21 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, mono, gtk-sharp-2_0 }:
+{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, mono48, gtk-sharp-2_0 }:
 
 stdenv.mkDerivation rec {
   name = "mono-addins-${version}";
-  version = "1.2";
+  version = "1.3.3";
 
   src = fetchFromGitHub {
     owner = "mono";
     repo = "mono-addins";
 
     rev = "mono-addins-${version}";
-    sha256 = "1hnn0a2qsjcjprsxas424bzvhsdwy0yc2jj5xbp698c0m9kfk24y";
+    sha256 = "018g3bd8afjc39h22h2j5r6ldsdn08ynx7wg889gdvnxg3hrxgl2";
   };
 
   nativeBuildInputs = [ pkgconfig autoreconfHook ];
-  buildInputs = [ mono gtk-sharp-2_0 ];
+
+  # Use msbuild when https://github.com/NixOS/nixpkgs/pull/43680 is merged
+  buildInputs = [ mono48 gtk-sharp-2_0 ];
 
   dontStrip = true;
 
@@ -25,5 +27,6 @@ stdenv.mkDerivation rec {
       and for creating libraries which extend those applications.
     '';
     platforms = platforms.linux;
+    license = licenses.mit;
   };
 }

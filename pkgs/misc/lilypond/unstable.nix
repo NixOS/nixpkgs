@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchgit, guile, rsync, lilypond, gyre-fonts }:
+{ stdenv, fetchurl, fetchgit, rsync, lilypond, gyre-fonts }:
 
 with stdenv.lib;
 

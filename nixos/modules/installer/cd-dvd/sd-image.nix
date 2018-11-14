@@ -12,18 +12,17 @@
 with lib;
 
 let
-  rootfsImage = import ../../../lib/make-ext4-fs.nix {
-    inherit pkgs;
+  rootfsImage = pkgs.callPackage ../../../lib/make-ext4-fs.nix ({
     inherit (config.sdImage) storePaths;
     volumeLabel = "NIXOS_SD";
   } // optionalAttrs (config.sdImage.rootPartitionUUID != null) {
     uuid = config.sdImage.rootPartitionUUID;
-  };
+  });
 in
 {
   options.sdImage = {
     imageName = mkOption {
-      default = "${config.sdImage.imageBaseName}-${config.system.nixos.label}-${pkgs.stdenv.system}.img";
+      default = "${config.sdImage.imageBaseName}-${config.system.nixos.label}-${pkgs.stdenv.hostPlatform.system}.img";
       description = ''
         Name of the generated image file.
       '';
@@ -94,16 +93,16 @@ in
 
     sdImage.storePaths = [ config.system.build.toplevel ];
 
-    system.build.sdImage = pkgs.stdenv.mkDerivation {
+    system.build.sdImage = pkgs.callPackage ({ stdenv, dosfstools, e2fsprogs, mtools, libfaketime, utillinux }: stdenv.mkDerivation {
       name = config.sdImage.imageName;
 
-      buildInputs = with pkgs; [ dosfstools e2fsprogs mtools libfaketime utillinux ];
+      nativeBuildInputs = [ dosfstools e2fsprogs mtools libfaketime utillinux ];
 
       buildCommand = ''
         mkdir -p $out/nix-support $out/sd-image
         export img=$out/sd-image/${config.sdImage.imageName}
 
-        echo "${pkgs.stdenv.system}" > $out/nix-support/system
+        echo "${pkgs.stdenv.buildPlatform.system}" > $out/nix-support/system
         echo "file sd-image $img" >> $out/nix-support/hydra-build-products
 
         # Create the image file sized to fit /boot and /, plus 20M of slack
@@ -138,7 +137,7 @@ in
         (cd boot; mcopy -bpsvm -i ../bootpart.img ./* ::)
         dd conv=notrunc if=bootpart.img of=$img seek=$START count=$SECTORS
       '';
-    };
+    }) {};
 
     boot.postBootCommands = ''
       # On the first boot do some maintenance tasks

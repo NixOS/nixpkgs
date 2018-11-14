@@ -1,4 +1,4 @@
-{ stdenv, lib, buildGoPackage, fetchFromGitHub }:
+{ stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   name = "hologram-2018-03-19";

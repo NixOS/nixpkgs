@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, writeText, nss, python
+{ stdenv, fetchurl, nss, python
 , blacklist ? []
 , includeEmail ? false
 }:

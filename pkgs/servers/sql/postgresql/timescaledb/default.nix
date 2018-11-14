@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, postgresql }:
+{ stdenv, fetchFromGitHub, cmake, postgresql, openssl }:
 
 # # To enable on NixOS:
 # config.services.postgresql = {
@@ -8,16 +8,16 @@
 
 stdenv.mkDerivation rec {
   name = "timescaledb-${version}";
-  version = "0.10.1";
+  version = "1.0.0";
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ postgresql ];
+  buildInputs = [ postgresql openssl ];
 
   src = fetchFromGitHub {
     owner  = "timescale";
     repo   = "timescaledb";
     rev    = "refs/tags/${version}";
-    sha256 = "07qkkf7lbwaig26iia54vdakwmv33f71p8saqifz9lf0zy6xn0w0";
+    sha256 = "1359jc0dw8q3f0iipqfadzs8lvri9qa5w59ziz00x1d09ppw2q40";
   };
 
   # Fix the install phase which tries to install into the pgsql extension dir,
@@ -46,6 +46,6 @@ stdenv.mkDerivation rec {
     homepage    = https://www.timescale.com/;
     maintainers = with maintainers; [ volth ];
     platforms   = platforms.linux;
-    license     = licenses.postgresql;
+    license     = licenses.asl20;
   };
 }

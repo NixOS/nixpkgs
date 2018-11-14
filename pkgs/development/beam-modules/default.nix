@@ -1,7 +1,7 @@
 { stdenv, pkgs, erlang }:
 
 let
-  inherit (stdenv.lib) getVersion versionAtLeast makeExtensible;
+  inherit (stdenv.lib) makeExtensible;
 
   lib = pkgs.callPackage ./lib.nix {};
 
@@ -42,27 +42,32 @@ let
         buildMix = callPackage ./build-mix.nix {};
 
         # BEAM-based languages.
-        elixir = elixir_1_6;
+        elixir = elixir_1_7;
+
+        elixir_1_7 = lib.callElixir ../interpreters/elixir/1.7.nix {
+          inherit rebar erlang;
+          debugInfo = true;
+        };
 
         elixir_1_6 = lib.callElixir ../interpreters/elixir/1.6.nix {
-                       inherit rebar erlang;
-                       debugInfo = true;
-                     };
+          inherit rebar erlang;
+          debugInfo = true;
+        };
 
         elixir_1_5 = lib.callElixir ../interpreters/elixir/1.5.nix {
-                       inherit rebar erlang;
-                       debugInfo = true;
-                     };
+          inherit rebar erlang;
+          debugInfo = true;
+        };
 
         elixir_1_4 = lib.callElixir ../interpreters/elixir/1.4.nix {
-                       inherit rebar erlang;
-                       debugInfo = true;
-                     };
+          inherit rebar erlang;
+          debugInfo = true;
+        };
 
         elixir_1_3 = lib.callElixir ../interpreters/elixir/1.3.nix {
-                       inherit rebar erlang;
-                       debugInfo = true;
-                     };
+          inherit rebar erlang;
+          debugInfo = true;
+        };
 
         lfe = lfe_1_2;
         lfe_1_2 = lib.callLFE ../interpreters/lfe/1.2.nix { inherit erlang buildRebar3 buildHex; };

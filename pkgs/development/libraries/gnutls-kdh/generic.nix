@@ -1,6 +1,6 @@
-{ lib, fetchurl, stdenv, zlib, lzo, libtasn1, nettle, pkgconfig, lzip
+{ lib, stdenv, zlib, lzo, libtasn1, nettle, pkgconfig, lzip
 , guileBindings, guile, perl, gmp, autogen, libidn, p11-kit, unbound, libiconv
-, tpmSupport ? true, trousers, nettools, bash, gperftools, gperf, gettext, automake
+, tpmSupport ? true, trousers, nettools, gperftools, gperf, gettext, automake
 , yacc, texinfo
 
 # Version dependent args

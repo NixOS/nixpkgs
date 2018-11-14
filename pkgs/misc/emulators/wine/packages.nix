@@ -1,4 +1,4 @@
-{ system, stdenv, stdenv_32bit, lib, pkgs, pkgsi686Linux, callPackage,
+{ stdenv_32bit, lib, pkgs, pkgsi686Linux, callPackage,
   wineRelease ? "stable",
   supportFlags
 }:

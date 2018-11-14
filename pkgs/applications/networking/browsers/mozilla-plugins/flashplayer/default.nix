@@ -33,6 +33,7 @@
 , libXxf86vm
 , libdrm
 , libffi
+, libglvnd
 , libpng
 , libvdpau
 , libxcb
@@ -60,38 +61,38 @@
 
 let
   arch =
-    if stdenv.system == "x86_64-linux" then
+    if stdenv.hostPlatform.system == "x86_64-linux" then
       "x86_64"
-    else if stdenv.system == "i686-linux"   then
+    else if stdenv.hostPlatform.system == "i686-linux"   then
       "i386"
     else throw "Flash Player is not supported on this platform";
   lib_suffix =
-      if stdenv.system == "x86_64-linux" then
+      if stdenv.hostPlatform.system == "x86_64-linux" then
       "64"
     else
       "";
 in
 stdenv.mkDerivation rec {
   name = "flashplayer-${version}";
-  version = "30.0.0.134";
+  version = "31.0.0.122";
 
   src = fetchurl {
     url =
       if debug then
-        "https://fpdownload.macromedia.com/pub/flashplayer/updaters/30/flash_player_npapi_linux_debug.${arch}.tar.gz"
+        "https://fpdownload.macromedia.com/pub/flashplayer/updaters/31/flash_player_npapi_linux_debug.${arch}.tar.gz"
       else
         "https://fpdownload.adobe.com/get/flashplayer/pdc/${version}/flash_player_npapi_linux.${arch}.tar.gz";
     sha256 =
       if debug then
         if arch == "x86_64" then
-          "1xa2mcbcxpfrqdf37a98nvvsvyp0bm3lsv21ky3ps9cba8a13z80"
+          "0mjyb8mk4av8cia34gmqi0n4nq0spiblgn18z6f4nkx12wgdka2c"
         else
-          "1jgl57ggcszdim51dcr0gsjmrdb2kdvxl0lv5zl83cvxcyz0z4p6"
+          "07qgawd4xgy9690gbx0c6k97cp7lp04l70ccp4jd81y4xjsc9bq3"
       else
         if arch == "x86_64" then
-          "0331r5af4zrvwc4h7dp5qyy91dfam5z03yjggls3x04i10nz5myw"
+          "0264kcn0frgcl7zfd60ybs4r7x1p3f8nj496z264ax6qc390qr02"
         else
-          "011cf0kycs4ih45l23bp6rr2vm7w7jaj4pjvmqwjax4xrb5pzkic";
+          "0w170wz920imca8wc7kggl2vldn9k7cqm2xwvx8yqqi1p42a1941";
   };
 
   nativeBuildInputs = [ unzip ];
@@ -132,8 +133,8 @@ stdenv.mkDerivation rec {
       alsaLib atk bzip2 cairo curl expat fontconfig freetype gdk_pixbuf glib
       glibc graphite2 gtk2 harfbuzz libICE libSM libX11 libXau libXcomposite
       libXcursor libXdamage libXdmcp libXext libXfixes libXi libXinerama
-      libXrandr libXrender libXt libXxf86vm libdrm libffi libpng libvdpau
-      libxcb libxshmfence nspr nss pango pcre pixman zlib
+      libXrandr libXrender libXt libXxf86vm libdrm libffi libglvnd libpng
+      libvdpau libxcb libxshmfence nspr nss pango pcre pixman zlib
     ];
 
   meta = {

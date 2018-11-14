@@ -1,5 +1,4 @@
 { stdenv, fetchurl, lzip
-, buildPlatform, hostPlatform
 }:
 
 stdenv.mkDerivation (rec {
@@ -36,7 +35,7 @@ stdenv.mkDerivation (rec {
     maintainers = [ ];
     platforms = stdenv.lib.platforms.unix;
   };
-} // stdenv.lib.optionalAttrs (hostPlatform != buildPlatform) {
+} // stdenv.lib.optionalAttrs (stdenv.hostPlatform != stdenv.buildPlatform) {
   # This may be moved above during a stdenv rebuild.
   preConfigure = ''
     configureFlagsArray+=("CC=$CC")

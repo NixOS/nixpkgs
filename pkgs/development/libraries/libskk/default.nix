@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchFromGitHub,
+{ stdenv, fetchFromGitHub,
   libtool, gettext, pkgconfig,
   vala, gnome-common, gobjectIntrospection,
   libgee, json-glib, skk-dicts }:

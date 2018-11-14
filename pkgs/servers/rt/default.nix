@@ -33,11 +33,11 @@
 stdenv.mkDerivation rec {
   name = "rt-${version}";
 
-  version = "4.4.2";
+  version = "4.4.3";
 
   src = fetchurl {
     url = "https://download.bestpractical.com/pub/rt/release/${name}.tar.gz";
-    sha256 = "0s5ykc5imcii66zkzcb8lf8adkr8zlbc2ikcpkaxzcccikhndqxj";
+    sha256 = "1cddgp3j7qm7r3v5j1l1hl6i6laxa64f4nalaarj094hmhyb92kk";
   };
 
   patches = [ ./override-generated.patch ];

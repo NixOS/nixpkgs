@@ -1,4 +1,4 @@
-{ stdenv, fetch, cmake, libxml2, llvm, version, release_version, clang-tools-extra_src, python
+{ stdenv, fetch, cmake, libxml2, llvm, version, clang-tools-extra_src, python
 , fixDarwinDylibNames
 , enableManpages ? false
 }:

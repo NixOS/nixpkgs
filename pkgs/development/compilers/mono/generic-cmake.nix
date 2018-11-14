@@ -80,11 +80,11 @@ stdenv.mkDerivation rec {
 
   inherit enableParallelBuilding;
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://mono-project.com/;
     description = "Cross platform, open source .NET development framework";
-    platforms = with stdenv.lib.platforms; darwin ++ linux;
-    maintainers = with stdenv.lib.maintainers; [ viric thoughtpolice obadz vrthra ];
-    license = stdenv.lib.licenses.free; # Combination of LGPL/X11/GPL ?
+    platforms = with platforms; darwin ++ linux;
+    maintainers = with maintainers; [ thoughtpolice obadz vrthra ];
+    license = licenses.free; # Combination of LGPL/X11/GPL ?
   };
 }

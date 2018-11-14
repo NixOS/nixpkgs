@@ -1,5 +1,5 @@
 { lib, fetchpatch
-, buildPythonPackage, fetchPypi, isPy3k, pythonOlder
+, buildPythonPackage, fetchPypi, isPy3k
 , beautifulsoup4, lxml, cssutils, future, enum34, six
 }:
 
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   prePatch = ''
     substituteInPlace setup.py \
       --replace 'beautifulsoup4>=4.2.1,<4.5.0' \
-                'beautifulsoup4>=4.2.1,<=4.6.0'
+                'beautifulsoup4>=4.2.1,<=4.6.3'
   '';
 
   # don't require enum34 on python >= 3.4

@@ -5,7 +5,7 @@
 }:
 
 let
-  shouldUsePkg = pkg: if pkg != null && pkg.meta.available then pkg else null;
+  shouldUsePkg = pkg: if pkg != null && stdenv.lib.any (stdenv.lib.meta.platformMatch stdenv.hostPlatform) pkg.meta.platforms then pkg else null;
 
   optAlsaLib = shouldUsePkg alsaLib;
   optDb = shouldUsePkg db;
@@ -22,9 +22,9 @@ stdenv.mkDerivation rec {
     sha256 = "0i6l25dmfk2ji2lrakqq9icnwjxklgcjzzk65dmsff91z2zva5rm";
   };
   
-  configureFlags = ''
-    ${if (optLibffado != null) then "--enable-firewire" else ""}
-  '';
+  configureFlags = [
+    (stdenv.lib.enableFeature (optLibffado != null) "firewire")
+  ];
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ optAlsaLib optDb optLibffado optCelt ];

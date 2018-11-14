@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "01pbg67qy5hcssy2yi0ckqapzfclgdq93li2rmzw4pa3wh5j42cw";
   };
 
-  nativeBuildInputs = stdenv.lib.optional doCheck perl;
+  checkInputs = [ perl ];
 
   preCheck = "patchShebangs tests/unit";
   doCheck = true;

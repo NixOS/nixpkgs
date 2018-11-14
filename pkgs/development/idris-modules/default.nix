@@ -153,6 +153,8 @@
 
     protobuf = callPackage ./protobuf.nix {};
 
+    quantities = callPackage ./quantities.nix {};
+
     rationals = callPackage ./rationals.nix {};
 
     recursion_schemes = callPackage ./recursion_schemes.nix {};

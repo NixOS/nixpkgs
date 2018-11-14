@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   name = "todolist-${version}";
-  version = "0.8";
+  version = "v0.8.1";
 
   goPackagePath = "github.com/gammons/todolist";
 
@@ -10,7 +10,7 @@ buildGoPackage rec {
     owner = "gammons";
     repo = "todolist";
     rev = "${version}";
-    sha256 = "0agv9a44q81qr960b7m1jxk0pb8ahk6lvmzmijvw4v6mbip2720z";
+    sha256 = "0dazfymby5xm4482p9cyj23djmkz5q7g79cqm2d85mczvz7vks8p";
   };
 
   meta = with stdenv.lib; {

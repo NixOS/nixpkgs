@@ -1,18 +1,16 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, darwin }:
 
 stdenv.mkDerivation rec {
-  name = "webrtc-audio-processing-0.3";
+  name = "webrtc-audio-processing-0.3.1";
 
   src = fetchurl {
     url = "https://freedesktop.org/software/pulseaudio/webrtc-audio-processing/${name}.tar.xz";
-    sha256 = "1yl0187xjh1j2zkb7v9cs9i868zcaj23pzn4a36qhzam9wfjjvkm";
+    sha256 = "1gsx7k77blfy171b6g3m0k0s0072v6jcawhmx1kjs9w5zlwdkzd0";
   };
 
-  # Avoid this error:
-  # signal_processing/filter_ar_fast_q12_armv7.S:88: Error: selected processor does not support `sbfx r11,r6,#12,#16' in ARM mode
-  patchPhase = stdenv.lib.optionalString stdenv.isAarch32 ''
-    substituteInPlace configure --replace 'armv7*|armv8*' 'disabled'
-  '' + stdenv.lib.optionalString stdenv.hostPlatform.isMusl ''
+  buildInputs = stdenv.lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ ApplicationServices ]);
+
+  patchPhase = stdenv.lib.optionalString stdenv.hostPlatform.isMusl ''
     substituteInPlace webrtc/base/checks.cc --replace 'defined(__UCLIBC__)' 1
   '';
 

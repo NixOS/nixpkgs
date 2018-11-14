@@ -23,6 +23,6 @@ stdenv.mkDerivation rec {
     description = "A small C library for x86 CPU detection and feature extraction";
     license = licenses.bsd2;
     maintainers = with maintainers; [ orivej artuuge ];
-    platforms = platforms.all;
+    platforms = platforms.x86;
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, autoconf, automake, libtool, gettext }:
+{ stdenv, fetchFromGitHub, autoconf, automake, libtool, gettext }:
 
 stdenv.mkDerivation rec {
 
@@ -25,6 +25,7 @@ stdenv.mkDerivation rec {
     vertex coloring and derivative computation";
     homepage = "http://cscapes.cs.purdue.edu/coloringpage/software.htm#functionalities";
     license = licenses.lgpl3;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ edwtjo ];
   };
 

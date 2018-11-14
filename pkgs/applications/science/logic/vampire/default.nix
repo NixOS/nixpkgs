@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "vprover";
     repo = "vampire";
     rev = version;
-    sha256 = "080zwgmyhn0b2c6hqlhcgaw7n3frz02sh894v5kk68kzxbqr29w2";
+    sha256 = "1n0kf0g15yjw3v7z60l51h7fdn880mmvqsbb2szh48vzy20l92il";
     fetchSubmodules = true;
     leaveDotGit = true;
   };

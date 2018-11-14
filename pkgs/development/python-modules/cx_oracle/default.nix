@@ -2,13 +2,13 @@
 
 buildPythonPackage rec {
   pname = "cx_Oracle";
-  version = "6.3.1";
+  version = "6.4.1";
 
   buildInputs = [ odpic ];
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0200j6jh80rpgzxmvgcxmkshaj4zadq32g2i97nlwiq3f7q374l7";
+    sha256 = "3519bf3263c9892aaadc844735aca02d3773ed9b92f97e069cd1726882a7d1b6";
   };
 
   preConfigure = ''

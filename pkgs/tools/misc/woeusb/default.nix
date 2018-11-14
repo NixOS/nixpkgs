@@ -3,14 +3,14 @@
 , wxGTK30 }:
 
 stdenv.mkDerivation rec {
-  version = "3.2.1";
+  version = "3.2.10";
   name = "woeusb-${version}";
 
   src = fetchFromGitHub {
     owner = "slacka";
     repo = "WoeUSB";
     rev = "v${version}";
-    sha256 = "0qymdc216ws6adkzmzxz6hx43dim0hpwab9c4qmgg8jnkhnpvnj1";
+    sha256 = "0jzgwh9xv92yns5yi5zpl49zbp3csh6m6iclgq070awpjpsqlqi0";
   };
 
   buildInputs = [ wxGTK30 autoreconfHook makeWrapper ];

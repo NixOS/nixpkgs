@@ -3,11 +3,11 @@ zlib, bzip2, lzma }:
 
 stdenv.mkDerivation rec {
   name = "pacman-${version}";
-  version = "5.1.0";
+  version = "5.1.1";
 
   src = fetchurl {
     url = "https://git.archlinux.org/pacman.git/snapshot/pacman-${version}.tar.gz";
-    sha256 = "1b545zvh661vkypnqr1cdicypym9d2kfvnxbf4a61qkyza6kzx35";
+    sha256 = "17g497q6ylq73rql9k2ji2l2b2bj3dd4am30z8i6khnhc0x8s2il";
   };
 
   # trying to build docs fails with a2x errors, unable to fix through asciidoc
@@ -15,6 +15,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
   buildInputs = [ perl libarchive openssl zlib bzip2 lzma ];
+
+  postFixup = ''
+    substituteInPlace $out/bin/repo-add \
+      --replace bsdtar "${libarchive}/bin/bsdtar"
+  '';
 
   meta = with lib; {
     description = "A simple library-based package manager";

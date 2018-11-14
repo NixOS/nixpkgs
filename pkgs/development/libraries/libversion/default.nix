@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, cmake }:
 
 let
-  version = "2.6.0";
+  version = "2.7.0";
 in
 stdenv.mkDerivation {
   name = "libversion-${version}";
@@ -10,7 +10,7 @@ stdenv.mkDerivation {
     owner = "repology";
     repo = "libversion";
     rev = version;
-    sha256 = "0krhfycva3l4rhac5kx6x1a6fad594i9i77vy52rwn37j62bm601";
+    sha256 = "0brk2mbazc7yz0h4zsvbybbaymf497dgxnc74qihnvbi4z4rlqpj";
   };
 
   nativeBuildInputs = [ cmake ];

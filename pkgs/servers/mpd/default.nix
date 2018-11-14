@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch, autoreconfHook, pkgconfig, glib, systemd, boost, darwin
+{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, glib, systemd, boost, darwin
 , alsaSupport ? true, alsaLib
 , avahiSupport ? true, avahi, dbus
 , flacSupport ? true, flac
@@ -26,6 +26,8 @@
 , clientSupport ? true, mpd_clientlib
 , opusSupport ? true, libopus
 , soundcloudSupport ? true, yajl
+, nfsSupport ? true, libnfs
+, smbSupport ? true, samba
 }:
 
 assert avahiSupport -> avahi != null && dbus != null;
@@ -34,7 +36,7 @@ let
   opt = stdenv.lib.optional;
   mkFlag = c: f: if c then "--enable-${f}" else "--disable-${f}";
   major = "0.20";
-  minor = "20";
+  minor = "21";
 
 in stdenv.mkDerivation rec {
   name = "mpd-${version}";
@@ -44,7 +46,7 @@ in stdenv.mkDerivation rec {
     owner  = "MusicPlayerDaemon";
     repo   = "MPD";
     rev    = "v${version}";
-    sha256 = "0v7xpsr8b4d0q9vh1wni0qbkbkxdjpn639qm2q553ckk5idas4lm";
+    sha256 = "0qchvycwiai5gwkvvf44nc1jw16yhpcjmlppqlrlvicgzsanhmy3";
   };
 
   patches = [ ./x86.patch ];
@@ -81,7 +83,9 @@ in stdenv.mkDerivation rec {
     ++ opt icuSupport icu
     ++ opt clientSupport mpd_clientlib
     ++ opt opusSupport libopus
-    ++ opt soundcloudSupport yajl;
+    ++ opt soundcloudSupport yajl
+    ++ opt (!stdenv.isDarwin && nfsSupport) libnfs
+    ++ opt (!stdenv.isDarwin && smbSupport) samba;
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
 
@@ -116,6 +120,8 @@ in stdenv.mkDerivation rec {
       (mkFlag clientSupport "libmpdclient")
       (mkFlag opusSupport "opus")
       (mkFlag soundcloudSupport "soundcloud")
+      (mkFlag (!stdenv.isDarwin && nfsSupport) "libnfs")
+      (mkFlag (!stdenv.isDarwin && smbSupport) "smbclient")
       "--enable-debug"
       "--with-zeroconf=avahi"
     ]

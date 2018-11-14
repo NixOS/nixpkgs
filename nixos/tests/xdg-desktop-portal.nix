@@ -7,7 +7,7 @@ import ./make-test.nix ({ pkgs, ... }:
     maintainers = pkgs.xdg-desktop-portal.meta.maintainers;
   };
 
-  machine = { config, pkgs, ... }: {
+  machine = { pkgs, ... }: {
     environment.systemPackages = with pkgs; [ gnome-desktop-testing ];
   };
 

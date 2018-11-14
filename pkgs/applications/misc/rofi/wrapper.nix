@@ -1,4 +1,4 @@
-{ stdenv, rofi-unwrapped, makeWrapper, theme ? null, lib }:
+{ stdenv, rofi-unwrapped, makeWrapper, theme ? null }:
 
 if theme == null then rofi-unwrapped else
 stdenv.mkDerivation {

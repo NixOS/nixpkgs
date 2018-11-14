@@ -11,12 +11,15 @@ rec {
     isi686         = { cpu = cpuTypes.i686; };
     isx86_64       = { cpu = cpuTypes.x86_64; };
     isPowerPC      = { cpu = cpuTypes.powerpc; };
+    isPower = { cpu = { family = "power"; }; };
     isx86          = { cpu = { family = "x86"; }; };
     isAarch32      = { cpu = { family = "arm"; bits = 32; }; };
     isAarch64      = { cpu = { family = "arm"; bits = 64; }; };
     isMips         = { cpu = { family = "mips"; }; };
     isRiscV        = { cpu = { family = "riscv"; }; };
+    isSparc        = { cpu = { family = "sparc"; }; };
     isWasm         = { cpu = { family = "wasm"; }; };
+    isAvr          = { cpu = { family = "avr"; }; };
 
     is32bit        = { cpu = { bits = 32; }; };
     is64bit        = { cpu = { bits = 64; }; };
@@ -25,14 +28,13 @@ rec {
 
     isBSD          = { kernel = { families = { inherit (kernelFamilies) bsd; }; }; };
     isDarwin       = { kernel = { families = { inherit (kernelFamilies) darwin; }; }; };
-    isUnix         = [ isBSD isDarwin isLinux isSunOS isHurd isCygwin ];
+    isUnix         = [ isBSD isDarwin isLinux isSunOS isCygwin ];
 
     isMacOS        = { kernel = kernels.macos; };
     isiOS          = { kernel = kernels.ios; };
     isLinux        = { kernel = kernels.linux; };
     isSunOS        = { kernel = kernels.solaris; };
     isFreeBSD      = { kernel = kernels.freebsd; };
-    isHurd         = { kernel = kernels.hurd; };
     isNetBSD       = { kernel = kernels.netbsd; };
     isOpenBSD      = { kernel = kernels.openbsd; };
     isWindows      = { kernel = kernels.windows; };

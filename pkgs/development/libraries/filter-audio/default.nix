@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Lightweight audio filtering library made from webrtc code";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ viric jgeerds ];
+    maintainers = with maintainers; [ jgeerds ];
     platforms = platforms.all;
   };
 }

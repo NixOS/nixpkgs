@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, gtk2, useGTK ? false }:
+{ stdenv, fetchurl, pkgconfig, gtk2, Carbon, useGTK ? false }:
 
 stdenv.mkDerivation rec {
   name = "libiodbc-3.52.12";
@@ -9,16 +9,18 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = stdenv.lib.optionals useGTK [ gtk2 ];
+  buildInputs = stdenv.lib.optionals useGTK [ gtk2 ]
+                ++ stdenv.lib.optional stdenv.isDarwin Carbon;
 
   preBuild =
     ''
       export NIX_LDFLAGS_BEFORE="-rpath $out/lib"
     '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "iODBC driver manager";
     homepage = http://www.iodbc.org;
-    platforms = stdenv.lib.platforms.linux;
+    platforms = platforms.unix;
+    license = licenses.bsd3;
   };
 }

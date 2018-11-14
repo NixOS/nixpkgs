@@ -1,4 +1,5 @@
 { stdenv, callPackage, fetchurl, fetchpatch, fetchgit
+, ocaml-ng
 , withInternalQemu ? true
 , withInternalTraditionalQemu ? true
 , withInternalSeabios ? true
@@ -181,4 +182,4 @@ callPackage (import ./generic.nix (rec {
       else throw "this xen has no qemu builtin";
   };
 
-})) args
+})) ({ ocamlPackages = ocaml-ng.ocamlPackages_4_05; } // args)

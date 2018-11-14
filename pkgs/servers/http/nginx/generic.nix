@@ -1,10 +1,9 @@
-{ stdenv, fetchurl, fetchFromGitHub, openssl, zlib, pcre, libxml2, libxslt, expat
+{ stdenv, fetchurl, openssl, zlib, pcre, libxml2, libxslt
 , gd, geoip
 , withDebug ? false
 , withStream ? true
 , withMail ? false
 , modules ? []
-, hardening ? true
 , version, sha256, ...
 }:
 
@@ -18,9 +17,7 @@ stdenv.mkDerivation {
     inherit sha256;
   };
 
-
-  buildInputs =
-    [ openssl zlib pcre libxml2 libxslt gd geoip ]
+  buildInputs = [ openssl zlib pcre libxml2 libxslt gd geoip ]
     ++ concatMap (mod: mod.inputs or []) modules;
 
   configureFlags = [

@@ -6,6 +6,8 @@ build-idris-package  {
   name = "canvas";
   version = "2017-11-09";
 
+  ipkgName = "idriscanvas";
+
   src = fetchFromGitHub {
     owner = "JinWuZhao";
     repo = "idriscanvas";

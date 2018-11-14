@@ -3,27 +3,23 @@
 , fetchFromGitHub
 , nix
 , git
-, makeWrapper
+, lib
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "nix-review";
-  version = "0.3.0";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "Mic92";
     repo = "nix-review";
     rev = version;
-    sha256 = "0dv6hzmfqyhfi6zzjm10nzzqiy2wyfhiksm1cd4fznq0psxaihfj";
+    sha256 = "1391fs33jlg1pnfxpfhvry4sb4p4hy8gjpipnnxm8483f12b49km";
   };
 
-  buildInputs = [ makeWrapper ];
-
-  preFixup = ''
-    wrapProgram $out/bin/nix-review --prefix PATH : ${stdenv.lib.makeBinPath [
-      git nix
-    ]}
-  '';
+  makeWrapperArgs = [
+    "--prefix" "PATH" ":" "${lib.makeBinPath [ nix git ]}"
+  ];
 
   meta = with stdenv.lib; {
     description = "Review pull-requests on https://github.com/NixOS/nixpkgs";

@@ -4,8 +4,6 @@ with lib;
 
 let
 
-  inherit (pkgs) pam_usb;
-
   cfg = config.security.pam.usb;
 
   anyUsbAuth = any (attrByPath ["usbAuth"] false) (attrValues config.security.pam.services);

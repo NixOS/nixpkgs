@@ -2,7 +2,7 @@
 , avahi, bluez, boost, eigen, fftw, glib, glib-networking
 , glibmm, gsettings-desktop-schemas, gtkmm2, libjack2
 , ladspaH, libav, librdf, libsndfile, lilv, lv2, serd, sord, sratom
-, wrapGAppsHook, zita-convolver, zita-resampler
+, wrapGAppsHook, zita-convolver, zita-resampler, curl
 , optimizationSupport ? false # Enable support for native CPU extensions
 }:
 
@@ -12,11 +12,11 @@ in
 
 stdenv.mkDerivation rec {
   name = "guitarix-${version}";
-  version = "0.37.1";
+  version = "0.37.3";
 
   src = fetchurl {
     url = "mirror://sourceforge/guitarix/guitarix2-${version}.tar.xz";
-    sha256 = "064k0jzxqgx9gwf8za6jziansabzrwzjaim3qx1743ify5g3gaai";
+    sha256 = "1wfm8wrwrnqpb4ihy75n7l9i6vml536jlq9pdx2pblbc4ba3paac";
   };
 
   nativeBuildInputs = [ gettext intltool wrapGAppsHook pkgconfig python2 ];
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     avahi bluez boost eigen fftw glib glibmm glib-networking.out
     gsettings-desktop-schemas gtkmm2 libjack2 ladspaH libav librdf
     libsndfile lilv lv2 serd sord sratom zita-convolver
-    zita-resampler
+    zita-resampler curl
   ];
 
   configureFlags = [

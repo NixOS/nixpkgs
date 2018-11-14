@@ -1,7 +1,7 @@
 { stdenv, intltool, fetchurl, vala
 , pkgconfig, gtk3, glib
 , wrapGAppsHook, itstool, gnupg, libsoup
-, gnome3, librsvg, gdk_pixbuf, gpgme
+, gnome3, gpgme
 , libsecret, avahi, p11-kit, openssh }:
 
 let
@@ -11,7 +11,7 @@ in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
     sha256 = "e2b07461ed54a8333e5628e9b8e517ec2b731068377bf376570aad998274c6df";
   };
 

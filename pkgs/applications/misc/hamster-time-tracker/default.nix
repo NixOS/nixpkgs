@@ -1,5 +1,5 @@
 { stdenv, fetchzip, pythonPackages, docbook2x, libxslt, gnome-doc-utils
-, intltool, dbus-glib, gnome_python, dbus
+, intltool, dbus-glib, gnome_python
 , hicolor-icon-theme
 }:
 

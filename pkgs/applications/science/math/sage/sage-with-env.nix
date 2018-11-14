@@ -3,8 +3,6 @@
 , makeWrapper
 , sage-env
 , sage-src
-, sagelib
-, sagedoc
 , openblasCompat
 , openblas-blas-pc
 , openblas-cblas-pc
@@ -14,7 +12,6 @@
 , singular
 , libgap
 , gap-libgap-compatible
-, gcc
 , giac
 , maxima-ecl
 , pari

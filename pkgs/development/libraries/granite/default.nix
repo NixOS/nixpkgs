@@ -1,14 +1,16 @@
-{ stdenv, fetchFromGitHub, perl, cmake, ninja, vala, pkgconfig, gobjectIntrospection, glib, gtk3, gnome3, gettext }:
+{ stdenv, fetchFromGitHub, cmake, ninja, vala_0_40, pkgconfig, gobjectIntrospection, gnome3, gtk3, glib, gettext }:
 
 stdenv.mkDerivation rec {
-  name = "granite-${version}";
-  version = "0.5";
+  pname = "granite";
+  version = "5.2.0";
+
+  name = "${pname}-${version}";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = "granite";
+    repo = pname;
     rev = version;
-    sha256 = "15l8z1jkqhvappnr8jww27lfy3dwqybgsxk5iccyvnvzpjdh2s0h";
+    sha256 = "1v1yhz6rp616xi417m9r8072s6mpz5i8vkdyj264b73p0lgjwh40";
   };
 
   cmakeFlags = [
@@ -17,26 +19,29 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    vala
-    pkgconfig
     cmake
-    ninja
-    perl
     gettext
     gobjectIntrospection
+    ninja
+    pkgconfig
+    vala_0_40 # should be `elementary.vala` when elementary attribute set is merged
   ];
+
   buildInputs = [
     glib
-    gtk3
     gnome3.libgee
+    gtk3
   ];
 
   meta = with stdenv.lib; {
     description = "An extension to GTK+ used by elementary OS";
-    longDescription = "An extension to GTK+ that provides several useful widgets and classes to ease application development. Designed for elementary OS.";
+    longDescription = ''
+      Granite is a companion library for GTK+ and GLib. Among other things, it provides complex widgets and convenience functions
+      designed for use in apps built for elementary OS.
+    '';
     homepage = https://github.com/elementary/granite;
-    license = licenses.lgpl3;
+    license = licenses.lgpl3Plus;
     platforms = platforms.linux;
-    maintainers = [ maintainers.vozz ];
+    maintainers = with maintainers; [ vozz worldofpeace ];
   };
 }

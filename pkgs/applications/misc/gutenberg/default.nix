@@ -1,19 +1,19 @@
-{ stdenv, fetchFromGitHub, rustPlatform, cmake, CoreServices, cf-private }:
+{ stdenv, fetchFromGitHub, rustPlatform, cmake, pkgconfig, openssl, CoreServices, cf-private }:
 
 rustPlatform.buildRustPackage rec {
   name = "gutenberg-${version}";
-  version = "0.3.4";
+  version = "0.4.2";
 
   src = fetchFromGitHub {
     owner = "Keats";
     repo = "gutenberg";
     rev = "v${version}";
-    sha256 = "1v26q1m3bx7mdmmwgd6p601ncf13rr4rrx9s06fiy8vnd0ar1vlf";
+    sha256 = "0kzxz26khk5rwb9mz0wi9r8y7r93w4n2dbq6v2qr07cy5h14pa6w";
   };
 
-  cargoSha256 = "0cdy0wvibkpnmlqwxvn02a2k2vqy6zdqzflj2dh6g1cjbz1j8qh5";
+  cargoSha256 = "0n4ji06chybmcvg5yz6cnhzqh162zhh5xpbz374a796dwp1132m8";
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake pkgconfig openssl ];
   buildInputs = stdenv.lib.optionals stdenv.isDarwin [ CoreServices cf-private ];
 
   postInstall = ''

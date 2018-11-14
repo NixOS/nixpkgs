@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, gradle, perl, jre, makeWrapper, makeDesktopItem, mplayer }:
+{ stdenv, fetchFromGitHub, gradle, perl, jre, makeWrapper, makeDesktopItem, mplayer }:
 
 let
   version = "6.6.7-build-529";
@@ -75,7 +75,7 @@ in stdenv.mkDerivation {
     cp ${ { x86_64-darwin = "desktop/lib/native/*.dylib";
             x86_64-linux  = "desktop/lib/native/lib{jlibtorrent,SystemUtilities}.so";
             i686-linux    = "desktop/lib/native/lib{jlibtorrent,SystemUtilities}X86.so";
-          }.${stdenv.system} or (throw "unsupported system ${stdenv.system}")
+          }.${stdenv.hostPlatform.system} or (throw "unsupported system ${stdenv.hostPlatform.system}")
         } $out/lib
 
     cp -dpR ${desktopItem}/share $out

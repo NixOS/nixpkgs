@@ -17,7 +17,7 @@ let
       buildInputs = [ readline ];
 
       patches = [
-        (./. + (builtins.toPath "/dont-create-sysconfdir-${builtins.substring 0 1 version}.patch"))
+        (./. + "/dont-create-sysconfdir-${builtins.substring 0 1 version}.patch")
       ];
 
       configureFlags = [
@@ -28,7 +28,7 @@ let
         description = "BIRD Internet Routing Daemon";
         homepage = http://bird.network.cz;
         license = licenses.gpl2Plus;
-        maintainers = with maintainers; [ viric fpletz ];
+        maintainers = with maintainers; [ fpletz ];
         platforms = platforms.linux;
       };
     };

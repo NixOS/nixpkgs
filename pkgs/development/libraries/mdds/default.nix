@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, boost }:
 
 stdenv.mkDerivation rec {
   version = "1.3.1";
@@ -14,10 +14,13 @@ stdenv.mkDerivation rec {
    cp "$out/share/pkgconfig/"* "$out/lib/pkgconfig"
   '';
 
-  meta = {
+  checkInputs = [ boost ];
+
+  meta = with stdenv.lib; {
     inherit version;
     homepage = https://gitlab.com/mdds/mdds;
     description = "A collection of multi-dimensional data structure and indexing algorithm";
-    platforms = stdenv.lib.platforms.all;
+    platforms = platforms.all;
+    license = licenses.mit;
   };
 }

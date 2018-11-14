@@ -1,4 +1,4 @@
-{ config, stdenv, substituteAll, fetchFromGitHub, glib, glib-networking, libgtop, pkgs }:
+{ stdenv, substituteAll, fetchFromGitHub, glib, glib-networking, libgtop }:
 
 stdenv.mkDerivation rec {
   name = "gnome-shell-system-monitor-${version}";
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildPhase = ''
-    ${glib.dev}/bin/glib-compile-schemas --targetdir=${uuid}/schemas ${uuid}/schemas
+    glib-compile-schemas --targetdir=${uuid}/schemas ${uuid}/schemas
   '';
 
   installPhase = ''

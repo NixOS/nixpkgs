@@ -1,5 +1,5 @@
 
-{ stdenv, lib, bundlerEnv, ruby }:
+{ lib, bundlerEnv, ruby }:
 
 bundlerEnv {
   name = "matter_compiler-0.5.1";

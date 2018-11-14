@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi
+{ buildPythonPackage, fetchPypi
 , cookies, mock, requests, six }:
 
 buildPythonPackage rec {

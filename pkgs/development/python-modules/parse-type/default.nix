@@ -1,4 +1,4 @@
-{ stdenv, fetchPypi, fetchpatch
+{ stdenv, fetchPypi
 , buildPythonPackage, pythonOlder
 , pytest, pytestrunner
 , parse, six, enum34

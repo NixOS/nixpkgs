@@ -1,4 +1,4 @@
-{ stdenv, lib, config, fetchFromGitHub, fetchpatch
+{ stdenv, lib, config, fetchFromGitHub
 , cmake
 , glog, google-gflags, gtest
 , protobuf, snappy

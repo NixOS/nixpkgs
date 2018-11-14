@@ -85,7 +85,8 @@ let
             after = [ "network-pre.target" "systemd-udevd.service" "systemd-sysctl.service" ];
             before = [ "network.target" "shutdown.target" ];
             wants = [ "network.target" ];
-            partOf = map (i: "network-addresses-${i.name}.service") interfaces;
+            # exclude bridges from the partOf relationship to fix container networking bug #47210
+            partOf = map (i: "network-addresses-${i.name}.service") (filter (i: !(hasAttr i.name cfg.bridges)) interfaces);
             conflicts = [ "shutdown.target" ];
             wantedBy = [ "multi-user.target" ] ++ optional hasDefaultGatewaySet "network-online.target";
 
@@ -473,7 +474,12 @@ let
               # Remove Dead Interfaces
               ip link show "${n}" >/dev/null 2>&1 && ip link delete "${n}"
               ip link add link "${v.interface}" name "${n}" type vlan id "${toString v.id}"
-              ip link set "${n}" up
+              
+              # We try to bring up the logical VLAN interface. If the master 
+              # interface the logical interface is dependent upon is not up yet we will 
+              # fail to immediately bring up the logical interface. The resulting logical
+              # interface will brought up later when the master interface is up.
+              ip link set "${n}" up || true
             '';
             postStop = ''
               ip link delete "${n}" || true

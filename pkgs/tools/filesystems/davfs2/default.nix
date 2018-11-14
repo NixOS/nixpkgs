@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   patches = [ ./isdir.patch ./fix-sysconfdir.patch ];
 
-  configureFlags = "--sysconfdir=/etc";
+  configureFlags = [ "--sysconfdir=/etc" ];
 
   makeFlags = ["sbindir=$(out)/sbin" "ssbindir=$(out)/sbin"];
 

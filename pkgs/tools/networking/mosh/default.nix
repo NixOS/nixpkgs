@@ -25,6 +25,8 @@ stdenv.mkDerivation rec {
       wrapProgram $out/bin/mosh --prefix PERL5LIB : $PERL5LIB
   '';
 
+  CXXFLAGS = stdenv.lib.optionalString stdenv.cc.isClang "-std=c++11";
+
   meta = {
     homepage = https://mosh.org/;
     description = "Mobile shell (ssh replacement)";

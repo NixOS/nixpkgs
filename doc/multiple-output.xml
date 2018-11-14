@@ -6,7 +6,7 @@
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xml:id="chap-multiple-output">
  <title>Multiple-output packages</title>
- <section>
+ <section xml:id="sec-multiple-outputs-introduction">
   <title>Introduction</title>
 
   <para>
@@ -38,7 +38,7 @@
    </para>
   </note>
  </section>
- <section>
+ <section xml:id="sec-multiple-outputs-installing">
   <title>Installing a split package</title>
 
   <para>
@@ -84,7 +84,7 @@
    </listitem>
   </itemizedlist>
  </section>
- <section>
+ <section xml:id="sec-multiple-outputs-using-split-packages">
   <title>Using a split package</title>
 
   <para>
@@ -102,7 +102,7 @@
    also added. (See <xref linkend="multiple-output-file-type-groups" />.)
   </para>
  </section>
- <section>
+ <section xml:id="sec-multiple-outputs-">
   <title>Writing a split derivation</title>
 
   <para>
@@ -283,7 +283,7 @@
    </variablelist>
   </section>
 
-  <section>
+  <section xml:id="sec-multiple-outputs-caveats">
    <title>Common caveats</title>
 
    <itemizedlist>

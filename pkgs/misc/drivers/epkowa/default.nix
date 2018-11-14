@@ -30,7 +30,7 @@ let plugins = {
     version = "1.0.1";
     pluginVersion = "2.1.2-1";
 
-    buildInputs = [ patchelf rpm ];
+    nativeBuildInputs = [ patchelf rpm ];
     src = fetchurl {
       url = "https://download2.ebz.epson.net/iscan/plugin/gt-x770/rpm/x64/iscan-gt-x770-bundle-${version}.x64.rpm.tar.gz";
       sha256 = "0m9c60rszzdvq1pqfzygzzrjycm1giy465lj29108j7hsnfcv56r";

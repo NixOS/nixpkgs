@@ -46,7 +46,7 @@ let
 
         ln -s ${kernelPath} $out/kernel
         ln -s ${config.system.modulesTree} $out/kernel-modules
-        ${optionalString (pkgs.stdenv.platform.kernelDTB or false) ''
+        ${optionalString (pkgs.stdenv.hostPlatform.platform.kernelDTB or false) ''
           ln -s ${config.boot.kernelPackages.kernel}/dtbs $out/dtbs
         ''}
 
@@ -74,7 +74,7 @@ let
       echo -n "$configurationName" > $out/configuration-name
       echo -n "systemd ${toString config.systemd.package.interfaceVersion}" > $out/init-interface-version
       echo -n "$nixosLabel" > $out/nixos-version
-      echo -n "$system" > $out/system
+      echo -n "${pkgs.stdenv.hostPlatform.system}" > $out/system
 
       mkdir $out/fine-tune
       childCount=0
@@ -93,48 +93,53 @@ let
       ${config.system.extraSystemBuilderCmds}
     '';
 
-  # Handle assertions
-
-  failed = map (x: x.message) (filter (x: !x.assertion) config.assertions);
-
-  showWarnings = res: fold (w: x: builtins.trace "[1;31mwarning: ${w}[0m" x) res config.warnings;
-
   # Putting it all together.  This builds a store path containing
   # symlinks to the various parts of the built configuration (the
   # kernel, systemd units, init scripts, etc.) as well as a script
   # `switch-to-configuration' that activates the configuration and
   # makes it bootable.
-  baseSystem = showWarnings (
-    if [] == failed then pkgs.stdenvNoCC.mkDerivation {
-      name = let hn = config.networking.hostName;
-                 nn = if (hn != "") then hn else "unnamed";
-          in "nixos-system-${nn}-${config.system.nixos.label}";
-      preferLocalBuild = true;
-      allowSubstitutes = false;
-      buildCommand = systemBuilder;
+  baseSystem = pkgs.stdenvNoCC.mkDerivation {
+    name = let hn = config.networking.hostName;
+               nn = if (hn != "") then hn else "unnamed";
+        in "nixos-system-${nn}-${config.system.nixos.label}";
+    preferLocalBuild = true;
+    allowSubstitutes = false;
+    buildCommand = systemBuilder;
 
-      inherit (pkgs) utillinux coreutils;
-      systemd = config.systemd.package;
+    inherit (pkgs) utillinux coreutils;
+    systemd = config.systemd.package;
+    shell = "${pkgs.bash}/bin/sh";
+    su = "${pkgs.shadow.su}/bin/su";
 
-      inherit children;
-      kernelParams = config.boot.kernelParams;
-      installBootLoader =
-        config.system.build.installBootLoader
-        or "echo 'Warning: do not know how to make this configuration bootable; please enable a boot loader.' 1>&2; true";
-      activationScript = config.system.activationScripts.script;
-      nixosLabel = config.system.nixos.label;
+    inherit children;
+    kernelParams = config.boot.kernelParams;
+    installBootLoader =
+      config.system.build.installBootLoader
+      or "echo 'Warning: do not know how to make this configuration bootable; please enable a boot loader.' 1>&2; true";
+    activationScript = config.system.activationScripts.script;
+    nixosLabel = config.system.nixos.label;
 
-      configurationName = config.boot.loader.grub.configurationName;
+    configurationName = config.boot.loader.grub.configurationName;
 
-      # Needed by switch-to-configuration.
+    # Needed by switch-to-configuration.
 
-      perl = "${pkgs.perl}/bin/perl " + (concatMapStringsSep " " (lib: "-I${lib}/${pkgs.perl.libPrefix}") (with pkgs.perlPackages; [ FileSlurp NetDBus XMLParser XMLTwig ]));
-  } else throw "\nFailed assertions:\n${concatStringsSep "\n" (map (x: "- ${x}") failed)}");
+    perl = "${pkgs.perl}/bin/perl " + (concatMapStringsSep " " (lib: "-I${lib}/${pkgs.perl.libPrefix}") (with pkgs.perlPackages; [ FileSlurp NetDBus XMLParser XMLTwig ]));
+  };
+
+  # Handle assertions and warnings
+
+  failedAssertions = map (x: x.message) (filter (x: !x.assertion) config.assertions);
+
+  showWarnings = res: fold (w: x: builtins.trace "[1;31mwarning: ${w}[0m" x) res config.warnings;
+
+  baseSystemAssertWarn = if failedAssertions != []
+    then throw "\nFailed assertions:\n${concatStringsSep "\n" (map (x: "- ${x}") failedAssertions)}"
+    else showWarnings baseSystem;
 
   # Replace runtime dependencies
   system = fold ({ oldDependency, newDependency }: drv:
       pkgs.replaceDependency { inherit oldDependency newDependency drv; }
-    ) baseSystem config.system.replaceRuntimeDependencies;
+    ) baseSystemAssertWarn config.system.replaceRuntimeDependencies;
 
 in
 
@@ -162,6 +167,13 @@ in
       description = ''
         Additional configurations to build based on the current
         configuration which then has a lower priority.
+
+        To switch to a cloned configuration (e.g. <literal>child-1</literal>)
+        at runtime, run
+
+        <programlisting>
+        # sudo /run/current-system/fine-tune/child-1/bin/switch-to-configuration test
+        </programlisting>
       '';
     };
 
@@ -175,7 +187,7 @@ in
 
     system.boot.loader.kernelFile = mkOption {
       internal = true;
-      default = pkgs.stdenv.platform.kernelTarget;
+      default = pkgs.stdenv.hostPlatform.platform.kernelTarget;
       type = types.str;
       description = ''
         Name of the kernel file to be passed to the bootloader.
@@ -226,7 +238,7 @@ in
       default = [];
       example = lib.literalExample "[ ({ original = pkgs.openssl; replacement = pkgs.callPackage /path/to/openssl { }; }) ]";
       type = types.listOf (types.submodule (
-        { options, ... }: {
+        { ... }: {
           options.original = mkOption {
             type = types.package;
             description = "The original package to override.";

@@ -1,4 +1,4 @@
-{stdenv, fetchurl, fetchgit
+{stdenv, fetchgit
 , wxGTK, perl, python2, zlib, libGLU_combined, libX11
 , automake, autoconf
 }:

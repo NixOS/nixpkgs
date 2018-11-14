@@ -1,4 +1,4 @@
-{ stdenv, kaitaistruct, buildPythonPackage, fetchPypi }:
+{ stdenv, buildPythonPackage, fetchPypi }:
 
 buildPythonPackage rec {
   pname = "kaitaistruct";

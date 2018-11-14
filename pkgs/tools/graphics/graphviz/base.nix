@@ -7,7 +7,7 @@
 assert stdenv.isDarwin -> ApplicationServices != null;
 
 let
-  inherit (stdenv.lib) optional optionals optionalString;
+  inherit (stdenv.lib) optionals optionalString;
 in
 
 stdenv.mkDerivation rec {

@@ -5,12 +5,12 @@
 
 stdenv.mkDerivation rec {
   name = "at-${version}";
-  version = "3.1.20";
+  version = "3.1.23";
 
   src = fetchurl {
     # Debian is apparently the last location where it can be found.
     url = "mirror://debian/pool/main/a/at/at_${version}.orig.tar.gz";
-    sha256 = "1fgsrqpx0r6qcjxmlsqnwilydhfxn976c870mjc0n1bkmcy94w88";
+    sha256 = "040pr2ivfbrhvrhzis97cpwfkzpr7nin33nc301aga5aajlhlicp";
   };
 
   patches = [

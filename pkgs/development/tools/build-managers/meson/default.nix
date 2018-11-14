@@ -1,7 +1,6 @@
-{ lib, python3Packages, stdenv, ninja, pkgconfig, targetPlatform, writeTextDir, substituteAll }: let
-  targetPrefix = lib.optionalString stdenv.isCross
-                   (targetPlatform.config + "-");
-in python3Packages.buildPythonApplication rec {
+{ lib, python3Packages, stdenv, writeTextDir, substituteAll, targetPackages }:
+
+python3Packages.buildPythonApplication rec {
   version = "0.46.1";
   pname = "meson";
 
@@ -48,20 +47,20 @@ in python3Packages.buildPythonApplication rec {
 
   crossFile = writeTextDir "cross-file.conf" ''
     [binaries]
-    c = '${targetPrefix}cc'
-    cpp = '${targetPrefix}c++'
-    ar = '${targetPrefix}ar'
-    strip = '${targetPrefix}strip'
+    c = '${targetPackages.stdenv.cc.targetPrefix}cc'
+    cpp = '${targetPackages.stdenv.cc.targetPrefix}c++'
+    ar = '${targetPackages.stdenv.cc.bintools.targetPrefix}ar'
+    strip = '${targetPackages.stdenv.cc.bintools.targetPrefix}strip'
     pkgconfig = 'pkg-config'
 
     [properties]
     needs_exe_wrapper = true
 
     [host_machine]
-    system = '${targetPlatform.parsed.kernel.name}'
-    cpu_family = '${targetPlatform.parsed.cpu.family}'
-    cpu = '${targetPlatform.parsed.cpu.name}'
-    endian = ${if targetPlatform.isLittleEndian then "'little'" else "'big'"}
+    system = '${targetPackages.stdenv.targetPlatform.parsed.kernel.name}'
+    cpu_family = '${targetPackages.stdenv.targetPlatform.parsed.cpu.family}'
+    cpu = '${targetPackages.stdenv.targetPlatform.parsed.cpu.name}'
+    endian = ${if targetPackages.stdenv.targetPlatform.isLittleEndian then "'little'" else "'big'"}
   '';
 
   # 0.45 update enabled tests but they are failing
@@ -69,7 +68,9 @@ in python3Packages.buildPythonApplication rec {
   # checkInputs = [ ninja pkgconfig ];
   # checkPhase = "python ./run_project_tests.py";
 
-  inherit (stdenv) cc isCross;
+  inherit (stdenv) cc;
+
+  isCross = stdenv.targetPlatform != stdenv.hostPlatform;
 
   meta = with lib; {
     homepage = http://mesonbuild.com;

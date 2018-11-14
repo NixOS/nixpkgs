@@ -1,4 +1,4 @@
-{ stdenv, ghcWithPackages, xmessage, makeWrapper, packages ? (x: []) }:
+{ stdenv, ghcWithPackages, makeWrapper, packages ? (x: []) }:
 
 let
 taffybarEnv = ghcWithPackages (self: [ self.taffybar ] ++ packages self);
@@ -15,5 +15,6 @@ in stdenv.mkDerivation {
 
   meta = {
     platforms = stdenv.lib.platforms.unix;
+    license = stdenv.lib.licenses.bsd3;
   };
 }

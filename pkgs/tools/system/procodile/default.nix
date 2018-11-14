@@ -1,4 +1,4 @@
-{ lib, bundlerEnv, ruby, stdenv }:
+{ lib, bundlerEnv, ruby }:
 
 bundlerEnv rec {
   name = "procodile-${version}";

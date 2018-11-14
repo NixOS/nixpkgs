@@ -121,9 +121,14 @@ let
 
       # Utility flags to test the type of platform.
       inherit (hostPlatform)
-        isDarwin isLinux isSunOS isHurd isCygwin isFreeBSD isOpenBSD
+        isDarwin isLinux isSunOS isCygwin isFreeBSD isOpenBSD
         isi686 isx86_64 is64bit isAarch32 isAarch64 isMips isBigEndian;
-      isArm = builtins.trace "stdenv.isArm is deprecated after 18.03" hostPlatform.isArm;
+      isArm = lib.warn
+        "`stdenv.isArm` is deprecated after 18.03. Please use `stdenv.isAarch32` instead"
+        hostPlatform.isAarch32;
+
+      # The derivation's `system` is `buildPlatform.system`.
+      inherit (buildPlatform) system;
 
       # Whether we should run paxctl to pax-mark binaries.
       needsPax = isLinux;
@@ -141,8 +146,6 @@ let
       inherit overrides;
 
       inherit cc;
-
-      isCross = targetPlatform != buildPlatform;
     }
 
     # Propagate any extra attributes.  For instance, we use this to

@@ -1,17 +1,17 @@
-{ buildPythonPackage, stdenv, tornado, pycrypto, pycurl, pytz
+{ buildPythonPackage, tornado, pycrypto, pycurl, pytz
 , pillow, derpconf, python_magic, pexif, libthumbor, opencv, webcolors
 , piexif, futures, statsd, thumborPexif, fetchPypi, isPy3k, lib
 }:
 
 buildPythonPackage rec {
   pname = "thumbor";
-  version = "6.5.1";
+  version = "6.5.2";
 
   disabled = isPy3k; # see https://github.com/thumbor/thumbor/issues/1004
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0yalqwpxb6m0dz2qfnyv1pqqd5dd020wl7hc0n0bvsvxg1ib9if0";
+    sha256 = "1icfnzwzi5lvnh576n7v3r819jaw15ph9ja2w3fwg5z9qs40xvl8";
   };
 
   postPatch = ''
@@ -40,7 +40,7 @@ buildPythonPackage rec {
   # for further reference.
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A smart imaging service";
     homepage = https://github.com/thumbor/thumbor/wiki;
     license = licenses.mit;

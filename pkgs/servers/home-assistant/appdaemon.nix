@@ -1,4 +1,4 @@
-{ lib, python3, fetchpatch }:
+{ lib, python3 }:
 
 let
   python = python3.override {

@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, emacs, texinfo, which, texlive }:
+{ fetchurl, stdenv, emacs, texinfo, texlive }:
 
 stdenv.mkDerivation rec {
   name = "org-8.3.3";

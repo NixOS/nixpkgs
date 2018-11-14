@@ -26,8 +26,7 @@ existing packages here and modify it as necessary.
 
 {
   libsForQt5, lib, fetchurl,
-  gconf, gsettings-desktop-schemas,
-  debug ? false,
+  gconf, gsettings-desktop-schemas
 }:
 
 let

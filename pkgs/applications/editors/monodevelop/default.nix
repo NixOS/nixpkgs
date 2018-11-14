@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchgit, fetchNuGet
+{ stdenv, fetchurl
 , autoconf, automake, pkgconfig, shared-mime-info, intltool
 , glib, mono, gtk-sharp-2_0, gnome2, gnome-sharp, unzip
 , dotnetPackages
@@ -76,5 +76,6 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     platforms = platforms.linux;
     maintainers = with maintainers; [ obadz ];
+    broken = true; # 2018-09-21, build has failed since 2018-03-08
   };
 }

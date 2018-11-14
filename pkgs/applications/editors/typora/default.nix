@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, dpkg, lib, glib, dbus, makeWrapper, gnome3, gtk3, atk, cairo, pango
+{ stdenv, fetchurl, dpkg, lib, glib, dbus, makeWrapper, gnome2, gnome3, gtk3, atk, cairo, pango
 , gdk_pixbuf, freetype, fontconfig, nspr, nss, xorg, alsaLib, cups, expat, udev, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   version = "0.9.53";
 
   src =
-    if stdenv.system == "x86_64-linux" then
+    if stdenv.hostPlatform.system == "x86_64-linux" then
       fetchurl {
         url = "https://www.typora.io/linux/typora_${version}_amd64.deb";
         sha256 = "02k6x30l4mbjragqbq5rn663xbw3h4bxzgppfxqf5lwydswldklb";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
     rpath = stdenv.lib.makeLibraryPath [
       alsaLib
-      gnome3.gconf
+      gnome2.GConf
       gdk_pixbuf
       pango
       gnome3.defaultIconTheme

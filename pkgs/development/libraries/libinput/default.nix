@@ -16,20 +16,24 @@ in
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "libinput-${version}";
-  version = "1.11.0";
+  version = "1.12.2";
 
   src = fetchurl {
     url = "https://www.freedesktop.org/software/libinput/${name}.tar.xz";
-    sha256 = "04mwl1v51b785h7q3v23hahr0qzr48qq1jzj7d3msjvgh97nr8v4";
+    sha256 = "1w8wkh03j5zdgbamyj7wv2f6k76kd0w4z04abxxf5b0mnplrb6vb";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = [ "bin" "out" "dev" ];
 
   mesonFlags = [
     (mkFlag documentationSupport "documentation")
     (mkFlag eventGUISupport "debug-gui")
     (mkFlag testsSupport "tests")
   ];
+
+  preConfigure = ''
+    mesonFlags="$mesonFlags --libexecdir=$bin/libexec"
+  '';
 
   nativeBuildInputs = [ pkgconfig meson ninja ]
     ++ optionals documentationSupport [ doxygen graphviz ]
@@ -41,12 +45,6 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ udev ];
 
   patches = [ ./udev-absolute-path.patch ];
-
-   preBuild = ''
-    # meson setup-hook changes the directory so the files are located one level up
-    patchShebangs ../udev/parse_hwdb.py
-    patchShebangs ../test/symbols-leak-test.in
-  '';
 
   doCheck = testsSupport;
 

@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = http://openocd.sourceforge.net/;
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ viric bjornfor ];
+    maintainers = with maintainers; [ bjornfor ];
     platforms = platforms.linux;
   };
 }

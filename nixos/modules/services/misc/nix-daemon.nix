@@ -62,11 +62,15 @@ let
         ''}
         $extraOptions
         END
-      '' + optionalString cfg.checkConfig ''
-        echo "Checking that Nix can read nix.conf..."
-        ln -s $out ./nix.conf
-        NIX_CONF_DIR=$PWD ${cfg.package}/bin/nix show-config >/dev/null
-      '');
+      '' + optionalString cfg.checkConfig (
+            if pkgs.stdenv.hostPlatform != pkgs.stdenv.buildPlatform then ''
+              echo "Ignore nix.checkConfig when cross-compiling"
+            '' else ''
+              echo "Checking that Nix can read nix.conf..."
+              ln -s $out ./nix.conf
+              NIX_CONF_DIR=$PWD ${cfg.package}/bin/nix show-config >/dev/null
+            '')
+      );
 
 in
 
@@ -88,7 +92,7 @@ in
       };
 
       maxJobs = mkOption {
-        type = types.int;
+        type = types.either types.int (types.enum ["auto"]);
         default = 1;
         example = 64;
         description = ''
@@ -127,16 +131,16 @@ in
 
       useSandbox = mkOption {
         type = types.either types.bool (types.enum ["relaxed"]);
-        default = false;
+        default = true;
         description = "
           If set, Nix will perform builds in a sandboxed environment that it
           will set up automatically for each build. This prevents impurities
           in builds by disallowing access to dependencies outside of the Nix
           store by using network and mount namespaces in a chroot environment.
-          This isn't enabled by default for possible performance impacts due to
-          the initial setup time of a sandbox for each build. It doesn't affect
-          derivation hashes, so changing this option will not trigger a rebuild
-          of packages.
+          This is enabled by default even though it has a possible performance
+          impact due to the initial setup time of a sandbox for each build. It
+          doesn't affect derivation hashes, so changing this option will not
+          trigger a rebuild of packages.
         ";
       };
 
@@ -345,7 +349,6 @@ in
         type = types.listOf types.str;
         default =
           [
-            "$HOME/.nix-defexpr/channels"
             "nixpkgs=/nix/var/nix/profiles/per-user/root/channels/nixos"
             "nixos-config=/etc/nixos/configuration.nix"
             "/nix/var/nix/profiles/per-user/root/channels"
@@ -400,8 +403,8 @@ in
     systemd.sockets.nix-daemon.wantedBy = [ "sockets.target" ];
 
     systemd.services.nix-daemon =
-      { path = [ nix pkgs.utillinux ]
-          ++ optionals cfg.distributedBuilds [ config.programs.ssh.package pkgs.gzip ]
+      { path = [ nix pkgs.utillinux config.programs.ssh.package ]
+          ++ optionals cfg.distributedBuilds [ pkgs.gzip ]
           ++ optionals (!isNix20) [ pkgs.openssl.bin ];
 
         environment = cfg.envVars
@@ -436,7 +439,7 @@ in
 
     # Set up the environment variables for running Nix.
     environment.sessionVariables = cfg.envVars //
-      { NIX_PATH = concatStringsSep ":" cfg.nixPath;
+      { NIX_PATH = cfg.nixPath;
       };
 
     environment.extraInit = optionalString (!isNix20)
@@ -445,6 +448,10 @@ in
         # Nix daemon.
         if [ "$USER" != root -o ! -w /nix/var/nix/db ]; then
             export NIX_REMOTE=daemon
+        fi
+      '' + ''
+        if [ -e "$HOME/.nix-defexpr/channels" ]; then
+          export NIX_PATH="$HOME/.nix-defexpr/channels''${NIX_PATH:+:$NIX_PATH}"
         fi
       '';
 

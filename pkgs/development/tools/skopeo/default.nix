@@ -5,18 +5,18 @@
 with stdenv.lib;
 
 let
-  version = "0.1.30";
+  version = "0.1.32";
 
   src = fetchFromGitHub {
     rev = "v${version}";
-    owner = "projectatomic";
+    owner = "containers";
     repo = "skopeo";
-    sha256 = "10lpiiki7mlhrp4bid40wys3lch7fars1whxsa5gy0frfgp89ghn";
+    sha256 = "0pyii4z9xf23lsdx4d3m5pkdyrsi4v1pbjj8l7fjgyfv8ncrjyn8";
   };
 
   defaultPolicyFile = runCommand "skopeo-default-policy.json" {} "cp ${src}/default-policy.json $out";
 
-  goPackagePath = "github.com/projectatomic/skopeo";
+  goPackagePath = "github.com/containers/skopeo";
 
 in
 buildGoPackage rec {
@@ -28,17 +28,17 @@ buildGoPackage rec {
   excludedPackages = "integration";
 
   nativeBuildInputs = [ pkgconfig (lib.getBin go-md2man) ];
-  buildInputs = [ gpgme libgpgerror lvm2 btrfs-progs ostree libselinux ];
+  buildInputs = [ gpgme ] ++ lib.optionals stdenv.isLinux [ libgpgerror lvm2 btrfs-progs ostree libselinux ];
 
   buildFlagsArray = ''
     -ldflags=
-    -X github.com/projectatomic/skopeo/vendor/github.com/containers/image/signature.systemDefaultPolicyPath=${defaultPolicyFile}
-    -X github.com/projectatomic/skopeo/vendor/github.com/containers/image/internal/tmpdir.unixTempDirForBigFiles=/tmp
+    -X github.com/containers/skopeo/vendor/github.com/containers/image/signature.systemDefaultPolicyPath=${defaultPolicyFile}
+    -X github.com/containers/skopeo/vendor/github.com/containers/image/internal/tmpdir.unixTempDirForBigFiles=/tmp
   '';
 
   preBuild = ''
-    export CGO_CFLAGS="-I${getDev gpgme}/include -I${getDev libgpgerror}/include -I${getDev lvm2}/include -I${getDev btrfs-progs}/include"
-    export CGO_LDFLAGS="-L${getLib gpgme}/lib -L${getLib libgpgerror}/lib -L${getLib lvm2}/lib"
+    export CGO_CFLAGS="$CFLAGS"
+    export CGO_LDFLAGS="$LDFLAGS"
   '';
 
   postBuild = ''

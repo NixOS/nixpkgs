@@ -1,13 +1,13 @@
-{ stdenv, fetchPypi, openssl, makeWrapper, buildPythonPackage
+{ stdenv, fetchPypi, openssl, buildPythonPackage
 , pytest, dnspython, pynacl, authres, python }:
 
 buildPythonPackage rec {
   pname = "dkimpy";
-  version = "0.8.1";
+  version = "0.9.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "125xakqg2j5jp4k5kafpnpazh9d97ysgayrsgpvm3nkdj4g8hw1j";
+    sha256 = "1cfj2jsfqbwkrg9y5inz61wxf8z4rrs5js6dizjgsd4lyb3b5inj";
 };
 
   checkInputs = [ pytest ];

@@ -1,4 +1,4 @@
-{ fetchurl, makeWrapper, patchelf, pkgs, stdenv, libXft, libX11, freetype, fontconfig, libXrender, libXScrnSaver, libXext }:
+{ fetchurl, makeWrapper, patchelf, stdenv, libXft, libX11, freetype, fontconfig, libXrender, libXScrnSaver, libXext }:
 
 stdenv.mkDerivation rec {
   name = "gorilla-bin-${version}";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "19ir6x4c01825hpx2wbbcxkk70ymwbw4j03v8b2xc13ayylwzx0r";
   };
 
-  buildInputs = [ patchelf makeWrapper ];
+  nativeBuildInputs = [ patchelf makeWrapper ];
   phases = [ "unpackPhase" "installPhase" ];
 
   unpackCmd = ''

@@ -3,13 +3,13 @@
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
-  name = "lxcfs-3.0.1";
+  name = "lxcfs-3.0.2";
 
   src = fetchFromGitHub {
     owner = "lxc";
     repo = "lxcfs";
     rev = name;
-    sha256 = "0rwk1nbcjnp2d2zbyng8ix9dmww211aiqq8870r9p4j11xv9mgx4";
+    sha256 = "0llfvml9ww8gxa4g2a7b1gnxf9g5473pq1inrhvi4xkjx76x602k";
   };
 
   nativeBuildInputs = [ pkgconfig help2man autoreconfHook ];

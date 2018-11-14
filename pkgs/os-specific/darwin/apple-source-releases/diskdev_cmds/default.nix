@@ -1,5 +1,5 @@
 { stdenv, appleDerivation, xcbuildHook
-, lib, hostPlatform, Libc, xnu, libutil-new }:
+, Libc, xnu, libutil-new }:
 
 appleDerivation {
   nativeBuildInputs = [ xcbuildHook ];

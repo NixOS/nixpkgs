@@ -1,36 +1,61 @@
-{ stdenv, fetchurl, dbus, dbus-glib, glib, pkgconfig, libxml2, gnome2,
-  libxslt, glib-networking }:
+{ fetchurl, stdenv, fetchpatch, intltool, pkgconfig, gtk-doc, docbook_xsl, docbook_xml_dtd_412, glib, json-glib, libsoup, libnotify, gdk_pixbuf
+, modemmanager, avahi, glib-networking, wrapGAppsHook, gobjectIntrospection
+, withDemoAgent ? false
+}:
+
+with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "geoclue-0.12.0";
+  name = "geoclue-${version}";
+  version = "2.4.12";
+
   src = fetchurl {
-    url = "https://launchpad.net/geoclue/trunk/0.12/+download/${name}.tar.gz";
-    sha256 = "15j619kvmdgj2hpma92mkxbzjvgn8147a7500zl3bap9g8bkylqg";
+    url = "https://www.freedesktop.org/software/geoclue/releases/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    sha256 = "1jnad1f3rf8h05sz1lc172jnqdhqdpz76ff6m7i5ss3s0znf5l05";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = [ "out" "dev" "devdoc" ];
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ libxml2 gnome2.GConf libxslt glib-networking ];
+  nativeBuildInputs = [
+    pkgconfig intltool wrapGAppsHook gobjectIntrospection
+    # devdoc
+    gtk-doc docbook_xsl docbook_xml_dtd_412
+  ];
 
-  propagatedBuildInputs = [dbus glib dbus-glib];
+  buildInputs = [
+    glib json-glib libsoup avahi
+  ] ++ optionals withDemoAgent [
+    libnotify gdk_pixbuf
+  ] ++ optionals (!stdenv.isDarwin) [ modemmanager ];
 
-  hardeningDisable = [ "format" ];
+  propagatedBuildInputs = [ glib glib-networking ];
 
-  preConfigure = ''
-    sed -e '/-Werror/d' -i configure
-  '';
+  # Whitelist elementary's agent
+  patches = [
+    (fetchpatch {
+      url = "https://gitlab.freedesktop.org/geoclue/geoclue/commit/2b0491e408be1ebcdbe8751bb2637c1acb78f71e.patch";
+      sha256 = "0pac94y55iksk340dlx3gkhb9lrci90mxqqy5fnh1zbjw9bqxfn4";
+    })
+  ];
+
+  configureFlags = [
+    "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
+    "--enable-introspection"
+    "--enable-gtk-doc"
+    "--enable-demo-agent=${if withDemoAgent then "yes" else "no"}"
+  ] ++ optionals stdenv.isDarwin [
+    "--disable-silent-rules"
+    "--disable-3g-source"
+    "--disable-cdma-source"
+    "--disable-modem-gps-source"
+    "--disable-nmea-source"
+  ];
 
   meta = with stdenv.lib; {
     description = "Geolocation framework and some data providers";
-    maintainers = with maintainers; [ raskin ];
-    platforms = platforms.linux;
+    homepage = https://gitlab.freedesktop.org/geoclue/geoclue/wikis/home;
+    maintainers = with maintainers; [ raskin garbas ];
+    platforms = with platforms; linux ++ darwin;
     license = licenses.lgpl2;
-  };
-
-  passthru = {
-    updateInfo = {
-      downloadPage = "http://folks.o-hand.com/jku/geoclue-releases/";
-    };
   };
 }

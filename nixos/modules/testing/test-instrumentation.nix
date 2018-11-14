@@ -55,7 +55,8 @@ with import ../../lib/qemu-flags.nix { inherit pkgs; };
     systemd.services."serial-getty@hvc0".enable = false;
 
     # Only use a serial console, no TTY.
-    virtualisation.qemu.consoles = [ qemuSerialDevice ];
+    # hvc1: socket backdoor, see "Debugging NixOS tests" section in NixOS manual
+    virtualisation.qemu.consoles = [ "hvc1" qemuSerialDevice ];
 
     boot.initrd.preDeviceCommands =
       ''
@@ -102,8 +103,12 @@ with import ../../lib/qemu-flags.nix { inherit pkgs; };
         MaxLevelConsole=debug
       '';
 
-    # Don't clobber the console with duplicate systemd messages.
-    systemd.extraConfig = "ShowStatus=no";
+    systemd.extraConfig = ''
+      # Don't clobber the console with duplicate systemd messages.
+      ShowStatus=no
+      # Allow very slow start
+      DefaultTimeoutStartSec=300
+    '';
 
     boot.consoleLogLevel = 7;
 
@@ -127,7 +132,7 @@ with import ../../lib/qemu-flags.nix { inherit pkgs; };
     services.xserver.displayManager.job.logToJournal = true;
 
     # set default stateVersion to avoid warnings during eval
-    system.nixos.stateVersion = mkDefault "18.03";
+    system.stateVersion = mkDefault "18.03";
   };
 
 }

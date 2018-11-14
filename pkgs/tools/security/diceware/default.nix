@@ -1,6 +1,5 @@
 { lib
 , pythonPackages
-, fetchpatch
 }:
 
 with pythonPackages;

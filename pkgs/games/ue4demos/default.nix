@@ -5,7 +5,7 @@ let
     stdenv.mkDerivation rec {
       inherit name src;
 
-      buildInputs = [ unzip patchelf ];
+      nativeBuildInputs = [ unzip patchelf ];
 
       rtdeps = stdenv.lib.makeLibraryPath
         [ xorg.libXxf86vm xorg.libXext openal ]

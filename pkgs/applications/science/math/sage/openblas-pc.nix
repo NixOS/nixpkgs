@@ -1,5 +1,4 @@
-{ stdenv
-, openblasCompat
+{ openblasCompat
 , writeTextFile
 , name
 }:

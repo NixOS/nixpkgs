@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
     pname = "dbf";
-    version = "0.97.7";
+    version = "0.97.11";
 
     src = fetchPypi {
       inherit pname version;
-      sha256 = "855800d12df87855096eeafc58f34c9092407e8faf197f48073e7bc2b1938de0";
+      sha256 = "8aa5a73d8b140aa3c511a3b5b204a67d391962e90c66b380dd048fcae6ddbb68";
     };
 
     propagatedBuildInputs = [ aenum ] ++ stdenv.lib.optional (pythonOlder "3.4") [ enum34 ];

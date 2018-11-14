@@ -34,6 +34,7 @@ in
 
     environment.variables = mkOption {
       default = {};
+      example = { EDITOR = "nvim"; VISUAL = "nvim"; };
       description = ''
         A set of environment variables used in the global environment.
         These variables will be set on shell initialisation (e.g. in /etc/profile).
@@ -70,7 +71,7 @@ in
       description = ''
         Shell script code called during global environment initialisation
         after all variables and profileVariables have been set.
-        This code is asumed to be shell-independent, which means you should
+        This code is assumed to be shell-independent, which means you should
         stick to pure sh without sh word split.
       '';
       type = types.lines;
@@ -80,7 +81,7 @@ in
       default = "";
       description = ''
         Shell script code called during shell initialisation.
-        This code is asumed to be shell-independent, which means you should
+        This code is assumed to be shell-independent, which means you should
         stick to pure sh without sh word split.
       '';
       type = types.lines;
@@ -90,7 +91,7 @@ in
       default = "";
       description = ''
         Shell script code called during login shell initialisation.
-        This code is asumed to be shell-independent, which means you should
+        This code is assumed to be shell-independent, which means you should
         stick to pure sh without sh word split.
       '';
       type = types.lines;
@@ -100,21 +101,21 @@ in
       default = "";
       description = ''
         Shell script code called during interactive shell initialisation.
-        This code is asumed to be shell-independent, which means you should
+        This code is assumed to be shell-independent, which means you should
         stick to pure sh without sh word split.
       '';
       type = types.lines;
     };
 
     environment.shellAliases = mkOption {
-      default = {};
-      example = { ll = "ls -l"; };
+      example = { l = null; ll = "ls -l"; };
       description = ''
         An attribute set that maps aliases (the top level attribute names in
         this option) to command strings or directly to build outputs. The
         aliases are added to all users' shells.
+        Aliases mapped to <code>null</code> are ignored.
       '';
-      type = types.attrs; # types.attrsOf types.stringOrPath;
+      type = with types; attrsOf (nullOr (either str path));
     };
 
     environment.binsh = mkOption {
@@ -156,21 +157,36 @@ in
     # terminal instead of logging out of X11).
     environment.variables = config.environment.sessionVariables;
 
+    environment.shellAliases = mapAttrs (name: mkDefault) {
+      ls = "ls --color=tty";
+      ll = "ls -l";
+      l  = "ls -alh";
+    };
+
     environment.etc."shells".text =
       ''
         ${concatStringsSep "\n" (map utils.toShellPath cfg.shells)}
         /bin/sh
       '';
 
+    # For resetting environment with `. /etc/set-environment` when needed
+    # and discoverability (see motivation of #30418).
+    environment.etc."set-environment".source = config.system.build.setEnvironment;
+
     system.build.setEnvironment = pkgs.writeText "set-environment"
-       ''
-         ${exportedEnvVars}
+      ''
+        # DO NOT EDIT -- this file has been generated automatically.
 
-         ${cfg.extraInit}
+        # Prevent this file from being sourced by child shells.
+        export __NIXOS_SET_ENVIRONMENT_DONE=1
 
-         # ~/bin if it exists overrides other bin directories.
-         export PATH="$HOME/bin:$PATH"
-       '';
+        ${exportedEnvVars}
+
+        ${cfg.extraInit}
+
+        # ~/bin if it exists overrides other bin directories.
+        export PATH="$HOME/bin:$PATH"
+      '';
 
     system.activationScripts.binsh = stringAfter [ "stdio" ]
       ''

@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, python2Packages }:
+{ stdenv, fetchurl, python2Packages }:
 
 #
 # TODO: Declare configuration options for the following optional dependencies:

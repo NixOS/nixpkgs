@@ -1,4 +1,4 @@
-{ stdenv, lib, makeStaticLibraries,
+{ stdenv, makeStaticLibraries,
   coreutils, rsync, bash,
   openssl, zlib, sqlite, libxml2, libyaml, mysql, lmdb, leveldb, postgresql,
   version, git-version, GAMBIT, SRC }:

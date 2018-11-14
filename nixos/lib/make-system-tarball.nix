@@ -1,7 +1,7 @@
 { stdenv, perl, pixz, pathsFromGraph
 
 , # The file name of the resulting tarball
-  fileName ? "nixos-system-${stdenv.system}"
+  fileName ? "nixos-system-${stdenv.hostPlatform.system}"
 
 , # The files and directories to be placed in the tarball.
   # This is a list of attribute sets {source, target} where `source'

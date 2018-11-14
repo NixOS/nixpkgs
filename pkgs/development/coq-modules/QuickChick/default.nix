@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     inherit (param) rev sha256;
   };
 
-  buildInputs = [ coq.ocaml coq.camlp5 coq.findlib ];
+  buildInputs = with coq.ocamlPackages; [ ocaml camlp5 findlib ];
   propagatedBuildInputs = [ coq ssreflect ];
 
   enableParallelBuilding = false;
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = git://github.com/QuickChick/QuickChick.git;
+    homepage = https://github.com/QuickChick/QuickChick;
     description = "Randomized property-based testing plugin for Coq; a clone of Haskell QuickCheck";
     maintainers = with maintainers; [ jwiegley ];
     platforms = coq.meta.platforms;

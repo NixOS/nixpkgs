@@ -1,4 +1,4 @@
-{ lib, fetchurl, fetchpatch, pythonPackages, pkgconfig, makeWrapper
+{ lib, fetchurl, fetchpatch, pythonPackages, pkgconfig
 , qmake, lndir, qtbase, qtsvg, qtwebkit, qtwebengine, dbus
 , withWebSockets ? false, qtwebsockets
 , withConnectivity ? false, qtconnectivity

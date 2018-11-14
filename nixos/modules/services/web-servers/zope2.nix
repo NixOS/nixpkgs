@@ -6,7 +6,7 @@ let
 
   cfg = config.services.zope2;
 
-  zope2Opts = { name, config, ... }: {
+  zope2Opts = { name, ... }: {
     options = {
 
       name = mkOption {

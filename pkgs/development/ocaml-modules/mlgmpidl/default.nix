@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   name = "ocaml${ocaml.version}-mlgmpidl-${version}";
-  version = "1.2.6";
+  version = "1.2.7";
   src = fetchFromGitHub {
     owner = "nberth";
     repo = "mlgmpidl";
     rev = version;
-    sha256 = "1lq3yy10v3rvlchbl5kl75l9f8frgj6g9f1n14kj5qlxm5xsrvks";
+    sha256 = "063hy1divbiabqm5x307iamw942sivzw9fr8vczy3kgndfp12nic";
   };
 
   buildInputs = [ perl gmp mpfr ocaml findlib camlidl ];

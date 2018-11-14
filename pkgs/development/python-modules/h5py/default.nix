@@ -1,4 +1,4 @@
-{ stdenv, fetchPypi, fetchpatch, isPy27, python, buildPythonPackage
+{ stdenv, fetchPypi, isPy27, python, buildPythonPackage
 , numpy, hdf5, cython, six, pkgconfig, unittest2
 , mpi4py ? null, openssh }:
 
@@ -36,6 +36,9 @@ in buildPythonPackage rec {
     ++ optional mpiSupport mpi;
   propagatedBuildInputs = [ numpy six]
     ++ optionals mpiSupport [ mpi4py openssh ];
+
+  # https://github.com/h5py/h5py/issues/1088
+  doCheck = false;
 
   meta = {
     description =

@@ -1,15 +1,15 @@
 { stdenv, fetchurl, meson, ninja, pkgconfig, gst-plugins-base, bzip2, libva, wayland
-, libdrm, udev, xorg, libGLU_combined, yasm, gstreamer, gst-plugins-bad, nasm
+, libdrm, udev, xorg, libGLU_combined, gstreamer, gst-plugins-bad, nasm
 , libvpx, python
 }:
 
 stdenv.mkDerivation rec {
   name = "gst-vaapi-${version}";
-  version = "1.14.0";
+  version = "1.14.2";
 
   src = fetchurl {
     url = "${meta.homepage}/src/gstreamer-vaapi/gstreamer-vaapi-${version}.tar.xz";
-    sha256 = "1whxk428badv8ibji00sn6hj17cp8l9n93rr948bz2gjbq41zqz4";
+    sha256 = "12hdyfma2lnfj38dj6y891vsxnxrlbqjbd36xx13mgasgzi6843z";
   };
 
   outputs = [ "out" "dev" ];

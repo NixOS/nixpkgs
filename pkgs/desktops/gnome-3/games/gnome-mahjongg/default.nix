@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   version = "3.22.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-mahjongg/${gnome3.versionBranch version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/gnome-mahjongg/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
     sha256 = "f5972a14fa4ad04153bd6e68475b85cd79c6b44f6cac1fe1edb64dbad4135218";
   };
 

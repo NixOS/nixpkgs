@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "cups-toshiba-estudio-${version}";
-  version = "7.51";
+  version = "7.89";
 
   src = fetchurl {
-    url = http://business.toshiba.com/downloads/KB/f1Ulds/14079/TOSHIBA_ColorMFP_CUPS.tar;
-    sha256 = "3741bb79723495da5cb5a3971ae8c6042b6c71a6264af8f25aecf721f1f0752f";
+    url = http://business.toshiba.com/downloads/KB/f1Ulds/15178/TOSHIBA_ColorMFP_CUPS.tar;
+    sha256 = "0qz4r7q55i0adf4fv3aqnfqgi2pz3jb1jixkqm9x6nk4vanyjf4r";
   };
 
   buildInputs = [ perl ];

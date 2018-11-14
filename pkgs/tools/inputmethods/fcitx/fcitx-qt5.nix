@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, cmake, fcitx, pkgconfig, qtbase, extra-cmake-modules
+{ stdenv, fetchurl, cmake, fcitx, pkgconfig, qtbase, extra-cmake-modules
 , fetchpatch
 }:
 

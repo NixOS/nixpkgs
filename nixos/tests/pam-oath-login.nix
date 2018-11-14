@@ -1,4 +1,4 @@
-import ./make-test.nix ({ pkgs, latestKernel ? false, ... }:
+import ./make-test.nix ({ ... }:
 
 let
   oathSnakeoilSecret = "cdd4083ef8ff1fa9178c6d46bfb1a3";
@@ -22,7 +22,7 @@ in
   name = "pam-oath-login";
 
   machine =
-    { config, pkgs, lib, ... }:
+    { ... }:
     {
       security.pam.oath = {
         enable = true;

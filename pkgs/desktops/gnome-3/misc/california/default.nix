@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, intltool, pkgconfig, gtk3, vala_0_32, libgee, wrapGAppsHook, itstool, gobjectIntrospection
+{ stdenv, fetchurl, intltool, pkgconfig, gtk3, vala_0_34, libgee, wrapGAppsHook, itstool, gobjectIntrospection
 , gnome-online-accounts, evolution-data-server, gnome3, glib, libsoup, libgdata, sqlite, xdg_utils }:
 
 let
@@ -12,7 +12,7 @@ in stdenv.mkDerivation rec {
     sha256 = "1dky2kllv469k8966ilnf4xrr7z35pq8mdvs7kwziy59cdikapxj";
   };
 
-  nativeBuildInputs = [ intltool itstool vala_0_32 pkgconfig wrapGAppsHook gobjectIntrospection ];
+  nativeBuildInputs = [ intltool itstool vala_0_34 pkgconfig wrapGAppsHook gobjectIntrospection ];
   buildInputs = [ glib gtk3 libgee libsoup libgdata gnome-online-accounts evolution-data-server sqlite xdg_utils gnome3.gsettings-desktop-schemas ];
 
   enableParallelBuilding = true;

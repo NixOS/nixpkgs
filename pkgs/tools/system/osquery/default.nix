@@ -4,7 +4,7 @@
 , beecrypt, augeas, libxml2, sleuthkit, yara, lldpd, google-gflags
 , thrift, boost, rocksdb_lite, glog, gbenchmark, snappy
 , openssl, file, doxygen
-, gtest, sqlite, fpm, zstd, rdkafka, rapidjson, path
+, gtest, sqlite, fpm, zstd, rdkafka, rapidjson
 }:
 
 let
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   # this is what `osquery --help` will show as the version.
   OSQUERY_BUILD_VERSION = version;
-  OSQUERY_PLATFORM = "nixos;${stdenv.lib.version}";
+  OSQUERY_PLATFORM = "NixOS;";
 
   src = fetchFromGitHub {
     owner = "facebook";

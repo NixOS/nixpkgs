@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchFromGitHub, python2
+{ stdenv, fetchurl, python2
 , windowsSupport ? false
 }:
 
@@ -6,6 +6,8 @@ let
   generic = { version, sha256, py ? python2 }: py.pkgs.buildPythonPackage rec {
     pname = "ansible";
     inherit version;
+
+    outputs = [ "out" "man" ];
 
     src = fetchurl {
       url = "https://releases.ansible.com/ansible/${pname}-${version}.tar.gz";
@@ -16,13 +18,21 @@ let
       sed -i "s,/usr/,$out," lib/ansible/constants.py
     '';
 
+    postInstall = ''
+      wrapPythonProgramsIn "$out/bin" "$out $PYTHONPATH"
+
+      for m in docs/man/man1/*; do
+        install -vD $m -t $man/share/man/man1
+      done
+    '';
+
     doCheck = false;
     dontStrip = true;
     dontPatchELF = true;
     dontPatchShebangs = false;
 
     propagatedBuildInputs = with py.pkgs; [
-      pycrypto paramiko jinja2 pyyaml httplib2 boto six netaddr dnspython
+      pycrypto paramiko jinja2 pyyaml httplib2 boto six netaddr dnspython jmespath dopy
     ] ++ stdenv.lib.optional windowsSupport pywinrm;
 
     meta = with stdenv.lib; {
@@ -43,10 +53,20 @@ in rec {
   };
 
   ansible_2_5 = generic {
-    version = "2.5.2";
-    sha256  = "1r9sq30xz3jrvx6yqssj5wmkml1f75rx1amd7g89f3ryngrq6m59";
+    version = "2.5.11";
+    sha256  = "07rhgkl3a2ba59rqh9pyz1p661gc389shlwa2sw1m6wwifg4lm24";
   };
 
-  ansible2 = ansible_2_5;
+  ansible_2_6 = generic {
+    version = "2.6.7";
+    sha256  = "10pakw9k9wd3cy1qk3ah2253ph7c7h3qzpal4k0s5lschzgy2fh0";
+  };
+
+  ansible_2_7 = generic {
+    version = "2.7.1";
+    sha256  = "0fg95x2nr3j4rwnlyd2n03h91xx9fssi34c32356vk3z6ir395g7";
+  };
+
+  ansible2 = ansible_2_7;
   ansible  = ansible2;
 }

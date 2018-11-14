@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   name = "libqmatrixclient-${version}";
-  version = "0.3.0.2";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner  = "QMatrixClient";
     repo   = "libqmatrixclient";
     rev    = "v${version}";
-    sha256 = "03pxmr4wa818fgqddkr2fkwz6pda538x3ic9yq7c40x98zqf55w5";
+    sha256 = "1llzqjagvp91kcg26q5c4qw9aaz7wna3rh6k06rc3baivrjqf3cn";
   };
 
   buildInputs = [ qtbase ];
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     description= "A Qt5 library to write cross-platfrom clients for Matrix";
     homepage = https://matrix.org/docs/projects/sdk/libqmatrixclient.html;
     license = licenses.lgpl21;
-    platforms = platforms.linux;
+    platforms = with platforms; linux ++ darwin;
     maintainers = with maintainers; [ peterhoeg ];
   };
 }

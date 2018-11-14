@@ -1,7 +1,7 @@
-import ./make-test.nix ({ pkgs, ... } :
+import ./make-test.nix ({ ... } :
 
 let
-  node = { config, pkgs, lib, ... } : {
+  node = { pkgs, ... } : {
     networking = {
       firewall = {
         allowedUDPPorts = [ 4791 ]; # open RoCE port

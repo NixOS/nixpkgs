@@ -1,4 +1,6 @@
-{ stdenv, buildPythonPackage, fetchPypi, unittest2, robotframework, lxml }:
+{ stdenv, buildPythonPackage, fetchPypi
+, unittest2, lxml, robotframework
+}:
 
 buildPythonPackage rec {
   pname = "robotsuite";
@@ -11,6 +13,11 @@ buildPythonPackage rec {
 
   buildInputs = [ unittest2 ];
   propagatedBuildInputs = [ robotframework lxml ];
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace robotframework-python3 robotframework
+  '';
 
   meta = with stdenv.lib; {
     description = "Python unittest test suite for Robot Framework";

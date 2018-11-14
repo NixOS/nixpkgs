@@ -1,5 +1,5 @@
 { stdenv, fetchurl, python, cairomm, sparsehash, pycairo, autoreconfHook,
-pkgconfig, boost, expat, scipy, numpy, cgal, gmp, mpfr, lndir,
+pkgconfig, boost, expat, scipy, cgal, gmp, mpfr,
 gobjectIntrospection, pygobject3, gtk3, matplotlib, ncurses,
 buildPythonPackage }:
 

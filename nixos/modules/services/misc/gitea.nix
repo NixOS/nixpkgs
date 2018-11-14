@@ -6,6 +6,7 @@ let
   cfg = config.services.gitea;
   gitea = cfg.package;
   pg = config.services.postgresql;
+  useMysql = cfg.database.type == "mysql";
   usePostgresql = cfg.database.type == "postgres";
   configFile = pkgs.writeText "app.ini" ''
     APP_NAME = ${cfg.appName}
@@ -14,7 +15,7 @@ let
 
     [database]
     DB_TYPE = ${cfg.database.type}
-    HOST = ${cfg.database.host}:${toString cfg.database.port}
+    HOST = ${if cfg.database.socket != null then cfg.database.socket else cfg.database.host + ":" + toString cfg.database.port}
     NAME = ${cfg.database.name}
     USER = ${cfg.database.user}
     PASSWD = #dbpass#
@@ -148,6 +149,13 @@ in
           '';
         };
 
+        socket = mkOption {
+          type = types.nullOr types.path;
+          default = null;
+          example = "/run/mysqld/mysqld.sock";
+          description = "Path to the unix socket file to use for authentication.";
+        };
+
         path = mkOption {
           type = types.str;
           default = "${cfg.stateDir}/data/gitea.db";
@@ -253,7 +261,7 @@ in
 
     systemd.services.gitea = {
       description = "gitea";
-      after = [ "network.target" "postgresql.service" ];
+      after = [ "network.target" ] ++ lib.optional usePostgresql "postgresql.service" ++ lib.optional useMysql "mysql.service";
       wantedBy = [ "multi-user.target" ];
       path = [ gitea.bin ];
 
@@ -261,7 +269,8 @@ in
         runConfig = "${cfg.stateDir}/custom/conf/app.ini";
         secretKey = "${cfg.stateDir}/custom/conf/secret_key";
       in ''
-        mkdir -p ${cfg.stateDir}
+        # Make sure that the stateDir exists, as well as the conf dir in there
+        mkdir -p ${cfg.stateDir}/conf
 
         # copy custom configuration and generate a random secret key if needed
         ${optionalString (cfg.useWizard == false) ''
@@ -282,7 +291,7 @@ in
 
         mkdir -p ${cfg.repositoryRoot}
         # update all hooks' binary paths
-        HOOKS=$(find ${cfg.repositoryRoot} -mindepth 4 -maxdepth 5 -type f -wholename "*git/hooks/*")
+        HOOKS=$(find ${cfg.repositoryRoot} -mindepth 4 -maxdepth 6 -type f -wholename "*git/hooks/*")
         if [ "$HOOKS" ]
         then
           sed -ri 's,/nix/store/[a-z0-9.-]+/bin/gitea,${gitea.bin}/bin/gitea,g' $HOOKS
@@ -290,11 +299,13 @@ in
           sed -ri 's,/nix/store/[a-z0-9.-]+/bin/bash,${pkgs.bash}/bin/bash,g' $HOOKS
           sed -ri 's,/nix/store/[a-z0-9.-]+/bin/perl,${pkgs.perl}/bin/perl,g' $HOOKS
         fi
-        if [ ! -d ${cfg.stateDir}/conf/locale ]
+        # If we have a folder or symlink with gitea locales, remove it
+        if [ -e ${cfg.stateDir}/conf/locale ]
         then
-          mkdir -p ${cfg.stateDir}/conf
-          cp -r ${gitea.out}/locale ${cfg.stateDir}/conf/locale
+          rm -r ${cfg.stateDir}/conf/locale
         fi
+        # And symlink the current gitea locales in place
+        ln -s ${gitea.out}/locale ${cfg.stateDir}/conf/locale
         # update command option in authorized_keys
         if [ -r ${cfg.stateDir}/.ssh/authorized_keys ]
         then

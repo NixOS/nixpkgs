@@ -5,7 +5,6 @@
 
 # Optional Arguments
 , snappy ? null, google-gflags ? null, zlib ? null, bzip2 ? null, lz4 ? null
-, numactl ? null
 
 # Malloc implementation
 , jemalloc ? null, gperftools ? null

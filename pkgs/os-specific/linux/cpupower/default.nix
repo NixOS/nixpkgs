@@ -1,4 +1,4 @@
-{ stdenv, buildPackages, fetchurl, kernel, pciutils, gettext }:
+{ stdenv, buildPackages, kernel, pciutils, gettext }:
 
 stdenv.mkDerivation {
   name = "cpupower-${kernel.version}";

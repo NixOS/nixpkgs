@@ -1,4 +1,4 @@
-{ stdenv, git, openssl, autoconf, pkgs, makeStaticLibraries, version, git-version, SRC }:
+{ stdenv, git, openssl, autoconf, pkgs, makeStaticLibraries, version, SRC }:
 
 stdenv.mkDerivation rec {
   name    = "gambit-${version}";

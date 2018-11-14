@@ -1,7 +1,6 @@
 { stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  isPy3k,
   pythonOlder,
   lib,
   requests,

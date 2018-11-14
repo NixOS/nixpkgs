@@ -1,4 +1,4 @@
-{stdenv, fetchurl, unzip}:
+{stdenv, fetchurl}:
 
 stdenv.mkDerivation {
   name = "docbook-xml-ebnf-1.2b1";

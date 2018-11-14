@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, unzip, erlang, which, pam, coreutils }:
+{ stdenv, lib, fetchurl, unzip, erlang, which, pam }:
 
 let
   solrName = "solr-4.10.4-yz-2.tgz";
@@ -92,5 +92,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ cstrahan mdaiter ];
     description = "Dynamo inspired NoSQL DB by Basho";
     platforms   = [ "x86_64-linux" ];
+    license     = licenses.asl20;
   };
 }

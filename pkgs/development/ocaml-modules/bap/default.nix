@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, fetchurl, fetchpatch
 , ocaml, findlib, ocamlbuild, ocaml_oasis,
- bitstring, camlzip, cmdliner, core_kernel, ezjsonm, faillib, fileutils, ocaml_lwt, ocamlgraph, ocurl, re, uri, zarith, piqi, piqi-ocaml, uuidm, llvm_38, ulex, easy-format, xmlm, frontc, ounit, ppx_jane, parsexp,
+ bitstring, camlzip, cmdliner, core_kernel, ezjsonm, faillib, fileutils, ocaml_lwt, ocamlgraph, ocurl, re, uri, zarith, piqi, piqi-ocaml, uuidm, llvm_38, frontc, ounit, ppx_jane, parsexp,
  utop,
  which, makeWrapper, writeText
 }:
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
 
   disableIda = "--disable-ida --disable-fsi-benchmark";
 
-  configureFlags = "--enable-everything ${disableIda} --with-llvm-config=${llvm_38}/bin/llvm-config";
+  configureFlags = [ "--enable-everything ${disableIda}" "--with-llvm-config=${llvm_38}/bin/llvm-config" ];
 
   BAPBUILDFLAGS = "-j $(NIX_BUILD_CORES)";
 

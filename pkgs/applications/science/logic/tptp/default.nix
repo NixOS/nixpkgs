@@ -12,7 +12,8 @@ stdenv.mkDerivation rec {
     sha256 = "0slqbqv4y43wz6wnh72s4n540ssapah0d12mndi0c7xr04kf2v2d";
   };
 
-  buildInputs = [ tcsh yap perl patchelf ];
+  nativeBuildInputs = [ patchelf ];
+  buildInputs = [ tcsh yap perl ];
 
   installPhase = ''
     sharedir=$out/share/tptp

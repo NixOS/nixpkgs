@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch, autoreconfHook, autoconf, automake, asciidoc, docbook_xsl, docbook_xml_dtd_45, libxslt, xmlto, pkgconfig, json_c, kmod, which, systemd, utillinux
+{ stdenv, fetchFromGitHub, fetchpatch, autoreconfHook, asciidoc, docbook_xsl, docbook_xml_dtd_45, libxslt, xmlto, pkgconfig, json_c, kmod, which, systemd, utillinux
 }:
 
 let
@@ -30,6 +30,10 @@ in stdenv.mkDerivation rec {
       sha256 = "1jr5kh087938msl22hgjngbf025n9iplz0czmybfp7lavl73m0pm";
     })
   ];
+
+  postPatch = ''
+    patchShebangs test
+  '';
 
   preAutoreconf = ''
     substituteInPlace configure.ac --replace "which" "${which}/bin/which"

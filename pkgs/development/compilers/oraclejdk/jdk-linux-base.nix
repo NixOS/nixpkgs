@@ -46,7 +46,7 @@ let
     x86_64-linux  = "amd64";
     armv7l-linux  = "arm";
     aarch64-linux = "aarch64";
-  }.${stdenv.system};
+  }.${stdenv.hostPlatform.system};
 
   jce =
     if installjce then
@@ -77,9 +77,9 @@ let result = stdenv.mkDerivation rec {
       x86_64-linux  = "jdk-${productVersion}u${patchVersion}-linux-x64.tar.gz";
       armv7l-linux  = "jdk-${productVersion}u${patchVersion}-linux-arm32-vfp-hflt.tar.gz";
       aarch64-linux = "jdk-${productVersion}u${patchVersion}-linux-arm64-vfp-hflt.tar.gz";
-    }.${stdenv.system};
+    }.${stdenv.hostPlatform.system};
     url = downloadUrl;
-    sha256 = sha256.${stdenv.system};
+    sha256 = sha256.${stdenv.hostPlatform.system};
   };
 
   nativeBuildInputs = [ file ]

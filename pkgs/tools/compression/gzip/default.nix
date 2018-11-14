@@ -1,4 +1,4 @@
-{ stdenv, hostPlatform, fetchurl, xz }:
+{ stdenv, fetchurl, xz }:
 
 stdenv.mkDerivation rec {
   name = "gzip-${version}";

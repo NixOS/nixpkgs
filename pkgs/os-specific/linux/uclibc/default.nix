@@ -1,6 +1,5 @@
 { stdenv, buildPackages
 , fetchurl, linuxHeaders, libiconvReal
-, buildPlatform, hostPlatform
 , extraConfig ? ""
 }:
 
@@ -40,7 +39,7 @@ let
     UCLIBC_SUSV4_LEGACY y
     UCLIBC_HAS_THREADS_NATIVE y
     KERNEL_HEADERS "${linuxHeaders}/include"
-  '' + stdenv.lib.optionalString (stdenv.isAarch32 && buildPlatform != hostPlatform) ''
+  '' + stdenv.lib.optionalString (stdenv.isAarch32 && stdenv.buildPlatform != stdenv.hostPlatform) ''
     CONFIG_ARM_EABI y
     ARCH_WANTS_BIG_ENDIAN n
     ARCH_BIG_ENDIAN n
@@ -69,7 +68,7 @@ stdenv.mkDerivation {
     cat << EOF | parseconfig
     ${nixConfig}
     ${extraConfig}
-    ${hostPlatform.platform.uclibc.extraConfig or ""}
+    ${stdenv.hostPlatform.platform.uclibc.extraConfig or ""}
     EOF
     ( set +o pipefail; yes "" | make oldconfig )
   '';
@@ -82,7 +81,7 @@ stdenv.mkDerivation {
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
   makeFlags = [
-    "ARCH=${hostPlatform.parsed.cpu.name}"
+    "ARCH=${stdenv.hostPlatform.parsed.cpu.name}"
     "VERBOSE=1"
   ] ++ stdenv.lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
     "CROSS=${stdenv.cc.targetPrefix}"

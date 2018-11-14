@@ -842,9 +842,12 @@ src = fetchFromGitHub {
   owner = "NixOS";
   repo = "nix";
   rev = "1f795f9f44607cc5bec70d1300150bfefcef2aae";
-  sha256 = "04yri911rj9j19qqqn6m82266fl05pz98inasni0vxr1cf1gdgv9";
+  sha256 = "1i2yxndxb6yc9l6c99pypbd92lfq5aac4klq7y2v93c9qvx2cgpc";
 }
 </programlisting>
+      Find the value to put as <literal>sha256</literal> by running
+      <literal>nix run -f '&lt;nixpkgs&gt;' nix-prefetch-github -c nix-prefetch-github --rev 1f795f9f44607cc5bec70d1300150bfefcef2aae NixOS nix</literal>
+      or <literal>nix-prefetch-url --unpack https://github.com/NixOS/nix/archive/1f795f9f44607cc5bec70d1300150bfefcef2aae.tar.gz</literal>.
      </para>
     </listitem>
    </itemizedlist>

@@ -1,0 +1,27 @@
+{ stdenv
+, buildPythonPackage
+, fetchPypi
+, pkgs
+}:
+
+buildPythonPackage rec {
+  pname = "musicbrainzngs";
+  version = "0.6";
+
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "1dddarpjawryll2wss65xq3v9q8ln8dan7984l5dxzqx88d2dvr8";
+  };
+
+  buildInputs = [ pkgs.glibcLocales ];
+
+  LC_ALL="en_US.UTF-8";
+
+  meta = with stdenv.lib; {
+    homepage = http://alastair/python-musicbrainz-ngs;
+    description = "Python bindings for musicbrainz NGS webservice";
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ domenkozar ];
+  };
+
+}

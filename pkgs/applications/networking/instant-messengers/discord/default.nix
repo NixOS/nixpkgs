@@ -1,6 +1,6 @@
 { stdenv, fetchurl, makeDesktopItem, makeWrapper
 , alsaLib, atk, cairo, cups, dbus, expat, fontconfig, freetype, gdk_pixbuf
-, glib, gnome3, gtk2, libnotify, libX11, libXcomposite, libXcursor, libXdamage
+, glib, gnome2, gtk2, libnotify, libX11, libXcomposite, libXcursor, libXdamage
 , libXext, libXfixes, libXi, libXrandr, libXrender, libXtst, nspr, nss, libxcb
 , pango, systemd, libXScrnSaver, libcxx, libpulseaudio }:
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     libPath = stdenv.lib.makeLibraryPath [
         libcxx systemd libpulseaudio
         stdenv.cc.cc alsaLib atk cairo cups dbus expat fontconfig freetype
-        gdk_pixbuf glib gnome3.gconf gtk2 libnotify libX11 libXcomposite
+        gdk_pixbuf glib gnome2.GConf gtk2 libnotify libX11 libXcomposite
         libXcursor libXdamage libXext libXfixes libXi libXrandr libXrender
         libXtst nspr nss libxcb pango systemd libXScrnSaver
      ];

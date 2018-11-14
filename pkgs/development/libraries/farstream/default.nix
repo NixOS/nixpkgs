@@ -24,10 +24,10 @@ in stdenv.mkDerivation rec {
     gst-plugins-good gst-plugins-bad gst-libav
   ];
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = https://www.freedesktop.org/wiki/Software/Farstream;
     description = "Audio/Video Communications Framework formely known as farsight";
-    maintainers = [ ];
-    platforms = stdenv.lib.platforms.linux;
+    platforms = platforms.linux;
+    license = licenses.lgpl21;
   };
 }

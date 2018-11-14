@@ -37,7 +37,7 @@
 let
   arch32 = "i686-linux";
 
-  arch = if stdenv.system == arch32
+  arch = if stdenv.hostPlatform.system == arch32
     then "i386"
     else "amd64";
 
@@ -46,7 +46,7 @@ let
   version = "${shortVersion}_${arch}";
 
   url = "http://desktop-download.mendeley.com/download/apt/pool/main/m/mendeleydesktop/mendeleydesktop_${version}.deb";
-  sha256 = if stdenv.system == arch32
+  sha256 = if stdenv.hostPlatform.system == arch32
     then "0fcyl5i8xdgb5j0x1643qc0j74d8p11jczvqmgqkqh0wgid1y1ad"
     else "1dzwa2cnn9xakrhhq159fhh71gw5wlbf017rrikdlia694m8akq6";
 

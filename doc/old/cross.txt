@@ -64,7 +64,7 @@ stdenv.mkDerivation {
     sha256 = "1ian3kwh2vg6hr3ymrv48s04gijs539vzrq62xr76bxbhbwnz2np";
   };
   inherit noSysDirs;
-  configureFlags = "--target=arm-linux";
+  configureFlags = [ "--target=arm-linux" ];
 }
 ---
 
@@ -78,7 +78,7 @@ Step 2: build kernel headers for the target architecture
 ---
 {stdenv, fetchurl}:
 
-assert stdenv.system == "i686-linux";
+assert stdenv.buildPlatform.system == "i686-linux";
 
 stdenv.mkDerivation {
   name = "linux-headers-2.6.13.1-arm";

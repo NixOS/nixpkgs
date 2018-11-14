@@ -10,8 +10,17 @@ in stdenv.mkDerivation rec {
     sha256 = "1mlx34fgh1kaqamrkl5isf0npch3mm6s4lz3jsjb7hakiijhj7f0";
   };
 
+  outputs = [ "out" "dev" ];
+  setOutputFlags = false; # Configure script only understands --includedir
+
   buildInputs = [ readline icu zlib nspr ];
   nativeBuildInputs = [ autoconf213 pkgconfig perl which python2 zip ];
+
+  # Apparently this package fails to build correctly with modern compilers, which at least
+  # on ARMv6 causes polkit testsuite to break with an assertion failure in spidermonkey.
+  # These flags were stolen from:
+  # https://git.archlinux.org/svntogit/packages.git/tree/trunk/PKGBUILD?h=packages/js52
+  NIX_CFLAGS_COMPILE = "-fno-delete-null-pointer-checks -fno-strict-aliasing -fno-tree-vrp";
 
   patches = [
     # needed to build gnome3.gjs
@@ -26,6 +35,7 @@ in stdenv.mkDerivation rec {
     export CXXFLAGS="-fpermissive"
     export LIBXUL_DIST=$out
     export PYTHON="${python2.interpreter}"
+    configureFlagsArray+=("--includedir=$dev/include")
 
     cd js/src
 
@@ -39,9 +49,15 @@ in stdenv.mkDerivation rec {
     "--with-intl-api"
     "--enable-readline"
     "--enable-shared-js"
-  ];
+  ] ++ stdenv.lib.optional stdenv.hostPlatform.isMusl "--disable-jemalloc";
 
   enableParallelBuilding = true;
+
+  postInstall = ''
+    moveToOutput bin/js52-config "$dev"
+    # Nuke a static lib.
+    rm $out/lib/libjs_static.ajs
+  '';
 
   meta = with stdenv.lib; {
     description = "Mozilla's JavaScript engine written in C/C++";

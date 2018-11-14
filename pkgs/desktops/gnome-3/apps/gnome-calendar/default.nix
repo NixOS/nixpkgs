@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, meson, ninja, pkgconfig, wrapGAppsHook, libdazzle, libgweather, geoclue2, geocode-glib
+{ stdenv, fetchurl, meson, ninja, pkgconfig, wrapGAppsHook, libdazzle, libgweather, geoclue2, geocode-glib, python3
 , gettext, libxml2, gnome3, gtk, evolution-data-server, libsoup
 , glib, gnome-online-accounts, gsettings-desktop-schemas }:
 
@@ -9,7 +9,7 @@ in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
     sha256 = "0x6wxngf8fkwgbl6x7rzp0srrb43rm55klpb2vfjk2hahpbjvxyw";
   };
 
@@ -20,7 +20,7 @@ in stdenv.mkDerivation rec {
     };
   };
 
-  nativeBuildInputs = [ meson ninja pkgconfig gettext libxml2 wrapGAppsHook ];
+  nativeBuildInputs = [ meson ninja pkgconfig gettext libxml2 wrapGAppsHook python3 ];
   buildInputs = [
     gtk evolution-data-server libsoup glib gnome-online-accounts libdazzle libgweather geoclue2 geocode-glib
     gsettings-desktop-schemas gnome3.defaultIconTheme

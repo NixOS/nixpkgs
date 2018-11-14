@@ -5,7 +5,7 @@
 
 stdenv.mkDerivation rec {
   version = sage-with-env.version;
-  name = "sage-${version}";
+  name = "sage-tests-${version}";
 
   buildInputs = [
     makeWrapper

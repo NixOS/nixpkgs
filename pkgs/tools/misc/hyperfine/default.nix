@@ -1,17 +1,21 @@
-{ stdenv, fetchFromGitHub, rustPlatform }:
+{ stdenv, fetchFromGitHub, rustPlatform
+, Security
+}:
 
 rustPlatform.buildRustPackage rec {
   name = "hyperfine-${version}";
-  version = "1.1.0";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner  = "sharkdp";
     repo   = "hyperfine";
     rev    = "refs/tags/v${version}";
-    sha256 = "13h43sjp059yq3bmdbb9i1082fkx5yzmhrkf5kpkxhnyn67xbdsg";
+    sha256 = "06kghk3gmi47c8g28n8srpb578yym104fa30s4m33ajb60fvwlld";
   };
 
-  cargoSha256 = "0saf0hl21ba2ckqbsw64908nvs0x1rjrnm73ackzpmv5pi9j567s";
+  cargoSha256 = "1rwh8kyrkk5jza4lx7sf1pln68ljwsv4ccyfvzcvc140y7ya8ps0";
+
+  buildInputs = stdenv.lib.optional stdenv.isDarwin Security;
 
   meta = with stdenv.lib; {
     description = "Command-line benchmarking tool";

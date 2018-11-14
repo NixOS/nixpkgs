@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, libiconv }:
+{ stdenv, fetchurl, libiconv }:
 
 stdenv.mkDerivation rec {
   name = "wavpack-${version}";

@@ -20,6 +20,7 @@ let
   Xsetup = pkgs.writeScript "Xsetup" ''
     #!/bin/sh
     ${cfg.setupScript}
+    ${dmcfg.setupCommands}
   '';
 
   Xstop = pkgs.writeScript "Xstop" ''
@@ -49,8 +50,8 @@ let
     MinimumVT=${toString (if xcfg.tty != null then xcfg.tty else 7)}
     ServerPath=${xserverWrapper}
     XephyrPath=${pkgs.xorg.xorgserver.out}/bin/Xephyr
-    SessionCommand=${dmcfg.session.script}
-    SessionDir=${dmcfg.session.desktops}
+    SessionCommand=${dmcfg.session.wrapper}
+    SessionDir=${dmcfg.session.desktops}/share/xsessions
     XauthPath=${pkgs.xorg.xauth}/bin/xauth
     DisplayCommand=${Xsetup}
     DisplayStopCommand=${Xstop}
@@ -137,7 +138,8 @@ in
           xrandr --auto
         '';
         description = ''
-          A script to execute when starting the display server.
+          A script to execute when starting the display server. DEPRECATED, please
+          use <option>services.xserver.displayManager.setupCommands</option>.
         '';
       };
 
@@ -206,11 +208,7 @@ in
       }
     ];
 
-    services.xserver.displayManager.slim.enable = false;
-
     services.xserver.displayManager.job = {
-      logToFile = true;
-
       environment = {
         # Load themes from system environment
         QT_PLUGIN_PATH = "/run/current-system/sw/" + pkgs.qt5.qtbase.qtPluginPrefix;
@@ -265,6 +263,9 @@ in
     };
 
     environment.etc."sddm.conf".source = cfgFile;
+    environment.pathsToLink = [ 
+      "/share/sddm" 
+    ];
 
     users.groups.sddm.gid = config.ids.gids.sddm;
 

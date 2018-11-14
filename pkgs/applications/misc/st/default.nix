@@ -1,10 +1,9 @@
-{ stdenv, fetchurl, pkgconfig, writeText, makeWrapper, libX11, ncurses, libXext
-, libXft, fontconfig, dmenu, conf ? null, patches ? [], extraLibs ? []}:
+{ stdenv, fetchurl, pkgconfig, writeText, libX11, ncurses
+, libXft, conf ? null, patches ? [], extraLibs ? []}:
 
 with stdenv.lib;
 
-let patches' = if patches == null then [] else patches;
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   name = "st-0.8.1";
 
   src = fetchurl {
@@ -12,24 +11,23 @@ in stdenv.mkDerivation rec {
     sha256 = "09k94v3n20gg32xy7y68p96x9dq5msl80gknf9gbvlyjp3i0zyy4";
   };
 
-  patches = patches';
+  inherit patches;
 
   configFile = optionalString (conf!=null) (writeText "config.def.h" conf);
   preBuild = optionalString (conf!=null) "cp ${configFile} config.def.h";
 
-  nativeBuildInputs = [ pkgconfig makeWrapper ];
-  buildInputs = [ libX11 ncurses libXext libXft fontconfig ] ++ extraLibs;
+  nativeBuildInputs = [ pkgconfig ncurses ];
+  buildInputs = [ libX11 libXft ] ++ extraLibs;
 
   installPhase = ''
     TERMINFO=$out/share/terminfo make install PREFIX=$out
-    wrapProgram "$out/bin/st" --prefix PATH : "${dmenu}/bin"
   '';
 
   meta = {
     homepage = https://st.suckless.org/;
     description = "Simple Terminal for X from Suckless.org Community";
     license = licenses.mit;
-    maintainers = with maintainers; [viric andsild];
+    maintainers = with maintainers; [andsild];
     platforms = platforms.linux;
   };
 }

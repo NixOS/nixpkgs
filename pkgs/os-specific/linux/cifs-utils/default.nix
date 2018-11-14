@@ -1,4 +1,5 @@
-{ stdenv, fetchurl, autoreconfHook, pkgconfig, kerberos, keyutils, pam, talloc }:
+{ stdenv, fetchurl, autoreconfHook, docutils, pkgconfig
+, kerberos, keyutils, pam, talloc }:
 
 stdenv.mkDerivation rec {
   name = "cifs-utils-${version}";
@@ -9,7 +10,8 @@ stdenv.mkDerivation rec {
     sha256 = "0ygz3pagjpaj5ky11hzh4byyymb7fpmqiqkprn11zwj31h2zdlg7";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook docutils pkgconfig ];
+
   buildInputs = [ kerberos keyutils pam talloc ];
 
   makeFlags = "root_sbindir=$(out)/sbin";

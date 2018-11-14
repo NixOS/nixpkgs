@@ -15,12 +15,12 @@ if isPyPy then throw "dbus-python not supported for interpreter ${python.executa
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ dbus dbus-glib ]
-    ++ lib.optionals doCheck [ dbus.out pygobject3 ]
     # My guess why it's sometimes trying to -lncurses.
     # It seems not to retain the dependency anyway.
     ++ lib.optional (! python ? modules) ncurses;
 
   doCheck = true;
+  checkInputs = [ dbus.out pygobject3 ];
 
   meta = {
     description = "Python DBus bindings";

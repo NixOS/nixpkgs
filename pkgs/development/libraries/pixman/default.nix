@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ]
     ++ stdenv.lib.optionals stdenv.cc.isClang [ autoconf automake libtool autoreconfHook ];
 
-  buildInputs = stdenv.lib.optional doCheck libpng;
+  buildInputs = [ libpng ];
 
   configureFlags = stdenv.lib.optional stdenv.isAarch32 "--disable-arm-iwmmxt";
 

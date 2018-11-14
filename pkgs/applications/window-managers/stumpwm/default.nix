@@ -1,4 +1,4 @@
-{ stdenv, pkgs, fetchgit, autoconf, sbcl, lispPackages, xdpyinfo, texinfo4
+{ stdenv, fetchgit, autoconf, sbcl, lispPackages, xdpyinfo, texinfo4
 , makeWrapper , rlwrap, gnused, gnugrep, coreutils, xprop
 , extraModulePaths ? []
 , version }:

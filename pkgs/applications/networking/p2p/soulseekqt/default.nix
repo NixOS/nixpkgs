@@ -1,27 +1,25 @@
 { stdenv
 , fetchurl
 , dbus
-, expat, zlib, fontconfig
-, libpng, libX11, libxcb, libXau, libXdmcp, freetype, libbsd
+, zlib, fontconfig
+, qtbase, qtmultimedia
+, libjson, libgpgerror
+, libX11, libxcb, libXau, libXdmcp, freetype, libbsd
+, pythonPackages, squashfsTools, desktop-file-utils
 }:
 
 with stdenv.lib;
 let
   libPath = makeLibraryPath
-    [ stdenv.cc.cc dbus libX11 zlib libX11 libxcb libXau libXdmcp freetype fontconfig libbsd ];
+    [ stdenv.cc.cc qtbase qtmultimedia dbus libX11 zlib libX11 libxcb libXau libXdmcp freetype fontconfig libbsd libjson libgpgerror];
 
-  version = "2016-1-17";
+  version = "2018-1-30";
 
   mainbin = "SoulseekQt-" + (version) +"-"+ (if stdenv.is64bit then "64bit" else "32bit");
   srcs = {
-    "i686-linux" = fetchurl {
-      url = "https://www.dropbox.com/s/kebk1b5ib1m3xxw/${mainbin}.tgz";
-      sha256 = "0r9rhnfslkgbw3l7fnc0rcfqjh58amgh5p33kwam0qvn1h1frnir";
-    };
-
     "x86_64-linux" = fetchurl {
-      url = "https://www.dropbox.com/s/7qh902qv2sxyp6p/${mainbin}.tgz";
-      sha256 = "05l3smpdvw8xdhv4v8a28j0yi1kvzhrha2ck23g4bl7x9wkay4cc";
+      url = "https://www.dropbox.com/s/0vi87eef3ooh7iy/${mainbin}.tgz";
+      sha256 = "0d1cayxr1a4j19bc5a3qp9pg22ggzmd55b6f5av3lc6lvwqqg4w6";
     };
   };
 
@@ -29,20 +27,40 @@ in stdenv.mkDerivation rec {
 
   name = "soulseekqt-${version}";
   inherit version;
-  src = srcs."${stdenv.system}" or (throw "unsupported system: ${stdenv.system}");
+  src = srcs."${stdenv.hostPlatform.system}" or (throw "unsupported system: ${stdenv.hostPlatform.system}");
 
-  sourceRoot = ".";
-  buildPhase = ":";   # nothing to build
+  dontBuild = true;
+
+  buildInputs = [ pythonPackages.binwalk squashfsTools desktop-file-utils ];
+
+  # avoid usage of appimage's runner option --appimage-extract 
+  unpackCmd = ''
+    export HOME=$(pwd) # workaround for binwalk
+    appimage=$(tar xvf $curSrc) && binwalk --quiet \
+       $appimage -D 'squashfs:squashfs:unsquashfs %e'
+    '';
+  
+  patchPhase = ''
+    cd squashfs-root/
+    binary="$(readlink AppRun)"
+  
+    # fixup desktop file
+    desktop-file-edit --set-key Exec --set-value $binary default.desktop
+    desktop-file-edit --set-key Comment --set-value "${meta.description}" default.desktop
+    desktop-file-edit --set-key Categories --set-value Network default.desktop   
+  '';
 
   installPhase = ''
-    mkdir -p $out/bin
-    cp ${mainbin} $out/bin/soulseekqt
+    mkdir -p $out/{bin,share/applications,share/icons/}
+    cp default.desktop $out/share/applications/$binary.desktop
+    cp soulseek.png $out/share/icons/
+    cp $binary $out/bin/
   '';
 
   fixupPhase = ''
     patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
              --set-rpath ${libPath} \
-             $out/bin/soulseekqt
+             $out/bin/$binary
   '';
 
   meta = with stdenv.lib; {
@@ -50,6 +68,6 @@ in stdenv.mkDerivation rec {
     homepage = http://www.soulseekqt.net;
     license = licenses.unfree;
     maintainers = [ maintainers.genesis ];
-    platforms = [ "i686-linux" "x86_64-linux" ];
+    platforms = [ "x86_64-linux" ];
   };
 }

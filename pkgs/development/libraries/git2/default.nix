@@ -5,14 +5,14 @@
 
 stdenv.mkDerivation (rec {
   name = "libgit2-${version}";
-  version = "0.26.0";
+  version = "0.26.6";
   # keep the version in sync with pythonPackages.pygit2 and gnome3.libgit2-glib
 
   src = fetchFromGitHub {
     owner = "libgit2";
     repo = "libgit2";
     rev = "v${version}";
-    sha256 = "0zrrmfkfhd2xb4879z5khjb6xsdklrm01f1lscrs2ks68v25fk78";
+    sha256 = "17pjvprmdrx4h6bb1hhc98w9qi6ki7yl57f090n9kbhswxqfs7s3";
   };
 
   cmakeFlags = [ "-DTHREADSAFE=ON" ];

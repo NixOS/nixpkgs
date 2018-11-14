@@ -15,7 +15,7 @@ stdenv.mkDerivation {
       -e "s|/bin/rm|rm|"
   '';
 
-  configureFlags = "--with-slang=${slang.dev}";
+  configureFlags = [ "--with-slang=${slang.dev}" ];
 
   buildInputs = [ slang ncurses ];
 

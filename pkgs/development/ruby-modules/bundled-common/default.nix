@@ -19,6 +19,7 @@
 , meta ? {}
 , groups ? ["default"]
 , ignoreCollisions ? false
+, buildInputs ? []
 , ...
 }@args:
 
@@ -61,7 +62,7 @@ let
   else
     name;
 
-  copyIfBundledByPath = { bundledByPath ? false, ...}@main:
+  copyIfBundledByPath = { bundledByPath ? false, ...}:
   (if bundledByPath then
       assert gemFiles.gemdir != null; "cp -a ${gemFiles.gemdir}/* $out/" #*/
     else ""
@@ -96,7 +97,7 @@ let
   envPaths = lib.attrValues gems ++ lib.optional (!hasBundler) bundler;
 
   basicEnv = buildEnv {
-    inherit  ignoreCollisions;
+    inherit buildInputs ignoreCollisions;
 
     name = name';
 

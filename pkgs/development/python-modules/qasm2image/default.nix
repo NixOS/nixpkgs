@@ -12,13 +12,13 @@
 
 buildPythonPackage rec {
   pname = "qasm2image";
-  version = "0.5.0";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
-    owner = "nelimeee";
+    owner = "nelimee";
     repo = "qasm2image";
-    rev = "7f3c3e4d1701b8b284ef0352aa3a47722ebbbcaa";
-    sha256 = "129xlpwp36h2czzw1wcl8df2864zg3if2gaad1v18ah1cf68b0f3";
+    rev = "2c01756946ba9782973359dbd7bbf6651af6bee5";
+    sha256 = "1bnkzv7wrdvrq71dmsqanb3v2hcsxh5zaglfcxm2d9zzpmvb4a2n";
   };
 
   propagatedBuildInputs = [

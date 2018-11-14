@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, librdf_raptor2, gmp, pkgconfig, pcre, libxml2 }:
+{ stdenv, fetchurl, librdf_raptor2, gmp, pkgconfig, pcre, libxml2, perl }:
 
 stdenv.mkDerivation rec {
   name = "rasqal-0.9.33";
@@ -15,6 +15,10 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ librdf_raptor2 ];
 
   postInstall = "rm -rvf $out/share/gtk-doc";
+
+  checkInputs = [ perl ];
+  doCheck = false; # fails with "No testsuite plan file sparql-query-plan.ttl could be created in build/..."
+  doInstallCheck = false; # fails with "rasqal-config does not support (--help|--version)"
 
   meta = {
     description = "Library that handles Resource Description Framework (RDF)";

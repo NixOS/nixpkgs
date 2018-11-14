@@ -1,11 +1,11 @@
-{ stdenv, fetchgit, autoPatchelfHook, fetchzip, libunwind, libuuid, icu, curl,
+{ stdenv, autoPatchelfHook, fetchzip, libunwind, libuuid, icu, curl,
   makeWrapper, less, openssl, pam, lttng-ust }:
 
 let platformString = if stdenv.isDarwin then "osx"
                      else if stdenv.isLinux then "linux"
                      else throw "unsupported platform";
-    platformSha = if stdenv.isDarwin then "1ga4p8xmrxa54v2s6i0q1q7lx2idcmp1jwm0g4jxr54fyn5ay3lf"
-                     else if stdenv.isLinux then "000mmv5iblnmwydfdvg5izli3vpb6l14xy4qy3smcikpf0h87fhl"
+    platformSha = if stdenv.isDarwin then "0jngmqxjiiz5dpgky027wl0s3nn321rxs6kxab27kmp031j65x8g"
+                     else if stdenv.isLinux then "0nmqv32mck16b7zljfpb9ydg3h2jvcqrid9ga2i5wac26x3ix531"
                      else throw "unsupported platform";
     platformLdLibraryPath = if stdenv.isDarwin then "DYLD_FALLBACK_LIBRARY_PATH"
                      else if stdenv.isLinux then "LD_LIBRARY_PATH"
@@ -14,7 +14,7 @@ let platformString = if stdenv.isDarwin then "osx"
 in
 stdenv.mkDerivation rec {
   name = "powershell-${version}";
-  version = "6.0.2";
+  version = "6.1.0";
 
   src = fetchzip {
     url = "https://github.com/PowerShell/PowerShell/releases/download/v${version}/powershell-${version}-${platformString}-x64.tar.gz";
@@ -25,15 +25,12 @@ stdenv.mkDerivation rec {
   buildInputs = [ less ] ++ libraries;
   nativeBuildInputs = [ autoPatchelfHook makeWrapper ];
 
-  # TODO: remove PAGER after upgrading to v6.1.0-preview.1 or later as it has been addressed in
-  # https://github.com/PowerShell/PowerShell/pull/6144
   installPhase = ''
     mkdir -p $out/bin
     mkdir -p $out/share/powershell
     cp -r * $out/share/powershell
-    rm $out/share/powershell/DELETE_ME_TO_DISABLE_CONSOLEHOST_TELEMETRY
     makeWrapper $out/share/powershell/pwsh $out/bin/pwsh --prefix ${platformLdLibraryPath} : "${stdenv.lib.makeLibraryPath libraries}" \
-                                           --set PAGER ${less}/bin/less --set TERM xterm
+                                           --set TERM xterm --set POWERSHELL_TELEMETRY_OPTOUT 1
   '';
 
   dontStrip = true;

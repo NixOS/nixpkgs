@@ -21,11 +21,16 @@ stdenv.mkDerivation rec {
 
   createFindlibDestdir = true;
 
+  postInstall = ''
+    mkdir $out/bin
+    cp -L interpreter/wasm $out/bin
+  '';
+
   meta = {
-    description = "An OCaml library to read and write Web Assembly (wasm) files and manipulate their AST";
+    description = "An executable and OCaml library to run, read and write Web Assembly (wasm) files and manipulate their AST";
     license = stdenv.lib.licenses.asl20;
     maintainers = [ stdenv.lib.maintainers.vbgl ];
-    inherit (src.meta) homepage;
+    homepage = https://github.com/WebAssembly/spec/tree/master/interpreter;
     inherit (ocaml.meta) platforms;
   };
 }

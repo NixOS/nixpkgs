@@ -25,5 +25,6 @@ in stdenv.mkDerivation rec {
     homepage = src.meta.homepage;
     license = licenses.bsd2;
     platforms = platforms.linux;
+    maintainers = with maintainers; [ gnidorah ];
   };
 }

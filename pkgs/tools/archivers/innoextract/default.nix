@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, doxygen, makeWrapper, python
+{ stdenv, fetchurl, cmake, makeWrapper, python
 , boost, lzma
 , withGog ? false, unar ? null }:
 

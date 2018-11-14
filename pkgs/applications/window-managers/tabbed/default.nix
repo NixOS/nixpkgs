@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     homepage = https://tools.suckless.org/tabbed;
     description = "Simple generic tabbed fronted to xembed aware applications";
     license = licenses.mit;
-    maintainers = with maintainers; [ viric vrthra ];
+    maintainers = with maintainers; [ vrthra ];
     platforms = platforms.linux;
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, buildEnv, writeText, pkgs, pkgsi686Linux, system }:
+{ stdenv, buildEnv, writeText, pkgs, pkgsi686Linux }:
 
 { name, profile ? ""
 , targetPkgs ? pkgs: [], multiPkgs ? pkgs: []
@@ -22,7 +22,7 @@
 # /lib will link to /lib32
 
 let
-  is64Bit = system == "x86_64-linux";
+  is64Bit = stdenv.hostPlatform.parsed.cpu.bits == 64;
   isMultiBuild  = multiPkgs != null && is64Bit;
   isTargetBuild = !isMultiBuild;
 

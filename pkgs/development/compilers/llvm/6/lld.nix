@@ -3,7 +3,6 @@
 , cmake
 , libxml2
 , llvm
-, python
 , version
 }:
 

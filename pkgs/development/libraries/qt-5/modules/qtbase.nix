@@ -3,14 +3,14 @@
   src, patches, version, qtCompatVersion,
 
   coreutils, bison, flex, gdb, gperf, lndir, patchelf, perl, pkgconfig, python2,
-  ruby, which,
+  which,
   # darwin support
-  darwin, libiconv, libcxx,
+  darwin, libiconv,
 
   dbus, fontconfig, freetype, glib, harfbuzz, icu, libX11, libXcomposite,
   libXcursor, libXext, libXi, libXrender, libinput, libjpeg, libpng, libtiff,
   libxcb, libxkbcommon, libxml2, libxslt, openssl, pcre16, pcre2, sqlite, udev,
-  xcbutil, xcbutilimage, xcbutilkeysyms, xcbutilrenderutil, xcbutilwm, xorg,
+  xcbutil, xcbutilimage, xcbutilkeysyms, xcbutilrenderutil, xcbutilwm,
   zlib,
 
   # optional dependencies
@@ -18,7 +18,7 @@
   withGtk3 ? false, dconf ? null, gtk3 ? null,
 
   # options
-  libGLSupported ? (!stdenv.isDarwin),
+  libGLSupported ? !stdenv.isDarwin,
   libGL,
   buildExamples ? false,
   buildTests ? false,
@@ -53,6 +53,7 @@ stdenv.mkDerivation {
       if stdenv.isDarwin
       then with darwin.apple_sdk.frameworks;
         [
+          # TODO: move to buildInputs, this should not be propagated.
           AGL AppKit ApplicationServices Carbon Cocoa CoreAudio CoreBluetooth
           CoreLocation CoreServices DiskArbitration Foundation OpenGL
           darwin.libobjc libiconv
@@ -77,6 +78,9 @@ stdenv.mkDerivation {
       [ libinput ]
       ++ lib.optional withGtk3 gtk3
     )
+    ++ lib.optional stdenv.isDarwin
+      # Needed for OBJC_CLASS_$_NSDate symbols.
+      [ darwin.cf-private ]
     ++ lib.optional developerBuild gdb
     ++ lib.optional (cups != null) cups
     ++ lib.optional (mysql != null) mysql.connector-c

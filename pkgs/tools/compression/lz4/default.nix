@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   name = "lz4-${version}";
-  version = "1.8.2";
+  version = "1.8.3";
 
   src = fetchFromGitHub {
-    sha256 = "0xbjbjrvgzypk8dnldakir06gb8m946d064lxx0qc4ky6m8n9hn2";
+    sha256 = "0lq00yi7alr9aip6dw0flykzi8yv7z43aay177n86spn9qms7s3g";
     rev = "v${version}";
     repo = "lz4";
     owner = "lz4";

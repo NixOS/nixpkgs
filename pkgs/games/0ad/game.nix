@@ -1,4 +1,4 @@
-{ stdenv, lib, callPackage, perl, fetchurl, python2
+{ stdenv, lib, perl, fetchurl, python2
 , pkgconfig, spidermonkey_38, boost, icu, libxml2, libpng, libsodium
 , libjpeg, zlib, curl, libogg, libvorbis, enet, miniupnpc
 , openal, libGLU_combined, xproto, libX11, libXcursor, nspr, SDL2

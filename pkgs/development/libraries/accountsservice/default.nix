@@ -1,22 +1,26 @@
 { stdenv, fetchurl, pkgconfig, glib, intltool, makeWrapper, shadow
-, libtool, gobjectIntrospection, polkit, systemd, coreutils }:
+, gobjectIntrospection, polkit, systemd, coreutils, meson, dbus
+, ninja, python3 }:
 
 stdenv.mkDerivation rec {
   name = "accountsservice-${version}";
-  version = "0.6.49";
+  version = "0.6.54";
 
   src = fetchurl {
     url = "https://www.freedesktop.org/software/accountsservice/accountsservice-${version}.tar.xz";
-    sha256 = "032ndvs18gla49dvc9vg35cwczg0wpv2wscp1m3yjfdqdpams7i5";
+    sha256 = "1b115n0a4yfa06kgxc69qfc1rc0w4frgs3id3029czkrhhn0ds96";
   };
 
-  nativeBuildInputs = [ pkgconfig makeWrapper ];
+  nativeBuildInputs = [ pkgconfig makeWrapper meson ninja python3 ];
 
-  buildInputs = [ glib intltool libtool gobjectIntrospection polkit systemd ];
+  buildInputs = [ glib intltool gobjectIntrospection polkit systemd dbus ];
 
-  configureFlags = [ "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
-                     "--localstatedir=/var" ];
+  mesonFlags = [ "-Dsystemdsystemunitdir=etc/systemd/system"
+                 "-Dlocalstatedir=/var" ];
   prePatch = ''
+    chmod +x meson_post_install.py
+    patchShebangs meson_post_install.py
+
     substituteInPlace src/daemon.c --replace '"/usr/sbin/useradd"' '"${shadow}/bin/useradd"' \
                                    --replace '"/usr/sbin/userdel"' '"${shadow}/bin/userdel"'
     substituteInPlace src/user.c   --replace '"/usr/sbin/usermod"' '"${shadow}/bin/usermod"' \

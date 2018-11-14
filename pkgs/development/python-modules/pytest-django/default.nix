@@ -1,26 +1,25 @@
-{ stdenv, buildPythonPackage, fetchPypi
-, pytest, django, setuptools_scm
-, fetchpatch
+{ stdenv
+, buildPythonPackage
+, fetchPypi
+, pytest
+, django
+, setuptools_scm
+, django-configurations
+, pytest_xdist
+, six
 }:
 buildPythonPackage rec {
   pname = "pytest-django";
-  version = "3.1.2";
+  version = "3.4.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "02932m2sr8x22m4az8syr8g835g4ak77varrnw71n6xakmdcr303";
+    sha256 = "b379282feaf89069cb790775ab6bbbd2bd2038a68c7ef9b84a41898e0b551081";
   };
 
   buildInputs = [ pytest setuptools_scm ];
+  checkInputs = [ django-configurations pytest_xdist six ];
   propagatedBuildInputs = [ django ];
-
-  patches = [
-    # Unpin setuptools-scm
-    (fetchpatch {
-      url = "https://github.com/pytest-dev/pytest-django/commit/25cbc3b395dcdeb92bdc9414e296680c2b9d602e.patch";
-      sha256 = "0mz3rcsv44pfzlxy3pv8mx87glmv34gy0d5aknvbzgb2a9niryws";
-    })
-  ];
 
   # Complicated. Requires Django setup.
   doCheck = false;

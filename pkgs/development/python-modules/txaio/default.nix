@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "txaio";
-  version = "2.10.0";
+  version = "18.7.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4797f9f6a9866fe887c96abc0110a226dd5744c894dc3630870542597ad30853";
+    sha256 = "701de939e90bb80f7e085357081552437526752199def5541dddfc34c0b0593f";
   };
 
   checkInputs = [ pytest mock ];

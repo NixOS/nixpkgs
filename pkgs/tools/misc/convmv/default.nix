@@ -26,5 +26,6 @@ stdenv.mkDerivation rec {
     description = "Converts filenames from one encoding to another";
     platforms = platforms.linux ++ platforms.freebsd ++ platforms.cygwin;
     maintainers = [ ];
+    license = licenses.gpl2Plus;
   };
 }

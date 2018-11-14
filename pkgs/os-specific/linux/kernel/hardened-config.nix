@@ -22,7 +22,7 @@ ${optionalString (versionAtLeast version "4.10") ''
   BUG_ON_DATA_CORRUPTION y
 ''}
 
-${optionalString (stdenv.platform.kernelArch == "x86_64") ''
+${optionalString (stdenv.hostPlatform.platform.kernelArch == "x86_64") ''
   DEFAULT_MMAP_MIN_ADDR 65536 # Prevent allocation of first 64K of memory
 
   # Reduce attack surface by disabling various emulations
@@ -103,16 +103,17 @@ PAGE_POISONING_ZERO y
 PANIC_ON_OOPS y
 PANIC_TIMEOUT -1
 
-GCC_PLUGINS y # Enable gcc plugin options
+${optionalString (versionOlder version "4.18") ''
+  GCC_PLUGINS y # Enable gcc plugin options
+  # Gather additional entropy at boot time for systems that may not have appropriate entropy sources.
+  GCC_PLUGIN_LATENT_ENTROPY y
 
-# Gather additional entropy at boot time for systems that may not have appropriate entropy sources.
-GCC_PLUGIN_LATENT_ENTROPY y
-
-${optionalString (versionAtLeast version "4.11") ''
-  GCC_PLUGIN_STRUCTLEAK y # A port of the PaX structleak plugin
-''}
-${optionalString (versionAtLeast version "4.14") ''
-  GCC_PLUGIN_STRUCTLEAK_BYREF_ALL y # Also cover structs passed by address
+  ${optionalString (versionAtLeast version "4.11") ''
+    GCC_PLUGIN_STRUCTLEAK y # A port of the PaX structleak plugin
+  ''}
+  ${optionalString (versionAtLeast version "4.14") ''
+    GCC_PLUGIN_STRUCTLEAK_BYREF_ALL y # Also cover structs passed by address
+  ''}
 ''}
 
 # Disable various dangerous settings
@@ -121,8 +122,10 @@ PROC_KCORE n # Exposes kernel text image layout
 INET_DIAG n # Has been used for heap based attacks in the past
 
 # Use -fstack-protector-strong (gcc 4.9+) for best stack canary coverage.
-CC_STACKPROTECTOR_REGULAR n
-CC_STACKPROTECTOR_STRONG y
+${optionalString (versionOlder version "4.18") ''
+  CC_STACKPROTECTOR_REGULAR n
+  CC_STACKPROTECTOR_STRONG y
+''}
 
 # Enable compile/run-time buffer overflow detection ala glibc's _FORTIFY_SOURCE
 ${optionalString (versionAtLeast version "4.13") ''

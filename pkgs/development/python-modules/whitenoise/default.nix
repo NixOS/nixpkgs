@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "whitenoise";
-  version = "4.0b4";
+  version = "4.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0ra2bbsihwfhnf1ibahzzabgfjfghxqcrbfx6r5r50mlil5n8bf4";
+    sha256 = "1e206c5adfb849942ddd057e599ac472ec1a85d56ae78a5ba24f243ea46a89c5";
   };
 
   # No tests

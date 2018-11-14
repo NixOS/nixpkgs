@@ -12,7 +12,7 @@ import ./make-test.nix ({ pkgs, ...} : {
   nodes = {
 
     master =
-      { config, pkgs, ... }:
+      { ... }:
       { services.jenkins.enable = true;
 
         # should have no effect
@@ -24,7 +24,7 @@ import ./make-test.nix ({ pkgs, ...} : {
       };
 
     slave =
-      { config, pkgs, ... }:
+      { ... }:
       { services.jenkinsSlave.enable = true;
 
         users.users.jenkins.extraGroups = [ "users" ];

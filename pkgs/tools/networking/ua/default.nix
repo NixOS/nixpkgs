@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchgit, fetchhg, fetchbzr, fetchsvn
+{ stdenv, buildGoPackage, fetchgit
 , pkgconfig
 , glib, libxml2
 }:

@@ -1,4 +1,4 @@
-{ pkgs, stdenv, callPackage, wxGTK30, darwin }:
+{ callPackage, wxGTK30 }:
 
 rec {
   lib = callPackage ../development/beam-modules/lib.nix {};
@@ -6,12 +6,12 @@ rec {
   # Each
   interpreters = rec {
 
-    # R19 is the default version.
-    erlang = erlangR19; # The main switch to change default Erlang version.
-    erlang_odbc = erlangR19_odbc;
-    erlang_javac = erlangR19_javac;
-    erlang_odbc_javac = erlangR19_odbc_javac;
-    erlang_nox = erlangR19_nox;
+    # R20 is the default version.
+    erlang = erlangR20; # The main switch to change default Erlang version.
+    erlang_odbc = erlangR20_odbc;
+    erlang_javac = erlangR20_javac;
+    erlang_odbc_javac = erlangR20_odbc_javac;
+    erlang_nox = erlangR20_nox;
 
     # These are standard Erlang versions, using the generic builder.
     erlangR18 = lib.callErlang ../development/interpreters/erlang/R18.nix {
@@ -61,7 +61,7 @@ rec {
     # Other Beam languages. These are built with `beam.interpreters.erlang`. To
     # access for example elixir built with different version of Erlang, use
     # `beam.packages.erlangR19.elixir`.
-    inherit (packages.erlang) elixir elixir_1_6 elixir_1_5 elixir_1_4 elixir_1_3;
+    inherit (packages.erlang) elixir elixir_1_7 elixir_1_6 elixir_1_5 elixir_1_4 elixir_1_3;
 
     inherit (packages.erlang) lfe lfe_1_2;
   };

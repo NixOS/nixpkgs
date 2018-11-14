@@ -33,12 +33,13 @@ stdenv.mkDerivation {
       rm -rf $out/include
       rm -rf $out/share/man/man5
       rm $(for i in $out/share/man/man8/*; do echo $i; done | grep -v 'pidof\|killall5')
-      rm $out/bin/{mountpoint,wall} $out/share/man/man1/{mountpoint.1,wall.1}
+      rm $out/bin/wall $out/share/man/man1/wall.1
     '';
 
   meta = {
     homepage = http://www.nongnu.org/sysvinit/;
     description = "Utilities related to booting and shutdown";
     platforms = stdenv.lib.platforms.linux;
+    license = stdenv.lib.licenses.gpl2Plus;
   };
 }

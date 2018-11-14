@@ -9,7 +9,7 @@
 , enableOpenGL ? false, libGLU_combined  ? null
 
 # GUI toolkits
-, enableGTK ? true,  gtk2 ? null, gnome2 ? null, gnome3 ? null
+, enableGTK ? true,  gtk2 ? null, gnome2 ? null
 , enableSDL ? false
 , enableQt  ? false, qt4  ? null
 
@@ -27,7 +27,7 @@
 
 with stdenv.lib;
 
-let 
+let
   available = x: x != null;
 
   sound =
@@ -52,7 +52,7 @@ assert enableCairo  -> available cairo;
 assert enableOpenGL -> available libGLU_combined;
 
 # GUI toolkits
-assert enableGTK -> all available [ gtk2 gnome2.gtkglext gnome3.gconf ];
+assert enableGTK -> all available [ gtk2 gnome2.gtkglext gnome2.GConf ];
 assert enableSDL -> available SDL;
 assert enableQt  -> available qt4;
 
@@ -96,7 +96,7 @@ stdenv.mkDerivation rec {
     ++ optional  enableJemalloc  jemalloc
     ++ optional  enableHwAccel   libGLU_combined
     ++ optionals enablePlugins   [ xulrunner npapi_sdk ]
-    ++ optionals enableGTK       [ gtk2 gnome2.gtkglext gnome3.gconf ]
+    ++ optionals enableGTK       [ gtk2 gnome2.gtkglext gnome2.GConf ]
     ++ optionals enableGstreamer [ gst-plugins-base gst-plugins-ugly gst-ffmpeg ];
 
   configureFlags = with stdenv.lib; [

@@ -13,7 +13,7 @@ in
 
   nodes = {
     master =
-      { pkgs, config, ... }:
+      { pkgs, ... }:
 
       {
         services.mysql.enable = true;
@@ -27,7 +27,7 @@ in
       };
 
     slave1 =
-      { pkgs, config, nodes, ... }:
+      { pkgs, nodes, ... }:
 
       {
         services.mysql.enable = true;
@@ -40,7 +40,7 @@ in
       };
 
     slave2 =
-      { pkgs, config, nodes, ... }:
+      { pkgs, nodes, ... }:
 
       {
         services.mysql.enable = true;

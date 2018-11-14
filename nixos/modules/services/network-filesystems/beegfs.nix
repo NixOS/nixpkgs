@@ -139,7 +139,7 @@ in
       description = ''
         BeeGFS configurations. Every mount point requires a separate configuration.
       '';
-      type = with types; attrsOf (submodule ({ config, ... } : {
+      type = with types; attrsOf (submodule ({ ... } : {
         options = {
           mgmtdHost = mkOption {
             type = types.str;
@@ -195,6 +195,17 @@ in
           };
 
           helperd = {
+            enable = mkOption {
+              type = types.bool;
+              default = true;
+              description = ''
+                Enable the BeeGFS helperd.
+                The helpered is need for logging purposes on the client.
+                Disabling <literal>helperd</literal> allows for runing the client
+                with <literal>allowUnfree = false</literal>.
+              '';
+            };
+
             extraConfig = mkOption {
               type = types.lines;
               default = "";

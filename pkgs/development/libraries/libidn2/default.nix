@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, libiconv, libunistring, help2man, ronn, buildPackages }:
+{ fetchurl, stdenv, libiconv, libunistring, help2man, buildPackages }:
 
 with stdenv.lib;
 

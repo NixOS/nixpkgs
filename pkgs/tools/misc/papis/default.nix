@@ -1,4 +1,4 @@
-{ buildPythonApplication, lib, fetchFromGitHub, bashInteractive
+{ lib, fetchFromGitHub, bashInteractive
 , python3, vim
 }:
 

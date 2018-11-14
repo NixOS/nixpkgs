@@ -1,5 +1,5 @@
 { stdenv, fetchurl, meson, ninja, wrapGAppsHook, pkgconfig, gettext, itstool, libvirt-glib
-, glib, gobjectIntrospection, libxml2, gtk3, gtkvnc, libvirt, spice-gtk
+, glib, gobjectIntrospection, libxml2, gtk3, gtk-vnc, libvirt, spice-gtk, python3
 , spice-protocol, libsoup, libosinfo, systemd, tracker, tracker-miners, vala
 , libcap, yajl, gmp, gdbm, cyrus_sasl, gnome3, librsvg, desktop-file-utils
 , mtools, cdrkit, libcdio, libusb, libarchive, acl, libgudev, qemu, libsecret
@@ -14,21 +14,21 @@ in stdenv.mkDerivation rec {
   name = "gnome-boxes-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-boxes/${gnome3.versionBranch version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/gnome-boxes/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
     sha256 = "1z1qimspx1nw7l79rardxcx2bydj9nmk60vsdb611xzlqa3hkppm";
   };
 
   doCheck = true;
 
   nativeBuildInputs = [
-    meson ninja vala pkgconfig gettext itstool wrapGAppsHook gobjectIntrospection desktop-file-utils
+    meson ninja vala pkgconfig gettext itstool wrapGAppsHook gobjectIntrospection desktop-file-utils python3
   ];
 
   # Required for USB redirection PolicyKit rules file
   propagatedUserEnvPkgs = [ spice-gtk ];
 
   buildInputs = [
-    libvirt-glib glib gtk3 gtkvnc libxml2
+    libvirt-glib glib gtk3 gtk-vnc libxml2
     libvirt spice-gtk spice-protocol libsoup json-glib webkitgtk libosinfo systemd
     tracker tracker-miners libcap yajl gmp gdbm cyrus_sasl libusb libarchive
     gnome3.defaultIconTheme librsvg acl libgudev libsecret

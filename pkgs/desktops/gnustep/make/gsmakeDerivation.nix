@@ -1,4 +1,4 @@
-{ stdenv, lib, make, makeWrapper, which }:
+{ stdenv, make, makeWrapper, which }:
 { buildInputs ? [], ...} @ args:
 stdenv.mkDerivation (args // {
   buildInputs = [ makeWrapper make which ] ++ buildInputs;

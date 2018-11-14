@@ -1,7 +1,6 @@
 { stdenv, buildPackages
 , fetchurl, pkgconfig, ncurses, gzip
 , sslSupport ? true, openssl ? null
-, buildPlatform, hostPlatform
 , nukeReferences
 }:
 

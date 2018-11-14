@@ -20,15 +20,16 @@
 , requests
 , send2trash
 , pexpect
+, prometheus_client
 }:
 
 buildPythonPackage rec {
   pname = "notebook";
-  version = "5.5.0";
+  version = "5.6.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "fa915c231e64a30d19cc2c70ccab6444cbaa93e44e92b5f8233dd9147ad0e664";
+    sha256 = "e2c8e931cc19db4f8c63e6a396efbc13a228b2cb5b2919df011b946f28239a08";
   };
 
   LC_ALL = "en_US.utf8";
@@ -39,6 +40,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     jinja2 tornado ipython_genutils traitlets jupyter_core send2trash
     jupyter_client nbformat nbconvert ipykernel terminado requests pexpect
+    prometheus_client
   ];
 
   # disable warning_filters

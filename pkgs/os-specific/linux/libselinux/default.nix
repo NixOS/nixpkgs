@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
 
   installTargets = [ "install" ] ++ optional enablePython "install-pywrap";
 
-  meta = libsepol.meta // {
+  meta = removeAttrs libsepol.meta ["outputsToInstall"] // {
     description = "SELinux core library";
   };
 }

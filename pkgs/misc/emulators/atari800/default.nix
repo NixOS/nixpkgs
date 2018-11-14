@@ -13,7 +13,15 @@ stdenv.mkDerivation rec{
 
   buildInputs = [ unzip zlib SDL readline libGLU_combined libX11 ];
 
-  configureFlags = "--target=default --with-video=sdl --with-sound=sdl --with-readline --with-opengl --with-x --enable-riodevice";
+  configureFlags = [
+    "--target=default"
+    "--with-video=sdl"
+    "--with-sound=sdl"
+    "--with-readline"
+    "--with-opengl"
+    "--with-x"
+    "--enable-riodevice"
+  ];
 
   preConfigure = "cd src";
 

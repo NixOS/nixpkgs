@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ dbus glib expat ];
 
-  configureFlags = "--disable-ecore";
+  configureFlags = [ "--disable-ecore" ];
 
   meta = with stdenv.lib; {
     homepage = http://dbus-cplusplus.sourceforge.net;

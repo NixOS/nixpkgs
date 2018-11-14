@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, ncurses  }:
+{ stdenv, fetchurl, ncurses  }:
 
 stdenv.mkDerivation rec {
   name = "gcal-${version}";

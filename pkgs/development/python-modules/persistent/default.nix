@@ -1,18 +1,19 @@
 { buildPythonPackage
 , fetchPypi
 , zope_interface
-, pkgs
+, sphinx, manuel
 }:
 
 buildPythonPackage rec {
   pname = "persistent";
-  version = "4.2.4.2";
+  version = "4.4.3";
 
+  nativeBuildInputs = [ sphinx manuel ];
   propagatedBuildInputs = [ zope_interface ];
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "cf264cd55866c7ffbcbe1328f8d8b28fd042a5dd0c03a03f68c0887df3aa1964";
+    sha256 = "05hi8yfvxl5ns7y7xhbgbqp78ydaxabjp5b64r4nmrfdfsqylrb7";
   };
 
   meta = {

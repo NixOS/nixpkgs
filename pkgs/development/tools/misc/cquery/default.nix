@@ -1,12 +1,12 @@
-{ stdenv, fetchFromGitHub, makeWrapper
+{ fetchFromGitHub, makeWrapper
 , cmake, llvmPackages, ncurses }:
 
 let
   src = fetchFromGitHub {
     owner = "cquery-project";
     repo = "cquery";
-    rev = "34b357bc5e873d52d2aa41287c6e138244cea109";
-    sha256 = "0i34v30cl73485bzpbis539x0iq9whpv0403ca5a9h6vqwnvdn7c";
+    rev = "a95a6503d68a85baa25465ce147b7fc20f4a552e";
+    sha256 = "0rxbdln7dqkdw4q8rhclssgwypq16g9flkwmaabsr8knckbszxrx";
     fetchSubmodules = true;
   };
 
@@ -15,7 +15,7 @@ let
 in
 stdenv.mkDerivation rec {
   name    = "cquery-${version}";
-  version = "2018-05-01";
+  version = "2018-10-14";
 
   inherit src;
 
@@ -25,13 +25,14 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DSYSTEM_CLANG=ON"
     "-DCLANG_CXX=ON"
+    "-DCMAKE_OSX_DEPLOYMENT_TARGET=10.12"
   ];
 
   shell = stdenv.shell;
   postFixup = ''
     # We need to tell cquery where to find the standard library headers.
 
-    standard_library_includes="\\\"-isystem\\\", \\\"${if (stdenv.hostPlatform.libc == "glibc") then stdenv.cc.libc.dev else stdenv.cc.libc}/include\\\""
+    standard_library_includes="\\\"-isystem\\\", \\\"${stdenv.lib.getDev stdenv.cc.libc}/include\\\""
     standard_library_includes+=", \\\"-isystem\\\", \\\"${llvmPackages.libcxx}/include/c++/v1\\\""
     export standard_library_includes
 
@@ -47,6 +48,10 @@ stdenv.mkDerivation rec {
   installCheckPhase = ''
     pushd ${src}
     $out/bin/cquery --ci --test-unit
+
+    # The integration tests have to be disabled because cquery ignores `--init`
+    # if they are invoked, which means it won't find the system includes.
+    #$out/bin/cquery --ci --test-index
   '';
 
   meta = with stdenv.lib; {

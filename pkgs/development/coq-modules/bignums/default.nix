@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     inherit (param) rev sha256;
   };
 
-  buildInputs = [ coq.ocaml coq.camlp5 coq.findlib coq ];
+  buildInputs = with coq.ocamlPackages; [ ocaml camlp5 findlib coq ];
 
   installFlags = "COQLIB=$(out)/lib/coq/${coq.coq-version}/";
 

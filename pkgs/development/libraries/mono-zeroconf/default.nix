@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoreconfHook, which, pkgconfig, mono }:
+{ stdenv, fetchurl, which, pkgconfig, mono }:
 
 stdenv.mkDerivation rec {
   name = "mono-zeroconf-${version}";
@@ -20,5 +20,6 @@ stdenv.mkDerivation rec {
     description = "A cross platform Zero Configuration Networking library for Mono and .NET";
     homepage = http://www.mono-project.com/archived/monozeroconf/;
     platforms = platforms.linux;
+    license = licenses.mit;
   };
 }

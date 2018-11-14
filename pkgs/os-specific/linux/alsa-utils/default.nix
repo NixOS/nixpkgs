@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "alsa-utils-${version}";
-  version = "1.1.6";
+  version = "1.1.7";
 
   src = fetchurl {
     url = "mirror://alsa/utils/${name}.tar.bz2";
-    sha256 = "0vnkyymgwj9rfdb11nvab30dnfrylmakdfildxl0y8mj836awp0m";
+    sha256 = "02jlw6a22j2rr7inggfgk2hzx3w0fjhvhs0dn1afpzdp9aspzchx";
   };
 
   patchPhase = ''
@@ -17,11 +17,11 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ gettext ];
   buildInputs = [ alsaLib ncurses libsamplerate fftw ];
 
-  configureFlags = "--disable-xmlto --with-udev-rules-dir=$(out)/lib/udev/rules.d";
+  configureFlags = [ "--disable-xmlto" "--with-udev-rules-dir=$(out)/lib/udev/rules.d" ];
 
   installFlags = "ASOUND_STATE_DIR=$(TMPDIR)/dummy";
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://www.alsa-project.org/;
     description = "ALSA, the Advanced Linux Sound Architecture utils";
     longDescription = ''
@@ -29,7 +29,8 @@ stdenv.mkDerivation rec {
       MIDI functionality to the Linux-based operating system.
     '';
 
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.AndersonTorres ];
+    license = licenses.gpl2;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.AndersonTorres ];
   };
 }

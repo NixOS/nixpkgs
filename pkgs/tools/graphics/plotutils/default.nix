@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     make -C libplot xmi.h
   '';
 
-  configureFlags = "--enable-libplotter"; # required for pstoedit
+  configureFlags = [ "--enable-libplotter" ]; # required for pstoedit
 
   hardeningDisable = [ "format" ];
 

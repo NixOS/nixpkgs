@@ -214,12 +214,10 @@ in
             }
           ];
         # Always provide a smb.conf to shut up programs like smbclient and smbspool.
-        environment.etc = singleton
-          { source =
-              if cfg.enable then configFile
-              else pkgs.writeText "smb-dummy.conf" "# Samba is disabled.";
-            target = "samba/smb.conf";
-          };
+        environment.etc."samba/smb.conf".source = mkOptionDefault (
+          if cfg.enable then configFile
+          else pkgs.writeText "smb-dummy.conf" "# Samba is disabled."
+        );
       }
 
       (mkIf cfg.enable {

@@ -234,5 +234,6 @@ stdenv.mkDerivation (rec {
                     + withXenfiles (name: x: ''* ${name}: ${x.meta.description or "(No description)"}.'');
     platforms = [ "x86_64-linux" ];
     maintainers = with stdenv.lib.maintainers; [ eelco tstrobel oxij ];
+    license = stdenv.lib.licenses.gpl2;
   } // (config.meta or {});
 } // removeAttrs config [ "xenfiles" "buildInputs" "patches" "postPatch" "meta" ])

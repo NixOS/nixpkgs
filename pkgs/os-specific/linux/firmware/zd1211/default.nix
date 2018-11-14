@@ -1,22 +1,19 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchzip }:
 
-stdenv.mkDerivation rec {
+let
   pname = "zd1211-firmware";
   version = "1.5";
-
+in fetchzip rec {
   name = "${pname}-${version}";
+  url = "mirror://sourceforge/zd1211/${name}.tar.bz2";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/zd1211/${name}.tar.bz2";
-    sha256 = "04ibs0qw8bh6h6zmm5iz6lddgknwhsjq8ib3gyck6a7psw83h7gi";
-  };
-
-  dontBuild = true;
-
-  installPhase = ''
+  postFetch = ''
+    tar -xjvf $downloadedFile
     mkdir -p $out/lib/firmware/zd1211
-    cp * $out/lib/firmware/zd1211
+    cp zd1211-firmware/* $out/lib/firmware/zd1211
   '';
+
+  sha256 = "0sj2zl3r0549mjz37xy6iilm1hm7ak5ax02gwrn81r5yvphqzd52";
 
   meta = {
     description = "Firmware for the ZyDAS ZD1211(b) 802.11a/b/g USB WLAN chip";

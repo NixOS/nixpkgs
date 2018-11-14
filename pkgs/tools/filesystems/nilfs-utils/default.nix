@@ -46,14 +46,11 @@ stdenv.mkDerivation rec {
     find . -name .libs | xargs rm -rf
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "NILFS utilities";
-    maintainers = with stdenv.lib.maintainers;
-    [
-      raskin
-    ];
-    platforms = with stdenv.lib.platforms;
-      linux;
+    maintainers = [ maintainers.raskin ];
+    platforms = platforms.linux;
+    license =  with licenses; [ gpl2 lgpl21 ];
     downloadPage = "http://nilfs.sourceforge.net/en/download.html";
     updateWalker = true;
   };

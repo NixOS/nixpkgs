@@ -1,4 +1,4 @@
-{ lib, stdenv, fetch, cmake, python, llvm, libcxxabi, fixDarwinDylibNames, version }:
+{ lib, stdenv, fetch, cmake, python, libcxxabi, fixDarwinDylibNames, version }:
 
 stdenv.mkDerivation rec {
   name = "libc++-${version}";

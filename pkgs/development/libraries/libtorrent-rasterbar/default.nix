@@ -1,11 +1,14 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch, pkgconfig, automake, autoconf, zlib
-, boost, openssl, libtool, python, libiconv, geoip }:
+{ stdenv, lib, fetchFromGitHub, fetchpatch, pkgconfig, automake, autoconf
+, zlib, boost, openssl, libtool, python, libiconv, geoip, ncurses
+}:
 
 let
-  version = "1.1.7";
+  version = "1.1.10";
   formattedVersion = lib.replaceChars ["."] ["_"] version;
 
-  boostPython = boost.override { enablePython = true; };
+  # Make sure we override python, so the correct version is chosen
+  # for the bindings, if overridden
+  boostPython = boost.override { enablePython = true; inherit python; };
 
 in stdenv.mkDerivation {
   name = "libtorrent-rasterbar-${version}";
@@ -14,24 +17,20 @@ in stdenv.mkDerivation {
     owner = "arvidn";
     repo = "libtorrent";
     rev = "libtorrent-${formattedVersion}";
-    sha256 = "073nb7yca5jg1i8z5h76qrmddl2hdy8fc1pnchkg574087an31r3";
+    sha256 = "0qj1rz52jk95m43cr7l3fi9jmf4pwxncp5mq4hi2vzacfnf79yms";
   };
-
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/arvidn/libtorrent/commit/64d6b4900448097b0157abb328621dd211e2947d.patch";
-      sha256 = "1bdv0icqzbg1il60sckcly4y22lkdbkkwdjadwdzxv7cdj586bzd";
-    })
-    (fetchpatch {
-      url = "https://github.com/arvidn/libtorrent/commit/9cd0ae67e74a507c1b9ff9c057ee97dda38ccb81.patch";
-      sha256 = "1cscqpc6fq9iwspww930dsxf0yb01bgrghzf5hdhl09a87r6q2zg";
-    })
-  ];
 
   enableParallelBuilding = true;
   nativeBuildInputs = [ automake autoconf libtool pkgconfig ];
-  buildInputs = [ boostPython openssl zlib python libiconv geoip ];
+  buildInputs = [ boostPython openssl zlib python libiconv geoip ncurses ];
   preConfigure = "./autotool.sh";
+
+  postInstall = ''
+    moveToOutput "include" "$dev"
+    moveToOutput "lib/${python.libPrefix}" "$python"
+  '';
+
+  outputs = [ "out" "dev" "python" ];
 
   configureFlags = [
     "--enable-python-binding"

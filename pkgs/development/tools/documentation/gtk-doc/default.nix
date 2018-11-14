@@ -1,5 +1,6 @@
 { stdenv, fetchurl, autoreconfHook, pkgconfig, perl, python, libxml2Python, libxslt, which
-, docbook_xml_dtd_43, docbook_xsl, gnome-doc-utils, dblatex, gettext, itstool
+, docbook_xml_dtd_43, docbook_xsl, gnome-doc-utils, gettext, itstool
+, withDblatex ? false, dblatex
 }:
 
 stdenv.mkDerivation rec {
@@ -20,15 +21,15 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs =
     [ pkgconfig perl python libxml2Python libxslt docbook_xml_dtd_43 docbook_xsl
-      gnome-doc-utils dblatex gettext which itstool
-    ];
+      gnome-doc-utils gettext which itstool
+    ] ++ stdenv.lib.optional withDblatex dblatex;
 
   configureFlags = [ "--disable-scrollkeeper" ];
 
   # Make six available for binaries, python.withPackages creates a wrapper
   # but scripts are not allowed in shebangs so we link it into sys.path.
   postInstall = ''
-    ln -s ${python.pkgs.six}/lib/python2.7/site-packages/* $out/share/gtk-doc/python/
+    ln -s ${python.pkgs.six}/${python.sitePackages}/* $out/share/gtk-doc/python/
   '';
 
   doCheck = false; # requires a lot of stuff

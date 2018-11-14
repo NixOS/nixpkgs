@@ -1,7 +1,7 @@
 { stdenv, meson, ninja, gettext, fetchurl, gdk_pixbuf, tracker
 , libxml2, python3, libnotify, wrapGAppsHook, libmediaart
 , gobjectIntrospection, gnome-online-accounts, grilo, grilo-plugins
-, pkgconfig, gtk3, glib, cairo, desktop-file-utils, appstream-glib
+, pkgconfig, gtk3, glib, desktop-file-utils, appstream-glib
 , itstool, gnome3, gst_all_1 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -11,7 +11,7 @@ python3.pkgs.buildPythonApplication rec {
   format = "other";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "09lvpiqhijiq0kddnfi9rmmw806qh9a03czfhssqczd9fxmmbx5v";
   };
 

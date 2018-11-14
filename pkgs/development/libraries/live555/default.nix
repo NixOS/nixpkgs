@@ -28,7 +28,7 @@ stdenv.mkDerivation {
       i686-linux = "linux";
       x86_64-linux = "linux-64bit";
       aarch64-linux = "linux-64bit";
-    }.${stdenv.system}}
+    }.${stdenv.hostPlatform.system}}
   '';
 
   installPhase = ''

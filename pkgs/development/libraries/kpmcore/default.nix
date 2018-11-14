@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, extra-cmake-modules, pkgconfig
+{ stdenv, lib, fetchurl, extra-cmake-modules
 , qtbase, kdeFrameworks
 , libatasmart, parted
 , utillinux }:

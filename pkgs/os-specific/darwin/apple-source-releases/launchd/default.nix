@@ -1,4 +1,4 @@
-{ stdenv, appleDerivation }:
+{ appleDerivation }:
 
 appleDerivation {
   # No clue why the same file has two different names. Ask Apple!

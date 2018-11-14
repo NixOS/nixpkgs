@@ -33,7 +33,7 @@ in stdenv.mkDerivation (args // {
   STACK_PLATFORM_VARIANT="nix";
   STACK_IN_NIX_SHELL=1;
   STACK_IN_NIX_EXTRA_ARGS = extraArgs;
-  shellHook = addStackArgsHook;
+  shellHook = addStackArgsHook + args.shellHook or "";
 
 
   # XXX: workaround for https://ghc.haskell.org/trac/ghc/ticket/11042.

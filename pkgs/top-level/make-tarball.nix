@@ -54,7 +54,7 @@ releaseTools.sourceTarball rec {
     mkdir $TMPDIR/foo
     ln -s $(readlink -f .) $TMPDIR/foo/bar
     p1=$(nix-instantiate ./. --dry-run -A firefox --show-trace)
-    p2=$(nix-instantiate $TMPDIR/foo/bar --dry-run -A firefox)
+    p2=$(nix-instantiate $TMPDIR/foo/bar --dry-run -A firefox --show-trace)
     if [ "$p1" != "$p2" ]; then
         echo "Nixpkgs evaluation depends on Nixpkgs path ($p1 vs $p2)!"
         exit 1
@@ -63,9 +63,9 @@ releaseTools.sourceTarball rec {
     # Run the regression tests in `lib'.
     if
         # `set -e` doesn't work inside here, so need to && instead :(
-        res="$(nix-instantiate --eval --strict lib/tests/misc.nix)" \
+        res="$(nix-instantiate --eval --strict lib/tests/misc.nix --show-trace)" \
         && [[ "$res" == "[ ]" ]] \
-        && res="$(nix-instantiate --eval --strict lib/tests/systems.nix)" \
+        && res="$(nix-instantiate --eval --strict lib/tests/systems.nix --show-trace)" \
         && [[ "$res" == "[ ]" ]]
     then
         true

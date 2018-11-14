@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     homepage = http://www.ivarch.com/programs/pv;
     description = "Tool for monitoring the progress of data through a pipeline";
     license = stdenv.lib.licenses.artistic2;
-    maintainers = with stdenv.lib.maintainers; [ viric jgeerds ];
+    maintainers = with stdenv.lib.maintainers; [ jgeerds ];
     platforms = with stdenv.lib.platforms; all;
   };
 }

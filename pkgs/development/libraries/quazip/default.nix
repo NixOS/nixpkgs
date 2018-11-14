@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, zip, zlib, qtbase, qmake }:
+{ fetchurl, stdenv, zlib, qtbase, qmake }:
 
 stdenv.mkDerivation rec {
   name = "quazip-0.7.3";

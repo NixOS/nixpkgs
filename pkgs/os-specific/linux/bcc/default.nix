@@ -1,17 +1,17 @@
-{ stdenv, fetchFromGitHub, fetchpatch, makeWrapper, cmake, llvmPackages, kernel
+{ stdenv, fetchFromGitHub, makeWrapper, cmake, llvmPackages, kernel
 , flex, bison, elfutils, python, luajit, netperf, iperf, libelf
 , systemtap
 }:
 
 python.pkgs.buildPythonApplication rec {
-  version = "0.6.0";
+  version = "0.7.0";
   name = "bcc-${version}";
 
   src = fetchFromGitHub {
     owner  = "iovisor";
     repo   = "bcc";
     rev    = "v${version}";
-    sha256 = "1fk2kvbdvm87rkha2cigz2qhhlrni4g0dcnmiiyya79y85ahfvga";
+    sha256 = "1ww7l0chx2ivw9d2ahxjyhxmh6hz3w5z69r4lz02f0361rnrvk7f";
   };
 
   format = "other";

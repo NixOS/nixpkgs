@@ -1,4 +1,4 @@
-{ stdenv, config, requireFile, fetchurl
+{ stdenv, requireFile
 , libX11, libXext, libXau, libxcb, libXdmcp , SDL, SDL_mixer, libvorbis, libGLU_combined
 , demo ? false }:
 
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     then "WorldOfGooDemo-1.41"
     else "WorldofGoo-1.41";
 
-  arch = if stdenv.system == "x86_64-linux" then "supported"
+  arch = if stdenv.hostPlatform.system == "x86_64-linux" then "supported"
     else throw "Sorry. World of Goo only is only supported on x86_64 now.";
 
   goBuyItNow = '' 

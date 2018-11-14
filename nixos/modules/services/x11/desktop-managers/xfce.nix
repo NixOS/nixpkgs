@@ -59,9 +59,6 @@ in
       tango-icon-theme
       xfce4-icon-theme
 
-      desktop-file-utils
-      shared-mime-info
-
       # Needed by Xfce's xinitrc script
       # TODO: replace with command -v
       which
@@ -100,15 +97,14 @@ in
     environment.pathsToLink = [
       "/share/xfce4"
       "/share/themes"
-      "/share/mime"
-      "/share/desktop-directories"
       "/share/gtksourceview-2.0"
     ];
 
     environment.variables = {
-      GDK_PIXBUF_MODULE_FILE = "${pkgs.librsvg.out}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache";
       GIO_EXTRA_MODULES = [ "${pkgs.xfce.gvfs}/lib/gio/modules" ];
     };
+
+    services.xserver.gdk-pixbuf.modulePackages = [ pkgs.librsvg ];
 
     services.xserver.desktopManager.session = [{
       name = "xfce";

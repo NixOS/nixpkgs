@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchpatch, fetchFromGitHub, cmake, nasm
+{ stdenv, lib, fetchFromGitHub, cmake, nasm
 , gtk2, glib, ffmpeg, alsaLib, libmad, libogg, libvorbis
 , glew, libpulseaudio, udev
 }:

@@ -9,7 +9,9 @@ stdenv.mkDerivation rec {
     sha256 = "08dpa506xk4gjbbi8vnxcb640wq4ihlgmhzlssl52nhvxwx7gx5v";
   };
 
-  configureFlags = "--disable-update-xdg-database";
+  configureFlags = [
+    "--disable-update-xdg-database" 
+  ];
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ guile gtk2 flex gawk perl ];
 

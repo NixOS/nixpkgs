@@ -12,13 +12,15 @@
 , withpcre2 ? true
 , sendEmailSupport
 , darwin
+, withLibsecret ? false
+, pkgconfig, glib, libsecret
 }:
 
 assert sendEmailSupport -> perlSupport;
 assert svnSupport -> perlSupport;
 
 let
-  version = "2.18.0";
+  version = "2.19.1";
   svn = subversionClient.override { perlBindings = perlSupport; };
 in
 
@@ -27,7 +29,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://www.kernel.org/pub/software/scm/git/git-${version}.tar.xz";
-    sha256 = "14hfwfkrci829a9316hnvkglnqqw1p03cw9k56p4fcb078wbwh4b";
+    sha256 = "1dfv43lmdnxz42504jc89sihbv1d4d6kgqcz3c5ji140kfm5cl1l";
   };
 
   outputs = [ "out" ] ++ stdenv.lib.optional perlSupport "gitweb";
@@ -64,7 +66,8 @@ stdenv.mkDerivation {
     ++ stdenv.lib.optionals perlSupport [ perl ]
     ++ stdenv.lib.optionals guiSupport [tcl tk]
     ++ stdenv.lib.optionals withpcre2 [ pcre2 ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ darwin.Security ];
+    ++ stdenv.lib.optionals stdenv.isDarwin [ darwin.Security ]
+    ++ stdenv.lib.optionals withLibsecret [ pkgconfig glib libsecret ];
 
   # required to support pthread_cancel()
   NIX_LDFLAGS = stdenv.lib.optionalString (!stdenv.cc.isClang) "-lgcc_s"
@@ -90,12 +93,14 @@ stdenv.mkDerivation {
   ++ stdenv.lib.optionals stdenv.hostPlatform.isMusl ["NO_SYS_POLL_H=1" "NO_GETTEXT=YesPlease"]
   ++ stdenv.lib.optional withpcre2 "USE_LIBPCRE2=1";
 
-  # build git-credential-osxkeychain if darwin
-  postBuild = stdenv.lib.optionalString stdenv.isDarwin ''
-    pushd $PWD/contrib/credential/osxkeychain/
-    make
-    popd
-  '';
+
+  postBuild = ''
+    make -C contrib/subtree
+  '' + (stdenv.lib.optionalString stdenv.isDarwin ''
+    make -C contrib/credential/osxkeychain
+  '') + (stdenv.lib.optionalString withLibsecret ''
+    make -C contrib/credential/libsecret
+  '');
 
 
   ## Install
@@ -105,11 +110,15 @@ stdenv.mkDerivation {
 
   installFlags = "NO_INSTALL_HARDLINKS=1";
 
-  preInstall = stdenv.lib.optionalString stdenv.isDarwin ''
+  preInstall = (stdenv.lib.optionalString stdenv.isDarwin ''
     mkdir -p $out/bin
-    cp -a $PWD/contrib/credential/osxkeychain/git-credential-osxkeychain $out/bin
+    ln -s $out/share/git/contrib/credential/osxkeychain/git-credential-osxkeychain $out/bin/
     rm -f $PWD/contrib/credential/osxkeychain/git-credential-osxkeychain.o
-  '';
+  '') + (stdenv.lib.optionalString withLibsecret ''
+    mkdir -p $out/bin
+    ln -s $out/share/git/contrib/credential/libsecret/git-credential-libsecret $out/bin/
+    rm -f $PWD/contrib/credential/libsecret/git-credential-libsecret.o
+  '');
 
   postInstall =
     ''
@@ -118,10 +127,7 @@ stdenv.mkDerivation {
       }
 
       # Install git-subtree.
-      pushd contrib/subtree
-      make
-      make install ${stdenv.lib.optionalString withManual "install-doc"}
-      popd
+      make -C contrib/subtree install ${stdenv.lib.optionalString withManual "install-doc"}
       rm -rf contrib/subtree
 
       # Install contrib stuff.
@@ -238,6 +244,7 @@ EOF
 
   ## InstallCheck
 
+  doCheck = false;
   doInstallCheck = true;
 
   installCheckTarget = "test";
@@ -276,7 +283,7 @@ EOF
 
     # XXX: I failed to understand why this one fails.
     # Could someone try to re-enable it on the next release ?
-    # Tested to fail: 2.18.0
+    # Tested to fail: 2.18.0 and 2.19.0
     disable_test t1700-split-index "null sha1"
 
     # Tested to fail: 2.18.0
@@ -285,6 +292,9 @@ EOF
 
     # Tested to fail: 2.18.0
     disable_test t9902-completion "sourcing the completion script clears cached --options"
+
+    # As of 2.19.0, t5562 refers to #!/usr/bin/perl
+    patchShebangs t/t5562/invoke-with-content-length.pl
   '' + stdenv.lib.optionalString stdenv.hostPlatform.isMusl ''
     # Test fails (as of 2.17.0, musl 1.1.19)
     disable_test t3900-i18n-commit
@@ -292,6 +302,8 @@ EOF
     # Tested to fail: 2.18.0
     disable_test t0028-working-tree-encoding
   '';
+
+  stripDebugList = [ "lib" "libexec" "bin" "share/git/contrib/credential/libsecret" ];
 
 
   meta = {

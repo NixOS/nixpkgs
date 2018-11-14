@@ -8,7 +8,6 @@
 , six
 , nose
 , Mako
-, python
 , cudaSupport ? false, cudatoolkit , nvidia_x11
 , openclSupport ? true, ocl-icd, clblas
 }:

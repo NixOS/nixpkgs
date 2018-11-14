@@ -1,16 +1,16 @@
 { stdenv, fetchFromGitHub
-, openssl, zlib, python2Packages, readline, cmake, python }:
+, openssl, zlib, readline, cmake, python }:
 
 let
 in stdenv.mkDerivation rec {
-  version = "3.3.12";
+  version = "3.3.16";
   name    = "arangodb-${version}";
 
   src = fetchFromGitHub {
     repo = "arangodb";
     owner = "arangodb";
     rev = "v${version}";
-    sha256 = "18mx7bcxll1za91q090g3hps3mwrlqdg40lvs61kibci3amma7j2";
+    sha256 = "0pw930ri5a0f1s6mhsbjc58lsmpy535f5wv2vcp8mzdx1rk3l091";
   };
 
   buildInputs = [

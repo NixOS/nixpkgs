@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libgcrypt, libgpgerror, yacc, flex, gettext }:
+{ stdenv, fetchurl, libgcrypt, libgpgerror, gettext }:
 
 # library that allows libbluray to play BDplus protected bluray disks
 # libaacs does not infringe DRM's right or copyright. See the legal page of the website for more info.

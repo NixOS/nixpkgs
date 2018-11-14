@@ -1,5 +1,5 @@
 { buildPythonPackage, fetchPypi, lib,
-  coverage, dicttoxml, flake8, pexpect, prettytable, requests_toolbelt
+  dicttoxml, pexpect, prettytable, requests_toolbelt
 }:
 buildPythonPackage rec {
   pname = "argcomplete";

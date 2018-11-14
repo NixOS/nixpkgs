@@ -4,6 +4,11 @@ let
   version = "0.9.8.6-0.rc1";
   webpage = "http://omake.metaprl.org";
 in
+
+if stdenv.lib.versionAtLeast ocaml.version "4.06"
+then throw "${pname}-${version} is not available for OCaml ${ocaml.version}"
+else
+
 stdenv.mkDerivation {
 
   name = "${pname}-${version}";

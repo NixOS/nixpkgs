@@ -1,4 +1,4 @@
-{ lib, pythonPackages, fetchurl, kmod, systemd, cloud-utils }:
+{ lib, pythonPackages, fetchurl, cloud-utils }:
 
 let version = "0.7.9";
 

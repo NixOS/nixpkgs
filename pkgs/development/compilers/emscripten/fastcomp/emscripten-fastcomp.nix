@@ -1,4 +1,4 @@
-{ emscriptenVersion, stdenv, llvm, fetchFromGitHub, cmake, python, gtest, ... }:
+{ emscriptenVersion, stdenv, fetchFromGitHub, cmake, python, gtest, ... }:
 
 let
   rev = emscriptenVersion;

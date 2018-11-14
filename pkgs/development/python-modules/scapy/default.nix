@@ -1,6 +1,14 @@
-{ stdenv, lib, buildPythonPackage, fetchFromGitHub, isPyPy, isPy3k, pythonOlder
-, matplotlib, pycrypto, ecdsa
+{ buildPythonPackage, fetchFromGitHub, lib, isPyPy, isPy3k, pythonOlder
+, pycrypto, ecdsa # TODO
 , enum34, mock
+, withOptionalDeps ? true, tcpdump, ipython
+, withCryptography ? true, cryptography
+, withVoipSupport ? true, sox
+, withPlottingSupport ? true, matplotlib
+, withGraphicsSupport ? false, pyx, texlive, graphviz, imagemagick
+, withManufDb ? false, wireshark
+# 2D/3D graphics and graphs TODO: VPython
+# TODO: nmap, numpy
 }:
 
 buildPythonPackage rec {
@@ -19,15 +27,23 @@ buildPythonPackage rec {
   # TODO: Temporary workaround
   patches = [ ./fix-version-1.patch ./fix-version-2.patch ];
 
-  propagatedBuildInputs =
-    [ matplotlib pycrypto ecdsa ]
+  postPatch = lib.optionalString withManufDb ''
+    substituteInPlace scapy/data.py --replace "/opt/wireshark" "${wireshark}"
+  '';
+
+  propagatedBuildInputs = [ pycrypto ecdsa ]
+    ++ lib.optional withOptionalDeps [ tcpdump ipython ]
+    ++ lib.optional withCryptography [ cryptography ]
+    ++ lib.optional withVoipSupport [ sox ]
+    ++ lib.optional withPlottingSupport [ matplotlib ]
+    ++ lib.optional withGraphicsSupport [ pyx texlive.combined.scheme-minimal graphviz imagemagick ]
     ++ lib.optional (isPy3k && pythonOlder "3.4") [ enum34 ]
     ++ lib.optional doCheck [ mock ];
 
   # Tests fail with Python 3.6 (seems to be an upstream bug, I'll investigate)
   doCheck = if isPy3k then false else true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Powerful interactive network packet manipulation program";
     homepage = https://scapy.net/;
     license = licenses.gpl2;

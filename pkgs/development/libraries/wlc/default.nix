@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch, cmake, pkgconfig
+{ stdenv, fetchFromGitHub, cmake, pkgconfig
 , wayland, pixman, libxkbcommon, libinput, xcbutilwm, xcbutilimage, libGL
 , libX11, dbus, wayland-protocols, libdrm, mesa_noglu
 , libpthreadstubs, libXdmcp, libXext, libXfixes

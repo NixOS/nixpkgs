@@ -12,7 +12,7 @@ let mkContrib = repo: revs: param:
       sha256 = "${param.sha256}";
     };
 
-    buildInputs = [ coq.ocaml coq.camlp5 coq.findlib coq ];
+    buildInputs = with coq.ocamlPackages; [ ocaml camlp5 findlib coq ];
 
     installFlags = "COQLIB=$(out)/lib/coq/${coq.coq-version}/";
 
@@ -1018,7 +1018,7 @@ let mkContrib = repo: revs: param:
     sha256 = "0fp3vdl79c8d759qjhk42rjfpkd0ba4pcw572f5gxn28kfwz3rrj";
   };
 
-  zfc = mkContrib "zfc" [ "8.5" "8.6" "8.7" ] {
+  zfc = mkContrib "zfc" [ "8.5" "8.6" "8.7" "8.8" ] {
     version = "v8.5.0-5-gbba3259";
     rev = "bba325933370fea64780b1afa2fad54c1b567819";
     sha256 = "0iwkpmc22nwasrk4g7ki4s5y05zjs7kmqk3j98giwp2wiavhgapn";

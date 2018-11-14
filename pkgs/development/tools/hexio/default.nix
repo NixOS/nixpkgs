@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchurl, python, pcsclite, pth }:
+{ stdenv, fetchFromGitHub, python, pcsclite, pth }:
 
 stdenv.mkDerivation rec {
   pname = "hexio";

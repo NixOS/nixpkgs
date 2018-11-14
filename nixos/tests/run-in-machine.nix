@@ -1,11 +1,14 @@
-{ system ? builtins.currentSystem }:
+{ system ? builtins.currentSystem,
+  config ? {},
+  pkgs ? import ../.. { inherit system config; }
+}:
 
-with import ../lib/testing.nix { inherit system; };
+with import ../lib/testing.nix { inherit system pkgs; };
 
 let
   output = runInMachine {
     drv = pkgs.hello;
-    machine = { config, pkgs, ... }: { /* services.sshd.enable = true; */ };
+    machine = { ... }: { /* services.sshd.enable = true; */ };
   };
 in pkgs.runCommand "verify-output" { inherit output; } ''
   if [ ! -e "$output/bin/hello" ]; then

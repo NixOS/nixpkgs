@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "beautifulsoup4";
-  version = "4.6.0";
+  version = "4.6.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "12cf0ygpz9srpfh9gx2f9ba0swa1rzypv3sm4r0hmjyw6b4nm2w0";
+    sha256 = "90f8e61121d6ae58362ce3bed8cd997efb00c914eae0ff3d363c32f9a9822d10";
   };
 
   buildInputs = [ nose ];

@@ -3,13 +3,13 @@
 stdenv.mkDerivation rec
 {
   name = "openvdb-${version}";
-  version = "5.1.0";
+  version = "5.2.0";
 
   src = fetchFromGitHub {
     owner = "dreamworksanimation";
     repo = "openvdb";
     rev = "v${version}";
-    sha256 = "1als53dnbnwa66k16vy95h1rhpdzz6i80c0gc2g3i17qbasl6ni5";
+    sha256 = "1yykrbc3nnnmpmmk0dz4b4y5xl4hl3ayjpqw0baq8yx2614r46b5";
   };
 
   outputs = [ "out" ];

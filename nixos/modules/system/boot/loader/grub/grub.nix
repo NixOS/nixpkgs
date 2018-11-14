@@ -38,6 +38,8 @@ let
     in
     pkgs.writeText "grub-config.xml" (builtins.toXML
     { splashImage = f cfg.splashImage;
+      splashMode = f cfg.splashMode;
+      backgroundColor = f cfg.backgroundColor;
       grub = f grub;
       grubTarget = f (grub.grubTarget or "");
       shell = "${pkgs.runtimeShell}";
@@ -80,6 +82,8 @@ let
                "--output" "$out"
              ] ++ (optional (cfg.fontSize!=null) "--size ${toString cfg.fontSize}")))
          );
+
+  defaultSplash = "${pkgs.nixos-artwork.wallpapers.simple-dark-gray-bootloader}/share/artwork/gnome/nix-wallpaper-simple-dark-gray_bootloader.png";
 in
 
 {
@@ -328,6 +332,31 @@ in
         '';
       };
 
+      backgroundColor = mkOption {
+        type = types.nullOr types.string;
+        example = "#7EBAE4";
+        default = null;
+        description = ''
+          Background color to be used for GRUB to fill the areas the image isn't filling.
+
+          <note><para>
+          This options has no effect for GRUB 1.
+          </para></note>
+        '';
+      };
+
+      splashMode = mkOption {
+        type = types.enum [ "normal" "stretch" ];
+        default = "stretch";
+        description = ''
+          Whether to stretch the image or show the image in the top-left corner unstretched.
+
+          <note><para>
+          This options has no effect for GRUB 1.
+          </para></note>
+        '';
+      };
+
       font = mkOption {
         type = types.nullOr types.path;
         default = "${realGrub}/share/grub/unicode.pf2";
@@ -531,8 +560,13 @@ in
           sha256 = "14kqdx2lfqvh40h6fjjzqgff1mwk74dmbjvmqphi6azzra7z8d59";
         }
         # GRUB 1.97 doesn't support gzipped XPMs.
-        else "${pkgs.nixos-artwork.wallpapers.gnome-dark}/share/artwork/gnome/Gnome_Dark.png");
+        else defaultSplash);
     }
+
+    (mkIf (cfg.splashImage == defaultSplash) {
+      boot.loader.grub.backgroundColor = mkDefault "#2F302F";
+      boot.loader.grub.splashMode = mkDefault "normal";
+    })
 
     (mkIf cfg.enable {
 

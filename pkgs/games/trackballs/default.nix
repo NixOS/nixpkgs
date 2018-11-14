@@ -19,5 +19,6 @@ stdenv.mkDerivation rec {
     homepage = https://trackballs.github.io/;
     description = "3D Marble Madness clone";
     platforms = stdenv.lib.platforms.linux;
+    license = stdenv.lib.licenses.gpl2;
   };
 }

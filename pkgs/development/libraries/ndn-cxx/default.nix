@@ -1,24 +1,24 @@
-{ stdenv, fetchgit, openssl, doxygen, boost, sqlite, cryptopp, pkgconfig, python, pythonPackages }:
+{ stdenv, fetchFromGitHub, openssl, doxygen, boost, sqlite, pkgconfig, python, pythonPackages }:
 let
-  version = "4c32e7";
+  version = "0.6.3";
 in
 stdenv.mkDerivation {
-  name = "ndn-cxx-0.1-${version}";
-  src = fetchgit {
-    url = "https://github.com/named-data/ndn-cxx.git";
-    rev = "4c32e748863d5165cc0e3d6b54a8383f4836cdf1";
-    sha256 = "18szs3j3ig8wlcqngran0daxaj7j2qsmch0212ids6fymj1hgax4";
+  name = "ndn-cxx-${version}";
+  src = fetchFromGitHub {
+    owner = "named-data";
+    repo = "ndn-cxx";
+    rev = "a3bf4319ed483a4a6fe2c96b79ec4491d7217f00";
+    sha256 = "076jhrjigisqz5n8dgxwd5fhimg69zhm834m7w9yvf9afgzrr50h";
   };
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ openssl doxygen boost sqlite cryptopp python pythonPackages.sphinx];
+  buildInputs = [ openssl doxygen boost sqlite python pythonPackages.sphinx];
   preConfigure = ''
     patchShebangs waf
     ./waf configure \
-      --with-cryptopp=${cryptopp} \
+      --prefix=$out \
+      --with-openssl=${openssl.dev} \
       --boost-includes=${boost.dev}/include \
-      --boost-libs=${boost.out}/lib \
-      --with-examples \
-      --prefix=$out
+      --boost-libs=${boost.out}/lib
   '';
   buildPhase = ''
     ./waf
@@ -45,6 +45,5 @@ stdenv.mkDerivation {
     license = licenses.lgpl3;
     platforms = stdenv.lib.platforms.unix;
     maintainers = [ maintainers.sjmackenzie ];
-    broken = true; # 2018-04-11
   };
 }

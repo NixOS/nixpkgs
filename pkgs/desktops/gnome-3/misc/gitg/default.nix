@@ -1,7 +1,7 @@
 { stdenv, fetchurl, vala, intltool, pkgconfig, gtk3, glib
 , json-glib, wrapGAppsHook, libpeas, bash, gobjectIntrospection
-, gnome3, gtkspell3, shared-mime-info, libgee, libgit2-glib, librsvg, libsecret
-, libsoup }:
+, gnome3, gtkspell3, shared-mime-info, libgee, libgit2-glib, libsecret
+ }:
 
 let
   pname = "gitg";
@@ -10,7 +10,7 @@ in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
     sha256 = "26730d437d6a30d6e341b9e8da99d2134dce4b96022c195609f45062f82b54d5";
   };
 

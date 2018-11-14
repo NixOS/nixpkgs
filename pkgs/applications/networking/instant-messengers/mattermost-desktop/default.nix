@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, gnome3, gtk2, pango, atk, cairo, gdk_pixbuf, glib,
+{ stdenv, lib, fetchurl, gnome2, gtk2, pango, atk, cairo, gdk_pixbuf, glib,
 freetype, fontconfig, dbus, libX11, xorg, libXi, libXcursor, libXdamage,
 libXrandr, libXcomposite, libXext, libXfixes, libXrender, libXtst,
 libXScrnSaver, nss, nspr, alsaLib, cups, expat, udev }:
@@ -14,7 +14,7 @@ let
     freetype
     gdk_pixbuf
     glib
-    gnome3.gconf
+    gnome2.GConf
     gtk2
     pango
     libX11
@@ -41,18 +41,18 @@ in
     version = "4.1.2";
 
     src =
-      if stdenv.system == "x86_64-linux" then
+      if stdenv.hostPlatform.system == "x86_64-linux" then
         fetchurl {
           url = "https://releases.mattermost.com/desktop/${version}/${name}-linux-x64.tar.gz";
           sha256 = "16dn6870bs1nfl2082ym9gwvmqb3i5sli48qprap80p7riph6k9s";
         }
-      else if stdenv.system == "i686-linux" then
+      else if stdenv.hostPlatform.system == "i686-linux" then
         fetchurl {
           url = "https://releases.mattermost.com/desktop/${version}/${name}-linux-ia32.tar.gz";
           sha256 = "145zb1l37fa2slfrrlprlwzcc5km3plxs374yhgix25mlg2afkqr";
         }
       else
-        throw "Mattermost-Desktop is not currently supported on ${stdenv.system}";
+        throw "Mattermost-Desktop is not currently supported on ${stdenv.hostPlatform.system}";
 
     phases = [ "unpackPhase" "installPhase" ];
     installPhase = ''

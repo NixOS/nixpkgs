@@ -130,7 +130,7 @@ in
       };
 
       ports = mkOption {
-        type = types.listOf types.int;
+        type = types.listOf types.port;
         default = [22];
         description = ''
           Specifies on which ports the SSH daemon listens.
@@ -479,7 +479,7 @@ in
 
     assertions = [{ assertion = if cfg.forwardX11 then cfgc.setXAuthLocation else true;
                     message = "cannot enable X11 forwarding without setting xauth location";}]
-      ++ flip map cfg.listenAddresses ({ addr, port, ... }: {
+      ++ flip map cfg.listenAddresses ({ addr, ... }: {
         assertion = addr != null;
         message = "addr must be specified in each listenAddresses entry";
       });

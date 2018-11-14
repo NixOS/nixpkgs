@@ -1,4 +1,4 @@
-{stdenv, fetchFromGitHub, fetchpatch, bash, which, m4, python, bison, flex, llvmPackages,
+{stdenv, fetchFromGitHub, fetchpatch, which, m4, python, bison, flex, llvmPackages,
 testedTargets ? ["sse2" "host"] # the default test target is sse4, but that is not supported by all Hydra agents
 }:
 

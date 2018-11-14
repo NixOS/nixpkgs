@@ -1,4 +1,4 @@
-{ fetchurl, fetchpatch, stdenv, pkgconfig, libgcrypt, libassuan, libksba
+{ fetchurl, stdenv, pkgconfig, libgcrypt, libassuan, libksba
 , libiconv, npth, gettext, texinfo, pcsclite, sqlite
 
 # Each of the dependencies below are optional.
@@ -15,11 +15,11 @@ assert guiSupport -> pinentry != null;
 stdenv.mkDerivation rec {
   name = "gnupg-${version}";
 
-  version = "2.2.8";
+  version = "2.2.10";
 
   src = fetchurl {
     url = "mirror://gnupg/gnupg/${name}.tar.bz2";
-    sha256 = "1k8dnnfs9888yp713l7kg2jg110lw47s4krx0njna6fjrsw4qyvp";
+    sha256 = "05f9804g72pffdxgvxjmjzkfcpjg1x221g9rwcr8fi51hrxd77br";
   };
 
   nativeBuildInputs = [ pkgconfig ];

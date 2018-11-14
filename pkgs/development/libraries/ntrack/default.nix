@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, glib, qt4, pkgconfig, libnl, python }:
+{ stdenv, fetchurl, qt4, pkgconfig, libnl, python }:
 
 let
   version = "016";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig python ];
 
-  configureFlags = "--without-gobject CFLAGS=--std=gnu99";
+  configureFlags = [ "--without-gobject" "CFLAGS=--std=gnu99" ];
 
   # Remove this patch after version 016
   patches = [ ./libnl-fix.patch ];
@@ -25,10 +25,10 @@ stdenv.mkDerivation rec {
     sed -e "s@/usr\(/lib/ntrack/modules/\)@$out&@" -i common/ntrack.c
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Network Connectivity Tracking library for Desktop Applications";
     homepage = https://launchpad.net/ntrack;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ ];
+    platforms = platforms.linux;
+    license = licenses.lgpl3Plus;
   };
 }

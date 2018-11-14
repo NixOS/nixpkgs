@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, isPy3k
 , mock
 }:
 

@@ -11,7 +11,7 @@
 , freetype
 , gdk_pixbuf
 , glib
-, gnome3
+, gnome2
 , gtk3
 , libX11
 , libxcb
@@ -55,7 +55,7 @@ let
     freetype.out
     gdk_pixbuf.out
     glib.out
-    gnome3.gconf
+    gnome2.GConf
     gtk3.out
     libX11.out
     libXScrnSaver.out

@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub
 , pkgconfig, cmake
-, libressl_2_6, libuv, zlib
+, libressl, libuv, zlib
 }:
 
 with builtins;
@@ -16,8 +16,17 @@ stdenv.mkDerivation rec {
     sha256 = "0jyvbp6cjiirj44nxqa2fi5y473gnc8awfn8zv82hb1y9rlxqfyv";
   };
 
+  # We have to fix up some function prototypes, because despite upstream h2o
+  # issue #1705 (https://github.com/h2o/h2o/issues/1706), libressl 2.7+ doesn't
+  # seem to work
+  patchPhase = ''
+    substituteInPlace ./deps/neverbleed/neverbleed.c \
+      --replace 'static void RSA_' 'void RSA_' \
+      --replace 'static int RSA_'  'int RSA_'
+  '';
+
   nativeBuildInputs = [ pkgconfig cmake ];
-  buildInputs = [ libressl_2_6 libuv zlib ];
+  buildInputs = [ libressl libuv zlib ];
   enableParallelBuilding = true;
 
   meta = {

@@ -26,13 +26,12 @@ stdenv.mkDerivation rec {
     cp license.txt "$out/share/doc/opencsg"
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Constructive Solid Geometry library";
     homepage = http://www.opencsg.org/;
-    platforms = with stdenv.lib.platforms;
-      linux;
-    maintainers = with stdenv.lib.maintainers; 
-      [raskin];
+    platforms = platforms.linux;
+    maintainers = [ maintainers.raskin ];
+    license = licenses.gpl2;
   };
 }
 

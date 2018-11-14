@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchurl, autoconf, automake, gettext, intltool
+{ stdenv, fetchFromGitHub, autoconf, automake, gettext, intltool
 , libtool, pkgconfig, wrapGAppsHook, wrapPython, gobjectIntrospection
 , gtk3, python, pygobject3, hicolor-icon-theme, pyxdg
 
@@ -60,6 +60,15 @@ stdenv.mkDerivation rec {
   preConfigure = "./bootstrap";
 
   postFixup = "wrapPythonPrograms";
+
+  # the geoclue agent may inspect these paths and expect them to be
+  # valid without having the correct $PATH set
+  postInstall = ''
+    substituteInPlace $out/share/applications/redshift.desktop \
+      --replace 'Exec=redshift' "Exec=$out/bin/redshift"
+    substituteInPlace $out/share/applications/redshift.desktop \
+      --replace 'Exec=redshift-gtk' "Exec=$out/bin/redshift-gtk"
+  '';
 
   enableParallelBuilding = true;
 

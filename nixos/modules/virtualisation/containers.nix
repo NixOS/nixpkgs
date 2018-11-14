@@ -130,6 +130,7 @@ let
         --bind-ro=/nix/var/nix/daemon-socket \
         --bind="/nix/var/nix/profiles/per-container/$INSTANCE:/nix/var/nix/profiles" \
         --bind="/nix/var/nix/gcroots/per-container/$INSTANCE:/nix/var/nix/gcroots" \
+        --link-journal=try-guest \
         --setenv PRIVATE_NETWORK="$PRIVATE_NETWORK" \
         --setenv HOST_BRIDGE="$HOST_BRIDGE" \
         --setenv HOST_ADDRESS="$HOST_ADDRESS" \
@@ -242,6 +243,9 @@ let
 
     Restart = "on-failure";
 
+    Slice = "machine.slice";
+    Delegate = true;
+
     # Hack: we don't want to kill systemd-nspawn, since we call
     # "machinectl poweroff" in preStop to shut down the
     # container cleanly. But systemd requires sending a signal
@@ -257,7 +261,7 @@ let
 
   system = config.nixpkgs.localSystem.system;
 
-  bindMountOpts = { name, config, ... }: {
+  bindMountOpts = { name, ... }: {
 
     options = {
       mountPoint = mkOption {
@@ -284,7 +288,7 @@ let
 
   };
 
-  allowedDeviceOpts = { name, config, ... }: {
+  allowedDeviceOpts = { ... }: {
     options = {
       node = mkOption {
         example = "/dev/net/tun";
@@ -605,9 +609,9 @@ in
               { config =
                   { config, pkgs, ... }:
                   { services.postgresql.enable = true;
-                    services.postgresql.package = pkgs.postgresql96;
+                    services.postgresql.package = pkgs.postgresql_9_6;
 
-                    system.nixos.stateVersion = "17.03";
+                    system.stateVersion = "17.03";
                   };
               };
           }
@@ -656,6 +660,8 @@ in
       serviceConfig = serviceDirectives dummyConfig;
     };
   in {
+    systemd.targets."multi-user".wants = [ "machines.target" ];
+
     systemd.services = listToAttrs (filter (x: x.value != null) (
       # The generic container template used by imperative containers
       [{ name = "container@"; value = unit; }]
@@ -679,7 +685,7 @@ in
           } // (
           if config.autoStart then
             {
-              wantedBy = [ "multi-user.target" ];
+              wantedBy = [ "machines.target" ];
               wants = [ "network.target" ];
               after = [ "network.target" ];
               restartTriggers = [ config.path ];

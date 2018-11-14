@@ -26,7 +26,7 @@ existing packages here and modify it as necessary.
 
 {
   newScope,
-  stdenv, fetchurl, makeSetupHook, makeWrapper,
+  stdenv, fetchurl, makeSetupHook,
   bison, cups ? null, harfbuzz, libGL, perl,
   gstreamer, gst-plugins-base,
 

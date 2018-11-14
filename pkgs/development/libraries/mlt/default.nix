@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchurl, makeWrapper
+{ stdenv, fetchFromGitHub, makeWrapper
 , SDL, ffmpeg, frei0r, libjack2, libdv, libsamplerate
 , libvorbis, libxml2, movit, pkgconfig, sox
 , gtk2

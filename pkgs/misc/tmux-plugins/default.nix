@@ -3,18 +3,19 @@
 let
   rtpPath = "share/tmux-plugins";
 
-  addRtp = path: pluginName: attrs: derivation:
-    derivation // { rtp = "${derivation}/${path}/${builtins.replaceStrings ["-"] ["_"] pluginName}.tmux"; } // {
-      overrideAttrs = f: buildTmuxPlugin (attrs // f attrs);
+  addRtp = path: rtpFilePath: attrs: derivation:
+    derivation // { rtp = "${derivation}/${path}/${rtpFilePath}"; } // {
+      overrideAttrs = f: mkDerivation (attrs // f attrs);
     };
 
-  buildTmuxPlugin = a@{
+  mkDerivation = a@{
     pluginName,
+    rtpFilePath ? (builtins.replaceStrings ["-"] ["_"] pluginName) + ".tmux",
     namePrefix ? "tmuxplugin-",
     src,
     unpackPhase ? "",
-    configurePhase ? "",
-    buildPhase ? "",
+    configurePhase ? ":",
+    buildPhase ? ":",
     addonInfo ? null,
     preInstall ? "",
     postInstall ? "",
@@ -22,7 +23,7 @@ let
     dependencies ? [],
     ...
   }:
-    addRtp "${rtpPath}/${path}" pluginName a (stdenv.mkDerivation (a // {
+    addRtp "${rtpPath}/${path}" rtpFilePath a (stdenv.mkDerivation (a // {
       name = namePrefix + pluginName;
 
       inherit pluginName unpackPhase configurePhase buildPhase addonInfo preInstall postInstall;
@@ -43,14 +44,11 @@ let
       dependencies = [ pkgs.bash ] ++ dependencies;
     }));
 
-  buildTmuxPluginFrom2Nix = a: buildTmuxPlugin ({
-    buildPhase = ":";
-    configurePhase =":";
-  } // a);
-
 in rec {
 
-  battery = buildTmuxPluginFrom2Nix {
+  inherit mkDerivation;
+
+  battery = mkDerivation {
     pluginName = "battery";
     src = fetchgit {
       url = "https://github.com/tmux-plugins/tmux-battery";
@@ -59,7 +57,7 @@ in rec {
     };
   };
 
-  continuum = buildTmuxPluginFrom2Nix {
+  continuum = mkDerivation {
     pluginName = "continuum";
     src = fetchgit {
       url = "https://github.com/tmux-plugins/tmux-continuum";
@@ -69,7 +67,7 @@ in rec {
     dependencies = [ resurrect ];
   };
 
-  copycat = buildTmuxPluginFrom2Nix {
+  copycat = mkDerivation {
     pluginName = "copycat";
     src = fetchgit {
       url = "https://github.com/tmux-plugins/tmux-copycat";
@@ -78,7 +76,7 @@ in rec {
     };
   };
 
-  cpu = buildTmuxPluginFrom2Nix {
+  cpu = mkDerivation {
     pluginName = "cpu";
     src = fetchgit {
       url = "https://github.com/tmux-plugins/tmux-cpu";
@@ -87,7 +85,7 @@ in rec {
     };
   };
 
-  fpp = buildTmuxPluginFrom2Nix {
+  fpp = mkDerivation {
     pluginName = "fpp";
     src = fetchgit {
       url = "https://github.com/tmux-plugins/tmux-fpp";
@@ -100,7 +98,17 @@ in rec {
     dependencies = [ pkgs.fpp ];
   };
 
-  logging = buildTmuxPluginFrom2Nix {
+  fzf-tmux-url = mkDerivation {
+    pluginName = "fzf-tmux-url";
+    rtpFilePath = "fzf-url.tmux";
+    src = fetchgit {
+      url = "https://github.com/wfxr/tmux-fzf-url";
+      rev = "ecd518eec1067234598c01e655b048ff9d06ef2f";
+      sha256 = "0png8hdv91y2nivq5vdii2192mb2qcrkwwn69lzxrdnbfa27qrgv";
+    };
+  };
+
+  logging = mkDerivation {
     pluginName = "logging";
     src = fetchgit {
       url = "https://github.com/tmux-plugins/tmux-logging";
@@ -109,7 +117,7 @@ in rec {
     };
   };
 
-  net-speed = buildTmuxPluginFrom2Nix {
+  net-speed = mkDerivation {
     pluginName = "net-speed";
     src = fetchgit {
       url = "https://github.com/tmux-plugins/tmux-net-speed";
@@ -118,7 +126,7 @@ in rec {
     };
   };
 
-  maildir-counter = buildTmuxPluginFrom2Nix {
+  maildir-counter = mkDerivation {
     pluginName = "maildir-counter";
     src = fetchgit {
       url = "https://github.com/tmux-plugins/tmux-maildir-counter";
@@ -127,7 +135,7 @@ in rec {
     };
   };
 
-  online-status = buildTmuxPluginFrom2Nix {
+  online-status = mkDerivation {
     pluginName = "online-status";
     src = fetchgit {
       url = "https://github.com/tmux-plugins/tmux-online-status";
@@ -136,7 +144,7 @@ in rec {
     };
   };
 
-  open = buildTmuxPluginFrom2Nix {
+  open = mkDerivation {
     pluginName = "open";
     src = fetchgit {
       url = "https://github.com/tmux-plugins/tmux-open";
@@ -145,7 +153,7 @@ in rec {
     };
   };
 
-  pain-control = buildTmuxPluginFrom2Nix {
+  pain-control = mkDerivation {
     pluginName = "pain-control";
     src = fetchgit {
       url = "https://github.com/tmux-plugins/tmux-pain-control";
@@ -154,7 +162,7 @@ in rec {
     };
   };
 
-  prefix-highlight = buildTmuxPluginFrom2Nix {
+  prefix-highlight = mkDerivation {
     pluginName = "prefix-highlight";
     src = fetchgit {
       url = "https://github.com/tmux-plugins/tmux-prefix-highlight";
@@ -163,7 +171,7 @@ in rec {
     };
   };
 
-  resurrect = buildTmuxPluginFrom2Nix {
+  resurrect = mkDerivation {
     pluginName = "resurrect";
     src = fetchgit {
       url = "https://github.com/tmux-plugins/tmux-resurrect";
@@ -172,7 +180,7 @@ in rec {
     };
   };
 
-  sensible = buildTmuxPluginFrom2Nix {
+  sensible = mkDerivation {
     pluginName = "sensible";
     src = fetchgit {
       url = "https://github.com/tmux-plugins/tmux-sensible";
@@ -181,7 +189,7 @@ in rec {
     };
   };
 
-  sessionist = buildTmuxPluginFrom2Nix {
+  sessionist = mkDerivation {
     pluginName = "sessionist";
     src = fetchgit {
       url = "https://github.com/tmux-plugins/tmux-sessionist";
@@ -190,7 +198,7 @@ in rec {
     };
   };
 
-  sidebar = buildTmuxPluginFrom2Nix {
+  sidebar = mkDerivation {
     pluginName = "sidebar";
     src = fetchgit {
       url = "https://github.com/tmux-plugins/tmux-sidebar";
@@ -199,7 +207,7 @@ in rec {
     };
   };
 
-  urlview = buildTmuxPluginFrom2Nix {
+  urlview = mkDerivation {
     pluginName = "urlview";
     src = fetchgit {
       url = "https://github.com/tmux-plugins/tmux-urlview";
@@ -212,7 +220,7 @@ in rec {
     dependencies = [ pkgs.urlview ];
   };
 
-  yank = buildTmuxPluginFrom2Nix {
+  yank = mkDerivation {
     pluginName = "yank";
     src = fetchgit {
       url = "https://github.com/tmux-plugins/tmux-yank";

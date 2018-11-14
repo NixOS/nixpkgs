@@ -2,7 +2,7 @@
 
 buildBazelPackage rec {
   name = "bazel-deps-${version}";
-  version = "2018-05-31";
+  version = "2018-11-01";
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/johnynek/bazel-deps";
@@ -15,8 +15,8 @@ buildBazelPackage rec {
   src = fetchFromGitHub {
     owner = "johnynek";
     repo = "bazel-deps";
-    rev = "dd7d0086d3a61c1d5c3370a0300824d0c75946e4";
-    sha256 = "1h9ddgk6vn0bhnnkwwz4n1iqv2rcdj521dxhdwj5wwpndbciw855";
+    rev = "1af8921d52f053fad575f26762533a3823b4a847";
+    sha256 = "0srz0sbz4bq9n7cp4g1n3kd3j6rcjqfi25sq8aa64l27yqzbk53x";
   };
 
   bazelTarget = "//src/scala/com/github/johnynek/bazel_deps:parseproject_deploy.jar";
@@ -26,7 +26,7 @@ buildBazelPackage rec {
   fetchAttrs = {
     preInstall = ''
       # Remove all built in external workspaces, Bazel will recreate them when building
-      rm -rf $bazelOut/external/{bazel_tools,\@bazel_tools.marker,local_*,\@local_*}
+      rm -rf $bazelOut/external/{bazel_tools,\@bazel_tools.marker,embedded_jdk,\@embedded_jdk.marker,local_*,\@local_*}
       # For each external workspace, remove all files that aren't referenced by Bazel
       # Many of these files are non-hermetic (for example .git/refs/remotes/origin/HEAD)
       files_to_delete=()
@@ -66,12 +66,13 @@ buildBazelPackage rec {
       find . -type d -empty -delete
     '';
 
-    sha256 = "0fh9jjwk3aq0kklhl9zyy8hj8gjm1y1fy4ygjinm0469w9jdgc3g";
+    sha256 = "1gvl4a9z8p4ch2gmcj3lpp0imrkrvy8wng949p3wlkibi14hc6ww";
   };
 
   buildAttrs = {
     installPhase = ''
       mkdir -p $out/bin/bazel-bin/src/scala/com/github/johnynek/bazel_deps
+
       cp gen_maven_deps.sh $out/bin
       wrapProgram "$out/bin/gen_maven_deps.sh" --set JAVA_HOME "${jre}" --prefix PATH : ${lib.makeBinPath [ jre ]}
       cp bazel-bin/src/scala/com/github/johnynek/bazel_deps/parseproject_deploy.jar $out/bin/bazel-bin/src/scala/com/github/johnynek/bazel_deps

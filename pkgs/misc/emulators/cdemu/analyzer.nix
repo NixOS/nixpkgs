@@ -1,4 +1,4 @@
-{ callPackage, gtk3, glib, libxml2, gnuplot, makeWrapper, stdenv, gnome3, gdk_pixbuf, librsvg, intltool }:
+{ callPackage, gtk3, glib, libxml2, gnuplot, makeWrapper, gnome3, gdk_pixbuf, librsvg, intltool }:
 let pkg = import ./base.nix {
   version = "3.1.0";
   pkgName = "image-analyzer";

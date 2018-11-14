@@ -1,8 +1,8 @@
-import ./make-test.nix ({ pkgs, ... }:
+import ./make-test.nix ({ ... }:
 {
   name = "ecryptfs";
 
-  machine = { config, pkgs, ... }: {
+  machine = { pkgs, ... }: {
     imports = [ ./common/user-account.nix ];
     boot.kernelModules = [ "ecryptfs" ];
     security.pam.enableEcryptfs = true;

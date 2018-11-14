@@ -2,23 +2,23 @@
 , fetchFromGitHub
 , buildPythonApplication
 , bash
-, shadow
 , systemd
 , utillinux
 , boto
 , setuptools
+, distro
 }:
 
 buildPythonApplication rec {
   name = "google-compute-engine-${version}";
-  version = "20180129";
+  version = "20181011";
   namePrefix = "";
 
   src = fetchFromGitHub {
     owner = "GoogleCloudPlatform";
     repo = "compute-image-packages";
     rev = version;
-    sha256 = "0380fnr64109hv8l1f3sgdg8a5mf020axj7jh8y25xq6wzkjm20c";
+    sha256 = "1b3wyr412qh113xvs671dqnacidil61gisfvg79wbq6wrdwswkp8";
   };
 
   postPatch = ''
@@ -43,7 +43,7 @@ buildPythonApplication rec {
     cp -r google_config/udev/*.rules $out/lib/udev/rules.d
   '';
 
-  propagatedBuildInputs = [ boto setuptools ];
+  propagatedBuildInputs = [ boto setuptools distro ];
 
   doCheck = false;
 

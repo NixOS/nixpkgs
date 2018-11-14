@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "jsonrpc-base";
-  version = "1.0";
+  version = "1.0.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1dl55n54ha5kf4x6hap2p1k3s4qa4w7g791wp2656rjg2zxfgywk";
+    sha256 = "f9baac32aa51c3052d03b86ff30a9856900b8b4a4eb175f7bf2c8722520b8637";
   };
 
   propagatedBuildInputs = [ ];

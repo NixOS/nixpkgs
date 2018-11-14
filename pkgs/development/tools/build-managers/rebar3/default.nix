@@ -1,6 +1,6 @@
-{ stdenv, writeText, callPackage, fetchurl,
+{ stdenv, fetchurl,
   fetchHex, erlang, hermeticRebar3 ? true,
-  tree, fetchFromGitHub, hexRegistrySnapshot }:
+  tree, hexRegistrySnapshot }:
 
 let
   version = "3.6.1";
@@ -122,5 +122,6 @@ stdenv.mkDerivation {
 
     platforms = stdenv.lib.platforms.unix;
     maintainers = with stdenv.lib.maintainers; [ gleber tazjin ];
+    license = stdenv.lib.licenses.asl20;
   };
 }

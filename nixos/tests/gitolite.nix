@@ -58,7 +58,7 @@ in
   nodes = {
 
     server =
-      { config, pkgs, lib, ... }:
+      { ... }:
       {
         services.gitolite = {
           enable = true;
@@ -68,7 +68,7 @@ in
       };
 
     client =
-      { config, pkgs, lib, ... }:
+      { pkgs, ... }:
       {
         environment.systemPackages = [ pkgs.git ];
         programs.ssh.extraConfig = ''

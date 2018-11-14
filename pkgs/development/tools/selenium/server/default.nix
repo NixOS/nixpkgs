@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, jre, jdk, gcc, xorg
+{ stdenv, fetchurl, makeWrapper, jre
 , htmlunit-driver, chromedriver, chromeSupport ? true }:
 
 with stdenv.lib;

@@ -1,12 +1,13 @@
 { coreutils, fetchFromGitHub, libcaca, makeWrapper, python, openssl, qrencode, stdenv, yubikey-manager }:
 
-stdenv.mkDerivation {
-  name = "gen-oath-safe-2017-01-23";
+stdenv.mkDerivation rec {
+  name = "gen-oath-safe-${version}";
+  version = "0.11.0";
   src = fetchFromGitHub {
     owner = "mcepl";
     repo = "gen-oath-safe";
-    rev = "fb53841";
-    sha256 = "0018kqmhg0861r5xkbis2a1rx49gyn0dxcyj05wap5ms7zz69m0m";
+    rev = version;
+    sha256 = "1914z0jgj7lni0nf3hslkjgkv87mhxdr92cmhmbzhpjgjgr23ydp";
   };
 
   buildInputs = [ makeWrapper ];

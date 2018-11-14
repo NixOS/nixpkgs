@@ -1,17 +1,17 @@
-{ stdenv, fetchpatch, python3, pkgconfig, which, libtool, autoconf, automake,
-  autogen, git, sqlite, gmp, zlib, fetchFromGitHub }:
+{ stdenv, python3, pkgconfig, which, libtool, autoconf, automake,
+  autogen, sqlite, gmp, zlib, fetchFromGitHub }:
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "clightning-${version}";
-  version = "0.6";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     fetchSubmodules = true;
     owner = "ElementsProject";
     repo = "lightning";
     rev = "v${version}";
-    sha256 = "1xbi8c7kn21wj255fxnb9s0sqnzbn3wsz4p96z084k8mw1nc71vn";
+    sha256 = "0qx30i1c97ic4ii8bm0sk9dh76nfg4ihl9381gxjj14i4jr1q8y4";
   };
 
   enableParallelBuilding = true;

@@ -62,5 +62,6 @@ in stdenv.mkDerivation rec {
     homepage = https://github.com/facebook/xcbuild;
     platforms = platforms.unix;
     maintainers = with maintainers; [ copumpkin matthewbauer ];
+    license = with licenses; [ bsd2 bsd3 ];
   };
 }

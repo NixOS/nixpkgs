@@ -123,7 +123,7 @@ in stdenv.mkDerivation rec {
 
     wrapProgram $out/bin/caff --set PERL5LIB \
       ${with perlPackages; stdenv.lib.makePerlPath ([
-        TextTemplate MIMEtools MailTools TimeDate NetIDNEncode ]
+        TextTemplate MIMETools MailTools TimeDate NetIDNEncode ]
         ++ GnuPGInterfaceRuntimeDependencies)} \
       --prefix PATH ":" \
       "${stdenv.lib.makeBinPath [ nettools gnupg1 ]}"

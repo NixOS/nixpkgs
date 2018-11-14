@@ -1,5 +1,4 @@
-{stdenv, fetchurl, cmake, subversion, libGLU_combined, qt5, boost,
- python27, python27Packages}:
+{stdenv, fetchurl, cmake, libGLU_combined, qt5, boost}:
 
 stdenv.mkDerivation rec {
   version = "201707";

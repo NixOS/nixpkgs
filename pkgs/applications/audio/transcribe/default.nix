@@ -7,12 +7,12 @@ stdenv.mkDerivation rec {
   name = "transcribe-${version}";
   version = "8.40";
 
-  src = if stdenv.system == "i686-linux" then
+  src = if stdenv.hostPlatform.system == "i686-linux" then
     fetchzip {
       url = "https://www.seventhstring.com/xscribe/downlinux32_old/xscsetup.tar.gz";
       sha256 = "1ngidmj9zz8bmv754s5xfsjv7v6xr03vck4kigzq4bpc9b1fdhjq";
     }
-  else if stdenv.system == "x86_64-linux" then
+  else if stdenv.hostPlatform.system == "x86_64-linux" then
     fetchzip {
       url = "https://www.seventhstring.com/xscribe/downlinux64_old/xsc64setup.tar.gz";
       sha256 = "0svzi8svj6zn06gj0hr8mpnhq4416dvb4g5al0gpb1g3paywdaf9";

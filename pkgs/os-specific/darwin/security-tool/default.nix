@@ -1,4 +1,4 @@
-{ CoreServices, Foundation, PCSC, Security, GSS, Kerberos, makeWrapper, apple_sdk,
+{ Foundation, PCSC, Security, GSS, Kerberos, makeWrapper, apple_sdk,
 fetchurl, gnustep, libobjc, libsecurity_apple_csp, libsecurity_apple_cspdl,
 libsecurity_apple_file_dl, libsecurity_apple_x509_cl, libsecurity_apple_x509_tp,
 libsecurity_asn1, libsecurity_cdsa_client, libsecurity_cdsa_plugin,

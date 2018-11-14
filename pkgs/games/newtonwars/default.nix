@@ -33,5 +33,6 @@ stdenv.mkDerivation rec {
     description = "A space battle game with gravity as the main theme";
     maintainers = with maintainers; [ pSub ];
     platforms = platforms.linux;
+    license = licenses.mit;
   };
 }

@@ -1,7 +1,7 @@
 import ./make-test.nix ({ pkgs, ...}: {
   name = "haproxy";
   nodes = {
-    machine = { config, ...}: {
+    machine = { ... }: {
       imports = [ ../modules/profiles/minimal.nix ];
       services.haproxy = {
         enable = true;

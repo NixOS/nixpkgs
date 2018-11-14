@@ -1,7 +1,7 @@
 { stdenv, fetchgit, perl }:
 
 stdenv.mkDerivation rec {
-  version = "1.20170129";
+  version = "1.20180726";
   name = "mr-${version}";
 
   src = fetchgit {
@@ -9,6 +9,10 @@ stdenv.mkDerivation rec {
     rev = "refs/tags/" + version;
     sha256 = "15i9bs2i25l7ibv530ghy8280kklcgm5kr6j86s7iwcqqckd0czp";
   };
+
+  postPatch = ''
+    patchShebangs .
+  '';
 
   buildInputs = [ perl ];
 

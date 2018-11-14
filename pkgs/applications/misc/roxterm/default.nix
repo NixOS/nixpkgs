@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, docbook_xsl, dbus, dbus-glib, expat, gettext
-, gsettings-desktop-schemas, gdk_pixbuf, gtk2, gtk3, hicolor-icon-theme
-, imagemagick, itstool, librsvg, libtool, libxslt, lockfile, makeWrapper
+{ stdenv, fetchurl, docbook_xsl, dbus, dbus-glib, expat
+, gsettings-desktop-schemas, gdk_pixbuf, gtk3, hicolor-icon-theme
+, imagemagick, itstool, librsvg, libtool, libxslt, makeWrapper
 , pkgconfig, python, pythonPackages, vte
 , wrapGAppsHook}:
 

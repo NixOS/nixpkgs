@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     dbus telepathy-glib.python
   ];
 
-  configureFlags = "--enable-call";
+  configureFlags = [ "--enable-call" ];
 
   preFixup = ''
     wrapProgram "$out/libexec/telepathy-logger" \

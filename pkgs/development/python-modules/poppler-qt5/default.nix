@@ -1,5 +1,5 @@
 { buildPythonPackage, fetchPypi, stdenv, sip, qtbase, pyqt5, poppler, pkgconfig, fetchpatch
-, python, substituteAll
+, substituteAll
 }:
 
 buildPythonPackage rec {

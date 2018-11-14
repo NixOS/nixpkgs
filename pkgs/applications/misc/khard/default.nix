@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchFromGitHub, glibcLocales, python3 }:
+{ stdenv, fetchurl, glibcLocales, python3 }:
 
 let
   python = python3.override {
@@ -39,6 +39,10 @@ in with python.pkgs; buildPythonApplication rec {
     ruamel_base
     unidecode
   ];
+
+  postInstall = ''
+    install -D misc/zsh/_khard $out/share/zsh/site-functions/_khard
+  '';
 
   # Fails; but there are no tests anyway.
   doCheck = false;

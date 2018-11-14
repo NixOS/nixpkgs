@@ -1,45 +1,42 @@
-{ stdenv, execline, fetchgit, skalibs, s6 }:
+{ stdenv, skawarePackages }:
 
-let
+with skawarePackages;
 
-  version = "0.3.0.0";
+buildPackage {
+  pname = "s6-rc";
+  version = "0.4.1.0";
+  sha256 = "1xl37xi509pcm5chcvn8l7gb952sr5mkpxhpkbsxhsllj791bfa2";
 
-in stdenv.mkDerivation rec {
+  description = "A service manager for s6-based systems";
+  platforms = stdenv.lib.platforms.linux;
 
-  name = "s6-rc-${version}";
-
-  src = fetchgit {
-    url = "git://git.skarnet.org/s6-rc";
-    rev = "refs/tags/v${version}";
-    sha256 = "174a3l92nkhxrx8gq36xmb5a7krj40iz1xdiii25nxwjfiw5ynfb";
-  };
-
-  dontDisableStatic = true;
-
-  enableParallelBuilding = true;
+  outputs = [ "bin" "lib" "dev" "doc" "out" ];
 
   configureFlags = [
-    "--enable-absolute-paths"
-    "--with-sysdeps=${skalibs}/lib/skalibs/sysdeps"
-    "--with-include=${skalibs}/include"
-    "--with-include=${execline}/include"
-    "--with-include=${s6}/include"
-    "--with-lib=${skalibs}/lib"
-    "--with-lib=${execline}/lib"
-    "--with-lib=${s6}/lib/s6"
-    "--with-dynlib=${skalibs}/lib"
-    "--with-dynlib=${execline}/lib"
-    "--with-dynlib=${s6}/lib"
-  ]
-  ++ (if stdenv.isDarwin then [ "--disable-shared" ] else [ "--enable-shared" ])
-  ++ (stdenv.lib.optional stdenv.isDarwin "--build=${stdenv.system}");
+    "--libdir=\${lib}/lib"
+    "--libexecdir=\${lib}/libexec"
+    "--dynlibdir=\${lib}/lib"
+    "--bindir=\${bin}/bin"
+    "--includedir=\${dev}/include"
+    "--with-sysdeps=${skalibs.lib}/lib/skalibs/sysdeps"
+    "--with-include=${skalibs.dev}/include"
+    "--with-include=${execline.dev}/include"
+    "--with-include=${s6.dev}/include"
+    "--with-lib=${skalibs.lib}/lib"
+    "--with-lib=${execline.lib}/lib"
+    "--with-lib=${s6.out}/lib"
+    "--with-dynlib=${skalibs.lib}/lib"
+    "--with-dynlib=${execline.lib}/lib"
+    "--with-dynlib=${s6.out}/lib"
+  ];
 
-  meta = {
-    homepage = http://skarnet.org/software/s6-rc/;
-    description = "A service manager for s6-based systems";
-    platforms = stdenv.lib.platforms.linux;
-    license = stdenv.lib.licenses.isc;
-    maintainers = with stdenv.lib.maintainers; [ pmahoney ];
-  };
+  postInstall = ''
+    # remove all s6 executables from build directory
+    rm $(find -name "s6-rc-*" -type f -mindepth 1 -maxdepth 1 -executable)
+    rm s6-rc libs6rc.*
+
+    mv doc $doc/share/doc/s6-rc/html
+    mv examples $doc/share/doc/s6-rc/examples
+  '';
 
 }

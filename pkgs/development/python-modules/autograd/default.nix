@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, numpy, future, nose }:
+{ stdenv, buildPythonPackage, fetchPypi, numpy, future }:
 
 buildPythonPackage rec {
   pname = "autograd";

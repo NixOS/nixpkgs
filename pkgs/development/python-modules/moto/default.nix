@@ -1,14 +1,14 @@
-{ stdenv, buildPythonPackage, fetchPypi, jinja2, werkzeug, flask
+{ buildPythonPackage, fetchPypi, jinja2, werkzeug, flask
 , requests, pytz, backports_tempfile, cookies, jsondiff, botocore, aws-xray-sdk, docker, responses
-, six, boto, httpretty, xmltodict, nose, sure, boto3, freezegun, dateutil, mock, pyaml }:
+, six, boto, httpretty, xmltodict, nose, sure, boto3, freezegun, dateutil, mock, pyaml, python-jose }:
 
 buildPythonPackage rec {
   pname = "moto";
-  version = "1.3.3";
+  version = "1.3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "45d14aca2b06b0083d5e82cfd770ebca0ba77b5070aec6928670240939a78681";
+    sha256 = "58fe0a0d55cbd9a001c02c146c15790cfcebf010c6648cb9990e6c3204709cbb";
   };
 
   postPatch = ''
@@ -42,6 +42,7 @@ buildPythonPackage rec {
     botocore
     docker
     responses
+    python-jose
   ];
 
   checkInputs = [ boto3 nose sure freezegun ];

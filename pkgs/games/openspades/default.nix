@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, fetchFromGitHub, cmake, unzip, zip, file
+{ stdenv, fetchurl, fetchFromGitHub, cmake, unzip, zip, file
 , curl, glew , libGL, SDL2, SDL2_image, zlib, freetype, imagemagick
 , openal , opusfile, libogg
 }:

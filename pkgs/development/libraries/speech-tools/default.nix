@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gawk, alsaLib, ncurses }:
+{ stdenv, fetchurl, alsaLib, ncurses }:
 
 stdenv.mkDerivation rec {
   name = "speech_tools-${version}.0";

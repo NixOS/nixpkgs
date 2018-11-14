@@ -16,10 +16,11 @@ infoFile: let
   script = writeText "build-maven-repository.sh" ''
     ${lib.concatStrings (map (dep: let
       inherit (dep)
-        url sha1 groupId artifactId version
-        authenticated metadata extension repository-id;
+        url sha1 groupId artifactId
+        version metadata repository-id;
 
       versionDir = dep.unresolved-version or version;
+      authenticated = dep.authenticated or false;
 
       fetch = (if authenticated then requireFile else fetchurl) {
         inherit url sha1;

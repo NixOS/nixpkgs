@@ -1,5 +1,9 @@
-{ system ? builtins.currentSystem }:
-with import ../lib/testing.nix { inherit system; };
+{ system ? builtins.currentSystem,
+  config ? {},
+  pkgs ? import ../.. { inherit system config; }
+}:
+
+with import ../lib/testing.nix { inherit system pkgs; };
 with pkgs.lib;
 
 let
@@ -10,7 +14,7 @@ let
     };
 
     nodes = {
-      zookeeper1 = { config, ... }: {
+      zookeeper1 = { ... }: {
         services.zookeeper = {
           enable = true;
         };
@@ -18,7 +22,7 @@ let
         networking.firewall.allowedTCPPorts = [ 2181 ];
         virtualisation.memorySize = 1024;
       };
-      kafka = { config, ... }: {
+      kafka = { ... }: {
         services.apache-kafka = {
           enable = true;
           extraProperties = ''

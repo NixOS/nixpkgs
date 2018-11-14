@@ -1,10 +1,10 @@
 { stdenv, fetchurl, zlib, libX11, libXext, libSM, libICE
 , libXfixes, libXt, libXi, libXcursor, libXScrnSaver, libXcomposite, libXdamage, libXtst, libXrandr
 , alsaLib, dbus, cups, libexif, ffmpeg, systemd
-, freetype, fontconfig, libXft, libXrender, libxcb, expat, libXau, libXdmcp
-, libuuid, xz
+, freetype, fontconfig, libXft, libXrender, libxcb, expat
+, libuuid
 , gstreamer, gst-plugins-base, libxml2
-, glib, gtk3, pango, gdk_pixbuf, cairo, atk, at-spi2-atk, gnome3
+, glib, gtk3, pango, gdk_pixbuf, cairo, atk, at-spi2-atk, gnome2
 , nss, nspr
 , patchelf, makeWrapper
 , proprietaryCodecs ? false, vivaldi-ffmpeg-codecs ? null
@@ -13,11 +13,11 @@
 stdenv.mkDerivation rec {
   name = "${product}-${version}";
   product = "vivaldi";
-  version = "1.15.1147.42-1";
+  version = "2.1.1337.36-1";
 
   src = fetchurl {
     url = "https://downloads.vivaldi.com/stable/${product}-stable_${version}_amd64.deb";
-    sha256 = "15cajvn2sv05qdp3y538n2xvyy3il49q8zi5928z1mfirjz3dlwh";
+    sha256 = "14qf3gk46m65yfc7q7gsnkj6av8yhg7byi0h1yv24sr7n4rrnrsc";
   };
 
   unpackPhase = ''
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     libXi libXft libXcursor libXfixes libXScrnSaver libXcomposite libXdamage libXtst libXrandr
     atk at-spi2-atk alsaLib dbus cups gtk3 gdk_pixbuf libexif ffmpeg systemd
     freetype fontconfig libXrender libuuid expat glib nss nspr
-    gstreamer libxml2 gst-plugins-base pango cairo gnome3.gconf
+    gstreamer libxml2 gst-plugins-base pango cairo gnome2.GConf
   ] ++ stdenv.lib.optional proprietaryCodecs vivaldi-ffmpeg-codecs;
 
   libPath = stdenv.lib.makeLibraryPath buildInputs

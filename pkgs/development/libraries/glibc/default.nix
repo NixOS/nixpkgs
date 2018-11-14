@@ -5,12 +5,16 @@
 , withGd ? false
 }:
 
-assert stdenv.cc.isGNU;
-
 callPackage ./common.nix { inherit stdenv; } {
     name = "glibc" + stdenv.lib.optionalString withGd "-gd";
 
     inherit withLinuxHeaders profilingLibraries installLocales withGd;
+
+    # Note:
+    # Things you write here override, and do not add to,
+    # the values in `common.nix`.
+    # (For example, if you define `patches = [...]` here, it will
+    # override the patches in `common.nix`.)
 
     NIX_NO_SELF_RPATH = true;
 

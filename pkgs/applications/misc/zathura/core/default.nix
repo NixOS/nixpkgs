@@ -1,6 +1,6 @@
 { stdenv, fetchurl, meson, ninja, makeWrapper, pkgconfig
 , appstream-glib, desktop-file-utils, python3
-, gtk, girara, ncurses, gettext, libxml2
+, gtk, girara, gettext, libxml2
 , file, sqlite, glib, texlive, libintl, libseccomp
 , gtk-mac-integration, synctexSupport ? true
 }:
@@ -11,11 +11,11 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "zathura-core-${version}";
-  version = "0.4.0";
+  version = "0.4.1";
 
   src = fetchurl {
     url = "https://pwmt.org/projects/zathura/download/zathura-${version}.tar.xz";
-    sha256 = "1j0yah09adv3bsjhhbqra5lambal32svk8fxmf89wwmcqrcr4qma";
+    sha256 = "1znr3psqda06xklzj8mn452w908llapcg1rj468jwpg0wzv6pxfn";
   };
 
   nativeBuildInputs = [

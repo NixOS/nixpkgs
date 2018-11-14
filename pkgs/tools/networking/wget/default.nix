@@ -34,8 +34,9 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional (libpsl != null) libpsl
     ++ stdenv.lib.optional stdenv.isDarwin perl;
 
-  configureFlags =
-    if openssl != null then "--with-ssl=openssl" else "--without-ssl";
+  configureFlags = [
+    (stdenv.lib.withFeatureAs (openssl != null) "ssl" "openssl")
+  ];
 
   doCheck = false;
 

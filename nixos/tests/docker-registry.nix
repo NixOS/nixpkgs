@@ -7,7 +7,7 @@ import ./make-test.nix ({ pkgs, ...} : {
   };
 
   nodes = {
-    registry = { config, pkgs, ... }: {
+    registry = { ... }: {
       services.dockerRegistry.enable = true;
       services.dockerRegistry.enableDelete = true;
       services.dockerRegistry.port = 8080;
@@ -16,12 +16,12 @@ import ./make-test.nix ({ pkgs, ...} : {
       networking.firewall.allowedTCPPorts = [ 8080 ];
     };
 
-    client1 = { config, pkgs, ...}: {
+    client1 = { ... }: {
       virtualisation.docker.enable = true;
       virtualisation.docker.extraOptions = "--insecure-registry registry:8080";
     };
 
-    client2 = { config, pkgs, ...}: {
+    client2 = { ... }: {
       virtualisation.docker.enable = true;
       virtualisation.docker.extraOptions = "--insecure-registry registry:8080";
     };

@@ -1,6 +1,6 @@
 { stdenv, fetchurl
 # TODO: links -lsigsegv but loses the reference for some reason
-, withSigsegv ? (false && stdenv.system != "x86_64-cygwin"), libsigsegv
+, withSigsegv ? (false && stdenv.hostPlatform.system != "x86_64-cygwin"), libsigsegv
 , interactive ? false, readline
 
 /* Test suite broke on:

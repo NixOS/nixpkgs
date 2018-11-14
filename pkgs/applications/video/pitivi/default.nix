@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, pkgconfig, intltool, itstool, wrapGAppsHook
-, python3Packages, gst, gtk3, hicolor-icon-theme
+{ stdenv, fetchurl, pkgconfig, intltool, itstool, python3, wrapGAppsHook
+, python3Packages, gst, gtk3
 , gobjectIntrospection, librsvg, gnome3, libnotify
 , meson, ninja
 }:
@@ -26,7 +26,7 @@ in python3Packages.buildPythonApplication rec {
   name = "pitivi-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/pitivi/${gnome3.versionBranch version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/pitivi/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
     sha256 = "0z4gvcr0cvyz2by47f36nqf7x2kfv9wn382w9glhs7l0d7b2zl69";
   };
 
@@ -43,7 +43,7 @@ in python3Packages.buildPythonApplication rec {
     patchShebangs ./getenvvar.py
   '';
 
-  nativeBuildInputs = [ meson ninja pkgconfig intltool itstool wrapGAppsHook ];
+  nativeBuildInputs = [ meson ninja pkgconfig intltool itstool python3 wrapGAppsHook ];
 
   buildInputs = [
     gobjectIntrospection gtk3 librsvg gnome3.gnome-desktop gnome3.gsound

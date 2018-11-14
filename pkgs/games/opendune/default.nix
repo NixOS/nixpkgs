@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, SDL, SDL_image, SDL_mixer, binutils }:
+{ stdenv, fetchFromGitHub, SDL, SDL_image, SDL_mixer }:
 
 # - set the opendune configuration at ~/.config/opendune/opendune.ini:
 #     [opendune]
