@@ -27,6 +27,7 @@ import ./make-test.nix ({ pkgs, lib, ...} : with lib; {
         enable = true;
         databasePassword = "dbPassword";
         initialRootPassword = "notproduction";
+        smtp.enable = true;
         secrets = {
           secret = "secret";
           otp = "otpsecret";
