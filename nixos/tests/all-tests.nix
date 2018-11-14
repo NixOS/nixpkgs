@@ -99,7 +99,7 @@ in
   hydra = handleTest ./hydra {};
   i3wm = handleTest ./i3wm.nix {};
   iftop = handleTest ./iftop.nix {};
-  incron = handleTest tests/incron.nix {};
+  incron = handleTest ./incron.nix {};
   influxdb = handleTest ./influxdb.nix {};
   initrd-network-ssh = handleTest ./initrd-network-ssh {};
   initrdNetwork = handleTest ./initrd-network.nix {};
