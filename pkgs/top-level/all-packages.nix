@@ -237,6 +237,8 @@ in
 
   mod = callPackage ../development/tools/mod { };
 
+  broadlink-cli = callPackage ../tools/misc/broadlink-cli {};
+
   mht2htm = callPackage ../tools/misc/mht2htm { };
 
   fetchpatch = callPackage ../build-support/fetchpatch { };
