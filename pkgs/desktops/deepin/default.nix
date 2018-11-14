@@ -2,6 +2,8 @@
 
 let
   packages = self: with self; {
+    setupHook = ./setup-hook.sh;
+
     updateScript = callPackage ./update.nix { };
 
     dbus-factory = callPackage ./dbus-factory { };
