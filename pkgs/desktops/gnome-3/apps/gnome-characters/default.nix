@@ -23,7 +23,12 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ meson ninja pkgconfig gettext wrapGAppsHook python3 gobjectIntrospection ];
-  buildInputs = [ glib gtk3 gjs pango gnome3.gsettings-desktop-schemas gnome3.defaultIconTheme libunistring ];
+  buildInputs = [
+    glib gtk3 gjs pango gnome3.gsettings-desktop-schemas
+    gnome3.defaultIconTheme libunistring
+    # typelib
+    gnome3.gnome-desktop
+  ];
 
   mesonFlags = [
     "-Ddbus_service_dir=${placeholder "out"}/share/dbus-1/services"
