@@ -220,6 +220,18 @@
      reset to the default value (<literal>false</literal>).
     </para>
    </listitem>
+   <listitem>
+      <para>
+        The <literal>services.fcgiwrap</literal> module has been converted to use
+        socket activation with <literal>systemd</literal>. You can now
+        configure the owner, group and mode of a unix socket. The service
+        won't be started as <literal>root</literal> anymore by default and the option
+        <literal>services.fcgiwrap.socketType</literal> was removed because
+        <literal>services.fcgiwrap.socketAddress</literal> now takes
+        addresses as defined in
+        <citerefentry><refentrytitle>systemd.socket</refentrytitle><manvolnum>5</manvolnum></citerefentry>.
+      </para>
+    </listitem>
   </itemizedlist>
  </section>
 
