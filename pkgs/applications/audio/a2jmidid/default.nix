@@ -1,4 +1,5 @@
 { stdenv, fetchurl, makeWrapper, pkgconfig, alsaLib, dbus, libjack2
+, wafHook
 , python2Packages}:
 
 let
@@ -12,15 +13,10 @@ in stdenv.mkDerivation rec {
     sha256 = "06dgf5655znbvrd7fhrv8msv6zw8vk0hjqglcqkh90960mnnmwz7";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig wafHook ];
   buildInputs = [ makeWrapper alsaLib dbus libjack2 python dbus-python ];
 
-  configurePhase = "${python.interpreter} waf configure --prefix=$out";
-
-  buildPhase = "${python.interpreter} waf";
-
-  installPhase = ''
-    ${python.interpreter} waf install
+  postInstall = ''
     wrapProgram $out/bin/a2j_control --set PYTHONPATH $PYTHONPATH
   '';
 
