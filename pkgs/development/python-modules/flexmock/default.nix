@@ -15,4 +15,10 @@ buildPythonPackage rec {
   };
 
   buildInputs = [ nose pytest ];
+
+  meta = with lib; {
+    homepage = https://flexmock.readthedocs.io/en/latest/;
+    description = "flexmock is a testing library for Python.";
+    license = licenses.bsd2;
+  };
 }
