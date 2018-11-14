@@ -29,15 +29,15 @@ let
   license_dir = "~/.config/houdini";
 in
 stdenv.mkDerivation rec {
-  version = "16.5.439";
+  version = "16.5.634";
   name = "houdini-runtime-${version}";
   src = requireFile rec {
     name = "houdini-${version}-linux_x86_64_gcc4.8.tar.gz";
-    sha256 = "7e483072a0e6e751a93f2a2f968cccb2d95559c61106ffeb344c95975704321b";
+    sha256 = "1jl7i2arhwxz42wb872i6wxqxxgdj8rkgg5rn1phsljv5w4kqc68";
     message = ''
       This nix expression requires that ${name} is already part of the store.
       Download it from https://sidefx.com and add it to the nix store with:
-        
+
           nix-prefetch-url <URL>
 
       This can't be done automatically because you need to create an account on
