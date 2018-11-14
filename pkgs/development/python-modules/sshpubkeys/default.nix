@@ -18,4 +18,10 @@ buildPythonPackage rec {
 
   # For some reason nix can't find the "tests" module.
   doCheck = false;
+
+  meta = with lib; {
+    homepage = https://github.com/ojarva/python-sshpubkeys;
+    description = "OpenSSH public key parser for Python";
+    license = licenses.bsd3;
+  };
 }
