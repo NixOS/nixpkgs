@@ -6604,17 +6604,15 @@ in
 
   colm = callPackage ../development/compilers/colm { };
 
-  fetchegg = callPackage ../build-support/fetchegg { };
+  chickenPackages_4 = callPackage ../development/compilers/chicken/4 { };
+  chickenPackages_5 = callPackage ../development/compilers/chicken/5 { };
+  chickenPackages = chickenPackages_5;
 
-  eggDerivation = callPackage ../development/compilers/chicken/eggDerivation.nix { };
-
-  chicken = callPackage ../development/compilers/chicken {
-    bootstrap-chicken = chicken.override { bootstrap-chicken = null; };
-  };
-
-  egg2nix = callPackage ../development/tools/egg2nix {
-    chickenEggs = callPackage ../development/tools/egg2nix/chicken-eggs.nix { };
-  };
+  inherit (chickenPackages)
+    fetchegg
+    eggDerivation
+    chicken
+    egg2nix;
 
   ccl = callPackage ../development/compilers/ccl {
     inherit (buildPackages.darwin) bootstrap_cmds;
