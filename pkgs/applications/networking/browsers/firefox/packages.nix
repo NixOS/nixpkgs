@@ -22,6 +22,14 @@ rec {
 
     patches = nixpkgsPatches ++ [
       ./no-buildconfig.patch
+      # this is only required for version 63.0,  version 63.0.3 onwards will
+      # carry the patch
+      # bug report: https://bugzilla.mozilla.org/show_bug.cgi?id=1503401
+      (fetchpatch {
+        name = "fix-rust-cbindgen-breaking-change.patch";
+        url = "https://hg.mozilla.org/releases/mozilla-release/raw-rev/22273af49058";
+        sha256 = "1kvswbr1jxigli6s5jh3cr21153jx6mlyxf4a39510y3dg19ls0a";
+      })
     ];
 
     extraNativeBuildInputs = [ python3 ];
