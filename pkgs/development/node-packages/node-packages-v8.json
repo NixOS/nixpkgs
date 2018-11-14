@@ -105,7 +105,6 @@
 , "statsd"
 , "statsd-influxdb-backend"
 , "statsd-librato-backend"
-, "stylus"
 , "svgo"
 , "swagger"
 , "tern"
