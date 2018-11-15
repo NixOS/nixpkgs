@@ -6926,7 +6926,7 @@ in
   });
 
   gcj = gcj6;
-  gcj6 = wrapCC (gcc6.cc.override {
+  gcj6 = wrapCC ((gcc6.cc.override {
     name = "gcj";
     langJava = true;
     langFortran = false;
@@ -6935,7 +6935,9 @@ in
     profiledCompiler = false;
     inherit zip unzip zlib boehmgc gettext pkgconfig perl;
     inherit (gnome2) libart_lgpl;
-  });
+  }).overrideAttrs (oldAttrs: {
+    strictDeps = stdenv.isDarwin;
+  }));
 
   gnu-smalltalk = callPackage ../development/compilers/gnu-smalltalk {
     emacsSupport = config.emacsSupport or false;
