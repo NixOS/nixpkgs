@@ -22987,4 +22987,6 @@ with pkgs;
   newlibCross = callPackage ../development/misc/newlib {
     stdenv = crossLibcStdenv;
   };
+
+  turtl-server = callPackage ../servers/turtl-server {};
 }

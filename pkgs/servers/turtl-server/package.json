@@ -1,0 +1,25 @@
+{
+  "name": "turtl-server",
+  "version": "0.1.3",
+  "description": "Turtl's node-based API server (sorry, lisp)",
+  "author": "Andrew Lyon",
+  "license": "AGPL-3.0",
+  "repository": "https://github.com/turtl/server",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "aws-sdk": "2.9.0",
+    "bluebird": "3.4.7",
+    "body-parser": "1.15.2",
+    "express": "4.14.0",
+    "method-override": "2.3.10",
+    "morgan": "1.7.0",
+    "pg": "7.4.3",
+    "request": "2.81.0",
+    "s3-upload-stream": "1.0.7",
+    "turtl-lib-permissions": "git+https://github.com/turtl/lib-permissions.git#master",
+    "winston": "2.3.0",
+    "yaml-env": "git+https://github.com/orthecreedence/yaml-env.git#master"
+  }
+}

@@ -706,6 +706,7 @@
   ./services/web-apps/matomo.nix
   ./services/web-apps/restya-board.nix
   ./services/web-apps/tt-rss.nix
+  ./services/web-apps/turtl-server.nix
   ./services/web-apps/selfoss.nix
   ./services/web-apps/quassel-webserver.nix
   ./services/web-apps/virtlyst.nix
