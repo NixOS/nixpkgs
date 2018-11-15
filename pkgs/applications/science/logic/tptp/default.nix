@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "7.2.0";
 
   src = fetchurl {
-    url = [
+    urls = [
       "http://www.cs.miami.edu/~tptp/TPTP/Distribution/TPTP-v${version}.tgz"
       "http://www.cs.miami.edu/~tptp/TPTP/Archive/TPTP-v${version}.tgz"
     ];
