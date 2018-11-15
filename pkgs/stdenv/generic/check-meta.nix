@@ -166,14 +166,15 @@ let
     hydraPlatforms = listOf str;
     broken = bool;
     # TODO: refactor once something like Profpatsch's types-simple will land
+    # This is currently dead code due to https://github.com/NixOS/nix/issues/2532
     tests = attrsOf (mkOptionType {
       name = "test";
-      check = x: isDerivation x &&
-        x ? meta.timeout &&
-        x ? meta.needsVMSupport;
+      check = x: x == {} || ( # Accept {} for tests that are unsupported
+        isDerivation x &&
+        x ? meta.timeout
+      );
       merge = lib.options.mergeOneOption;
     });
-    needsVMSupport = bool;
     timeout = int;
 
     # Weirder stuff that doesn't appear in the documentation?

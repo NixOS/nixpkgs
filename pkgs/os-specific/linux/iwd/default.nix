@@ -1,23 +1,24 @@
-{ stdenv, fetchgit, autoreconfHook, coreutils, readline, python3Packages }:
+{ stdenv, fetchgit, autoreconfHook, pkgconfig, coreutils, readline, python3Packages }:
 
 let
   ell = fetchgit {
      url = https://git.kernel.org/pub/scm/libs/ell/ell.git;
-     rev = "0.11";
-     sha256 = "0nifa5w6fxy7cagyas2a0zhcppi83yrcsnnp70ls2rc90x4r1ip8";
+     rev = "0.14";
+     sha256 = "13jlmdk47pscmfs3c12awfwr3m6ka4fh6fyr9cl1bmqdpwqmmmk6";
   };
 in stdenv.mkDerivation rec {
   name = "iwd-${version}";
-  version = "0.9";
+  version = "0.11";
 
   src = fetchgit {
     url = https://git.kernel.org/pub/scm/network/wireless/iwd.git;
     rev = version;
-    sha256 = "1l1jbwsshjbz32s4rf0zfcn3fd16si4y9qa0zaxp00bfzflnpcd4";
+    sha256 = "0q79rdj3h16xdf0g2jdsvb2141z36z89vgzq0qn31pxzhgxdgf7j";
   };
 
   nativeBuildInputs = [
     autoreconfHook
+    pkgconfig
     python3Packages.wrapPython
   ];
 

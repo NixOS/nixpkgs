@@ -47,6 +47,9 @@
 /nixos/doc/manual/man-nixos-option.xml                @nbp
 /nixos/modules/installer/tools/nixos-option.sh        @nbp
 
+# NixOS modules
+/nixos/modules @Infinisil
+
 # Python-related code and docs
 /maintainers/scripts/update-python-libraries	@FRidh
 /pkgs/top-level/python-packages.nix     @FRidh
@@ -117,3 +120,6 @@
 # Dhall
 /pkgs/development/dhall-modules      @Gabriel439 @Profpatsch
 /pkgs/development/interpreters/dhall @Gabriel439 @Profpatsch
+
+# Idris
+/pkgs/development/idris-modules @Infinisil

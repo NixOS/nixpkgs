@@ -11,8 +11,6 @@ buildDunePackage rec {
     sha256 = "0rzysj07z2q6gk0yhjxnjnba01vmdb9x32wwna10qk3rrb8r2pnn";
   };
 
-  unpackCmd = "tar xjf $src";
-
   hardeningDisable = stdenv.lib.optional stdenv.isDarwin "strictoverflow";
 
   meta = with stdenv.lib; {

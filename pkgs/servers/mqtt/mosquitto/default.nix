@@ -25,6 +25,10 @@ stdenv.mkDerivation rec {
     substituteInPlace man/manpage.xsl \
       --replace /usr/share/xml/docbook/stylesheet/ ${docbook_xsl}/share/xml/
 
+    for f in {lib,lib/cpp,src}/CMakeLists.txt ; do
+      substituteInPlace $f --replace /sbin/ldconfig ldconfig
+    done
+
     # the manpages are not generated when using cmake
     pushd man
     make
@@ -39,6 +43,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DWITH_THREADING=ON"
+    "-DWITH_WEBSOCKETS=ON"
   ];
 
   meta = with stdenv.lib; {

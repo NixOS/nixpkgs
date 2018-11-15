@@ -9,8 +9,6 @@ buildDunePackage rec {
 		sha256 = "0cgfb6cwhwy7ypc1i3jyfz6sdnykp75aqi6kk0g1a2d81yjwzbcg";
 	};
 
-	unpackCmd = "tar -xjf $src";
-
 	meta = {
 		description = "A pure OCaml library to read and write CSV files";
 		license = stdenv.lib.licenses.lgpl21;

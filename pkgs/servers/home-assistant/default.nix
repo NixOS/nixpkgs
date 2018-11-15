@@ -20,8 +20,8 @@ let
     # Override the version of some packages pinned in Home Assistant's setup.py
     (mkOverride "aiohttp" "3.4.4"
       "51afec6ffa50a9da4cdef188971a802beb1ca8e8edb40fa429e5e529db3475fa")
-    (mkOverride "astral" "1.6.1"
-      "ab0c08f2467d35fcaeb7bad15274743d3ac1ad18b5391f64a0058a9cd192d37d")
+    (mkOverride "astral" "1.7.1"
+      "88086fd2006c946567285286464b2da3294a3b0cbba4410b7008ec2458f82a07")
     (mkOverride "async-timeout" "3.0.1"
       "0c3c816a028d47f659d6ff5c745cb2acf1f966da1fe5c19c77a70282b25f4c5f")
     (mkOverride "attrs" "18.2.0"
@@ -36,10 +36,16 @@ let
       "bf4d9b61dce69c49e830950aa36fad194706463b0b6dfe81425b9e0bc6644d46")
     (mkOverride "requests" "2.20.0"
       "99dcfdaaeb17caf6e526f32b6a7b780461512ab3f1d992187801694cba42770c")
+    (mkOverride "ruamel_yaml" "0.15.72"
+      "97652b9e3a76958cf6684d5d963674adf345d8cc192ddd95e2a21b22cda29f40")
     (mkOverride "voluptuous" "0.11.5"
       "567a56286ef82a9d7ae0628c5842f65f516abcb496e74f3f59f1d7b28df314ef")
     (mkOverride "voluptuous-serialize" "2.0.0"
       "44be04d87aec34bd7d31ab539341fadc505205f2299031ed9be985112c21aa41")
+
+    # used by auth.mfa_modules.totp
+    (mkOverride "pyotp" "2.2.6"
+      "dd9130dd91a0340d89a0f06f887dbd76dd07fb95a8886dc4bc401239f2eebd69")
 
     # used by check_config script
     # can be unpinned once https://github.com/home-assistant/home-assistant/issues/11917 is resolved
@@ -79,7 +85,7 @@ let
   extraBuildInputs = extraPackages py.pkgs;
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "0.81.5";
+  hassVersion = "0.82.0";
 
 in with py.pkgs; buildPythonApplication rec {
   pname = "homeassistant";
@@ -94,12 +100,12 @@ in with py.pkgs; buildPythonApplication rec {
     owner = "home-assistant";
     repo = "home-assistant";
     rev = version;
-    sha256 = "1fgf9hrv7q7g8s561sir951vd27a459mh3k685xzfnhkh4si47g4";
+    sha256 = "1vvq6frzwmbnynpq6269ykifwmvm8zj5zraslsph3jidppx2bnd4";
   };
 
   propagatedBuildInputs = [
     # From setup.py
-    aiohttp astral async-timeout attrs bcrypt certifi jinja2 pyjwt cryptography pip pytz pyyaml requests voluptuous voluptuous-serialize
+    aiohttp astral async-timeout attrs bcrypt certifi jinja2 pyjwt cryptography pip pytz pyyaml requests ruamel_yaml voluptuous voluptuous-serialize
     # From http, frontend and recorder components and auth.mfa_modules.totp
     sqlalchemy aiohttp-cors hass-frontend pyotp pyqrcode
   ] ++ componentBuildInputs ++ extraBuildInputs;

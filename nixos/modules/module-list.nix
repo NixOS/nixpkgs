@@ -11,6 +11,7 @@
   ./config/xdg/icons.nix
   ./config/xdg/menus.nix
   ./config/xdg/mime.nix
+  ./config/gtk/gtk-icon-cache.nix
   ./config/gnu.nix
   ./config/i18n.nix
   ./config/iproute2.nix
@@ -34,7 +35,7 @@
   ./config/zram.nix
   ./hardware/all-firmware.nix
   ./hardware/brightnessctl.nix
-  ./hardware/ckb.nix
+  ./hardware/ckb-next.nix
   ./hardware/cpu/amd-microcode.nix
   ./hardware/cpu/intel-microcode.nix
   ./hardware/digitalbitbox.nix
@@ -431,6 +432,7 @@
   ./services/monitoring/dd-agent/dd-agent.nix
   ./services/monitoring/fusion-inventory.nix
   ./services/monitoring/grafana.nix
+  ./services/monitoring/grafana-reporter.nix
   ./services/monitoring/graphite.nix
   ./services/monitoring/hdaps.nix
   ./services/monitoring/heapster.nix
@@ -450,7 +452,6 @@
   ./services/monitoring/riemann-tools.nix
   ./services/monitoring/scollector.nix
   ./services/monitoring/smartd.nix
-  ./services/monitoring/statsd.nix
   ./services/monitoring/sysstat.nix
   ./services/monitoring/systemhealth.nix
   ./services/monitoring/teamviewer.nix

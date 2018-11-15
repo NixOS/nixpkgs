@@ -1,18 +1,17 @@
 { stdenv, fetchFromGitHub, pkgconfig, intltool, libtool, gnome3, xorg,
   libcanberra-gtk3, upower, xkeyboard_config, libxkbcommon,
-  libstartup_notification, libinput, cogl, clutter, systemd
-}:
+  libstartup_notification, libinput, cogl, clutter, systemd, deepin }:
 
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "deepin-mutter";
-  version = "3.20.34";
+  version = "3.20.35";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "0s427fmj806ljpdg6jdvpfislk5m1xvxpnnyrq3l8b7pkhjvp8wd";
+    sha256 = "0mwk06kgw8qp8rg1j6px1zlya4x5rr9llax0qks59j56b3m9yim7";
   };
 
   nativeBuildInputs = [
@@ -50,6 +49,8 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     NOCONFIGURE=1 ./autogen.sh
   '';
+
+  passthru.updateScript = deepin.updateScript { inherit name; };
 
   meta = with stdenv.lib; {
     description = "Base window manager for deepin, fork of gnome mutter";

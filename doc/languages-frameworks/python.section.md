@@ -484,11 +484,11 @@ and in this case the `python35` interpreter is automatically used.
 ### Interpreters
 
 Versions 2.7, 3.5, 3.6 and 3.7 of the CPython interpreter are available as
-respectively `python27`, `python35` and `python36`. The PyPy interpreter
-is available as `pypy`. The aliases `python2` and `python3` correspond to respectively `python27` and
-`python35`. The default interpreter, `python`, maps to `python2`.
-The Nix expressions for the interpreters can be found in
-`pkgs/development/interpreters/python`.
+respectively `python27`, `python35`, `python36`, and `python37`. The PyPy
+interpreter is available as `pypy`. The aliases `python2` and `python3`
+correspond to respectively `python27` and `python36`. The default interpreter,
+`python`, maps to `python2`. The Nix expressions for the interpreters can be
+found in `pkgs/development/interpreters/python`.
 
 All packages depending on any Python interpreter get appended
 `out/{python.sitePackages}` to `$PYTHONPATH` if such directory
