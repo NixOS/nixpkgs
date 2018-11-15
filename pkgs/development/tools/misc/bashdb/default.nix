@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python36Packages }:
+{ stdenv, fetchurl, python3Packages }:
 
 stdenv.mkDerivation rec {
   name = "bashdb-${version}";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "0p7i7bpzs6q1i7swnkr89kxqgzr146xw8d2acmqwqbslzm9dqlml";
   };
 
-  propagatedBuildInputs = [ python36Packages.pygments ];
+  ropagatedBuildInputs = [ python3Packages.pygments ];
 
   meta = {
     description = "Bash script debugger";
