@@ -59,10 +59,10 @@ in stdenv.mkDerivation {
   '';
 
   meta = with stdenv.lib; {
-    description = "Turl notebook server";
+    description = "Turtl notebook server";
     license = licenses.agpl3;
     homepage = https://github.com/turtl/server;
-    maintainer = [];
+    maintainer = [ maintainers.raquelgb maintainers.rafaelgg ];
     platforms = platforms.linux;
   };
 }

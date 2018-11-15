@@ -3507,6 +3507,11 @@
     github = "alyssais";
     name = "Alyssa Ross";
   };
+  rafaelgg = {
+    email = "rafael.garcia.gallego@mail.com";
+    github = "rafaelgg";
+    name = "Rafael Garcia";
+  };
   ragge = {
     email = "r.dahlen@gmail.com";
     github = "ragnard";
@@ -3521,6 +3526,11 @@
     email = "ramkromberg@mail.com";
     github = "ramkromberg";
     name = "Ram Kromberg";
+  };
+  raquelgb = {
+    email = "rachgb@mail.com";
+    github = "raquelgb";
+    name = "Raquel Garcia";
   };
   rardiol = {
     email = "ricardo.ardissone@gmail.com";
