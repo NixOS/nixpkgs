@@ -6644,6 +6644,11 @@ with pkgs;
 
   apache-flex-sdk = callPackage ../development/compilers/apache-flex-sdk { };
 
+  fasm = pkgsi686Linux.callPackage ../development/compilers/fasm {
+    inherit (stdenv) isx86_64;
+  };
+  fasm-bin = callPackage ../development/compilers/fasm/bin.nix { };
+
   fpc = callPackage ../development/compilers/fpc { };
 
   gambit = callPackage ../development/compilers/gambit { stdenv = gccStdenv; };
