@@ -55,9 +55,6 @@ let format' = format; in let
 
   compress = optionalString (format' == "qcow2-compressed") "-c";
 
-  suffix = if config.nixpkgs.localSystem == config.nixpkgs.crossSystem
-           then "" else "-${config.nixpkgs.localSystem.config}";
-
   filename = "nixos." + {
     qcow2 = "qcow2";
     vpc   = "vhd";
@@ -184,7 +181,7 @@ let format' = format; in let
     nix-store --load-db < ${closureInfo}/registration
 
     echo "running nixos-install..."
-    nixos-install${suffix} --root $root --no-bootloader --no-root-passwd \
+    nixos-install --root $root --no-bootloader --no-root-passwd \
       --system ${config.system.build.toplevel} --channel ${channelSources} --substituters ""
 
     echo "copying staging root to image..."
@@ -233,7 +230,7 @@ in pkgs.vmTools.runInLinuxVM (
       ''}
 
       # Set up core system link, GRUB, etc.
-      NIXOS_INSTALL_BOOTLOADER=1 nixos-enter${suffix} --root $mountPoint -- /nix/var/nix/profiles/system/bin/switch-to-configuration boot
+      NIXOS_INSTALL_BOOTLOADER=1 nixos-enter --root $mountPoint -- /nix/var/nix/profiles/system/bin/switch-to-configuration boot
 
       # The above scripts will generate a random machine-id and we don't want to bake a single ID into all our images
       rm -f $mountPoint/etc/machine-id
