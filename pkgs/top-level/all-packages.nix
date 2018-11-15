@@ -16629,6 +16629,8 @@ with pkgs;
 
   exercism = callPackage ../applications/misc/exercism { };
 
+  go-motion = callPackage ../development/tools/go-motion { };
+
   gpg-mdp = callPackage ../applications/misc/gpg-mdp { };
 
   icesl = callPackage ../applications/misc/icesl { };
