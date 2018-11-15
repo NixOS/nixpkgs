@@ -20133,7 +20133,7 @@ with pkgs;
 
   angband = callPackage ../games/angband { };
 
-  anki = python2Packages.callPackage ../games/anki { };
+  anki = python3Packages.callPackage ../games/anki { };
 
   armagetronad = callPackage ../games/armagetronad { };
 
