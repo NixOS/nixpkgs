@@ -564,11 +564,11 @@ in {
         [ -L /run/gitlab/log ] || ln -sf ${cfg.statePath}/log /run/gitlab/log
         [ -L /run/gitlab/tmp ] || ln -sf ${cfg.statePath}/tmp /run/gitlab/tmp
         [ -L /run/gitlab/uploads ] || ln -sf ${cfg.statePath}/uploads /run/gitlab/uploads
+        cp ${cfg.packages.gitlab}/share/gitlab/VERSION ${cfg.statePath}/VERSION
+        cp -rf ${cfg.packages.gitlab}/share/gitlab/config.dist/* ${cfg.statePath}/config
         ${optionalString cfg.smtp.enable ''
           ln -sf ${smtpSettings} ${cfg.statePath}/config/initializers/smtp_settings.rb
         ''}
-        cp ${cfg.packages.gitlab}/share/gitlab/VERSION ${cfg.statePath}/VERSION
-        cp -rf ${cfg.packages.gitlab}/share/gitlab/config.dist/* ${cfg.statePath}/config
         ${pkgs.openssl}/bin/openssl rand -hex 32 > ${cfg.statePath}/config/gitlab_shell_secret
 
         # JSON is a subset of YAML
