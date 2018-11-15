@@ -6,6 +6,7 @@
 , libxslt, libmcrypt, bzip2, icu, openldap, cyrus_sasl, libmhash, freetds
 , uwimap, pam, gmp, apacheHttpd, libiconv, systemd, libsodium }:
 
+assert (config.php.intl or false) -> !stdenv.isDarwin;
 let
 
   generic =
@@ -260,7 +261,7 @@ let
         opensslSupport = config.php.openssl or true;
         mbstringSupport = config.php.mbstring or true;
         gdSupport = config.php.gd or true;
-        intlSupport = config.php.intl or true;
+        intlSupport = config.php.intl or (!stdenv.isDarwin);
         exifSupport = config.php.exif or true;
         xslSupport = config.php.xsl or false;
         mcryptSupport = config.php.mcrypt or true;
@@ -351,12 +352,12 @@ in {
   };
 
   php71 = generic {
-    version = "7.1.21";
-    sha256 = "104mn4kppklb21hgz1a50kgmc0ak5y996sx990xpc8yy9dbrqh62";
+    version = "7.1.24";
+    sha256 = "02qy76krbdhlbkzs9k1sa5mgmj0qnbb8gcf1j3q0cq3z7kkj9pk6";
   };
 
   php72 = generic {
-    version = "7.2.8";
-    sha256 = "1rky321gcvjm0npbfd4bznh36an0y14viqcvn4yzy3x643sni00z";
+    version = "7.2.12";
+    sha256 = "1dpnbsv4bdlc5v40ddddi971f456jp1qrn89w5di1dj70g1c895p";
   };
 }
