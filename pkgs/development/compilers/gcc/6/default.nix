@@ -180,18 +180,23 @@ stdenv.mkDerivation ({
 
   hardeningDisable = [ "format" "pie" ];
 
-  # This should kill all the stdinc frameworks that gcc and friends like to
-  # insert into default search paths.
-  prePatch = stdenv.lib.optionalString hostPlatform.isDarwin ''
-    substituteInPlace gcc/config/darwin-c.c \
-      --replace 'if (stdinc)' 'if (0)'
+  prePatch =
+    (stdenv.lib.optionalString (langJava || langGo) ''
+      export lib=$out
+    '')
 
-    substituteInPlace libgcc/config/t-slibgcc-darwin \
-      --replace "-install_name @shlib_slibdir@/\$(SHLIB_INSTALL_NAME)" "-install_name $lib/lib/\$(SHLIB_INSTALL_NAME)"
+    # This should kill all the stdinc frameworks that gcc and friends like to
+    # insert into default search paths.
+    + stdenv.lib.optionalString hostPlatform.isDarwin ''
+      substituteInPlace gcc/config/darwin-c.c \
+        --replace 'if (stdinc)' 'if (0)'
 
-    substituteInPlace libgfortran/configure \
-      --replace "-install_name \\\$rpath/\\\$soname" "-install_name $lib/lib/\\\$soname"
-  '';
+      substituteInPlace libgcc/config/t-slibgcc-darwin \
+        --replace "-install_name @shlib_slibdir@/\$(SHLIB_INSTALL_NAME)" "-install_name $lib/lib/\$(SHLIB_INSTALL_NAME)"
+
+      substituteInPlace libgfortran/configure \
+        --replace "-install_name \\\$rpath/\\\$soname" "-install_name $lib/lib/\\\$soname"
+    '';
 
   postPatch =
     if targetPlatform != hostPlatform || stdenv.cc.libc != null then
@@ -447,7 +452,7 @@ stdenv.mkDerivation ({
 
 // optionalAttrs (enableMultilib) { dontMoveLib64 = true; }
 
-// optionalAttrs (langJava) {
+// optionalAttrs (langJava && !stdenv.hostPlatform.isDarwin) {
      postFixup = ''
        target="$(echo "$out/libexec/gcc"/*/*/ecj*)"
        patchelf --set-rpath "$(patchelf --print-rpath "$target"):$out/lib" "$target"
