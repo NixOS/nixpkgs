@@ -1,16 +1,21 @@
-{ stdenv, fetchurl, python3Packages }:
+{ stdenv, fetchurl, makeWrapper, python3Packages }:
 
 stdenv.mkDerivation rec {
   name = "bashdb-${version}";
   version = "4.4-1.0.0";
-
 
   src = fetchurl {
     url =  "mirror://sourceforge/bashdb/${name}.tar.bz2";
     sha256 = "0p7i7bpzs6q1i7swnkr89kxqgzr146xw8d2acmqwqbslzm9dqlml";
   };
 
-  ropagatedBuildInputs = [ python3Packages.pygments ];
+  nativeBuildInputs = [
+    makeWrapper
+  ];
+
+  postInstall = ''
+    wrapProgram $out/bin/bashdb --prefix PYTHONPATH ":" "$(toPythonPath ${python3Packages.pygments})"
+  '';
 
   meta = {
     description = "Bash script debugger";
