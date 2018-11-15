@@ -1,11 +1,13 @@
-{ stdenv, fetchurl, fetchpatch, autoreconfHook, file, openssl, perl, unzip }:
+{ stdenv, lib, fetchurl, fetchpatch, darwin, autoreconfHook
+, file, openssl, perl, unzip, ncurses }:
 
 stdenv.mkDerivation rec {
-  name = "net-snmp-5.7.3";
+  name = "net-snmp-${version}";
+  version = "5.8";
 
   src = fetchurl {
     url = "mirror://sourceforge/net-snmp/${name}.zip";
-    sha256 = "0gkss3zclm23zwpqfhddca8278id7pk6qx1mydpimdrrcndwgpz8";
+    sha256 = "0hk0lmvr8jhiza8f7hl2n3kpwzmgbl09fhgyj1cg117dp22i6af6";
   };
 
   patches =
@@ -14,12 +16,8 @@ stdenv.mkDerivation rec {
       inherit name sha256;
     };
   in [
-    (fetchAlpinePatch "CVE-2015-5621.patch" "05098jyvd9ddr5q26z7scbbvk1bk6x4agpjm6pyprvpc1zpi0y09")
-    (fetchAlpinePatch "fix-Makefile-PL.patch" "14ilnkj3cr6mpi242hrmmmv8nv4dj0fdgn42qfk9aa7scwsc0lc7")
     (fetchAlpinePatch "fix-includes.patch" "0zpkbb6k366qpq4dax5wknwprhwnhighcp402mlm7950d39zfa3m")
     (fetchAlpinePatch "netsnmp-swinst-crash.patch" "0gh164wy6zfiwiszh58fsvr25k0ns14r3099664qykgpmickkqid")
-    (fetchAlpinePatch "remove-U64-typedef.patch" "1msxyhcqkvhqa03dwb50288g7f6nbrcd9cs036m9xc8jdgjb8k8j")
-    ./CVE-2018-18065.patch
   ];
 
   preConfigure =
@@ -38,13 +36,14 @@ stdenv.mkDerivation rec {
       "--with-logfile=/var/log/net-snmpd.log"
       "--with-persistent-directory=/var/lib/net-snmp"
       "--with-openssl=${openssl.dev}"
-    ] ++ stdenv.lib.optional stdenv.isLinux "--with-mnttab=/proc/mounts";
+    ] ++ lib.optional stdenv.isLinux "--with-mnttab=/proc/mounts";
 
   nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ file perl unzip openssl ];
+  buildInputs = [ file perl unzip openssl ncurses ] ++
+    lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks;
+      [ DiskArbitration IOKit ApplicationServices ]);
 
   enableParallelBuilding = true;
-  doCheck = false; # fails
 
   postInstall = ''
     for f in "$out/lib/"*.la $out/bin/net-snmp-config $out/bin/net-snmp-create-v3-user; do
@@ -52,10 +51,10 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Clients and server for the SNMP network monitoring protocol";
     homepage = http://net-snmp.sourceforge.net/;
     license = licenses.bsd3;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }
