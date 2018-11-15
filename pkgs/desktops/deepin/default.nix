@@ -30,6 +30,7 @@ let
       inherit (pkgs.gnome3) libgee;
       wnck = pkgs.libwnck3;
     };
+    deepin-turbo = callPackage ./deepin-turbo { };
     deepin-wallpapers = callPackage ./deepin-wallpapers { };
     deepin-wm = callPackage ./deepin-wm { };
     dtkcore = callPackage ./dtkcore { };
