@@ -24,7 +24,7 @@ buildPythonPackage rec {
   meta = with pkgs.lib; {
     description = "Functions and classes to access online data resources";
     homepage = "https://astroquery.readthedocs.io/";
-    license = licenses.bsdOriginal;
+    license = licenses.bsd3;
     maintainers = [ maintainers.smaret ];
   };
 }
