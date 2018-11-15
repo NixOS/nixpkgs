@@ -13,6 +13,7 @@ let
     dde-dock = callPackage ./dde-dock { };
     dde-file-manager = callPackage ./dde-file-manager { };
     dde-network-utils = callPackage ./dde-network-utils { };
+    dde-polkit-agent = callPackage ./dde-polkit-agent { };
     dde-qt-dbus-factory = callPackage ./dde-qt-dbus-factory { };
     dde-session-ui = callPackage ./dde-session-ui { };
     deepin-desktop-base = callPackage ./deepin-desktop-base { };
@@ -34,6 +35,7 @@ let
     deepin-turbo = callPackage ./deepin-turbo { };
     deepin-wallpapers = callPackage ./deepin-wallpapers { };
     deepin-wm = callPackage ./deepin-wm { };
+    dpa-ext-gnomekeyring = callPackage ./dpa-ext-gnomekeyring { };
     dtkcore = callPackage ./dtkcore { };
     dtkwm = callPackage ./dtkwm { };
     dtkwidget = callPackage ./dtkwidget { };
