@@ -2413,6 +2413,8 @@ with pkgs;
     inherit (pythonPackages) sphinx;
   };
 
+  wl-clipboard = callPackage ../tools/misc/wl-clipboard { };
+
   zabbix-cli = callPackage ../tools/misc/zabbix-cli { };
 
   ### DEVELOPMENT / EMSCRIPTEN
