@@ -21194,6 +21194,8 @@ with pkgs;
 
   ncbi_tools = callPackage ../applications/science/biology/ncbi-tools { };
 
+  niftyreg = callPackage ../applications/science/biology/niftyreg { };
+
   paml = callPackage ../applications/science/biology/paml { };
 
   picard-tools = callPackage ../applications/science/biology/picard-tools { };
