@@ -12309,6 +12309,15 @@ let
         sha1 = "df8c69eef1647923c7157b9ce83840610b02cc39";
       };
     };
+    "event-lite-0.1.2" = {
+      name = "event-lite";
+      packageName = "event-lite";
+      version = "0.1.2";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/event-lite/-/event-lite-0.1.2.tgz";
+        sha512 = "HnSYx1BsJ87/p6swwzv+2v6B4X+uxUteoDfRxsAb1S1BePzQqOLevVmkdA15GHJVd9A9Ok6wygUR18Hu0YeV9g==";
+      };
+    };
     "event-pubsub-4.3.0" = {
       name = "event-pubsub";
       packageName = "event-pubsub";
@@ -22696,6 +22705,15 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/msgpack/-/msgpack-1.0.2.tgz";
         sha1 = "923e2c5cffa65c8418e9b228d1124793969c429c";
+      };
+    };
+    "msgpack-lite-0.1.26" = {
+      name = "msgpack-lite";
+      packageName = "msgpack-lite";
+      version = "0.1.26";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/msgpack-lite/-/msgpack-lite-0.1.26.tgz";
+        sha1 = "dd3c50b26f059f25e7edee3644418358e2a9ad89";
       };
     };
     "msgpack5-3.6.0" = {
@@ -50871,6 +50889,39 @@ in
     buildInputs = globalBuildInputs;
     meta = {
       description = "Multi-file Swagger example";
+      license = "MIT";
+    };
+    production = true;
+    bypassCache = true;
+  };
+  neovim = nodeEnv.buildNodePackage {
+    name = "neovim";
+    packageName = "neovim";
+    version = "4.2.1";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/neovim/-/neovim-4.2.1.tgz";
+      sha512 = "2Kto3HlBsFFtgyAmV8ecNtBBUrydoXp2EfIHwIvuhOIiVinCuKJaUmp1+1u5eGGu1TDZHUiHwvFv0T05eG8T+w==";
+    };
+    dependencies = [
+      sources."async-1.0.0"
+      sources."colors-1.0.3"
+      sources."cycle-1.0.3"
+      sources."event-lite-0.1.2"
+      sources."eyes-0.1.8"
+      sources."ieee754-1.1.12"
+      sources."int64-buffer-0.1.10"
+      sources."isarray-1.0.0"
+      sources."isstream-0.1.2"
+      sources."lodash-4.17.11"
+      sources."msgpack-lite-0.1.26"
+      sources."stack-trace-0.0.10"
+      sources."traverse-0.6.6"
+      sources."winston-2.4.4"
+    ];
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "Neovim client API and neovim remote plugin provider";
+      homepage = https://github.com/neovim/node-client;
       license = "MIT";
     };
     production = true;
