@@ -609,6 +609,7 @@
   ./services/networking/smokeping.nix
   ./services/networking/softether.nix
   ./services/networking/spiped.nix
+  ./services/networking/spruned.nix
   ./services/networking/squid.nix
   ./services/networking/sslh.nix
   ./services/networking/ssh/lshd.nix
