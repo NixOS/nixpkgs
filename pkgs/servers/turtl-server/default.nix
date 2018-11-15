@@ -62,7 +62,7 @@ in stdenv.mkDerivation {
     description = "Turtl notebook server";
     license = licenses.agpl3;
     homepage = https://github.com/turtl/server;
-    maintainer = [ maintainers.raquelgb maintainers.rafaelgg ];
+    maintainers = [ maintainers.raquelgb maintainers.rafaelgg ];
     platforms = platforms.linux;
   };
 }
