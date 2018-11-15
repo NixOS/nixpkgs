@@ -1,5 +1,5 @@
 { stdenv49
-, lib, fetchurl, fetchFromGitHub
+, lib, fetchurl, fetchpatch, fetchFromGitHub
 
 , which, findutils, m4, gawk
 , python, openjdk, mono58, libressl
@@ -47,8 +47,8 @@ let
           inherit rev sha256;
         };
 
-        nativeBuildInputs = [ gawk which m4 findutils mono58 ];
-        buildInputs = [ python openjdk libressl boost ];
+        nativeBuildInputs = [ python openjdk gawk which m4 findutils mono58 ];
+        buildInputs = [ libressl boost ];
 
         patches =
           [ # For 5.2+, we need a slightly adjusted patch to fix all the ldflags
@@ -57,10 +57,24 @@ let
                    then ./ldflags-6.0.patch
                    else ./ldflags-5.2.patch)
              else ./ldflags-5.1.patch)
-          ] ++
+          ]
           # for 6.0+, we do NOT need to apply this version fix, since we can specify
           # it ourselves. see configurePhase
-          (lib.optional (!lib.versionAtLeast version "6.0") ./fix-scm-version.patch);
+          ++ (lib.optional (!lib.versionAtLeast version "6.0") ./fix-scm-version.patch)
+          # Versions less than 6.0 have a busted Python 3 build due to an outdated
+          # use of 'print'. Also apply an update to the six module with many bugfixes,
+          # which is in 6.0+ as well
+          ++ (lib.optional (!lib.versionAtLeast version "6.0") (fetchpatch {
+            name   = "update-python-six.patch";
+            url    = "https://github.com/apple/foundationdb/commit/4bd9efc4fc74917bc04b07a84eb065070ea7edb2.patch";
+            sha256 = "030679lmc86f1wzqqyvxnwjyfrhh54pdql20ab3iifqpp9i5mi85";
+          }))
+          ++ (lib.optional (!lib.versionAtLeast version "6.0") (fetchpatch {
+            name   = "import-for-python-print.patch";
+            url    = "https://github.com/apple/foundationdb/commit/ded17c6cd667f39699cf663c0e87fe01e996c153.patch";
+            sha256 = "11y434w68cpk7shs2r22hyrpcrqi8vx02cw7v5x79qxvnmdxv2an";
+          }))
+          ;
 
         postPatch = ''
           # note: this does not do anything for 6.0+
@@ -106,7 +120,6 @@ let
 
         installPhase = ''
           mkdir -vp $out/{bin,libexec/plugins} $lib/{lib,share/java} $dev/include/foundationdb
-          mkdir -vp $python/lib/${python.libPrefix}/site-packages
 
         '' + lib.optionalString (!lib.versionAtLeast version "6.0") ''
           # we only copy the TLS library on < 6.0, since it's compiled-in otherwise
@@ -123,10 +136,15 @@ let
           cp -v ./bindings/java/foundationdb-client.jar     $lib/share/java/fdb-java.jar
 
           # python
+          cp LICENSE ./bindings/python
+          substitute ./bindings/python/setup.py.in ./bindings/python/setup.py \
+            --replace 'VERSION' "${version}"
+          rm -f ./bindings/python/setup.py.in
           rm -f ./bindings/python/fdb/*.pth # remove useless files
-          cp -R ./bindings/python/fdb                       $python/lib/${python.libPrefix}/site-packages/fdb
-          # symlink a copy of the shared object into place, so that impl.py can load it
-          ln -sv $lib/lib/libfdb_c.so                       $python/lib/${python.libPrefix}/site-packages/fdb/libfdb_c.so
+          rm -f ./bindings/python/*.rst ./bindings/python/*.mk
+
+          cp -R ./bindings/python/                          tmp-pythonsrc/
+          tar -zcf $pythonsrc --transform s/tmp-pythonsrc/python-foundationdb/ ./tmp-pythonsrc/
 
           # binaries
           for x in fdbbackup fdbcli fdbserver fdbmonitor; do
@@ -140,7 +158,7 @@ let
           ln -sfv $out/bin/fdbbackup $out/libexec/backup_agent
         '';
 
-        outputs = [ "out" "lib" "dev" "python" ];
+        outputs = [ "out" "lib" "dev" "pythonsrc" ];
 
         meta = with stdenv.lib; {
           description = "Open source, distributed, transactional key-value store";
