@@ -12,7 +12,7 @@
 # standard library dependencies
 , curl, fftwSinglePrec, fftw, gmp, libgit2, mpfr, openlibm, openspecfun, pcre2
 # linear algebra
-, mkl, openmp
+, mkl
 # Darwin frameworks
 , CoreServices, ApplicationServices
 }:
@@ -75,13 +75,6 @@ stdenv.mkDerivation rec {
     sha256 = src_sha256;
   };
 
-  setupHook = pkgs.writeText "setup-hook.sh" ''
-    addOpenmp() {
-        addToSearchPath LD_LIBRARY_PATH ${openmp}/lib
-    }
-    addEnvHooks "$targetOffset" addOpenmp
-  '';
-
   prePatch = ''
     export PATH=$PATH:${cmake}/bin
     mkdir deps/srccache
@@ -113,7 +106,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     fftw fftwSinglePrec gmp libgit2 libunwind mpfr
     pcre2.dev mkl openlibm openspecfun readline utf8proc
-    zlib openmp
+    zlib
   ]
   ++ stdenv.lib.optionals stdenv.isDarwin [CoreServices ApplicationServices]
   ;

@@ -7131,7 +7131,6 @@ with pkgs;
   julia-mkl_10 = callPackage ../development/compilers/julia-mkl/1.0.nix {
     gmp = gmp6;
     inherit (darwin.apple_sdk.frameworks) CoreServices ApplicationServices;
-    inherit (llvmPackages) openmp;
   };
 
   julia-mkl = julia-mkl_10;
