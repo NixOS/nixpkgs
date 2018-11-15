@@ -45,6 +45,7 @@ in buildPythonPackage rec {
   checkPhase = ''
     export HOME="$NIX_BUILD_TOP"
     ${python.interpreter} runtests.py -j$NIX_BUILD_CORES \
+      --no-code-style \
       ${stdenv.lib.optionalString (builtins.length excludedTests != 0)
         ''--exclude="(${builtins.concatStringsSep "|" excludedTests})"''}
   '';
