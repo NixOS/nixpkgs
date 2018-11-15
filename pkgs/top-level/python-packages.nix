@@ -196,6 +196,8 @@ in {
 
   astropy = callPackage ../development/python-modules/astropy { };
 
+  astroquery = callPackage ../development/python-modules/astroquery { }; 
+
   atom = callPackage ../development/python-modules/atom { };
 
   augeas = callPackage ../development/python-modules/augeas {
