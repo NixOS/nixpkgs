@@ -34,6 +34,9 @@ stdenv.mkDerivation rec {
 
     sed -i pluginmanager.cpp \
       -e "s,/usr/lib/polkit-1-dde/plugins,/run/current-system/sw/lib/polkit-1-dde/plugins,"
+
+    # Deprecate dcombobox.h header
+    sed -i 's|dcombobox.h|QComboBox|' AuthDialog.h
   '';
 
   passthru.updateScript = deepin.updateScript { inherit name; };
