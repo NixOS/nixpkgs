@@ -16,6 +16,7 @@ let
       # XXX: the build is finding references to Go when compiled with go v1.12
       go = go_1_11;
     };
+    dde-polkit-agent = callPackage ./dde-polkit-agent { };
     dde-qt-dbus-factory = callPackage ./dde-qt-dbus-factory { };
     dde-session-ui = callPackage ./dde-session-ui { };
     deepin-desktop-base = callPackage ./deepin-desktop-base { };
@@ -36,6 +37,7 @@ let
     };
     deepin-wallpapers = callPackage ./deepin-wallpapers { };
     deepin-wm = callPackage ./deepin-wm { };
+    dpa-ext-gnomekeyring = callPackage ./dpa-ext-gnomekeyring { };
     dtkcore = callPackage ./dtkcore { };
     dtkwm = callPackage ./dtkwm { };
     dtkwidget = callPackage ./dtkwidget { };
