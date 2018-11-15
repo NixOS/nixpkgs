@@ -2,13 +2,13 @@
 
 python3Packages.buildPythonApplication rec {
   name = "unicode-${version}";
-  version = "2.5";
+  version = "2.6";
 
   src = fetchFromGitHub {
     owner = "garabik";
     repo = "unicode";
     rev = "v${version}";
-    sha256 = "0vg1zshlzgdva8gzw6fya28fc4jhypjkj743x3q0yabx6934k0g2";
+    sha256 = "17hh4nwl5njsh7lnff583j2axn6rfvfbiqwp72n7vcsgkiszw4kg";
   };
 
   ucdtxt = fetchurl {
