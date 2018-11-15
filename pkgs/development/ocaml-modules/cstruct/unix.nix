@@ -2,7 +2,7 @@
 
 buildDunePackage {
 	pname = "cstruct-unix";
-	inherit (cstruct) version src unpackCmd meta;
+	inherit (cstruct) version src meta;
 
   minimumOCamlVersion = "4.02";
 

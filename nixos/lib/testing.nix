@@ -1,6 +1,13 @@
-{ system, minimal ? false, config ? {} }:
+{ system
+, pkgs
+  # Use a minimal kernel?
+, minimal ? false
+  # Ignored
+, config ? null
+  # Modules to add to each VM
+, extraConfigurations ? [] }:
 
-with import ./build-vms.nix { inherit system minimal config; };
+with import ./build-vms.nix { inherit system pkgs minimal extraConfigurations; };
 with pkgs;
 
 let
@@ -70,8 +77,6 @@ in rec {
             mv $i $out/coverage-data/$(dirname $(dirname $i))
           done
         '';
-
-        meta.needsVMSupport = true;
     };
 
 

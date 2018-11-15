@@ -59,6 +59,7 @@ mapAliases ({
   cantarell_fonts = cantarell-fonts; # added 2018-03-03
   checkbashism = checkbashisms; # added 2016-08-16
   cifs_utils = cifs-utils; # added 2016-08
+  ckb = ckb-next; # added 2018-10-21
   clangAnalyzer = clang-analyzer;  # added 2015-02-20
   clawsMail = claws-mail; # added 2016-04-29
   clutter_gtk = clutter-gtk; # added 2018-02-25
@@ -84,8 +85,8 @@ mapAliases ({
   docbook5_xsl = docbook_xsl_ns; # added 2018-04-25
   docbook_xml_xslt = docbook_xsl; # added 2018-04-25
   double_conversion = double-conversion; # 2017-11-22
+  docker_compose = docker-compose; # 2018-11-10
   dwarf_fortress = dwarf-fortress; # added 2016-01-23
-  emacs25Macport_25_1 = emacs25Macport; # added 2018-04-25
   emacsMelpa = emacs25PackagesNg; # for backward compatibility
   emacsPackagesGen = emacsPackagesFor; # added 2018-08-18
   emacsPackagesNgGen = emacsPackagesNgFor; # added 2018-08-18
@@ -163,6 +164,7 @@ mapAliases ({
   libgumbo = gumbo; # added 2018-01-21
   libintlOrEmpty = stdenv.lib.optional (!stdenv.isLinux || stdenv.hostPlatform.libc != "glibc") gettext; # added 2018-03-14
   libjson_rpc_cpp = libjson-rpc-cpp; # added 2017-02-28
+  liblapackWithoutAtlas = liblapack; # added 2018-11-05
   libmysql = mysql.connector-c; # added # 2017-12-28, this was a misnomer refering to libmysqlclient
   librecad2 = librecad;  # backwards compatibility alias, added 2015-10
   libsysfs = sysfsutils; # added 2018-04-25

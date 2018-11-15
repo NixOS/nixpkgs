@@ -73,23 +73,11 @@ with pkgs;
 
   ### Push NixOS tests inside the fixed point
 
-  nixosTests =
-    let
-      # TODO(Ericson2314,ekleog): Check this will work correctly with cross-
-      system = builtins.currentSystem;
-      rawTests = (import ../../nixos/release.nix {
-        nixpkgs = pkgs;
-      }).tests;
-      testNames = builtins.attrNames rawTests;
-      filteredList = builtins.filter
-        (test: rawTests.${test} ? ${system})
-        testNames;
-      finalList = map
-        (test: { name = test; value = rawTests.${test}.${system}; })
-        filteredList;
-      finalTests = builtins.listToAttrs finalList;
-    in
-    finalTests;
+  nixosTests = import ../../nixos/tests/all-tests.nix {
+    inherit pkgs;
+    system = stdenv.hostPlatform.system;
+    callTest = t: t.test;
+  };
 
   ### BUILD SUPPORT
 
@@ -154,7 +142,7 @@ with pkgs;
 
   dockerTools = callPackage ../build-support/docker { };
 
-  docker_compose = pythonPackages.docker_compose;
+  docker-compose = python3Packages.callPackage ../applications/virtualization/docker-compose {};
 
   docker-ls = callPackage ../tools/misc/docker-ls { };
 
@@ -521,6 +509,7 @@ with pkgs;
 
   alacritty = callPackage ../applications/misc/alacritty {
     inherit (xorg) libXcursor libXxf86vm libXi;
+    inherit (darwin) cf-private;
     inherit (darwin.apple_sdk.frameworks) AppKit CoreFoundation CoreGraphics CoreServices CoreText Foundation OpenGL;
   };
 
@@ -690,6 +679,8 @@ with pkgs;
 
   cozy = callPackage ../applications/audio/cozy-audiobooks { };
 
+  diskus = callPackage ../tools/misc/diskus { };
+
   djmount = callPackage ../tools/filesystems/djmount { };
 
   dgsh = callPackage ../shells/dgsh { };
@@ -734,6 +725,8 @@ with pkgs;
   green-pdfviewer = callPackage ../applications/misc/green-pdfviewer {
    SDL = SDL_sixel;
   };
+
+  gremlin-console = callPackage ../applications/misc/gremlin-console { };
 
   gcsfuse = callPackage ../tools/filesystems/gcsfuse { };
 
@@ -1065,7 +1058,7 @@ with pkgs;
 
   cue2pops = callPackage ../tools/cd-dvd/cue2pops { };
 
-  cabal2nix = haskell.lib.overrideCabal (haskell.lib.addOptparseApplicativeCompletionScripts "cabal2nix" haskellPackages.cabal2nix) (drv: {
+  cabal2nix = haskell.lib.overrideCabal (haskell.lib.generateOptparseApplicativeCompletion "cabal2nix" haskellPackages.cabal2nix) (drv: {
     isLibrary = false;
     enableSharedExecutables = false;
     executableToolDepends = (drv.executableToolDepends or []) ++ [ makeWrapper ];
@@ -1106,6 +1099,8 @@ with pkgs;
   cataract-unstable = callPackage ../applications/misc/cataract/unstable.nix { };
 
   catch = callPackage ../development/libraries/catch { };
+
+  catch2 = callPackage ../development/libraries/catch2 { };
 
   catdoc = callPackage ../tools/text/catdoc { };
 
@@ -1187,9 +1182,7 @@ with pkgs;
 
   clipster = callPackage ../tools/misc/clipster { };
 
-  coprthr = callPackage ../development/libraries/coprthr {
-    flex = flex_2_5_35;
-  };
+  coprthr = callPackage ../development/libraries/coprthr { };
 
   cplex = callPackage ../applications/science/math/cplex { releasePath = config.cplex.releasePath or null; };
 
@@ -1550,6 +1543,7 @@ with pkgs;
   noteshrink = callPackage ../tools/misc/noteshrink { };
 
   noti = callPackage ../tools/misc/noti {
+    inherit (darwin) cf-private;
     inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
 
@@ -1583,7 +1577,7 @@ with pkgs;
 
   parallel-rust = callPackage ../tools/misc/parallel-rust { };
 
-  scour = callPackage ../tools/graphics/scour { };
+  scour = with python3Packages; toPythonApplication scour;
 
   s2png = callPackage ../tools/graphics/s2png { };
 
@@ -2036,7 +2030,7 @@ with pkgs;
 
   checkbashisms = callPackage ../development/tools/misc/checkbashisms { };
 
-  ckb = libsForQt5.callPackage ../tools/misc/ckb { };
+  ckb-next = libsForQt5.callPackage ../tools/misc/ckb-next { };
 
   clamav = callPackage ../tools/security/clamav { };
 
@@ -2962,7 +2956,10 @@ with pkgs;
 
   gnu-pw-mgr = callPackage ../tools/security/gnu-pw-mgr { };
 
-  gnused = callPackage ../tools/text/gnused { };
+  gnused = if !stdenv.hostPlatform.isWindows then
+             callPackage ../tools/text/gnused { } # broken on Windows
+           else
+             gnused_422;
   # This is an easy work-around for [:space:] problems.
   gnused_422 = callPackage ../tools/text/gnused/422.nix { };
 
@@ -3597,6 +3594,7 @@ with pkgs;
   kexpand = callPackage ../development/tools/kexpand { };
 
   keybase = callPackage ../tools/security/keybase {
+    inherit (darwin) cf-private;
     # Reasoning for the inherited apple_sdk.frameworks:
     # 1. specific compiler errors about: AVFoundation, AudioToolbox, MediaToolbox
     # 2. the rest are added from here: https://github.com/keybase/client/blob/68bb8c893c5214040d86ea36f2f86fbb7fac8d39/go/chat/attachments/preview_darwin.go#L7
@@ -3949,8 +3947,6 @@ with pkgs;
 
   libiberty_static = libiberty.override { staticBuild = true; };
 
-  libibverbs = callPackage ../development/libraries/libibverbs { };
-
   libxc = callPackage ../development/libraries/libxc { };
 
   libxcomp = callPackage ../development/libraries/libxcomp { };
@@ -3960,8 +3956,6 @@ with pkgs;
   libx86emu = callPackage ../development/libraries/libx86emu { };
 
   libzmf = callPackage ../development/libraries/libzmf {};
-
-  librdmacm = callPackage ../development/libraries/librdmacm { };
 
   libreswan = callPackage ../tools/networking/libreswan { };
 
@@ -5888,6 +5882,8 @@ with pkgs;
 
   untrunc = callPackage ../tools/video/untrunc { };
 
+  up = callPackage ../tools/misc/up { };
+
   upx = callPackage ../tools/compression/upx { };
 
   uqmi = callPackage ../tools/networking/uqmi { };
@@ -6248,6 +6244,8 @@ with pkgs;
   wol = callPackage ../tools/networking/wol { };
 
   wolf-shaper = callPackage ../applications/audio/wolf-shaper { };
+
+  wpgtk = callPackage ../tools/X11/wpgtk { };
 
   wring = nodePackages.wring;
 
@@ -7654,6 +7652,10 @@ with pkgs;
 
   kanif = callPackage ../applications/networking/cluster/kanif { };
 
+  lumo = callPackage ../development/interpreters/clojurescript/lumo {
+    nodejs = nodejs-10_x;
+  };
+
   lxappearance = callPackage ../desktops/lxde/core/lxappearance {
     gtk2 = gtk2-x11;
   };
@@ -7717,10 +7719,7 @@ with pkgs;
 
   lush2 = callPackage ../development/interpreters/lush {};
 
-  maude = callPackage ../development/interpreters/maude {
-    bison = bison2;
-    flex = flex_2_5_35;
-  };
+  maude = callPackage ../development/interpreters/maude { };
 
   mesos = callPackage ../applications/networking/cluster/mesos {
     sasl = cyrus_sasl;
@@ -8506,7 +8505,6 @@ with pkgs;
   jdepend = callPackage ../development/tools/analysis/jdepend { };
 
   flex_2_5_35 = callPackage ../development/tools/parsing/flex/2.5.35.nix { };
-  flex_2_6_1 = callPackage ../development/tools/parsing/flex/2.6.1.nix { };
   flex = callPackage ../development/tools/parsing/flex { };
 
   flexcpp = callPackage ../development/tools/parsing/flexc++ { };
@@ -8853,6 +8851,8 @@ with pkgs;
 
   hammer = callPackage ../development/tools/parsing/hammer { };
 
+  rdocker = callPackage ../development/tools/rdocker { };
+
   redis-dump = callPackage ../development/tools/redis-dump { };
 
   redo = callPackage ../development/tools/build-managers/redo { };
@@ -9122,6 +9122,8 @@ with pkgs;
 
   arb = callPackage ../development/libraries/arb {};
   arb-git = callPackage ../development/libraries/arb/git.nix {};
+
+  argp-standalone = callPackage ../development/libraries/argp-standalone {};
 
   armadillo = callPackage ../development/libraries/armadillo {};
 
@@ -9586,7 +9588,10 @@ with pkgs;
 
   flite = callPackage ../development/libraries/flite { };
 
-  fltk13 = callPackage ../development/libraries/fltk { };
+  fltk13 = callPackage ../development/libraries/fltk {
+    inherit (darwin) cf-private;
+    inherit (darwin.apple_sdk.frameworks) Cocoa AGL GLUT;
+  };
   fltk = self.fltk13;
 
   flyway = callPackage ../development/tools/flyway { };
@@ -9740,7 +9745,10 @@ with pkgs;
 
   glfw = glfw3;
   glfw2 = callPackage ../development/libraries/glfw/2.x.nix { };
-  glfw3 = callPackage ../development/libraries/glfw/3.x.nix { };
+  glfw3 = callPackage ../development/libraries/glfw/3.x.nix {
+    inherit (darwin) cf-private;
+    inherit (darwin.apple_sdk.frameworks) Cocoa Kernel;
+  };
 
   glibc = callPackage ../development/libraries/glibc {
     installLocales = config.glibc.locales or false;
@@ -10242,6 +10250,8 @@ with pkgs;
   jsonnet = callPackage ../development/compilers/jsonnet { };
 
   jsonrpc-glib = callPackage ../development/libraries/jsonrpc-glib { };
+
+  jxrlib = callPackage ../development/libraries/jxrlib { };
 
   libjson = callPackage ../development/libraries/libjson { };
 
@@ -11179,7 +11189,10 @@ with pkgs;
 
   libuecc = callPackage ../development/libraries/libuecc { };
 
-  libui = callPackage ../development/libraries/libui { };
+  libui = callPackage ../development/libraries/libui {
+    inherit (darwin) cf-private;
+    inherit (darwin.apple_sdk.frameworks) Cocoa;
+  };
 
   libunistring = callPackage ../development/libraries/libunistring { };
 
@@ -11443,13 +11456,6 @@ with pkgs;
 
   minizip = callPackage ../development/libraries/minizip { };
 
-  miro = callPackage ../applications/video/miro {
-    avahi = avahi.override {
-      withLibdnssdCompat = true;
-    };
-    ffmpeg = ffmpeg_2;
-  };
-
   mkvtoolnix = libsForQt5.callPackage ../applications/video/mkvtoolnix { };
 
   mkvtoolnix-cli = callPackage ../applications/video/mkvtoolnix {
@@ -11629,6 +11635,8 @@ with pkgs;
 
   opencv = callPackage ../development/libraries/opencv {
     ffmpeg = ffmpeg_2;
+    inherit (darwin) cf-private;
+    inherit (darwin.apple_sdk.frameworks) Cocoa QTKit;
   };
 
   opencv3 = callPackage ../development/libraries/opencv/3.x.nix {
@@ -12345,6 +12353,8 @@ with pkgs;
   soundtouch = callPackage ../development/libraries/soundtouch {};
 
   spandsp = callPackage ../development/libraries/spandsp {};
+
+  spaceship-prompt = callPackage ../shells/zsh/spaceship-prompt {};
 
   spatialite_tools = callPackage ../development/libraries/spatialite-tools { };
 
@@ -13340,6 +13350,8 @@ with pkgs;
 
   grafana = callPackage ../servers/monitoring/grafana { };
 
+  grafana_reporter = callPackage ../servers/monitoring/grafana-reporter { };
+
   h2o = callPackage ../servers/http/h2o { };
 
   haka = callPackage ../tools/security/haka { };
@@ -14162,9 +14174,7 @@ with pkgs;
 
   gpu-switch = callPackage ../os-specific/linux/gpu-switch { };
 
-  gradm = callPackage ../os-specific/linux/gradm {
-    flex = flex_2_5_35;
-  };
+  gradm = callPackage ../os-specific/linux/gradm { };
 
   hd-idle = callPackage ../os-specific/linux/hd-idle { };
 
@@ -14323,11 +14333,6 @@ with pkgs;
       [ kernelPatches.bridge_stp_helper
         kernelPatches.cpu-cgroup-v2."4.9"
         kernelPatches.modinst_arg_list_too_long
-        # https://github.com/NixOS/nixpkgs/issues/42755
-        # Remove these xen-netfront patches once they're included in
-        # upstream! Fixes https://github.com/NixOS/nixpkgs/issues/42755
-        kernelPatches.xen-netfront_fix_mismatched_rtnl_unlock
-        kernelPatches.xen-netfront_update_features_after_registering_netdev
       ];
   };
 
@@ -16144,9 +16149,7 @@ with pkgs;
 
   cpp_ethereum = callPackage ../applications/misc/cpp-ethereum { };
 
-  csdp = callPackage ../applications/science/math/csdp {
-    liblapack = liblapackWithoutAtlas;
-  };
+  csdp = callPackage ../applications/science/math/csdp { };
 
   ctop = callPackage ../tools/system/ctop { };
 
@@ -16390,6 +16393,7 @@ with pkgs;
     imagemagick = null;
     acl = null;
     gpm = null;
+    inherit (darwin) cf-private;
     inherit (darwin.apple_sdk.frameworks) AppKit GSS ImageIO;
   };
 
@@ -16399,8 +16403,8 @@ with pkgs;
     withGTK3 = false;
   }));
 
-  emacsMacport = emacs25Macport;
-  emacs25Macport = callPackage ../applications/editors/emacs/macport.nix {
+  emacsMacport = callPackage ../applications/editors/emacs/macport.nix {
+    inherit (darwin) cf-private;
     inherit (darwin.apple_sdk.frameworks)
       AppKit Carbon Cocoa IOKit OSAKit Quartz QuartzCore WebKit
       ImageCaptureCore GSS ImageIO;
@@ -17256,6 +17260,8 @@ with pkgs;
     gtk = gtk3;
   };
 
+  hovercraft = python3Packages.callPackage ../applications/misc/hovercraft { };
+
   howl = callPackage ../applications/editors/howl { };
 
   ht = callPackage ../applications/editors/ht { };
@@ -17790,6 +17796,8 @@ with pkgs;
 
   looking-glass-client = callPackage ../applications/virtualization/looking-glass-client { };
 
+  ltc-tools = callPackage ../applications/audio/ltc-tools { };
+
   lumail = callPackage ../applications/networking/mailreaders/lumail {
     lua = lua5_1;
   };
@@ -18160,6 +18168,8 @@ with pkgs;
   polybar = callPackage ../applications/misc/polybar { };
 
   ptex = callPackage ../development/libraries/ptex {};
+
+  qtcurve = libsForQt5.callPackage ../misc/themes/qtcurve {};
 
   rssguard = libsForQt5.callPackage ../applications/networking/feedreaders/rssguard { };
 
@@ -18893,6 +18903,8 @@ with pkgs;
     inherit (gnome2) libart_lgpl;
   };
 
+  scribusUnstable = libsForQt5.callPackage ../applications/office/scribus/unstable.nix { };
+
   seafile-client = libsForQt5.callPackage ../applications/networking/seafile-client { };
 
   seeks = callPackage ../tools/networking/p2p/seeks {
@@ -18908,6 +18920,8 @@ with pkgs;
   seq24 = callPackage ../applications/audio/seq24 { };
 
   setbfree = callPackage ../applications/audio/setbfree { };
+
+  sfxr-qt = libsForQt5.callPackage ../applications/audio/sfxr-qt { };
 
   shadowfox = callPackage ../tools/networking/shadowfox { };
 
@@ -18985,8 +18999,6 @@ with pkgs;
   };
 
   stella = callPackage ../misc/emulators/stella { };
-
-  statsd = nodePackages.statsd;
 
   linuxstopmotion = callPackage ../applications/video/linuxstopmotion { };
 
@@ -20342,7 +20354,7 @@ with pkgs;
   garden-of-coloured-lights = callPackage ../games/garden-of-coloured-lights { allegro = allegro4; };
 
   gargoyle = callPackage ../games/gargoyle {
-    libtool = darwin.cctools;
+    inherit (darwin) cctools cf-private;
   };
 
   gav = callPackage ../games/gav { };
@@ -21222,16 +21234,6 @@ with pkgs;
 
   arpack = callPackage ../development/libraries/science/math/arpack { };
 
-  atlas = callPackage ../development/libraries/science/math/atlas {
-    # The build process measures CPU capabilities and optimizes the
-    # library to perform best on that particular machine. That is a
-    # great feature, but it's of limited use with pre-built binaries
-    # coming from a central build farm.
-    tolerateCpuTimingInaccuracy = true;
-    liblapack = liblapackWithoutAtlas;
-    withLapack = false;
-  };
-
   blas = callPackage ../development/libraries/science/math/blas { };
 
   brial = callPackage ../development/libraries/science/math/brial { };
@@ -21254,13 +21256,7 @@ with pkgs;
 
   libhomfly = callPackage ../development/libraries/science/math/libhomfly { };
 
-  # We have essentially 4 permutations of liblapack: version 3.4.1 or 3.5.0,
-  # and with or without atlas as a dependency. The default `liblapack` is 3.4.1
-  # with atlas. Atlas, when built with liblapack as a dependency, uses 3.5.0
-  # without atlas. Etc.
   liblapack = callPackage ../development/libraries/science/math/liblapack {};
-  liblapackWithoutAtlas = liblapackWithAtlas.override { atlas = null; };
-  liblapackWithAtlas = liblapack;
 
   liblbfgs = callPackage ../development/libraries/science/math/liblbfgs { };
 
@@ -21327,9 +21323,7 @@ with pkgs;
 
   QuadProgpp = callPackage ../development/libraries/science/math/QuadProgpp { };
 
-  scs = callPackage ../development/libraries/science/math/scs {
-    liblapack = liblapackWithoutAtlas;
-  };
+  scs = callPackage ../development/libraries/science/math/scs { };
 
   sage = callPackage ../applications/science/math/sage {
     nixpkgs = pkgs;
@@ -21355,12 +21349,15 @@ with pkgs;
 
   ### SCIENCE/MOLECULAR-DYNAMICS
 
+  dl-poly-classic-mpi = callPackage ../applications/science/molecular-dynamics/dl-poly-classic {
+    mpi = openmpi;
+  };
+
   lammps = callPackage ../applications/science/molecular-dynamics/lammps {
     fftw = fftw;
   };
 
-  lammps-mpi = appendToName "mpi" (lammps.override {
-    mpiSupport = true;
+  lammps-mpi = lowPrio (lammps.override {
     mpi = openmpi;
   });
 
@@ -21656,14 +21653,14 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Accelerate CoreGraphics CoreVideo;
   };
 
-  caffe2 = callPackage ../development/libraries/science/math/caffe2 {
+  caffe2 = callPackage ../development/libraries/science/math/caffe2 (rec {
     eigen3 = eigen3_3;
     inherit (python3Packages) python future six numpy pydot;
     protobuf = protobuf3_1;
-    python-protobuf = python3Packages.protobuf3_1;
+    python-protobuf = python3Packages.protobuf.override { inherit protobuf; };
     # Used only for image loading.
     opencv3 = opencv3WithoutCuda;
-  };
+  });
 
   cntk = callPackage ../applications/science/math/cntk rec {
     cudaSupport = pkgs.config.cudaSupport or false;
@@ -21738,9 +21735,7 @@ with pkgs;
 
   scilab-bin = callPackage ../applications/science/math/scilab-bin {};
 
-  scotch = callPackage ../applications/science/math/scotch {
-    flex = flex_2_5_35;
-  };
+  scotch = callPackage ../applications/science/math/scotch { };
 
   msieve = callPackage ../applications/science/math/msieve { };
 
@@ -22191,7 +22186,7 @@ with pkgs;
          in
            myOS.run-nginx
 
-     Unlike in plain NixOS, the nixpkgs.config, nixpkgs.overlays and
+     Unlike in plain NixOS, the nixpkgs.config and
      nixpkgs.system options will be ignored by default. Instead,
      nixpkgs.pkgs will have the default value of pkgs as it was
      constructed right after invoking the nixpkgs function (e.g. the
@@ -22221,6 +22216,61 @@ with pkgs;
                   else [configuration]
                 );
     }).config.system.build;
+
+
+  /*
+   * Run a NixOS VM network test using this evaluation of Nixpkgs.
+   *
+   * It is mostly equivalent to `import ./make-test.nix` from the
+   * NixOS manual[1], except that your `pkgs` will be used instead of
+   * letting NixOS invoke Nixpkgs again. If a test machine needs to
+   * set NixOS options under `nixpkgs`, it must set only the
+   * `nixpkgs.pkgs` option. For the details, see the Nixpkgs
+   * `pkgs.nixos` documentation.
+   *
+   * Parameter:
+   *   A NixOS VM test network, or path to it. Example:
+   *
+   *      { lib, ... }:
+   *      { name = "my-test";
+   *        nodes = {
+   *          machine-1 = someNixOSConfiguration;
+   *          machine-2 = ...;
+   *        }
+   *      }
+   *
+   * Result:
+   *   A derivation that runs the VM test.
+   *
+   * [1]: For writing NixOS tests, see
+   *      https://nixos.org/nixos/manual/index.html#sec-nixos-tests
+   */
+  nixosTest =
+    let
+      /* The nixos/lib/testing.nix module, preapplied with arguments that
+       * make sense for this evaluation of Nixpkgs.
+       */
+      nixosTesting =
+        (import ../../nixos/lib/testing.nix {
+          inherit (pkgs.stdenv.hostPlatform) system;
+          inherit pkgs;
+          extraConfigurations = [(
+            { lib, ... }: {
+              config.nixpkgs.pkgs = lib.mkDefault pkgs;
+            }
+          )];
+        });
+    in
+      test:
+        let
+          loadedTest = if builtins.typeOf test == "path"
+                       then import test
+                       else test;
+          calledTest = if pkgs.lib.isFunction loadedTest
+                       then callPackage loadedTest {}
+                       else loadedTest;
+        in
+          nixosTesting.makeTest calledTest;
 
   nixui = callPackage ../tools/package-management/nixui { node_webkit = nwjs_0_12; };
 

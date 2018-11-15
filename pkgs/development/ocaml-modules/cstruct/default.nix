@@ -9,8 +9,6 @@ buildDunePackage rec {
     sha256 = "1x4jxsvd1lrfibnjdjrkfl7hqsc48rljnwbap6faanj9qhwwa6v2";
   };
 
-  unpackCmd = "tar -xjf $curSrc";
-
   propagatedBuildInputs = [ sexplib ocplib-endian ];
 
   meta = {

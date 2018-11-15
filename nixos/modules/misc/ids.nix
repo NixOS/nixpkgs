@@ -101,7 +101,7 @@
       iodined = 66;
       #libvirtd = 67; # unused
       graphite = 68;
-      statsd = 69;
+      #statsd = 69; # removed 2018-11-14
       transmission = 70;
       postgres = 71;
       #vboxusers = 72; # unused
@@ -335,6 +335,7 @@
       kapacitor = 308;
       solr = 309;
       alerta = 310;
+      minetest = 311;
 
       # When adding a uid, make sure it doesn't match an existing gid. And don't use uids above 399!
 
@@ -410,7 +411,7 @@
       iodined = 66;
       libvirtd = 67;
       graphite = 68;
-      #statsd = 69; # unused
+      #statsd = 69; # removed 2018-11-14
       transmission = 70;
       postgres = 71;
       vboxusers = 72;
@@ -630,6 +631,7 @@
       kapacitor = 308;
       solr = 309;
       alerta = 310;
+      minetest = 311;
 
       # When adding a gid, make sure it doesn't match an existing
       # uid. Users and groups with the same name should have equal

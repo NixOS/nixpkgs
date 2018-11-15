@@ -1,54 +1,60 @@
-{ stdenv, fetchurl, fetchFromGitHub, pkgconfig, gtk3, vala, cmake,
-  ninja, vte, libgee, wnck, zssh, gettext, librsvg, libsecret,
-  json-glib, gobjectIntrospection, deepin-menu, deepin-shortcut-viewer
-}:
+{ stdenv, fetchurl, fetchFromGitHub, pkgconfig, cmake, ninja, vala,
+  gettext, gobjectIntrospection, at-spi2-core, dbus, epoxy, expect,
+  gtk3, json-glib, libXdmcp, libgee, libpthreadstubs, librsvg,
+  libsecret, libtasn1, libxcb, libxkbcommon, p11-kit, pcre, vte, wnck,
+  deepin-menu, deepin-shortcut-viewer, deepin }:
 
 stdenv.mkDerivation rec {
-  name = "deepin-terminal-${version}";
-  version = "3.0.3";
+  name = "${pname}-${version}";
+  pname = "deepin-terminal";
+  version = "3.0.10";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = "deepin-terminal";
     rev = version;
-    sha256 = "04yvim97a4j8fq5lq2g6svs8qs79np9m4nl6x83iv02wkb9b7gqa";
+    sha256 = "1jrzx0igq2csb25k4ak5hj81gpvb7zwbg4i64p4mln4vl7x27i5q";
   };
-
-  patches = [
-    # Do not build vendored zssh and vte
-    (fetchurl {
-      name = "remove-vendor.patch";
-      url = https://git.archlinux.org/svntogit/community.git/plain/trunk/remove-vendor.patch?h=packages/deepin-terminal&id=de701614c19c273b98b60fd6790795ff7d8a157e;
-      sha256 = "0g7hhvr7ay9g0cgc6qqvzhbcwvbzvrrilbn8w46ypfzj7w5hlkqv";
-    })
-  ];
-
-  postPatch = ''
-    substituteInPlace ssh_login.sh --replace /usr/lib/deepin-terminal/zssh "${zssh}/bin/zssh"
-  '';
 
   nativeBuildInputs = [
     pkgconfig
-    vala
     cmake
     ninja
+    vala
     gettext
     gobjectIntrospection # For setup hook
   ];
 
   buildInputs = [
-    gtk3
-    vte
-    libgee
-    wnck
-    librsvg
-    libsecret
-    json-glib
+    at-spi2-core
+    dbus
     deepin-menu
     deepin-shortcut-viewer
+    epoxy
+    expect
+    gtk3
+    json-glib
+    libXdmcp
+    libgee
+    libpthreadstubs
+    librsvg
+    libsecret
+    libtasn1
+    libxcb
+    libxkbcommon
+    p11-kit
+    pcre
+    vte
+    wnck
   ];
 
+  postPatch = ''
+    patchShebangs .
+  '';
+
   enableParallelBuilding = true;
+
+  passthru.updateScript = deepin.updateScript { inherit name; };
 
   meta = with stdenv.lib; {
     description = "The default terminal emulation for Deepin";
