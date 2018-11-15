@@ -12,7 +12,7 @@
 
 # vim-go denpencies
 , asmfmt, delve, errcheck, godef, golint
-, gomodifytags, gotags, gotools, motion
+, gomodifytags, gotags, gotools, go-motion
 , gnused, reftools, gogetdoc, gometalinter
 , impl, iferr, gocode, gocode-gomod, go-tools
 }:
@@ -265,6 +265,7 @@ with generated;
       asmfmt
       delve
       errcheck
+      go-motion
       go-tools
       gocode
       gocode-gomod
@@ -277,7 +278,6 @@ with generated;
       gotools
       iferr
       impl
-      motion
       reftools
     ];
     in {
