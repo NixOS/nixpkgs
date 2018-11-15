@@ -1866,7 +1866,6 @@ default-package-overrides:
   - setlocale ==1.0.0.8
   - sexp-grammar ==2.0.1
   - SHA ==1.6.4.4
-  - shake ==0.16.4
   - shake-language-c ==0.12.0
   - shakespeare ==2.0.19
   - shell-conduit ==4.7.0
