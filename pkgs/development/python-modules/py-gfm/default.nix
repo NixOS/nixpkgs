@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = https://github.com/zopieux/py-gfm;
-    description = "This is an implementation of GitHub-Flavored Markdown written as an extension to the Python Markdown library. It aims for maximal compatibility with GitHub's rendering.";
+    description = "GitHub-Flavored Markdown as an extension to the Python Markdown library.";
     license = licenses.bsd3;
   };
 }
