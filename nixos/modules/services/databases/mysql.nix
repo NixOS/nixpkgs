@@ -147,7 +147,7 @@ in
           option is changed. This means that users created and permissions assigned once through this option or
           otherwise have to be removed manually.
         '';
-        example = [
+        example = literalExample ''[
           {
             name = "nextcloud";
             ensurePermissions = {
@@ -160,7 +160,7 @@ in
               "*.*" = "SELECT, LOCK TABLES";
             };
           }
-        ];
+        ]'';
       };
 
       # FIXME: remove this option; it's a really bad idea.
