@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, m4, zlib, bzip2, bison, flex, gettext, xz, setupDebugInfoDirs }:
+{ lib, stdenv, fetchurl, fetchpatch, m4, zlib, bzip2, bison, flex, gettext, xz, setupDebugInfoDirs }:
 
 # TODO: Look at the hardcoded paths to kernel, modules etc.
 stdenv.mkDerivation rec {
@@ -10,7 +10,15 @@ stdenv.mkDerivation rec {
     sha256 = "0nx6nzbk0rw3pxbzxsfvrjjh37hibzd2gjz5bb8wccpf85ar5vzp";
   };
 
-  patches = [ ./debug-info-from-env.patch ];
+  patches = [
+    ./debug-info-from-env.patch
+    (fetchpatch {
+      name = "support-pax-flags.patch";
+      url = https://115100.bugs.gentoo.org/attachment.cgi?id=74902;
+      sha256 = "06gmpp0mi0i82gi5qpl33a9jai3048s19rd4j9y3crixb3cqbpdh";
+      extraPrefix = "";
+    })
+  ];
 
   postPatch = ''
     patchShebangs tests
