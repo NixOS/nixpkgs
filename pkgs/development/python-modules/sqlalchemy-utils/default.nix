@@ -25,5 +25,10 @@ buildPythonPackage rec {
     homepage = https://github.com/kvesteri/sqlalchemy-utils;
     description = "Various utility functions and datatypes for SQLAlchemy.";
     license = licenses.bsd3;
+    longDescription = ''
+      SQLAlchemy-Utils provides custom data types and various utility functions
+      for SQLAlchemy.
+    '';
+    maintainers = [ maintainers.bsima ];
   };
 }
