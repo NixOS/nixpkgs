@@ -26,6 +26,7 @@ let
     { url = "${baseurl}/smlnj-c.tgz";             sha256 = "1sgfdnvkqa6wmwg027wg8lvg7zxq36p83bkymy8qkjdlxhxm2nhl"; }
     { url = "${baseurl}/doc.tgz";                 sha256 = "083h5h937gkhfq3xk982vmng903c83d98yh5fps53f62wib99mhf"; }
     { url = "${baseurl}/boot.x86-unix.tgz";       sha256 = "10nf79jzmv64ag8c11fxd9ggw21a9kdn9shqkiz1kni3lq63p7m2"; }
+    { url = "${baseurl}/asdl.tgz";                sha256 = "13jvdgv63h4s8p9q563hyisbz464y88y2flvwyxvi1n11lh15rwb"; }
   ];
 in stdenv.mkDerivation {
   name = "smlnj-${version}";
