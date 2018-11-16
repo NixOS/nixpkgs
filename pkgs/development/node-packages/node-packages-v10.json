@@ -12,6 +12,7 @@
 , "coinmon"
 , "configurable-http-proxy"
 , "cordova"
+, "cpy-cli"
 , "create-cycle-app"
 , "create-react-app"
 , "create-react-native-app"
