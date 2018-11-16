@@ -111,6 +111,7 @@
 , "titanium"
 , "triton"
 , "ttf2eot"
+, { "turtl-server-build-deps": "../../servers/turtl-server" }
 , "typescript"
 , "uglify-js"
 , "ungit"

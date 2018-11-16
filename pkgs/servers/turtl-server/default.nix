@@ -1,15 +1,14 @@
 { stdenv,
   fetchFromGitHub,
   makeWrapper,
+  nodePackages,
   pkgs ? import <nixpkgs> {
     inherit system;
-  }, system ? builtins.currentSystem, nodejs ? pkgs."nodejs-8_x"}:
+  },
+  system ? builtins.currentSystem,
+  nodejs ? pkgs."nodejs-8_x"}:
 
 let
-  nodePackages = import ./node.nix {
-    inherit pkgs;
-    system = stdenv.hostPlatform.system;
-  };
   name = "turtl-server-${version}";
   version = "2018-11-05";
   src = stdenv.mkDerivation {
@@ -30,10 +29,11 @@ let
       cp -R . $out
     '';
   };
+  nodePath = "${nodePackages."turtl-server-build-deps-../../servers/turtl-server"}/lib/node_modules/turtl-server/node_modules";
 in stdenv.mkDerivation {
   inherit name version src;
 
-  buildInputs = [ makeWrapper nodejs ];
+  buildInputs = [ makeWrapper nodejs nodePackages."turtl-server-build-deps-../../servers/turtl-server" ];
 
   dontBuild = true;
 
@@ -52,10 +52,8 @@ in stdenv.mkDerivation {
 
   postFixup = ''
     chmod +x $out/bin/turtl-server $out/scripts/init-db.sh $out/scripts/install-plugins.sh
-    wrapProgram $out/bin/turtl-server \
-      --set NODE_PATH "${nodePackages.shell.nodeDependencies}/lib/node_modules"
-    wrapProgram $out/scripts/init-db.sh \
-      --set NODE_PATH "${nodePackages.shell.nodeDependencies}/lib/node_modules"
+    wrapProgram $out/bin/turtl-server --set NODE_PATH "${nodePath}"
+    wrapProgram $out/scripts/init-db.sh --set NODE_PATH "${nodePath}"
   '';
 
   meta = with stdenv.lib; {
