@@ -5,7 +5,7 @@ with lib;
   options = {
     gtk.iconCache.enable = mkOption {
       type = types.bool;
-      default = true;
+      default = false;
       description = ''
         Whether to build icon theme caches for GTK+ applications.
       '';
