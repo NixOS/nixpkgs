@@ -1,26 +1,22 @@
 ninjaBuildPhase() {
     runHook preBuild
 
-    if [[ -z "$ninjaFlags" && ! ( -e build.ninja ) ]]; then
-        echo "no build.ninja, doing nothing"
-    else
-        local buildCores=1
+    local buildCores=1
 
-        # Parallel building is enabled by default.
-        if [ "${enableParallelBuilding-1}" ]; then
-            buildCores="$NIX_BUILD_CORES"
-        fi
-
-        # shellcheck disable=SC2086
-        local flagsArray=( \
-            -j"$buildCores" -l"$NIX_BUILD_CORES" \
-            $ninjaFlags "${ninjaFlagsArray[@]}" \
-            $buildFlags "${buildFlagsArray[@]}")
-
-        echoCmd 'build flags' "${flagsArray[@]}"
-        ninja "${flagsArray[@]}"
-        unset flagsArray
+    # Parallel building is enabled by default.
+    if [ "${enableParallelBuilding-1}" ]; then
+        buildCores="$NIX_BUILD_CORES"
     fi
+
+    local flagsArray=(
+        -j$buildCores -l$buildCores
+        $ninjaFlags "${ninjaFlagsArray[@]}"
+        $buildFlags "${buildFlagsArray[@]}"
+    )
+
+    echoCmd 'build flags' "${flagsArray[@]}"
+    ninja "${flagsArray[@]}"
+    unset flagsArray
 
     runHook postBuild
 }
@@ -32,11 +28,12 @@ fi
 ninjaInstallPhase() {
     runHook preInstall
 
-    installTargets="${installTargets:-install}"
-
     # shellcheck disable=SC2086
-    local flagsArray=( $installTargets \
-        $ninjaFlags "${ninjaFlagsArray[@]}")
+    local flagsArray=(
+        $ninjaFlags "${ninjaFlagsArray[@]}"
+        $installFlags "${installFlagsArray[@]}"
+        ${installTargets:-install}
+    )
 
     echoCmd 'install flags' "${flagsArray[@]}"
     ninja "${flagsArray[@]}"
@@ -47,4 +44,41 @@ ninjaInstallPhase() {
 
 if [ -z "$dontUseNinjaInstall" -a -z "$installPhase" ]; then
     installPhase=ninjaInstallPhase
+fi
+
+ninjaCheckPhase() {
+    runHook preCheck
+
+    if [ -z "${checkTarget:-}" ]; then
+        if ninja -n test >/dev/null 2>&1; then
+            checkTarget=test
+        fi
+    fi
+
+    if [ -z "${checkTarget:-}" ]; then
+        echo "no check/test target in ${makefile:-Makefile}, doing nothing"
+    else
+        local buildCores=1
+
+        if [ "${enableParallelChecking-1}" ]; then
+            buildCores="$NIX_BUILD_CORES"
+        fi
+
+        local flagsArray=(
+            -j$buildCores -l$buildCores
+            $ninjaFlags "${ninjaFlagsArray[@]}"
+            $checkFlags "${checkFlagsArray[@]}"
+            $checkTarget
+        )
+
+        echoCmd 'check flags' "${flagsArray[@]}"
+        ninja "${flagsArray[@]}"
+        unset flagsArray
+    fi
+
+    runHook postCheck
+}
+
+if [ -z "$dontUseNinjaCheck" -a -z "$checkPhase" ]; then
+    checkPhase=ninjaCheckPhase
 fi
