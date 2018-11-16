@@ -20,12 +20,11 @@ let
         $out/bin/mnexec \
         --prefix PATH : "${generatedPath}"
 
-      makeWrapper ${pyEnv}/bin/mn $out/bin/mn
+      ln -s ${pyEnv}/bin/mn $out/bin/mn
 
       # mn errors out without a telnet binary
       # pkgs.telnet brings an undesired ifconfig into PATH see #43105
-      # so we wrap it here instead
-      makeWrapper ${pkgs.telnet}/bin/telnet $out/bin/telnet
+      ln -s ${pkgs.telnet}/bin/telnet $out/bin/telnet
     '';
 in
 {

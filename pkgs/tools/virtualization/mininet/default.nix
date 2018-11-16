@@ -23,6 +23,9 @@ stdenv.mkDerivation rec {
   buildFlags = [ "mnexec" ];
   makeFlags = [ "PREFIX=$(out)" ];
 
+  pythonPath = [ python.pkgs.setuptools ];
+  buildInputs = [ python which help2man ];
+
   installTargets = [ "install-mnexec" "install-manpages" ];
 
   preInstall = ''
@@ -33,7 +36,6 @@ stdenv.mkDerivation rec {
 
   doCheck = false;
 
-  buildInputs = [ python.pkgs.wrapPython which help2man pyEnv ];
 
   meta = with lib; {
     description = "Emulator for rapid prototyping of Software Defined Networks";
