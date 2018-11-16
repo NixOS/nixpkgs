@@ -1,22 +1,22 @@
-{ stdenv, fetchurl, fetchFromGitHub,
+{ stdenv, fetchFromGitHub,
   libtool, gettext, pkgconfig,
-  vala, gnome_common, gobjectIntrospection,
-  libgee, json_glib, skk-dicts }:
+  vala, gnome-common, gobjectIntrospection,
+  libgee, json-glib, skk-dicts }:
 
 stdenv.mkDerivation rec {
   name = "libskk-${version}";
-  version = "1.0.3";
+  version = "1.0.4";
 
   src = fetchFromGitHub {
     owner = "ueno";
     repo = "libskk";
     rev = version;
-    sha256 = "092bjir866f350s4prq9q0yg34s91vmr8wbgf2vh3kcax1yj1axm";
+    sha256 = "1yvyscr22rrh0jja1bz70jzwi5776jyw39pgbgrx00j79vsv7b51";
   };
 
   buildInputs = [ skk-dicts ];
-  nativeBuildInputs = [ vala gnome_common gobjectIntrospection libtool gettext pkgconfig ];
-  propagatedBuildInputs = [ libgee json_glib ];
+  nativeBuildInputs = [ vala gnome-common gobjectIntrospection libtool gettext pkgconfig ];
+  propagatedBuildInputs = [ libgee json-glib ];
 
   preConfigure = ''
     ./autogen.sh

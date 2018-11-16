@@ -1,23 +1,23 @@
 { stdenv, fetchurl, pkgconfig, openssl, libjpeg, zlib, lz4, freetype, fontconfig
-, fribidi, SDL2, SDL, mesa, giflib, libpng, libtiff, glib, gst_all_1, libpulseaudio
-, libsndfile, xorg, libdrm, libxkbcommon, udev, utillinux, dbus, bullet, luajit
+, fribidi, SDL2, SDL, libGL, giflib, libpng, libtiff, glib, gst_all_1, libpulseaudio
+, libsndfile, xorg, libdrm, libxkbcommon, udev, utillinux, bullet, luajit
 , python27Packages, openjpeg, doxygen, expat, harfbuzz, jbig2dec, librsvg
-, dbus_libs, alsaLib, poppler, ghostscript, libraw, libspectre, xineLib, libwebp
-, curl, libinput, systemd, writeText
+, dbus, alsaLib, poppler, ghostscript, libraw, libspectre, xineLib, libwebp
+, curl, libinput, systemd, mesa_noglu, writeText, gtk3
 }:
 
 stdenv.mkDerivation rec {
   name = "efl-${version}";
-  version = "1.20.6";
+  version = "1.21.1";
 
   src = fetchurl {
     url = "http://download.enlightenment.org/rel/libs/efl/${name}.tar.xz";
-    sha256 = "1h9jkb1pkp2g6ld7ra9mxgblx3x5id4162ja697klx9mfjkpxijn";
+    sha256 = "0a5907h896pvpix7a6idc2fspzy6d78xrzf84k8y9fyvnd14nxs4";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig gtk3 ];
 
-  buildInputs = [ openssl zlib lz4 freetype fontconfig SDL mesa
+  buildInputs = [ openssl zlib lz4 freetype fontconfig SDL libGL mesa_noglu
     giflib libpng libtiff glib gst_all_1.gstreamer gst_all_1.gst-plugins-base gst_all_1.gst-plugins-good
     gst_all_1.gst-libav libpulseaudio libsndfile xorg.libXcursor xorg.printproto
     xorg.libX11 udev systemd ];
@@ -26,8 +26,11 @@ stdenv.mkDerivation rec {
     xorg.libXdamage xorg.libXinerama xorg.libXp xorg.libXtst xorg.libXi xorg.libXext
     bullet xorg.libXScrnSaver xorg.libXrender xorg.libXfixes xorg.libXrandr
     xorg.libxkbfile xorg.libxcb xorg.xcbutilkeysyms openjpeg doxygen expat luajit
-    harfbuzz jbig2dec librsvg dbus_libs alsaLib poppler ghostscript libraw libspectre xineLib libwebp curl libdrm
+    harfbuzz jbig2dec librsvg dbus alsaLib poppler ghostscript libraw libspectre xineLib libwebp curl libdrm
     libinput utillinux fribidi SDL2 ];
+
+  # as of 1.21.0 compilation will fail due to -Werror=format-security
+  hardeningDisable = [ "format" ];
 
   # ac_ct_CXX must be set to random value, because then it skips some magic which does alternative searching for g++
   configureFlags = [
@@ -68,6 +71,15 @@ stdenv.mkDerivation rec {
     modules=$(for i in "$out/include/"*/; do printf ' -I''${includedir}/'`basename $i`; done)
     substituteInPlace "$out/lib/pkgconfig/efl.pc" --replace 'Cflags: -I''${includedir}/efl-1' \
       'Cflags: -I''${includedir}/eina-1/eina'"$modules"
+
+    # build icon cache
+    gtk-update-icon-cache "$out"/share/icons/Enlightenment-X
+  '';
+
+  # EFL applications depend on libcurl, although it is linked at
+  # runtime by hand in code (it is dlopened).
+  postFixup = ''
+    patchelf --add-needed ${curl.out}/lib/libcurl.so $out/lib/libecore_con.so
   '';
 
   enableParallelBuilding = true;

@@ -1,6 +1,6 @@
 { lib, buildPythonPackage, fetchPypi, pythonOlder,
   # Build inputs
-  dateutil, six, ipaddress ? null,
+  dateutil, six, text-unidecode, ipaddress ? null,
   # Test inputs
   email_validator, nose, mock, ukpostcodeparser }:
 
@@ -8,12 +8,11 @@ assert pythonOlder "3.3" -> ipaddress != null;
 
 buildPythonPackage rec {
   pname = "Faker";
-  version = "0.8.8";
-  name = "${pname}-${version}";
+  version = "0.8.18";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e928cf853ef69d7471421f2a3716a1239e43de0fa9855f4016ee0c9f1057328a";
+    sha256 = "0184fa252f86214308bb6bed344f96294f2e3528fbffafc727890cf2a86d6027";
   };
 
   checkInputs = [
@@ -26,6 +25,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     dateutil
     six
+    text-unidecode
   ] ++ lib.optional (pythonOlder "3.3") ipaddress;
 
   meta = with lib; {

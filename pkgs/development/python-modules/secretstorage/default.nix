@@ -4,7 +4,6 @@
 buildPythonPackage rec {
   pname = "secretstorage";
   version = "2.3.1";
-  name = "${pname}-${version}";
 
   src = fetchFromGitHub {
     owner = "mitya57";

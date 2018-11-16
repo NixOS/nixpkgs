@@ -9,9 +9,13 @@ let
   xEnv = config.systemd.services."display-manager".environment;
   cfg = dmcfg.lightdm;
 
-  inherit (pkgs) stdenv lightdm writeScript writeText;
+  dmDefault = xcfg.desktopManager.default;
+  wmDefault = xcfg.windowManager.default;
+  hasDefaultUserSession = dmDefault != "none" || wmDefault != "none";
 
-  # lightdm runs with clearenv(), but we need a few things in the enviornment for X to startup
+  inherit (pkgs) lightdm writeScript writeText;
+
+  # lightdm runs with clearenv(), but we need a few things in the environment for X to startup
   xserverWrapper = writeScript "xserver-wrapper"
     ''
       #! ${pkgs.bash}/bin/bash
@@ -38,14 +42,15 @@ let
     ''
       [LightDM]
       ${optionalString cfg.greeter.enable ''
-        greeter-user = ${config.users.extraUsers.lightdm.name}
+        greeter-user = ${config.users.users.lightdm.name}
         greeters-directory = ${cfg.greeter.package}
       ''}
-      sessions-directory = ${dmcfg.session.desktops}
+      sessions-directory = ${dmcfg.session.desktops}/share/xsessions
+      ${cfg.extraConfig}
 
       [Seat:*]
       xserver-command = ${xserverWrapper}
-      session-wrapper = ${dmcfg.session.script}
+      session-wrapper = ${dmcfg.session.wrapper}
       ${optionalString cfg.greeter.enable ''
         greeter-session = ${cfg.greeter.name}
       ''}
@@ -54,14 +59,19 @@ let
         autologin-user-timeout = ${toString cfg.autoLogin.timeout}
         autologin-session = ${defaultSessionName}
       ''}
+      ${optionalString hasDefaultUserSession ''
+        user-session=${defaultSessionName}
+      ''}
+      ${optionalString (dmcfg.setupCommands != "") ''
+        display-setup-script=${pkgs.writeScript "lightdm-display-setup" ''
+          #!${pkgs.bash}/bin/bash
+          ${dmcfg.setupCommands}
+        ''}
+      ''}
       ${cfg.extraSeatDefaults}
     '';
 
-  defaultSessionName =
-    let
-      dm = xcfg.desktopManager.default;
-      wm = xcfg.windowManager.default;
-    in dm + optionalString (wm != "none") ("+" + wm);
+  defaultSessionName = dmDefault + optionalString (wmDefault != "none") ("+" + wmDefault);
 in
 {
   # Note: the order in which lightdm greeter modules are imported
@@ -69,6 +79,8 @@ in
   # preferred.
   imports = [
     ./lightdm-greeters/gtk.nix
+    ./lightdm-greeters/mini.nix
+    ./lightdm-greeters/enso-os.nix
   ];
 
   options = {
@@ -109,9 +121,18 @@ in
         };
       };
 
+      extraConfig = mkOption {
+        type = types.lines;
+        default = "";
+        example = ''
+          user-authority-in-system-dir = true
+        '';
+        description = "Extra lines to append to LightDM section.";
+      };
+
       background = mkOption {
         type = types.str;
-        default = "${pkgs.nixos-artwork.wallpapers.gnome-dark}/share/artwork/gnome/Gnome_Dark.png";
+        default = "${pkgs.nixos-artwork.wallpapers.simple-dark-gray-bottom}/share/artwork/gnome/nix-wallpaper-simple-dark-gray_bottom.png";
         description = ''
           The background image or color to use.
         '';
@@ -172,7 +193,7 @@ in
           LightDM auto-login requires services.xserver.displayManager.lightdm.autoLogin.user to be set
         '';
       }
-      { assertion = cfg.autoLogin.enable -> elem defaultSessionName dmcfg.session.names;
+      { assertion = cfg.autoLogin.enable -> dmDefault != "none" || wmDefault != "none";
         message = ''
           LightDM auto-login requires that services.xserver.desktopManager.default and
           services.xserver.windowMananger.default are set to valid values. The current
@@ -187,17 +208,11 @@ in
       }
     ];
 
-    services.xserver.displayManager.slim.enable = false;
-
-    services.xserver.displayManager.job = {
-      logToFile = true;
-
-      # lightdm relaunches itself via just `lightdm`, so needs to be on the PATH
-      execCmd = ''
-        export PATH=${lightdm}/sbin:$PATH
-        exec ${lightdm}/sbin/lightdm --log-dir=/var/log --run-dir=/run
-      '';
-    };
+    # lightdm relaunches itself via just `lightdm`, so needs to be on the PATH
+    services.xserver.displayManager.job.execCmd = ''
+      export PATH=${lightdm}/sbin:$PATH
+      exec ${lightdm}/sbin/lightdm
+    '';
 
     environment.etc."lightdm/lightdm.conf".source = lightdmConf;
     environment.etc."lightdm/users.conf".source = usersConf;
@@ -205,8 +220,11 @@ in
     services.dbus.enable = true;
     services.dbus.packages = [ lightdm ];
 
-    # lightdm uses the accounts daemon to rember language/window-manager per user
+    # lightdm uses the accounts daemon to remember language/window-manager per user
     services.accounts-daemon.enable = true;
+
+    # Enable the accounts daemon to find lightdm's dbus interface
+    environment.systemPackages = [ lightdm ];
 
     security.pam.services.lightdm = {
       allowNullPassword = true;
@@ -240,14 +258,21 @@ in
         session  include   lightdm
     '';
 
-    users.extraUsers.lightdm = {
-      createHome = true;
-      home = "/var/lib/lightdm-data";
+    users.users.lightdm = {
+      home = "/var/lib/lightdm";
       group = "lightdm";
       uid = config.ids.uids.lightdm;
     };
 
-    users.extraGroups.lightdm.gid = config.ids.gids.lightdm;
+    systemd.tmpfiles.rules = [
+      "d /run/lightdm 0711 lightdm lightdm 0"
+      "d /var/cache/lightdm 0711 root lightdm -"
+      "d /var/lib/lightdm 1770 lightdm lightdm -"
+      "d /var/lib/lightdm-data 1775 lightdm lightdm -"
+      "d /var/log/lightdm 0711 root lightdm -"
+    ];
+
+    users.groups.lightdm.gid = config.ids.gids.lightdm;
     services.xserver.tty     = null; # We might start multiple X servers so let the tty increment themselves..
     services.xserver.display = null; # We specify our own display (and logfile) in xserver-wrapper up there
   };

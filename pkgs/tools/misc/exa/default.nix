@@ -1,4 +1,6 @@
-{ stdenv, fetchFromGitHub, rustPlatform, cmake, perl, pkgconfig, zlib }:
+{ stdenv, fetchFromGitHub, rustPlatform, cmake, perl, pkgconfig, zlib
+, darwin, libiconv
+}:
 
 with rustPlatform;
 
@@ -16,7 +18,24 @@ buildRustPackage rec {
   };
 
   nativeBuildInputs = [ cmake pkgconfig perl ];
-  buildInputs = [ zlib ];
+  buildInputs = [ zlib ]
+  ++ stdenv.lib.optionals stdenv.isDarwin [
+    libiconv darwin.apple_sdk.frameworks.Security ]
+  ;
+
+  postInstall = ''
+    mkdir -p $out/share/man/man1
+    cp contrib/man/exa.1 $out/share/man/man1/
+
+    mkdir -p $out/share/bash-completion/completions
+    cp contrib/completions.bash $out/share/bash-completion/completions/exa
+
+    mkdir -p $out/share/fish/vendor_completions.d
+    cp contrib/completions.fish $out/share/fish/vendor_completions.d/exa.fish
+
+    mkdir -p $out/share/zsh/site-functions
+    cp contrib/completions.zsh $out/share/zsh/site-functions/_exa
+  '';
 
   # Some tests fail, but Travis ensures a proper build
   doCheck = false;

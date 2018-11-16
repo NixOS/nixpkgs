@@ -1,29 +1,20 @@
 [
   {
-    goPackagePath = "github.com/Sirupsen/logrus";
+    goPackagePath = "github.com/alecthomas/template";
     fetch = {
       type = "git";
-      url = "https://github.com/Sirupsen/logrus";
-      rev = "be52937128b38f1d99787bb476c789e2af1147f1";
-      sha256 = "1m6vvd4pg4lwglhk54lv5mf6cc8h7bi0d9zb3gar4crz531r66y4";
+      url = "https://github.com/alecthomas/template";
+      rev = "a0175ee3bccc567396460bf5acd36800cb10c49c";
+      sha256 = "0qjgvvh26vk1cyfq9fadyhfgdj36f1iapbmr5xp6zqipldz8ffxj";
     };
   }
   {
-    goPackagePath = "github.com/golang/protobuf";
+    goPackagePath = "github.com/alecthomas/units";
     fetch = {
       type = "git";
-      url = "https://github.com/golang/protobuf";
-      rev = "59b73b37c1e45995477aae817e4a653c89a858db";
-      sha256 = "1dx22jvhvj34ivpr7gw01fncg9yyx35mbpal4mpgnqka7ajmgjsa";
-    };
-  }
-  {
-    goPackagePath = "github.com/prometheus/client_model";
-    fetch = {
-      type = "git";
-      url = "https://github.com/prometheus/client_model";
-      rev = "fa8ad6fec33561be4280a8f0514318c79d7f6cb6";
-      sha256 = "11a7v1fjzhhwsl128znjcf5v7v6129xjgkdpym2lial4lac1dhm9";
+      url = "https://github.com/alecthomas/units";
+      rev = "2efee857e7cfd4f3d0138cc3cbb1b4966962b93a";
+      sha256 = "1j65b91qb9sbrml9cpabfrcf07wmgzzghrl7809hjjhrmbzri5bl";
     };
   }
   {
@@ -31,8 +22,17 @@
     fetch = {
       type = "git";
       url = "https://github.com/beorn7/perks";
-      rev = "b965b613227fddccbfffe13eae360ed3fa822f8d";
-      sha256 = "1p8zsj4r0g61q922khfxpwxhdma2dx4xad1m5qx43mfn28kxngqk";
+      rev = "3a771d992973f24aa725d07868b467d1ddfceafb";
+      sha256 = "1l2lns4f5jabp61201sh88zf3b0q793w4zdgp9nll7mmfcxxjif3";
+    };
+  }
+  {
+    goPackagePath = "github.com/golang/protobuf";
+    fetch = {
+      type = "git";
+      url = "https://github.com/golang/protobuf";
+      rev = "b4deda0973fb4c70b50d226b1af49f3da59f5265";
+      sha256 = "0ya4ha7m20bw048m1159ppqzlvda4x0vdprlbk5sdgmy74h3xcdq";
     };
   }
   {
@@ -40,8 +40,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/matttproud/golang_protobuf_extensions";
-      rev = "fc2b8d3a73c4867e51861bbdd5ae3c1f0869dd6a";
-      sha256 = "0ajg41h6402big484drvm72wvid1af2sffw0qkzbmpy04lq68ahj";
+      rev = "c12348ce28de40eed0136aa2b644d0ee0650e56c";
+      sha256 = "1d0c1isd2lk9pnfq2nk0aih356j30k3h1gi2w0ixsivi5csl7jya";
     };
   }
   {
@@ -49,8 +49,26 @@
     fetch = {
       type = "git";
       url = "https://github.com/prometheus/client_golang";
-      rev = "6dbab8106ed3ed77359ac85d9cf08e30290df864";
-      sha256 = "1i3g5h2ncdb8b67742kfpid7d0a1jas1pyicglbglwngfmzhpkna";
+      rev = "82f5ff156b29e276022b1a958f7d385870fb9814";
+      sha256 = "111j329yrlgvh73dm80gawwxsh9dgjkw74254kyj5c2rfmra7znz";
+    };
+  }
+  {
+    goPackagePath = "github.com/prometheus/client_model";
+    fetch = {
+      type = "git";
+      url = "https://github.com/prometheus/client_model";
+      rev = "99fa1f4be8e564e8a6b613da7fa6f46c9edafc6c";
+      sha256 = "19y4ywsivhpxj7ikf2j0gm9k3cmyw37qcbfi78n526jxcc7kw998";
+    };
+  }
+  {
+    goPackagePath = "github.com/prometheus/common";
+    fetch = {
+      type = "git";
+      url = "https://github.com/prometheus/common";
+      rev = "d811d2e9bf898806ecfb6ef6296774b13ffc314c";
+      sha256 = "0r4067r4ysmljksqw3awcxx5qplqhykahc5igdzgkky7i4bvaik1";
     };
   }
   {
@@ -58,26 +76,44 @@
     fetch = {
       type = "git";
       url = "https://github.com/prometheus/procfs";
-      rev = "c91d8eefde16bd047416409eb56353ea84a186e4";
-      sha256 = "0pj3gzw9b58l72w0rkpn03ayssglmqfmyxghhfad6mh0b49dvj3r";
+      rev = "8b1c2da0d56deffdbb9e48d4414b4e674bd8083e";
+      sha256 = "0x128p15h35mgwqxkigfkk1lfrcz9g697ahl8v6xp9kwvcqvjrrf";
     };
   }
   {
-    goPackagePath = "bitbucket.org/ww/goautoneg";
-    fetch = {
-      type = "hg";
-      url = "bitbucket.org/ww/goautoneg";
-      rev = "75cd24fc2f2c2a2088577d12123ddee5f54e0675";
-      sha256 = "19khhn5xhqv1yp7d6k987gh5w5rhrjnp4p0c6fyrd8z6lzz5h9qi";
-    };
-  }
-  {
-    goPackagePath = "github.com/prometheus/log";
+    goPackagePath = "github.com/sirupsen/logrus";
     fetch = {
       type = "git";
-      url = "https://github.com/prometheus/log";
-      rev = "439e5db48fbb50ebbaf2c816030473a62f505f55";
-      sha256 = "1fl23gsw2hn3c1y91qckr661sybqcw2gqnd1gllxn3hp6p2w6hxv";
+      url = "https://github.com/sirupsen/logrus";
+      rev = "778f2e774c725116edbc3d039dc0dfc1cc62aae8";
+      sha256 = "0drlrl192k4qkpcf1b6nw2qlixply31x2jhcckjzl3hn4mzwi6nf";
+    };
+  }
+  {
+    goPackagePath = "golang.org/x/crypto";
+    fetch = {
+      type = "git";
+      url = "https://go.googlesource.com/crypto";
+      rev = "ae8bce0030810cf999bb2b9868ae5c7c58e6343b";
+      sha256 = "0aihwcf0g8mq1sb96pwhpgvwxlf862pdhsfr7mdppz7bii4i9shw";
+    };
+  }
+  {
+    goPackagePath = "golang.org/x/sys";
+    fetch = {
+      type = "git";
+      url = "https://go.googlesource.com/sys";
+      rev = "78d5f264b493f125018180c204871ecf58a2dce1";
+      sha256 = "0x23n60wskys39dwybz5za77ldky9i518kp58ragpd5528kcc68s";
+    };
+  }
+  {
+    goPackagePath = "gopkg.in/alecthomas/kingpin.v2";
+    fetch = {
+      type = "git";
+      url = "https://gopkg.in/alecthomas/kingpin.v2";
+      rev = "947dcec5ba9c011838740e680966fd7087a71d0d";
+      sha256 = "0mndnv3hdngr3bxp7yxfd47cas4prv98sqw534mx7vp38gd88n5r";
     };
   }
 ]

@@ -2,18 +2,20 @@
 
 buildPythonPackage rec {
   pname = "pyslurm";
-  version = "20171102";
-  name = pname + "-" + version;
+  version = "18-08-3";
 
   src = fetchFromGitHub {
     repo = "pyslurm";
     owner = "PySlurm";
-    rev = "a2acbc820da419e308c5817998d2abe78a7b75e6";
-    sha256 = "1wmlx5fh1xzjyksvmq7i083hmyvs7id61ysk2d9hbmf8rza498as";
+    rev = version;
+    sha256 = "1rymx106xa99wd4n44s7jw0w41spg39y1ji4fgn01yk7wjfrdrwg";
   };
 
   buildInputs = [ cython slurm ];
   setupPyBuildFlags = [ "--slurm-lib=${slurm}/lib" "--slurm-inc=${slurm.dev}/include" ];
+
+  # Test cases need /etc/slurm/slurm.conf and require a working slurm installation
+  doCheck = false;
 
   meta = with lib; {
     homepage = https://github.com/PySlurm/pyslurm;

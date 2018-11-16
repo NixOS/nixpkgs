@@ -1,7 +1,6 @@
 { stdenv, buildPythonPackage, fetchPypi, glibcLocales }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "Unidecode";
   version = "1.0.22";
 

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgs, gnum4 }:
+{ stdenv, fetchurl, gnum4 }:
 
 stdenv.mkDerivation rec {
   name = "jade-${version}-${debpatch}";

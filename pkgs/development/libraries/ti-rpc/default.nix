@@ -1,21 +1,21 @@
-{ fetchurl, fetchpatch, stdenv, autoreconfHook, libkrb5 }:
+{ fetchurl, stdenv, autoreconfHook, libkrb5 }:
 
 stdenv.mkDerivation rec {
-  name = "libtirpc-1.0.2";
+  name = "libtirpc-1.1.4";
 
   src = fetchurl {
     url = "mirror://sourceforge/libtirpc/${name}.tar.bz2";
-    sha256 = "1xchbxy0xql7yl7z4n1icj8r7dmly46i22fvm00vdjq64zlmqg3j";
+    sha256 = "07anqypf7c719x9y683qz65cxllmzlgmlab2hlahrqcj4bq2k99c";
   };
 
-  patches = stdenv.lib.optional stdenv.hostPlatform.isMusl
-    (fetchpatch {
-      url = "https://raw.githubusercontent.com/openembedded/openembedded-core/2be873301420ec6ca2c70d899b7c49a7e2b0954d/meta/recipes-extended/libtirpc/libtirpc/0001-replace-__bzero-with-memset-API.patch";
-      sha256 = "1jmbn0j2bnjp0j9z5vzz5xiwyv3kd28w5pixbqsy2lz6q8nii7cf";
-    });
+  outputs = [ "out" "dev" ];
 
   postPatch = ''
     sed '1i#include <stdint.h>' -i src/xdr_sizeof.c
+  '' + stdenv.lib.optionalString stdenv.hostPlatform.isMusl ''
+    substituteInPlace tirpc/rpc/types.h \
+      --replace '#if defined __APPLE_CC__ || defined __FreeBSD__' \
+                '#if defined __APPLE_CC__ || defined __FreeBSD__ || !defined __GLIBC__'
   '';
 
   nativeBuildInputs = [ autoreconfHook ];

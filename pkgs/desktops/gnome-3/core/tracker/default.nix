@@ -1,24 +1,55 @@
-{ stdenv, fetchurl, intltool, pkgconfig
-, libxml2, upower, glib, wrapGAppsHook, vala, sqlite, libxslt
-, gnome3, icu, libuuid, networkmanager, libsoup, json_glib }:
+{ stdenv, fetchurl, intltool, meson, ninja, pkgconfig, gobjectIntrospection, python2
+, gtk-doc, docbook_xsl, docbook_xml_dtd_412, docbook_xml_dtd_43, glibcLocales
+, libxml2, upower, glib, wrapGAppsHook, vala, sqlite, libxslt, libstemmer
+, gnome3, icu, libuuid, networkmanager, libsoup, json-glib }:
 
-stdenv.mkDerivation rec {
-  inherit (import ./src.nix fetchurl) name src;
+let
+  pname = "tracker";
+  version = "2.1.4";
+in stdenv.mkDerivation rec {
+  name = "${pname}-${version}";
 
-  enableParallelBuilding = true;
+  outputs = [ "out" "dev" "devdoc" ];
 
-  nativeBuildInputs = [ vala pkgconfig intltool libxslt wrapGAppsHook ];
-  # TODO: add libstemmer
-  buildInputs = [
-    glib libxml2 sqlite upower icu networkmanager libsoup libuuid json_glib
+  src = fetchurl {
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    sha256 = "0xf58zld6pnfa8k7k70rv8ya8g7zqgahz6q4sapwxs6k97d2fgsx";
+  };
+
+  nativeBuildInputs = [
+    meson ninja vala pkgconfig intltool libxslt wrapGAppsHook gobjectIntrospection
+    gtk-doc docbook_xsl docbook_xml_dtd_412 docbook_xml_dtd_43 glibcLocales
+    python2 # for data-generators
   ];
 
-  # TODO: figure out wrapping unit tests, some of them fail on missing gsettings_desktop_schemas
-  configureFlags = [ "--disable-unit-tests" ];
+  buildInputs = [
+    glib libxml2 sqlite upower icu networkmanager libsoup libuuid json-glib libstemmer
+  ];
+
+  LC_ALL = "en_US.UTF-8";
+
+  mesonFlags = [
+    "-Ddbus_services=share/dbus-1/services"
+    # TODO: figure out wrapping unit tests, some of them fail on missing gsettings-desktop-schemas
+    "-Dfunctional_tests=false"
+  ];
 
   postPatch = ''
     patchShebangs utils/g-ir-merge/g-ir-merge
+    patchShebangs utils/data-generators/cc/generate
   '';
+
+  postInstall = ''
+    glib-compile-schemas "$out/share/glib-2.0/schemas"
+  '';
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+      attrPath = "gnome3.${pname}";
+      versionPolicy = "none";
+    };
+  };
 
   meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/Projects/Tracker;

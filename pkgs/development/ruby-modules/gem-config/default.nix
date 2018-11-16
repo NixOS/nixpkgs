@@ -21,8 +21,8 @@
 , libiconv, postgresql, v8_3_16_14, clang, sqlite, zlib, imagemagick
 , pkgconfig , ncurses, xapian_1_2_22, gpgme, utillinux, fetchpatch, tzdata, icu, libffi
 , cmake, libssh2, openssl, mysql, darwin, git, perl, pcre, gecode_3, curl
-, libmsgpack, qt48, libsodium, snappy, libossp_uuid, lxc, libpcap, xlibs, gtk2, buildRubyGem
-, cairo, re2, rake, gobjectIntrospection, gdk_pixbuf
+, msgpack, qt59, libsodium, snappy, libossp_uuid, lxc, libpcap, xorg, gtk2, buildRubyGem
+, cairo, re2, rake, gobjectIntrospection, gdk_pixbuf, zeromq, graphicsmagick, libcxx, file
 }@args:
 
 let
@@ -60,16 +60,17 @@ in
 
   cairo = attrs: {
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ gtk2 pcre xlibs.libpthreadstubs xlibs.libXdmcp];
+    buildInputs = [ gtk2 pcre xorg.libpthreadstubs xorg.libXdmcp];
   };
 
   cairo-gobject = attrs: {
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ cairo pcre xlibs.libpthreadstubs xlibs.libXdmcp ];
+    buildInputs = [ cairo pcre xorg.libpthreadstubs xorg.libXdmcp ];
   };
 
   capybara-webkit = attrs: {
-    buildInputs = [ qt48 ];
+    buildInputs = [ qt59.qtbase qt59.qtwebkit ] ++ stdenv.lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Cocoa ];
+    NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isDarwin "-I${libcxx}/include/c++/v1";
   };
 
   charlock_holmes = attrs: {
@@ -80,6 +81,10 @@ in
     buildInputs = [ curl ];
   };
 
+  curses = attrs: {
+    buildInputs = [ ncurses ];
+  };
+
   dep-selector-libgecode = attrs: {
     USE_SYSTEM_GECODE = true;
     postInstall = ''
@@ -87,21 +92,56 @@ in
       sed -i $installPath/lib/dep-selector-libgecode.rb -e 's@VENDORED_GECODE_DIR =.*@VENDORED_GECODE_DIR = "${gecode_3}"@'
     '';
   };
-  
+
   ethon = attrs: {
     dontBuild = false;
     postPatch = ''
       substituteInPlace lib/ethon/curls/settings.rb \
         --replace "libcurl" "${curl.out}/lib/libcurl${stdenv.hostPlatform.extensions.sharedLibrary}"
     '';
-  }; 
+  };
+
+  fog-dnsimple = attrs: {
+    postInstall = ''
+      cd $(cat $out/nix-support/gem-meta/install-path)
+      rm {$out/bin,bin,../../bin}/{setup,console}
+    '';
+  };
+
+  redis-rack = attrs: {
+    dontBuild = false;
+    preBuild = ''
+      exec 3>&1
+      output="$(gem build $gemspec | tee >(cat - >&3))"
+      exec 3>&-
+      sed -i 's!"rake".freeze!!' $gemspec
+    '';
+  };
+
+  ffi-rzmq-core = attrs: {
+    postInstall = ''
+      installPath=$(cat $out/nix-support/gem-meta/install-path)
+      sed -i $installPath/lib/ffi-rzmq-core/libzmq.rb -e 's@inside_gem =.*@inside_gem = "${zeromq}/lib"@'
+    '';
+  };
+
+  mini_magick = attrs: {
+    postInstall = ''
+      installPath=$(cat $out/nix-support/gem-meta/install-path)
+      echo -e "\nENV['PATH'] += ':${graphicsmagick}/bin'\n" >> $installPath/lib/mini_magick/configuration.rb
+    '';
+  };
+
+  do_sqlite3 = attrs: {
+    buildInputs = [ sqlite ];
+  };
 
   eventmachine = attrs: {
     buildInputs = [ openssl ];
   };
 
   ffi = attrs: {
-  nativeBuildInputs = [ pkgconfig ];
+    nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ libffi ];
   };
 
@@ -128,7 +168,7 @@ in
 
   gtk2 = attrs: {
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ gtk2 pcre xlibs.libpthreadstubs xlibs.libXdmcp];
+    buildInputs = [ gtk2 pcre xorg.libpthreadstubs xorg.libXdmcp];
     # CFLAGS must be set for this gem to detect gdkkeysyms.h correctly
     CFLAGS = "-I${gtk2.dev}/include/gtk-2.0 -I/non-existent-path";
   };
@@ -139,14 +179,20 @@ in
   };
 
   grpc = attrs: {
-  nativeBuildInputs = [ pkgconfig ];
+    nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ openssl ];
+    hardeningDisable = [ "format" ];
+    NIX_CFLAGS_COMPILE = [ "-Wno-error=stringop-overflow" "-Wno-error=implicit-fallthrough" ];
   };
 
   hitimes = attrs: {
     buildInputs =
       stdenv.lib.optionals stdenv.isDarwin
         [ darwin.apple_sdk.frameworks.CoreServices ];
+  };
+
+  iconv = attrs: {
+    buildFlags = lib.optional stdenv.isDarwin "--with-iconv-dir=${libiconv}";
   };
 
   # disable bundle install as it can't install anything in addition to what is
@@ -169,8 +215,29 @@ in
     buildFlags = [ "--with-system-v8=true" ];
   };
 
+  libxml-ruby = attrs: {
+    buildFlags = [
+      "--with-xml2-lib=${libxml2.out}/lib"
+      "--with-xml2-include=${libxml2.dev}/include/libxml2"
+    ];
+  };
+
+  magic = attrs: {
+    buildInputs = [ file ];
+    postInstall = ''
+      installPath=$(cat $out/nix-support/gem-meta/install-path)
+      sed -e 's@ENV\["MAGIC_LIB"\] ||@ENV\["MAGIC_LIB"\] || "${file}/lib/libmagic.so" ||@' -i $installPath/lib/magic/api.rb
+    '';
+  };
+
+  metasploit-framework = attrs: {
+    preInstall = ''
+      export HOME=$TMPDIR
+    '';
+  };
+
   msgpack = attrs: {
-    buildInputs = [ libmsgpack ];
+    buildInputs = [ msgpack ];
   };
 
   mysql = attrs: {
@@ -202,9 +269,16 @@ in
     ] ++ lib.optional stdenv.isDarwin "--with-iconv-dir=${libiconv}";
   };
 
+  oxidized = attrs: {
+    postInstall = ''
+      cd "$(cat "$out/nix-support/gem-meta/install-path")"
+      patch -p1 < ${../../../tools/admin/oxidized/temporary-x-series.patch}
+    '';
+  };
+
   pango = attrs: {
-  nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ gtk2 xlibs.libXdmcp pcre xlibs.libpthreadstubs ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ gtk2 xorg.libXdmcp pcre xorg.libpthreadstubs ];
   };
 
   patron = attrs: {
@@ -242,7 +316,7 @@ in
   };
 
   rmagick = attrs: {
-  nativeBuildInputs = [ pkgconfig ];
+    nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ imagemagick which ];
   };
 
@@ -258,8 +332,13 @@ in
     ];
   };
   rugged = attrs: {
-  nativeBuildInputs = [ pkgconfig ];
+    nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ cmake openssl libssh2 zlib ];
+    dontUseCmakeConfigure = true;
+  };
+
+  sassc = attrs: {
+    nativeBuildInputs = [ rake ];
   };
 
   scrypt = attrs:
@@ -309,6 +388,10 @@ in
     buildInputs = [ kerberos ];
   };
 
+  tiny_tds = attrs: {
+    nativeBuildInputs = [ pkgconfig openssl ];
+  };
+
   therubyracer = attrs: {
     buildFlags = [
       "--with-v8-dir=${v8}"
@@ -336,7 +419,7 @@ in
   xapian-ruby = attrs: {
     # use the system xapian
     dontBuild = false;
-  nativeBuildInputs = [ pkgconfig ];
+    nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ xapian_1_2_22 zlib ];
     postPatch = ''
       cp ${./xapian-Rakefile} Rakefile
@@ -345,5 +428,9 @@ in
       export XAPIAN_CONFIG=${xapian_1_2_22}/bin/xapian-config
     '';
   };
+
+   zookeeper = attrs: {
+     buildInputs = stdenv.lib.optionals stdenv.isDarwin [ darwin.cctools ];
+   };
 
 }

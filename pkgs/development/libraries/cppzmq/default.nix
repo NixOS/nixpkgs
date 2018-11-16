@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "cppzmq-${version}";
-  version = "4.2.1";
+  version = "4.2.3";
 
   src = fetchFromGitHub {
     owner = "zeromq";
     repo = "cppzmq";
     rev = "v${version}";
-    sha256 = "0hy8yxb22siimq0pf6jq6kdp9lvi5f6al1xd12c9i1jyajhp1lhk";
+    sha256 = "1yjs25ra5s8zs0rhk50w3f1rrrl80hhq784lwdhh1m3risk740sa";
   };
 
   nativeBuildInputs = [ cmake ];

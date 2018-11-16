@@ -11,8 +11,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "info" ];
   outputBin = "dev"; # libassuan-config
 
-  buildInputs = [ libgpgerror pth ]
-    ++ stdenv.lib.optional stdenv.isDarwin gettext;
+  buildInputs = [ libgpgerror pth gettext];
 
   doCheck = true;
 

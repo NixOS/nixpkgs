@@ -11,7 +11,7 @@ stdenv.mkDerivation {
   buildInputs = [ coq ];
   propagatedBuildInputs = [ ssreflect ];
 
-  configureFlags = "--libdir=$out/lib/coq/${coq.coq-version}/user-contrib/Coquelicot";
+  configureFlags = [ "--libdir=$out/lib/coq/${coq.coq-version}/user-contrib/Coquelicot" ];
   buildPhase = "./remake";
   installPhase = "./remake install";
 
@@ -22,4 +22,9 @@ stdenv.mkDerivation {
     maintainers = [ stdenv.lib.maintainers.vbgl ];
     inherit (coq.meta) platforms;
   };
+
+  passthru = {
+    compatibleCoqVersions = v: builtins.elem v [ "8.5" "8.6" "8.7" ];
+  };
+
 }

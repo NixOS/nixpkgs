@@ -14,6 +14,7 @@ stdenv.mkDerivation rec {
     description = "A tool to run processes untied from some of the namespaces";
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.linux;
+    license = licenses.gpl2Plus;
   };
 
   passthru = {

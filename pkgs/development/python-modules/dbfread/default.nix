@@ -1,7 +1,6 @@
 { stdenv, fetchPypi, buildPythonPackage }:
 
 buildPythonPackage rec {
-    name = "${pname}-${version}";
     pname = "dbfread";
     version = "2.0.7";
 

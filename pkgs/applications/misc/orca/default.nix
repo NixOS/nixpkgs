@@ -1,24 +1,23 @@
-{ stdenv, lib, pkgconfig, fetchurl, buildPythonApplication
-, autoreconfHook, wrapGAppsHook
-, intltool, yelp_tools, itstool, libxmlxx3
+{ stdenv, pkgconfig, fetchurl, buildPythonApplication
+, autoreconfHook, wrapGAppsHook, gobjectIntrospection
+, intltool, yelp-tools, itstool, libxmlxx3
 , python, pygobject3, gtk3, gnome3, substituteAll
-, at_spi2_atk, at_spi2_core, pyatspi, dbus, dbus-python, pyxdg
-, xkbcomp, gsettings_desktop_schemas, liblouis
+, at-spi2-atk, at-spi2-core, pyatspi, dbus, dbus-python, pyxdg
+, xkbcomp, gsettings-desktop-schemas
 , speechd, brltty, setproctitle, gst_all_1, gst-python
 }:
 
-with lib;
 let
-  version = "3.26.0";
-  majorVersion = builtins.concatStringsSep "." (take 2 (splitString "." version));
+  pname = "orca";
+  version = "3.28.2";
 in buildPythonApplication rec {
-  name = "orca-${version}";
+  name = "${pname}-${version}";
 
   format = "other";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/orca/${majorVersion}/${name}.tar.xz";
-    sha256 = "0xk5k9cbswymma60nrfj00dl97wypx59c107fb1hwi75gm0i07a7";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    sha256 = "08rh6ji680g5nrw2n7jrxrw7nwg04sj52jxffcfasgss2f51d38q";
   };
 
   patches = [
@@ -30,15 +29,16 @@ in buildPythonApplication rec {
 
   nativeBuildInputs = [
     autoreconfHook wrapGAppsHook pkgconfig libxmlxx3
-    intltool yelp_tools itstool
+    intltool yelp-tools itstool gobjectIntrospection
   ];
 
   propagatedBuildInputs = [
-    pygobject3 pyatspi dbus-python pyxdg brltty liblouis speechd gst-python setproctitle
+    # TODO: re-add liblouis when it is fixed
+    pygobject3 pyatspi dbus-python pyxdg brltty speechd gst-python setproctitle
   ];
 
   buildInputs = [
-    python gtk3 at_spi2_atk at_spi2_core dbus gsettings_desktop_schemas
+    python gtk3 at-spi2-atk at-spi2-core dbus gsettings-desktop-schemas
     gst_all_1.gstreamer gst_all_1.gst-plugins-base gst_all_1.gst-plugins-good
   ];
 
@@ -47,7 +47,13 @@ in buildPythonApplication rec {
     intltoolize
   '';
 
-  meta = {
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+    };
+  };
+
+  meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/Projects/Orca;
     description = "Screen reader";
     longDescription = ''

@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, fetchgit, fetchNuGet
-, autoconf, automake, pkgconfig, shared_mime_info, intltool
+{ stdenv, fetchurl
+, autoconf, automake, pkgconfig, shared-mime-info, intltool
 , glib, mono, gtk-sharp-2_0, gnome2, gnome-sharp, unzip
 , dotnetPackages
 }:
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   name = "monodevelop-${version}";
 
   src = fetchurl {
-    url = "http://download.mono-project.com/sources/monodevelop/${name}.tar.bz2";
+    url = "https://download.mono-project.com/sources/monodevelop/${name}.tar.bz2";
     sha256 = "0bim4bfv3zwijafl9g0cx3159zq43dlcv74mnyrda41j4p52w5ji";
   };
 
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    autoconf automake shared_mime_info intltool
+    autoconf automake shared-mime-info intltool
     mono gtk-sharp-2_0 gnome-sharp unzip
     dotnetPackages.NUnit
     dotnetPackages.NUnitRunners
@@ -76,5 +76,6 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     platforms = platforms.linux;
     maintainers = with maintainers; [ obadz ];
+    broken = true; # 2018-09-21, build has failed since 2018-03-08
   };
 }

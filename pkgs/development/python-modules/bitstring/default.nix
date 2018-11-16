@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "bitstring";
   version = "3.1.5";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

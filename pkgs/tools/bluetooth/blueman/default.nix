@@ -1,18 +1,19 @@
-{ stdenv, lib, fetchurl, intltool, pkgconfig, pythonPackages, bluez, polkit, gtk3
+{ stdenv, lib, fetchurl, intltool, pkgconfig, python3Packages, bluez, gtk3
 , obex_data_server, xdg_utils, libnotify, dnsmasq, dhcp
-, hicolor_icon_theme, librsvg, wrapGAppsHook, gobjectIntrospection
+, hicolor-icon-theme, librsvg, wrapGAppsHook, gobjectIntrospection
 , withPulseAudio ? true, libpulseaudio }:
 
 let
+  pythonPackages = python3Packages;
   binPath = lib.makeBinPath [ xdg_utils dnsmasq dhcp ];
 
 in stdenv.mkDerivation rec {
   name = "blueman-${version}";
-  version = "2.0.4";
+  version = "2.0.6";
 
   src = fetchurl {
     url = "https://github.com/blueman-project/blueman/releases/download/${version}/${name}.tar.xz";
-    sha256 = "03s305mbc57nl3sq5ywh9casz926k4aqnylgaidli8bmgz1djbg9";
+    sha256 = "0bc1lfsjkbrg9f1jnw6mx7bp04x76ljy9g0rgx7n80vaj0hpz3bj";
   };
 
   nativeBuildInputs = [
@@ -20,7 +21,7 @@ in stdenv.mkDerivation rec {
     pythonPackages.wrapPython wrapGAppsHook
   ];
 
-  buildInputs = [ bluez gtk3 pythonPackages.python libnotify librsvg hicolor_icon_theme ]
+  buildInputs = [ bluez gtk3 pythonPackages.python libnotify librsvg hicolor-icon-theme ]
                 ++ pythonPath
                 ++ lib.optional withPulseAudio libpulseaudio;
 

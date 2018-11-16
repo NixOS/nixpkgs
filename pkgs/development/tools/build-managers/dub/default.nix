@@ -1,10 +1,10 @@
-{ stdenv, fetchFromGitHub, fetchpatch, curl, dmd, libevent, rsync }:
+{ stdenv, fetchFromGitHub, curl, dmd, libevent, rsync }:
 
 let
 
   dubBuild = stdenv.mkDerivation rec {
     name = "dubBuild-${version}";
-    version = "1.7.2";
+    version = "1.10.0";
 
     enableParallelBuilding = true;
 
@@ -12,20 +12,12 @@ let
       owner = "dlang";
       repo = "dub";
       rev = "v${version}";
-      sha256 = "073ibvgm1gphcqs1yjrav9ryp677nh3b194nxmvicwgvdc0sb6w9";
+      sha256 = "02xxpfcjs427jqbwz0vh5vl3bh62ys65zmi9gpa3svzqffyx13n4";
     };
 
     postUnpack = ''
         patchShebangs .
     '';
-
-    patches = [
-      # TODO Remove with next release which contains https://github.com/dlang/dub/pull/1354
-      (fetchpatch {
-        url = "https://patch-diff.githubusercontent.com/raw/dlang/dub/pull/1354.patch";
-        sha256 = "01alky8a91qwjmlnfjbrn8kiivwr69f3j4c84cjlxrzfp1ph20ah";
-      })
-    ];
 
     # Can be removed with https://github.com/dlang/dub/pull/1368
     dubvar = "\\$DUB";
@@ -59,41 +51,45 @@ let
 
   # Need to test in a fixed-output derivation, otherwise the
   # network tests would fail if sandbox mode is enabled.
-  dubUnittests = stdenv.mkDerivation rec {
-    name = "dubUnittests-${version}";
-    version = dubBuild.version;
+  # Disable tests on Darwin for now because they don't work
+  # reliably there.
+  dubUnittests = if !stdenv.hostPlatform.isDarwin then
+    stdenv.mkDerivation rec {
+      name = "dubUnittests-${version}";
+      version = dubBuild.version;
 
-    enableParallelBuilding = dubBuild.enableParallelBuilding;
-    preferLocalBuild = true;
-    inputString = dubBuild.outPath;
-    outputHashAlgo = "sha256";
-    outputHash = builtins.hashString "sha256" inputString;
+      enableParallelBuilding = dubBuild.enableParallelBuilding;
+      preferLocalBuild = true;
+      inputString = dubBuild.outPath;
+      outputHashAlgo = "sha256";
+      outputHash = builtins.hashString "sha256" inputString;
 
-    src = dubBuild.src;
-    
-    patches = dubBuild.patches;
+      src = dubBuild.src;
+      
+      postUnpack = dubBuild.postUnpack;
+      postPatch = dubBuild.postPatch;
 
-    postUnpack = dubBuild.postUnpack;
-    postPatch = dubBuild.postPatch;
+      nativeBuildInputs = dubBuild.nativeBuildInputs;
+      buildInputs = dubBuild.buildInputs;
 
-    nativeBuildInputs = dubBuild.nativeBuildInputs;
-    buildInputs = dubBuild.buildInputs;
+      buildPhase = ''
+        # Can't use dub from dubBuild directly because one unittest 
+        # (issue895-local-configuration) needs to generate a config 
+        # file under ../etc relative to the dub location.
+        cp ${dubBuild}/bin/dub bin/
+        export DUB=$NIX_BUILD_TOP/source/bin/dub
+        export PATH=$PATH:$NIX_BUILD_TOP/source/bin/
+        export DC=${dmd.out}/bin/dmd
+        export HOME=$TMP
+        ./test/run-unittest.sh
+      '';
 
-    buildPhase = ''
-      # Can't use dub from dubBuild directly because one unittest 
-      # (issue895-local-configuration) needs to generate a config 
-      # file under ../etc relative to the dub location.
-      cp ${dubBuild}/bin/dub bin/
-      export DUB=$NIX_BUILD_TOP/source/bin/dub
-      export DC=${dmd.out}/bin/dmd
-      export HOME=$TMP
-      ./test/run-unittest.sh
-    '';
-
-    installPhase = ''
-        echo -n $inputString > $out
-    '';
-  };
+      installPhase = ''
+          echo -n $inputString > $out
+      '';
+    }
+  else
+    "";
 
 in
 

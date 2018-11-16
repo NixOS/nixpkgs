@@ -5,17 +5,19 @@
 , version, sha256
 , withLLVM ? false
 , enableParallelBuilding ? true
+, meta ? {}
 }:
 
 let
   llvm     = callPackage ./llvm.nix { };
-in
-stdenv.mkDerivation rec {
   name = "mono-${version}";
+in
+stdenv.mkDerivation {
+  inherit name;
 
   src = fetchurl {
     inherit sha256;
-    url = "http://download.mono-project.com/sources/mono/${name}.tar.bz2";
+    url = "https://download.mono-project.com/sources/mono/${name}.tar.bz2";
   };
 
   buildInputs =
@@ -88,8 +90,8 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://mono-project.com/;
     description = "Cross platform, open source .NET development framework";
-    platforms = with stdenv.lib.platforms; allBut [ "aarch64-linux" ];
-    maintainers = with stdenv.lib.maintainers; [ viric thoughtpolice obadz vrthra ];
+    platforms = stdenv.lib.platforms.x86;
+    maintainers = with stdenv.lib.maintainers; [ thoughtpolice obadz vrthra ];
     license = stdenv.lib.licenses.free; # Combination of LGPL/X11/GPL ?
-  };
+  } // meta;
 }

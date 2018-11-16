@@ -1,7 +1,6 @@
 { stdenv, buildPythonPackage, fetchPypi, pytest, pytestrunner }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "mccabe";
   version = "0.6.1";
 

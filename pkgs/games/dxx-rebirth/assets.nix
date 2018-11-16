@@ -42,7 +42,7 @@ let
 
     meta = with stdenv.lib; {
       description = "Descent ${toString ver} assets from GOG";
-      homepage    = http://www.dxx-rebirth.com/;
+      homepage    = https://www.dxx-rebirth.com/;
       license     = licenses.unfree;
       maintainers = with maintainers; [ peterhoeg ];
       hydraPlatforms = [];

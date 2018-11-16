@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   name = "ent-1.1";
 
   src = fetchurl {
-    url = "http://www.fourmilab.ch/random/random.zip";
+    url = "https://www.fourmilab.ch/random/random.zip";
     sha256 = "1v39jlj3lzr5f99avzs2j2z6anqqd64bzm1pdf6q84a5n8nxckn1";
   };
 
@@ -21,9 +21,10 @@ stdenv.mkDerivation rec {
     cp ent $out/bin/
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Pseudorandom Number Sequence Test Program";
     homepage = http://www.fourmilab.ch/random/;
-    platforms = stdenv.lib.platforms.all;
+    platforms = platforms.all;
+    license = licenses.publicDomain;
   };
 }

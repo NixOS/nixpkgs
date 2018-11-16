@@ -1,5 +1,5 @@
 { fetchurl, stdenv, lib
-, cmake, mesa
+, cmake, libGLU_combined
 , freetype, freeimage, zziplib, randrproto, libXrandr
 , libXaw, freeglut, libXt, libpng, boost, ois
 , xproto, libX11, libXmu, libSM, pkgconfig
@@ -24,7 +24,7 @@ stdenv.mkDerivation {
   enableParallelBuilding = true;
 
   buildInputs =
-   [ cmake mesa
+   [ cmake libGLU_combined
      freetype freeimage zziplib randrproto libXrandr
      libXaw freeglut libXt libpng boost ois
      xproto libX11 libXmu libSM pkgconfig

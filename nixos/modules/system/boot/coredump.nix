@@ -15,8 +15,11 @@ with lib;
           Enables storing core dumps in systemd.
           Note that this alone is not enough to enable core dumps. The maximum
           file size for core dumps must be specified in limits.conf as well. See
-          <option>security.pam.loginLimits</option> as well as the limits.conf(5)
-          man page.
+          <option>security.pam.loginLimits</option> and the limits.conf(5)
+          man page (these specify the core dump limits for user login sessions)
+          and <option>systemd.extraConfig</option> (where e.g.
+          <literal>DefaultLimitCORE=1000000</literal> can be specified to set
+          the core dump limit for systemd system-level services).
         '';
       };
 

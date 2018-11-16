@@ -3,13 +3,12 @@
 , pytest }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "zetup";
-  version = "0.2.42";
+  version = "0.2.45";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "6c9e25249f3014ed2162398772ccf1a5e8a4e9e66c74e3c7f6683945a6a3d84c";
+    sha256 = "f1cde33d0ef3bedaf697e432201fa86da698dadd3445c0efd2a114753853c675";
   };
 
   checkPhase = ''

@@ -1,16 +1,14 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPy3k, python, glibcLocales, flask, flask_sqlalchemy, flask_script, alembic
-}:
+{ stdenv, buildPythonPackage, fetchPypi, isPy3k, glibcLocales, flask, flask_sqlalchemy, flask_script, alembic }:
 
 with stdenv.lib;
 
 buildPythonPackage rec {
   pname = "Flask-Migrate";
-  version = "2.1.1";
-  name = "${pname}-${version}";
+  version = "2.3.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b709ca8642559c3c5a81a33ab10839fa052177accd5ba821047a99db635255ed";
+    sha256 = "19rxhva9i5n643vm3d11f8p98jwai2pavysa217p5w5h5cnksnx2";
   };
 
   checkInputs = optional isPy3k glibcLocales;

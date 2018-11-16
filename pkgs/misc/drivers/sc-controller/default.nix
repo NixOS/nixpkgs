@@ -1,19 +1,19 @@
 { lib, buildPythonApplication, fetchFromGitHub, wrapGAppsHook
 , gtk3, gobjectIntrospection, libappindicator-gtk3, librsvg
-, evdev, pygobject3, pylibacl, pytest
+, evdev, pygobject3, pylibacl, pytest, bluez
 , linuxHeaders
-, libX11, libXext, libXfixes, libusb1
+, libX11, libXext, libXfixes, libusb1, udev
 }:
 
 buildPythonApplication rec {
   pname = "sc-controller";
-  version = "0.4.0.1";
+  version = "0.4.5";
 
   src = fetchFromGitHub {
-    owner = "kozec";
-    repo = "sc-controller";
-    rev = "v${version}";
-    sha256 = "0vhgiqg4r4bnn004ql80rvi23y05wlax80sj8qsr91pvqsxwv3yl";
+    owner  = "kozec";
+    repo   = pname;
+    rev    = "v${version}";
+    sha256 = "0mb9r4811rfj5rs4vrdhaf3x38iy1fvxr4sk2zg3xhvc29cdf5wv";
   };
 
   nativeBuildInputs = [ wrapGAppsHook ];
@@ -27,9 +27,10 @@ buildPythonApplication rec {
   postPatch = ''
     substituteInPlace scc/paths.py --replace sys.prefix "'$out'"
     substituteInPlace scc/uinput.py --replace /usr/include ${linuxHeaders}/include
+    substituteInPlace scc/device_monitor.py --replace "find_library('bluetooth')" "'libbluetooth.so.3'"
   '';
 
-  LD_LIBRARY_PATH = lib.makeLibraryPath [ libX11 libXext libXfixes libusb1 ];
+  LD_LIBRARY_PATH = lib.makeLibraryPath [ libX11 libXext libXfixes libusb1 udev bluez ];
 
   preFixup = ''
     gappsWrapperArgs+=(--prefix LD_LIBRARY_PATH : "$LD_LIBRARY_PATH")
@@ -52,11 +53,11 @@ buildPythonApplication rec {
   '';
 
   meta = with lib; {
-    homepage = https://github.com/kozec/sc-controller;
+    homepage    = https://github.com/kozec/sc-controller;
     # donations: https://www.patreon.com/kozec
     description = "User-mode driver and GUI for Steam Controller and other controllers";
-    license = licenses.gpl2;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.orivej ];
+    license     = licenses.gpl2;
+    platforms   = platforms.linux;
+    maintainers = with maintainers; [ orivej rnhmjoj ];
   };
 }

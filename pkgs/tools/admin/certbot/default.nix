@@ -1,19 +1,19 @@
-{ stdenv, python2Packages, fetchFromGitHub, dialog }:
+{ stdenv, pythonPackages, fetchFromGitHub, dialog }:
 
 # Latest version of certbot supports python3 and python3 version of pythondialog
 
-python2Packages.buildPythonApplication rec {
+pythonPackages.buildPythonApplication rec {
   name = "certbot-${version}";
-  version = "0.19.0";
+  version = "0.24.0";
 
   src = fetchFromGitHub {
     owner = "certbot";
     repo = "certbot";
     rev = "v${version}";
-    sha256 = "14i3q59v7j0q2pa1dri420fhil4h0vgl4vb471hp81f4y14gq6h7";
+    sha256 = "0gsq4si0bqwzd7ywf87y7bbprqg1m72qdj11h64qmwb5zl4vh444";
   };
 
-  propagatedBuildInputs = with python2Packages; [
+  propagatedBuildInputs = with pythonPackages; [
     ConfigArgParse
     acme
     configobj
@@ -28,7 +28,7 @@ python2Packages.buildPythonApplication rec {
     zope_component
     zope_interface
   ];
-  buildInputs = [ dialog ] ++ (with python2Packages; [ nose mock gnureadline ]);
+  buildInputs = [ dialog ] ++ (with pythonPackages; [ nose mock gnureadline ]);
 
   patchPhase = ''
     substituteInPlace certbot/notify.py --replace "/usr/sbin/sendmail" "/run/wrappers/bin/sendmail"
@@ -41,6 +41,8 @@ python2Packages.buildPythonApplication rec {
                        --prefix PATH : "${dialog}/bin:$PATH"
     done
   '';
+
+  doCheck = !stdenv.isDarwin; # On Hydra Darwin tests fail with "Too many open files".
 
   meta = with stdenv.lib; {
     homepage = src.meta.homepage;

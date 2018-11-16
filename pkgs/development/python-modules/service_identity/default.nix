@@ -13,8 +13,6 @@
 buildPythonPackage rec {
   pname = "service_identity";
   version = "17.0.0";
-  name = "${pname}-${version}";
-
 
   src = fetchFromGitHub {
     owner = "pyca";
@@ -33,6 +31,6 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Service identity verification for pyOpenSSL";
     license = licenses.mit;
-    homepage = "https://service-identity.readthedocs.io";
+    homepage = https://service-identity.readthedocs.io;
   };
 }

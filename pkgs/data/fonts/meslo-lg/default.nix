@@ -3,7 +3,7 @@
 stdenv.mkDerivation rec {
   version = "1.2.1";
 
-  name = "meslo-lg";
+  name = "meslo-lg-${version}";
 
   meslo-lg = fetchurl {
     url="https://github.com/andreberg/Meslo-Font/blob/master/dist/v${version}/Meslo%20LG%20v${version}.zip?raw=true";

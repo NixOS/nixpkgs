@@ -85,7 +85,7 @@ in
 
   config = mkIf cfg.enable {
 
-    users.extraUsers = singleton
+    users.users = singleton
       { name = "polipo";
         uid = config.ids.uids.polipo;
         description = "Polipo caching proxy user";
@@ -93,7 +93,7 @@ in
         createHome = true;
       };
 
-    users.extraGroups = singleton
+    users.groups = singleton
       { name = "polipo";
         gid = config.ids.gids.polipo;
         members = [ "polipo" ];

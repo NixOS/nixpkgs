@@ -22,7 +22,7 @@
 , libav_0_8
 , ffmpeg
 , libxslt
-, mesa_noglu
+, libGL
 , freetype
 , fontconfig
 , gtk2
@@ -46,7 +46,7 @@ let
     x86_64-linux  = "amd64";
     armv7l-linux  = "arm";
     aarch64-linux = "aarch64";
-  }.${stdenv.system};
+  }.${stdenv.hostPlatform.system};
 
   jce =
     if installjce then
@@ -77,9 +77,9 @@ let result = stdenv.mkDerivation rec {
       x86_64-linux  = "jdk-${productVersion}u${patchVersion}-linux-x64.tar.gz";
       armv7l-linux  = "jdk-${productVersion}u${patchVersion}-linux-arm32-vfp-hflt.tar.gz";
       aarch64-linux = "jdk-${productVersion}u${patchVersion}-linux-arm64-vfp-hflt.tar.gz";
-    }.${stdenv.system};
+    }.${stdenv.hostPlatform.system};
     url = downloadUrl;
-    sha256 = sha256.${stdenv.system};
+    sha256 = sha256.${stdenv.hostPlatform.system};
   };
 
   nativeBuildInputs = [ file ]
@@ -177,7 +177,7 @@ let result = stdenv.mkDerivation rec {
    * libXt is only needed on amd64
    */
   libraries =
-    [stdenv.cc.libc glib libxml2 libav_0_8 ffmpeg libxslt mesa_noglu xorg.libXxf86vm alsaLib fontconfig freetype pango gtk2 cairo gdk_pixbuf atk] ++
+    [stdenv.cc.libc glib libxml2 libav_0_8 ffmpeg libxslt libGL xorg.libXxf86vm alsaLib fontconfig freetype pango gtk2 cairo gdk_pixbuf atk] ++
     (if swingSupport then [xorg.libX11 xorg.libXext xorg.libXtst xorg.libXi xorg.libXp xorg.libXt xorg.libXrender stdenv.cc.cc] else []);
 
   rpath = stdenv.lib.strings.makeLibraryPath libraries;

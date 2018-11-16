@@ -36,6 +36,11 @@ stdenv.mkDerivation rec {
       url = "https://github.com/naihe2010/apvlv/commit/4c7a583e8431964def482e5471f02e6de8e62a7b.patch";
       sha256 = "1dszm120lwm90hcg5zmd4vr6pjyaxc84qmb7k0fr59mmb3qif62j";
     })
+    # fix build with gcc7
+    (fetchpatch {
+      url = "https://github.com/naihe2010/apvlv/commit/a3a895772a27d76dab0c37643f0f4c73f9970e62.patch";
+      sha256 = "1fpc7wr1ajilvwi5gjsy5g9jcx4bl03gp5dmajg90ljqbhwz2bfi";
+    })
   ];
 
   installPhase = ''
@@ -47,6 +52,9 @@ stdenv.mkDerivation rec {
     mkdir -p $out/share/doc/apvlv/
     cp ../Startup.pdf $out/share/doc/apvlv/Startup.pdf
     cp ../main_menubar.glade $out/share/doc/apvlv/main_menubar.glade
+  ''
+  + stdenv.lib.optionalString (!stdenv.isDarwin) ''
+    install -D ../apvlv.desktop $out/share/applications/apvlv.desktop
   '';
 
   meta = with stdenv.lib; {
@@ -58,7 +66,7 @@ stdenv.mkDerivation rec {
     '';
 
     license = licenses.lgpl2;
-    platforms = platforms.unix;
+    platforms = platforms.linux;
     maintainers = [ maintainers.ardumont ];
   };
 

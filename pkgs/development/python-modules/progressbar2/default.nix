@@ -2,7 +2,6 @@
 , python
 , buildPythonPackage
 , fetchFromGitHub
-, isPy3k
 , pytest
 , python-utils
 , sphinx

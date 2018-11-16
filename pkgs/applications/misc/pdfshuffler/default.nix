@@ -1,7 +1,7 @@
 { stdenv, fetchsvn
 , wrapGAppsHook, makeWrapper, gettext
 , python3Packages, gtk3, poppler_gi
-, gnome3, gsettings_desktop_schemas, shared_mime_info,
+, gnome3, gsettings-desktop-schemas, shared-mime-info,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -16,7 +16,7 @@ python3Packages.buildPythonApplication rec {
   nativeBuildInputs = [ wrapGAppsHook gettext makeWrapper ];
 
   buildInputs = [
-    gtk3 gsettings_desktop_schemas poppler_gi gnome3.adwaita-icon-theme
+    gtk3 gsettings-desktop-schemas poppler_gi gnome3.adwaita-icon-theme
   ];
 
   propagatedBuildInputs = with python3Packages; [
@@ -26,15 +26,16 @@ python3Packages.buildPythonApplication rec {
   ];
 
   preFixup = ''
-    gappsWrapperArgs+=(--prefix XDG_DATA_DIRS : "${shared_mime_info}/share")
+    gappsWrapperArgs+=(--prefix XDG_DATA_DIRS : "${shared-mime-info}/share")
   '';
 
   doCheck = false; # no tests
 
   meta = with stdenv.lib; {
-    homepage = https://gna.org/projects/pdfshuffler/;
+    homepage = https://sourceforge.net/p/pdfshuffler/wiki/Home;
     description = "Merge or split pdf documents and rotate, crop and rearrange their pages";
     platforms = platforms.linux;
     maintainers = with maintainers; [ mic92 ];
+    license = licenses.gpl3;
   };
 }

@@ -9,32 +9,20 @@ var_templates_list=(
     NIX+CFLAGS_LINK
     NIX+CXXSTDLIB_COMPILE
     NIX+CXXSTDLIB_LINK
-    NIX+GNATFLAGS_COMPILE
 )
 var_templates_bool=(
     NIX+ENFORCE_NO_NATIVE
 )
 
-# Accumulate infixes for taking in the right input parameters. See setup-hook
-# for details.
-declare -a role_infixes=()
-if [ "${NIX_CC_WRAPPER_@infixSalt@_TARGET_BUILD:-}" ]; then
-    role_infixes+=(_BUILD_)
-fi
-if [ "${NIX_CC_WRAPPER_@infixSalt@_TARGET_HOST:-}" ]; then
-    role_infixes+=(_)
-fi
-if [ "${NIX_CC_WRAPPER_@infixSalt@_TARGET_TARGET:-}" ]; then
-    role_infixes+=(_TARGET_)
-fi
+accumulateRoles
 
 # We need to mangle names for hygiene, but also take parameters/overrides
 # from the environment.
 for var in "${var_templates_list[@]}"; do
-    mangleVarList "$var" "${role_infixes[@]}"
+    mangleVarList "$var" ${role_infixes[@]+"${role_infixes[@]}"}
 done
 for var in "${var_templates_bool[@]}"; do
-    mangleVarBool "$var" "${role_infixes[@]}"
+    mangleVarBool "$var" ${role_infixes[@]+"${role_infixes[@]}"}
 done
 
 # `-B@out@/bin' forces cc to use ld-wrapper.sh when calling ld.
@@ -49,10 +37,6 @@ fi
 
 if [ -e @out@/nix-support/cc-cflags ]; then
     NIX_@infixSalt@_CFLAGS_COMPILE="$(< @out@/nix-support/cc-cflags) $NIX_@infixSalt@_CFLAGS_COMPILE"
-fi
-
-if [ -e @out@/nix-support/gnat-cflags ]; then
-    NIX_@infixSalt@_GNATFLAGS_COMPILE="$(< @out@/nix-support/gnat-cflags) $NIX_@infixSalt@_GNATFLAGS_COMPILE"
 fi
 
 if [ -e @out@/nix-support/cc-ldflags ]; then

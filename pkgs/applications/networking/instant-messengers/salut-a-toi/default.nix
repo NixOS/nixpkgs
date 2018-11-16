@@ -9,7 +9,7 @@ let
 
 in
   stdenv.mkDerivation rec {
-    name = "salut-a-toi";
+    name = "salut-a-toi-${version}";
     version = "0.6.1";
     pname = "sat-${version}";
 

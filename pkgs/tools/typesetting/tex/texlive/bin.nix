@@ -1,10 +1,10 @@
-{ stdenv, lib, fetchurl
+{ stdenv, fetchurl
 , texlive
-, zlib, bzip2, ncurses, libiconv, libpng, flex, bison, libX11, libICE, xproto
-, freetype, t1lib, gd, libXaw, icu, ghostscript, ed, libXt, libXpm, libXmu, libXext
-, xextproto, perl, libSM, ruby, expat, curl, libjpeg, python, fontconfig, pkgconfig
-, poppler, libpaper, graphite2, zziplib, harfbuzz, texinfo, potrace, gmp, mpfr
-, xpdf, cairo, pixman, xorg, clisp
+, zlib, libiconv, libpng, libX11
+, freetype, gd, libXaw, icu, ghostscript, libXpm, libXmu, libXext
+, perl, pkgconfig, autoreconfHook
+, poppler, libpaper, graphite2, zziplib, harfbuzz, potrace, gmp, mpfr
+, cairo, pixman, xorg, clisp, biber
 , makeWrapper
 }:
 
@@ -14,19 +14,33 @@
 let
   withSystemLibs = map (libname: "--with-system-${libname}");
 
-  year = "2017";
+  year = "2018";
   version = year; # keep names simple for now
 
   common = rec {
     src = fetchurl {
-      url = # "ftp://tug.org/historic/systems/texlive/${year}/"
-      #"http://lipa.ms.mff.cuni.cz/~cunav5am/nix/texlive-2016"
-      # FIXME: a proper mirror, though tarballs.nixos.org saves this case ATM
-      # http://146.185.144.154/texlive-2016
-      # + "/texlive-${year}0523b-source.tar.xz";
-        "http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/${year}/texlive-${year}0524-source.tar.xz";
-      sha256 = "1amjrxyasplv4alfwcxwnw4nrx7dz2ydmddkq16k6hg90i9njq81";
+      urls = [
+        "http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/${year}/texlive-${year}0414-source.tar.xz"
+              "ftp://tug.ctan.org/pub/tex/historic/systems/texlive/${year}/texlive-${year}0414-source.tar.xz"
+      ];
+      sha256 = "0khyi6h015r2zfqgg0a44a2j7vmr1cy42knw7jbss237yvakc07y";
     };
+
+    patches = [
+      (fetchurl {
+        name = "texlive-poppler-0.64.patch";
+        url = https://git.archlinux.org/svntogit/packages.git/plain/trunk/texlive-poppler-0.64.patch?h=packages/texlive-bin;
+        sha256 = "0443d074zl3c5raba8jyhavish706arjcd80ibb84zwnwck4ai0w";
+      })
+      (fetchurl {
+        name = "synctex-missing-header.patch";
+        url = https://git.archlinux.org/svntogit/packages.git/plain/trunk/synctex-missing-header.patch?h=packages/texlive-bin&id=da56abf0f8a1e85daca0ec0f031b8fa268519e6b;
+        sha256 = "1c4aq8lk8g3mlfq3mdjnxvmhss3qs7nni5rmw0k054dmj6q1xj5n";
+      })
+    ];
+    # remove when removing synctex-missing-header.patch
+    preAutoreconf = "pushd texk/web2c";
+    postAutoreconf = "popd";
 
     configureFlags = [
       "--with-banner-add=/NixOS.org"
@@ -58,11 +72,11 @@ texliveYear = year;
 core = stdenv.mkDerivation rec {
   name = "texlive-bin-${version}";
 
-  inherit (common) src;
+  inherit (common) src patches preAutoreconf postAutoreconf;
 
   outputs = [ "out" "doc" ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig autoreconfHook ];
   buildInputs = [
     /*teckit*/ zziplib poppler mpfr gmp
     pixman potrace gd freetype libpng libpaper zlib
@@ -75,6 +89,8 @@ core = stdenv.mkDerivation rec {
     for i in texk/kpathsea/mktex*; do
       sed -i '/^mydir=/d' "$i"
     done
+    cp -pv texk/web2c/pdftexdir/pdftoepdf{-newpoppler.cc,.cc}
+    cp -pv texk/web2c/pdftexdir/pdftosrc{-newpoppler.cc,.cc}
   '';
 
   preConfigure = ''
@@ -87,11 +103,11 @@ core = stdenv.mkDerivation rec {
 
   configureFlags = common.configureFlags
     ++ [ "--without-x" ] # disable xdvik and xpdfopen
-    ++ map (what: "--disable-${what}") [
+    ++ map (what: "--disable-${what}") ([
       "dvisvgm" "dvipng" # ghostscript dependency
       "luatex" "luajittex" "mp" "pmp" "upmp" "mf" # cairo would bring in X and more
       "xetex" "bibtexu" "bibtex8" "bibtex-x" "upmendex" # ICU isn't small
-    ]
+    ] ++ stdenv.lib.optional (stdenv.hostPlatform.isPower && stdenv.hostPlatform.is64bit) "mfluajit")
     ++ [ "--without-system-harfbuzz" "--without-system-icu" ] # bogus configure
     ;
 
@@ -136,6 +152,9 @@ core = stdenv.mkDerivation rec {
     mv "$out"/share/{man,info} "$doc"/doc
   '' + cleanBrokenLinks;
 
+  # needed for poppler and xpdf
+  CXXFLAGS = stdenv.lib.optionalString stdenv.cc.isClang "-std=c++11";
+
   setupHook = ./setup-hook.sh; # TODO: maybe texmf-nix -> texmf (and all references)
   passthru = { inherit version buildInputs; };
 
@@ -153,7 +172,7 @@ inherit (core-big) metafont metapost luatex xetex;
 core-big = stdenv.mkDerivation { #TODO: upmendex
   name = "texlive-core-big.bin-${version}";
 
-  inherit (common) src;
+  inherit (common) src patches preAutoreconf postAutoreconf;
 
   hardeningDisable = [ "format" ];
 
@@ -164,8 +183,12 @@ core-big = stdenv.mkDerivation { #TODO: upmendex
     ++ withSystemLibs [ "kpathsea" "ptexenc" "cairo" "harfbuzz" "icu" "graphite2" ]
     ++ map (prog: "--disable-${prog}") # don't build things we already have
       [ "tex" "ptex" "eptex" "uptex" "euptex" "aleph" "pdftex"
-        "web-progs" "synctex" "luajittex" "mfluajit" # luajittex is mostly not needed, see:
+        "web-progs" "synctex"
+        # build fails on Darwin with luatex53
+        "luatex53" # TODO probably can be removed when TexLive 2019 is out
+        # luajittex is mostly not needed, see:
         # http://tex.stackexchange.com/questions/97999/when-to-use-luajittex-in-favour-of-luatex
+        "luajittex" "mfluajit"
       ];
 
   configureScript = ":";
@@ -173,9 +196,10 @@ core-big = stdenv.mkDerivation { #TODO: upmendex
   # we use static libtexlua, because it's only used by a single binary
   postConfigure = ''
     mkdir ./WorkDir && cd ./WorkDir
+    # TODO add lua53 here when luatex53 is enabled again
     for path in libs/{teckit,lua52} texk/web2c; do
       (
-        if [[ "$path" == "libs/lua52" ]]; then
+        if [[ "$path" =~ "libs/lua5" ]]; then
           extraConfig="--enable-static --disable-shared"
         else
           extraConfig=""
@@ -188,8 +212,9 @@ core-big = stdenv.mkDerivation { #TODO: upmendex
   '';
 
   preBuild = "cd texk/web2c";
-  CXXFLAGS = "-std=c++11 -Wno-reserved-user-defined-literal"; # TODO: remove once texlive 2018 is out?
   enableParallelBuilding = true;
+
+  doCheck = false; # fails
 
   # now distribute stuff into outputs, roughly as upstream TL
   # (uninteresting stuff remains in $out, typically duplicates from `core`)
@@ -246,6 +271,7 @@ dvipng = stdenv.mkDerivation {
 };
 
 
+inherit biber;
 bibtexu = bibtex8;
 bibtex8 = stdenv.mkDerivation {
   name = "texlive-bibtex-x.bin-${version}";
@@ -296,6 +322,10 @@ xindy = stdenv.mkDerivation {
   name = "texlive-xindy.bin-${version}";
 
   inherit (common) src;
+
+  # If unset, xindy will try to mkdir /homeless-shelter
+  HOME = ".";
+
   prePatch = "cd utils/xindy";
   # hardcode clisp location
   postPatch = ''
@@ -322,5 +352,3 @@ xindy = stdenv.mkDerivation {
 };
 
 }
-
-

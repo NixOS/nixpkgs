@@ -32,13 +32,13 @@ with lib;
           optionalString config.networking.enableIPv6 " -a ::";
     };
 
-    users.extraUsers.oidentd = {
+    users.users.oidentd = {
       description = "Ident Protocol daemon user";
       group = "oidentd";
       uid = config.ids.uids.oidentd;
     };
 
-    users.extraGroups.oidentd.gid = config.ids.gids.oidentd;
+    users.groups.oidentd.gid = config.ids.gids.oidentd;
 
   };
 

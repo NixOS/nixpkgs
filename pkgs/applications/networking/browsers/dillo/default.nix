@@ -10,14 +10,14 @@ stdenv.mkDerivation rec {
   name = "dillo-${version}";
 
   src = fetchurl {
-    url = "http://www.dillo.org/download/${name}.tar.bz2";
+    url = "https://www.dillo.org/download/${name}.tar.bz2";
     sha256 = "12ql8n1lypv3k5zqgwjxlw1md90ixz3ag6j1gghfnhjq3inf26yv";
   };
 
   buildInputs = with stdenv.lib;
   [ perl fltk openssl libjpeg libpng libXcursor libXi libXinerama ];
 
-  configureFlags =  "--enable-ssl";
+  configureFlags = [ "--enable-ssl" ];
 
   meta = with stdenv.lib; {
     homepage = https://www.dillo.org/;
@@ -27,5 +27,6 @@ stdenv.mkDerivation rec {
     '';
     maintainers = [ maintainers.AndersonTorres ];
     platforms = platforms.linux;
+    license = licenses.gpl3;
   };
 }

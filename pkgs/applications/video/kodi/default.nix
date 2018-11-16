@@ -1,5 +1,5 @@
-{ stdenv, lib, fetchFromGitHub, fetchurl, autoconf, automake, libtool, makeWrapper
-, pkgconfig, cmake, gnumake, yasm, python2
+{ stdenv, lib, fetchFromGitHub, autoconf, automake, libtool, makeWrapper
+, pkgconfig, cmake, gnumake, yasm, python2Packages
 , libgcrypt, libgpgerror, libunistring
 , boost, avahi, lame, autoreconfHook
 , gettext, pcre-cpp, yajl, fribidi, which
@@ -8,18 +8,18 @@
 , libXt, libXmu, libXext, xextproto
 , libXinerama, libXrandr, randrproto
 , libXtst, libXfixes, fixesproto, systemd
-, alsaLib, mesa, glew, fontconfig, freetype, ftgl
+, alsaLib, libGLU_combined, glew, fontconfig, freetype, ftgl
 , libjpeg, jasper, libpng, libtiff
 , libmpeg2, libsamplerate, libmad
 , libogg, libvorbis, flac, libxslt
 , lzo, libcdio, libmodplug, libass, libbluray
-, sqlite, mysql, nasm, gnutls, libva, wayland
+, sqlite, mysql, nasm, gnutls, libva, libdrm, wayland
 , curl, bzip2, zip, unzip, glxinfo, xdpyinfo
 , libcec, libcec_platform, dcadec, libuuid
 , libcrossguid, libmicrohttpd
 , bluez, doxygen, giflib, glib, harfbuzz, lcms2, libidn, libpthreadstubs, libtasn1, libXdmcp
-, libplist, p11_kit, zlib
-, dbusSupport ? true, dbus_libs ? null
+, libplist, p11-kit, zlib
+, dbusSupport ? true, dbus ? null
 , joystickSupport ? true, cwiid ? null
 , nfsSupport ? true, libnfs ? null
 , pulseSupport ? true, libpulseaudio ? null
@@ -30,7 +30,7 @@
 , vdpauSupport ? true, libvdpau ? null
 }:
 
-assert dbusSupport  -> dbus_libs != null;
+assert dbusSupport  -> dbus != null;
 assert nfsSupport   -> libnfs != null;
 assert pulseSupport -> libpulseaudio != null;
 assert rtmpSupport  -> rtmpdump != null;
@@ -78,7 +78,7 @@ let
     preConfigure = ''
       cp ${kodi_src}/tools/depends/target/ffmpeg/{CMakeLists.txt,*.cmake} .
     '';
-    buildInputs = [ gnutls libidn libtasn1 p11_kit zlib libva ]
+    buildInputs = [ gnutls libidn libtasn1 p11-kit zlib libva ]
       ++ lib.optional  vdpauSupport    libvdpau;
     nativeBuildInputs = [ cmake nasm pkgconfig ];
   };
@@ -118,14 +118,14 @@ in stdenv.mkDerivation rec {
     src = kodi_src;
 
     buildInputs = [
-      gnutls libidn libtasn1 nasm p11_kit
-      libxml2 yasm python2
+      gnutls libidn libtasn1 nasm p11-kit
+      libxml2 yasm python2Packages.python
       boost libmicrohttpd
-      gettext pcre-cpp yajl fribidi libva
+      gettext pcre-cpp yajl fribidi libva libdrm
       openssl gperf tinyxml2 taglib libssh swig jre
       libX11 xproto inputproto libXt libXmu libXext xextproto
       libXinerama libXrandr randrproto libXtst libXfixes fixesproto
-      alsaLib mesa glew fontconfig freetype ftgl
+      alsaLib libGLU_combined glew fontconfig freetype ftgl
       libjpeg jasper libpng libtiff wayland
       libmpeg2 libsamplerate libmad
       libogg libvorbis flac libxslt systemd
@@ -139,7 +139,7 @@ in stdenv.mkDerivation rec {
       ffmpeg
       # libdvdcss libdvdnav libdvdread
     ]
-    ++ lib.optional  dbusSupport     dbus_libs
+    ++ lib.optional  dbusSupport     dbus
     ++ lib.optionals joystickSupport [ cwiid ]
     ++ lib.optional  nfsSupport      libnfs
     ++ lib.optional  pulseSupport    libpulseaudio
@@ -187,9 +187,9 @@ in stdenv.mkDerivation rec {
     postInstall = ''
       for p in $(ls $out/bin/) ; do
         wrapProgram $out/bin/$p \
-          --prefix PATH            ":" "${lib.makeBinPath [ python2 glxinfo xdpyinfo ]}" \
+          --prefix PATH            ":" "${lib.makeBinPath [ python2Packages.python glxinfo xdpyinfo ]}" \
           --prefix LD_LIBRARY_PATH ":" "${lib.makeLibraryPath
-              [ curl systemd libmad libvdpau libcec libcec_platform rtmpdump libass ]}"
+              ([ curl systemd libmad libvdpau libcec libcec_platform rtmpdump libass ] ++ lib.optional nfsSupport libnfs)}"
       done
 
       substituteInPlace $out/share/xsessions/kodi.desktop \
@@ -199,6 +199,10 @@ in stdenv.mkDerivation rec {
     doInstallCheck = true;
 
     installCheckPhase = "$out/bin/kodi --version";
+
+    passthru = {
+      pythonPackages = python2Packages;
+    };
 
     meta = with stdenv.lib; {
       description = "Media center";

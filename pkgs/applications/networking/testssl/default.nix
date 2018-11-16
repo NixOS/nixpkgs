@@ -1,9 +1,8 @@
-{ stdenv, fetchFromGitHub, pkgs }:
+{ stdenv, fetchFromGitHub, makeWrapper, lib
+, dnsutils, coreutils, openssl, nettools, utillinux, procps }:
 
 let
-  version = "2.9.5-1";
-  pwdBinPath = "${stdenv.lib.makeBinPath (with pkgs; [ coreutils ])}/pwd";
-  opensslBinPath = "${stdenv.lib.makeBinPath (with pkgs; [ openssl ])}/openssl";
+  version = "2.9.5-7";
 
 in stdenv.mkDerivation rec {
   name = "testssl.sh-${version}";
@@ -12,26 +11,32 @@ in stdenv.mkDerivation rec {
     owner = "drwetter";
     repo = "testssl.sh";
     rev = "v${version}";
-    sha256 = "0hz6g685jwl0c0jrdca746425xpwiwc8lnlc2gigga5hkcq8qzl9";
+    sha256 = "02xp0yi53xf6jw6v633zs2ws2iyyvq3mlkimg0cv3zvj7nw9x5wr";
   };
 
-  nativeBuildInputs = with pkgs; [
-    makeWrapper
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [
+    coreutils # for pwd and printf
+    dnsutils  # for dig
+    nettools  # for hostname
+    openssl   # for openssl
+    procps    # for ps
+    utillinux # for hexdump
   ];
 
-  patches = [ ./testssl.patch ];
-
   postPatch = ''
-    sed -i -e "s|/bin/pwd|${pwdBinPath}|g"                                     \
-           -e "s|TESTSSL_INSTALL_DIR:-\"\"|TESTSSL_INSTALL_DIR:-\"$out\"|g"    \
-           -e "s|OPENSSL:-\"\"|OPENSSL:-\"${opensslBinPath}\"|g" \
-           testssl.sh
+    substituteInPlace testssl.sh                                               \
+      --replace /bin/pwd                    pwd                                \
+      --replace TESTSSL_INSTALL_DIR:-\"\"   TESTSSL_INSTALL_DIR:-\"$out\"
   '';
 
   installPhase = ''
-    mkdir -p $out/bin $out/etc
-    cp -r etc/ $out/
-    cp testssl.sh $out/bin/testssl.sh
+    install -Dt $out/bin testssl.sh
+
+    wrapProgram $out/bin/testssl.sh                                            \
+      --prefix PATH ':' ${lib.makeBinPath buildInputs}
+
+    cp -r etc $out
   '';
 
   meta = with stdenv.lib; {
@@ -42,6 +47,6 @@ in stdenv.mkDerivation rec {
     '';
     homepage = https://testssl.sh/;
     license = licenses.gpl2;
-    maintainers = [ maintainers.etu ];
+    maintainers = with maintainers; [ etu ];
   };
 }

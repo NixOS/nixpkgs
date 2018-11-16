@@ -1,21 +1,20 @@
-{ stdenv, lib, fetchFromGitHub, python, cmake, sip, protobuf }:
+{ stdenv, buildPythonPackage, fetchFromGitHub
+, cmake, sip, protobuf, pythonOlder }:
 
-if lib.versionOlder python.version "3.4.0"
-then throw "libArcus not supported for interpreter ${python.executable}"
-else
-
-stdenv.mkDerivation rec {
+buildPythonPackage rec {
   pname = "libarcus";
-  name = "${pname}-${version}";
-  version = "3.0.3";
-  
+  version = "3.4.1";
+  format = "other";
+
   src = fetchFromGitHub {
     owner = "Ultimaker";
     repo = "libArcus";
     rev = version;
-    sha256 = "05dpd6nx32nws0ghsm365wlsb8hg2s3v9fqcmdk11biwfhnr6rjw";
+    sha256 = "0mln8myvfl7rq2p4g1vadvlykckd8490jijag4xa5hhj3w3p19bk";
   };
-  
+
+  disabled = pythonOlder "3.4.0";
+
   propagatedBuildInputs = [ sip protobuf ];
   nativeBuildInputs = [ cmake ];
 
@@ -26,7 +25,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Communication library between internal components for Ultimaker software";
-    homepage = "https://github.com/Ultimaker/libArcus";
+    homepage = https://github.com/Ultimaker/libArcus;
     license = licenses.agpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ abbradar ];

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "evdi-${version}";
-  version = "unstable-2018-01-12";
+  version = "1.5.0.2";
 
   src = fetchFromGitHub {
     owner = "DisplayLink";
     repo = "evdi";
-    rev = "e7a08d08e3876efba8007e91df1b296f2447b8de";
-    sha256 = "01z7bx5rgpb5lc4c6dxfiv52ni25564djxmvmgy3d7r1x1mqhxgs";
+    rev = "v${version}";
+    sha256 = "1wjk023lpjxnspfl34c6rzkrixahfdzdkmc3hnmrdw12s3i6ca5x";
   };
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "KVER=${kernel.modDirVersion}" "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build" ];
 
-  hardeningDisable = [ "pic" "format" ];
+  hardeningDisable = [ "format" "pic" "fortify" ];
 
   installPhase = ''
     install -Dm755 module/evdi.ko $out/lib/modules/${kernel.modDirVersion}/kernel/drivers/gpu/drm/evdi/evdi.ko
@@ -29,6 +29,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     license = licenses.gpl2;
     homepage = http://www.displaylink.com/;
-    broken = versionOlder kernel.version "4.9";
+    broken = versionOlder kernel.version "4.9" || versionAtLeast kernel.version "4.15" || stdenv.isAarch64;
   };
 }

@@ -4,7 +4,6 @@
 buildPythonPackage rec {
   pname = "jsonref";
   version = "0.1";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
@@ -19,7 +18,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "An implementation of JSON Reference for Python";
-    homepage    = "http://github.com/gazpachoking/jsonref";
+    homepage    = "https://github.com/gazpachoking/jsonref";
     license     = licenses.mit;
     maintainers = with maintainers; [ nand0p ];
     platforms   = platforms.all;

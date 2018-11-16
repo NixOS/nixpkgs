@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, fetchgit, qtbase, qtx11extras, qmake, pkgconfig, boost }:
+{ stdenv, fetchgit, qtbase, qtx11extras, qmake, pkgconfig, boost }:
 
 stdenv.mkDerivation rec {
   name = "twmn-git-2014-09-23";
@@ -30,5 +30,6 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/sboli/twmn;
     platforms = with stdenv.lib.platforms; linux;
     maintainers = [ stdenv.lib.maintainers.matejc ];
+    license = stdenv.lib.licenses.lgpl3;
   };
 }

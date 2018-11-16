@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   # the build will fail without complaining about a reference to /tmp
-  preFixup = ''
+  preFixup = stdenv.lib.optionalString stdenv.isLinux ''
     patchelf \
       --set-rpath "${stdenv.lib.makeLibraryPath buildInputs}:$out/lib" \
       $out/bin/shairplay

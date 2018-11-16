@@ -1,6 +1,6 @@
 { stdenv, fetchzip, fetchpatch
 , boost, cairo, freetype, gdal, harfbuzz, icu, libjpeg, libpng, libtiff
-, libwebp, libxml2, proj, python2, scons, sqlite, zlib
+, libwebp, libxml2, proj, python, scons, sqlite, zlib
 
 # supply a postgresql package to enable the PostGIS input plugin
 , postgresql ? null
@@ -8,28 +8,22 @@
 
 stdenv.mkDerivation rec {
   name = "mapnik-${version}";
-  version = "3.0.13";
+  version = "3.0.21";
 
   src = fetchzip {
     # this one contains all git submodules and is cheaper than fetchgit
     url = "https://github.com/mapnik/mapnik/releases/download/v${version}/mapnik-v${version}.tar.bz2";
-    sha256 = "189wsd6l6awblkiha666l1sdyp7ifmnfsa87y0j37rvym6w4r065";
+    sha256 = "0cq2gbmf1sssg72sq4b5s3x1z6wvl1pzxliymm06flw5bpim5as2";
   };
-
-  patches = [(fetchpatch {
-    name = "icu-59.diff";
-    url = https://github.com/mapnik/mapnik/commit/9e58c890430d.diff;
-    sha256 = "0h546qq8g19gw9s4979hla9vkq5kcwh3q45ryajyjhmlr2z9fi6p";
-  })];
 
   # a distinct dev output makes python-mapnik fail
   outputs = [ "out" ];
 
-  nativeBuildInputs = [ python2 scons ];
+  nativeBuildInputs = [ python scons ];
 
   buildInputs =
     [ boost cairo freetype gdal harfbuzz icu libjpeg libpng libtiff
-      libwebp libxml2 proj python2 sqlite zlib
+      libwebp libxml2 proj python sqlite zlib
 
       # optional inputs
       postgresql

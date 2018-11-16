@@ -1,16 +1,16 @@
 { stdenv, fetchurl, autoreconfHook, pkgconfig, libzen, libmediainfo, wxGTK
-, desktop_file_utils, libSM, imagemagick }:
+, desktop-file-utils, libSM, imagemagick }:
 
 stdenv.mkDerivation rec {
-  version = "17.10";
+  version = "18.08.1";
   name = "mediainfo-gui-${version}";
   src = fetchurl {
     url = "https://mediaarea.net/download/source/mediainfo/${version}/mediainfo_${version}.tar.xz";
-    sha256 = "1yvh4r19kk3bzzgnr4ikrjxqldr6860s35sh4bqr51c7l77k048c";
+    sha256 = "0rq2dczjq26g5i0ac8px7xmxjvqq4h0rzd97fy5824yb2c5ksxs9";
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
-  buildInputs = [ libzen libmediainfo wxGTK desktop_file_utils libSM
+  buildInputs = [ libzen libmediainfo wxGTK desktop-file-utils libSM
                   imagemagick ];
 
   sourceRoot = "./MediaInfo/Project/GNU/GUI/";

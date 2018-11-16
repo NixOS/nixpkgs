@@ -1,29 +1,34 @@
-{ stdenv, fetchFromGitHub, autoreconfHook
-, pkgconfig, glib, systemd, libgudev, vala  }:
+{ stdenv, fetchFromGitHub, autoreconfHook, umockdev, gobjectIntrospection
+, pkgconfig, glib, systemd, libgudev, vala }:
 
 stdenv.mkDerivation rec {
-  name = "umockdev";
-  version = "0.8.13";
+  name = "umockdev-${version}";
+  version = "0.12";
+
+  outputs = [ "bin" "out" "dev" "doc" ];
 
   src = fetchFromGitHub {
-    owner = "martinpitt";
-    repo = "umockdev";
-    rev = version;
-    sha256 ="0bw2dpshlgbdwg5mhq4j22z474llpqix8pxii63r2bk5nhjc537k";
+    owner  = "martinpitt";
+    repo   = "umockdev";
+    rev    = version;
+    sha256 = "1j7kkxpqs991w3qdlb779gzv38l1vpnlk3laabi2ndk83j1wl5k2";
   };
 
-  buildInputs = [ glib systemd libgudev vala ];
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  # autoreconfHook complains if we try to build the documentation
+  postPatch = ''
+    echo 'EXTRA_DIST =' > docs/gtk-doc.make
+  '';
 
-  ### docs/gtk-doc.make not found
-  prePatch = ''
-    sed -i 's|include $(top_srcdir)/docs/gtk-doc.make||g' docs/reference/Makefile.am
-   sed -i 's|+=|=|g' docs/reference/Makefile.am
-   '';
+  buildInputs = [ glib systemd libgudev ];
+
+  nativeBuildInputs = [ autoreconfHook pkgconfig vala gobjectIntrospection ];
+
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "Mock hardware devices for creating unit tests";
     license = licenses.lgpl2;
-    maintainers = [ maintainers.ndowens ];
+    maintainers = with maintainers; [ ndowens ];
+    platforms = with platforms; linux;
   };
 }

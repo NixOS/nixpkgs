@@ -1,7 +1,7 @@
 {
   mkDerivation, lib, kdepimTeam,
   extra-cmake-modules, kdoctools,
-  akonadi, akonadi-mime, akonadi-notes, akonadi-search, gpgme, grantlee5,
+  akonadi, akonadi-mime, akonadi-notes, akonadi-search, gpgme, grantlee,
   grantleetheme, karchive, kcodecs, kconfig, kconfigwidgets, kcontacts,
   kdepim-apps-libs, kiconthemes, kidentitymanagement, kio, kjobwidgets, kldap,
   kmailtransport, kmbox, kmime, kwindowsystem, libgravatar, libkdepim, libkleo,
@@ -16,7 +16,7 @@ mkDerivation {
   };
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
-    akonadi-notes akonadi-search gpgme grantlee5 grantleetheme karchive kcodecs
+    akonadi-notes akonadi-search gpgme grantlee grantleetheme karchive kcodecs
     kconfig kconfigwidgets kdepim-apps-libs kiconthemes kio kjobwidgets kldap
     kmailtransport kmbox kmime kwindowsystem libgravatar libkdepim qtwebkit
     syntax-highlighting

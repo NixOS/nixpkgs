@@ -1,4 +1,4 @@
-{ stdenv, fetchurl
+{ stdenv
 
 # Version specific stuff
 , release, version, src

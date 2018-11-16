@@ -1,8 +1,6 @@
 { stdenv, fetchurl, cmake, openssl, libedit, flex, bison, qt4, makeWrapper
 , gcc, nettools, iproute, linuxHeaders }:
 
-assert stdenv.isLinux;
-
 # NOTE: use $out/etc/iked.conf as sample configuration and also set: dhcp_file "/etc/iked.dhcp";
 # launch with "iked -f /etc/iked.conf"
 

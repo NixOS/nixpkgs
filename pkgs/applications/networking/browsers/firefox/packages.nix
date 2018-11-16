@@ -1,81 +1,118 @@
-{ lib, callPackage, stdenv, overrideCC, gcc5, fetchurl, fetchFromGitHub, fetchpatch }:
+{ lib, callPackage, stdenv, fetchurl, fetchFromGitHub, fetchpatch, python3 }:
 
-let common = opts: callPackage (import ./common.nix opts); in
+let
+
+  common = opts: callPackage (import ./common.nix opts) {};
+
+  nixpkgsPatches = [
+    ./env_var_for_system_dir.patch
+  ];
+
+in
 
 rec {
 
   firefox = common rec {
     pname = "firefox";
-    version = "58.0.2";
+    ffversion = "63.0.1";
     src = fetchurl {
-      url = "mirror://mozilla/firefox/releases/${version}/source/firefox-${version}.source.tar.xz";
-      sha512 = "ff748780492fc66b3e44c7e7641f16206e4c09514224c62d37efac2c59877bdf428a3670bfb50407166d7b505d4e2ea020626fd776b87f6abb6bc5d2e54c773f";
+      url = "mirror://mozilla/firefox/releases/${ffversion}/source/firefox-${ffversion}.source.tar.xz";
+      sha512 = "29acad70259d71a924cbaf4c2f01fb034cf8090759b3a2d74a5eabc2823f83b6508434e619d8501d3930702e2bbad373581a70e2ce57aead9af77fc42766fbe2";
     };
 
-    patches = [
+    patches = nixpkgsPatches ++ [
       ./no-buildconfig.patch
-      ./env_var_for_system_dir.patch
-
-      # https://bugzilla.mozilla.org/show_bug.cgi?id=1430274
-      # Scheduled for firefox 59
+      # this is only required for version 63.0,  version 63.0.3 onwards will
+      # carry the patch
+      # bug report: https://bugzilla.mozilla.org/show_bug.cgi?id=1503401
       (fetchpatch {
-        url = "https://bug1430274.bmoattachments.org/attachment.cgi?id=8943426";
-        sha256 = "12yfss3k61yilrb337dh2rffy5hh83d2f16gqrf5i56r9c33f7hf";
+        name = "fix-rust-cbindgen-breaking-change.patch";
+        url = "https://hg.mozilla.org/releases/mozilla-release/raw-rev/22273af49058";
+        sha256 = "1kvswbr1jxigli6s5jh3cr21153jx6mlyxf4a39510y3dg19ls0a";
       })
+    ];
 
-      # https://bugzilla.mozilla.org/show_bug.cgi?id=1388981
-      # Should have been fixed in firefox 57
-    ] ++ lib.optional stdenv.isi686 (fetchpatch {
-      url = "https://hg.mozilla.org/mozilla-central/raw-rev/15517c5a5d37";
-      sha256 = "1ba487p3hk4w2w7qqfxgv1y57vp86b8g3xhav2j20qd3j3phbbn7";
-    });
+    extraNativeBuildInputs = [ python3 ];
 
     meta = {
       description = "A web browser built from Firefox source tree";
       homepage = http://www.mozilla.com/en-US/firefox/;
       maintainers = with lib.maintainers; [ eelco ];
-      platforms = lib.platforms.linux;
+      platforms = lib.platforms.unix;
+      license = lib.licenses.mpl20;
     };
     updateScript = callPackage ./update.nix {
       attrPath = "firefox-unwrapped";
     };
-  } {};
+  };
 
-  firefox-esr = common rec {
+  firefox-esr-52 = common rec {
     pname = "firefox-esr";
-    version = "52.6.0esr";
+    ffversion = "52.9.0esr";
     src = fetchurl {
-      url = "mirror://mozilla/firefox/releases/${version}/source/firefox-${version}.source.tar.xz";
-      sha512 = "cf583df34272b7ff8841c3b093ca0819118f9c36d23c6f9b3135db298e84ca022934bcd189add6473922b199b47330c0ecf14c303ab4177c03dbf26e64476fa4";
+      url = "mirror://mozilla/firefox/releases/${ffversion}/source/firefox-${ffversion}.source.tar.xz";
+      sha512 = "bfca42668ca78a12a9fb56368f4aae5334b1f7a71966fbba4c32b9c5e6597aac79a6e340ac3966779d2d5563eb47c054ab33cc40bfb7306172138ccbd3adb2b9";
     };
 
-    patches =
-      [ ./env_var_for_system_dir.patch ];
+    patches = nixpkgsPatches ++ [
+      # this one is actually an omnipresent bug
+      # https://bugzilla.mozilla.org/show_bug.cgi?id=1444519
+      ./fix-pa-context-connect-retval.patch
+    ];
+
+    meta = firefox.meta // {
+      description = "A web browser built from Firefox Extended Support Release source tree";
+      knownVulnerabilities = [ "Support ended in August 2018." ];
+    };
+    updateScript = callPackage ./update.nix {
+      attrPath = "firefox-esr-52-unwrapped";
+      ffversionSuffix = "esr";
+    };
+  };
+
+  firefox-esr-60 = common rec {
+    pname = "firefox-esr";
+    ffversion = "60.3.0esr";
+    src = fetchurl {
+      url = "mirror://mozilla/firefox/releases/${ffversion}/source/firefox-${ffversion}.source.tar.xz";
+      sha512 = "7ded25a38835fbd73a58085e24ad83308afee1784a3bf853d75093c1500ad46988f5865c106abdae938cfbd1fb10746cc1795ece7994fd7eba8a002158cf1bcd";
+    };
+
+    patches = nixpkgsPatches ++ [
+      ./no-buildconfig.patch
+
+      # this one is actually an omnipresent bug
+      # https://bugzilla.mozilla.org/show_bug.cgi?id=1444519
+      ./fix-pa-context-connect-retval.patch
+    ];
 
     meta = firefox.meta // {
       description = "A web browser built from Firefox Extended Support Release source tree";
     };
     updateScript = callPackage ./update.nix {
-      attrPath = "firefox-esr-unwrapped";
+      attrPath = "firefox-esr-60-unwrapped";
       versionSuffix = "esr";
     };
-  } {};
+  };
 
 } // (let
 
-  commonAttrs = {
-    overrides = {
-      unpackPhase = ''
-        # fetchFromGitHub produces ro sources, root dir gets a name that
-        # is too long for shebangs. fixing
-        cp -a $src tor-browser
-        chmod -R +w tor-browser
-        cd tor-browser
+  tbcommon = args: common (args // {
+    pname = "tor-browser";
+    isTorBrowserLike = true;
 
-        # set times for xpi archives
-        find . -exec touch -d'2010-01-01 00:00' {} \;
-      '';
-    };
+    unpackPhase = ''
+      # fetchFromGitHub produces ro sources, root dir gets a name that
+      # is too long for shebangs. fixing
+      cp -a $src tor-browser
+      chmod -R +w tor-browser
+      cd tor-browser
+
+      # set times for xpi archives
+      find . -exec touch -d'2010-01-01 00:00' {} \;
+    '';
+
+    patches = nixpkgsPatches;
 
     meta = {
       description = "A web browser built from TorBrowser source tree";
@@ -93,59 +130,57 @@ rec {
         It will use your default Firefox profile if you're not careful
         even! Be careful!
 
-        It will clash with firefox binary if you install both. But its
-        not a problem since you should run browsers in separate
-        users/VMs anyway.
+        It will clash with firefox binary if you install both. But it
+        should not be a problem because you should run browsers in
+        separate users/VMs anyway.
 
         Create new profile by starting it as
 
         $ firefox -ProfileManager
 
         and then configure it to use your tor instance.
+
+        Or just use `tor-browser-bundle` package that packs this
+        `tor-browser` back into a sanely-built bundle.
       '';
       homepage = https://www.torproject.org/projects/torbrowser.html;
       platforms = lib.platforms.linux;
+      license = lib.licenses.bsd3;
     };
-  };
+  });
 
 in rec {
 
-  tor-browser-7-0 = common (rec {
-    pname = "tor-browser";
-    version = "7.0.1";
-    isTorBrowserLike = true;
+  tor-browser-7-5 = (tbcommon rec {
+    ffversion = "52.9.0esr";
+    tbversion = "7.5.6";
 
     # FIXME: fetchFromGitHub is not ideal, unpacked source is >900Mb
     src = fetchFromGitHub {
       owner = "SLNOS";
       repo  = "tor-browser";
-      # branch "tor-browser-52.5.0esr-7.0-1-slnos";
-      rev   = "830ff8d622ef20345d83f386174f790b0fc2440d";
-      sha256 = "169mjkr0bp80yv9nzza7kay7y2k03lpnx71h4ybcv9ygxgzdgax5";
+      # branch "tor-browser-52.9.0esr-7.5-2-slnos"
+      rev   = "95bb92d552876a1f4260edf68fda5faa3eb36ad8";
+      sha256 = "1ykn3yg4s36g2cpzxbz7s995c33ij8kgyvghx38z4i8siaqxdddy";
     };
+  }).override {
+    gtk3Support = false;
+  };
 
-    patches =
-      [ ./env_var_for_system_dir.patch ];
-  } // commonAttrs) {};
-
-  tor-browser-7-5 = common (rec {
-    pname = "tor-browser";
-    version = "7.5.2";
-    isTorBrowserLike = true;
+  tor-browser-8-0 = tbcommon rec {
+    ffversion = "60.3.0esr";
+    tbversion = "8.0.3";
 
     # FIXME: fetchFromGitHub is not ideal, unpacked source is >900Mb
     src = fetchFromGitHub {
       owner = "SLNOS";
       repo  = "tor-browser";
-      # branch "tor-browser-52.6.2esr-7.5-2-slnos";
-      rev   = "cf1a504aaa26af962ae909a3811c0038db2d2eec";
-      sha256 = "0llbk7skh1n7yj137gv7rnxfasxsnvfjp4ss7h1fbdnw19yba115";
+      # branch "tor-browser-60.3.0esr-8.0-1-slnos"
+      rev   = "bd512ad9c40069adfc983f4f03dbd9d220cdf2f9";
+      sha256 = "1j349aqiqrf58zrx8pkqvh292w41v1vwr7x7dmd74hq4pi2iwpn8";
     };
+  };
 
-    patches =
-      [ ./env_var_for_system_dir.patch ];
-  } // commonAttrs) {};
-
-  tor-browser = tor-browser-7-5;
+  tor-browser = tor-browser-8-0;
 
 })

@@ -1,7 +1,7 @@
 {
   mkDerivation, lib, kdepimTeam,
   extra-cmake-modules, kdoctools,
-  shared_mime_info,
+  shared-mime-info,
   akonadi, akonadi-calendar, akonadi-contacts, akonadi-mime, akonadi-notes,
   kalarmcal, kcalutils, kcontacts, kdav, kdelibs4support, kidentitymanagement,
   kimap, kmailtransport, kmbox, kmime, knotifications, knotifyconfig,
@@ -14,7 +14,7 @@ mkDerivation {
     license = with lib.licenses; [ gpl2 lgpl21 fdl12 ];
     maintainers = kdepimTeam;
   };
-  nativeBuildInputs = [ extra-cmake-modules kdoctools shared_mime_info ];
+  nativeBuildInputs = [ extra-cmake-modules kdoctools shared-mime-info ];
   buildInputs = [
     akonadi akonadi-calendar akonadi-contacts akonadi-mime akonadi-notes
     kalarmcal kcalutils kcontacts kdav kdelibs4support kidentitymanagement kimap

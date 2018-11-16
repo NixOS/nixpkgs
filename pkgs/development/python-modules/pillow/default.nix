@@ -6,12 +6,11 @@
 }:
 buildPythonPackage rec {
   pname = "Pillow";
-  version = "5.0.0";
-  name = "${pname}-${version}";
+  version = "5.2.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "12f29d6c23424f704c66b5b68c02fe0b571504459605cfe36ab8158359b0e1bb";
+    sha256 = "f8b3d413c5a8f84b12cd4c5df1d8e211777c9852c6be3ee9c094b626644d3eab";
   };
 
   doCheck = !stdenv.isDarwin && !isPyPy;
@@ -31,6 +30,14 @@ buildPythonPackage rec {
     ++ stdenv.lib.optionals (isPyPy) [ tk libX11 ];
 
   # NOTE: we use LCMS_ROOT as WEBP root since there is not other setting for webp.
+  # NOTE: The Pillow install script will, by default, add paths like /usr/lib
+  # and /usr/include to the search paths. This can break things when building
+  # on a non-NixOS system that has some libraries installed that are not
+  # installed in Nix (for example, Arch Linux has jpeg2000 but Nix doesn't
+  # build Pillow with this support). We patch the `disable_platform_guessing`
+  # setting here, instead of passing the `--disable-platform-guessing`
+  # command-line option, since the command-line option doesn't work when we run
+  # tests.
   preConfigure = let
     libinclude' = pkg: ''"${pkg.out}/lib", "${pkg.out}/include"'';
     libinclude = pkg: ''"${pkg.out}/lib", "${pkg.dev}/include"'';
@@ -41,7 +48,8 @@ buildPythonPackage rec {
             s|^ZLIB_ROOT =.*$|ZLIB_ROOT = ${libinclude zlib}|g ;
             s|^LCMS_ROOT =.*$|LCMS_ROOT = ${libinclude lcms2}|g ;
             s|^TIFF_ROOT =.*$|TIFF_ROOT = ${libinclude libtiff}|g ;
-            s|^TCL_ROOT=.*$|TCL_ROOT = ${libinclude' tcl}|g ;'
+            s|^TCL_ROOT=.*$|TCL_ROOT = ${libinclude' tcl}|g ;
+            s|self\.disable_platform_guessing = None|self.disable_platform_guessing = True|g ;'
     export LDFLAGS="-L${libwebp}/lib"
     export CFLAGS="-I${libwebp}/include"
   ''

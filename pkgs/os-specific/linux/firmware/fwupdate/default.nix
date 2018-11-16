@@ -1,37 +1,60 @@
-{ stdenv, fetchurl, gnu-efi, efivar, libsmbios, popt, pkgconfig
-, gettext }:
-let version = "8"; in
-  stdenv.mkDerivation
-    { name = "fwupdate-${version}";
-      src = fetchurl
-        { url = "https://github.com/rhinstaller/fwupdate/releases/download/${version}/fwupdate-${version}.tar.bz2";
-          sha256 = "10q8k1kghvbcb5fwcl2smzp8vqdfzimx9dkk0c3hz39py1phy4n8";
-        };
-      makeFlags =
-        [ "EFIDIR=nixos"
-          "LIBDIR=$(out)/lib"
-          "GNUEFIDIR=${gnu-efi}/lib"
-          "TARGETDIR=$(out)/boot/efi/nixos/"
-          "prefix=$(out)/"
-        ];
-  nativeBuildInputs = [ pkgconfig ];
-      buildInputs = [ gnu-efi libsmbios popt gettext ];
-      propagatedBuildInputs = [ efivar ];
-      # TODO: Just apply the disable to the efi subdir
-      hardeningDisable = [ "all" ];
-      patchPhase = ''
-        sed -i 's|/usr/include/smbios_c/token.h|smbios_c/token.h|' \
-          linux/libfwup.c
-        sed -i 's|/usr/share|$(prefix)share|' linux/Makefile
-        sed -i "s|/usr/include|$out/include|" linux/fwup.pc.in
-        find . -type f -print0 | xargs -0 sed -i -e 's|/boot/efi|/boot|g' -e 's|/boot/efi/EFI|/boot/EFI|g'
-      '';
-      configurePhase = ''
-        arch=$(cc -dumpmachine | cut -f1 -d- | sed 's,i[3456789]86,ia32,' )
-        export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${gnu-efi}/include/efi -I${efivar}/include/efivar -I${gnu-efi}/include/efi/$arch"
-      '';
-      meta =
-        { license = [ stdenv.lib.licenses.gpl2 ];
-          platforms = stdenv.lib.platforms.linux;
-        };
-    }
+{ efivar, fetchurl, gettext, gnu-efi, libsmbios, pkgconfig, popt, stdenv }:
+let
+  version = "12";
+in stdenv.mkDerivation {
+  name = "fwupdate-${version}";
+  src = fetchurl {
+    url = "https://github.com/rhinstaller/fwupdate/releases/download/${version}/fwupdate-${version}.tar.bz2";
+    sha256 = "00w7jsg7wrlq4cpfz26m9rbv2jwyf0sansf343vfq02fy5lxars1";
+  };
+
+  patches = [
+    ./do-not-create-sharedstatedir.patch
+  ];
+
+  NIX_CFLAGS_COMPILE = [ "-I${gnu-efi}/include/efi" ];
+
+  # TODO: Just apply the disable to the efi subdir
+  hardeningDisable = [ "stackprotector" ];
+
+  makeFlags = [
+    "EFIDIR=nixos"
+    "prefix=$(out)"
+    "LIBDIR=$(out)/lib"
+    "GNUEFIDIR=${gnu-efi}/lib"
+    "ESPMOUNTPOINT=$(out)/boot"
+  ];
+
+  nativeBuildInputs = [
+    pkgconfig
+    gettext
+  ];
+
+  buildInputs = [
+    gnu-efi
+    libsmbios
+    popt
+  ];
+
+  propagatedBuildInputs = [
+    efivar
+  ];
+
+  # TODO: fix wrt cross-compilation
+  preConfigure = ''
+    arch=$(cc -dumpmachine | cut -f1 -d- | sed 's,i[3456789]86,ia32,' )
+    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${gnu-efi}/include/efi/$arch"
+  '';
+
+  postInstall = ''
+    rm -rf $out/src
+    rm -rf $out/lib/debug
+  '';
+
+  meta = with stdenv.lib; {
+    description = "Tools for using the ESRT and UpdateCapsule() to apply firmware updates";
+    maintainers = with maintainers; [ ];
+    license = licenses.gpl2;
+    platforms = platforms.linux;
+  };
+}

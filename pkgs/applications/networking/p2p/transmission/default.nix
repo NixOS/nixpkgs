@@ -1,23 +1,20 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig, intltool, file, wrapGAppsHook
-, openssl, curl, libevent, inotify-tools, systemd, zlib
+{ stdenv, fetchurl, pkgconfig, intltool, file, wrapGAppsHook
+, openssl, curl, libevent, inotify-tools, systemd, zlib, hicolor-icon-theme
 , enableGTK3 ? false, gtk3
 , enableSystemd ? stdenv.isLinux
 , enableDaemon ? true
 , enableCli ? true
 }:
 
-let
-  version = "2.92";
-in
-
 let inherit (stdenv.lib) optional optionals optionalString; in
 
 stdenv.mkDerivation rec {
   name = "transmission-" + optionalString enableGTK3 "gtk-" + version;
+  version = "2.94";
 
   src = fetchurl {
-    url = "https://transmission.cachefly.net/transmission-${version}.tar.xz";
-    sha256 = "0pykmhi7pdmzq47glbj8i2im6iarp4wnj4l1pyvsrnba61f0939s";
+    url = "https://github.com/transmission/transmission-releases/raw/master/transmission-2.94.tar.xz";
+    sha256 = "0zbbj7rlm6m7vb64x68a64cwmijhsrwx9l63hbwqs7zr9742qi1m";
   };
 
   nativeBuildInputs = [ pkgconfig ]
@@ -25,17 +22,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ intltool file openssl curl libevent zlib ]
     ++ optionals enableGTK3 [ gtk3 ]
     ++ optionals enableSystemd [ systemd ]
-    ++ optionals stdenv.isLinux [ inotify-tools ];
-
-  patches = [
-    (fetchpatch {
-      # See https://github.com/transmission/transmission/pull/468
-      # Patch from: https://github.com/transmission/transmission/pull/468#issuecomment-357098126
-      name = "transmission-fix-dns-rebinding-vuln.patch";
-      url = https://github.com/transmission/transmission/files/1624507/transmission-fix-dns-rebinding-vuln.patch.txt;
-      sha256 = "1p9m20kp4kdyp5jjr3yp5px627n8cfa29mg5n3wzsdfv0qzk9gy4";
-    })
-  ];
+    ++ optionals stdenv.isLinux [ inotify-tools ]
+    ++ optionals enableGTK3 [ hicolor-icon-theme ];
 
   postPatch = ''
     substituteInPlace ./configure \
@@ -51,10 +39,6 @@ stdenv.mkDerivation rec {
     ]
     ++ optional enableSystemd "--with-systemd-daemon"
     ++ optional enableGTK3 "--with-gtk";
-
-  preFixup = optionalString enableGTK3 ''
-    rm "$out/share/icons/hicolor/icon-theme.cache"
-  '';
 
   NIX_LDFLAGS = optionalString stdenv.isDarwin "-framework CoreFoundation";
 

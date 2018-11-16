@@ -1,19 +1,24 @@
 { stdenv, fetchurl, flex, bison, pkgconfig, zlib, libtiff, libpng, fftw
 , cairo, readline, ffmpeg, makeWrapper, wxGTK30, netcdf, blas
-, proj, gdal, geos, sqlite, postgresql, mysql, python2Packages
+, proj, gdal, geos, sqlite, postgresql, mysql, python2Packages, libLAS
 }:
 
 stdenv.mkDerivation {
   name = "grass-7.2.2";
   src = fetchurl {
-    url = http://grass.osgeo.org/grass72/source/grass-7.2.2.tar.gz;
+    url = https://grass.osgeo.org/grass72/source/grass-7.2.2.tar.gz;
     sha256 = "0yzljbrxlqp4wbw08n1dvmm4vmwkg8glf1ff4xyh589r5ryb7gxv";
   };
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ flex bison zlib proj gdal libtiff libpng fftw sqlite cairo
-  readline ffmpeg makeWrapper wxGTK30 netcdf geos postgresql mysql.connector-c blas ]
+  readline ffmpeg makeWrapper wxGTK30 netcdf geos postgresql mysql.connector-c blas
+  libLAS ]
     ++ (with python2Packages; [ python dateutil wxPython30 numpy ]);
+
+  # On Darwin the installer tries to symlink the help files into a system
+  # directory
+  patches = [ ./no_symbolic_links.patch ];
 
   configureFlags = [
     "--with-proj-share=${proj}/share/proj"
@@ -29,7 +34,11 @@ stdenv.mkDerivation {
     "--with-mysql-includes=${mysql.connector-c}/include/mysql"
     "--with-mysql-libs=${mysql.connector-c}/lib/mysql"
     "--with-blas"
+    "--with-liblas=${libLAS}/bin/liblas-config"
   ];
+
+  # Otherwise a very confusing "Can't load GDAL library" error
+  makeFlags = stdenv.lib.optional stdenv.isDarwin "GDAL_DYNAMIC=";
 
   /* Ensures that the python script run at build time are actually executable;
    * otherwise, patchShebangs ignores them.  */
@@ -69,6 +78,7 @@ stdenv.mkDerivation {
     --set GRASS_PYTHON ${python2Packages.python}/bin/${python2Packages.python.executable} \
     --suffix LD_LIBRARY_PATH ':' '${gdal}/lib'
     ln -s $out/grass-*/lib $out/lib
+    ln -s $out/grass-*/include $out/include
   '';
 
   enableParallelBuilding = true;
@@ -78,5 +88,6 @@ stdenv.mkDerivation {
     description = "GIS software suite used for geospatial data management and analysis, image processing, graphics and maps production, spatial modeling, and visualization";
     license = stdenv.lib.licenses.gpl2Plus;
     platforms = stdenv.lib.platforms.all;
+    maintainers = with stdenv.lib.maintainers; [mpickering];
   };
 }

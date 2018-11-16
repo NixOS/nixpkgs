@@ -4,7 +4,7 @@ stdenv.mkDerivation {
   name = "testdisk-7.1";
 
   src = fetchurl {
-    url = http://www.cgsecurity.org/testdisk-7.0.tar.bz2;
+    url = https://www.cgsecurity.org/testdisk-7.0.tar.bz2;
     sha256 = "0ba4wfz2qrf60vwvb1qsq9l6j0pgg81qgf7fh22siaz649mkpfq0";
   };
 

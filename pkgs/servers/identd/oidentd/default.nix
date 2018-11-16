@@ -1,13 +1,14 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "oidentd-2.0.8";
+  name = "oidentd-${version}";
+  version = "2.2.2";
 
   CFLAGS = [ "--std=gnu89" ];
 
   src = fetchurl {
-    url = "mirror://sourceforge/ojnk/${name}.tar.gz";
-    sha256 = "0vzv2086rrxcaavrm3js7aqvyc0grgaqy78x61d8s7r8hz8vwk55";
+    url = "https://ftp.janikrabe.com/pub/oidentd/releases/${version}/${name}.tar.gz";
+    sha256 = "1svj7ymljp4s17d7jlx6602n9081714qsj5yymmv1s9wagzjqyn9";
   };
 
   meta = {

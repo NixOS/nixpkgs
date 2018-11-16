@@ -1,16 +1,15 @@
-{ stdenv, buildPythonPackage, fetchurl }:
+{ lib, buildPythonPackage, fetchPypi }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "incremental";
   version = "17.5.0";
 
-  src = fetchurl {
-    url = "mirror://pypi/i/${pname}/${name}.tar.gz";
+  src = fetchPypi {
+    inherit pname version;
     sha256 = "7b751696aaf36eebfab537e458929e194460051ccad279c72b755a167eebd4b3";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = https://github.com/twisted/treq;
     description = "Incremental is a small library that versions your Python projects";
     license = licenses.mit;

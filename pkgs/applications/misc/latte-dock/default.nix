@@ -1,28 +1,31 @@
-{ mkDerivation, lib, cmake, xorg, plasma-framework, fetchFromGitHub
-, extra-cmake-modules, karchive, kwindowsystem, qtx11extras, kcrash }:
+{ mkDerivation, lib, cmake, xorg, plasma-framework, fetchurl
+, extra-cmake-modules, karchive, kwindowsystem, qtx11extras, kcrash, knewstuff }:
 
-let version = "0.7.1"; in
+mkDerivation rec {
+  pname = "latte-dock";
+  version = "0.8.2";
+  name = "${pname}-${version}";
 
-mkDerivation {
-  name = "latte-dock-${version}";
-
-  src = fetchFromGitHub {
-    owner = "psifidotos";
-    repo = "Latte-Dock";
-    rev = "v${version}";
-    sha256 = "0vdmsjj1qqlzz26mznb56znv5x7akbvw65ybbzakclp4q1xrsrm2";
+  src = fetchurl {
+    url = "https://download.kde.org/stable/${pname}/${name}.tar.xz";
+    sha256 = "1acwgxg9swmazi9bg5a0iyyin07h2gvp3mhbn6cfqqhpmndqxfdx";
+    name = "${name}.tar.xz";
   };
 
   buildInputs = [ plasma-framework xorg.libpthreadstubs xorg.libXdmcp xorg.libSM ];
 
   nativeBuildInputs = [ extra-cmake-modules cmake karchive kwindowsystem
-    qtx11extras kcrash ];
+    qtx11extras kcrash knewstuff ];
+
+
 
   meta = with lib; {
     description = "Dock-style app launcher based on Plasma frameworks";
     homepage = https://github.com/psifidotos/Latte-Dock;
     license = licenses.gpl2;
     platforms = platforms.unix;
-    maintainers = [ maintainers.benley ];
+    maintainers = [ maintainers.benley maintainers.ysndr ];
   };
+
+
 }

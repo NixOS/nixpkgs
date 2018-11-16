@@ -1,4 +1,4 @@
-{ config, lib, pkgs, serverInfo, php, ... }:
+{ config, lib, pkgs, serverInfo, ... }:
 # http://codex.wordpress.org/Hardening_WordPress
 
 with lib;

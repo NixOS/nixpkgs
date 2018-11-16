@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitHub, fetchpatch, qmake, qtbase, qttools, subversion, apr }:
+{ stdenv, fetchFromGitHub, qmake, qtbase, qttools, subversion, apr }:
 
 let
-  version = "1.0.11";
+  version = "1.0.13";
 in
 stdenv.mkDerivation {
   name = "svn-all-fast-export-${version}";
@@ -10,17 +10,8 @@ stdenv.mkDerivation {
     owner = "svn-all-fast-export";
     repo = "svn2git";
     rev = version;
-    sha256 = "0lhnw8f15j4wkpswhrjd7bp9xkhbk32zmszaxayzfhbdl0g7pzwj";
+    sha256 = "0f1qj0c4cdq46mz54wcy17g7rq1fy2q0bq3sswhr7r5a2s433x4f";
   };
-
-  # https://github.com/svn-all-fast-export/svn2git/pull/40
-  patches = [
-    (fetchpatch {
-      name = "pr40.patch";
-      sha256 = "1qndhk5csf7kddk3giailx7r0cdipq46lj73nkcws43n4n93synk";
-      url = https://github.com/svn-all-fast-export/svn2git/pull/40.diff;
-    })
-  ];
 
   nativeBuildInputs = [ qmake qttools ];
   buildInputs = [ apr.dev subversion.dev qtbase ];
@@ -30,8 +21,6 @@ stdenv.mkDerivation {
     "APR_INCLUDE=${apr.dev}/include/apr-1"
     "SVN_INCLUDE=${subversion.dev}/include/subversion-1"
   ];
-
-  installPhase = "make install INSTALL_ROOT=$out";
 
   meta = with stdenv.lib; {
     homepage = https://github.com/svn-all-fast-export/svn2git;

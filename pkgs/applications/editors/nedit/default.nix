@@ -28,5 +28,6 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage = https://sourceforge.net/projects/nedit;
     platforms = with platforms; linux ++ darwin;
+    license = licenses.gpl2;
   };
 }

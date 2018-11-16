@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, autoreconfHook, automake, pkgconfig, libxml2 }:
+{ stdenv, fetchgit, autoreconfHook, pkgconfig, libxml2 }:
 
 stdenv.mkDerivation rec {
   name = "evtest-1.33";

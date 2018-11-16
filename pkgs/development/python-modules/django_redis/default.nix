@@ -2,12 +2,11 @@
   mock, django, redis, msgpack }:
 buildPythonPackage rec {
   pname = "django-redis";
-  version = "4.8.0";
-  name = "${pname}-${version}";
+  version = "4.9.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5229da5b07ccb8d3e3e9ee098c0b7c03e20eba48634bc456697dd73d62c68b19";
+    sha256 = "15b47faef6aefaa3f47135a2aeb67372da300e4a4cf06809c66ab392686a2155";
   };
 
   doCheck = false;

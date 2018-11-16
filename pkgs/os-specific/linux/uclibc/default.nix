@@ -1,8 +1,7 @@
-{stdenv, fetchzip, linuxHeaders, libiconvReal, cross ? null, gccCross ? null,
-extraConfig ? ""}:
-
-assert stdenv.isLinux;
-assert cross != null -> gccCross != null;
+{ stdenv, buildPackages
+, fetchurl, linuxHeaders, libiconvReal
+, extraConfig ? ""
+}:
 
 let
   configParser = ''
@@ -28,9 +27,6 @@ let
     }
   '';
 
-  archMakeFlag = if cross != null then "ARCH=${cross.arch}" else "";
-  crossMakeFlag = if cross != null then "CROSS=${cross.config}-" else "";
-
   # UCLIBC_SUSV4_LEGACY defines 'tmpnam', needed for gcc libstdc++ builds.
   nixConfig = ''
     RUNTIME_PREFIX "/"
@@ -43,7 +39,7 @@ let
     UCLIBC_SUSV4_LEGACY y
     UCLIBC_HAS_THREADS_NATIVE y
     KERNEL_HEADERS "${linuxHeaders}/include"
-  '' + stdenv.lib.optionalString (stdenv.isArm && cross == null) ''
+  '' + stdenv.lib.optionalString (stdenv.isAarch32 && stdenv.buildPlatform != stdenv.hostPlatform) ''
     CONFIG_ARM_EABI y
     ARCH_WANTS_BIG_ENDIAN n
     ARCH_BIG_ENDIAN n
@@ -52,29 +48,27 @@ let
     UCLIBC_HAS_FPU n
   '';
 
-  name = "uclibc-0.9.34-pre-20150131";
-  rev = "343f6b8f1f754e397632b0552e4afe586c8b392b";
-
+  version = "1.0.30";
 in
 
 stdenv.mkDerivation {
-  name = name + stdenv.lib.optionalString (cross != null) ("-" + cross.config);
+  name = "uclibc-ng-${version}";
+  inherit version;
 
-  src = fetchzip {
-    name = name + "-source";
-    url = "http://git.uclibc.org/uClibc/snapshot/uClibc-${rev}.tar.bz2";
-    sha256 = "1kgylzpid7da5i7wz7slh5q9rnq1m8bv5h9ilm76g0xwc2iwlhbw";
+  src = fetchurl {
+    url = "https://downloads.uclibc-ng.org/releases/${version}/uClibc-ng-${version}.tar.bz2";
+    # from "${url}.sha256";
+    sha256 = "3e0f057f24882823d697126015aa4d7d48fa2542be3939985cb3c26dcbcab5a8";
   };
 
   # 'ftw' needed to build acl, a coreutils dependency
   configurePhase = ''
-    make defconfig ${archMakeFlag}
+    make defconfig
     ${configParser}
     cat << EOF | parseconfig
     ${nixConfig}
     ${extraConfig}
-    ${if cross != null then stdenv.lib.attrByPath [ "uclibc" "extraConfig" ] "" cross else ""}
-    $extraCrossConfig
+    ${stdenv.hostPlatform.platform.uclibc.extraConfig or ""}
     EOF
     ( set +o pipefail; yes "" | make oldconfig )
   '';
@@ -82,11 +76,16 @@ stdenv.mkDerivation {
   hardeningDisable = [ "stackprotector" ];
 
   # Cross stripping hurts.
-  dontStrip = cross != null;
+  dontStrip = stdenv.hostPlatform != stdenv.buildPlatform;
 
-  makeFlags = [ crossMakeFlag "VERBOSE=1" ];
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
 
-  buildInputs = stdenv.lib.optional (gccCross != null) gccCross;
+  makeFlags = [
+    "ARCH=${stdenv.hostPlatform.parsed.cpu.name}"
+    "VERBOSE=1"
+  ] ++ stdenv.lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    "CROSS=${stdenv.cc.targetPrefix}"
+  ];
 
   # `make libpthread/nptl/sysdeps/unix/sysv/linux/lowlevelrwlock.h`:
   # error: bits/sysnum.h: No such file or directory
@@ -94,7 +93,7 @@ stdenv.mkDerivation {
 
   installPhase = ''
     mkdir -p $out
-    make PREFIX=$out VERBOSE=1 install ${crossMakeFlag}
+    make PREFIX=$out VERBOSE=1 install
     (cd $out/include && ln -s $(ls -d ${linuxHeaders}/include/* | grep -v "scsi$") .)
     # libpthread.so may not exist, so I do || true
     sed -i s@/lib/@$out/lib/@g $out/lib/libc.so $out/lib/libpthread.so || true
@@ -106,10 +105,10 @@ stdenv.mkDerivation {
   };
 
   meta = with stdenv.lib; {
-    homepage = http://www.uclibc.org/;
+    homepage = "https://uclibc-ng.org";
     description = "A small implementation of the C library";
     maintainers = with maintainers; [ rasendubi ];
     license = licenses.lgpl2;
-    platforms = subtractLists ["aarch64-linux"] platforms.linux;
+    platforms = platforms.linux;
   };
 }

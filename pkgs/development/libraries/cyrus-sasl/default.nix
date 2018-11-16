@@ -22,7 +22,8 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./missing-size_t.patch # https://bugzilla.redhat.com/show_bug.cgi?id=906519
-    (fetchpatch { # CVE-2013-4122
+    (fetchpatch {
+      name = "CVE-2013-4122.patch";
       url = "http://sourceforge.net/projects/miscellaneouspa/files/glibc217/cyrus-sasl-2.1.26-glibc217-crypt.diff";
       sha256 = "05l7dh1w9d5fvzg0pjwzqh0fy4ah8y5cv6v67s4ssbq8xwd4pkf2";
     })
@@ -35,15 +36,15 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--with-openssl=${openssl.dev}"
+    "--with-plugindir=${placeholder "out"}/lib/sasl2"
+    "--with-saslauthd=/run/saslauthd"
+    "--enable-login"
+    "--enable-shared"
   ] ++ lib.optional enableLdap "--with-ldap=${openldap.dev}";
 
-  # Set this variable at build-time to make sure $out can be evaluated.
-  preConfigure = ''
-    configureFlagsArray=( --with-plugindir=$out/lib/sasl2
-                          --with-saslauthd=/run/saslauthd
-                          --enable-login
-                        )
-  '';
+  # Avoid triggering regenerating using broken autoconf/libtool bits.
+  # (many distributions carry patches to remove/replace, but this works for now)
+  dontUpdateAutotoolsGnuConfigScripts = if stdenv.hostPlatform.isMusl then true else null;
 
   installFlags = lib.optional stdenv.isDarwin [ "framedir=$(out)/Library/Frameworks/SASL2.framework" ];
 
@@ -54,8 +55,9 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = http://cyrusimap.web.cmu.edu/;
+    homepage = https://www.cyrusimap.org/sasl;
     description = "Library for adding authentication support to connection-based protocols";
     platforms = platforms.unix;
+    license = licenses.bsdOriginal;
   };
 }

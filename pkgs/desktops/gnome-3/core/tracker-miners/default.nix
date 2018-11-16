@@ -1,45 +1,106 @@
-{ stdenv, intltool, fetchurl, libxml2, upower
-, pkgconfig, gtk3, glib
-, bash, wrapGAppsHook, itstool, vala, sqlite, libxslt
-, gnome3, librsvg, gdk_pixbuf, libnotify
-, evolution_data_server, gst_all_1, poppler
-, icu, taglib, libjpeg, libtiff, giflib, libcue
-, libvorbis, flac, exempi, networkmanager
-, libpng, libexif, libgsf, libuuid, bzip2
-, libsoup, json_glib, libseccomp
-, libiptcdata }:
+{ stdenv, fetchurl, substituteAll, intltool, itstool, libxslt
+, meson, ninja, pkgconfig, vala, wrapGAppsHook, bzip2, dbus, evolution-data-server
+, exempi, flac, giflib, glib, gnome3, gst_all_1, icu, json-glib, libcue, libexif
+, libgrss, libgsf, libiptcdata, libjpeg, libpng, libseccomp, libsoup, libtiff, libuuid
+, libvorbis, libxml2, poppler, taglib, upower }:
 
-stdenv.mkDerivation rec {
-  inherit (import ./src.nix fetchurl) name src;
+let
+  pname = "tracker-miners";
+in stdenv.mkDerivation rec {
+  name = "${pname}-${version}";
+  version = "2.1.3";
 
-  NIX_CFLAGS_COMPILE = "-I${poppler.dev}/include/poppler";
+  src = fetchurl {
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    sha256 = "10j6iifq0ccnqckdx7fqlrfifbvs08jbczgxajldz26057kwp8fz";
+  };
 
-  enableParallelBuilding = true;
-
-  nativeBuildInputs = [ vala pkgconfig intltool itstool libxslt wrapGAppsHook ];
-  # TODO: add libgrss, libenca
-  buildInputs = [
-    bzip2 evolution_data_server exempi flac giflib glib gnome3.totem-pl-parser
-    gnome3.tracker gst_all_1.gst-plugins-base gst_all_1.gstreamer icu
-    json_glib libcue libexif libgsf libiptcdata libjpeg libpng libseccomp libsoup
-    libtiff libuuid libvorbis libxml2 poppler taglib upower
+  nativeBuildInputs = [
+    intltool
+    itstool
+    libxslt
+    meson
+    ninja
+    pkgconfig
+    vala
+    wrapGAppsHook
   ];
 
-  LANG = "en_US.UTF-8"; # for running tests
+  # TODO: add libenca, libosinfo
+  buildInputs = [
+    bzip2
+    dbus
+    evolution-data-server
+    exempi
+    flac
+    giflib
+    glib
+    gnome3.gexiv2
+    gnome3.totem-pl-parser
+    gnome3.tracker
+    gst_all_1.gst-plugins-base
+    gst_all_1.gstreamer
+    icu
+    json-glib
+    libcue
+    libexif
+    libgrss
+    libgsf
+    libiptcdata
+    libjpeg
+    libpng
+    libseccomp
+    libsoup
+    libtiff
+    libuuid
+    libvorbis
+    libxml2
+    poppler
+    taglib
+    upower
+  ];
 
-  doCheck = true;
+  mesonFlags = [
+    # TODO: tests do not like our sandbox
+    "-Dfunctional_tests=false"
+  ];
 
-  postPatch = ''
-    substituteInPlace src/libtracker-common/tracker-domain-ontology.c --replace \
-      'SHAREDIR, "tracker", "domain-ontologies"' \
-      '"${gnome3.tracker}/share", "tracker", "domain-ontologies"'
+  patches = [
+    (substituteAll {
+      src = ./fix-paths.patch;
+      inherit (gnome3) tracker;
+    })
+    # https://bugzilla.gnome.org/show_bug.cgi?id=795576
+    (fetchurl {
+      url = https://bugzilla.gnome.org/attachment.cgi?id=371427;
+      sha256 = "187flswvzymjfxwfrrhizb1cvs780zm39aa3i2vwa5fbllr7kcpf";
+    })
+  ];
+
+  # Symlinks require absolute path and we still cannot use placeholders
+  # https://github.com/NixOS/nixpkgs/pull/39534#discussion_r184339131
+  # https://github.com/NixOS/nixpkgs/pull/37693
+  preConfigure = ''
+    mesonFlagsArray+=("-Ddbus_services=$out/share/dbus-1/services")
   '';
+
+  postInstall = ''
+    glib-compile-schemas "$out/share/glib-2.0/schemas"
+  '';
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+      attrPath = "gnome3.${pname}";
+      versionPolicy = "none";
+    };
+  };
 
   meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/Projects/Tracker;
     description = "Desktop-neutral user information store, search tool and indexer";
     maintainers = gnome3.maintainers;
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
   };
 }

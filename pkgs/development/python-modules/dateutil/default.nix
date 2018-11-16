@@ -1,15 +1,14 @@
-{ stdenv, buildPythonPackage, fetchPypi, six }:
+{ stdenv, buildPythonPackage, fetchPypi, six, setuptools_scm }:
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "python-dateutil";
-  version = "2.6.1";
+  version = "2.7.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1jkahssf0ir5ssxc3ydbp8cpv77limn8d4s77szb2nrgl2r3h749";
+    sha256 = "e27001de32f627c22380a688bcc43ce83504a7bc5da472209b4c70f02829f0b8";
   };
 
-  propagatedBuildInputs = [ six ];
+  propagatedBuildInputs = [ six setuptools_scm ];
 
   meta = with stdenv.lib; {
     description = "Powerful extensions to the standard datetime module";

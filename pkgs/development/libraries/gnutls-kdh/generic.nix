@@ -1,6 +1,6 @@
-{ lib, fetchurl, stdenv, zlib, lzo, libtasn1, nettle, pkgconfig, lzip
-, guileBindings, guile, perl, gmp, autogen, libidn, p11_kit, unbound, libiconv
-, tpmSupport ? true, trousers, nettools, bash, gperftools, gperf, gettext, automake
+{ lib, stdenv, zlib, lzo, libtasn1, nettle, pkgconfig, lzip
+, guileBindings, guile, perl, gmp, autogen, libidn, p11-kit, unbound, libiconv
+, tpmSupport ? true, trousers, nettools, gperftools, gperf, gettext, automake
 , yacc, texinfo
 
 # Version dependent args
@@ -52,7 +52,7 @@ stdenv.mkDerivation {
   # systemkey-args.h.
   enableParallelBuilding = false;
 
-  buildInputs = [ lzo lzip nettle libtasn1 libidn p11_kit zlib gmp
+  buildInputs = [ lzo lzip nettle libtasn1 libidn p11-kit zlib gmp
   autogen gperftools gperf gettext automake yacc texinfo ]
     ++ lib.optional doCheck nettools
     ++ lib.optional (stdenv.isFreeBSD || stdenv.isDarwin) libiconv

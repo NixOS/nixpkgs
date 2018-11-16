@@ -10,7 +10,7 @@ rec {
   simple framework for user-defined handlers and can be extended
   through subclassing.'';
 
-  deps = [ args."alexandria" args."babel" args."bordeaux-threads" args."cffi" args."chunga" args."cl+ssl" args."cl-base64" args."cl-fad" args."cl-ppcre" args."cl-who" args."cxml-stp" args."drakma" args."flexi-streams" args."md5" args."rfc2388" args."split-sequence" args."swank" args."trivial-backtrace" args."trivial-features" args."trivial-garbage" args."trivial-gray-streams" args."usocket" args."xpath" ];
+  deps = [ args."alexandria" args."babel" args."bordeaux-threads" args."cffi" args."chunga" args."cl_plus_ssl" args."cl-base64" args."cl-fad" args."cl-ppcre" args."cl-who" args."cxml-stp" args."drakma" args."flexi-streams" args."md5" args."rfc2388" args."split-sequence" args."swank" args."trivial-backtrace" args."trivial-features" args."trivial-garbage" args."trivial-gray-streams" args."usocket" args."xpath" ];
 
   src = fetchurl {
     url = ''http://beta.quicklisp.org/archive/hunchentoot/2017-12-27/hunchentoot-v1.2.38.tgz'';
@@ -34,7 +34,7 @@ rec {
     ((NAME alexandria FILENAME alexandria) (NAME babel FILENAME babel)
      (NAME bordeaux-threads FILENAME bordeaux-threads)
      (NAME cffi FILENAME cffi) (NAME chunga FILENAME chunga)
-     (NAME cl+ssl FILENAME cl+ssl) (NAME cl-base64 FILENAME cl-base64)
+     (NAME cl+ssl FILENAME cl_plus_ssl) (NAME cl-base64 FILENAME cl-base64)
      (NAME cl-fad FILENAME cl-fad) (NAME cl-ppcre FILENAME cl-ppcre)
      (NAME cl-who FILENAME cl-who) (NAME cxml-stp FILENAME cxml-stp)
      (NAME drakma FILENAME drakma) (NAME flexi-streams FILENAME flexi-streams)

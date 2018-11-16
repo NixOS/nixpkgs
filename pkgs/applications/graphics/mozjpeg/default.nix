@@ -1,19 +1,17 @@
-{ stdenv, fetchurl, file, pkgconfig, libpng, nasm }:
+{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, libpng, nasm }:
 
 stdenv.mkDerivation rec {
-  version = "3.2";
+  version = "3.3.1";
   name = "mozjpeg-${version}";
 
-  src = fetchurl {
-    url = "https://github.com/mozilla/mozjpeg/releases/download/v${version}/mozjpeg-${version}-release-source.tar.gz";
-    sha256 = "0wvv5qh1jasz8apq93c3j9d5wd22j7lld9dr06p76yj4mpnc3v4a";
+  src = fetchFromGitHub {
+    owner = "mozilla";
+    repo = "mozjpeg";
+    rev = "v${version}";
+    sha256 = "1na68860asn8b82ny5ilwbhh4nyl9gvx2yxmm4wr2v1v95v51fky";
   };
 
-  postPatch = ''
-    sed -i -e "s!/usr/bin/file!${file}/bin/file!g" configure
-  '';
-
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
   buildInputs = [ libpng nasm ];
 
   meta = {

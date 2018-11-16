@@ -1,30 +1,30 @@
 { stdenv, lib, fetchFromGitHub, cmake, libetpan, icu, cyrus_sasl, libctemplate
-, libuchardet, pkgconfig, glib, libtidy, libxml2, libuuid, openssl
+, libuchardet, pkgconfig, glib, html-tidy, libxml2, libuuid, openssl
 }:
 
 stdenv.mkDerivation rec {
   name = "mailcore2-${version}";
 
-  version = "0.5.1";
+  version = "0.6.2";
 
   src = fetchFromGitHub {
     owner  = "MailCore";
     repo   = "mailcore2";
     rev    = version;
-    sha256 = "1k0l59cdk8np4pff1my07dp7ivf3nchlhcpvm9xizp0my9rqgbxb";
+    sha256 = "1d0wmnkk9vnjqc28i79z3fwaaycdbprfspagik4mzdkgval5r5pm";
   };
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
     libetpan cmake icu cyrus_sasl libctemplate libuchardet glib
-    libtidy libxml2 libuuid openssl
+    html-tidy libxml2 libuuid openssl
   ];
 
   postPatch = ''
     substituteInPlace CMakeLists.txt \
        --replace " icule iculx" "" \
        --replace "tidy/tidy.h" "tidy.h" \
-       --replace "/usr/include/tidy" "${libtidy}/include" \
+       --replace "/usr/include/tidy" "${html-tidy}/include" \
        --replace "/usr/include/libxml2" "${libxml2.dev}/include/libxml2"
     substituteInPlace src/core/basetypes/MCHTMLCleaner.cpp \
       --replace buffio.h tidybuffio.h

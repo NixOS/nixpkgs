@@ -4,7 +4,6 @@
 buildPythonPackage rec {
   version = "0.10.4";
   pname = "pyFFTW";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

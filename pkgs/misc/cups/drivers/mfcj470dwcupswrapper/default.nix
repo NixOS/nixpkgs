@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "3.0.0-1";
 
   src = fetchurl {
-    url = "http://download.brother.com/welcome/dlf006866/mfcj470dw_cupswrapper_GPL_source_${version}.tar.gz";
+    url = "https://download.brother.com/welcome/dlf006866/mfcj470dw_cupswrapper_GPL_source_${version}.tar.gz";
     sha256 = "b88f9b592723a00c024129560367f40a560ca3cba06fd99512ab368dd6855853";
   };
 

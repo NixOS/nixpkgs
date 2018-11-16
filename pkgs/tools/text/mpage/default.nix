@@ -1,10 +1,10 @@
 { fetchurl, stdenv }:
 
 stdenv.mkDerivation rec {
-  name = "mpage-2.5.6";
+  name = "mpage-2.5.7";
   src = fetchurl {
     url = "http://www.mesa.nl/pub/mpage/${name}.tgz";
-    sha256 = "016w9sm06sn1d2lim4p8fzl6wbmad3wigxhflsybzi7p4zy6vrjg";
+    sha256 = "1zn37r5xrvjgjbw2bdkc0r7s6q8b1krmcryzj0yf0dyxbx79rasi";
   };
 
   patchPhase = ''

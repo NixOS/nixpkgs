@@ -1,10 +1,10 @@
 { stdenv, fetchurl, postgresql, makeWrapper }:
 stdenv.mkDerivation rec {
   name = "ephemeralpg-${version}";
-  version = "2.2";
+  version = "2.5";
   src = fetchurl {
     url = "http://ephemeralpg.org/code/${name}.tar.gz";
-    sha256 = "1v48bcmc23zzqbha80p3spxd5l347qnjzs4z44wl80i2s8fdzlyz";
+    sha256 = "004fcll7248h73adkqawn9bhkqj9wsxyi3w99x64f7s37r2518wk";
   };
   buildInputs = [ makeWrapper ];
   installPhase = ''

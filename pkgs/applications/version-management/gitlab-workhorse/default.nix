@@ -1,33 +1,27 @@
 { stdenv, fetchFromGitLab, git, go }:
 
 stdenv.mkDerivation rec {
-  version = "3.3.1";
   name = "gitlab-workhorse-${version}";
+
+  version = "7.0.0";
 
   srcs = fetchFromGitLab {
     owner = "gitlab-org";
     repo = "gitlab-workhorse";
     rev = "v${version}";
-    sha256 = "19x9ryp99xygj39kq2r756rahh9mxp6j83hxvv09y33vgz64y8xh";
+    sha256 = "1mmfb7h5sbva2kv9h9cxfg7dyksxrwwikq7jwggfawqaadzwm677";
   };
 
   buildInputs = [ git go ];
 
-  patches = [ ./remove-hardcoded-paths.patch ];
+  patches = [ ./remove-hardcoded-paths.patch ./deterministic-build.patch ];
 
-  buildPhase = ''
-    make PREFIX=$out
-  '';
-
-  installPhase = ''
-    mkdir -p $out/bin
-    make install PREFIX=$out
-  '';
+  makeFlags = [ "PREFIX=$(out)" "VERSION=${version}" ];
 
   meta = with stdenv.lib; {
     homepage = http://www.gitlab.com/;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ fpletz ];
+    maintainers = with maintainers; [ fpletz globin ];
     license = licenses.mit;
   };
 }

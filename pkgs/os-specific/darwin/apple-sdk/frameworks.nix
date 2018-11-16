@@ -14,7 +14,6 @@ with frameworks; with libs; {
   AppKitScripting         = [];
   AppleScriptKit          = [];
   AppleScriptObjC         = [];
-  AppleShareClientCore    = [ CoreServices ];
   AudioToolbox            = [ AudioUnit CoreAudio CF CoreMIDI ];
   AudioUnit               = [ Carbon CoreAudio CF ];
   AudioVideoBridging      = [ Foundation ];
@@ -35,7 +34,7 @@ with frameworks; with libs; {
   CoreMIDIServer          = [];
   CoreMedia               = [ ApplicationServices AudioToolbox CoreAudio CF CoreGraphics CoreVideo ];
   CoreMediaIO             = [ CF CoreMedia ];
-  CoreText                = [ CF CoreGraphics cf-private ];
+  CoreText                = [ CF CoreGraphics ];
   CoreVideo               = [ ApplicationServices CF CoreGraphics IOSurface OpenGL ];
   CoreWLAN                = [ SecurityFoundation ];
   DVComponentGlue         = [ CoreServices QuickTime ];
@@ -49,8 +48,7 @@ with frameworks; with libs; {
   ExceptionHandling       = [];
   FWAUserLib              = [];
   ForceFeedback           = [ CF IOKit ];
-  # cf-private was moved first in list because of https://github.com/NixOS/nixpkgs/pull/28635
-  Foundation              = [ cf-private CF libobjc Security ApplicationServices SystemConfiguration ];
+  Foundation              = [ CF libobjc Security ApplicationServices SystemConfiguration ];
   GLKit                   = [ CF ];
   GLUT                    = [ OpenGL ];
   GSS                     = [];
@@ -84,12 +82,9 @@ with frameworks; with libs; {
   PCSC                    = [ CoreData ];
   PreferencePanes         = [];
   PubSub                  = [];
-  Python                  = [ ApplicationServices ];
   QTKit                   = [ CoreMediaIO CoreMedia MediaToolbox QuickTime VideoToolbox ];
   QuickLook               = [ ApplicationServices CF ];
   QuickTime               = [ ApplicationServices AudioUnit Carbon CoreAudio CoreServices OpenGL QuartzCore ];
-  Ruby                    = [];
-  RubyCocoa               = [];
   SceneKit                = [];
   ScreenSaver             = [];
   Scripting               = [];
@@ -105,11 +100,9 @@ with frameworks; with libs; {
   SystemConfiguration     = [ CF Security ];
   TWAIN                   = [ Carbon ];
   Tcl                     = [];
-  Tk                      = [ ApplicationServices Carbon X11 ];
   VideoDecodeAcceleration = [ CF CoreVideo ];
   VideoToolbox            = [ CF CoreMedia CoreVideo ];
   WebKit                  = [ ApplicationServices Carbon JavaScriptCore OpenGL ];
-  X11                     = []; # used by Tk, should this exist?
 
   # Umbrellas
   Accelerate          = [ CoreWLAN IOBluetooth ];

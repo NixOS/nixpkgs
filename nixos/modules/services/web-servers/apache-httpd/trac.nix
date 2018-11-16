@@ -12,8 +12,6 @@ let
     apacheHttpd = httpd;
   };
 
-  pythonLib = p: "${p}/";
-
   httpd = serverInfo.serverConfig.package;
 
   versionPre24 = versionOlder httpd.version "2.4";

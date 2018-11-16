@@ -1,8 +1,8 @@
-{ stdenv, lib, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   name = "restic-${version}";
-  version = "0.8.2";
+  version = "0.9.2";
 
   goPackagePath = "github.com/restic/restic";
 
@@ -10,7 +10,7 @@ buildGoPackage rec {
     owner = "restic";
     repo = "restic";
     rev = "v${version}";
-    sha256 = "1prk8r0kmcscj79fc53a0qjvik6ygjr50xwnahs0amlyh03pyb46";
+    sha256 = "0kl8yk636i3y7f2kd43pydjh4pv7hhq09p5k54jlysnrbf2kjb4h";
   };
 
   buildPhase = ''
@@ -27,12 +27,12 @@ buildGoPackage rec {
     cp restic $bin/bin/
     $bin/bin/restic generate \
       --bash-completion $bin/etc/bash_completion.d/restic.sh \
-      --zsh-completion $bin/share/zsh/vendor-completions/restic.sh \
+      --zsh-completion $bin/share/zsh/vendor-completions/_restic \
       --man $bin/share/man/man1
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://restic.github.io;
+  meta = with lib; {
+    homepage = https://restic.net;
     description = "A backup program that is fast, efficient and secure";
     platforms = platforms.linux ++ platforms.darwin;
     license = licenses.bsd2;

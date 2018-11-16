@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, pkgconfig, intltool, gtk3, dbus_glib, libXScrnSaver, libnotify, pam, systemd, mate, wrapGAppsHook }:
+{ stdenv, fetchurl, pkgconfig, intltool, gtk3, dbus-glib, libXScrnSaver, libnotify, pam, systemd, mate, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   name = "mate-screensaver-${version}";
-  version = "1.20.0";
+  version = "1.21.0";
 
   src = fetchurl {
     url = "http://pub.mate-desktop.org/releases/${mate.getRelease version}/${name}.tar.xz";
-    sha256 = "1698608m6kf4dn91xdwy7l809yagz02h1k594smj75wvnhr7x4k9";
+    sha256 = "1asfw2x0ha830ilkw97bjdqm2gnjbpb6dd7lb6h43aix7g3lgm7f";
   };
 
   nativeBuildInputs = [
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     gtk3
-    dbus_glib
+    dbus-glib
     libXScrnSaver
     libnotify
     pam
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     mate.mate-menus
   ];
 
-  configureFlags = "--without-console-kit";
+  configureFlags = [ "--without-console-kit" ];
 
   makeFlags = "DBUS_SESSION_SERVICE_DIR=$(out)/etc";
 

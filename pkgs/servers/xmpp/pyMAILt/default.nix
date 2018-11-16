@@ -32,8 +32,9 @@ stdenv.mkDerivation rec {
     wrapPythonPrograms
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Email transport module for XMPP";
-    platforms = stdenv.lib.platforms.unix;
+    platforms = platforms.unix;
+    license = licenses.gpl2;
   };
 }

@@ -3,7 +3,7 @@
 }:
 
 let
-  version = "3.4.0";
+  version = "3.5.0";
 in stdenv.mkDerivation rec {
   name = "liblouis-${version}";
 
@@ -11,7 +11,7 @@ in stdenv.mkDerivation rec {
     owner = "liblouis";
     repo = "liblouis";
     rev = "v${version}";
-    sha256 = "1b3vf6sq2iffdvj0r2q5g5k198camy3sq2nwfz391brpwivsnayh";
+    sha256 = "0klmyh6cg9khv59j4xdsrwwjzdgylw689gvrjiy5jsvqll58fcsd";
   };
 
   outputs = [ "out" "dev" "man" "info" "doc" ];
@@ -50,6 +50,7 @@ in stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Open-source braille translator and back-translator";
     homepage = http://liblouis.org/;
+    broken = true;
     license = licenses.lgpl21;
     maintainers = with maintainers; [ jtojnar ];
     platforms = platforms.unix;

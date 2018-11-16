@@ -1,13 +1,13 @@
 { stdenv, buildPythonPackage, fetchPypi
-, mock, manuel, pytest, sybil, zope_component, django }:
+, mock, manuel, pytest, sybil, zope_component }:
 
 buildPythonPackage rec {
   pname = "testfixtures";
-  version = "5.4.0";
+  version = "6.2.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "338aed9695c432b7c9b8a271dabb521e3e7e2c96b11f7b4e60552f1c8408a8f0";
+    sha256 = "7e4df89a8bf8b8905464160f08aff131a36f0b33654fe4f9e4387afe546eae25";
   };
 
   checkInputs = [ mock manuel pytest sybil zope_component ];

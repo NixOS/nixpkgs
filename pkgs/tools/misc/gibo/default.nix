@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "gibo-${version}";
-  version = "1.0.4";
+  version = "1.0.6";
 
   src = fetchFromGitHub {
     owner = "simonwhitaker";
     repo = "gibo";
     rev = version;
-    sha256 = "1vzchggxv660c1cj5v0hlmln7yda48wjy2cv0qwi619cmr5hwbgh";
+    sha256 = "07j3sv9ar9l074krajw8nfmsfmdp836irsbd053dbqk2v880gfm6";
   };
 
   phases = [ "unpackPhase" "installPhase" "fixupPhase" ];

@@ -4,8 +4,7 @@
 
 buildPythonPackage rec {
   pname = "aioamqp";
-  name = "${pname}-${version}";
-  version = "0.10.0";
+  version = "0.11.0";
 
   meta = {
     homepage = https://github.com/polyconseil/aioamqp;
@@ -15,7 +14,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0132921yy31ijb8w439zcz1gla4hiws4hx8zf6la4hjr01nsy666";
+    sha256 = "7f1eb9e0f1b7c7e21a3a6ca498c3daafdfc3e95b4a1a0633fd8d6ba2dfcab777";
   };
 
   buildInputs = lib.optionals isPy33 [ asyncio ];

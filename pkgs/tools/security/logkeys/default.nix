@@ -1,13 +1,14 @@
-{ stdenv, fetchgit, autoconf, automake, which, procps, kbd }:
+{ stdenv, fetchFromGitHub, autoconf, automake, which, procps, kbd }:
 
 stdenv.mkDerivation rec {
   name = "logkeys-${version}";
-  version = "2017-10-10";
+  version = "2018-01-22";
 
-  src = fetchgit {
-    url = https://github.com/kernc/logkeys;
-    rev = "5c368327a2cd818efaed4794633c260b90b87abf";
-    sha256 = "0akj7j775y9c0p53zq5v12jk3fy030fpdvn5m1x9w4rdj47vxdpg";
+  src = fetchFromGitHub {
+    owner = "kernc";
+    repo = "logkeys";
+    rev = "7a9f19fb6b152d9f00a0b3fe29ab266ff1f88129";
+    sha256 = "1k6kj0913imwh53lh6hrhqmrpygqg2h462raafjsn7gbd3vkgx8n";
   };
 
   buildInputs = [ autoconf automake which procps kbd ];

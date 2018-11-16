@@ -1,16 +1,14 @@
 { stdenv, fetchFromGitHub, openssl, libevent }:
 
-let inherit (stdenv.lib) optional; in
-
 stdenv.mkDerivation rec {
   name = "coturn-${version}";
-  version = "4.5.0.6";
+  version = "4.5.0.8";
 
   src = fetchFromGitHub {
     owner = "coturn";
     repo = "coturn";
     rev = "${version}";
-    sha256 = "084c3zgwmmz4s6211i5jbkzsn13703lsg7vhc2cpacazq4sgsrhb";
+    sha256 = "1l2q76lzv2gff832wrqd9dcilyaqx91pixyz335822ypra89mdp8";
   };
 
   buildInputs = [ openssl libevent ];
@@ -22,6 +20,7 @@ stdenv.mkDerivation rec {
     license = with licenses; [ bsd3 ];
     description = "A TURN server";
     platforms = platforms.all;
+    broken = stdenv.isDarwin; # 2018-10-21
     maintainers = [ maintainers.ralith ];
   };
 }

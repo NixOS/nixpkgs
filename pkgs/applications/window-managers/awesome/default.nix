@@ -4,7 +4,7 @@
 , compton, procps, iproute, coreutils, curl, alsaUtils, findutils, xterm
 , which, dbus, nettools, git, asciidoc, doxygen
 , xmlto, docbook_xml_dtd_45, docbook_xsl, findXMLCatalogs
-, libxkbcommon, xcbutilxrm, hicolor_icon_theme
+, libxkbcommon, xcbutilxrm, hicolor-icon-theme
 }:
 
 with luaPackages; stdenv.mkDerivation rec {
@@ -29,7 +29,7 @@ with luaPackages; stdenv.mkDerivation rec {
     docbook_xsl findXMLCatalogs
   ];
 
-  propagatedUserEnvPkgs = [ hicolor_icon_theme ];
+  propagatedUserEnvPkgs = [ hicolor-icon-theme ];
   buildInputs = [ cairo librsvg dbus gdk_pixbuf gobjectIntrospection
                   git lgi libpthreadstubs libstartup_notification
                   libxdg_basedir lua nettools pango xcb-util-cursor

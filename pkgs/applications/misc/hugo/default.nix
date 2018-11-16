@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   name = "hugo-${version}";
-  version = "0.36.1";
+  version = "0.50";
 
   goPackagePath = "github.com/gohugoio/hugo";
 
@@ -10,10 +10,16 @@ buildGoPackage rec {
     owner  = "gohugoio";
     repo   = "hugo";
     rev    = "v${version}";
-    sha256 = "179lzkd6f81rssgcwlngx2mhr9nvbj0rsh6yjbf1fsrpxfzr2q9z";
+    sha256 = "1shrw7pxwrz9g5x9bq6k5qvhn3fqmwznadpw7i07msh97p8b3dyn";
   };
 
   goDeps = ./deps.nix;
+
+  buildFlags = "-tags extended";
+
+  postInstall = ''
+    rm $bin/bin/generate
+  '';
 
   meta = with stdenv.lib; {
     description = "A fast and modern static website engine.";

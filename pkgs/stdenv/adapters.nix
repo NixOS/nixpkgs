@@ -34,9 +34,9 @@ rec {
   makeStaticBinaries = stdenv: stdenv //
     { mkDerivation = args: stdenv.mkDerivation (args // {
         NIX_CFLAGS_LINK = "-static";
-        configureFlags =
-          toString args.configureFlags or ""
-          + " --disable-shared"; # brrr...
+        configureFlags = (args.configureFlags or []) ++ [
+            "--disable-shared" # brrr...
+          ];
       });
       isStatic = true;
     };
@@ -47,60 +47,12 @@ rec {
   makeStaticLibraries = stdenv: stdenv //
     { mkDerivation = args: stdenv.mkDerivation (args // {
         dontDisableStatic = true;
-        configureFlags =
-          toString args.configureFlags or ""
-          + " --enable-static --disable-shared";
+        configureFlags = (args.configureFlags or []) ++ [
+          "--enable-static"
+          "--disable-shared"
+        ];
       });
     };
-
-
-  # Return a modified stdenv that adds a cross compiler to the
-  # builds.
-  makeStdenvCross = { stdenv
-                    , cc
-                    , buildPlatform, hostPlatform, targetPlatform
-                    , # Prior overrides are surely not valid as packages built
-                      # with this run on a different platform, so disable by
-                      # default.
-                      overrides ? _: _: {}
-                    } @ overrideArgs: let
-    stdenv = overrideArgs.stdenv.override {
-      inherit
-        buildPlatform hostPlatform targetPlatform
-        cc overrides;
-
-      allowedRequisites = null;
-      extraBuildInputs = [ ]; # Old ones run on wrong platform
-    };
-  in stdenv // {
-    mkDerivation =
-      { nativeBuildInputs ? []
-      , selfNativeBuildInput ? args.crossAttrs.selfNativeBuildInput or false
-      , ...
-      } @ args:
-
-      let
-        # *BuildInputs exists temporarily as another name for
-        # *HostInputs.
-
-        # The base stdenv already knows that nativeBuildInputs and
-        # buildInputs should be built with the usual gcc-wrapper
-        # And the same for propagatedBuildInputs.
-        nativeDrv = stdenv.mkDerivation args;
-      in
-        stdenv.mkDerivation (args // {
-          nativeBuildInputs = nativeBuildInputs
-            ++ stdenv.lib.optional selfNativeBuildInput nativeDrv
-              # without proper `file` command, libtool sometimes fails
-              # to recognize 64-bit DLLs
-            ++ stdenv.lib.optional (hostPlatform.config == "x86_64-w64-mingw32") pkgs.file
-            ++ stdenv.lib.optional (hostPlatform.isAarch64 || hostPlatform.libc == "musl") pkgs.updateAutotoolsGnuConfigScriptsHook
-            ;
-
-          crossConfig = hostPlatform.config;
-        } // args.crossAttrs or {});
-  };
-
 
   /* Modify a stdenv so that the specified attributes are added to
      every derivation returned by its mkDerivation function.
@@ -217,6 +169,21 @@ rec {
   useGoldLinker = stdenv: stdenv //
     { mkDerivation = args: stdenv.mkDerivation (args // {
         NIX_CFLAGS_LINK = toString (args.NIX_CFLAGS_LINK or "") + " -fuse-ld=gold";
+      });
+    };
+
+
+  /* Modify a stdenv so that it builds binaries optimized specifically
+     for the machine they are built on.
+
+     WARNING: this breaks purity! */
+  impureUseNativeOptimizations = stdenv: stdenv //
+    { mkDerivation = args: stdenv.mkDerivation (args // {
+        NIX_CFLAGS_COMPILE = toString (args.NIX_CFLAGS_COMPILE or "") + " -march=native";
+        NIX_ENFORCE_NO_NATIVE = false;
+
+        preferLocalBuild = true;
+        allowSubstitutes = false;
       });
     };
 }

@@ -1,14 +1,15 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig
-, zlib, bzip2, libiconv, libxml2, openssl, ncurses, curl, libmilter, pcre
+{ stdenv, fetchurl, pkgconfig
+, zlib, bzip2, libiconv, libxml2, openssl, ncurses, curl, libmilter, pcre2
+, libmspack, systemd
 }:
 
 stdenv.mkDerivation rec {
   name = "clamav-${version}";
-  version = "0.99.3";
+  version = "0.100.2";
 
   src = fetchurl {
     url = "https://www.clamav.net/downloads/production/${name}.tar.gz";
-    sha256 = "114f7qk3h0klgm0zzn2394n5spcn91vjc9mq6m03l2p0ls955yh0";
+    sha256 = "1mkd41sxbjkfjinpx5b9kb85q529gj2s3d0klysssqhysh64ybja";
   };
 
   # don't install sample config files into the absolute sysconfdir folder
@@ -18,18 +19,20 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    zlib bzip2 libxml2 openssl ncurses curl libiconv libmilter pcre
+    zlib bzip2 libxml2 openssl ncurses curl libiconv libmilter pcre2 libmspack
+    systemd
   ];
 
-  patches = [ ./fd-leak.patch ];
-
   configureFlags = [
+    "--libdir=$(out)/lib"
     "--sysconfdir=/etc/clamav"
+    "--with-systemdsystemunitdir=$(out)/lib/systemd"
     "--disable-llvm" # enabling breaks the build at the moment
     "--with-zlib=${zlib.dev}"
     "--with-xml=${libxml2.dev}"
     "--with-openssl=${openssl.dev}"
     "--with-libcurl=${curl.dev}"
+    "--with-system-libmspack"
     "--enable-milter"
   ];
 
@@ -39,7 +42,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://www.clamav.net;
+    homepage = https://www.clamav.net;
     description = "Antivirus engine designed for detecting Trojans, viruses, malware and other malicious threats";
     license = licenses.gpl2;
     maintainers = with maintainers; [ phreedom robberer qknight fpletz ];

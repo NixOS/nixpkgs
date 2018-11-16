@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "pytzdata";
-  version = "2018.3";
+  version = "2018.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4e2cceb54335cd6c28caea46b15cd592e2aec5e8b05b0241cbccfb1b23c02ae7";
+    sha256 = "e4ef42e82b0b493c5849eed98b5ab49d6767caf982127e9a33167f1153b36cc5";
   };
 
   # No tests

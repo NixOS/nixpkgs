@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "1.0.2";
-  name = "varnish-geoip-${version}";
+  name = "${varnish.name}-geoip-${version}";
 
   src = fetchFromGitHub {
     owner = "varnish";

@@ -3,7 +3,7 @@
 let
 xmonadEnv = ghcWithPackages (self: [ self.xmonad ] ++ packages self);
 in stdenv.mkDerivation {
-  name = "xmonad-with-packages";
+  name = "xmonad-with-packages-${xmonadEnv.version}";
 
   nativeBuildInputs = [ makeWrapper ];
 

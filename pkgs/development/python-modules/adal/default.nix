@@ -3,12 +3,11 @@
 
 buildPythonPackage rec {
   pname = "adal";
-  version = "0.5.0";
-  name = "${pname}-${version}";
+  version = "1.2.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "120821f72ca9d59a7c7197fc14d0e27448ff8d331fae230f92d713b9b5c721f7";
+    sha256 = "1hgm62wil1avc3h0dwbks2v6l19xfsjl3azai16llsyp70y92lms";
   };
 
   propagatedBuildInputs =  [ requests pyjwt dateutil ];

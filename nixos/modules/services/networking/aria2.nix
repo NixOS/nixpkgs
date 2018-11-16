@@ -92,7 +92,7 @@ in
       allowedTCPPorts = [ config.services.aria2.rpcListenPort ];
     };
 
-    users.extraUsers.aria2 = {
+    users.users.aria2 = {
       group = "aria2";
       uid = config.ids.uids.aria2;
       description = "aria2 user";
@@ -100,7 +100,7 @@ in
       createHome = false;
     };
 
-    users.extraGroups.aria2.gid = config.ids.gids.aria2;
+    users.groups.aria2.gid = config.ids.gids.aria2;
 
     systemd.services.aria2 = {
       description = "aria2 Service";

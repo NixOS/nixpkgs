@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig, gnum4 }:
+{ stdenv, fetchurl, pkgconfig, gnum4 }:
 let
   ver_maj = "2.10"; # odd major numbers are unstable
   ver_min = "0";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = with stdenv.lib; {
-    homepage = http://libsigc.sourceforge.net/;
+    homepage = https://libsigcplusplus.github.io/libsigcplusplus/;
     description = "A typesafe callback system for standard C++";
     license = licenses.lgpl21;
     platforms = platforms.all;

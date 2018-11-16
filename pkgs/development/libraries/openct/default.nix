@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/OpenSC/openct/;
     license = licenses.lgpl21;
     description = "Drivers for several smart card readers";
-    maintainers = with maintainers; [ viric wkennington ];
+    maintainers = with maintainers; [ wkennington ];
     platforms = platforms.all;
   };
 }

@@ -4,14 +4,14 @@
 
 stdenv.mkDerivation rec {
   name = "netsniff-ng-${version}";
-  version = "0.6.3";
+  version = "0.6.5";
 
   # Upstream recommends and supports git
   src = fetchFromGitHub rec {
     repo = "netsniff-ng";
     owner = repo;
     rev = "v${version}";
-    sha256 = "0g3105c5ha897bpwsnrp72gx4n61gspxmld594i37g8k7vwzny4l";
+    sha256 = "0bcbdiik69g6jnravkkid8gxw2akg01i372msc5x1w9fh9wh2phw";
   };
 
   patches = [ ./glibc-2.26.patch ];

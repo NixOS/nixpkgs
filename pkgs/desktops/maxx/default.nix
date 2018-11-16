@@ -1,19 +1,15 @@
-{ stdenv, fetchurl, makeWrapper, libredirect, gcc-unwrapped, bash, gtk-engine-murrine, gtk_engines, librsvg
+{ stdenv, fetchurl, makeWrapper, autoPatchelfHook
+, libredirect, gcc-unwrapped, bash, gtk-engine-murrine, gtk_engines, librsvg
 
 , libX11, libXext, libXi, libXau, libXrender, libXft, libXmu, libSM, libXcomposite, libXfixes, libXpm
 , libXinerama, libXdamage, libICE, libXtst, libXaw, fontconfig, pango, cairo, glib, libxml2, atk, gtk2
-, gdk_pixbuf, mesa_noglu, ncurses
+, gdk_pixbuf, libGL, ncurses
 
 , xclock, xsettingsd }:
 
 let
   version = "Indy-1.1.0";
 
-  deps = [
-    stdenv.cc.cc libX11 libXext libXi libXau libXrender libXft libXmu libSM libXcomposite libXfixes libXpm
-    libXinerama libXdamage libICE libXtst libXaw fontconfig pango cairo glib libxml2 atk gtk2
-    gdk_pixbuf mesa_noglu ncurses
-  ];
   runtime_deps = [
     xclock xsettingsd
   ];
@@ -22,16 +18,21 @@ in stdenv.mkDerivation {
 
   srcs = [
     (fetchurl {
-      url = "http://maxxinteractive.com/downloads/${version}/FEDORA/MaXX-${version}-NO-ARCH.tar.gz";
+      url = "http://maxxdesktop.arcadedaydream.com/Indy-Releases/Installers/MaXX-${version}-NO-ARCH.tar.gz";
       sha256 = "1d23j08wwrrn5cp7csv70pcz9jppcn0xb1894wkp0caaliy7g31y";
     })
     (fetchurl {
-      url = "http://maxxinteractive.com/downloads/${version}/FEDORA/MaXX-${version}-x86_64.tar.gz";
+      url = "http://maxxdesktop.arcadedaydream.com/Indy-Releases/Installers/MaXX-${version}-x86_64.tar.gz";
       sha256 = "156p2lra184wyvibrihisd7cr1ivqaygsf0zfm26a12gx23b7708";
     })
   ];
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper autoPatchelfHook ];
+  buildInputs = [
+    stdenv.cc.cc libX11 libXext libXi libXau libXrender libXft libXmu libSM libXcomposite libXfixes libXpm
+    libXinerama libXdamage libICE libXtst libXaw fontconfig pango cairo glib libxml2 atk gtk2
+    gdk_pixbuf libGL ncurses
+  ];
 
   buildPhase = ''
     while IFS= read -r -d ''$'\0' i; do
@@ -58,15 +59,11 @@ in stdenv.mkDerivation {
       --prefix PATH : ${stdenv.lib.makeBinPath runtime_deps}
 
     while IFS= read -r -d ''$'\0' i; do
-      if isELF "$i"; then
-        bin=`patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" "$i"; echo $?`
-        patchelf --set-rpath "$maxx/lib64:$maxx/OpenMotif-2.1.32/lib64:$maxx/OpenMotif-2.3.1/lib64:${stdenv.lib.makeLibraryPath deps}" "$i"
-        if [ "$bin" -eq 0 ]; then
-          wrapProgram "$i" \
-            --set LD_PRELOAD "${libredirect}/lib/libredirect.so" \
-            --set NIX_REDIRECTS /opt/MaXX=$maxx \
-            --prefix PATH : $maxx/sbin
-        fi
+      if isExecutable "$i"; then
+        wrapProgram "$i" \
+          --set LD_PRELOAD "${libredirect}/lib/libredirect.so" \
+          --set NIX_REDIRECTS /opt/MaXX=$maxx \
+          --prefix PATH : $maxx/sbin
       fi
     done < <(find "$maxx" -type f -print0)
 

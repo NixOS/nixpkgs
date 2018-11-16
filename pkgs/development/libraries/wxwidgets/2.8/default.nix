@@ -1,10 +1,10 @@
 { stdenv, fetchurl, pkgconfig, gtk2, libXinerama, libSM, libXxf86vm, xf86vidmodeproto
 , gstreamer, gst-plugins-base, GConf, libX11, cairo
-, withMesa ? true, mesa_glu ? null, mesa_noglu ? null
+, withMesa ? true, libGLU ? null, libGL ? null
 , compat24 ? false, compat26 ? true, unicode ? true,
 }:
 
-assert withMesa -> mesa_glu != null && mesa_noglu != null;
+assert withMesa -> libGLU != null && libGL != null;
 
 with stdenv.lib;
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ gtk2 libXinerama libSM libXxf86vm xf86vidmodeproto gstreamer gst-plugins-base GConf libX11 cairo ]
-    ++ optional withMesa mesa_glu;
+    ++ optional withMesa libGLU;
 
   nativeBuildInputs = [ pkgconfig ];
 
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     "${libXinerama.dev}/include ${libSM.dev}/include ${libXxf86vm.dev}/include";
   SEARCH_LIB =
     "${libXinerama.out}/lib ${libSM.out}/lib ${libXxf86vm.out}/lib "
-    + optionalString withMesa "${mesa_glu.out}/lib ${mesa_noglu.out}/lib ";
+    + optionalString withMesa "${libGLU.out}/lib ${libGL.out}/lib ";
 
   # Work around a bug in configure.
   NIX_CFLAGS_COMPILE = [ "-DHAVE_X11_XLIB_H=1" "-lX11" "-lcairo" "-Wno-narrowing" ];

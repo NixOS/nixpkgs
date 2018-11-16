@@ -3,13 +3,13 @@
 stdenv.mkDerivation rec
 {
   name = "openvdb-${version}";
-  version = "4.0.2";
+  version = "5.2.0";
 
   src = fetchFromGitHub {
     owner = "dreamworksanimation";
     repo = "openvdb";
     rev = "v${version}";
-    sha256 = "0kqlsfa9rdpxpw7v61vfknvs11axh196ilqk6bnyyfkslmmcak45";
+    sha256 = "1yykrbc3nnnmpmmk0dz4b4y5xl4hl3ayjpqw0baq8yx2614r46b5";
   };
 
   outputs = [ "out" ];
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec
     LOG4CPLUS_LIB=
     BLOSC_INCLUDE_DIR=${c-blosc}/include/
     BLOSC_LIB_DIR=${c-blosc}/lib/
-    '';
+  '';
 
   installFlags = ''DESTDIR=$(out)'';
 
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec
     description = "An open framework for voxel";
     homepage = "http://www.openvdb.org";
     maintainers = [ maintainers.guibou ];
-    platforms = platforms.all;
+    platforms = platforms.linux;
     license = licenses.mpl20;
   };
 }

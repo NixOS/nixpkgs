@@ -17,7 +17,7 @@ let
       buildInputs = [ readline ];
 
       patches = [
-        (./. + (builtins.toPath "/dont-create-sysconfdir-${builtins.substring 0 1 version}.patch"))
+        (./. + "/dont-create-sysconfdir-${builtins.substring 0 1 version}.patch")
       ];
 
       configureFlags = [
@@ -28,7 +28,7 @@ let
         description = "BIRD Internet Routing Daemon";
         homepage = http://bird.network.cz;
         license = licenses.gpl2Plus;
-        maintainers = with maintainers; [ viric fpletz ];
+        maintainers = with maintainers; [ fpletz ];
         platforms = platforms.linux;
       };
     };
@@ -48,7 +48,7 @@ in
   };
 
   bird2 = generic {
-    version = "2.0.1";
-    sha256 = "0qyh2cxj7hfz90x3fnczjdm3i9g7vr0nc4l4wjkj9qm0646vc52n";
+    version = "2.0.2";
+    sha256 = "03s8hcl761y3489j1krarm3r3iy5qid26508i91yvy38ypb92pq3";
   };
 }

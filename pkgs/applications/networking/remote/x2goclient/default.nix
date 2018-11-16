@@ -1,25 +1,30 @@
-{ stdenv, fetchurl, cups, libssh, libXpm, nxproxy, openldap, openssh, makeWrapper, qt4 }:
+{ stdenv, fetchurl, cups, libssh, libXpm, nxproxy, openldap, openssh,
+makeWrapper, qtbase, qtsvg, qtx11extras, qttools, phonon }:
 
 stdenv.mkDerivation rec {
   name = "x2goclient-${version}";
-  version = "4.1.0.0";
+  version = "4.1.2.1";
 
   src = fetchurl {
-    url = "http://code.x2go.org/releases/source/x2goclient/${name}.tar.gz";
-    sha256 = "0sibrj4qppww7mirdixrqrknkyq3g97s64186h88j8k66sy1anab";
+    url = "https://code.x2go.org/releases/source/x2goclient/${name}.tar.gz";
+    sha256 = "1bzjzz2m9bqqndnk1p9p522cfapsqgkb0wllvqj9d4ir18grh60w";
   };
 
-  buildInputs = [ cups libssh libXpm nxproxy openldap openssh qt4 ];
+  buildInputs = [ cups libssh libXpm nxproxy openldap openssh
+                  qtbase qtsvg qtx11extras qttools phonon ];
   nativeBuildInputs = [ makeWrapper ];
 
-  patchPhase = ''
+  patches = [ ./qt511.patch ];
+
+  postPatch = ''
      substituteInPlace Makefile \
-       --replace "lrelease-qt4" "${qt4}/bin/lrelease" \
-       --replace "qmake-qt4" "${qt4}/bin/qmake" \
+       --replace "SHELL=/bin/bash" "SHELL=$SHELL" \
+       --replace "lrelease-qt4" "${qttools.dev}/bin/lrelease" \
+       --replace "qmake-qt4" "${qtbase.dev}/bin/qmake" \
        --replace "-o root -g root" ""
   '';
 
-  makeFlags = [ "PREFIX=$(out)" "ETCDIR=$(out)/etc" ];
+  makeFlags = [ "PREFIX=$(out)" "ETCDIR=$(out)/etc" "build_client" "build_man" ];
 
   enableParallelBuilding = true;
 

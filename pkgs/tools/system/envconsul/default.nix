@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   name = "envconsul-${version}";
-  version = "0.6.2";
+  version = "0.7.3";
   rev = "v${version}";
 
   goPackagePath = "github.com/hashicorp/envconsul";
@@ -11,7 +11,7 @@ buildGoPackage rec {
     inherit rev;
     owner = "hashicorp";
     repo = "envconsul";
-    sha256 = "176jbicyg7vwd0kgawz859gq7ldrxyw1gx55wig7azakiidkl731";
+    sha256 = "03cgxkyyynr067dg5b0lhvaxn60318fj9fh55p1n43vj5nrzgnbc";
   };
 
   meta = with stdenv.lib; {

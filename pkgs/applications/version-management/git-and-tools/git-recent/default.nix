@@ -1,23 +1,17 @@
 {stdenv, git, less, fetchFromGitHub, makeWrapper
 # utillinuxMinimal is included because we need the column command
-, utillinux ? null
+, utillinux
 }:
 
-assert stdenv.isLinux -> utillinux != null;
-
-let
-  binpath = stdenv.lib.makeBinPath
-    ([ git less ]
-    ++ stdenv.lib.optional (utillinux != null) utillinux);
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   name = "git-recent-${version}";
-  version = "1.0.3";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "paulirish";
     repo = "git-recent";
     rev = "v${version}";
-    sha256 = "0rckjjrw2xmvmbqaf66i36x59vs1v4pfnmvbinx5iggp7vjly1a4";
+    sha256 = "06r1jzmzdv3d4vxdh5qyf5g5rgavxfmh2rpbs7a7byg3k7d77hpn";
   };
 
   buildInputs = [ makeWrapper ];
@@ -28,7 +22,7 @@ in stdenv.mkDerivation rec {
     mkdir -p $out/bin
     cp git-recent $out/bin
     wrapProgram $out/bin/git-recent \
-      --prefix PATH : "${binpath}"
+      --prefix PATH : "${stdenv.lib.makeBinPath [ git less utillinux ]}"
   '';
 
   meta = with stdenv.lib; {

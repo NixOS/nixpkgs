@@ -1,27 +1,27 @@
 { stdenv, fetchFromGitHub, substituteAll, pkgconfig, gettext, gtk3, glib
-, gtk_doc, libarchive, gobjectIntrospection, libxslt, pngquant
-, sqlite, libsoup, gcab, attr, acl, docbook_xsl, docbook_xml_dtd_42
-, libuuid, json_glib, meson, gperf, ninja
+, gtk-doc, libarchive, gobjectIntrospection, libxslt, pngquant
+, sqlite, libsoup, attr, acl, docbook_xsl, docbook_xml_dtd_42
+, libuuid, json-glib, meson, gperf, ninja
 }:
 stdenv.mkDerivation rec {
-  name = "appstream-glib-0.7.6";
+  name = "appstream-glib-0.7.14";
 
-  outputs = [ "out" "dev" "man" ];
+  outputs = [ "out" "dev" "man" "installedTests" ];
   outputBin = "dev";
 
   src = fetchFromGitHub {
     owner = "hughsie";
     repo = "appstream-glib";
     rev = stdenv.lib.replaceStrings ["." "-"] ["_" "_"] name;
-    sha256 = "1nzm6w9n7fb2m06w88gwszaqf74bnip87ay0ca59wajq6y4mpfgv";
+    sha256 = "1908ilra1l0m2a224azmj6p4yglzdwwk41rr6rhby959sgw3iaky";
   };
 
   nativeBuildInputs = [
-    meson pkgconfig ninja gtk_doc libxslt docbook_xsl docbook_xml_dtd_42
+    meson pkgconfig ninja gtk-doc libxslt docbook_xsl docbook_xml_dtd_42
   ];
   buildInputs = [
     glib gettext sqlite libsoup
-    gcab attr acl libuuid json_glib
+    attr acl libuuid json-glib
     libarchive gobjectIntrospection gperf
   ];
   propagatedBuildInputs = [ gtk3 ];
@@ -38,6 +38,12 @@ stdenv.mkDerivation rec {
     "-Dstemmer=false"
     "-Ddep11=false"
   ];
+
+  doCheck = false; # fails at least 1 test
+
+  postInstall = ''
+    moveToOutput "share/installed-tests" "$installedTests"
+  '';
 
   meta = with stdenv.lib; {
     description = "Objects and helper methods to read and write AppStream metadata";

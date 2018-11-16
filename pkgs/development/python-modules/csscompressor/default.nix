@@ -2,7 +2,6 @@
 buildPythonPackage rec {
   pname = "csscompressor";
   version = "0.9.5";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

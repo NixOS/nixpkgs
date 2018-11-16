@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig, perl, pam, nspr, nss, openldap
+{ stdenv, fetchurl, pkgconfig, perl, pam, nspr, nss, openldap
 , db, cyrus_sasl, svrcore, icu, net_snmp, kerberos, pcre, perlPackages
 }:
 let
@@ -36,7 +36,9 @@ stdenv.mkDerivation rec {
     "--sysconfdir=/etc"
     "--localstatedir=/var"
     "--with-openldap"
-    "--with-db=${db}"
+    "--with-db"
+    "--with-db-inc=${db.dev}/include"
+    "--with-db-lib=${db.out}/lib"
     "--with-sasl=${cyrus_sasl.dev}"
     "--with-netsnmp=${net_snmp}"
   ];

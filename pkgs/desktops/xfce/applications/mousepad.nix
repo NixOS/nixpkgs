@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, intltool, libxfce4util
-, gtk, gtksourceview, dbus, dbus_glib, makeWrapper
+, gtk, gtksourceview, dbus, dbus-glib, makeWrapper
 , dconf }:
 
 stdenv.mkDerivation rec {
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [ pkgconfig intltool libxfce4util
-      gtk gtksourceview dbus dbus_glib makeWrapper
+      gtk gtksourceview dbus dbus-glib makeWrapper
       dconf
     ];
 

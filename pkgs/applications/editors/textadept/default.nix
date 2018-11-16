@@ -56,7 +56,6 @@ let
   gtdialog_zip   = "gtdialog_1.3.zip";
   cdk_tgz        = "cdk-5.0-20150928.tgz";
   termkey_tgz    = "libtermkey-0.17.tar.gz";
-  bombay_zip     = "bombay.zip";
 
   scinterm_url   = "http://foicica.com/scinterm/download/" + scinterm_zip;
   tre_url        = "https://github.com/laurikari/tre/archive/" + tre_zip;

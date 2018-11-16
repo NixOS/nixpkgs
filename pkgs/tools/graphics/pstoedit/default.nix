@@ -4,12 +4,17 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "pstoedit-3.70";
+  name = "pstoedit-3.73";
 
   src = fetchurl {
     url = "mirror://sourceforge/pstoedit/${name}.tar.gz";
-    sha256 = "130kz0ghsrggdn70kygrmsy3n533hwd948q69vyvqz44yw9n3f06";
+    sha256 = "147jkgvm9n6mbkl6ndqnm9x74x5y9agbxkfwj0jrw6yxyhxx2cdd";
   };
+
+  #
+  # Turn on "-rdb" option (REALLYDELAYBIND) by default to ensure compatibility with gs-9.22
+  #
+  patches = [ ./pstoedit-gs-9.22-compat.patch  ];
 
   outputs = [ "out" "dev" ];
   nativeBuildInputs = [ pkgconfig ];

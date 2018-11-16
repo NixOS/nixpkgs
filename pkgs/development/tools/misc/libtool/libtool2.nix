@@ -1,5 +1,4 @@
 { stdenv, fetchurl, m4, perl, help2man
-, buildPlatform, hostPlatform
 }:
 
 stdenv.mkDerivation rec {
@@ -22,10 +21,11 @@ stdenv.mkDerivation rec {
   # XXX: The GNU ld wrapper does all sorts of nasty things wrt. RPATH, which
   # leads to the failure of a number of tests.
   doCheck = false;
+  doInstallCheck = false;
 
   # Don't run the native `strip' when cross-compiling.  This breaks at least
   # with `.a' files for MinGW.
-  dontStrip = hostPlatform != buildPlatform;
+  dontStrip = stdenv.hostPlatform != stdenv.buildPlatform;
 
   meta = {
     description = "GNU Libtool, a generic library support script";

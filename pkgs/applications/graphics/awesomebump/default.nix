@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchgit, qtbase, qmake, makeWrapper, qtscript, gcc, flex, bison, qtdeclarative, gnutar }:
+{ lib, stdenv, fetchgit, qtbase, qmake, makeWrapper, qtscript, flex, bison, qtdeclarative }:
 
 
 let

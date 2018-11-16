@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig, zlib, libjpeg, xz }:
+{ stdenv, fetchurl, pkgconfig, zlib, libjpeg, xz }:
 
 let
   version = "4.0.9";
@@ -7,18 +7,20 @@ stdenv.mkDerivation rec {
   name = "libtiff-${version}";
 
   src = fetchurl {
-    url = "http://download.osgeo.org/libtiff/tiff-${version}.tar.gz";
+    url = "https://download.osgeo.org/libtiff/tiff-${version}.tar.gz";
     sha256 = "1kfg4q01r4mqn7dj63ifhi6pmqzbf4xax6ni6kkk81ri5kndwyvf";
   };
 
   prePatch = let
       debian = fetchurl {
-        url = http://snapshot.debian.org/archive/debian-debug/20180128T155203Z//pool/main/t/tiff/tiff_4.0.9-3.debian.tar.xz;
-        sha256 = "0wya42y7kcq093g3h7ca10cm5sns1mgnkjmdd2qdi59v8arga4y4";
+        # When the URL disappears, it typically means that Debian has new patches
+        # (probably security) and updating to new tarball will apply them as well.
+        url = http://http.debian.net/debian/pool/main/t/tiff/tiff_4.0.9-6.debian.tar.xz;
+        sha256 = "10yk5npchxscgsnd7ihd3bbbw2fxkl7ni0plm43c9q4nwp6ms52f";
       };
     in ''
-      tar xf '${debian}'
-      patches="$patches $(cat debian/patches/series | sed 's|^|debian/patches/|')"
+      tar xf ${debian}
+      patches="$patches $(sed 's|^|debian/patches/|' < debian/patches/series)"
     '';
 
   outputs = [ "bin" "dev" "out" "man" "doc" ];

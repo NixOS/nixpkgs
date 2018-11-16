@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name    = "verilator-${version}";
-  version = "3.900";
+  version = "4.004";
 
   src = fetchurl {
-    url    = "http://www.veripool.org/ftp/${name}.tgz";
-    sha256 = "0yvbibcysdiw6mphda0lfs56wz6v450px2420x0hbd3rc7k53s2b";
+    url    = "https://www.veripool.org/ftp/${name}.tgz";
+    sha256 = "1nkdmz4bm1v2xarajf2g3z5vb2611a4fkvpgjxac4xrja5r8wpwk";
   };
 
   enableParallelBuilding = true;
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     description = "Fast and robust (System)Verilog simulator/compiler";
     homepage    = "https://www.veripool.org/wiki/verilator";
     license     = stdenv.lib.licenses.lgpl3;
-    platforms   = stdenv.lib.platforms.linux;
+    platforms   = stdenv.lib.platforms.unix;
     maintainers = with stdenv.lib.maintainers; [ thoughtpolice ];
   };
 }

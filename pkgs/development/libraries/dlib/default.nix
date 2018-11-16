@@ -1,16 +1,16 @@
-{ stdenv, lib, fetchFromGitHub, cmake, pkgconfig, openblas, libpng, libjpeg
+{ stdenv, lib, fetchFromGitHub, cmake, pkgconfig, libpng, libjpeg
 , guiSupport ? false, libX11
 }:
 
 stdenv.mkDerivation rec {
-  version = "19.8";
+  version = "19.16";
   name = "dlib-${version}";
 
   src = fetchFromGitHub {
     owner = "davisking";
     repo = "dlib";
     rev ="v${version}";
-    sha256 = "0ras4dl1ws9f9680bi8wg0mnbqvrpn0l2xl5lrvq3jvnijb3cz9i";
+    sha256 = "0ix52npsxfm6324jli7y0zkyijl5yirv2yzfncyd4sq0r9fcwb4p";
   };
 
   postPatch = ''
@@ -19,14 +19,13 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
   nativeBuildInputs = [ cmake pkgconfig ];
-  buildInputs = [ openblas libpng libjpeg ] ++ lib.optional guiSupport libX11;
+  buildInputs = [ libpng libjpeg ] ++ lib.optional guiSupport libX11;
 
   meta = with stdenv.lib; {
     description = "A general purpose cross-platform C++ machine learning library";
     homepage = http://www.dlib.net;
     license = licenses.boost;
-    maintainers = with maintainers; [ christopherpoole ];
-    platforms = platforms.all;
+    maintainers = with maintainers; [ christopherpoole ma27 ];
+    platforms = platforms.linux;
   };
 }
-

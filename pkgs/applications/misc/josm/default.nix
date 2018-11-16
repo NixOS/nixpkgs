@@ -1,15 +1,15 @@
-{ fetchurl, stdenv, makeDesktopItem, makeWrapper, unzip, bash, jre8 }:
+{ fetchurl, stdenv, makeDesktopItem, makeWrapper, unzip, jdk11 }:
 
 stdenv.mkDerivation rec {
   name = "josm-${version}";
-  version = "13265";
+  version = "14382";
 
   src = fetchurl {
     url = "https://josm.openstreetmap.de/download/josm-snapshot-${version}.jar";
-    sha256 = "0mmpxmf17lw1j1m1gfz2jrm3qj2416zgbwgcy7xbvn6qcd8k7dr5";
+    sha256 = "1a2nx9jr1fvw95gdvl9kj3z0cs6ndafm0k4l0lwfx9p9qn4lgzjg";
   };
 
-  buildInputs = [ jre8 makeWrapper ];
+  buildInputs = [ jdk11 makeWrapper ];
 
   desktopItem = makeDesktopItem {
     name = "josm";
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin $out/share/java
     cp -v $src $out/share/java/josm.jar
 
-    makeWrapper ${jre8}/bin/java $out/bin/josm \
+    makeWrapper ${jdk11}/bin/java $out/bin/josm \
       --add-flags "-jar $out/share/java/josm.jar"
 
     mkdir -p $out/share/applications

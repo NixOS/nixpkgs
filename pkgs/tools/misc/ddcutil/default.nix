@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   name = "ddcutil-${version}";
-  version = "0.8.5";
+  version = "0.9.2";
 
   src = fetchFromGitHub {
     owner  = "rockowitz";
     repo   = "ddcutil";
     rev    = "v${version}";
-    sha256 = "127a5v545gvfgxqqjxqafsg1p8i4qd5wnpdwccr38jbsphl6yzl4";
+    sha256 = "0mpd3j570yyfm9ki5in9i92nzg25ahmdfp2f7yby7xnqiy53zd8w";
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
@@ -22,6 +22,7 @@ stdenv.mkDerivation rec {
     homepage    = http://www.ddcutil.com/;
     description = "Query and change Linux monitor settings using DDC/CI and USB";
     license     = licenses.gpl2;
+    platforms   = platforms.linux;
     maintainers = with maintainers; [ rnhmjoj ];
   };
 }

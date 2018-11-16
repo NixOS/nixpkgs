@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, libtool, pkgconfig, perl }:
+{ stdenv, lib, fetchFromGitHub, libtool, pkgconfig, perl, ncurses }:
 
 stdenv.mkDerivation rec {
   name = "unibilium-${version}";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional stdenv.isDarwin "LIBTOOL=${libtool}/bin/libtool";
 
   nativeBuildInputs = [ pkgconfig perl ];
-  buildInputs = [ libtool ];
+  buildInputs = [ libtool ncurses ];
 
   meta = with lib; {
     description = "A very basic terminfo library";

@@ -17,6 +17,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     patchShebangs build/dll-map-makefile-verifier
     patchShebangs build/private-icon-theme-installer
+    substituteInPlace configure --replace lib/mono/2.0/ lib/mono/2.0-api/
     find -name Makefile.in | xargs -n 1 -d '\n' sed -e 's/^dnl/#/' -i
   '';
 
@@ -35,5 +36,6 @@ stdenv.mkDerivation rec {
     '';
     platforms = platforms.all;
     maintainers = with maintainers; [ obadz ];
+    license = licenses.mit;
   };
 }

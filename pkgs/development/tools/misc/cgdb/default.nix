@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "0.7.0";
 
   src = fetchurl {
-    url = "http://cgdb.me/files/${name}.tar.gz";
+    url = "https://cgdb.me/files/${name}.tar.gz";
     sha256 = "08slzg3702v5nivjhdx2bciqxc5vqcn8pc4i4lsgkcwdcrj94ymz";
   };
 
@@ -21,6 +21,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
 
     platforms = with platforms; linux ++ cygwin;
-    maintainers = with maintainers; [ viric vrthra ];
+    maintainers = with maintainers; [ vrthra ];
   };
 }

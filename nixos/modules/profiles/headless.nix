@@ -1,7 +1,7 @@
 # Common configuration for headless machines (e.g., Amazon EC2
 # instances).
 
-{ config, lib, pkgs, ... }:
+{ lib, ... }:
 
 with lib;
 

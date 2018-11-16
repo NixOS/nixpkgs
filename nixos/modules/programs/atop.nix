@@ -1,6 +1,6 @@
 # Global configuration for atop.
 
-{ config, lib, pkgs, ... }:
+{ config, lib, ... }:
 
 with lib;
 

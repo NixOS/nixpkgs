@@ -3,7 +3,7 @@ import ./make-test.nix ({ pkgs, ...} : {
 
   meta.maintainers = [ pkgs.stdenv.lib.maintainers.eelco ];
 
-  machine = { config, pkgs, ... }: {
+  machine = { ... }: {
     imports = [ ../modules/profiles/minimal.nix ];
     boot.initrd.network.enable = true;
     boot.initrd.network.postCommands =

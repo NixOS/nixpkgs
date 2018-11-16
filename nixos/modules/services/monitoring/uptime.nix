@@ -1,6 +1,6 @@
 { config, pkgs, lib, ... }:
 let
-  inherit (lib) mkOption mkEnableOption mkIf mkMerge types optionalAttrs optional;
+  inherit (lib) mkOption mkEnableOption mkIf mkMerge types optional;
 
   cfg = config.services.uptime;
 

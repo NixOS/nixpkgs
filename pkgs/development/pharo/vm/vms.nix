@@ -1,4 +1,4 @@
-{ cmake, stdenv, fetchurl, bash, unzip, glibc, openssl, gcc, mesa, freetype, xorg, alsaLib, cairo, libuuid, autoreconfHook, gcc48, fetchFromGitHub, makeWrapper} @args:
+{ cmake, stdenv, fetchurl, bash, unzip, glibc, openssl, gcc, libGLU_combined, freetype, xorg, alsaLib, cairo, libuuid, autoreconfHook, gcc48, fetchFromGitHub, makeWrapper} @args:
 
 let
   pharo-vm-build = import ./build-vm.nix args;

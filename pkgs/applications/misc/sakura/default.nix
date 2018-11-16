@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "sakura-${version}";
-  version = "3.4.0";
+  version = "3.6.0";
 
   src = fetchurl {
     url = "http://launchpad.net/sakura/trunk/${version}/+download/${name}.tar.bz2";
-    sha256 = "1vj07xnkalb8q6ippf4bmv5cf4266p1j9m80sxb6hncx0h8paj04";
+    sha256 = "1q463qm41ym7jb3kbzjz7b6x549vmgkb70arpkhsf86yxly1y5m1";
   };
 
   nativeBuildInputs = [ cmake perl pkgconfig ];

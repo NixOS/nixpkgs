@@ -1,27 +1,27 @@
-{ stdenv, lib, fetchurl, unzip, utillinux,
+{ stdenv, lib, unzip, utillinux,
   libusb1, evdi, systemd, makeWrapper, requireFile }:
 
 let
   arch =
-    if stdenv.system == "x86_64-linux" then "x64"
-    else if stdenv.system == "i686-linux" then "x86"
+    if stdenv.hostPlatform.system == "x86_64-linux" then "x64"
+    else if stdenv.hostPlatform.system == "i686-linux" then "x86"
     else throw "Unsupported architecture";
   bins = "${arch}-ubuntu-1604";
   libPath = lib.makeLibraryPath [ stdenv.cc.cc utillinux libusb1 evdi ];
 
 in stdenv.mkDerivation rec {
   name = "displaylink-${version}";
-  version = "1.3.52";
+  version = "4.1.9";
 
   src = requireFile rec {
     name = "displaylink.zip";
-    sha256 = "0ridpsxcf761vym0nlpq702qa46ynddzci17bjmyax2pph7khr0k";
+    sha256 = "d762145014df7fea8ca7af12206a077d73d8e7f2259c8dc2ce7e5fb1e69ef9a3";
     message = ''
       In order to install the DisplayLink drivers, you must first
       comply with DisplayLink's EULA and download the binaries and
       sources from here:
 
-      http://www.displaylink.com/downloads/file?id=744
+      http://www.displaylink.com/downloads/file?id=1087
 
       Once you have downloaded the file, please use the following
       commands and re-run the installation:
@@ -56,6 +56,9 @@ in stdenv.mkDerivation rec {
 
     fixupPhase
   '';
+
+  dontStrip = true;
+  dontPatchELF = true;
 
   meta = with stdenv.lib; {
     description = "DisplayLink DL-5xxx, DL-41xx and DL-3x00 Driver for Linux";

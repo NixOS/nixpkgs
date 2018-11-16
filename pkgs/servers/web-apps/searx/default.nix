@@ -1,17 +1,17 @@
-{ lib, pythonPackages, fetchFromGitHub }:
+{ lib, python3Packages, fetchFromGitHub }:
 
-with pythonPackages;
+with python3Packages;
 
 buildPythonApplication rec {
   pname = "searx";
-  version = "0.13.1";
+  version = "0.14.0";
 
   # Can not use PyPI because certain test files are missing.
   src = fetchFromGitHub {
     owner = "asciimoo";
     repo = "searx";
     rev = "v${version}";
-    sha256 = "0nizxq9ggf9g8f8pxn2hfm0kn20356v65h4cj9s73n742nkv6ani";
+    sha256 = "046xg6xcs1mxgahz7kwf3fsmwd99q3hhms6pdjlvyczidlfhpmxl";
   };
 
   postPatch = ''
@@ -32,10 +32,13 @@ buildPythonApplication rec {
     pyasn1 pyasn1-modules ndg-httpsclient certifi pysocks
   ];
 
-  checkInputs = [ splinter mock plone-testing robotsuite unittest2 ];
+  checkInputs = [
+    splinter mock plone-testing robotsuite unittest2 selenium
+  ];
 
   preCheck = ''
     rm tests/test_robot.py # A variable that is imported is commented out
+    rm tests/unit/engines/pubmed.py
   '';
 
   meta = with lib; {

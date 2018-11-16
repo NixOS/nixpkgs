@@ -31,11 +31,12 @@ let
                   else p;
       describe = args:
         let
+          title = args.title or null;
           name = args.name or (lib.concatStringsSep "." args.path);
           path = args.path or [ args.name ];
           package = args.package or (lib.attrByPath path (throw "Invalid package attribute path `${toString path}'") pkgs);
         in "<listitem>"
-        + "<para><literal>pkgs.${name} (${package.meta.name})</literal>"
+        + "<para><literal>${lib.optionalString (title != null) "${title} aka "}pkgs.${name} (${package.meta.name})</literal>"
         + lib.optionalString (!package.meta.available) " <emphasis>[UNAVAILABLE]</emphasis>"
         + ": ${package.meta.description or "???"}.</para>"
         + lib.optionalString (args ? comment) "\n<para>${args.comment}</para>"
@@ -51,7 +52,7 @@ let
   // lib.optionalAttrs (opt ? example) { example = substFunction opt.example; }
   // lib.optionalAttrs (opt ? default) { default = substFunction opt.default; }
   // lib.optionalAttrs (opt ? type) { type = substFunction opt.type; }
-  // lib.optionalAttrs (opt ? relatedPackages) { relatedPackages = genRelatedPackages opt.relatedPackages; });
+  // lib.optionalAttrs (opt ? relatedPackages && opt.relatedPackages != []) { relatedPackages = genRelatedPackages opt.relatedPackages; });
 
   # We need to strip references to /nix/store/* from options,
   # including any `extraSources` if some modules came from elsewhere,
@@ -87,9 +88,11 @@ let
       echo "for hints about the offending path)."
       exit 1
     fi
-    ${libxslt.bin}/bin/xsltproc \
+    ${buildPackages.libxslt.bin}/bin/xsltproc \
       --stringparam revision '${revision}' \
-      -o $out ${./options-to-docbook.xsl} $optionsXML
+      -o intermediate.xml ${./options-to-docbook.xsl} $optionsXML
+    ${buildPackages.libxslt.bin}/bin/xsltproc \
+      -o "$out" ${./postprocess-option-descriptions.xsl} intermediate.xml
   '';
 
   sources = lib.sourceFilesBySuffices ./. [".xml"];
@@ -102,13 +105,18 @@ let
     </section>
   '';
 
+  generatedSources = runCommand "generated-docbook" {} ''
+    mkdir $out
+    ln -s ${modulesDoc} $out/modules.xml
+    ln -s ${optionsDocBook} $out/options-db.xml
+    printf "%s" "${version}" > $out/version
+  '';
+
   copySources =
     ''
       cp -prd $sources/* . # */
+      ln -s ${generatedSources} ./generated
       chmod -R u+w .
-      ln -s ${modulesDoc} configuration/modules.xml
-      ln -s ${optionsDocBook} options-db.xml
-      printf "%s" "${version}" > version
     '';
 
   toc = builtins.toFile "toc.xml"
@@ -124,11 +132,12 @@ let
   manualXsltprocOptions = toString [
     "--param section.autolabel 1"
     "--param section.label.includes.component.label 1"
-    "--stringparam html.stylesheet style.css"
+    "--stringparam html.stylesheet 'style.css overrides.css highlightjs/mono-blue.css'"
+    "--stringparam html.script './highlightjs/highlight.pack.js ./highlightjs/loader.js'"
     "--param xref.with.number.and.title 1"
     "--param toc.section.depth 3"
     "--stringparam admon.style ''"
-    "--stringparam callout.graphics.extension .gif"
+    "--stringparam callout.graphics.extension .svg"
     "--stringparam current.docid manual"
     "--param chunk.section.depth 0"
     "--param chunk.first.sections 1"
@@ -139,7 +148,7 @@ let
 
   manual-combined = runCommand "nixos-manual-combined"
     { inherit sources;
-      buildInputs = [ libxml2 libxslt ];
+      nativeBuildInputs = [ buildPackages.libxml2.bin buildPackages.libxslt.bin ];
       meta.description = "The NixOS manual as plain docbook XML";
     }
     ''
@@ -194,7 +203,7 @@ let
 
   olinkDB = runCommand "manual-olinkdb"
     { inherit sources;
-      buildInputs = [ libxml2 libxslt ];
+      nativeBuildInputs = [ buildPackages.libxml2.bin buildPackages.libxslt.bin ];
     }
     ''
       xsltproc \
@@ -202,13 +211,13 @@ let
         --stringparam collect.xref.targets only \
         --stringparam targets.filename "$out/manual.db" \
         --nonet \
-        ${docbook5_xsl}/xml/xsl/docbook/xhtml/chunktoc.xsl \
+        ${docbook_xsl_ns}/xml/xsl/docbook/xhtml/chunktoc.xsl \
         ${manual-combined}/manual-combined.xml
 
       cat > "$out/olinkdb.xml" <<EOF
       <?xml version="1.0" encoding="utf-8"?>
       <!DOCTYPE targetset SYSTEM
-        "file://${docbook5_xsl}/xml/xsl/docbook/common/targetdatabase.dtd" [
+        "file://${docbook_xsl_ns}/xml/xsl/docbook/common/targetdatabase.dtd" [
         <!ENTITY manualtargets SYSTEM "file://$out/manual.db">
       ]>
       <targetset>
@@ -223,6 +232,7 @@ let
     '';
 
 in rec {
+  inherit generatedSources;
 
   # The NixOS options in JSON format.
   optionsJSON = runCommand "options-json"
@@ -242,9 +252,9 @@ in rec {
     ''; # */
 
   # Generate the NixOS manual.
-  manual = runCommand "nixos-manual"
+  manualHTML = runCommand "nixos-manual-html"
     { inherit sources;
-      buildInputs = [ libxml2 libxslt ];
+      nativeBuildInputs = [ buildPackages.libxml2.bin buildPackages.libxslt.bin ];
       meta.description = "The NixOS manual in HTML format";
       allowedReferences = ["out"];
     }
@@ -256,23 +266,30 @@ in rec {
         ${manualXsltprocOptions} \
         --stringparam target.database.document "${olinkDB}/olinkdb.xml" \
         --nonet --output $dst/ \
-        ${docbook5_xsl}/xml/xsl/docbook/xhtml/chunktoc.xsl \
+        ${docbook_xsl_ns}/xml/xsl/docbook/xhtml/chunktoc.xsl \
         ${manual-combined}/manual-combined.xml
 
       mkdir -p $dst/images/callouts
-      cp ${docbook5_xsl}/xml/xsl/docbook/images/callouts/*.gif $dst/images/callouts/
+      cp ${docbook_xsl_ns}/xml/xsl/docbook/images/callouts/*.svg $dst/images/callouts/
 
-      cp ${./style.css} $dst/style.css
+      cp ${../../../doc/style.css} $dst/style.css
+      cp ${../../../doc/overrides.css} $dst/overrides.css
+      cp -r ${pkgs.documentation-highlighter} $dst/highlightjs
 
       mkdir -p $out/nix-support
       echo "nix-build out $out" >> $out/nix-support/hydra-build-products
       echo "doc manual $dst" >> $out/nix-support/hydra-build-products
     ''; # */
 
+  # Alias for backward compatibility. TODO(@oxij): remove eventually.
+  manual = manualHTML;
+
+  # Index page of the NixOS manual.
+  manualHTMLIndex = "${manualHTML}/share/doc/nixos/index.html";
 
   manualEpub = runCommand "nixos-manual-epub"
     { inherit sources;
-      buildInputs = [ libxml2 libxslt zip ];
+      buildInputs = [ libxml2.bin libxslt.bin zip ];
     }
     ''
       # Generate the epub manual.
@@ -282,11 +299,11 @@ in rec {
         ${manualXsltprocOptions} \
         --stringparam target.database.document "${olinkDB}/olinkdb.xml" \
         --nonet --xinclude --output $dst/epub/ \
-        ${docbook5_xsl}/xml/xsl/docbook/epub/docbook.xsl \
+        ${docbook_xsl_ns}/xml/xsl/docbook/epub/docbook.xsl \
         ${manual-combined}/manual-combined.xml
 
       mkdir -p $dst/epub/OEBPS/images/callouts
-      cp -r ${docbook5_xsl}/xml/xsl/docbook/images/callouts/*.gif $dst/epub/OEBPS/images/callouts # */
+      cp -r ${docbook_xsl_ns}/xml/xsl/docbook/images/callouts/*.svg $dst/epub/OEBPS/images/callouts # */
       echo "application/epub+zip" > mimetype
       manual="$dst/nixos-manual.epub"
       zip -0Xq "$manual" mimetype
@@ -302,7 +319,7 @@ in rec {
   # Generate the NixOS manpages.
   manpages = runCommand "nixos-manpages"
     { inherit sources;
-      buildInputs = [ libxml2 libxslt ];
+      nativeBuildInputs = [ buildPackages.libxml2.bin buildPackages.libxslt.bin ];
       allowedReferences = ["out"];
     }
     ''
@@ -314,7 +331,7 @@ in rec {
         --param man.endnotes.are.numbered 0 \
         --param man.break.after.slash 1 \
         --stringparam target.database.document "${olinkDB}/olinkdb.xml" \
-        ${docbook5_xsl}/xml/xsl/docbook/manpages/docbook.xsl \
+        ${docbook_xsl_ns}/xml/xsl/docbook/manpages/docbook.xsl \
         ${manual-combined}/man-pages-combined.xml
     '';
 

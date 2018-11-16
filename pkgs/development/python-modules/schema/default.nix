@@ -3,12 +3,11 @@
 buildPythonPackage rec {
 
   pname = "schema";
-  version = "0.6.7";
-  name = "${pname}-${version}";
+  version = "0.6.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "410f44cb025384959d20deef00b4e1595397fa30959947a4f0d92e9c84616f35";
+    sha256 = "fa1a53fe5f3b6929725a4e81688c250f46838e25d8c1885a10a590c8c01a7b74";
   };
 
   checkInputs = [ pytest ];

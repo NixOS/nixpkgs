@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation rec {
   name = "dbeaver-ce-${version}";
-  version = "4.3.3";
+  version = "5.2.4";
 
   desktopItem = makeDesktopItem {
     name = "dbeaver";
@@ -29,8 +29,8 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "https://dbeaver.jkiss.org/files/${version}/dbeaver-ce-${version}-linux.gtk.x86_64.tar.gz";
-    sha256 = "063h2za2m33b4k9s756lwicxwszzsqr2sqr2gi4ai05dqkgkw951";
+    url = "https://dbeaver.io/files/${version}/dbeaver-ce-${version}-linux.gtk.x86_64.tar.gz";
+    sha256 = "1zwbqr5s76r77x7klydpqbaqakzzilzv92ddyck1sj5jiy5prwpp";
   };
 
   installPhase = ''
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://dbeaver.jkiss.org;
+    homepage = https://dbeaver.io/;
     description = "Universal SQL Client for developers, DBA and analysts. Supports MySQL, PostgreSQL, MariaDB, SQLite, and more";
     longDescription = ''
       Free multi-platform database tool for developers, SQL programmers, database

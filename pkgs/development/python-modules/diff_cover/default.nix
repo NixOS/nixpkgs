@@ -1,6 +1,6 @@
 { stdenv, buildPythonPackage, fetchPypi, jinja2, jinja2_pluralize, pygments,
   six, inflect, mock, nose, coverage, pycodestyle, flake8, pyflakes, git,
-  pylint, pydocstyle, fetchpatch }:
+  pylint, pydocstyle, fetchpatch, glibcLocales }:
 
 buildPythonPackage rec {
   pname = "diff_cover";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ jinja2 jinja2_pluralize pygments six inflect ];
 
-  checkInputs = [ mock nose coverage pycodestyle flake8 pyflakes pylint pydocstyle git ];
+  checkInputs = [ mock nose coverage pycodestyle flake8 pyflakes pylint pydocstyle git glibcLocales ];
 
   meta = with stdenv.lib; {
     description = "Automatically find diff lines that need test coverage";

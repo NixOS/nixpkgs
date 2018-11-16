@@ -14,9 +14,6 @@
 
 assert modifyPublicMain -> mainClassFile != null;
 
-let
-  wrapperCS = ./Wrapper.cs.in;  
-in
 stdenv.mkDerivation {
   inherit name src;
   

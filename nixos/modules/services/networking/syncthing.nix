@@ -16,10 +16,12 @@ in {
         available on http://127.0.0.1:8384/.
       '';
 
-      useInotify = mkOption {
-        type = types.bool;
-        default = false;
-        description = "Provide syncthing-inotify as a service.";
+      guiAddress = mkOption {
+        type = types.str;
+        default = "127.0.0.1:8384";
+        description = ''
+          Address to serve the GUI.
+        '';
       };
 
       systemService = mkOption {
@@ -29,7 +31,7 @@ in {
       };
 
       user = mkOption {
-        type = types.string;
+        type = types.str;
         default = defaultUser;
         description = ''
           Syncthing will be run under this user (user will be created if it doesn't exist.
@@ -38,7 +40,7 @@ in {
       };
 
       group = mkOption {
-        type = types.string;
+        type = types.str;
         default = "nogroup";
         description = ''
           Syncthing will be run under this group (group will not be created if it doesn't exist.
@@ -47,7 +49,7 @@ in {
       };
 
       all_proxy = mkOption {
-        type = types.nullOr types.string;
+        type = with types; nullOr str;
         default = null;
         example = "socks5://address.com:1234";
         description = ''
@@ -61,8 +63,20 @@ in {
         type = types.path;
         default = "/var/lib/syncthing";
         description = ''
+          Path where synced directories will exist.
+        '';
+      };
+
+      configDir = mkOption {
+        type = types.path;
+        description = ''
           Path where the settings and keys will exist.
         '';
+        default =
+          let
+            nixos = config.system.stateVersion;
+            cond  = versionAtLeast nixos "19.03";
+          in cfg.dataDir + (optionalString cond "/.config/syncthing");
       };
 
       openDefaultPorts = mkOption {
@@ -90,6 +104,12 @@ in {
     };
   };
 
+  imports = [
+    (mkRemovedOptionModule ["services" "syncthing" "useInotify"] ''
+      This option was removed because syncthing now has the inotify functionality included under the name "fswatcher".
+      It can be enabled on a per-folder basis through the webinterface.
+    '')
+  ];
 
   ###### implementation
 
@@ -100,11 +120,10 @@ in {
       allowedUDPPorts = [ 21027 ];
     };
 
-    systemd.packages = [ pkgs.syncthing ]
-                       ++ lib.optional cfg.useInotify pkgs.syncthing-inotify;
+    systemd.packages = [ pkgs.syncthing ];
 
     users = mkIf (cfg.user == defaultUser) {
-      extraUsers."${defaultUser}" =
+      users."${defaultUser}" =
         { group = cfg.group;
           home  = cfg.dataDir;
           createHome = true;
@@ -112,7 +131,7 @@ in {
           description = "Syncthing daemon user";
         };
 
-      extraGroups."${defaultUser}".gid =
+      groups."${defaultUser}".gid =
         config.ids.gids.syncthing;
     };
 
@@ -125,7 +144,6 @@ in {
           STNOUPGRADE = "yes";
           inherit (cfg) all_proxy;
         } // config.networking.proxy.envVars;
-        wants = mkIf cfg.useInotify [ "syncthing-inotify.service" ];
         wantedBy = [ "multi-user.target" ];
         serviceConfig = {
           Restart = "on-failure";
@@ -134,26 +152,17 @@ in {
           User = cfg.user;
           Group = cfg.group;
           PermissionsStartOnly = true;
-          ExecStart = "${cfg.package}/bin/syncthing -no-browser -home=${cfg.dataDir}";
+          ExecStart = ''
+            ${cfg.package}/bin/syncthing \
+              -no-browser \
+              -gui-address=${cfg.guiAddress} \
+              -home=${cfg.configDir}
+          '';
         };
       };
 
       syncthing-resume = {
         wantedBy = [ "suspend.target" ];
-      };
-
-      syncthing-inotify = mkIf (cfg.systemService && cfg.useInotify) {
-        description = "Syncthing Inotify File Watcher service";
-        after = [ "network.target" "syncthing.service" ];
-        requires = [ "syncthing.service" ];
-        wantedBy = [ "multi-user.target" ];
-        serviceConfig = {
-          SuccessExitStatus = "2";
-          RestartForceExitStatus = "3";
-          Restart = "on-failure";
-          User = cfg.user;
-          ExecStart = "${pkgs.syncthing-inotify.bin}/bin/syncthing-inotify -home=${cfg.dataDir} -logflags=0";
-        };
       };
     };
   };

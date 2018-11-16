@@ -33,7 +33,7 @@ let
     test -n "$LD_LIBRARY_PATH" &&
         echo "export LD_LIBRARY_PATH=\"\$LD_LIBRARY_PATH\''${LD_LIBRARY_PATH:+:}\"'$LD_LIBRARY_PATH'" >> "$path_config_script"
     test -n "$NIX_LISP_LD_LIBRARY_PATH" &&
-        echo "export NIX_LISP_LD_LIBRARY_PATH=\"\$NIX_LISP_LD_LIBRARY_PATH\''${NIX_LISP_LD_LIBRARY_PATH:+:}\"'$(echo "$NIX_LISP_LD_LIBRARY_PATH" | tr -d '\n' | tr : '\n' | sort | uniq | tr '\n' ':')'" >> "$path_config_script"
+        echo "export NIX_LISP_LD_LIBRARY_PATH=\"\$NIX_LISP_LD_LIBRARY_PATH\''${NIX_LISP_LD_LIBRARY_PATH:+:}\"'$(echo "$NIX_LISP_LD_LIBRARY_PATH" | tr -d '\n' | tr : '\n' | sort | uniq | tr '\n' ':' | sed -e 's/:$//')'" >> "$path_config_script"
     echo "fi" >> "$path_config_script"
   '';
   deployLaunchScript = ''
@@ -43,7 +43,7 @@ let
     chmod a+x "$launch_script"
     echo "#! /bin/sh" >> "$launch_script"
     echo "source '$config_script'" >> "$launch_script"
-    echo "export LD_LIBRARY_PATH=\"\$NIX_LISP_LD_LIBRARY_PATH\''${NIX_LISP_LD_LIBRARY_PATH:+:}\$LD_LIBRARY_PATH\"" >> "$launch_script"
+    echo "test -n \"\$NIX_LISP_LD_LIBRARY_PATH\" export LD_LIBRARY_PATH=\"\$NIX_LISP_LD_LIBRARY_PATH\''${LD_LIBRARY_PATH:+:}\$LD_LIBRARY_PATH\"" >> "$launch_script"
     echo '"${clwrapper}/bin/common-lisp.sh" "$@"' >> "$launch_script"
   '';
   moveAsdFiles = ''

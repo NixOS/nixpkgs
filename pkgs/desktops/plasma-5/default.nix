@@ -26,8 +26,7 @@ existing packages here and modify it as necessary.
 
 {
   libsForQt5, lib, fetchurl,
-  gconf, gsettings_desktop_schemas,
-  debug ? false,
+  gconf, gsettings-desktop-schemas
 }:
 
 let
@@ -105,7 +104,7 @@ let
       breeze-plymouth = callPackage ./breeze-plymouth {};
       kactivitymanagerd = callPackage ./kactivitymanagerd.nix {};
       kde-cli-tools = callPackage ./kde-cli-tools.nix {};
-      kde-gtk-config = callPackage ./kde-gtk-config { inherit gsettings_desktop_schemas; };
+      kde-gtk-config = callPackage ./kde-gtk-config { inherit gsettings-desktop-schemas; };
       kdecoration = callPackage ./kdecoration.nix {};
       kdeplasma-addons = callPackage ./kdeplasma-addons.nix {};
       kgamma5 = callPackage ./kgamma5.nix {};
@@ -124,6 +123,7 @@ let
       libksysguard = callPackage ./libksysguard {};
       milou = callPackage ./milou.nix {};
       oxygen = callPackage ./oxygen.nix {};
+      plasma-browser-integration = callPackage ./plasma-browser-integration.nix {};
       plasma-desktop = callPackage ./plasma-desktop {};
       plasma-integration = callPackage ./plasma-integration {};
       plasma-nm = callPackage ./plasma-nm {};

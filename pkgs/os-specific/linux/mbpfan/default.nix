@@ -1,13 +1,13 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch, gnugrep, kmod }:
+{ stdenv, lib, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   name = "mbpfan-${version}";
-  version = "2.0.1";
+  version = "2.1.0";
   src = fetchFromGitHub {
     owner = "dgraziotin";
     repo = "mbpfan";
     rev = "v${version}";
-    sha256 = "1iri1py9ym0zz7fcacbf0d9y3i3ay77jmajckchagamkfha16zyp";
+    sha256 = "1gysq778rkl6dvvj9a1swxcl15wvz0bng5bn4nwq118cl8p8pask";
   };
   installPhase = ''
     mkdir -p $out/bin $out/etc

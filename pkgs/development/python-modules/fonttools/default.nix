@@ -3,16 +3,16 @@
 , numpy
 , pytest
 , pytestrunner
+, glibcLocales
 }:
 
 buildPythonPackage rec {
   pname = "fonttools";
-  version = "3.22.0";
-  name = "${pname}-${version}";
+  version = "3.32.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "01640dfbc0ba752181b21fe74240b8a7bbf7af75581737245836ada5565bd549";
+    sha256 = "16cg5v50x905c0dr34wqk70b0n3mqzp41iir2rd73f31d1z9jndq";
     extension = "zip";
   };
 
@@ -23,7 +23,12 @@ buildPythonPackage rec {
   checkInputs = [
     pytest
     pytestrunner
+    glibcLocales
   ];
+
+  preCheck = ''
+    export LC_ALL="en_US.UTF-8"
+  '';
 
   meta = {
     homepage = https://github.com/fonttools/fonttools;

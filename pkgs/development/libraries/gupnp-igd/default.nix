@@ -1,22 +1,29 @@
-{ stdenv, fetchurl, pkgconfig, glib, gupnp }:
- 
+{ stdenv, fetchurl, pkgconfig, gettext, gobjectIntrospection, gtk-doc, docbook_xsl, docbook_xml_dtd_412, glib, gupnp }:
+
 stdenv.mkDerivation rec {
   name = "gupnp-igd-${version}";
-  majorVersion = "0.2";
-  version = "${majorVersion}.4";
+  version = "0.2.5";
+
+  outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gupnp-igd/${majorVersion}/${name}.tar.xz";
-    sha256 = "38c4a6d7718d17eac17df95a3a8c337677eda77e58978129ad3182d769c38e44";
+    url = "mirror://gnome/sources/gupnp-igd/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    sha256 = "081v1vhkbz3wayv49xfiskvrmvnpx93k25am2wnarg5cifiiljlb";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig gettext gobjectIntrospection gtk-doc docbook_xsl docbook_xml_dtd_412 ];
   propagatedBuildInputs = [ glib gupnp ];
 
-  meta = {
+  configureFlags = [
+    "--enable-gtk-doc"
+  ];
+
+  doCheck = true;
+
+  meta = with stdenv.lib; {
+    description = "Library to handle UPnP IGD port mapping";
     homepage = http://www.gupnp.org/;
-    license = stdenv.lib.licenses.lgpl21;
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.lgpl21;
+    platforms = platforms.linux;
   };
 }
-

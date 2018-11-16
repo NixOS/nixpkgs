@@ -1,18 +1,23 @@
-{ stdenv, acl, attr, autoconf, automake, bash, bc, coreutils, e2fsprogs, fetchgit, fio, gawk, keyutils
-, lib, libaio, libcap, libtool, libuuid, libxfs, lvm2, openssl, perl, procps, psmisc, quota, su
+{ stdenv, acl, attr, autoconf, automake, bash, bc, coreutils, e2fsprogs
+, fetchgit, fio, gawk, keyutils, killall, lib, libaio, libcap, libtool
+, libuuid, libxfs, lvm2, openssl, perl, procps, quota
 , time, utillinux, which, writeScript, xfsprogs }:
 
 stdenv.mkDerivation {
-  name = "xfstests-2017-07-16";
+  name = "xfstests-2018-04-11";
 
   src = fetchgit {
     url = "git://git.kernel.org/pub/scm/fs/xfs/xfstests-dev.git";
-    rev = "c3893c2dc623a07b1ace8e72ee4beb29f8bfae15";
-    sha256 = "1p42dakry4r2366hdgj4i1wcnjs4qk0bfmyr70r1n7s7ykvnvnrl";
+    rev = "fdf6d4bc862bb3269c95986fdaf1c59271762ad6";
+    sha256 = "16j1kcmj0xq6s2qw4hll5r5cz7q4vbbsy2nh1g5aaq7xsl3h8mhb";
   };
 
-  nativeBuildInputs = [ autoconf automake libtool ];
-  buildInputs = [ acl attr gawk libaio libuuid libxfs openssl perl ];
+  nativeBuildInputs = [
+    autoconf automake libtool
+  ];
+  buildInputs = [
+    acl attr gawk libaio libuuid libxfs openssl perl
+  ];
 
   hardeningDisable = [ "format" ];
   enableParallelBuilding = true;
@@ -86,7 +91,9 @@ stdenv.mkDerivation {
       ln -s @out@/lib/xfstests/$f $f
     done
 
-    export PATH=${lib.makeBinPath [acl attr bc e2fsprogs fio gawk keyutils libcap lvm2 perl procps psmisc quota utillinux which xfsprogs]}:$PATH
+    export PATH=${lib.makeBinPath [acl attr bc e2fsprogs fio gawk keyutils
+                                   libcap lvm2 perl procps killall quota
+                                   utillinux which xfsprogs]}:$PATH
     exec ./check "$@"
   '';
 

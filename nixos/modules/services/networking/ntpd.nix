@@ -67,7 +67,9 @@ in
     environment.systemPackages = [ pkgs.ntp ];
     services.timesyncd.enable = mkForce false;
 
-    users.extraUsers = singleton
+    systemd.services.systemd-timedated.environment = { SYSTEMD_TIMEDATED_NTP_SERVICES = "ntpd.service"; };
+
+    users.users = singleton
       { name = ntpUser;
         uid = config.ids.uids.ntp;
         description = "NTP daemon user";

@@ -1,8 +1,8 @@
-{ stdenv, lib, buildGoPackage, fetchFromGitHub, libobjc, IOKit }:
+{ stdenv, buildGoPackage, fetchFromGitHub, libobjc, IOKit }:
 
 buildGoPackage rec {
   name = "go-ethereum-${version}";
-  version = "1.8.1";
+  version = "1.8.17";
   goPackagePath = "github.com/ethereum/go-ethereum";
 
   # Fix for usb-related segmentation faults on darwin
@@ -12,22 +12,11 @@ buildGoPackage rec {
   # Fixes Cgo related build failures (see https://github.com/NixOS/nixpkgs/issues/25959 )
   hardeningDisable = [ "fortify" ];
 
-  # Only install binaries in $out, source is not interesting and takes ~50M
-  outputs = [ "out" ];
-  preFixup = ''
-    export bin="''${out}"
-  '';
-  installPhase = ''
-    mkdir -p $out/bin $out
-    dir="$NIX_BUILD_TOP/go/bin"
-    [ -e "$dir" ] && cp -r $dir $out
-  '';
-
   src = fetchFromGitHub {
     owner = "ethereum";
     repo = "go-ethereum";
     rev = "v${version}";
-    sha256 = "0k7ly9cw68ranksa1fdn7v2lncmlqgabw3qiiyqya2xz3s4aazlf";
+    sha256 = "0vm526gbyi8bygqwwki9hx7gf5g3xk2s1biyvwjidrydzj9i46zd";
   };
 
   meta = with stdenv.lib; {

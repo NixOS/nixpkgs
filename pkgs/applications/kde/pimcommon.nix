@@ -2,7 +2,7 @@
   mkDerivation, lib, kdepimTeam,
   extra-cmake-modules, kdoctools,
   akonadi, akonadi-contacts, akonadi-mime, grantlee, karchive, kcodecs,
-  kcompletion, kconfig, kconfigwidgets, kcontacts, kdbusaddons, kdesignerplugin,
+  kcompletion, kconfig, kconfigwidgets, kcontacts, kdbusaddons,
   kiconthemes, kimap, kio, kitemmodels, kjobwidgets, knewstuff, kpimtextedit,
   kwallet, kwindowsystem, libkdepim, qtwebengine
 }:

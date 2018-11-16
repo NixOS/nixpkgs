@@ -9,10 +9,11 @@ stdenv.mkDerivation rec {
     sha256 = "0q7fblaczb7kwbsz0gdy9267z0sllzgmf0c7z5c9mf88wv74ycn6";
   };
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = https://sourceforge.net/projects/sshpass/;
     description = "Non-interactive ssh password auth";
-    maintainers = [ stdenv.lib.maintainers.madjar ];
-    platforms = stdenv.lib.platforms.unix;
+    license = licenses.gpl2;
+    maintainers = [ maintainers.madjar ];
+    platforms = platforms.unix;
   };
 }

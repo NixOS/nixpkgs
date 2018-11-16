@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, fetchurl
 , isPy3k
 , docutils
 , requests
@@ -21,11 +20,11 @@
 
 buildPythonPackage rec {
   pname = "flit";
-  version = "0.13";
+  version = "1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8f558351bf4bb82b872d3bdbea7055cbb2e33ed2bdf809284bf927d4c78bf0ee";
+    sha256 = "95b8577b2232da39ee14ae237575b7a85afeeabc1e87f4a19485fac34f85aa89";
   };
 
   disabled = !isPy3k;

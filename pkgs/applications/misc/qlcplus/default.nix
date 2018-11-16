@@ -5,13 +5,13 @@
 
 mkDerivation rec {
   name = "qlcplus-${version}";
-  version = "4.11.1";
+  version = "4.11.2";
 
   src = fetchFromGitHub {
     owner = "mcallegari";
     repo = "qlcplus";
     rev = "QLC+_${version}";
-    sha256 = "0lb1mdp7kbnkja14phgyknr65irwkxcmzk96rqacysvwrvzvfzyd";
+    sha256 = "0ry7j8d5mm3h3mzd49xqlagnldmfhfr6plwk73pz62hxr4j58s6w";
   };
 
   nativeBuildInputs = [ qmake pkgconfig ];

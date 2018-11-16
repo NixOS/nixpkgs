@@ -406,7 +406,7 @@ in
 
   config = mkIf cfg.enable {
 
-    users.extraUsers = singleton
+    users.users = singleton
       { name = "rippled";
         description = "Ripple server user";
         uid = config.ids.uids.rippled;

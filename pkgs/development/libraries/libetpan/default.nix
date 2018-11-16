@@ -1,6 +1,6 @@
 { autoconf, automake, fetchgit, libtool, stdenv, openssl }:
 
-let version = "1.6"; in
+let version = "1.8"; in
 
 stdenv.mkDerivation {
   name = "libetpan-${version}";
@@ -8,7 +8,7 @@ stdenv.mkDerivation {
   src = fetchgit {
     url = "git://github.com/dinhviethoa/libetpan";
     rev = "refs/tags/" + version;
-    sha256 = "13hv49271rr9yj7ifxqqmc0jfy1f26llivhp22s5wigick7qjxky";
+    sha256 = "09xqy1n18qn63x7idfrpwm59lfkvb1p5vxkyksywvy4f6mn4pyxk";
   };
 
   buildInputs = [ autoconf automake libtool openssl ];

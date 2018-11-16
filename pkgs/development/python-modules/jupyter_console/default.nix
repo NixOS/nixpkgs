@@ -12,7 +12,6 @@
 buildPythonPackage rec {
   pname = "jupyter_console";
   version = "5.2.0";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

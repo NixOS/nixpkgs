@@ -47,8 +47,8 @@ in
       default = true;
       description =
         ''
-          Whether users of the <code>wheel</code> group can execute
-          commands as super user without entering a password.
+          Whether users of the <code>wheel</code> group must
+          provide a password to run commands as super user via <command>sudo</command>.
         '';
       };
 
@@ -66,6 +66,9 @@ in
     security.sudo.extraRules = mkOption {
       description = ''
         Define specific rules to be in the <filename>sudoers</filename> file.
+        More specific rules should come after more general ones in order to
+        yield the expected behavior. You can use mkBefore/mkAfter to ensure
+        this is the case when configuration options are merged.
       '';
       default = [];
       example = [
@@ -75,7 +78,7 @@ in
 
         # Allow execution of "/home/root/secret.sh" by user `backup`, `database`
         # and the group with GID `1006` without a password.
-        { users = [ "backup" ]; groups = [ 1006 ];
+        { users = [ "backup" "database" ]; groups = [ 1006 ];
           commands = [ { command = "/home/root/secret.sh"; options = [ "SETENV" "NOPASSWD" ]; } ]; }
 
         # Allow all users of group `bar` to run two executables as user `foo`
@@ -215,7 +218,7 @@ in
           { src = pkgs.writeText "sudoers-in" cfg.configFile; }
           # Make sure that the sudoers file is syntactically valid.
           # (currently disabled - NIXOS-66)
-          "${pkgs.sudo}/sbin/visudo -f $src -c && cp $src $out";
+          "${pkgs.buildPackages.sudo}/sbin/visudo -f $src -c && cp $src $out";
         target = "sudoers";
         mode = "0440";
       };

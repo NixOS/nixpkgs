@@ -41,6 +41,18 @@ in
       name = "lxqt";
       bgSupport = true;
       start = ''
+        # Upstream installs default configuration files in
+        # $prefix/share/lxqt instead of $prefix/etc/xdg, (arguably)
+        # giving distributors freedom to ship custom default
+        # configuration files more easily. In order to let the session
+        # manager find them the share subdirectory is added to the
+        # XDG_CONFIG_DIRS environment variable.
+        #
+        # For an explanation see
+        # https://github.com/lxqt/lxqt/issues/1521#issuecomment-405097453
+        #
+        export XDG_CONFIG_DIRS=$XDG_CONFIG_DIRS''${XDG_CONFIG_DIRS:+:}${config.system.path}/share
+
         exec ${pkgs.lxqt.lxqt-session}/bin/startlxqt
       '';
     };
@@ -53,14 +65,11 @@ in
         config.environment.lxqt.excludePackages);
 
     # Link some extra directories in /run/current-system/software/share
-    environment.pathsToLink = [
-      "/share/desktop-directories"
-      "/share/icons"
-      "/share/lxqt"
-    ];
+    environment.pathsToLink = [ "/share" ];
 
     environment.variables.GIO_EXTRA_MODULES = [ "${pkgs.gvfs}/lib/gio/modules" ];
 
+    services.upower.enable = config.powerManagement.enable;
   };
 
 }

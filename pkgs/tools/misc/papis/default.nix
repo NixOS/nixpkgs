@@ -1,21 +1,20 @@
-{ buildPythonApplication, lib, fetchFromGitHub, bashInteractive
-, argcomplete, arxiv2bib, beautifulsoup4, bibtexparser
-, configparser, dmenu-python, habanero, papis-python-rofi
-, pylibgen, prompt_toolkit, pyparser, pytest, python_magic
-, pyyaml, requests, unidecode, urwid, vobject, tkinter
-, vim
+{ lib, fetchFromGitHub, bashInteractive
+, python3, vim
 }:
 
-buildPythonApplication rec {
+let
+  python = python3;
+
+in python.pkgs.buildPythonApplication rec {
   pname = "papis";
-  version = "0.5.3";
+  version = "0.6";
 
   # Missing tests on Pypi
   src = fetchFromGitHub {
     owner = "papis";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1yc4ilb7bw099pi2vwawyf8mi0n1kp87wgwgwcwc841ibq62q8ic";
+    sha256 = "0zy8q154zhpqb75c775nwq3mdl1szhzhkfi0nvyjmzfgsv2g1wa2";
   };
 
   postPatch = ''
@@ -23,15 +22,15 @@ buildPythonApplication rec {
     patchShebangs tests
   '';
 
-  propagatedBuildInputs = [
+  propagatedBuildInputs = with python.pkgs; [
     argcomplete arxiv2bib beautifulsoup4 bibtexparser
     configparser dmenu-python habanero papis-python-rofi
     pylibgen prompt_toolkit pyparser python_magic pyyaml
-    requests unidecode urwid vobject tkinter
+    requests unidecode urwid vobject tkinter whoosh
     vim
   ];
 
-  checkInputs = [ pytest ];
+  checkInputs = with python.pkgs; [ pytest ];
 
   # Papis tries to create the config folder under $HOME during the tests
   checkPhase = ''

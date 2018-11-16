@@ -1,51 +1,42 @@
-{ stdenv, fetchurl, fetchpatch, gtk_doc, pkgconfig, gobjectIntrospection, intltool
-, libgudev, polkit, appstream-glib, gusb, sqlite, libarchive, glib_networking
+{ stdenv, fetchurl, gtk-doc, pkgconfig, gobjectIntrospection, intltool
+, libgudev, polkit, appstream-glib, gusb, sqlite, libarchive, glib-networking
 , libsoup, help2man, gpgme, libxslt, elfutils, libsmbios, efivar, glibcLocales
-, fwupdate, libyaml, valgrind, meson, libuuid, colord, docbook_xml_dtd_43, docbook_xsl
-, ninja, gcab, gnutls, python3, wrapGAppsHook, json_glib
-, shared_mime_info, umockdev
+, gnu-efi, libyaml, valgrind, meson, libuuid, colord, docbook_xml_dtd_43, docbook_xsl
+, ninja, gcab, gnutls, python3, wrapGAppsHook, json-glib, bash-completion
+, shared-mime-info, umockdev, vala, makeFontsConf, freefont_ttf
 }:
 let
-  version = "1.0.4";
+  # Updating? Keep $out/etc synchronized with passthru.filesInstalledToEtc
+  version = "1.1.2";
   python = python3.withPackages (p: with p; [ pygobject3 pycairo pillow ]);
   installedTestsPython = python3.withPackages (p: with p; [ pygobject3 requests ]);
+
+  fontsConf = makeFontsConf {
+    fontDirectories = [ freefont_ttf ];
+  };
 in stdenv.mkDerivation {
   name = "fwupd-${version}";
   src = fetchurl {
     url = "https://people.freedesktop.org/~hughsient/releases/fwupd-${version}.tar.xz";
-    sha256 = "1n4d6fw3ffg051072hbxn106s52x2wlh5dh2kxwdfjsb5kh03ra3";
+    sha256 = "1qhg8h1dv9k3i0429j0wl37rpxfbahggfd1j8s7a4cw83k42cgfs";
   };
 
-  outputs = [ "out" "devdoc" "man" "installedTests" ];
+  outputs = [ "out" "lib" "dev" "devdoc" "man" "installedTests" ];
 
   nativeBuildInputs = [
-    meson ninja gtk_doc pkgconfig gobjectIntrospection intltool glibcLocales shared_mime_info
-    valgrind gcab docbook_xml_dtd_43 docbook_xsl help2man libxslt python wrapGAppsHook
+    meson ninja gtk-doc pkgconfig gobjectIntrospection intltool glibcLocales shared-mime-info
+    valgrind gcab docbook_xml_dtd_43 docbook_xsl help2man libxslt python wrapGAppsHook vala
   ];
   buildInputs = [
-    polkit appstream-glib gusb sqlite libarchive libsoup elfutils libsmbios fwupdate libyaml
-    libgudev colord gpgme libuuid gnutls glib_networking efivar json_glib umockdev
+    polkit appstream-glib gusb sqlite libarchive libsoup elfutils libsmbios gnu-efi libyaml
+    libgudev colord gpgme libuuid gnutls glib-networking efivar json-glib umockdev
+    bash-completion
   ];
 
   LC_ALL = "en_US.UTF-8"; # For po/make-images
 
   patches = [
-    ./fix-missing-deps.patch
-    # https://github.com/hughsie/fwupd/issues/403
-    (fetchpatch {
-      url = https://github.com/hughsie/fwupd/commit/bd6082574989e4f48b66c7270bb408d439b77a06.patch;
-      sha256 = "17pixyizkmn6wlsjmr1wwya17ivn770hdv9mp769vifxinya8w9y";
-    })
-    # drop docbook2man
-    (fetchpatch {
-      url = https://github.com/hughsie/fwupd/commit/2c43d3e6e65868b66a9a64a76123697e259ec7c2.patch;
-      sha256 = "0vjv7jnai0g96frlipk2sc59pj3mhq9di01hajycjv7y5v6qqrmc";
-    })
-    # https://github.com/hughsie/fwupd/issues/405
-    (fetchpatch {
-      url = https://github.com/hughsie/fwupd/pull/407.patch;
-      sha256 = "1dxhqps12x7bz0s974xk5hfpk4nwn1gs29vl0dfi9j54wy18f688";
-    })
+    ./fix-paths.patch
   ];
 
   postPatch = ''
@@ -57,19 +48,28 @@ in stdenv.mkDerivation {
     substituteInPlace data/installed-tests/fwupdmgr.test.in --subst-var-by installedtestsdir "$installedTests/share/installed-tests/fwupd"
   '';
 
-  doCheck = true;
+  # /etc/os-release not available in sandbox
+  # doCheck = true;
 
   preFixup = ''
-    gappsWrapperArgs+=(--prefix XDG_DATA_DIRS : "${shared_mime_info}/share")
+    gappsWrapperArgs+=(--prefix XDG_DATA_DIRS : "${shared-mime-info}/share")
   '';
 
   mesonFlags = [
     "-Dplugin_dummy=true"
-    "-Dbootdir=/boot"
     "-Dudevdir=lib/udev"
     "-Dsystemdunitdir=lib/systemd/system"
+    "-Defi-libdir=${gnu-efi}/lib"
+    "-Defi-ldsdir=${gnu-efi}/lib"
+    "-Defi-includedir=${gnu-efi}/include/efi"
     "--localstatedir=/var"
   ];
+
+  # TODO: We need to be able to override the directory flags from meson setup hook
+  # better – declaring them multiple times might become an error.
+  preConfigure = ''
+    mesonFlagsArray+=("--libexecdir=$out/libexec")
+  '';
 
   postInstall = ''
     moveToOutput share/installed-tests "$installedTests"
@@ -77,7 +77,38 @@ in stdenv.mkDerivation {
       --prefix GI_TYPELIB_PATH : "$out/lib/girepository-1.0:${libsoup}/lib/girepository-1.0"
   '';
 
-  enableParallelBuilding = true;
+  FONTCONFIG_FILE = fontsConf; # Fontconfig error: Cannot load default config file
+
+  # TODO: wrapGAppsHook wraps efi capsule even though it is not elf
+  dontWrapGApps = true;
+  # so we need to wrap the executables manually
+  postFixup = ''
+    find -L "$out/bin" "$out/libexec" -type f -executable -print0 \
+      | while IFS= read -r -d ''' file; do
+      if [[ "''${file}" != *.efi ]]; then
+        echo "Wrapping program ''${file}"
+        wrapProgram "''${file}" "''${gappsWrapperArgs[@]}"
+      fi
+    done
+  '';
+
+  # /etc/fwupd/uefi.conf is created by the services.hardware.fwupd NixOS module
+  passthru = {
+    filesInstalledToEtc = [
+      "fwupd/remotes.d/fwupd.conf"
+      "fwupd/remotes.d/lvfs-testing.conf"
+      "fwupd/remotes.d/lvfs.conf"
+      "fwupd/remotes.d/vendor.conf"
+      "pki/fwupd/GPG-KEY-Hughski-Limited"
+      "pki/fwupd/GPG-KEY-Linux-Foundation-Metadata"
+      "pki/fwupd/GPG-KEY-Linux-Vendor-Firmware-Service"
+      "pki/fwupd/LVFS-CA.pem"
+      "pki/fwupd-metadata/GPG-KEY-Linux-Foundation-Metadata"
+      "pki/fwupd-metadata/GPG-KEY-Linux-Vendor-Firmware-Service"
+      "pki/fwupd-metadata/LVFS-CA.pem"
+    ];
+  };
+
   meta = with stdenv.lib; {
     homepage = https://fwupd.org/;
     maintainers = with maintainers; [];

@@ -2,7 +2,6 @@
 buildPythonPackage rec {
   pname = "olefile";
   version = "0.45.1";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

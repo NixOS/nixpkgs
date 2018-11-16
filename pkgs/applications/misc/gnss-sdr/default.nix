@@ -47,6 +47,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DGFlags_ROOT_DIR=${google-gflags}/lib"
     "-DGLOG_INCLUDE_DIR=${glog}/include"
+    "-DENABLE_UNIT_TESTING=OFF"
 
     # gnss-sdr doesn't truly depend on BLAS or LAPACK, as long as
     # armadillo is built using both, so skip checking for them.
@@ -60,7 +61,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "An open source Global Navigation Satellite Systems software-defined receiver";
-    homepage = http://gnss-sdr.org/;
+    homepage = https://gnss-sdr.org/;
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
   };

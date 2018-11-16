@@ -14,7 +14,7 @@ let
   nx = cfg.notifications.x11;
 
   smartdNotify = pkgs.writeScript "smartd-notify.sh" ''
-    #! ${pkgs.stdenv.shell}
+    #! ${pkgs.runtimeShell}
     ${optionalString nm.enable ''
       {
       ${pkgs.coreutils}/bin/cat << EOF
@@ -64,7 +64,7 @@ let
        "DEVICESCAN ${notifyOpts}${cfg.defaults.autodetected}"}
   '';
 
-  smartdDeviceOpts = { name, ... }: {
+  smartdDeviceOpts = { ... }: {
 
     options = {
 

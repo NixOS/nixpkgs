@@ -1,21 +1,25 @@
-{ stdenv, fetchurl, python, pythonPackages }:
+{ stdenv, fetchurl, python2 }:
 
 stdenv.mkDerivation rec {
   name = "mailman-${version}";
-  version = "2.1.24";
+  version = "2.1.29";
 
   src = fetchurl {
     url = "mirror://gnu/mailman/${name}.tgz";
-    sha256 = "1r6sjapjmbav45xibjzc2a8y1xf4ikz09470ma1kw7iz174wn8z7";
+    sha256 = "0b0dpwf6ap260791c7lg2vpw30llf19hymbf2hja3s016rqp5243";
   };
 
-  buildInputs = [ python pythonPackages.dnspython ];
+  buildInputs = [ python2 python2.pkgs.dnspython ];
 
   patches = [ ./fix-var-prefix.patch ];
 
-  configureFlags = "--without-permcheck --with-cgi-ext=.cgi --with-var-prefix=/var/lib/mailman";
+  configureFlags = [
+    "--without-permcheck"
+    "--with-cgi-ext=.cgi"
+    "--with-var-prefix=/var/lib/mailman"
+  ];
 
-  installTargets = "doinstall";         # Leave out the 'update' target that's implied by 'install'.
+  installTargets = "doinstall"; # Leave out the 'update' target that's implied by 'install'.
 
   makeFlags = [ "DIRSETGID=:" ];
 

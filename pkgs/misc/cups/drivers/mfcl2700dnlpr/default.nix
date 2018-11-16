@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "3.2.0-1";
 
   src = fetchurl {
-    url = "http://download.brother.com/welcome/dlf102085/${name}.i386.deb";
+    url = "https://download.brother.com/welcome/dlf102085/${name}.i386.deb";
     sha256 = "170qdzxlqikzvv2wphvfb37m19mn13az4aj88md87ka3rl5knk4m";
   };
 

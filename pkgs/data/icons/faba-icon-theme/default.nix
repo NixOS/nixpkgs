@@ -1,23 +1,21 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, elementary-icon-theme }:
+{ stdenv, fetchFromGitHub, meson, ninja, python3, gtk3, elementary-icon-theme }:
 
 stdenv.mkDerivation rec {
   name = "${package-name}-${version}";
   package-name = "faba-icon-theme";
-  version = "2016-09-13";
+  version = "4.3";
 
   src = fetchFromGitHub {
     owner = "moka-project";
     repo = package-name;
-    rev = "00431894bce5fb1b8caccaee064788996be228a7";
-    sha256 = "0hif030pd4w3s851k0s65w0mf2pik10ha25ycpsv91gpbgarqcns";
+    rev = "v${version}";
+    sha256 = "0xh6ppr73p76z60ym49b4d0liwdc96w41cc5p07d48hxjsa6qd6n";
   };
 
-  nativeBuildInputs = [ autoreconfHook ];
-
-  buildInputs = [ elementary-icon-theme ];
+  nativeBuildInputs = [ meson ninja python3 gtk3 elementary-icon-theme ];
 
   postPatch = ''
-    substituteInPlace Makefile.am --replace '$(DESTDIR)'/usr $out
+    patchShebangs meson/post_install.py
   '';
 
   meta = with stdenv.lib; {

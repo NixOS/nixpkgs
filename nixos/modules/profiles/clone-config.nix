@@ -31,7 +31,6 @@ let
     let
       relocateNixOS = path:
         "<nixpkgs/nixos" + removePrefix nixosPath (toString path) + ">";
-      relocateOthers = null;
     in
       { nixos = map relocateNixOS partitionedModuleFiles.nixos;
         others = []; # TODO: copy the modules to the install-device repository.
@@ -49,6 +48,8 @@ let
 
       {
         imports = [ ${toString config.installer.cloneConfigIncludes} ];
+
+        ${config.installer.cloneConfigExtra}
       }
     '';
 
@@ -74,6 +75,13 @@ in
       '';
     };
 
+    installer.cloneConfigExtra = mkOption {
+      default = "";
+      description = ''
+        Extra text to include in the cloned configuration.nix included in this
+        installer.
+      '';
+    };
   };
 
   config = {

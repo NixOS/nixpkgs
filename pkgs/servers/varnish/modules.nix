@@ -1,16 +1,23 @@
-{ stdenv, fetchurl, pkgconfig, varnish, python, docutils, removeReferencesTo }:
+{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, varnish, python, docutils, removeReferencesTo }:
 
 stdenv.mkDerivation rec {
-  version = "0.13.0";
-  name = "varnish-modules-${version}";
+  version = "0.14.0";
+  name = "${varnish.name}-modules-${version}";
 
-  src = fetchurl {
-    url = "https://download.varnish-software.com/varnish-modules/varnish-modules-${version}.tar.gz";
-    sha256 = "1nj52va7cp0swcv87zd3si80knpaa4a7na37cy9wkvgyvhf9k8mh";
+  src = fetchFromGitHub {
+    owner = "varnish";
+    repo = "varnish-modules";
+    rev = version;
+    sha256 = "17fkbr4i70qgdqsrx1x28ag20xkfyz1v3q3d3ywmv409aczqhm40";
   };
 
-  nativeBuildInputs = [ pkgconfig docutils removeReferencesTo ];
+  nativeBuildInputs = [ pkgconfig autoreconfHook docutils removeReferencesTo ];
   buildInputs = [ varnish python ];
+
+  postPatch = ''
+    substituteInPlace bootstrap   --replace "''${dataroot}/aclocal"                  "${varnish.dev}/share/aclocal"
+    substituteInPlace Makefile.am --replace "''${LIBVARNISHAPI_DATAROOTDIR}/aclocal" "${varnish.dev}/share/aclocal"
+  '';
 
   postInstall = "find $out -type f -exec remove-references-to -t ${varnish.dev} '{}' +"; # varnish.dev captured only as __FILE__ in assert messages
 

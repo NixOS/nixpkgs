@@ -200,7 +200,7 @@ in {
   };
 
   config = mkIf cfg.enable {
-    users.extraUsers.${cfg.user} = {
+    users.users.${cfg.user} = {
       description = "gammu-smsd user";
       uid = config.ids.uids.gammu-smsd;
       extraGroups = [ "${cfg.device.group}" ];

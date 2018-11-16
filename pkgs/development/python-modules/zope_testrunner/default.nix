@@ -1,7 +1,6 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi
-, fetchpatch
 , zope_interface
 , zope_exceptions
 , zope_testing

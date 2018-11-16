@@ -1,14 +1,11 @@
 { stdenv, fetchurl, unzip, patchelf, xorg, openal }:
 
-assert stdenv.isLinux;
-assert stdenv.isx86_64;
-
 let
   buildDemo = { name, src }:
     stdenv.mkDerivation rec {
       inherit name src;
 
-      buildInputs = [ unzip patchelf ];
+      nativeBuildInputs = [ unzip patchelf ];
 
       rtdeps = stdenv.lib.makeLibraryPath
         [ xorg.libXxf86vm xorg.libXext openal ]
@@ -47,7 +44,7 @@ let
       meta = {
         description = "Unreal Engine 4 Linux demos";
         homepage = https://wiki.unrealengine.com/Linux_Demos;
-        platforms = stdenv.lib.platforms.linux;
+        platforms = [ "x86_64-linux" ];
         license = stdenv.lib.licenses.unfree;
       };
     };
@@ -189,4 +186,3 @@ in {
     };
   };
 }
-

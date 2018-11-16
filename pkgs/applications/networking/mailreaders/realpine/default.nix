@@ -1,4 +1,4 @@
-{stdenv, fetchurl, ncurses, tcl, openssl, pam, pkgconfig, gettext, kerberos
+{stdenv, fetchurl, ncurses, tcl, openssl, pam, kerberos
 , openldap
 }:
 # NOTE: Please check if any changes here are applicable to ../alpine/ as well

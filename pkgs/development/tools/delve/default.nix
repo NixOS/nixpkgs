@@ -1,8 +1,8 @@
-{ stdenv, lib, buildGoPackage, fetchFromGitHub }:
+{ stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   name = "delve-${version}";
-  version = "0.12.2";
+  version = "1.1.0";
 
   goPackagePath = "github.com/derekparker/delve";
   excludedPackages = "\\(_fixtures\\|scripts\\|service/test\\)";
@@ -11,7 +11,7 @@ buildGoPackage rec {
     owner = "derekparker";
     repo = "delve";
     rev = "v${version}";
-    sha256 = "1241zqyimgqil4qd72f0yiw935lkdmfr88kvqbkn9n05k7xhdg30";
+    sha256 = "0gpsd9hb7r65rn4ml9jzsmy72b8j0id6wik2l48ghzkwjm72rsdz";
   };
 
   meta = with stdenv.lib; {

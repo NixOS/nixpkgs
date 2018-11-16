@@ -27,6 +27,7 @@
       <xsl:for-each select="str:tokenize($serviceDirectories)">
         <servicedir><xsl:value-of select="." />/share/dbus-1/system-services</servicedir>
         <includedir><xsl:value-of select="." />/etc/dbus-1/system.d</includedir>
+        <includedir><xsl:value-of select="." />/share/dbus-1/system.d</includedir>
       </xsl:for-each>
     </busconfig>
   </xsl:template>

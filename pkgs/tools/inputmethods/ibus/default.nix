@@ -1,7 +1,8 @@
 { stdenv, fetchurl, fetchFromGitHub, autoreconfHook, gconf, intltool, makeWrapper, pkgconfig
-, vala, wrapGAppsHook, atk, dbus, dconf ? null, glib, gdk_pixbuf, gobjectIntrospection, gtk2
-, gtk3, gtk_doc, isocodes, python3, json_glib, libnotify ? null, enablePythonLibrary ? true
-, enableUI ? true, withWayland ? false, libxkbcommon ? null, wayland ? null }:
+, vala, wrapGAppsHook, dbus, dconf ? null, glib, gdk_pixbuf, gobjectIntrospection, gtk2
+, gtk3, gtk-doc, isocodes, python3, json-glib, libnotify ? null, enablePythonLibrary ? true
+, enableUI ? true, withWayland ? false, libxkbcommon ? null, wayland ? null
+, buildPackages }:
 
 assert withWayland -> wayland != null && libxkbcommon != null;
 
@@ -76,7 +77,7 @@ stdenv.mkDerivation rec {
     substituteInPlace data/dconf/Makefile.am --replace "dconf update" true
     substituteInPlace configure.ac --replace '$python2dir/ibus' $out/${python3.sitePackages}/ibus
     echo \#!${stdenv.shell} > data/dconf/make-dconf-override-db.sh
-    cp ${gtk_doc}/share/gtk-doc/data/gtk-doc.make .
+    cp ${buildPackages.gtk-doc}/share/gtk-doc/data/gtk-doc.make .
   '';
 
   preAutoreconf = "touch ChangeLog";
@@ -97,7 +98,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoreconfHook
     gconf
-    gtk_doc
+    gtk-doc
     intltool
     makeWrapper
     pkgconfig
@@ -116,7 +117,7 @@ stdenv.mkDerivation rec {
     gtk2
     gtk3
     isocodes
-    json_glib
+    json-glib
     libnotify
   ] ++ optionals withWayland [
     libxkbcommon
@@ -125,6 +126,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  doCheck = false; # requires X11 daemon
   doInstallCheck = true;
   installCheckPhase = "$out/bin/ibus version";
 

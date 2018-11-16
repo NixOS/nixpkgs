@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, fetchpatch
-, linkStatic ? (stdenv.system == "i686-cygwin")
+{ stdenv, fetchurl
+, linkStatic ? (stdenv.hostPlatform.system == "i686-cygwin")
 }:
 
 stdenv.mkDerivation rec {
@@ -35,11 +35,10 @@ stdenv.mkDerivation rec {
   configureFlags =
     stdenv.lib.optionals linkStatic [ "--enable-static" "--disable-shared" ];
 
-  meta = {
-    homepage = http://www.bzip.org;
+  meta = with stdenv.lib; {
     description = "High-quality data compression program";
-
-    platforms = stdenv.lib.platforms.all;
+    license = licenses.bsdOriginal;
+    platforms = platforms.all;
     maintainers = [];
   };
 }

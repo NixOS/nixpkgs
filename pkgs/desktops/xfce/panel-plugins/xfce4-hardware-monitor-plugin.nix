@@ -1,15 +1,15 @@
 { stdenv, fetchurl, pkgconfig, intltool, autoreconfHook, gnome2,
-  libgtop, libxfce4ui, libxfce4util, xfce4panel, lm_sensors
+  libgtop, libxfce4ui, libxfce4util, xfce4-panel, lm_sensors
 }:
 
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname  = "xfce4-hardware-monitor-plugin";
-  version = "1.5.0";
+  version = "1.6.0";
 
   src = fetchurl {
     url = "https://git.xfce.org/panel-plugins/${pname}/snapshot/${name}.tar.bz2";
-    sha256 = "0sqvisr8gagpywq9sfyzqw37hxmj54ii89j5s2g8hx8bng5a98z1";
+    sha256 = "0xg5har11fk1wmdymydxlbk1z8aa39j8k0p4gzw2iqslv3n0zf7b";
   };
 
   nativeBuildInputs = [
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     libgtop
     libxfce4ui
     libxfce4util
-    xfce4panel
+    xfce4-panel
     lm_sensors
    ];
 

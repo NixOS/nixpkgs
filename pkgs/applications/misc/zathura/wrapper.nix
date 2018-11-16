@@ -1,7 +1,7 @@
 { symlinkJoin, lib, makeWrapper, zathura_core, plugins ? [] }:
 
 let
-  pluginsPath = lib.makeLibraryPath plugins;
+  pluginsPath = lib.makeSearchPath "lib/zathura" plugins;
 
 in symlinkJoin {
   name = "zathura-with-plugins-${zathura_core.version}";

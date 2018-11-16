@@ -38,7 +38,7 @@ let
   ];
 
   shellCmdsForEventScript = eventname: commands: ''
-    echo "#!${pkgs.stdenv.shell}" > "$out/${eventname}"
+    echo "#!${pkgs.runtimeShell}" > "$out/${eventname}"
     echo '${commands}' >> "$out/${eventname}"
     chmod a+x "$out/${eventname}"
   '';

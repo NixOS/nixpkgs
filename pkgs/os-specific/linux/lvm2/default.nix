@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig, systemd, libudev, utillinux, coreutils, libuuid
+{ stdenv, fetchurl, fetchpatch, pkgconfig, systemd, udev, utillinux, libuuid
 , thin-provisioning-tools, enable_dmeventd ? false }:
 
 let
@@ -27,7 +27,7 @@ stdenv.mkDerivation {
   ];
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ libudev libuuid thin-provisioning-tools ];
+  buildInputs = [ udev libuuid thin-provisioning-tools ];
 
   preConfigure =
     ''
@@ -59,6 +59,8 @@ stdenv.mkDerivation {
     })
   ];
 
+  doCheck = false; # requires root
+
   # To prevent make install from failing.
   preInstall = "installFlags=\"OWNER= GROUP= confdir=$out/etc\"";
 
@@ -76,11 +78,12 @@ stdenv.mkDerivation {
       cp scripts/lvm2_activation_generator_systemd_red_hat $out/lib/systemd/system-generators
     '';
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://sourceware.org/lvm2/;
     description = "Tools to support Logical Volume Management (LVM) on Linux";
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [raskin];
+    platforms = platforms.linux;
+    license = with licenses; [ gpl2 bsd2 lgpl21 ];
+    maintainers = with maintainers; [raskin];
     inherit version;
     downloadPage = "ftp://sources.redhat.com/pub/lvm2/";
   };

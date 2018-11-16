@@ -1,29 +1,24 @@
-{ stdenv, fetchurl, pkgconfig, python, gst-plugins-base, orc
+{ stdenv, fetchurl, fetchpatch, meson, ninja, gettext
+, pkgconfig, python, gst-plugins-base, orc
 , faacSupport ? false, faac ? null
-, gtkSupport ? false, gtk3 ? null
-, faad2, libass, libkate, libmms
-, libmodplug, mpeg2dec, mpg123
+, faad2, libass, libkate, libmms, librdf, ladspaH
+, libnice, webrtc-audio-processing, lilv, lv2, serd, sord, sratom
+, libbs2b, libmodplug, mpeg2dec
 , openjpeg, libopus, librsvg
 , wildmidi, fluidsynth, libvdpau, wayland
 , libwebp, xvidcore, gnutls, mjpegtools
-, mesa, libintlOrEmpty, libgme
+, libGLU_combined, libintl, libgme
 , openssl, x265, libxml2
 }:
 
 assert faacSupport -> faac != null;
-assert gtkSupport -> gtk3 != null;
 
 let
-  inherit (stdenv.lib) optional optionalString;
-
-  # OpenJPEG version is hardcoded in package source
-  openJpegVersion = with stdenv;
-    lib.concatStringsSep "." (lib.lists.take 2
-      (lib.splitString "." (lib.getVersion openjpeg)));
-
+  inherit (stdenv.lib) optional;
 in
 stdenv.mkDerivation rec {
-  name = "gst-plugins-bad-1.12.3";
+  name = "gst-plugins-bad-${version}";
+  version = "1.14.2";
 
   meta = with stdenv.lib; {
     description = "Gstreamer Bad Plugins";
@@ -35,41 +30,61 @@ stdenv.mkDerivation rec {
       a real live maintainer, or some actual wide use.
     '';
     license     = licenses.lgpl2Plus;
-    platforms   = platforms.linux;
+    platforms   = platforms.linux ++ platforms.darwin;
+    maintainers = with maintainers; [ matthewbauer ];
   };
 
-  patchPhase = ''
-    sed -i 's/openjpeg-2.2/openjpeg-${openJpegVersion}/' ext/openjpeg/*
+  preConfigure = ''
+    patchShebangs .
   '';
+
+  patches = [
+    (fetchpatch {
+        url = "https://bug794856.bugzilla-attachments.gnome.org/attachment.cgi?id=370409";
+        sha256 = "0hy0rcn35alq65yqwri4fqjz2hf3nyyg5c7rnndk51msmqjxpprk";
+    })
+    ./fix_pkgconfig_includedir.patch
+    # Enable bs2b compilation
+    # https://bugzilla.gnome.org/show_bug.cgi?id=794346
+    (fetchurl {
+      url = https://bugzilla.gnome.org/attachment.cgi?id=369724;
+      sha256 = "1716mp0h2866ab33w607isvfhv1zwyj71qb4jrkx5v0h276v1pwr";
+    })
+  ];
 
   src = fetchurl {
     url = "${meta.homepage}/src/gst-plugins-bad/${name}.tar.xz";
-    sha256 = "1v5z3i5ha20gmbb3r9dwsaaspv5fm1jfzlzwlzqx1gjj31v5kl1n";
+    sha256 = "1bqy3dn7q4kdkd4lqznyly8fv854d0hhncv88jk6ai4rf3dbgyil";
   };
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ pkgconfig python ];
+  nativeBuildInputs = [ meson ninja pkgconfig python gettext ];
 
   buildInputs = [
     gst-plugins-base orc
-    faad2 gtk3 libass libkate libmms
-    libmodplug mpeg2dec mpg123
+    faad2 libass libkate libmms
+    libnice webrtc-audio-processing # webrtc
+    libbs2b
+    ladspaH librdf # ladspa plug-in
+    lilv lv2 serd sord sratom # lv2 plug-in
+    libmodplug mpeg2dec
     openjpeg libopus librsvg
     fluidsynth libvdpau
-    libwebp xvidcore gnutls mesa
-    mjpegtools libgme openssl x265 libxml2
+    libwebp xvidcore gnutls libGLU_combined
+    libgme openssl x265 libxml2
+    libintl
   ]
-    ++ libintlOrEmpty
     ++ optional faacSupport faac
-    # for gtksink
-    ++ optional gtkSupport gtk3
     ++ optional stdenv.isLinux wayland
     # wildmidi requires apple's OpenAL
     # TODO: package apple's OpenAL, fix wildmidi, include on Darwin
-    ++ optional (!stdenv.isDarwin) wildmidi;
-
-  LDFLAGS = optionalString stdenv.isDarwin "-lintl";
+    ++ optional (!stdenv.isDarwin) wildmidi
+    # TODO: mjpegtools uint64_t is not compatible with guint64 on Darwin
+    ++ optional (!stdenv.isDarwin) mjpegtools;
 
   enableParallelBuilding = true;
+
+  doCheck = false; # fails 20 out of 58 tests, expensive
+
 }

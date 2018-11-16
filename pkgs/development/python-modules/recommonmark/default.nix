@@ -9,7 +9,6 @@
 
 buildPythonPackage rec {
   pname = "recommonmark";
-  name = "${pname}-${version}";
   version = "0.4.0";
 
   src = fetchPypi {

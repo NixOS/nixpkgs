@@ -12,6 +12,12 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ sqlite ];
 
+  # needed for 1.116.0 to build with gcc7
+  NIX_CFLAGS_COMPILE = [
+    "-Wno-implicit-fallthrough"
+  ];
+
+
   meta = {
     description = "A flexible memory management and garbage collection library";
     homepage    = "https://www.ravenbrook.com/project/mps";

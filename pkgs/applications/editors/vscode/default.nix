@@ -1,26 +1,27 @@
-{ stdenv, lib, callPackage, fetchurl, unzip, atomEnv, makeDesktopItem,
-  makeWrapper, libXScrnSaver, libxkbfile, libsecret }:
+{ stdenv, lib, fetchurl, unzip, atomEnv, makeDesktopItem,
+  gtk2, wrapGAppsHook, libXScrnSaver, libxkbfile, libsecret }:
 
 let
-  version = "1.20.1";
+  version = "1.29.0";
   channel = "stable";
 
   plat = {
     "i686-linux" = "linux-ia32";
     "x86_64-linux" = "linux-x64";
     "x86_64-darwin" = "darwin";
-  }.${stdenv.system};
+  }.${stdenv.hostPlatform.system};
 
   sha256 = {
-    "i686-linux" = "0gycz857bl9ikfrylim970qgmyw7rcy3gbg2zsjddp9cgdk9basn";
-    "x86_64-linux" = "0rx0qyxv173s9wjw97f94h61f12lh42grnmabgsvwd87b8zx4qim";
-    "x86_64-darwin" = "0mqxmmkp3bsmy1g35prsgan61zzq5368gp720v37cwx1rskl0bfg";
-  }.${stdenv.system};
+    "i686-linux" = "12qanqd3bviw2lzf23pd79wapzn463ckivfrl2wbbi8dcyhp4sda";
+    "x86_64-linux" = "1v72i40hdsy8v7wrbsz6igj8r1q4sfzvrxri0ddxjb3y5mivzjwf";
+    "x86_64-darwin" = "0qxz6j468nvgv4d8fibsi13q5ymc8z2gdx5kqcf6wixzrk0clnv8";
+  }.${stdenv.hostPlatform.system};
 
-  archive_fmt = if stdenv.system == "x86_64-darwin" then "zip" else "tar.gz";
+  archive_fmt = if stdenv.hostPlatform.system == "x86_64-darwin" then "zip" else "tar.gz";
 
   rpath = lib.concatStringsSep ":" [
     atomEnv.libPath
+    "${lib.makeLibraryPath [gtk2]}"
     "${lib.makeLibraryPath [libsecret]}/libsecret-1.so.0"
     "${lib.makeLibraryPath [libXScrnSaver]}/libXss.so.1"
     "${lib.makeLibraryPath [libxkbfile]}/libxkbfile.so.1"
@@ -47,12 +48,12 @@ in
       categories = "GNOME;GTK;Utility;TextEditor;Development;";
     };
 
-    buildInputs = if stdenv.system == "x86_64-darwin"
-      then [ unzip makeWrapper libXScrnSaver libsecret ]
-      else [ makeWrapper libXScrnSaver libxkbfile libsecret ];
+    buildInputs = if stdenv.hostPlatform.system == "x86_64-darwin"
+      then [ unzip libXScrnSaver libsecret ]
+      else [ wrapGAppsHook libXScrnSaver libxkbfile libsecret ];
 
     installPhase =
-      if stdenv.system == "x86_64-darwin" then ''
+      if stdenv.hostPlatform.system == "x86_64-darwin" then ''
         mkdir -p $out/lib/vscode $out/bin
         cp -r ./* $out/lib/vscode
         ln -s $out/lib/vscode/Contents/Resources/app/bin/code $out/bin
@@ -71,7 +72,7 @@ in
         cp $out/lib/vscode/resources/app/resources/linux/code.png $out/share/pixmaps/code.png
       '';
 
-    postFixup = lib.optionalString (stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux") ''
+    postFixup = lib.optionalString (stdenv.hostPlatform.system == "i686-linux" || stdenv.hostPlatform.system == "x86_64-linux") ''
       patchelf \
         --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
         --set-rpath "${rpath}" \
@@ -79,7 +80,12 @@ in
 
       patchelf \
         --set-rpath "${rpath}" \
-        $out/lib/vscode/resources/app/node_modules/keytar/build/Release/keytar.node
+        $out/lib/vscode/resources/app/node_modules.asar.unpacked/keytar/build/Release/keytar.node
+
+      patchelf \
+        --set-rpath "${rpath}" \
+        "$out/lib/vscode/resources/app/node_modules.asar.unpacked/native-keymap/build/Release/\
+      keymapping.node"
 
       ln -s ${lib.makeLibraryPath [libsecret]}/libsecret-1.so.0 $out/lib/vscode/libsecret-1.so.0
     '';

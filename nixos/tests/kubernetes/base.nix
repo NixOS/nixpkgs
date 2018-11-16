@@ -1,6 +1,9 @@
-{ system ? builtins.currentSystem }:
+{ system ? builtins.currentSystem,
+  config ? {},
+  pkgs ? import ../.. { inherit system config; }
+}:
 
-with import ../../lib/testing.nix { inherit system; };
+with import ../../lib/testing.nix { inherit system pkgs; };
 with pkgs.lib;
 
 let
@@ -24,7 +27,7 @@ let
         { config, pkgs, lib, nodes, ... }:
           mkMerge [
             {
-              virtualisation.memorySize = mkDefault 768;
+              virtualisation.memorySize = mkDefault 1536;
               virtualisation.diskSize = mkDefault 4096;
               networking = {
                 inherit domain extraHosts;

@@ -1,19 +1,29 @@
-{stdenv, buildOcaml, fetchFromGitHub, fetchurl, camlp4, ocaml_oasis, bitstring, camlzip, cmdliner, core_kernel, ezjsonm, faillib, fileutils, ocaml_lwt, ocamlgraph, ocurl, re, uri, zarith, piqi, piqi-ocaml, uuidm, llvm_38, ulex, easy-format, xmlm, frontc, ounit, utop, which, makeWrapper, writeText, ocaml}:
+{ stdenv, fetchFromGitHub, fetchurl, fetchpatch
+, ocaml, findlib, ocamlbuild, ocaml_oasis,
+ bitstring, camlzip, cmdliner, core_kernel, ezjsonm, faillib, fileutils, ocaml_lwt, ocamlgraph, ocurl, re, uri, zarith, piqi, piqi-ocaml, uuidm, llvm_38, frontc, ounit, ppx_jane, parsexp,
+ utop,
+ which, makeWrapper, writeText
+}:
 
-buildOcaml rec {
-  name = "bap";
-  version = "1.2.0";
+stdenv.mkDerivation rec {
+  name = "ocaml${ocaml.version}-bap-${version}";
+  version = "1.4.0";
   src = fetchFromGitHub {
     owner = "BinaryAnalysisPlatform";
     repo = "bap";
     rev = "v${version}";
-    sha256 = "0dn1gvj73pma0rsw8r50cmjddibnf42w1kbskb2vpzq0kb79jlkw";
+    sha256 = "0329m65x8q5q8vgvsqgyz2vz7q6qkh2rh11j7x29hckk3fzxsf8g";
   };
 
   sigs = fetchurl {
      url = "https://github.com/BinaryAnalysisPlatform/bap/releases/download/v${version}/sigs.zip";
-     sha256 = "0mpsq2pinbrynlisnh8j3nrlamlsls7lza0bkqnm9szqjjdmcgfn";
+     sha256 = "0k761w82zkmi5dwsfqq61dbjnb8mmmpb2xwp7vp85xs14g5fjz19";
   };
+
+  patches = [(fetchpatch {
+    url = "https://github.com/BinaryAnalysisPlatform/bap/commit/e4ee3a1e5b427e8d8991e7462b06123178c0a046.patch";
+    sha256 = "1yq33zd2sdacclr20g05c1q050m7x7vfbl66qdgansh23dr4fnxk";
+  })];
 
   createFindlibDestdir = true;
 
@@ -24,11 +34,11 @@ buildOcaml rec {
 
   nativeBuildInputs = [ which makeWrapper ];
 
-  buildInputs = [ ocaml_oasis
+  buildInputs = [ ocaml findlib ocamlbuild ocaml_oasis
                   llvm_38
                   utop ];
 
-  propagatedBuildInputs = [ bitstring camlzip cmdliner core_kernel ezjsonm faillib fileutils ocaml_lwt ocamlgraph ocurl re uri zarith piqi
+  propagatedBuildInputs = [ bitstring camlzip cmdliner ppx_jane core_kernel ezjsonm faillib fileutils ocaml_lwt ocamlgraph ocurl re uri zarith piqi parsexp
                             piqi-ocaml uuidm frontc ounit ];
 
   installPhase = ''
@@ -45,11 +55,7 @@ buildOcaml rec {
 
   disableIda = "--disable-ida --disable-fsi-benchmark";
 
-  doCheck = true;
-
-  checkTarget = "check test";
-
-  configureFlags = "--enable-everything --enable-tests ${disableIda} --with-llvm-config=${llvm_38}/bin/llvm-config";
+  configureFlags = [ "--enable-everything ${disableIda}" "--with-llvm-config=${llvm_38}/bin/llvm-config" ];
 
   BAPBUILDFLAGS = "-j $(NIX_BUILD_CORES)";
 
@@ -58,6 +64,6 @@ buildOcaml rec {
     homepage = https://github.com/BinaryAnalysisPlatform/bap/;
     maintainers = [ maintainers.maurer ];
     license = licenses.mit;
-    broken = versionAtLeast ocaml.version "4.03";
+    broken = versionOlder ocaml.version "4.03";
   };
 }

@@ -1,18 +1,19 @@
-{ stdenv, autoreconfHook, pkgconfig, fetchFromGitHub, dleyna-connector-dbus, dleyna-core, gssdp, gupnp, gupnp_av, gupnp_dlna, libsoup, makeWrapper }:
+{ stdenv, autoreconfHook, pkgconfig, fetchFromGitHub, dleyna-connector-dbus, dleyna-core, gssdp, gupnp, gupnp-av, gupnp-dlna, libsoup, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "dleyna-renderer";
+  pname = "dleyna-renderer";
+  name = "${pname}-${version}";
   version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "01org";
-    repo = name;
-    rev = "${version}";
+    repo = pname;
+    rev = version;
     sha256 = "0jy54aq8hgrvzchrvfzqaj4pcn0cfhafl9bv8a9p6j82yjk4pvpp";
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig makeWrapper ];
-  buildInputs = [ dleyna-core dleyna-connector-dbus gssdp gupnp gupnp_av gupnp_dlna libsoup ];
+  buildInputs = [ dleyna-core dleyna-connector-dbus gssdp gupnp gupnp-av gupnp-dlna libsoup ];
 
   preFixup = ''
     wrapProgram "$out/libexec/dleyna-renderer-service" \
@@ -21,7 +22,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Library to discover and manipulate Digital Media Renderers";
-    homepage = http://01.org/dleyna;
+    homepage = https://01.org/dleyna;
     maintainers = [ maintainers.jtojnar ];
     platforms = platforms.linux;
     license = licenses.lgpl21;

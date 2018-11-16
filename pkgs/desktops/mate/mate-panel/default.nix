@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, pkgconfig, intltool, itstool, glib, dbus_glib, libwnck3, librsvg, libxml2, gnome3, mate, hicolor_icon_theme, wrapGAppsHook }:
+{ stdenv, fetchurl, pkgconfig, intltool, itstool, glib, dbus-glib, libwnck3, librsvg, libxml2, gnome3, mate, hicolor-icon-theme, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   name = "mate-panel-${version}";
-  version = "1.20.0";
+  version = "1.21.1";
 
   src = fetchurl {
     url = "http://pub.mate-desktop.org/releases/${mate.getRelease version}/${name}.tar.xz";
-    sha256 = "0cz1pfwvsmrjcd0wa83cid9yjcygla6rhigyr7f75d75kiknlcm7";
+    sha256 = "0093pimqkx5db2nciksgrmq02hldg08p7hghafky3njl0kzv8l5z";
   };
 
   nativeBuildInputs = [
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     glib
-    dbus_glib
+    dbus-glib
     libwnck3
     librsvg
     libxml2
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     mate.libmateweather
     mate.mate-desktop
     mate.mate-menus
-    hicolor_icon_theme
+    hicolor-icon-theme
   ];
 
   NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";

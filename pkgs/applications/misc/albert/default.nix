@@ -1,15 +1,18 @@
 { mkDerivation, lib, fetchFromGitHub, makeWrapper, qtbase,
   qtdeclarative, qtsvg, qtx11extras, muparser, cmake, python3 }:
 
+let
+  pname = "albert";
+  version = "0.14.22";
+in
 mkDerivation rec {
-  name    = "albert-${version}";
-  version = "0.14.15";
+  name = "${pname}-${version}";
 
   src = fetchFromGitHub {
     owner  = "albertlauncher";
     repo   = "albert";
     rev    = "v${version}";
-    sha256 = "1rjp0bmzs8b9blbxz3sfcanyhgmds882pf1g3jx5qp85y64j8507";
+    sha256 = "0i9kss5szirmd0pzw3cm692kl9rhkan1zfywfqrjdf3i3b6914sg";
     fetchSubmodules = true;
   };
 
@@ -45,7 +48,7 @@ mkDerivation rec {
     homepage    = https://albertlauncher.github.io/;
     description = "Desktop agnostic launcher";
     license     = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ericsagnes ];
+    maintainers = with maintainers; [ ericsagnes synthetica ];
     platforms   = platforms.linux;
   };
 }

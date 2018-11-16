@@ -1,7 +1,6 @@
 { stdenv, fetchFromGitHub, buildPythonPackage, pytest }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "semver";
   version = "2.7.9";
 

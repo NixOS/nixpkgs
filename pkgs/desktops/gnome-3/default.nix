@@ -1,61 +1,51 @@
-{ pkgs }:
+{ config, pkgs, lib }:
 
-let
+lib.makeScope pkgs.newScope (self: with self; {
+  updateScript = callPackage ./update.nix { };
 
-  pkgsFun = overrides:
-    let
-      self = self_ // overrides;
-      self_ = with self; {
-
-  overridePackages = f:
-    let newself = pkgsFun (f newself self);
-    in newself;
-
-  callPackage = pkgs.newScope self;
-
-  version = "3.26";
   maintainers = with pkgs.lib.maintainers; [ lethalman jtojnar ];
 
   corePackages = with gnome3; [
-    pkgs.desktop_file_utils pkgs.ibus
-    pkgs.shared_mime_info # for update-mime-database
+    pkgs.desktop-file-utils
+    pkgs.shared-mime-info # for update-mime-database
     glib # for gsettings
     gtk3.out # for gtk-update-icon-cache
-    glib_networking gvfs dconf gnome-backgrounds gnome_control_center
-    gnome-menus gnome_settings_daemon gnome_shell
-    gnome_themes_standard defaultIconTheme gnome-shell-extensions
-    pkgs.hicolor_icon_theme
+    glib-networking gvfs dconf gnome-backgrounds gnome-control-center
+    gnome-menus gnome-settings-daemon gnome-shell
+    gnome-themes-extra defaultIconTheme gnome-shell-extensions
+    pkgs.hicolor-icon-theme
   ];
 
   optionalPackages = with gnome3; [ baobab eog epiphany evince
     gucharmap nautilus totem vino yelp gnome-bluetooth
     gnome-calculator gnome-contacts gnome-font-viewer gnome-screenshot
     gnome-system-log gnome-system-monitor simple-scan
-    gnome_terminal gnome-user-docs evolution file-roller gedit
-    gnome-clocks gnome-music gnome-tweak-tool gnome-photos
+    gnome-terminal gnome-user-docs evolution file-roller gedit
+    gnome-clocks gnome-music gnome-tweaks gnome-photos
     nautilus-sendto dconf-editor vinagre gnome-weather gnome-logs
     gnome-maps gnome-characters gnome-calendar accerciser gnome-nettool
     gnome-getting-started-docs gnome-packagekit gnome-software
-    gnome-power-manager
+    gnome-power-manager gnome-todo gnome-usage
   ];
 
   gamesPackages = with gnome3; [ swell-foop lightsoff iagno
-    tali quadrapassel gnome-sudoku aisleriot five-or-more
+    tali quadrapassel gnome-sudoku atomix aisleriot five-or-more
     four-in-a-row gnome-chess gnome-klotski gnome-mahjongg
     gnome-mines gnome-nibbles gnome-robots gnome-tetravex
     hitori gnome-taquin
   ];
 
-  inherit (pkgs) glib gtk2 webkitgtk gtk3 gtkmm3 libcanberra_gtk2
-    clutter clutter-gst clutter_gtk cogl gtkvnc;
-  inherit (pkgs.gnome2) ORBit2;
+  inherit (pkgs) atk glib gobjectIntrospection gspell webkitgtk gtk3 gtkmm3
+    libgtop libgudev libhttpseverywhere librsvg libsecret gdk_pixbuf gtksourceview gtksourceview4
+    easytag meld orca rhythmbox shotwell gnome-usage
+    clutter clutter-gst clutter-gtk cogl gtk-vnc libdazzle;
+
   libsoup = pkgs.libsoup.override { gnomeSupport = true; };
   libchamplain = pkgs.libchamplain.override { libsoup = libsoup; };
-  orbit = ORBit2;
   gnome3 = self // { recurseForDerivations = false; };
   gtk = gtk3;
   gtkmm = gtkmm3;
-  vala = pkgs.vala_0_38;
+  vala = pkgs.vala_0_40;
   gegl_0_3 = pkgs.gegl_0_3.override { inherit gtk; };
 
 # Simplify the nixos module and gnome packages
@@ -81,11 +71,9 @@ let
 
   evince = callPackage ./core/evince { }; # ToDo: dbus would prevent compilation, enable tests
 
-  evolution_data_server = callPackage ./core/evolution-data-server { };
+  evolution-data-server = callPackage ./core/evolution-data-server { };
 
-  gconf = callPackage ./core/gconf { };
-
-  geocode_glib = callPackage ./core/geocode-glib { };
+  geocode-glib = callPackage ./core/geocode-glib { };
 
   gcr = callPackage ./core/gcr { }; # ToDo: tests fail
 
@@ -93,23 +81,25 @@ let
 
   gjs = callPackage ./core/gjs { };
 
-  glib_networking = pkgs.glib_networking.override {
-    inherit gsettings_desktop_schemas;
+  glib-networking = pkgs.glib-networking.override {
+    inherit gsettings-desktop-schemas;
   };
 
   gnome-backgrounds = callPackage ./core/gnome-backgrounds { };
 
   gnome-bluetooth = callPackage ./core/gnome-bluetooth { };
 
+  gnome-color-manager = callPackage ./core/gnome-color-manager { };
+
   gnome-contacts = callPackage ./core/gnome-contacts { };
 
-  gnome_control_center = callPackage ./core/gnome-control-center { };
+  gnome-control-center = callPackage ./core/gnome-control-center { };
 
   gnome-calculator = callPackage ./core/gnome-calculator { };
 
-  gnome_common = callPackage ./core/gnome-common { };
+  gnome-common = callPackage ./core/gnome-common { };
 
-  gnome_desktop = callPackage ./core/gnome-desktop { };
+  gnome-desktop = callPackage ./core/gnome-desktop { };
 
   gnome-dictionary = callPackage ./core/gnome-dictionary { };
 
@@ -119,27 +109,27 @@ let
 
   gnome-menus = callPackage ./core/gnome-menus { };
 
-  gnome_keyring = callPackage ./core/gnome-keyring { };
+  gnome-keyring = callPackage ./core/gnome-keyring { };
 
-  libgnome_keyring = callPackage ./core/libgnome-keyring { };
+  libgnome-keyring = callPackage ./core/libgnome-keyring { };
 
   libgnomekbd = callPackage ./core/libgnomekbd { };
 
   folks = callPackage ./core/folks { };
 
-  gnome_online_accounts = callPackage ./core/gnome-online-accounts { };
+  gnome-online-accounts = callPackage ./core/gnome-online-accounts { };
 
   gnome-online-miners = callPackage ./core/gnome-online-miners { };
 
-  gnome_session = callPackage ./core/gnome-session { };
+  gnome-session = callPackage ./core/gnome-session { };
 
-  gnome_shell = callPackage ./core/gnome-shell { };
+  gnome-shell = callPackage ./core/gnome-shell { };
 
   gnome-shell-extensions = callPackage ./core/gnome-shell-extensions { };
 
   gnome-screenshot = callPackage ./core/gnome-screenshot { };
 
-  gnome_settings_daemon = callPackage ./core/gnome-settings-daemon { };
+  gnome-settings-daemon = callPackage ./core/gnome-settings-daemon { };
 
   gnome-software = callPackage ./core/gnome-software { };
 
@@ -147,9 +137,9 @@ let
 
   gnome-system-monitor = callPackage ./core/gnome-system-monitor { };
 
-  gnome_terminal = callPackage ./core/gnome-terminal { };
+  gnome-terminal = callPackage ./core/gnome-terminal { };
 
-  gnome_themes_standard = callPackage ./core/gnome-themes-standard { };
+  gnome-themes-extra = callPackage ./core/gnome-themes-extra { };
 
   gnome-user-docs = callPackage ./core/gnome-user-docs { };
 
@@ -159,11 +149,9 @@ let
 
   grilo-plugins = callPackage ./core/grilo-plugins { };
 
-  gsettings_desktop_schemas = callPackage ./core/gsettings-desktop-schemas { };
+  gsettings-desktop-schemas = callPackage ./core/gsettings-desktop-schemas { };
 
   gsound = callPackage ./core/gsound { };
-
-  gtksourceview = callPackage ./core/gtksourceview { };
 
   gtksourceviewmm = callPackage ./core/gtksourceviewmm { };
 
@@ -193,39 +181,37 @@ let
 
   nautilus = callPackage ./core/nautilus { };
 
-  networkmanager_openvpn = pkgs.networkmanager_openvpn.override {
-    inherit gnome3;
+  networkmanager-openvpn = pkgs.networkmanager-openvpn.override {
+    withGnome = true;
   };
 
-  networkmanager_pptp = pkgs.networkmanager_pptp.override {
-    inherit gnome3;
+  networkmanager-vpnc = pkgs.networkmanager-vpnc.override {
+    withGnome = true;
   };
 
-  networkmanager_vpnc = pkgs.networkmanager_vpnc.override {
-    inherit gnome3;
+  networkmanager-openconnect = pkgs.networkmanager-openconnect.override {
+    withGnome = true;
   };
 
-  networkmanager_openconnect = pkgs.networkmanager_openconnect.override {
-    inherit gnome3;
+  networkmanager-fortisslvpn = pkgs.networkmanager-fortisslvpn.override {
+    withGnome = true;
   };
 
-  networkmanager_fortisslvpn = pkgs.networkmanager_fortisslvpn.override {
-    inherit gnome3;
+  networkmanager-l2tp = pkgs.networkmanager-l2tp.override {
+    withGnome = true;
   };
 
-  networkmanager_l2tp = pkgs.networkmanager_l2tp.override {
-    inherit gnome3;
-  };
-
-  networkmanager_iodine = pkgs.networkmanager_iodine.override {
-    inherit gnome3;
+  networkmanager-iodine = pkgs.networkmanager-iodine.override {
+    withGnome = true;
   };
 
   networkmanagerapplet = pkgs.networkmanagerapplet.override {
-    inherit gnome3 gsettings_desktop_schemas glib_networking;
+    withGnome = true;
   };
 
   rest = callPackage ./core/rest { };
+
+  rygel = callPackage ./core/rygel { };
 
   simple-scan = callPackage ./core/simple-scan { };
 
@@ -249,9 +235,9 @@ let
 
   yelp = callPackage ./core/yelp { };
 
-  yelp_xsl = callPackage ./core/yelp-xsl { };
+  yelp-xsl = callPackage ./core/yelp-xsl { };
 
-  yelp_tools = callPackage ./core/yelp-tools { };
+  yelp-tools = callPackage ./core/yelp-tools { };
 
   zenity = callPackage ./core/zenity { };
 
@@ -300,14 +286,15 @@ let
 
   gnome-power-manager = callPackage ./apps/gnome-power-manager { };
 
+  gnome-sound-recorder = callPackage ./apps/gnome-sound-recorder { };
+
+  gnome-todo = callPackage ./apps/gnome-todo {};
+
   gnome-weather = callPackage ./apps/gnome-weather { };
 
   nautilus-sendto = callPackage ./apps/nautilus-sendto { };
 
   polari = callPackage ./apps/polari { };
-
-  # scrollkeeper replacement
-  rarian = callPackage ./desktop/rarian { };
 
   seahorse = callPackage ./apps/seahorse { };
 
@@ -328,6 +315,8 @@ let
 #### Games
 
   aisleriot = callPackage ./games/aisleriot { };
+
+  atomix = callPackage ./games/atomix { };
 
   five-or-more = callPackage ./games/five-or-more { };
 
@@ -373,9 +362,7 @@ let
 
   gitg = callPackage ./misc/gitg { };
 
-  gspell = callPackage ./misc/gspell { };
-
-  libgames-support = callPackage ./misc/libgames-support { };
+  libgnome-games-support = callPackage ./misc/libgnome-games-support { };
 
   libgda = callPackage ./misc/libgda { };
 
@@ -385,9 +372,17 @@ let
 
   gexiv2 = callPackage ./misc/gexiv2 { };
 
-  gnome-tweak-tool = callPackage ./misc/gnome-tweak-tool { };
+  gnome-applets = callPackage ./misc/gnome-applets { };
+
+  gnome-flashback = callPackage ./misc/gnome-flashback { };
+
+  gnome-panel = callPackage ./misc/gnome-panel { };
+
+  gnome-tweaks = callPackage ./misc/gnome-tweaks { };
 
   gpaste = callPackage ./misc/gpaste { };
+
+  metacity = callPackage ./misc/metacity { };
 
   pidgin-im-gnome-shell-extension = callPackage ./misc/pidgin { };
 
@@ -401,7 +396,37 @@ let
 
   gnome-packagekit = callPackage ./misc/gnome-packagekit { };
 
-    };
-  in self; # pkgsFun
+  # TODO: remove this after 18.09 has forked off
+  gconf = throw "gconf is deprecated since 2009 and has been removed from the package set. Use gnome2.GConf instead. For more details see https://github.com/NixOS/nixpkgs/pull/43268";
+} // lib.optionalAttrs (config.allowAliases or true) {
+#### Legacy aliases
 
-in pkgsFun {}
+  evolution_data_server = evolution-data-server; # added 2018-02-25
+  geocode_glib = geocode-glib; # added 2018-02-25
+  glib_networking = glib-networking; # added 2018-02-25
+  gnome_common = gnome-common; # added 2018-02-25
+  gnome_control_center = gnome-control-center; # added 2018-02-25
+  gnome_desktop = gnome-desktop; # added 2018-02-25
+  gnome_keyring = gnome-keyring; # added 2018-02-25
+  gnome_online_accounts = gnome-online-accounts; # added 2018-02-25
+  gnome_session = gnome-session; # added 2018-02-25
+  gnome_settings_daemon = gnome-settings-daemon; # added 2018-02-25
+  gnome_shell = gnome-shell; # added 2018-02-25
+  gnome_terminal = gnome-terminal; # added 2018-02-25
+  gnome-themes-standard = gnome-themes-extra; # added 2018-03-14
+  gnome_themes_standard = gnome-themes-standard; # added 2018-02-25
+  gnome-tweak-tool = gnome-tweaks; # added 2018-03-21
+  gsettings_desktop_schemas = gsettings-desktop-schemas; # added 2018-02-25
+  libgames-support = libgnome-games-support; # added 2018-03-14
+  libgnome_keyring = libgnome-keyring; # added 2018-02-25
+  inherit (pkgs) rarian; # added 2018-04-25
+  networkmanager_fortisslvpn = networkmanager-fortisslvpn; # added 2018-02-25
+  networkmanager_iodine = networkmanager-iodine; # added 2018-02-25
+  networkmanager_l2tp = networkmanager-l2tp; # added 2018-02-25
+  networkmanager_openconnect = networkmanager-openconnect; # added 2018-02-25
+  networkmanager_openvpn = networkmanager-openvpn; # added 2018-02-25
+  networkmanager_vpnc = networkmanager-vpnc; # added 2018-02-25
+  yelp_xsl = yelp-xsl; # added 2018-02-25
+  yelp_tools = yelp-tools; # added 2018-02-25
+
+})

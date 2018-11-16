@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl, groff
+{ stdenv, fetchurl, perl
 , ghostscript #for postscript and html output
 , psutils, netpbm #for html output
 , buildPackages
@@ -47,18 +47,17 @@ stdenv.mkDerivation rec {
   ] ++ stdenv.lib.optionals (ghostscript != null) [
     "--with-gs=${ghostscript}/bin/gs"
   ] ++ stdenv.lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
-    "ac_cv_path_PERL=${perl}/bin/perl"
+    "ac_cv_path_PERL=${buildPackages.perl}/bin/perl"
+  ];
+
+  makeFlags = stdenv.lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    # Trick to get the build system find the proper 'native' groff
+    # http://www.mail-archive.com/bug-groff@gnu.org/msg01335.html
+    "GROFF_BIN_PATH=${buildPackages.groff}/bin"
+    "GROFFBIN=${buildPackages.groff}/bin/groff"
   ];
 
   doCheck = true;
-
-  crossAttrs = {
-    # Trick to get the build system find the proper 'native' groff
-    # http://www.mail-archive.com/bug-groff@gnu.org/msg01335.html
-    preBuild = ''
-      makeFlags="GROFF_BIN_PATH=${buildPackages.groff}/bin GROFFBIN=${buildPackages.groff}/bin/groff"
-    '';
-  };
 
   # Remove example output with (random?) colors and creation date
   # to avoid non-determinism in the output.
@@ -103,6 +102,8 @@ stdenv.mkDerivation rec {
     substituteInPlace $perl/bin/grog \
       --replace $out/lib/groff/grog $perl/lib/groff/grog
 
+  '' + stdenv.lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
+    find $perl/ -type f -print0 | xargs --null sed -i 's|${buildPackages.perl}|${perl}|'
   '';
 
   meta = with stdenv.lib; {

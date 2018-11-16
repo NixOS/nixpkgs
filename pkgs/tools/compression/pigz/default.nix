@@ -1,19 +1,21 @@
 { stdenv, fetchurl, zlib, utillinux }:
 
 let name = "pigz";
-    version = "2.3.4";
+    version = "2.4";
 in
 stdenv.mkDerivation {
   name = name + "-" + version;
 
   src = fetchurl {
-    url = "http://www.zlib.net/${name}/${name}-${version}.tar.gz";
-    sha256 = "16lgbjzzfx0k4a1znsw8kq3lnkx17gw93zq2sn01sny11fj1y0vg";
+    url = "https://www.zlib.net/${name}/${name}-${version}.tar.gz";
+    sha256 = "0wsgw5vwl23jrnpsvd8v3xcp5k4waw5mk0164fynjhkv58i1dy54";
   };
 
   enableParallelBuilding = true;
 
   buildInputs = [zlib] ++ stdenv.lib.optional stdenv.isLinux utillinux;
+
+  makeFlags = [ "CC=cc" ];
 
   doCheck = stdenv.isLinux;
   checkTarget = "tests";
@@ -26,9 +28,10 @@ stdenv.mkDerivation {
       install -Dm755 pigz.pdf "$out/share/doc/pigz/pigz.pdf"
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://www.zlib.net/pigz/;
     description = "A parallel implementation of gzip for multi-core machines";
-    platforms = stdenv.lib.platforms.unix;
+    license = licenses.zlib;
+    platforms = platforms.unix;
   };
 }

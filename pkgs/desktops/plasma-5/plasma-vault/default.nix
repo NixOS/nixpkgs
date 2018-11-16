@@ -5,6 +5,7 @@
   kactivities,
   plasma-framework,
   kwindowsystem,
+  networkmanager-qt,
   libksysguard,
 
   encfs,
@@ -24,6 +25,7 @@ mkDerivation {
 
   buildInputs = [
     kactivities plasma-framework kwindowsystem libksysguard
+    networkmanager-qt
   ];
 
   CXXFLAGS = [

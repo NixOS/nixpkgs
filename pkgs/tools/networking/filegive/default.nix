@@ -1,7 +1,5 @@
 { stdenv, fetchurl, fetchgit, go }:
 
-assert stdenv.isLinux && (stdenv.isi686 || stdenv.isx86_64 || stdenv.isArm);
-
 let
 
   # Code with BSD license
@@ -23,7 +21,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ go ];
 
   buildPhase = ''
-    ${stdenv.lib.optionalString (stdenv.system == "armv5tel-linux") "export GOARM=5"}
+    ${stdenv.lib.optionalString (stdenv.hostPlatform.system == "armv5tel-linux") "export GOARM=5"}
 
     mkdir $TMPDIR/go
     export GOPATH=$TMPDIR/go

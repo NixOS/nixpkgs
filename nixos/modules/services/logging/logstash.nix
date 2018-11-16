@@ -4,25 +4,12 @@ with lib;
 
 let
   cfg = config.services.logstash;
-  atLeast54 = versionAtLeast (builtins.parseDrvName cfg.package.name).version "5.4";
   pluginPath = lib.concatStringsSep ":" cfg.plugins;
   havePluginPath = lib.length cfg.plugins > 0;
   ops = lib.optionalString;
-  verbosityFlag =
-    if atLeast54
-    then "--log.level " + cfg.logLevel
-    else {
-      debug = "--debug";
-      info  = "--verbose";
-      warn  = ""; # intentionally empty
-      error = "--quiet";
-      fatal = "--silent";
-    }."${cfg.logLevel}";
+  verbosityFlag = "--log.level " + cfg.logLevel;
 
-  pluginsPath =
-    if atLeast54
-    then "--path.plugins ${pluginPath}"
-    else "--pluginpath ${pluginPath}";
+  pluginsPath = "--path.plugins ${pluginPath}";
 
   logstashConf = pkgs.writeText "logstash.conf" ''
     input {
@@ -63,7 +50,7 @@ in
         type = types.package;
         default = pkgs.logstash;
         defaultText = "pkgs.logstash";
-        example = literalExample "pkgs.logstash";
+        example = literalExample "pkgs.logstash5";
         description = "Logstash package to use.";
       };
 
@@ -93,12 +80,6 @@ in
         type = types.int;
         default = 1;
         description = "The quantity of filter workers to run.";
-      };
-
-      enableWeb = mkOption {
-        type = types.bool;
-        default = false;
-        description = "Enable the logstash web interface.";
       };
 
       listenAddress = mkOption {
@@ -174,16 +155,6 @@ in
   ###### implementation
 
   config = mkIf cfg.enable {
-    assertions = [
-      { assertion = atLeast54 -> !cfg.enableWeb;
-        message = ''
-          The logstash web interface is only available for versions older than 5.4.
-          So either set services.logstash.enableWeb = false,
-          or set services.logstash.package to an older logstash.
-        '';
-      }
-    ];
-
     systemd.services.logstash = with pkgs; {
       description = "Logstash Daemon";
       wantedBy = [ "multi-user.target" ];
@@ -193,14 +164,12 @@ in
         ExecStartPre = ''${pkgs.coreutils}/bin/mkdir -p "${cfg.dataDir}" ; ${pkgs.coreutils}/bin/chmod 700 "${cfg.dataDir}"'';
         ExecStart = concatStringsSep " " (filter (s: stringLength s != 0) [
           "${cfg.package}/bin/logstash"
-          (ops (!atLeast54) "agent")
           "-w ${toString cfg.filterWorkers}"
           (ops havePluginPath pluginsPath)
           "${verbosityFlag}"
           "-f ${logstashConf}"
-          (ops atLeast54 "--path.settings ${logstashSettingsDir}")
-          (ops atLeast54 "--path.data ${cfg.dataDir}")
-          (ops cfg.enableWeb "-- web -a ${cfg.listenAddress} -p ${cfg.port}")
+          "--path.settings ${logstashSettingsDir}"
+          "--path.data ${cfg.dataDir}"
         ]);
       };
     };

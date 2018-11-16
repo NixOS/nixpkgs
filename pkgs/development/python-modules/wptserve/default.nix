@@ -1,5 +1,4 @@
 { lib
-, stdenv
 , buildPythonPackage
 , fetchPypi
 , isPy3k
@@ -8,7 +7,6 @@
 buildPythonPackage rec {
   pname = "wptserve";
   version = "1.4.0";
-  name = "${pname}-${version}";
 
   disabled = isPy3k;
 

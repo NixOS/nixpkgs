@@ -1,68 +1,61 @@
-{ stdenv, fetchgit, intltool, itstool, meson, ninja, pkgconfig, wrapGAppsHook
-, git, glib, glib_networking, gsettings_desktop_schemas, gst_all_1, gtk3
-, gtkspell3, libsecret, python36, python36Packages, webkitgtk }:
+{ stdenv, fetchgit, meson, ninja, pkgconfig
+, python3, gtk3, libsecret, gst_all_1, webkitgtk
+, glib-networking, gtkspell3, hunspell, desktop-file-utils
+, gobjectIntrospection, wrapGAppsHook }:
 
-stdenv.mkDerivation rec {
+python3.pkgs.buildPythonApplication rec {
   name = "eolie-${version}";
-  version = "0.9.16";
+  version = "0.9.45";
+
+  format = "other";
+  doCheck = false;
 
   src = fetchgit {
-    url = "https://gitlab.gnome.org/gnumdk/eolie";
-    rev = version;
-    sha256 = "0mvhr6hy4nx7xaq9r9qp5rb0y293kjjryw5ykzb473cr3iwzk25b";
+    url = "https://gitlab.gnome.org/World/eolie";
+    rev = "refs/tags/${version}";
+    fetchSubmodules = true;
+    sha256 = "0x6f2qqqxpjf28mqxs4jlrz2z8wa9nvb9h24nf8qwmzavjjbraqg";
   };
 
   nativeBuildInputs = [
-    intltool
-    itstool
+    desktop-file-utils
+    gobjectIntrospection
     meson
     ninja
     pkgconfig
     wrapGAppsHook
   ];
 
-  buildInputs = [
-    git # required to download ad blocking DB
-    glib_networking
-    gsettings_desktop_schemas
-    gst_all_1.gstreamer
-    gst_all_1.gst-plugins-base
-    gst_all_1.gst-plugins-good
-    gst_all_1.gst-plugins-bad
-    gst_all_1.gst-plugins-ugly
-    gst_all_1.gst-libav
+  buildInputs = with gst_all_1; [
+    glib-networking
+    gst-libav
+    gst-plugins-base
+    gst-plugins-ugly
+    gstreamer
     gtk3
     gtkspell3
+    hunspell
     libsecret
-    python36
-    python36Packages.pygobject3
-    python36Packages.pycairo
-    python36Packages.dateutil
-    python36Packages.dbus-python
-    python36Packages.beautifulsoup4
-    python36Packages.pycrypto
-    python36Packages.requests
     webkitgtk
   ];
 
-  wrapPrefixVariables = [ "PYTHONPATH" ];
-
-  enableParallelBuilding = true;
-
-  postInstall = ''
-    ${glib.dev}/bin/glib-compile-schemas $out/share/glib-2.0/schemas
-  '';
-
-  patches = [
-    ./0001-Remove-post-install-script-handle-in-nix-config-inst.patch
-    ./0001-Extend-the-python-path-rather-than-replacing-it.patch
+  pythonPath = with python3.pkgs; [
+    beautifulsoup4
+    pycairo
+    pygobject3
+    python-dateutil
   ];
+
+  postPatch = ''
+    chmod +x meson_post_install.py
+    patchShebangs meson_post_install.py
+  '';
 
   meta = with stdenv.lib; {
     description = "A new GNOME web browser";
-    homepage = https://gitlab.gnome.org/gnumdk/eolie;
-    license = licenses.gpl3;
-    maintainers = [ maintainers.samdroid-apps ];
-    platforms = platforms.linux;
+    homepage    = https://wiki.gnome.org/Apps/Eolie;
+    license     = licenses.gpl3Plus;
+    maintainers = with maintainers; [ samdroid-apps worldofpeace ];
+    platforms   = platforms.linux;
   };
 }

@@ -4,17 +4,16 @@
 
 stdenv.mkDerivation rec {
   name = "pipework-${version}";
-  version = "2015-07-30";
+  version = "2017-08-22";
   src = fetchFromGitHub {
     owner = "jpetazzo";
     repo = "pipework";
-    rev = "5a46ecb5f8f933fd268ef315f58a1eb1c46bd93d";
-    sha256 = "02znyg5ir37s8xqjcqqz6xnwyqxapn7c4scyqkcapxr932hf1frh";
+    rev = "ae42f1b5fef82b3bc23fe93c95c345e7af65fef3";
+    sha256 = "0c342m0bpq6ranr7dsxk9qi5mg3j5aw9wv85ql8gprdb2pz59qy8";
   };
   buildInputs = [ makeWrapper ];
   installPhase = ''
-    mkdir -p $out/bin
-    cp pipework $out/bin
+    install -D pipework $out/bin/pipework
     wrapProgram $out/bin/pipework --prefix PATH : \
       ${lib.makeBinPath [ bridge-utils iproute lxc openvswitch docker busybox dhcpcd dhcp ]};
   '';

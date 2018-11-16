@@ -1,19 +1,17 @@
-{ stdenv, fetchurl, config, wrapGAppsHook
+{ lib, stdenv, fetchurl, config, wrapGAppsHook
 , alsaLib
 , atk
 , cairo
 , curl
 , cups
-, dbus_glib
-, dbus_libs
+, dbus-glib
+, dbus
 , fontconfig
 , freetype
 , gconf
 , gdk_pixbuf
 , glib
 , glibc
-, gst-plugins-base
-, gstreamer
 , gtk2
 , gtk3
 , kerberos
@@ -21,17 +19,20 @@
 , libXScrnSaver
 , libxcb
 , libXcomposite
+, libXcursor
 , libXdamage
 , libXext
 , libXfixes
+, libXi
 , libXinerama
 , libXrender
 , libXt
-, libcanberra_gtk2
+, libcanberra-gtk2
 , libgnome
 , libgnomeui
+, libnotify
 , defaultIconTheme
-, mesa
+, libGLU_combined
 , nspr
 , nss
 , pango
@@ -41,14 +42,14 @@
 , channel
 , generated
 , writeScript
+, writeText
 , xidel
 , coreutils
 , gnused
 , gnugrep
 , gnupg
+, ffmpeg
 }:
-
-assert stdenv.isLinux;
 
 let
 
@@ -59,7 +60,7 @@ let
     "x86_64-linux" = "linux-x86_64";
   };
 
-  arch = mozillaPlatforms.${stdenv.system};
+  arch = mozillaPlatforms.${stdenv.hostPlatform.system};
 
   isPrefixOf = prefix: string:
     builtins.substring 0 (builtins.stringLength prefix) string == prefix;
@@ -68,6 +69,12 @@ let
       (isPrefixOf source.locale locale) && source.arch == arch;
 
   systemLocale = config.i18n.defaultLocale or "en-US";
+
+  policies = {
+    DisableAppUpdate = true;
+  };
+
+  policiesJson = writeText "no-update-firefox-policy.json" (builtins.toJSON { inherit policies; });
 
   defaultSource = stdenv.lib.findFirst (sourceMatches "en-US") {} sources;
 
@@ -82,50 +89,52 @@ stdenv.mkDerivation {
 
   src = fetchurl { inherit (source) url sha512; };
 
-  phases = [ "unpackPhase" "installPhase" "fixupPhase" ];
+  phases = [ "unpackPhase" "patchPhase" "installPhase" "fixupPhase" ];
 
   libPath = stdenv.lib.makeLibraryPath
     [ stdenv.cc.cc
       alsaLib
-      alsaLib.dev
+      (lib.getDev alsaLib)
       atk
       cairo
       curl
       cups
-      dbus_glib
-      dbus_libs
+      dbus-glib
+      dbus
       fontconfig
       freetype
       gconf
       gdk_pixbuf
       glib
       glibc
-      gst-plugins-base
-      gstreamer
       gtk2
       gtk3
       kerberos
       libX11
       libXScrnSaver
       libXcomposite
+      libXcursor
       libxcb
       libXdamage
       libXext
       libXfixes
+      libXi
       libXinerama
       libXrender
       libXt
-      libcanberra_gtk2
+      libcanberra-gtk2
       libgnome
       libgnomeui
-      mesa
+      libnotify
+      libGLU_combined
       nspr
       nss
       pango
       libheimdal
       libpulseaudio
-      libpulseaudio.dev
+      (lib.getDev libpulseaudio)
       systemd
+      ffmpeg
     ] + ":" + stdenv.lib.makeSearchPathOutput "lib" "lib64" [
       stdenv.cc.cc
     ];
@@ -140,8 +149,8 @@ stdenv.mkDerivation {
   dontPatchELF = true;
 
   patchPhase = ''
-    sed -i -e '/^pref("app.update.channel",/d' defaults/pref/channel-prefs.js
-    echo 'pref("app.update.channel", "non-existing-channel")' >> defaults/pref/channel-prefs.js
+    # Don't download updates from Mozilla directly
+    echo 'pref("app.update.auto", "false");' >> defaults/pref/channel-prefs.js
   '';
 
   installPhase =
@@ -170,10 +179,17 @@ stdenv.mkDerivation {
       ln -s "$out/usr/lib" "$out/lib"
 
       gappsWrapperArgs+=(--argv0 "$out/bin/.firefox-wrapped")
+
+      # See: https://github.com/mozilla/policy-templates/blob/master/README.md
+      mkdir -p "$out/lib/firefox-bin-${version}/distribution";
+      ln -s ${policiesJson} "$out/lib/firefox-bin-${version}/distribution/policies.json";
     '';
 
+  passthru.execdir = "/bin";
   passthru.ffmpegSupport = true;
   passthru.gssSupport = true;
+  # update with:
+  # $ nix-shell maintainers/scripts/update.nix --argstr package firefox-bin-unwrapped
   passthru.updateScript = import ./update.nix {
     inherit name channel writeScript xidel coreutils gnused gnugrep gnupg curl;
     baseUrl =

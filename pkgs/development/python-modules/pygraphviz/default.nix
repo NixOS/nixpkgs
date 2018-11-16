@@ -2,7 +2,6 @@
 , pkgconfig, doctest-ignore-unicode, mock, nose }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "pygraphviz";
   version = "1.3.1";
 
@@ -22,6 +21,6 @@ buildPythonPackage rec {
     description = "Python interface to Graphviz graph drawing package";
     homepage = https://github.com/pygraphviz/pygraphviz;
     license = licenses.bsd3;
-    maintainers = with maintainers; [ matthiasbeyer ];
+    maintainers = with maintainers; [ ];
   };
 }

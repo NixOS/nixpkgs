@@ -31,6 +31,5 @@ stdenv.mkDerivation rec {
     description = "Simple, yet powerful and good looking image viewer";
     license = stdenv.lib.licenses.gpl2Plus;
     platforms = stdenv.lib.platforms.unix;
-    maintainers = [ stdenv.lib.maintainers.eduarrrd ];
   };
 }

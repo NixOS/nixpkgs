@@ -6,7 +6,7 @@ import ./make-test.nix ({ pkgs, ... } : {
   };
 
   nodes = let
-    cfg = { config, pkgs, ... }: {
+    cfg = { ... }: {
       services.avahi = {
         enable = true;
         nssmdns = true;

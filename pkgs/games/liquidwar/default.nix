@@ -1,8 +1,8 @@
 { stdenv, fetchurl, xproto, libX11, libXrender
-, gmp, mesa, libjpeg, libpng
+, gmp, libGLU_combined, libjpeg, libpng
 , expat, gettext, perl, guile
 , SDL, SDL_image, SDL_mixer, SDL_ttf
-, curl, sqlite
+, curl, sqlite, libtool, readline
 , libogg, libvorbis, libcaca, csound, cunit } :
 
 stdenv.mkDerivation rec {
@@ -16,12 +16,13 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     xproto libX11 gmp guile
-    mesa libjpeg libpng
+    libGLU_combined libjpeg libpng
     expat gettext perl
     SDL SDL_image SDL_mixer SDL_ttf
     curl sqlite
     libogg libvorbis csound
     libXrender libcaca cunit
+    libtool readline
   ];
 
   hardeningDisable = [ "format" ];

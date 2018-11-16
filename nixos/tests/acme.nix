@@ -1,35 +1,10 @@
 let
-  commonConfig = { config, lib, pkgs, nodes, ... }: {
-    networking.nameservers = [
-      nodes.letsencrypt.config.networking.primaryIPAddress
-    ];
-
-    nixpkgs.overlays = lib.singleton (self: super: {
-      cacert = super.cacert.overrideDerivation (drv: {
-        installPhase = (drv.installPhase or "") + ''
-          cat "${nodes.letsencrypt.config.test-support.letsencrypt.caCert}" \
-            >> "$out/etc/ssl/certs/ca-bundle.crt"
-        '';
-      });
-
-      pythonPackages = (super.python.override {
-        packageOverrides = lib.const (pysuper: {
-          certifi = pysuper.certifi.overridePythonAttrs (attrs: {
-            postPatch = (attrs.postPatch or "") + ''
-              cat "${self.cacert}/etc/ssl/certs/ca-bundle.crt" \
-                > certifi/cacert.pem
-            '';
-          });
-        });
-      }).pkgs;
-    });
-  };
-
+  commonConfig = ./common/letsencrypt/common.nix;
 in import ./make-test.nix {
   name = "acme";
 
   nodes = {
-    letsencrypt = ./common/letsencrypt.nix;
+    letsencrypt = ./common/letsencrypt;
 
     webserver = { config, pkgs, ... }: {
       imports = [ commonConfig ];
@@ -54,9 +29,11 @@ in import ./make-test.nix {
   };
 
   testScript = ''
+    $letsencrypt->waitForUnit("default.target");
     $letsencrypt->waitForUnit("boulder.service");
-    startAll;
+    $webserver->waitForUnit("default.target");
     $webserver->waitForUnit("acme-certificates.target");
+    $client->waitForUnit("default.target");
     $client->succeed('curl https://example.com/ | grep -qF "hello world"');
   '';
 }

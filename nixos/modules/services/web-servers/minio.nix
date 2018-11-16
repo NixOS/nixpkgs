@@ -85,7 +85,7 @@ in
       '';
       serviceConfig = {
         PermissionsStartOnly = true;
-        ExecStart = "${cfg.package}/bin/minio server --address ${cfg.listenAddress} --config-dir=${cfg.configDir} ${cfg.dataDir}";
+        ExecStart = "${cfg.package}/bin/minio server --json --address ${cfg.listenAddress} --config-dir=${cfg.configDir} ${cfg.dataDir}";
         Type = "simple";
         User = "minio";
         Group = "minio";
@@ -101,11 +101,11 @@ in
       };
     };
 
-    users.extraUsers.minio = {
+    users.users.minio = {
       group = "minio";
       uid = config.ids.uids.minio;
     };
 
-    users.extraGroups.minio.gid = config.ids.uids.minio;
+    users.groups.minio.gid = config.ids.uids.minio;
   };
 }

@@ -1,27 +1,29 @@
 { stdenv
 , buildPythonPackage
-, fetchurl
+, fetchPypi
 , python
 , zope_interface
 , incremental
 , automat
 , constantly
 , hyperlink
+, pyhamcrest
+, attrs
 , pyopenssl
 , service-identity
 , idna
 }:
 buildPythonPackage rec {
   pname = "Twisted";
-  name = "${pname}-${version}";
-  version = "17.9.0";
+  version = "18.7.0";
 
-  src = fetchurl {
-    url = "mirror://pypi/T/Twisted/${name}.tar.bz2";
-    sha256 = "0da1a7e35d5fcae37bc9c7978970b5feb3bc82822155b8654ec63925c05af75c";
+  src = fetchPypi {
+    inherit pname version;
+    extension = "tar.bz2";
+    sha256 = "95ae985716e8107816d8d0df249d558dbaabb677987cc2ace45272c166b267e4";
   };
 
-  propagatedBuildInputs = [ zope_interface incremental automat constantly hyperlink ];
+  propagatedBuildInputs = [ zope_interface incremental automat constantly hyperlink pyhamcrest attrs ];
 
   passthru.extras.tls = [ pyopenssl service-identity idna ];
 
@@ -45,7 +47,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with stdenv.lib; {
-    homepage = http://twistedmatrix.com/;
+    homepage = https://twistedmatrix.com/;
     description = "Twisted, an event-driven networking engine written in Python";
     longDescription = ''
       Twisted is an event-driven networking engine written in Python

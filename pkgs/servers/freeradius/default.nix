@@ -21,6 +21,8 @@
 , withYubikey ? false
 , collectd
 , withCollectd ? false
+, curl
+, withRest ? false
 }:
 
 assert withSqlite -> sqlite != null;
@@ -32,6 +34,7 @@ assert withRedis -> hiredis != null;
 assert withMysql -> mysql != null;
 assert withYubikey -> libyubikey != null;
 assert withCollectd -> collectd != null;
+assert withRest -> curl != null && withJson;
 
 ## TODO: include windbind optionally (via samba?)
 ## TODO: include oracle optionally
@@ -40,11 +43,11 @@ assert withCollectd -> collectd != null;
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "freeradius-${version}";
-  version = "3.0.16";
+  version = "3.0.17";
 
   src = fetchurl {
     url = "ftp://ftp.freeradius.org/pub/freeradius/freeradius-server-${version}.tar.gz";
-    sha256 = "062dw4ckaa7k2br16l3naz9dr7hvzqhpxdwam3klq1i44v4hvl1b";
+    sha256 = "0bc35knv46z729l4h22rirqns5v6jb0fzcffnjayhs8wjysfkfyy";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
@@ -59,11 +62,13 @@ stdenv.mkDerivation rec {
     ++ optional withMysql mysql.connector-c
     ++ optional withJson json_c
     ++ optional withYubikey libyubikey
-    ++ optional withCollectd collectd;
+    ++ optional withCollectd collectd
+    ++ optional withRest curl;
+
 
   configureFlags = [
-     "--sysconfdir=/etc"
-     "--localstatedir=/var"
+    "--sysconfdir=/etc"
+    "--localstatedir=/var"
   ] ++ optional (!linkOpenssl) "--with-openssl=no";
 
   postPatch = ''
@@ -74,6 +79,8 @@ stdenv.mkDerivation rec {
     "sysconfdir=\${out}/etc"
     "localstatedir=\${TMPDIR}"
   ];
+
+  outputs = [ "out" "dev" "man" "doc" ];
 
   meta = with stdenv.lib; {
     homepage = https://freeradius.org/;

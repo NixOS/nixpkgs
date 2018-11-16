@@ -1,4 +1,5 @@
-{ stdenv, fetchurl, pkgconfig, gnused_422, perl, python2, zip, libffi, readline, icu, zlib, nspr }:
+{ stdenv, fetchurl, pkgconfig, gnused_422, perl, python2, zip, libffi, readline, icu, zlib, nspr
+, libobjc }:
 
 stdenv.mkDerivation rec {
   version = "38.2.1.rc0";
@@ -13,7 +14,8 @@ stdenv.mkDerivation rec {
     sha256 = "0p4bmbpgkfsj54xschcny0a118jdrdgg0q29rwxigg3lh5slr681";
   };
 
-  buildInputs = [ libffi readline icu zlib nspr ];
+  buildInputs = [ libffi readline icu zlib nspr ]
+               ++ stdenv.lib.optional stdenv.isDarwin libobjc;
   nativeBuildInputs = [ pkgconfig perl python2 zip gnused_422 ];
 
   postUnpack = "sourceRoot=\${sourceRoot}/js/src";
@@ -57,6 +59,6 @@ stdenv.mkDerivation rec {
     # TODO: MPL/GPL/LGPL tri-license.
 
     maintainers = [ maintainers.abbradar ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

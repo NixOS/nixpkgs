@@ -45,7 +45,7 @@ in
   };
 
   config = mkIf cfg.enable {
-    users.extraUsers.minecraft = {
+    users.users.minecraft = {
       description     = "Minecraft Server Service user";
       home            = cfg.dataDir;
       createHome      = true;

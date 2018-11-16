@@ -1,7 +1,7 @@
 {stdenv, fetchFromGitHub
   , llvmPackages
   , cmake, boehmgc, gmp, zlib, ncurses, boost
-  , waf, python, git, sbcl
+  , python, git, sbcl
 }:
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
@@ -70,5 +70,6 @@ stdenv.mkDerivation rec {
     maintainers = [stdenv.lib.maintainers.raskin];
     platforms = stdenv.lib.platforms.linux;
     homepage = "https://github.com/drmeister/clasp";
+    broken = true; # 2018-09-08, no successful build since 2018-01-03
   };
 }

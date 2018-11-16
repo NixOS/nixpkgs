@@ -21,7 +21,7 @@ in
 
       enable = mkOption {
         type = types.bool;
-        defaultText = "!versionAtLeast system.stateVersion \"18.03\"";
+        default = false;
         description = ''
           Whether to enable ALSA sound.
         '';
@@ -54,6 +54,11 @@ in
           description = ''
             Whether to enable volume and capture control with keyboard media keys.
 
+            You want to leave this disabled if you run a desktop environment
+            like KDE, Gnome, Xfce, etc, as those handle such things themselves.
+            You might want to enable this if you run a minimalistic desktop
+            environment or work from bare linux ttys/framebuffers.
+
             Enabling this will turn on <option>services.actkbd</option>.
           '';
         };
@@ -78,11 +83,7 @@ in
 
   ###### implementation
 
-  config = mkMerge [
-    ({
-      sound.enable = mkDefault (!versionAtLeast config.system.stateVersion "18.03");
-    })
-    (mkIf config.sound.enable {
+  config = mkIf config.sound.enable {
 
     environment.systemPackages = [ alsaUtils ];
 
@@ -128,6 +129,6 @@ in
       ];
     };
 
-  })];
+  };
 
 }

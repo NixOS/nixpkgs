@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, pkgconfig, libsoup, webkit, gtk2, glib_networking
-, gsettings_desktop_schemas, makeWrapper
+{ stdenv, fetchurl, pkgconfig, libsoup, webkit, gtk2, glib-networking
+, gsettings-desktop-schemas, makeWrapper
 }:
 
 stdenv.mkDerivation rec {
@@ -12,13 +12,13 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ makeWrapper gtk2 libsoup webkit gsettings_desktop_schemas ];
+  buildInputs = [ makeWrapper gtk2 libsoup webkit gsettings-desktop-schemas ];
 
   makeFlags = [ "PREFIX=$(out)" ];
 
   preFixup = ''
     wrapProgram "$out/bin/vimb" \
-      --prefix GIO_EXTRA_MODULES : "${glib_networking.out}/lib/gio/modules" \
+      --prefix GIO_EXTRA_MODULES : "${glib-networking.out}/lib/gio/modules" \
       --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
   '';
 

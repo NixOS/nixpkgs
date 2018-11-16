@@ -1,78 +1,102 @@
-{ stdenv, lib, fetchurl, pkgconfig, audiofile
-, openglSupport ? false, mesa_noglu
-, alsaSupport ? true, alsaLib
-, x11Support ? true, libICE, libXi, libXScrnSaver, libXcursor, libXinerama, libXext, libXxf86vm, libXrandr
-, waylandSupport ? true, wayland, wayland-protocols, libxkbcommon
-, dbusSupport ? false, dbus
+{ stdenv, config, libGLSupported, fetchurl, pkgconfig, pruneLibtoolFiles
+, openglSupport ? libGLSupported, libGL
+, alsaSupport ? stdenv.isLinux, alsaLib
+, x11Support ? !stdenv.isCygwin, libX11, xproto, libICE, libXi, libXScrnSaver, libXcursor, libXinerama, libXext, libXxf86vm, libXrandr
+, waylandSupport ? stdenv.isLinux, wayland, wayland-protocols, libxkbcommon
+, dbusSupport ? stdenv.isLinux, dbus
 , udevSupport ? false, udev
 , ibusSupport ? false, ibus
-, pulseaudioSupport ? true, libpulseaudio
+, pulseaudioSupport ? config.pulseaudio or stdenv.isLinux, libpulseaudio
 , AudioUnit, Cocoa, CoreAudio, CoreServices, ForceFeedback, OpenGL
-, libiconv
+, audiofile, cf-private, libiconv
 }:
 
-# OSS is no longer supported, for it's much crappier than ALSA and
-# PulseAudio.
+# NOTE: When editing this expression see if the same change applies to
+# SDL expression too
+
+with stdenv.lib;
+
 assert !stdenv.isDarwin -> alsaSupport || pulseaudioSupport;
+assert openglSupport -> (stdenv.isDarwin || x11Support && libGL != null);
 
-assert openglSupport -> (stdenv.isDarwin || mesa_noglu != null && x11Support);
-
-let
-  configureFlagsFun = attrs: [
-      "--disable-oss" "--disable-x11-shared" "--disable-wayland-shared"
-      "--disable-pulseaudio-shared" "--disable-alsa-shared"
-    ] ++ lib.optional alsaSupport "--with-alsa-prefix=${attrs.alsaLib.out}/lib"
-      ++ lib.optional (!x11Support) "--without-x";
-in
 stdenv.mkDerivation rec {
   name = "SDL2-${version}";
-  version = "2.0.7";
+  version = "2.0.9";
 
   src = fetchurl {
-    url = "http://www.libsdl.org/release/${name}.tar.gz";
-    sha256 = "0pjdpxla5kh1w1b0shxrx97a116vyy31njxi0jhyvqhk8d6cfdgf";
+    url = "https://www.libsdl.org/release/${name}.tar.gz";
+    sha256 = "1c94ndagzkdfqaa838yqg589p1nnqln8mv0hpwfhrkbfczf8cl95";
   };
 
   outputs = [ "out" "dev" ];
+  outputBin = "dev"; # sdl-config
 
   patches = [ ./find-headers.patch ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig pruneLibtoolFiles ];
 
-  # Since `libpulse*.la' contain `-lgdbm', PulseAudio must be propagated.
-  propagatedBuildInputs = lib.optionals x11Support [ libICE libXi libXScrnSaver libXcursor libXinerama libXext libXrandr libXxf86vm ] ++
-    lib.optionals waylandSupport [ wayland wayland-protocols libxkbcommon ] ++
-    lib.optional pulseaudioSupport libpulseaudio
-    ++ [ libiconv ];
+  propagatedBuildInputs = dlopenPropagatedBuildInputs;
 
-  buildInputs = [ audiofile ] ++
-    lib.optional openglSupport mesa_noglu ++
-    lib.optional alsaSupport alsaLib ++
-    lib.optional dbusSupport dbus ++
-    lib.optional udevSupport udev ++
-    lib.optional ibusSupport ibus ++
-    lib.optionals stdenv.isDarwin [ AudioUnit Cocoa CoreAudio CoreServices ForceFeedback OpenGL ];
+  dlopenPropagatedBuildInputs = [ ]
+    # Propagated for #include <GLES/gl.h> in SDL_opengles.h.
+    ++ optional openglSupport libGL
+    # Propagated for #include <X11/Xlib.h> and <X11/Xatom.h> in SDL_syswm.h.
+    ++ optionals x11Support [ libX11 xproto ];
 
-  # https://bugzilla.libsdl.org/show_bug.cgi?id=1431
-  dontDisableStatic = true;
+  dlopenBuildInputs = [ ]
+    ++ optional  alsaSupport alsaLib
+    ++ optional  dbusSupport dbus
+    ++ optional  pulseaudioSupport libpulseaudio
+    ++ optional  udevSupport udev
+    ++ optionals waylandSupport [ wayland wayland-protocols libxkbcommon ]
+    ++ optionals x11Support [ libICE libXi libXScrnSaver libXcursor libXinerama libXext libXrandr libXxf86vm ];
+
+  buildInputs = [ audiofile libiconv ]
+    ++ dlopenBuildInputs
+    ++ optional  ibusSupport ibus
+    ++ optionals stdenv.isDarwin [
+      AudioUnit Cocoa CoreAudio CoreServices ForceFeedback OpenGL
+      # Needed for NSDefaultRunLoopMode symbols.
+      cf-private
+    ];
 
   # /build/SDL2-2.0.7/src/video/wayland/SDL_waylandevents.c:41:10: fatal error:
   #   pointer-constraints-unstable-v1-client-protocol.h: No such file or directory
   enableParallelBuilding = false;
 
-  # XXX: By default, SDL wants to dlopen() PulseAudio, in which case
-  # we must arrange to add it to its RPATH; however, `patchelf' seems
-  # to fail at doing this, hence `--disable-pulseaudio-shared'.
-  configureFlags = configureFlagsFun { inherit alsaLib; };
-
-  crossAttrs = {
-    configureFlags = configureFlagsFun { alsaLib = alsaLib.crossDrv; };
-  };
+  configureFlags = [
+    "--disable-oss"
+  ] ++ optional (!x11Support) "--without-x"
+    ++ optional alsaSupport "--with-alsa-prefix=${alsaLib.out}/lib"
+    ++ optional stdenv.isDarwin "--disable-sdltest";
 
   postInstall = ''
     moveToOutput lib/libSDL2main.a "$dev"
     rm $out/lib/*.a
     moveToOutput bin/sdl2-config "$dev"
+  '';
+
+  # SDL is weird in that instead of just dynamically linking with
+  # libraries when you `--enable-*` (or when `configure` finds) them
+  # it `dlopen`s them at runtime. In principle, this means it can
+  # ignore any missing optional dependencies like alsa, pulseaudio,
+  # some x11 libs, wayland, etc if they are missing on the system
+  # and/or work with wide array of versions of said libraries. In
+  # nixpkgs, however, we don't need any of that. Moreover, since we
+  # don't have a global ld-cache we have to stuff all the propagated
+  # libraries into rpath by hand or else some applications that use
+  # SDL API that requires said libraries will fail to start.
+  #
+  # You can grep SDL sources with `grep -rE 'SDL_(NAME|.*_SYM)'` to
+  # list the symbols used in this way.
+  postFixup = let
+    rpath = makeLibraryPath (dlopenPropagatedBuildInputs ++ dlopenBuildInputs);
+  in optionalString (stdenv.hostPlatform.extensions.sharedLibrary == ".so") ''
+    for lib in $out/lib/*.so* ; do
+      if ! [[ -L "$lib" ]]; then
+        patchelf --set-rpath "$(patchelf --print-rpath $lib):${rpath}" "$lib"
+      fi
+    done
   '';
 
   setupHook = ./setup-hook.sh;

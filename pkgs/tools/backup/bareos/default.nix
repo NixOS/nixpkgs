@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, nettools, gettext, libtool, flex
+{ stdenv, fetchFromGitHub, pkgconfig, nettools, gettext, flex
 , readline ? null, openssl ? null, python2 ? null, ncurses ? null, rocksdb
 , sqlite ? null, postgresql ? null, mysql ? null, zlib ? null, lzo ? null
 , jansson ? null, acl ? null, glusterfs ? null, libceph ? null, libcap ? null
@@ -12,14 +12,14 @@ let
 in
 stdenv.mkDerivation rec {
   name = "bareos-${version}";
-  version = "15.2.4";
+  version = "17.2.7";
 
   src = fetchFromGitHub {
     owner = "bareos";
     repo = "bareos";
     rev = "Release/${version}";
     name = "${name}-src";
-    sha256 = "02k6wmr2n12dc6vwda8xczmbqidg6fs8nfg9n2cwwpm3k1a21qnd";
+    sha256 = "1awf5i4mw2nfd7z0dmqnywapnx9nz6xwqv8rxp0y2mnrhzdpbrbz";
   };
 
   nativeBuildInputs = [ pkgconfig ];

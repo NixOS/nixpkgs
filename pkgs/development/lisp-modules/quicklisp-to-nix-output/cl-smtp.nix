@@ -5,7 +5,7 @@ rec {
 
   description = ''Common Lisp smtp client.'';
 
-  deps = [ args."alexandria" args."babel" args."bordeaux-threads" args."cffi" args."cl+ssl" args."cl-base64" args."flexi-streams" args."split-sequence" args."trivial-features" args."trivial-garbage" args."trivial-gray-streams" args."usocket" ];
+  deps = [ args."alexandria" args."babel" args."bordeaux-threads" args."cffi" args."cl_plus_ssl" args."cl-base64" args."flexi-streams" args."split-sequence" args."trivial-features" args."trivial-garbage" args."trivial-gray-streams" args."usocket" ];
 
   src = fetchurl {
     url = ''http://beta.quicklisp.org/archive/cl-smtp/2018-01-31/cl-smtp-20180131-git.tgz'';
@@ -23,7 +23,7 @@ rec {
     MD5 0ce08f067f145ab4c7528f806f0b51ff NAME cl-smtp FILENAME cl-smtp DEPS
     ((NAME alexandria FILENAME alexandria) (NAME babel FILENAME babel)
      (NAME bordeaux-threads FILENAME bordeaux-threads)
-     (NAME cffi FILENAME cffi) (NAME cl+ssl FILENAME cl+ssl)
+     (NAME cffi FILENAME cffi) (NAME cl+ssl FILENAME cl_plus_ssl)
      (NAME cl-base64 FILENAME cl-base64)
      (NAME flexi-streams FILENAME flexi-streams)
      (NAME split-sequence FILENAME split-sequence)

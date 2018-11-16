@@ -1,14 +1,12 @@
 { stdenv
-, makeWrapper
 , fetchurl
 , intltool
 , python3Packages
 , gobjectIntrospection
 , gtk3
-, dbus
 , libwnck3
 , keybinder3
-, hicolor_icon_theme
+, hicolor-icon-theme
 , wrapGAppsHook
 }:
 
@@ -28,7 +26,7 @@ buildPythonApplication rec {
     # For setup hook
     gobjectIntrospection
   ];
-  buildInputs = [ hicolor_icon_theme docutils libwnck3 keybinder3 ];
+  buildInputs = [ hicolor-icon-theme docutils libwnck3 keybinder3 ];
   propagatedBuildInputs = [ pygobject3 gtk3 pyxdg dbus-python pycairo ];
 
   configurePhase = ''

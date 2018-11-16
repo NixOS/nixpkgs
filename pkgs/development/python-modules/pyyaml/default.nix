@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "PyYAML";
-  version = "3.12";
+  version = "3.13";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "592766c6303207a20efc445587778322d7f73b161bd994f227adaa341ba212ab";
+    sha256 = "3ef3092145e9b70e3ddd2c7ad59bdd0252a94dfe3949721633e41344de00a6bf";
   };
 
   propagatedBuildInputs = [ libyaml ];

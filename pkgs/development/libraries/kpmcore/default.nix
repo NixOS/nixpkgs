@@ -1,26 +1,28 @@
-{ stdenv, lib, fetchurl, extra-cmake-modules, pkgconfig
+{ stdenv, lib, fetchurl, extra-cmake-modules
 , qtbase, kdeFrameworks
-, eject, libatasmart, parted }:
+, libatasmart, parted
+, utillinux }:
 
 let
   pname = "kpmcore";
 
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
-  version = "3.0.3";
+  version = "3.3.0";
 
   src = fetchurl {
     url = "mirror://kde/stable/${pname}/${version}/src/${name}.tar.xz";
-    sha256 = "17lqrp39w31fm7haigwq23cp92zwk3czjzqa2fhn3wafx3vafwd2";
+    sha256 = "0s6v0jfrhjg31ri5p6h9n4w29jvasf5dj954j3vfpzl91lygmmmq";
   };
 
   buildInputs = [
     qtbase
-    eject # this is to get libblkid
     libatasmart
     parted # we only need the library
 
     kdeFrameworks.kio
+
+    utillinux # needs blkid (note that this is not provided by utillinux-compat)
   ];
   nativeBuildInputs = [ extra-cmake-modules ];
   enableParallelBuilding = true;

@@ -2,11 +2,11 @@
   yubikey-personalization, libu2f-host, libusb1 }:
 
 pythonPackages.buildPythonPackage rec {
-  name = "yubikey-manager-0.4.0";
+  name = "yubikey-manager-1.0.0";
 
   srcs = fetchurl {
     url = "https://developers.yubico.com/yubikey-manager/Releases/${name}.tar.gz";
-    sha256 = "0dc0mqg8r6kjh0s2rmrggfxbx9imslajjrj80rffcvg64a2vgsgb";
+    sha256 = "1qdb2b3mv4wafghnmv3sxw4fh7cjc06hnkdimfnwmqcjafzvbawd";
   };
 
   propagatedBuildInputs =
@@ -18,6 +18,7 @@ pythonPackages.buildPythonPackage rec {
       pyusb
       pyopenssl
       six
+      fido2
     ] ++ [
       libu2f-host
       libusb1

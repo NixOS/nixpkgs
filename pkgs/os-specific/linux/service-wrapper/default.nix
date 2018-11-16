@@ -1,4 +1,4 @@
-{ lib, runCommand, substituteAll, fetchurl, systemd, coreutils }:
+{ lib, runCommand, substituteAll, coreutils }:
 
 let
   name = "service-wrapper-${version}";

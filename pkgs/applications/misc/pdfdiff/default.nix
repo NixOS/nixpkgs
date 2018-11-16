@@ -7,7 +7,7 @@ py.buildPythonApplication rec {
   version = "0.92";
 
   src = fetchurl {
-    url = "http://www.cs.ox.ac.uk/people/cas.cremers/downloads/software/pdfdiff.py";
+    url = "https://www.cs.ox.ac.uk/people/cas.cremers/downloads/software/pdfdiff.py";
     sha256 = "0zxwjjbklz87wkbhkmsvhc7xmv5php7m2a9vm6ydhmhlxsybf836";
   };
 

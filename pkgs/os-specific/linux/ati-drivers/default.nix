@@ -1,6 +1,6 @@
 { stdenv, lib, fetchurl, kernel ? null, which
 , xorg, makeWrapper, glibc, patchelf, unzip
-, fontconfig, freetype, mesa # for fgl_glxgears
+, fontconfig, freetype, libGLU_combined # for fgl_glxgears
 , # Whether to build the libraries only (i.e. not the kernel module or
   # driver utils). Used to support 32-bit binaries on 64-bit
   # Linux.
@@ -37,9 +37,9 @@ stdenv.mkDerivation rec {
   build = "15.302";
 
   linuxonly =
-    if stdenv.system == "i686-linux" then
+    if stdenv.hostPlatform.system == "i686-linux" then
       true
-    else if stdenv.system == "x86_64-linux" then
+    else if stdenv.hostPlatform.system == "x86_64-linux" then
       true
     else throw "ati-drivers are Linux only. Sorry. The build was stopped.";
 
@@ -61,8 +61,8 @@ stdenv.mkDerivation rec {
   src = fetchurl {
     url =
     "https://www2.ati.com/drivers/linux/radeon-crimson-15.12-15.302-151217a-297685e.zip";
-    sha256 = "0n0ynqmjkjp5dl5q07as7ps3rlyyn63hq4mlwgd7c7v82ky2skvh";
-    curlOpts = "--referer http://support.amd.com/en-us/download/desktop?os=Linux+x86_64";
+    sha256 = "704f2dfc14681f76dae3b4120c87b1ded33cf43d5a1d800b6de5ca292bb61e58";
+    curlOpts = "--referer https://www.amd.com/en/support";
   };
 
   hardeningDisable = [ "pic" "format" ];
@@ -90,7 +90,7 @@ stdenv.mkDerivation rec {
       xorg.libXrandr xorg.libXxf86vm xorg.xf86vidmodeproto xorg.imake xorg.libICE
       patchelf
       unzip
-      mesa
+      libGLU_combined
       fontconfig
       freetype
       makeWrapper
@@ -108,7 +108,7 @@ stdenv.mkDerivation rec {
   LD_LIBRARY_PATH = makeLibraryPath
     [ xorg.libXrender xorg.libXext xorg.libX11 xorg.libXinerama xorg.libSM
       xorg.libXrandr xorg.libXxf86vm xorg.xf86vidmodeproto xorg.imake xorg.libICE
-      mesa
+      libGLU_combined
       fontconfig
       freetype
       stdenv.cc.cc
@@ -122,7 +122,7 @@ stdenv.mkDerivation rec {
                    xorg.libX11.out xorg.libXinerama.out xorg.libSM.out
                    xorg.libICE.out ];
 
-  inherit mesa; # only required to build the examples
+  inherit libGLU_combined; # only required to build the examples
 
   enableParallelBuilding = true;
 

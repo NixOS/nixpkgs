@@ -51,7 +51,7 @@
 #AMR-WB IF2 support        no
 
 { stdenv, fetchurl, gtk2, libglade, libxml2, libraw1394, libsamplerate, libdv
-, pkgconfig, perl, perlXMLParser, libavc1394, libiec61883, libXv, gettext
+, pkgconfig, perlPackages, libavc1394, libiec61883, libXv, gettext
 , libX11, glib, cairo, intltool, ffmpeg, libv4l
 }:
 
@@ -64,9 +64,10 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [ gtk2 libglade libxml2 libraw1394 libsamplerate libdv
-      pkgconfig perl perlXMLParser libavc1394 libiec61883 intltool libXv gettext libX11 glib cairo ffmpeg libv4l ]; # TODOoptional packages 
+      pkgconfig libavc1394 libiec61883 intltool libXv gettext libX11 glib cairo ffmpeg libv4l ] # TODOoptional packages
+    ++ (with perlPackages; [ perl XMLParser ]);
 
-  configureFlags = "--enable-local-ffmpeg=no";
+  configureFlags = [ "--enable-local-ffmpeg=no" ];
 
   hardeningDisable = [ "format" ];
 

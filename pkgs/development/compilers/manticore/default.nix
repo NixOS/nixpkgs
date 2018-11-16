@@ -1,15 +1,15 @@
 { stdenv, fetchFromGitHub, coreutils, autoreconfHook, smlnj }:
 
 let
-    rev = "592a5714595b4448b646a7d49df04c285668c2f8";
+  rev= "f8e08c89dd98b7b8dba318d245dcd4abd3328ae2";
 in stdenv.mkDerivation rec {
   name = "manticore-${version}";
-  version = "2014.08.18";
+  version = "2017.08.22";
  
   src = fetchFromGitHub {
-    owner = "rrnewton";
-    repo = "manticore_temp_mirror";
-    sha256 = "1snwlm9a31wfgvzb80y7r7yvc6n0k0bi675lqwzll95as7cdswwi";
+    owner = "ManticoreProject";
+    repo = "manticore";
+    sha256 = "06icq0qdzwyzbsyms53blxpb9i26n2vn7ci8p9xvvnq687hxhr73";
     inherit rev;
   };
 
@@ -25,7 +25,7 @@ in stdenv.mkDerivation rec {
     mkdir -p $out
     cd $out
     unpackFile $src
-    mv manticore_temp_mirror-${rev}-src repo_checkout
+    mv source repo_checkout
     cd repo_checkout
     chmod u+w . -R
   ''; 

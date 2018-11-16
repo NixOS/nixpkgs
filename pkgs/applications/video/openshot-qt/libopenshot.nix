@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch
+{ stdenv, fetchFromGitHub
 , pkgconfig, cmake, doxygen
 , libopenshot-audio, imagemagick, ffmpeg
 , swig, python3
@@ -8,13 +8,13 @@
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "libopenshot-${version}";
-  version = "0.1.7";
+  version = "0.2.2";
 
   src = fetchFromGitHub {
     owner = "OpenShot";
     repo = "libopenshot";
     rev = "v${version}";
-    sha256 = "1dk40qild8d3s99p2kkm0mjvxfxrz2wns7ij1brzqmcdnaxqdhlp";
+    sha256 = "1x4kv05pdq1pglb6y056aa7llc6iyibyhzg93k7zwj0q08cp5ixd";
   };
 
   patchPhase = ''

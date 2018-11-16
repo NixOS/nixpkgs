@@ -55,6 +55,8 @@ in
       environment.NIX_SECRET_KEY_FILE = cfg.secretKeyFile;
 
       serviceConfig = {
+        Restart = "always";
+        RestartSec = "5s";
         ExecStart = "${pkgs.nix-serve}/bin/nix-serve " +
           "--listen ${cfg.bindAddress}:${toString cfg.port} ${cfg.extraParams}";
         User = "nix-serve";
@@ -62,7 +64,7 @@ in
       };
     };
 
-    users.extraUsers.nix-serve = {
+    users.users.nix-serve = {
       description = "Nix-serve user";
       uid = config.ids.uids.nix-serve;
     };

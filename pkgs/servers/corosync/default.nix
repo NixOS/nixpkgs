@@ -1,5 +1,5 @@
 { stdenv, fetchurl, makeWrapper, pkgconfig, nss, nspr, libqb
-, dbus, librdmacm, libibverbs, libstatgrab, net_snmp
+, dbus, rdma-core, libstatgrab, net_snmp
 , enableDbus ? false
 , enableInfiniBandRdma ? false
 , enableMonitoring ? false
@@ -9,11 +9,11 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "corosync-2.4.2";
+  name = "corosync-2.4.3";
 
   src = fetchurl {
     url = "http://build.clusterlabs.org/corosync/releases/${name}.tar.gz";
-    sha256 = "1aab380mv4ivy5icmwvk7941jbs6ikm21p5ijk7brr4z608k0vpj";
+    sha256 = "15y5la04qn2lh1gabyifygzpa4dx3ndk5yhmaf7azxyjx0if9rxi";
   };
 
   nativeBuildInputs = [ makeWrapper pkgconfig ];
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     nss nspr libqb
   ] ++ optional enableDbus dbus
-    ++ optional enableInfiniBandRdma [ librdmacm libibverbs ]
+    ++ optional enableInfiniBandRdma rdma-core
     ++ optional enableMonitoring libstatgrab
     ++ optional enableSnmp net_snmp;
 
@@ -43,6 +43,17 @@ stdenv.mkDerivation rec {
     "INITDDIR=$(out)/etc/init.d"
     "LOGROTATEDIR=$(out)/etc/logrotate.d"
   ];
+
+  preConfigure = optionalString enableInfiniBandRdma ''
+    # configure looks for the pkg-config files
+    # of librdmacm and libibverbs
+    # Howver, rmda-core does not provide a pkg-config file
+    # We give the flags manually here:
+    export rdmacm_LIBS=-lrdmacm
+    export rdmacm_CFLAGS=" "
+    export ibverbs_LIBS=-libverbs
+    export ibverbs_CFLAGS=" "
+  '';
 
   postInstall = ''
     wrapProgram $out/bin/corosync-blackbox \

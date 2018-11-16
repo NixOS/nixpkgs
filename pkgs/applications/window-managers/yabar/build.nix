@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, cairo, gdk_pixbuf, libconfig, pango, pkgconfig
 , xcbutilwm, alsaLib, wirelesstools, asciidoc, libxslt, makeWrapper, docbook_xsl
 , configFile ? null, lib
-, rev, sha256, version
+, rev, sha256, version, patches ? []
 }:
 
 stdenv.mkDerivation {
@@ -13,6 +13,8 @@ stdenv.mkDerivation {
     owner = "geommer";
     repo  = "yabar";
   };
+
+  inherit patches;
 
   hardeningDisable = [ "format" ];
 

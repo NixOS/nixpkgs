@@ -1,35 +1,32 @@
-{ stdenv, fetchurl, skalibs }:
+{ stdenv, skawarePackages }:
 
-let
+with skawarePackages;
 
-  version = "2.4.0.2";
+buildPackage {
+  pname = "s6-linux-utils";
+  version = "2.5.0.0";
+  sha256 = "04q2z71dkzahd2ppga2zikclz2qk014c23gm7rigqxjc8rs1amvq";
 
-in stdenv.mkDerivation rec {
+  description = "A set of minimalistic Linux-specific system utilities";
+  platforms = stdenv.lib.platforms.linux;
 
-  name = "s6-linux-utils-${version}";
+  outputs = [ "bin" "dev" "doc" "out" ];
 
-  src = fetchurl {
-    url = "http://www.skarnet.org/software/s6-linux-utils/${name}.tar.gz";
-    sha256 = "0245rmk7wfyyfsi4g7f0niprwlvqlwkbyjxflb8kkbvhwfdavqip";
-  };
-
-  dontDisableStatic = true;
-
+  # TODO: nsss support
   configureFlags = [
-    "--enable-absolute-paths"
-    "--includedir=\${prefix}/include"
-    "--with-sysdeps=${skalibs}/lib/skalibs/sysdeps"
-    "--with-include=${skalibs}/include"
-    "--with-lib=${skalibs}/lib"
-    "--with-dynlib=${skalibs}/lib"
+    "--bindir=\${bin}/bin"
+    "--includedir=\${dev}/include"
+    "--with-sysdeps=${skalibs.lib}/lib/skalibs/sysdeps"
+    "--with-include=${skalibs.dev}/include"
+    "--with-lib=${skalibs.lib}/lib"
+    "--with-dynlib=${skalibs.lib}/lib"
   ];
 
-  meta = {
-    homepage = http://www.skarnet.org/software/s6-linux-utils/;
-    description = "A set of minimalistic Linux-specific system utilities";
-    platforms = stdenv.lib.platforms.linux;
-    license = stdenv.lib.licenses.isc;
-    maintainers = with stdenv.lib.maintainers; [ pmahoney ];
-  };
+  postInstall = ''
+    # remove all s6 executables from build directory
+    rm $(find -name "s6-*" -type f -mindepth 1 -maxdepth 1 -executable)
+
+    mv doc $doc/share/doc/s6-linux-utils/html
+  '';
 
 }

@@ -1,4 +1,4 @@
-{stdenv, fetchurl, mesa, tcl, tk, file, libXmu, cmake, libtool, qt4,
+{stdenv, fetchurl, libGLU_combined, tcl, tk, file, libXmu, cmake, libtool, qt4,
 ftgl, freetype}:
 
 stdenv.mkDerivation rec {
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "0vpmnb0k5y2f7lpmwx9pg9yfq24zjvnsak5alzacncfm1hv9b6cd";
   };
 
-  buildInputs = [ mesa tcl tk file libXmu libtool qt4 ftgl freetype cmake ];
+  buildInputs = [ libGLU_combined tcl tk file libXmu libtool qt4 ftgl freetype cmake ];
 
   # Fix for glibc 2.26
   postPatch = ''
@@ -25,10 +25,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Open CASCADE Technology, libraries for 3D modeling and numerical simulation";
     homepage = http://www.opencascade.org/;
-    maintainers = with stdenv.lib.maintainers; [viric];
-    platforms = with stdenv.lib.platforms; linux;
+    maintainers = [ maintainers.viric ];
+    platforms = platforms.linux;
+    license = licenses.lgpl21;
   };
 }

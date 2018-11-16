@@ -2,32 +2,34 @@
 , makeWrapper, makeDesktopItem
 , qtbase, qmake, qtmultimedia, qttools
 , qtgraphicaleffects, qtdeclarative
-, qtlocation, qtquickcontrols, qtwebchannel
+, qtlocation, qtquickcontrols2, qtwebchannel
 , qtwebengine, qtx11extras, qtxmlpatterns
 , monero, unbound, readline, boost, libunwind
+, libsodium, pcsclite, zeromq, cppzmq, pkgconfig
 }:
 
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "monero-gui-${version}";
-  version = "0.11.1.0";
+  version = "0.13.0.3";
 
   src = fetchFromGitHub {
     owner  = "monero-project";
     repo   = "monero-gui";
     rev    = "v${version}";
-    sha256 = "01d7apwrv8j8bh7plvvhlnll3ransaha3n6rx19nkgvfn319hswq";
+    sha256 = "1rvxwz7p1yw9c817n07m60xvmv2p97s82sfzwkg2x880fpxb0gj9";
   };
 
-  nativeBuildInputs = [ qmake ];
+  nativeBuildInputs = [ qmake pkgconfig ];
 
   buildInputs = [
     qtbase qtmultimedia qtgraphicaleffects
-    qtdeclarative qtlocation qtquickcontrols
+    qtdeclarative qtlocation qtquickcontrols2
     qtwebchannel qtwebengine qtx11extras
     qtxmlpatterns monero unbound readline
-    boost libunwind makeWrapper
+    boost libunwind libsodium pcsclite zeromq
+    cppzmq makeWrapper
   ];
 
   patches = [
@@ -68,7 +70,8 @@ stdenv.mkDerivation rec {
     cp ${desktopItem}/share/applications/* $out/share/applications
 
     # install translations
-    cp -r release/bin/translations $out/share/
+    mkdir -p $out/share/translations
+    cp translations/*.qm $out/share/translations/
 
     # install icons
     for n in 16 24 32 48 64 96 128 256; do

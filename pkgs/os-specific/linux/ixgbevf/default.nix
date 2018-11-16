@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "ixgbevf-${version}-${kernel.version}";
-  version = "4.3.3";
+  version = "4.3.4";
 
   src = fetchurl {
     url = "mirror://sourceforge/e1000/ixgbevf-${version}.tar.gz";
-    sha256 = "0kq8y0944kaprw445wb8iswdck2jmc0xpkx0iv6idy3r5cc4hvyg";
+    sha256 = "122zn9nd8f95bpidiiinc8xaizypkirqs8vlmsdy2iv3w65md9k3";
   };
 
   nativeBuildInputs = kernel.moduleBuildDependencies;

@@ -1,21 +1,22 @@
-{ stdenv, fetchurl, fetchpatch, lib
+{ stdenv, fetchurl, lib
 , ncurses, openssl, aspell, gnutls
 , zlib, curl, pkgconfig, libgcrypt
 , cmake, makeWrapper, libobjc, libresolv, libiconv
-, writeScriptBin, symlinkJoin # for withPlugins
+, writeScriptBin # for withPlugins
 , asciidoctor # manpages
 , guileSupport ? true, guile
 , luaSupport ? true, lua5
-, perlSupport ? true, perl
+, perlSupport ? true, perl, perlPackages
 , pythonSupport ? true, pythonPackages
 , rubySupport ? true, ruby
 , tclSupport ? true, tcl
 , extraBuildInputs ? []
 , configure ? { availablePlugins, ... }: { plugins = builtins.attrValues availablePlugins; }
-, runCommand }:
+, runCommand, buildEnv
+}:
 
 let
-  inherit (pythonPackages) python pycrypto pync;
+  inherit (pythonPackages) python;
   plugins = [
     { name = "perl"; enabled = perlSupport; cmakeFlag = "ENABLE_PERL"; buildInputs = [ perl ]; }
     { name = "tcl"; enabled = tclSupport; cmakeFlag = "ENABLE_TCL"; buildInputs = [ tcl ]; }
@@ -29,12 +30,12 @@ let
   weechat =
     assert lib.all (p: p.enabled -> ! (builtins.elem null p.buildInputs)) plugins;
     stdenv.mkDerivation rec {
-      version = "2.0";
+      version = "2.3";
       name = "weechat-${version}";
 
       src = fetchurl {
-        url = "http://weechat.org/files/src/weechat-${version}.tar.bz2";
-        sha256 = "0jd1l67k2k44xmfv0a71im3j4v0gss3a6bd5s84nj3f7lqnfmqdn";
+        url = "https://weechat.org/files/src/weechat-${version}.tar.bz2";
+        sha256 = "0mi4pfnyny0vqc35r0scn6yy21y790a5iwq8ms7kch7b7z11jn9w";
       };
 
       outputs = [ "out" "man" ] ++ map (p: p.name) enabledPlugins;
@@ -72,39 +73,50 @@ let
       meta = {
         homepage = http://www.weechat.org/;
         description = "A fast, light and extensible chat client";
+        longDescription = ''
+          You can find more documentation as to how to customize this package
+          (eg. adding python modules for scripts that would require them, etc.)
+          on https://nixos.org/nixpkgs/manual/#sec-weechat .
+        '';
         license = stdenv.lib.licenses.gpl3;
-        maintainers = with stdenv.lib.maintainers; [ lovek323 garbas the-kenny lheckemann ];
+        maintainers = with stdenv.lib.maintainers; [ lovek323 garbas the-kenny lheckemann ma27 ];
         platforms = stdenv.lib.platforms.unix;
       };
     };
 in if configure == null then weechat else
   let
     perlInterpreter = perl;
-    config = configure {
-      availablePlugins = let
-          simplePlugin = name: {pluginFile = "${weechat.${name}}/lib/weechat/plugins/${name}.so";};
-        in rec {
-          python = {
-            pluginFile = "${weechat.python}/lib/weechat/plugins/python.so";
-            withPackages = pkgsFun: (python // {
-              extraEnv = ''
-                export PYTHONHOME="${pythonPackages.python.withPackages pkgsFun}"
-              '';
-            });
-          };
-          perl = (simplePlugin "perl") // {
+    availablePlugins = let
+        simplePlugin = name: {pluginFile = "${weechat.${name}}/lib/weechat/plugins/${name}.so";};
+      in rec {
+        python = {
+          pluginFile = "${weechat.python}/lib/weechat/plugins/python.so";
+          withPackages = pkgsFun: (python // {
             extraEnv = ''
-              export PATH="${perlInterpreter}/bin:$PATH"
+              export PYTHONHOME="${pythonPackages.python.withPackages pkgsFun}"
             '';
-          };
-          tcl = simplePlugin "tcl";
-          ruby = simplePlugin "ruby";
-          guile = simplePlugin "guile";
-          lua = simplePlugin "lua";
+          });
         };
+        perl = (simplePlugin "perl") // {
+          extraEnv = ''
+            export PATH="${perlInterpreter}/bin:$PATH"
+          '';
+          withPackages = pkgsFun: (perl // {
+            extraEnv = ''
+              ${perl.extraEnv}
+              export PERL5LIB=${lib.makeFullPerlPath (pkgsFun perlPackages)}
+            '';
+          });
+        };
+        tcl = simplePlugin "tcl";
+        ruby = simplePlugin "ruby";
+        guile = simplePlugin "guile";
+        lua = simplePlugin "lua";
       };
 
-    inherit (config) plugins;
+    config = configure { inherit availablePlugins; };
+
+    plugins = config.plugins or (builtins.attrValues availablePlugins);
 
     pluginsDir = runCommand "weechat-plugins" {} ''
       mkdir -p $out/plugins
@@ -112,9 +124,30 @@ in if configure == null then weechat else
         ln -s $plugin $out/plugins
       done
     '';
-  in (writeScriptBin "weechat" ''
-    #!${stdenv.shell}
-    export WEECHAT_EXTRA_LIBDIR=${pluginsDir}
-    ${lib.concatMapStringsSep "\n" (p: lib.optionalString (p ? extraEnv) p.extraEnv) plugins}
-    exec ${weechat}/bin/weechat "$@"
-  '') // { unwrapped = weechat; }
+
+    init = let
+      init = builtins.replaceStrings [ "\n" ] [ ";" ] (config.init or "");
+
+      mkScript = drv: lib.flip map drv.scripts (script: "/script load ${drv}/share/${script}");
+
+      scripts = builtins.concatStringsSep ";" (lib.foldl (scripts: drv: scripts ++ mkScript drv)
+        [ ] (config.scripts or []));
+    in "${scripts};${init}";
+
+    mkWeechat = bin: (writeScriptBin bin ''
+      #!${stdenv.shell}
+      export WEECHAT_EXTRA_LIBDIR=${pluginsDir}
+      ${lib.concatMapStringsSep "\n" (p: lib.optionalString (p ? extraEnv) p.extraEnv) plugins}
+      exec ${weechat}/bin/${bin} "$@" --run-command ${lib.escapeShellArg init}
+    '') // {
+      inherit (weechat) name meta;
+      unwrapped = weechat;
+    };
+  in buildEnv {
+    name = "weechat-bin-env-${weechat.version}";
+    paths = [
+      (mkWeechat "weechat")
+      (mkWeechat "weechat-headless")
+    ];
+    meta = weechat.meta;
+  }

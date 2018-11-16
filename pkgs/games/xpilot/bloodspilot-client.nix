@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libX11, SDL, mesa, expat, zlib, SDL_ttf, SDL_image }:
+{ stdenv, fetchurl, libX11, SDL, libGLU_combined, expat, zlib, SDL_ttf, SDL_image }:
 
 stdenv.mkDerivation rec {
   version = "1.5.0";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    libX11 SDL SDL_ttf SDL_image mesa expat zlib
+    libX11 SDL SDL_ttf SDL_image libGLU_combined expat zlib
   ];
 
   NIX_LDFLAGS = [ "-lX11" ];

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, bash, cacert, zlib, buildRustPackage, curl, darwin
+{ stdenv, makeWrapper, bash, buildRustPackage, curl, darwin
 , version
 , src
 , platform
@@ -6,15 +6,14 @@
 }:
 
 let
-  inherit (stdenv.lib) getLib optionalString;
-  inherit (darwin) libiconv;
+  inherit (stdenv.lib) optionalString;
   inherit (darwin.apple_sdk.frameworks) Security;
 
   bootstrapping = versionType == "bootstrap";
 
   installComponents
     = "rustc,rust-std-${platform}"
-    + (optionalString bootstrapping ",rust-docs,cargo")
+    + (optionalString bootstrapping ",cargo")
     ;
 in
 
@@ -70,7 +69,7 @@ rec {
       # Do NOT, I repeat, DO NOT use `wrapProgram` on $out/bin/rustc
       # (or similar) here. It causes strange effects where rustc loads
       # the wrong libraries in a bootstrap-build causing failures that
-      # are very hard to track dow. For details, see
+      # are very hard to track down. For details, see
       # https://github.com/rust-lang/rust/issues/34722#issuecomment-232164943
     '';
   };

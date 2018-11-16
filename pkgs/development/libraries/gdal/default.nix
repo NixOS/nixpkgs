@@ -1,28 +1,29 @@
-{ stdenv, fetchurl, unzip, libjpeg, libtiff, zlib
+{ stdenv, fetchurl, fetchpatch, unzip, libjpeg, libtiff, zlib
 , postgresql, mysql, libgeotiff, pythonPackages, proj, geos, openssl
-, libpng, sqlite, libspatialite, poppler, hdf4
-, libiconv
-, netcdfSupport ? true, netcdf, hdf5 , curl
+, libpng, sqlite, libspatialite, poppler, hdf4, qhull, giflib, expat
+, libiconv, libxml2
+, netcdfSupport ? true, netcdf, hdf5, curl
 }:
 
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  version = "2.2.3";
   name = "gdal-${version}";
+  version = "2.3.2";
 
   src = fetchurl {
-    url = "http://download.osgeo.org/gdal/${version}/${name}.tar.xz";
-    sha256 = "a328d63d476b3653f5a25b5f7971e87a15cdf8860ab0729d4b1157ba988b8d0b";
+    url = "https://download.osgeo.org/gdal/${version}/${name}.tar.xz";
+    sha256 = "191jknma0vricrgdcdmwh8588rwly6a77lmynypxdl87i3z7hv9z";
   };
 
   buildInputs = [ unzip libjpeg libtiff libpng proj openssl sqlite
-    libspatialite poppler hdf4 ]
+    libspatialite poppler hdf4 qhull giflib expat libxml2 ]
   ++ (with pythonPackages; [ python numpy wrapPython ])
   ++ stdenv.lib.optional stdenv.isDarwin libiconv
   ++ stdenv.lib.optionals netcdfSupport [ netcdf hdf5 curl ];
 
   configureFlags = [
+    "--with-expat=${expat.dev}"
     "--with-jpeg=${libjpeg.dev}"
     "--with-libtiff=${libtiff.dev}" # optional (without largetiff support)
     "--with-png=${libpng.dev}"      # optional
@@ -34,9 +35,10 @@ stdenv.mkDerivation rec {
     "--with-sqlite3=${sqlite.dev}"
     "--with-spatialite=${libspatialite}"
     "--with-python"               # optional
-    "--with-static-proj4=${proj}" # optional
+    "--with-proj=${proj}" # optional
     "--with-geos=${geos}/bin/geos-config"# optional
     "--with-hdf4=${hdf4.dev}" # optional
+    "--with-xml2=${libxml2.dev}/bin/xml2-config" # optional
     (if netcdfSupport then "--with-netcdf=${netcdf}" else "")
   ];
 

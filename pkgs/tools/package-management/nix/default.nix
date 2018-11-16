@@ -1,11 +1,12 @@
-{ lib, stdenv, fetchurl, fetchFromGitHub, perl, curl, bzip2, sqlite, openssl ? null, xz
-, pkgconfig, boehmgc, perlPackages, libsodium, aws-sdk-cpp, brotli
-, autoreconfHook, autoconf-archive, bison, flex, libxml2, libxslt, docbook5, docbook5_xsl
-, libseccomp, busybox-sandbox-shell
-, hostPlatform, buildPlatform
+{ lib, stdenv, fetchurl, fetchFromGitHub, fetchpatch, perl, curl, bzip2, sqlite, openssl ? null, xz
+, pkgconfig, boehmgc, perlPackages, libsodium, brotli, boost
+, autoreconfHook, autoconf-archive, bison, flex, libxml2, libxslt, docbook5, docbook_xsl_ns
+, busybox-sandbox-shell
 , storeDir ? "/nix/store"
 , stateDir ? "/nix/var"
 , confDir ? "/etc"
+, withLibseccomp ? lib.any (lib.meta.platformMatch stdenv.hostPlatform) libseccomp.meta.platforms, libseccomp
+, withAWS ? stdenv.isLinux || stdenv.isDarwin, aws-sdk-cpp
 }:
 
 let
@@ -25,19 +26,36 @@ let
     nativeBuildInputs =
       [ pkgconfig ]
       ++ lib.optionals (!is20) [ curl perl ]
-      ++ lib.optionals fromGit [ autoreconfHook autoconf-archive bison flex libxml2 libxslt docbook5 docbook5_xsl ];
+      ++ lib.optionals fromGit [ autoreconfHook autoconf-archive bison flex libxml2 libxslt docbook5 docbook_xsl_ns ];
 
     buildInputs = [ curl openssl sqlite xz bzip2 ]
       ++ lib.optional (stdenv.isLinux || stdenv.isDarwin) libsodium
-      ++ lib.optionals fromGit [ brotli ] # Since 1.12
-      ++ lib.optional (stdenv.isLinux && !hostPlatform.isRiscV) libseccomp
-      ++ lib.optional ((stdenv.isLinux || stdenv.isDarwin) && is20)
-          (aws-sdk-cpp.override {
-            apis = ["s3"];
+      ++ lib.optionals is20 [ brotli boost ]
+      ++ lib.optional withLibseccomp libseccomp
+      ++ lib.optional (withAWS && is20)
+          ((aws-sdk-cpp.override {
+            apis = ["s3" "transfer"];
             customMemoryManagement = false;
-          });
+          }).overrideDerivation (args: {
+            patches = args.patches or [] ++ [(fetchpatch {
+              url = https://github.com/edolstra/aws-sdk-cpp/commit/7d58e303159b2fb343af9a1ec4512238efa147c7.patch;
+              sha256 = "103phn6kyvs1yc7fibyin3lgxz699qakhw671kl207484im55id1";
+            })];
+          }));
 
     propagatedBuildInputs = [ boehmgc ];
+
+    # Seems to be required when using std::atomic with 64-bit types
+    NIX_LDFLAGS = lib.optionalString (stdenv.hostPlatform.system == "armv6l-linux") "-latomic";
+
+    preConfigure =
+      # Copy libboost_context so we don't get all of Boost in our closure.
+      # https://github.com/NixOS/nixpkgs/issues/45462
+      lib.optionalString is20
+      ''
+        mkdir -p $out/lib
+        cp ${boost}/lib/libboost_context* $out/lib
+      '';
 
     configureFlags =
       [ "--with-store-dir=${storeDir}"
@@ -54,10 +72,10 @@ let
         "--with-sandbox-shell=${sh}/bin/busybox"
       ]
       ++ lib.optional (
-          hostPlatform != buildPlatform && hostPlatform ? nix && hostPlatform.nix ? system
-      ) ''--with-system=${hostPlatform.nix.system}''
+          stdenv.hostPlatform != stdenv.buildPlatform && stdenv.hostPlatform ? nix && stdenv.hostPlatform.nix ? system
+      ) ''--with-system=${stdenv.hostPlatform.nix.system}''
          # RISC-V support in progress https://github.com/seccomp/libseccomp/pull/50
-      ++ lib.optional hostPlatform.isRiscV "--disable-seccomp-sandboxing";
+      ++ lib.optional (!withLibseccomp) "--disable-seccomp-sandboxing";
 
     makeFlags = "profiledir=$(out)/etc/profile.d";
 
@@ -66,7 +84,9 @@ let
     doInstallCheck = true; # not cross
 
     # socket path becomes too long otherwise
-    preInstallCheck = lib.optional stdenv.isDarwin "export TMPDIR=/tmp";
+    preInstallCheck = lib.optional stdenv.isDarwin ''
+      export TMPDIR=$NIX_BUILD_TOP
+    '';
 
     separateDebugInfo = stdenv.isLinux;
 
@@ -91,16 +111,19 @@ let
     passthru = { inherit fromGit; };
   };
 
-  perl-bindings = { nix }: stdenv.mkDerivation {
+  perl-bindings = { nix, needsBoost ? false }: stdenv.mkDerivation {
     name = "nix-perl-" + nix.version;
 
     inherit (nix) src;
 
     postUnpack = "sourceRoot=$sourceRoot/perl";
 
+    # This is not cross-compile safe, don't have time to fix right now
+    # but noting for future travellers.
     nativeBuildInputs =
       [ perl pkgconfig curl nix libsodium ]
-      ++ lib.optionals nix.fromGit [ autoreconfHook autoconf-archive ];
+      ++ lib.optionals nix.fromGit [ autoreconfHook autoconf-archive ]
+      ++ lib.optional needsBoost boost;
 
     configureFlags =
       [ "--with-dbi=${perlPackages.DBI}/${perl.libPrefix}"
@@ -116,24 +139,38 @@ in rec {
 
   nix = nixStable;
 
-  nixStable = (common rec {
+  nix1 = (common rec {
     name = "nix-1.11.16";
     src = fetchurl {
       url = "http://nixos.org/releases/nix/${name}/${name}.tar.xz";
       sha256 = "0ca5782fc37d62238d13a620a7b4bff6a200bab1bd63003709249a776162357c";
     };
-  }) // { perl-bindings = nixStable; };
+  }) // { perl-bindings = nix1; };
+
+  nixStable = (common rec {
+    name = "nix-2.1.3";
+    src = fetchurl {
+      url = "http://nixos.org/releases/nix/${name}/${name}.tar.xz";
+      sha256 = "5d22dad058d5c800d65a115f919da22938c50dd6ba98c5e3a183172d149840a4";
+    };
+  }) // { perl-bindings = perl-bindings {
+    nix = nixStable;
+    needsBoost = true;
+  }; };
 
   nixUnstable = (lib.lowPrio (common rec {
-    name = "nix-2.0${suffix}";
-    suffix = "pre5968_a6c0b773";
+    name = "nix-2.2${suffix}";
+    suffix = "pre6526_9f99d624";
     src = fetchFromGitHub {
       owner = "NixOS";
       repo = "nix";
-      rev = "a6c0b773b72d4e30690e01f1f1dcffc28f2d9ea1";
-      sha256 = "0i8wcblcjw3291ba6ki4llw3fgm8ylp9q52kajkyr58dih537346";
+      rev = "9f99d62480cf7c58c0a110b180f2096b7d25adab";
+      sha256 = "0fkmx7gmgg0yij9kw52fkyvib88hj1jsj90vbpy13ccfwknh1044";
     };
     fromGit = true;
-  })) // { perl-bindings = perl-bindings { nix = nixUnstable; }; };
+  })) // { perl-bindings = perl-bindings {
+    nix = nixUnstable;
+    needsBoost = true;
+  }; };
 
 }

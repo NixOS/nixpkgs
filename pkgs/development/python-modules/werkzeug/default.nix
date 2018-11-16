@@ -3,7 +3,6 @@
 , pytest, requests, glibcLocales }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "Werkzeug";
   version = "0.14.1";
 

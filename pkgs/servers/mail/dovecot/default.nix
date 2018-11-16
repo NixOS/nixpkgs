@@ -1,6 +1,7 @@
-{ stdenv, lib, fetchurl, fetchpatch, perl, pkgconfig, systemd, openssl
+{ stdenv, lib, fetchurl, perl, pkgconfig, systemd, openssl
 , bzip2, zlib, lz4, inotify-tools, pam, libcap
-, clucene_core_2, icu, openldap, libsodium, libstemmer
+, clucene_core_2, icu, openldap, libsodium, libstemmer, cyrus_sasl
+, nixosTests
 # Auth modules
 , withMySQL ? false, mysql
 , withPgSQL ? false, postgresql
@@ -8,19 +9,19 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "dovecot-2.3.0";
+  name = "dovecot-2.3.3";
 
   nativeBuildInputs = [ perl pkgconfig ];
   buildInputs =
-    [ openssl bzip2 zlib lz4 clucene_core_2 icu openldap libsodium libstemmer ]
+    [ openssl bzip2 zlib lz4 clucene_core_2 icu openldap libsodium libstemmer cyrus_sasl.dev ]
     ++ lib.optionals (stdenv.isLinux) [ systemd pam libcap inotify-tools ]
     ++ lib.optional withMySQL mysql.connector-c
     ++ lib.optional withPgSQL postgresql
     ++ lib.optional withSQLite sqlite;
 
   src = fetchurl {
-    url = "http://dovecot.org/releases/2.3/${name}.tar.gz";
-    sha256 = "10c5myzgys866c3x6jdr1s9x9pqnjd5vpyz8z384sph21m3wnq6y";
+    url = "https://dovecot.org/releases/2.3/${name}.tar.gz";
+    sha256 = "13kd0rxdg9scwnx6n24p6mv8p6dyh7v8s7sqv55gp2i54pp2gbqm";
   };
 
   preConfigure = ''
@@ -33,13 +34,6 @@ stdenv.mkDerivation rec {
   postInstall = ''
     cp -r $out/$out/* $out
     rm -rf $out/$(echo "$out" | cut -d "/" -f2)
-  '' + lib.optionalString stdenv.isDarwin ''
-    install_name_tool -change libclucene-shared.1.dylib \
-        ${clucene_core_2}/lib/libclucene-shared.1.dylib \
-        $out/lib/dovecot/lib21_fts_lucene_plugin.so
-    install_name_tool -change libclucene-core.1.dylib \
-        ${clucene_core_2}/lib/libclucene-core.1.dylib \
-        $out/lib/dovecot/lib21_fts_lucene_plugin.so
   '';
 
   patches = [
@@ -47,16 +41,6 @@ stdenv.mkDerivation rec {
     # so we can symlink plugins from several packages there.
     # The symlinking needs to be done in NixOS.
     ./2.2.x-module_dir.patch
-    (fetchpatch {
-      name = "CVE-2017-14132_part1.patch";
-      url = https://github.com/dovecot/core/commit/1a29ed2f96da1be22fa5a4d96c7583aa81b8b060.patch;
-      sha256 = "1pcfzxr8xlwbpa7z19grp7mlvdnan6ln8zw74dj4pdmynmlk4aw9";
-    })
-    (fetchpatch {
-      name = "CVE-2017-14132_part2.patch";
-      url = https://github.com/dovecot/core/commit/a9b135760aea6d1790d447d351c56b78889dac22.patch;
-      sha256 = "0082iid5rvjmh003xi9s09jld2rb31hbvni0yai1h1ggbmd5zf8l";
-    })
   ];
 
   configureFlags = [
@@ -82,7 +66,10 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = https://dovecot.org/;
     description = "Open source IMAP and POP3 email server written with security primarily in mind";
-    maintainers = with stdenv.lib.maintainers; [ viric peti rickynils fpletz ];
+    maintainers = with stdenv.lib.maintainers; [ peti rickynils fpletz ];
     platforms = stdenv.lib.platforms.unix;
+  };
+  passthru.tests = {
+    opensmtpd-interaction = nixosTests.opensmtpd;
   };
 }

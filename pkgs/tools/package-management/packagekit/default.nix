@@ -1,26 +1,30 @@
 { stdenv, fetchFromGitHub, lib
-, intltool, glib, pkgconfig, polkit, python, sqlite, systemd
-, gobjectIntrospection, vala_0_38, gtk_doc, autoreconfHook, autoconf-archive
+, intltool, glib, pkgconfig, polkit, python, sqlite
+, gobjectIntrospection, vala_0_38, gtk-doc, autoreconfHook, autoconf-archive
 # TODO: set enableNixBackend to true, as soon as it builds
 , nix, enableNixBackend ? false, boost
 , enableCommandNotFound ? false
-, enableBashCompletion ? false, bash-completion ? null }:
+, enableBashCompletion ? false, bash-completion ? null
+, enableSystemd ? stdenv.isLinux, systemd }:
 
 stdenv.mkDerivation rec {
   name = "packagekit-${version}";
-  version = "1.1.8";
+  version = "1.1.11";
+
+  outputs = [ "out" "dev" ];
 
   src = fetchFromGitHub {
     owner = "hughsie";
     repo = "PackageKit";
     rev = "PACKAGEKIT_${lib.replaceStrings ["."] ["_"] version}";
-    sha256 = "0bn9flsjbzlwmlbv2gphqwgzy9sx8ahch28z6dzgak4csbz5wcws";
+    sha256 = "0zr4b3ax8lcd3wkgj1cybs2cqf38br2nvl91qkw9g2jmzlq6bvic";
   };
 
-  buildInputs = [ glib polkit systemd python gobjectIntrospection vala_0_38 ]
+  buildInputs = [ glib polkit python gobjectIntrospection vala_0_38 ]
+                  ++ lib.optional enableSystemd systemd
                   ++ lib.optional enableBashCompletion bash-completion;
   propagatedBuildInputs = [ sqlite nix boost ];
-  nativeBuildInputs = [ intltool pkgconfig autoreconfHook autoconf-archive gtk_doc ];
+  nativeBuildInputs = [ intltool pkgconfig autoreconfHook autoconf-archive gtk-doc ];
 
   preAutoreconf = ''
     gtkdocize
@@ -28,10 +32,10 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = [
-    "--enable-systemd"
+    (if enableSystemd then "--enable-systemd" else "--disable-systemd")
     "--disable-dummy"
     "--disable-cron"
-    "--disable-introspection"
+    "--enable-introspection"
     "--disable-offline-update"
     "--localstatedir=/var"
     "--sysconfdir=/etc"
@@ -63,7 +67,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = http://www.packagekit.org/;
     license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ matthewbauer ];
   };
 }

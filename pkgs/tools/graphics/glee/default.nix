@@ -1,4 +1,4 @@
-{stdenv, fetchgit, cmake, mesa, xorg }:
+{stdenv, fetchgit, cmake, libGLU_combined, xorg }:
 
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ mesa xorg.libX11 ];
+  buildInputs = [ libGLU_combined xorg.libX11 ];
 
   configureScript = ''
     cmake

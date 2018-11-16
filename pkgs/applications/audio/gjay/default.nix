@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, mpd_clientlib, dbus_glib, audacious, gtk2, gsl
+{ stdenv, fetchurl, pkgconfig, mpd_clientlib, dbus-glib, audacious, gtk2, gsl
 , libaudclient }:
 
 stdenv.mkDerivation {
@@ -11,7 +11,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ pkgconfig ];
 
-  buildInputs = [ mpd_clientlib dbus_glib audacious gtk2 gsl libaudclient ];
+  buildInputs = [ mpd_clientlib dbus-glib audacious gtk2 gsl libaudclient ];
 
   hardeningDisable = [ "format" ];
 

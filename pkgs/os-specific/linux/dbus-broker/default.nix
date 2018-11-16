@@ -1,15 +1,15 @@
-{ stdenv, fetchgit, fetchFromGitHub, docutils, meson, ninja, pkgconfig
+{ stdenv, fetchFromGitHub, docutils, meson, ninja, pkgconfig
 , dbus, glib, linuxHeaders, systemd }:
 
 stdenv.mkDerivation rec {
   name = "dbus-broker-${version}";
-  version = "11";
+  version = "13";
 
   src = fetchFromGitHub {
-    owner           = "bus1";
-    repo            = "dbus-broker";
-    rev             = "v${version}";
-    sha256          = "19sszb6ac7md494i996ixqmz9b3gim8rrv2nbrmlgjd59gk6hf7b";
+    owner  = "bus1";
+    repo   = "dbus-broker";
+    rev    = "v${version}";
+    sha256 = "1yjkxpnl54pky6ha3y8dsds57lnk10lmriyzpzy0ha2npng2614x";
     fetchSubmodules = true;
   };
 
@@ -17,13 +17,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ dbus glib linuxHeaders systemd ];
 
-  enableParallelBuilding = true;
-
-  prePatch = ''
-    substituteInPlace meson.build \
-      --replace "dep_systemd.get_pkgconfig_variable('systemdsystemunitdir')" "'$out/lib/systemd/system'" \
-      --replace "dep_systemd.get_pkgconfig_variable('systemduserunitdir')"   "'$out/lib/systemd/user'"
-  '';
+  PKG_CONFIG_SYSTEMD_SYSTEMDSYSTEMUNITDIR = "${placeholder "out"}/lib/systemd/system";
+  PKG_CONFIG_SYSTEMD_SYSTEMDUSERUNITDIR = "${placeholder "out"}/lib/systemd/user";
 
   postInstall = ''
     install -Dm644 ../README $out/share/doc/dbus-broker/README
@@ -31,8 +26,6 @@ stdenv.mkDerivation rec {
     sed -i $out/lib/systemd/{system,user}/dbus-broker.service \
       -e 's,^ExecReload.*busctl,ExecReload=${systemd}/bin/busctl,'
   '';
-
-  checkPhase = "ninja test";
 
   doCheck = true;
 

@@ -1,29 +1,26 @@
-{ stdenv, fetchurl, ant, jdk }:
-
-let version = "9.3-1100"; in
+{ stdenv, fetchMavenArtifact }:
 
 stdenv.mkDerivation rec {
   name = "postgresql-jdbc-${version}";
+  version = "42.2.5";
 
-  src = fetchurl {
-    url = "http://jdbc.postgresql.org/download/postgresql-jdbc-${version}.src.tar.gz";
-    sha256 = "0mbdzhzg4ws0i7ps98rg0q5n68lsrdm2klj7y7skaix0rpa57gp6";
+  src = fetchMavenArtifact {
+    artifactId = "postgresql";
+    groupId = "org.postgresql";
+    sha256 = "1p0cbb7ka41xxipzjy81hmcndkqynav22xyipkg7qdqrqvw4dykz";
+    inherit version;
   };
 
-  buildInputs = [ ant jdk ];
+  phases = [ "installPhase" ];
 
-  buildPhase = "ant";
-
-  installPhase =
-    ''
-      mkdir -p $out/share/java
-      cp jars/*.jar $out/share/java
-    '';
+  installPhase = ''
+    install -m444 -D $src/share/java/*postgresql-${version}.jar $out/share/java/postgresql-jdbc.jar
+  '';
 
   meta = with stdenv.lib; {
     homepage = https://jdbc.postgresql.org/;
     description = "JDBC driver for PostgreSQL allowing Java programs to connect to a PostgreSQL database";
-    license = licenses.bsd3;
+    license = licenses.bsd2;
     platforms = platforms.unix;
   };
 }

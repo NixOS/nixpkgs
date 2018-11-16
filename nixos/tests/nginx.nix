@@ -10,7 +10,7 @@ import ./make-test.nix ({ pkgs, ...} : {
 
   nodes = {
     webserver =
-      { config, pkgs, ... }:
+      { ... }:
       { services.nginx.enable = true;
         services.nginx.commonHttpConfig = ''
         log_format ceeformat '@cee: {"status":"$status",'

@@ -1,20 +1,21 @@
-{ lib, rustPlatform, fetchFromGitHub, pkgconfig, openssl, curl }:
+{ stdenv, rustPlatform, fetchFromGitHub, pkgconfig, openssl, curl
+, Security
+}:
 
-with rustPlatform;
-
-buildRustPackage rec {
+rustPlatform.buildRustPackage rec {
   name = "nix-index-${version}";
-  version = "0.1.0";
+  version = "0.1.2";
 
   src = fetchFromGitHub {
     owner = "bennofs";
     repo = "nix-index";
     rev = "v${version}";
-    sha256 = "1lmg65yqkwf2a5qxm3dmv8158kqhnriir062vlgar5wimf409rm5";
+    sha256 = "05fqfwz34n4ijw7ydw2n6bh4bv64rhks85cn720sy5r7bmhfmfa8";
   };
-  cargoSha256 = "0cxdrzjmqq3ywdh0f5mzkcf50hbbgd3bak4398v2ls5gy5s9fcz2";
+  cargoSha256 = "045qm7cyg3sdvf22i8b9cz8gsvggs5bn9xz8k1pvn5gxb7zj24cx";
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ openssl curl];
+  buildInputs = [ openssl curl ]
+    ++ stdenv.lib.optional stdenv.isDarwin Security;
 
   postInstall = ''
     mkdir -p $out/etc/profile.d
@@ -23,7 +24,7 @@ buildRustPackage rec {
       --replace "@out@" "$out"
   '';
 
-  meta = with lib; {
+  meta = with stdenv.lib; {
     description = "A files database for nixpkgs";
     homepage = https://github.com/bennofs/nix-index;
     license = with licenses; [ bsd3 ];

@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, file, openssl, mlton
+{ stdenv, fetchurl, file, openssl, mlton
 , mysql, postgresql, sqlite, gcc
 }:
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     sed -e 's@/usr/bin/file@${file}/bin/file@g' -i configure
   '';
 
-  configureFlags = "--with-openssl=${openssl.dev}";
+  configureFlags = [ "--with-openssl=${openssl.dev}" ];
 
   preConfigure = ''
     export PGHEADER="${postgresql}/include/libpq-fe.h";

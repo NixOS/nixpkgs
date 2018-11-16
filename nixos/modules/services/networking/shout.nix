@@ -1,4 +1,4 @@
-{ pkgs, lib, config, options, ... }:
+{ pkgs, lib, config, ... }:
 
 with lib;
 
@@ -82,7 +82,7 @@ in {
   };
 
   config = mkIf cfg.enable {
-    users.extraUsers = singleton {
+    users.users = singleton {
       name = "shout";
       uid = config.ids.uids.shout;
       description = "Shout daemon user";

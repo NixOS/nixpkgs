@@ -2,7 +2,7 @@ Remove the use of macdeployqt to avoid copying dependencies and
 reduce installation size from 90 MB to 9 MB.
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -188,8 +188,8 @@ else()
+@@ -250,8 +250,8 @@ else()
    set(PROGNAME keepassxc)
  endif()
  
@@ -10,43 +10,43 @@ reduce installation size from 90 MB to 9 MB.
 -  set(CMAKE_INSTALL_PREFIX "/Applications")
 +if(APPLE AND WITH_APP_BUNDLE)
 +  set(CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}/Applications")
+   set(CMAKE_INSTALL_MANDIR "/usr/local/share/man")
  endif()
  
- if(MINGW)
-@@ -198,7 +198,7 @@ if(MINGW)
+@@ -262,7 +262,7 @@ if(MINGW)
    set(PLUGIN_INSTALL_DIR ".")
    set(DATA_INSTALL_DIR   "share")
  elseif(APPLE AND WITH_APP_BUNDLE)
 -  set(CLI_INSTALL_DIR    "/usr/local/bin")
 +  set(CLI_INSTALL_DIR    "../bin")
+   set(PROXY_INSTALL_DIR  "/usr/local/bin")
    set(BIN_INSTALL_DIR    ".")
    set(PLUGIN_INSTALL_DIR "${PROGNAME}.app/Contents/PlugIns")
-   set(DATA_INSTALL_DIR   "${PROGNAME}.app/Contents/Resources")
 diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
-index 5255186..0175983 100644
+index 69526967..38f7c5d4 100644
 --- a/src/CMakeLists.txt
 +++ b/src/CMakeLists.txt
-@@ -282,11 +282,6 @@ if(APPLE AND WITH_APP_BUNDLE)
-   if(NOT DEFINED QT_BINARY_DIR)
-     set(QT_BINARY_DIR "/usr/local/opt/qt5/bin" CACHE PATH "QT binary folder")
-   endif()
+@@ -319,11 +319,6 @@ if(APPLE AND WITH_APP_BUNDLE)
+   set(CPACK_PACKAGE_FILE_NAME "${PROGNAME}-${KEEPASSXC_VERSION}")
+   include(CPack)
+ 
 -  add_custom_command(TARGET ${PROGNAME}
 -                     POST_BUILD
--                     COMMAND ${QT_BINARY_DIR}/macdeployqt ${PROGNAME}.app
+-                     COMMAND ${MACDEPLOYQT_EXE} ${PROGNAME}.app
 -                     WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/src
 -                     COMMENT "Deploying app bundle")
  endif()
  
- if(MINGW)
+ install(TARGETS ${PROGNAME}
 diff --git a/src/autotype/mac/CMakeLists.txt b/src/autotype/mac/CMakeLists.txt
-index ac93de0..03d502e 100644
+index 08c53278..b833b692 100644
 --- a/src/autotype/mac/CMakeLists.txt
 +++ b/src/autotype/mac/CMakeLists.txt
-@@ -16,7 +16,6 @@ if(WITH_APP_BUNDLE)
+@@ -14,7 +14,6 @@ if(WITH_APP_BUNDLE)
    add_custom_command(TARGET keepassx-autotype-cocoa
                       POST_BUILD
                       COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_BINARY_DIR}/libkeepassx-autotype-cocoa.so ${PLUGIN_INSTALL_DIR}
--                     COMMAND ${QT_BINARY_DIR}/macdeployqt ${PROGNAME}.app -executable=${PLUGIN_INSTALL_DIR}/libkeepassx-autotype-cocoa.so -no-plugins
+-                     COMMAND ${MACDEPLOYQT_EXE} ${PROGNAME}.app -executable=${PLUGIN_INSTALL_DIR}/libkeepassx-autotype-cocoa.so -no-plugins
                       WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/src
    COMMENT "Deploying autotype plugin")
  else()

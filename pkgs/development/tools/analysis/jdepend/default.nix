@@ -30,5 +30,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.clarkware.com/software/JDepend.html;
     license = licenses.bsd3;
     platforms = platforms.linux;
+    maintainers = with maintainers; [ pSub ];
   };
 }

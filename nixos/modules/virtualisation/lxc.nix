@@ -74,6 +74,9 @@ in
     systemd.tmpfiles.rules = [ "d /var/lib/lxc/rootfs 0755 root root -" ];
 
     security.apparmor.packages = [ pkgs.lxc ];
-    security.apparmor.profiles = [ "${pkgs.lxc}/etc/apparmor.d/lxc-containers" ];
+    security.apparmor.profiles = [
+      "${pkgs.lxc}/etc/apparmor.d/lxc-containers"
+      "${pkgs.lxc}/etc/apparmor.d/usr.bin.lxc-start"
+    ];
   };
 }

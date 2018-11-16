@@ -15,13 +15,13 @@ in
 
 stdenv.mkDerivation rec {
   name = "${package}-${version}";
-  version = "0.5.4";
+  version = "0.5.6";
 
   src = fetchFromGitHub {
     repo = "JFBView";
     owner = "jichu4n";
     rev = version;
-    sha256 = "0p12b5n07yfkmfswjdb3a4c5c50jcphl030n3i71djcq4jjvrxlw";
+    sha256 = "09rcmlf04aka0yzr25imadi0fl4nlbsxcahs7fhvzx4nql4halqw";
   };
 
   hardeningDisable = [ "format" ];

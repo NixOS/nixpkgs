@@ -1,31 +1,28 @@
 { stdenv, fetchurl, pkgconfig, autoreconfHook, makeWrapper
 , ncurses, cpio, gperf, perl, cdrkit, flex, bison, qemu, pcre, augeas, libxml2
 , acl, libcap, libcap_ng, libconfig, systemd, fuse, yajl, libvirt, hivex
-, gmp, readline, file, libintlperl, GetoptLong, SysVirt, numactl, xen, libapparmor
+, gmp, readline, file, libintl_perl, GetoptLong, SysVirt, numactl, xen, libapparmor
 , getopt, perlPackages, ocamlPackages
+, appliance ? null
 , javaSupport ? false, jdk ? null }:
 
+assert appliance == null || stdenv.lib.isDerivation appliance;
 assert javaSupport -> jdk != null;
 
 stdenv.mkDerivation rec {
   name = "libguestfs-${version}";
-  version = "1.38.0";
-
-  appliance = fetchurl {
-    url = "http://libguestfs.org/download/binaries/appliance/appliance-1.38.0.tar.xz";
-    sha256 = "05481qxgidakga871yb5rgpyci2jaxmplmkh6y79anfh5m19nzhy";
-  };
+  version = "1.38.6";
 
   src = fetchurl {
     url = "http://libguestfs.org/download/1.38-stable/libguestfs-${version}.tar.gz";
-    sha256 = "0cgapiad3x5ggwm097mq62hng3bv91p5gmrikrb6adfaasr1l6m3";
+    sha256 = "1v2mggx2jlaq4m3p5shc46gzf7vmaayha6r0nwdnyzd7x6q0is7p";
   };
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
     makeWrapper autoreconfHook ncurses cpio gperf perl
     cdrkit flex bison qemu pcre augeas libxml2 acl libcap libcap_ng libconfig
-    systemd fuse yajl libvirt gmp readline file hivex libintlperl GetoptLong
+    systemd fuse yajl libvirt gmp readline file hivex libintl_perl GetoptLong
     SysVirt numactl xen libapparmor getopt perlPackages.ModuleBuild
   ] ++ (with ocamlPackages; [ ocaml findlib ocamlbuild ocaml_libvirt ocaml_gettext ounit ])
     ++ stdenv.lib.optional javaSupport jdk;
@@ -54,14 +51,31 @@ stdenv.mkDerivation rec {
   postInstall = ''
     for bin in $out/bin/*; do
       wrapProgram "$bin" \
-        --prefix "PATH" : "$out/bin:${hivex}/bin:${qemu}/bin" \
-        --prefix "PERL5LIB" : "$PERL5LIB:$out/lib/perl5/site_perl"
+        --prefix PATH     : "$out/bin:${hivex}/bin:${qemu}/bin" \
+        --prefix PERL5LIB : "$out/lib/perl5/site_perl"
     done
   '';
 
-  postFixup = ''
-    mkdir -p "$out/lib/guestfs"
-    tar -Jxvf "$appliance" --strip 1 -C "$out/lib/guestfs"
+  postFixup = stdenv.lib.optionalString (appliance != null) ''
+    mkdir -p $out/{lib,lib64}
+    ln -s ${appliance} $out/lib64/guestfs
+    ln -s ${appliance} $out/lib/guestfs
+  '';
+
+  doInstallCheck = appliance != null;
+  installCheckPhase = ''
+    export HOME=$(mktemp -d) # avoid access to /homeless-shelter/.guestfish
+
+    ${qemu}/bin/qemu-img create -f qcow2 disk1.img 10G
+
+    $out/bin/guestfish <<'EOF'
+    add-drive disk1.img
+    run
+    list-filesystems
+    part-disk /dev/sda mbr
+    mkfs ext2 /dev/sda1
+    list-filesystems
+    EOF
   '';
 
   meta = with stdenv.lib; {

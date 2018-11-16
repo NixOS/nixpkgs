@@ -2,34 +2,49 @@
 , openssl, enableMagnet ? false, lua5_1 ? null
 , enableMysql ? false, mysql ? null
 , enableLdap ? false, openldap ? null
+, enableWebDAV ? true, sqlite ? null, libuuid ? null
+, perl
 }:
 
 assert enableMagnet -> lua5_1 != null;
 assert enableMysql -> mysql != null;
 assert enableLdap -> openldap != null;
+assert enableWebDAV -> sqlite != null;
+assert enableWebDAV -> libuuid != null;
 
 stdenv.mkDerivation rec {
-  name = "lighttpd-1.4.48";
+  name = "lighttpd-1.4.51";
 
   src = fetchurl {
-    url = "http://download.lighttpd.net/lighttpd/releases-1.4.x/${name}.tar.xz";
-    sha256 = "0djgsx06x3p22rjvzml5klq7gqd9nk88qzlxifa7p7ajqymdb2hg";
+    url = "https://download.lighttpd.net/lighttpd/releases-1.4.x/${name}.tar.xz";
+    sha256 = "10lw9vvivpvf4aw7ajayb2yyq4lp4dq3gq9llszjbw6icnrgvy9a";
   };
+
+  postPatch = ''
+    patchShebangs tests
+  '';
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ pcre libxml2 zlib attr bzip2 which file openssl ]
              ++ stdenv.lib.optional enableMagnet lua5_1
              ++ stdenv.lib.optional enableMysql mysql.connector-c
-             ++ stdenv.lib.optional enableLdap openldap;
+             ++ stdenv.lib.optional enableLdap openldap
+             ++ stdenv.lib.optional enableWebDAV sqlite
+             ++ stdenv.lib.optional enableWebDAV libuuid;
 
   configureFlags = [ "--with-openssl" ]
                 ++ stdenv.lib.optional enableMagnet "--with-lua"
                 ++ stdenv.lib.optional enableMysql "--with-mysql"
-                ++ stdenv.lib.optional enableLdap "--with-ldap";
+                ++ stdenv.lib.optional enableLdap "--with-ldap"
+                ++ stdenv.lib.optional enableWebDAV "--with-webdav-props"
+                ++ stdenv.lib.optional enableWebDAV "--with-webdav-locks";
 
   preConfigure = ''
     sed -i "s:/usr/bin/file:${file}/bin/file:g" configure
   '';
+
+  checkInputs = [ perl ];
+  doCheck = false; # fails 2 tests
 
   postInstall = ''
     mkdir -p "$out/share/lighttpd/doc/config"

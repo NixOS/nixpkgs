@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   name = "minify-${version}";

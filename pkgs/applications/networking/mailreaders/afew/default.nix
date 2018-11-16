@@ -9,11 +9,21 @@ pythonPackages.buildPythonApplication rec {
     sha256 = "0105glmlkpkjqbz350dxxasvlfx9dk0him9vwbl86andzi106ygz";
   };
 
-  buildInputs = with pythonPackages; [ setuptools_scm ];
+  nativeBuildInputs = with pythonPackages; [ sphinx setuptools_scm ];
 
   propagatedBuildInputs = with pythonPackages; [
     pythonPackages.notmuch chardet dkimpy
   ] ++ stdenv.lib.optional (!pythonPackages.isPy3k) subprocess32;
+
+  postBuild =  ''
+    make -C docs man
+  '';
+
+  postInstall = ''
+    mandir="$out/share/man/man1"
+    mkdir -p "$mandir"
+    cp docs/build/man/* "$mandir"
+  '';
 
   makeWrapperArgs = [
     ''--prefix PATH ':' "${notmuch}/bin"''

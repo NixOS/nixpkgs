@@ -1,14 +1,14 @@
-{ stdenv, lib, go, fetchFromGitHub }:
+{ stdenv, go, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   name = "cadvisor-${version}";
-  version = "0.28.3";
+  version = "0.31.0";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "cadvisor";
     rev = "v${version}";
-    sha256 = "1rdw09cbhs4il63lv1f92dw8pav9rjnkbrqx37lqij8x6xmv01gy";
+    sha256 = "0dnn2vgjbbb82kvbmgrfq0hqwfk0jh5gc3xrcfqwvvq673yf4f2m";
   };
 
   nativeBuildInputs = [ go ];

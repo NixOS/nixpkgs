@@ -201,13 +201,13 @@ with lib;
     };
 
     users = {
-      extraUsers = singleton {
+      users = singleton {
         name = cfg.user;
         description = "Nullmailer relay-only mta user";
         group = cfg.group;
       };
 
-      extraGroups = singleton {
+      groups = singleton {
         name = cfg.group;
       };
     };

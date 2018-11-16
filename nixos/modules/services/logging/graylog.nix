@@ -127,7 +127,7 @@ in
 
   config = mkIf cfg.enable {
 
-    users.extraUsers = mkIf (cfg.user == "graylog") {
+    users.users = mkIf (cfg.user == "graylog") {
       graylog = {
         uid = config.ids.uids.graylog;
         description = "Graylog server daemon user";
@@ -141,7 +141,7 @@ in
         JAVA_HOME = jre;
         GRAYLOG_CONF = "${confFile}";
       };
-      path = [ pkgs.openjdk8 pkgs.which pkgs.procps ];
+      path = [ pkgs.jre_headless pkgs.which pkgs.procps ];
       preStart = ''
         mkdir -p /var/lib/graylog -m 755
 

@@ -7,6 +7,13 @@ let
   cfg = config.services.xserver.displayManager;
   gdm = pkgs.gnome3.gdm;
 
+  xSessionWrapper = if (cfg.setupCommands == "") then null else
+    pkgs.writeScript "gdm-x-session-wrapper" ''
+      #!${pkgs.bash}/bin/bash
+      ${cfg.setupCommands}
+      exec "$@"
+    '';
+
 in
 
 {
@@ -87,9 +94,9 @@ in
       }
     ];
 
-    services.xserver.displayManager.slim.enable = false;
+    services.xserver.displayManager.lightdm.enable = false;
 
-    users.extraUsers.gdm =
+    users.users.gdm =
       { name = "gdm";
         uid = config.ids.uids.gdm;
         group = "gdm";
@@ -97,7 +104,7 @@ in
         description = "GDM user";
       };
 
-    users.extraGroups.gdm.gid = config.ids.gids.gdm;
+    users.groups.gdm.gid = config.ids.gids.gdm;
 
     # GDM needs different xserverArgs, presumable because using wayland by default.
     services.xserver.tty = null;
@@ -109,9 +116,14 @@ in
         environment = {
           GDM_X_SERVER_EXTRA_ARGS = toString
             (filter (arg: arg != "-terminate") cfg.xserverArgs);
-          GDM_SESSIONS_DIR = "${cfg.session.desktops}";
+          GDM_SESSIONS_DIR = "${cfg.session.desktops}/share/xsessions";
           # Find the mouse
           XCURSOR_PATH = "~/.icons:${pkgs.gnome3.adwaita-icon-theme}/share/icons";
+        } // optionalAttrs (xSessionWrapper != null) {
+          # Make GDM use this wrapper before running the session, which runs the
+          # configured setupCommands. This relies on a patched GDM which supports
+          # this environment variable.
+          GDM_X_SESSION_WRAPPER = "${xSessionWrapper}";
         };
         execCmd = "exec ${gdm}/bin/gdm";
       };
@@ -133,13 +145,19 @@ in
       StandardError = "inherit";
     };
 
-    systemd.services.display-manager.path = [ pkgs.gnome3.gnome_session ];
+    systemd.services.display-manager.path = [ pkgs.gnome3.gnome-session ];
+
+    # Allow choosing an user account
+    services.accounts-daemon.enable = true;
 
     services.dbus.packages = [ gdm ];
 
     systemd.user.services.dbus.wantedBy = [ "default.target" ];
 
-    programs.dconf.profiles.gdm = "${gdm}/share/dconf/profile/gdm";
+    programs.dconf.profiles.gdm = pkgs.writeText "dconf-gdm-profile" ''
+      system-db:local
+      ${gdm}/share/dconf/profile/gdm
+    '';
 
     # Use AutomaticLogin if delay is zero, because it's immediate.
     # Otherwise with TimedLogin with zero seconds the prompt is still
@@ -170,6 +188,8 @@ in
       ${optionalString cfg.gdm.debug "Enable=true"}
     '';
 
+    environment.etc."gdm/Xsession".source = config.services.xserver.displayManager.session.wrapper;
+
     # GDM LFS PAM modules, adapted somehow to NixOS
     security.pam.services = {
       gdm-launch-environment.text = ''
@@ -193,7 +213,7 @@ in
         auth     required       pam_env.so envfile=${config.system.build.pamEnvironment}
 
         auth     required       pam_succeed_if.so uid >= 1000 quiet
-        auth     optional       ${pkgs.gnome3.gnome_keyring}/lib/security/pam_gnome_keyring.so
+        auth     optional       ${pkgs.gnome3.gnome-keyring}/lib/security/pam_gnome_keyring.so
         auth     ${if config.security.pam.enableEcryptfs then "required" else "sufficient"} pam_unix.so nullok likeauth
         ${optionalString config.security.pam.enableEcryptfs
           "auth required ${pkgs.ecryptfs}/lib/security/pam_ecryptfs.so unwrap"}
@@ -213,7 +233,7 @@ in
           "session optional ${pkgs.ecryptfs}/lib/security/pam_ecryptfs.so"}
         session  required       pam_loginuid.so
         session  optional       ${pkgs.systemd}/lib/security/pam_systemd.so
-        session  optional       ${pkgs.gnome3.gnome_keyring}/lib/security/pam_gnome_keyring.so auto_start
+        session  optional       ${pkgs.gnome3.gnome-keyring}/lib/security/pam_gnome_keyring.so auto_start
       '';
 
       gdm-password.text = ''
@@ -221,7 +241,7 @@ in
         auth     required       pam_env.so envfile=${config.system.build.pamEnvironment}
 
         auth     required       pam_succeed_if.so uid >= 1000 quiet
-        auth     optional       ${pkgs.gnome3.gnome_keyring}/lib/security/pam_gnome_keyring.so
+        auth     optional       ${pkgs.gnome3.gnome-keyring}/lib/security/pam_gnome_keyring.so
         auth     ${if config.security.pam.enableEcryptfs then "required" else "sufficient"} pam_unix.so nullok likeauth
         ${optionalString config.security.pam.enableEcryptfs
           "auth required ${pkgs.ecryptfs}/lib/security/pam_ecryptfs.so unwrap"}
@@ -240,7 +260,7 @@ in
           "session optional ${pkgs.ecryptfs}/lib/security/pam_ecryptfs.so"}
         session  required       pam_loginuid.so
         session  optional       ${pkgs.systemd}/lib/security/pam_systemd.so
-        session  optional       ${pkgs.gnome3.gnome_keyring}/lib/security/pam_gnome_keyring.so auto_start
+        session  optional       ${pkgs.gnome3.gnome-keyring}/lib/security/pam_gnome_keyring.so auto_start
       '';
 
       gdm-autologin.text = ''

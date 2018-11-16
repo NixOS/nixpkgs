@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, pkgconfig, gtk2, gnome3, libgksu,
-  intltool, libstartup_notification, gtk_doc, wrapGAppsHook
+{ stdenv, fetchurl, pkgconfig, gtk2, gnome2, gnome3, libgksu,
+  intltool, libstartup_notification, gtk-doc, wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
@@ -13,11 +13,11 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    pkgconfig intltool gtk_doc wrapGAppsHook
+    pkgconfig intltool gtk-doc wrapGAppsHook
   ];
 
   buildInputs = [
-    gtk2 gnome3.gconf libstartup_notification gnome3.libgnome_keyring
+    gtk2 gnome2.GConf libstartup_notification gnome3.libgnome-keyring
   ];
 
   propagatedBuildInputs = [
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     sed -i -e 's|/usr/bin/x-terminal-emulator|-l gnome-terminal|g' gksu.desktop
   '';
 
-  configureFlags = "--disable-nautilus-extension";
+  configureFlags = [ "--disable-nautilus-extension" ];
 
   meta = {
     description = "A graphical frontend for libgksu";

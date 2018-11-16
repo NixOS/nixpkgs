@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, qmake, qttools, qtbase, poppler_qt5 }:
+{ stdenv, fetchurl, fetchpatch, qmake, qttools, qtbase, poppler }:
 
 stdenv.mkDerivation rec {
   version = "2.1.3";
@@ -18,10 +18,10 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ qmake qttools ];
-  buildInputs = [ qtbase poppler_qt5 ];
+  buildInputs = [ qtbase poppler ];
 
   preConfigure = ''
-    substituteInPlace diffpdf.pro --replace @@NIX_POPPLER_QT5@@ ${poppler_qt5.dev}
+    substituteInPlace diffpdf.pro --replace @@NIX_POPPLER_QT5@@ ${poppler.dev}
     lrelease diffpdf.pro
   '';
 

@@ -1,10 +1,10 @@
 {stdenv, fetchurl}:
 stdenv.mkDerivation rec {
   name = "nauty-${version}";
-  version = "26r7";
+  version = "26r11";
   src = fetchurl {
     url = "http://pallini.di.uniroma1.it/nauty${version}.tar.gz";
-    sha256 = "1indcc1im7s5x89x0xn4699izw1wwars1aanpmf8jibnw66n9dcp";
+    sha256 = "05z6mk7c31j70md83396cdjmvzzip1hqb88pfszzc6k4gy8h3m2y";
   };
   buildInputs = [];
   installPhase = ''

@@ -22,7 +22,7 @@ let
 
       web_root = ${cfg.package}/etc/pgmanage/web_root
 
-      data_root = ${cfg.dataRoot}
+      sql_root = ${cfg.sqlRoot}
 
       ${optionalString (!isNull cfg.tls) ''
       tls_cert = ${cfg.tls.cert}
@@ -41,7 +41,9 @@ let
 
   pgmanage = "pgmanage";
 
-  pgmanageOptions = {
+in {
+
+  options.services.pgmanage = {
     enable = mkEnableOption "PostgreSQL Administration for the web";
 
     package = mkOption {
@@ -130,7 +132,7 @@ let
       '';
     };
 
-    dataRoot = mkOption {
+    sqlRoot = mkOption {
       type = types.str;
       default = "/var/lib/pgmanage";
       description = ''
@@ -176,47 +178,29 @@ let
     };
   };
 
-
-in {
-
-  options.services.pgmanage = pgmanageOptions;
-
-  # This is deprecated and should be removed for NixOS-18.03.
-  options.services.postage = pgmanageOptions;
-
-  config = mkMerge [
-    { assertions = [
-        { assertion = !config.services.postage.enable;
-          message =
-            "services.postage is deprecated in favour of pgmanage. " +
-            "They have the same options so just substitute postage for pgmanage." ;
-        }
-      ];
-    }
-    (mkIf cfg.enable {
-      systemd.services.pgmanage = {
-        description = "pgmanage - PostgreSQL Administration for the web";
-        wants    = [ "postgresql.service" ];
-        after    = [ "postgresql.service" ];
-        wantedBy = [ "multi-user.target" ];
-        serviceConfig = {
-          User         = pgmanage;
-          Group        = pgmanage;
-          ExecStart    = "${pkgs.pgmanage}/sbin/pgmanage -c ${confFile}" +
-                         optionalString cfg.localOnly " --local-only=true";
-        };
+  config = mkIf cfg.enable {
+    systemd.services.pgmanage = {
+      description = "pgmanage - PostgreSQL Administration for the web";
+      wants    = [ "postgresql.service" ];
+      after    = [ "postgresql.service" ];
+      wantedBy = [ "multi-user.target" ];
+      serviceConfig = {
+        User         = pgmanage;
+        Group        = pgmanage;
+        ExecStart    = "${pkgs.pgmanage}/sbin/pgmanage -c ${confFile}" +
+                       optionalString cfg.localOnly " --local-only=true";
       };
-      users = {
-        users."${pgmanage}" = {
-          name  = pgmanage;
-          group = pgmanage;
-          home  = cfg.dataRoot;
-          createHome = true;
-        };
-        groups."${pgmanage}" = {
-          name = pgmanage;
-        };
+    };
+    users = {
+      users."${pgmanage}" = {
+        name  = pgmanage;
+        group = pgmanage;
+        home  = cfg.sqlRoot;
+        createHome = true;
       };
-    })
-  ];
+      groups."${pgmanage}" = {
+        name = pgmanage;
+      };
+    };
+  };
 }

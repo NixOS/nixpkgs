@@ -1,16 +1,17 @@
-{ stdenv, buildGoPackage, fetchurl, cmake, xz, which, autoconf }:
+{ stdenv, buildGoPackage, fetchurl, cmake, xz, which, autoconf, ncurses6, libedit }:
 
 buildGoPackage rec {
   name = "cockroach-${version}";
-  version = "1.1.5";
+  version = "2.0.0";
 
   goPackagePath = "github.com/cockroachdb/cockroach";
 
   src = fetchurl {
     url = "https://binaries.cockroachdb.com/cockroach-v${version}.src.tgz";
-    sha256 = "0i2lg60424i1yg9dhapfsy3majnlbad2wlf93d9l161jf5lp9a2d";
+    sha256 = "0x8hf5qwvgb2w6dcnvy20v77nf19f0l1pb40jf31rm72xhk3bwvy";
   };
 
+  buildInputs = [ (if stdenv.isDarwin then libedit else ncurses6) ];
   nativeBuildInputs = [ cmake xz which autoconf ];
 
   buildPhase = ''

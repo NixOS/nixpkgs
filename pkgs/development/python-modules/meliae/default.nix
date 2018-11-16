@@ -9,7 +9,6 @@
 buildPythonPackage rec {
   pname = "meliae";
   version = "0.4.0";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname;
@@ -35,7 +34,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Python Memory Usage Analyzer";
-    homepage = http://launchpad.net/meliae;
+    homepage = https://launchpad.net/meliae;
     license = licenses.gpl3;
     maintainers = with maintainers; [ xvapx ];
   };

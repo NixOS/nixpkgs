@@ -1,14 +1,13 @@
-{ stdenv, fetchurl, pythonPackages, makeWrapper, nettools, libtorrentRasterbar, imagemagick
+{ stdenv, fetchurl, pythonPackages, makeWrapper, imagemagick
 , enablePlayer ? true, vlc ? null, qt5 }:
 
 stdenv.mkDerivation rec {
-  pname = "tribler";
-  name = "${pname}-${version}";
-  version = "7.0.0-rc3";
+  name = "tribler-${version}";
+  version = "7.1.2";
 
   src = fetchurl {
-    url = "https://github.com/Tribler/tribler/releases/download/v${version}/Tribler-v${version}.tar.xz";
-    sha256 = "0f1f8mzbk1ygkh8lv9y1s9mvslv12d94mxvmp3b4s2vm8w4syza7";
+    url = "https://github.com/Tribler/tribler/releases/download/v${version}/Tribler-v${version}.tar.gz";
+    sha256 = "1ayzqx4358qlx56hsnsn5s8xl6mzdb6nw4kwsalmp86dw6vmmis8";
   };
 
   buildInputs = [
@@ -19,7 +18,7 @@ stdenv.mkDerivation rec {
   ];
 
   pythonPath = [
-    libtorrentRasterbar
+    pythonPackages.libtorrentRasterbar
     pythonPackages.apsw
     pythonPackages.twisted
     pythonPackages.netifaces
@@ -41,6 +40,9 @@ stdenv.mkDerivation rec {
     pythonPackages.service-identity
     pythonPackages.psutil
     pythonPackages.meliae
+    pythonPackages.sip
+    pythonPackages.pillow
+    pythonPackages.networkx
   ];
 
   postPatch = ''

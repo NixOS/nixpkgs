@@ -1,6 +1,4 @@
-{ stdenv, fetchurlBoot, openssl, zlib, windows
-, hostPlatform
-}:
+{ stdenv, fetchurlBoot, openssl, zlib, windows }:
 
 stdenv.mkDerivation rec {
   name = "libssh2-1.8.0";
@@ -12,27 +10,14 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" "devdoc" ];
 
-  buildInputs = [ openssl zlib ];
+  buildInputs = [ openssl zlib ]
+    ++ stdenv.lib.optional stdenv.hostPlatform.isMinGW windows.mingw_w64;
 
-  crossAttrs = {
-    # link against cross-built libraries
-    configureFlags = [
-      "--with-openssl"
-      "--with-libssl-prefix=${openssl.crossDrv}"
-      "--with-libz"
-      "--with-libz-prefix=${zlib.crossDrv}"
-    ];
-  } // stdenv.lib.optionalAttrs (hostPlatform.libc == "msvcrt") {
-    # mingw needs import library of ws2_32 to build the shared library
-    preConfigure = ''
-      export LDFLAGS="-L${windows.mingw_w64}/lib $LDFLAGS"
-    '';
-  };
-
-  meta = {
+  meta = with stdenv.lib; {
     description = "A client-side C library implementing the SSH2 protocol";
-    homepage = http://www.libssh2.org;
-    platforms = stdenv.lib.platforms.all;
+    homepage = https://www.libssh2.org;
+    platforms = platforms.all;
+    license = licenses.bsd3;
     maintainers = [ ];
   };
 }

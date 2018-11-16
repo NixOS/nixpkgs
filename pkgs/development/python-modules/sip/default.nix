@@ -1,14 +1,15 @@
 { lib, fetchurl, buildPythonPackage, python, isPyPy }:
 
-if isPyPy then throw "sip not supported for interpreter ${python.executable}" else buildPythonPackage rec {
+buildPythonPackage rec {
   pname = "sip";
-  version = "4.19.6";
-  name = "${pname}-${version}";
+  version = "4.19.8";
   format = "other";
 
+  disabled = isPyPy;
+
   src = fetchurl {
-    url = "mirror://sourceforge/pyqt/sip/${name}/${name}.tar.gz";
-    sha256 = "0nlj0zbvmzliyhhspqwf2bjvcnpq4agx4s47php7ishv32p2gnlx";
+    url = "mirror://sourceforge/pyqt/sip/${pname}-${version}/${pname}-${version}.tar.gz";
+    sha256 = "1g4pq9vj753r2s061jc4y9ydzgb48ibhc9bdvmb8mlyllwp7mbvy";
   };
 
   configurePhase = ''

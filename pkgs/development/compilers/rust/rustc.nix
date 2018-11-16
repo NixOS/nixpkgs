@@ -1,5 +1,5 @@
 { stdenv, targetPackages
-, fetchurl, fetchgit, fetchzip, file, python2, tzdata, procps
+, fetchurl, fetchgit, fetchzip, file, python2, tzdata, ps
 , llvm, jemalloc, ncurses, darwin, rustPlatform, git, cmake, curl
 , which, libffi, gdb
 , version
@@ -12,14 +12,11 @@
 , targetToolchains
 , doCheck ? true
 , broken ? false
-, buildPlatform, hostPlatform
-} @ args:
+}:
 
 let
   inherit (stdenv.lib) optional optionalString;
   inherit (darwin.apple_sdk.frameworks) Security;
-
-  procps = if stdenv.isDarwin then darwin.ps else args.procps;
 
   llvmShared = llvm.override { enableSharedLibraries = true; };
 
@@ -34,8 +31,8 @@ stdenv.mkDerivation {
 
   __darwinAllowLocalNetworking = true;
 
-  # The build will fail at the very end on AArch64 without this.
-  dontUpdateAutotoolsGnuConfigScripts = if stdenv.isAarch64 then true else null;
+  # rustc complains about modified source files otherwise
+  dontUpdateAutotoolsGnuConfigScripts = true;
 
   # Running the default `strip -S` command on Darwin corrupts the
   # .rlib files in "lib/".
@@ -55,6 +52,7 @@ stdenv.mkDerivation {
   RUSTFLAGS = "-Ccodegen-units=10";
 
   # We need rust to build rust. If we don't provide it, configure will try to download it.
+  # Reference: https://github.com/rust-lang/rust/blob/master/src/bootstrap/configure.py
   configureFlags = configureFlags
                 ++ [ "--enable-local-rust" "--local-rust-root=${rustPlatform.rust.rustc}" "--enable-rpath" ]
                 ++ [ "--enable-vendor" ]
@@ -63,6 +61,13 @@ stdenv.mkDerivation {
                 ++ optional (!forceBundledLLVM) [ "--enable-llvm-link-shared" ]
                 ++ optional (targets != []) "--target=${target}"
                 ++ optional (!forceBundledLLVM) "--llvm-root=${llvmShared}";
+
+  # The bootstrap.py will generated a Makefile that then executes the build.
+  # The BOOTSTRAP_ARGS used by this Makefile must include all flags to pass
+  # to the bootstrap builder.
+  postConfigure = ''
+    substituteInPlace Makefile --replace 'BOOTSTRAP_ARGS :=' 'BOOTSTRAP_ARGS := --jobs $(NIX_BUILD_CORES)'
+  '';
 
   patches = patches ++ targetPatches;
 
@@ -87,38 +92,42 @@ stdenv.mkDerivation {
     #[ -f src/liballoc/heap.rs ] && sed -i 's,je_,,g' src/liballoc/heap.rs # Remove for 1.4.0+
 
     # Disable fragile tests.
-    rm -vr src/test/run-make/linker-output-non-utf8 || true
-    rm -vr src/test/run-make/issue-26092 || true
+    rm -vr src/test/run-make-fulldeps/linker-output-non-utf8 || true
+    rm -vr src/test/run-make-fulldeps/issue-26092 || true
 
     # Remove test targeted at LLVM 3.9 - https://github.com/rust-lang/rust/issues/36835
-    rm -vr src/test/run-pass/issue-36023.rs || true
+    rm -vr src/test/ui/run-pass/issue-36023.rs || true
 
     # Disable test getting stuck on hydra - possible fix:
     # https://reviews.llvm.org/rL281650
-    rm -vr src/test/run-pass/issue-36474.rs || true
+    rm -vr src/test/ui/run-pass/issue-36474.rs || true
 
     # On Hydra: `TcpListener::bind(&addr)`: Address already in use (os error 98)'
     sed '/^ *fn fast_rebind()/i#[ignore]' -i src/libstd/net/tcp.rs
 
+    # https://github.com/rust-lang/rust/issues/39522
+    echo removing gdb-version-sensitive tests...
+    find src/test/debuginfo -type f -execdir grep -q ignore-gdb-version '{}' \; -print -delete
+    rm src/test/debuginfo/{borrowed-c-style-enum.rs,c-style-enum-in-composite.rs,gdb-pretty-struct-and-enums-pre-gdb-7-7.rs,generic-enum-with-different-disr-sizes.rs}
+
     # Useful debugging parameter
     # export VERBOSE=1
-  ''
-  + optionalString stdenv.isDarwin ''
+  '' + optionalString stdenv.isDarwin ''
     # Disable all lldb tests.
     # error: Can't run LLDB test because LLDB's python path is not set
     rm -vr src/test/debuginfo/*
-    rm -v src/test/run-pass/backtrace-debuginfo.rs
+    rm -v src/test/run-pass/backtrace-debuginfo.rs || true
 
     # error: No such file or directory
-    rm -v src/test/run-pass/issue-45731.rs
+    rm -v src/test/ui/run-pass/issues/issue-45731.rs || true
 
     # Disable tests that fail when sandboxing is enabled.
     substituteInPlace src/libstd/sys/unix/ext/net.rs \
         --replace '#[test]' '#[test] #[ignore]'
     substituteInPlace src/test/run-pass/env-home-dir.rs \
         --replace 'home_dir().is_some()' true
-    rm -v src/test/run-pass/fds-are-cloexec.rs  # FIXME: pipes?
-    rm -v src/test/run-pass/sync-send-in-std.rs  # FIXME: ???
+    rm -v src/test/run-pass/fds-are-cloexec.rs || true  # FIXME: pipes?
+    rm -v src/test/ui/run-pass/threads-sendsync/sync-send-in-std.rs || true  # FIXME: ???
   '';
 
   # rustc unfortunately need cmake for compiling llvm-rt but doesn't
@@ -127,7 +136,7 @@ stdenv.mkDerivation {
 
   # ps is needed for one of the test cases
   nativeBuildInputs =
-    [ file python2 procps rustPlatform.rust.rustc git cmake
+    [ file python2 ps rustPlatform.rust.rustc git cmake
       which libffi
     ]
     # Only needed for the debuginfo tests
@@ -140,10 +149,11 @@ stdenv.mkDerivation {
   outputs = [ "out" "man" "doc" ];
   setOutputFlags = false;
 
-  # Disable codegen units for the tests.
+  # Disable codegen units and hardening for the tests.
   preCheck = ''
     export RUSTFLAGS=
     export TZDIR=${tzdata}/share/zoneinfo
+    export hardeningDisable=all
   '' +
   # Ensure TMPDIR is set, and disable a test that removing the HOME
   # variable from the environment falls back to another home

@@ -1,17 +1,17 @@
-{stdenv, fetchurl, pkgconfig, alsaLib, spice_protocol, glib,
+{stdenv, fetchurl, pkgconfig, alsaLib, spice-protocol, glib,
  libpciaccess, libxcb, libXrandr, libXinerama, libXfixes, dbus,
  systemd}:
 stdenv.mkDerivation rec {
-  name = "spice-vdagent-0.17.0";
+  name = "spice-vdagent-0.18.0";
   src = fetchurl {
-    url = "http://www.spice-space.org/download/releases/${name}.tar.bz2";
-    sha256 = "0gdkyylyg1hksg0i0anvznqfli2q39335fnrmcd6847frpc8njpi";
+    url = "https://www.spice-space.org/download/releases/${name}.tar.bz2";
+    sha256 = "1bmyvapwj1x0m6y8q0r1df2q37vsnb04qkgnnrfbnzf1qzipxvl0";
   };
   postPatch = ''
     substituteInPlace data/spice-vdagent.desktop --replace /usr $out
   '';
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ alsaLib spice_protocol glib
+  buildInputs = [ alsaLib spice-protocol glib
                   libpciaccess libxcb libXrandr libXinerama libXfixes
                   dbus systemd ] ;
   meta = {

@@ -3,18 +3,17 @@
 with python3Packages;
 
 buildPythonApplication rec {
-  name = "${pname}-${version}";
   pname = "pirate-get";
-  version = "0.2.12";
+  version = "0.3.2";
 
   doCheck = false;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1q6hvavj0gswgw3x756h18nmmpnxlgg08qvxphpbzlwd43xrnza3";
+    sha256 = "1iirip12zrxm2nqsib5wfqqnlfmhh432y3kkyih9crk4q2p914df";
   };
 
-  propagatedBuildInputs = [ colorama veryprettytable beautifulsoup4 ];
+  propagatedBuildInputs = [ colorama veryprettytable beautifulsoup4 pyperclip ];
 
   meta = with stdenv.lib; {
     description = "A command line interface for The Pirate Bay";

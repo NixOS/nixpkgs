@@ -16,7 +16,7 @@ stdenv.mkDerivation {
   binaryVersion = 8;
 
   src = fetchurl {
-    url = "http://code.call-cc.org/releases/${version}/chicken-${version}.tar.gz";
+    url = "https://code.call-cc.org/releases/${version}/chicken-${version}.tar.gz";
     sha256 = "0hvckhi5gfny3mlva6d7y9pmx7cbwvq0r7mk11k3sdiik9hlkmdd";
   };
 
@@ -63,7 +63,7 @@ stdenv.mkDerivation {
     homepage = http://www.call-cc.org/;
     license = stdenv.lib.licenses.bsd3;
     maintainers = with stdenv.lib.maintainers; [ the-kenny ];
-    platforms = with stdenv.lib.platforms; allBut darwin;
+    platforms = stdenv.lib.platforms.linux; # Maybe other non-darwin Unix
     description = "A portable compiler for the Scheme programming language";
     longDescription = ''
       CHICKEN is a compiler for the Scheme programming language.

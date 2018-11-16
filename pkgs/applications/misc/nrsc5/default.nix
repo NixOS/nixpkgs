@@ -10,14 +10,16 @@ let
     sha256 = "0pcw2x9rjgkf5g6irql1j4m5xjb4lxj6468z8v603921bnir71mf";
   };
 
+  version = "1.0";
+
 in stdenv.mkDerivation {
-  name = "nrsc5-20171129";
+  name = "nrsc5-${version}";
 
   src = fetchFromGitHub {
     owner = "theori-io";
     repo = "nrsc5";
-    rev = "f87beeed96f12ce6aa4789ac1d45761cec28d2db";
-    sha256 = "03d5k59125qrjsm1naj9pd0nfzwi008l9n30p9q4g5abgqi5nc8v";
+    rev = "v${version}";
+    sha256 = "09zzh3h1zzf2lwrbz3i7rif2hw36d9ska8irvxaa9lz6xc1y68pg";
   };
 
   postUnpack = ''

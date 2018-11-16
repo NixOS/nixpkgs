@@ -1,15 +1,15 @@
 args @ { fetchurl, ... }:
 rec {
   baseName = ''mssql'';
-  version = ''cl-20170630-git'';
+  version = ''cl-20180228-git'';
 
   description = '''';
 
-  deps = [ args."cffi" args."garbage-pools" args."iterate" args."parse-number" ];
+  deps = [ args."alexandria" args."babel" args."cffi" args."garbage-pools" args."iterate" args."parse-number" args."trivial-features" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/cl-mssql/2017-06-30/cl-mssql-20170630-git.tgz'';
-    sha256 = ''0vwssk39m8pqn8srwvbcnq43wkqlav5rvq64byrnpsrwlfcbfvxy'';
+    url = ''http://beta.quicklisp.org/archive/cl-mssql/2018-02-28/cl-mssql-20180228-git.tgz'';
+    sha256 = ''1f9vq78xx4vv1898cigkf09mzimknc6ry6qrkys3xj167vyqhwm0'';
   };
 
   packageName = "mssql";
@@ -18,10 +18,13 @@ rec {
   overrides = x: x;
 }
 /* (SYSTEM mssql DESCRIPTION NIL SHA256
-    0vwssk39m8pqn8srwvbcnq43wkqlav5rvq64byrnpsrwlfcbfvxy URL
-    http://beta.quicklisp.org/archive/cl-mssql/2017-06-30/cl-mssql-20170630-git.tgz
-    MD5 88e65c72923896df603ecf20039ae305 NAME mssql FILENAME mssql DEPS
-    ((NAME cffi FILENAME cffi) (NAME garbage-pools FILENAME garbage-pools)
-     (NAME iterate FILENAME iterate) (NAME parse-number FILENAME parse-number))
-    DEPENDENCIES (cffi garbage-pools iterate parse-number) VERSION
-    cl-20170630-git SIBLINGS NIL PARASITES NIL) */
+    1f9vq78xx4vv1898cigkf09mzimknc6ry6qrkys3xj167vyqhwm0 URL
+    http://beta.quicklisp.org/archive/cl-mssql/2018-02-28/cl-mssql-20180228-git.tgz
+    MD5 03a269f5221948393643432fc6de9d5d NAME mssql FILENAME mssql DEPS
+    ((NAME alexandria FILENAME alexandria) (NAME babel FILENAME babel)
+     (NAME cffi FILENAME cffi) (NAME garbage-pools FILENAME garbage-pools)
+     (NAME iterate FILENAME iterate) (NAME parse-number FILENAME parse-number)
+     (NAME trivial-features FILENAME trivial-features))
+    DEPENDENCIES
+    (alexandria babel cffi garbage-pools iterate parse-number trivial-features)
+    VERSION cl-20180228-git SIBLINGS NIL PARASITES NIL) */

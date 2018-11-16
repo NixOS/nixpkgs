@@ -3,27 +3,31 @@
         xmlns:xi="http://www.w3.org/2001/XInclude"
         version="5.0"
         xml:id="sec-replace-modules">
+ <title>Replace Modules</title>
 
-<title>Replace Modules</title>
+ <para>
+  Modules that are imported can also be disabled. The option declarations and
+  config implementation of a disabled module will be ignored, allowing another
+  to take it's place. This can be used to import a set of modules from another
+  channel while keeping the rest of the system on a stable release.
+ </para>
 
-<para>Modules that are imported can also be disabled.  The option
-  declarations and config implementation of a disabled module will be
-  ignored, allowing another to take it's place.  This can be used to
-  import a set of modules from another channel while keeping the rest
-  of the system on a stable release.</para>
-<para><literal>disabledModules</literal> is a top level attribute like
+ <para>
+  <literal>disabledModules</literal> is a top level attribute like
   <literal>imports</literal>, <literal>options</literal> and
-  <literal>config</literal>.  It contains a list of modules that will
-  be disabled. This can either be the full path to the module or a
-  string with the filename relative to the modules path
-  (eg. &lt;nixpkgs/nixos/modules&gt; for nixos).
-  </para>
+  <literal>config</literal>. It contains a list of modules that will be
+  disabled. This can either be the full path to the module or a string with the
+  filename relative to the modules path (eg. &lt;nixpkgs/nixos/modules&gt; for
+  nixos).
+ </para>
 
-<para>This example will replace the existing postgresql module with
-  the version defined in the nixos-unstable channel while keeping the
-  rest of the modules and packages from the original nixos channel.
-  This only overrides the module definition, this won't use postgresql
-  from nixos-unstable unless explicitly configured to do so.</para>
+ <para>
+  This example will replace the existing postgresql module with the version
+  defined in the nixos-unstable channel while keeping the rest of the modules
+  and packages from the original nixos channel. This only overrides the module
+  definition, this won't use postgresql from nixos-unstable unless explicitly
+  configured to do so.
+ </para>
 
 <programlisting>
 { config, lib, pkgs, ... }:
@@ -41,10 +45,11 @@
 }
 </programlisting>
 
-<para>This example shows how to define a custom module as a
-  replacement for an existing module. Importing this module will
-  disable the original module without having to know it's
-  implementation details.</para>
+ <para>
+  This example shows how to define a custom module as a replacement for an
+  existing module. Importing this module will disable the original module
+  without having to know it's implementation details.
+ </para>
 
 <programlisting>
 { config, lib, pkgs, ... }:
@@ -71,5 +76,4 @@ in
   };
 }
 </programlisting>
-
 </section>

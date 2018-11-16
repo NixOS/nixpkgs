@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   name = "xsnow-${version}";
 
   src = fetchurl {
-    url = "http://janswaal.home.xs4all.nl/Xsnow/${name}.tar.gz";
+    url = "https://janswaal.home.xs4all.nl/Xsnow/${name}.tar.gz";
     sha256 = "06jnbp88wc9i9dbmy7kggplw4hzlx2bhghxijmlhkjlizgqwimyh";
   };
 

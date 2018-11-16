@@ -5,7 +5,7 @@
 
 stdenv.mkDerivation rec {
   name = "openra-${version}";
-  version = "20180218";
+  version = "20180923";
 
   meta = with stdenv.lib; {
     description = "Real Time Strategy game engine recreating the C&C titles";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     owner = "OpenRA";
     repo = "OpenRA";
     rev = "release-${version}";
-    sha256 = "1853p2q88602s3zf22wg1h2qx2x661n20bcjjbfmj0h2d4p9dmaf";
+    sha256 = "1pgi3zaq9fwwdq6yh19bwxscslqgabjxkvl9bcn1a5agy4bfbqk5";
 
     extraPostFetch = ''
       sed -i 's,curl,curl --insecure,g' $out/thirdparty/{fetch-thirdparty-deps,noget}.sh
@@ -64,7 +64,8 @@ stdenv.mkDerivation rec {
   in ''
     wrapProgram $out/lib/openra/launch-game.sh \
       --prefix PATH : "${binaries}" \
-      --prefix LD_LIBRARY_PATH : "${runtime}"
+      --prefix LD_LIBRARY_PATH : "${runtime}" \
+      --set TERM "xterm"
 
     mkdir -p $out/bin
     makeWrapper $out/lib/openra/launch-game.sh $out/bin/openra --run "cd $out/lib/openra"

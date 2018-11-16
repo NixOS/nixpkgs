@@ -1,7 +1,6 @@
 { stdenv, fetchurl, nspr, perl, zlib, sqlite, fixDarwinDylibNames }:
 
 let
-
   nssPEM = fetchurl {
     url = http://dev.gentoo.org/~polynomial-c/mozilla/nss-3.15.4-pem-support-20140109.patch.xz;
     sha256 = "10ibz6y0hknac15zr6dw4gv9nb5r5z9ym6gq18j3xqx7v7n3vpdw";
@@ -9,11 +8,11 @@ let
 
 in stdenv.mkDerivation rec {
   name = "nss-${version}";
-  version = "3.34.1";
+  version = "3.39";
 
   src = fetchurl {
-    url = "mirror://mozilla/security/nss/releases/NSS_3_34_1_RTM/src/${name}.tar.gz";
-    sha256 = "186x33wsk4mzjz7dzbn8p0py9a0nzkgzpfkdv4rlyy5gghv5vhd3";
+    url = "mirror://mozilla/security/nss/releases/NSS_3_39_RTM/src/${name}.tar.gz";
+    sha256 = "0jw6qlfl2g47hhx056nvnj6h92bk3sn46hy3ig61a911dzblvrkb";
   };
 
   buildInputs = [ perl zlib sqlite ]
@@ -43,7 +42,7 @@ in stdenv.mkDerivation rec {
   preConfigure = "cd nss";
 
   makeFlags = [
-    "NSPR_INCLUDE_DIR=${nspr.dev}/include/nspr"
+    "NSPR_INCLUDE_DIR=${nspr.dev}/include"
     "NSPR_LIB_DIR=${nspr.out}/lib"
     "NSDISTMODE=copy"
     "BUILD_OPT=1"
@@ -55,6 +54,11 @@ in stdenv.mkDerivation rec {
     ++ stdenv.lib.optional stdenv.isDarwin "CCC=clang++";
 
   NIX_CFLAGS_COMPILE = "-Wno-error";
+
+  # TODO(@oxij): investigate this: `make -n check` works but `make
+  # check` fails with "no rule", same for "installcheck".
+  doCheck = false;
+  doInstallCheck = false;
 
   postInstall = ''
     rm -rf $out/private
@@ -109,9 +113,10 @@ in stdenv.mkDerivation rec {
     rm -f "$out"/lib/*.a
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = https://developer.mozilla.org/en-US/docs/NSS;
     description = "A set of libraries for development of security-enabled client and server applications";
-    platforms = stdenv.lib.platforms.all;
+    license = licenses.mpl20;
+    platforms = platforms.all;
   };
 }

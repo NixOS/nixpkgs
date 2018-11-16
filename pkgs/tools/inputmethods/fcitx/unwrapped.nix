@@ -2,7 +2,7 @@
 , libxml2, enchant, isocodes, icu, libpthreadstubs
 , pango, cairo, libxkbfile, libXau, libXdmcp, libxkbcommon
 , dbus, gtk2, gtk3, qt4, extra-cmake-modules
-, xkeyboard_config, pcre, libuuid, curl, cacert
+, xkeyboard_config, pcre, libuuid
 , withPinyin ? true
 , fetchFromGitHub
 }:
@@ -89,7 +89,7 @@ stdenv.mkDerivation rec {
     '';
 
   meta = with stdenv.lib; {
-    homepage    = http://github.com/fcitx/fcitx;
+    homepage    = https://github.com/fcitx/fcitx;
     description = "A Flexible Input Method Framework";
     license     = licenses.gpl2;
     platforms   = platforms.linux;

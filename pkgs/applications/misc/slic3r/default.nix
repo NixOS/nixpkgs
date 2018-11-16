@@ -21,6 +21,7 @@ stdenv.mkDerivation rec {
     MathConvexHullMonotoneChain MathGeometryVoronoi MathPlanePath Moo
     IOStringy ClassXSAccessor Wx GrowlGNTP NetDBus ImportInto XMLSAX
     ExtUtilsMakeMaker OpenGL WxGLCanvas ModuleBuild LWP
+    ExtUtilsCppGuess ModuleBuildWithXSpp ExtUtilsTypemapsDefault
   ];
 
   desktopItem = makeDesktopItem {

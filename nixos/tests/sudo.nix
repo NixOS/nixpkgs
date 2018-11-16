@@ -11,10 +11,10 @@ in
     };
 
     machine =
-      { config, lib, pkgs, ... }:
+      { lib, ... }:
       with lib;
       {
-        users.extraGroups = { foobar = {}; barfoo = {}; baz = { gid = 1337; }; };
+        users.groups = { foobar = {}; barfoo = {}; baz = { gid = 1337; }; };
         users.users = {
           test0 = { isNormalUser = true; extraGroups = [ "wheel" ]; };
           test1 = { isNormalUser = true; password = password; };

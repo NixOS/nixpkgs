@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, cmake, wxGTK, itk, mesa, libXft, libXext, libXi, zlib, libXmu,
+{ fetchurl, stdenv, cmake, wxGTK, itk, libGLU_combined, libXft, libXext, libXi, zlib, libXmu,
 libuuid }:
 
 assert (stdenv ? glibc);
@@ -6,7 +6,7 @@ assert (stdenv ? glibc);
 stdenv.mkDerivation {
   name = "seg3d-1.12_20090930";
   src = fetchurl {
-    url = http://www.sci.utah.edu/releases/seg3d_v1.12/Seg3D_1.12_20090930_source.tgz;
+    url = https://www.sci.utah.edu/releases/seg3d_v1.12/Seg3D_1.12_20090930_source.tgz;
     sha256 = "1wr6rc6v5qjjkmws8yrc03z35h3iydxk1z28p06v1wdnca0y71z8";
   };
 
@@ -47,7 +47,7 @@ stdenv.mkDerivation {
     exit 1
   '';
 
-  buildInputs = [ cmake wxGTK itk mesa libXft libXext libXi zlib libXmu libuuid ];
+  buildInputs = [ cmake wxGTK itk libGLU_combined libXft libXext libXi zlib libXmu libuuid ];
 
   meta = {
     broken = true;

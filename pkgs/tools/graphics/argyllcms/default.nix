@@ -1,8 +1,8 @@
 { stdenv, fetchzip, jam, unzip, libX11, libXxf86vm, libXrandr, libXinerama
 , libXrender, libXext, libtiff, libjpeg, libpng, libXScrnSaver, writeText
-, libXdmcp, libXau, lib, openssl, zlib }:
+, libXdmcp, libXau, lib, openssl }:
 let
-  version = "1.8.3";
+  version = "2.0.1";
  in
 stdenv.mkDerivation rec {
   name = "argyllcms-${version}";
@@ -10,8 +10,8 @@ stdenv.mkDerivation rec {
   src = fetchzip {
     # Kind of flacky URL, it was reaturning 406 and inconsistent binaries for a
     # while on me. It might be good to find a mirror
-    url = "http://www.argyllcms.com/Argyll_V${version}_src.zip";
-    sha256 = "00ggh47qzb3xyl8rnppwxa6j113lr38aiwvsfyxwgs51aqmvq7bd";
+    url = "https://www.argyllcms.com/Argyll_V${version}_src.zip";
+    sha256 = "0a7m5mwvy74db34hvqsgy296469x3139qj5gfj4zqpnz0iyxhkny";
 
     # The argyllcms web server doesn't like curl ...
     curlOpts = "--user-agent 'Mozilla/5.0'";

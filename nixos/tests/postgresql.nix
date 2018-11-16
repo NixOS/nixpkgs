@@ -1,6 +1,11 @@
-{ system ? builtins.currentSystem }:
-with import ../lib/testing.nix { inherit system; };
+{ system ? builtins.currentSystem,
+  config ? {},
+  pkgs ? import ../.. { inherit system config; }
+}:
+
+with import ../lib/testing.nix { inherit system pkgs; };
 with pkgs.lib;
+
 let
   postgresql-versions = pkgs.callPackages ../../pkgs/servers/sql/postgresql { };
   test-sql = pkgs.writeText "postgresql-test" ''
@@ -22,10 +27,13 @@ let
       maintainers = [ zagy ];
     };
 
-    machine = {pkgs, config, ...}:
+    machine = {...}:
       {
         services.postgresql.package=postgresql-package;
         services.postgresql.enable = true;
+
+        services.postgresqlBackup.enable = true;
+        services.postgresqlBackup.databases = [ "postgres" ];
       };
 
     testScript = ''
@@ -46,6 +54,11 @@ let
       $machine->succeed(check_count("SELECT * FROM sth;", 5));
       $machine->fail(check_count("SELECT * FROM sth;", 4));
       $machine->succeed(check_count("SELECT xpath(\'/test/text()\', doc) FROM xmltest;", 1));
+
+      # Check backup service
+      $machine->succeed("systemctl start postgresqlBackup-postgres.service");
+      $machine->succeed("zcat /var/backup/postgresql/postgres.sql.gz | grep '<test>ok</test>'");
+      $machine->succeed("stat -c '%a' /var/backup/postgresql/postgres.sql.gz | grep 600");
       $machine->shutdown;
     '';
 

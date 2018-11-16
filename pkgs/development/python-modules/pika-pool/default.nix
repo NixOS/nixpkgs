@@ -5,7 +5,6 @@
 buildPythonPackage rec {
   pname = "pika-pool";
   version = "0.1.3";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

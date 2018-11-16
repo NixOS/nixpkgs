@@ -1,28 +1,32 @@
-{ stdenv, fetchurl, crystal, libyaml, which }:
+{ stdenv, fetchFromGitHub, crystal, pcre, libyaml, which }:
 
 stdenv.mkDerivation rec {
   name = "shards-${version}";
-  version = "0.7.2";
+  version = "0.8.1";
 
-  src = fetchurl {
-    url = "https://github.com/crystal-lang/shards/archive/v${version}.tar.gz";
-    sha256 = "1qiv9zzpccf6i5r2qrzbl84wgvqapbs0csazayhcpzfjfhg6i8wp";
+  src = fetchFromGitHub {
+    owner  = "crystal-lang";
+    repo   = "shards";
+    rev    = "v${version}";
+    sha256 = "1cjn2lafr08yiqzlhyqx14jjjxf1y24i2kk046px07gljpnlgqwk";
   };
 
-  buildInputs = [ crystal libyaml which ];
+  buildInputs = [ crystal libyaml pcre which ];
 
-  buildFlags = [ "CRFLAGS=" "release" ];
+  buildFlags = [ "CRFLAGS=--release" ];
 
   installPhase = ''
-    mkdir -p $out/bin
-    cp bin/shards $out/bin/
+    runHook preInstall
+
+    install -Dm755 bin/shards $out/bin/shards
+
+    runHook postInstall
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://crystal-lang.org/;
-    license = licenses.asl20;
     description = "Dependency manager for the Crystal language";
-    maintainers = with maintainers; [ sifmelcara ];
-    platforms = [ "x86_64-linux" "i686-linux" "x86_64-darwin" ];
+    license     = licenses.asl20;
+    maintainers = with maintainers; [ peterhoeg ];
+    inherit (crystal.meta) homepage platforms;
   };
 }

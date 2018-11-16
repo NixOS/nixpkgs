@@ -16,6 +16,7 @@ verbose=false
 nixPath=""
 
 option=""
+exit_code=0
 
 argfun=""
 for arg; do
@@ -74,9 +75,14 @@ fi
 #############################
 
 evalNix(){
+  # disable `-e` flag, it's possible that the evaluation of `nix-instantiate` fails (e.g. due to broken pkgs)
+  set +e
   result=$(nix-instantiate ${nixPath:+$nixPath} - --eval-only "$@" 2>&1)
-  if test $? -eq 0; then
-      cat <<EOF
+  exit_code=$?
+  set -e
+
+  if test $exit_code -eq 0; then
+      sed '/^warning: Nix search path/d' <<EOF
 $result
 EOF
       return 0;
@@ -84,10 +90,10 @@ EOF
       sed -n '
   /^error/ { s/, at (string):[0-9]*:[0-9]*//; p; };
   /^warning: Nix search path/ { p; };
-' <<EOF
+' >&2 <<EOF
 $result
 EOF
-      return 1;
+    exit_code=1
   fi
 }
 
@@ -317,3 +323,5 @@ else
     echo $result
   fi
 fi
+
+exit $exit_code

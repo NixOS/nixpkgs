@@ -12,6 +12,16 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig  ];
   buildInputs = [ fcitx-qt5 qtbase qtwebengine.dev cmake fcitx gettext libpinyin glib pcre dbus ];
 
+  # With a typical installation via NixOS option i18n.inputMethod.fcitx.engines,
+  # the FCITXDIR environment variable is set to $out of fcitx-with-plugins,
+  # which leads to an incorrect path for pinyin data.
+  #
+  # It is impossible or difficult to fix this issue without patching. We want
+  # FCITXDIR to point into libpinyin, which is currently not symlinked within
+  # fcitx-with-plugins (only fcitx-libpinyin is symlinked). Also, FCITXDIR
+  # doesn't accept multiple directories.
+  patches = [ ./datapath.patch ];
+
   preInstall = ''
     substituteInPlace src/cmake_install.cmake \
       --replace ${fcitx} $out

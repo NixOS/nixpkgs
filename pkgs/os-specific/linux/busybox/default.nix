@@ -1,9 +1,8 @@
-{ stdenv, lib, buildPackages, fetchurl, fetchpatch
+{ stdenv, lib, buildPackages, fetchurl
 , enableStatic ? false
 , enableMinimal ? false
 , useMusl ? stdenv.hostPlatform.libc == "musl", musl
 , extraConfig ? ""
-, buildPlatform, hostPlatform
 }:
 
 assert stdenv.hostPlatform.libc == "musl" -> useMusl;
@@ -33,14 +32,14 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "busybox-1.28.1";
+  name = "busybox-1.29.3";
 
   # Note to whoever is updating busybox: please verify that:
   # nix-build pkgs/stdenv/linux/make-bootstrap-tools.nix -A test
   # still builds after the update.
   src = fetchurl {
-    url = "http://busybox.net/downloads/${name}.tar.bz2";
-    sha256 = "0bk52cxxlya5hg9va87snr9caz9ppdrpdyjwrnbwamhi64y1vzlq";
+    url = "https://busybox.net/downloads/${name}.tar.bz2";
+    sha256 = "1dzg45vgy2w1xcd3p6h8d76ykhabbvk1h0lf8yb24ikrwlv8cr4p";
   };
 
   hardeningDisable = [ "format" ] ++ lib.optionals enableStatic [ "fortify" ];
@@ -48,6 +47,8 @@ stdenv.mkDerivation rec {
   patches = [
     ./busybox-in-store.patch
   ];
+
+  postPatch = "patchShebangs .";
 
   configurePhase = ''
     export KCONFIG_NOTIMESTAMP=1
@@ -96,11 +97,13 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  doCheck = false; # tries to access the net
+
   meta = with stdenv.lib; {
     description = "Tiny versions of common UNIX utilities in a single small executable";
     homepage = https://busybox.net/;
     license = licenses.gpl2;
-    maintainers = with maintainers; [ viric ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
   };
 }

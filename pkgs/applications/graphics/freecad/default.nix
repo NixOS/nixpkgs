@@ -1,20 +1,33 @@
 { stdenv, fetchurl, cmake, coin3d, xercesc, ode, eigen, qt4, opencascade, gts
-, boost, zlib, python27Packages, swig, gfortran, soqt, libf2c, makeWrapper, makeDesktopItem }:
+, hdf5, vtk, medfile, zlib, python27Packages, swig, gfortran, fetchpatch
+, soqt, libf2c, makeWrapper, makeDesktopItem
+, mpi ? null }:
+
+assert mpi != null;
 
 let
   pythonPackages = python27Packages;
 in stdenv.mkDerivation rec {
   name = "freecad-${version}";
-  version = "0.16.6712";
+  version = "0.17";
 
   src = fetchurl {
     url = "https://github.com/FreeCAD/FreeCAD/archive/${version}.tar.gz";
-    sha256 = "14hs26gvv7gbg9misxq34v4nrds2sbxjhj4yyw5kq3zbvl517alp";
+    sha256 = "1yv6abdzlpn4wxy315943xwrnbywxqfgkjib37qwfvbb8y9p60df";
   };
 
-  buildInputs = with pythonPackages; [ cmake coin3d xercesc ode eigen qt4 opencascade gts boost
-    zlib python swig gfortran soqt libf2c makeWrapper matplotlib
-    pycollada pyside pysideShiboken pysideTools pivy
+  buildInputs = [ cmake coin3d xercesc ode eigen qt4 opencascade gts
+    zlib  swig gfortran soqt libf2c makeWrapper  mpi vtk hdf5 medfile
+  ] ++ (with pythonPackages; [
+    matplotlib pycollada pyside pysideShiboken pysideTools pivy python boost
+  ]);
+
+  patches = [
+    # Fix for finding boost_python. Boost >= 1.67.0 appends the Python version.
+    (fetchpatch {
+      url = https://github.com/FreeCAD/FreeCAD/commit/3c9e6b038ed544e446c61695dab62f83e781a28a.patch;
+      sha256 = "0f09qywzn0y41hylizb5g8jy74fi53iqmvqr5zznaz16wpw4hqbp";
+    })
   ];
 
   enableParallelBuilding = true;

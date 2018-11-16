@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, intltool, glib, libxfce4util, dbus_glib }:
+{ stdenv, fetchurl, pkgconfig, intltool, glib, libxfce4util, dbus-glib }:
 let
   p_name  = "xfconf";
   ver_maj = "4.12";
@@ -17,7 +17,9 @@ stdenv.mkDerivation rec {
   #TODO: no perl bingings yet (ExtUtils::Depends, ExtUtils::PkgConfig, Glib)
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ intltool glib libxfce4util ];
-  propagatedBuildInputs = [ dbus_glib ];
+  propagatedBuildInputs = [ dbus-glib ];
+
+  doCheck = false; # requires dbus daemon
 
   meta = with stdenv.lib; {
     homepage = http://docs.xfce.org/xfce/xfconf/start;
@@ -26,4 +28,3 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
   };
 }
-

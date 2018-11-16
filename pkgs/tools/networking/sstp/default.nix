@@ -28,5 +28,6 @@ stdenv.mkDerivation rec {
     homepage = http://sstp-client.sourceforge.net/;
     platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.ktosiek ];
+    license = stdenv.lib.licenses.gpl2;
   };
 }

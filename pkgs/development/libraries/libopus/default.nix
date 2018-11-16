@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch
+{ stdenv, fetchurl
 , fixedPoint ? false, withCustomModes ? true }:
 
 let

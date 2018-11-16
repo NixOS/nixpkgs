@@ -1,21 +1,21 @@
-{ stdenv, writeText, callPackage, fetchurl,
+{ stdenv, fetchurl,
   fetchHex, erlang, hermeticRebar3 ? true,
-  tree, fetchFromGitHub, hexRegistrySnapshot }:
+  tree, hexRegistrySnapshot }:
 
 let
-  version = "3.4.3";
+  version = "3.6.1";
 
   bootstrapper = ./rebar3-nix-bootstrap;
 
   erlware_commons = fetchHex {
     pkg = "erlware_commons";
-    version = "1.0.0";
-    sha256 = "0wkphbrjk19lxdwndy92v058qwcaz13bcgdzp33h21aa7vminzx7";
+    version = "1.2.0";
+    sha256 = "149kkn9gc9cjgvlmakygq475r63q2rry31s29ax0s425dh37sfl7";
   };
   ssl_verify_fun = fetchHex {
     pkg = "ssl_verify_fun";
-    version = "1.1.2";
-    sha256 = "0qdyx70v09fydv4wzz1djnkixqj62ny40yjjhv2q6mh47lns2arj";
+    version = "1.1.3";
+    sha256 = "1zljxashfhqmiscmf298vhr880ppwbgi2rl3nbnyvsfn0mjhw4if";
   };
   certifi = fetchHex {
     pkg = "certifi";
@@ -24,23 +24,23 @@ let
   };
   providers = fetchHex {
     pkg = "providers";
-    version = "1.6.0";
-    sha256 = "0byfa1h57n46jilz4q132j0vk3iqc0v1vip89li38gb1k997cs0g";
+    version = "1.7.0";
+    sha256 = "19p4rbsdx9lm2ihgvlhxyld1q76kxpd7qwyqxxsgmhl5r8ln3rlb";
   };
   getopt = fetchHex {
     pkg = "getopt";
-    version = "0.8.2";
-    sha256 = "1xw30h59zbw957cyjd8n50hf9y09jnv9dyry6x3avfwzcyrnsvkk";
+    version = "1.0.1";
+    sha256 = "174mb46c2qd1f4a7507fng4vvscjh1ds7rykfab5rdnfp61spqak";
   };
   bbmustache = fetchHex {
     pkg = "bbmustache";
-    version = "1.3.0";
-    sha256 = "042pfgss8kscq6ssg8gix8ccmdsrx0anjczsbrn2a6c36ljrx2p6";
+    version = "1.5.0";
+    sha256 = "0xg3r4lxhqifrv32nm55b4zmkflacc1s964g15p6y6jfx6v4y1zd";
   };
   relx = fetchHex {
     pkg = "relx";
-    version = "3.23.1";
-    sha256 = "13j7wds2d7b8v3r9pwy3zhwhzywgwhn6l9gm3slqzyrs1jld0a9d";
+    version = "3.26.0";
+    sha256 = "1f810rb01kdidpa985s321ycg3y4hvqpzbk263n6i1bfnqykkvv9";
   };
   cf = fetchHex {
     pkg = "cf";
@@ -49,13 +49,13 @@ let
   };
   cth_readable = fetchHex {
     pkg = "cth_readable";
-    version = "1.3.0";
-    sha256 = "1s7bqj6f2zpbyjmbfq2mm6vcz1jrxjr2nd0531wshsx6fnshqhvs";
+    version = "1.4.2";
+    sha256 = "1pjid4f60pp81ds01rqa6ybksrnzqriw3aibilld1asn9iabxkav";
   };
   eunit_formatters = fetchHex {
     pkg = "eunit_formatters";
-    version = "0.3.1";
-    sha256 = "0cg9dasv60v09q3q4wja76pld0546mhmlpb0khagyylv890hg934";
+    version = "0.5.0";
+    sha256 = "1jb3hzb216r29x2h4pcjwfmx1k81431rgh5v0mp4x5146hhvmj6n";
   };
   rebar3_hex = fetchHex {
     pkg = "rebar3_hex";
@@ -70,7 +70,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://github.com/rebar/rebar3/archive/${version}.tar.gz";
-    sha256 = "1a05gpxxc3mx5v33kzpb5xnq5vglmjl0q8hrcvpinjlazcwbg531";
+    sha256 = "0cqhqymzh10pfyxqiy4hcg3d2myz3chx0y4m2ixmq8zk81acics0";
   };
 
   inherit bootstrapper;
@@ -121,6 +121,7 @@ stdenv.mkDerivation {
       '';
 
     platforms = stdenv.lib.platforms.unix;
-    maintainers = [ stdenv.lib.maintainers.gleber ];
+    maintainers = with stdenv.lib.maintainers; [ gleber tazjin ];
+    license = stdenv.lib.licenses.asl20;
   };
 }

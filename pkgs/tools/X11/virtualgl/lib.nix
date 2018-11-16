@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, mesa, libX11, libXv, libjpeg_turbo, fltk }:
+{ stdenv, fetchurl, cmake, libGLU_combined, libX11, libXv, libjpeg_turbo, fltk }:
 
 stdenv.mkDerivation rec {
   name = "virtualgl-lib-${version}";
@@ -15,14 +15,14 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ libjpeg_turbo mesa fltk libX11 libXv ];
+  buildInputs = [ libjpeg_turbo libGLU_combined fltk libX11 libXv ];
 
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     homepage = http://www.virtualgl.org/;
     description = "X11 GL rendering in a remote computer with full 3D hw acceleration";
-    license = licenses.free; # many parts under different free licenses
+    license = licenses.wxWindows;
     platforms = platforms.linux;
     maintainers = with maintainers; [ abbradar ];
   };

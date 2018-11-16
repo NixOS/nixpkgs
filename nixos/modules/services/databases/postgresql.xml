@@ -3,36 +3,39 @@
          xmlns:xi="http://www.w3.org/2001/XInclude"
          version="5.0"
          xml:id="module-postgresql">
-
-<title>PostgreSQL</title>
-
+ <title>PostgreSQL</title>
 <!-- FIXME: render nicely -->
-
 <!-- FIXME: source can be added automatically -->
-<para><emphasis>Source:</emphasis> <filename>modules/services/databases/postgresql.nix</filename></para>
-
-<para><emphasis>Upstream documentation:</emphasis> <link xlink:href="http://www.postgresql.org/docs/"/></para>
-
+ <para>
+  <emphasis>Source:</emphasis>
+  <filename>modules/services/databases/postgresql.nix</filename>
+ </para>
+ <para>
+  <emphasis>Upstream documentation:</emphasis>
+  <link xlink:href="http://www.postgresql.org/docs/"/>
+ </para>
 <!-- FIXME: more stuff, like maintainer? -->
+ <para>
+  PostgreSQL is an advanced, free relational database.
+<!-- MORE -->
+ </para>
+ <section xml:id="module-services-postgres-configuring">
+  <title>Configuring</title>
 
-<para>PostgreSQL is an advanced, free relational database.<!-- MORE --></para>
-
-<section><title>Configuring</title>
-
-<para>To enable PostgreSQL, add the following to your
-<filename>configuration.nix</filename>:
-
+  <para>
+   To enable PostgreSQL, add the following to your
+   <filename>configuration.nix</filename>:
 <programlisting>
-services.postgresql.enable = true;
-services.postgresql.package = pkgs.postgresql94;
+<xref linkend="opt-services.postgresql.enable"/> = true;
+<xref linkend="opt-services.postgresql.package"/> = pkgs.postgresql_9_4;
 </programlisting>
-
-Note that you are required to specify the desired version of
-PostgreSQL (e.g. <literal>pkgs.postgresql94</literal>). Since
-upgrading your PostgreSQL version requires a database dump and reload
-(see below), NixOS cannot provide a default value for
-<option>services.postgresql.package</option> such as the most recent
-release of PostgreSQL.</para>
+   Note that you are required to specify the desired version of PostgreSQL
+   (e.g. <literal>pkgs.postgresql_9_4</literal>). Since upgrading your
+   PostgreSQL version requires a database dump and reload (see below), NixOS
+   cannot provide a default value for
+   <xref linkend="opt-services.postgresql.package"/> such as the most recent
+   release of PostgreSQL.
+  </para>
 
 <!--
 <para>After running <command>nixos-rebuild</command>, you can verify
@@ -47,31 +50,28 @@ alice=>
 </screen>
 -->
 
-<para>By default, PostgreSQL stores its databases in
-<filename>/var/db/postgresql</filename>. You can override this using
-<option>services.postgresql.dataDir</option>, e.g.
-
+  <para>
+   By default, PostgreSQL stores its databases in
+   <filename>/var/db/postgresql</filename>. You can override this using
+   <xref linkend="opt-services.postgresql.dataDir"/>, e.g.
 <programlisting>
-services.postgresql.dataDir = "/data/postgresql";
+<xref linkend="opt-services.postgresql.dataDir"/> = "/data/postgresql";
 </programlisting>
+  </para>
+ </section>
+ <section xml:id="module-services-postgres-upgrading">
+  <title>Upgrading</title>
 
-</para>
+  <para>
+   FIXME: document dump/upgrade/load cycle.
+  </para>
+ </section>
+ <section xml:id="module-services-postgres-options">
+  <title>Options</title>
 
-</section>
-
-
-<section><title>Upgrading</title>
-
-<para>FIXME: document dump/upgrade/load cycle.</para>
-
-</section>
-
-
-<section><title>Options</title>
-
-<para>FIXME: auto-generated list of module options.</para>
-
-</section>
-
-
+  <para>
+   A complete list of options for the PostgreSQL module may be found
+   <link linkend="opt-services.postgresql.enable">here</link>.
+  </para>
+ </section>
 </chapter>

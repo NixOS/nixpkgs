@@ -65,7 +65,7 @@ let
 in {
   name = "partitiion";
 
-  machine = { config, pkgs, ... }: {
+  machine = { pkgs, ... }: {
     environment.systemPackages = [
       pkgs.pythonPackages.nixpart0
       pkgs.file pkgs.btrfs-progs pkgs.xfsprogs pkgs.lvm2

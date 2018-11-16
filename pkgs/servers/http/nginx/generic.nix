@@ -1,9 +1,9 @@
-{ stdenv, fetchurl, fetchFromGitHub, openssl, zlib, pcre, libxml2, libxslt, expat
+{ stdenv, fetchurl, openssl, zlib, pcre, libxml2, libxslt
 , gd, geoip
+, withDebug ? false
 , withStream ? true
 , withMail ? false
 , modules ? []
-, hardening ? true
 , version, sha256, ...
 }:
 
@@ -13,13 +13,11 @@ stdenv.mkDerivation {
   name = "nginx-${version}";
 
   src = fetchurl {
-    url = "http://nginx.org/download/nginx-${version}.tar.gz";
+    url = "https://nginx.org/download/nginx-${version}.tar.gz";
     inherit sha256;
   };
 
-
-  buildInputs =
-    [ openssl zlib pcre libxml2 libxslt gd geoip ]
+  buildInputs = [ openssl zlib pcre libxml2 libxslt gd geoip ]
     ++ concatMap (mod: mod.inputs or []) modules;
 
   configureFlags = [
@@ -44,6 +42,8 @@ stdenv.mkDerivation {
     "--with-pcre-jit"
     # Install destination problems
     # "--with-http_perl_module"
+  ] ++ optional withDebug [
+    "--with-debug"
   ] ++ optional withStream [
     "--with-stream"
     "--with-stream_geoip_module"
@@ -55,7 +55,7 @@ stdenv.mkDerivation {
     "--with-mail_ssl_module"
   ]
     ++ optional (gd != null) "--with-http_image_filter_module"
-    ++ optional (elem stdenv.system (with platforms; linux ++ freebsd)) "--with-file-aio"
+    ++ optional (with stdenv.hostPlatform; isLinux || isFreeBSD) "--with-file-aio"
     ++ map (mod: "--add-module=${mod.src}") modules;
 
   NIX_CFLAGS_COMPILE = [ "-I${libxml2.dev}/include/libxml2" ] ++ optional stdenv.isDarwin "-Wno-error=deprecated-declarations";
@@ -63,6 +63,8 @@ stdenv.mkDerivation {
   preConfigure = (concatMapStringsSep "\n" (mod: mod.preConfigure or "") modules);
 
   hardeningEnable = optional (!stdenv.isDarwin) "pie";
+
+  enableParallelBuilding = true;
 
   postInstall = ''
     mv $out/sbin $out/bin

@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, makeWrapper, pkgconfig, udev, dbus_libs, pcsclite
+{ stdenv, lib, fetchurl, makeWrapper, pkgconfig, udev, dbus, pcsclite
 , wget, coreutils
 , perl, pcscperl, Glib, Gtk2, Pango, Cairo
 }:
@@ -6,16 +6,14 @@
 let deps = lib.makeBinPath [ wget coreutils ];
 
 in stdenv.mkDerivation rec {
-  name = "pcsc-tools-1.4.25";
+  name = "pcsc-tools-1.5.3";
 
   src = fetchurl {
-    url = "http://ludovic.rousseau.free.fr/softwares/pcsc-tools/${name}.tar.gz";
-    sha256 = "0iqcy28pb963ds4pjrpi37577vm6nkgf3i0b3rr978jy9qi1bix9";
+    url = "http://ludovic.rousseau.free.fr/softwares/pcsc-tools/${name}.tar.bz2";
+    sha256 = "050x3yqd5ywl385zai3k1zhbm2lz1f5ksalfpm9hd86s50f03ans";
   };
 
-  buildInputs = [ udev dbus_libs perl pcsclite ];
-
-  makeFlags = [ "DESTDIR=$(out)" ];
+  buildInputs = [ udev dbus perl pcsclite ];
 
   nativeBuildInputs = [ makeWrapper pkgconfig ];
 
@@ -34,7 +32,7 @@ in stdenv.mkDerivation rec {
     description = "Tools used to test a PC/SC driver, card or reader";
     homepage = http://ludovic.rousseau.free.fr/softwares/pcsc-tools/;
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ viric ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
   };
 }

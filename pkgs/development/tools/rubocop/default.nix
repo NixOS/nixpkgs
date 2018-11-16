@@ -1,4 +1,4 @@
-{ stdenv, lib, bundlerEnv, ruby, makeWrapper }:
+{ lib, bundlerEnv, ruby }:
 
 bundlerEnv rec {
   pname = "rubocop";

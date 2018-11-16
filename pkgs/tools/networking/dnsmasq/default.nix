@@ -1,4 +1,5 @@
-{ stdenv, fetchurl, pkgconfig, dbus_libs, nettle, libidn, libnetfilter_conntrack }:
+{ stdenv, fetchurl, pkgconfig, dbus, nettle
+, libidn, libnetfilter_conntrack }:
 
 with stdenv.lib;
 let
@@ -11,11 +12,11 @@ let
   ]);
 in
 stdenv.mkDerivation rec {
-  name = "dnsmasq-2.78";
+  name = "dnsmasq-2.79";
 
   src = fetchurl {
     url = "http://www.thekelleys.org.uk/dnsmasq/${name}.tar.xz";
-    sha256 = "0ar5h5v3kas2qx2wgy5iqin15gc4jhqrqs067xacgc3lii1rz549";
+    sha256 = "07w6cw706yyahwvbvslhkrbjf2ynv567cgy9pal8bz8lrbsp9bbq";
   };
 
   preBuild = ''
@@ -62,7 +63,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ nettle libidn ]
-    ++ optionals stdenv.isLinux [ dbus_libs libnetfilter_conntrack ];
+    ++ optionals stdenv.isLinux [ dbus libnetfilter_conntrack ];
 
   meta = {
     description = "An integrated DNS, DHCP and TFTP server for small networks";

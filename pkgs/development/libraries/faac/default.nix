@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, autoreconfHook
+{ stdenv, fetchurl, autoreconfHook
 , mp4v2Support ? true, mp4v2 ? null
 , drmSupport ? false # Digital Radio Mondiale
 }:

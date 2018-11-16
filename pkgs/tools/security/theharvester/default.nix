@@ -1,4 +1,4 @@
-{ stdenv, makeWrapper, python2Packages, fetchFromGitHub, python2 }:
+{ stdenv, makeWrapper, python2Packages, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "theHarvester";

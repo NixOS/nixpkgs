@@ -1,19 +1,19 @@
-{stdenv, fetchurl, fetchFromGitHub, cmake, luajit, kernel, zlib, ncurses, perl, jsoncpp, libb64, openssl, curl, jq, gcc, fetchpatch}:
+{stdenv, fetchFromGitHub, cmake, luajit, kernel, zlib, ncurses, perl, jsoncpp, libb64, openssl, curl, jq, gcc, elfutils}:
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "sysdig-${version}";
-  version = "0.20.0";
+  version = "0.23.1";
 
   src = fetchFromGitHub {
     owner = "draios";
     repo = "sysdig";
     rev = version;
-    sha256 = "0nbsfm2jh5gjy2wh79f35rqk3c3z15lymmcz3gviw0jaxdv6drzw";
+    sha256 = "0q52yfag97n6cvrnzgx7inx11zdg7bgwkvqn2idsg9874fd2wkzh";
   };
 
   buildInputs = [
-    cmake zlib luajit ncurses perl jsoncpp libb64 openssl curl jq gcc
+    cmake zlib luajit ncurses perl jsoncpp libb64 openssl curl jq gcc elfutils
   ] ++ optional (kernel != null) kernel.moduleBuildDependencies;
 
   hardeningDisable = [ "pic" ];
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     description = "A tracepoint-based system tracing tool for Linux (with clients for other OSes)";
     license = licenses.gpl2;
     maintainers = [maintainers.raskin];
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = ["x86_64-linux"] ++ platforms.darwin;
     downloadPage = "https://github.com/draios/sysdig/releases";
   };
 }

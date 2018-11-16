@@ -5,12 +5,16 @@
 , withGd ? false
 }:
 
-assert stdenv.cc.isGNU;
-
 callPackage ./common.nix { inherit stdenv; } {
     name = "glibc" + stdenv.lib.optionalString withGd "-gd";
 
     inherit withLinuxHeaders profilingLibraries installLocales withGd;
+
+    # Note:
+    # Things you write here override, and do not add to,
+    # the values in `common.nix`.
+    # (For example, if you define `patches = [...]` here, it will
+    # override the patches in `common.nix`.)
 
     NIX_NO_SELF_RPATH = true;
 
@@ -31,7 +35,10 @@ callPackage ./common.nix { inherit stdenv; } {
     # The stackprotector and fortify hardening flags are autodetected by glibc
     # and enabled by default if supported. Setting it for every gcc invocation
     # does not work.
-    hardeningDisable = [ "stackprotector" "fortify" ];
+    hardeningDisable = [ "stackprotector" "fortify" ]
+    # XXX: Not actually musl-speciic but since only musl enables pie by default,
+    #      limit rebuilds by only disabling pie w/musl
+      ++ stdenv.lib.optional stdenv.hostPlatform.isMusl "pie";
 
     # When building glibc from bootstrap-tools, we need libgcc_s at RPATH for
     # any program we run, because the gcc will have been placed at a new
@@ -71,14 +78,15 @@ callPackage ./common.nix { inherit stdenv; } {
 
       # Get rid of more unnecessary stuff.
       rm -rf $out/var $bin/bin/sln
-
+    ''
       # For some reason these aren't stripped otherwise and retain reference
       # to bootstrap-tools; on cross-arm this stripping would break objects.
-      if [ -z "$crossConfig" ]; then
-        for i in "$out"/lib/*.a; do
-            [ "$i" = "$out/lib/libm.a" ] || strip -S "$i"
-        done
-      fi
+    + stdenv.lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
+
+      for i in "$out"/lib/*.a; do
+          [ "$i" = "$out/lib/libm.a" ] || $STRIP -S "$i"
+      done
+    '' + ''
 
       # Put libraries for static linking in a separate output.  Note
       # that libc_nonshared.a and libpthread_nonshared.a are required

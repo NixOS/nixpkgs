@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip, jre }:
+{ stdenv, fetchurl, jre }:
 
 with stdenv;
 

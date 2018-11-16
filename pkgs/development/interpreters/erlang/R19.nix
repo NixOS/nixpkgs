@@ -1,8 +1,8 @@
-{ mkDerivation, fetchurl, fetchpatch }:
+{ mkDerivation, fetchpatch }:
 
 mkDerivation rec {
-  version = "19.3.6.4";
-  sha256 = "1w0h3wj2h58m3jrfgw56xab2352na3i9ccrbpfs4420dn7igf071";
+  version = "19.3.6.11";
+  sha256 = "0b02iv8dly1vkc2xnqqi030sdj34h4gji2h4qgilllajr1f868vm";
 
   patches = [
     # macOS 10.13 crypto fix from OTP-20.1.2

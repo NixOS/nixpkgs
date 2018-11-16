@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, python, androidsdk, makeWrapper }:
+{ stdenv, fetchgit, python3, androidsdk, makeWrapper }:
 
 stdenv.mkDerivation rec {
   name = "adb-sync-${version}";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "1y016bjky5sn58v91jyqfz7vw8qfqnfhb9s9jd32k8y29hy5vy4d";
   };
 
-  buildInputs = [ python androidsdk makeWrapper ];
+  buildInputs = [ python3 androidsdk makeWrapper ];
 
   phases = "installPhase";
 

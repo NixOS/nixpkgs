@@ -1,5 +1,5 @@
 { stdenv, fetchurl, scons, libX11, pkgconfig
-, libusb1, boost, glib, dbus_glib }:
+, libusb1, boost, glib, dbus-glib }:
 
 let
   version = "0.8.8";
@@ -16,7 +16,7 @@ in stdenv.mkDerivation {
   '';
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ scons libX11 libusb1 boost glib dbus_glib];
+  buildInputs = [ scons libX11 libusb1 boost glib dbus-glib];
 
   meta = with stdenv.lib; {
     homepage = https://pingus.seul.org/~grumbel/xboxdrv/;

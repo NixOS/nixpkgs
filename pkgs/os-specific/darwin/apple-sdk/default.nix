@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, xar, xz, cpio, pkgs, python }:
+{ stdenv, fetchurl, xar, xz, cpio, pkgs, python, lib }:
 
 let
   # TODO: make this available to other packages and generalize the unpacking a bit
@@ -27,6 +27,7 @@ let
     buildInputs = [ xar xz cpio python ];
 
     phases = [ "unpackPhase" "installPhase" "fixupPhase" ];
+    outputs = [ "out" "dev" "man" ];
 
     unpackPhase = ''
       xar -x -f $src
@@ -70,6 +71,8 @@ let
     # because we copy files from the system
     preferLocalBuild = true;
 
+    disallowedRequisites = [ sdk ];
+
     installPhase = ''
       linkFramework() {
         local path="$1"
@@ -87,13 +90,13 @@ let
         # ApplicationServices in the 10.9 SDK
         local isChild
 
-        if [ -d "${sdk}/Library/Frameworks/$path/Versions/$current/Headers" ]; then
+        if [ -d "${sdk.out}/Library/Frameworks/$path/Versions/$current/Headers" ]; then
           isChild=1
-          cp -R "${sdk}/Library/Frameworks/$path/Versions/$current/Headers" .
+          cp -R "${sdk.out}/Library/Frameworks/$path/Versions/$current/Headers" .
         else
           isChild=0
           current="$(readlink "/System/Library/Frameworks/$name.framework/Versions/Current")"
-          cp -R "${sdk}/Library/Frameworks/$name.framework/Versions/$current/Headers" .
+          cp -R "${sdk.out}/Library/Frameworks/$name.framework/Versions/$current/Headers" .
         fi
         ln -s -L "/System/Library/Frameworks/$path/Versions/$current/$name"
         ln -s -L "/System/Library/Frameworks/$path/Versions/$current/Resources"
@@ -103,9 +106,9 @@ let
         fi
 
         if [ $isChild -eq 1 ]; then
-          pushd "${sdk}/Library/Frameworks/$path/Versions/$current" >/dev/null
+          pushd "${sdk.out}/Library/Frameworks/$path/Versions/$current" >/dev/null
         else
-          pushd "${sdk}/Library/Frameworks/$name.framework/Versions/$current" >/dev/null
+          pushd "${sdk.out}/Library/Frameworks/$name.framework/Versions/$current" >/dev/null
         fi
         local children=$(echo Frameworks/*.framework)
         if [ "$name" == "ApplicationServices" ]; then
@@ -159,8 +162,8 @@ in rec {
       installPhase = ''
         mkdir -p $out/include
         pushd $out/include >/dev/null
-        ln -s "${sdk}/include/xpc"
-        ln -s "${sdk}/include/launch.h"
+        cp -r "${lib.getDev sdk}/include/xpc" $out/include/xpc
+        cp "${lib.getDev sdk}/include/launch.h" $out/include/launch.h
         popd >/dev/null
       '';
     };
@@ -178,7 +181,7 @@ in rec {
 
       installPhase = ''
         mkdir -p $out/include $out/lib
-        ln -s "${sdk}/include/Xplugin.h" $out/include/Xplugin.h
+        ln -s "${lib.getDev sdk}/include/Xplugin.h" $out/include/Xplugin.h
         ln -s "/usr/lib/libXplugin.1.dylib" $out/lib/libXplugin.dylib
       '';
     };
@@ -190,8 +193,8 @@ in rec {
       installPhase = ''
         mkdir -p $out/include
         pushd $out/include >/dev/null
-        ln -s "${sdk}/include/utmp.h"
-        ln -s "${sdk}/include/utmpx.h"
+        ln -s "${lib.getDev sdk}/include/utmp.h"
+        ln -s "${lib.getDev sdk}/include/utmpx.h"
         popd >/dev/null
       '';
     };
@@ -208,6 +211,13 @@ in rec {
       __propagatedImpureHostDeps = drv.__propagatedImpureHostDeps ++ [
         "/System/Library/Frameworks/CoreImage.framework"
       ];
+    });
+
+    CoreMIDI = stdenv.lib.overrideDerivation super.CoreMIDI (drv: {
+      __propagatedImpureHostDeps = drv.__propagatedImpureHostDeps ++ [
+        "/System/Library/PrivateFrameworks/"
+      ];
+      setupHook = ./private-frameworks-setup-hook.sh;
     });
 
     Security = stdenv.lib.overrideDerivation super.Security (drv: {

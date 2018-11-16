@@ -1,5 +1,5 @@
 { stdenv, callPackage, fetchurl, fetchpatch, fetchgit
-, ocamlPackages_4_02
+, ocaml-ng
 , withInternalQemu ? true
 , withInternalTraditionalQemu ? true
 , withInternalSeabios ? true
@@ -9,7 +9,7 @@
 , withLibHVM ? true
 
 # qemu
-, udev, pciutils, xorg, SDL, pixman, acl, glusterfs, spice_protocol, usbredir
+, udev, pciutils, xorg, SDL, pixman, acl, glusterfs, spice-protocol, usbredir
 , alsaLib
 , ... } @ args:
 
@@ -29,7 +29,7 @@ let
   });
 
   qemuDeps = [
-    udev pciutils xorg.libX11 SDL pixman acl glusterfs spice_protocol usbredir
+    udev pciutils xorg.libX11 SDL pixman acl glusterfs spice-protocol usbredir
     alsaLib
   ];
 
@@ -38,6 +38,10 @@ in
 
 callPackage (import ./generic.nix (rec {
   version = "4.5.5";
+
+  meta = {
+    knownVulnerabilities = [ "Security support ended in January 2018" ];
+  };
 
   src = fetchurl {
     url = "https://downloads.xenproject.org/release/xen/${version}/xen-${version}.tar.gz";
@@ -254,4 +258,4 @@ callPackage (import ./generic.nix (rec {
       else throw "this xen has no qemu builtin";
   };
 
-})) ({ ocamlPackages = ocamlPackages_4_02; } // args)
+})) ({ ocamlPackages = ocaml-ng.ocamlPackages_4_02; } // args)

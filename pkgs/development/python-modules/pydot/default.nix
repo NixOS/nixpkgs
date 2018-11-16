@@ -9,7 +9,6 @@
 buildPythonPackage rec {
   pname = "pydot";
   version = "1.2.4";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

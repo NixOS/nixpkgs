@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "1.20";
 
   src = fetchurl {
-    url = "http://dev.yorhel.nl/download/ncdc-${version}.tar.gz";
+    url = "https://dev.yorhel.nl/download/ncdc-${version}.tar.gz";
     sha256 = "0ccn7dqbqpqsbglqyalz32c20rjvf1pw0zr88jyvd2b2vxbqi6ca";
   };
 

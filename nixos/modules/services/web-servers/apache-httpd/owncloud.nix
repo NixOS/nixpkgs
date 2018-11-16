@@ -4,17 +4,6 @@ with lib;
 
 let
 
-  httpd = serverInfo.serverConfig.package;
-
-  version24 = !versionOlder httpd.version "2.4";
-
-  allGranted = if version24 then ''
-    Require all granted
-  '' else ''
-    Order allow,deny
-    Allow from all
-  '';
-
   owncloudConfig = pkgs.writeText "config.php"
     ''
       <?php
@@ -346,7 +335,7 @@ let
   postgresql = serverInfo.fullConfig.services.postgresql.package;
 
   setupDb = pkgs.writeScript "setup-owncloud-db" ''
-    #!${pkgs.stdenv.shell}
+    #!${pkgs.runtimeShell}
     PATH="${postgresql}/bin"
     createuser --no-superuser --no-createdb --no-createrole "${config.dbUser}" || true
     createdb "${config.dbName}" -O "${config.dbUser}" || true

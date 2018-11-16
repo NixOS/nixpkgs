@@ -1,5 +1,5 @@
 { stdenv, fetchurl, openssl, nss, nspr, kerberos, gmp, zlib, libpcap, re2
-, writeText, gcc, pythonPackages, perl, perlPackages, makeWrapper
+, gcc, pythonPackages, perl, perlPackages, makeWrapper
 }:
 
 with stdenv.lib;
@@ -37,8 +37,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ openssl nss nspr kerberos gmp zlib libpcap re2 gcc pythonPackages.wrapPython perl makeWrapper ];
   propagatedBuildInputs = (with pythonPackages; [ dpkt scapy lxml ]) ++ # For pcap2john.py
-                          (with perlPackages; [ DigestMD4 DigestMD5 DigestSHA1 GetoptLong MIMEBase64 # For pass_gen.pl
-                                                NetLDAP ]); # For sha-dump.pl
+                          (with perlPackages; [ DigestMD4 DigestMD5 DigestSHA1 GetoptLong # For pass_gen.pl
+                                                perlldap ]); # For sha-dump.pl
                           # TODO: Get dependencies for radius2john.pl and lion2john-alt.pl
 
   # gcc -DAC_BUILT -Wall vncpcap2john.o memdbg.o -g    -lpcap -fopenmp -o ../run/vncpcap2john
@@ -69,6 +69,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     homepage = https://github.com/magnumripper/JohnTheRipper/;
     maintainers = with maintainers; [ offline ];
-    platforms = platforms.unix;
+    platforms = [ "x86_64-linux" "x86_64-darwin"];
   };
 }

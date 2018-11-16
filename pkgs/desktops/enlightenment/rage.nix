@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, meson, ninja, pkgconfig, efl, gst_all_1, pcre, curl, wrapGAppsHook }:
+{ stdenv, fetchurl, meson, ninja, pkgconfig, efl, gst_all_1, pcre, mesa_noglu, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   name = "rage-${version}";
@@ -13,6 +13,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     (pkgconfig.override { vanilla = true; })
+    mesa_noglu.dev
     wrapGAppsHook
   ];
 
@@ -24,12 +25,7 @@ stdenv.mkDerivation rec {
     gst_all_1.gst-plugins-bad
     gst_all_1.gst-libav
     pcre
-    curl
- ];
-
-  postInstall = ''
-    wrapProgram $out/bin/rage --prefix LD_LIBRARY_PATH : ${curl.out}/lib
-  '';
+  ];
 
   meta = {
     description = "Video + Audio player along the lines of mplayer";

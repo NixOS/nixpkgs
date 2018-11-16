@@ -2,12 +2,11 @@
 
 buildPythonPackage rec {
   pname = "numpy-stl";
-  name = "${pname}-${version}";
-  version = "2.3.2";
+  version = "2.7.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0w3f9yhw4mg88drqnn17gaqxbx941p3hg0rn8fsqrf5ry56h93k2";
+    sha256 = "ede911118cfee5a8fd4c341b418fc55bfcd70a557686febc4efb6693297e3aa2";
   };
 
   checkInputs = [ pytest pytestrunner ];

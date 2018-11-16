@@ -1,11 +1,12 @@
 { stdenv, fetchurl, pkgconfig, python3, makeWrapper
-, webkit, glib_networking, gsettings_desktop_schemas, python2Packages
+, webkit, glib-networking, gsettings-desktop-schemas, python2Packages
 }:
 # This package needs python3 during buildtime,
 # but Python 2 + packages during runtime.
 
 stdenv.mkDerivation rec {
-  name = "uzbl-v0.9.0";
+  name = "uzbl-${version}";
+  version = "0.9.0";
 
   meta = with stdenv.lib; {
     description = "Tiny externally controllable webkit browser";
@@ -16,8 +17,8 @@ stdenv.mkDerivation rec {
   };
 
   src = fetchurl {
-    name = "${name}.tar.gz";
-    url = "https://github.com/uzbl/uzbl/archive/v0.9.0.tar.gz";
+    name = "uzbl-v${version}.tar.gz";
+    url = "https://github.com/uzbl/uzbl/archive/v${version}.tar.gz";
     sha256 = "0iskhv653fdm5raiidimh9fzlsw28zjqx7b5n3fl1wgbj6yz074k";
   };
 
@@ -31,7 +32,7 @@ stdenv.mkDerivation rec {
   preFixup = ''
     for f in $out/bin/*; do
       wrapProgram $f \
-        --prefix GIO_EXTRA_MODULES : "${glib_networking.out}/lib/gio/modules" \
+        --prefix GIO_EXTRA_MODULES : "${glib-networking.out}/lib/gio/modules" \
         --prefix PYTHONPATH : "$PYTHONPATH" \
         --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH:$out/share"
     done
@@ -39,6 +40,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig python3 makeWrapper ];
 
-  buildInputs = [ gsettings_desktop_schemas webkit ];
+  buildInputs = [ gsettings-desktop-schemas webkit ];
   propagatedBuildInputs = with python2Packages; [ pygtk six ];
 }

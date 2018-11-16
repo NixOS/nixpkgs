@@ -1,14 +1,15 @@
-{ stdenv, fetchurl, python2 }:
+{ stdenv, fetchurl, python2, makeWrapper }:
 
 stdenv.mkDerivation rec {
   name = "lhapdf-${version}";
   version = "6.2.1";
 
   src = fetchurl {
-    url = "http://www.hepforge.org/archive/lhapdf/LHAPDF-${version}.tar.gz";
+    url = "https://www.hepforge.org/archive/lhapdf/LHAPDF-${version}.tar.gz";
     sha256 = "0bi02xcmq5as0wf0jn6i3hx0qy0hj61m02sbrbzd1gwjhpccwmvd";
   };
 
+  nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ python2 ];
 
   enableParallelBuilding = true;
@@ -16,6 +17,10 @@ stdenv.mkDerivation rec {
   passthru = {
     pdf_sets = import ./pdf_sets.nix { inherit stdenv fetchurl; };
   };
+
+  postInstall = ''
+    wrapProgram $out/bin/lhapdf --prefix PYTHONPATH : "$(toPythonPath "$out")"
+  '';
 
   meta = {
     description = "A general purpose interpolator, used for evaluating Parton Distribution Functions from discretised data files";

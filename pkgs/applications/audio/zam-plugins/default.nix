@@ -1,4 +1,4 @@
-{ stdenv, fetchgit , boost, libX11, mesa, liblo, libjack2, ladspaH, lv2, pkgconfig, rubberband, libsndfile, fftwFloat, libsamplerate }:
+{ stdenv, fetchgit , boost, libX11, libGLU_combined, liblo, libjack2, ladspaH, lv2, pkgconfig, rubberband, libsndfile, fftwFloat, libsamplerate }:
 
 stdenv.mkDerivation rec {
   name = "zam-plugins-${version}";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ boost libX11 mesa liblo libjack2 ladspaH lv2 rubberband libsndfile fftwFloat libsamplerate ];
+  buildInputs = [ boost libX11 libGLU_combined liblo libjack2 ladspaH lv2 rubberband libsndfile fftwFloat libsamplerate ];
 
   patchPhase = ''
     patchShebangs ./dpf/utils/generate-ttl.sh

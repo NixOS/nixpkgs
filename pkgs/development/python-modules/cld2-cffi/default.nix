@@ -1,7 +1,6 @@
 { stdenv, buildPythonPackage, fetchPypi, six, cffi, nose }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "cld2-cffi";
   version = "0.1.4";
 

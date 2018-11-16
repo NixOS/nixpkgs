@@ -5,8 +5,8 @@
 , fonts ? openlilylib-fonts.all
 }:
 
-stdenv.mkDerivation {
-  name = "${lilypond.name}-with-fonts";
+stdenv.lib.appendToName "with-fonts" (stdenv.mkDerivation {
+  inherit (lilypond) name;
   phases = "installPhase";
   buildInputs = fonts;
   nativeBuildInputs = [ lndir ];
@@ -32,4 +32,4 @@ stdenv.mkDerivation {
         substituteInPlace $p --replace "exec -a \"${lilypond}" "exec -a \"$out"
       done
   '';
-}
+})

@@ -20,17 +20,16 @@
 , speex
 , boost
 , opendht
-, libmsgpack
+, msgpack
 , gnutls
 , zlib
 , jsoncpp
-, xlibs
+, xorg
 , libargon2
 , cryptopp
 , openssl
 , perl
 , python3
-, bash
 , libupnp
 , speexdsp
 , fetchFromGitHub
@@ -109,12 +108,12 @@ stdenv.mkDerivation rec {
     speex
     boost
     opendht
-    libmsgpack
+    msgpack
     gnutls
     zlib
     jsoncpp
     restbed
-    xlibs.libX11
+    xorg.libX11
     libargon2
     cryptopp
     openssl

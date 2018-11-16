@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, scons, pkgconfig, SDL, mesa, zlib, smpeg
+{ stdenv, fetchurl, fetchpatch, scons, pkgconfig, SDL, libGLU_combined, zlib, smpeg
 , SDL_image, libvorbis, expat, zip, lua5_1 }:
 
 stdenv.mkDerivation rec {
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ scons pkgconfig ];
-  buildInputs = [ SDL mesa zlib smpeg SDL_image libvorbis expat zip lua5_1 ];
+  buildInputs = [ SDL libGLU_combined zlib smpeg SDL_image libvorbis expat zip lua5_1 ];
 
   NIX_CFLAGS_COMPILE = "-I${SDL_image}/include/SDL";
 
@@ -32,5 +32,6 @@ stdenv.mkDerivation rec {
     homepage = https://sourceforge.net/projects/btanks/;
     description = "Fast 2d tank arcade game";
     license = stdenv.lib.licenses.gpl2Plus;
+    broken = true; # 2018-09-13, no successful build since 2018-03-16
   };
 }

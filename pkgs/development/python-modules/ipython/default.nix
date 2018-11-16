@@ -18,16 +18,16 @@
 , pexpect
 , appnope
 , typing
+, backcall
 }:
 
 buildPythonPackage rec {
   pname = "ipython";
-  version = "6.2.1";
-  name = "${pname}-${version}";
+  version = "6.5.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "51c158a6c8b899898d1c91c6b51a34110196815cc905f9be0fa5878e19355608";
+    sha256 = "b0f2ef9eada4a68ef63ee10b6dde4f35c840035c50fd24265f8052c98947d5a4";
   };
 
   prePatch = lib.optionalString stdenv.isDarwin ''
@@ -46,6 +46,7 @@ buildPythonPackage rec {
     traitlets
     prompt_toolkit
     pexpect
+    backcall
   ] ++ lib.optionals stdenv.isDarwin [appnope]
     ++ lib.optionals (pythonOlder "3.5") [ typing ];
 

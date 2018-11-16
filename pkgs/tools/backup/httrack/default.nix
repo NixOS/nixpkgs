@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   name = "httrack-${version}";
 
   src = fetchurl {
-    url = "http://mirror.httrack.com/httrack-${version}.tar.gz";
+    url = "https://mirror.httrack.com/httrack-${version}.tar.gz";
     sha256 = "09a0gm67nml86qby1k1gh7rdxamnrnzwr6l9r5iiq94favjs0xrl";
   };
 

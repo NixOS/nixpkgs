@@ -3,9 +3,10 @@
 , libjpeg_turbo, pixman, fltk
 , fontDirectories
 , cmake, gettext, libtool
-, glproto, mesa_glu
+, glproto, libGLU
 , gnutls, pam, nettle
-, xterm, openssh }:
+, xterm, openssh
+, makeWrapper}:
 
 with stdenv.lib;
 
@@ -84,10 +85,10 @@ stdenv.mkDerivation rec {
     fontsproto videoproto scrnsaverproto resourceproto presentproto
     utilmacros libXtst libXext libX11 libXext libICE libXi libSM libXft
     libxkbfile libXfont2 libpciaccess xineramaproto
-    glproto mesa_glu
+    glproto libGLU
   ] ++ xorgserver.buildInputs;
 
-  nativeBuildInputs = with xorg; [ cmake zlib gettext libtool utilmacros fontutil ]
+  nativeBuildInputs = with xorg; [ cmake zlib gettext libtool utilmacros fontutil makeWrapper ]
     ++ xorg.xorgserver.nativeBuildInputs;
 
   propagatedBuildInputs = xorg.xorgserver.propagatedBuildInputs;

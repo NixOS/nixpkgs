@@ -24,8 +24,6 @@ let
     buildCore = monolithic || daemon;
 in
 
-assert stdenv.isLinux;
-
 assert monolithic -> !client && !daemon;
 assert client || daemon -> !monolithic;
 assert !buildClient -> !withKDE; # KDE is used by the client only
@@ -72,6 +70,8 @@ in with stdenv; mkDerivation rec {
         wrapProgram "$out/bin/quassel${lib.optionalString client "client"}" \
           --prefix GIO_EXTRA_MODULES : "${dconf}/lib/gio/modules"
     '';
+
+  patches = [ ./qt5_11.patch ];
 
   meta = with stdenv.lib; {
     homepage = https://quassel-irc.org/;

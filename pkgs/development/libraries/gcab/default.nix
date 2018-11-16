@@ -1,4 +1,6 @@
-{ stdenv, fetchurl, gettext, gobjectIntrospection, pkgconfig, meson, ninja, glibcLocales, git, vala, glib, zlib }:
+{ stdenv, fetchurl, gettext, gobjectIntrospection, pkgconfig
+, meson, ninja, glibcLocales, git, vala, glib, zlib
+}:
 
 stdenv.mkDerivation rec {
   name = "gcab-${version}";
@@ -22,6 +24,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     platforms = platforms.linux;
+    license = licenses.lgpl21;
     maintainers = [ maintainers.lethalman ];
   };
 

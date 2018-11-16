@@ -20,6 +20,7 @@ stdenv.mkDerivation rec {
     description = "A stand-alone panel";
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.linux;
+    license = licenses.mit;
   };
 
   passthru = {

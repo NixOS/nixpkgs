@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, glibc }:
+{ stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   name = "lzbench-20170208";

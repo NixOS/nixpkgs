@@ -141,7 +141,7 @@ in
         dns = "127.0.0.1:${toString cfg.dns.port}";
       };
 
-    users.extraUsers = singleton {
+    users.users = singleton {
       name = username;
       description = "DNSChain daemon user";
       home = dataDir;

@@ -11,7 +11,7 @@ buildGoPackage rec {
     owner = "miekg";
     repo = "coredns";
     rev = "v${version}";
-    sha256 = "11wvy3xp9in5ny6h7hp24dq6asc013vrwc6bqiky83dlzasjwkf6";
+    sha256 = "15q8l4apspaw1xbbb9j1d8s2cc5zrgycan6iq597ga9m0vyf7wiw";
   };
 
   goDeps = ./deps.nix;

@@ -1,6 +1,5 @@
-{pkgs, buildLispPackage, clwrapper, quicklisp-to-nix-packages}:
+{pkgs, quicklisp-to-nix-packages}:
 let
-  addDeps = newdeps: x: {deps = x.deps ++ newdeps;};
   addNativeLibs = libs: x: { propagatedBuildInputs = libs; };
   skipBuildPhase = x: {
     overrides = y: ((x.overrides y) // { buildPhase = "true"; });
@@ -46,10 +45,10 @@ in
   cxml = skipBuildPhase;
   wookie = addNativeLibs (with pkgs; [libuv openssl]);
   lev = addNativeLibs [pkgs.libev];
-  "cl+ssl" = addNativeLibs [pkgs.openssl];
+  cl_plus_ssl = addNativeLibs [pkgs.openssl];
   cl-colors = skipBuildPhase;
   cl-libuv = addNativeLibs [pkgs.libuv];
-  cl-async-ssl = addNativeLibs [pkgs.openssl];
+  cl-async-ssl = addNativeLibs [pkgs.openssl (import ./openssl-lib-marked.nix)];
   cl-async-test = addNativeLibs [pkgs.openssl];
   clsql = x: {
     propagatedBuildInputs = with pkgs; [mysql.connector-c postgresql sqlite zlib];
@@ -144,7 +143,8 @@ $out/lib/common-lisp/query-fs"
       fiveam md5 usocket
     ];
     parasites = [
-      "simple-date/tests"
+      # Needs pomo? Wants to do queries unconditionally?
+      # "simple-date/tests"
     ];
   };
   cl-postgres = x: {
@@ -153,5 +153,14 @@ $out/lib/common-lisp/query-fs"
       "simple-date" "simple-date/postgres-glue"
     ];
     asdFilesToKeep = x.asdFilesToKeep ++ ["simple-date.asd"];
+  };
+  buildnode = x: {
+    deps = pkgs.lib.filter (x: x.name != quicklisp-to-nix-packages.buildnode-xhtml.name) x.deps;
+    parasites = pkgs.lib.filter (x: x!= "buildnode-test") x.parasites;
+  };
+  postmodern = x: {
+    overrides = y : (x.overrides y) // {
+      meta.broken = true; # 2018-04-10
+    };
   };
 }

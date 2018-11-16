@@ -8,7 +8,6 @@
 buildPythonPackage rec {
   pname = "odfpy";
   version = "1.3.6";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

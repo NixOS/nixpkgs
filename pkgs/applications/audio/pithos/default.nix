@@ -4,7 +4,6 @@
 pythonPackages.buildPythonApplication rec {
   pname = "pithos";
   version = "1.1.2";
-  name = "${pname}-${version}";
 
   src = fetchFromGitHub {
     owner = pname;

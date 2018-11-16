@@ -1,20 +1,20 @@
-{ stdenv, fetchFromGitHub, pythonPackages, makeWrapper, gettext, git }:
+{ stdenv, fetchFromGitHub, pythonPackages, gettext, git }:
 
 let
-  inherit (pythonPackages) buildPythonApplication pyqt4 sip pyinotify python mock;
+  inherit (pythonPackages) buildPythonApplication pyqt5 sip pyinotify;
 in buildPythonApplication rec {
   name = "git-cola-${version}";
-  version = "3.0";
+  version = "3.2";
 
   src = fetchFromGitHub {
     owner = "git-cola";
     repo = "git-cola";
     rev = "v${version}";
-    sha256 = "0jc360agrlhp1w9i725ffksvc6v95jnzzppjvza7ssip65gplrkx";
+    sha256 = "1ivaqhvdbmlp0lmrwb2pv3kjqlcpqbxbinbvjjn3g81r4avjs7yy";
   };
 
   buildInputs = [ git gettext ];
-  propagatedBuildInputs = [ pyqt4 sip pyinotify ];
+  propagatedBuildInputs = [ pyqt5 sip pyinotify ];
 
   doCheck = false;
 

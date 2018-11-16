@@ -1,4 +1,6 @@
-{ stdenv, fetchurl, gcc, staticBuild ? false }:
+{ stdenv, buildPackages, staticBuild ? false }:
+
+let inherit (buildPackages.buildPackages) gcc; in
 
 stdenv.mkDerivation rec {
   name = "libiberty-${gcc.cc.version}";

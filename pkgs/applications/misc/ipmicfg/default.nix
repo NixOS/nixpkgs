@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   name = "ipmicfg-${version}";
-  version = "1.27.1";
-  buildVersion = "170901";
+  version = "1.28.0";
+  buildVersion = "180302";
 
   src = fetchzip {
     url = "ftp://ftp.supermicro.com/utility/IPMICFG/IPMICFG_${version}_build.${buildVersion}.zip";
-    sha256 = "11xhzw36pg4has8857pypf44cni8m2mg8qsqi1s4bfjbxlfgxgwk";
+    sha256 = "0hw853cwaaxmxy1sa3m7l9gqalwpbbvp4ghk8inr7dzwxjljmr02";
     extraPostFetch = "chmod u+rwX,go-rwx+X $out/";
   };
 
@@ -15,9 +15,10 @@ stdenv.mkDerivation rec {
     mkdir -p "$out/bin" "$out/opt/ipmicfg"
     cp Linux/64bit/* "$out/opt/ipmicfg"
 
-    patchelf "$out/opt/ipmicfg/IPMICFG-Linux.x86_64" \
+    patchelf \
        --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-       --set-rpath "${stdenv.lib.makeLibraryPath [ stdenv.cc.cc ]}"
+       --set-rpath "${stdenv.lib.makeLibraryPath [ stdenv.cc.cc ]}" \
+       "$out/opt/ipmicfg/IPMICFG-Linux.x86_64"
 
     ln -s "$out/opt/ipmicfg/IPMICFG-Linux.x86_64" "$out/bin/ipmicfg"
   '';

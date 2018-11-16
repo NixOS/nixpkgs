@@ -2,10 +2,10 @@
 
 buildPythonPackage rec {
   pname = "pyte";
-  version = "0.7.0";
+  version = "0.8.0";
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1an54hvyjm8gncx8cgabz9mkpgjkdb0bkyjlkh7g7f94nr3wnfl7";
+    sha256 = "7e71d03e972d6f262cbe8704ff70039855f05ee6f7ad9d7129df9c977b5a88c5";
   };
 
   propagatedBuildInputs = [ wcwidth ];

@@ -1,73 +1,61 @@
 { stdenv, fetchFromGitHub, cmake, pkgconfig
-, qtbase, qtx11extras, qtsvg, makeWrapper, python3, bison
-, pcre, vulkan-loader, xorg, autoreconfHook
+, qtbase, qtx11extras, qtsvg, makeWrapper
+, vulkan-loader, xorg
+, python36, bison, pcre, automake, autoconf
 }:
-
 let
-  custom_swig = stdenv.mkDerivation {
-    name = "renderdoc-custom-swig";
-    src = fetchFromGitHub {
-      owner = "baldurk";
-      repo = "swig";
-      rev = "renderdoc-modified-1";
-      sha256 = "1whymd3vamwnp4jqfc9asls3dw9wsdi21xhm1d2a4vx9nql8if1x";
-    };
-
-    nativeBuildInputs = [ autoreconfHook pcre ];
-
-    autoreconfPhase = ''
-      patchShebangs autogen.sh
-      ./autogen.sh
-    '';
+  custom_swig = fetchFromGitHub {
+    owner = "baldurk";
+    repo = "swig";
+    rev = "renderdoc-modified-5";
+    sha256 = "0ihrxbx56p5wn589fbbsns93fp91sypqdzfxdy7l7v9sf69a41mw";
   };
 in
 stdenv.mkDerivation rec {
+  version = "1.1";
   name = "renderdoc-${version}";
-  version = "0.91";
 
   src = fetchFromGitHub {
     owner = "baldurk";
     repo = "renderdoc";
-    rev = "2d8b2cf818746b6a2add54e2fef449398816a40c";
-    sha256 = "07yc3fk7j2nqmrhc4dm3v2pgbc37scd7d28nlzk6v0hw99zck8k0";
+    rev = "v${version}";
+    sha256 = "0kb9m1dm0mnglqyh1srvl0f1bgjghxzbqarn0xfqw49wphqwhmcd";
   };
 
   buildInputs = [
-    qtbase qtsvg xorg.libpthreadstubs xorg.libXdmcp qtx11extras vulkan-loader
+    qtbase qtsvg xorg.libpthreadstubs xorg.libXdmcp qtx11extras vulkan-loader python36
   ];
 
-  nativeBuildInputs = [ cmake makeWrapper pkgconfig python3 bison ];
+  nativeBuildInputs = [ cmake makeWrapper pkgconfig bison pcre automake autoconf ];
+
+  postUnpack = ''
+    cp -r ${custom_swig} swig
+    chmod -R +w swig
+    patchShebangs swig/autogen.sh
+  '';
 
   cmakeFlags = [
     "-DBUILD_VERSION_HASH=${src.rev}"
     "-DBUILD_VERSION_DIST_NAME=NixOS"
-    "-DBUILD_VERSION_DIST_VER=0.91"
+    "-DBUILD_VERSION_DIST_VER=${version}"
     "-DBUILD_VERSION_DIST_CONTACT=https://github.com/NixOS/nixpkgs/tree/master/pkgs/applications/graphics/renderdoc"
-    "-DBUILD_VERSION_DIST_STABLE=ON"
-    # TODO: use this instead of preConfigure once placeholders land
-    #"-DVULKAN_LAYER_FOLDER=${placeholder out}/share/vulkan/implicit_layer.d/"
+    "-DBUILD_VERSION_STABLE=ON"
+    # TODO: add once pyside2 is in nixpkgs
+    #"-DPYSIDE2_PACKAGE_DIR=${python36Packages.pyside2}"
   ];
 
+  # Future work: define these in the above array via placeholders
   preConfigure = ''
     cmakeFlags+=" -DVULKAN_LAYER_FOLDER=$out/share/vulkan/implicit_layer.d/"
+    cmakeFlags+=" -DRENDERDOC_SWIG_PACKAGE=$PWD/../swig"
   '';
 
   preFixup = ''
-    mkdir $out/bin/.bin
-    mv $out/bin/qrenderdoc $out/bin/.bin/qrenderdoc
-    ln -s $out/bin/.bin/qrenderdoc $out/bin/qrenderdoc
     wrapProgram $out/bin/qrenderdoc --suffix LD_LIBRARY_PATH : $out/lib --suffix LD_LIBRARY_PATH : ${vulkan-loader}/lib
-    mv $out/bin/renderdoccmd $out/bin/.bin/renderdoccmd
-    ln -s $out/bin/.bin/renderdoccmd $out/bin/renderdoccmd
     wrapProgram $out/bin/renderdoccmd --suffix LD_LIBRARY_PATH : $out/lib --suffix LD_LIBRARY_PATH : ${vulkan-loader}/lib
   '';
 
-  # Set path to custom swig binary
-  NIXOS_CUSTOM_SWIG = "${custom_swig}/bin/swig";
-
   enableParallelBuilding = true;
-
-  patches = [ ./custom_swig.patch ];
 
   meta = with stdenv.lib; {
     description = "A single-frame graphics debugger";

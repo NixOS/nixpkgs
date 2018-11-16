@@ -3,7 +3,7 @@
 , which, zlib }:
 
 let
-  version = "4.2.4";
+  version = "4.2.7";
 
 in stdenv.mkDerivation rec {
   name = "tvheadend-${version}";
@@ -12,7 +12,7 @@ in stdenv.mkDerivation rec {
     owner  = "tvheadend";
     repo   = "tvheadend";
     rev    = "v${version}";
-    sha256 = "1kydjmgv0nrllgi2s6aczq4x9ag01c8qm8w962qb52fzdfw7fs6k";
+    sha256 = "09q6lddkld22z9nbxx5v3v3z5yvcnl4lgjirvrdprwkv67fld70g";
   };
 
   buildInputs = [

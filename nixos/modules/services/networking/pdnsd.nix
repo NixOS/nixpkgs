@@ -62,14 +62,14 @@ in
     };
 
   config = mkIf cfg.enable {
-    users.extraUsers = singleton {
+    users.users = singleton {
       name = pdnsdUser;
       uid = config.ids.uids.pdnsd;
       group = pdnsdGroup;
       description = "pdnsd user";
     };
 
-    users.extraGroups = singleton {
+    users.groups = singleton {
       name = pdnsdGroup;
       gid = config.ids.gids.pdnsd;
     };

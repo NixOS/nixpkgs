@@ -1,5 +1,5 @@
 { stdenv, fetchurl, gfortran, readline, ncurses, perl, flex, texinfo, qhull
-, libsndfile, portaudio, libX11, graphicsmagick, pcre, pkgconfig, mesa, fltk
+, libsndfile, portaudio, libX11, graphicsmagick, pcre, pkgconfig, libGLU_combined, fltk
 , fftw, fftwSinglePrec, zlib, curl, qrupdate, openblas, arpack, libwebp
 , qt ? null, qscintilla ? null, ghostscript ? null, llvm ? null, hdf5 ? null,glpk ? null
 , suitesparse ? null, gnuplot ? null, jdk ? null, python ? null, overridePlatforms ? null
@@ -18,11 +18,11 @@ let
 in
 
 stdenv.mkDerivation rec {
-  version = "4.2.1";
+  version = "4.4.1";
   name = "octave-${version}";
   src = fetchurl {
     url = "mirror://gnu/octave/${name}.tar.gz";
-    sha256 = "0frk0nk3aaic8hj3g45h11rnz3arp7pjsq0frbx50sspk1iqzhl0";
+    sha256 = "15xfcx6dc7p204b92i7va2a7ygff637l370x7zjj3vzl2brd1yq9";
   };
 
   buildInputs = [ gfortran readline ncurses perl flex texinfo qhull
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     ++ (stdenv.lib.optional (jdk != null) jdk)
     ++ (stdenv.lib.optional (gnuplot != null) gnuplot)
     ++ (stdenv.lib.optional (python != null) python)
-    ++ (stdenv.lib.optionals (!stdenv.isDarwin) [ mesa libX11 ])
+    ++ (stdenv.lib.optionals (!stdenv.isDarwin) [ libGLU_combined libX11 ])
     ;
 
   # makeinfo is required by Octave at runtime to display help
@@ -46,16 +46,14 @@ stdenv.mkDerivation rec {
     substituteInPlace libinterp/corefcn/help.cc \
       --replace 'Vmakeinfo_program = "makeinfo"' \
                 'Vmakeinfo_program = "${texinfo}/bin/makeinfo"'
-  ''
-  # REMOVE ON VERSION BUMP
-  # Needed for Octave-4.2.1 on darwin. See https://savannah.gnu.org/bugs/?50234
-  + stdenv.lib.optionalString stdenv.isDarwin ''
-    sed 's/inline file_stat::~file_stat () { }/file_stat::~file_stat () { }/' -i ./liboctave/system/file-stat.cc
   '';
 
   doCheck = !stdenv.isDarwin;
 
   enableParallelBuilding = true;
+
+  # See https://savannah.gnu.org/bugs/?50339
+  F77_INTEGER_8_FLAG = if openblas.blas64 then "-fdefault-integer-8" else "";
 
   configureFlags =
     [ "--enable-readline"
@@ -81,7 +79,8 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://octave.org/;
     license = stdenv.lib.licenses.gpl3Plus;
-    maintainers = with stdenv.lib.maintainers; [viric raskin];
+    maintainers = with stdenv.lib.maintainers; [raskin];
+    description = "Scientific Pragramming Language";
     platforms = if overridePlatforms == null then
       (with stdenv.lib.platforms; linux ++ darwin)
     else overridePlatforms;

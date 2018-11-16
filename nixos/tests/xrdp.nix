@@ -5,14 +5,14 @@ import ./make-test.nix ({ pkgs, ...} : {
   };
 
   nodes = {
-    server = { lib, pkgs, ... }: {
+    server = { pkgs, ... }: {
       imports = [ ./common/user-account.nix ];
       services.xrdp.enable = true;
       services.xrdp.defaultWindowManager = "${pkgs.xterm}/bin/xterm";
       networking.firewall.allowedTCPPorts = [ 3389 ];
     };
 
-    client = { lib, pkgs, ... }: {
+    client = { pkgs, ... }: {
       imports = [ ./common/x11.nix ./common/user-account.nix ];
       services.xserver.displayManager.auto.user = "alice";
       environment.systemPackages = [ pkgs.freerdp ];
@@ -21,7 +21,7 @@ import ./make-test.nix ({ pkgs, ...} : {
     };
   };
 
-  testScript = { nodes, ... }: ''
+  testScript = { ... }: ''
     startAll;
 
     $client->waitForX;

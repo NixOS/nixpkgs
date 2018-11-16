@@ -5,7 +5,7 @@ with lib;
 {
   config = mkIf (any (fs: fs == "exfat") config.boot.supportedFilesystems) {
 
-    system.fsPackages = [ pkgs.exfat-utils pkgs.fuse_exfat ];
+    system.fsPackages = [ pkgs.exfat ];
 
   };
 }

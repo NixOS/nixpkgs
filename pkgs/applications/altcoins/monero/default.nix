@@ -1,46 +1,45 @@
-{ stdenv, fetchpatch, fetchFromGitHub, cmake
-, boost, miniupnpc, openssl, pkgconfig, unbound
+{ stdenv, fetchgit
+, cmake, pkgconfig, git
+, boost, miniupnpc, openssl, unbound, cppzmq
+, zeromq, pcsclite, readline, libsodium
+, CoreData, IOKit, PCSC
 }:
+
+assert stdenv.isDarwin -> IOKit != null;
+
+with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name    = "monero-${version}";
-  version = "0.11.1.0";
+  version = "0.13.0.3";
 
-  src = fetchFromGitHub {
-    owner  = "monero-project";
-    repo   = "monero";
+  src = fetchgit {
+    url    = "https://github.com/monero-project/monero.git";
     rev    = "v${version}";
-    sha256 = "0nrpxx6r63ia6ard85d504x2kgaikvrhb5sg93ml70l6djyy1148";
+    sha256 = "03qx8y74zxnmabdi5r3a274pp8zvm3xhkdwi1xf5sb40vf4sfmwb";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkgconfig git ];
 
-  buildInputs = [ boost miniupnpc openssl unbound ];
-
-  patches = [
-    ./build-wallet-rpc.patch # fixed in next release
-  ];
+  buildInputs = [
+    boost miniupnpc openssl unbound
+    cppzmq zeromq pcsclite readline
+    libsodium
+  ] ++ optionals stdenv.isDarwin [ IOKit CoreData PCSC ];
 
   cmakeFlags = [
     "-DCMAKE_BUILD_TYPE=Release"
     "-DBUILD_GUI_DEPS=ON"
-  ];
+    "-DReadline_ROOT_DIR=${readline.dev}"
+  ] ++ optional stdenv.isDarwin "-DBoost_USE_MULTITHREADED=OFF";
 
-  doCheck = false;
+  hardeningDisable = [ "fortify" ];
 
-  installPhase = ''
-    make install
-    install -Dt "$out/bin/" \
-      bin/monero-blockchain-export \
-      bin/monero-blockchain-import \
-      bin/monero-wallet-rpc
-  '';
-
-  meta = with stdenv.lib; {
+  meta = {
     description = "Private, secure, untraceable currency";
     homepage    = https://getmonero.org/;
     license     = licenses.bsd3;
     platforms   = platforms.all;
-    maintainers = [ maintainers.ehmry ];
+    maintainers = with maintainers; [ ehmry rnhmjoj ];
   };
 }

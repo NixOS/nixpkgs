@@ -148,14 +148,6 @@ in
         }
       ));
 
-    networking.interfaces = flip mapAttrs' cfg.networks (network: data: nameValuePair
-      ("tinc.${network}")
-      ({
-        virtual = true;
-        virtualType = "${data.interfaceType}";
-      })
-    );
-
     systemd.services = flip mapAttrs' cfg.networks (network: data: nameValuePair
       ("tinc.${network}")
       ({
@@ -163,12 +155,7 @@ in
         wantedBy = [ "multi-user.target" ];
         after = [ "network.target" ];
         path = [ data.package ];
-        restartTriggers =
-          let
-            drvlist = [ config.environment.etc."tinc/${network}/tinc.conf".source ]
-                        ++ mapAttrsToList (host: _: config.environment.etc."tinc/${network}/hosts/${host}".source) data.hosts;
-          in # drvlist might be too long to be used directly
-            [ (builtins.hashString "sha256" (concatMapStrings (d: d.outPath) drvlist)) ];
+        restartTriggers = [ config.environment.etc."tinc/${network}/tinc.conf".source ];
         serviceConfig = {
           Type = "simple";
           Restart = "always";
@@ -178,6 +165,8 @@ in
         preStart = ''
           mkdir -p /etc/tinc/${network}/hosts
           chown tinc.${network} /etc/tinc/${network}/hosts
+          mkdir -p /etc/tinc/${network}/invitations
+          chown tinc.${network} /etc/tinc/${network}/invitations
 
           # Determine how we should generate our keys
           if type tinc >/dev/null 2>&1; then
@@ -205,13 +194,14 @@ in
           ${concatStringsSep "\n" (mapAttrsToList (network: data:
             optionalString (versionAtLeast data.package.version "1.1pre") ''
               makeWrapper ${data.package}/bin/tinc "$out/bin/tinc.${network}" \
-                --add-flags "--pidfile=/run/tinc.${network}.pid"
+                --add-flags "--pidfile=/run/tinc.${network}.pid" \
+                --add-flags "--config=/etc/tinc/${network}"
             '') cfg.networks)}
         '';
       };
     in [ cli-wrappers ];
 
-    users.extraUsers = flip mapAttrs' cfg.networks (network: _:
+    users.users = flip mapAttrs' cfg.networks (network: _:
       nameValuePair ("tinc.${network}") ({
         description = "Tinc daemon user for ${network}";
         isSystemUser = true;

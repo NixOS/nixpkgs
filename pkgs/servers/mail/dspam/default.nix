@@ -1,6 +1,6 @@
 { stdenv, lib, fetchurl, makeWrapper
 , gawk, gnused, gnugrep, coreutils, which
-, perl, NetSMTP
+, perl, libnet
 , withMySQL ? false, zlib, mysql57
 , withPgSQL ? false, postgresql
 , withSQLite ? false, sqlite
@@ -62,7 +62,7 @@ in stdenv.mkDerivation rec {
     rm -rf $out/var
 
     wrapProgram $out/bin/dspam_notify \
-      --set PERL5LIB "${lib.makePerlPath [ NetSMTP ]}"
+      --set PERL5LIB "${lib.makePerlPath [ libnet ]}"
 
     # Install SQL scripts
     mkdir -p $out/share/dspam/sql

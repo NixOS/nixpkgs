@@ -2,21 +2,22 @@
 
 python3Packages.buildPythonApplication rec {
   name = "urlwatch-${version}";
-  version = "2.8";
+  version = "2.15";
 
   src = fetchFromGitHub {
     owner  = "thp";
     repo   = "urlwatch";
     rev    = version;
-    sha256 = "1nja7n6pc45azd3l1xyvav89855lvcgwabrvf34rps81dbl8cnl4";
+    sha256 = "1bkd0r5arzdvinpn1n23cw1gf7byxml95hl6qvvf6mnggb1ifcwg";
   };
 
   propagatedBuildInputs = with python3Packages; [
     appdirs
     keyring
+    lxml
     minidb
-    pyyaml
     pycodestyle
+    pyyaml
     requests
   ];
 

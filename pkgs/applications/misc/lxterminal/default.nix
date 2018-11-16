@@ -1,27 +1,28 @@
-{ stdenv, fetchurl, automake, autoconf, intltool, pkgconfig, gtk2, vte
-, libxslt, docbook_xml_dtd_412, docbook_xml_xslt, libxml2, findXMLCatalogs
+{ stdenv, fetchurl, automake, autoconf, intltool, pkgconfig, gtk3, vte, wrapGAppsHook
+, libxslt, docbook_xml_dtd_412, docbook_xsl, libxml2, findXMLCatalogs
 }:
 
-let version = "0.3.1"; in
+let version = "0.3.2"; in
 
 stdenv.mkDerivation rec {
   name = "lxterminal-${version}";
 
   src = fetchurl {
     url = "https://github.com/lxde/lxterminal/archive/${version}.tar.gz";
-    sha256 = "e91f15c8a726d5c13227263476583137a2639d4799c021ca0726c9805021b54c";
+    sha256 = "1iafqmccsm3nnzwp6pb2c04iniqqnscj83bq1rvf58ppzk0bvih3";
   };
 
   configureFlags = [
     "--enable-man"
+    "--enable-gtk3"
   ];
 
   nativeBuildInputs = [
-    automake autoconf intltool pkgconfig
-    libxslt docbook_xml_dtd_412 docbook_xml_xslt libxml2 findXMLCatalogs
+    automake autoconf intltool pkgconfig wrapGAppsHook
+    libxslt docbook_xml_dtd_412 docbook_xsl libxml2 findXMLCatalogs
   ];
 
-  buildInputs = [ gtk2 vte ];
+  buildInputs = [ gtk3 vte ];
 
   patches = [
     ./respect-xml-catalog-files-var.patch

@@ -1,7 +1,7 @@
 {stdenv, fetchzip}:
 
 fetchzip {
-  name = "MPH-2B-Damase";
+  name = "MPH-2B-Damase-2";
 
   url = http://www.wazu.jp/downloads/damase_v.2.zip;
 

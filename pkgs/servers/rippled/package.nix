@@ -1,4 +1,4 @@
-{ self, fetchurl, fetchgit ? null, lib }:
+{ self, fetchurl ? null }:
 
 {
   by-spec."abbrev"."1" =

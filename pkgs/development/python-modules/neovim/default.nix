@@ -11,11 +11,11 @@
 
 buildPythonPackage rec {
   pname = "neovim";
-  version = "0.2.1";
+  version = "0.3.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "16vzxmp7f6dl20n30j5cwwvrjj5h3c2ch8ldbss31anf36nirsdp";
+    sha256 = "18x7gi1idsch11hijvy0mm2mk4f42rapz9niax4rnak14x2klqq2";
   };
 
   checkInputs = [ nose ];

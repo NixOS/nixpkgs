@@ -17,6 +17,8 @@ buildPythonPackage rec {
     nosetests
   '';
 
+  doCheck = (!stdenv.isDarwin);
+
   meta = with stdenv.lib; {
     description = "A gpodder.net client library";
     longDescription = ''

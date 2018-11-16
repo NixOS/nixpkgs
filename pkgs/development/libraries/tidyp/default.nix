@@ -15,5 +15,6 @@ stdenv.mkDerivation rec {
     homepage = http://tidyp.com/;
     platforms = platforms.linux;
     maintainers = with maintainers; [ pSub ];
+    license = licenses.bsd3;
   };
 }

@@ -41,6 +41,7 @@ in import ./make-test.nix ({ pkgs, ...} : {
         { address = "dead:beef::1"; prefixLength = 64; }
       ];
       services.nsd.enable = true;
+      services.nsd.rootServer = true;
       services.nsd.interfaces = lib.mkForce [];
       services.nsd.zones."example.com.".data = ''
         @ SOA ns.example.com noc.example.com 666 7200 3600 1209600 3600
@@ -54,6 +55,11 @@ in import ./make-test.nix ({ pkgs, ...} : {
         @ SOA ns.example.com noc.example.com 666 7200 3600 1209600 3600
         @ A 9.8.7.6
         @ AAAA fedc::bbaa
+      '';
+      services.nsd.zones.".".data = ''
+        @ SOA ns.example.com noc.example.com 666 7200 3600 1209600 3600
+        root A 1.8.7.4
+        root AAAA acbd::4
       '';
     };
   };
@@ -86,6 +92,9 @@ in import ./make-test.nix ({ pkgs, ...} : {
 
         assertHost($_, "a", "deleg.example.com", qr/address 9.8.7.6$/);
         assertHost($_, "aaaa", "deleg.example.com", qr/address fedc::bbaa$/);
+
+        assertHost($_, "a", "root", qr/address 1.8.7.4$/);
+        assertHost($_, "aaaa", "root", qr/address acbd::4$/);
       };
     }
   '';

@@ -51,9 +51,9 @@ in {
 
   config = mkIf cfg.enable {
 
-    users.extraGroups.riemanndash.gid = config.ids.gids.riemanndash;
+    users.groups.riemanndash.gid = config.ids.gids.riemanndash;
 
-    users.extraUsers.riemanndash = {
+    users.users.riemanndash = {
       description = "riemann-dash daemon user";
       uid = config.ids.uids.riemanndash;
       group = "riemanndash";

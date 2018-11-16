@@ -1,15 +1,15 @@
 { stdenv, fetchurl, gettext, pkgconfig, perl
-, libidn2, zlib, pcre, libuuid, libiconv
+, libidn2, zlib, pcre, libuuid, libiconv, libintl
 , IOSocketSSL, LWP, python3, lzip
 , libpsl ? null
 , openssl ? null }:
 
 stdenv.mkDerivation rec {
-  name = "wget-1.19.4";
+  name = "wget-1.19.5";
 
   src = fetchurl {
     url = "mirror://gnu/wget/${name}.tar.lz";
-    sha256 = "16jmcqcasx3q9k4azssryli9qyxfq0sfijw998g8zp58cnwzzh1g";
+    sha256 = "0xfaxmlnih7dhkyks5wi4vrn0n1xshmy6gx6fb2k1120sprydyr9";
   };
 
   patches = [
@@ -25,19 +25,18 @@ stdenv.mkDerivation rec {
     do
       sed -i "$i" -e's/localhost/127.0.0.1/g'
     done
-  '' + stdenv.lib.optionalString stdenv.isDarwin ''
-    export LIBS="-liconv -lintl"
   '';
 
-  nativeBuildInputs = [ gettext pkgconfig perl lzip ];
-  buildInputs = [ libidn2 libiconv zlib pcre libuuid ]
+  nativeBuildInputs = [ gettext pkgconfig perl lzip libiconv libintl ];
+  buildInputs = [ libidn2 zlib pcre libuuid ]
     ++ stdenv.lib.optionals doCheck [ IOSocketSSL LWP python3 ]
     ++ stdenv.lib.optional (openssl != null) openssl
     ++ stdenv.lib.optional (libpsl != null) libpsl
     ++ stdenv.lib.optional stdenv.isDarwin perl;
 
-  configureFlags =
-    if openssl != null then "--with-ssl=openssl" else "--without-ssl";
+  configureFlags = [
+    (stdenv.lib.withFeatureAs (openssl != null) "ssl" "openssl")
+  ];
 
   doCheck = false;
 

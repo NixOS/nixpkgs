@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "cabextract-1.6";
+  name = "cabextract-1.9";
 
   src = fetchurl {
-    url = "http://www.cabextract.org.uk/${name}.tar.gz";
-    sha256 = "1ysmmz25fjghq7mxb2anyyvr1ljxqxzi4piwjhk0sdamcnsn3rnf";
+    url = "https://www.cabextract.org.uk/${name}.tar.gz";
+    sha256 = "1hf4zhjxfdgq9x172r5zfdnafma9q0zf7372syn8hcn7hcypkg0v";
   };
 
   meta = with stdenv.lib; {

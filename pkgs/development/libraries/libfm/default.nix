@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, glib, intltool, menu-cache, pango, pkgconfig, vala_0_34
+{ stdenv, fetchurl, glib, intltool, menu-cache, pango, pkgconfig, vala
 , extraOnly ? false
 , withGtk3 ? false, gtk2, gtk3 }:
 let
@@ -9,19 +9,18 @@ stdenv.mkDerivation rec {
   name = if extraOnly
     then "libfm-extra-${version}"
     else "libfm-${version}";
-  version = "1.2.5";
+  version = "1.3.0.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/pcmanfm/libfm-${version}.tar.xz";
-    sha256 = "0nlvfwh09gbq8bkbvwnw6iqr918rrs9gc9ljb9pjspyg408bn1n7";
+    sha256 = "0wkwbi1nyvqza3r1dhrq846axiiq0fy0dqgngnagh76fjrwnzl0q";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ glib gtk intltool pango vala_0_34 ]
-                ++ optional (!extraOnly) menu-cache;
+  nativeBuildInputs = [ vala pkgconfig intltool ];
+  buildInputs = [ glib gtk pango ] ++ optional (!extraOnly) menu-cache;
 
-  configureFlags = [ (optional extraOnly "--with-extra-only")
-                     (optional withGtk3 "--with-gtk=3") ];
+  configureFlags = optional extraOnly "--with-extra-only"
+    ++ optional withGtk3 "--with-gtk=3";
 
   enableParallelBuilding = true;
 

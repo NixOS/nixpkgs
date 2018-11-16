@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, CF, configd, coreutils }:
+{ stdenv, fetchurl, configd, CF, coreutils }:
 
 with stdenv.lib;
 
@@ -43,6 +43,15 @@ stdenv.mkDerivation rec {
       ./deterministic-build.patch
     ];
 
+  # Hack hack hack to stop shit from failing from a missing _scproxy on Darwin. Since
+  # we only use this python for bootstrappy things, it doesn't really matter if it
+  # doesn't have perfect proxy support in urllib :) this just makes it fall back on env
+  # vars instead of attempting to read the proxy configuration automatically, so not a
+  # huge loss even if for whatever reason we did want proxy support.
+  postPatch = ''
+    substituteInPlace Lib/urllib.py --replace "if sys.platform == 'darwin'" "if False"
+  '';
+
   DETERMINISTIC_BUILD = 1;
 
   preConfigure = ''
@@ -74,6 +83,8 @@ stdenv.mkDerivation rec {
     '';
 
   enableParallelBuilding = true;
+
+  passthru.pkgs = builtins.throw "python-boot does not support packages, this package is only intended for bootstrapping." {};
 
   meta = {
     homepage = http://python.org;

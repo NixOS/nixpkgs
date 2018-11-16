@@ -1,8 +1,9 @@
-{ pkgs, stdenv, fetchurl, fetchFromGitHub, makeWrapper, gawk, gnum4, gnused
+{ pkgs, stdenv, fetchFromGitHub, makeWrapper, gawk, gnum4, gnused
 , libxml2, libxslt, ncurses, openssl, perl, autoreconfHook
 , openjdk ? null # javacSupport
 , unixODBC ? null # odbcSupport
-, mesa ? null, wxGTK ? null, wxmac ? null, xorg ? null # wxSupport
+, libGLU_combined ? null, wxGTK ? null, wxmac ? null, xorg ? null # wxSupport
+, withSystemd ? stdenv.isLinux, systemd # systemd support in epmd
 }:
 
 { baseName ? "erlang"
@@ -17,7 +18,7 @@
 , enableKernelPoll ? true
 , javacSupport ? false, javacPackages ? [ openjdk ]
 , odbcSupport ? false, odbcPackages ? [ unixODBC ]
-, wxSupport ? true, wxPackages ? [ mesa wxGTK xorg.libX11 ]
+, wxSupport ? !stdenv.isDarwin, wxPackages ? [ libGLU_combined wxGTK xorg.libX11 ]
 , preUnpack ? "", postUnpack ? ""
 , patches ? [], patchPhase ? "", prePatch ? "", postPatch ? ""
 , configureFlags ? [], configurePhase ? "", preConfigure ? "", postConfigure ? ""
@@ -31,7 +32,7 @@
 
 assert wxSupport -> (if stdenv.isDarwin
   then wxmac != null
-  else mesa != null && wxGTK != null && xorg != null);
+  else libGLU_combined != null && wxGTK != null && xorg != null);
 
 assert odbcSupport -> unixODBC != null;
 assert javacSupport -> openjdk != null;
@@ -53,9 +54,12 @@ in stdenv.mkDerivation ({
     ++ optionals wxSupport wxPackages2
     ++ optionals odbcSupport odbcPackages
     ++ optionals javacSupport javacPackages
+    ++ optional withSystemd systemd
     ++ optionals stdenv.isDarwin (with pkgs.darwin.apple_sdk.frameworks; [ Carbon Cocoa ]);
 
   debugInfo = enableDebugInfo;
+
+  enableParallelBuilding = true;
 
   # Clang 4 (rightfully) thinks signed comparisons of pointers with NULL are nonsense
   prePatch = ''
@@ -65,9 +69,9 @@ in stdenv.mkDerivation ({
   '';
 
   postPatch = ''
-    ${postPatch}
-
     patchShebangs make
+
+    ${postPatch}
   '';
 
   preConfigure = ''
@@ -82,15 +86,16 @@ in stdenv.mkDerivation ({
     ++ optional javacSupport "--with-javac"
     ++ optional odbcSupport "--with-odbc=${unixODBC}"
     ++ optional wxSupport "--enable-wx"
+    ++ optional withSystemd "--enable-systemd"
     ++ optional stdenv.isDarwin "--enable-darwin-64bit";
 
   # install-docs will generate and install manpages and html docs
   # (PDFs are generated only when fop is available).
 
   postInstall = ''
-    ${postInstall}
-
     ln -s $out/lib/erlang/lib/erl_interface*/bin/erl_call $out/bin/erl_call
+
+    ${postInstall}
   '';
 
   # Some erlang bin/ scripts run sed and awk

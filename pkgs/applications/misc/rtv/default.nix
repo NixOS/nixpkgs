@@ -1,15 +1,15 @@
-{ stdenv, fetchFromGitHub, pkgs, pythonPackages }:
+{ stdenv, fetchFromGitHub, python3Packages }:
 
-with pythonPackages;
+with python3Packages;
 buildPythonApplication rec {
-  version = "1.21.0";
-  name = "rtv-${version}";
+  version = "1.24.0";
+  pname = "rtv";
 
   src = fetchFromGitHub {
     owner = "michael-lazar";
     repo = "rtv";
     rev = "v${version}";
-    sha256 = "0srm01nrb23hdmj3ripsa9p8nv2cgss3m6and9rdr875qw5ii130";
+    sha256 = "0vzhnqys8nr6ymsi1mnv092z3i7nwyhgnj4jv6mjifak9j3164fw";
   };
 
   # Tests try to access network
@@ -19,7 +19,7 @@ buildPythonApplication rec {
     py.test
   '';
 
-  buildInputs = [
+  checkInputs = [
     coverage
     coveralls
     docopt
@@ -30,24 +30,17 @@ buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = [
-    backports_functools_lru_cache
     beautifulsoup4
-    configparser
-    contextlib2
     decorator
     kitchen
-    mailcap-fix
-    mccabe
     requests
     six
-    tornado
-    pyyaml
   ];
 
   meta = with stdenv.lib; {
     homepage = https://github.com/michael-lazar/rtv;
     description = "Browse Reddit from your Terminal";
     license = licenses.mit;
-    maintainers = with maintainers; [ matthiasbeyer jgeerds wedens ];
+    maintainers = with maintainers; [ jgeerds wedens ];
   };
 }

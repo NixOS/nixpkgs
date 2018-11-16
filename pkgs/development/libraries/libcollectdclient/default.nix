@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, collectd }:
+{ stdenv, collectd }:
 with stdenv.lib;
 
-overrideDerivation collectd (oldAttrs: {
+collectd.overrideAttrs (oldAttrs: {
   name = "libcollectdclient-${collectd.version}";
   buildInputs = [ ];
 
@@ -16,7 +16,6 @@ overrideDerivation collectd (oldAttrs: {
 
   postInstall = "rm -rf $out/{bin,etc,sbin,share}";
 
-}) // {
   meta = with stdenv.lib; {
     description = "C Library for collectd, a daemon which collects system performance statistics periodically";
     homepage = http://collectd.org;
@@ -24,4 +23,4 @@ overrideDerivation collectd (oldAttrs: {
     platforms = platforms.linux; # TODO: collectd may be linux but the C client may be more portable?
     maintainers = [ maintainers.sheenobu maintainers.bjornfor ];
   };
-}
+})

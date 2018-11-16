@@ -15,12 +15,14 @@
       "armv6l-linux" = import ./bootstrap-files/armv6l.nix;
       "armv7l-linux" = import ./bootstrap-files/armv7l.nix;
       "aarch64-linux" = import ./bootstrap-files/aarch64.nix;
-      "mips64el-linux" = import ./bootstrap-files/loongson2f.nix;
+      "mipsel-linux" = import ./bootstrap-files/loongson2f.nix;
+      "powerpc64le-linux" = import ./bootstrap-files/ppc64le.nix;
     };
     "musl" = {
       "aarch64-linux" = import ./bootstrap-files/aarch64-musl.nix;
       "armv6l-linux"  = import ./bootstrap-files/armv6l-musl.nix;
       "x86_64-linux"  = import ./bootstrap-files/x86_64-musl.nix;
+      "powerpc64le-linux" = import ./bootstrap-files/ppc64le-musl.nix;
     };
   };
   archLookupTable = table.${localSystem.libc}
@@ -40,7 +42,7 @@ let
       export NIX_ENFORCE_PURITY="''${NIX_ENFORCE_PURITY-1}"
       export NIX_ENFORCE_NO_NATIVE="''${NIX_ENFORCE_NO_NATIVE-1}"
       ${if system == "x86_64-linux" then "NIX_LIB64_IN_SELF_RPATH=1" else ""}
-      ${if system == "mips64el-linux" then "NIX_LIB32_IN_SELF_RPATH=1" else ""}
+      ${if system == "mipsel-linux" then "NIX_LIB32_IN_SELF_RPATH=1" else ""}
     '';
 
 
@@ -66,7 +68,7 @@ let
     let
 
       thisStdenv = import ../generic {
-        name = "stdenv-linux-boot";
+        name = "${name}-stdenv-linux";
         buildPlatform = localSystem;
         hostPlatform = localSystem;
         targetPlatform = localSystem;
@@ -88,6 +90,7 @@ let
         cc = if isNull prevStage.gcc-unwrapped
              then null
              else lib.makeOverridable (import ../../build-support/cc-wrapper) {
+          name = "${name}-gcc-wrapper";
           nativeTools = false;
           nativeLibc = false;
           buildPackages = lib.optionalAttrs (prevStage ? stdenv) {
@@ -98,7 +101,6 @@ let
           isGNU = true;
           libc = getLibc prevStage;
           inherit (prevStage) coreutils gnugrep;
-          name = name;
           stdenvNoCC = prevStage.ccWrapperStdenv;
         };
 
@@ -106,11 +108,6 @@ let
           # Having the proper 'platform' in all the stdenvs allows getting proper
           # linuxHeaders for example.
           inherit platform;
-
-          # stdenv.glibc is used by GCC build to figure out the system-level
-          # /usr/include directory.
-          # TODO: Remove this!
-          inherit (prevStage) glibc;
         };
         overrides = self: super: (overrides self super) // { fetchurl = thisStdenv.fetchurlBoot; };
       };
@@ -128,8 +125,6 @@ in
     __raw = true;
 
     gcc-unwrapped = null;
-    glibc = assert false; null;
-    musl = assert false; null;
     binutils = null;
     coreutils = null;
     gnugrep = null;
@@ -138,7 +133,7 @@ in
   # Build a dummy stdenv with no GCC or working fetchurl.  This is
   # because we need a stdenv to build the GCC wrapper and fetchurl.
   (prevStage: stageFun prevStage {
-    name = null;
+    name = "bootstrap-stage0";
 
     overrides = self: super: {
       # We thread stage0's stdenv through under this name so downstream stages
@@ -152,7 +147,7 @@ in
       # create a dummy Glibc here, which will be used in the stdenv of
       # stage1.
       ${localSystem.libc} = self.stdenv.mkDerivation {
-        name = "bootstrap-${localSystem.libc}";
+        name = "bootstrap-stage0-${localSystem.libc}";
         buildCommand = ''
           mkdir -p $out
           ln -s ${bootstrapTools}/lib $out/lib
@@ -164,13 +159,13 @@ in
       };
       gcc-unwrapped = bootstrapTools;
       binutils = import ../../build-support/bintools-wrapper {
+        name = "bootstrap-stage0-binutils-wrapper";
         nativeTools = false;
         nativeLibc = false;
         buildPackages = { };
         libc = getLibc self;
         inherit (self) stdenvNoCC coreutils gnugrep;
         bintools = bootstrapTools;
-        name = "bootstrap-binutils-wrapper";
       };
       coreutils = bootstrapTools;
       gnugrep = bootstrapTools;
@@ -189,7 +184,7 @@ in
   # simply re-export those packages in the middle stage(s) using the
   # overrides attribute and the inherit syntax.
   (prevStage: stageFun prevStage {
-    name = "bootstrap-gcc-wrapper";
+    name = "bootstrap-stage1";
 
     # Rebuild binutils to use from stage2 onwards.
     overrides = self: super: {
@@ -213,7 +208,7 @@ in
   # 2nd stdenv that contains our own rebuilt binutils and is used for
   # compiling our own Glibc.
   (prevStage: stageFun prevStage {
-    name = "bootstrap-gcc-wrapper";
+    name = "bootstrap-stage2";
 
     overrides = self: super: {
       inherit (prevStage)
@@ -234,7 +229,7 @@ in
   # one uses the rebuilt Glibc from stage2.  It still uses the recent
   # binutils and rest of the bootstrap tools, including GCC.
   (prevStage: stageFun prevStage {
-    name = "bootstrap-gcc-wrapper";
+    name = "bootstrap-stage3";
 
     overrides = self: super: rec {
       inherit (prevStage)
@@ -255,21 +250,22 @@ in
     };
     extraNativeBuildInputs = [ prevStage.patchelf prevStage.paxctl ] ++
       # Many tarballs come with obsolete config.sub/config.guess that don't recognize aarch64.
-      lib.optional localSystem.isAarch64 prevStage.updateAutotoolsGnuConfigScriptsHook;
+      lib.optional (!localSystem.isx86 || localSystem.libc == "musl")
+                   prevStage.updateAutotoolsGnuConfigScriptsHook;
   })
 
 
   # Construct a fourth stdenv that uses the new GCC.  But coreutils is
   # still from the bootstrap tools.
   (prevStage: stageFun prevStage {
-    name = "";
+    name = "bootstrap-stage4";
 
     overrides = self: super: {
       # Zlib has to be inherited and not rebuilt in this stage,
       # because gcc (since JAR support) already depends on zlib, and
       # then if we already have a zlib we want to use that for the
       # other purposes (binutils and top-level pkgs) too.
-      inherit (prevStage) gettext gnum4 bison gmp perl zlib linuxHeaders;
+      inherit (prevStage) gettext gnum4 bison gmp perl texinfo zlib linuxHeaders;
       ${localSystem.libc} = getLibc prevStage;
       binutils = super.binutils.override {
         # Don't use stdenv's shell but our own
@@ -291,13 +287,13 @@ in
         bintools = self.binutils;
         libc = getLibc self;
         inherit (self) stdenvNoCC coreutils gnugrep;
-        name = "";
         shell = self.bash + "/bin/bash";
       };
     };
     extraNativeBuildInputs = [ prevStage.patchelf prevStage.xz ] ++
       # Many tarballs come with obsolete config.sub/config.guess that don't recognize aarch64.
-      lib.optional localSystem.isAarch64 prevStage.updateAutotoolsGnuConfigScriptsHook;
+      lib.optional (!localSystem.isx86 || localSystem.libc == "musl")
+                   prevStage.updateAutotoolsGnuConfigScriptsHook;
   })
 
   # Construct the final stdenv.  It uses the Glibc and GCC, and adds
@@ -310,6 +306,8 @@ in
   (prevStage: {
     inherit config overlays;
     stdenv = import ../generic rec {
+      name = "stdenv-linux";
+
       buildPlatform = localSystem;
       hostPlatform = localSystem;
       targetPlatform = localSystem;
@@ -327,7 +325,8 @@ in
 
       extraNativeBuildInputs = [ prevStage.patchelf prevStage.paxctl ] ++
         # Many tarballs come with obsolete config.sub/config.guess that don't recognize aarch64.
-        lib.optional localSystem.isAarch64 prevStage.updateAutotoolsGnuConfigScriptsHook;
+        lib.optional (!localSystem.isx86 || localSystem.libc == "musl")
+        prevStage.updateAutotoolsGnuConfigScriptsHook;
 
       cc = prevStage.gcc;
 
@@ -346,8 +345,8 @@ in
       # Mainly avoid reference to bootstrap tools
       allowedRequisites = with prevStage; with lib;
         # Simple executable tools
-        concatMap (p: [ (getBin p) (getLib p) ])
-          [ gzip bzip2 xz bash binutils.bintools coreutils diffutils findutils
+        concatMap (p: [ (getBin p) (getLib p) ]) [
+            gzip bzip2 xz bash binutils.bintools coreutils diffutils findutils
             gawk gnumake gnused gnutar gnugrep gnupatch patchelf ed paxctl
           ]
         # Library dependencies
@@ -360,8 +359,7 @@ in
         ++  [ /*propagated from .dev*/ linuxHeaders
             binutils gcc gcc.cc gcc.cc.lib gcc.expand-response-params
           ]
-          ++ lib.optional (localSystem.libc == "musl") libiconv
-          ++ lib.optionals localSystem.isAarch64
+          ++ lib.optionals (!localSystem.isx86 || localSystem.libc == "musl")
             [ prevStage.updateAutotoolsGnuConfigScriptsHook prevStage.gnu-config ];
 
       overrides = self: super: {
@@ -370,9 +368,9 @@ in
           gnumake gnused gnutar gnugrep gnupatch patchelf
           attr acl paxctl zlib pcre;
         ${localSystem.libc} = getLibc prevStage;
-      } // lib.optionalAttrs (super.targetPlatform == localSystem) {
+      } // lib.optionalAttrs (super.stdenv.targetPlatform == localSystem) {
         # Need to get rid of these when cross-compiling.
-        inherit (prevStage) binutils binutils-raw;
+        inherit (prevStage) binutils binutils-unwrapped;
         gcc = cc;
       };
     };

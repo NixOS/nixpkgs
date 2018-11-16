@@ -4,16 +4,15 @@
 }:
 
 python3Packages.buildPythonApplication rec {
-  name = "gpodder-${version}";
-  version = "3.10.1";
-
+  pname = "gpodder";
+  version = "3.10.5";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "gpodder";
     repo = "gpodder";
     rev = version;
-    sha256 = "1cqhm5h0kkdb2m691dbj8i3bixl7bw0iww2pl6k1jkz8mgafyd9d";
+    sha256 = "00lvma40d62h4haybabh15x1y7rnmd84whbjgjv773igwagkn9vw";
   };
 
   postPatch = with stdenv.lib; ''

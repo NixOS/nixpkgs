@@ -1,15 +1,15 @@
 args @ { fetchurl, ... }:
 rec {
   baseName = ''md5'';
-  version = ''20170630-git'';
+  version = ''20180228-git'';
 
   description = ''The MD5 Message-Digest Algorithm RFC 1321'';
 
   deps = [ ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/md5/2017-06-30/md5-20170630-git.tgz'';
-    sha256 = ''0pli483skkfbi9ln8ghxnvzw9p5srs8zyilkygsimkzy8fcc5hyx'';
+    url = ''http://beta.quicklisp.org/archive/md5/2018-02-28/md5-20180228-git.tgz'';
+    sha256 = ''1261ix6bmkjyx8bkpj6ksa0kgyrhngm31as77dyy3vfg6dvrsnd4'';
   };
 
   packageName = "md5";
@@ -18,7 +18,7 @@ rec {
   overrides = x: x;
 }
 /* (SYSTEM md5 DESCRIPTION The MD5 Message-Digest Algorithm RFC 1321 SHA256
-    0pli483skkfbi9ln8ghxnvzw9p5srs8zyilkygsimkzy8fcc5hyx URL
-    http://beta.quicklisp.org/archive/md5/2017-06-30/md5-20170630-git.tgz MD5
-    c6a5b3ca5a23fad3dfde23963db84910 NAME md5 FILENAME md5 DEPS NIL
-    DEPENDENCIES NIL VERSION 20170630-git SIBLINGS NIL PARASITES NIL) */
+    1261ix6bmkjyx8bkpj6ksa0kgyrhngm31as77dyy3vfg6dvrsnd4 URL
+    http://beta.quicklisp.org/archive/md5/2018-02-28/md5-20180228-git.tgz MD5
+    7f250f8a2487e4e0aac1ed9c50b79b4d NAME md5 FILENAME md5 DEPS NIL
+    DEPENDENCIES NIL VERSION 20180228-git SIBLINGS NIL PARASITES NIL) */

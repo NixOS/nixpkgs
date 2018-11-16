@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip, pkgconfig, SDL, gtk2, GConf, mesa
+{ stdenv, fetchurl, unzip, pkgconfig, SDL, gtk2, GConf, libGLU_combined
 , expat, zlib }:
 
 let
@@ -32,7 +32,7 @@ stdenv.mkDerivation {
   makeFlags = "TARGET=mess BUILD_EXPAT= BUILD_ZLIB= NOWERROR=1";
 
   buildInputs =
-    [ unzip pkgconfig SDL gtk2 GConf mesa expat zlib ];
+    [ unzip pkgconfig SDL gtk2 GConf libGLU_combined expat zlib ];
 
   installPhase =
     ''

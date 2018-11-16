@@ -1,21 +1,23 @@
-{ stdenv, fetchFromGitHub, cmake, luajit,
+{ stdenv, fetchFromGitLab, cmake, luajit,
   SDL2, SDL2_image, SDL2_ttf, physfs,
-  openal, libmodplug, libvorbis}:
+  openal, libmodplug, libvorbis,
+  qtbase, qttools }:
 
 stdenv.mkDerivation rec {
   name = "solarus-${version}";
-  version = "1.4.5";
+  version = "1.5.3";
 
-  src = fetchFromGitHub {
-    owner = "christopho";
+  src = fetchFromGitLab {
+    owner = "solarus-games";
     repo = "solarus";
-    rev = "d9fdb9fdb4e1b9fc384730a9279d134ae9f2c70e";
-    sha256 = "0xjx789d6crm322wmkqyq9r288vddsha59yavhy78c4r01gs1p5v";
+    rev = "v1.5.3";
+    sha256 = "035hkdw3a1ryasj5wfa1xla1xmpnc3hjp4s20sl9ywip41675vaz";
   };
 
   buildInputs = [ cmake luajit SDL2
     SDL2_image SDL2_ttf physfs
-    openal libmodplug libvorbis ];
+    openal libmodplug libvorbis
+    qtbase qttools ];
 
   enableParallelBuilding = true;
 

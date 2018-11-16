@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch, octoprint, pythonPackages }:
+{ stdenv, fetchFromGitHub, octoprint, pythonPackages }:
 
 let
   buildPlugin = args: pythonPackages.buildPythonApplication (args // {

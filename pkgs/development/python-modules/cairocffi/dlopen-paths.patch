@@ -16,10 +16,10 @@ index 718aa7f..1a1dcff 100644
  
 +# Use hardcoded soname, because ctypes.util use gcc/objdump which shouldn't be required for runtime
 +_LIBS = {
-+    'cairo': '@cairo@/lib/libcairo.so.2',
-+    'glib-2.0': '@glib@/lib/libglib-2.0.so.0',
-+    'gobject-2.0': '@glib@/lib/libgobject-2.0.so.0',
-+    'gdk_pixbuf-2.0': '@gdk_pixbuf@/lib/libgdk_pixbuf-2.0.so.0',
++    'cairo': '@cairo@/lib/libcairo@ext@',
++    'glib-2.0': '@glib@/lib/libglib-2.0@ext@',
++    'gobject-2.0': '@glib@/lib/libgobject-2.0@ext@',
++    'gdk_pixbuf-2.0': '@gdk_pixbuf@/lib/libgdk_pixbuf-2.0@ext@',
 +}
  
 -def dlopen(ffi, *names):

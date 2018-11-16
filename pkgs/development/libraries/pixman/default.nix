@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, autoconf, automake, libtool, pkgconfig, libpng, glib /*just passthru*/ }:
+{ stdenv, fetchurl, fetchpatch, autoconf, automake, libtool, autoreconfHook, pkgconfig, libpng, glib /*just passthru*/ }:
 
 stdenv.mkDerivation rec {
   name = "pixman-${version}";
@@ -18,11 +18,11 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ pkgconfig ]
-    ++ stdenv.lib.optionals stdenv.cc.isClang [ autoconf automake libtool ];
+    ++ stdenv.lib.optionals stdenv.cc.isClang [ autoconf automake libtool autoreconfHook ];
 
-  buildInputs = stdenv.lib.optional doCheck libpng;
+  buildInputs = [ libpng ];
 
-  configureFlags = stdenv.lib.optional stdenv.isArm "--disable-arm-iwmmxt";
+  configureFlags = stdenv.lib.optional stdenv.isAarch32 "--disable-arm-iwmmxt";
 
   doCheck = true;
 

@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "PyLTI";
-  version = "0.5.1";
+  version = "0.7.0";
 
   disabled = !isPy27;
 
@@ -39,7 +39,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "32093d961bf95e508bf27667289155da1e082ed9989bb84a76c54c6974c941e1";
+    sha256 = "80938a235b1ab390f6889a95237d087ea7adde5cc50fcae9c80c49898e8ee78e";
   };
 
   meta = {

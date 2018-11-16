@@ -72,14 +72,14 @@ in
 
   config = mkIf cfg.enable {
 
-    users.extraUsers = mkIf (cfg.user == null) [
+    users.users = mkIf (cfg.user == null) [
       { name = "quassel";
         description = "Quassel IRC client daemon";
         group = "quassel";
         uid = config.ids.uids.quassel;
       }];
 
-    users.extraGroups = mkIf (cfg.user == null) [
+    users.groups = mkIf (cfg.user == null) [
       { name = "quassel";
         gid = config.ids.gids.quassel;
       }];

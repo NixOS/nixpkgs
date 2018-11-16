@@ -5,8 +5,9 @@ with lib;
 let
   cfg = config.virtualisation.virtualbox.host;
 
-  virtualbox = pkgs.virtualbox.override {
+  virtualbox = cfg.package.override {
     inherit (cfg) enableHardening headless;
+    extensionPack = if cfg.enableExtensionPack then pkgs.virtualboxExtpack else null;
   };
 
   kernelModules = config.boot.kernelPackages.virtualbox.override {
@@ -17,9 +18,7 @@ in
 
 {
   options.virtualisation.virtualbox.host = {
-    enable = mkOption {
-      type = types.bool;
-      default = false;
+    enable = mkEnableOption "VirtualBox" // {
       description = ''
         Whether to enable VirtualBox.
 
@@ -27,6 +26,26 @@ in
           In order to pass USB devices from the host to the guests, the user
           needs to be in the <literal>vboxusers</literal> group.
         </para></note>
+      '';
+    };
+
+    enableExtensionPack = mkEnableOption "VirtualBox extension pack" // {
+      description = ''
+        Whether to install the Oracle Extension Pack for VirtualBox.
+
+        <important><para>
+          You must set <literal>nixpkgs.config.allowUnfree = true</literal> in
+          order to use this.  This requires you accept the VirtualBox PUEL.
+        </para></important>
+      '';
+    };
+
+    package = mkOption {
+      type = types.package;
+      default = pkgs.virtualbox;
+      defaultText = "pkgs.virtualbox";
+      description = ''
+        Which VirtualBox package to use.
       '';
     };
 
@@ -86,7 +105,7 @@ in
       "VirtualBox"
     ]));
 
-    users.extraGroups.vboxusers.gid = config.ids.gids.vboxusers;
+    users.groups.vboxusers.gid = config.ids.gids.vboxusers;
 
     services.udev.extraRules =
       ''

@@ -39,7 +39,7 @@ stdenv.mkDerivation {
     description = "Fusionio command line utilities";
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
-    broken = stdenv.system != "x86_64-linux";
+    broken = stdenv.hostPlatform.system != "x86_64-linux";
     maintainers = with maintainers; [ wkennington ];
   };
 }

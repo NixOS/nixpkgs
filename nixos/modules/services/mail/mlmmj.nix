@@ -94,7 +94,7 @@ in
 
   config = mkIf cfg.enable {
 
-    users.extraUsers = singleton {
+    users.users = singleton {
       name = cfg.user;
       description = "mlmmj user";
       home = stateDir;
@@ -104,7 +104,7 @@ in
       useDefaultShell = true;
     };
 
-    users.extraGroups = singleton {
+    users.groups = singleton {
       name = cfg.group;
       gid = config.ids.gids.mlmmj;
     };

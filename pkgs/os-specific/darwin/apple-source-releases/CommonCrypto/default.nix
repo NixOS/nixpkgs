@@ -1,8 +1,6 @@
 { stdenv, appleDerivation }:
 
 appleDerivation {
-  phases = [ "unpackPhase" "installPhase" ];
-
   installPhase = ''
     mkdir -p $out/include/CommonCrypto
     cp include/* $out/include/CommonCrypto

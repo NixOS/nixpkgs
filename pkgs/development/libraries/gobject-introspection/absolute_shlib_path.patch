@@ -1,8 +1,6 @@
-diff --git a/giscanner/scannermain.py b/giscanner/scannermain.py
-index 89ec193..54f1d2e 100755
 --- a/giscanner/scannermain.py
 +++ b/giscanner/scannermain.py
-@@ -94,6 +94,39 @@ def get_windows_option_group(parser):
+@@ -100,6 +100,39 @@
      return group
  
  
@@ -42,7 +40,7 @@ index 89ec193..54f1d2e 100755
  def _get_option_parser():
      parser = optparse.OptionParser('%prog [options] sources')
      parser.add_option('', "--quiet",
-@@ -200,6 +233,10 @@ match the namespace prefix.""")
+@@ -209,6 +242,10 @@
      parser.add_option("", "--filelist",
                        action="store", dest="filelist", default=[],
                        help="file containing headers and sources to be scanned")
@@ -53,57 +51,50 @@ index 89ec193..54f1d2e 100755
  
      group = get_preprocessor_option_group(parser)
      parser.add_option_group(group)
-diff --git a/giscanner/shlibs.py b/giscanner/shlibs.py
-index 838d343..ca7fc0d 100644
 --- a/giscanner/shlibs.py
 +++ b/giscanner/shlibs.py
-@@ -53,10 +53,27 @@ def _resolve_libtool(options, binary, libraries):
- # Match absolute paths on OS X to conform to how libraries are usually
- # referenced on OS X systems.
- def _ldd_library_pattern(library_name):
-+    nix_store_dir = re.escape('@nixStoreDir@'.rstrip('/'))
-     pattern = "(?<![A-Za-z0-9_-])(lib*%s[^A-Za-z0-9_-][^\s\(\)]*)"
-     if platform.system() == 'Darwin':
+@@ -63,6 +63,11 @@
          pattern = "([^\s]*lib*%s[^A-Za-z0-9_-][^\s\(\)]*)"
--    return re.compile(pattern % re.escape(library_name))
-+        return re.compile(pattern % re.escape(library_name))
-+    pattern = r'''
-+        (
-+          (?:
-+            # First match Nix store paths because they need to be absolute.
-+            (?:%s(?:/[^/]*)+)
-+            # Everything else not a store path remains relative, because we
-+            # would end up with temporary paths that are only valid during
-+            # build time in the resulting GIR file.
-+            | (?<=/)
-+          )
-+          # And finally the library itself:
-+          (?:lib%s[^A-Za-z0-9_-][^\s\(\)]*)
-+        )
-+    '''
-+    return re.compile(pattern % (nix_store_dir, re.escape(library_name)),
-+                      re.VERBOSE)
+     return re.compile(pattern % re.escape(library_name))
  
++def _ldd_library_nix_pattern(library_name):
++    nix_store_dir = re.escape('@nixStoreDir@'.rstrip('/'))
++    pattern = r'(%s(?:/[^/]*)+lib%s[^A-Za-z0-9_-][^\s\(\)]*)'
++    return re.compile(pattern % (nix_store_dir, re.escape(library_name)))
++
  
  # This is a what we do for non-la files. We assume that we are on an
-@@ -115,7 +132,11 @@ def _resolve_non_libtool(options, binary, libraries):
-                 m = pattern.search(line)
+ # ELF-like system where ldd exists and the soname extracted with ldd is
+@@ -112,7 +117,7 @@
+         proc = subprocess.Popen(args, stdout=subprocess.PIPE)
+         patterns = {}
+         for library in libraries:
+-            patterns[library] = _ldd_library_pattern(library)
++            patterns[library] = (_ldd_library_pattern(library), _ldd_library_nix_pattern(library))
+ 
+         shlibs = []
+         for line in proc.stdout:
+@@ -122,11 +127,14 @@
+             # possible for the name of the binary to match _ldd_library_pattern.
+             if line == binary.args[0] + ':\n':
+                 continue
+-            for library, pattern in patterns.items():
+-                m = pattern.search(line)
++            for library, (pattern, nix_pattern) in patterns.items():
++                if line.find('@nixStoreDir@') != -1:
++                    m = nix_pattern.search(line)
++                else:
++                    m = pattern.search(line)
                  if m:
                      del patterns[library]
 -                    shlibs.append(m.group(1))
-+                    match = m.group(1)
-+                    if not match.startswith('/') \
-+                       and len(options.fallback_libpath) > 0:
-+                        match = os.path.join(options.fallback_libpath, match)
-+                    shlibs.append(match)
++                    shlibs.append(os.path.join(options.fallback_libpath, m.group(1)))
                      break
  
          if len(patterns) > 0:
-diff --git a/giscanner/utils.py b/giscanner/utils.py
-index 660081e..c9c767a 100644
 --- a/giscanner/utils.py
 +++ b/giscanner/utils.py
-@@ -109,17 +109,11 @@ def extract_libtool_shlib(la_file):
+@@ -113,17 +113,11 @@
      if dlname is None:
          return None
  

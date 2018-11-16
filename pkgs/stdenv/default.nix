@@ -45,8 +45,9 @@ in
     "armv6l-linux" = stagesLinux;
     "armv7l-linux" = stagesLinux;
     "aarch64-linux" = stagesLinux;
-    "mips64el-linux" = stagesLinux;
+    "mipsel-linux" = stagesLinux;
     "powerpc-linux" = /* stagesLinux */ stagesNative;
+    "powerpc64le-linux" = stagesLinux;
     "x86_64-darwin" = stagesDarwin;
     "x86_64-solaris" = stagesNix;
     "i686-cygwin" = stagesNative;

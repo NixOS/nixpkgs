@@ -1,14 +1,18 @@
 # This test runs gitlab and checks if it works
 
-import ./make-test.nix ({ pkgs, ...} : {
+import ./make-test.nix ({ pkgs, lib, ...} : with lib; {
   name = "gitlab";
   meta = with pkgs.stdenv.lib.maintainers; {
-    maintainers = [ domenkozar offline ];
+    maintainers = [ globin ];
   };
 
   nodes = {
-    gitlab = { config, pkgs, ... }: {
-      virtualisation.memorySize = 768;
+    gitlab = { ... }: {
+      virtualisation.memorySize = 4096;
+      systemd.services.gitlab.serviceConfig.Restart = mkForce "no";
+      systemd.services.gitlab-workhorse.serviceConfig.Restart = mkForce "no";
+      systemd.services.gitaly.serviceConfig.Restart = mkForce "no";
+      systemd.services.gitlab-sidekiq.serviceConfig.Restart = mkForce "no";
 
       services.nginx = {
         enable = true;
@@ -19,10 +23,11 @@ import ./make-test.nix ({ pkgs, ...} : {
         };
       };
 
-      systemd.services.gitlab.serviceConfig.TimeoutStartSec = "10min";
       services.gitlab = {
         enable = true;
         databasePassword = "dbPassword";
+        initialRootPassword = "notproduction";
+        smtp.enable = true;
         secrets = {
           secret = "secret";
           otp = "otpsecret";
@@ -65,8 +70,12 @@ import ./make-test.nix ({ pkgs, ...} : {
 
   testScript = ''
     $gitlab->start();
+    $gitlab->waitForUnit("gitaly.service");
+    $gitlab->waitForUnit("gitlab-workhorse.service");
     $gitlab->waitForUnit("gitlab.service");
     $gitlab->waitForUnit("gitlab-sidekiq.service");
-    $gitlab->waitUntilSucceeds("curl http://localhost:80/users/sign_in");
+    $gitlab->waitForFile("/var/gitlab/state/tmp/sockets/gitlab.socket");
+    $gitlab->waitUntilSucceeds("curl -sSf http://localhost/users/sign_in");
+    $gitlab->succeed("${pkgs.sudo}/bin/sudo -u gitlab -H gitlab-rake gitlab:check 1>&2")
   '';
 })

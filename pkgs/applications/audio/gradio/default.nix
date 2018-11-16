@@ -1,13 +1,12 @@
 { stdenv, fetchFromGitHub, pkgconfig
-, gcc
 , python3
-, gsettings_desktop_schemas
-, desktop_file_utils
+, gsettings-desktop-schemas
+, desktop-file-utils
 , glib
 , gtk3
 , intltool
 , libsoup
-, json_glib
+, json-glib
 , wrapGAppsHook
 , meson
 , ninja
@@ -17,7 +16,7 @@
 , gst_plugins ? with gst_all_1; [ gst-plugins-good gst-plugins-ugly ]
 }:
 let
-  version = "7.1";
+  version = "7.2";
 
 in stdenv.mkDerivation rec {
   name = "gradio-${version}";
@@ -26,7 +25,7 @@ in stdenv.mkDerivation rec {
     owner = "haecker-felix";
     repo = "gradio";
     rev = "v${version}";
-    sha256 = "0x0hmcjvpgvsm64ywcc71srlwqybfhadn5nkwycq0lh7r49d89kx";
+    sha256 = "0c4vlrfl0ljkiwarpwa8wcfmmihh6a5j4pi4yr0qshyl9xxvxiv3";
   };
 
   nativeBuildInputs = [
@@ -44,20 +43,20 @@ in stdenv.mkDerivation rec {
     glib
     intltool
     libsoup
-    json_glib
+    json-glib
 
     gtk3
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
 
     wrapGAppsHook
-    desktop_file_utils
-    gsettings_desktop_schemas
+    desktop-file-utils
+    gsettings-desktop-schemas
   ] ++ gst_plugins;
 
   enableParallelBuilding = true;
   postInstall = ''
-    ${glib.dev}/bin/glib-compile-schemas $out/share/glib-2.0/schemas
+    glib-compile-schemas "$out"/share/glib-2.0/schemas
   '';
 
   patches = [ ./0001-Remove-post-install-script-that-hardcodes-paths.patch ];

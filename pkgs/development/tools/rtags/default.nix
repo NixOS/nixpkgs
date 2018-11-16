@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchgit, cmake, llvmPackages, openssl, writeScript, apple_sdk, bash, emacs, pkgconfig }:
+{ stdenv, lib, fetchgit, cmake, llvmPackages, openssl, apple_sdk, emacs, pkgconfig }:
 
 stdenv.mkDerivation rec {
   name = "rtags-${version}";
@@ -32,6 +32,6 @@ stdenv.mkDerivation rec {
     description = "C/C++ client-server indexer based on clang";
     homepage = https://github.com/andersbakken/rtags;
     license = stdenv.lib.licenses.gpl3;
-    platforms = stdenv.lib.platforms.allBut [ "i686-linux" ];
+    platforms = with stdenv.lib.platforms; x86_64 ++ aarch64;
   };
 }

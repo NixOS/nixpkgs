@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "3.0";
 
   src = fetchurl {
-    url = "http://ftp.gnu.org/gnu/gvpe/gvpe-${version}.tar.gz";
+    url = "https://ftp.gnu.org/gnu/gvpe/gvpe-${version}.tar.gz";
     sha256 = "1v61mj25iyd91z0ir7cmradkkcm1ffbk52c96v293ibsvjs2s2hf";
   };
 
@@ -24,9 +24,11 @@ stdenv.mkDerivation rec {
     sed -e 's@/sbin/ifconfig@${nettools}/sbin/ifconfig@g' -i src/device-*.C
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A protected multinode virtual network";
-    maintainers = [ stdenv.lib.maintainers.raskin ];
-    platforms = with stdenv.lib.platforms; linux ++ freebsd;
+    homepage = http://software.schmorp.de/pkg/gvpe.html;
+    maintainers = [ maintainers.raskin ];
+    platforms = with platforms; linux ++ freebsd;
+    license = licenses.gpl2;
   };
 }

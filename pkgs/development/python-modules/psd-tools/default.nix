@@ -4,7 +4,6 @@
 
 buildPythonPackage rec {
   pname = "psd-tools";
-  name = "${pname}-${version}";
   version = "1.4";
 
   meta = {

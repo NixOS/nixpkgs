@@ -1,12 +1,26 @@
-{ stdenv, fetchFromGitHub, which, buildGoPackage, utillinux, coreutils }:
+{ stdenv, lib, fetchFromGitHub, removeReferencesTo, which, go, go-bindata, makeWrapper, rsync, utillinux
+, coreutils, kerberos, clang
+, components ? [
+  "cmd/oc"
+  "cmd/openshift"
+  ]
+}:
+
+with lib;
 
 let
-  version = "3.6.0";
+  version = "3.11.0";
   ver = stdenv.lib.elemAt (stdenv.lib.splitString "." version);
   versionMajor = ver 0;
   versionMinor = ver 1;
   versionPatch = ver 2;
-in buildGoPackage rec {
+  gitCommit = "0cbc58b";
+  # version is in vendor/k8s.io/kubernetes/pkg/version/base.go
+  k8sversion = "v1.11.1";
+  k8sgitcommit = "b1b2997";
+  k8sgitMajor = "0";
+  k8sgitMinor = "1";
+in stdenv.mkDerivation rec {
   name = "openshift-origin-${version}";
   inherit version;
 
@@ -14,40 +28,57 @@ in buildGoPackage rec {
     owner = "openshift";
     repo = "origin";
     rev = "v${version}";
-    sha256 = "08bdqvsjl6c7dmllyz8n4akb7gyn91znvbph5cgmmk1bhskycy1r";
-  };
+    sha256 = "06q4v2a1mm6c659ab0rzkqz6b66vx4avqfg0s9xckwhq420lzgka";
+};
 
-  buildInputs = [ which ];
+  # go > 1.10
+  # [FATAL] [14:44:02+0000] Please install Go version go or use PERMISSIVE_GO=y to bypass this check.
+  buildInputs = [ removeReferencesTo makeWrapper which go rsync go-bindata kerberos clang ];
 
-  goPackagePath = null;
+  outputs = [ "out" ];
+
   patchPhase = ''
     patchShebangs ./hack
-    substituteInPlace pkg/bootstrap/docker/host/host.go  \
+
+    substituteInPlace pkg/oc/clusterup/docker/host/host.go  \
       --replace 'nsenter --mount=/rootfs/proc/1/ns/mnt findmnt' \
       'nsenter --mount=/rootfs/proc/1/ns/mnt ${utillinux}/bin/findmnt'
 
-    substituteInPlace pkg/bootstrap/docker/host/host.go  \
+    substituteInPlace pkg/oc/clusterup/docker/host/host.go  \
       --replace 'nsenter --mount=/rootfs/proc/1/ns/mnt mount' \
       'nsenter --mount=/rootfs/proc/1/ns/mnt ${utillinux}/bin/mount'
 
-    substituteInPlace pkg/bootstrap/docker/host/host.go  \
+    substituteInPlace pkg/oc/clusterup/docker/host/host.go  \
       --replace 'nsenter --mount=/rootfs/proc/1/ns/mnt mkdir' \
-      'nsenter --mount=/rootfs/proc/1/ns/mnt ${utillinux}/bin/mount'
+      'nsenter --mount=/rootfs/proc/1/ns/mnt ${coreutils}/bin/mkdir'
   '';
 
   buildPhase = ''
-    cd go/src/origin-v${version}-src
     # Openshift build require this variables to be set
     # unless there is a .git folder which is not the case with fetchFromGitHub
-    export OS_GIT_VERSION=v${version}
-    export OS_GIT_MAJOR=${versionMajor}
-    export OS_GIT_MINOR=${versionMinor}
-    make build
+    echo "OS_GIT_VERSION=v${version}" >> os-version-defs
+    echo "OS_GIT_MAJOR=${versionMajor}" >> os-version-defs
+    echo "OS_GIT_MINOR=${versionMinor}" >> os-version-defs
+    echo "OS_GIT_PATCH=${versionPatch}" >> os-version-defs
+    echo "OS_GIT_COMMIT=${gitCommit}" >> os-version-defs
+    echo "KUBE_GIT_VERSION=${k8sversion}" >> os-version-defs
+    echo "KUBE_GIT_COMMIT=${k8sgitcommit}" >> os-version-defs
+    echo "KUBE_GIT_MAJOR=${k8sgitMajor}" >> os-version-defs
+    echo "KUBE_GIT_MINOR=${k8sgitMinor}" >> os-version-defs
+    export OS_VERSION_FILE="os-version-defs"
+    export CC=clang
+    make all WHAT='${concatStringsSep " " components}'
   '';
 
   installPhase = ''
-    mkdir -p "$bin/bin"
-    cp -a "_output/local/bin/$(go env GOOS)/$(go env GOARCH)/"* "$bin/bin/"
+    mkdir -p "$out/bin"
+    cp -a "_output/local/bin/$(go env GOOS)/$(go env GOARCH)/"* "$out/bin/"
+    install -D -t "$out/etc/bash_completion.d" contrib/completions/bash/*
+    install -D -t "$out/share/zsh/site-functions" contrib/completions/zsh/*
+  '';
+
+  preFixup = ''
+    find $out/bin -type f -exec remove-references-to -t ${go} '{}' +
   '';
 
   meta = with stdenv.lib; {

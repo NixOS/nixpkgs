@@ -1,20 +1,20 @@
 { stdenv, cmake, fetchurl, gnumake, makeWrapper, pkgconfig
 , autopanosiftc, boost, cairo, enblend-enfuse, exiv2, fftw, flann, gettext
 , glew, ilmbase, lcms2, lensfun, libjpeg, libpng, libtiff, libX11, libXi
-, libXmu, mesa, openexr, panotools, perlPackages, sqlite, vigra, wxGTK, zlib
+, libXmu, libGLU_combined, openexr, panotools, perlPackages, sqlite, vigra, wxGTK, zlib
 }:
 
 stdenv.mkDerivation rec {
-  name = "hugin-2017.0.0";
+  name = "hugin-2018.0.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/hugin/${name}.tar.bz2";
-    sha256 = "02a6rlwp20jdn5jdsyg3c7liljr10c3jfdkxiv9mkf9jgyi6wr46";
+    sha256 = "1jv5wpqbq49fhbl5g521g1qxhdm1rm7acxd18fr3n3n5d830vbyk";
   };
 
   buildInputs = [
     boost cairo exiv2 fftw flann gettext glew ilmbase lcms2 lensfun libjpeg
-    libpng libtiff libX11 libXi libXmu mesa openexr panotools sqlite vigra
+    libpng libtiff libX11 libXi libXmu libGLU_combined openexr panotools sqlite vigra
     wxGTK zlib
   ];
 
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     homepage = http://hugin.sourceforge.net/;
     description = "Toolkit for stitching photographs and assembling panoramas, together with an easy to use graphical front end";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ viric hrdinka ];
+    maintainers = with maintainers; [ hrdinka ];
     platforms = platforms.linux;
   };
 }

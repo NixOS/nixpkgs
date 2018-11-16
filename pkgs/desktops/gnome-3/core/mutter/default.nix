@@ -1,15 +1,33 @@
 { fetchurl, stdenv, pkgconfig, gnome3, intltool, gobjectIntrospection, upower, cairo
-, pango, cogl, clutter, libstartup_notification, zenity, libcanberra_gtk3
+, pango, cogl, clutter, libstartup_notification, zenity, libcanberra-gtk3
 , libtool, makeWrapper, xkeyboard_config, libxkbfile, libxkbcommon, libXtst, libinput
-, pipewire, libgudev, libwacom, xwayland, autoreconfHook }:
+, pipewire, libgudev, libwacom, xwayland, autoreconfHook, fetchpatch }:
 
 stdenv.mkDerivation rec {
-  inherit (import ./src.nix fetchurl) name src;
+  name = "mutter-${version}";
+  version = "3.28.3";
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/mutter/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    sha256 = "0vq3rmq20d6b1mi6sf67wkzqys6hw5j7n7fd4hndcp19d5i26149";
+  };
+
+  passthru = {
+    updateScript = gnome3.updateScript { packageName = "mutter"; attrPath = "gnome3.mutter"; };
+  };
+
+  patches = [
+    # https://gitlab.gnome.org/GNOME/mutter/merge_requests/172
+    (fetchpatch {
+      url = https://gitlab.gnome.org/GNOME/mutter/commit/62660bbd.patch;
+      sha256 = "1qq8vxlqnyrqh94dc0dh1aj1dsbyw6bwv3x46q5vsscbbxbiv9wk";
+    })
+  ];
 
   configureFlags = [
     "--with-x"
     "--disable-static"
-    "--enable-remote-desktop"
+    # "--enable-remote-desktop"
     "--enable-shape"
     "--enable-sm"
     "--enable-startup-notification"
@@ -17,15 +35,6 @@ stdenv.mkDerivation rec {
     "--enable-verbose-mode"
     "--with-libcanberra"
     "--with-xwayland-path=${xwayland}/bin/Xwayland"
-  ];
-
-  patches = [
-    # Pipewire 0.1.8 compatibility
-    (fetchurl {
-      name = "mutter-pipewire-0.1.8-compat.patch";
-      url = https://bugzilla.gnome.org/attachment.cgi?id=367356;
-      sha256 = "10bx5zf11wwhhy686w11ggikk56pbxydpbk9fbd947ir385x92cz";
-    })
   ];
 
   propagatedBuildInputs = [
@@ -36,10 +45,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook pkgconfig intltool libtool makeWrapper ];
 
   buildInputs = with gnome3; [
-    glib gobjectIntrospection gtk gsettings_desktop_schemas upower
-    gnome_desktop cairo pango cogl clutter zenity libstartup_notification
-    gnome3.geocode_glib libinput libgudev libwacom
-    libcanberra_gtk3 zenity xkeyboard_config libxkbfile
+    glib gobjectIntrospection gtk gsettings-desktop-schemas upower
+    gnome-desktop cairo pango cogl clutter zenity libstartup_notification
+    gnome3.geocode-glib libinput libgudev libwacom
+    libcanberra-gtk3 zenity xkeyboard_config libxkbfile
     libxkbcommon pipewire
   ];
 

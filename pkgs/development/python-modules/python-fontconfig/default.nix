@@ -7,7 +7,6 @@ let
 in buildPythonPackage rec {
   pname = "Python-fontconfig";
   version = "0.5.1";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

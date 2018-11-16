@@ -4,14 +4,14 @@ with stdenv.lib;
 stdenv.mkDerivation rec {
 
   name = "lightning-${version}";
-  version = "2.1.0";
+  version = "2.1.2";
 
   src = fetchurl {
     url = "mirror://gnu/lightning/${name}.tar.gz";
-    sha256 = "19j9nwl88k660045s40cbz5zrl1wpd2mcxnnc8qqnnaj311a58qz";
+    sha256 = "0sbs2lm8b9in2m8d52zf0x9gpp40x6r7sl6sha92yq3pr78rwa4v";
   };
 
-  buildInputs = stdenv.lib.optional doCheck libopcodes;
+  checkInputs = [ libopcodes ];
 
   doCheck = true;
 

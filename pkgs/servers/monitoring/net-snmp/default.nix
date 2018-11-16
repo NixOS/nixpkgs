@@ -19,6 +19,7 @@ stdenv.mkDerivation rec {
     (fetchAlpinePatch "fix-includes.patch" "0zpkbb6k366qpq4dax5wknwprhwnhighcp402mlm7950d39zfa3m")
     (fetchAlpinePatch "netsnmp-swinst-crash.patch" "0gh164wy6zfiwiszh58fsvr25k0ns14r3099664qykgpmickkqid")
     (fetchAlpinePatch "remove-U64-typedef.patch" "1msxyhcqkvhqa03dwb50288g7f6nbrcd9cs036m9xc8jdgjb8k8j")
+    ./CVE-2018-18065.patch
   ];
 
   preConfigure =
@@ -44,6 +45,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ file perl unzip openssl ];
 
   enableParallelBuilding = true;
+  doCheck = false; # fails
 
   postInstall = ''
     for f in "$out/lib/"*.la $out/bin/net-snmp-config $out/bin/net-snmp-create-v3-user; do

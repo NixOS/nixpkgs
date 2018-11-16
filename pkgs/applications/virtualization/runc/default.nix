@@ -1,17 +1,17 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch, removeReferencesTo, go-md2man
+{ stdenv, lib, fetchFromGitHub, removeReferencesTo, go-md2man
 , go, pkgconfig, libapparmor, apparmor-parser, libseccomp }:
 
 with lib;
 
 stdenv.mkDerivation rec {
   name = "runc-${version}";
-  version = "1.0.0-rc4";
+  version = "1.0.0-rc5";
 
   src = fetchFromGitHub {
     owner = "opencontainers";
     repo = "runc";
     rev = "v${version}";
-    sha256 = "0dh24x0zw90hs7618pnqvjhd2nx8dpz3b5jwc1vbs8dawj8prir2";
+    sha256 = "1ikqw39jn8dzb4snc4pcg3z85jb67ivskdhx028k17ss29bf4062";
   };
 
   outputs = [ "out" "man" ];
@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
     homepage = https://runc.io/;
     description = "A CLI tool for spawning and running containers according to the OCI specification";
     license = licenses.asl20;
-    maintainers = with maintainers; [ offline ];
+    maintainers = with maintainers; [ offline vdemeester ];
     platforms = platforms.linux;
   };
 }

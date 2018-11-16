@@ -11,11 +11,13 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [pkgconfig];
+  nativeBuildInputs = [ pkgconfig ];
 
   propagatedBuildInputs = [ glibmm gtk2 atkmm cairomm pangomm ];
 
   doCheck = true;
+
+  enableParallelBuilding = true;
 
   meta = {
     description = "C++ interface to the GTK+ graphical user interface library";

@@ -19,7 +19,7 @@ in fetchzip rec {
   sha256 = "0598zr5f7d6ll48pbfbmmkrybhhdks9b2g3m2g67wm40070ffzmd";
 
   meta = with stdenv.lib; {
-    homepage = http://software.sil.org/gentium/;
+    homepage = https://software.sil.org/gentium/;
     description = "A high-quality typeface family for Latin, Cyrillic, and Greek";
     maintainers = with maintainers; [ ];
     license = licenses.ofl;

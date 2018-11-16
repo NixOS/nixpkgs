@@ -1,12 +1,11 @@
-{ stdenv, fetchurl, buildPerlPackage, perlPackages
-}:
+{ stdenv, fetchurl, perlPackages }:
 
-buildPerlPackage rec {
+perlPackages.buildPerlPackage rec {
   name = "pflogsumm-${version}";
   version = "1.1.3";
 
   src = fetchurl {
-    url = "http://jimsun.linxnet.com/downloads/${name}.tar.gz";
+    url = "https://jimsun.linxnet.com/downloads/${name}.tar.gz";
     sha256 = "0hkim9s5f1yg5sfs5048jydhy3sbxafls496wcjk0cggxb113py4";
   };
 

@@ -4,14 +4,14 @@ stdenv.mkDerivation rec {
   name = "spatialite-tools-4.1.1";
 
   src = fetchurl {
-    url = "http://www.gaia-gis.it/gaia-sins/spatialite-tools-sources/${name}.tar.gz";
+    url = "https://www.gaia-gis.it/gaia-sins/spatialite-tools-sources/${name}.tar.gz";
     sha256 = "14aqmhvab63ydbb82fglsbig7jw1wmci8jjvci07aavdhvh1pyrv";
   };
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ sqlite expat zlib proj geos libspatialite readosm ];
 
-  configureFlags = "--disable-freexl";
+  configureFlags = [ "--disable-freexl" ];
 
   enableParallelBuilding = true;
 

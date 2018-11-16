@@ -6,14 +6,18 @@
 
 buildPythonPackage rec {
   pname = "prawcore";
-  version = "0.12.0";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "praw-dev";
     repo = "prawcore";
     rev = "v${version}";
-    sha256 = "1z5fz6v4bv6xw84l4q3rpw3j63bb2dldl0fd6ckz8wqlpb2l45br";
+    sha256 = "1j905wi5n2xgik3yk2hrv8dky318ahfjl5k1zs21mrl81jk0907f";
   };
+
+  postPatch = ''
+    sed -i "s/'testfixtures >4.13.2, <6'/'testfixtures >4.13.2'/g" setup.py
+  '';
 
   propagatedBuildInputs = [
     requests

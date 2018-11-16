@@ -4,12 +4,12 @@
 
 , enableXMPP      ? true,  libjreen     ? null
 , enableKDE       ? false, kdelibs4     ? null
-, enableTelepathy ? false, telepathy_qt ? null
+, enableTelepathy ? false, telepathy-qt ? null
 }:
 
 assert enableXMPP      -> libjreen     != null;
 assert enableKDE       -> kdelibs4     != null;
-assert enableTelepathy -> telepathy_qt != null;
+assert enableTelepathy -> telepathy-qt != null;
 
 stdenv.mkDerivation rec {
   name = "tomahawk-${version}";
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     makeWrapper
   ] ++ stdenv.lib.optional enableXMPP      libjreen
     ++ stdenv.lib.optional enableKDE       kdelibs4
-    ++ stdenv.lib.optional enableTelepathy telepathy_qt;
+    ++ stdenv.lib.optional enableTelepathy telepathy-qt;
 
   postInstall = let
     pluginPath = stdenv.lib.concatStringsSep ":" [
@@ -51,5 +51,6 @@ stdenv.mkDerivation rec {
     homepage = http://tomahawk-player.org/;
     license = licenses.gpl3Plus;
     platforms = platforms.all;
+    broken = true; # 2018-06-25
   };
 }

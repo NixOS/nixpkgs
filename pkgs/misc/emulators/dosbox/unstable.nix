@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchsvn, SDL, SDL_net, SDL_sound, libpng, makeDesktopItem, mesa, autoreconfHook }:
+{ stdenv, fetchsvn, SDL, SDL_net, SDL_sound, libpng, makeDesktopItem, libGLU_combined, autoreconfHook }:
 
 let revision = "4025";
     revisionDate = "2017-07-02";
@@ -15,7 +15,7 @@ in stdenv.mkDerivation rec {
   hardeningDisable = [ "format" ];
 
   nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ SDL SDL_net SDL_sound libpng mesa ];
+  buildInputs = [ SDL SDL_net SDL_sound libpng libGLU_combined ];
 
   desktopItem = makeDesktopItem {
     name = "dosbox";
@@ -36,5 +36,6 @@ in stdenv.mkDerivation rec {
     description = "A DOS emulator";
     platforms = stdenv.lib.platforms.unix;
     maintainers = with stdenv.lib.maintainers; [ binarin ];
+    license = stdenv.lib.licenses.gpl2Plus;
   };
 }

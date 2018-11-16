@@ -1,32 +1,50 @@
-{ stdenv, fetchurl, pkgconfig, libxml2, gnome3
-, gnome_doc_utils, intltool, which, libuuid, vala
-, desktop_file_utils, itstool, wrapGAppsHook, appdata-tools }:
+{ stdenv, fetchurl, pkgconfig, libxml2, gnome3, dconf, nautilus
+, gtk, gsettings-desktop-schemas, vte, intltool, which, libuuid, vala
+, desktop-file-utils, itstool, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
-  inherit (import ./src.nix fetchurl) name src;
+  name = "gnome-terminal-${version}";
+  version = "3.28.2";
 
-  buildInputs = [ gnome3.gtk gnome3.gsettings_desktop_schemas gnome3.vte appdata-tools
-                  gnome3.dconf itstool gnome3.nautilus ];
+  src = fetchurl {
+    url = "mirror://gnome/sources/gnome-terminal/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    sha256 = "0ybjansg6lr279191w8z8r45gy4rxwzw1ajm98cgkv0fk2jdr0x2";
+  };
 
-  nativeBuildInputs = [ pkgconfig intltool gnome_doc_utils which libuuid libxml2
-                        vala desktop_file_utils wrapGAppsHook ];
+  buildInputs = [
+    gtk gsettings-desktop-schemas vte libuuid dconf
+    # For extension
+    nautilus
+  ];
+
+  nativeBuildInputs = [
+    pkgconfig intltool itstool which libxml2
+    vala desktop-file-utils wrapGAppsHook
+  ];
 
   # Silly ./configure, it looks for dbus file from gnome-shell in the
   # installation tree of the package it is configuring.
   postPatch = ''
-    substituteInPlace configure --replace '$(eval echo $(eval echo $(eval echo ''${dbusinterfacedir})))/org.gnome.ShellSearchProvider2.xml' "${gnome3.gnome_shell}/share/dbus-1/interfaces/org.gnome.ShellSearchProvider2.xml"
-    substituteInPlace src/Makefile.in --replace '$(dbusinterfacedir)/org.gnome.ShellSearchProvider2.xml' "${gnome3.gnome_shell}/share/dbus-1/interfaces/org.gnome.ShellSearchProvider2.xml"
+    substituteInPlace configure --replace '$(eval echo $(eval echo $(eval echo ''${dbusinterfacedir})))/org.gnome.ShellSearchProvider2.xml' "${gnome3.gnome-shell}/share/dbus-1/interfaces/org.gnome.ShellSearchProvider2.xml"
+    substituteInPlace src/Makefile.in --replace '$(dbusinterfacedir)/org.gnome.ShellSearchProvider2.xml' "${gnome3.gnome-shell}/share/dbus-1/interfaces/org.gnome.ShellSearchProvider2.xml"
   '';
 
-  # FIXME: enable for gnome3
-  configureFlags = [ "--disable-migration" ];
+  configureFlags = [ "--disable-migration" ]; # TODO: remove this with 3.30
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = "gnome-terminal";
+      attrPath = "gnome3.gnome-terminal";
+    };
+  };
 
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "The GNOME Terminal Emulator";
-    homepage = https://wiki.gnome.org/Apps/Terminal/;
+    homepage = https://wiki.gnome.org/Apps/Terminal;
     platforms = platforms.linux;
+    license = licenses.gpl3Plus;
     maintainers = gnome3.maintainers;
   };
 }

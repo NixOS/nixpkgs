@@ -1,13 +1,16 @@
 { stdenv
 , fetchFromGitHub
 , openssl
-, gcc
 , zlib
 , libssh
 , cmake
 , perl
 , pkgconfig
 , rustPlatform
+, curl
+, libiconv
+, CoreFoundation
+, Security
 }:
 
 with rustPlatform;
@@ -35,12 +38,17 @@ buildRustPackage rec {
     openssl
     libssh
     zlib
+  ] ++ stdenv.lib.optionals (stdenv.isDarwin) [
+    curl
+    libiconv
+    CoreFoundation
+    Security
   ];
 
   meta = with stdenv.lib; {
     inherit (src.meta) homepage;
     description = "Decentralized Issue Tracking for git";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ Profpatsch matthiasbeyer ];
+    maintainers = with maintainers; [ Profpatsch ];
   };
 }

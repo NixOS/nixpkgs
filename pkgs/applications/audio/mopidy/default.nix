@@ -1,10 +1,9 @@
 { stdenv, fetchFromGitHub, pythonPackages, wrapGAppsHook
-, gst_all_1, glib_networking, gobjectIntrospection
+, gst_all_1, glib-networking, gobjectIntrospection
 }:
 
 pythonPackages.buildPythonApplication rec {
-  name = "mopidy-${version}";
-
+  pname = "mopidy";
   version = "2.1.0";
 
   src = fetchFromGitHub {
@@ -18,12 +17,12 @@ pythonPackages.buildPythonApplication rec {
 
   buildInputs = with gst_all_1; [
     gst-plugins-base gst-plugins-good gst-plugins-ugly gst-plugins-bad
-    glib_networking gobjectIntrospection
+    glib-networking gobjectIntrospection
   ];
 
   propagatedBuildInputs = with pythonPackages; [
-    gst-python pygobject3 pykka tornado requests dbus-python
-  ];
+    gst-python pygobject3 pykka tornado requests
+  ] ++ stdenv.lib.optional (!stdenv.isDarwin) dbus-python;
 
   # There are no tests
   doCheck = false;

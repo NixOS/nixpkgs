@@ -3,15 +3,15 @@
 with stdenv.lib;
 
 pythonPackages.buildPythonPackage rec {
-  name = "neovim-remote-${version}";
-  version = "v1.8.6";
+  pname = "neovim-remote";
+  version = "2.1.0";
   disabled = !pythonPackages.isPy3k;
 
   src = fetchFromGitHub {
     owner = "mhinz";
     repo = "neovim-remote";
-    rev = version;
-    sha256 = "0x01zpmxi37jr7j2az2bd8902h7zhkpg6kpvc8xmll9f7703zz2l";
+    rev = "v${version}";
+    sha256 = "0gri4d8gg5hvywffvj8r123d06x006qhink7d54yk6lvplw64gyc";
   };
 
   propagatedBuildInputs = with pythonPackages; [ neovim psutil ];

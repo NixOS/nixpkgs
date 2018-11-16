@@ -20,9 +20,6 @@ let
 
   # map: name -> fixed-output hash
   # sha1 in base32 was chosen as a compromise between security and length
-  # warning: the following generator command takes lots of resources
-  # nix-build ../../../../.. -Q -A texlive.scheme-full.pkgs | ./fixHashes.sh > ./fixedHashes-new.nix
-  # mv ./fixedHashes{-new,}.nix
   fixedHashes = lib.optionalAttrs useFixedHashes (import ./fixedHashes.nix);
 
   # function for creating a working environment from a set of TL packages
@@ -34,9 +31,6 @@ let
 
   # the set of TeX Live packages, collections, and schemes; using upstream naming
   tl = let
-    /* # beware: the URL below changes contents continuously
-      curl http://mirror.ctan.org/tex-archive/systems/texlive/tlnet/tlpkg/texlive.tlpdb.xz \
-        | xzcat | uniq -u | sed -rn -f ./tl2nix.sed > ./pkgs.nix */
     orig = import ./pkgs.nix tl;
     removeSelfDep = lib.mapAttrs
       (n: p: if p ? deps then p // { deps = lib.filterAttrs (dn: _: n != dn) p.deps; }
@@ -57,15 +51,9 @@ let
 
       # remove dependency-heavy packages from the basic collections
       collection-basic = orig.collection-basic // {
-        deps = removeAttrs orig.collection-basic.deps [ "luatex" "metafont" "xdvi" ];
-      };
-      latex = orig.latex // {
-        deps = removeAttrs orig.latex.deps [ "luatex" ];
+        deps = removeAttrs orig.collection-basic.deps [ "metafont" "xdvi" ];
       };
       # add them elsewhere so that collections cover all packages
-      collection-luatex = orig.collection-luatex // {
-        deps = orig.collection-luatex.deps // { inherit (tl) luatex; };
-      };
       collection-metapost = orig.collection-metapost // {
         deps = orig.collection-metapost.deps // { inherit (tl) metafont; };
       };
@@ -115,13 +103,28 @@ let
               map (up: "${up}/${urlName}.tar.xz") urlPrefixes
             );
 
-      # Upstream refuses to distribute stable tarballs, so we host snapshots on IPFS.
+      # Upstream refuses to distribute stable tarballs,
+      # so we host snapshots on IPFS or on our own servers.
       # Common packages should get served from the binary cache anyway.
       # See discussions, e.g. https://github.com/NixOS/nixpkgs/issues/24683
       urlPrefixes = args.urlPrefixes or [
-        http://146.185.144.154/texlive-2017
-        # IPFS GW is second, as it doesn't have a good time-outing behavior
-        http://gateway.ipfs.io/ipfs/QmRLK45EC828vGXv5YDaBsJBj2LjMjjA2ReLVrXsasRzy7/texlive-2017
+        # A snapshot temporarily hosted by @xeji.
+        # TODO: remove when there is a reliable long-term solution
+        https://cat3.de/texlive-2018/tlnet/archive
+
+        # TODO: Add second, faster and more reliable snapshot mirror,
+        # maybe on one of our project's servers
+
+        # IPFS seeded by the mirror above - this may be quite slow
+        https://ipfs.io/ipfs/QmT4Z67wXin1Z9DhvqwSSkSZSuu8hT6LgDyMu6CBm9Tb7t/tlnet/archive
+
+        # The canonical source moves quickly and will be broken almost immediately
+        http://mirror.ctan.org/tex-archive/systems/texlive/tlnet/archive
+
+        # Should be stable for historic, archived releases
+        # http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/2018/tlnet-final/archive
+        # TODO: use this later when 2018 is archived
+
       ];
 
       src = fetchurl { inherit urls sha512; };
@@ -146,7 +149,7 @@ let
         downloadToTemp = true;
         postFetch = ''mkdir "$out";'' + unpackCmd "$downloadedFile";
         # TODO: perhaps override preferHashedMirrors and allowSubstitutes
-      }
+     }
         // passthru
 
     else runCommand "texlive-${tlName}"
@@ -196,9 +199,8 @@ in
           })
         )
         { inherit (tl)
-            scheme-basic scheme-context scheme-full scheme-gust scheme-infraonly
+            scheme-basic scheme-context scheme-full scheme-gust
             scheme-medium scheme-minimal scheme-small scheme-tetex;
         }
     );
   }
-

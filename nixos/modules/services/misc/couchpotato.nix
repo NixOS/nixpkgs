@@ -34,7 +34,7 @@ in
       };
     };
 
-    users.extraUsers = singleton
+    users.users = singleton
       { name = "couchpotato";
         group = "couchpotato";
         home = "/var/lib/couchpotato/";
@@ -42,7 +42,7 @@ in
         uid = config.ids.uids.couchpotato;
       };
 
-    users.extraGroups = singleton
+    users.groups = singleton
       { name = "couchpotato";
         gid = config.ids.gids.couchpotato;
       };

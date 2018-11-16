@@ -1,9 +1,9 @@
 { stdenv, fetchurl, symlinkJoin, gfortran, perl, procps
-, libyaml, libxc, fftw, openblas, gsl
+, libyaml, libxc, fftw, openblas, gsl, netcdf, arpack
 }:
 
 let
-  version = "7.2";
+  version = "8.2";
   fftwAll = symlinkJoin { name ="ftw-dev-out"; paths = [ fftw.dev fftw.out ]; };
 
 in stdenv.mkDerivation {
@@ -11,20 +11,20 @@ in stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://www.tddft.org/programs/octopus/down.php?file=${version}/octopus-${version}.tar.gz";
-    sha256 = "03zzmq72zdnjkhifbmlxs7ig7x6sf6mv8zv9mxhakm9hzwa9yn7m";
+    sha256 = "0z74q17lzyga44m5pbsr1hmq12ly96y44pcz7glfvc4vbaq3jd8p";
   };
 
   nativeBuildInputs = [ perl procps fftw.dev ];
-  buildInputs = [ libyaml gfortran libxc openblas gsl fftw.out ];
+  buildInputs = [ libyaml gfortran libxc openblas gsl fftw.out netcdf arpack ];
 
-  configureFlags = ''
-    --with-yaml-prefix=${libyaml}
-    --with-blas=-lopenblas
-    --with-lapack=-lopenblas
-    --with-fftw-prefix=${fftwAll}
-    --with-gsl-prefix=${gsl}
-    --with-libxc-prefix=${libxc}
-  '';
+  configureFlags = [
+    "--with-yaml-prefix=${libyaml}"
+    "--with-blas=-lopenblas"
+    "--with-lapack=-lopenblas"
+    "--with-fftw-prefix=${fftwAll}"
+    "--with-gsl-prefix=${gsl}"
+    "--with-libxc-prefix=${libxc}"
+  ];
 
   doCheck = false;
   checkTarget = "check-short";
@@ -36,6 +36,8 @@ in stdenv.mkDerivation {
   postConfigure = ''
     patchShebangs testsuite/oct-run_testsuite.sh
   '';
+
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "Real-space time dependent density-functional theory code";

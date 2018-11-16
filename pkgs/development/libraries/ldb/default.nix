@@ -1,13 +1,13 @@
 { stdenv, fetchurl, python, pkgconfig, readline, tdb, talloc, tevent
-, popt, libxslt, docbook_xsl, docbook_xml_dtd_42
+, popt, libxslt, docbook_xsl, docbook_xml_dtd_42, cmocka
 }:
 
 stdenv.mkDerivation rec {
-  name = "ldb-1.1.27";
+  name = "ldb-1.3.3";
 
   src = fetchurl {
     url = "mirror://samba/ldb/${name}.tar.gz";
-    sha256 = "1b1mkl5p8swb67s9aswavhzswlib34hpgsv66zgns009paf2df6d";
+    sha256 = "14gsrm7dvyjpbpnc60z75j6fz2p187abm2h353lq95kx2bv70c1b"                                                                                                                                                             ;
   };
 
   outputs = [ "out" "dev" ];
@@ -16,6 +16,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     python readline tdb talloc tevent popt
     libxslt docbook_xsl docbook_xml_dtd_42
+    cmocka
   ];
 
   preConfigure = ''
@@ -31,7 +32,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A LDAP-like embedded database";
-    homepage = http://ldb.samba.org/;
+    homepage = https://ldb.samba.org/;
     license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ wkennington ];
     platforms = platforms.all;

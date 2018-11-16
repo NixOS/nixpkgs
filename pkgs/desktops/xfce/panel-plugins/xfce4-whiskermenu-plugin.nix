@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, cmake, pkgconfig, intltool, libxfce4util, libxfcegui4
-, xfce4panel, gtk, exo, garcon }:
+, xfce4-panel, gtk, exo, garcon }:
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
@@ -17,13 +17,13 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkgconfig intltool ];
 
-  buildInputs = [ libxfce4util libxfcegui4 xfce4panel gtk exo garcon ];
+  buildInputs = [ libxfce4util libxfcegui4 xfce4-panel gtk exo garcon ];
 
   enableParallelBuilding = true;
 
   preFixup = ''
     substituteInPlace $out/bin/xfce4-popup-whiskermenu \
-      --replace $out/bin/xfce4-panel ${xfce4panel.out}/bin/xfce4-panel
+      --replace $out/bin/xfce4-panel ${xfce4-panel.out}/bin/xfce4-panel
   '';
 
   meta = {

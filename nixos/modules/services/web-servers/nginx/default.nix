@@ -9,15 +9,18 @@ let
       serverName = if vhostConfig.serverName != null
         then vhostConfig.serverName
         else vhostName;
+      acmeDirectory = config.security.acme.directory;
     in
     vhostConfig // {
       inherit serverName;
     } // (optionalAttrs vhostConfig.enableACME {
-      sslCertificate = "/var/lib/acme/${serverName}/fullchain.pem";
-      sslCertificateKey = "/var/lib/acme/${serverName}/key.pem";
+      sslCertificate = "${acmeDirectory}/${serverName}/fullchain.pem";
+      sslCertificateKey = "${acmeDirectory}/${serverName}/key.pem";
+      sslTrustedCertificate = "${acmeDirectory}/${serverName}/full.pem";
     }) // (optionalAttrs (vhostConfig.useACMEHost != null) {
-      sslCertificate = "/var/lib/acme/${vhostConfig.useACMEHost}/fullchain.pem";
-      sslCertificateKey = "/var/lib/acme/${vhostConfig.useACMEHost}/key.pem";
+      sslCertificate = "${acmeDirectory}/${vhostConfig.useACMEHost}/fullchain.pem";
+      sslCertificateKey = "${acmeDirectory}/${vhostConfig.useACMEHost}/key.pem";
+      sslTrustedCertificate = "${acmeDirectory}/${vhostConfig.useACMEHost}/full.pem";
     })
   ) cfg.virtualHosts;
   enableIPv6 = config.networking.enableIPv6;
@@ -37,12 +40,13 @@ let
       ${toString (flip mapAttrsToList upstream.servers (name: server: ''
         server ${name} ${optionalString server.backup "backup"};
       ''))}
+      ${upstream.extraConfig}
     }
   ''));
 
   configFile = pkgs.writeText "nginx.conf" ''
     user ${cfg.user} ${cfg.group};
-    error_log stderr;
+    error_log ${cfg.logError};
     daemon off;
 
     ${cfg.config}
@@ -90,8 +94,18 @@ let
         gzip on;
         gzip_disable "msie6";
         gzip_proxied any;
-        gzip_comp_level 9;
-        gzip_types text/plain text/css application/json application/javascript text/xml application/xml application/xml+rss text/javascript;
+        gzip_comp_level 5;
+        gzip_types
+          application/atom+xml
+          application/javascript
+          application/json
+          application/xml
+          application/xml+rss
+          image/svg+xml
+          text/css
+          text/javascript
+          text/plain
+          text/xml;
         gzip_vary on;
       ''}
 
@@ -216,8 +230,14 @@ let
             ssl_certificate ${vhost.sslCertificate};
             ssl_certificate_key ${vhost.sslCertificateKey};
           ''}
+          ${optionalString (hasSSL && vhost.sslTrustedCertificate != null) ''
+            ssl_trusted_certificate ${vhost.sslTrustedCertificate};
+          ''}
 
-          ${optionalString (vhost.basicAuth != {}) (mkBasicAuth vhostName vhost.basicAuth)}
+          ${optionalString (vhost.basicAuthFile != null || vhost.basicAuth != {}) ''
+            auth_basic secured;
+            auth_basic_user_file ${if vhost.basicAuthFile != null then vhost.basicAuthFile else mkHtpasswd vhostName vhost.basicAuth};
+          ''}
 
           ${mkLocations vhost.locations}
 
@@ -225,8 +245,8 @@ let
         }
       ''
   ) virtualHosts);
-  mkLocations = locations: concatStringsSep "\n" (mapAttrsToList (location: config: ''
-    location ${location} {
+  mkLocations = locations: concatStringsSep "\n" (map (config: ''
+    location ${config.location} {
       ${optionalString (config.proxyPass != null && !cfg.proxyResolveWhileRunning)
         "proxy_pass ${config.proxyPass};"
       }
@@ -246,7 +266,7 @@ let
       ${config.extraConfig}
       ${optionalString (config.proxyPass != null && cfg.recommendedProxySettings) "include ${recommendedProxyConfig};"}
     }
-  '') locations);
+  '') (sortProperties (mapAttrsToList (k: v: v // { location = k; }) locations)));
   mkBasicAuth = vhostName: authDef: let
     htpasswdFile = pkgs.writeText "${vhostName}.htpasswd" (
       concatStringsSep "\n" (mapAttrsToList (user: password: ''
@@ -257,6 +277,12 @@ let
     auth_basic secured;
     auth_basic_user_file ${htpasswdFile};
   '';
+
+  mkHtpasswd = vhostName: authDef: pkgs.writeText "${vhostName}.htpasswd" (
+    concatStringsSep "\n" (mapAttrsToList (user: password: ''
+      ${user}:{PLAIN}${password}
+    '') authDef)
+  );
 in
 
 {
@@ -312,6 +338,35 @@ in
           Nginx package to use. This defaults to the stable version. Note
           that the nginx team recommends to use the mainline version which
           available in nixpkgs as <literal>nginxMainline</literal>.
+        ";
+      };
+
+      logError = mkOption {
+        default = "stderr";
+        description = "
+          Configures logging.
+          The first parameter defines a file that will store the log. The
+          special value stderr selects the standard error file. Logging to
+          syslog can be configured by specifying the “syslog:” prefix.
+          The second parameter determines the level of logging, and can be
+          one of the following: debug, info, notice, warn, error, crit,
+          alert, or emerg. Log levels above are listed in the order of
+          increasing severity. Setting a certain log level will cause all
+          messages of the specified and more severe log levels to be logged.
+          If this parameter is omitted then error is used.
+        ";
+      };
+
+      preStart =  mkOption {
+        type = types.lines;
+        default = ''
+          test -d ${cfg.stateDir}/logs || mkdir -m 750 -p ${cfg.stateDir}/logs  
+          test `stat -c %a ${cfg.stateDir}` = "750" || chmod 750 ${cfg.stateDir}
+          test `stat -c %a ${cfg.stateDir}/logs` = "750" || chmod 750 ${cfg.stateDir}/logs
+          chown -R ${cfg.user}:${cfg.group} ${cfg.stateDir}
+        '';
+        description = "
+          Shell commands executed before the service's nginx is started.
         ";
       };
 
@@ -493,6 +548,13 @@ in
               '';
               default = {};
             };
+            extraConfig = mkOption {
+              type = types.lines;
+              default = "";
+              description = ''
+                These lines go to the end of the upstream verbatim.
+              '';
+            };
           };
         });
         description = ''
@@ -575,9 +637,7 @@ in
       stopIfChanged = false;
       preStart =
         ''
-        mkdir -p ${cfg.stateDir}/logs
-        chmod 700 ${cfg.stateDir}
-        chown -R ${cfg.user}:${cfg.group} ${cfg.stateDir}
+        ${cfg.preStart}
         ${cfg.package}/bin/nginx -c ${configFile} -p ${cfg.stateDir} -t
         '';
       serviceConfig = {
@@ -606,13 +666,13 @@ in
         listToAttrs acmePairs
     );
 
-    users.extraUsers = optionalAttrs (cfg.user == "nginx") (singleton
+    users.users = optionalAttrs (cfg.user == "nginx") (singleton
       { name = "nginx";
         group = cfg.group;
         uid = config.ids.uids.nginx;
       });
 
-    users.extraGroups = optionalAttrs (cfg.group == "nginx") (singleton
+    users.groups = optionalAttrs (cfg.group == "nginx") (singleton
       { name = "nginx";
         gid = config.ids.gids.nginx;
       });

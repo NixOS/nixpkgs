@@ -10,7 +10,7 @@ stdenv.mkDerivation {
     sha256 = "0bv0884yxpvk2ishxj8gdy1w6wb0gwfq55q5qjp0s8z0z7f63zqh";
   };
 
-  # NOTE: we install only headers that are really needed to keep closure sie
+  # NOTE: we install only headers that are really needed to keep closure size
   # reasonable.
   installPhase = ''
     mkdir -p $out/include

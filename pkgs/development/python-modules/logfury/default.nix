@@ -7,7 +7,6 @@
 
 buildPythonPackage rec {
   pname = "logfury";
-  name = "${pname}-${version}";
   version = "0.1.2";
 
   src = fetchPypi {

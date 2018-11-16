@@ -5,7 +5,6 @@
 , postgresql
 , geos
 , proj
-, flex
 , gdal
 , json_c
 , pkgconfig
@@ -17,7 +16,7 @@
   ### NixOS - usage:
   ==================
 
-    services.postgresql.extraPlugins = [ (pkgs.postgis.override { postgresql = pkgs.postgresql95; }) ];
+    services.postgresql.extraPlugins = [ (pkgs.postgis.override { postgresql = pkgs.postgresql_9_5; }) ];
 
 
   ### important Postgis implementation details:
@@ -43,18 +42,22 @@
 
 
 let
-  version = "2.4.0";
-  sha256 = "02baa90f04da41e04b6c18eedfda53110c45ae943d4e65050f6d202f7de07d29";
+  version = "2.5.0";
+  sha256 = "1m9n1shhqhjrhbq6fd9fyfccxcgpng37s3lffhlmyrp98zbsnwxy";
 in stdenv.mkDerivation rec {
   name = "postgis-${version}";
 
   src = fetchurl {
-    url = "http://download.osgeo.org/postgis/source/postgis-${builtins.toString version}.tar.gz";
+    url = "https://download.osgeo.org/postgis/source/postgis-${builtins.toString version}.tar.gz";
     inherit sha256;
   };
 
   # don't pass these vars to the builder
   removeAttrs = ["sql_comments" "sql_srcs"];
+
+  preInstall = ''
+    mkdir -p $out/bin
+  '';
 
   # create aliases for all commands adding version information
   postInstall = ''

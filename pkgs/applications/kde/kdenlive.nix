@@ -2,18 +2,13 @@
 , lib
 , extra-cmake-modules
 , kdoctools
-, kactivities
 , kconfig
 , kcrash
 , kguiaddons
 , kiconthemes
 , ki18n
 , kinit
-, kio
-, kio-extras
-, kwindowsystem
 , kdbusaddons
-, plasma-framework
 , knotifications
 , knewstuff
 , karchive
@@ -21,7 +16,7 @@
 , kplotting
 , ktextwidgets
 , mlt
-, shared_mime_info
+, shared-mime-info
 , libv4l
 , kfilemetadata
 , ffmpeg
@@ -34,9 +29,6 @@
 
 mkDerivation {
   name = "kdenlive";
-  patches = [
-    ./kdenlive-cmake-concurrent-module.patch
-  ];
   nativeBuildInputs = [
     extra-cmake-modules
     kdoctools
@@ -62,7 +54,7 @@ mkDerivation {
     qtquickcontrols
     qtscript
     qtwebkit
-    shared_mime_info
+    shared-mime-info
     libv4l
     ffmpeg
   ];

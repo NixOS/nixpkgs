@@ -14,7 +14,4 @@ mkDerivation {
   buildInputs = [
     akonadi akonadi-search kconfig kservice kio mailcommon mailimporter messagelib
   ];
-  preHook = ''
-    set -x
-  '';
 }

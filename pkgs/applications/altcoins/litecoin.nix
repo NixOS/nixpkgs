@@ -2,28 +2,34 @@
 , pkgconfig, autoreconfHook
 , openssl, db48, boost, zlib, miniupnpc
 , glib, protobuf, utillinux, qt4, qrencode
-, withGui, libevent }:
+, AppKit
+, withGui ? true, libevent
+}:
 
 with stdenv.lib;
+
 stdenv.mkDerivation rec {
 
   name = "litecoin" + (toString (optional (!withGui) "d")) + "-" + version;
-  version = "0.14.2";
+  version = "0.16.3";
 
   src = fetchFromGitHub {
     owner = "litecoin-project";
     repo = "litecoin";
     rev = "v${version}";
-    sha256 = "1smadd5d2mpz2v3pyk7wqm60vdp81zqr4m3z4wfvnlz62m1m800y";
+    sha256 = "0vc184qfdkjky1qffa7309k6973k4197bkzwcmffc9r5sdfhrhkp";
   };
 
   nativeBuildInputs = [ pkgconfig autoreconfHook ];
   buildInputs = [ openssl db48 boost zlib
                   miniupnpc glib protobuf utillinux libevent ]
+                  ++ optionals stdenv.isDarwin [ AppKit ]
                   ++ optionals withGui [ qt4 qrencode ];
 
   configureFlags = [ "--with-boost-libdir=${boost.out}/lib" ]
                      ++ optionals withGui [ "--with-gui=qt4" ];
+
+  enableParallelBuilding = true;
 
   meta = {
     description = "A lite version of Bitcoin using scrypt as a proof-of-work algorithm";
@@ -39,6 +45,7 @@ stdenv.mkDerivation rec {
     homepage = https://litecoin.org/;
     platforms = platforms.unix;
     license = licenses.mit;
-    maintainers = with maintainers; [ offline AndersonTorres ];  
+    broken = stdenv.isDarwin;
+    maintainers = with maintainers; [ offline AndersonTorres ];
   };
 }

@@ -1,4 +1,4 @@
-{stdenvNoCC, darcs, nix, cacert}:
+{stdenvNoCC, darcs, cacert}:
 
 {url, rev ? null, context ? null, md5 ? "", sha256 ? ""}:
 

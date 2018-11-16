@@ -37,7 +37,8 @@ stdenv.mkDerivation rec {
 
     maintainers = [ ];
 
-    # The fancy libs aren't available on {Cyg,Dar}win.
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.unix;
+
+    hydraPlatforms = stdenv.lib.platforms.linux; # sdl-config times out on darwin
   };
 }

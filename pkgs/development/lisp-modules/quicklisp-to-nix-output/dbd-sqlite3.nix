@@ -1,15 +1,15 @@
 args @ { fetchurl, ... }:
 rec {
   baseName = ''dbd-sqlite3'';
-  version = ''cl-dbi-20180131-git'';
+  version = ''cl-dbi-20180831-git'';
 
   description = ''Database driver for SQLite3.'';
 
   deps = [ args."alexandria" args."babel" args."bordeaux-threads" args."cffi" args."cl-annot" args."cl-syntax" args."cl-syntax-annot" args."closer-mop" args."dbi" args."iterate" args."named-readtables" args."split-sequence" args."sqlite" args."trivial-features" args."trivial-types" args."uiop" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/cl-dbi/2018-01-31/cl-dbi-20180131-git.tgz'';
-    sha256 = ''0hz5na9aqfi3z78yhzz4dhf2zy3h0v639w41w8b1adffyqqf1vhn'';
+    url = ''http://beta.quicklisp.org/archive/cl-dbi/2018-08-31/cl-dbi-20180831-git.tgz'';
+    sha256 = ''19cpzdzjjzm0if77dycsk8lj91ihwr51mbjmf3fx0wqwr8k5y0g9'';
   };
 
   packageName = "dbd-sqlite3";
@@ -18,9 +18,9 @@ rec {
   overrides = x: x;
 }
 /* (SYSTEM dbd-sqlite3 DESCRIPTION Database driver for SQLite3. SHA256
-    0hz5na9aqfi3z78yhzz4dhf2zy3h0v639w41w8b1adffyqqf1vhn URL
-    http://beta.quicklisp.org/archive/cl-dbi/2018-01-31/cl-dbi-20180131-git.tgz
-    MD5 7dacf1c276fab38b952813795ff1f707 NAME dbd-sqlite3 FILENAME dbd-sqlite3
+    19cpzdzjjzm0if77dycsk8lj91ihwr51mbjmf3fx0wqwr8k5y0g9 URL
+    http://beta.quicklisp.org/archive/cl-dbi/2018-08-31/cl-dbi-20180831-git.tgz
+    MD5 2fc95bff95d3cd25e3afeb003ee009d2 NAME dbd-sqlite3 FILENAME dbd-sqlite3
     DEPS
     ((NAME alexandria FILENAME alexandria) (NAME babel FILENAME babel)
      (NAME bordeaux-threads FILENAME bordeaux-threads)
@@ -38,5 +38,5 @@ rec {
     (alexandria babel bordeaux-threads cffi cl-annot cl-syntax cl-syntax-annot
      closer-mop dbi iterate named-readtables split-sequence sqlite
      trivial-features trivial-types uiop)
-    VERSION cl-dbi-20180131-git SIBLINGS
+    VERSION cl-dbi-20180831-git SIBLINGS
     (cl-dbi dbd-mysql dbd-postgres dbi-test dbi) PARASITES NIL) */

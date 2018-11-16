@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   name = "duperemove-${version}";
-  version = "0.10";
+  version = "0.11";
 
   src = fetchFromGitHub {
     owner = "markfasheh";
     repo = "duperemove";
     rev = "v${version}";
-    sha256 = "1fll0xjg1p3pabgjiddild4ragk9spbdmdzrkq0hv5pxb1qrv7lp";
+    sha256 = "09bwpsvnppl9bm2l5pym5673x04ah3hddb0xip61gdq8ws3ri5yj";
   };
 
   nativeBuildInputs = [ pkgconfig ];

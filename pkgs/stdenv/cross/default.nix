@@ -10,15 +10,22 @@ let
     config = builtins.removeAttrs config [ "replaceStdenv" ];
   };
 
-in bootStages ++ [
+in lib.init bootStages ++ [
 
-  # Build Packages
+  # Regular native packages
+  (somePrevStage: lib.last bootStages somePrevStage // {
+    # It's OK to change the built-time dependencies
+    allowCustomOverrides = true;
+  })
+
+  # Build tool Packages
   (vanillaPackages: {
     inherit config overlays;
     selfBuild = false;
     stdenv =
-      assert vanillaPackages.hostPlatform == localSystem;
-      assert vanillaPackages.targetPlatform == localSystem;
+      assert vanillaPackages.stdenv.buildPlatform == localSystem;
+      assert vanillaPackages.stdenv.hostPlatform == localSystem;
+      assert vanillaPackages.stdenv.targetPlatform == localSystem;
       vanillaPackages.stdenv.override { targetPlatform = crossSystem; };
     # It's OK to change the built-time dependencies
     allowCustomOverrides = true;
@@ -28,15 +35,35 @@ in bootStages ++ [
   (buildPackages: {
     inherit config overlays;
     selfBuild = false;
-    stdenv = buildPackages.makeStdenvCross {
-      inherit (buildPackages) stdenv;
+    stdenv = buildPackages.stdenv.override (old: rec {
       buildPlatform = localSystem;
       hostPlatform = crossSystem;
       targetPlatform = crossSystem;
-      cc = if crossSystem.useiOSCross or false
-           then buildPackages.darwin.ios-cross
+
+      # Prior overrides are surely not valid as packages built with this run on
+      # a different platform, and so are disabled.
+      overrides = _: _: {};
+      extraBuildInputs = [ ]; # Old ones run on wrong platform
+      allowedRequisites = null;
+
+      cc = if crossSystem.useiOSPrebuilt or false
+             then buildPackages.darwin.iosSdkPkgs.clang
+           else if crossSystem.useAndroidPrebuilt
+             then buildPackages.androidenv."androidndkPkgs_${crossSystem.ndkVer}".gcc
            else buildPackages.gcc;
-    };
+
+      extraNativeBuildInputs = old.extraNativeBuildInputs
+        ++ lib.optionals
+             (hostPlatform.isLinux && !buildPlatform.isLinux)
+             [ buildPackages.patchelf buildPackages.paxctl ]
+        ++ lib.optional
+             (let f = p: !p.isx86 || p.libc == "musl"; in f hostPlatform && !(f buildPlatform))
+             buildPackages.updateAutotoolsGnuConfigScriptsHook
+           # without proper `file` command, libtool sometimes fails
+           # to recognize 64-bit DLLs
+        ++ lib.optional (hostPlatform.config == "x86_64-w64-mingw32") buildPackages.file
+        ;
+    });
   })
 
 ]

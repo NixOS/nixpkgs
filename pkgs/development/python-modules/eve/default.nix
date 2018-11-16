@@ -1,31 +1,21 @@
-{ stdenv, buildPythonPackage, fetchPypi, flask, jinja2, itsdangerous, events
-, markupsafe, pymongo, flask-pymongo, werkzeug, simplejson, cerberus }:
+{ stdenv, buildPythonPackage, fetchPypi, flask, events
+, pymongo, simplejson, cerberus }:
 
 buildPythonPackage rec {
   pname = "Eve";
-  version = "0.7.8";
-  name  = "${pname}-${version}";
+  version = "0.8.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "af373ab7b9611990d39b090eed372a0860d4e12a1c8a6ef49fdee29e4626053f";
+    sha256 = "88105080e8a2567a1a8d50a5cded0d7d95e95f704b310c8107ef2ff7696f5316";
   };
-
-  patches = [
-    ./setup.patch
-  ];
 
   propagatedBuildInputs = [
     cerberus
     events
-    flask-pymongo
     flask
-    itsdangerous
-    jinja2
-    markupsafe
     pymongo
     simplejson
-    werkzeug
   ];
 
   # tests call a running mongodb instance

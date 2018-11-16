@@ -56,6 +56,8 @@ let
     };
     dst = "pybind11";
   };
+
+  ccVersion = (builtins.parseDrvName stdenv.cc.name).version;
 in
 
 stdenv.mkDerivation rec {
@@ -84,7 +86,9 @@ stdenv.mkDerivation rec {
   ;
   propagatedBuildInputs = [ numpy future six python-protobuf pydot ];
 
-  patches = lib.optional stdenv.cc.isClang [ ./update_clang_cvtsh_bugfix.patch ];
+  patches = lib.optional (stdenv.cc.isGNU && lib.versionAtLeast ccVersion "7.0.0") [
+    ./fix_compilation_on_gcc7.patch
+  ] ++ lib.optional stdenv.cc.isClang [ ./update_clang_cvtsh_bugfix.patch ];
 
   cmakeFlags = [ ''-DBUILD_TEST=OFF''
                  ''-DBUILD_PYTHON=ON''
@@ -133,7 +137,7 @@ stdenv.mkDerivation rec {
       algorithms. You can bring your creations to scale using the power of GPUs in the
       cloud or to the masses on mobile with Caffe2's cross-platform libraries.
     '';
-    platforms = with stdenv.lib.platforms; linux ++ darwin;
+    platforms = with stdenv.lib.platforms; linux;
     license = stdenv.lib.licenses.asl20;
     maintainers = with stdenv.lib.maintainers; [ yuriaisaka ];
   };

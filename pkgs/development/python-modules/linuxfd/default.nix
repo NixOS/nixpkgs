@@ -7,7 +7,6 @@ buildPythonPackage rec {
   pname = "linuxfd";
   version = "1.4.4";
 
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

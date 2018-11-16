@@ -33,9 +33,20 @@ sub new {
         $startCommand =
             "qemu-kvm -m 384 " .
             "-net nic,model=virtio \$QEMU_OPTS ";
-        my $iface = $args->{hdaInterface} || "virtio";
-        $startCommand .= "-drive file=" . Cwd::abs_path($args->{hda}) . ",if=$iface,werror=report "
-            if defined $args->{hda};
+
+        if (defined $args->{hda}) {
+            if ($args->{hdaInterface} eq "scsi") {
+                $startCommand .= "-drive id=hda,file="
+                               . Cwd::abs_path($args->{hda})
+                               . ",werror=report,if=none "
+                               . "-device scsi-hd,drive=hda ";
+            } else {
+                $startCommand .= "-drive file=" . Cwd::abs_path($args->{hda})
+                               . ",if=" . $args->{hdaInterface}
+                               . ",werror=report ";
+            }
+        }
+
         $startCommand .= "-cdrom $args->{cdrom} "
             if defined $args->{cdrom};
         $startCommand .= "-device piix3-usb-uhci -drive id=usbdisk,file=$args->{usb},if=none,readonly -device usb-storage,drive=usbdisk "
@@ -144,8 +155,10 @@ sub start {
         $ENV{USE_TMPDIR} = 1;
         $ENV{QEMU_OPTS} =
             ($self->{allowReboot} ? "" : "-no-reboot ") .
-            "-monitor unix:./monitor -chardev socket,id=shell,path=./shell " .
-            "-device virtio-serial -device virtconsole,chardev=shell " .
+            "-monitor unix:./monitor " .
+            "-chardev socket,id=shell,path=./shell -device virtio-serial -device virtconsole,chardev=shell " .
+            # socket backdoor, see "Debugging NixOS tests" section in NixOS manual
+            "-chardev socket,id=backdoor,path=./backdoor,server,nowait -device virtio-serial -device virtconsole,chardev=backdoor " .
             "-device virtio-rng-pci " .
             ($showGraphics ? "-serial stdio" : "-nographic") . " " . ($ENV{QEMU_OPTS} || "");
         chdir $self->{stateDir} or die;
@@ -612,7 +625,7 @@ sub waitForX {
     my ($self, $regexp) = @_;
     $self->nest("waiting for the X11 server", sub {
         retry sub {
-            my ($status, $out) = $self->execute("journalctl -b SYSLOG_IDENTIFIER=systemd | grep 'session opened'");
+            my ($status, $out) = $self->execute("journalctl -b SYSLOG_IDENTIFIER=systemd | grep 'Reached target Current graphical'");
             return 0 if $status != 0;
             ($status, $out) = $self->execute("[ -e /tmp/.X11-unix/X0 ]");
             return 1 if $status == 0;

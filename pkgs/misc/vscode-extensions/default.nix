@@ -1,14 +1,13 @@
-{ stdenv, lib, fetchurl, callPackage, vscode-utils }:
+{ stdenv, callPackage, vscode-utils }:
 
 let
-  inherit (vscode-utils) buildVscodeExtension buildVscodeMarketplaceExtension
-      extensionFromVscodeMarketplace;
+  inherit (vscode-utils) buildVscodeMarketplaceExtension;
 in
 #
-# Unless there is a good reason not to, we attemp to use the same name as the 
+# Unless there is a good reason not to, we attempt to use the same name as the
 # extension's unique identifier (the name the extension gets when installed
 # from vscode under `~/.vscode`) and found on the marketplace extension page.
-# So an extension's attribute name should be of the form: 
+# So an extension's attribute name should be of the form:
 # "${mktplcRef.publisher}.${mktplcRef.name}".
 #
 rec {
@@ -25,6 +24,6 @@ rec {
   };
 
   ms-vscode.cpptools = callPackage ./cpptools {};
-  
+
   ms-python.python = callPackage ./python {};
 }

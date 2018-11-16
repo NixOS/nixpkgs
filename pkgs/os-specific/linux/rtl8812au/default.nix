@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch, kernel, bc }:
+{ stdenv, fetchFromGitHub, kernel, bc }:
 
 stdenv.mkDerivation rec {
   name = "rtl8812au-${kernel.version}-${version}";

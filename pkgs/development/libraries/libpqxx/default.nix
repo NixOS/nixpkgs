@@ -1,20 +1,24 @@
-{ lib, stdenv, fetchurl, postgresql, python2, gnused }:
+{ lib, stdenv, fetchFromGitHub, postgresql, doxygen, xmlto, python2, gnused }:
 
 stdenv.mkDerivation rec {
-  name = "libpqxx-4.0.1";
+  name = "libpqxx-${version}";
+  version = "6.2.5";
 
-  src = fetchurl {
-    url = "http://pqxx.org/download/software/libpqxx/${name}.tar.gz";
-    sha256 = "0f6wxspp6rx12fkasanb0z2g2gc8dhcfwnxagx8wwqbpg6ifsz09";
+  src = fetchFromGitHub {
+    owner = "jtv";
+    repo = "libpqxx";
+    rev = version;
+    sha256 = "15x9xlj2v66w81j90cb438qkrrcqaq4dqrvhllwyqfz4lprqnhh9";
   };
 
-  buildInputs = [ postgresql python2 gnused ];
+  nativeBuildInputs = [ gnused python2 ];
+  buildInputs = [ postgresql doxygen xmlto ];
 
   preConfigure = ''
     patchShebangs .
   '';
 
-  configureFlags = "--enable-shared";
+  configureFlags = [ "--enable-shared" ];
 
   meta = {
     description = "A C++ library to access PostgreSQL databases";

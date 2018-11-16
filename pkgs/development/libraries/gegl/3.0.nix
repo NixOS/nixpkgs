@@ -1,21 +1,19 @@
 { stdenv, fetchurl, pkgconfig, glib, babl, libpng, cairo, libjpeg, which
-, librsvg, pango, gtk, bzip2, json_glib, intltool, autoreconfHook, libraw
-, libwebp, gnome3 }:
+, librsvg, pango, gtk, bzip2, json-glib, intltool, autoreconfHook, libraw
+, libwebp, gnome3, libintl }:
 
 stdenv.mkDerivation rec {
-  name = "gegl-0.3.28";
+  name = "gegl-0.3.34";
 
   src = fetchurl {
-    url = "http://download.gimp.org/pub/gegl/0.3/${name}.tar.bz2";
-    sha256 = "1zr3gmmzjhp2d3d3h51x80r5q7gs9rv67ywx69sif6as99h8fbqm";
+    url = "https://download.gimp.org/pub/gegl/0.3/${name}.tar.bz2";
+    sha256 = "010k86wn8cmr07rqwa4lccrmiiqrwbnkxvic4lpapwgbamv258jw";
   };
-
-  NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isDarwin "-lintl";
 
   hardeningDisable = [ "format" ];
 
   # needs fonts otherwise  don't know how to pass them
-  configureFlags = "--disable-docs";
+  configureFlags = [ "--disable-docs" ];
 
   enableParallelBuilding = true;
 
@@ -26,9 +24,9 @@ stdenv.mkDerivation rec {
     libraw libwebp gnome3.gexiv2
   ];
 
-  propagatedBuildInputs = [ glib json_glib babl ]; # for gegl-3.0.pc
+  propagatedBuildInputs = [ glib json-glib babl ]; # for gegl-3.0.pc
 
-  nativeBuildInputs = [ pkgconfig intltool which autoreconfHook ];
+  nativeBuildInputs = [ pkgconfig intltool which autoreconfHook libintl ];
 
   meta = with stdenv.lib; {
     description = "Graph-based image processing framework";

@@ -21,7 +21,7 @@ stdenv.mkDerivation rec{
   buildInputs = [ db libgcrypt avahi libiconv pam openssl acl ];
 
   configureFlags = [
-    "--with-bdb=${db}"
+    "--with-bdb=${db.dev}"
     "--with-ssl-dir=${openssl.dev}"
     "--with-lockfile=/run/lock/netatalk"
     "--localstatedir=/var/lib"

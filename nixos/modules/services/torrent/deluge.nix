@@ -11,10 +11,7 @@ in {
   options = {
     services = {
       deluge = {
-        enable = mkOption {
-          default = false;
-          description = "Start the Deluge daemon";
-        };
+        enable = mkEnableOption "Deluge daemon";
 
         openFilesLimit = mkOption {
           default = openFilesLimit;
@@ -25,14 +22,7 @@ in {
         };
       };
 
-      deluge.web = {
-        enable = mkOption {
-          default = false;
-          description = ''
-            Start Deluge Web daemon.
-          '';
-        };
-      };
+      deluge.web.enable = mkEnableOption "Deluge Web daemon";
     };
   };
 
@@ -65,7 +55,7 @@ in {
 
     environment.systemPackages = [ pkgs.deluge ];
 
-    users.extraUsers.deluge = {
+    users.users.deluge = {
       group = "deluge";
       uid = config.ids.uids.deluge;
       home = "/var/lib/deluge/";
@@ -73,6 +63,6 @@ in {
       description = "Deluge Daemon user";
     };
 
-    users.extraGroups.deluge.gid = config.ids.gids.deluge;
+    users.groups.deluge.gid = config.ids.gids.deluge;
   };
 }

@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   name = "x264-${version}";
 
   src = fetchurl {
-    url = "http://download.videolan.org/x264/snapshots/x264-snapshot-${version}-stable.tar.bz2";
+    url = "https://download.videolan.org/x264/snapshots/x264-snapshot-${version}-stable.tar.bz2";
     sha256 = "01sgk1ps4qfifdnblwa3fxnd8ah6n6zbmfc1sy09cgqcdgzxgj0z";
   };
 

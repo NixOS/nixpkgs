@@ -10,4 +10,3 @@ callPackage ./generic.nix (args // rec {
   patches = [ ./different-prefix-with-tcl.patch ] ++ stdenv.lib.optionals stdenv.isDarwin [ ./Fix-bad-install_name-for-libtk8.6.dylib.patch ];
 
 })
-

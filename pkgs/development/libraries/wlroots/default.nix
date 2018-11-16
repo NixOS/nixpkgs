@@ -1,42 +1,83 @@
-{ stdenv, fetchFromGitHub, meson, ninja, pkgconfig
-, wayland, mesa_noglu, wayland-protocols, libinput, libxkbcommon, pixman
-, xcbutilwm, libX11, libcap, xcbutilimage
+{ stdenv, fetchFromGitHub, fetchpatch, meson, ninja, pkgconfig
+, wayland, libGL, wayland-protocols, libinput, libxkbcommon, pixman
+, xcbutilwm, libX11, libcap, xcbutilimage, xcbutilerrors, mesa_noglu
+, libpng, ffmpeg_4
+, python3Packages # TODO: Temporary
 }:
 
-let pname = "wlroots";
-    version = "unstable-2017-12-22";
+let
+  pname = "wlroots";
+  version = "0.1";
+  meson480 = meson.overrideAttrs (oldAttrs: rec {
+    name = pname + "-" + version;
+    pname = "meson";
+    version = "0.48.0";
+
+    src = python3Packages.fetchPypi {
+      inherit pname version;
+      sha256 = "0qawsm6px1vca3babnqwn0hmkzsxy4w0gi345apd2qk3v0cv7ipc";
+    };
+    patches = builtins.filter # Remove gir-fallback-path.patch
+      (str: !(stdenv.lib.hasSuffix "gir-fallback-path.patch" str))
+      oldAttrs.patches;
+  });
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchFromGitHub {
     owner = "swaywm";
     repo = "wlroots";
-    rev = "0a370c529806077a11638e7fa856d5fbb539496b";
-    sha256 = "0h3i0psn5595dncv53l5m2mf13k9wcv3qi16vla5ckpskykc0xx6";
+    rev = version;
+    sha256 = "0xfipgg2qh2xcf3a1pzx8pyh1aqpb9rijdyi0as4s6fhgy4w269c";
   };
 
-  # TODO: Temporary workaround for compilation errors
-  patches = [ ./libdrm.patch ]; #./no-werror.patch
+  patches = [ (fetchpatch { # TODO: Only required for version 0.1
+    url = https://github.com/swaywm/wlroots/commit/be6210cf8216c08a91e085dac0ec11d0e34fb217.patch;
+    sha256 = "0njv7mr4ark603w79cxcsln29galh87vpzsx2dzkrl1x5x4i6cj5";
+  }) ];
 
-  # $out for the library and $bin for rootston
-  outputs = [ "out" "bin" ];
+  # $out for the library, $bin for rootston, and $examples for the example
+  # programs (in examples) AND rootston
+  outputs = [ "out" "bin" "examples" ];
 
-  nativeBuildInputs = [ meson ninja pkgconfig ];
+  nativeBuildInputs = [ meson480 ninja pkgconfig ];
 
   buildInputs = [
-    wayland mesa_noglu wayland-protocols libinput libxkbcommon pixman
-    xcbutilwm libX11 libcap xcbutilimage
+    wayland libGL wayland-protocols libinput libxkbcommon pixman
+    xcbutilwm libX11 libcap xcbutilimage xcbutilerrors mesa_noglu
+    libpng ffmpeg_4
   ];
 
-  # Install rootston (the reference compositor) to $bin
+  mesonFlags = [
+    "-Dlibcap=enabled" "-Dlogind=enabled" "-Dxwayland=enabled" "-Dx11-backend=enabled"
+    "-Dxcb-icccm=enabled" "-Dxcb-xkb=enabled" "-Dxcb-errors=enabled"
+  ];
+
   postInstall = ''
-    mkdir -p $bin/bin
-    cp rootston/rootston $bin/bin/
-    mkdir $bin/lib
-    cp libwlroots.so $bin/lib/
-    patchelf --set-rpath "$bin/lib:${stdenv.lib.makeLibraryPath buildInputs}" $bin/bin/rootston
-    mkdir $bin/etc
-    cp ../rootston/rootston.ini.example $bin/etc/rootston.ini
+    # Install rootston (the reference compositor) to $bin and $examples
+    for output in "$bin" "$examples"; do
+      mkdir -p $output/bin
+      cp rootston/rootston $output/bin/
+      mkdir $output/lib
+      cp libwlroots* $output/lib/
+      patchelf \
+        --set-rpath "$output/lib:${stdenv.lib.makeLibraryPath buildInputs}" \
+        $output/bin/rootston
+      mkdir $output/etc
+      cp ../rootston/rootston.ini.example $output/etc/rootston.ini
+    done
+    # Install ALL example programs to $examples:
+    # screencopy dmabuf-capture input-inhibitor layer-shell idle-inhibit idle
+    # screenshot output-layout multi-pointer rotation tablet touch pointer
+    # simple
+    mkdir -p $examples/bin
+    cd ./examples
+    for binary in $(find . -executable -type f -printf '%P\n' | grep -vE '\.so'); do
+      patchelf \
+        --set-rpath "$examples/lib:${stdenv.lib.makeLibraryPath buildInputs}" \
+        "$binary"
+      cp "$binary" "$examples/bin/wlroots-$binary"
+    done
   '';
 
   meta = with stdenv.lib; {

@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitHub, pythonPackages }:
+{ stdenv, fetchFromGitHub, python3Packages }:
 
-pythonPackages.buildPythonApplication rec {
-  name = "awslogs-${version}";
+python3Packages.buildPythonApplication rec {
+  pname = "awslogs";
   version = "0.10";
 
   src = fetchFromGitHub {
@@ -13,7 +13,7 @@ pythonPackages.buildPythonApplication rec {
 
   doCheck = false;
 
-  propagatedBuildInputs = with pythonPackages; [
+  propagatedBuildInputs = with python3Packages; [
     boto3 termcolor dateutil docutils
   ];
 

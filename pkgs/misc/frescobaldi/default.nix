@@ -1,21 +1,22 @@
-{ stdenv, fetchurl, pythonPackages, lilypond}:
+{ lib, fetchFromGitHub, python3Packages, lilypond }:
 
-pythonPackages.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   name = "frescobaldi-${version}";
-  version = "2.0.16";
+  version = "3.0.0";
 
-  src = fetchurl {
-    url = "https://github.com/wbsoft/frescobaldi/releases/download/"
-          + "v2.0.16/${name}.tar.gz";
-    sha256 = "12pabvq5b2lq84q3kx8lh02zh6ali6v4wnin2k2ycnm45mk9ms6q";
+  src = fetchFromGitHub {
+    owner = "wbsoft";
+    repo = "frescobaldi";
+    rev = "v${version}";
+    sha256 = "1yn18pwsjxpxz5j3yfysmaif8k0vqahj5c7ays9cxsylpg9hl7jd";
   };
 
-  propagatedBuildInputs = with pythonPackages; [ lilypond
-    pyqt4 poppler-qt4 pygame ];
+  propagatedBuildInputs = with python3Packages; [ lilypond pygame python-ly poppler-qt5 ];
 
-  patches = [ ./setup.cfg.patch ./python-path.patch ];
+  # no tests in shipped with upstream
+  doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = http://frescobaldi.org/;
     description = ''Frescobaldi is a LilyPond sheet music text editor'';
     longDescription = ''
@@ -31,7 +32,7 @@ pythonPackages.buildPythonApplication rec {
       fonts and keyboard shortcuts
     '';
     license = licenses.gpl2Plus;
-    maintainers = [ maintainers.sepi ];
+    maintainers = with maintainers; [ sepi ma27 ];
     platforms = platforms.all;
   };
 }

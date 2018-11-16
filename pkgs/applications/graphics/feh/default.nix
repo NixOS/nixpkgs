@@ -6,23 +6,22 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "feh-${version}";
-  version = "2.23";
+  version = "2.28.1";
 
   src = fetchurl {
     url = "https://feh.finalrewind.org/${name}.tar.bz2";
-    sha256 = "18922zv8ckm82r1ap1yn7plbk6djpj02za2ahng58sjj2fw3rpqn";
+    sha256 = "0wian0gnx0yfxf8x9b8wr57fjd6rnmi3y3xj83ni6x0xqrjnf1lp";
   };
 
   outputs = [ "out" "man" "doc" ];
 
-  nativeBuildInputs = [ makeWrapper xorg.libXt ]
-    ++ optionals doCheck [ perlPackages.TestCommand perlPackages.TestHarness ];
+  nativeBuildInputs = [ makeWrapper xorg.libXt ];
 
   buildInputs = [ xorg.libX11 xorg.libXinerama imlib2 libjpeg libpng curl libexif ];
 
-  preBuild = ''
-    makeFlags="PREFIX=$out exif=1"
-  '';
+  makeFlags = [
+    "PREFIX=$(out)" "exif=1"
+  ] ++ optional stdenv.isDarwin "verscmp=0";
 
   postBuild = ''
     pushd man
@@ -36,8 +35,9 @@ stdenv.mkDerivation rec {
     install -D -m 644 man/*.1 $out/share/man/man1
   '';
 
-  checkPhase = ''
-    PERL5LIB="${perlPackages.TestCommand}/lib/perl5/site_perl" make test
+  checkInputs = [ perlPackages.TestCommand perlPackages.TestHarness ];
+  preCheck = ''
+    export PERL5LIB="${perlPackages.TestCommand}/lib/perl5/site_perl"
   '';
 
   doCheck = true;

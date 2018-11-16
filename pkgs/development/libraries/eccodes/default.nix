@@ -3,15 +3,19 @@
 , enablePython ? false, pythonPackages
 , enablePosixThreads ? false
 , enableOpenMPThreads ? false}:
-with stdenv.lib; 
+with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "eccodes-${version}";
-  version = "2.5.0";
+  version = "2.9.0";
 
   src = fetchurl {
-    url = "https://software.ecmwf.int/wiki/download/attachments/45757960/eccodes-${version}-Source.tar.gz";
-    sha256 = "0kiff19gk0w7ij0kx5ydqpsmdq499ylxxxq79lrgss218jy49aqq";
+    url = "https://confluence.ecmwf.int/download/attachments/45757960/eccodes-${version}-Source.tar.gz";
+    sha256 = "1mh9zkfb5dj3j8fk3gdhz2bp6z13nik5pmynpf5l6qy3lhgyn17z";
   };
+
+  postPatch = ''
+    substituteInPlace cmake/FindOpenJPEG.cmake --replace openjpeg-2.1 ${openjpeg.incDir}
+  '';
 
   nativeBuildInputs = [ cmake ];
 
@@ -43,7 +47,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = https://software.ecmwf.int/wiki/display/ECC/;
+    homepage = https://confluence.ecmwf.int/display/ECC/;
     license = licenses.asl20;
     maintainers = with maintainers; [ knedlsepp ];
     platforms = platforms.unix;

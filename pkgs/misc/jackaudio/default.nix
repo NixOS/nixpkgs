@@ -6,7 +6,6 @@
 # Optional Dependencies
 , dbus ? null, libffado ? null, alsaLib ? null
 , libopus ? null
-, darwin
 
 # Extra options
 , prefix ? ""
@@ -15,7 +14,7 @@
 with stdenv.lib;
 let
   inherit (python2Packages) python dbus-python;
-  shouldUsePkg = pkg: if pkg != null && stdenv.lib.any (x: x == stdenv.system) pkg.meta.platforms then pkg else null;
+  shouldUsePkg = pkg: if pkg != null && stdenv.lib.any (stdenv.lib.meta.platformMatch stdenv.hostPlatform) pkg.meta.platforms then pkg else null;
 
   libOnly = prefix == "lib";
 
@@ -42,7 +41,7 @@ stdenv.mkDerivation rec {
   ] ++ stdenv.lib.optionals stdenv.isDarwin [ aften AudioToolbox CoreAudio CoreFoundation ];
 
   # CoreFoundation 10.10 doesn't include CFNotificationCenter.h yet.
-  patches = stdenv.lib.optionals stdenv.isDarwin [ ./clang.patch ./darwin-cf.patch ];
+  patches = stdenv.lib.optionals stdenv.isDarwin [ ./darwin-cf.patch ];
 
   prePatch = ''
     substituteInPlace svnversion_regenerate.sh \

@@ -1,11 +1,13 @@
-{ fetchurl, perl, stdenv }:
+{ fetchFromGitHub, perl, stdenv }:
 
 stdenv.mkDerivation rec {
-  name = "sec-2.7.7";
+  name = "sec-${meta.version}";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/simple-evcorr/${name}.tar.gz";
-    sha256 = "116nn8fg24nwcimm8gcfp52bsgh1ckrspjr8sk4i0arvpl3d12m9";
+  src = fetchFromGitHub {
+    owner = "simple-evcorr";
+    repo = "sec";
+    rev = meta.version;
+    sha256 = "17qzw7k1r3svagaf6jb7166grwqsyxwd6p23b2m9q9h3ggcwynp9";
   };
 
   buildInputs = [ perl ];
@@ -20,10 +22,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = http://simple-evcorr.sourceforge.net/;
+    homepage = https://simple-evcorr.github.io;
     license = stdenv.lib.licenses.gpl2;
     description = "Simple Event Correlator";
     maintainers = [ stdenv.lib.maintainers.tv ];
     platforms = stdenv.lib.platforms.all;
+    version = "2.8.1";
   };
 }

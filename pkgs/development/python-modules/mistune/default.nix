@@ -7,7 +7,6 @@
 buildPythonPackage rec {
   pname = "mistune";
   version = "0.8.3";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

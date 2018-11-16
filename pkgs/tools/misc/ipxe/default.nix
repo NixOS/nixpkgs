@@ -3,8 +3,8 @@
 }:
 
 let
-  date = "20170922";
-  rev = "74d90b33f8490adcee2026ece18d8411d93b6a39";
+  date = "20180220";
+  rev = "47849be3a900c546cf92066849be0806f4e611d9";
 in
 
 stdenv.mkDerivation {
@@ -14,7 +14,7 @@ stdenv.mkDerivation {
 
   src = fetchgit {
     url = git://git.ipxe.org/ipxe.git;
-    sha256 = "12ijrq451fj2x3i7c7xjlxig5mwbhmgzqjvmfl2sza953vfbk4vw";
+    sha256 = "1f4pi1dp2zqnrbfnggnzycfvrxv0bqgw73dxbyy3hfy4mhdj6z45";
     inherit rev;
   };
 
@@ -26,6 +26,7 @@ stdenv.mkDerivation {
   makeFlags =
     [ "ECHO_E_BIN_ECHO=echo" "ECHO_E_BIN_ECHO_E=echo" # No /bin/echo here.
       "ISOLINUX_BIN_LIST=${syslinux}/share/syslinux/isolinux.bin"
+      "LDLINUX_C32=${syslinux}/share/syslinux/ldlinux.c32"
     ] ++ lib.optional (embedScript != null) "EMBED=${embedScript}";
 
 
@@ -34,6 +35,7 @@ stdenv.mkDerivation {
   configurePhase = ''
     runHook preConfigure
     for opt in $enabledOptions; do echo "#define $opt" >> src/config/general.h; done
+    sed -i '/cp \''${ISOLINUX_BIN}/s/$/ --no-preserve=mode/' src/util/geniso
     runHook postConfigure
   '';
 

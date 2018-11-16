@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   name = "uget-${version}";
-  version = "2.2.0";
+  version = "2.2.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/urlget/${name}.tar.gz";
-    sha256 = "0rg2mr2cndxvnjib8zm5dp7y2hgbvnqkz2j2jmg0xlzfh9d34b2m";
+    sha256 = "0dlrjhnm1pg2vwmp7nl2xv1aia5hyirb3021rl46x859k63zap24";
   };
 
   nativeBuildInputs = [

@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, pkgconfig, intltool, itstool, libxml2, libcanberra_gtk3, libgtop, gnome2, gnome3, mate, wrapGAppsHook }:
+{ stdenv, fetchurl, pkgconfig, intltool, itstool, libxml2, libcanberra-gtk3, libgtop, gnome2, gnome3, mate, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   name = "marco-${version}";
-  version = "1.20.0";
+  version = "1.21.0";
 
   src = fetchurl {
     url = "http://pub.mate-desktop.org/releases/${mate.getRelease version}/${name}.tar.xz";
-    sha256 = "07asf8i15ih6ajkp5yapk720qyssi2cinxwg2z5q5j9m6mxax6lr";
+    sha256 = "1vg3dl7kqhzgspa2ykyql4j3bpki59769qrkakqfdcavb9j5c877";
   };
 
   nativeBuildInputs = [
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libxml2
-    libcanberra_gtk3
+    libcanberra-gtk3
     libgtop
     gnome2.startup_notification
     gnome3.gtk

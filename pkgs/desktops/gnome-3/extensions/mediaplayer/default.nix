@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, glib, meson, gettext, ninja }:
+{ stdenv, fetchFromGitHub, glib, meson, gettext, ninja, python3 }:
 
 stdenv.mkDerivation rec {
   name = "gnome-shell-extensions-mediaplayer-${version}";
@@ -14,6 +14,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     meson
     ninja
+    python3
   ];
   buildInputs = [
     glib

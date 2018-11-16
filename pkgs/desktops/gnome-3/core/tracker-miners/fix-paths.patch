@@ -1,0 +1,42 @@
+--- a/meson.build
++++ b/meson.build
+@@ -25,15 +25,15 @@
+   #
+   # This check acts as a guard to make sure we are being configured with the
+   # right prefix, among other things.
+-  tracker_store = find_program(join_paths(get_option('prefix'), get_option('libexecdir'), 'tracker-store'))
++  tracker_store = find_program(join_paths(tracker_miner.get_pkgconfig_variable('prefix'), 'libexec', 'tracker-store'))
+   tracker_store_path = tracker_store.path()
+ 
+   # If we are building against an installed version of tracker core rather than
+   # having it as a subproject, these 'uninstalled' locations point to the actual
+   # installed locations.
+-  tracker_uninstalled_domain_rule = join_paths(get_option('prefix'), get_option('datadir'), 'tracker', 'domain-ontologies', 'default.rule')
+-  tracker_uninstalled_nepomuk_ontologies_dir = join_paths(get_option('prefix'), get_option('datadir'), 'tracker', 'ontologies', 'nepomuk')
+-  tracker_uninstalled_stop_words_dir = join_paths(get_option('prefix'), get_option('datadir'), 'tracker', 'stop-words', 'default.rule')
++  tracker_uninstalled_domain_rule = join_paths(tracker_miner.get_pkgconfig_variable('prefix'), 'share', 'tracker', 'domain-ontologies', 'default.rule')
++  tracker_uninstalled_nepomuk_ontologies_dir = join_paths(tracker_miner.get_pkgconfig_variable('prefix'), 'share', 'tracker', 'ontologies', 'nepomuk')
++  tracker_uninstalled_stop_words_dir = join_paths(tracker_miner.get_pkgconfig_variable('prefix'), 'share', 'tracker', 'stop-words', 'default.rule')
+ else
+   tracker_subproject = subproject('tracker',
+     default_options: [
+--- a/src/libtracker-miners-common/tracker-domain-ontology.c
++++ b/src/libtracker-miners-common/tracker-domain-ontology.c
+@@ -323,7 +323,7 @@
+ 			goto end;
+ 		}
+ 	} else {
+-		path = g_build_filename (SHAREDIR, "tracker", "domain-ontologies",
++		path = g_build_filename ("@tracker@", "share", "tracker", "domain-ontologies",
+ 		                         DEFAULT_RULE, NULL);
+ 
+ 		if (!g_file_test (path, G_FILE_TEST_IS_REGULAR)) {
+@@ -388,7 +388,7 @@
+ 	if (!priv->ontology_location) {
+ 		gchar *ontology_path;
+ 
+-		ontology_path = g_build_filename (SHAREDIR, "tracker", "ontologies",
++		ontology_path = g_build_filename ("@tracker@", "share", "tracker", "ontologies",
+ 		                                  priv->ontology_name, NULL);
+ 
+ 		if (!g_file_test (ontology_path, G_FILE_TEST_IS_DIR)) {

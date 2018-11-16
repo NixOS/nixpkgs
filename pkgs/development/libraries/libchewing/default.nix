@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec{
   name = "libchewing-${version}";
-  version = "0.4.0";
+  version = "0.5.1";
 
   src = fetchurl {
     url = "https://github.com/chewing/libchewing/releases/download/v${version}/libchewing-${version}.tar.bz2";
-    sha256 = "1j5g5j4w6yp73k03pmsq9n2r0p458hqriq0sd5kisj9xrssbynp5";
+    sha256 = "0aqp2vqgxczydpn7pxi7r6xf3l1hgl710f0gbi1k8q7s2lscc24p";
   };
 
   buildInputs = [ sqlite ];

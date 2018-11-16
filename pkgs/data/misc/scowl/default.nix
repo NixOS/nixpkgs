@@ -1,20 +1,28 @@
-{stdenv, fetchFromGitHub, unzip, zip, perl, aspell, dos2unix, singleWordlist ? null}:
+{ stdenv, fetchFromGitHub, unzip, zip, libiconv, perl, aspell, dos2unix
+, singleWordlist ? null
+}:
+
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "scowl";
-  version = "2017.08.24";
+  version = "2018.04.16";
 
   src = fetchFromGitHub {
     owner = "en-wl";
     repo = "wordlist";
     rev = "rel-${version}";
-    sha256 = "16mgk6scbw8i38g63kh60bsnzgzfs8gvvz2n5jh4x5didbwly8nz";
+    sha256 = "0p0hgg5y88bb802z210cdk1c4fjwlpxxkci6yph3fk7g6s9xc73g";
   };
 
-  buildInputs = [];
-  nativeBuildInputs = [unzip zip perl aspell dos2unix];
+  postPatch = ''
+    substituteInPlace scowl/src/Makefile \
+        --replace g++ c++
+  '';
 
-  NIX_CFLAGS_COMPILE = " -Wno-narrowing ";
+  nativeBuildInputs = [ unzip zip perl aspell dos2unix ];
+  buildInputs = stdenv.lib.optional (!stdenv.isLinux) libiconv;
+
+  NIX_CFLAGS_COMPILE = "-Wno-narrowing";
 
   preConfigure = ''
     patchShebangs .
@@ -34,8 +42,8 @@ stdenv.mkDerivation rec {
   installPhase = if singleWordlist == null then ''
     eval "$preInstall"
 
-    mkdir -p "$out/share/scowl" 
-    mkdir -p "$out/lib" "$out/share/hunspell" "$out/share/myspell" 
+    mkdir -p "$out/share/scowl"
+    mkdir -p "$out/lib" "$out/share/hunspell" "$out/share/myspell"
     mkdir -p "$out/share/dict"
 
     cp -r scowl/speller/aspell "$out/lib/aspell"

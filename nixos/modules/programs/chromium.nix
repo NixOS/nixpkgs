@@ -36,6 +36,7 @@ in
             "chlffgpmiacpedhhbkiomidkjlcfhogd" # pushbullet
             "mbniclmhobmnbdlbpiphghaielnnpgdp" # lightshot
             "gcbommkclmclpchllfjekcdonpmejbdp" # https everywhere
+            "cjpalhdlnbpafiamejdnhcphjbkeiagm" # ublock origin
           ]
         '';
       };
@@ -78,7 +79,11 @@ in
   ###### implementation
 
   config = lib.mkIf cfg.enable {
+    # for chromium
     environment.etc."chromium/policies/managed/default.json".text = builtins.toJSON defaultProfile;
     environment.etc."chromium/policies/managed/extra.json".text = builtins.toJSON cfg.extraOpts;
+    # for google-chrome https://www.chromium.org/administrators/linux-quick-start
+    environment.etc."opt/chrome/policies/managed/default.json".text = builtins.toJSON defaultProfile;
+    environment.etc."opt/chrome/policies/managed/extra.json".text = builtins.toJSON cfg.extraOpts;
   };
 }

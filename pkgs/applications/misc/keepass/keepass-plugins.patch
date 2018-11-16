@@ -1,0 +1,13 @@
+diff --git a/KeePass/Forms/MainForm.cs b/KeePass/Forms/MainForm.cs
+index 3d5fca0..4c3f3d4 100644
+--- a/KeePass/Forms/MainForm.cs
++++ b/KeePass/Forms/MainForm.cs
+@@ -406,7 +406,$OUTPUT_LC$ @@ namespace KeePass.Forms
+ 			m_pluginManager.Initialize(m_pluginDefaultHost);
+ 
+ 			m_pluginManager.UnloadAllPlugins();
+-			if(AppPolicy.Current.Plugins) m_pluginManager.LoadAllPlugins();
+$DO_LOADS$+
+ 
+ 			// Delete old files *after* loading plugins (when timestamps
+ 			// of loaded plugins have been updated already)

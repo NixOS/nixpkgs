@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "ir.lv2-${version}";
-  version = "1.2.3";
+  version = "1.2.4";
 
   src = fetchFromGitHub {
     owner = "tomszilagyi";
     repo = "ir.lv2";
     rev = "${version}";
-    sha256 = "16vy06qb0vgwg4yx15grzh5m2q3cbzm3jd0p37g2qb8rgvjhladg";
+    sha256 = "1p6makmgr898fakdxzl4agh48qqwgv1k1kwm8cgq187n0mhiknp6";
   };
 
   buildInputs = [ fftw gtk2 lv2 libsamplerate libsndfile zita-convolver ];
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     mkdir "$out/include"
     mkdir -p "$out/share/doc"
 
-    make PREFIX="$out" install
+    make PREFIX="$out" INSTDIR="$out/lib/lv2" install
     install -Dm755 convert4chan "$out/bin/convert4chan"
   '';
 

@@ -1,4 +1,4 @@
-{ stdenv, callPackage, Foundation, libobjc }:
+{ callPackage, Foundation, libobjc }:
 
 callPackage ./generic-cmake.nix (rec {
   inherit Foundation libobjc;

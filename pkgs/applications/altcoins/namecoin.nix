@@ -1,21 +1,22 @@
-{ stdenv, lib, fetchFromGitHub, openssl, boost, libevent, autoreconfHook, db4, miniupnpc, eject, pkgconfig, qt4, protobuf, libqrencode
+{ stdenv, fetchFromGitHub, openssl, boost, libevent, autoreconfHook, db4, miniupnpc, eject, pkgconfig, qt4, protobuf, libqrencode, hexdump
 , withGui }:
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
-  version = "nc0.13.0rc1";
+  version = "nc0.15.99-name-tab-beta2";
   name = "namecoin" + toString (optional (!withGui) "d") + "-" + version;
 
   src = fetchFromGitHub {
     owner = "namecoin";
     repo = "namecoin-core";
     rev = version;
-    sha256 = "17zz0rm3js285w2assxp8blfx830rs0ambcsaqqfli9mnaik3m39";
+    sha256 = "1r0v0yvlazmidxp6xhapbdawqb8fhzrdp11d4an5vgxa208s6wdf";
   };
 
   nativeBuildInputs = [
     autoreconfHook
     pkgconfig
+    hexdump
   ];
 
   buildInputs = [
@@ -30,6 +31,8 @@ stdenv.mkDerivation rec {
     protobuf
     libqrencode
   ];
+
+  enableParallelBuilding = true;
 
   configureFlags = [
     "--with-boost-libdir=${boost.out}/lib"

@@ -1,6 +1,6 @@
 { stdenv, fetchsvn, boost, cmake, ffmpeg, freeglut, glib,
   gtk2, libjpeg, libpng, libpthreadstubs, libvorbis, libXau, libXdmcp,
-  libXmu, mesa, openal, pixman, pkgconfig, python27, SDL }:
+  libXmu, libGLU_combined, openal, pixman, pkgconfig, python27, SDL }:
 
 stdenv.mkDerivation {
   name = "privateer-1.03";
@@ -8,13 +8,13 @@ stdenv.mkDerivation {
   src = fetchsvn {
     #url = "mirror://sourceforge/project/privateer/Wing%20Commander%20Privateer/Privateer%20Gemini%20Gold%201.03/PrivateerGold1.03.bz2.bin";
     url = "https://privateer.svn.sourceforge.net/svnroot/privateer/privgold/trunk/engine";
-    rev = 294;
+    rev = "294";
     sha256 = "e1759087d4565d3fc95e5c87d0f6ddf36b2cd5befec5695ec56ed5f3cd144c63";
   };
 
   buildInputs =
     [ boost cmake ffmpeg freeglut glib gtk2 libjpeg libpng
-      libpthreadstubs libvorbis libXau libXdmcp libXmu mesa openal
+      libpthreadstubs libvorbis libXau libXdmcp libXmu libGLU_combined openal
       pixman pkgconfig python27 SDL ];
 
   patches = [ ./0001-fix-VSFile-constructor.patch ];

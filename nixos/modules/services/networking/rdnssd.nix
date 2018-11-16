@@ -6,7 +6,7 @@
 with lib;
 let
   mergeHook = pkgs.writeScript "rdnssd-merge-hook" ''
-    #! ${pkgs.stdenv.shell} -e
+    #! ${pkgs.runtimeShell} -e
     ${pkgs.openresolv}/bin/resolvconf -u
   '';
 in
@@ -64,7 +64,7 @@ in
       };
     };
 
-    users.extraUsers.rdnssd = {
+    users.users.rdnssd = {
       description = "RDNSSD Daemon User";
       uid = config.ids.uids.rdnssd;
     };

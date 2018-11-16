@@ -1,11 +1,11 @@
 # This module generates nixos-install, nixos-rebuild,
 # nixos-generate-config, etc.
 
-{ config, pkgs, modulesPath, ... }:
+{ config, lib, pkgs, ... }:
+
+with lib;
 
 let
-  cfg = config.installer;
-
   makeProg = args: pkgs.substituteAll (args // {
     dir = "bin";
     isExecutable = true;
@@ -16,28 +16,11 @@ let
     src = ./nixos-build-vms/nixos-build-vms.sh;
   };
 
-  nixos-prepare-root = makeProg {
-    name = "nixos-prepare-root";
-    src = ./nixos-prepare-root.sh;
-
-    nix = pkgs.nixUnstable;
-    inherit (pkgs) perl pathsFromGraph rsync utillinux coreutils;
-  };
-
   nixos-install = makeProg {
     name = "nixos-install";
     src = ./nixos-install.sh;
-
-    inherit (pkgs) perl pathsFromGraph rsync;
     nix = config.nix.package.out;
-    cacert = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
-    root_uid = config.ids.uids.root;
-    nixbld_gid = config.ids.gids.nixbld;
-    prepare_root = nixos-prepare-root;
-
-    nixClosure = pkgs.runCommand "closure"
-      { exportReferencesGraph = ["refs" config.nix.package.out]; }
-      "cp refs $out";
+    path = makeBinPath [ nixos-enter ];
   };
 
   nixos-rebuild =
@@ -69,6 +52,11 @@ let
     inherit (config.system.nixos) version codeName revision;
   };
 
+  nixos-enter = makeProg {
+    name = "nixos-enter";
+    src = ./nixos-enter.sh;
+  };
+
 in
 
 {
@@ -77,16 +65,16 @@ in
 
     environment.systemPackages =
       [ nixos-build-vms
-        nixos-prepare-root
         nixos-install
         nixos-rebuild
         nixos-generate-config
         nixos-option
         nixos-version
+        nixos-enter
       ];
 
     system.build = {
-      inherit nixos-install nixos-prepare-root nixos-generate-config nixos-option nixos-rebuild;
+      inherit nixos-install nixos-generate-config nixos-option nixos-rebuild nixos-enter;
     };
 
   };

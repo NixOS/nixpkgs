@@ -4,13 +4,13 @@
 
 python3Packages.buildPythonApplication rec {
   name = "openshot-qt-${version}";
-  version = "2.3.4";
+  version = "2.4.2";
 
   src = fetchFromGitHub {
     owner = "OpenShot";
     repo = "openshot-qt";
     rev = "v${version}";
-    sha256 = "026zxvg5mij49g021hipv3hspsx8m5bs4v9pm2axqw6rvszjk90z";
+    sha256 = "0m4fq9vj8gc5ngk8qf6ikj85qgzxhfk7nnz7n7362dzlfymaz18q";
   };
 
   nativeBuildInputs = [ doxygen wrapGAppsHook ];

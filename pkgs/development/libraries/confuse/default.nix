@@ -1,10 +1,11 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation rec {
-  name = "confuse-2.7";
+  name = "confuse-${version}";
+  version = "3.2.1";
   src = fetchurl {
-    url = "mirror://savannah/confuse/${name}.tar.gz";
-    sha256 = "0y47r2ashz44wvnxdb18ivpmj8nxhw3y9bf7v9w0g5byhgyp89g3";
+    url = "https://github.com/martinh/libconfuse/releases/download/v${version}/${name}.tar.xz";
+    sha256 = "0pnjmlj9i0alp407qd7c0vq83sz7gpsjrbdgpcn4xvzjp9r35ii3";
   };
 
   meta = {

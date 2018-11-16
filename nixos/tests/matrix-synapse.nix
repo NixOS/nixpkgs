@@ -6,12 +6,13 @@ import ./make-test.nix ({ pkgs, ... } : {
   };
 
   nodes = {
-    server_postgres = args: {
+    # Since 0.33.0, matrix-synapse doesn't allow underscores in server names
+    serverpostgres = args: {
       services.matrix-synapse.enable = true;
       services.matrix-synapse.database_type = "psycopg2";
     };
 
-    server_sqlite = args: {
+    serversqlite = args: {
       services.matrix-synapse.enable = true;
       services.matrix-synapse.database_type = "sqlite3";
     };
@@ -19,12 +20,12 @@ import ./make-test.nix ({ pkgs, ... } : {
 
   testScript = ''
     startAll;
-    $server_postgres->waitForUnit("matrix-synapse.service");
-    $server_postgres->waitUntilSucceeds("curl -Lk https://localhost:8448/");
-    $server_postgres->requireActiveUnit("postgresql.service");
-    $server_sqlite->waitForUnit("matrix-synapse.service");
-    $server_sqlite->waitUntilSucceeds("curl -Lk https://localhost:8448/");
-    $server_sqlite->mustSucceed("[ -e /var/lib/matrix-synapse/homeserver.db ]");
+    $serverpostgres->waitForUnit("matrix-synapse.service");
+    $serverpostgres->waitUntilSucceeds("curl -Lk https://localhost:8448/");
+    $serverpostgres->requireActiveUnit("postgresql.service");
+    $serversqlite->waitForUnit("matrix-synapse.service");
+    $serversqlite->waitUntilSucceeds("curl -Lk https://localhost:8448/");
+    $serversqlite->mustSucceed("[ -e /var/lib/matrix-synapse/homeserver.db ]");
   '';
 
 })

@@ -1,18 +1,21 @@
-{ lib, writeText, buildPythonPackage, isPy3k, fetchPypi
-, openldap, cyrus_sasl, openssl, pytest, pyasn1 }:
+{ buildPythonPackage, fetchPypi
+, pyasn1, pyasn1-modules, pytest
+, openldap, cyrus_sasl, stdenv }:
 
 buildPythonPackage rec {
   pname = "python-ldap";
-  version = "2.5.2";
-  name = "${pname}-${version}";
-  disabled = isPy3k;
+  version = "3.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b8c134dfedaef0e6ff4a4b94277708dcadb758b448905a83b8946df077356ed2";
+    sha256 = "41975e79406502c092732c57ef0c2c2eb318d91e8e765f81f5d4ab6c1db727c5";
   };
 
-  checkInputs = [ pytest pyasn1 ];
+  propagatedBuildInputs = [ pyasn1 pyasn1-modules ];
+
+  buildInputs = [ openldap cyrus_sasl ];
+
+  checkInputs = [ pytest ];
 
   checkPhase = ''
     # Needed by tests to setup a mockup ldap server.
@@ -21,28 +24,8 @@ buildPythonPackage rec {
     export SLAPD="${openldap}/libexec/slapd"
     export SCHEMA="${openldap}/etc/schema"
 
-    # AssertionError: expected errno=107, got 57 -> nix sandbox related ?
-    py.test -k 'not TestLdapCExtension and \
-                not Test01_SimpleLDAPObject and \
-                not Test02_ReconnectLDAPObject' Tests/*.py
+    py.test
   '';
 
-  patches = lib.singleton (writeText "avoid-syslog.diff" ''
-    diff a/Lib/slapdtest.py b/Lib/slapdtest.py
-    --- a/Lib/slapdtest.py
-    +++ b/Lib/slapdtest.py
-    @@ -60,7 +60,8 @@ def combined_logger(
-                 pass
-         # for writing to syslog
-         new_logger = logging.getLogger(log_name)
-    -    if sys_log_format:
-    +    # /dev/log does not exist in nix build environment.
-    +    if False:
-             my_syslog_formatter = logging.Formatter(
-                 fmt=' '.join((log_name, sys_log_format)))
-             my_syslog_handler = logging.handlers.SysLogHandler(
-  '');
-
-  NIX_CFLAGS_COMPILE = "-I${cyrus_sasl.dev}/include/sasl";
-  propagatedBuildInputs = [openldap cyrus_sasl openssl];
+  doCheck = !stdenv.isDarwin;
 }

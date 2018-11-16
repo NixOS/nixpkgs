@@ -1,7 +1,5 @@
 { stdenv, requireFile, p7zip, jre, libusb1, platformTools, gtk2, glib, libXtst }:
 
-assert stdenv.system == "i686-linux";
-
 # TODO:
 #
 #   The FlashTool and FlashToolConsole scripts are messy and should probably we
@@ -57,7 +55,7 @@ stdenv.mkDerivation rec {
     homepage = http://www.flashtool.net/;
     description = "S1 flashing software for Sony phones from X10 to Xperia Z Ultra";
     license = stdenv.lib.licenses.unfreeRedistributableFirmware;
-    platforms = stdenv.lib.platforms.linux;
+    platforms = [ "i686-linux" ];
     hydraPlatforms = stdenv.lib.platforms.none;
     broken = true;
   };

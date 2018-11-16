@@ -27,19 +27,17 @@
 , git
 , libgit2
 , fetchFromGitHub
-, fetchpatch
 , paxctl
 , findutils
 , makeWrapper
 , gnumake
 , file
-#, systemtap
 }:
 
 let
-  v_major = "4.0.3";
-  version = "${v_major}-RELEASE";
-  version_friendly = "${v_major}";
+  v_base = "4.2.1";
+  version = "${v_base}-RELEASE";
+  version_friendly = "${v_base}";
 
   tag = "refs/tags/swift-${version}";
   fetch = { repo, sha256, fetchSubmodules ? false }:
@@ -55,15 +53,15 @@ let
     # For more inforation, see: https://github.com/apple/swift/pull/3594#issuecomment-234169759
     clang = fetch {
       repo = "swift-clang";
-      sha256 = "0zm624iwiprk3c3nzqf4p1fd9zqic4yi3jv51cw3249ax4x6vy10";
+      sha256 = "0l6w4xzpl3w2nax9a0b885nfzhfj38p2g99158nb5bzfd4s0man7";
     };
     llvm = fetch {
       repo = "swift-llvm";
-      sha256 = "11vw6461c0cdvwm1wna1a5709fjj14hzp6br6jg94p4f6jp3yv4d";
+      sha256 = "1664zwxbq0a1cmxr9n5a0vw6vdk6ygr7rpglpdsfc7ki857vpsyv";
     };
     compilerrt = fetch {
       repo = "swift-compiler-rt";
-      sha256 = "1hj4qaj4c9n2wzg2cvarbyl0n708zd1dlw4zkzq07fjxxqs36nfa";
+      sha256 = "19s6qxn4i0kxpf39xjp2i7zg427iinbmaxqkbb1p91g616y367sf";
     };
     cmark = fetch {
       repo = "swift-cmark";
@@ -71,32 +69,32 @@ let
     };
     lldb = fetch {
       repo = "swift-lldb";
-      sha256 = "0yk5qg85008vcn63vn2jpn5ls9pdhda222p2w1cfkrj27k5k8vqr";
+      sha256 = "00kz0xhj1p6ckyandj2gs1yfl29kxv84x9pfph00r8crbkd2jz7b";
     };
     llbuild = fetch {
       repo = "swift-llbuild";
-      sha256 = "0jffw6z1s6ck1i05brw59x6vsg7zrxbz5n2wz72fj29rh3nppc7a";
+      sha256 = "1mkkhydshhxr28igbldzr0hhqvb6ql43cpf3ba5vglfkbcz6wh6q";
     };
     pm = fetch {
       repo = "swift-package-manager";
-      sha256 = "0xj070b8fii7ijfsnyq4fxgv6569vdrg0yippi85h2p1l7s9aagh";
+      sha256 = "1aqvmgq9g5zs4k2qnkvw3h3mar66d690hqq6g2dmrapsyb321j9l";
     };
     xctest = fetch {
       repo = "swift-corelibs-xctest";
-      sha256 = "0l355wq8zfwrpv044xf4smjwbm0bmib360748n8cwls3vkr9l2yv";
+      sha256 = "1n4w7bfgy73vjzbvbphlwayy0dw73bbrayrpkqq8lbidg0x9lam8";
     };
     foundation = fetch {
       repo = "swift-corelibs-foundation";
-      sha256 = "0s7yc5gsbd96a4bs8c6q24dyfjm4xhcr2nzhl2ics8dmi60j15s4";
+      sha256 = "1bfnkj8s3v327cy0czkngz0ryzmz7amjzkkxbsg2zyrhf9a9f0f7";
     };
     libdispatch = fetch {
       repo = "swift-corelibs-libdispatch";
-      sha256 = "0x8zzq3shhvmhq4sbhaaa0ddiv3nw347pz6ayym6jyzq7j9n15ia";
+      sha256 = "0fibrx54nbaawhsgd7cbr356ji9qvf8y8ahd5bdx28fpj6q0cnwc";
       fetchSubmodules = true;
     };
     swift = fetch {
       repo = "swift";
-      sha256 = "0a1gq0k5701i418f0qi7kywv16q7vh4a4wp0f6fpyv4sjkq27msx";
+      sha256 = "0y277wi0m6zp1yph9s14mmc65m21q5fm6lgzkn2rkrbaz25fdzak";
     };
   };
 
@@ -112,7 +110,6 @@ let
     ncurses
     sqlite
     swig
-    #    systemtap?
   ];
 
   cmakeFlags = [
@@ -131,20 +128,6 @@ let
       install_prefix=$out \
       install_destdir=$SWIFT_INSTALL_DIR \
       extra_cmake_options="${stdenv.lib.concatStringsSep "," cmakeFlags}"'';
-
-  # from llvm/4/llvm.nix
-  sigaltstackPatch = fetchpatch {
-    name = "sigaltstack.patch"; # for glibc-2.26
-    url = https://github.com/llvm-mirror/compiler-rt/commit/8a5e425a68d.diff;
-    sha256 = "0h4y5vl74qaa7dl54b1fcyqalvlpd8zban2d1jxfkxpzyi7m8ifi";
-  };
-
-  # https://bugs.swift.org/browse/SR-6409
-  sigunusedPatch = fetchpatch {
-    name = "sigunused.patch";
-    url = "https://github.com/apple/swift-llbuild/commit/303a89bc6da606c115560921a452686aa0655f5e.diff";
-    sha256 = "04sw7ym1grzggj1v3xrzr2ljxz8rf9rnn9n5fg1xjbwlrdagkc7m";
-  };
 
 in
 stdenv.mkDerivation rec {
@@ -180,7 +163,7 @@ stdenv.mkDerivation rec {
 
   configurePhase = ''
     cd ..
-    
+
     export INSTALLABLE_PACKAGE=$PWD/swift.tar.gz
 
     mkdir build install
@@ -230,45 +213,45 @@ stdenv.mkDerivation rec {
 
     substituteInPlace swift/stdlib/public/Platform/CMakeLists.txt \
       --replace '/usr/include' "${stdenv.cc.libc.dev}/include"
+    substituteInPlace swift-corelibs-libdispatch/src/CMakeLists.txt \
+      --replace '/usr/include' "${stdenv.cc.libc.dev}/include"
     substituteInPlace swift/utils/build-script-impl \
       --replace '/usr/include/c++' "${clang.cc.gcc}/include/c++"
+    patch -p1 -d swift -i ${./patches/glibc-arch-headers.patch}
   '' + stdenv.lib.optionalString stdenv.needsPax ''
     patch -p1 -d swift -i ${./patches/build-script-pax.patch}
   '' + ''
     patch -p1 -d swift -i ${./patches/0001-build-presets-linux-don-t-require-using-Ninja.patch}
     patch -p1 -d swift -i ${./patches/0002-build-presets-linux-allow-custom-install-prefix.patch}
-    patch -p1 -d swift -i ${./patches/0003-build-presets-linux-disable-tests.patch}
     patch -p1 -d swift -i ${./patches/0004-build-presets-linux-plumb-extra-cmake-options.patch}
-    # https://sourceware.org/glibc/wiki/Release/2.26#Removal_of_.27xlocale.h.27
-    patch -p1 -i ${./patches/remove_xlocale.patch}
-    # https://bugs.swift.org/browse/SR-4633
-    patch -p1 -d swift -i ${./patches/icu59.patch}
+
+    sed -i swift/utils/build-presets.ini \
+      -e 's/^test-installable-package$/# \0/' \
+      -e 's/^test$/# \0/' \
+      -e 's/^validation-test$/# \0/' \
+      -e 's/^long-test$/# \0/' \
+      -e 's/^stress-test$/# \0/' \
+      -e 's/^test-optimized$/# \0/'
 
     # https://bugs.swift.org/browse/SR-5779
     sed -i -e 's|"-latomic"|"-Wl,-rpath,${clang.cc.gcc.lib}/lib" "-L${clang.cc.gcc.lib}/lib" "-latomic"|' swift/cmake/modules/AddSwift.cmake
 
-    substituteInPlace clang/lib/Driver/ToolChains.cpp \
-      --replace '  addPathIfExists(D, SysRoot + "/usr/lib", Paths);' \
-                '  addPathIfExists(D, SysRoot + "/usr/lib", Paths); addPathIfExists(D, "${glibc}/lib", Paths);'
+    substituteInPlace clang/lib/Driver/ToolChains/Linux.cpp \
+      --replace 'SysRoot + "/usr/lib' '"${glibc}/lib" "'
+    patch -p1 -d clang -i ${./patches/llvm-include-dirs.patch}
     patch -p1 -d clang -i ${./purity.patch}
 
     # Workaround hardcoded dep on "libcurses" (vs "libncurses"):
     sed -i 's,curses,ncurses,' llbuild/*/*/CMakeLists.txt
 
-    # This test fails on one of my machines, not sure why.
-    # Disabling for now. 
-    rm llbuild/tests/Examples/buildsystem-capi.llbuild
-
     PREFIX=''${out/#\/}
+    substituteInPlace swift-corelibs-foundation/build.py \
+      --replace usr/lib "$PREFIX/lib"
     substituteInPlace swift-corelibs-xctest/build_script.py \
       --replace usr "$PREFIX"
     substituteInPlace swiftpm/Utilities/bootstrap \
-      --replace "usr" "$PREFIX"
-  '' + stdenv.lib.optionalString (stdenv ? glibc) ''
-    patch -p1 -d compiler-rt -i ${sigaltstackPatch}
-    patch -p1 -d compiler-rt -i ${./patches/sigaltstack.patch}
-    patch -p1 -d llbuild -i ${sigunusedPatch}
-    patch -p1 -i ${./patches/sigunused.patch}
+      --replace \"usr\" \"$PREFIX\" \
+      --replace usr/lib "$PREFIX/lib"
   '';
 
   doCheck = false;
@@ -281,13 +264,14 @@ stdenv.mkDerivation rec {
     # Extract the generated tarball into the store
     PREFIX=''${out/#\/}
     tar xf $INSTALLABLE_PACKAGE -C $out --strip-components=3 $PREFIX
+    find $out -type d -empty -delete
 
     paxmark pmr $out/bin/swift
     paxmark pmr $out/bin/*
 
     # TODO: Use wrappers to get these on the PATH for swift tools, instead
     ln -s ${clang}/bin/* $out/bin/
-    ln -s ${targetPackages.stdenv.cc.bintools}/bin/ar $out/bin/ar
+    ln -s ${targetPackages.stdenv.cc.bintools.bintools_bin}/bin/ar $out/bin/ar
 
     wrapProgram $out/bin/swift \
       --suffix C_INCLUDE_PATH : $out/lib/swift/clang/include \
@@ -303,7 +287,8 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ dtzWill ];
     license = licenses.asl20;
     # Swift doesn't support 32bit Linux, unknown on other platforms.
-    platforms = [ "x86_64-linux" ];
+    platforms = platforms.linux;
+    badPlatforms = platforms.i686;
+    broken = stdenv.isAarch64; # 2018-09-04, never built on Hydra
   };
 }
-

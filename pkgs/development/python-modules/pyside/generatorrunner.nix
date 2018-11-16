@@ -3,9 +3,9 @@
 # This derivation does not provide any Python module and should therefore be called via `all-packages.nix`.
 let
   pythonEnv = python2.withPackages(ps: with ps; [ sphinx ]);
-in stdenv.mkDerivation rec {
   pname = "pyside-generatorrunner";
   version = "0.6.16";
+in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {

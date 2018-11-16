@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ocaml, findlib, ocamlbuild, react, opam }:
+{ stdenv, fetchurl, ocaml, findlib, ocamlbuild, react, opaline }:
 
 assert stdenv.lib.versionAtLeast ocaml.version "3.11";
 
@@ -9,12 +9,12 @@ stdenv.mkDerivation {
     sha256 = "0wcs0z50nia1cpk8mh6i5qbc6sff9cc8x7s7q1q89d7m73bnv4vf";
   };
 
-  buildInputs = [ ocaml findlib ocamlbuild opam ];
+  buildInputs = [ ocaml findlib ocamlbuild opaline ];
   propagatedBuildInputs = [ react ];
 
   buildPhase = "ocaml pkg/build.ml native=true native-dynlink=true";
 
-  installPhase = "opam-installer -i --prefix=$out --libdir=$OCAMLFIND_DESTDIR";
+  installPhase = "opaline -prefix $out -libdir $OCAMLFIND_DESTDIR";
 
   meta = with stdenv.lib; {
     description = "An OCaml module for functional reactive programming (FRP) based on React";

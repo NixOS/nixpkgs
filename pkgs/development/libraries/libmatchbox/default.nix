@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ libX11 libXext libpng ];
 
   src = fetchurl {
-    url = "http://downloads.yoctoproject.org/releases/matchbox/libmatchbox/${version}/libmatchbox-${version}.tar.bz2";
+    url = "https://downloads.yoctoproject.org/releases/matchbox/libmatchbox/${version}/libmatchbox-${version}.tar.bz2";
     sha256 = "0lvv44s3bf96zvkysa4ansxj2ffgj3b5kgpliln538q4wd9ank15";
   };
 

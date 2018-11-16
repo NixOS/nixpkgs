@@ -1,9 +1,9 @@
 { fetchurl, fetchpatch, stdenv, intltool, pkgconfig, file, makeWrapper
 , libxml2, libxslt, perl, perlPackages, gconf, guile
 , glib, gtk2, libofx, aqbanking, gwenhywfar, libgnomecanvas, goffice
-, webkit, glibcLocales, gsettings_desktop_schemas, dconf
+, webkit, glibcLocales, gsettings-desktop-schemas, dconf
 , gettext, swig, slibGuile, enchant, bzip2, isocodes, libdbi, libdbiDrivers
-, pango, gdk_pixbuf
+, pango, gdk_pixbuf, hicolor-icon-theme
 }:
 
 /*
@@ -36,9 +36,9 @@ stdenv.mkDerivation rec {
     libxml2 libxslt glibcLocales gettext swig enchant
     bzip2 isocodes
     # glib, gtk...
-    glib gtk2 goffice webkit
+    glib gtk2 goffice webkit hicolor-icon-theme
     # gnome...
-    dconf gconf libgnomecanvas gsettings_desktop_schemas
+    dconf gconf libgnomecanvas gsettings-desktop-schemas
     # financial
     libofx aqbanking gwenhywfar
     # perl
@@ -83,8 +83,6 @@ stdenv.mkDerivation rec {
         --prefix GIO_EXTRA_MODULES : "${stdenv.lib.getLib dconf}/lib/gio/modules"  \
         --prefix PATH ":" "$out/bin:${stdenv.lib.makeBinPath [ perl gconf ]}"
     done
-
-    rm $out/share/icons/hicolor/icon-theme.cache
   '';
 
   # The following settings fix failures in the test suite. It's not required otherwise.
@@ -113,6 +111,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.gnucash.org/;
 
     maintainers = [ stdenv.lib.maintainers.peti stdenv.lib.maintainers.domenkozar ];
-    platforms = stdenv.lib.platforms.gnu;
+    platforms = stdenv.lib.platforms.gnu ++ stdenv.lib.platforms.linux;
   };
 }

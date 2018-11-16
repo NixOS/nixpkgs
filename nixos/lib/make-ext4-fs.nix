@@ -5,25 +5,28 @@
 { pkgs
 , storePaths
 , volumeLabel
+, uuid ? "44444444-4444-4444-8888-888888888888"
+, e2fsprogs
+, libfaketime
+, perl
 }:
+
+let
+  sdClosureInfo = pkgs.buildPackages.closureInfo { rootPaths = storePaths; };
+in
 
 pkgs.stdenv.mkDerivation {
   name = "ext4-fs.img";
 
-  nativeBuildInputs = with pkgs; [e2fsprogs libfaketime perl];
-
-  # For obtaining the closure of `storePaths'.
-  exportReferencesGraph =
-    map (x: [("closure-" + baseNameOf x) x]) storePaths;
+  nativeBuildInputs = [e2fsprogs.bin libfaketime perl];
 
   buildCommand =
     ''
       # Add the closures of the top-level store objects.
-      storePaths=$(perl ${pkgs.pathsFromGraph} closure-*)
+      storePaths=$(cat ${sdClosureInfo}/store-paths)
 
-      # Also include a manifest of the closures in a format suitable
-      # for nix-store --load-db.
-      printRegistration=1 perl ${pkgs.pathsFromGraph} closure-* > nix-path-registration
+      # Also include a manifest of the closures in a format suitable for nix-store --load-db.
+      cp ${sdClosureInfo}/registration nix-path-registration
 
       # Make a crude approximation of the size of the target image.
       # If the script starts failing, increase the fudge factors here.
@@ -33,7 +36,7 @@ pkgs.stdenv.mkDerivation {
       echo "Creating an EXT4 image of $bytes bytes (numInodes=$numInodes, numDataBlocks=$numDataBlocks)"
 
       truncate -s $bytes $out
-      faketime -f "1970-01-01 00:00:01" mkfs.ext4 -L ${volumeLabel} -U 44444444-4444-4444-8888-888888888888 $out
+      faketime -f "1970-01-01 00:00:01" mkfs.ext4 -L ${volumeLabel} -U ${uuid} $out
 
       # Populate the image contents by piping a bunch of commands to the `debugfs` tool from e2fsprogs.
       # For example, to copy /nix/store/abcd...efg-coreutils-8.23/bin/sleep:
@@ -82,6 +85,13 @@ pkgs.stdenv.mkDerivation {
       if egrep -q 'Could not allocate|File not found' errorlog; then
         cat errorlog
         echo "--- Failed to create EXT4 image of $bytes bytes (numInodes=$numInodes, numDataBlocks=$numDataBlocks) ---"
+        return 1
+      fi
+
+      # I have ended up with corrupted images sometimes, I suspect that happens when the build machine's disk gets full during the build.
+      if ! fsck.ext4 -n -f $out; then
+        echo "--- Fsck failed for EXT4 image of $bytes bytes (numInodes=$numInodes, numDataBlocks=$numDataBlocks) ---"
+        cat errorlog
         return 1
       fi
     '';

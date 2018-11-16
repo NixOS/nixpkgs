@@ -1,5 +1,5 @@
 { stdenv, fetchurl, fetchgit, autogen, flex, bison, python, autoconf, automake
-, gettext, ncurses, libusb, freetype, qemu, devicemapper
+, gettext, ncurses, libusb, freetype, qemu, lvm2
 , for_HP_laptop ? false
 }:
 
@@ -10,7 +10,7 @@ let
     "x86_64-linux".target = "i386";
   };
 
-  inPCSystems = any (system: stdenv.system == system) (mapAttrsToList (name: _: name) pcSystems);
+  inPCSystems = any (system: stdenv.hostPlatform.system == system) (mapAttrsToList (name: _: name) pcSystems);
 
   version = if for_HP_laptop then "1.2.1" else "1.2.0";
 
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
         };
 
   nativeBuildInputs = [ autogen flex bison python autoconf automake ];
-  buildInputs = [ ncurses libusb freetype gettext devicemapper ]
+  buildInputs = [ ncurses libusb freetype gettext lvm2 ]
     ++ optional doCheck qemu;
 
   hardeningDisable = [ "stackprotector" "pic" ];
@@ -84,7 +84,7 @@ stdenv.mkDerivation rec {
 
   # save target that grub is compiled for
   grubTarget = if inPCSystems
-               then "${pcSystems.${stdenv.system}.target}-pc"
+               then "${pcSystems.${stdenv.hostPlatform.system}.target}-pc"
                else "";
 
   doCheck = false;
@@ -98,6 +98,6 @@ stdenv.mkDerivation rec {
     description = "GRUB 2.0 extended with TCG (TPM) support for integrity measured boot process (trusted boot)";
     homepage = https://github.com/Sirrix-AG/TrustedGRUB2;
     license = licenses.gpl3Plus;
-    platforms = platforms.gnu;
+    platforms = platforms.gnu ++ platforms.linux;
   };
 }

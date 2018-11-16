@@ -1,12 +1,12 @@
 {stdenv, fetchurl, help2man}:
 
 stdenv.mkDerivation rec {
-  version = "1.3.365";
+  version = "1.5.0.456";
   name = "fatsort-${version}";
 
   src = fetchurl {
-    url = "mirror://sourceforge/fatsort/${name}.tar.gz";
-    sha256 = "0g9zn2ns86g7zmy0y8hw1w1zhnd51hy8yl6kflyhxs49n5sc7b3p";
+    url = "mirror://sourceforge/fatsort/${name}.tar.xz";
+    sha256 = "15fy2m4p9s8cfvnzdcd5ynkc2js0zklkkf34sjxdac7x2iwb8dd8";
   };
 
   patches = [ ./fatsort-Makefiles.patch ];

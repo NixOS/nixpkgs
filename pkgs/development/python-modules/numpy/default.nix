@@ -1,24 +1,37 @@
-{lib, fetchPypi, python, buildPythonPackage, isPy27, isPyPy, gfortran, nose, blas}:
+{ stdenv, lib, fetchPypi, python, buildPythonPackage, isPyPy, gfortran, pytest, blas }:
 
 buildPythonPackage rec {
   pname = "numpy";
-  version = "1.14.0";
-  name = "${pname}-${version}";
+  version = "1.15.2";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "3de643935b212307b420248018323a44ec51987a336d1d747c1322afc3c099fb";
+    sha256 = "27a0d018f608a3fe34ac5e2b876f4c23c47e38295c47dd0775cc294cd2614bc1";
   };
 
   disabled = isPyPy;
-  buildInputs = [ gfortran nose blas ];
+  nativeBuildInputs = [ gfortran pytest ];
+  buildInputs = [ blas ];
 
   patches = lib.optionals (python.hasDistutilsCxxPatch or false) [
-    # See cpython 2.7 patches.
-    # numpy.distutils is used by cython during it's check phase
+    # We patch cpython/distutils to fix https://bugs.python.org/issue1222585
+    # Patching of numpy.distutils is needed to prevent it from undoing the
+    # patch to distutils.
     ./numpy-distutils-C++.patch
   ];
+
+  postPatch = lib.optionalString stdenv.hostPlatform.isMusl ''
+    # Use fenv.h
+    sed -i \
+      numpy/core/src/npymath/ieee754.c.src \
+      numpy/core/include/numpy/ufuncobject.h \
+      -e 's/__GLIBC__/__linux__/'
+    # Don't use various complex trig functions
+    substituteInPlace numpy/core/src/private/npy_config.h \
+      --replace '#if defined(__GLIBC__)' "#if 1" \
+      --replace '#if !__GLIBC_PREREQ(2, 18)' "#if 1"
+  '';
 
   preConfigure = ''
     sed -i 's/-faltivec//' numpy/distutils/system_info.py
@@ -42,10 +55,6 @@ buildPythonPackage rec {
     ${python.interpreter} -c 'import numpy; numpy.test("fast", verbose=10)'
     popd
     runHook postCheck
-  '';
-
-  postInstall = ''
-    ln -s $out/bin/f2py* $out/bin/f2py
   '';
 
   passthru = {

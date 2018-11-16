@@ -1,5 +1,5 @@
-{ stdenv, lib, fetchurl, pkgconfig, mesa
-, SDL, SDL_image, libpng, zlib, libvorbis, libogg, libmikmod
+{ stdenv, lib, fetchurl, pkgconfig, libGLU_combined
+, SDL, SDL_image, libpng, libvorbis, libogg, libmikmod
 
 , use3DOVideos ? false, requireFile ? null, writeText ? null
 , haskellPackages ? null
@@ -51,7 +51,7 @@ in stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ SDL SDL_image libpng libvorbis libogg libmikmod mesa ];
+  buildInputs = [ SDL SDL_image libpng libvorbis libogg libmikmod libGLU_combined ];
 
   postUnpack = ''
     mkdir -p uqm-${version}/content/packages

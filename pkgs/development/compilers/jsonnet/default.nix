@@ -1,30 +1,28 @@
-{ stdenv, lib, fetchFromGitHub, emscripten }:
+{ stdenv, lib, fetchFromGitHub }:
 
-let version = "0.9.5"; in
-
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "jsonnet-${version}";
-  version = version;
+  version = "0.11.2";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "google";
     repo = "jsonnet";
-    sha256 = "193sa4hdhvml0c32nmdkjii41hbyc5l0zisdn699ar0gaq7yiqan";
+    sha256 = "05rl5i4g36k2ikxv4sw726mha1qf5bb66wiqpi0s09wj9azm7vym";
   };
-
-  buildInputs = [ emscripten ];
 
   enableParallelBuilding = true;
 
-  makeFlags = [''EM_CACHE=$(TMPDIR)/.em_cache'' ''all''];
+  makeFlags = [
+    "jsonnet"
+    "libjsonnet.so"
+  ];
 
   installPhase = ''
-    mkdir -p $out/bin $out/lib $out/share/
+    mkdir -p $out/bin $out/lib $out/include
     cp jsonnet $out/bin/
-    cp libjsonnet.so $out/lib/
-    cp -a doc $out/share/doc
-    cp -a include $out/include
+    cp libjsonnet*.so $out/lib/
+    cp -a include/*.h $out/include/
   '';
 
   meta = {

@@ -1,7 +1,7 @@
-{ stdenv, callPackage, callPackage_i686, makeWrapper, ...} @pkgs:
+{ stdenv, callPackage, pkgsi686Linux, makeWrapper, ...}:
 
 let
-  i686    = callPackage_i686 ./vms.nix {};
+  i686    = pkgsi686Linux.callPackage ./vms.nix {};
   native  = callPackage ./vms.nix {};
 in
 
@@ -11,5 +11,3 @@ rec {
   spur64 = if stdenv.is64bit then native.spur else "none";
   multi-vm-wrapper  = callPackage ../wrapper { inherit cog32 spur32 spur64; };
 }
-
-

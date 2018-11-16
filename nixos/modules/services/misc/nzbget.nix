@@ -4,7 +4,7 @@ with lib;
 
 let
   cfg = config.services.nzbget;
-  nzbget = pkgs.nzbget; in {
+in {
   options = {
     services.nzbget = {
       enable = mkEnableOption "NZBGet";
@@ -86,14 +86,14 @@ let
       };
     };
 
-    users.extraUsers = mkIf (cfg.user == "nzbget") {
+    users.users = mkIf (cfg.user == "nzbget") {
       nzbget = {
         group = cfg.group;
         uid = config.ids.uids.nzbget;
       };
     };
 
-    users.extraGroups = mkIf (cfg.group == "nzbget") {
+    users.groups = mkIf (cfg.group == "nzbget") {
       nzbget = {
         gid = config.ids.gids.nzbget;
       };

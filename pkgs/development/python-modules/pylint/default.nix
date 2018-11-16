@@ -1,30 +1,36 @@
-{ stdenv, buildPythonPackage, fetchPypi, python, astroid, isort,
-  pytest, pytestrunner,  mccabe, configparser, backports_functools_lru_cache }:
+{ stdenv, lib, buildPythonPackage, fetchPypi, python, pythonOlder, astroid,
+  isort, mccabe, pytest, pytestrunner, pyenchant }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "pylint";
-  version = "1.8.2";
+  version = "2.1.1";
+
+  disabled = pythonOlder "3.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4fe3b99da7e789545327b75548cee6b511e4faa98afe268130fea1af4b5ec022";
+    sha256 = "31142f764d2a7cd41df5196f9933b12b7ee55e73ef12204b648ad7e556c119fb";
   };
 
-  buildInputs = [ pytest pytestrunner mccabe configparser backports_functools_lru_cache ];
+  checkInputs = [ pytest pytestrunner pyenchant ];
 
-  propagatedBuildInputs = [ astroid configparser isort ];
+  propagatedBuildInputs = [ astroid isort mccabe ];
 
-  postPatch = ''
-    # Remove broken darwin tests
-    sed -i -e '/test_parallel_execution/,+2d' pylint/test/test_self.py
-    sed -i -e '/test_py3k_jobs_option/,+4d' pylint/test/test_self.py
+  postPatch = lib.optionalString stdenv.isDarwin ''
+    # Remove broken darwin test
     rm -vf pylint/test/test_functional.py
   '';
 
   checkPhase = ''
-    cd pylint/test
-    ${python.interpreter} -m unittest discover -p "*test*"
+    pytest pylint/test -k "not ${lib.concatStringsSep " and not " (
+      # Broken test
+      [ "test_good_comprehension_checks" ] ++
+      # Disable broken darwin tests
+      lib.optionals stdenv.isDarwin [
+        "test_parallel_execution"
+        "test_py3k_jobs_option"
+      ]
+    )}"
   '';
 
   postInstall = ''
@@ -32,8 +38,8 @@ buildPythonPackage rec {
     cp "elisp/"*.el $out/share/emacs/site-lisp/
   '';
 
-  meta = with stdenv.lib; {
-    homepage = http://www.logilab.org/project/pylint;
+  meta = with lib; {
+    homepage = https://github.com/PyCQA/pylint;
     description = "A bug and style checker for Python";
     platforms = platforms.all;
     license = licenses.gpl1Plus;

@@ -1,4 +1,4 @@
-{stdenv, fetchurl, SDL, mesa, SDL_image, freealut, openal, libvorbis,
+{stdenv, fetchurl, SDL, libGLU_combined, SDL_image, freealut, openal, libvorbis,
 pkgconfig}:
 
 stdenv.mkDerivation rec {
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ SDL mesa SDL_image freealut openal libvorbis ];
+  buildInputs = [ SDL libGLU_combined SDL_image freealut openal libvorbis ];
 
   postPatch = ''
     sed -e '1i#include <unistd.h>' -i $(find . -name '*.c' -o -name '*.cpp')

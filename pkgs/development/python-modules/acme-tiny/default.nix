@@ -4,7 +4,6 @@
 buildPythonPackage rec {
   pname = "acme-tiny";
   version = "2016-03-26";
-  name = "${pname}-${version}";
 
   src = fetchFromGitHub {
     sha256 = "0ngmr3kxcvlqa9mrv3gx0rg4r67xvdjplqfminxliri3ipak853g";

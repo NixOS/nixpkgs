@@ -1,18 +1,19 @@
 { stdenv, lib, fetchFromGitHub, autoreconfHook, pkgconfig
 , libXext, libdrm, libXfixes, wayland, libffi, libX11
-, mesa_noglu
-, minimal ? true, libva
+, libGL, libGL_driver
+, minimal ? false, libva-minimal
 }:
 
 stdenv.mkDerivation rec {
-  name = "libva-${lib.optionalString (!minimal) "full-"}${version}";
-  version = "2.0.0";
+  name = "libva-${lib.optionalString minimal "minimal-"}${version}";
+  version = "2.1.0";
 
+  # update libva-utils and vaapiIntel as well
   src = fetchFromGitHub {
     owner  = "01org";
     repo   = "libva";
     rev    = version;
-    sha256 = "1x8rlmv5wfqjz3j87byrxb4d9vp5b4lrrin2fx254nwl3aqy15hy";
+    sha256 = "1a60lrgr65hx9b2qp0gjky1298c4d4zp3ap6vnmmz850sxx5rm8w";
   };
 
   outputs = [ "dev" "out" ];
@@ -20,13 +21,14 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
 
   buildInputs = [ libdrm ]
-    ++ lib.optionals (!minimal) [ libva libX11 libXext libXfixes wayland libffi mesa_noglu ];
+    ++ lib.optionals (!minimal) [ libva-minimal libX11 libXext libXfixes wayland libffi libGL ];
   # TODO: share libs between minimal and !minimal - perhaps just symlink them
 
   enableParallelBuilding = true;
 
   configureFlags = [
-    "--with-drivers-path=${mesa_noglu.driverLink}/lib/dri"
+    # Add FHS paths for non-NixOS applications.
+    "--with-drivers-path=${libGL_driver.driverLink}/lib/dri:/usr/lib/dri:/usr/lib32/dri"
   ] ++ lib.optionals (!minimal) [ "--enable-glx" ];
 
   installFlags = [

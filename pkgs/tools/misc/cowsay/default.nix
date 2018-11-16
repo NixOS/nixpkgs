@@ -1,12 +1,12 @@
-{ stdenv, fetchgit, perl }:
+{ stdenv, fetchurl, perl }:
 
-stdenv.mkDerivation {
-  name = "cowsay-3.03+dfsg1-16";
+stdenv.mkDerivation rec{
+  version = "3.03+dfsg2";
+  name = "cowsay-${version}";
 
-  src = fetchgit {
-    url = https://anonscm.debian.org/git/collab-maint/cowsay.git;
-    rev = "acb946c166fa3b9526b9c471ef1330f9f89f9c8b";
-    sha256 = "1ji66nrdcc8sh79hwils3nbaj897s352r5wp7kzjwiym8bm2azk6";
+  src = fetchurl {
+    url = "http://http.debian.net/debian/pool/main/c/cowsay/cowsay_${version}.orig.tar.gz";
+    sha256 = "0ghqnkp8njc3wyqx4mlg0qv0v0pc996x2nbyhqhz66bbgmf9d29v";
   };
 
   buildInputs = [ perl ];
@@ -15,10 +15,11 @@ stdenv.mkDerivation {
     bash ./install.sh $out
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A program which generates ASCII pictures of a cow with a message";
-    homepage = http://www.nog.net/~tony/warez/cowsay.shtml;
-    platforms = stdenv.lib.platforms.all;
-    maintainers = [ stdenv.lib.maintainers.rob ];
+    homepage = https://en.wikipedia.org/wiki/Cowsay;
+    license = licenses.gpl1;
+    platforms = platforms.all;
+    maintainers = [ maintainers.rob ];
   };
 }

@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
 
-  name = "pig-0.14.0";
+  name = "pig-0.16.0";
 
   src = fetchurl {
     url = "mirror://apache/pig/${name}/${name}.tar.gz";
-    sha256 = "183in34cj93ny3lhqyq76g9pjqgw1qlwakk5v6x847vrlkfndska";
+    sha256 = "0p79grz5islnq195lv7pqdxb5l3v4y0k0w63602827qs70zpr508";
 
   };
 

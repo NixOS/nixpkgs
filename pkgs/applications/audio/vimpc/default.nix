@@ -8,9 +8,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "boysetsfrog";
     repo = "vimpc";
-    # Using commit-hash as there is not tag available
-    # https://github.com/boysetsfrog/vimpc/issues/70
-    rev = "63556da6b94ab27d7e3f542399f5e0975a5812ba";
+    rev = "v${version}";
     sha256 = "1495a702df4nja8mlxq98mkbic2zv88sjiinimf9qddrfb38jxk6";
   };
 

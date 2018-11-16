@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, bash }:
+{ stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   name = "zsh-autoenv-${version}";

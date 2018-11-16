@@ -1,6 +1,13 @@
-{ system, minimal ? false, config ? {} }:
-
-let pkgs = import ../.. { inherit system config; }; in
+{ system
+, # Use a minimal kernel?
+  minimal ? false
+, # Ignored
+  config ? null
+  # Nixpkgs, for qemu, lib and more
+, pkgs
+, # NixOS configuration to add to the VMs
+  extraConfigurations ? []
+}:
 
 with pkgs.lib;
 with import ../lib/qemu-flags.nix { inherit pkgs; };
@@ -28,9 +35,10 @@ rec {
       modules = configurations ++
         [ ../modules/virtualisation/qemu-vm.nix
           ../modules/testing/test-instrumentation.nix # !!! should only get added for automated test runs
-          { key = "no-manual"; services.nixosManual.enable = false; }
+          { key = "no-manual"; documentation.nixos.enable = false; }
           { key = "qemu"; system.build.qemu = qemu; }
-        ] ++ optional minimal ../modules/testing/minimal-kernel.nix;
+        ] ++ optional minimal ../modules/testing/minimal-kernel.nix
+          ++ extraConfigurations;
       extraArgs = { inherit nodes; };
     };
 
@@ -47,7 +55,7 @@ rec {
       machinesNumbered = zipLists machines (range 1 254);
 
       nodes_ = flip map machinesNumbered (m: nameValuePair m.fst
-        [ ( { config, pkgs, nodes, ... }:
+        [ ( { config, nodes, ... }:
             let
               interfacesNumbered = zipLists config.virtualisation.vlans (range 1 255);
               interfaces = flip map interfacesNumbered ({ fst, snd }:

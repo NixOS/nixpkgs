@@ -1,7 +1,7 @@
-{ stdenv, perl, xz, pathsFromGraph
+{ stdenv, perl, pixz, pathsFromGraph
 
 , # The file name of the resulting tarball
-  fileName ? "nixos-system-${stdenv.system}"
+  fileName ? "nixos-system-${stdenv.hostPlatform.system}"
 
 , # The files and directories to be placed in the tarball.
   # This is a list of attribute sets {source, target} where `source'
@@ -21,14 +21,20 @@
 
   # Extra tar arguments
 , extraArgs ? ""
+  # Command used for compression
+, compressCommand ? "pixz"
+  # Extension for the compressed tarball
+, compressionExtension ? ".xz"
+  # extra inputs, like the compressor to use
+, extraInputs ? [ pixz ]
 }:
 
 stdenv.mkDerivation {
   name = "tarball";
   builder = ./make-system-tarball.sh;
-  buildInputs = [perl xz];
+  buildInputs = [ perl ] ++ extraInputs;
 
-  inherit fileName pathsFromGraph extraArgs extraCommands;
+  inherit fileName pathsFromGraph extraArgs extraCommands compressCommand;
 
   # !!! should use XML.
   sources = map (x: x.source) contents;
@@ -41,4 +47,6 @@ stdenv.mkDerivation {
   # For obtaining the closure of `storeContents'.
   exportReferencesGraph =
     map (x: [("closure-" + baseNameOf x.object) x.object]) storeContents;
+
+  extension = compressionExtension;
 }

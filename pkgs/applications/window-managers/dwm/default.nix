@@ -7,7 +7,7 @@ stdenv.mkDerivation {
   inherit name;
  
   src = fetchurl {
-    url = "http://dl.suckless.org/dwm/${name}.tar.gz";
+    url = "https://dl.suckless.org/dwm/${name}.tar.gz";
     sha256 = "1zkmwb6df6m254shx06ly90c0q4jl70skk1pvkixpb7hcxhwbxn2";
   };
  

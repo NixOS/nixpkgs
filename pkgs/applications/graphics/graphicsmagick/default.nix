@@ -1,15 +1,14 @@
-{ stdenv, fetchurl, fetchpatch, bzip2, freetype, graphviz, ghostscript
+{ stdenv, fetchurl, bzip2, freetype, graphviz, ghostscript
 , libjpeg, libpng, libtiff, libxml2, zlib, libtool, xz, libX11
 , libwebp, quantumdepth ? 8, fixDarwinDylibNames }:
 
-let version = "1.3.28"; in
-
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "graphicsmagick-${version}";
+  version = "1.3.30";
 
   src = fetchurl {
     url = "mirror://sourceforge/graphicsmagick/GraphicsMagick-${version}.tar.xz";
-    sha256 = "0jlrrimrajcmwp7llivyj14qnzb1mpqd8vw95dl6zbx5m2lnhall";
+    sha256 = "1warar0731xf94r4bn5x1km85rjabl4iq8r0dk3ywmczap3farfr";
   };
 
   patches = [

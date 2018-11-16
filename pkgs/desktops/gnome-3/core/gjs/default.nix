@@ -3,7 +3,17 @@
 , makeWrapper }:
 
 stdenv.mkDerivation rec {
-  inherit (import ./src.nix fetchurl) name src;
+  name = "gjs-${version}";
+  version = "1.52.3";
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/gjs/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    sha256 = "1z4n15wdz6pbqd2hfzrqc8mmprhv50v4jk43p08v0xv07yldh8ff";
+  };
+
+  passthru = {
+    updateScript = gnome3.updateScript { packageName = "gjs"; attrPath = "gnome3.gjs"; };
+  };
 
   outputs = [ "out" "installedTests" ];
 

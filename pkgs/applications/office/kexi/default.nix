@@ -1,5 +1,5 @@
 {
-  mkDerivation, lib, fetchurl, extra-cmake-modules, kdoctools,
+  mkDerivation, lib, fetchurl, fetchpatch, extra-cmake-modules, kdoctools,
   boost, qttools, qtwebkit,
   breeze-icons, karchive, kcodecs, kcompletion, kconfig, kconfigwidgets, kcoreaddons,
   kcrash, kguiaddons, ki18n, kiconthemes, kitemviews, kio, ktexteditor, ktextwidgets,
@@ -9,12 +9,12 @@
 
 mkDerivation rec {
   pname = "kexi";
-  version = "3.0.2";
+  version = "3.1.0";
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://kde/stable/${pname}/src/${name}.tar.xz";
-    sha256 = "1fjvjifi5ygx5gs2lzfg22j0x3r7kl4wk5jll09r8gc3dfxaiblf";
+    sha256 = "1ysj44qq75wglw4d080l3gfw47695gapf29scxhb1g3py55csmbd";
   };
 
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
@@ -28,6 +28,13 @@ mkDerivation rec {
   ];
 
   propagatedUserEnvPkgs = [ kproperty ];
+
+  patches = [
+    (fetchpatch {
+      url = "https://phabricator.kde.org/file/data/6iwzltiifyqwjnzbvyo6/PHID-FILE-li4a7j35wkdkm2qdtnp4/D11503.diff";
+      sha256 = "0yj717m4x1zb4xjy1ayhz78xkxpawxgsvjgvf5iw81jnlr8absq9";
+    })
+  ];
 
   meta = with lib; {
     description = "A open source visual database applications creator, a long-awaited competitor for programs like MS Access or Filemaker";

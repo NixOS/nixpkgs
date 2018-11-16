@@ -37,5 +37,6 @@ in pythonPackages.buildPythonApplication rec {
     homepage = http://manatlan.com/jbrout/;
     description = "Photo manager";
     platforms = stdenv.lib.platforms.linux;
+    license = stdenv.lib.licenses.gpl2Plus;
   };
 }

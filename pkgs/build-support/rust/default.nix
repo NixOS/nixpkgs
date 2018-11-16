@@ -1,12 +1,14 @@
-{ callPackage, fetchurl, stdenv, path, cacert, git, rust, cargo-vendor }:
+{ stdenv, cacert, git, rust, cargo-vendor, python3 }:
 let
   fetchcargo = import ./fetchcargo.nix {
-    inherit stdenv cacert git rust cargo-vendor;
+    inherit stdenv cacert git rust cargo-vendor python3;
   };
 in
-{ name, cargoSha256 ? null
+{ name, cargoSha256 ? "unset"
 , src ? null
 , srcs ? null
+, cargoPatches ? []
+, patches ? []
 , sourceRoot ? null
 , logLevel ? ""
 , buildInputs ? []
@@ -17,14 +19,13 @@ in
 , cargoVendorDir ? null
 , ... } @ args:
 
-assert cargoVendorDir == null -> cargoSha256 != null;
+assert cargoVendorDir == null -> cargoSha256 != "unset";
 
 let
-  lib = stdenv.lib;
-
   cargoDeps = if cargoVendorDir == null
     then fetchcargo {
         inherit name src srcs sourceRoot cargoUpdateHook;
+        patches = cargoPatches;
         sha256 = cargoSha256;
       }
     else null;
@@ -46,6 +47,8 @@ in stdenv.mkDerivation (args // {
 
   buildInputs = [ cacert git rust.cargo rust.rustc ] ++ buildInputs;
 
+  patches = cargoPatches ++ patches;
+
   configurePhase = args.configurePhase or ''
     runHook preConfigure
     # noop
@@ -58,14 +61,12 @@ in stdenv.mkDerivation (args // {
     ${setupVendorDir}
 
     mkdir .cargo
-    cat >.cargo/config <<-EOF
-      [source.crates-io]
-      registry = 'https://github.com/rust-lang/crates.io-index'
-      replace-with = 'vendored-sources'
-
-      [source.vendored-sources]
-      directory = '$(pwd)/$cargoDepsCopy'
-    EOF
+    config="$(pwd)/$cargoDepsCopy/.cargo/config";
+    if [[ ! -e $config ]]; then
+      config=${./fetchcargo-default-config.toml};
+    fi;
+    substitute $config .cargo/config \
+    --subst-var-by vendor "$(pwd)/$cargoDepsCopy"
 
     unset cargoDepsCopy
 
@@ -90,8 +91,10 @@ in stdenv.mkDerivation (args // {
 
   installPhase = args.installPhase or ''
     runHook preInstall
-    mkdir -p $out/bin
-    find target/release -maxdepth 1 -executable -exec cp "{}" $out/bin \;
+    mkdir -p $out/bin $out/lib
+    find target/release -maxdepth 1 -type f -executable ! \( -regex ".*\.\(so.[0-9.]+\|so\|a\|dylib\)" \) -print0 | xargs -r -0 cp -t $out/bin
+    find target/release -maxdepth 1 -regex ".*\.\(so.[0-9.]+\|so\|a\|dylib\)" -print0 | xargs -r -0 cp -t $out/lib
+    rmdir --ignore-fail-on-non-empty $out/lib $out/bin
     runHook postInstall
   '';
 

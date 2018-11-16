@@ -1,0 +1,188 @@
+From: Torsten Landschoff <t.landschoff@gmx.net>
+Date: Tue, 30 Mar 1999 21:05:09 +0100
+Subject: 0007 Use termios
+
+Use termios instead of termio (Closes: #35288).
+
+Patch updated on Mon, 07 Mar 2011 20:40:53 +0100 based on
+ispell-3.3.02-terminal.patch from ispell-3.3.02-102.1.src.rpm
+---
+ term.c |   58 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 files changed, 58 insertions(+), 0 deletions(-)
+
+diff --git a/term.c b/term.c
+index 4923844..47c1aa0 100644
+--- a/term.c
++++ b/term.c
+@@ -87,13 +87,22 @@ static char Rcs_Id[] =
+ #include "proto.h"
+ #include "msgs.h"
+ #ifdef USG
++#if defined(__GLIBC__) && __GLIBC__ >= 2
++/* Use termios under at least glibc */
++  #include <termios.h>
++  #define USE_TERMIOS
++#else
+ #include <termio.h>
++#endif
+ #else
+ #ifndef __DJGPP__
+ #include <sgtty.h>
+ #endif
+ #endif
+ #include <signal.h>
++#include <unistd.h>
++#include <sys/types.h>
++#include <sys/wait.h>
+ 
+ void		ierase P ((void));
+ void		imove P ((int row, int col));
+@@ -166,8 +175,13 @@ static int iputch (c)
+     }
+ 
+ #ifdef USG
++#ifdef USE_TERMIOS
++static struct termios	sbuf;
++static struct termios	osbuf;
++#else
+ static struct termio	sbuf;
+ static struct termio	osbuf;
++#endif
+ #else
+ static struct sgttyb	sbuf;
+ static struct sgttyb	osbuf;
+@@ -190,9 +204,13 @@ void terminit ()
+     int			tpgrp;
+ #else
+ #ifdef TIOCGPGRP
++#ifdef USE_TERMIOS
++    pid_t		tpgrp;
++#else
+     int			tpgrp;
+ #endif
+ #endif
++#endif
+ #ifdef TIOCGWINSZ
+     struct winsize	wsize;
+ #endif /* TIOCGWINSZ */
+@@ -276,7 +294,11 @@ retry:
+ 	(void) fprintf (stderr, TERM_C_NO_BATCH);
+ 	exit (1);
+ 	}
++#ifdef USE_TERMIOS
++    (void) tcgetattr (0, &osbuf);
++#else
+     (void) ioctl (0, TCGETA, (char *) &osbuf);
++#endif
+     termchanged = 1;
+ 
+     sbuf = osbuf;
+@@ -285,7 +307,11 @@ retry:
+     sbuf.c_iflag &= ~(INLCR | IGNCR | ICRNL);
+     sbuf.c_cc[VMIN] = 1;
+     sbuf.c_cc[VTIME] = 1;
++#ifdef USE_TERMIOS
++    (void) tcsetattr (0, TCSADRAIN, &sbuf);
++#else
+     (void) ioctl (0, TCSETAW, (char *) &sbuf);
++#endif
+ 
+     uerasechar = osbuf.c_cc[VERASE];
+     ukillchar = osbuf.c_cc[VKILL];
+@@ -298,7 +324,11 @@ retry:
+ #endif
+ #endif
+ #ifdef TIOCGPGRP
++#ifdef USE_TERMIOS
++    if ((tpgrp = tcgetpgrp (0)) == -1)
++#else
+     if (ioctl (0, TIOCGPGRP, (char *) &tpgrp) != 0)
++#endif
+ 	{
+ 	(void) fprintf (stderr, TERM_C_NO_BATCH);
+ 	exit (1);
+@@ -373,7 +403,11 @@ SIGNAL_TYPE done (signo)
+ 	if (te)
+ 	    tputs (te, 1, iputch);
+ #ifdef USG
++#ifdef USE_TERMIOS
++	(void) tcsetattr (0, TCSADRAIN, &osbuf);
++#else
+ 	(void) ioctl (0, TCSETAW, (char *) &osbuf);
++#endif
+ #else
+ 	(void) ioctl (0, TIOCSETP, (char *) &osbuf);
+ #ifdef TIOCSLTC
+@@ -394,7 +428,11 @@ static SIGNAL_TYPE onstop (signo)
+ 	if (te)
+ 	    tputs (te, 1, iputch);
+ #ifdef USG
++#ifdef USE_TERMIOS
++    (void) tcsetattr (0, TCSANOW, &osbuf); /* OpenSuse: TCSADRAIN */
++#else
+ 	(void) ioctl (0, TCSETAW, (char *) &osbuf);
++#endif
+ #else
+ 	(void) ioctl (0, TIOCSETP, (char *) &osbuf);
+ #ifdef TIOCSLTC
+@@ -413,7 +451,11 @@ static SIGNAL_TYPE onstop (signo)
+     if (termchanged)
+ 	{
+ #ifdef USG
++#ifdef USE_TERMIOS
++    (void) tcsetattr (0, TCSANOW, &sbuf);
++#else
+ 	(void) ioctl (0, TCSETAW, (char *) &sbuf);
++#endif
+ #else
+ 	(void) ioctl (0, TIOCSETP, (char *) &sbuf);
+ #ifdef TIOCSLTC
+@@ -481,7 +523,11 @@ int shellescape	(buf)
+     argv[i] = NULL;
+ 
+ #ifdef USG
++#ifdef USE_TERMIOS
++    (void) tcsetattr (0, TCSADRAIN, &osbuf);
++#else
+     (void) ioctl (0, TCSETAW, (char *) &osbuf);
++#endif
+ #else
+     (void) ioctl (0, TIOCSETP, (char *) &osbuf);
+ #ifdef TIOCSLTC
+@@ -527,7 +573,11 @@ int shellescape	(buf)
+ #endif
+ 
+ #ifdef USG
++#ifdef USE_TERMIOS
++    (void) tcsetattr (0, TCSADRAIN, &sbuf);
++#else
+     (void) ioctl (0, TCSETAW, (char *) &sbuf);
++#endif
+ #else
+     (void) ioctl (0, TIOCSETP, (char *) &sbuf);
+ #ifdef TIOCSLTC
+@@ -563,7 +613,11 @@ void shescape (buf)
+ #endif
+ 
+ #ifdef USG
++#ifdef USE_TERMIOS
++    (void) tcsetattr (0, TCSADRAIN, &osbuf);
++#else
+     (void) ioctl (0, TCSETAW, (char *) &osbuf);
++#endif
+ #else
+     (void) ioctl (0, TIOCSETP, (char *) &osbuf);
+ #ifdef TIOCSLTC
+@@ -611,7 +665,11 @@ void shescape (buf)
+ #endif
+ 
+ #ifdef USG
++#ifdef USE_TERMIOS
++    (void) tcsetattr (0, TCSADRAIN, &sbuf);
++#else
+     (void) ioctl (0, TCSETAW, (char *) &sbuf);
++#endif
+ #else
+     (void) ioctl (0, TIOCSETP, (char *) &sbuf);
+ #ifdef TIOCSLTC
+-- 

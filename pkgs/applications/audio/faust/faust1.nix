@@ -49,7 +49,7 @@ let
     # faust.wrapWithBuildEnv.
     postInstall = ''
       # syntax error when eval'd directly
-      pattern="faust2!(svg)"
+      pattern="faust2!(*@(atomsnippets|graph|graphviewer|md|plot|sig|sigviewer|svg))"
       (shopt -s extglob; rm "$out"/bin/$pattern)
     '';
 

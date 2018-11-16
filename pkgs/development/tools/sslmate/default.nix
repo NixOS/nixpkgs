@@ -1,11 +1,11 @@
 { stdenv, fetchurl, perlPackages, perl, makeWrapper, openssl }:
 
 stdenv.mkDerivation rec {
-  name = "sslmate-1.5.0";
+  name = "sslmate-1.7.0";
 
   src = fetchurl {
     url = "https://packages.sslmate.com/other/${name}.tar.gz";
-    sha256 = "1vxdkydwww4awi6ishvq68jvlj6vkbfw7pin1cdqpl84vs9q7ycg";
+    sha256 = "0vhppvy5vphipbycfilzxdly7nw12brscz4biawf3bl376yp7ljm";
   };
 
   makeFlags = "PREFIX=$(out)";
