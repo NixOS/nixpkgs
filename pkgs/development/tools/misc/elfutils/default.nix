@@ -67,8 +67,8 @@ stdenv.mkDerivation rec {
     cp version.h $out/include
   '';
 
-  doCheck = false; # fails 3 out of 174 tests
-  doInstallCheck = false; # fails 70 out of 174 tests
+  doCheck = true;
+  doInstallCheck = true;
 
   meta = {
     homepage = https://sourceware.org/elfutils/;
