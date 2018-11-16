@@ -80,7 +80,6 @@
 , { "npm2nix": "git://github.com/NixOS/npm2nix.git#5.12.0" }
 , "npm-check-updates"
 , "ocaml-language-server"
-, { "parsoid": "git://github.com/abbradar/parsoid#stable" }
 , "peerflix"
 , "peerflix-server"
 , "phantomjs"
