@@ -107,6 +107,15 @@ if [ "$buildHost" = localhost ]; then
     buildHost=
 fi
 
+# either run as root, or install sudo
+asRoot() {
+    if [[ $UID == 0 ]]; then
+        "$@"
+    else
+        sudo -- "$@"
+    fi
+}
+
 buildHostCmd() {
     if [ -z "$buildHost" ]; then
         "$@"
@@ -119,9 +128,10 @@ buildHostCmd() {
 
 targetHostCmd() {
     if [ -z "$targetHost" ]; then
-        "$@"
+        asRoot "$@"
     else
-        ssh $SSHOPTS "$targetHost" "$@"
+        # the target host user must be root
+        ssh $SSHOPTS "$targetHost" -- "$@"
     fi
 }
 
@@ -196,13 +206,13 @@ fi
 
 # If ‘--upgrade’ is given, run ‘nix-channel --update nixos’.
 if [ -n "$upgrade" -a -z "$_NIXOS_REBUILD_REEXEC" ]; then
-    nix-channel --update nixos
+    asRoot nix-channel --update nixos
 
     # If there are other channels that contain a file called
     # ".update-on-nixos-rebuild", update them as well.
     for channelpath in /nix/var/nix/profiles/per-user/root/channels/*; do
         if [ -e "$channelpath/.update-on-nixos-rebuild" ]; then
-            nix-channel --update "$(basename "$channelpath")"
+            asRoot nix-channel --update "$(basename "$channelpath")"
         fi
     done
 fi
