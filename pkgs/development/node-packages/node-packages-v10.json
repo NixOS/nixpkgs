@@ -28,6 +28,7 @@
 , "eslint_d"
 , "emojione"
 , { "fast-cli": "1.x" }
+, "fkill-cli"
 , "forever"
 , "git-run"
 , "git-ssb"
