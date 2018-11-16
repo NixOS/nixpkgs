@@ -16,10 +16,7 @@ stdenv.mkDerivation rec {
     patchShebangs tests
   '';
 
-
-  # We need bzip2 in NativeInputs because otherwise we can't unpack the src,
-  # as the host-bzip2 will be in the path.
-  nativeBuildInputs = [ m4 bison flex gettext bzip2 ];
+  nativeBuildInputs = [ m4 bison flex gettext ];
   buildInputs = [ zlib bzip2 xz ];
 
   propagatedNativeBuildInputs = [ setupDebugInfoDirs ];
