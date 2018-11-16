@@ -27,5 +27,6 @@ buildPythonPackage rec {
       4880.
     '';
     license = licenses.bsd3;
+    maintainers = [ maintainers.bsima ];
   };
 }
