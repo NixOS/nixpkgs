@@ -52,7 +52,6 @@ stdenv.mkDerivation rec {
 
     mkdir -p $out/share/mime/packages
     cp dist/debian/valentina.sharedmimeinfo $out/share/mime/packages/valentina.xml
-    cp dist/debian/valentina.mime $out/share/mime/packages/valentina
   '';
 
   enableParallelBuilding = true;
