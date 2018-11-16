@@ -6,4 +6,5 @@
 , "node-gyp-build"
 , "node-pre-gyp"
 , "pnpm"
+, "parcel-bundler"
 ]
