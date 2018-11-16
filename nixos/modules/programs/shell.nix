@@ -46,6 +46,14 @@ with lib;
                   ln -s /nix/var/nix/profiles/per-user/root/channels "$HOME/.nix-defexpr/channels_root"
               fi
           fi
+
+          # Alias the `nixpkgs` prefix to the `nixos` channel on NixOS
+          if [ ! -L "$HOME/.nix-defexpr/nixpkgs-compat/nixpkgs" ]; then
+            mkdir -p "$HOME/.nix-defexpr/nixpkgs-compat"
+            ln -s \
+              /nix/var/nix/profiles/per-user/root/channels/nixos \
+              "$HOME/.nix-defexpr/nixpkgs-compat/nixpkgs"
+          fi
         fi
       '';
 
