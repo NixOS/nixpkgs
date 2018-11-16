@@ -644,6 +644,11 @@
     github = "bricewge";
     name = "Brice Waegeneire";
   };
+  bsima = {
+    email = "ben@bsima.me";
+    github = "bsima";
+    name = "Ben Sima";
+  };
   bstrik = {
     email = "dutchman55@gmx.com";
     github = "bstrik";
