@@ -70,6 +70,10 @@ stdenv.mkDerivation rec {
     mv usr/share/* $out/share/
 
     ln -s $out/share/polar-bookshelf/polar-bookshelf $out/bin/polar-bookshelf
+    
+    # Correct desktop file `Exec`
+    substituteInPlace $out/share/applications/polar-bookshelf.desktop \
+      --replace "/opt/Polar Bookshelf/polar-bookshelf" "$out/bin/polar-bookshelf"
   '';
 
   preFixup = ''
