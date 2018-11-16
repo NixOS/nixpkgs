@@ -16,7 +16,6 @@ stdenv.mkDerivation rec {
     patchShebangs tests
   '';
 
-  hardeningDisable = [ "format" ];
 
   # We need bzip2 in NativeInputs because otherwise we can't unpack the src,
   # as the host-bzip2 will be in the path.
