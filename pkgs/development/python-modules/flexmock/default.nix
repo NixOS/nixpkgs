@@ -19,6 +19,11 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = https://flexmock.readthedocs.io/en/latest/;
     description = "flexmock is a testing library for Python.";
+    longDescription = ''
+      flexmock is a testing library for Python that makes it easy to create
+      mocks, stubs and fakes.
+    '';
     license = licenses.bsd2;
+    maintainers = [ maintainers.bsima ];
   };
 }
