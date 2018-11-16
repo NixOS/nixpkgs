@@ -12,7 +12,7 @@
 # standard library dependencies
 , curl, fftwSinglePrec, fftw, gmp, libgit2, mpfr, openlibm, openspecfun, pcre2
 # linear algebra
-, mkl
+, mkl, llvmPackages
 # Darwin frameworks
 , CoreServices, ApplicationServices
 }:
@@ -105,7 +105,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     fftw fftwSinglePrec gmp libgit2 libunwind mpfr
-    pcre2.dev mkl openlibm openspecfun readline utf8proc
+    pcre2.dev mkl llvmPackages.openmp openlibm openspecfun readline utf8proc
     zlib
   ]
   ++ stdenv.lib.optionals stdenv.isDarwin [CoreServices ApplicationServices]
@@ -163,7 +163,7 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = [ "-fPIC" ];
 
   LD_LIBRARY_PATH = makeLibraryPath [
-    fftw fftwSinglePrec gmp libgit2 mpfr mkl openlibm
+    fftw fftwSinglePrec gmp libgit2 mpfr mkl llvmPackages.openmp openlibm
     openspecfun pcre2
   ];
 
