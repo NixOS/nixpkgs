@@ -43,6 +43,7 @@ rec {
     };
     updateScript = callPackage ./update.nix {
       attrPath = "firefox-unwrapped";
+      versionKey = "ffversion";
     };
   };
 
@@ -67,6 +68,7 @@ rec {
     updateScript = callPackage ./update.nix {
       attrPath = "firefox-esr-52-unwrapped";
       ffversionSuffix = "esr";
+      versionKey = "ffversion";
     };
   };
 
@@ -92,6 +94,7 @@ rec {
     updateScript = callPackage ./update.nix {
       attrPath = "firefox-esr-60-unwrapped";
       versionSuffix = "esr";
+      versionKey = "ffversion";
     };
   };
 
