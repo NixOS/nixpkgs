@@ -227,7 +227,7 @@ in {
   # We can't update the darwin versions because they simply don't compile at
   # all due to a bug in the intl extensions.
   #
-  # The bug so far is present in 7.1.21, 7.1.22, 7.1.23, 7.2.9, 7.2.10, 7.2.12.
+  # The bug so far is present in 7.1.21, 7.1.22, 7.1.23, 7.2.9, 7.2.10, 7.2.11.
 
   php71 = generic (
     if stdenv.isDarwin then
