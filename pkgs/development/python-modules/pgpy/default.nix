@@ -20,7 +20,12 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = https://github.com/SecurityInnovation/PGPy;
-    description = "PGPy is a Python (2 and 3) library for implementing Pretty Good Privacy into Python programs, conforming to the OpenPGP specification per RFC 4880.";
+    description = "Pretty Good Privacy for Python 2 and 3.";
+    longDescription = ''
+      PGPy is a Python (2 and 3) library for implementing Pretty Good Privacy
+      into Python programs, conforming to the OpenPGP specification per RFC
+      4880.
+    '';
     license = licenses.bsd3;
   };
 }
