@@ -1,5 +1,5 @@
 { lib, buildGoPackage, fetchFromGitHub, go-bindata, pkgconfig, makeWrapper
-, glib, gtk3, libappindicator-gtk3, gpgme, ostree, libselinux, btrfs-progs
+, glib, gtk3, libappindicator-gtk3, gpgme, openshift, ostree, libselinux, btrfs-progs
 , lvm2, docker-machine-kvm
 }:
 
@@ -31,6 +31,11 @@ in buildGoPackage rec {
   postPatch = ''
     substituteInPlace vendor/github.com/containers/image/storage/storage_image.go \
       --replace 'nil, diff' 'diff'
+
+    # minishift downloads openshift if not found therefore set the cache to /nix/store/...
+    substituteInPlace pkg/minishift/cache/oc_caching.go \
+      --replace 'filepath.Join(oc.MinishiftCacheDir, OC_CACHE_DIR, oc.OpenShiftVersion, runtime.GOOS)' '"${openshift}/bin"' \
+      --replace '"runtime"' ""
   '';
 
   buildFlagsArray = ''
@@ -49,7 +54,7 @@ in buildGoPackage rec {
 
   postInstall = ''
     wrapProgram "$bin/bin/minishift" \
-      --prefix PATH ':' '${lib.makeBinPath [ docker-machine-kvm ]}'
+      --prefix PATH ':' '${lib.makeBinPath [ docker-machine-kvm openshift ]}'
   '';
 
   meta = with lib; {
