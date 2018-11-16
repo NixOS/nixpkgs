@@ -23,5 +23,11 @@ buildPythonPackage rec {
     homepage = https://github.com/ojarva/python-sshpubkeys;
     description = "OpenSSH public key parser for Python";
     license = licenses.bsd3;
+    longDescription = ''
+      Native implementation for validating OpenSSH public keys.  Currently
+      ssh-rsa, ssh-dss (DSA), ssh-ed25519 and ecdsa keys with NIST curves are
+      supported.
+    '';
+    maintainers = [ maintainers.bsima ];
   };
 }
