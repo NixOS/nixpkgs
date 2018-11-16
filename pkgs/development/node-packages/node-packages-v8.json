@@ -19,7 +19,6 @@
 , "dat"
 , "dhcp"
 , "dnschain"
-, "docker-registry-server"
 , "elasticdump"
 , "elm-oracle"
 , "elm-test"
@@ -34,7 +33,6 @@
 , "git-standup"
 , "graphql-cli"
 , "grunt-cli"
-, { "guifi-earth": "https://github.com/jmendeth/guifi-earth/tarball/f3ee96835fd4fb0e3e12fadbd2cb782770d64854 " }
 , "gulp"
 , "gulp-cli"
 , "htmlhint"
@@ -78,15 +76,12 @@
 , "node-pre-gyp"
 , "nodemon"
 , "node-red"
-, { "node-uptime": "https://github.com/fzaninotto/uptime/tarball/1c65756575f90f563a752e2a22892ba2981c79b7" }
 , "npm"
 , { "npm2nix": "git://github.com/NixOS/npm2nix.git#5.12.0" }
 , "npm-check-updates"
 , "ocaml-language-server"
-, { "parsoid": "git://github.com/abbradar/parsoid#stable" }
 , "peerflix"
 , "peerflix-server"
-, "phantomjs"
 , "pnpm"
 , "prettier"
 , "pulp"
@@ -121,7 +116,6 @@
 , "@webassemblyjs/wasm-strip"
 , "@webassemblyjs/wasm-text-gen"
 , "@webassemblyjs/wast-refmt"
-, "webdrvr"
 , "webpack"
 , "webtorrent-cli"
 , "web-ext"

@@ -90,25 +90,6 @@ nodePackages // {
     buildInputs = [ pkgs.automake pkgs.autoconf nodePackages.node-gyp-build ];
   };
 
-  webdrvr = nodePackages.webdrvr.override {
-    buildInputs = [ pkgs.phantomjs ];
-
-    preRebuild = ''
-      mkdir $TMPDIR/webdrvr
-
-      ln -s ${pkgs.fetchurl {
-        url = "https://selenium-release.storage.googleapis.com/2.43/selenium-server-standalone-2.43.1.jar";
-        sha1 = "ef1b5f8ae9c99332f99ba8794988a1d5b974d27b";
-      }} $TMPDIR/webdrvr/selenium-server-standalone-2.43.1.jar
-      ln -s ${pkgs.fetchurl {
-        url = "http://chromedriver.storage.googleapis.com/2.10/chromedriver_linux64.zip";
-        sha1 = "26220f7e43ee3c0d714860db61c4d0ecc9bb3d89";
-      }} $TMPDIR/webdrvr/chromedriver_linux64.zip
-    '';
-
-    dontNpmInstall = true; # We face an error with underscore not found, but the package will work fine if we ignore this.
-  };
-
   webtorrent-cli = nodePackages.webtorrent-cli.override {
     buildInputs = [ nodePackages.node-gyp-build ];
   };
