@@ -117,6 +117,7 @@ let
           cp -v ./lib/libfdb_c.so                           $lib/lib
           cp -v ./bindings/c/foundationdb/fdb_c.h           $dev/include/foundationdb
           cp -v ./bindings/c/foundationdb/fdb_c_options.g.h $dev/include/foundationdb
+          cp -v ./fdbclient/vexillographer/fdb.options      $dev/include/foundationdb
 
           # java
           cp -v ./bindings/java/foundationdb-client.jar     $lib/share/java/fdb-java.jar
