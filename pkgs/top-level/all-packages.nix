@@ -256,14 +256,20 @@ with pkgs;
   fetchCrate = callPackage ../build-support/rust/fetchcrate.nix { };
 
   fetchFromGitHub = {
-    owner, repo, rev, name ? "source",
+    owner, repo, rev ? null, tag ? null, name ? "source",
     fetchSubmodules ? false, private ? false,
     githubBase ? "github.com", varPrefix ? null,
     ... # For hash agility
   }@args: assert private -> !fetchSubmodules;
+  if (rev == null) == (tag == null) then
+    throw "fetchFromGitHub requires either tag, or rev argument"
+  else
   let
+    revOrTag = if tag != null
+      then "refs/tags/${tag}"
+      else rev;
     baseUrl = "https://${githubBase}/${owner}/${repo}";
-    passthruAttrs = removeAttrs args [ "owner" "repo" "rev" "fetchSubmodules" "private" "githubBase" "varPrefix" ];
+    passthruAttrs = removeAttrs args [ "owner" "repo" "rev" "tag" "fetchSubmodules" "private" "githubBase" "varPrefix" ];
     varBase = "NIX${if varPrefix == null then "" else "_${varPrefix}"}_GITHUB_PRIVATE_";
     # We prefer fetchzip in cases we don't need submodules as the hash
     # is more stable in that case.
@@ -283,10 +289,10 @@ with pkgs;
       netrcImpureEnvVars = [ "${varBase}USERNAME" "${varBase}PASSWORD" ];
     };
     fetcherArgs = (if fetchSubmodules
-        then { inherit rev fetchSubmodules; url = "${baseUrl}.git"; }
-        else ({ url = "${baseUrl}/archive/${rev}.tar.gz"; } // privateAttrs)
+        then { inherit rev tag fetchSubmodules; url = "${baseUrl}.git"; }
+        else ({ url = "${baseUrl}/archive/${revOrTag}.tar.gz"; } // privateAttrs)
       ) // passthruAttrs // { inherit name; };
-  in fetcher fetcherArgs // { meta.homepage = baseUrl; inherit rev; };
+  in fetcher fetcherArgs // { meta.homepage = baseUrl; rev = revOrTag; };
 
   fetchFromBitbucket = {
     owner, repo, rev, name ? "source",
