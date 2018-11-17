@@ -17730,6 +17730,8 @@ in
 
   chromiumDev = lowPrio (chromium.override { channel = "dev"; });
 
+  chromiumOzone = lowPrio (chromium.override { channel = "dev"; useOzone = true; });
+
   chuck = callPackage ../applications/audio/chuck {
     inherit (darwin.apple_sdk.frameworks) AppKit Carbon CoreAudio CoreMIDI CoreServices Kernel;
   };

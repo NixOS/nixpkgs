@@ -21,10 +21,12 @@
 # optional dependencies
 , libgcrypt ? null # gnomeSupport || cupsSupport
 , libva ? null # useVaapi
+, libxkbcommon, libdrm, wayland # useOzone
 
 # package customization
 , enableNaCl ? false
 , useVaapi ? false
+, useOzone ? false
 , gnomeSupport ? false, gnome ? null
 , gnomeKeyringSupport ? false, libgnome-keyring3 ? null
 , proprietaryCodecs ? true
@@ -130,6 +132,7 @@ let
       ++ optionals cupsSupport [ libgcrypt cups ]
       ++ optional useVaapi libva
       ++ optional pulseSupport libpulseaudio
+      ++ optionals useOzone [ libxkbcommon libdrm wayland ]
       ++ optional (versionAtLeast version "72") jdk.jre;
 
     patches = [
@@ -267,6 +270,14 @@ let
       ffmpeg_branding = "Chrome";
     } // optionalAttrs useVaapi {
       use_vaapi = true;
+    } // optionalAttrs useOzone {
+      use_ozone = true;
+      use_system_minigbm = true;
+      ozone_auto_platforms = false;
+      ozone_platform = "wayland";
+      ozone_platform_wayland = true;
+      ozone_platform_x11 = true;
+      ozone_platform_headless = true;
     } // optionalAttrs pulseSupport {
       use_pulseaudio = true;
       link_pulseaudio = true;

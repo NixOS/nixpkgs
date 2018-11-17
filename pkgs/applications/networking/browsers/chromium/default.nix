@@ -2,6 +2,7 @@
 , makeWrapper, ed
 , glib, gtk3, gnome3, gsettings-desktop-schemas
 , libva ? null
+, libglvnd ? null
 , gcc, nspr, nss, patchelfUnstable, runCommand
 , lib
 
@@ -14,6 +15,7 @@
 , enablePepperFlash ? false
 , enableWideVine ? false
 , useVaapi ? false # test video on radeon, before enabling this
+, useOzone ? false
 , cupsSupport ? true
 , pulseSupport ? config.pulseaudio or stdenv.isLinux
 , commandLineArgs ? ""
@@ -36,7 +38,7 @@ in let
     mkChromiumDerivation = callPackage ./common.nix {
       inherit enableNaCl gnomeSupport gnome
               gnomeKeyringSupport proprietaryCodecs cupsSupport pulseSupport
-              useVaapi;
+              useVaapi useOzone;
     };
 
     browser = callPackage ./browser.nix { inherit channel enableWideVine; };
@@ -141,6 +143,7 @@ in stdenv.mkDerivation {
     getWrapperFlags = plugin: "$(< \"${plugin}/nix-support/wrapper-flags\")";
     libPath = stdenv.lib.makeLibraryPath ([]
       ++ stdenv.lib.optional useVaapi libva
+      ++ stdenv.lib.optional useOzone libglvnd
     );
 
   in with stdenv.lib; ''
