@@ -14965,6 +14965,8 @@ with pkgs;
 
   smem = callPackage ../os-specific/linux/smem { };
 
+  speedometer = callPackage ../os-specific/linux/speedometer { };
+
   statifier = callPackage ../os-specific/linux/statifier { };
 
   sysdig = callPackage ../os-specific/linux/sysdig {
