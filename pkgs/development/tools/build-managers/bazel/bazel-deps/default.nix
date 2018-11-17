@@ -21,6 +21,11 @@ buildBazelPackage rec {
 
   bazelTarget = "//src/scala/com/github/johnynek/bazel_deps:parseproject_deploy.jar";
 
+  bazelFlags = [
+    "--java_toolchain=@bazel_tools//tools/jdk:toolchain_hostjdk8"
+    "--host_java_toolchain=@bazel_tools//tools/jdk:toolchain_hostjdk8"
+  ];
+
   buildInputs = [ git makeWrapper ];
 
   fetchAttrs = {

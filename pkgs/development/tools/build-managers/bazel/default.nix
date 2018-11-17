@@ -14,7 +14,7 @@ let
   srcDeps = lib.singleton (
     fetchurl {
       url = "https://github.com/google/desugar_jdk_libs/archive/fd937f4180c1b557805219af4482f1a27eb0ff2b.zip";
-      sha256 = "04hs399340xfwcdajbbcpywnb2syp6z5ydwg966if3hqdb2zrf23";
+      sha256 = "43b8fcc56a180e178d498f375fbeb95e8b65b9bf6c2da91ae3ae0332521a1a12";
     }
   );
 
@@ -28,7 +28,7 @@ let
 in
 stdenv.mkDerivation rec {
 
-  version = "0.18.0";
+  version = "0.20.0";
 
   meta = with lib; {
     homepage = "https://github.com/bazelbuild/bazel/";
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel-${version}-dist.zip";
-    sha256 = "0mbi4n4wp1x73l8qksg4vyh2sba52xh9hfl2m518gv41g0pnvs6h";
+    sha256 = "1g9hglly5199gcw929fzc5f0d0dwlharkh387h58p1fq9ylayi8r";
   };
 
   sourceRoot = ".";
@@ -131,10 +131,10 @@ stdenv.mkDerivation rec {
       echo "build --host_copt=\"$(echo $NIX_CFLAGS_COMPILE | sed -e 's/ /" --host_copt=\"/g')\"" >> .bazelrc
       echo "build --linkopt=\"-Wl,$(echo $NIX_LDFLAGS | sed -e 's/ /" --linkopt=\"-Wl,/g')\"" >> .bazelrc
       echo "build --host_linkopt=\"-Wl,$(echo $NIX_LDFLAGS | sed -e 's/ /" --host_linkopt=\"-Wl,/g')\"" >> .bazelrc
-      sed -i -e "378 a --copt=\"$(echo $NIX_CFLAGS_COMPILE | sed -e 's/ /" --copt=\"/g')\" \\\\" scripts/bootstrap/compile.sh
-      sed -i -e "378 a --host_copt=\"$(echo $NIX_CFLAGS_COMPILE | sed -e 's/ /" --host_copt=\"/g')\" \\\\" scripts/bootstrap/compile.sh
-      sed -i -e "378 a --linkopt=\"-Wl,$(echo $NIX_LDFLAGS | sed -e 's/ /" --linkopt=\"-Wl,/g')\" \\\\" scripts/bootstrap/compile.sh
-      sed -i -e "378 a --host_linkopt=\"-Wl,$(echo $NIX_LDFLAGS | sed -e 's/ /" --host_linkopt=\"-Wl,/g')\" \\\\" scripts/bootstrap/compile.sh
+      sed -i -e "421 a --copt=\"$(echo $NIX_CFLAGS_COMPILE | sed -e 's/ /" --copt=\"/g')\" \\\\" scripts/bootstrap/compile.sh
+      sed -i -e "421 a --host_copt=\"$(echo $NIX_CFLAGS_COMPILE | sed -e 's/ /" --host_copt=\"/g')\" \\\\" scripts/bootstrap/compile.sh
+      sed -i -e "421 a --linkopt=\"-Wl,$(echo $NIX_LDFLAGS | sed -e 's/ /" --linkopt=\"-Wl,/g')\" \\\\" scripts/bootstrap/compile.sh
+      sed -i -e "421 a --host_linkopt=\"-Wl,$(echo $NIX_LDFLAGS | sed -e 's/ /" --host_linkopt=\"-Wl,/g')\" \\\\" scripts/bootstrap/compile.sh
 
       # --experimental_strict_action_env (which will soon become the
       # default, see bazelbuild/bazel#2574) hardcodes the default
@@ -186,6 +186,10 @@ stdenv.mkDerivation rec {
   checkPhase = ''
     export TEST_TMPDIR=$(pwd)
     ./output/bazel test --test_output=errors \
+        --host_javabase=@bazel_tools//tools/jdk:absolute_javabase \
+        --define=ABSOLUTE_JAVABASE=$JAVA_HOME \
+        --host_java_toolchain=@bazel_tools//tools/jdk:toolchain_vanilla \
+        --java_toolchain=@bazel_tools//tools/jdk:toolchain_vanilla \
         examples/cpp:hello-success_test \
         examples/java-native/src/test/java/com/example/myproject:hello
   '';
@@ -212,6 +216,10 @@ stdenv.mkDerivation rec {
 
     hello_test () {
       $out/bin/bazel test --test_output=errors \
+        --host_javabase=@bazel_tools//tools/jdk:absolute_javabase \
+        --define=ABSOLUTE_JAVABASE=$JAVA_HOME \
+        --host_java_toolchain=@bazel_tools//tools/jdk:toolchain_vanilla \
+        --java_toolchain=@bazel_tools//tools/jdk:toolchain_vanilla \
         examples/cpp:hello-success_test \
         examples/java-native/src/test/java/com/example/myproject:hello
     }
