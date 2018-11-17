@@ -23,6 +23,11 @@ mkChromiumDerivation (base: rec {
             "$libExecPath/libwidevinecdmadapter.so"
     fi
 
+    if [ -e "$buildPath/libminigbm.so" ]; then
+      cp -v "$buildPath/libminigbm.so" \
+            "$libExecPath/libminigbm.so"
+    fi
+
     mkdir -p "$sandbox/bin"
     cp -v "$buildPath/chrome_sandbox" "$sandbox/bin/${sandboxExecutableName}"
 

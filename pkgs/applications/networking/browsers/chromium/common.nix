@@ -20,10 +20,12 @@
 
 # optional dependencies
 , libgcrypt ? null # gnomeSupport || cupsSupport
+, libxkbcommon, libdrm, wayland # useOzone
 
 # package customization
 , enableNaCl ? false
 , enableWideVine ? false
+, useOzone ? false
 , gnomeSupport ? false, gnome ? null
 , gnomeKeyringSupport ? false, libgnome-keyring3 ? null
 , proprietaryCodecs ? true
@@ -46,6 +48,11 @@ let
 
   githubPatch = commit: sha256: fetchpatch {
     url = "https://github.com/chromium/chromium/commit/${commit}.patch";
+    inherit sha256;
+  };
+
+  igaliaPatch = commit: sha256: fetchpatch {
+    url = "https://github.com/Igalia/chromium/commit/${commit}.patch";
     inherit sha256;
   };
 
@@ -127,6 +134,7 @@ let
       ++ optionals gnomeSupport [ gnome.GConf libgcrypt ]
       ++ optionals cupsSupport [ libgcrypt cups ]
       ++ optional pulseSupport libpulseaudio
+      ++ optionals useOzone [ libxkbcommon libdrm wayland ]
       ++ optional (versionAtLeast version "72") jdk.jre;
 
     patches = optional enableWideVine ./patches/widevine.patch ++ [
@@ -143,6 +151,22 @@ let
       # ++ optional (versionRange "68" "72") ( githubPatch "<patch>" "0000000000000000000000000000000000000000000000000000000000000000" )
     ] ++ optionals (!stdenv.cc.isClang && (versionRange "71" "72")) [
       ( githubPatch "65be571f6ac2f7942b4df9e50b24da517f829eec" "1sqv0aba0mpdi4x4f21zdkxz2cf8ji55ffgbfcr88c5gcg0qn2jh" )
+    ] ++ optionals (useOzone && (versionRange "74" "99")) [
+      # Go to latest ozone-wayland-dev tag and copy extra commits here
+      # https://github.com/Igalia/chromium/commits/ozone-wayland-dev-74.0.3718.0/r635050
+      ( igaliaPatch "0af0494e0cdf8319e00e0d07d3700411d6030630" "01838j00f4fwvgisa2g4s109xc9v944wah3y8x60y56gkhjxkzfr" )
+      #( igaliaPatch "94c4cd50f69381d4fc989b6bc7569fc7cb6b3c95" "0b07y8a2jrrziajp16k3zgx2yv09ff0av1p970kwnzixflmp4lbg" )
+      #( igaliaPatch "6e49d60d38a68ee9e804c50c770618129bc7ba5f" "0z3xw0pya2pr81fvrij2y0kz0479axdmm99ghaqn13ny6wnp5vin" )
+      ( igaliaPatch "6168792c37cc7073fe424f4c4c2fc9a6d2d0503e" "15j81c831mksn0sif0f468lyrb1bn00h5xw0nx8ils9n37v8pqcx" )
+      ( igaliaPatch "509c1331a6ecbe2d282a4da7e48637cc2330d055" "07aw7i53i45wy0xkn2qkrrp8q5bph1jgadw20j6kz7fc2vdqzii3" )
+      ( igaliaPatch "db2948203578a9b1671bca86c1efbabc3dd51e7b" "0ga9bdn0ahwv8sw009s67zp2kac9zy6297j47sbpadzffg2vbnbd" )
+      ( igaliaPatch "6727ef6196c31b1d13ecf8129bb975500e544ff9" "1kzjr34izh4qna1ylpjg3kqw46zwdag21xnn5hhsly6a9764cs7a" )
+      ( igaliaPatch "0ed9ef9d7a46edc116b8e270efbc9529584b2f71" "0a5p40hv64dixixc0aphc0y9r33pvrq2zzl6br9w6b0fijr62nzp" )
+      ( igaliaPatch "987b1d9c1ffbe28d8aa116393c78b24394993a57" "1a8qp974d79nfcbvbja9n889pgkjx9na3ppadhm1lb7x1bcx5227" )
+      ( igaliaPatch "f225f4d45dd300dd6d99391f4cc49ac9e01c5eb5" "1ilxsa0kap4vlgjylkfgx2mp9xmljz9kfm8hcrqbdq34b1zkvzbq" )
+      ( igaliaPatch "232a93763950ab98e9d855580ffb65c341c7f85b" "0jwid7n1ldbcmkzaxfmhzq0d47c1cmr0aixmlgy1nisk2h9g96hi" )
+      ( igaliaPatch "9c61d3259e584cf6f70c49d96b49320000071296" "00xk3700h70v15yjqn2lbymrd3yfbiiibshx1yvvvcg6idlb3yfj" )
+      ( igaliaPatch "92c1adf73437784bae00ae3f011dc9e94d4906fe" "01gyknz1v04vgm3a9sqwji0xm00iq2aipjgzffanaa47h8wmrpir" )
     ] ++ optional stdenv.isAarch64
            (if (versionOlder version "71") then
               fetchpatch {
@@ -258,6 +282,14 @@ let
       proprietary_codecs = true;
       enable_hangout_services_extension = true;
       ffmpeg_branding = "Chrome";
+    } // optionalAttrs useOzone {
+      use_ozone = true;
+      ozone_auto_platforms = false;
+      ozone_platform = "wayland";
+      ozone_platform_wayland = true;
+      ozone_platform_x11 = true;
+      ozone_platform_headless = true;
+      use_intel_minigbm = true;
     } // optionalAttrs pulseSupport {
       use_pulseaudio = true;
       link_pulseaudio = true;
