@@ -11401,8 +11401,6 @@ with pkgs;
   mbedtls_1_3 = callPackage ../development/libraries/mbedtls/1.3.nix { };
   polarssl = mbedtls; # TODO: add to aliases.nix
 
-  mdds_0_7_1 = callPackage ../development/libraries/mdds/0.7.1.nix { };
-  mdds_0_12_1 = callPackage ../development/libraries/mdds/0.12.1.nix { };
   mdds = callPackage ../development/libraries/mdds { };
 
   mediastreamer = callPackage ../development/libraries/mediastreamer { };
