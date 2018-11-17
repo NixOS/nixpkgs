@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     urls = [
       "ftp://ftp.infradead.org/pub/openconnect/${name}.tar.gz"
     ];
-    sha256 = "00wacb79l2c45f94gxs63b9z25wlciarasvjrb8jb8566wgyqi0w";
+    sha256 = "00wacb79l2c45f94gxs63b9z25wlciarasvjrb8jb8566wgyqi00";
   };
 
   outputs = [ "out" "dev" ];

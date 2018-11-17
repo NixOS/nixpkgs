@@ -1,0 +1,46 @@
+{ stdenv, fetchFromGitHub, pkgconfig, vpnc, openssl ? null, gnutls ? null, gmp, libxml2, stoken, zlib, autoreconfHook } :
+
+assert (openssl != null) == (gnutls == null);
+
+let
+  version = "7.08";
+  name = "openconnect_pa-${version}";
+in stdenv.mkDerivation {
+  inherit name;
+
+  src = fetchFromGitHub {
+    owner = "dlenski";
+    repo = "openconnect";
+    rev = "e5fe063a087385c5b157ad7a9a3fa874181f6e3b";
+    sha256 = "0ywacqs3nncr2gpjjcz2yc9c6v4ifjssh0vb07h0qff06whqhdax"; 
+  };
+
+  outputs = [ "out" ];
+
+  preConfigure = ''
+      export PKG_CONFIG=${pkgconfig}/bin/pkg-config
+      export LIBXML2_CFLAGS="-I ${libxml2.dev}/include/libxml2"
+      export LIBXML2_LIBS="-L${libxml2.out}/lib -lxml2"
+  '';
+
+  configureFlags = [
+    "--with-vpnc-script=${vpnc}/etc/vpnc/vpnc-script"
+    "--disable-nls"
+    "--without-openssl-version-check"
+  ];
+
+  postInstall = ''
+    # ldconfig
+  '';
+
+  nativeBuildInputs = [ pkgconfig autoreconfHook ];
+  propagatedBuildInputs = [ vpnc openssl gnutls gmp libxml2 stoken zlib ];
+  
+  meta = {
+    description = "OpenConnect client extended to support Palo Alto Networks' GlobalProtect VPN";
+    homepage = https://github.com/dlenski/openconnect/;
+    license = stdenv.lib.licenses.lgpl21;
+    maintainers = with stdenv.lib.maintainers; [ chessai ];
+    platforms = stdenv.lib.platforms.linux;
+  };
+}
