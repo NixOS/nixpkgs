@@ -12,14 +12,14 @@
       else "";
   in "${if matched == null then base else builtins.head matched}${appendShort}";
 in
-{ url, rev ? "HEAD", md5 ? "", sha256 ? "", leaveDotGit ? deepClone
+{ url, tag ? null, rev ? null, md5 ? "", sha256 ? "", leaveDotGit ? deepClone
 , fetchSubmodules ? true, deepClone ? false
 , branchName ? null
-, name ? urlToName url rev
+, name ? null
 , # Shell code executed after the file has been fetched
   # successfully. This can do things like check or transform the file.
   postFetch ? ""
-}:
+} @ args:
 
 /* NOTE:
    fetchgit has one problem: git fetch only works for refs.
@@ -45,11 +45,17 @@ in
 
 assert deepClone -> leaveDotGit;
 
-if md5 != "" then
+if rev != null && tag != null then
+  throw "fetchgit cannot take both tag and rev arguments"
+else if md5 != "" then
   throw "fetchgit does not support md5 anymore, please use sha256"
-else
+else let
+  revOrTag = if tag != null
+    then "refs/tags/${tag}"
+    else args.rev or "HEAD";
+in
 stdenvNoCC.mkDerivation {
-  inherit name;
+  name = args.name or (urlToName url revOrTag);
   builder = ./builder.sh;
   fetcher = "${./nix-prefetch-git}";  # This must be a string to ensure it's called with bash.
   nativeBuildInputs = [git];
@@ -58,7 +64,9 @@ stdenvNoCC.mkDerivation {
   outputHashMode = "recursive";
   outputHash = sha256;
 
-  inherit url rev leaveDotGit fetchSubmodules deepClone branchName postFetch;
+  rev = revOrTag;
+
+  inherit url leaveDotGit fetchSubmodules deepClone branchName postFetch;
 
   GIT_SSL_CAINFO = "${cacert}/etc/ssl/certs/ca-bundle.crt";
 
