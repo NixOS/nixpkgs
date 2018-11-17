@@ -147,12 +147,12 @@ let
       $machine->succeed("nix-store --verify --check-contents >&2");
 
       # Check whether the channel works.
-      $machine->succeed("nix-env -iA nixos.procps >&2");
+      $machine->succeed("nix-env -iA nixpkgs.procps >&2");
       $machine->succeed("type -tP ps | tee /dev/stderr") =~ /.nix-profile/
           or die "nix-env failed";
 
       # Check that the daemon works, and that non-root users can run builds (this will build a new profile generation through the daemon)
-      $machine->succeed("su alice -l -c 'nix-env -iA nixos.procps' >&2");
+      $machine->succeed("su alice -l -c 'nix-env -iA nixpkgs.procps' >&2");
 
       # We need a writable Nix store on next boot.
       $machine->copyFileFromHost(

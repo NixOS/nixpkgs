@@ -38,7 +38,7 @@ import ./make-test.nix ({ pkgs, ...} : {
   testScript =
     ''
       # Make sure we have a NixOS tree (required by ‘nixos-container create’).
-      $machine->succeed("PAGER=cat nix-env -qa -A nixos.hello >&2");
+      $machine->succeed("PAGER=cat nix-env -qa -A nixpkgs.hello >&2");
 
       # Create some containers imperatively.
       my $id1 = $machine->succeed("nixos-container create foo --ensure-unique-name");

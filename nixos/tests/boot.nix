@@ -31,7 +31,7 @@ let
 
           # Test whether the channel got installed correctly.
           $machine->succeed("nix-instantiate --dry-run '<nixpkgs>' -A hello");
-          $machine->succeed("nix-env --dry-run -iA nixos.procps");
+          $machine->succeed("nix-env --dry-run -iA nixpkgs.procps");
 
           $machine->shutdown;
         '';
