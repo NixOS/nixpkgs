@@ -6,9 +6,11 @@
 let
   name = "pakcs-2.0.2";
 
+  # Don't switch to development release without a reason, because its
+  # source updates without version bump. Prefer current release instead.
   src = fetchurl {
     url = "https://www.informatik.uni-kiel.de/~pakcs/download/${name}-src.tar.gz";
-    sha256 = "086nbsfv363cwrfxzhs54ggdwwkh1ms0pn0v1a4lvqlksjm7jdhv";
+    sha256 = "1hm80gvpsifbsfi13i0iiv7f2b72ymw98bbrm6a8hjsbnfw55jvg";
   };
 
   curry-frontend = (haskellPackages.override {
