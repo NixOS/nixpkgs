@@ -815,7 +815,9 @@ in
 
   ssh-agents = callPackage ../tools/networking/ssh-agents { };
 
-  titaniumenv = callPackage ../development/mobile/titaniumenv { };
+  titaniumenv = callPackage ../development/mobile/titaniumenv {
+    pkgs_i686 = pkgsi686Linux;
+  };
 
   abootimg = callPackage ../development/mobile/abootimg {};
 
