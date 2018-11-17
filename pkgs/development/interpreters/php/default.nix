@@ -8,6 +8,28 @@
 
 with lib;
 
+# Because of an upstream bug: https://bugs.php.net/bug.php?id=76826
+# We can't enable the intl extensions for Darwin, due to CVE-2018-17082
+# forcing us to use recent versions.
+#
+# The bug so far is present in:
+#  * 7.1.21, 7.1.22, 7.1.23, 7.1.24
+#  * 7.2.9,  7.2.10, 7.2.11, 7.2.12
+#
+# Once it will be fixed, we will be able to remove the two specificities
+# between Darwin and intl here.
+
+assert (assertMsg ((config.php.intl or false) -> !stdenv.isDarwin) ''
+  PHP does not support the intl extension on Darwin for recent versions of PHP.
+  Please set `php.intl = false;` in your nixpkgs configuration:
+  `nixpkgs.config.php.intl = false;` in `/etc/nixos/configuration.nix` for
+  NixOS, and `php.intl = false;` in `~/.config/nixpkgs/config.nix` for
+  non-NixOS.
+  If you would prefer to keep an old version of PHP with intl, please be aware
+  that it has known security vulnerabilities. If you really want to do it,
+  please see this wiki page: https://nixos.wiki/wiki/FAQ/Pinning_Nixpkgs
+'');
+
 let
   generic =
   { version
@@ -37,7 +59,7 @@ let
   , opensslSupport ? config.php.openssl or true
   , mbstringSupport ? config.php.mbstring or true
   , gdSupport ? config.php.gd or true
-  , intlSupport ? config.php.intl or true
+  , intlSupport ? config.php.intl or (!stdenv.isDarwin)
   , exifSupport ? config.php.exif or true
   , xslSupport ? config.php.xsl or false
   , mcryptSupport ? config.php.mcrypt or true
@@ -223,35 +245,13 @@ let
     };
 
 in {
-  # Because of an upstream bug: https://bugs.php.net/bug.php?id=76826
-  # We can't update the darwin versions because they simply don't compile at
-  # all due to a bug in the intl extensions.
-  #
-  # The bug so far is present in 7.1.21, 7.1.22, 7.1.23, 7.2.9, 7.2.10, 7.2.11.
+  php71 = generic {
+    version = "7.1.24";
+    sha256 = "02qy76krbdhlbkzs9k1sa5mgmj0qnbb8gcf1j3q0cq3z7kkj9pk6";
+  };
 
-  php71 = generic (
-    if stdenv.isDarwin then
-      {
-        version = "7.1.20";
-        sha256 = "0i8xd6p4zdg8fl6f0j430raanlshsshr3s3jlm72b0gvi1n4f6rs";
-      }
-    else
-      {
-        version = "7.1.23";
-        sha256 = "0jyc5q666xh808sgy78cfylkhy5ma2zdg88jlxhagyphv23aly9d";
-      }
-  );
-
-  php72 = generic (
-    if stdenv.isDarwin then
-      {
-        version = "7.2.8";
-        sha256 = "1rky321gcvjm0npbfd4bznh36an0y14viqcvn4yzy3x643sni00z";
-      }
-    else
-      {
-        version = "7.2.11";
-        sha256 = "1idlv04j1l2d0bn5nvfrapcpjh6ayj1n4y80lqvnp5h75m07y3aa";
-      }
-  );
+  php72 = generic {
+    version = "7.2.12";
+    sha256 = "1dpnbsv4bdlc5v40ddddi971f456jp1qrn89w5di1dj70g1c895p";
+  };
 }

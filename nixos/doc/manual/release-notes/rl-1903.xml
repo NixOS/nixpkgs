@@ -233,6 +233,13 @@
      options.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     PHP on Darwin no longer comes with the <literal>intl</literal> extension,
+     as there is a known security vulnerability on the latest version of
+     <literal>intl</literal> for PHP that supports Darwin.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
