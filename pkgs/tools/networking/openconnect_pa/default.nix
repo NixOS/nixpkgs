@@ -36,10 +36,10 @@ in stdenv.mkDerivation {
   nativeBuildInputs = [ pkgconfig autoreconfHook ];
   propagatedBuildInputs = [ vpnc openssl gnutls gmp libxml2 stoken zlib ];
   
-  meta = {
+  meta = with stdenv.lib; {
     description = "OpenConnect client extended to support Palo Alto Networks' GlobalProtect VPN";
     homepage = https://github.com/dlenski/openconnect/;
-    license = stdenv.lib.licenses.lgpl21;
+    license = licenses.lgpl21;
     maintainers = with stdenv.lib.maintainers; [ chessai ];
     platforms = stdenv.lib.platforms.linux;
   };
