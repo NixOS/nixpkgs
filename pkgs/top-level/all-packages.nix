@@ -239,9 +239,35 @@ in
   # `fetchurl' downloads a file from the network.
   fetchurl = import ../build-support/fetchurl {
     inherit lib stdenvNoCC;
-    # On darwin, libkrb5 needs bootstrap_cmds which would require
-    # converting many packages to fetchurl_boot to avoid evaluation cycles.
-    curl = buildPackages.curl.override (lib.optionalAttrs stdenv.isDarwin { gssSupport = false; });
+    curl = buildPackages.curl.override rec {
+      # break dependency cycles
+      fetchurl = stdenv.fetchurlBoot;
+      pkgconfig = buildPackages.pkgconfig.override { fetchurl = stdenv.fetchurlBoot; };
+      perl = buildPackages.perl.override { fetchurl = stdenv.fetchurlBoot; };
+      openssl = buildPackages.openssl.override {
+        fetchurl = stdenv.fetchurlBoot;
+        inherit perl;
+        buildPackages = { inherit perl; };
+      };
+      libssh2 = buildPackages.libssh2.override {
+        fetchurl = stdenv.fetchurlBoot;
+        inherit openssl;
+      };
+      # On darwin, libkrb5 needs bootstrap_cmds which would require
+      # converting many packages to fetchurl_boot to avoid evaluation cycles.
+      gssSupport = !stdenv.isDarwin && !stdenv.hostPlatform.isWindows;
+      libkrb5 = buildPackages.libkrb5.override {
+        fetchurl = stdenv.fetchurlBoot;
+        inherit pkgconfig perl openssl;
+        keyutils = buildPackages.keyutils.override { fetchurl = stdenv.fetchurlBoot; };
+      };
+      nghttp2 = buildPackages.nghttp2.override {
+        fetchurl = stdenv.fetchurlBoot;
+        inherit pkgconfig openssl;
+        c-ares = buildPackages.c-ares.override { fetchurl = stdenv.fetchurlBoot; };
+        libev = buildPackages.libev.override { fetchurl = stdenv.fetchurlBoot; };
+      };
+    };
   };
 
   fetchRepoProject = callPackage ../build-support/fetchrepoproject { };
@@ -249,13 +275,6 @@ in
   fetchipfs = import ../build-support/fetchipfs {
     inherit curl stdenv;
   };
-
-  # fetchurlBoot is used for curl and its dependencies in order to
-  # prevent a cyclic dependency (curl depends on curl.tar.bz2,
-  # curl.tar.bz2 depends on fetchurl, fetchurl depends on curl).  It
-  # uses the curl from the previous bootstrap phase (e.g. a statically
-  # linked curl in the case of stdenv-linux).
-  fetchurlBoot = stdenv.fetchurlBoot;
 
   fetchzip = callPackage ../build-support/fetchzip { };
 
@@ -2139,9 +2158,7 @@ in
     brotliSupport = true;
   };
 
-  curl = callPackage ../tools/networking/curl rec {
-    fetchurl = fetchurlBoot;
-  };
+  curl = callPackage ../tools/networking/curl { };
 
   curl_unix_socket = callPackage ../tools/networking/curl-unix-socket rec { };
 
@@ -8971,9 +8988,7 @@ in
 
   pkgconf = callPackage ../development/tools/misc/pkgconf {};
 
-  pkg-config = callPackage ../development/tools/misc/pkg-config {
-    fetchurl = fetchurlBoot;
-  };
+  pkg-config = callPackage ../development/tools/misc/pkg-config { };
   pkgconfig = pkg-config; # added 2018-02-02
 
   pkg-configUpstream = lowPrio (pkg-config.override { vanilla = true; });
@@ -9436,9 +9451,7 @@ in
 
   bzrtp = callPackage ../development/libraries/bzrtp { };
 
-  c-ares = callPackage ../development/libraries/c-ares {
-    fetchurl = fetchurlBoot;
-  };
+  c-ares = callPackage ../development/libraries/c-ares { };
 
   c-blosc = callPackage ../development/libraries/c-blosc { };
 
@@ -10499,10 +10512,7 @@ in
     inherit (buildPackages.darwin) bootstrap_cmds;
   };
   krb5Full = krb5;
-  libkrb5 = krb5.override {
-    fetchurl = fetchurlBoot;
-    type = "lib";
-  };
+  libkrb5 = krb5.override { type = "lib"; };
   kerberos = libkrb5; # TODO: move to aliases.nix
 
   languageMachines = recurseIntoAttrs (import ../development/libraries/languagemachines/packages.nix { inherit callPackage; });
@@ -10878,9 +10888,7 @@ in
 
   libechonest = callPackage ../development/libraries/libechonest { };
 
-  libev = callPackage ../development/libraries/libev {
-    fetchurl = fetchurlBoot;
-  };
+  libev = callPackage ../development/libraries/libev { };
 
   libevent = callPackage ../development/libraries/libevent { };
 
@@ -11099,9 +11107,7 @@ in
     ln -sv ${libcDev}/include/iconv.h $out/include
   '';
 
-  libiconvReal = callPackage ../development/libraries/libiconv {
-    fetchurl = fetchurlBoot;
-  };
+  libiconvReal = callPackage ../development/libraries/libiconv { };
 
   # On non-GNU systems we need GNU Gettext for libintl.
   libintl = if stdenv.hostPlatform.libc != "glibc" then gettext else null;
@@ -11771,9 +11777,7 @@ in
 
   newt = callPackage ../development/libraries/newt { };
 
-  nghttp2 = callPackage ../development/libraries/nghttp2 {
-    fetchurl = fetchurlBoot;
-  };
+  nghttp2 = callPackage ../development/libraries/nghttp2 { };
   libnghttp2 = nghttp2.lib;
 
   nix-plugins = callPackage ../development/libraries/nix-plugins {
@@ -11931,9 +11935,7 @@ in
 
   openssl = openssl_1_0_2;
 
-  inherit (callPackages ../development/libraries/openssl {
-      fetchurl = fetchurlBoot;
-    })
+  inherit (callPackages ../development/libraries/openssl { })
     openssl_1_0_2
     openssl_1_1;
 
@@ -13132,9 +13134,7 @@ in
 
   zeitgeist = callPackage ../development/libraries/zeitgeist { };
 
-  zlib = callPackage ../development/libraries/zlib {
-    fetchurl = fetchurlBoot;
-  };
+  zlib = callPackage ../development/libraries/zlib { };
 
   libdynd = callPackage ../development/libraries/libdynd { };
 
@@ -14913,8 +14913,7 @@ in
     kernel = null; # dpdk modules are in linuxPackages.dpdk.kmod
   };
 
-  # Using fetchurlBoot because this is used by kerberos (on Linux), which curl depends on
-  keyutils = callPackage ../os-specific/linux/keyutils { fetchurl = fetchurlBoot; };
+  keyutils = callPackage ../os-specific/linux/keyutils { };
 
   libselinux = callPackage ../os-specific/linux/libselinux { };
 
