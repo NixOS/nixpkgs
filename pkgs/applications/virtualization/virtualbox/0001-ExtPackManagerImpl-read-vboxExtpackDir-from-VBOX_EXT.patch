@@ -1,0 +1,32 @@
+From 568f46e8b1667ae7e3bd46714a050b238b7255fe Mon Sep 17 00:00:00 2001
+From: Florian Klink <flokli@flokli.de>
+Date: Sat, 27 Oct 2018 18:07:59 +0100
+Subject: [PATCH] ExtPackManagerImpl: read vboxExtpackDir from VBOX_EXTPACK_DIR
+ if set
+
+---
+ src/VBox/Main/src-all/ExtPackManagerImpl.cpp | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
+
+diff --git a/src/VBox/Main/src-all/ExtPackManagerImpl.cpp b/src/VBox/Main/src-all/ExtPackManagerImpl.cpp
+index 739efc34b9..6179ac6bab 100644
+--- a/src/VBox/Main/src-all/ExtPackManagerImpl.cpp
++++ b/src/VBox/Main/src-all/ExtPackManagerImpl.cpp
+@@ -2094,7 +2094,13 @@ HRESULT ExtPackManager::initExtPackManager(VirtualBox *a_pVirtualBox, VBOXEXTPAC
+     char szBaseDir[RTPATH_MAX];
+     int rc = RTPathAppPrivateArchTop(szBaseDir, sizeof(szBaseDir));
+     AssertLogRelRCReturn(rc, E_FAIL);
+-    rc = RTPathAppend(szBaseDir, sizeof(szBaseDir), VBOX_EXTPACK_INSTALL_DIR);
++    const char* vboxExtpackDir = getenv("VBOX_EXTPACK_DIR");
++    if(vboxExtpackDir == NULL) {
++        rc = RTPathAppend(szBaseDir, sizeof(szBaseDir), VBOX_EXTPACK_INSTALL_DIR);
++    }
++    else {
++        rc = vboxExtpackDir;
++    }
+     AssertLogRelRCReturn(rc, E_FAIL);
+ 
+     char szCertificatDir[RTPATH_MAX];
+-- 
+2.18.1
+

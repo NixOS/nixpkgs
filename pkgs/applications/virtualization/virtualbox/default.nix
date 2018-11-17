@@ -95,6 +95,7 @@ in stdenv.mkDerivation {
     # Kernel 5.3 fix, should be fixed with VirtualBox 6.0.14
     # https://www.virtualbox.org/ticket/18911
     ./kernel-5.3-fix.patch
+    ./0001-ExtPackManagerImpl-read-vboxExtpackDir-from-VBOX_EXT.patch
   ];
 
   postPatch = ''
