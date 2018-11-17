@@ -310,13 +310,20 @@ with pkgs;
 
   # gitlab example
   fetchFromGitLab = {
-    owner, repo, rev, domain ? "gitlab.com", name ? "source", group ? null,
+    owner, repo, rev ? null, tag ? null, domain ? "gitlab.com", name ? "source", group ? null,
     ... # For hash agility
-  }@args: fetchzip ({
+  }@args:
+  if (rev == null) == (tag == null) then
+    throw "fetchFromGitLab requires either tag, or rev argument"
+  else let
+    revOrTag = if tag != null
+      then "refs/tags/${tag}"
+      else rev;
+  in fetchzip ({
     inherit name;
-    url = "https://${domain}/api/v4/projects/${lib.optionalString (group != null) "${group}%2F"}${owner}%2F${repo}/repository/archive.tar.gz?sha=${rev}";
+    url = "https://${domain}/api/v4/projects/${lib.optionalString (group != null) "${group}%2F"}${owner}%2F${repo}/repository/archive.tar.gz?sha=${lib.escapeUriSegment revOrTag}";
     meta.homepage = "https://${domain}/${lib.optionalString (group != null) "${group}/"}${owner}/${repo}/";
-  } // removeAttrs args [ "domain" "owner" "group" "repo" "rev" ]) // { inherit rev; };
+  } // removeAttrs args [ "domain" "owner" "group" "repo" "rev" "tag" ]) // { rev = revOrTag; };
 
   # gitweb example, snapshot support is optional in gitweb
   fetchFromRepoOrCz = {
