@@ -475,6 +475,8 @@ with pkgs;
 
   acme-client = callPackage ../tools/networking/acme-client { inherit (darwin) apple_sdk; };
 
+  amass = callPackage ../tools/networking/amass { };
+
   afew = callPackage ../applications/networking/mailreaders/afew { pythonPackages = python3Packages; };
 
   afio = callPackage ../tools/archivers/afio { };
