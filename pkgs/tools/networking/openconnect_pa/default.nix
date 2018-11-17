@@ -29,10 +29,6 @@ in stdenv.mkDerivation {
     "--without-openssl-version-check"
   ];
 
-  postInstall = ''
-    # ldconfig
-  '';
-
   nativeBuildInputs = [ pkgconfig autoreconfHook ];
   propagatedBuildInputs = [ vpnc openssl gnutls gmp libxml2 stoken zlib ];
   
