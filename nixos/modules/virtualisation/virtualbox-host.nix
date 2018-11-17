@@ -5,13 +5,17 @@ with lib;
 let
   cfg = config.virtualisation.virtualbox.host;
 
-  virtualbox = cfg.package.override {
+  virtualboxUnwrapped = cfg.package.override {
     inherit (cfg) enableHardening headless;
-    extensionPack = if cfg.enableExtensionPack then pkgs.virtualboxExtpack else null;
   };
+  virtualbox = if cfg.enableExtensionPack then
+    pkgs.callPackage ../../../pkgs/applications/virtualization/virtualbox/wrapper.nix {
+      virtualbox = virtualboxUnwrapped;
+    }
+  else virtualboxUnwrapped;
 
   kernelModules = config.boot.kernelPackages.virtualbox.override {
-    inherit virtualbox;
+    virtualbox = virtualboxUnwrapped;
   };
 
 in

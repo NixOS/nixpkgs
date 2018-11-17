@@ -21326,9 +21326,7 @@ in
 
   virtualboxExtpack = callPackage ../applications/virtualization/virtualbox/extpack.nix { };
 
-  virtualboxWithExtpack = lowPrio (virtualbox.override {
-    extensionPack = virtualboxExtpack;
-  });
+  virtualboxWithExtpack = callPackage ../applications/virtualization/virtualbox/wrapper.nix { };
 
   virtualglLib = callPackage ../tools/X11/virtualgl/lib.nix {
     fltk = fltk13;
