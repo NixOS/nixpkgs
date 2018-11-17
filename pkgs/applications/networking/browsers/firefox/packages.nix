@@ -14,22 +14,14 @@ rec {
 
   firefox = common rec {
     pname = "firefox";
-    ffversion = "63.0.1";
+    ffversion = "63.0.3";
     src = fetchurl {
       url = "mirror://mozilla/firefox/releases/${ffversion}/source/firefox-${ffversion}.source.tar.xz";
-      sha512 = "29acad70259d71a924cbaf4c2f01fb034cf8090759b3a2d74a5eabc2823f83b6508434e619d8501d3930702e2bbad373581a70e2ce57aead9af77fc42766fbe2";
+      sha512 = "319bdkvk1r53i8l9ilz9ffllp2yxn02glhjsf26bqchw0c4ym8y6d62j1g7s55lddzqka3kcsmzba0k8wna1aw3pydf7v84nyhaw1bc";
     };
 
     patches = nixpkgsPatches ++ [
       ./no-buildconfig.patch
-      # this is only required for version 63.0,  version 63.0.3 onwards will
-      # carry the patch
-      # bug report: https://bugzilla.mozilla.org/show_bug.cgi?id=1503401
-      (fetchpatch {
-        name = "fix-rust-cbindgen-breaking-change.patch";
-        url = "https://hg.mozilla.org/releases/mozilla-release/raw-rev/22273af49058";
-        sha256 = "1kvswbr1jxigli6s5jh3cr21153jx6mlyxf4a39510y3dg19ls0a";
-      })
     ];
 
     extraNativeBuildInputs = [ python3 ];
@@ -43,6 +35,7 @@ rec {
     };
     updateScript = callPackage ./update.nix {
       attrPath = "firefox-unwrapped";
+      versionKey = "ffversion";
     };
   };
 
@@ -67,6 +60,7 @@ rec {
     updateScript = callPackage ./update.nix {
       attrPath = "firefox-esr-52-unwrapped";
       ffversionSuffix = "esr";
+      versionKey = "ffversion";
     };
   };
 
@@ -92,6 +86,7 @@ rec {
     updateScript = callPackage ./update.nix {
       attrPath = "firefox-esr-60-unwrapped";
       versionSuffix = "esr";
+      versionKey = "ffversion";
     };
   };
 
