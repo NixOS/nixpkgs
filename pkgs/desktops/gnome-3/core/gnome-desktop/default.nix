@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   patches = [
     (substituteAll {
       src = ./bubblewrap-paths.patch;
-      BUBBLEWRAP_BIN = "${bubblewrap}/bin/bwrap";
+      bubblewrap_bin = "${bubblewrap}/bin/bwrap";
     })
   ];
 
