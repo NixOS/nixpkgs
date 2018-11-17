@@ -1,13 +1,12 @@
-{ config, stdenv, fetchurl, lib, iasl, dev86, pam, libxslt, libxml2, wrapQtAppsHook
+{ stdenv, fetchurl, lib, iasl, dev86, pam, libxslt, libxml2, wrapQtAppsHook
 , libX11, xorgproto, libXext, libXcursor, libXmu, libIDL, SDL, libcap, libGL
 , libpng, glib, lvm2, libXrandr, libXinerama, libopus, qtbase, qtx11extras
 , qttools, qtsvg, qtwayland, pkgconfig, which, docbook_xsl, docbook_xml_dtd_43
 , alsaLib, curl, libvpx, nettools, dbus, substituteAll
-, makeself, perl
+, makeself, perl, libpulseaudio
 , javaBindings ? true, jdk ? null # Almost doesn't affect closure size
 , pythonBindings ? false, python3 ? null
 , extensionPack ? null, fakeroot ? null
-, pulseSupport ? config.pulseaudio or stdenv.isLinux, libpulseaudio ? null
 , enableHardening ? false
 , headless ? false
 , enable32bitGuests ? true
@@ -46,9 +45,8 @@ in stdenv.mkDerivation {
       libXmu libpng libopus python ]
     ++ optional javaBindings jdk
     ++ optional pythonBindings python # Python is needed even when not building bindings
-    ++ optional pulseSupport libpulseaudio
     ++ optionals (headless) [ libXrandr libGL ]
-    ++ optionals (!headless) [ qtbase qtx11extras libXinerama SDL ];
+    ++ optionals (!headless) [ qtbase qtx11extras libpulseaudio libXinerama SDL ];
 
   hardeningDisable = [ "format" "fortify" "pic" "stackprotector" ];
 
@@ -64,7 +62,7 @@ in stdenv.mkDerivation {
     ls kBuild/bin/linux.amd64/k* tools/linux.amd64/bin/* | xargs -n 1 patchelf --set-interpreter ${stdenv.glibc.out}/lib/ld-linux-x86-64.so.2
 
     grep 'libpulse\.so\.0'      src include -rI --files-with-match | xargs sed -i -e '
-      ${optionalString pulseSupport
+      ${optionalString (!headless)
         ''s@"libpulse\.so\.0"@"${libpulseaudio.out}/lib/libpulse.so.0"@g''}'
 
     grep 'libdbus-1\.so\.3'     src include -rI --files-with-match | xargs sed -i -e '
@@ -135,7 +133,7 @@ in stdenv.mkDerivation {
       ${optionalString headless "--build-headless"} \
       ${optionalString (!javaBindings) "--disable-java"} \
       ${optionalString (!pythonBindings) "--disable-python"} \
-      ${optionalString (!pulseSupport) "--disable-pulse"} \
+      ${optionalString (headless) "--disable-pulse"} \
       ${optionalString (!enableHardening) "--disable-hardening"} \
       ${optionalString (!enable32bitGuests) "--disable-vmmraw"} \
       --disable-kmods
@@ -169,18 +167,6 @@ in stdenv.mkDerivation {
         ln -s "$libexec/$file" $out/bin/$file
     done
 
-    ${optionalString (extensionPack != null) ''
-      mkdir -p "$share"
-      "${fakeroot}/bin/fakeroot" "${stdenv.shell}" <<EXTHELPER
-      "$libexec/VBoxExtPackHelperApp" install \
-        --base-dir "$share/ExtensionPacks" \
-        --cert-dir "$share/ExtPackCertificates" \
-        --name "Oracle VM VirtualBox Extension Pack" \
-        --tarball "${extensionPack}" \
-        --sha-256 "${extensionPack.outputHash}"
-      EXTHELPER
-    ''}
-
     ${optionalString (!headless) ''
       # Create and fix desktop item
       mkdir -p $out/share/applications
@@ -208,7 +194,6 @@ in stdenv.mkDerivation {
 
   passthru = {
     inherit version;       # for guest additions
-    inherit extensionPack; # for inclusion in profile to prevent gc
   };
 
   meta = {
