@@ -72,16 +72,16 @@ default. To figure out the proper attribute path, it's easiest to query for the
 path of a well-known Nixpkgs package, i.e.:
 ```
 $ nix-env -qaP coreutils
-nixos.coreutils  coreutils-8.23
+nixpkgs.coreutils  coreutils-8.23
 ```
 
 If your system responds like that (most NixOS installations will), then the
-attribute path to `haskellPackages` is `nixos.haskellPackages`. Thus, if you
+attribute path to `haskellPackages` is `nixpkgs.haskellPackages`. Thus, if you
 want to use `nix-env` without giving an explicit `-f` flag, then that's the way
 to do it:
 ```shell
-nix-env -qaP -A nixos.haskellPackages
-nix-env -iA nixos.haskellPackages.cabal-install
+nix-env -qaP -A nixpkgs.haskellPackages
+nix-env -iA nixpkgs.haskellPackages.cabal-install
 ```
 
 Our current default compiler is GHC 7.10.x and the `haskellPackages` set

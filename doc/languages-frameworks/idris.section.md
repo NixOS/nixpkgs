@@ -5,9 +5,6 @@
 The easiest way to get a working idris version is to install the `idris` attribute:
 
 ```
-$ # On NixOS
-$ nix-env -i nixos.idris
-$ # On non-NixOS
 $ nix-env -i nixpkgs.idris
 ```
 
@@ -19,9 +16,6 @@ $ nix-env -iE 'pkgs: pkgs.idrisPackages.with-packages (with pkgs.idrisPackages; 
 
 To see all available Idris packages:
 ```
-$ # On NixOS
-$ nix-env -qaPA nixos.idrisPackages
-$ # On non-NixOS
 $ nix-env -qaPA nixpkgs.idrisPackages
 ```
 

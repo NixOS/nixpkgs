@@ -9,7 +9,7 @@
   With the command <command>nix-env</command>, you can install and uninstall
   packages from the command line. For instance, to install Mozilla Thunderbird:
 <screen>
-$ nix-env -iA nixos.thunderbird</screen>
+$ nix-env -iA nixpkgs.thunderbird</screen>
   If you invoke this as root, the package is installed in the Nix profile
   <filename>/nix/var/nix/profiles/default</filename> and visible to all users
   of the system; otherwise, the package ends up in
