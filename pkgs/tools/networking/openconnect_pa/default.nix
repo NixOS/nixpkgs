@@ -15,7 +15,6 @@ in stdenv.mkDerivation {
     sha256 = "0ywacqs3nncr2gpjjcz2yc9c6v4ifjssh0vb07h0qff06whqhdax"; 
   };
 
-  outputs = [ "out" ];
 
   preConfigure = ''
       export PKG_CONFIG=${pkgconfig}/bin/pkg-config
