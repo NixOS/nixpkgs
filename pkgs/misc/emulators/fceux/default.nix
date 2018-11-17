@@ -1,6 +1,12 @@
-{stdenv, fetchurl, scons, zlib, SDL, lua5_1, pkgconfig}:
+{ stdenv, fetchurl, scons, zlib, SDL, lua5_1, pkgconfig
+  , enableGtk ? false, gtk2 ? null
+}:
 
-stdenv.mkDerivation {
+assert enableGtk -> gtk2 != null;
+
+let
+  bool2str = bval: if bval then "true" else "false";
+in stdenv.mkDerivation {
   name = "fceux-2.2.3";
 
   src = fetchurl {
@@ -10,7 +16,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    scons zlib SDL lua5_1
+    scons zlib SDL lua5_1 enableGtk gtk2
   ];
 
   phases = "unpackPhase buildPhase";
@@ -24,7 +30,7 @@ stdenv.mkDerivation {
     export CC="gcc"
     export CXX="g++"
     mkdir -p "$out" "$out/share/applications" "$out/share/pixmaps"
-    scons --prefix="$out" OPENGL=false GTK=false CREATE_AVI=false LOGO=false install
+    scons --prefix="$out" OPENGL=false GTK=${bool2str enableGtk} CREATE_AVI=false LOGO=false install
   '';
 
   meta = {
