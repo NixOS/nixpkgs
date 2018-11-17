@@ -193,6 +193,7 @@ in
   strongswan-swanctl = handleTest ./strongswan-swanctl.nix {};
   sudo = handleTest ./sudo.nix {};
   switchTest = handleTest ./switch-test.nix {};
+  syncthing-relay = handleTest ./syncthing-relay.nix {};
   systemd = handleTest ./systemd.nix {};
   taskserver = handleTest ./taskserver.nix {};
   tomcat = handleTest ./tomcat.nix {};
