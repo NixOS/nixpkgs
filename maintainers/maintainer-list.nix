@@ -762,6 +762,11 @@
     github = "ChengCat";
     name = "Yucheng Zhang";
   };
+  chessai = {
+    email = "chessai1996@gmail.com";
+    github = "chessai";
+    name = "Daniel Cartwright";
+  };
   chiiruno = {
     email = "okinan@protonmail.com";
     github = "chiiruno";
