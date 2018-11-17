@@ -1,4 +1,7 @@
-{stdenv, version, xcodeBaseDir}:
+{stdenv}:
+{version ? "9.3", xcodeBaseDir ? "/Applications/Xcode.app"}:
+
+assert stdenv.isDarwin;
 
 stdenv.mkDerivation {
   name = "xcode-wrapper-"+version;
@@ -9,6 +12,7 @@ stdenv.mkDerivation {
     ln -s /usr/bin/security
     ln -s /usr/bin/codesign
     ln -s /usr/bin/xcrun
+    ln -s /usr/bin/plutil
     ln -s "${xcodeBaseDir}/Contents/Developer/usr/bin/xcodebuild"
     ln -s "${xcodeBaseDir}/Contents/Developer/Applications/Simulator.app/Contents/MacOS/Simulator"
 
