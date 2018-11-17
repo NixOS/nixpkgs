@@ -129,6 +129,7 @@ in buildFHSUserEnv rec {
     wayland
     mesa_noglu
     libxkbcommon
+    gtk3
 
     # Other things from runtime
     flac
