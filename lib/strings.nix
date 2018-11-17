@@ -315,6 +315,23 @@ rec {
   */
   escapeNixString = s: escape ["$"] (builtins.toJSON s);
 
+  /* Encode string for safe use in URI segments
+
+     https://en.wikipedia.org/wiki/Percent-encoding
+
+     Type: string -> string
+
+     Example:
+       escapeUriSegment "foo/bar?baz=qux&quux=quuz#corge"
+       => "foo%2Fbar%3Fbaz%3Dqux%26quux%3Dquuz%23corge"
+  */
+  escapeUriSegment = arg:
+    let
+      raw = [ "%" "!" "#" "$" "&" "'" "(" ")" "*" "+" "," "/" ":" ";" "=" "?" "@" "[" "]" ];
+      encoded = [ "%%" "%21" "%23" "%24" "%26" "%27" "%28" "%29" "%2A" "%2B" "%2C" "%2F" "%3A" "%3B" "%3D" "%3F" "%40" "%5B" "%5D" ];
+    in
+      replaceStrings raw encoded (toString arg);
+
   # Obsolete - use replaceStrings instead.
   replaceChars = builtins.replaceStrings or (
     del: new: s:

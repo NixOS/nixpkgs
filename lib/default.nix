@@ -82,7 +82,7 @@ let
       concatImapStringsSep makeSearchPath makeSearchPathOutput
       makeLibraryPath makeBinPath makePerlPath makeFullPerlPath optionalString
       hasPrefix hasSuffix stringToCharacters stringAsChars escape
-      escapeShellArg escapeShellArgs replaceChars lowerChars
+      escapeShellArg escapeShellArgs escapeUriSegment replaceChars lowerChars
       upperChars toLower toUpper addContextFrom splitString
       removePrefix removeSuffix versionOlder versionAtLeast getVersion
       nameFromURL enableFeature enableFeatureAs withFeature
