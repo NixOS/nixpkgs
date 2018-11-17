@@ -11,12 +11,12 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name    = "monero-${version}";
-  version = "0.13.0.3";
+  version = "0.13.0.4";
 
   src = fetchgit {
     url    = "https://github.com/monero-project/monero.git";
     rev    = "v${version}";
-    sha256 = "03qx8y74zxnmabdi5r3a274pp8zvm3xhkdwi1xf5sb40vf4sfmwb";
+    sha256 = "1ambgakapijhsi1pd70vw8vvnlwa3nid944lqkbfq3wl25lmc70d";
   };
 
   nativeBuildInputs = [ cmake pkgconfig git ];
