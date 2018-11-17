@@ -86,9 +86,6 @@ let format' = format; in let
     mkdir -p $out
     cp -prd ${nixpkgs} $out/nixos
     chmod -R u+w $out/nixos
-    if [ ! -e $out/nixos/nixpkgs ]; then
-      ln -s . $out/nixos/nixpkgs
-    fi
     rm -rf $out/nixos/.git
     echo -n ${config.system.nixos.versionSuffix} > $out/nixos/.version-suffix
   '';

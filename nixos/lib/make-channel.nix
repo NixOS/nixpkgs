@@ -22,7 +22,6 @@ pkgs.releaseTools.makeSourceTarball {
     mkdir -p $out/tarballs
     cp -prd . ../$releaseName
     chmod -R u+w ../$releaseName
-    ln -s . ../$releaseName/nixpkgs # hack to make ‘<nixpkgs>’ work
     NIX_STATE_DIR=$TMPDIR nix-env -f ../$releaseName/default.nix -qaP --meta --xml \* > /dev/null
     cd ..
     chmod -R u+w $releaseName

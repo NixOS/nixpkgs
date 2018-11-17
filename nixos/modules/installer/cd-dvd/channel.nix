@@ -18,9 +18,6 @@ let
       mkdir -p $out
       cp -prd ${nixpkgs} $out/nixos
       chmod -R u+w $out/nixos
-      if [ ! -e $out/nixos/nixpkgs ]; then
-        ln -s . $out/nixos/nixpkgs
-      fi
       echo -n ${config.system.nixos.revision} > $out/nixos/.git-revision
       echo -n ${config.system.nixos.versionSuffix} > $out/nixos/.version-suffix
       echo ${config.system.nixos.versionSuffix} | sed -e s/pre// > $out/nixos/svn-revision
