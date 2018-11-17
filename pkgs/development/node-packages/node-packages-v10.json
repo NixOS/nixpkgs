@@ -1,6 +1,5 @@
 [
-  "alloy"
-, "asar"
+  "asar"
 , "azure-cli"
 , "azure-functions-core-tools"
 , "bower"
@@ -106,7 +105,6 @@
 , "tern"
 , "three"
 , "tiddlywiki"
-, "titanium"
 , "triton"
 , "ttf2eot"
 , "typescript"
