@@ -3,7 +3,7 @@
 assert (openssl != null) == (gnutls == null);
 
 let
-  version = "2018-10-08";
+  version = "unstable-2018-10-08";
   name = "openconnect_pa-${version}";
 in stdenv.mkDerivation {
   inherit name;
