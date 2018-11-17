@@ -15764,7 +15764,7 @@ with pkgs;
 
   antiword = callPackage ../applications/office/antiword {};
 
-  ao = callPackage ../applications/graphics/ao {};
+  ao = libfive;
 
   apache-directory-studio = callPackage ../applications/networking/apache-directory-studio {};
 
