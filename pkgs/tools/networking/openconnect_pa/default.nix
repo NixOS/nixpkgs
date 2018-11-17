@@ -8,6 +8,8 @@ let
 in stdenv.mkDerivation {
   inherit name;
 
+  outputs = [ "out" "dev" ];
+
   src = fetchFromGitHub {
     owner = "dlenski";
     repo = "openconnect";
