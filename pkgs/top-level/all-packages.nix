@@ -2761,6 +2761,8 @@ with pkgs;
 
   fuseiso = callPackage ../tools/filesystems/fuseiso { };
 
+  fusuma = callPackage ../tools/inputmethods/fusuma {};
+
   fdbPackages = callPackage ../servers/foundationdb {
     stdenv49 = overrideCC stdenv gcc49;
   };
