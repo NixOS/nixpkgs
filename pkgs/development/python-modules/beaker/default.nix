@@ -9,25 +9,39 @@
 , isPy27
 , funcsigs
 , pycryptopp
+, redis
+, memcached
+, pylibmc
+, pymongo
+, cryptography
 }:
 
 buildPythonPackage rec {
   pname = "Beaker";
-  version = "1.8.0";
+  version = "1.10.0";
 
   # The pypy release do not contains the tests
   src = fetchFromGitHub {
     owner = "bbangert";
     repo = "beaker";
     rev = "${version}";
-    sha256 = "17yfr7a307n8rdl09was4j60xqk2s0hk0hywdkigrpj4qnw0is7g";
+    sha256 = "1xwbl8ggj0xlvih95m2b70cbrsazkzma7g6ivg724m6kh3xfwqhv";
   };
 
-  buildInputs =
-    [ nose
-      mock
-      webtest
-    ];
+  checkInputs = [
+    nose mock webtest redis memcached pylibmc pymongo cryptography
+  ];
+
+  postPatch = ''
+    # fails on import because it tries to make a connection
+    rm tests/test_memcached.py
+  '';
+
+  checkPhase = ''
+    # ignore external tests
+    NOSE_EXCLUDE=".*test_ext_.*" nosetests tests
+  '';
+
   propagatedBuildInputs = [
     sqlalchemy
     pycrypto
