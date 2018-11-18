@@ -22167,6 +22167,8 @@ with pkgs;
 
   mongoc = callPackage ../development/libraries/mongoc { };
 
+  morph = callPackage ../tools/package-management/morph { };
+
   mupen64plus = callPackage ../misc/emulators/mupen64plus { };
 
   muse = callPackage ../applications/audio/muse { };

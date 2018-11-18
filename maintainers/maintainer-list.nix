@@ -73,6 +73,11 @@
     github = "acowley";
     name = "Anthony Cowley";
   };
+  adamt = {
+    email = "mail@adamtulinius.dk";
+    github = "adamtulinius";
+    name = "Adam Tulinius";
+  };
   adelbertc = {
     email = "adelbertc@gmail.com";
     github = "adelbertc";
