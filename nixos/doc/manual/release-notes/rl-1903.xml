@@ -151,6 +151,14 @@
    </listitem>
    <listitem>
     <para>
+     When the <literal>nixpkgs.pkgs</literal> option is set, NixOS will no
+     longer ignore the <literal>nixpkgs.overlays</literal> option. The old
+     behavior can be recovered by setting <literal>nixpkgs.overlays =
+     lib.mkForce [];</literal>.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
      OpenSMTPD has been upgraded to version 6.4.0p1. This release makes
      backwards-incompatible changes to the configuration file format. See
      <command>man smtpd.conf</command> for more information on the new file
@@ -204,6 +212,14 @@
      Package <literal>ckb</literal> is renamed to <literal>ckb-next</literal>,
      and options <literal>hardware.ckb.*</literal> are renamed to
      <literal>hardware.ckb-next.*</literal>.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     The option <literal>services.xserver.displayManager.job.logToFile</literal> which was
+     previously set to <literal>true</literal> when using the display managers
+     <literal>lightdm</literal>, <literal>sddm</literal> or <literal>xpra</literal> has been
+     reset to the default value (<literal>false</literal>).
     </para>
    </listitem>
   </itemizedlist>

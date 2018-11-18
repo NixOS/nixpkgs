@@ -1,9 +1,10 @@
-{ config, lib, pkgs, ... }:
+{ config, options, lib, pkgs, ... }:
 
 with lib;
 
 let
   cfg = config.nixpkgs;
+  opt = options.nixpkgs;
 
   isConfig = x:
     builtins.isAttrs x || lib.isFunction x;
@@ -54,6 +55,12 @@ let
     check = builtins.isAttrs;
   };
 
+  defaultPkgs = import ../../../pkgs/top-level/default.nix {
+    inherit (cfg) config overlays localSystem crossSystem;
+  };
+
+  finalPkgs = if opt.pkgs.isDefined then cfg.pkgs.appendOverlays cfg.overlays else defaultPkgs;
+
 in
 
 {
@@ -61,21 +68,25 @@ in
 
     pkgs = mkOption {
       defaultText = literalExample
-        ''import "''${nixos}/.." {
+        ''import "''${nixos}/../pkgs/top-level" {
             inherit (cfg) config overlays localSystem crossSystem;
           }
         '';
-      default = import ../../.. {
-        inherit (cfg) config overlays localSystem crossSystem;
-      };
       type = pkgsType;
       example = literalExample ''import <nixpkgs> {}'';
       description = ''
-        This is the evaluation of Nixpkgs that will be provided to
-        all NixOS modules. Defining this option has the effect of
-        ignoring the other options that would otherwise be used to
-        evaluate Nixpkgs, because those are arguments to the default
-        value. The default value imports the Nixpkgs source files
+        If set, the pkgs argument to all NixOS modules is the value of
+        this option, extended with <code>nixpkgs.overlays</code>, if
+        that is also set. Either <code>nixpkgs.crossSystem</code> or
+        <code>nixpkgs.localSystem</code> will be used in an assertion
+        to check that the NixOS and Nixpkgs architectures match. Any
+        other options in <code>nixpkgs.*</code>, notably <code>config</code>,
+        will be ignored.
+
+        If unset, the pkgs argument to all NixOS modules is determined
+        as shown in the default value for this option.
+
+        The default value imports the Nixpkgs source files
         relative to the location of this NixOS module, because
         NixOS and Nixpkgs are distributed together for consistency,
         so the <code>nixos</code> in the default value is in fact a
@@ -128,12 +139,14 @@ in
       description = ''
         List of overlays to use with the Nix Packages collection.
         (For details, see the Nixpkgs documentation.)  It allows
-        you to override packages globally. This is a function that
+        you to override packages globally. Each function in the list
         takes as an argument the <emphasis>original</emphasis> Nixpkgs.
         The first argument should be used for finding dependencies, and
         the second should be used for overriding recipes.
 
-        Ignored when <code>nixpkgs.pkgs</code> is set.
+        If <code>nixpkgs.pkgs</code> is set, overlays specified here
+        will be applied after the overlays that were already present
+        in <code>nixpkgs.pkgs</code>.
       '';
     };
 
@@ -207,7 +220,26 @@ in
 
   config = {
     _module.args = {
-      pkgs = cfg.pkgs;
+      pkgs = finalPkgs;
     };
+
+    assertions = [
+      (
+        let
+          nixosExpectedSystem =
+            if config.nixpkgs.crossSystem != null
+            then config.nixpkgs.crossSystem.system
+            else config.nixpkgs.localSystem.system;
+          nixosOption =
+            if config.nixpkgs.crossSystem != null
+            then "nixpkgs.crossSystem"
+            else "nixpkgs.localSystem";
+          pkgsSystem = finalPkgs.stdenv.targetPlatform.system;
+        in {
+          assertion = nixosExpectedSystem == pkgsSystem;
+          message = "The NixOS nixpkgs.pkgs option was set to a Nixpkgs invocation that compiles to target system ${pkgsSystem} but NixOS was configured for system ${nixosExpectedSystem} via NixOS option ${nixosOption}. The NixOS system settings must match the Nixpkgs target system.";
+        }
+      )
+    ];
   };
 }

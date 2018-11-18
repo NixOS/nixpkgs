@@ -23,6 +23,7 @@ let
   ''
     [mysqld]
     port = ${toString cfg.port}
+    datadir = ${cfg.dataDir}
     ${optionalString (cfg.bind != null) "bind-address = ${cfg.bind}" }
     ${optionalString (cfg.replication.role == "master" || cfg.replication.role == "slave") "log-bin=mysql-bin"}
     ${optionalString (cfg.replication.role == "master" || cfg.replication.role == "slave") "server-id = ${toString cfg.replication.serverId}"}
@@ -147,7 +148,7 @@ in
           option is changed. This means that users created and permissions assigned once through this option or
           otherwise have to be removed manually.
         '';
-        example = [
+        example = literalExample ''[
           {
             name = "nextcloud";
             ensurePermissions = {
@@ -160,7 +161,7 @@ in
               "*.*" = "SELECT, LOCK TABLES";
             };
           }
-        ];
+        ]'';
       };
 
       # FIXME: remove this option; it's a really bad idea.

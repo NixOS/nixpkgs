@@ -101,7 +101,7 @@
       iodined = 66;
       #libvirtd = 67; # unused
       graphite = 68;
-      statsd = 69;
+      #statsd = 69; # removed 2018-11-14
       transmission = 70;
       postgres = 71;
       #vboxusers = 72; # unused
@@ -411,7 +411,7 @@
       iodined = 66;
       libvirtd = 67;
       graphite = 68;
-      #statsd = 69; # unused
+      #statsd = 69; # removed 2018-11-14
       transmission = 70;
       postgres = 71;
       vboxusers = 72;

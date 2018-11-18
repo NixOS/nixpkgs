@@ -15,6 +15,8 @@ let
     name = "apcu-4.0.11";
     sha256 = "002d1gklkf0z170wkbhmm2z1p9p5ghhq3q1r9k54fq1sq4p30ks5";
     buildInputs = [ pkgs.pcre ];
+    makeFlags = [ "phpincludedir=$(dev)/include" ];
+    outputs = [ "out" "dev" ];
   };
 
   apcu51 = assert isPhp7; buildPecl {
@@ -24,6 +26,14 @@ let
     doCheck = true;
     checkTarget = "test";
     checkFlagsArray = ["REPORT_EXIT_STATUS=1" "NO_INTERACTION=1"];
+    makeFlags = [ "phpincludedir=$(dev)/include" ];
+    outputs = [ "out" "dev" ];
+  };
+
+  apcu_bc = buildPecl {
+    name = "apcu_bc-1.0.4";
+    sha256 = "1raww7alwayg9nk0akly1mdrjypxlwg8safnmaczl773cwpw5cbw";
+    buildInputs = [ apcu pkgs.pcre ];
   };
 
   ast = assert isPhp7; buildPecl {

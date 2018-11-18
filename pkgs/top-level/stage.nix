@@ -164,7 +164,9 @@ let
     # preexisting overlays. Prefer to initialize with the right overlays
     # in one go when calling Nixpkgs, for performance and simplicity.
     appendOverlays = extraOverlays:
-      import ./stage.nix (args // { overlays = args.overlays ++ extraOverlays; });
+      if extraOverlays == []
+      then self
+      else import ./stage.nix (args // { overlays = args.overlays ++ extraOverlays; });
 
     # Extend the package set with a single overlay. This preserves
     # preexisting overlays. Prefer to initialize with the right overlays

@@ -3,7 +3,7 @@
 }:
 
 let
-  inherit (nixpkgs) fetchpatch fetchurl symlinkJoin callPackage nodePackages_8_x;
+  inherit (nixpkgs) fetchpatch fetchurl symlinkJoin callPackage nodePackages;
 
   # https://trac.sagemath.org/ticket/15980 for tracking of python3 support
   python = nixpkgs.python2.override {
@@ -26,7 +26,7 @@ let
       };
 
       sagenb = self.callPackage ./sagenb.nix {
-        mathjax = nodePackages_8_x.mathjax;
+        mathjax = nodePackages.mathjax;
       };
 
       sagedoc = self.callPackage ./sagedoc.nix {
@@ -36,8 +36,8 @@ let
       env-locations = self.callPackage ./env-locations.nix {
         inherit pari_data ecl;
         inherit singular;
-        three = nodePackages_8_x.three;
-        mathjax = nodePackages_8_x.mathjax;
+        three = nodePackages.three;
+        mathjax = nodePackages.mathjax;
       };
 
       sage-env = self.callPackage ./sage-env.nix {
@@ -49,7 +49,7 @@ let
         inherit pythonEnv;
         inherit sage-src openblas-blas-pc openblas-cblas-pc openblas-lapack-pc pynac singular;
         pkg-config = nixpkgs.pkgconfig; # not to confuse with pythonPackages.pkgconfig
-        three = nodePackages_8_x.three;
+        three = nodePackages.three;
       };
 
       sage = self.callPackage ./sage.nix { };

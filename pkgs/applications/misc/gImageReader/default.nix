@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, cmake, pkgconfig, libuuid
 , sane-backends, podofo, libjpeg, djvulibre, libxmlxx3, libzip, tesseract
-, enchant, intltool, poppler, json-glib
+, intltool, poppler, json-glib
 , ninja
 , python3
 
@@ -37,7 +37,6 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    enchant
     libxmlxx3
     libzip
     libuuid

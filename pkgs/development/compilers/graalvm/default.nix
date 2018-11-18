@@ -262,6 +262,9 @@ in rec {
       ./helloworld
       ./helloworld | fgrep 'Hello World'
     '';
+
+    passthru.home = graalvm8;
+
     meta = with stdenv.lib; {
       homepage = https://github.com/oracle/graal;
       description = "High-Performance Polyglot VM";

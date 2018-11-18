@@ -1,5 +1,6 @@
 { stdenv, fetchFromGitHub, pkgconfig, python2Packages, makeWrapper
 , bash, libsamplerate, libsndfile, readline, eigen, celt
+, wafHook
 # Darwin Dependencies
 , aften, AudioToolbox, CoreAudio, CoreFoundation
 
@@ -35,13 +36,13 @@ stdenv.mkDerivation rec {
     sha256 = "0ynpyn0l77m94b50g7ysl795nvam3ra65wx5zb46nxspgbf6wnkh";
   };
 
-  nativeBuildInputs = [ pkgconfig python makeWrapper ];
+  nativeBuildInputs = [ pkgconfig python makeWrapper wafHook ];
   buildInputs = [ libsamplerate libsndfile readline eigen celt
     optDbus optPythonDBus optLibffado optAlsaLib optLibopus
-  ] ++ stdenv.lib.optionals stdenv.isDarwin [ aften AudioToolbox CoreAudio CoreFoundation ];
+  ] ++ optionals stdenv.isDarwin [ aften AudioToolbox CoreAudio CoreFoundation ];
 
   # CoreFoundation 10.10 doesn't include CFNotificationCenter.h yet.
-  patches = stdenv.lib.optionals stdenv.isDarwin [ ./darwin-cf.patch ];
+  patches = optionals stdenv.isDarwin [ ./darwin-cf.patch ];
 
   prePatch = ''
     substituteInPlace svnversion_regenerate.sh \
@@ -51,30 +52,18 @@ stdenv.mkDerivation rec {
   # It looks like one of the frameworks depends on <CoreFoundation/CFAttributedString.h>
   # since frameworks are impure we also have to use the impure CoreFoundation here.
   # FIXME: remove when CoreFoundation is updated to 10.11
-  preConfigure = stdenv.lib.optionalString stdenv.isDarwin ''
+  preConfigure = optionalString stdenv.isDarwin ''
     export NIX_CFLAGS_COMPILE="-F${CoreFoundation}/Library/Frameworks $NIX_CFLAGS_COMPILE"
   '';
 
-  configurePhase = ''
-    runHook preConfigure
+  configureFlags = [
+    "--classic"
+    "--autostart=${if (optDbus != null) then "dbus" else "classic"}"
+  ] ++ optional (optDbus != null) "--dbus"
+    ++ optional (optLibffado != null) "--firewire"
+    ++ optional (optAlsaLib != null) "--alsa";
 
-    python waf configure --prefix=$out \
-      ${optionalString (optDbus != null) "--dbus"} \
-      --classic \
-      ${optionalString (optLibffado != null) "--firewire"} \
-      ${optionalString (optAlsaLib != null) "--alsa"} \
-      --autostart=${if (optDbus != null) then "dbus" else "classic"} \
-
-    runHook postConfigure
-  '';
-
-  buildPhase = ''
-    python waf build
-  '';
-
-  installPhase = ''
-    python waf install
-  '' + (if libOnly then ''
+  postInstall = (if libOnly then ''
     rm -rf $out/{bin,share}
     rm -rf $out/lib/{jack,libjacknet*,libjackserver*}
   '' else ''

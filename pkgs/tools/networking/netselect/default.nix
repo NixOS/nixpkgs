@@ -1,19 +1,28 @@
-{stdenv, fetchurl}:
+{ stdenv, fetchFromGitHub }:
 
-stdenv.mkDerivation {
-  name = "netselect-0.3";
+stdenv.mkDerivation rec {
+  name = "netselect-${version}";
+  version = "0.4";
 
-  src = fetchurl {
-    url = http://alumnit.ca/~apenwarr/netselect/netselect-0.3.tar.gz;
-    sha256 = "0y69z59vylj9x9nk5jqn6ihx7dkzg09gpv2w1q1rs8fmi4jr90gy";
+  src = fetchFromGitHub {
+    owner = "apenwarr";
+    repo = "netselect";
+    rev = name;
+    sha256 = "1zncyvjzllrjbdvz7c50d1xjyhs9mwqfy92ndpfc5b3mxqslw4kx";
   };
 
-  preBuild = ''
-    makeFlagsArray=(PREFIX=$out)
-    substituteInPlace Makefile \
-      --replace "-o root" "" \
-      --replace "-g root" "" \
-      --replace "4755"    "0755"
+  postPatch = ''
+    substituteInPlace netselect-apt \
+      --replace "/usr/bin/" ""
+  '';
+
+  makeFlags = [ "PREFIX=$(out)" ];
+
+  installPhase = ''
+    runHook preInstall
+    install -Dm555 -t $out/bin netselect netselect-apt
+    install -Dm444 -t $out/share/man/man1 *.1
+    runHook postInstall
   '';
 
   meta = with stdenv.lib; {

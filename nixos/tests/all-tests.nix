@@ -88,6 +88,7 @@ in
   graphite = handleTest ./graphite.nix {};
   hadoop.hdfs = handleTestOn [ "x86_64-linux" ] ./hadoop/hdfs.nix {};
   hadoop.yarn = handleTestOn [ "x86_64-linux" ] ./hadoop/yarn.nix {};
+  handbrake = handleTestOn ["x86_64-linux"] ./handbrake.nix {};
   haproxy = handleTest ./haproxy.nix {};
   #hardened = handleTest ./hardened.nix {}; # broken due useSandbox = true
   hibernate = handleTest ./hibernate.nix {};
@@ -98,7 +99,7 @@ in
   hydra = handleTest ./hydra {};
   i3wm = handleTest ./i3wm.nix {};
   iftop = handleTest ./iftop.nix {};
-  incron = handleTest tests/incron.nix {};
+  incron = handleTest ./incron.nix {};
   influxdb = handleTest ./influxdb.nix {};
   initrd-network-ssh = handleTest ./initrd-network-ssh {};
   initrdNetwork = handleTest ./initrd-network.nix {};
@@ -189,7 +190,6 @@ in
   smokeping = handleTest ./smokeping.nix {};
   snapper = handleTest ./snapper.nix {};
   solr = handleTest ./solr.nix {};
-  #statsd = handleTest ./statsd.nix {}; # statsd is broken: #45946
   strongswan-swanctl = handleTest ./strongswan-swanctl.nix {};
   sudo = handleTest ./sudo.nix {};
   switchTest = handleTest ./switch-test.nix {};
