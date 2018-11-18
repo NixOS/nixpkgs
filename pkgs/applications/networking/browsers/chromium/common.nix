@@ -103,7 +103,7 @@ let
        else result;
 
   base = rec {
-    name = "${packageName}-${version}";
+    name = "${packageName}-unwrapped-${version}";
     inherit (upstream-info) version;
     inherit packageName buildType buildPath;
 
