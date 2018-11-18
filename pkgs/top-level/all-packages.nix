@@ -1676,9 +1676,7 @@ with pkgs;
 
   apparix = callPackage ../tools/misc/apparix { };
 
-  appleseed = callPackage ../tools/graphics/appleseed {
-    eigen = eigen3_3;
-  };
+  appleseed = callPackage ../tools/graphics/appleseed { };
 
   arping = callPackage ../tools/networking/arping { };
 
@@ -3213,9 +3211,7 @@ with pkgs;
 
   halibut = callPackage ../tools/typesetting/halibut { };
 
-  halide = callPackage ../development/compilers/halide {
-    eigen = eigen3_3;
-  };
+  halide = callPackage ../development/compilers/halide { };
 
   hardinfo = callPackage ../tools/system/hardinfo { };
 
@@ -9471,7 +9467,6 @@ with pkgs;
   editline = callPackage ../development/libraries/editline { };
 
   eigen = callPackage ../development/libraries/eigen {};
-  eigen3_3 = callPackage ../development/libraries/eigen/3.3.nix {};
 
   eigen2 = callPackage ../development/libraries/eigen/2.0.nix {};
 
@@ -10702,9 +10697,7 @@ with pkgs;
 
   libf2c = callPackage ../development/libraries/libf2c {};
 
-  libfive = callPackage ../development/libraries/libfive {
-    eigen = eigen3_3;
-  };
+  libfive = callPackage ../development/libraries/libfive { };
 
   libfixposix = callPackage ../development/libraries/libfixposix {};
 
@@ -21677,7 +21670,6 @@ with pkgs;
   };
 
   caffe2 = callPackage ../development/libraries/science/math/caffe2 (rec {
-    eigen = eigen3_3;
     inherit (python3Packages) python future six numpy pydot;
     protobuf = protobuf3_1;
     python-protobuf = python3Packages.protobuf.override { inherit protobuf; };
