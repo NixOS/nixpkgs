@@ -2766,7 +2766,7 @@ with pkgs;
     foundationdb52
     foundationdb60;
 
-  foundationdb = foundationdb52;
+  foundationdb = foundationdb60;
 
   fuse-7z-ng = callPackage ../tools/filesystems/fuse-7z-ng { };
 
