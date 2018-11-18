@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
       monitor what is going on.
     '';
     homepage = "http://xosview.sourceforge.net/index.html";
-    license = licenses.gpl1;
+    license = with licenses; [ gpl2 bsdOriginal ];
     maintainers = [ maintainers.SeanZicari ];
     platforms = platforms.all;
   };
