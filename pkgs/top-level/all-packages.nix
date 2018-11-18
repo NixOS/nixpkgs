@@ -20200,8 +20200,6 @@ with pkgs;
 
   blackshades = callPackage ../games/blackshades { };
 
-  blackshadeselite = callPackage ../games/blackshadeselite { };
-
   blobby = callPackage ../games/blobby { };
 
   boohu = callPackage ../games/boohu { };
