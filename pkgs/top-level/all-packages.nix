@@ -726,6 +726,8 @@ with pkgs;
    SDL = SDL_sixel;
   };
 
+  gremlin-console = callPackage ../applications/misc/gremlin-console { };
+
   gcsfuse = callPackage ../tools/filesystems/gcsfuse { };
 
   glyr = callPackage ../tools/audio/glyr { };
@@ -1180,9 +1182,7 @@ with pkgs;
 
   clipster = callPackage ../tools/misc/clipster { };
 
-  coprthr = callPackage ../development/libraries/coprthr {
-    flex = flex_2_5_35;
-  };
+  coprthr = callPackage ../development/libraries/coprthr { };
 
   cplex = callPackage ../applications/science/math/cplex { releasePath = config.cplex.releasePath or null; };
 
@@ -2078,7 +2078,7 @@ with pkgs;
 
   crackxls = callPackage ../tools/security/crackxls { };
 
-  create-cycle-app = nodePackages_8_x.create-cycle-app;
+  create-cycle-app = nodePackages.create-cycle-app;
 
   createrepo_c = callPackage ../tools/package-management/createrepo_c { };
 
@@ -2412,6 +2412,8 @@ with pkgs;
   uutils-coreutils = callPackage ../tools/misc/uutils-coreutils {
     inherit (pythonPackages) sphinx;
   };
+
+  wl-clipboard = callPackage ../tools/misc/wl-clipboard { };
 
   zabbix-cli = callPackage ../tools/misc/zabbix-cli { };
 
@@ -2764,7 +2766,7 @@ with pkgs;
     foundationdb52
     foundationdb60;
 
-  foundationdb = foundationdb52;
+  foundationdb = foundationdb60;
 
   fuse-7z-ng = callPackage ../tools/filesystems/fuse-7z-ng { };
 
@@ -2895,6 +2897,8 @@ with pkgs;
   glusterfs = callPackage ../tools/filesystems/glusterfs { };
 
   glmark2 = callPackage ../tools/graphics/glmark2 { };
+
+  glogg = libsForQt5.callPackage ../tools/text/glogg { };
 
   glxinfo = callPackage ../tools/graphics/glxinfo { };
 
@@ -3763,7 +3767,9 @@ with pkgs;
     pythonPackages = python3Packages;
   };
 
-  netdata = callPackage ../tools/system/netdata { };
+  netdata = callPackage ../tools/system/netdata {
+    inherit (darwin.apple_sdk.frameworks) CoreFoundation IOKit;
+  };
 
   netsurf = recurseIntoAttrs (let callPackage = newScope pkgs.netsurf; in rec {
     # ui could be gtk, sixel or framebuffer. Note that console display (sixel)
@@ -3843,7 +3849,7 @@ with pkgs;
     nodejs = pkgs.nodejs-6_x;
   };
 
-  nodePackages = nodePackages_8_x;
+  nodePackages = nodePackages_10_x;
 
   npm2nix = nodePackages.npm2nix;
 
@@ -5971,6 +5977,10 @@ with pkgs;
     SDL = SDL_sixel;
   };
 
+  openconnect_pa = callPackage ../tools/networking/openconnect_pa {
+    openssl = null;    
+  };
+
   openconnect = openconnect_gnutls;
 
   openconnect_openssl = callPackage ../tools/networking/openconnect {
@@ -6641,6 +6651,11 @@ with pkgs;
   elmPackages = recurseIntoAttrs (callPackage ../development/compilers/elm { });
 
   apache-flex-sdk = callPackage ../development/compilers/apache-flex-sdk { };
+
+  fasm = pkgsi686Linux.callPackage ../development/compilers/fasm {
+    inherit (stdenv) isx86_64;
+  };
+  fasm-bin = callPackage ../development/compilers/fasm/bin.nix { };
 
   fpc = callPackage ../development/compilers/fpc { };
 
@@ -7717,10 +7732,7 @@ with pkgs;
 
   lush2 = callPackage ../development/interpreters/lush {};
 
-  maude = callPackage ../development/interpreters/maude {
-    bison = bison2;
-    flex = flex_2_5_35;
-  };
+  maude = callPackage ../development/interpreters/maude { };
 
   mesos = callPackage ../applications/networking/cluster/mesos {
     sasl = cyrus_sasl;
@@ -8460,9 +8472,11 @@ with pkgs;
 
   egypt = callPackage ../development/tools/analysis/egypt { };
 
-  elfutils = callPackage ../development/tools/misc/elfutils { };
+  elfinfo = callPackage ../development/tools/misc/elfinfo { };
 
   elfkickers = callPackage ../development/tools/misc/elfkickers { };
+
+  elfutils = callPackage ../development/tools/misc/elfutils { };
 
   emma = callPackage ../development/tools/analysis/emma { };
 
@@ -8506,7 +8520,6 @@ with pkgs;
   jdepend = callPackage ../development/tools/analysis/jdepend { };
 
   flex_2_5_35 = callPackage ../development/tools/parsing/flex/2.5.35.nix { };
-  flex_2_6_1 = callPackage ../development/tools/parsing/flex/2.6.1.nix { };
   flex = callPackage ../development/tools/parsing/flex { };
 
   flexcpp = callPackage ../development/tools/parsing/flexc++ { };
@@ -8530,8 +8543,6 @@ with pkgs;
   gnum4 = callPackage ../development/tools/misc/gnum4 { };
   m4 = gnum4;
 
-  gnumake382 = callPackage ../development/tools/build-managers/gnumake/3.82 { };
-  gnumake3 = gnumake382;
   gnumake42 = callPackage ../development/tools/build-managers/gnumake/4.2 { };
   gnumake = gnumake42;
 
@@ -9124,6 +9135,8 @@ with pkgs;
 
   arb = callPackage ../development/libraries/arb {};
   arb-git = callPackage ../development/libraries/arb/git.nix {};
+
+  argp-standalone = callPackage ../development/libraries/argp-standalone {};
 
   armadillo = callPackage ../development/libraries/armadillo {};
 
@@ -10250,6 +10263,8 @@ with pkgs;
   jsonnet = callPackage ../development/compilers/jsonnet { };
 
   jsonrpc-glib = callPackage ../development/libraries/jsonrpc-glib { };
+
+  jxrlib = callPackage ../development/libraries/jxrlib { };
 
   libjson = callPackage ../development/libraries/libjson { };
 
@@ -11392,8 +11407,6 @@ with pkgs;
   mbedtls_1_3 = callPackage ../development/libraries/mbedtls/1.3.nix { };
   polarssl = mbedtls; # TODO: add to aliases.nix
 
-  mdds_0_7_1 = callPackage ../development/libraries/mdds/0.7.1.nix { };
-  mdds_0_12_1 = callPackage ../development/libraries/mdds/0.12.1.nix { };
   mdds = callPackage ../development/libraries/mdds { };
 
   mediastreamer = callPackage ../development/libraries/mediastreamer { };
@@ -11453,13 +11466,6 @@ with pkgs;
   microsoft_gsl = callPackage ../development/libraries/microsoft_gsl { };
 
   minizip = callPackage ../development/libraries/minizip { };
-
-  miro = callPackage ../applications/video/miro {
-    avahi = avahi.override {
-      withLibdnssdCompat = true;
-    };
-    ffmpeg = ffmpeg_2;
-  };
 
   mkvtoolnix = libsForQt5.callPackage ../applications/video/mkvtoolnix { };
 
@@ -14179,9 +14185,7 @@ with pkgs;
 
   gpu-switch = callPackage ../os-specific/linux/gpu-switch { };
 
-  gradm = callPackage ../os-specific/linux/gradm {
-    flex = flex_2_5_35;
-  };
+  gradm = callPackage ../os-specific/linux/gradm { };
 
   hd-idle = callPackage ../os-specific/linux/hd-idle { };
 
@@ -14882,6 +14886,8 @@ with pkgs;
   procps = if stdenv.isLinux then callPackage ../os-specific/linux/procps-ng { }
            else unixtools.procps;
 
+  procdump = callPackage ../os-specific/linux/procdump { };
+
   qemu_kvm = lowPrio (qemu.override { hostCpuOnly = true; });
 
   # See `xenPackages` source for explanations.
@@ -14958,6 +14964,8 @@ with pkgs;
   skopeo = callPackage ../development/tools/skopeo { };
 
   smem = callPackage ../os-specific/linux/smem { };
+
+  speedometer = callPackage ../os-specific/linux/speedometer { };
 
   statifier = callPackage ../os-specific/linux/statifier { };
 
@@ -16154,9 +16162,7 @@ with pkgs;
 
   cpp_ethereum = callPackage ../applications/misc/cpp-ethereum { };
 
-  csdp = callPackage ../applications/science/math/csdp {
-    liblapack = liblapackWithoutAtlas;
-  };
+  csdp = callPackage ../applications/science/math/csdp { };
 
   ctop = callPackage ../tools/system/ctop { };
 
@@ -16635,6 +16641,8 @@ with pkgs;
   evopedia = callPackage ../applications/misc/evopedia { };
 
   exercism = callPackage ../applications/misc/exercism { };
+
+  go-motion = callPackage ../development/tools/go-motion { };
 
   gpg-mdp = callPackage ../applications/misc/gpg-mdp { };
 
@@ -17803,6 +17811,8 @@ with pkgs;
 
   looking-glass-client = callPackage ../applications/virtualization/looking-glass-client { };
 
+  ltc-tools = callPackage ../applications/audio/ltc-tools { };
+
   lumail = callPackage ../applications/networking/mailreaders/lumail {
     lua = lua5_1;
   };
@@ -18173,6 +18183,8 @@ with pkgs;
   polybar = callPackage ../applications/misc/polybar { };
 
   ptex = callPackage ../development/libraries/ptex {};
+
+  qtcurve = libsForQt5.callPackage ../misc/themes/qtcurve {};
 
   rssguard = libsForQt5.callPackage ../applications/networking/feedreaders/rssguard { };
 
@@ -18904,6 +18916,8 @@ with pkgs;
     inherit (gnome2) libart_lgpl;
   };
 
+  scribusUnstable = libsForQt5.callPackage ../applications/office/scribus/unstable.nix { };
+
   seafile-client = libsForQt5.callPackage ../applications/networking/seafile-client { };
 
   seeks = callPackage ../tools/networking/p2p/seeks {
@@ -18998,8 +19012,6 @@ with pkgs;
   };
 
   stella = callPackage ../misc/emulators/stella { };
-
-  statsd = nodePackages.statsd;
 
   linuxstopmotion = callPackage ../applications/video/linuxstopmotion { };
 
@@ -20134,7 +20146,7 @@ with pkgs;
 
   angband = callPackage ../games/angband { };
 
-  anki = python2Packages.callPackage ../games/anki { };
+  anki = python3Packages.callPackage ../games/anki { };
 
   armagetronad = callPackage ../games/armagetronad { };
 
@@ -21186,6 +21198,10 @@ with pkgs;
 
   ncbi_tools = callPackage ../applications/science/biology/ncbi-tools { };
 
+  niftyreg = callPackage ../applications/science/biology/niftyreg { };
+
+  niftyseg = callPackage ../applications/science/biology/niftyseg { };
+
   paml = callPackage ../applications/science/biology/paml { };
 
   picard-tools = callPackage ../applications/science/biology/picard-tools { };
@@ -21235,16 +21251,6 @@ with pkgs;
 
   arpack = callPackage ../development/libraries/science/math/arpack { };
 
-  atlas = callPackage ../development/libraries/science/math/atlas {
-    # The build process measures CPU capabilities and optimizes the
-    # library to perform best on that particular machine. That is a
-    # great feature, but it's of limited use with pre-built binaries
-    # coming from a central build farm.
-    tolerateCpuTimingInaccuracy = true;
-    liblapack = liblapackWithoutAtlas;
-    withLapack = false;
-  };
-
   blas = callPackage ../development/libraries/science/math/blas { };
 
   brial = callPackage ../development/libraries/science/math/brial { };
@@ -21267,13 +21273,7 @@ with pkgs;
 
   libhomfly = callPackage ../development/libraries/science/math/libhomfly { };
 
-  # We have essentially 4 permutations of liblapack: version 3.4.1 or 3.5.0,
-  # and with or without atlas as a dependency. The default `liblapack` is 3.4.1
-  # with atlas. Atlas, when built with liblapack as a dependency, uses 3.5.0
-  # without atlas. Etc.
   liblapack = callPackage ../development/libraries/science/math/liblapack {};
-  liblapackWithoutAtlas = liblapackWithAtlas.override { atlas = null; };
-  liblapackWithAtlas = liblapack;
 
   liblbfgs = callPackage ../development/libraries/science/math/liblbfgs { };
 
@@ -21340,9 +21340,7 @@ with pkgs;
 
   QuadProgpp = callPackage ../development/libraries/science/math/QuadProgpp { };
 
-  scs = callPackage ../development/libraries/science/math/scs {
-    liblapack = liblapackWithoutAtlas;
-  };
+  scs = callPackage ../development/libraries/science/math/scs { };
 
   sage = callPackage ../applications/science/math/sage {
     nixpkgs = pkgs;
@@ -21368,12 +21366,15 @@ with pkgs;
 
   ### SCIENCE/MOLECULAR-DYNAMICS
 
+  dl-poly-classic-mpi = callPackage ../applications/science/molecular-dynamics/dl-poly-classic {
+    mpi = openmpi;
+  };
+
   lammps = callPackage ../applications/science/molecular-dynamics/lammps {
     fftw = fftw;
   };
 
-  lammps-mpi = appendToName "mpi" (lammps.override {
-    mpiSupport = true;
+  lammps-mpi = lowPrio (lammps.override {
     mpi = openmpi;
   });
 
@@ -21452,9 +21453,7 @@ with pkgs;
     coqPackages      coq
   ;
 
-  coq2html = callPackage ../applications/science/logic/coq2html {
-    make = pkgs.gnumake3;
-  };
+  coq2html = callPackage ../applications/science/logic/coq2html { };
 
   cryptoverif = callPackage ../applications/science/logic/cryptoverif { };
 
@@ -21751,9 +21750,7 @@ with pkgs;
 
   scilab-bin = callPackage ../applications/science/math/scilab-bin {};
 
-  scotch = callPackage ../applications/science/math/scotch {
-    flex = flex_2_5_35;
-  };
+  scotch = callPackage ../applications/science/math/scotch { };
 
   msieve = callPackage ../applications/science/math/msieve { };
 
@@ -22203,7 +22200,7 @@ with pkgs;
          in
            myOS.run-nginx
 
-     Unlike in plain NixOS, the nixpkgs.config, nixpkgs.overlays and
+     Unlike in plain NixOS, the nixpkgs.config and
      nixpkgs.system options will be ignored by default. Instead,
      nixpkgs.pkgs will have the default value of pkgs as it was
      constructed right after invoking the nixpkgs function (e.g. the
@@ -22233,6 +22230,61 @@ with pkgs;
                   else [configuration]
                 );
     }).config.system.build;
+
+
+  /*
+   * Run a NixOS VM network test using this evaluation of Nixpkgs.
+   *
+   * It is mostly equivalent to `import ./make-test.nix` from the
+   * NixOS manual[1], except that your `pkgs` will be used instead of
+   * letting NixOS invoke Nixpkgs again. If a test machine needs to
+   * set NixOS options under `nixpkgs`, it must set only the
+   * `nixpkgs.pkgs` option. For the details, see the Nixpkgs
+   * `pkgs.nixos` documentation.
+   *
+   * Parameter:
+   *   A NixOS VM test network, or path to it. Example:
+   *
+   *      { lib, ... }:
+   *      { name = "my-test";
+   *        nodes = {
+   *          machine-1 = someNixOSConfiguration;
+   *          machine-2 = ...;
+   *        }
+   *      }
+   *
+   * Result:
+   *   A derivation that runs the VM test.
+   *
+   * [1]: For writing NixOS tests, see
+   *      https://nixos.org/nixos/manual/index.html#sec-nixos-tests
+   */
+  nixosTest =
+    let
+      /* The nixos/lib/testing.nix module, preapplied with arguments that
+       * make sense for this evaluation of Nixpkgs.
+       */
+      nixosTesting =
+        (import ../../nixos/lib/testing.nix {
+          inherit (pkgs.stdenv.hostPlatform) system;
+          inherit pkgs;
+          extraConfigurations = [(
+            { lib, ... }: {
+              config.nixpkgs.pkgs = lib.mkDefault pkgs;
+            }
+          )];
+        });
+    in
+      test:
+        let
+          loadedTest = if builtins.typeOf test == "path"
+                       then import test
+                       else test;
+          calledTest = if pkgs.lib.isFunction loadedTest
+                       then callPackage loadedTest {}
+                       else loadedTest;
+        in
+          nixosTesting.makeTest calledTest;
 
   nixui = callPackage ../tools/package-management/nixui { node_webkit = nwjs_0_12; };
 
@@ -22590,8 +22642,6 @@ with pkgs;
   unicode-paracode = callPackage ../tools/misc/unicode { };
 
   unixcw = callPackage ../applications/misc/unixcw { };
-
-  valauncher = callPackage ../applications/misc/valauncher { };
 
   vault = callPackage ../tools/security/vault { };
 

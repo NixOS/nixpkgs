@@ -177,13 +177,13 @@ in {
 
   zfsUnstable = common rec {
     # comment/uncomment if breaking kernel versions are known
-    incompatibleKernelVersion = "4.19";
+    # incompatibleKernelVersion = "4.19";
 
     # this package should point to a version / git revision compatible with the latest kernel release
-    version = "0.8.0-rc1";
+    version = "0.8.0-rc2";
 
-    rev = "b8a90418f3a9c23b89c5d2c729a4dd0fea644508";
-    sha256 = "041b7h8gbb042x9mhg8y87bgq9y793bawglc7b0fg871k6190drx";
+    rev = "af2e8411dacbc694b1aaf9074e68a9d12270e74c";
+    sha256 = "0wm7x9dwrw30jnjlnz6a224h88qd6a5794pzbjsih50lqb10g2gy";
     isUnstable = true;
 
     extraPatches = [

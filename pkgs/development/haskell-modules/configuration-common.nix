@@ -251,6 +251,10 @@ self: super: {
   # Fails for non-obvious reasons while attempting to use doctest.
   search = dontCheck super.search;
 
+  # see https://github.com/LumiGuide/haskell-opencv/commit/cd613e200aa20887ded83256cf67d6903c207a60
+  opencv = dontCheck (appendPatch super.opencv ./patches/opencv-fix-116.patch);
+  opencv-extra = dontCheck (appendPatch super.opencv-extra ./patches/opencv-fix-116.patch);
+
   # https://github.com/ekmett/structures/issues/3
   structures = dontCheck super.structures;
 

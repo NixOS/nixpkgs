@@ -216,6 +216,11 @@
     github = "alunduil";
     name = "Alex Brandt";
   };
+  amar1729 = {
+    email = "amar.paul16@gmail.com";
+    github = "amar1729";
+    name = "Amar Paul";
+  };
   ambrop72 = {
     email = "ambrop7@gmail.com";
     github = "ambrop72";
@@ -756,6 +761,11 @@
     email = "yu@cheng.cat";
     github = "ChengCat";
     name = "Yucheng Zhang";
+  };
+  chessai = {
+    email = "chessai1996@gmail.com";
+    github = "chessai";
+    name = "Daniel Cartwright";
   };
   chiiruno = {
     email = "okinan@protonmail.com";
@@ -4262,6 +4272,11 @@
     email = "milan.svoboda@centrum.cz";
     github = "tex";
     name = "Milan Svoboda";
+  };
+  tg-x = {
+    email = "*@tg-x.net";
+    github = "tg-x";
+    name = "TG ⊗ Θ";
   };
   thall = {
     email = "niclas.thall@gmail.com";

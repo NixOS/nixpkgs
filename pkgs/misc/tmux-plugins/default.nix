@@ -1,4 +1,9 @@
-{ fetchgit, stdenv, pkgs }:
+{ fetchgit
+, lib
+, pkgs
+, reattach-to-user-namespace
+, stdenv
+}:
 
 let
   rtpPath = "share/tmux-plugins";
@@ -187,6 +192,9 @@ in rec {
       rev = "e91b178ff832b7bcbbf4d99d9f467f63fd1b76b5";
       sha256 = "1z8dfbwblrbmb8sgb0k8h1q0dvfdz7gw57las8nwd5gj6ss1jyvx";
     };
+    postInstall = lib.optionalString pkgs.stdenv.isDarwin ''
+      sed -e 's:reattach-to-user-namespace:${reattach-to-user-namespace}/bin/reattach-to-user-namespace:g' -i $target/sensible.tmux
+    '';
   };
 
   sessionist = mkDerivation {

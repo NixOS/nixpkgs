@@ -176,10 +176,8 @@ in
       '';
 
       serviceConfig = {
-        Type="forking";
-        PIDFile="/run/glusterd.pid";
         LimitNOFILE=65536;
-        ExecStart="${glusterfs}/sbin/glusterd -p /run/glusterd.pid --log-level=${cfg.logLevel} ${toString cfg.extraFlags}";
+        ExecStart="${glusterfs}/sbin/glusterd --no-daemon --log-level=${cfg.logLevel} ${toString cfg.extraFlags}";
         KillMode=cfg.killMode;
         TimeoutStopSec=cfg.stopKillTimeout;
       };

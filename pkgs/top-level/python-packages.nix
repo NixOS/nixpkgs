@@ -196,6 +196,8 @@ in {
 
   astropy = callPackage ../development/python-modules/astropy { };
 
+  astroquery = callPackage ../development/python-modules/astroquery { }; 
+
   atom = callPackage ../development/python-modules/atom { };
 
   augeas = callPackage ../development/python-modules/augeas {
@@ -277,6 +279,8 @@ in {
   browser-cookie3 = callPackage ../development/python-modules/browser-cookie3 { };
 
   browsermob-proxy = disabledIf isPy3k (callPackage ../development/python-modules/browsermob-proxy {});
+
+  bt_proximity = callPackage ../development/python-modules/bt-proximity { };
 
   bugseverywhere = callPackage ../applications/version-management/bugseverywhere {};
 
@@ -390,6 +394,10 @@ in {
 
   hdmedians = callPackage ../development/python-modules/hdmedians { };
 
+  hoomd-blue = toPythonModule (callPackage ../development/python-modules/hoomd-blue {
+    inherit python;
+  });
+
   httpsig = callPackage ../development/python-modules/httpsig { };
 
   i3ipc = callPackage ../development/python-modules/i3ipc { };
@@ -453,6 +461,10 @@ in {
   osmnx = callPackage ../development/python-modules/osmnx { };
 
   outcome = callPackage ../development/python-modules/outcome {};
+
+  ovito = toPythonModule (pkgs.libsForQt5.callPackage ../development/python-modules/ovito {
+      pythonPackages = self;
+    });
 
   palettable = callPackage ../development/python-modules/palettable { };
 
@@ -519,6 +531,8 @@ in {
   py3exiv2 = callPackage ../development/python-modules/py3exiv2 { };
 
   pyfakefs = callPackage ../development/python-modules/pyfakefs {};
+
+  pyfttt = callPackage ../development/python-modules/pyfttt { };
 
   pygame = callPackage ../development/python-modules/pygame { };
 
@@ -703,6 +717,8 @@ in {
   vidstab = callPackage ../development/python-modules/vidstab { };
 
   pyunbound = callPackage ../tools/networking/unbound/python.nix { };
+
+  WazeRouteCalculator = callPackage ../development/python-modules/WazeRouteCalculator { };
 
   # packages defined here
 
@@ -2950,6 +2966,8 @@ in {
 
   nose = callPackage ../development/python-modules/nose { };
 
+  nose-cov = callPackage ../development/python-modules/nose-cov { };
+
   nose-exclude = callPackage ../development/python-modules/nose-exclude { };
 
   nose2 = callPackage ../development/python-modules/nose2 { };
@@ -4878,17 +4896,9 @@ in {
 
   rfc7464 = callPackage ../development/python-modules/rfc7464 { };
 
-  foundationdb51 = (toPythonModule (pkgs.fdbPackages.override {
-    inherit python;
-  }).foundationdb51).python;
-
-  foundationdb52 = (toPythonModule (pkgs.fdbPackages.override {
-    inherit python;
-  }).foundationdb52).python;
-
-  foundationdb60 = (toPythonModule (pkgs.fdbPackages.override {
-    inherit python;
-  }).foundationdb60).python;
+  foundationdb51 = callPackage ../servers/foundationdb/python.nix { foundationdb = pkgs.foundationdb51; };
+  foundationdb52 = callPackage ../servers/foundationdb/python.nix { foundationdb = pkgs.foundationdb52; };
+  foundationdb60 = callPackage ../servers/foundationdb/python.nix { foundationdb = pkgs.foundationdb60; };
 
   libtorrentRasterbar = (toPythonModule (pkgs.libtorrentRasterbar.override {
     inherit python;

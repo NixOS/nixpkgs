@@ -11,6 +11,7 @@
   ./config/xdg/icons.nix
   ./config/xdg/menus.nix
   ./config/xdg/mime.nix
+  ./config/gtk/gtk-icon-cache.nix
   ./config/gnu.nix
   ./config/i18n.nix
   ./config/iproute2.nix
@@ -63,7 +64,6 @@
   ./i18n/input-method/ibus.nix
   ./i18n/input-method/nabi.nix
   ./i18n/input-method/uim.nix
-  ./installer/tools/auto-upgrade.nix
   ./installer/tools/tools.nix
   ./misc/assertions.nix
   ./misc/crashdump.nix
@@ -302,6 +302,7 @@
   ./services/logging/graylog.nix
   ./services/logging/heartbeat.nix
   ./services/logging/journalbeat.nix
+  ./services/logging/journaldriver.nix
   ./services/logging/journalwatch.nix
   ./services/logging/klogd.nix
   ./services/logging/logcheck.nix
@@ -451,7 +452,6 @@
   ./services/monitoring/riemann-tools.nix
   ./services/monitoring/scollector.nix
   ./services/monitoring/smartd.nix
-  ./services/monitoring/statsd.nix
   ./services/monitoring/sysstat.nix
   ./services/monitoring/systemhealth.nix
   ./services/monitoring/teamviewer.nix
@@ -801,6 +801,7 @@
   ./system/boot/timesyncd.nix
   ./system/boot/tmp.nix
   ./system/etc/etc.nix
+  ./tasks/auto-upgrade.nix
   ./tasks/bcache.nix
   ./tasks/cpu-freq.nix
   ./tasks/encrypted-devices.nix

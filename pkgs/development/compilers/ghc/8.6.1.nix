@@ -189,7 +189,7 @@ stdenv.mkDerivation (rec {
 
   checkTarget = "test";
 
-  hardeningDisable = [ "format" ];
+  hardeningDisable = [ "format" ] ++ stdenv.lib.optional stdenv.targetPlatform.isMusl "pie";
 
   postInstall = ''
     for bin in "$out"/lib/${name}/bin/*; do

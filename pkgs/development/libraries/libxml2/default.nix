@@ -33,7 +33,7 @@ in stdenv.mkDerivation rec {
 
   outputs = [ "bin" "dev" "out" "man" "doc" ]
     ++ lib.optional pythonSupport "py"
-    ++ lib.optional enableStatic "static";
+    ++ lib.optional (enableStatic && enableShared) "static";
   propagatedBuildOutputs = "out bin" + lib.optionalString pythonSupport " py";
 
   buildInputs = lib.optional pythonSupport python
@@ -67,7 +67,7 @@ in stdenv.mkDerivation rec {
     moveToOutput bin/xml2-config "$dev"
     moveToOutput lib/xml2Conf.sh "$dev"
     moveToOutput share/man/man1 "$bin"
-  '' + lib.optionalString enableStatic ''
+  '' + lib.optionalString (enableStatic && enableShared) ''
     moveToOutput lib/libxml2.a "$static"
   '';
 
