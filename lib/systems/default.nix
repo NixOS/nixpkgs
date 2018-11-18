@@ -26,7 +26,8 @@ rec {
       platform = platforms.selectBySystem final.system;
       # Derived meta-data
       libc =
-        /**/ if final.isDarwin              then "libSystem"
+        /**/ if final.isNone                then null
+        else if final.isDarwin              then "libSystem"
         else if final.isMinGW               then "msvcrt"
         else if final.isMusl                then "musl"
         else if final.isUClibc              then "uclibc"

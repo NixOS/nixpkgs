@@ -9784,8 +9784,8 @@ with pkgs;
     stdenv = crossLibcStdenv;
   };
 
-  # We can choose:
-  libcCrossChooser = name:
+  libcCross = assert stdenv.targetPlatform != stdenv.buildPlatform;
+    let name = stdenv.targetPlatform.libc; in
     # libc is hackily often used from the previous stage. This `or`
     # hack fixes the hack, *sigh*.
     /**/ if name == "glibc" then targetPackages.glibcCross or glibcCross
@@ -9797,9 +9797,8 @@ with pkgs;
     else if name == "msvcrt" then targetPackages.windows.mingw_w64 or windows.mingw_w64
     else if stdenv.targetPlatform.useiOSPrebuilt then targetPackages.darwin.iosSdkPkgs.libraries or darwin.iosSdkPkgs.libraries
     else if name == "libSystem" then targetPackages.darwin.xcode
+    else if name == null then throw "Target platform ${stdenv.targetPlatform.config} has no libc"
     else throw "Unknown libc";
-
-  libcCross = assert stdenv.targetPlatform != stdenv.buildPlatform; libcCrossChooser stdenv.targetPlatform.libc;
 
   # Only supported on Linux, using glibc
   glibcLocales = if stdenv.hostPlatform.libc == "glibc" then callPackage ../development/libraries/glibc/locales.nix { } else null;

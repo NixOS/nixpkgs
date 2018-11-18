@@ -8,6 +8,10 @@ let abis = lib.mapAttrs (_: abi: builtins.removeAttrs abi [ "assertions" ]) abis
 
 rec {
   patterns = rec {
+    # NOTE: normal stuff should use i686, this type is purely for
+    # "i386-pc-elf" target (e.g. coreboot and its payloads)
+    isi386         = { cpu = cpuTypes.i386; };
+
     isi686         = { cpu = cpuTypes.i686; };
     isx86_64       = { cpu = cpuTypes.x86_64; };
     isPowerPC      = { cpu = cpuTypes.powerpc; };
@@ -25,6 +29,8 @@ rec {
     is64bit        = { cpu = { bits = 64; }; };
     isBigEndian    = { cpu = { significantByte = significantBytes.bigEndian; }; };
     isLittleEndian = { cpu = { significantByte = significantBytes.littleEndian; }; };
+
+    isNone         = { kernel = { families = { inherit (kernelFamilies) none; }; }; };
 
     isBSD          = { kernel = { families = { inherit (kernelFamilies) bsd; }; }; };
     isDarwin       = { kernel = { families = { inherit (kernelFamilies) darwin; }; }; };

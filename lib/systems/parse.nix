@@ -82,6 +82,7 @@ rec {
     aarch64  = { bits = 64; significantByte = littleEndian; family = "arm"; version = "8"; };
     aarch64_be = { bits = 64; significantByte = bigEndian; family = "arm"; version = "8"; };
 
+    i386     = { bits = 32; significantByte = littleEndian; family = "x86"; }; # see inspect.nix
     i686     = { bits = 32; significantByte = littleEndian; family = "x86"; };
     x86_64   = { bits = 64; significantByte = littleEndian; family = "x86"; };
 
@@ -157,6 +158,7 @@ rec {
   types.kernelFamily = enum (attrValues kernelFamilies);
 
   kernelFamilies = setTypes types.openKernelFamily {
+    none = {};
     bsd = {};
     darwin = {};
   };
@@ -174,6 +176,10 @@ rec {
   types.kernel = enum (attrValues kernels);
 
   kernels = with execFormats; with kernelFamilies; setTypes types.openKernel {
+    # kernel-less targets
+    elf     = { execFormat = elf;     families = { inherit none; }; };
+    none    = { execFormat = unknown; families = { inherit none; }; };
+
     # TODO(@Ericson2314): Don't want to mass-rebuild yet to keeping 'darwin' as
     # the nnormalized name for macOS.
     macos   = { execFormat = macho;   families = { inherit darwin; }; name = "darwin"; };
@@ -181,7 +187,6 @@ rec {
     freebsd = { execFormat = elf;     families = { inherit bsd; }; };
     linux   = { execFormat = elf;     families = { }; };
     netbsd  = { execFormat = elf;     families = { inherit bsd; }; };
-    none    = { execFormat = unknown; families = { }; };
     openbsd = { execFormat = elf;     families = { inherit bsd; }; };
     solaris = { execFormat = elf;     families = { }; };
     windows = { execFormat = pe;      families = { }; };
@@ -277,6 +282,8 @@ rec {
     "3" = # Awkwards hacks, beware!
       if elemAt l 1 == "apple"
         then { cpu = elemAt l 0; vendor = "apple";    kernel = elemAt l 2;                   }
+      else if elemAt l 1 == "pc"
+        then { cpu = elemAt l 0; vendor = "pc";       kernel = elemAt l 2;                   }
       else if (elemAt l 1 == "linux") || (elemAt l 2 == "gnu")
         then { cpu = elemAt l 0;                      kernel = elemAt l 1; abi = elemAt l 2; }
       else if (elemAt l 2 == "mingw32") # autotools breaks on -gnu for window
@@ -287,7 +294,7 @@ rec {
         then { cpu = elemAt l 0; vendor = elemAt l 1; kernel = "none"; abi = elemAt l 2; }
       else if (elemAt l 2 == "elf")
         then { cpu = elemAt l 0; vendor = elemAt l 1; kernel = "none"; abi = elemAt l 2; }
-      else throw "Target specification with 3 components is ambiguous";
+      else throw "Target specification ${l} with 3 components is ambiguous";
     "4" =    { cpu = elemAt l 0; vendor = elemAt l 1; kernel = elemAt l 2; abi = elemAt l 3; };
   }.${toString (length l)}
     or (throw "system string has invalid number of hyphen-separated components");
