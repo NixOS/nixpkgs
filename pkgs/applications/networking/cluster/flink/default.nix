@@ -4,8 +4,8 @@
 let
   versionMap = {
     "1.5" = {
-      flinkVersion = "1.5.4";
-      sha256 = "193cgiykzbsm6ygnr1h45504xp2qxjikq188wkgivdj9a4wa04il";
+      flinkVersion = "1.5.5";
+      sha256 = "18wqcqi3gyqd40nspih99gq7ylfs20b35f4dcrspffagwkfp2l4z";
     };
     "1.6" = {
       flinkVersion = "1.6.2";
