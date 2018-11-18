@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, cmake, pkgconfig, pandoc
-, ethtool, nettools, libnl, udev, python, perl
+, ethtool, iproute, libnl, udev, python, perl
 } :
 
 let
@@ -16,7 +16,7 @@ in stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ cmake pkgconfig pandoc ];
-  buildInputs = [ libnl ethtool nettools udev python perl ];
+  buildInputs = [ libnl ethtool iproute udev python perl ];
 
   cmakeFlags = [
     "-DCMAKE_INSTALL_RUNDIR=/run"
@@ -26,7 +26,8 @@ in stdenv.mkDerivation {
   postPatch = ''
     substituteInPlace providers/rxe/rxe_cfg.in \
       --replace ethtool "${ethtool}/bin/ethtool" \
-      --replace ifconfig "${nettools}/bin/ifconfig"
+      --replace 'ip addr' "${iproute}/bin/ip addr" \
+      --replace 'ip link' "${iproute}/bin/ip link"
   '';
 
   meta = with stdenv.lib; {
