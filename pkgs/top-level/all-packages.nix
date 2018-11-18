@@ -1674,7 +1674,9 @@ with pkgs;
 
   apparix = callPackage ../tools/misc/apparix { };
 
-  appleseed = callPackage ../tools/graphics/appleseed { };
+  appleseed = callPackage ../tools/graphics/appleseed {
+    eigen = eigen3_3;
+  };
 
   arping = callPackage ../tools/networking/arping { };
 
@@ -3217,7 +3219,9 @@ with pkgs;
 
   halibut = callPackage ../tools/typesetting/halibut { };
 
-  halide = callPackage ../development/compilers/halide {};
+  halide = callPackage ../development/compilers/halide {
+    eigen = eigen3_3;
+  };
 
   hardinfo = callPackage ../tools/system/hardinfo { };
 
@@ -5979,7 +5983,7 @@ with pkgs;
   };
 
   openconnect_pa = callPackage ../tools/networking/openconnect_pa {
-    openssl = null;    
+    openssl = null;
   };
 
   openconnect = openconnect_gnutls;
@@ -10702,7 +10706,9 @@ with pkgs;
 
   libf2c = callPackage ../development/libraries/libf2c {};
 
-  libfive = callPackage ../development/libraries/libfive {};
+  libfive = callPackage ../development/libraries/libfive {
+    eigen = eigen3_3;
+  };
 
   libfixposix = callPackage ../development/libraries/libfixposix {};
 
@@ -21677,7 +21683,7 @@ with pkgs;
   };
 
   caffe2 = callPackage ../development/libraries/science/math/caffe2 (rec {
-    eigen3 = eigen3_3;
+    eigen = eigen3_3;
     inherit (python3Packages) python future six numpy pydot;
     protobuf = protobuf3_1;
     python-protobuf = python3Packages.protobuf.override { inherit protobuf; };
