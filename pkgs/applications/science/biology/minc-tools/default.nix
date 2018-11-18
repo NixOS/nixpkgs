@@ -17,8 +17,6 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [ "-DLIBMINC_DIR=${libminc}/lib/" ];
 
-  checkPhase = "ctest --output-on-failure";  # still some weird test failures though
-
   postFixup = ''
     for prog in minccomplete minchistory mincpik; do
       wrapProgram $out/bin/$prog --prefix PERL5LIB : $PERL5LIB

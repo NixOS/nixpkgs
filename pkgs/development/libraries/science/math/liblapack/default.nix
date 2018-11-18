@@ -42,10 +42,6 @@ stdenv.mkDerivation rec {
 
   doCheck = ! shared;
 
-  checkPhase = "
-    ctest
-  ";
-
   enableParallelBuilding = true;
 
   passthru = {

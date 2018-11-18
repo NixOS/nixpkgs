@@ -38,8 +38,6 @@ in stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  checkPhase = "ctest";
-
   passthru = {
     updateScript = gnome3.updateScript {
       packageName = "evolution";
