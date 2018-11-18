@@ -688,6 +688,11 @@
     github = "campadrenalin";
     name = "Philip Horger";
   };
+  candeira = {
+    email = "javier@candeira.com";
+    github = "candeira";
+    name = "Javier Candeira";
+  };
   canndrew = {
     email = "shum@canndrew.org";
     github = "canndrew";
