@@ -23,21 +23,6 @@
     qtbase
   ];
 
-  apps = [
-    "cadence"
-    "cadence-jacksettings"
-    "cadence-pulse2loopback"
-    "claudia"
-    "cadence-aloop-daemon"
-    "cadence-logs"
-    "cadence-render"
-    "catarina"
-    "claudia-launcher"
-    "cadence-pulse2jack"
-    "cadence-session-start"
-    "catia"
-  ];
-
   makeFlags = ''
     PREFIX=""
     DESTDIR=$(out)
@@ -46,13 +31,47 @@
   propagatedBuildInputs = with python3Packages; [ pyqt5 ];
 
   postInstall = ''
-    # replace with our own wrappers.
-    for app in $apps; do
-      rm $out/bin/$app
-      makeWrapper ${python3Packages.python.interpreter} $out/bin/$app \
-        --set PYTHONPATH "$PYTHONPATH:$out/share/cadence" \
-        --add-flags "-O $out/share/cadence/src/$app.py"
-    done
+    # replace with our own wrappers. They need to be changed manually since it wouldn't work otherwise
+    rm $out/bin/cadence
+    makeWrapper ${python3Packages.python.interpreter} $out/bin/cadence \
+      --set PYTHONPATH "$PYTHONPATH:$out/share/cadence" \
+      --add-flags "-O $out/share/cadence/src/cadence.py"
+    rm $out/bin/claudia
+    makeWrapper ${python3Packages.python.interpreter} $out/bin/claudia \
+      --set PYTHONPATH "$PYTHONPATH:$out/share/cadence" \
+      --add-flags "-O $out/share/cadence/src/claudia.py"
+    rm $out/bin/catarina
+    makeWrapper ${python3Packages.python.interpreter} $out/bin/catarina \
+      --set PYTHONPATH "$PYTHONPATH:$out/share/cadence" \
+      --add-flags "-O $out/share/cadence/src/catarina.py"
+    rm $out/bin/catia
+    makeWrapper ${python3Packages.python.interpreter} $out/bin/catia \
+      --set PYTHONPATH "$PYTHONPATH:$out/share/cadence" \
+      --add-flags "-O $out/share/cadence/src/catia.py"
+    rm $out/bin/cadence-jacksettings
+    makeWrapper ${python3Packages.python.interpreter} $out/bin/cadence-jacksettings \
+      --set PYTHONPATH "$PYTHONPATH:$out/share/cadence" \
+      --add-flags "-O $out/share/cadence/src/jacksettings.py"
+    rm $out/bin/cadence-aloop-daemon
+    makeWrapper ${python3Packages.python.interpreter} $out/bin/cadence-aloop-daemon \
+      --set PYTHONPATH "$PYTHONPATH:$out/share/cadence" \
+      --add-flags "-O $out/share/cadence/src/cadence_aloop_daemon.py"
+    rm $out/bin/cadence-logs
+    makeWrapper ${python3Packages.python.interpreter} $out/bin/cadence-logs \
+      --set PYTHONPATH "$PYTHONPATH:$out/share/cadence" \
+      --add-flags "-O $out/share/cadence/src/logs.py"
+    rm $out/bin/cadence-render
+    makeWrapper ${python3Packages.python.interpreter} $out/bin/cadence-render \
+      --set PYTHONPATH "$PYTHONPATH:$out/share/cadence" \
+      --add-flags "-O $out/share/cadence/src/render.py"
+    rm $out/bin/claudia-launcher
+    makeWrapper ${python3Packages.python.interpreter} $out/bin/claudia-launcher \
+      --set PYTHONPATH "$PYTHONPATH:$out/share/cadence" \
+      --add-flags "-O $out/share/cadence/src/claudia_launcher.py"
+    rm $out/bin/cadence-session-start
+    makeWrapper ${python3Packages.python.interpreter} $out/bin/cadence-session-start \
+      --set PYTHONPATH "$PYTHONPATH:$out/share/cadence" \
+      --add-flags "-O $out/share/cadence/src/cadence_session_start.py"
   '';
 
   meta = {
