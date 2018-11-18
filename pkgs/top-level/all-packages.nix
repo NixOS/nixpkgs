@@ -4760,8 +4760,6 @@ with pkgs;
     inherit (pythonPackages) pillow;
   };
 
-  pdfshuffler = callPackage ../applications/misc/pdfshuffler { };
-
   briss = callPackage ../tools/graphics/briss { };
 
   brickd = callPackage ../servers/brickd {
