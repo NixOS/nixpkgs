@@ -11700,20 +11700,11 @@ with pkgs;
 
   inherit (callPackages ../development/libraries/openssl {
       fetchurl = fetchurlBoot;
-      cryptodevHeaders = linuxPackages.cryptodev.override {
-        fetchurl = fetchurlBoot;
-        onlyHeaders = true;
-      };
     })
     openssl_1_0_2
     openssl_1_1;
 
-  openssl-chacha = callPackage ../development/libraries/openssl/chacha.nix {
-    cryptodevHeaders = linuxPackages.cryptodev.override {
-      fetchurl = fetchurlBoot;
-      onlyHeaders = true;
-    };
-  };
+  openssl-chacha = callPackage ../development/libraries/openssl/chacha.nix { };
 
   opensubdiv = callPackage ../development/libraries/opensubdiv {
     cudaSupport = config.cudaSupport or false;
@@ -14640,6 +14631,8 @@ with pkgs;
     };
 
   buildLinux = attrs: callPackage ../os-specific/linux/kernel/generic.nix attrs;
+
+  cryptodev = linuxPackages_4_9.cryptodev;
 
   dpdk = callPackage ../os-specific/linux/dpdk {
     kernel = null; # dpdk modules are in linuxPackages.dpdk.kmod
