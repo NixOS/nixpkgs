@@ -1,25 +1,26 @@
-{  buildGoPackage, fetchFromGitHub, lib  }:
+{ buildGoPackage, fetchFromGitHub, lib }:
 
 with lib;
 
 buildGoPackage rec {
   name = "mage-${version}";
-  version = "1.2.4";
-  rev = "v${version}";
+  version = "1.7.1";
 
   goPackagePath = "github.com/magefile/mage";
   subPackages = [ "." ];
 
   src = fetchFromGitHub {
-    inherit rev;
     owner = "magefile";
     repo = "mage";
-    sha256 = "1870pgxsbhj54z8ks26pzidzsr2mfl1g226gw9j6s3xjdbbslylk";
+    rev = "v${version}";
+    sha256 = "0n4k5dy338rxwzj654smxzlanmd0zws6mdzv0wc4byqjhr7mqhg2";
   };
-  
-  # ex: from pkgs/development/tools/dep/default.nix
-  # buildFlagsArray = ("-ldflags=-s -w -X main.commitHash=${rev} -X main.version=${version}");
-  buildFlagsArray = ("-ldflags=-X github.com/magefile/mage/mage.gitTag=${rev}");
+
+  buildFlagsArray = [ 
+    "-ldflags="
+    "-X github.com/magefile/mage/mage.commitHash=v${version}"
+    "-X github.com/magefile/mage/mage.gitTag=v${version}"
+  ];
 
   meta = {
     description = "A Make/Rake-like Build Tool Using Go";
