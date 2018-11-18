@@ -105,11 +105,11 @@
     md5name = "1f467e5bb703f12cbbb09d5cf67ecf4a-converttexttonumber-1-5-0.oxt";
   }
   {
-    name = "curl-7.60.0.tar.gz";
-    url = "http://dev-www.libreoffice.org/src/curl-7.60.0.tar.gz";
-    sha256 = "e9c37986337743f37fd14fe8737f246e97aec94b39d1b71e8a5973f72a9fc4f5";
+    name = "curl-7.61.1.tar.gz";
+    url = "http://dev-www.libreoffice.org/src/curl-7.61.1.tar.gz";
+    sha256 = "eaa812e9a871ea10dbe8e1d3f8f12a64a8e3e62aeab18cb23742e2f1727458ae";
     md5 = "";
-    md5name = "e9c37986337743f37fd14fe8737f246e97aec94b39d1b71e8a5973f72a9fc4f5-curl-7.60.0.tar.gz";
+    md5name = "eaa812e9a871ea10dbe8e1d3f8f12a64a8e3e62aeab18cb23742e2f1727458ae-curl-7.61.1.tar.gz";
   }
   {
     name = "libe-book-0.1.3.tar.xz";
@@ -609,11 +609,11 @@
     md5name = "db0bd8cdec329b48f53a6f00199c92d5ba40b0f015b153718d1b15d3d967fbca-neon-0.30.2.tar.gz";
   }
   {
-    name = "nss-3.33-with-nspr-4.17.tar.gz";
-    url = "http://dev-www.libreoffice.org/src/nss-3.33-with-nspr-4.17.tar.gz";
-    sha256 = "878d505ec0be577c45990c57eb5d2e5c8696bfa3412bd0fae193b275297bf5c4";
+    name = "nss-3.38-with-nspr-4.19.tar.gz";
+    url = "http://dev-www.libreoffice.org/src/nss-3.38-with-nspr-4.19.tar.gz";
+    sha256 = "f271ec73291fa3e4bd4b59109f8035cc3a192fc33886f40ed4f9ee4b31c746e9";
     md5 = "";
-    md5name = "878d505ec0be577c45990c57eb5d2e5c8696bfa3412bd0fae193b275297bf5c4-nss-3.33-with-nspr-4.17.tar.gz";
+    md5name = "f271ec73291fa3e4bd4b59109f8035cc3a192fc33886f40ed4f9ee4b31c746e9-nss-3.38-with-nspr-4.19.tar.gz";
   }
   {
     name = "libodfgen-0.1.6.tar.bz2";
