@@ -54,5 +54,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.live555.com/liveMedia/;
     license = licenses.lgpl21Plus;
     platforms = platforms.unix;
+    broken = stdenv.hostPlatform.isAarch64;
   };
 }
