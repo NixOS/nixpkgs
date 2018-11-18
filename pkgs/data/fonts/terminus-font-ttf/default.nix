@@ -18,7 +18,7 @@ in fetchzip rec {
     install -Dm 644 COPYING "$out/share/doc/terminus-font-ttf/COPYING"
   '';
 
-  sha256 = "1pggf66j5fhdf4fzln2vbidql0pqr60l5axww1q4m3xliywwgmq2";
+  sha256 = "129rfmwnm2bhp99w4zl262l6sdx8pddc0gf1ispjqs6dz3m3mdkp";
 
   meta = with stdenv.lib; {
     description = "A clean fixed width TTF font";
