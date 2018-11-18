@@ -8711,6 +8711,8 @@ with pkgs;
 
   go-md2man = callPackage ../development/tools/misc/md2man {};
 
+  mage = callPackage ../development/tools/build-managers/mage { };
+
   minify = callPackage ../development/web/minify { };
 
   minizinc = callPackage ../development/tools/minizinc { };
