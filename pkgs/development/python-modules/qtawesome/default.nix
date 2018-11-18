@@ -15,6 +15,6 @@ buildPythonPackage rec {
     description = "Iconic fonts in PyQt and PySide applications";
     homepage = https://github.com/spyder-ide/qtawesome;
     license = licenses.mit;
-    platforms = lib.platforms.linux; # fails on Darwin
+    platforms = platforms.linux; # fails on Darwin
   };
 }
