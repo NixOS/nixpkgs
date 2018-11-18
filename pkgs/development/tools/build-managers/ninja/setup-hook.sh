@@ -56,7 +56,7 @@ ninjaCheckPhase() {
     fi
 
     if [ -z "${checkTarget:-}" ]; then
-        echo "no check/test target in ${makefile:-Makefile}, doing nothing"
+        echo "no test target found in ninja, doing nothing"
     else
         local buildCores=1
 
