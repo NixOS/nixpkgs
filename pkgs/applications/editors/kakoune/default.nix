@@ -4,11 +4,11 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "kakoune-unstable-${version}";
-  version = "v2018.10.27";
+  version = "2018.10.27";
   src = fetchFromGitHub {
     repo = "kakoune";
     owner = "mawww";
-    rev = version;
+    rev = "v${version}";
     sha256 = "1w7jmq57h8gxxbzg0n3lgd6cci77xb9mziy6lr8330nzqc85zp9p";
   };
   nativeBuildInputs = [ pkgconfig ];
