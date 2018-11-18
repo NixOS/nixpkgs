@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = http://neurobin.github.io/shc;
+    homepage = https://neurobin.org/projects/softwares/unix/shc/;
     description = "Shell Script Compiler";
     platforms = stdenv.lib.platforms.linux;
     license = licenses.gpl3;
