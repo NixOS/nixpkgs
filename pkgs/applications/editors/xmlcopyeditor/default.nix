@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgs, aspell, boost, expat, expect, intltool, libxml, libxslt, pcre, xercesc, wxwidgets }:
+{ stdenv, fetchurl, aspell, boost, expat, expect, intltool, libxml2, libxslt, pcre, wxGTK, xercesc }:
 
 stdenv.mkDerivation rec {
   name = "xmlcopyeditor-${version}";
@@ -6,16 +6,17 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     name = "${name}.tar.gz";
-    url = "https://sourceforge.net/projects/xml-copy-editor/files/xmlcopyeditor-linux/${version}/${name}.tar.gz/download";
+    url = "mirror://sourceforge/xml-copy-editor/${name}.tar.gz";
     sha256 = "0bwxn89600jbrkvlwyawgc0c0qqxpl453mbgcb9qbbxl8984ns4v";
   };
 
-  buildInputs = [ aspell boost expat expect intltool libxml libxslt pcre xercesc wxwidgets ];
-
-  C_INCLUDE_PATH = "${pkgs.libxml2.dev}/include/libxml2";
-  CPLUS_INCLUDE_PATH = "${pkgs.libxml2.dev}/include/libxml2";
-
   patches = [ ./xmlcopyeditor.patch ];
+  CPLUS_INCLUDE_PATH = "${libxml2.dev}/include/libxml2";
+
+  nativeBuildInputs = [ intltool ];
+  buildInputs = [ aspell boost expat libxml2 libxslt pcre wxGTK xercesc ];
+
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "A fast, free, validating XML editor";
