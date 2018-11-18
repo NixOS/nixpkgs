@@ -33,9 +33,15 @@ stdenv.mkDerivation rec {
     cp include/gurobi*.h $out/include/
 
     mkdir -p $out/lib
+    cp lib/*.jar $out/lib/
+    cp lib/libGurobiJni*.so $out/lib/
     cp lib/libgurobi*.so* $out/lib/
     cp lib/libgurobi*.a $out/lib/
     cp src/build/*.a $out/lib/
+
+    mkdir -p $out/share/java
+    ln -s $out/lib/gurobi.jar $out/share/java/
+    ln -s $out/lib/gurobi-javadoc.jar $out/share/java/
   '';
 
   meta = with stdenv.lib; {

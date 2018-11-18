@@ -2,11 +2,11 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "doitlive";
-  version = "4.1.0";
+  version = "4.2.0";
 
   src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256 = "0zkvmnv6adz0gyqiql8anpxnh8zzpqk0p2n0pf2kxy55010qs4wz";
+    sha256 = "0yabw2gqsjdivivlwsc2q7p3qq72cccx3xzfc1a4gd8d74f84nrw";
   };
 
   propagatedBuildInputs = with python3Packages; [ click click-completion click-didyoumean ];

@@ -688,6 +688,11 @@
     github = "campadrenalin";
     name = "Philip Horger";
   };
+  candeira = {
+    email = "javier@candeira.com";
+    github = "candeira";
+    name = "Javier Candeira";
+  };
   canndrew = {
     email = "shum@canndrew.org";
     github = "canndrew";
@@ -761,6 +766,11 @@
     email = "yu@cheng.cat";
     github = "ChengCat";
     name = "Yucheng Zhang";
+  };
+  chessai = {
+    email = "chessai1996@gmail.com";
+    github = "chessai";
+    name = "Daniel Cartwright";
   };
   chiiruno = {
     email = "okinan@protonmail.com";

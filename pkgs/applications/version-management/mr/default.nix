@@ -1,13 +1,15 @@
 { stdenv, fetchgit, perl }:
 
 stdenv.mkDerivation rec {
-  version = "1.20180726";
   name = "mr-${version}";
+  version = "1.20180726";
 
   src = fetchgit {
     url = "git://myrepos.branchable.com/";
-    rev = "refs/tags/" + version;
-    sha256 = "15i9bs2i25l7ibv530ghy8280kklcgm5kr6j86s7iwcqqckd0czp";
+    # the repository moved its tags at least once
+    # when updating please continue using the revision hash here
+    rev = "0ad7a17bb455de1fec3b2375c7aac72ab2a22ac4";
+    sha256 = "0jphw61plm8cgklja6hs639xhdvxgvjwbr6jpvjwpp7hc5gmhms5";
   };
 
   postPatch = ''

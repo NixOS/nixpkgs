@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, which, pkgconfig
+{ stdenv, makeWrapper, fetchurl, which, pkgconfig
 , ocamlPackages
 , libao, portaudio, alsaLib, libpulseaudio, libjack2
 , libsamplerate, libmad, taglib, lame, libogg
@@ -31,10 +31,15 @@ stdenv.mkDerivation {
     sed ${toString packageFilters} PACKAGES.default > PACKAGES
   '';
 
+  postFixup = ''
+    wrapProgram $out/bin/liquidsoap --set LIQ_LADSPA_PATH /run/current-system/sw/lib/ladspa
+  '';
+
   configureFlags = [ "--localstatedir=/var" ];
 
+  nativeBuildInputs = [ makeWrapper pkgconfig ];
   buildInputs =
-    [ which ocamlPackages.ocaml ocamlPackages.findlib pkgconfig
+    [ which ocamlPackages.ocaml ocamlPackages.findlib
       libao portaudio alsaLib libpulseaudio libjack2
       libsamplerate libmad taglib lame libogg
       libvorbis speex libtheora libopus fdk_aac
@@ -47,7 +52,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Swiss-army knife for multimedia streaming";
-    homepage = http://liquidsoap.fm/;
+    homepage = https://www.liquidsoap.info/;
     maintainers = with maintainers; [ ehmry ];
     license = licenses.gpl2;
     platforms = ocamlPackages.ocaml.meta.platforms or [];

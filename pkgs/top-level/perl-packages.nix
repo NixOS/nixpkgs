@@ -6792,6 +6792,20 @@ let
     };
   };
 
+  HashDiff = buildPerlPackage rec {
+    name = "Hash-Diff-0.010";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/B/BO/BOLAV/${name}.tar.gz";
+      sha256 = "1ig0l859gq00k0r9l85274r2lbvwl7wsndcy52c0m3y9isilm6mw";
+    };
+    propagatedBuildInputs = [ HashMerge ];
+
+    meta = {
+      license = with stdenv.lib.licenses; [ artistic1 ];
+      description = "Return difference between two hashes as a hash";
+    };
+  };
+
   HashFlatten = buildPerlPackage rec {
     name = "Hash-Flatten-1.19";
     src = fetchurl {
