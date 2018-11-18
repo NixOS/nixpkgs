@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cairo, libjpeg, libXft, pkgconfig, python2 }:
+{ stdenv, fetchFromGitHub, cairo, libjpeg, libXft, pkgconfig, python2, wafHook }:
 
 stdenv.mkDerivation rec {
   name = "ntk-${version}";
@@ -10,19 +10,10 @@ stdenv.mkDerivation rec {
     sha256 = "0j38mhnfqy6swcrnc5zxcwlqi8b1pgklyghxk6qs1lf4japv2zc0";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig wafHook ];
   buildInputs = [
     cairo libjpeg libXft python2
   ];
-
-  buildPhase = ''
-    python waf configure --prefix=$out
-    python waf
-  '';
-
-  installPhase = ''
-    python waf install
-  '';
 
   meta = {
     description = "Fork of FLTK 1.3.0 with additional functionality";

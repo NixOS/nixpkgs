@@ -6,7 +6,7 @@
 }:
 
 python3Packages.buildPythonApplication rec {
-  name = "vimiv";
+  pname = "vimiv";
   version = "0.7.3";
 
   src = fetchFromGitHub {

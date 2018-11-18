@@ -74,6 +74,12 @@ let
         url = "file://${./type_getattro.patch}";
         sha256 = "11v9yx20hs3jmw0wggzvmw39qs4mxay4kb8iq2qjydwy9ya61nrd";
       })
+
+      (fetchpatch {
+        name = "CVE-2018-1000802.patch";
+        url = "https://github.com/python/cpython/pull/8985.patch";
+        sha256 = "1c8nq2c9sjqa8ipl62hiandg6a7lzrwwfhi3ky6jd3pxgyalrh97";
+      })
     ] ++ optionals (x11Support && stdenv.isDarwin) [
       ./use-correct-tcl-tk-on-darwin.patch
     ] ++ optionals stdenv.isLinux [

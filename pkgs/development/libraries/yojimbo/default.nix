@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, premake5, doxygen, libsodium, mbedtls }:
 
 stdenv.mkDerivation rec {
-  name = "yojimbo";
+  pname = "yojimbo";
   version = "1.1";
 
   src = fetchFromGitHub {

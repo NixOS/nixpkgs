@@ -486,7 +486,7 @@ and in this case the `python35` interpreter is automatically used.
 Versions 2.7, 3.5, 3.6 and 3.7 of the CPython interpreter are available as
 respectively `python27`, `python35`, `python36`, and `python37`. The PyPy
 interpreter is available as `pypy`. The aliases `python2` and `python3`
-correspond to respectively `python27` and `python36`. The default interpreter,
+correspond to respectively `python27` and `python37`. The default interpreter,
 `python`, maps to `python2`. The Nix expressions for the interpreters can be
 found in `pkgs/development/interpreters/python`.
 
@@ -537,7 +537,7 @@ sets are
 and the aliases
 
 * `pkgs.python2Packages` pointing to `pkgs.python27Packages`
-* `pkgs.python3Packages` pointing to `pkgs.python36Packages`
+* `pkgs.python3Packages` pointing to `pkgs.python37Packages`
 * `pkgs.pythonPackages` pointing to `pkgs.python2Packages`
 
 #### `buildPythonPackage` function
@@ -1078,8 +1078,7 @@ To modify only a Python package set instead of a whole Python derivation, use th
 Use the following overlay template:
 
 ```nix
-self: super:
-{
+self: super: {
   python = super.python.override {
     packageOverrides = python-self: python-super: {
       zerobin = python-super.zerobin.overrideAttrs (oldAttrs: {
@@ -1089,6 +1088,25 @@ self: super:
           sha256 = "16d769kmnrpbdr0ph0whyf4yff5df6zi4kmwx7sz1d3r6c8p6xji";
         };
       });
+    };
+  };
+}
+```
+
+### How to use Intel's MKL with numpy and scipy?
+
+A `site.cfg` is created that configures BLAS based on the `blas` parameter
+of the `numpy` derivation. By passing in `mkl`, `numpy` and packages depending
+on `numpy` will be built with `mkl`.
+
+The following is an overlay that configures `numpy` to use `mkl`:
+```nix
+self: super: {
+  python36 = super.python36.override {
+    packageOverrides = python-self: python-super: {
+      numpy = python-super.numpy.override {
+        blas = super.pkgs.mkl;
+      };
     };
   };
 }

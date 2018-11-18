@@ -1,5 +1,5 @@
 { stdenv, fetchurl, gtk2, libjack2, lilv, lv2, pkgconfig, python
-, serd, sord , sratom, suil }:
+, serd, sord , sratom, suil, wafHook }:
 
 stdenv.mkDerivation  rec {
   name = "jalv-${version}";
@@ -10,16 +10,10 @@ stdenv.mkDerivation  rec {
     sha256 = "1x2wpzzx2cgvz3dgdcgsj8dr0w3zsasy62mvl199bsdj5fbjaili";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig wafHook ];
   buildInputs = [
     gtk2 libjack2 lilv lv2 python serd sord sratom suil
   ];
-
-  configurePhase = "python waf configure --prefix=$out";
-
-  buildPhase = "python waf";
-
-  installPhase = "python waf install";
 
   meta = with stdenv.lib; {
     description = "A simple but fully featured LV2 host for Jack";

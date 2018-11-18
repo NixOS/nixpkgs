@@ -42,7 +42,8 @@ stdenv.mkDerivation rec {
     sha256 = "1dzg45vgy2w1xcd3p6h8d76ykhabbvk1h0lf8yb24ikrwlv8cr4p";
   };
 
-  hardeningDisable = [ "format" ] ++ lib.optionals enableStatic [ "fortify" ];
+  hardeningDisable = [ "format" "pie" ]
+    ++ lib.optionals enableStatic [ "fortify" ];
 
   patches = [
     ./busybox-in-store.patch

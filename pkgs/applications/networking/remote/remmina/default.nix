@@ -12,7 +12,7 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "remmina-${version}";
+  pname = "remmina";
   version = "1.2.32.1";
 
   src = fetchFromGitLab {

@@ -65,12 +65,18 @@ stdenv.mkDerivation rec {
     ./patches/numpy-1.15.1.patch
 
     # ntl upgrade
+    # https://trac.sagemath.org/ticket/25532#comment:29
     (fetchpatch {
       name = "lcalc-c++11.patch";
       url = "https://git.archlinux.org/svntogit/community.git/plain/trunk/sagemath-lcalc-c++11.patch?h=packages/sagemath&id=0e31ae526ab7c6b5c0bfacb3f8b1c4fd490035aa";
       sha256 = "0p5wnvbx65i7cp0bjyaqgp4rly8xgnk12pqwaq3dqby0j2bk6ijb";
     })
 
+    (fetchpatch {
+      name = "cython-0.29.patch";
+      url = "https://git.sagemath.org/sage.git/patch/?h=f77de1d0e7f90ee12761140500cb8cbbb789ab20";
+      sha256 = "14wrpy8jgbnpza1j8a2nx8y2r946y82pll1fv3cn6gpfmm6640l3";
+    })
     # https://trac.sagemath.org/ticket/26360
     (fetchpatch {
       name = "arb-2.15.1.patch";
