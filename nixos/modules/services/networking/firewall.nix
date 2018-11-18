@@ -508,14 +508,12 @@ in
       };
 
       interfaces = mkOption {
-        default = {
-          default = mapAttrs (name: value: cfg."${name}") commonOptions;
-        };
+        default = { };
         type = with types; attrsOf (submodule [ { options = commonOptions; } ]);
         description =
           ''
-            Interface-specific open ports. Setting this value will override
-            all values of the <literal>networking.firewall.allowed*</literal>
+            Interface-specific open ports. These values will be merged with
+            the values of the <literal>networking.firewall.allowed*</literal>
             options.
           '';
       };
@@ -531,6 +529,9 @@ in
   config = mkIf cfg.enable {
 
     networking.firewall.trustedInterfaces = [ "lo" ];
+    networking.firewall.interfaces.default =
+      mapAttrs (name: value: cfg."${name}") commonOptions //
+        cfg.interfaces.default;
 
     environment.systemPackages = [ pkgs.iptables ] ++ cfg.extraPackages;
 
