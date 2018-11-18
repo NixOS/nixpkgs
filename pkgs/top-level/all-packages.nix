@@ -11807,8 +11807,6 @@ with pkgs;
 
   podofo = callPackage ../development/libraries/podofo { lua5 = lua5_1; };
 
-  poker-eval = callPackage ../development/libraries/poker-eval { };
-
   polkit = callPackage ../development/libraries/polkit { };
 
   polkit_qt4 = callPackage ../development/libraries/polkit-qt-1/qt-4.nix { };
