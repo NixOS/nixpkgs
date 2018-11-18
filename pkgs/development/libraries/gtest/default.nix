@@ -3,6 +3,8 @@ stdenv.mkDerivation rec {
   name = "gtest-${version}";
   version = "1.8.1";
 
+  outputs = [ "out" "dev" ];
+
   src = fetchFromGitHub {
     owner = "google";
     repo = "googletest";
@@ -11,6 +13,10 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ninja ];
+
+  cmakeFlags = [
+    "-DBUILD_SHARED_LIBS=ON"
+  ];
 
   meta = with stdenv.lib; {
     description = "Google's framework for writing C++ tests";
