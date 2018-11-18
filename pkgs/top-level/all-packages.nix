@@ -16548,8 +16548,6 @@ with pkgs;
 
     rectMark = callPackage ../applications/editors/emacs-modes/rect-mark { };
 
-    remember = callPackage ../applications/editors/emacs-modes/remember { };
-
     rudel = callPackage ../applications/editors/emacs-modes/rudel { };
 
     s = callPackage ../applications/editors/emacs-modes/s { };
