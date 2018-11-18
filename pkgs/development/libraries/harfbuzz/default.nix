@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, pkgconfig, glib, freetype, cairo, libintl
-, icu, graphite2, harfbuzz # The icu variant uses and propagates the non-icu one.
+{ stdenv, lib, fetchurl, pkgconfig, glib, freetype, cairo, libintl
+, icu, graphite2
 , ApplicationServices, CoreText
 , withCoreText ? false
 , withIcu ? false # recommended by upstream as default, but most don't needed and it's big
@@ -8,64 +8,73 @@
 }:
 
 let
+  inherit (lib) optional optionals optionalString;
+
   version = "1.9.0";
-  inherit (stdenv.lib) optional optionals optionalString;
-in
 
-stdenv.mkDerivation {
-  name = "harfbuzz${optionalString withIcu "-icu"}-${version}";
+  # The ICU build propagates the non-ICU one.
+  # We do it this way to make sure all parameters apart from withIcu are the
+  # same.
+  harfbuzzWithoutIcu = mkHarfbuzz { withIcu = false; };
 
-  src = fetchurl {
-    url = "https://www.freedesktop.org/software/harfbuzz/release/harfbuzz-${version}.tar.bz2";
-    sha256 = "004b4j812wgfv8pmcypyrlwrjfa6149lwpz5df6rnm5cy0msdv0i";
-  };
+  mkHarfbuzz =
+    { withIcu }:
+    stdenv.mkDerivation {
+      name = "harfbuzz${optionalString withIcu "-icu"}-${version}";
 
-  postPatch = ''
-    patchShebangs src/gen-def.py
-    patchShebangs test
-  '';
+      src = fetchurl {
+        url = "https://www.freedesktop.org/software/harfbuzz/release/harfbuzz-${version}.tar.bz2";
+        sha256 = "004b4j812wgfv8pmcypyrlwrjfa6149lwpz5df6rnm5cy0msdv0i";
+      };
 
-  outputs = [ "out" "dev" ];
-  outputBin = "dev";
+      postPatch = ''
+        patchShebangs src/gen-def.py
+        patchShebangs test
+      '';
 
-  configureFlags = [
-    # not auto-detected by default
-    "--with-graphite2=${if withGraphite2 then "yes" else "no"}"
-    "--with-icu=${if withIcu then "yes" else "no"}"
-  ]
-    ++ stdenv.lib.optional withCoreText "--with-coretext=yes";
+      outputs = [ "out" "dev" ];
+      outputBin = "dev";
 
-  nativeBuildInputs = [ pkgconfig libintl ];
+      configureFlags = [
+        # not auto-detected by default
+        "--with-graphite2=${if withGraphite2 then "yes" else "no"}"
+        "--with-icu=${if withIcu then "yes" else "no"}"
+      ]
+        ++ optional withCoreText "--with-coretext=yes";
 
-  buildInputs = [ glib freetype cairo ] # recommended by upstream
-    ++ stdenv.lib.optionals withCoreText [ ApplicationServices CoreText ];
+      nativeBuildInputs = [ pkgconfig libintl ];
 
-  propagatedBuildInputs = []
-    ++ optional withGraphite2 graphite2
-    ++ optionals withIcu [ icu harfbuzz ];
+      buildInputs = [ glib freetype cairo ] # recommended by upstream
+        ++ optionals withCoreText [ ApplicationServices CoreText ];
 
-  checkInputs = [ python ];
-  doInstallCheck = false; # fails, probably a bug
+      propagatedBuildInputs = []
+        ++ optional withGraphite2 graphite2
+        ++ optionals withIcu [ icu harfbuzzWithoutIcu ];
 
-  # Slightly hacky; some pkgs expect them in a single directory.
-  postInstall = optionalString withIcu ''
-    rm "$out"/lib/libharfbuzz.* "$dev/lib/pkgconfig/harfbuzz.pc"
-    ln -s {'${harfbuzz.out}',"$out"}/lib/libharfbuzz.la
-    ln -s {'${harfbuzz.dev}',"$dev"}/lib/pkgconfig/harfbuzz.pc
-    ${optionalString stdenv.isDarwin ''
-      ln -s {'${harfbuzz.out}',"$out"}/lib/libharfbuzz.dylib
-      ln -s {'${harfbuzz.out}',"$out"}/lib/libharfbuzz.0.dylib
-    ''}
-  '';
+      checkInputs = [ python ];
+      doInstallCheck = false; # fails, probably a bug
 
-  meta = with stdenv.lib; {
-    description = "An OpenType text shaping engine";
-    homepage = http://www.freedesktop.org/wiki/Software/HarfBuzz;
-    downloadPage = "https://www.freedesktop.org/software/harfbuzz/release/";
-    maintainers = [ maintainers.eelco ];
-    license = licenses.mit;
-    platforms = with platforms; linux ++ darwin;
-    inherit version;
-    updateWalker = true;
-  };
-}
+      # Slightly hacky; some pkgs expect them in a single directory.
+      postInstall = optionalString withIcu ''
+        rm "$out"/lib/libharfbuzz.* "$dev/lib/pkgconfig/harfbuzz.pc"
+        ln -s {'${harfbuzzWithoutIcu.out}',"$out"}/lib/libharfbuzz.la
+        ln -s {'${harfbuzzWithoutIcu.dev}',"$dev"}/lib/pkgconfig/harfbuzz.pc
+        ${optionalString stdenv.isDarwin ''
+          ln -s {'${harfbuzzWithoutIcu.out}',"$out"}/lib/libharfbuzz.dylib
+          ln -s {'${harfbuzzWithoutIcu.out}',"$out"}/lib/libharfbuzz.0.dylib
+        ''}
+      '';
+
+      meta = with lib; {
+        description = "An OpenType text shaping engine";
+        homepage = http://www.freedesktop.org/wiki/Software/HarfBuzz;
+        downloadPage = "https://www.freedesktop.org/software/harfbuzz/release/";
+        maintainers = [ maintainers.eelco ];
+        license = licenses.mit;
+        platforms = with platforms; linux ++ darwin;
+        inherit version;
+        updateWalker = true;
+      };
+    };
+
+in mkHarfbuzz { inherit withIcu; }
