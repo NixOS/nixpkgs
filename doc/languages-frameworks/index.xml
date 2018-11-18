@@ -29,6 +29,7 @@
  <xi:include href="ruby.xml" />
  <xi:include href="rust.section.xml" />
  <xi:include href="texlive.xml" />
+ <xi:include href="titanium.section.xml" />
  <xi:include href="vim.section.xml" />
  <xi:include href="emscripten.section.xml" />
 </chapter>
