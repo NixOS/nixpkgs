@@ -82,6 +82,6 @@ in stdenv.mkDerivation rec {
     homepage = https://te4.org/;
     license = licenses.gpl3;
     maintainers = with maintainers; [ chattered peterhoeg ];
-    platforms = subtractLists ["aarch64-linux"] platforms.linux;
+    platforms = with platforms; [ "i686-linux" "x86_64-linux" ];
   };
 }
