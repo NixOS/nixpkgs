@@ -15,6 +15,9 @@
   # Utility functions, could just import but passing in for efficiency
   lib
 
+, # An preprocessed import of ../package-list.nix
+  packageList
+
 , # Use to reevaluate Nixpkgs; a dirty hack that should be removed
   nixpkgsFun
 
@@ -87,6 +90,8 @@ let
   };
 
   splice = self: super: import ./splice.nix lib self (buildPackages != null);
+
+  trivialPackages = self: super: lib.mapAttrs (name: path: self.callPackage path {}) packageList;
 
   allPackages = self: super:
     let res = import ./all-packages.nix
@@ -185,6 +190,7 @@ let
     stdenvAdapters
     trivialBuilders
     splice
+    trivialPackages
     allPackages
     otherPackageSets
     aliases

@@ -63,6 +63,9 @@ in let
 
   crossSystem = lib.mapNullable lib.systems.elaborate crossSystem0;
 
+  packageList = lib.listToAttrs
+    (map (path: lib.nameValuePair (baseNameOf (toString path)) path) (import ../package-list.nix));
+
   # A few packages make a new package set to draw their dependencies from.
   # (Currently to get a cross tool chain, or forced-i686 package.) Rather than
   # give `all-packages.nix` all the arguments to this function, even ones that
@@ -85,7 +88,7 @@ in let
   # Partially apply some arguments for building bootstraping stage pkgs
   # sets. Only apply arguments which no stdenv would want to override.
   allPackages = newArgs: import ./stage.nix ({
-    inherit lib nixpkgsFun;
+    inherit lib packageList nixpkgsFun;
   } // newArgs);
 
   boot = import ../stdenv/booter.nix { inherit lib allPackages; };
