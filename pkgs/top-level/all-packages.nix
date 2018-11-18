@@ -17238,11 +17238,6 @@ with pkgs;
 
   gv = callPackage ../applications/misc/gv { };
 
-  gutenberg = callPackage ../applications/misc/gutenberg {
-    inherit (darwin.apple_sdk.frameworks) CoreServices;
-    inherit (darwin) cf-private;
-  };
-
   guvcview = callPackage ../os-specific/linux/guvcview {
     pulseaudioSupport = config.pulseaudio or true;
     ffmpeg = ffmpeg_2;
@@ -20130,6 +20125,11 @@ with pkgs;
   zim = callPackage ../applications/office/zim { };
 
   zita-njbridge = callPackage ../applications/audio/zita-njbridge { };
+
+  zola = callPackage ../applications/misc/zola {
+    inherit (darwin.apple_sdk.frameworks) CoreServices;
+    inherit (darwin) cf-private;
+  };
 
   zoom-us = libsForQt59.callPackage ../applications/networking/instant-messengers/zoom-us { };
 
