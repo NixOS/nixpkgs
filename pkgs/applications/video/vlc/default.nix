@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
   postFixup = ''
     find $out/lib/vlc/plugins -exec touch -d @1 '{}' ';'
     $out/lib/vlc/vlc-cache-gen $out/vlc/plugins
-
+  '' + optionalString withQt5 ''
     remove-references-to -t "${qtbase.dev}" $out/lib/vlc/plugins/gui/libqt_plugin.so
   '';
 
