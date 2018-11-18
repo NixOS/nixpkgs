@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   name = "jflex-1.6.1";
 
   src = fetchurl {
-    url = "http://jflex.de/${name}.tar.gz";
+    url = "http://jflex.de/release/${name}.tar.gz";
     sha256 = "1h7q2vhb4s42g4pqz5xxxliagprray7i9krr6hyaz1mjlx7gnycq";
   };
 
