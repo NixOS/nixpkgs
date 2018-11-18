@@ -3,7 +3,7 @@
 , ninja
 , pkgconfig
 
-, platformTools
+, platform-tools
 , ffmpeg
 , SDL2
 }:
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     ln -s "${prebuilt_server}" "$out/share/scrcpy/scrcpy-server.jar"
 
     # runtime dep on `adb` to push the server
-    wrapProgram "$out/bin/scrcpy" --prefix PATH : "${platformTools}/bin"
+    wrapProgram "$out/bin/scrcpy" --prefix PATH : "${platform-tools}/bin"
   '';
 
   meta = with stdenv.lib; {
