@@ -10,6 +10,7 @@
   Nixpkgs to easily build packages for other programming languages, such as
   Perl or Haskell. These are described in this chapter.
  </para>
+ <xi:include href="android.section.xml" />
  <xi:include href="beam.xml" />
  <xi:include href="bower.xml" />
  <xi:include href="coq.xml" />
