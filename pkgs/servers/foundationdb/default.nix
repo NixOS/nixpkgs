@@ -37,6 +37,9 @@ let
     # in theory newer versions of fdb support newer boost versions, but they
     # don't :( maybe one day
     , boost ? boost152
+
+    # if an release is unofficial/a prerelease, then make sure this is set
+    , officialRelease ? true
     }: stdenv.mkDerivation rec {
         name = "foundationdb-${version}";
         inherit version;
@@ -109,7 +112,7 @@ let
           # Needed environment overrides
           ++ [ "KVRELEASE=1"
                "NOSTRIP=1"
-             ];
+             ] ++ lib.optional officialRelease [ "RELEASE=true" ];
 
         # on 6.0 and later, we can specify all this information manually
         configurePhase = lib.optionalString (lib.versionAtLeast version "6.0") ''
