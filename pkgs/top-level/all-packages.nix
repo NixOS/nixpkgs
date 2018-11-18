@@ -934,8 +934,6 @@ with pkgs;
 
   bindfs = callPackage ../tools/filesystems/bindfs { };
 
-  bins = callPackage ../tools/graphics/bins { };
-
   bitbucket-cli = python2Packages.bitbucket-cli;
 
   bittornado = callPackage ../tools/networking/p2p/bittornado { };
