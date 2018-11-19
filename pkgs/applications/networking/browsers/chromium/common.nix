@@ -15,6 +15,7 @@
 , libXScrnSaver, libXcursor, libXtst, libGLU_combined
 , protobuf, speechd, libXdamage, cups
 , ffmpeg, libxslt, libxml2, at-spi2-core
+, jdk
 
 # optional dependencies
 , libgcrypt ? null # gnomeSupport || cupsSupport
@@ -125,7 +126,8 @@ let
       ++ optionals gnomeSupport [ gnome.GConf libgcrypt ]
       ++ optionals cupsSupport [ libgcrypt cups ]
       ++ optional pulseSupport libpulseaudio
-      ++ optional (versionAtLeast version "71") at-spi2-core;
+      ++ optional (versionAtLeast version "71") at-spi2-core
+      ++ optional (versionAtLeast version "72") jdk.jre;
 
     patches = optional enableWideVine ./patches/widevine.patch ++ [
       ./patches/nix_plugin_paths_68.patch
