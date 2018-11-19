@@ -1,6 +1,6 @@
 { stdenv, fetchgit, automake, autoconf, libtool }:
 
-# with stdenv.lib;
+with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "pkgconf-1.5.4";
@@ -19,10 +19,10 @@ stdenv.mkDerivation rec {
     ./autogen.sh
   '';
 
-  #meta = {
-  #  description = "TODO";
-  #  homepage = "TODO";
-  #  platforms = "TODO";
-  #  license = "TODO";
-  #};
+  meta = {
+    description = "Package compiler and linker metadata toolkit";
+    homepage = https://git.dereferenced.org/pkgconf/pkgconf;
+    platforms = platforms.all;
+    license = licenses.isc;
+  };
 }
