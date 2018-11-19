@@ -50,7 +50,7 @@ ninjaCheckPhase() {
     runHook preCheck
 
     if [ -z "${checkTarget:-}" ]; then
-        if ninja -n test >/dev/null 2>&1; then
+        if ninja -t query test >/dev/null 2>&1; then
             checkTarget=test
         fi
     fi
