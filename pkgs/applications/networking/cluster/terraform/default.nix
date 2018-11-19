@@ -58,6 +58,7 @@ let
 
           passthru = {
             withPlugins = newplugins: withPlugins (x: newplugins x ++ actualPlugins);
+            full = withPlugins lib.attrValues;
 
             # Ouch
             overrideDerivation = f: (pluggable (terraform.overrideDerivation f)).withPlugins plugins;
@@ -93,7 +94,7 @@ in rec {
     passthru = { inherit plugins; };
   });
 
-  terraform_0_11-full = terraform_0_11.withPlugins lib.attrValues;
+  terraform_0_11-full = terraform_0_11.full;
 
   # Tests that the plugins are being used. Terraform looks at the specific
   # file pattern and if the plugin is not found it will try to download it
