@@ -23,9 +23,9 @@ stdenv.mkDerivation rec {
 
   doInstallCheck = true;
   installCheckPhase = ''
-    runHook preCheck
+    runHook preInstallCheck
     $out/bin/jflex --version
-    runHook postCheck
+    runHook postInstallCheck
   '';
 
   meta = {
