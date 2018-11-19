@@ -1205,17 +1205,6 @@ passthru = {
     </varlistentry>
     <varlistentry>
      <term>
-      <varname>checkInputs</varname>
-     </term>
-     <listitem>
-      <para>
-       A list of dependencies used by the phase. This gets included in
-       <varname>buildInputs</varname> when <varname>doCheck</varname> is set.
-      </para>
-     </listitem>
-    </varlistentry>
-    <varlistentry>
-     <term>
       <varname>makeFlags</varname>
      </term>
      <listitem>
@@ -1360,6 +1349,18 @@ makeFlagsArray=(CFLAGS="-O0 -g" LDFLAGS="-lfoo -lbar")
        A list of strings passed as additional flags to <command>make</command>.
        Like <varname>makeFlags</varname> and <varname>makeFlagsArray</varname>,
        but only used by the check phase.
+      </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term>
+      <varname>checkInputs</varname>
+     </term>
+     <listitem>
+      <para>
+       A list of dependencies used by the phase. This gets included in
+       <varname>nativeBuildInputs</varname> when <varname>doCheck</varname> is
+       set.
       </para>
      </listitem>
     </varlistentry>
