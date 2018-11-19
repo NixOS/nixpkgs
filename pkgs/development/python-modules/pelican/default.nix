@@ -6,13 +6,13 @@
 
 buildPythonPackage rec {
   pname = "pelican";
-  version = "3.7.1";
+  version = "4.0.0";
 
   src = fetchFromGitHub {
     owner = "getpelican";
     repo = "pelican";
     rev = version;
-    sha256 = "0nkxrb77k2bra7bqckg7f5k73wk98hcbz7rimxl8sw05b2bvd62g";
+    sha256 = "1lm18m8r5pba6r7lvl76q5vcmrvh18ih5iddvpk8jiwmmicn3j91";
   };
 
   doCheck = true;
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     glibcLocales
     # Note: Pelican has to adapt to a changed CLI of pandoc before enabling this
     # again. Compare https://github.com/getpelican/pelican/pull/2252.
-    # Version 3.7.1 is incompatible with our current pandoc version.
+    # Version 4.0.0 is incompatible with our current pandoc version.
     # pandoc
     git
     mock
