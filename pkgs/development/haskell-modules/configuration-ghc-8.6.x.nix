@@ -63,7 +63,7 @@ self: super: {
   hspec-core = self.hspec-core_2_6_0;
   hspec-discover = self.hspec-discover_2_6_0;
   hspec-megaparsec = doJailbreak super.hspec-megaparsec;  # newer versions need megaparsec 7.x
-  hspec-meta = self.hspec-meta_2_5_6;
+  hspec-meta = self.hspec-meta_2_6_0;
   JuicyPixels = self.JuicyPixels_3_3_2;
   lens = self.lens_4_17;
   megaparsec = dontCheck (doJailbreak super.megaparsec);
