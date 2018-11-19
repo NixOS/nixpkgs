@@ -11,6 +11,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "info" ];
 
   buildInputs = [ gettext ];
+  propagatedBuildInputs = [ libgpgerror ];
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
   configureFlags = [ "--with-libgpg-error-prefix=${libgpgerror.dev}" ];
