@@ -15,6 +15,8 @@ fixCmakeFiles() {
 cmakeConfigurePhase() {
     runHook preConfigure
 
+    export CTEST_OUTPUT_ON_FAILURE=1
+
     if [ -z "$dontFixCmake" ]; then
         fixCmakeFiles .
     fi

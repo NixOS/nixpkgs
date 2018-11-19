@@ -15,7 +15,6 @@ ninjaBuildPhase() {
 
     echoCmd 'build flags' "${flagsArray[@]}"
     ninja "${flagsArray[@]}"
-    unset flagsArray
 
     runHook postBuild
 }
@@ -35,7 +34,6 @@ ninjaInstallPhase() {
 
     echoCmd 'install flags' "${flagsArray[@]}"
     ninja "${flagsArray[@]}"
-    unset flagsArray
 
     runHook postInstall
 }
@@ -70,7 +68,6 @@ ninjaCheckPhase() {
 
         echoCmd 'check flags' "${flagsArray[@]}"
         ninja "${flagsArray[@]}"
-        unset flagsArray
     fi
 
     runHook postCheck

@@ -15,7 +15,6 @@ stdenv.mkDerivation rec {
   doCheck = !stdenv.isDarwin;
   preCheck = ''
     export LD_LIBRARY_PATH=$(readlink -f ./src)
-    export CTEST_OUTPUT_ON_FAILURE=1
   '';
 
   meta = with stdenv.lib; {
