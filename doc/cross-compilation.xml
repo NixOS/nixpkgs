@@ -366,13 +366,6 @@
  <section xml:id="sec-cross-usage">
   <title>Cross-building packages</title>
 
-  <note>
-   <para>
-    More information needs to be moved from the old wiki, especially <link
-    xlink:href="https://nixos.org/wiki/CrossCompiling" />, for this section.
-   </para>
-  </note>
-
   <para>
    Nixpkgs can be instantiated with <varname>localSystem</varname> alone, in
    which case there is no cross-compiling and everything is built by and for
