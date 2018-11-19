@@ -258,15 +258,15 @@ genericBuild
   </para>
 
   <para>
-   It is important to note dependencies are not necessarily propagated as the
-   same sort of dependency that they were before, but rather as the
+   It is important to note that dependencies are not necessarily propagated as
+   the same sort of dependency that they were before, but rather as the
    corresponding sort so that the platform rules still line up. The exact rules
    for dependency propagation can be given by assigning to each dependency two
    integers based one how its host and target platforms are offset from the
    depending derivation's platforms. Those offsets are given below in the
    descriptions of each dependency list attribute. Algorithmically, we traverse
    propagated inputs, accumulating every propagated dependency's propagated
-   dependenciess and adjusting them to account for the "shift in perspective"
+   dependencies and adjusting them to account for the "shift in perspective"
    described by the current dependency's platform offsets. This results in sort
    a transitive closure of the dependency relation, with the offsets being
    approximately summed when two dependency links are combined. We also prune
@@ -424,7 +424,7 @@ let f(h, h + 1, i) = i + h
       target offset from the new derivation's platforms. These are programs used
       at build time that produce code to run with code produced by the depending
       package. Most commonly, these are tools used to build the runtime or
-      standard library taht the currently-being-built compiler will inject into
+      standard library that the currently-being-built compiler will inject into
       any code it compiles. In many cases, the currently-being-built-compiler is
       itself employed for that task, but when that compiler won't run (i.e. its
       build and host platform differ) this is not possible. Other times, the
