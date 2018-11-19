@@ -1,7 +1,5 @@
 { stdenv, fetchgit, automake, autoconf, libtool }:
 
-with stdenv.lib;
-
 stdenv.mkDerivation rec {
   name = "pkgconf-1.5.4";
 
@@ -19,10 +17,11 @@ stdenv.mkDerivation rec {
     ./autogen.sh
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Package compiler and linker metadata toolkit";
     homepage = https://git.dereferenced.org/pkgconf/pkgconf;
     platforms = platforms.all;
     license = licenses.isc;
+    maintainers = with maintainers; [ zaninime ];
   };
 }
