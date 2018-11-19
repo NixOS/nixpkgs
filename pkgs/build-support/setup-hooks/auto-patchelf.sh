@@ -153,7 +153,7 @@ autoPatchelf() {
     # Add all shared objects of the current output path to the start of
     # cachedDependencies so that it's choosen first in findDependency.
     cachedDependencies+=(
-        $(find "$prefix" \! -type d \( -name '*.so' -o -name '*.so.*' \))
+        $(find "$@" \! -type d \( -name '*.so' -o -name '*.so.*' \))
     )
     local elffile
 
@@ -169,7 +169,7 @@ autoPatchelf() {
           LANG=C readelf -l "$file" | grep -q "^ *INTERP\\>" || continue
       fi
       autoPatchelfFile "$file"
-    done < <(find "$prefix" -type f -print0)
+    done < <(find "$@" -type f -print0)
 }
 
 # XXX: This should ultimately use fixupOutputHooks but we currently don't have
@@ -181,5 +181,5 @@ autoPatchelf() {
 # behaviour as fixupOutputHooks because the setup hook for patchelf is run in
 # fixupOutput and the postFixup hook runs later.
 postFixupHooks+=(
-    'for output in $outputs; do prefix="${!output}" autoPatchelf; done'
+    'autoPatchelf $(for output in $outputs; do echo "${!output}"; done)'
 )
