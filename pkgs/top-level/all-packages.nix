@@ -11051,7 +11051,9 @@ with pkgs;
 
   libxdg_basedir = callPackage ../development/libraries/libxdg-basedir { };
 
-  libxkbcommon = callPackage ../development/libraries/libxkbcommon { };
+  libxkbcommon = libxkbcommon_8;
+  libxkbcommon_8 = callPackage ../development/libraries/libxkbcommon { };
+  libxkbcommon_7 = callPackage ../development/libraries/libxkbcommon/libxkbcommon_7.nix { };
 
   libxklavier = callPackage ../development/libraries/libxklavier { };
 
