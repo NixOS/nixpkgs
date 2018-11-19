@@ -89,7 +89,7 @@ in {
       integerSimpleGhcNames = pkgs.lib.filter
         (name: ! builtins.elem name integerSimpleExcludes)
         (pkgs.lib.attrNames compiler);
-    in pkgs.recurseIntoAttrs (pkgs.lib.genAttrs
+    in pkgs.lib.recurseIntoAttrs (pkgs.lib.genAttrs
       integerSimpleGhcNames
       (name: compiler."${name}".override { enableIntegerSimple = true; }));
   };
