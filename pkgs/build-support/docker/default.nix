@@ -673,6 +673,13 @@ rec {
         if [[ -n "$fromImage" ]]; then
           echo "Unpacking base image..."
           tar -C image -xpf "$fromImage"
+
+          # Grab the base image config for later
+          if [[ -f image/manifest.json ]]; then
+            fromImageConfigPath=$(cat image/manifest.json | jq -r ".[0].Config")
+            fromImageConfig=$(cat image/$fromImageConfigPath)
+          fi
+
           # Do not import the base image configuration and manifest
           chmod a+w image image/*.json
           rm -f image/*.json
@@ -743,7 +750,14 @@ rec {
         mv temp image/$layerID
 
         # Create image json and image manifest
+        # Set the rootfs
         imageJson=$(cat ${baseJson} | jq ". + {\"rootfs\": {\"diff_ids\": [], \"type\": \"layers\"}}")
+        # Prepend the environment variables from the base image, if provided
+        if [[ -n "$fromImageConfig" ]]; then
+          fromImageEnv=$(echo "$fromImageConfig" | jq ".config.Env // []")
+          imageJson=$(echo "$imageJson" | jq ".config.Env |= $fromImageEnv + .")
+        fi
+
         manifestJson=$(jq -n "[{\"RepoTags\":[\"$imageName:$imageTag\"]}]")
         currentID=$layerID
         while [[ -n "$currentID" ]]; do
