@@ -1,13 +1,13 @@
 { stdenv, lib, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "gdbm-1.18";
-  # FIXME: remove on update to > 1.18
+  name = "gdbm-1.18.1";
+  # FIXME: remove on update to > 1.18.1
   NIX_CFLAGS_COMPILE = if stdenv.cc.isClang then "-Wno-error=return-type" else null;
 
   src = fetchurl {
     url = "mirror://gnu/gdbm/${name}.tar.gz";
-    sha256 = "1kimnv12bzjjhaqk4c8w2j6chdj9c6bg21lchaf7abcyfss2r0mq";
+    sha256 = "1p4ibds6z3ccy65lkmd6lm7js0kwifvl53r0fd759fjxgr917rl6";
   };
 
   doCheck = true; # not cross;
