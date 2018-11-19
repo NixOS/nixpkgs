@@ -9,7 +9,7 @@ ninjaBuildPhase() {
     fi
 
     local flagsArray=(
-        -j$buildCores -l$buildCores
+        -j$buildCores -l$NIX_BUILD_CORES
         $ninjaFlags "${ninjaFlagsArray[@]}"
     )
 
@@ -63,7 +63,7 @@ ninjaCheckPhase() {
         fi
 
         local flagsArray=(
-            -j$buildCores -l$buildCores
+            -j$buildCores -l$NIX_BUILD_CORES
             $ninjaFlags "${ninjaFlagsArray[@]}"
             $checkTarget
         )
