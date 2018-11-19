@@ -14,7 +14,7 @@ in fetchzip rec {
     unzip -j $downloadedFile "Font-Awesome-${version}/use-on-desktop/Font Awesome 5 Free-Solid-900.otf" -d $out/share/fonts/opentype
   '';
 
-  sha256 = "17n2f9hwv15gm7g9zfj2xp3fvzia9a694h7q7cxg5kgyhfdfwqi5";
+  sha256 = "1drjc40glfqhwmfn3s4gz8hz1x0ncrwdr9n1i25m1l7pvsk26f5f";
 
   meta = with stdenv.lib; {
     description = "Font Awesome - OTF font";
