@@ -22586,11 +22586,6 @@ with pkgs;
   sqsh = callPackage ../development/tools/sqsh { };
 
   inherit (callPackage ../applications/networking/cluster/terraform {})
-    terraform_0_8_5
-    terraform_0_8
-    terraform_0_9
-    terraform_0_10
-    terraform_0_10-full
     terraform_0_11
     terraform_0_11-full
     terraform_plugins_test
