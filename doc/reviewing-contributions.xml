@@ -17,27 +17,25 @@
   </para>
  </warning>
  <para>
-  The nixpkgs project receives a fairly high number of contributions via GitHub
+  The Nixpkgs project receives a fairly high number of contributions via GitHub
   pull-requests. Reviewing and approving these is an important task and a way
   to contribute to the project.
  </para>
  <para>
-  The high change rate of nixpkgs makes any pull request that remains open for
+  The high change rate of Nixpkgs makes any pull-request that remains open for
   too long subject to conflicts that will require extra work from the submitter
-  or the merger. Reviewing pull requests in a timely manner and being
-  responsive to the comments is the key to avoid these. GitHub provides sort
-  filters that can be used to see the
-  <link
-    xlink:href="https://github.com/NixOS/nixpkgs/pulls?q=is%3Apr+is%3Aopen+sort%3Aupdated-desc">most
-  recently</link> and the
-  <link
-    xlink:href="https://github.com/NixOS/nixpkgs/pulls?q=is%3Apr+is%3Aopen+sort%3Aupdated-asc">least
+  or the merger. Reviewing pull-requests in a timely manner and being responsive
+  to the comments is the key to avoid this issue. GitHub provides sort filters
+  that can be used to see the <link
+  xlink:href="https://github.com/NixOS/nixpkgs/pulls?q=is%3Apr+is%3Aopen+sort%3Aupdated-desc">most
+  recently</link> and the <link
+  xlink:href="https://github.com/NixOS/nixpkgs/pulls?q=is%3Apr+is%3Aopen+sort%3Aupdated-asc">least
   recently</link> updated pull-requests. We highly encourage looking at
   <link xlink:href="https://github.com/NixOS/nixpkgs/pulls?q=is%3Apr+is%3Aopen+review%3Anone+status%3Asuccess+-label%3A%222.status%3A+work-in-progress%22+no%3Aproject+no%3Aassignee+no%3Amilestone">
-  this list of ready to merge, unreviewed pull requests</link>.
+  this list of ready to merge, unreviewed pull-requests</link>.
  </para>
  <para>
-  When reviewing a pull request, please always be nice and polite.
+  When reviewing a pull-request, please always be nice and polite.
   Controversial changes can lead to controversial opinions, but it is important
   to respect every community member and their work.
  </para>
@@ -230,7 +228,7 @@ $ nix-shell -p nox --run "nox-review -k pr PRNUMBER"
   <title>New packages</title>
 
   <para>
-   New packages are a common type of pull-requests. These pull requests
+   New packages are a common type of pull-requests. These pull-requests
    consists in adding a new nix-expression for a package.
   </para>
 
@@ -279,7 +277,7 @@ $ nix-shell -p nox --run "nox-review -k pr PRNUMBER"
      </listitem>
      <listitem>
       <para>
-       A maintainer must be set, this can be the package submitter or a
+       A maintainer must be set. This can be the package submitter or a
        community member that accepts to take maintainership of the package.
       </para>
      </listitem>
@@ -582,7 +580,7 @@ $ nix-shell -p nox --run "nox-review -k pr PRNUMBER"
 
   <para>
    Container system, boot system and library changes are some examples of the
-   pull requests fitting this category.
+   pull-requests fitting this category.
   </para>
  </section>
  <section xml:id="reviewing-contributions--merging-pull-requests">
@@ -590,7 +588,7 @@ $ nix-shell -p nox --run "nox-review -k pr PRNUMBER"
 
   <para>
    It is possible for community members that have enough knowledge and
-   experience on a special topic to contribute by merging pull requests.
+   experience on a special topic to contribute by merging pull-requests.
   </para>
 
   <para>

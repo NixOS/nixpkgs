@@ -193,7 +193,7 @@
      <listitem>
       <para>
        These predicates are defined in <literal>lib.systems.inspect</literal>,
-       and slapped on every platform. They are superior to the ones in
+       and slapped onto every platform. They are superior to the ones in
        <varname>stdenv</varname> as they force the user to be explicit about
        which platform they are inspecting. Please use these instead of those.
       </para>
@@ -221,7 +221,7 @@
 
    <para>
     In this section we explore the relationship between both runtime and
-    buildtime dependencies and the 3 Autoconf platforms.
+    build-time dependencies and the 3 Autoconf platforms.
    </para>
 
    <para>

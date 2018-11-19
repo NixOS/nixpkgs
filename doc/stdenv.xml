@@ -581,7 +581,7 @@ let f(h, h + 1, i) = i + h
    </varlistentry>
    <varlistentry>
     <term>
-     <varname>depsTargetTarget</varname>
+     <varname>depsTargetTargetPropagated</varname>
     </term>
     <listitem>
      <para>
@@ -836,7 +836,7 @@ passthru = {
        <para>
         Zip files are unpacked using <command>unzip</command>. However,
         <command>unzip</command> is not in the standard environment, so you
-        should add it to <varname>buildInputs</varname> yourself.
+        should add it to <varname>nativeBuildInputs</varname> yourself.
        </para>
       </listitem>
      </varlistentry>
