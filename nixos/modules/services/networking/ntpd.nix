@@ -15,6 +15,10 @@ let
   configFile = pkgs.writeText "ntp.conf" ''
     driftfile ${stateDir}/ntp.drift
 
+    restrict default ${toString cfg.restrictDefault}
+    restrict -6 default ${toString cfg.restrictDefault}
+    restrict source ${toString cfg.restrictSource}
+
     restrict 127.0.0.1
     restrict -6 ::1
 
@@ -39,6 +43,22 @@ in
           Whether to synchronise your machine's time using the NTP
           protocol.
         '';
+      };
+
+      restrictDefault = mkOption {
+        type = types.listOf types.str;
+        description = ''
+          The restriction flags to be set by default.
+        '';
+        default = [ "limited" "kod" "nomodify" "notrap" "noquery" "nopeer" ];
+      };
+
+      restrictSource = mkOption {
+        type = types.listOf types.str;
+        description = ''
+          The restriction flags to be set on source.
+        '';
+        default = [ "limited" "kod" "nomodify" "notrap" "noquery" ];
       };
 
       servers = mkOption {
