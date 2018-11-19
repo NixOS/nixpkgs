@@ -1,4 +1,4 @@
-{ pkgs, stdenv }:
+{ pkgs, lib }:
 
 rec {
 
@@ -7,7 +7,7 @@ rec {
   callPackageWith = autoArgs: fn: args:
     let
       f = if pkgs.lib.isFunction fn then fn else import fn;
-      auto = builtins.intersectAttrs (stdenv.lib.functionArgs f) autoArgs;
+      auto = builtins.intersectAttrs (lib.functionArgs f) autoArgs;
     in f (auto // args);
 
   callPackage = callPackageWith pkgs;
@@ -31,7 +31,7 @@ rec {
       builder = callPackage ../../development/interpreters/erlang/generic-builder.nix args;
     in
       callPackage drv {
-        mkDerivation = pkgs.makeOverridable builder;
+        mkDerivation = lib.makeOverridable builder;
       };
 
   /* Uses generic-builder to evaluate provided drv containing Elixir version
@@ -52,7 +52,7 @@ rec {
       builder = callPackage ../interpreters/elixir/generic-builder.nix args;
     in
       callPackage drv {
-        mkDerivation = pkgs.makeOverridable builder;
+        mkDerivation = lib.makeOverridable builder;
       };
 
   /* Uses generic-builder to evaluate provided drv containing Elixir version
@@ -73,7 +73,7 @@ rec {
       builder = callPackage ../interpreters/lfe/generic-builder.nix args;
     in
       callPackage drv {
-        mkDerivation = pkgs.makeOverridable builder;
+        mkDerivation = lib.makeOverridable builder;
       };
 
 }

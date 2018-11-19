@@ -1,4 +1,4 @@
-{ pkgs, stdenv, stdenvNoCC, gccStdenv, lib, recurseIntoAttrs }:
+{ pkgs, stdenv, stdenvNoCC, gccStdenv, lib }:
 
 # To whomever it may concern:
 #
@@ -99,12 +99,12 @@ let
     dwarf-fortress-full = callPackage ./lazy-pack.nix {
       inherit df-games versionToName latestVersion;
     };
-    
+
     soundSense = callPackage ./soundsense.nix { };
 
     legends-browser = callPackage ./legends-browser {};
 
-    themes = recurseIntoAttrs (callPackage ./themes {
+    themes = lib.recurseIntoAttrs (callPackage ./themes {
       stdenv = stdenvNoCC;
     });
 

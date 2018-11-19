@@ -6,7 +6,6 @@
 , callPackage, ghostscriptX, harfbuzz, poppler_min
 , makeWrapper, python, ruby, perl
 , useFixedHashes ? true
-, recurseIntoAttrs
 }:
 let
   # various binaries (compiled)

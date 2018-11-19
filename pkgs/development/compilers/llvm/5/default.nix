@@ -1,4 +1,4 @@
-{ lowPrio, newScope, pkgs, stdenv, cmake, libstdcxxHook
+{ lib, newScope, pkgs, stdenv, cmake, libstdcxxHook
 , libxml2, python, isl, fetchurl, overrideCC, wrapCCWith
 , buildLlvmTools # tools, but from the previous stage, for cross
 , targetLlvmLibraries # libraries, but from the next stage, for cross
@@ -34,12 +34,12 @@ let
       inherit clang-tools-extra_src;
     };
 
-    llvm-manpages = lowPrio (tools.llvm.override {
+    llvm-manpages = lib.lowPrio (tools.llvm.override {
       enableManpages = true;
       python = pkgs.python;  # don't use python-boot
     });
 
-    clang-manpages = lowPrio (tools.clang-unwrapped.override {
+    clang-manpages = lib.lowPrio (tools.clang-unwrapped.override {
       enableManpages = true;
       python = pkgs.python;  # don't use python-boot
     });

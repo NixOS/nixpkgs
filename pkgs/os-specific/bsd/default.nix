@@ -1,5 +1,5 @@
-{ callPackages, recurseIntoAttrs }:
+{ callPackages, lib }:
 
 rec {
-  netbsd = recurseIntoAttrs (callPackages ./netbsd {});
+  netbsd = lib.recurseIntoAttrs (callPackages ./netbsd {});
 }

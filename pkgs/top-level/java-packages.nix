@@ -1,4 +1,4 @@
-{ pkgs }:
+{ pkgs, lib }:
 
 with pkgs;
 
@@ -8,7 +8,7 @@ let
 in {
   inherit mavenbuild fetchMaven;
 
-  mavenPlugins = recurseIntoAttrs (callPackage ../development/java-modules/mavenPlugins.nix { });
+  mavenPlugins = lib.recurseIntoAttrs (callPackage ../development/java-modules/mavenPlugins.nix { });
 
   inherit (callPackage ../development/java-modules/eclipse/aether-util.nix { inherit fetchMaven; })
     aetherUtil_0_9_0_M2;

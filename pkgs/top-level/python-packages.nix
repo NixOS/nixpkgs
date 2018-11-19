@@ -1094,7 +1094,7 @@ in {
   bugzilla = callPackage ../development/python-modules/bugzilla { };
 
   buildbot = callPackage ../development/python-modules/buildbot { };
-  buildbot-plugins = pkgs.recurseIntoAttrs (callPackage ../development/python-modules/buildbot/plugins.nix { });
+  buildbot-plugins = recurseIntoAttrs (callPackage ../development/python-modules/buildbot/plugins.nix { });
   buildbot-ui = self.buildbot.withPlugins (with self.buildbot-plugins; [ www ]);
   buildbot-full = self.buildbot.withPlugins (with self.buildbot-plugins; [ www console-view waterfall-view grid-view wsgi-dashboards ]);
   buildbot-worker = callPackage ../development/python-modules/buildbot/worker.nix { };

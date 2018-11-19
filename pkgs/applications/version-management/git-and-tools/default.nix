@@ -28,7 +28,7 @@ let
 
   ghq = callPackage ./ghq { };
 
-  git = appendToName "minimal" gitBase;
+  git = lib.appendToName "minimal" gitBase;
 
   git-absorb = callPackage ./git-absorb {
     inherit (darwin.apple_sdk.frameworks) Security;
@@ -47,7 +47,7 @@ let
   };
 
   # Git with SVN support, but without GUI.
-  gitSVN = lowPrio (appendToName "with-svn" (gitBase.override {
+  gitSVN = lib.lowPrio (lib.appendToName "with-svn" (gitBase.override {
     svnSupport = true;
   }));
 

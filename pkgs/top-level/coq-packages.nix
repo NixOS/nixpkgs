@@ -1,4 +1,4 @@
-{ lib, callPackage, newScope, recurseIntoAttrs, ocamlPackages_4_05 }:
+{ lib, callPackage, newScope, ocamlPackages_4_05 }:
 
 let
   mkCoqPackages' = self: coq:
@@ -6,7 +6,7 @@ let
       inherit callPackage coq;
       coqPackages = self;
 
-      contribs = recurseIntoAttrs
+      contribs = lib.recurseIntoAttrs
         (callPackage ../development/coq-modules/contribs {});
 
       autosubst = callPackage ../development/coq-modules/autosubst {};
