@@ -22609,14 +22609,6 @@ with pkgs;
 
   terragrunt = callPackage ../applications/networking/cluster/terragrunt {};
 
-  terragrunt_0_11_1 = callPackage ../applications/networking/cluster/terragrunt/0.11.1.nix {
-    terraform = terraform_0_8;
-  };
-
-  terragrunt_0_9_8 = callPackage ../applications/networking/cluster/terragrunt/0.9.8.nix {
-    terraform = terraform_0_8_5;
-  };
-
   tetex = callPackage ../tools/typesetting/tex/tetex { libpng = libpng12; };
 
   tetra-gtk-theme = callPackage ../misc/themes/tetra { };
