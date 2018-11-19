@@ -14,11 +14,11 @@ assert withGf2x -> gf2x != null;
 
 stdenv.mkDerivation rec {
   name = "ntl-${version}";
-  version = "11.3.1";
+  version = "11.3.2";
 
   src = fetchurl {
     url = "http://www.shoup.net/ntl/ntl-${version}.tar.gz";
-    sha256 = "08a1v92js13ij6lpf75xkjc8iy2w89igd7hy58abll6wnjj107zs";
+    sha256 = "17bfsvn72zjqfibnxscyf4hbk3inndh4r89jd2zg7mgqmd2k3fl4";
   };
 
   buildInputs = [
