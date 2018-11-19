@@ -14,7 +14,7 @@ index 72652ad2f..3c0eca89a 100644
 +
 +[source."https://github.com/nikvolf/parity-tokio-ipc"]
 +git = "https://github.com/nikvolf/parity-tokio-ipc"
-+rev = "7c9bbe3bc45d8e72a92b0951acc877da228abd50"
++rev = "c0f80b40399d7f08ef1e6869569640eb28645f56"
 +replace-with = "vendored-sources"
 +
 +[source."https://github.com/nikvolf/tokio-named-pipes"]
