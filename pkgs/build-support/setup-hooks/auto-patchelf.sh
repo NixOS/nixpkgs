@@ -180,6 +180,11 @@ autoPatchelf() {
 # So what we do here is basically run in postFixup and emulate the same
 # behaviour as fixupOutputHooks because the setup hook for patchelf is run in
 # fixupOutput and the postFixup hook runs later.
-postFixupHooks+=(
-    'autoPatchelf $(for output in $outputs; do echo "${!output}"; done)'
-)
+postFixupHooks+=('
+    if [ -z "$dontAutoPatchelf" ]; then
+        autoPatchelf $(for output in $outputs; do
+            [ -e "${!output}" ] || continue
+            echo "${!output}"
+        done)
+    fi
+')
