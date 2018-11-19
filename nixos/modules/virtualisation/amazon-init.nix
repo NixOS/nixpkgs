@@ -26,9 +26,14 @@ let
           printf "%s" "$channels" > /root/.nix-channels
           nix-channel --update
         fi
-
-        echo "setting configuration from EC2 user data"
-        cp "$userData" /etc/nixos/configuration.nix
+        nix-instantiate --eval-only "$userData" &> /dev/null
+        if [ $? -eq 0 ]; then
+          echo "setting configuration from EC2 user data"
+          cp "$userData" /etc/nixos/configuration.nix
+        else
+          echo "user data is not a valid Nix expression; ignoring"
+          exit
+        fi
       else
         echo "user data does not appear to be a Nix expression; ignoring"
         exit
@@ -48,7 +53,7 @@ in {
     wantedBy = [ "multi-user.target" ];
     after = [ "multi-user.target" ];
     requires = [ "network-online.target" ];
- 
+
     restartIfChanged = false;
     unitConfig.X-StopOnRemoval = false;
 
@@ -58,4 +63,3 @@ in {
     };
   };
 }
-
