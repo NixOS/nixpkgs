@@ -10,7 +10,8 @@ stdenv.mkDerivation rec {
 
   # Prevents errors such as "mainloop.c:89:15: error: expected ')'"
   # Upstream issue https://lists.gnu.org/archive/html/info-mtools/2014-02/msg00000.html
-  patches = stdenv.lib.optional stdenv.isDarwin ./UNUSED-darwin.patch;
+  patches = [ ./fix-dos_to_wchar-declaration.patch ] ++
+    stdenv.lib.optional stdenv.isDarwin ./UNUSED-darwin.patch;
 
   # fails to find X on darwin
   configureFlags = stdenv.lib.optional stdenv.isDarwin "--without-x";
