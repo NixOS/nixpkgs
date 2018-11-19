@@ -19,6 +19,7 @@
 , smbdSupport ? false, samba
 , hostCpuOnly ? false
 , nixosTestRunner ? false
+, qemu-ga
 }:
 
 with stdenv.lib;
@@ -69,8 +70,6 @@ stdenv.mkDerivation rec {
     ++ optionals smbdSupport [ samba ];
 
   enableParallelBuilding = true;
-
-  outputs = [ "out" "ga" ];
 
   patches = [
     ./no-etc-install.patch
@@ -129,9 +128,6 @@ stdenv.mkDerivation rec {
       for exe in $out/bin/qemu-system-* ; do
         paxmark m $exe
       done
-      # copy qemu-ga (guest agent) to separate output
-      mkdir -p $ga/bin
-      cp $out/bin/qemu-ga $ga/bin/
     '';
 
   # Add a ‘qemu-kvm’ wrapper for compatibility/convenience.
@@ -144,6 +140,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     qemu-system-i386 = "bin/qemu-system-i386";
+    ga = qemu-ga; # backward compatible with old "pkgs.qemu.ga"
   };
 
   meta = with stdenv.lib; {

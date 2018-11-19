@@ -1,4 +1,4 @@
-{ stdenv, runCommand, openssh, qemu, controller, mkCygwinImage
+{ stdenv, runCommand, openssh, qemu-img, controller, mkCygwinImage
 , writeText, dosfstools, mtools
 }:
 
@@ -63,7 +63,7 @@ let
 in stdenv.mkDerivation {
   name = "cygwin-base-vm";
   buildCommand = ''
-    ${qemu}/bin/qemu-img create -f qcow2 winvm.img 2G
+    ${qemu-img}/bin/qemu-img create -f qcow2 winvm.img 2G
     ${installController}
     mkdir -p "$out"
     cp winvm.img "$out/disk.img"
