@@ -1078,6 +1078,17 @@ passthru = {
     </varlistentry>
     <varlistentry>
      <term>
+      <varname>prefixKey</varname>
+     </term>
+     <listitem>
+      <para>
+       The key to use when specifying the prefix. By default, this is set to
+       <option>--prefix=</option> as that is used by the majority of packages.
+      </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term>
       <varname>dontAddDisableDepTrack</varname>
      </term>
      <listitem>
