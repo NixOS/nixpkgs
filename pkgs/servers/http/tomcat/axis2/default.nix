@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "axis2-${version}";
-  version = "1.6.4";
+  version = "1.7.8";
 
   src = fetchurl {
     url = "http://apache.proserve.nl/axis/axis2/java/core/${version}/${name}-bin.zip";
-    sha256 = "12ir706dn95567j6lkxdwrh28vnp6292h59qwjyqjm7ckglkmgyr";
+    sha256 = "0k1ppxb9v6agx4gcfkpgwcri6v29ng3arjyc0b0mxcby6ck85mny";
   };
 
   buildInputs = [ unzip apacheAnt jdk ];
