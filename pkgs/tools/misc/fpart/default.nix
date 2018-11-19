@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "fpart-${version}";
-  version = "1.0.0";
+  version = "1.1.0";
 
   src = fetchurl {
     url = "http://contribs.martymac.org/fpart/${name}.tar.gz";
-    sha256 = "1p0ajmry18lcg82znfp8nxs4w3izic775l7df08hywlq4vfa66pg";
+    sha256 = "1q5x62pay6b4lx24icmzh6zda82377v9nr1a07pzd3y74gv6j0xd";
   };
 
   postInstall = ''
