@@ -2871,6 +2871,16 @@
     };
   };
 
+  vim-ps1 = buildVimPluginFrom2Nix {
+    name = "vim-ps1-2017-10-20";
+    src = fetchFromGitHub {
+      owner = "PProvost";
+      repo = "vim-ps1";
+      rev = "0b2509f210f5dc73001fdcfe8fd7ac354b363388";
+      sha256 = "0fkqd9xnr0310pmi5hjxfwh9x6b75z6q1w8qp1alm4qcv425q9rm";
+    };
+  };
+
   vim-puppet = buildVimPluginFrom2Nix {
     name = "vim-puppet-2018-09-24";
     src = fetchFromGitHub {
