@@ -13,11 +13,11 @@
 
 buildPythonPackage rec {
   pname = "readme_renderer";
-  version = "22.0";
+  version = "24.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1lj3k3x7wm0w5xdy82jwl0fmchqmlkdh24g41n3lka7ybxqahz13";
+    sha256 = "0br0562lnvj339f1nwz4nfl4ay49rw05xkqacigzf9wz4mdza5mv";
   };
 
   checkInputs = [ pytest mock ];
