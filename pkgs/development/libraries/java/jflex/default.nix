@@ -10,15 +10,22 @@ stdenv.mkDerivation rec {
 
   sourceRoot = name;
 
-  phases = [ "unpackPhase" "installPhase" ];
-
   installPhase = ''
+    runHook preInstall
     mkdir -p $out
     cp -a * $out
     rm -f $out/bin/jflex.bat
 
     patchShebangs $out
     sed -i -e '/^JAVA=java/ s#java#${jre}/bin/java#' $out/bin/jflex
+    runHook postInstall
+  '';
+
+  doInstallCheck = true;
+  installCheckPhase = ''
+    runHook preCheck
+    $out/bin/jflex --version
+    runHook postCheck
   '';
 
   meta = {
