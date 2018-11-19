@@ -6,7 +6,8 @@
 }:
 
 let
-  python2Env = python2.withPackages(ps: with ps; [ numpy lxml ]);
+  python2Env = python2.withPackages(ps: with ps;
+    [ numpy lxml scour ]);
 in
 
 stdenv.mkDerivation rec {

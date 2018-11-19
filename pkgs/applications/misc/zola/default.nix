@@ -1,33 +1,33 @@
 { stdenv, fetchFromGitHub, rustPlatform, cmake, pkgconfig, openssl, CoreServices, cf-private }:
 
 rustPlatform.buildRustPackage rec {
-  name = "gutenberg-${version}";
-  version = "0.4.2";
+  name = "zola-${version}";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
-    owner = "Keats";
-    repo = "gutenberg";
+    owner = "getzola";
+    repo = "zola";
     rev = "v${version}";
-    sha256 = "0kzxz26khk5rwb9mz0wi9r8y7r93w4n2dbq6v2qr07cy5h14pa6w";
+    sha256 = "0as8nrzw9zz10w4xxiibgz8ylghc879b2pwaxnw8sjbji2d9qv63";
   };
 
-  cargoSha256 = "0n4ji06chybmcvg5yz6cnhzqh162zhh5xpbz374a796dwp1132m8";
+  cargoSha256 = "0a14hq8d3xjr6yfg5qn5r7npqivm816f1p53bbm826igvpc9hsxa";
 
   nativeBuildInputs = [ cmake pkgconfig openssl ];
   buildInputs = stdenv.lib.optionals stdenv.isDarwin [ CoreServices cf-private ];
 
   postInstall = ''
-    install -D -m 444 completions/gutenberg.bash \
+    install -D -m 444 completions/zola.bash \
       -t $out/share/bash-completion/completions
-    install -D -m 444 completions/_gutenberg \
+    install -D -m 444 completions/_zola \
       -t $out/share/zsh/site-functions
-    install -D -m 444 completions/gutenberg.fish \
+    install -D -m 444 completions/zola.fish \
       -t $out/share/fish/vendor_completions.d
   '';
 
   meta = with stdenv.lib; {
-    description = "An opinionated static site generator with everything built-in";
-    homepage = https://www.getgutenberg.io;
+    description = "A fast static site generator with everything built-in";
+    homepage = https://www.getzola.org/;
     license = licenses.mit;
     maintainers = with maintainers; [ dywedir ];
     platforms = platforms.all;
