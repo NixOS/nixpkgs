@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "limnoria";
-  version = "2016.05.06";
+  version = "2018.09.09";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "09kbii5559d09jjb6cryj8rva1050r54dvb67hlcvxhy8g3gr1y3";
+    sha256 = "077v4gsl0fimsqxir1mpzn2kvw01fg6fa0nnf33nlfa0xzdn241y";
   };
 
   patchPhase = ''

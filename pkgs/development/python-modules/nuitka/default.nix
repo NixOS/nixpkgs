@@ -13,13 +13,13 @@ let
   # Therefore we create a separate env for it.
   scons = pkgs.python27.withPackages(ps: [ pkgs.scons ]);
 in buildPythonPackage rec {
-  version = "0.5.25";
+  version = "0.6.0.6";
   pname = "Nuitka";
 
   # Latest version is not yet on PyPi
   src = fetchurl {
     url = "https://github.com/kayhayen/Nuitka/archive/${version}.tar.gz";
-    sha256 = "11psz0pyj56adv4b3f47hl8jakvp2mc2c85s092a5rsv1la1a0aa";
+    sha256 = "1i5p4ia4qcqmfb9k90g3ssbr090q555fdpc32sl4x6rgqfw5ddj4";
   };
 
   buildInputs = stdenv.lib.optionals doCheck [ vmprof pyqt4 ];

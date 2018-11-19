@@ -1,14 +1,14 @@
 { stdenv, fetchurl, qt5 }:
 
 let
-  version = "1.40.13";
+  version = "1.40.23";
 in
 stdenv.mkDerivation {
   name = "qtbitcointrader-${version}";
 
   src = fetchurl {
     url = "https://github.com/JulyIGHOR/QtBitcoinTrader/archive/v${version}.tar.gz";
-    sha256 = "0d6b9ls742nghzg5y97dx7myvv8i88f0s27lhr52yy4833hdxdwn";
+    sha256 = "11r2jzb09a62hf9fkg6aw8pg2js8c87k6lba9xz2q8n6d6jv44r1";
   };
 
   buildInputs = [ qt5.qtbase qt5.qtmultimedia qt5.qtscript ];

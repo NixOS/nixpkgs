@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "pyRFC3339";
-  version = "0.2";
+  version = "1.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1pp648xsjaw9h1xq2mgwzda5wis2ypjmzxlksc1a8grnrdmzy155";
+    sha256 = "06jv7ar7lpvvk0dixzwdr3wgm0g1lipxs429s2z7knwwa7hwpf41";
   };
 
   propagatedBuildInputs = [ pytz ];

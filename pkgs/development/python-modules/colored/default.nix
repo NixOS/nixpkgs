@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "colored";
-  version = "1.1.5";
+  version = "1.3.93";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1r1vsypk8v7az82d66bidbxlndx1h7xd4m43hpg1a6hsjr30wrm3";
+    sha256 = "0xbhq9nd9xz3b6w0c4q33jfgnv8jid023v2fyhi7hsrz1scym5l2";
   };
 
   # No proper test suite

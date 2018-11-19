@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "statsd";
-  version = "3.2.1";
+  version = "3.3.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "3fa92bf0192af926f7a0d9be031fe3fd0fbaa1992d42cf2f07e68f76ac18288e";
+    sha256 = "07yxnlalvcglgwa9pjs1clwrmwx7a4575jai7q05jz3g4i6dprp3";
   };
 
   buildInputs = [ nose mock ];

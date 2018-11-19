@@ -6792,6 +6792,20 @@ let
     };
   };
 
+  HashDiff = buildPerlPackage rec {
+    name = "Hash-Diff-0.010";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/B/BO/BOLAV/${name}.tar.gz";
+      sha256 = "1ig0l859gq00k0r9l85274r2lbvwl7wsndcy52c0m3y9isilm6mw";
+    };
+    propagatedBuildInputs = [ HashMerge ];
+
+    meta = {
+      license = with stdenv.lib.licenses; [ artistic1 ];
+      description = "Return difference between two hashes as a hash";
+    };
+  };
+
   HashFlatten = buildPerlPackage rec {
     name = "Hash-Flatten-1.19";
     src = fetchurl {
@@ -12103,19 +12117,19 @@ let
   };
 
   PerconaToolkit = buildPerlPackage rec {
-    name = "Percona-Toolkit-3.0.11";
+    name = "Percona-Toolkit-3.0.12";
     src = fetchFromGitHub {
       owner = "percona";
       repo = "percona-toolkit";
-      rev = "6e5c5c5e6db0a32c6951c8f798c4547539cdab87";
-      sha256 = "18wxvp7psqrx0zdvg47azrals572hv9fx1s3p0q65s87lnk3q63l";
+      rev = "3.0.12";
+      sha256 = "0xk4h4dzl80kf97lbx0nznx9ajrb6kkg7k3iwca3rj6f3rqggv9y";
     };
     outputs = [ "out" ];
     buildInputs = [ DBDmysql DBI IOSocketSSL TermReadKey TimeHiRes ];
     meta = {
       description = ''Collection of advanced command-line tools to perform a variety of MySQL and system tasks.'';
       homepage = http://www.percona.com/software/percona-toolkit;
-      license = with stdenv.lib.licenses; [ lgpl2 ];
+      license = with stdenv.lib.licenses; [ gpl2 ];
       platforms = stdenv.lib.platforms.linux;
       maintainers = with stdenv.lib.maintainers; [ izorkin ];
     };
@@ -12482,7 +12496,8 @@ let
       export PERL_MB_OPT="--install_base=$out --prefix=$out"
       substituteInPlace Po4aBuilder.pm --replace "\$self->install_sets(\$self->installdirs)->{'bindoc'}" "'$out/share/man/man1'"
     '';
-    buildPhase = "perl Build.PL --install_base=$out; ./Build build";
+
+    buildPhase = "perl Build.PL --install_base=$out --install_path=\"lib=$out/${perl.libPrefix}\"; ./Build build";
     installPhase = "./Build install";
     checkPhase = ''
       export SGML_CATALOG_FILES=${pkgs.docbook_sgml_dtd_41}/sgml/dtd/docbook-4.1/docbook.cat

@@ -2,7 +2,7 @@
 , fetchPypi
 , pytest
 , tornado
-, zeromq3
+, zeromq
 , py
 , python
 }:
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [  pytest tornado ];
-  buildInputs = [ zeromq3];
+  buildInputs = [ zeromq ];
   propagatedBuildInputs = [ py ];
 
   # test_socket.py seems to be hanging

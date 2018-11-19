@@ -27,12 +27,12 @@
    <filename>configuration.nix</filename>:
 <programlisting>
 <xref linkend="opt-services.postgresql.enable"/> = true;
-<xref linkend="opt-services.postgresql.package"/> = pkgs.postgresql94;
+<xref linkend="opt-services.postgresql.package"/> = pkgs.postgresql_9_4;
 </programlisting>
    Note that you are required to specify the desired version of PostgreSQL
-   (e.g. <literal>pkgs.postgresql94</literal>). Since upgrading your PostgreSQL
-   version requires a database dump and reload (see below), NixOS cannot
-   provide a default value for
+   (e.g. <literal>pkgs.postgresql_9_4</literal>). Since upgrading your
+   PostgreSQL version requires a database dump and reload (see below), NixOS
+   cannot provide a default value for
    <xref linkend="opt-services.postgresql.package"/> such as the most recent
    release of PostgreSQL.
   </para>

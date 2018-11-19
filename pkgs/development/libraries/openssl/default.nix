@@ -51,6 +51,8 @@ let
     configureScript = {
         "x86_64-darwin"  = "./Configure darwin64-x86_64-cc";
         "x86_64-solaris" = "./Configure solaris64-x86_64-gcc";
+        "armv6l-linux" = "./Configure linux-armv4 -march=armv6";
+        "armv7l-linux" = "./Configure linux-armv4 -march=armv7-a";
       }.${stdenv.hostPlatform.system} or (
         if stdenv.hostPlatform == stdenv.buildPlatform
           then "./config"

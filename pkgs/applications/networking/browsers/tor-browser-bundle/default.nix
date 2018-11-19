@@ -19,12 +19,9 @@
 
 # Media support (implies audio support)
 , mediaSupport ? false
-, gstreamer
-, gst-plugins-base
-, gst-plugins-good
-, gst-ffmpeg
-, gmp
 , ffmpeg
+
+, gmp
 
 # Extensions, common
 , zip
@@ -72,18 +69,7 @@ let
 
   fontsDir = "${fontsEnv}/share/fonts";
 
-  gstPluginsPath = concatMapStringsSep ":" (x:
-    "${x}/lib/gstreamer-0.10") [
-      gstreamer
-      gst-plugins-base
-      gst-plugins-good
-      gst-ffmpeg
-    ];
-
-  gstLibPath = makeLibraryPath [
-    gstreamer
-    gst-plugins-base
-    gmp
+  mediaLibPath = makeLibraryPath [
     ffmpeg
   ];
 in
@@ -207,7 +193,7 @@ stdenv.mkDerivation rec {
     ''}
 
     ${optionalString mediaSupport ''
-      wrapper_LD_LIBRARY_PATH=${gstLibPath}''${wrapper_LD_LIBRARY_PATH:+:$wrapper_LD_LIBRARY_PATH}
+      wrapper_LD_LIBRARY_PATH=${mediaLibPath}''${wrapper_LD_LIBRARY_PATH:+:$wrapper_LD_LIBRARY_PATH}
     ''}
 
     mkdir -p $out/bin
@@ -284,10 +270,6 @@ stdenv.mkDerivation rec {
     #
     # APULSE_PLAYBACK_DEVICE is for audio playback w/o pulseaudio (no capture yet)
     #
-    # GST_PLUGIN_SYSTEM_PATH is for HD video playback
-    #
-    # GST_REGISTRY is set to devnull to minimize disk writes
-    #
     # TOR_* is for using an external tor instance
     #
     # Parameters lacking a default value below are *required* (enforced by
@@ -313,10 +295,6 @@ stdenv.mkDerivation rec {
       FONTCONFIG_FILE="$TBDATA_IN_STORE/fonts.conf" \
       \
       APULSE_PLAYBACK_DEVICE="\''${APULSE_PLAYBACK_DEVICE:-plug:dmix}" \
-      \
-      GST_PLUGIN_SYSTEM_PATH="${optionalString mediaSupport gstPluginsPath}" \
-      GST_REGISTRY="/dev/null" \
-      GST_REGISTRY_UPDATE="no" \
       \
       TOR_SKIP_LAUNCH="\''${TOR_SKIP_LAUNCH:-}" \
       TOR_CONTROL_PORT="\''${TOR_CONTROL_PORT:-}" \

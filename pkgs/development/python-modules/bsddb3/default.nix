@@ -3,12 +3,12 @@
 , fetchPypi
 , pkgs
 , isPy3k
+, python
 }:
 
 buildPythonPackage rec {
   pname = "bsddb3";
   version = "6.2.6";
-  disabled = isPy3k;
 
   src = fetchPypi {
     inherit pname version;
@@ -17,8 +17,9 @@ buildPythonPackage rec {
 
   buildInputs = [ pkgs.db ];
 
-  # Judging from SyntaxError in test
-  doCheck = false; # test suite breaks python3 compatibility
+  checkPhase = ''
+    ${python.interpreter} test.py
+  '';
 
   # Path to database need to be set.
   # Somehow the setup.py flag is not propagated.

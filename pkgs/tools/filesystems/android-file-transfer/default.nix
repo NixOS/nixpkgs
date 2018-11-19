@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   name = "android-file-transfer-${version}";
-  version = "3.5";
+  version = "3.6";
   src = fetchFromGitHub {
     owner = "whoozle";
     repo = "android-file-transfer-linux";
     rev = "v${version}";
-    sha256 = "036hca41ikgnw4maykjdp53l31rm01mgamy9y56i5qqh84cwmls2";
+    sha256 = "0gaj1shmd62ks4cjdcmiqczlr93v8ivjcg0l6s8z73cz9pf8dxmz";
   };
   buildInputs = [ cmake fuse readline pkgconfig qtbase ];
   buildPhase = ''

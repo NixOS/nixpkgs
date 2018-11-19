@@ -1,6 +1,7 @@
 { stdenv, lib, fetchurl, perl, pkgconfig, systemd, openssl
 , bzip2, zlib, lz4, inotify-tools, pam, libcap
 , clucene_core_2, icu, openldap, libsodium, libstemmer, cyrus_sasl
+, nixosTests
 # Auth modules
 , withMySQL ? false, mysql
 , withPgSQL ? false, postgresql
@@ -33,13 +34,6 @@ stdenv.mkDerivation rec {
   postInstall = ''
     cp -r $out/$out/* $out
     rm -rf $out/$(echo "$out" | cut -d "/" -f2)
-  '' + lib.optionalString stdenv.isDarwin ''
-    install_name_tool -change libclucene-shared.1.dylib \
-        ${clucene_core_2}/lib/libclucene-shared.1.dylib \
-        $out/lib/dovecot/lib21_fts_lucene_plugin.so
-    install_name_tool -change libclucene-core.1.dylib \
-        ${clucene_core_2}/lib/libclucene-core.1.dylib \
-        $out/lib/dovecot/lib21_fts_lucene_plugin.so
   '';
 
   patches = [
@@ -74,5 +68,8 @@ stdenv.mkDerivation rec {
     description = "Open source IMAP and POP3 email server written with security primarily in mind";
     maintainers = with stdenv.lib.maintainers; [ peti rickynils fpletz ];
     platforms = stdenv.lib.platforms.unix;
+  };
+  passthru.tests = {
+    opensmtpd-interaction = nixosTests.opensmtpd;
   };
 }

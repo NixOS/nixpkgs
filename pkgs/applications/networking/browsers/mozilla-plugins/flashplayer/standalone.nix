@@ -33,6 +33,7 @@
 , libXxf86vm
 , libdrm
 , libffi
+, libglvnd
 , libpng
 , libvdpau
 , libxcb
@@ -49,7 +50,7 @@
 
 stdenv.mkDerivation rec {
   name = "flashplayer-standalone-${version}";
-  version = "31.0.0.122";
+  version = "31.0.0.148";
 
   src = fetchurl {
     url =
@@ -59,9 +60,9 @@ stdenv.mkDerivation rec {
         "https://fpdownload.macromedia.com/pub/flashplayer/updaters/31/flash_player_sa_linux.x86_64.tar.gz";
     sha256 =
       if debug then
-        "1psd49bxn6w6kgcjhml44g5wb4za18m8apas8qyly4xcapdylias"
+        "08ysnbnsfs741w9bi0mfl62jhvj8fxh2in1kbp9xzzc40z3yqngn"
       else
-        "0g3h31pdxw91r3067zrkgyziwl18i5kidwx83y13ff4d17v999ss";
+        "0j7qw3iqswgc5df6zzm9jw0yf2mc7r29cp10b1y5p1ys0hrpm33d";
   };
 
   nativeBuildInputs = [ unzip ];
@@ -88,8 +89,8 @@ stdenv.mkDerivation rec {
       alsaLib atk bzip2 cairo curl expat fontconfig freetype gdk_pixbuf glib
       glibc graphite2 gtk2 harfbuzz libICE libSM libX11 libXau libXcomposite
       libXcursor libXdamage libXdmcp libXext libXfixes libXi libXinerama
-      libXrandr libXrender libXt libXxf86vm libdrm libffi libpng libvdpau
-      libxcb libxshmfence nspr nss pango pcre pixman zlib
+      libXrandr libXrender libXt libXxf86vm libdrm libffi libglvnd libpng
+      libvdpau libxcb libxshmfence nspr nss pango pcre pixman zlib
     ];
 
   meta = {

@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, vscode-utils, jq, mono46, clang-tools, writeScript
+{ stdenv, fetchzip, vscode-utils, jq, mono, clang-tools, writeScript
 , gdbUseFixed ? true, gdb # The gdb default setting will be fixed to specified. Use version from `PATH` otherwise.
 }:
 
@@ -34,8 +34,8 @@ let
     name = "cpptools-language-component-binaries";
 
     src = fetchzip {
-      url = https://download.visualstudio.microsoft.com/download/pr/11991016/8a81aa8f89aac452956b0e4c68e6620b/Bin_Linux.zip;
-      sha256 = "0ma59fxfldbgh6ijlvfbs3hnl4g0cnw5gs6286zdrp065n763sv4";
+      url = "https://download.visualstudio.microsoft.com/download/pr/e8bc2ccc-bb10-4d40-8e29-edcd78986e9a/2e86fa29aefdbde2ea2cd1a6fceadeaa/bin_linux.zip";
+      sha256 = "1hvrbp3c4733aryslgyh3l5azmqkw398j2wbgr3w788fphg4v6cc";
     };
 
     patchPhase = ''
@@ -59,7 +59,7 @@ let
           export PATH=''${PATH}''${PATH:+:}${gdb}/bin
         ''
         else ""}
-    ${mono46}/bin/mono $BIN_DIR/bin/OpenDebugAD7.exe $*
+    ${mono}/bin/mono $BIN_DIR/bin/OpenDebugAD7.exe $*
   '';
 in
 
@@ -81,7 +81,7 @@ vscode-utils.buildVscodeMarketplaceExtension {
     # 1. Add activation events so that the extension is functional. This listing is empty when unpacking the extension but is filled at runtime.
     # 2. Patch `packages.json` so that nix's *gdb* is used as default value for `miDebuggerPath`.
     cat ./package_ori.json | \
-      jq --slurpfile actEvts ${./package-activation-events-0-16-1.json} '(.activationEvents) = $actEvts[0]' | \
+      jq --slurpfile actEvts ${./package-activation-events.json} '(.activationEvents) = $actEvts[0]' | \
       jq '(.contributes.debuggers[].configurationAttributes | .attach , .launch | .properties.miDebuggerPath | select(. != null) | select(.default == "/usr/bin/gdb") | .default) = "${gdbDefaultsTo}"' > \
       ./package.json
 

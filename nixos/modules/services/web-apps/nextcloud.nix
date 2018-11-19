@@ -171,7 +171,12 @@ in {
       dbhost = mkOption {
         type = types.nullOr types.str;
         default = "localhost";
-        description = "Database host.";
+        description = ''
+          Database host.
+
+          Note: for using Unix authentication with PostgreSQL, this should be
+          set to <literal>/tmp</literal>.
+        '';
       };
       dbport = mkOption {
         type = with types; nullOr (either int str);
@@ -192,7 +197,7 @@ in {
         type = types.nullOr types.str;
         default = null;
         description = ''
-          Database password.  Use <literal>adminpassFile</literal> to avoid this
+          Admin password.  Use <literal>adminpassFile</literal> to avoid this
           being world-readable in the <literal>/nix/store</literal>.
         '';
       };

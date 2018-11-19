@@ -1,33 +1,31 @@
 { stdenv, buildPythonPackage, fetchPypi, python
-, nose, pillow
 , gfortran, glibcLocales
-, numpy, scipy
+, numpy, scipy, pytest, pillow
 }:
 
 buildPythonPackage rec {
   pname = "scikit-learn";
-  version = "0.19.2";
+  version = "0.20.0";
   # UnboundLocalError: local variable 'message' referenced before assignment
-  doCheck = false;
   disabled = stdenv.isi686;  # https://github.com/scikit-learn/scikit-learn/issues/5534
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b276739a5f863ccacb61999a3067d0895ee291c95502929b2ae56ea1f882e888";
+    sha256 = "064cbxsis6m7l6pr09ijjwqdv0c0yrfnazabwq8p09gcz1qxklcp";
   };
 
-  buildInputs = [ nose pillow gfortran glibcLocales ];
+  buildInputs = [ pillow gfortran glibcLocales ];
   propagatedBuildInputs = [ numpy scipy numpy.blas ];
+  checkInputs = [ pytest ];
 
   LC_ALL="en_US.UTF-8";
 
-  # Disable doctests on OSX: https://github.com/scikit-learn/scikit-learn/issues/10213
-  # Disable doctests everywhere: https://github.com/NixOS/nixpkgs/issues/35436
+  doCheck = !stdenv.isAarch64;
+  # Skip test_feature_importance_regression - does web fetch
   checkPhase = ''
-    HOME=$TMPDIR OMP_NUM_THREADS=1 nosetests --doctest-options=+SKIP $out/${python.sitePackages}/sklearn/
+    cd $TMPDIR
+    HOME=$TMPDIR OMP_NUM_THREADS=1 pytest -k "not test_feature_importance_regression" --pyargs sklearn
   '';
-
-
 
   meta = with stdenv.lib; {
     description = "A set of python modules for machine learning and data mining";

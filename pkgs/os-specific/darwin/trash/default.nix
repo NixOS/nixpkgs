@@ -1,4 +1,5 @@
-{ stdenv, fetchFromGitHub, frameworks, perl } :
+{ stdenv, fetchFromGitHub, perl, cf-private, AppKit, Cocoa, ScriptingBridge }:
+
 stdenv.mkDerivation rec {
   version = "0.9.1";
   name = "trash-${version}";
@@ -10,11 +11,11 @@ stdenv.mkDerivation rec {
     sha256 = "0ylkf7jxfy1pj7i1s48w28kzqjdfd57m2pw0jycsgcj5bkzwll41";
   };
 
-  buildInputs = with frameworks; [
-    Cocoa
-    AppKit
-    ScriptingBridge
+  buildInputs = [
     perl
+    Cocoa AppKit ScriptingBridge
+    # Neded for OBJC_CLASS_$_NSMutableArray symbols.
+    cf-private
   ];
 
   patches = [ ./trash.diff ];

@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "fusepy";
-  version = "2.0.4";
+  version = "3.0.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0v5grm4zyf58hsplwsxfbihddw95lz9w8cy3rpzbyha287swgx8h";
+    sha256 = "1gg69qfi9pjcic3g98l8ya64rw2vc1bp8gsf76my6gglq8z7izvj";
   };
 
   propagatedBuildInputs = [ pkgs.fuse ];

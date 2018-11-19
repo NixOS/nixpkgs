@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "xosview2-${version}";
-  version = "2.2.2";
+  version = "2.3.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/xosview/${name}.tar.gz";
-    sha256 = "3502e119a5305ff2396f559340132910807351c7d4e375f13b5c338404990406";
+    sha256 = "0a588aryjn3397p7d3sp3nblnsg3v8affib1kfk3k8x0x75vgpal";
   };
 
   # The software failed to buid with this enabled; it seemed tests were not implemented
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
       monitor what is going on.
     '';
     homepage = "http://xosview.sourceforge.net/index.html";
-    license = licenses.gpl1;
+    license = with licenses; [ gpl2 bsdOriginal ];
     maintainers = [ maintainers.SeanZicari ];
     platforms = platforms.all;
   };

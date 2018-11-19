@@ -1,17 +1,17 @@
-{ stdenv, fetchurl, pkgconfig, glib, zlib, gnupg, gpgme, libidn, gobjectIntrospection }:
+{ stdenv, fetchurl, pkgconfig, glib, zlib, gnupg, gpgme, libidn2, libunistring, gobjectIntrospection }:
 
 stdenv.mkDerivation rec {
-  version = "3.2.0";
+  version = "3.2.1";
   name = "gmime-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gmime/3.2/${name}.tar.xz";
-    sha256 = "1q6palbpf6lh6bvy9ly26q5apl5k0z0r4mvl6zzqh90rz4rn1v3m";
+    sha256 = "0q65nalxzpyjg37gdlpj9v6028wp0qx47z96q0ff6znw217nzzjn";
   };
 
   outputs = [ "out" "dev" ];
 
-  buildInputs = [ gobjectIntrospection zlib gpgme libidn ];
+  buildInputs = [ gobjectIntrospection zlib gpgme libidn2 libunistring ];
   nativeBuildInputs = [ pkgconfig ];
   propagatedBuildInputs = [ glib ];
   configureFlags = [ "--enable-introspection=yes" ];
@@ -22,6 +22,8 @@ stdenv.mkDerivation rec {
   '';
 
   checkInputs = [ gnupg ];
+
+  doCheck = true;
 
   enableParallelBuilding = true;
 

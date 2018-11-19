@@ -165,6 +165,17 @@ let
     platforms = listOf (either str lib.systems.parsedPlatform.types.system);
     hydraPlatforms = listOf str;
     broken = bool;
+    # TODO: refactor once something like Profpatsch's types-simple will land
+    # This is currently dead code due to https://github.com/NixOS/nix/issues/2532
+    tests = attrsOf (mkOptionType {
+      name = "test";
+      check = x: x == {} || ( # Accept {} for tests that are unsupported
+        isDerivation x &&
+        x ? meta.timeout
+      );
+      merge = lib.options.mergeOneOption;
+    });
+    timeout = int;
 
     # Weirder stuff that doesn't appear in the documentation?
     knownVulnerabilities = listOf str;
@@ -184,8 +195,6 @@ let
     isIbusEngine = bool;
     isGutenprint = bool;
     badPlatforms = platforms;
-    # Hydra build timeout
-    timeout = int;
   };
 
   checkMetaAttr = k: v:

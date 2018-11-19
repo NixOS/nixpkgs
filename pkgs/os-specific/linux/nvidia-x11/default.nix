@@ -19,10 +19,10 @@ rec {
   stable = if stdenv.hostPlatform.system == "x86_64-linux" then stable_410 else stable_390;
 
   stable_410 = generic {
-    version = "410.66";
-    sha256_64bit = "05xjzvj0fgmkpz36dbd7hy2vzl6xxiflzx7kml3k7ad9gy2svdlg";
-    settingsSha256 = "1nsxz1byshgjs3c03lyx6ya36dp0f2vg2l0d9pkh1i6cpzkp53kz";
-    persistencedSha256 = "0m4wdpb8w4y323d8py105p9hizwmf2ai8frkl7h77sn3ski17zw6";
+    version = "410.78";
+    sha256_64bit = "1ciabnmvh95gsfiaakq158x2yws3m9zxvnxws3p32lz9riblpdjx";
+    settingsSha256 = "1677g7rcjbcs5fja1s4p0syhhz46g9x2qqzyn3wwwrjsj7rwaz77";
+    persistencedSha256 = "01kvd3zp056i4n8vazj7gx1xw0h4yjdlpazmspnsmwg24ijb82x4";
   };
 
   # Last one supporting x86

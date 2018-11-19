@@ -4,11 +4,11 @@
 
 buildPythonPackage rec {
   pname = "pylama";
-  version = "7.5.5";
+  version = "7.6.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1zg7wca9s5srvbj3kawalv4438l47hg7m6gaw8rd4i43lbyyqya6";
+    sha256 = "0277pr066vg1w8ip6kdava7d5daiv7csixpysb37ss140k222iiv";
   };
 
   propagatedBuildInputs = [

@@ -1,20 +1,25 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi
-, nose
+, pytest
 , six
+, click
 }:
 
 buildPythonPackage rec {
   pname = "xdis";
-  version = "3.2.4";
+  version = "3.8.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0g2lh70837vigcbc1i58349wp2xzrhlsg2ahc92sn8d3jwxja4dk";
+    sha256 = "4d212df8a85ab55a35f6ad71b2c29818d903c3e6a95e31eb26d5f3fc66a4e015";
   };
 
-  propagatedBuildInputs = [ nose six ];
+  checkInputs = [ pytest ];
+  propagatedBuildInputs = [ six click ];
+
+  # newest release moves to pytest (tests not packaged with release)
+  doCheck = false;
 
   meta = with stdenv.lib; {
     description = "Python cross-version byte-code disassembler and marshal routines";

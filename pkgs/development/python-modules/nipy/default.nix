@@ -12,13 +12,13 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.4.0";
+  version = "0.4.2";
   pname = "nipy";
   disabled = pythonOlder "2.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1hnbn2i4fjxflaaz082s2c57hfp59jfra1zayz1iras5p2dy21nr";
+    sha256 = "1pn731nsczrx198i2gadffqmfbhviglrclv6xxwhnbv6w5hfs2yk";
   };
 
   buildInputs = stdenv.lib.optional doCheck [ nose ];

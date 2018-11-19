@@ -3,7 +3,7 @@
 
 let
   pname = "albert";
-  version = "0.14.21";
+  version = "0.14.22";
 in
 mkDerivation rec {
   name = "${pname}-${version}";
@@ -12,7 +12,7 @@ mkDerivation rec {
     owner  = "albertlauncher";
     repo   = "albert";
     rev    = "v${version}";
-    sha256 = "16nk9krn1mwr0bh57viig9hizqyp3slna0qg7s5a736nsfxy226w";
+    sha256 = "0i9kss5szirmd0pzw3cm692kl9rhkan1zfywfqrjdf3i3b6914sg";
     fetchSubmodules = true;
   };
 
@@ -48,7 +48,7 @@ mkDerivation rec {
     homepage    = https://albertlauncher.github.io/;
     description = "Desktop agnostic launcher";
     license     = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ericsagnes ];
+    maintainers = with maintainers; [ ericsagnes synthetica ];
     platforms   = platforms.linux;
   };
 }

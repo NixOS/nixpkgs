@@ -30,12 +30,12 @@ let
   weechat =
     assert lib.all (p: p.enabled -> ! (builtins.elem null p.buildInputs)) plugins;
     stdenv.mkDerivation rec {
-      version = "2.2";
+      version = "2.3";
       name = "weechat-${version}";
 
       src = fetchurl {
-        url = "http://weechat.org/files/src/weechat-${version}.tar.bz2";
-        sha256 = "0p4nhh7f7w4q77g7jm9i6fynndqlgjkc9dk5g1xb4gf9imiisqlg";
+        url = "https://weechat.org/files/src/weechat-${version}.tar.bz2";
+        sha256 = "0mi4pfnyny0vqc35r0scn6yy21y790a5iwq8ms7kch7b7z11jn9w";
       };
 
       outputs = [ "out" "man" ] ++ map (p: p.name) enabledPlugins;
@@ -69,13 +69,6 @@ let
           mv $from $to
         done
       '';
-
-      # remove when bumping to the latest version.
-      # This patch basically rebases `fcf7469d7664f37e94d5f6d0b3fe6fce6413f88c`
-      # from weechat upstream to weechat-2.2.
-      patches = [
-        ./aggregate-commands.patch
-      ];
 
       meta = {
         homepage = http://www.weechat.org/;

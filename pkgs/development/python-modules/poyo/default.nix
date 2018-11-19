@@ -4,12 +4,12 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.4.0";
+  version = "0.4.2";
   pname = "poyo";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1f48ffl0j1f2lmgabajps7v8w90ppxbp5168gh8kh27bjd8xk5ca";
+    sha256 = "07fdxlqgnnzb8r6lasvdfjcbd8sb9af0wla08rbfs40j349m8jn3";
   };
 
   meta = with stdenv.lib; {

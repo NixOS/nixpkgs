@@ -1,8 +1,5 @@
 #! /usr/bin/env nix-shell
-#! nix-shell -i bash --pure -p androidsdk curl libxslt
-
-# this shows a list of available xmls
-android list sdk | grep 'Parse XML:' | cut -f8- -d\  # | xargs -n 1 curl -O
+#! nix-shell -i bash --pure -p curl libxslt
 
 # we skip the intel addons, as they are Windows+osX only
 # we skip the default sys-img (arm?) because it is empty
@@ -14,3 +11,4 @@ curl -o sys-img.xml       https://dl.google.com/android/repository/sys-img/andro
 ./generate-platforms.sh
 ./generate-sysimages.sh
 ./generate-sources.sh
+./generate-tools.sh

@@ -13,9 +13,10 @@ stdenv.mkDerivation {
   preConfigure = "autoconf";
   patches = [ ./tradcpp-configure.patch ];
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A traditional (K&R-style) C macro preprocessor";
-    platforms = stdenv.lib.platforms.all;
+    platforms = platforms.all;
+    license = licenses.bsd2;
   };
 
 }

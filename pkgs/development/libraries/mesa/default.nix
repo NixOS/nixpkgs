@@ -25,20 +25,20 @@
 
 with stdenv.lib;
 
-if ! lists.elem stdenv.hostPlatform.system platforms.mesaPlatforms then
+if ! elem stdenv.hostPlatform.system platforms.mesaPlatforms then
   throw "unsupported platform for Mesa"
 else
 
 let
   defaultGalliumDrivers =
-    optionals (builtins.elem "drm" eglPlatforms)
+    optionals (elem "drm" eglPlatforms)
     (if stdenv.isAarch32
     then ["virgl" "nouveau" "freedreno" "vc4" "etnaviv" "imx"]
     else if stdenv.isAarch64
     then ["virgl" "nouveau" "vc4" ]
     else ["virgl" "svga" "i915" "r300" "r600" "radeonsi" "nouveau"]);
   defaultDriDrivers =
-    optionals (builtins.elem "drm" eglPlatforms)
+    optionals (elem "drm" eglPlatforms)
     (if (stdenv.isAarch32 || stdenv.isAarch64)
     then ["nouveau"]
     else ["i915" "i965" "nouveau" "radeon" "r200"]);
@@ -148,8 +148,8 @@ let self = stdenv.mkDerivation {
     libffi libvdpau libelf libXvMC
     libpthreadstubs openssl/*or another sha1 provider*/
     valgrind-light python2 python2.pkgs.Mako
-  ] ++ lib.optionals stdenv.isLinux [ wayland wayland-protocols
-                                      libomxil-bellagio libva-minimal ];
+  ] ++ lib.optionals (elem "wayland" eglPlatforms) [ wayland wayland-protocols ]
+    ++ lib.optionals stdenv.isLinux [ libomxil-bellagio libva-minimal ];
 
   enableParallelBuilding = true;
   doCheck = false;

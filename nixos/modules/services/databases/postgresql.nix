@@ -55,7 +55,7 @@ in
 
       package = mkOption {
         type = types.package;
-        example = literalExample "pkgs.postgresql96";
+        example = literalExample "pkgs.postgresql_9_6";
         description = ''
           PostgreSQL package to use.
         '';
@@ -118,7 +118,7 @@ in
       extraPlugins = mkOption {
         type = types.listOf types.path;
         default = [];
-        example = literalExample "[ (pkgs.postgis.override { postgresql = pkgs.postgresql94; }) ]";
+        example = literalExample "[ (pkgs.postgis.override { postgresql = pkgs.postgresql_9_4; }) ]";
         description = ''
           When this list contains elements a new store path is created.
           PostgreSQL and the elements are symlinked into it. Then pg_config,
@@ -167,9 +167,9 @@ in
       # Note: when changing the default, make it conditional on
       # ‘system.stateVersion’ to maintain compatibility with existing
       # systems!
-      mkDefault (if versionAtLeast config.system.stateVersion "17.09" then pkgs.postgresql96
-            else if versionAtLeast config.system.stateVersion "16.03" then pkgs.postgresql95
-            else pkgs.postgresql94);
+      mkDefault (if versionAtLeast config.system.stateVersion "17.09" then pkgs.postgresql_9_6
+            else if versionAtLeast config.system.stateVersion "16.03" then pkgs.postgresql_9_5
+            else pkgs.postgresql_9_4);
 
     services.postgresql.dataDir =
       mkDefault (if versionAtLeast config.system.stateVersion "17.09" then "/var/lib/postgresql/${config.services.postgresql.package.psqlSchema}"
@@ -271,5 +271,5 @@ in
   };
 
   meta.doc = ./postgresql.xml;
-
+  meta.maintainers = with lib.maintainers; [ thoughtpolice ];
 }

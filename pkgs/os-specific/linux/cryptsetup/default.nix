@@ -5,13 +5,13 @@
 assert enablePython -> python2 != null;
 
 stdenv.mkDerivation rec {
-  name = "cryptsetup-2.0.4";
+  name = "cryptsetup-2.0.5";
 
   outputs = [ "out" "dev" "man" ];
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/cryptsetup/v2.0/${name}.tar.xz";
-    sha256 = "0d2p9g2wqcv6l3671gvw96p16jadbgyh21ddy2bhqgi96dq3qflx";
+    sha256 = "079hzvjyzbzaakzvqc1fmciwlzllzqyl2949viasb994r2i2rxx0";
   };
 
   # Disable 4 test cases that fail in a sandbox

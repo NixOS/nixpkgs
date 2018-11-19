@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "validictory";
-  version = "1.0.0a2";
+  version = "1.1.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c02388a70f5b854e71e2e09bd6d762a2d8c2a017557562e866d8ffafb0934b07";
+    sha256 = "1fim11vj990rmn59qd67knccjx1p4an7gavbgprpabsrb13bi1rs";
   };
 
   doCheck = false;
