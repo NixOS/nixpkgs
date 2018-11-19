@@ -18553,6 +18553,8 @@ with pkgs;
 
   pommed_light = callPackage ../os-specific/linux/pommed-light {};
 
+  polymake = callPackage ../applications/science/math/polymake { };
+
   pond = callPackage ../applications/networking/instant-messengers/pond { };
 
   ponymix = callPackage ../applications/audio/ponymix { };
