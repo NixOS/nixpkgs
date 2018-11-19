@@ -86,4 +86,9 @@ rec {
         then { system = elem; }
         else { parsed = elem; };
     in lib.matchAttrs pattern platform;
+
+  # Applying this to an attribute set will cause nix-env to look
+  # inside the set for derivations.
+  recurseIntoAttrs = attrs: attrs // { recurseForDerivations = true; };
+
 }
