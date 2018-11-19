@@ -1,7 +1,7 @@
 { stdenv, fetchzip }:
 
 let
-  version = "2.5";
+  version = "3.0";
 in fetchzip {
   name = "inter-ui-${version}";
 
@@ -12,7 +12,7 @@ in fetchzip {
     unzip -j $downloadedFile \*.otf -d $out/share/fonts/opentype
   '';
 
-  sha256 = "1d88y6c9vbjz5siazhavnpfpazfkvpbcbb4pdycbnj03mmx6y07v";
+  sha256 = "02mscwjh3iwd2nl5vah3qcncwkl4jpmi2xxngyf0bhcsmrixi1c6";
 
   meta = with stdenv.lib; {
     homepage = https://rsms.me/inter/;
