@@ -2128,20 +2128,10 @@ with pkgs;
 
   curl_7_59 = callPackage ../tools/networking/curl/7_59.nix rec {
     fetchurl = fetchurlBoot;
-    http2Support = true;
-    zlibSupport = true;
-    sslSupport = zlibSupport;
-    scpSupport = zlibSupport && !stdenv.isSunOS && !stdenv.isCygwin;
-    gssSupport = !stdenv.hostPlatform.isWindows;
   };
 
   curl = callPackage ../tools/networking/curl rec {
     fetchurl = fetchurlBoot;
-    http2Support = true;
-    zlibSupport = true;
-    sslSupport = zlibSupport;
-    scpSupport = zlibSupport && !stdenv.isSunOS && !stdenv.isCygwin;
-    gssSupport = !stdenv.hostPlatform.isWindows;
   };
 
   curl_unix_socket = callPackage ../tools/networking/curl-unix-socket rec { };
