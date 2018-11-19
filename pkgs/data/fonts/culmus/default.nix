@@ -1,7 +1,7 @@
 { stdenv, fetchzip }:
 
 let
-  version = "0.130";
+  version = "0.133";
 in fetchzip {
   name = "culmus-${version}";
 
@@ -13,7 +13,7 @@ in fetchzip {
     cp -v *.ttf $out/share/fonts/truetype/
   '';
 
-  sha256 = "0v5vm8j2bxnw2qn0640kyibn4h8ck8cidhx2pixi5xsayr0ij1n6";
+  sha256 = "0q80j3vixn364sc23hcy6098rkgy0kb4p91lky6224am1dwn2qmr";
 
   meta = {
     description = "Culmus Hebrew fonts";
