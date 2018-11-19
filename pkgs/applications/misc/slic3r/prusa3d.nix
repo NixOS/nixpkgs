@@ -114,7 +114,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "prusa3d";
     repo = "Slic3r";
-    sha256 = "0068wwsjwmnxql7653vy3labcyslzf17kr8xdr4lg2jplm022hvy";
+    sha256 = "0crjrll8cjpkllval6abrqzvzp8g3rnb4vmwi5vivw0jvdv3w5y7";
     rev = "version_${version}";
   };
 
