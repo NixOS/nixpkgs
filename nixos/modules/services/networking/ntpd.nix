@@ -49,6 +49,7 @@ in
         type = types.listOf types.str;
         description = ''
           The restriction flags to be set by default.
+          As recommended by 6.5.1.1.3 "No" of http://support.ntp.org/bin/view/Support/AccessRestrictions
         '';
         default = [ "limited" "kod" "nomodify" "notrap" "noquery" "nopeer" ];
       };
@@ -57,6 +58,7 @@ in
         type = types.listOf types.str;
         description = ''
           The restriction flags to be set on source.
+          This allows peers to be added by ntpd from configured pool(s), but not by other means.
         '';
         default = [ "limited" "kod" "nomodify" "notrap" "noquery" ];
       };
