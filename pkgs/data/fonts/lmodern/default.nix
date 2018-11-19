@@ -17,7 +17,7 @@ fetchzip {
     ln -s -r $out/texmf* $out/share/
   '';
 
-  sha256 = "0f3nszrvs1nqyhsvjgrnnlam72sz741fyggg9261n9slrkql1jja";
+  sha256 = "11f10qnp8a435lhh19zc2znlf9q4isynmvjmvr63g5n5fhvhc192";
 
   meta = {
     description = "Latin Modern font";
