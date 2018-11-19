@@ -15926,6 +15926,7 @@ with pkgs;
 
   bitwig-studio1 =  callPackage ../applications/audio/bitwig-studio/bitwig-studio1.nix {
     inherit (gnome3) zenity;
+    libxkbcommon = libxkbcommon_7;
   };
   bitwig-studio2 =  callPackage ../applications/audio/bitwig-studio/bitwig-studio2.nix {
     inherit (gnome3) zenity;
