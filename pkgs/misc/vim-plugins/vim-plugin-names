@@ -217,6 +217,7 @@ phanviet/vim-monokai-pro
 plasticboy/vim-markdown
 posva/vim-vue
 powerman/vim-plugin-AnsiEsc
+PProvost/vim-ps1
 python-mode/python-mode
 Quramy/tsuquyomi
 racer-rust/vim-racer
