@@ -148,12 +148,32 @@ autoPatchelfFile() {
 }
 
 autoPatchelf() {
+    local -a findOpts=()
+
+    while [ $# -gt 0 ]; do
+        case "$1" in
+            --) shift; break;;
+            --no-recurse) shift; findOpts+=("-maxdepth" 1);;
+            --*)
+                echo "autoPatchelf: ERROR: Invalid command line" \
+                     "argument: $1" >&2
+                return 1;;
+            *) break;;
+        esac
+    done
+
+    if [ $# -eq 0 ]; then
+        echo "autoPatchelf: No paths to patch specified." >&2
+        return 1
+    fi
+
     echo "automatically fixing dependencies for ELF files" >&2
 
     # Add all shared objects of the current output path to the start of
     # cachedDependencies so that it's choosen first in findDependency.
     cachedDependencies+=(
-        $(find "$@" \! -type d \( -name '*.so' -o -name '*.so.*' \))
+        $(find "$@" "${findOpts[@]}" \! -type d \
+               \( -name '*.so' -o -name '*.so.*' \))
     )
     local elffile
 
@@ -169,7 +189,7 @@ autoPatchelf() {
           LANG=C readelf -l "$file" | grep -q "^ *INTERP\\>" || continue
       fi
       autoPatchelfFile "$file"
-    done < <(find "$@" -type f -print0)
+    done < <(find "$@" "${findOpts[@]}" -type f -print0)
 }
 
 # XXX: This should ultimately use fixupOutputHooks but we currently don't have
@@ -182,7 +202,7 @@ autoPatchelf() {
 # fixupOutput and the postFixup hook runs later.
 postFixupHooks+=('
     if [ -z "$dontAutoPatchelf" ]; then
-        autoPatchelf $(for output in $outputs; do
+        autoPatchelf -- $(for output in $outputs; do
             [ -e "${!output}" ] || continue
             echo "${!output}"
         done)
