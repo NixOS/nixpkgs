@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   name = "keybinder3-${version}";
-  version = "0.3.0";
+  version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "engla";
     repo = "keybinder";
     rev = "keybinder-3.0-v${version}";
-    sha256 = "1jdcrfhvqffhc2h69197wkpc5j5synk5mm8rqhz27qfrfhh4vf0q";
+    sha256 = "196ibn86j54fywfwwgyh89i9wygm4vh7ls19fn20vrnm6ijlzh9r";
   };
 
   nativeBuildInputs = [ pkgconfig ];
