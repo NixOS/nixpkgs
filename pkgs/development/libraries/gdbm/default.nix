@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   name = "gdbm-1.18.1";
-  # FIXME: remove on update to > 1.18.1
+  # FIXME: remove on update to > 1.18
   NIX_CFLAGS_COMPILE = if stdenv.cc.isClang then "-Wno-error=return-type" else null;
 
   src = fetchurl {
