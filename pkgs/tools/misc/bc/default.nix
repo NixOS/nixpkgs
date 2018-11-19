@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     # Libraries for build
     buildPackages.readline buildPackages.ncurses
   ];
-  buildInputs = [ readline ];
+  buildInputs = [ readline flex ];
 
   doCheck = true; # not cross
 
