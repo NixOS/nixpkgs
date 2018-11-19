@@ -13,7 +13,7 @@ in fetchzip {
     cp -v *.ttf $out/share/fonts/truetype/
   '';
 
-  sha256 = "0q80j3vixn364sc23hcy6098rkgy0kb4p91lky6224am1dwn2qmr";
+  sha256 = "1jxg2wf4kwasp5cia00nki2lrcdnhsyh4yy7d05l0a9bim5hq2lr";
 
   meta = {
     description = "Culmus Hebrew fonts";
