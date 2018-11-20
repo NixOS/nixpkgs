@@ -66,10 +66,6 @@ python3Packages.buildPythonApplication rec {
     substituteInPlace cozy/magic/magic.py --replace "ctypes.util.find_library('magic')" "'${file}/lib/libmagic${stdenv.hostPlatform.extensions.sharedLibrary}'"
   '';
 
-  checkPhase = ''
-    ninja test
-  '';
-
   postInstall = ''
     ln -s $out/bin/com.github.geigi.cozy $out/bin/cozy
   '';

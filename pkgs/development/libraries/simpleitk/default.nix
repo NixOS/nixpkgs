@@ -15,8 +15,6 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [ "-DBUILD_SHARED_LIBS=ON" "-DCMAKE_CXX_FLAGS='-Wno-attributes'" ];
 
-  checkPhase = "ctest";
-
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
