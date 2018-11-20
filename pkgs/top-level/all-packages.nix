@@ -607,6 +607,8 @@ with pkgs;
 
   aws-env = callPackage ../tools/admin/aws-env { };
 
+  aws-google-auth = pythonPackages.callPackage ../tools/admin/aws-google-auth { };
+
   aws-okta = callPackage ../tools/security/aws-okta { };
 
   aws-rotate-key = callPackage ../tools/admin/aws-rotate-key { };
