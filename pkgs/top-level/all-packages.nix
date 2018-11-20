@@ -20019,6 +20019,10 @@ with pkgs;
     inherit (gnome3) gsettings-desktop-schemas vte;
   };
 
+  termonad-with-packages = callPackage ../applications/misc/termonad {
+    inherit (haskellPackages) ghcWithPackages;
+  };
+
   xtrace = callPackage ../tools/X11/xtrace { };
 
   xmacro = callPackage ../tools/X11/xmacro { };
