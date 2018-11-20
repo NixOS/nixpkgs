@@ -4853,6 +4853,11 @@
     github = "umazalakain";
     name = "Unai Zalakain";
   };
+  zaninime = {
+    email = "francesco@zanini.me";
+    github = "zaninime";
+    name = "Francesco Zanini";
+  };
   zarelit = {
     email = "david@zarel.net";
     github = "zarelit";
