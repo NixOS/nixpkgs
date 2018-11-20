@@ -1,4 +1,5 @@
-{ lib
+{ stdenv
+, lib
 , buildPythonPackage
 , fetchPypi
 , isPyPy
@@ -50,7 +51,7 @@ buildPythonPackage rec {
     ${python.interpreter} -m unittest discover -s tests
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = http://cvxopt.org/;
     description = "Python Software for Convex Optimization";
     longDescription = ''
@@ -63,7 +64,8 @@ buildPythonPackage rec {
       standard library and on the strengths of Python as a high-level
       programming language.
     '';
-    maintainers = with lib.maintainers; [ edwtjo ];
-    license = lib.licenses.gpl3Plus;
+    maintainers = with maintainers; [ edwtjo ];
+    broken = stdenv.targetPlatform.isDarwin;
+    license = licenses.gpl3Plus;
   };
 }
