@@ -306,7 +306,21 @@ rec {
       x86_64-linux = "12cacc70c3fd2f40574015631c00f41fb8a39048";
     };
   };
-  androidndk = androidndk_17c;
+
+  androidndk_18b = pkgs.callPackage ./androidndk.nix {
+    inherit (buildPackages)
+      unzip makeWrapper;
+    inherit (pkgs)
+      stdenv fetchurl zlib ncurses5 lib python3 libcxx
+      coreutils file findutils gawk gnugrep gnused jdk which;
+    inherit platformTools;
+    version = "18b";
+    sha1s = {
+      x86_64-darwin = "98cb9909aa8c2dab32db188bbdc3ac6207e09440";
+      x86_64-linux = "500679655da3a86aecf67007e8ab230ea9b4dd7b";
+    };
+  };
+  androidndk = androidndk_18b;
 
   androidndk_r8e = import ./androidndk_r8e.nix {
     inherit (buildPackages)
