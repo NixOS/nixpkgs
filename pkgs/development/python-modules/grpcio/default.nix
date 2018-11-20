@@ -4,11 +4,11 @@
 with stdenv.lib;
 buildPythonPackage rec {
   pname = "grpcio";
-  version = "1.16.0";
+  version = "1.16.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0cc5f2d3ee21c642d8982f197c83053fd3a8cbcd6a60240d8c87c6c256b10d57";
+    sha256 = "41bf456665d666d0a07cb1b363626745dc1a98b02395acd666b36c929133a72a";
   };
 
   nativeBuildInputs = [ pkgconfig ] ++ optional stdenv.isDarwin darwin.cctools;
