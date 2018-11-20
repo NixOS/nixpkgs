@@ -4,11 +4,11 @@
 
 buildPythonPackage rec {
   pname = "paperspace";
-  version = "0.0.11";
+  version = "0.0.12";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0z19arikcjpfvp3bgssnlhplm1qzgw95s3r5fnsyf7nwmc4pvvpa";
+    sha256 = "9e7192ee9270768c0dba44969d49730c17d2f955c201798706cdcbc407310d64";
   };
 
   propagatedBuildInputs = [ boto3 requests ];
