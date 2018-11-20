@@ -217,7 +217,7 @@ stdenv.mkDerivation (rec {
   # For building runtime libs
   depsBuildTarget = toolsForTarget;
 
-  buildInputs = libDeps hostPlatform;
+  buildInputs = [ perl ] ++ (libDeps hostPlatform);
 
   propagatedBuildInputs = [ targetPackages.stdenv.cc ]
     ++ stdenv.lib.optional useLLVM llvmPackages.llvm;

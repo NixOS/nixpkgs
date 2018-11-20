@@ -228,6 +228,22 @@ rec {
           inherit doCheck doInstallCheck;
 
           inherit outputs;
+        } // lib.optionalAttrs strictDeps {
+          # Make sure "build" dependencies don’t leak into outputs. We
+          # want to disallow references to depsBuildBuild,
+          # nativeBuildInputs, and depsBuildTarget. But depsHostHost,
+          # buildInputs, and depsTargetTarget is okay, so we subtract
+          # those from disallowedReferences in case a dependency is
+          # listed in multiple dependency lists. We also include
+          # propagated dependencies here as well.
+          disallowedReferences = (attrs.disallowedReferences or [])
+          ++ (lib.subtractLists
+              (lib.concatLists ( (lib.elemAt propagatedDependencies 1) ++
+                                 (lib.elemAt dependencies 1) ++
+                                 (lib.elemAt propagatedDependencies 2) ++
+                                 (lib.elemAt dependencies 2) ) )
+              (lib.concatLists ( (lib.elemAt propagatedDependencies 0) ++
+                                 (lib.elemAt dependencies 0) ) ) );
         } // lib.optionalAttrs (stdenv.hostPlatform != stdenv.buildPlatform) {
           cmakeFlags =
             (/**/ if lib.isString cmakeFlags then [cmakeFlags]
