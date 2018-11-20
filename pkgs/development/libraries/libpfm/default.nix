@@ -11,6 +11,11 @@ stdenv.mkDerivation rec {
 
   installFlags = "DESTDIR=\${out} PREFIX= LDCONFIG=true";
 
+  makeFlags = [
+    "ARCH=${stdenv.targetPlatform.uname.processor}"
+    "SYS=${stdenv.targetPlatform.uname.system}"
+  ];
+
   NIX_CFLAGS_COMPILE = [ "-Wno-error" ];
 
   meta = with stdenv.lib; {
