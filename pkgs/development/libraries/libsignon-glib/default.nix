@@ -2,15 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libsignon-glib";
-  version = "3639a2e90447e4640a03a44972560afe8f61aa48";
-
-  name = "${pname}-2018-10-24";
+  version = "unstable-2018-10-24";
 
   outputs = [ "out" "dev" "devdoc" "py" ];
 
   src = fetchgit {
     url = "https://gitlab.com/accounts-sso/${pname}";
-    rev = version;
+    rev = "3639a2e90447e4640a03a44972560afe8f61aa48";
     fetchSubmodules = true;
     sha256 = "1cq19zbsx4c57dc5gp3shp8lzcr1hw2ynylpn1nkvfyyrx80m60w";
   };

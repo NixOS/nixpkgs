@@ -5,8 +5,6 @@ stdenv.mkDerivation rec {
   pname = "bookworm";
   version = "unstable-2018-11-19";
 
-  name = "${pname}-${version}";
-
   src = fetchFromGitHub {
     owner = "babluboy";
     repo = pname;

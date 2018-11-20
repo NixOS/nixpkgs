@@ -6,11 +6,12 @@ let
             , platform
             , extraMakeFlags ? []
             , extraMeta ? {}
+            , version ? "1.5"
             , ... } @ args:
            stdenv.mkDerivation (rec {
 
     name = "arm-trusted-firmware-${platform}-${version}";
-    version = "1.5";
+    inherit version;
 
     src = fetchFromGitHub {
       owner = "ARM-software";

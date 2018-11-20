@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "1ac20jws8iys9w6dpn4q3hihyx73zkabdwv3gcb779cxfrmq2k2h";
   };
 
-  hardeningDisable = [ "format" "pic" "relro" ];
+  hardeningDisable = [ "format" "pic" "relro" "pie" ];
 
   configureFlags = [ "BUILD_CC=${buildPackages.stdenv.cc.targetPrefix}cc" ];
   nativeBuildInputs = [ buildPackages.stdenv.cc ];
