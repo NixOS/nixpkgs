@@ -17,7 +17,7 @@ let
 
     patches =
       (args.patches or [])
-      ++ [ ./nix-ssl-cert-file.patch ]
+      ++ [(if versionOlder version "1.1.0" then ./nix-ssl-cert-file.patch else ./nix-ssl-cert-file-2.patch)]
       ++ optional (versionOlder version "1.1.0")
           (if stdenv.hostPlatform.isDarwin then ./use-etc-ssl-certs-darwin.patch else ./use-etc-ssl-certs.patch)
       ++ optional (versionOlder version "1.0.2" && stdenv.hostPlatform.isDarwin)

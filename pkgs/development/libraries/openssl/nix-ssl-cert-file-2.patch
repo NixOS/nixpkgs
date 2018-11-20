@@ -9,7 +9,6 @@ diff -ru -x '*~' openssl-1.0.2j-orig/crypto/x509/by_file.c openssl-1.0.2j/crypto
 +            file = ossl_safe_getenv("NIX_SSL_CERT_FILE");
 +            if (!file)
 +                file = ossl_safe_getenv(X509_get_default_cert_file_env());
-
              if (file)
                  ok = (X509_load_cert_crl_file(ctx, file,
                                                X509_FILETYPE_PEM) != 0);
