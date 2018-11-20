@@ -22868,6 +22868,8 @@ with pkgs;
 
   zimg = callPackage ../development/libraries/zimg { };
 
+  wtf = callPackage ../applications/misc/wtf { };
+
   zk-shell = callPackage ../applications/misc/zk-shell { };
 
   zuki-themes = callPackage ../misc/themes/zuki { };
