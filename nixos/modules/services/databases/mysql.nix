@@ -12,12 +12,22 @@ let
     let
       pName = _p: (builtins.parseDrvName (_p.name)).name;
     in pName mysql == pName pkgs.mariadb;
+  isMysqlAtLeast57 =
+    let
+      pName = _p: (builtins.parseDrvName (_p.name)).name;
+    in (pName mysql == pName pkgs.mysql57)
+       && ((builtins.compareVersions mysql.version "5.7") >= 0);
 
   pidFile = "${cfg.pidDir}/mysqld.pid";
 
+  mysqldAndInstallOptions =
+    "--user=${cfg.user} --datadir=${cfg.dataDir} --basedir=${mysql}";
   mysqldOptions =
-    "--user=${cfg.user} --datadir=${cfg.dataDir} --basedir=${mysql} " +
-    "--pid-file=${pidFile}";
+    "${mysqldAndInstallOptions} --pid-file=${pidFile}";
+  # For MySQL 5.7+, --insecure creates the root user without password
+  # (earlier versions and MariaDB do this by default).
+  installOptions =
+    "${mysqldAndInstallOptions} ${lib.optionalString isMysqlAtLeast57 "--insecure"}";
 
   myCnf = pkgs.writeText "my.cnf"
   ''
@@ -253,7 +263,7 @@ in
             if ! test -e ${cfg.dataDir}/mysql; then
                 mkdir -m 0700 -p ${cfg.dataDir}
                 chown -R ${cfg.user} ${cfg.dataDir}
-                ${mysql}/bin/mysql_install_db ${mysqldOptions}
+                ${mysql}/bin/mysql_install_db ${installOptions}
                 touch /tmp/mysql_init
             fi
 

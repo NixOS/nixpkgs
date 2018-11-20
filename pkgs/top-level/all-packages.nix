@@ -2349,6 +2349,8 @@ with pkgs;
 
   duply = callPackage ../tools/backup/duply { };
 
+  dvd-vr = callPackage ../tools/cd-dvd/dvd-vr { };
+
   dvdisaster = callPackage ../tools/cd-dvd/dvdisaster { };
 
   dvdplusrwtools = callPackage ../tools/cd-dvd/dvd+rw-tools { };
@@ -3484,12 +3486,11 @@ with pkgs;
 
   ised = callPackage ../tools/misc/ised {};
 
-  isl = isl_0_17;
+  isl = isl_0_20;
   isl_0_11 = callPackage ../development/libraries/isl/0.11.1.nix { };
-  isl_0_12 = callPackage ../development/libraries/isl/0.12.2.nix { };
   isl_0_14 = callPackage ../development/libraries/isl/0.14.1.nix { };
-  isl_0_15 = callPackage ../development/libraries/isl/0.15.0.nix { };
   isl_0_17 = callPackage ../development/libraries/isl/0.17.1.nix { };
+  isl_0_20 = callPackage ../development/libraries/isl/0.20.0.nix { };
 
   ispike = callPackage ../development/libraries/science/robotics/ispike { };
 
@@ -3516,6 +3517,8 @@ with pkgs;
   jfsutils = callPackage ../tools/filesystems/jfsutils { };
 
   jhead = callPackage ../tools/graphics/jhead { };
+
+  jid = callPackage ../development/tools/jid { };
 
   jing = self.jing-trang;
   jing-trang = callPackage ../tools/text/xml/jing-trang { };
@@ -22576,18 +22579,15 @@ with pkgs;
   sqsh = callPackage ../development/tools/sqsh { };
 
   inherit (callPackage ../applications/networking/cluster/terraform {})
-    terraform_0_8_5
-    terraform_0_8
-    terraform_0_9
-    terraform_0_10
-    terraform_0_10-full
     terraform_0_11
     terraform_0_11-full
+    terraform_0_12
     terraform_plugins_test
     ;
 
   terraform = terraform_0_11;
-  terraform-full = terraform_0_11-full;
+  # deprecated
+  terraform-full = terraform.full;
 
   terraform-providers = recurseIntoAttrs (
     callPackage ../applications/networking/cluster/terraform-providers {}
@@ -22598,14 +22598,6 @@ with pkgs;
   terraform-landscape = callPackage ../applications/networking/cluster/terraform-landscape {};
 
   terragrunt = callPackage ../applications/networking/cluster/terragrunt {};
-
-  terragrunt_0_11_1 = callPackage ../applications/networking/cluster/terragrunt/0.11.1.nix {
-    terraform = terraform_0_8;
-  };
-
-  terragrunt_0_9_8 = callPackage ../applications/networking/cluster/terragrunt/0.9.8.nix {
-    terraform = terraform_0_8_5;
-  };
 
   tetex = callPackage ../tools/typesetting/tex/tetex { libpng = libpng12; };
 
