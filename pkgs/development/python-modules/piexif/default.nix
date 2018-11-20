@@ -2,7 +2,7 @@
 
 buildPythonPackage rec {
   pname = "piexif";
-  version = "1.1.1";
+  version = "1.1.2";
 
   # pillow needed for unit tests
   buildInputs = [ pillow ];
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "c996bcd600afaf126ee142e058a8d62059046a217105a9a270ac48457bcc5544";
+    sha256 = "60cd973f7b5a6d999c3bb60b784745c8d5345486ef62708ffdc5cc4a78e44636";
   };
 
   meta = with stdenv.lib; {
