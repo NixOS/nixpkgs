@@ -1520,6 +1520,8 @@ with pkgs;
 
   metabase = callPackage ../servers/metabase { };
 
+  miniserve = callPackage ../tools/misc/miniserve { };
+
   mkspiffs = callPackage ../tools/filesystems/mkspiffs { };
 
   mkspiffs-presets = recurseIntoAttrs (callPackages ../tools/filesystems/mkspiffs/presets.nix { });
