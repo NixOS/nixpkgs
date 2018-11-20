@@ -15,7 +15,8 @@ buildGoPackage rec {
 
   goDeps = ./deps.nix;
 
-  nativeBuildInputs = [ pkgconfig libgit2 ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libgit2 ];
 
   meta = with stdenv.lib; {
     homepage = https://github.com/junegunn/blsd;
