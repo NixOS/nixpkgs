@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://tedfelix.com/linux/acpid-netlink.html;
+    homepage = https://sourceforge.net/projects/acpid2/;
     description = "A daemon for delivering ACPI events to userspace programs";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
