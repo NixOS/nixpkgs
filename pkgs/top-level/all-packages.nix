@@ -22586,18 +22586,15 @@ with pkgs;
   sqsh = callPackage ../development/tools/sqsh { };
 
   inherit (callPackage ../applications/networking/cluster/terraform {})
-    terraform_0_8_5
-    terraform_0_8
-    terraform_0_9
-    terraform_0_10
-    terraform_0_10-full
     terraform_0_11
     terraform_0_11-full
+    terraform_0_12
     terraform_plugins_test
     ;
 
   terraform = terraform_0_11;
-  terraform-full = terraform_0_11-full;
+  # deprecated
+  terraform-full = terraform.full;
 
   terraform-providers = recurseIntoAttrs (
     callPackage ../applications/networking/cluster/terraform-providers {}
@@ -22608,14 +22605,6 @@ with pkgs;
   terraform-landscape = callPackage ../applications/networking/cluster/terraform-landscape {};
 
   terragrunt = callPackage ../applications/networking/cluster/terragrunt {};
-
-  terragrunt_0_11_1 = callPackage ../applications/networking/cluster/terragrunt/0.11.1.nix {
-    terraform = terraform_0_8;
-  };
-
-  terragrunt_0_9_8 = callPackage ../applications/networking/cluster/terragrunt/0.9.8.nix {
-    terraform = terraform_0_8_5;
-  };
 
   tetex = callPackage ../tools/typesetting/tex/tetex { libpng = libpng12; };
 

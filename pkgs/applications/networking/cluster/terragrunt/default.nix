@@ -1,4 +1,4 @@
-{ stdenv, lib, buildGoPackage, fetchFromGitHub, terraform-full, makeWrapper }:
+{ stdenv, lib, buildGoPackage, fetchFromGitHub, terraform, makeWrapper }:
 
 buildGoPackage rec {
   name = "terragrunt-${version}";
@@ -23,7 +23,7 @@ buildGoPackage rec {
 
   postInstall = ''
     wrapProgram $bin/bin/terragrunt \
-      --set TERRAGRUNT_TFPATH ${lib.getBin terraform-full}/bin/terraform
+      --set TERRAGRUNT_TFPATH ${lib.getBin terraform.full}/bin/terraform
   '';
 
   meta = with stdenv.lib; {
