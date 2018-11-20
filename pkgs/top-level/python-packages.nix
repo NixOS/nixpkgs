@@ -3916,6 +3916,8 @@ in {
 
   magic-wormhole = callPackage ../development/python-modules/magic-wormhole { };
 
+  magic-wormhole-mailbox-server = callPackage ../development/python-modules/magic-wormhole-mailbox-server { };
+
   magic-wormhole-transit-relay = callPackage ../development/python-modules/magic-wormhole-transit-relay { };
 
   wxPython = self.wxPython30;
