@@ -16,17 +16,21 @@ let
 in
 rec {
   # Policy: use the highest stable version as the default (on our master).
-  stable = if stdenv.hostPlatform.system != "x86_64-linux"
-    then legacy_390
-    else generic {
-      version = "410.78";
-      sha256_64bit = "1ciabnmvh95gsfiaakq158x2yws3m9zxvnxws3p32lz9riblpdjx";
-      settingsSha256 = "1677g7rcjbcs5fja1s4p0syhhz46g9x2qqzyn3wwwrjsj7rwaz77";
-      persistencedSha256 = "01kvd3zp056i4n8vazj7gx1xw0h4yjdlpazmspnsmwg24ijb82x4";
-    };
+  stable = if stdenv.hostPlatform.system == "x86_64-linux" then stable_410 else legacy_390;
 
   # No active beta right now
   beta = stable;
+
+  stable_410 = generic {
+    version = "415.25";
+    sha256_64bit = "0jck3sjhkdf9j40fqa6hpm2m9i11bfka9diaxmk2apni4f4mpdk4";
+    settingsSha256 = "0x5a9dhr29g67rbgl1w973fzgjfg1lyn3dpq7fpc7chfp91vxzrp";
+    persistencedSha256 = "0z1d7hrz7zvi4x3ir1c3gcfpsj57wdr5pylvmjhdi3x47cb1w34f";
+
+    patches = lib.optional (kernel.meta.branch == "4.20") [
+      ./atomic64_t.patch
+    ];
+  };
 
   # Last one supporting x86
   legacy_390 = generic {
