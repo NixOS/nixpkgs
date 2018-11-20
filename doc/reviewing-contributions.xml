@@ -583,7 +583,7 @@ $ nix-shell -p nox --run "nox-review -k pr PRNUMBER"
    pull requests fitting this category.
   </para>
  </section>
- <section xml:id="reviewing-contributions--merging-pull requests">
+ <section xml:id="reviewing-contributions--merging-pull-requests">
   <title>Merging pull requests</title>
 
   <para>
