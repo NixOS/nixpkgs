@@ -3,9 +3,9 @@
          xml:id="chap-overlays">
  <title>Overlays</title>
  <para>
-  This chapter describes how to extend and change Nixpkgs packages using
-  overlays. Overlays are used to add layers in the fix-point used by Nixpkgs to
-  compose the set of all packages.
+  This chapter describes how to extend and change Nixpkgs using overlays.
+  Overlays are used to add layers in the fixed-point used by Nixpkgs to compose
+  the set of all packages.
  </para>
  <para>
   Nixpkgs can be configured with a list of overlays, which are applied in
@@ -60,7 +60,7 @@
       <para>
        First, if an
        <link xlink:href="#sec-overlays-argument"><varname>overlays</varname>
-       argument</link> to the nixpkgs function itself is given, then that is
+       argument</link> to the Nixpkgs function itself is given, then that is
        used and no path lookup will be performed.
       </para>
      </listitem>

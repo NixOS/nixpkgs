@@ -47,6 +47,8 @@ stdenv.mkDerivation rec {
     libxml2 libxslt glib gtkmm2 glibmm libsigcxx lcms boost gettext
     gsl poppler imagemagick libwpg librevenge
     libvisio libcdr libexif potrace hicolor-icon-theme
+
+    python2Env perlPackages.perl
   ];
 
   enableParallelBuilding = true;
