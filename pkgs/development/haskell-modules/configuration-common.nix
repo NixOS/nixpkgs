@@ -694,9 +694,12 @@ self: super: {
   # We cannot build this package w/o the C library from <http://www.phash.org/>.
   phash = markBroken super.phash;
 
-  # https://github.com/deech/fltkhs/issues/16
-  # linking fails because the build doesn't pull in the libGLU_combined libraries
-  fltkhs = markBroken super.fltkhs;
+  fltkhs = let inherit (pkgs.lib) flip foldr; in foldr (f: x: f x) super.fltkhs [
+    (flip appendConfigureFlag "-fopengl")
+    (flip addPkgconfigDepend pkgs.libGLU_combined)
+    (flip addExtraLibrary super.OpenGLRaw)
+    (flip addSetupDepend pkgs.fltk14)
+  ];
   fltkhs-fluid-examples = dontDistribute super.fltkhs-fluid-examples;
 
   # We get lots of strange compiler errors during the test suite run.
