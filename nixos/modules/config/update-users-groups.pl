@@ -1,5 +1,6 @@
 use strict;
 use File::Path qw(make_path);
+use File::Spec::Functions qw(canonpath catdir splitdir);
 use File::Slurp;
 use JSON;
 
@@ -74,6 +75,11 @@ sub allocUid {
 
 # Read the declared users/groups.
 my $spec = decode_json(read_file($ARGV[0]));
+
+# Canonicalize home directories
+foreach my $u (@{$spec->{users}}) {
+    $u->{home} = canonpath($u->{home}) if defined $u->{home};
+}
 
 # Don't allocate UIDs/GIDs that are manually assigned.
 foreach my $g (@{$spec->{groups}}) {
@@ -213,7 +219,11 @@ foreach my $u (@{$spec->{users}}) {
 
     # Create a home directory.
     if ($u->{createHome}) {
-        make_path($u->{home}, { mode => 0700 }) if ! -e $u->{home};
+        if (! -e $u->{home}) {
+             my @dirs = splitdir($u->{home});
+             make_path(catdir(@dirs[0..$#dirs - 1]), { mode => 0755 });
+             make_path($u->{home}, { mode => 0700 });
+        }
         chown $u->{uid}, $u->{gid}, $u->{home};
     }
 
