@@ -29,6 +29,7 @@ stdenv.mkDerivation rec {
   passthru = {
     updateScript = gnome3.updateScript {
       packageName = "gtk-vnc";
+      versionPolicy = "none";
     };
   };
 
