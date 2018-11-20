@@ -1,5 +1,5 @@
 { go, govers, lib, fetchgit, fetchhg, fetchbzr, rsync
-, removeReferencesTo, fetchFromGitHub }:
+, removeReferencesTo, fetchFromGitHub, stdenv }:
 
 { name, buildInputs ? [], nativeBuildInputs ? [], passthru ? {}, preFixup ? ""
 , shellHook ? ""
@@ -80,7 +80,9 @@ go.stdenv.mkDerivation (
   inherit name;
   nativeBuildInputs = [ removeReferencesTo go ]
     ++ (lib.optional (!dontRenameImports) govers) ++ nativeBuildInputs;
-  buildInputs = [ go ] ++ buildInputs;
+  buildInputs = buildInputs;
+
+  inherit (go) GOOS GOARCH;
 
   configurePhase = args.configurePhase or ''
     runHook preConfigure
@@ -167,7 +169,18 @@ go.stdenv.mkDerivation (
         export NIX_BUILD_CORES=1
     fi
     getGoDirs "" | xargs -n1 -P $NIX_BUILD_CORES bash -c 'buildGoDir install "$@"' --
-
+  '' + lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+    # normalize cross-compiled builds w.r.t. native builds
+    (
+      dir=$NIX_BUILD_TOP/go/bin/${go.GOOS}_${go.GOARCH}
+      if [[ -n "$(shopt -s nullglob; echo $dir/*)" ]]; then
+        mv $dir/* $dir/..
+      fi
+      if [[ -d $dir ]]; then
+        rmdir $dir
+      fi
+    )
+  '' + ''
     runHook postBuild
   '';
 
