@@ -160,8 +160,17 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
     cp -r . $GOROOT
-    ( cd $GOROOT/src && ./all.bash )
+    ( cd $GOROOT/src && ./make.bash )
+    runHook postInstall
+  '';
+
+  doInstallCheck = true;
+  installCheckPhase = ''
+    runHook preCheck
+    ( cd $GOROOT/src && ./run.bash --no-rebuild)
+    runHook postCheck
   '';
 
   preFixup = ''
