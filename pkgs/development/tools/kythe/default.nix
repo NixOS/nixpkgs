@@ -1,4 +1,4 @@
-{ stdenv, binutils , fetchurl, glibc }:
+{ stdenv, binutils , fetchurl, glibc, ncurses5 }:
 
 stdenv.mkDerivation rec {
   version = "0.0.28";
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
                 write_entries write_tables; do
       echo "Patching:" $exe
       patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" $exe
-      patchelf --set-rpath "${stdenv.cc.cc.lib}/lib64" $exe
+      patchelf --set-rpath "${stdenv.cc.cc.lib}/lib64:${ncurses5}/lib" $exe
     done
     cd ../
     cp -R ./ $out
