@@ -22699,4 +22699,7 @@ with pkgs;
   };
 
   tsung = callPackage ../applications/networking/tsung {};
+
+  mididings = python3Packages.callPackage ../development/python-modules/mididings { };
+
 }

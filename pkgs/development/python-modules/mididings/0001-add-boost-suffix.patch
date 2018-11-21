@@ -1,0 +1,25 @@
+From a2838023e1b984864067cba2c38ff4ecbcbc0420 Mon Sep 17 00:00:00 2001
+From: hark <hark@puscii.nl>
+Date: Wed, 21 Nov 2018 18:36:54 +0100
+Subject: [PATCH] add boost suffix
+
+---
+ setup.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/setup.py b/setup.py
+index 6376278..d12e969 100755
+--- a/setup.py
++++ b/setup.py
+@@ -128,7 +128,7 @@ def boost_lib_name(name, add_suffixes=[]):
+     Try to figure out the correct boost library name (with or without "-mt"
+     suffix, or with any of the given additional suffixes).
+     """
+-    for suffix in add_suffixes + ['', '-mt']:
++    for suffix in add_suffixes + ['', '-mt', '36']:
+         for libdir in lib_dirs():
+             for ext in ['so'] + ['dylib'] * (sys.platform == 'darwin'):
+                 libname = 'lib%s%s.%s' % (name, suffix, ext)
+-- 
+2.19.1
+
