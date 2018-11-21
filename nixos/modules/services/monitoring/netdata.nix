@@ -99,19 +99,23 @@ in {
           message = "Cannot specify both config and configText";
         }
       ];
+
+    systemd.tmpfiles.rules = [
+      "d /var/cache/netdata 0755 ${cfg.user} ${cfg.group} -"
+      "Z /var/cache/netdata - ${cfg.user} ${cfg.group} -"
+      "d /var/log/netdata 0755 ${cfg.user} ${cfg.group} -"
+      "Z /var/log/netdata - ${cfg.user} ${cfg.group} -"
+      "d /var/lib/netdata 0755 ${cfg.user} ${cfg.group} -"
+      "Z /var/lib/netdata - ${cfg.user} ${cfg.group} -"
+      "d /etc/netdata 0755 ${cfg.user} ${cfg.group} -"
+      "Z /etc/netdata - ${cfg.user} ${cfg.group} -"
+    ];
     systemd.services.netdata = {
       description = "Real time performance monitoring";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       path = (with pkgs; [ gawk curl ]) ++ lib.optional cfg.python.enable
         (pkgs.python3.withPackages cfg.python.extraPackages);
-      preStart = concatStringsSep "\n" (map (dir: ''
-        mkdir -vp ${dir}
-        chmod 750 ${dir}
-        chown -R ${cfg.user}:${cfg.group} ${dir}
-        '') [ "/var/cache/netdata"
-              "/var/log/netdata"
-              "/var/lib/netdata" ]);
       serviceConfig = {
         User = cfg.user;
         Group = cfg.group;
