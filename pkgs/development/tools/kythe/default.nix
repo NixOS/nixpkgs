@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     cd tools
     for exe in http_server \
                 kythe read_entries triples verifier \
-                write_entries write_tables; do
+                write_entries write_tables entrystream; do
       echo "Patching:" $exe
       patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" $exe
       patchelf --set-rpath "${stdenv.cc.cc.lib}/lib64:${ncurses5}/lib" $exe
