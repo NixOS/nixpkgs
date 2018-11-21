@@ -4110,10 +4110,6 @@ with pkgs;
 
   mdbtools = callPackage ../tools/misc/mdbtools { };
 
-  mdbtools_git = callPackage ../tools/misc/mdbtools/git.nix {
-    inherit (gnome2) scrollkeeper;
-  };
-
   mdk = callPackage ../development/tools/mdk { };
 
   mdp = callPackage ../applications/misc/mdp { };
