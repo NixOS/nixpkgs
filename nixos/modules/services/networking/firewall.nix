@@ -58,6 +58,9 @@ let
     ${text}
   ''; in "${dir}/bin/${name}";
 
+  anyInterface = { any = mapAttrs (name: value: cfg."${name}") commonOptions; };
+  allInterfaces = anyInterface // cfg.interfaces;
+
   startScript = writeShScript "firewall-start" ''
     ${helpers}
 
@@ -154,7 +157,7 @@ let
           ip46tables -A nixos-fw -p tcp --dport ${toString port} -j nixos-fw-accept ${optionalString (iface != "any") "-i ${iface}"}
         ''
       ) cfg.allowedTCPPorts
-    ) (cfg.interfaces // {any={allowedTCPPorts = cfg.allowedTCPPorts;};}))}
+    ) allInterfaces)}
 
     # Accept connections to the allowed TCP port ranges.
     ${concatStrings (mapAttrsToList (iface: cfg:
@@ -164,7 +167,7 @@ let
           ip46tables -A nixos-fw -p tcp --dport ${range} -j nixos-fw-accept ${optionalString (iface != "any") "-i ${iface}"}
         ''
       ) cfg.allowedTCPPortRanges
-    ) (cfg.interfaces // {any={allowedTCPPortRanges = cfg.allowedTCPPortRanges;};}))}
+    ) allInterfaces)}
 
     # Accept packets on the allowed UDP ports.
     ${concatStrings (mapAttrsToList (iface: cfg:
@@ -173,7 +176,7 @@ let
           ip46tables -A nixos-fw -p udp --dport ${toString port} -j nixos-fw-accept ${optionalString (iface != "any") "-i ${iface}"}
         ''
       ) cfg.allowedUDPPorts
-    ) (cfg.interfaces // {any={allowedUDPPorts = cfg.allowedUDPPorts;};}))}
+    ) allInterfaces)}
 
     # Accept packets on the allowed UDP port ranges.
     ${concatStrings (mapAttrsToList (iface: cfg:
@@ -183,7 +186,7 @@ let
           ip46tables -A nixos-fw -p udp --dport ${range} -j nixos-fw-accept ${optionalString (iface != "any") "-i ${iface}"}
         ''
       ) cfg.allowedUDPPortRanges
-    ) (cfg.interfaces // {any={allowedUDPPortRanges = cfg.allowedUDPPortRanges;};}))}
+    ) allInterfaces)}
 
     # Accept IPv4 multicast.  Not a big security risk since
     # probably nobody is listening anyway.
