@@ -18,9 +18,9 @@ rustPlatform.buildRustPackage rec {
     cp "$src/doc/fd.1" "$out/man/man1"
 
     mkdir -p "$out/share/"{bash-completion/completions,fish/vendor_completions.d,zsh/site-functions}
-    cp target/release/build/fd-find-*/out/fd.bash "$out/share/bash-completion/completions/"
-    cp target/release/build/fd-find-*/out/fd.fish "$out/share/fish/vendor_completions.d/"
-    cp target/release/build/fd-find-*/out/_fd "$out/share/zsh/site-functions/"
+    cp $releaseDir/build/fd-find-*/out/fd.bash "$out/share/bash-completion/completions/"
+    cp $releaseDir/build/fd-find-*/out/fd.fish "$out/share/fish/vendor_completions.d/"
+    cp $releaseDir/build/fd-find-*/out/_fd "$out/share/zsh/site-functions/"
   '';
 
   meta = with stdenv.lib; {
