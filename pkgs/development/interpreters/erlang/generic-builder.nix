@@ -120,7 +120,8 @@ in stdenv.mkDerivation ({
       tolerance.
     '';
 
-    platforms = platforms.unix;
+    # aarch64 is supposed to work but started failing in https://hydra.nixos.org/build/83735973
+    platforms = subtractLists [ "aarch64-linux" ] platforms.unix;
     maintainers = with maintainers; [ the-kenny sjmackenzie couchemar gleber ];
     license = licenses.asl20;
   } // meta);

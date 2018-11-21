@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, pkgconfig, meson, ninja, gettext, gnome3, libxslt, packagekit, polkit
-, fontconfig, libcanberra-gtk3, systemd, libnotify, wrapGAppsHook, dbus-glib, dbus, desktop-file-utils }:
+{ stdenv, fetchurl, pkgconfig, meson, ninja, gettext, gnome3, packagekit, polkit
+, systemd, wrapGAppsHook, desktop-file-utils }:
 
 stdenv.mkDerivation rec {
   name = "gnome-packagekit-${version}";
@@ -10,17 +10,19 @@ stdenv.mkDerivation rec {
     sha256 = "051q3hc78qa85mfh4jxxprfcrfj1hva6smfqsgzm0kx4zkkj1c1r";
   };
 
-  passthru = {
-    updateScript = gnome3.updateScript { packageName = "gnome-packagekit"; attrPath = "gnome3.gnome-packagekit"; };
-  };
-
-  NIX_CFLAGS_COMPILE = "-I${dbus-glib.dev}/include/dbus-1.0 -I${dbus.dev}/include/dbus-1.0";
-
   nativeBuildInputs = [ pkgconfig meson ninja gettext wrapGAppsHook desktop-file-utils ];
-  buildInputs = [ libxslt gnome3.gtk packagekit fontconfig systemd polkit
-                  libcanberra-gtk3 libnotify dbus-glib dbus ];
+  buildInputs = [ gnome3.gtk packagekit systemd polkit ];
 
-  prePatch = "patchShebangs meson_post_install.sh";
+  postPatch = ''
+    patchShebangs meson_post_install.sh
+  '';
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = "gnome-packagekit";
+      attrPath = "gnome3.gnome-packagekit";
+    };
+  };
 
   meta = with stdenv.lib; {
     homepage = https://www.freedesktop.org/software/PackageKit/;

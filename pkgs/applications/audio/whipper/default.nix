@@ -6,7 +6,7 @@ python2.pkgs.buildPythonApplication rec {
   version = "0.7.0";
 
   src = fetchFromGitHub {
-    owner = "JoeLametta";
+    owner = "whipper-team";
     repo = "whipper";
     rev = "v${version}";
     sha256 = "04m8s0s9dcnly9l6id8vv99n9kbjrjid79bss52ay9yvwng0frmj";
@@ -39,7 +39,7 @@ python2.pkgs.buildPythonApplication rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/JoeLametta/whipper;
+    homepage = https://github.com/whipper-team/whipper;
     description = "A CD ripper aiming for accuracy over speed";
     maintainers = with maintainers; [ rycee jgeerds ];
     license = licenses.gpl3Plus;

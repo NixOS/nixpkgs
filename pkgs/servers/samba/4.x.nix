@@ -3,10 +3,8 @@
 , docbook_xml_dtd_42, readline, talloc
 , popt, iniparser, libbsd, libarchive, libiconv, gettext
 , krb5Full, zlib, openldap, cups, pam, avahi, acl, libaio, fam, libceph, glusterfs
-, gnutls
-, ncurses, libunwind, libibverbs, librdmacm, systemd
+, gnutls, ncurses, libunwind, systemd
 
-, enableInfiniband ? false
 , enableLDAP ? false
 , enablePrinting ? false
 , enableMDNS ? false
@@ -22,11 +20,11 @@ with lib;
 
 stdenv.mkDerivation rec {
   name = "samba-${version}";
-  version = "4.7.9";
+  version = "4.7.10";
 
   src = fetchurl {
     url = "mirror://samba/pub/samba/stable/${name}.tar.gz";
-    sha256 = "1v0pd2k4rfdzcqbzb3g5gjiy8rwqamppwzwy5swz4x5rxyr5567c";
+    sha256 = "0w5y6a7kiw5ap7hd84yglzk7cjax6lxlszd0wz1sxnmqx4a6hn9l";
   };
 
   outputs = [ "out" "dev" "man" ];
@@ -47,7 +45,6 @@ stdenv.mkDerivation rec {
       libbsd libarchive zlib fam libiconv gettext libunwind krb5Full
     ]
     ++ optionals stdenv.isLinux [ libaio systemd ]
-    ++ optionals (enableInfiniband && stdenv.isLinux) [ libibverbs librdmacm ]
     ++ optional enableLDAP openldap
     ++ optional (enablePrinting && stdenv.isLinux) cups
     ++ optional enableMDNS avahi

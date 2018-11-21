@@ -23,22 +23,19 @@
 
 buildPythonPackage rec {
   pname = "spacy";
-  version = "2.0.12";
+  version = "2.0.16";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b220ebee412c19613c26b2c1870b60473834bd686cec49553ce5f184164d3359";
+    sha256 = "1ghgbv819ff4777904p1kzayq1dj34i7853anvg859sak59r7pj1";
   };
 
   prePatch = ''
     substituteInPlace setup.py \
-      --replace "html5lib==" "html5lib>=" \
       --replace "regex==" "regex>=" \
-      --replace "ftfy==" "ftfy>=" \
-      --replace "msgpack-python==" "msgpack-python>=" \
-      --replace "msgpack-numpy==" "msgpack-numpy>=" \
-      --replace "thinc>=6.10.3,<6.11.0" "thinc>=6.10.3" \
-      --replace "plac<1.0.0,>=0.9.6" "plac>=0.9.6"
+      --replace "plac<1.0.0,>=0.9.6" "plac>=0.9.6" \
+      --replace "thinc>=6.12.0,<6.13.0" "thinc>=6.12.0" \
+      --replace "wheel>=0.32.0,<0.33.0" "wheel>=0.31.0"
   '';
 
   propagatedBuildInputs = [

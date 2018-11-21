@@ -58,6 +58,10 @@ stdenv.mkDerivation rec {
     # Forwards certain environment variables to the gdm-x-session child process
     # to ensure that the above two patches actually work.
     ./gdm-session-worker_forward-vars.patch
+
+    # Set up the environment properly when launching sessions
+    # https://github.com/NixOS/nixpkgs/issues/48255
+    ./reset-environment.patch
   ];
 
   installFlags = [

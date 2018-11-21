@@ -33,10 +33,9 @@ in stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  buildPhase = ''
-    scons target=release_debug platform=x11 prefix=$out -j $NIX_BUILD_CORES \
-      ${lib.concatStringsSep " "
-          (lib.mapAttrsToList (k: v: "${k}=${builtins.toJSON v}") options)}
+  sconsFlags = "target=release_debug platform=x11";
+  preConfigure = ''
+    sconsFlags+=" ${lib.concatStringsSep " " (lib.mapAttrsToList (k: v: "${k}=${builtins.toJSON v}") options)}"
   '';
 
   outputs = [ "out" "dev" "man" ];

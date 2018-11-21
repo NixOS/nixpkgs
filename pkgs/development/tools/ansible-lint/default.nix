@@ -19,6 +19,10 @@ pythonPackages.buildPythonPackage rec {
     patchShebangs bin/ansible-lint
   '';
 
+   preBuild = ''
+     export HOME="$TMP"
+   '';
+
   checkPhase = ''
     nosetests test
   '';

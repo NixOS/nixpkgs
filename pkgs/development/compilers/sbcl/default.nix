@@ -5,16 +5,19 @@
   # Note that the created binaries still need `patchelf --set-interpreter ...`
   # to get rid of ${glibc} dependency.
 , purgeNixReferences ? false
+, texinfo
 }:
 
 stdenv.mkDerivation rec {
   name    = "sbcl-${version}";
-  version = "1.4.10";
+  version = "1.4.13";
 
   src = fetchurl {
     url    = "mirror://sourceforge/project/sbcl/sbcl/${version}/${name}-source.tar.bz2";
-    sha256 = "1j9wb608pkihpwgzl4qvnr4jl6mb7ngfqy559pxnvmnn1zlyfklh";
+    sha256 = "120rnnz8367lk7ljqlf8xidm4b0d738xqsib4kq0q5ms5r7fzgvm";
   };
+
+  buildInputs = [texinfo];
 
   patchPhase = ''
     echo '"${version}.nixos"' > version.lisp-expr
@@ -46,11 +49,6 @@ stdenv.mkDerivation rec {
       '/date defaulted-source/i(or (and (= 2208988801 (file-write-date defaulted-source-truename)) (= 2208988801 (file-write-date defaulted-fasl-truename)))'
 
     # Fix the tests
-    sed -e '/deftest pwent/inil' -i contrib/sb-posix/posix-tests.lisp
-    sed -e '/deftest grent/inil' -i contrib/sb-posix/posix-tests.lisp
-    sed -e '/deftest .*ent.non-existing/,+5d' -i contrib/sb-posix/posix-tests.lisp
-    sed -e '/deftest \(pw\|gr\)ent/,+3d' -i contrib/sb-posix/posix-tests.lisp
-
     sed -e '5,$d' -i contrib/sb-bsd-sockets/tests.lisp
     sed -e '5,$d' -i contrib/sb-simple-streams/*test*.lisp
 
@@ -83,19 +81,28 @@ stdenv.mkDerivation rec {
 
   buildPhase = ''
     sh make.sh --prefix=$out --xc-host="${sbclBootstrapHost}"
+    (cd doc/manual ; make info)
   '';
 
   installPhase = ''
     INSTALL_ROOT=$out sh install.sh
+  ''
+  + stdenv.lib.optionalString (!purgeNixReferences) ''
+    cp -r src $out/lib/sbcl
+    cp -r contrib $out/lib/sbcl
+    cat >$out/lib/sbcl/sbclrc <<EOF
+     (setf (logical-pathname-translations "SYS")
+       '(("SYS:SRC;**;*.*.*" #P"$out/lib/sbcl/src/**/*.*")
+         ("SYS:CONTRIB;**;*.*.*" #P"$out/lib/sbcl/contrib/**/*.*")))
+    EOF
   '';
 
-  # Specifying $SBCL_HOME is only truly needed with `purgeNixReferences = true`.
-  setupHook = writeText "setupHook.sh" ''
+  setupHook = stdenv.lib.optional purgeNixReferences (writeText "setupHook.sh" ''
     addEnvHooks "$targetOffset" _setSbclHome
     _setSbclHome() {
       export SBCL_HOME='@out@/lib/sbcl/'
     }
-  '';
+  '');
 
   meta = sbclBootstrap.meta // {
     inherit version;

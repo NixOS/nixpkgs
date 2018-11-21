@@ -12,11 +12,11 @@ stdenv.mkDerivation (rec {
 
   buildInputs = [ popt ];
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://natspec.sourceforge.net/ ;
     description = "A library intended to smooth national specificities in using of programs";
-    platforms = stdenv.lib.platforms.unix;
-    maintainers = [ ];
+    platforms = platforms.unix;
+    license = licenses.lgpl21;
   };
 } // stdenv.lib.optionalAttrs (!stdenv.isLinux) {
   propagatedBuildInputs = [ libiconv ];

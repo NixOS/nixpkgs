@@ -1,9 +1,15 @@
 { stdenv, fetchFromGitHub, ocamlPackages, makeWrapper, writeScript
-, dune, python3, rsync, fetchpatch }:
+, dune, python3, rsync, fetchpatch, buck }:
 let
   # Manually set version - the setup script requires
   # hg and git + keeping the .git directory around.
-  pyre-version = "0.0.14";
+  pyre-version = "0.0.17";  # also change typeshed revision below with $pyre-src/.typeshed-version
+  pyre-src = fetchFromGitHub {
+    owner = "facebook";
+    repo = "pyre-check";
+    rev = "v${pyre-version}";
+    sha256 = "0y86a3g5xbgh0byksyx5jw7yq7w840x85dhz9inz6mkg5j06mcis";
+  };
   versionFile = writeScript "version.ml" ''
     cat > "./version.ml" <<EOF
     open Core
@@ -20,12 +26,7 @@ let
  pyre-bin = stdenv.mkDerivation {
   name = "pyre-${pyre-version}";
 
-  src = fetchFromGitHub {
-    owner = "facebook";
-    repo = "pyre-check";
-    rev = "v${pyre-version}";
-    sha256 = "0c8xzaa3ljqb6llr041sydw0l4xqn7x21nw9vaymdxh35nx9bp2v";
-  };
+  src = pyre-src;
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -49,7 +50,6 @@ let
     export HOME=.
 
     # "external" because https://github.com/facebook/pyre-check/pull/8/files
-    cp Makefile.template Makefile
     sed "s/%VERSION%/external/" dune.in > dune
 
     cp ${versionFile} ./scripts/generate-version-number.sh
@@ -77,20 +77,18 @@ let
     description = "A performant type-checker for Python 3";
     homepage = https://pyre-check.org;
     license = licenses.mit;
-    platforms = with platforms; linux;
+    platforms = ocamlPackages.ocaml.meta.platforms;
     maintainers = with maintainers; [ teh ];
   };
 };
 typeshed = stdenv.mkDerivation {
   name = "typeshed";
-  # typeshed doesn't have versions, it seems to be synchronized with
-  # mypy relases. I'm assigning a random version here (same as pyre).
   version = pyre-version;
   src = fetchFromGitHub {
     owner = "python";
     repo = "typeshed";
-    rev = "a08c6ea";
-    sha256 = "0wy8yh43vhyyc4g7iqnmlj66kz5in02y5qc0c4jdckhpa3mchaqk";
+    rev = "bc3f9fe1d3c43b00c04cedb23e0eeebc9e1734b6";
+    sha256 = "06b2kj4n49h4sgi8hn5kalmir8llhanfdc7f1924cxvrkj5ry94b";
   };
   phases = [ "unpackPhase" "installPhase" ];
   installPhase = "cp -r $src $out";
@@ -98,19 +96,8 @@ typeshed = stdenv.mkDerivation {
 in python3.pkgs.buildPythonApplication rec {
   pname = "pyre-check";
   version = pyre-version;
-  src = fetchFromGitHub {
-    owner = "facebook";
-    repo = "pyre-check";
-    rev = "v${pyre-version}";
-    sha256 = "0ig7bx2kfn2kbxw74wysh5365yp5gyby42l9l29iclrzdghgk32l";
-  };
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/facebook/pyre-check/commit/b473d2ed9fc11e7c1cd0c7b8c42f521e5cdc2003.patch";
-      sha256 = "05xvyp7j4n6z92bxf64rxfq5pvaadxgx1c8c5qziy75vdz72lkcy";
-    })
-    ./pyre-bdist-wheel.patch
-  ];
+  src = pyre-src;
+  patches = [ ./pyre-bdist-wheel.patch ];
 
   # The build-pypi-package script does some funky stuff with build
   # directories - easier to patch it a bit than to replace it
@@ -119,15 +106,21 @@ in python3.pkgs.buildPythonApplication rec {
     mkdir ./build
     substituteInPlace scripts/build-pypi-package.sh \
         --replace 'NIX_BINARY_FILE' '${pyre-bin}/bin/pyre.bin' \
-        --replace 'BUILD_ROOT="$(mktemp -d)"' "BUILD_ROOT=$(pwd)/build"
+        --replace 'BUILD_ROOT="$(mktemp -d)"' "BUILD_ROOT=$PWD/build"
+    substituteInPlace client/buck.py \
+        --replace '"buck"' '"${buck}/bin/buck"'
+    substituteInPlace client/tests/buck_test.py \
+        --replace '"buck"' '"${buck}/bin/buck"'
   '';
 
-  buildInputs = [ pyre-bin rsync ];
+  buildInputs = [ pyre-bin ];
+  nativeBuildInputs = [ rsync ]; # only required for build-pypi-package.sh
   propagatedBuildInputs = with python3.pkgs; [ docutils typeshed ];
   buildPhase = ''
     bash scripts/build-pypi-package.sh --version ${pyre-version} --bundle-typeshed ${typeshed}
     cp -r build/dist dist
   '';
-
-  doCheck = false; # can't open file 'nix_run_setup':
+  checkPhase = ''
+    bash scripts/run-python-tests.sh
+  '';
 }

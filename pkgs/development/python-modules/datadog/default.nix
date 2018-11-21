@@ -1,18 +1,14 @@
-{ lib, buildPythonPackage, fetchFromGitHub
+{ lib, buildPythonPackage, fetchPypi
 , decorator, requests, simplejson
 , nose, mock }:
 
 buildPythonPackage rec {
   pname = "datadog";
-  version = "0.20.0";
+  version = "0.23.0";
 
-  # no tests in PyPI tarball
-  # https://github.com/DataDog/datadogpy/pull/259
-  src = fetchFromGitHub {
-    owner = "DataDog";
-    repo = "datadogpy";
-    rev = "v${version}";
-    sha256 = "1p4p14853yrsl8py4ca7za7a12qzw0xwgz64f5kzx8a6vpv3p3md";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "6ed9aec2b3a26722b74465c2ed36d2efdb9c9fac1a07a84d81fa2fc0cfa66ae4";
   };
 
   propagatedBuildInputs = [ decorator requests simplejson ];

@@ -41,8 +41,6 @@ stdenv.mkDerivation rec {
   cmakeFlags = [ "-DCMAKE_C_FLAGS=-fPIC" "-DCMAKE_CXX_FLAGS=-fPIC" ]
     ++ optional (qtLib != null) [ "-DVTK_USE_QT:BOOL=ON" ]
     ++ optional stdenv.isDarwin [ "-DBUILD_TESTING:BOOL=OFF"
-                                  "-DCMAKE_OSX_SYSROOT="
-                                  "-DCMAKE_OSX_DEPLOYMENT_TARGET="
                                   "-DOPENGL_INCLUDE_DIR=${OpenGL}/Library/Frameworks" ];
 
   postPatch = stdenv.lib.optionalString stdenv.isDarwin ''

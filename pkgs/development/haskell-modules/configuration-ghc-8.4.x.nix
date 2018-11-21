@@ -56,4 +56,19 @@ self: super: {
           };
     in appendPatch super.hadoop-rpc patch;
 
+  # stack-1.9.1 needs Cabal 2.4.x, a recent version of hpack, and a non-recent
+  # version of yaml. Go figure. We avoid overrideScope here because using it to
+  # change Cabal would re-compile every single package instead of just those
+  # that have it as an actual library dependency. The explicit overrides are
+  # more verbose but friendlier for Hydra.
+  stack = (doJailbreak super.stack).override {
+    Cabal = self.Cabal_2_4_0_1;
+    hpack = self.hpack_0_31_1.override { Cabal = self.Cabal_2_4_0_1; };
+    yaml = self.yaml_0_11_0_0;
+    hackage-security = self.hackage-security.override { Cabal = self.Cabal_2_4_0_1; };
+  };
+  hpack_0_31_1 = super.hpack_0_31_1.override {
+    yaml = self.yaml_0_11_0_0;
+  };
+
 }

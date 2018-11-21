@@ -1,4 +1,5 @@
 { stdenv, callPackage, recurseIntoAttrs, makeRustPlatform, llvm, fetchurl
+, CoreFoundation, Security
 , targets ? []
 , targetToolchains ? []
 , targetPatches ? []
@@ -6,11 +7,11 @@
 
 let
   rustPlatform = recurseIntoAttrs (makeRustPlatform (callPackage ./bootstrap.nix {}));
-  version = "1.29.1";
-  cargoVersion = "1.29.1";
+  version = "1.30.0";
+  cargoVersion = "1.30.0";
   src = fetchurl {
     url = "https://static.rust-lang.org/dist/rustc-${version}-src.tar.gz";
-    sha256 = "0jd3c57x3yndizns4pb68nh25si47agfmrdvf9nwwsyfcs5p5c7i";
+    sha256 = "1vh8q5i273xyjvpipqisny11iz0xfgz30cgjr7068nx5rhzsh2yd";
   };
 in rec {
   rustc = callPackage ./rustc.nix {
@@ -44,8 +45,7 @@ in rec {
 
   cargo = callPackage ./cargo.nix rec {
     version = cargoVersion;
-    inherit src;
-    inherit stdenv;
+    inherit src stdenv CoreFoundation Security;
     inherit rustc; # the rustc that will be wrapped by cargo
     inherit rustPlatform; # used to build cargo
   };

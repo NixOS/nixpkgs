@@ -66,6 +66,7 @@ stdenv.mkDerivation rec {
     homepage    = https://github.com/libuv/libuv;
     maintainers = with maintainers; [ cstrahan ];
     platforms   = with platforms; linux ++ darwin;
+    license     = with licenses; [ mit isc bsd2 bsd3 cc-by-40 ];
   };
 
 }

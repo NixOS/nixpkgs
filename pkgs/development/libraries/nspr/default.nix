@@ -35,9 +35,10 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://www.mozilla.org/projects/nspr/;
     description = "Netscape Portable Runtime, a platform-neutral API for system-level and libc-like functions";
-    platforms = stdenv.lib.platforms.all;
+    platforms = platforms.all;
+    license = licenses.mpl20;
   };
 }

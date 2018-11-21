@@ -4,11 +4,11 @@
 
 buildPythonPackage rec {
   pname = "moto";
-  version = "1.3.5";
+  version = "1.3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "52426f2567e51ba73fdc7c7d617236b7e7918dca2421caabe13e5290942b53d8";
+    sha256 = "58fe0a0d55cbd9a001c02c146c15790cfcebf010c6648cb9990e6c3204709cbb";
   };
 
   postPatch = ''

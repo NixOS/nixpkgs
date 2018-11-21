@@ -23,8 +23,6 @@ stdenv.mkDerivation rec {
 
   createFindlibDestdir = true;
 
-  unpackCmd = "tar xjf $src";
-
   buildPhase = "ocaml pkg/build.ml native=true native-dynlink=true";
 
   installPhase = "opaline -libdir $OCAMLFIND_DESTDIR";

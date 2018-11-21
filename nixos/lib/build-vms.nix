@@ -1,6 +1,13 @@
-{ system, minimal ? false, config ? {} }:
-
-let pkgs = import ../.. { inherit system config; }; in
+{ system
+, # Use a minimal kernel?
+  minimal ? false
+, # Ignored
+  config ? null
+  # Nixpkgs, for qemu, lib and more
+, pkgs
+, # NixOS configuration to add to the VMs
+  extraConfigurations ? []
+}:
 
 with pkgs.lib;
 with import ../lib/qemu-flags.nix { inherit pkgs; };
@@ -30,7 +37,8 @@ rec {
           ../modules/testing/test-instrumentation.nix # !!! should only get added for automated test runs
           { key = "no-manual"; documentation.nixos.enable = false; }
           { key = "qemu"; system.build.qemu = qemu; }
-        ] ++ optional minimal ../modules/testing/minimal-kernel.nix;
+        ] ++ optional minimal ../modules/testing/minimal-kernel.nix
+          ++ extraConfigurations;
       extraArgs = { inherit nodes; };
     };
 

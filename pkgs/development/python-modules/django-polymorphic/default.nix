@@ -2,14 +2,14 @@
 
 buildPythonPackage rec {
   pname = "django-polymorphic";
-  version = "2.0.2";
+  version = "2.0.3";
 
   # PyPI tarball is missing some test files
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "18p84kdwpfp423vb2n38h840mj3bq0j57jx3cry7c8dznpi0vfi2";
+    sha256 = "08qk3rbk0xlphwalkigbhqpmfaqjk1sxmlfh8zy8s8dw7fw1myk4";
   };
 
   checkInputs = [ dj-database-url ];

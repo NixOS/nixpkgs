@@ -1,4 +1,5 @@
 { buildPackages, runCommand, nettools, bc, bison, flex, perl, rsync, gmp, libmpc, mpfr, openssl
+, pkgconfig ? null, ncurses ? null
 , libelf
 , utillinux
 , writeTextFile
@@ -265,6 +266,7 @@ stdenv.mkDerivation ((drvAttrs config stdenv.hostPlatform.platform kernelPatches
       ++ optional (stdenv.lib.versionAtLeast version "4.14") libelf
       ++ optional (stdenv.lib.versionAtLeast version "4.15") utillinux
       ++ optionals (stdenv.lib.versionAtLeast version "4.16") [ bison flex ]
+      ++ optionals stdenv.lib.inNixShell [ pkgconfig ncurses ]
       ;
 
   hardeningDisable = [ "bindnow" "format" "fortify" "stackprotector" "pic" ];

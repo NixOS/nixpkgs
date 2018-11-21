@@ -13,7 +13,8 @@ let
 
   # Map video driver names to driver packages. FIXME: move into card-specific modules.
   knownVideoDrivers = {
-    virtualbox = { modules = [ kernelPackages.virtualboxGuestAdditions ]; driverName = "vboxvideo"; };
+    # Alias so people can keep using "virtualbox" instead of "vboxvideo".
+    virtualbox = { modules = [ xorg.xf86videovboxvideo ]; driverName = "vboxvideo"; };
 
     # modesetting does not have a xf86videomodesetting package as it is included in xorgserver
     modesetting = {};
@@ -564,8 +565,6 @@ in
           knownVideoDrivers;
       in optional (driver != null) ({ inherit name; modules = []; driverName = name; } // driver));
 
-    nixpkgs.config = optionalAttrs (elem "vboxvideo" cfg.videoDrivers) { xorg.abiCompat = "1.18"; };
-
     assertions = [
       { assertion = config.security.polkit.enable;
         message = "X11 requires Polkit to be enabled (‘security.polkit.enable = true’).";
@@ -630,6 +629,8 @@ in
         xorg.xf86inputevdev.out # get evdev.4 man page
       ]
       ++ optional (elem "virtualbox" cfg.videoDrivers) xorg.xrefresh;
+
+    environment.pathsToLink = [ "/share/X11" ];
 
     xdg = { 
       autostart.enable = true;

@@ -12,8 +12,8 @@ let
     src = fetchFromGitHub {
       owner = "justinfrankel";
       repo = "WDL";
-      rev = "e87f5bdee7327b63398366fde6ec0a3f08bf600d";
-      sha256 = "147idjqc6nc23w9krl8a9w571k5jx190z3id6ir6cr8zsx0lakdb";
+      rev = "cb89dc81dc5cbc13a8f1b3cda38a204e356d4014";
+      sha256 = "0m19dy4r0i21ckypzfhpfjm6sh00v9i088pva7hhhr4mmrbqd0ms";
     };
 
     nativeBuildInputs = [ pkgconfig ];
@@ -31,11 +31,11 @@ let
 
 in stdenv.mkDerivation rec {
   name = "reaper-${version}";
-  version = "5.94";
+  version = "5.961";
 
   src = fetchurl {
     url = "https://www.reaper.fm/files/${stdenv.lib.versions.major version}.x/reaper${builtins.replaceStrings ["."] [""] version}_linux_x86_64.tar.xz";
-    sha256 = "16g5q12wh1cfbl9wq03vb7vpsd870k7i7883z0wn492x7y9syz8z";
+    sha256 = "0lnpdnxnwn7zfn8slivkp971ll9qshgq7y9gcfrk5829z94df06i";
   };
 
   nativeBuildInputs = [ autoPatchelfHook makeWrapper ];

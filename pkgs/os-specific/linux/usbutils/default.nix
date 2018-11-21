@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   postInstall =
     ''
       substituteInPlace $out/bin/lsusb.py \
-        --replace /usr/share/usb.ids ${hwdata}/data/hwdata/usb.ids
+        --replace /usr/share/usb.ids ${hwdata}/share/hwdata/usb.ids
     '';
 
   meta = with stdenv.lib; {

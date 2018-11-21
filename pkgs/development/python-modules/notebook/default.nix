@@ -25,11 +25,11 @@
 
 buildPythonPackage rec {
   pname = "notebook";
-  version = "5.6.0";
+  version = "5.7.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e2c8e931cc19db4f8c63e6a396efbc13a228b2cb5b2919df011b946f28239a08";
+    sha256 = "b85e4de3d54cf4f14fe1d0515a980ccb49ddd4cdd21250cc0d4fb6374d50b1a7";
   };
 
   LC_ALL = "en_US.utf8";

@@ -13,6 +13,11 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
    * add it to this list. The URL mentioned above is a good source for inspiration.
    */
 
+  abstyles = spdx {
+    spdxId = "Abstyles";
+    fullName = "Abstyles License";
+  };
+
   afl21 = spdx {
     spdxId = "AFL-2.1";
     fullName = "Academic Free License v2.1";
@@ -42,6 +47,7 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
   amd = {
     fullName = "AMD License Agreement";
     url = http://developer.amd.com/amd-license-agreement/;
+    free = false;
   };
 
   apsl20 = spdx {
@@ -99,14 +105,10 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
     fullName = ''BSD 4-clause "Original" or "Old" License'';
   };
 
-  bsl10 = {
-    fullName = "Business Source License 1.0";
-    url = https://mariadb.com/bsl10;
-  };
-
   bsl11 = {
     fullName = "Business Source License 1.1";
     url = https://mariadb.com/bsl11;
+    free = false;
   };
 
   clArtistic = spdx {
@@ -309,6 +311,12 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
     fullName = "GNU General Public License v2.0 only";
   };
 
+  gpl2Classpath = {
+    spdxId = "GPL-2.0-with-classpath-exception";
+    fullName = "GNU General Public License v2.0 only (with Classpath exception)";
+    url = https://fedoraproject.org/wiki/Licensing/GPL_Classpath_Exception;
+  };
+
   gpl2ClasspathPlus = {
     fullName = "GNU General Public License v2.0 or later (with Classpath exception)";
     url = https://fedoraproject.org/wiki/Licensing/GPL_Classpath_Exception;
@@ -394,6 +402,10 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
     free = false;
   };
 
+  jasper = spdx {
+    spdxId = "JasPer-2.0";
+    fullName = "JasPer License";
+  };
 
   lgpl2 = spdx {
     spdxId = "LGPL-2.0";
@@ -583,6 +595,11 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
   ruby = spdx {
     spdxId = "Ruby";
     fullName = "Ruby License";
+  };
+
+  sendmail = spdx {
+    spdxId = "Sendmail";
+    fullName = "Sendmail License";
   };
 
   sgi-b-20 = spdx {
