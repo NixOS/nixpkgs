@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   name = "easysnap-${version}";
-  version = "unstable-2018-10-28";
+  version = "unstable-2018-11-20";
 
   src = fetchFromGitHub {
     owner = "sjau";
