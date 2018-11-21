@@ -16,15 +16,8 @@ stdenv.mkDerivation rec {
     sha256 = "187dw96mzgcmh4k9pvfpb7ckbb8d4vlikamr2x8vkpwzgjs3xd6g";
   };
 
+  checkTarget = "test";
   doCheck = true;
-
-  checkPhase = ''
-    runHook preCheck
-
-    make test
-
-    runHook postCheck
-  '';
 
   buildInputs = [ boost sqlite cmake gtest ];
 

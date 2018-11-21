@@ -15,11 +15,9 @@ buildGoPackage rec {
   patches = [ ./no-git-usage.patch ];
 
   buildInputs = [ libtool ];
-  buildPhase = ''
-    runHook preBuild
+  buildFlags = "client GITCOMMIT=${gitcommit}";
+  preBuild = ''
     cd go/src/github.com/theupdateframework/notary
-    make client GITCOMMIT=${gitcommit}
-    runHook postBuild
   '';
 
   goPackagePath = "github.com/theupdateframework/notary";
@@ -31,9 +29,8 @@ buildGoPackage rec {
   '';
 
   doCheck = true;
-  checkPhase = ''
-    make test PKGS=github.com/theupdateframework/notary/cmd/notary
-  '';
+  checkTarget = "test";
+  checkFlags = "PKGS=github.com/theupdateframework/notary/cmd/notary";
 
   meta = with stdenv.lib; {
     description = "Notary is a project that allows anyone to have trust over arbitrary collections of data";

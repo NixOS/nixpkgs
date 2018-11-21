@@ -20,18 +20,15 @@ buildPythonApplication rec {
       tests/test__ped_ped.py
   '';
 
-  preConfigure = ''
-    PATH="${parted}/sbin:$PATH"
-  '';
-
   nativeBuildInputs = [ pkgconfig ];
 
   propagatedBuildInputs = [ parted ];
 
-  checkPhase = ''
+  preCheck = ''
     patchShebangs Makefile
-    make test PYTHON=${python.executable}
   '';
+  checkTarget = "test";
+  checkFlags = "PYTHON=${python.executable}";
 
   meta = {
     homepage = https://fedorahosted.org/pyparted/;

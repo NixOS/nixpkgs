@@ -32,7 +32,11 @@ stdenv.mkDerivation rec {
   makeFlags = "PREFIX=$(out) CC=cc";
 
   doCheck = true;
-  checkPhase = ''HOME="$TMPDIR" PATH="$PWD:$PATH" make test'';
+  checkTarget = "test";
+  preCheck = ''
+    export HOME=$TMPDIR
+    export PATH=$PWD:$PATH
+  '';
 
   preInstall = ''
     mkdir -p "$out/bin"

@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ cmake hdf5 ];
 
-  checkPhase = "make test";
+  checkTarget = "test";
 
   postInstall = "rm -r $out/bin/testc";
 

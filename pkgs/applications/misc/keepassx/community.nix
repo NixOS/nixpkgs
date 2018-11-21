@@ -65,9 +65,10 @@ stdenv.mkDerivation rec {
   ++ (optional withKeePassSSHAgent "-DWITH_XC_SSHAGENT=ON");
 
   doCheck = true;
-  checkPhase = ''
+  checkTarget = "test";
+  preCheck = ''
     export LC_ALL="en_US.UTF-8"
-    make test ARGS+="-E testgui --output-on-failure"
+    checkFlagsArray+=(ARGS+="-E testgui --output-on-failure")
   '';
 
   nativeBuildInputs = [ cmake makeWrapper qttools ];

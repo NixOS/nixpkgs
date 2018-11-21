@@ -23,8 +23,9 @@ stdenv.mkDerivation rec {
       --replace \"/lib32/ld-linux.so.2 \""$(cat $NIX_CC/nix-support/dynamic-linker)"
   '';
 
-  checkPhase = ''
-    LD_LIBRARY_PATH=$(pwd)/src make test
+  checkTarget = "test";
+  preCheck = ''
+    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$PWD/src
   '';
 
   meta = with stdenv.lib; {

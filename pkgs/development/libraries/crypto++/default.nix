@@ -37,7 +37,10 @@ stdenv.mkDerivation rec {
   installFlags = [ "LDCONF=true" ];
 
   doCheck = true;
-  checkPhase = "LD_LIBRARY_PATH=`pwd` make test";
+  checkTarget = "test";
+  preCheck = ''
+    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$PWD
+  '';
 
   # prefer -fPIC and .so to .a; cryptotest.exe seems superfluous
   postInstall = ''

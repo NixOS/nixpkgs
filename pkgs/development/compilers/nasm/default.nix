@@ -12,10 +12,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ perl ];
 
   doCheck = true;
-
-  checkPhase = ''
-    make golden && make test
-  '';
+  checkTarget = "golden test";
 
   meta = with stdenv.lib; {
     homepage = https://www.nasm.us/;

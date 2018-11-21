@@ -21,8 +21,7 @@ stdenv.mkDerivation rec {
       -e "s,^all:.*$,all: \$(PROGS),"
     '';
 
-  checkPhase = "make test";
-
+  checkTarget = "test";
   doCheck = true;
 
   meta = with stdenv.lib; {

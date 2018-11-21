@@ -3,7 +3,7 @@
 stdenv.mkDerivation rec {
   name = "libtins-${version}";
   version = "4.0";
-  
+
   src = fetchFromGitHub {
     owner = "mfontanini";
     repo = "libtins";
@@ -31,7 +31,10 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
   doCheck = true;
-  checkPhase = "make tests && LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$PWD/lib make test";
+  checkTarget = "tests test";
+  preCheck = ''
+    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$PWD/lib
+  '';
 
   meta = with stdenv.lib; {
     description = "High-level, multiplatform C++ network packet sniffing and crafting library";

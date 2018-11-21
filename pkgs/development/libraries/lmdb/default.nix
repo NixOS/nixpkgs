@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional stdenv.isDarwin "LDFLAGS=-Wl,-install_name,$(out)/lib/liblmdb.so";
 
   doCheck = true;
-  checkPhase = "make test";
+  checkTarget = "test";
 
   postInstall = ''
     moveToOutput bin "$bin"

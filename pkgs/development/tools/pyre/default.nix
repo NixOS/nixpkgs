@@ -61,8 +61,8 @@ let
     make release
   '';
 
-  checkPhase = ''
-    make test
+  checkTarget = "test";
+  postCheck = ''
     # ./scripts/run-python-tests.sh # TODO: once typeshed and python bits are added
   '';
 

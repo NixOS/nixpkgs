@@ -23,7 +23,8 @@ stdenv.mkDerivation {
 
   buildFlags = "all";
 
-  checkPhase = "make test1";
+  checkTarget = "test1";
+  doCheck = true;
 
   installPhase = ''
     mkdir -p $out/bin

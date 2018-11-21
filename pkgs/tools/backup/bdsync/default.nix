@@ -20,10 +20,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ openssl coreutils which ];
 
+  checkTarget = "test";
   doCheck = true;
-  checkPhase = ''
-    make test
-  '';
 
   installPhase = ''
     mkdir -p $out/bin

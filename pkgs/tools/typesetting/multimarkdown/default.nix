@@ -16,8 +16,9 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [ stdenv ];
-  checkPhase = "make test-all";
-  installPhase = "make pkg-install prefix='' DESTDIR=$out; make pkg-install-scripts prefix='' DESTDIR=$out";
+  checkTarget = "test-all";
+  installTargets = "pkg-install pkg-install-scripts";
+  makeFlags = "prefix= DESTDIR=$(out)";
 
   meta = with stdenv.lib; {
     description = "A derivative of Markdown that adds new syntax features";

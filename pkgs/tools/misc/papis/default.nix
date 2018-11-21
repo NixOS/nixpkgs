@@ -33,7 +33,7 @@ in python.pkgs.buildPythonApplication rec {
   checkInputs = with python.pkgs; [ pytest ];
 
   # Papis tries to create the config folder under $HOME during the tests
-  checkPhase = ''
+  preCheck = ''
     mkdir -p check-phase
     export PATH=$out/bin:$PATH
     # Still don't know why this fails
@@ -43,9 +43,9 @@ in python.pkgs.buildPythonApplication rec {
     sed -i 's/test_downloader_getter(self):/disabled_test_downloader_getter(self):/' papis/downloaders/tests/test_main.py
 
     export HOME=$(pwd)/check-phase
-    make test
-    SH=${bashInteractive}/bin/bash make test-non-pythonic
+    export SH=${bashInteractive}/bin/bash
   '';
+  checkTarget = "test test-non-pythonic";
 
   meta = {
     description = "Powerful command-line document and bibliography manager";

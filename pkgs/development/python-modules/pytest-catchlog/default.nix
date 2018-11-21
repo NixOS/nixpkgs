@@ -11,10 +11,10 @@ buildPythonPackage rec {
   };
 
   buildInputs = [ pytest unzip ];
-  checkPhase = "make test";
 
   # Requires pytest < 3.1
   doCheck = false;
+  checkTarget = "test";
 
   meta = with stdenv.lib; {
     license = licenses.mit;

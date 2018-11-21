@@ -11,13 +11,11 @@ stdenv.mkDerivation rec {
     sha256 = "11v958j66wq30gxpjpkgl7n3rvla845lygz8fl39pgf1vk9sdyc7";
   };
 
-  buildPhase = ''
-    make all shared
-  '';
+  buildFlags = "all shared";
 
   doCheck = true;
-  checkPhase = ''
-    make test
+  checkTarget = "test";
+  postCheck = ''
     ./runecos
   '';
 

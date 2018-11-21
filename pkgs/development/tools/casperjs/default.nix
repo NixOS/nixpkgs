@@ -23,10 +23,10 @@ in stdenv.mkDerivation rec {
   dontBuild = true;
 
   doCheck = true;
-  checkPhase = ''
+  preCheck = ''
     export FONTCONFIG_FILE=${fontsConf}
-    make test
   '';
+  checkTarget = "test";
 
   installPhase = ''
     cp -r . $out

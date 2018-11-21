@@ -21,9 +21,8 @@ stdenv.mkDerivation rec {
 
   dontBuild = true;
 
-  installPhase = ''
-    make install prefix="$out"
-
+  makeFlags = "prefix=$(out)";
+  postInstall = ''
     mkdir -p "$out/share/${name}"
     cp -v default.sdf "$out/share/${name}"
     sed -i "$out/bin/swec" -e"s|realpath(\$0)|'$out/share/${name}/swec'|g"
@@ -35,7 +34,6 @@ stdenv.mkDerivation rec {
   '';
 
   doCheck = true;
-  checkPhase = "make test";
 
   meta = {
     homepage = https://random.zerodogg.org/swec/;

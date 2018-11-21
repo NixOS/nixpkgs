@@ -18,7 +18,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ requests ];
 
   checkInputs = [ nose vcrpy ];
-  checkPhase = "make test";
+  checkTarget = "test";
 
   meta = {
     description = "Python interface to Library Genesis";
