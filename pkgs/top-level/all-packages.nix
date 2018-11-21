@@ -19915,6 +19915,8 @@ with pkgs;
     kodi = kodiPlain;
   };
 
+  kodi-cli = callPackage ../applications/video/kodi-cli { };
+
   kodi-retroarch-advanced-launchers =
     callPackage ../misc/emulators/retroarch/kodi-advanced-launchers.nix {
       cores = retroArchCores;
