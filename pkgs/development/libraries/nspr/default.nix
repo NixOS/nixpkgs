@@ -1,5 +1,6 @@
 { stdenv, fetchurl
-, CoreServices ? null }:
+, CoreServices ? null
+, buildPackages }:
 
 let version = "4.20"; in
 
@@ -21,6 +22,8 @@ stdenv.mkDerivation {
     substituteInPlace configure.in --replace '@executable_path/' "$out/lib/"
   '';
 
+  HOST_CC = "cc";
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
   configureFlags = [
     "--enable-optimize"
     "--disable-debug"
