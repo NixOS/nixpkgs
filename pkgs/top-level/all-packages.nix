@@ -21004,6 +21004,8 @@ with pkgs;
 
   gnome-themes-extra = gnome3.gnome-themes-extra;
 
+  nordic = callPackage ../misc/themes/nordic { };
+
   numix-gtk-theme = callPackage ../misc/themes/numix { };
 
   numix-solarized-gtk-theme = callPackage ../misc/themes/numix-solarized { };
