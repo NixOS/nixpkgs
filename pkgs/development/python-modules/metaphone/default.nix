@@ -5,7 +5,8 @@ buildPythonPackage rec {
   version = "0.6";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "Metaphone";
+    inherit version;
     sha256 = "09ysaczwh2rlsqq9j5fz7m4pq2fs0axp5vvivrpfrdvclvffl2xd";
   };
 
