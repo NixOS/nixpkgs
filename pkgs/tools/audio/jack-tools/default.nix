@@ -1,16 +1,29 @@
-{ stdenv, fetchgit, pkgconfig, libjack2, alsaLib, libGL, libGLU
+{ stdenv, fetchgit, fetchdarcs, pkgconfig, libjack2, alsaLib, libGL, libGLU
 ,freeglut, libsndfile, libsamplerate, liblo, ncurses, libtool, xorg, asciidoc, libxslt, libxml2 }:
 
 stdenv.mkDerivation rec {
   name = "jack-tools-${version}";
   version = "20131226";
 
+  src = fetchdarcs {
+    url = http://rohandrape.net/sw/rju/;
+   sha256 = "1h40hgmw51w2145xfng2dy0r5m5pl6mnl4hhwrajzfxc5g35hs31";
+
+  };
+
+  c-common = fetchdarcs {
+    url = http://rohandrape.net/sw/c-common/;
+sha256 = "1h40hgmw51w2145xfng2dy0r5m5pl6mnl4hhwrajzfxc5g35hs31";
+
+
+  };
+/*
   src = fetchgit {
     url    = https://salsa.debian.org/multimedia-team/jack-tools.git;
     rev    = "6f2a666d6859e7ef764145a73bdd5985ff850173";
     sha256 = "003pnyqbhncal5azf8qznz34mja4ywbgbmfkdfyizz12j4awscw4";
   };
-
+*/
 
 #  nativeBuildInputs = [ pkgconfig ];
  
@@ -39,6 +52,7 @@ stdenv.mkDerivation rec {
 #    "--with-lame-prefix=${lame.lib}"
 #  ];
 
+/*
   buildPhase = ''
     make mk-local-c-common
     make
@@ -60,7 +74,7 @@ stdenv.mkDerivation rec {
   '';
 
  patches = [ ./jack-tools-curses.patch ];
-
+*/
 #  enableParallelBuilding = true;
 
   meta = {
