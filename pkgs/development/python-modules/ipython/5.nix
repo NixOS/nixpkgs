@@ -19,7 +19,7 @@
 , requests
 , simplegeneric
 , traitlets
-, prompt_toolkit_1
+, prompt_toolkit
 , pexpect
 , appnope
 }:
@@ -42,7 +42,7 @@ buildPythonPackage rec {
   checkInputs = [ nose pygments testpath ] ++ lib.optional isPy27 mock;
 
   propagatedBuildInputs = [
-    backports_shutil_get_terminal_size decorator pickleshare prompt_toolkit_1
+    backports_shutil_get_terminal_size decorator pickleshare prompt_toolkit
     simplegeneric traitlets requests pathlib2 pexpect
   ] ++ lib.optionals stdenv.isDarwin [ appnope ];
 

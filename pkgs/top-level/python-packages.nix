@@ -196,7 +196,7 @@ in {
 
   astropy = callPackage ../development/python-modules/astropy { };
 
-  astroquery = callPackage ../development/python-modules/astroquery { }; 
+  astroquery = callPackage ../development/python-modules/astroquery { };
 
   atom = callPackage ../development/python-modules/atom { };
 
@@ -3268,10 +3268,9 @@ in {
 
   prettytable = callPackage ../development/python-modules/prettytable { };
 
-  prompt_toolkit = self.prompt_toolkit_2;
-
-  prompt_toolkit_1 = callPackage ../development/python-modules/prompt_toolkit/1.nix { };
-  prompt_toolkit_2 = callPackage ../development/python-modules/prompt_toolkit { };
+  prompt_toolkit = let
+    filename = if isPy3k then ../development/python-modules/prompt_toolkit else ../development/python-modules/prompt_toolkit/1.nix;
+  in callPackage filename { };
 
   protobuf = callPackage ../development/python-modules/protobuf {
     disabled = isPyPy;
@@ -3286,7 +3285,7 @@ in {
   psycopg2 = callPackage ../development/python-modules/psycopg2 {};
 
   ptpython = callPackage ../development/python-modules/ptpython {
-    prompt_toolkit = self.prompt_toolkit_2;
+    prompt_toolkit = self.prompt_toolkit;
   };
 
   publicsuffix = callPackage ../development/python-modules/publicsuffix {};

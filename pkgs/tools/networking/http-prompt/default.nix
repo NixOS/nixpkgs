@@ -16,7 +16,7 @@ pythonPackages.buildPythonApplication rec {
     click
     httpie
     parsimonious
-    prompt_toolkit_1
+    prompt_toolkit
     pygments
     six
   ];
