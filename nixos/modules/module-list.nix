@@ -745,7 +745,7 @@
   ./services/networking/tedicross.nix
   ./services/networking/thelounge.nix
   ./services/networking/tinc.nix
-  ./services/networking/tinydns.nix
+  ./services/networking/tinydns/default.nix
   ./services/networking/tftpd.nix
   ./services/networking/trickster.nix
   ./services/networking/tox-bootstrapd.nix

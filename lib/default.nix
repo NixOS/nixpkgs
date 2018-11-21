@@ -49,6 +49,7 @@ let
 
     # domain-specific
     fetchers = callLibs ./fetchers.nix;
+    tinydns = callLibs ./tinydns.nix;
 
     # Eval-time filesystem handling
     filesystem = callLibs ./filesystem.nix;
