@@ -27,8 +27,8 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Extensible Virtual Display Interface";
     platforms = platforms.linux;
-    license = licenses.gpl2;
-    homepage = http://www.displaylink.com/;
-    broken = versionOlder kernel.version "4.9" || versionAtLeast kernel.version "4.15" || stdenv.isAarch64;
+    license = with licenses; [ lgpl21 gpl2 ];
+    homepage = https://www.displaylink.com/;
+    broken = versionOlder kernel.version "4.9" || versionAtLeast kernel.version "4.18" || stdenv.isAarch64;
   };
 }
