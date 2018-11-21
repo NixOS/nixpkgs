@@ -13224,10 +13224,9 @@ with pkgs;
 
   apcupsd = callPackage ../servers/apcupsd { };
 
-  asterisk = asterisk-stable;
-
   inherit (callPackages ../servers/asterisk { })
-    asterisk-stable asterisk-lts;
+    asterisk asterisk-stable asterisk-lts
+    asterisk_13 asterisk_15 asterisk_16;
 
   sabnzbd = callPackage ../servers/sabnzbd { };
 
