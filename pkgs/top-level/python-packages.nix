@@ -5001,6 +5001,8 @@ in {
 
   nanoleaf = callPackage ../development/python-modules/nanoleaf { };
 
+  importlib-resources = callPackage ../development/python-modules/importlib-resources {};
+
 });
 
 in fix' (extends overrides packages)
