@@ -27,6 +27,7 @@ stdenv.mkDerivation rec {
     done
     cd ../
     cp -R ./ $out
+    ln -s $out/tools $out/bin
   '';
 
   meta = with stdenv.lib; {
