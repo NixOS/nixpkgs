@@ -14,6 +14,7 @@ let
         then callPackage ../development/coq-modules/bignums {}
         else null;
       category-theory = callPackage ../development/coq-modules/category-theory { };
+      Cheerios = callPackage ../development/coq-modules/Cheerios {};
       CoLoR = callPackage ../development/coq-modules/CoLoR {};
       coq-ext-lib = callPackage ../development/coq-modules/coq-ext-lib {};
       coq-haskell = callPackage ../development/coq-modules/coq-haskell { };
@@ -26,6 +27,7 @@ let
       heq = callPackage ../development/coq-modules/heq {};
       HoTT = callPackage ../development/coq-modules/HoTT {};
       interval = callPackage ../development/coq-modules/interval {};
+      InfSeqExt = callPackage ../development/coq-modules/InfSeqExt {};
       iris = callPackage ../development/coq-modules/iris {};
       math-classes = callPackage ../development/coq-modules/math-classes { };
       mathcomp = callPackage ../development/coq-modules/mathcomp { };
@@ -35,8 +37,10 @@ let
       QuickChick = callPackage ../development/coq-modules/QuickChick {};
       ssreflect = callPackage ../development/coq-modules/ssreflect { };
       stdpp = callPackage ../development/coq-modules/stdpp { };
+      StructTact = callPackage ../development/coq-modules/StructTact {};
       tlc = callPackage ../development/coq-modules/tlc {};
       Velisarios = callPackage ../development/coq-modules/Velisarios {};
+      Verdi = callPackage ../development/coq-modules/Verdi {};
     };
 
   filterCoqPackages = coq:

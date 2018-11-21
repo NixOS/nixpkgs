@@ -196,7 +196,7 @@ in {
 
   astropy = callPackage ../development/python-modules/astropy { };
 
-  astroquery = callPackage ../development/python-modules/astroquery { }; 
+  astroquery = callPackage ../development/python-modules/astroquery { };
 
   atom = callPackage ../development/python-modules/atom { };
 
@@ -1796,9 +1796,14 @@ in {
 
   jupyter = callPackage ../development/python-modules/jupyter { };
 
-  jupyter_console = callPackage ../development/python-modules/jupyter_console { };
+  jupyter_console = if pythonOlder "3.5" then
+       callPackage ../development/python-modules/jupyter_console/5.nix { }
+     else
+       callPackage ../development/python-modules/jupyter_console { };
 
   jupyterlab_launcher = callPackage ../development/python-modules/jupyterlab_launcher { };
+
+  jupyterlab_server = callPackage ../development/python-modules/jupyterlab_server { };
 
   jupyterlab = callPackage ../development/python-modules/jupyterlab {};
 
@@ -2539,16 +2544,17 @@ in {
 
   ipy = callPackage ../development/python-modules/IPy { };
 
-  ipykernel = callPackage ../development/python-modules/ipykernel { };
+  ipykernel = if pythonOlder "3.4" then
+      callPackage ../development/python-modules/ipykernel/4.nix { }
+    else
+      callPackage ../development/python-modules/ipykernel { };
 
   ipyparallel = callPackage ../development/python-modules/ipyparallel { };
 
-  # Newer versions of IPython no longer support Python 2.7.
-  ipython = if isPy27 then self.ipython_5 else self.ipython_6;
-
-  ipython_5 = callPackage ../development/python-modules/ipython/5.nix { };
-
-  ipython_6 = callPackage ../development/python-modules/ipython { };
+  ipython = if pythonOlder "3.5" then
+      callPackage ../development/python-modules/ipython/5.nix { }
+    else
+      callPackage ../development/python-modules/ipython { };
 
   ipython_genutils = callPackage ../development/python-modules/ipython_genutils { };
 
@@ -3262,11 +3268,9 @@ in {
 
   prettytable = callPackage ../development/python-modules/prettytable { };
 
-  prompt_toolkit = self.prompt_toolkit_1;
-
-  prompt_toolkit_1 = callPackage ../development/python-modules/prompt_toolkit/1.nix { };
-
-  prompt_toolkit_2 = callPackage ../development/python-modules/prompt_toolkit { };
+  prompt_toolkit = let
+    filename = if isPy3k then ../development/python-modules/prompt_toolkit else ../development/python-modules/prompt_toolkit/1.nix;
+  in callPackage filename { };
 
   protobuf = callPackage ../development/python-modules/protobuf {
     disabled = isPyPy;
@@ -3281,7 +3285,7 @@ in {
   psycopg2 = callPackage ../development/python-modules/psycopg2 {};
 
   ptpython = callPackage ../development/python-modules/ptpython {
-    prompt_toolkit = self.prompt_toolkit_2;
+    prompt_toolkit = self.prompt_toolkit;
   };
 
   publicsuffix = callPackage ../development/python-modules/publicsuffix {};
@@ -3916,6 +3920,8 @@ in {
   wordfreq = callPackage ../development/python-modules/wordfreq { };
 
   magic-wormhole = callPackage ../development/python-modules/magic-wormhole { };
+
+  magic-wormhole-mailbox-server = callPackage ../development/python-modules/magic-wormhole-mailbox-server { };
 
   magic-wormhole-transit-relay = callPackage ../development/python-modules/magic-wormhole-transit-relay { };
 

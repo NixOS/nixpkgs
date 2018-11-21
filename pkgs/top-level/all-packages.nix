@@ -934,8 +934,6 @@ with pkgs;
 
   bindfs = callPackage ../tools/filesystems/bindfs { };
 
-  bins = callPackage ../tools/graphics/bins { };
-
   bitbucket-cli = python2Packages.bitbucket-cli;
 
   bittornado = callPackage ../tools/networking/p2p/bittornado { };
@@ -3096,12 +3094,8 @@ with pkgs;
     stdenv = stdenv_32bit;
   };
 
-  gx = callPackage ../tools/package-management/gx {
-    buildGoPackage = buildGo110Package;
-  };
-  gx-go = callPackage ../tools/package-management/gx/go {
-    buildGoPackage = buildGo110Package;
-  };
+  gx = callPackage ../tools/package-management/gx { };
+  gx-go = callPackage ../tools/package-management/gx/go { };
 
   sbsigntool = callPackage ../tools/security/sbsigntool { };
 
@@ -4762,8 +4756,6 @@ with pkgs;
     inherit (pythonPackages) pillow;
   };
 
-  pdfshuffler = callPackage ../applications/misc/pdfshuffler { };
-
   briss = callPackage ../tools/graphics/briss { };
 
   brickd = callPackage ../servers/brickd {
@@ -5414,10 +5406,6 @@ with pkgs;
 
   smarty3 = callPackage ../development/libraries/smarty3 { };
   smarty3-i18n = callPackage ../development/libraries/smarty3-i18n { };
-
-  smbldaptools = callPackage ../tools/networking/smbldaptools {
-    inherit (perlPackages) perlldap CryptSmbHash DigestSHA1;
-  };
 
   smbnetfs = callPackage ../tools/filesystems/smbnetfs {};
 
@@ -8797,9 +8785,12 @@ with pkgs;
 
   pmccabe = callPackage ../development/tools/misc/pmccabe { };
 
+  pkgconf = callPackage ../development/tools/misc/pkgconf {};
+
   pkgconfig = callPackage ../development/tools/misc/pkgconfig {
     fetchurl = fetchurlBoot;
   };
+
   pkgconfigUpstream = lowPrio (pkgconfig.override { vanilla = true; });
 
   postiats-utilities = callPackage ../development/tools/postiats-utilities {};
@@ -11806,8 +11797,6 @@ with pkgs;
   poco = callPackage ../development/libraries/poco { };
 
   podofo = callPackage ../development/libraries/podofo { lua5 = lua5_1; };
-
-  poker-eval = callPackage ../development/libraries/poker-eval { };
 
   polkit = callPackage ../development/libraries/polkit { };
 
@@ -15678,6 +15667,8 @@ with pkgs;
 
   xorg-rgb = callPackage ../data/misc/xorg-rgb {};
 
+  zafiro-icons = callPackage ../data/icons/zafiro-icons { };
+
   zeal = libsForQt5.callPackage ../data/documentation/zeal { };
 
   zilla-slab = callPackage ../data/fonts/zilla-slab { };
@@ -16545,8 +16536,6 @@ with pkgs;
     rainbowDelimiters = callPackage ../applications/editors/emacs-modes/rainbow-delimiters { };
 
     rectMark = callPackage ../applications/editors/emacs-modes/rect-mark { };
-
-    remember = callPackage ../applications/editors/emacs-modes/remember { };
 
     rudel = callPackage ../applications/editors/emacs-modes/rudel { };
 
@@ -20194,8 +20183,6 @@ with pkgs;
 
   blackshades = callPackage ../games/blackshades { };
 
-  blackshadeselite = callPackage ../games/blackshadeselite { };
-
   blobby = callPackage ../games/blobby { };
 
   boohu = callPackage ../games/boohu { };
@@ -21507,9 +21494,7 @@ with pkgs;
     java = if stdenv.isLinux then jre else jdk;
   };
 
-  iprover = callPackage ../applications/science/logic/iprover {
-    inherit (ocaml-ng.ocamlPackages_4_02) ocaml;
-  };
+  iprover = callPackage ../applications/science/logic/iprover { };
 
   jonprl = callPackage ../applications/science/logic/jonprl {
     smlnj = if stdenv.isDarwin
