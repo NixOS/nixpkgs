@@ -17,14 +17,23 @@
    evaluation is taking place, and the configuration from environment variables
    or dot-files. */
 
-{ # The system packages will be built on. See the manual for the
-  # subtle division of labor between these two `*System`s and the three
-  # `*Platform`s.
-  localSystem
+{ # DEPRECATED:
+  # If not cross-compiling, pass the localSystem as hostSystem.
+  # If cross-compiling, pass the localSystem argument as buildSystem.
+  localSystem ? null
 
-, # The system packages will ultimately be run on. Null if the two should be the
-  # same.
+, # DEPRECATED:
+  # If cross-compiling, pass the argument as hostSystem.
+  # Otherwise, omit or null buildSystem.
   crossSystem ? null
+
+  # The system that the packages will ultimately run on
+, hostSystem ? null
+
+  # The system that will build the packages. Omit or null to build on
+  # the host architecture.  See the manual for the subtle division of
+  # labor between these two `*System`s and the three `*Platform`s.
+, buildSystem ? null
 
 , # Allow a configuration attribute set to be passed in as an argument.
   config ? {}
@@ -37,6 +46,55 @@
   # list it returns.
   stdenvStages ? import ../stdenv
 } @ args:
+
+# Begin conversion from new params to legacy params
+let
+  _localSystem = localSystem;
+  _crossSystem = crossSystem;
+  _hostSystem = hostSystem;
+  _buildSystem = buildSystem;
+  _args = args;
+in let
+  _isUsingLegacyParams = _localSystem != null || _crossSystem != null;
+  isUsingLegacyParams =
+    if _isUsingLegacyParams && (_buildSystem != null || _hostSystem != null)
+    then builtins.abort "You must specify either hostSystem (and optionally buildSystem) or localSystem (and optionally crossSystem)"
+    else _isUsingLegacyParams;
+  isCross = _crossSystem != null || _buildSystem != null;
+
+  crossSystem =
+    if isUsingLegacyParams
+    then _crossSystem
+    else if isCross
+      then _hostSystem
+      else null;
+
+  localSystem =
+    if isUsingLegacyParams
+    then _localSystem
+    else if isCross
+      then _buildSystem
+      else _hostSystem;
+
+  hostSystem =
+    if isUsingLegacyParams
+    then if isCross
+      then _crossSystem
+      else _localSystem
+    else _hostSystem;
+
+  buildSystem =
+    if isUsingLegacyParams
+    then if isCross
+      then _localSystem
+      else null
+    else _buildSystem;
+
+  args = _args // {
+    inherit localSystem crossSystem hostSystem buildSystem;
+  };
+in
+# End conversion from new params to legacy params
 
 let # Rename the function arguments
   configExpr = config;
