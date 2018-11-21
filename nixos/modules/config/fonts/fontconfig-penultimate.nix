@@ -269,7 +269,7 @@ in
 
   };
 
-  config = mkIf (config.fonts.fontconfig.enable && cfg.enable) {
+  config = mkIf (config.fonts.fontconfig.enable && config.fonts.fontconfig.penultimate.enable) {
 
     fonts.fontconfig.confPackages = [ penultimateConf ];
 

@@ -58,7 +58,8 @@ stdenv.mkDerivation rec {
     "bash_cv_sys_named_pipes=nomissing"
     "bash_cv_getcwd_malloc=yes"
   ] ++ optionals stdenv.hostPlatform.isCygwin [
-    "--without-libintl-prefix --without-libiconv-prefix"
+    "--without-libintl-prefix"
+    "--without-libiconv-prefix"
     "--with-installed-readline"
     "bash_cv_dev_stdin=present"
     "bash_cv_dev_fd=standard"

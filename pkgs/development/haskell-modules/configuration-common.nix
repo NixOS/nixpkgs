@@ -1183,4 +1183,11 @@ self: super: {
   # https://github.com/DanielG/cabal-helper/issues/59
   cabal-helper = doJailbreak super.cabal-helper;
 
+  # TODO(Profpatsch): factor out local nix store setup from
+  # lib/tests/release.nix and use that for the tests of libnix
+  # libnix = overrideCabal super.libnix (old: {
+  #   testToolDepends = old.testToolDepends or [] ++ [ pkgs.nix ];
+  # });
+  libnix = dontCheck super.libnix;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
