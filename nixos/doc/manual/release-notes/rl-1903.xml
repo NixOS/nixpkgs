@@ -220,6 +220,13 @@
      reset to the default value (<literal>false</literal>).
     </para>
    </listitem>
+   <listitem>
+    <para>
+     NixOS global firewall allow options (<literal>networking.firewall.allow*</literal>)
+     are now preserved when setting interface specific rules such as
+     <literal>networking.firewall.interfaces.en0.allow*</literal>.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
