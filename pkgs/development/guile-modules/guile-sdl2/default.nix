@@ -14,9 +14,9 @@ in stdenv.mkDerivation {
     sha256 = "0bw7x2lx90k4banc5k7yfkn3as93y25gr1xdr225ll7lmij21k64";
   };
 
+  nativeBuildInputs = [ libtool pkgconfig ];
   buildInputs = [
-    guile libtool pkgconfig
-    SDL2 SDL2_image SDL2_ttf SDL2_mixer
+    guile SDL2 SDL2_image SDL2_ttf SDL2_mixer
   ];
 
   configureFlags = [
