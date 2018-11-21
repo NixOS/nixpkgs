@@ -5078,6 +5078,8 @@ in {
 
   nanoleaf = callPackage ../development/python-modules/nanoleaf { };
 
+  importlib-metadata = callPackage ../development/python-modules/importlib-metadata {};
+
   importlib-resources = callPackage ../development/python-modules/importlib-resources {};
 
 });
