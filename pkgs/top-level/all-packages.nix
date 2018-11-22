@@ -11505,16 +11505,7 @@ in
 
   libxml2 = callPackage ../development/libraries/libxml2 { };
 
-  libxml2Python = pkgs.buildEnv { # slightly hacky
-    name = "libxml2+py-${res.libxml2.version}";
-    paths = with libxml2; [ dev bin py ];
-    inherit (libxml2) passthru;
-    # the hook to find catalogs is hidden by buildEnv
-    postBuild = ''
-      mkdir "$out/nix-support"
-      cp '${libxml2.dev}/nix-support/propagated-build-inputs' "$out/nix-support/"
-    '';
-  };
+  libxml2Python = callPackage ../development/libraries/libxml2/python.nix { };
 
   libxmlb = callPackage ../development/libraries/libxmlb { };
 
