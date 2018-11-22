@@ -2027,6 +2027,11 @@
     github = "jhhuh";
     name = "Ji-Haeng Huh";
   };
+  jhillyerd = {
+    email = "james+nixos@hillyerd.com";
+    github = "jhillyerd";
+    name = "James Hillyerd";
+  };
   jirkamarsik = {
     email = "jiri.marsik89@gmail.com";
     github = "jirkamarsik";
