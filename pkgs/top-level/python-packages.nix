@@ -4994,6 +4994,8 @@ in {
 
   scour = callPackage ../development/python-modules/scour { };
 
+  pymssql = callPackage ../development/python-modules/pymssql { };
+
 });
 
 in fix' (extends overrides packages)
