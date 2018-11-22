@@ -4907,4 +4907,9 @@
     github = "zzamboni";
     name = "Diego Zamboni";
   };
+  mredaelli = {
+    email = "massimo@typish.io";
+    github = "mredaelli";
+    name = "Massimo Redaelli";
+  };
 }
