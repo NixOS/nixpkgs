@@ -44,7 +44,7 @@ index 72652ad2f..3c0eca89a 100644
 +
 +[source."https://github.com/paritytech/jsonrpc.git"]
 +git = "https://github.com/paritytech/jsonrpc.git"
-+branch = "parity-1.11"
++branch = "parity-2.2"
 +replace-with = "vendored-sources"
 +
 +[source."https://github.com/paritytech/libusb-rs"]

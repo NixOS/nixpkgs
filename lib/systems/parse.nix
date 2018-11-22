@@ -82,6 +82,9 @@ rec {
     aarch64  = { bits = 64; significantByte = littleEndian; family = "arm"; version = "8"; };
     aarch64_be = { bits = 64; significantByte = bigEndian; family = "arm"; version = "8"; };
 
+    i386     = { bits = 32; significantByte = littleEndian; family = "x86"; };
+    i486     = { bits = 32; significantByte = littleEndian; family = "x86"; };
+    i586     = { bits = 32; significantByte = littleEndian; family = "x86"; };
     i686     = { bits = 32; significantByte = littleEndian; family = "x86"; };
     x86_64   = { bits = 64; significantByte = littleEndian; family = "x86"; };
 

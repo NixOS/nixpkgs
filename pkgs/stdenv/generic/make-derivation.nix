@@ -249,12 +249,12 @@ rec {
           # propagated dependencies here as well.
           disallowedReferences = (attrs.disallowedReferences or [])
           ++ (lib.subtractLists
-              (lib.concatLists ( (lib.elemAt propagatedDependencies 1) ++
+               (lib.concatLists ((lib.elemAt propagatedDependencies 0) ++
+                                 (lib.elemAt propagatedDependencies 1) ++
                                  (lib.elemAt dependencies 1) ++
                                  (lib.elemAt propagatedDependencies 2) ++
                                  (lib.elemAt dependencies 2) ) )
-              (lib.concatLists ( (lib.elemAt propagatedDependencies 0) ++
-                                 (lib.elemAt dependencies 0) ) ) );
+               (lib.concatLists ((lib.elemAt dependencies 0)) ) );
         } // lib.optionalAttrs (stdenv.hostPlatform != stdenv.buildPlatform) {
           cmakeFlags =
             (/**/ if lib.isString cmakeFlags then [cmakeFlags]

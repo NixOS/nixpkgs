@@ -24,30 +24,30 @@ let
 in
 
 stdenv.mkDerivation rec {
-  version = "8.2.1";
+  version = "8.2.2";
 
   name = "ghc-${version}-binary";
 
   src = fetchurl ({
     "i686-linux" = {
       url = "http://haskell.org/ghc/dist/${version}/ghc-${version}-i386-deb8-linux.tar.xz";
-      sha256 = "d86f9c157dd4161a8acb14062c131c8985a4f65fc856603c373502be1d50c95e";
+      sha256 = "08w2ik55dp3n95qikmrflc91lsiq01xp53ki3jlhnbj8fqnxfrwy";
     };
     "x86_64-linux" = {
       url = "http://haskell.org/ghc/dist/${version}/ghc-${version}-x86_64-deb8-linux.tar.xz";
-      sha256 = "543b81bf610240bd0398111d6c6607a9094dc2d159b564057d46c8a3d1aaa130";
+      sha256 = "0ahv26304pqi3dm7i78si4pxwvg5f5dc2jwsfgvcrhcx5g30bqj8";
     };
     "armv7l-linux" = {
       url = "http://haskell.org/ghc/dist/${version}/ghc-${version}-armv7-deb8-linux.tar.xz";
-      sha256 = "0f0e5e1d4fad3fa1a87ca1fe0d19242f4a94d158b7b8a08f99efefd98b51b019";
+      sha256 = "1jmv8qmnh5bn324fivbwdcaj55kvw7cb2zq9pafmlmv3qwwx7s46";
     };
     "aarch64-linux" = {
       url = "http://haskell.org/ghc/dist/${version}/ghc-${version}-aarch64-deb8-linux.tar.xz";
-      sha256 = "61dab9c95ef9f9af8bce7338863fda3e42945eb46194b12d922b6d0dc245d0c2";
+      sha256 = "1k2amylcp1ad67c75h1pqf7czf9m0zj1i7hdc45ghjklnfq9hrk7";
     };
     "x86_64-darwin" = {
       url = "http://haskell.org/ghc/dist/${version}/ghc-${version}-x86_64-apple-darwin.tar.xz";
-      sha256 = "900c802025fb630060dbd30f9738e5d107a4ca5a50d5c1262cd3e69fe4467188";
+      sha256 = "09swx71gh5habzbx55shz2xykgr96xkcy09nzinnm4z0yxicy3zr";
     };
   }.${stdenv.hostPlatform.system}
     or (throw "cannot bootstrap GHC on this platform"));

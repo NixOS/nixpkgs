@@ -6,20 +6,8 @@ let
       inherit php;
       inherit (pkgs) stdenv autoreconfHook fetchurl;
     };
-  isPhpOlder55 = pkgs.lib.versionOlder php.version "5.5";
-  isPhp7 = pkgs.lib.versionAtLeast php.version "7.0";
 
-  apcu = if isPhp7 then apcu51 else apcu40;
-
-  apcu40 = assert !isPhp7; buildPecl {
-    name = "apcu-4.0.11";
-    sha256 = "002d1gklkf0z170wkbhmm2z1p9p5ghhq3q1r9k54fq1sq4p30ks5";
-    buildInputs = [ pkgs.pcre ];
-    makeFlags = [ "phpincludedir=$(dev)/include" ];
-    outputs = [ "out" "dev" ];
-  };
-
-  apcu51 = assert isPhp7; buildPecl {
+  apcu = buildPecl {
     name = "apcu-5.1.11";
     sha256 = "0nz9m3fbxgyc2ij63yqmxm06a1f51g8rkxk85f85ziqdin66q2f1";
     buildInputs = [ pkgs.pcre ];
@@ -36,7 +24,7 @@ let
     buildInputs = [ apcu pkgs.pcre ];
   };
 
-  ast = assert isPhp7; buildPecl {
+  ast = buildPecl {
     name = "ast-0.1.5";
 
     sha256 = "0vv2w5fkkw9n7qdmi5aq50416zxmvyzjym8kb6j1v8kd4xcsjjgw";
@@ -83,7 +71,7 @@ let
     ];
   };
 
-  php_excel = assert isPhp7; buildPecl rec {
+  php_excel = buildPecl rec {
     name = "php_excel-${version}";
     version = "1.0.2";
     phpVersion = "php7";
@@ -110,7 +98,7 @@ let
     sha256 = "0a55l4f0bgbf3f6sh34njd14niwagg829gfkvb8n5fs69xqab67d";
   };
 
-  mailparse = assert isPhp7; buildPecl {
+  mailparse = buildPecl {
     name = "mailparse-3.0.2";
 
     sha256 = "0fw447ralqihsjnn0fm2hkaj8343cvb90v0d1wfclgz49256y6nq";
@@ -124,35 +112,7 @@ let
     buildInputs = [ pkgs.pcre ];
   };
 
-  # No support for PHP 7 yet
-  memcache = assert !isPhp7; buildPecl {
-    name = "memcache-3.0.8";
-
-    sha256 = "04c35rj0cvq5ygn2jgmyvqcb0k8d03v4k642b6i37zgv7x15pbic";
-
-    configureFlags = [ "--with-zlib-dir=${pkgs.zlib.dev}" ];
-
-    makeFlags = [ "CFLAGS=-fgnu89-inline" ];
-  };
-
-  memcached = if isPhp7 then memcachedPhp7 else memcached22;
-
-  memcached22 = assert !isPhp7; buildPecl {
-    name = "memcached-2.2.0";
-
-    sha256 = "0n4z2mp4rvrbmxq079zdsrhjxjkmhz6mzi7mlcipz02cdl7n1f8p";
-
-    configureFlags = [
-      "--with-zlib-dir=${pkgs.zlib.dev}"
-      "--with-libmemcached-dir=${pkgs.libmemcached}"
-    ];
-
-    nativeBuildInputs = [ pkgs.pkgconfig ];
-    buildInputs = with pkgs; [ cyrus_sasl zlib ];
-  };
-
-  # Not released yet
-  memcachedPhp7 = assert isPhp7; buildPecl rec {
+  memcached = buildPecl rec {
     name = "memcached-php7";
 
     src = fetchgit {
@@ -183,31 +143,7 @@ let
     sha256 = "0d4p1gpl8gkzdiv860qzxfz250ryf0wmjgyc8qcaaqgkdyh5jy5p";
   };
 
-  # No support for PHP 7 yet (and probably never will be)
-  spidermonkey = assert !isPhp7; buildPecl rec {
-    name = "spidermonkey-1.0.0";
-
-    sha256 = "1ywrsp90w6rlgq3v2vmvp2zvvykkgqqasab7h9bf3vgvgv3qasbg";
-
-    configureFlags = [
-      "--with-spidermonkey=${pkgs.spidermonkey_1_8_5}"
-    ];
-
-    buildInputs = [ pkgs.spidermonkey_1_8_5 ];
-  };
-
-  xdebug = if isPhp7 then xdebug26 else xdebug23;
-
-  xdebug23 = assert !isPhp7; buildPecl {
-    name = "xdebug-2.3.1";
-
-    sha256 = "0k567i6w7cw14m13s7ip0946pvy5ii16cjwjcinnviw9c24na0xm";
-
-    doCheck = true;
-    checkTarget = "test";
-  };
-
-  xdebug26 = assert isPhp7; buildPecl {
+  xdebug = buildPecl {
     name = "xdebug-2.6.1";
 
     sha256 = "0xxxy6n4lv7ghi9liqx133yskg07lw316vhcds43n1sjq3b93rns";
@@ -216,21 +152,7 @@ let
     checkTarget = "test";
   };
 
-  yaml = if isPhp7 then yaml20 else yaml13;
-
-  yaml13 = assert !isPhp7; buildPecl {
-    name = "yaml-1.3.1";
-
-    sha256 = "1fbmgsgnd6l0d4vbjaca0x9mrfgl99yix5yf0q0pfcqzfdg4bj8q";
-
-    configureFlags = [
-      "--with-yaml=${pkgs.libyaml}"
-    ];
-
-    nativeBuildInputs = [ pkgs.pkgconfig ];
-  };
-
-  yaml20 = assert isPhp7; buildPecl {
+  yaml = buildPecl {
     name = "yaml-2.0.2";
 
     sha256 = "0f80zy79kyy4hn6iigpgfkwppwldjfj5g7s4gddklv3vskdb1by3";
@@ -240,13 +162,6 @@ let
     ];
 
     nativeBuildInputs = [ pkgs.pkgconfig ];
-  };
-
-  # Since PHP 5.5 OPcache is integrated in the core and has to be enabled via --enable-opcache during compilation.
-  zendopcache = assert isPhpOlder55; buildPecl {
-    name = "zendopcache-7.0.3";
-
-    sha256 = "0qpfbkfy4wlnsfq4vc4q5wvaia83l89ky33s08gqrcfp3p1adn88";
   };
 
   zmq = buildPecl {
@@ -261,69 +176,18 @@ let
     nativeBuildInputs = [ pkgs.pkgconfig ];
   };
 
-  # No support for PHP 7 and probably never will be
-  xcache = assert !isPhp7; buildPecl rec {
-    name = "xcache-${version}";
-
-    version = "3.2.0";
-
-    src = pkgs.fetchurl {
-      url = "http://xcache.lighttpd.net/pub/Releases/${version}/${name}.tar.bz2";
-      sha256 = "1gbcpw64da9ynjxv70jybwf9y88idm01kb16j87vfagpsp5s64kx";
-    };
-
-    doCheck = true;
-    checkTarget = "test";
-
-    configureFlags = [
-      "--enable-xcache"
-      "--enable-xcache-coverager"
-      "--enable-xcache-optimizer"
-      "--enable-xcache-assembler"
-      "--enable-xcache-encoder"
-      "--enable-xcache-decoder"
-    ];
-
-    buildInputs = [ pkgs.m4 ];
-  };
-
-  #pthreads requires a build of PHP with ZTS (Zend Thread Safety) enabled
-  #--enable-maintainer-zts or --enable-zts on Windows
-  pthreads = if isPhp7 then pthreads31 else pthreads20;
-
-  pthreads20 = assert (pkgs.config.php.zts or false) && (!isPhp7); buildPecl {
-    name = "pthreads-2.0.10";
-    sha256 = "1xlcb1b1g10jd0xhm3c01a06yqpb5qln47pd1k522138324qvpwb";
-  };
-
-  pthreads31 = assert (pkgs.config.php.zts or false) && isPhp7; buildPecl {
+  pthreads = assert (pkgs.config.php.zts or false); buildPecl {
     name = "pthreads-3.1.5";
     sha256 = "1ziap0py3zrc7qj9lw4nzq6wx1viyj8v9y1babchizzan014x6p5";
+    meta.broken = true;
   };
 
-  # No support for PHP 7 yet
-  geoip = assert !isPhp7; buildPecl {
-    name = "geoip-1.1.0";
-    sha256 = "1fcqpsvwba84gqqmwyb5x5xhkazprwkpsnn4sv2gfbsd4svxxil2";
-
-    configureFlags = [ "--with-geoip=${pkgs.geoip}" ];
-
-    buildInputs = [ pkgs.geoip ];
-  };
-
-  redis = if isPhp7 then redis31 else redis22;
-
-  redis22 = assert !isPhp7; buildPecl {
-    name = "redis-2.2.7";
-    sha256 = "00n9dpk9ak0bl35sbcd3msr78sijrxdlb727nhg7f2g7swf37rcm";
-  };
-
-  redis31 = assert isPhp7; buildPecl {
+  redis = buildPecl {
     name = "redis-3.1.4";
     sha256 = "0rgjdrqfif8pfn3ipk1v4gyjkkdcdrdk479qbpda89w25vaxzsxd";
   };
 
-  v8 = assert isPhp7; buildPecl rec {
+  v8 = buildPecl rec {
     version = "0.1.9";
     name = "v8-${version}";
 
@@ -333,7 +197,7 @@ let
     configureFlags = [ "--with-v8=${pkgs.v8_6_x}" ];
   };
 
-  v8js = assert isPhp7; buildPecl rec {
+  v8js = buildPecl rec {
     version = "1.4.1";
     name = "v8js-${version}";
 

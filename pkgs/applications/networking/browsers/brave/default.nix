@@ -12,6 +12,7 @@
   gdk_pixbuf,
   glib,
   gnome2,
+  gnome3,
   gtk3,
   libuuid,
   libX11,
@@ -31,7 +32,8 @@
   udev,
   xorg,
   zlib,
-  xdg_utils
+  xdg_utils,
+  wrapGAppsHook
 }:
 
 let rpath = lib.makeLibraryPath [
@@ -83,14 +85,16 @@ in stdenv.mkDerivation rec {
     dontBuild = true;
     dontPatchELF = true;
 
-    nativeBuildInputs = [ dpkg ];
+    nativeBuildInputs = [ dpkg wrapGAppsHook ];
+
+    buildInputs = [ glib gnome3.gsettings_desktop_schemas gnome3.defaultIconTheme ];
 
     unpackPhase = "dpkg-deb --fsys-tarfile $src | tar -x --no-same-permissions --no-same-owner";
 
     installPhase = ''
-        mkdir -p $out
+        mkdir -p $out $out/bin
 
-        cp -R usr/* $out
+        cp -R usr/share $out
         cp -R opt/ $out/opt
 
         export BINARYWRAPPER=$out/opt/brave.com/brave/brave-browser
