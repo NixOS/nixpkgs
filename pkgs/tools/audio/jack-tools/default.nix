@@ -29,8 +29,13 @@ in stdenv.mkDerivation rec {
     chmod -R +rw $sourceRoot/cmd/c-common
   '';
  
- nativeBuildInputs = [
+  nativeBuildInputs = [
     pkgconfig
+    asciidoc
+    libtool
+  ];
+
+  buildInputs = [
     libjack2
     alsaLib
     libGL
@@ -40,15 +45,12 @@ in stdenv.mkDerivation rec {
     libsamplerate
     liblo
     ncurses
-    libtool
     xorg.libXext
     xorg.libXt
-    asciidoc
     libxslt
     libxml2 
     libpng
   ];
-
 
   buildPhase = ''
     cd cmd/c-common
@@ -79,7 +81,6 @@ in stdenv.mkDerivation rec {
     cp jack-scope $out/bin
     cp jack-transport $out/bin
     cp jack-udp $out/bin
-
   '';
 
   meta = {
@@ -88,6 +89,5 @@ in stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.gpl3;
     maintainers = with stdenv.lib.maintainers; [ hark ];
     platforms = stdenv.lib.platforms.linux;
-
   };
 }
