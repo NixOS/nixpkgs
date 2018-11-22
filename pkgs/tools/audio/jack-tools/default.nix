@@ -84,7 +84,7 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = http://rd.slavepianos.org/r/d/darcsweb.cgi?r=rju;
+    homepage = http://rohandrape.net/?t=rju;
     description = "jackd utilities";
     license = stdenv.lib.licenses.gpl3;
     maintainers = with stdenv.lib.maintainers; [ hark ];
