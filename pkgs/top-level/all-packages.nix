@@ -19389,6 +19389,8 @@ with pkgs;
 
   transgui = callPackage ../applications/networking/p2p/transgui { };
 
+  traverso = libsForQt5.callPackage ../applications/audio/traverso { };
+
   trayer = callPackage ../applications/window-managers/trayer { };
 
   tree = callPackage ../tools/system/tree {};
