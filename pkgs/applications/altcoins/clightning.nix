@@ -16,7 +16,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  buildInputs = [ which sqlite gmp zlib autoconf libtool automake autogen python3 pkgconfig ];
+  nativeBuildInputs = [ autoconf autogen automake libtool pkgconfig which ];
+  buildInputs = [ sqlite gmp zlib python3 ];
 
   makeFlags = [ "prefix=$(out)" ];
 
