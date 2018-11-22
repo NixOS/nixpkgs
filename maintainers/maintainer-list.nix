@@ -3841,6 +3841,11 @@
     github = "sauyon";
     name = "Sauyon Lee";
   };
+  sboosali = {
+    email = "SamBoosalis@gmail.com";
+    github = "sboosali";
+    name = "Sam Boosalis";
+  };
   schmitthenner = {
     email = "development@schmitthenner.eu";
     github = "fkz";

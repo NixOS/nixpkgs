@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     ${xmlstarlet}/bin/xmlstarlet ed --inplace -P -d '//get[@src="http://download.processing.org/reference.zip"]' build/build.xml
     install -D -m0444 ${fetchurl {
                           url    = http://download.processing.org/reference.zip;
-                          sha256 = "0dli1bdgw8hsx7g7b048ap81v2za9maa6pfcwdqm3qkfypr8q7pr";
+                          sha256 = "0ai0cr62gc7n6y22ki3qibyj1qnlaxv1miqxmmahfk3hpbyfqz9n";
                         }
                        } ./java/reference.zip
 

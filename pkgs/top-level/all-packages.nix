@@ -1520,6 +1520,8 @@ with pkgs;
 
   metabase = callPackage ../servers/metabase { };
 
+  miniserve = callPackage ../tools/misc/miniserve { };
+
   mkspiffs = callPackage ../tools/filesystems/mkspiffs { };
 
   mkspiffs-presets = recurseIntoAttrs (callPackages ../tools/filesystems/mkspiffs/presets.nix { });
@@ -2358,6 +2360,8 @@ with pkgs;
     # and enable
     # customConfig = builtins.readFile ./dvtm.config.h;
   };
+
+  dvtm-unstable = callPackage ../tools/misc/dvtm/unstable.nix {};
 
   ecmtools = callPackage ../tools/cd-dvd/ecm-tools { };
 
@@ -4105,10 +4109,6 @@ with pkgs;
   };
 
   mdbtools = callPackage ../tools/misc/mdbtools { };
-
-  mdbtools_git = callPackage ../tools/misc/mdbtools/git.nix {
-    inherit (gnome2) scrollkeeper;
-  };
 
   mdk = callPackage ../development/tools/mdk { };
 
@@ -6328,7 +6328,9 @@ with pkgs;
 
   xsel = callPackage ../tools/misc/xsel { };
 
-  xsv = callPackage ../tools/text/xsv { };
+  xsv = callPackage ../tools/text/xsv {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   xtreemfs = callPackage ../tools/filesystems/xtreemfs {
     boost = boost165;
@@ -7381,22 +7383,8 @@ with pkgs;
 
   defaultCrateOverrides = callPackage ../build-support/rust/default-crate-overrides.nix { };
 
+  makeRustPlatform = callPackage ../build-support/rust/make-rust-platform.nix {};
   rustPlatform = recurseIntoAttrs (makeRustPlatform rust);
-
-  makeRustPlatform = rust: lib.fix (self:
-    let
-      callPackage = newScope self;
-    in {
-      inherit rust;
-
-      buildRustPackage = callPackage ../build-support/rust {
-        inherit rust;
-      };
-
-      rustcSrc = callPackage ../development/compilers/rust/rust-src.nix {
-        inherit (rust) rustc;
-      };
-    });
 
   cargo-download = callPackage ../tools/package-management/cargo-download { };
   cargo-edit = callPackage ../tools/package-management/cargo-edit { };
@@ -9125,7 +9113,6 @@ with pkgs;
   };
 
   arb = callPackage ../development/libraries/arb {};
-  arb-git = callPackage ../development/libraries/arb/git.nix {};
 
   argp-standalone = callPackage ../development/libraries/argp-standalone {};
 
@@ -9592,6 +9579,10 @@ with pkgs;
   flite = callPackage ../development/libraries/flite { };
 
   fltk13 = callPackage ../development/libraries/fltk {
+    inherit (darwin) cf-private;
+    inherit (darwin.apple_sdk.frameworks) Cocoa AGL GLUT;
+  };
+  fltk14 = callPackage ../development/libraries/fltk/1.4.nix {
     inherit (darwin) cf-private;
     inherit (darwin.apple_sdk.frameworks) Cocoa AGL GLUT;
   };
@@ -11266,7 +11257,6 @@ with pkgs;
   libviper = callPackage ../development/libraries/libviper { };
 
   libvpx = callPackage ../development/libraries/libvpx { };
-  libvpx-git = callPackage ../development/libraries/libvpx/git.nix { };
 
   libvterm = callPackage ../development/libraries/libvterm { };
   libvterm-neovim = callPackage ../development/libraries/libvterm-neovim { };
@@ -15759,7 +15749,7 @@ with pkgs;
 
   antiword = callPackage ../applications/office/antiword {};
 
-  ao = callPackage ../applications/graphics/ao {};
+  ao = libfive;
 
   apache-directory-studio = callPackage ../applications/networking/apache-directory-studio {};
 
@@ -17092,6 +17082,8 @@ with pkgs;
   manuskript = callPackage ../applications/editors/manuskript { };
 
   manul = callPackage ../development/tools/manul { };
+
+  mindforger = libsForQt5.callPackage ../applications/editors/mindforger { };
 
   mi2ly = callPackage ../applications/audio/mi2ly {};
 
@@ -19394,6 +19386,8 @@ with pkgs;
 
   transgui = callPackage ../applications/networking/p2p/transgui { };
 
+  traverso = libsForQt5.callPackage ../applications/audio/traverso { };
+
   trayer = callPackage ../applications/window-managers/trayer { };
 
   tree = callPackage ../tools/system/tree {};
@@ -20022,6 +20016,10 @@ with pkgs;
 
   roxterm = callPackage ../applications/misc/roxterm {
     inherit (gnome3) gsettings-desktop-schemas vte;
+  };
+
+  termonad-with-packages = callPackage ../applications/misc/termonad {
+    inherit (haskellPackages) ghcWithPackages;
   };
 
   xtrace = callPackage ../tools/X11/xtrace { };
@@ -21740,6 +21738,8 @@ with pkgs;
 
   scotch = callPackage ../applications/science/math/scotch { };
 
+  mininet = callPackage ../tools/virtualization/mininet { };
+
   msieve = callPackage ../applications/science/math/msieve { };
 
   weka = callPackage ../applications/science/math/weka { };
@@ -21776,6 +21776,8 @@ with pkgs;
   golly-beta = callPackage ../applications/science/misc/golly/beta.nix { wxGTK = wxGTK30; };
 
   megam = callPackage ../applications/science/misc/megam { };
+
+  netlogo = callPackage ../applications/science/misc/netlogo { };
 
   ns-3 = callPackage ../development/libraries/science/networking/ns3 { };
 
@@ -22859,6 +22861,8 @@ with pkgs;
   maphosts = callPackage ../tools/networking/maphosts {};
 
   zimg = callPackage ../development/libraries/zimg { };
+
+  wtf = callPackage ../applications/misc/wtf { };
 
   zk-shell = callPackage ../applications/misc/zk-shell { };
 
