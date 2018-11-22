@@ -10,13 +10,12 @@ buildPythonPackage rec {
     sha256 = "09r1ga6kj5cnmrldpkqzvdhh7xi7aad9g4fbcr1gawgsd9y13g0a";
   };
 
-  buildPhase = ''
+  preBuild = ''
     sed -i -e "s@env = Environment()@env = Environment( ENV = os.environ )@" src/SConscript
-    scons
   '';
-  installPhase = ''
+
+  preInstall = ''
     sed -i -e "s@    python_lib_path = get_python_lib(plat_specific=True)@    python_lib_path = \'/lib/python2.7/site-packages\'@" src/SConscript
-    scons install DESTDIR=$out
   '';
 
   buildInputs = [ python exiv2 scons boost ];

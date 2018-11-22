@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, pkgconfig, libdaemon, dbus, perl, perlXMLParser
+{ fetchurl, stdenv, pkgconfig, libdaemon, dbus, perlPackages
 , expat, gettext, intltool, glib, libiconv
 , qt4 ? null
 , qt4Support ? false
@@ -17,7 +17,8 @@ stdenv.mkDerivation rec {
 
   patches = [ ./no-mkdir-localstatedir.patch ];
 
-  buildInputs = [ libdaemon dbus perl perlXMLParser glib expat libiconv ]
+  buildInputs = [ libdaemon dbus glib expat libiconv ]
+    ++ (with perlPackages; [ perl XMLParser ])
     ++ (stdenv.lib.optional qt4Support qt4);
 
   nativeBuildInputs = [ pkgconfig gettext intltool glib ];

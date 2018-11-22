@@ -4,16 +4,24 @@ with python3.pkgs;
 
 buildPythonApplication rec {
   pname = "thonny";
-  version = "3.0.0b3";
+  version = "3.0.5";
 
   src = fetchFromBitbucket {
     owner = "plas";
     repo = pname;
-    rev = "a511d4539c532b6dddf6d7f1586d30e1ac35bd86";
-    sha256 = "1s3pp97r6p3j81idglnml4faxryk7saszxmv3gys1agdfj75qczr";
+    rev = "e5a1ad4ae9d24066a769489b1e168b4bd6e00b03";
+    sha256 = "1lrl5pj9dpw9i5ij863hd47gfd15nmvglqkl2ldwgfn7kgpsdkz5";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [ jedi pyserial tkinter docutils pylint ];
+  propagatedBuildInputs = with python3.pkgs; [
+    jedi
+    pyserial
+    tkinter
+    docutils
+    pylint
+    mypy
+    pyperclip
+  ];
 
   preInstall = ''
     export HOME=$(mktemp -d)

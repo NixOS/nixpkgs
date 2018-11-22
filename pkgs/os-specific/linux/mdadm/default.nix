@@ -14,11 +14,11 @@ let
   '';
 in
 stdenv.mkDerivation rec {
-  name = "mdadm-4.0";
+  name = "mdadm-4.1";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/raid/mdadm/${name}.tar.xz";
-    sha256 = "1ad3mma641946wn5lsllwf0lifw9lps34fv1nnkhyfpd9krffshx";
+    sha256 = "0jjgjgqijpdp7ijh8slzzjjw690kydb1jjadf0x5ilq85628hxmb";
   };
 
   # This is to avoid self-references, which causes the initrd to explode
@@ -47,6 +47,7 @@ stdenv.mkDerivation rec {
     description = "Programs for managing RAID arrays under Linux";
     homepage = http://neil.brown.name/blog/mdadm;
     license = licenses.gpl2;
+    maintainers = with maintainers; [ ekleog ];
     platforms = platforms.linux;
   };
 }

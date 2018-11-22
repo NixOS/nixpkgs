@@ -50,5 +50,6 @@ stdenv.mkDerivation rec {
     description = "Packet Capture Library";
     platforms = platforms.unix;
     maintainers = with maintainers; [ fpletz ];
+    license = licenses.bsd3;
   };
 }

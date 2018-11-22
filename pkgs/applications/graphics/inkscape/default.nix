@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, perl, perlXMLParser, libXft
+{ stdenv, fetchurl, pkgconfig, perlPackages, libXft
 , libpng, zlib, popt, boehmgc, libxml2, libxslt, glib, gtkmm2
 , glibmm, libsigcxx, lcms, boost, gettext, makeWrapper
 , gsl, python2, poppler, imagemagick, libwpg, librevenge
@@ -6,7 +6,8 @@
 }:
 
 let
-  python2Env = python2.withPackages(ps: with ps; [ numpy lxml ]);
+  python2Env = python2.withPackages(ps: with ps;
+    [ numpy lxml scour ]);
 in
 
 stdenv.mkDerivation rec {
@@ -39,12 +40,15 @@ stdenv.mkDerivation rec {
       --replace '"python-interpreter", "python"' '"python-interpreter", "${python2Env}/bin/python"'
   '';
 
-  nativeBuildInputs = [ pkgconfig cmake makeWrapper python2Env perl perlXMLParser ];
+  nativeBuildInputs = [ pkgconfig cmake makeWrapper python2Env ]
+    ++ (with perlPackages; [ perl XMLParser ]);
   buildInputs = [
     libXft libpng zlib popt boehmgc
     libxml2 libxslt glib gtkmm2 glibmm libsigcxx lcms boost gettext
     gsl poppler imagemagick libwpg librevenge
     libvisio libcdr libexif potrace hicolor-icon-theme
+
+    python2Env perlPackages.perl
   ];
 
   enableParallelBuilding = true;

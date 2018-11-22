@@ -35,6 +35,12 @@ stdenv.mkDerivation rec {
     tar -xf ${wip-cars-and-tracks}
   '';
 
+  prePatch = ''
+    # https://sourceforge.net/p/speed-dreams/mailman/message/35665539/
+    sed -i "s|lastSlash = '\\\0'|lastSlash = NULL|" src/libs/tgf/params.cpp
+    sed -i "s|const char\* error = '\\\0'|const char\* error = NULL|" src/libs/tgfclient/openalmusicplayer.cpp
+  '';
+
   preBuild = ''
     make -C src/libs/portability
     make -C src/libs/portability portability.o

@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   name = "hub-${version}";
-  version = "2.5.1";
+  version = "2.6.0";
 
   goPackagePath = "github.com/github/hub";
 
@@ -10,10 +10,11 @@ buildGoPackage rec {
     owner = "github";
     repo = "hub";
     rev = "v${version}";
-    sha256 = "0a5i351v998vdwf883qhh39c15x56db01fr9hscz4ha7r9550pqg";
+    sha256 = "0hxmbpyv2yjxg4v3z50x5ikgcz7mgv5prya8jcpi277vq2s0wwa1";
   };
 
-  buildInputs = [ groff ronn ruby utillinux ] ++
+  nativeBuildInputs = [ groff ronn utillinux ];
+  buildInputs = [ ruby ] ++
     stdenv.lib.optional stdenv.isDarwin Security;
 
   postPatch = ''
@@ -29,7 +30,7 @@ buildGoPackage rec {
     install -D etc/hub.fish_completion  "$bin/share/fish/vendor_completions.d/hub.fish"
 
     make man-pages
-    cp -r share/man $bin/share/man
+    cp -vr --parents share/man/man[1-9]/*.[1-9] $bin/
   '';
 
   meta = with stdenv.lib; {

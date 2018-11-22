@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "13fv150dcwnjrk00d7zj2c5x9jwmxgrq0ay440gkr730l8mvk3l3";
   };
 
-  buildInputs = [ coq.ocaml coq.camlp5 bash which autoconf automake ];
+  buildInputs = with coq.ocamlPackages; [ ocaml camlp5 bash which autoconf automake ];
   propagatedBuildInputs = [ coq ];
 
   buildPhase = ''

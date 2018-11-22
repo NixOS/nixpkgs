@@ -19,6 +19,7 @@
 , meta ? {}
 , groups ? ["default"]
 , ignoreCollisions ? false
+, buildInputs ? []
 , ...
 }@args:
 
@@ -96,7 +97,7 @@ let
   envPaths = lib.attrValues gems ++ lib.optional (!hasBundler) bundler;
 
   basicEnv = buildEnv {
-    inherit  ignoreCollisions;
+    inherit buildInputs ignoreCollisions;
 
     name = name';
 

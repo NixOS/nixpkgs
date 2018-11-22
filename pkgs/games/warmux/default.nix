@@ -1,4 +1,4 @@
-{ stdenv, fetchurl
+{ stdenv, fetchFromGitHub, autoconf, automake
 , zlib, curl, gnutls, fribidi, libpng, SDL, SDL_gfx, SDL_image, SDL_mixer
 , SDL_net, SDL_ttf, libunwind, libX11, xproto, libxml2, pkgconfig
 , gettext, intltool, libtool, perl
@@ -6,31 +6,32 @@
 
 stdenv.mkDerivation rec {
   name = "warmux-${version}";
-  version = "11.04.1";
+  version = "unstable-2017-10-20";
 
-  src = fetchurl {
-    url = "http://download.gna.org/warmux/${name}.tar.bz2";
-    sha256 = "1vp44wdpnb1g6cddmn3nphc543pxsdhjis52mfif0p2c7qslz73q";
+  src = fetchFromGitHub {
+    owner = "fluxer";
+    repo = "warmux";
+    rev = "8f81d4fc309a548ae89a068c2dde27b7e7ef8851";
+    sha256 = "1hvzglsmp75xiqqb0k75qjz4jwi8kl3fhn8zfsz53hhhqmbw6wkr";
   };
 
-  buildInputs =
-    [ zlib curl gnutls fribidi libpng SDL SDL_gfx SDL_image SDL_mixer
-      SDL_net SDL_ttf libunwind libX11 xproto libxml2 pkgconfig
-      gettext intltool libtool perl
-    ];
-
+  preConfigure = "patchShebangs autogen.sh && ./autogen.sh";
   configureFlagsArray = ("CFLAGS=-include ${zlib.dev}/include/zlib.h");
 
-  patches = [ ./gcc-fix.patch ];
+  nativeBuildInputs = [
+    autoconf automake gettext intltool libtool pkgconfig
+  ];
+  buildInputs = [
+    zlib curl gnutls fribidi libpng SDL SDL_gfx SDL_image SDL_mixer
+    SDL_net SDL_ttf libunwind libX11 xproto libxml2 perl
+  ];
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    description = "Ballistics turn-based battle game between teams";
-    maintainers = with maintainers;
-    [
-      raskin
-    ];
+    description = "Ballistics turn-based battle game between teams - unofficial copy";
+    maintainers = with maintainers; [ raskin ];
     platforms = platforms.linux;
-    license = licenses.gpl2;
-    downloadPage = "http://download.gna.org/warmux/";
+    license = with licenses; [ gpl2 ufl ];
+    homepage = https://github.com/fluxer/warmux;
   };
 }

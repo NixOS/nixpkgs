@@ -9,6 +9,7 @@
 , attrPath
 , baseUrl ? "http://archive.mozilla.org/pub/firefox/releases/"
 , versionSuffix ? ""
+, versionKey ? "version"
 }:
 
 writeScript "update-${attrPath}" ''
@@ -28,5 +29,5 @@ writeScript "update-${attrPath}" ''
            sort --version-sort | \
            tail -n 1`
 
-  update-source-version ${attrPath} "$version"
+  update-source-version ${attrPath} "$version" "" "" ${versionKey}
 ''

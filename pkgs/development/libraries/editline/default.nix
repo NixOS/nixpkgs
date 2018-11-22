@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  dontDisableStatic = true;
+  outputs = [ "out" "dev" "man" "doc" ];
 
   meta = with stdenv.lib; {
     homepage = http://troglobit.com/editline.html;

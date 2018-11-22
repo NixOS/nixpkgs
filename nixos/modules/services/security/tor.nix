@@ -57,6 +57,11 @@ let
     AutomapHostsSuffixes ${concatStringsSep "," cfg.client.dns.automapHostsSuffixes}
     ''}
   ''
+  # Explicitly disable the SOCKS server if the client is disabled.  In
+  # particular, this makes non-anonymous hidden services possible.
+  + optionalString (! cfg.client.enable) ''
+  SOCKSPort 0
+  ''
   # Relay config
   + optionalString cfg.relay.enable ''
     ORPort ${toString cfg.relay.port}

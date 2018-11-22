@@ -7,7 +7,7 @@
   # Include some utilities that are useful for installing or repairing
   # the system.
   environment.systemPackages = [
-    pkgs.w3m-nox # needed for the manual anyway
+    pkgs.w3m-nographics # needed for the manual anyway
     pkgs.testdisk # useful for repairing boot problems
     pkgs.ms-sys # for writing Microsoft boot sectors / MBRs
     pkgs.efibootmgr
@@ -18,6 +18,9 @@
     pkgs.ccrypt
     pkgs.cryptsetup # needed for dm-crypt volumes
     pkgs.mkpasswd # for generating password files
+
+    # Some text editors.
+    pkgs.vim
 
     # Some networking tools.
     pkgs.fuse

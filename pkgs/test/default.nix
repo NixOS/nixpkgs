@@ -30,5 +30,7 @@ with pkgs;
 
   cross = callPackage ./cross {};
 
+  nixos-functions = callPackage ./nixos-functions {};
+
   patch-shebangs = callPackage ./patch-shebangs {};
 }

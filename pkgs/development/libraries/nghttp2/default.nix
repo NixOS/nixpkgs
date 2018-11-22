@@ -18,12 +18,14 @@ let inherit (stdenv.lib) optional; in
 
 stdenv.mkDerivation rec {
   name = "nghttp2-${version}";
-  version = "1.32.0";
+  version = "1.34.0";
 
   src = fetchurl {
     url = "https://github.com/nghttp2/nghttp2/releases/download/v${version}/nghttp2-${version}.tar.bz2";
-    sha256 = "0jlndbp4bnyvdg8b59pznrzz0bvwb9nmag7zgcflg51lm1pq2q06";
+    sha256 = "1l5rir8d73x97p3p1x4l8cawjc9m2adnippnb27fmrbcd3rfaxbl";
   };
+
+  patches = [ ./fix-stream-operator.patch /* can't fetchpatch during bootstrap */ ];
 
   outputs = [ "bin" "out" "dev" "lib" ];
 

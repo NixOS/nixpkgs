@@ -9,6 +9,12 @@
 , languagetool
 , Cocoa, CoreFoundation, CoreServices
 , buildVimPluginFrom2Nix
+
+# vim-go denpencies
+, asmfmt, delve, errcheck, godef, golint
+, gomodifytags, gotags, gotools, go-motion
+, gnused, reftools, gogetdoc, gometalinter
+, impl, iferr, gocode, gocode-gomod, go-tools
 }:
 
 let
@@ -94,7 +100,7 @@ with generated;
     # $ eval echo $(nix-instantiate --eval --expr 'with (import <nixpkgs>) {}; clang.default_cxx_stdlib_compile')
     preFixup = ''
       substituteInPlace "$out"/share/vim-plugins/clang_complete/plugin/clang_complete.vim \
-        --replace "let g:clang_library_path = '' + "''" + ''" "let g:clang_library_path='${llvmPackages.clang.cc}/lib/libclang.so'"
+        --replace "let g:clang_library_path = '' + "''" + ''" "let g:clang_library_path='${llvmPackages.clang.cc.lib}/lib/libclang.so'"
     '';
   });
 
@@ -154,6 +160,10 @@ with generated;
 
   forms = forms.overrideAttrs(old: {
     dependencies = ["self"];
+  });
+
+  gist-vim = gist-vim.overrideAttrs(old: {
+    dependencies = ["webapi-vim"];
   });
 
   gitv = gitv.overrideAttrs(old: {
@@ -247,6 +257,37 @@ with generated;
     dependencies = ["vim-misc"];
   });
 
+  # change the go_bin_path to point to a path in the nix store. See the code in
+  # fatih/vim-go here
+  # https://github.com/fatih/vim-go/blob/155836d47052ea9c9bac81ba3e937f6f22c8e384/autoload/go/path.vim#L154-L159
+  vim-go = vim-go.overrideAttrs(old: let
+    binPath = lib.makeBinPath [
+      asmfmt
+      delve
+      errcheck
+      go-motion
+      go-tools
+      gocode
+      gocode-gomod
+      godef
+      gogetdoc
+      golint
+      gometalinter
+      gomodifytags
+      gotags
+      gotools
+      iferr
+      impl
+      reftools
+    ];
+    in {
+    postPatch = ''
+      ${gnused}/bin/sed \
+        -Ee 's@"go_bin_path", ""@"go_bin_path", "${binPath}"@g' \
+        -i autoload/go/config.vim
+    '';
+  });
+
   vim-grammarous = vim-grammarous.overrideAttrs(old: {
     # use `:GrammarousCheck` to initialize checking
     # In neovim, you also want to use set
@@ -331,6 +372,15 @@ with generated;
       license = stdenv.lib.licenses.gpl3;
       maintainers = with stdenv.lib.maintainers; [marcweber jagajaga];
       platforms = stdenv.lib.platforms.unix;
+    };
+  });
+
+  jedi-vim = jedi-vim.overrideAttrs(old: {
+    # checking for python3 support in vim would be neat, too, but nobody else seems to care
+    buildInputs = [ python3Packages.jedi ];
+    meta = {
+      description = "code-completion for python using python-jedi";
+      license = stdenv.lib.licenses.mit;
     };
   });
 

@@ -180,11 +180,11 @@ everything = stdenv.mkDerivation (common // {
 
 connector-c = stdenv.mkDerivation rec {
   name = "mariadb-connector-c-${version}";
-  version = "2.3.6";
+  version = "2.3.7";
 
   src = fetchurl {
     url = "https://downloads.mariadb.org/interstitial/connector-c-${version}/mariadb-connector-c-${version}-src.tar.gz/from/http%3A//nyc2.mirrors.digitalocean.com/mariadb/";
-    sha256 = "15iy5iqp0njbwbn086x2dq8qnbkaci7ydvi84cf5z8fxvljis9vb";
+    sha256 = "13izi35vvxhiwl2dsnqrz75ciisy2s2k30giv7hrm01qlwnmiycl";
     name   = "mariadb-connector-c-${version}-src.tar.gz";
   };
 
@@ -233,7 +233,7 @@ galera = stdenv.mkDerivation rec {
 
   buildInputs = [ asio boost check openssl scons ];
 
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace SConstruct \
       --replace "boost_library_path = '''" "boost_library_path = '${boost}/lib'"
   '';
@@ -243,11 +243,9 @@ galera = stdenv.mkDerivation rec {
     export LIBPATH="${galeraLibs}/lib"
   '';
 
-  buildPhase = ''
-     scons -j$NIX_BUILD_CORES ssl=1 system_asio=1 strict_build_flags=0
-  '';
+  sconsFlags = "ssl=1 system_asio=1 strict_build_flags=0";
 
-  installPhase = ''
+  postInstall = ''
     # copied with modifications from scripts/packages/freebsd.sh
     GALERA_LICENSE_DIR="$share/licenses/${name}"
     install -d $out/{bin,lib/galera,share/doc/galera,$GALERA_LICENSE_DIR}

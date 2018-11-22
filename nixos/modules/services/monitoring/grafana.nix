@@ -4,6 +4,7 @@ with lib;
 
 let
   cfg = config.services.grafana;
+  opt = options.services.grafana;
 
   envOptions = {
     PATHS_DATA = cfg.dataDir;
@@ -41,6 +42,12 @@ let
     AUTH_ANONYMOUS_ORG_ROLE = cfg.auth.anonymous.org_role;
 
     ANALYTICS_REPORTING_ENABLED = boolToString cfg.analytics.reporting.enable;
+
+    SMTP_ENABLE = boolToString cfg.smtp.enable;
+    SMTP_HOST = cfg.smtp.host;
+    SMTP_USER = cfg.smtp.user;
+    SMTP_PASSWORD = cfg.smtp.password;
+    SMTP_FROM_ADDRESS = cfg.smtp.fromAddress;
   } // cfg.extraOptions;
 
 in {
@@ -134,9 +141,21 @@ in {
       };
 
       password = mkOption {
-        description = "Database password.";
+        description = ''
+          Database password.
+          This option is mutual exclusive with the passwordFile option.
+        '';
         default = "";
         type = types.str;
+      };
+
+      passwordFile = mkOption {
+        description = ''
+          File that containts the database password.
+          This option is mutual exclusive with the password option.
+        '';
+        default = null;
+        type = types.nullOr types.path;
       };
 
       path = mkOption {
@@ -163,14 +182,67 @@ in {
       };
 
       adminPassword = mkOption {
-        description = "Default admin password.";
+        description = ''
+          Default admin password.
+          This option is mutual exclusive with the adminPasswordFile option.
+        '';
         default = "admin";
         type = types.str;
+      };
+
+      adminPasswordFile = mkOption {
+        description = ''
+          Default admin password.
+          This option is mutual exclusive with the <literal>adminPassword</literal> option.
+        '';
+        default = null;
+        type = types.nullOr types.path;
       };
 
       secretKey = mkOption {
         description = "Secret key used for signing.";
         default = "SW2YcwTIb9zpOOhoPsMm";
+        type = types.str;
+      };
+
+      secretKeyFile = mkOption {
+        description = "Secret key used for signing.";
+        default = null;
+        type = types.nullOr types.path;
+      };
+    };
+
+    smtp = {
+      enable = mkEnableOption "smtp";
+      host = mkOption {
+        description = "Host to connect to";
+        default = "localhost:25";
+        type = types.str;
+      };
+      user = mkOption {
+        description = "User used for authentication";
+        default = "";
+        type = types.str;
+      };
+      password = mkOption {
+        description = ''
+          Password used for authentication.
+          This option is mutual exclusive with the passwordFile option.
+        '';
+        default = "";
+        type = types.str;
+      };
+      passwordFile = mkOption {
+        description = ''
+          Password used for authentication.
+          This option is mutual exclusive with the password option.
+        '';
+        default = null;
+        type = types.nullOr types.path;
+      };
+      fromAddress = mkOption {
+        description = "Email address used for sending";
+        default = "admin@grafana.localhost";
         type = types.str;
       };
     };
@@ -241,11 +313,30 @@ in {
 
   config = mkIf cfg.enable {
     warnings = optional (
-      cfg.database.password != options.services.grafana.database.password.default ||
-      cfg.security.adminPassword != options.services.grafana.security.adminPassword.default
+      cfg.database.password != opt.database.password.default ||
+      cfg.security.adminPassword != opt.security.adminPassword.default
     ) "Grafana passwords will be stored as plaintext in the Nix store!";
 
     environment.systemPackages = [ cfg.package ];
+
+    assertions = [
+      {
+        assertion = cfg.database.password != opt.database.password.default -> cfg.database.passwordFile == null;
+        message = "Cannot set both password and passwordFile";
+      }
+      {
+        assertion = cfg.security.adminPassword != opt.security.adminPassword.default -> cfg.security.adminPasswordFile == null;
+        message = "Cannot set both adminPassword and adminPasswordFile";
+      }
+      {
+        assertion = cfg.security.secretKeyFile != opt.security.secretKeyFile.default -> cfg.security.secretKeyFile == null;
+        message = "Cannot set both secretKey and secretKeyFile";
+      }
+      {
+        assertion = cfg.smtp.password != opt.smtp.password.default -> cfg.smtp.passwordFile == null;
+        message = "Cannot set both password and secretKeyFile";
+      }
+    ];
 
     systemd.services.grafana = {
       description = "Grafana Service Daemon";
@@ -254,8 +345,22 @@ in {
       environment = {
         QT_QPA_PLATFORM = "offscreen";
       } // mapAttrs' (n: v: nameValuePair "GF_${n}" (toString v)) envOptions;
+      script = ''
+        ${optionalString (cfg.database.passwordFile != null) ''
+          export GF_DATABASE_PASSWORD="$(cat ${escapeShellArg cfg.database.passwordFile})"
+        ''}
+        ${optionalString (cfg.security.adminPasswordFile != null) ''
+          export GF_SECURITY_ADMIN_PASSWORD="$(cat ${escapeShellArg cfg.security.adminPasswordFile})"
+        ''}
+        ${optionalString (cfg.security.secretKeyFile != null) ''
+          export GF_SECURITY_SECRET_KEY="$(cat ${escapeShellArg cfg.security.secretKeyFile})"
+        ''}
+        ${optionalString (cfg.smtp.passwordFile != null) ''
+          export GF_SMTP_PASSWORD="$(cat ${escapeShellArg cfg.smtp.passwordFile})"
+        ''}
+        exec ${cfg.package.bin}/bin/grafana-server -homepath ${cfg.dataDir}
+      '';
       serviceConfig = {
-        ExecStart = "${cfg.package.bin}/bin/grafana-server -homepath ${cfg.dataDir}";
         WorkingDirectory = cfg.dataDir;
         User = "grafana";
       };
