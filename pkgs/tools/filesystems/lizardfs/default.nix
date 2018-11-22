@@ -4,6 +4,7 @@
 , cmake
 , makeWrapper
 , python
+, db
 , fuse
 , asciidoc
 , libxml2
@@ -40,7 +41,7 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkgconfig makeWrapper ];
 
   buildInputs =
-    [ fuse asciidoc libxml2 libxslt docbook_xml_dtd_412 docbook_xsl
+    [ db fuse asciidoc libxml2 libxslt docbook_xml_dtd_412 docbook_xsl
       zlib boost judy pam
     ];
 
