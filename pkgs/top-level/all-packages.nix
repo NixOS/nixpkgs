@@ -5042,6 +5042,8 @@ with pkgs;
 
   sks = callPackage ../servers/sks { inherit (ocamlPackages_4_02) ocaml camlp4; };
 
+  sky = callPackage ../applications/networking/instant-messengers/sky { };
+
   skydns = callPackage ../servers/skydns { };
 
   sipcalc = callPackage ../tools/networking/sipcalc { };
