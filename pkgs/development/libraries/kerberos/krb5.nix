@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
     description = "MIT Kerberos 5";
     homepage = http://web.mit.edu/kerberos/;
     license = licenses.mit;
-    platforms = platforms.unix;
+    platforms = platforms.unix ++ platforms.windows;
     maintainers = with maintainers; [ wkennington ];
   };
 
