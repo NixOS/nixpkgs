@@ -31,5 +31,6 @@ stdenv.mkDerivation rec {
     homepage    = https://herwig.hepforge.org/;
     platforms   = stdenv.lib.platforms.unix;
     maintainers = with stdenv.lib.maintainers; [ veprbl ];
+    broken      = stdenv.isAarch64; # doesn't compile: ignoring return value of 'FILE* freopen...
   };
 }
