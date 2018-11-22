@@ -9,11 +9,11 @@ let
   pname = "NetworkManager";
 in stdenv.mkDerivation rec {
   name = "network-manager-${version}";
-  version = "1.12.2";
+  version = "1.14.4";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "09hsh34m8hg4m402pw5n11f29vsfjw6lm3p5m56yxwq57bwnzq3b";
+    sha256 = "064cgj9za0kzarks0lrv0qw2ysdphb5l97iw0c964bfiqzjfv8rm";
   };
 
   outputs = [ "out" "dev" ];
@@ -70,10 +70,6 @@ in stdenv.mkDerivation rec {
     (fetchpatch {
       url = https://bugzilla.gnome.org/attachment.cgi?id=372953;
       sha256 = "0xg7bzs6dvkbv2qp67i7mi1c5yrmfd471xgmlkn15b33pqkzy3mc";
-    })
-    (fetchpatch {
-      url = https://gitlab.freedesktop.org/NetworkManager/NetworkManager/commit/0a3755c1799d3a4dc1875d4c59c7c568a64c8456.patch;
-      sha256 = "0r7338q3za7mf419a244vi65b1q497rg84avijybmv6w4x6p1ksd";
     })
     (substituteAll {
       src = ./fix-paths.patch;
