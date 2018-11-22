@@ -21779,6 +21779,8 @@ with pkgs;
 
   megam = callPackage ../applications/science/misc/megam { };
 
+  netlogo = callPackage ../applications/science/misc/netlogo { };
+
   ns-3 = callPackage ../development/libraries/science/networking/ns3 { };
 
   root = callPackage ../applications/science/misc/root {
