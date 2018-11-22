@@ -4,16 +4,12 @@ with rustPlatform;
 
 buildRustPackage rec {
   name = "pijul-${version}";
-  version = "0.10.0";
+  version = "0.11.0";
 
   src = fetchurl {
     url = "https://pijul.org/releases/${name}.tar.gz";
-    sha256 = "1lkipcp83rfsj9yqddvb46dmqdf2ch9njwvjv8f3g91rmfjcngys";
+    sha256 = "1rdmnvl9mg3782b4sdmmzarfn1z5pan9i5jhsp0m942f2amr61z6";
   };
-
-  cargoPatches = [
-    ./libpijul.patch
-  ];
 
   nativeBuildInputs = [ pkgconfig ];
 
@@ -29,7 +25,7 @@ buildRustPackage rec {
 
   doCheck = false;
 
-  cargoSha256 = "1419mlxa4p53hm5qzfd1yi2k0n1bcv8kaslls1nyx661vknhfamw";
+  cargoSha256 = "1r76azmka1d76ff0ddfhzr24b0ry496qrp13945i3vs0fgzk2sdz";
 
   meta = with stdenv.lib; {
     description = "A distributed version control system";
