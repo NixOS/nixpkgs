@@ -5,6 +5,8 @@ let inherit (lib.lists) fold;
 in
 rec {
 
+# aho-corasick-0.6.8
+
   crates.aho_corasick."0.6.8" = deps: { features?(features_.aho_corasick."0.6.8" deps {}) }: buildRustCrate {
     crateName = "aho-corasick";
     version = "0.6.8";
@@ -24,6 +26,9 @@ rec {
     (features_.memchr."${deps."aho_corasick"."0.6.8"."memchr"}" deps)
   ];
 
+
+# end
+# ansi_term-0.11.0
 
   crates.ansi_term."0.11.0" = deps: { features?(features_.ansi_term."0.11.0" deps {}) }: buildRustCrate {
     crateName = "ansi_term";
@@ -46,6 +51,9 @@ rec {
     (features_.winapi."${deps."ansi_term"."0.11.0"."winapi"}" deps)
   ];
 
+
+# end
+# argon2rs-0.2.5
 
   crates.argon2rs."0.2.5" = deps: { features?(features_.argon2rs."0.2.5" deps {}) }: buildRustCrate {
     crateName = "argon2rs";
@@ -74,6 +82,9 @@ rec {
   ];
 
 
+# end
+# arrayvec-0.4.7
+
   crates.arrayvec."0.4.7" = deps: { features?(features_.arrayvec."0.4.7" deps {}) }: buildRustCrate {
     crateName = "arrayvec";
     version = "0.4.7";
@@ -101,6 +112,9 @@ rec {
     (features_.nodrop."${deps."arrayvec"."0.4.7"."nodrop"}" deps)
   ];
 
+
+# end
+# atty-0.2.11
 
   crates.atty."0.2.11" = deps: { features?(features_.atty."0.2.11" deps {}) }: buildRustCrate {
     crateName = "atty";
@@ -135,6 +149,9 @@ rec {
     (features_.winapi."${deps."atty"."0.2.11"."winapi"}" deps)
   ];
 
+
+# end
+# backtrace-0.3.9
 
   crates.backtrace."0.3.9" = deps: { features?(features_.backtrace."0.3.9" deps {}) }: buildRustCrate {
     crateName = "backtrace";
@@ -241,6 +258,9 @@ rec {
   ];
 
 
+# end
+# backtrace-sys-0.1.24
+
   crates.backtrace_sys."0.1.24" = deps: { features?(features_.backtrace_sys."0.1.24" deps {}) }: buildRustCrate {
     crateName = "backtrace-sys";
     version = "0.1.24";
@@ -265,6 +285,9 @@ rec {
   ];
 
 
+# end
+# bitflags-1.0.4
+
   crates.bitflags."1.0.4" = deps: { features?(features_.bitflags."1.0.4" deps {}) }: buildRustCrate {
     crateName = "bitflags";
     version = "1.0.4";
@@ -276,6 +299,9 @@ rec {
     bitflags."1.0.4".default = (f.bitflags."1.0.4".default or true);
   }) [];
 
+
+# end
+# blake2-rfc-0.2.18
 
   crates.blake2_rfc."0.2.18" = deps: { features?(features_.blake2_rfc."0.2.18" deps {}) }: buildRustCrate {
     crateName = "blake2-rfc";
@@ -312,61 +338,67 @@ rec {
   ];
 
 
-  crates.carnix."0.9.0" = deps: { features?(features_.carnix."0.9.0" deps {}) }: buildRustCrate {
+# end
+# carnix-0.9.1
+
+  crates.carnix."0.9.1" = deps: { features?(features_.carnix."0.9.1" deps {}) }: buildRustCrate {
     crateName = "carnix";
-    version = "0.9.0";
+    version = "0.9.1";
     authors = [ "pe@pijul.org <pe@pijul.org>" ];
-    sha256 = "1ydq4z0linpbdh18fzs8z96rmjpm2zvrz16vzjyb1j65p045kk8l";
+    sha256 = "0dn292d4mjlxif0kclrljzff8rm35cd9d92vycjbzklyhz5d62wi";
     crateBin =
       [{  name = "cargo-generate-nixfile";  path = "src/cargo-generate-nixfile.rs"; }] ++
       [{  name = "carnix";  path = "src/main.rs"; }];
     dependencies = mapFeatures features ([
-      (crates."clap"."${deps."carnix"."0.9.0"."clap"}" deps)
-      (crates."dirs"."${deps."carnix"."0.9.0"."dirs"}" deps)
-      (crates."env_logger"."${deps."carnix"."0.9.0"."env_logger"}" deps)
-      (crates."error_chain"."${deps."carnix"."0.9.0"."error_chain"}" deps)
-      (crates."itertools"."${deps."carnix"."0.9.0"."itertools"}" deps)
-      (crates."log"."${deps."carnix"."0.9.0"."log"}" deps)
-      (crates."nom"."${deps."carnix"."0.9.0"."nom"}" deps)
-      (crates."regex"."${deps."carnix"."0.9.0"."regex"}" deps)
-      (crates."serde"."${deps."carnix"."0.9.0"."serde"}" deps)
-      (crates."serde_derive"."${deps."carnix"."0.9.0"."serde_derive"}" deps)
-      (crates."serde_json"."${deps."carnix"."0.9.0"."serde_json"}" deps)
-      (crates."tempdir"."${deps."carnix"."0.9.0"."tempdir"}" deps)
-      (crates."toml"."${deps."carnix"."0.9.0"."toml"}" deps)
+      (crates."clap"."${deps."carnix"."0.9.1"."clap"}" deps)
+      (crates."dirs"."${deps."carnix"."0.9.1"."dirs"}" deps)
+      (crates."env_logger"."${deps."carnix"."0.9.1"."env_logger"}" deps)
+      (crates."error_chain"."${deps."carnix"."0.9.1"."error_chain"}" deps)
+      (crates."itertools"."${deps."carnix"."0.9.1"."itertools"}" deps)
+      (crates."log"."${deps."carnix"."0.9.1"."log"}" deps)
+      (crates."nom"."${deps."carnix"."0.9.1"."nom"}" deps)
+      (crates."regex"."${deps."carnix"."0.9.1"."regex"}" deps)
+      (crates."serde"."${deps."carnix"."0.9.1"."serde"}" deps)
+      (crates."serde_derive"."${deps."carnix"."0.9.1"."serde_derive"}" deps)
+      (crates."serde_json"."${deps."carnix"."0.9.1"."serde_json"}" deps)
+      (crates."tempdir"."${deps."carnix"."0.9.1"."tempdir"}" deps)
+      (crates."toml"."${deps."carnix"."0.9.1"."toml"}" deps)
     ]);
   };
-  features_.carnix."0.9.0" = deps: f: updateFeatures f (rec {
-    carnix."0.9.0".default = (f.carnix."0.9.0".default or true);
-    clap."${deps.carnix."0.9.0".clap}".default = true;
-    dirs."${deps.carnix."0.9.0".dirs}".default = true;
-    env_logger."${deps.carnix."0.9.0".env_logger}".default = true;
-    error_chain."${deps.carnix."0.9.0".error_chain}".default = true;
-    itertools."${deps.carnix."0.9.0".itertools}".default = true;
-    log."${deps.carnix."0.9.0".log}".default = true;
-    nom."${deps.carnix."0.9.0".nom}".default = true;
-    regex."${deps.carnix."0.9.0".regex}".default = true;
-    serde."${deps.carnix."0.9.0".serde}".default = true;
-    serde_derive."${deps.carnix."0.9.0".serde_derive}".default = true;
-    serde_json."${deps.carnix."0.9.0".serde_json}".default = true;
-    tempdir."${deps.carnix."0.9.0".tempdir}".default = true;
-    toml."${deps.carnix."0.9.0".toml}".default = true;
+  features_.carnix."0.9.1" = deps: f: updateFeatures f (rec {
+    carnix."0.9.1".default = (f.carnix."0.9.1".default or true);
+    clap."${deps.carnix."0.9.1".clap}".default = true;
+    dirs."${deps.carnix."0.9.1".dirs}".default = true;
+    env_logger."${deps.carnix."0.9.1".env_logger}".default = true;
+    error_chain."${deps.carnix."0.9.1".error_chain}".default = true;
+    itertools."${deps.carnix."0.9.1".itertools}".default = true;
+    log."${deps.carnix."0.9.1".log}".default = true;
+    nom."${deps.carnix."0.9.1".nom}".default = true;
+    regex."${deps.carnix."0.9.1".regex}".default = true;
+    serde."${deps.carnix."0.9.1".serde}".default = true;
+    serde_derive."${deps.carnix."0.9.1".serde_derive}".default = true;
+    serde_json."${deps.carnix."0.9.1".serde_json}".default = true;
+    tempdir."${deps.carnix."0.9.1".tempdir}".default = true;
+    toml."${deps.carnix."0.9.1".toml}".default = true;
   }) [
-    (features_.clap."${deps."carnix"."0.9.0"."clap"}" deps)
-    (features_.dirs."${deps."carnix"."0.9.0"."dirs"}" deps)
-    (features_.env_logger."${deps."carnix"."0.9.0"."env_logger"}" deps)
-    (features_.error_chain."${deps."carnix"."0.9.0"."error_chain"}" deps)
-    (features_.itertools."${deps."carnix"."0.9.0"."itertools"}" deps)
-    (features_.log."${deps."carnix"."0.9.0"."log"}" deps)
-    (features_.nom."${deps."carnix"."0.9.0"."nom"}" deps)
-    (features_.regex."${deps."carnix"."0.9.0"."regex"}" deps)
-    (features_.serde."${deps."carnix"."0.9.0"."serde"}" deps)
-    (features_.serde_derive."${deps."carnix"."0.9.0"."serde_derive"}" deps)
-    (features_.serde_json."${deps."carnix"."0.9.0"."serde_json"}" deps)
-    (features_.tempdir."${deps."carnix"."0.9.0"."tempdir"}" deps)
-    (features_.toml."${deps."carnix"."0.9.0"."toml"}" deps)
+    (features_.clap."${deps."carnix"."0.9.1"."clap"}" deps)
+    (features_.dirs."${deps."carnix"."0.9.1"."dirs"}" deps)
+    (features_.env_logger."${deps."carnix"."0.9.1"."env_logger"}" deps)
+    (features_.error_chain."${deps."carnix"."0.9.1"."error_chain"}" deps)
+    (features_.itertools."${deps."carnix"."0.9.1"."itertools"}" deps)
+    (features_.log."${deps."carnix"."0.9.1"."log"}" deps)
+    (features_.nom."${deps."carnix"."0.9.1"."nom"}" deps)
+    (features_.regex."${deps."carnix"."0.9.1"."regex"}" deps)
+    (features_.serde."${deps."carnix"."0.9.1"."serde"}" deps)
+    (features_.serde_derive."${deps."carnix"."0.9.1"."serde_derive"}" deps)
+    (features_.serde_json."${deps."carnix"."0.9.1"."serde_json"}" deps)
+    (features_.tempdir."${deps."carnix"."0.9.1"."tempdir"}" deps)
+    (features_.toml."${deps."carnix"."0.9.1"."toml"}" deps)
   ];
 
+
+# end
+# cc-1.0.25
 
   crates.cc."1.0.25" = deps: { features?(features_.cc."1.0.25" deps {}) }: buildRustCrate {
     crateName = "cc";
@@ -388,6 +420,9 @@ rec {
   }) [];
 
 
+# end
+# cfg-if-0.1.6
+
   crates.cfg_if."0.1.6" = deps: { features?(features_.cfg_if."0.1.6" deps {}) }: buildRustCrate {
     crateName = "cfg-if";
     version = "0.1.6";
@@ -398,6 +433,9 @@ rec {
     cfg_if."0.1.6".default = (f.cfg_if."0.1.6".default or true);
   }) [];
 
+
+# end
+# clap-2.32.0
 
   crates.clap."2.32.0" = deps: { features?(features_.clap."2.32.0" deps {}) }: buildRustCrate {
     crateName = "clap";
@@ -485,6 +523,9 @@ rec {
   ];
 
 
+# end
+# constant_time_eq-0.1.3
+
   crates.constant_time_eq."0.1.3" = deps: { features?(features_.constant_time_eq."0.1.3" deps {}) }: buildRustCrate {
     crateName = "constant_time_eq";
     version = "0.1.3";
@@ -495,6 +536,9 @@ rec {
     constant_time_eq."0.1.3".default = (f.constant_time_eq."0.1.3".default or true);
   }) [];
 
+
+# end
+# dirs-1.0.4
 
   crates.dirs."1.0.4" = deps: { features?(features_.dirs."1.0.4" deps {}) }: buildRustCrate {
     crateName = "dirs";
@@ -530,6 +574,9 @@ rec {
   ];
 
 
+# end
+# either-1.5.0
+
   crates.either."1.5.0" = deps: { features?(features_.either."1.5.0" deps {}) }: buildRustCrate {
     crateName = "either";
     version = "1.5.0";
@@ -549,6 +596,9 @@ rec {
     ];
   }) [];
 
+
+# end
+# env_logger-0.5.13
 
   crates.env_logger."0.5.13" = deps: { features?(features_.env_logger."0.5.13" deps {}) }: buildRustCrate {
     crateName = "env_logger";
@@ -589,6 +639,9 @@ rec {
   ];
 
 
+# end
+# error-chain-0.12.0
+
   crates.error_chain."0.12.0" = deps: { features?(features_.error_chain."0.12.0" deps {}) }: buildRustCrate {
     crateName = "error-chain";
     version = "0.12.0";
@@ -616,6 +669,9 @@ rec {
     (features_.backtrace."${deps."error_chain"."0.12.0"."backtrace"}" deps)
   ];
 
+
+# end
+# failure-0.1.3
 
   crates.failure."0.1.3" = deps: { features?(features_.failure."0.1.3" deps {}) }: buildRustCrate {
     crateName = "failure";
@@ -656,6 +712,9 @@ rec {
   ];
 
 
+# end
+# failure_derive-0.1.3
+
   crates.failure_derive."0.1.3" = deps: { features?(features_.failure_derive."0.1.3" deps {}) }: buildRustCrate {
     crateName = "failure_derive";
     version = "0.1.3";
@@ -685,6 +744,9 @@ rec {
   ];
 
 
+# end
+# fuchsia-zircon-0.3.3
+
   crates.fuchsia_zircon."0.3.3" = deps: { features?(features_.fuchsia_zircon."0.3.3" deps {}) }: buildRustCrate {
     crateName = "fuchsia-zircon";
     version = "0.3.3";
@@ -705,6 +767,9 @@ rec {
   ];
 
 
+# end
+# fuchsia-zircon-sys-0.3.3
+
   crates.fuchsia_zircon_sys."0.3.3" = deps: { features?(features_.fuchsia_zircon_sys."0.3.3" deps {}) }: buildRustCrate {
     crateName = "fuchsia-zircon-sys";
     version = "0.3.3";
@@ -715,6 +780,9 @@ rec {
     fuchsia_zircon_sys."0.3.3".default = (f.fuchsia_zircon_sys."0.3.3".default or true);
   }) [];
 
+
+# end
+# humantime-1.1.1
 
   crates.humantime."1.1.1" = deps: { features?(features_.humantime."1.1.1" deps {}) }: buildRustCrate {
     crateName = "humantime";
@@ -733,6 +801,9 @@ rec {
     (features_.quick_error."${deps."humantime"."1.1.1"."quick_error"}" deps)
   ];
 
+
+# end
+# itertools-0.7.8
 
   crates.itertools."0.7.8" = deps: { features?(features_.itertools."0.7.8" deps {}) }: buildRustCrate {
     crateName = "itertools";
@@ -758,6 +829,9 @@ rec {
   ];
 
 
+# end
+# itoa-0.4.3
+
   crates.itoa."0.4.3" = deps: { features?(features_.itoa."0.4.3" deps {}) }: buildRustCrate {
     crateName = "itoa";
     version = "0.4.3";
@@ -775,6 +849,9 @@ rec {
     ];
   }) [];
 
+
+# end
+# lazy_static-1.1.0
 
   crates.lazy_static."1.1.0" = deps: { features?(features_.lazy_static."1.1.0" deps {}) }: buildRustCrate {
     crateName = "lazy_static";
@@ -808,6 +885,9 @@ rec {
   ];
 
 
+# end
+# libc-0.2.43
+
   crates.libc."0.2.43" = deps: { features?(features_.libc."0.2.43" deps {}) }: buildRustCrate {
     crateName = "libc";
     version = "0.2.43";
@@ -826,6 +906,9 @@ rec {
   }) [];
 
 
+# end
+# log-0.4.5
+
   crates.log."0.4.5" = deps: { features?(features_.log."0.4.5" deps {}) }: buildRustCrate {
     crateName = "log";
     version = "0.4.5";
@@ -843,6 +926,9 @@ rec {
     (features_.cfg_if."${deps."log"."0.4.5"."cfg_if"}" deps)
   ];
 
+
+# end
+# memchr-1.0.2
 
   crates.memchr."1.0.2" = deps: { features?(features_.memchr."1.0.2" deps {}) }: buildRustCrate {
     crateName = "memchr";
@@ -879,6 +965,9 @@ rec {
     (features_.libc."${deps."memchr"."1.0.2"."libc"}" deps)
   ];
 
+
+# end
+# memchr-2.1.0
 
   crates.memchr."2.1.0" = deps: { features?(features_.memchr."2.1.0" deps {}) }: buildRustCrate {
     crateName = "memchr";
@@ -925,6 +1014,9 @@ rec {
   ];
 
 
+# end
+# nodrop-0.1.12
+
   crates.nodrop."0.1.12" = deps: { features?(features_.nodrop."0.1.12" deps {}) }: buildRustCrate {
     crateName = "nodrop";
     version = "0.1.12";
@@ -948,6 +1040,9 @@ rec {
     ];
   }) [];
 
+
+# end
+# nom-3.2.1
 
   crates.nom."3.2.1" = deps: { features?(features_.nom."3.2.1" deps {}) }: buildRustCrate {
     crateName = "nom";
@@ -999,6 +1094,9 @@ rec {
   ];
 
 
+# end
+# proc-macro2-0.4.20
+
   crates.proc_macro2."0.4.20" = deps: { features?(features_.proc_macro2."0.4.20" deps {}) }: buildRustCrate {
     crateName = "proc-macro2";
     version = "0.4.20";
@@ -1026,6 +1124,9 @@ rec {
   ];
 
 
+# end
+# quick-error-1.2.2
+
   crates.quick_error."1.2.2" = deps: { features?(features_.quick_error."1.2.2" deps {}) }: buildRustCrate {
     crateName = "quick-error";
     version = "1.2.2";
@@ -1036,6 +1137,9 @@ rec {
     quick_error."1.2.2".default = (f.quick_error."1.2.2".default or true);
   }) [];
 
+
+# end
+# quote-0.6.8
 
   crates.quote."0.6.8" = deps: { features?(features_.quote."0.6.8" deps {}) }: buildRustCrate {
     crateName = "quote";
@@ -1066,6 +1170,9 @@ rec {
     (features_.proc_macro2."${deps."quote"."0.6.8"."proc_macro2"}" deps)
   ];
 
+
+# end
+# rand-0.4.3
 
   crates.rand."0.4.3" = deps: { features?(features_.rand."0.4.3" deps {}) }: buildRustCrate {
     crateName = "rand";
@@ -1115,6 +1222,9 @@ rec {
   ];
 
 
+# end
+# redox_syscall-0.1.40
+
   crates.redox_syscall."0.1.40" = deps: { features?(features_.redox_syscall."0.1.40" deps {}) }: buildRustCrate {
     crateName = "redox_syscall";
     version = "0.1.40";
@@ -1126,6 +1236,9 @@ rec {
     redox_syscall."0.1.40".default = (f.redox_syscall."0.1.40".default or true);
   }) [];
 
+
+# end
+# redox_termios-0.1.1
 
   crates.redox_termios."0.1.1" = deps: { features?(features_.redox_termios."0.1.1" deps {}) }: buildRustCrate {
     crateName = "redox_termios";
@@ -1144,6 +1257,9 @@ rec {
     (features_.redox_syscall."${deps."redox_termios"."0.1.1"."redox_syscall"}" deps)
   ];
 
+
+# end
+# redox_users-0.2.0
 
   crates.redox_users."0.2.0" = deps: { features?(features_.redox_users."0.2.0" deps {}) }: buildRustCrate {
     crateName = "redox_users";
@@ -1170,6 +1286,9 @@ rec {
     (features_.redox_syscall."${deps."redox_users"."0.2.0"."redox_syscall"}" deps)
   ];
 
+
+# end
+# regex-1.0.5
 
   crates.regex."1.0.5" = deps: { features?(features_.regex."1.0.5" deps {}) }: buildRustCrate {
     crateName = "regex";
@@ -1211,6 +1330,9 @@ rec {
   ];
 
 
+# end
+# regex-syntax-0.6.2
+
   crates.regex_syntax."0.6.2" = deps: { features?(features_.regex_syntax."0.6.2" deps {}) }: buildRustCrate {
     crateName = "regex-syntax";
     version = "0.6.2";
@@ -1227,6 +1349,9 @@ rec {
     (features_.ucd_util."${deps."regex_syntax"."0.6.2"."ucd_util"}" deps)
   ];
 
+
+# end
+# remove_dir_all-0.5.1
 
   crates.remove_dir_all."0.5.1" = deps: { features?(features_.remove_dir_all."0.5.1" deps {}) }: buildRustCrate {
     crateName = "remove_dir_all";
@@ -1252,6 +1377,9 @@ rec {
   ];
 
 
+# end
+# rustc-demangle-0.1.9
+
   crates.rustc_demangle."0.1.9" = deps: { features?(features_.rustc_demangle."0.1.9" deps {}) }: buildRustCrate {
     crateName = "rustc-demangle";
     version = "0.1.9";
@@ -1262,6 +1390,9 @@ rec {
     rustc_demangle."0.1.9".default = (f.rustc_demangle."0.1.9".default or true);
   }) [];
 
+
+# end
+# ryu-0.2.6
 
   crates.ryu."0.2.6" = deps: { features?(features_.ryu."0.2.6" deps {}) }: buildRustCrate {
     crateName = "ryu";
@@ -1278,6 +1409,9 @@ rec {
   }) [];
 
 
+# end
+# scoped_threadpool-0.1.9
+
   crates.scoped_threadpool."0.1.9" = deps: { features?(features_.scoped_threadpool."0.1.9" deps {}) }: buildRustCrate {
     crateName = "scoped_threadpool";
     version = "0.1.9";
@@ -1289,6 +1423,9 @@ rec {
     scoped_threadpool."0.1.9".default = (f.scoped_threadpool."0.1.9".default or true);
   }) [];
 
+
+# end
+# serde-1.0.80
 
   crates.serde."1.0.80" = deps: { features?(features_.serde."1.0.80" deps {}) }: buildRustCrate {
     crateName = "serde";
@@ -1319,6 +1456,9 @@ rec {
   }) [];
 
 
+# end
+# serde_derive-1.0.80
+
   crates.serde_derive."1.0.80" = deps: { features?(features_.serde_derive."1.0.80" deps {}) }: buildRustCrate {
     crateName = "serde_derive";
     version = "1.0.80";
@@ -1346,6 +1486,9 @@ rec {
     (features_.syn."${deps."serde_derive"."1.0.80"."syn"}" deps)
   ];
 
+
+# end
+# serde_json-1.0.32
 
   crates.serde_json."1.0.32" = deps: { features?(features_.serde_json."1.0.32" deps {}) }: buildRustCrate {
     crateName = "serde_json";
@@ -1377,6 +1520,9 @@ rec {
   ];
 
 
+# end
+# strsim-0.7.0
+
   crates.strsim."0.7.0" = deps: { features?(features_.strsim."0.7.0" deps {}) }: buildRustCrate {
     crateName = "strsim";
     version = "0.7.0";
@@ -1387,6 +1533,9 @@ rec {
     strsim."0.7.0".default = (f.strsim."0.7.0".default or true);
   }) [];
 
+
+# end
+# syn-0.15.13
 
   crates.syn."0.15.13" = deps: { features?(features_.syn."0.15.13" deps {}) }: buildRustCrate {
     crateName = "syn";
@@ -1450,6 +1599,9 @@ rec {
   ];
 
 
+# end
+# synstructure-0.10.0
+
   crates.synstructure."0.10.0" = deps: { features?(features_.synstructure."0.10.0" deps {}) }: buildRustCrate {
     crateName = "synstructure";
     version = "0.10.0";
@@ -1481,6 +1633,9 @@ rec {
   ];
 
 
+# end
+# tempdir-0.3.7
+
   crates.tempdir."0.3.7" = deps: { features?(features_.tempdir."0.3.7" deps {}) }: buildRustCrate {
     crateName = "tempdir";
     version = "0.3.7";
@@ -1501,6 +1656,9 @@ rec {
   ];
 
 
+# end
+# termcolor-1.0.4
+
   crates.termcolor."1.0.4" = deps: { features?(features_.termcolor."1.0.4" deps {}) }: buildRustCrate {
     crateName = "termcolor";
     version = "1.0.4";
@@ -1517,6 +1675,9 @@ rec {
     (features_.wincolor."${deps."termcolor"."1.0.4"."wincolor"}" deps)
   ];
 
+
+# end
+# termion-1.5.1
 
   crates.termion."1.5.1" = deps: { features?(features_.termion."1.5.1" deps {}) }: buildRustCrate {
     crateName = "termion";
@@ -1543,6 +1704,9 @@ rec {
   ];
 
 
+# end
+# textwrap-0.10.0
+
   crates.textwrap."0.10.0" = deps: { features?(features_.textwrap."0.10.0" deps {}) }: buildRustCrate {
     crateName = "textwrap";
     version = "0.10.0";
@@ -1559,6 +1723,9 @@ rec {
     (features_.unicode_width."${deps."textwrap"."0.10.0"."unicode_width"}" deps)
   ];
 
+
+# end
+# thread_local-0.3.6
 
   crates.thread_local."0.3.6" = deps: { features?(features_.thread_local."0.3.6" deps {}) }: buildRustCrate {
     crateName = "thread_local";
@@ -1577,6 +1744,9 @@ rec {
   ];
 
 
+# end
+# toml-0.4.8
+
   crates.toml."0.4.8" = deps: { features?(features_.toml."0.4.8" deps {}) }: buildRustCrate {
     crateName = "toml";
     version = "0.4.8";
@@ -1594,6 +1764,9 @@ rec {
   ];
 
 
+# end
+# ucd-util-0.1.1
+
   crates.ucd_util."0.1.1" = deps: { features?(features_.ucd_util."0.1.1" deps {}) }: buildRustCrate {
     crateName = "ucd-util";
     version = "0.1.1";
@@ -1604,6 +1777,9 @@ rec {
     ucd_util."0.1.1".default = (f.ucd_util."0.1.1".default or true);
   }) [];
 
+
+# end
+# unicode-width-0.1.5
 
   crates.unicode_width."0.1.5" = deps: { features?(features_.unicode_width."0.1.5" deps {}) }: buildRustCrate {
     crateName = "unicode-width";
@@ -1617,6 +1793,9 @@ rec {
   }) [];
 
 
+# end
+# unicode-xid-0.1.0
+
   crates.unicode_xid."0.1.0" = deps: { features?(features_.unicode_xid."0.1.0" deps {}) }: buildRustCrate {
     crateName = "unicode-xid";
     version = "0.1.0";
@@ -1629,6 +1808,9 @@ rec {
   }) [];
 
 
+# end
+# utf8-ranges-1.0.1
+
   crates.utf8_ranges."1.0.1" = deps: { features?(features_.utf8_ranges."1.0.1" deps {}) }: buildRustCrate {
     crateName = "utf8-ranges";
     version = "1.0.1";
@@ -1639,6 +1821,9 @@ rec {
     utf8_ranges."1.0.1".default = (f.utf8_ranges."1.0.1".default or true);
   }) [];
 
+
+# end
+# vec_map-0.8.1
 
   crates.vec_map."0.8.1" = deps: { features?(features_.vec_map."0.8.1" deps {}) }: buildRustCrate {
     crateName = "vec_map";
@@ -1660,6 +1845,9 @@ rec {
   }) [];
 
 
+# end
+# version_check-0.1.5
+
   crates.version_check."0.1.5" = deps: { features?(features_.version_check."0.1.5" deps {}) }: buildRustCrate {
     crateName = "version_check";
     version = "0.1.5";
@@ -1670,6 +1858,9 @@ rec {
     version_check."0.1.5".default = (f.version_check."0.1.5".default or true);
   }) [];
 
+
+# end
+# winapi-0.3.6
 
   crates.winapi."0.3.6" = deps: { features?(features_.winapi."0.3.6" deps {}) }: buildRustCrate {
     crateName = "winapi";
@@ -1695,6 +1886,9 @@ rec {
   ];
 
 
+# end
+# winapi-i686-pc-windows-gnu-0.4.0
+
   crates.winapi_i686_pc_windows_gnu."0.4.0" = deps: { features?(features_.winapi_i686_pc_windows_gnu."0.4.0" deps {}) }: buildRustCrate {
     crateName = "winapi-i686-pc-windows-gnu";
     version = "0.4.0";
@@ -1706,6 +1900,9 @@ rec {
     winapi_i686_pc_windows_gnu."0.4.0".default = (f.winapi_i686_pc_windows_gnu."0.4.0".default or true);
   }) [];
 
+
+# end
+# winapi-util-0.1.1
 
   crates.winapi_util."0.1.1" = deps: { features?(features_.winapi_util."0.1.1" deps {}) }: buildRustCrate {
     crateName = "winapi-util";
@@ -1735,6 +1932,9 @@ rec {
   ];
 
 
+# end
+# winapi-x86_64-pc-windows-gnu-0.4.0
+
   crates.winapi_x86_64_pc_windows_gnu."0.4.0" = deps: { features?(features_.winapi_x86_64_pc_windows_gnu."0.4.0" deps {}) }: buildRustCrate {
     crateName = "winapi-x86_64-pc-windows-gnu";
     version = "0.4.0";
@@ -1746,6 +1946,9 @@ rec {
     winapi_x86_64_pc_windows_gnu."0.4.0".default = (f.winapi_x86_64_pc_windows_gnu."0.4.0".default or true);
   }) [];
 
+
+# end
+# wincolor-1.0.1
 
   crates.wincolor."1.0.1" = deps: { features?(features_.wincolor."1.0.1" deps {}) }: buildRustCrate {
     crateName = "wincolor";
@@ -1771,4 +1974,5 @@ rec {
   ];
 
 
+# end
 }
