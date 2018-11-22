@@ -132,7 +132,7 @@ in
         mkdir -p /run/atlassian-crowd
         ln -sf ${cfg.home}/{database,work,server.xml} /run/atlassian-crowd
 
-        chown -R ${cfg.user}:${cfg.group} ${cfg.home}
+        chown ${cfg.user}:${cfg.group} ${cfg.home}
 
         sed -e 's,port="8095",port="${toString cfg.listenPort}" address="${cfg.listenAddress}",' \
         '' + (lib.optionalString cfg.proxy.enable ''
