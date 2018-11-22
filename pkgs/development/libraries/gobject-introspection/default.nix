@@ -42,6 +42,10 @@ stdenv.mkDerivation rec {
   patches = [
     ./macos-shared-library.patch
     (substituteAll {
+      src = ./test_shlibs.patch;
+      inherit nixStoreDir;
+    })
+    (substituteAll {
       src = ./absolute_shlib_path.patch;
       inherit nixStoreDir;
     })
