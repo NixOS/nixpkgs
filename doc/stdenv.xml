@@ -671,6 +671,43 @@ passthru = {
      </para>
     </listitem>
    </varlistentry>
+   <varlistentry>
+    <term>
+     <varname>passthru.updateScript</varname>
+    </term>
+    <listitem>
+     <para>
+      A script to be run by <filename>maintainers/scripts/update.nix</filename> when
+      the package is matched. It needs to be an executable file, either on the file
+      system:
+<programlisting>
+passthru.updateScript = ./update.sh;
+</programlisting>
+      or inside the expression itself:
+<programlisting>
+passthru.updateScript = writeScript "update-zoom-us" ''
+  #!/usr/bin/env nix-shell
+  #!nix-shell -i bash -p curl pcre common-updater-scripts
+
+  set -eu -o pipefail
+
+  version="$(curl -sI https://zoom.us/client/latest/zoom_x86_64.tar.xz | grep -Fi 'Location:' | pcregrep -o1 '/(([0-9]\.?)+)/')"
+  update-source-version zoom-us "$version"
+'';
+</programlisting>
+      The attribute can also contain a list, a script followed by arguments to be passed to it:
+<programlisting>
+passthru.updateScript = [ ../../update.sh pname "--requested-release=unstable" ];
+</programlisting>
+      Note that the update scripts will be run in parallel by default; you should avoid running <command>git commit</command> or any other commands that cannot handle that.
+     </para>
+
+     <para>
+      For information about how to run the updates, execute
+      <cmdsynopsis><command>nix-shell</command> <arg>maintainers/scripts/update.nix</arg></cmdsynopsis>.
+     </para>
+    </listitem>
+   </varlistentry>
   </variablelist>
  </section>
  <section xml:id="sec-stdenv-phases">
