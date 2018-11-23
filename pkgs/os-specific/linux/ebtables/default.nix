@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, enableStatic ? false }:
 
-stdenv.mkDerivation (rec {
+stdenv.mkDerivation rec {
   name = "ebtables-${version}";
   version = "2.0.10-4";
 
@@ -41,7 +41,6 @@ stdenv.mkDerivation (rec {
       "-Du_int32_t=uint32_t"
     ];
 
-  dontStrip = enableDebug;
   preInstall = "mkdir -p $out/etc/sysconfig";
 
   meta = with stdenv.lib; {
@@ -50,4 +49,4 @@ stdenv.mkDerivation (rec {
     license = licenses.gpl2;
     platforms = platforms.linux;
   };
-};
+}
