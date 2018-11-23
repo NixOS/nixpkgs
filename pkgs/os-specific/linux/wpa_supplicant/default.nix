@@ -64,6 +64,9 @@ stdenv.mkDerivation rec {
   '');
 
   preBuild = ''
+    for manpage in wpa_supplicant/doc/docbook/wpa_supplicant.conf* ; do
+      substituteInPlace "$manpage" --replace /usr/share/doc $out/share/doc
+    done
     cd wpa_supplicant
     cp -v defconfig .config
     echo "$extraConfig" >> .config
