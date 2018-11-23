@@ -20,8 +20,7 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     cmakeFlagsArray+=(
       "-DCMAKE_INSTALL_BINDIR=$bin/bin"
-      "-DWITH_JPEG8=1"
-      "-DWITH_JPEG9=1"
+      "-DENABLE_STATIC=0"
     )
   '';
 
