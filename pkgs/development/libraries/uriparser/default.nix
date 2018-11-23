@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cpptest, pkgconfig, doxygen, graphviz }:
+{ lib, stdenv, fetchurl, cpptest, pkgconfig, doxygen, graphviz }:
 
 stdenv.mkDerivation rec {
   name = "uriparser-${version}";
@@ -10,9 +10,11 @@ stdenv.mkDerivation rec {
     sha256 = "0m2a5bf5b00ybagxmsa8mdj9mhc62vcm0qimy1ivfza1fbjsf287";
   };
 
-  nativeBuildInputs = [ pkgconfig cpptest doxygen graphviz ];
+  nativeBuildInputs = [ pkgconfig doxygen graphviz ];
+  buildInputs = lib.optional doCheck cpptest;
+  configureFlags = lib.optional (!doCheck) "--disable-tests";
 
-  doCheck = true;
+  doCheck = stdenv.targetPlatform.system == stdenv.hostPlatform.system;
 
   meta = with stdenv.lib; {
     homepage = https://uriparser.github.io/;
