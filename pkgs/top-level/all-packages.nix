@@ -14579,6 +14579,7 @@ with pkgs;
 
   musl = callPackage ../os-specific/linux/musl { };
   musl-utils = callPackage ../os-specific/linux/musl-utils { };
+  musl-locales = callPackage ../os-specific/linux/musl-locales { };
 
   nettools = if stdenv.isLinux then callPackage ../os-specific/linux/net-tools { }
              else unixtools.nettools;

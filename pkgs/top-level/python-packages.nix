@@ -4809,7 +4809,7 @@ in {
   pyls-mypy = callPackage ../development/python-modules/pyls-mypy {};
 
   pyudev = callPackage ../development/python-modules/pyudev {
-    inherit (pkgs) systemd;
+    inherit (pkgs) udev;
   };
 
   pynmea2 = callPackage ../development/python-modules/pynmea2 {};

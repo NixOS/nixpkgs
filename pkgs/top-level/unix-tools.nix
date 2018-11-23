@@ -99,7 +99,9 @@ let
       darwin = pkgs.darwin.shell_cmds;
     };
     locale = {
-      linux = pkgs.glibc;
+      linux = if stdenv.hostPlatform.libc == "glibc" then pkgs.glibc
+              else if stdenv.hostPlatform.libc == "musl" then pkgs.musl-locales
+	      else pkgs.netbsd.locale;
       darwin = pkgs.netbsd.locale;
     };
     logger = {
