@@ -222,6 +222,17 @@
      reset to the default value (<literal>false</literal>).
     </para>
    </listitem>
+   <listitem>
+    <para>
+     Network interface indiscriminate NixOS firewall options
+     (<literal>networking.firewall.allow*</literal>) are now preserved when also
+     setting interface specific rules such as <literal>networking.firewall.interfaces.en0.allow*</literal>.
+     These rules continue to use the pseudo device "default"
+     (<literal>networking.firewall.interfaces.default.*</literal>), and assigning
+     to this pseudo device will override the (<literal>networking.firewall.allow*</literal>)
+     options.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
