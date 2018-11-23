@@ -2882,7 +2882,7 @@ with pkgs;
 
   gitlab-shell = callPackage ../applications/version-management/gitlab/gitlab-shell { };
 
-  gitlab-workhorse = callPackage ../applications/version-management/gitlab-workhorse { };
+  gitlab-workhorse = callPackage ../applications/version-management/gitlab/gitlab-workhorse { };
 
   gitaly = callPackage ../applications/version-management/gitlab/gitaly { };
 
