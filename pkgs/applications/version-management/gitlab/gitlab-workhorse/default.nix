@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ git go ];
 
-  patches = [ ./remove-hardcoded-paths.patch ./deterministic-build.patch ];
+  patches = [ ./remove-hardcoded-paths.patch ];
 
   makeFlags = [ "PREFIX=$(out)" "VERSION=${version}" ];
 
