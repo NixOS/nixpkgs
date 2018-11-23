@@ -5357,6 +5357,8 @@ with pkgs;
 
   signal-desktop = callPackage ../applications/networking/instant-messengers/signal-desktop { };
 
+  slither-analyzer = with python3Packages; toPythonApplication slither-analyzer;
+
   signify = callPackage ../tools/security/signify { };
 
   # aka., pgp-tools
