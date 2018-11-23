@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   buildInputs = lib.optional doCheck cpptest;
   configureFlags = lib.optional (!doCheck) "--disable-tests";
 
-  doCheck = stdenv.targetPlatform.system == stdenv.hostPlatform.system;
+  doCheck = stdenv.buildPlatform.system == stdenv.hostPlatform.system;
 
   meta = with stdenv.lib; {
     homepage = https://uriparser.github.io/;
