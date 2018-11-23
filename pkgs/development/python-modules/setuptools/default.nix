@@ -3,10 +3,20 @@
 , python
 , wrapPython
 , unzip
+, lib
 }:
 
+let isCross = stdenv.buildPlatform != stdenv.hostPlatform;
+
+    crossSetup = lib.optionalString isCross ''
+      export PYTHONXCPREFIX=${python}
+      export CROSS_COMPILE=${stdenv.cc.targetPrefix}
+      export CC=${stdenv.cc}
+      export LDSHARED="${stdenv.cc} -shared"
+    '';
+
 # Should use buildPythonPackage here somehow
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "setuptools";
   version = "40.2.0";
   name = "${python.libPrefix}-${pname}-${version}";
@@ -24,7 +34,8 @@ stdenv.mkDerivation rec {
       dst=$out/${python.sitePackages}
       mkdir -p $dst
       export PYTHONPATH="$dst:$PYTHONPATH"
-      ${python.interpreter} setup.py install --prefix=$out
+      ${crossSetup}
+      ${python.nativePython.interpreter} setup.py install --prefix=$out
       wrapPythonPrograms
   '';
 
