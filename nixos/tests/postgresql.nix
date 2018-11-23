@@ -53,6 +53,7 @@ let
       # Check backup service
       $machine->succeed("systemctl start postgresqlBackup-postgres.service");
       $machine->succeed("zcat /var/backup/postgresql/postgres.sql.gz | grep '<test>ok</test>'");
+      $machine->succeed("stat -c '%a' /var/backup/postgresql/postgres.sql.gz | grep 600");
       $machine->shutdown;
     '';
 
