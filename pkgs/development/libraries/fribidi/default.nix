@@ -2,6 +2,7 @@
 , fetchurl
 
 , meson
+, mesonBuilder
 , ninja
 , pkgconfig
 , fixDarwinDylibNames
@@ -26,7 +27,7 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ meson ninja pkgconfig ];
-  buildInputs = stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
+  buildInputs = [ mesonBuilder ] ++ stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
   checkInptus = [ python3 ];
 
