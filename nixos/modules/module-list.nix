@@ -116,7 +116,7 @@
   ./programs/shadow.nix
   ./programs/shell.nix
   ./programs/spacefm.nix
-  ./programs/singularity.nix
+  ./programs/singularity/default.nix
   ./programs/ssh.nix
   ./programs/ssmtp.nix
   ./programs/sysdig.nix
