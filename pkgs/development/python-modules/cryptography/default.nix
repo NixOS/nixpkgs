@@ -18,6 +18,7 @@
 , iso8601
 , pytz
 , hypothesis
+, python
 }:
 
 buildPythonPackage rec {
@@ -42,6 +43,10 @@ buildPythonPackage rec {
   ] ++ stdenv.lib.optional (pythonOlder "3.4") enum34
   ++ stdenv.lib.optional (pythonOlder "3.3") ipaddress
   ++ stdenv.lib.optional (!isPyPy) cffi;
+
+  propagatedNativeBuildInputs = stdenv.lib.optional (!isPyPy) python.nativePython.pkgs.cffi;
+
+  catchConflicts = stdenv.buildPlatform == stdenv.hostPlatform;
 
   checkInputs = [
     pytest

@@ -71,5 +71,7 @@ buildPythonPackage rec {
   buildInputs = [ openssl ];
   propagatedBuildInputs = [ cryptography pyasn1 idna ];
 
+  catchConflicts = stdenv.buildPlatform == stdenv.hostPlatform;
+
   checkInputs = [ pytest pretend flaky glibcLocales ];
 }
