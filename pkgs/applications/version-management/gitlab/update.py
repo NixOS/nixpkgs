@@ -193,7 +193,13 @@ def update_gitaly():
             f.write(r.get_file(f"ruby/{fn}", f"v{gitaly_server_version}"))
 
     subprocess.check_output(['bundix'], cwd=rubyenv_dir)
-    _call_update_source_version('gitaly', gitaly_server_version)
+    # currently broken, as `gitaly.meta.position` returns
+    # pkgs/development/go-modules/generic/default.nix
+    # so update-source-version doesn't know where to update hashes
+    # _call_update_source_version('gitaly', gitaly_server_version)
+    gitaly_hash = r.get_git_hash(f"v{gitaly_server_version}")
+    click.echo(f"Please update gitaly/default.nix to version {gitaly_server_version} and hash {gitaly_hash}")
+
 
 
 @cli.command('update-gitlab-shell')
