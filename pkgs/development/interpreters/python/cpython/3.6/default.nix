@@ -210,6 +210,7 @@ in stdenv.mkDerivation {
     isPy36 = true;
     is_py3k = true;  # deprecated
     interpreter = "${self}/bin/${executable}";
+    nativePython = buildPackages.python36;
   };
 
   enableParallelBuilding = true;

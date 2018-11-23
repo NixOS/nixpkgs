@@ -14,6 +14,7 @@
 , self
 , CF, configd
 , python-setup-hook
+, buildPackages
 # For the Python package set
 , packageOverrides ? (self: super: {})
 }:
@@ -189,6 +190,7 @@ in stdenv.mkDerivation {
     isPy34 = true;
     is_py3k = true;  # deprecated
     interpreter = "${self}/bin/${executable}";
+    nativePython = buildPackages.python34;
   };
 
   enableParallelBuilding = true;

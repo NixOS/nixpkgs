@@ -87,7 +87,11 @@ toPythonModule (python.stdenv.mkDerivation (builtins.removeAttrs attrs [
   doInstallCheck = doCheck;
   installCheckInputs = checkInputs;
 
-  postFixup = lib.optionalString (!dontWrapPythonPrograms) ''
+  postFixup = lib.optionalString (python.stdenv.buildPlatform != python.stdenv.hostPlatform) ''
+    for executable in $out/bin/*; do
+      substituteInPlace $executable --replace ${python.nativePython.interpreter} ${python.interpreter}
+    done
+  '' + lib.optionalString (!dontWrapPythonPrograms) ''
     wrapPythonPrograms
   '' + lib.optionalString removeBinBytecode ''
     if [ -d "$out/bin" ]; then
@@ -98,7 +102,7 @@ toPythonModule (python.stdenv.mkDerivation (builtins.removeAttrs attrs [
     # Check if we have two packages with the same name in the closure and fail.
     # If this happens, something went wrong with the dependencies specs.
     # Intentionally kept in a subdirectory, see catch_conflicts/README.md.
-    ${python.interpreter} ${./catch_conflicts}/catch_conflicts.py
+    ${python.nativePython.interpreter} ${./catch_conflicts}/catch_conflicts.py
   '' + attrs.postFixup or '''';
 
   meta = {

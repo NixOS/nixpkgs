@@ -260,6 +260,7 @@ in stdenv.mkDerivation ({
       isPy2 = true;
       isPy27 = true;
       interpreter = "${self}/bin/${executable}";
+      nativePython = buildPackages.python27;
     };
 
     enableParallelBuilding = true;

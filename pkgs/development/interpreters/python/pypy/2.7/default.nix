@@ -3,6 +3,7 @@
 , sqlite, openssl, ncurses, python, expat, tcl, tk, tix, xlibsWrapper, libX11
 , makeWrapper, callPackage, self, gdbm, db
 , python-setup-hook
+, buildPackages
 # For the Python package set
 , packageOverrides ? (self: super: {})
 }:
@@ -128,6 +129,7 @@ in stdenv.mkDerivation rec {
     isPypy = true;
     buildEnv = callPackage ../../wrapper.nix { python = self; inherit (pythonPackages) requiredPythonModules; };
     interpreter = "${self}/bin/${executable}";
+    nativePython = buildPackages.pypy27;
     withPackages = import ../../with-packages.nix { inherit buildEnv pythonPackages;};
     pkgs = pythonPackages;
   };

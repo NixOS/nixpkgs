@@ -16,23 +16,70 @@
 , ... } @ attrs:
 
 let
+  isCross = python.stdenv.buildPlatform != python.stdenv.hostPlatform;
+
   # use setuptools shim (so that setuptools is imported before distutils)
   # pip does the same thing: https://github.com/pypa/pip/pull/3265
   setuppy = ./run_setup.py;
 
-in attrs // {
+  crossBuild = lib.optionalString isCross ''
+    echo Cross building python extension
+    export CROSS_COMPILE=${python.stdenv.cc.targetPrefix}
+    export PYTHONXCPREFIX=${python}
+    export CC="${python.stdenv.cc}/bin/${python.stdenv.cc.targetPrefix}cc"
+    export LDSHARED="${python.stdenv.cc}/bin/${python.stdenv.cc.targetPrefix}cc -shared"
+  '';
+
+
+  abiName = abi: builtins.replaceStrings ["musl"] ["gnu"] abi;
+  cpuName = cpu: if cpu.family == "arm"
+                 then (if cpu.bits == 64 then "arm64" else "arm")
+		 else cpu.name;
+
+  pySuffix = platform: "${cpuName platform.parsed.cpu}-${platform.parsed.kernel.name}-${abiName platform.parsed.abi.name}";
+
+  crossFixup = lib.optionalString isCross ''
+    echo "Fixing python cross-compiled modules"
+    build_so_suffix=${pySuffix python.stdenv.buildPlatform}
+    host_so_suffix=${pySuffix python.stdenv.hostPlatform}
+
+    for library in $( find "$out/lib" -name \*.so ); do
+      echo "Fixing up $library"
+      newName=$(echo $library | sed s/$build_so_suffix/$host_so_suffix/)
+      basename=$(basename $library)
+      newBaseName=$(basename $newName)
+
+      if [ "$library" != "$newName" ]; then
+        mv $library $newName
+
+        for record in $( find "$out/lib" -name RECORD ); do
+          substituteInPlace $record --replace $basename $newBaseName
+        done
+      fi
+    done
+
+    ${attrs.preFixup or ""}
+  '';
+
+  setupPython = python.nativePython.interpreter;
+
+  crossIncludeDir = "${python}/include/python${python.majorVersion}";
+  setupPyBuildFlagsComplete = lib.optional isCross "-I${crossIncludeDir}" ++setupPyBuildFlags;
+
+  crossAttrs = if isCross then { preFixup =  crossFixup; catchConflicts = false; } else  {};
+in attrs // crossAttrs // {
   # we copy nix_run_setup over so it's executed relative to the root of the source
   # many project make that assumption
   buildPhase = attrs.buildPhase or ''
-    runHook preBuild
+    ${crossBuild}runHook preBuild
     cp ${setuppy} nix_run_setup
-    ${python.interpreter} nix_run_setup ${lib.optionalString (setupPyBuildFlags != []) ("build_ext " + (lib.concatStringsSep " " setupPyBuildFlags))} bdist_wheel
+    ${setupPython} nix_run_setup ${lib.optionalString (setupPyBuildFlagsComplete != []) ("build_ext " + (lib.concatStringsSep " " setupPyBuildFlagsComplete))} bdist_wheel
     runHook postBuild
   '';
 
   installCheckPhase = attrs.checkPhase or ''
     runHook preCheck
-    ${python.interpreter} nix_run_setup test
+    ${python.nativePython.interpreter} nix_run_setup test
     runHook postCheck
   '';
 
@@ -49,7 +96,7 @@ in attrs // {
       export PATH="$tmp_path/bin:$PATH"
       export PYTHONPATH="$tmp_path/${python.sitePackages}:$PYTHONPATH"
       mkdir -p $tmp_path/${python.sitePackages}
-      ${bootstrapped-pip}/bin/pip install -e . --prefix $tmp_path >&2
+      ${python.nativePython.pkgs.bootstrapped-pip}/bin/pip install -e . --prefix $tmp_path >&2
     fi
     ${postShellHook}
   '';

@@ -10,7 +10,7 @@
 , ... } @ attrs:
 
 attrs // {
-  buildInputs = buildInputs ++ [ bootstrapped-pip ];
+  buildInputs = buildInputs ++ [ python.nativePython.pkgs.bootstrapped-pip ];
 
   configurePhase = attrs.configurePhase or ''
     runHook preConfigure
@@ -24,7 +24,7 @@ attrs // {
     export PYTHONPATH="$out/${python.sitePackages}:$PYTHONPATH"
 
     pushd dist
-    ${bootstrapped-pip}/bin/pip install *.whl --no-index --prefix=$out --no-cache ${toString installFlags} --build tmpbuild
+    ${python.nativePython.pkgs.bootstrapped-pip}/bin/pip install *.whl --no-index --prefix=$out --no-cache ${toString installFlags} --build tmpbuild
     popd
 
     runHook postInstall

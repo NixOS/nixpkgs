@@ -14,6 +14,7 @@
 , self
 , CF, configd
 , python-setup-hook
+, buildPackages
 # For the Python package set
 , packageOverrides ? (self: super: {})
 }:
@@ -173,6 +174,7 @@ in stdenv.mkDerivation {
     isPy37 = true;
     is_py3k = true;  # deprecated
     interpreter = "${self}/bin/${executable}";
+    nativePython = buildPackages.python37;
   };
 
   enableParallelBuilding = true;
