@@ -1319,6 +1319,11 @@
     github = "ellis";
     name = "Ellis Whitehead";
   };
+  elseym = {
+    email = "elseym@me.com";
+    github = "elseym";
+    name = "Simon Waibl";
+  };
   elvishjerricco = {
     email = "elvishjerricco@gmail.com";
     github = "ElvishJerricco";
