@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
 
   version = "7.0.0";
 
-  srcs = fetchFromGitLab {
+  src = fetchFromGitLab {
     owner = "gitlab-org";
     repo = "gitlab-workhorse";
     rev = "v${version}";
