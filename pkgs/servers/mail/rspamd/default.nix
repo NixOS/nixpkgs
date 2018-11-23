@@ -14,13 +14,13 @@ in
 
 stdenv.mkDerivation rec {
   name = "rspamd-${version}";
-  version = "1.8.1";
+  version = "1.8.2";
 
   src = fetchFromGitHub {
-    owner = "vstakhov";
+    owner = "rspamd";
     repo = "rspamd";
     rev = version;
-    sha256 = "1cgnychv8yz7a6mjg3b12nzs4gl0xqg9agl7m6faihnh7gqx4xld";
+    sha256 = "0al4d8h3ssxcx191d4crywz7dsp61lklc9m5z36a90a8w97v76bv";
   };
 
   nativeBuildInputs = [ cmake pkgconfig perl ];
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional withGd "-DENABLE_GD=ON";
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/vstakhov/rspamd;
+    homepage = https://rspamd.com;
     license = licenses.asl20;
     description = "Advanced spam filtering system";
     maintainers = with maintainers; [ avnik fpletz ];
