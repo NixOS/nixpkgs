@@ -7,14 +7,20 @@
 , ruby, php-embed, mysql
 }:
 
-let pythonPlugin = pkg : lib.nameValuePair "python${if pkg ? isPy2 then "2" else "3"}" {
-                           interpreter = pkg.interpreter;
+let crossCompileEnv = lib.optionalAttrs (stdenv.hostPlatform != stdenv.buildPlatform)
+                        { _PYTHON_HOST_PLATFORM = stdenv.hostPlatform.config;
+                          HOST_PYTHON = "${python3}";
+                          HOST_PYTHON_CFLAGS = "-I${python3}/include/python3.6";
+                          HOST_PYTHON_LDFLAGS = "-L${python3}/lib -Wl,-rpath,${python3}/lib"; };
+
+    pythonPlugin = pkg : lib.nameValuePair "python${if pkg ? isPy2 then "2" else "3"}" {
+                           interpreter = pkg.nativePython.interpreter;
                            path = "plugins/python";
                            inputs = [ pkg ncurses ];
                            install = ''
                              install -Dm644 uwsgidecorators.py $out/${pkg.sitePackages}/uwsgidecorators.py
-                             ${pkg.executable} -m compileall $out/${pkg.sitePackages}/
-                             ${pkg.executable} -O -m compileall $out/${pkg.sitePackages}/
+                             ${pkg.nativePython.executable} -m compileall $out/${pkg.sitePackages}/
+                             ${pkg.nativePython.executable} -O -m compileall $out/${pkg.sitePackages}/
                            '';
                          };
 
@@ -47,7 +53,7 @@ let pythonPlugin = pkg : lib.nameValuePair "python${if pkg ? isPy2 then "2" else
     needed = builtins.map getPlugin plugins;
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (rec {
   name = "uwsgi-${version}";
   version = "2.0.17.1";
 
@@ -69,6 +75,9 @@ stdenv.mkDerivation rec {
                  ++ lib.optional withSystemd "systemd_logger"
                  );
 
+  patches = stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform)
+    [ ./cross-compile.patch ];
+
   passthru = {
     inherit python2 python3;
   };
@@ -81,6 +90,7 @@ stdenv.mkDerivation rec {
   buildPhase = ''
     mkdir -p $pluginDir
     python3 uwsgiconfig.py --build nixos
+    set -e
     ${lib.concatMapStringsSep ";" (x: "${x.preBuild or ""}\n ${x.interpreter or "python3"} uwsgiconfig.py --plugin ${x.path} nixos ${x.name}") needed}
   '';
 
@@ -89,7 +99,9 @@ stdenv.mkDerivation rec {
     ${lib.concatMapStringsSep "\n" (x: x.install or "") needed}
   '';
 
-  NIX_CFLAGS_LINK = [ "-lsystemd" ] ++ lib.concatMap (x: x.NIX_CFLAGS_LINK or []) needed;
+  NIX_CFLAGS_LINK =
+   lib.optional withSystemd [ "-lsystemd" ] ++
+   lib.concatMap (x: x.NIX_CFLAGS_LINK or []) needed;
 
   meta = with stdenv.lib; {
     homepage = http://uwsgi-docs.readthedocs.org/en/latest/;
@@ -98,4 +110,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ abbradar schneefux ];
     platforms = platforms.linux;
   };
-}
+} // crossCompileEnv)

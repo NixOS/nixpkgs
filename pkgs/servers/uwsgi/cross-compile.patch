@@ -1,0 +1,42 @@
+diff -ru ../uwsgi-2.0.17.1.orig/plugins/python/uwsgiplugin.py ./plugins/python/uwsgiplugin.py
+--- ../uwsgi-2.0.17.1.orig/plugins/python/uwsgiplugin.py        2018-11-14 22:23:36.324008771 -0800
++++ ./plugins/python/uwsgiplugin.py     2018-11-15 08:18:35.583534519 -0800
+@@ -13,7 +13,10 @@
+ NAME='python'
+ GCC_LIST = ['python_plugin', 'pyutils', 'pyloader', 'wsgi_handlers', 'wsgi_headers', 'wsgi_subhandler', 'web3_subhandler', 'pump_subhandler', 'gil', 'uwsgi_pymodule', 'profiler', 'symimporter', 'tracebacker', 'raw']
+ 
+-CFLAGS = ['-I' + sysconfig.get_python_inc(), '-I' + sysconfig.get_python_inc(plat_specific=True) ] 
++if 'HOST_PYTHON' in os.environ:
++    CFLAGS = [ os.environ['HOST_PYTHON_CFLAGS'] ]
++else:
++    CFLAGS = ['-I' + sysconfig.get_python_inc(), '-I' + sysconfig.get_python_inc(plat_specific=True) ] 
+ LDFLAGS = []
+ 
+ if not 'UWSGI_PYTHON_NOLIB' in os.environ:
+@@ -50,15 +53,18 @@
+         if '-lutil' in LIBS:
+             LIBS.append('-lutil')
+     else:
+-        try:
+-            libdir = sysconfig.get_config_var('LIBDIR')
+-        except:
+-            libdir = "%s/lib" % sysconfig.PREFIX
++        if 'HOST_PYTHON_LDFLAGS' in os.environ:
++            LDFLAGS.append(os.environ['HOST_PYTHON_LDFLAGS'])
++        else:
++            try:
++                libdir = sysconfig.get_config_var('LIBDIR')
++            except:
++                libdir = "%s/lib" % sysconfig.PREFIX
+ 
+-        LDFLAGS.append("-L%s" % libdir)
+-        LDFLAGS.append("-Wl,-rpath,%s" % libdir)
++            LDFLAGS.append("-L%s" % libdir)
++            LDFLAGS.append("-Wl,-rpath,%s" % libdir)
+ 
+-        os.environ['LD_RUN_PATH'] = "%s" % libdir
++            os.environ['LD_RUN_PATH'] = "%s" % libdir
+ 
+         LIBS.append('-lpython%s' % get_python_version())
+ else:
+
