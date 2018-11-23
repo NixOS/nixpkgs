@@ -5,13 +5,13 @@ with lib;
 
 stdenv.mkDerivation rec {
   name = "runc-${version}";
-  version = "1.0.0-rc5";
+  version = "1.0.0-rc6";
 
   src = fetchFromGitHub {
     owner = "opencontainers";
     repo = "runc";
     rev = "v${version}";
-    sha256 = "1ikqw39jn8dzb4snc4pcg3z85jb67ivskdhx028k17ss29bf4062";
+    sha256 = "1jwacb8xnmx5fr86gximhbl9dlbdwj3rpf27hav9q1si86w5pb1j";
   };
 
   outputs = [ "out" "man" ];
