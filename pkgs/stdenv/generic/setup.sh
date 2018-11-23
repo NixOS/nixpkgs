@@ -810,12 +810,12 @@ _defaultUnpack() {
         case "$fn" in
             *.tar.xz | *.tar.lzma | *.txz)
                 # Don't rely on tar knowing about .xz.
-                xz -d < "$fn" | tar xf -
+                xz -d < "$fn" | tar --delay-directory-restore -xf -
                 ;;
             *.tar | *.tar.* | *.tgz | *.tbz2 | *.tbz)
                 # GNU tar can automatically select the decompression method
                 # (info "(tar) gzip").
-                tar xf "$fn"
+                tar --delay-directory-restore -xf "$fn"
                 ;;
             *)
                 return 1
@@ -895,6 +895,11 @@ unpackPhase() {
     fi
 
     echo "source root is $sourceRoot"
+
+    # Make all directories enterable. This is required for archives that contain
+    # directories that do not have their execute bit set. This seems to occur
+    # most often when a tar is created in Windows.
+    find "$sourceRoot" -type d -exec chmod u+x {} \;
 
     # By default, add write permission to the sources.  This is often
     # necessary when sources have been copied from other store
