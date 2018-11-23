@@ -6,7 +6,7 @@ bundlerApp {
   exes = [ "wpscan" ];
 
   meta = with lib; {
-    description = "black box WordPress vulnerability scanner";
+    description = "Black box WordPress vulnerability scanner";
     homepage    = https://wpscan.org/;
     license     = licenses.unfreeRedistributable;
     maintainers = [ maintainers.nyanloutre ];
