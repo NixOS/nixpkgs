@@ -1,5 +1,5 @@
 { lib, fetchPypi, buildPythonPackage
-, six, systemd, pytest, mock, hypothesis, docutils
+, six, udev, pytest, mock, hypothesis, docutils
 }:
 
 buildPythonPackage rec {
@@ -13,11 +13,11 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace src/pyudev/_ctypeslib/utils.py \
-      --replace "find_library(name)" "'${systemd.lib}/lib/libudev.so'"
+      --replace "find_library(name)" "'${lib.getLib udev}/lib/libudev.so'"
     '';
 
-  buildInputs = [ pytest mock hypothesis docutils ];
-  propagatedBuildInputs = [ systemd six ];
+  buildInputs = lib.optionals doCheck [ pytest mock hypothesis docutils ];
+  propagatedBuildInputs = [ udev six ];
 
   checkPhase = ''
     py.test
