@@ -716,6 +716,8 @@ in {
 
   slicerator = callPackage ../development/python-modules/slicerator { };
 
+  slither-analyzer = callPackage ../development/python-modules/slither-analyzer { };
+
   snapcast = callPackage ../development/python-modules/snapcast { };
 
   spglib = callPackage ../development/python-modules/spglib { };
