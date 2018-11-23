@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, rustPlatform }:
+{ stdenv, fetchFromGitHub, rustPlatform, darwin }:
 
 rustPlatform.buildRustPackage rec {
   name = "rustfmt-${version}";
@@ -12,6 +12,9 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoSha256 = "1rs6jjm75ixxhrf8b3zn991xa5kfayxlf0b70zdx6wd4r6by7w2y";
+
+  buildInputs = stdenv.lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Security;
+
 
   # As of 1.0.0 and rustc 1.30 rustfmt requires a nightly compiler
   RUSTC_BOOTSTRAP = 1;
