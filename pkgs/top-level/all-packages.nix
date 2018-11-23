@@ -13360,7 +13360,9 @@ with pkgs;
 
   hiawatha = callPackage ../servers/http/hiawatha {};
 
-  home-assistant = callPackage ../servers/home-assistant { };
+  home-assistant = callPackage ../servers/home-assistant {
+    python = python36;
+  };
 
   hydron = callPackage ../servers/hydron { };
 
