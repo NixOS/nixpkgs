@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "prettytable";
-  version = "0.7.1";
+  version = "0.7.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "599bc5b4b9602e28294cf795733c889c26dd934aa7e0ee9cff9b905d4fbad188";
+    sha256 = "1ndckiniasacfqcdafzs04plskrcigk7vxprr2y34jmpkpf60m1d";
   };
 
   buildInputs = [ glibcLocales ];
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   meta = with stdenv.lib; {
     description = "Simple Python library for easily displaying tabular data in a visually appealing ASCII table format";
     homepage = http://code.google.com/p/prettytable/;
-    license = licenses.bsd0;
+    license = licenses.bsd3;
   };
 
 }
