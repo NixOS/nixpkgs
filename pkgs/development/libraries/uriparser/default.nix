@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig doxygen graphviz ];
   buildInputs = lib.optional doCheck cpptest;
-  configureFlags = lib.optional (!doCheck) "--disable-tests";
+  configureFlags = lib.optional (!doCheck) "--disable-test";
 
   doCheck = stdenv.buildPlatform.system == stdenv.hostPlatform.system;
 
