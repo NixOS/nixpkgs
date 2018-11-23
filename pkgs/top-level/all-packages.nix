@@ -13517,6 +13517,8 @@ with pkgs;
 
   pshs = callPackage ../servers/http/pshs { };
 
+  system-sendmail = lowPrio (callPackage ../servers/mail/system-sendmail { });
+
   # PulseAudio daemons
 
   pulseaudio = callPackage ../servers/pulseaudio {
