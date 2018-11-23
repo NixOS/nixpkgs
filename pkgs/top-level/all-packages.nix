@@ -20980,6 +20980,8 @@ with pkgs;
 
   hsetroot = callPackage ../tools/X11/hsetroot { };
 
+  imwheel = callPackage ../tools/X11/imwheel { };
+
   kakasi = callPackage ../tools/text/kakasi { };
 
   lumina = libsForQt5.callPackage ../desktops/lumina { };
