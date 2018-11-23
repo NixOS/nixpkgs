@@ -92,9 +92,11 @@ let
           ${modulesIncludeString}
       )
 
-      # Logging (logs end up in systemd journal)
-      accesslog.use-syslog = "enable"
-      server.errorlog-use-syslog = "enable"
+      ${lib.optionalString (!cfg.enableStdoutLog) ''
+         # Logging (logs end up in systemd journal)
+         accesslog.use-syslog = "enable"
+         server.errorlog-use-syslog = "enable"
+        ''}
 
       ${lib.optionalString cfg.enableUpstreamMimeTypes ''
       include "${pkgs.lighttpd}/share/lighttpd/doc/config/conf.d/mime.conf"
@@ -130,6 +132,14 @@ in
         description = ''
           Enable the lighttpd web server.
         '';
+      };
+
+      enableStdoutLog = mkOption {
+         default = config.runit.enable;
+         type = types.bool;
+         description = ''
+           Whether to enable logging via stdout / stderr (instead of syslog)
+         '';
       };
 
       port = mkOption {
@@ -243,6 +253,14 @@ in
       serviceConfig.ExecStart = "${pkgs.lighttpd}/sbin/lighttpd -D -f ${configFile}";
       # SIGINT => graceful shutdown
       serviceConfig.KillSignal = "SIGINT";
+    };
+
+    runit.services.lighttpd = {
+      requires = [ "network" ];
+      logging = { enable = true; redirectStderr = true; };
+      script = ''
+        ${pkgs.lighttpd}/sbin/lighttpd -D -f ${configFile}
+      '';
     };
 
     users.users.lighttpd = {

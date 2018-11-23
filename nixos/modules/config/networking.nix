@@ -15,7 +15,7 @@ let
 
   resolvconfOptions = cfg.resolvconfOptions
     ++ optional cfg.dnsSingleRequest "single-request"
-    ++ optional cfg.dnsExtensionMechanism "edns0";
+    ++ optional ((!pkgs.stdenv.targetPlatform.isMusl) && cfg.dnsExtensionMechanism) "edns0";
 in
 
 {
@@ -79,6 +79,8 @@ in
         that option set, <code>glibc</code> supports use of the extension mechanisms for
         DNS (EDNS) specified in RFC 2671. The most popular user of that feature is DNSSEC,
         which does not work without it.
+
+        Glibc only
       '';
     };
 

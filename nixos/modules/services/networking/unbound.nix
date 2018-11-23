@@ -22,12 +22,30 @@ let
       forward-zone:
         name: .
     '' +
-    concatMapStringsSep "\n" (x: "    forward-addr: ${x}") cfg.forwardAddresses;
+    optionalString cfg.forwardTlsUpstream
+    "  forward-tls-upstream: yes\n" +
+    concatMapStringsSep "\n" (x: "  forward-addr: ${x}") cfg.forwardAddresses;
 
   rootTrustAnchorFile = "${stateDir}/root.key";
 
   trustAnchor = optionalString cfg.enableRootTrustAnchor
     "auto-trust-anchor-file: ${rootTrustAnchorFile}";
+  tlsCertBundle = optionalString cfg.forwardTlsUpstream
+    "tls-cert-bundle: ${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
+
+  remoteControlConfig = with cfg.remoteControl; ''
+    remote-control:
+      control-enable: yes
+      control-interface: ${interface}
+      control-port: ${builtins.toString port}
+      server-key-file: "${stateDir}/unbound_server.key"
+      server-cert-file: "${stateDir}/unbound_server.pem"
+      control-key-file: "${stateDir}/unbound_control.key"
+      control-cert-file: "${stateDir}/unbound_control.pem"
+  '';
+
+  rootHints = optionalString (cfg.rootHints != null)
+    "root-hints: \"${stateDir}/root.hints\"";
 
   confFile = pkgs.writeText "unbound.conf" ''
     server:
@@ -38,6 +56,9 @@ let
       ${interfaces}
       ${access}
       ${trustAnchor}
+      ${tlsCertBundle}
+      ${rootHints}
+    ${optionalString cfg.remoteControl.enable remoteControlConfig}
     ${cfg.extraConfig}
     ${forward}
   '';
@@ -45,9 +66,16 @@ let
   preStartScript =  ''
     mkdir -m 0755 -p ${stateDir}/dev/
     cp ${confFile} ${stateDir}/unbound.conf
+    ${optionalString (cfg.rootHints != null) ''
+      cp ${cfg.rootHints} ${stateDir}/root.hints
+    ''}
     ${optionalString cfg.enableRootTrustAnchor ''
       ${pkgs.unbound}/bin/unbound-anchor -a ${rootTrustAnchorFile} || echo "Root anchor updated!"
       chown unbound ${stateDir} ${rootTrustAnchorFile}
+    ''}
+    ${optionalString cfg.remoteControl.enable ''
+      ${pkgs.unbound}/bin/unbound-control-setup -d ${stateDir} || echo "Unbound remote control certificates generated!"
+      chown unbound ${stateDir}/unbound_server.key ${stateDir}/unbound_server.pem ${stateDir}/unbound_control.key ${stateDir}/unbound_control.pem
     ''}
     touch ${stateDir}/dev/random
     ${pkgs.utillinux}/bin/mount --bind -n /dev/urandom ${stateDir}/dev/random
@@ -82,10 +110,41 @@ in
         description = "What servers to forward queries to.";
       };
 
+      forwardTlsUpstream = mkOption {
+        default = false;
+        type = types.bool;
+        description = "Whether to forward NSSEC upstream";
+      };
+
       enableRootTrustAnchor = mkOption {
         default = true;
         type = types.bool;
         description = "Use and update root trust anchor for DNSSEC validation.";
+      };
+
+      rootHints = mkOption {
+        type = types.nullOr types.path;
+        description = "Root hints file to replace default";
+      };
+
+      remoteControl = {
+        enable = mkOption {
+          type = types.bool;
+          default = false;
+          description = "Whether to enable the remote control feature";
+        };
+
+        interface = mkOption {
+          type = types.string;
+          default = "127.0.0.1";
+          description = "Interface to listen on for remote control requests. You probably do not want this exposed to the internet";
+        };
+
+        port = mkOption {
+          type = types.int;
+          default = 8953;
+          description = "Port to listen on for remote control";
+        };
       };
 
       extraConfig = mkOption {
@@ -121,6 +180,8 @@ in
 
       preStart = preStartScript;
 
+      path = [ pkgs.openssl_1_1 ];
+
       serviceConfig = {
         ExecStart = "${pkgs.unbound}/bin/unbound -d -c ${stateDir}/unbound.conf";
         ExecStopPost="${pkgs.utillinux}/bin/umount ${stateDir}/dev/random";
@@ -135,10 +196,13 @@ in
 
     runit.services.unbound = {
       logging.enable = true;
+      logging.redirectStderr = true;
+      requires = [ "network" ];
+      path = [ pkgs.openssl_1_1 ];
       script = ''
         ${preStartScript}
 
-        exec ${pkgs.unbound}/bin/unbound -d -c ${stateDir}/unbound.conf
+        exec ${pkgs.unbound}/bin/unbound -dd -c ${stateDir}/unbound.conf
       '';
 
       stop = ''

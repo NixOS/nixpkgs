@@ -83,7 +83,10 @@ let
 
       mkdir $out/bin
       export localeArchive="${config.i18n.glibcLocales}/lib/locale/locale-archive"
-      substituteAll ${./switch-to-configuration.pl} $out/bin/switch-to-configuration
+      ${lib.optionalString config.systemd.enable
+          "substituteAll ${./switch-to-configuration.pl} $out/bin/switch-to-configuration"}
+      ${lib.optionalString config.runit.enable
+          "substituteAll ${./switch-to-configuration-runit.pl} $out/bin/switch-to-configuration"}
       chmod +x $out/bin/switch-to-configuration
 
       echo -n "${toString config.system.extraDependencies}" > $out/extra-dependencies
@@ -121,7 +124,7 @@ let
 
     # Needed by switch-to-configuration.
 
-    perl = "${pkgs.perl}/bin/perl " + (concatMapStringsSep " " (lib: "-I${lib}/${pkgs.perl.libPrefix}") (with pkgs.perlPackages; [ FileSlurp NetDBus XMLParser XMLTwig ]));
+    perl = "${pkgs.perl}/bin/perl " + (concatMapStringsSep " " (lib: "-I${lib}/${pkgs.perl.libPrefix}") (with pkgs.perlPackages; [ FileSlurp NetDBus XMLParser XMLTwig HashDiff HashMerge CloneChoose ]));
   } // config.system.init.extraBaseSystemAttrs);
 
   # Handle assertions and warnings

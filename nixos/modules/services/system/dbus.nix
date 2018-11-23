@@ -46,7 +46,7 @@ in
       };
 
       package = mkOption {
-        type = types.bool;
+        type = types.package;
         default = pkgs.dbus;
         defaultText = "pkgs.dbus";
         description = ''
@@ -120,6 +120,17 @@ in
       dbus.out
       config.system.path
     ];
+
+    runit.services.dbus = {
+      environment.LD_LIBRARY_PATH = config.system.nssModules.path;
+
+      oomScoreAdj = -900;
+
+      script = ''
+        mkdir -p /run/dbus/
+        ${getBin cfg.package}/bin/dbus-daemon --system --nofork --nopidfile
+      '';
+    };
 
     systemd.services.dbus = {
       # Don't restart dbus-daemon. Bad things tend to happen if we do.

@@ -366,10 +366,14 @@ in
         redirectStderr = true;
       };
 
+      requires = [ "network-online" ];
+
+      path = [ cfgc.package pkgs.gawk pkgs.coreutils ];
+
       script = ''
         ${prepareKeysScript}
 
-        exec ${cfgc.package}/bin/sshd -f /etc/ssh/sshd_config
+        exec ${cfgc.package}/bin/sshd -f /etc/ssh/sshd_config -D
       '';
     };
 

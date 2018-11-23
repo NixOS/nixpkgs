@@ -212,6 +212,20 @@ in
 
     environment.systemPackages = [ pkgs.avahi ];
 
+    runit.services.avahi-daemon = {
+      requires = [ "dbus" ]; #"network" "dbus" ];
+      logging.enable = true;
+      logging.redirectStderr = true;
+
+      environment.LD_LIBRARY_PATH=config.system.nssModules.path;
+
+      script = ''
+        mkdir -p /var/run/avahi-daemon
+
+        exec ${pkgs.avahi}/sbin/avahi-daemon -f "${avahiDaemonConf}"
+      '';
+    };
+
     systemd.sockets.avahi-daemon =
       { description = "Avahi mDNS/DNS-SD Stack Activation Socket";
         listenStreams = [ "/var/run/avahi-daemon/socket" ];

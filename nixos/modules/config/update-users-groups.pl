@@ -177,7 +177,7 @@ my @lines = map { join(":", $_->{name}, $_->{password}, $_->{gid}, $_->{members}
     (sort { $a->{gid} <=> $b->{gid} } values(%groupsOut));
 updateFile($gidMapFile, encode_json($gidMap));
 updateFile("/etc/group", \@lines);
-system("nscd --invalidate group");
+system("nscd --invalidate group || exit 0");
 
 # Generate a new /etc/passwd containing the declared users.
 my %usersOut;
@@ -253,7 +253,7 @@ foreach my $name (keys %usersCur) {
     (sort { $a->{uid} <=> $b->{uid} } (values %usersOut));
 updateFile($uidMapFile, encode_json($uidMap));
 updateFile("/etc/passwd", \@lines);
-system("nscd --invalidate passwd");
+system("nscd --invalidate passwd || exit 0");
 
 
 # Rewrite /etc/shadow to add new accounts or remove dead ones.

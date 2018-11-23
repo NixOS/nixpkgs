@@ -97,7 +97,6 @@ in
                  logging.enable = false;
                  script = ''
                    echo "Run getty ${name}"
-                   ls -l /dev/${name}
                    ${(runitGettyCmd " ${name} ${speeds} ${term.type}")}
                  '';
 #                 requires = [ "udev" ];

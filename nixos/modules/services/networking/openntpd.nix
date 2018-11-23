@@ -66,6 +66,19 @@ in
       home = "/var/empty";
     };
 
+    runit.services.openntpd = {
+      requires = [ "network-online" ];
+
+      logging = {
+        enable = true;
+        redirectStderr = true;
+      };
+
+      script = ''
+        ${package}/sbin/ntpd -p ${pidFile} ${cfg.extraOptions} -d
+      '';
+    };
+
     systemd.services.openntpd = {
       description = "OpenNTP Server";
       wantedBy = [ "multi-user.target" ];

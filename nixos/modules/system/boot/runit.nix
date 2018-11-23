@@ -1,7 +1,7 @@
 { config, pkgs, stdenv, lib, ... }:
 
 with lib;
-with import ./runit-lib.nix { inherit pkgs lib; runit = config.runit.package; };
+with import ./runit-lib.nix { inherit pkgs lib; runit = config.runit.package; mainConfig = config; };
 
 {
 
@@ -11,22 +11,24 @@ with import ./runit-lib.nix { inherit pkgs lib; runit = config.runit.package; };
   #   - SSH
 
   options = {
-    runit.enable = mkOption {
-      type = types.bool;
-      default = false;
-      description = "Whether to enable the runit init system.";
-    };
+    runit = {
+      enable = mkOption {
+        type = types.bool;
+        default = false;
+        description = "Whether to enable the runit init system.";
+      };
 
-    runit.package = mkOption {
-      type = types.package;
-      default = pkgs.runit;
-      description = "Runit package.";
-    };
+      package = mkOption {
+        type = types.package;
+        default = pkgs.runit;
+        description = "Runit package.";
+      };
 
-    runit.services = mkOption {
-      default = {};
-      type = types.attrsOf ( types.submodule serviceConfig );
-      description = "Definition of runit services";
+      services = mkOption {
+        default = {};
+        type = types.attrsOf ( types.submodule serviceConfig );
+        description = "Definition of runit services";
+      };
     };
   };
 
@@ -38,22 +40,27 @@ with import ./runit-lib.nix { inherit pkgs lib; runit = config.runit.package; };
 
         runit1 = pkgs.writeScript "runit1" ''
           #!${pkgs.runtimeShell} -e
-          echo "Runit1"
+          echo "Activating swap..."
+          ${pkgs.utillinux}/bin/swapon -ae
         '';
 
         runit2 = pkgs.writeScript "runit2" ''
           #!${pkgs.runtimeShell} -e
-          echo "Running runsvdir"
-          ${pkgs.coreutils}/bin/ls -l /etc/sv
-          exec runsvdir -P /etc/sv/
+          mkdir -p /run/current-services/
+
+          for i in /etc/sv/*; do
+            ln -s $(readlink -f "$i") /run/current-services/$(basename "$i")
+          done
+
+          exec runsvdir -P /run/current-services/
         '';
 
         runit3 = pkgs.writeScript "runit3" ''
           #!${pkgs.runtimeShell} -e
           echo 'Shutting down'
 
-          sv force-stop /etc/sv/*
-          sv exit /etc/sv/*
+          sv force-stop /run/current-services/*
+          sv exit /run/current-services/*
 
           echo 'Sending SIGTERM to all processes...'
           ${pkgs.procps}/bin/pkill --inverse -s0,1 -TERM
@@ -70,6 +77,10 @@ with import ./runit-lib.nix { inherit pkgs lib; runit = config.runit.package; };
           echo 'Syncing file systems'
           sync
         '';
+
+        runit-sv-sorted = with pkgs.stringsWithDeps;
+          let data = mapAttrs (name: value: fullDepEntry name value.requires) config.runit.services;
+          in pkgs.writeText "runit-sv-sorted" (textClosureMap id data (builtins.attrNames data));
     in mkIf config.runit.enable {
       assertions = concatLists (mapAttrsToList (checkService config.runit.services) config.runit.services);
 
@@ -105,15 +116,17 @@ with import ./runit-lib.nix { inherit pkgs lib; runit = config.runit.package; };
 
            libusb1 = super.libusb1.override { systemdSupport = false; systemd = null; };
 
+           uwsgi = super.uwsgi.override { withSystemd = false; };
+
          })
       ];
 
       system.init.extraSystemBuilderCmds = ''
          mkdir -p $out/var/run/runit
+         echo -n "runit ${toString config.runit.package.version}" > $out/init-interface-version
       '';
 
       boot.startInitCommands = ''
-        echo "starting runit..."
         ${pkgs.coreutils}/bin/mkdir -p $out/var/run/runit
         ${pkgs.utillinux}/bin/mount -t tmpfs -o size=16m tmpfs /var/run/runit
 
@@ -126,7 +139,33 @@ with import ./runit-lib.nix { inherit pkgs lib; runit = config.runit.package; };
           "runit/1" = { source = runit1; };
           "runit/2" = { source = runit2; };
           "runit/3" = { source = runit3; };
+          "runit-sv-sorted" = { source = runit-sv-sorted; };
         };
+
+      runit.services.network = {
+        oneshot = true;
+        script = ''
+          ${pkgs.nettools}/bin/ifconfig lo up
+        '';
+        requires = map (i: "network-link-${i.name}")
+          (attrValues config.networking.interfaces);
+      };
+      runit.services.network-online = {
+        oneshot = true;
+        script = ''
+          >&2 echo '[ init ] network is up'
+        '';
+      };
+
+      system.activationScripts.modules = {
+         text = ''
+          # Install kernel modules
+          ${concatStringsSep "\n"
+             (map (mod: "${pkgs.kmod}/bin/modprobe -d $systemConfig/kernel-modules ${mod} || echo Could not load ${mod}") config.boot.kernelModules)}
+         '';
+         deps = [ "modprobe" ];
+      };
     };
 
 }
+

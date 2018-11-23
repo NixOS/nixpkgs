@@ -46,6 +46,19 @@ let
     '';
   });
 
+  bringUpInterfaceScript = i: ''
+    echo "Configuring link..."
+  '' + optionalString (i.macAddress != null) ''
+    echo "setting MAC address to ${i.macAddress}..."
+    ip link set "${i.name}" address "${i.macAddress}"
+  '' + optionalString (i.mtu != null) ''
+    echo "setting MTU to ${toString i.mtu}..."
+    ip link set "${i.name}" mtu "${toString i.mtu}"
+  '' + ''
+    echo -n "bringing up interface... "
+    ip link set "${i.name}" up && echo "done" || (echo "failed"; exit 1)
+  '';
+
   # We must escape interfaces due to the systemd interpretation
   subsystemDevice = interface:
     "sys-subsystem-net-devices-${escapeSystemdPath interface}.device";
@@ -1026,6 +1039,12 @@ in
       ]
       ++ bridgeStp;
 
+    runit.services = listToAttrs (flip map interfaces (i:
+      nameValuePair "network-link-${i.name}"
+        { script = bringUpInterfaceScript i;
+          path = [ pkgs.iproute ];
+          oneshot = true; }));
+
     # The network-interfaces target is kept for backwards compatibility.
     # New modules must NOT use it.
     systemd.targets."network-interfaces" =
@@ -1068,19 +1087,7 @@ in
           Type = "oneshot";
           RemainAfterExit = true;
         };
-        script =
-          ''
-            echo "Configuring link..."
-          '' + optionalString (i.macAddress != null) ''
-            echo "setting MAC address to ${i.macAddress}..."
-            ip link set "${i.name}" address "${i.macAddress}"
-          '' + optionalString (i.mtu != null) ''
-            echo "setting MTU to ${toString i.mtu}..."
-            ip link set "${i.name}" mtu "${toString i.mtu}"
-          '' + ''
-            echo -n "bringing up interface... "
-            ip link set "${i.name}" up && echo "done" || (echo "failed"; exit 1)
-          '';
+        script = bringUpInterface i;
       })));
 
     services.mstpd = mkIf needsMstpd { enable = true; };

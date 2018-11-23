@@ -396,6 +396,27 @@ in
 
     systemd.packages = [ nix ];
 
+    runit.services.nix-daemon = {
+      path = [ nix pkgs.utillinux config.programs.ssh.package ]
+        ++ optionals cfg.distributedBuilds [ pkgs.gzip ]
+        ++ optionals (!isNix20) [ pkgs.openssl.bin ];
+
+      environment = cfg.envVars
+        // { CURL_CA_BUNDLE = "/etc/ssl/certs/ca-certificates.crt"; }
+        // config.networking.proxy.envVars;
+
+      nice = cfg.daemonNiceLevel;
+      ioPriority = cfg.daemonIONiceLevel;
+      limits.nofiles = 4096;
+
+      script = ''
+        nix-daemon --daemon
+      '';
+
+      logging.enable = true;
+      logging.redirectStderr = true;
+    };
+
     systemd.sockets.nix-daemon.wantedBy = [ "sockets.target" ];
 
     systemd.services.nix-daemon =

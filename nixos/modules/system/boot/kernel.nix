@@ -186,7 +186,8 @@ in
 
     boot.kernel.sysctl."kernel.printk" = mkDefault config.boot.consoleLogLevel;
 
-    boot.kernelModules = [ "loop" "atkbd" ];
+    boot.kernelModules = [ "loop" ] ++
+      optionals (pkgs.stdenv.isi686 || pkgs.stdenv.isx86_64) [ "atkbd" ];
 
     boot.initrd.availableKernelModules =
       [ # Note: most of these (especially the SATA/PATA modules)

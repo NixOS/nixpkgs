@@ -71,9 +71,13 @@ let
           # anything ever again ("couldn't resolve ..., giving up on
           # it"), so we silently lose time synchronisation. This also
           # applies to openntpd.
-          # TODO: polymorphic init systems
+
           ${lib.optionalString config.systemd.enable ''
             ${config.systemd.package}/bin/systemctl try-reload-or-restart ntpd.service openntpd.service || true
+            ''}
+          ${lib.optionalString config.runit.enable ''
+            ${config.runit.package}/bin/sv restart /etc/sv/ntpd || true
+            ${config.runit.package}/bin/sv restart /etc/sv/openntpd || true
             ''}
       fi
 
@@ -155,6 +159,19 @@ in
   ###### implementation
 
   config = mkIf enableDHCP {
+
+    runit.services.dhcpcd = {
+      requires = [ "network" ]; # Start this when network stack is started
+
+      path = [ dhcpcd pkgs.nettools pkgs.openresolv ];
+
+      logging.enable = true;
+      logging.redirectStderr = true;
+
+      script = ''
+        ${dhcpcd}/sbin/dhcpcd -B -w --quiet ${optionalString cfg.persistent "--persistent"} --config ${dhcpcdConf}
+      '';
+    };
 
     systemd.services.dhcpcd = let
       cfgN = config.networking;
