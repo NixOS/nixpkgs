@@ -58,8 +58,8 @@ let
     ${text}
   ''; in "${dir}/bin/${name}";
 
-  anyInterface = { any = mapAttrs (name: value: cfg."${name}") commonOptions; };
-  allInterfaces = anyInterface // cfg.interfaces;
+  defaultInterface = { default = mapAttrs (name: value: cfg."${name}") commonOptions; };
+  allInterfaces = defaultInterface // cfg.interfaces;
 
   startScript = writeShScript "firewall-start" ''
     ${helpers}
@@ -154,7 +154,7 @@ let
     ${concatStrings (mapAttrsToList (iface: cfg:
       concatMapStrings (port:
         ''
-          ip46tables -A nixos-fw -p tcp --dport ${toString port} -j nixos-fw-accept ${optionalString (iface != "any") "-i ${iface}"}
+          ip46tables -A nixos-fw -p tcp --dport ${toString port} -j nixos-fw-accept ${optionalString (iface != "default") "-i ${iface}"}
         ''
       ) cfg.allowedTCPPorts
     ) allInterfaces)}
@@ -164,7 +164,7 @@ let
       concatMapStrings (rangeAttr:
         let range = toString rangeAttr.from + ":" + toString rangeAttr.to; in
         ''
-          ip46tables -A nixos-fw -p tcp --dport ${range} -j nixos-fw-accept ${optionalString (iface != "any") "-i ${iface}"}
+          ip46tables -A nixos-fw -p tcp --dport ${range} -j nixos-fw-accept ${optionalString (iface != "default") "-i ${iface}"}
         ''
       ) cfg.allowedTCPPortRanges
     ) allInterfaces)}
@@ -173,7 +173,7 @@ let
     ${concatStrings (mapAttrsToList (iface: cfg:
       concatMapStrings (port:
         ''
-          ip46tables -A nixos-fw -p udp --dport ${toString port} -j nixos-fw-accept ${optionalString (iface != "any") "-i ${iface}"}
+          ip46tables -A nixos-fw -p udp --dport ${toString port} -j nixos-fw-accept ${optionalString (iface != "default") "-i ${iface}"}
         ''
       ) cfg.allowedUDPPorts
     ) allInterfaces)}
@@ -183,7 +183,7 @@ let
       concatMapStrings (rangeAttr:
         let range = toString rangeAttr.from + ":" + toString rangeAttr.to; in
         ''
-          ip46tables -A nixos-fw -p udp --dport ${range} -j nixos-fw-accept ${optionalString (iface != "any") "-i ${iface}"}
+          ip46tables -A nixos-fw -p udp --dport ${range} -j nixos-fw-accept ${optionalString (iface != "default") "-i ${iface}"}
         ''
       ) cfg.allowedUDPPortRanges
     ) allInterfaces)}
