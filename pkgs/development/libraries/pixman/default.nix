@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, autoconf, automake, libtool, autoreconfHook, pkgconfig, libpng, glib /*just passthru*/ }:
+{ stdenv, fetchurl, fetchpatch, pkgconfig, libpng, glib /*just passthru*/ }:
 
 stdenv.mkDerivation rec {
   name = "pixman-${version}";
