@@ -7,7 +7,7 @@
 # is always preferred, see `sage-src.nix` for that.
 
 let
-  inherit (pkgs) fetchurl symlinkJoin callPackage nodePackages_8_x;
+  inherit (pkgs) fetchurl symlinkJoin callPackage nodePackages;
 
   # https://trac.sagemath.org/ticket/15980 for tracking of python3 support
   python = pkgs.python2.override {
@@ -24,7 +24,7 @@ let
       flask-openid = self.callPackage ./flask-openid.nix {};
       python-openid = self.callPackage ./python-openid.nix {};
       sagenb = self.callPackage ./sagenb.nix {
-        mathjax = nodePackages_8_x.mathjax;
+        mathjax = nodePackages.mathjax;
       };
 
       # Package with a cyclic dependency with sage
@@ -45,8 +45,8 @@ let
     inherit pari_data ecl;
     inherit singular;
     cysignals = python.pkgs.cysignals;
-    three = nodePackages_8_x.three;
-    mathjax = nodePackages_8_x.mathjax;
+    three = nodePackages.three;
+    mathjax = nodePackages.mathjax;
   };
 
   # The shell file that gets sourced on every sage start. Will also source
@@ -70,7 +70,7 @@ let
     inherit sage-env;
     inherit pynac singular;
     pkg-config = pkgs.pkgconfig; # not to confuse with pythonPackages.pkgconfig
-    three = nodePackages_8_x.three;
+    three = nodePackages.three;
   };
 
   # Doesn't actually build anything, just runs sages testsuite. This is a
