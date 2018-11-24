@@ -1663,6 +1663,8 @@ in {
 
   fedpkg = callPackage ../development/python-modules/fedpkg { };
 
+  flexmock = callPackage ../development/python-modules/flexmock { };
+
   flit = callPackage ../development/python-modules/flit { };
 
   flowlogs_reader = callPackage ../development/python-modules/flowlogs_reader { };
