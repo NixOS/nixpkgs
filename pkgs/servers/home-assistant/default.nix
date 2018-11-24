@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, fetchpatch, python3
+{ lib, fetchFromGitHub, fetchpatch, python
 
 # Look up dependencies of specified components in component-packages.nix
 , extraComponents ? []
@@ -52,7 +52,7 @@ let
     (mkOverride "colorlog" "3.1.4"
       "418db638c9577f37f0fae4914074f395847a728158a011be2a193ac491b9779d")
 
-    # hass-frontend does not exist in python3.pkgs
+    # hass-frontend does not exist in python.pkgs
     (self: super: {
       hass-frontend = self.callPackage ./frontend.nix { };
     })
@@ -68,7 +68,7 @@ let
       });
     };
     
-  py = python3.override {
+  py = python.override {
     # Put packageOverrides at the start so they are applied after defaultOverrides
     packageOverrides = lib.foldr lib.composeExtensions (self: super: { }) ([ packageOverrides ] ++ defaultOverrides);
   };

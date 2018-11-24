@@ -179,6 +179,7 @@ in
   radicale = handleTest ./radicale.nix {};
   redmine = handleTest ./redmine.nix {};
   rspamd = handleTest ./rspamd.nix {};
+  rss2email = handleTest ./rss2email.nix {};
   rsyslogd = handleTest ./rsyslogd.nix {};
   runInMachine = handleTest ./run-in-machine.nix {};
   rxe = handleTest ./rxe.nix {};
