@@ -4,7 +4,8 @@
 , pytest
 , py
 , mock
-, pkgs
+, glibcLocales
+, iocapture
 }:
 
 buildPythonPackage rec {
@@ -16,7 +17,7 @@ buildPythonPackage rec {
     sha256 = "e9535b8c84dc9571a48999094fda7f33e63c3f1b74f3e5f3ac0105a58405bb65";
   };
 
-  buildInputs = [ pytest py mock pkgs.glibcLocales ];
+  checkInputs = [ pytest py mock glibcLocales iocapture ];
 
   checkPhase = ''
     export LANG="en_US.UTF-8"
