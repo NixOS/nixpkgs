@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "manuel";
-  version = "1.9.0";
+  version = "1.10.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d324983db5d8e3f36ff20732a723cf0af2e2477d569f871fc649f08b782fa8f1";
+    sha256 = "fee65086422cf8ccb31182db6e3bcd59f6bc1c8a6d71e35df1d481238f57bfad";
   };
 
   propagatedBuildInputs = [ six zope_testing ];
