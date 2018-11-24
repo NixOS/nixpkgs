@@ -1,4 +1,4 @@
-{ lib, fetchurl, buildPythonPackage, numpy }:
+{ lib, fetchurl, buildPythonPackage, numpy, scikitlearn }:
 
 buildPythonPackage rec {
   pname = "hmmlearn";
@@ -10,7 +10,7 @@ buildPythonPackage rec {
     sha256 = "d43f5b25f9019ef5d01914d0972a5fa0594e82ab75d2c6aec26d682e47bd553c";
   };
 
-  propagatedBuildInputs = [ numpy ];
+  propagatedBuildInputs = [ numpy scikitlearn ];
 
   doCheck = false;
 
@@ -19,6 +19,5 @@ buildPythonPackage rec {
     homepage    = https://github.com/hmmlearn/hmmlearn;
     license     = licenses.bsd3;
     maintainers = with maintainers; [ abbradar ];
-    platforms   = platforms.unix;
   };
 }
