@@ -12,7 +12,7 @@ let
   };
 
   src_qxlwddm = fetchurl {
-    url = "http://people.redhat.com/~vrozenfe/qxlwddm/qxlwddm-0.11.zip";
+    url = "https://people.redhat.com/~vrozenfe/qxlwddm/qxlwddm-0.11.zip";
     sha256 = "082zdpbh9i3bq2ds8g33rcbcw390jsm7cqf46rrlx02x8r03dm98";
   };
 
