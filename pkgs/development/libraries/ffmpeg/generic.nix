@@ -126,6 +126,7 @@ stdenv.mkDerivation rec {
       (ifMinVer "1.0" "--enable-fontconfig")
       (ifMinVer "0.7" "--enable-libfreetype")
       "--enable-libmp3lame"
+      (ifMinVer "0.9" "--enable-libass")
       (ifMinVer "1.2" "--enable-iconv")
       "--enable-libtheora"
       (ifMinVer "2.1" "--enable-libssh")
