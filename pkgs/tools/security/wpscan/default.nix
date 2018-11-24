@@ -11,5 +11,5 @@ bundlerApp {
     license     = licenses.unfreeRedistributable;
     maintainers = [ maintainers.nyanloutre ];
     platforms   = platforms.unix;
-};
+  };
 }
