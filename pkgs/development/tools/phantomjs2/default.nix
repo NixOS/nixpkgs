@@ -36,6 +36,7 @@ in stdenv.mkDerivation rec {
   ]);
 
   patches = [
+    (fetchpatch {
       url = https://salsa.debian.org/debian/phantomjs/raw/0b20f0dd/debian/patches/build-hardening.patch;
       sha256 = "1qs1r76w90qgpw742i7lf0y3b7m9zh5wxcbrhrak6mq1kqaphqb5";
     })
