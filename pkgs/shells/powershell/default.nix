@@ -4,8 +4,8 @@
 let platformString = if stdenv.isDarwin then "osx"
                      else if stdenv.isLinux then "linux"
                      else throw "unsupported platform";
-    platformSha = if stdenv.isDarwin then "0jngmqxjiiz5dpgky027wl0s3nn321rxs6kxab27kmp031j65x8g"
-                     else if stdenv.isLinux then "0nmqv32mck16b7zljfpb9ydg3h2jvcqrid9ga2i5wac26x3ix531"
+    platformSha = if stdenv.isDarwin then "1zm5q25ny2x6wvdqfrc380467zq0nbrzh2rzldwdkdpkb6wbvpj8"
+                     else if stdenv.isLinux then "0wh5vvh8pk75fy37bm5av4xvp76slqyjhb6a0al55vw9rlg5q3xw"
                      else throw "unsupported platform";
     platformLdLibraryPath = if stdenv.isDarwin then "DYLD_FALLBACK_LIBRARY_PATH"
                      else if stdenv.isLinux then "LD_LIBRARY_PATH"
@@ -14,7 +14,7 @@ let platformString = if stdenv.isDarwin then "osx"
 in
 stdenv.mkDerivation rec {
   name = "powershell-${version}";
-  version = "6.1.0";
+  version = "6.1.1";
 
   src = fetchzip {
     url = "https://github.com/PowerShell/PowerShell/releases/download/v${version}/powershell-${version}-${platformString}-x64.tar.gz";
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     description = "Cross-platform (Windows, Linux, and macOS) automation and configuration tool/framework";
     homepage = https://github.com/PowerShell/PowerShell;
     maintainers = [ maintainers.yrashk ];
-    platforms = platforms.unix;
+    platforms = with platforms; unix ++ darwin;
     license = with licenses; [ mit ];
   };
 
