@@ -24,16 +24,18 @@ with lib;
     };
   };
 
-  config = mkIf (!config.security.allowUserNamespaces) {
-    # Setting the number of allowed user namespaces to 0 effectively disables
-    # the feature at runtime.  Note that root may raise the limit again
-    # at any time.
-    boot.kernel.sysctl."user.max_user_namespaces" = 0;
+  config = mkMerge [
+    (mkIf (!config.security.allowUserNamespaces) {
+      # Setting the number of allowed user namespaces to 0 effectively disables
+      # the feature at runtime.  Note that root may raise the limit again
+      # at any time.
+      boot.kernel.sysctl."user.max_user_namespaces" = 0;
 
-    assertions = [
-      { assertion = config.nix.useSandbox -> config.security.allowUserNamespaces;
-        message = "`nix.useSandbox = true` conflicts with `!security.allowUserNamespaces`.";
-      }
-    ];
-  };
+      assertions = [
+        { assertion = config.nix.useSandbox -> config.security.allowUserNamespaces;
+          message = "`nix.useSandbox = true` conflicts with `!security.allowUserNamespaces`.";
+        }
+      ];
+    })
+  ];
 }
