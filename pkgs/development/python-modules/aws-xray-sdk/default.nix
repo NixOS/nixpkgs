@@ -5,6 +5,7 @@
 , wrapt
 , requests
 , future
+, botocore
 }:
 
 buildPythonPackage rec {
@@ -17,7 +18,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    jsonpickle wrapt requests future
+    jsonpickle wrapt requests future botocore
   ];
 
   meta = {
