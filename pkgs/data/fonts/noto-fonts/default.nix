@@ -116,7 +116,7 @@ rec {
       inherit version;
       description = "Color and Black-and-White emoji fonts";
       homepage = https://github.com/googlei18n/noto-emoji;
-      license = licenses.asl20;
+      license = with licenses; [ ofl asl20 ];
       platforms = platforms.all;
       maintainers = with maintainers; [ mathnerd314 ];
     };
