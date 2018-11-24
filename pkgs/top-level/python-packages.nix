@@ -4731,6 +4731,8 @@ in {
 
   tvdb_api = callPackage ../development/python-modules/tvdb_api { };
 
+  sdnotify = callPackage ../development/python-modules/sdnotify { };
+
   tvnamer = callPackage ../development/python-modules/tvnamer { };
 
   threadpool = callPackage ../development/python-modules/threadpool { };
