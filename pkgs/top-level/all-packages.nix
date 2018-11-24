@@ -8897,6 +8897,8 @@ with pkgs;
 
   selendroid = callPackage ../development/tools/selenium/selendroid { };
 
+  semver-tool = callPackage ../development/tools/misc/semver-tool { };
+
   sconsPackages = callPackage ../development/tools/build-managers/scons { };
   scons = sconsPackages.scons_3_0_1;
   scons_2_5_1 = sconsPackages.scons_2_5_1;
