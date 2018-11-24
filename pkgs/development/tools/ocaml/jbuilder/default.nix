@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   name = "jbuilder-${version}";
-  version = "1.0.1";
+  version = "1.5.1";
   src = fetchFromGitHub {
     owner = "ocaml";
     repo = "dune";
     rev = "${version}";
-    sha256 = "0k6r9qrbwlnb4rqwqys5fr7khwza7n7d8wpgl9jbb3xpag2zl3q9";
+    sha256 = "abc45a0b5c49795d564bf3b201a224a3c416021bde8e4c051dff011ad2db89eb";
   };
 
   buildInputs = with ocamlPackages; [ ocaml findlib ];
