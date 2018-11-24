@@ -1,7 +1,9 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi
-, pkgs
+, swig2
+, openssl
+, typing
 }:
 
 
@@ -14,10 +16,12 @@ buildPythonPackage rec {
     sha256 = "a1b2751cdadc6afac3df8a5799676b7b7c67a6ad144bb62d38563062e7cd3fc6";
   };
 
-  buildInputs = [ pkgs.swig2 pkgs.openssl ];
+  buildInputs = [ swig2 openssl ];
+
+  propagatedBuildInputs = [ typing ];
 
   preConfigure = ''
-    substituteInPlace setup.py --replace "self.openssl = '/usr'" "self.openssl = '${pkgs.openssl.dev}'"
+    substituteInPlace setup.py --replace "self.openssl = '/usr'" "self.openssl = '${openssl.dev}'"
   '';
 
   doCheck = false; # another test that depends on the network.
