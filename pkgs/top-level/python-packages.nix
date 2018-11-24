@@ -2664,6 +2664,8 @@ in {
 
   interruptingcow = callPackage ../development/python-modules/interruptingcow {};
 
+  iocapture = callPackage ../development/python-modules/iocapture { };
+
   iptools = callPackage ../development/python-modules/iptools { };
 
   ipy = callPackage ../development/python-modules/IPy { };
