@@ -9,12 +9,12 @@ in stdenv.mkDerivation rec {
   version = "8";
 
   src = fetchurl {
-    url = "http://repo.or.cz/a2jmidid.git/snapshot/7383d268c4bfe85df9f10df6351677659211d1ca.tar.gz";
+    url = "https://repo.or.cz/a2jmidid.git/snapshot/7383d268c4bfe85df9f10df6351677659211d1ca.tar.gz";
     sha256 = "06dgf5655znbvrd7fhrv8msv6zw8vk0hjqglcqkh90960mnnmwz7";
   };
 
-  nativeBuildInputs = [ pkgconfig wafHook ];
-  buildInputs = [ makeWrapper alsaLib dbus libjack2 python dbus-python ];
+  nativeBuildInputs = [ pkgconfig makeWrapper wafHook ];
+  buildInputs = [ alsaLib dbus libjack2 python dbus-python ];
 
   postInstall = ''
     wrapProgram $out/bin/a2j_control --set PYTHONPATH $PYTHONPATH
