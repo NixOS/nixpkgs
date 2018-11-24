@@ -7896,6 +7896,8 @@ with pkgs;
   python37Packages = recurseIntoAttrs python37.pkgs;
   pypyPackages = pypy.pkgs;
 
+  update-python-libraries = callPackage ../development/interpreters/python/update-python-libraries { };
+
   # Should eventually be moved inside Python interpreters.
   python-setup-hook = callPackage ../development/interpreters/python/setup-hook.nix { };
 

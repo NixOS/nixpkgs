@@ -10,6 +10,8 @@
 # Whether the derivation provides a Python module or not.
 , toPythonModule
 , namePrefix
+, writeScript
+, update-python-libraries
 }:
 
 { name ? "${attrs.pname}-${attrs.version}"
@@ -64,7 +66,7 @@ if disabled
 then throw "${name} not supported for interpreter ${python.executable}"
 else
 
-toPythonModule (python.stdenv.mkDerivation (builtins.removeAttrs attrs [
+let self = toPythonModule (python.stdenv.mkDerivation (builtins.removeAttrs attrs [
     "disabled" "checkInputs" "doCheck" "doInstallCheck" "dontWrapPythonPrograms" "catchConflicts"
   ] // {
 
@@ -106,4 +108,14 @@ toPythonModule (python.stdenv.mkDerivation (builtins.removeAttrs attrs [
     platforms = python.meta.platforms;
     isBuildPythonPackage = python.meta.platforms;
   } // meta;
-}))
+}));
+
+passthru = {
+  updateScript = let
+    filename = builtins.head (lib.splitString ":" self.meta.position);
+  in writeScript "update-python" ''
+    #!${python.stdenv.shell}
+    ${update-python-libraries} ${filename}
+  '';
+};
+in lib.extendDerivation true passthru self
