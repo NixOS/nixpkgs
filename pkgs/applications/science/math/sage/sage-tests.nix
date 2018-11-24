@@ -1,15 +1,30 @@
 { stdenv
+, lib
 , sage-with-env
 , makeWrapper
+, files ? null # "null" means run all tests
+, longTests ? true # run tests marked as "long time"
 }:
 
+# for a quick test of some source files:
+# nix-build -E 'with (import ./. {}); sage.tests.override { files = [ "src/sage/misc/cython.py" ];}'
+
+let
+  src = sage-with-env.env.lib.src;
+  runAllTests = files == null;
+  testArgs = if runAllTests then "--all" else testFileList;
+  patienceSpecifier = if longTests then "--long" else "";
+  relpathToArg = relpath: lib.escapeShellArg "${src}/${relpath}"; # paths need to be absolute
+  testFileList = lib.concatStringsSep " " (map relpathToArg files);
+in
 stdenv.mkDerivation rec {
   version = src.version;
   name = "sage-tests-${version}";
-  src = sage-with-env.env.lib.src;
+  inherit src;
 
   buildInputs = [
     makeWrapper
+    sage-with-env
   ];
 
   unpackPhase = "#do nothing";
@@ -31,6 +46,6 @@ stdenv.mkDerivation rec {
     mkdir -p "$HOME"
 
     # "--long" tests are in the order of 1h, without "--long" its 1/2h
-    "$out/bin/sage" -t --nthreads "$NIX_BUILD_CORES" --optional=sage --long --all
+    "sage" -t --nthreads "$NIX_BUILD_CORES" --optional=sage ${patienceSpecifier} ${testArgs}
   '';
 }
