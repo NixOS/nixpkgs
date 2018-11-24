@@ -6038,6 +6038,8 @@ with pkgs;
 
   woof = callPackage ../tools/misc/woof { };
 
+  wpscan = callPackage ../tools/security/wpscan { };
+
   wsmancli = callPackage ../tools/system/wsmancli {};
 
   wolfebin = callPackage ../tools/networking/wolfebin {
