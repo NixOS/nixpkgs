@@ -17,8 +17,6 @@ buildPythonPackage rec {
     sha256 = "f3856a79ab0e4ff74addc3e6c152b388dddee548345b440767b6361f635bd9b7";
   };
 
-  patches = [ ./test-selection.patch ];
-
   propagatedBuildInputs = [ zope_interface zope_exceptions zope_testing six ];
 
   meta = with stdenv.lib; {
