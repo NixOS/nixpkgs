@@ -45,5 +45,6 @@ stdenv.mkDerivation {
     maintainers = with maintainers; [ joachifm ];
     license = licenses.bsd3;
     platforms = platforms.all;
+    broken = stdenv.hostPlatform.cc.isClang;
   };
 }
