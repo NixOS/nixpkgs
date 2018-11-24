@@ -64,5 +64,11 @@ import ./make-test.nix ({ pkgs, ...} : {
         $machine->succeed("mount /dev/disk/by-label/EFISYS /efi");
         $machine->succeed("mountpoint -q /efi"); # now mounted
       };
+
+      # Test Nix dæmon usage
+      subtest "nix-daemon", sub {
+        $machine->fail("su -l nobody -s /bin/sh -c 'nix ping-store'");
+        $machine->succeed("su -l alice -c 'nix ping-store'") =~ "OK";
+      };
     '';
 })
