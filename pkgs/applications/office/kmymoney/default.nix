@@ -60,12 +60,11 @@ stdenv.mkDerivation rec {
       "$out/share/kmymoney/weboob/kmymoneyweboob.py"
   '';
 
-  doInstallCheck = stdenv.hostPlatform == stdenv.buildPlatform;
-  installCheckPhase = let
-    pluginPath = "${qtbase.bin}/${qtbase.qtPluginPrefix}";
-  in lib.optionalString doInstallCheck ''
-    QT_PLUGIN_PATH=${lib.escapeShellArg pluginPath} CTEST_OUTPUT_ON_FAILURE=1 \
-      ${xvfb_run}/bin/xvfb-run -s '-screen 0 1024x768x24' make test \
+  doInstallCheck = true;
+  installCheckInputs = [ xvfb_run ];
+  installCheckPhase = ''
+    QT_PLUGIN_PATH=${lib.escapeShellArg "${qtbase.bin}/${qtbase.qtPluginPrefix}"} \
+      xvfb-run -s '-screen 0 1024x768x24' make test \
       ARGS="-E '(reports-chart-test)'" # Test fails, so exclude it for now.
   '';
 
