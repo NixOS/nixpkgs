@@ -32,7 +32,8 @@ in stdenv.mkDerivation rec {
     python3Packages.pygobject3
   ];
 
-  enableParallelBuilding = true;
+  # Enable when it works again
+  enableParallelBuilding = false;
 
   configureFlags = [
     "--with-dbus-datadir=$(out)/etc/"

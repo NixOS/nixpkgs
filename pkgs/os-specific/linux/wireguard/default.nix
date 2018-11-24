@@ -1,4 +1,4 @@
-{ stdenv, kernel, wireguard-tools }:
+{ stdenv, kernel, wireguard-tools, perl }:
 
 # module requires Linux >= 3.10 https://www.wireguard.io/install/#kernel-requirements
 assert stdenv.lib.versionAtLeast kernel.version "3.10";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS = ["-Wno-error=cpp"];
 
-  nativeBuildInputs = kernel.moduleBuildDependencies;
+  nativeBuildInputs = [ perl ] ++ kernel.moduleBuildDependencies;
 
   buildPhase = "make module";
 

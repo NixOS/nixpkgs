@@ -27,6 +27,7 @@
 , libXtst
 , libnotify
 , libpulseaudio
+, libuuid
 , nspr
 , nss
 , pango
@@ -38,7 +39,7 @@
 let
 
   mirror = https://get.geo.opera.com/pub/opera/desktop;
-  version = "53.0.2907.99";
+  version = "56.0.3051.99";
 
   rpath = stdenv.lib.makeLibraryPath [
 
@@ -70,6 +71,7 @@ let
     libXtst.out
     libxcb.out
     libnotify.out
+    libuuid.out
     nspr.out
     nss.out
     pango.out
@@ -92,7 +94,7 @@ in stdenv.mkDerivation {
 
   src = fetchurl {
     url = "${mirror}/${version}/linux/opera-stable_${version}_amd64.deb";
-    sha256 = "0fih5047xv275rmbcr2drji81wxi6p0kyp172mmn328g3pzddmwx";
+    sha256 = "1mf4lpb66w63kafjni5caq9k3lmsqd85161q29z5lr1s2cx9qqm8";
   };
 
   unpackCmd = "${dpkg}/bin/dpkg-deb -x $curSrc .";

@@ -1319,6 +1319,11 @@
     github = "ellis";
     name = "Ellis Whitehead";
   };
+  elseym = {
+    email = "elseym@me.com";
+    github = "elseym";
+    name = "Simon Waibl";
+  };
   elvishjerricco = {
     email = "elvishjerricco@gmail.com";
     github = "ElvishJerricco";
@@ -2026,6 +2031,11 @@
     email = "jhhuh.note@gmail.com";
     github = "jhhuh";
     name = "Ji-Haeng Huh";
+  };
+  jhillyerd = {
+    email = "james+nixos@hillyerd.com";
+    github = "jhillyerd";
+    name = "James Hillyerd";
   };
   jirkamarsik = {
     email = "jiri.marsik89@gmail.com";
@@ -4916,5 +4926,10 @@
     email = "diego@zzamboni.org";
     github = "zzamboni";
     name = "Diego Zamboni";
+  };
+  mredaelli = {
+    email = "massimo@typish.io";
+    github = "mredaelli";
+    name = "Massimo Redaelli";
   };
 }
