@@ -110,6 +110,7 @@ let
     sympy
     fpylll
     matplotlib
+    tkinter # optional, as a matplotlib backend (use with `%matplotlib tk`)
     scipy
     ipywidgets
     rpy2
