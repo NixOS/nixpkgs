@@ -39,6 +39,22 @@ let
     };
   };
 
+  jupyter-kernel-definition = {
+    displayName = "SageMath ${sage-src.version}";
+    argv = [
+      "${sage-with-env}/bin/sage" # FIXME which sage
+      "--python"
+      "-m"
+      "sage.repl.ipython_kernel"
+      "-f"
+      "{connection_file}"
+    ];
+    language = "sagemath";
+    # just one 16x16 logo is available
+    logo32 = "${sage-src}/doc/common/themes/sage/static/sageicon.png";
+    logo64 = "${sage-src}/doc/common/themes/sage/static/sageicon.png";
+  };
+
   # A bash script setting various environment variables to tell sage where
   # the files its looking fore are located. Also see `sage-env`.
   env-locations = callPackage ./env-locations.nix {
@@ -158,6 +174,6 @@ let
 in
 # A wrapper around sage that makes sure sage finds its docs (if they were build).
 callPackage ./sage.nix {
-  inherit sage-tests sage-with-env sagedoc;
+  inherit sage-tests sage-with-env sagedoc jupyter-kernel-definition;
   inherit withDoc;
 }
