@@ -3839,6 +3839,8 @@ in {
 
   snowballstemmer = callPackage ../development/python-modules/snowballstemmer { };
 
+  snug = callPackage ../development/python-modules/snug { };
+
   spake2 = callPackage ../development/python-modules/spake2 { };
 
   sphfile = callPackage ../development/python-modules/sphfile { };
