@@ -1136,6 +1136,8 @@ in {
 
   carrot = callPackage ../development/python-modules/carrot {};
 
+  cartopy = callPackage ../development/python-modules/cartopy {};
+
   case = callPackage ../development/python-modules/case {};
 
   cassandra-driver = callPackage ../development/python-modules/cassandra-driver { };
