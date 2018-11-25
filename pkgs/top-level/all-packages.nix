@@ -23253,6 +23253,13 @@ in
 
   dpkg = callPackage ../tools/package-management/dpkg { };
 
+  edex-ui = callPackage ../applications/misc/edex-ui rec {
+    fetchNodeModules = callPackage ../applications/networking/instant-messengers/rambox/fetchNodeModules.nix { };
+    buildNativeModule = callPackage ../applications/misc/edex-ui/buildNativeModule.nix {
+      inherit electron fetchNodeModules;
+    };
+  };
+
   ekiga = callPackage ../applications/networking/instant-messengers/ekiga { };
 
   dumb = callPackage ../misc/dumb { };
