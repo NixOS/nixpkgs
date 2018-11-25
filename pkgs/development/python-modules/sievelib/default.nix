@@ -36,6 +36,6 @@ buildPythonPackage rec {
        * Date and Index (RFC 5260)
        * Vacation (RFC 5230)
        * Imap4flags (RFC 5232)
-'';
+    '';
   };
 }
