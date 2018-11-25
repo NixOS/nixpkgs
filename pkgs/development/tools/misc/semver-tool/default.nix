@@ -11,6 +11,10 @@ stdenv.mkDerivation rec {
     sha256 = "0lpwsa86qb5w6vbnsn892nb3qpxxx9ifxch8pw3ahzx2dqhdgnrr";
   };
 
+  postPatch = ''
+    patchShebangs .
+  '';
+
   installPhase = ''
     mkdir -p $out/bin
     install src/semver $out/bin
