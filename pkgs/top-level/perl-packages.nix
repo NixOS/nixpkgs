@@ -8934,7 +8934,7 @@ let
     meta = with stdenv.lib; {
       description = "The World-Wide Web library for Perl";
       license = with licenses; [ artistic1 gpl1Plus ];
-      platforms = platforms.unix;
+      platforms = platforms.unix ++ platforms.windows;
     };
     buildInputs = [ TestFatal TestNeeds TestRequiresInternet ];
   };
