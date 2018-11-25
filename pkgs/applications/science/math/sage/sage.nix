@@ -2,12 +2,23 @@
 , makeWrapper
 , sage-tests
 , sage-with-env
+, jupyter-kernel-definition
+, jupyter-kernel
 , sagedoc
 , withDoc
 }:
 
-# A wrapper that makes sure sage finds its docs (if they were build).
+# A wrapper that makes sure sage finds its docs (if they were build) and the
+# jupyter kernel spec.
 
+let 
+  # generate kernel spec + default kernels
+  kernel-specs = jupyter-kernel.create {
+    definitions = jupyter-kernel.default // {
+      sagemath = jupyter-kernel-definition;
+    };
+  };
+in
 stdenv.mkDerivation rec {
   version = src.version;
   name = "sage-${version}";
@@ -29,8 +40,9 @@ stdenv.mkDerivation rec {
     mkdir -p "$out/bin"
     makeWrapper "${sage-with-env}/bin/sage" "$out/bin/sage" \
       --set SAGE_DOC_SRC_OVERRIDE "${src}/src/doc" ${
-      stdenv.lib.optionalString withDoc "--set SAGE_DOC_OVERRIDE ${sagedoc}/share/doc/sage"
-    }
+        stdenv.lib.optionalString withDoc "--set SAGE_DOC_OVERRIDE ${sagedoc}/share/doc/sage"
+      } \
+      --prefix JUPYTER_PATH : "${kernel-specs}"
   '';
 
   doInstallCheck = withDoc;
@@ -44,6 +56,7 @@ stdenv.mkDerivation rec {
     tests = sage-tests;
     doc = sagedoc;
     lib = sage-with-env.env.lib;
+    kernelspec = jupyter-kernel-definition;
   };
 
   meta = with stdenv.lib; {
