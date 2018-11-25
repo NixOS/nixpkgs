@@ -1,5 +1,5 @@
-{ stdenv, fetchzip, lib, wrapGAppsHook, alsaLib, atk, cairo, gdk_pixbuf
-, glib, gst_all_1,  gtk3, libSM, libX11 , libpng12, pango, zlib }:
+{ stdenv, fetchzip, wrapGAppsHook, alsaLib, atk, cairo, gdk_pixbuf
+, glib, gst_all_1,  gtk3, libSM, libX11, libpng12, pango, zlib }:
 
 stdenv.mkDerivation rec {
   name = "transcribe-${version}";
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   dontPatchELF = true;
 
-  libPath = with gst_all_1; lib.makeLibraryPath [
+  libPath = with gst_all_1; stdenv.lib.makeLibraryPath [
     stdenv.cc.cc glib gtk3 atk pango cairo gdk_pixbuf alsaLib
     libX11 libSM libpng12 gstreamer gst-plugins-base zlib
   ];
