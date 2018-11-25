@@ -1,5 +1,5 @@
 { stdenv
-, fetchurl
+, fetchzip
 , pkgconfig
 , qtbase
 , makeWrapper
@@ -12,9 +12,9 @@
   version = "0.9.0";
   name = "cadence";
 
-  src = fetchurl {
+  src = fetchzip {
     url = "https://github.com/falkTX/Cadence/archive/v${version}.tar.gz";
-    sha256 = "07z1mnb0bmldb3i31bgw816pnvlvr9gawr51rpx3mhixg5wpiqzb";
+    sha256 = "08vcggypkdfr70v49innahs5s11hi222dhhnm5wcqzdgksphqzwx";
   };
 
   nativeBuildInputs = [ makeWrapper pkgconfig ];
