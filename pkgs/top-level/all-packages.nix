@@ -18569,8 +18569,6 @@ with pkgs;
 
   poezio = python3Packages.poezio;
 
-  pommed = callPackage ../os-specific/linux/pommed {};
-
   pommed_light = callPackage ../os-specific/linux/pommed-light {};
 
   polymake = callPackage ../applications/science/math/polymake { };
