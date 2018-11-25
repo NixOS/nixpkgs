@@ -17,11 +17,8 @@
     sha256 = "07z1mnb0bmldb3i31bgw816pnvlvr9gawr51rpx3mhixg5wpiqzb";
   };
 
-  buildInputs = [
-    makeWrapper
-    pkgconfig
-    qtbase
-  ];
+  nativeBuildInputs = [ makeWrapper pkgconfig ];
+  buildInputs = [ qtbase ];
 
   makeFlags = ''
     PREFIX=""
@@ -77,7 +74,7 @@
   meta = {
     homepage = https://github.com/falkTX/Cadence/;
     description = "Collection of tools useful for audio production";
-    license = stdenv.lib.licenses.mit;
+    license = stdenv.lib.licenses.gpl2Plus;
     maintainers = with stdenv.lib.maintainers; [ genesis ];
     platforms = stdenv.lib.platforms.linux;
   };
