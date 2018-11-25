@@ -12,7 +12,7 @@ buildPythonPackage rec {
   doCheck = false; # no tests are defined in 1.3.1
 
   meta = with lib; {
-    description = "Simplekml is a python package which enables you to generate KML with as little effort as possible.";
+    description = "Generate KML with as little effort as possible";
     homepage =  https://readthedocs.org/projects/simplekml/;
     license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ rvolosatovs ];
