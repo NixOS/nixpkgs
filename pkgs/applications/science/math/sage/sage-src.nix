@@ -9,14 +9,14 @@
 # all get the same sources with the same patches applied.
 
 stdenv.mkDerivation rec {
-  version = "8.5.beta3";
+  version = "8.5.beta4";
   name = "sage-src-${version}";
 
   src = fetchFromGitHub {
     owner = "sagemath";
     repo = "sage";
     rev = version;
-    sha256 = "1nhhx576188q87ma7yygp1mgqs2mcjk89cy4dqibzbv0vmhasz3c";
+    sha256 = "0x8zi5c1glw5h7231yxdyklmf1vgrvf0zvzwa4qwnm7x2nky62zf";
   };
 
   # Patches needed because of particularities of nix or the way this is packaged.
@@ -46,6 +46,8 @@ stdenv.mkDerivation rec {
     # tests) are also run. That is necessary to test dochtml individually. See
     # https://trac.sagemath.org/ticket/26110 for an upstream discussion.
     ./patches/Only-test-py2-py3-optional-tests-when-all-of-sage-is.patch
+
+    ./patches/no-invalid-gap-test.patch
   ];
 
   # Patches needed because of package updates. We could just pin the versions of
