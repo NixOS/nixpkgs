@@ -484,4 +484,6 @@ in {
       };
     })
   ]);
+
+  meta.doc = ./nextcloud.xml;
 }
