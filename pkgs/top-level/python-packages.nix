@@ -3661,6 +3661,8 @@ in {
 
   rabbitpy = callPackage ../development/python-modules/rabbitpy { };
 
+  rasterio = callPackage ../development/python-modules/rasterio { };
+
   radicale_infcloud = callPackage ../development/python-modules/radicale_infcloud {};
 
   recaptcha_client = callPackage ../development/python-modules/recaptcha_client { };
