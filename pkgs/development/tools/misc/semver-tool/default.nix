@@ -16,8 +16,10 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/bin
     install src/semver $out/bin
+    runHook postInstall
   '';
 
   meta = with lib; {
