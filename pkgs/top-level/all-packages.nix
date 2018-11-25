@@ -9344,8 +9344,6 @@ with pkgs;
 
   commoncpp2 = callPackage ../development/libraries/commoncpp2 { };
 
-  confuse = callPackage ../development/libraries/confuse { };
-
   coredumper = callPackage ../development/libraries/coredumper { };
 
   ctl = callPackage ../development/libraries/ctl { };
@@ -22672,7 +22670,7 @@ with pkgs;
 
   vimUtils = callPackage ../misc/vim-plugins/vim-utils.nix { };
 
-  vimPlugins = recurseIntoAttrs (callPackage ../misc/vim-plugins { 
+  vimPlugins = recurseIntoAttrs (callPackage ../misc/vim-plugins {
     llvmPackages = llvmPackages_6;
   });
 
