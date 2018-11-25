@@ -2417,6 +2417,8 @@ in {
 
   genshi = callPackage ../development/python-modules/genshi { };
 
+  gentools = callPackage ../development/python-modules/gentools { };
+
   gevent = callPackage ../development/python-modules/gevent { };
 
   geventhttpclient = callPackage ../development/python-modules/geventhttpclient { };
