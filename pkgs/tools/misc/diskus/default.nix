@@ -7,7 +7,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "sharkdp";
     repo = "diskus";
-    rev = "071be5a57b03a29479d7add7b34590e1d8c9a84d";
+    rev = "v${version}";
     sha256 = "18scxspi5ncags8bnxq4ah9w8hrlwwlgpq7q9qfh4d81asmbyr8n";
   };
 
