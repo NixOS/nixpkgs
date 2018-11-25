@@ -552,6 +552,8 @@ let
 
     opam-file-format = callPackage ../development/ocaml-modules/opam-file-format { };
 
+    opti = callPackage ../development/ocaml-modules/opti { };
+
     otfm = callPackage ../development/ocaml-modules/otfm { };
 
     otr = callPackage ../development/ocaml-modules/otr { };
