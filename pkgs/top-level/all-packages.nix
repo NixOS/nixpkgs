@@ -9747,9 +9747,6 @@ in
     blas = if stdenv.isDarwin then blas else openblas;
   };
 
-  ffmpeg_0_10 = callPackage ../development/libraries/ffmpeg/0.10.nix {
-    inherit (darwin.apple_sdk.frameworks) Cocoa;
-  };
   ffmpeg_2_8 = callPackage ../development/libraries/ffmpeg/2.8.nix {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
@@ -9761,7 +9758,6 @@ in
   };
 
   # Aliases
-  ffmpeg_0 = ffmpeg_0_10;
   ffmpeg_2 = ffmpeg_2_8;
   ffmpeg_3 = ffmpeg_3_4;
   ffmpeg = ffmpeg_3;
