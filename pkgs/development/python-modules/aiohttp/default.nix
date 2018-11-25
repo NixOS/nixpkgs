@@ -29,8 +29,8 @@ buildPythonPackage rec {
 
   checkInputs = [ pytest gunicorn pytest-mock async_generator pytestrunner pytest-timeout ];
 
-  propagatedBuildInputs = [ attrs chardet multidict async-timeout yarl ]
-    ++ lib.optional (pythonOlder "3.7") idna-ssl;
+  propagatedBuildInputs = [ attrs chardet multidict async-timeout yarl idna-ssl ];
+    #++ lib.optional (pythonOlder "3.7") idna-ssl;
 
 
   # Several test failures. Need to be looked into.
