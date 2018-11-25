@@ -11663,6 +11663,12 @@ with pkgs;
     enableCuda = false;
   };
 
+  opencv4 = callPackage ../development/libraries/opencv/4.x.nix {
+    enableCuda = config.cudaSupport or false;
+    inherit (darwin) cf-private;
+    inherit (darwin.apple_sdk.frameworks) AVFoundation Cocoa QTKit VideoDecodeAcceleration;
+  };
+
   openexr = callPackage ../development/libraries/openexr { };
 
   openexrid-unstable = callPackage ../development/libraries/openexrid-unstable { };
