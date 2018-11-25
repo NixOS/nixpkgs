@@ -744,6 +744,8 @@ in {
 
   adal = callPackage ../development/python-modules/adal { };
 
+  affine = callPackage ../development/python-modules/affine { };
+
   aioconsole = callPackage ../development/python-modules/aioconsole { };
 
   aiodns = callPackage ../development/python-modules/aiodns { };
