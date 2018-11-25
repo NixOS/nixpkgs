@@ -76,6 +76,6 @@
     description = "Collection of tools useful for audio production";
     license = stdenv.lib.licenses.gpl2Plus;
     maintainers = with stdenv.lib.maintainers; [ genesis ];
-    platforms = stdenv.lib.platforms.linux;
+    platforms = [ "x86_64-linux" ];
   };
 }
