@@ -147,13 +147,38 @@ autoPatchelfFile() {
     fi
 }
 
-autoPatchelf() {
+# Can be used to manually add additional directories with shared object files
+# to be included for the next autoPatchelf invocation.
+addAutoPatchelfSearchPath() {
     local -a findOpts=()
 
+    # XXX: Somewhat similar to the one in the autoPatchelf function, maybe make
+    #      it DRY someday...
     while [ $# -gt 0 ]; do
         case "$1" in
             --) shift; break;;
             --no-recurse) shift; findOpts+=("-maxdepth" 1);;
+            --*)
+                echo "addAutoPatchelfSearchPath: ERROR: Invalid command line" \
+                     "argument: $1" >&2
+                return 1;;
+            *) break;;
+        esac
+    done
+
+    cachedDependencies+=(
+        $(find "$@" "${findOpts[@]}" \! -type d \
+               \( -name '*.so' -o -name '*.so.*' \))
+    )
+}
+
+autoPatchelf() {
+    local -a norecurse=
+
+    while [ $# -gt 0 ]; do
+        case "$1" in
+            --) shift; break;;
+            --no-recurse) shift; norecurse=1;;
             --*)
                 echo "autoPatchelf: ERROR: Invalid command line" \
                      "argument: $1" >&2
@@ -171,11 +196,7 @@ autoPatchelf() {
 
     # Add all shared objects of the current output path to the start of
     # cachedDependencies so that it's choosen first in findDependency.
-    cachedDependencies+=(
-        $(find "$@" "${findOpts[@]}" \! -type d \
-               \( -name '*.so' -o -name '*.so.*' \))
-    )
-    local elffile
+    addAutoPatchelfSearchPath ${norecurse:+--no-recurse} -- "$@"
 
     # Here we actually have a subshell, which also means that
     # $cachedDependencies is final at this point, so whenever we want to run
@@ -189,7 +210,7 @@ autoPatchelf() {
           LANG=C readelf -l "$file" | grep -q "^ *INTERP\\>" || continue
       fi
       autoPatchelfFile "$file"
-    done < <(find "$@" "${findOpts[@]}" -type f -print0)
+    done < <(find "$@" ${norecurse:+-maxdepth 1} -type f -print0)
 }
 
 # XXX: This should ultimately use fixupOutputHooks but we currently don't have
