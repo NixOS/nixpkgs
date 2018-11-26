@@ -422,6 +422,8 @@ in {
 
   markerlib = callPackage ../development/python-modules/markerlib { };
 
+  matchpy = callPackage ../development/python-modules/matchpy { };
+
   monty = callPackage ../development/python-modules/monty { };
 
   mininet-python = (toPythonModule (pkgs.mininet.override{ inherit python; })).py;
