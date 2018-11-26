@@ -398,6 +398,8 @@ in {
     inherit python;
   });
 
+  hopcroftkarp = callPackage ../development/python-modules/hopcroftkarp { };
+
   httpsig = callPackage ../development/python-modules/httpsig { };
 
   i3ipc = callPackage ../development/python-modules/i3ipc { };
