@@ -14,24 +14,21 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = "-I${SDL_image}/include/SDL";
 
-  patches = [ (fetchpatch {
-    name = "gcc-4.7.patch";
-    url = "https://anonscm.debian.org/viewvc/pkg-games/packages/trunk/btanks/debian/patches/gcc-4.7.patch?revision=13641&view=co&pathrev=15758";
-    sha256 = "1dxlk1xh69gj10sqcsyckiakb8an3h41206wby4z44mpmvxc7pi4";
-  }) ];
+  patches = [
+    (fetchpatch {
+      url = "https://sources.debian.org/data/main/b/btanks/0.9.8083-7/debian/patches/gcc-4.7.patch";
+      sha256 = "1dxlk1xh69gj10sqcsyckiakb8an3h41206wby4z44mpmvxc7pi4";
+    })
+    (fetchpatch {
+      url = "https://sources.debian.org/data/main/b/btanks/0.9.8083-7/debian/patches/pow10f.patch";
+      sha256 = "1h45790v2dpdbccfn6lwfgl8782q54i14cz9gpipkaghcka4y0g9";
+    })
+  ];
 
-  buildPhase = ''
-    scons prefix=$out
-  '';
-
-  installPhase = ''
-    scons install
-  '';
-
-  meta = {
+  meta = with stdenv.lib; {
     homepage = https://sourceforge.net/projects/btanks/;
     description = "Fast 2d tank arcade game";
-    license = stdenv.lib.licenses.gpl2Plus;
-    broken = true; # 2018-09-13, no successful build since 2018-03-16
+    license = licenses.gpl2Plus;
+    platforms = platforms.unix;
   };
 }

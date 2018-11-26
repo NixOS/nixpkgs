@@ -19,7 +19,9 @@
 
   <itemizedlist>
    <listitem>
-    <para />
+    <para>
+    The default Python 3 interpreter is now CPython 3.7 instead of CPython 3.6.
+    </para>
    </listitem>
   </itemizedlist>
  </section>
@@ -97,17 +99,17 @@
        start org.nixos.nix-daemon</command>.
       </para>
      </listitem>
-     <listitem>
-      <para>
-        The Syncthing state and configuration data has been moved from
-        <varname>services.syncthing.dataDir</varname> to the newly defined
-        <varname>services.syncthing.configDir</varname>, which default to
-        <literal>/var/lib/syncthing/.config/syncthing</literal>.
-        This change makes possible to share synced directories using ACLs
-        without Syncthing resetting the permission on every start.
-      </para>
-     </listitem>
     </itemizedlist>
+   </listitem>
+   <listitem>
+    <para>
+      The Syncthing state and configuration data has been moved from
+      <varname>services.syncthing.dataDir</varname> to the newly defined
+      <varname>services.syncthing.configDir</varname>, which default to
+      <literal>/var/lib/syncthing/.config/syncthing</literal>.
+      This change makes possible to share synced directories using ACLs
+      without Syncthing resetting the permission on every start.
+    </para>
    </listitem>
    <listitem>
     <para>
@@ -145,6 +147,14 @@
      Package <literal>wasm</literal> has been renamed <literal>proglodyte-wasm</literal>. The package
      <literal>wasm</literal> will be pointed to <literal>ocamlPackages.wasm</literal> in 19.09, so
      make sure to update your configuration if you want to keep <literal>proglodyte-wasm</literal>
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     When the <literal>nixpkgs.pkgs</literal> option is set, NixOS will no
+     longer ignore the <literal>nixpkgs.overlays</literal> option. The old
+     behavior can be recovered by setting <literal>nixpkgs.overlays =
+     lib.mkForce [];</literal>.
     </para>
    </listitem>
    <listitem>
@@ -195,6 +205,32 @@
       The <literal>solr</literal> package has been upgraded from 4.10.3 to 7.5.0 and has undergone
       some major changes. The <literal>services.solr</literal> module has been updated to reflect
       these changes. Please review http://lucene.apache.org/solr/ carefully before upgrading.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     Package <literal>ckb</literal> is renamed to <literal>ckb-next</literal>,
+     and options <literal>hardware.ckb.*</literal> are renamed to
+     <literal>hardware.ckb-next.*</literal>.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     The option <literal>services.xserver.displayManager.job.logToFile</literal> which was
+     previously set to <literal>true</literal> when using the display managers
+     <literal>lightdm</literal>, <literal>sddm</literal> or <literal>xpra</literal> has been
+     reset to the default value (<literal>false</literal>).
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     Network interface indiscriminate NixOS firewall options
+     (<literal>networking.firewall.allow*</literal>) are now preserved when also
+     setting interface specific rules such as <literal>networking.firewall.interfaces.en0.allow*</literal>.
+     These rules continue to use the pseudo device "default"
+     (<literal>networking.firewall.interfaces.default.*</literal>), and assigning
+     to this pseudo device will override the (<literal>networking.firewall.allow*</literal>)
+     options.
     </para>
    </listitem>
   </itemizedlist>

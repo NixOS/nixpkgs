@@ -1,5 +1,5 @@
 { stdenv, fetchurl, buildPackages, perl, coreutils
-, withCryptodev ? false, cryptodevHeaders
+, withCryptodev ? false, cryptodev
 , enableSSL2 ? false
 , static ? false
 }:
@@ -44,7 +44,7 @@ let
     separateDebugInfo = stdenv.hostPlatform.isLinux;
 
     nativeBuildInputs = [ perl ];
-    buildInputs = stdenv.lib.optional withCryptodev cryptodevHeaders;
+    buildInputs = stdenv.lib.optional withCryptodev cryptodev;
 
     # TODO(@Ericson2314): Improve with mass rebuild
     configurePlatforms = [];

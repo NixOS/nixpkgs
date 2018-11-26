@@ -209,8 +209,6 @@ in
     ];
 
     services.xserver.displayManager.job = {
-      logToFile = true;
-
       environment = {
         # Load themes from system environment
         QT_PLUGIN_PATH = "/run/current-system/sw/" + pkgs.qt5.qtbase.qtPluginPrefix;

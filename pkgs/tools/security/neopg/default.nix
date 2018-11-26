@@ -1,5 +1,5 @@
 { stdenv
-, fetchgit
+, fetchFromGitHub
 , cmake
 , sqlite
 , botan2
@@ -12,13 +12,14 @@
 
 stdenv.mkDerivation rec {
   name = "neopg-${version}";
-  version = "0.0.4";
+  version = "0.0.5";
 
-  # no fetchFromGitHub, as repo contains submodules
-  src = fetchgit {
-    url = "https://github.com/das-labor/neopg.git";
+  src = fetchFromGitHub {
+    owner = "das-labor";
+    repo = "neopg";
     rev = "v${version}";
-    sha256 = "0hhkl326ff6f76k8pwggpzmivbm13fz497nlyy6ybn5bmi9xfblm";
+    sha256 = "1ky3pwg6w8kyaa9iksfx6rryva87mbj1h3yi2mrzp2h7jhrfffpp";
+    fetchSubmodules = true;
   };
 
   nativeBuildInputs = [ pkgconfig ];

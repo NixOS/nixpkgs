@@ -1,4 +1,5 @@
-{ stdenv, fetchFromGitHub, jam, libtool, pkgconfig, gtk2, SDL, SDL_mixer, SDL_sound, smpeg, libvorbis }:
+{ stdenv, lib, fetchFromGitHub, jam, cctools, pkgconfig
+, SDL, SDL_mixer, SDL_sound, cf-private, gtk2, libvorbis, smpeg }:
 
 let
 
@@ -19,27 +20,21 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "gargoyle-2017-08-27";
+  name = "gargoyle-2018-10-06";
 
   src = fetchFromGitHub {
     owner = "garglk";
     repo = "garglk";
-    rev = "65c95166f53adaa2e5e1a5e0d8a34e9219d06de6";
-    sha256 = "1agnap38qdf2n1v37ka3ky44j56yhvln4lzf13diyqhjmh9lvfq5";
+    rev = "d03391563fa75942fbf8f8deeeacf3a8be9fc3b0";
+    sha256 = "0icwgc25gp7krq6zf66hljydc6vps6bb4knywnrfgnfcmcalqqx9";
   };
 
-  nativeBuildInputs = [ jam pkgconfig ] ++ stdenv.lib.optional stdenv.isDarwin libtool;
+  nativeBuildInputs = [ jam pkgconfig ] ++ lib.optional stdenv.isDarwin cctools;
 
-  buildInputs = [ gtk2 SDL SDL_mixer ] ++ (
-    if stdenv.isDarwin then [ smpeg libvorbis ] else [ SDL_sound ]
-  );
+  buildInputs = [ SDL SDL_mixer SDL_sound gtk2 ]
+    ++ lib.optionals stdenv.isDarwin [ cf-private smpeg libvorbis ];
 
   patches = [ ./darwin.patch ];
-
-  postPatch = ''
-    substituteInPlace Jamrules \
-        --replace -mmacosx-version-min=10.7 -mmacosx-version-min=$MACOSX_DEPLOYMENT_TARGET
-  '';
 
   buildPhase = jamenv + "jam -j$NIX_BUILD_CORES";
 
@@ -57,7 +52,7 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = http://ccxvii.net/gargoyle/;
     license = licenses.gpl2Plus;
     description = "Interactive fiction interpreter GUI";

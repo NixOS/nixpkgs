@@ -2,7 +2,7 @@
 
 # build-tools
 , bootPkgs
-, autoconf, automake, coreutils, fetchurl, fetchpatch, perl, python3, m4
+, autoconf, automake, coreutils, fetchurl, fetchpatch, perl, python3, m4, sphinx
 
 , libiconv ? null, ncurses
 
@@ -168,14 +168,14 @@ stdenv.mkDerivation (rec {
   strictDeps = true;
 
   nativeBuildInputs = [
-    perl autoconf automake m4 python3
+    perl autoconf automake m4 python3 sphinx
     ghc bootPkgs.alex bootPkgs.happy bootPkgs.hscolour
   ];
 
   # For building runtime libs
   depsBuildTarget = toolsForTarget;
 
-  buildInputs = libDeps hostPlatform;
+  buildInputs = [ perl ] ++ (libDeps hostPlatform);
 
   propagatedBuildInputs = [ targetPackages.stdenv.cc ]
     ++ stdenv.lib.optional useLLVM llvmPackages.llvm;
@@ -189,7 +189,7 @@ stdenv.mkDerivation (rec {
 
   checkTarget = "test";
 
-  hardeningDisable = [ "format" ];
+  hardeningDisable = [ "format" ] ++ stdenv.lib.optional stdenv.targetPlatform.isMusl "pie";
 
   postInstall = ''
     for bin in "$out"/lib/${name}/bin/*; do

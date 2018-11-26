@@ -18,8 +18,8 @@
 ## optional libraries
 
 , alsaSupport ? stdenv.isLinux, alsaLib
-, pulseaudioSupport ? true, libpulseaudio
-, ffmpegSupport ? true, gstreamer, gst-plugins-base
+, pulseaudioSupport ? stdenv.isLinux, libpulseaudio
+, ffmpegSupport ? true
 , gtk3Support ? true, gtk2, gtk3, wrapGAppsHook
 , gssSupport ? true, kerberos
 
@@ -101,7 +101,6 @@ stdenv.mkDerivation rec {
   ++ lib.optional (lib.versionOlder ffversion "61") hunspell
   ++ lib.optional  alsaSupport alsaLib
   ++ lib.optional  pulseaudioSupport libpulseaudio # only headers are needed
-  ++ lib.optionals ffmpegSupport [ gstreamer gst-plugins-base ]
   ++ lib.optional  gtk3Support gtk3
   ++ lib.optional  gssSupport kerberos
   ++ lib.optionals stdenv.isDarwin [ CoreMedia ExceptionHandling Kerberos
@@ -196,8 +195,7 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optional (stdenv.isDarwin && lib.versionAtLeast ffversion "61") "--disable-xcode-checks"
   ++ lib.optional (lib.versionOlder ffversion "61") "--enable-system-hunspell"
-  ++ lib.optionals (lib.versionAtLeast ffversion "56" && !stdenv.hostPlatform.isi686) [
-    # on i686-linux: --with-libclang-path is not available in this configuration
+  ++ lib.optionals (lib.versionAtLeast ffversion "56") [
     "--with-libclang-path=${llvmPackages.libclang}/lib"
     "--with-clang-path=${llvmPackages.clang}/bin/clang"
   ]
@@ -222,7 +220,6 @@ stdenv.mkDerivation rec {
   ++ flag pulseaudioSupport "pulseaudio"
   ++ flag ffmpegSupport "ffmpeg"
   ++ flag gssSupport "negotiateauth"
-  ++ lib.optional (!ffmpegSupport) "--disable-gstreamer"
   ++ flag webrtcSupport "webrtc"
   ++ flag crashreporterSupport "crashreporter"
   ++ lib.optional drmSupport "--enable-eme=widevine"

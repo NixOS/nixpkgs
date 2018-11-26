@@ -36,9 +36,7 @@ in stdenv.mkDerivation (rec {
   nativeBuildInputs = [ cmake python ]
     ++ stdenv.lib.optional enableManpages python.pkgs.sphinx;
 
-  buildInputs = [ libxml2 libffi ]
-    # TODO(@Ericson2314): Remove next mass rebuild
-    ++ stdenv.lib.optionals (stdenv.isDarwin && stdenv.hostPlatform == stdenv.buildPlatform) [ libcxxabi ];
+  buildInputs = [ libxml2 libffi ];
 
   propagatedBuildInputs = [ ncurses zlib ];
 

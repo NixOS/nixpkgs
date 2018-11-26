@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, cmake, pkgconfig, libuuid
 , sane-backends, podofo, libjpeg, djvulibre, libxmlxx3, libzip, tesseract
-, enchant, intltool, poppler, json-glib
+, intltool, poppler, json-glib
 , ninja
 , python3
 
@@ -16,13 +16,13 @@ let
 in
 stdenv.mkDerivation rec {
   name = "gImageReader-${version}";
-  version = "3.2.99";
+  version = "3.3.0";
 
   src = fetchFromGitHub {
     owner= "manisandro";
     repo = "gImageReader";
     rev = "v${version}";
-    sha256 = "19dbxq83j77lbvi10a8x0xxgw5hbsqyc852c196zzvmwk3km6pnc";
+    sha256 = "0pjk4kr7bc5q4hi1xf7na2zln9fyqdazgzq62r3bg41nzy7fakcz";
   };
 
   nativeBuildInputs = [
@@ -37,7 +37,6 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    enchant
     libxmlxx3
     libzip
     libuuid

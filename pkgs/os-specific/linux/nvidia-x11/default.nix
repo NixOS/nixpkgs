@@ -19,10 +19,10 @@ rec {
   stable = if stdenv.hostPlatform.system == "x86_64-linux" then stable_410 else stable_390;
 
   stable_410 = generic {
-    version = "410.73";
-    sha256_64bit = "07pzq8rvbsx3v8rgz98amyw0k1mn5mkygpd1q5gfn6r0h7vrrg5y";
-    settingsSha256 = "19xc10b0c074wb9fv9n04dvmi8hrwl6srvvyrjfyj92gch49x6hw";
-    persistencedSha256 = "0vhr7pysv4vk7v96yima0i9zsvvgxaxihjzxlfifpsdki57n2jz7";
+    version = "410.78";
+    sha256_64bit = "1ciabnmvh95gsfiaakq158x2yws3m9zxvnxws3p32lz9riblpdjx";
+    settingsSha256 = "1677g7rcjbcs5fja1s4p0syhhz46g9x2qqzyn3wwwrjsj7rwaz77";
+    persistencedSha256 = "01kvd3zp056i4n8vazj7gx1xw0h4yjdlpazmspnsmwg24ijb82x4";
   };
 
   # Last one supporting x86
@@ -40,11 +40,11 @@ rec {
   beta = stable;
 
   legacy_340 = generic {
-    version = "340.104";
-    sha256_32bit = "1l8w95qpxmkw33c4lsf5ar9w2fkhky4x23rlpqvp1j66wbw1b473";
-    sha256_64bit = "18k65gx6jg956zxyfz31xdp914sq3msn665a759bdbryksbk3wds";
-    settingsSha256 = "1vvpqimvld2iyfjgb9wvs7ca0b0f68jzfdpr0icbyxk4vhsq7sxk";
-    persistencedSha256 = "0zqws2vsrxbxhv6z0nn2galnghcsilcn3s0f70bpm6jqj9wzy7x8";
+    version = "340.107";
+    sha256_32bit = "0mh83affz6bim26ws7kkwwcfj2s6vkdy4d45hifsbshr82qd52wd";
+    sha256_64bit = "0pv9yv3x0kg9hfkmc50xb54ahxkbnyy2vyy4hj2h0s6m9sb5kqz3";
+    settingsSha256 = "1rgaa24acdyqa1rqrx56293vxpskr792njqqpigqmps04llsx703";
+    persistencedSha256 = "0nwv6kh4gxgy80x1zs6gcg5hy3amg25xhsfa2v4mwqa36sblxz6l";
     useGLVND = false;
 
     patches = maybePatch_drm_legacy ++ [ ./vm_operations_struct-fault.patch ];

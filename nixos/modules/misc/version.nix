@@ -43,6 +43,7 @@ in
     nixos.codeName = mkOption {
       readOnly = true;
       type = types.str;
+      default = lib.trivial.codeName;
       description = "The NixOS release code name (e.g. <literal>Emu</literal>).";
     };
 
@@ -79,9 +80,6 @@ in
       version = mkDefault (cfg.release + cfg.versionSuffix);
       revision      = mkIf (pathIsDirectory gitRepo) (mkDefault            gitCommitId);
       versionSuffix = mkIf (pathIsDirectory gitRepo) (mkDefault (".git." + gitCommitId));
-
-      # Note: the first letter is bumped on every release.  It's an animal.
-      codeName = "Koi";
     };
 
     # Generate /etc/os-release.  See

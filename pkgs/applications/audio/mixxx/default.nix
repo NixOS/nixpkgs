@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   name = "mixxx-${version}";
-  version = "2.1.4";
+  version = "2.1.5";
 
   src = fetchFromGitHub {
     owner = "mixxxdj";
     repo = "mixxx";
     rev = "release-${version}";
-    sha256 = "1q1px4033marraprvgr5yq9jlz943kcc10fdkn7py2ma8cfgnipq";
+    sha256 = "0h14pwglz03sdmgzviypv1qa1xfjclrnhyqaq5nd60j47h4z39dr";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -32,26 +32,11 @@ stdenv.mkDerivation rec {
     "opus=1"
   ];
 
-  buildPhase = ''
-    runHook preBuild
-    mkdir -p "$out"
-    scons \
-      -j$NIX_BUILD_CORES -l$NIX_BUILD_CORES \
-      $sconsFlags "prefix=$out"
-    runHook postBuild
-  '';
-
-  installPhase = ''
-    runHook preInstall
-    scons $sconsFlags "prefix=$out" install
-    runHook postInstall
-  '';
-
   fixupPhase = ''
     wrapProgram $out/bin/mixxx \
       --set LOCALE_ARCHIVE ${glibcLocales}/lib/locale/locale-archive;
   '';
-    
+
   meta = with stdenv.lib; {
     homepage = https://mixxx.org;
     description = "Digital DJ mixing software";

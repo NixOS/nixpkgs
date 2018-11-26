@@ -10,6 +10,7 @@ import ./make-test.nix ({ pkgs, ...} : {
     { users.users.alice = { isNormalUser = true; extraGroups = [ "proc" ]; };
       users.users.sybil = { isNormalUser = true; group = "wheel"; };
       imports = [ ../modules/profiles/hardened.nix ];
+      nix.useSandbox = false;
       virtualisation.emptyDiskImages = [ 4096 ];
       boot.initrd.postDeviceCommands = ''
         ${pkgs.dosfstools}/bin/mkfs.vfat -n EFISYS /dev/vdb
@@ -62,6 +63,12 @@ import ./make-test.nix ({ pkgs, ...} : {
         $machine->execute("mkdir -p /efi");
         $machine->succeed("mount /dev/disk/by-label/EFISYS /efi");
         $machine->succeed("mountpoint -q /efi"); # now mounted
+      };
+
+      # Test Nix dæmon usage
+      subtest "nix-daemon", sub {
+        $machine->fail("su -l nobody -s /bin/sh -c 'nix ping-store'");
+        $machine->succeed("su -l alice -c 'nix ping-store'") =~ "OK";
       };
     '';
 })

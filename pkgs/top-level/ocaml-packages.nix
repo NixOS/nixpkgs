@@ -17,6 +17,8 @@ let
 
     buildOcaml = callPackage ../build-support/ocaml { };
 
+    buildDunePackage = callPackage ../build-support/ocaml/dune.nix {};
+
     alcotest = callPackage ../development/ocaml-modules/alcotest {};
 
     angstrom = callPackage ../development/ocaml-modules/angstrom { };
@@ -735,6 +737,8 @@ let
 
     vg = callPackage ../development/ocaml-modules/vg { };
 
+    visitors = callPackage ../development/ocaml-modules/visitors { };
+
     wasm = callPackage ../development/ocaml-modules/wasm { };
 
     wtf8 = callPackage ../development/ocaml-modules/wtf8 { };
@@ -1035,7 +1039,9 @@ let
       enableX11 = config.unison.enableX11 or true;
     };
 
-    hol_light = callPackage ../applications/science/logic/hol_light { };
+    hol_light = callPackage ../applications/science/logic/hol_light {
+      camlp5 = callPackage ../development/tools/ocaml/camlp5 { legacy = true; };
+    };
 
   };
     in (ocamlPackages.janeStreet // ocamlPackages);

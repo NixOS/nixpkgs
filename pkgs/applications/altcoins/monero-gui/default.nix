@@ -6,19 +6,20 @@
 , qtwebengine, qtx11extras, qtxmlpatterns
 , monero, unbound, readline, boost, libunwind
 , libsodium, pcsclite, zeromq, cppzmq, pkgconfig
+, hidapi
 }:
 
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "monero-gui-${version}";
-  version = "0.13.0.3";
+  version = "0.13.0.4";
 
   src = fetchFromGitHub {
     owner  = "monero-project";
     repo   = "monero-gui";
     rev    = "v${version}";
-    sha256 = "1rvxwz7p1yw9c817n07m60xvmv2p97s82sfzwkg2x880fpxb0gj9";
+    sha256 = "142yj5s15bhm300dislq3x5inw1f37shnrd5vyj78jjcvry3wymw";
   };
 
   nativeBuildInputs = [ qmake pkgconfig ];
@@ -29,7 +30,7 @@ stdenv.mkDerivation rec {
     qtwebchannel qtwebengine qtx11extras
     qtxmlpatterns monero unbound readline
     boost libunwind libsodium pcsclite zeromq
-    cppzmq makeWrapper
+    cppzmq makeWrapper hidapi
   ];
 
   patches = [
@@ -86,7 +87,7 @@ stdenv.mkDerivation rec {
     description = "Private, secure, untraceable currency";
     homepage    = https://getmonero.org/;
     license     = licenses.bsd3;
-    platforms   = platforms.all;
+    platforms   = [ "x86_64-linux" ];
     maintainers = with maintainers; [ rnhmjoj ];
   };
 }

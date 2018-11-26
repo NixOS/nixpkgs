@@ -13,6 +13,7 @@
 
 let
   excludedTests = []
+    ++ [ "reimport_from_subinterpreter" ]
     # cython's testsuite is not working very well with libc++
     # We are however optimistic about things outside of testsuite still working
     ++ stdenv.lib.optionals (stdenv.cc.isClang or false) [ "cpdef_extern_func" "libcpp_algo" ]
@@ -25,11 +26,11 @@ let
 
 in buildPythonPackage rec {
   pname = "Cython";
-  version = "0.28.5";
+  version = "0.29";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b64575241f64f6ec005a4d4137339fb0ba5e156e826db2fdb5f458060d9979e0";
+    sha256 = "15zama7fgp7yyi3z39xp3z2lvwcgch8fn3ycscw2cs37vqg6v4cl";
   };
 
   nativeBuildInputs = [
@@ -44,6 +45,7 @@ in buildPythonPackage rec {
   checkPhase = ''
     export HOME="$NIX_BUILD_TOP"
     ${python.interpreter} runtests.py -j$NIX_BUILD_CORES \
+      --no-code-style \
       ${stdenv.lib.optionalString (builtins.length excludedTests != 0)
         ''--exclude="(${builtins.concatStringsSep "|" excludedTests})"''}
   '';

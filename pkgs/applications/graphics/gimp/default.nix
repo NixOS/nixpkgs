@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, intltool, babl, gegl, gtk2, glib, gdk_pixbuf, isocodes
+{ stdenv, fetchurl, substituteAll, pkgconfig, intltool, babl, gegl, gtk2, glib, gdk_pixbuf, isocodes
 , pango, cairo, freetype, fontconfig, lcms, libpng, libjpeg, poppler, poppler_data, libtiff
 , libmng, librsvg, libwmf, zlib, libzip, ghostscript, aalib, shared-mime-info
 , python2Packages, libexif, gettext, xorg, glib-networking, libmypaint, gexiv2
@@ -9,11 +9,11 @@ let
   inherit (python2Packages) pygtk wrapPython python;
 in stdenv.mkDerivation rec {
   name = "gimp-${version}";
-  version = "2.10.6";
+  version = "2.10.8";
 
   src = fetchurl {
     url = "http://download.gimp.org/pub/gimp/v${stdenv.lib.versions.majorMinor version}/${name}.tar.bz2";
-    sha256 = "07qh2ljbza2mph1gh8sicn27qihhj8hx3ivvry2874cfh8ghgj2f";
+    sha256 = "16sb4kslwin2jbgdb4nhks78pd0af8mvj8g5hap3hj946p7w2jfq";
   };
 
   nativeBuildInputs = [ pkgconfig intltool gettext wrapPython ];
@@ -35,6 +35,15 @@ in stdenv.mkDerivation rec {
     # The check runs before glib-networking is registered
     export GIO_EXTRA_MODULES="${glib-networking}/lib/gio/modules:$GIO_EXTRA_MODULES"
   '';
+
+  patches = [
+    # to remove compiler from the runtime closure, reference was retained via
+    # gimp --version --verbose output
+    (substituteAll {
+      src = ./remove-cc-reference.patch;
+      cc_version = stdenv.cc.cc.name;
+    })
+  ];
 
   postFixup = ''
     wrapPythonProgramsIn $out/lib/gimp/${passthru.majorVersion}/plug-ins/

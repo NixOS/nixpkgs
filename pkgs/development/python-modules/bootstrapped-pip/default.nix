@@ -3,9 +3,9 @@
 let
   wheel_source = fetchPypi {
     pname = "wheel";
-    version = "0.32.1";
+    version = "0.32.2";
     format = "wheel";
-    sha256 = "15hizylh761jcaz8zfdc3wg30jf33izaakyv1p82ppx2y5rgg8cz";
+    sha256 = "1216licil12jjixfqvkb84xkync5zz0fdc2kgzhl362z3xqjsgn9";
   };
   setuptools_source = fetchPypi {
     pname = "setuptools";

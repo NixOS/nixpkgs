@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "peppercorn";
-  version = "0.5";
+  version = "0.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "921cba5d51fa211e6da0fbd2120b9a98d663422a80f5bb669ad81ffb0909774b";
+    sha256 = "1ip4bfwcpwkq9hz2dai14k2cyabvwrnvcvrcmzxmqm04g8fnimwn";
   };
 
   meta = with stdenv.lib; {

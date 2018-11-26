@@ -92,6 +92,7 @@ let
   # Hidden services
   + concatStrings (flip mapAttrsToList cfg.hiddenServices (n: v: ''
     HiddenServiceDir ${torDirectory}/onion/${v.name}
+    ${optionalString (v.version != null) "HiddenServiceVersion ${toString v.version}"}
     ${flip concatMapStrings v.map (p: ''
       HiddenServicePort ${toString p.port} ${p.destination}
     '')}
@@ -666,6 +667,12 @@ in
                    };
                  };
                }));
+             };
+
+             version = mkOption {
+               default = null;
+               description = "Rendezvous service descriptor version to publish for the hidden service. Currently, versions 2 and 3 are supported. (Default: 2)";
+               type = types.nullOr (types.enum [ 2 3 ]);
              };
           };
 

@@ -5,8 +5,7 @@
 let
   # These are attributes in compiler and packages that don't support integer-simple.
   integerSimpleExcludes = [
-    "ghc7103Binary"
-    "ghc821Binary"
+    "ghc822Binary"
     "ghc844"
     "ghcjs"
     "ghcjs82"
@@ -43,32 +42,35 @@ in {
 
   compiler = {
 
-    ghc7103Binary = callPackage ../development/compilers/ghc/7.10.3-binary.nix { };
-    ghc821Binary = callPackage ../development/compilers/ghc/8.2.1-binary.nix { };
+    ghc822Binary = callPackage ../development/compilers/ghc/8.2.2-binary.nix { };
 
     ghc822 = callPackage ../development/compilers/ghc/8.2.2.nix {
-      bootPkgs = packages.ghc821Binary;
+      bootPkgs = packages.ghc822Binary;
       inherit (buildPackages.python3Packages) sphinx;
       buildLlvmPackages = buildPackages.llvmPackages_39;
       llvmPackages = pkgs.llvmPackages_39;
     };
     ghc844 = callPackage ../development/compilers/ghc/8.4.4.nix {
-      bootPkgs = packages.ghc821Binary;
+      bootPkgs = packages.ghc822Binary;
+      inherit (buildPackages.python3Packages) sphinx;
       buildLlvmPackages = buildPackages.llvmPackages_5;
       llvmPackages = pkgs.llvmPackages_5;
     };
     ghc861 = callPackage ../development/compilers/ghc/8.6.1.nix {
       bootPkgs = packages.ghc822;
+      inherit (buildPackages.python3Packages) sphinx;
       buildLlvmPackages = buildPackages.llvmPackages_6;
       llvmPackages = pkgs.llvmPackages_6;
     };
     ghc862 = callPackage ../development/compilers/ghc/8.6.2.nix {
       bootPkgs = packages.ghc822;
+      inherit (buildPackages.python3Packages) sphinx;
       buildLlvmPackages = buildPackages.llvmPackages_6;
       llvmPackages = pkgs.llvmPackages_6;
     };
     ghcHEAD = callPackage ../development/compilers/ghc/head.nix {
-      bootPkgs = packages.ghc821Binary;
+      bootPkgs = packages.ghc822Binary;
+      inherit (buildPackages.python3Packages) sphinx;
       buildLlvmPackages = buildPackages.llvmPackages_5;
       llvmPackages = pkgs.llvmPackages_5;
     };
@@ -102,15 +104,9 @@ in {
   # Always get compilers from `buildPackages`
   packages = let bh = buildPackages.haskell; in {
 
-    ghc7103Binary = callPackage ../development/haskell-modules {
-      buildHaskellPackages = bh.packages.ghc7103Binary;
-      ghc = bh.compiler.ghc7103Binary;
-      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-7.10.x.nix { };
-      packageSetConfig = bootstrapPackageSet;
-    };
-    ghc821Binary = callPackage ../development/haskell-modules {
-      buildHaskellPackages = bh.packages.ghc821Binary;
-      ghc = bh.compiler.ghc821Binary;
+    ghc822Binary = callPackage ../development/haskell-modules {
+      buildHaskellPackages = bh.packages.ghc822Binary;
+      ghc = bh.compiler.ghc822Binary;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.2.x.nix { };
       packageSetConfig = bootstrapPackageSet;
     };
@@ -118,11 +114,6 @@ in {
       buildHaskellPackages = bh.packages.ghc822;
       ghc = bh.compiler.ghc822;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.2.x.nix { };
-    };
-    ghc843 = callPackage ../development/haskell-modules {
-      buildHaskellPackages = bh.packages.ghc843;
-      ghc = bh.compiler.ghc843;
-      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.4.x.nix { };
     };
     ghc844 = callPackage ../development/haskell-modules {
       buildHaskellPackages = bh.packages.ghc844;

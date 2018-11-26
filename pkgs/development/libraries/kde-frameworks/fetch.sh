@@ -1,1 +1,1 @@
-WGET_ARGS=( https://download.kde.org/stable/frameworks/5.51/ -A '*.tar.xz' )
+WGET_ARGS=( https://download.kde.org/stable/frameworks/5.52/ -A '*.tar.xz' )
