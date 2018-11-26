@@ -3829,6 +3829,8 @@ in {
 
   simplejson = callPackage ../development/python-modules/simplejson { };
 
+  simplekml = callPackage ../development/python-modules/simplekml { };
+
   slimit = callPackage ../development/python-modules/slimit { };
 
   snowballstemmer = callPackage ../development/python-modules/snowballstemmer { };
