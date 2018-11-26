@@ -3780,6 +3780,8 @@ with pkgs;
     pythonPackages = python3Packages;
   };
 
+  nbench = callPackage ../tools/misc/nbench { };
+
   netdata = callPackage ../tools/system/netdata {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation IOKit;
   };
