@@ -2459,7 +2459,7 @@ addEnvHooks "$hostOffset" myBashFunction
        use it first add <literal>cntr</literal> to your
        <literal>environment.systemPackages</literal> on NixOS or alternatively to
        the root user on non-NixOS systems. Then in the package that is supposed
-       to be inspected, add <literal>cntr</literal> to
+       to be inspected, add <literal>breakpointHook</literal> to
        <literal>nativeBuildInputs</literal>.
 <programlisting>
          nativeBuildInputs = [ breakpointHook ];
