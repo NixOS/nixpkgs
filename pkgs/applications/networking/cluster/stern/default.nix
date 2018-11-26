@@ -1,4 +1,6 @@
-{ stdenv, lib, buildGoPackage, fetchFromGitHub }:
+{ stdenv, lib, buildPackages, buildGoPackage, fetchFromGitHub }:
+
+let isCrossBuild = stdenv.hostPlatform != stdenv.buildPlatform; in
 
 buildGoPackage rec {
   name = "stern-${version}";
@@ -15,14 +17,14 @@ buildGoPackage rec {
 
   goDeps = ./deps.nix;
 
-  # Only build shell completion if we're _not_ cross compiling,
-  # because it requires executing the compiled stern binary.
-  postInstall = lib.optionalString (stdenv.buildPlatform == stdenv.hostPlatform) ''
-    mkdir -p $bin/share/bash-completion/completions
-    $bin/bin/stern --completion bash > $bin/share/bash-completion/completions/stern
-    mkdir -p $bin/share/zsh/site-functions
-    $bin/bin/stern --completion zsh > $bin/share/zsh/site-functions/_stern
-  '';
+  postInstall =
+    let stern = if isCrossBuild then buildPackages.stern else "$bin"; in
+    ''
+      mkdir -p $bin/share/bash-completion/completions
+      ${stern}/bin/stern --completion bash > $bin/share/bash-completion/completions/stern
+      mkdir -p $bin/share/zsh/site-functions
+      ${stern}/bin/stern --completion zsh > $bin/share/zsh/site-functions/_stern
+    '';
 
   meta = with lib; {
     description      = "Multi pod and container log tailing for Kubernetes";
