@@ -3,18 +3,18 @@
 stdenv.mkDerivation rec {
   name = "gitlab-workhorse-${version}";
 
-  version = "7.0.0";
+  version = "7.1.0";
 
-  srcs = fetchFromGitLab {
+  src = fetchFromGitLab {
     owner = "gitlab-org";
     repo = "gitlab-workhorse";
     rev = "v${version}";
-    sha256 = "1mmfb7h5sbva2kv9h9cxfg7dyksxrwwikq7jwggfawqaadzwm677";
+    sha256 = "1jq28z2kf58wnbv8jkwfx2bm8ki22hpm9ssdy2ymza22gq0zx00g";
   };
 
   buildInputs = [ git go ];
 
-  patches = [ ./remove-hardcoded-paths.patch ./deterministic-build.patch ];
+  patches = [ ./remove-hardcoded-paths.patch ];
 
   makeFlags = [ "PREFIX=$(out)" "VERSION=${version}" ];
 
