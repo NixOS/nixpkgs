@@ -197,6 +197,7 @@ stdenv.mkDerivation rec {
   '';
 
   preInstall = ''
+    rm -r pkg/{bootstrap,obj}
     # Contains the wrong perl shebang when cross compiling,
     # since it is not used for anything we can deleted as well.
     rm src/regexp/syntax/make_perl_groups.pl
