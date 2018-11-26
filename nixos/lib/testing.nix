@@ -1,5 +1,5 @@
 { system
-, pkgs
+, pkgs ? import ../.. { inherit system config; }
   # Use a minimal kernel?
 , minimal ? false
   # Ignored
