@@ -88,7 +88,9 @@ in rec {
   coqPackages_8_7 = mkCoqPackages coq_8_7;
   coqPackages_8_8 = mkCoqPackages coq_8_8;
   coqPackages_8_9 = mkCoqPackages coq_8_9;
-  coqPackages = coqPackages_8_8;
+  coqPackages = recurseIntoAttrs (lib.mapDerivationAttrset lib.dontDistribute
+    coqPackages_8_8
+  );
   coq = coqPackages.coq;
 
 }
