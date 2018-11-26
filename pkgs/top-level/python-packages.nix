@@ -3484,6 +3484,8 @@ in {
 
   pyspread = callPackage ../development/python-modules/pyspread { };
 
+  pyupdate = callPackage ../development/python-modules/pyupdate {};
+
   pyx = callPackage ../development/python-modules/pyx { };
 
   mmpython = callPackage ../development/python-modules/mmpython { };
