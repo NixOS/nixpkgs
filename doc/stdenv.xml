@@ -2458,7 +2458,7 @@ addEnvHooks "$hostOffset" myBashFunction
        <command>cntr</command> is only supported on Linux-based platforms. To
        use it first add <literal>cntr</literal> to your
        <literal>environment.systemPackages</literal> on NixOS or alternatively to
-       the root user on non-nixos systems. Then in the package that is supposed
+       the root user on non-NixOS systems. Then in the package that is supposed
        to be inspected, add <literal>cntr</literal> to
        <literal>nativeBuildInputs</literal>.
 <programlisting>
