@@ -173,7 +173,7 @@ addAutoPatchelfSearchPath() {
 }
 
 autoPatchelf() {
-    local -a norecurse=
+    local norecurse=
 
     while [ $# -gt 0 ]; do
         case "$1" in
