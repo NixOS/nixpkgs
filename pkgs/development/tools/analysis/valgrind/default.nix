@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   # GDB is needed to provide a sane default for `--db-command'.
   buildInputs = [ perl gdb ]  ++ stdenv.lib.optionals (stdenv.isDarwin) [ bootstrap_cmds xnu ];
 
-  enableParallelBuilding = true;
+  enableParallelBuilding = !stdenv.isDarwin;
   separateDebugInfo = stdenv.isLinux;
 
   preConfigure = stdenv.lib.optionalString stdenv.isDarwin (
