@@ -744,6 +744,8 @@ in {
 
   adal = callPackage ../development/python-modules/adal { };
 
+  affine = callPackage ../development/python-modules/affine { };
+
   aioconsole = callPackage ../development/python-modules/aioconsole { };
 
   aiodns = callPackage ../development/python-modules/aiodns { };
@@ -1053,6 +1055,8 @@ in {
 
   pyechonest = callPackage ../development/python-modules/pyechonest { };
 
+  pyepsg = callPackage ../development/python-modules/pyepsg { };
+
   pyezminc = callPackage ../development/python-modules/pyezminc { };
 
   billiard = callPackage ../development/python-modules/billiard { };
@@ -1133,6 +1137,8 @@ in {
   cairosvg = callPackage ../development/python-modules/cairosvg {};
 
   carrot = callPackage ../development/python-modules/carrot {};
+
+  cartopy = callPackage ../development/python-modules/cartopy {};
 
   case = callPackage ../development/python-modules/case {};
 
@@ -2415,6 +2421,8 @@ in {
 
   genshi = callPackage ../development/python-modules/genshi { };
 
+  gentools = callPackage ../development/python-modules/gentools { };
+
   gevent = callPackage ../development/python-modules/gevent { };
 
   geventhttpclient = callPackage ../development/python-modules/geventhttpclient { };
@@ -3657,6 +3665,8 @@ in {
 
   rabbitpy = callPackage ../development/python-modules/rabbitpy { };
 
+  rasterio = callPackage ../development/python-modules/rasterio { };
+
   radicale_infcloud = callPackage ../development/python-modules/radicale_infcloud {};
 
   recaptcha_client = callPackage ../development/python-modules/recaptcha_client { };
@@ -3840,6 +3850,10 @@ in {
   slimit = callPackage ../development/python-modules/slimit { };
 
   snowballstemmer = callPackage ../development/python-modules/snowballstemmer { };
+
+  snug = callPackage ../development/python-modules/snug { };
+
+  snuggs = callPackage ../development/python-modules/snuggs { };
 
   spake2 = callPackage ../development/python-modules/spake2 { };
 
