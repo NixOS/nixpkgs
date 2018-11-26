@@ -86,7 +86,7 @@ self: super: {
       name = "git-annex-${super.git-annex.version}-src";
       url = "git://git-annex.branchable.com/";
       rev = "refs/tags/" + super.git-annex.version;
-      sha256 = "0dnrihpdshrldais74jm5wjfw650i4va8znc1k2zq8gl9p4i8p39";
+      sha256 = "0f0pp0d5q4122cjh4j7iasnjh234fmkvlwgb3f49087cg8rr2czh";
     };
   }).override {
     dbus = if pkgs.stdenv.isLinux then self.dbus else null;
@@ -694,11 +694,6 @@ self: super: {
   # We cannot build this package w/o the C library from <http://www.phash.org/>.
   phash = markBroken super.phash;
 
-  # https://github.com/deech/fltkhs/issues/16
-  # linking fails because the build doesn't pull in the libGLU_combined libraries
-  fltkhs = markBroken super.fltkhs;
-  fltkhs-fluid-examples = dontDistribute super.fltkhs-fluid-examples;
-
   # We get lots of strange compiler errors during the test suite run.
   jsaddle = dontCheck super.jsaddle;
 
@@ -897,6 +892,7 @@ self: super: {
   cryptohash-md5 = doJailbreak super.cryptohash-md5;
   text-short = doJailbreak super.text-short;
   gitHUD = dontCheck super.gitHUD;
+  githud = dontCheck super.githud;
 
   # https://github.com/aisamanra/config-ini/issues/12
   config-ini = dontCheck super.config-ini;
@@ -1181,5 +1177,12 @@ self: super: {
 
   # https://github.com/DanielG/cabal-helper/issues/59
   cabal-helper = doJailbreak super.cabal-helper;
+
+  # TODO(Profpatsch): factor out local nix store setup from
+  # lib/tests/release.nix and use that for the tests of libnix
+  # libnix = overrideCabal super.libnix (old: {
+  #   testToolDepends = old.testToolDepends or [] ++ [ pkgs.nix ];
+  # });
+  libnix = dontCheck super.libnix;
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super

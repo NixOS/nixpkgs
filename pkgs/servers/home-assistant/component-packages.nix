@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "0.82.0";
+  version = "0.82.1";
   components = {
     "abode" = ps: with ps; [  ];
     "ads" = ps: with ps; [  ];
@@ -562,7 +562,7 @@
     "light.mqtt_template" = ps: with ps; [ paho-mqtt ];
     "light.mysensors" = ps: with ps; [  ];
     "light.mystrom" = ps: with ps; [  ];
-    "light.nanoleaf_aurora" = ps: with ps; [  ];
+    "light.nanoleaf_aurora" = ps: with ps; [ nanoleaf ];
     "light.opple" = ps: with ps; [  ];
     "light.osramlightify" = ps: with ps; [  ];
     "light.piglow" = ps: with ps; [  ];

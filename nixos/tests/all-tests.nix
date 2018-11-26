@@ -99,7 +99,7 @@ in
   hydra = handleTest ./hydra {};
   i3wm = handleTest ./i3wm.nix {};
   iftop = handleTest ./iftop.nix {};
-  incron = handleTest tests/incron.nix {};
+  incron = handleTest ./incron.nix {};
   influxdb = handleTest ./influxdb.nix {};
   initrd-network-ssh = handleTest ./initrd-network-ssh {};
   initrdNetwork = handleTest ./initrd-network.nix {};
@@ -179,6 +179,7 @@ in
   radicale = handleTest ./radicale.nix {};
   redmine = handleTest ./redmine.nix {};
   rspamd = handleTest ./rspamd.nix {};
+  rss2email = handleTest ./rss2email.nix {};
   rsyslogd = handleTest ./rsyslogd.nix {};
   runInMachine = handleTest ./run-in-machine.nix {};
   rxe = handleTest ./rxe.nix {};
@@ -190,10 +191,10 @@ in
   smokeping = handleTest ./smokeping.nix {};
   snapper = handleTest ./snapper.nix {};
   solr = handleTest ./solr.nix {};
-  #statsd = handleTest ./statsd.nix {}; # statsd is broken: #45946
   strongswan-swanctl = handleTest ./strongswan-swanctl.nix {};
   sudo = handleTest ./sudo.nix {};
   switchTest = handleTest ./switch-test.nix {};
+  syncthing-relay = handleTest ./syncthing-relay.nix {};
   systemd = handleTest ./systemd.nix {};
   taskserver = handleTest ./taskserver.nix {};
   tomcat = handleTest ./tomcat.nix {};

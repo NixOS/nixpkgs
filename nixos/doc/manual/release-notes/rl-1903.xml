@@ -19,7 +19,9 @@
 
   <itemizedlist>
    <listitem>
-    <para />
+    <para>
+    The default Python 3 interpreter is now CPython 3.7 instead of CPython 3.6.
+    </para>
    </listitem>
   </itemizedlist>
  </section>
@@ -218,6 +220,17 @@
      previously set to <literal>true</literal> when using the display managers
      <literal>lightdm</literal>, <literal>sddm</literal> or <literal>xpra</literal> has been
      reset to the default value (<literal>false</literal>).
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     Network interface indiscriminate NixOS firewall options
+     (<literal>networking.firewall.allow*</literal>) are now preserved when also
+     setting interface specific rules such as <literal>networking.firewall.interfaces.en0.allow*</literal>.
+     These rules continue to use the pseudo device "default"
+     (<literal>networking.firewall.interfaces.default.*</literal>), and assigning
+     to this pseudo device will override the (<literal>networking.firewall.allow*</literal>)
+     options.
     </para>
    </listitem>
   </itemizedlist>

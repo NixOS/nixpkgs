@@ -41,6 +41,18 @@ rec {
   # think of it as an infix operator `g extends f` that mimics the syntax from
   # Java. It may seem counter-intuitive to have the "base class" as the second
   # argument, but it's nice this way if several uses of `extends` are cascaded.
+  #
+  # To get a better understanding how `extends` turns a function with a fix
+  # point (the package set we start with) into a new function with a different fix
+  # point (the desired packages set) lets just see, how `extends g f`
+  # unfolds with `g` and `f` defined above:
+  #
+  # extends g f = self: let super = f self; in super // g self super;
+  #             = self: let super = { foo = "foo"; bar = "bar"; foobar = self.foo + self.bar; }; in super // g self super
+  #             = self: { foo = "foo"; bar = "bar"; foobar = self.foo + self.bar; } // g self { foo = "foo"; bar = "bar"; foobar = self.foo + self.bar; }
+  #             = self: { foo = "foo"; bar = "bar"; foobar = self.foo + self.bar; } // { foo = "foo" + " + "; }
+  #             = self: { foo = "foo + "; bar = "bar"; foobar = self.foo + self.bar; }
+  #
   extends = f: rattrs: self: let super = rattrs self; in super // f self super;
 
   # Compose two extending functions of the type expected by 'extends'

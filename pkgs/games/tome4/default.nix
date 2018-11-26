@@ -18,11 +18,11 @@ let
 
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
-  version = "1.5.5";
+  version = "1.5.10";
 
   src = fetchurl {
     url = "https://te4.org/dl/t-engine/t-engine4-src-${version}.tar.bz2";
-    sha256 = "0v2qgdfpvdzd1bcbp9v8pfahj1bgczsq2d4xfhh5wg11jgjcwz03";
+    sha256 = "0mc5dgh2x9nbili7gy6srjhb23ckalf08wqq2amyjr5rq392jvd7";
   };
 
   nativeBuildInputs = [ premake4 makeWrapper unzip ];
@@ -82,6 +82,6 @@ in stdenv.mkDerivation rec {
     homepage = https://te4.org/;
     license = licenses.gpl3;
     maintainers = with maintainers; [ chattered peterhoeg ];
-    platforms = subtractLists ["aarch64-linux"] platforms.linux;
+    platforms = with platforms; [ "i686-linux" "x86_64-linux" ];
   };
 }

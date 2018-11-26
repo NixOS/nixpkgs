@@ -12,7 +12,7 @@
 
 # vim-go denpencies
 , asmfmt, delve, errcheck, godef, golint
-, gomodifytags, gotags, gotools, motion
+, gomodifytags, gotags, gotools, go-motion
 , gnused, reftools, gogetdoc, gometalinter
 , impl, iferr, gocode, gocode-gomod, go-tools
 }:
@@ -101,12 +101,15 @@ with generated;
     preFixup = ''
       substituteInPlace "$out"/share/vim-plugins/clang_complete/plugin/clang_complete.vim \
         --replace "let g:clang_library_path = '' + "''" + ''" "let g:clang_library_path='${llvmPackages.clang.cc.lib}/lib/libclang.so'"
+
+      substituteInPlace "$out"/share/vim-plugins/clang_complete/plugin/libclang.py \
+        --replace "/usr/lib/clang" "${llvmPackages.clang.cc}/lib/clang"
     '';
   });
 
   clighter8 = clighter8.overrideAttrs(old: {
     preFixup = ''
-      sed "/^let g:clighter8_libclang_path/s|')$|${llvmPackages.clang.cc}/lib/libclang.so')|" \
+      sed "/^let g:clighter8_libclang_path/s|')$|${llvmPackages.clang.cc.lib}/lib/libclang.so')|" \
         -i "$out"/share/vim-plugins/clighter8/plugin/clighter8.vim
     '';
   });
@@ -265,6 +268,7 @@ with generated;
       asmfmt
       delve
       errcheck
+      go-motion
       go-tools
       gocode
       gocode-gomod
@@ -277,7 +281,6 @@ with generated;
       gotools
       iferr
       impl
-      motion
       reftools
     ];
     in {

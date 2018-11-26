@@ -75,9 +75,13 @@ self = stdenv.mkDerivation rec {
     mysqlVersion = "5.7";
   };
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = https://www.mysql.com/;
     description = "The world's most popular open source database";
-    platforms = stdenv.lib.platforms.unix;
+    platforms = platforms.unix;
+    license = with licenses; [
+      artistic1 bsd0 bsd2 bsd3 bsdOriginal
+      gpl2 lgpl2 lgpl21 mit publicDomain licenses.zlib
+    ];
   };
 }; in self

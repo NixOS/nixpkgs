@@ -165,7 +165,7 @@ in
       ExecStop = "${gce}/bin/google_metadata_script_runner --debug --script-type shutdown";
       Type = "oneshot";
       RemainAfterExit = true;
-      TimeoutStopSec = 0;
+      TimeoutStopSec = "infinity";
     };
   };
 
