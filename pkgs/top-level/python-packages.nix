@@ -434,6 +434,8 @@ in {
 
   mwoauth = callPackage ../development/python-modules/mwoauth { };
 
+  nbval = callPackage ../development/python-modules/nbval { };
+
   nest-asyncio = callPackage ../development/python-modules/nest-asyncio { };
 
   neuron = pkgs.neuron.override {
