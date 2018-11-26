@@ -52,21 +52,25 @@ in {
     };
     ghc844 = callPackage ../development/compilers/ghc/8.4.4.nix {
       bootPkgs = packages.ghc822Binary;
+      inherit (buildPackages.python3Packages) sphinx;
       buildLlvmPackages = buildPackages.llvmPackages_5;
       llvmPackages = pkgs.llvmPackages_5;
     };
     ghc861 = callPackage ../development/compilers/ghc/8.6.1.nix {
       bootPkgs = packages.ghc822;
+      inherit (buildPackages.python3Packages) sphinx;
       buildLlvmPackages = buildPackages.llvmPackages_6;
       llvmPackages = pkgs.llvmPackages_6;
     };
     ghc862 = callPackage ../development/compilers/ghc/8.6.2.nix {
       bootPkgs = packages.ghc822;
+      inherit (buildPackages.python3Packages) sphinx;
       buildLlvmPackages = buildPackages.llvmPackages_6;
       llvmPackages = pkgs.llvmPackages_6;
     };
     ghcHEAD = callPackage ../development/compilers/ghc/head.nix {
       bootPkgs = packages.ghc822Binary;
+      inherit (buildPackages.python3Packages) sphinx;
       buildLlvmPackages = buildPackages.llvmPackages_5;
       llvmPackages = pkgs.llvmPackages_5;
     };

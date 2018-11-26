@@ -2068,6 +2068,8 @@ in {
 
   setuptools-git = callPackage ../development/python-modules/setuptools-git { };
 
+  sievelib = callPackage ../development/python-modules/sievelib { };
+
   watchdog = callPackage ../development/python-modules/watchdog { };
 
   zope_deprecation = callPackage ../development/python-modules/zope_deprecation { };
@@ -3827,6 +3829,8 @@ in {
 
   simplejson = callPackage ../development/python-modules/simplejson { };
 
+  simplekml = callPackage ../development/python-modules/simplekml { };
+
   slimit = callPackage ../development/python-modules/slimit { };
 
   snowballstemmer = callPackage ../development/python-modules/snowballstemmer { };
@@ -4732,6 +4736,8 @@ in {
 
   tvdb_api = callPackage ../development/python-modules/tvdb_api { };
 
+  sdnotify = callPackage ../development/python-modules/sdnotify { };
+
   tvnamer = callPackage ../development/python-modules/tvnamer { };
 
   threadpool = callPackage ../development/python-modules/threadpool { };
@@ -4974,6 +4980,8 @@ in {
   qasm2image = callPackage ../development/python-modules/qasm2image { };
 
   simpy = callPackage ../development/python-modules/simpy { };
+
+  yattag = callPackage ../development/python-modules/yattag { };
 
   z3 = (toPythonModule (pkgs.z3.override {
     inherit python;
