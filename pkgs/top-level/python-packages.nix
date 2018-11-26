@@ -430,6 +430,8 @@ in {
     mpi = pkgs.openmpi;
   };
 
+  multiset = callPackage ../development/python-modules/multiset { };
+
   mwclient = callPackage ../development/python-modules/mwclient { };
 
   mwoauth = callPackage ../development/python-modules/mwoauth { };
