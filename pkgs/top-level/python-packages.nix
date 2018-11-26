@@ -3961,6 +3961,8 @@ in {
 
   ua-parser = callPackage ../development/python-modules/ua-parser { };
 
+  uarray = callPackage ../development/python-modules/uarray { };
+
   ukpostcodeparser = callPackage ../development/python-modules/ukpostcodeparser { };
 
   umemcache = callPackage ../development/python-modules/umemcache {};
