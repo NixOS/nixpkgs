@@ -940,8 +940,6 @@ with pkgs;
 
   bitbucket-cli = python2Packages.bitbucket-cli;
 
-  bittornado = callPackage ../tools/networking/p2p/bittornado { };
-
   blink = callPackage ../applications/networking/instant-messengers/blink { };
 
   blockhash = callPackage ../tools/graphics/blockhash { };
