@@ -8964,6 +8964,8 @@ with pkgs;
 
   sqlitebrowser = libsForQt5.callPackage ../development/tools/database/sqlitebrowser { };
 
+  sqlite-web = callPackage ../development/tools/database/sqlite-web { };
+
   sselp = callPackage ../tools/X11/sselp{ };
 
   stm32flash = callPackage ../development/tools/misc/stm32flash { };
