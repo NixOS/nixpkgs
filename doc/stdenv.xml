@@ -2455,7 +2455,17 @@ addEnvHooks "$hostOffset" myBashFunction
        use the cntr exec subcommand. Note that <command>cntr</command> also
        needs to be executed on the machine that is doing the build, which might
        be not the case when remote builders are enabled.
-       <command>cntr</command> is only supported on linux based platforms.
+       <command>cntr</command> is only supported on Linux-based platforms. To
+       use it first add <literal>cntr</literal> to your
+       <literal>environment.systemPackages</literal> on NixOS or alternatively to
+       the root user on non-NixOS systems. Then in the package that is supposed
+       to be inspected, add <literal>breakpointHook</literal> to
+       <literal>nativeBuildInputs</literal>.
+<programlisting>
+         nativeBuildInputs = [ breakpointHook ];
+       </programlisting>
+       When a build failure happens there will be an instruction printed that
+       shows how to attach with <literal>cntr</literal> to the build sandbox.
       </para>
      </listitem>
     </varlistentry>
