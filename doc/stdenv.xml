@@ -2455,7 +2455,7 @@ addEnvHooks "$hostOffset" myBashFunction
        use the cntr exec subcommand. Note that <command>cntr</command> also
        needs to be executed on the machine that is doing the build, which might
        be not the case when remote builders are enabled.
-       <command>cntr</command> is only supported on linux based platforms. To
+       <command>cntr</command> is only supported on Linux-based platforms. To
        use it first add <literal>cntr</literal> to your
        <literal>environment.systemPackaes</literal> on NixOS or alternativly to
        the root user on non-nixos systems. Then in the package that is supposed
