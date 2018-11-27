@@ -14,6 +14,11 @@ buildPythonPackage rec {
     sha256 = "0x22fs3pdmr42kvz6c654756wja305qv6cx1zbhwlagvxgr4xrji";
   };
 
+  # Fix checkPhase on Darwin
+  # Otherwise it fails with  "ValueError: unknown locale: UTF-8"
+  # https://bugs.python.org/issue18378
+  LC_CTYPE = "en_US.UTF-8";
+
   checkPhase = if isPy3k then ''
     ${python.interpreter} test3/alltests.py
   '' else ''
