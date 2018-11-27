@@ -108,12 +108,12 @@ rec {
     }
   ) platformVersions;
 
-  sources = stdenv.lib.optional includeSources (map (version:
+  sources = map (version:
     deployAndroidPackage {
       inherit os;
       package = packages.sources."${version}";
     }
-  ) platformVersions);
+  ) platformVersions;
 
   system-images = stdenv.lib.flatten (map (apiVersion:
     map (type:
