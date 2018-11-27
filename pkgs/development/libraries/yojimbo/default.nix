@@ -15,9 +15,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ premake5 doxygen ];
   propagatedBuildInputs = [ libsodium mbedtls ];
 
-  buildPhase = ''
-    premake5 gmake
-    make all
+  postBuild = ''
     premake5 docs
   '';
 
@@ -27,6 +25,8 @@ stdenv.mkDerivation rec {
     mkdir -p $out/share/doc/yojimbo
     cp -r docs/html $out/share/doc/yojimbo
   '';
+
+  doCheck = true;
 
   meta = with stdenv.lib; {
     description = "A network library for client/server games with dedicated servers";
