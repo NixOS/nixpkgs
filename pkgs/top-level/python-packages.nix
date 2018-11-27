@@ -496,6 +496,8 @@ in {
 
   nbval = callPackage ../development/python-modules/nbval { };
 
+  ndtypes = callPackage ../development/python-modules/ndtypes { };
+
   nest-asyncio = callPackage ../development/python-modules/nest-asyncio { };
 
   neuron = pkgs.neuron.override {
