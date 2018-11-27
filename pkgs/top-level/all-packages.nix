@@ -23214,6 +23214,8 @@ in
 
   migrate = callPackage ../applications/science/biology/migrate { };
 
+  minc2_simple = callPackage ../development/libraries/minc2-simple { };
+
   mirtk = callPackage ../development/libraries/science/biology/mirtk { };
 
   muscle = callPackage ../applications/science/biology/muscle { };
