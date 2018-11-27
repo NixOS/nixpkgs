@@ -488,6 +488,8 @@ in {
 
   pdfx = callPackage ../development/python-modules/pdfx { };
 
+  perf = callPackage ../development/python-modules/perf { };
+
   phonopy = callPackage ../development/python-modules/phonopy { };
 
   pims = callPackage ../development/python-modules/pims { };
