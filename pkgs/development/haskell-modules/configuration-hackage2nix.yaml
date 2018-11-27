@@ -2455,6 +2455,7 @@ extra-packages:
   - yesod-persistent < 1.5              # pre-lts-11.x versions neeed by git-annex 6.20180227
   - yesod-static ^>= 1.5                # pre-lts-11.x versions neeed by git-annex 6.20180227
   - yesod-test ^>= 1.5                  # pre-lts-11.x versions neeed by git-annex 6.20180227
+  - patience ^>= 0.1                    # required by chell-0.4.x
 
 package-maintainers:
   peti:
