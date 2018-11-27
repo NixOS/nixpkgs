@@ -418,6 +418,8 @@ in {
 
   guestfs = callPackage ../development/python-modules/guestfs { };
 
+  gumath = callPackage ../development/python-modules/gumath { };
+
   h5py = callPackage ../development/python-modules/h5py {
     hdf5 = pkgs.hdf5;
   };
