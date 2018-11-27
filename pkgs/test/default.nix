@@ -31,4 +31,6 @@ with pkgs;
   cross = callPackage ./cross {};
 
   patch-shebangs = callPackage ./patch-shebangs {};
+
+  writers = callPackage ../build-support/writers/test.nix {};
 }
