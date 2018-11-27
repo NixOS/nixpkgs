@@ -1,5 +1,5 @@
 { stdenv, fetchurl, jre }:
- stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   name = "mill-${version}";
   version = "0.3.5";
 
