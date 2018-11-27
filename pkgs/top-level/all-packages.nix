@@ -8568,6 +8568,7 @@ with pkgs;
   gradle_2_14 = self.gradleGen.gradle_2_14;
   gradle_2_5 = self.gradleGen.gradle_2_5;
   gradle_3_5 = self.gradleGen.gradle_3_5;
+  gradle_4_10 = self.gradleGen.gradle_4_10;
 
   gperf = callPackage ../development/tools/misc/gperf { };
   # 3.1 changed some parameters from int to size_t, leading to mismatches.
