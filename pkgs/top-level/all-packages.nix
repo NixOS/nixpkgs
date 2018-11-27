@@ -21186,6 +21186,8 @@ with pkgs;
 
   kallisto = callPackage ../applications/science/biology/kallisto { };
 
+  minc2_simple = callPackage ../development/libraries/minc2-simple { };
+
   mirtk = callPackage ../development/libraries/science/biology/mirtk { };
 
   muscle = callPackage ../applications/science/biology/muscle { };
