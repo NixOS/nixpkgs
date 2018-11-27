@@ -7,11 +7,13 @@
 , pytestrunner
 , hypothesis
 , setuptools_scm
+, isPy27
 }:
 
 buildPythonPackage rec {
   pname = "matchpy";
   version = "0.4.6";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
