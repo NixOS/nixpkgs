@@ -61,19 +61,18 @@ import ./generic.nix { inherit lib stdenv emacs texinfo; } ({
     ln -s "$NIX_BUILD_TOP/$sourceRoot" "$NIX_BUILD_TOP/working/$ename"
   '';
 
-  buildPhase =
-    ''
-      runHook preBuild
+  buildPhase = ''
+    runHook preBuild
 
-      cd "$NIX_BUILD_TOP"
+    cd "$NIX_BUILD_TOP"
 
-      emacs --batch -Q \
-          -L "$melpa/package-build" \
-          -l "$melpa2nix" \
-          -f melpa2nix-build-package \
-          $ename $version
+    emacs --batch -Q \
+        -L "$melpa/package-build" \
+        -l "$melpa2nix" \
+        -f melpa2nix-build-package \
+        $ename $version
 
-      runHook postBuild
+    runHook postBuild
     '';
 
   installPhase = ''
