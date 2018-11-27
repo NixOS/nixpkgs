@@ -420,6 +420,8 @@ with pkgs;
 
   iconConvTools = callPackage ../build-support/icon-conv-tools {};
 
+  #package writers
+  writers = callPackage ../build-support/writers {};
 
   ### TOOLS
 
@@ -939,8 +941,6 @@ with pkgs;
   bindfs = callPackage ../tools/filesystems/bindfs { };
 
   bitbucket-cli = python2Packages.bitbucket-cli;
-
-  bittornado = callPackage ../tools/networking/p2p/bittornado { };
 
   blink = callPackage ../applications/networking/instant-messengers/blink { };
 
@@ -2780,6 +2780,8 @@ with pkgs;
 
   fuse-7z-ng = callPackage ../tools/filesystems/fuse-7z-ng { };
 
+  fusee-launcher = callPackage ../development/tools/fusee-launcher { };
+
   fwknop = callPackage ../tools/security/fwknop { };
 
   exfat = callPackage ../tools/filesystems/exfat { };
@@ -2890,11 +2892,11 @@ with pkgs;
 
   gitlab-runner = callPackage ../development/tools/continuous-integration/gitlab-runner { };
 
-  gitlab-shell = callPackage ../applications/version-management/gitlab-shell { };
+  gitlab-shell = callPackage ../applications/version-management/gitlab/gitlab-shell { };
 
-  gitlab-workhorse = callPackage ../applications/version-management/gitlab-workhorse { };
+  gitlab-workhorse = callPackage ../applications/version-management/gitlab/gitlab-workhorse { };
 
-  gitaly = callPackage ../applications/version-management/gitaly { };
+  gitaly = callPackage ../applications/version-management/gitlab/gitaly { };
 
   gitstats = callPackage ../applications/version-management/gitstats { };
 
@@ -3777,6 +3779,8 @@ with pkgs;
   nagstamon = callPackage ../tools/misc/nagstamon {
     pythonPackages = python3Packages;
   };
+
+  nbench = callPackage ../tools/misc/nbench { };
 
   netdata = callPackage ../tools/system/netdata {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation IOKit;
@@ -4792,6 +4796,8 @@ with pkgs;
 
   pg_top = callPackage ../tools/misc/pg_top { };
 
+  pgcenter = callPackage ../tools/misc/pgcenter { };
+
   pgmetrics = callPackage ../tools/misc/pgmetrics { };
 
   pdsh = callPackage ../tools/networking/pdsh {
@@ -5631,6 +5637,8 @@ with pkgs;
   talkfilters = callPackage ../misc/talkfilters {};
 
   znapzend = callPackage ../tools/backup/znapzend { };
+
+  targetcli = callPackage ../os-specific/linux/targetcli { };
 
   tarsnap = callPackage ../tools/backup/tarsnap { };
 
@@ -8657,6 +8665,8 @@ with pkgs;
 
   kube-prompt = callPackage ../development/tools/kube-prompt { };
 
+  kubicorn = callPackage ../development/tools/kubicorn {  };
+
   kustomize = callPackage ../development/tools/kustomize { };
 
   kythe = callPackage ../development/tools/kythe { };
@@ -8959,6 +8969,8 @@ with pkgs;
   spoofer-gui = callPackage ../tools/networking/spoofer { withGUI = true; };
 
   sqlitebrowser = libsForQt5.callPackage ../development/tools/database/sqlitebrowser { };
+
+  sqlite-web = callPackage ../development/tools/database/sqlite-web { };
 
   sselp = callPackage ../tools/X11/sselp{ };
 
@@ -9343,8 +9355,6 @@ with pkgs;
   cointop = callPackage ../applications/misc/cointop { };
 
   commoncpp2 = callPackage ../development/libraries/commoncpp2 { };
-
-  confuse = callPackage ../development/libraries/confuse { };
 
   coredumper = callPackage ../development/libraries/coredumper { };
 
@@ -16360,6 +16370,8 @@ with pkgs;
 
   eaglemode = callPackage ../applications/misc/eaglemode { };
 
+  echoip = callPackage ../servers/echoip { };
+
   eclipses = recurseIntoAttrs (callPackage ../applications/editors/eclipse {
     jdk = jdk11;
   });
@@ -18571,8 +18583,6 @@ with pkgs;
 
   poezio = python3Packages.poezio;
 
-  pommed = callPackage ../os-specific/linux/pommed {};
-
   pommed_light = callPackage ../os-specific/linux/pommed-light {};
 
   polymake = callPackage ../applications/science/math/polymake { };
@@ -18705,6 +18715,8 @@ with pkgs;
   qtractor = callPackage ../applications/audio/qtractor { };
 
   qtscrobbler = callPackage ../applications/audio/qtscrobbler { };
+
+  quantomatic = callPackage ../applications/science/physics/quantomatic { };
 
   quassel = libsForQt5.callPackage ../applications/networking/irc/quassel {
     monolithic = true;
@@ -22672,7 +22684,7 @@ with pkgs;
 
   vimUtils = callPackage ../misc/vim-plugins/vim-utils.nix { };
 
-  vimPlugins = recurseIntoAttrs (callPackage ../misc/vim-plugins { 
+  vimPlugins = recurseIntoAttrs (callPackage ../misc/vim-plugins {
     llvmPackages = llvmPackages_6;
   });
 

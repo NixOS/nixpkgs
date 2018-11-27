@@ -744,6 +744,8 @@ in {
 
   adal = callPackage ../development/python-modules/adal { };
 
+  affine = callPackage ../development/python-modules/affine { };
+
   aioconsole = callPackage ../development/python-modules/aioconsole { };
 
   aiodns = callPackage ../development/python-modules/aiodns { };
@@ -995,6 +997,8 @@ in {
 
   colour = callPackage ../development/python-modules/colour {};
 
+  configshell = callPackage ../development/python-modules/configshell { };
+
   constantly = callPackage ../development/python-modules/constantly { };
 
   cornice = callPackage ../development/python-modules/cornice { };
@@ -1050,6 +1054,8 @@ in {
   py4j = callPackage ../development/python-modules/py4j { };
 
   pyechonest = callPackage ../development/python-modules/pyechonest { };
+
+  pyepsg = callPackage ../development/python-modules/pyepsg { };
 
   pyezminc = callPackage ../development/python-modules/pyezminc { };
 
@@ -1131,6 +1137,8 @@ in {
   cairosvg = callPackage ../development/python-modules/cairosvg {};
 
   carrot = callPackage ../development/python-modules/carrot {};
+
+  cartopy = callPackage ../development/python-modules/cartopy {};
 
   case = callPackage ../development/python-modules/case {};
 
@@ -2413,6 +2421,8 @@ in {
 
   genshi = callPackage ../development/python-modules/genshi { };
 
+  gentools = callPackage ../development/python-modules/gentools { };
+
   gevent = callPackage ../development/python-modules/gevent { };
 
   geventhttpclient = callPackage ../development/python-modules/geventhttpclient { };
@@ -3484,6 +3494,8 @@ in {
 
   pyspread = callPackage ../development/python-modules/pyspread { };
 
+  pyupdate = callPackage ../development/python-modules/pyupdate {};
+
   pyx = callPackage ../development/python-modules/pyx { };
 
   mmpython = callPackage ../development/python-modules/mmpython { };
@@ -3653,6 +3665,8 @@ in {
 
   rabbitpy = callPackage ../development/python-modules/rabbitpy { };
 
+  rasterio = callPackage ../development/python-modules/rasterio { };
+
   radicale_infcloud = callPackage ../development/python-modules/radicale_infcloud {};
 
   recaptcha_client = callPackage ../development/python-modules/recaptcha_client { };
@@ -3781,6 +3795,8 @@ in {
 
   rpy2 = callPackage ../development/python-modules/rpy2 {};
 
+  rtslib = callPackage ../development/python-modules/rtslib {};
+
   Rtree = callPackage ../development/python-modules/Rtree { inherit (pkgs) libspatialindex; };
 
   typing = callPackage ../development/python-modules/typing { };
@@ -3829,9 +3845,15 @@ in {
 
   simplejson = callPackage ../development/python-modules/simplejson { };
 
+  simplekml = callPackage ../development/python-modules/simplekml { };
+
   slimit = callPackage ../development/python-modules/slimit { };
 
   snowballstemmer = callPackage ../development/python-modules/snowballstemmer { };
+
+  snug = callPackage ../development/python-modules/snug { };
+
+  snuggs = callPackage ../development/python-modules/snuggs { };
 
   spake2 = callPackage ../development/python-modules/spake2 { };
 
@@ -4977,6 +4999,8 @@ in {
   qasm2image = callPackage ../development/python-modules/qasm2image { };
 
   simpy = callPackage ../development/python-modules/simpy { };
+
+  yattag = callPackage ../development/python-modules/yattag { };
 
   z3 = (toPythonModule (pkgs.z3.override {
     inherit python;

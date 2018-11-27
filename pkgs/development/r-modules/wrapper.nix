@@ -5,6 +5,9 @@ stdenv.mkDerivation {
 
   buildInputs = [makeWrapper R] ++ recommendedPackages ++ packages;
 
+  # Make the list of recommended R packages accessible to other packages such as rpy2
+  passthru.recommendedPackages = recommendedPackages;
+
   unpackPhase = ":";
 
   installPhase = ''
