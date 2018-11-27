@@ -2786,6 +2786,8 @@ in {
 
   xdis = callPackage ../development/python-modules/xdis { };
 
+  xnd = callPackage ../development/python-modules/xnd { };
+
   uncompyle6 = callPackage ../development/python-modules/uncompyle6 { };
 
   lsi = callPackage ../development/python-modules/lsi { };
