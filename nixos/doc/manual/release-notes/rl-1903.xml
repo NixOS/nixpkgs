@@ -112,7 +112,8 @@
    <listitem>
     <para>
       The <literal>ntp</literal> module now has sane default restrictions.
-      If you're relying on it being wide-open, you can set
+      If you're relying on the previous defaults, which permitted all queries
+      and commands from all firewall-permitted sources, you can set
       <varname>services.ntp.restrictDefault</varname> and
       <varname>services.ntp.restrictSource</varname> to
       <literal>[]</literal>.
