@@ -68,6 +68,7 @@ self: super: {
   JuicyPixels = self.JuicyPixels_3_3_2;
   lens = self.lens_4_17;
   megaparsec = dontCheck (doJailbreak super.megaparsec);
+  pandoc = self.pandoc_2_5;
   patience = markBrokenVersion "0.1.1" super.patience;
   polyparse = self.polyparse_1_12_1;
   primitive = self.primitive_0_6_4_0;
@@ -95,9 +96,6 @@ self: super: {
 
   # https://github.com/jgm/skylighting/issues/55
   skylighting-core = dontCheck super.skylighting-core;
-
-  # https://github.com/jgm/pandoc/issues/4974
-  pandoc = doJailbreak super.pandoc_2_4;
 
   # Break out of "yaml >=0.10.4.0 && <0.11".
   stack = doJailbreak super.stack;
