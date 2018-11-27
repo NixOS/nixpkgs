@@ -50,6 +50,7 @@ self: super: {
   cassava-megaparsec = doJailbreak super.cassava-megaparsec;
   config-ini = doJailbreak super.config-ini;   # https://github.com/aisamanra/config-ini/issues/18
   contravariant = self.contravariant_1_5;
+  fgl = self.fgl_5_7_0_1;
   free = self.free_5_1;
   haddock-library = dontCheck super.haddock-library_1_7_0;
   HaTeX = doJailbreak super.HaTeX;
@@ -80,10 +81,6 @@ self: super: {
 
   # https://github.com/tibbe/unordered-containers/issues/214
   unordered-containers = dontCheck super.unordered-containers;
-
-  # https://github.com/haskell/fgl/issues/79
-  # https://github.com/haskell/fgl/issues/81
-  fgl = appendPatch (overrideCabal super.fgl (drv: { editedCabalFile = null; })) ./patches/fgl-monad-fail.patch;
 
   # Test suite does not compile.
   cereal = dontCheck super.cereal;
