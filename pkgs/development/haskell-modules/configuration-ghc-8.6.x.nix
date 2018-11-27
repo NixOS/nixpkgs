@@ -69,6 +69,8 @@ self: super: {
   lens = self.lens_4_17;
   megaparsec = dontCheck (doJailbreak super.megaparsec);
   pandoc = self.pandoc_2_5;
+  pandoc-citeproc = self.pandoc-citeproc_0_15;
+  pandoc-citeproc_0_15 = doJailbreak super.pandoc-citeproc_0_15;
   patience = markBrokenVersion "0.1.1" super.patience;
   polyparse = self.polyparse_1_12_1;
   primitive = self.primitive_0_6_4_0;
