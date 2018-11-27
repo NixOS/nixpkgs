@@ -9,14 +9,14 @@
 # all get the same sources with the same patches applied.
 
 stdenv.mkDerivation rec {
-  version = "8.5.beta4";
+  version = "8.5.beta5";
   name = "sage-src-${version}";
 
   src = fetchFromGitHub {
     owner = "sagemath";
     repo = "sage";
     rev = version;
-    sha256 = "0x8zi5c1glw5h7231yxdyklmf1vgrvf0zvzwa4qwnm7x2nky62zf";
+    sha256 = "1jnlk4y7njkg095kd3rhsi5929k6q90lzgyb7pshsjz251866nyv";
   };
 
   # Patches needed because of particularities of nix or the way this is packaged.
@@ -70,20 +70,13 @@ stdenv.mkDerivation rec {
     );
   in [
     # New glpk version has new warnings, filter those out until upstream sage has found a solution
+    # Should be fixed with glpk > 4.65.
     # https://trac.sagemath.org/ticket/24824
     ./patches/pari-stackwarn.patch # not actually necessary since the pari upgrade, but necessary for the glpk patch to apply
     (fetchpatch {
       url = "https://salsa.debian.org/science-team/sagemath/raw/58bbba93a807ca2933ca317501d093a1bb4b84db/debian/patches/dt-version-glpk-4.65-ignore-warnings.patch";
       sha256 = "0b9293v73wb4x13wv5zwyjgclc01zn16msccfzzi6znswklgvddp";
       stripLen = 1;
-    })
-
-    # needed for ntl update
-    # https://trac.sagemath.org/ticket/25532
-    (fetchpatch {
-      name = "lcalc-c++11.patch";
-      url = "https://git.archlinux.org/svntogit/community.git/plain/trunk/sagemath-lcalc-c++11.patch?h=packages/sagemath&id=0e31ae526ab7c6b5c0bfacb3f8b1c4fd490035aa";
-      sha256 = "0p5wnvbx65i7cp0bjyaqgp4rly8xgnk12pqwaq3dqby0j2bk6ijb";
     })
 
     (fetchpatch {
