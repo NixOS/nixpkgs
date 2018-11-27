@@ -1,11 +1,7 @@
 { stdenv
-, fetchFromGitLab
+, fetchurl
 
 , pkgconfig
-, autogen
-, autoconf
-, automake
-, libtool
 
 , zlib
 , libjpeg
@@ -13,25 +9,21 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "2018-11-04";
-  name = "libtiff-unstable-${version}";
+  version = "4.0.10";
+  name = "libtiff-${version}";
 
-  src = fetchFromGitLab {
-    owner = "libtiff";
-    repo = "libtiff";
-    rev = "779e54ca32b09155c10d398227a70038de399d7d";
-    sha256 = "029fmn0rdmb5gxhg83ff9j2zx3qk6wsiaiv554jq26pdc23achsp";
+  src = fetchurl {
+    url = "https://download.osgeo.org/libtiff/tiff-${version}.tar.gz";
+    sha256 = "1r4np635gr6zlc0bic38dzvxia6iqzcrary4n1ylarzpr8fd2lic";
   };
 
   outputs = [ "bin" "dev" "out" "man" "doc" ];
 
-  nativeBuildInputs = [ pkgconfig autogen autoconf automake libtool ];
+  nativeBuildInputs = [ pkgconfig ];
 
   propagatedBuildInputs = [ zlib libjpeg xz ]; #TODO: opengl support (bogus configure detection)
 
   enableParallelBuilding = true;
-
-  preConfigure = "./autogen.sh";
 
   doCheck = true; # not cross;
 
