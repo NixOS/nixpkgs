@@ -8,7 +8,7 @@ let
 
   swayWrapped = pkgs.writeShellScriptBin "sway" ''
     ${cfg.extraSessionCommands}
-    exec ${pkgs.dbus.dbus-launch} --exit-with-session ${swayPackage}/bin/sway
+    exec ${pkgs.dbus.dbus-launch} --exit-with-session ${swayPackage}/bin/sway "$@"
   '';
   swayJoined = pkgs.symlinkJoin {
     name = "sway-joined";
