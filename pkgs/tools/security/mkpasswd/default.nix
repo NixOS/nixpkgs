@@ -5,7 +5,7 @@ stdenv.mkDerivation {
 
   src = whois.src;
 
-  buildInputs = [ perl ];
+  nativeBuildInputs = [ perl ];
 
   preConfigure = whois.preConfigure;
   buildPhase = "make mkpasswd";
