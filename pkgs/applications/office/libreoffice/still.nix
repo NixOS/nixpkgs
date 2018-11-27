@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pam, python3, libxslt, perl, ArchiveZip, gettext
+{ stdenv, fetchurl, fetchpatch, pam, python3, libxslt, perl, ArchiveZip, gettext
 , IOCompress, zlib, libjpeg, expat, freetype, libwpd
 , libxml2, db, sablotron, curl, fontconfig, libsndfile, neon
 , bison, flex, zip, unzip, gtk3, gtk2, libmspack, getopt, file, cairo, which
@@ -12,6 +12,7 @@
 , libatomic_ops, graphite2, harfbuzz, libodfgen, libzmf
 , librevenge, libe-book, libmwaw, glm, glew, gst_all_1
 , gdb, commonsLogging, librdf_rasqal, wrapGAppsHook
+, xcbuild, darwin, libiconv
 , defaultIconTheme, glib, ncurses, epoxy, gpgme
 , langs ? [ "ca" "cs" "de" "en-GB" "en-US" "eo" "es" "fr" "hu" "it" "nl" "pl" "ru" "sl" "zh-CN" ]
 , withHelp ? true
@@ -64,11 +65,25 @@ in stdenv.mkDerivation rec {
 
   inherit (primary-src) src;
 
-  # For some reason librdf_redland sometimes refers to rasqal.h instead
-  # of rasqal/rasqal.h
-  NIX_CFLAGS_COMPILE = [ "-I${librdf_rasqal}/include/rasqal" ];
+  NIX_CFLAGS_COMPILE = [
+    # For some reason librdf_redland sometimes refers to rasqal.h instead
+    # of rasqal/rasqal.h
+    "-I${librdf_rasqal}/include/rasqal"
+  ]
+  ++ lib.optional stdenv.isDarwin "-I${libxml2.dev}/include/libxml2";
 
-  patches = [ ./xdg-open-brief.patch ];
+  patches = [ ./xdg-open-brief.patch ]
+  ++ lib.optionals stdenv.isDarwin [
+    (fetchpatch {
+      url = https://github.com/LibreOffice/core/commit/c06570c6e919ee090715049abfdfbd55d34aa467.patch;
+      sha256 = "0wsinxxxrvps25rh4p58w8h1b792k7fk2k0qiz5zrkdwz6ib75wa";
+    })
+
+    (fetchpatch {
+      url = https://github.com/LibreOffice/core/commit/ab9d95e6073d84a0dbabf1a4e704b8468afe7bff.patch;
+      sha256 = "0armsz8xr2fi14w0gv6ss1f57prhdb3v3swnvdz765ycnqaq2522";
+    })
+  ];
 
   postUnpack = ''
     mkdir -v $sourceRoot/src
@@ -93,6 +108,10 @@ in stdenv.mkDerivation rec {
     substituteInPlace configure.ac --replace \
       'GPGMEPP_CFLAGS=-I/usr/include/gpgme++' \
       'GPGMEPP_CFLAGS=-I${gpgme.dev}/include/gpgme++'
+  '' + lib.optionalString stdenv.isDarwin ''
+    substituteInPlace configure.ac \
+      --replace '/Library/Java/JavaVirtualMachines/*' '*' \
+      --replace /usr/bin/libtool ${darwin.cctools}/bin/libtool
   '';
 
   QT4DIR = qt4;
@@ -163,16 +182,22 @@ in stdenv.mkDerivation rec {
 
   makeFlags = "SHELL=${bash}/bin/bash";
 
+  # Make this the same on all platforms.
+  # Otherwise, will try to use /usr/bin/mktemp on Darwin.
+  gb_MKTEMP = "mktemp -t gbuild.XXXXXX";
+
   enableParallelBuilding = true;
 
   buildPhase = ''
     make build-nocheck
   '';
 
-  doCheck = true;
+  doCheck = !stdenv.isDarwin;
 
-  # It installs only things to $out/lib/libreoffice
-  postInstall = ''
+  postInstall = if stdenv.isDarwin then ''
+    mkdir -p $out/Applications
+    cp -R instdir/LibreOffice.app $out/Applications
+  '' else ''
     mkdir -p $out/bin $out/share/desktop
 
     mkdir -p "$out/share/gsettings-schemas/collected-for-libreoffice/glib-2.0/schemas/"
@@ -251,6 +276,12 @@ in stdenv.mkDerivation rec {
     # https://github.com/NixOS/nixpkgs/commit/5c5362427a3fa9aefccfca9e531492a8735d4e6f
     "--without-system-orcus"
     "--without-system-xmlsec"
+  ]
+  ++ lib.optionals stdenv.isDarwin [
+    "--enable-bogus-pkg-config"
+
+    "--without-system-harfbuzz"
+    "--without-system-graphite"
   ];
 
   checkPhase = ''
@@ -258,24 +289,32 @@ in stdenv.mkDerivation rec {
     make slowcheck
   '';
 
-  buildInputs = with xorg;
-    [ ant ArchiveZip autoconf automake bison boost cairo clucene_core
-      IOCompress cppunit cups curl db dbus-glib expat file flex fontconfig
-      freetype GConf getopt gnome_vfs gperf gtk3 gtk2
-      hunspell icu jdk lcms libcdr libexttextcat unixODBC libjpeg
-      libmspack librdf_redland librsvg libsndfile libvisio libwpd libwpg libX11
-      libXaw libXext libXi libXinerama libxml2 libxslt libXtst
-      libXdmcp libpthreadstubs libGLU_combined mythes gst_all_1.gstreamer
-      gst_all_1.gst-plugins-base glib
-      neon nspr nss openldap openssl ORBit2 pam perl pkgconfig poppler
-      python3 sablotron sane-backends unzip vigra which zip zlib
-      mdds bluez5 libcmis libwps libabw libzmf libtool
-      libxshmfence libatomic_ops graphite2 harfbuzz gpgme utillinux
-      librevenge libe-book libmwaw glm glew ncurses epoxy
-      libodfgen CoinMP librdf_rasqal defaultIconTheme gettext
-    ]
-    ++ lib.optional kdeIntegration kdelibs4;
-  nativeBuildInputs = [ wrapGAppsHook gdb ];
+  buildInputs = with xorg; [
+    ArchiveZip boost cairo clucene_core IOCompress cppunit cups curl db
+    dbus-glib expat file fontconfig freetype GConf getopt gperf gtk3 gtk2
+    hunspell icu jdk lcms libcdr libexttextcat unixODBC libjpeg libmspack
+    librdf_redland librsvg libsndfile libvisio libwpd libwpg libX11 libXaw
+    libXext libXi libXinerama libxml2 libxslt libXtst libXdmcp libpthreadstubs
+    libGLU_combined mythes gst_all_1.gstreamer gst_all_1.gst-plugins-base glib
+    neon nspr nss openldap openssl ORBit2 pam poppler python3 sablotron
+    sane-backends vigra zlib mdds libcmis libwps libabw libzmf libtool
+    libxshmfence libatomic_ops gpgme utillinux librevenge libe-book libmwaw
+    glm glew ncurses epoxy libodfgen CoinMP librdf_rasqal defaultIconTheme
+  ]
+  ++ lib.optional kdeIntegration kdelibs4
+  ++ lib.optional stdenv.isLinux bluez5
+  ++ lib.optionals (!stdenv.isDarwin) [ graphite2 harfbuzz gnome_vfs ]
+  ++ lib.optionals stdenv.isDarwin (with darwin; with apple_sdk.frameworks;
+    [ libiconv gettext cf-private AVFoundation CoreMedia MediaToolbox AddressBook ]);
+
+  nativeBuildInputs = [
+    wrapGAppsHook gdb perl automake autoconf which pkgconfig libxslt libxml2
+    python3 icu zip unzip ant curl gettext
+  ]
+  ++ lib.optionals (!stdenv.isDarwin) [ gperf bison flex ]
+  ++ lib.optionals stdenv.isDarwin [ xcbuild jdk libiconv ];
+
+  strictDeps = true;
 
   passthru = {
     inherit srcs jdk;
@@ -288,6 +327,6 @@ in stdenv.mkDerivation rec {
     homepage = https://libreoffice.org/;
     license = licenses.lgpl3;
     maintainers = with maintainers; [ raskin ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }
