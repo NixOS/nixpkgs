@@ -3,13 +3,13 @@
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "go-dbus-factory";
-  version = "0.0.7.1";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "0gj2xxv45gh7wr5ry3mcsi46kdsyq9nbd7znssn34kapiv40ixcx";
+    sha256 = "1vgpm3v0amjh2xb6cg9xpd7rikj3297h150b95qxrws1pjwm0m5v";
   };
 
   makeFlags = [ "PREFIX=$(out)" ];
