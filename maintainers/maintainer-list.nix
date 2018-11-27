@@ -4932,4 +4932,9 @@
     github = "mredaelli";
     name = "Massimo Redaelli";
   };
+  scalavision = {
+    email = "scalavision@gmail.com";
+    github = "scalavision";
+    name = "Tom Sorlie";
+  };
 }
