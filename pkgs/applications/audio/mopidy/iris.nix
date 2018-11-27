@@ -2,11 +2,11 @@
 
 pythonPackages.buildPythonApplication rec {
   pname = "Mopidy-Iris";
-  version = "3.31.1";
+  version = "3.31.2";
 
   src = pythonPackages.fetchPypi {
     inherit pname version;
-    sha256 = "1djxkgjvfzijvlq3gill1p20l0q64dbv9wd55whbir1l7y8wdga5";
+    sha256 = "0639ib5nicrabckjd17wdmhl8n3822gc2p1bn0xv8mq70paspar6";
   };
 
   propagatedBuildInputs = [
@@ -17,7 +17,7 @@ pythonPackages.buildPythonApplication rec {
     pylast
     spotipy
     raven
-    tornado
+    tornado_4
   ]);
 
   postPatch = "sed -i /tornado/d setup.py";
