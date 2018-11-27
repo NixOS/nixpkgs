@@ -12,6 +12,7 @@ python.buildPythonPackage rec {
     ConfigArgParse
     datrie
     docutils
+    drmaa
     jsonschema
     pyyaml
     ratelimiter
