@@ -14085,6 +14085,12 @@ with pkgs;
     pulseSupport = config.pulseaudio or false;
   } // config.conky or {});
 
+  conky-latest = callPackage ../os-specific/linux/conky/latest.nix ({
+    lua = lua5_1; # conky can use 5.2, but toluapp can not
+    libXNVCtrl = linuxPackages.nvidia_x11.settings.libXNVCtrl;
+    pulseSupport = config.pulseaudio or false;
+  } // config.conky or {});
+
   conntrack-tools = callPackage ../os-specific/linux/conntrack-tools { };
 
   coredns = callPackage ../servers/dns/coredns { };
