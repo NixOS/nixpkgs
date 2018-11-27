@@ -73,7 +73,9 @@ rec {
   # Mirrors of ftp://ftp.kde.org/pub/kde/.
   kde = [
     "http://download.kde.org/download.php?url="
-    http://ftp.gwdg.de/pub/x11/kde/
+    https://ftp.gwdg.de/pub/linux/kde/
+    https://mirrors.ocf.berkeley.edu/kde/
+    http://mirrors.mit.edu/kde/
     ftp://ftp.heanet.ie/mirrors/ftp.kde.org/
     ftp://ftp.kde.org/pub/kde/
     ftp://ftp.funet.fi/pub/mirrors/ftp.kde.org/pub/kde/
