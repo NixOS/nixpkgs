@@ -20,7 +20,7 @@ let
       ++ lib.optionals (atLeast "9.6" && !stdenv.isDarwin) [ systemd ]
       ++ lib.optionals (!stdenv.isDarwin) [ libossp_uuid ];
 
-    enableParallelBuilding = true;
+    enableParallelBuilding = !stdenv.isDarwin;
 
     makeFlags = [ "world" ];
 
