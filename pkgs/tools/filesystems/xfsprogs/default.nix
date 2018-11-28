@@ -1,4 +1,6 @@
-{ stdenv, fetchpatch, fetchgit, autoconf, automake, gettext, libtool, readline, utillinux }:
+{ stdenv, fetchpatch, fetchgit, autoconf, automake, gettext, libtool, readline
+, buildPackages, libuuid
+}:
 
 let
   gentooPatch = name: sha256: fetchpatch {
@@ -19,8 +21,12 @@ stdenv.mkDerivation rec {
 
   outputs = [ "bin" "dev" "out" "doc" ];
 
-  nativeBuildInputs = [ autoconf automake libtool gettext ];
-  propagatedBuildInputs = [ utillinux ]; # Dev headers include <uuid/uuid.h>
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
+  nativeBuildInputs = [
+    autoconf automake libtool gettext
+    libuuid # codegen tool uses libuuid
+  ];
+  propagatedBuildInputs = [ libuuid ]; # Dev headers include <uuid/uuid.h>
   buildInputs = [ readline ];
 
   enableParallelBuilding = true;
