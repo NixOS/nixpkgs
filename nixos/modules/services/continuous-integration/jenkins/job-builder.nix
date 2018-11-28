@@ -42,6 +42,18 @@ in {
         type = types.str;
         description = ''
           User token in Jenkins used to reload config.
+          WARNING: This token will be world readable in the Nix store. To keep
+          it secret, use the <option>accessTokenFile</option> option instead.
+        '';
+      };
+
+      accessTokenFile = mkOption {
+        default = "";
+        type = types.str;
+        example = "/run/keys/jenkins-job-builder-access-token";
+        description = ''
+          File containing the API token for the <option>accessUser</option>
+          user.
         '';
       };
 
@@ -103,6 +115,21 @@ in {
   };
 
   config = mkIf (jenkinsCfg.enable && cfg.enable) {
+    assertions = [
+      { assertion =
+          if cfg.accessUser != ""
+          then (cfg.accessToken != "" && cfg.accessTokenFile == "") ||
+               (cfg.accessToken == "" && cfg.accessTokenFile != "")
+          else true;
+        message = ''
+          One of accessToken and accessTokenFile options must be non-empty
+          strings, but not both. Current values:
+            services.jenkins.jobBuilder.accessToken = "${cfg.accessToken}"
+            services.jenkins.jobBuilder.accessTokenFile = "${cfg.accessTokenFile}"
+        '';
+      }
+    ];
+
     systemd.services.jenkins-job-builder = {
       description = "Jenkins Job Builder Service";
       # JJB can run either before or after jenkins. We chose after, so we can
@@ -129,7 +156,10 @@ in {
           reloadScript = ''
             echo "Asking Jenkins to reload config"
             curl_opts="--silent --fail --show-error"
-            jenkins_url="http://${cfg.accessUser}:${accessToken}@${jenkinsCfg.listenAddress}:${toString jenkinsCfg.port}${jenkinsCfg.prefix}"
+            access_token=${if cfg.accessTokenFile != ""
+                           then "$(cat '${cfg.accessTokenFile}')"
+                           else cfg.accessToken}
+            jenkins_url="http://${cfg.accessUser}:$access_token@${jenkinsCfg.listenAddress}:${toString jenkinsCfg.port}${jenkinsCfg.prefix}"
             crumb=$(curl $curl_opts "$jenkins_url"'/crumbIssuer/api/xml?xpath=concat(//crumbRequestField,":",//crumb)')
             curl $curl_opts -X POST -H "$crumb" "$jenkins_url"/reload
           '';
