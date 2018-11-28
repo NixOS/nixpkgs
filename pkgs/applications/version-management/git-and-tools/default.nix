@@ -94,6 +94,8 @@ let
 
   git-remote-hg = callPackage ./git-remote-hg { };
 
+  git-reparent = callPackage ./git-reparent { };
+
   git-secret = callPackage ./git-secret { };
 
   git-secrets = callPackage ./git-secrets { };

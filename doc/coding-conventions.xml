@@ -56,25 +56,30 @@ foo { arg = ...; }
      or list elements should be aligned:
 <programlisting>
 # A long list.
-list =
-  [ elem1
-    elem2
-    elem3
-  ];
+list = [
+  elem1
+  elem2
+  elem3
+];
 
 # A long attribute set.
-attrs =
-  { attr1 = short_expr;
-    attr2 =
-      if true then big_expr else big_expr;
-  };
-
-# Alternatively:
 attrs = {
   attr1 = short_expr;
   attr2 =
     if true then big_expr else big_expr;
 };
+
+# Combined
+listOfAttrs = [
+  {
+    attr1 = 3;
+    attr2 = "fff";
+  }
+  {
+    attr1 = 5;
+    attr2 = "ggg";
+  }
+];
 </programlisting>
     </para>
    </listitem>

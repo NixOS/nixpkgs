@@ -2428,12 +2428,31 @@ addEnvHooks "$hostOffset" myBashFunction
       <para>
        This is a special setup hook which helps in packaging proprietary
        software in that it automatically tries to find missing shared library
-       dependencies of ELF files. All packages within the
-       <envar>runtimeDependencies</envar> environment variable are
-       unconditionally added to executables, which is useful for programs that
-       use <citerefentry>
-       <refentrytitle>dlopen</refentrytitle>
-       <manvolnum>3</manvolnum> </citerefentry> to load libraries at runtime.
+       dependencies of ELF files based on the given
+       <varname>buildInputs</varname> and <varname>nativeBuildInputs</varname>.
+      </para>
+      <para>
+       You can also specify a <envar>runtimeDependencies</envar> environment
+       variable which lists dependencies that are unconditionally added to all
+       executables.
+      </para>
+      <para>
+       This is useful for programs that use <citerefentry>
+        <refentrytitle>dlopen</refentrytitle>
+        <manvolnum>3</manvolnum>
+       </citerefentry> to load libraries at runtime.
+      </para>
+      <para>
+        In certain situations you may want to run the main command
+        (<command>autoPatchelf</command>) of the setup hook on a file or a set
+        of directories instead of unconditionally patching all outputs. This
+        can be done by setting the <envar>dontAutoPatchelf</envar> environment
+        variable to a non-empty value.
+      </para>
+      <para>
+        The <command>autoPatchelf</command> command also recognizes a
+        <parameter class="command">--no-recurse</parameter> command line flag,
+        which prevents it from recursing into subdirectories.
       </para>
      </listitem>
     </varlistentry>
@@ -2455,7 +2474,17 @@ addEnvHooks "$hostOffset" myBashFunction
        use the cntr exec subcommand. Note that <command>cntr</command> also
        needs to be executed on the machine that is doing the build, which might
        be not the case when remote builders are enabled.
-       <command>cntr</command> is only supported on linux based platforms.
+       <command>cntr</command> is only supported on Linux-based platforms. To
+       use it first add <literal>cntr</literal> to your
+       <literal>environment.systemPackages</literal> on NixOS or alternatively to
+       the root user on non-NixOS systems. Then in the package that is supposed
+       to be inspected, add <literal>breakpointHook</literal> to
+       <literal>nativeBuildInputs</literal>.
+<programlisting>
+         nativeBuildInputs = [ breakpointHook ];
+       </programlisting>
+       When a build failure happens there will be an instruction printed that
+       shows how to attach with <literal>cntr</literal> to the build sandbox.
       </para>
      </listitem>
     </varlistentry>

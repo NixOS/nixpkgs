@@ -632,13 +632,10 @@
       slurm = 307;
       kapacitor = 308;
       solr = 309;
-<<<<<<< HEAD
       alerta = 310;
       minetest = 311;
       rss2email = 312;
-=======
-      concourse = 310;
->>>>>>> 556a42405b34295fb672d4f4b75ef30487d70922
+      concourse = 313;
 
       # When adding a gid, make sure it doesn't match an existing
       # uid. Users and groups with the same name should have equal
