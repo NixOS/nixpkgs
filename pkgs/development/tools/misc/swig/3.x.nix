@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "1wyffskbkzj5zyhjnnpip80xzsjcr3p0q5486z3wdwabnysnhn8n";
   };
 
-  nativeBuildInputs = [ autoconf automake libtool bison ];
+  nativeBuildInputs = [ autoconf automake libtool bison pcre.dev ];
   buildInputs = [ pcre ];
 
   configureFlags = [ "--without-tcl" ];
