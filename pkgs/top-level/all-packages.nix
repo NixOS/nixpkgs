@@ -20051,8 +20051,6 @@ with pkgs;
 
   xmlcopyeditor = callPackage ../applications/editors/xmlcopyeditor { };
 
-  xmove = callPackage ../applications/misc/xmove { };
-
   xmp = callPackage ../applications/audio/xmp { };
 
   xnee = callPackage ../tools/X11/xnee { };
