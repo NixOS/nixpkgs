@@ -96,7 +96,7 @@ rec {
                                       ++ depsHostHost ++ depsHostHostPropagated
                                       ++ buildInputs ++ propagatedBuildInputs
                                       ++ depsTargetTarget ++ depsTargetTargetPropagated) == 0;
-      runtimeSensativeIfFixedOutput = fixedOutputDrv -> !noNonNativeDeps;
+      dontAddHostSuffix = attrs ? outputHash && !noNonNativeDeps || stdenv.cc == null;
       supportedHardeningFlags = [ "fortify" "stackprotector" "pie" "pic" "strictoverflow" "format" "relro" "bindnow" ];
       defaultHardeningFlags = if stdenv.targetPlatform.isMusl
                               then supportedHardeningFlags
@@ -187,7 +187,7 @@ rec {
             # suffix. But we have some weird ones with run-time deps that are
             # just used for their side-affects. Those might as well since the
             # hash can't be the same. See #32986.
-            (stdenv.hostPlatform != stdenv.buildPlatform && runtimeSensativeIfFixedOutput)
+            (stdenv.hostPlatform != stdenv.buildPlatform && !dontAddHostSuffix)
             ("-" + stdenv.hostPlatform.config);
 
           builder = attrs.realBuilder or stdenv.shell;
