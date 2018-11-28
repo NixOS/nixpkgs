@@ -1,4 +1,4 @@
-{ buildPackages, pkgs, pkgs_i686, targetPackages
+{ pkgs, pkgs_i686, buildPackages
 , includeSources ? true, licenseAccepted ? false
 }:
 
@@ -339,37 +339,6 @@ rec {
   emulateApp = import ./emulate-app.nix {
     inherit (pkgs) stdenv;
     inherit androidsdk;
-  };
-
-  androidndkPkgs_17c = import ./androidndk-pkgs.nix {
-    inherit (buildPackages)
-      makeWrapper;
-    inherit (pkgs)
-      lib stdenv
-      runCommand wrapBintoolsWith wrapCCWith;
-    # buildPackages.foo rather than buildPackages.buildPackages.foo would work,
-    # but for splicing messing up on infinite recursion for the variants we
-    # *dont't* use. Using this workaround, but also making a test to ensure
-    # these two really are the same.
-    buildAndroidndk = buildPackages.buildPackages.androidenv.androidndk_17c;
-    androidndk = androidndk_17c;
-    targetAndroidndkPkgs = targetPackages.androidenv.androidndkPkgs_17c;
-  };
-  androidndkPkgs = androidndkPkgs_17c;
-
-  androidndkPkgs_10e = import ./androidndk-pkgs.nix {
-    inherit (buildPackages)
-      makeWrapper;
-    inherit (pkgs)
-      lib stdenv
-      runCommand wrapBintoolsWith wrapCCWith;
-    # buildPackages.foo rather than buildPackages.buildPackages.foo would work,
-    # but for splicing messing up on infinite recursion for the variants we
-    # *dont't* use. Using this workaround, but also making a test to ensure
-    # these two really are the same.
-    buildAndroidndk = buildPackages.buildPackages.androidenv.androidndk_10e;
-    androidndk = androidndk_10e;
-    targetAndroidndkPkgs = targetPackages.androidenv.androidndkPkgs_10e;
   };
 
   buildGradleApp = import ./build-gradle-app.nix {
