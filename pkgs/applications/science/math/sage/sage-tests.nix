@@ -46,6 +46,6 @@ stdenv.mkDerivation rec {
     mkdir -p "$HOME"
 
     # "--long" tests are in the order of 1h, without "--long" its 1/2h
-    "sage" -t --nthreads "$NIX_BUILD_CORES" --optional=sage ${patienceSpecifier} ${testArgs}
+    "sage" -t --timeout=0 --nthreads "$NIX_BUILD_CORES" --optional=sage ${patienceSpecifier} ${testArgs}
   '';
 }
