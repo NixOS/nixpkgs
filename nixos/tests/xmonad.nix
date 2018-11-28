@@ -12,6 +12,12 @@ import ./make-test.nix ({ pkgs, ...} : {
       enable = true;
       enableContribAndExtras = true;
       extraPackages = with pkgs.haskellPackages; haskellPackages: [ xmobar ];
+      config = ''
+        import XMonad
+        import XMonad.Util.EZConfig
+        main = launch $ def `additionalKeysP` myKeys
+        myKeys = [ ("M-C-x", spawn "xterm") ]
+      '';
     };
   };
 
@@ -19,6 +25,10 @@ import ./make-test.nix ({ pkgs, ...} : {
     $machine->waitForX;
     $machine->waitForFile("/home/alice/.Xauthority");
     $machine->succeed("xauth merge ~alice/.Xauthority");
+    $machine->sendKeys("alt-ctrl-x");
+    $machine->waitForWindow(qr/machine.*alice/);
+    $machine->sleep(1);
+    $machine->screenshot("terminal");
     $machine->waitUntilSucceeds("xmonad --restart");
     $machine->sleep(3);
     $machine->sendKeys("alt-shift-ret");
