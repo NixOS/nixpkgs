@@ -19327,6 +19327,11 @@ with pkgs;
     vte = gnome3.vte;
   };
 
+  aminal = callPackage ../applications/misc/aminal {
+    inherit (darwin.apple_sdk.frameworks) Carbon Cocoa Kernel;
+    inherit (darwin) cf-private;
+  };
+
   termite-unwrapped = callPackage ../applications/misc/termite {
     vte = gnome3.vte-ng;
   };
