@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, popt }:
+{ stdenv, buildPackages, fetchFromGitHub, pkgconfig, popt }:
 
 stdenv.mkDerivation rec {
   name = "efivar-${version}";
@@ -15,6 +15,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ popt ];
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
 
   makeFlags = [
     "prefix=$(out)"
