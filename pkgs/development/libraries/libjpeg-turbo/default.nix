@@ -1,14 +1,13 @@
-{ stdenv, fetchurl, nasm
-}:
+{ stdenv, fetchurl, cmake, nasm }:
 
 stdenv.mkDerivation rec {
   name = "libjpeg-turbo-${version}";
-  version = "1.5.3";
+  version = "2.0.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/libjpeg-turbo/${name}.tar.gz";
-    sha256 = "08r5b5mywwrxv4axvq80dm31cklz81grczlzlxr2xqa6pgi90j5j";
-  }; # github releases still need autotools, surprisingly
+    sha256 = "1zv6z093l3x3jzygvni7b819j7xhn6d63jhcdrckj7fz67n6ry75";
+  };
 
   patches =
     stdenv.lib.optional (stdenv.hostPlatform.libc or null == "msvcrt")
@@ -16,12 +15,20 @@ stdenv.mkDerivation rec {
 
   outputs = [ "bin" "dev" "out" "man" "doc" ];
 
-  nativeBuildInputs = [ nasm ];
+  nativeBuildInputs = [ cmake nasm ];
 
-  enableParallelBuilding = true;
+  preConfigure = ''
+    cmakeFlagsArray+=(
+      "-DCMAKE_INSTALL_BINDIR=$bin/bin"
+      "-DENABLE_STATIC=0"
+    )
+  '';
 
   doCheck = true; # not cross;
   checkTarget = "test";
+  preCheck = ''
+    export LD_LIBRARY_PATH="$NIX_BUILD_TOP/${name}:$LD_LIBRARY_PATH"
+  '';
 
   meta = with stdenv.lib; {
     homepage = http://libjpeg-turbo.virtualgl.org/;
