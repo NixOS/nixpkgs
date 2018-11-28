@@ -128,8 +128,10 @@ in {
           ownerStamp = ".config-xml-managed-by-nixos-jenkins-job-builder";
           reloadScript = ''
             echo "Asking Jenkins to reload config"
-            CRUMB=$(curl -s 'http://${cfg.accessUser}:${cfg.accessToken}@${jenkinsCfg.listenAddress}:${toString jenkinsCfg.port}${jenkinsCfg.prefix}/crumbIssuer/api/xml?xpath=concat(//crumbRequestField,":",//crumb)')
-            curl --silent -X POST -H "$CRUMB" http://${cfg.accessUser}:${cfg.accessToken}@${jenkinsCfg.listenAddress}:${toString jenkinsCfg.port}${jenkinsCfg.prefix}/reload
+            curl_opts="--silent --fail --show-error"
+            jenkins_url="http://${cfg.accessUser}:${accessToken}@${jenkinsCfg.listenAddress}:${toString jenkinsCfg.port}${jenkinsCfg.prefix}"
+            crumb=$(curl $curl_opts "$jenkins_url"'/crumbIssuer/api/xml?xpath=concat(//crumbRequestField,":",//crumb)')
+            curl $curl_opts -X POST -H "$crumb" "$jenkins_url"/reload
           '';
         in
           ''
