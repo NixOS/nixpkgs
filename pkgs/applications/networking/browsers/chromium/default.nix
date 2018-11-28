@@ -12,6 +12,7 @@
 , cupsSupport ? true
 , pulseSupport ? false
 , commandLineArgs ? ""
+, ungoogled ? false
 }:
 
 assert stdenv.cc.isClang -> (stdenv == llvmPackages.stdenv);
@@ -26,7 +27,7 @@ let
     mkChromiumDerivation = callPackage ./common.nix {
       inherit enableNaCl gnomeSupport gnome
               gnomeKeyringSupport proprietaryCodecs cupsSupport pulseSupport
-              enableWideVine;
+              enableWideVine ungoogled;
     };
 
     browser = callPackage ./browser.nix { inherit channel; };

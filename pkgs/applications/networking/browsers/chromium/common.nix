@@ -1,4 +1,4 @@
-{ stdenv, llvmPackages, gn, ninja, which, nodejs, fetchurl, fetchpatch, gnutar
+{ stdenv, llvmPackages, gn, ninja, which, nodejs, fetchurl, fetchpatch, fetchgit, gnutar
 
 # default dependencies
 , bzip2, flac, speex, libopus
@@ -28,6 +28,7 @@
 , proprietaryCodecs ? true
 , cupsSupport ? true
 , pulseSupport ? false, libpulseaudio ? null
+, ungoogled ? false
 
 , upstream-info
 }:
@@ -162,7 +163,23 @@ let
                 postFetch = "substituteInPlace $out --replace __aarch64__ SK_CPU_ARM64";
                 sha256    = "018fbdzyw9rvia8m0qkk5gv8q8gl7x34rrjbn7mi1fgxdsayn22s";
               }
-            );
+           ) ++ optional ungoogled
+             (fetchgit {
+               url    = "https://github.com/Eloston/ungoogled-chromium.git";
+               rev    = "70.0.3538.110-2";
+               sha256 = "1mj7b2wm87s5vv0d4s00570drvfz8yf2hdbgqhrh5hfdjbp7sfll";
+               postFetch = ''
+                 rm -r $out/patches/debian_buster \
+                       $out/patches/debian_stretch \
+                       $out/patches/opensuse \
+                       $out/patches/ubuntu
+                 # sort according to https://github.com/Eloston/ungoogled-chromium/blob/master/config_bundles/common/patch_order.list
+                 mv $out/patches/inox-patchset $out/patches/1inox-patchset
+                 mv $out/patches/iridium-browser $out/patches/2iridium-browser
+                 mv $out/patches/ungoogled-chromium $out/patches/3ungoogled-chromium
+                 mv $out/patches/bromite $out/patches/4bromite
+               '';
+             });
 
     postPatch = ''
       # We want to be able to specify where the sandbox is via CHROME_DEVEL_SANDBOX
