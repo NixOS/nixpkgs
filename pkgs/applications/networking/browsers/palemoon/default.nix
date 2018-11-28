@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, makeDesktopItem
 , pkgconfig, autoconf213, alsaLib, bzip2, cairo
 , dbus, dbus-glib, file, fontconfig, freetype
-, gstreamer, gst-plugins-base, gst_all_1
+, gnome2, gstreamer, gst-plugins-base, gst_all_1
 , gtk2, hunspell, icu, libevent, libjpeg, libnotify
 , libstartup_notification, libvpx, makeWrapper, libGLU_combined
 , nspr, nss, pango, perl, python, libpulseaudio, sqlite
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     alsaLib bzip2 cairo dbus dbus-glib file fontconfig freetype
-    gst-plugins-base gstreamer gst_all_1.gst-plugins-base gtk2
+    gnome2.GConf gst-plugins-base gstreamer gst_all_1.gst-plugins-base gtk2
     hunspell icu libevent libjpeg libnotify libstartup_notification
     libvpx makeWrapper libGLU_combined nspr nss pango perl pkgconfig python
     libpulseaudio sqlite unzip which yasm zip zlib
