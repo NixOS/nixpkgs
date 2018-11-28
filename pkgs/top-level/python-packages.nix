@@ -398,6 +398,8 @@ in {
     inherit python;
   });
 
+  hopcroftkarp = callPackage ../development/python-modules/hopcroftkarp { };
+
   httpsig = callPackage ../development/python-modules/httpsig { };
 
   i3ipc = callPackage ../development/python-modules/i3ipc { };
@@ -422,6 +424,8 @@ in {
 
   markerlib = callPackage ../development/python-modules/markerlib { };
 
+  matchpy = callPackage ../development/python-modules/matchpy { };
+
   monty = callPackage ../development/python-modules/monty { };
 
   mininet-python = (toPythonModule (pkgs.mininet.override{ inherit python; })).py;
@@ -430,9 +434,13 @@ in {
     mpi = pkgs.openmpi;
   };
 
+  multiset = callPackage ../development/python-modules/multiset { };
+
   mwclient = callPackage ../development/python-modules/mwclient { };
 
   mwoauth = callPackage ../development/python-modules/mwoauth { };
+
+  nbval = callPackage ../development/python-modules/nbval { };
 
   nest-asyncio = callPackage ../development/python-modules/nest-asyncio { };
 
@@ -479,6 +487,8 @@ in {
   pdfminer = callPackage ../development/python-modules/pdfminer_six { };
 
   pdfx = callPackage ../development/python-modules/pdfx { };
+
+  perf = callPackage ../development/python-modules/perf { };
 
   phonopy = callPackage ../development/python-modules/phonopy { };
 
@@ -612,6 +622,8 @@ in {
   pystache = callPackage ../development/python-modules/pystache { };
 
   pytesseract = callPackage ../development/python-modules/pytesseract { };
+
+  pytest-mypy = callPackage ../development/python-modules/pytest-mypy { };
 
   pytest-tornado = callPackage ../development/python-modules/pytest-tornado { };
 
@@ -3966,6 +3978,8 @@ in {
   u-msgpack-python = callPackage ../development/python-modules/u-msgpack-python { };
 
   ua-parser = callPackage ../development/python-modules/ua-parser { };
+
+  uarray = callPackage ../development/python-modules/uarray { };
 
   ukpostcodeparser = callPackage ../development/python-modules/ukpostcodeparser { };
 
