@@ -10,14 +10,14 @@
 
 stdenv.mkDerivation rec {
   name = "palemoon-${version}";
-  version = "27.9.4";
+  version = "28.2.1";
 
   src = fetchFromGitHub {
     name   = "palemoon-src";
     owner  = "MoonchildProductions";
-    repo   = "Pale-Moon";
-    rev    = version + "_Release";
-    sha256 = "0ir5gzhw98gfn15x58g1fwi11jd7gysvacqxg1v0jdjhgdl4m5sx";
+    repo   = "UXP";
+    rev    = "PM" + version + "_Release";
+    sha256 = "0jcp5imiar88r72kspwjynbl0r3v90knyszagjydkrx9g58lkpzr";
   };
 
   desktopItem = makeDesktopItem {
@@ -59,19 +59,30 @@ stdenv.mkDerivation rec {
     mkdir -p $MOZBUILD_STATE_PATH $builddir
     echo > $MOZ_CONFIG "
     . $src/build/mozconfig.common
+    mk_add_options AUTOCLOBBER=1
     ac_add_options --prefix=$out
-    ac_add_options --with-pthreads
-    ac_add_options --enable-application=browser
-    ac_add_options --enable-official-branding
+    ac_add_options --enable-application=palemoon
+
     ac_add_options --enable-optimize="-O2"
-    ac_add_options --enable-release
-    ac_add_options --enable-devtools
+
+    ac_add_options --enable-official-branding
+    export MOZILLA_OFFICIAL=1
+
+    ac_add_options --enable-default-toolkit=cairo-gtk2
     ac_add_options --enable-jemalloc
-    ac_add_options --enable-shared-js
     ac_add_options --enable-strip
+    ac_add_options --with-pthreads
+
     ac_add_options --disable-tests
-    ac_add_options --disable-installer
-    ac_add_options --disable-updaters
+    ac_add_options --disable-eme
+    ac_add_options --disable-parental-controls
+    ac_add_options --disable-accessibility
+    ac_add_options --disable-webrtc
+    ac_add_options --disable-gamepad
+    ac_add_options --disable-necko-wifi
+    ac_add_options --disable-updater
+
+    ac_add_options --x-libraries=/usr/lib
     "
   '';
 
