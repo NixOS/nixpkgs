@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ jre ] ;
 
   unpackPhase = ''
-    echo "Skipping unpackphase, nothing to unpack"
+    # Skipping unpackphase, nothing to unpack
   '';
 
   dontConfigure = true;
