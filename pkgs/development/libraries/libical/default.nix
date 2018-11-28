@@ -35,6 +35,7 @@ stdenv.mkDerivation rec {
   # Using install check so we do not have to manually set
   # LD_LIBRARY_PATH and GI_TYPELIB_PATH variables
   doInstallCheck = true;
+  enableParallelChecking = false;
   installCheckPhase = ''
     runHook preInstallCheck
 
