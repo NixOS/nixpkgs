@@ -63,12 +63,12 @@ self: super:
     inherit (self) xorgcffiles;
     x11BuildHook = ./imake.sh;
     patches = [./imake.patch ./imake-cc-wrapper-uberhack.patch];
-    setupHook = if stdenv.isDarwin then ./darwin-imake-setup-hook.sh else null;
-    CFLAGS = [ "-DIMAKE_COMPILETIME_CPP=\\\"${if stdenv.isDarwin
+    setupHook = ./imake-setup-hook.sh;
+    CFLAGS = [ ''-DIMAKE_COMPILETIME_CPP='"${if stdenv.isDarwin
       then "${tradcpp}/bin/cpp"
-      else "gcc"}\\\""
+      else "gcc"}"' ''
     ];
-    tradcpp = if stdenv.isDarwin then tradcpp else null;
+    inherit tradcpp;
   });
 
   mkfontdir = super.mkfontdir.overrideAttrs (attrs: {
