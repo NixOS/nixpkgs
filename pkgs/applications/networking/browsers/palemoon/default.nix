@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     name   = "palemoon-src";
     owner  = "MoonchildProductions";
     repo   = "UXP";
-    rev    = "PM" + version + "_Release";
+    rev    = "PM${version}_Release";
     sha256 = "0jcp5imiar88r72kspwjynbl0r3v90knyszagjydkrx9g58lkpzr";
   };
 
