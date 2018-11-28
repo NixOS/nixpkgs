@@ -9077,6 +9077,8 @@ with pkgs;
     deps = [ xcbuild ];
   } ../development/tools/xcbuild/setup-hook.sh  ;
 
+  xcpretty = callPackage ../development/tools/xcpretty { };
+
   xmlindent = callPackage ../development/web/xmlindent {};
 
   xpwn = callPackage ../development/mobile/xpwn {};
