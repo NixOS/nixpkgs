@@ -1,5 +1,5 @@
-{ stdenv, lib, pkgconfig, fetchFromGitHub, scons, python, glibmm, libpulseaudio, libao
-}:
+{ stdenv, lib, pkgconfig, fetchFromGitHub, scons
+, python, glibmm, libpulseaudio, libao }:
 
 let
   version = "unstable-2018-02-10";
@@ -29,14 +29,6 @@ in stdenv.mkDerivation rec {
   #     - RPATH, to link to the newly built libraries
 
   patches = [ ./honor_nix_environment.patch ];
-
-  buildPhase = ''
-    scons prefix=$out
-  '';
-
-  installPhase = ''
-    scons install
-  '';
 
   meta = {
     description = "A free and open source speech synthesizer for Russian language and others";

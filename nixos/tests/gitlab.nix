@@ -16,6 +16,7 @@ import ./make-test.nix ({ pkgs, lib, ...} : with lib; {
 
       services.nginx = {
         enable = true;
+        recommendedProxySettings = true;
         virtualHosts = {
           "localhost" = {
             locations."/".proxyPass = "http://unix:/run/gitlab/gitlab-workhorse.socket";
@@ -27,6 +28,7 @@ import ./make-test.nix ({ pkgs, lib, ...} : with lib; {
         enable = true;
         databasePassword = "dbPassword";
         initialRootPassword = "notproduction";
+        smtp.enable = true;
         secrets = {
           secret = "secret";
           otp = "otpsecret";
@@ -74,7 +76,8 @@ import ./make-test.nix ({ pkgs, lib, ...} : with lib; {
     $gitlab->waitForUnit("gitlab.service");
     $gitlab->waitForUnit("gitlab-sidekiq.service");
     $gitlab->waitForFile("/var/gitlab/state/tmp/sockets/gitlab.socket");
-    $gitlab->waitUntilSucceeds("curl -sSf http://localhost/users/sign_in");
+    $gitlab->waitUntilSucceeds("curl -sSf http://gitlab/users/sign_in");
+    $gitlab->succeed("curl -isSf http://gitlab  | grep -i location | grep -q http://gitlab/users/sign_in");
     $gitlab->succeed("${pkgs.sudo}/bin/sudo -u gitlab -H gitlab-rake gitlab:check 1>&2")
   '';
 })

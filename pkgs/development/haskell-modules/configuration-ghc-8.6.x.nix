@@ -46,7 +46,7 @@ self: super: {
 
   # LTS-12.x versions do not compile.
   base-orphans = self.base-orphans_0_8;
-  brick = self.brick_0_41_2;
+  brick = self.brick_0_41_4;
   cassava-megaparsec = doJailbreak super.cassava-megaparsec;
   config-ini = doJailbreak super.config-ini;   # https://github.com/aisamanra/config-ini/issues/18
   contravariant = self.contravariant_1_5;
@@ -63,11 +63,10 @@ self: super: {
   hspec-core = self.hspec-core_2_6_0;
   hspec-discover = self.hspec-discover_2_6_0;
   hspec-megaparsec = doJailbreak super.hspec-megaparsec;  # newer versions need megaparsec 7.x
-  hspec-meta = self.hspec-meta_2_5_6;
+  hspec-meta = self.hspec-meta_2_6_0;
   JuicyPixels = self.JuicyPixels_3_3_2;
   lens = self.lens_4_17;
   megaparsec = dontCheck (doJailbreak super.megaparsec);
-  neat-interpolation = dontCheck super.neat-interpolation;  # test suite depends on broken HTF
   patience = markBrokenVersion "0.1.1" super.patience;
   polyparse = self.polyparse_1_12_1;
   primitive = self.primitive_0_6_4_0;
@@ -96,12 +95,6 @@ self: super: {
   system-fileio = dontCheck super.system-fileio;  # avoid dependency on broken "patience"
   unicode-transforms = dontCheck super.unicode-transforms;
   monad-par = dontCheck super.monad-par;  # https://github.com/simonmar/monad-par/issues/66
-
-  # https://github.com/bmillwood/haskell-src-meta/pull/80
-  haskell-src-meta = doJailbreak super.haskell-src-meta;
-
-  # https://github.com/skogsbaer/HTF/issues/69
-  HTF = markBrokenVersion "0.13.2.4" super.HTF;
 
   # https://github.com/jgm/skylighting/issues/55
   skylighting-core = dontCheck super.skylighting-core;

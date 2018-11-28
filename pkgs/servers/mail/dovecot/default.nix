@@ -9,7 +9,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "dovecot-2.3.3";
+  name = "dovecot-2.3.4";
 
   nativeBuildInputs = [ perl pkgconfig ];
   buildInputs =
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://dovecot.org/releases/2.3/${name}.tar.gz";
-    sha256 = "13kd0rxdg9scwnx6n24p6mv8p6dyh7v8s7sqv55gp2i54pp2gbqm";
+    sha256 = "01ggzf7b3jpl89mjiqr7xbpbs181g2gjf6wzg70qaqfzz3ppc6yr";
   };
 
   preConfigure = ''
@@ -68,8 +68,8 @@ stdenv.mkDerivation rec {
     description = "Open source IMAP and POP3 email server written with security primarily in mind";
     maintainers = with stdenv.lib.maintainers; [ peti rickynils fpletz ];
     platforms = stdenv.lib.platforms.unix;
-    tests = {
-      opensmtpd-interaction = nixosTests.opensmtpd;
-    };
+  };
+  passthru.tests = {
+    opensmtpd-interaction = nixosTests.opensmtpd;
   };
 }

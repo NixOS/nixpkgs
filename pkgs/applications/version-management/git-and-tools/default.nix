@@ -30,6 +30,10 @@ let
 
   git = appendToName "minimal" gitBase;
 
+  git-absorb = callPackage ./git-absorb {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   git-appraise = callPackage ./git-appraise {};
 
   git-fame = callPackage ./git-fame {};
@@ -89,6 +93,8 @@ let
   };
 
   git-remote-hg = callPackage ./git-remote-hg { };
+
+  git-reparent = callPackage ./git-reparent { };
 
   git-secret = callPackage ./git-secret { };
 

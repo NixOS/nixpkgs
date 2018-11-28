@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "QtAwesome";
-  version = "0.5.1";
+  version = "0.5.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "15n6ywfkx5vap0bvayh6n572kw5fkqnzpq5ga4a4d7v52nnxbba1";
+    sha256 = "1b5l9xmymyqlkm1phxyfw3s94ydkk3hykndjbkb24n5nfy46h5gl";
   };
 
   propagatedBuildInputs = [ qtpy six pyside ];
@@ -15,5 +15,6 @@ buildPythonPackage rec {
     description = "Iconic fonts in PyQt and PySide applications";
     homepage = https://github.com/spyder-ide/qtawesome;
     license = licenses.mit;
+    platforms = platforms.linux; # fails on Darwin
   };
 }

@@ -3,14 +3,15 @@
 , xorgserver, dbus, python2 }:
 
 stdenv.mkDerivation rec {
-  name = "bamf-2018-02-07";
+  name = "bamf-${version}";
+  version = "0.5.4";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchgit {
     url = https://git.launchpad.net/~unity-team/bamf;
-    rev = "0.5.3+18.04.20180207.2-0ubuntu1";
-    sha256 = "0hvbgzi0mzzzvcamd9mi1ykbk2l6zxffspyk5fpik8bij56nhzym";
+    rev = version;
+    sha256 = "1klvij1wyhdj5d8sr3b16pfixc1yk8ihglpjykg7zrr1f50jfgsz";
   };
 
   nativeBuildInputs = [

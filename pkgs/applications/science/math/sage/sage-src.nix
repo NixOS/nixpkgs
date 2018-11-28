@@ -2,6 +2,12 @@
 , fetchFromGitHub
 , fetchpatch
 }:
+
+# This file is responsible for fetching the sage source and adding necessary patches.
+# It does not actually build anything, it just copies the patched sources to $out.
+# This is done because multiple derivations rely on these sources and they should
+# all get the same sources with the same patches applied.
+
 stdenv.mkDerivation rec {
   version = "8.4";
   name = "sage-src-${version}";
@@ -13,6 +19,8 @@ stdenv.mkDerivation rec {
     sha256 = "0gips1hagiz9m7s21bg5as8hrrm2x5k47h1bsq0pc46iplfwmv2d";
   };
 
+  # Patches needed because of particularities of nix or the way this is packaged.
+  # The goal is to upstream all of them and get rid of this list.
   nixPatches = [
     # https://trac.sagemath.org/ticket/25358
     (fetchpatch {
@@ -31,6 +39,7 @@ stdenv.mkDerivation rec {
     # Revert the commit that made the sphinx build fork even in the single thread
     # case. For some yet unknown reason, that breaks the docbuild on nix and archlinux.
     # See https://groups.google.com/forum/#!msg/sage-packaging/VU4h8IWGFLA/mrmCMocYBwAJ.
+    # https://trac.sagemath.org/ticket/26608
     ./patches/revert-sphinx-always-fork.patch
 
     # Make sure py2/py3 tests are only run when their expected context (all "sage"
@@ -39,10 +48,16 @@ stdenv.mkDerivation rec {
     ./patches/Only-test-py2-py3-optional-tests-when-all-of-sage-is.patch
   ];
 
+  # Patches needed because of package updates. We could just pin the versions of
+  # dependencies, but that would lead to rebuilds, confusion and the burdons of
+  # maintaining multiple versions of dependencies. Instead we try to make sage
+  # compatible with never dependency versions when possible. All these changes
+  # should come from or be proposed to upstream. This list will probably never
+  # be empty since dependencies update all the time.
   packageUpgradePatches = let
-    # fetch a diff between base and rev on sage's git server
-    # used to fetch trac tickets by setting the base to the release and the
-    # revision to the last commit that should be included
+    # Fetch a diff between `base` and `rev` on sage's git server.
+    # Used to fetch trac tickets by setting the `base` to the last release and the
+    # `rev` to the last commit of the ticket.
     fetchSageDiff = { base, rev, ...}@args: (
       fetchpatch ({
         url = "https://git.sagemath.org/sage.git/patch?id2=${base}&id=${rev}";
@@ -54,7 +69,7 @@ stdenv.mkDerivation rec {
   in [
     # New glpk version has new warnings, filter those out until upstream sage has found a solution
     # https://trac.sagemath.org/ticket/24824
-    ./patches/pari-stackwarn.patch # not actually necessary since tha pari upgrade, but necessary for the glpk patch to apply
+    ./patches/pari-stackwarn.patch # not actually necessary since the pari upgrade, but necessary for the glpk patch to apply
     (fetchpatch {
       url = "https://salsa.debian.org/science-team/sagemath/raw/58bbba93a807ca2933ca317501d093a1bb4b84db/debian/patches/dt-version-glpk-4.65-ignore-warnings.patch";
       sha256 = "0b9293v73wb4x13wv5zwyjgclc01zn16msccfzzi6znswklgvddp";
@@ -64,13 +79,19 @@ stdenv.mkDerivation rec {
     # https://trac.sagemath.org/ticket/25260
     ./patches/numpy-1.15.1.patch
 
-    # ntl upgrade
+    # needed for ntl update
+    # https://trac.sagemath.org/ticket/25532
     (fetchpatch {
       name = "lcalc-c++11.patch";
       url = "https://git.archlinux.org/svntogit/community.git/plain/trunk/sagemath-lcalc-c++11.patch?h=packages/sagemath&id=0e31ae526ab7c6b5c0bfacb3f8b1c4fd490035aa";
       sha256 = "0p5wnvbx65i7cp0bjyaqgp4rly8xgnk12pqwaq3dqby0j2bk6ijb";
     })
 
+    (fetchpatch {
+      name = "cython-0.29.patch";
+      url = "https://git.sagemath.org/sage.git/patch/?h=f77de1d0e7f90ee12761140500cb8cbbb789ab20";
+      sha256 = "14wrpy8jgbnpza1j8a2nx8y2r946y82pll1fv3cn6gpfmm6640l3";
+    })
     # https://trac.sagemath.org/ticket/26360
     (fetchpatch {
       name = "arb-2.15.1.patch";
@@ -94,9 +115,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  patches = nixPatches ++ packageUpgradePatches ++ [
-    ./patches/known-padics-bug.patch
-  ];
+  patches = nixPatches ++ packageUpgradePatches;
 
   postPatch = ''
     # make sure shebangs etc are fixed, but sage-python23 still works

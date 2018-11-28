@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.linux;
     license = licenses.gpl2;
-    downloadPage = "http://sourceforge.net/projects/smbnetfs/files/smbnetfs";
+    downloadPage = "https://sourceforge.net/projects/smbnetfs/files/smbnetfs";
     updateWalker = true;
     inherit version;
     homepage = https://sourceforge.net/projects/smbnetfs/;

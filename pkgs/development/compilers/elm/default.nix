@@ -51,46 +51,17 @@
 # that the default of ~/.elm isn't used.
 
 let
-  makeDotElm = ver: deps:
-    let versionsDat = ./versions.dat;
-        cmds = lib.mapAttrsToList (name: info: let
-                 pkg = stdenv.mkDerivation {
-
-                   name = lib.replaceChars ["/"] ["-"] name + "-${info.version}";
-
-                   src = fetchurl {
-                     url = "https://github.com/${name}/archive/${info.version}.tar.gz";
-                     meta.homepage = "https://github.com/${name}/";
-                     inherit (info) sha256;
-                   };
-
-                   phases = [ "unpackPhase" "installPhase" ];
-
-                   installPhase = ''
-                     mkdir -p $out
-                     cp -r * $out
-                   '';
-
-                 };
-               in ''
-                 mkdir -p .elm/${ver}/package/${name}
-                 cp -R ${pkg} .elm/${ver}/package/${name}/${info.version}
-               '') deps;
-    in (lib.concatStrings cmds) + ''
-      mkdir -p .elm/${ver}/package;
-      cp ${versionsDat} .elm/${ver}/package/versions.dat;
-      chmod -R +w .elm
-    '';
-
+  fetchElmDeps = import ./fetchElmDeps.nix { inherit stdenv lib fetchurl; };
   hsPkgs = haskell.packages.ghc822.override {
     overrides = self: super: with haskell.lib;
       let elmPkgs = {
             elm = overrideCabal (self.callPackage ./packages/elm.nix { }) (drv: {
               # sadly with parallelism most of the time breaks compilation
               enableParallelBuilding = false;
-              preConfigure = ''
-                export ELM_HOME=`pwd`/.elm
-              '' + (makeDotElm "0.19.0" (import ./packages/elm-elm.nix));
+              preConfigure = fetchElmDeps {
+                elmPackages = (import ./packages/elm-elm.nix);
+                versionsDat = ./versions.dat;
+              };
               buildTools = drv.buildTools or [] ++ [ makeWrapper ];
               patches = [
                 (fetchpatch {
@@ -111,6 +82,7 @@ let
             `pacakge/nix/build.sh`
             */
             elm-format = self.callPackage ./packages/elm-format.nix {};
+            inherit fetchElmDeps;
           };
       in elmPkgs // {
         inherit elmPkgs;

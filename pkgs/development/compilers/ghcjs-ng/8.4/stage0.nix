@@ -156,6 +156,7 @@
         tree-diff
       ];
       testToolDepends = [ hspec-discover ];
+      doHaddock = false;
       homepage = "http://www.haskell.org/haddock/";
       description = "Library exposing some functionality of Haddock";
       license = stdenv.lib.licenses.bsd3;
