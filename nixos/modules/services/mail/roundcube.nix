@@ -7,13 +7,13 @@ let
 in
 {
   options.services.roundcube = {
-    enable = mkEnableOption "Roundcube";
-
-    nginx.enable = mkOption {
+    enable = mkOption {
       type = types.bool;
-      default = true;
+      default = false;
       description = ''
-        Whether to enable nginx virtual host management.
+        Whether to enable roundcube.
+
+        Also enables nginx virtual host management.
         Further nginx configuration can be done by adapting <literal>services.nginx.virtualHosts.&lt;name&gt;</literal>.
         See <xref linkend="opt-services.nginx.virtualHosts"/> for further information.
       '';
@@ -21,8 +21,8 @@ in
 
     hostName = mkOption {
       type = types.str;
-      example = "webmail";
-      description = "Host name to use which for the nginx vhost";
+      example = "webmail.example.com";
+      description = "Hostname to use for the nginx vhost";
     };
 
     database = {
@@ -34,7 +34,12 @@ in
       host = mkOption {
         type = types.str;
         default = "localhost";
-        description = "Host of the postgresql server";
+        description = ''
+          Host of the postgresql server. If this is not set to
+          <literal>localhost</literal>, you have to create the
+          postgresql user and database yourself, with appropriate
+          permissions.
+        '';
       };
       password = mkOption {
         type = types.str;
@@ -51,7 +56,7 @@ in
       type = types.listOf types.str;
       default = [];
       description = ''
-        List of roundcube plugins to enable.
+        List of roundcube plugins to enable. Currently, only those directly shipped with Roundcube are supported.
       '';
     };
 
@@ -74,7 +79,7 @@ in
       ${cfg.extraConfig}
     '';
 
-    services.nginx = mkIf cfg.nginx.enable {
+    services.nginx = {
       enable = true;
       virtualHosts = {
         ${cfg.hostName} = {
@@ -100,7 +105,7 @@ in
       enable = true;
     };
 
-    services.phpfpm.poolConfigs.${cfg.hostName} = ''
+    services.phpfpm.poolConfigs.roundcube = ''
       listen = /run/phpfpm/roundcube
       listen.owner = nginx
       listen.group = nginx
@@ -139,6 +144,8 @@ in
             -h ${cfg.database.host} ${cfg.database.dbname}
           touch /var/lib/roundcube/db-created
         fi
+
+        ${pkgs.php}/bin/php ${pkgs.roundcube}/bin/update.sh
       '';
       serviceConfig.Type = "oneshot";
     };

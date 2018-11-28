@@ -9,7 +9,6 @@ import ./make-test.nix ({ pkgs, ...} : {
       services.roundcube = {
         enable = true;
         hostName = "roundcube";
-        nginx.enable = true;
         database.password = "notproduction";
       };
       services.nginx.virtualHosts.roundcube = {
@@ -23,6 +22,7 @@ import ./make-test.nix ({ pkgs, ...} : {
     $roundcube->start;
     $roundcube->waitForUnit("postgresql.service");
     $roundcube->waitForUnit("phpfpm-roundcube.service");
+    $roundcube->waitForUnit("nginx.service");
     $roundcube->succeed("curl -sSfL http://roundcube/");
   '';
 })
