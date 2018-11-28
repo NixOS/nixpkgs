@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/yhatt/marp/releases/download/v${version}/${version}-Marp-linux-x64.tar.gz";
-    sha256 = "0yx6qxrjfs4q4p6j11zxydr23r9y16l8arygr0yjl4dlzffdygxm";
+    sha256 = "0nklzxwdx5llzfwz1hl2jpp2kwz78w4y63h5l00fh6fv6zisw6j4";
   };
 
   unpackPhase = ''
@@ -22,7 +22,6 @@ stdenv.mkDerivation rec {
   '';
 
   postFixup = ''
-    chmod u+x $out/bin/Marp
     patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
       --set-rpath "${atomEnv.libPath}:${stdenv.lib.makeLibraryPath [ libXScrnSaver gtk2 ]}:$out/lib/marp" \
       $out/bin/Marp
