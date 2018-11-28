@@ -88,7 +88,8 @@ rec {
       doCheck' = doCheck && stdenv.hostPlatform == stdenv.buildPlatform;
       doInstallCheck' = doInstallCheck && stdenv.hostPlatform == stdenv.buildPlatform;
 
-      outputs' = outputs ++ lib.optional separateDebugInfo "debug";
+      separateDebugInfo' = separateDebugInfo && stdenv.hostPlatform.isLinux;
+      outputs' = outputs ++ lib.optional separateDebugInfo' "debug";
 
       fixedOutputDrv = attrs ? outputHash;
       noNonNativeDeps = builtins.length (depsBuildTarget ++ depsBuildTargetPropagated
@@ -123,7 +124,7 @@ rec {
         [
           (map (drv: drv.__spliced.buildBuild or drv) depsBuildBuild)
           (map (drv: drv.nativeDrv or drv) nativeBuildInputs
-             ++ lib.optional separateDebugInfo ../../build-support/setup-hooks/separate-debug-info.sh
+             ++ lib.optional separateDebugInfo' ../../build-support/setup-hooks/separate-debug-info.sh
              ++ lib.optional stdenv.hostPlatform.isWindows ../../build-support/setup-hooks/win-dll-link.sh)
           (map (drv: drv.__spliced.buildTarget or drv) depsBuildTarget)
         ]
@@ -181,7 +182,7 @@ rec {
         // {
           # A hack to make `nix-env -qa` and `nix search` ignore broken packages.
           # TODO(@oxij): remove this assert when something like NixOS/nix#1771 gets merged into nix.
-          name = assert validity.handled && (separateDebugInfo -> stdenv.hostPlatform.isLinux); computedName + lib.optionalString
+          name = assert validity.handled; computedName + lib.optionalString
             # Fixed-output derivations like source tarballs shouldn't get a host
             # suffix. But we have some weird ones with run-time deps that are
             # just used for their side-affects. Those might as well since the
