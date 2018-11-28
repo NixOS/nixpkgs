@@ -1,0 +1,13 @@
+diff --git a/libraries/protocol/include/steem/protocol/version.hpp b/libraries/protocol/include/steem/protocol/version.hpp
+index 577a772f..cfcab439 100644
+--- a/libraries/protocol/include/steem/protocol/version.hpp
++++ b/libraries/protocol/include/steem/protocol/version.hpp
+@@ -2,6 +2,8 @@
+ 
+ #include <fc/string.hpp>
+ #include <fc/time.hpp>
++#undef major
++#undef minor
+ 
+ namespace steem { namespace protocol {
+ 

@@ -19149,6 +19149,8 @@ with pkgs;
 
   stalonetray = callPackage ../applications/window-managers/stalonetray {};
 
+  steem = callPackage ../applications/altcoins/steem { };
+
   inherit (ocamlPackages) stog;
 
   stp = callPackage ../applications/science/logic/stp {};
