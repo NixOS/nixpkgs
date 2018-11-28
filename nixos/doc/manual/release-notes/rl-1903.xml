@@ -241,8 +241,22 @@
      (<literal>networking.firewall.interfaces.default.*</literal>), and assigning
      to this pseudo device will override the (<literal>networking.firewall.allow*</literal>)
      options.
-    </para>
-   </listitem>
+   </para>
+  </listitem>
+  <listitem>
+   <para>
+     GitLab Shell previously used the nix store paths for the
+     <literal>gitlab-shell</literal> command in its
+     <literal>authorized_keys</literal> file, which might stop working after
+     garbage collection. To circumvent that, we regenerated that file on each
+     startup.  As <literal>gitlab-shell</literal> has now been changed to use
+     <literal>/var/run/current-system/sw/bin/gitlab-shell</literal>, this is
+     not necessary anymore, but there might be leftover lines with a nix store
+     path. Regenerate the <literal>authorized_keys</literal> file via
+     <command>sudo -u git -H gitlab-rake gitlab:shell:setup</command> in that
+     case.
+   </para>
+  </listitem>
   </itemizedlist>
  </section>
 
