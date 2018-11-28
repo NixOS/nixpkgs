@@ -10,15 +10,19 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ jre ] ;
 
-  phases = "installPhase";
+  unpackPhase = ''
+    echo "Skipping unpackphase, nothing to unpack"
+  '';
 
+  dontConfigure = true;
+  
+  dontBuild = true;
+    
   installPhase = ''
     runHook preInstall
     mkdir -p $out/bin
     cp ${src} $out/bin/mill
     chmod +x $out/bin/mill
-    sed -i '0,/java/{s|java|${jre}/bin/java|}' $out/bin/mill
-    sed -i '0,/mill.MillMain/{s|mill.MillMain|mill.MillMain --no-remote-logging|}' $out/bin/mill
     runHook postInstall
   '';
 
