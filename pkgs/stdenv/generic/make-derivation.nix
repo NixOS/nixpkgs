@@ -81,13 +81,6 @@ rec {
     , ... } @ attrs:
 
     let
-      # Check that the name is consistent with pname and version:
-      selfConsistent = (with attrs; attrs ? "name" ->
-        (lib.assertMsg (attrs ? "version" -> lib.strings.hasInfix version name)
-          "version ${version} does not appear in name ${name}" &&
-        lib.assertMsg (attrs ? "pname" -> lib.strings.hasInfix pname name)
-          "pname ${pname} does not appear in name ${name}"));
-
       computedName = if name != "" then name else "${attrs.pname}-${attrs.version}";
 
       # TODO(@oxij, @Ericson2314): This is here to keep the old semantics, remove when
@@ -188,7 +181,7 @@ rec {
         // {
           # A hack to make `nix-env -qa` and `nix search` ignore broken packages.
           # TODO(@oxij): remove this assert when something like NixOS/nix#1771 gets merged into nix.
-          name = assert selfConsistent && validity.handled && (separateDebugInfo -> stdenv.hostPlatform.isLinux); computedName + lib.optionalString
+          name = assert validity.handled && (separateDebugInfo -> stdenv.hostPlatform.isLinux); computedName + lib.optionalString
             # Fixed-output derivations like source tarballs shouldn't get a host
             # suffix. But we have some weird ones with run-time deps that are
             # just used for their side-affects. Those might as well since the
