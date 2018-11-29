@@ -33,7 +33,7 @@ self: super: {
   unbuildable = throw "package depends on meta package 'unbuildable'";
 
   # Use the latest version of the Cabal library.
-  cabal-install = super.cabal-install.overrideScope (self: super: { Cabal = self.Cabal_2_4_0_1; });
+  cabal-install = super.cabal-install.overrideScope (self: super: { Cabal = self.Cabal_2_4_1_0; });
 
   # The test suite depends on old versions of tasty and QuickCheck.
   hackage-security = dontCheck super.hackage-security;
@@ -1184,5 +1184,8 @@ self: super: {
   #   testToolDepends = old.testToolDepends or [] ++ [ pkgs.nix ];
   # });
   libnix = dontCheck super.libnix;
+
+  # https://github.com/jmillikin/chell/issues/1
+  chell = super.chell.override { patience = self.patience_0_1_1; };
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super

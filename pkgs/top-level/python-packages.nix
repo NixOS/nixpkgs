@@ -398,6 +398,8 @@ in {
     inherit python;
   });
 
+  hopcroftkarp = callPackage ../development/python-modules/hopcroftkarp { };
+
   httpsig = callPackage ../development/python-modules/httpsig { };
 
   i3ipc = callPackage ../development/python-modules/i3ipc { };
@@ -422,6 +424,8 @@ in {
 
   markerlib = callPackage ../development/python-modules/markerlib { };
 
+  matchpy = callPackage ../development/python-modules/matchpy { };
+
   monty = callPackage ../development/python-modules/monty { };
 
   mininet-python = (toPythonModule (pkgs.mininet.override{ inherit python; })).py;
@@ -430,9 +434,13 @@ in {
     mpi = pkgs.openmpi;
   };
 
+  multiset = callPackage ../development/python-modules/multiset { };
+
   mwclient = callPackage ../development/python-modules/mwclient { };
 
   mwoauth = callPackage ../development/python-modules/mwoauth { };
+
+  nbval = callPackage ../development/python-modules/nbval { };
 
   nest-asyncio = callPackage ../development/python-modules/nest-asyncio { };
 
@@ -479,6 +487,8 @@ in {
   pdfminer = callPackage ../development/python-modules/pdfminer_six { };
 
   pdfx = callPackage ../development/python-modules/pdfx { };
+
+  perf = callPackage ../development/python-modules/perf { };
 
   phonopy = callPackage ../development/python-modules/phonopy { };
 
@@ -613,6 +623,8 @@ in {
 
   pytesseract = callPackage ../development/python-modules/pytesseract { };
 
+  pytest-mypy = callPackage ../development/python-modules/pytest-mypy { };
+
   pytest-tornado = callPackage ../development/python-modules/pytest-tornado { };
 
   python-binance = callPackage ../development/python-modules/python-binance { };
@@ -743,6 +755,8 @@ in {
   actdiag = callPackage ../development/python-modules/actdiag { };
 
   adal = callPackage ../development/python-modules/adal { };
+
+  affine = callPackage ../development/python-modules/affine { };
 
   aioconsole = callPackage ../development/python-modules/aioconsole { };
 
@@ -995,6 +1009,8 @@ in {
 
   colour = callPackage ../development/python-modules/colour {};
 
+  configshell = callPackage ../development/python-modules/configshell { };
+
   constantly = callPackage ../development/python-modules/constantly { };
 
   cornice = callPackage ../development/python-modules/cornice { };
@@ -1050,6 +1066,8 @@ in {
   py4j = callPackage ../development/python-modules/py4j { };
 
   pyechonest = callPackage ../development/python-modules/pyechonest { };
+
+  pyepsg = callPackage ../development/python-modules/pyepsg { };
 
   pyezminc = callPackage ../development/python-modules/pyezminc { };
 
@@ -1131,6 +1149,8 @@ in {
   cairosvg = callPackage ../development/python-modules/cairosvg {};
 
   carrot = callPackage ../development/python-modules/carrot {};
+
+  cartopy = callPackage ../development/python-modules/cartopy {};
 
   case = callPackage ../development/python-modules/case {};
 
@@ -2413,6 +2433,8 @@ in {
 
   genshi = callPackage ../development/python-modules/genshi { };
 
+  gentools = callPackage ../development/python-modules/gentools { };
+
   gevent = callPackage ../development/python-modules/gevent { };
 
   geventhttpclient = callPackage ../development/python-modules/geventhttpclient { };
@@ -2743,6 +2765,8 @@ in {
   python-Levenshtein = callPackage ../development/python-modules/python-levenshtein { };
 
   fs = callPackage ../development/python-modules/fs { };
+
+  fs-s3fs = callPackage ../development/python-modules/fs-s3fs { };
 
   libcloud = callPackage ../development/python-modules/libcloud { };
 
@@ -3484,6 +3508,8 @@ in {
 
   pyspread = callPackage ../development/python-modules/pyspread { };
 
+  pyupdate = callPackage ../development/python-modules/pyupdate {};
+
   pyx = callPackage ../development/python-modules/pyx { };
 
   mmpython = callPackage ../development/python-modules/mmpython { };
@@ -3653,6 +3679,8 @@ in {
 
   rabbitpy = callPackage ../development/python-modules/rabbitpy { };
 
+  rasterio = callPackage ../development/python-modules/rasterio { };
+
   radicale_infcloud = callPackage ../development/python-modules/radicale_infcloud {};
 
   recaptcha_client = callPackage ../development/python-modules/recaptcha_client { };
@@ -3781,6 +3809,8 @@ in {
 
   rpy2 = callPackage ../development/python-modules/rpy2 {};
 
+  rtslib = callPackage ../development/python-modules/rtslib {};
+
   Rtree = callPackage ../development/python-modules/Rtree { inherit (pkgs) libspatialindex; };
 
   typing = callPackage ../development/python-modules/typing { };
@@ -3834,6 +3864,10 @@ in {
   slimit = callPackage ../development/python-modules/slimit { };
 
   snowballstemmer = callPackage ../development/python-modules/snowballstemmer { };
+
+  snug = callPackage ../development/python-modules/snug { };
+
+  snuggs = callPackage ../development/python-modules/snuggs { };
 
   spake2 = callPackage ../development/python-modules/spake2 { };
 
@@ -3947,6 +3981,8 @@ in {
   u-msgpack-python = callPackage ../development/python-modules/u-msgpack-python { };
 
   ua-parser = callPackage ../development/python-modules/ua-parser { };
+
+  uarray = callPackage ../development/python-modules/uarray { };
 
   ukpostcodeparser = callPackage ../development/python-modules/ukpostcodeparser { };
 

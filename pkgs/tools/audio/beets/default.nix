@@ -1,5 +1,6 @@
 { stdenv, fetchFromGitHub, writeScript, glibcLocales, diffPlugins
 , pythonPackages, imagemagick, gobjectIntrospection, gst_all_1
+, fetchpatch
 
 # Attributes needed for tests of the external plugins
 , callPackage, beets
@@ -155,6 +156,14 @@ in pythonPackages.buildPythonApplication rec {
   patches = [
     ./replaygain-default-bs1770gain.patch
     ./keyfinder-default-bin.patch
+
+    # Fix Python 3.7 compatibility
+    (fetchpatch {
+      url = "https://github.com/beetbox/beets/commit/"
+          + "15d44f02a391764da1ce1f239caef819f08beed8.patch";
+      sha256 = "12rjb4959nvnrm3fvvki7chxjkipa0cy8i0yi132xrcn8141dnpm";
+      excludes = [ "docs/changelog.rst" ];
+    })
   ];
 
   postPatch = ''
