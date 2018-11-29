@@ -21,5 +21,6 @@ buildPythonPackage rec {
     maintainers = with maintainers; [ fridh ];
     license = with licenses; [ bsd3 ];
     homepage = https://github.com/python-acoustics/python-acoustics;
+    broken = true;
   };
 }
