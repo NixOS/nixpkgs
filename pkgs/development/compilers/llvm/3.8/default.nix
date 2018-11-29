@@ -56,4 +56,4 @@ let
     libcxxabi = callPackage ./libc++abi.nix {};
   });
 
-in { inherit tools libraries; } // libraries // tools
+in stdenv.lib.makeExtensible (_: _: { inherit tools libraries; } // tools // libraries)

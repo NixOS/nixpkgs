@@ -89,4 +89,4 @@ let
     openmp = callPackage ./openmp.nix {};
   });
 
-in { inherit tools libraries; } // libraries // tools
+in stdenv.lib.makeExtensible (_: _: { inherit tools libraries; } // tools // libraries)
