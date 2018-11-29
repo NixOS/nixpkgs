@@ -4055,7 +4055,7 @@ let
       \$(BASEEXT)\$(OBJ_EXT): \$(BASEEXT).xsi
 
       \$(BASEEXT).xsi: \$(DBI_DRIVER_XST) $autodir/Driver_xst.h
-        \$(PERL) -p -e "s/~DRIVER~/\$(BASEEXT)/g" \$(DBI_DRIVER_XST) > \$(BASEEXT).xsi
+      ''\t\$(PERL) -p -e "s/~DRIVER~/\$(BASEEXT)/g" \$(DBI_DRIVER_XST) > \$(BASEEXT).xsi
 
       # ---
       ';
