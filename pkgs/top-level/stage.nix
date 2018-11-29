@@ -179,7 +179,7 @@ let
   # The complete chain of package set builders, applied from top to bottom.
   # stdenvOverlays must be last as it brings package forward from the
   # previous bootstrapping phases which have already been overlayed.
-  toFix = lib.foldl' (lib.flip lib.extends) (self: {}) ([
+  toFix = map lib.overrides.makeExtensibleAttrset ([
     stdenvBootstappingAndPlatforms
     platformCompat
     stdenvAdapters
@@ -194,4 +194,4 @@ let
 
 in
   # Return the complete set of packages.
-  lib.fix toFix
+  lib.monoid.fold lib.monoid.extensibleAttrset toFix
