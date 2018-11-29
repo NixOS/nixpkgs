@@ -595,6 +595,8 @@ in {
 
   pyparser = callPackage ../development/python-modules/pyparser { };
 
+  pyres = callPackage ../development/python-modules/pyres { };
+
   pyqt4 = callPackage ../development/python-modules/pyqt/4.x.nix {
     pythonPackages = self;
   };
@@ -618,6 +620,8 @@ in {
   pyslurm = callPackage ../development/python-modules/pyslurm {
     slurm = pkgs.slurm;
   };
+
+  pyssim = callPackage ../development/python-modules/pyssim { };
 
   pystache = callPackage ../development/python-modules/pystache { };
 
@@ -665,6 +669,8 @@ in {
   pyvoro = callPackage ../development/python-modules/pyvoro { };
 
   relatorio = callPackage ../development/python-modules/relatorio { };
+
+  remotecv = callPackage ../development/python-modules/remotecv { };
 
   pyzufall = callPackage ../development/python-modules/pyzufall { };
 
@@ -1145,6 +1151,8 @@ in {
   canmatrix = callPackage ../development/python-modules/canmatrix {};
 
   cairocffi = callPackage ../development/python-modules/cairocffi {};
+
+  cairosvg1 = callPackage ../development/python-modules/cairosvg/1_x.nix {};
 
   cairosvg = callPackage ../development/python-modules/cairosvg {};
 
@@ -3080,6 +3088,8 @@ in {
 
   nose-exclude = callPackage ../development/python-modules/nose-exclude { };
 
+  nose-focus = callPackage ../development/python-modules/nose-focus { };
+
   nose2 = callPackage ../development/python-modules/nose2 { };
 
   nose-cover3 = callPackage ../development/python-modules/nose-cover3 { };
@@ -3089,6 +3099,10 @@ in {
   nosejs = callPackage ../development/python-modules/nosejs { };
 
   nose-cprof = callPackage ../development/python-modules/nose-cprof { };
+
+  nose-of-yeti = callPackage ../development/python-modules/nose-of-yeti { };
+
+  nose-pattern-exclude = callPackage ../development/python-modules/nose-pattern-exclude { };
 
   nose_warnings_filters = callPackage ../development/python-modules/nose_warnings_filters { };
 
@@ -3856,6 +3870,8 @@ in {
   simanneal = callPackage ../development/python-modules/simanneal { };
 
   simplegeneric = callPackage ../development/python-modules/simplegeneric { };
+
+  should-dsl = callPackage ../development/python-modules/should-dsl { };
 
   simplejson = callPackage ../development/python-modules/simplejson { };
 
@@ -4851,11 +4867,15 @@ in {
 
   packaging = callPackage ../development/python-modules/packaging { };
 
+  preggy = callPackage ../development/python-modules/preggy { };
+
   pytoml = callPackage ../development/python-modules/pytoml { };
 
   pypandoc = callPackage ../development/python-modules/pypandoc { };
 
   yamllint = callPackage ../development/python-modules/yamllint { };
+
+  yanc = callPackage ../development/python-modules/yanc { };
 
   yarl = callPackage ../development/python-modules/yarl { };
 
