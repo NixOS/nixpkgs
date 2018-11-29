@@ -10408,6 +10408,8 @@ with pkgs;
 
   libclxclient = callPackage ../development/libraries/libclxclient  { };
 
+  libcondordrmaa = callPackage ../development/libraries/libcondordrmaa { };
+
   libconfuse = callPackage ../development/libraries/libconfuse { };
 
   inherit (gnome3) libcroco;
