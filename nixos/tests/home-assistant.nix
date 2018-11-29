@@ -31,6 +31,9 @@ in {
               latitude = "0.0";
               longitude = "0.0";
               elevation = 0;
+              auth_providers = [
+                { type = "legacy_api_password"; }
+              ];
             };
             frontend = { };
             http.api_password = apiPassword;
