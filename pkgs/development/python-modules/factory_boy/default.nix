@@ -2,6 +2,8 @@
 , buildPythonPackage
 , fetchPypi
 , fake_factory
+, faker
+, python
 }:
 
 buildPythonPackage rec {
@@ -13,7 +15,12 @@ buildPythonPackage rec {
     sha256 = "6f25cc4761ac109efd503f096e2ad99421b1159f01a29dbb917359dcd68e08ca";
   };
 
+  checkInputs = [ faker ];
   propagatedBuildInputs = [ fake_factory ];
+
+  checkPhase = ''
+    ${python.interpreter} -m unittest
+  '';
 
   meta = with stdenv.lib; {
     description = "A Python package to create factories for complex objects";
