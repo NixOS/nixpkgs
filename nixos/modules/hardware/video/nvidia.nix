@@ -18,8 +18,6 @@ let
         kernelPackages.nvidia_x11_beta
     else if elem "nvidiaLegacy304" drivers then
       kernelPackages.nvidia_x11_legacy304
-    else if elem "nvidiaLegacy340" drivers then
-      kernelPackages.nvidia_x11_legacy340
     else null;
 
   nvidia_x11 = nvidiaForKernel config.boot.kernelPackages;

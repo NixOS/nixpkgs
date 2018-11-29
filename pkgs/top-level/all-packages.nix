@@ -14498,7 +14498,6 @@ with pkgs;
     nvidiaPackages = callPackage ../os-specific/linux/nvidia-x11 { };
 
     nvidia_x11_legacy304 = nvidiaPackages.legacy_304;
-    nvidia_x11_legacy340 = nvidiaPackages.legacy_340;
     nvidia_x11_beta      = nvidiaPackages.beta;
     nvidia_x11           = nvidiaPackages.stable;
 
