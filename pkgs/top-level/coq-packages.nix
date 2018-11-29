@@ -20,6 +20,7 @@ let
       coq-haskell = callPackage ../development/coq-modules/coq-haskell { };
       coqprime = callPackage ../development/coq-modules/coqprime {};
       coquelicot = callPackage ../development/coq-modules/coquelicot {};
+      corn = callPackage ../development/coq-modules/corn {};
       dpdgraph = callPackage ../development/coq-modules/dpdgraph {};
       equations = callPackage ../development/coq-modules/equations { };
       fiat_HEAD = callPackage ../development/coq-modules/fiat/HEAD.nix {};
