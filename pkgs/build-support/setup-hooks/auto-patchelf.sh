@@ -147,15 +147,56 @@ autoPatchelfFile() {
     fi
 }
 
+# Can be used to manually add additional directories with shared object files
+# to be included for the next autoPatchelf invocation.
+addAutoPatchelfSearchPath() {
+    local -a findOpts=()
+
+    # XXX: Somewhat similar to the one in the autoPatchelf function, maybe make
+    #      it DRY someday...
+    while [ $# -gt 0 ]; do
+        case "$1" in
+            --) shift; break;;
+            --no-recurse) shift; findOpts+=("-maxdepth" 1);;
+            --*)
+                echo "addAutoPatchelfSearchPath: ERROR: Invalid command line" \
+                     "argument: $1" >&2
+                return 1;;
+            *) break;;
+        esac
+    done
+
+    cachedDependencies+=(
+        $(find "$@" "${findOpts[@]}" \! -type d \
+               \( -name '*.so' -o -name '*.so.*' \))
+    )
+}
+
 autoPatchelf() {
+    local norecurse=
+
+    while [ $# -gt 0 ]; do
+        case "$1" in
+            --) shift; break;;
+            --no-recurse) shift; norecurse=1;;
+            --*)
+                echo "autoPatchelf: ERROR: Invalid command line" \
+                     "argument: $1" >&2
+                return 1;;
+            *) break;;
+        esac
+    done
+
+    if [ $# -eq 0 ]; then
+        echo "autoPatchelf: No paths to patch specified." >&2
+        return 1
+    fi
+
     echo "automatically fixing dependencies for ELF files" >&2
 
     # Add all shared objects of the current output path to the start of
     # cachedDependencies so that it's choosen first in findDependency.
-    cachedDependencies+=(
-        $(find "$prefix" \! -type d \( -name '*.so' -o -name '*.so.*' \))
-    )
-    local elffile
+    addAutoPatchelfSearchPath ${norecurse:+--no-recurse} -- "$@"
 
     # Here we actually have a subshell, which also means that
     # $cachedDependencies is final at this point, so whenever we want to run
@@ -164,12 +205,15 @@ autoPatchelf() {
     # outside of this function.
     while IFS= read -r -d $'\0' file; do
       isELF "$file" || continue
+      segmentHeaders="$(LANG=C readelf -l "$file")"
+      # Skip if the ELF file doesn't have segment headers (eg. object files).
+      echo "$segmentHeaders" | grep -q '^Program Headers:' || continue
       if isExecutable "$file"; then
           # Skip if the executable is statically linked.
-          LANG=C readelf -l "$file" | grep -q "^ *INTERP\\>" || continue
+          echo "$segmentHeaders" | grep -q "^ *INTERP\\>" || continue
       fi
       autoPatchelfFile "$file"
-    done < <(find "$prefix" -type f -print0)
+    done < <(find "$@" ${norecurse:+-maxdepth 1} -type f -print0)
 }
 
 # XXX: This should ultimately use fixupOutputHooks but we currently don't have
@@ -180,6 +224,11 @@ autoPatchelf() {
 # So what we do here is basically run in postFixup and emulate the same
 # behaviour as fixupOutputHooks because the setup hook for patchelf is run in
 # fixupOutput and the postFixup hook runs later.
-postFixupHooks+=(
-    'for output in $outputs; do prefix="${!output}" autoPatchelf; done'
-)
+postFixupHooks+=('
+    if [ -z "$dontAutoPatchelf" ]; then
+        autoPatchelf -- $(for output in $outputs; do
+            [ -e "${!output}" ] || continue
+            echo "${!output}"
+        done)
+    fi
+')

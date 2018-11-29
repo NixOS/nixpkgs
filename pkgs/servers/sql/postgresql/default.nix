@@ -1,10 +1,11 @@
-{ lib, stdenv, glibc, fetchurl, zlib, readline, libossp_uuid, openssl, libxml2, makeWrapper, tzdata }:
+{ lib, stdenv, glibc, fetchurl, zlib, readline, libossp_uuid, openssl, libxml2, makeWrapper, tzdata, systemd }:
 
 let
 
   common = { version, sha256, psqlSchema }:
    let atLeast = lib.versionAtLeast version; in stdenv.mkDerivation (rec {
     name = "postgresql-${version}";
+    inherit version;
 
     src = fetchurl {
       url = "mirror://postgresql/source/v${version}/${name}.tar.bz2";
@@ -16,9 +17,10 @@ let
 
     buildInputs =
       [ zlib readline openssl libxml2 makeWrapper ]
+      ++ lib.optionals (atLeast "9.6" && !stdenv.isDarwin) [ systemd ]
       ++ lib.optionals (!stdenv.isDarwin) [ libossp_uuid ];
 
-    enableParallelBuilding = true;
+    enableParallelBuilding = !stdenv.isDarwin;
 
     makeFlags = [ "world" ];
 
@@ -33,6 +35,7 @@ let
       "--sysconfdir=/etc"
       "--libdir=$(lib)/lib"
       "--with-system-tzdata=${tzdata}/share/zoneinfo"
+      (lib.optionalString (atLeast "9.6" && !stdenv.isDarwin) "--with-systemd")
       (if stdenv.isDarwin then "--with-uuid=e2fs" else "--with-ossp-uuid")
     ];
 
@@ -132,7 +135,7 @@ in {
 
   postgresql_11 = common {
     version = "11.1";
-    psqlSchema = "11.0";
+    psqlSchema = "11.1";
     sha256 = "026v0sicsh7avzi45waf8shcbhivyxmi7qgn9fd1x0vl520mx0ch";
   };
 

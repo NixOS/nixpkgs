@@ -180,7 +180,7 @@ in
       serviceConfig = {
         Type = "oneshot";
         ExecStart = "${pkgs.apcupsd}/bin/apcupsd --killpower -f ${configFile}";
-        TimeoutSec = 0;
+        TimeoutSec = "infinity";
         StandardOutput = "tty";
         RemainAfterExit = "yes";
       };

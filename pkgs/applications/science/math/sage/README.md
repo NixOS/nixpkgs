@@ -2,46 +2,7 @@
 
 Sage is a pretty complex package that depends on many other complex packages and patches some of those. As a result, the sage nix package is also quite complex.
 
-Don't feel discouraged to fix, simplify or improve things though. Here's a quick overview over the functions of the individual files:
-
-- `sage-src.nix`  
-  Downloads the source code and applies patches. This makes sure that all the other files work with the same sage source. If you want to apply a patch to sage or update sage to a new version, this is the place to do it.
-
-- `env-locations.nix`  
-  Creates a bash file that sets a bunch of environment variables telling sage where to find various packages and files. The definitions of those environment variables can be found in the sage source in the `src/env.py` file. This bash file needs to be sourced before sage is started (done in `sage-env.nix` and `sagedoc.nix`).
-
-- `sage-env.nix`  
-  Sets all environment variables sage needs to run. This includes the package locations defined in `env-locations.nix` as well as the location of sage itself and its various subdirectories.
-
-- `sagelib.nix`  
-  Defines the main sage package (without setting the necessary environments or running any tests).
-
-- `sage-with-env.nix`  
-  Wraps sage in the necessary environment.
-
-- `sage.nix`  
-  Runs sages doctests.
-
-- `sage-wrapper.nix`  
-  Optionally tells sage where do find the docs.
-
-- `sagedoc.nix`  
-  Builds and tests the sage html documentation. Can be used for offline documentation viewing as well as the sage `browse_sage_doc` and `search_doc` functions.
-
-- `sagenb.nix`  
-  The (semi deprecated) sage notebook.
-
-- `default.nix`  
-  Introduces necessary overrides, defines new packages and ties everything together (returning the `sage` package).
-
-- `flask-oldsessions.nix`, `flask-openid.nix`, `python-openid.nix`
-  These are python packages that were rejected from the main nixpkgs tree because they appear unmaintained. They are needed for the (semi-deprecated) sage notebook. Since that notebook is still needed to run the sage doctests, these packages are included but not exposed to the rest of nixpkgs.
-
-- `pybrial.nix`  
-  pybrial is a dependency of sage. However, pybrial itself also has sage as a dependency. Because of that circular dependency, pybrial is hidden from the rest of nixpkgs (just as the flask packages and python-openid.
-
-- `openblas-pc.nix`  
-  This creates a `.pc` file to be read by `pkg-config` that allows openblas to take on different roles, like `cblas` or `lapack`.
+Don't feel discouraged to fix, simplify or improve things though. The individual files have comments explaining their purpose. The most importent ones are `default.nix` linking everything together, `sage-src.nix` adding patches and `sagelib.nix` building the actual sage package.
 
 ## The sage build is broken
 

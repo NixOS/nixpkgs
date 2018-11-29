@@ -3,13 +3,13 @@
 
 rustPlatform.buildRustPackage rec {
   name = "dwm-status-${version}";
-  version = "1.2.0";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "Gerschtli";
     repo = "dwm-status";
     rev = version;
-    sha256 = "0bv1jkqkf509akg3dvdy8b2q1kh8i75vw4n6a9rjvslx9s9nh6ca";
+    sha256 = "1v9ksv8hdxhpm7vs71p9s1y3gnahczza0w4wyrk2fsc6x2kwlh6x";
   };
 
   nativeBuildInputs = [ makeWrapper pkgconfig ];

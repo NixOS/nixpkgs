@@ -183,7 +183,7 @@ with pkgs;
   fetchfossil = callPackage ../build-support/fetchfossil { };
 
   fetchgit = callPackage ../build-support/fetchgit {
-    git = gitMinimal;
+    git = buildPackages.gitMinimal;
   };
 
   fetchgitPrivate = callPackage ../build-support/fetchgit/private.nix { };
@@ -314,8 +314,8 @@ with pkgs;
     ... # For hash agility
   }@args: fetchzip ({
     inherit name;
-    url = "http://repo.or.cz/${repo}.git/snapshot/${rev}.tar.gz";
-    meta.homepage = "http://repo.or.cz/${repo}.git/";
+    url = "https://repo.or.cz/${repo}.git/snapshot/${rev}.tar.gz";
+    meta.homepage = "https://repo.or.cz/${repo}.git/";
   } // removeAttrs args [ "repo" "rev" ]) // { inherit rev; };
 
   fetchNuGet = callPackage ../build-support/fetchnuget { };
@@ -420,6 +420,8 @@ with pkgs;
 
   iconConvTools = callPackage ../build-support/icon-conv-tools {};
 
+  #package writers
+  writers = callPackage ../build-support/writers {};
 
   ### TOOLS
 
@@ -593,6 +595,8 @@ with pkgs;
 
   autoflake = callPackage ../development/tools/analysis/autoflake { };
 
+  autospotting = callPackage ../applications/misc/autospotting { };
+
   avfs = callPackage ../tools/filesystems/avfs { };
 
   avldrums-lv2 = callPackage ../applications/audio/avldrums-lv2 { };
@@ -680,6 +684,8 @@ with pkgs;
   chkcrontab = callPackage ../tools/admin/chkcrontab { };
 
   cozy = callPackage ../applications/audio/cozy-audiobooks { };
+
+  deskew = callPackage ../applications/graphics/deskew { };
 
   diskus = callPackage ../tools/misc/diskus { };
 
@@ -937,8 +943,6 @@ with pkgs;
   bindfs = callPackage ../tools/filesystems/bindfs { };
 
   bitbucket-cli = python2Packages.bitbucket-cli;
-
-  bittornado = callPackage ../tools/networking/p2p/bittornado { };
 
   blink = callPackage ../applications/networking/instant-messengers/blink { };
 
@@ -1580,6 +1584,8 @@ with pkgs;
   psstop = callPackage ../tools/system/psstop { };
 
   parallel-rust = callPackage ../tools/misc/parallel-rust { };
+
+  pyCA = python3Packages.callPackage ../applications/video/pyca {};
 
   scour = with python3Packages; toPythonApplication scour;
 
@@ -2774,6 +2780,8 @@ with pkgs;
 
   fuse-7z-ng = callPackage ../tools/filesystems/fuse-7z-ng { };
 
+  fusee-launcher = callPackage ../development/tools/fusee-launcher { };
+
   fwknop = callPackage ../tools/security/fwknop { };
 
   exfat = callPackage ../tools/filesystems/exfat { };
@@ -2884,11 +2892,11 @@ with pkgs;
 
   gitlab-runner = callPackage ../development/tools/continuous-integration/gitlab-runner { };
 
-  gitlab-shell = callPackage ../applications/version-management/gitlab-shell { };
+  gitlab-shell = callPackage ../applications/version-management/gitlab/gitlab-shell { };
 
-  gitlab-workhorse = callPackage ../applications/version-management/gitlab-workhorse { };
+  gitlab-workhorse = callPackage ../applications/version-management/gitlab/gitlab-workhorse { };
 
-  gitaly = callPackage ../applications/version-management/gitaly { };
+  gitaly = callPackage ../applications/version-management/gitlab/gitaly { };
 
   gitstats = callPackage ../applications/version-management/gitstats { };
 
@@ -3764,9 +3772,13 @@ with pkgs;
 
   mxt-app = callPackage ../misc/mxt-app { };
 
+  mxisd = callPackage ../servers/mxisd { };
+
   nagstamon = callPackage ../tools/misc/nagstamon {
     pythonPackages = python3Packages;
   };
+
+  nbench = callPackage ../tools/misc/nbench { };
 
   netdata = callPackage ../tools/system/netdata {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation IOKit;
@@ -4666,6 +4678,10 @@ with pkgs;
   pandoc = haskell.lib.overrideCabal (haskell.lib.justStaticExecutables haskellPackages.pandoc) (drv: {
     configureFlags = drv.configureFlags or [] ++ ["-fembed_data_files"];
     buildDepends = drv.buildDepends or [] ++ [haskellPackages.file-embed];
+    postInstall = ''
+      mkdir -p $out/share/man/man1
+      cp man/pandoc.1 $out/share/man/man1/
+    '';
   });
 
   pamtester = callPackage ../tools/security/pamtester { };
@@ -4706,6 +4722,8 @@ with pkgs;
                   });
       };
   };
+
+  pulumi-bin = callPackage ../tools/admin/pulumi { };
 
   p0f = callPackage ../tools/security/p0f { };
 
@@ -4781,6 +4799,8 @@ with pkgs;
   peco = callPackage ../tools/text/peco { };
 
   pg_top = callPackage ../tools/misc/pg_top { };
+
+  pgcenter = callPackage ../tools/misc/pgcenter { };
 
   pgmetrics = callPackage ../tools/misc/pgmetrics { };
 
@@ -5622,6 +5642,8 @@ with pkgs;
 
   znapzend = callPackage ../tools/backup/znapzend { };
 
+  targetcli = callPackage ../os-specific/linux/targetcli { };
+
   tarsnap = callPackage ../tools/backup/tarsnap { };
 
   tarsnapper = callPackage ../tools/backup/tarsnapper { };
@@ -6033,6 +6055,8 @@ with pkgs;
   woff2 = callPackage ../development/web/woff2 { };
 
   woof = callPackage ../tools/misc/woof { };
+
+  wpscan = callPackage ../tools/security/wpscan { };
 
   wsmancli = callPackage ../tools/system/wsmancli {};
 
@@ -8549,6 +8573,7 @@ with pkgs;
   gradle_2_14 = self.gradleGen.gradle_2_14;
   gradle_2_5 = self.gradleGen.gradle_2_5;
   gradle_3_5 = self.gradleGen.gradle_3_5;
+  gradle_4_10 = self.gradleGen.gradle_4_10;
 
   gperf = callPackage ../development/tools/misc/gperf { };
   # 3.1 changed some parameters from int to size_t, leading to mismatches.
@@ -8645,6 +8670,8 @@ with pkgs;
   kubectx = callPackage ../development/tools/kubectx { };
 
   kube-prompt = callPackage ../development/tools/kube-prompt { };
+
+  kubicorn = callPackage ../development/tools/kubicorn {  };
 
   kustomize = callPackage ../development/tools/kustomize { };
 
@@ -8900,6 +8927,8 @@ with pkgs;
 
   sbt-extras = callPackage ../development/tools/build-managers/sbt-extras { };
 
+  scss-lint = callPackage ../development/tools/scss-lint { };
+
   shallot = callPackage ../tools/misc/shallot { };
 
   shards = callPackage ../development/tools/build-managers/shards { };
@@ -8947,7 +8976,11 @@ with pkgs;
 
   spoofer-gui = callPackage ../tools/networking/spoofer { withGUI = true; };
 
+  sqlcheck = callPackage ../development/tools/database/sqlcheck { };
+
   sqlitebrowser = libsForQt5.callPackage ../development/tools/database/sqlitebrowser { };
+
+  sqlite-web = callPackage ../development/tools/database/sqlite-web { };
 
   sselp = callPackage ../tools/X11/sselp{ };
 
@@ -9045,6 +9078,8 @@ with pkgs;
     deps = [ xcbuild ];
   } ../development/tools/xcbuild/setup-hook.sh  ;
 
+  xcpretty = callPackage ../development/tools/xcpretty { };
+
   xmlindent = callPackage ../development/web/xmlindent {};
 
   xpwn = callPackage ../development/mobile/xpwn {};
@@ -9122,6 +9157,10 @@ with pkgs;
     db = if stdenv.isFreeBSD then db4 else db;
     # XXX: only the db_185 interface was available through
     #      apr with db58 on freebsd (nov 2015), for unknown reasons
+  };
+
+  aravis = callPackage ../development/libraries/aravis {
+    inherit (gst_all_1) gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad;
   };
 
   arb = callPackage ../development/libraries/arb {};
@@ -9332,8 +9371,6 @@ with pkgs;
   cointop = callPackage ../applications/misc/cointop { };
 
   commoncpp2 = callPackage ../development/libraries/commoncpp2 { };
-
-  confuse = callPackage ../development/libraries/confuse { };
 
   coredumper = callPackage ../development/libraries/coredumper { };
 
@@ -13139,7 +13176,7 @@ with pkgs;
     packages = [];
   };
 
-  rstudioWrapper = callPackage ../development/r-modules/wrapper-rstudio.nix {
+  rstudioWrapper = libsForQt5.callPackage ../development/r-modules/wrapper-rstudio.nix {
     recommendedPackages = with rPackages; [
       boot class cluster codetools foreign KernSmooth lattice MASS
       Matrix mgcv nlme nnet rpart spatial survival
@@ -15386,6 +15423,8 @@ with pkgs;
 
   maia-icon-theme = callPackage ../data/icons/maia-icon-theme { };
 
+  mailcap = callPackage ../data/misc/mailcap { };
+
   marathi-cursive = callPackage ../data/fonts/marathi-cursive { };
 
   man-pages = callPackage ../data/documentation/man-pages { };
@@ -16344,6 +16383,8 @@ with pkgs;
   dzen2 = callPackage ../applications/window-managers/dzen2 { };
 
   eaglemode = callPackage ../applications/misc/eaglemode { };
+
+  echoip = callPackage ../servers/echoip { };
 
   eclipses = recurseIntoAttrs (callPackage ../applications/editors/eclipse {
     jdk = jdk11;
@@ -18556,8 +18597,6 @@ with pkgs;
 
   poezio = python3Packages.poezio;
 
-  pommed = callPackage ../os-specific/linux/pommed {};
-
   pommed_light = callPackage ../os-specific/linux/pommed-light {};
 
   polymake = callPackage ../applications/science/math/polymake { };
@@ -18690,6 +18729,8 @@ with pkgs;
   qtractor = callPackage ../applications/audio/qtractor { };
 
   qtscrobbler = callPackage ../applications/audio/qtscrobbler { };
+
+  quantomatic = callPackage ../applications/science/physics/quantomatic { };
 
   quassel = libsForQt5.callPackage ../applications/networking/irc/quassel {
     monolithic = true;
@@ -19281,6 +19322,11 @@ with pkgs;
 
   lxterminal = callPackage ../applications/misc/lxterminal {
     vte = gnome3.vte;
+  };
+
+  aminal = callPackage ../applications/misc/aminal {
+    inherit (darwin.apple_sdk.frameworks) Carbon Cocoa Kernel;
+    inherit (darwin) cf-private;
   };
 
   termite-unwrapped = callPackage ../applications/misc/termite {
@@ -21349,9 +21395,7 @@ with pkgs;
 
   scs = callPackage ../development/libraries/science/math/scs { };
 
-  sage = callPackage ../applications/science/math/sage {
-    nixpkgs = pkgs;
-  };
+  sage = callPackage ../applications/science/math/sage { };
   sageWithDoc = sage.override { withDoc = true; };
 
   suitesparse_4_2 = callPackage ../development/libraries/science/math/suitesparse/4.2.nix { };
@@ -22659,7 +22703,7 @@ with pkgs;
   vimUtils = callPackage ../misc/vim-plugins/vim-utils.nix { };
 
   vimPlugins = recurseIntoAttrs (callPackage ../misc/vim-plugins {
-    llvmPackages = llvmPackages_39;
+    llvmPackages = llvmPackages_6;
   });
 
   vimprobable2-unwrapped = callPackage ../applications/networking/browsers/vimprobable2 {

@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, pytest, isPy3k }:
+{ stdenv, buildPythonPackage, fetchPypi, pytest, isPy3k, isPy35, async_generator }:
 buildPythonPackage rec {
   pname = "pytest-asyncio";
   version = "0.9.0";
@@ -10,7 +10,8 @@ buildPythonPackage rec {
     sha256 = "fbd92c067c16111174a1286bfb253660f1e564e5146b39eeed1133315cf2c2cf";
   };
 
-  buildInputs = [ pytest ];
+  buildInputs = [ pytest ]
+    ++ stdenv.lib.optionals isPy35 [ async_generator ];
 
   # No tests in archive
   doCheck = false;

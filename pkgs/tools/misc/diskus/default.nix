@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   name = "diskus-${version}";
-  version = "0.4.0";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "sharkdp";
     repo = "diskus";
-    rev = "cf4a5e0dc5bf3daedabe4b25343e7eb6238930c0";
-    sha256 = "1w5fnpwdsfaca2177qn0clf8j7zwgzhdckjdl2zdbs5qrdwdqrd2";
+    rev = "v${version}";
+    sha256 = "18scxspi5ncags8bnxq4ah9w8hrlwwlgpq7q9qfh4d81asmbyr8n";
   };
 
-  cargoSha256 = "08wm85cs0fi03a75wp276w5hgch3kd787py51jjcxdanm2viq7zv";
+  cargoSha256 = "1syrmm5qpz7d1h17xpw1wa3d2snaz9n7d1avsjp7xz8s2qcx1wdc";
 
   meta = with stdenv.lib; {
     description = "A minimal, fast alternative to 'du -sh'";

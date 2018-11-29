@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, confuse, yajl, alsaLib, libpulseaudio, libnl, pkgconfig
+{ fetchurl, stdenv, libconfuse, yajl, alsaLib, libpulseaudio, libnl, pkgconfig
   }:
 
 stdenv.mkDerivation rec {
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ confuse yajl alsaLib libpulseaudio libnl ];
+  buildInputs = [ libconfuse yajl alsaLib libpulseaudio libnl ];
 
   makeFlags = [ "all" "PREFIX=$(out)" ];
 

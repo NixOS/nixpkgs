@@ -108,7 +108,7 @@ xlink:href="https://github.com/NixOS/nixpkgs/blob/master/nixos/modules/virtualis
 <programlisting>
 $machine->start;
 $machine->waitForUnit("default.target");
-die unless $machine->succeed("uname") =~ /Linux/;
+$machine->succeed("uname") =~ /Linux/ or die;
 </programlisting>
   The first line is actually unnecessary; machines are implicitly started when
   you first execute an action on them (such as <literal>waitForUnit</literal>
