@@ -917,7 +917,8 @@ with pkgs;
     filebeat6
     heartbeat6
     metricbeat6
-    packetbeat6;
+    packetbeat6
+    journalbeat6;
 
   filebeat = filebeat6;
   heartbeat = heartbeat6;
@@ -2453,7 +2454,7 @@ with pkgs;
 
   # The latest version used by elasticsearch, logstash, kibana and the the beats from elastic.
   elk5Version = "5.6.9";
-  elk6Version = "6.3.2";
+  elk6Version = "6.5.1";
 
   elasticsearch5 = callPackage ../servers/search/elasticsearch/5.x.nix { };
   elasticsearch6 = callPackage ../servers/search/elasticsearch { };
