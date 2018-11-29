@@ -29,6 +29,6 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Capture stdout, stderr easily.";
     homepage = https://github.com/oinume/iocapture;
-    license = licenses.MIT;
+    license = licenses.mit;
   };
 }
