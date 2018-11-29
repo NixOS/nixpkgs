@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "0q07df9wxxih8714a3mdp61h5n347l7j2a0l351acs3xapzgwi3y";
   };
 
-  patches = [ ./ar-fix.patch ];
+  patches = [ ./reiserfsprogs-ar-fix.patch ];
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ libuuid ];
 
