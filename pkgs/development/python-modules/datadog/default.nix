@@ -4,21 +4,20 @@
 
 buildPythonPackage rec {
   pname = "datadog";
-  version = "0.23.0";
+  version = "0.25.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "6ed9aec2b3a26722b74465c2ed36d2efdb9c9fac1a07a84d81fa2fc0cfa66ae4";
+    sha256 = "e71f9024fb0b968bd704178c7e48fa41ce728281cc6913994db5e065596cddf1";
   };
+
+  postPatch = ''
+    find . -name '*.pyc' -exec rm {} \;
+  '';
 
   propagatedBuildInputs = [ decorator requests simplejson ];
 
   checkInputs = [ nose mock ];
-
-  # v0.20.0 tests are nondeterministic:
-  # test_send_batch_metrics: https://hydra.nixos.org/build/74920933
-  # test_timed_decorator_threaded: https://hydra.nixos.org/build/74328993
-  doCheck = false;
 
   meta = with lib; {
     description = "The Datadog Python library";
