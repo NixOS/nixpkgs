@@ -3060,6 +3060,8 @@ in {
 
   nose-exclude = callPackage ../development/python-modules/nose-exclude { };
 
+  nose-randomly = callPackage ../development/python-modules/nose-randomly { };
+
   nose2 = callPackage ../development/python-modules/nose2 { };
 
   nose-cover3 = callPackage ../development/python-modules/nose-cover3 { };
