@@ -4,10 +4,11 @@
  * for new functions in `./tests.nix'.
  */
 let
+  bootstrapLib = mkLib bootstrapLib;
 
-  inherit (import ./fixed-points.nix {}) makeExtensible;
+  lib = bootstrapLib.makeExtensible mkLib;
 
-  lib = makeExtensible (self: let
+  mkLib = self: let
     callLibs = file: import file { lib = self; };
   in with self; {
 
@@ -135,5 +136,5 @@ let
       mergeAttrsNoOverride mergeAttrByFunc mergeAttrsByFuncDefaults
       mergeAttrsByFuncDefaultsClean mergeAttrBy prepareDerivationArgs
       nixType imap overridableDelayableArgs;
-  });
+  };
 in lib
