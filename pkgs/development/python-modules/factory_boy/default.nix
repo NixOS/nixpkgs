@@ -1,7 +1,6 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi
-, fake_factory
 , faker
 , python
 }:
@@ -15,8 +14,10 @@ buildPythonPackage rec {
     sha256 = "6f25cc4761ac109efd503f096e2ad99421b1159f01a29dbb917359dcd68e08ca";
   };
 
-  checkInputs = [ faker ];
-  propagatedBuildInputs = [ fake_factory ];
+  propagatedBuildInputs = [ faker ];
+
+  # tests not included with pypi release
+  doCheck = false;
 
   checkPhase = ''
     ${python.interpreter} -m unittest
