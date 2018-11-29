@@ -354,6 +354,8 @@ in {
 
   eradicate = callPackage ../development/python-modules/eradicate {  };
 
+  face = callPackage ../development/python-modules/face { };
+
   fastpbkdf2 = callPackage ../development/python-modules/fastpbkdf2 {  };
 
   fido2 = callPackage ../development/python-modules/fido2 {  };
