@@ -596,7 +596,7 @@ let
     };
 
     patchPhase = stdenv.lib.optionalString stdenv.isDarwin ''
-      substituteInPlace src/makefile --replace gcc cc \
+      substituteInPlace src/makefile \
         --replace 10.3 10.5
     '';
 
@@ -604,6 +604,8 @@ let
       makeFlagsArray=(
         LUAV=${lua.luaversion}
         PLAT=${platformString}
+        CC=''${CC}
+        LD=''${CC}
         prefix=$out
       );
     '';
