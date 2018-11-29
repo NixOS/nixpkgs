@@ -94,5 +94,24 @@ pkgs.stdenv.mkDerivation {
         cat errorlog
         return 1
       fi
+
+      (
+        # Resizes **snugly** to its actual limits (or closer to)
+        free=$(dumpe2fs $out | grep '^Free blocks:')
+        blocksize=$(dumpe2fs $out | grep '^Block size:')
+        blocks=$(dumpe2fs $out | grep '^Block count:')
+        blocks=$((''${blocks##*:})) # format the number.
+        blocksize=$((''${blocksize##*:})) # format the number.
+        # System can't boot with 0 blocks free.
+        # Add 16MiB of free space
+        fudge=$(( 16 * 1024 * 1024 / blocksize ))
+        size=$(( blocks - ''${free##*:} + fudge ))
+
+        echo "Resizing from $blocks blocks to $size blocks. (~ $((size*blocksize/1024/1024))MiB)"
+        EXT2FS_NO_MTAB_OK=yes resize2fs $out -f $size
+      )
+
+      # And a final fsck, because of the previous truncating.
+      fsck.ext4 -n -f $out
     '';
 }
