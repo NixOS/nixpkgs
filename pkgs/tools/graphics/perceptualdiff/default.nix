@@ -3,13 +3,13 @@
 stdenv.mkDerivation rec {
   pname = "perceptualdiff";
   name = "${pname}-${version}";
-  version = "1.2";
+  version = "2.1";
 
   src = fetchFromGitHub {
     owner = "myint";
     repo = pname;
     rev = "v${version}";
-    sha256 = "12sx2alidfba07v281jrvr5dxxsalp263x92lag6r9swj5nbbgn2";
+    sha256 = "176n518xv0pczf1yyz9r5a8zw5r6sh5ym596kmvw30qznp8n4a8j";
   };
 
   nativeBuildInputs = [ cmake ];
