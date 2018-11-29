@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, jre }:
+{ stdenv, fetchurl, jre, makeWrapper }:
 stdenv.mkDerivation rec {
   name = "mill-${version}";
   version = "0.3.5";
@@ -8,21 +8,17 @@ stdenv.mkDerivation rec {
     sha256 = "19ka81f6vjr85gd8cadn0fv0i0qcdspx2skslfksklxdxs2gasf8";
   };
 
-  propagatedBuildInputs = [ jre ] ;
+  nativeBuildInputs = [ makeWrapper ];
 
-  unpackPhase = ''
-    # Skipping unpackphase, nothing to unpack
-  '';
-
+  unpackPhase = "true";
   dontConfigure = true;
-  
   dontBuild = true;
     
   installPhase = ''
     runHook preInstall
-    mkdir -p $out/bin
-    cp ${src} $out/bin/mill
-    chmod +x $out/bin/mill
+    install -Dm555 "$src" "$out/bin/.mill-wrapped"
+    # can't use wrapProgram because it sets --argv0
+    makeWrapper "$out/bin/.mill-wrapped" "$out/bin/mill" --prefix PATH : ${stdenv.lib.makeBinPath [ jre ]}
     runHook postInstall
   '';
 
@@ -31,7 +27,7 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     description = "A build tool for Scala, Java and more";
     maintainers = with maintainers; [ scalavision ];
-    platforms = platforms.unix;
+    inherit (jre.meta) platforms;
   };
 
 }
