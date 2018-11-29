@@ -146,7 +146,7 @@ in rec {
 
   stage0 = stageFun 0 null {
     overrides = self: super: with stage0; rec {
-      darwin = super.darwin // {
+      darwin = lib.makeExtensibleAttrset (_: _: {
         Libsystem = stdenv.mkDerivation {
           name = "bootstrap-stage0-Libsystem";
           buildCommand = ''
@@ -156,9 +156,9 @@ in rec {
           '';
         };
         dyld = bootstrapTools;
-      };
+      });
 
-      llvmPackages_5 = {
+      llvmPackages_5 = lib.makeExtensibleAttrset (_: _: {
         libcxx = stdenv.mkDerivation {
           name = "bootstrap-stage0-libcxx";
           phases = [ "installPhase" "fixupPhase" ];
@@ -178,7 +178,7 @@ in rec {
             ln -s ${bootstrapTools}/lib/libc++abi.dylib $out/lib/libc++abi.dylib
           '';
         };
-      };
+      });
     };
 
     extraNativeBuildInputs = [];
@@ -200,7 +200,9 @@ in rec {
       python2 = self.python;
 
       ninja = super.ninja.override { buildDocs = false; };
-      darwin = super.darwin // { cctools = super.darwin.cctools.override { llvm = null; }; };
+      darwin = lib.makeExtensibleAttrset (_: superDarwin: {
+        cctools = superDarwin.cctools.override { llvm = null; };
+      });
     };
   in with prevStage; stageFun 1 prevStage {
     extraPreHook = "export NIX_CFLAGS_COMPILE+=\" -F${bootstrapTools}/Library/Frameworks\"";
@@ -223,10 +225,10 @@ in rec {
         findfreetype libssh curl cmake autoconf automake libtool ed cpio coreutils
         libssh2 nghttp2 libkrb5 python2 ninja;
 
-      darwin = super.darwin // {
+      darwin = lib.makeExtensibleAttrset (_: _: {
         inherit (darwin)
           dyld Libsystem xnu configd ICU libdispatch libclosure launchd CF;
-      };
+      });
     };
   in with prevStage; stageFun 2 prevStage {
     extraPreHook = ''
@@ -260,16 +262,16 @@ in rec {
       # Avoid pulling in a full python and its extra dependencies for the llvm/clang builds.
       libxml2 = super.libxml2.override { pythonSupport = false; };
 
-      llvmPackages_5 = super.llvmPackages_5 // (let
-        libraries = super.llvmPackages_5.libraries.extend (_: _: {
+      llvmPackages_5 = lib.makeExtensibleAttrset (_: _: {
+        libraries = {
           inherit (llvmPackages_5) libcxx libcxxabi;
-        });
-      in { inherit libraries; } // libraries);
+        }
+      });
 
-      darwin = super.darwin // {
+      darwin = lib.makeExtensibleAttrset (_: _: {
         inherit (darwin)
           dyld Libsystem xnu configd libdispatch libclosure launchd libiconv locale;
-      };
+      });
     };
   in with prevStage; stageFun 3 prevStage {
     shell = "${pkgs.bash}/bin/bash";
@@ -314,24 +316,24 @@ in rec {
         ];
       });
 
-      llvmPackages_5 = super.llvmPackages_5 // (let
-        tools = super.llvmPackages_5.tools.extend (llvmSelf: _: {
+      llvmPackages_5 = let
+        tools = {
           inherit (llvmPackages_5) llvm clang-unwrapped;
-        });
-        libraries = super.llvmPackages_5.libraries.extend (llvmSelf: _: {
+        };
+        libraries = {
           inherit (llvmPackages_5) libcxx libcxxabi compiler-rt;
-        });
-      in { inherit tools libraries; } // tools // libraries);
+        };
+      in lib.makeExtensibleAttrset (_: _: { inherit tools libraries; } // tools // libraries);
 
-      darwin = super.darwin // rec {
+      darwin = lib.makeExtensibleAttrset (_: superDarwin: {
         inherit (darwin) dyld Libsystem libiconv locale;
 
         libxml2-nopython = super.libxml2.override { pythonSupport = false; };
-        CF = super.darwin.CF.override {
+        CF = superDarwin.CF.override {
           libxml2 = libxml2-nopython;
           python = prevStage.python;
         };
-      };
+      });
     };
   in with prevStage; stageFun 4 prevStage {
     shell = "${pkgs.bash}/bin/bash";
@@ -353,14 +355,14 @@ in rec {
         ncurses libffi zlib llvm gmp pcre gnugrep
         coreutils findutils diffutils patchutils;
 
-      llvmPackages_5 = super.llvmPackages_5 // (let
+      llvmPackages_5 = let
         tools = super.llvmPackages_5.tools.extend (_: super: {
           inherit (llvmPackages_5) llvm clang-unwrapped;
         });
         libraries = super.llvmPackages_5.libraries.extend (_: _: {
           inherit (llvmPackages_5) compiler-rt libcxx libcxxabi;
         });
-      in { inherit tools libraries; } // tools // libraries);
+      in lib.makeExtensibleAttrset (_: _: { inherit tools libraries; } // tools // libraries);
 
       # N.B: the important thing here is to ensure that python == python2
       # == python27 or you get weird issues with inconsistent package sets.
@@ -373,7 +375,7 @@ in rec {
       # and I'm just leaving this blurb here so people realize why it matters
       python27 = super.python27.override { CF = prevStage.darwin.CF; };
 
-      darwin = super.darwin // {
+      darwin = lib.makeExtensibleAttrset (_: _: {
         inherit (darwin) dyld ICU Libsystem libiconv;
       } // lib.optionalAttrs (super.stdenv.targetPlatform == localSystem) {
         inherit (darwin) binutils binutils-unwrapped cctools;
@@ -381,7 +383,7 @@ in rec {
     } // lib.optionalAttrs (super.stdenv.targetPlatform == localSystem) {
       # Need to get rid of these when cross-compiling.
       inherit binutils binutils-unwrapped;
-    };
+    });
   in import ../generic rec {
     name = "stdenv-darwin";
 
@@ -437,8 +439,8 @@ in rec {
       llvmPackages = super.llvmPackages // { clang = cc; };
       inherit cc;
 
-      darwin = super.darwin // {
-        xnu = super.darwin.xnu.override { python = super.python.override { configd = null; }; };
+      darwin = lib.makeExtensibleAttrset (_: superDarwin: {
+        xnu = superDarwin.xnu.override { python = super.python.override { configd = null; }; };
       };
     });
   };
