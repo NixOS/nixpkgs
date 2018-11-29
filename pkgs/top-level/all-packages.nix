@@ -1400,6 +1400,8 @@ in
 
   fileshelter = callPackage ../servers/web-apps/fileshelter { };
 
+  firecracker = callPackage ../applications/virtualization/firecracker { };
+
   fsmon = callPackage ../tools/misc/fsmon { };
 
   fsql = callPackage ../tools/misc/fsql { };
