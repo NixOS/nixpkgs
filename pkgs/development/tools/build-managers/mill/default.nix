@@ -26,8 +26,15 @@ stdenv.mkDerivation rec {
     homepage = https://www.lihaoyi.com/mill;
     license = licenses.mit;
     description = "A build tool for Scala, Java and more";
+    longDescription = ''
+      Mill is a build tool borrowing ideas from modern tools like Bazel, to let you build
+      your projects in a way that's simple, fast, and predictable. Mill has built in
+      support for the Scala programming language, and can serve as a replacement for
+      SBT, but can also be extended to support any other language or platform via
+      modules (written in Java or Scala) or through an external subprocesses.
+    '';
     maintainers = with maintainers; [ scalavision ];
-    inherit (jre.meta) platforms;
+    platforms = stdenv.lib.platforms.all;
   };
 
 }
