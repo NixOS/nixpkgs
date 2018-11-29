@@ -32,7 +32,7 @@ in {
       configFile = mkOption {
         type = types.str;
         default = "/var/lib/nzbget/nzbget.conf";
-        description = "File path for config file";
+        description = "Path for NZBGet config file";
       };
     };
   };
