@@ -7,20 +7,20 @@
 
 stdenv.mkDerivation rec {
   name = "tesseract-${version}";
-  version = "4.00.00alpha-git-20170410";
+  version = "4.0.0";
 
   src = fetchFromGitHub {
     owner = "tesseract-ocr";
     repo = "tesseract";
-    rev = "36a995bdc92eb2dd8bc5a63205708944a3f990a1";
-    sha256 = "0xz3krvap8sdm27v1dyb34lcdmx11wzvxyszpppfsfmjgkvg19bq";
+    rev = version;
+    sha256 = "1b5fi2vibc4kk9b30kkk4ais4bw8fbbv24bzr5709194hb81cav8";
   };
 
   tessdata = fetchFromGitHub {
     owner = "tesseract-ocr";
     repo = "tessdata";
-    rev = "8bf2e7ad08db9ca174ae2b0b3a7498c9f1f71d40";
-    sha256 = "0idwkv4qsmmqhrxcgyhy32yldl3vk054m7dkv4fjswfnalgsx794";
+    rev = version;
+    sha256 = "1chw1ya5zf8aaj2ixr9x013x7vwwwjjmx6f2ag0d6i14lypygy28";
   };
 
   nativeBuildInputs = [ pkgconfig autoreconfHook autoconf-archive ];
