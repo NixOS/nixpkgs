@@ -3,7 +3,7 @@
 { stdenv, buildPackages, fetchurl, perl, xz
 
 # we are a dependency of gcc, this simplifies bootstraping
-, interactive ? false, ncurses, procps
+, interactive ? false, ncurses, procps, autoreconfHook, help2man
 }:
 
 with stdenv.lib;
@@ -17,18 +17,21 @@ stdenv.mkDerivation rec {
     inherit sha256;
   };
 
-  patches = optional (version == "6.5") ./perl.patch;
+  patches = (optional (version == "6.5") ./perl.patch) ++
+            (optionals ((version == "6.5") && (stdenv.hostPlatform != stdenv.buildPlatform))
+                       [ ./texinfo-cross.patch ./texinfo-disable-manpages.patch ]);
 
   # We need a native compiler to build perl XS extensions
   # when cross-compiling.
   depsBuildBuild = [ buildPackages.stdenv.cc perl ];
+  nativeBuildInputs = (optionals (stdenv.hostPlatform != stdenv.buildPlatform)
+                                 [autoreconfHook ncurses help2man]);
 
-  buildInputs = [ xz.bin ]
-    ++ optionals stdenv.isSunOS [ libiconv gawk ]
-    ++ optional interactive ncurses;
+  buildInputs = [ xz.bin ] ++ optionals stdenv.isSunOS [ libiconv gawk ]
+                           ++ optional interactive ncurses;
 
-  configureFlags = [ "PERL=${buildPackages.perl}/bin/perl" ]
-    ++ stdenv.lib.optional stdenv.isSunOS "AWK=${gawk}/bin/awk";
+  configureFlags = [ "PERL=${buildPackages.perl}/bin/perl" ] ++
+                   (stdenv.lib.optional stdenv.isSunOS "AWK=${buildPackages.gawk}/bin/awk");
 
   preInstall = ''
     installFlags="TEXMF=$out/texmf-dist";

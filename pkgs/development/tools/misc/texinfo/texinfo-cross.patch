@@ -1,0 +1,29 @@
+--- texinfo-6.5/configure.ac.orig	2018-11-30 07:00:11.027337595 +0300
++++ texinfo-6.5/configure.ac	2018-11-30 07:28:03.764954462 +0300
+@@ -91,7 +91,8 @@
+ gl_INIT
+ 
+ # help2man to generate man pages.
+-AM_MISSING_PROG(HELP2MAN, help2man)
++#AM_MISSING_PROG(HELP2MAN, help2man)
++AC_PATH_PROG([HELP2MAN], [help2man])
+ 
+ AC_PROG_INSTALL
+ AC_PROG_MAKE_SET
+@@ -212,10 +213,12 @@
+   # env -i gives this build host configure a clean environment;
+   # consequently, we have to re-initialize $PATH.
+   env -i CC="$BUILD_CC" AR="$BUILD_AR" RANLIB="$BUILD_RANLIB" \
+-      PATH="$PATH" \
+-      tools_only=1 \
+-    ${confdir}/configure --build=${build} --host=${build} \
+-                         --disable-rpath --disable-nls
++         PATH="$PATH" tools_only=1 \
++         ${confdir}/configure PERL="$PERL" AWK="$AWK" \
++                              CFLAGS="$NIX_BUILD_CFLAGS_COMPILE" \
++                              LDFLAGS="$NIX_BUILD_LDFLAGS" \
++                              --build=${build} --host=${build} \
++                              --disable-rpath --disable-nls
+   cd .. || exit 1
+   AC_MSG_NOTICE([[Continuing with main configure (${host}).]])
+ fi
