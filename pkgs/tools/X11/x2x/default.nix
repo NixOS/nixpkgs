@@ -1,4 +1,4 @@
-{stdenv, fetchurl, imake, libX11, libXtst, libXext}:
+{ stdenv, fetchurl, imake, libX11, libXtst, libXext, gccmakedep }:
 
 stdenv.mkDerivation {
   name = "x2x-1.27";
@@ -8,20 +8,16 @@ stdenv.mkDerivation {
     sha256 = "0dha0kn1lbc4as0wixsvk6bn4innv49z9a0sm5wlx4q1v0vzqzyj";
   };
 
-  buildInputs = [ imake libX11 libXtst libXext ];
+  nativeBuildInputs = [ imake gccmakedep ];
+  buildInputs = [ libX11 libXtst libXext ];
 
   hardeningDisable = [ "format" ];
 
-  configurePhase = ''
-    xmkmf
-    makeFlags="BINDIR=$out/bin x2x"
-  '';
+  buildFlags = [ "x2x" ];
 
   installPhase = ''
-    mkdir -p $out/bin
-    mkdir -p $out/man/man1
-    cp x2x $out/bin/
-    cp x2x.1 $out/man/man1/
+    install -D x2x $out/bin/x2x
+    install -D x2x.1 $out/man/man1/x2x.1
   '';
 
   meta = with stdenv.lib; {

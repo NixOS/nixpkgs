@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
     sha256 = "0463bff5eea0f3d93fa071f79c18d0993878fd4f2e18ae6cf22c1639d11457ed";
   };
 
+  dontUseImakeConfigure = true;
+
   buildInputs = [
     bzip2 gfortran libX11 libXmu libXt libXt libjpeg libpng libtiff ncurses
     pango pcre perl readline texLive xz zlib less texinfo graphviz icu
