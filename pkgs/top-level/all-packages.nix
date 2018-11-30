@@ -10796,6 +10796,8 @@ in
 
   libgphoto2 = callPackage ../development/libraries/libgphoto2 { };
 
+  libgpiod = callPackage ../development/libraries/libgpiod { };
+
   libgpod = callPackage ../development/libraries/libgpod {
     inherit (pkgs.pythonPackages) mutagen;
     monoSupport = false;
