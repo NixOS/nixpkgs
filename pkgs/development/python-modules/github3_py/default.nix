@@ -9,10 +9,10 @@
 , dateutil
 , requests
 , pyopenssl
-, uritemplate_py
+, uritemplate
 , ndg-httpsclient
-, requests_toolbelt
 , pyasn1
+, jwcrypto
 }:
 
 buildPythonPackage rec {
@@ -25,7 +25,7 @@ buildPythonPackage rec {
   };
 
   buildInputs = [ unittest2 pytest mock betamax betamax-matchers dateutil ];
-  propagatedBuildInputs = [ requests pyopenssl uritemplate_py ndg-httpsclient requests_toolbelt pyasn1 ];
+  propagatedBuildInputs = [ requests uritemplate dateutil jwcrypto pyopenssl ndg-httpsclient pyasn1 ];
 
   postPatch = ''
     sed -i -e 's/mock ==1.0.1/mock>=1.0.1/' setup.py
