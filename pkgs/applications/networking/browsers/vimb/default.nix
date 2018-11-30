@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, libsoup, webkit, gtk2, glib-networking
+{ stdenv, fetchFromGitHub, pkgconfig, libsoup, webkit, gtk3, glib-networking
 , gsettings-desktop-schemas, makeWrapper
 }:
 
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ makeWrapper pkgconfig ];
-  buildInputs = [ gtk2 libsoup webkit gsettings-desktop-schemas ];
+  buildInputs = [ gtk3 libsoup webkit gsettings-desktop-schemas ];
 
   makeFlags = [ "PREFIX=$(out)" ];
 
