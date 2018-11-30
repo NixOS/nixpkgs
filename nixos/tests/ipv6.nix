@@ -70,8 +70,8 @@ import ./make-test.nix ({ pkgs, ...} : {
           my $serverIp = waitForAddress $server, "eth1", "global";
           $client->succeed("ping -c 1 $clientIp >&2");
           $client->succeed("ping -c 1 $serverIp >&2");
-          $client->succeed("curl --fail -g http://[$serverIp]");
-          $client->fail("curl --fail -g http://[$clientIp]");
+          $client->succeed("curl --fail -g http://[$serverIp]:80");
+          $client->fail("curl --fail -g http://[$clientIp]:80");
       };
 
       # TODO: test reachability of a machine on another network.
