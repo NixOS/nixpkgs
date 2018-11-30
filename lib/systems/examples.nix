@@ -2,7 +2,14 @@
 # `crossSystem`. They are put here for user convenience, but also used by cross
 # tests and linux cross stdenv building, so handle with care!
 { lib }:
-let platforms = import ./platforms.nix { inherit lib; }; in
+let
+  platforms = import ./platforms.nix { inherit lib; };
+
+  riscv = bits: {
+    config = "riscv${bits}-unknown-linux-gnu";
+    platform = platforms.riscv-multiplatform bits;
+  };
+in
 
 rec {
   #
@@ -92,10 +99,6 @@ rec {
   musl64 = { config = "x86_64-unknown-linux-musl"; };
   musl32  = { config = "i686-unknown-linux-musl"; };
 
-  riscv = bits: {
-    config = "riscv${bits}-unknown-linux-gnu";
-    platform = platforms.riscv-multiplatform bits;
-  };
   riscv64 = riscv "64";
   riscv32 = riscv "32";
 
