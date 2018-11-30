@@ -104,7 +104,7 @@ stdenv.mkDerivation rec {
     for n in 16 22 24 32 48 256; do
       size=$n"x"$n
       mkdir -p $out/share/icons/hicolor/$size/apps
-      cp $src/browser/branding/official/default$n.png \
+      cp $src/application/palemoon/branding/official/$n.png \
          $out/share/icons/hicolor/$size/apps/palemoon.png
     done
 
