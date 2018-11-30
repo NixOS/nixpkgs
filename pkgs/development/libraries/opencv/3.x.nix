@@ -1,5 +1,5 @@
 { lib, stdenv
-, fetchurl, fetchFromGitHub
+, fetchurl, fetchFromGitHub, fetchpatch
 , cmake, pkgconfig, unzip, zlib, pcre, hdf5
 , glog, boost, google-gflags, protobuf
 , config
@@ -31,28 +31,30 @@
 , enableDC1394    ? false, libdc1394
 , enableDocs      ? false, doxygen, graphviz-nox
 
-, AVFoundation, Cocoa, QTKit, VideoDecodeAcceleration, bzip2
+, cf-private, AVFoundation, Cocoa, QTKit, VideoDecodeAcceleration, bzip2
 }:
 
 let
-  version = "3.4.3";
+  version = "3.4.4";
 
   src = fetchFromGitHub {
     owner  = "opencv";
     repo   = "opencv";
     rev    = version;
-    sha256 = "138q3wiv4g4xvqzsp93xaqayv7kz7bl2vrgppp8jm8w6m25cd4i2";
+    sha256 = "1xzbv0922r2zq4fgpkc1ldyq3kxp4c6x6dizydbspka18jrrxqlr";
   };
 
   contribSrc = fetchFromGitHub {
     owner  = "opencv";
     repo   = "opencv_contrib";
     rev    = version;
-    sha256 = "1f334glf39nk42mpqq6j732h3ql2mpz89jd4mcl678s8n73nfjh2";
+    sha256 = "0ylsljkmgfj5vam05cv0z3qwkqwjwz5fs5f5yif3pwvb99lxlbib";
   };
 
   # Contrib must be built in order to enable Tesseract support:
   buildContrib = enableContrib || enableTesseract;
+
+  useSystemProtobuf = ! stdenv.isDarwin;
 
   # See opencv/3rdparty/ippicv/ippicv.cmake
   ippicv = {
@@ -145,6 +147,13 @@ stdenv.mkDerivation rec {
     cp --no-preserve=mode -r "${contribSrc}/modules" "$NIX_BUILD_TOP/opencv_contrib"
   '';
 
+  patches =
+    # https://github.com/opencv/opencv/pull/13254
+    lib.optional enablePython (fetchpatch {
+      url = https://github.com/opencv/opencv/commit/ad35b79e3f98b4ce30481e0299cca550ed77aef0.patch;
+      sha256 = "0rkvg6wm5fyncszfpd83wa4lvsb8srvk21r1jcld758i4f334sws";
+    });
+
   # This prevents cmake from using libraries in impure paths (which
   # causes build failure on non NixOS)
   # Also, work around https://github.com/NixOS/nixpkgs/issues/26304 with
@@ -171,7 +180,8 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs =
-       [ zlib pcre hdf5 glog boost google-gflags protobuf ]
+       [ zlib pcre hdf5 glog boost google-gflags ]
+    ++ lib.optional useSystemProtobuf protobuf
     ++ lib.optional enablePython pythonPackages.python
     ++ lib.optional enableGtk2 gtk2
     ++ lib.optional enableGtk3 gtk3
@@ -197,7 +207,7 @@ stdenv.mkDerivation rec {
     ++ lib.optionals enableTesseract [ tesseract leptonica ]
     ++ lib.optional enableTbb tbb
     ++ lib.optional enableCuda cudatoolkit
-    ++ lib.optionals stdenv.isDarwin [ AVFoundation Cocoa QTKit VideoDecodeAcceleration bzip2 ]
+    ++ lib.optionals stdenv.isDarwin [ cf-private AVFoundation Cocoa QTKit VideoDecodeAcceleration bzip2 ]
     ++ lib.optionals enableDocs [ doxygen graphviz-nox ];
 
   propagatedBuildInputs = lib.optional enablePython pythonPackages.numpy;
@@ -211,8 +221,8 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DWITH_OPENMP=ON"
-    "-DBUILD_PROTOBUF=OFF"
-    "-DPROTOBUF_UPDATE_FILES=ON"
+    "-DBUILD_PROTOBUF=${printEnabled (!useSystemProtobuf)}"
+    "-DPROTOBUF_UPDATE_FILES=${printEnabled useSystemProtobuf}"
     "-DOPENCV_ENABLE_NONFREE=${printEnabled enableUnfree}"
     "-DBUILD_TESTS=OFF"
     "-DBUILD_PERF_TESTS=OFF"
@@ -234,6 +244,8 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals stdenv.isDarwin [
     "-DWITH_OPENCL=OFF"
     "-DWITH_LAPACK=OFF"
+  ] ++ lib.optionals enablePython [
+    "-DOPENCV_SKIP_PYTHON_LOADER=ON"
   ];
 
   enableParallelBuilding = true;
@@ -254,7 +266,8 @@ stdenv.mkDerivation rec {
   # ${exec_prefix}. This causes linker errors in downstream packages so we strip
   # of $out after the ${exec_prefix} prefix:
   postInstall = ''
-    sed -i "s|\''${exec_prefix}/$out|\''${exec_prefix}|" "$out/lib/pkgconfig/opencv.pc"
+    sed -i "s|{exec_prefix}/$out|{exec_prefix}|" \
+      "$out/lib/pkgconfig/opencv.pc"
   '';
 
   hardeningDisable = [ "bindnow" "relro" ];
