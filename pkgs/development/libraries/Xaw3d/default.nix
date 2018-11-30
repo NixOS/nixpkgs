@@ -8,6 +8,7 @@ stdenv.mkDerivation {
     url = https://www.x.org/releases/individual/lib/libXaw3d-1.6.3.tar.bz2;
     sha256 = "0i653s8g25cc0mimkwid9366bqkbyhdyjhckx7bw77j20hzrkfid";
   };
+  dontUseImakeConfigure = true;
   nativeBuildInputs = [ pkgconfig bison flex imake gccmakedep ];
   buildInputs = [ libXpm libXp ];
   propagatedBuildInputs = [ xlibsWrapper libXmu ];
