@@ -5,14 +5,14 @@ let
 in
 deployAndroidPackage {
   inherit package os;
-  buildInputs = [ autoPatchelfHook makeWrapper ]
+  buildInputs = [ autoPatchelfHook makeWrapper pkgs.python2 ]
     ++ lib.optional (os == "linux") [ pkgs.glibc pkgs.stdenv.cc.cc pkgs.ncurses5 pkgs.zlib pkgs.libcxx.out ];
   patchInstructions = lib.optionalString (os == "linux") ''
     patchShebangs .
 
     patch -p1 \
       --no-backup-if-mismatch < ${./make_standalone_toolchain.py_18.patch}
-    wrapProgram build/tools/make_standalone_toolchain.py --prefix PATH : "${runtime_paths}"
+    wrapProgram $(pwd)/build/tools/make_standalone_toolchain.py --prefix PATH : "${runtime_paths}"
 
     # TODO: allow this stuff
     rm -rf docs tests
@@ -47,4 +47,5 @@ deployAndroidPackage {
         ln -sf ../../libexec/android-sdk/ndk-bundle/$i $out/bin/$i
     done
   '';
+  noAuditTmpdir = true; # Audit script gets invoked by the build/ component in the path for the make standalone script
 }
