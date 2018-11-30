@@ -8,6 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "19ds42jwd89zrsjb94g7gizkkzipn8xik3xykrpcqxylxyzi2z03";
   };
 
+  patches = [ ./coregrind-makefile-race.patch ];
+
   outputs = [ "out" "dev" "man" "doc" ];
 
   hardeningDisable = [ "stackprotector" ];

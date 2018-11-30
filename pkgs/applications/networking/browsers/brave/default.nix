@@ -73,7 +73,7 @@ let rpath = lib.makeLibraryPath [
 
 
 in stdenv.mkDerivation rec {
-    name = "brave-${version}";
+    pname = "brave";
     version = "0.56.15";
 
     src = fetchurl {

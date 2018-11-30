@@ -1,6 +1,7 @@
 { stdenv, callPackage, fetchurl, fetchFromGitHub, unzip
 , cmake, kodiPlain, libcec_platform, tinyxml
-, steam, libusb, pcre-cpp, jsoncpp, libhdhomerun, zlib }:
+, steam, libusb, pcre-cpp, jsoncpp, libhdhomerun, zlib
+, python2Packages }:
 
 with stdenv.lib;
 
@@ -180,26 +181,6 @@ let self = rec {
     // (mkController "ps")
     // (mkController "snes");
 
-  exodus = mkKodiPlugin rec {
-
-    plugin = "exodus";
-    namespace = "plugin.video.exodus";
-    version = "3.1.13";
-
-    src = fetchurl {
-      url = "https://offshoregit.com/${plugin}/${namespace}/${namespace}-${version}.zip";
-      sha256 = "1zyay7cinljxmpzngzlrr4pnk2a7z9wwfdcsk6a4p416iglyggdj";
-    };
-
-    buildInputs = [ unzip ];
-
-    meta = {
-      description = "A streaming plugin for Kodi";
-      platforms = platforms.all;
-      maintainers = with maintainers; [ edwtjo ];
-    };
-  };
-
   hyper-launcher = let
     pname = "hyper-launcher";
     version = "1.5.2";
@@ -249,6 +230,25 @@ let self = rec {
 
     extraBuildInputs = [ libusb pcre-cpp ];
 
+  };
+
+  simpleplugin = mkKodiPlugin rec {
+    plugin = "simpleplugin";
+    namespace = "script.module.simpleplugin";
+    version = "2.3.2";
+
+    src = fetchFromGitHub {
+      owner = "romanvm";
+      repo = namespace;
+      rev = "v.${version}";
+      sha256 = "0myar8dqjigb75pcc8zx3i5z79p1ifgphgb82s5syqywk0zaxm3j";
+    };
+
+    meta = {
+      homepage = src.meta.homepage;
+      description = "Simpleplugin API";
+      license = licenses.gpl3;
+    };
   };
 
   svtplay = mkKodiPlugin rec {
@@ -442,5 +442,32 @@ let self = rec {
       license = licenses.cc-by-nc-sa-30;
     };
   };
+
+  yatp = python2Packages.toPythonModule (mkKodiPlugin rec {
+    plugin = "yatp";
+    namespace = "plugin.video.yatp";
+    version = "3.3.2";
+
+    src = fetchFromGitHub {
+      owner = "romanvm";
+      repo = "kodi.yatp";
+      rev = "v.${version}";
+      sha256 = "12g1f57sx7dy6wy7ljl7siz2qs1kxcmijcg7xx2xpvmq61x9qa2d";
+    };
+
+    patches = [ ./yatp/dont-monkey.patch ];
+
+    propagatedBuildInputs = [
+      simpleplugin
+      python2Packages.requests
+      python2Packages.libtorrentRasterbar
+    ];
+
+    meta = {
+      homepage = src.meta.homepage;
+      description = "Yet Another Torrent Player: libtorrent-based torrent streaming for Kodi";
+      license = licenses.gpl3;
+    };
+  });
 
 }; in self

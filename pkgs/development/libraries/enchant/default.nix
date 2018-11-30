@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
-  version = "1.6.0";
+  version = "1.6.1";
   pname = "enchant";
 
   src = fetchurl {
-    url = "http://www.abisource.com/downloads/${pname}/${version}/${name}.tar.gz";
-    sha256 = "0zq9yw1xzk8k9s6x83n1f9srzcwdavzazn3haln4nhp9wxxrxb1g";
+    url = "https://github.com/AbiWord/${pname}/releases/download/${pname}-1-6-1/${name}.tar.gz";
+    sha256 = "1xg3m7mniyqyff8qv46jbfwgchb6di6qxdjnd5sfir7jzv0dkw5y";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Generic spell checking library";
-    homepage = http://www.abisource.com/enchant;
+    homepage = https://abiword.github.io/enchant;
     platforms = platforms.unix;
     license = licenses.lgpl21;
   };

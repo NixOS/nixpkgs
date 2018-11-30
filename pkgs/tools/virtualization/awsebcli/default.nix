@@ -20,6 +20,7 @@ let
       });
 
       pathspec = super.pathspec.overridePythonAttrs (oldAttrs: rec {
+        name = "${oldAttrs.pname}-${version}";
         version = "0.5.5";
         src = oldAttrs.src.override {
           inherit version;

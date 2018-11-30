@@ -23,7 +23,7 @@ let
   };
 
   hplipState = substituteAll {
-    inherit version;
+    version_ = version;
     src = ./hplip.state;
   };
 
