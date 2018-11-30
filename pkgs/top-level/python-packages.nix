@@ -1321,6 +1321,11 @@ in {
     pythonPackages = self;
   });
 
+  opencv4 = toPythonModule (pkgs.opencv4.override {
+    enablePython = true;
+    pythonPackages = self;
+  });
+
   openidc-client = callPackage ../development/python-modules/openidc-client {};
 
   idna = callPackage ../development/python-modules/idna { };
