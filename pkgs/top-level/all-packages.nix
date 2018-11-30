@@ -6,10 +6,18 @@
  * Hint: ### starts category names.
  */
 { lib, noSysDirs, config}:
-self: pkgs:
+super: pkgs:
 
 with pkgs;
 
+# Deprecation message for those who are patching this file
+let self = builtins.trace ''
+             Did you really mean to use self? self used to mean super!
+             If you intend to use the final package set, use pkgs.
+             If you intend to use super, like the past version of self in this file, use super.
+             This only applies to names in all-packages.nix.'' super;
+
+in
 {
 
   # Allow callPackage to fill in the pkgs argument
@@ -813,7 +821,7 @@ with pkgs;
 
   androidsdk = androidenv.androidsdk_8_0;
 
-  androidsdk_extras = self.androidenv.androidsdk_8_0_extras;
+  androidsdk_extras = super.androidenv.androidsdk_8_0_extras;
 
   webos = recurseIntoAttrs {
     cmake-modules = callPackage ../development/mobile/webos/cmake-modules.nix { };
@@ -3532,7 +3540,7 @@ with pkgs;
 
   jid = callPackage ../development/tools/jid { };
 
-  jing = self.jing-trang;
+  jing = super.jing-trang;
   jing-trang = callPackage ../tools/text/xml/jing-trang { };
 
   jira-cli = callPackage ../development/tools/jira_cli { };
@@ -4825,23 +4833,23 @@ with pkgs;
     libcap = if stdenv.isDarwin then null else libcap;
   };
 
-  pinentry_ncurses = self.pinentry.override {
+  pinentry_ncurses = super.pinentry.override {
     gtk2 = null;
   };
 
-  pinentry_emacs = self.pinentry.override {
+  pinentry_emacs = super.pinentry.override {
     enableEmacs = true;
   };
 
-  pinentry_gnome = self.pinentry.override {
+  pinentry_gnome = super.pinentry.override {
     gcr = gnome3.gcr;
   };
 
-  pinentry_qt4 = self.pinentry.override {
+  pinentry_qt4 = super.pinentry.override {
     qt = qt4;
   };
 
-  pinentry_qt5 = self.pinentry.override {
+  pinentry_qt5 = super.pinentry.override {
     qt = qt5.qtbase;
   };
 
@@ -8574,11 +8582,11 @@ with pkgs;
   gputils = callPackage ../development/tools/misc/gputils { };
 
   gradleGen = callPackage ../development/tools/build-managers/gradle { };
-  gradle = self.gradleGen.gradle_latest;
-  gradle_2_14 = self.gradleGen.gradle_2_14;
-  gradle_2_5 = self.gradleGen.gradle_2_5;
-  gradle_3_5 = self.gradleGen.gradle_3_5;
-  gradle_4_10 = self.gradleGen.gradle_4_10;
+  gradle = super.gradleGen.gradle_latest;
+  gradle_2_14 = super.gradleGen.gradle_2_14;
+  gradle_2_5 = super.gradleGen.gradle_2_5;
+  gradle_3_5 = super.gradleGen.gradle_3_5;
+  gradle_4_10 = super.gradleGen.gradle_4_10;
 
   gperf = callPackage ../development/tools/misc/gperf { };
   # 3.1 changed some parameters from int to size_t, leading to mismatches.
@@ -9059,7 +9067,7 @@ with pkgs;
   valgrind = callPackage ../development/tools/analysis/valgrind {
     inherit (darwin) xnu bootstrap_cmds cctools;
   };
-  valgrind-light = self.valgrind.override { gdb = null; };
+  valgrind-light = super.valgrind.override { gdb = null; };
 
   valkyrie = callPackage ../development/tools/analysis/valkyrie { };
 
@@ -9645,7 +9653,7 @@ with pkgs;
     inherit (darwin) cf-private;
     inherit (darwin.apple_sdk.frameworks) Cocoa AGL GLUT;
   };
-  fltk = self.fltk13;
+  fltk = super.fltk13;
 
   flyway = callPackage ../development/tools/flyway { };
 
@@ -9658,7 +9666,7 @@ with pkgs;
 
   freetts = callPackage ../development/libraries/freetts { };
 
-  frog = self.languageMachines.frog;
+  frog = super.languageMachines.frog;
 
   fstrcmp = callPackage ../development/libraries/fstrcmp { };
 
@@ -9726,11 +9734,11 @@ with pkgs;
   };
 
   gegl_0_3 = callPackage ../development/libraries/gegl/3.0.nix {
-    gtk = self.gtk2;
+    gtk = super.gtk2;
   };
 
   gegl_0_4 = callPackage ../development/libraries/gegl/4.0.nix {
-    gtk = self.gtk2;
+    gtk = super.gtk2;
   };
 
   geoclue2 = callPackage ../development/libraries/geoclue {};
@@ -10128,7 +10136,7 @@ with pkgs;
   gumbo = callPackage ../development/libraries/gumbo { };
 
   gvfs = callPackage ../development/libraries/gvfs {
-    gnome = self.gnome3;
+    gnome = super.gnome3;
   };
 
   gwenhywfar = callPackage ../development/libraries/aqbanking/gwenhywfar.nix { };
@@ -11356,7 +11364,7 @@ with pkgs;
   libxml2 = callPackage ../development/libraries/libxml2 { };
 
   libxml2Python = pkgs.buildEnv { # slightly hacky
-    name = "libxml2+py-${self.libxml2.version}";
+    name = "libxml2+py-${super.libxml2.version}";
     paths = with libxml2; [ dev bin py ];
     inherit (libxml2) passthru;
     # the hook to find catalogs is hidden by buildEnv
@@ -11789,9 +11797,9 @@ with pkgs;
   };
 
   pcre = callPackage ../development/libraries/pcre { };
-  pcre16 = self.pcre.override { variant = "pcre16"; };
+  pcre16 = super.pcre.override { variant = "pcre16"; };
   # pcre32 seems unused
-  pcre-cpp = self.pcre.override { variant = "cpp"; };
+  pcre-cpp = super.pcre.override { variant = "cpp"; };
 
   pcre2 = callPackage ../development/libraries/pcre2 { };
 
@@ -12692,7 +12700,7 @@ with pkgs;
     stdenv = overrideCC stdenv gcc6;
   });
 
-  v8_static = lowPrio (self.v8.override { static = true; });
+  v8_static = lowPrio (super.v8.override { static = true; });
 
   vaapiIntel = callPackage ../development/libraries/vaapi-intel { };
 
@@ -15635,7 +15643,7 @@ with pkgs;
   inherit (callPackages ../data/fonts/tai-languages { }) tai-ahom;
 
   tango-icon-theme = callPackage ../data/icons/tango-icon-theme {
-    gtk = self.gtk2;
+    gtk = super.gtk2;
   };
 
   themes = name: callPackage (../data/misc/themes + ("/" + name + ".nix")) {};
@@ -15877,16 +15885,16 @@ with pkgs;
   libbitcoin-explorer = callPackage ../tools/misc/libbitcoin/libbitcoin-explorer.nix { };
 
 
-  go-ethereum = self.altcoins.go-ethereum;
-  ethabi = self.altcoins.ethabi;
+  go-ethereum = super.altcoins.go-ethereum;
+  ethabi = super.altcoins.ethabi;
 
-  parity = self.altcoins.parity;
-  parity-beta = self.altcoins.parity-beta;
-  parity-ui = self.altcoins.parity-ui;
+  parity = super.altcoins.parity;
+  parity-beta = super.altcoins.parity-beta;
+  parity-ui = super.altcoins.parity-ui;
 
-  stellar-core = self.altcoins.stellar-core;
+  stellar-core = super.altcoins.stellar-core;
 
-  particl-core = self.altcoins.particl-core;
+  particl-core = super.altcoins.particl-core;
 
   aumix = callPackage ../applications/audio/aumix {
     gtkGUI = false;
@@ -15981,7 +15989,7 @@ with pkgs;
   };
   bitwig-studio2 =  callPackage ../applications/audio/bitwig-studio/bitwig-studio2.nix {
     inherit (gnome3) zenity;
-    inherit (self) bitwig-studio1;
+    inherit (super) bitwig-studio1;
   };
   bitwig-studio = bitwig-studio2;
 
@@ -16661,7 +16669,7 @@ with pkgs;
   espeak-classic = callPackage ../applications/audio/espeak { };
 
   espeak-ng = callPackage ../applications/audio/espeak-ng { };
-  espeak = self.espeak-ng;
+  espeak = super.espeak-ng;
 
   espeakedit = callPackage ../applications/audio/espeak/edit.nix { };
 
@@ -16954,7 +16962,7 @@ with pkgs;
     inherit (pkgs.gnome3) defaultIconTheme;
   };
 
-  firefox-beta-bin = self.wrapFirefox firefox-beta-bin-unwrapped {
+  firefox-beta-bin = super.wrapFirefox firefox-beta-bin-unwrapped {
     browserName = "firefox";
     name = "firefox-beta-bin-" +
       (builtins.parseDrvName firefox-beta-bin-unwrapped.name).version;
@@ -16969,7 +16977,7 @@ with pkgs;
     inherit (pkgs.gnome3) defaultIconTheme;
   };
 
-  firefox-devedition-bin = self.wrapFirefox firefox-devedition-bin-unwrapped {
+  firefox-devedition-bin = super.wrapFirefox firefox-devedition-bin-unwrapped {
     browserName = "firefox";
     nameSuffix = "-devedition";
     name = "firefox-devedition-bin-" +
@@ -20860,7 +20868,7 @@ with pkgs;
 
   ut2004Packages = callPackage ../games/ut2004 { };
 
-  ut2004demo = self.ut2004Packages.ut2004 [ self.ut2004Packages.ut2004-demo ];
+  ut2004demo = super.ut2004Packages.ut2004 [ super.ut2004Packages.ut2004-demo ];
 
   vapor = callPackage ../games/vapor { love = love_0_8; };
 
@@ -20997,8 +21005,8 @@ with pkgs;
       # Included for backwards compatibility
       libsoup libwnck gtk-doc gnome-doc-utils;
 
-    gtk = self.gtk2;
-    gtkmm = self.gtkmm2;
+    gtk = super.gtk2;
+    gtkmm = super.gtkmm2;
   });
 
   gnome3 = recurseIntoAttrs (callPackage ../desktops/gnome-3 { });
@@ -22051,7 +22059,7 @@ with pkgs;
 
   fakenes = callPackage ../misc/emulators/fakenes { };
 
-  faust = self.faust2;
+  faust = super.faust2;
 
   faust1 = callPackage ../applications/audio/faust/faust1.nix { };
 
@@ -22274,7 +22282,7 @@ with pkgs;
      parameter set to the right value for your deployment target.
   */
   nixos = configuration:
-    (import (self.path + "/nixos/lib/eval-config.nix") {
+    (import (super.path + "/nixos/lib/eval-config.nix") {
       inherit (pkgs.stdenv.hostPlatform) system;
       modules = [(
                   { lib, ... }: {
@@ -22553,7 +22561,7 @@ with pkgs;
   samsung-unified-linux-driver_1_00_37 = callPackage ../misc/cups/drivers/samsung/1.00.37.nix { };
   samsung-unified-linux-driver_4_00_39 = callPackage ../misc/cups/drivers/samsung/4.00.39 { };
   samsung-unified-linux-driver_4_01_17 = callPackage ../misc/cups/drivers/samsung/4.01.17.nix { };
-  samsung-unified-linux-driver = self.samsung-unified-linux-driver_4_01_17;
+  samsung-unified-linux-driver = super.samsung-unified-linux-driver_4_01_17;
 
   sane-backends = callPackage ../applications/graphics/sane/backends {
     gt68xxFirmware = config.sane.gt68xxFirmware or null;
