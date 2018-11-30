@@ -1,18 +1,17 @@
 { lib, stdenv, fetchurl, fetchpatch, pkgconfig, libatomic_ops
 , enableLargeConfig ? false # doc: https://github.com/ivmai/bdwgc/blob/v7.6.6/doc/README.macros#L179
-, buildPlatform, hostPlatform
 }:
 
 stdenv.mkDerivation rec {
   name = "boehm-gc-${version}";
-  version = "7.6.6";
+  version = "8.0.0";
 
   src = fetchurl {
     urls = [
       "http://www.hboehm.info/gc/gc_source/gc-${version}.tar.gz"
       "https://github.com/ivmai/bdwgc/releases/download/v${version}/gc-${version}.tar.gz"
     ];
-    sha256 = "1p1r015a7jbpvkkbgzv1y8nxrbbp6dg0mq3ksi6ji0qdz3wfss79";
+    sha256 = "014gjv3f1qycsv5yh3fyhvrvsig60yc288pipzr0ml4312igj8wg";
   };
 
   buildInputs = [ libatomic_ops ];
@@ -30,7 +29,7 @@ stdenv.mkDerivation rec {
     sha256 = "1gydwlklvci30f5dpp5ccw2p2qpph5y41r55wx9idamjlq66fbb3";
   }) ] ++
     # https://github.com/ivmai/bdwgc/pull/208
-    lib.optional hostPlatform.isRiscV ./riscv.patch;
+    lib.optional stdenv.hostPlatform.isRiscV ./riscv.patch;
 
   configureFlags =
     [ "--enable-cplusplus" ]
@@ -40,7 +39,7 @@ stdenv.mkDerivation rec {
   doCheck = true; # not cross;
 
   # Don't run the native `strip' when cross-compiling.
-  dontStrip = hostPlatform != buildPlatform;
+  dontStrip = stdenv.hostPlatform != stdenv.buildPlatform;
 
   enableParallelBuilding = true;
 

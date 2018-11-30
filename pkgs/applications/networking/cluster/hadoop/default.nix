@@ -11,10 +11,15 @@ let
           inherit sha256;
         };
 
+        postUnpack = stdenv.lib.optionalString (tomcat != null) ''
+          install -D ${tomcat.src} $sourceRoot/hadoop-hdfs-project/hadoop-hdfs-httpfs/downloads/apache-tomcat-${tomcat.version}.tar.gz
+          install -D ${tomcat.src} $sourceRoot/hadoop-common-project/hadoop-kms/downloads/apache-tomcat-${tomcat.version}.tar.gz
+        '';
+
         # perform fake build to make a fixed-output derivation of dependencies downloaded from maven central (~100Mb in ~3000 files)
         fetched-maven-deps = stdenv.mkDerivation {
           name = "hadoop-${version}-maven-deps";
-          inherit src nativeBuildInputs buildInputs configurePhase;
+          inherit src postUnpack nativeBuildInputs buildInputs configurePhase;
           buildPhase = ''
             while mvn package -Dmaven.repo.local=$out/.m2 ${mavenFlags} -Dmaven.wagon.rto=5000; [ $? = 1 ]; do
               echo "timeout, restart maven to continue downloading"
@@ -48,11 +53,6 @@ let
         '';
         configurePhase = "true"; # do not trigger cmake hook
         mavenFlags = "-Drequire.snappy -Drequire.bzip2 -DskipTests -Pdist,native -e";
-        # prevent downloading tomcat during the build
-        preBuild = stdenv.lib.optionalString (tomcat != null) ''
-          install -D ${tomcat.src} hadoop-hdfs-project/hadoop-hdfs-httpfs/downloads/apache-tomcat-${tomcat.version}.tar.gz
-          install -D ${tomcat.src} hadoop-common-project/hadoop-kms/downloads/apache-tomcat-${tomcat.version}.tar.gz
-        '';
         buildPhase = ''
           # 'maven.repo.local' must be writable
           mvn package --offline -Dmaven.repo.local=$(cp -dpR ${fetched-maven-deps}/.m2 ./ && chmod +w -R .m2 && pwd)/.m2 ${mavenFlags}
@@ -123,8 +123,8 @@ let
 
 in {
   hadoop_2_7 = common {
-    version = "2.7.6";
-    sha256 = "0wmg0iy0qxrf43fzajzmx03gxp4yx197vxacqwkxaj45clqwl010";
+    version = "2.7.7";
+    sha256 = "1ahv67f3lwak3kbjvnk1gncq56z6dksbajj872iqd0awdsj3p5rf";
     dependencies-sha256 = "1lsr9nvrynzspxqcamb10d596zlnmnfpxhkd884gdiva0frm0b1r";
     tomcat = tomcat_6_0_48;
   };
@@ -147,9 +147,9 @@ in {
     tomcat = null;
   };
   hadoop_3_1 = common {
-    version = "3.1.0";
-    sha256 = "0lig25jkffkzc2bfgyrnm3wymapgyw9fkai8sk9fnmp7cljia314";
-    dependencies-sha256 = "1ri6a7lrijh538vy7v0fzgvkw603pf8jkh3ldl1kl7l0dvszd70d";
+    version = "3.1.1";
+    sha256 = "04hhdbyd4x1hy0fpy537f8mi0864hww97zap29x7dk1smrffwabd";
+    dependencies-sha256 = "1q63jsxg3d31x0p8hvhpvbly2b07almyzsbhwphbczl3fhlqgiwn";
     tomcat = null;
   };
 }

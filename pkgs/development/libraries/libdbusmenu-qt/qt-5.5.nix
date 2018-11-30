@@ -1,12 +1,13 @@
-{ stdenv, fetchbzr, cmake, qtbase }:
+{ stdenv, fetchgit, cmake, qtbase }:
 
-stdenv.mkDerivation {
-  name = "libdbusmenu-qt-0.9.3+14";
+stdenv.mkDerivation rec {
+  name = "libdbusmenu-qt-${version}";
+  version = "0.9.3+16";
 
-  src = fetchbzr {
-    url = "https://bazaar.launchpad.net/~dbusmenu-team/libdbusmenu-qt/trunk";
-    rev = "ps-jenkins@lists.canonical.com-20140619090718-mppiiax5atpnb8i2";
-    sha256 = "1dbhaljyivbv3wc184zpjfjmn24zb6aj72wgg1gg1xl5f783issd";
+  src = fetchgit {
+    url = https://git.launchpad.net/ubuntu/+source/libdbusmenu-qt;
+    rev = "import/${version}.04.20160218-1";
+    sha256 = "039yvklhbmfbcynrbqq9n5ywmj8bjfslnkzcnwpzyhnxdzb6yxlx";
   };
 
   buildInputs = [ qtbase ];
@@ -19,5 +20,6 @@ stdenv.mkDerivation {
     description = "Provides a Qt implementation of the DBusMenu spec";
     maintainers = [ maintainers.ttuegel ];
     inherit (qtbase.meta) platforms;
+    license = licenses.lgpl2;
   };
 }

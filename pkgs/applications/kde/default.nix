@@ -77,6 +77,7 @@ let
       calendarsupport = callPackage ./calendarsupport.nix {};
       dolphin = callPackage ./dolphin.nix {};
       dolphin-plugins = callPackage ./dolphin-plugins.nix {};
+      dragon = callPackage ./dragon.nix {};
       eventviews = callPackage ./eventviews.nix {};
       ffmpegthumbs = callPackage ./ffmpegthumbs.nix { };
       filelight = callPackage ./filelight.nix {};
@@ -112,6 +113,7 @@ let
       kidentitymanagement = callPackage ./kidentitymanagement.nix {};
       kig = callPackage ./kig.nix {};
       kimap = callPackage ./kimap.nix {};
+      kitinerary = callPackage ./kitinerary.nix {};
       kio-extras = callPackage ./kio-extras.nix {};
       kldap = callPackage ./kldap.nix {};
       kleopatra = callPackage ./kleopatra.nix {};
@@ -127,10 +129,12 @@ let
       kontact = callPackage ./kontact.nix {};
       kontactinterface = callPackage ./kontactinterface.nix {};
       konquest = callPackage ./konquest.nix {};
+      konqueror = callPackage ./konqueror.nix {};
       korganizer = callPackage ./korganizer.nix {};
       kpimtextedit = callPackage ./kpimtextedit.nix {};
       ksmtp = callPackage ./ksmtp {};
       kqtquickcharts = callPackage ./kqtquickcharts.nix {};
+      kpkpass = callPackage ./kpkpass.nix {};
       krdc = callPackage ./krdc.nix {};
       krfb = callPackage ./krfb.nix {};
       kruler = callPackage ./kruler.nix {};

@@ -61,6 +61,7 @@ let
       X86_INTEL_PSTATE                 = yes;
       INTEL_IDLE                       = yes;
       CPU_FREQ_DEFAULT_GOV_PERFORMANCE = yes;
+      CPU_FREQ_GOV_SCHEDUTIL           = whenAtLeast "4.9" yes;
       PM_WAKELOCKS                     = yes;
     };
 
@@ -113,7 +114,7 @@ let
       IP_DCCP_CCID3      = no; # experimental
       CLS_U32_PERF       = yes;
       CLS_U32_MARK       = yes;
-      BPF_JIT            = when (stdenv.system == "x86_64-linux") yes;
+      BPF_JIT            = when (stdenv.hostPlatform.system == "x86_64-linux") yes;
       WAN                = yes;
       # Required by systemd per-cgroup firewalling
       CGROUP_BPF                  = option yes;
@@ -146,6 +147,14 @@ let
 
       # needed for iwd WPS support (wpa_supplicant replacement)
       KEY_DH_OPERATIONS = whenAtLeast "4.7" yes;
+
+      # needed for nftables
+      NF_TABLES_INET              = whenAtLeast "4.17" yes;
+      NF_TABLES_NETDEV            = whenAtLeast "4.17" yes;
+      NF_TABLES_IPV4              = whenAtLeast "4.17" yes;
+      NF_TABLES_ARP               = whenAtLeast "4.17" yes;
+      NF_TABLES_IPV6              = whenAtLeast "4.17" yes;
+      NF_TABLES_BRIDGE            = whenAtLeast "4.17" yes;
     };
 
     wireless = {
@@ -175,7 +184,7 @@ let
       FB_VESA             = yes;
       FRAMEBUFFER_CONSOLE = yes;
       FRAMEBUFFER_CONSOLE_ROTATION = yes;
-      FB_GEODE            = when (stdenv.system == "i686-linux") yes;
+      FB_GEODE            = when (stdenv.hostPlatform.system == "i686-linux") yes;
     };
 
     video = {
@@ -294,7 +303,7 @@ let
       CIFS_XATTR        = yes;
       CIFS_POSIX        = yes;
       CIFS_FSCACHE      = yes;
-      CIFS_STATS        = yes;
+      CIFS_STATS        = whenOlder "4.19" yes;
       CIFS_WEAK_PW_HASH = yes;
       CIFS_UPCALL       = yes;
       CIFS_ACL          = yes;
@@ -488,7 +497,7 @@ let
     };
 
     # Support x2APIC (which requires IRQ remapping)
-    x2apic = optionalAttrs (stdenv.system == "x86_64-linux") {
+    x2apic = optionalAttrs (stdenv.hostPlatform.system == "x86_64-linux") {
       X86_X2APIC = yes;
       IRQ_REMAP  = yes;
     };

@@ -6,7 +6,7 @@
 let
   nodePackages = import ./node.nix {
     inherit pkgs;
-    system = stdenv.system;
+    system = stdenv.hostPlatform.system;
   };
 
   runtimeEnv = buildEnv {

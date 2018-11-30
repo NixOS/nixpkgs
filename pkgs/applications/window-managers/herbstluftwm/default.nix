@@ -1,18 +1,19 @@
 { stdenv, fetchurl, pkgconfig, glib, libX11, libXext, libXinerama }:
 
 stdenv.mkDerivation rec {
-  name = "herbstluftwm-0.7.0";
+  name = "herbstluftwm-0.7.1";
 
   src = fetchurl {
     url = "https://herbstluftwm.org/tarballs/${name}.tar.gz";
-    sha256 = "09xfs213vg1dpird61wik5bqb9yf8kh63ssy18ihf54inwqgqbvy";
+    sha256 = "0d47lbjxxqd8d96hby47bdhyn9mlih7h28712j1vckiz05ig63nw";
   };
 
   patchPhase = ''
     substituteInPlace config.mk \
       --replace "/usr/local" "$out" \
       --replace "/etc" "$out/etc" \
-      --replace "/zsh/functions/Completion/X" "/zsh/site-functions"
+      --replace "/zsh/functions/Completion/X" "/zsh/site-functions" \
+      --replace "/usr/share" "\$(PREFIX)/share"
   '';
 
   nativeBuildInputs = [ pkgconfig ];

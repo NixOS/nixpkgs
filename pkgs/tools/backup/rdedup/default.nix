@@ -1,19 +1,25 @@
-{ stdenv, fetchFromGitHub, rustPlatform, pkgconfig, libsodium, lzma }:
+{ stdenv, fetchFromGitHub, rustPlatform, pkgconfig, openssl, libsodium
+, llvmPackages, clang_39, lzma }:
 
 rustPlatform.buildRustPackage rec {
   name = "rdedup-${version}";
-  version = "2.0.0";
+  version = "3.0.1";
 
   src = fetchFromGitHub {
     owner = "dpc";
     repo = "rdedup";
-    rev = "v${version}";
-    sha256 = "14r6x1wi5mwadarm0vp6qnr5mykv4g0kxz9msq76fhwghwb9k1d9";
+    rev = "e0f26f379a434f76d238c7a5fa6ddd8ae8b32f19";
+    sha256 = "1nhf8ap0w99aa1h0l599cx90lcvfvjaj67nw9flq9bmmzpn53kp9";
   };
 
-  buildInputs = [ pkgconfig libsodium lzma ];
+  cargoSha256 = "1x6wchlcxb1frww6y04gfx4idxv9h0g9qfxrhgb6g5qy3bqhqq3p";
 
-  cargoSha256 = "0wyswc4b4hkiw20gz0w94vv1qgcb2zq0cdaj9zxvyr5l0abxip9w";
+  nativeBuildInputs = [ pkgconfig llvmPackages.libclang clang_39 ];
+  buildInputs = [ openssl libsodium lzma ];
+
+  configurePhase = ''
+    export LIBCLANG_PATH="${llvmPackages.libclang}/lib"
+  '';
 
   meta = with stdenv.lib; {
     description = "Data deduplication with compression and public key encryption";

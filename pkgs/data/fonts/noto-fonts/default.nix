@@ -86,14 +86,14 @@ rec {
       maintainers = with maintainers; [ mathnerd314 ];
     };
   };
-  noto-fonts-emoji = let version = "2017-09-13-design-refresh"; in stdenv.mkDerivation {
+  noto-fonts-emoji = let version = "2018-08-10-unicode11"; in stdenv.mkDerivation {
     name = "noto-fonts-emoji-${version}";
 
     src = fetchFromGitHub {
       owner = "googlei18n";
       repo = "noto-emoji";
       rev = "v${version}";
-      sha256 = "1ixz03207kzh6jhmw8bpi77pxkfzq46dk26sr41m5kkvc14d14vl";
+      sha256 = "1y54zsvwf5pqhcd9cl2zz5l52qyswn6kycvrq03zm5kqqsngbw3p";
     };
 
     buildInputs = [ cairo ];
@@ -116,7 +116,7 @@ rec {
       inherit version;
       description = "Color and Black-and-White emoji fonts";
       homepage = https://github.com/googlei18n/noto-emoji;
-      license = licenses.asl20;
+      license = with licenses; [ ofl asl20 ];
       platforms = platforms.all;
       maintainers = with maintainers; [ mathnerd314 ];
     };

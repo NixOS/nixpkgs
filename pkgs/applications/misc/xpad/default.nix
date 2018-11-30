@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   name = "xpad-${version}";
-  version = "5.0.0";
+  version = "5.1.0";
 
   src = fetchurl {
     url = "https://launchpad.net/xpad/trunk/${version}/+download/xpad-${version}.tar.bz2";
-    sha256 = "02yikxg6z9bwla09ka001ppjlpbv5kbza3za9asazm5aiz376mkb";
+    sha256 = "0l0g5x8g6dwhf5ksnqqrjjsycy57kcvdslkmsr6bl3vrsjd7qml3";
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig wrapGAppsHook ];

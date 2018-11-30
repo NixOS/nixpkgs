@@ -17,6 +17,7 @@ let
       pkgs.utillinux
       pkgs.openresolv
     ];
+    fsPackagesPath = lib.makeBinPath config.system.fsPackages;
     postBootCommands = pkgs.writeText "local-cmds"
       ''
         ${config.boot.postBootCommands}

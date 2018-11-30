@@ -15,7 +15,7 @@ stdenv.mkDerivation {
   # in stdenv linux headers
   # BUILD_BRL fails to find open()
   cmakeFlags = "-DBUILD_TESTING=OFF -DBUILD_OUL=OFF -DBUILD_BRL=OFF -DBUILD_CONTRIB=OFF "
-    + (if stdenv.system == "x86_64-linux" then
+    + (if stdenv.hostPlatform.system == "x86_64-linux" then
       "-DCMAKE_CXX_FLAGS=-fPIC -DCMAKE_C_FLAGS=-fPIC"
     else
       "");

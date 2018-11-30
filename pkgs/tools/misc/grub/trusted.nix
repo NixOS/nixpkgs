@@ -10,7 +10,7 @@ let
     "x86_64-linux".target = "i386";
   };
 
-  inPCSystems = any (system: stdenv.system == system) (mapAttrsToList (name: _: name) pcSystems);
+  inPCSystems = any (system: stdenv.hostPlatform.system == system) (mapAttrsToList (name: _: name) pcSystems);
 
   version = if for_HP_laptop then "1.2.1" else "1.2.0";
 
@@ -84,7 +84,7 @@ stdenv.mkDerivation rec {
 
   # save target that grub is compiled for
   grubTarget = if inPCSystems
-               then "${pcSystems.${stdenv.system}.target}-pc"
+               then "${pcSystems.${stdenv.hostPlatform.system}.target}-pc"
                else "";
 
   doCheck = false;

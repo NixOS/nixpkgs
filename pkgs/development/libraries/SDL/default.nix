@@ -1,16 +1,16 @@
-{ stdenv, lib, fetchurl, fetchpatch, pkgconfig, audiofile, libcap, libiconv
-, openglSupport ? false, libGL, libGLU
-, alsaSupport ? true, alsaLib
-, x11Support ? hostPlatform == buildPlatform, libXext, libICE, libXrandr
-, pulseaudioSupport ? true, libpulseaudio
+{ stdenv, config, libGLSupported, fetchurl, fetchpatch, pkgconfig, audiofile, libcap, libiconv
+, openglSupport ? libGLSupported, libGL, libGLU
+, alsaSupport ? stdenv.isLinux, alsaLib
+, x11Support ? !stdenv.isCygwin, libXext, libICE, libXrandr
+, pulseaudioSupport ? config.pulseaudio or stdenv.isLinux, libpulseaudio
 , OpenGL, CoreAudio, CoreServices, AudioUnit, Kernel, Cocoa
-, hostPlatform, buildPlatform
+, cf-private
 }:
 
 # NOTE: When editing this expression see if the same change applies to
 # SDL2 expression too
 
-with lib;
+with stdenv.lib;
 
 assert !stdenv.isDarwin -> alsaSupport || pulseaudioSupport;
 assert openglSupport -> (stdenv.isDarwin || x11Support && libGL != null && libGLU != null);
@@ -41,8 +41,12 @@ stdenv.mkDerivation rec {
     ++ optional stdenv.isDarwin Cocoa;
 
   buildInputs = [ ]
-    ++ optional (!hostPlatform.isMinGW) audiofile
-    ++ optionals stdenv.isDarwin [ AudioUnit CoreAudio CoreServices Kernel OpenGL ];
+    ++ optional (!stdenv.hostPlatform.isMinGW) audiofile
+    ++ optionals stdenv.isDarwin [
+      AudioUnit CoreAudio CoreServices Kernel OpenGL
+      # Needed for NSDefaultRunLoopMode symbols.
+      cf-private
+    ];
 
   configureFlags = [
     "--disable-oss"
@@ -87,7 +91,7 @@ stdenv.mkDerivation rec {
     # Ticket: https://bugs.freedesktop.org/show_bug.cgi?id=27222
     (fetchpatch {
       name = "SDL_SetGamma.patch";
-      url = "http://src.fedoraproject.org/cgit/rpms/SDL.git/plain/SDL-1.2.15-x11-Bypass-SetGammaRamp-when-changing-gamma.patch?id=04a3a7b1bd88c2d5502292fad27e0e02d084698d";
+      url = "https://src.fedoraproject.org/cgit/rpms/SDL.git/plain/SDL-1.2.15-x11-Bypass-SetGammaRamp-when-changing-gamma.patch?id=04a3a7b1bd88c2d5502292fad27e0e02d084698d";
       sha256 = "0x52s4328kilyq43i7psqkqg7chsfwh0aawr50j566nzd7j51dlv";
     })
     # Fix a build failure on OS X Mavericks
@@ -110,7 +114,7 @@ stdenv.mkDerivation rec {
   postFixup = ''
     for lib in $out/lib/*.so* ; do
       if [[ -L "$lib" ]]; then
-        patchelf --set-rpath "$(patchelf --print-rpath $lib):${lib.makeLibraryPath propagatedBuildInputs}" "$lib"
+        patchelf --set-rpath "$(patchelf --print-rpath $lib):${makeLibraryPath propagatedBuildInputs}" "$lib"
       fi
     done
   '';

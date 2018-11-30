@@ -1,4 +1,4 @@
-{stdenv, fetchurl, fltk13, ghostscript}:
+{ stdenv, fetchurl, fltk13, ghostscript }:
 
 stdenv.mkDerivation rec {
   name = "flpsed-${version}";
@@ -19,9 +19,9 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "WYSIWYG PostScript annotator";
-    homepage = http://http://flpsed.org/flpsed.html;
+    homepage = http://flpsed.org/flpsed.html;
     license = licenses.gpl3;
-    platforms = platforms.mesaPlatforms;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ fuuzetsu ];
   };
 }

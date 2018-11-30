@@ -1,4 +1,4 @@
-{ stdenv, python, buildPythonPackage
+{ stdenv, fetchpatch, python, buildPythonPackage
 , protobuf, google_apputils, pyext, libcxx
 , disabled, doCheck ? true }:
 
@@ -16,6 +16,15 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ protobuf google_apputils ];
   buildInputs = [ google_apputils pyext ];
 
+  patches = [
+    # Python 3.7 compatibility (remove when protobuf 3.7 is released)
+    (fetchpatch {
+      url = "https://github.com/protocolbuffers/protobuf/commit/0a59054c30e4f0ba10f10acfc1d7f3814c63e1a7.patch";
+      sha256 = "09hw22y3423v8bbmc9xm07znwdxfbya6rp78d4zqw6fisdvjkqf1";
+      stripLen = 1;
+    })
+  ];
+
   prePatch = ''
     while [ ! -d python ]; do
       cd *
@@ -28,7 +37,10 @@ buildPythonPackage rec {
     export PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION_VERSION=2
   '';
 
-  preBuild = optionalString (versionAtLeast protobuf.version "2.6.0") ''
+  preBuild = ''
+    # Workaround for https://github.com/google/protobuf/issues/2895
+    ${python}/bin/${python.executable} setup.py build
+  '' + optionalString (versionAtLeast protobuf.version "2.6.0") ''
     ${python}/bin/${python.executable} setup.py build_ext --cpp_implementation
   '';
 

@@ -12,20 +12,22 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
+  nativeBuildInputs = [ imake gccmakedep ];
   buildInputs = [
-    libX11 xproto imake gccmakedep libXt libXmu libXaw
+    libX11 xproto libXt libXmu libXaw
     libXext xextproto libSM libICE libXpm libXp
   ];
 
-  buildPhase = ''xmkmf && make World'';
-
-  installPhase = ''
-    make DESTDIR=$out BINDIR=/bin MANDIR=/share/man/man1 install install.man
-  '';
+  makeFlags = [
+    "BINDIR=${placeholder "out"}/bin"
+    "MANDIR=${placeholder "out"}/share/man"
+  ];
+  installTargets = "install install.man";
 
   meta = {
     description = "VNC recorder";
     homepage = http://ronja.twibright.com/utils/vncrec/;
     platforms = stdenv.lib.platforms.linux;
+    license = stdenv.lib.licenses.gpl2;
   };
 }

@@ -1,28 +1,38 @@
 { stdenv, python3, pkgconfig, which, libtool, autoconf, automake,
-  autogen, sqlite, gmp, zlib, fetchFromGitHub }:
+  autogen, sqlite, gmp, zlib, fetchFromGitHub, fetchpatch }:
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "clightning-${version}";
-  version = "0.6";
+  version = "0.6.2";
 
   src = fetchFromGitHub {
     fetchSubmodules = true;
     owner = "ElementsProject";
     repo = "lightning";
     rev = "v${version}";
-    sha256 = "1xbi8c7kn21wj255fxnb9s0sqnzbn3wsz4p96z084k8mw1nc71vn";
+    sha256 = "18yns0yyf7kc4p4n1crxdqh37j9faxkx216nh2ip7cxj4x8bf9gx";
   };
 
   enableParallelBuilding = true;
 
-  buildInputs = [ which sqlite gmp zlib autoconf libtool automake autogen python3 pkgconfig ];
+  nativeBuildInputs = [ autoconf autogen automake libtool pkgconfig which ];
+  buildInputs = [ sqlite gmp zlib python3 ];
 
   makeFlags = [ "prefix=$(out)" ];
 
   configurePhase = ''
     ./configure --prefix=$out --disable-developer --disable-valgrind
   '';
+
+  # NOTE: remove me in 0.6.3
+  patches = [
+    (fetchpatch {
+      name = "clightning_0_6_2-compile-error.patch";
+      url = https://patch-diff.githubusercontent.com/raw/ElementsProject/lightning/pull/2070.patch;
+      sha256 = "1576fqik5zcpz5zsvp2ks939bgiz0jc22yf24iv61000dd5j6na9";
+    })
+  ];
 
   postPatch = ''
     echo "" > tools/refresh-submodules.sh

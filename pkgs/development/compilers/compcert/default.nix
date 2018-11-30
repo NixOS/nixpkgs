@@ -1,5 +1,5 @@
-{ stdenv, lib, fetchurl
-, coq, ocamlPackages
+{ stdenv, lib, fetchurl, fetchpatch
+, coq, ocamlPackages, coq2html
 , tools ? stdenv.cc
 }:
 
@@ -7,21 +7,17 @@ assert lib.versionAtLeast ocamlPackages.ocaml.version "4.02";
 
 stdenv.mkDerivation rec {
   name    = "compcert-${version}";
-  version = "3.2";
+  version = "3.4";
 
   src = fetchurl {
     url    = "http://compcert.inria.fr/release/${name}.tgz";
-    sha256 = "11q4121s0rxva63njjwya7syfx9w0p4hzr6avh8s57vfbrcakc93";
+    sha256 = "12gchwvkzhd2bhrnwzfb4a06wc4hgv98z987k06vj7ga31ii763h";
   };
 
-  buildInputs = [ coq ]
+  buildInputs = [ coq coq2html ]
   ++ (with ocamlPackages; [ ocaml findlib menhir ]);
 
   enableParallelBuilding = true;
-
-  postPatch = ''
-    sed -i -e 's/8\.6\.1|8\.7\.0|8\.7\.1)/8.6.1|8.7.0|8.7.1|8.7.2)/' configure
-  '';
 
   configurePhase = ''
     substituteInPlace ./configure --replace '{toolprefix}gcc' '{toolprefix}cc'

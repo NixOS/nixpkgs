@@ -15,6 +15,8 @@ let
 
     "x86_64-cygwin" "x86_64-darwin" "x86_64-freebsd" "x86_64-linux"
     "x86_64-netbsd" "x86_64-openbsd" "x86_64-solaris"
+
+    "x86_64-windows" "i686-windows"
   ];
 
   allParsed = map parse.mkSystemFromString all;
@@ -36,13 +38,14 @@ in rec {
   cygwin  = filterDoubles predicates.isCygwin;
   darwin  = filterDoubles predicates.isDarwin;
   freebsd = filterDoubles predicates.isFreeBSD;
-  # Should be better, but MinGW is unclear, and HURD is bit-rotted.
-  gnu     = filterDoubles (matchAttrs { kernel = parse.kernels.linux; abi = parse.abis.gnu; });
+  # Should be better, but MinGW is unclear.
+  gnu     = filterDoubles (matchAttrs { kernel = parse.kernels.linux; abi = parse.abis.gnu; }) ++ filterDoubles (matchAttrs { kernel = parse.kernels.linux; abi = parse.abis.gnueabi; }) ++ filterDoubles (matchAttrs { kernel = parse.kernels.linux; abi = parse.abis.gnueabihf; });
   illumos = filterDoubles predicates.isSunOS;
   linux   = filterDoubles predicates.isLinux;
   netbsd  = filterDoubles predicates.isNetBSD;
   openbsd = filterDoubles predicates.isOpenBSD;
   unix    = filterDoubles predicates.isUnix;
+  windows = filterDoubles predicates.isWindows;
 
-  mesaPlatforms = ["i686-linux" "x86_64-linux" "x86_64-darwin" "armv5tel-linux" "armv6l-linux" "armv7l-linux" "aarch64-linux"];
+  mesaPlatforms = ["i686-linux" "x86_64-linux" "x86_64-darwin" "armv5tel-linux" "armv6l-linux" "armv7l-linux" "aarch64-linux" "powerpc64le-linux"];
 }

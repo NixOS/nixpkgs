@@ -1,5 +1,5 @@
 { buildPackages, pkgs, pkgs_i686, targetPackages
-, includeSources ? true
+, includeSources ? true, licenseAccepted ? false
 }:
 
 # TODO: use callPackage instead of import to avoid so many inherits
@@ -9,8 +9,19 @@ rec {
     inherit buildPackages pkgs;
   };
 
+  buildToolsSources = let
+    system = pkgs.stdenv.hostPlatform.system;
+    path = if (system == "i686-linux" || system == "x86_64-linux")
+      then ./build-tools-srcs-linux.nix
+      else if system == "x86_64-darwin"
+      then ./build-tools-srcs-macosx.nix
+      else throw "System: ${system} not supported!";
+  in
+    import path { inherit (pkgs) fetchurl; };
+
   buildTools = import ./build-tools.nix {
-    inherit (pkgs) stdenv fetchurl unzip zlib file;
+    inherit (pkgs) stdenv lib fetchurl unzip zlib file coreutils;
+    inherit buildToolsSources;
     stdenv_32bit = pkgs_i686.stdenv;
     zlib_32bit = pkgs_i686.zlib;
     ncurses_32bit = pkgs_i686.ncurses5;
@@ -25,15 +36,15 @@ rec {
     inherit (pkgs) stdenv fetchurl unzip;
   };
 
-  platforms = if (pkgs.stdenv.system == "i686-linux" || pkgs.stdenv.system == "x86_64-linux")
+  platforms = if (pkgs.stdenv.hostPlatform.system == "i686-linux" || pkgs.stdenv.hostPlatform.system == "x86_64-linux")
     then import ./platforms-linux.nix {
       inherit (pkgs) stdenv fetchurl unzip;
     }
-    else if pkgs.stdenv.system == "x86_64-darwin"
+    else if pkgs.stdenv.hostPlatform.system == "x86_64-darwin"
     then import ./platforms-macosx.nix {
       inherit (pkgs) stdenv fetchurl unzip;
     }
-    else throw "Platform: ${pkgs.stdenv.system} not supported!";
+    else throw "Platform: ${pkgs.stdenv.hostPlatform.system} not supported!";
 
   sysimages = import ./sysimages.nix {
     inherit (pkgs) stdenv fetchurl unzip;
@@ -57,7 +68,7 @@ rec {
 
     inherit platformTools buildTools support
             supportRepository platforms sysimages
-            addons sources includeSources;
+            addons sources includeSources licenseAccepted;
 
     stdenv_32bit = pkgs_i686.stdenv;
   };
@@ -222,7 +233,37 @@ rec {
     useInstantApps = true;
   };
 
-  androidsdk_latest = androidsdk_8_0;
+  androidsdk_8_1 = androidsdk {
+    platformVersions = [ "27" ];
+    abiVersions = [ "x86" "x86_64"];
+    useGoogleAPIs = true;
+  };
+
+  androidsdk_8_1_extras = androidsdk {
+    platformVersions = [ "27" ];
+    abiVersions = [ "x86" "x86_64"];
+    useGoogleAPIs = true;
+    useExtraSupportLibs = true;
+    useGooglePlayServices = true;
+    useInstantApps = true;
+  };
+
+  androidsdk_9_0 = androidsdk {
+    platformVersions = [ "28" ];
+    abiVersions = [ "x86" "x86_64"];
+    useGoogleAPIs = true;
+  };
+
+  androidsdk_9_0_extras = androidsdk {
+    platformVersions = [ "28" ];
+    abiVersions = [ "x86" "x86_64"];
+    useGoogleAPIs = true;
+    useExtraSupportLibs = true;
+    useGooglePlayServices = true;
+    useInstantApps = true;
+  };
+
+  androidsdk_latest = androidsdk_9_0;
 
   androidndk_10e = pkgs.callPackage ./androidndk.nix {
     inherit (buildPackages)
@@ -232,7 +273,10 @@ rec {
       coreutils file findutils gawk gnugrep gnused jdk which;
     inherit platformTools;
     version = "10e";
-    sha256 = "032j3sgk93bjbkny84i17ph61dhjmsax9ddqng1zbi2p7dgl0pzf";
+    sha1s = {
+      x86_64-darwin = "6be8598e4ed3d9dd42998c8cb666f0ee502b1294";
+      x86_64-linux = "f692681b007071103277f6edc6f91cb5c5494a32";
+    };
   };
 
   androidndk_16b = pkgs.callPackage ./androidndk.nix {
@@ -243,20 +287,26 @@ rec {
       coreutils file findutils gawk gnugrep gnused jdk which;
     inherit platformTools;
     version = "16b";
-    sha256 = "00frcnvpcsngv00p6l2vxj4cwi2mwcm9lnjvm3zv4wrp6pss9pmw";
+    sha1s = {
+      x86_64-darwin = "e51e615449b98c716cf912057e2682e75d55e2de";
+      x86_64-linux = "42aa43aae89a50d1c66c3f9fdecd676936da6128";
+    };
   };
 
-  androidndk_17 = pkgs.callPackage ./androidndk.nix {
+  androidndk_17c = pkgs.callPackage ./androidndk.nix {
     inherit (buildPackages)
       unzip makeWrapper;
     inherit (pkgs)
       stdenv fetchurl zlib ncurses5 lib python3 libcxx
       coreutils file findutils gawk gnugrep gnused jdk which;
     inherit platformTools;
-    version = "17";
-    sha256 = "1jj3zy958zsidywqd5nwdyrnr72rf9zhippkl8rbqxfy8wxq2gds";
+    version = "17c";
+    sha1s = {
+      x86_64-darwin = "f97e3d7711497e3b4faf9e7b3fa0f0da90bb649c";
+      x86_64-linux = "12cacc70c3fd2f40574015631c00f41fb8a39048";
+    };
   };
-  androidndk = androidndk_17;
+  androidndk = androidndk_17c;
 
   androidndk_r8e = import ./androidndk_r8e.nix {
     inherit (buildPackages)
@@ -277,27 +327,27 @@ rec {
     inherit androidsdk;
   };
 
-  androidndkPkgs_17 = import ./androidndk-pkgs.nix {
+  androidndkPkgs_17c = import ./androidndk-pkgs.nix {
     inherit (buildPackages)
       makeWrapper;
     inherit (pkgs)
-      lib hostPlatform targetPlatform
+      lib stdenv
       runCommand wrapBintoolsWith wrapCCWith;
     # buildPackages.foo rather than buildPackages.buildPackages.foo would work,
     # but for splicing messing up on infinite recursion for the variants we
     # *dont't* use. Using this workaround, but also making a test to ensure
     # these two really are the same.
-    buildAndroidndk = buildPackages.buildPackages.androidenv.androidndk_17;
-    androidndk = androidndk_17;
-    targetAndroidndkPkgs = targetPackages.androidenv.androidndkPkgs_17;
+    buildAndroidndk = buildPackages.buildPackages.androidenv.androidndk_17c;
+    androidndk = androidndk_17c;
+    targetAndroidndkPkgs = targetPackages.androidenv.androidndkPkgs_17c;
   };
-  androidndkPkgs = androidndkPkgs_17;
+  androidndkPkgs = androidndkPkgs_17c;
 
   androidndkPkgs_10e = import ./androidndk-pkgs.nix {
     inherit (buildPackages)
       makeWrapper;
     inherit (pkgs)
-      lib hostPlatform targetPlatform
+      lib stdenv
       runCommand wrapBintoolsWith wrapCCWith;
     # buildPackages.foo rather than buildPackages.buildPackages.foo would work,
     # but for splicing messing up on infinite recursion for the variants we

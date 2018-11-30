@@ -1,4 +1,4 @@
-{ mkXfceDerivation, automakeAddFlags, dbus-glib, exo, garcon, gtk3
+{ mkXfceDerivation, automakeAddFlags, exo, garcon, gtk3
 , libnotify ? null, libxfce4ui, libxfce4util, libxklavier ? null
 , upower ? null, xfconf, xf86inputlibinput ? null }:
 
@@ -19,7 +19,6 @@ mkXfceDerivation rec {
   nativeBuildInputs = [ automakeAddFlags ];
 
   buildInputs = [
-    dbus-glib
     exo
     garcon
     gtk3

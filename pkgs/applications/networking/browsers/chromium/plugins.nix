@@ -1,4 +1,4 @@
-{ stdenv
+{ stdenv, gcc
 , jshon
 , glib
 , nspr
@@ -69,7 +69,7 @@ let
       ! find -iname '*.so' -exec ldd {} + | grep 'not found'
     '';
 
-    PATCH_RPATH = mkrpath [ stdenv.cc.cc glib nspr nss ];
+    PATCH_RPATH = mkrpath [ gcc.cc glib nspr nss ];
 
     patchPhase = ''
       chmod +x libwidevinecdm.so libwidevinecdmadapter.so
@@ -94,21 +94,23 @@ let
         envVars.NIX_CHROMIUM_PLUGIN_PATH_WIDEVINE = "@out@/lib";
       }}
     '';
+    
+    meta.platforms = platforms.x86_64;
   };
 
   flash = stdenv.mkDerivation rec {
     name = "flashplayer-ppapi-${version}";
-    version = "30.0.0.134";
+    version = "31.0.0.153";
 
     src = fetchzip {
       url = "https://fpdownload.adobe.com/pub/flashplayer/pdc/${version}/flash_player_ppapi_linux.x86_64.tar.gz";
-      sha256 = "1g6695w1ijqs8jbkbrb403ca1vvrf298ayvxslrvk70x6l7lp2ys";
+      sha256 = "0c7vh1h9lzx09njf7w1acvj2v91girlzflqxzli8nxza7pd1zb2v";
       stripRoot = false;
     };
 
     patchPhase = ''
       chmod +x libpepflashplayer.so
-      patchelf --set-rpath "${mkrpath [ stdenv.cc.cc ]}" libpepflashplayer.so
+      patchelf --set-rpath "${mkrpath [ gcc.cc ]}" libpepflashplayer.so
     '';
 
     doCheck = true;
@@ -133,6 +135,8 @@ let
     '';
 
     dontStrip = true;
+    
+    meta.platforms = platforms.x86_64;
   };
 
 in {

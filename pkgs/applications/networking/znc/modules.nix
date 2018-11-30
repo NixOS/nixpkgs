@@ -9,6 +9,8 @@ let
     inherit buildPhase;
     inherit installPhase;
 
+    buildInputs = znc.buildInputs;
+
     meta = a.meta // { platforms = stdenv.lib.platforms.unix; };
     passthru.module_name = module_name;
   });

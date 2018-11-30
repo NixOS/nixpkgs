@@ -8,6 +8,7 @@ let
     ${optionalString cfg.userControlled.enable ''
       ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=${cfg.userControlled.group}
       update_config=1''}
+    ${cfg.extraConfig}
     ${concatStringsSep "\n" (mapAttrsToList (ssid: config: with config; let
       key = if psk != null
         then ''"${psk}"''
@@ -164,6 +165,17 @@ in {
           example = "network";
           description = "Members of this group can control wpa_supplicant.";
         };
+      };
+      extraConfig = mkOption {
+        type = types.str;
+        default = "";
+        example = ''
+          p2p_disabled=1
+        '';
+        description = ''
+          Extra lines appended to the configuration file.
+          See wpa_supplicant.conf(5) for available options.
+        '';
       };
     };
   };

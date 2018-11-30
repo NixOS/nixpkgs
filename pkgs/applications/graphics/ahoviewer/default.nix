@@ -8,13 +8,13 @@ assert useUnrar -> unrar != null;
 
 stdenv.mkDerivation rec {
   name = "ahoviewer-${version}";
-  version = "1.5.0";
+  version = "1.6.4";
 
   src = fetchFromGitHub {
     owner = "ahodesuka";
     repo = "ahoviewer";
     rev = version;
-    sha256 = "1adzxp30fwh41y339ha8i5qp89zf21dw18vcicqqnzvyxbk5r3ig";
+    sha256 = "144jmk8w7dnmqy4w81b3kzama7i97chx16pgax2facn72a92921q";
   };
 
   enableParallelBuilding = true;
@@ -28,11 +28,6 @@ stdenv.mkDerivation rec {
     gst_all_1.gst-libav
     gst_all_1.gst-plugins-base
   ] ++ stdenv.lib.optional useUnrar unrar;
-
-  # https://github.com/ahodesuka/ahoviewer/issues/60
-  # Already fixed in the master branch
-  # TODO: remove this next release
-  makeFlags = [ ''LIBS=-lssl -lcrypto'' ];
 
   postPatch = ''patchShebangs version.sh'';
 

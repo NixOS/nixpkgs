@@ -157,7 +157,7 @@ let
     "-net vde,vlan=0,sock=$QEMU_VDE_SOCKET"
   ]);
 
-  maybeKvm64 = optional (stdenv.system == "x86_64-linux") "-cpu kvm64";
+  maybeKvm64 = optional (stdenv.hostPlatform.system == "x86_64-linux") "-cpu kvm64";
 
   cygwinQemuArgs = concatStringsSep " " (maybeKvm64 ++ [
     "-monitor unix:$MONITOR_SOCKET,server,nowait"

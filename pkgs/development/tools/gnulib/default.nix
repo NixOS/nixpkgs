@@ -14,6 +14,8 @@ stdenv.mkDerivation {
   installPhase = ''
     mkdir -p $out; mv * $out/
     ln -s $out/lib $out/include
+    mkdir -p $out/bin
+    ln -s $out/gnulib-tool $out/bin/
   '';
 
   meta = {

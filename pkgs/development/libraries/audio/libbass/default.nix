@@ -41,8 +41,8 @@ let
     dontBuild = true;
     installPhase =
       let so =
-            if bass.so ? ${stdenv.system} then bass.so.${stdenv.system}
-            else throw "${name} not packaged for ${stdenv.system} (yet).";
+            if bass.so ? ${stdenv.hostPlatform.system} then bass.so.${stdenv.hostPlatform.system}
+            else throw "${name} not packaged for ${stdenv.hostPlatform.system} (yet).";
       in ''
         mkdir -p $out/{lib,include}
         install -m644 -t $out/lib/ ${so}

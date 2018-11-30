@@ -27,7 +27,12 @@ in
 
     inherit src preConfigure;
 
-    configureFlags = "--enable-agent --enable-server --with-pgsql --with-libcurl";
+    configureFlags = [
+      "--enable-agent"
+      "--enable-server"
+      "--with-pgsql"
+      "--with-libcurl"
+    ];
 
   nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ postgresql curl openssl zlib ];
@@ -56,7 +61,7 @@ in
 
     inherit src preConfigure;
 
-    configureFlags = "--enable-agent";
+    configureFlags = [ "--enable-agent" ];
 
     meta = with stdenv.lib; {
       description = "An enterprise-class open source distributed monitoring solution (client-side agent)";

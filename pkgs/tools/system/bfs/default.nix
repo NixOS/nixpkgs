@@ -2,17 +2,15 @@
 
 stdenv.mkDerivation rec {
   name = "bfs-${version}";
-  version = "1.2.3";
+  version = "1.2.4";
 
   src = fetchFromGitHub {
     repo = "bfs";
     owner = "tavianator";
     rev = version;
-    sha256 = "01vcqanj2sifa5i51wvrkxh55d6hrq6iq7zmnhv4ls221dqmbyyn";
+    sha256 = "0nxx2njjp04ik6msfmf07hprw0j88wg04m0q1sf17mhkliw2d78s";
   };
 
-  # Disable fstype test, tries to read /etc/mtab
-  patches = [ ./tests.patch ];
   postPatch = ''
     # Patch tests (both shebangs and usage in scripts)
     for f in $(find -type f -name '*.sh'); do

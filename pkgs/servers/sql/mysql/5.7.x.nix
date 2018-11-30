@@ -7,11 +7,11 @@
 let
 self = stdenv.mkDerivation rec {
   name = "mysql-${version}";
-  version = "5.7.22";
+  version = "5.7.24";
 
   src = fetchurl {
     url = "mirror://mysql/MySQL-5.7/${name}.tar.gz";
-    sha256 = "1wng15j5caz6fsv28avlcxjgq3c5n90ifk79xa0h7jws19dl1f2f";
+    sha256 = "11qz8cc4zyi7sxs66c5zlap6fd3vra1srwgzcxdzhz59qs90rgq5";
   };
 
   preConfigure = stdenv.lib.optional stdenv.isDarwin ''
@@ -75,9 +75,13 @@ self = stdenv.mkDerivation rec {
     mysqlVersion = "5.7";
   };
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = https://www.mysql.com/;
     description = "The world's most popular open source database";
-    platforms = stdenv.lib.platforms.unix;
+    platforms = platforms.unix;
+    license = with licenses; [
+      artistic1 bsd0 bsd2 bsd3 bsdOriginal
+      gpl2 lgpl2 lgpl21 mit publicDomain licenses.zlib
+    ];
   };
 }; in self

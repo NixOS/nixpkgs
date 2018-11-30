@@ -4,11 +4,11 @@ stdenv.mkDerivation rec {
   name = "clean-2.4";
 
   src =
-    if stdenv.system == "i686-linux" then (fetchurl {
+    if stdenv.hostPlatform.system == "i686-linux" then (fetchurl {
       url = "http://clean.cs.ru.nl/download/Clean24/linux/clean2.4_boot.tar.gz";
       sha256 = "1w8vvmkwzq8g51639r62apcy75sj69nm08082a34xvqm9ymfgkq5";
     })
-    else if stdenv.system == "x86_64-linux" then (fetchurl {
+    else if stdenv.hostPlatform.system == "x86_64-linux" then (fetchurl {
         url = "https://clean.cs.ru.nl/download/Clean24/linux/clean2.4_64_boot.tar.gz";
         sha256 = "08gsa1pjl5wyzh4ah8ccfx8a7mdcn6ycsn1lzkrr9adygv1gmm7r";
     })

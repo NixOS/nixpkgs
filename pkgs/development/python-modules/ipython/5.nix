@@ -2,6 +2,7 @@
 , stdenv
 , buildPythonPackage
 , fetchPypi
+, fetchpatch
 # Build dependencies
 , glibcLocales
 # Test dependencies
@@ -25,11 +26,11 @@
 
 buildPythonPackage rec {
   pname = "ipython";
-  version = "5.7.0";
+  version = "5.8.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0g1jm06qriq48m58311cs7askp83ipq3yq96hv4kg431nxzkmd4d";
+    sha256 = "4bac649857611baaaf76bc82c173aa542f7486446c335fe1a6c05d0d491c8906";
   };
 
   prePatch = stdenv.lib.optionalString stdenv.isDarwin ''

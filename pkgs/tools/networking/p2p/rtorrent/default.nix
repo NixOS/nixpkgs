@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   name = "rtorrent-${version}";
-  version = "20161023";
+  version = "0.9.7";
 
   src = fetchFromGitHub {
     owner = "rakshasa";
     repo = "rtorrent";
-    rev = "226e670decf92e7adaa845a6982aca4f164ea740";
-    sha256 = "0cxyakc09bn6wjfj42gh508hc62awx825skzacpizx2bqs6v7xvb";
+    rev = "v${version}";
+    sha256 = "0a9dk3cz56f7gad8ghsma79iy900rwdvzngs6k6x08nlwaqid8ga";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -42,10 +42,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    inherit (src.meta) homepage;
+    homepage = https://rakshasa.github.io/rtorrent/;
     description = "An ncurses client for libtorrent, ideal for use with screen, tmux, or dtach";
 
     platforms = platforms.unix;
     maintainers = with maintainers; [ ebzzry codyopel ];
+    license = licenses.gpl2Plus;
   };
 }

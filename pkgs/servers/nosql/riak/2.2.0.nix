@@ -92,5 +92,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ cstrahan mdaiter ];
     description = "Dynamo inspired NoSQL DB by Basho";
     platforms   = [ "x86_64-linux" ];
+    license     = licenses.asl20;
   };
 }

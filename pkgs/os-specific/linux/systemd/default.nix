@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch, pkgconfig, intltool, gperf, libcap, kmod
+{ stdenv, lib, fetchFromGitHub, fetchpatch, fetchurl, pkgconfig, intltool, gperf, libcap, kmod
 , xz, pam, acl, libuuid, m4, utillinux, libffi
 , glib, kbd, libxslt, coreutils, libgcrypt, libgpgerror, libidn2, libapparmor
 , audit, lz4, bzip2, libmicrohttpd, pcre2
@@ -8,18 +8,17 @@
 , ninja, meson, python3Packages, glibcLocales
 , patchelf
 , getent
-, hostPlatform
 , buildPackages
 , withSelinux ? false, libselinux
-, withLibseccomp ? libseccomp.meta.available, libseccomp
-, withKexectools ? kexectools.meta.available, kexectools
+, withLibseccomp ? lib.any (lib.meta.platformMatch stdenv.hostPlatform) libseccomp.meta.platforms, libseccomp
+, withKexectools ? lib.any (lib.meta.platformMatch stdenv.hostPlatform) kexectools.meta.platforms, kexectools
 }:
 
 let
   pythonLxmlEnv = buildPackages.python3Packages.python.withPackages ( ps: with ps; [ python3Packages.lxml ]);
 
 in stdenv.mkDerivation rec {
-  version = "238";
+  version = "239";
   name = "systemd-${version}";
 
   # When updating, use https://github.com/systemd/systemd-stable tree, not the development one!
@@ -27,9 +26,25 @@ in stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "NixOS";
     repo = "systemd";
-    rev = "02042d012c4d6c0a2854d8436dd6636d4327774f";
-    sha256 = "0iv6fygzac0z6dagbmw1nf8dx7rrr6d9cxp0fr304rn3ir58g5f0";
+    rev = "31859ddd35fc3fa82a583744caa836d356c31d7f";
+    sha256 = "1xci0491j95vdjgs397n618zii3sgwnvanirkblqqw6bcvcjvir1";
   };
+
+  prePatch = let
+      # Upstream's maintenance branches are still too intrusive:
+      # https://github.com/systemd/systemd-stable/tree/v239-stable
+      patches-deb = fetchurl {
+        # When the URL disappears, it typically means that Debian has new patches
+        # (probably security) and updating to new tarball will apply them as well.
+        name = "systemd-debian-patches.tar.xz";
+        url = mirror://debian/pool/main/s/systemd/systemd_239-11~bpo9+1.debian.tar.xz;
+        sha256 = "136f6p4jbi4z94mf4g099dfcacwka8jwhza0wxxw2q5l5q3xiysh";
+      };
+      # Note that we skip debian-specific patches, i.e. ./debian/patches/debian/*
+    in ''
+      tar xf ${patches-deb}
+      patches="$patches $(cat debian/patches/series | grep -v '^debian/' | sed 's|^|debian/patches/|')"
+    '';
 
   outputs = [ "out" "lib" "man" "dev" ];
 
@@ -79,7 +94,7 @@ in stdenv.mkDerivation rec {
     "-Dsystem-gid-max=499"
     # "-Dtime-epoch=1"
 
-    (if stdenv.isAarch32 || stdenv.isAarch64 || !hostPlatform.isEfi then "-Dgnu-efi=false" else "-Dgnu-efi=true")
+    (if stdenv.isAarch32 || stdenv.isAarch64 || !stdenv.hostPlatform.isEfi then "-Dgnu-efi=false" else "-Dgnu-efi=true")
     "-Defi-libdir=${toString gnu-efi}/lib"
     "-Defi-includedir=${toString gnu-efi}/include/efi"
     "-Defi-ldsdir=${toString gnu-efi}/lib"
@@ -145,16 +160,6 @@ in stdenv.mkDerivation rec {
       --replace "SYSTEMD_CGROUP_AGENT_PATH" "_SYSTEMD_CGROUP_AGENT_PATH"
   '';
 
-  patches = [
-    # https://github.com/systemd/systemd/pull/8580
-    (fetchpatch {
-      url = https://github.com/systemd/systemd/pull/8580.patch;
-      sha256 = "1yp07hlpgqq0h2y0qc3kasswzkycz6p8d56d695ck1qa2f5bdfgn";
-    })
-  ];
-
-  hardeningDisable = [ "stackprotector" ];
-
   NIX_CFLAGS_COMPILE =
     [ # Can't say ${polkit.bin}/bin/pkttyagent here because that would
       # lead to a cyclic dependency.
@@ -208,10 +213,11 @@ in stdenv.mkDerivation rec {
   # runtime; otherwise we can't and we need to reboot.
   passthru.interfaceVersion = 2;
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://www.freedesktop.org/wiki/Software/systemd;
     description = "A system and service manager for Linux";
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.eelco ];
+    license = licenses.lgpl21Plus;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.eelco ];
   };
 }

@@ -1,8 +1,19 @@
 { stdenv, fetchurl
 , qtbase, qtsvg, qtserialport, qtwebkit, qtmultimedia, qttools, qtconnectivity
-, yacc, flex, zlib, qmake, makeWrapper
+, yacc, flex, zlib, qmake, makeDesktopItem, makeWrapper
 }:
-stdenv.mkDerivation rec {
+
+let
+  desktopItem = makeDesktopItem {
+    name = "goldencheetah";
+    exec = "GoldenCheetah";
+    icon = "goldencheetah";
+    desktopName = "GoldenCheetah";
+    genericName = "GoldenCheetah";
+    comment = "Performance software for cyclists, runners and triathletes";
+    categories = "Application;Utility;";
+  };
+in stdenv.mkDerivation rec {
   name = "golden-cheetah-${version}";
   version = "3.4";
   src = fetchurl {
@@ -27,6 +38,8 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
     cp src/GoldenCheetah $out/bin
     wrapProgram $out/bin/GoldenCheetah --set LD_LIBRARY_PATH "${zlib.out}/lib"
+    install -Dm644 "${desktopItem}/share/applications/"* -t $out/share/applications/
+    install -Dm644 src/Resources/images/gc.png $out/share/pixmaps/goldencheetah.png
 
     runHook postInstall
   '';
@@ -34,9 +47,10 @@ stdenv.mkDerivation rec {
   # RCC: Error in 'Resources/application.qrc': Cannot find file 'translations/gc_fr.qm'
   enableParallelBuilding = false;
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Performance software for cyclists, runners and triathletes";
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.ocharles ];
+    platforms = platforms.linux;
+    maintainers = [ maintainers.ocharles ];
+    license = licenses.gpl3;
   };
 }

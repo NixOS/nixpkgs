@@ -6,7 +6,7 @@ with stdenv.lib;
 stdenv.mkDerivation rec {
 
   pname = "squashfuse";
-  version = "unstable-2018-02-20";
+  version = "0.1.103";
   name = "${pname}-${version}";
 
   meta = {
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "vasi";
     repo  = "${pname}";
-    rev = "3f4a93f373796e88f7eee3a0c005ef60cb395d30";
+    rev = "540204955134eee44201d50132a5f66a246bcfaf";
     sha256 = "07jv4qjjz9ky3mw3p5prgs19g1bna9dcd7jjdz8083s1wyipdgcq";
   };
 

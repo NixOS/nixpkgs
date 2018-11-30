@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     cat configure.in | ${bsdbuild}/bin/mkconfigure > configure
   '';
 
-  configureFlags = "--with-agar=${libagar}";
+  configureFlags = [ "--with-agar=${libagar}" ];
 
   buildInputs = [ perl bsdbuild libagar libjpeg libpng openssl ];
 

@@ -19,6 +19,10 @@ stdenv.mkDerivation rec {
     "strictoverflow" # causes runtime failure (tested in checkPhase)
   ];
 
+  patchPhase = stdenv.lib.optionalString stdenv.isDarwin ''
+    substituteInPlace GNUmakefile --replace gcc cc
+  '';
+
   preBuild = ''
       echo Building PALP optimized for ${dim} dimensions
       sed -i "s/^#define[^a-zA-Z]*POLY_Dmax.*/#define POLY_Dmax ${dim}/" Global.h
@@ -77,6 +81,6 @@ stdenv.mkDerivation rec {
     # the right license.
     license = licenses.gpl2;
     maintainers = with maintainers; [ timokau ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

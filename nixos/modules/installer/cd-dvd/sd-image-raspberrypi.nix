@@ -16,7 +16,8 @@ in
   ];
 
   assertions = lib.singleton {
-    assertion = pkgs.stdenv.system == "armv6l-linux";
+    assertion = pkgs.stdenv.hostPlatform.system == "armv6l-linux"
+      && pkgs.stdenv.hostPlatform.system == pkgs.stdenv.buildPlatform.system;
     message = "sd-image-raspberrypi.nix can be only built natively on ARMv6; " +
       "it cannot be cross compiled";
   };
@@ -26,9 +27,6 @@ in
 
   boot.consoleLogLevel = lib.mkDefault 7;
   boot.kernelPackages = pkgs.linuxPackages_rpi;
-
-  # FIXME: this probably should be in installation-device.nix
-  users.users.root.initialHashedPassword = "";
 
   sdImage = {
     populateBootCommands = let

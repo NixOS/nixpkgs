@@ -13,7 +13,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ intltool gtk2 alsaLib libglade ];
 
-  configureFlags = "--disable-jack";
+  configureFlags = [ "--disable-jack" ];
 
   meta = {
     description = "Not a Guitar-Only tuner";

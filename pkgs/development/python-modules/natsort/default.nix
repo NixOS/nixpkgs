@@ -4,8 +4,6 @@
 , fetchPypi
 , hypothesis
 , pytestcache
-, pytestflakes
-, pytestpep8
 , pytest
 , glibcLocales
 , mock ? null
@@ -14,13 +12,11 @@
 
 buildPythonPackage rec {
   pname = "natsort";
-  version = "5.3.2";
+  version = "5.3.3";
 
   checkInputs = [
     hypothesis
     pytestcache
-    pytestflakes
-    pytestpep8
     pytest
     glibcLocales
   ]
@@ -31,13 +27,13 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "94056276c41be501d9fad3ade61d4eb4edf3b37fea53829b3294b75dc1d23708";
+    sha256 = "da930bfddce941526955dea8d35a44243c96adf919ceb758ba7bbd1ba5b0a39a";
   };
 
   # testing based on project's tox.ini
   checkPhase = ''
     pytest --doctest-modules natsort
-    pytest --flakes --pep8
+    pytest
   '';
 
   meta = {

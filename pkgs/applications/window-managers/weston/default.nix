@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation rec {
   name = "weston-${version}";
-  version = "4.0.0";
+  version = "5.0.0";
 
   src = fetchurl {
     url = "https://wayland.freedesktop.org/releases/${name}.tar.xz";
-    sha256 = "0n2big8xw6g6n46zm1jyf00dv9r4d84visdz5b8vxpw3xzkhmz50";
+    sha256 = "1bsc9ry566mpk6fdwkqpvwq2j7m79d9cvh7d3lgf6igsphik98hm";
   };
 
   nativeBuildInputs = [ pkgconfig ];

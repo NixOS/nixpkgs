@@ -14,12 +14,13 @@ stdenv.mkDerivation rec {
   postInstall =
     ''
       substituteInPlace $out/bin/lsusb.py \
-        --replace /usr/share/usb.ids ${hwdata}/data/hwdata/usb.ids
+        --replace /usr/share/usb.ids ${hwdata}/share/hwdata/usb.ids
     '';
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://www.linux-usb.org/;
     description = "Tools for working with USB devices, such as lsusb";
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
   };
 }

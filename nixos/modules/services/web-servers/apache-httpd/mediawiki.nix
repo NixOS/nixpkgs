@@ -86,7 +86,7 @@ let
     name= "mediawiki-1.29.1";
 
     src = pkgs.fetchurl {
-      url = "http://download.wikimedia.org/mediawiki/1.29/${name}.tar.gz";
+      url = "https://releases.wikimedia.org/mediawiki/1.29/${name}.tar.gz";
       sha256 = "03mpazbxvb011s2nmlw5p6dc43yjgl5yrsilmj1imyykm57bwb3m";
     };
 
@@ -311,7 +311,7 @@ in
       description = ''
         Any additional text to be appended to MediaWiki's
         configuration file.  This is a PHP script.  For configuration
-        settings, see <link xlink:href='http://www.mediawiki.org/wiki/Manual:Configuration_settings'/>.
+        settings, see <link xlink:href='https://www.mediawiki.org/wiki/Manual:Configuration_settings'/>.
       '';
     };
 

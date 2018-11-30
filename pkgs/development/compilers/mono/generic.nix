@@ -91,7 +91,7 @@ stdenv.mkDerivation {
     homepage = http://mono-project.com/;
     description = "Cross platform, open source .NET development framework";
     platforms = stdenv.lib.platforms.x86;
-    maintainers = with stdenv.lib.maintainers; [ viric thoughtpolice obadz vrthra ];
+    maintainers = with stdenv.lib.maintainers; [ thoughtpolice obadz vrthra ];
     license = stdenv.lib.licenses.free; # Combination of LGPL/X11/GPL ?
   } // meta;
 }

@@ -19,7 +19,7 @@
 
 /usr/lib/system/libsystem_configuration.dylib
 /usr/lib/system/libsystem_coreservices.dylib
-# /usr/lib/system/libsystem_coretls.dylib # Removed in 10.13
+# /usr/lib/system/libsystem_coretls.dylib  # Removed in 10.13
 /usr/lib/system/libsystem_dnssd.dylib
 /usr/lib/system/libsystem_info.dylib
 
@@ -28,7 +28,7 @@
 
 /usr/lib/system/libsystem_m.dylib
 /usr/lib/system/libsystem_malloc.dylib
-/usr/lib/system/libsystem_network.dylib
+# /usr/lib/system/libsystem_network.dylib  # Removed in 10.14
 /usr/lib/system/libsystem_networkextension.dylib
 /usr/lib/system/libsystem_notify.dylib
 /usr/lib/system/libsystem_platform.dylib

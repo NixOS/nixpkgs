@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   name = "libtorrent-${version}";
-  version = "20161212";
+  version = "0.13.7";
 
   src = fetchFromGitHub {
     owner = "rakshasa";
     repo = "libtorrent";
-    rev = "c167c5a9e0bcf0df23ae5efd91396aae0e37eb87";
-    sha256 = "0y9759sxx5dyamyw8w58dsxq7bmnn57q7s2f4cw2zln2pp5gripw";
+    rev = "v${version}";
+    sha256 = "027qanwcisxhx0bq8dn8cpg8563q0k2pm8ls278f04n7jqvvwkp0";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   preConfigure = "./autogen.sh";
 
   meta = with stdenv.lib; {
-    homepage = "http://rtorrent.net/downloads/";
+    inherit (src.meta) homepage;
     description = "A BitTorrent library written in C++ for *nix, with focus on high performance and good code";
 
     platforms = platforms.unix;

@@ -1,6 +1,6 @@
-{ lib, pythonPackages, fetchFromGitHub }:
+{ lib, python3Packages, fetchFromGitHub }:
 
-with pythonPackages;
+with python3Packages;
 
 buildPythonApplication rec {
   pname = "searx";
@@ -32,10 +32,13 @@ buildPythonApplication rec {
     pyasn1 pyasn1-modules ndg-httpsclient certifi pysocks
   ];
 
-  checkInputs = [ splinter mock plone-testing robotsuite unittest2 ];
+  checkInputs = [
+    splinter mock plone-testing robotsuite unittest2 selenium
+  ];
 
   preCheck = ''
     rm tests/test_robot.py # A variable that is imported is commented out
+    rm tests/unit/engines/pubmed.py
   '';
 
   meta = with lib; {

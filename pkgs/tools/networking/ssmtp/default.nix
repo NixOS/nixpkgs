@@ -14,7 +14,10 @@ stdenv.mkDerivation {
   # See: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=858781
   patches = [ ./ssmtp_support_AuthPassFile_parameter.patch ];
 
-  configureFlags = "--sysconfdir=/etc ${if tlsSupport then "--enable-ssl" else ""}";
+  configureFlags = [
+    "--sysconfdir=/etc"
+    (stdenv.lib.enableFeature tlsSupport "ssl")
+  ];
 
   postConfigure =
     ''
@@ -33,6 +36,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     platforms = platforms.linux;
+    license = licenses.gpl2;
     maintainers = with maintainers; [ basvandijk ];
   };
 }

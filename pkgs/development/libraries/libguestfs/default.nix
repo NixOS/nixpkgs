@@ -11,11 +11,11 @@ assert javaSupport -> jdk != null;
 
 stdenv.mkDerivation rec {
   name = "libguestfs-${version}";
-  version = "1.38.2";
+  version = "1.38.6";
 
   src = fetchurl {
     url = "http://libguestfs.org/download/1.38-stable/libguestfs-${version}.tar.gz";
-    sha256 = "16v2lpi9c0vnic2x0vpszmckh0x39bmf6x7y00vvzbwhszshxx3w";
+    sha256 = "1v2mggx2jlaq4m3p5shc46gzf7vmaayha6r0nwdnyzd7x6q0is7p";
   };
 
   nativeBuildInputs = [ pkgconfig ];

@@ -9,8 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "1m3971z4z1wr0paggprfz0n8ng8vsnkc9m6s3bdplgyz7qjk6jwx";
   };
 
-  buildInputs = [ makeWrapper perl LWP URI HTMLParser ]
-   ++ stdenv.lib.optionals doCheck [ HTTPServerSimple Parent ];
+  buildInputs = [ makeWrapper perl LWP URI HTMLParser ];
+  checkInputs = [ HTTPServerSimple Parent ];
 
   configurePhase = ''
     for i in swec tests/{runTests,testServer}

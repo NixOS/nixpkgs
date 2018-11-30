@@ -8,7 +8,7 @@
 
    $ nix-build pkgs/top-level/release.nix -A coreutils.x86_64-linux
 */
-{ nixpkgs ? { outPath = (import ../../lib).cleanSource ../..; revCount = 1234; shortRev = "abcdef"; }
+{ nixpkgs ? { outPath = (import ../../lib).cleanSource ../..; revCount = 1234; shortRev = "abcdef"; revision = "0000000000000000000000000000000000000000"; }
 , officialRelease ? false
   # The platforms for which we build Nixpkgs.
 , supportedSystems ? [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" ]
@@ -16,7 +16,7 @@
   # Strip most of attributes when evaluating to spare memory usage
 ,  scrubJobs ? true
   # Attributes passed to nixpkgs. Don't build packages marked as unfree.
-,  nixpkgsArgs ? { config = { allowUnfree = false; inHydra = true; allowAliases = false; }; }
+,  nixpkgsArgs ? { config = { allowUnfree = false; inHydra = true; }; }
 }:
 
 with import ./release-lib.nix { inherit supportedSystems scrubJobs nixpkgsArgs; };
@@ -32,7 +32,7 @@ let
 
       metrics = import ./metrics.nix { inherit pkgs nixpkgs; };
 
-      manual = import ../../doc;
+      manual = import ../../doc { inherit pkgs nixpkgs; };
       lib-tests = import ../../lib/tests/release.nix { inherit pkgs; };
 
       darwin-tested = if supportDarwin then pkgs.releaseTools.aggregate
@@ -41,7 +41,6 @@ let
           constituents =
             [ jobs.tarball
               jobs.cabal2nix.x86_64-darwin
-              jobs.emacs.x86_64-darwin
               jobs.ghc.x86_64-darwin
               jobs.git.x86_64-darwin
               jobs.go.x86_64-darwin
@@ -57,9 +56,20 @@ let
               jobs.python3.x86_64-darwin
               jobs.ruby.x86_64-darwin
               jobs.rustc.x86_64-darwin
+              jobs.stack.x86_64-darwin
               jobs.stdenv.x86_64-darwin
               jobs.vim.x86_64-darwin
 
+              # UI apps
+              jobs.firefox-unwrapped.x86_64-darwin
+              jobs.qt5.qtmultimedia.x86_64-darwin
+              jobs.inkscape.x86_64-darwin
+              # jobs.gimp.x86_64-darwin
+              jobs.emacs.x86_64-darwin
+              jobs.wireshark.x86_64-darwin
+              jobs.transmission-gtk.x86_64-darwin
+
+              # Tests
               jobs.tests.cc-wrapper.x86_64-darwin
               jobs.tests.cc-wrapper-clang.x86_64-darwin
               jobs.tests.cc-wrapper-libcxx.x86_64-darwin
@@ -67,6 +77,7 @@ let
               jobs.tests.cc-wrapper-libcxx-39.x86_64-darwin
               jobs.tests.stdenv-inputs.x86_64-darwin
               jobs.tests.macOSSierraShared.x86_64-darwin
+              jobs.tests.patch-shebangs.x86_64-darwin
             ];
         } else null;
 
@@ -109,6 +120,7 @@ let
               jobs.tests.cc-multilib-gcc.x86_64-linux
               jobs.tests.cc-multilib-clang.x86_64-linux
               jobs.tests.stdenv-inputs.x86_64-linux
+              jobs.tests.patch-shebangs.x86_64-linux
             ]
             ++ lib.collect lib.isDerivation jobs.stdenvBootstrapTools
             ++ lib.optionals supportDarwin [
@@ -138,6 +150,7 @@ let
               jobs.tests.cc-wrapper-libcxx-6.x86_64-darwin
               jobs.tests.stdenv-inputs.x86_64-darwin
               jobs.tests.macOSSierraShared.x86_64-darwin
+              jobs.tests.patch-shebangs.x86_64-darwin
             ];
         };
 

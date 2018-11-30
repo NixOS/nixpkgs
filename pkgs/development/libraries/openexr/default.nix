@@ -1,11 +1,12 @@
 { lib, stdenv, fetchurl, autoconf, automake, libtool, pkgconfig, zlib, ilmbase }:
 
 stdenv.mkDerivation rec {
-  name = "openexr-${lib.getVersion ilmbase}";
+  name = "openexr-${version}";
+  version = lib.getVersion ilmbase;
 
   src = fetchurl {
-    url = "http://download.savannah.nongnu.org/releases/openexr/${name}.tar.gz";
-    sha256 = "1kdf2gqznsdinbd5vcmqnif442nyhdf9l7ckc51410qm2gv5m6lg";
+    url = "https://github.com/openexr/openexr/releases/download/v${version}/${name}.tar.gz";
+    sha256 = "19jywbs9qjvsbkvlvzayzi81s976k53wg53vw4xj66lcgylb6v7x";
   };
 
   patches = [
@@ -15,6 +16,7 @@ stdenv.mkDerivation rec {
   outputs = [ "bin" "dev" "out" "doc" ];
 
   preConfigure = ''
+    patchShebangs ./bootstrap
     ./bootstrap
   '';
 

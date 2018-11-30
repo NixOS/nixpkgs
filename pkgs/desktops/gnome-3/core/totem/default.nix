@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation rec {
   name = "totem-${version}";
-  version = "3.26.1";
+  version = "3.26.2";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/totem/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "10n302fdp3lhkzbij5sbzmsnln738029xil6cnng2d4dxv4n1099";
+    url = "mirror://gnome/sources/totem/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    sha256 = "1llyisls3pzf5bwkpxyfyxc2d3gpa09n5pjy7qsjdqrp3ya4k36g";
   };
 
   doCheck = true;
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   '';
 
   mesonFlags = [
-    "-Dwith-nautilusdir=lib/nautilus/extensions-3.0"
+    "-Dwith-nautilusdir=${placeholder "out"}/lib/nautilus/extensions-3.0"
     # https://bugs.launchpad.net/ubuntu/+source/totem/+bug/1712021
     # https://bugzilla.gnome.org/show_bug.cgi?id=784236
     # https://github.com/mesonbuild/meson/issues/1994

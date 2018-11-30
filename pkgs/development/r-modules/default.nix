@@ -42,20 +42,20 @@ let
   # from the name, version, sha256, and optional per-package arguments above
   #
   deriveBioc = mkDerive {
-    mkHomepage = {name, biocVersion}: "https://bioconductor.org/packages/${biocVersion}/bioc/html/${name}.html";
+    mkHomepage = {name, biocVersion, ...}: "https://bioconductor.org/packages/${biocVersion}/bioc/html/${name}.html";
     mkUrls = {name, version, biocVersion}: [ "mirror://bioc/${biocVersion}/bioc/src/contrib/${name}_${version}.tar.gz"
                                              "mirror://bioc/${biocVersion}/bioc/src/contrib/Archive/${name}_${version}.tar.gz" ];
   };
   deriveBiocAnn = mkDerive {
-    mkHomepage = {name}: "http://www.bioconductor.org/packages/${name}.html";
+    mkHomepage = {name, ...}: "http://www.bioconductor.org/packages/${name}.html";
     mkUrls = {name, version, biocVersion}: [ "mirror://bioc/${biocVersion}/data/annotation/src/contrib/${name}_${version}.tar.gz" ];
   };
   deriveBiocExp = mkDerive {
-    mkHomepage = {name}: "http://www.bioconductor.org/packages/${name}.html";
+    mkHomepage = {name, ...}: "http://www.bioconductor.org/packages/${name}.html";
     mkUrls = {name, version, biocVersion}: [ "mirror://bioc/${biocVersion}/data/experiment/src/contrib/${name}_${version}.tar.gz" ];
   };
   deriveCran = mkDerive {
-    mkHomepage = {name, snapshot}: "http://mran.revolutionanalytics.com/snapshot/${snapshot}/web/packages/${name}/";
+    mkHomepage = {name, snapshot, ...}: "http://mran.revolutionanalytics.com/snapshot/${snapshot}/web/packages/${name}/";
     mkUrls = {name, version, snapshot}: [ "http://mran.revolutionanalytics.com/snapshot/${snapshot}/src/contrib/${name}_${version}.tar.gz" ];
   };
 
@@ -216,7 +216,8 @@ let
   # `self` is `_self` with overridden packages;
   # packages in `_self` may depends on overridden packages.
   self = (defaultOverrides _self self) // overrides;
-  _self = import ./bioc-packages.nix { inherit self; derive = deriveBioc; } //
+  _self = { inherit buildRPackage; } //
+          import ./bioc-packages.nix { inherit self; derive = deriveBioc; } //
           import ./bioc-annotation-packages.nix { inherit self; derive = deriveBiocAnn; } //
           import ./bioc-experiment-packages.nix { inherit self; derive = deriveBiocExp; } //
           import ./cran-packages.nix { inherit self; derive = deriveCran; };
@@ -257,7 +258,7 @@ let
     Formula = [ pkgs.gmp ];
     geoCount = [ pkgs.gsl_1 ];
     gdtools = [ pkgs.cairo.dev pkgs.fontconfig.lib pkgs.freetype.dev ];
-    git2r = [ pkgs.zlib.dev pkgs.openssl.dev ];
+    git2r = [ pkgs.zlib.dev pkgs.openssl.dev pkgs.libssh2.dev ];
     GLAD = [ pkgs.gsl_1 ];
     glpkAPI = [ pkgs.gmp pkgs.glpk ];
     gmp = [ pkgs.gmp.dev ];
@@ -272,15 +273,15 @@ let
     igraph = [ pkgs.gmp pkgs.libxml2.dev ];
     JavaGD = [ pkgs.jdk ];
     jpeg = [ pkgs.libjpeg.dev ];
+    jqr = [ pkgs.jq.dev ];
     KFKSDS = [ pkgs.gsl_1 ];
     kza = [ pkgs.fftw.dev ];
     libamtrack = [ pkgs.gsl_1 ];
     magick = [ pkgs.imagemagick.dev ];
-    mixcat = [ pkgs.gsl_1 ];
     mvabund = [ pkgs.gsl_1 ];
     mwaved = [ pkgs.fftw.dev ];
     ncdf4 = [ pkgs.netcdf ];
-    nloptr = [ pkgs.nlopt ];
+    nloptr = [ pkgs.nlopt pkgs.pkgconfig ];
     odbc = [ pkgs.unixODBC ];
     outbreaker = [ pkgs.gsl_1 ];
     pander = [ pkgs.pandoc pkgs.which ];
@@ -351,7 +352,6 @@ let
     sf = [ pkgs.gdal pkgs.proj pkgs.geos ];
     showtext = [ pkgs.zlib pkgs.libpng pkgs.icu pkgs.freetype.dev ];
     simplexreg = [ pkgs.gsl_1 ];
-    SOD = [ pkgs.opencl-headers ];
     spate = [ pkgs.fftw.dev ];
     ssanv = [ pkgs.proj ];
     stsm = [ pkgs.gsl_1 ];
@@ -365,6 +365,7 @@ let
     tkrplot = [ pkgs.xorg.libX11 pkgs.tk.dev ];
     topicmodels = [ pkgs.gsl_1 ];
     udunits2 = [ pkgs.udunits pkgs.expat ];
+    units = [ pkgs.udunits ];
     V8 = [ pkgs.v8_3_14 ];
     VBLPCM = [ pkgs.gsl_1 ];
     WhopGenome = [ pkgs.zlib.dev ];
@@ -412,6 +413,7 @@ let
     geoCount = [ pkgs.pkgconfig ];
     gdtools = [ pkgs.pkgconfig ];
     JuniperKernel = lib.optionals stdenv.isDarwin [ pkgs.darwin.binutils ];
+    jqr = [ pkgs.jq.lib ];
     kza = [ pkgs.pkgconfig ];
     magick = [ pkgs.pkgconfig ];
     mwaved = [ pkgs.pkgconfig ];
@@ -598,11 +600,9 @@ let
     "RcmdrPlugin_coin"
     "RcmdrPlugin_depthTools"
     "RcmdrPlugin_DoE"
-    "RcmdrPlugin_doex"
     "RcmdrPlugin_EACSPIR"
     "RcmdrPlugin_EBM"
     "RcmdrPlugin_EcoVirtual"
-    "RcmdrPlugin_epack"
     "RcmdrPlugin_EZR"
     "RcmdrPlugin_FactoMineR"
     "RcmdrPlugin_HH"
@@ -620,7 +620,6 @@ let
     "RcmdrPlugin_sampling"
     "RcmdrPlugin_SCDA"
     "RcmdrPlugin_SLC"
-    "RcmdrPlugin_SM"
     "RcmdrPlugin_sos"
     "RcmdrPlugin_steepness"
     "RcmdrPlugin_survival"
@@ -637,7 +636,6 @@ let
     "rich"
     "rioja"
     "ripa"
-    "rite"
     "RNCEP"
     "RQDA"
     "RSDA"
@@ -775,6 +773,12 @@ let
       '';
     });
 
+    jqr = old.jqr.overrideDerivation (attrs: {
+      preConfigure = ''
+        patchShebangs configure
+        '';
+    });
+
     pbdZMQ = old.pbdZMQ.overrideDerivation (attrs: {
       postPatch = lib.optionalString stdenv.isDarwin ''
         for file in R/*.{r,r.in}; do
@@ -851,10 +855,9 @@ let
     });
 
     nloptr = old.nloptr.overrideDerivation (attrs: {
-      configureFlags = [
-        "--with-nlopt-cflags=-I${pkgs.nlopt}/include"
-        "--with-nlopt-libs='-L${pkgs.nlopt}/lib -lnlopt_cxx -lm'"
-      ];
+      # Drop bundled nlopt source code. Probably unnecessary, but I want to be
+      # sure we're using the system library, not this one.
+      preConfigure = "rm -r src/nlopt_src";
     });
 
     V8 = old.V8.overrideDerivation (attrs: {
@@ -897,6 +900,14 @@ let
       TCLLIBPATH = "${pkgs.bwidget}/lib/bwidget${pkgs.bwidget.version}";
     });
 
+    RPostgres = old.RPostgres.overrideDerivation (attrs: {
+      preConfigure = ''
+        export INCLUDE_DIR=${pkgs.postgresql}/include
+        export LIB_DIR=${pkgs.postgresql.lib}/lib
+        patchShebangs configure
+        '';
+    });
+
     OpenMx = old.OpenMx.overrideDerivation (attrs: {
       preConfigure = ''
         patchShebangs configure
@@ -930,6 +941,15 @@ let
       PKGCONFIG_CFLAGS = "-I${pkgs.openssl.dev}/include -I${pkgs.cyrus_sasl.dev}/include -I${pkgs.zlib.dev}/include";
       PKGCONFIG_LIBS = "-Wl,-rpath,${pkgs.openssl.out}/lib -L${pkgs.openssl.out}/lib -L${pkgs.cyrus_sasl.out}/lib -L${pkgs.zlib.out}/lib -lssl -lcrypto -lsasl2 -lz";
     });
+
+    ps = old.ps.overrideDerivation (attrs: {
+      preConfigure = "patchShebangs configure";
+    });
+
+    rlang = old.rlang.overrideDerivation (attrs: {
+      preConfigure = "patchShebangs configure";
+    });
+
   };
 in
   self

@@ -1,5 +1,5 @@
 { stdenv49
-, lib, fetchurl, fetchFromGitHub
+, lib, fetchurl, fetchpatch, fetchFromGitHub
 
 , which, findutils, m4, gawk
 , python, openjdk, mono58, libressl
@@ -37,6 +37,9 @@ let
     # in theory newer versions of fdb support newer boost versions, but they
     # don't :( maybe one day
     , boost ? boost152
+
+    # if an release is unofficial/a prerelease, then make sure this is set
+    , officialRelease ? true
     }: stdenv.mkDerivation rec {
         name = "foundationdb-${version}";
         inherit version;
@@ -47,8 +50,8 @@ let
           inherit rev sha256;
         };
 
-        nativeBuildInputs = [ gawk which m4 findutils mono58 ];
-        buildInputs = [ python openjdk libressl boost ];
+        nativeBuildInputs = [ python openjdk gawk which m4 findutils mono58 ];
+        buildInputs = [ libressl boost ];
 
         patches =
           [ # For 5.2+, we need a slightly adjusted patch to fix all the ldflags
@@ -57,10 +60,24 @@ let
                    then ./ldflags-6.0.patch
                    else ./ldflags-5.2.patch)
              else ./ldflags-5.1.patch)
-          ] ++
+          ]
           # for 6.0+, we do NOT need to apply this version fix, since we can specify
           # it ourselves. see configurePhase
-          (lib.optional (!lib.versionAtLeast version "6.0") ./fix-scm-version.patch);
+          ++ (lib.optional (!lib.versionAtLeast version "6.0") ./fix-scm-version.patch)
+          # Versions less than 6.0 have a busted Python 3 build due to an outdated
+          # use of 'print'. Also apply an update to the six module with many bugfixes,
+          # which is in 6.0+ as well
+          ++ (lib.optional (!lib.versionAtLeast version "6.0") (fetchpatch {
+            name   = "update-python-six.patch";
+            url    = "https://github.com/apple/foundationdb/commit/4bd9efc4fc74917bc04b07a84eb065070ea7edb2.patch";
+            sha256 = "030679lmc86f1wzqqyvxnwjyfrhh54pdql20ab3iifqpp9i5mi85";
+          }))
+          ++ (lib.optional (!lib.versionAtLeast version "6.0") (fetchpatch {
+            name   = "import-for-python-print.patch";
+            url    = "https://github.com/apple/foundationdb/commit/ded17c6cd667f39699cf663c0e87fe01e996c153.patch";
+            sha256 = "11y434w68cpk7shs2r22hyrpcrqi8vx02cw7v5x79qxvnmdxv2an";
+          }))
+          ;
 
         postPatch = ''
           # note: this does not do anything for 6.0+
@@ -85,14 +102,17 @@ let
             --replace 'LDFLAGS :=' 'LDFLAGS := -ltls -lssl -lcrypto'
         '';
 
+        separateDebugInfo = true;
         enableParallelBuilding = true;
 
-        makeFlags = [ "all" "fdb_java" ]
+        makeFlags = [ "all" "fdb_java" "fdb_python" ]
           # Don't compile FDBLibTLS if we don't need it in 6.0 or later;
           # it gets statically linked in
           ++ lib.optional (!lib.versionAtLeast version "6.0") [ "fdb_c" ]
           # Needed environment overrides
-          ++ [ "KVRELEASE=1" ];
+          ++ [ "KVRELEASE=1"
+               "NOSTRIP=1"
+             ] ++ lib.optional officialRelease [ "RELEASE=true" ];
 
         # on 6.0 and later, we can specify all this information manually
         configurePhase = lib.optionalString (lib.versionAtLeast version "6.0") ''
@@ -104,16 +124,32 @@ let
         installPhase = ''
           mkdir -vp $out/{bin,libexec/plugins} $lib/{lib,share/java} $dev/include/foundationdb
 
-          cp -v ./lib/libfdb_c.so     $lib/lib
         '' + lib.optionalString (!lib.versionAtLeast version "6.0") ''
+          # we only copy the TLS library on < 6.0, since it's compiled-in otherwise
           cp -v ./lib/libFDBLibTLS.so $out/libexec/plugins/FDBLibTLS.so
         '' + ''
 
+          # C API
+          cp -v ./lib/libfdb_c.so                           $lib/lib
           cp -v ./bindings/c/foundationdb/fdb_c.h           $dev/include/foundationdb
           cp -v ./bindings/c/foundationdb/fdb_c_options.g.h $dev/include/foundationdb
+          cp -v ./fdbclient/vexillographer/fdb.options      $dev/include/foundationdb
 
+          # java
           cp -v ./bindings/java/foundationdb-client.jar     $lib/share/java/fdb-java.jar
 
+          # python
+          cp LICENSE ./bindings/python
+          substitute ./bindings/python/setup.py.in ./bindings/python/setup.py \
+            --replace 'VERSION' "${version}"
+          rm -f ./bindings/python/setup.py.in
+          rm -f ./bindings/python/fdb/*.pth # remove useless files
+          rm -f ./bindings/python/*.rst ./bindings/python/*.mk
+
+          cp -R ./bindings/python/                          tmp-pythonsrc/
+          tar -zcf $pythonsrc --transform s/tmp-pythonsrc/python-foundationdb/ ./tmp-pythonsrc/
+
+          # binaries
           for x in fdbbackup fdbcli fdbserver fdbmonitor; do
             cp -v "./bin/$x" $out/bin;
           done
@@ -125,7 +161,7 @@ let
           ln -sfv $out/bin/fdbbackup $out/libexec/backup_agent
         '';
 
-        outputs = [ "out" "lib" "dev" ];
+        outputs = [ "out" "lib" "dev" "pythonsrc" ];
 
         meta = with stdenv.lib; {
           description = "Open source, distributed, transactional key-value store";
@@ -145,16 +181,14 @@ in with builtins; {
   };
 
   foundationdb52 = makeFdb rec {
-    version = "5.2.6";
+    version = "5.2.8";
     branch  = "release-5.2";
-    rev     = "refs/tags/v5.2.6"; # seemed to be tagged incorrectly
-    sha256  = "1q3lq1hqq0f53n51gd4cw5cpayyw65dmkfplhsw1m5mghymzmskk";
+    sha256  = "1kbmmhk2m9486r4kyjlc7bb3wd50204i0p6dxcmvl6pbp1bs0wlb";
   };
 
   foundationdb60 = makeFdb rec {
-    version = "6.0.2pre2430_${substring 0 8 rev}";
+    version = "6.0.15";
     branch  = "release-6.0";
-    rev     = "7938d247a5eaf886a176575de6592b76374df58c";
-    sha256  = "0g8h2zs0f3aacs7x4hyjh0scybv33gjj6dqfb789h4n6r4gd7d9h";
+    sha256  = "1z8104nj1qn738bs1zjiq1mdn8dnj4vksb3fh503mf3ygl54mjbw";
   };
 }

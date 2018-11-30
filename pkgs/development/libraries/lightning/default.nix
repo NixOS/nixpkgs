@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0sbs2lm8b9in2m8d52zf0x9gpp40x6r7sl6sha92yq3pr78rwa4v";
   };
 
-  buildInputs = stdenv.lib.optional doCheck libopcodes;
+  checkInputs = [ libopcodes ];
 
   doCheck = true;
 

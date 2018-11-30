@@ -147,7 +147,7 @@ let
       ${config.boot.initrd.extraUtilsCommands}
 
       # Copy ld manually since it isn't detected correctly
-      cp -pv ${pkgs.glibc.out}/lib/ld*.so.? $out/lib
+      cp -pv ${pkgs.stdenv.cc.libc.out}/lib/ld*.so.? $out/lib
 
       # Copy all of the needed libraries
       find $out/bin $out/lib -type f | while read BIN; do
@@ -179,7 +179,7 @@ let
         fi
       done
 
-      if [ -z "${toString pkgs.stdenv.isCross}" ]; then
+      if [ -z "${toString (pkgs.stdenv.hostPlatform != pkgs.stdenv.buildPlatform)}" ]; then
       # Make sure that the patchelf'ed binaries still work.
       echo "testing patched programs..."
       $out/bin/ash -c 'echo hello world' | grep "hello world"
@@ -247,6 +247,14 @@ let
     shell = "${extraUtils}/bin/ash";
 
     isExecutable = true;
+
+    postInstall = ''
+      echo checking syntax
+      # check both with bash
+      ${pkgs.buildPackages.bash}/bin/sh -n $target
+      # and with ash shell, just in case
+      ${pkgs.buildPackages.busybox}/bin/ash -n $target
+    '';
 
     inherit udevRules extraUtils modulesClosure;
 

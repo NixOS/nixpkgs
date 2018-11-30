@@ -3,11 +3,11 @@
 assert stdenv.lib.versionAtLeast (stdenv.lib.getVersion ocaml) "3.11";
 
 stdenv.mkDerivation {
-  name = "ocaml-extlib-1.7.4";
+  name = "ocaml${ocaml.version}-extlib-1.7.5";
 
   src = fetchurl {
-    url = http://ygrek.org.ua/p/release/ocaml-extlib/extlib-1.7.4.tar.gz;
-    sha256 = "18jb4rvkk6p3mqnkamwb41x8q49shgn43h020bs4cp4vac7nrhnr";
+    url = http://ygrek.org.ua/p/release/ocaml-extlib/extlib-1.7.5.tar.gz;
+    sha256 = "19slqf5bdj0rrph2w41giwmn6df2qm07942jn058pjkjrnk30d4s";
   };
 
   buildInputs = [ ocaml findlib cppo ];

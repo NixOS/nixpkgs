@@ -1,13 +1,12 @@
 { stdenv, targetPackages
-, buildPlatform, hostPlatform, targetPlatform
 
 # build-tools
-, bootPkgs, alex, happy, hscolour
-, autoconf, automake, coreutils, fetchgit, perl, python3, m4
+, bootPkgs
+, autoconf, automake, coreutils, fetchgit, perl, python3, m4, sphinx
 
 , libiconv ? null, ncurses
 
-, useLLVM ? !targetPlatform.isx86 || (targetPlatform.isMusl && hostPlatform != targetPlatform)
+, useLLVM ? !stdenv.targetPlatform.isx86 || (stdenv.targetPlatform.isMusl && stdenv.hostPlatform != stdenv.targetPlatform)
 , # LLVM is conceptually a run-time-only depedendency, but for
   # non-x86, we need LLVM to bootstrap later stages, so it becomes a
   # build-time dependency too.
@@ -15,25 +14,29 @@
 
 , # If enabled, GHC will be built with the GPL-free but slower integer-simple
   # library instead of the faster but GPLed integer-gmp library.
-  enableIntegerSimple ? !(gmp.meta.available or false), gmp
+  enableIntegerSimple ? !(stdenv.lib.any (stdenv.lib.meta.platformMatch stdenv.hostPlatform) gmp.meta.platforms), gmp
 
 , # If enabled, use -fPIC when compiling static libs.
-  enableRelocatedStaticLibs ? targetPlatform != hostPlatform
+  enableRelocatedStaticLibs ? stdenv.targetPlatform != stdenv.hostPlatform
 
 , # Whether to build dynamic libs for the standard library (on the target
   # platform). Static libs are always built.
-  enableShared ? !targetPlatform.isWindows && !targetPlatform.useAndroidPrebuilt
+  enableShared ? !stdenv.targetPlatform.isWindows && !stdenv.targetPlatform.useAndroidPrebuilt
 
 , # Whetherto build terminfo.
-  enableTerminfo ? !targetPlatform.isWindows
+  enableTerminfo ? !stdenv.targetPlatform.isWindows
 
 , version ? "8.5.20180118"
 , # What flavour to build. An empty string indicates no
   # specific flavour and falls back to ghc default values.
-  ghcFlavour ? stdenv.lib.optionalString (targetPlatform != hostPlatform) "perf-cross"
+  ghcFlavour ? stdenv.lib.optionalString (stdenv.targetPlatform != stdenv.hostPlatform) "perf-cross"
 }:
 
+assert !enableIntegerSimple -> gmp != null;
+
 let
+  inherit (stdenv) buildPlatform hostPlatform targetPlatform;
+
   inherit (bootPkgs) ghc;
 
   # TODO(@Ericson2314) Make unconditional
@@ -47,8 +50,7 @@ let
     include mk/flavours/\$(BuildFlavour).mk
     endif
     DYNAMIC_GHC_PROGRAMS = ${if enableShared then "YES" else "NO"}
-  '' + stdenv.lib.optionalString enableIntegerSimple ''
-    INTEGER_LIBRARY = integer-simple
+    INTEGER_LIBRARY = ${if enableIntegerSimple then "integer-simple" else "integer-gmp"}
   '' + stdenv.lib.optionalString (targetPlatform != hostPlatform) ''
     Stage1Only = ${if targetPlatform.system == hostPlatform.system then "NO" else "YES"}
     CrossCompilePrefix = ${targetPrefix}
@@ -76,7 +78,7 @@ let
   targetCC = builtins.head toolsForTarget;
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (rec {
   inherit version;
   inherit (src) rev;
   name = "${targetPrefix}ghc-${version}";
@@ -149,13 +151,13 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     perl autoconf automake m4 python3
-    ghc alex happy hscolour
+    ghc bootPkgs.alex bootPkgs.happy bootPkgs.hscolour
   ];
 
   # For building runtime libs
   depsBuildTarget = toolsForTarget;
 
-  buildInputs = libDeps hostPlatform;
+  buildInputs = [ perl ] ++ (libDeps hostPlatform);
 
   propagatedBuildInputs = [ targetPackages.stdenv.cc ]
     ++ stdenv.lib.optional useLLVM llvmPackages.llvm;
@@ -169,7 +171,7 @@ stdenv.mkDerivation rec {
 
   checkTarget = "test";
 
-  hardeningDisable = [ "format" ];
+  hardeningDisable = [ "format" ] ++ stdenv.lib.optional stdenv.targetPlatform.isMusl "pie";
 
   postInstall = ''
     for bin in "$out"/lib/${name}/bin/*; do
@@ -205,4 +207,8 @@ stdenv.mkDerivation rec {
     inherit (ghc.meta) license platforms;
   };
 
-}
+} // stdenv.lib.optionalAttrs targetPlatform.useAndroidPrebuilt {
+  dontStrip = true;
+  dontPatchELF = true;
+  noAuditTmpdir = true;
+})

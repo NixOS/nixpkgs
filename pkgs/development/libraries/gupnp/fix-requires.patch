@@ -1,0 +1,9 @@
+--- a/gupnp-1.0.pc.in
++++ b/gupnp-1.0.pc.in
+@@ -8,4 +8,5 @@
+ Version: @VERSION@
+ Libs: -L${libdir} -lgupnp-1.0
+ Cflags: -I${includedir}/gupnp-1.0
+-Requires.private: gssdp-1.0 libxml-2.0 libsoup-2.4 @UUID_LIBS@
++Requires: glib-2.0 gobject-2.0 gssdp-1.0 libxml-2.0 libsoup-2.4
++Requires.private: @UUID_LIBS@

@@ -1,4 +1,4 @@
-{ fetchurl, pythonPackages }:
+{ stdenv, fetchurl, pythonPackages }:
 
 pythonPackages.buildPythonApplication rec {
   name = "vnc2flv-20100207";
@@ -15,5 +15,6 @@ pythonPackages.buildPythonApplication rec {
   meta = {
     description = "Tool to record VNC sessions to Flash Video";
     homepage = http://www.unixuser.org/~euske/python/vnc2flv/;
+    license = stdenv.lib.licenses.mit;
   };
 }

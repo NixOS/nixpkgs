@@ -22,8 +22,8 @@ let
       # This wrapper ensures that we actually get themes
       makeWrapper ${pkgs.lightdm_gtk_greeter}/sbin/lightdm-gtk-greeter \
         $out/greeter \
-        --prefix PATH : "${pkgs.glibc.bin}/bin" \
-        --set GDK_PIXBUF_MODULE_FILE "${pkgs.gdk_pixbuf.out}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache" \
+        --prefix PATH : "${lib.getBin pkgs.stdenv.cc.libc}/bin" \
+        --set GDK_PIXBUF_MODULE_FILE "${pkgs.librsvg.out}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache" \
         --set GTK_PATH "${theme}:${pkgs.gtk3.out}" \
         --set GTK_EXE_PREFIX "${theme}" \
         --set GTK_DATA_PREFIX "${theme}" \

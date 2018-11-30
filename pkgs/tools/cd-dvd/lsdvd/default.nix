@@ -13,9 +13,10 @@ stdenv.mkDerivation {
   buildInputs = [ libdvdread ];
   nativeBuildInputs = [ pkgconfig ];
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = https://sourceforge.net/projects/lsdvd/;
     description = "Display information about audio, video, and subtitle tracks on a DVD";
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.gpl2;
+    platforms = platforms.linux;
   };
 }

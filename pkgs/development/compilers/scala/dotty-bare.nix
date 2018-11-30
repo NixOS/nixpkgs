@@ -1,15 +1,15 @@
-{ stdenv, fetchurl, makeWrapper, jre }:
+{ stdenv, fetchurl, makeWrapper, jre, ncurses }:
 
 stdenv.mkDerivation rec {
-  version = "0.8.0-RC1";
+  version = "0.10.0-RC1";
   name = "dotty-bare-${version}";
 
   src = fetchurl {
     url = "https://github.com/lampepfl/dotty/releases/download/${version}/dotty-${version}.tar.gz";
-    sha256 = "e5b7a9bb6f1007146a440ddfff871cc312075e5d69b9ab7e279ad7c3514f7065";
+    sha256 = "0s9vh0d6xx99gl0ji0dgmbq36f79c0iwfbrfqwmaclqm9yq5m54k";
   };
 
-  propagatedBuildInputs = [ jre ] ;
+  propagatedBuildInputs = [ jre ncurses.dev ] ;
   buildInputs = [ makeWrapper ] ;
 
   installPhase = ''
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   fixupPhase = ''
         bin_files=$(find $out/bin -type f ! -name common)
         for f in $bin_files ; do
-          wrapProgram $f --set JAVA_HOME ${jre}
+          wrapProgram $f --set JAVA_HOME ${jre} --prefix PATH : '${ncurses.dev}/bin'
         done
   '';
 

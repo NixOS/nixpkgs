@@ -1,4 +1,5 @@
 {
+  symlinkJoin,
   coreutils,
   docker,
   e2fsprogs,
@@ -9,8 +10,7 @@
   lib,
   pkgs,
   pigz,
-  nixUnstable,
-  perl,
+  nix,
   runCommand,
   rsync,
   shadow,
@@ -19,8 +19,10 @@
   utillinux,
   vmTools,
   writeReferencesToFile,
+  referencesByPopularity,
   writeScript,
   writeText,
+  closureInfo
 }:
 
 # WARNING: this API is unstable and may be subject to backwards-incompatible changes in the future.
@@ -36,10 +38,11 @@ rec {
   in
     { imageName
       # To find the digest of an image, you can use skopeo:
-      # skopeo inspect docker://docker.io/nixos/nix:1.11 | jq -r '.Digest'
-      # sha256:20d9485b25ecfd89204e843a962c1bd70e9cc6858d65d7f5fadc340246e2116b
+      # see doc/functions.xml
     , imageDigest
     , sha256
+    , os ? "linux"
+    , arch ? "amd64"
       # This used to set a tag to the pulled image
     , finalImageTag ? "latest"
     , name ? fixName "docker-image-${imageName}-${finalImageTag}.tar"
@@ -59,7 +62,7 @@ rec {
       sourceURL = "docker://${imageName}@${imageDigest}";
       destNameTag = "${imageName}:${finalImageTag}";
     } ''
-      skopeo copy "$sourceURL" "docker-archive://$out:$destNameTag"
+      skopeo --override-os ${os} --override-arch ${arch} copy "$sourceURL" "docker-archive://$out:$destNameTag"
     '';
 
   # We need to sum layer.tar, not a directory, hence tarsum instead of nix-hash.
@@ -76,7 +79,9 @@ rec {
     ln -sT ${docker.src}/components/engine/pkg/tarsum src/github.com/docker/docker/pkg/tarsum
     go build
 
-    cp tarsum $out
+    mkdir -p $out/bin
+
+    cp tarsum $out/bin/
   '';
 
   # buildEnv creates symlinks to dirs, which is hard to edit inside the overlay VM
@@ -256,17 +261,79 @@ rec {
       ${text}
     '';
 
-  nixRegistration = contents: runCommand "nix-registration" {
-    buildInputs = [ nixUnstable perl ];
-    # For obtaining the closure of `contents'.
-    exportReferencesGraph =
-      let contentsList = if builtins.isList contents then contents else [ contents ];
-      in map (x: [("closure-" + baseNameOf x) x]) contentsList;
+  # Create $maxLayers worth of Docker Layers, one layer per store path
+  # unless there are more paths than $maxLayers. In that case, create
+  # $maxLayers-1 for the most popular layers, and smush the remainaing
+  # store paths in to one final layer.
+  mkManyPureLayers = {
+    name,
+    # Files to add to the layer.
+    closure,
+    configJson,
+    # Docker has a 42-layer maximum, we pick 24 to ensure there is plenty
+    # of room for extension
+    maxLayers ? 24
+  }:
+    runCommand "${name}-granular-docker-layers" {
+      inherit maxLayers;
+      paths = referencesByPopularity closure;
+      buildInputs = [ jshon rsync tarsum ];
+      enableParallelBuilding = true;
     }
     ''
+      # Delete impurities for store path layers, so they don't get
+      # shared and taint other projects.
+      cat ${configJson} \
+        | jshon -d config \
+        | jshon -s "1970-01-01T00:00:01Z" -i created > generic.json
+
+      # WARNING!
+      # The following code is fiddly w.r.t. ensuring every layer is
+      # created, and that no paths are missed. If you change the
+      # following head and tail call lines, double-check that your
+      # code behaves properly when the number of layers equals:
+      #      maxLayers-1, maxLayers, and maxLayers+1
+      head -n $((maxLayers - 1)) $paths | cat -n | xargs -P$NIX_BUILD_CORES -n2 ${./store-path-to-layer.sh}
+      if [ $(cat $paths | wc -l) -ge $maxLayers ]; then
+        tail -n+$maxLayers $paths | xargs ${./store-path-to-layer.sh} $maxLayers
+      fi
+
+      echo "Finished building layer '$name'"
+
+      mv ./layers $out
+    '';
+
+  # Create a "Customisation" layer which adds symlinks at the root of
+  # the image to the root paths of the closure. Also add the config
+  # data like what command to run and the environment to run it in.
+  mkCustomisationLayer = {
+    name,
+    # Files to add to the layer.
+    contents,
+    baseJson,
+    uid ? 0, gid ? 0,
+  }:
+    runCommand "${name}-customisation-layer" {
+      buildInputs = [ jshon rsync tarsum ];
+    }
+    ''
+      cp -r ${contents}/ ./layer
+
+      # Tar up the layer and throw it into 'layer.tar'.
+      echo "Packing layer..."
       mkdir $out
-      printRegistration=1 perl ${pkgs.pathsFromGraph} closure-* > $out/db.dump
-      perl ${pkgs.pathsFromGraph} closure-* > $out/storePaths
+      tar -C layer --sort=name --mtime="@$SOURCE_DATE_EPOCH" --owner=${toString uid} --group=${toString gid} -cf $out/layer.tar .
+
+      # Compute a checksum of the tarball.
+      echo "Computing layer checksum..."
+      tarhash=$(tarsum < $out/layer.tar)
+
+      # Add a 'checksum' field to the JSON, with the value set to the
+      # checksum of the tarball.
+      cat ${baseJson} | jshon -s "$tarhash" -i checksum > $out/json
+
+      # Indicate to docker that we're using schema version 1.0.
+      echo -n "1.0" > $out/VERSION
     '';
 
   # Create a "layer" (set of files).
@@ -286,7 +353,7 @@ rec {
   }:
     runCommand "docker-layer-${name}" {
       inherit baseJson contents extraCommands;
-      buildInputs = [ jshon rsync ];
+      buildInputs = [ jshon rsync tarsum ];
     }
     ''
       mkdir layer
@@ -313,11 +380,11 @@ rec {
 
       # Compute a checksum of the tarball.
       echo "Computing layer checksum..."
-      tarsum=$(${tarsum} < $out/layer.tar)
+      tarhash=$(tarsum < $out/layer.tar)
 
       # Add a 'checksum' field to the JSON, with the value set to the
       # checksum of the tarball.
-      cat ${baseJson} | jshon -s "$tarsum" -i checksum > $out/json
+      cat ${baseJson} | jshon -s "$tarhash" -i checksum > $out/json
 
       # Indicate to docker that we're using schema version 1.0.
       echo -n "1.0" > $out/VERSION
@@ -401,14 +468,112 @@ rec {
 
         # Compute the tar checksum and add it to the output json.
         echo "Computing checksum..."
-        ts=$(${tarsum} < $out/layer.tar)
-        cat ${baseJson} | jshon -s "$ts" -i checksum > $out/json
+        tarhash=$(${tarsum}/bin/tarsum < $out/layer.tar)
+        cat ${baseJson} | jshon -s "$tarhash" -i checksum > $out/json
         # Indicate to docker that we're using schema version 1.0.
         echo -n "1.0" > $out/VERSION
 
         echo "Finished building layer '${name}'"
       '';
     };
+
+  buildLayeredImage = {
+    # Image Name
+    name,
+    # Image tag, the Nix's output hash will be used if null
+    tag ? null,
+    # Files to put on the image (a nix store path or list of paths).
+    contents ? [],
+    # Docker config; e.g. what command to run on the container.
+    config ? {},
+    # Time of creation of the image. Passing "now" will make the
+    # created date be the time of building.
+    created ? "1970-01-01T00:00:01Z",
+    # Docker's lowest maximum layer limit is 42-layers for an old
+    # version of the AUFS graph driver. We pick 24 to ensure there is
+    # plenty of room for extension. I believe the actual maximum is
+    # 128.
+    maxLayers ? 24
+  }:
+    let
+      uid = 0;
+      gid = 0;
+      baseName = baseNameOf name;
+      contentsEnv = symlinkJoin { name = "bulk-layers"; paths = (if builtins.isList contents then contents else [ contents ]); };
+
+      configJson = let
+          pure = writeText "${baseName}-config.json" (builtins.toJSON {
+            inherit created config;
+            architecture = "amd64";
+            os = "linux";
+          });
+          impure = runCommand "${baseName}-standard-dynamic-date.json"
+            { buildInputs = [ jq ]; }
+            ''
+               jq ".created = \"$(TZ=utc date --iso-8601="seconds")\"" ${pure} > $out
+            '';
+        in if created == "now" then impure else pure;
+
+      bulkLayers = mkManyPureLayers {
+          name = baseName;
+          closure = writeText "closure" "${contentsEnv} ${configJson}";
+          # One layer will be taken up by the customisationLayer, so
+          # take up one less.
+          maxLayers = maxLayers - 1;
+          inherit configJson;
+        };
+      customisationLayer = mkCustomisationLayer {
+          name = baseName;
+          contents = contentsEnv;
+          baseJson = configJson;
+          inherit uid gid;
+        };
+      result = runCommand "docker-image-${baseName}.tar.gz" {
+        buildInputs = [ jshon pigz coreutils findutils jq ];
+        # Image name and tag must be lowercase
+        imageName = lib.toLower name;
+        imageTag = if tag == null then "" else lib.toLower tag;
+        baseJson = configJson;
+      } ''
+        ${lib.optionalString (tag == null) ''
+          outName="$(basename "$out")"
+          outHash=$(echo "$outName" | cut -d - -f 1)
+
+          imageTag=$outHash
+        ''}
+
+        find ${bulkLayers} -mindepth 1 -maxdepth 1 | sort -t/ -k5 -n > layer-list
+        echo ${customisationLayer} >> layer-list
+
+        mkdir image
+        imageJson=$(cat ${configJson} | jq ". + {\"rootfs\": {\"diff_ids\": [], \"type\": \"layers\"}}")
+        manifestJson=$(jq -n "[{\"RepoTags\":[\"$imageName:$imageTag\"]}]")
+        for layer in $(cat layer-list); do
+          layerChecksum=$(sha256sum $layer/layer.tar | cut -d ' ' -f1)
+          layerID=$(sha256sum "$layer/json" | cut -d ' ' -f 1)
+          ln -s "$layer" "./image/$layerID"
+
+          manifestJson=$(echo "$manifestJson" | jq ".[0].Layers |= [\"$layerID/layer.tar\"] + .")
+          imageJson=$(echo "$imageJson" | jq ".history |= [{\"created\": \"$(jq -r .created ${configJson})\"}] + .")
+          imageJson=$(echo "$imageJson" | jq ".rootfs.diff_ids |= [\"sha256:$layerChecksum\"] + .")
+        done
+        imageJsonChecksum=$(echo "$imageJson" | sha256sum | cut -d ' ' -f1)
+        echo "$imageJson" > "image/$imageJsonChecksum.json"
+        manifestJson=$(echo "$manifestJson" | jq ".[0].Config = \"$imageJsonChecksum.json\"")
+        echo "$manifestJson" > image/manifest.json
+
+        jshon -n object \
+          -n object -s "$layerID" -i "$imageTag" \
+          -i "$imageName" > image/repositories
+
+        echo "Cooking the image..."
+        tar -C image --dereference --hard-dereference --sort=name --mtime="@$SOURCE_DATE_EPOCH" --owner=0 --group=0  --mode=a-w --xform s:'^./':: -c . | pigz -nT > $out
+
+        echo "Finished."
+      '';
+
+    in
+    result;
 
   # 1. extract the base image
   # 2. create the layer
@@ -449,11 +614,18 @@ rec {
       baseName = baseNameOf name;
 
       # Create a JSON blob of the configuration. Set the date to unix zero.
-      baseJson = writeText "${baseName}-config.json" (builtins.toJSON {
-        inherit created config;
-        architecture = "amd64";
-        os = "linux";
-      });
+      baseJson = let
+          pure = writeText "${baseName}-config.json" (builtins.toJSON {
+            inherit created config;
+            architecture = "amd64";
+            os = "linux";
+          });
+          impure = runCommand "${baseName}-config.json"
+            { buildInputs = [ jq ]; }
+            ''
+               jq ".created = \"$(TZ=utc date --iso-8601="seconds")\"" ${pure} > $out
+            '';
+        in if created == "now" then impure else pure;
 
       layer =
         if runAsRoot == null
@@ -576,7 +748,7 @@ rec {
         currentID=$layerID
         while [[ -n "$currentID" ]]; do
           layerChecksum=$(sha256sum image/$currentID/layer.tar | cut -d ' ' -f1)
-          imageJson=$(echo "$imageJson" | jq ".history |= [{\"created\": \"${created}\"}] + .")
+          imageJson=$(echo "$imageJson" | jq ".history |= [{\"created\": \"$(jq -r .created ${baseJson})\"}] + .")
           imageJson=$(echo "$imageJson" | jq ".rootfs.diff_ids |= [\"sha256:$layerChecksum\"] + .")
           manifestJson=$(echo "$manifestJson" | jq ".[0].Layers |= [\"$currentID/layer.tar\"] + .")
 
@@ -610,29 +782,19 @@ rec {
   # the container.
   # Be careful since this doesn't work well with multilayer.
   buildImageWithNixDb = args@{ contents ? null, extraCommands ? "", ... }:
-    buildImage (args // {
+    let contentsList = if builtins.isList contents then contents else [ contents ];
+    in buildImage (args // {
       extraCommands = ''
         echo "Generating the nix database..."
         echo "Warning: only the database of the deepest Nix layer is loaded."
         echo "         If you want to use nix commands in the container, it would"
         echo "         be better to only have one layer that contains a nix store."
-        # This requires Nix 1.12 or higher
-        export NIX_REMOTE=local?root=$PWD
-        ${nixUnstable}/bin/nix-store --load-db < ${nixRegistration contents}/db.dump
 
-        # We fill the store in order to run the 'verify' command that
-        # generates hash and size of output paths.
-        # Note when Nix 1.12 is be the stable one, the database dump
-        # generated by the exportReferencesGraph function will
-        # contains sha and size. See
-        # https://github.com/NixOS/nix/commit/c2b0d8749f7e77afc1c4b3e8dd36b7ee9720af4a
-        storePaths=$(cat ${nixRegistration contents}/storePaths)
-        echo "Copying everything to /nix/store (will take a while)..."
-        cp -prd $storePaths nix/store/
-        ${nixUnstable}/bin/nix-store --verify --check-contents
+        export NIX_REMOTE=local?root=$PWD
+        ${nix}/bin/nix-store --load-db < ${closureInfo {rootPaths = contentsList;}}/registration
 
         mkdir -p nix/var/nix/gcroots/docker/
-        for i in ${lib.concatStringsSep " " contents}; do
+        for i in ${lib.concatStringsSep " " contentsList}; do
           ln -s $i nix/var/nix/gcroots/docker/$(basename $i)
         done;
       '' + extraCommands;

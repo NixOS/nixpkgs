@@ -1,10 +1,11 @@
-{ lib, stdenv, glibc, fetchurl, zlib, readline, libossp_uuid, openssl, libxml2, makeWrapper }:
+{ lib, stdenv, glibc, fetchurl, zlib, readline, libossp_uuid, openssl, libxml2, makeWrapper, tzdata, systemd }:
 
 let
 
   common = { version, sha256, psqlSchema }:
    let atLeast = lib.versionAtLeast version; in stdenv.mkDerivation (rec {
     name = "postgresql-${version}";
+    inherit version;
 
     src = fetchurl {
       url = "mirror://postgresql/source/v${version}/${name}.tar.bz2";
@@ -16,20 +17,27 @@ let
 
     buildInputs =
       [ zlib readline openssl libxml2 makeWrapper ]
+      ++ lib.optionals (atLeast "9.6" && !stdenv.isDarwin) [ systemd ]
       ++ lib.optionals (!stdenv.isDarwin) [ libossp_uuid ];
 
-    enableParallelBuilding = true;
+    enableParallelBuilding = !stdenv.isDarwin;
 
     makeFlags = [ "world" ];
+
+    NIX_CFLAGS_COMPILE = [ "-I${libxml2.dev}/include/libxml2" ];
+
+    # Otherwise it retains a reference to compiler and fails; see #44767.  TODO: better.
+    preConfigure = "CC=${stdenv.cc.targetPrefix}cc";
 
     configureFlags = [
       "--with-openssl"
       "--with-libxml"
       "--sysconfdir=/etc"
       "--libdir=$(lib)/lib"
-    ]
-      ++ lib.optional (stdenv.isDarwin)  "--with-uuid=e2fs"
-      ++ lib.optional (!stdenv.isDarwin) "--with-ossp-uuid";
+      "--with-system-tzdata=${tzdata}/share/zoneinfo"
+      (lib.optionalString (atLeast "9.6" && !stdenv.isDarwin) "--with-systemd")
+      (if stdenv.isDarwin then "--with-uuid=e2fs" else "--with-ossp-uuid")
+    ];
 
     patches =
       [ (if atLeast "9.4" then ./disable-resolve_symlinks-94.patch else ./disable-resolve_symlinks.patch)
@@ -84,44 +92,50 @@ let
     };
 
     meta = with lib; {
-      homepage = https://www.postgresql.org;
+      homepage    = https://www.postgresql.org;
       description = "A powerful, open source object-relational database system";
-      license = licenses.postgresql;
-      maintainers = [ maintainers.ocharles ];
-      platforms = platforms.unix;
+      license     = licenses.postgresql;
+      maintainers = with maintainers; [ ocharles thoughtpolice ];
+      platforms   = platforms.unix;
     };
   });
 
 in {
 
-  postgresql93 = common {
-    version = "9.3.23";
+  postgresql_9_3 = common {
+    version = "9.3.24";
     psqlSchema = "9.3";
-    sha256 = "1jzncs7b6zrcgpnqjbjcc4y8303a96zqi3h31d3ix1g3vh31160x";
+    sha256 = "1a8dnv16n2rxnbwhqw7c0kjpj3xqvkpwk50kvimj4d917cxaf542";
   };
 
-  postgresql94 = common {
-    version = "9.4.18";
+  postgresql_9_4 = common {
+    version = "9.4.19";
     psqlSchema = "9.4";
-    sha256 = "1h64yjyrlz3ppsp9k6sm4jihg6n9i7mqhkx4p0hymqzmnbr3g0s2";
+    sha256 = "12qn9h47rkn4k41gdbxkkvg0pff43k1113jmhc83f19adc1nnxq3";
   };
 
-  postgresql95 = common {
-    version = "9.5.13";
+  postgresql_9_5 = common {
+    version = "9.5.14";
     psqlSchema = "9.5";
-    sha256 = "1vm55q9apja6lg672m9xl1zq3iwv2zwnn0d0qr003zan1dmbh22l";
+    sha256 = "0k8s62h6qd9p3xlx315j5irniskqsnx1nz4ir5r1yhqp07mdab1y";
   };
 
-  postgresql96 = common {
-    version = "9.6.9";
+  postgresql_9_6 = common {
+    version = "9.6.10";
     psqlSchema = "9.6";
-    sha256 = "0biy8j69dbvdmrag55pdszpc0702agzqhhcwdx21xp02mzim4ydr";
+    sha256 = "09l4zqs74fqnazdsyln9x657mq3wsbgng9wpvq71yh26cv2sq5c6";
   };
 
-  postgresql100 = common {
-    version = "10.4";
+  postgresql_10 = common {
+    version = "10.5";
     psqlSchema = "10.0";
-    sha256 = "0j000bcs9w8wrllg8m7j1lxsd3n2x0yzkack5p35cmxx20iq2q0v";
+    sha256 = "04a07jkvc5s6zgh6jr78149kcjmsxclizsqabjw44ld4j5n633kc";
+  };
+
+  postgresql_11 = common {
+    version = "11.1";
+    psqlSchema = "11.1";
+    sha256 = "026v0sicsh7avzi45waf8shcbhivyxmi7qgn9fd1x0vl520mx0ch";
   };
 
 }

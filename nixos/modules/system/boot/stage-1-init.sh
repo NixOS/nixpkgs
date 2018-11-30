@@ -246,10 +246,7 @@ checkFS() {
     if [ "$fsType" = iso9660 -o "$fsType" = udf ]; then return 0; fi
 
     # Don't check resilient COWs as they validate the fs structures at mount time
-    if [ "$fsType" = btrfs -o "$fsType" = zfs ]; then return 0; fi
-
-    # Skip fsck for bcachefs - not implemented yet.
-    if [ "$fsType" = bcachefs ]; then return 0; fi
+    if [ "$fsType" = btrfs -o "$fsType" = zfs -o "$fsType" = bcachefs ]; then return 0; fi
 
     # Skip fsck for nilfs2 - not needed by design and no fsck tool for this filesystem.
     if [ "$fsType" = nilfs2 ]; then return 0; fi
@@ -260,6 +257,13 @@ checkFS() {
     # If we couldn't figure out the FS type, then skip fsck.
     if [ "$fsType" = auto ]; then
         echo 'cannot check filesystem with type "auto"!'
+        return 0
+    fi
+
+    # Device might be already mounted manually 
+    # e.g. NBD-device or the host filesystem of the file which contains encrypted root fs
+    if mount | grep -q "^$device on "; then
+        echo "skip checking already mounted $device"
         return 0
     fi
 

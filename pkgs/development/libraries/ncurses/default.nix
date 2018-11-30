@@ -8,7 +8,6 @@
 
 , gpm
 
-, buildPlatform, hostPlatform
 , buildPackages
 }:
 
@@ -21,7 +20,9 @@ stdenv.mkDerivation rec {
     sha256 = "05qdmbmrrn88ii9f66rkcmcyzp1kb1ymkx7g040lfkd1nkp7w1da";
   };
 
-  patches = lib.optional (!stdenv.cc.isClang) ./clang.patch;
+  # The patch st-0.7.patch needs to be removed, if ncurses is upgraded in the future.
+  # It is necessary for the 6.1 version of ncurses.
+  patches = [ ./st-0.7.patch ] ++ lib.optional (!stdenv.cc.isClang) ./clang.patch;
 
   outputs = [ "out" "dev" "man" ];
   setOutputFlags = false; # some aren't supported
@@ -34,7 +35,7 @@ stdenv.mkDerivation rec {
   ] ++ lib.optional unicode "--enable-widec"
     ++ lib.optional (!withCxx) "--without-cxx"
     ++ lib.optional (abiVersion == "5") "--with-abi-version=5"
-    ++ lib.optionals hostPlatform.isWindows [
+    ++ lib.optionals stdenv.hostPlatform.isWindows [
       "--enable-sp-funcs"
       "--enable-term-driver"
     ];
@@ -45,7 +46,7 @@ stdenv.mkDerivation rec {
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [
     pkgconfig
-  ] ++ lib.optionals (buildPlatform != hostPlatform) [
+  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
     buildPackages.ncurses
   ];
   buildInputs = lib.optional (mouseSupport && stdenv.isLinux) gpm;
@@ -135,7 +136,7 @@ stdenv.mkDerivation rec {
     moveToOutput "bin/infotocap" "$out"
   '';
 
-  preFixup = lib.optionalString (!hostPlatform.isCygwin && !enableStatic) ''
+  preFixup = lib.optionalString (!stdenv.hostPlatform.isCygwin && !enableStatic) ''
     rm "$out"/lib/*.a
   '';
 

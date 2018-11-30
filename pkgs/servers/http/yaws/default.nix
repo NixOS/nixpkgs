@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     cd $name
   '';
 
-  configureFlags = "--with-extrainclude=${pam}/include/security";
+  configureFlags = [ "--with-extrainclude=${pam}/include/security" ];
 
   buildInputs = [ erlang pam perl ];
 

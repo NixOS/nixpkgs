@@ -42,17 +42,19 @@ let
     # https://gcc.gnu.org/gcc-5/porting_to.html
     CPPFLAGS = "-P";
 
-    configureFlags = ''
-      ${if bdbSupport then "--with-berkeley-db" else "--without-berkeley-db"}
-      ${if httpServer then "--with-apxs=${apacheHttpd.dev}/bin/apxs" else "--without-apxs"}
-      ${if pythonBindings || perlBindings then "--with-swig=${swig}" else "--without-swig"}
-      ${if javahlBindings then "--enable-javahl --with-jdk=${jdk}" else ""}
-      --disable-keychain
-      ${if saslSupport then "--with-sasl=${sasl}" else "--without-sasl"}
-      ${if httpSupport then "--with-serf=${serf}" else "--without-serf"}
-      --with-zlib=${zlib.dev}
-      --with-sqlite=${sqlite.dev}
-    '';
+    configureFlags = [
+      (stdenv.lib.withFeature bdbSupport "berkeley-db")
+      (stdenv.lib.withFeatureAs httpServer "apxs" "${apacheHttpd.dev}/bin/apxs")
+      (stdenv.lib.withFeatureAs (pythonBindings || perlBindings) "swig" swig)
+      (stdenv.lib.withFeatureAs saslSupport "sasl" sasl)
+      (stdenv.lib.withFeatureAs httpSupport "serf" serf)
+      "--disable-keychain"
+      "--with-zlib=${zlib.dev}"
+      "--with-sqlite=${sqlite.dev}"
+    ] ++ stdenv.lib.optionals javahlBindings [
+      "--enable-javahl"
+      "--with-jdk=${jdk}"
+    ];
 
     preBuild = ''
       makeFlagsArray=(APACHE_LIBEXECDIR=$out/modules)
@@ -89,13 +91,15 @@ let
 
     enableParallelBuilding = true;
 
+    checkInputs = [ python ];
     doCheck = false; # fails 10 out of ~2300 tests
 
-    meta = {
+    meta = with stdenv.lib; {
       description = "A version control system intended to be a compelling replacement for CVS in the open source community";
+      license = licenses.asl20;
       homepage = http://subversion.apache.org/;
-      maintainers = with stdenv.lib.maintainers; [ eelco lovek323 ];
-      platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
+      maintainers = with maintainers; [ eelco lovek323 ];
+      platforms = platforms.linux ++ platforms.darwin;
     };
 
   } // stdenv.lib.optionalAttrs stdenv.isDarwin {
@@ -112,13 +116,19 @@ in {
   };
 
   subversion19 = common {
-    version = "1.9.7";
-    sha256 = "08qn94zaqcclam2spb4h742lvhxw8w5bnrlya0fm0bp17hriicf3";
+    version = "1.9.9";
+    sha256 = "1ll13ychbkp367c7zsrrpda5nygkryma5k18qfr8wbaq7dbvxzcd";
   };
 
   subversion_1_10 = common {
-    version = "1.10.2";
-    sha256 = "127dysfc31q4dhbbxaznh9kqixy9jd44kgwji2gdwj6rb2lf6dav";
+    version = "1.10.3";
+    sha256 = "1z6r3n91a4znsh68rl3jisfr7k4faymhbpalmmvsmvsap34al3cz";
+    extraBuildInputs = [ lz4 utf8proc ];
+  };
+
+  subversion_1_11 = common {
+    version = "1.11.0";
+    sha256 = "0miyz3xsxxp56iczxv6yqd8p06av3vxpb5nasyg2xb3ln1247i47";
     extraBuildInputs = [ lz4 utf8proc ];
   };
 }

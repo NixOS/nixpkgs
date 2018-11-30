@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "raspberrypi-firmware-${version}";
-  version = "1.20180619";
+  version = "1.20180919";
 
   src = fetchFromGitHub {
     owner = "raspberrypi";
     repo = "firmware";
     rev = version;
-    sha256 = "1wppk6c5mbanx9h2wa3yz3rzh5am8bqvgw23gxqgwhbar8w99cfn";
+    sha256 = "0aw5fzz7kr18cc4phdn81g45swkpaf4022sgi72pq2q6zzqnrdg4";
   };
 
   installPhase = ''
@@ -21,6 +21,6 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/raspberrypi/firmware;
     license = licenses.unfreeRedistributableFirmware; # See https://github.com/raspberrypi/firmware/blob/master/boot/LICENCE.broadcom
     platforms = [ "armv6l-linux" "armv7l-linux" "aarch64-linux" ];
-    maintainers = with maintainers; [ dezgeg viric tavyc ];
+    maintainers = with maintainers; [ dezgeg tavyc ];
   };
 }

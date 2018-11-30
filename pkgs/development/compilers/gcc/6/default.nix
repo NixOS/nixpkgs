@@ -1,7 +1,7 @@
 { stdenv, targetPackages, fetchurl, noSysDirs
 , langC ? true, langCC ? true, langFortran ? false
-, langObjC ? targetPlatform.isDarwin
-, langObjCpp ? targetPlatform.isDarwin
+, langObjC ? stdenv.targetPlatform.isDarwin
+, langObjCpp ? stdenv.targetPlatform.isDarwin
 , langJava ? false
 , langGo ? false
 , profiledCompiler ? false
@@ -20,16 +20,15 @@
 , libXrandr ? null, libXi ? null, inputproto ? null, randrproto ? null
 , x11Support ? langJava
 , enableMultilib ? false
-, enablePlugin ? hostPlatform == buildPlatform # Whether to support user-supplied plug-ins
+, enablePlugin ? stdenv.hostPlatform == stdenv.buildPlatform # Whether to support user-supplied plug-ins
 , name ? "gcc"
 , libcCross ? null
 , crossStageStatic ? false
-, libpthread ? null, libpthreadCross ? null  # required for GNU/Hurd
 , # Strip kills static libs of other archs (hence no cross)
-  stripped ? hostPlatform == buildPlatform && targetPlatform == hostPlatform
+  stripped ? stdenv.hostPlatform == stdenv.buildPlatform
+          && stdenv.targetPlatform == stdenv.hostPlatform
 , gnused ? null
 , cloog # unused; just for compat with gcc4, as we override the parameter on some places
-, buildPlatform, hostPlatform, targetPlatform
 , buildPackages
 }:
 
@@ -41,7 +40,7 @@ assert langJava     -> zip != null && unzip != null
 assert libelf != null -> zlib != null;
 
 # Make sure we get GNU sed.
-assert hostPlatform.isDarwin -> gnused != null;
+assert stdenv.hostPlatform.isDarwin -> gnused != null;
 
 # The go frontend is written in c++
 assert langGo -> langCC;
@@ -49,17 +48,16 @@ assert langGo -> langCC;
 with stdenv.lib;
 with builtins;
 
-let version = "6.4.0";
+let version = "6.5.0";
 
-    enableParallelBuilding = true;
+    inherit (stdenv) buildPlatform hostPlatform targetPlatform;
 
     patches =
       [ ../use-source-date-epoch.patch ]
       ++ optional (targetPlatform != hostPlatform) ../libstdc++-target.patch
       ++ optional noSysDirs ../no-sys-dirs.patch
       ++ optional langFortran ../gfortran-driving.patch
-      ++ [ ../struct-ucontext.patch ../struct-sigaltstack.patch ] # glibc-2.26
-      ++ optional langJava [ ../struct-ucontext-libjava.patch ] # glibc-2.26
+      ++ optional (targetPlatform.libc == "musl") ../libgomp-dont-force-initial-exec.patch
       ;
 
     javaEcj = fetchurl {
@@ -104,6 +102,7 @@ let version = "6.4.0";
         "--enable-sjlj-exceptions"
         "--enable-threads=win32"
         "--disable-win32-registry"
+        "--disable-libmpx" # requires libc
       ] else if crossStageStatic then [
         "--disable-libssp"
         "--disable-nls"
@@ -112,14 +111,12 @@ let version = "6.4.0";
         "--disable-libgomp"
         "--disable-libquadmath"
         "--disable-shared"
-        "--disable-libatomic"  # libatomic requires libc
-        "--disable-decimal-float" # libdecnumber requires libc
-        # maybe only needed on musl, PATH_MAX
-        # https://github.com/richfelker/musl-cross-make/blob/0867cdf300618d1e3e87a0a939fa4427207ad9d7/litecross/Makefile#L62
-        "--disable-libmpx"
+        "--disable-libatomic" # requires libc
+        "--disable-decimal-float" # requires libc
+        "--disable-libmpx" # requires libc
       ] else [
         (if crossDarwin then "--with-sysroot=${getLib libcCross}/share/sysroot"
-         else                "--with-headers=${getDev libcCross}/include")
+         else                "--with-headers=${getDev libcCross}${libcCross.incdir or "/include"}")
         "--enable-__cxa_atexit"
         "--enable-long-long"
       ] ++
@@ -142,10 +139,15 @@ let version = "6.4.0";
             "--disable-libgomp"
             # musl at least, disable: https://git.buildroot.net/buildroot/commit/?id=873d4019f7fb00f6a80592224236b3ba7d657865
             "--disable-libmpx"
-          ] ++ [
-          "--enable-threads=posix"
-          "--enable-nls"
-          "--disable-decimal-float" # No final libdecnumber (it may work only in 386)
+          ]
+          ++ optional (targetPlatform.libc == "newlib") "--with-newlib"
+          ++ optional (targetPlatform.libc == "avrlibc") "--with-avrlibc"
+          ++ [
+            "--enable-threads=${if targetPlatform.isUnix then "posix"
+                                else if targetPlatform.isWindows then "win32"
+                                else "single"}"
+            "--enable-nls"
+            "--disable-decimal-float" # No final libdecnumber (it may work only in 386)
         ]));
     stageNameAddon = if crossStageStatic then "-stage-static" else "-stage-final";
     crossNameAddon = if targetPlatform != hostPlatform then "${targetPlatform.config}${stageNameAddon}-" else "";
@@ -164,7 +166,7 @@ stdenv.mkDerivation ({
 
   src = fetchurl {
     url = "mirror://gnu/gcc/gcc-${version}/gcc-${version}.tar.xz";
-    sha256 = "1m0lr7938lw5d773dkvwld90hjlcq2282517d1gwvrfzmwgg42w5";
+    sha256 = "0i89fksfp6wr1xg9l8296aslcymv2idn60ip31wr9s4pwin7kwby";
   };
 
   inherit patches;
@@ -176,7 +178,7 @@ stdenv.mkDerivation ({
 
   libc_dev = stdenv.cc.libc_dev;
 
-  hardeningDisable = [ "format" ];
+  hardeningDisable = [ "format" ] ++ stdenv.lib.optional stdenv.targetPlatform.isMusl "pie";
 
   # This should kill all the stdinc frameworks that gcc and friends like to
   # insert into default search paths.
@@ -192,39 +194,7 @@ stdenv.mkDerivation ({
   '';
 
   postPatch =
-    if targetPlatform.isHurd
-    then
-      # On GNU/Hurd glibc refers to Hurd & Mach headers and libpthread is not
-      # in glibc, so add the right `-I' flags to the default spec string.
-      assert libcCross != null -> libpthreadCross != null;
-      let
-        libc = if libcCross != null then libcCross else stdenv.glibc;
-        gnu_h = "gcc/config/gnu.h";
-        extraCPPDeps =
-             libc.propagatedBuildInputs
-          ++ stdenv.lib.optional (libpthreadCross != null) libpthreadCross
-          ++ stdenv.lib.optional (libpthread != null) libpthread;
-        extraCPPSpec =
-          concatStrings (intersperse " "
-                          (map (x: "-I${x.dev or x}/include") extraCPPDeps));
-        extraLibSpec =
-          if libpthreadCross != null
-          then "-L${libpthreadCross}/lib ${libpthreadCross.TARGET_LDFLAGS}"
-          else "-L${libpthread}/lib";
-      in
-        '' echo "augmenting \`CPP_SPEC' in \`${gnu_h}' with \`${extraCPPSpec}'..."
-           sed -i "${gnu_h}" \
-               -es'|CPP_SPEC *"\(.*\)$|CPP_SPEC "${extraCPPSpec} \1|g'
-
-           echo "augmenting \`LIB_SPEC' in \`${gnu_h}' with \`${extraLibSpec}'..."
-           sed -i "${gnu_h}" \
-               -es'|LIB_SPEC *"\(.*\)$|LIB_SPEC "${extraLibSpec} \1|g'
-
-           echo "setting \`NATIVE_SYSTEM_HEADER_DIR' and \`STANDARD_INCLUDE_DIR' to \`${libc.dev}/include'..."
-           sed -i "${gnu_h}" \
-               -es'|#define STANDARD_INCLUDE_DIR.*$|#define STANDARD_INCLUDE_DIR "${libc.dev}/include"|g'
-        ''
-    else if targetPlatform != hostPlatform || stdenv.cc.libc != null then
+    if targetPlatform != hostPlatform || stdenv.cc.libc != null then
       # On NixOS, use the right path to the dynamic linker instead of
       # `/lib/ld*.so'.
       let
@@ -248,9 +218,7 @@ stdenv.mkDerivation ({
         )
     else null;
 
-  # TODO(@Ericson2314): Make passthru instead. Weird to avoid mass rebuild,
-  crossStageStatic = targetPlatform == hostPlatform || crossStageStatic;
-  inherit noSysDirs staticCompiler langJava
+  inherit noSysDirs staticCompiler langJava crossStageStatic
     libcCross crossMingw;
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
@@ -273,12 +241,9 @@ stdenv.mkDerivation ({
     ++ (optional (zlib != null) zlib)
     ++ (optionals langJava [ boehmgc zip unzip ])
     ++ (optionals javaAwtGtk ([ gtk2 libart_lgpl ] ++ xlibs))
-    ++ (optionals (targetPlatform != hostPlatform) [targetPackages.stdenv.cc.bintools])
-
     # The builder relies on GNU sed (for instance, Darwin's `sed' fails with
     # "-i may not be used with stdin"), and `stdenvNative' doesn't provide it.
     ++ (optional hostPlatform.isDarwin gnused)
-    ++ (optional hostPlatform.isDarwin targetPackages.stdenv.cc.bintools)
     ;
 
   NIX_LDFLAGS = stdenv.lib.optionalString  hostPlatform.isSunOS "-lm -ldl";
@@ -291,8 +256,7 @@ stdenv.mkDerivation ({
   ''
   + stdenv.lib.optionalString (langJava || langGo) ''
     export lib=$out;
-  ''
-  ;
+  '';
 
   dontDisableStatic = true;
 
@@ -334,7 +298,7 @@ stdenv.mkDerivation ({
       }"
     ] ++
 
-    (if enableMultilib
+    (if (enableMultilib || targetPlatform.isAvr)
       then ["--enable-multilib" "--disable-libquadmath"]
       else ["--disable-multilib"]) ++
     optional (!enableShared) "--disable-shared" ++
@@ -368,7 +332,12 @@ stdenv.mkDerivation ({
       # On Illumos/Solaris GNU as is preferred
       "--with-gnu-as" "--without-gnu-ld"
     ]
-    ++ optional (targetPlatform == hostPlatform && targetPlatform.libc == "musl") "--disable-libsanitizer"
+    ++ optionals (targetPlatform == hostPlatform && targetPlatform.libc == "musl") [
+      "--disable-libsanitizer"
+      "--disable-symvers"
+      "libat_cv_have_ifunc=no"
+      "--disable-gnu-indirect-function"
+    ]
   ;
 
   targetConfig = if targetPlatform != hostPlatform then targetPlatform.config else null;
@@ -408,13 +377,6 @@ stdenv.mkDerivation ({
     ++ optional langJava boehmgc
     ++ optionals javaAwtGtk xlibs
     ++ optionals javaAwtGtk [ gmp mpfr ]
-    ++ optional (libpthread != null) libpthread
-    ++ optional (libpthreadCross != null) libpthreadCross
-
-    # On GNU/Hurd glibc refers to Mach & Hurd
-    # headers.
-    ++ optionals (libcCross != null && libcCross ? propagatedBuildInputs)
-                 libcCross.propagatedBuildInputs
   ));
 
   LIBRARY_PATH = optionals (targetPlatform == hostPlatform) (makeLibraryPath ([]
@@ -422,35 +384,34 @@ stdenv.mkDerivation ({
     ++ optional langJava boehmgc
     ++ optionals javaAwtGtk xlibs
     ++ optionals javaAwtGtk [ gmp mpfr ]
-    ++ optional (libpthread != null) libpthread)
-  );
+  ));
 
   EXTRA_TARGET_FLAGS = optionals
     (targetPlatform != hostPlatform && libcCross != null)
     ([
-      "-idirafter ${getDev libcCross}/include"
+      "-idirafter ${getDev libcCross}${libcCross.incdir or "/include"}"
     ] ++ optionals (! crossStageStatic) [
-      "-B${libcCross.out}/lib"
+      "-B${libcCross.out}${libcCross.libdir or "/lib"}"
     ]);
 
   EXTRA_TARGET_LDFLAGS = optionals
     (targetPlatform != hostPlatform && libcCross != null)
     ([
-      "-Wl,-L${libcCross.out}/lib"
+      "-Wl,-L${libcCross.out}${libcCross.libdir or "/lib"}"
     ] ++ (if crossStageStatic then [
-        "-B${libcCross.out}/lib"
+        "-B${libcCross.out}${libcCross.libdir or "/lib"}"
       ] else [
-        "-Wl,-rpath,${libcCross.out}/lib"
-        "-Wl,-rpath-link,${libcCross.out}/lib"
-    ]) ++ optionals (libpthreadCross != null) [
-      "-L${libpthreadCross}/lib"
-      "-Wl,${libpthreadCross.TARGET_LDFLAGS}"
-    ]);
+        "-Wl,-rpath,${libcCross.out}${libcCross.libdir or "/lib"}"
+        "-Wl,-rpath-link,${libcCross.out}${libcCross.libdir or "/lib"}"
+    ]));
 
-  passthru =
-    { inherit langC langCC langObjC langObjCpp langFortran langGo version; isGNU = true; };
+  passthru = {
+    inherit langC langCC langObjC langObjCpp langFortran langGo version;
+    isGNU = true;
+  };
 
-  inherit enableParallelBuilding enableMultilib;
+  enableParallelBuilding = true;
+  inherit enableMultilib;
 
   inherit (stdenv) is64bit;
 
@@ -469,11 +430,12 @@ stdenv.mkDerivation ({
       compiler used in the GNU system including the GNU/Linux variant.
     '';
 
-    maintainers = with stdenv.lib.maintainers; [ viric peti ];
+    maintainers = with stdenv.lib.maintainers; [ peti ];
 
     platforms =
       stdenv.lib.platforms.linux ++
       stdenv.lib.platforms.freebsd ++
+      stdenv.lib.platforms.illumos ++
       stdenv.lib.platforms.darwin;
   };
 }

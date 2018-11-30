@@ -3,7 +3,7 @@
 , libGL, xcbutilkeysyms, xdg_utils, libtool }:
 
 let
-  version = "4.30.5.1676";
+  version = "4.30.5.1682";
 
   rpath = stdenv.lib.makeLibraryPath [
     xdg_utils
@@ -43,7 +43,7 @@ in stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://atlassian.artifactoryonline.com/atlassian/hipchat-apt-client/pool/HipChat4-${version}-Linux.deb";
-    sha256 = "1fmvarq7zf1cnah2d1l7rxhbiw3dmjcxsldys5is63y204hdh04y";
+    sha256 = "03pz8wskafn848yvciq29kwdvqcgjrk6sjnm8nk9acl89xf0sn96";
   };
 
   buildInputs = [ makeWrapper ];

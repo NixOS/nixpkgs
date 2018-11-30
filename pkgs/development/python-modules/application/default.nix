@@ -1,4 +1,4 @@
-{ buildPythonPackage, fetchdarcs, zope_interface, isPy3k }:
+{ lib, buildPythonPackage, fetchdarcs, zope_interface, isPy3k }:
 
 buildPythonPackage rec {
   pname = "python-application";
@@ -12,4 +12,10 @@ buildPythonPackage rec {
   };
 
   buildInputs = [ zope_interface ];
+
+  meta = with lib; {
+    description = "Basic building blocks for python applications";
+    homepage = https://github.com/AGProjects/python-application;
+    license = licenses.lgpl2Plus;
+  };
 }

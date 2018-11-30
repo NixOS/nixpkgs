@@ -16,7 +16,7 @@
   ### NixOS - usage:
   ==================
 
-    services.postgresql.extraPlugins = [ (pkgs.postgis.override { postgresql = pkgs.postgresql95; }) ];
+    services.postgresql.extraPlugins = [ (pkgs.postgis.override { postgresql = pkgs.postgresql_9_5; }) ];
 
 
   ### important Postgis implementation details:
@@ -42,8 +42,8 @@
 
 
 let
-  version = "2.4.4";
-  sha256 = "1hm8migjb53cymp4qvg1h20yqllmy9f7x0awv5450391i6syyqq6";
+  version = "2.5.0";
+  sha256 = "1m9n1shhqhjrhbq6fd9fyfccxcgpng37s3lffhlmyrp98zbsnwxy";
 in stdenv.mkDerivation rec {
   name = "postgis-${version}";
 

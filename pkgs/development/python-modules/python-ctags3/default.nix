@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "python-ctags3";
-  version = "1.2.4";
+  version = "1.3.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "62e1d48a8cd88756767f3f5e3f1b1a81bc84deeb736f0c9480a5b5d066f63c3e";
+    sha256 = "69029185ec70db4180be2b58e9a7245700c7ddcdc9049bf0641448f439112176";
   };
 
   meta = with lib; {

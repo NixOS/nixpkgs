@@ -11,7 +11,9 @@ stdenv.mkDerivation rec {
     sha256 = "13d7gff4prl1nsdknjigmb7bbqhn79165n01v4y9mwbnd0d3jqxn";
   };
 
-  patchPhase = stdenv.lib.optionalString stdenv.isDarwin ''
+  postPatch = ''
+    patchShebangs gdisk_test.sh
+  '' + stdenv.lib.optionalString stdenv.isDarwin ''
     substituteInPlace Makefile.mac --replace \
       "-mmacosx-version-min=10.4" "-mmacosx-version-min=10.6"
     substituteInPlace Makefile.mac --replace \

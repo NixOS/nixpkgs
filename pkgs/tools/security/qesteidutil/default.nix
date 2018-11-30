@@ -1,11 +1,10 @@
-{ stdenv, fetchFromGitHub
+{ stdenv, fetchFromGitHub, fetchpatch
 , cmake, ccid, qttools, qttranslations
 , pkgconfig, pcsclite, hicolor-icon-theme 
 }:
 
 stdenv.mkDerivation rec {
-
-  version = "3.12.10";
+  version = "2018-08-21";
   name = "qesteidutil-${version}";
 
   src = fetchFromGitHub {
@@ -13,9 +12,8 @@ stdenv.mkDerivation rec {
     repo = "qesteidutil";
     # TODO: Switch back to this after next release.
     #rev = "v${version}";
-    # We require the remove breakpad stuff
-    rev = "efdfe4c5521f68f206569e71e292a664bb9f46aa";
-    sha256 = "0zly83sdqsf9lxnfw4ir2a9vmmfba181rhsrz61ga2zzpm2wf0f0";
+    rev = "3bb65ef345aaa0d589b37a5d0d6f5772e95b0cd7";
+    sha256 = "13xsw5gh4svp9a5nxcqv72mymivr7w1cyjbv2l6yf96m45bsd9x4";
     fetchSubmodules = true;
   };
 
@@ -29,6 +27,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.id.ee/;
     license = licenses.lgpl2;
     platforms = platforms.linux;
-    maintainers = [ maintainers.jagajaga ];
+    maintainers = with maintainers; [ jagajaga domenkozar ];
   };
 }

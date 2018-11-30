@@ -10,12 +10,12 @@
 
 stdenv.mkDerivation rec {
   name = "obs-linuxbrowser-${version}";
-  version = "0.4.0";
+  version = "0.5.2";
   src = fetchFromGitHub {
     owner = "bazukas";
     repo = "obs-linuxbrowser";
     rev = version;
-    sha256 = "1nqi04ici9n1xjliy1gaqy2bq8zj1z32dffk890x2hi7ml688y9h";
+    sha256 = "1vwgdgcmab5442wh2rjww6lzij9g2c5ccnv79rs7vx3rdl8wqg4f";
   };
   nativeBuildInputs = [ cmake ];
   buildInputs = [ obs-studio ];
@@ -30,8 +30,8 @@ stdenv.mkDerivation rec {
     ln -s ${libcef}/include cef/
   '';
   cmakeFlags = [
-    "-DCEF_DIR=../../cef"
-    "-DOBS_INCLUDE=${obs-studio}/include/obs"
+    "-DCEF_ROOT_DIR=../../cef"
+    "-DOBS_INCLUDE_SEARCH_DIR=${obs-studio}/include/obs"
   ];
   installPhase = ''
     mkdir -p $out/share/obs/obs-plugins

@@ -10,7 +10,10 @@ stdenv.mkDerivation {
 
   hardeningDisable = [ "format" ];
 
-  configureFlags = if stdenv.isCygwin then "--enable-static" else "--enable-shared";
+  configureFlags = [
+    (stdenv.lib.enableFeature stdenv.isCygwin    "static")
+    (stdenv.lib.enableFeature (!stdenv.isCygwin) "shared")
+  ];
 
   dontStrip = stdenv.hostPlatform != stdenv.buildPlatform;
 

@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ zeromq3 jdk ];
 
   preConfigure = ''
-    ${if stdenv.system == "x86_64-darwin" then
+    ${if stdenv.hostPlatform.system == "x86_64-darwin" then
       '' sed -i -e 's~/Headers~/include~' -e 's~_JNI_INC_SUBDIRS=\".*\"~_JNI_INC_SUBDIRS=\"darwin\"~' configure
       '' else ""}
   '';

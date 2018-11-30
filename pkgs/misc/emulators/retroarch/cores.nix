@@ -234,8 +234,8 @@ in with stdenv.lib.licenses;
     core = "mame";
     src = fetchRetro {
       repo = "mame";
-      rev = "9f8a36adeb4dc54ec2ecac992ce91bcdb377519e";
-      sha256 = "0blfvq28hgv9kkpijd8c9d9sa5g2qr448clwi7wrj8kqfdnrr8m1";
+      rev = "9f9e6b6c9bde4d50c72e9a5c80496a1fec6b8aa9";
+      sha256 = "0lfj8bjchkcvyb5x0x29cg10fkfklxndk80947k4qfysclijxpkv";
     };
     description = "Port of MAME to libretro";
     license = gpl2Plus;
@@ -272,7 +272,7 @@ in with stdenv.lib.licenses;
 
     extraBuildInputs = [ libGLU_combined libpng ];
   }).override {
-    buildPhase = "make WITH_DYNAREC=${if stdenv.system == "x86_64-linux" then "x86_64" else "x86"}";
+    buildPhase = "make WITH_DYNAREC=${if stdenv.hostPlatform.system == "x86_64-linux" then "x86_64" else "x86"}";
   };
 
   nestopia = (mkLibRetroCore rec {
@@ -300,7 +300,7 @@ in with stdenv.lib.licenses;
 
     extraBuildInputs = [ libGLU_combined libpng ];
   }).override {
-    buildPhase = "make WITH_DYNAREC=${if stdenv.system == "x86_64-linux" then "x86_64" else "x86"}";
+    buildPhase = "make WITH_DYNAREC=${if stdenv.hostPlatform.system == "x86_64-linux" then "x86_64" else "x86"}";
   };
 
   picodrive = (mkLibRetroCore rec {

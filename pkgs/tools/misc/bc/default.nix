@@ -1,4 +1,6 @@
-{stdenv, autoreconfHook, buildPackages, fetchurl, flex, readline, ed, texinfo}:
+{ stdenv, autoreconfHook, buildPackages
+, fetchurl, flex, readline, ed, texinfo
+}:
 
 stdenv.mkDerivation rec {
   name = "bc-1.07.1";
@@ -19,7 +21,7 @@ stdenv.mkDerivation rec {
     # Libraries for build
     buildPackages.readline buildPackages.ncurses
   ];
-  buildInputs = [ readline ];
+  buildInputs = [ readline flex ];
 
   doCheck = true; # not cross
 
@@ -31,6 +33,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "GNU software calculator";
     homepage = http://www.gnu.org/software/bc/;
+    license = stdenv.lib.licenses.gpl3;
     platforms = stdenv.lib.platforms.all;
   };
 }

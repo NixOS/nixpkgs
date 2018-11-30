@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, gnutls, zlib }:
 
 stdenv.mkDerivation rec {
-  name = "librelp-1.2.16";
+  name = "librelp-1.2.18";
 
   src = fetchurl {
     url = "http://download.rsyslog.com/librelp/${name}.tar.gz";
-    sha256 = "0lzxc2ydjbbs50dalqp2s107ckp63arpk223cigasq0hl395s8qc";
+    sha256 = "0grrnxhazd9iirj07al524xykk0k33vs0dgnpajz5vpqig4qyk53";
   };
 
   nativeBuildInputs = [ pkgconfig ];

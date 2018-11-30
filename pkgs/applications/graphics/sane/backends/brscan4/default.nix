@@ -12,17 +12,17 @@ let
 in stdenv.mkDerivation rec {
   name = "brscan4-0.4.4-4";
   src = 
-    if stdenv.system == "i686-linux" then
+    if stdenv.hostPlatform.system == "i686-linux" then
       fetchurl {
         url = "http://download.brother.com/welcome/dlf006646/${name}.i386.deb";
         sha256 = "13mhjbzf9nvpdzrc2s98684r7likg76zxs1wlz2h8w59fsqgx4k2";
       }
-    else if stdenv.system == "x86_64-linux" then
+    else if stdenv.hostPlatform.system == "x86_64-linux" then
       fetchurl {
         url = "https://download.brother.com/welcome/dlf006645/${name}.amd64.deb";
         sha256 = "0xy5px96y1saq9l80vwvfn6anr2q42qlxdhm6ci2a0diwib5q9fd";
       }
-    else throw "${name} is not supported on ${stdenv.system} (only i686-linux and x86_64 linux are supported)";
+    else throw "${name} is not supported on ${stdenv.hostPlatform.system} (only i686-linux and x86_64 linux are supported)";
 
   unpackPhase = ''
     ar x $src

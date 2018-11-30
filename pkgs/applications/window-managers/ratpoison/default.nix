@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
        cripples Emacs and other quality pieces of software.
     '';
 
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = [ maintainers.AndersonTorres ];
   };
 }

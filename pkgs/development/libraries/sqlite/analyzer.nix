@@ -24,6 +24,7 @@ stdenv.mkDerivation rec {
     description = "A tool that shows statistics about SQLite databases";
     downloadPage = http://sqlite.org/download.html;
     homepage = http://www.sqlite.org;
+    license = licenses.publicDomain;
     maintainers = with maintainers; [ pesterhazy ];
     platforms = platforms.unix;
   };

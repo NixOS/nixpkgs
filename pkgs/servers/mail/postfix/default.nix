@@ -1,9 +1,9 @@
 { stdenv, lib, fetchurl, makeWrapper, gnused, db, openssl, cyrus_sasl, libnsl
 , coreutils, findutils, gnugrep, gawk, icu, pcre
+, withLDAP ? true, openldap
 , withPgSQL ? false, postgresql
 , withMySQL ? false, mysql
 , withSQLite ? false, sqlite
-, withLDAP ? false, openldap
 }:
 
 let
@@ -13,7 +13,7 @@ let
    ] ++ lib.optional withPgSQL "-DHAS_PGSQL"
      ++ lib.optionals withMySQL [ "-DHAS_MYSQL" "-I${mysql.connector-c}/include/mysql" "-L${mysql.connector-c}/lib/mysql" ]
      ++ lib.optional withSQLite "-DHAS_SQLITE"
-     ++ lib.optional withLDAP "-DHAS_LDAP");
+     ++ lib.optionals withLDAP ["-DHAS_LDAP" "-DUSE_LDAP_SASL"]);
    auxlibs = lib.concatStringsSep " " ([
      "-ldb" "-lnsl" "-lresolv" "-lsasl2" "-lcrypto" "-lssl"
    ] ++ lib.optional withPgSQL "-lpq"

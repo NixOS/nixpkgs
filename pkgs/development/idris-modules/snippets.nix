@@ -7,6 +7,7 @@ build-idris-package  {
   name = "snippets";
   version = "2018-03-17";
 
+  ipkgName = "idris-snippets";
   idrisDeps = [ contrib ];
 
   src = fetchFromGitHub {

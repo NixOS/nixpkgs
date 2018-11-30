@@ -1,11 +1,11 @@
 { stdenv, buildPythonPackage, fetchPypi }:
 buildPythonPackage rec {
   pname = "svg.path";
-  version = "2.2";
+  version = "3.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "08kp03i4yiqdkz7a7l7d7kzszahmhigrml2502zi1ybndrh7ayxw";
+    sha256 = "7b568f90f67fd25413c8da9f8bc9f9f8ab089425c20fa03330e97e77d13880ee";
   };
 
   meta = with stdenv.lib; {

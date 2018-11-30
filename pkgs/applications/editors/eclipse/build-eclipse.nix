@@ -2,7 +2,7 @@
 , zlib, jdk, glib, gtk3, libXtst, gsettings-desktop-schemas, webkitgtk
 , makeWrapper, ... }:
 
-{ name, src ? builtins.getAttr stdenv.system sources, sources ? null, description }:
+{ name, src ? builtins.getAttr stdenv.hostPlatform.system sources, sources ? null, description }:
 
 stdenv.mkDerivation rec {
   inherit name src;

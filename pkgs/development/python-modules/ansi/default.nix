@@ -1,4 +1,4 @@
-{ buildPythonPackage, fetchPypi }:
+{ lib, buildPythonPackage, fetchPypi }:
 
 buildPythonPackage rec {
   pname = "ansi";
@@ -12,4 +12,10 @@ buildPythonPackage rec {
   checkPhase = ''
     python -c "import ansi.color"
   '';
+
+  meta = with lib; {
+    description = "ANSI cursor movement and graphics";
+    homepage = https://github.com/tehmaze/ansi/;
+    license = licenses.mit;
+  };
 }

@@ -24,10 +24,11 @@ stdenv.mkDerivation  rec {
     ln -s libXinerama.so.1 $out/lib/libXinerama.so
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://xpra.org/;
     description = "fakeXinerama for Xpra";
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ tstrobel ];
+    platforms = platforms.linux;
+    maintainers = [ maintainers.tstrobel ];
+    license = licenses.gpl2;
   };
 }

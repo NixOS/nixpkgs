@@ -1,6 +1,13 @@
-{ system, minimal ? false, config ? {} }:
+{ system
+, pkgs ? import ../.. { inherit system config; }
+  # Use a minimal kernel?
+, minimal ? false
+  # Ignored
+, config ? null
+  # Modules to add to each VM
+, extraConfigurations ? [] }:
 
-with import ./build-vms.nix { inherit system minimal config; };
+with import ./build-vms.nix { inherit system pkgs minimal extraConfigurations; };
 with pkgs;
 
 let
@@ -69,7 +76,7 @@ in rec {
             mkdir -p $out/coverage-data
             mv $i $out/coverage-data/$(dirname $(dirname $i))
           done
-        ''; # */
+        '';
     };
 
 

@@ -1,14 +1,14 @@
-{ stdenv, fetchFromGitHub, pkgconfig, which, freetype, pango }:
+{ stdenv, fetchFromGitHub, pkgconfig, which, docutils, freetype, pango }:
 
 stdenv.mkDerivation rec {
   name = "abcm2ps-${version}";
-  version = "8.13.23";
+  version = "8.14.1";
 
   src = fetchFromGitHub {
     owner = "leesavide";
     repo = "abcm2ps";
     rev = "v${version}";
-    sha256 = "00bc4vsdvnyznfwcrkij02n2736nsbjlrh0rng96zv00p4abv4ad";
+    sha256 = "1i39wfrnjflhfbqhcphr9dw08q4si5i724wv423996whk5xni61l";
   };
 
   prePatch = ''
@@ -23,7 +23,9 @@ stdenv.mkDerivation rec {
     "CC=${stdenv.cc}/bin/cc"
   ];
 
-  buildInputs = [ which pkgconfig freetype pango ];
+  nativeBuildInputs = [ which pkgconfig docutils ];
+
+  buildInputs = [ freetype pango ];
 
   meta = with stdenv.lib; {
     homepage = http://moinejf.free.fr/;

@@ -1,22 +1,18 @@
-{ stdenv, fetchFromGitHub, python, pkgconfig, imagemagick }:
+{ stdenv, fetchFromGitHub, python, pkgconfig, imagemagick, wafHook }:
 
 stdenv.mkDerivation rec {
   name = "blockhash-${version}";
-  version = "0.3";
+  version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "commonsmachinery";
     repo = "blockhash";
     rev = "v${version}";
-    sha256 = "15iwljpkykn2711jhls7cwkb23gk6iawlvvk4prl972wic2wlxcj";
+    sha256 = "0m7ikppl42iicgmwsb7baajmag7v0p1ab06xckifvrr0zm21bq9p";
   };
 
-  nativeBuildInputs = [ python pkgconfig ];
+  nativeBuildInputs = [ python pkgconfig wafHook ];
   buildInputs = [ imagemagick ];
-
-  configurePhase = "python waf configure --prefix=$out";
-  buildPhase = "python waf";
-  installPhase = "python waf install";
 
   meta = with stdenv.lib; {
     homepage = "http://blockhash.io/";

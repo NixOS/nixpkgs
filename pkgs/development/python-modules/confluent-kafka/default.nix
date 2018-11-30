@@ -1,15 +1,15 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPy3k, rdkafka, requests, avro3k, avro}:
+{ stdenv, buildPythonPackage, fetchPypi, isPy3k, rdkafka, requests, avro3k, avro, futures}:
 
 buildPythonPackage rec {
-  version = "0.11.4";
+  version = "0.11.6";
   pname = "confluent-kafka";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8cf480199685127c9692b0bf1e15eac82e71ae34b7967a016ab31a318741abb1";
+    sha256 = "1dvzlafgr4g0n7382s5bgbls3f9wrgr0yxd70yyxl59wddwzfii7";
   };
 
-  buildInputs = [ rdkafka requests ] ++ (if isPy3k then [ avro3k ] else [ avro ]) ;
+  buildInputs = [ rdkafka requests ] ++ (if isPy3k then [ avro3k ] else [ avro futures ]) ;
 
   # Tests fail for python3 under this pypi release
   doCheck = if isPy3k then false else true;

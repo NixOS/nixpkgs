@@ -16,11 +16,18 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook pkgconfig python2 ];
   buildInputs = [ libX11 libXext glproto ];
 
+  postPatch = lib.optionalString stdenv.isDarwin ''
+    substituteInPlace src/GLX/Makefile.am \
+      --replace "-Wl,-Bsymbolic " ""
+    substituteInPlace src/EGL/Makefile.am \
+      --replace "-Wl,-Bsymbolic " ""
+  '';
+
   NIX_CFLAGS_COMPILE = [
     "-UDEFAULT_EGL_VENDOR_CONFIG_DIRS"
     # FHS paths are added so that non-NixOS applications can find vendor files.
     "-DDEFAULT_EGL_VENDOR_CONFIG_DIRS=\"${driverLink}/share/glvnd/egl_vendor.d:/etc/glvnd/egl_vendor.d:/usr/share/glvnd/egl_vendor.d\""
-  ];
+  ] ++ lib.optional stdenv.cc.isClang "-Wno-error";
 
   # Indirectly: https://bugs.freedesktop.org/show_bug.cgi?id=35268
   configureFlags  = stdenv.lib.optional stdenv.hostPlatform.isMusl "--disable-tls";
@@ -40,6 +47,6 @@ in stdenv.mkDerivation rec {
     description = "The GL Vendor-Neutral Dispatch library";
     homepage = https://github.com/NVIDIA/libglvnd;
     license = licenses.bsd2;
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

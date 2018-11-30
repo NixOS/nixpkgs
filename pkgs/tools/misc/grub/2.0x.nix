@@ -28,8 +28,8 @@ let
     "aarch64-linux".target = "arm64";
   };
 
-  canEfi = any (system: stdenv.system == system) (mapAttrsToList (name: _: name) efiSystemsBuild);
-  inPCSystems = any (system: stdenv.system == system) (mapAttrsToList (name: _: name) pcSystems);
+  canEfi = any (system: stdenv.hostPlatform.system == system) (mapAttrsToList (name: _: name) efiSystemsBuild);
+  inPCSystems = any (system: stdenv.hostPlatform.system == system) (mapAttrsToList (name: _: name) pcSystems);
 
   version = "2.02";
 
@@ -86,14 +86,14 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--enable-grub-mount" ] # dep of os-prober
     ++ optional zfsSupport "--enable-libzfs"
-    ++ optionals efiSupport [ "--with-platform=efi" "--target=${efiSystemsBuild.${stdenv.system}.target}" "--program-prefix=" ]
-    ++ optionals xenSupport [ "--with-platform=xen" "--target=${efiSystemsBuild.${stdenv.system}.target}"];
+    ++ optionals efiSupport [ "--with-platform=efi" "--target=${efiSystemsBuild.${stdenv.hostPlatform.system}.target}" "--program-prefix=" ]
+    ++ optionals xenSupport [ "--with-platform=xen" "--target=${efiSystemsBuild.${stdenv.hostPlatform.system}.target}"];
 
   # save target that grub is compiled for
   grubTarget = if efiSupport
-               then "${efiSystemsInstall.${stdenv.system}.target}-efi"
+               then "${efiSystemsInstall.${stdenv.hostPlatform.system}.target}-efi"
                else if inPCSystems
-                    then "${pcSystems.${stdenv.system}.target}-pc"
+                    then "${pcSystems.${stdenv.hostPlatform.system}.target}-pc"
                     else "";
 
   doCheck = false;

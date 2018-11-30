@@ -1,5 +1,4 @@
 { fetchurl, stdenv, ncurses
-, buildPlatform, hostPlatform
 }:
 
 stdenv.mkDerivation (rec {
@@ -59,6 +58,6 @@ stdenv.mkDerivation (rec {
 //
 
 # Don't run the native `strip' when cross-compiling.
-(if hostPlatform != buildPlatform
+(if stdenv.hostPlatform != stdenv.buildPlatform
  then { dontStrip = true; }
  else { }))

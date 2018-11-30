@@ -3,7 +3,7 @@
 , glog, google-gflags, gtest
 , protobuf, snappy
 , python, future, six, python-protobuf, numpy, pydot
-, eigen3
+, eigen
 , doxygen
 , useCuda ? (config.cudaSupport or false), cudatoolkit ? null
 , useCudnn ? (config.cudnnSupport or false), cudnn ? null
@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
   outputs = [ "bin" "out" ];
   propagatedBuildOutputs = [ ]; # otherwise propagates out -> bin cycle
 
-  buildInputs = [ glog google-gflags protobuf snappy eigen3 ]
+  buildInputs = [ glog google-gflags protobuf snappy eigen ]
     ++ lib.optional useCuda cudatoolkit
     ++ lib.optional useCudnn cudnn
     ++ lib.optional useOpenmp openmp
@@ -116,7 +116,7 @@ stdenv.mkDerivation rec {
     ${installExtraSrc cub}
     ${installExtraSrc pybind11}
     # XXX hack
-    export NIX_CFLAGS_COMPILE="-I ${eigen3}/include/eigen3/ $NIX_CFLAGS_COMPILE"
+    export NIX_CFLAGS_COMPILE="-I ${eigen}/include/eigen3/ $NIX_CFLAGS_COMPILE"
   '';
 
   postInstall = ''

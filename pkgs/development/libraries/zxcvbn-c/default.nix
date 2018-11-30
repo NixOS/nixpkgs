@@ -1,13 +1,13 @@
 { stdenv, fetchFromGitHub }:
 stdenv.mkDerivation rec {
   name = "zxcvbn-c-${version}";
-  version = "2.3";
+  version = "2.4";
 
   src = fetchFromGitHub {
     owner = "tsyrogit";
     repo = "zxcvbn-c";
     rev = "v${version}";
-    sha256 = "1m097b4qq1r3kk4b236pc3mpaj22il9fh43ifagad5wy54x8zf7b";
+    sha256 = "12ksdnpxlqlmg9zhyyk3bspcf0sfj5zk735vr4ry635qi7gzcaas";
   };
 
   installPhase = ''

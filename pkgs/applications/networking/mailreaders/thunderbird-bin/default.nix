@@ -47,7 +47,7 @@
 with (import ./release_sources.nix);
 
 let
-  arch = if stdenv.system == "i686-linux"
+  arch = if stdenv.hostPlatform.system == "i686-linux"
     then "linux-i686"
     else "linux-x86_64";
 

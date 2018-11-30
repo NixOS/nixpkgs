@@ -51,8 +51,6 @@ ___bt_setcur
 ___bt_split
 ___bt_sync
 ___buf_free
-___cVersionNumber
-___cVersionString
 ___call_hash
 ___cleanup
 ___cmp_D2A

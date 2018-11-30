@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   name = "gnu-pw-mgr-${version}";
-  version = "2.3.3";
+  version = "2.4.2";
   src = fetchurl {
     url = "http://ftp.gnu.org/gnu/gnu-pw-mgr/${name}.tar.xz";
-    sha256 = "04xh38j7l0sfnb01kp05xc908pvqfc0lph94k7n9bi46zy3qy7ma";
+    sha256 = "1yvdzc5w37qrjrkby5699ygj9bhkvgi3zk9k9jcjry1j6b7wdl17";
   };
 
   buildInputs = [ gnulib ];

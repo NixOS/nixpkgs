@@ -14,7 +14,6 @@ buildPythonPackage rec {
     sha256 = "1kp2iyx20lpc9dv4qg5fgwf83a1wx6f7hj1ldqyncg0kn9xcrhbg";
   };
 
-  # Required for tests only
   checkInputs = [ mock ];
 
   checkPhase = "${python.interpreter} -m unittest discover -s tests";

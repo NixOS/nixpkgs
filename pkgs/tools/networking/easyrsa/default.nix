@@ -35,6 +35,6 @@ in stdenv.mkDerivation rec {
     homepage = https://openvpn.net/;
     license = licenses.gpl2;
     maintainers = [ maintainers.offline ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

@@ -16,7 +16,8 @@ in
   ];
 
   assertions = lib.singleton {
-    assertion = pkgs.stdenv.system == "aarch64-linux";
+    assertion = pkgs.stdenv.hostPlatform.system == "aarch64-linux"
+      && pkgs.stdenv.hostPlatform.system == pkgs.stdenv.buildPlatform.system;
     message = "sd-image-aarch64.nix can be only built natively on Aarch64 / ARM64; " +
       "it cannot be cross compiled";
   };
@@ -32,9 +33,6 @@ in
   # - ttyAMA0: for QEMU's -machine virt
   # Also increase the amount of CMA to ensure the virtual console on the RPi3 works.
   boot.kernelParams = ["cma=32M" "console=ttyS0,115200n8" "console=ttyAMA0,115200n8" "console=tty0"];
-
-  # FIXME: this probably should be in installation-device.nix
-  users.users.root.initialHashedPassword = "";
 
   sdImage = {
     populateBootCommands = let

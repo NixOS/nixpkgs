@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "Pyphen";
-  version = "0.9.4";
+  version = "0.9.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1mqb5jrigxipxzp1d8nbwkq0cfjw77pnn6hc4mp1yd2mn059mymb";
+    sha256 = "3b633a50873156d777e1f1075ba4d8e96a6ad0a3ca42aa3ea9a6259f93f18921";
   };
 
   meta = with stdenv.lib; {

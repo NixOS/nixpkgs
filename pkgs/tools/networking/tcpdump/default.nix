@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libpcap }:
+{ stdenv, fetchurl, libpcap, perl }:
 
 stdenv.mkDerivation rec {
   name = "tcpdump-${version}";
@@ -15,6 +15,12 @@ stdenv.mkDerivation rec {
   #   rev = "${repo}-${version}";
   #   sha256 = "1vzrvn1q7x28h18yskqc390y357pzpg5xd3pzzj4xz3llnvsr64p";
   # };
+
+  postPatch = ''
+    patchShebangs tests
+  '';
+
+  checkInputs = [ perl ];
 
   buildInputs = [ libpcap ];
 

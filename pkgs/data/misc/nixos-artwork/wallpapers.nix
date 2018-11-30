@@ -23,16 +23,9 @@ let
 
 in
 
-{
+rec {
 
-  gnome-dark = mkNixBackground {
-    name = "gnome-dark-2015-02-27";
-    description = "Gnome Dark background for Nix";
-    src = fetchurl {
-      url = https://raw.githubusercontent.com/NixOS/nixos-artwork/7ece5356398db14b5513392be4b31f8aedbb85a2/gnome/Gnome_Dark.png;
-      sha256 = "0c7sl9k4zdjwvdz3nhlm8i4qv4cjr0qagalaa1a438jigixx27l7";
-    };
-  };
+  gnome-dark = simple-dark-gray-bottom;
 
   mosaic-blue = mkNixBackground {
     name = "mosaic-blue-2016-02-19";
@@ -58,6 +51,24 @@ in
     src = fetchurl {
       url = https://raw.githubusercontent.com/NixOS/nixos-artwork/766f10e0c93cb1236a85925a089d861b52ed2905/wallpapers/nix-wallpaper-simple-dark-gray.png;
       sha256 = "1282cnqc5qynp0q9gdll7bgpw23yp5bhvaqpar59ibkh3iscg8i5";
+    };
+  };
+
+  simple-dark-gray-bootloader = mkNixBackground {
+    name = "simple-dark-gray-bootloader-2018-08-28";
+    description = "Simple dark gray background for NixOS, specifically bootloaders.";
+    src = fetchurl {
+      url = https://raw.githubusercontent.com/NixOS/nixos-artwork/9d1f11f652ed5ffe460b6c602fbfe2e7e9a08dff/bootloader/nix-wallpaper-simple-dark-gray_bootloader.png;
+      sha256 = "0v26kfydn7alr81f2qpgsqdiq2zk7yrwlgibx2j7k91z9h47dpj9";
+    };
+  };
+
+  simple-dark-gray-bottom = mkNixBackground {
+    name = "simple-dark-gray-2018-08-28";
+    description = "Simple dark gray background for NixOS, specifically bootloaders and graphical login.";
+    src = fetchurl {
+      url = https://raw.githubusercontent.com/NixOS/nixos-artwork/783c38b22de09f6ee33aacc817470a4513392d83/wallpapers/nix-wallpaper-simple-dark-gray_bottom.png;
+      sha256 = "13hi4jwp5ga06dpdw5l03b4znwn58fdjlkqjkg824isqsxzv6k15";
     };
   };
 

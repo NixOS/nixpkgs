@@ -1,5 +1,5 @@
 { stdenv, buildGoPackage, fetchFromGitHub, go-bindata, libvirt, qemu
-, gpgme, makeWrapper, hostPlatform, vmnet, python
+, gpgme, makeWrapper, vmnet, python
 , docker-machine-kvm, docker-machine-kvm2
 , extraDrivers ? []
 }:
@@ -14,7 +14,9 @@ let
 in buildGoPackage rec {
   pname   = "minikube";
   name    = "${pname}-${version}";
-  version = "0.28.1";
+  version = "0.30.0";
+
+  kubernetesVersion = "1.11.2";
 
   goPackagePath = "k8s.io/minikube";
 
@@ -22,11 +24,11 @@ in buildGoPackage rec {
     owner  = "kubernetes";
     repo   = "minikube";
     rev    = "v${version}";
-    sha256 = "0c36rzsdzxf9q6l4hl506bsd4qwmw033i0k1xhqszv9agg7qjlmm";
+    sha256 = "02jxwh8qrvjn31rzjwx23908nd1i592drfdykxbc5b6a62fwp02z";
   };
 
-  buildInputs = [ go-bindata makeWrapper gpgme ] ++ stdenv.lib.optional hostPlatform.isDarwin vmnet;
-  subPackages = [ "cmd/minikube" ] ++ stdenv.lib.optional hostPlatform.isDarwin "cmd/drivers/hyperkit";
+  buildInputs = [ go-bindata makeWrapper gpgme ] ++ stdenv.lib.optional stdenv.hostPlatform.isDarwin vmnet;
+  subPackages = [ "cmd/minikube" ] ++ stdenv.lib.optional stdenv.hostPlatform.isDarwin "cmd/drivers/hyperkit";
 
   preBuild = ''
     pushd go/src/${goPackagePath} >/dev/null
@@ -35,7 +37,7 @@ in buildGoPackage rec {
 
     ISO_VERSION=$(grep "^ISO_VERSION" Makefile | sed "s/^.*\s//")
     ISO_BUCKET=$(grep "^ISO_BUCKET" Makefile | sed "s/^.*\s//")
-    KUBERNETES_VERSION=$(${python}/bin/python hack/get_k8s_version.py --k8s-version-only 2>&1) || true
+    KUBERNETES_VERSION=${kubernetesVersion}
 
     export buildFlagsArray="-ldflags=\
       -X k8s.io/minikube/pkg/version.version=v${version} \
@@ -56,7 +58,7 @@ in buildGoPackage rec {
 
   postFixup = ''
     wrapProgram $bin/bin/${pname} --prefix PATH : $bin/bin:${stdenv.lib.makeBinPath binPath}
-  '' + stdenv.lib.optionalString hostPlatform.isDarwin ''
+  '' + stdenv.lib.optionalString stdenv.hostPlatform.isDarwin ''
     mv $bin/bin/hyperkit $bin/bin/docker-machine-driver-hyperkit
   '';
 

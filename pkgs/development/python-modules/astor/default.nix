@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "astor";
-  version = "0.6.2";
+  version = "0.7.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ff6d2e2962d834acb125cc4dcc80c54a8c17c253f4cc9d9c43b5102a560bb75d";
+    sha256 = "95c30d87a6c2cf89aa628b87398466840f0ad8652f88eb173125a6df8533fb8d";
   };
 
   # disable tests broken with python3.6: https://github.com/berkerpeksag/astor/issues/89

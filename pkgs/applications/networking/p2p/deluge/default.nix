@@ -18,7 +18,8 @@ pythonPackages.buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = with pythonPackages; [
-    pyGtkGlade libtorrentRasterbar twisted Mako chardet pyxdg pyopenssl service-identity
+    pyGtkGlade twisted Mako chardet pyxdg pyopenssl service-identity
+    libtorrentRasterbar.dev libtorrentRasterbar.python
   ];
 
   nativeBuildInputs = [ intltool ];

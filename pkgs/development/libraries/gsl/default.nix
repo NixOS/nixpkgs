@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   ];
 
   # https://lists.gnu.org/archive/html/bug-gsl/2015-11/msg00012.html
-  doCheck = stdenv.system != "i686-linux" && stdenv.system != "aarch64-linux";
+  doCheck = stdenv.hostPlatform.system != "i686-linux" && stdenv.hostPlatform.system != "aarch64-linux";
 
   meta = {
     description = "The GNU Scientific Library, a large numerical library";

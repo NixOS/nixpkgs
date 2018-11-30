@@ -4,11 +4,11 @@
 
 buildPythonPackage rec {
   pname = "pygame";
-  version = "1.9.3";
+  version = "1.9.4";
 
   src = fetchurl {
     url = "mirror://pypi/p/pygame/pygame-${version}.tar.gz";
-    sha256 = "1hlydiyygl444bq5m5g8n3jsxsgrdyxlm42ipmfbw36wkf0j243m";
+    sha256 = "700d1781c999af25d11bfd1f3e158ebb660f72ebccb2040ecafe5069d0b2c0b6";
   };
 
   buildInputs = [

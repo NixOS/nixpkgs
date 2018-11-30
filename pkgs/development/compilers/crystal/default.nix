@@ -1,93 +1,142 @@
-{ stdenv, fetchurl, makeWrapper
-, boehmgc, libatomic_ops, pcre, libevent, libiconv, llvm, clang }:
+{ stdenv, lib, fetchFromGitHub, fetchurl, makeWrapper
+, gmp, openssl, readline, tzdata, libxml2, libyaml
+, boehmgc, libatomic_ops, pcre, libevent, libiconv, llvm, clang, which, zlib }:
 
-stdenv.mkDerivation rec {
-  name = "crystal-${version}";
-  version = "0.25.0";
+let
+  binaryVersion = "0.26.0";
+  releaseDate = "2018-08-29";
 
-  src = fetchurl {
-    url = "https://github.com/crystal-lang/crystal/archive/${version}.tar.gz";
-    sha256 = "1pnx21ky6cqfyv6df4mmjnyd1yh1bvcqkdzq6f0mk0yrkcl57k3q";
-  };
-
-  prebuiltName = "crystal-0.25.0-1";
-  prebuiltSrc = let arch = {
-    "x86_64-linux" = "linux-x86_64";
-    "i686-linux" = "linux-i686";
+  arch = {
+    "x86_64-linux"  = "linux-x86_64";
+    "i686-linux"    = "linux-i686";
     "x86_64-darwin" = "darwin-x86_64";
   }."${stdenv.system}" or (throw "system ${stdenv.system} not supported");
-  in fetchurl {
-    url = "https://github.com/crystal-lang/crystal/releases/download/0.25.0/${prebuiltName}-${arch}.tar.gz";
-    sha256 = {
-      "x86_64-linux" = "1q006086pbbvhmscbjzzgbdq1jkppd4p4kl9z9fn9j6np8fhi8ms";
-      "i686-linux" = "074ndm9n0mzsa7dkl3chhf234l85msm99yjksa5980lyqynyrw1d";
-      "x86_64-darwin" = "006f2j5984dkp5lsq8kns5mkxbhj50syjvzqk9z931pxl92wc7iy";
-    }."${stdenv.system}";
+
+  checkInputs = [ gmp openssl readline libxml2 libyaml tzdata ];
+
+  # we could turn this into a function instead in case we cannot use the same
+  # binary to build multiple versions
+  binary = stdenv.mkDerivation rec {
+    name = "crystal-binary-${binaryVersion}";
+
+    src = fetchurl {
+      url = "https://github.com/crystal-lang/crystal/releases/download/${binaryVersion}/crystal-${binaryVersion}-1-${arch}.tar.gz";
+      sha256 = {
+        "x86_64-linux"  = "1xban102yiiwmlklxvn3xp3q546bp8hlxxpakayajkhhnpl6yv45";
+        "i686-linux"    = "1igspf1lrv7wpmz0pfrkbx8m1ykvnv4zhic53cav4nicppm2v0ic";
+        "x86_64-darwin" = "0hzc65ccajr0yhmvi5vbdgbzbp1gbjy56da24ds3zwwkam1ddk0k";
+      }."${stdenv.system}";
+    };
+
+    buildCommand = ''
+      mkdir -p $out
+      tar --strip-components=1 -C $out -xf ${src}
+    '';
   };
 
-  unpackPhase = ''
-    mkdir ${prebuiltName}
-    tar --strip-components=1 -C ${prebuiltName} -xf ${prebuiltSrc}
-    tar xf ${src}
-  '';
+  generic = { version, sha256, doCheck ? true }:
+  stdenv.mkDerivation rec {
+    inherit doCheck;
+    name = "crystal-${version}";
 
-  # crystal on Darwin needs libiconv to build
-  libs = [
-    boehmgc libatomic_ops pcre libevent
-  ] ++ stdenv.lib.optionals stdenv.isDarwin [
-    libiconv
-  ];
+    src = fetchFromGitHub {
+      owner  = "crystal-lang";
+      repo   = "crystal";
+      rev    = version;
+      inherit sha256;
+    };
 
-  nativeBuildInputs = [ makeWrapper ];
+    # the first bit can go when https://github.com/crystal-lang/crystal/pull/6788 is merged
+    postPatch = ''
+      substituteInPlace src/compiler/crystal/config.cr \
+        --replace '{{ `date "+%Y-%m-%d"`.stringify.chomp }}' '"${releaseDate}"'
+      ln -s spec/compiler spec/std
+      substituteInPlace spec/std/process_spec.cr \
+        --replace /bin/ /run/current-system/sw/bin
+    '';
 
-  buildInputs = libs ++ [ llvm ];
+    buildInputs = [
+      boehmgc libatomic_ops pcre libevent
+      llvm zlib openssl
+    ] ++ stdenv.lib.optionals stdenv.isDarwin [
+      libiconv
+    ];
 
-  libPath = stdenv.lib.makeLibraryPath libs;
+    nativeBuildInputs = [ binary makeWrapper which ];
 
-  sourceRoot = "${name}";
 
-  preBuild = ''
-    patchShebangs bin/crystal
-    patchShebangs ../${prebuiltName}/bin/crystal
-    export PATH="$(pwd)/../${prebuiltName}/bin:$PATH"
-  '';
+    makeFlags = [
+      "CRYSTAL_CONFIG_BUILD_DATE=${releaseDate}"
+      "CRYSTAL_CONFIG_VERSION=${version}"
+    ];
 
-  makeFlags = [ "CRYSTAL_CONFIG_VERSION=${version}"
-                "FLAGS=--no-debug"
-                "release=1"
-                "all" "docs"
-              ];
+    buildFlags = [
+      "all" "docs"
+    ];
 
-  installPhase = ''
-    install -Dm755 .build/crystal $out/bin/crystal
-    wrapProgram $out/bin/crystal \
-        --suffix PATH : ${clang}/bin \
-        --suffix CRYSTAL_PATH : lib:$out/lib/crystal \
-        --suffix LIBRARY_PATH : $libPath
-    install -dm755 $out/lib/crystal
-    cp -r src/* $out/lib/crystal/
+    FLAGS = [
+      "--release"
+      "--single-module" # needed for deterministic builds
+    ];
 
-    install -dm755 $out/share/doc/crystal/api
-    cp -r docs/* $out/share/doc/crystal/api/
-    cp -r samples $out/share/doc/crystal/
+    # We *have* to add `which` to the PATH or crystal is unable to build stuff
+    # later if which is not available.
+    installPhase = ''
+      runHook preInstall
 
-    install -Dm644 etc/completion.bash $out/share/bash-completion/completions/crystal
-    install -Dm644 etc/completion.zsh $out/share/zsh/site-functions/_crystal
+      install -Dm755 .build/crystal $out/bin/crystal
+      wrapProgram $out/bin/crystal \
+          --suffix PATH : ${lib.makeBinPath [ clang which ]} \
+          --suffix CRYSTAL_PATH : lib:$out/lib/crystal \
+          --suffix LIBRARY_PATH : ${lib.makeLibraryPath buildInputs}
+      install -dm755 $out/lib/crystal
+      cp -r src/* $out/lib/crystal/
 
-    install -Dm644 man/crystal.1 $out/share/man/man1/crystal.1
+      install -dm755 $out/share/doc/crystal/api
+      cp -r docs/* $out/share/doc/crystal/api/
+      cp -r samples $out/share/doc/crystal/
 
-    install -Dm644 LICENSE $out/share/licenses/crystal/LICENSE
-  '';
+      install -Dm644 etc/completion.bash $out/share/bash-completion/completions/crystal
+      install -Dm644 etc/completion.zsh $out/share/zsh/site-functions/_crystal
 
-  dontStrip = true;
+      install -Dm644 man/crystal.1 $out/share/man/man1/crystal.1
 
-  enableParallelBuilding = false;
+      install -Dm644 -t $out/share/licenses/crystal LICENSE README.md
 
-  meta = {
-    description = "A compiled language with Ruby like syntax and type inference";
-    homepage = https://crystal-lang.org/;
-    license = stdenv.lib.licenses.asl20;
-    maintainers = with stdenv.lib.maintainers; [ sifmelcara david50407 ];
-    platforms = [ "x86_64-linux" "i686-linux" "x86_64-darwin" ];
+      runHook postInstall
+    '';
+
+    enableParallelBuilding = true;
+
+    dontStrip = true;
+
+    checkTarget = "spec";
+
+    preCheck = ''
+      export LIBRARY_PATH=${lib.makeLibraryPath checkInputs}:$LIBRARY_PATH
+    '';
+
+    meta = with lib; {
+      description = "A compiled language with Ruby like syntax and type inference";
+      homepage = https://crystal-lang.org/;
+      license = licenses.asl20;
+      maintainers = with maintainers; [ manveru david50407 peterhoeg ];
+      platforms = [ "x86_64-linux" "i686-linux" "x86_64-darwin" ];
+    };
   };
+
+in rec {
+  crystal_0_25 = generic {
+    version = "0.25.1";
+    sha256  = "15xmbkalsdk9qpc6wfpkly3sifgw6a4ai5jzlv78dh3jp7glmgyl";
+    doCheck = false;
+  };
+
+  crystal_0_26 = generic {
+    version = "0.26.1";
+    sha256  = "0jwxrqm99zcjj82gyl6bzvnfj79nwzqf8sa1q3f66q9p50v44f84";
+    doCheck = false; # about 20 tests out of more than 14000 are failing
+  };
+
+  crystal = crystal_0_26;
 }

@@ -1,0 +1,30 @@
+--- a/data/Makefile.am
++++ b/data/Makefile.am
+@@ -22,7 +22,7 @@
+ 	             echo 'if [ -z $$XDG_CURRENT_DESKTOP ]; then' && \
+ 	             echo '  export XDG_CURRENT_DESKTOP="GNOME-Flashback:GNOME"' && \
+ 	             echo 'fi' && echo '' && \
+-	             echo 'exec gnome-session --session=gnome-flashback-compiz "$$@"') > $@
++	             echo 'exec @gnomeSession@/bin/gnome-session --session=gnome-flashback-compiz "$$@"') > $@
+ 	$(AM_V_at) chmod a+x $@
+ 
+ gnome-flashback-metacity: Makefile
+@@ -30,7 +30,7 @@
+ 	             echo 'if [ -z $$XDG_CURRENT_DESKTOP ]; then' && \
+ 	             echo '  export XDG_CURRENT_DESKTOP="GNOME-Flashback:GNOME"' && \
+ 	             echo 'fi' && echo '' && \
+-	             echo 'exec gnome-session --session=gnome-flashback-metacity --disable-acceleration-check "$$@"') > $@
++	             echo 'exec @gnomeSession@/bin/gnome-session --session=gnome-flashback-metacity --disable-acceleration-check "$$@"') > $@
+ 	$(AM_V_at) chmod a+x $@
+ 
+ CLEANFILES = \
+--- a/data/xsessions/gnome-flashback-metacity.desktop.in.in
++++ b/data/xsessions/gnome-flashback-metacity.desktop.in.in
+@@ -2,6 +2,6 @@
+ Name=GNOME Flashback (Metacity)
+ Comment=This session logs you into GNOME Flashback with Metacity
+ Exec=@libexecdir@/gnome-flashback-metacity
+-TryExec=metacity
++TryExec=@metacity@/bin/metacity
+ Type=Application
+ DesktopNames=GNOME-Flashback;GNOME;

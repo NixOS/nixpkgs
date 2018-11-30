@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ SDL lua fftwFloat zlib bzip2 ];
 
-  buildPhase = "scons DESTDIR=$out/bin --tool='' -j$NIX_BUILD_CORES";
+  sconsFlags = "--tool=";
 
   installPhase = ''
     install -Dm 755 build/powder* "$out/bin/powder"

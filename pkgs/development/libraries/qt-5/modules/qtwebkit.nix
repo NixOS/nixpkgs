@@ -1,12 +1,10 @@
 { qtModule, stdenv, lib, fetchurl
-, qtbase, qtdeclarative, qtlocation, qtsensors, qtwebchannel
+, qtbase, qtdeclarative, qtlocation, qtmultimedia, qtsensors, qtwebchannel
 , fontconfig, gdk_pixbuf, gtk2, libwebp, libxml2, libxslt
 , sqlite, systemd, glib, gst_all_1, cmake
 , bison2, flex, gdb, gperf, perl, pkgconfig, python2, ruby
 , darwin
 , flashplayerFix ? false
-, src ? null
-, version ? null
 }:
 
 let
@@ -17,23 +15,25 @@ let
       url = "http://dev-www.libreoffice.org/src/5ade6ae2a99bc1e9e57031ca88d36dad-${name}.tar.gz";
       sha256 = "304636d4eccd81a14b6914d07b84c79ebb815288c76fe027b9ebff6ff24d5705";
     };
+    postPatch = ''
+      patchShebangs tests
+    '';
     buildInputs = [ perl ];
   };
 in
 qtModule {
   name = "qtwebkit";
-  qtInputs = [ qtbase qtdeclarative qtlocation qtsensors ] ++ optionals (lib.versionAtLeast qtbase.version "5.11.0") [ qtwebchannel ];
+  qtInputs = [ qtbase qtdeclarative qtlocation qtsensors ]
+    ++ optional (stdenv.isDarwin && lib.versionAtLeast qtbase.version "5.9.0") qtmultimedia
+    ++ optional (lib.versionAtLeast qtbase.version "5.11.0") qtwebchannel;
   buildInputs = [ fontconfig libwebp libxml2 libxslt sqlite glib gst_all_1.gstreamer gst_all_1.gst-plugins-base ]
-    ++ optionals (stdenv.isDarwin) (with darwin.apple_sdk.frameworks; [ OpenGL ])
+    ++ optionals (stdenv.isDarwin) (with darwin; with apple_sdk.frameworks; [ cf-private OpenGL ])
     ++ optionals (lib.versionAtLeast qtbase.version "5.11.0") [ hyphen ];
   nativeBuildInputs = [
     bison2 flex gdb gperf perl pkgconfig python2 ruby
   ] ++ optionals (lib.versionAtLeast qtbase.version "5.11.0") [ cmake ];
 
   cmakeFlags = optionals (lib.versionAtLeast qtbase.version "5.11.0") [ "-DPORT=Qt" ];
-
-  inherit src;
-  inherit version;
 
   __impureHostDeps = optionals (stdenv.isDarwin) [
     "/usr/lib/libicucore.dylib"
@@ -59,6 +59,8 @@ qtModule {
         ''-DNIXPKGS_LIBGDK2="${getLib gdk_pixbuf}/lib/libgdk-x11-2.0"''
       ]
     ++ optional (!stdenv.isDarwin) ''-DNIXPKGS_LIBUDEV="${getLib systemd}/lib/libudev"'';
+
+  doCheck = false; # fails 13 out of 13 tests (ctest)
 
   # Hack to avoid TMPDIR in RPATHs.
   preFixup = ''rm -rf "$(pwd)" && mkdir "$(pwd)" '';

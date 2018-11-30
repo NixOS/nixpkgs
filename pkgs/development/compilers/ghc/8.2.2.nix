@@ -1,14 +1,13 @@
 { stdenv, targetPackages
-, buildPlatform, hostPlatform, targetPlatform
 
 # build-tools
-, bootPkgs, alex, happy, hscolour
+, bootPkgs
 , autoconf, autoreconfHook, automake, coreutils, fetchurl, fetchpatch, perl, python3, sphinx
 , runCommand
 
 , libiconv ? null, ncurses
 
-, useLLVM ? !targetPlatform.isx86 || (targetPlatform.isMusl && hostPlatform != targetPlatform)
+, useLLVM ? !stdenv.targetPlatform.isx86 || (stdenv.targetPlatform.isMusl && stdenv.hostPlatform != stdenv.targetPlatform)
 , # LLVM is conceptually a run-time-only depedendency, but for
   # non-x86, we need LLVM to bootstrap later stages, so it becomes a
   # build-time dependency too.
@@ -16,18 +15,18 @@
 
 , # If enabled, GHC will be built with the GPL-free but slower integer-simple
   # library instead of the faster but GPLed integer-gmp library.
-  enableIntegerSimple ? !(gmp.meta.available or false), gmp
+  enableIntegerSimple ? !(stdenv.lib.any (stdenv.lib.meta.platformMatch stdenv.hostPlatform) gmp.meta.platforms), gmp
 
 , # If enabled, use -fPIC when compiling static libs.
-  enableRelocatedStaticLibs ? targetPlatform != hostPlatform
+  enableRelocatedStaticLibs ? stdenv.targetPlatform != stdenv.hostPlatform
 
 , # Whether to build dynamic libs for the standard library (on the target
   # platform). Static libs are always built.
-  enableShared ? true
+  enableShared ? !stdenv.targetPlatform.useiOSPrebuilt
 
 , # What flavour to build. An empty string indicates no
   # specific flavour and falls back to ghc default values.
-  ghcFlavour ? stdenv.lib.optionalString (targetPlatform != hostPlatform) "perf-cross"
+  ghcFlavour ? stdenv.lib.optionalString (stdenv.targetPlatform != stdenv.hostPlatform) "perf-cross"
 , # Whether to backport https://phabricator.haskell.org/D4388 for
   # deterministic profiling symbol names, at the cost of a slightly
   # non-standard GHC API
@@ -37,6 +36,8 @@
 assert !enableIntegerSimple -> gmp != null;
 
 let
+  inherit (stdenv) buildPlatform hostPlatform targetPlatform;
+
   inherit (bootPkgs) ghc;
 
   # TODO(@Ericson2314) Make unconditional
@@ -78,7 +79,7 @@ let
   targetCC = builtins.head toolsForTarget;
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (rec {
   version = "8.2.2";
   name = "${targetPrefix}ghc-${version}";
 
@@ -97,6 +98,35 @@ stdenv.mkDerivation rec {
       sha256 = "03253ci40np1v6k0wmi4aypj3nmj3rdyvb1k6rwqipb30nfc719f";
     })
     (import ./abi-depends-determinism.nix { inherit fetchpatch runCommand; })
+  ] ++ stdenv.lib.optionals (hostPlatform != targetPlatform) [
+    # Cherry-pick a few commits from newer hsc2hs so that proper binary is
+    # installed -- stage 2 normally but stage 1 with cross.
+    #
+    # TODO make unconditional next mass rebuild.
+    (fetchpatch {
+      url = "https://git.haskell.org/hsc2hs.git/patch/ecdac062b5cf1d284906487849c56f4e149b3c8e";
+      sha256 = "1gagswi26j50z44sdx0mk1sb3wr0nrqyaph9j724zp6iwqslxyzm";
+      extraPrefix = "utils/hsc2hs/";
+      stripLen = 1;
+    })
+    (fetchpatch {
+      url = "https://git.haskell.org/hsc2hs.git/patch/598303cbffcd230635fbce28ce4105d177fdf76a";
+      sha256 = "0hqcg434qbh1bz1pk85cap2q4v9i8bs6x65yzq4spz6xk3zq6af7";
+      extraPrefix = "utils/hsc2hs/";
+      stripLen = 1;
+    })
+    (fetchpatch {
+      url = "https://git.haskell.org/hsc2hs.git/patch/9483ad10064fbbb97ab525280623826b1ef63959";
+      sha256 = "1cpfdhfc0cz9xkjzkcgwx4fbyj96dkmd04wpwi1vji7fahw8kmf3";
+      extraPrefix = "utils/hsc2hs/";
+      stripLen = 1;
+    })
+    (fetchpatch {
+      url = "https://git.haskell.org/hsc2hs.git/patch/738f3666c878ee9e79c3d5e819ef8b3460288edf";
+      sha256 = "0plzsbfaq6vb1023lsarrjglwgr9chld4q3m99rcfzx0yx5mibp3";
+      extraPrefix = "utils/hsc2hs/";
+      stripLen = 1;
+    })
   ] ++ stdenv.lib.optionals (hostPlatform != targetPlatform && targetPlatform.system == hostPlatform.system) [
     (fetchpatch {
       url = "https://raw.githubusercontent.com/gentoo/gentoo/08a41d2dff99645af6ac5a7bb4774f5f193b6f20/dev-lang/ghc/files/ghc-8.2.1_rc1-unphased-cross.patch";
@@ -181,13 +211,13 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     autoconf autoreconfHook automake perl python3 sphinx
-    ghc alex happy hscolour
+    ghc bootPkgs.alex bootPkgs.happy bootPkgs.hscolour
   ];
 
   # For building runtime libs
   depsBuildTarget = toolsForTarget;
 
-  buildInputs = libDeps hostPlatform;
+  buildInputs = [ perl ] ++ (libDeps hostPlatform);
 
   propagatedBuildInputs = [ targetPackages.stdenv.cc ]
     ++ stdenv.lib.optional useLLVM llvmPackages.llvm;
@@ -202,7 +232,7 @@ stdenv.mkDerivation rec {
   checkTarget = "test";
   doCheck = false; # fails with "testsuite/tests: No such file or directory.  Stop."
 
-  hardeningDisable = [ "format" ];
+  hardeningDisable = [ "format" ] ++ stdenv.lib.optional stdenv.targetPlatform.isMusl "pie";
 
   postInstall = ''
     for bin in "$out"/lib/${name}/bin/*; do
@@ -238,4 +268,8 @@ stdenv.mkDerivation rec {
     inherit (ghc.meta) license platforms;
   };
 
-}
+} // stdenv.lib.optionalAttrs targetPlatform.useAndroidPrebuilt {
+  dontStrip = true;
+  dontPatchELF = true;
+  noAuditTmpdir = true;
+})

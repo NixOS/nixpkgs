@@ -67,5 +67,6 @@ stdenv.mkDerivation (rec {
     downloadPage = "http://dist.schmorp.de/rxvt-unicode/Attic/";
     maintainers = [ ];
     platforms = platforms.unix;
+    license = licenses.gpl3;
   };
 })

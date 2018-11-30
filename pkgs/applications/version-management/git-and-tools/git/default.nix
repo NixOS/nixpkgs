@@ -20,7 +20,7 @@ assert sendEmailSupport -> perlSupport;
 assert svnSupport -> perlSupport;
 
 let
-  version = "2.18.0";
+  version = "2.19.1";
   svn = subversionClient.override { perlBindings = perlSupport; };
 in
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://www.kernel.org/pub/software/scm/git/git-${version}.tar.xz";
-    sha256 = "14hfwfkrci829a9316hnvkglnqqw1p03cw9k56p4fcb078wbwh4b";
+    sha256 = "1dfv43lmdnxz42504jc89sihbv1d4d6kgqcz3c5ji140kfm5cl1l";
   };
 
   outputs = [ "out" ] ++ stdenv.lib.optional perlSupport "gitweb";
@@ -283,7 +283,7 @@ EOF
 
     # XXX: I failed to understand why this one fails.
     # Could someone try to re-enable it on the next release ?
-    # Tested to fail: 2.18.0
+    # Tested to fail: 2.18.0 and 2.19.0
     disable_test t1700-split-index "null sha1"
 
     # Tested to fail: 2.18.0
@@ -292,6 +292,9 @@ EOF
 
     # Tested to fail: 2.18.0
     disable_test t9902-completion "sourcing the completion script clears cached --options"
+
+    # As of 2.19.0, t5562 refers to #!/usr/bin/perl
+    patchShebangs t/t5562/invoke-with-content-length.pl
   '' + stdenv.lib.optionalString stdenv.hostPlatform.isMusl ''
     # Test fails (as of 2.17.0, musl 1.1.19)
     disable_test t3900-i18n-commit
@@ -299,6 +302,8 @@ EOF
     # Tested to fail: 2.18.0
     disable_test t0028-working-tree-encoding
   '';
+
+  stripDebugList = [ "lib" "libexec" "bin" "share/git/contrib/credential/libsecret" ];
 
 
   meta = {

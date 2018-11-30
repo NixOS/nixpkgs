@@ -1,15 +1,24 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, utillinux}:
 
 stdenv.mkDerivation rec {
-  version = "5.53";
+  version = "6.33";
   name = "profile-sync-daemon-${version}";
 
   src = fetchurl {
     url = "http://github.com/graysky2/profile-sync-daemon/archive/v${version}.tar.gz";
-    sha256 = "0m7h9l7dndqgb5k3grpc00f6dpg73p6h4q5sgkf8bvyzvcbdafwx";
+    sha256 = "0dzs51xbszzmcg82n2dil6nljj4gn0aw9rqjmhyi4a5frc8g6xmb";
   };
 
-  installPhase = "PREFIX=\"\" DESTDIR=$out make install-systemd-all";
+  installPhase = ''
+    PREFIX=\"\" DESTDIR=$out make install
+    substituteInPlace $out/bin/profile-sync-daemon \
+      --replace "/usr/" "$out/" \
+      --replace "sudo " "/run/wrappers/bin/sudo "
+    # $HOME detection fails (and is unnecessary)
+    sed -i '/^HOME/d' $out/bin/profile-sync-daemon
+    substituteInPlace $out/bin/psd-overlay-helper \
+      --replace "PATH=/usr/bin:/bin" "PATH=${utillinux.bin}/bin"
+  '';
 
   preferLocalBuild = true;
 

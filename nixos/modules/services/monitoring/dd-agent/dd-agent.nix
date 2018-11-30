@@ -114,13 +114,22 @@ let
 in {
   options.services.dd-agent = {
     enable = mkOption {
-      description = "Whether to enable the dd-agent montioring service";
+      description = ''
+        Whether to enable the dd-agent v5 monitoring service.
+        For datadog-agent v6, see <option>services.datadog-agent.enable</option>.
+      '';
       default = false;
       type = types.bool;
     };
 
     api_key = mkOption {
-      description = "The Datadog API key to associate the agent with your account";
+      description = ''
+        The Datadog API key to associate the agent with your account.
+
+        Warning: this key is stored in cleartext within the world-readable
+        Nix store! Consider using the new v6
+        <option>services.datadog-agent</option> module instead.
+      '';
       example = "ae0aa6a8f08efa988ba0a17578f009ab";
       type = types.str;
     };
@@ -188,48 +197,41 @@ in {
 
     users.groups.datadog.gid = config.ids.gids.datadog;
 
-    systemd.services.dd-agent = {
-      description = "Datadog agent monitor";
-      path = [ pkgs."dd-agent" pkgs.python pkgs.sysstat pkgs.procps pkgs.gohai ];
-      wantedBy = [ "multi-user.target" ];
-      serviceConfig = {
-        ExecStart = "${pkgs.dd-agent}/bin/dd-agent foreground";
-        User = "datadog";
-        Group = "datadog";
-        Restart = "always";
-        RestartSec = 2;
+    systemd.services = let
+      makeService = attrs: recursiveUpdate {
+        path = [ pkgs.dd-agent pkgs.python pkgs.sysstat pkgs.procps pkgs.gohai ];
+        wantedBy = [ "multi-user.target" ];
+        serviceConfig = {
+          User = "datadog";
+          Group = "datadog";
+          Restart = "always";
+          RestartSec = 2;
+          PrivateTmp = true;
+        };
+        restartTriggers = [ pkgs.dd-agent ddConf diskConfig networkConfig postgresqlConfig nginxConfig mongoConfig jmxConfig processConfig ];
+      } attrs;
+    in {
+      dd-agent = makeService {
+        description = "Datadog agent monitor";
+        serviceConfig.ExecStart = "${pkgs.dd-agent}/bin/dd-agent foreground";
       };
-      restartTriggers = [ pkgs.dd-agent ddConf diskConfig networkConfig postgresqlConfig nginxConfig mongoConfig jmxConfig processConfig ];
-    };
 
-    systemd.services.dogstatsd = {
-      description = "Datadog statsd";
-      path = [ pkgs."dd-agent" pkgs.python pkgs.procps ];
-      wantedBy = [ "multi-user.target" ];
-      serviceConfig = {
-        ExecStart = "${pkgs.dd-agent}/bin/dogstatsd start";
-        User = "datadog";
-        Group = "datadog";
-        Type = "forking";
-        PIDFile = "/tmp/dogstatsd.pid";
-        Restart = "always";
-        RestartSec = 2;
+      dogstatsd = makeService {
+        description = "Datadog statsd";
+        environment.TMPDIR = "/run/dogstatsd";
+        serviceConfig = {
+          ExecStart = "${pkgs.dd-agent}/bin/dogstatsd start";
+          Type = "forking";
+          PIDFile = "/run/dogstatsd/dogstatsd.pid";
+          RuntimeDirectory = "dogstatsd";
+        };
       };
-      restartTriggers = [ pkgs.dd-agent ddConf diskConfig networkConfig postgresqlConfig nginxConfig mongoConfig jmxConfig processConfig ];
-    };
 
-    systemd.services.dd-jmxfetch = lib.mkIf (cfg.jmxConfig != null) {
-      description = "Datadog JMX Fetcher";
-      path = [ pkgs."dd-agent" pkgs.python pkgs.sysstat pkgs.procps pkgs.jdk ];
-      wantedBy = [ "multi-user.target" ];
-      serviceConfig = {
-        ExecStart = "${pkgs.dd-agent}/bin/dd-jmxfetch";
-        User = "datadog";
-        Group = "datadog";
-        Restart = "always";
-        RestartSec = 2;
+      dd-jmxfetch = lib.mkIf (cfg.jmxConfig != null) {
+        description = "Datadog JMX Fetcher";
+        path = [ pkgs.dd-agent pkgs.python pkgs.sysstat pkgs.procps pkgs.jdk ];
+        serviceConfig.ExecStart = "${pkgs.dd-agent}/bin/dd-jmxfetch";
       };
-      restartTriggers = [ pkgs.dd-agent ddConf diskConfig networkConfig postgresqlConfig nginxConfig mongoConfig jmxConfig ];
     };
 
     environment.etc = etcfiles;

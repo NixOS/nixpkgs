@@ -394,7 +394,7 @@ in rec {
         Each attribute in this set specifies an option in the
         <literal>[Timer]</literal> section of the unit.  See
         <citerefentry><refentrytitle>systemd.timer</refentrytitle>
-        <manvolnum>7</manvolnum></citerefentry> and
+        <manvolnum>5</manvolnum></citerefentry> and
         <citerefentry><refentrytitle>systemd.time</refentrytitle>
         <manvolnum>7</manvolnum></citerefentry> for details.
       '';

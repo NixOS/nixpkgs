@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, qmake, qtsvg }:
+{ stdenv, fetchurl, qmake, qtsvg, makeWrapper, xdg_utils }:
 
 let
   version = "1.43.27";
@@ -9,7 +9,7 @@ in stdenv.mkDerivation rec {
     sha256 = "1gzr11jy1bvnp28w2ar3wmh76g55jn9nra5la5qasnal6b5pg28h";
   };
 
-  nativeBuildInputs = [ qmake ];
+  nativeBuildInputs = [ qmake makeWrapper ];
   buildInputs = [ qtsvg ];
 
   hardeningDisable = [ "format" ];
@@ -21,6 +21,11 @@ in stdenv.mkDerivation rec {
 
     substituteInPlace src/views/mainWindow/MainWindow.cpp \
       --replace ":/resource/pic/logo.svg" "$out/share/icons/hicolor/48x48/apps/mytetra.png"
+  '';
+
+  postFixup = ''
+    wrapProgram $out/bin/mytetra \
+      --prefix PATH : ${xdg_utils}/bin
   '';
 
   meta = with stdenv.lib; {

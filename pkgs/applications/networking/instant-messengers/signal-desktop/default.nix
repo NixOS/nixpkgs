@@ -2,10 +2,25 @@
 , gnome2, gtk3, atk, cairo, pango, gdk_pixbuf, glib, freetype, fontconfig
 , dbus, libX11, xorg, libXi, libXcursor, libXdamage, libXrandr, libXcomposite
 , libXext, libXfixes, libXrender, libXtst, libXScrnSaver, nss, nspr, alsaLib
-, cups, expat, udev
+, cups, expat, udev, libnotify
+# Unfortunately this also overwrites the UI language (not just the spell
+# checking language!):
+, hunspellDicts, spellcheckerLanguage ? null # E.g. "de_DE"
+# For a full list of available languages:
+# $ cat pkgs/development/libraries/hunspell/dictionaries.nix | grep "dictFileName =" | awk '{ print $3 }'
 }:
 
 let
+  customLanguageWrapperArgs = (with lib;
+    let
+      # E.g. "de_DE" -> "de-de" (spellcheckerLanguage -> hunspellDict)
+      spellLangComponents = splitString "_" spellcheckerLanguage;
+      hunspellDict = elemAt spellLangComponents 0 + "-" + toLower (elemAt spellLangComponents 1);
+    in if spellcheckerLanguage != null
+      then ''
+        --set HUNSPELL_DICTIONARIES "${hunspellDicts.${hunspellDict}}/share/hunspell" \
+        --set LC_MESSAGES "${spellcheckerLanguage}"''
+      else "");
   rpath = lib.makeLibraryPath [
     alsaLib
     atk
@@ -20,6 +35,7 @@ let
     gnome2.GConf
     gtk3
     pango
+    libnotify
     libX11
     libXScrnSaver
     libXcomposite
@@ -40,11 +56,11 @@ let
 
 in stdenv.mkDerivation rec {
   name = "signal-desktop-${version}";
-  version = "1.14.4";
+  version = "1.18.1";
 
   src = fetchurl {
     url = "https://updates.signal.org/desktop/apt/pool/main/s/signal-desktop/signal-desktop_${version}_amd64.deb";
-    sha256 = "0590r7748kv6g7zygq95v8qxf7vi2n5ypj6734x9yshrn8z6p8lr";
+    sha256 = "1gak6nhv5gk37iv1bfmjx6wf0p1vcln5y29i6fkzmvcrp3j2cmfh";
   };
 
   phases = [ "unpackPhase" "installPhase" ];
@@ -68,6 +84,7 @@ in stdenv.mkDerivation rec {
              --set-rpath ${rpath}:$out/libexec $out/libexec/signal-desktop
     wrapProgram $out/libexec/signal-desktop \
       --prefix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.name}/" \
+      ${customLanguageWrapperArgs} \
       "''${gappsWrapperArgs[@]}"
 
     # Symlink to bin

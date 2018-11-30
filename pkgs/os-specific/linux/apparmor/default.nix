@@ -1,10 +1,10 @@
-{ stdenv, fetchurl, fetchpatch, makeWrapper, autoreconfHook
+{ stdenv, lib, fetchurl, fetchpatch, makeWrapper, autoreconfHook
 , pkgconfig, which
 , flex, bison
 , linuxHeaders ? stdenv.cc.libc.linuxHeaders
-, python
 , gawk
-, perl
+, withPerl ? stdenv.hostPlatform == stdenv.buildPlatform && lib.any (lib.meta.platformMatch stdenv.hostPlatform) perl.meta.platforms, perl
+, withPython ? stdenv.hostPlatform == stdenv.buildPlatform && lib.any (lib.meta.platformMatch stdenv.hostPlatform) python.meta.platforms, python
 , swig
 , ncurses
 , pam
@@ -12,8 +12,8 @@
 }:
 
 let
-  apparmor-series = "2.12";
-  apparmor-patchver = "0";
+  apparmor-series = "2.13";
+  apparmor-patchver = "1";
   apparmor-version = apparmor-series + "." + apparmor-patchver;
 
   apparmor-meta = component: with stdenv.lib; {
@@ -25,8 +25,8 @@ let
   };
 
   apparmor-sources = fetchurl {
-    url = "https://launchpad.net/apparmor/${apparmor-series}/${apparmor-version}/+download/apparmor-${apparmor-series}.tar.gz";
-    sha256 = "0mm0mcp0w18si9wl15drndysm7v27az2942p1xjd197shg80qawa";
+    url = "https://launchpad.net/apparmor/${apparmor-series}/${apparmor-version}/+download/apparmor-${apparmor-version}.tar.gz";
+    sha256 = "7a060d94c275e59f96bacd1da150e6fee2c9152a85bf57800109d07d51ef8afb";
   };
 
   prePatchCommon = ''
@@ -76,10 +76,9 @@ let
       perl
     ];
 
-    buildInputs = stdenv.lib.optionals (!stdenv.isCross) [
-      perl
-      python
-    ];
+    buildInputs = []
+      ++ stdenv.lib.optional withPerl perl
+      ++ stdenv.lib.optional withPython python;
 
     # required to build apparmor-parser
     dontDisableStatic = true;
@@ -92,11 +91,14 @@ let
 
     postPatch = "cd ./libraries/libapparmor";
     # https://gitlab.com/apparmor/apparmor/issues/1
-    configureFlags = stdenv.lib.optionalString (!stdenv.isCross) "--with-python --with-perl";
+    configureFlags = [
+      (stdenv.lib.withFeature withPerl "perl")
+      (stdenv.lib.withFeature withPython "python")
+    ];
 
-    outputs = if stdenv.isCross then [ "out" ] else [ "out" "python" ];
+    outputs = [ "out" ] ++ stdenv.lib.optional withPython "python";
 
-    postInstall = stdenv.lib.optionalString (!stdenv.isCross) ''
+    postInstall = stdenv.lib.optionalString withPython ''
       mkdir -p $python/lib
       mv $out/lib/python* $python/lib/
     '';
@@ -137,7 +139,9 @@ let
 
     inherit doCheck;
 
-    meta = apparmor-meta "user-land utilities";
+    meta = apparmor-meta "user-land utilities" // {
+      broken = !(withPython && withPerl);
+    };
   };
 
   apparmor-bin-utils = stdenv.mkDerivation {

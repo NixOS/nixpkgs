@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "sockjs-tornado";
-  version = "1.0.3";
+  version = "1.0.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "16cff40nniqsyvda1pb2j3b4zwmrw7y2g1vqq78lp20xpmhnwwkd";
+    sha256 = "4c4bcf33c8a238bbab37d01da769bcf89e74ef6019bfa76ddbcb4d682d47187e";
   };
 
   propagatedBuildInputs = [ tornado ];

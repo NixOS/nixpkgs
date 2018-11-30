@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, freetype, cmake }:
+{ stdenv, fetchurl, pkgconfig, freetype, cmake, python }:
 
 stdenv.mkDerivation rec {
   version = "1.3.6";
@@ -15,9 +15,13 @@ stdenv.mkDerivation rec {
 
   patches = stdenv.lib.optionals stdenv.isDarwin [ ./macosx.patch ];
 
-  meta = {
+  checkInputs = [ python ];
+  doCheck = false; # fails, probably missing something
+
+  meta = with stdenv.lib; {
     description = "An advanced font engine";
-    maintainers = [ stdenv.lib.maintainers.raskin ];
-    platforms = stdenv.lib.platforms.unix;
+    maintainers = [ maintainers.raskin ];
+    platforms = platforms.unix;
+    license = licenses.lgpl21;
   };
 }

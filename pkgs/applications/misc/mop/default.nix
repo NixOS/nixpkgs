@@ -22,9 +22,10 @@ buildGoPackage rec {
     sha256 = "0zp51g9i8rw6acs4vnrxclbxa5z1v0a0m1xx27szszp0rphcczkx";
   };
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Simple stock tracker implemented in go";
     homepage =  https://github.com/mop-tracker/mop;
-    platforms = stdenv.lib.platforms.all;
+    license = licenses.mit;
+    platforms = platforms.all;
   };
 }

@@ -1,12 +1,12 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation rec {
-  version = "2.2.3a";
+  version = "2.2.4";
   name = "discount-${version}";
 
   src = fetchurl {
     url = "http://www.pell.portland.or.us/~orc/Code/discount/discount-${version}.tar.bz2";
-    sha256 = "0m09x9dd75d3pqvmrwr0kqw3dm2x3ss9clj5fxf7lq79lbyxbxbm";
+    sha256 = "199hwajpspqil0a4y3yxsmhdp2dm73gqkzfk4mrwzsmlq8y1xzbl";
   };
 
   patches = ./fix-configure-path.patch;

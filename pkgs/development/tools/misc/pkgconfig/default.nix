@@ -19,7 +19,6 @@ stdenv.mkDerivation rec {
   patches = optional (!vanilla) ./requires-private.patch
     ++ optional stdenv.isCygwin ./2.36.3-not-win32.patch;
 
-  preConfigure = ""; # TODO(@Ericson2314): Remove next mass rebuild
   buildInputs = optional (stdenv.isCygwin || stdenv.isDarwin || stdenv.isSunOS) libiconv;
 
   configureFlags = [ "--with-internal-glib" ]
@@ -40,6 +39,7 @@ stdenv.mkDerivation rec {
     description = "A tool that allows packages to find out information about other packages";
     homepage = http://pkg-config.freedesktop.org/wiki/;
     platforms = platforms.all;
+    license = licenses.gpl2Plus;
   };
 
 }

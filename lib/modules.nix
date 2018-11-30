@@ -192,29 +192,53 @@ rec {
       (concatMap (m: map (config: { inherit (m) file; inherit config; }) (pushDownProperties m.config)) modules);
 
   mergeModules' = prefix: options: configs:
-    listToAttrs (map (name: {
+    let
+     /* byName is like foldAttrs, but will look for attributes to merge in the
+        specified attribute name.
+
+        byName "foo" (module: value: ["module.hidden=${module.hidden},value=${value}"])
+        [
+          {
+            hidden="baz";
+            foo={qux="bar"; gla="flop";};
+          }
+          {
+            hidden="fli";
+            foo={qux="gne"; gli="flip";};
+          }
+        ]
+        ===>
+        {
+          gla = [ "module.hidden=baz,value=flop" ];
+          gli = [ "module.hidden=fli,value=flip" ];
+          qux = [ "module.hidden=baz,value=bar" "module.hidden=fli,value=gne" ];
+        }
+      */
+      byName = attr: f: modules: foldl' (acc: module:
+        foldl' (inner: name:
+          inner // { ${name} = (acc.${name} or []) ++ (f module module.${attr}.${name}); }
+          ) acc (attrNames module.${attr})
+        ) {} modules;
+      # an attrset 'name' => list of submodules that declare ‘name’.
+      declsByName = byName "options"
+        (module: option: [{ inherit (module) file; options = option; }])
+        options;
+      # an attrset 'name' => list of submodules that define ‘name’.
+      defnsByName = byName "config" (module: value:
+        map (config: { inherit (module) file; inherit config; }) (pushDownProperties value)
+        ) configs;
+      # extract the definitions for each loc
+      defnsByName' = byName "config"
+        (module: value: [{ inherit (module) file; inherit value; }])
+        configs;
+    in
+    (flip mapAttrs declsByName (name: decls:
       # We're descending into attribute ‘name’.
-      inherit name;
-      value =
         let
           loc = prefix ++ [name];
-          # Get all submodules that declare ‘name’.
-          decls = concatMap (m:
-            if m.options ? ${name}
-              then [ { inherit (m) file; options = m.options.${name}; } ]
-              else []
-            ) options;
-          # Get all submodules that define ‘name’.
-          defns = concatMap (m:
-            if m.config ? ${name}
-              then map (config: { inherit (m) file; inherit config; })
-                (pushDownProperties m.config.${name})
-              else []
-            ) configs;
+          defns = defnsByName.${name} or [];
+          defns' = defnsByName'.${name} or [];
           nrOptions = count (m: isOption m.options) decls;
-          # Extract the definitions for this loc
-          defns' = map (m: { inherit (m) file; value = m.config.${name}; })
-            (filter (m: m.config ? ${name}) configs);
         in
           if nrOptions == length decls then
             let opt = fixupOptionType loc (mergeOptionDecls loc decls);
@@ -226,8 +250,8 @@ rec {
             in
               throw "The option `${showOption loc}' in `${firstOption.file}' is a prefix of options in `${firstNonOption.file}'."
           else
-            mergeModules' loc decls defns;
-    }) (concatMap (m: attrNames m.options) options))
+            mergeModules' loc decls defns
+      ))
     // { _definedNames = map (m: { inherit (m) file; names = attrNames m.config; }) configs; };
 
   /* Merge multiple option declarations into a single declaration.  In

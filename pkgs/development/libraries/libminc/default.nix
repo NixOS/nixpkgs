@@ -14,21 +14,26 @@ stdenv.mkDerivation rec {
     sha256 = "0mn4n3ihzcr1jw2g1vy6c8p4lkc88jwljk04argmj7k4djrgpxpa";
   };
 
+  postPatch = ''
+    patchShebangs .
+  '';
+
   nativeBuildInputs = [ cmake ];
   buildInputs = [ zlib netcdf nifticlib hdf5 ];
 
-  cmakeFlags = [ "-DBUILD_TESTING=${if doCheck then "TRUE" else "FALSE"}"
-                 "-DLIBMINC_MINC1_SUPPORT=TRUE"
-                 "-DLIBMINC_BUILD_SHARED_LIBS=TRUE"
-                 "-DLIBMINC_USE_SYSTEM_NIFTI=TRUE" ];
+  cmakeFlags = [
+    "-DBUILD_TESTING=${if doCheck then "ON" else "OFF"}"
+    "-DLIBMINC_MINC1_SUPPORT=ON"
+    "-DLIBMINC_BUILD_SHARED_LIBS=ON"
+    "-DLIBMINC_USE_SYSTEM_NIFTI=ON"
+  ];
 
-
+  doCheck = stdenv.buildPlatform == stdenv.hostPlatform;
   checkPhase = ''
     export LD_LIBRARY_PATH="$(pwd)"  # see #22060
     ctest -E 'ezminc_rw_test|minc_conversion' --output-on-failure
     # ezminc_rw_test can't find libminc_io.so.5.2.0; minc_conversion hits netcdf compilation issue
   '';
-  doCheck = true;
 
   enableParallelBuilding = true;
 

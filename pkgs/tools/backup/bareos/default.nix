@@ -12,14 +12,14 @@ let
 in
 stdenv.mkDerivation rec {
   name = "bareos-${version}";
-  version = "17.2.5";
+  version = "17.2.7";
 
   src = fetchFromGitHub {
     owner = "bareos";
     repo = "bareos";
     rev = "Release/${version}";
     name = "${name}-src";
-    sha256 = "1mgh25lhd05m26sq1sj5ir2b4n7560x93ib25cvf9vmmypm1c7pn";
+    sha256 = "1awf5i4mw2nfd7z0dmqnywapnx9nz6xwqv8rxp0y2mnrhzdpbrbz";
   };
 
   nativeBuildInputs = [ pkgconfig ];

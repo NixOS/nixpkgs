@@ -277,8 +277,7 @@ if ($virt eq "qemu" || $virt eq "kvm" || $virt eq "bochs") {
 
 # Also for Hyper-V.
 if ($virt eq "microsoft") {
-    push @initrdAvailableKernelModules, "hv_storvsc";
-    $videoDriver = "fbdev";
+    push @attrs, "virtualisation.hypervGuest.enable = true;"
 }
 
 
@@ -315,14 +314,16 @@ push @attrs, "services.xserver.videoDrivers = [ \"$videoDriver\" ];" if $videoDr
 
 # Generate the swapDevices option from the currently activated swap
 # devices.
-my @swaps = read_file("/proc/swaps");
-shift @swaps;
+my @swaps = read_file("/proc/swaps", err_mode => 'carp');
 my @swapDevices;
-foreach my $swap (@swaps) {
-    $swap =~ /^(\S+)\s/;
-    next unless -e $1;
-    my $dev = findStableDevPath $1;
-    push @swapDevices, "{ device = \"$dev\"; }";
+if (@swaps) {
+    shift @swaps;
+    foreach my $swap (@swaps) {
+        $swap =~ /^(\S+)\s/;
+        next unless -e $1;
+        my $dev = findStableDevPath $1;
+        push @swapDevices, "{ device = \"$dev\"; }";
+    }
 }
 
 
@@ -537,6 +538,13 @@ if ($showHardwareConfig) {
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 EOF
+        } elsif (-e "/boot/extlinux") {
+            $bootLoaderConfig = <<EOF;
+  # Use the extlinux boot loader. (NixOS wants to enable GRUB by default)
+  boot.loader.grub.enable = false;
+  # Enables the generation of /boot/extlinux/extlinux.conf
+  boot.loader.generic-extlinux-compatible.enable = true;
+EOF
         } elsif ($virt ne "systemd-nspawn") {
             $bootLoaderConfig = <<EOF;
   # Use the GRUB 2 boot loader.
@@ -566,6 +574,10 @@ EOF
 $bootLoaderConfig
   # networking.hostName = "nixos"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
+
+  # Configure network proxy if necessary
+  # networking.proxy.default = "http://user:password\@proxy:port/";
+  # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
   # Select internationalisation properties.
   # i18n = {
@@ -628,7 +640,7 @@ $bootLoaderConfig
   # compatible, in order to avoid breaking some software such as database
   # servers. You should change this only after NixOS release notes say you
   # should.
-  system.nixos.stateVersion = "${\(qw(@release@))}"; # Did you read the comment?
+  system.stateVersion = "${\(qw(@release@))}"; # Did you read the comment?
 
 }
 EOF

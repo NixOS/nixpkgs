@@ -28,7 +28,7 @@ in
     meta = with stdenv.lib; {
       homepage = https://github.com/airspy/airspyone_host;
       description = "Host tools and driver library for the AirSpy SDR";
-      license = licenses.free;
+      license = licenses.bsd3;
       platforms = with platforms; linux ++ darwin;
       maintainers = with maintainers; [ markuskowa ];
     };

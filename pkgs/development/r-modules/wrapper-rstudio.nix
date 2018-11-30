@@ -1,5 +1,8 @@
-{ stdenv, R, rstudio, makeWrapper, recommendedPackages, packages }:
+{ stdenv, R, rstudio, makeWrapper, recommendedPackages, packages, qtbase }:
 
+let
+  qtVersion = with stdenv.lib.versions; "${major qtbase.version}.${minor qtbase.version}";
+in
 stdenv.mkDerivation rec {
 
   name = rstudio.name + "-wrapper";
@@ -24,7 +27,8 @@ stdenv.mkDerivation rec {
     echo -n $R_LIBS_SITE | sed -e 's/:/", "/g' >> $out/${fixLibsR}
     echo -n "\"))" >> $out/${fixLibsR}
     echo >> $out/${fixLibsR}
-    makeWrapper ${rstudio}/bin/rstudio $out/bin/rstudio --set R_PROFILE_USER $out/${fixLibsR}
+    makeWrapper ${rstudio}/bin/rstudio $out/bin/rstudio --set R_PROFILE_USER $out/${fixLibsR} \
+      --prefix QT_PLUGIN_PATH : ${qtbase}/lib/qt-${qtVersion}/plugins    
   '';
   
   meta = {

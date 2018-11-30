@@ -1,4 +1,5 @@
-{ stdenv, fetchurl, libX11, libXext, libXcursor, libXrandr, libjack2, alsaLib, releasePath ? null }:
+{ stdenv, fetchurl, libX11, libXext, libXcursor, libXrandr, libjack2, alsaLib
+, mpg123, releasePath ? null }:
 
 with stdenv.lib;
 
@@ -17,7 +18,7 @@ stdenv.mkDerivation rec {
   version = "3.1.0";
 
   src =
-    if stdenv.system == "x86_64-linux" then
+    if stdenv.hostPlatform.system == "x86_64-linux" then
         if builtins.isNull releasePath then
         fetchurl {
           url = "https://files.renoise.com/demo/Renoise_${urlVersion version}_Demo_x86_64.tar.bz2";
@@ -25,7 +26,7 @@ stdenv.mkDerivation rec {
         }
         else
         releasePath
-    else if stdenv.system == "i686-linux" then
+    else if stdenv.hostPlatform.system == "i686-linux" then
         if builtins.isNull releasePath then
         fetchurl {
           url = "http://files.renoise.com/demo/Renoise_${urlVersion version}_Demo_x86.tar.bz2";
@@ -35,7 +36,7 @@ stdenv.mkDerivation rec {
         releasePath
     else throw "Platform is not supported by Renoise";
 
-  buildInputs = [ libX11 libXext libXcursor libXrandr alsaLib libjack2 ];
+  buildInputs = [ alsaLib libjack2 libX11 libXcursor libXext libXrandr ];
 
   installPhase = ''
     cp -r Resources $out
@@ -54,13 +55,18 @@ stdenv.mkDerivation rec {
 
     mkdir $out/bin
     ln -s $out/renoise $out/bin/renoise
+  '';
 
-    patchelf --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) --set-rpath $out/lib $out/renoise
+  postFixup = ''
+    patchelf \
+      --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
+      --set-rpath ${mpg123}/lib:$out/lib \
+      $out/renoise
   '';
 
   meta = {
     description = "Modern tracker-based DAW";
-    homepage = http://www.renoise.com/;
+    homepage = https://www.renoise.com/;
     license = licenses.unfree;
     maintainers = [];
     platforms = [ "i686-linux" "x86_64-linux" ];

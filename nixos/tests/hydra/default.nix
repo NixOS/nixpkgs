@@ -2,14 +2,11 @@ import ../make-test.nix ({ pkgs, ...} :
 
 let
    trivialJob = pkgs.writeTextDir "trivial.nix" ''
-     with import <nix/config.nix>;
-
      { trivial = builtins.derivation {
          name = "trivial";
          system = "x86_64-linux";
-         PATH = coreutils;
-         builder = shell;
-         args = ["-c" "touch $out; exit 0"];
+         builder = "/bin/sh";
+         args = ["-c" "echo success > $out; exit 0"];
        };
      }
    '';
@@ -27,7 +24,7 @@ let
 in {
   name = "hydra-init-localdb";
   meta = with pkgs.stdenv.lib.maintainers; {
-    maintainers = [ pstn lewo ];
+    maintainers = [ pstn lewo ma27 ];
   };
 
   machine =
@@ -50,6 +47,8 @@ in {
           hostName = "localhost";
           systems = [ "x86_64-linux" ];
         }];
+
+        binaryCaches = [];
       };
     };
 
@@ -74,5 +73,5 @@ in {
       $machine->succeed("create-trivial-project.sh");
 
       $machine->waitUntilSucceeds('curl -L -s http://localhost:3000/build/1 -H "Accept: application/json" |  jq .buildstatus | xargs test 0 -eq');
-     '';
+    '';
 })

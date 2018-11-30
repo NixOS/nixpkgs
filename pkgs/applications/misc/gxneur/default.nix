@@ -14,8 +14,9 @@ stdenv.mkDerivation {
     libglade GConf pcre libappindicator-gtk2
   ];
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "GUI for XNEUR keyboard layout switcher";
-    platforms = stdenv.lib.platforms.linux;
+    platforms = platforms.linux;
+    license = with licenses; [ gpl2 gpl3 ];
   };
 }

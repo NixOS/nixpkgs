@@ -36,9 +36,10 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = "-fgnu89-inline";
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "GNU Common Lisp compiler working via GCC";
-    maintainers = [ stdenv.lib.maintainers.raskin ];
-    platforms = stdenv.lib.platforms.linux;
+    maintainers = [ maintainers.raskin ];
+    license = licenses.gpl2;
+    platforms = platforms.linux;
   };
 }

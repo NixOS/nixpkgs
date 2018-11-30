@@ -9,24 +9,29 @@ let
       sha256 = "0ykcjv5dz9i5bws9my2d60pww1g9v2p2nqr67h0i2xrjm7az8a6v";
     };
     "0.10" = {
-      kafkaVersion = "0.10.2.1";
+      kafkaVersion = "0.10.2.2";
       scalaVersion = "2.12";
-      sha256 = "0iszr6r0n9yjgq7kcp1hf00fg754m86gs4jzqc18542an94b88z5";
+      sha256 = "13wibnz7n7znv2g13jlpkz1r0y73qy5b02pdqhsq7cl72h9s6wms";
     };
     "0.11" = {
-      kafkaVersion = "0.11.0.1";
+      kafkaVersion = "0.11.0.3";
       scalaVersion = "2.12";
-      sha256 = "1wj639h95aq5n132fq1rbyzqh5rsa4mlhbg3c5mszqglnzdz4xn7";
+      sha256 = "0zkzp9a8lcfcpavks131119v10hpn90sc0pw4f90jc4zn2yw3rgd";
     };
     "1.0" = {
-      kafkaVersion = "1.0.1";
+      kafkaVersion = "1.0.2";
       scalaVersion = "2.12";
-      sha256 = "1fxn6i0kanwksj1dhcnlni0cn542k50wdg8jkwhfmf4qq8yfl90m";
+      sha256 = "0cmq8ww1lbkp3ipy9d1q8c1yz4kfwj0v4ynnhsk1i48sqlmvwybj";
     };
     "1.1" = {
-      kafkaVersion = "1.1.0";
+      kafkaVersion = "1.1.1";
       scalaVersion = "2.12";
-      sha256 = "04idhsr6pbkb0xkx38faxv2pn5nkjcflz6wl4s3ka82h1fbq74j9";
+      sha256 = "13vg0wm2fsd06pfw05m4bhcgbjmb2bmd4i31zfs48w0f7hjc8qf2";
+    };
+    "2.0" = {
+      kafkaVersion = "2.0.0";
+      scalaVersion = "2.12";
+      sha256 = "0mbrp8rafv1bra9nrdicpxy6w59ixanaj50c9pkgdrih82f57wdm";
     };
   };
 in

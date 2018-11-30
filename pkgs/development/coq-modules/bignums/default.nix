@@ -1,6 +1,11 @@
 { stdenv, fetchFromGitHub, coq }:
 
 let params =
+  let v_8_8_0 = {
+      rev = "V8.8.0";
+      sha256 = "1ymxyrvjygscxkfj3qkq66skl3vdjhb670rzvsvgmwrjkrakjnfg";
+    };
+  in
   {
     "8.6" = {
       rev = "v8.6.0";
@@ -10,10 +15,8 @@ let params =
       rev = "V8.7.0";
       sha256 = "11c4sdmpd3l6jjl4v6k213z9fhrmmm1xnly3zmzam1wrrdif4ghl";
     };
-    "8.8" = {
-      rev = "V8.8+beta1";
-      sha256 = "1ymxyrvjygscxkfj3qkq66skl3vdjhb670rzvsvgmwrjkrakjnfg";
-    };
+    "8.8" = v_8_8_0;
+    "8.9" = v_8_8_0;
   };
   param = params."${coq.coq-version}"
 ; in
@@ -28,7 +31,7 @@ stdenv.mkDerivation rec {
     inherit (param) rev sha256;
   };
 
-  buildInputs = [ coq.ocaml coq.camlp5 coq.findlib coq ];
+  buildInputs = with coq.ocamlPackages; [ ocaml camlp5 findlib coq ];
 
   installFlags = "COQLIB=$(out)/lib/coq/${coq.coq-version}/";
 

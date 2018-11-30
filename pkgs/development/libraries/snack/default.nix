@@ -10,7 +10,7 @@ stdenv.mkDerivation {
     sha256 = "07p89jv9qnjqkszws9sssq93ayvwpdnkcxrvyicbm4mb8x2pdzjb";
   };
 
-  configureFlags = "--with-tcl=${tcl}/lib --with-tk=${tk}/lib";
+  configureFlags = [ "--with-tcl=${tcl}/lib" "--with-tk=${tk}/lib" ];
 
   postUnpack = ''sourceRoot="$sourceRoot/unix"'';
 

@@ -1,13 +1,8 @@
 { config, pkgs, lib }:
 
 lib.makeScope pkgs.newScope (self: with self; {
-  # Convert a version to branch (3.26.18 → 3.26)
-  # Used for finding packages on GNOME mirrors
-  versionBranch = version: builtins.concatStringsSep "." (lib.take 2 (lib.splitString "." version));
-
   updateScript = callPackage ./update.nix { };
 
-  version = "3.26";
   maintainers = with pkgs.lib.maintainers; [ lethalman jtojnar ];
 
   corePackages = with gnome3; [
@@ -30,11 +25,11 @@ lib.makeScope pkgs.newScope (self: with self; {
     nautilus-sendto dconf-editor vinagre gnome-weather gnome-logs
     gnome-maps gnome-characters gnome-calendar accerciser gnome-nettool
     gnome-getting-started-docs gnome-packagekit gnome-software
-    gnome-power-manager gnome-usage
+    gnome-power-manager gnome-todo gnome-usage
   ];
 
   gamesPackages = with gnome3; [ swell-foop lightsoff iagno
-    tali quadrapassel gnome-sudoku aisleriot five-or-more
+    tali quadrapassel gnome-sudoku atomix aisleriot five-or-more
     four-in-a-row gnome-chess gnome-klotski gnome-mahjongg
     gnome-mines gnome-nibbles gnome-robots gnome-tetravex
     hitori gnome-taquin
@@ -43,7 +38,7 @@ lib.makeScope pkgs.newScope (self: with self; {
   inherit (pkgs) atk glib gobjectIntrospection gspell webkitgtk gtk3 gtkmm3
     libgtop libgudev libhttpseverywhere librsvg libsecret gdk_pixbuf gtksourceview gtksourceview4
     easytag meld orca rhythmbox shotwell gnome-usage
-    clutter clutter-gst clutter-gtk cogl gtkvnc libdazzle;
+    clutter clutter-gst clutter-gtk cogl gtk-vnc libdazzle;
 
   libsoup = pkgs.libsoup.override { gnomeSupport = true; };
   libchamplain = pkgs.libchamplain.override { libsoup = libsoup; };
@@ -187,34 +182,36 @@ lib.makeScope pkgs.newScope (self: with self; {
   nautilus = callPackage ./core/nautilus { };
 
   networkmanager-openvpn = pkgs.networkmanager-openvpn.override {
-    inherit gnome3;
+    withGnome = true;
   };
 
   networkmanager-vpnc = pkgs.networkmanager-vpnc.override {
-    inherit gnome3;
+    withGnome = true;
   };
 
   networkmanager-openconnect = pkgs.networkmanager-openconnect.override {
-    inherit gnome3;
+    withGnome = true;
   };
 
   networkmanager-fortisslvpn = pkgs.networkmanager-fortisslvpn.override {
-    inherit gnome3;
+    withGnome = true;
   };
 
   networkmanager-l2tp = pkgs.networkmanager-l2tp.override {
-    inherit gnome3;
+    withGnome = true;
   };
 
   networkmanager-iodine = pkgs.networkmanager-iodine.override {
-    inherit gnome3;
+    withGnome = true;
   };
 
   networkmanagerapplet = pkgs.networkmanagerapplet.override {
-    inherit gnome3 gsettings-desktop-schemas glib-networking;
+    withGnome = true;
   };
 
   rest = callPackage ./core/rest { };
+
+  rygel = callPackage ./core/rygel { };
 
   simple-scan = callPackage ./core/simple-scan { };
 
@@ -291,6 +288,8 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   gnome-sound-recorder = callPackage ./apps/gnome-sound-recorder { };
 
+  gnome-todo = callPackage ./apps/gnome-todo {};
+
   gnome-weather = callPackage ./apps/gnome-weather { };
 
   nautilus-sendto = callPackage ./apps/nautilus-sendto { };
@@ -316,6 +315,8 @@ lib.makeScope pkgs.newScope (self: with self; {
 #### Games
 
   aisleriot = callPackage ./games/aisleriot { };
+
+  atomix = callPackage ./games/atomix { };
 
   five-or-more = callPackage ./games/five-or-more { };
 
@@ -371,9 +372,17 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   gexiv2 = callPackage ./misc/gexiv2 { };
 
+  gnome-applets = callPackage ./misc/gnome-applets { };
+
+  gnome-flashback = callPackage ./misc/gnome-flashback { };
+
+  gnome-panel = callPackage ./misc/gnome-panel { };
+
   gnome-tweaks = callPackage ./misc/gnome-tweaks { };
 
   gpaste = callPackage ./misc/gpaste { };
+
+  metacity = callPackage ./misc/metacity { };
 
   pidgin-im-gnome-shell-extension = callPackage ./misc/pidgin { };
 
@@ -387,6 +396,8 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   gnome-packagekit = callPackage ./misc/gnome-packagekit { };
 
+  # TODO: remove this after 18.09 has forked off
+  gconf = throw "gconf is deprecated since 2009 and has been removed from the package set. Use gnome2.GConf instead. For more details see https://github.com/NixOS/nixpkgs/pull/43268";
 } // lib.optionalAttrs (config.allowAliases or true) {
 #### Legacy aliases
 

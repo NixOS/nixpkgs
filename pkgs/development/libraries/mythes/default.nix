@@ -14,6 +14,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://hunspell.sourceforge.net/;
     description = "Thesaurus library from Hunspell project";
+    license = stdenv.lib.licenses.bsd3;
     inherit (hunspell.meta) platforms;
   };
 }

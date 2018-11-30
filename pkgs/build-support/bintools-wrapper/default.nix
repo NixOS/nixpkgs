@@ -6,9 +6,10 @@
 # compiler and the linker just "work".
 
 { name ? ""
-, stdenvNoCC, nativeTools, propagateDoc ? !nativeTools, noLibc ? false, nativeLibc, nativePrefix ? ""
-, bintools ? null, libc ? null
-, coreutils ? null, shell ? stdenvNoCC.shell, gnugrep ? null
+, stdenvNoCC
+, bintools ? null, libc ? null, coreutils ? null, shell ? stdenvNoCC.shell, gnugrep ? null
+, nativeTools, noLibc ? false, nativeLibc, nativePrefix ? ""
+, propagateDoc ? bintools != null && bintools ? man
 , extraPackages ? [], extraBuildCommands ? ""
 , buildPackages ? {}
 , useMacosReexportHack ? false
@@ -43,10 +44,8 @@ let
   # The wrapper scripts use 'cat' and 'grep', so we may need coreutils.
   coreutils_bin = if nativeTools then "" else getBin coreutils;
 
-  dashlessTarget = stdenv.lib.replaceStrings ["-"] ["_"] targetPlatform.config;
-
   # See description in cc-wrapper.
-  infixSalt = dashlessTarget;
+  infixSalt = replaceStrings ["-" "."] ["_" "_"] targetPlatform.config;
 
   # The dynamic linker has different names on different platforms. This is a
   # shell glob that ought to match it.
@@ -173,18 +172,21 @@ stdenv.mkDerivation {
       else if targetPlatform.isWindows then "pe"
       else "elf" + toString targetPlatform.parsed.cpu.bits;
     endianPrefix = if targetPlatform.isBigEndian then "big" else "little";
-    sep = optionalString (!targetPlatform.isMips) "-";
+    sep = optionalString (!targetPlatform.isMips && !targetPlatform.isPower) "-";
     arch =
       /**/ if targetPlatform.isAarch64 then endianPrefix + "aarch64"
       else if targetPlatform.isAarch32     then endianPrefix + "arm"
       else if targetPlatform.isx86_64  then "x86-64"
-      else if targetPlatform.isi686    then "i386"
+      else if targetPlatform.isx86     then "i386"
       else if targetPlatform.isMips    then {
           "mips"     = "btsmipn32"; # n32 variant
           "mipsel"   = "ltsmipn32"; # n32 variant
           "mips64"   = "btsmip";
           "mips64el" = "ltsmip";
         }.${targetPlatform.parsed.cpu.name}
+      else if targetPlatform.isPower then if targetPlatform.isBigEndian then "ppc" else "lppc"
+      else if targetPlatform.isSparc then "sparc"
+      else if targetPlatform.isAvr then "avr"
       else throw "unknown emulation for platform: " + targetPlatform.config;
     in targetPlatform.platform.bfdEmulation or (fmt + sep + arch);
 
@@ -208,7 +210,7 @@ stdenv.mkDerivation {
       ## General libc support
       ##
 
-      echo "-L${libc_lib}/lib" > $out/nix-support/libc-ldflags
+      echo "-L${libc_lib}${libc.libdir or "/lib"}" > $out/nix-support/libc-ldflags
 
       echo "${libc_lib}" > $out/nix-support/orig-libc
       echo "${libc_dev}" > $out/nix-support/orig-libc-dev
@@ -268,8 +270,8 @@ stdenv.mkDerivation {
       ##
 
       mkdir -p $man/nix-support $info/nix-support
-      printWords ${bintools.man or ""} >> $man/nix-support/propagated-build-inputs
-      printWords ${bintools.info or ""} >> $info/nix-support/propagated-build-inputs
+      echo ${bintools.man or ""} >> $man/nix-support/propagated-user-env-packages
+      echo ${bintools.info or ""} >> $info/nix-support/propagated-user-env-packages
     ''
 
     + ''
@@ -289,6 +291,16 @@ stdenv.mkDerivation {
 
     + optionalString hostPlatform.isCygwin ''
       hardening_unsupported_flags+=" pic"
+    ''
+
+    + optionalString targetPlatform.isAvr ''
+      hardening_unsupported_flags+=" relro bindnow"
+    ''
+
+    + optionalString (libc != null && targetPlatform.isAvr) ''
+      for isa in avr5 avr3 avr4 avr6 avr25 avr31 avr35 avr51 avrxmega2 avrxmega4 avrxmega5 avrxmega6 avrxmega7 tiny-stack; do
+        echo "-L${getLib libc}/avr/lib/$isa" >> $out/nix-support/libc-cflags
+      done
     ''
 
     + ''

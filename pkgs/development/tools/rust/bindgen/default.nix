@@ -1,35 +1,56 @@
-{ stdenv, fetchFromGitHub, rustPlatform, makeWrapper, llvmPackages }:
-
-# Future work: Automatically communicate NIX_CFLAGS_COMPILE to bindgen's tests and the bindgen executable itself.
+{ stdenv, fetchFromGitHub, rustPlatform, clang, llvmPackages, rustfmt, writeScriptBin }:
 
 rustPlatform.buildRustPackage rec {
   name = "rust-bindgen-${version}";
-  version = "0.37.0";
+  version = "0.42.2";
 
   src = fetchFromGitHub {
     owner = "rust-lang-nursery";
     repo = "rust-bindgen";
     rev = "v${version}";
-    sha256 = "0cqjr7qspjrfgqcp4nqxljmhhbqyijb2jpw3lajgjj48y6wrnw93";
+    sha256 = "10h0h7x8yf4dsyw2p2nas2jg5p3i29np0y3rfzrdq898d70gvq4j";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ llvmPackages.clang-unwrapped.lib ];
+  cargoSha256 = "01jvi86xgz0r7ia9agnfpms6b6x68lzwj6f085m0w659i94acgpi";
+
+  libclang = llvmPackages.libclang.lib; #for substituteAll
+
+  buildInputs = [ libclang ];
+
+  propagatedBuildInputs = [ clang ]; # to populate NIX_CXXSTDLIB_COMPILE
 
   configurePhase = ''
-    export LIBCLANG_PATH="${llvmPackages.clang-unwrapped.lib}/lib"
+    export LIBCLANG_PATH="${libclang}/lib"
   '';
 
   postInstall = ''
-    wrapProgram $out/bin/bindgen --set LIBCLANG_PATH "${llvmPackages.clang-unwrapped.lib}/lib"
+    mv $out/bin/{bindgen,.bindgen-wrapped};
+    substituteAll ${./wrapper.sh} $out/bin/bindgen
+    chmod +x $out/bin/bindgen
   '';
 
-  cargoSha256 = "0b8v6c7q1abibzygrigldpd31lyd5ngmj4vq5d7zni96m20mm85w";
-
-  doCheck = false; # A test fails because it can't find standard headers in NixOS
+  doCheck = false; # half the tests fail because our rustfmt is not nightly enough
+  checkInputs =
+    let fakeRustup = writeScriptBin "rustup" ''
+      #!${stdenv.shell}
+      shift
+      shift
+      exec "$@"
+    '';
+  in [
+    rustfmt
+    fakeRustup # the test suite insists in calling `rustup run nightly rustfmt`
+    clang
+  ];
 
   meta = with stdenv.lib; {
     description = "C and C++ binding generator";
+    longDescription = ''
+      Bindgen takes a c or c++ header file and turns them into
+      rust ffi declarations.
+      As with most compiler related software, this will only work
+      inside a nix-shell with the required libraries as buildInputs.
+    '';
     homepage = https://github.com/rust-lang-nursery/rust-bindgen;
     license = with licenses; [ bsd3 ];
     maintainers = [ maintainers.ralith ];

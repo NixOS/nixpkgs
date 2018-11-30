@@ -2,13 +2,24 @@
   pytest, case, kombu, billiard, pytz, anyjson, amqp, eventlet
 }:
 
-buildPythonPackage rec {
+let
+
+  # Needed for celery
+  pytest_32 = pytest.overridePythonAttrs( oldAttrs: rec {
+    version = "3.2.5";
+    src = oldAttrs.src.override {
+      inherit version;
+      sha256 = "6d5bd4f7113b444c55a3bbb5c738a3dd80d43563d063fc42dcb0aaefbdd78b81";
+    };
+  });
+
+in buildPythonPackage rec {
   pname = "celery";
-  version = "4.2.0";
+  version = "4.2.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ff727c115533edbc7b81b2b4ba1ec88d1c2fc4836e1e2f4c3c33a76ff53e5d7f";
+    sha256 = "0y66rz7z8dfcgs3s0qxmdddlaq57bzbgxgfz896nbp14grkv9nkp";
   };
 
   # Skip test_RedisBackend.test_timeouts_in_url_coerced
@@ -27,7 +38,7 @@ buildPythonPackage rec {
     unset NIX_REDIRECTS LD_PRELOAD
   '';
 
-  buildInputs = [ pytest case ];
+  checkInputs = [ pytest_32 case ];
   propagatedBuildInputs = [ kombu billiard pytz anyjson amqp eventlet ];
 
   meta = with stdenv.lib; {

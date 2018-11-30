@@ -22,9 +22,10 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Psi, an XMPP (Jabber) client";
-    maintainers = [ stdenv.lib.maintainers.raskin ];
+    maintainers = [ maintainers.raskin ];
+    license = licenses.gpl2;
     platforms = stdenv.lib.platforms.linux;
   };
 }

@@ -11,10 +11,9 @@
  </para>
 
  <para>
-  Some libraries require OCaml and sometimes also Camlp5 or findlib. The exact
-  versions that were used to build Coq are saved in the
-  <literal>coq.ocaml</literal> and <literal>coq.camlp5</literal> and
-  <literal>coq.findlib</literal> attributes.
+  Some extensions (plugins) might require OCaml and sometimes other OCaml
+  packages. The <literal>coq.ocamlPackages</literal> attribute can be used to
+  depend on the same package set Coq was built against.
  </para>
 
  <para>

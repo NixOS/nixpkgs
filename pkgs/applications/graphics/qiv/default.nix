@@ -17,10 +17,11 @@ stdenv.mkDerivation (rec {
     substituteInPlace Makefile --replace /man/ /share/man/
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Quick image viewer";
     homepage = http://spiegl.de/qiv/;
     inherit version;
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.gpl2;
+    platforms = platforms.linux;
   };
 })

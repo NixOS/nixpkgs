@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   name = "girara-${version}";
-  version = "0.3.0";
+  version = "0.3.1";
 
   src = fetchurl {
     url = "https://pwmt.org/projects/girara/download/${name}.tar.xz";
-    sha256 = "18j1gv8pi4cpndvnap88pcfacdz3lnw6pxmw7dvzm359y1gzllmp";
+    sha256 = "1ddwap5q5cnfdr1q1b110wy7mw1z3khn86k01jl8lqmn02n9nh1w";
   };
 
   nativeBuildInputs = [ meson ninja pkgconfig gettext ];

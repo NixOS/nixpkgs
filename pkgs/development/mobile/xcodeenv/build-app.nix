@@ -20,6 +20,7 @@
 , bundleId ? null
 , version ? null
 , title ? null
+, meta ? {}
 }:
 
 assert release -> codeSignIdentity != null && certificateFile != null && certificatePassword != null && provisioningProfile != null && signMethod != null;
@@ -49,6 +50,7 @@ in
 stdenv.mkDerivation {
   name = stdenv.lib.replaceChars [" "] [""] name;
   inherit src;
+  inherit meta;
   buildInputs = [ xcodewrapper ];
   buildPhase = ''
     ${stdenv.lib.optionalString release ''

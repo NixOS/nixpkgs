@@ -10,11 +10,11 @@
 
 buildPythonPackage rec {
   pname = "hdbscan";
-  version = "0.8.13";
+  version = "0.8.18";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "31874db29375816688b5541287a051c9bd768f2499ccf1f6a4d88d266530e2a6";
+    sha256 = "4d6782f08872f4c54983873a41759daae680d6247b0db363f3510cb001108f02";
   };
 
   checkInputs = [ nose ];

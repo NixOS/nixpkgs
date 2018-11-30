@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, openssl, perl, dns-root-data }:
+{ stdenv, fetchurl, fetchpatch, openssl, perl, which, dns-root-data }:
 
 stdenv.mkDerivation rec {
   pname = "ldns";
@@ -44,6 +44,9 @@ stdenv.mkDerivation rec {
     "ac_cv_func_malloc_0_nonnull=yes"
     "ac_cv_func_realloc_0_nonnull=yes"
   ];
+
+  checkInputs = [ which ];
+  doCheck = false; # fails. missing some files
 
   postInstall = ''
     moveToOutput "bin/ldns-config" "$dev"

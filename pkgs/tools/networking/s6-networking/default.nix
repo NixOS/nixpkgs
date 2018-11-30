@@ -1,27 +1,34 @@
-{ stdenv, execline, fetchgit, s6, s6-dns, skalibs }:
+{ stdenv, skawarePackages
 
+# Whether to build the TLS/SSL tools and what library to use
+# acceptable values: "libressl", false
+# TODO: add bearssl
+, sslSupport ? "libressl" , libressl
+}:
+
+with skawarePackages;
 let
-
-  version = "2.3.0.2";
-
-in stdenv.mkDerivation rec {
-
-  name = "s6-networking-${version}";
-
-  src = fetchgit {
-    url = "git://git.skarnet.org/s6-networking";
-    rev = "refs/tags/v${version}";
-    sha256 = "1qrhca8yjaysrqf7nx3yjfyfi9yly3rxpgrd2sqj0a0ckk73rv42";
+  inherit (stdenv) lib;
+  sslSupportEnabled = sslSupport != false;
+  sslLibs = {
+    "libressl" = libressl;
   };
+
+in
+assert sslSupportEnabled -> sslLibs ? ${sslSupport};
+
+
+buildPackage {
+  pname = "s6-networking";
+  version = "2.3.0.3";
+  sha256 = "1kfjl7da6wkmyq1mvq9irkbzk2wbi0axjfbcw5cym5y11mqswsjs";
+
+  description = "A suite of small networking utilities for Unix systems";
 
   outputs = [ "bin" "lib" "dev" "doc" "out" ];
 
-  dontDisableStatic = true;
-
-  enableParallelBuilding = true;
-
+  # TODO: nsss support
   configureFlags = [
-    "--enable-absolute-paths"
     "--libdir=\${lib}/lib"
     "--libexecdir=\${lib}/libexec"
     "--dynlibdir=\${lib}/lib"
@@ -41,19 +48,20 @@ in stdenv.mkDerivation rec {
     "--with-dynlib=${s6.out}/lib"
     "--with-dynlib=${s6-dns.lib}/lib"
   ]
-  ++ (stdenv.lib.optional stdenv.isDarwin "--build=${stdenv.system}");
+  ++ (lib.optionals sslSupportEnabled [
+       "--enable-ssl=${sslSupport}"
+       "--with-include=${lib.getDev sslLibs.${sslSupport}}/include"
+       "--with-lib=${lib.getLib sslLibs.${sslSupport}}/lib"
+       "--with-dynlib=${lib.getLib sslLibs.${sslSupport}}/lib"
+     ]);
 
   postInstall = ''
-    mkdir -p $doc/share/doc/s6-networking/
+    # remove all s6 executables from build directory
+    rm $(find -name "s6-*" -type f -mindepth 1 -maxdepth 1 -executable)
+    rm minidentd
+    rm libs6net.* libstls.*
+
     mv doc $doc/share/doc/s6-networking/html
   '';
-
-  meta = {
-    homepage = http://www.skarnet.org/software/s6-networking/;
-    description = "A suite of small networking utilities for Unix systems";
-    platforms = stdenv.lib.platforms.all;
-    license = stdenv.lib.licenses.isc;
-    maintainers = with stdenv.lib.maintainers; [ pmahoney Profpatsch ];
-  };
 
 }

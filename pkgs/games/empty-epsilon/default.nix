@@ -1,8 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, cmake, sfml, libX11, glew, python }:
+{ lib, stdenv, fetchFromGitHub, cmake, sfml, libX11, glew, python3 }:
 
 let
 
-  version = "2018.02.15";
+  major = "2018";
+  minor = "02";
+  patch = "15";
+
+  version = "${major}.${minor}.${patch}";
 
   serious-proton = stdenv.mkDerivation rec {
     name = "serious-proton-${version}";
@@ -42,10 +46,14 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ serious-proton sfml glew libX11 python ];
+  buildInputs = [ serious-proton sfml glew libX11 python3 ];
 
   cmakeFlags = [
     "-DSERIOUS_PROTON_DIR=${serious-proton.src}"
+    "-DCPACK_PACKAGE_VERSION=${version}"
+    "-DCPACK_PACKAGE_VERSION_MAJOR=${major}"
+    "-DCPACK_PACKAGE_VERSION_MINOR=${minor}"
+    "-DCPACK_PACKAGE_VERSION_PATCH=${patch}"
   ];
 
   meta = with lib; {

@@ -1,17 +1,29 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "libowfat-0.31";
+  name = "libowfat-0.32";
 
   src = fetchurl {
     url = "https://www.fefe.de/libowfat/${name}.tar.xz";
-    sha256 = "04lagr62bd2cr0k8h59qfnx2klh2cf73k5kxsx8xrdybzhfarr6i";
+    sha256 = "1hcqg7pvy093bxx8wk7i4gvbmgnxz2grxpyy7b4mphidjbcv7fgl";
   };
 
+  # Dirty patch because 0.32 "moved headers to <libowfat/> upon install"
+  # but it breaks gatling-0.15 and opentracker-2018-05-26 ...
+  postPatch = ''
+    substituteInPlace GNUmakefile --replace \
+      'install -d $(DESTDIR)$(INCLUDEDIR)/libowfat' \
+      'install -d $(DESTDIR)$(INCLUDEDIR)'
+    substituteInPlace GNUmakefile --replace \
+      'install -m 644 $(INCLUDES) $(DESTDIR)$(INCLUDEDIR)/libowfat' \
+      'install -m 644 $(INCLUDES) $(DESTDIR)$(INCLUDEDIR)'
+  '';
+
   makeFlags = "prefix=$(out)";
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    homepage = http://www.fefe.de/libowfat/;
+    homepage = https://www.fefe.de/libowfat/;
     license = licenses.gpl2;
     platforms = platforms.linux;
   };

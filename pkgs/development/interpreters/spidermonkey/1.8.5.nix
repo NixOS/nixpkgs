@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
   # of polkit, which is what matters most, it does not override the allocator
   # so the failure of that test does not matter much.
   configureFlags = [ "--enable-threadsafe" "--with-system-nspr" ] ++
-    stdenv.lib.optionals (stdenv.system == "armv5tel-linux") [
+    stdenv.lib.optionals (stdenv.hostPlatform.system == "armv5tel-linux") [
         "--with-cpu-arch=armv5t" 
         "--disable-tracejit" ];
 
@@ -70,6 +70,7 @@ stdenv.mkDerivation rec {
     # TODO: MPL/GPL/LGPL tri-license.
     maintainers = [ maintainers.goibhniu ];
     platforms = platforms.linux;
+    broken = stdenv.isAarch64; # 2018-08-21, broken since 2017-03-08
   };
 }
 

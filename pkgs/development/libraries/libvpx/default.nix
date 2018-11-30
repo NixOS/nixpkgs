@@ -1,5 +1,4 @@
 { stdenv, fetchFromGitHub, perl, yasm
-, hostPlatform
 , vp8DecoderSupport ? true # VP8 decoder
 , vp8EncoderSupport ? true # VP8 encoder
 , vp9DecoderSupport ? true # VP9 decoder
@@ -141,17 +140,17 @@ stdenv.mkDerivation rec {
     # libvpx darwin targets include darwin version (ie. ARCH-darwinXX-gcc, XX being the darwin version)
     # See all_platforms: https://github.com/webmproject/libvpx/blob/master/configure
     # Darwin versions: 10.4=8, 10.5=9, 10.6=10, 10.7=11, 10.8=12, 10.9=13, 10.10=14
-    "--force-target=${hostPlatform.config}${
-            if hostPlatform.isDarwin then
-              if      hostPlatform.osxMinVersion == "10.10" then "14"
-              else if hostPlatform.osxMinVersion == "10.9"  then "13"
-              else if hostPlatform.osxMinVersion == "10.8"  then "12"
-              else if hostPlatform.osxMinVersion == "10.7"  then "11"
-              else if hostPlatform.osxMinVersion == "10.6"  then "10"
-              else if hostPlatform.osxMinVersion == "10.5"  then "9"
+    "--force-target=${stdenv.hostPlatform.config}${
+            if stdenv.hostPlatform.isDarwin then
+              if      stdenv.hostPlatform.osxMinVersion == "10.10" then "14"
+              else if stdenv.hostPlatform.osxMinVersion == "10.9"  then "13"
+              else if stdenv.hostPlatform.osxMinVersion == "10.8"  then "12"
+              else if stdenv.hostPlatform.osxMinVersion == "10.7"  then "11"
+              else if stdenv.hostPlatform.osxMinVersion == "10.6"  then "10"
+              else if stdenv.hostPlatform.osxMinVersion == "10.5"  then "9"
               else "8"
             else ""}-gcc"
-    (if hostPlatform.isCygwin then "--enable-static-msvcrt" else "")
+    (if stdenv.hostPlatform.isCygwin then "--enable-static-msvcrt" else "")
   ] # Experimental features
     ++ optional experimentalSpatialSvcSupport "--enable-spatial-svc"
     ++ optional experimentalFpMbStatsSupport "--enable-fp-mb-stats"

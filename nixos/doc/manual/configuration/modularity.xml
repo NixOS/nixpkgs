@@ -74,7 +74,7 @@ The unique option `services.httpd.adminAddr' is defined multiple times, in `/etc
   argument is for: it contains the complete, merged system configuration. That
   is, <varname>config</varname> is the result of combining the configurations
   returned by every module
-  <footnote>
+  <footnote xml:id="footnote-nix-is-lazy">
    <para>
     If you’re wondering how it’s possible that the (indirect)
     <emphasis>result</emphasis> of a function is passed as an
@@ -127,4 +127,23 @@ nix-repl> map (x: x.hostName) config.<xref linkend="opt-services.httpd.virtualHo
 [ "example.org" "example.gov" ]
 </screen>
  </para>
+
+ <para>
+   While abstracting your configuration, you may find it useful to generate
+   modules using code, instead of writing files. The example
+   below would have the same effect as importing a file which sets those
+   options.
+   <screen>
+     { config, pkgs, ... }:
+
+     let netConfig = { hostName }: {
+       networking.hostName = hostName;
+       networking.useDHCP = false;
+    };
+
+    in
+
+    { imports = [ (netConfig "nixos.localdomain") ]; }
+  </screen>
+</para>
 </section>

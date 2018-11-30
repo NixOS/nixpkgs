@@ -1,13 +1,13 @@
 { stdenv, fetchzip, ocaml }:
 
-let version = "0.1.8"; in
+let version = "0.1.10"; in
 
 stdenv.mkDerivation {
   name = "obuild-${version}";
 
   src = fetchzip {
     url = "https://github.com/ocaml-obuild/obuild/archive/obuild-v${version}.tar.gz";
-    sha256 = "1q1k2qqd08j1zakvydgvwgwpyn0ll7rs65gap0pvg3amnh5cp3wd";
+    sha256 = "15arsgbhk1c39vd8qhpa3pag94m44bwvzggdvkibx6hnpkv8z9bn";
   };
 
   buildInputs = [ ocaml ];

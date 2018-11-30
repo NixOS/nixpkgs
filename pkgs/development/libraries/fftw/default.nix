@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, lib, precision ? "double" }:
+{ fetchurl, stdenv, lib, precision ? "double", perl }:
 
 with lib;
 
@@ -37,6 +37,8 @@ stdenv.mkDerivation rec {
     ++ optional (!withDoc) "--disable-doc";
 
   enableParallelBuilding = true;
+
+  checkInputs = [ perl ];
 
   meta = with stdenv.lib; {
     description = "Fastest Fourier Transform in the West library";

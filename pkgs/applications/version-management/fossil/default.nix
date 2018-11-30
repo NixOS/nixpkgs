@@ -5,7 +5,7 @@
 
 stdenv.mkDerivation rec {
   name = "fossil-${version}";
-  version = "2.6";
+  version = "2.7";
 
   src = fetchurl {
     urls =
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
         "https://www.fossil-scm.org/index.html/uv/fossil-src-${version}.tar.gz"
       ];
     name = "${name}.tar.gz";
-    sha256 = "1nbfzxwnq66f8162nmddd22xn3nyazqr16kka2c1gghqb5ar99vn";
+    sha256 = "0g032502lx4l1lvkczh8v7g0i90vbyriw0lmvi3mwjfp668ka91c";
   };
 
   buildInputs = [ zlib openssl readline sqlite which ed ]
@@ -21,13 +21,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ tcl ];
 
   doCheck = stdenv.hostPlatform == stdenv.buildPlatform;
-
-  checkTarget = "test";
-
-  preCheck = stdenv.lib.optional doCheck ''
+  preCheck = ''
     export TCLLIBPATH="${tcllib}/lib/tcllib${tcllib.version}"
   '';
-  configureFlags = if withJson then  "--json" else  "";
+  configureFlags = stdenv.lib.optional withJson "--json";
 
   preBuild=''
     export USER=nonexistent-but-specified-user

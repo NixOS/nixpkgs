@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
     sha256 = "1xq105596sk9yram5a143b369wpaiiwc9gz86n0j1kfr7nipkqn4";
   };
 
@@ -63,9 +63,9 @@ stdenv.mkDerivation rec {
 
   # Uncomment when switching back to meson
   # mesonFlags = [
-  #   "-Dgio_module_dir=lib/gio/modules"
-  #   "-Dsystemduserunitdir=lib/systemd/user"
-  #   "-Ddbus_service_dir=share/dbus-1/services"
+  #   "-Dgio_module_dir=${placeholder "out"}/lib/gio/modules"
+  #   "-Dsystemduserunitdir=${placeholder "out"}/lib/systemd/user"
+  #   "-Ddbus_service_dir=${placeholder "out"}/share/dbus-1/services"
   #   "-Dtmpfilesdir=no"
   # ] ++ stdenv.lib.optionals (!gnomeSupport) [
   #   "-Dgcr=false" "-Dgoa=false" "-Dkeyring=false" "-Dhttp=false"

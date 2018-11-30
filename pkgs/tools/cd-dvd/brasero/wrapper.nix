@@ -12,4 +12,6 @@ in symlinkJoin {
     wrapProgram $out/bin/brasero \
       --prefix PATH ':' ${binPath}
   '';
+  
+  inherit (brasero-original) meta;
 }

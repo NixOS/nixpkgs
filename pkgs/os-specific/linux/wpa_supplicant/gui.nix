@@ -23,8 +23,10 @@ stdenv.mkDerivation {
     cp -av icons/hicolor $out/share/icons
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Qt-based GUI for wpa_supplicant";
-    platforms = stdenv.lib.platforms.linux;
+    homepage = http://hostap.epitest.fi/wpa_supplicant/;
+    license = licenses.bsd3;
+    platforms = platforms.linux;
   };
 }

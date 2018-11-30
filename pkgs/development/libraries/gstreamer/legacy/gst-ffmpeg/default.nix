@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   # Upstream strongly recommends against using --with-system-ffmpeg,
   # but we do it anyway because we're so hardcore (and we don't want
   # multiple copies of ffmpeg).
-  configureFlags = stdenv.lib.optionalString (!useInternalFfmpeg) "--with-system-ffmpeg";
+  configureFlags = stdenv.lib.optional (!useInternalFfmpeg) "--with-system-ffmpeg";
 
   buildInputs =
     [ pkgconfig bzip2 gst-plugins-base orc ]

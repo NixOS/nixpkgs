@@ -1,7 +1,6 @@
-{ stdenv, fetchurl, buildPerlPackage, perlPackages
-}:
+{ stdenv, fetchurl, perlPackages }:
 
-buildPerlPackage rec {
+perlPackages.buildPerlPackage rec {
   name = "pflogsumm-${version}";
   version = "1.1.3";
 

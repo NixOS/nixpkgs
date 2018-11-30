@@ -2,7 +2,7 @@
   testfixtures, pillow, six, twisted, w3lib, lxml, queuelib, pyopenssl,
   service-identity, parsel, pydispatcher, cssselect, lib }:
 buildPythonPackage rec {
-  version = "1.5.0";
+  version = "1.5.1";
   pname = "Scrapy";
 
   checkInputs = [ glibcLocales mock pytest botocore testfixtures pillow ];
@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "31a0bf05d43198afaf3acfb9b4fb0c09c1d7d7ff641e58c66e36117f26c4b755";
+    sha256 = "5a398bf6818f87dcc817c919408a195f19ba46414ae12f259119336cfa862bb6";
   };
 
   meta = with lib; {

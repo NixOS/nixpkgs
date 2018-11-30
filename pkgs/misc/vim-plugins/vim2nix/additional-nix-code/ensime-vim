@@ -1,1 +1,0 @@
-    pythonDependencies = with pythonPackages; [ sexpdata websocket_client ];

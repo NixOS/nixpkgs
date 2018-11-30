@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   checkInputs = [ dbus.daemon ];
 
-  configureFlags = "--with-ca-certificates=/etc/ssl/certs/ca-certificates.crt";
+  configureFlags = [ "--with-ca-certificates=/etc/ssl/certs/ca-certificates.crt" ];
 
   enableParallelBuilding = true;
   doCheck = true;

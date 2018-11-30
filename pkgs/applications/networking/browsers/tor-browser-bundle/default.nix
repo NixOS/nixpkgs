@@ -19,12 +19,9 @@
 
 # Media support (implies audio support)
 , mediaSupport ? false
-, gstreamer
-, gst-plugins-base
-, gst-plugins-good
-, gst-ffmpeg
-, gmp
 , ffmpeg
+
+, gmp
 
 # Extensions, common
 , zip
@@ -72,18 +69,7 @@ let
 
   fontsDir = "${fontsEnv}/share/fonts";
 
-  gstPluginsPath = concatMapStringsSep ":" (x:
-    "${x}/lib/gstreamer-0.10") [
-      gstreamer
-      gst-plugins-base
-      gst-plugins-good
-      gst-ffmpeg
-    ];
-
-  gstLibPath = makeLibraryPath [
-    gstreamer
-    gst-plugins-base
-    gmp
+  mediaLibPath = makeLibraryPath [
     ffmpeg
   ];
 in
@@ -207,7 +193,7 @@ stdenv.mkDerivation rec {
     ''}
 
     ${optionalString mediaSupport ''
-      wrapper_LD_LIBRARY_PATH=${gstLibPath}''${wrapper_LD_LIBRARY_PATH:+:$wrapper_LD_LIBRARY_PATH}
+      wrapper_LD_LIBRARY_PATH=${mediaLibPath}''${wrapper_LD_LIBRARY_PATH:+:$wrapper_LD_LIBRARY_PATH}
     ''}
 
     mkdir -p $out/bin
@@ -284,10 +270,6 @@ stdenv.mkDerivation rec {
     #
     # APULSE_PLAYBACK_DEVICE is for audio playback w/o pulseaudio (no capture yet)
     #
-    # GST_PLUGIN_SYSTEM_PATH is for HD video playback
-    #
-    # GST_REGISTRY is set to devnull to minimize disk writes
-    #
     # TOR_* is for using an external tor instance
     #
     # Parameters lacking a default value below are *required* (enforced by
@@ -314,10 +296,6 @@ stdenv.mkDerivation rec {
       \
       APULSE_PLAYBACK_DEVICE="\''${APULSE_PLAYBACK_DEVICE:-plug:dmix}" \
       \
-      GST_PLUGIN_SYSTEM_PATH="${optionalString mediaSupport gstPluginsPath}" \
-      GST_REGISTRY="/dev/null" \
-      GST_REGISTRY_UPDATE="no" \
-      \
       TOR_SKIP_LAUNCH="\''${TOR_SKIP_LAUNCH:-}" \
       TOR_CONTROL_PORT="\''${TOR_CONTROL_PORT:-}" \
       TOR_SOCKS_PORT="\''${TOR_SOCKS_PORT:-}" \
@@ -337,8 +315,31 @@ stdenv.mkDerivation rec {
     $out/bin/tor-browser -version >/dev/null
   '';
 
+  passthru.execdir = "/bin";
   meta = with stdenv.lib; {
-    description = "An unofficial version of the tor browser bundle, built from source";
+    description = "An unofficial version of the Tor Browser Bundle, built from source";
+    longDescription = ''
+      Tor Browser Bundle is a bundle of the Tor daemon, Tor Browser (heavily patched version of
+      Firefox), several essential extensions for Tor Browser, and some tools that glue those
+      together with a convenient UI.
+
+      `tor-browser-bundle-bin` package is the official version built by torproject.org patched with
+      `patchelf` to work under nix and with bundled scripts adapted to the read-only nature of
+      the `/nix/store`.
+
+      `tor-browser-bundle` package is the version built completely from source. It reuses the `tor`
+      package for the tor daemon, `firefoxPackages.tor-browser` package for the tor-browser, and
+      builds all the extensions from source.
+
+      Note that `tor-browser-bundle` package is not only built from source, but also bundles Tor
+      Browser differently from the official `tor-browser-bundle-bin` implementation. The official
+      Tor Browser is not a normal UNIX program and is heavily patched for its use in the Tor Browser
+      Bundle (which `tor-browser-bundle-bin` package then has to work around for the read-only
+      /nix/store). Meanwhile, `firefoxPackages.tor-browser` reverts all those patches, allowing
+      `firefoxPackages.tor-browser` to be used independently of the bundle, and then implements what
+      `tor-browser-bundle` needs for the bundling using a much simpler patch. See the
+      longDescription and expression of the `firefoxPackages.tor-browser` package for more info.
+    '';
     homepage = https://torproject.org/;
     license = licenses.free;
     platforms = [ "x86_64-linux" ];

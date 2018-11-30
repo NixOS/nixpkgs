@@ -1,6 +1,5 @@
 { stdenv, writeScript
 , fetchurl, groff
-, buildPlatform, hostPlatform
 }:
 
 let
@@ -15,11 +14,11 @@ let
   '';
 in
 stdenv.mkDerivation rec {
-  name = "mdadm-4.0";
+  name = "mdadm-4.1";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/raid/mdadm/${name}.tar.xz";
-    sha256 = "1ad3mma641946wn5lsllwf0lifw9lps34fv1nnkhyfpd9krffshx";
+    sha256 = "0jjgjgqijpdp7ijh8slzzjjw690kydb1jjadf0x5ilq85628hxmb";
   };
 
   # This is to avoid self-references, which causes the initrd to explode
@@ -32,7 +31,7 @@ stdenv.mkDerivation rec {
     "NIXOS=1" "INSTALL=install" "INSTALL_BINDIR=$(out)/sbin"
     "MANDIR=$(out)/share/man" "RUN_DIR=/dev/.mdadm"
     "STRIP="
-  ] ++ stdenv.lib.optionals (hostPlatform != buildPlatform) [
+  ] ++ stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
   ];
 
@@ -44,9 +43,11 @@ stdenv.mkDerivation rec {
         -e 's@/usr/sbin/sendmail@${sendmail-script}@' -i Makefile
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Programs for managing RAID arrays under Linux";
     homepage = http://neil.brown.name/blog/mdadm;
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.gpl2;
+    maintainers = with maintainers; [ ekleog ];
+    platforms = platforms.linux;
   };
 }

@@ -5,7 +5,7 @@ rec {
 
   description = ''An implementation of css selectors that interacts with cxml-stp'';
 
-  deps = [ args."alexandria" args."babel" args."buildnode" args."cl-interpol" args."cl-ppcre" args."cl-unicode" args."closer-mop" args."closure-common" args."closure-html" args."collectors" args."css-selectors" args."cxml" args."cxml-dom" args."cxml-klacks" args."cxml-stp" args."cxml-test" args."cxml-xml" args."flexi-streams" args."iterate" args."parse-number" args."puri" args."split-sequence" args."swank" args."symbol-munger" args."trivial-features" args."trivial-gray-streams" args."xpath" args."yacc" ];
+  deps = [ args."alexandria" args."babel" args."buildnode" args."cl-interpol" args."cl-ppcre" args."cl-unicode" args."closer-mop" args."closure-common" args."closure-html" args."collectors" args."css-selectors" args."cxml" args."cxml-dom" args."cxml-klacks" args."cxml-stp" args."cxml-test" args."cxml-xml" args."flexi-streams" args."iterate" args."named-readtables" args."parse-number" args."puri" args."split-sequence" args."swank" args."symbol-munger" args."trivial-features" args."trivial-gray-streams" args."xpath" args."yacc" ];
 
   src = fetchurl {
     url = ''http://beta.quicklisp.org/archive/css-selectors/2016-06-28/css-selectors-20160628-git.tgz'';
@@ -36,17 +36,19 @@ rec {
      (NAME cxml-stp FILENAME cxml-stp) (NAME cxml-test FILENAME cxml-test)
      (NAME cxml-xml FILENAME cxml-xml)
      (NAME flexi-streams FILENAME flexi-streams)
-     (NAME iterate FILENAME iterate) (NAME parse-number FILENAME parse-number)
-     (NAME puri FILENAME puri) (NAME split-sequence FILENAME split-sequence)
-     (NAME swank FILENAME swank) (NAME symbol-munger FILENAME symbol-munger)
+     (NAME iterate FILENAME iterate)
+     (NAME named-readtables FILENAME named-readtables)
+     (NAME parse-number FILENAME parse-number) (NAME puri FILENAME puri)
+     (NAME split-sequence FILENAME split-sequence) (NAME swank FILENAME swank)
+     (NAME symbol-munger FILENAME symbol-munger)
      (NAME trivial-features FILENAME trivial-features)
      (NAME trivial-gray-streams FILENAME trivial-gray-streams)
      (NAME xpath FILENAME xpath) (NAME yacc FILENAME yacc))
     DEPENDENCIES
     (alexandria babel buildnode cl-interpol cl-ppcre cl-unicode closer-mop
      closure-common closure-html collectors css-selectors cxml cxml-dom
-     cxml-klacks cxml-stp cxml-test cxml-xml flexi-streams iterate parse-number
-     puri split-sequence swank symbol-munger trivial-features
-     trivial-gray-streams xpath yacc)
+     cxml-klacks cxml-stp cxml-test cxml-xml flexi-streams iterate
+     named-readtables parse-number puri split-sequence swank symbol-munger
+     trivial-features trivial-gray-streams xpath yacc)
     VERSION css-selectors-20160628-git SIBLINGS
     (css-selectors-simple-tree css-selectors) PARASITES NIL) */

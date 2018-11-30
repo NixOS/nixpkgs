@@ -1,7 +1,7 @@
-{ stdenv, fetchPypi, python, buildPythonPackage, pycairo, backports_functools_lru_cache
+{ stdenv, fetchPypi, python, buildPythonPackage, isPy3k, pycairo, backports_functools_lru_cache
 , which, cycler, dateutil, nose, numpy, pyparsing, sphinx, tornado, kiwisolver
 , freetype, libpng, pkgconfig, mock, pytz, pygobject3, functools32, subprocess32
-, enableGhostscript ? false, ghostscript ? null, gtk3
+, enableGhostscript ? true, ghostscript ? null, gtk3
 , enableGtk2 ? false, pygtk ? null, gobjectIntrospection
 , enableGtk3 ? false, cairo
 , enableTk ? false, tcl ? null, tk ? null, tkinter ? null, libX11 ? null
@@ -21,12 +21,14 @@ assert enableTk -> (tcl != null)
 assert enableQt -> pyqt4 != null;
 
 buildPythonPackage rec {
-  version = "2.2.2";
+  version = "3.0.2";
   pname = "matplotlib";
+
+  disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4dc7ef528aad21f22be85e95725234c5178c0f938e2228ca76640e5e84d8cde8";
+    sha256 = "c94b792af431f6adb6859eb218137acd9a35f4f7442cea57e4a59c54751c36af";
   };
 
   NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isDarwin "-I${libcxx}/include/c++/v1";
@@ -44,8 +46,7 @@ buildPythonPackage rec {
     ++ stdenv.lib.optional enableGtk2 pygtk
     ++ stdenv.lib.optionals enableGtk3 [ cairo pycairo gtk3 gobjectIntrospection pygobject3 ]
     ++ stdenv.lib.optionals enableTk [ tcl tk tkinter libX11 ]
-    ++ stdenv.lib.optionals enableQt [ pyqt4 ]
-    ++ stdenv.lib.optionals (builtins.hasAttr "isPy2" python) [ functools32 subprocess32 ];
+    ++ stdenv.lib.optionals enableQt [ pyqt4 ];
 
   patches =
     [ ./basedirlist.patch ] ++
@@ -84,9 +85,8 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Python plotting library, making publication quality plots";
-    homepage    = "http://matplotlib.sourceforge.net/";
+    homepage    = "https://matplotlib.org/";
     maintainers = with maintainers; [ lovek323 ];
-    platforms   = platforms.unix;
   };
 
 }

@@ -15,6 +15,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook ];
 
+  preCheck = ''
+    patchShebangs run_tests.sh
+  '';
+
   meta = with stdenv.lib; {
     description = "Tool for writing very fast and very flexible scanners";
     homepage    = "http://re2c.org";

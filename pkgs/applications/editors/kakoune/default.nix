@@ -4,12 +4,12 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "kakoune-unstable-${version}";
-  version = "2018-05-21";
+  version = "2018.10.27";
   src = fetchFromGitHub {
     repo = "kakoune";
     owner = "mawww";
-    rev = "878d2a4bdb674a5e7703a66e530520f48efba641";
-    sha256 = "0pwy6ilsb62s1792gjyvhvq8shj60l8lx26b58zvpfb54an4s6rk";
+    rev = "v${version}";
+    sha256 = "1w7jmq57h8gxxbzg0n3lgd6cci77xb9mziy6lr8330nzqc85zp9p";
   };
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ ncurses asciidoc docbook_xsl libxslt ];
@@ -19,6 +19,10 @@ stdenv.mkDerivation rec {
     export PREFIX=$out
     cd src
     sed -ie 's#--no-xmllint#--no-xmllint --xsltproc-opts="--nonet"#g' Makefile
+  '';
+
+  preConfigure = ''
+    export version="v${version}"
   '';
 
   meta = {

@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation rec {
   name = "enlightenment-${version}";
-  version = "0.22.3";
+  version = "0.22.4";
 
   src = fetchurl {
     url = "http://download.enlightenment.org/rel/apps/enlightenment/${name}.tar.xz";
-    sha256 = "16zydv7z94aw3rywmb9gr8ya85k7b75h22wng95lfx1x0y1yb0ad";
+    sha256 = "0ygy891rrw5c7lhk539nhif77j88phvz2h0fhx172iaridy9kx2r";
   };
 
   nativeBuildInputs = [
@@ -57,16 +57,6 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    # In order to get the available keyboard layouts Enlightenment looks for
-    # the file xorg.lst, that should be provided by xkeyboard-config (when
-    # configured with option --with-xkb-rules-symlink=xorg). Currently
-    # xkeyboard-config is not configured with this option in
-    # NixOS. Therefore it is needed to add base.lst (which xorg.lst would be
-    # a symbolic link to) explicitly as an alternative.
-
-    sed "/#ifdef XKB_BASE/a XKB_BASE \"\/rules\/base.lst\"," \
-      -i src/modules/wizard/page_011.c src/modules/xkbswitch/e_mod_parse.c
-
     # edge_cc is a binary provided by efl and cannot be found at the directory
     # given by e_prefix_bin_get(), which is $out/bin
 

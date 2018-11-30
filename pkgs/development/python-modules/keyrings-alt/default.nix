@@ -11,12 +11,15 @@ buildPythonPackage rec {
     sha256 = "0nnva8g03dv6gdhjk1ihn2qw7g15232fyj8shipah9whgfv8d75m";
   };
 
+  postPatch = ''
+    substituteInPlace pytest.ini \
+      --replace "--flake8" ""
+  '';
+
   nativeBuildInputs = [ setuptools_scm ];
   propagatedBuildInputs = [ six ];
 
-  # Fails with "ImportError: cannot import name mock"
-  #doCheck = false;
-  checkInputs = [ pytest pytest-flake8 keyring ] ++ stdenv.lib.optional (pythonOlder "3.3") backports_unittest-mock;
+  checkInputs = [ pytest keyring ] ++ stdenv.lib.optional (pythonOlder "3.3") backports_unittest-mock;
 
   checkPhase = ''
     py.test

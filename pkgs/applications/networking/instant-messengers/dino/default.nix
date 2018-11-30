@@ -10,16 +10,17 @@
 , dbus
 , gpgme
 , pcre
+, qrencode
  }:
 
 stdenv.mkDerivation rec {
-  name = "dino-unstable-2018-06-03";
+  name = "dino-unstable-2018-11-27";
 
   src = fetchFromGitHub {
     owner = "dino";
     repo = "dino";
-    rev = "52e116ee44be1667660c08858a28fe8fda125f79";
-    sha256 = "1yybmjd50r41366clrsw21qybbpjfkvim2n5b3dkcagjnifak0zl";
+    rev = "141db9e40a3a81cfa3ad3587dc47f69c541d0fde";
+    sha256 = "006r1x7drlz39jjxlfdnxgrnambw9amhl9jcgf6p1dx71h1x8221";
     fetchSubmodules = true;
   };
 
@@ -32,6 +33,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    qrencode
     gobjectIntrospection
     glib-networking
     glib

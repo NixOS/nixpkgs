@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "smmap2";
-  version = "2.0.3";
+  version = "2.0.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1hvn28p3zvxa98sbi9lrqvv2ps4q284j4jq9a619zw0m7yv0sly7";
+    sha256 = "dc216005e529d57007ace27048eb336dcecb7fc413cfb3b2f402bb25972b69c6";
   };
 
   checkInputs = [ nosexcover ];

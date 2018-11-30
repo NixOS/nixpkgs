@@ -34,9 +34,10 @@ stdenv.mkDerivation rec {
     cp ${gnu-config}/config.guess configure.guess
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = https://xiph.org/paranoia;
     description = "A tool and library for reading digital audio from CDs";
-    platforms = stdenv.lib.platforms.unix;
+    license = with licenses; [ gpl2Plus lgpl21Plus ];
+    platforms = platforms.unix;
   };
 }

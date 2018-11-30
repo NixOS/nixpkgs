@@ -178,7 +178,7 @@ let
       for file in elpy.el elpy-pkg.el; do
         substituteInPlace $file \
             --replace "company \"0.8.2\"" "company \"${company.version}\"" \
-            --replace "find-file-in-project \"3.3\"" "find-file-in-project \"${find-file-in-project.version}\"" \
+            --replace "find-file-in-project \"3.3\"" "find-file-in-project \"${(melpaPackages self).find-file-in-project.version}\"" \
             --replace "highlight-indentation \"0.5.0\"" "highlight-indentation \"${highlight-indentation.version}\"" \
             --replace "pyvenv \"1.3\"" "pyvenv \"${pyvenv.version}\"" \
             --replace "yasnippet \"0.8.0\"" "yasnippet \"${yasnippet.version}\""
@@ -226,31 +226,6 @@ let
   ess-R-object-popup =
     callPackage ../applications/editors/emacs-modes/ess-R-object-popup { };
 
-  find-file-in-project = melpaBuild rec {
-    pname = "find-file-in-project";
-    version = "3.5";
-    src = fetchFromGitHub {
-      owner  = "technomancy";
-      repo   = pname;
-      rev    = "53a8d8174f915d9dcf5ac6954b1c0cae61266177";
-      sha256 = "0wky8vqg08iw34prbz04bqmhfhj82y93swb8zkz6la2vf9da0gmd";
-    };
-    recipe = writeText "recipe" ''
-      (find-file-in-project
-       :repo "technomancy/find-file-in-project"
-       :fetcher github)
-    '';
-    meta = {
-      description = "Quick access to project files in Emacs";
-      longDescription = ''
-        Find files in a project quickly.
-        This program provides a couple methods for quickly finding any file in a
-        given project. It depends on GNU find.
-      '';
-      license = gpl3Plus;
-    };
-  };
-
   filesets-plus = callPackage ../applications/editors/emacs-modes/filesets-plus { };
 
   font-lock-plus = callPackage ../applications/editors/emacs-modes/font-lock-plus { };
@@ -297,23 +272,6 @@ let
   header2 = callPackage ../applications/editors/emacs-modes/header2 { };
 
   helm-words = callPackage ../applications/editors/emacs-modes/helm-words { };
-
-  hindent = melpaBuild rec {
-    pname = "hindent";
-    version = external.hindent.version;
-    src = external.hindent.src;
-    packageRequires = [ haskell-mode ];
-    propagatedUserEnvPkgs = [ external.hindent ];
-    recipe = writeText "recipe" ''
-      (hindent
-       :repo "commercialhaskell/hindent" :fetcher github
-       :files ("elisp/*.el"))
-    '';
-    meta = {
-      description = "Indent haskell code using the \"hindent\" program";
-      license = bsd3;
-    };
-  };
 
   icicles = callPackage ../applications/editors/emacs-modes/icicles { };
 

@@ -1,6 +1,4 @@
-{ stdenv, fetchurl, gmp
-, hostPlatform
-}:
+{ stdenv, fetchurl, gmp }:
 
 stdenv.mkDerivation rec {
   version = "4.0.1";
@@ -17,8 +15,8 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ gmp ];
 
   configureFlags =
-    stdenv.lib.optional hostPlatform.isSunOS "--disable-thread-safe" ++
-    stdenv.lib.optional hostPlatform.is64bit "--with-pic";
+    stdenv.lib.optional stdenv.hostPlatform.isSunOS "--disable-thread-safe" ++
+    stdenv.lib.optional stdenv.hostPlatform.is64bit "--with-pic";
 
   doCheck = true; # not cross;
 

@@ -1,4 +1,4 @@
-{ buildPythonPackage, fetchPypi, isPy3k, nose }:
+{ lib, buildPythonPackage, fetchPypi, isPy3k, nose }:
 
 buildPythonPackage rec {
   pname = "anyjson";
@@ -14,8 +14,9 @@ buildPythonPackage rec {
 
   buildInputs = [ nose ];
 
-  meta = {
-    homepage = https://pypi.python.org/pypi/anyjson/;
+  meta = with lib; {
+    homepage = https://bitbucket.org/runeh/anyjson/;
     description = "Wrapper that selects the best available JSON implementation";
+    license = licenses.bsd2;
   };
 }

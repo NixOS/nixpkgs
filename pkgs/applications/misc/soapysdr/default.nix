@@ -6,7 +6,7 @@
 } :
 
 let
-  version = "0.6.1";
+  version = "0.7.0";
 
 in stdenv.mkDerivation {
   name = "soapysdr-${version}";
@@ -15,7 +15,7 @@ in stdenv.mkDerivation {
     owner = "pothosware";
     repo = "SoapySDR";
     rev = "soapy-sdr-${version}";
-    sha256 = "1azbb2j6dv0b2dd5ks6yqd31j17sdhi9p82czwc8zy2isymax0l9";
+    sha256 = "14fjwnfj7jz9ixvim2gy4f52y6s7d4xggzxn2ck7g4q35d879x13";
   };
 
   nativeBuildInputs = [ cmake pkgconfig ];

@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   buildInputs = with stdenv.lib;
   [ perl fltk openssl libjpeg libpng libXcursor libXi libXinerama ];
 
-  configureFlags =  "--enable-ssl";
+  configureFlags = [ "--enable-ssl" ];
 
   meta = with stdenv.lib; {
     homepage = https://www.dillo.org/;
@@ -27,5 +27,6 @@ stdenv.mkDerivation rec {
     '';
     maintainers = [ maintainers.AndersonTorres ];
     platforms = platforms.linux;
+    license = licenses.gpl3;
   };
 }

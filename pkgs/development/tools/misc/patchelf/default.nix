@@ -10,13 +10,13 @@ stdenv.mkDerivation rec {
 
   setupHook = [ ./setup-hook.sh ];
 
-  #doCheck = true; # problems when loading libc.so.6
+  doCheck = false; # fails 8 out of 24 tests, problems when loading libc.so.6
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = https://nixos.org/patchelf.html;
-    license = "GPL";
+    license = licenses.gpl3;
     description = "A small utility to modify the dynamic linker and RPATH of ELF executables";
-    maintainers = [ stdenv.lib.maintainers.eelco ];
-    platforms = stdenv.lib.platforms.all;
+    maintainers = [ maintainers.eelco ];
+    platforms = platforms.all;
   };
 }

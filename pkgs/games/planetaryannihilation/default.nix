@@ -22,7 +22,7 @@ stdenv.mkDerivation {
     inherit (config.planetary_annihilation) url sha256;
   };
 
-  buildInputs = [ patchelf makeWrapper ];
+  nativeBuildInputs = [ patchelf makeWrapper ];
  
   installPhase = ''
     mkdir -p $out/{bin,lib}

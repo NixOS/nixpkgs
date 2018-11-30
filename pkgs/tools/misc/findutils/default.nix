@@ -1,6 +1,5 @@
 { stdenv, fetchurl
 , coreutils
-, buildPlatform, hostPlatform
 }:
 
 stdenv.mkDerivation rec {
@@ -11,16 +10,23 @@ stdenv.mkDerivation rec {
     sha256 = "178nn4dl7wbcw499czikirnkniwnx36argdnqgz4ik9i6zvwkm6y";
   };
 
-  patches = [ ./memory-leak.patch ./no-install-statedir.patch ];
+  patches = [
+    ./memory-leak.patch
+    ./no-install-statedir.patch
+
+    # Prevent tests from failing on old kernels (2.6x)
+    # getdtablesize reports incorrect values if getrlimit() fails
+    ./disable-getdtablesize-test.patch
+  ];
 
   buildInputs = [ coreutils ]; # bin/updatedb script needs to call sort
 
   # Since glibc-2.25 the i686 tests hang reliably right after test-sleep.
   doCheck
-    =  !hostPlatform.isDarwin
-    && !(hostPlatform.libc == "glibc" && hostPlatform.isi686)
-    && (hostPlatform.libc != "musl")
-    && hostPlatform == buildPlatform;
+    =  !stdenv.hostPlatform.isDarwin
+    && !(stdenv.hostPlatform.libc == "glibc" && stdenv.hostPlatform.isi686)
+    && (stdenv.hostPlatform.libc != "musl")
+    && stdenv.hostPlatform == stdenv.buildPlatform;
 
   outputs = [ "out" "info" ];
 

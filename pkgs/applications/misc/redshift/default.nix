@@ -2,11 +2,14 @@
 , libtool, pkgconfig, wrapGAppsHook, wrapPython, gobjectIntrospection
 , gtk3, python, pygobject3, hicolor-icon-theme, pyxdg
 
-, withCoreLocation ? stdenv.isDarwin, CoreLocation, Foundation, Cocoa
 , withQuartz ? stdenv.isDarwin, ApplicationServices
 , withRandr ? stdenv.isLinux, libxcb
 , withDrm ? stdenv.isLinux, libdrm
-, withGeoclue ? stdenv.isLinux, geoclue }:
+
+, withGeolocation ? true
+, withCoreLocation ? withGeolocation && stdenv.isDarwin, CoreLocation, Foundation, Cocoa
+, withGeoclue ? withGeolocation && stdenv.isLinux, geoclue
+}:
 
 stdenv.mkDerivation rec {
   name = "redshift-${version}";
@@ -60,6 +63,15 @@ stdenv.mkDerivation rec {
   preConfigure = "./bootstrap";
 
   postFixup = "wrapPythonPrograms";
+
+  # the geoclue agent may inspect these paths and expect them to be
+  # valid without having the correct $PATH set
+  postInstall = ''
+    substituteInPlace $out/share/applications/redshift.desktop \
+      --replace 'Exec=redshift' "Exec=$out/bin/redshift"
+    substituteInPlace $out/share/applications/redshift.desktop \
+      --replace 'Exec=redshift-gtk' "Exec=$out/bin/redshift-gtk"
+  '';
 
   enableParallelBuilding = true;
 

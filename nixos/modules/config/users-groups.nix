@@ -266,7 +266,7 @@ let
         (mkIf config.isNormalUser {
           group = mkDefault "users";
           createHome = mkDefault true;
-          home = mkDefault "/home/${name}";
+          home = mkDefault "/home/${config.name}";
           useDefaultShell = mkDefault true;
           isSystemUser = mkDefault false;
         })
@@ -524,6 +524,8 @@ in {
       utmp.gid = ids.gids.utmp;
       adm.gid = ids.gids.adm;
       input.gid = ids.gids.input;
+      kvm.gid = ids.gids.kvm;
+      render.gid = ids.gids.render;
     };
 
     system.activationScripts.users = stringAfter [ "stdio" ]

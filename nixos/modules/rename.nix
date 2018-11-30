@@ -4,7 +4,11 @@ with lib;
 
 {
   imports = [
-    (mkRenamedOptionModule [ "dysnomia" ] [ "services" "dysnomia" ])
+    # !!! These were renamed the other way, but got reverted later.
+    # !!! Drop these before 18.09 is released.
+    (mkRenamedOptionModule [ "system" "nixos" "stateVersion" ] [ "system" "stateVersion" ])
+    (mkRenamedOptionModule [ "system" "nixos" "defaultChannel" ] [ "system" "defaultChannel" ])
+
     (mkRenamedOptionModule [ "environment" "x11Packages" ] [ "environment" "systemPackages" ])
     (mkRenamedOptionModule [ "environment" "enableBashCompletion" ] [ "programs" "bash" "enableCompletion" ])
     (mkRenamedOptionModule [ "environment" "nix" ] [ "nix" "package" ])
@@ -24,7 +28,10 @@ with lib;
       (config:
         let enabled = getAttrFromPath [ "services" "printing" "gutenprint" ] config;
         in if enabled then [ pkgs.gutenprint ] else [ ]))
-    (mkRenamedOptionModule [ "services" "ddclient" "domain" ] [ "services" "ddclient" "domains" ])
+    (mkChangedOptionModule [ "services" "ddclient" "domain" ] [ "services" "ddclient" "domains" ]
+      (config:
+        let value = getAttrFromPath [ "services" "ddclient" "domain" ] config;
+        in if value != "" then [ value ] else []))
     (mkRemovedOptionModule [ "services" "ddclient" "homeDir" ] "")
     (mkRenamedOptionModule [ "services" "elasticsearch" "host" ] [ "services" "elasticsearch" "listenAddress" ])
     (mkRenamedOptionModule [ "services" "graphite" "api" "host" ] [ "services" "graphite" "api" "listenAddress" ])
@@ -35,6 +42,7 @@ with lib;
     (mkRenamedOptionModule [ "services" "kubernetes" "apiserver" "address" ] ["services" "kubernetes" "apiserver" "bindAddress"])
     (mkRemovedOptionModule [ "services" "kubernetes" "apiserver" "publicAddress" ] "")
     (mkRenamedOptionModule [ "services" "kubernetes" "addons" "dashboard" "enableRBAC" ] [ "services" "kubernetes" "addons" "dashboard" "rbac" "enable" ])
+    (mkRemovedOptionModule [ "services" "kubernetes" "kubelet" "cadvisorPort" ] "")
     (mkRenamedOptionModule [ "services" "logstash" "address" ] [ "services" "logstash" "listenAddress" ])
     (mkRenamedOptionModule [ "services" "mpd" "network" "host" ] [ "services" "mpd" "network" "listenAddress" ])
     (mkRenamedOptionModule [ "services" "neo4j" "host" ] [ "services" "neo4j" "defaultListenAddress" ])
@@ -215,15 +223,13 @@ with lib;
     '')
 
     # Profile splitting
-    (mkRenamedOptionModule [ "virtualization" "growPartition" ] [ "boot" "growPartition" ])
+    (mkRenamedOptionModule [ "virtualisation" "growPartition" ] [ "boot" "growPartition" ])
 
     # misc/version.nix
     (mkRenamedOptionModule [ "system" "nixosVersion" ] [ "system" "nixos" "version" ])
     (mkRenamedOptionModule [ "system" "nixosVersionSuffix" ] [ "system" "nixos" "versionSuffix" ])
     (mkRenamedOptionModule [ "system" "nixosRevision" ] [ "system" "nixos" "revision" ])
     (mkRenamedOptionModule [ "system" "nixosLabel" ] [ "system" "nixos" "label" ])
-    (mkRenamedOptionModule [ "system" "stateVersion" ] [ "system" "nixos" "stateVersion" ])
-    (mkRenamedOptionModule [ "system" "defaultChannel" ] [ "system" "nixos" "defaultChannel" ])
 
     # Users
     (mkAliasOptionModule [ "users" "extraUsers" ] [ "users" "users" ])
@@ -254,6 +260,8 @@ with lib;
     (mkRemovedOptionModule [ "fonts" "fontconfig" "forceAutohint" ] "")
     (mkRemovedOptionModule [ "fonts" "fontconfig" "renderMonoTTFAsBitmap" ] "")
     (mkRemovedOptionModule [ "virtualisation" "xen" "qemu" ] "You don't need this option anymore, it will work without it.")
+    (mkRemovedOptionModule [ "services" "logstash" "enableWeb" ] "The web interface was removed from logstash")
+    (mkRemovedOptionModule [ "boot" "zfs" "enableLegacyCrypto" ] "The corresponding package was removed from nixpkgs.")
 
     # ZSH
     (mkRenamedOptionModule [ "programs" "zsh" "enableSyntaxHighlighting" ] [ "programs" "zsh" "syntaxHighlighting" "enable" ])
@@ -272,6 +280,11 @@ with lib;
 
     (mkRenamedOptionModule [ "programs" "info" "enable" ] [ "documentation" "info" "enable" ])
     (mkRenamedOptionModule [ "programs" "man"  "enable" ] [ "documentation" "man"  "enable" ])
+    (mkRenamedOptionModule [ "services" "nixosManual" "enable" ] [ "documentation" "nixos" "enable" ])
+
+    # ckb
+    (mkRenamedOptionModule [ "hardware" "ckb" "enable" ] [ "hardware" "ckb-next" "enable" ])
+    (mkRenamedOptionModule [ "hardware" "ckb" "package" ] [ "hardware" "ckb-next" "package" ])
 
   ] ++ (flip map [ "blackboxExporter" "collectdExporter" "fritzboxExporter"
                    "jsonExporter" "minioExporter" "nginxExporter" "nodeExporter"

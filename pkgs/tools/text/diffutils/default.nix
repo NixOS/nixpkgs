@@ -20,9 +20,10 @@ stdenv.mkDerivation rec {
     stdenv.lib.optional (coreutils != null) "PR_PROGRAM=${coreutils}/bin/pr"
     ++ stdenv.lib.optional (stdenv.buildPlatform != stdenv.hostPlatform) "gl_cv_func_getopt_gnu=yes";
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://www.gnu.org/software/diffutils/diffutils.html;
     description = "Commands for showing the differences between files (diff, cmp, etc.)";
-    platforms = stdenv.lib.platforms.unix;
+    license = licenses.gpl3;
+    platforms = platforms.unix;
   };
 }

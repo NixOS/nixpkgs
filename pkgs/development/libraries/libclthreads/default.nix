@@ -2,20 +2,17 @@
 
 stdenv.mkDerivation rec {
   name = "libclthreads-${version}";
-  version = "2.4.0";
+  version = "2.4.2";
 
   src = fetchurl {
     url = "https://kokkinizita.linuxaudio.org/linuxaudio/downloads/clthreads-${version}.tar.bz2";
-    sha256 = "1s8xx99z6llv46cvkllmd72v2pkzbfl5gngcql85mf14mxkdb7x6";
+    sha256 = "0cbs1w89q8wfjrrhvxf6xk0y02nkjl5hd0yb692c8ma01i6b2nf6";
   };
 
   patchPhase = ''
-    # Fix hardcoded paths to executables
-    sed -e "s@/usr/bin/install@install@" -i ./Makefile
-    sed -e "s@/sbin/ldconfig@ldconfig@" -i ./Makefile
-
-    # Remove useless symlink: /lib64 -> /lib
-    sed -e '/ln -sf \$(CLTHREADS_MIN) \$(PREFIX)\/\$(LIBDIR)\/\$(CLTHREADS_SO)/d' -i ./Makefile
+    cd source
+    # don't run ldconfig:
+    sed -e "/ldconfig/d" -i ./Makefile
   '';
 
   makeFlags = [
@@ -24,12 +21,13 @@ stdenv.mkDerivation rec {
   ];
 
   preInstall = ''
-    # The Makefile does not create the include directory
+    # The Makefile does not create the include and lib directories
     mkdir -p $out/include
+    mkdir -p $out/lib
   '';
 
   postInstall = ''
-    ln -s $out/lib/libclthreads.so.${version} $out/lib/libclthreads.so
+    ln $out/lib/libclthreads.so $out/lib/libclthreads.so.2
   '';
 
   meta = with stdenv.lib; {

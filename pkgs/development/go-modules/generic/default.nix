@@ -103,6 +103,7 @@ go.stdenv.mkDerivation (
 
   '') + ''
     export GOPATH=$NIX_BUILD_TOP/go:$GOPATH
+    export GOCACHE=$TMPDIR/go-cache
 
     runHook postConfigure
   '';
@@ -152,6 +153,10 @@ go.stdenv.mkDerivation (
       fi
     }
 
+    if (( "''${NIX_DEBUG:-0}" >= 1 )); then
+      buildFlagsArray+=(-x)
+    fi
+
     if [ ''${#buildFlagsArray[@]} -ne 0 ]; then
       declare -p buildFlagsArray > $TMPDIR/buildFlagsArray
     else
@@ -166,6 +171,7 @@ go.stdenv.mkDerivation (
     runHook postBuild
   '';
 
+  doCheck = args.doCheck or false;
   checkPhase = args.checkPhase or ''
     runHook preCheck
 
@@ -187,9 +193,6 @@ go.stdenv.mkDerivation (
   preFixup = preFixup + ''
     find $bin/bin -type f -exec ${removeExpr removeReferences} '{}' + || true
   '';
-
-  # Disable go cache, which is not reused in nix anyway
-  GOCACHE = "off";
 
   shellHook = ''
     d=$(mktemp -d "--suffix=-$name")

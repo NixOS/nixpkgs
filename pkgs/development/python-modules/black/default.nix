@@ -4,13 +4,13 @@
 
 buildPythonPackage rec {
   pname = "black";
-  version = "18.6b4";
+  version = "18.9b0";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0i4sfqgz6w15vd50kbhi7g7rifgqlf8yfr8y78rypd56q64qn592";
+    sha256 = "1992ramdwv8sg4mbl5ajirwj5i4a48zjgsycib0fnbaliyiajc70";
   };
 
   checkInputs =  [ pytest glibcLocales ];

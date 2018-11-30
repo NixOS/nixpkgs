@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.mit;
   };
 
-  buildInputs = [ coq.ocaml coq.camlp5 which coq lngen ott coq.findlib ];
+  buildInputs = with coq.ocamlPackages; [ ocaml camlp5 which coq lngen ott findlib ];
   propagatedBuildInputs = [ coq ];
 
   enableParallelBuilding = true;

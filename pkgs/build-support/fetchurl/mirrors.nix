@@ -10,26 +10,26 @@ rec {
 
   # SourceForge.
   sourceforge = [
-    http://downloads.sourceforge.net/
-    http://prdownloads.sourceforge.net/
-    http://heanet.dl.sourceforge.net/sourceforge/
-    http://surfnet.dl.sourceforge.net/sourceforge/
-    http://dfn.dl.sourceforge.net/sourceforge/
-    http://osdn.dl.sourceforge.net/sourceforge/
-    http://kent.dl.sourceforge.net/sourceforge/
+    https://downloads.sourceforge.net/
+    https://prdownloads.sourceforge.net/
+    https://heanet.dl.sourceforge.net/sourceforge/
+    https://surfnet.dl.sourceforge.net/sourceforge/
+    https://dfn.dl.sourceforge.net/sourceforge/
+    https://osdn.dl.sourceforge.net/sourceforge/
+    https://kent.dl.sourceforge.net/sourceforge/
   ];
 
   # SourceForge.jp.
   sourceforgejp = [
-    http://osdn.dl.sourceforge.jp/
-    http://jaist.dl.sourceforge.jp/
+    https://osdn.dl.sourceforge.jp/
+    https://jaist.dl.sourceforge.jp/
   ];
 
-  # GNU (http://www.gnu.org/prep/ftp.html).
+  # GNU (https://www.gnu.org/prep/ftp.html).
   gnu = [
     # This one redirects to a (supposedly) nearby and (supposedly) up-to-date
     # mirror.
-    http://ftpmirror.gnu.org/
+    https://ftpmirror.gnu.org/
 
     http://ftp.nluug.nl/pub/gnu/
     http://mirrors.kernel.org/gnu/
@@ -157,12 +157,12 @@ rec {
 
   # CPAN mirrors.
   cpan = [
-    http://ftp.gwdg.de/pub/languages/perl/CPAN/
-    ftp://download.xs4all.nl/pub/mirror/CPAN/
+    https://ftp.gwdg.de/pub/languages/perl/CPAN/
+    https://download.xs4all.nl/mirror/CPAN/
+    https://cpan.metacpan.org/
+    https://cpan.perl.org/
     http://ftp.tuwien.ac.at/pub/CPAN/
     http://ftp.funet.fi/pub/CPAN/
-    https://cpan.metacpan.org/
-    http://cpan.perl.org/
     http://backpan.perl.org/  # for old releases
   ];
 

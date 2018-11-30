@@ -25,7 +25,7 @@ let
     "LD_LIBRARY_PATH=${cudaStub}\${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH} ";
 
 in buildPythonPackage rec {
-  version = "0.4.0";
+  version = "0.4.1";
   pname = "pytorch";
 
   src = fetchFromGitHub {
@@ -33,13 +33,29 @@ in buildPythonPackage rec {
     repo   = "pytorch";
     rev    = "v${version}";
     fetchSubmodules = true;
-    sha256 = "12d5vqqaprk0igmih7fwa65ldmaawgijxl58h6dnw660wysc132j";
+    sha256 = "1cr8h47jxgfar5bamyvlayvqymnb2qvp7rr0ka2d2d4rdldf9lrp";
   };
 
   preConfigure = lib.optionalString cudaSupport ''
     export CC=${cudatoolkit.cc}/bin/gcc CXX=${cudatoolkit.cc}/bin/g++
   '' + lib.optionalString (cudaSupport && cudnn != null) ''
     export CUDNN_INCLUDE_DIR=${cudnn}/include
+  '';
+
+  preFixup = ''
+    function join_by { local IFS="$1"; shift; echo "$*"; }
+    function strip2 {
+      IFS=':'
+      read -ra RP <<< $(patchelf --print-rpath $1)
+      IFS=' '
+      RP_NEW=$(join_by : ''${RP[@]:2})
+      patchelf --set-rpath \$ORIGIN:''${RP_NEW} "$1"
+    }
+
+    for f in $(find ''${out} -name 'libcaffe2*.so')
+    do
+      strip2 $f
+    done
   '';
 
   buildInputs = [
@@ -56,7 +72,7 @@ in buildPythonPackage rec {
   ] ++ lib.optional (pythonOlder "3.5") typing;
 
   checkPhase = ''
-    ${cudaStubEnv}python test/run_test.py --exclude distributed
+    ${cudaStubEnv}python test/run_test.py --exclude dataloader sparse torch utils distributed
   '';
 
   meta = {

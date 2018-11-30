@@ -1,12 +1,12 @@
 { stdenv, buildEnv, fetchurl, mono }:
 
 let
-  version = "1.7.3.1";
+  version = "1.8.0";
   drv = stdenv.mkDerivation {
     name = "keepassrpc-${version}";
     src = fetchurl {
       url    = "https://github.com/kee-org/keepassrpc/releases/download/v${version}/KeePassRPC.plgx";
-      sha256 = "1y9b35qg27caj3pbaqqzrqpk61hbbd8617ziwdc9vl799i786m9k";
+      sha256 = "1dclfpia559cqf78qw29zz235h1df5md4kgjv3bbi8y41wwmx7cd";
     };
 
     meta = with stdenv.lib; {
@@ -14,7 +14,7 @@ let
       homepage    = https://github.com/kee-org/keepassrpc;
       platforms   = [ "x86_64-linux" ];
       license     = licenses.gpl2;
-      maintainers = with maintainers; [ mjanczyk svsdep ];
+      maintainers = with maintainers; [ mjanczyk svsdep mgregoire ];
     };
 
     pluginFilename = "KeePassRPC.plgx";

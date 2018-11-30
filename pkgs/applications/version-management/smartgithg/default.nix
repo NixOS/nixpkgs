@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation rec {
   name = "smartgithg-${version}";
-  version = "17_1_4";
+  version = "18_1_5";
 
   src = fetchurl {
     url = "https://www.syntevo.com/downloads/smartgit/smartgit-linux-${version}.tar.gz";
-    sha256 = "1x8s1mdxg7m3fy3izgnb1smrn4ng3q31x0sqnjlchkb5vx7gp5rh";
+    sha256 = "0f2aj3259jvn7n0x6m8sbwliikln9lqffd00jg75dblhxwl8adg3";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -37,6 +37,8 @@ stdenv.mkDerivation rec {
     mkdir -pv ${pkg_path}
     # unpacking should have produced a dir named 'smartgit'
     cp -a smartgit/* ${pkg_path}
+    # prevent using packaged jre
+    rm -r ${pkg_path}/jre
     mkdir -pv ${bin_path}
     jre=${jre.home}
     makeWrapper ${pkg_path}/bin/smartgit.sh ${bin_path}/smartgit \
@@ -45,6 +47,7 @@ stdenv.mkDerivation rec {
       --prefix JRE_HOME : ${jre} \
       --prefix JAVA_HOME : ${jre} \
       --prefix SMARTGITHG_JAVA_HOME : ${jre}
+    sed -i '/ --login/d' ${pkg_path}/bin/smartgit.sh
     patchShebangs $out
     cp ${bin_path}/smartgit ${bin_path}/smartgithg
 

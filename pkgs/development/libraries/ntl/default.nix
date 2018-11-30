@@ -14,10 +14,11 @@ assert withGf2x -> gf2x != null;
 
 stdenv.mkDerivation rec {
   name = "ntl-${version}";
-  version = "11.2.1";
+  version = "11.3.2";
+
   src = fetchurl {
     url = "http://www.shoup.net/ntl/ntl-${version}.tar.gz";
-    sha256 = "04avzmqflx2a33n7v9jj32g83p7m6z712fg1mw308jk5ca2qp489";
+    sha256 = "17bfsvn72zjqfibnxscyf4hbk3inndh4r89jd2zg7mgqmd2k3fl4";
   };
 
   buildInputs = [
@@ -47,6 +48,7 @@ stdenv.mkDerivation rec {
       else
         "generic" # "chooses options that should be OK for most platforms"
     }"
+    "CXX=c++"
   ] ++ lib.optionals withGf2x [
     "NTL_GF2X_LIB=on"
     "GF2X_PREFIX=${gf2x}"
@@ -62,6 +64,8 @@ stdenv.mkDerivation rec {
       length integers, and for vectors, matrices, and polynomials over
       the integers and over finite fields.
     '';
+    # Upstream contact: maintainer is victorshoup on GitHub. Alternatively the
+    # email listed on the homepage.
     homepage = http://www.shoup.net/ntl/;
     maintainers = with maintainers; [ timokau ];
     license = licenses.gpl2Plus;

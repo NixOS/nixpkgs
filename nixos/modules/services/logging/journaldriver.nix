@@ -7,7 +7,7 @@
 # to be set.
 #
 # For further information please consult the documentation in the
-# upstream repository at: https://github.com/aprilabank/journaldriver/
+# upstream repository at: https://github.com/tazjin/journaldriver/
 
 { config, lib, pkgs, ...}:
 

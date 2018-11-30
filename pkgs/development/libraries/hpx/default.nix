@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "hpx-${version}";
-  version = "1.1.0";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "STEllAR-GROUP";
     repo = "hpx";
     rev = "${version}";
-    sha256 = "0xlhnycmpy2jgiqyzpwmkdrl6drf46ywdsl0qm4vksvjxqfgk9z3";
+    sha256 = "1rliv42glns60bpmmvmgrglgmii42p8bmji349r6mr68f48iv4dx";
   };
 
   buildInputs = [ boost hwloc gperftools ];

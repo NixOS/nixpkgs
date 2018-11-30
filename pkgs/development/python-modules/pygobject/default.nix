@@ -19,7 +19,7 @@ buildPythonPackage rec {
     ./pygobject-2.28.6-gio-types-2.32.patch
   ];
 
-  configureFlags = "--disable-introspection";
+  configureFlags = [ "--disable-introspection" ];
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ glib ];

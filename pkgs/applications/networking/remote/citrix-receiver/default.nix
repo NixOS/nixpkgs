@@ -39,50 +39,6 @@ let
   });
 
   versionInfo = {
-    "13.4.0" = rec {
-      major     = "13";
-      minor     = "4";
-      patch     = "0";
-      x64hash   = "133brs0sq6d0mgr19rc6ig1n9ahm3ryi23v5nrgqfh0hgxqcrrjb";
-      x86hash   = "0r7jfl5yqv1s2npy8l9gsn0gbb82f6raa092ppkc8xy5pni5sh7l";
-      x64suffix = "10109380";
-      x86suffix = x64suffix;
-      homepage  = https://www.citrix.com/downloads/citrix-receiver/legacy-receiver-for-linux/receiver-for-linux-latest-13-4.html;
-    };
-
-    "13.5.0" = rec {
-      major     = "13";
-      minor     = "5";
-      patch     = "0";
-      x64hash   = "1r24mhkpcc0z95n597p07fz92pd1b8qqzp2z6w07rmb9wb8mpd4x";
-      x86hash   = "0pwxshlryzhkl86cj9ryybm54alhzjx0gpp67fnvdn5r64wy1nd1";
-      x64suffix = "10185126";
-      x86suffix = x64suffix;
-      homepage  = https://www.citrix.com/downloads/citrix-receiver/legacy-receiver-for-linux/receiver-for-linux-latest-13-5.html;
-    };
-
-    "13.6.0" = rec {
-      major     = "13";
-      minor     = "6";
-      patch     = "0";
-      x64hash   = "6e423be41d5bb8186bcca3fbb4ede54dc3f00b8d2aeb216ae4aabffef9310d34";
-      x86hash   = "0ba3eba208b37844904d540b3011075ed5cecf429a0ab6c6cd52f2d0fd841ad2";
-      x64suffix = "10243651";
-      x86suffix = x64suffix;
-      homepage  = https://www.citrix.com/downloads/citrix-receiver/legacy-receiver-for-linux/receiver-for-linux-136.html;
-    };
-
-    "13.7.0" = {
-      major     = "13";
-      minor     = "7";
-      patch     = "0";
-      x64hash   = "18fb374b9fb8e249b79178500dddca7a1f275411c6537e7695da5dcf19c5ba91";
-      x86hash   = "4c68723b0327cf6f12da824056fce2b7853c38e6163a48c9d222b93dd8da75b6";
-      x64suffix = "10276927";
-      x86suffix = "10276925";
-      homepage  = https://www.citrix.com/downloads/citrix-receiver/legacy-receiver-for-linux/receiver-for-linux-137.html;
-    };
-
     "13.8.0" = {
       major     = "13";
       minor     = "8";
@@ -156,7 +112,7 @@ let
         '';
       };
 
-      phases = [ "unpackPhase" "installPhase" ];
+      dontBuild = true;
 
       sourceRoot = ".";
 
@@ -203,6 +159,8 @@ let
       };
 
       installPhase = ''
+        runHook preInstall
+
         export ICAInstDir="$out/opt/citrix-icaclient"
 
         sed -i \
@@ -262,13 +220,15 @@ let
 
         # We introduce a dependency on the source file so that it need not be redownloaded everytime
         echo $src >> "$out/share/nix_dependencies.pin"
+
+        runHook postInstall
       '';
 
       meta = with stdenv.lib; {
         license     = stdenv.lib.licenses.unfree;
         inherit homepage;
         description = "Citrix Receiver";
-        maintainers = with maintainers; [ obadz a1russell ];
+        maintainers = with maintainers; [ obadz a1russell ma27 ];
         platforms   = platforms.linux;
       };
     };

@@ -20,6 +20,7 @@ in mkDerivation rec {
   meta = with lib; {
     homepage = http://www.krename.net;
     description = "A powerful batch renamer for KDE";
+    license = licenses.gpl2;
     inherit (kconfig.meta) platforms;
     maintainers = with maintainers; [ peterhoeg ];
   };

@@ -18,9 +18,10 @@ stdenv.mkDerivation {
 
   hardeningDisable = [ "format" ];
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A fast image viewer";
     homepage = http://gqview.sourceforge.net;
-    platforms = stdenv.lib.platforms.unix;
+    license = licenses.gpl2;
+    platforms = platforms.unix;
   };
 }

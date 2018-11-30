@@ -54,12 +54,12 @@ stdenv.mkDerivation rec {
   version = "5.41.3.0";
 
   src =
-    if stdenv.system == "x86_64-linux" then
+    if stdenv.hostPlatform.system == "x86_64-linux" then
       fetchurl {
         url = "${baseURL}/google-talkplugin_${version}-1_amd64.deb";
         sha1 = "0bbc3d6997ba22ce712d93e5bc336c894b54fc81";
       }
-    else if stdenv.system == "i686-linux" then
+    else if stdenv.hostPlatform.system == "i686-linux" then
       fetchurl {
         url = "${baseURL}/google-talkplugin_${version}-1_i386.deb";
         sha1 = "6eae0544858f85c68b0cc46d7786e990bd94f139";

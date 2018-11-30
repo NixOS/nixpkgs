@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   # TODO: package boost-test, so we can run the test suite. (Currently it fails
   # to find libboost_unit_test_framework.a.)
-  configureFlags = "--enable-tests=no";
+  configureFlags = [ "--enable-tests=no" ];
   doCheck = false;
 
   meta = with stdenv.lib; {

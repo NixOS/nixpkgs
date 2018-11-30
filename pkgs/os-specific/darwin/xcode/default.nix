@@ -1,4 +1,4 @@
-{ stdenv, requireFile, targetPlatform, lib }:
+{ stdenv, requireFile, lib }:
 
 let requireXcode = version: sha256:
   let
@@ -46,5 +46,5 @@ in lib.makeExtensible (self: {
   xcode_9_1 = requireXcode "9.1" "0ab1403wy84ys3yn26fj78cazhpnslmh3nzzp1wxib3mr1afjvic";
   xcode_9_2 = requireXcode "9.2" "1bgfgdp266cbbqf2axcflz92frzvhi0qw0jdkcw6r85kdpc8dj4c";
   xcode_9_4 = requireXcode "9.4" "6731381785075602a52489f7ea47ece8f6daf225007ba3ffae1fd59b1c0b5f01";
-  xcode = self."xcode_${lib.replaceStrings ["."] ["_"] (if targetPlatform.useiOSPrebuilt then targetPlatform.xcodeVer else "8.2")}";
+  xcode = self."xcode_${lib.replaceStrings ["."] ["_"] (if stdenv.targetPlatform.useiOSPrebuilt then stdenv.targetPlatform.xcodeVer else "8.2")}";
 })

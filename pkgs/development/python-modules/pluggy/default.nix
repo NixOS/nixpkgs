@@ -1,15 +1,16 @@
 { buildPythonPackage
 , lib
 , fetchPypi
+, setuptools_scm
 }:
 
 buildPythonPackage rec {
   pname = "pluggy";
-  version = "0.6.0";
+  version = "0.7.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7f8ae7f5bdf75671a718d2daf0a64b7885f74510bcd98b1a0bb420eb9a9d0cff";
+    sha256 = "95eb8364a4708392bae89035f45341871286a333f749c3141c20573d2b3876e1";
   };
 
   checkPhase = ''
@@ -18,6 +19,8 @@ buildPythonPackage rec {
 
   # To prevent infinite recursion with pytest
   doCheck = false;
+
+  buildInputs = [ setuptools_scm ];
 
   meta = {
     description = "Plugin and hook calling mechanisms for Python";

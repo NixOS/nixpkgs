@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ expat zlib geos libspatialite ];
 
-  configureFlags = "--disable-freexl";
+  configureFlags = [ "--disable-freexl" ];
 
   enableParallelBuilding = true;
 

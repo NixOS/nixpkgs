@@ -9,6 +9,12 @@ import ./make-test.nix ({ pkgs, ...} : {
   machine =
     { config, pkgs, lib, ... }:
     { imports = [ ../modules/installer/cd-dvd/channel.nix ];
+
+      # XXX: Sandbox setup fails while trying to hardlink files from the host's
+      #      store file system into the prepared chroot directory.
+      nix.useSandbox = false;
+      nix.binaryCaches = []; # don't try to access cache.nixos.org
+
       virtualisation.writableStore = true;
       virtualisation.memorySize = 1024;
       # Make sure we always have all the required dependencies for creating a
@@ -18,13 +24,14 @@ import ./make-test.nix ({ pkgs, ...} : {
           inherit (config.nixpkgs.localSystem) system;
           modules = lib.singleton {
             containers.foo.config = {
-              system.nixos.stateVersion = "18.03";
+              system.stateVersion = "18.03";
             };
           };
         };
-      in [
-        pkgs.stdenv pkgs.stdenvNoCC emptyContainer.config.containers.foo.path
-        pkgs.libxslt
+      in with pkgs; [
+        stdenv stdenvNoCC emptyContainer.config.containers.foo.path
+        libxslt desktop-file-utils texinfo docbook5 libxml2
+        docbook_xsl_ns xorg.lndir documentation-highlighter
       ];
     };
 
@@ -78,6 +85,9 @@ import ./make-test.nix ({ pkgs, ...} : {
 
       # Execute commands via the root shell.
       $machine->succeed("nixos-container run $id1 -- uname") =~ /Linux/ or die;
+
+      # Execute a nix command via the root shell. (regression test for #40355)
+      $machine->succeed("nixos-container run $id1 -- nix-instantiate -E 'derivation { name = \"empty\"; builder = \"false\"; system = \"false\"; }'");
 
       # Stop and start (regression test for #4989)
       $machine->succeed("nixos-container stop $id1");

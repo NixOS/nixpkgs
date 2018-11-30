@@ -31,5 +31,8 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     maintainers = [ maintainers.bodil ];
     platforms = platforms.linux;
+    knownVulnerabilities = [
+      "https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=854585"
+    ];
   };
 }

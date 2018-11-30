@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "pylru";
-  version = "1.0.9";
+  version = "1.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0b0pq0l7xv83dfsajsc49jcxzc99kb9jfx1a1dlx22hzcy962dvi";
+    sha256 = "e03a3d354eb8fdfa11638698e8a1f06cd3b3a214ebc0a120c603a79290d9ebec";
   };
 
   meta = with lib; {

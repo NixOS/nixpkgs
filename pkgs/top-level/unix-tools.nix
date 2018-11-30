@@ -1,4 +1,4 @@
-{ pkgs, buildEnv, runCommand, hostPlatform, lib, stdenv }:
+{ pkgs, buildEnv, runCommand, lib, stdenv }:
 
 # These are some unix tools that are commonly included in the /usr/bin
 # and /usr/sbin directory under more normal distributions. Along with
@@ -16,7 +16,7 @@ let
   version = "1003.1-2008";
 
   singleBinary = cmd: providers: let
-      provider = providers.${hostPlatform.parsed.kernel.name};
+      provider = providers.${stdenv.hostPlatform.parsed.kernel.name};
       bin = "${getBin provider}/bin/${cmd}";
       manpage = "${getOutput "man" provider}/share/man/man1/${cmd}.1.gz";
     in runCommand "${cmd}-${version}" {
@@ -59,12 +59,12 @@ let
       linux = pkgs.utillinux;
     };
     getconf = {
-      linux = if hostPlatform.libc == "glibc" then pkgs.glibc
+      linux = if stdenv.hostPlatform.libc == "glibc" then pkgs.glibc
               else pkgs.netbsd.getconf;
       darwin = pkgs.darwin.system_cmds;
     };
     getent = {
-      linux = if hostPlatform.libc == "glibc" then pkgs.glibc
+      linux = if stdenv.hostPlatform.libc == "glibc" then pkgs.glibc
               else pkgs.netbsd.getent;
       darwin = pkgs.netbsd.getent;
     };

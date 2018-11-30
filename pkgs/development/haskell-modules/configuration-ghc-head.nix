@@ -40,7 +40,7 @@ self: super: {
   xhtml = null;
 
   # jailbreak-cabal can use the native Cabal library.
-  jailbreak-cabal = pkgs.haskell.packages.ghc802.jailbreak-cabal;
+  jailbreak-cabal = super.jailbreak-cabal.override { Cabal = null; };
 
   # haddock: No input file(s).
   nats = dontHaddock super.nats;

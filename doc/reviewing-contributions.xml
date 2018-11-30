@@ -6,31 +6,31 @@
  <title>Reviewing contributions</title>
  <warning>
   <para>
-   The following section is a draft, and the policy for reviewing is still being
-   discussed in issues such as <link
+   The following section is a draft, and the policy for reviewing is still
+   being discussed in issues such as
+   <link
 	   xlink:href="https://github.com/NixOS/nixpkgs/issues/11166">#11166
-   </link> and <link
+   </link> and
+   <link
 	   xlink:href="https://github.com/NixOS/nixpkgs/issues/20836">#20836
    </link>.
   </para>
  </warning>
  <para>
-  The nixpkgs project receives a fairly high number of contributions via
-  GitHub pull-requests. Reviewing and approving these is an important task and
-  a way to contribute to the project.
+  The Nixpkgs project receives a fairly high number of contributions via GitHub
+  pull requests. Reviewing and approving these is an important task and a way
+  to contribute to the project.
  </para>
  <para>
-  The high change rate of nixpkgs makes any pull request that remains open for
+  The high change rate of Nixpkgs makes any pull request that remains open for
   too long subject to conflicts that will require extra work from the submitter
-  or the merger. Reviewing pull requests in a timely manner and being
-  responsive to the comments is the key to avoid these. GitHub provides sort
-  filters that can be used to see the
-  <link
-    xlink:href="https://github.com/NixOS/nixpkgs/pulls?q=is%3Apr+is%3Aopen+sort%3Aupdated-desc">most
-  recently</link> and the
-  <link
-    xlink:href="https://github.com/NixOS/nixpkgs/pulls?q=is%3Apr+is%3Aopen+sort%3Aupdated-asc">least
-  recently</link> updated pull-requests. We highly encourage looking at
+  or the merger. Reviewing pull requests in a timely manner and being responsive
+  to the comments is the key to avoid this issue. GitHub provides sort filters
+  that can be used to see the <link
+  xlink:href="https://github.com/NixOS/nixpkgs/pulls?q=is%3Apr+is%3Aopen+sort%3Aupdated-desc">most
+  recently</link> and the <link
+  xlink:href="https://github.com/NixOS/nixpkgs/pulls?q=is%3Apr+is%3Aopen+sort%3Aupdated-asc">least
+  recently</link> updated pull requests. We highly encourage looking at
   <link xlink:href="https://github.com/NixOS/nixpkgs/pulls?q=is%3Apr+is%3Aopen+review%3Anone+status%3Asuccess+-label%3A%222.status%3A+work-in-progress%22+no%3Aproject+no%3Aassignee+no%3Amilestone">
   this list of ready to merge, unreviewed pull requests</link>.
  </para>
@@ -40,13 +40,13 @@
   to respect every community member and their work.
  </para>
  <para>
-  GitHub provides reactions as a simple and quick way to provide
-  feedback to pull-requests or any comments. The thumb-down reaction should be
-  used with care and if possible accompanied with some explanation so the
-  submitter has directions to improve their contribution.
+  GitHub provides reactions as a simple and quick way to provide feedback to
+  pull requests or any comments. The thumb-down reaction should be used with
+  care and if possible accompanied with some explanation so the submitter has
+  directions to improve their contribution.
  </para>
  <para>
-  Pull-request reviews should include a list of what has been reviewed in a
+  pull request reviews should include a list of what has been reviewed in a
   comment, so other reviewers and mergers can know the state of the review.
  </para>
  <para>
@@ -54,12 +54,12 @@
   meant as examples. Their usage is optional and the reviewer is free to adapt
   them to their liking.
  </para>
- <section>
+ <section xml:id="reviewing-contributions-package-updates">
   <title>Package updates</title>
 
   <para>
-   A package update is the most trivial and common type of pull-request. These
-   pull-requests mainly consist of updating the version part of the package
+   A package update is the most trivial and common type of pull request. These
+   pull requests mainly consist of updating the version part of the package
    name and the source hash.
   </para>
 
@@ -75,7 +75,7 @@
   <itemizedlist>
    <listitem>
     <para>
-     Add labels to the pull-request. (Requires commit rights)
+     Add labels to the pull request. (Requires commit rights)
     </para>
     <itemizedlist>
      <listitem>
@@ -103,8 +103,9 @@
     <itemizedlist>
      <listitem>
       <para>
-       mention-bot usually notifies GitHub users based on the submitted changes,
-       but it can happen that it misses some of the package maintainers.
+       <link xlink:href="https://help.github.com/articles/about-codeowners/">CODEOWNERS</link>
+       will make GitHub notify users based on the submitted changes, but it can
+       happen that it misses some of the package maintainers.
       </para>
      </listitem>
     </itemizedlist>
@@ -116,8 +117,8 @@
     <itemizedlist>
      <listitem>
       <para>
-       License can change with version updates, so it should be checked to match
-       the upstream license.
+       License can change with version updates, so it should be checked to
+       match the upstream license.
       </para>
      </listitem>
      <listitem>
@@ -141,9 +142,9 @@
     <itemizedlist>
      <listitem>
       <para>
-       Pull-requests are often targeted to the master or staging branch, and
-       building the pull-request locally when it is submitted can trigger
-       many source builds.
+       pull requests are often targeted to the master or staging branch, and
+       building the pull request locally when it is submitted can trigger many
+       source builds.
       </para>
       <para>
        It is possible to rebase the changes on nixos-unstable or
@@ -171,14 +172,14 @@ $ git rebase --onto nixos-unstable BASEBRANCH FETCH_HEAD <co
         </callout>
         <callout arearefs='reviewing-rebase-3'>
          <para>
-          Fetching the pull-request changes, <varname>PRNUMBER</varname> is the
-          number at the end of the pull-request title and
-          <varname>BASEBRANCH</varname> the base branch of the pull-request.
+          Fetching the pull request changes, <varname>PRNUMBER</varname> is the
+          number at the end of the pull request title and
+          <varname>BASEBRANCH</varname> the base branch of the pull request.
          </para>
         </callout>
         <callout arearefs='reviewing-rebase-4'>
          <para>
-          Rebasing the pull-request changes to the nixos-unstable branch.
+          Rebasing the pull request changes to the nixos-unstable branch.
          </para>
         </callout>
        </calloutlist>
@@ -187,10 +188,10 @@ $ git rebase --onto nixos-unstable BASEBRANCH FETCH_HEAD <co
      <listitem>
       <para>
        The <link xlink:href="https://github.com/madjar/nox">nox</link> tool can
-       be used to review a pull-request content in a single command. It doesn't
+       be used to review a pull request content in a single command. It doesn't
        rebase on a channel branch so it might trigger multiple source builds.
        <varname>PRNUMBER</varname> should be replaced by the number at the end
-       of the pull-request title.
+       of the pull request title.
       </para>
 <screen>
 $ nix-shell -p nox --run "nox-review -k pr PRNUMBER"
@@ -205,7 +206,7 @@ $ nix-shell -p nox --run "nox-review -k pr PRNUMBER"
    </listitem>
   </itemizedlist>
 
-  <example>
+  <example xml:id="reviewing-contributions-sample-package-update">
    <title>Sample template for a package update review</title>
 <screen>
 ##### Reviewed points
@@ -223,11 +224,11 @@ $ nix-shell -p nox --run "nox-review -k pr PRNUMBER"
 </screen>
   </example>
  </section>
- <section>
+ <section xml:id="reviewing-contributions-new-packages">
   <title>New packages</title>
 
   <para>
-   New packages are a common type of pull-requests. These pull requests
+   New packages are a common type of pull requests. These pull requests
    consists in adding a new nix-expression for a package.
   </para>
 
@@ -238,7 +239,7 @@ $ nix-shell -p nox --run "nox-review -k pr PRNUMBER"
   <itemizedlist>
    <listitem>
     <para>
-     Add labels to the pull-request. (Requires commit rights)
+     Add labels to the pull request. (Requires commit rights)
     </para>
     <itemizedlist>
      <listitem>
@@ -276,7 +277,7 @@ $ nix-shell -p nox --run "nox-review -k pr PRNUMBER"
      </listitem>
      <listitem>
       <para>
-       A maintainer must be set, this can be the package submitter or a
+       A maintainer must be set. This can be the package submitter or a
        community member that accepts to take maintainership of the package.
       </para>
      </listitem>
@@ -317,7 +318,7 @@ $ nix-shell -p nox --run "nox-review -k pr PRNUMBER"
    </listitem>
   </itemizedlist>
 
-  <example>
+  <example xml:id="reviewing-contributions-sample-new-package">
    <title>Sample template for a new package review</title>
 <screen>
 ##### Reviewed points
@@ -343,7 +344,7 @@ $ nix-shell -p nox --run "nox-review -k pr PRNUMBER"
 </screen>
   </example>
  </section>
- <section>
+ <section xml:id="reviewing-contributions-module-updates">
   <title>Module updates</title>
 
   <para>
@@ -358,7 +359,7 @@ $ nix-shell -p nox --run "nox-review -k pr PRNUMBER"
   <itemizedlist>
    <listitem>
     <para>
-     Add labels to the pull-request. (Requires commit rights)
+     Add labels to the pull request. (Requires commit rights)
     </para>
     <itemizedlist>
      <listitem>
@@ -376,8 +377,9 @@ $ nix-shell -p nox --run "nox-review -k pr PRNUMBER"
     <itemizedlist>
      <listitem>
       <para>
-       Mention-bot notify GitHub users based on the submitted changes, but it
-       can happen that it miss some of the package maintainers.
+       <link xlink:href="https://help.github.com/articles/about-codeowners/">CODEOWNERS</link>
+       will make GitHub notify users based on the submitted changes, but it can
+       happen that it misses some of the package maintainers.
       </para>
      </listitem>
     </itemizedlist>
@@ -439,7 +441,7 @@ $ nix-shell -p nox --run "nox-review -k pr PRNUMBER"
    </listitem>
   </itemizedlist>
 
-  <example>
+  <example xml:id="reviewing-contributions-sample-module-update">
    <title>Sample template for a module update review</title>
 <screen>
 ##### Reviewed points
@@ -460,7 +462,7 @@ $ nix-shell -p nox --run "nox-review -k pr PRNUMBER"
 </screen>
   </example>
  </section>
- <section>
+ <section xml:id="reviewing-contributions-new-modules">
   <title>New modules</title>
 
   <para>
@@ -470,7 +472,7 @@ $ nix-shell -p nox --run "nox-review -k pr PRNUMBER"
   <itemizedlist>
    <listitem>
     <para>
-     Add labels to the pull-request. (Requires commit rights)
+     Add labels to the pull request. (Requires commit rights)
     </para>
     <itemizedlist>
      <listitem>
@@ -538,7 +540,7 @@ $ nix-shell -p nox --run "nox-review -k pr PRNUMBER"
    </listitem>
   </itemizedlist>
 
-  <example>
+  <example xml:id="reviewing-contributions-sample-new-module">
    <title>Sample template for a new module review</title>
 <screen>
 ##### Reviewed points
@@ -560,7 +562,7 @@ $ nix-shell -p nox --run "nox-review -k pr PRNUMBER"
 </screen>
   </example>
  </section>
- <section>
+ <section xml:id="reviewing-contributions-other-submissions">
   <title>Other submissions</title>
 
   <para>
@@ -572,7 +574,7 @@ $ nix-shell -p nox --run "nox-review -k pr PRNUMBER"
    like to be a long-term reviewer for related submissions, please contact the
    current reviewers for that topic. They will give you information about the
    reviewing process. The main reviewers for a topic can be hard to find as
-   there is no list, but checking past pull-requests to see who reviewed or
+   there is no list, but checking past pull requests to see who reviewed or
    git-blaming the code to see who committed to that topic can give some hints.
   </para>
 
@@ -581,8 +583,8 @@ $ nix-shell -p nox --run "nox-review -k pr PRNUMBER"
    pull requests fitting this category.
   </para>
  </section>
- <section>
-  <title>Merging pull-requests</title>
+ <section xml:id="reviewing-contributions--merging-pull-requests">
+  <title>Merging pull requests</title>
 
   <para>
    It is possible for community members that have enough knowledge and
@@ -604,9 +606,11 @@ policy.
 
   <para>
    In a case a contributor leaves definitively the Nix community, he should
-   create an issue or notify the mailing list with references of packages and
-   modules he maintains so the maintainership can be taken over by other
-   contributors.
+   create an issue or post on
+   <link
+   xlink:href="https://discourse.nixos.org">Discourse</link> with
+   references of packages and modules he maintains so the maintainership can be
+   taken over by other contributors.
   </para>
  </section>
 </chapter>

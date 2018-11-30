@@ -17,5 +17,6 @@ stdenv.mkDerivation rec {
     description = "Template engine library written in C";
     platforms = platforms.linux;
     maintainers = [ maintainers.lethalman ];
+    license = licenses.gpl3Plus;
   };
 }

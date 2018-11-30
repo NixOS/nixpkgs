@@ -19,7 +19,7 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 
-const gchar *bind_blacklist[] = {"bin", "etc", "host", "usr", NULL};
+const gchar *bind_blacklist[] = {"bin", "etc", "host", "usr", "lib", "lib64", "lib32", "sbin", NULL};
 
 void bind_mount(const gchar *source, const gchar *target) {
   fail_if(g_mkdir(target, 0755));

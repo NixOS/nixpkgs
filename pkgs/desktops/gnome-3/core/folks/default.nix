@@ -10,7 +10,7 @@ in stdenv.mkDerivation rec {
   name = "folks-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/folks/${gnome3.versionBranch version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/folks/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
     sha256 = "16hqh2gxlbx0b0hgq216hndr1m72vj54jvryzii9zqkk0g9kxc57";
   };
 
@@ -20,7 +20,7 @@ in stdenv.mkDerivation rec {
                   vala libsecret libxml2 libsoup nspr nss intltool db ];
   nativeBuildInputs = [ pkgconfig ];
 
-  configureFlags = "--disable-fatal-warnings";
+  configureFlags = [ "--disable-fatal-warnings" ];
 
   NIX_CFLAGS_COMPILE = ["-I${nss.dev}/include/nss"
                         "-I${dbus-glib.dev}/include/dbus-1.0" "-I${dbus.dev}/include/dbus-1.0"];

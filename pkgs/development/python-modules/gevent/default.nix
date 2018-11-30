@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "gevent";
-  version = "1.3.4";
+  version = "1.3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "53c4dc705886d028f5d81e698b1d1479994a421498cd6529cb9711b5e2a84f74";
+    sha256 = "7b413c391e8ad6607b7f7540d698a94349abd64e4935184c595f7cdcc69904c6";
   };
 
   buildInputs = [ libev ];

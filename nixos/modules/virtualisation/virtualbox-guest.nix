@@ -34,7 +34,7 @@ in
   config = mkIf cfg.enable (mkMerge [{
     assertions = [{
       assertion = pkgs.stdenv.isi686 || pkgs.stdenv.isx86_64;
-      message = "Virtualbox not currently supported on ${pkgs.stdenv.system}";
+      message = "Virtualbox not currently supported on ${pkgs.stdenv.hostPlatform.system}";
     }];
 
     environment.systemPackages = [ kernel.virtualboxGuestAdditions ];

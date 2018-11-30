@@ -1,6 +1,5 @@
 { stdenv, fetchurl
 , pcre, windows ? null
-, buildPlatform, hostPlatform
 , variant ? null
 }:
 
@@ -18,19 +17,19 @@ in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/pcre-${version}.tar.bz2";
+    url = "https://ftp.pcre.org/pub/pcre/pcre-${version}.tar.bz2";
     sha256 = "00ckpzlgyr16bnqx8fawa3afjgqxw5yxgs2l081vw23qi1y4pl1c";
   };
 
   outputs = [ "bin" "dev" "out" "doc" "man" ];
 
-  configureFlags = optional (!hostPlatform.isRiscV) "--enable-jit" ++ [
+  configureFlags = optional (!stdenv.hostPlatform.isRiscV) "--enable-jit" ++ [
     "--enable-unicode-properties"
     "--disable-cpp"
   ]
     ++ optional (variant != null) "--enable-${variant}";
 
-  buildInputs = optional (hostPlatform.libc == "msvcrt") windows.mingw_w64_pthreads;
+  buildInputs = optional (stdenv.hostPlatform.libc == "msvcrt") windows.mingw_w64_pthreads;
 
   # https://bugs.exim.org/show_bug.cgi?id=2173
   patches = [ ./stacksize-detection.patch ];
@@ -39,7 +38,7 @@ in stdenv.mkDerivation rec {
     patchShebangs RunGrepTest
   '';
 
-  doCheck = !(with hostPlatform; isCygwin || isFreeBSD) && hostPlatform == buildPlatform;
+  doCheck = !(with stdenv.hostPlatform; isCygwin || isFreeBSD) && stdenv.hostPlatform == stdenv.buildPlatform;
     # XXX: test failure on Cygwin
     # we are running out of stack on both freeBSDs on Hydra
 

@@ -1,13 +1,14 @@
-{ stdenv, agda, fetchsvn }:
+{ stdenv, agda, fetchFromGitHub }:
 
 agda.mkDerivation (self: rec {
-  version = "18734";
+  version = "1.4.0";
   name = "agda-iowa-stdlib-${version}";
 
-  src = fetchsvn {
-    url = "https://svn.divms.uiowa.edu/repos/clc/projects/agda/lib";
-    rev = version;
-    sha256 = "0aqib88m5n6aqb5lmns9nl62x40yqhg6zpj0zjxibbn4s4qjw9ky";
+  src = fetchFromGitHub {
+    owner = "cedille";
+    repo  = "ial";
+    rev = "v${version}";
+    sha256 = "1gwxpybxwdj5ipbb3gapm7r5hfl3g6sj9kp13954pdmx8d5b0gma";
   };
 
   sourceDirectories = [ "./." ];
@@ -22,7 +23,5 @@ agda.mkDerivation (self: rec {
     license = stdenv.lib.licenses.free;
     platforms = stdenv.lib.platforms.unix;
     maintainers = with stdenv.lib.maintainers; [ fuuzetsu ];
-
-    broken = true;
   };
 })

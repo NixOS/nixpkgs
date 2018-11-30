@@ -1,4 +1,8 @@
-{lib, buildOcaml, fetchurl}:
+{ lib, buildOcaml, fetchurl, ocaml }:
+
+if lib.versionAtLeast ocaml.version "4.06"
+then throw "FrontC is not available for OCaml ${ocaml.version}"
+else
 
 buildOcaml rec {
   name = "FrontC";

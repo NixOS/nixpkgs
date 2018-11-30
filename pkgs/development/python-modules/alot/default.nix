@@ -47,6 +47,8 @@ buildPythonPackage rec {
     mkdir -p $out/share/{applications,alot}
     cp -r extra/themes $out/share/alot
 
+    install -D extra/completion/alot-completion.zsh $out/share/zsh/site-functions/_alot
+
     sed "s,/usr/bin,$out/bin,g" extra/alot.desktop > $out/share/applications/alot.desktop
   '';
 

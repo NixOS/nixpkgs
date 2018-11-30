@@ -13,9 +13,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ aspell glib hunspell hspell ];
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Generic spell checking library";
     homepage = http://www.abisource.com/enchant;
-    platforms = stdenv.lib.platforms.unix;
+    platforms = platforms.unix;
+    license = licenses.lgpl21;
   };
 }

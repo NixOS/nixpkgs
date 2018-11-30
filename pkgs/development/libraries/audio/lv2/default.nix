@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gtk2, libsndfile, pkgconfig, python }:
+{ stdenv, fetchurl, gtk2, libsndfile, pkgconfig, python, wafHook }:
 
 stdenv.mkDerivation rec {
   name = "lv2-${version}";
@@ -9,14 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "0chxwys3vnn3nxc9x2vchm74s9sx0vfra6y893byy12ci61jc1dq";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig wafHook ];
   buildInputs = [ gtk2 libsndfile python ];
-
-  configurePhase = "${python.interpreter} waf configure --prefix=$out";
-
-  buildPhase = "${python.interpreter} waf";
-
-  installPhase = "${python.interpreter} waf install";
 
   meta = with stdenv.lib; {
     homepage = http://lv2plug.in;

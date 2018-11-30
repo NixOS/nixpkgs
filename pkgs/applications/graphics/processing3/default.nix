@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, fetchurl, xmlstarlet, makeWrapper, ant, jdk, rsync, javaPackages, libXxf86vm, gsettings-desktop-schemas }:
 
 stdenv.mkDerivation rec {
-  version = "3.3.7";
+  version = "3.4";
   name = "processing3-${version}";
 
   src = fetchFromGitHub {
     owner = "processing";
     repo = "processing";
-    rev = "processing-0264-3.3.7";
-    sha256 = "0a20z19lmc4xarfnr7xshcmlv3xkc2dgjxknis0iv79gxnwlqhpq";
+    rev = "processing-0265-${version}";
+    sha256 = "12wpxgn2wd5vbasx9584w5yb1s319smq1zh8m7dvp7gkqw9plwp4";
   };
 
   nativeBuildInputs = [ ant rsync makeWrapper ];
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     ${xmlstarlet}/bin/xmlstarlet ed --inplace -P -d '//get[@src="http://download.processing.org/reference.zip"]' build/build.xml
     install -D -m0444 ${fetchurl {
                           url    = http://download.processing.org/reference.zip;
-                          sha256 = "104zig026y8vbl4qksmscjq0bms8mi2jmri1ijdlbkxcqnv9bnlf";
+                          sha256 = "0ai0cr62gc7n6y22ki3qibyj1qnlaxv1miqxmmahfk3hpbyfqz9n";
                         }
                        } ./java/reference.zip
 

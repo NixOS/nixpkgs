@@ -1,6 +1,6 @@
 { stdenv, fetchurl, makeWrapper, pkgconfig, gtk2, gtkspell2, aspell
 , gst_all_1, startupnotification, gettext
-, perl, perlXMLParser, libxml2, nss, nspr, farstream
+, perlPackages, libxml2, nss, nspr, farstream
 , libXScrnSaver, ncurses, avahi, dbus, dbus-glib, intltool, libidn
 , lib, python, libICE, libXext, libSM
 , cyrus_sasl ? null
@@ -40,9 +40,8 @@ let unwrapped = stdenv.mkDerivation rec {
   ++ (lib.optional (gnutls != null) gnutls)
   ++ (lib.optional (libgcrypt != null) libgcrypt);
 
-  propagatedBuildInputs = [
-    pkgconfig gtk2 perl perlXMLParser gettext
-  ];
+  propagatedBuildInputs = [ pkgconfig gtk2 gettext ]
+    ++ (with perlPackages; [ perl XMLParser ]);
 
   patches = [ ./pidgin-makefile.patch ./add-search-path.patch ];
 

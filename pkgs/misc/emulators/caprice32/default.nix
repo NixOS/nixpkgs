@@ -3,14 +3,14 @@
 stdenv.mkDerivation rec {
 
   repo = "caprice32";
-  version = "unstable-2018-02-10";
-  rev = "53de69543300f81af85df32cbd21bb5c68cab61e";
+  version = "unstable-2018-03-05";
+  rev = "317fe638111e245d67e301f6f295094d3c859a70";
   name = "${repo}-${version}";
 
   src = fetchFromGitHub {
     inherit rev repo;
     owner = "ColinPitrat";
-    sha256 = "12yv56blm49qmshpk4mgc802bs51wv2ra87hmcbf2wxma39c45fy";
+    sha256 = "1bywpmkizixcnr057k8zq9nlw0zhcmwkiriln0krgdcm7d3h9b86";
   };
 
   postPatch = "substituteInPlace cap32.cfg --replace /usr/local $out";

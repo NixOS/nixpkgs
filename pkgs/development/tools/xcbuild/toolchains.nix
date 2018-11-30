@@ -1,4 +1,4 @@
-{ runCommand, toolchainName, fetchurl, makeWrapper, stdenv
+{ runCommand, toolchainName, fetchurl, stdenv
 , buildPackages, lib, writeText }:
 
 let
@@ -20,52 +20,52 @@ let
   };
 in
 
-runCommand "Toolchains" {
-  nativeBuildInputs = [ makeWrapper ];
-} (''
+runCommand "Toolchains" {} (''
   toolchain=$out/XcodeDefault.xctoolchain
   mkdir -p $toolchain
 
   install -D ${writeText "ToolchainInfo.plist" (toPlist {} ToolchainInfo)} $toolchain/ToolchainInfo.plist
 
-  mkdir -p $toolchain/usr/include
-  mkdir -p $toolchain/usr/lib
-  mkdir -p $toolchain/usr/libexec
-  mkdir -p $toolchain/usr/share
-  mkdir -p $toolchain/usr/bin
+  ln -s $toolchain $toolchain/usr
+
+  mkdir -p $toolchain/include
+  mkdir -p $toolchain/lib
+  mkdir -p $toolchain/libexec
+  mkdir -p $toolchain/share
+  mkdir -p $toolchain/bin
 
   for bin in ${getBin stdenv.cc}/bin/*; do
-    ln -s $bin $toolchain/usr/bin
+    ln -s $bin $toolchain/bin
   done
 
   for bin in ${getBin stdenv.cc.bintools.bintools}/bin/*; do
-    if ! [ -e "$toolchain/usr/bin/$(basename $bin)" ]; then
-      ln -s $bin $toolchain/usr/bin
+    if ! [ -e "$toolchain/bin/$(basename $bin)" ]; then
+      ln -s $bin $toolchain/bin
     fi
   done
 
-  ln -s ${buildPackages.yacc}/bin/yacc $toolchain/usr/bin/yacc
-  ln -s ${buildPackages.yacc}/bin/bison $toolchain/usr/bin/bison
-  ln -s ${buildPackages.flex}/bin/flex $toolchain/usr/bin/flex
-  ln -s ${buildPackages.flex}/bin/flex++ $toolchain/usr/bin/flex++
-  ln -s $toolchain/bin/flex $toolchain/usr/bin/lex
+  ln -s ${buildPackages.yacc}/bin/yacc $toolchain/bin/yacc
+  ln -s ${buildPackages.yacc}/bin/bison $toolchain/bin/bison
+  ln -s ${buildPackages.flex}/bin/flex $toolchain/bin/flex
+  ln -s ${buildPackages.flex}/bin/flex++ $toolchain/bin/flex++
+  ln -s $toolchain/bin/flex $toolchain/bin/lex
 
-  ln -s ${buildPackages.m4}/bin/m4 $toolchain/usr/bin/m4
-  ln -s $toolchain/usr/bin/m4 $toolchain/usr/bin/gm4
+  ln -s ${buildPackages.m4}/bin/m4 $toolchain/bin/m4
+  ln -s $toolchain/bin/m4 $toolchain/bin/gm4
 
-  ln -s ${buildPackages.unifdef}/bin/unifdef $toolchain/usr/bin/unifdef
-  ln -s ${buildPackages.unifdef}/bin/unifdefall $toolchain/usr/bin/unifdefall
+  ln -s ${buildPackages.unifdef}/bin/unifdef $toolchain/bin/unifdef
+  ln -s ${buildPackages.unifdef}/bin/unifdefall $toolchain/bin/unifdefall
 
-  ln -s ${buildPackages.gperf}/bin/gperf $toolchain/usr/bin/gperf
-  ln -s ${buildPackages.indent}/bin/indent $toolchain/usr/bin/indent
-  ln -s ${buildPackages.ctags}/bin/ctags $toolchain/usr/bin/ctags
+  ln -s ${buildPackages.gperf}/bin/gperf $toolchain/bin/gperf
+  ln -s ${buildPackages.indent}/bin/indent $toolchain/bin/indent
+  ln -s ${buildPackages.ctags}/bin/ctags $toolchain/bin/ctags
 '' + optionalString stdenv.isDarwin ''
   for bin in ${getBin buildPackages.darwin.cctools}/bin/*; do
-    if ! [ -e "$toolchain/usr/bin/$(basename $bin)" ]; then
-      ln -s $bin $toolchain/usr/bin
+    if ! [ -e "$toolchain/bin/$(basename $bin)" ]; then
+      ln -s $bin $toolchain/bin
     fi
   done
 
-  ln -s ${buildPackages.darwin.bootstrap_cmds}/bin/mig $toolchain/usr/bin
-  ln -s ${mkdep-darwin-src} $toolchain/usr/bin/mkdep
+  ln -s ${buildPackages.darwin.bootstrap_cmds}/bin/mig $toolchain/bin
+  ln -s ${mkdep-darwin-src} $toolchain/bin/mkdep
 '')

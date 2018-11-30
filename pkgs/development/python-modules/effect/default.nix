@@ -1,5 +1,6 @@
 { buildPythonPackage
 , fetchPypi
+, isPy37
 , lib
 , six
 , attrs
@@ -25,6 +26,8 @@ buildPythonPackage rec {
   checkPhase = ''
     pytest .
   '';
+  # Tests fails on python3.7 https://github.com/python-effect/effect/issues/78
+  doCheck = !isPy37;
   meta = with lib; {
     description = "Pure effects for Python";
     homepage = https://github.com/python-effect/effect;

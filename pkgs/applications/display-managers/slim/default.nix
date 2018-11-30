@@ -50,5 +50,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = https://sourceforge.net/projects/slim.berlios/; # berlios shut down; I found no replacement yet
     platforms = stdenv.lib.platforms.linux;
+    license = stdenv.lib.licenses.gpl2;
   };
 }

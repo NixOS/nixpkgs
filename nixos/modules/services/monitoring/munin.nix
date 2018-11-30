@@ -5,8 +5,8 @@
 
 # TODO: support fastcgi
 # http://munin-monitoring.org/wiki/CgiHowto2
-# spawn-fcgi -s /var/run/munin/fastcgi-graph.sock -U www-data   -u munin -g munin /usr/lib/munin/cgi/munin-cgi-graph
-# spawn-fcgi -s /var/run/munin/fastcgi-html.sock  -U www-data   -u munin -g munin /usr/lib/munin/cgi/munin-cgi-html
+# spawn-fcgi -s /run/munin/fastcgi-graph.sock -U www-data   -u munin -g munin /usr/lib/munin/cgi/munin-cgi-graph
+# spawn-fcgi -s /run/munin/fastcgi-html.sock  -U www-data   -u munin -g munin /usr/lib/munin/cgi/munin-cgi-html
 # https://paste.sh/vofcctHP#-KbDSXVeWoifYncZmLfZzgum
 # nginx http://munin.readthedocs.org/en/latest/example/webserver/nginx.html
 
@@ -22,7 +22,7 @@ let
       dbdir     /var/lib/munin
       htmldir   /var/www/munin
       logdir    /var/log/munin
-      rundir    /var/run/munin
+      rundir    /run/munin
 
       ${cronCfg.extraGlobalConfig}
 
@@ -170,7 +170,7 @@ in
       wantedBy = [ "multi-user.target" ];
       path = with pkgs; [ munin smartmontools "/run/current-system/sw" "/run/wrappers" ];
       environment.MUNIN_LIBDIR = "${pkgs.munin}/lib";
-      environment.MUNIN_PLUGSTATE = "/var/run/munin";
+      environment.MUNIN_PLUGSTATE = "/run/munin";
       environment.MUNIN_LOGDIR = "/var/log/munin";
       preStart = ''
         echo "updating munin plugins..."
@@ -188,7 +188,7 @@ in
     };
 
     # munin_stats plugin breaks as of 2.0.33 when this doesn't exist
-    systemd.tmpfiles.rules = [ "d /var/run/munin 0755 munin munin -" ];
+    systemd.tmpfiles.rules = [ "d /run/munin 0755 munin munin -" ];
 
   }) (mkIf cronCfg.enable {
 
@@ -210,7 +210,7 @@ in
     };
 
     systemd.tmpfiles.rules = [
-      "d /var/run/munin 0755 munin munin -"
+      "d /run/munin 0755 munin munin -"
       "d /var/log/munin 0755 munin munin -"
       "d /var/www/munin 0755 munin munin -"
       "d /var/lib/munin 0755 munin munin -"

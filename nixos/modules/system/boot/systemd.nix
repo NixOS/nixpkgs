@@ -65,6 +65,7 @@ let
       "systemd-user-sessions.service"
       "dbus-org.freedesktop.machine1.service"
       "user@.service"
+      "user-runtime-dir@.service"
 
       # Journal.
       "systemd-journald.socket"
@@ -189,9 +190,8 @@ let
     ];
 
   makeJobScript = name: text:
-    let mkScriptName =  s: (replaceChars [ "\\" ] [ "-" ] (shellEscape s) );
-        x = pkgs.writeTextFile { name = "unit-script"; executable = true; destination = "/bin/${mkScriptName name}"; inherit text; };
-    in "${x}/bin/${mkScriptName name}";
+    let mkScriptName =  s: "unit-script-" + (replaceChars [ "\\" "@" ] [ "-" "_" ] (shellEscape s) );
+    in  pkgs.writeTextFile { name = mkScriptName name; executable = true; inherit text; };
 
   unitConfig = { config, ... }: {
     config = {
@@ -387,7 +387,7 @@ let
 
   logindHandlerType = types.enum [
     "ignore" "poweroff" "reboot" "halt" "kexec" "suspend"
-    "hibernate" "hybrid-sleep" "lock"
+    "hibernate" "hybrid-sleep" "suspend-then-hibernate" "lock"
   ];
 
 in
@@ -546,7 +546,7 @@ in
     };
 
     services.journald.rateLimitInterval = mkOption {
-      default = "10s";
+      default = "30s";
       type = types.str;
       description = ''
         Configures the rate limiting interval that is applied to all
@@ -559,7 +559,7 @@ in
     };
 
     services.journald.rateLimitBurst = mkOption {
-      default = 100;
+      default = 1000;
       type = types.int;
       description = ''
         Configures the rate limiting burst limit (number of messages per
@@ -584,6 +584,15 @@ in
       type = types.bool;
       description = ''
         Whether to enable the HTTP gateway to the journal.
+      '';
+    };
+
+    services.journald.forwardToSyslog = mkOption {
+      default = config.services.rsyslogd.enable || config.services.syslog-ng.enable;
+      defaultText = "config.services.rsyslogd.enable || config.services.syslog-ng.enable";
+      type = types.bool;
+      description = ''
+        Whether to forward log messages to syslog.
       '';
     };
 
@@ -747,11 +756,15 @@ in
 
       "systemd/journald.conf".text = ''
         [Journal]
+        Storage=persistent
         RateLimitInterval=${config.services.journald.rateLimitInterval}
         RateLimitBurst=${toString config.services.journald.rateLimitBurst}
         ${optionalString (config.services.journald.console != "") ''
           ForwardToConsole=yes
           TTYPath=${config.services.journald.console}
+        ''}
+        ${optionalString (config.services.journald.forwardToSyslog) ''
+          ForwardToSyslog=yes
         ''}
         ${config.services.journald.extraConfig}
       '';
@@ -782,19 +795,6 @@ in
     });
 
     services.dbus.enable = true;
-
-    system.activationScripts.systemd = stringAfter [ "groups" ]
-      ''
-        mkdir -m 0755 -p /var/lib/udev
-
-        if ! [ -e /etc/machine-id ]; then
-          ${systemd}/bin/systemd-machine-id-setup
-        fi
-
-        # Keep a persistent journal. Note that systemd-tmpfiles will
-        # set proper ownership/permissions.
-        mkdir -m 0700 -p /var/log/journal
-      '';
 
     users.users.systemd-network.uid = config.ids.uids.systemd-network;
     users.groups.systemd-network.gid = config.ids.gids.systemd-network;
@@ -886,6 +886,9 @@ in
     #systemd.services.systemd-logind.restartTriggers = [ config.environment.etc."systemd/logind.conf".source ];
     systemd.services.systemd-logind.restartIfChanged = false;
     systemd.services.systemd-logind.stopIfChanged = false;
+    # The user-runtime-dir@ service is managed by systemd-logind we should not touch it or else we break the users' sessions.
+    systemd.services."user-runtime-dir@".stopIfChanged = false;
+    systemd.services."user-runtime-dir@".restartIfChanged = false;
     systemd.services.systemd-journald.restartTriggers = [ config.environment.etc."systemd/journald.conf".source ];
     systemd.services.systemd-journald.stopIfChanged = false;
     systemd.targets.local-fs.unitConfig.X-StopOnReconfiguration = true;

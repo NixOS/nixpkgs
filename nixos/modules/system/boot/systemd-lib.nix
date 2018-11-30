@@ -63,7 +63,7 @@ in rec {
 
   assertValueOneOf = name: values: group: attr:
     optional (attr ? ${name} && !elem attr.${name} values)
-      "Systemd ${group} field `${name}' cannot have value `${attr.${name}}'.";
+      "Systemd ${group} field `${name}' cannot have value `${toString attr.${name}}'.";
 
   assertHasField = name: group: attr:
     optional (!(attr ? ${name}))
@@ -73,10 +73,18 @@ in rec {
     optional (attr ? ${name} && !(min <= attr.${name} && max >= attr.${name}))
       "Systemd ${group} field `${name}' is outside the range [${toString min},${toString max}]";
 
+  assertMinimum = name: min: group: attr:
+    optional (attr ? ${name} && attr.${name} < min)
+      "Systemd ${group} field `${name}' must be greater than or equal to ${toString min}";
+
   assertOnlyFields = fields: group: attr:
     let badFields = filter (name: ! elem name fields) (attrNames attr); in
     optional (badFields != [ ])
       "Systemd ${group} has extra fields [${concatStringsSep " " badFields}].";
+
+  assertInt = name: group: attr:
+    optional (attr ? ${name} && !isInt attr.${name})
+      "Systemd ${group} field `${name}' is not an integer";
 
   checkUnitConfig = group: checks: attrs: let
     # We're applied at the top-level type (attrsOf unitOption), so the actual

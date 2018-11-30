@@ -78,11 +78,12 @@ stdenv.mkDerivation {
       cp scripts/lvm2_activation_generator_systemd_red_hat $out/lib/systemd/system-generators
     '';
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://sourceware.org/lvm2/;
     description = "Tools to support Logical Volume Management (LVM) on Linux";
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [raskin];
+    platforms = platforms.linux;
+    license = with licenses; [ gpl2 bsd2 lgpl21 ];
+    maintainers = with maintainers; [raskin];
     inherit version;
     downloadPage = "ftp://sources.redhat.com/pub/lvm2/";
   };

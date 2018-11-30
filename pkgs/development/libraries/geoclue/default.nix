@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, intltool, pkgconfig, gtk-doc, docbook_xsl, docbook_xml_dtd_412, glib, json-glib, libsoup, libnotify, gdk_pixbuf
+{ fetchurl, stdenv, fetchpatch, intltool, pkgconfig, gtk-doc, docbook_xsl, docbook_xml_dtd_412, glib, json-glib, libsoup, libnotify, gdk_pixbuf
 , modemmanager, avahi, glib-networking, wrapGAppsHook, gobjectIntrospection
 , withDemoAgent ? false
 }:
@@ -7,17 +7,19 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "geoclue-${version}";
-  version = "2.4.10";
+  version = "2.4.12";
 
   src = fetchurl {
     url = "https://www.freedesktop.org/software/geoclue/releases/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "0h4n8jf7w457sglfdhghkyf8n4v4a5jrx8dgdy5zn35nbscx24l4";
+    sha256 = "1jnad1f3rf8h05sz1lc172jnqdhqdpz76ff6m7i5ss3s0znf5l05";
   };
 
   outputs = [ "out" "dev" "devdoc" ];
 
   nativeBuildInputs = [
-    pkgconfig intltool gtk-doc docbook_xsl docbook_xml_dtd_412 wrapGAppsHook gobjectIntrospection
+    pkgconfig intltool wrapGAppsHook gobjectIntrospection
+    # devdoc
+    gtk-doc docbook_xsl docbook_xml_dtd_412
   ];
 
   buildInputs = [
@@ -27,6 +29,14 @@ stdenv.mkDerivation rec {
   ] ++ optionals (!stdenv.isDarwin) [ modemmanager ];
 
   propagatedBuildInputs = [ glib glib-networking ];
+
+  # Whitelist elementary's agent
+  patches = [
+    (fetchpatch {
+      url = "https://gitlab.freedesktop.org/geoclue/geoclue/commit/2b0491e408be1ebcdbe8751bb2637c1acb78f71e.patch";
+      sha256 = "0pac94y55iksk340dlx3gkhb9lrci90mxqqy5fnh1zbjw9bqxfn4";
+    })
+  ];
 
   configureFlags = [
     "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
@@ -40,11 +50,6 @@ stdenv.mkDerivation rec {
     "--disable-modem-gps-source"
     "--disable-nmea-source"
   ];
-
-  # https://gitlab.freedesktop.org/geoclue/geoclue/issues/73
-  postInstall = ''
-    sed -i $dev/lib/pkgconfig/libgeoclue-2.0.pc -e "s|includedir=.*|includedir=$dev/include|"
-  '';
 
   meta = with stdenv.lib; {
     description = "Geolocation framework and some data providers";

@@ -11,10 +11,10 @@
   atomos = {
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "10z69hjv30r2w5q5wmlf0cq4jv3w744jrac8ylln8sf45ckqj7wk";
+      sha256 = "17vq6sjyswr5jfzwdccw748kgph6bdw30bakwnn6p8sl4hpv4hvx";
       type = "gem";
     };
-    version = "0.1.2";
+    version = "0.1.3";
   };
   CFPropertyList = {
     source = {
@@ -36,19 +36,19 @@
     dependencies = ["activesupport" "claide" "cocoapods-core" "cocoapods-deintegrate" "cocoapods-downloader" "cocoapods-plugins" "cocoapods-search" "cocoapods-stats" "cocoapods-trunk" "cocoapods-try" "colored2" "escape" "fourflusher" "gh_inspector" "molinillo" "nap" "ruby-macho" "xcodeproj"];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0pg2rkw6rlqq0y2vpajw4946hmvcnrg6lhr1i5p7j7kj8y5az167";
+      sha256 = "0x5cz19p0j9k1hvn35lxnv3dn8i65n4qvi5nzjaf53pdgh52401h";
       type = "gem";
     };
-    version = "1.5.0";
+    version = "1.5.3";
   };
   cocoapods-core = {
     dependencies = ["activesupport" "fuzzy_match" "nap"];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0mqxgd22rj49pfasvinsn7z1bzm899m8cfw38yr38nspri10acad";
+      sha256 = "0xnxcd2xnvf60f8w27glq5jcn9wdhzch9nkdb24ihhmpxfgj3f39";
       type = "gem";
     };
-    version = "1.5.0";
+    version = "1.5.3";
   };
   cocoapods-deintegrate = {
     source = {
@@ -61,10 +61,10 @@
   cocoapods-downloader = {
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1azzwyxvcqk5g394ica80x7pj7bh9zysk2q7x1jh8zbwrp6c0x8c";
+      sha256 = "0g1v3k52g2mjlml8miq06c61764lqdy0gc0h2f4ymajz0pqg1zik";
       type = "gem";
     };
-    version = "1.2.0";
+    version = "1.2.1";
   };
   cocoapods-plugins = {
     dependencies = ["nap"];
@@ -95,10 +95,10 @@
     dependencies = ["nap" "netrc"];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0shxr64j7f50yglp5l90vr1ba5p9pkk0a3b8apkbci2lmq5kq60b";
+      sha256 = "1plssgabdv6hcaq1c3gf43kf1d2prx883q8lzdr6chi5byzzs3yl";
       type = "gem";
     };
-    version = "1.3.0";
+    version = "1.3.1";
   };
   cocoapods-try = {
     source = {
@@ -176,18 +176,18 @@
   molinillo = {
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "19zlshd1ra15x0a4jzss6ilz2xsnq293p43kxsljiy7xxq7bipx7";
+      sha256 = "1hh40z1adl4lw16dj4hxgabx4rr28mgqycih1y1d91bwww0jjdg6";
       type = "gem";
     };
-    version = "0.6.5";
+    version = "0.6.6";
   };
   nanaimo = {
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "03x5f7hk0s21hlkj309w0qipjxz34kyd3c5yj25zq3s2yyn57idi";
+      sha256 = "0ajfyaqjw3dzykk612yw8sm21savfqy292hgps8h8l4lvxww1lz6";
       type = "gem";
     };
-    version = "0.2.5";
+    version = "0.2.6";
   };
   nap = {
     source = {
@@ -208,10 +208,10 @@
   ruby-macho = {
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1i9vkz3ki3yvps4z1hca2q2axniq95x4yypnc22p9pcfjdfrbrq6";
+      sha256 = "0xi0ll217h3caiamplqaypmipmrkriqrvmq207ngyzhgmh1jfc8q";
       type = "gem";
     };
-    version = "1.1.0";
+    version = "1.2.0";
   };
   thread_safe = {
     source = {
@@ -234,9 +234,9 @@
     dependencies = ["CFPropertyList" "atomos" "claide" "colored2" "nanaimo"];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "16743g16mrh47f1lxkbw28xn9mmlf1r0zicin4malalsxxkc7ykz";
+      sha256 = "1f4shbzff3wsk1jq0v9bs10496qdx69k2jfpf11p4q2ik3jdnsv7";
       type = "gem";
     };
-    version = "1.5.7";
+    version = "1.6.0";
   };
 }

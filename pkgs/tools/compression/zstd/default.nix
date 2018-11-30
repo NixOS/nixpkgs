@@ -1,13 +1,14 @@
 { stdenv, fetchFromGitHub, gnugrep
 , fixDarwinDylibNames
+, file
 , legacySupport ? false }:
 
 stdenv.mkDerivation rec {
   name = "zstd-${version}";
-  version = "1.3.5";
+  version = "1.3.7";
 
   src = fetchFromGitHub {
-    sha256 = "0fpv8k16s14g0r552mhbh0mkr716cqy41d2znyrvks6qfphkgir4";
+    sha256 = "04pdim2bgbbryalim6y8fflm9njpbzxh7148hi4pa828rn9p0jim";
     rev = "v${version}";
     repo = "zstd";
     owner = "facebook";
@@ -18,6 +19,13 @@ stdenv.mkDerivation rec {
   makeFlags = [
     "ZSTD_LEGACY_SUPPORT=${if legacySupport then "1" else "0"}"
   ];
+
+  checkInputs = [ file ];
+  doCheck = true;
+  preCheck = ''
+    substituteInPlace tests/playTests.sh \
+      --replace 'MD5SUM="md5 -r"' 'MD5SUM="md5sum"'
+  '';
 
   installFlags = [
     "PREFIX=$(out)"

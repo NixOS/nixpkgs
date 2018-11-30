@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   version = "0.9.53";
 
   src =
-    if stdenv.system == "x86_64-linux" then
+    if stdenv.hostPlatform.system == "x86_64-linux" then
       fetchurl {
         url = "https://www.typora.io/linux/typora_${version}_amd64.deb";
         sha256 = "02k6x30l4mbjragqbq5rn663xbw3h4bxzgppfxqf5lwydswldklb";

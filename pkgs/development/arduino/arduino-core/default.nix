@@ -13,15 +13,19 @@ assert withTeensyduino -> withGui;
 # xdotool script; the cause of this hang is not yet known.
 # TODO: There is a fair chance that Teensyduino works with arm-linux, but it
 # has not yet been tested.
-if withTeensyduino && (stdenv.system != "x86_64-linux") then throw
+if withTeensyduino && (stdenv.hostPlatform.system != "x86_64-linux") then throw
   "Teensyduino is only supported on x86_64-linux at this time (patches welcome)."
 else
 let
-  externalDownloads = import ./downloads.nix {inherit fetchurl; inherit (lib) optionalAttrs; inherit (stdenv) system;};
+  externalDownloads = import ./downloads.nix {
+    inherit fetchurl;
+    inherit (lib) optionalAttrs;
+    inherit (stdenv.hostPlatform) system;
+  };
   # Some .so-files are later copied from .jar-s to $HOME, so patch them beforehand
   patchelfInJars =
-       lib.optional (stdenv.system == "x86_64-linux") {jar = "share/arduino/lib/jssc-2.8.0-arduino1.jar"; file = "libs/linux/libjSSC-2.8_x86_64.so";}
-    ++ lib.optional (stdenv.system == "i686-linux") {jar = "share/arduino/lib/jssc-2.8.0-arduino1.jar"; file = "libs/linux/libjSSC-2.8_x86.so";}
+       lib.optional (stdenv.hostPlatform.system == "x86_64-linux") {jar = "share/arduino/lib/jssc-2.8.0-arduino1.jar"; file = "libs/linux/libjSSC-2.8_x86_64.so";}
+    ++ lib.optional (stdenv.hostPlatform.system == "i686-linux") {jar = "share/arduino/lib/jssc-2.8.0-arduino1.jar"; file = "libs/linux/libjSSC-2.8_x86.so";}
   ;
   # abiVersion 6 is default, but we need 5 for `avrdude_bin` executable
   ncurses5 = ncurses.override { abiVersion = "5"; };
@@ -46,9 +50,9 @@ let
     zlib
   ];
   teensy_architecture =
-      lib.optionalString (stdenv.system == "x86_64-linux") "linux64"
-      + lib.optionalString (stdenv.system == "i686-linux") "linux32"
-      + lib.optionalString (stdenv.system == "arm-linux") "linuxarm";
+      lib.optionalString (stdenv.hostPlatform.system == "x86_64-linux") "linux64"
+      + lib.optionalString (stdenv.hostPlatform.system == "i686-linux") "linux32"
+      + lib.optionalString (stdenv.hostPlatform.system == "arm-linux") "linuxarm";
 
   flavor = (if withTeensyduino then "teensyduino" else "arduino")
              + stdenv.lib.optionalString (!withGui) "-core";

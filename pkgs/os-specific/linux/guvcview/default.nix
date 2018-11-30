@@ -27,10 +27,11 @@ stdenv.mkDerivation rec {
       gsl
     ] ++ stdenv.lib.optional pulseaudioSupport libpulseaudio;
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A simple interface for devices supported by the linux UVC driver";
     homepage = http://guvcview.sourceforge.net;
-    maintainers = [ stdenv.lib.maintainers.coconnor ];
-    platforms = stdenv.lib.platforms.linux;
+    maintainers = [ maintainers.coconnor ];
+    license = licenses.gpl3;
+    platforms = platforms.linux;
   };
 }

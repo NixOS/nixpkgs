@@ -15,7 +15,7 @@ in
 
 let
   polymlEnableShared = with pkgs; lib.overrideDerivation polyml (attrs: {
-    configureFlags = "--enable-shared";
+    configureFlags = [ "--enable-shared" ];
   });
 in
 

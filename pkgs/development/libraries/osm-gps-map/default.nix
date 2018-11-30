@@ -24,6 +24,6 @@ stdenv.mkDerivation rec {
     homepage = https://nzjrs.github.io/osm-gps-map;
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ hrdinka ];
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

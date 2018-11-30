@@ -1,17 +1,45 @@
-{ stdenv, pkgs, fetchurl, makeWrapper, gvfs, atomEnv}:
+{ stdenv, pkgs, fetchurl, makeWrapper, wrapGAppsHook, gvfs, gtk3, atomEnv }:
 
 let
-  common = pname: {version, sha256}: stdenv.mkDerivation rec {
-    name = "${pname}-${version}";
-    inherit version;
+  versions = {
+    atom = {
+      version = "1.32.1";
+      sha256 = "1x22jbhvagqw9mvq0v7z4z09qp727vl0rkyvaxn98xnj9gvcfkq9";
+    };
+
+    atom-beta = {
+      version = "1.33.0";
+      beta = 1;
+      sha256 = "0sf98apmb57msgr5p1xly0mffzn2s808nsfsmbisk4qqmm9fv2m3";
+    };
+  };
+
+  common = pname: {version, sha256, beta ? null}:
+      let fullVersion = version + stdenv.lib.optionalString (beta != null) "-beta${toString beta}";
+      name = "${pname}-${fullVersion}";
+  in stdenv.mkDerivation {
+    inherit name;
+    version = fullVersion;
 
     src = fetchurl {
-      url = "https://github.com/atom/atom/releases/download/v${version}/atom-amd64.deb";
+      url = "https://github.com/atom/atom/releases/download/v${fullVersion}/atom-amd64.deb";
       name = "${name}.deb";
       inherit sha256;
     };
 
-    nativeBuildInputs = [ makeWrapper ];
+    nativeBuildInputs = [
+      wrapGAppsHook  # Fix error: GLib-GIO-ERROR **: No GSettings schemas are installed on the system
+    ];
+
+    buildInputs = [
+      gtk3  # Fix error: GLib-GIO-ERROR **: Settings schema 'org.gtk.Settings.FileChooser' is not installed
+    ];
+
+    preFixup = ''
+      gappsWrapperArgs+=(
+        --prefix "PATH" : "${gvfs}/bin" \
+      )
+    '';
 
     buildCommand = ''
       mkdir -p $out/usr/
@@ -22,9 +50,6 @@ let
       rm -r $out/share/lintian
       rm -r $out/usr/
       sed -i "s/${pname})/.${pname}-wrapped)/" $out/bin/${pname}
-      # sed -i "s/'${pname}'/'.${pname}-wrapped'/" $out/bin/${pname}
-      wrapProgram $out/bin/${pname} \
-        --prefix "PATH" : "${gvfs}/bin"
 
       fixupPhase
 
@@ -59,14 +84,4 @@ let
       platforms = platforms.x86_64;
     };
   };
-in stdenv.lib.mapAttrs common {
-  atom = {
-    version = "1.28.2";
-    sha256 = "07lz4lj07dbfz952l3q9vplvg41pxl1cx89gzy8bzzr3ay7kn6za";
-  };
-
-  atom-beta = {
-    version = "1.29.0-beta1";
-    sha256 = "121y716pnq4vpjrymr505prskvi5a2lnn8hw79q8b4hf7yz0j6rb";
-  };
-}
+in stdenv.lib.mapAttrs common versions

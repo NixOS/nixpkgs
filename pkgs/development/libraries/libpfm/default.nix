@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
 
   installFlags = "DESTDIR=\${out} PREFIX= LDCONFIG=true";
 
+  NIX_CFLAGS_COMPILE = [ "-Wno-error" ];
+
   meta = with stdenv.lib; {
     description = "Helper library to program the performance monitoring events";
     longDescription = ''

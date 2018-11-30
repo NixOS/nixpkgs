@@ -1,0 +1,11 @@
+--- source/zmq/src/caml_zmq_stubs.c	1970-01-01 01:00:01.000000000 +0100
++++ source/zmq/src/caml_zmq_stubs.c	1970-01-01 01:00:01.000000000 +0100
+@@ -35,7 +35,7 @@
+ #include "socket.h"
+ #include "msg.h"
+ 
+-#include <uint64.h>
++#include <ocaml_stdint/uint64.h>
+ 
+ /**
+  * Version

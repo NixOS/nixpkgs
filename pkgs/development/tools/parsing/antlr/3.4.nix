@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   };
 
   unpackPhase = "true";
- 
+
   installPhase = ''
     mkdir -p "$out"/{lib/antlr,bin}
     cp "$src" "$out/lib/antlr/antlr-${version}-complete.jar"
@@ -33,6 +33,7 @@ stdenv.mkDerivation rec {
       walk parse trees.
     '';
     homepage = http://www.antlr.org/;
+    license = licenses.bsd3;
     platforms = platforms.linux ++ platforms.darwin;
   };
 }

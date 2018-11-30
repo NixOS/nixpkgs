@@ -4,22 +4,21 @@
 
 buildPythonPackage rec {
   pname = "asana";
-  version = "0.7.0";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "asana";
     repo = "python-asana";
     rev = "v${version}";
-    sha256 = "0786y3wxqxxhsb0kkpx4bfzif3dhvv3dmm6vnq58iyj94862kpxf";
+    sha256 = "0vmpy4j1n54gkkg0l8bhw0xf4yby5kqzxnsv07cjc2w38snj5vy1";
   };
 
   checkInputs = [ pytest responses ];
   propagatedBuildInputs = [ requests requests_oauthlib six ];
 
-  patchPhase = ''
-    echo > requirements.txt
-    sed -i "s/requests~=2.9.1/requests >=2.9.1/" setup.py
-    sed -i "s/requests_oauthlib~=0.6.1/requests_oauthlib >=0.6.1/" setup.py
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "requests_oauthlib >= 0.8.0, == 0.8.*" "requests_oauthlib>=0.8.0<2.0"
   '';
 
   checkPhase = ''

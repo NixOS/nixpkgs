@@ -32,7 +32,7 @@
 let
   pathParts =
    (builtins.filter
-    ({prefix}: "DOCKER_CREDENTIALS" == prefix)
+    ({prefix, path}: "DOCKER_CREDENTIALS" == prefix)
     builtins.nixPath);
 in
   if (pathParts != []) then (builtins.head pathParts).path else ""

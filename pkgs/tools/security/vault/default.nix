@@ -1,6 +1,8 @@
 { stdenv, fetchFromGitHub, go, gox, removeReferencesTo }:
 
 let
+  # Deprecated since vault 0.8.2: use `vault -autocomplete-install` instead
+  # to install auto-complete for bash, zsh and fish
   vaultBashCompletions = fetchFromGitHub {
     owner = "iljaweis";
     repo = "vault-bash-completion";
@@ -9,28 +11,26 @@ let
   };
 in stdenv.mkDerivation rec {
   name = "vault-${version}";
-  version = "0.10.3";
+  version = "0.11.2";
 
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = "vault";
     rev = "v${version}";
-    sha256 = "16sndzbfciw4bccxm7sc83y2pma2bgsmc1kqyb2hp0jsdy4rl3k4";
+    sha256 = "0lckpfp1yw6rfq2cardsp2qjiajg706qjk98cycrlsa5nr2csafa";
   };
 
   nativeBuildInputs = [ go gox removeReferencesTo ];
 
-  buildPhase = ''
+  preBuild = ''
     patchShebangs ./
     substituteInPlace scripts/build.sh --replace 'git rev-parse HEAD' 'echo ${src.rev}'
     sed -i s/'^GIT_DIRTY=.*'/'GIT_DIRTY="+NixOS"'/ scripts/build.sh
 
-    mkdir -p src/github.com/hashicorp
+    mkdir -p .git/hooks src/github.com/hashicorp
     ln -s $(pwd) src/github.com/hashicorp/vault
 
-    mkdir -p .git/hooks
-
-    GOPATH=$(pwd) make
+    export GOPATH=$(pwd)
   '';
 
   installPhase = ''
@@ -47,6 +47,6 @@ in stdenv.mkDerivation rec {
     description = "A tool for managing secrets";
     platforms = platforms.linux ++ platforms.darwin;
     license = licenses.mpl20;
-    maintainers = with maintainers; [ rushmorem offline pradeepchhetri ];
+    maintainers = with maintainers; [ rushmorem lnl7 offline pradeepchhetri ];
   };
 }

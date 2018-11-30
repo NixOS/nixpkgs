@@ -145,6 +145,7 @@ let
       kpackage = callPackage ./kpackage {};
       kpty = callPackage ./kpty.nix {};
       kunitconversion = callPackage ./kunitconversion.nix {};
+      syndication = callPackage ./syndication.nix {};
 
     # TIER 3
       baloo = callPackage ./baloo.nix {};
@@ -173,6 +174,7 @@ let
       kxmlgui = callPackage ./kxmlgui.nix {};
       kxmlrpcclient = callPackage ./kxmlrpcclient.nix {};
       plasma-framework = callPackage ./plasma-framework.nix {};
+      kpurpose = callPackage ./purpose.nix {};
 
     # TIER 4
       frameworkintegration = callPackage ./frameworkintegration.nix {};

@@ -4,13 +4,13 @@ let
 in
 stdenv.mkDerivation rec {
   name = "clipmenu-${version}";
-  version = "5.4.0";
+  version = "5.5.0";
 
   src = fetchFromGitHub {
     owner  = "cdown";
     repo   = "clipmenu";
     rev    = version;
-    sha256 = "1qbpca0wny6i222vbikfl2znn3fynhbl4100qs8v4wn27ra5p0mi";
+    sha256 = "15if7bwqviyynbrcwrn04r418cfnxf2mkmq112696np24bggvljg";
   };
 
   buildInputs = [ makeWrapper ];

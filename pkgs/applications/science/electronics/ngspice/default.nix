@@ -2,11 +2,11 @@
 , readline, libX11, libICE, libXaw, libXmu, libXext, libXt, fftw }:
 
 stdenv.mkDerivation {
-  name = "ngspice-28";
+  name = "ngspice-29";
 
   src = fetchurl {
-    url = "mirror://sourceforge/ngspice/ngspice-28.tar.gz";
-    sha256 = "0rnz2rdgyav16w7wfn3sfrk2lwvvgz1fh0l9107zkcldijklz04l";
+    url = "mirror://sourceforge/ngspice/ngspice-29.tar.gz";
+    sha256 = "0jjwz73naq7l9yhwdqbpnrfckywp2ffkppivxjv8w92zq7xhyvcd";
   };
 
   nativeBuildInputs = [ flex bison ];
@@ -18,7 +18,7 @@ stdenv.mkDerivation {
     description = "The Next Generation Spice (Electronic Circuit Simulator)";
     homepage = http://ngspice.sourceforge.net;
     license = with licenses; [ "BSD" gpl2 ];
-    maintainers = with maintainers; [ bgamari viric rongcuid ];
+    maintainers = with maintainers; [ bgamari rongcuid ];
     platforms = platforms.linux;
   };
 }

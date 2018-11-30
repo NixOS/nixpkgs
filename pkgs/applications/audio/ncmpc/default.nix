@@ -1,18 +1,18 @@
 { stdenv, fetchFromGitHub, meson, ninja, pkgconfig, glib, ncurses
-, mpd_clientlib, gettext }:
+, mpd_clientlib, gettext, boost }:
 
 stdenv.mkDerivation rec {
   name = "ncmpc-${version}";
-  version = "0.30";
+  version = "0.33";
 
   src = fetchFromGitHub {
     owner  = "MusicPlayerDaemon";
     repo   = "ncmpc";
     rev    = "v${version}";
-    sha256 = "0s2bynm5szrk8bjhg200mvsm2ny0wz9s10nx7r69y9y4jsxr8624";
+    sha256 = "1ymnxb85v2pc0qpk0yz5gdxayc0ialk82ba521lgdw66li7fr4as";
   };
 
-  buildInputs = [ glib ncurses mpd_clientlib ];
+  buildInputs = [ glib ncurses mpd_clientlib boost ];
   nativeBuildInputs = [ meson ninja pkgconfig gettext ];
 
   meta = with stdenv.lib; {

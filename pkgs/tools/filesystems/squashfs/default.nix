@@ -15,13 +15,17 @@ stdenv.mkDerivation rec {
     rev = "9c1db6d13a51a2e009f0027ef336ce03624eac0d";
   };
 
-  # These patches ensures that mksquashfs output is reproducible.
-  # See also https://reproducible-builds.org/docs/system-images/
-  # and https://github.com/NixOS/nixpkgs/issues/40144.
   patches = [
+    # These patches ensures that mksquashfs output is reproducible.
+    # See also https://reproducible-builds.org/docs/system-images/
+    # and https://github.com/NixOS/nixpkgs/issues/40144.
     ./0001-If-SOURCE_DATE_EPOCH-is-set-override-timestamps-with.patch
     ./0002-If-SOURCE_DATE_EPOCH-is-set-also-clamp-content-times.patch
     ./0003-remove-frag-deflator-thread.patch
+
+    # This patch adds an option to pad filesystems (increasing size) in
+    # exchange for better chunking / binary diff calculation.
+    ./squashfs-tools-4.3-4k-align.patch
   ] ++ stdenv.lib.optional stdenv.isDarwin ./darwin.patch;
 
   buildInputs = [ zlib xz ]

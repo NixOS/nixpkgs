@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
       - Plugin interface
     '';
     homepage = https://www.geany.org/;
-    license = "GPL";
+    license = licenses.gpl2;
     maintainers = [];
     platforms = platforms.all;
   };

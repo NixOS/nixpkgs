@@ -2,12 +2,12 @@
 
 buildPythonPackage rec {
   pname = "contextvars";
-  version = "2.2";
+  version = "2.3";
   disabled = !isPy36;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "046b385nfzkjh0wqmd268p2jkgn9fg6hz40npq7j1w3c8aqzhwvx";
+    sha256 = "09fnni8cyxm070bfv9ay030qbyk0dfds5nq77s0p38h33hp08h93";
   };
 
   propagatedBuildInputs = [ immutables ];

@@ -18,6 +18,7 @@ appleDerivation {
     cp runtime/OldClasses.subproj/List.h $out/include/objc/List.h
     cp runtime/NSObjCRuntime.h $out/include/objc/NSObjCRuntime.h
     cp runtime/NSObject.h $out/include/objc/NSObject.h
+    cp runtime/Object.h $out/include/objc/Object.h
     cp runtime/Protocol.h $out/include/objc/Protocol.h
     cp runtime/hashtable.h $out/include/objc/hashtable.h
     cp runtime/hashtable2.h $out/include/objc/hashtable2.h

@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libfprint glib dbus-glib polkit nss pam systemd ];
   nativeBuildInputs = [ pkgconfig intltool ];
 
-  configureFlags = [ "--with-systemdsystemunitdir=$(out)/lib/systemd/system" ];
+  configureFlags = [ "--with-systemdsystemunitdir=$(out)/lib/systemd/system" "--localstatedir=/var" ];
 
   meta = with stdenv.lib; {
     homepage = http://www.freedesktop.org/wiki/Software/fprint/fprintd/;

@@ -44,5 +44,6 @@ stdenv.mkDerivation rec {
     description = "A simple application for modifying PDF documents";
     platforms = platforms.all;
     maintainers = with maintainers; [ obadz ];
+    license = licenses.gpl2Plus;
   };
 }

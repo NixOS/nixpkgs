@@ -31,7 +31,8 @@ let
   '';
 
   tamarin-prover-utils = mkDerivation (common "tamarin-prover-utils" (src + "/lib/utils") // {
-    patchPhase = replaceSymlinks;
+    postPatch = replaceSymlinks;
+    patches = [ ./ghc-8.4-support-utils.patch ];
     libraryHaskellDepends = with haskellPackages; [
       base base64-bytestring binary blaze-builder bytestring containers
       deepseq dlist fclabels mtl pretty safe SHA syb time transformers
@@ -39,7 +40,8 @@ let
   });
 
   tamarin-prover-term = mkDerivation (common "tamarin-prover-term" (src + "/lib/term") // {
-    patchPhase = replaceSymlinks;
+    postPatch = replaceSymlinks;
+    patches = [ ./ghc-8.4-support-term.patch ];
     libraryHaskellDepends = (with haskellPackages; [
       attoparsec base binary bytestring containers deepseq dlist HUnit
       mtl process safe
@@ -47,7 +49,8 @@ let
   });
 
   tamarin-prover-theory = mkDerivation (common "tamarin-prover-theory" (src + "/lib/theory") // {
-    patchPhase = replaceSymlinks;
+    postPatch = replaceSymlinks;
+    patches = [ ./ghc-8.4-support-theory.patch ];
     doHaddock = false; # broken
     libraryHaskellDepends = (with haskellPackages; [
       aeson aeson-pretty base binary bytestring containers deepseq dlist

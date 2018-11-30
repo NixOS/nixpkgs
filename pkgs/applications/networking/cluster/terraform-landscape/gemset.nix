@@ -11,10 +11,10 @@
     dependencies = ["highline"];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0sry6raysvg9qsx5nqqw09n8r8hvcsqzvci7xp2qk7jq3s9mgvnn";
+      sha256 = "11sd2sb0id2dbxkv4pvymdiia1xxhms45kh4nr8mryqybad0fwwf";
       type = "gem";
     };
-    version = "4.4.5";
+    version = "4.4.6";
   };
   diffy = {
     source = {
@@ -44,10 +44,10 @@
     dependencies = ["colorize" "commander" "diffy" "treetop"];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0476q2kx88w9srj7rlzl6skrza3pdgyym7zksw78infsb2105lg9";
+      sha256 = "1i93pih7r6zcqpjhsmvkpfkgbh0l66c60i6fkiymq7vy2xd6wnns";
       type = "gem";
     };
-    version = "0.1.18";
+    version = "0.2.1";
   };
   treetop = {
     dependencies = ["polyglot"];

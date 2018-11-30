@@ -13,9 +13,8 @@ stdenv.mkDerivation rec {
 
   dontBuild = false;
 
-  buildInputs = stdenv.lib.optional doCheck perl;
-
   doCheck = true;
+  checkInputs = [ perl ];
   checkTarget = "-C tests/";
 
   installPhase = ''
@@ -30,4 +29,3 @@ stdenv.mkDerivation rec {
     platforms   = platforms.all;
   };
 }
-

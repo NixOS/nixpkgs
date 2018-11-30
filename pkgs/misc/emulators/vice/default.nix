@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ bison flex perl libpng giflib libjpeg alsaLib readline libGLU_combined
     pkgconfig gtk2 SDL autoreconfHook libXaw ];
   dontDisableStatic = true;
-  configureFlags = "--enable-fullscreen --enable-gnomeui";
+  configureFlags = [ "--enable-fullscreen --enable-gnomeui" ];
 
   desktopItem = makeDesktopItem {
     name = "vice";

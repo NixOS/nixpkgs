@@ -13,32 +13,31 @@ let
   gssapiPatch = fetchpatch {
     name = "openssh-gssapi.patch";
     url = "https://salsa.debian.org/ssh-team/openssh/raw/"
-      + "e395eed38096fcda74398424ea94de3ec44effd5"
+      + "d80ebbf028196b2478beebf5a290b97f35e1eed9"
       + "/debian/patches/gssapi.patch";
-    sha256 = "0x7xysgdahb4jaq0f28g2d7yzp0d3mh59i4xnffszvjndhvbk27x";
+    sha256 = "14j9cabb3gkhkjc641zbiv29mbvsmgsvis3fbj8ywsd21zc7m2wv";
   };
 
 in
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "openssh-${version}";
-  version = if hpnSupport then "7.7p1" else "7.7p1";
+  version = if hpnSupport then "7.8p1" else "7.9p1";
 
   src = if hpnSupport then
       fetchurl {
-        url = "https://github.com/rapier1/openssh-portable/archive/hpn-KitchenSink-7_7_P1.tar.gz";
-        sha256 = "1l4k8mg3gnzxbz53cma8s6ak56waz03ijsr08p8vgpi0c2rc5ri5";
+        url = "https://github.com/rapier1/openssh-portable/archive/hpn-KitchenSink-7_8_P1.tar.gz";
+        sha256 = "05q5hxx7fzcgd8a5i0zk4fwvmnz4xqk04j489irnwm7cka7xdqxw";
       }
     else
       fetchurl {
         url = "mirror://openbsd/OpenSSH/portable/${name}.tar.gz";
-        sha256 = "13vbbrvj3mmfhj83qyrg5c0ipr6bzw5s65dy4k8gr7p9hkkfffyp";
+        sha256 = "1b8sy6v0b8v4ggmknwcqx3y1rjcpsll0f1f8f4vyv11x4ni3njvb";
       };
 
   patches =
     [
       ./locale_archive.patch
-      ./fix-host-key-algorithms-plus.patch
 
       # See discussion in https://github.com/NixOS/nixpkgs/pull/16966
       ./dont_create_privsep_path.patch

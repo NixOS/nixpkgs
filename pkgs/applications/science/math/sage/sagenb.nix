@@ -1,4 +1,3 @@
-# Has a cyclic dependency with sage (not expressed here) and is not useful outside of sage
 { stdenv
 , fetchpatch
 , python
@@ -12,6 +11,10 @@
 , flask-autoindex
 , flask-babel
 }:
+
+# Has a cyclic dependency with sage (not expressed here) and is not useful outside of sage.
+# Deprecated, hopefully soon to be removed. See
+# https://trac.sagemath.org/ticket/25837
 
 buildPythonPackage rec {
   pname = "sagenb";

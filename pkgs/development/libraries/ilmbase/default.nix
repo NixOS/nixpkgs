@@ -1,16 +1,18 @@
 { stdenv, fetchurl, automake, autoconf, libtool, which }:
 
 stdenv.mkDerivation rec {
-  name = "ilmbase-2.2.1";
+  name = "ilmbase-${version}";
+  version = "2.3.0";
 
   src = fetchurl {
-    url = "http://download.savannah.nongnu.org/releases/openexr/${name}.tar.gz";
-    sha256 = "17k0hq19wplx9s029kjrq6c51x2ryrfmaavcappkd0g67gk0dhna";
+    url = "https://github.com/openexr/openexr/releases/download/v${version}/${name}.tar.gz";
+    sha256 = "0qiq5bqq9rxhqjiym2k36sx4vq8adgrz6xf6qwizi9bqm78phsa5";
   };
 
   outputs = [ "out" "dev" ];
 
   preConfigure = ''
+    patchShebangs ./bootstrap
     ./bootstrap
   '';
 

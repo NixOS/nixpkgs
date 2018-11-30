@@ -1,11 +1,11 @@
 { stdenv, fetchurl, cmake, libX11, libuuid, xz, vtk }:
 
 stdenv.mkDerivation rec {
-  name = "itk-4.13.0";
+  name = "itk-4.13.1";
 
   src = fetchurl {
-    url = mirror://sourceforge/itk/InsightToolkit-4.13.0.tar.xz;
-    sha256 = "09d1gmqx3wbdfgwf7r91r12m2vknviv0i8wxwh2q9w1vrpizrczy";
+    url = mirror://sourceforge/itk/InsightToolkit-4.13.1.tar.xz;
+    sha256 = "0p4cspgbnjsnkjz8nfg092yaxz8qkqi2nkxjdv421d0zrmi0i2al";
   };
 
   cmakeFlags = [

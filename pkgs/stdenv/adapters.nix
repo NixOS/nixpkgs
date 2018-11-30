@@ -34,9 +34,9 @@ rec {
   makeStaticBinaries = stdenv: stdenv //
     { mkDerivation = args: stdenv.mkDerivation (args // {
         NIX_CFLAGS_LINK = "-static";
-        configureFlags =
-          toString args.configureFlags or ""
-          + " --disable-shared"; # brrr...
+        configureFlags = (args.configureFlags or []) ++ [
+            "--disable-shared" # brrr...
+          ];
       });
       isStatic = true;
     };
@@ -47,9 +47,10 @@ rec {
   makeStaticLibraries = stdenv: stdenv //
     { mkDerivation = args: stdenv.mkDerivation (args // {
         dontDisableStatic = true;
-        configureFlags =
-          toString args.configureFlags or ""
-          + " --enable-static --disable-shared";
+        configureFlags = (args.configureFlags or []) ++ [
+          "--enable-static"
+          "--disable-shared"
+        ];
       });
     };
 
@@ -168,6 +169,21 @@ rec {
   useGoldLinker = stdenv: stdenv //
     { mkDerivation = args: stdenv.mkDerivation (args // {
         NIX_CFLAGS_LINK = toString (args.NIX_CFLAGS_LINK or "") + " -fuse-ld=gold";
+      });
+    };
+
+
+  /* Modify a stdenv so that it builds binaries optimized specifically
+     for the machine they are built on.
+
+     WARNING: this breaks purity! */
+  impureUseNativeOptimizations = stdenv: stdenv //
+    { mkDerivation = args: stdenv.mkDerivation (args // {
+        NIX_CFLAGS_COMPILE = toString (args.NIX_CFLAGS_COMPILE or "") + " -march=native";
+        NIX_ENFORCE_NO_NATIVE = false;
+
+        preferLocalBuild = true;
+        allowSubstitutes = false;
       });
     };
 }

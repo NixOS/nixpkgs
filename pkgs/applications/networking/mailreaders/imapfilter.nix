@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "imapfilter-${version}";
-  version = "2.6.11";
+  version = "2.6.12";
 
   src = fetchFromGitHub {
     owner = "lefcha";
     repo = "imapfilter";
     rev = "v${version}";
-    sha256 = "0cjnp7vqmgqym2zswabkmwlbj21r063vw7wkwxglj08z5qyjl5ps";
+    sha256 = "0vzpc54fjf5vb5vx5w0fl20xvx1k9cg6a3hbl86mm8kwsqf3wrab";
   };
 
   makeFlagsArray = "PREFIX=$(out)";

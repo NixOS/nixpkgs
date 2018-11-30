@@ -21,14 +21,6 @@ stdenv.mkDerivation rec {
     sed -i "s/= check/= detail::filter_base<internal_type, checked>::check/" nova/source/dsp/filter.hpp
   '';
 
-  buildPhase = ''
-    scons
-  '';
-
-  installPhase = ''
-    scons $sconsFlags "prefix=$out" install
-  '';
-
   meta = with stdenv.lib; {
     description = "LADSPA plugins based on filters of nova";
     homepage = http://klingt.org/~tim/nova-filters/;

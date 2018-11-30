@@ -2,7 +2,7 @@
 , gdk_pixbuf, xlibsWrapper, gobjectIntrospection
 , xineramaSupport ? stdenv.isLinux
 , cupsSupport ? true, cups ? null
-, gdktarget ? "x11"
+, gdktarget ? if stdenv.isDarwin then "quartz" else "x11"
 , AppKit, Cocoa
 , fetchpatch
 }:

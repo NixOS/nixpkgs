@@ -21,5 +21,6 @@ stdenv.mkDerivation rec {
     description = "The PPTP Server for Linux";
     platforms   = platforms.linux;
     maintainers = with maintainers; [ obadz ];
+    license = licenses.gpl2;
   };
 }

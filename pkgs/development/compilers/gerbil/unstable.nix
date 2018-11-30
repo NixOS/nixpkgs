@@ -1,12 +1,14 @@
-{ callPackage, fetchgit, gambit-unstable }:
+{ stdenv, callPackage, fetchFromGitHub, gambit-unstable }:
 
 callPackage ./build.nix {
-  version = "unstable-2018-05-12";
-  git-version = "0.13-DEV-437-gaefdb47f";
-  GAMBIT = gambit-unstable;
-  SRC = fetchgit {
-    url = "https://github.com/vyzo/gerbil.git";
-    rev = "aefdb47f3d1ceaa735fd5c3dcaac2aeb0d4d2436";
-    sha256 = "0xhsilm5kix5lsmykv273npp1gk6dgx9axh266mimwh7j0nxf7ms";
+  version = "unstable-2018-11-19";
+  git-version = "0.15-DEV-2-g7d09a4ce";
+  gambit = gambit-unstable;
+  src = fetchFromGitHub {
+    owner = "vyzo";
+    repo = "gerbil";
+    rev = "7d09a4cebe03d755a1791e77279e156a74e07685";
+    sha256 = "1mqi9xcjk59sqbh1fx65a4fa4mqm35py4xqxq6086bcyhkm1nzwa";
   };
+  inherit stdenv;
 }

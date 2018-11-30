@@ -1,4 +1,4 @@
-{ fetchFromGitHub, stdenv, pythonPackages, gnupg }:
+{ fetchFromGitHub, stdenv, pythonPackages, gnupg, perl }:
 
 let version = "2.2.6"; in
 pythonPackages.buildPythonApplication {
@@ -17,6 +17,8 @@ pythonPackages.buildPythonApplication {
       sed -i "$file" -E -e's|/usr/bin/gpg2?|${gnupg}/bin/gpg|g'
     done
   '';
+
+  buildInputs = [ perl ];
 
   meta = {
     homepage = https://www.phildev.net/pius/;

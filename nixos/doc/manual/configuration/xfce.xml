@@ -31,7 +31,7 @@
   (system wide), put them into your
   <xref linkend="opt-environment.systemPackages"/>.
  </para>
- <simplesect>
+ <simplesect xml:id="sec-xfce-thunar-volumes">
   <title>Thunar Volume Support</title>
   <para>
    To enable <emphasis>Thunar</emphasis> volume support, put
@@ -41,7 +41,7 @@
    into your <emphasis>configuration.nix</emphasis>.
   </para>
  </simplesect>
- <simplesect>
+ <simplesect xml:id="sec-xfce-polkit">
   <title>Polkit Authentication Agent</title>
   <para>
    There is no authentication agent automatically installed alongside Xfce. To
@@ -50,7 +50,7 @@
    and login did the trick.
   </para>
  </simplesect>
- <simplesect>
+ <simplesect xml:id="sec-xfce-troubleshooting">
   <title>Troubleshooting</title>
   <para>
    Even after enabling udisks2, volume management might not work. Thunar and/or

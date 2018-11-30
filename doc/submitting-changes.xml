@@ -2,7 +2,7 @@
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xml:id="chap-submitting-changes">
  <title>Submitting changes</title>
- <section>
+ <section xml:id="submitting-changes-making-patches">
   <title>Making patches</title>
 
   <itemizedlist>
@@ -205,7 +205,7 @@ Additional information.
    </listitem>
   </itemizedlist>
  </section>
- <section>
+ <section xml:id="submitting-changes-submitting-changes">
   <title>Submitting changes</title>
 
   <itemizedlist>
@@ -253,7 +253,7 @@ Additional information.
    </listitem>
   </itemizedlist>
  </section>
- <section>
+ <section xml:id="submitting-changes-pull-request-template">
   <title>Pull Request Template</title>
 
   <para>
@@ -269,7 +269,7 @@ Additional information.
    below:
   </para>
 
-  <section>
+  <section xml:id="submitting-changes-tested-with-sandbox">
    <title>Tested using sandboxing</title>
 
    <para>
@@ -322,7 +322,7 @@ Additional information.
    </para>
   </section>
 
-  <section>
+  <section xml:id="submitting-changes-platform-diversity">
    <title>Built on platform(s)</title>
 
    <para>
@@ -334,7 +334,7 @@ Additional information.
    </para>
   </section>
 
-  <section>
+  <section xml:id="submitting-changes-nixos-tests">
    <title>Tested via one or more NixOS test(s) if existing and applicable for the change (look inside nixos/tests)</title>
 
    <para>
@@ -350,7 +350,7 @@ Additional information.
    </para>
   </section>
 
-  <section>
+  <section xml:id="submitting-changes-tested-compilation">
    <title>Tested compilation of all pkgs that depend on this change using <command>nox-review</command></title>
 
    <para>
@@ -373,7 +373,7 @@ Additional information.
    </para>
   </section>
 
-  <section>
+  <section xml:id="submitting-changes-tested-execution">
    <title>Tested execution of all binary files (usually in <filename>./result/bin/</filename>)</title>
 
    <para>
@@ -387,8 +387,8 @@ Additional information.
    </para>
   </section>
 
-  <section>
-   <title>Meets nixpkgs contribution standards</title>
+  <section xml:id="submitting-changes-contribution-standards">
+   <title>Meets Nixpkgs contribution standards</title>
 
    <para>
     The last checkbox is fits
@@ -402,7 +402,7 @@ Additional information.
    </para>
   </section>
  </section>
- <section>
+ <section xml:id="submitting-changes-hotfixing-pull-requests">
   <title>Hotfixing pull requests</title>
 
   <itemizedlist>
@@ -430,7 +430,7 @@ Additional information.
    </listitem>
   </itemizedlist>
  </section>
- <section>
+ <section xml:id="submitting-changes-commit-policy">
   <title>Commit policy</title>
 
   <itemizedlist>
@@ -456,7 +456,7 @@ Additional information.
    </listitem>
   </itemizedlist>
 
-  <section>
+  <section xml:id="submitting-changes-master-branch">
    <title>Master branch</title>
 
    <itemizedlist>
@@ -468,7 +468,7 @@ Additional information.
    </itemizedlist>
   </section>
 
-  <section>
+  <section xml:id="submitting-changes-staging-branch">
    <title>Staging branch</title>
 
    <itemizedlist>
@@ -493,7 +493,7 @@ Additional information.
    </itemizedlist>
   </section>
 
-  <section>
+  <section xml:id="submitting-changes-stable-release-branches">
    <title>Stable release branches</title>
 
    <itemizedlist>

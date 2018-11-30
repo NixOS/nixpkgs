@@ -4,6 +4,16 @@
 
 let
   pythonPackages = python3Packages;
+  async-timeout = (stdenv.lib.overrideDerivation pythonPackages.async-timeout
+    (oldAttrs:
+      rec {
+        pname = "async-timeout";
+        version = "2.0.1";
+        src = pythonPackages.fetchPypi {
+          inherit pname version;
+          sha256 = "1l3kg062m02mph6rf9rdv8r5c5n356clxa6b6mrn0i77vk9g9kq0";
+        };
+      }));
   aiohttp = (stdenv.lib.overrideDerivation pythonPackages.aiohttp
     (oldAttrs:
       rec {
@@ -13,6 +23,9 @@ let
           inherit pname version;
           sha256 = "8adda6583ba438a4c70693374e10b60168663ffa6564c5c75d3c7a9055290964";
         };
+        propagatedBuildInputs = [ async-timeout ]
+          ++ (with pythonPackages; [ attrs chardet multidict yarl ])
+          ++ stdenv.lib.optional (pythonPackages.pythonOlder "3.7") pythonPackages.idna-ssl;
       }));
   aiohttp-cors = (stdenv.lib.overrideDerivation pythonPackages.aiohttp-cors
     (oldAttrs:

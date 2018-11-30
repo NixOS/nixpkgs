@@ -9,7 +9,7 @@ in stdenv.mkDerivation rec{
   name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
     sha256 = "0mx6n901vb97hsv0cwaafjffj75s1kcp8jsqay90dy3099849dyz";
   };
 
@@ -21,6 +21,8 @@ in stdenv.mkDerivation rec{
     gst_all_1.gst-plugins-good gst_all_1.gst-plugins-bad
     gst_all_1.gst-libav
   ];
+
+  NIX_CFLAGS_COMPILE="-Wno-error=format-nonliteral";
 
   passthru = {
     updateScript = gnome3.updateScript {

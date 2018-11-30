@@ -6,9 +6,9 @@
 # };
 # Make additional configurations on demand:
 # wine.override { wineBuild = "wine32"; wineRelease = "staging"; };
-{ lib, system, callPackage,
+{ lib, stdenv, callPackage,
   wineRelease ? "stable",
-  wineBuild ? (if system == "x86_64-linux" then "wineWow" else "wine32"),
+  wineBuild ? if stdenv.hostPlatform.system == "x86_64-linux" then "wineWow" else "wine32",
   libtxc_dxtn_Name ? "libtxc_dxtn_s2tc",
   pngSupport ? false,
   jpegSupport ? false,

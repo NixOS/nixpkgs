@@ -26,6 +26,7 @@ python2Packages.buildPythonApplication {
       datadog
       digital-ocean
       libvirt
+      typing
     ];
 
   doCheck = false;
@@ -47,5 +48,6 @@ python2Packages.buildPythonApplication {
     description = "NixOS cloud provisioning and deployment tool";
     maintainers = with lib.maintainers; [ eelco rob domenkozar ];
     platforms = lib.platforms.unix;
+    license = lib.licenses.lgpl3;
   };
 }

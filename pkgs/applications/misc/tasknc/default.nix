@@ -38,5 +38,6 @@ stdenv.mkDerivation rec {
     description = "A ncurses wrapper around taskwarrior";
     maintainers = with maintainers; [ infinisil ];
     platforms = platforms.linux; # Cannot test others
+    license = licenses.mit;
   };
 }

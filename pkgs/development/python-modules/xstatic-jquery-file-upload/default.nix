@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "XStatic-jQuery-File-Upload";
-  version = "9.7.0.1";
+  version = "9.22.0.1";
 
   src = fetchPypi {
     inherit version pname;
-    sha256 = "0d5za18lhzhb54baxq8z73wazq801n3qfj5vgcz7ri3ngx7nb0cg";
+    sha256 = "0jy7xnww0177fv0asssxvv8l1032jcnbkvz39z16yd6k34v53fzf";
   };
 
   # no tests implemented

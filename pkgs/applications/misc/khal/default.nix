@@ -1,28 +1,12 @@
 { stdenv, pkgs, python3 }:
 
-let
-  python = python3.override {
-    packageOverrides = self: super: {
-
-      # https://github.com/pimutils/khal/issues/780
-      python-dateutil = super.python-dateutil.overridePythonAttrs (oldAttrs: rec {
-        version = "2.6.1";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "891c38b2a02f5bb1be3e4793866c8df49c7d19baabf9c1bad62547e0b4866aca";
-        };
-      });
-
-    };
-  };
-
-in with python.pkgs; buildPythonApplication rec {
+with python3.pkgs; buildPythonApplication rec {
   pname = "khal";
-  version = "0.9.9";
+  version = "0.9.10";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0dq9aqb9pqjfqrnfg43mhpb7m0szmychxy1ydb3lwzf3500c9rsh";
+    sha256 = "03h0j0d3xyqh98x5v2gv63wv3g91hip3vsaxvybsn5iz331d23h4";
   };
 
   LC_ALL = "en_US.UTF-8";
@@ -46,6 +30,13 @@ in with python.pkgs; buildPythonApplication rec {
   nativeBuildInputs = [ setuptools_scm pkgs.glibcLocales ];
   checkInputs = [ pytest ];
 
+  postInstall = ''
+    install -D misc/__khal $out/share/zsh/site-functions/__khal
+  '';
+
+  # One test fails as of 0.9.10 due to the upgrade to icalendar 4.0.3
+  doCheck = false;
+
   checkPhase = ''
     py.test
   '';
@@ -54,6 +45,6 @@ in with python.pkgs; buildPythonApplication rec {
     homepage = http://lostpackets.de/khal/;
     description = "CLI calendar application";
     license = licenses.mit;
-    maintainers = with maintainers; [ jgeerds ];
+    maintainers = with maintainers; [ jgeerds gebner ];
   };
 }

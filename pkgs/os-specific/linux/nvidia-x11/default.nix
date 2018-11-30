@@ -1,4 +1,4 @@
-{ lib, callPackage, fetchurl }:
+{ lib, callPackage, fetchurl, stdenv }:
 
 let
   generic = args: callPackage (import ./generic.nix args) { };
@@ -16,23 +16,35 @@ let
 in
 rec {
   # Policy: use the highest stable version as the default (on our master).
-  stable = generic {
-    version = "390.67";
-    sha256_32bit = "01c8fa80njyyr39c1pyf7ssmfq65ci8mapbs94fd6gnhwc7gfjkg";
-    sha256_64bit = "0np6xj93fali2hss8xsdlmy5ykjgn4hx6mzjr8dpbdi0fhdcmwkd";
-    settingsSha256 = "1wk4587czysnbj5yxijmv3bldcffzwp4yvfx133apsr31dqca0s7";
-    persistencedSha256 = "1zia1r97lyj6fbmvsw4hv5qfcj84x3sz971m4430d8qyks2c4sdw";
+  stable = if stdenv.hostPlatform.system == "x86_64-linux" then stable_410 else stable_390;
+
+  stable_410 = generic {
+    version = "410.78";
+    sha256_64bit = "1ciabnmvh95gsfiaakq158x2yws3m9zxvnxws3p32lz9riblpdjx";
+    settingsSha256 = "1677g7rcjbcs5fja1s4p0syhhz46g9x2qqzyn3wwwrjsj7rwaz77";
+    persistencedSha256 = "01kvd3zp056i4n8vazj7gx1xw0h4yjdlpazmspnsmwg24ijb82x4";
   };
 
-  beta = stable; # not enough interest to maintain beta ATM
+  # Last one supporting x86
+  stable_390 = generic {
+    version = "390.87";
+    sha256_32bit = "0rlr1f4lnpb8c4qz4w5r8xw5gdy9bzz26qww45qyl1qav3wwaaaw";
+    sha256_64bit = "07k1kq8lkgbvjyr2dnbxcz6nppcwpq17wf925w8kfq78345hla9q";
+    settingsSha256 = "0xlaiy7jr95z0v2c6cwll89nxnb142pybw7m08jg44r7n13ffv3r";
+    persistencedSha256 = "0mhwk321garyl6m12261cj03ycv0qz1sbrlbq6cqwjpq4f1s7h58";
 
+    patches = lib.optional (kernel.meta.branch == "4.19") ./drm_mode_connector.patch;
+  };
+
+  # No active beta right now
+  beta = stable;
 
   legacy_340 = generic {
-    version = "340.104";
-    sha256_32bit = "1l8w95qpxmkw33c4lsf5ar9w2fkhky4x23rlpqvp1j66wbw1b473";
-    sha256_64bit = "18k65gx6jg956zxyfz31xdp914sq3msn665a759bdbryksbk3wds";
-    settingsSha256 = "1vvpqimvld2iyfjgb9wvs7ca0b0f68jzfdpr0icbyxk4vhsq7sxk";
-    persistencedSha256 = "0zqws2vsrxbxhv6z0nn2galnghcsilcn3s0f70bpm6jqj9wzy7x8";
+    version = "340.107";
+    sha256_32bit = "0mh83affz6bim26ws7kkwwcfj2s6vkdy4d45hifsbshr82qd52wd";
+    sha256_64bit = "0pv9yv3x0kg9hfkmc50xb54ahxkbnyy2vyy4hj2h0s6m9sb5kqz3";
+    settingsSha256 = "1rgaa24acdyqa1rqrx56293vxpskr792njqqpigqmps04llsx703";
+    persistencedSha256 = "0nwv6kh4gxgy80x1zs6gcg5hy3amg25xhsfa2v4mwqa36sblxz6l";
     useGLVND = false;
 
     patches = maybePatch_drm_legacy ++ [ ./vm_operations_struct-fault.patch ];

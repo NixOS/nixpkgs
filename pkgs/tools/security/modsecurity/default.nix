@@ -22,17 +22,17 @@ stdenv.mkDerivation rec {
   buildInputs = [  curl apacheHttpd pcre apr aprutil libxml2 ] ++
     optional luaSupport lua5;
 
-  configureFlags = ''
-    --enable-standalone-module
-    --enable-static
-    --with-curl=${curl.dev}
-    --with-apxs=${apacheHttpd.dev}/bin/apxs
-    --with-pcre=${pcre.dev}
-    --with-apr=${apr.dev}
-    --with-apu=${aprutil.dev}/bin/apu-1-config
-    --with-libxml=${libxml2.dev}
-    --with-lua=${luaValue}
-  '';
+  configureFlags = [
+    "--enable-standalone-module"
+    "--enable-static"
+    "--with-curl=${curl.dev}"
+    "--with-apxs=${apacheHttpd.dev}/bin/apxs"
+    "--with-pcre=${pcre.dev}"
+    "--with-apr=${apr.dev}"
+    "--with-apu=${aprutil.dev}/bin/apu-1-config"
+    "--with-libxml=${libxml2.dev}"
+    "--with-lua=${luaValue}"
+  ];
 
   outputs = ["out" "nginx"];
   # by default modsecurity's install script copies compiled output to httpd's modules folder

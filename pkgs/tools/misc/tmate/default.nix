@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, autoreconfHook, cmake, libtool, pkgconfig
-, zlib, openssl, libevent, ncurses, ruby, libmsgpack, libssh }:
+, zlib, openssl, libevent, ncurses, ruby, msgpack, libssh }:
 
 stdenv.mkDerivation rec {
   name = "tmate-${version}";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   dontUseCmakeConfigure = true;
 
-  buildInputs = [ libtool zlib openssl libevent ncurses ruby libmsgpack libssh ];
+  buildInputs = [ libtool zlib openssl libevent ncurses ruby msgpack libssh ];
   nativeBuildInputs = [ autoreconfHook cmake pkgconfig ];
   enableParallelBuilding = true;
 

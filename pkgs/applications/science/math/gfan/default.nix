@@ -9,15 +9,20 @@ stdenv.mkDerivation rec {
     sha256 = "02pihqb1lb76a0xbfwjzs1cd6ay3ldfxsm8dvsbl6qs3vkjxax56";
   };
 
-  makeFlags = ''PREFIX=$(out) CC=cc CXX=c++ cddnoprefix=1'';
-  buildInputs = [gmp mpir cddlib];
+  patchPhase = stdenv.lib.optionalString stdenv.isDarwin ''
+    substituteInPlace Makefile --replace "-fno-guess-branch-probability" ""
+  '';
+
+  buildFlags = [ "CC=cc" "CXX=c++" "cddnoprefix=1" ];
+  installFlags = [ ''PREFIX=$(out)'' ];
+  buildInputs = [ gmp mpir cddlib ];
 
   meta = {
     inherit version;
     description = ''A software package for computing Gröbner fans and tropical varieties'';
     license = stdenv.lib.licenses.gpl2 ;
     maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.unix;
     homepage = http://home.math.au.dk/jensen/software/gfan/gfan.html;
   };
 }

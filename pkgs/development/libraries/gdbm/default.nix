@@ -1,11 +1,13 @@
-{ stdenv, lib, buildPlatform, fetchurl }:
+{ stdenv, lib, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "gdbm-1.15";
+  name = "gdbm-1.18";
+  # FIXME: remove on update to > 1.18
+  NIX_CFLAGS_COMPILE = if stdenv.cc.isClang then "-Wno-error=return-type" else null;
 
   src = fetchurl {
     url = "mirror://gnu/gdbm/${name}.tar.gz";
-    sha256 = "03nwsbixdp3nx3fzn3gjy0n7rcppmkkxb2nxbmd8mvb7gwhf7zgr";
+    sha256 = "1kimnv12bzjjhaqk4c8w2j6chdj9c6bg21lchaf7abcyfss2r0mq";
   };
 
   doCheck = true; # not cross;
@@ -16,7 +18,7 @@ stdenv.mkDerivation rec {
   # Disable dbmfetch03.at test because it depends on unlink()
   # failing on a link in a chmod -w directory, which cygwin
   # apparently allows.
-  postPatch = lib.optionalString buildPlatform.isCygwin ''
+  postPatch = lib.optionalString stdenv.buildPlatform.isCygwin ''
       substituteInPlace tests/Makefile.in --replace \
         '_LDADD = ../src/libgdbm.la ../compat/libgdbm_compat.la' \
         '_LDADD = ../compat/libgdbm_compat.la ../src/libgdbm.la'
