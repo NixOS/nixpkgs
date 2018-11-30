@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libsoup, webkit, gtk2, glib-networking
+{ stdenv, fetchFromGitHub, pkgconfig, libsoup, webkit, gtk2, glib-networking
 , gsettings-desktop-schemas, makeWrapper
 }:
 
@@ -6,13 +6,15 @@ stdenv.mkDerivation rec {
   name = "vimb-${version}";
   version = "3.3.0";
 
-  src = fetchurl {
-    url = "https://github.com/fanglingsu/vimb/archive/${version}.tar.gz";
-    sha256 = "0v3daxs10nndxvcpvx8377aylfdismzkys5n5cs8m89c3fdy6vsw";
+  src = fetchFromGitHub {
+    owner = "fanglingsu";
+    repo = "vimb";
+    rev = version;
+    sha256 = "1qg18z2gnsli9qgrqfhqfrsi6g9mcgr90w8yab28nxrq4aha6brf";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ makeWrapper gtk2 libsoup webkit gsettings-desktop-schemas ];
+  nativeBuildInputs = [ makeWrapper pkgconfig ];
+  buildInputs = [ gtk2 libsoup webkit gsettings-desktop-schemas ];
 
   makeFlags = [ "PREFIX=$(out)" ];
 
