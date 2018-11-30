@@ -16,6 +16,7 @@
 buildPythonPackage rec {
   pname = "gidgethub";
   version = "3.0.0";
+  format = "flit";
 
   disabled = pythonOlder "3.6";
 
