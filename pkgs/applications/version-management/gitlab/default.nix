@@ -11,32 +11,22 @@ let
     groups = [ "default" "unicorn" "ed25519" "metrics" ];
   };
 
-  version = "11.4.4";
+  flavour = if gitlabEnterprise then "ee" else "ce";
+  data = (builtins.fromJSON (builtins.readFile ./data.json)).${flavour};
 
-  sources = if gitlabEnterprise then {
-    gitlabDeb = fetchurl {
-      url = "https://packages.gitlab.com/gitlab/gitlab-ee/packages/debian/stretch/gitlab-ee_${version}-ee.0_amd64.deb/download.deb";
-      sha256 = "15lpcdjcw6lpmzlhqnpd6pgaxh7wvx2mldjd1vqr414r4bcnhgy4";
-    };
+  version = data.version;
+  sources = {
     gitlab = fetchFromGitLab {
-      owner = "gitlab-org";
-      repo = "gitlab-ee";
-      rev = "v${version}-ee";
-      sha256 = "046hchr7q4jnx3j4yxg3rdixfzlva35al3ci26pf9vxrbbl5y8cg";
+      owner = data.owner;
+      repo = data.repo;
+      rev = data.rev;
+      sha256 = data.repo_hash;
     };
-  } else {
     gitlabDeb = fetchurl {
-      url = "https://packages.gitlab.com/gitlab/gitlab-ce/packages/debian/stretch/gitlab-ce_${version}-ce.0_amd64.deb/download.deb";
-      sha256 = "02p7azyjgb984bk491q6f4zk1mikbcd38rif08kl07bjjzzkir81";
-    };
-    gitlab = fetchFromGitLab {
-      owner = "gitlab-org";
-      repo = "gitlab-ce";
-      rev = "v${version}";
-      sha256 = "1hq9iyp0xrxwmncn61ja3pdj9h2hmdy1l63d1ic3r1dyacybaf2g";
+      url = data.deb_url;
+      sha256 = data.deb_hash;
     };
   };
-
 in
 
 stdenv.mkDerivation rec {
@@ -101,6 +91,10 @@ stdenv.mkDerivation rec {
   passthru = {
     inherit rubyEnv;
     ruby = rubyEnv.wrappedRuby;
+    GITALY_SERVER_VERSION = data.passthru.GITALY_SERVER_VERSION;
+    GITLAB_PAGES_VERSION = data.passthru.GITLAB_PAGES_VERSION;
+    GITLAB_SHELL_VERSION = data.passthru.GITLAB_SHELL_VERSION;
+    GITLAB_WORKHORSE_VERSION = data.passthru.GITLAB_WORKHORSE_VERSION;
   };
 
   meta = with lib; {
