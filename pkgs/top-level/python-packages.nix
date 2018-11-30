@@ -410,6 +410,8 @@ in {
 
   jira = callPackage ../development/python-modules/jira { };
 
+  jwcrypto = callPackage ../development/python-modules/jwcrypto { };
+
   lammps-cython = callPackage ../development/python-modules/lammps-cython {
     mpi = pkgs.openmpi;
   };
