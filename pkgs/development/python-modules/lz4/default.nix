@@ -1,7 +1,11 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi
-, nose
+, pytestrunner
+, pytest
+, psutil
+, pkgconfig
+, setuptools_scm
 }:
 
 buildPythonPackage rec {
@@ -13,7 +17,8 @@ buildPythonPackage rec {
     sha256 = "ec265f7c3fc3df706e9579bde632ceeef9278858d7ae87c376a2954d11e9ea39";
   };
 
-  buildInputs = [ nose ];
+  buildInputs = [ setuptools_scm pytestrunner pkgconfig ];
+  checkInputs = [ pytest psutil ];
 
   meta = with stdenv.lib; {
     description = "Compression library";
