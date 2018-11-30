@@ -25,9 +25,10 @@ in stdenv.mkDerivation rec {
     sha256 = "0mc5dgh2x9nbili7gy6srjhb23ckalf08wqq2amyjr5rq392jvd7";
   };
 
-  nativeBuildInputs = [ premake4 makeWrapper unzip ];
+  nativeBuildInputs = [ makeWrapper unzip premake4 ];
 
-  # tome4 vendors quite a few libraries so someone might want to look into avoiding that...
+  # tome4 vendors quite a few libraries so someone might want to look
+  # into avoiding that...
   buildInputs = [
     libGLU openal libpng libvorbis SDL2 SDL2_ttf SDL2_image
   ];
@@ -36,19 +37,10 @@ in stdenv.mkDerivation rec {
   enableParallelBuilding = false;
 
   NIX_CFLAGS_COMPILE = [
+    "-I${SDL2.dev}/include/SDL2"
     "-I${SDL2_image}/include/SDL2"
     "-I${SDL2_ttf}/include/SDL2"
   ];
-
-  postPatch = ''
-    substituteInPlace premake4.lua \
-      --replace "/opt/SDL-2.0/include/SDL2" "${SDL2.dev}/include/SDL2" \
-      --replace "/usr/include/GL" "/run/opengl-driver/include"
-  '';
-
-  preConfigure = ''
-    premake4 gmake
-  '';
 
   makeFlags = [ "config=release" ];
 

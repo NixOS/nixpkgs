@@ -18,6 +18,10 @@
 , virglSupport ? openGLSupport, virglrenderer
 , smbdSupport ? false, samba
 , hostCpuOnly ? false
+, hostCpuTargets ? (if hostCpuOnly
+                    then (stdenv.lib.optional stdenv.isx86_64 "i386-softmmu"
+                          ++ ["${stdenv.hostPlatform.qemuArch}-softmmu"])
+                    else null)
 , nixosTestRunner ? false
 }:
 
@@ -27,11 +31,6 @@ let
     + optionalString pulseSupport "pa,"
     + optionalString sdlSupport "sdl,";
 
-  hostCpuTargets = if stdenv.isx86_64 then "i386-softmmu,x86_64-softmmu"
-                   else if stdenv.isi686 then "i386-softmmu"
-                   else if stdenv.isAarch32 then "arm-softmmu"
-                   else if stdenv.isAarch64 then "aarch64-softmmu"
-                   else throw "Don't know how to build a 'hostCpuOnly = true' QEMU";
 in
 
 stdenv.mkDerivation rec {
@@ -113,7 +112,7 @@ stdenv.mkDerivation rec {
     ++ optional smartcardSupport "--enable-smartcard"
     ++ optional spiceSupport "--enable-spice"
     ++ optional usbredirSupport "--enable-usb-redir"
-    ++ optional hostCpuOnly "--target-list=${hostCpuTargets}"
+    ++ optional (hostCpuTargets != null) "--target-list=${stdenv.lib.concatStringsSep "," hostCpuTargets}"
     ++ optional stdenv.isDarwin "--enable-cocoa"
     ++ optional stdenv.isLinux "--enable-linux-aio"
     ++ optional gtkSupport "--enable-gtk"
@@ -135,12 +134,13 @@ stdenv.mkDerivation rec {
     '';
 
   # Add a ‘qemu-kvm’ wrapper for compatibility/convenience.
-  postInstall =
-    if stdenv.isx86_64       then ''makeWrapper $out/bin/qemu-system-x86_64  $out/bin/qemu-kvm --add-flags "\$([ -e /dev/kvm ] && echo -enable-kvm)"''
-    else if stdenv.isi686    then ''makeWrapper $out/bin/qemu-system-i386    $out/bin/qemu-kvm --add-flags "\$([ -e /dev/kvm ] && echo -enable-kvm)"''
-    else if stdenv.isAarch32 then ''makeWrapper $out/bin/qemu-system-arm     $out/bin/qemu-kvm --add-flags "\$([ -e /dev/kvm ] && echo -enable-kvm)"''
-    else if stdenv.isAarch64 then ''makeWrapper $out/bin/qemu-system-aarch64 $out/bin/qemu-kvm --add-flags "\$([ -e /dev/kvm ] && echo -enable-kvm)"''
-    else "";
+  postInstall = ''
+    if [ -x $out/bin/qemu-system-${stdenv.hostPlatform.qemuArch} ]; then
+      makeWrapper $out/bin/qemu-system-${stdenv.hostPlatform.qemuArch} \
+                  $out/bin/qemu-kvm \
+                  --add-flags "\$([ -e /dev/kvm ] && echo -enable-kvm)"
+    fi
+  '';
 
   passthru = {
     qemu-system-i386 = "bin/qemu-system-i386";

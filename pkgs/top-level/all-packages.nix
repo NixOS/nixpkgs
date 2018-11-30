@@ -4706,6 +4706,8 @@ with pkgs;
 
   pepper = callPackage ../tools/admin/salt/pepper { };
 
+  perceptualdiff = callPackage ../tools/graphics/perceptualdiff { };
+
   percona-xtrabackup = callPackage ../tools/backup/percona-xtrabackup {
     boost = boost159;
   };
@@ -9029,6 +9031,10 @@ with pkgs;
 
   tweak = callPackage ../applications/editors/tweak { };
 
+  tychus = callPackage ../development/tools/tychus {
+    inherit (darwin.apple_sdk.frameworks) CoreFoundation;
+  };
+
   uhd = callPackage ../development/tools/misc/uhd { };
 
   uisp = callPackage ../development/tools/misc/uisp { };
@@ -11092,8 +11098,6 @@ with pkgs;
 
   libosip = callPackage ../development/libraries/osip {};
 
-  libosip_3 = callPackage ../development/libraries/osip/3.nix {};
-
   libosmium = callPackage ../development/libraries/libosmium { };
 
   libosmocore = callPackage ../applications/misc/libosmocore { };
@@ -12526,7 +12530,7 @@ with pkgs;
   taglib-sharp = callPackage ../development/libraries/taglib-sharp { };
 
   talloc = callPackage ../development/libraries/talloc {
-    python = python2;
+    python = buildPackages.python2;
   };
 
   tclap = callPackage ../development/libraries/tclap {};
@@ -14196,8 +14200,6 @@ with pkgs;
   fuse3 = fusePackages.fuse_3;
   fuse-common = hiPrio fusePackages.fuse_3.common;
 
-  fusionio-util = callPackage ../os-specific/linux/fusionio/util.nix { };
-
   fxload = callPackage ../os-specific/linux/fxload { };
 
   gfxtablet = callPackage ../os-specific/linux/gfxtablet {};
@@ -14479,8 +14481,6 @@ with pkgs;
     ena = callPackage ../os-specific/linux/ena {};
 
     v4l2loopback = callPackage ../os-specific/linux/v4l2loopback { };
-
-    fusionio-vsl = callPackage ../os-specific/linux/fusionio/vsl.nix { };
 
     lttng-modules = callPackage ../os-specific/linux/lttng-modules { };
 
@@ -17502,8 +17502,6 @@ with pkgs;
   # Impressive, formerly known as "KeyJNote".
   impressive = callPackage ../applications/office/impressive { };
 
-  inferno = pkgsi686Linux.callPackage ../applications/inferno { };
-
   inkscape = callPackage ../applications/graphics/inkscape {
     lcms = lcms2;
     poppler = poppler_0_61;
@@ -20087,8 +20085,6 @@ with pkgs;
   xmacro = callPackage ../tools/X11/xmacro { };
 
   xmlcopyeditor = callPackage ../applications/editors/xmlcopyeditor { };
-
-  xmove = callPackage ../applications/misc/xmove { };
 
   xmp = callPackage ../applications/audio/xmp { };
 

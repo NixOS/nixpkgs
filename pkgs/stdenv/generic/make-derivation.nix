@@ -98,7 +98,7 @@ rec {
                                       ++ depsTargetTarget ++ depsTargetTargetPropagated) == 0;
       dontAddHostSuffix = attrs ? outputHash && !noNonNativeDeps || stdenv.cc == null;
       supportedHardeningFlags = [ "fortify" "stackprotector" "pie" "pic" "strictoverflow" "format" "relro" "bindnow" ];
-      defaultHardeningFlags = if stdenv.targetPlatform.isMusl
+      defaultHardeningFlags = if stdenv.hostPlatform.isMusl
                               then supportedHardeningFlags
                               else lib.remove "pie" supportedHardeningFlags;
       enabledHardeningOptions =

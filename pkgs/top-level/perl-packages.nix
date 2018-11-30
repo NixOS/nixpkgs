@@ -7462,6 +7462,21 @@ let
     };
   };
 
+  Imager = buildPerlPackage rec {
+    name = "Imager-1.006";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/T/TO/TONYC/${name}.tar.gz";
+      sha256 = "c1e434a4de6250e3b229aa74aa653e56c38f981864f71a975366c50559c9d52b";
+    };
+    buildInputs = [ ExtUtilsPkgConfig pkgs.freetype pkgs.fontconfig pkgs.libjpeg pkgs.libpng ];
+    makeMakerFlags = "--incpath ${pkgs.libjpeg.dev}/include --libpath ${pkgs.libjpeg.out}/lib --incpath ${pkgs.libpng.dev}/include --libpath ${pkgs.libpng.out}/lib";
+    meta = {
+      homepage = http://imager.perl.org/;
+      description = "Perl extension for Generating 24 bit Images";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   ImageInfo = buildPerlPackage rec {
     name = "Image-Info-1.41";
     src = fetchurl {
