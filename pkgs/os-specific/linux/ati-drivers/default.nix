@@ -19,7 +19,7 @@ with stdenv.lib;
 # make sure libglx.so of ati is used. xorg.xorgserver does provide it as well
 # which is a problem because it doesn't contain the xorgserver patch supporting
 # the XORG_DRI_DRIVER_PATH env var.
-# See http://thread.gmane.org/gmane.linux.distributions.nixos/4145 for a
+# See https://marc.info/?l=nix-dev&m=139641585515351 for a
 # workaround (TODO)
 
 # The gentoo ebuild contains much more "magic" and is usually a great resource to
