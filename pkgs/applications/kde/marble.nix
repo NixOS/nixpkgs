@@ -14,4 +14,7 @@ mkDerivation {
     qtscript qtsvg qtquickcontrols qtwebkit shared-mime-info krunner kparts
     knewstuff gpsd
   ];
+  preConfigure = ''
+    cmakeFlags+=" -DINCLUDE_INSTALL_DIR=''${!outputDev}/include"
+  '';
 }

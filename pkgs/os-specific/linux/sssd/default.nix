@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgs, glibc, augeas, dnsutils, c-ares, curl,
+{ stdenv, fetchurl, fetchpatch, pkgs, glibc, augeas, dnsutils, c-ares, curl,
   cyrus_sasl, ding-libs, libnl, libunistring, nss, samba, nfs-utils, doxygen,
   python, python3, pam, popt, talloc, tdb, tevent, pkgconfig, ldb, openldap,
   pcre, kerberos, cifs-utils, glib, keyutils, dbus, fakeroot, libxslt, libxml2,
@@ -17,6 +17,14 @@ stdenv.mkDerivation rec {
     url = "https://fedorahosted.org/released/sssd/${name}.tar.gz";
     sha256 = "032ppk57qs1lnvz7pb7lw9ldwm9i1yagh9fzgqgn6na3bg61ynzy";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "duplicate-case-value.diff";
+      url = "https://github.com/SSSD/sssd/commit/1ee12b05570fcfb8.diff";
+      sha256 = "01y8i8cfs2gydn84097cl5fynx0db8b0vr345gh57ypp84in3ixw";
+    })
+  ];
 
   # Something is looking for <libxml/foo.h> instead of <libxml2/libxml/foo.h>
   NIX_CFLAGS_COMPILE = "-I${libxml2.dev}/include/libxml2";

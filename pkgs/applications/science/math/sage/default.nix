@@ -91,6 +91,7 @@ let
     # https://trac.sagemath.org/ticket/25674
     R = nixpkgs.R.overrideAttrs (attrs: rec {
       name = "R-3.4.4";
+      doCheck = false;
       src = fetchurl {
         url = "http://cran.r-project.org/src/base/R-3/${name}.tar.gz";
         sha256 = "0dq3jsnwsb5j3fhl0wi3p5ycv8avf8s5j1y4ap3d2mkjmcppvsdk";
