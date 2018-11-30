@@ -2,7 +2,7 @@
 , meson, ninja, pkgconfig, python3
 , gnome3, vala, gobject-introspection, wrapGAppsHook
 , gtk3, granite
-, json-glib, glib, glib-networking
+, json-glib, glib, glib-networking, hicolor-icon-theme
 }:
 
 let
@@ -20,7 +20,7 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ meson ninja pkgconfig python3 vala gobject-introspection wrapGAppsHook ];
   buildInputs = [
-    gtk3 granite json-glib glib glib-networking
+    gtk3 granite json-glib glib glib-networking hicolor-icon-theme
     gnome3.libgee gnome3.libsoup gnome3.gsettings-desktop-schemas
   ];
 
