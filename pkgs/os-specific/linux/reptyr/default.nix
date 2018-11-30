@@ -29,5 +29,6 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [raskin];
     license = lib.licenses.mit;
     description = "Reparent a running program to a new terminal";
+    homepage = https://github.com/nelhage/reptyr;
   };
 }
