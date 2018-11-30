@@ -17,8 +17,11 @@ let
       inherit pname version;
       sha256 = "0qawsm6px1vca3babnqwn0hmkzsxy4w0gi345apd2qk3v0cv7ipc";
     };
-    patches = builtins.filter # Remove gir-fallback-path.patch
-      (str: !(stdenv.lib.hasSuffix "gir-fallback-path.patch" str))
+    # Remove gir-fallback-path.patch and
+    # a87496addd9160300837aa50193f4798c6f1d251.patch (already in 0.48.0):
+    patches = builtins.filter
+      (str: !(stdenv.lib.hasSuffix "gir-fallback-path.patch" str
+              || stdenv.lib.hasSuffix "a87496addd9160300837aa50193f4798c6f1d251.patch" str))
       oldAttrs.patches;
   });
 in stdenv.mkDerivation rec {
@@ -50,7 +53,7 @@ in stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Dlibcap=enabled" "-Dlogind=enabled" "-Dxwayland=enabled" "-Dx11-backend=enabled"
-    "-Dxcb-icccm=enabled" "-Dxcb-xkb=enabled" "-Dxcb-errors=enabled"
+    "-Dxcb-icccm=enabled" "-Dxcb-errors=enabled"
   ];
 
   postInstall = ''
