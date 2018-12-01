@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, cmake, google-gflags, which
-, lsb-release, glog, protobuf, cbc, zlib }:
+, lsb-release, glog, protobuf, cbc, zlib, python3 }:
 
 stdenv.mkDerivation rec {
   name = "or-tools-${version}";
@@ -28,10 +28,13 @@ stdenv.mkDerivation rec {
   makeFlags = [ "prefix=${placeholder "out"}" ];
   buildFlags = [ "cc" ];
 
+  checkTarget = "test_cc";
+  doCheck = true;
+
   installTargets = [ "install_cc" ];
 
   nativeBuildInputs = [
-    cmake lsb-release which zlib
+    cmake lsb-release which zlib python3
   ];
   propagatedBuildInputs = [
     google-gflags glog protobuf cbc
