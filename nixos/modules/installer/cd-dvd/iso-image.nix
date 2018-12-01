@@ -339,7 +339,9 @@ let
       echo "Image size: $image_size"
       truncate --size=$image_size "$out"
       ${pkgs.libfaketime}/bin/faketime "2000-01-01 00:00:00" ${pkgs.dosfstools}/sbin/mkfs.vfat -i 12345678 -n EFIBOOT "$out"
-      mcopy -bpsvm -i "$out" ./* ::
+      mcopy -psvm -i "$out" ./* ::
+      # Verify the FAT partition.
+      ${pkgs.dosfstools}/sbin/fsck.vfat -vn "$out"
     ''; # */
 
   targetArch = if pkgs.stdenv.isi686 then
