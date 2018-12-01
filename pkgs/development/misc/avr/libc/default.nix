@@ -7,7 +7,7 @@ stdenv.mkDerivation {
   name = "avr-libc-${version}";
 
   src = fetchurl {
-    url = http://download.savannah.gnu.org/releases/avr-libc/avr-libc-2.0.0.tar.bz2;
+    url = https://download.savannah.gnu.org/releases/avr-libc/avr-libc-2.0.0.tar.bz2;
     sha256 = "15svr2fx8j6prql2il2fc0ppwlv50rpmyckaxx38d3gxxv97zpdj";
   };
 

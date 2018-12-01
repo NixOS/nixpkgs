@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   version = "2.0.15";
   
   src = fetchurl {
-    url = "http://download.savannah.gnu.org/releases/xlog/${name}.tar.gz";
+    url = "https://download.savannah.gnu.org/releases/xlog/${name}.tar.gz";
     sha256 = "0an883wqw3zwpw8nqinm9cb17hp2xw9vf603k4l2345p61jqdw2j";
   };
 

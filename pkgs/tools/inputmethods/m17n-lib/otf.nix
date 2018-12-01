@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   name = "libotf-0.9.16";
 
   src = fetchurl {
-    url = "http://download.savannah.gnu.org/releases/m17n/${name}.tar.gz";
+    url = "https://download.savannah.gnu.org/releases/m17n/${name}.tar.gz";
     sha256 = "0sq6g3xaxw388akws6qrllp3kp2sxgk2dv4j79k6mm52rnihrnv8";
   };
 

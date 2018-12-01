@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   name = "bbdb-3.1.2";
 
   src = fetchurl {
-    url = "http://download.savannah.gnu.org/releases/bbdb/${name}.tar.gz";
+    url = "https://download.savannah.gnu.org/releases/bbdb/${name}.tar.gz";
     sha256 = "1gs16bbpiiy01w9pyg12868r57kx1v3hnw04gmqsmpc40l1hyy05";
   };
 
