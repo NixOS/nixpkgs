@@ -20,7 +20,7 @@ auditTmpdir() {
         if [[ "$i" =~ .build-id ]]; then continue; fi
 
         if isELF "$i"; then
-            if patchelf --print-rpath "$i" | grep -q -F "$TMPDIR/"; then
+            if { printf :; patchelf --print-rpath "$i"; } | grep -q -F ":$TMPDIR/"; then
                 echo "RPATH of binary $i contains a forbidden reference to $TMPDIR/"
                 exit 1
             fi
