@@ -6,7 +6,7 @@
 # Run time
 , ncurses, readline, gmp, mpfr, expat, zlib, dejagnu
 
-, pythonSupport ? stdenv.hostPlatform == stdenv.buildPlatform && !stdenv.hostPlatform.isCygwin, python ? null
+, pythonSupport ? stdenv.hostPlatform == stdenv.buildPlatform && !stdenv.hostPlatform.isCygwin, python3 ? null
 , guile ? null
 
 }:
@@ -16,7 +16,7 @@ let
   version = "8.2";
 in
 
-assert pythonSupport -> python != null;
+assert pythonSupport -> python3 != null;
 
 stdenv.mkDerivation rec {
   name =
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig texinfo perl setupDebugInfoDirs ];
 
   buildInputs = [ ncurses readline gmp mpfr expat zlib guile ]
-    ++ stdenv.lib.optional pythonSupport python
+    ++ stdenv.lib.optional pythonSupport python3
     ++ stdenv.lib.optional doCheck dejagnu;
 
   propagatedNativeBuildInputs = [ setupDebugInfoDirs ];
