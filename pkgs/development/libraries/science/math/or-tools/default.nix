@@ -37,6 +37,8 @@ stdenv.mkDerivation rec {
     google-gflags glog protobuf cbc
   ];
 
+  enableParallelBuilding = true;
+
   meta = with stdenv.lib; {
     homepage = https://github.com/google/or-tools;
     license = licenses.asl20;
