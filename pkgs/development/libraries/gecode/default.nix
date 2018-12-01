@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, perl }:
+{ stdenv, fetchFromGitHub, bison, flex, perl, gmp, mpfr, enableGist ? true, qtbase }:
 
 stdenv.mkDerivation rec {
   name = "gecode-${version}";
@@ -12,7 +12,9 @@ stdenv.mkDerivation rec {
   };
 
   enableParallelBuilding = true;
-  buildInputs = [ perl ];
+  nativeBuildInputs = [ bison flex ];
+  buildInputs = [ perl gmp mpfr ]
+    ++ stdenv.lib.optional enableGist qtbase;
 
   meta = with stdenv.lib; {
     license = licenses.mit;
