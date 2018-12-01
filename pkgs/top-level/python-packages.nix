@@ -662,6 +662,8 @@ in {
 
   python-stdnum = callPackage ../development/python-modules/python-stdnum { };
 
+  python-socketio = callPackage ../development/python-modules/python-socketio { };
+
   python-utils = callPackage ../development/python-modules/python-utils { };
 
   pytimeparse =  callPackage ../development/python-modules/pytimeparse { };
