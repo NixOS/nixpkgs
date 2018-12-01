@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   name = "or-tools-${version}";
-  version = "v6.9.1";
+  version = "v6.10";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "or-tools";
     rev = version;
-    sha256 = "099j1mc7vvry0a2fiz9zvk6divivglzphv48wbw0c6nd5w8hb27c";
+    sha256 = "11k3671rpv968dsglc6bgarr9yi8ijaaqm2wq3m0rn4wy8fj7za2";
   };
 
   # The original build system uses cmake which does things like pull
@@ -32,17 +32,6 @@ stdenv.mkDerivation rec {
   installPhase = ''
     make install_cc prefix=$out
   '';
-
-  patches = [
-    # In "expected" way of compilation, the glog package is compiled
-    # with gflags support which then makes gflags header transitively
-    # included through glog. However in nixpkgs we don't compile glog
-    # with gflags so we have to include it ourselves. Upstream should
-    # always include gflags to support both ways I think.
-    #
-    # Upstream ticket: https://github.com/google/or-tools/issues/902
-    ./gflags-include.patch
-  ];
 
   nativeBuildInputs = [
     cmake lsb-release which zlib
