@@ -5,7 +5,7 @@ python2Packages.buildPythonApplication rec {
   version = "0.7.18.2";
 
   src = fetchurl {
-    url = "http://code.launchpad.net/duplicity/${stdenv.lib.versions.majorMinor version}-series/${version}/+download/${name}.tar.gz";
+    url = "https://code.launchpad.net/duplicity/${stdenv.lib.versions.majorMinor version}-series/${version}/+download/${name}.tar.gz";
     sha256 = "0j37dgyji36hvb5dbzlmh5rj83jwhni02yq16g6rd3hj8f7qhdn2";
   };
 
@@ -35,7 +35,7 @@ python2Packages.buildPythonApplication rec {
 
   meta = with stdenv.lib; {
     description = "Encrypted bandwidth-efficient backup using the rsync algorithm";
-    homepage = http://www.nongnu.org/duplicity;
+    homepage = https://www.nongnu.org/duplicity;
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ peti ];
     platforms = platforms.unix;

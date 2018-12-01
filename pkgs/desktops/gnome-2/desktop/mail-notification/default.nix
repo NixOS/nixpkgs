@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Tray status icon, which notifies us when new email arrives";
-    homepage = http://www.nongnu.org/mailnotify/;
+    homepage = https://www.nongnu.org/mailnotify/;
     license = with licenses; [ gpl3 ];
     platforms = platforms.unix;
     maintainers = [ maintainers.eleanor ];
