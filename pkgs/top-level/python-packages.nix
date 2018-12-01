@@ -2369,6 +2369,8 @@ in {
 
   flask-silk = callPackage ../development/python-modules/flask-silk { };
 
+  flask-socketio = callPackage ../development/python-modules/flask-socketio { };
+
   flask_sqlalchemy = callPackage ../development/python-modules/flask-sqlalchemy { };
 
   flask_testing = callPackage ../development/python-modules/flask-testing { };
