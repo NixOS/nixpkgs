@@ -50,18 +50,18 @@ let
 
 in {
   liberation_ttf_v1_from_source = common rec {
-    version = "1.07.4";
-    url = "https://releases.pagure.org/liberation-fonts/liberation-fonts-${version}.tar.gz";
-    sha256 = "01jlg88q2s6by7qv6fmnrlx0lwjarrjrpxv811zjz6f2im4vg65d";
+    version = "1.07.5";
+    url = https://github.com/liberationfonts/liberation-1.7-fonts/files/2175696/liberation-fonts-1.07.5.tar.gz;
+    sha256 = "0k1p2nrbx5vjs93x6z91z8y6nkn1vv1zncd02kp9v0ghf0ddmsaa";
     nativeBuildInputs = [ fontforge ];
-    outputHash = "1q102rmg4004p74f8m4y8a6iklmnva0q39sq260jsq3lhcfypg7p";
+    outputHash = "16jn17p22z2vip58aza2dfg1ri31ki6z3hsnmidfqfi7v8k83vq4";
   };
   liberation_ttf_v1_binary = common rec {
-    version = "1.07.4";
-    url = "https://releases.pagure.org/liberation-fonts/liberation-fonts-ttf-${version}.tar.gz";
-    sha256 = "0p7frz29pmjlk2d0j2zs5kfspygwdnpzxkb2hwzcfhrafjvf59v1";
+    version = "1.07.5";
+    url = https://github.com/liberationfonts/liberation-1.7-fonts/files/2175699/liberation-fonts-ttf-1.07.5.tar.gz;
+    sha256 = "0wx999dx83azjqrz56pldnan41k8g12zrccg15j5nqhg7k6687r0";
     nativeBuildInputs = [ ];
-    outputHash = "12gwb9b4ij9d93ky4c9ykgp03fqr62axy37pds88q7y6zgciwkab";
+    outputHash = "1spdwjlswylhl89yz35fnrin55n68hyx82laglicnhwwxv2vapg2";
   };
   liberation_ttf_v2_from_source = common rec {
     version = "2.00.4";
