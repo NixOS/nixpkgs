@@ -14107,16 +14107,6 @@ with pkgs;
       ];
   };
 
-  linux_4_18 = callPackage ../os-specific/linux/kernel/linux-4.18.nix {
-    kernelPatches =
-      [ kernelPatches.bridge_stp_helper
-        # See pkgs/os-specific/linux/kernel/cpu-cgroup-v2-patches/README.md
-        # when adding a new linux version
-        # kernelPatches.cpu-cgroup-v2."4.11"
-        kernelPatches.modinst_arg_list_too_long
-      ];
-  };
-
   linux_4_19 = callPackage ../os-specific/linux/kernel/linux-4.19.nix {
     kernelPatches =
       [ kernelPatches.bridge_stp_helper
@@ -14330,7 +14320,6 @@ with pkgs;
   linuxPackages_4_4 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_4);
   linuxPackages_4_9 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_9);
   linuxPackages_4_14 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_14);
-  linuxPackages_4_18 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_18);
   linuxPackages_4_19 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_19);
   # Don't forget to update linuxPackages_latest!
 
