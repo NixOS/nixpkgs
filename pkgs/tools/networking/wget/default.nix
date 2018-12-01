@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
 
     license = licenses.gpl3Plus;
 
-    homepage = http://www.gnu.org/software/wget/;
+    homepage = https://www.gnu.org/software/wget/;
 
     maintainers = with maintainers; [ fpletz ];
     platforms = platforms.all;

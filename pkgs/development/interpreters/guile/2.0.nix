@@ -94,7 +94,7 @@
 
   meta = {
     description = "Embeddable Scheme implementation";
-    homepage    = http://www.gnu.org/software/guile/;
+    homepage    = https://www.gnu.org/software/guile/;
     license     = stdenv.lib.licenses.lgpl3Plus;
     maintainers = with stdenv.lib.maintainers; [ ludo lovek323 ];
     platforms   = stdenv.lib.platforms.all;
@@ -114,7 +114,7 @@
 //
 
 (stdenv.lib.optionalAttrs (!stdenv.isLinux) {
-  # Work around <http://bugs.gnu.org/14201>.
+  # Work around <https://bugs.gnu.org/14201>.
   SHELL = "/bin/sh";
   CONFIG_SHELL = "/bin/sh";
 })

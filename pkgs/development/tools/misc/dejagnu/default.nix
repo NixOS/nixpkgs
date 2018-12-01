@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   # details.
 
   # The test-suite needs to have a non-empty stdin:
-  #   http://lists.gnu.org/archive/html/bug-dejagnu/2003-06/msg00002.html
+  #   https://lists.gnu.org/archive/html/bug-dejagnu/2003-06/msg00002.html
   checkPhase = ''
     # Provide `runtest' with a log name, otherwise it tries to run
     # `whoami', which fails when in a chroot.
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
       Tool command language.
     '';
 
-    homepage = http://www.gnu.org/software/dejagnu/;
+    homepage = https://www.gnu.org/software/dejagnu/;
     license = licenses.gpl2Plus;
 
     platforms = platforms.unix;
