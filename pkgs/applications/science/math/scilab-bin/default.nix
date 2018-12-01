@@ -63,6 +63,7 @@ stdenv.mkDerivation rec {
     cp -r . "$out/opt/scilab-${ver}/"
     mkdir "$out/bin"
     ln -s "$out/opt/scilab-${ver}/bin/scilab" "$out/bin/scilab-${ver}"
+    ln -s "$out/opt/scilab-${ver}/bin/scilab" "$out/bin/scilab"
     ln -s "scilab-${ver}" "$out/bin/scilab-${majorVer}"
   '';
 
