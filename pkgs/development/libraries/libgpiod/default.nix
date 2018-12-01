@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "2018-10-07";
 
   src = fetchgit {
-    url = "git://git.kernel.org/pub/scm/libs/libgpiod/libgpiod.git";
+    url = "https://git.kernel.org/pub/scm/libs/libgpiod/libgpiod.git";
     rev = "4bf402d3a49336eacd33654441d575bd267780b8";
     sha256 = "01f3jzb133z189sxdiz9qiy65p0bjqhynfllidbpxdr0cxkyyc1d";
   };
