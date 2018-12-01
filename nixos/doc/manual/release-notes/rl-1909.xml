@@ -42,6 +42,13 @@
    The following new services were added since the last release:
   </para>
 
+  <itemizedlist>
+   <listitem>
+    <para>
+     <literal>./programs/dwm-status.nix</literal>
+    </para>
+   </listitem>
+  </itemizedlist>
  </section>
 
  <section xmlns="http://docbook.org/ns/docbook"
