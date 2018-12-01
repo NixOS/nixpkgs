@@ -3,17 +3,17 @@
 
 python2.pkgs.buildPythonApplication rec {
   name = "whipper-${version}";
-  version = "0.7.0";
+  version = "0.7.2";
 
   src = fetchFromGitHub {
     owner = "whipper-team";
     repo = "whipper";
     rev = "v${version}";
-    sha256 = "04m8s0s9dcnly9l6id8vv99n9kbjrjid79bss52ay9yvwng0frmj";
+    sha256 = "17cn11c6c62pfhhp6vcslxpanb0czh2xbxq1g6wd7bpmgw38yd8v";
   };
 
   pythonPath = with python2.pkgs; [
-    pygobject2 musicbrainzngs urllib3 chardet
+    pygobject3 musicbrainzngs urllib3 chardet
     pycdio setuptools mutagen CDDB
     requests
   ];
@@ -25,9 +25,12 @@ python2.pkgs.buildPythonApplication rec {
   patches = [
     (substituteAll {
       src = ./paths.patch;
-      inherit cdrdao cdparanoia utillinux flac sox;
-      accurateripChecksum = accuraterip-checksum;
+      inherit cdparanoia;
     })
+  ];
+
+  makeWrapperArgs = [
+    "--prefix" "PATH" ":" "${stdenv.lib.makeBinPath [ accuraterip-checksum cdrdao utillinux flac sox ]}"
   ];
 
   # some tests require internet access
