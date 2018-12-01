@@ -1,6 +1,6 @@
-{ stdenv, buildPythonPackage, isPy3k, fetchurl, rpkg, offtrac, urlgrabber }:
+{ stdenv, buildPythonApplication, isPy3k, fetchurl, rpkg, offtrac, urlgrabber }:
 
-buildPythonPackage rec {
+buildPythonApplication rec {
   pname = "fedpkg";
   version = "1.29";
 

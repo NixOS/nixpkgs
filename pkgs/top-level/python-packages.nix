@@ -1655,8 +1655,6 @@ in {
     then callPackage ../development/python-modules/faulthandler {}
     else throw "faulthandler is built into ${python.executable}";
 
-  fedpkg = callPackage ../development/python-modules/fedpkg { };
-
   flit = callPackage ../development/python-modules/flit { };
 
   flowlogs_reader = callPackage ../development/python-modules/flowlogs_reader { };
