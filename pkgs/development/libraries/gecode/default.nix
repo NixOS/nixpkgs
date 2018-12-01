@@ -21,6 +21,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.gecode.org;
     description = "Toolkit for developing constraint-based systems";
     platforms = platforms.all;
-    maintainers = [ maintainers.manveru ];
+    maintainers = [ ];
   };
 }
