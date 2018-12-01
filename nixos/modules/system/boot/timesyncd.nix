@@ -25,7 +25,7 @@ with lib;
 
   config = mkIf config.services.timesyncd.enable {
 
-    systemd.additionalUpstreamSystemUnits = [ "systemd-timesyncd.service" ];
+    systemd.additionalUpstreamSystemUnits = [ "systemd-timesyncd.service" "systemd-time-wait-sync.service" ];
 
     systemd.services.systemd-timesyncd = {
       wantedBy = [ "sysinit.target" ];
