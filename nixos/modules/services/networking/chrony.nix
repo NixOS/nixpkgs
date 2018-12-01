@@ -12,7 +12,7 @@ let
     ${concatMapStringsSep "\n" (server: "server " + server) cfg.servers}
 
     ${optionalString
-      cfg.initstepslew.enabled
+      (cfg.initstepslew.enabled && (cfg.servers != []))
       "initstepslew ${toString cfg.initstepslew.threshold} ${concatStringsSep " " cfg.initstepslew.servers}"
     }
 
