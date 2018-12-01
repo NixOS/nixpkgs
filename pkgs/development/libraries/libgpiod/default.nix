@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, autoconf, autoconf-archive, automake, libtool, pkgconfig, kmod, enable-tools ? true }:
+{ stdenv, fetchgit, autoreconfHook, autoconf-archive, pkgconfig, kmod, enable-tools ? true }:
 
 stdenv.mkDerivation rec {
   name = "libgpiod-${version}";
@@ -12,19 +12,16 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ kmod ];
   nativeBuildInputs = [
-    autoconf
     autoconf-archive
-    automake
-    libtool
     pkgconfig
+    autoreconfHook
   ];
 
-  configurePhase = ''
-    ./autogen.sh \
-      --enable-tools=${if enable-tools then "yes" else "no"} \
-      --enable-bindings-cxx \
-      --prefix="$out"
-  '';
+  configureFlags = [
+    "--enable-tools=${if enable-tools then "yes" else "no"}"
+    "--enable-bindings-cxx"
+    "--prefix=$(out)"
+  ];
 
   meta = with stdenv.lib; {
     description = "C library and tools for interacting with the linux GPIO character device";
