@@ -12,7 +12,7 @@
 
 buildGoPackage rec {
   name = "aminal-${version}";
-  version = "0.7.5";
+  version = "0.7.6";
 
   goPackagePath = "github.com/liamg/aminal";
 
@@ -36,7 +36,7 @@ buildGoPackage rec {
     owner = "liamg";
     repo = "aminal";
     rev = "v${version}";
-    sha256 = "0q9jgjkf64s0d4izz7q82835yxw200agpdq9kcm0ybmddld3bwkh";
+    sha256 = "0fg8k4xzs5nxjggqpn25mia4z8dlpzfk0qzfk503cyx0kfmynxf7";
   };
 
   preBuild = ''
