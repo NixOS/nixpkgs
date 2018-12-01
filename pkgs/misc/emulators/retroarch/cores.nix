@@ -150,7 +150,7 @@ in with stdenv.lib.licenses;
       cmake curl libGLU_combined pcre pkgconfig sfml miniupnpc
       gettext glib gtk2 hidapi
       libevdev udev
-    ] ++ (with xorg; [ libSM libX11 libXi libpthreadstubs libxcb xcbutil ]);
+    ] ++ (with xorg; [ libSM libX11 libXi libpthreadstubs libxcb xcbutil libXinerama libXxf86vm ]);
   }).override {
     cmakeFlags = [
         "-DLINUX_LOCAL_DEV=true"
