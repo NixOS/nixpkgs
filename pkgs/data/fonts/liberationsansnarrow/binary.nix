@@ -1,11 +1,11 @@
 { stdenv, fetchurl, liberationsansnarrow }:
 
 stdenv.mkDerivation rec {
-  version = "1.07.3";
+  version = "1.07.6";
   name = "liberationsansnarrow-${version}";
   src = fetchurl {
-    url = "https://fedorahosted.org/releases/l/i/liberation-fonts/liberation-fonts-ttf-${version}.tar.gz";
-    sha256 = "0qkr7n97jmj4q85jr20nsf6n5b48j118l9hr88vijn22ikad4wsp";
+    url = https://github.com/liberationfonts/liberation-sans-narrow/files/2579431/liberation-narrow-fonts-ttf-1.07.6.tar.gz;
+    sha256 = "18wya6l20zfjhd96xrikjfz4p58bbhdc7vr8zk4hddgpbydxhyc8";
   };
 
   phases = [ "unpackPhase" "installPhase" ];

@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "liberationsansnarrow";
-  version = "1.07.3";
+  version = "1.07.6";
   name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "https://fedorahosted.org/releases/l/i/liberation-fonts/liberation-fonts-ttf-${version}.tar.gz";
-    sha256 = "0qkr7n97jmj4q85jr20nsf6n5b48j118l9hr88vijn22ikad4wsp";
+    url = https://github.com/liberationfonts/liberation-sans-narrow/files/2579430/liberation-narrow-fonts-1.07.6.tar.gz;
+    sha256 = "1j2ilz2kb4kpl1wky3m7ak6axnlfn44anj9dhpbr1madh2682i2j";
   };
 
   buildInputs = [ fontforge pythonPackages.fonttools python ];
