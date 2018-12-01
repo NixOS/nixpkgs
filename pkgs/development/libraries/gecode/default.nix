@@ -1,12 +1,14 @@
-{ stdenv, fetchurl, perl }:
+{ stdenv, fetchFromGitHub, perl }:
 
 stdenv.mkDerivation rec {
   name = "gecode-${version}";
-  version = "6.0.0";
+  version = "6.1.0";
 
-  src = fetchurl {
-    url = "http://www.gecode.org/download/${name}.tar.gz";
-    sha256 = "0dp7bm6k790jx669y4jr0ffi5cdfpwsqm1ykj2c0zh56jsgs6hfs";
+  src = fetchFromGitHub {
+    owner = "Gecode";
+    repo = "gecode";
+    rev = "release-${version}";
+    sha256 = "1ijjy8ppx7djnkrkawsd00rmlf24qh1z13aap0h1azailw1pbrg4";
   };
 
   enableParallelBuilding = true;
