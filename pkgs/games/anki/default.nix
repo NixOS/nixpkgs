@@ -4,6 +4,7 @@
 , lib
 , python
 , fetchurl
+, fetchpatch
 , lame
 , mplayer
 , libpulseaudio
@@ -53,7 +54,16 @@ buildPythonApplication rec {
     patches = [
       # Disable updated version check.
       ./no-version-check.patch
-      ./python-3.7-compat.patch
+
+      # This is needed to fix python 3.7 compatibilty, where the
+      # behaviour of `re.escape()` was changed in a way that it no
+      # longer escapes `%`. This patch detects this difference at
+      # runtime and makes anki work with any python version.
+      # Upstream PR: https://github.com/dae/anki/pull/266
+      (fetchpatch {
+        url = "https://github.com/dae/anki/commit/3d69aa9ce454a151ba75deafd7de117af2c7307d.patch";
+        sha256 = "0kf9gajhy0wcajp24xfia71z6gn1mc4vl37svvq4sqbhj3gigd0h";
+      })
     ];
 
     buildPhase = ''
