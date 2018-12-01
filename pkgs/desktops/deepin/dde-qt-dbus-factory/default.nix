@@ -1,25 +1,29 @@
-{ stdenv, fetchFromGitHub, pkgconfig, qmake, python, deepin }:
+{ stdenv, fetchFromGitHub, pkgconfig, qmake, python3, deepin }:
 
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "dde-qt-dbus-factory";
-  version = "1.0.5";
+  version = "1.0.8";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "0cz55hsbhy1ab1mndv0sp6xnqrhz2y66w7pcxy8v9k87ii32czf8";
+    sha256 = "0yilhlgdxinwd8bncbzfry40596vaxcdqpcryzr7wj6haxybx0jm";
   };
 
   nativeBuildInputs = [
     qmake
-    python
+    python3
+    deepin.setupHook
   ];
 
   postPatch = ''
-    sed -i libdframeworkdbus/{DFrameworkdbusConfig.in,libdframeworkdbus.pro} \
-      -e "s,/usr,$out,"
+    searchHardCodedPaths
+    patchShebangs .
+    fixPath $out /usr \
+      libdframeworkdbus/DFrameworkdbusConfig.in \
+      libdframeworkdbus/libdframeworkdbus.pro
   '';
 
   enableParallelBuilding = true;
