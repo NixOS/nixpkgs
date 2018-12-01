@@ -1,7 +1,7 @@
-{stdenv, fetchurl, fontforge, python2}:
+{stdenv, fetchurl, fontforge, python3}:
 
 let
-  inherit (python2.pkgs) fonttools;
+  inherit (python3.pkgs) fonttools;
 
   common =
     {version, url, sha256, nativeBuildInputs, postPatch ? null, outputHash}:
@@ -64,22 +64,22 @@ in {
     outputHash = "12gwb9b4ij9d93ky4c9ykgp03fqr62axy37pds88q7y6zgciwkab";
   };
   liberation_ttf_v2_from_source = common rec {
-    version = "2.00.1";
-    url = "https://releases.pagure.org/liberation-fonts/liberation-fonts-${version}.tar.gz";
-    sha256 = "1ymryvd2nw4jmw4w5y1i3ll2dn48rpkqzlsgv7994lk6qc9cdjvs";
+    version = "2.00.4";
+    url = https://github.com/liberationfonts/liberation-fonts/files/2579282/liberation-fonts-2.00.4.tar.gz;
+    sha256 = "13f5c5q0kim3l1v2l4v2wqyfhl4fb4c27yq77zpyl7hnm5kfqicl";
     nativeBuildInputs = [ fontforge fonttools ];
     postPatch = ''
       substituteInPlace scripts/setisFixedPitch-fonttools.py --replace \
         'font = ttLib.TTFont(fontfile)' \
         'font = ttLib.TTFont(fontfile, recalcTimestamp=False)'
     '';
-    outputHash = "0nldgawm0a6lpn86w4w3rzx01ns3ph09ar1knq1g4jkxc8ci5rqn";
+    outputHash = "14c0c5n4vzd5y0hf9jkh48h12kkd8hlg94npbmv41j449g6wv6vn";
   };
   liberation_ttf_v2_binary = common rec {
-    version = "2.00.1";
-    url = "https://releases.pagure.org/liberation-fonts/liberation-fonts-ttf-${version}.tar.gz";
-    sha256 = "010m4zfqan4w04b6bs9pm3gapn9hsb18bmwwgp2p6y6idj52g43q";
+    version = "2.00.4";
+    url = https://github.com/liberationfonts/liberation-fonts/files/2579281/liberation-fonts-ttf-2.00.4.tar.gz;
+    sha256 = "0ifz9b6dd3rdx47f0lsjvk3jnkhiq6py4njnpva77jqfbvy9a3n4";
     nativeBuildInputs = [ ];
-    outputHash = "19jky9li345zsig9pcb0rnlsjqqclh7r60vbi4pwh16f14850gpk";
+    outputHash = "0946hqjrb4qlvfgr909zv44bzrs2wyz7v24nz2f5flh25s9bmyzd";
   };
 }
