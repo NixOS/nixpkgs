@@ -3,5 +3,5 @@
 buildDunePackage rec {
   inherit (bisect_ppx) version src meta;
   pname = "bisect_ppx-ocamlbuild";
-  buildInputs = [ ocamlbuild ];
+  propagatedBuildInputs = [ ocamlbuild ];
 }
