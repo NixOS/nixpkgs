@@ -40,7 +40,7 @@ let
         '';
 
         license = licenses.ofl;
-        homepage = https://pagure.io/liberation-fonts/;
+        homepage = https://github.com/liberationfonts;
         maintainers = [
           maintainers.raskin
         ];

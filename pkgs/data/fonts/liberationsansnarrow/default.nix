@@ -32,8 +32,7 @@ stdenv.mkDerivation rec {
     '';
 
     license = licenses.gpl2;
-    homepage = https://fedorahosted.org/liberation-fonts/;
-    maintainers = [ maintainers.leenaars
-    ];
+    homepage = https://github.com/liberationfonts;
+    maintainers = [ maintainers.leenaars ];
   };
 }
