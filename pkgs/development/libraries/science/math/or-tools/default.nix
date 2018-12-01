@@ -25,13 +25,10 @@ stdenv.mkDerivation rec {
     EOF
   '';
 
-  buildPhase = ''
-    make cc
-  '';
+  makeFlags = [ "prefix=${placeholder "out"}" ];
+  buildFlags = [ "cc" ];
 
-  installPhase = ''
-    make install_cc prefix=$out
-  '';
+  installTargets = [ "install_cc" ];
 
   nativeBuildInputs = [
     cmake lsb-release which zlib
