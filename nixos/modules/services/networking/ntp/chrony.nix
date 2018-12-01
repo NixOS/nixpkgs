@@ -76,6 +76,8 @@ in
   };
 
   config = mkIf cfg.enable {
+    meta.maintainers = with lib.maintainers; [ thoughtpolice ];
+
     environment.systemPackages = [ pkgs.chrony ];
 
     users.groups = singleton
