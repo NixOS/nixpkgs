@@ -1,9 +1,8 @@
-{ stdenv, fetchFromGitHub, ocaml, dune, findlib, ocaml-migrate-parsetree, ppx_tools_versioned }:
+{ stdenv, fetchFromGitHub, buildDunePackage, ocaml-migrate-parsetree, ppx_tools_versioned }:
 
-let version = "1.4.0"; in
-
-stdenv.mkDerivation {
-  name = "ocaml${ocaml.version}-bisect_ppx-${version}";
+buildDunePackage rec {
+  pname = "bisect_ppx";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "aantron";
@@ -13,21 +12,13 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [
-    ocaml
-    dune
-    findlib
     ocaml-migrate-parsetree
     ppx_tools_versioned
   ];
 
-  buildPhase = "dune build -p bisect_ppx";
-
-  inherit (dune) installPhase;
-
   meta = {
-    homepage = https://github.com/aantron/bisect_ppx;
-    platforms = ocaml.meta.platforms or [];
     description = "Code coverage for OCaml";
     license = stdenv.lib.licenses.mpl20;
+    homepage = https://github.com/aantron/bisect_ppx;
   };
 }
