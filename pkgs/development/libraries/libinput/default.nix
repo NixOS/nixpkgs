@@ -2,15 +2,26 @@
 , libevdev, mtdev, udev, libwacom
 , documentationSupport ? false, doxygen ? null, graphviz ? null # Documentation
 , eventGUISupport ? false, cairo ? null, glib ? null, gtk3 ? null # GUI event viewer support
-, testsSupport ? false, check ? null, valgrind ? null, python3Packages ? null
+, testsSupport ? false, check ? null, valgrind ? null, python3 ? null
 }:
 
-assert documentationSupport -> doxygen != null && graphviz != null;
+assert documentationSupport -> doxygen != null && graphviz != null && python3 != null;
 assert eventGUISupport -> cairo != null && glib != null && gtk3 != null;
-assert testsSupport -> check != null && valgrind != null && python3Packages != null;
+assert testsSupport -> check != null && valgrind != null && python3 != null;
 
 let
   mkFlag = optSet: flag: "-D${flag}=${stdenv.lib.boolToString optSet}";
+
+  sphinx-build = if documentationSupport then
+    python3.pkgs.sphinx.overrideAttrs (super: {
+      propagatedBuildInputs = super.propagatedBuildInputs ++ (with python3.pkgs; [ recommonmark sphinx_rtd_theme ]);
+
+      postFixup = super.postFixup or "" + ''
+        # Do not propagate Python
+        rm $out/nix-support/propagated-build-inputs
+      '';
+    })
+  else null;
 in
 
 with stdenv.lib;
@@ -32,18 +43,25 @@ stdenv.mkDerivation rec {
     "--libexecdir=${placeholder "bin"}/libexec"
   ];
 
-  nativeBuildInputs = [ pkgconfig meson ninja python3Packages.python ]
-    ++ optionals documentationSupport [ doxygen graphviz ]
-    ++ optionals testsSupport [ check valgrind python3Packages.pyparsing ];
+  nativeBuildInputs = [ pkgconfig meson ninja ]
+    ++ optionals documentationSupport [ doxygen graphviz sphinx-build ]
+    ++ optionals testsSupport [ valgrind ];
 
-  buildInputs = [ libevdev mtdev libwacom ]
-    ++ optionals eventGUISupport [ cairo glib gtk3 ];
+  buildInputs = [ libevdev mtdev libwacom (python3.withPackages (pkgs: with pkgs; [ evdev ])) ]
+    ++ optionals eventGUISupport [ cairo glib gtk3 ]
+    ++ optionals testsSupport [ check ];
 
   propagatedBuildInputs = [ udev ];
 
   patches = [ ./udev-absolute-path.patch ];
 
-  doCheck = testsSupport;
+  postPatch = ''
+    patchShebangs tools/helper-copy-and-exec-from-tmp.sh
+    patchShebangs test/symbols-leak-test
+    patchShebangs test/check-leftover-udev-rules.sh
+  '';
+
+  doCheck = testsSupport && stdenv.hostPlatform == stdenv.buildPlatform;
 
   meta = {
     description = "Handles input devices in Wayland compositors and provides a generic X.Org input driver";
