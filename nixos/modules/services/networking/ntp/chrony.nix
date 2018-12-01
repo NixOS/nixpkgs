@@ -67,7 +67,7 @@ in
 
       extraFlags = mkOption {
         default = [];
-        example = [ "-s" ];
+        example = [ "-s" "-F1" ];
         type = types.listOf types.str;
         description = "Extra flags passed to the chronyd command.";
       };
@@ -76,7 +76,6 @@ in
 
   config = mkIf cfg.enable {
     meta.maintainers = with lib.maintainers; [ thoughtpolice ];
-
     environment.systemPackages = [ pkgs.chrony ];
 
     users.groups = singleton
@@ -97,15 +96,13 @@ in
     systemd.services.systemd-timedated.environment = { SYSTEMD_TIMEDATED_NTP_SERVICES = "chronyd.service"; };
 
     systemd.services.chronyd =
-      { description = "chrony NTP daemon";
+      { description   = "Chrony NTP daemon";
+        documentation = [ "man:chronyd(8)" "man:chrony.conf(5)" "https://chrony.tuxfamily.org" ];
 
-        wantedBy = [ "multi-user.target" ];
-        wants    = [ "time-sync.target" ];
-        before   = [ "time-sync.target" ];
-        after    = [ "network.target" ];
-        conflicts = [ "ntpd.service" "systemd-timesyncd.service" ];
-
-        path = [ pkgs.chrony ];
+        wantedBy  = [ "multi-user.target" ];
+        wants     = [ "ntp-adjusted-chrony.service" ];
+        after     = [ "network.target" ];
+        conflicts = [ "openntpd.service" "ntpd.service" "systemd-timesyncd.service" ];
 
         preStart = ''
           mkdir -m 0755 -p ${stateDir}
@@ -122,9 +119,26 @@ in
             ProtectHome = "yes";
             ProtectSystem = "full";
             PrivateTmp = "yes";
-
           };
+      };
 
+    # Blocker for time-sync.target
+    systemd.services.ntp-adjusted-chrony =
+      { description = "initial NTP adjustment and measurement (chrony)";
+
+        requires = [ "chronyd.service" "time-sync.target" ];
+        before   = [ "time-sync.target" ];
+        after    = [ "chronyd.service" ];
+
+        serviceConfig =
+          { ExecStart = "${pkgs.chrony}/bin/chronyc waitsync";
+            Type = "oneshot";
+            RemainAfterExit = "yes";
+
+            ProtectHome = "yes";
+            ProtectSystem = "full";
+            PrivateTmp = "yes";
+          };
       };
   };
 }
