@@ -8785,8 +8785,6 @@ with pkgs;
 
   omake = callPackage ../development/tools/ocaml/omake { };
 
-  inherit (ocamlPackages) omake_rc1;
-
   omniorb = callPackage ../development/tools/omniorb { };
 
   opengrok = callPackage ../development/tools/misc/opengrok { };
