@@ -64,7 +64,7 @@ stdenv.mkDerivation (rec {
   nativeBuildInputs = [ autoPatchelfHook ];
   runtimeDependencies = [ zlib ];
   postFixup = ''
-    for exe in $(find $out/modules/x-pack/x-pack-ml/platform/linux-x86_64/bin -executable -type f); do
+    for exe in $(find $out/modules/x-pack-ml/platform/linux-x86_64/bin -executable -type f); do
       echo "patching $exe..."
       patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" "$exe"
     done
