@@ -2527,6 +2527,23 @@ addEnvHooks "$hostOffset" myBashFunction
     </varlistentry>
     <varlistentry>
      <term>
+      libiconv, libintl
+     </term>
+     <listitem>
+       <para>
+	 A few libraries automatically add to
+	 <literal>NIX_LDFLAGS</literal> their library, making their
+	 symbols automatically available to the linker. This includes
+	 libiconv and libintl (gettext). This is done to provide
+	 compatibility between GNU Linux, where libiconv and libintl
+	 are bundled in, and other systems where that might not be the
+	 case. Sometimes, this behavior is not desired. To disable
+	 this behavior, set <literal>dontAddExtraLibs</literal>.
+       </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term>
       cmake
      </term>
      <listitem>
