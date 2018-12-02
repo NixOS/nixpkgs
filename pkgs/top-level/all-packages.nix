@@ -21936,6 +21936,8 @@ with pkgs;
 
   beep = callPackage ../misc/beep { };
 
+  bees = callPackage ../tools/filesystems/bees { };
+
   blackbird = callPackage ../misc/themes/blackbird { };
 
   bootil = callPackage ../development/libraries/bootil { };
