@@ -4409,6 +4409,8 @@ in {
 
   zope_contenttype = callPackage ../development/python-modules/zope_contenttype { };
 
+  zope-deferredimport = callPackage ../development/python-modules/zope-deferredimport { };
+
   zope_dottedname = callPackage ../development/python-modules/zope_dottedname { };
 
   zope_event = callPackage ../development/python-modules/zope_event { };
