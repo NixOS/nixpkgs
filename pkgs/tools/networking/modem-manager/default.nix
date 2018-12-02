@@ -33,12 +33,9 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   postInstall = ''
-    # rename to modem-manager to be in style
-    mv $out/etc/systemd/system/ModemManager.service $out/etc/systemd/system/modem-manager.service
-
     # systemd in NixOS doesn't use `systemctl enable`, so we need to establish
     # aliases ourselves.
-    ln -s $out/etc/systemd/system/modem-manager.service \
+    ln -s $out/etc/systemd/system/ModemManager.service \
       $out/etc/systemd/system/dbus-org.freedesktop.ModemManager1.service
   '';
 
