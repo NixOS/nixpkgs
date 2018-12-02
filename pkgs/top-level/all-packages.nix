@@ -22975,6 +22975,8 @@ with pkgs;
     inherit (darwin) libresolv;
   };
 
+  dsniff = callPackage ../tools/networking/dsniff {};
+
   wal-g = callPackage ../tools/backup/wal-g {};
 
   tlwg = callPackage ../data/fonts/tlwg { };
