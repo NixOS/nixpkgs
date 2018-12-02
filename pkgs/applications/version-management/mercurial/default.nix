@@ -50,7 +50,8 @@ in python2Packages.buildPythonApplication {
       chmod u+x $out/share/cgi-bin/hgweb.cgi
 
       # install bash completion
-      install -D -v contrib/bash_completion $out/share/bash-completion/completions/mercurial
+      install -v -m644 -D contrib/bash_completion $out/share/bash-completion/completions/mercurial
+      install -v -m644 -D contrib/zsh_completion $out/share/zsh/site-functions/_hg
     '';
 
   meta = {
