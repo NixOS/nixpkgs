@@ -1,5 +1,4 @@
 { stdenv
-, lib
 , buildPythonPackage
 , fetchPypi
 , imagemagick
@@ -26,22 +25,19 @@ in buildPythonPackage rec {
 
   buildInputs = [ imagemagick ];
 
-  patches = [
-    ./libraries.patch
-  ];
-
   inherit magick_wand_library imagemagick_library;
 
   postPatch = ''
     substituteAllInPlace wand/api.py
   '';
 
-  # No tests
+  # tests not included with pypi release
   doCheck = false;
-  meta = {
+
+  meta = with stdenv.lib; {
     description = "Ctypes-based simple MagickWand API binding for Python";
     homepage = http://wand-py.org/;
-    license = with lib.licenses; [ mit ];
+    license = [ licenses.mit ];
   };
 
   passthru = {
