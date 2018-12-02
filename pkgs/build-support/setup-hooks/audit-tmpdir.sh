@@ -26,7 +26,7 @@ auditTmpdir() {
             fi
         fi
 
-        if  isScript "$i"; then
+        if isScript "$i"; then
             if [ -e "$(dirname "$i")/.$(basename "$i")-wrapped" ]; then
                 if grep -q -F "$TMPDIR/" "$i"; then
                     echo "wrapper script $i contains a forbidden reference to $TMPDIR/"
