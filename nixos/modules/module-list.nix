@@ -106,6 +106,7 @@
   ./programs/mininet.nix
   ./programs/mtr.nix
   ./programs/nano.nix
+  ./programs/nm-applet.nix
   ./programs/npm.nix
   ./programs/oblogout.nix
   ./programs/plotinus.nix
