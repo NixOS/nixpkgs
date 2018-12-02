@@ -9,6 +9,9 @@ buildPythonPackage rec {
     sha256 = "cbc35031ec2b29af36947d085a7fbbcd8b79b84d563adf6156103d82565f78db";
   };
 
+  # armv6l needs library to implement C++ atomics
+  GRPC_PYTHON_LDFLAGS = stdenv.lib.optional (stdenv.hostPlatform.system == "armv6l-linux") "-latomic";
+
   enableParallelBuilding = true;
 
   propagatedBuildInputs = [ protobuf grpcio ];
