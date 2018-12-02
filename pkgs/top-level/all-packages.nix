@@ -10036,6 +10036,7 @@ in
 
   goocanvas = callPackage ../development/libraries/goocanvas { };
   goocanvas2 = callPackage ../development/libraries/goocanvas/2.x.nix { };
+  goocanvasmm2 = callPackage ../development/libraries/goocanvasmm { };
 
   google-gflags = callPackage ../development/libraries/google-gflags { };
   gflags = google-gflags; # TODO: move to aliases.nix
