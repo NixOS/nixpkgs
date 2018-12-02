@@ -19,6 +19,5 @@ stdenv.mkDerivation rec {
     description = "Simple getter for HTTP URLs using cURL";
     platforms = platforms.unix;
     license = licenses.gpl3;
-    broken = stdenv.hostPlatform.cc.isClang;
   };
 }
