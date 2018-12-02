@@ -7,15 +7,15 @@
 
 stdenv.mkDerivation rec {
   p_name  = "thunar-archive-plugin";
-  ver_maj = "0.3";
-  ver_min = "1";
+  ver_maj = "0.4";
+  ver_min = "0";
   name = "${p_name}-${ver_maj}.${ver_min}";
 
   src = fetchFromGitHub {
     owner = "xfce-mirror";
     repo = p_name;
-    rev = "72b23eefc348bee31e06a04f968e430bc7dfa51e";
-    sha256 = "0l8715x23qmk0jkywiza3qx0xxmafxi4grp7p82kkc5df5ccs8kx";
+    rev = "b63862f03a041c2467c18dc8828f3a63a2d00328";
+    sha256 = "1793zicm00fail4iknliwy2b668j239ndxhc9hy6jarvdyp08h38";
   };
 
   nativeBuildInputs = [ pkgconfig ];
