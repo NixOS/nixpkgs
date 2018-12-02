@@ -5,7 +5,7 @@ let
     url = http://dev.gentoo.org/~polynomial-c/mozilla/nss-3.15.4-pem-support-20140109.patch.xz;
     sha256 = "10ibz6y0hknac15zr6dw4gv9nb5r5z9ym6gq18j3xqx7v7n3vpdw";
   };
-  version = "3.40";
+  version = "3.40.1";
   underscoreVersion = builtins.replaceStrings ["."] ["_"] version;
 
 in stdenv.mkDerivation rec {
@@ -14,7 +14,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://mozilla/security/nss/releases/NSS_${underscoreVersion}_RTM/src/${name}.tar.gz";
-    sha256 = "1p9jidi3nysirf3lhkrqkjjrf2cw3y2wz2jgjvsjn1ysidxhhqh5";
+    sha256 = "1wf8qapd2lh8pbjd6pp9m32mx1zyddrmv5c4cr86xj3r5ap6n3jy";
   };
 
   buildInputs = [ perl zlib sqlite ]
