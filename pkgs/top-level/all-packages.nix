@@ -697,6 +697,8 @@ with pkgs;
 
   dkimpy = with pythonPackages; toPythonApplication dkimpy;
 
+  dpt-rp1-py = callPackage ../tools/misc/dpt-rp1-py { };
+
   ecdsautils = callPackage ../tools/security/ecdsautils { };
 
   sedutil = callPackage ../tools/security/sedutil { };
