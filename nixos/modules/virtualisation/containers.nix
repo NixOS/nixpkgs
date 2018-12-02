@@ -457,6 +457,16 @@ in
                       { boot.isContainer = true;
                         networking.hostName = mkDefault name;
                         networking.useDHCP = false;
+                        assertions = [
+                          {
+                            assertion =  config.privateNetwork -> stringLength name < 12;
+                            message = ''
+                              Container name `${name}` is too long: When `privateNetwork` is enabled, container names can
+                              not be longer than 11 characters, because the container's interface name is derived from it.
+                              This might be fixed in the future. See https://github.com/NixOS/nixpkgs/issues/38509
+                            '';
+                          }
+                        ];
                       };
                     in [ extraConfig ] ++ (map (x: x.value) defs);
                   prefix = [ "containers" name ];
