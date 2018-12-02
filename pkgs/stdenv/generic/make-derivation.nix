@@ -81,13 +81,6 @@ rec {
     , ... } @ attrs:
 
     let
-      # Check that the name is consistent with pname and version:
-      selfConsistent = (with attrs; attrs ? "name" ->
-        (lib.assertMsg (attrs ? "version" -> lib.strings.hasInfix version name)
-          "version ${version} does not appear in name ${name}" &&
-        lib.assertMsg (attrs ? "pname" -> lib.strings.hasInfix pname name)
-          "pname ${pname} does not appear in name ${name}"));
-
       computedName = if name != "" then name else "${attrs.pname}-${attrs.version}";
 
       # TODO(@oxij, @Ericson2314): This is here to keep the old semantics, remove when
@@ -95,16 +88,17 @@ rec {
       doCheck' = doCheck && stdenv.hostPlatform == stdenv.buildPlatform;
       doInstallCheck' = doInstallCheck && stdenv.hostPlatform == stdenv.buildPlatform;
 
-      outputs' = outputs ++ lib.optional separateDebugInfo "debug";
+      separateDebugInfo' = separateDebugInfo && stdenv.hostPlatform.isLinux;
+      outputs' = outputs ++ lib.optional separateDebugInfo' "debug";
 
       fixedOutputDrv = attrs ? outputHash;
       noNonNativeDeps = builtins.length (depsBuildTarget ++ depsBuildTargetPropagated
                                       ++ depsHostHost ++ depsHostHostPropagated
                                       ++ buildInputs ++ propagatedBuildInputs
                                       ++ depsTargetTarget ++ depsTargetTargetPropagated) == 0;
-      runtimeSensativeIfFixedOutput = fixedOutputDrv -> !noNonNativeDeps;
+      dontAddHostSuffix = attrs ? outputHash && !noNonNativeDeps || stdenv.cc == null;
       supportedHardeningFlags = [ "fortify" "stackprotector" "pie" "pic" "strictoverflow" "format" "relro" "bindnow" ];
-      defaultHardeningFlags = if stdenv.targetPlatform.isMusl
+      defaultHardeningFlags = if stdenv.hostPlatform.isMusl
                               then supportedHardeningFlags
                               else lib.remove "pie" supportedHardeningFlags;
       enabledHardeningOptions =
@@ -130,7 +124,7 @@ rec {
         [
           (map (drv: drv.__spliced.buildBuild or drv) depsBuildBuild)
           (map (drv: drv.nativeDrv or drv) nativeBuildInputs
-             ++ lib.optional separateDebugInfo ../../build-support/setup-hooks/separate-debug-info.sh
+             ++ lib.optional separateDebugInfo' ../../build-support/setup-hooks/separate-debug-info.sh
              ++ lib.optional stdenv.hostPlatform.isWindows ../../build-support/setup-hooks/win-dll-link.sh)
           (map (drv: drv.__spliced.buildTarget or drv) depsBuildTarget)
         ]
@@ -188,12 +182,12 @@ rec {
         // {
           # A hack to make `nix-env -qa` and `nix search` ignore broken packages.
           # TODO(@oxij): remove this assert when something like NixOS/nix#1771 gets merged into nix.
-          name = assert selfConsistent && validity.handled && (separateDebugInfo -> stdenv.hostPlatform.isLinux); computedName + lib.optionalString
+          name = assert validity.handled; computedName + lib.optionalString
             # Fixed-output derivations like source tarballs shouldn't get a host
             # suffix. But we have some weird ones with run-time deps that are
             # just used for their side-affects. Those might as well since the
             # hash can't be the same. See #32986.
-            (stdenv.hostPlatform != stdenv.buildPlatform && runtimeSensativeIfFixedOutput)
+            (stdenv.hostPlatform != stdenv.buildPlatform && !dontAddHostSuffix)
             ("-" + stdenv.hostPlatform.config);
 
           builder = attrs.realBuilder or stdenv.shell;
@@ -239,22 +233,6 @@ rec {
           inherit doCheck doInstallCheck;
 
           inherit outputs;
-        } // lib.optionalAttrs strictDeps {
-          # Make sure "build" dependencies don’t leak into outputs. We
-          # want to disallow references to depsBuildBuild,
-          # nativeBuildInputs, and depsBuildTarget. But depsHostHost,
-          # buildInputs, and depsTargetTarget is okay, so we subtract
-          # those from disallowedReferences in case a dependency is
-          # listed in multiple dependency lists. We also include
-          # propagated dependencies here as well.
-          disallowedReferences = (attrs.disallowedReferences or [])
-          ++ (lib.subtractLists
-               (lib.concatLists ((lib.elemAt propagatedDependencies 0) ++
-                                 (lib.elemAt propagatedDependencies 1) ++
-                                 (lib.elemAt dependencies 1) ++
-                                 (lib.elemAt propagatedDependencies 2) ++
-                                 (lib.elemAt dependencies 2) ) )
-               (lib.concatLists ((lib.elemAt dependencies 0)) ) );
         } // lib.optionalAttrs (stdenv.hostPlatform != stdenv.buildPlatform) {
           cmakeFlags =
             (/**/ if lib.isString cmakeFlags then [cmakeFlags]

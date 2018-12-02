@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, pythonPackages, intltool, gtk3, gobjectIntrospection, defaultIconTheme }:
+{ stdenv, fetchgit, pythonPackages, intltool, gtk3, gobject-introspection, defaultIconTheme }:
 
 pythonPackages.buildPythonApplication rec {
   name = "onioncircuits-${version}";
@@ -10,7 +10,7 @@ pythonPackages.buildPythonApplication rec {
     sha256 = "13mqif9b9iajpkrl9ijspdnvy82kxhprxd5mw3njk68rcn4z2pcm";
   };
 
-  buildInputs = [ intltool gtk3 gobjectIntrospection ];
+  buildInputs = [ intltool gtk3 gobject-introspection ];
   propagatedBuildInputs =  with pythonPackages; [ stem distutils_extra pygobject3 ];
 
   postFixup = ''

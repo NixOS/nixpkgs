@@ -1,7 +1,7 @@
 { stdenv, fetchurl, fetchpatch, substituteAll, intltool, pkgconfig, dbus-glib
 , gnome3, systemd, libuuid, polkit, gnutls, ppp, dhcp, iptables
 , libgcrypt, dnsmasq, bluez5, readline
-, gobjectIntrospection, modemmanager, openresolv, libndp, newt, libsoup
+, gobject-introspection, modemmanager, openresolv, libndp, newt, libsoup
 , ethtool, gnused, coreutils, file, inetutils, kmod, jansson, libxslt
 , python3Packages, docbook_xsl, openconnect, curl, autoreconfHook }:
 
@@ -84,7 +84,7 @@ in stdenv.mkDerivation rec {
 
   buildInputs = [
     systemd libuuid polkit ppp libndp curl
-    bluez5 dnsmasq gobjectIntrospection modemmanager readline newt libsoup jansson
+    bluez5 dnsmasq gobject-introspection modemmanager readline newt libsoup jansson
   ];
 
   propagatedBuildInputs = [ dbus-glib gnutls libgcrypt python3Packages.pygobject3 ];

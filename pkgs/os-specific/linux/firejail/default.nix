@@ -52,6 +52,6 @@ stdenv.mkDerivation {
     maintainers = [stdenv.lib.maintainers.raskin];
     platforms = stdenv.lib.platforms.linux;
     homepage = https://l3net.wordpress.com/projects/firejail/;
-    downloadPage = "http://sourceforge.net/projects/firejail/files/firejail/";
+    downloadPage = "https://sourceforge.net/projects/firejail/files/firejail/";
   };
 }

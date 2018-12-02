@@ -2,16 +2,16 @@
 
 stdenv.mkDerivation rec {
   name = "nordic-${version}";
-  version = "1.2.1";
+  version = "1.3.0";
 
   srcs = [
     (fetchurl {
       url = "https://github.com/EliverLara/Nordic/releases/download/v${version}/Nordic.tar.xz";
-      sha256 = "1k8fzvjb92wcqha378af5hk6r75xanff9iwlx51jmi67ny8z28pn";
+      sha256 = "04axs2yldppcx159nwj70g4cyw0hbbzk5250677i9ny8b0w3gr9x";
     })
     (fetchurl {
       url = "https://github.com/EliverLara/Nordic/releases/download/v${version}/Nordic-standard-buttons.tar.xz";
-      sha256 = "12w01z88rqkds1wm2kskql1x5c6prpgpc9cxxnl0b11knsfhi6jn";
+      sha256 = "1h0690cijaipidb5if2bxhvvkrx5src3akyxvfywxg4bf8x7jxs5";
     })
   ];
 

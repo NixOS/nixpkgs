@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, pythonPackages, wrapGAppsHook
-, gst_all_1, glib-networking, gobjectIntrospection
+, gst_all_1, glib-networking, gobject-introspection
 }:
 
 pythonPackages.buildPythonApplication rec {
@@ -17,7 +17,7 @@ pythonPackages.buildPythonApplication rec {
 
   buildInputs = with gst_all_1; [
     gst-plugins-base gst-plugins-good gst-plugins-ugly gst-plugins-bad
-    glib-networking gobjectIntrospection
+    glib-networking gobject-introspection
   ];
 
   propagatedBuildInputs = with pythonPackages; [

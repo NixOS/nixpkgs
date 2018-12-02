@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
          to the client resolution
        * Multiple displays
     '';
-    homepage = http://www.spice-space.org/home.html;
+    homepage = https://www.spice-space.org/;
     license = stdenv.lib.licenses.gpl3;
     maintainers = [ stdenv.lib.maintainers.aboseley ];
     platforms = stdenv.lib.platforms.linux;

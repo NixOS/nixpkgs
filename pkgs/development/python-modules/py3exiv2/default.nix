@@ -19,7 +19,7 @@ buildPythonPackage rec {
   patches = [
     (substituteAll {
       src = ./setup.patch;
-      version_ = "3${stdenv.lib.versions.minor python.version}";
+      version = "3${stdenv.lib.versions.minor python.version}";
     })
   ];
 

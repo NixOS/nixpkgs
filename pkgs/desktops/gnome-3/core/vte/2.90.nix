@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, intltool, pkgconfig, gnome3, ncurses, gobjectIntrospection }:
+{ stdenv, fetchurl, intltool, pkgconfig, gnome3, ncurses, gobject-introspection }:
 
 stdenv.mkDerivation rec {
   versionMajor = "0.36";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ gobjectIntrospection intltool gnome3.glib gnome3.gtk3 ncurses ];
+  buildInputs = [ gobject-introspection intltool gnome3.glib gnome3.gtk3 ncurses ];
 
   configureFlags = [ "--enable-introspection" ];
 

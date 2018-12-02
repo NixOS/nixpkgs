@@ -25,12 +25,12 @@ index c93d20c..4d4915d 100644
  
  # Assume ldd output is something vaguely like
  #
-@@ -121,7 +137,7 @@ def _resolve_non_libtool(options, binary, libraries):
-                 m = pattern.search(line)
+@@ -136,7 +152,7 @@ def resolve_from_ldd_output(libraries, output, basename=False):
+                 m = pattern.match(word)
                  if m:
                      del patterns[library]
--                    shlibs.append(m.group(1))
-+                    shlibs.append(_sanitize_install_name(m.group(1)))
+-                    shlibs.append(m.group())
++                    shlibs.append(_sanitize_install_name(m.group()))
                      break
  
-         if len(patterns) > 0:
+     if len(patterns) > 0:

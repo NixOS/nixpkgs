@@ -1,23 +1,23 @@
 { stdenv, fetchurl, meson, ninja, pkgconfig, gettext, libxml2, desktop-file-utils, python3, wrapGAppsHook
-, gtk, gnome3, gnome-autoar, glib-networking, shared-mime-info, libnotify, libexif
+, gtk, gnome3, gnome-autoar, glib-networking, shared-mime-info, libnotify, libexif, libseccomp
 , exempi, librsvg, tracker, tracker-miners, gnome-desktop, gexiv2, libselinux, gdk_pixbuf }:
 
 let
   pname = "nautilus";
-  version = "3.28.1";
+  version = "3.30.4";
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "19dhpa2ylrg8d5274lahy7xqr2p9z3jnq1h4qmsh95czkpy7is4w";
+    sha256 = "1fcavvv85mpaz53k5kx5mls7npx7b95s8isnhrgq2iglz4kpr7s1";
   };
 
   nativeBuildInputs = [ meson ninja pkgconfig libxml2 gettext python3 wrapGAppsHook desktop-file-utils ];
 
   buildInputs = [
     glib-networking shared-mime-info libexif gtk exempi libnotify libselinux
-    tracker tracker-miners gnome-desktop gexiv2
+    tracker tracker-miners gnome-desktop gexiv2 libseccomp
     gnome3.adwaita-icon-theme gnome3.gsettings-desktop-schemas
   ];
 

@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, fetchpatch, vala_0_40, python3, python2, pkgconfig, libxml2, meson, ninja, gtk3, granite, gnome3
-, gobjectIntrospection, sqlite, poppler, poppler_utils, html2text, curl, gnugrep, coreutils, bash, unzip, unar, wrapGAppsHook }:
+, gobject-introspection, sqlite, poppler, poppler_utils, html2text, curl, gnugrep, coreutils, bash, unzip, unar, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "bookworm";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     bash
-    gobjectIntrospection
+    gobject-introspection
     libxml2
     meson
     ninja

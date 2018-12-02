@@ -246,6 +246,7 @@
   ./services/desktops/gnome3/gnome-documents.nix
   ./services/desktops/gnome3/gnome-keyring.nix
   ./services/desktops/gnome3/gnome-online-accounts.nix
+  ./services/desktops/gnome3/gnome-remote-desktop.nix
   ./services/desktops/gnome3/gnome-online-miners.nix
   ./services/desktops/gnome3/gnome-terminal-server.nix
   ./services/desktops/gnome3/gnome-user-share.nix
@@ -332,6 +333,7 @@
   ./services/mail/rspamd.nix
   ./services/mail/rss2email.nix
   ./services/mail/rmilter.nix
+  ./services/mail/roundcube.nix
   ./services/mail/nullmailer.nix
   ./services/misc/airsonic.nix
   ./services/misc/apache-kafka.nix
@@ -560,6 +562,7 @@
   ./services/networking/miredo.nix
   ./services/networking/mstpd.nix
   ./services/networking/murmur.nix
+  ./services/networking/mxisd.nix
   ./services/networking/namecoind.nix
   ./services/networking/nat.nix
   ./services/networking/ndppd.nix

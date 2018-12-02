@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub
 , vala, cmake, ninja, wrapGAppsHook, pkgconfig, gettext
-, gobjectIntrospection, gnome3, glib, gdk_pixbuf, gtk3, glib-networking
+, gobject-introspection, gnome3, glib, gdk_pixbuf, gtk3, glib-networking
 , xorg, libXdmcp, libxkbcommon
 , libnotify, libsoup
 , libgcrypt
@@ -10,16 +10,17 @@
 , dbus
 , gpgme
 , pcre
+, qrencode
  }:
 
 stdenv.mkDerivation rec {
-  name = "dino-unstable-2018-09-21";
+  name = "dino-unstable-2018-11-27";
 
   src = fetchFromGitHub {
     owner = "dino";
     repo = "dino";
-    rev = "6b7ef800f54e781a618425236ba8d4ed2f2fef9c";
-    sha256 = "1si815b6y06lridj88hws0dgq54w9jfam9sqbrq3cfcvmhc38ysk";
+    rev = "141db9e40a3a81cfa3ad3587dc47f69c541d0fde";
+    sha256 = "006r1x7drlz39jjxlfdnxgrnambw9amhl9jcgf6p1dx71h1x8221";
     fetchSubmodules = true;
   };
 
@@ -32,7 +33,8 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    gobjectIntrospection
+    qrencode
+    gobject-introspection
     glib-networking
     glib
     gnome3.libgee

@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, fetchpatch, vala_0_40, pkgconfig, meson, ninja, python3
 , granite, gtk3, desktop-file-utils, gnome3, gtksourceview, webkitgtk, gtkspell3
-, discount, gobjectIntrospection, wrapGAppsHook }:
+, discount, gobject-introspection, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "quilter";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     desktop-file-utils
-    gobjectIntrospection
+    gobject-introspection
     meson
     ninja
     pkgconfig

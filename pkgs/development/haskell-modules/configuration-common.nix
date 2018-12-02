@@ -33,7 +33,7 @@ self: super: {
   unbuildable = throw "package depends on meta package 'unbuildable'";
 
   # Use the latest version of the Cabal library.
-  cabal-install = super.cabal-install.overrideScope (self: super: { Cabal = self.Cabal_2_4_0_1; });
+  cabal-install = super.cabal-install.overrideScope (self: super: { Cabal = self.Cabal_2_4_1_0; });
 
   # The test suite depends on old versions of tasty and QuickCheck.
   hackage-security = dontCheck super.hackage-security;
@@ -86,7 +86,7 @@ self: super: {
       name = "git-annex-${super.git-annex.version}-src";
       url = "git://git-annex.branchable.com/";
       rev = "refs/tags/" + super.git-annex.version;
-      sha256 = "0dnrihpdshrldais74jm5wjfw650i4va8znc1k2zq8gl9p4i8p39";
+      sha256 = "0f0pp0d5q4122cjh4j7iasnjh234fmkvlwgb3f49087cg8rr2czh";
     };
   }).override {
     dbus = if pkgs.stdenv.isLinux then self.dbus else null;
@@ -1184,5 +1184,8 @@ self: super: {
   #   testToolDepends = old.testToolDepends or [] ++ [ pkgs.nix ];
   # });
   libnix = dontCheck super.libnix;
+
+  # https://github.com/jmillikin/chell/issues/1
+  chell = super.chell.override { patience = self.patience_0_1_1; };
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super

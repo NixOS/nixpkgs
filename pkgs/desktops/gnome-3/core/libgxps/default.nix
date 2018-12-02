@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, meson, ninja, pkgconfig, glib, gobjectIntrospection, cairo
+{ stdenv, fetchurl, meson, ninja, pkgconfig, glib, gobject-introspection, cairo
 , libarchive, freetype, libjpeg, libtiff, gnome3, fetchpatch
 }:
 
@@ -26,7 +26,7 @@ in stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ meson ninja pkgconfig gobjectIntrospection ];
+  nativeBuildInputs = [ meson ninja pkgconfig gobject-introspection ];
   buildInputs = [ glib cairo freetype libjpeg libtiff ];
   propagatedBuildInputs = [ libarchive ];
 

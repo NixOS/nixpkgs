@@ -3,13 +3,13 @@
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "avldrums.lv2";
-  version = "0.3.0";
+  version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "x42";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0w51gdshq2i5bix2x5l3g3gnycy84nlzf5sj0jkrw0zrnbk6ghwg";
+    sha256 = "0yhq3n5bahhqpj40mvlkxcjsdsw63jsbz20pl77bx2qj30w25i2j";
     fetchSubmodules = true;
   };
 

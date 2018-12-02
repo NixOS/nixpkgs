@@ -19,6 +19,7 @@ let
   overrides = callPackage ./overrides.nix {
     inherit (darwin.apple_sdk.frameworks) Cocoa CoreFoundation CoreServices;
     inherit buildVimPluginFrom2Nix;
+    inherit llvmPackages;
   };
 
   overriden = generated // (overrides generated);

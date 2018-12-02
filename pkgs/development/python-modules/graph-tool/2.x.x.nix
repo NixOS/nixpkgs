@@ -1,6 +1,6 @@
 { stdenv, fetchurl, python, cairomm, sparsehash, pycairo, autoreconfHook,
 pkgconfig, boost, expat, scipy, cgal, gmp, mpfr,
-gobjectIntrospection, pygobject3, gtk3, matplotlib, ncurses,
+gobject-introspection, pygobject3, gtk3, matplotlib, ncurses,
 buildPythonPackage }:
 
 buildPythonPackage rec {
@@ -43,7 +43,7 @@ buildPythonPackage rec {
     sparsehash
     # drawing
     cairomm
-    gobjectIntrospection
+    gobject-introspection
     gtk3
     pycairo
     matplotlib

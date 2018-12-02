@@ -2,13 +2,13 @@
 , glib, desktop-file-utils, gtk-doc, autoconf, automake, libtool
 , wrapGAppsHook, gnome3, itstool, libxml2, yelp-tools
 , docbook_xsl, docbook_xml_dtd_412, gsettings-desktop-schemas
-, callPackage, unzip, gobjectIntrospection }:
+, callPackage, unzip, gobject-introspection }:
 
 let
   unicode-data = callPackage ./unicode-data.nix {};
 in stdenv.mkDerivation rec {
   name = "gucharmap-${version}";
-  version = "11.0.1";
+  version = "11.0.3";
 
   outputs = [ "out" "lib" "dev" "devdoc" ];
 
@@ -17,22 +17,13 @@ in stdenv.mkDerivation rec {
     owner = "GNOME";
     repo = "gucharmap";
     rev = version;
-    sha256 = "13iw4fa6mv8vi8bkwk0bbhamnzbaih0c93p4rh07khq6mxa6hnpi";
+    sha256 = "1a590nxy8jdf6zxh6jdsyvhxyaz94ixx3aa1pj7gicf1aqp26vnh";
   };
-
-  patches = [
-    # Fix locale path to allow split outputs
-    # https://gitlab.gnome.org/GNOME/gucharmap/issues/10
-    (fetchpatch {
-      url = https://gitlab.gnome.org/GNOME/gucharmap/commit/b2b03f16aa869ac0ec1a05c55c4d4e4c4b513576.patch;
-      sha256 = "1543mcyz96x23m9pzx04ny15m4a2pqmiksl1y5r51k3sw4fyisci";
-    })
-  ];
 
   nativeBuildInputs = [
     pkgconfig wrapGAppsHook unzip intltool itstool
     autoconf automake libtool gtk-doc docbook_xsl docbook_xml_dtd_412
-    yelp-tools libxml2 desktop-file-utils gobjectIntrospection
+    yelp-tools libxml2 desktop-file-utils gobject-introspection
   ];
 
   buildInputs = [ gtk3 glib gsettings-desktop-schemas defaultIconTheme ];

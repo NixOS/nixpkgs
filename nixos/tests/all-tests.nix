@@ -178,6 +178,7 @@ in
   rabbitmq = handleTest ./rabbitmq.nix {};
   radicale = handleTest ./radicale.nix {};
   redmine = handleTest ./redmine.nix {};
+  roundcube = handleTest ./roundcube.nix {};
   rspamd = handleTest ./rspamd.nix {};
   rss2email = handleTest ./rss2email.nix {};
   rsyslogd = handleTest ./rsyslogd.nix {};

@@ -1289,30 +1289,6 @@ let
     };
   };
 
-  CatalystEngineHTTPPrefork = buildPerlPackage rec {
-    name = "Catalyst-Engine-HTTP-Prefork-0.51";
-    src = fetchurl {
-      url = "mirror://cpan/authors/id/A/AG/AGRUNDMA/${name}.tar.gz";
-      sha256 = "1ygmrzc9akjaqfxid8br11ajj9qgfvhkimakcv4ffk4s5v7q2sii";
-    };
-    propagatedBuildInputs = [
-      CatalystRuntime HTTPBody NetServer
-      CookieXS HTTPHeaderParserXS
-    ];
-    buildInputs = [TestPod TestPodCoverage];
-    patches = [
-      # Fix chunked transfers (they were missing the final CR/LF at
-      # the end, which makes curl barf).
-      ../development/perl-modules/catalyst-fix-chunked-encoding.patch
-    ];
-
-    meta = {
-      # Depends on some old version of Catalyst-Runtime that contains
-      # Catalyst::Engine::CGI. But those version do not compile.
-      broken = true;
-    };
-  };
-
   CatalystManual = buildPerlPackage rec {
     name = "Catalyst-Manual-5.9009";
     src = fetchurl {
@@ -1484,20 +1460,6 @@ let
     propagatedBuildInputs = [ CatalystPluginFormValidator FormValidatorSimple ];
     meta = {
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-    };
-  };
-
-  CatalystPluginHTMLWidget = buildPerlPackage rec {
-    name = "Catalyst-Plugin-HTML-Widget-1.1";
-    src = fetchurl {
-      url = "mirror://cpan/authors/id/B/BO/BOBTFISH/${name}.tar.gz";
-      sha256 = "b4a4873162f515ec7cead6272533fc347c34711d138cc4c5e46b63fa2b74feff";
-    };
-    propagatedBuildInputs = [ CatalystRuntime HTMLWidget ];
-    meta = {
-      description = "HTML Widget Catalyst Plugin";
-      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      broken = true;
     };
   };
 
@@ -4024,22 +3986,6 @@ let
     };
   };
 
-  DevelSizeMe = buildPerlPackage {
-    name = "Devel-SizeMe-0.19";
-    src = fetchurl {
-      url = mirror://cpan/authors/id/T/TI/TIMB/Devel-SizeMe-0.19.tar.gz;
-      sha256 = "546e31ba83c0bf7cef37b38a462860461850473479d7d4ac6c0dadfb78d54717";
-    };
-    propagatedBuildInputs = [ DBDSQLite DBI DataDumperConcise HTMLParser JSONXS Moo ];
-    meta = {
-      homepage = https://github.com/timbunce/devel-sizeme;
-      description = "Unknown";
-      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      # See https://rt.cpan.org/Public/Bug/Display.html?id=92348
-      broken = true;
-    };
-  };
-
   DevelTrace = buildPerlPackage {
     name = "Devel-Trace-0.12";
     src = fetchurl {
@@ -4109,7 +4055,7 @@ let
       \$(BASEEXT)\$(OBJ_EXT): \$(BASEEXT).xsi
 
       \$(BASEEXT).xsi: \$(DBI_DRIVER_XST) $autodir/Driver_xst.h
-        \$(PERL) -p -e "s/~DRIVER~/\$(BASEEXT)/g" \$(DBI_DRIVER_XST) > \$(BASEEXT).xsi
+      ''\t\$(PERL) -p -e "s/~DRIVER~/\$(BASEEXT)/g" \$(DBI_DRIVER_XST) > \$(BASEEXT).xsi
 
       # ---
       ';
@@ -7512,6 +7458,21 @@ let
     };
     propagatedBuildInputs = [ DateTimeFormatICal FreezeThaw IOString TextvFileasData ];
     meta = {
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  Imager = buildPerlPackage rec {
+    name = "Imager-1.006";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/T/TO/TONYC/${name}.tar.gz";
+      sha256 = "c1e434a4de6250e3b229aa74aa653e56c38f981864f71a975366c50559c9d52b";
+    };
+    buildInputs = [ ExtUtilsPkgConfig pkgs.freetype pkgs.fontconfig pkgs.libjpeg pkgs.libpng ];
+    makeMakerFlags = "--incpath ${pkgs.libjpeg.dev}/include --libpath ${pkgs.libjpeg.out}/lib --incpath ${pkgs.libpng.dev}/include --libpath ${pkgs.libpng.out}/lib";
+    meta = {
+      homepage = http://imager.perl.org/;
+      description = "Perl extension for Generating 24 bit Images";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -13191,15 +13152,6 @@ let
     };
   };
 
-  RegexpCopy = buildPerlPackage rec {
-    name = "Regexp-Copy-0.06";
-    src = fetchurl {
-      url = "mirror://cpan/authors/id/J/JD/JDUNCAN/${name}.tar.gz";
-      sha256 = "09c8xb43p1s6ala6g4274az51mf33phyjkp66dpvgkgbi1xfnawp";
-    };
-    meta.broken = true;
-  };
-
   RegexpGrammars = buildPerlModule rec {
     name = "Regexp-Grammars-1.049";
     src = fetchurl {
@@ -14142,40 +14094,6 @@ let
     };
     propagatedBuildInputs = [ NumberMisc ];
     buildInputs = [ TestToolbox ];
-  };
-
-  libfile-stripnondeterminism = buildPerlPackage rec {
-    name = "libstrip-nondeterminism-${version}";
-    version = "0.016";
-
-    src = fetchurl {
-      url = "http://http.debian.net/debian/pool/main/s/strip-nondeterminism/strip-nondeterminism_${version}.orig.tar.gz";
-      sha256 = "1y9lfhxgwyysybing72n3hng2db5njpk2dbb80vskdz75r7ffqjp";
-    };
-
-    buildInputs = [ ArchiveZip pkgs.file ];
-    meta.broken = true;
-  };
-
-
-  strip-nondeterminism = buildPerlPackage rec {
-    name = "strip-nondeterminism-${version}";
-    version = "0.016";
-
-    src = fetchurl {
-      url = "http://http.debian.net/debian/pool/main/s/strip-nondeterminism/strip-nondeterminism_${version}.orig.tar.gz";
-      sha256 = "1y9lfhxgwyysybing72n3hng2db5njpk2dbb80vskdz75r7ffqjp";
-    };
-
-    buildInputs = [ ArchiveZip libfile-stripnondeterminism pkgs.file ];
-
-    meta = with stdenv.lib; {
-      description = "A Perl module for stripping bits of non-deterministic information";
-      license = licenses.gpl3;
-      platforms = platforms.all;
-      maintainers = with maintainers; [ pSub ];
-      broken = true;
-    };
   };
 
   SubExporter = buildPerlPackage {
@@ -16358,22 +16276,6 @@ let
     buildInputs = [ ListMoreUtils TestDifferences TestException ];
   };
 
-  TestMagpie = buildPerlPackage {
-    name = "Test-Magpie-0.11";
-    src = fetchurl {
-      url = mirror://cpan/authors/id/S/ST/STEVENL/Test-Magpie-0.11.tar.gz;
-      sha256 = "1c4iy35yg3fa9mrc4phmpz46fkihl6yic6a13fpcxyd3xafd5zhm";
-    };
-    propagatedBuildInputs = [ MooseXTypesStructured SetObject UNIVERSALref aliased ];
-    meta = {
-      description = "Spy on objects to achieve test doubles (mock testing)";
-      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ ];
-      platforms   = stdenv.lib.platforms.unix;
-    };
-    buildInputs = [ TestFatal Throwable ];
-  };
-
   TestMinimumVersion = buildPerlPackage rec {
     name = "Test-MinimumVersion-0.101082";
     src = fetchurl {
@@ -17064,20 +16966,6 @@ let
     };
   };
 
-  UNIVERSALref = buildPerlPackage rec {
-     name = "UNIVERSAL-ref-0.14";
-     src = fetchurl {
-       url = mirror://cpan/authors/id/J/JJ/JJORE/UNIVERSAL-ref-0.14.tar.gz;
-       sha256 = "1ar8dfj90nn52cb8c6yyj4bi6ya8hk2f2sl0a5q7pmchj321bn1m";
-     };
-     propagatedBuildInputs = [ BUtils ];
-     meta = {
-       description = "Turns ref() into a multimethod";
-       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-       broken = true; # 'OP {aka struct op}' has no member named 'op_sibling'
-     };
-  };
-
   UNIVERSALrequire = buildPerlPackage rec {
     name = "UNIVERSAL-require-0.18";
     src = fetchurl {
@@ -17123,22 +17011,6 @@ let
       description = "Unicode Collation Algorithm";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
-  };
-
-  UnicodeICUCollator = buildPerlPackage {
-    name = "Unicode-ICU-Collator-0.002";
-    src = fetchurl {
-      url = mirror://cpan/authors/id/T/TO/TONYC/Unicode-ICU-Collator-0.002.tar.gz;
-      sha256 = "0gimwydam0mdgm6qjzzxny4gw8zda9kc2843kcl2xrpq7z7ww3f9";
-    };
-    meta = {
-      description = "Wrapper around ICU collation services";
-      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ ];
-      platforms   = stdenv.lib.platforms.unix;
-      broken = true; # tests fail http://hydra.nixos.org/build/25141764/nixlog/1/raw
-    };
-    buildInputs = [ pkgs.icu ];
   };
 
   UnicodeLineBreak = buildPerlPackage rec {

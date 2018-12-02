@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with stdenv.lib; {
-    homepage = http://people.redhat.com/dhowells/keyutils/;
+    homepage = https://people.redhat.com/dhowells/keyutils/;
     description = "Tools used to control the Linux kernel key management system";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

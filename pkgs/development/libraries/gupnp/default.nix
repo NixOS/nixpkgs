@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, gobjectIntrospection, vala, gtk-doc, docbook_xsl, docbook_xml_dtd_412, docbook_xml_dtd_44, glib, gssdp, libsoup, libxml2, libuuid }:
+{ stdenv, fetchurl, pkgconfig, gobject-introspection, vala, gtk-doc, docbook_xsl, docbook_xml_dtd_412, docbook_xml_dtd_44, glib, gssdp, libsoup, libxml2, libuuid }:
 
 stdenv.mkDerivation rec {
   name = "gupnp-${version}";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     ./fix-requires.patch
   ];
 
-  nativeBuildInputs = [ pkgconfig gobjectIntrospection vala gtk-doc docbook_xsl docbook_xml_dtd_412 docbook_xml_dtd_44 ];
+  nativeBuildInputs = [ pkgconfig gobject-introspection vala gtk-doc docbook_xsl docbook_xml_dtd_412 docbook_xml_dtd_44 ];
   propagatedBuildInputs = [ glib gssdp libsoup libxml2 libuuid ];
 
   configureFlags = [

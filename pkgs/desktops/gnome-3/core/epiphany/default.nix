@@ -2,15 +2,15 @@
 , wrapGAppsHook, gnome3, libxml2, libxslt, itstool
 , webkitgtk, libsoup, glib-networking, libsecret, gnome-desktop, libnotify, p11-kit
 , sqlite, gcr, isocodes, desktop-file-utils, python3
-, gdk_pixbuf, gst_all_1, json-glib }:
+, gdk_pixbuf, gst_all_1, json-glib, libdazzle }:
 
 stdenv.mkDerivation rec {
   name = "epiphany-${version}";
-  version = "3.28.3.1";
+  version = "3.30.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/epiphany/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "1xz6xl6b0iihvczyr0cs1z5ifvpai6anb4m0ng1caiph06klc1b9";
+    sha256 = "0141bb37nd8wc743g4wy491crjh6ig76ack07aj2ba4z3gjz2zlc";
   };
 
   # Tests need an X display
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     gdk_pixbuf gnome3.defaultIconTheme gcr
     glib-networking gst_all_1.gstreamer gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-good gst_all_1.gst-plugins-bad gst_all_1.gst-plugins-ugly
-    gst_all_1.gst-libav json-glib
+    gst_all_1.gst-libav json-glib libdazzle
   ];
 
   postPatch = ''

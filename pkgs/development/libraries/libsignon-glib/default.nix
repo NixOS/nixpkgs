@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, pkgconfig, meson, ninja, vala, python3, gtk-doc, docbook_xsl, docbook_xml_dtd_43, docbook_xml_dtd_412, glib, check, gobjectIntrospection }:
+{ stdenv, fetchgit, pkgconfig, meson, ninja, vala, python3, gtk-doc, docbook_xsl, docbook_xml_dtd_43, docbook_xml_dtd_412, glib, check, gobject-introspection }:
 
 stdenv.mkDerivation rec {
   pname = "libsignon-glib";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     docbook_xml_dtd_412
     docbook_xml_dtd_43
     docbook_xsl
-    gobjectIntrospection
+    gobject-introspection
     gtk-doc
     meson
     ninja

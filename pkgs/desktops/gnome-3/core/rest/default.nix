@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, glib, libsoup, gobjectIntrospection, gnome3 }:
+{ stdenv, fetchurl, pkgconfig, glib, libsoup, gobject-introspection, gnome3 }:
 
 let
   pname = "rest";
@@ -12,7 +12,7 @@ in stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ glib libsoup gobjectIntrospection];
+  buildInputs = [ glib libsoup gobject-introspection];
 
   configureFlags = [ "--with-ca-certificates=/etc/ssl/certs/ca-certificates.crt" ];
 

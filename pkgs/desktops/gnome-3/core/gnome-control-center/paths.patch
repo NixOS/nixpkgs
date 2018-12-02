@@ -1,15 +1,15 @@
 --- a/panels/color/cc-color-panel.c
 +++ b/panels/color/cc-color-panel.c
-@@ -634,7 +634,7 @@
+@@ -599,7 +599,7 @@
  
    /* run with modal set */
    argv = g_ptr_array_new_with_free_func (g_free);
 -  g_ptr_array_add (argv, g_build_filename (BINDIR, "gcm-calibrate", NULL));
 +  g_ptr_array_add (argv, g_build_filename ("@gcm@", "bin", "gcm-calibrate", NULL));
    g_ptr_array_add (argv, g_strdup ("--device"));
-   g_ptr_array_add (argv, g_strdup (cd_device_get_id (priv->current_device)));
+   g_ptr_array_add (argv, g_strdup (cd_device_get_id (prefs->current_device)));
    g_ptr_array_add (argv, g_strdup ("--parent-window"));
-@@ -1136,7 +1136,7 @@
+@@ -1038,7 +1038,7 @@
  
    /* open up gcm-viewer as a info pane */
    argv = g_ptr_array_new_with_free_func (g_free);
@@ -18,38 +18,23 @@
    g_ptr_array_add (argv, g_strdup ("--profile"));
    g_ptr_array_add (argv, g_strdup (cd_profile_get_id (profile)));
    g_ptr_array_add (argv, g_strdup ("--parent-window"));
-@@ -1406,7 +1406,6 @@
+@@ -1288,15 +1288,12 @@
+ static void
  gcm_prefs_profile_clicked (CcColorPanel *prefs, CdProfile *profile, CdDevice *device)
  {
-   GtkWidget *widget;
--  gchar *s;
-   CcColorPanelPrivate *priv = prefs->priv;
- 
+-  g_autofree gchar *s = NULL;
+-
    /* get profile */
-@@ -1416,11 +1415,9 @@
+   g_debug ("selected profile = %s",
+      cd_profile_get_filename (profile));
+ 
    /* allow getting profile info */
-   widget = GTK_WIDGET (gtk_builder_get_object (priv->builder,
-                "toolbutton_profile_view"));
 -  if (cd_profile_get_filename (profile) != NULL &&
 -      (s = g_find_program_in_path ("gcm-viewer")) != NULL)
 +  if (cd_profile_get_filename (profile) != NULL)
-     {
-       gtk_widget_set_sensitive (widget, TRUE);
--      g_free (s);
-     }
+     gtk_widget_set_sensitive (prefs->toolbutton_profile_view, TRUE);
    else
-       gtk_widget_set_sensitive (widget, FALSE);
---- a/panels/datetime/test-endianess.c
-+++ b/panels/datetime/test-endianess.c
-@@ -26,7 +26,7 @@
- 	GDir *dir;
- 	const char *name;
- 
--	dir = g_dir_open ("/usr/share/i18n/locales/", 0, NULL);
-+	dir = g_dir_open ("@glibc@/share/i18n/locales/", 0, NULL);
- 	if (dir == NULL) {
- 		/* Try with /usr/share/locale/
- 		 * https://bugzilla.gnome.org/show_bug.cgi?id=646780 */
+     gtk_widget_set_sensitive (prefs->toolbutton_profile_view, FALSE);
 --- a/panels/datetime/tz.h
 +++ b/panels/datetime/tz.h
 @@ -27,11 +27,7 @@
@@ -67,7 +52,7 @@
  typedef struct _TzLocation TzLocation;
 --- a/panels/region/cc-region-panel.c
 +++ b/panels/region/cc-region-panel.c
-@@ -1388,10 +1388,10 @@
+@@ -1265,10 +1265,10 @@
          }
  
          if (variant && variant[0])
@@ -80,3 +65,14 @@
                                                 layout);
  
          g_spawn_command_line_async (commandline, NULL);
+--- a/tests/datetime/test-endianess.c
++++ b/tests/datetime/test-endianess.c
+@@ -26,7 +26,7 @@
+ 	g_autoptr(GDir) dir = NULL;
+ 	const char *name;
+ 
+-	dir = g_dir_open ("/usr/share/i18n/locales/", 0, NULL);
++	dir = g_dir_open ("@glibc@/share/i18n/locales/", 0, NULL);
+ 	if (dir == NULL) {
+ 		/* Try with /usr/share/locale/
+ 		 * https://bugzilla.gnome.org/show_bug.cgi?id=646780 */
