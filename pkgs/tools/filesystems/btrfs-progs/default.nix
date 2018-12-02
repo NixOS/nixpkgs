@@ -1,5 +1,5 @@
 { stdenv, fetchurl, fetchpatch, pkgconfig, attr, acl, zlib, libuuid, e2fsprogs, lzo
-, asciidoc, xmlto, docbook_xml_dtd_45, docbook_xsl, libxslt, zstd, python, pythonPackages
+, asciidoc, xmlto, docbook_xml_dtd_45, docbook_xsl, libxslt, zstd, python3, python3Packages
 }:
 
 stdenv.mkDerivation rec {
@@ -12,10 +12,10 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    pkgconfig asciidoc xmlto docbook_xml_dtd_45 docbook_xsl libxslt python pythonPackages.setuptools
+    pkgconfig asciidoc xmlto docbook_xml_dtd_45 docbook_xsl libxslt python3 python3Packages.setuptools
   ];
 
-  buildInputs = [ attr acl zlib libuuid e2fsprogs lzo zstd python ];
+  buildInputs = [ attr acl zlib libuuid e2fsprogs lzo zstd ];
 
   # gcc bug with -O1 on ARM with gcc 4.8
   # This should be fine on all platforms so apply universally
