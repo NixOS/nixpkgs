@@ -4419,6 +4419,8 @@ in {
 
   zope_filerepresentation = callPackage ../development/python-modules/zope_filerepresentation { };
 
+  zope-hookable = callPackage ../development/python-modules/zope-hookable { };
+
   zope_i18n = callPackage ../development/python-modules/zope_i18n { };
 
   zope_i18nmessageid = callPackage ../development/python-modules/zope_i18nmessageid { };
