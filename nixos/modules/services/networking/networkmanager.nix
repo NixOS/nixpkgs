@@ -466,7 +466,7 @@ in {
 
     systemd.packages = cfg.packages;
 
-    systemd.services."network-manager" = {
+    systemd.services."NetworkManager" = {
       wantedBy = [ "network.target" ];
       restartTriggers = [ configFile ];
 
@@ -478,9 +478,9 @@ in {
     };
 
     systemd.services.nm-setup-hostsdirs = mkIf dynamicHostsEnabled {
-      wantedBy = [ "network-manager.service" ];
-      before = [ "network-manager.service" ];
-      partOf = [ "network-manager.service" ];
+      wantedBy = [ "NetworkManager.service" ];
+      before = [ "NetworkManager.service" ];
+      partOf = [ "NetworkManager.service" ];
       script = concatStrings (mapAttrsToList (n: d: ''
         mkdir -p "/run/NetworkManager/hostsdirs/${n}"
         chown "${d.user}:${d.group}" "/run/NetworkManager/hostsdirs/${n}"
