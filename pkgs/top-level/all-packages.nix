@@ -10813,6 +10813,8 @@ in
 
   libgda = callPackage ../development/libraries/libgda { };
 
+  libgdamm = callPackage ../development/libraries/libgdamm { };
+
   libgdata = gnome3.libgdata;
 
   libgig = callPackage ../development/libraries/libgig { };
