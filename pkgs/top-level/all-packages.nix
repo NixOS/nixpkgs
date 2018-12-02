@@ -10221,6 +10221,8 @@ in
 
   gtksourceview4 = callPackage ../development/libraries/gtksourceview/4.x.nix { };
 
+  gtksourceviewmm = callPackage ../development/libraries/gtksourceviewmm { };
+
   gtkspell2 = callPackage ../development/libraries/gtkspell { };
 
   gtkspell3 = callPackage ../development/libraries/gtkspell/3.nix { };
