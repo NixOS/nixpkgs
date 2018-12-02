@@ -59,8 +59,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/getlantern/systray";
-      rev =  "3fd1443dac5c8297999189fe28d5836b2b075b66";
-      sha256 = "1sb11n27zy8xmq0lvrpqikb53425jvwl5617cp201va6iwk1hgnh";
+      rev =  "e31397f8c6928d98a8a9a7e80087aebcf0090beb";
+      sha256 = "0ahb6qjd2c43nbbg0ssm76ilbzs9dq43a89f7fj6c029nympjmqn";
     };
   }
   {
@@ -86,8 +86,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/pkg/errors";
-      rev =  "c059e472caf75dbe73903f6521a20abac245b17f";
-      sha256 = "07xg8ym776j2w0k8445ii82lx8yz358cp1z96r739y13i1anqdzi";
+      rev =  "645ef00459ed84a119197bfb8d8205042c6df63d";
+      sha256 = "001i6n71ghp2l6kdl3qq1v2vmghcz3kicv9a5wgcihrzigm75pp5";
     };
   }
   {
@@ -95,8 +95,8 @@
     fetch = {
       type = "git";
       url = "https://go.googlesource.com/sys";
-      rev =  "d0be0721c37eeb5299f245a996a483160fc36940";
-      sha256 = "081wyvfnlf842dqg03raxfz6lldlxpmyh1prix9lmrrm65arxb12";
+      rev =  "8e24a49d80f82323e1c4db1b5da3e0f31171a151";
+      sha256 = "0zsdnyb8dy98jw6f9yn6g5gdhaqwk39hqridr0mh4dhwvwvlj724";
     };
   }
 ]
