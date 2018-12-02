@@ -65,5 +65,6 @@ rec {
         '';
     in applyPatches [ "fix-typos" ];
     patches = maybePatch_drm_legacy;
+    broken = lib.versionAtLeast kernel.version "4.18";
   };
 }
