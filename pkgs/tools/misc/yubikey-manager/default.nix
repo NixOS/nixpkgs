@@ -2,11 +2,11 @@
   yubikey-personalization, libu2f-host, libusb1 }:
 
 pythonPackages.buildPythonPackage rec {
-  name = "yubikey-manager-1.0.0";
+  name = "yubikey-manager-1.0.1";
 
   srcs = fetchurl {
     url = "https://developers.yubico.com/yubikey-manager/Releases/${name}.tar.gz";
-    sha256 = "1qdb2b3mv4wafghnmv3sxw4fh7cjc06hnkdimfnwmqcjafzvbawd";
+    sha256 = "0i7w1f89hqlw7g800fjhbb6yvq9wjmj5d7w7p6v8bkyvk645v48z";
   };
 
   propagatedBuildInputs =
@@ -40,6 +40,7 @@ pythonPackages.buildPythonPackage rec {
   meta = with lib; {
     homepage = https://developers.yubico.com/yubikey-manager;
     description = "Command line tool for configuring any YubiKey over all USB transports.";
+
     license = licenses.bsd2;
     platforms = platforms.unix;
     maintainers = with maintainers; [ benley ];
