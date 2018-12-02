@@ -28,7 +28,7 @@ in stdenv.mkDerivation rec {
     gnome3.gtk networkmanager libnotify libsecret gsettings-desktop-schemas
     polkit isocodes mobile-broadband-provider-info libgudev
     modemmanager jansson glib-networking
-    libappindicator-gtk3
+    libappindicator-gtk3 gnome3.defaultIconTheme
   ] ++ stdenv.lib.optionals withGnome [ gnome3.gcr ]; # advanced certificate chooser
 
   nativeBuildInputs = [ meson ninja intltool pkgconfig wrapGAppsHook gobjectIntrospection gtk-doc docbook_xsl docbook_xml_dtd_43 libxml2 ];
