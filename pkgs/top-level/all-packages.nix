@@ -1247,6 +1247,8 @@ with pkgs;
 
   deja-dup = callPackage ../applications/backup/deja-dup { };
 
+  dejsonlz4 = callPackage ../tools/compression/dejsonlz4 { };
+
   desync = callPackage ../applications/networking/sync/desync { };
 
   devmem2 = callPackage ../os-specific/linux/devmem2 { };
