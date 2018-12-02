@@ -1,6 +1,7 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi
+, nose
 }:
 
 buildPythonPackage rec {
@@ -11,6 +12,15 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "09ee1959fa34936c15417defa28bfd09cf88ad54c15454bc863d465ed42b8922";
   };
+
+  checkInputs = [ nose ];
+
+  checkPhase = ''
+    nosetests
+  '';
+
+  # tests directory missing in PyPI tarball
+  doCheck = false;
 
   meta = with stdenv.lib; {
     description = "Patch python built-in objects";
