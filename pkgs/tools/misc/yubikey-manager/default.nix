@@ -26,12 +26,13 @@ pythonPackages.buildPythonPackage rec {
     ];
 
   makeWrapperArgs = [
-    "--prefix LD_LIBRARY_PATH : ${libu2f-host}/lib:${libusb1}/lib:${yubikey-personalization}/lib"
+    "--prefix" "LD_LIBRARY_PATH" ":"
+    (lib.makeLibraryPath [ libu2f-host libusb1 yubikey-personalization ])
   ];
 
   postInstall = ''
-    mkdir -p $out/etc/bash_completion.d
-    _YKMAN_COMPLETE=source $out/bin/ykman > $out/etc/bash_completion.d/ykman.sh ||true
+    mkdir -p $out/share/bash-completion/completions
+    _YKMAN_COMPLETE=source $out/bin/ykman > $out/share/bash-completion/completions/ykman || :
   '';
 
   # See https://github.com/NixOS/nixpkgs/issues/29169
