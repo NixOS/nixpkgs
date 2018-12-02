@@ -69,5 +69,11 @@ stdenv.mkDerivation rec {
 
     mkdir -p $out/bin
     makeWrapper $out/lib/openra/launch-game.sh $out/bin/openra --run "cd $out/lib/openra"
+    printf "#!/bin/sh\nexec $out/bin/openra Game.Mod=ra" > $out/bin/openra-ra
+    chmod +x $out/bin/openra-ra
+    printf "#!/bin/sh\nexec $out/bin/openra Game.Mod=cnc" > $out/bin/openra-cnc
+    chmod +x $out/bin/openra-cnc
+    printf "#!/bin/sh\nexec $out/bin/openra Game.Mod=d2k" > $out/bin/openra-d2k
+    chmod +x $out/bin/openra-d2k
   '';
 }
