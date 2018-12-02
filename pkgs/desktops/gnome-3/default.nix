@@ -35,7 +35,7 @@ lib.makeScope pkgs.newScope (self: with self; {
     hitori gnome-taquin
   ];
 
-  inherit (pkgs) atk glib gobjectIntrospection gspell webkitgtk gtk3 gtkmm3
+  inherit (pkgs) atk glib gobject-introspection gspell webkitgtk gtk3 gtkmm3
     libgtop libgudev libhttpseverywhere librsvg libsecret gdk_pixbuf gtksourceview gtksourceview4
     easytag meld orca rhythmbox shotwell gnome-usage
     clutter clutter-gst clutter-gtk cogl gtk-vnc libdazzle;

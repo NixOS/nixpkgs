@@ -2,7 +2,7 @@
 , python3Packages, libsoup, polkit, clutter, networkmanager, docbook_xsl , docbook_xsl_ns, at-spi2-core
 , libstartup_notification, telepathy-glib, telepathy-logger, libXtst, unzip, glibcLocales, shared-mime-info
 , libgweather, libcanberra-gtk3, librsvg, geoclue2, perl, docbook_xml_dtd_42, desktop-file-utils
-, libpulseaudio, libical, gobjectIntrospection, gstreamer, wrapGAppsHook, libxslt
+, libpulseaudio, libical, gobject-introspection, gstreamer, wrapGAppsHook, libxslt
 , accountsservice, gdk_pixbuf, gdm, upower, ibus, networkmanagerapplet
 , sassc, systemd, gst_all_1 }:
 
@@ -37,7 +37,7 @@ in stdenv.mkDerivation rec {
     gnome3.gnome-clocks # schemas needed
     at-spi2-core upower ibus gnome-desktop telepathy-logger gnome3.gnome-settings-daemon
     gst_all_1.gst-plugins-good # recording
-    gobjectIntrospection
+    gobject-introspection
 
     # not declared at build time, but typelib is needed at runtime
     libgweather networkmanagerapplet

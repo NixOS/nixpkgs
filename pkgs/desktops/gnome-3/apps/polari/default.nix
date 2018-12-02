@@ -1,6 +1,6 @@
 { stdenv, itstool, fetchurl, gdk_pixbuf, adwaita-icon-theme
 , telepathy-glib, gjs, meson, ninja, gettext, telepathy-idle, libxml2, desktop-file-utils
-, pkgconfig, gtk3, glib, libsecret, libsoup, gobjectIntrospection, appstream-glib
+, pkgconfig, gtk3, glib, libsecret, libsoup, gobject-introspection, appstream-glib
 , gnome3, wrapGAppsHook, telepathy-logger, gspell }:
 
 let
@@ -18,7 +18,7 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     meson ninja pkgconfig itstool gettext wrapGAppsHook libxml2
-    desktop-file-utils gobjectIntrospection appstream-glib
+    desktop-file-utils gobject-introspection appstream-glib
   ];
 
   buildInputs = [

@@ -2,7 +2,7 @@
 , glib, desktop-file-utils, gtk-doc, autoconf, automake, libtool
 , wrapGAppsHook, gnome3, itstool, libxml2, yelp-tools
 , docbook_xsl, docbook_xml_dtd_412, gsettings-desktop-schemas
-, callPackage, unzip, gobjectIntrospection }:
+, callPackage, unzip, gobject-introspection }:
 
 let
   unicode-data = callPackage ./unicode-data.nix {};
@@ -23,7 +23,7 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [
     pkgconfig wrapGAppsHook unzip intltool itstool
     autoconf automake libtool gtk-doc docbook_xsl docbook_xml_dtd_412
-    yelp-tools libxml2 desktop-file-utils gobjectIntrospection
+    yelp-tools libxml2 desktop-file-utils gobject-introspection
   ];
 
   buildInputs = [ gtk3 glib gsettings-desktop-schemas defaultIconTheme ];

@@ -1,6 +1,6 @@
 { fetchurl, stdenv, meson, ninja, gettext, itstool, pkgconfig, libxml2, libjpeg, libpeas, gnome3
 , gtk3, glib, gsettings-desktop-schemas, adwaita-icon-theme, gnome-desktop, lcms2, gdk_pixbuf, exempi
-, shared-mime-info, wrapGAppsHook, librsvg, libexif, gobjectIntrospection, python3 }:
+, shared-mime-info, wrapGAppsHook, librsvg, libexif, gobject-introspection, python3 }:
 
 let
   pname = "eog";
@@ -13,7 +13,7 @@ in stdenv.mkDerivation rec {
     sha256 = "1wrq3l3z0x6q0hnc1vqr2hnyb1b14qw6aqvc5dldfgbs0yys6p55";
   };
 
-  nativeBuildInputs = [ meson ninja pkgconfig gettext itstool wrapGAppsHook libxml2 gobjectIntrospection python3 ];
+  nativeBuildInputs = [ meson ninja pkgconfig gettext itstool wrapGAppsHook libxml2 gobject-introspection python3 ];
 
   buildInputs = [
     libjpeg gtk3 gdk_pixbuf glib libpeas librsvg lcms2 gnome-desktop libexif exempi

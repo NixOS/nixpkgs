@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, pam, pkgconfig, autoconf, automake, libtool, libxcb
 , glib, libXdmcp, itstool, intltool, libxklavier, libgcrypt, audit, busybox
-, polkit, accountsservice, gtk-doc, gnome3, gobjectIntrospection, vala
+, polkit, accountsservice, gtk-doc, gnome3, gobject-introspection, vala
 , withQt4 ? false, qt4
 , withQt5 ? false, qtbase
 }:
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     automake
     gnome3.yelp-tools
     gnome3.yelp-xsl
-    gobjectIntrospection
+    gobject-introspection
     gtk-doc
     intltool
     itstool

@@ -1,6 +1,6 @@
 { stdenv, fetchurl
 , meson, ninja, gettext, pkgconfig, wrapGAppsHook, itstool, desktop-file-utils
-, vala, gobjectIntrospection, libxml2, gtk3, glib, gsound, sound-theme-freedesktop
+, vala, gobject-introspection, libxml2, gtk3, glib, gsound, sound-theme-freedesktop
 , gnome3, gdk_pixbuf, geoclue2, libgweather }:
 
 stdenv.mkDerivation rec {
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     vala meson ninja pkgconfig gettext itstool wrapGAppsHook desktop-file-utils libxml2
-    gobjectIntrospection # for finding vapi files
+    gobject-introspection # for finding vapi files
   ];
   buildInputs = [
     gtk3 glib gnome3.gsettings-desktop-schemas gdk_pixbuf gnome3.defaultIconTheme

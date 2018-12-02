@@ -1,7 +1,7 @@
 { stdenv, meson, ninja, gettext, fetchurl
 , pkgconfig, gtk3, glib, libsoup
 , itstool, libxml2, python3Packages
-, gnome3, gdk_pixbuf, libnotify, gobjectIntrospection, wrapGAppsHook }:
+, gnome3, gdk_pixbuf, libnotify, gobject-introspection, wrapGAppsHook }:
 
 let
   pname = "gnome-tweaks";
@@ -22,7 +22,7 @@ in stdenv.mkDerivation rec {
     gdk_pixbuf gnome3.defaultIconTheme
     libnotify gnome3.gnome-shell python3Packages.pygobject3
     libsoup gnome3.gnome-settings-daemon gnome3.nautilus
-    gnome3.mutter gnome3.gnome-desktop gobjectIntrospection
+    gnome3.mutter gnome3.gnome-desktop gobject-introspection
     gnome3.nautilus
     # Makes it possible to select user themes through the `user-theme` extension
     gnome3.gnome-shell-extensions

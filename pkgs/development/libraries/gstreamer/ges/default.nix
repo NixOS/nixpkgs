@@ -1,6 +1,6 @@
 { stdenv, fetchurl, fetchpatch, meson, ninja
 , pkgconfig, python, gst-plugins-base, libxml2
-, flex, perl, gettext, gobjectIntrospection
+, flex, perl, gettext, gobject-introspection
 }:
 
 stdenv.mkDerivation rec {
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ meson ninja pkgconfig gettext gobjectIntrospection python flex perl ];
+  nativeBuildInputs = [ meson ninja pkgconfig gettext gobject-introspection python flex perl ];
 
   propagatedBuildInputs = [ gst-plugins-base libxml2 ];
 

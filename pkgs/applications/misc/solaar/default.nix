@@ -1,4 +1,4 @@
-{fetchFromGitHub, stdenv, gtk3, pythonPackages, gobjectIntrospection}:
+{fetchFromGitHub, stdenv, gtk3, pythonPackages, gobject-introspection}:
 pythonPackages.buildPythonApplication rec {
   name = "solaar-unstable-${version}";
   version = "2018-02-02";
@@ -10,7 +10,7 @@ pythonPackages.buildPythonApplication rec {
     sha256 = "0zy5vmjzdybnjf0mpp8rny11sc43gmm8172svsm9s51h7x0v83y3";
   };
 
-  propagatedBuildInputs = [pythonPackages.pygobject3 pythonPackages.pyudev gobjectIntrospection gtk3];
+  propagatedBuildInputs = [pythonPackages.pygobject3 pythonPackages.pyudev gobject-introspection gtk3];
   postInstall = ''
     wrapProgram "$out/bin/solaar" \
       --prefix PYTHONPATH : "$PYTHONPATH" \

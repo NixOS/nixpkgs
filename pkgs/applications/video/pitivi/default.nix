@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, fetchurl, pkgconfig, intltool, itstool, python3, wrapGAppsHook
 , python3Packages, gst_all_1, gtk3
-, gobjectIntrospection, librsvg, gnome3, libnotify
+, gobject-introspection, librsvg, gnome3, libnotify
 , meson, ninja
 }:
 
@@ -19,7 +19,7 @@ let
       rev = version;
       sha256 = "16skiz9akavssii529v9nr8zd54w43livc14khdyzv164djg9q8f";
     };
-    nativeBuildInputs = [ pkgconfig meson ninja gobjectIntrospection python3 ];
+    nativeBuildInputs = [ pkgconfig meson ninja gobject-introspection python3 ];
     buildInputs = with gst_all_1; [ gstreamer gst-plugins-base ];
   };
 
@@ -47,7 +47,7 @@ in python3Packages.buildPythonApplication rec {
   nativeBuildInputs = [ meson ninja pkgconfig intltool itstool python3 wrapGAppsHook ];
 
   buildInputs = [
-    gobjectIntrospection gtk3 librsvg gnome3.gnome-desktop gnome3.gsound
+    gobject-introspection gtk3 librsvg gnome3.gnome-desktop gnome3.gsound
     gnome3.defaultIconTheme
     gnome3.gsettings-desktop-schemas libnotify
     gst-transcoder

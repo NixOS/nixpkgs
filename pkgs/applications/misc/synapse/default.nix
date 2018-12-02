@@ -1,5 +1,5 @@
 { stdenv, fetchurl, gettext, pkgconfig, glib, libnotify, gtk3, libgee
-, keybinder3, json-glib, zeitgeist, vala_0_38, hicolor-icon-theme, gobjectIntrospection
+, keybinder3, json-glib, zeitgeist, vala_0_38, hicolor-icon-theme, gobject-introspection
 }:
 
 let
@@ -15,7 +15,7 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [
     pkgconfig gettext vala_0_38
     # For setup hook
-    gobjectIntrospection
+    gobject-introspection
   ];
   buildInputs = [
     glib libnotify gtk3 libgee keybinder3 json-glib zeitgeist

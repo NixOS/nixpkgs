@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, pkgconfig, gnome3, gtk3, atk, gobjectIntrospection
+{ fetchurl, stdenv, pkgconfig, gnome3, gtk3, atk, gobject-introspection
 , spidermonkey_60, pango, readline, glib, libxml2, dbus, gdk_pixbuf
 , makeWrapper }:
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "installedTests" ];
 
   nativeBuildInputs = [ pkgconfig makeWrapper ];
-  buildInputs = [ libxml2 gobjectIntrospection gtk3 glib pango readline dbus ];
+  buildInputs = [ libxml2 gobject-introspection gtk3 glib pango readline dbus ];
 
   propagatedBuildInputs = [ spidermonkey_60 ];
 

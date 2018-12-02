@@ -1,7 +1,7 @@
 { stdenv, fetchurl, intltool, pkgconfig, gtk3, vala_0_40, enchant
 , wrapGAppsHook, gdk_pixbuf, cmake, ninja, desktop-file-utils
 , libnotify, libcanberra-gtk3, libsecret, gmime, isocodes
-, gobjectIntrospection, libpthreadstubs, sqlite
+, gobject-introspection, libpthreadstubs, sqlite
 , gnome3, librsvg, gnome-doc-utils, webkitgtk, fetchpatch }:
 
 let
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ vala_0_40 intltool pkgconfig wrapGAppsHook cmake ninja desktop-file-utils gnome-doc-utils gobjectIntrospection ];
+  nativeBuildInputs = [ vala_0_40 intltool pkgconfig wrapGAppsHook cmake ninja desktop-file-utils gnome-doc-utils gobject-introspection ];
   buildInputs = [
     gtk3 enchant webkitgtk libnotify libcanberra-gtk3 gnome3.libgee libsecret gmime sqlite
     libpthreadstubs gnome3.gsettings-desktop-schemas gnome3.gcr isocodes

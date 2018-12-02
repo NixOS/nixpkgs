@@ -1,5 +1,5 @@
 { stdenv, fetchurl, glib, meson, ninja, pkgconfig, gettext
-, gobjectIntrospection, fixDarwinDylibNames, gnome3
+, gobject-introspection, fixDarwinDylibNames, gnome3
 }:
 
 let
@@ -14,7 +14,7 @@ in stdenv.mkDerivation rec {
   };
 
   propagatedBuildInputs = [ glib ];
-  nativeBuildInputs = [ meson ninja pkgconfig gettext gobjectIntrospection ];
+  nativeBuildInputs = [ meson ninja pkgconfig gettext gobject-introspection ];
   buildInputs = stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
   outputs = [ "out" "dev" ];

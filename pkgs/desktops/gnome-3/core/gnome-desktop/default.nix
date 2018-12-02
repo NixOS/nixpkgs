@@ -1,6 +1,6 @@
 { stdenv, fetchurl, substituteAll, pkgconfig, libxslt, which, libX11, gnome3, gtk3, glib
 , gettext, libxml2, xkeyboard_config, isocodes, itstool, wayland
-, libseccomp, bubblewrap, gobjectIntrospection, gtk-doc, docbook_xsl }:
+, libseccomp, bubblewrap, gobject-introspection, gtk-doc, docbook_xsl }:
 
 stdenv.mkDerivation rec {
   name = "gnome-desktop-${version}";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   nativeBuildInputs = [
-    pkgconfig which itstool gettext libxslt libxml2 gobjectIntrospection
+    pkgconfig which itstool gettext libxslt libxml2 gobject-introspection
     gtk-doc docbook_xsl
   ];
   buildInputs = [

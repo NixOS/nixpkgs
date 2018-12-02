@@ -1,5 +1,5 @@
 { stdenv, python36Packages, fetchFromGitHub, pywal, feh, libxslt, imagemagick,
-  gobjectIntrospection, gtk3, wrapGAppsHook, gnome3 }:
+  gobject-introspection, gtk3, wrapGAppsHook, gnome3 }:
 
 python36Packages.buildPythonApplication rec {
   pname = "wpgtk";
@@ -22,7 +22,7 @@ python36Packages.buildPythonApplication rec {
   buildInputs = [
     wrapGAppsHook
     gtk3
-    gobjectIntrospection
+    gobject-introspection
     gnome3.adwaita-icon-theme
     libxslt
   ];

@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, pkgconfig, glib, gdk_pixbuf, pango, cairo, libxml2, libgsf
 , bzip2, libcroco, libintl, darwin, rust, gnome3
 , withGTK ? false, gtk3 ? null
-, vala, gobjectIntrospection }:
+, vala, gobject-introspection }:
 
 let
   pname = "librsvg";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ glib gdk_pixbuf cairo ] ++ lib.optional withGTK gtk3;
 
-  nativeBuildInputs = [ pkgconfig rust.rustc rust.cargo vala gobjectIntrospection ]
+  nativeBuildInputs = [ pkgconfig rust.rustc rust.cargo vala gobject-introspection ]
     ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
       ApplicationServices
     ]);

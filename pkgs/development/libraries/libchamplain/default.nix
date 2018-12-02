@@ -1,5 +1,5 @@
 { fetchurl, stdenv, pkgconfig, glib, gtk3, cairo, sqlite, gnome3
-, clutter-gtk, libsoup, gobjectIntrospection /*, libmemphis */ }:
+, clutter-gtk, libsoup, gobject-introspection /*, libmemphis */ }:
 
 let
   pname = "libchamplain";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ pkgconfig gobjectIntrospection ];
+  nativeBuildInputs = [ pkgconfig gobject-introspection ];
 
   propagatedBuildInputs = [ glib gtk3 cairo clutter-gtk sqlite libsoup ];
 

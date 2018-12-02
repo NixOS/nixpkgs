@@ -1,5 +1,5 @@
 { stdenv, fetchurl, itstool, python3Packages, intltool, wrapGAppsHook
-, libxml2, gobjectIntrospection, gtk3, gnome3, cairo, file
+, libxml2, gobject-introspection, gtk3, gnome3, cairo, file
 }:
 
 
@@ -20,7 +20,7 @@ in buildPythonApplication rec {
     gnome3.gtksourceview gnome3.gsettings-desktop-schemas pycairo cairo
     gnome3.defaultIconTheme gnome3.dconf file
   ];
-  propagatedBuildInputs = [ gobjectIntrospection pygobject3 gtk3 ];
+  propagatedBuildInputs = [ gobject-introspection pygobject3 gtk3 ];
 
   installPhase = ''
     mkdir -p "$out/lib/${python.libPrefix}/site-packages"

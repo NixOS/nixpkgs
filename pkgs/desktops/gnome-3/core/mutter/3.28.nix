@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, fetchpatch, pkgconfig, gnome3, intltool, gobjectIntrospection, upower, cairo
+{ fetchurl, stdenv, fetchpatch, pkgconfig, gnome3, intltool, gobject-introspection, upower, cairo
 , pango, cogl, clutter, libstartup_notification, zenity, libcanberra-gtk3
 , libtool, makeWrapper, xkeyboard_config, libxkbfile, libxkbcommon, libXtst, libinput
 , pipewire, libgudev, libwacom, xwayland, autoreconfHook }:
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook pkgconfig intltool libtool makeWrapper ];
 
   buildInputs = with gnome3; [
-    glib gobjectIntrospection gtk gsettings-desktop-schemas upower
+    glib gobject-introspection gtk gsettings-desktop-schemas upower
     gnome-desktop cairo pango cogl clutter zenity libstartup_notification
     gnome3.geocode-glib libinput libgudev libwacom
     libcanberra-gtk3 zenity xkeyboard_config libxkbfile

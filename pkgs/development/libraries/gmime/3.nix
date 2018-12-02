@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, glib, zlib, gnupg, gpgme, libidn2, libunistring, gobjectIntrospection }:
+{ stdenv, fetchurl, pkgconfig, glib, zlib, gnupg, gpgme, libidn2, libunistring, gobject-introspection }:
 
 stdenv.mkDerivation rec {
   version = "3.2.3";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  buildInputs = [ gobjectIntrospection zlib gpgme libidn2 libunistring ];
+  buildInputs = [ gobject-introspection zlib gpgme libidn2 libunistring ];
   nativeBuildInputs = [ pkgconfig ];
   propagatedBuildInputs = [ glib ];
   configureFlags = [ "--enable-introspection=yes" ];

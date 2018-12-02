@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitLab, fetchpatch, pkgconfig, meson, ninja, glib, gsignond, gsasl, check
-, gtk-doc, docbook_xml_dtd_43, docbook_xml_dtd_45, docbook_xsl, glibcLocales, gobjectIntrospection }:
+, gtk-doc, docbook_xml_dtd_43, docbook_xml_dtd_45, docbook_xsl, glibcLocales, gobject-introspection }:
 
 stdenv.mkDerivation rec {
   name = "gsignond-plugin-sasl-${version}";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     docbook_xml_dtd_45
     docbook_xsl
     glibcLocales
-    gobjectIntrospection
+    gobject-introspection
     gtk-doc
     meson
     ninja

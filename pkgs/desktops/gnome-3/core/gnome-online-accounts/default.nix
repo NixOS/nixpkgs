@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, vala, glib, libxslt, gtk, wrapGAppsHook
-, webkitgtk, json-glib, rest, libsecret, gtk-doc, gobjectIntrospection
+, webkitgtk, json-glib, rest, libsecret, gtk-doc, gobject-introspection
 , gettext, icu, glib-networking
 , libsoup, docbook_xsl, docbook_xml_dtd_412, gnome3, gcr, kerberos
 }:
@@ -29,7 +29,7 @@ in stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   nativeBuildInputs = [
-    pkgconfig gobjectIntrospection vala gettext wrapGAppsHook
+    pkgconfig gobject-introspection vala gettext wrapGAppsHook
     libxslt docbook_xsl docbook_xml_dtd_412 gtk-doc
   ];
   buildInputs = [

@@ -3,7 +3,7 @@
 , itstool, libxslt, webkitgtk, libgdata
 , gnome-desktop, libzapojit, libgepub
 , gnome3, gdk_pixbuf, libsoup, docbook_xsl, docbook_xml_dtd_42
-, gobjectIntrospection, inkscape, poppler_utils
+, gobject-introspection, inkscape, poppler_utils
 , desktop-file-utils, wrapGAppsHook, python3 }:
 
 stdenv.mkDerivation rec {
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     gtk3 glib gnome3.gsettings-desktop-schemas
     gdk_pixbuf gnome3.defaultIconTheme evince
-    libsoup webkitgtk gjs gobjectIntrospection
+    libsoup webkitgtk gjs gobject-introspection
     tracker tracker-miners libgdata
     gnome-desktop libzapojit libgepub
   ];

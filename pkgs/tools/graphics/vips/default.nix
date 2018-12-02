@@ -5,7 +5,7 @@
   fetchFromGitHub,
   autoreconfHook,
   gtk-doc,
-  gobjectIntrospection,
+  gobject-introspection,
 }:
 
 stdenv.mkDerivation rec {
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     sha256 = "1dwcpmpqbgb9lkajnqv50mrsn97mxbxpq6b5aya7fgfkgdnrs9sw";
   };
 
-  nativeBuildInputs = [ pkgconfig autoreconfHook gtk-doc gobjectIntrospection ];
+  nativeBuildInputs = [ pkgconfig autoreconfHook gtk-doc gobject-introspection ];
   buildInputs = [ glib libxml2 fftw orc lcms
     imagemagick openexr libtiff libjpeg
     libgsf libexif python27 libpng expat ]

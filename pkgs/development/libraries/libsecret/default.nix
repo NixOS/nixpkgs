@@ -1,5 +1,5 @@
 { stdenv, fetchurl, glib, pkgconfig, intltool, libxslt, python3, docbook_xsl, docbook_xml_dtd_42
-, libgcrypt, gobjectIntrospection, vala, gtk-doc, gnome3, libintl, dbus, xvfb_run }:
+, libgcrypt, gobject-introspection, vala, gtk-doc, gnome3, libintl, dbus, xvfb_run }:
 
 stdenv.mkDerivation rec {
   pname = "libsecret";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "devdoc" ];
 
   propagatedBuildInputs = [ glib ];
-  nativeBuildInputs = [ pkgconfig intltool libxslt docbook_xsl docbook_xml_dtd_42 libintl gobjectIntrospection vala gtk-doc ];
+  nativeBuildInputs = [ pkgconfig intltool libxslt docbook_xsl docbook_xml_dtd_42 libintl gobject-introspection vala gtk-doc ];
   buildInputs = [ libgcrypt ];
   # optional: build docs with gtk-doc? (probably needs a flag as well)
 

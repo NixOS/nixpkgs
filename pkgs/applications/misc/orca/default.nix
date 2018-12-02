@@ -1,5 +1,5 @@
 { stdenv, pkgconfig, fetchurl, buildPythonApplication
-, autoreconfHook, wrapGAppsHook, gobjectIntrospection
+, autoreconfHook, wrapGAppsHook, gobject-introspection
 , intltool, yelp-tools, itstool, libxmlxx3
 , python, pygobject3, gtk3, gnome3, substituteAll
 , at-spi2-atk, at-spi2-core, pyatspi, dbus, dbus-python, pyxdg
@@ -32,7 +32,7 @@ in buildPythonApplication rec {
 
   nativeBuildInputs = [
     autoreconfHook wrapGAppsHook pkgconfig libxmlxx3
-    intltool yelp-tools itstool gobjectIntrospection
+    intltool yelp-tools itstool gobject-introspection
   ];
 
   propagatedBuildInputs = [

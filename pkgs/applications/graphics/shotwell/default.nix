@@ -1,7 +1,7 @@
 { fetchurl, stdenv, meson, ninja, gtk3, libexif, libgphoto2, libsoup, libxml2, vala, sqlite
 , webkitgtk, pkgconfig, gnome3, gst_all_1, libgudev, libraw, glib, json-glib
 , gettext, desktop-file-utils, gdk_pixbuf, librsvg, wrapGAppsHook
-, gobjectIntrospection, itstool, libgdata, python3 }:
+, gobject-introspection, itstool, libgdata, python3 }:
 
 # for dependencies see https://wiki.gnome.org/Apps/Shotwell/BuildingAndInstalling
 
@@ -17,7 +17,7 @@ in stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    meson ninja vala pkgconfig itstool gettext desktop-file-utils python3 wrapGAppsHook gobjectIntrospection
+    meson ninja vala pkgconfig itstool gettext desktop-file-utils python3 wrapGAppsHook gobject-introspection
   ];
 
   buildInputs = [

@@ -1,5 +1,5 @@
 { stdenv, fetchurl, meson, ninja, pkgconfig, gnome3, gtk3, wrapGAppsHook
-, glib, amtk, appstream-glib, gobjectIntrospection, python3
+, glib, amtk, appstream-glib, gobject-introspection, python3
 , webkitgtk, gettext, itstool, gsettings-desktop-schemas }:
 
 stdenv.mkDerivation rec {
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "036sddvhs0blqpc2ixmjdl9vxynvkn5jpgn0jxr1fxcm4rh3q07a";
   };
 
-  nativeBuildInputs = [ meson ninja pkgconfig gettext itstool wrapGAppsHook appstream-glib gobjectIntrospection python3 ];
+  nativeBuildInputs = [ meson ninja pkgconfig gettext itstool wrapGAppsHook appstream-glib gobject-introspection python3 ];
   buildInputs = [
     glib gtk3 webkitgtk amtk
     gnome3.defaultIconTheme gsettings-desktop-schemas

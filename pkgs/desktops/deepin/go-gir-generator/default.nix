@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, go, gobjectIntrospection,
+{ stdenv, fetchFromGitHub, pkgconfig, go, gobject-introspection,
   libgudev, deepin, fetchurl }:
 
 stdenv.mkDerivation rec {
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    gobjectIntrospection
+    gobject-introspection
     libgudev
   ];
 

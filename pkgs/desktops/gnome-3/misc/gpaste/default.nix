@@ -1,5 +1,5 @@
 { stdenv, fetchurl, autoreconfHook, pkgconfig, vala, glib, gjs, mutter
-, pango, gtk3, gnome3, dbus, clutter, appstream-glib, wrapGAppsHook, systemd, gobjectIntrospection }:
+, pango, gtk3, gnome3, dbus, clutter, appstream-glib, wrapGAppsHook, systemd, gobject-introspection }:
 
 stdenv.mkDerivation rec {
   version = "3.30.2";
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [
     glib gjs mutter gtk3 dbus
-    clutter pango gobjectIntrospection
+    clutter pango gobject-introspection
   ];
 
   configureFlags = [

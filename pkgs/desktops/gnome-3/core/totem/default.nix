@@ -1,6 +1,6 @@
 { stdenv, fetchurl, meson, ninja, intltool, gst_all_1
 , clutter-gtk, clutter-gst, python3Packages, shared-mime-info
-, pkgconfig, gtk3, glib, gobjectIntrospection
+, pkgconfig, gtk3, glib, gobject-introspection
 , wrapGAppsHook, itstool, libxml2, vala, gnome3
 , gdk_pixbuf, tracker, nautilus }:
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = "-I${gnome3.glib.dev}/include/gio-unix-2.0";
 
-  nativeBuildInputs = [ meson ninja vala pkgconfig intltool python3Packages.python itstool gobjectIntrospection wrapGAppsHook ];
+  nativeBuildInputs = [ meson ninja vala pkgconfig intltool python3Packages.python itstool gobject-introspection wrapGAppsHook ];
   buildInputs = [
     gtk3 glib gnome3.grilo clutter-gtk clutter-gst gnome3.totem-pl-parser gnome3.grilo-plugins
     gst_all_1.gstreamer gst_all_1.gst-plugins-base gst_all_1.gst-plugins-good gst_all_1.gst-plugins-bad

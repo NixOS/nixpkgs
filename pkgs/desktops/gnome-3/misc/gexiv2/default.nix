@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, meson, ninja, pkgconfig, exiv2, glib, gnome3, gobjectIntrospection, vala }:
+{ stdenv, fetchurl, meson, ninja, pkgconfig, exiv2, glib, gnome3, gobject-introspection, vala }:
 
 let
   pname = "gexiv2";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     patchShebangs .
   '';
 
-  nativeBuildInputs = [ meson ninja pkgconfig gobjectIntrospection vala ];
+  nativeBuildInputs = [ meson ninja pkgconfig gobject-introspection vala ];
   buildInputs = [ glib ];
   propagatedBuildInputs = [ exiv2 ];
 

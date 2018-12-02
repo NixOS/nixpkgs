@@ -4,7 +4,7 @@
 , meson
 , ninja
 , pkgconfig
-, gobjectIntrospection
+, gobject-introspection
 
 , dbus
 , glib
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ meson ninja pkgconfig gobjectIntrospection ]
+  nativeBuildInputs = [ meson ninja pkgconfig gobject-introspection ]
     # Fixup rpaths because of meson, remove with meson-0.47
     ++ stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
   buildInputs = [ dbus glib libX11 libXtst libXi ];

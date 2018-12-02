@@ -1,5 +1,5 @@
 { stdenv, fetchurl, meson, ninja, vala, libxslt, pkgconfig, glib, gtk3, gnome3, python3
-, libxml2, gettext, docbook_xsl, wrapGAppsHook, gobjectIntrospection }:
+, libxml2, gettext, docbook_xsl, wrapGAppsHook, gobject-introspection }:
 
 let
   pname = "dconf-editor";
@@ -12,7 +12,7 @@ in stdenv.mkDerivation rec {
     sha256 = "06f736spn20s7qjsz00xw44v8r8bjhyrz1v3bix6v416jc5jp6ia";
   };
 
-  nativeBuildInputs = [ meson ninja vala libxslt pkgconfig wrapGAppsHook gettext docbook_xsl libxml2 gobjectIntrospection python3 ];
+  nativeBuildInputs = [ meson ninja vala libxslt pkgconfig wrapGAppsHook gettext docbook_xsl libxml2 gobject-introspection python3 ];
 
   buildInputs = [ glib gtk3 gnome3.dconf ];
 

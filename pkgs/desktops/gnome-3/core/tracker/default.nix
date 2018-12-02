@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchFromGitLab, intltool, meson, ninja, pkgconfig, gobjectIntrospection, python2
+{ stdenv, fetchurl, fetchFromGitLab, intltool, meson, ninja, pkgconfig, gobject-introspection, python2
 , gtk-doc, docbook_xsl, docbook_xml_dtd_412, docbook_xml_dtd_43, glibcLocales
 , libxml2, upower, glib, wrapGAppsHook, vala, sqlite, libxslt, libstemmer
 , gnome3, icu, libuuid, networkmanager, libsoup, json-glib }:
@@ -17,7 +17,7 @@ in stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    meson ninja vala pkgconfig intltool libxslt wrapGAppsHook gobjectIntrospection
+    meson ninja vala pkgconfig intltool libxslt wrapGAppsHook gobject-introspection
     gtk-doc docbook_xsl docbook_xml_dtd_412 docbook_xml_dtd_43 glibcLocales
     python2 # for data-generators
   ];

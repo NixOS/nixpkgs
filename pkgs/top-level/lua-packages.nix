@@ -7,7 +7,7 @@
 
 { fetchurl, stdenv, lua, callPackage, unzip, zziplib, pkgconfig
 , pcre, oniguruma, gnulib, tre, glibc, sqlite, openssl, expat
-, glib, gobjectIntrospection, libevent, zlib, autoreconfHook, gnum4
+, glib, gobject-introspection, libevent, zlib, autoreconfHook, gnum4
 , mysql, postgresql, cyrus_sasl
 , fetchFromGitHub, libmpack, which, fetchpatch, writeText
 }:
@@ -927,7 +927,7 @@ let
     };
 
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ glib gobjectIntrospection lua ];
+    buildInputs = [ glib gobject-introspection lua ];
 
     makeFlags = [ "LUA_VERSION=${lua.luaversion}" ];
 

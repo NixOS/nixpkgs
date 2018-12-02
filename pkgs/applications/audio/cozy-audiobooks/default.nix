@@ -8,7 +8,7 @@
 , desktop-file-utils
 , gtk3
 , gst_all_1
-, gobjectIntrospection
+, gobject-introspection
 , python3Packages
 , file
 , cairo
@@ -36,7 +36,7 @@ python3Packages.buildPythonApplication rec {
     wrapGAppsHook
     appstream-glib
     desktop-file-utils
-    gobjectIntrospection
+    gobject-introspection
   ];
 
   buildInputs = [

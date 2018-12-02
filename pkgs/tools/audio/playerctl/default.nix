@@ -1,4 +1,4 @@
-{ stdenv, meson, ninja, fetchFromGitHub, glib, pkgconfig, gobjectIntrospection }:
+{ stdenv, meson, ninja, fetchFromGitHub, glib, pkgconfig, gobject-introspection }:
 
 stdenv.mkDerivation rec {
   name = "playerctl-${version}";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0jnylj5d6i29c5y6yjxg1a88r2qfbac5pj95f2aljjkfh9428jbb";
   };
 
-  nativeBuildInputs = [ meson ninja pkgconfig gobjectIntrospection ];
+  nativeBuildInputs = [ meson ninja pkgconfig gobject-introspection ];
   buildInputs = [ glib ];
 
   # docs somehow crashes the install phase:

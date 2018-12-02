@@ -1,6 +1,6 @@
 { stdenv, fetchurl, fetchpatch, fixDarwinDylibNames, meson, ninja, pkgconfig, gettext, python3, libxml2, libxslt, docbook_xsl
 , docbook_xml_dtd_43, gtk-doc, glib, libtiff, libjpeg, libpng, libX11, gnome3
-, jasper, gobjectIntrospection, doCheck ? false, makeWrapper }:
+, jasper, gobject-introspection, doCheck ? false, makeWrapper }:
 
 let
   pname = "gdk-pixbuf";
@@ -37,7 +37,7 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     meson ninja pkgconfig gettext python3 libxml2 libxslt docbook_xsl docbook_xml_dtd_43
-    gtk-doc gobjectIntrospection makeWrapper
+    gtk-doc gobject-introspection makeWrapper
   ]
     ++ stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
@@ -47,7 +47,7 @@ in stdenv.mkDerivation rec {
     "-Ddocs=true"
     "-Djasper=true"
     "-Dx11=true"
-    "-Dgir=${if gobjectIntrospection != null then "true" else "false"}"
+    "-Dgir=${if gobject-introspection != null then "true" else "false"}"
   ];
 
   postPatch = ''

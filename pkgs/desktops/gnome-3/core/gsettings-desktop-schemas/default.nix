@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, intltool, glib, gobjectIntrospection
+{ stdenv, fetchurl, pkgconfig, intltool, glib, gobject-introspection
   # just for passthru
 , gnome3 }:
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     EOF
   '';
 
-  buildInputs = [ glib gobjectIntrospection ];
+  buildInputs = [ glib gobject-introspection ];
 
   nativeBuildInputs = [ pkgconfig intltool ];
 

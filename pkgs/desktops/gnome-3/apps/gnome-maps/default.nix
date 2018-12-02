@@ -1,5 +1,5 @@
 { stdenv, fetchurl, meson, ninja, gettext, python3, pkgconfig, gnome3, gtk3
-, gobjectIntrospection, gdk_pixbuf, librsvg, libgweather
+, gobject-introspection, gdk_pixbuf, librsvg, libgweather
 , geoclue2, wrapGAppsHook, folks, libchamplain, gfbgraph, libsoup
 , webkitgtk, gjs, libgee, geocode-glib, evolution-data-server, gnome-online-accounts }:
 
@@ -18,7 +18,7 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ meson ninja pkgconfig gettext python3 wrapGAppsHook ];
   buildInputs = [
-    gobjectIntrospection
+    gobject-introspection
     gtk3 geoclue2 gjs libgee folks gfbgraph
     geocode-glib libchamplain libsoup
     gdk_pixbuf librsvg libgweather

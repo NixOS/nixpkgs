@@ -1,5 +1,5 @@
 { stdenv, fetchurl, fetchpatch, pkgconfig, gettext, perl, makeWrapper, shared-mime-info
-, expat, glib, cairo, pango, gdk_pixbuf, atk, at-spi2-atk, gobjectIntrospection
+, expat, glib, cairo, pango, gdk_pixbuf, atk, at-spi2-atk, gobject-introspection
 , xorg, epoxy, json-glib, libxkbcommon, gmp, gnome3
 , x11Support ? stdenv.isLinux
 , waylandSupport ? stdenv.isLinux, mesa_noglu, wayland, wayland-protocols
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ];
   outputBin = "dev";
 
-  nativeBuildInputs = [ pkgconfig gettext gobjectIntrospection perl makeWrapper ];
+  nativeBuildInputs = [ pkgconfig gettext gobject-introspection perl makeWrapper ];
 
   patches = [
     ./3.0-immodules.cache.patch

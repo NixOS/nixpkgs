@@ -1,6 +1,6 @@
 { stdenv, meson, ninja, gettext, fetchurl, gdk_pixbuf, tracker
 , libxml2, python3, libnotify, wrapGAppsHook, libmediaart
-, gobjectIntrospection, gnome-online-accounts, grilo, grilo-plugins
+, gobject-introspection, gnome-online-accounts, grilo, grilo-plugins
 , pkgconfig, gtk3, glib, desktop-file-utils, appstream-glib
 , itstool, gnome3, gst_all_1, libdazzle, libsoup }:
 
@@ -15,7 +15,7 @@ python3.pkgs.buildPythonApplication rec {
     sha256 = "1d9gd9rqy71hibfrz4zglimvgv6yn1pw22cnrn7pbdz6k4yq209d";
   };
 
-  nativeBuildInputs = [ meson ninja gettext itstool pkgconfig libxml2 wrapGAppsHook desktop-file-utils appstream-glib gobjectIntrospection ];
+  nativeBuildInputs = [ meson ninja gettext itstool pkgconfig libxml2 wrapGAppsHook desktop-file-utils appstream-glib gobject-introspection ];
   buildInputs = with gst_all_1; [
     gtk3 glib libmediaart gnome-online-accounts
     gdk_pixbuf gnome3.defaultIconTheme python3

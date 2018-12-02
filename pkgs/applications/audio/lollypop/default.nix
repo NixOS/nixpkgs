@@ -1,7 +1,7 @@
 { stdenv, fetchgit, meson, ninja, pkgconfig
 , python3, gtk3, gst_all_1, libsecret, libsoup
 , appstream-glib, desktop-file-utils, gnome3
-, gobjectIntrospection, wrapGAppsHook }:
+, gobject-introspection, wrapGAppsHook }:
 
 python3.pkgs.buildPythonApplication rec  {
   version = "0.9.611";
@@ -20,7 +20,7 @@ python3.pkgs.buildPythonApplication rec  {
   nativeBuildInputs = with python3.pkgs; [
     appstream-glib
     desktop-file-utils
-    gobjectIntrospection
+    gobject-introspection
     meson
     ninja
     pkgconfig

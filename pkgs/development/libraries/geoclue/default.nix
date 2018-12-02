@@ -1,5 +1,5 @@
 { fetchurl, stdenv, fetchpatch, intltool, pkgconfig, gtk-doc, docbook_xsl, docbook_xml_dtd_412, glib, json-glib, libsoup, libnotify, gdk_pixbuf
-, modemmanager, avahi, glib-networking, wrapGAppsHook, gobjectIntrospection
+, modemmanager, avahi, glib-networking, wrapGAppsHook, gobject-introspection
 , withDemoAgent ? false
 }:
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "devdoc" ];
 
   nativeBuildInputs = [
-    pkgconfig intltool wrapGAppsHook gobjectIntrospection
+    pkgconfig intltool wrapGAppsHook gobject-introspection
     # devdoc
     gtk-doc docbook_xsl docbook_xml_dtd_412
   ];

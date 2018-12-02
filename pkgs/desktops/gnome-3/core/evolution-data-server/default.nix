@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, substituteAll, pkgconfig, gnome3, python3, gobjectIntrospection
+{ fetchurl, stdenv, substituteAll, pkgconfig, gnome3, python3, gobject-introspection
 , intltool, libsoup, libxml2, libsecret, icu, sqlite, tzdata, libcanberra-gtk3
 , p11-kit, db, nspr, nss, libical, gperf, wrapGAppsHook, glib-networking, pcre
 , vala, cmake, ninja, kerberos, openldap, webkitgtk, libaccounts-glib, json-glib }:
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    cmake ninja pkgconfig intltool python3 gperf wrapGAppsHook gobjectIntrospection vala
+    cmake ninja pkgconfig intltool python3 gperf wrapGAppsHook gobject-introspection vala
   ];
   buildInputs = with gnome3; [
     glib libsoup libxml2 gtk gnome-online-accounts

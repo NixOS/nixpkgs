@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitLab, meson, ninja, pkgconfig, gobjectIntrospection, vala
+{ stdenv, fetchFromGitLab, meson, ninja, pkgconfig, gobject-introspection, vala
 , gtk-doc, docbook_xsl, docbook_xml_dtd_43
 , gtk3, gnome3
 , dbus, xvfb_run, libxml2
@@ -22,7 +22,7 @@ in stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    meson ninja pkgconfig gobjectIntrospection vala
+    meson ninja pkgconfig gobject-introspection vala
     gtk-doc docbook_xsl docbook_xml_dtd_43
   ];
   buildInputs = [ gnome3.gnome-desktop gtk3 gnome3.glade libxml2 ];

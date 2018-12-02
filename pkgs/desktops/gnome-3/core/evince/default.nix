@@ -1,7 +1,7 @@
 { fetchurl, stdenv, pkgconfig, intltool, libxml2
 , glib, gtk3, pango, atk, gdk_pixbuf, shared-mime-info, itstool, gnome3
 , poppler, ghostscriptX, djvulibre, libspectre, libarchive, libsecret, wrapGAppsHook
-, librsvg, gobjectIntrospection, yelp-tools, gspell
+, librsvg, gobject-introspection, yelp-tools, gspell
 , recentListSize ? null # 5 is not enough, allow passing a different number
 , supportXPS ? false    # Open XML Paper Specification via libgxps
 , autoreconfHook
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    pkgconfig gobjectIntrospection intltool itstool wrapGAppsHook yelp-tools autoreconfHook
+    pkgconfig gobject-introspection intltool itstool wrapGAppsHook yelp-tools autoreconfHook
   ];
 
   buildInputs = [

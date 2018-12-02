@@ -1,5 +1,5 @@
 { stdenv, fetchurl, meson, ninja, pkgconfig, gettext, gnome3, glib, gtk3, pango, wrapGAppsHook, python3
-, gobjectIntrospection, gjs, libunistring }:
+, gobject-introspection, gjs, libunistring }:
 
 stdenv.mkDerivation rec {
   name = "gnome-characters-${version}";
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  nativeBuildInputs = [ meson ninja pkgconfig gettext wrapGAppsHook python3 gobjectIntrospection ];
+  nativeBuildInputs = [ meson ninja pkgconfig gettext wrapGAppsHook python3 gobject-introspection ];
   buildInputs = [
     glib gtk3 gjs pango gnome3.gsettings-desktop-schemas
     gnome3.defaultIconTheme libunistring

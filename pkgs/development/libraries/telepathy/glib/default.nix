@@ -1,5 +1,5 @@
 { stdenv, fetchurl, dbus-glib, glib, python2, pkgconfig, libxslt
-, gobjectIntrospection, vala, glibcLocales }:
+, gobject-introspection, vala, glibcLocales }:
 
 stdenv.mkDerivation rec {
   name = "telepathy-glib-0.24.1";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   LC_ALL = "en_US.UTF-8";
   propagatedBuildInputs = [ dbus-glib glib ];
 
-  nativeBuildInputs = [ pkgconfig libxslt gobjectIntrospection vala ];
+  nativeBuildInputs = [ pkgconfig libxslt gobject-introspection vala ];
   buildInputs = [ glibcLocales python2 ];
 
   enableParallelBuilding = true;

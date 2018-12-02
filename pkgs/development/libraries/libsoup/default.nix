@@ -1,5 +1,5 @@
 { stdenv, fetchurl, glib, libxml2, meson, ninja, pkgconfig, gnome3
-, gnomeSupport ? true, sqlite, glib-networking, gobjectIntrospection, vala
+, gnomeSupport ? true, sqlite, glib-networking, gobject-introspection, vala
 , libpsl, python3 }:
 
 stdenv.mkDerivation rec {
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ];
 
   buildInputs = [ python3 sqlite libpsl ];
-  nativeBuildInputs = [ meson ninja pkgconfig gobjectIntrospection vala ];
+  nativeBuildInputs = [ meson ninja pkgconfig gobject-introspection vala ];
   propagatedBuildInputs = [ glib libxml2 ];
 
   mesonFlags = [

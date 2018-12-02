@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, file, intltool, gobjectIntrospection, glib
+{ stdenv, fetchurl, pkgconfig, file, intltool, gobject-introspection, glib
 , clutter-gtk, clutter-gst, gnome3, aspell, hspell, gtksourceview, gjs
 , webkitgtk, libmusicbrainz5, icu, wrapGAppsHook, gst_all_1
 , gdk_pixbuf, librsvg, gtk3, harfbuzz }:
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "0zpaiw5r734fky3zq95a6szwn7srbkpixajqg2xvdivhhx4mbnnj";
   };
 
-  nativeBuildInputs = [ pkgconfig file intltool gobjectIntrospection wrapGAppsHook ];
+  nativeBuildInputs = [ pkgconfig file intltool gobject-introspection wrapGAppsHook ];
   buildInputs = [
     glib gtk3 gnome3.evince icu harfbuzz
     clutter-gtk clutter-gst gjs gtksourceview gdk_pixbuf

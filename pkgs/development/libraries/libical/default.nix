@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, perl, pkgconfig, cmake, ninja, vala, gobjectIntrospection
+{ stdenv, fetchFromGitHub, perl, pkgconfig, cmake, ninja, vala, gobject-introspection
 , python3, tzdata, gtk-doc, docbook_xsl, docbook_xml_dtd_43, glib, libxml2, icu }:
 
 stdenv.mkDerivation rec {
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    perl pkgconfig cmake ninja vala gobjectIntrospection
+    perl pkgconfig cmake ninja vala gobject-introspection
     (python3.withPackages (pkgs: with pkgs; [ pygobject3 ])) # running libical-glib tests
     gtk-doc docbook_xsl docbook_xml_dtd_43 # docs
   ];

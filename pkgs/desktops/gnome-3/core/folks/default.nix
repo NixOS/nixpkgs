@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, pkgconfig, glib, gnome3, nspr, intltool, gobjectIntrospection
+{ fetchurl, stdenv, pkgconfig, glib, gnome3, nspr, intltool, gobject-introspection
 , vala, sqlite, libxml2, dbus-glib, libsoup, nss, dbus
 , telepathy-glib, evolution-data-server, libsecret, db }:
 
@@ -20,7 +20,7 @@ in stdenv.mkDerivation rec {
     dbus-glib telepathy-glib evolution-data-server dbus
     libsecret libxml2 libsoup nspr nss db
   ];
-  nativeBuildInputs = [ pkgconfig intltool vala gobjectIntrospection ];
+  nativeBuildInputs = [ pkgconfig intltool vala gobject-introspection ];
 
   configureFlags = [ "--disable-fatal-warnings" ];
 

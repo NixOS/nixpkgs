@@ -7,7 +7,7 @@
 , flatpak
 , glibcLocales
 , gnome3
-, gobjectIntrospection
+, gobject-introspection
 , gspell
 , gtk-doc
 , gtk3
@@ -46,7 +46,7 @@ in stdenv.mkDerivation {
     docbook_xsl
     docbook_xml_dtd_43
     glibcLocales # for Meson's gtkdochelper
-    gobjectIntrospection
+    gobject-introspection
     gtk-doc
     hicolor-icon-theme
     meson
