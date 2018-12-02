@@ -43,6 +43,11 @@
      <literal>./programs/nm-applet.nix</literal>
     </para>
    </listitem>
+   <listitem>
+    <para>
+     <literal>./programs/pmount.nix</literal>
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
