@@ -3959,6 +3959,8 @@ with pkgs;
 
   libpointmatcher = callPackage ../development/libraries/libpointmatcher { };
 
+  libnids = callPackage ../tools/networking/libnids { };
+
   libtorrent = callPackage ../tools/networking/p2p/libtorrent { };
 
   libmpack = callPackage ../development/libraries/libmpack { };
