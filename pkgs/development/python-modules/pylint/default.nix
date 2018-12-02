@@ -3,13 +3,13 @@
 
 buildPythonPackage rec {
   pname = "pylint";
-  version = "2.1.1";
+  version = "2.2.2";
 
   disabled = pythonOlder "3.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "31142f764d2a7cd41df5196f9933b12b7ee55e73ef12204b648ad7e556c119fb";
+    sha256 = "689de29ae747642ab230c6d37be2b969bf75663176658851f456619aacf27492";
   };
 
   checkInputs = [ pytest pytestrunner pyenchant ];
