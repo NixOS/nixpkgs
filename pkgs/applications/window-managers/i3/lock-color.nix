@@ -58,5 +58,7 @@ stdenv.mkDerivation rec {
     # Needs the SSE2 instruction set. See upstream issue
     # https://github.com/chrjguill/i3lock-color/issues/44
     platforms = platforms.x86;
+
+    broken = stdenv.hostPlatform.cc.isClang;
   };
 }
