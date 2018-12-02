@@ -3932,6 +3932,8 @@ in
 
   libee = callPackage ../development/libraries/libee { };
 
+  libepc = callPackage ../development/libraries/libepc { };
+
   libestr = callPackage ../development/libraries/libestr { };
 
   libevdev = callPackage ../development/libraries/libevdev { };
