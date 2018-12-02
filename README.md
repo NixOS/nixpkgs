@@ -37,6 +37,7 @@ imports = [
 | Lenovo IdeaPad Z510               | `<nixos-hardware/lenovo/ideapad/z510>`       |
 | Lenovo ThinkPad T410              | `<nixos-hardware/lenovo/thinkpad/t410>`      |
 | Lenovo ThinkPad T430              | `<nixos-hardware/lenovo/thinkpad/t430>`      |
+| Lenovo ThinkPad T440s             | `<nixos-hardware/lenovo/thinkpad/t440s>`     |
 | Lenovo ThinkPad T440p             | `<nixos-hardware/lenovo/thinkpad/t440p>`     |
 | Lenovo ThinkPad T450s             | `<nixos-hardware/lenovo/thinkpad/t450s>`     |
 | Lenovo ThinkPad T460s             | `<nixos-hardware/lenovo/thinkpad/t460s>`     |
