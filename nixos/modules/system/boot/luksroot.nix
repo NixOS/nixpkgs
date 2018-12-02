@@ -107,11 +107,6 @@ let
     do_open_passphrase() {
         local passphrase
 
-        # Return if already unlocked
-        if ! cryptsetup status "${name}" > /dev/null; then
-          return
-        fi
-
         while true; do
             echo -n "Passphrase for ${device}: "
             passphrase=
