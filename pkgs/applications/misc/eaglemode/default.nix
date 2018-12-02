@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   # trick on NIX_LDFLAGS and dontPatchELF to make it find them.
   # I use 'yes y' to skip a build error linking with xineLib,
   # because xine stopped exporting "_x_vo_new_port"
-  #  http://sourceforge.net/projects/eaglemode/forums/forum/808824/topic/5115261
+  #  https://sourceforge.net/projects/eaglemode/forums/forum/808824/topic/5115261
   buildPhase = ''
     export NIX_LDFLAGS="$NIX_LDFLAGS -lXxf86vm -lXext"
     perl make.pl build

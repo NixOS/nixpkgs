@@ -137,7 +137,7 @@ stdenv.mkDerivation rec {
       They also include the BFD (Binary File Descriptor) library,
       `gprof', `nm', `strip', etc.
     '';
-    homepage = http://www.gnu.org/software/binutils/;
+    homepage = https://www.gnu.org/software/binutils/;
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ ericson2314 ];
     platforms = platforms.unix;

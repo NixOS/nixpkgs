@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    homepage = http://www.nongnu.org/pngpp/;
+    homepage = https://www.nongnu.org/pngpp/;
     description = "C++ wrapper for libpng library";
     license = licenses.bsd3;
     platforms = platforms.unix;
