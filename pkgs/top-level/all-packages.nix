@@ -8850,6 +8850,8 @@ with pkgs;
 
   puppet-lint = callPackage ../development/tools/puppet/puppet-lint { };
 
+  pyflame = callPackage ../development/tools/profiling/pyflame { };
+
   pyrseas = callPackage ../development/tools/database/pyrseas { };
 
   qtcreator = libsForQt5.callPackage ../development/tools/qtcreator { };
