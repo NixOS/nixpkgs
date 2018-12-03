@@ -20,13 +20,13 @@ auditTmpdir() {
         if [[ "$i" =~ .build-id ]]; then continue; fi
 
         if isELF "$i"; then
-            if patchelf --print-rpath "$i" | grep -q -F "$TMPDIR/"; then
+            if { printf :; patchelf --print-rpath "$i"; } | grep -q -F ":$TMPDIR/"; then
                 echo "RPATH of binary $i contains a forbidden reference to $TMPDIR/"
                 exit 1
             fi
         fi
 
-        if  isScript "$i"; then
+        if isScript "$i"; then
             if [ -e "$(dirname "$i")/.$(basename "$i")-wrapped" ]; then
                 if grep -q -F "$TMPDIR/" "$i"; then
                     echo "wrapper script $i contains a forbidden reference to $TMPDIR/"
