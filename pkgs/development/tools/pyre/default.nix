@@ -44,32 +44,29 @@ let
     # python36Packages.python36Full # TODO
   ];
 
-  buildPhase = ''
+  preBuild = ''
     # build requires HOME to be set
-    export HOME=.
+    export HOME=$TMPDIR
 
     # "external" because https://github.com/facebook/pyre-check/pull/8/files
     sed "s/%VERSION%/external/" dune.in > dune
 
-    cp ${versionFile} ./scripts/generate-version-number.sh
+    ln -sf ${versionFile} ./scripts/generate-version-number.sh
 
     mkdir $(pwd)/build
     export OCAMLFIND_DESTDIR=$(pwd)/build
     export OCAMLPATH=$OCAMLPATH:$(pwd)/build
-
-    make release
   '';
 
-  checkPhase = ''
-    make test
-    # ./scripts/run-python-tests.sh # TODO: once typeshed and python bits are added
-  '';
+  buildFlags = [ "release" ];
+
+  doCheck = true;
+  # ./scripts/run-python-tests.sh # TODO: once typeshed and python bits are added
 
   # Note that we're not installing the typeshed yet.
   # Improvement for a future version.
   installPhase = ''
-    mkdir -p $out/bin
-    cp ./_build/default/main.exe $out/bin/pyre.bin
+    install -D ./_build/default/main.exe $out/bin/pyre.bin
   '';
 
   meta = with stdenv.lib; {
