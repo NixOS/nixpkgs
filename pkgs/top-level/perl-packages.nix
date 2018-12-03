@@ -16838,6 +16838,18 @@ let
     };
   };
 
+  TimePeriod = buildPerlPackage {
+    name = "Time-Period-1.25";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PB/PBOYD/Time-Period-1.25.tar.gz";
+      sha256 = "d07fa580529beac6a9c8274c6bf220b4c3aade685df65c1669d53339bf6ef1e8";
+    };
+    meta = {
+      description = "A Perl module to deal with time periods";
+      license = stdenv.lib.licenses.gpl1;
+    };
+  };
+
   Tk = buildPerlPackage rec {
     name = "Tk-804.034";
     src = fetchurl {
