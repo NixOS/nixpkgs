@@ -113,6 +113,7 @@ in
           chown chrony:chrony ${stateDir} ${keyFile}
         '';
 
+        unitConfig.ConditionCapability = "CAP_SYS_TIME";
         serviceConfig =
           { Type = "forking";
             ExecStart = "${pkgs.chrony}/bin/chronyd ${chronyFlags}";
@@ -121,8 +122,8 @@ in
             ProtectSystem = "full";
             PrivateTmp = "yes";
 
-            ConditionCapability = "CAP_SYS_TIME";
           };
+
       };
   };
 }
