@@ -18,7 +18,7 @@ stdenv.mkDerivation {
     install -Dm755 bin/premake $out/bin/premake
   '';
 
-  premake_cmd = "premake3";
+  premake_cmd = "premake";
   setupHook = ./setup-hook.sh;
 
   meta = {
