@@ -21,7 +21,10 @@ stdenv.mkDerivation rec {
       url = https://gitlab.gnome.org/GNOME/glib-networking/commit/f1c8feee014007cc913b71357acb609f8d1200df.patch;
       sha256 = "1rbxqsrcb5if3xs2d18pqzd9xnjysdj715ijc41n5w326fsawg7i";
     })
-  ];
+  ] ++ stdenv.lib.optional stdenv.isDarwin (fetchpatch {
+    url = https://gitlab.gnome.org/GNOME/glib-networking/commit/8d3367c2c500a8c9f67f0447c4f711ca89625ae4.patch;
+    sha256 = "0nnvsnh022vydn4a7z8d3dbj86y72lvzx0a7vmziq2vaxjfm2slv";
+  });
 
   PKG_CONFIG_GIO_2_0_GIOMODULEDIR = "${placeholder "out"}/lib/gio/modules";
 
