@@ -3,12 +3,12 @@
 let
   # Manually set version - the setup script requires
   # hg and git + keeping the .git directory around.
-  pyre-version = "0.0.17";  # also change typeshed revision below with $pyre-src/.typeshed-version
+  pyre-version = "0.0.18";  # also change typeshed revision below with $pyre-src/.typeshed-version
   pyre-src = fetchFromGitHub {
     owner = "facebook";
     repo = "pyre-check";
     rev = "v${pyre-version}";
-    sha256 = "0y86a3g5xbgh0byksyx5jw7yq7w840x85dhz9inz6mkg5j06mcis";
+    sha256 = "1sy1lk9j3hq20dabfkr9s4r7prrcndrs345a5iqz6yzvakr4r74d";
   };
   versionFile = writeScript "version.ml" ''
     cat > "./version.ml" <<EOF
@@ -21,6 +21,7 @@ let
     let log_version_banner () =
       Log.info "Running as pid: %d" (Pid.to_int (Unix.getpid ()));
       Log.info "Version: %s" (version ());
+      Log.info "Build info: %s" (build_info ())
     EOF
   '';
  pyre-bin = stdenv.mkDerivation {
