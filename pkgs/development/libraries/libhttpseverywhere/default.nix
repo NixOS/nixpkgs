@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, pkgconfig, meson, ninja, makeFontsConf
-, gnome3, glib, json-glib, libarchive, libsoup, gobjectIntrospection }:
+{ stdenv, fetchurl, pkgconfig, meson, ninja, makeFontsConf, vala_0_40
+, gnome3, glib, json-glib, libarchive, libsoup, gobject-introspection }:
 
 let
   pname = "libhttpseverywhere";
@@ -12,7 +12,8 @@ in stdenv.mkDerivation rec {
     sha256 = "1jmn6i4vsm89q1axlq4ajqkzqmlmjaml9xhw3h9jnal46db6y00w";
   };
 
-  nativeBuildInputs = [ gnome3.vala gobjectIntrospection meson ninja pkgconfig ];
+  # Broken with newest Vala https://gitlab.gnome.org/GNOME/libhttpseverywhere/issues/1
+  nativeBuildInputs = [ vala_0_40 gobject-introspection meson ninja pkgconfig ];
   buildInputs = [ glib gnome3.libgee json-glib libsoup libarchive ];
 
   mesonFlags = [ "-Denable_valadoc=true" ];

@@ -2934,6 +2934,8 @@ with pkgs;
 
   gnome-builder = callPackage ../applications/editors/gnome-builder { };
 
+  gnome-podcasts = callPackage ../applications/audio/gnome-podcasts { };
+
   gnokii = callPackage ../tools/misc/gnokii { };
 
   gnuapl = callPackage ../development/interpreters/gnu-apl { };
@@ -3910,6 +3912,8 @@ with pkgs;
 
   libgaminggear = callPackage ../development/libraries/libgaminggear { };
 
+  libhandy = callPackage ../development/libraries/libhandy { };
+
   libipfix = callPackage ../development/libraries/libipfix { };
 
   libircclient = callPackage ../development/libraries/libircclient { };
@@ -4714,16 +4718,7 @@ with pkgs;
 
   pick = callPackage ../tools/misc/pick { };
 
-  pitivi = callPackage ../applications/video/pitivi {
-    gst = gst_all_1 //
-      { gst-plugins-bad = gst_all_1.gst-plugins-bad.overrideDerivation
-          (attrs: { nativeBuildInputs = attrs.nativeBuildInputs ++ [ gtk3 ];
-                    # Fix this build error in ./tests/examples/waylandsink:
-                    #   main.c:28:2: error: #error "Wayland is not supported in GTK+"
-                    configureFlags = attrs.configureFlags or [] ++ [ "--enable-wayland=no" ];
-                  });
-      };
-  };
+  pitivi = callPackage ../applications/video/pitivi { };
 
   pulumi-bin = callPackage ../tools/admin/pulumi { };
 
@@ -4983,7 +4978,7 @@ with pkgs;
 
   pwnat = callPackage ../tools/networking/pwnat { };
 
-  pwndbg = callPackage ../development/tools/misc/pwndbg { };
+  pwndbg = python3Packages.callPackage ../development/tools/misc/pwndbg { };
 
   pycangjie = pythonPackages.pycangjie;
 
@@ -6329,7 +6324,7 @@ with pkgs;
     gnome_python = gnome2.gnome_python;
   };
 
-  xfsprogs = callPackage ../tools/filesystems/xfsprogs { utillinux = utillinuxMinimal; };
+  xfsprogs = callPackage ../tools/filesystems/xfsprogs { };
   libxfs = xfsprogs.dev;
 
   xml2 = callPackage ../tools/text/xml/xml2 { };
@@ -7532,6 +7527,7 @@ with pkgs;
     vala_0_36
     vala_0_38
     vala_0_40
+    vala_0_42
     vala;
 
   valadoc = callPackage ../development/tools/valadoc { };
@@ -7992,6 +7988,7 @@ with pkgs;
       stdenv = overrideCC stdenv gcc6; # with gcc-7: undefined reference to `__divmoddi4'
   }));
   spidermonkey_52 = callPackage ../development/interpreters/spidermonkey/52.nix { };
+  spidermonkey_60 = callPackage ../development/interpreters/spidermonkey/60.nix { };
   spidermonkey = spidermonkey_31;
 
   ssm-agent = callPackage ../applications/networking/cluster/ssm-agent { };
@@ -8525,7 +8522,7 @@ with pkgs;
 
   gede = libsForQt59.callPackage ../development/tools/misc/gede { };
 
-  gdbgui = callPackage ../development/tools/misc/gdbgui { };
+  gdbgui = python3Packages.callPackage ../development/tools/misc/gdbgui { };
 
   pmd = callPackage ../development/tools/analysis/pmd { };
 
@@ -9898,10 +9895,9 @@ with pkgs;
   gns3-gui = gns3Packages.guiStable;
   gns3-server = gns3Packages.serverStable;
 
-  gobjectIntrospection = callPackage ../development/libraries/gobject-introspection {
+  gobject-introspection = callPackage ../development/libraries/gobject-introspection {
     nixStoreDir = config.nix.storeDir or builtins.storeDir;
     inherit (darwin) cctools;
-    python = python2;
   };
 
   goocanvas = callPackage ../development/libraries/goocanvas { };
@@ -12753,7 +12749,11 @@ with pkgs;
 
   wcslib = callPackage ../development/libraries/wcslib { };
 
-  webkitgtk = webkitgtk220x;
+  webkitgtk = callPackage ../development/libraries/webkitgtk {
+    harfbuzz = harfbuzzFull;
+    inherit (gst_all_1) gst-plugins-base gst-plugins-bad;
+    stdenv = overrideCC stdenv gcc6;
+  };
 
   webkitgtk24x-gtk3 = callPackage ../development/libraries/webkitgtk/2.4.nix {
     harfbuzz = harfbuzzFull.override {
@@ -12762,19 +12762,6 @@ with pkgs;
     gst-plugins-base = gst_all_1.gst-plugins-base;
     inherit (darwin) libobjc;
   };
-
-  webkitgtk220x = callPackage ../development/libraries/webkitgtk/2.20.nix {
-    harfbuzz = harfbuzzFull;
-    inherit (gst_all_1) gst-plugins-base gst-plugins-bad;
-    stdenv = overrideCC stdenv gcc6;
-  };
-
-  webkitgtk222x = callPackage ../development/libraries/webkitgtk/2.22.nix {
-    harfbuzz = harfbuzzFull;
-    inherit (gst_all_1) gst-plugins-base gst-plugins-bad;
-    stdenv = overrideCC stdenv gcc6;
-  };
-
 
   webkitgtk24x-gtk2 = webkitgtk24x-gtk3.override {
     withGtk2 = true;
@@ -13070,13 +13057,13 @@ with pkgs;
   ### DEVELOPMENT / GO MODULES
 
   buildGo19Package = callPackage ../development/go-modules/generic {
-    go = go_1_9;
+    go = buildPackages.go_1_9;
   };
   buildGo110Package = callPackage ../development/go-modules/generic {
-    go = go_1_10;
+    go = buildPackages.go_1_10;
   };
   buildGo111Package = callPackage ../development/go-modules/generic {
-    go = go_1_11;
+    go = buildPackages.go_1_11;
   };
 
   buildGoPackage = buildGo111Package;
@@ -13982,7 +13969,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) ApplicationServices Carbon Cocoa;
     inherit (darwin.apple_sdk.libs) Xplugin;
     bootstrap_cmds = if stdenv.isDarwin then darwin.bootstrap_cmds else null;
-    python = python2; # Incompatible with Python 3x
     udev = if stdenv.isLinux then udev else null;
     libdrm = if stdenv.isLinux then libdrm else null;
     abiCompat = config.xorg.abiCompat # `config` because we have no `xorg.override`
@@ -17213,6 +17199,10 @@ with pkgs;
   gnomecast = callPackage ../applications/video/gnomecast { };
 
   gnome-mpv = callPackage ../applications/video/gnome-mpv { };
+
+  gnome-recipes = callPackage ../applications/misc/gnome-recipes {
+    inherit (gnome3) gnome-online-accounts rest gnome-autoar gspell;
+  };
 
   gollum = callPackage ../applications/misc/gollum { };
 

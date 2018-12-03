@@ -3,16 +3,15 @@
 , desktop-file-utils
 , docbook_xsl
 , docbook_xml_dtd_43
-, fetchpatch
 , fetchurl
 , flatpak
 , glibcLocales
 , gnome3
-, gobjectIntrospection
+, gobject-introspection
 , gspell
 , gtk-doc
 , gtk3
-, gtksourceview3
+, gtksourceview4
 , hicolor-icon-theme
 , json-glib
 , jsonrpc-glib
@@ -31,14 +30,14 @@
 , wrapGAppsHook
 }:
 let
-  version = "3.28.4";
+  version = "3.30.0";
   pname = "gnome-builder";
 in stdenv.mkDerivation {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0ibb74jlyrl5f6rj1b74196zfg2qaf870lxgi76qzpkgwq0iya05";
+    sha256 = "1pshzpjy9rk6gijlm97s316aihykzxrmb07vilp17q5857passak";
   };
 
   nativeBuildInputs = [
@@ -47,7 +46,7 @@ in stdenv.mkDerivation {
     docbook_xsl
     docbook_xml_dtd_43
     glibcLocales # for Meson's gtkdochelper
-    gobjectIntrospection
+    gobject-introspection
     gtk-doc
     hicolor-icon-theme
     meson
@@ -67,7 +66,7 @@ in stdenv.mkDerivation {
     gnome3.vte
     gspell
     gtk3
-    gtksourceview3
+    gtksourceview4
     json-glib
     jsonrpc-glib
     libdazzle
@@ -86,24 +85,6 @@ in stdenv.mkDerivation {
   prePatch = ''
     patchShebangs build-aux/meson/post_install.py
   '';
-
-  patches = [
-    (fetchpatch {
-      name = "absolute-shared-library-path.patch";
-      url = "https://gitlab.gnome.org/GNOME/gnome-builder/commit/1011cabc519fd7322e2d695c79bfce3e18ff6200.patch";
-      sha256 = "1g12zziidzrphp527aa8sklfaln4qpjprkz73f0c9w5ph6k252fw";
-    })
-    (fetchpatch {
-      name = "python-libprefix.patch";
-      url = "https://gitlab.gnome.org/GNOME/gnome-builder/commit/43494ce83a347f369ed4cfb8dd71d3b93452736b.patch";
-      sha256 = "0kgi3n3g13n1j4xa61ln9xiahcfdc43bxi5mw4yva2d5px445msf";
-    })
-    (fetchpatch {
-      name = "ostree-dependency.patch";
-      url = "https://gitlab.gnome.org/GNOME/gnome-builder/commit/8b11773b65c95f464a0de16b91318c1ca73deeae.patch";
-      sha256 = "18r4hd90id0w6r0lzqpw83bcj45nm9jhr46a0ffi1mcayb18mgbk";
-    })
-  ];
 
   mesonFlags = [
     "-Dpython_libprefix=${python3.libPrefix}"

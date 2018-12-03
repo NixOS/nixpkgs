@@ -1,5 +1,5 @@
 { stdenv, fetchurl, fetchpatch, pkgconfig, gettext, perl, makeWrapper, shared-mime-info
-, expat, glib, cairo, pango, gdk_pixbuf, atk, at-spi2-atk, gobjectIntrospection
+, expat, glib, cairo, pango, gdk_pixbuf, atk, at-spi2-atk, gobject-introspection
 , xorg, epoxy, json-glib, libxkbcommon, gmp, gnome3
 , x11Support ? stdenv.isLinux
 , waylandSupport ? stdenv.isLinux, mesa_noglu, wayland, wayland-protocols
@@ -13,20 +13,20 @@ assert cupsSupport -> cups != null;
 with stdenv.lib;
 
 let
-  version = "3.22.30";
+  version = "3.24.1";
 in
 stdenv.mkDerivation rec {
   name = "gtk+3-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gtk+/${stdenv.lib.versions.majorMinor version}/gtk+-${version}.tar.xz";
-    sha256 = "0rv5k8fyi2i19k4zncai6vf429s6zy3kncr8vb6f3m034z0sb951";
+    sha256 = "0bxhsp7cjph7szg1iyv16nwi60bz59x1smjkqv6sv6mr0zipnf38";
   };
 
   outputs = [ "out" "dev" ];
   outputBin = "dev";
 
-  nativeBuildInputs = [ pkgconfig gettext gobjectIntrospection perl makeWrapper ];
+  nativeBuildInputs = [ pkgconfig gettext gobject-introspection perl makeWrapper ];
 
   patches = [
     ./3.0-immodules.cache.patch

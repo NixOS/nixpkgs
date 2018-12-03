@@ -1,5 +1,5 @@
 { buildPythonPackage, fetchurl, meson, ninja, stdenv, pkgconfig, python, pygobject3
-, gobjectIntrospection, gst-plugins-base, isPy3k
+, gobject-introspection, gst-plugins-base, isPy3k
 }:
 
 let
@@ -46,7 +46,7 @@ in buildPythonPackage rec {
     substituteInPlace meson.build --replace python3 python${if isPy3k then "3" else "2"}
   '';
 
-  nativeBuildInputs = [ meson ninja pkgconfig python gobjectIntrospection ];
+  nativeBuildInputs = [ meson ninja pkgconfig python gobject-introspection ];
 
   mesonFlags = [
     "-Dpython=python${if isPy3k then "3" else "2"}"

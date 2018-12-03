@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, intltool, pkgconfig, glib, gobjectIntrospection }:
+{ stdenv, fetchurl, intltool, pkgconfig, glib, gobject-introspection }:
 
 stdenv.mkDerivation rec {
   name = "gnome-menus-${version}";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   makeFlags = "INTROSPECTION_GIRDIR=$(out)/share/gir-1.0/ INTROSPECTION_TYPELIBDIR=$(out)/lib/girepository-1.0";
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ intltool glib gobjectIntrospection ];
+  buildInputs = [ intltool glib gobject-introspection ];
 
   meta = {
     homepage = https://www.gnome.org;

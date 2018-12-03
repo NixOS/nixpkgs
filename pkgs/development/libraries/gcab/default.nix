@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gettext, gobjectIntrospection, pkgconfig
+{ stdenv, fetchurl, gettext, gobject-introspection, pkgconfig
 , meson, ninja, glibcLocales, git, vala, glib, zlib
 }:
 
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "0l19sr6pg0cfcddmi5n79d08mjjbhn427ip5jlsy9zddq9r24aqr";
   };
 
-  nativeBuildInputs = [ meson ninja glibcLocales git pkgconfig vala gettext gobjectIntrospection ];
+  nativeBuildInputs = [ meson ninja glibcLocales git pkgconfig vala gettext gobject-introspection ];
 
   buildInputs = [ glib zlib ];
 

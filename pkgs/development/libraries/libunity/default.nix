@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, automake, autoconf, libtool
-, glib, vala, dee, gobjectIntrospection, libdbusmenu
+, glib, vala, dee, gobject-introspection, libdbusmenu
 , gtk3, intltool, gnome-common, python3, icu }:
 
 stdenv.mkDerivation rec {
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     autoconf
     automake
     gnome-common
-    gobjectIntrospection
+    gobject-introspection
     intltool
     libtool
     pkgconfig

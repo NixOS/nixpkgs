@@ -3,22 +3,24 @@
 
 stdenv.mkDerivation rec {
   name = "iagno-${version}";
-  version = "3.28.0";
+  version = "3.30.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/iagno/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "12haq1vgrr6wf970rja55rcg0352sm0i3l5z7gj0ipr2isv8506x";
+    sha256 = "15skh7186gp0k1lvzpv0l7dsr7mhb57njc3wjbgjwixym67h2d1z";
   };
 
-  passthru = {
-    updateScript = gnome3.updateScript { packageName = "iagno"; attrPath = "gnome3.iagno"; };
-  };
-
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ gtk3 gnome3.defaultIconTheme gdk_pixbuf librsvg
-                  dconf libxml2 libcanberra-gtk3 wrapGAppsHook itstool intltool ];
+  nativeBuildInputs = [ pkgconfig wrapGAppsHook itstool libxml2 ];
+  buildInputs = [ gtk3 gnome3.defaultIconTheme gdk_pixbuf librsvg libcanberra-gtk3 ];
 
   enableParallelBuilding = true;
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = "iagno";
+      attrPath = "gnome3.iagno";
+    };
+  };
 
   meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/Apps/Iagno;

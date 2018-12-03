@@ -3,9 +3,9 @@
 @@ -39,7 +39,7 @@
                  if '3' in l[2:]:
                      return l.replace('libboost', 'boost')
-
+ 
 -libboost = get_libboost_name()
-+libboost = 'boost_python@version_@'
-
++libboost = 'boost_python@version@'
+ 
  setup(
      name='py3exiv2',

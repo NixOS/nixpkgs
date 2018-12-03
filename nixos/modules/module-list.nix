@@ -246,6 +246,7 @@
   ./services/desktops/gnome3/gnome-documents.nix
   ./services/desktops/gnome3/gnome-keyring.nix
   ./services/desktops/gnome3/gnome-online-accounts.nix
+  ./services/desktops/gnome3/gnome-remote-desktop.nix
   ./services/desktops/gnome3/gnome-online-miners.nix
   ./services/desktops/gnome3/gnome-terminal-server.nix
   ./services/desktops/gnome3/gnome-user-share.nix

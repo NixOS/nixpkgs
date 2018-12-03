@@ -31,6 +31,8 @@ let
     ] ++ lib.optional (atLeast "0.38") graphviz
       ++ extraBuildInputs;
 
+    enableParallelBuilding = true;
+
     doCheck = false; # fails, requires dbus daemon
 
     meta = with stdenv.lib; {
@@ -64,9 +66,15 @@ in rec {
 
   vala_0_40 = generic {
     major   = "0.40";
-    minor   = "6";
-    sha256  = "1qjbwhifwwqbdg5zilvnwm4n76g8p7jwqs3fa0biw3rylzqm193d";
+    minor   = "11";
+    sha256  = "0xhm61kjdws167pafcji43s7icfvpq58lkbq3irb1jv3icjr3i8z";
   };
 
-  vala = vala_0_38;
+  vala_0_42 = generic {
+    major   = "0.42";
+    minor   = "3";
+    sha256  = "0zaq9009wqk5aah131m426a2ia0scwpjpl4npf8p7p43wv8kvisz";
+  };
+
+  vala = vala_0_42;
 }

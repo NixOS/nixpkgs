@@ -4,7 +4,7 @@
 , pkgconfig, autoconf
 , glib, dbus-glib, libdbusmenu
 , gtkVersion ? "3", gtk2 ? null, gtk3 ? null
-, pythonPackages, gobjectIntrospection, vala, gnome-doc-utils
+, pythonPackages, gobject-introspection, vala, gnome-doc-utils
 , monoSupport ? false, mono ? null, gtk-sharp-2_0 ? null
  }:
 
@@ -24,7 +24,7 @@ in stdenv.mkDerivation rec {
     sha256 = "10am0ymajx633b33anf6b79j37k61z30v9vaf5f9fwk1x5cw1q21";
   };
 
-  nativeBuildInputs = [ pkgconfig autoconf gobjectIntrospection vala gnome-doc-utils ];
+  nativeBuildInputs = [ pkgconfig autoconf gobject-introspection vala gnome-doc-utils ];
 
   buildInputs = [
     glib dbus-glib libdbusmenu

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, meson, ninja, pkgconfig, cmake, vala_0_40, python3, gnome3, gtk3, granite, gobjectIntrospection, desktop-file-utils, wrapGAppsHook }:
+{ stdenv, fetchFromGitHub, meson, ninja, pkgconfig, cmake, vala_0_40, python3, gnome3, gtk3, granite, gobject-introspection, desktop-file-utils, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "hashit";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     desktop-file-utils
-    gobjectIntrospection
+    gobject-introspection
     meson
     ninja
     pkgconfig

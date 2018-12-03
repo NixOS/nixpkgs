@@ -1,5 +1,5 @@
 { stdenv, fetchurl, fetchpatch, autoreconfHook, pkgconfig, glib, expat, pam, perl
-, intltool, spidermonkey_52 , gobjectIntrospection, libxslt, docbook_xsl, dbus
+, intltool, spidermonkey_52 , gobject-introspection, libxslt, docbook_xsl, dbus
 , docbook_xml_dtd_412, gtk-doc, coreutils
 , useSystemd ? stdenv.isLinux, systemd
 , doCheck ? stdenv.isLinux
@@ -28,10 +28,10 @@ stdenv.mkDerivation rec {
   outputs = [ "bin" "dev" "out" ]; # small man pages in $bin
 
   nativeBuildInputs =
-    [ gtk-doc pkgconfig autoreconfHook intltool gobjectIntrospection perl ]
+    [ gtk-doc pkgconfig autoreconfHook intltool gobject-introspection perl ]
     ++ [ libxslt docbook_xsl docbook_xml_dtd_412 ]; # man pages
   buildInputs =
-    [ glib expat pam spidermonkey_52 gobjectIntrospection ]
+    [ glib expat pam spidermonkey_52 gobject-introspection ]
     ++ stdenv.lib.optional useSystemd systemd;
 
   NIX_CFLAGS_COMPILE = " -Wno-deprecated-declarations "; # for polkit 0.114 and glib 2.56
