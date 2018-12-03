@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   name = "dmrconfig-${version}";
-  version = "2018-11-07";
+  version = "1.0";
 
   src = fetchFromGitHub {
     owner = "sergev";
     repo = "dmrconfig";
-    rev = "b58985d3c848b927e91699d97f96d9de014c3fc7";
-    sha256 = "083f21hz6vqjpndkn27nsjnhnc5a4bw0cr26ryfqcvz275rj4k18";
+    rev = version;
+    sha256 = "1bb3hahfdb5phxyzp1m5ibqwz3mcqplzaibb1aq7w273xcfrd9l9";
   };
 
   buildInputs = [
@@ -17,7 +17,10 @@ stdenv.mkDerivation rec {
   ];
 
   preConfigure = ''
-    substituteInPlace Makefile --replace /usr/local/bin/dmrconfig $out/bin/dmrconfig
+    substituteInPlace Makefile \
+      --replace /usr/local/bin/dmrconfig $out/bin/dmrconfig \
+      --replace "\$(shell git describe --tags --abbrev=0)" ${version} \
+      --replace "\$(shell git rev-list HEAD --count)" 0
   '';
 
   installPhase = ''
