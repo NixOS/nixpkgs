@@ -1688,8 +1688,6 @@ in {
 
   functools32 = callPackage ../development/python-modules/functools32 { };
 
-  gateone = callPackage ../development/python-modules/gateone { };
-
   gcutil = callPackage ../development/python-modules/gcutil { };
 
   GeoIP = callPackage ../development/python-modules/GeoIP { };

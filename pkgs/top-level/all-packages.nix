@@ -2790,6 +2790,8 @@ with pkgs;
 
   uni2ascii = callPackage ../tools/text/uni2ascii { };
 
+  gateone = callPackage ../applications/misc/gateone { };
+
   galculator = callPackage ../applications/misc/galculator {
     gtk = gtk3;
   };

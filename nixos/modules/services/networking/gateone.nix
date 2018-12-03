@@ -20,8 +20,7 @@ options = {
     };
 };
 config = mkIf cfg.enable {
-  environment.systemPackages = with pkgs.pythonPackages; [
-    gateone pkgs.openssh pkgs.procps pkgs.coreutils pkgs.cacert];
+  environment.systemPackages = with pkgs; [ gateone openssh procps coreutils cacert];
 
   users.users.gateone = {
     description = "GateOne privilege separation user";

@@ -1,28 +1,35 @@
 { stdenv
-, buildPythonPackage
 , fetchFromGitHub
-, tornado
-, futures
-, html5lib
-, pkgs
-, isPy3k
+, python
+, cacert
+, openssh
+, openssl
 }:
 
-buildPythonPackage rec {
-  name = "gateone-1.2-0d57c3";
-  disabled = isPy3k;
+python.pkgs.buildPythonApplication rec {
+  pname = "gateone";
+  version = "1.2-0d57c3";
 
-  src = pkgs.fetchFromGitHub {
+  disabled = python.pkgs.isPy3k;
+
+  src = fetchFromGitHub {
     rev = "1d0e8037fbfb7c270f3710ce24154e24b7031bea";
     owner= "liftoff";
     repo = "GateOne";
     sha256 = "1ghrawlqwv7wnck6alqpbwy9mpv0y21cw2jirrvsxaracmvgk6vv";
   };
 
-  propagatedBuildInputs = [tornado futures html5lib pkgs.openssl pkgs.cacert pkgs.openssh];
+  propagatedBuildInputs = [
+    cacert
+    openssh
+    openssl
+    python.pkgs.futures
+    python.pkgs.html5lib
+    python.pkgs.tornado_4
+  ];
 
   postInstall=''
-    cp -R "$out/gateone/"* $out/lib/python2.7/site-packages/gateone
+    cp -R "$out/gateone/"* $out/${python.sitePackages}/gateone
   '';
 
   meta = with stdenv.lib; {
@@ -31,5 +38,4 @@ buildPythonPackage rec {
     maintainers = with maintainers; [ tomberek ];
     license = licenses.gpl3;
   };
-
 }
