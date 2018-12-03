@@ -1,6 +1,7 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi
+, sphinx
 }:
 
 buildPythonPackage rec {
@@ -11,6 +12,8 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "02f02a676d6baabb758a20c7a479d58648e0f64f13e07d1b388e9bb2afe86a09";
   };
+
+  propagatedBuildInputs = [ sphinx ];
 
   meta = with stdenv.lib; {
     description = "ReadTheDocs.org theme for Sphinx";
