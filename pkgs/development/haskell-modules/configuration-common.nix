@@ -948,9 +948,6 @@ self: super: {
   # Tries to read a file it is not allowed to in the test suite
   load-env = dontCheck super.load-env;
 
-  # https://github.com/yesodweb/Shelly.hs/issues/162
-  shelly = dontCheck super.shelly;
-
   # hledger needs a newer megaparsec version than we have in LTS 12.x.
   hledger-lib = super.hledger-lib.overrideScope (self: super: {
     cassava-megaparsec = self.cassava-megaparsec_2_0_0;
