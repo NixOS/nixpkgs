@@ -4486,7 +4486,7 @@ with pkgs;
   # ntfsprogs are merged into ntfs-3g
   ntfsprogs = pkgs.ntfs3g;
 
-  ntfy = pythonPackages.ntfy;
+  ntfy = callPackage ../tools/misc/ntfy {};
 
   ntopng = callPackage ../tools/networking/ntopng { };
 
