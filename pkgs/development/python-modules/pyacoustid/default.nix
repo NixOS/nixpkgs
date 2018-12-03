@@ -17,8 +17,6 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ requests audioread ];
 
-  patches = [ ./pyacoustid-py3.patch ];
-
   postPatch = ''
     sed -i \
         -e '/^FPCALC_COMMAND *=/s|=.*|= "${pkgs.chromaprint}/bin/fpcalc"|' \
