@@ -3410,6 +3410,8 @@ with pkgs;
 
   jp2a = callPackage ../applications/misc/jp2a { };
 
+  jpeginfo = callPackage ../applications/graphics/jpeginfo { };
+
   jpegoptim = callPackage ../applications/graphics/jpegoptim { };
 
   jpegrescan = callPackage ../applications/graphics/jpegrescan { };
