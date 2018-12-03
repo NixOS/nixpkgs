@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
       Trivial, but useful nonetheless.
     '';
     homepage = http://gtk2fontsel.sourceforge.net/;
-    downloadPage = http://sourceforge.net/projects/gtk2fontsel/;
+    downloadPage = https://sourceforge.net/projects/gtk2fontsel/;
     license = licenses.gpl2;
     maintainers = [ maintainers.prikhi ];
     platforms = platforms.linux;

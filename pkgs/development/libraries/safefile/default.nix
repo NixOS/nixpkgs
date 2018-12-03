@@ -13,6 +13,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = ''
+      #!${stdenv.shell}
       cd ${toString ./.}
       ${toString path}/pkgs/build-support/upstream-updater/update-walker.sh default.nix
     '';

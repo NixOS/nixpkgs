@@ -64,7 +64,7 @@ let
   gtdialog_url   = "http://foicica.com/gtdialog/download/" + gtdialog_zip;
   lspawn_url     = "http://foicica.com/lspawn/download/" + lspawn_zip;
 
-  scintilla_url  = "http://prdownloads.sourceforge.net/scintilla/" + scintilla_tgz;
+  scintilla_url  = "mirror://sourceforge/scintilla/" + scintilla_tgz;
   lua_url        = "http://www.lua.org/ftp/" + lua_tgz;
   lpeg_url       = "http://www.inf.puc-rio.br/~roberto/lpeg/" + lpeg_tgz;
   lfs_url        = "https://github.com/keplerproject/luafilesystem/archive/" + lfs_zip;

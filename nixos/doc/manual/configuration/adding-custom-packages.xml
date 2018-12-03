@@ -31,7 +31,7 @@ $ cd nixpkgs
  <para>
   The second possibility is to add the package outside of the Nixpkgs tree. For
   instance, here is how you specify a build of the
-  <link xlink:href="http://www.gnu.org/software/hello/">GNU Hello</link>
+  <link xlink:href="https://www.gnu.org/software/hello/">GNU Hello</link>
   package directly in <filename>configuration.nix</filename>:
 <programlisting>
 <xref linkend="opt-environment.systemPackages"/> =

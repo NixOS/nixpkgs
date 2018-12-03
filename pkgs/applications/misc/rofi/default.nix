@@ -37,6 +37,6 @@ stdenv.mkDerivation rec {
     homepage = https://davedavenport.github.io/rofi;
     license = licenses.mit;
     maintainers = with maintainers; [ mbakke garbas ma27 ];
-    platforms = with platforms; unix;
+    platforms = with platforms; linux;
   };
 }

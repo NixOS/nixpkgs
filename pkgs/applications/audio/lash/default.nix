@@ -30,7 +30,7 @@ stdenv.mkDerivation  rec {
     longDescription = ''
       Session management system for GNU/Linux audio applications.
     '';
-    homepage = http://www.nongnu.org/lash;
+    homepage = https://www.nongnu.org/lash;
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.goibhniu ];

@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   version = "2.0.15";
   
   src = fetchurl {
-    url = "http://download.savannah.gnu.org/releases/xlog/${name}.tar.gz";
+    url = "https://download.savannah.gnu.org/releases/xlog/${name}.tar.gz";
     sha256 = "0an883wqw3zwpw8nqinm9cb17hp2xw9vf603k4l2345p61jqdw2j";
   };
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
          location in latitude and longitude and distance and heading in kilometers or miles,
          both for short and long path. 
       '';
-    homepage = http://www.nongnu.org/xlog;
+    homepage = https://www.nongnu.org/xlog;
     maintainers = [ maintainers.mafo ];
     license = licenses.gpl3;
     platforms = platforms.unix;

@@ -39,7 +39,9 @@
 
   <itemizedlist>
    <listitem>
-    <para />
+    <para>
+     <literal>./programs/nm-applet.nix</literal>
+    </para>
    </listitem>
   </itemizedlist>
  </section>

@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ perl makeWrapper ];
 
   src = fetchurl {
-    url = "http://download.savannah.gnu.org/releases/storebackup/storeBackup-${version}.tar.bz2";
+    url = "https://download.savannah.gnu.org/releases/storebackup/storeBackup-${version}.tar.bz2";
     sha256 = "0y4gzssc93x6y93mjsxm5b5cdh68d7ffa43jf6np7s7c99xxxz78";
   };
 
@@ -103,7 +103,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A backup suite that stores files on other disks";
-    homepage = http://savannah.nongnu.org/projects/storebackup;
+    homepage = https://savannah.nongnu.org/projects/storebackup;
     license = stdenv.lib.licenses.gpl3Plus;
     maintainers = [stdenv.lib.maintainers.marcweber];
     platforms = stdenv.lib.platforms.linux;

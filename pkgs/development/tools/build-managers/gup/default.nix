@@ -16,6 +16,7 @@ stdenv.mkDerivation rec {
     cp -r python/bin $out/bin
   '';
   passthru.updateScript = ''
+    #!${stdenv.shell}
     set -e
     echo
     cd ${toString ./.}
