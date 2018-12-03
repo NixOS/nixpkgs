@@ -1,4 +1,4 @@
-{stdenv, fetchurl}:
+{stdenv, fetchurl, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   name = "gperf-3.0.4";
@@ -8,6 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "0gnnm8iqcl52m8iha3sxrzrl9mcyhg7lfrhhqgdn4zj00ji14wbn";
   };
 
+  nativeBuildInputs = [ autoreconfHook ];
+  patches = [ ./gperf-ar-fix.patch ];
   meta = {
     description = "Perfect hash function generator";
 
