@@ -12,13 +12,12 @@ buildPythonPackage rec {
   };
 
   postPatch = ''
-    # dateutil upper bound was just to keep compatibility with Python 2.6
-    # see https://github.com/spulec/moto/pull/1519 and https://github.com/boto/botocore/pull/1402
     # regarding aws-xray-sdk: https://github.com/spulec/moto/commit/31eac49e1555c5345021a252cb0c95043197ea16
+    # regarding python-jose: https://github.com/spulec/moto/pull/1927
     substituteInPlace setup.py \
-      --replace "python-dateutil<2.7.0" "python-dateutil<3.0.0" \
       --replace "aws-xray-sdk<0.96," "aws-xray-sdk" \
-      --replace "jsondiff==1.1.1" "jsondiff>=1.1.1"
+      --replace "jsondiff==1.1.1" "jsondiff>=1.1.1" \
+      --replace "python-jose<3.0.0" "python-jose<4.0.0"
   '';
 
   propagatedBuildInputs = [
