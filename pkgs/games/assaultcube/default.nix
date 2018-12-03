@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
 
   # master branch has legacy (1.2.0.2) protocol 1201 and gcc 6 fix.
   pname = "assaultcube";
-  version = "01052017";
+  version = "unstable-2017-05-01";
   name = "${pname}-${version}";
 
   meta = {
