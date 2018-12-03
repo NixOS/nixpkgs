@@ -15446,6 +15446,8 @@ with pkgs;
 
   medio = callPackage ../data/fonts/medio { };
 
+  mnist = callPackage ../data/machine-learning/mnist { };
+
   mobile-broadband-provider-info = callPackage ../data/misc/mobile-broadband-provider-info { };
 
   monoid = callPackage ../data/fonts/monoid { };
