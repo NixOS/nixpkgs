@@ -3,7 +3,7 @@
 , libmng, librsvg, libwmf, zlib, libzip, ghostscript, aalib, shared-mime-info
 , python2Packages, libexif, gettext, xorg, glib-networking, libmypaint, gexiv2
 , harfbuzz, mypaint-brushes, libwebp, libheif, libgudev, openexr
-, AppKit, Cocoa, gtk-mac-integration }:
+, AppKit, Cocoa, gtk-mac-integration-gtk2, cf-private }:
 
 let
   inherit (python2Packages) pygtk wrapPython python;
@@ -23,7 +23,7 @@ in stdenv.mkDerivation rec {
     freetype fontconfig lcms libpng libjpeg poppler poppler_data libtiff openexr
     libmng librsvg libwmf zlib libzip ghostscript aalib shared-mime-info libwebp libheif
     python pygtk libexif xorg.libXpm glib-networking libmypaint mypaint-brushes
-  ] ++ stdenv.lib.optionals stdenv.isDarwin [ AppKit Cocoa gtk-mac-integration ]
+  ] ++ stdenv.lib.optionals stdenv.isDarwin [ AppKit Cocoa gtk-mac-integration-gtk2 cf-private ]
     ++ stdenv.lib.optionals stdenv.isLinux [ libgudev ];
 
   pythonPath = [ pygtk ];
@@ -60,7 +60,9 @@ in stdenv.mkDerivation rec {
     "--with-icc-directory=/var/run/current-system/sw/share/color/icc"
   ];
 
-  doCheck = true;
+  # on Darwin,
+  # test-eevl.c:64:36: error: initializer element is not a compile-time constant
+  doCheck = !stdenv.isDarwin;
 
   enableParallelBuilding = true;
 
