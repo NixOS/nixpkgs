@@ -72,27 +72,15 @@ let
         makestep 0.1 3
       '';
 
-      # Enable CockroachDB. In order to ensure that Chrony has performed its
-      # first synchronization at boot-time (which may take ~10 seconds) before
-      # starting CockroachDB, we block the ExecStartPre directive using the
-      # 'waitsync' command. This ensures Cockroach doesn't have its system time
-      # leap forward out of nowhere during startup/execution.
-      #
-      # Note that the default threshold for NTP-based skew in CockroachDB is
-      # ~500ms by default, so making sure it's started *after* accurate time
-      # synchronization is extremely important.
+      # Enable CockroachDB. Note that Cockroach will not start until
+      # time-sync.target is active, which will require Chrony to perform its
+      # first full synchronization.
       services.cockroachdb.enable = true;
       services.cockroachdb.insecure = true;
       services.cockroachdb.openPorts = true;
       services.cockroachdb.locality = locality;
       services.cockroachdb.listen.address = myAddr;
       services.cockroachdb.join = lib.mkIf (joinNode != null) joinNode;
-
-      # Hold startup until Chrony has performed its first measurement (which
-      # will probably result in a full timeskip, thanks to makestep)
-      systemd.services.cockroachdb.preStart = ''
-        ${pkgs.chrony}/bin/chronyc waitsync
-      '';
     };
 
 in import ./make-test.nix ({ pkgs, ...} : {
