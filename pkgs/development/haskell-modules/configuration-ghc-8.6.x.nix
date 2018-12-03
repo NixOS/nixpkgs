@@ -54,9 +54,6 @@ self: super: {
   free = self.free_5_1;
   haddock-library = dontCheck super.haddock-library_1_7_0;
   HaTeX = doJailbreak super.HaTeX;
-  hledger = doJailbreak super.hledger;
-  hledger-lib = doJailbreak super.hledger-lib;
-  hledger-ui = doJailbreak super.hledger-ui;
   hpack = self.hpack_0_31_1;
   hslua = self.hslua_1_0_1;
   hslua-module-text = self.hslua-module-text_0_2_0;
