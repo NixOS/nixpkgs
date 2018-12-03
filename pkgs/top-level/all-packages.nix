@@ -3675,6 +3675,8 @@ in
 
   kdiff3 = libsForQt5.callPackage ../tools/text/kdiff3 { };
 
+  kube-router = callPackage ../applications/networking/cluster/kube-router { };
+
   kwalletcli = libsForQt5.callPackage ../tools/security/kwalletcli { };
 
   peruse = libsForQt5.callPackage ../tools/misc/peruse { };
