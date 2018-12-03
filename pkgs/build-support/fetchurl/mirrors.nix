@@ -70,15 +70,14 @@ rec {
     ftp://ftp.funet.fi/pub/mirrors/ftp.kernel.org/pub/
   ];
 
-  # Mirrors of ftp://ftp.kde.org/pub/kde/.
+  # Mirrors from https://download.kde.org/extra/download-mirrors.html
   kde = [
-    "http://download.kde.org/download.php?url="
+    "https://download.kde.org/download.php?url="
     https://ftp.gwdg.de/pub/linux/kde/
     https://mirrors.ocf.berkeley.edu/kde/
     http://mirrors.mit.edu/kde/
-    ftp://ftp.heanet.ie/mirrors/ftp.kde.org/
-    ftp://ftp.kde.org/pub/kde/
-    ftp://ftp.funet.fi/pub/mirrors/ftp.kde.org/pub/kde/
+    https://mirrors.ustc.edu.cn/kde/
+    http://ftp.funet.fi/pub/mirrors/ftp.kde.org/pub/kde/
   ];
 
   # Gentoo files.
