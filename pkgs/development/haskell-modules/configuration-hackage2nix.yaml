@@ -45,7 +45,7 @@ default-package-overrides:
   - base-compat-batteries ==0.10.1
   # Newer versions don't work in LTS-12.x
   - cassava-megaparsec < 2
-  # LTS Haskell 12.20
+  # LTS Haskell 12.21
   - abstract-deque ==0.3
   - abstract-deque-tests ==0.3
   - abstract-par ==0.3.3
@@ -337,8 +337,8 @@ default-package-overrides:
   - cabal-doctest ==1.0.6
   - cabal-rpm ==0.12.6
   - cache ==0.1.1.1
-  - cachix ==0.1.2
-  - cachix-api ==0.1.0.2
+  - cachix ==0.1.3
+  - cachix-api ==0.1.0.3
   - cairo ==0.13.5.0
   - calendar-recycling ==0.0.0.1
   - call-stack ==0.1.0
@@ -361,7 +361,7 @@ default-package-overrides:
   - cereal-time ==0.1.0.0
   - cereal-vector ==0.2.0.1
   - cfenv ==0.1.0.0
-  - chan ==0.0.3
+  - chan ==0.0.4
   - ChannelT ==0.0.0.7
   - charset ==0.3.7.1
   - charsetdetect-ae ==1.1.0.4
@@ -433,7 +433,7 @@ default-package-overrides:
   - composition-prelude ==1.5.3.1
   - compressed ==3.11
   - concise ==0.1.0.1
-  - concurrency ==1.6.1.0
+  - concurrency ==1.6.2.0
   - concurrent-extra ==0.7.0.12
   - concurrent-output ==1.10.9
   - concurrent-split ==0.0.1.1
@@ -535,7 +535,7 @@ default-package-overrides:
   - data-default-instances-old-locale ==0.0.1
   - data-diverse ==4.6.0.0
   - data-diverse-lens ==4.3.0.0
-  - datadog ==0.2.2.0
+  - datadog ==0.2.3.0
   - data-dword ==0.3.1.2
   - data-endian ==0.1.1
   - data-fix ==0.2.0
@@ -732,8 +732,8 @@ default-package-overrides:
   - fileplow ==0.1.0.0
   - filter-logger ==0.6.0.0
   - filtrable ==0.1.1.0
-  - fin ==0.0.1
   - Fin ==0.2.6.0
+  - fin ==0.0.1
   - FindBin ==0.0.5
   - find-clumpiness ==0.2.3.1
   - fingertree ==0.1.4.1
@@ -982,7 +982,7 @@ default-package-overrides:
   - histogram-fill ==0.9.1.0
   - hjsmin ==0.2.0.2
   - hlibgit2 ==0.18.0.16
-  - hlibsass ==0.1.7.0
+  - hlibsass ==0.1.8.0
   - hmatrix ==0.19.0.0
   - hmatrix-backprop ==0.1.2.3
   - hmatrix-gsl ==0.19.0.1
@@ -1097,7 +1097,7 @@ default-package-overrides:
   - hw-mquery ==0.1.0.1
   - hworker ==0.1.0.1
   - hw-parser ==0.0.0.3
-  - hw-prim ==0.6.2.20
+  - hw-prim ==0.6.2.22
   - hw-rankselect ==0.10.0.3
   - hw-rankselect-base ==0.3.2.1
   - hw-string-parse ==0.0.0.4
@@ -1198,7 +1198,7 @@ default-package-overrides:
   - json-rpc-server ==0.2.6.0
   - json-schema ==0.7.4.2
   - JuicyPixels ==3.2.9.5
-  - JuicyPixels-blp ==0.1.0.1
+  - JuicyPixels-blp ==0.1.1.0
   - JuicyPixels-extra ==0.3.0
   - JuicyPixels-scale-dct ==0.1.2
   - justified-containers ==0.3.0.0
@@ -1294,7 +1294,7 @@ default-package-overrides:
   - log-postgres ==0.7.0.2
   - long-double ==0.1
   - loop ==0.3.0
-  - lrucache ==1.2.0.0
+  - lrucache ==1.2.0.1
   - lrucaching ==0.3.3
   - lucid ==2.9.11
   - lucid-extras ==0.1.0.1
@@ -1785,7 +1785,7 @@ default-package-overrides:
   - rvar ==0.2.0.3
   - s3-signer ==0.5.0.0
   - safe ==0.3.17
-  - safecopy ==0.9.4.1
+  - safecopy ==0.9.4.2
   - safe-exceptions ==0.1.7.0
   - safe-exceptions-checked ==0.1.0
   - safe-foldable ==0.1.0.0
@@ -2130,7 +2130,7 @@ default-package-overrides:
   - transformers-fix ==1.0
   - transformers-lift ==0.2.0.1
   - traverse-with-class ==1.0.0.0
-  - tree-diff ==0.0.1
+  - tree-diff ==0.0.2
   - tree-fun ==0.8.1.0
   - trifecta ==2
   - triplesec ==0.1.2.0
@@ -2323,7 +2323,7 @@ default-package-overrides:
   - x509-validation ==1.6.11
   - Xauth ==0.1
   - xdg-basedir ==0.2.2
-  - xeno ==0.3.4
+  - xeno ==0.3.5.1
   - xenstore ==0.1.1
   - xhtml ==3000.2.2.1
   - xls ==0.1.1
