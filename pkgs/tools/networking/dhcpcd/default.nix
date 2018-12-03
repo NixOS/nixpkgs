@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, udev, runtimeShellPackage }:
+{ stdenv, fetchurl, pkgconfig, udev, runtimeShellPackage, runtimeShell }:
 
 stdenv.mkDerivation rec {
   # when updating this to >=7, check, see previous reverts:
@@ -15,6 +15,10 @@ stdenv.mkDerivation rec {
     udev
     runtimeShellPackage # So patchShebangs finds a bash suitable for the installed scripts
   ];
+
+  prePatch = ''
+    substituteInPlace hooks/dhcpcd-run-hooks.in --replace /bin/sh ${runtimeShell}
+  '';
 
   preConfigure = "patchShebangs ./configure";
 
