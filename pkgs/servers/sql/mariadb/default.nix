@@ -180,11 +180,11 @@ everything = stdenv.mkDerivation (common // {
 
 connector-c = stdenv.mkDerivation rec {
   name = "mariadb-connector-c-${version}";
-  version = "2.3.6";
+  version = "2.3.7";
 
   src = fetchurl {
     url = "https://downloads.mariadb.org/interstitial/connector-c-${version}/mariadb-connector-c-${version}-src.tar.gz/from/http%3A//nyc2.mirrors.digitalocean.com/mariadb/";
-    sha256 = "15iy5iqp0njbwbn086x2dq8qnbkaci7ydvi84cf5z8fxvljis9vb";
+    sha256 = "13izi35vvxhiwl2dsnqrz75ciisy2s2k30giv7hrm01qlwnmiycl";
     name   = "mariadb-connector-c-${version}-src.tar.gz";
   };
 
