@@ -13602,6 +13602,7 @@ with pkgs;
 
   mariadb = callPackage ../servers/sql/mariadb {
     asio = asio_1_10;
+    jemalloc = jemalloc.override ({ disableInitExecTls = true; });
     inherit (darwin) cctools;
     inherit (pkgs.darwin.apple_sdk.frameworks) CoreServices;
   };
