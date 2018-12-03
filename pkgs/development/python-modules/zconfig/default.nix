@@ -15,8 +15,7 @@ buildPythonPackage rec {
     sha256 = "22d7fd3b8b12405f4856898995fd69e40bbe239c4c689502ee6d766a7368f585";
   };
 
-  patches = [ ./skip-broken-test.patch ]
-    ++ stdenv.lib.optional stdenv.hostPlatform.isMusl ./remove-setlocale-test.patch;
+  patches = stdenv.lib.optional stdenv.hostPlatform.isMusl ./remove-setlocale-test.patch;
 
   buildInputs = [ manuel docutils ];
   propagatedBuildInputs = [ zope_testrunner ];
