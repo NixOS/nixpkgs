@@ -1,4 +1,5 @@
 { stdenv, fetchurl, jre, makeWrapper }:
+
 stdenv.mkDerivation rec {
   name = "mill-${version}";
   version = "0.3.5";
@@ -13,7 +14,7 @@ stdenv.mkDerivation rec {
   unpackPhase = "true";
   dontConfigure = true;
   dontBuild = true;
-    
+
   installPhase = ''
     runHook preInstall
     install -Dm555 "$src" "$out/bin/.mill-wrapped"
@@ -36,5 +37,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ scalavision ];
     platforms = stdenv.lib.platforms.all;
   };
-
 }

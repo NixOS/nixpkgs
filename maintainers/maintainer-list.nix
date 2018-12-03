@@ -3861,6 +3861,11 @@
     github = "sboosali";
     name = "Sam Boosalis";
   };
+  scalavision = {
+    email = "scalavision@gmail.com";
+    github = "scalavision";
+    name = "Tom Sorlie";
+  };
   schmitthenner = {
     email = "development@schmitthenner.eu";
     github = "fkz";
@@ -4936,10 +4941,5 @@
     email = "massimo@typish.io";
     github = "mredaelli";
     name = "Massimo Redaelli";
-  };
-  scalavision = {
-    email = "scalavision@gmail.com";
-    github = "scalavision";
-    name = "Tom Sorlie";
   };
 }
