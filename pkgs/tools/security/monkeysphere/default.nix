@@ -31,8 +31,10 @@ stdenv.mkDerivation rec {
     DESTDIR=$(out)
   '';
 
-  # Not all checks pass yet (NixOS specific problems) and the tests "drain"
-  # entropy (apparently GnuPG still uses /dev/random).
+  # The tests "drain" entropy (GnuPG still uses /dev/random) and they don't run
+  # inside of the sandbox, because nixbld isn't allowed to login via SSH
+  # (/etc/passwd: "nixbld:x:1000:100:Nix build user:/build:/noshell",
+  # sshd: "User nixbld not allowed because shell /noshell does not exist").
   doCheck = false;
   preCheck = ''
     patchShebangs tests/

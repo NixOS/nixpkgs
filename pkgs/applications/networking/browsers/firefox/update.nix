@@ -1,4 +1,5 @@
 { writeScript
+, stdenv
 , lib
 , xidel
 , common-updater-scripts
@@ -13,6 +14,7 @@
 }:
 
 writeScript "update-${attrPath}" ''
+  #!${stdenv.shell}
   PATH=${lib.makeBinPath [ common-updater-scripts coreutils curl gnugrep gnused xidel ]}
 
   url=${baseUrl}

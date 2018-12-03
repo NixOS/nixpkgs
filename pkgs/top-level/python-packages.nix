@@ -1327,6 +1327,11 @@ in {
     pythonPackages = self;
   });
 
+  opencv4 = toPythonModule (pkgs.opencv4.override {
+    enablePython = true;
+    pythonPackages = self;
+  });
+
   openidc-client = callPackage ../development/python-modules/openidc-client {};
 
   idna = callPackage ../development/python-modules/idna { };
@@ -3125,8 +3130,6 @@ in {
   notmuch = callPackage ../development/python-modules/notmuch { };
 
   emoji = callPackage ../development/python-modules/emoji { };
-
-  ntfy = callPackage ../development/python-modules/ntfy { };
 
   ntplib = callPackage ../development/python-modules/ntplib { };
 

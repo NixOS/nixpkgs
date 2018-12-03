@@ -1,4 +1,4 @@
-{ lib, writeScript, coreutils, curl, gnugrep, gnused, jq, common-updater-scripts, nix }:
+{ stdenv, lib, writeScript, coreutils, curl, gnugrep, gnused, jq, common-updater-scripts, nix }:
 { name, ignored-versions ? "^2014\\.|^v[0-9]+" }:
 
 let
@@ -9,6 +9,7 @@ let
 in
 
 writeScript "update-${packageName}" ''
+  #!${stdenv.shell}
   set -o errexit
   set -x
 

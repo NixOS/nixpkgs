@@ -191,7 +191,7 @@ stdenv.mkDerivation {
   # update with:
   # $ nix-shell maintainers/scripts/update.nix --argstr package firefox-bin-unwrapped
   passthru.updateScript = import ./update.nix {
-    inherit name channel writeScript xidel coreutils gnused gnugrep gnupg curl;
+    inherit stdenv name channel writeScript xidel coreutils gnused gnugrep gnupg curl;
     baseUrl =
       if channel == "devedition"
         then "http://archive.mozilla.org/pub/devedition/releases/"

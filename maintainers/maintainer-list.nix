@@ -2052,6 +2052,11 @@
     github = "jluttine";
     name = "Jaakko Luttinen";
   };
+  jmagnusj = {
+    email = "jmagnusj@gmail.com";
+    github = "magnusjonsson";
+    name = "Johan Magnus Jonsson";
+  };
   jmettes = {
     email = "jonathan@jmettes.com";
     github = "jmettes";
@@ -3855,6 +3860,11 @@
     email = "SamBoosalis@gmail.com";
     github = "sboosali";
     name = "Sam Boosalis";
+  };
+  scalavision = {
+    email = "scalavision@gmail.com";
+    github = "scalavision";
+    name = "Tom Sorlie";
   };
   schmitthenner = {
     email = "development@schmitthenner.eu";
