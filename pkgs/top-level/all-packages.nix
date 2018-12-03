@@ -8644,8 +8644,6 @@ with pkgs;
 
   iozone = callPackage ../development/tools/misc/iozone { };
 
-  ired = callPackage ../development/tools/analysis/radare/ired.nix { };
-
   itstool = callPackage ../development/tools/misc/itstool { };
 
   jam = callPackage ../development/tools/build-managers/jam { };
@@ -8860,15 +8858,6 @@ with pkgs;
   qtcreator = libsForQt5.callPackage ../development/tools/qtcreator { };
 
   r10k = callPackage ../tools/system/r10k { };
-
-  radare = callPackage ../development/tools/analysis/radare {
-    inherit (gnome2) vte;
-    lua = lua5;
-    useX11 = config.radare.useX11 or false;
-    pythonBindings = config.radare.pythonBindings or false;
-    rubyBindings = config.radare.rubyBindings or false;
-    luaBindings = config.radare.luaBindings or false;
-  };
 
   inherit (callPackages ../development/tools/analysis/radare2 {
     inherit (gnome2) vte;
