@@ -110,6 +110,10 @@ rec {
     config = "arm-none-eabi";
     libc = "newlib";
   };
+  armhf-embedded = {
+    config = "arm-none-eabihf";
+    libc = "newlib";
+  };
 
   aarch64-embedded = {
     config = "aarch64-none-elf";
