@@ -18,27 +18,17 @@ in {
   };
 
   config = mkIf cfg.enable {
-    systemd.user = {
-      sockets.urxvtd = {
-        description = "socket for urxvtd, the urxvt terminal daemon";
-        wantedBy = [ "graphical-session.target" ];
-        partOf = [ "graphical-session.target" ];
-        socketConfig = {
-          ListenStream = "%t/urxvtd-socket";
-        };
+    systemd.user.services.urxvtd = {
+      description = "urxvt terminal daemon";
+      wantedBy = [ "graphical-session.target" ];
+      partOf = [ "graphical-session.target" ];
+      path = [ pkgs.xsel ];
+      serviceConfig = {
+        ExecStart = "${pkgs.rxvt_unicode-with-plugins}/bin/urxvtd -o";
+        Environment = "RXVT_SOCKET=%t/urxvtd-socket";
+        Restart = "on-failure";
+        RestartSec = "5s";
       };
-
-      services.urxvtd = {
-        description = "urxvt terminal daemon";
-        path = [ pkgs.xsel ];
-        serviceConfig = {
-          ExecStart = "${pkgs.rxvt_unicode-with-plugins}/bin/urxvtd -o";
-          Environment = "RXVT_SOCKET=%t/urxvtd-socket";
-          Restart = "on-failure";
-          RestartSec = "5s";
-        };
-      };
-
     };
 
     environment.systemPackages = [ pkgs.rxvt_unicode-with-plugins ];

@@ -861,7 +861,8 @@ with pkgs;
     filebeat6
     heartbeat6
     metricbeat6
-    packetbeat6;
+    packetbeat6
+    journalbeat6;
 
   filebeat = filebeat6;
   heartbeat = heartbeat6;
@@ -2328,7 +2329,7 @@ with pkgs;
 
   # The latest version used by elasticsearch, logstash, kibana and the the beats from elastic.
   elk5Version = "5.6.9";
-  elk6Version = "6.3.2";
+  elk6Version = "6.5.1";
 
   elasticsearch5 = callPackage ../servers/search/elasticsearch/5.x.nix { };
   elasticsearch6 = callPackage ../servers/search/elasticsearch { };
@@ -3458,6 +3459,7 @@ with pkgs;
   kexectools = callPackage ../os-specific/linux/kexectools { };
 
   keybase = callPackage ../tools/security/keybase {
+    inherit (darwin) cf-private;
     # Reasoning for the inherited apple_sdk.frameworks:
     # 1. specific compiler errors about: AVFoundation, AudioToolbox, MediaToolbox
     # 2. the rest are added from here: https://github.com/keybase/client/blob/68bb8c893c5214040d86ea36f2f86fbb7fac8d39/go/chat/attachments/preview_darwin.go#L7
