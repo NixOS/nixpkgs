@@ -5004,6 +5004,8 @@ with pkgs;
 
   remarshal = callPackage ../development/tools/remarshal { };
 
+  rig = callPackage ../tools/misc/rig { };
+
   rocket = libsForQt5.callPackage ../tools/graphics/rocket { };
 
   rtaudio = callPackage ../development/libraries/audio/rtaudio { };
