@@ -5,12 +5,12 @@
 
 stdenv.mkDerivation rec {
   p_name  = "thunar";
-  ver_maj = "1.6";
-  ver_min = "10";
+  ver_maj = "1.8";
+  ver_min = "2";
 
   src = fetchurl {
     url = "mirror://xfce/src/xfce/${p_name}/${ver_maj}/Thunar-${ver_maj}.${ver_min}.tar.bz2";
-    sha256 = "7e9d24067268900e5e44d3325e60a1a2b2f8f556ec238ec12574fbea15fdee8a";
+    sha256 = "1fh6nn3ndpgmh9iawv49ppay0kbvic9mz2k2wqr8aha3lk428sm4";
   };
 
   name = "${p_name}-build-${ver_maj}.${ver_min}";
