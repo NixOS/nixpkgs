@@ -36,6 +36,7 @@ let
       multinomials = callPackage ../development/coq-modules/multinomials {};
       paco = callPackage ../development/coq-modules/paco {};
       QuickChick = callPackage ../development/coq-modules/QuickChick {};
+      simple-io = callPackage ../development/coq-modules/simple-io { };
       ssreflect = callPackage ../development/coq-modules/ssreflect { };
       stdpp = callPackage ../development/coq-modules/stdpp { };
       StructTact = callPackage ../development/coq-modules/StructTact {};
