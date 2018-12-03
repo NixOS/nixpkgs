@@ -15,7 +15,7 @@ in stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig libxslt ];
-  buildInputs = [ xz elf-header ];
+  buildInputs = [ xz ] ++ lib.optional stdenv.isDarwin elf-header;
 
   configureFlags = [
     "--sysconfdir=/etc"
