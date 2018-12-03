@@ -91,7 +91,7 @@ let
   allPackages = self: super:
     let res = import ./all-packages.nix
       { inherit lib noSysDirs config; }
-      res self;
+      res self super;
     in res;
 
   aliases = self: super: lib.optionalAttrs (config.allowAliases or true) (import ./aliases.nix lib self super);
