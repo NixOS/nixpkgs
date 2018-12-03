@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
       sha256 = "04a5ql6clig5zq9914i4iyrrxcc36w2hzmwsrl69rxnq8hwhw1ql";
     })
     (fetchpatch {
-      name = "fix-for-CVE-2018-16151-and-CVE-2018-16152.patch";
+      name = "CVE-2018-17540.patch";
       url = "https://download.strongswan.org/patches/28_gmp_pkcs1_overflow_patch/strongswan-4.4.0-5.7.0_gmp-pkcs1-overflow.patch";
       sha256 = "1h8m9rsqzkl71x25h1aavs5xkqm20083law339phfjlrpbjpnizp";
     })
