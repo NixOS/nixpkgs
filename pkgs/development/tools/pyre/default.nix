@@ -29,8 +29,6 @@ let
 
   src = pyre-src;
 
-  nativeBuildInputs = [ makeWrapper ];
-
   buildInputs = with ocamlPackages; [
     ocaml
     findlib
