@@ -259,6 +259,9 @@ rec {
    */
   buildStrictly = pkg: buildFromSdist (failOnAllWarnings pkg);
 
+  /* Disable core optimizations, significantly speeds up build time */
+  disableOptimization = pkg: appendConfigureFlag pkg "--disable-optimization";
+
   /* Turn on most of the compiler warnings and fail the build if any
      of them occur. */
   failOnAllWarnings = drv: appendConfigureFlag drv "--ghc-option=-Wall --ghc-option=-Werror";
