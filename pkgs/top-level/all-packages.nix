@@ -17878,6 +17878,8 @@ in
     lua = lua5_1;
   };
 
+  luppp = callPackage ../applications/audio/luppp { };
+
   lv2bm = callPackage ../applications/audio/lv2bm { };
 
   lynx = callPackage ../applications/networking/browsers/lynx { };
