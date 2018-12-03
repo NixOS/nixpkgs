@@ -2,32 +2,31 @@
 , buildPythonPackage
 , pythonOlder
 , fetchPypi
-, hypothesis
-, pytestcache
 , pytest
+, pytestcov
+, pytest-mock
+, hypothesis
 , glibcLocales
-, mock ? null
 , pathlib ? null
 }:
 
 buildPythonPackage rec {
   pname = "natsort";
-  version = "5.4.1";
+  version = "5.5.0";
 
   checkInputs = [
-    hypothesis
-    pytestcache
     pytest
+    pytestcov
+    pytest-mock
+    hypothesis
     glibcLocales
   ]
   # pathlib was made part of standard library in 3.5:
-  ++ (lib.optionals (pythonOlder "3.4") [ pathlib ])
-  # based on testing-requirements.txt:
-  ++ (lib.optionals (pythonOlder "3.3") [ mock ]);
+  ++ (lib.optionals (pythonOlder "3.4") [ pathlib ]);
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ae73b005135dc152e7b282b2d4cf19380d8cab4c4026461ee9f37bf3aa12e344";
+    sha256 = "e29031f37aa264145d6ad9acdab335479ce3636806fc7aa70b7675a2b2198d09";
   };
 
   # testing based on project's tox.ini
