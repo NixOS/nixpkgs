@@ -22187,6 +22187,8 @@ in
 
   openlilylib-fonts = callPackage ../misc/lilypond/fonts.nix { };
 
+  loop = callPackage ../tools/misc/loop { };
+
   mailcore2 = callPackage ../development/libraries/mailcore2 {
     icu = icu58;
   };
