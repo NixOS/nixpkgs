@@ -182,12 +182,12 @@ in rec {
   };
 
   perl526 = common {
-    version = "5.26.2";
-    sha256 = "03gpnxx1g6hvlh0v4aqx00580h787sfywp1vlvw64q2xcbm9qbsp";
+    version = "5.26.3";
+    sha256 = "14y46c1cnrfnd1k5nk6fj5w5vxna5xav6pmk44qaabr9x06y8nmp";
   };
 
   perl528 = common {
-    version = "5.28.0";
-    sha256 = "1a3f822lcl8dr8v0hk80yyhpzqlljg49z9flb48rs3nbsij9z4ky";
+    version = "5.28.1";
+    sha256 = "0iy3as4hnbjfyws4in3j9d6zhhjxgl5m95i5n9jy2bnzcpz8bgry";
   };
 }
