@@ -3960,6 +3960,8 @@ with pkgs;
 
   libpointmatcher = callPackage ../development/libraries/libpointmatcher { };
 
+  libnids = callPackage ../tools/networking/libnids { };
+
   libtorrent = callPackage ../tools/networking/p2p/libtorrent { };
 
   libmpack = callPackage ../development/libraries/libmpack { };
@@ -22983,6 +22985,8 @@ with pkgs;
   dnstracer = callPackage ../tools/networking/dnstracer {
     inherit (darwin) libresolv;
   };
+
+  dsniff = callPackage ../tools/networking/dsniff {};
 
   wal-g = callPackage ../tools/backup/wal-g {};
 
