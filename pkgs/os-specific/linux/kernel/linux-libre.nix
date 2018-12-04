@@ -1,6 +1,9 @@
 { stdenv, lib, fetchsvn, linux
 , scripts ? fetchsvn {
     url = "https://www.fsfla.org/svn/fsfla/software/linux-libre/releases/tags/";
+    
+    # Update this if linux_latest-libre fails to build.
+    # $ curl https://www.fsfla.org/svn/fsfla/software/linux-libre/releases/tags/ | grep -Eo 'Revision [0-9]+'
     rev = "15715";
     sha256 = "1mz1xv860ddxz7dfp4l6q25hlsh532aapvylq703jskgbzsfinxh";
   }
