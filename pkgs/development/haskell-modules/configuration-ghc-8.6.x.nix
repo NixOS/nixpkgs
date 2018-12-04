@@ -58,6 +58,7 @@ self: super: {
   hslua = self.hslua_1_0_1;
   hslua-module-text = self.hslua-module-text_0_2_0;
   hspec = self.hspec_2_6_0;
+  hspec-contrib = self.hspec-contrib_0_5_1;
   hspec-core = self.hspec-core_2_6_0;
   hspec-discover = self.hspec-discover_2_6_0;
   hspec-megaparsec = doJailbreak super.hspec-megaparsec;  # newer versions need megaparsec 7.x
