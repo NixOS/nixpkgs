@@ -12,6 +12,7 @@
   ./config/xdg/menus.nix
   ./config/xdg/mime.nix
   ./config/appstream.nix
+  ./config/xdg/sounds.nix
   ./config/gtk/gtk-icon-cache.nix
   ./config/gnu.nix
   ./config/i18n.nix
