@@ -2,6 +2,7 @@
 , fetchFromGitHub
 , buildPythonApplication
 , bash
+, bashInteractive
 , systemd
 , utillinux
 , boto
@@ -25,7 +26,7 @@ buildPythonApplication rec {
     for file in $(find google_compute_engine -type f); do
       substituteInPlace "$file" \
         --replace /bin/systemctl "${systemd}/bin/systemctl" \
-        --replace /bin/bash "${bash}/bin/bash" \
+        --replace /bin/bash "${bashInteractive}/bin/bash" \
         --replace /sbin/hwclock "${utillinux}/bin/hwclock"
 
       # SELinux tool ???  /sbin/restorecon
