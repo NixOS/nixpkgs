@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, flex, bison }:
+{ stdenv, fetchurl, flex, bison }:
 
 stdenv.mkDerivation rec {
   name = "libpcap-1.9.0";
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   preInstall = ''mkdir -p $out/bin'';
 
   meta = with stdenv.lib; {
-    homepage = http://www.tcpdump.org;
+    homepage = https://www.tcpdump.org;
     description = "Packet Capture Library";
     platforms = platforms.unix;
     maintainers = with maintainers; [ fpletz ];
