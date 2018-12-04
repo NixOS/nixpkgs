@@ -15482,6 +15482,8 @@ in
 
   nafees = callPackage ../data/fonts/nafees { };
 
+  nordic-polar = callPackage ../data/themes/nordic-polar { };
+
   inherit (callPackages ../data/fonts/noto-fonts {})
     noto-fonts noto-fonts-cjk noto-fonts-emoji noto-fonts-extra;
 
