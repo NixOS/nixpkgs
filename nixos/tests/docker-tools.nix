@@ -62,5 +62,9 @@ import ./make-test.nix ({ pkgs, ... }: {
       # Ensure Layered Docker images work
       $docker->succeed("docker load --input='${pkgs.dockerTools.examples.layered-image}'");
       $docker->succeed("docker run --rm ${pkgs.dockerTools.examples.layered-image.imageName}");
+
+      # Ensure building an image on top of a layered Docker images work
+      $docker->succeed("docker load --input='${pkgs.dockerTools.examples.layered-on-top}'");
+      $docker->succeed("docker run --rm ${pkgs.dockerTools.examples.layered-on-top.imageName}");
     '';
 })
