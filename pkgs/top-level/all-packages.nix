@@ -15440,6 +15440,8 @@ in
 
   man-pages = callPackage ../data/documentation/man-pages { };
 
+  materia-theme = callPackage ../data/themes/materia-theme { };
+
   material-icons = callPackage ../data/fonts/material-icons { };
 
   meslo-lg = callPackage ../data/fonts/meslo-lg {};
@@ -22198,9 +22200,6 @@ in
   martyr = callPackage ../development/libraries/martyr { };
 
   matcha = callPackage ../misc/themes/matcha { };
-
-  # previously known as flat-plat
-  materia-theme = callPackage ../misc/themes/materia-theme { };
 
   mess = callPackage ../misc/emulators/mess {
     inherit (pkgs.gnome2) GConf;
