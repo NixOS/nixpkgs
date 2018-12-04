@@ -4866,8 +4866,7 @@ in {
   ROPGadget = callPackage ../development/python-modules/ROPGadget { };
 
   # We need "normal" libxml2 and not the python package by the same name.
-  pywbem = disabledIf isPy36
-    (callPackage ../development/python-modules/pywbem { libxml2 = pkgs.libxml2; });
+  pywbem = callPackage ../development/python-modules/pywbem { libxml2 = pkgs.libxml2; };
 
   unicorn = callPackage ../development/python-modules/unicorn { };
 
