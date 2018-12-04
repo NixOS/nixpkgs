@@ -70,8 +70,8 @@ let
   };
 
   pjproject-27 = fetchurl {
-    url = http://www.pjsip.org/release/2.7.1/pjproject-2.7.1.tar.bz2;
-    sha256 = "09ii5hgl5s7grx4fiimcl3s77i385h7b3kwpfa2q0arbl1ibryjr";
+    url = http://www.pjsip.org/release/2.7.2/pjproject-2.7.2.tar.bz2;
+    sha256 = "0wiph6g51wanzwjjrpwsz63amgvly8g08jz033gnwqmppa584b4w";
   };
 
   mp3-202 = fetchsvn {
@@ -84,19 +84,19 @@ in
 {
 
   asterisk-lts = common {
-    version = "13.20.0";
-    sha256 = "a3d6d953f844867ea11e0be22ee6225049cd4f5870df6ab23454623bcfbc94d5";
+    version = "13.23.1";
+    sha256 = "c772acbfdddb9250bfe07f7e20a7efb6a79a6c123832727429486c78d44fc78c";
     externals = {
-      "externals_cache/pjproject-2.7.1.tar.bz2" = pjproject-27;
+      "externals_cache/pjproject-2.7.2.tar.bz2" = pjproject-27;
       "addons/mp3" = mp3-202;
     };
   };
 
   asterisk-stable = common {
-    version = "15.3.0";
-    sha256 = "f424f89f23b72f267ff9baab82d449bebbbf00c54e54fcd06b8fca13788b012c";
+    version = "15.6.1";
+    sha256 = "9cb86585fb4efcd86423fa7586e55d9d3c74fda43a2e0b1b9c9eb3742df73155";
     externals = {
-      "externals_cache/pjproject-2.7.1.tar.bz2" = pjproject-27;
+      "externals_cache/pjproject-2.7.2.tar.bz2" = pjproject-27;
       "addons/mp3" = mp3-202;
     };
   };
