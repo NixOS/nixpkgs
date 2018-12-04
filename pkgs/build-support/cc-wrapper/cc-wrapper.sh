@@ -137,6 +137,15 @@ source @out@/nix-support/add-hardening.sh
 extraAfter=($NIX_@infixSalt@_CFLAGS_COMPILE)
 extraBefore=(${hardeningCFlags[@]+"${hardeningCFlags[@]}"})
 
+# When enforcing purity, pretend gcc can't find the current date and
+# time
+if [[ "${NIX_ENFORCE_PURITY:-}" = 1 ]]; then
+    extraAfter=(-D__DATE__=\"???-??-????\"
+        -D__TIME__=\"??:??:??\"
+        -Wno-builtin-macro-redefined
+	"${extraAfter[@]}")
+fi
+
 if [ "$dontLink" != 1 ]; then
 
     # Add the flags that should only be passed to the compiler when
