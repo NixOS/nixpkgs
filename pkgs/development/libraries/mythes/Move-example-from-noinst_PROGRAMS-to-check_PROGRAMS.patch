@@ -1,0 +1,26 @@
+From 1f5af8770809f15f0f4a5d2cc59af1198cde2fdc Mon Sep 17 00:00:00 2001
+From: Neil Mayhew <neil@neil.mayhew.name>
+Date: Mon, 3 Dec 2018 16:41:57 -0700
+Subject: [PATCH] Move example from noinst_PROGRAMS to check_PROGRAMS
+Content-Type: text/plain; charset=utf-8
+
+---
+ Makefile.am | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/Makefile.am b/Makefile.am
+index c623df9..aba53b4 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -1,6 +1,7 @@
++AUTOMAKE_OPTIONS = foreign
+ ACLOCAL_AMFLAGS = -I m4
+ 
+-noinst_PROGRAMS = example
++check_PROGRAMS = example
+ 
+ dist_bin_SCRIPTS = th_gen_idx.pl
+ 
+-- 
+2.19.1
+

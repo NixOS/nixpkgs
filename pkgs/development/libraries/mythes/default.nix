@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, hunspell, ncurses, pkgconfig, perl }:
+{ stdenv, fetchurl, autoreconfHook, hunspell, pkgconfig, perl }:
 
 stdenv.mkDerivation rec {
   name = "mythes-1.2.4";
@@ -8,8 +8,10 @@ stdenv.mkDerivation rec {
     sha256 = "0prh19wy1c74kmzkkavm9qslk99gz8h8wmjvwzjc6lf8v2az708y";
   };
 
-  buildInputs = [ hunspell ];
-  nativeBuildInputs = [ ncurses pkgconfig perl ];
+  buildInputs = [ autoreconfHook hunspell ];
+  nativeBuildInputs = [ pkgconfig perl ];
+
+  patches = [ ./Move-example-from-noinst_PROGRAMS-to-check_PROGRAMS.patch ];
 
   meta = {
     homepage = http://hunspell.sourceforge.net/;
