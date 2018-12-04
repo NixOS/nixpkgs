@@ -79,6 +79,9 @@ stdenv.mkDerivation rec {
     # https://trac.sagemath.org/ticket/25260
     ./patches/numpy-1.15.1.patch
 
+    # https://trac.sagemath.org/ticket/26315
+    ./patches/giac-1.5.0.patch
+
     # needed for ntl update
     # https://trac.sagemath.org/ticket/25532
     (fetchpatch {

@@ -9,11 +9,11 @@ assert enableGUI -> libGLU_combined != null && xorg != null && fltk != null;
 stdenv.mkDerivation rec {
   name = "${attr}-${version}";
   attr = if enableGUI then "giac-with-xcas" else "giac";
-  version = "1.4.9-59"; # TODO try to remove preCheck phase on upgrade
+  version = "1.5.0-21"; # TODO try to remove preCheck phase on upgrade
 
   src = fetchurl {
     url = "https://www-fourier.ujf-grenoble.fr/~parisse/debian/dists/stable/main/source/giac_${version}.tar.gz";
-    sha256 = "0dv5p5y6gkrsmz3xa7fw87rjyabwdwk09mqb09kb7gai9n9dgayk";
+    sha256 = "1b9khiv0mk2xzw1rblm2jy6qsf8y6f9k7qy15sxpb21d72hzzbl2";
   };
 
   patches = stdenv.lib.optionals (!enableGUI) [
