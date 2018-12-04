@@ -1,0 +1,13 @@
+diff --git a/pygraphviz/agraph.py b/pygraphviz/agraph.py
+index 8f72024..2d8358e 100644
+--- a/pygraphviz/agraph.py
++++ b/pygraphviz/agraph.py
+@@ -1557,7 +1557,7 @@ class AGraph(object):
+         import os
+         import glob
+ 
+-        paths = os.environ["PATH"]
++        paths = '@graphvizPath@:' + os.environ["PATH"]
+         if os.name == "nt":
+             exe = ".exe"
+         else:
