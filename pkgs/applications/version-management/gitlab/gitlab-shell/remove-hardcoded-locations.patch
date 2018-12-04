@@ -25,7 +25,7 @@ index 435cb29..078c1df 100644
  
  func NewFromDir(dir string) (*Config, error) {
 -	return newFromFile(path.Join(dir, configFile))
-+	return newFromFile(path.Join(dir, "shell-config.yml"))
++	return newFromFile("/run/gitlab/shell-config.yml")
  }
  
  func newFromFile(filename string) (*Config, error) {
