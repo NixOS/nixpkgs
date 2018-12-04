@@ -93,14 +93,9 @@ self: super: {
     fdo-notify = if pkgs.stdenv.isLinux then self.fdo-notify else null;
     hinotify = if pkgs.stdenv.isLinux then self.hinotify else self.fsnotify;
   };
-  esqueleto = overrideSrc (addBuildDepend (dontCheck (dontHaddock super.esqueleto)) self.unliftio) {
-    src = pkgs.fetchFromGitHub {
-      owner = "bitemyapp";
-      repo = "esqueleto";
-      rev = "b81e0d951e510ebffca03c5a58658ad884cc6fbd";
-      sha256 = "0lz1qxms7cfg5p3j37inlych0r2fwhm8xbarcys3df9m7jy9nixa";
-    };
-  };
+
+  # https://github.com/bitemyapp/esqueleto/issues/105
+  esqueleto = markBrokenVersion "2.5.3" super.esqueleto;
 
   # Fix test trying to access /home directory
   shell-conduit = overrideCabal super.shell-conduit (drv: {
