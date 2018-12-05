@@ -20523,6 +20523,8 @@ in
 
   kobodeluxe = callPackage ../games/kobodeluxe { };
 
+  leela-zero = libsForQt5.callPackage ../games/leela-zero { };
+
   lgogdownloader = callPackage ../games/lgogdownloader { };
 
   liberal-crime-squad = callPackage ../games/liberal-crime-squad { };
