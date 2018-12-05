@@ -200,26 +200,6 @@ in
       };
     };
 
-    services.geoclue2.appConfig."gnome-datetime-panel" = {
-      isAllowed = true;
-      isSystem = true;
-    };
-
-    services.geoclue2.appConfig."gnome-color-panel" = {
-      isAllowed = true;
-      isSystem = true;
-    };
-
-    services.geoclue2.appConfig."org.gnome.Shell" = {
-      isAllowed = true;
-      isSystem = true;
-    };
-
-    services.geoclue2.appConfig."io.elementary.desktop.agent-geoclue2" = {
-      isAllowed = true;
-      isSystem = true;
-    };
-
     services.geoclue2.appConfig."epiphany" = {
       isAllowed = true;
       isSystem = false;
