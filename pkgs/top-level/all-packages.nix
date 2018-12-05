@@ -3528,6 +3528,8 @@ in
 
   jade = callPackage ../tools/text/sgml/jade { };
 
+  javafx-scene-builder = callPackage ../applications/editors/javafx-scene-builder { };
+
   jazzy = callPackage ../development/tools/jazzy { };
 
   jd = callPackage ../development/tools/jd { };
