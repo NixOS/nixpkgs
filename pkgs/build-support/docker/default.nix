@@ -157,7 +157,7 @@ rec {
         };
         inherit fromImage fromImageName fromImageTag;
 
-        buildInputs = [ utillinux e2fsprogs jshon rsync ];
+        buildInputs = [ utillinux e2fsprogs jshon rsync tarsum ];
       } ''
       rm -rf $out
 
@@ -292,18 +292,19 @@ rec {
         | jshon -d config \
         | jshon -s "1970-01-01T00:00:01Z" -i created > generic.json
 
+      mkdir layers
+      cd layers
       # WARNING!
       # The following code is fiddly w.r.t. ensuring every layer is
       # created, and that no paths are missed. If you change the
       # following head and tail call lines, double-check that your
       # code behaves properly when the number of layers equals:
       #      maxLayers-1, maxLayers, and maxLayers+1
-      head -n $((maxLayers - 1)) $paths | cat -n | xargs -P$NIX_BUILD_CORES -n2 ${./store-path-to-layer.sh}
+      head -n $((maxLayers - 1)) $paths | cat -n | xargs -P$NIX_BUILD_CORES -n2 ${./make-layer.sh} ../generic.json 0 0
       if [ $(cat $paths | wc -l) -ge $maxLayers ]; then
-        tail -n+$maxLayers $paths | xargs ${./store-path-to-layer.sh} $maxLayers
+        tail -n+$maxLayers $paths | xargs ${./make-layer.sh} ../generic.json 0 0 $maxLayers
       fi
-
-      echo "Finished building layer '$name'"
+      cd ..
 
       mv ./layers $out
     '';
@@ -324,21 +325,8 @@ rec {
     ''
       cp -r ${contents}/ ./layer
 
-      # Tar up the layer and throw it into 'layer.tar'.
-      echo "Packing layer..."
-      mkdir $out
-      tar -C layer --sort=name --mtime="@$SOURCE_DATE_EPOCH" --owner=${toString uid} --group=${toString gid} -cf $out/layer.tar .
-
-      # Compute a checksum of the tarball.
-      echo "Computing layer checksum..."
-      tarhash=$(tarsum < $out/layer.tar)
-
-      # Add a 'checksum' field to the JSON, with the value set to the
-      # checksum of the tarball.
-      cat ${baseJson} | jshon -s "$tarhash" -i checksum > $out/json
-
-      # Indicate to docker that we're using schema version 1.0.
-      echo -n "1.0" > $out/VERSION
+      cd layer
+      ${./make-layer.sh} ${baseJson} ${toString uid} ${toString gid} "$out" .
     '';
 
   # Create a "layer" (set of files).
@@ -378,21 +366,8 @@ rec {
         (cd layer; eval "$extraCommands")
       fi
 
-      # Tar up the layer and throw it into 'layer.tar'.
-      echo "Packing layer..."
-      mkdir $out
-      tar -C layer --hard-dereference --sort=name --mtime="@$SOURCE_DATE_EPOCH" --owner=${toString uid} --group=${toString gid} -cf $out/layer.tar .
-
-      # Compute a checksum of the tarball.
-      echo "Computing layer checksum..."
-      tarhash=$(tarsum < $out/layer.tar)
-
-      # Add a 'checksum' field to the JSON, with the value set to the
-      # checksum of the tarball.
-      cat ${baseJson} | jshon -s "$tarhash" -i checksum > $out/json
-
-      # Indicate to docker that we're using schema version 1.0.
-      echo -n "1.0" > $out/VERSION
+      cd layer
+      ${./make-layer.sh} ${baseJson} ${toString uid} ${toString gid} "$out" .
 
       echo "Finished building layer '${name}'"
     '';
@@ -465,18 +440,11 @@ rec {
       '';
 
       postUmount = ''
-        (cd layer; ${extraCommandsScript})
+        cd layer
 
-        echo "Packing layer..."
-        mkdir $out
-        tar -C layer --hard-dereference --sort=name --mtime="@$SOURCE_DATE_EPOCH" -cf $out/layer.tar .
+        (${extraCommandsScript})
 
-        # Compute the tar checksum and add it to the output json.
-        echo "Computing checksum..."
-        tarhash=$(${tarsum}/bin/tarsum < $out/layer.tar)
-        cat ${baseJson} | jshon -s "$tarhash" -i checksum > $out/json
-        # Indicate to docker that we're using schema version 1.0.
-        echo -n "1.0" > $out/VERSION
+        ${./make-layer.sh} ${baseJson} - - "$out" .
 
         echo "Finished building layer '${name}'"
       '';
