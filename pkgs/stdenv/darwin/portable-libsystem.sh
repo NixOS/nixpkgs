@@ -1,0 +1,10 @@
+# Make /nix/store/...-libSystem “portable” for static built binaries.
+# This just rewrites everything in $1/bin to use the
+# /usr/lib/libSystem.B.dylib that is provided on every macOS system.
+
+fixupOutputHooks+=('fixLibsystemRefs $prefix')
+
+fixLibsystemRefs() {
+  find "$1/bin" \
+    -exec install_name_tool -change @libsystem@ /usr/lib/libSystem.B.dylib {} \;
+}
