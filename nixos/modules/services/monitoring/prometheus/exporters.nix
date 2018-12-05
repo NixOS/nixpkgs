@@ -127,7 +127,7 @@ let
         serviceConfig.Restart = mkDefault "always";
         serviceConfig.PrivateTmp = mkDefault true;
         serviceConfig.WorkingDirectory = mkDefault /tmp;
-      } serviceOpts ] ++ optional (serviceOpts.serviceConfig.DynamicUser or false) {
+      } serviceOpts ] ++ optional (!(serviceOpts.serviceConfig.DynamicUser or false)) {
         serviceConfig.User = conf.user;
         serviceConfig.Group = conf.group;
       });
