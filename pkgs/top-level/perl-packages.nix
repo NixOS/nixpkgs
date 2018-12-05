@@ -11336,6 +11336,7 @@ let
       description = "Simple wrappers around ssh and scp commands.";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
+    buildInputs = [ NetSSH StringShellQuote ];
   };
 
   NetServer = buildPerlPackage {
