@@ -11852,7 +11852,9 @@ with pkgs;
 
     qca-qt5 = callPackage ../development/libraries/qca-qt5 { };
 
-    qmltermwidget = callPackage ../development/libraries/qmltermwidget { };
+    qmltermwidget = callPackage ../development/libraries/qmltermwidget {
+      inherit (darwin.apple_sdk.libs) utmp;
+    };
     qmlbox2d = libsForQt59.callPackage ../development/libraries/qmlbox2d { };
 
     qscintilla = callPackage ../development/libraries/qscintilla {
