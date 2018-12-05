@@ -13300,11 +13300,11 @@ let
     doCheck = false; /* creates files in HOME */
   };
 
-  RTClientREST = buildPerlPackage {
-    name = "RT-Client-REST-0.52";
+  RTClientREST = buildPerlModule {
+    name = "RT-Client-REST-0.54";
     src = fetchurl {
-      url = mirror://cpan/authors/id/D/DJ/DJZORT/RT-Client-REST-0.52.tar.gz;
-      sha256 = "d058b8aa0db21aa1734ac50ae557297f603c2be60fa95a1d85278dbd11e19500";
+      url = mirror://cpan/authors/id/D/DJ/DJZORT/RT-Client-REST-0.54.tar.gz;
+      sha256 = "bfe5c530732745b2ab5db0777bc0ecb27980b9da54d6ab2720c30eea41e0a074";
     };
     buildInputs = [ CGI HTTPServerSimple TestException ];
     meta = {
