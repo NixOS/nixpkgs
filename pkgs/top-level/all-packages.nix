@@ -3488,9 +3488,7 @@ in
     buildGoPackage = buildGo110Package;
   };
 
-  ipmitool = callPackage ../tools/system/ipmitool {
-    static = false;
-  };
+  ipmitool = callPackage ../tools/system/ipmitool { };
 
   ipmiutil = callPackage ../tools/system/ipmiutil {};
 
@@ -3982,8 +3980,6 @@ in
   libmpack = callPackage ../development/libraries/libmpack { };
 
   libiberty = callPackage ../development/libraries/libiberty { };
-
-  libiberty_static = libiberty.override { staticBuild = true; };
 
   libxc = callPackage ../development/libraries/libxc { };
 
@@ -4902,7 +4898,9 @@ in
   plowshare = callPackage ../tools/misc/plowshare { };
 
   pngcheck = callPackage ../tools/graphics/pngcheck {
-    zlib = zlibStatic;
+    zlib = zlib.override {
+      static = true;
+    };
   };
 
   pngcrush = callPackage ../tools/graphics/pngcrush { };
@@ -5210,7 +5208,7 @@ in
   routino = callPackage ../tools/misc/routino { };
 
   rq = callPackage ../development/tools/rq {
-    v8 = v8_static;
+    v8 = v8.override { static = true; };
   };
 
   rsnapshot = callPackage ../tools/backup/rsnapshot { };
@@ -8028,7 +8026,9 @@ in
   tcl-8_5 = callPackage ../development/interpreters/tcl/8.5.nix { };
   tcl-8_6 = callPackage ../development/interpreters/tcl/8.6.nix { };
 
-  proglodyte-wasm = callPackage ../development/interpreters/proglodyte-wasm { };
+  proglodyte-wasm = callPackage ../development/interpreters/proglodyte-wasm {
+    v8_static = v8.override { static = true; };
+  };
 
   wasm-gc = callPackage ../development/interpreters/wasm-gc { };
 
@@ -8450,7 +8450,9 @@ in
 
   lattice-diamond = callPackage ../development/tools/lattice-diamond { };
 
-  distcc = callPackage ../development/tools/misc/distcc { };
+  distcc = callPackage ../development/tools/misc/distcc {
+    libiberty_static = libiberty.override { staticBuild = true; };
+  };
 
   # distccWrapper: wrapper that works as gcc or g++
   # It can be used by setting in nixpkgs config like this, for example:
@@ -8811,7 +8813,9 @@ in
 
   openocd = callPackage ../development/tools/misc/openocd { };
 
-  oprofile = callPackage ../development/tools/profiling/oprofile { };
+  oprofile = callPackage ../development/tools/profiling/oprofile {
+    libiberty_static = libiberty.override { staticBuild = true; };
+  };
 
   pahole = callPackage ../development/tools/misc/pahole {};
 
@@ -12712,8 +12716,6 @@ in
     stdenv = overrideCC stdenv gcc6;
   });
 
-  v8_static = lowPrio (res.v8.override { static = true; });
-
   vaapiIntel = callPackage ../development/libraries/vaapi-intel { };
 
   vaapi-intel-hybrid = callPackage ../development/libraries/vaapi-intel-hybrid { };
@@ -12947,10 +12949,6 @@ in
   libdynd = callPackage ../development/libraries/libdynd { };
 
   zlog = callPackage ../development/libraries/zlog { };
-
-  zlibStatic = lowPrio (appendToName "static" (zlib.override {
-    static = true;
-  }));
 
   zeromq3 = callPackage ../development/libraries/zeromq/3.x.nix {};
   zeromq4 = callPackage ../development/libraries/zeromq/4.x.nix {};
@@ -20610,7 +20608,9 @@ in
   openspades = callPackage ../games/openspades { };
 
   openttd = callPackage ../games/openttd {
-    zlib = zlibStatic;
+    zlib = zlib.override {
+      static = true;
+    };
   };
 
   opentyrian = callPackage ../games/opentyrian { };
