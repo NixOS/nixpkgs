@@ -1,4 +1,4 @@
-{stdenv, fetchurl, requireFile, makeWrapper, unzip, autoPatchelfHook, pkgs, pkgs_i686}:
+{stdenv, fetchurl, requireFile, makeWrapper, unzip, autoPatchelfHook, pkgs, pkgs_i686, licenseAccepted ? false}:
 
 { toolsVersion ? "25.2.5"
 , platformToolsVersion ? "28.0.1"
@@ -19,6 +19,13 @@
 , useGoogleTVAddOns ? false
 , includeExtras ? []
 }:
+
+if !licenseAccepted then throw ''
+    You must accept the Android Software Development Kit License Agreement at
+    https://developer.android.com/studio/terms
+    by setting nixpkgs config option 'android_sdk.accept_license = true;'
+  ''
+else assert licenseAccepted;
 
 let
   inherit (pkgs) stdenv fetchurl makeWrapper unzip;
