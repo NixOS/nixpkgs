@@ -1,4 +1,6 @@
-export IMAKECPP="@tradcpp@/bin/tradcpp"
+if [ -n "@tradcpp@" ]; then
+    export IMAKECPP="@tradcpp@/bin/tradcpp"
+fi
 
 imakeConfigurePhase() {
     runHook preConfigure

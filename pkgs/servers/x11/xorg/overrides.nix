@@ -68,7 +68,7 @@ self: super:
       then "${tradcpp}/bin/cpp"
       else "gcc"}"' ''
     ];
-    inherit tradcpp;
+    tradcpp = if stdenv.isDarwin then tradcpp else "";
   });
 
   mkfontdir = super.mkfontdir.overrideAttrs (attrs: {
