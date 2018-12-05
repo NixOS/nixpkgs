@@ -5,6 +5,8 @@
 fixupOutputHooks+=('fixLibsystemRefs $prefix')
 
 fixLibsystemRefs() {
-  find "$1/bin" \
-    -exec install_name_tool -change @libsystem@ /usr/lib/libSystem.B.dylib {} \;
+  if [ -d "$1/bin" ]; then
+      find "$1/bin" -exec \
+        install_name_tool -change @libsystem@ /usr/lib/libSystem.B.dylib {} \;
+  fi
 }
