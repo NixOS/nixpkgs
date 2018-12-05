@@ -278,14 +278,6 @@ let quicklisp-to-nix-packages = rec {
        }));
 
 
-  "zpb-ttf" = buildLispPackage
-    ((f: x: (x // (f x)))
-       (qlOverrides."zpb-ttf" or (x: {}))
-       (import ./quicklisp-to-nix-output/zpb-ttf.nix {
-         inherit fetchurl;
-       }));
-
-
   "cl-store" = buildLispPackage
     ((f: x: (x // (f x)))
        (qlOverrides."cl-store" or (x: {}))
@@ -357,6 +349,14 @@ let quicklisp-to-nix-packages = rec {
 
 
   "cl-ppcre-test" = quicklisp-to-nix-packages."cl-ppcre";
+
+
+  "zpb-ttf" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."zpb-ttf" or (x: {}))
+       (import ./quicklisp-to-nix-output/zpb-ttf.nix {
+         inherit fetchurl;
+       }));
 
 
   "puri" = buildLispPackage
@@ -1907,6 +1907,17 @@ let quicklisp-to-nix-packages = rec {
        }));
 
 
+  "cl-typesetting" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."cl-typesetting" or (x: {}))
+       (import ./quicklisp-to-nix-output/cl-typesetting.nix {
+         inherit fetchurl;
+           "cl-pdf" = quicklisp-to-nix-packages."cl-pdf";
+           "iterate" = quicklisp-to-nix-packages."iterate";
+           "zpb-ttf" = quicklisp-to-nix-packages."zpb-ttf";
+       }));
+
+
   "cl-test-more" = buildLispPackage
     ((f: x: (x // (f x)))
        (qlOverrides."cl-test-more" or (x: {}))
@@ -2103,6 +2114,17 @@ let quicklisp-to-nix-packages = rec {
        }));
 
 
+  "cl-pdf" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."cl-pdf" or (x: {}))
+       (import ./quicklisp-to-nix-output/cl-pdf.nix {
+         inherit fetchurl;
+           "iterate" = quicklisp-to-nix-packages."iterate";
+           "uiop" = quicklisp-to-nix-packages."uiop";
+           "zpb-ttf" = quicklisp-to-nix-packages."zpb-ttf";
+       }));
+
+
   "closure-html" = buildLispPackage
     ((f: x: (x // (f x)))
        (qlOverrides."closure-html" or (x: {}))
@@ -2187,6 +2209,14 @@ let quicklisp-to-nix-packages = rec {
        (import ./quicklisp-to-nix-output/cl-json.nix {
          inherit fetchurl;
            "fiveam" = quicklisp-to-nix-packages."fiveam";
+       }));
+
+
+  "cl-jpeg" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."cl-jpeg" or (x: {}))
+       (import ./quicklisp-to-nix-output/cl-jpeg.nix {
+         inherit fetchurl;
        }));
 
 
