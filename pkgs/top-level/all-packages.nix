@@ -19738,11 +19738,15 @@ in
 
   webtorrent_desktop = callPackage ../applications/video/webtorrent_desktop {};
 
-  weechat = callPackage ../applications/networking/irc/weechat {
+  wrapWeechat = callPackage ../applications/networking/irc/weechat/wrapper.nix { };
+
+  weechat-unwrapped = callPackage ../applications/networking/irc/weechat {
     inherit (darwin) libobjc;
     inherit (darwin) libresolv;
     guile = guile_2_0;
   };
+
+  weechat = wrapWeechat weechat-unwrapped { };
 
   weechatScripts = callPackage ../applications/networking/irc/weechat/scripts { };
 
