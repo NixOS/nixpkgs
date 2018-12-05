@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, ocaml, findlib, ocamlbuild, topkg, cppo
-, ppx_import, ppx_deriving, yojson, ounit
+, ppx_deriving, yojson, ounit
 }:
 
 stdenv.mkDerivation rec {
@@ -13,14 +13,11 @@ stdenv.mkDerivation rec {
     sha256 = "1pwfnq7z60nchba4gnf58918ll11w3gj5i88qhz1p2jm45hxqgnw";
   };
 
-  buildInputs = [ ocaml findlib ocamlbuild cppo ounit ppx_import ];
+  buildInputs = [ ocaml findlib ocamlbuild cppo ounit ];
 
   propagatedBuildInputs = [ ppx_deriving yojson ];
 
   inherit (topkg) installPhase;
-
-  doCheck = true;
-  checkTarget = "test";
 
   meta = {
     description = "A Yojson codec generator for OCaml >= 4.02.";
