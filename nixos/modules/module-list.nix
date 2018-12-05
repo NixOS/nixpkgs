@@ -34,6 +34,7 @@
   ./config/vpnc.nix
   ./config/zram.nix
   ./hardware/all-firmware.nix
+  ./hardware/applespi.nix
   ./hardware/brightnessctl.nix
   ./hardware/ckb-next.nix
   ./hardware/cpu/amd-microcode.nix
