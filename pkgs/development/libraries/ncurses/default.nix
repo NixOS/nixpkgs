@@ -4,6 +4,7 @@
 , mouseSupport ? false
 , unicode ? true
 , enableStatic ? stdenv.hostPlatform.useAndroidPrebuilt
+, enableShared ? !enableStatic
 , withCxx ? !stdenv.hostPlatform.useAndroidPrebuilt
 
 , gpm
@@ -28,7 +29,7 @@ stdenv.mkDerivation rec {
   setOutputFlags = false; # some aren't supported
 
   configureFlags = [
-    "--with-shared"
+    (lib.withFeature enableShared "shared")
     "--without-debug"
     "--enable-pc-files"
     "--enable-symlinks"
