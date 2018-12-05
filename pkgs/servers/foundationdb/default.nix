@@ -167,7 +167,7 @@ let
           description = "Open source, distributed, transactional key-value store";
           homepage    = https://www.foundationdb.org;
           license     = licenses.asl20;
-          platforms   = platforms.linux;
+          platforms   = [ "x86_64-linux" ];
           maintainers = with maintainers; [ thoughtpolice ];
        };
     };
