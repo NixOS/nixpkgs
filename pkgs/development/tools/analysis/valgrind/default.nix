@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl, gdb, llvm, cctools, xnu, bootstrap_cmds }:
+{ stdenv, fetchurl, perl, gdb, llvm, cctools, xnu, bootstrap_cmds, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   name = "valgrind-3.14.0";
@@ -8,7 +8,10 @@ stdenv.mkDerivation rec {
     sha256 = "19ds42jwd89zrsjb94g7gizkkzipn8xik3xykrpcqxylxyzi2z03";
   };
 
+  # autoreconfHook is needed to pick up patching of Makefile.am
+  # Remove when the patch no longer applies.
   patches = [ ./coregrind-makefile-race.patch ];
+  nativeBuildInputs = [ autoreconfHook ];
 
   outputs = [ "out" "dev" "man" "doc" ];
 
