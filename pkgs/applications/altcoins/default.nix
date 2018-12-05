@@ -94,5 +94,7 @@ rec {
   parity-beta = callPackage ./parity/beta.nix { };
   parity-ui = callPackage ./parity-ui { };
 
+  polkadot = callPackage ./polkadot { };
+
   particl-core = callPackage ./particl/particl-core.nix { miniupnpc = miniupnpc_2; };
 }
