@@ -2789,10 +2789,10 @@ let
   };
 
   CPANPerlReleases = buildPerlPackage rec {
-    name = "CPAN-Perl-Releases-3.76";
+    name = "CPAN-Perl-Releases-3.84";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BI/BINGOS/${name}.tar.gz";
-      sha256 = "0p9anb92sfi6cfr3ia8yvd3scn0bzwh2r6z8f6jrawjr8lilgahj";
+      sha256 = "10q1vgsfk1y1aclr3wnbn2icwa9qcd2qfyvycp8dzh5hv520f8x5";
     };
     meta = {
       homepage = https://github.com/bingos/cpan-perl-releases;
