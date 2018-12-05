@@ -5060,6 +5060,8 @@ in
 
   qshowdiff = callPackage ../tools/text/qshowdiff { };
 
+  qr-filetransfer = callPackage ../tools/networking/qr-filetransfer { };
+
   qtikz = libsForQt5.callPackage ../applications/graphics/ktikz { };
 
   quickserve = callPackage ../tools/networking/quickserve { };
