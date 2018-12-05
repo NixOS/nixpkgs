@@ -6750,6 +6750,7 @@ let
       license = with stdenv.lib.licenses; [ artistic1 ];
       description = "Return difference between two hashes as a hash";
     };
+    buildInputs = [ TestSimple13 ];
   };
 
   HashFlatten = buildPerlPackage rec {
