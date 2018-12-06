@@ -12407,9 +12407,12 @@ in
       soapybladerf
       soapyhackrf
       soapyremote
+      soapyrtlsdr
       soapyuhd
     ];
   };
+
+  soapyrtlsdr = callPackage ../applications/misc/soapyrtlsdr { };
 
   soapyuhd = callPackage ../applications/misc/soapyuhd { };
 
