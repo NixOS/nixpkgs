@@ -72,7 +72,13 @@
 
   <itemizedlist>
    <listitem>
-    <para />
+    <para>
+     Initrd networking now stops after successful mount so that OS networking
+     can take over. This behaviour is introduced only on new setups with
+     <literal>system.stateVersion</literal> greater or equal to 20.03,
+     so that existing network configurations don't break. You can enable the new
+     behaviour with <literal>boot.initrd.network.stopAfter</literal> option.
+    </para>
    </listitem>
   </itemizedlist>
  </section>
