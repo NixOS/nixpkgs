@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "i2c-tools-${version}";
-  version = "4.0";
+  version = "4.1";
 
   src = fetchurl {
     url = "https://www.kernel.org/pub/software/utils/i2c-tools/${name}.tar.xz";
-    sha256 = "1mi8mykvl89y6liinc9jv1x8m2q093wrdc2hm86a47n524fcl06r";
+    sha256 = "1m97hpwqfaqjl9xvr4pvz2vdrsdvxbcn0nnx8pamnyc3s7pikcjp";
   };
 
   buildInputs = [ perl ];
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    make install prefix=$out
+    make install PREFIX=$out
     rm -rf $out/include # Installs include/linux/i2c-dev.h that conflics with kernel headers
   '';
 
