@@ -22673,6 +22673,8 @@ in
     callPackage ../applications/networking/cluster/terraform-providers {}
   );
 
+  terraform-docs = callPackage ../applications/networking/cluster/terraform-docs {};
+
   terraform-inventory = callPackage ../applications/networking/cluster/terraform-inventory {};
 
   terraform-landscape = callPackage ../applications/networking/cluster/terraform-landscape {};
