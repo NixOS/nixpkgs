@@ -2,11 +2,10 @@ diff --git a/CMakeLists.txt b/CMakeLists.txt
 index 0c05208f..8893648e 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -48,6 +48,20 @@ add_subdirectory(libevmasm)
+@@ -48,6 +48,25 @@ add_subdirectory(libevmasm)
  add_subdirectory(libsolidity)
  add_subdirectory(libsolc)
  
-+
 +install(DIRECTORY libdevcore/
 +        DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/libdevcore
 +        FILES_MATCHING PATTERN "*.h")
@@ -15,6 +14,12 @@ index 0c05208f..8893648e 100644
 +        FILES_MATCHING PATTERN "*.h")
 +install(DIRECTORY libsolidity/
 +        DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/libsolidity
++        FILES_MATCHING PATTERN "*.h")
++install(DIRECTORY libyul/
++        DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/libyul
++        FILES_MATCHING PATTERN "*.h")
++install(DIRECTORY liblangutil/
++        DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/liblangutil
 +        FILES_MATCHING PATTERN "*.h")
 +install(DIRECTORY liblll/
 +        DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/liblll
@@ -57,8 +62,23 @@ index 0bdec4b4..e876177e 100644
 @@ -29,6 +29,7 @@ endif()
  
  add_library(solidity ${sources} ${headers})
- target_link_libraries(solidity PUBLIC evmasm devcore ${Boost_FILESYSTEM_LIBRARY} ${Boost_SYSTEM_LIBRARY})
+ target_link_libraries(solidity PUBLIC yul evmasm langutil devcore ${Boost_FILESYSTEM_LIBRARY} ${Boost_SYSTEM_LIBRARY})
 +install(TARGETS solidity LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
  
  if (${Z3_FOUND})
    target_link_libraries(solidity PUBLIC ${Z3_LIBRARY})
+--- a/libyul/CMakeLists.txt
++++ b/libyul/CMakeLists.txt
+@@ -42,3 +42,4 @@ endif()
+ 	optimiser/VarDeclPropagator.cpp
+ )
+-target_link_libraries(yul PUBLIC devcore)
++target_link_libraries(yul PUBLIC evmasm devcore langutil)
++install(TARGETS yul LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
+--- a/liblangutil/CMakeLists.txt
++++ b/liblangutil/CMakeLists.txt
+@@ -11,3 +11,4 @@ endif()
+ 
+ add_library(langutil ${sources})
+ target_link_libraries(langutil PUBLIC devcore)
++install(TARGETS langutil LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
