@@ -2,7 +2,7 @@
 
 let
   baseName = "bloop";
-  version = "1.0.0";
+  version = "1.1.0";
   deps = stdenv.mkDerivation {
     name = "${baseName}-deps-${version}";
     buildCommand = ''
@@ -16,7 +16,7 @@ let
     '';
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
-    outputHash     = "0dgllwv9rjvpzvlbwwiynmfp15j2x48al7cb5rlmhq0an3q81hbh";
+    outputHash     = "090ig5k1bd3pv4i8x6byyf9wda1430xysnbcllflcz6cf2ccjy2k";
   };
 in
 stdenv.mkDerivation rec {
