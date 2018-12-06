@@ -7,8 +7,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     repo = "qmltermwidget";
     owner = "Swordfish90";
-    rev = "v${version}";
-    sha256 = "0ca500mzcqglkj0i6km0z512y3a025dbm24605xyv18l6y0l2ny3";
+    rev = "48274c75660e28d44af7c195e79accdf1bd44963";
+    sha256 = "028nb1xp84jmakif5mmzx52q3rsjwckw27jdpahyaqw7j7i5znq6";
   };
 
   buildInputs = [ qtbase qtquick1 qtmultimedia ]
