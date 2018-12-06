@@ -2,6 +2,7 @@
 , pkgconfig, gettext, libXft, dbus, libpng, libjpeg, libungif
 , libtiff, librsvg, gconf, libxml2, imagemagick, gnutls, libselinux
 , alsaLib, cairo, acl, gpm, cf-private, AppKit, GSS, ImageIO, m17n_lib, libotf
+, xorg, makeWrapper
 , systemd ? null
 , withX ? !stdenv.isDarwin
 , withNS ? stdenv.isDarwin
@@ -50,7 +51,7 @@ stdenv.mkDerivation rec {
 
   CFLAGS = "-DMAC_OS_X_VERSION_MAX_ALLOWED=101200";
 
-  nativeBuildInputs = [ pkgconfig ]
+  nativeBuildInputs = [ pkgconfig makeWrapper ]
     ++ lib.optionals srcRepo [ autoconf automake texinfo ]
     ++ lib.optional (withX && (withGTK3 || withXwidgets)) wrapGAppsHook;
 
@@ -115,6 +116,8 @@ stdenv.mkDerivation rec {
   '' + lib.optionalString withNS ''
     mkdir -p $out/Applications
     mv nextstep/Emacs.app $out/Applications
+  '' + lib.optionalString (withX && toolkit == "lucid") ''
+    wrapProgram $out/bin/emacs --prefix LD_LIBRARY_PATH : ${xorg.libXcursor}/lib
   '';
 
   meta = with stdenv.lib; {
