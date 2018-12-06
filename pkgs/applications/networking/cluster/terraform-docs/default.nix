@@ -18,7 +18,7 @@ buildGoPackage rec {
   '';
 
   meta = with lib; {
-    description = "A utility to generate documentation from Terraform modules in various output formats.";
+    description = "A utility to generate documentation from Terraform modules in various output formats";
     homepage = "https://${goPackagePath}/";
     license = licenses.mit;
     maintainers = with maintainers; [ zimbatm ];
