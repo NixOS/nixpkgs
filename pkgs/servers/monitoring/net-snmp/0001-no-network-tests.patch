@@ -1,0 +1,122 @@
+diff --git a/testing/fulltests/default/T071com2sec6_simple b/testing/fulltests/default/T071com2sec6_simple
+index aceba57..1bcc369 100644
+--- a/testing/fulltests/default/T071com2sec6_simple
++++ b/testing/fulltests/default/T071com2sec6_simple
+@@ -76,9 +76,9 @@ CONFIGAGENT 'com2sec6 t607b a234567890123456789012345678901234567890123456789012
+
+ # 608 Lookup tests, require network access
+ # 608a Test lookup returning a single host
+-CONFIGAGENT 'com2sec6 t608a oneAAAA.net-snmp.org c608a'
++#CONFIGAGENT 'com2sec6 t608a oneAAAA.net-snmp.org c608a'
+ # 608b Test lookup returning multiple hosts
+-CONFIGAGENT 'com2sec6 t608b twoAAAA.net-snmp.org c608b'
++#CONFIGAGENT 'com2sec6 t608b twoAAAA.net-snmp.org c608b'
+
+ # Default agent setup
+ CONFIGAGENT "[snmp] persistentdir $SNMP_TMP_PERSISTENTDIR"
+@@ -133,23 +133,23 @@ SAVECHECKAGENT 'line 27: Error:'
+ SAVECHECKAGENT 'line 28: Error:'
+
+ # 608
+-CHECKAGENT '<"c608a"'
+-if [ "$snmp_last_test_result" -eq 0 ] ; then
+-  CHECKAGENT 'line 29: Error:'
+-  errnum=`expr $errnum - 1`
+-  if [ "$snmp_last_test_result" -ne 1 ] ; then
+-    FINISHED
+-  fi
+-elif [ "$snmp_last_test_result" -ne 1 ] ; then
+-  FINISHED
+-fi
+-
+-CHECKAGENTCOUNT atleastone '<"c608b"'
+-if [ "$snmp_last_test_result" -eq 0 ] ; then
+-  CHECKAGENT 'line 30: Error:'
+-  if [ "$snmp_last_test_result" -eq 1 ] ; then
+-    errnum=`expr $errnum - 1`
+-  fi
+-fi
++#CHECKAGENT '<"c608a"'
++#if [ "$snmp_last_test_result" -eq 0 ] ; then
++#  CHECKAGENT 'line 29: Error:'
++#  errnum=`expr $errnum - 1`
++#  if [ "$snmp_last_test_result" -ne 1 ] ; then
++#    FINISHED
++#  fi
++#elif [ "$snmp_last_test_result" -ne 1 ] ; then
++#  FINISHED
++#fi
++
++#CHECKAGENTCOUNT atleastone '<"c608b"'
++#if [ "$snmp_last_test_result" -eq 0 ] ; then
++#  CHECKAGENT 'line 30: Error:'
++#  if [ "$snmp_last_test_result" -eq 1 ] ; then
++#    errnum=`expr $errnum - 1`
++#  fi
++#fi
+
+ FINISHED
+diff --git a/testing/fulltests/default/T070com2sec_simple b/testing/fulltests/default/T070com2sec_simple
+index 2299a8e..bf87e17 100644
+--- a/testing/fulltests/default/T070com2sec_simple
++++ b/testing/fulltests/default/T070com2sec_simple
+@@ -82,9 +82,9 @@ CONFIGAGENT 'com2sec t407b a2345678901234567890123456789012345678901234567890123
+ 
+ # 408 Lookup tests, require network access
+ # 408a Test lookup returning a single host
+-CONFIGAGENT 'com2sec t408a onea.net-snmp.org c408a'
++#CONFIGAGENT 'com2sec t408a onea.net-snmp.org c408a'
+ # 408a Test lookup returning multiple hosts
+-CONFIGAGENT 'com2sec t408b twoa.net-snmp.org c408b'
++#CONFIGAGENT 'com2sec t408b twoa.net-snmp.org c408b'
+ 
+ # Default agent setup
+ CONFIGAGENT "[snmp] persistentdir $SNMP_TMP_PERSISTENTDIR"
+@@ -134,26 +134,26 @@ SAVECHECKAGENT '<"c406a", 255.255.255.255/255.255.255.255> => "t406a"'
+ SAVECHECKAGENT 'line 30: Error:' # msg from h_strerror so it varies
+ SAVECHECKAGENT 'line 31: Error:' # msg from h_strerror so it varies
+ 
+-CHECKAGENT '<"c408a"'
+-if [ "$snmp_last_test_result" -eq 0 ] ; then
+-  CHECKAGENT 'line 32: Error:'
+-  if [ "$snmp_last_test_result" -ne 1 ] ; then
+-    return_value=1
+-    FINISHED
+-  fi
+-elif [ "$snmp_last_test_result" -ne 1 ] ; then
+-  return_value=1
+-  FINISHED
+-fi
+-
+-CHECKAGENT '<"c408b"'
+-if [ "$snmp_last_test_result" -eq 0 ] ; then
+-  CHECKAGENT 'line 33: Error:'
+-  if [ "$snmp_last_test_result" -ne 1 ] ; then
+-    return_value=1
+-  fi
+-elif [ "$snmp_last_test_result" -ne 1 ] ; then
+-  return_value=1
+-fi
++#CHECKAGENT '<"c408a"'
++#if [ "$snmp_last_test_result" -eq 0 ] ; then
++#  CHECKAGENT 'line 32: Error:'
++#  if [ "$snmp_last_test_result" -ne 1 ] ; then
++#    return_value=1
++#    FINISHED
++#  fi
++#elif [ "$snmp_last_test_result" -ne 1 ] ; then
++#  return_value=1
++#  FINISHED
++#fi
++
++#CHECKAGENT '<"c408b"'
++#if [ "$snmp_last_test_result" -eq 0 ] ; then
++#  CHECKAGENT 'line 33: Error:'
++#  if [ "$snmp_last_test_result" -ne 1 ] ; then
++#    return_value=1
++#  fi
++#elif [ "$snmp_last_test_result" -ne 1 ] ; then
++#  return_value=1
++#fi
+ 
+ FINISHED
