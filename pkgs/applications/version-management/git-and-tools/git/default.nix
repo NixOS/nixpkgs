@@ -133,7 +133,6 @@ stdenv.mkDerivation {
       # Install contrib stuff.
       mkdir -p $out/share/git
       cp -a contrib $out/share/git/
-      ln -s "$out/share/git/contrib/credential/netrc/git-credential-netrc" $out/bin/
       mkdir -p $out/share/emacs/site-lisp
       ln -s "$out/share/git/contrib/emacs/"*.el $out/share/emacs/site-lisp/
       mkdir -p $out/etc/bash_completion.d
@@ -178,6 +177,9 @@ stdenv.mkDerivation {
       for i in ${builtins.toString perlLibs}; do
         gitperllib=$gitperllib:$i/lib/perl5/site_perl
       done
+
+      makeWrapper "$out/share/git/contrib/credential/netrc/git-credential-netrc" $out/bin/git-credential-netrc \
+                  --set PERL5LIB "$gitperllib"
       wrapProgram $out/libexec/git-core/git-cvsimport \
                   --set GITPERLLIB "$gitperllib"
       wrapProgram $out/libexec/git-core/git-add--interactive \
