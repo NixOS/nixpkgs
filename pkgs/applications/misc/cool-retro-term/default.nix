@@ -25,6 +25,8 @@ stdenv.mkDerivation rec {
     mv $out/usr/share $out/share
     mv $out/usr/bin $out/bin
     rmdir $out/usr
+  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+    ln -s $out/bin/cool-retro-term.app/Contents/MacOS/cool-retro-term $out/bin/cool-retro-term
   '';
 
   enableParallelBuilding = true;
@@ -38,7 +40,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = https://github.com/Swordfish90/cool-retro-term;
     license = with stdenv.lib.licenses; [ gpl2 gpl3 ];
-    platforms = stdenv.lib.platforms.linux;
+    platforms = with stdenv.lib.platforms; linux ++ darwin;
     maintainers = with stdenv.lib.maintainers; [ skeidel ];
   };
 }
