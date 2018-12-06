@@ -47,7 +47,7 @@
 , dontWrapPythonPrograms ? false
 
 # Skip setting the PYTHONNOUSERSITE environment variable in wrapped programs
-, skipNoUserSite ? false
+, permitUserSite ? false
 
 # Remove bytecode from bin folder.
 # When a Python script has the extension `.py`, bytecode is generated
@@ -96,7 +96,6 @@ let self = toPythonModule (python.stdenv.mkDerivation (builtins.removeAttrs attr
   installCheckInputs = checkInputs;
 
   postFixup = lib.optionalString (!dontWrapPythonPrograms) ''
-    ${if skipNoUserSite then "export SKIPNOUSERSITE=1" else ""}
     wrapPythonPrograms
   '' + lib.optionalString removeBinBytecode ''
     if [ -d "$out/bin" ]; then
