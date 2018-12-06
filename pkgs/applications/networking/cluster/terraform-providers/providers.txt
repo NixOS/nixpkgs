@@ -7,7 +7,7 @@
 #  <organisation>/<repo>                                         - include only the named repository.
 
 # include all terraform-providers
-terraform-providers terraform-provider- terraform-provider-\\(azure-classic\\|scaffolding\\|google-beta\\)
+terraform-providers terraform-provider- terraform-provider-\\(azure-classic\\|scaffolding\\|google-beta\\|skytap\\)
 
 # include terraform-provider-matchbox
 coreos/terraform-provider-matchbox
