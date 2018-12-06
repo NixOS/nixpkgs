@@ -13,6 +13,7 @@
       "x86_64-linux" = import ./bootstrap-files/x86_64.nix;
       "armv5tel-linux" = import ./bootstrap-files/armv5tel.nix;
       "armv6l-linux" = import ./bootstrap-files/armv6l.nix;
+      "armv7a-linux" = import ./bootstrap-files/armv7l.nix;
       "armv7l-linux" = import ./bootstrap-files/armv7l.nix;
       "aarch64-linux" = import ./bootstrap-files/aarch64.nix;
       "mipsel-linux" = import ./bootstrap-files/loongson2f.nix;

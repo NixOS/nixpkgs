@@ -43,6 +43,7 @@ in
     "x86_64-linux" = stagesLinux;
     "armv5tel-linux" = stagesLinux;
     "armv6l-linux" = stagesLinux;
+    "armv7a-linux" = stagesLinux;
     "armv7l-linux" = stagesLinux;
     "aarch64-linux" = stagesLinux;
     "mipsel-linux" = stagesLinux;
