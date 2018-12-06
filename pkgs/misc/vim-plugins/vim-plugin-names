@@ -15,6 +15,7 @@ artur-shaik/vim-javacomplete2
 bazelbuild/vim-bazel
 bbchung/clighter8
 benekastah/neomake
+benmills/vimux
 bitc/vim-hdevtools
 bling/vim-bufferline
 bronson/vim-trailing-whitespace

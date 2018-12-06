@@ -3411,6 +3411,16 @@
     };
   };
 
+  vimux = buildVimPluginFrom2Nix {
+    name = "vimux-2017-10-24";
+    src = fetchFromGitHub {
+      owner = "benmills";
+      repo = "vimux";
+      rev = "37f41195e6369ac602a08ec61364906600b771f1";
+      sha256 = "0k7ymak2ag67lb4sf80y4k35zj38rj0jf61bf50i6h1bgw987pra";
+    };
+  };
+
   vimwiki = buildVimPluginFrom2Nix {
     name = "vimwiki-2018-10-12";
     src = fetchFromGitHub {
