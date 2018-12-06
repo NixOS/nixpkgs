@@ -10,13 +10,13 @@
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "cups-${version}";
-  version = "2.2.6";
+  version = "2.2.9";
 
   passthru = { inherit version; };
 
   src = fetchurl {
     url = "https://github.com/apple/cups/releases/download/v${version}/cups-${version}-source.tar.gz";
-    sha256 = "16qn41b84xz6khrr2pa2wdwlqxr29rrrkjfi618gbgdkq9w5ff20";
+    sha256 = "0mhii4fq94v0sd8imv73mgr5zn5cfiazj2ys40rn95rv4pdda8kd";
   };
 
   outputs = [ "out" "lib" "dev" "man" ];
