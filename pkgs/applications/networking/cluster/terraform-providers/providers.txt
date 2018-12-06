@@ -14,3 +14,6 @@ coreos/terraform-provider-matchbox
 
 # include terraform-provider-nixos
 tweag/terraform-provider-nixos
+
+# include terraform-provider-secret
+tweag/terraform-provider-secret
