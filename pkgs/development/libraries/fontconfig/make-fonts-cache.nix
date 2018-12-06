@@ -1,8 +1,8 @@
-{ runCommand, lib, fontconfig, fontDirectories }:
+{ runCommand, lib, fontconfig, fontDirectories, buildPackages }:
 
 runCommand "fc-cache"
   rec {
-    buildInputs = [ fontconfig.bin ];
+    nativeBuildInputs = [ buildPackages.fontconfig.bin ];
     preferLocalBuild = true;
     passAsFile = [ "fontDirs" ];
     fontDirs = ''
