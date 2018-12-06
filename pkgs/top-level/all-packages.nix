@@ -8461,6 +8461,8 @@ in
 
   cppcheck = callPackage ../development/tools/analysis/cppcheck { };
 
+  infer = callPackage ../development/tools/analysis/infer { };
+
   cpplint = callPackage ../development/tools/analysis/cpplint { };
 
   cquery = callPackage ../development/tools/misc/cquery {
