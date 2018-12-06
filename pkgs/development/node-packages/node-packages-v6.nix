@@ -1228,13 +1228,13 @@ let
         sha512 = "Gi1W4k059gyRbyVUZQ4mEqLm0YIUiGYfvxhF6SIlk3ui1WVxMTGfGdQ2SInh3PDrRTVvPKgULkpJtT4RH10+VA==";
       };
     };
-    "minizlib-1.1.1" = {
+    "minizlib-1.2.1" = {
       name = "minizlib";
       packageName = "minizlib";
-      version = "1.1.1";
+      version = "1.2.1";
       src = fetchurl {
-        url = "https://registry.npmjs.org/minizlib/-/minizlib-1.1.1.tgz";
-        sha512 = "TrfjCjk4jLhcJyGMYymBH6oTXcWjYbUAXTHDbtnWHjZC25h0cdajHuPE1zxb4DVmu8crfh+HwH/WMuyLG0nHBg==";
+        url = "https://registry.npmjs.org/minizlib/-/minizlib-1.2.1.tgz";
+        sha512 = "7+4oTUOWKg7AuL3vloEWekXY2/D20cevzsrNT2kGWm+39J9hGTCBv8VI5Pm5lXZ/o3/mdR4f8rflAPhnQb8mPA==";
       };
     };
     "mixin-deep-1.3.1" = {
@@ -2555,7 +2555,7 @@ in
       sources."minimatch-3.0.4"
       sources."minimist-0.0.8"
       sources."minipass-2.3.5"
-      sources."minizlib-1.1.1"
+      sources."minizlib-1.2.1"
       sources."mkdirp-0.5.1"
       sources."ms-2.0.0"
       sources."needle-2.2.4"
@@ -2606,10 +2606,10 @@ in
   pnpm = nodeEnv.buildNodePackage {
     name = "pnpm";
     packageName = "pnpm";
-    version = "2.20.1";
+    version = "2.21.1";
     src = fetchurl {
-      url = "https://registry.npmjs.org/pnpm/-/pnpm-2.20.1.tgz";
-      sha512 = "gqYgV+A2Hsfl+dj9B60O9LnwV0ye2TYkazEZ8bAfnHjkyXcMHGd4EvvXMXov5WCfgui/raAQ0xcNZEHWFmfPAg==";
+      url = "https://registry.npmjs.org/pnpm/-/pnpm-2.21.1.tgz";
+      sha512 = "0UEIdUM8VqRHolaBPREYhTEuu/Zfi4qp3Kp0u6ioCtn7Yi33sGFdApEczb/SenmaqtnWD7OUIO74v8Aw9wnYeg==";
     };
     buildInputs = globalBuildInputs;
     meta = {
