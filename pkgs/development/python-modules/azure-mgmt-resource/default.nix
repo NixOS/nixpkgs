@@ -7,13 +7,13 @@
 
 
 buildPythonPackage rec {
-  version = "0.20.1";
+  version = "2.0.0";
   pname = "azure-mgmt-resource";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "0slh9qfm5nfacrdm3lid0sr8kwqzgxvrwf27laf9v38kylkfqvml";
+    sha256 = "2e83289369be88d0f06792118db5a7d4ed7150f956aaae64c528808da5518d7f";
   };
 
   preConfigure = ''

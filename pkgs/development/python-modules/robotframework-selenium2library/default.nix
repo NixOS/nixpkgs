@@ -8,12 +8,12 @@
 }:
 
 buildPythonPackage rec {
-  version = "1.6.0";
+  version = "3.0.0";
   pname = "robotframework-selenium2library";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1asdwrpb4s7q08bx641yrh3yicgba14n3hxmsqs58mqf86ignwly";
+    sha256 = "2a8e942b0788b16ded253039008b34d2b46199283461b294f0f41a579c70fda7";
   };
 
   # error: invalid command 'test'

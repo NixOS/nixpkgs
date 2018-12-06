@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "pgspecial";
-  version = "1.11.2";
+  version = "1.11.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1yq3cmpdcvwsz3nifc0db125433vxbgbpmbhxfj46b9s5k81xs30";
+    sha256 = "f183da55c37128f7a74fe5b28e997991156f19961e59a1ad0f400ffc9535faba";
   };
 
   buildInputs = [ pytest psycopg2 ];

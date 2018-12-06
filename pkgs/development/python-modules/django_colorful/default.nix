@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "django-colorful";
-  version = "1.2";
+  version = "1.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0y34hzvfrm1xbxrd8frybc9yzgqvz4c07frafipjikw7kfjsw8az";
+    sha256 = "fd246f2fb297ed074dc4349966d33a1c82d0308b7fb0d6ef6e2e76b90cefffb7";
   };
 
   # Tests aren't run
