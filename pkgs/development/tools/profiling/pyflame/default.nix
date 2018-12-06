@@ -1,15 +1,15 @@
 { stdenv, fetchFromGitHub, autoreconfHook, coreutils, pkgconfig
 # pyflame needs one python version per ABI
-# are currently supported 
+# are currently supported
 # * 2.6 or 2.7 for 2.x ABI
 # * 3.4 or 3.5 for 3.{4,5} ABI
 # * 3.6        for 3.6+ ABI
 # if you want to disable support for some ABI, make the corresponding argument null
-, python2, python35, python36
+, python2, python35, python36, python3
 }:
 stdenv.mkDerivation rec {
   pname = "pyflame";
-  version = "1.6.7"; 
+  version = "1.6.7";
   src = fetchFromGitHub {
     owner = "uber";
     repo = "pyflame";
@@ -25,6 +25,14 @@ stdenv.mkDerivation rec {
     # some tests will fail in the sandbox
     substituteInPlace tests/test_end_to_end.py \
       --replace 'skipif(IS_DOCKER' 'skipif(True'
+
+    # don't use patchShebangs here to be explicit about the python version
+    substituteInPlace utils/flame-chart-json \
+      --replace '#!usr/bin/env python' '#!${python3.interpreter}'
+  '';
+
+  postInstall = ''
+    install	-D utils/flame-chart-json $out/bin/flame-chart-json
   '';
 
   doCheck = true;
