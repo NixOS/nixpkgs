@@ -57,6 +57,8 @@ mkDerivation rec {
     license = licenses.gpl3;
     maintainers = [ maintainers.erictapen ];
     platforms = platforms.linux;
+    # binary segfaults at the moment
+    broken = true;
   };
 
 }

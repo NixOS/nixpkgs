@@ -3,14 +3,14 @@
 
 buildPythonPackage rec {
   pname = "mypy";
-  version = "0.630";
+  version = "0.641";
 
   # Tests not included in pip package.
   doCheck = false;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1p8rnap4ngczfm2q4035mcmn5nsprbljnhksx2jxzxrb9immh137";
+    sha256 = "0ma4l7px96zzb8x89dk9mkrrdzdhdqckvfsbld4fj9n25k1iw1wf";
   };
 
   disabled = !isPy3k;

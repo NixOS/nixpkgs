@@ -1,6 +1,7 @@
 { stdenv, lib, fetchurl, perl, pkgconfig, systemd, openssl
 , bzip2, zlib, lz4, inotify-tools, pam, libcap
 , clucene_core_2, icu, openldap, libsodium, libstemmer, cyrus_sasl
+, nixosTests
 # Auth modules
 , withMySQL ? false, mysql
 , withPgSQL ? false, postgresql
@@ -8,7 +9,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "dovecot-2.3.3";
+  name = "dovecot-2.3.4";
 
   nativeBuildInputs = [ perl pkgconfig ];
   buildInputs =
@@ -20,7 +21,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://dovecot.org/releases/2.3/${name}.tar.gz";
-    sha256 = "13kd0rxdg9scwnx6n24p6mv8p6dyh7v8s7sqv55gp2i54pp2gbqm";
+    sha256 = "01ggzf7b3jpl89mjiqr7xbpbs181g2gjf6wzg70qaqfzz3ppc6yr";
   };
 
   preConfigure = ''
@@ -33,13 +34,6 @@ stdenv.mkDerivation rec {
   postInstall = ''
     cp -r $out/$out/* $out
     rm -rf $out/$(echo "$out" | cut -d "/" -f2)
-  '' + lib.optionalString stdenv.isDarwin ''
-    install_name_tool -change libclucene-shared.1.dylib \
-        ${clucene_core_2}/lib/libclucene-shared.1.dylib \
-        $out/lib/dovecot/lib21_fts_lucene_plugin.so
-    install_name_tool -change libclucene-core.1.dylib \
-        ${clucene_core_2}/lib/libclucene-core.1.dylib \
-        $out/lib/dovecot/lib21_fts_lucene_plugin.so
   '';
 
   patches = [
@@ -74,5 +68,8 @@ stdenv.mkDerivation rec {
     description = "Open source IMAP and POP3 email server written with security primarily in mind";
     maintainers = with stdenv.lib.maintainers; [ peti rickynils fpletz ];
     platforms = stdenv.lib.platforms.unix;
+  };
+  passthru.tests = {
+    opensmtpd-interaction = nixosTests.opensmtpd;
   };
 }

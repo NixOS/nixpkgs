@@ -4,11 +4,11 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "neo4j-${version}";
-  version = "3.4.8";
+  version = "3.4.10";
 
   src = fetchurl {
     url = "https://neo4j.com/artifact.php?name=neo4j-community-${version}-unix.tar.gz";
-    sha256 = "1mdxqfy5xzc6944lg87975i9bfpqqx28xl8h70m4wn79x0qgby2v";
+    sha256 = "0wxcwsnnwk08w3zaz67aa93ysrl61lsy41xynq1sy6z31a7gx9jr";
   };
 
   buildInputs = [ makeWrapper jre8 which gawk ];

@@ -9,14 +9,14 @@
 # the executables of git, mercurial and bazaar.
 
 buildPythonPackage rec {
-  version  = "2.6";
+  version  = "2.7";
   pname = "powerline";
   name = pname + "-" + version;
 
   src = fetchurl {
     url    = "https://github.com/powerline/powerline/archive/${version}.tar.gz";
     name   = "${name}.tar.gz";
-    sha256 = "c108f11fe10dc910febb94b87d3abded85d4363fb950366a9e30282b9ba7c272";
+    sha256 = "1h1j2rfphvfdq6mmfyn5bql45hzrwxkhpc2jcwf0vrl3slzkl5s5";
   };
 
   propagatedBuildInputs = [ psutil pygit2];

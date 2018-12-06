@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, texlive, bison, flex, liblapackWithoutAtlas
+{ stdenv, fetchurl, fetchpatch, texlive, bison, flex, liblapack
 , gmp, mpfr, pari, ntl, gsl, blas, mpfi
 , readline, gettext, libpng, libao, gfortran, perl
 , enableGUI ? false, libGLU_combined ? null, xorg ? null, fltk ? null
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     # gfortran.cc default output contains static libraries compiled without -fPIC
     # we want libgfortran.so.3 instead
     (stdenv.lib.getLib gfortran.cc)
-    liblapackWithoutAtlas
+    liblapack
   ] ++ stdenv.lib.optionals enableGUI [
     libGLU_combined fltk xorg.libX11
   ];

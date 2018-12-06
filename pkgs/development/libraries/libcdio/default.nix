@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
       ISO-9660 filesystems (libiso9660), as well as utility
       programs such as an audio CD player and an extractor.
     '';
-    homepage = http://www.gnu.org/software/libcdio/;
+    homepage = https://www.gnu.org/software/libcdio/;
     license = licenses.gpl2Plus;
     platforms = platforms.linux ++ platforms.darwin;
   };

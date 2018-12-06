@@ -5,22 +5,14 @@
 
 stdenv.mkDerivation rec {
   name = "snapper-${version}";
-  version = "0.5.0";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "openSUSE";
     repo = "snapper";
     rev = "v${version}";
-    sha256 = "14hrv23film4iihyclcvc2r2dgxl8w3as50r81xjjc85iyp6yxkm";
+    sha256 = "1blllmkwh13pnf3hxi1p2az5i77arbm2661n0rd0569s6kf5brb7";
   };
-
-  patches = [
-    # Fix build with new Boost
-    (fetchpatch {
-      url = "https://github.com/openSUSE/snapper/commit/2e3812d2c1d1f54861fb79f5c2b0197de96a00a3.patch";
-      sha256 = "0yrzss1v7lmcvkajmchz917yqsvlsdfz871szzw790v6pql1322s";
-    })
-  ];
 
   nativeBuildInputs = [
     autoreconfHook pkgconfig

@@ -7,7 +7,7 @@
 
 let
   pname = "tootle";
-  version = "0.1.5";
+  version = "0.2.0";
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
@@ -15,7 +15,7 @@ in stdenv.mkDerivation rec {
     owner = "bleakgrey";
     repo = pname;
     rev = version;
-    sha256 = "022h1rh1jk3m1f9al0s1rylmnqnkydyc81idfc8jf1g0frnvn5i6";
+    sha256 = "1z3wyx316nns6gi7vlvcfmalhvxncmvcmmlgclbv6b6hwl5x2ysi";
   };
 
   nativeBuildInputs = [ meson ninja pkgconfig python3 vala gobjectIntrospection wrapGAppsHook ];

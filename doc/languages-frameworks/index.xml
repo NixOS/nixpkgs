@@ -19,6 +19,7 @@
  <xi:include href="java.xml" />
  <xi:include href="lua.xml" />
  <xi:include href="node.section.xml" />
+ <xi:include href="ocaml.xml" />
  <xi:include href="perl.xml" />
  <xi:include href="python.section.xml" />
  <xi:include href="qt.xml" />

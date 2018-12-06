@@ -72,7 +72,10 @@ in
       categories = "Network;InstantMessaging;Chat;VideoConference";
     };
 
-    phases = [ "unpackPhase" "installPhase" ];
+    dontBuild = true;
+    dontPatchELF = true;
+    dontConfigure = true;
+
     nativeBuildInputs = [ dpkg ];
     unpackPhase = "dpkg-deb -x $src .";
     installPhase = ''
@@ -93,7 +96,7 @@ in
 
       # Desktop file
       mkdir -p "$out/share/applications"
-      cp ${desktopItem}/share/applications/* "$out/share/applications"
+      cp "${desktopItem}/share/applications/"* "$out/share/applications"
     '';
 
     meta = with stdenv.lib; {

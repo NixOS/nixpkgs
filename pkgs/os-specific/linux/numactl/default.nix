@@ -13,11 +13,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  patches = stdenv.lib.optional stdenv.hostPlatform.isMusl (fetchpatch {
-      url = https://git.alpinelinux.org/cgit/aports/plain/testing/numactl/musl.patch?id=0592b128c71c3e70d493bc7a13caed0d7fae91dd;
-      sha256 = "080b0sygmg7104qbbh1amh3b322yyiajwi2d3d0vayffgva0720v";
-    });
-
   postPatch = ''
     patchShebangs test
   '';

@@ -2,7 +2,7 @@
   libsecret, libGL, libpulseaudio, glib, makeWrapper, makeDesktopItem }:
 
 let
-  version = "1.0.6-1";
+  version = "1.1.0-1";
 
   description = ''
     An application that runs on your computer in the background and seamlessly encrypts
@@ -25,7 +25,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://protonmail.com/download/protonmail-bridge_${version}_amd64.deb";
-    sha256 = "1as4xdsik2w9clbrwp1k00491324cg6araz3jq2m013yg1cild28";
+    sha256 = "0l29z208krnd3dginc203m4p5dlmnxf08vpmbm9xzlckwmswizkb";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -38,10 +38,10 @@ in stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/{bin,lib,share/applications}
-    # mkdir -p $out/share/{applications,icons/hicolor/scalable/apps}
+    mkdir -p $out/share/{applications,icons/hicolor/scalable/apps}
 
     cp -r usr/lib/protonmail/bridge/Desktop-Bridge{,.sh} $out/lib
-    # cp usr/share/icons/protonmail/Desktop-Bridge.svg $out/share/icons/hicolor/scalable/apps/desktop-bridge.svg
+    cp usr/share/icons/protonmail/Desktop-Bridge.svg $out/share/icons/hicolor/scalable/apps/desktop-bridge.svg
     cp ${desktopItem}/share/applications/* $out/share/applications
 
     ln -s $out/lib/Desktop-Bridge $out/bin/Desktop-Bridge

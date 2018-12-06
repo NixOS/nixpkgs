@@ -208,15 +208,11 @@ in
       }
     ];
 
-    services.xserver.displayManager.job = {
-      logToFile = true;
-
-      # lightdm relaunches itself via just `lightdm`, so needs to be on the PATH
-      execCmd = ''
-        export PATH=${lightdm}/sbin:$PATH
-        exec ${lightdm}/sbin/lightdm
-      '';
-    };
+    # lightdm relaunches itself via just `lightdm`, so needs to be on the PATH
+    services.xserver.displayManager.job.execCmd = ''
+      export PATH=${lightdm}/sbin:$PATH
+      exec ${lightdm}/sbin/lightdm
+    '';
 
     environment.etc."lightdm/lightdm.conf".source = lightdmConf;
     environment.etc."lightdm/users.conf".source = usersConf;

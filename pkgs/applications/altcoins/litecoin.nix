@@ -11,13 +11,13 @@ with stdenv.lib;
 stdenv.mkDerivation rec {
 
   name = "litecoin" + (toString (optional (!withGui) "d")) + "-" + version;
-  version = "0.16.2";
+  version = "0.16.3";
 
   src = fetchFromGitHub {
     owner = "litecoin-project";
     repo = "litecoin";
     rev = "v${version}";
-    sha256 = "0xfwh7cxxz6w8kgr4kl48w3zm81n1hv8fxb5l9zx3460im1ffgy6";
+    sha256 = "0vc184qfdkjky1qffa7309k6973k4197bkzwcmffc9r5sdfhrhkp";
   };
 
   nativeBuildInputs = [ pkgconfig autoreconfHook ];

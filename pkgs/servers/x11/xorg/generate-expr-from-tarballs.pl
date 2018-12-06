@@ -13,6 +13,9 @@
 use strict;
 use warnings;
 
+use File::Basename;
+use File::Spec::Functions;
+
 my $tmpDir = "/tmp/xorg-unpack";
 
 
@@ -43,7 +46,6 @@ $pcMap{"\$DRI2PROTO"} = "dri2proto";
 
 
 my $downloadCache = "./download-cache";
-$ENV{'NIX_DOWNLOAD_CACHE'} = $downloadCache;
 mkdir $downloadCache, 0755;
 
 
@@ -76,7 +78,17 @@ while (<>) {
     $pkgURLs{$pkg} = $tarball;
     $pkgNames{$pkg} = $pkgName;
 
-    my ($hash, $path) = `PRINT_PATH=1 QUIET=1 nix-prefetch-url '$tarball'`;
+    my $cachePath = catdir($downloadCache, basename($tarball));
+    my $hash;
+    my $path;
+    if (-e $cachePath) {
+        $path = readlink($cachePath);
+        $hash = `nix-hash --type sha256 --base32 --flat $cachePath`;
+    }
+    else {
+        ($hash, $path) = `PRINT_PATH=1 QUIET=1 nix-prefetch-url '$tarball'`;
+        `nix-store --realise --add-root $cachePath --indirect $path`;
+    }
     chomp $hash;
     chomp $path;
     $pkgHashes{$pkg} = $hash;
@@ -157,7 +169,7 @@ while (<>) {
     if ($file =~ /AC_PATH_PROG\(FCCACHE/) {
         # Don't run fc-cache.
         die if defined $extraAttrs{$pkg};
-        $extraAttrs{$pkg} = " preInstall = \"installFlags=(FCCACHE=true)\"; ";
+        push @{$extraAttrs{$pkg}}, "preInstall = \"installFlags=(FCCACHE=true)\";";
     }
 
     my $isFont;
@@ -178,7 +190,7 @@ while (<>) {
     }
 
     if ($isFont) {
-        $extraAttrs{$pkg} = " configureFlags = [ \"--with-fontrootdir=\$(out)/lib/X11/fonts\" ]; ";
+        push @{$extraAttrs{$pkg}}, "configureFlags = [ \"--with-fontrootdir=\$(out)/lib/X11/fonts\" ];";
     }
 
     sub process {
@@ -231,23 +243,9 @@ open OUT, ">default.nix";
 print OUT "";
 print OUT <<EOF;
 # THIS IS A GENERATED FILE.  DO NOT EDIT!
-args @ { clangStdenv, fetchurl, fetchgit, fetchpatch, stdenv, pkgconfig, intltool, freetype, fontconfig
-, libxslt, expat, libpng, zlib, perl, mesa_noglu, mesa_drivers, spice-protocol
-, dbus, libuuid, openssl, gperf, m4, libevdev, tradcpp, libinput, mcpp, makeWrapper, autoreconfHook
-, autoconf, automake, libtool, xmlto, asciidoc, flex, bison, python, mtdev, pixman, ... }: with args;
+{ lib, newScope, pixman }:
 
-let
-
-  mkDerivation = name: attrs:
-    let newAttrs = (overrides."\${name}" or (x: x)) attrs;
-        stdenv = newAttrs.stdenv or args.stdenv;
-      in stdenv.mkDerivation ((removeAttrs newAttrs [ "stdenv" ]) // {
-        hardeningDisable = [ "bindnow" "relro" ];
-      });
-
-  overrides = import ./overrides.nix {inherit args xorg;};
-
-  xorg = rec {
+lib.makeScope newScope (self: with self; {
 
   inherit pixman;
 
@@ -258,13 +256,13 @@ foreach my $pkg (sort (keys %pkgURLs)) {
     print "$pkg\n";
 
     my %requires = ();
-    my $inputs = "";
+    my @buildInputs;
     foreach my $req (sort @{$pkgRequires{$pkg}}) {
         if (defined $pcMap{$req}) {
             # Some packages have .pc that depends on itself.
             next if $pcMap{$req} eq $pkg;
             if (!defined $requires{$pcMap{$req}}) {
-                $inputs .= "$pcMap{$req} ";
+                push @buildInputs, $pcMap{$req};
                 $requires{$pcMap{$req}} = 1;
             }
         } else {
@@ -272,25 +270,34 @@ foreach my $pkg (sort (keys %pkgURLs)) {
         }
     }
 
-    my $extraAttrs = $extraAttrs{"$pkg"};
-    $extraAttrs = "" unless defined $extraAttrs;
+    my $buildInputsStr = join "", map { $_ . " " } @buildInputs;
+
+    my @arguments = @buildInputs;
+    unshift @arguments, "stdenv", "pkgconfig", "fetchurl";
+    my $argumentsStr = join ", ", @arguments;
+
+    my $extraAttrsStr = "";
+    if (defined $extraAttrs{$pkg}) {
+      $extraAttrsStr = join "", map { "\n    " . $_ } @{$extraAttrs{$pkg}};
+    }
 
     print OUT <<EOF
-  $pkg = (mkDerivation "$pkg" {
+  $pkg = callPackage ({ $argumentsStr }: stdenv.mkDerivation {
     name = "$pkgNames{$pkg}";
     builder = ./builder.sh;
     src = fetchurl {
       url = $pkgURLs{$pkg};
       sha256 = "$pkgHashes{$pkg}";
     };
+    hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ $inputs];$extraAttrs
+    buildInputs = [ $buildInputsStr];$extraAttrsStr
     meta.platforms = stdenv.lib.platforms.unix;
-  }) // {inherit $inputs;};
+  }) {};
 
 EOF
 }
 
-print OUT "}; in xorg\n";
+print OUT "})\n";
 
 close OUT;

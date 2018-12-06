@@ -17,9 +17,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig autoreconfHook gobjectIntrospection ];
   buildInputs = [ glib gdk_pixbuf ];
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = https://developer.gnome.org/notification-spec/;
     description = "A library that sends desktop notifications to a notification daemon";
-    platforms = stdenv.lib.platforms.unix;
+    platforms = platforms.unix;
+    license = licenses.lgpl21;
   };
 }

@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
     license = stdenv.lib.licenses.gpl3Plus;
 
-    homepage = http://www.gnu.org/software/enscript/;
+    homepage = https://www.gnu.org/software/enscript/;
 
     maintainers = [ ];
     platforms = stdenv.lib.platforms.all;

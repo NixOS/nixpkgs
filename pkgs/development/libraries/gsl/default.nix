@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   patches = [
     # ToDo: there might be more impurities than FMA support check
-    ./disable-fma.patch # http://lists.gnu.org/archive/html/bug-gsl/2011-11/msg00019.html
+    ./disable-fma.patch # https://lists.gnu.org/archive/html/bug-gsl/2011-11/msg00019.html
   ];
 
   # https://lists.gnu.org/archive/html/bug-gsl/2015-11/msg00012.html
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "The GNU Scientific Library, a large numerical library";
-    homepage = http://www.gnu.org/software/gsl/;
+    homepage = https://www.gnu.org/software/gsl/;
     license = stdenv.lib.licenses.gpl3Plus;
 
     longDescription = ''

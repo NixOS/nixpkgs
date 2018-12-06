@@ -1,9 +1,9 @@
-{ stdenv, fetchFromGitHub, fetchpatch, vala, pkgconfig, meson, ninja, python3, granite, gtk3
+{ stdenv, fetchFromGitHub, fetchpatch, vala_0_40, pkgconfig, meson, ninja, python3, granite, gtk3
 , gnome3, desktop-file-utils, json-glib, libsoup, poppler, gobjectIntrospection, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "aesop";
-  version = "1.0.5";
+  version = "1.0.7";
 
   name = "${pname}-${version}";
 
@@ -21,25 +21,18 @@ stdenv.mkDerivation rec {
     ninja
     pkgconfig
     python3
-    vala
+    vala_0_40 # should be `elementary.vala` when elementary attribute set is merged
     wrapGAppsHook
   ];
 
   buildInputs = [
+    gnome3.defaultIconTheme # should be `elementary.defaultIconTheme`when elementary attribute set is merged
     gnome3.libgee
     granite
     gtk3
     json-glib
     libsoup
     poppler
-  ];
-
-  # Fix build with vala 0.42
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/lainsce/aesop/commit/a90b3c711bd162583533370deb031c2c6254c82d.patch";
-      sha256 = "1zf831g6sqq3966q0i00x3jhlbfh9blcky6pnyp5qp59hxyxy169";
-    })
   ];
 
   postPatch = ''
@@ -49,9 +42,9 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "The simplest PDF viewer around";
-    homepage    = https://github.com/lainsce/aesop;
-    license     = licenses.gpl2Plus;
+    homepage = https://github.com/lainsce/aesop;
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ worldofpeace ];
-    platforms   = platforms.linux;
+    platforms = platforms.linux;
   };
 }

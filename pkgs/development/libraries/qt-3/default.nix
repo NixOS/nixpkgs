@@ -84,7 +84,8 @@ stdenv.mkDerivation {
 
   passthru = {inherit mysqlSupport;};
 
-  meta = {
-    platforms = stdenv.lib.platforms.linux;
+  meta = with stdenv.lib; {
+    license = with licenses; [ gpl2 qpl ];
+    platforms = platforms.linux;
   };
 }

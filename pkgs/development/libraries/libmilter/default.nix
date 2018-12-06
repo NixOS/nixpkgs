@@ -37,5 +37,6 @@ stdenv.mkDerivation rec {
     description = "Sendmail Milter mail filtering API library";
     platforms = platforms.unix;
     maintainers = with maintainers; [ fpletz ];
+    license = licenses.sendmail;
   };
 }

@@ -77,7 +77,7 @@ stdenv.mkDerivation ({
 
   # Failures in the regression test suite won't abort the build process. We run
   # the suite only so that potential errors show up in the build log. See also:
-  # http://sourceforge.net/tracker/?func=detail&aid=3365831&group_id=4933&atid=104933.
+  # https://sourceforge.net/tracker/?func=detail&aid=3365831&group_id=4933&atid=104933.
   doCheck = true;
 
   enableParallelBuilding = true;

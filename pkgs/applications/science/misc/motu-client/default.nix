@@ -12,10 +12,10 @@ python27Packages.buildPythonApplication rec {
     homepage = https://github.com/quiet-oceans/motuclient-setuptools;
     description = "CLI to query oceanographic data to Motu servers";
     longDescription = ''
-      Access data from (motu)[http://sourceforge.net/projects/cls-motu/] servers.
+      Access data from (motu)[https://sourceforge.net/projects/cls-motu/] servers.
       This is a refactored fork of the original release in order to simplify integration,
       deployment and packaging. Upstream code can be found at
-      http://sourceforge.net/projects/cls-motu/ .
+      https://sourceforge.net/projects/cls-motu/ .
     '';
     license = licenses.lgpl3Plus;
     maintainers = [ maintainers.lsix ];

@@ -26,20 +26,12 @@
 
 buildPythonPackage rec {
   pname = "thinc";
-  version = "6.11.2";
+  version = "6.12.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "028a014192e1914c151222794781d14e1c9fddf47a859aa36077f07871d0c30a";
+    sha256 = "0lfdf08v7rrj9b29z2vf8isaqa0zh16acw9im8chkqsh8bay4ykm";
   };
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "msgpack-python==" "msgpack-python>=" \
-      --replace "msgpack-numpy==" "msgpack-numpy>=" \
-      --replace "plac>=0.9,<1.0" "plac>=0.9" \
-      --replace "hypothesis>=2,<3" "hypothesis>=2"
-  '';
 
   buildInputs = lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
     Accelerate CoreFoundation CoreGraphics CoreVideo
@@ -71,13 +63,10 @@ buildPythonPackage rec {
   ];
 
   prePatch = ''
-    substituteInPlace setup.py --replace \
-      "'pathlib>=1.0.0,<2.0.0'," \
-      "\"pathlib>=1.0.0,<2.0.0; python_version<'3.4'\","
-
-    substituteInPlace setup.py --replace \
-      "'cytoolz>=0.8,<0.9'," \
-      "'cytoolz>=0.8',"
+    substituteInPlace setup.py \
+      --replace "pathlib==1.0.1" "pathlib>=1.0.0,<2.0.0" \
+      --replace "plac>=0.9.6,<1.0.0" "plac>=0.9.6" \
+      --replace "wheel>=0.32.0,<0.33.0" "wheel>=0.31.0"
   '';
 
   # Cannot find cython modules.

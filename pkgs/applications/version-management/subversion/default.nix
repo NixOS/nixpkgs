@@ -116,13 +116,19 @@ in {
   };
 
   subversion19 = common {
-    version = "1.9.7";
-    sha256 = "08qn94zaqcclam2spb4h742lvhxw8w5bnrlya0fm0bp17hriicf3";
+    version = "1.9.9";
+    sha256 = "1ll13ychbkp367c7zsrrpda5nygkryma5k18qfr8wbaq7dbvxzcd";
   };
 
   subversion_1_10 = common {
     version = "1.10.3";
     sha256 = "1z6r3n91a4znsh68rl3jisfr7k4faymhbpalmmvsmvsap34al3cz";
+    extraBuildInputs = [ lz4 utf8proc ];
+  };
+
+  subversion_1_11 = common {
+    version = "1.11.0";
+    sha256 = "0miyz3xsxxp56iczxv6yqd8p06av3vxpb5nasyg2xb3ln1247i47";
     extraBuildInputs = [ lz4 utf8proc ];
   };
 }

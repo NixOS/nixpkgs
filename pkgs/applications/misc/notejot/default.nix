@@ -1,9 +1,9 @@
-{ stdenv, fetchFromGitHub, vala, pkgconfig, meson, ninja, python3, granite
+{ stdenv, fetchFromGitHub, vala_0_40, pkgconfig, meson, ninja, python3, granite
 , gtk3, gnome3, gtksourceview, json-glib, gobjectIntrospection, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "notejot";
-  version = "1.4.5";
+  version = "1.4.7";
 
   name = "${pname}-${version}";
 
@@ -20,11 +20,12 @@ stdenv.mkDerivation rec {
     ninja
     pkgconfig
     python3
-    vala
+    vala_0_40 # should be `elementary.vala` when elementary attribute set is merged
     wrapGAppsHook
   ];
 
   buildInputs = [
+    gnome3.defaultIconTheme # should be `elementary.defaultIconTheme`when elementary attribute set is merged
     gnome3.libgee
     granite
     gtk3
@@ -39,9 +40,9 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Stupidly-simple sticky notes applet";
-    homepage    = https://github.com/lainsce/notejot;
-    license     = licenses.gpl2Plus;
+    homepage = https://github.com/lainsce/notejot;
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ worldofpeace ];
-    platforms   = platforms.linux;
+    platforms = platforms.linux;
   };
 }

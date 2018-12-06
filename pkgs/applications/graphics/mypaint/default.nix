@@ -26,10 +26,7 @@ in stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ numpy ];
 
-  buildPhase = "scons prefix=$out";
-
-  installPhase = ''
-    scons prefix=$out install
+  postInstall = ''
     sed -i -e 's|/usr/bin/env python2.7|${python}/bin/python|' $out/bin/mypaint
   '';
 

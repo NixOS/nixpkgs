@@ -18,5 +18,6 @@ stdenv.mkDerivation rec {
     homepage    = https://aomedia.org/av1-features/get-started/;
     maintainers = with maintainers; [ kiloreux ];
     platforms   = platforms.all;
+    license = licenses.bsd2;
   };
 }

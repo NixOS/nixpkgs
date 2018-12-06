@@ -1,13 +1,15 @@
-{ fetchurl, ncurses, stdenv,
+{ fetchFromGitHub, ncurses, stdenv,
   updateAutotoolsGnuConfigScriptsHook }:
 
 stdenv.mkDerivation rec {
   name = "freesweep-${version}";
   version = "1.0.1";
 
-  src = fetchurl {
-    url = "https://github.com/rwestlund/freesweep/archive/v${version}.tar.gz";
-    sha256 = "0l2kf14558lsq9qd2hs0kcyn9bbl1jdbzwrvcs6mnyjl7zpizcpj";
+  src = fetchFromGitHub {
+    owner = "rwestlund";
+    repo = "freesweep";
+    rev = "v${version}";
+    sha256 = "0grkwmz9whg1vlnk6gbr0vv9i2zgbd036182pk0xj4cavaj9rpjb";
   };
 
   nativeBuildInputs = [ updateAutotoolsGnuConfigScriptsHook ];

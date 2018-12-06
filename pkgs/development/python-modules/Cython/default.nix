@@ -13,6 +13,7 @@
 
 let
   excludedTests = []
+    ++ [ "reimport_from_subinterpreter" ]
     # cython's testsuite is not working very well with libc++
     # We are however optimistic about things outside of testsuite still working
     ++ stdenv.lib.optionals (stdenv.cc.isClang or false) [ "cpdef_extern_func" "libcpp_algo" ]
@@ -25,11 +26,11 @@ let
 
 in buildPythonPackage rec {
   pname = "Cython";
-  version = "0.28.3";
+  version = "0.29";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1aae6d6e9858888144cea147eb5e677830f45faaff3d305d77378c3cba55f526";
+    sha256 = "15zama7fgp7yyi3z39xp3z2lvwcgch8fn3ycscw2cs37vqg6v4cl";
   };
 
   nativeBuildInputs = [
@@ -44,20 +45,12 @@ in buildPythonPackage rec {
   checkPhase = ''
     export HOME="$NIX_BUILD_TOP"
     ${python.interpreter} runtests.py -j$NIX_BUILD_CORES \
+      --no-code-style \
       ${stdenv.lib.optionalString (builtins.length excludedTests != 0)
         ''--exclude="(${builtins.concatStringsSep "|" excludedTests})"''}
   '';
 
   doCheck = !stdenv.isDarwin;
-
-  patches = [
-    # The following is in GitHub in 0.28.3 but not in the `sdist`.
-    # https://github.com/cython/cython/issues/2319
-    (fetchpatch {
-      url = https://github.com/cython/cython/commit/c485b1b77264c3c75d090a3c526de24966830d42.patch;
-      sha256 = "1p6jj9rb097kqvhs5j5127sj5zy18l7x9v0p478cjyzh41khh9r0";
-    })
-  ];
 
   meta = {
     description = "An optimising static compiler for both the Python programming language and the extended Cython programming language";

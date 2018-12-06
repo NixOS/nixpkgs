@@ -134,7 +134,9 @@ in
         ${config.sdImage.populateBootCommands}
 
         # Copy the populated /boot into the SD image
-        (cd boot; mcopy -bpsvm -i ../bootpart.img ./* ::)
+        (cd boot; mcopy -psvm -i ../bootpart.img ./* ::)
+        # Verify the FAT partition before copying it.
+        fsck.vfat -vn bootpart.img
         dd conv=notrunc if=bootpart.img of=$img seek=$START count=$SECTORS
       '';
     }) {};

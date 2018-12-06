@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   major = "14";
-  minor = "2";
-  version = "${major}.${minor}";
+  minor = "3";
+  version = "${major}.${minor}.0";
   name = "umlet-${version}";
 
   src = fetchurl {
     url = "http://www.umlet.com/umlet_${major}_${minor}/umlet-standalone-${version}.zip";
-    sha256 = "1fcc7ms92vcc4b8jh56bd3zrqdb0bwhbbzdxycc952fb0j6m62fw";
+    sha256 = "0jfyxjxsjx29xhs3fl0f574nyncmk9j5jp8zlgd401mcaznn9c7l";
   };
 
   buildInputs = [ unzip ];
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = http://www.umlet.com;
     license = licenses.gpl3;
-    maintainers = [ ];
+    maintainers = with maintainers; [ geistesk ];
     platforms = platforms.all;
   };
 }

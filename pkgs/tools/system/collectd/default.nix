@@ -38,12 +38,12 @@
 , mongoc ? null
 }:
 stdenv.mkDerivation rec {
-  version = "5.8.0";
+  version = "5.8.1";
   name = "collectd-${version}";
 
   src = fetchurl {
     url = "https://collectd.org/files/${name}.tar.bz2";
-    sha256 = "1j8mxgfq8039js2bscphd6cnriy35hk4jrxfjz5k6mghpdvg8vxh";
+    sha256 = "1njk8hh56gb755xafsh7ahmqr9k2d4lam4ddj7s7fqz0gjigv5p7";
   };
 
   # on 5.8.0: lvm2app.h:21:2: error: #warning "liblvm2app is deprecated, use D-Bus API instead." [-Werror=cpp]
@@ -65,13 +65,6 @@ stdenv.mkDerivation rec {
     darwin.apple_sdk.frameworks.ApplicationServices
   ];
 
-  # Patch fixes broken build on 18.03
-  # Should be included in the next release of this package
-  patches = fetchpatch {
-    name = "collectd_kafka_fix";
-    url = "https://github.com/collectd/collectd/commit/6c2eb3ad28f08f7e774b6eaea5ae01b0857cf884.patch";
-    sha256 = "14wsyj5xghij9lz7c61bzdyh45zg8pv5xn490cvbqiaci948zzv6";
-  };
   configureFlags = [ "--localstatedir=/var" ];
 
   # do not create directories in /var during installPhase

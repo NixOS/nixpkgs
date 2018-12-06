@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, meson, ninja, vala, libxslt, pkgconfig, glib, dbus-glib, gtk3, gnome3, python3
+{ stdenv, fetchurl, meson, ninja, vala, libxslt, pkgconfig, glib, gtk3, gnome3, python3
 , libxml2, gettext, docbook_xsl, wrapGAppsHook, gobjectIntrospection }:
 
 let
@@ -14,7 +14,7 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ meson ninja vala libxslt pkgconfig wrapGAppsHook gettext docbook_xsl libxml2 gobjectIntrospection python3 ];
 
-  buildInputs = [ glib dbus-glib gtk3 gnome3.defaultIconTheme gnome3.dconf ];
+  buildInputs = [ glib gtk3 gnome3.dconf ];
 
   postPatch = ''
     chmod +x meson_post_install.py

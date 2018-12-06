@@ -3,13 +3,13 @@
 
 let
   pname = "NetworkManager-openvpn";
-  version = "1.8.6";
+  version = "1.8.8";
 in stdenv.mkDerivation rec {
   name = "${pname}${if withGnome then "-gnome" else ""}-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1ksij9438f2lrwkg287qjlfaxja6jgmqxqap96585r3nf5zj69ch";
+    sha256 = "19qdl7x5x7f9mj8vm25mck6gg8ljbixi0dw2rqngwl2nzpcxwg52";
   };
 
   patches = [

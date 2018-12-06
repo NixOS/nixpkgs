@@ -1,8 +1,8 @@
-{ stdenv, fetchurl, buildPerlPackage, perl, perlPackages, HTMLParser, NetDNS, NetAddrIP, DBFile
+{ stdenv, fetchurl, perl, perlPackages, HTMLParser, NetDNS, NetAddrIP, DBFile
 , HTTPDate, MailDKIM, LWP, IOSocketSSL, makeWrapper, gnupg1
 }:
 
-buildPerlPackage rec {
+perlPackages.buildPerlPackage rec {
   name = "SpamAssassin-3.4.1";
 
   src = fetchurl {

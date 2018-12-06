@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, pkgconfig, qmake, qttools,
-  deepin-gettext-tools, dtkcore, dtkwidget
+  deepin-gettext-tools, dtkcore, dtkwidget, deepin
 }:
 
 stdenv.mkDerivation rec {
@@ -33,6 +33,8 @@ stdenv.mkDerivation rec {
     sed -i com.deepin.Calendar.service \
       -e "s,/usr,$out,"
   '';
+
+  passthru.updateScript = deepin.updateScript { inherit name; };
 
   meta = with stdenv.lib; {
     description = "Calendar for Deepin Desktop Environment";

@@ -11,7 +11,9 @@ stdenv.mkDerivation rec {
     sha256 = "1mxaxg65f7v8n60irjwm24v7hcisbl0srmpvcy1l4scs6rjj1awh";
   };
 
-  meta = {
-    platforms = stdenv.lib.platforms.unix;
+  meta = with stdenv.lib; {
+    description = "Java full-text search engine";
+    platforms = platforms.unix;
+    license = licenses.asl20;
   };
 }

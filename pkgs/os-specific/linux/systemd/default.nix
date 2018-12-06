@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch, pkgconfig, intltool, gperf, libcap, kmod
+{ stdenv, lib, fetchFromGitHub, fetchpatch, fetchurl, pkgconfig, intltool, gperf, libcap, kmod
 , xz, pam, acl, libuuid, m4, utillinux, libffi
 , glib, kbd, libxslt, coreutils, libgcrypt, libgpgerror, libidn2, libapparmor
 , audit, lz4, bzip2, libmicrohttpd, pcre2
@@ -29,6 +29,22 @@ in stdenv.mkDerivation rec {
     rev = "31859ddd35fc3fa82a583744caa836d356c31d7f";
     sha256 = "1xci0491j95vdjgs397n618zii3sgwnvanirkblqqw6bcvcjvir1";
   };
+
+  prePatch = let
+      # Upstream's maintenance branches are still too intrusive:
+      # https://github.com/systemd/systemd-stable/tree/v239-stable
+      patches-deb = fetchurl {
+        # When the URL disappears, it typically means that Debian has new patches
+        # (probably security) and updating to new tarball will apply them as well.
+        name = "systemd-debian-patches.tar.xz";
+        url = mirror://debian/pool/main/s/systemd/systemd_239-11~bpo9+1.debian.tar.xz;
+        sha256 = "136f6p4jbi4z94mf4g099dfcacwka8jwhza0wxxw2q5l5q3xiysh";
+      };
+      # Note that we skip debian-specific patches, i.e. ./debian/patches/debian/*
+    in ''
+      tar xf ${patches-deb}
+      patches="$patches $(cat debian/patches/series | grep -v '^debian/' | sed 's|^|debian/patches/|')"
+    '';
 
   outputs = [ "out" "lib" "man" "dev" ];
 

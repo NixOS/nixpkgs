@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, pkgconfig, intltool, libtool, gnome3, bamf,
   json-glib, libcanberra-gtk3, libxkbcommon, libstartup_notification,
-  deepin-wallpapers, deepin-desktop-schemas }:
+  deepin-wallpapers, deepin-desktop-schemas, deepin }:
 
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
@@ -51,6 +51,8 @@ stdenv.mkDerivation rec {
   '';
 
   enableParallelBuilding = true;
+
+  passthru.updateScript = deepin.updateScript { inherit name; };
 
   meta = with stdenv.lib; {
     description = "2D window manager for Deepin";

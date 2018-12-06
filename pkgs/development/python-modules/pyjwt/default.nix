@@ -1,6 +1,6 @@
 { lib, buildPythonPackage, fetchPypi
 , cryptography, ecdsa
-, pytestrunner, pytestcov, pytest }:
+, pytestrunner, pytestcov, pytest_37 }:
 
 buildPythonPackage rec {
   pname = "PyJWT";
@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ cryptography ecdsa ];
 
-  checkInputs = [ pytestrunner pytestcov pytest ];
+  checkInputs = [ pytestrunner pytestcov pytest_37 ];
 
   meta = with lib; {
     description = "JSON Web Token implementation in Python";

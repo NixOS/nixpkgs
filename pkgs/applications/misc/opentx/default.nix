@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub
-, cmake, gcc-arm-embedded, python
+, cmake, gcc-arm-embedded, binutils-arm-embedded, python
 , qt5, SDL, gmock
 , dfu-util, avrdude
 }:
@@ -21,10 +21,12 @@ in stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [
+    cmake
+    gcc-arm-embedded binutils-arm-embedded
+  ];
 
   buildInputs = with qt5; [
-    gcc-arm-embedded
     python python.pkgs.pyqt4
     qtbase qtmultimedia qttranslations
     SDL gmock
@@ -40,6 +42,7 @@ in stdenv.mkDerivation {
     # XXX I would prefer to include these here, though we will need to file a bug upstream to get that changed.
     #"-DDFU_UTIL_PATH=${dfu-util}/bin/dfu-util"
     #"-DAVRDUDE_PATH=${avrdude}/bin/avrdude"
+    "-DNANO=OFF"
   ];
 
   meta = with stdenv.lib; {

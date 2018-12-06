@@ -13,6 +13,8 @@ let
 in {
   stable = mkTelegram stableVersion;
   preview = mkTelegram (stableVersion // {
+    version = "1.4.7";
+    sha256Hash = "00kjirikywdbigm4zdnm50s3wxfn9bw1yx13xz4k4ppz6amq9nrp";
     stable = false;
   });
 }

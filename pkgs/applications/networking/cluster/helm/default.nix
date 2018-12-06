@@ -18,7 +18,7 @@ buildGoPackage rec {
 
   # Thsese are the original flags from the helm makefile
   buildFlagsArray = ''
-    -ldflags=
+    -ldflags=-X k8s.io/helm/pkg/version.Version=v${version}
     -w
     -s
   '';

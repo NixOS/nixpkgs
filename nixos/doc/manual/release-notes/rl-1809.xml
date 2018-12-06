@@ -637,6 +637,11 @@ $ nix-instantiate -E '(import &lt;nixpkgsunstable&gt; {}).gitFull'
      anyways for clarity.
     </para>
    </listitem>
+   <listitem>
+    <para>
+        Groups <literal>kvm</literal> and <literal>render</literal> are introduced now, as systemd requires them.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 

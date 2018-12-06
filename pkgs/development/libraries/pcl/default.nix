@@ -29,7 +29,6 @@ stdenv.mkDerivation rec {
 
     ++ stdenv.lib.optionals stdenv.isDarwin [ Cocoa AGL cf-private ];
   cmakeFlags = stdenv.lib.optionals stdenv.isDarwin [
-    "-DCMAKE_OSX_SYSROOT=" "-DCMAKE_OSX_DEPLOYMENT_TARGET="
     "-DOPENGL_INCLUDE_DIR=${OpenGL}/Library/Frameworks"
   ];
 

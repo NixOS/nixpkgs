@@ -74,6 +74,12 @@ let
         url = "file://${./type_getattro.patch}";
         sha256 = "11v9yx20hs3jmw0wggzvmw39qs4mxay4kb8iq2qjydwy9ya61nrd";
       })
+
+      (fetchpatch {
+        name = "CVE-2018-1000802.patch";
+        url = "https://github.com/python/cpython/pull/8985.patch";
+        sha256 = "1c8nq2c9sjqa8ipl62hiandg6a7lzrwwfhi3ky6jd3pxgyalrh97";
+      })
     ] ++ optionals (x11Support && stdenv.isDarwin) [
       ./use-correct-tcl-tk-on-darwin.patch
     ] ++ optionals stdenv.isLinux [
@@ -104,6 +110,8 @@ let
       # only works for GCC and Apple Clang. This makes distutils to call C++
       # compiler when needed.
       ./python-2.7-distutils-C++.patch
+    ] ++ optional (stdenv.hostPlatform != stdenv.buildPlatform) [
+      ./cross-compile.patch
     ];
 
   preConfigure = ''
@@ -176,10 +184,14 @@ let
     LIBRARY_PATH = makeLibraryPath paths;
   };
 
+  # Python 2.7 needs this
+  crossCompileEnv = stdenv.lib.optionalAttrs (stdenv.hostPlatform != stdenv.buildPlatform)
+                      { _PYTHON_HOST_PLATFORM = stdenv.hostPlatform.config; };
+
   # Build the basic Python interpreter without modules that have
   # external dependencies.
 
-in stdenv.mkDerivation {
+in stdenv.mkDerivation ({
     name = "python-${version}";
     pythonVersion = majorVersion;
 
@@ -278,4 +290,4 @@ in stdenv.mkDerivation {
       # in case both 2 and 3 are installed.
       priority = -100;
     };
-  }
+  } // crossCompileEnv)

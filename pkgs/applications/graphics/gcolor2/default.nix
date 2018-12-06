@@ -1,4 +1,4 @@
-{stdenv, fetchurl, gtk2, perl, perlXMLParser, pkgconfig } :
+{stdenv, fetchurl, gtk2, perlPackages, pkgconfig } :
 
 let version = "0.4"; in
 stdenv.mkDerivation {
@@ -21,7 +21,8 @@ stdenv.mkDerivation {
         [ ];
 
   nativeBuildInputs = [ pkgconfig ];
-buildInputs = [ gtk2 perl perlXMLParser ];
+  buildInputs = [ gtk2 ]
+    ++ (with perlPackages; [ perl XMLParser ]);
 
   meta = {
     description = "Simple GTK+2 color selector";

@@ -7,13 +7,13 @@
 
 buildPythonApplication rec {
   pname = "sc-controller";
-  version = "0.4.4";
+  version = "0.4.5";
 
   src = fetchFromGitHub {
     owner  = "kozec";
     repo   = pname;
     rev    = "v${version}";
-    sha256 = "0ki9x28i5slpnygkpdglcvj8cssvvjyz732y1cnpzw1f0sj0kris";
+    sha256 = "0mb9r4811rfj5rs4vrdhaf3x38iy1fvxr4sk2zg3xhvc29cdf5wv";
   };
 
   nativeBuildInputs = [ wrapGAppsHook ];
@@ -23,10 +23,6 @@ buildPythonApplication rec {
   propagatedBuildInputs = [ evdev pygobject3 pylibacl ];
 
   checkInputs = [ pytest ];
-
-  patches = [ 
-    ./fix-udev.patch  # fix upstream issue #401, remove with the next update
-  ];
 
   postPatch = ''
     substituteInPlace scc/paths.py --replace sys.prefix "'$out'"

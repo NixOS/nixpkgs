@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, intltool, perl, perlXMLParser
+{ stdenv, fetchurl, pkgconfig, intltool, perlPackages
 , goffice, gnome3, makeWrapper, gtk3, bison, pythonPackages
 , itstool
 }:
@@ -20,19 +20,19 @@ in stdenv.mkDerivation rec {
 
   prePatch = ''
     substituteInPlace doc/C/gnumeric.xml \
-	--replace http://www.oasis-open.org/docbook/xml/4.5/ent/isopub.ent ${isopub} \
-	--replace http://www.oasis-open.org/docbook/xml/4.5/ent/isonum.ent ${isonum} \
-	--replace http://www.oasis-open.org/docbook/xml/4.5/ent/isogrk1.ent ${isogrk1}
+      --replace http://www.oasis-open.org/docbook/xml/4.5/ent/isopub.ent ${isopub} \
+      --replace http://www.oasis-open.org/docbook/xml/4.5/ent/isonum.ent ${isonum} \
+      --replace http://www.oasis-open.org/docbook/xml/4.5/ent/isogrk1.ent ${isogrk1}
   '';
 
   nativeBuildInputs = [ pkgconfig ];
 
   # ToDo: optional libgda, introspection?
   buildInputs = [
-    intltool perl perlXMLParser bison
+    intltool bison
     goffice gtk3 makeWrapper gnome3.defaultIconTheme
     python pygobject3 itstool
-  ];
+  ] ++ (with perlPackages; [ perl XMLParser ]);
 
   enableParallelBuilding = true;
 

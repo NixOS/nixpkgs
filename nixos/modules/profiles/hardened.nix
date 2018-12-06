@@ -12,6 +12,8 @@ with lib;
 
   boot.kernelPackages = mkDefault pkgs.linuxPackages_hardened;
 
+  nix.allowedUsers = mkDefault [ "@users" ];
+
   security.hideProcessInformation = mkDefault true;
 
   security.lockKernelModules = mkDefault true;

@@ -1,15 +1,16 @@
-{ stdenv, fetchFromGitHub, pkgconfig, qmake, qtx11extras, libSM, mtdev, cairo }:
+{ stdenv, fetchFromGitHub, pkgconfig, qmake, qtx11extras, libSM,
+  mtdev, cairo, deepin }:
 
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "qt5dxcb-plugin";
-  version = "1.1.11";
+  version = "1.1.13";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "157p2cqs9fvd4n4fmxj6mh4cxlc35bkl4rnf832wk2gvjnxdfrfy";
+    sha256 = "12lvh3agw3qdviqf32brmzba5kscnj5al5jhc08lq69a9kmip05x";
   };
 
   nativeBuildInputs = [
@@ -29,6 +30,8 @@ stdenv.mkDerivation rec {
   '';
 
   enableParallelBuilding = true;
+
+  passthru.updateScript = deepin.updateScript { inherit name; };
 
   meta = with stdenv.lib; {
     description = "Qt platform theme integration plugin for DDE";

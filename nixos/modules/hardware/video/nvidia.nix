@@ -1,6 +1,6 @@
 # This module provides the proprietary NVIDIA X11 / OpenGL drivers.
 
-{ config, lib, pkgs, pkgs_i686, ... }:
+{ stdenv, config, lib, pkgs, ... }:
 
 with lib;
 
@@ -23,7 +23,11 @@ let
     else null;
 
   nvidia_x11 = nvidiaForKernel config.boot.kernelPackages;
-  nvidia_libs32 = (nvidiaForKernel pkgs_i686.linuxPackages).override { libsOnly = true; kernel = null; };
+  nvidia_libs32 =
+    if versionOlder nvidia_x11.version "391" then
+      ((nvidiaForKernel pkgs.pkgsi686Linux.linuxPackages).override { libsOnly = true; kernel = null; }).out
+    else
+      (nvidiaForKernel config.boot.kernelPackages).lib32;
 
   enabled = nvidia_x11 != null;
 
@@ -98,7 +102,7 @@ in
     assertions = [
       {
         assertion = config.services.xserver.displayManager.gdm.wayland;
-        message = "NVidia drivers don't support wayland";
+        message = "NVIDIA drivers don't support wayland";
       }
       {
         assertion = !optimusCfg.enable ||
@@ -161,7 +165,7 @@ in
     };
 
     hardware.opengl.package = nvidia_x11.out;
-    hardware.opengl.package32 = nvidia_libs32.out;
+    hardware.opengl.package32 = nvidia_libs32;
 
     environment.systemPackages = [ nvidia_x11.bin nvidia_x11.settings ]
       ++ lib.filter (p: p != null) [ nvidia_x11.persistenced ];

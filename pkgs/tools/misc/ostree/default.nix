@@ -4,7 +4,7 @@
 }:
 
 let
-  version = "2018.8";
+  version = "2018.9";
 
   libglnx-src = fetchFromGitHub {
     owner = "GNOME";
@@ -28,7 +28,7 @@ in stdenv.mkDerivation {
     rev = "v${version}";
     owner = "ostreedev";
     repo = "ostree";
-    sha256 = "0i7b7hvlv8m44k39fr5389wskf810vda8s7ivy2whj1nan5951yx";
+    sha256 = "0a8gr4qqxcvz3fqv9w4dxy6iq0rq4kdzf08rzv8xg4gic3ldgyvj";
   };
 
   patches = [

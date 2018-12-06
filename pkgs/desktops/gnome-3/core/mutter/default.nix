@@ -1,7 +1,7 @@
 { fetchurl, stdenv, pkgconfig, gnome3, intltool, gobjectIntrospection, upower, cairo
 , pango, cogl, clutter, libstartup_notification, zenity, libcanberra-gtk3
 , libtool, makeWrapper, xkeyboard_config, libxkbfile, libxkbcommon, libXtst, libinput
-, pipewire, libgudev, libwacom, xwayland, autoreconfHook }:
+, pipewire, libgudev, libwacom, xwayland, autoreconfHook, fetchpatch }:
 
 stdenv.mkDerivation rec {
   name = "mutter-${version}";
@@ -15,6 +15,14 @@ stdenv.mkDerivation rec {
   passthru = {
     updateScript = gnome3.updateScript { packageName = "mutter"; attrPath = "gnome3.mutter"; };
   };
+
+  patches = [
+    # https://gitlab.gnome.org/GNOME/mutter/merge_requests/172
+    (fetchpatch {
+      url = https://gitlab.gnome.org/GNOME/mutter/commit/62660bbd.patch;
+      sha256 = "1qq8vxlqnyrqh94dc0dh1aj1dsbyw6bwv3x46q5vsscbbxbiv9wk";
+    })
+  ];
 
   configureFlags = [
     "--with-x"

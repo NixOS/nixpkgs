@@ -1,5 +1,5 @@
 #! /usr/bin/env nix-shell
-#! nix-shell -i python3 -p "python3.withPackages (ps: with ps; [ aiohttp astral async-timeout attrs certifi jinja2 pyjwt cryptography pip pytz pyyaml requests voluptuous ])"
+#! nix-shell -i python3 -p "python3.withPackages (ps: with ps; [ aiohttp astral async-timeout attrs certifi jinja2 pyjwt cryptography pip pytz pyyaml requests ruamel_yaml voluptuous ])"
 #
 # This script downloads Home Assistant's source tarball.
 # Inside the homeassistant/components directory, each component has an associated .py file,
@@ -93,7 +93,7 @@ def name_to_attr_path(req):
             except KeyError:
                 pass
     # Let's hope there's only one derivation with a matching name
-    assert(len(attr_paths) <= 1)
+    assert len(attr_paths) <= 1, "{} matches more than one derivation: {}".format(req, attr_paths)
     if len(attr_paths) == 1:
         return attr_paths.pop()
     else:

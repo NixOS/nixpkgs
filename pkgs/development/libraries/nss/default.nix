@@ -8,11 +8,11 @@ let
 
 in stdenv.mkDerivation rec {
   name = "nss-${version}";
-  version = "3.38";
+  version = "3.40";
 
   src = fetchurl {
-    url = "mirror://mozilla/security/nss/releases/NSS_3_38_RTM/src/${name}.tar.gz";
-    sha256 = "0qigcy3d169cf67jzv3rbai0m6dn34vp8h2z696mz4yn10y3sr1c";
+    url = "mirror://mozilla/security/nss/releases/NSS_3_40_RTM/src/${name}.tar.gz";
+    sha256 = "1p9jidi3nysirf3lhkrqkjjrf2cw3y2wz2jgjvsjn1ysidxhhqh5";
   };
 
   buildInputs = [ perl zlib sqlite ]
@@ -42,7 +42,7 @@ in stdenv.mkDerivation rec {
   preConfigure = "cd nss";
 
   makeFlags = [
-    "NSPR_INCLUDE_DIR=${nspr.dev}/include/nspr"
+    "NSPR_INCLUDE_DIR=${nspr.dev}/include"
     "NSPR_LIB_DIR=${nspr.out}/lib"
     "NSDISTMODE=copy"
     "BUILD_OPT=1"

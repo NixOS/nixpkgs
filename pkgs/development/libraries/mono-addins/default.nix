@@ -27,5 +27,6 @@ stdenv.mkDerivation rec {
       and for creating libraries which extend those applications.
     '';
     platforms = platforms.linux;
+    license = licenses.mit;
   };
 }

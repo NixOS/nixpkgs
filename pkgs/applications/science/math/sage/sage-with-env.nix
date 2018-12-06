@@ -2,11 +2,7 @@
 , lib
 , makeWrapper
 , sage-env
-, sage-src
 , openblasCompat
-, openblas-blas-pc
-, openblas-cblas-pc
-, openblas-lapack-pc
 , pkg-config
 , three
 , singular
@@ -26,15 +22,15 @@
 , pythonEnv
 }:
 
+# Wrapper that combined `sagelib` with `sage-env` to produce an actually
+# executable sage. No tests are run yet and no documentation is built.
+
 let
   buildInputs = [
     pythonEnv # for patchShebangs
     makeWrapper
     pkg-config
     openblasCompat # lots of segfaults with regular (64 bit) openblas
-    openblas-blas-pc
-    openblas-cblas-pc
-    openblas-lapack-pc
     singular
     three
     pynac
@@ -92,12 +88,11 @@ let
   input_names = map (dep: pkg_to_spkg_name dep patch_names) transitiveDeps;
 in
 stdenv.mkDerivation rec {
-  version = sage-src.version;
+  version = src.version;
   name = "sage-with-env-${version}";
+  src = sage-env.lib.src;
 
   inherit buildInputs;
-
-  src = sage-src;
 
   configurePhase = "#do nothing";
 
@@ -110,17 +105,24 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p "$out/var/lib/sage"
-    cp -r installed $out/var/lib/sage
+    cp -r installed "$out/var/lib/sage"
 
     mkdir -p "$out/etc"
     # sage tests will try to create this file if it doesn't exist
     touch "$out/etc/sage-started.txt"
 
     mkdir -p "$out/build"
+
+    # the scripts in src/bin will find the actual sage source files using environment variables set in `sage-env`
     cp -r src/bin "$out/bin"
     cp -r build/bin "$out/build/bin"
+
     cp -f '${sage-env}/sage-env' "$out/bin/sage-env"
     substituteInPlace "$out/bin/sage-env" \
       --subst-var-by sage-local "$out"
   '';
+
+  passthru = {
+    env = sage-env;
+  };
 }

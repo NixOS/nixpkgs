@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   makeFlags = [ "DIRSETGID=:" ];
 
   meta = {
-    homepage = http://www.gnu.org/software/mailman/;
+    homepage = https://www.gnu.org/software/mailman/;
     description = "Free software for managing electronic mail discussion and e-newsletter lists";
     license = stdenv.lib.licenses.gpl2Plus;
     platforms = stdenv.lib.platforms.linux;

@@ -1,25 +1,31 @@
 { stdenv, lib, rustPlatform, fetchFromGitHub, dbus, gdk_pixbuf, libnotify, makeWrapper, pkgconfig, xorg
-, enableAlsaUtils ? true, alsaUtils }:
+, enableAlsaUtils ? true, alsaUtils, bash, coreutils }:
+
+let
+  binPath = stdenv.lib.makeBinPath [
+    alsaUtils bash coreutils
+  ];
+in
 
 rustPlatform.buildRustPackage rec {
   name = "dwm-status-${version}";
-  version = "1.1.2";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "Gerschtli";
     repo = "dwm-status";
     rev = version;
-    sha256 = "1nyi0p9snx9hddb4hliihskj4gdp933xs0f8kydyiprckikwiyjk";
+    sha256 = "054lwgqpx3kbrnlsqbnd8fxsawvw3nl702pf56c7dcm4sfws15nl";
   };
 
   nativeBuildInputs = [ makeWrapper pkgconfig ];
   buildInputs = [ dbus gdk_pixbuf libnotify xorg.libX11 ];
 
-  cargoSha256 = "1ngdzzxnv4y6xprmkawf6s2696zgwiwgb6ykj5adb4knlx5c634d";
+  cargoSha256 = "0wbbbk99hxxlrkm389iqni9aqvw2laarwk6hhwsr4ph3y278qhi8";
 
   postInstall = lib.optionalString enableAlsaUtils ''
     wrapProgram $out/bin/dwm-status \
-      --prefix "PATH" : "${alsaUtils}/bin"
+      --prefix "PATH" : "${binPath}"
   '';
 
   meta = with stdenv.lib; {

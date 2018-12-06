@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "seekpath";
-  version = "1.8.2";
+  version = "1.8.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8fb22231ed6fc6aa12e2f2cc6c8ca67b82648e16c1c85ddac2e2237ac4553d83";
+    sha256 = "b61dadba82acc0838402981b7944155adc092b114ca81f53f61b1d498a512e3a";
   };  
 
   LC_ALL = "en_US.utf-8";

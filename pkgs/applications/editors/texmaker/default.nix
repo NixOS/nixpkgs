@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "texmaker";
-  version = "5.0.2";
+  version = "5.0.3";
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "http://www.xm1math.net/texmaker/${name}.tar.bz2";
-    sha256 = "0y81mjm89b99pr9svcwpaf4iz2q9pc9hjas5kiwd1pbgl5vqskm9";
+    sha256 = "0vrj9w5lk3vf6138n5bz8phmy3xp5kv4dq1rgirghcf4hbxdyx30";
   };
 
   buildInputs = [ qtbase qtscript poppler zlib ];

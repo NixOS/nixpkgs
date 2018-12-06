@@ -81,6 +81,10 @@ rec {
 
   sumokoin = callPackage ./sumokoin.nix { };
 
+  wownero = callPackage ./wownero.nix {
+    inherit (darwin.apple_sdk.frameworks) CoreData IOKit PCSC;
+  };
+
   zcash = callPackage ./zcash {
     withGui = false;
     openssl = openssl_1_1;
@@ -90,5 +94,5 @@ rec {
   parity-beta = callPackage ./parity/beta.nix { };
   parity-ui = callPackage ./parity-ui { };
 
-  particl-core = callPackage ./particl/particl-core.nix { boost = boost165; miniupnpc = miniupnpc_2; };
+  particl-core = callPackage ./particl/particl-core.nix { miniupnpc = miniupnpc_2; };
 }

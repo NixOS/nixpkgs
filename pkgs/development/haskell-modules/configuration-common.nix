@@ -33,7 +33,7 @@ self: super: {
   unbuildable = throw "package depends on meta package 'unbuildable'";
 
   # Use the latest version of the Cabal library.
-  cabal-install = super.cabal-install.overrideScope (self: super: { Cabal = self.Cabal_2_4_0_1; });
+  cabal-install = super.cabal-install.overrideScope (self: super: { Cabal = self.Cabal_2_4_1_0; });
 
   # The test suite depends on old versions of tasty and QuickCheck.
   hackage-security = dontCheck super.hackage-security;
@@ -86,21 +86,16 @@ self: super: {
       name = "git-annex-${super.git-annex.version}-src";
       url = "git://git-annex.branchable.com/";
       rev = "refs/tags/" + super.git-annex.version;
-      sha256 = "069w4gdb104lc3vp48k3wywmgql56yc5g2g2i240xrr88in3qvqw";
+      sha256 = "0f0pp0d5q4122cjh4j7iasnjh234fmkvlwgb3f49087cg8rr2czh";
     };
   }).override {
     dbus = if pkgs.stdenv.isLinux then self.dbus else null;
     fdo-notify = if pkgs.stdenv.isLinux then self.fdo-notify else null;
     hinotify = if pkgs.stdenv.isLinux then self.hinotify else self.fsnotify;
   };
-  esqueleto = overrideSrc (addBuildDepend (dontCheck (dontHaddock super.esqueleto)) self.unliftio) {
-    src = pkgs.fetchFromGitHub {
-      owner = "bitemyapp";
-      repo = "esqueleto";
-      rev = "b81e0d951e510ebffca03c5a58658ad884cc6fbd";
-      sha256 = "0lz1qxms7cfg5p3j37inlych0r2fwhm8xbarcys3df9m7jy9nixa";
-    };
-  };
+
+  # https://github.com/bitemyapp/esqueleto/issues/105
+  esqueleto = markBrokenVersion "2.5.3" super.esqueleto;
 
   # Fix test trying to access /home directory
   shell-conduit = overrideCabal super.shell-conduit (drv: {
@@ -242,12 +237,18 @@ self: super: {
   #   This is due to GenList having been removed from generic-random in 1.2.0.0
   # doJailbreak: Can be removed once https://github.com/haskell-nix/hnix/pull/329 is in (5.2 probably)
   #   This is due to hnix currently having an upper bound of <0.5 on deriving-compat, works just fine with our current version 0.5.1 though
-  hnix = dontCheck (doJailbreak (overrideCabal super.hnix (old: {
-    testHaskellDepends = old.testHaskellDepends or [] ++ [ pkgs.nix ];
-  })));
+  hnix =
+    generateOptparseApplicativeCompletion "hnix" (
+    dontCheck (doJailbreak (overrideCabal super.hnix (old: {
+      testHaskellDepends = old.testHaskellDepends or [] ++ [ pkgs.nix ];
+  }))));
 
   # Fails for non-obvious reasons while attempting to use doctest.
   search = dontCheck super.search;
+
+  # see https://github.com/LumiGuide/haskell-opencv/commit/cd613e200aa20887ded83256cf67d6903c207a60
+  opencv = dontCheck (appendPatch super.opencv ./patches/opencv-fix-116.patch);
+  opencv-extra = dontCheck (appendPatch super.opencv-extra ./patches/opencv-fix-116.patch);
 
   # https://github.com/ekmett/structures/issues/3
   structures = dontCheck super.structures;
@@ -370,6 +371,7 @@ self: super: {
   safecopy = dontCheck super.safecopy;
   sai-shape-syb = dontCheck super.sai-shape-syb;
   scp-streams = dontCheck super.scp-streams;
+  sdl2 = dontCheck super.sdl2; # the test suite needs an x server
   sdl2-ttf = dontCheck super.sdl2-ttf; # as of version 0.2.1, the test suite requires user intervention
   separated = dontCheck super.separated;
   shadowsocks = dontCheck super.shadowsocks;
@@ -687,11 +689,6 @@ self: super: {
   # We cannot build this package w/o the C library from <http://www.phash.org/>.
   phash = markBroken super.phash;
 
-  # https://github.com/deech/fltkhs/issues/16
-  # linking fails because the build doesn't pull in the libGLU_combined libraries
-  fltkhs = markBroken super.fltkhs;
-  fltkhs-fluid-examples = dontDistribute super.fltkhs-fluid-examples;
-
   # We get lots of strange compiler errors during the test suite run.
   jsaddle = dontCheck super.jsaddle;
 
@@ -712,7 +709,9 @@ self: super: {
   });
 
   # The standard libraries are compiled separately
-  idris = doJailbreak (dontCheck super.idris);
+  idris = generateOptparseApplicativeCompletion "idris" (
+    doJailbreak (dontCheck super.idris)
+  );
 
   # https://github.com/bos/math-functions/issues/25
   math-functions = dontCheck super.math-functions;
@@ -888,6 +887,7 @@ self: super: {
   cryptohash-md5 = doJailbreak super.cryptohash-md5;
   text-short = doJailbreak super.text-short;
   gitHUD = dontCheck super.gitHUD;
+  githud = dontCheck super.githud;
 
   # https://github.com/aisamanra/config-ini/issues/12
   config-ini = dontCheck super.config-ini;
@@ -923,9 +923,9 @@ self: super: {
   text-icu = dontCheck super.text-icu;
 
   # https://github.com/haskell/cabal/issues/4969
-  haddock-api = (super.haddock-api.overrideScope (self: super: {
-    haddock-library = self.haddock-library_1_6_0;
-  })).override { hspec = self.hspec_2_4_8; };
+  # haddock-api = (super.haddock-api.overrideScope (self: super: {
+  #   haddock-library = self.haddock-library_1_6_0;
+  # })).override { hspec = self.hspec_2_4_8; };
 
   # Jailbreak "unix-compat >=0.1.2 && <0.5".
   # Jailbreak "graphviz >=2999.18.1 && <2999.20".
@@ -943,8 +943,12 @@ self: super: {
   # Tries to read a file it is not allowed to in the test suite
   load-env = dontCheck super.load-env;
 
-  # https://github.com/yesodweb/Shelly.hs/issues/162
-  shelly = dontCheck super.shelly;
+  # hledger needs a newer megaparsec version than we have in LTS 12.x.
+  hledger-lib = super.hledger-lib.overrideScope (self: super: {
+    cassava-megaparsec = self.cassava-megaparsec_2_0_0;
+    hspec-megaparsec = self.hspec-megaparsec_2_0_0;
+    megaparsec = self.megaparsec_7_0_4;
+  });
 
   # Copy hledger man pages from data directory into the proper place. This code
   # should be moved into the cabal2nix generator.
@@ -971,7 +975,12 @@ self: super: {
       mkdir -p $out/share/info
       cp -v *.info* $out/share/info/
     '';
-  }));
+  })).overrideScope (self: super: {
+    cassava-megaparsec = self.cassava-megaparsec_2_0_0;
+    config-ini = self.config-ini_0_2_4_0;
+    hspec-megaparsec = self.hspec-megaparsec_2_0_0;
+    megaparsec = self.megaparsec_7_0_4;
+  });
   hledger-web = overrideCabal super.hledger-web (drv: {
     postInstall = ''
       for i in $(seq 1 9); do
@@ -1046,7 +1055,20 @@ self: super: {
   vector-algorithms = dontCheck super.vector-algorithms;
 
   # The test suite attempts to use the network.
-  dhall = dontCheck super.dhall;
+  dhall =
+    generateOptparseApplicativeCompletion "dhall" (
+      dontCheck super.dhall
+  );
+
+  dhall-json =
+    generateOptparseApplicativeCompletions ["dhall-to-json" "dhall-to-yaml"] (
+      super.dhall-json
+  );
+
+  dhall-nix =
+    generateOptparseApplicativeCompletion "dhall-to-nix" (
+      super.dhall-nix
+  );
 
   # https://github.com/well-typed/cborg/issues/174
   cborg = doJailbreak super.cborg;
@@ -1060,20 +1082,21 @@ self: super: {
 
   # The test suite is broken. Break out of "base-compat >=0.9.3 && <0.10, hspec >=2.4.4 && <2.5".
   haddock-library = doJailbreak (dontCheck super.haddock-library);
-  haddock-library_1_6_0 = doJailbreak (dontCheck super.haddock-library_1_6_0);
+  # haddock-library_1_6_0 = doJailbreak (dontCheck super.haddock-library_1_6_0);
 
   # The tool needs a newer hpack version than the one mandated by LTS-12.x.
-  cabal2nix = super.cabal2nix.overrideScope (self: super: {
-    hpack = self.hpack_0_31_0;
-    yaml = self.yaml_0_11_0_0;
-  });
+  # Also generate shell completions.
+  cabal2nix = generateOptparseApplicativeCompletion "cabal2nix"
+    (super.cabal2nix.overrideScope (self: super: {
+      hpack = self.hpack_0_31_1;
+      yaml = self.yaml_0_11_0_0;
+    }));
   stack2nix = super.stack2nix.overrideScope (self: super: {
-    hpack = self.hpack_0_31_0;
+    hpack = self.hpack_0_31_1;
     yaml = self.yaml_0_11_0_0;
   });
-
   # Break out of "aeson <1.3, temporary <1.3".
-  stack = doJailbreak super.stack;
+  stack = generateOptparseApplicativeCompletion "stack" (doJailbreak super.stack);
 
   # https://github.com/pikajude/stylish-cabal/issues/11
   stylish-cabal = super.stylish-cabal.override { hspec = self.hspec_2_4_8; hspec-core = self.hspec-core_2_4_8; };
@@ -1108,14 +1131,14 @@ self: super: {
   # Can be removed once yi-language >= 0.18 is in the LTS
   yi-core = super.yi-core.overrideScope (self: super: { yi-language = self.yi-language_0_18_0; });
 
-  # https://github.com/MarcWeber/hasktags/issues/52
-  hasktags = dontCheck super.hasktags;
-
   # https://github.com/haskell/hoopl/issues/50
   hoopl = dontCheck super.hoopl;
 
   # https://github.com/snapframework/xmlhtml/pull/37
   xmlhtml = doJailbreak super.xmlhtml;
+
+  # Generate shell completions
+  purescript = generateOptparseApplicativeCompletion "purs" super.purescript;
 
   # https://github.com/NixOS/nixpkgs/issues/46467
   safe-money-aeson = super.safe-money-aeson.overrideScope (self: super: { safe-money = self.safe-money_0_7; });
@@ -1153,7 +1176,26 @@ self: super: {
 
   arbtt = doJailbreak super.arbtt;
 
-  # https://github.com/yesodweb/yesod/issues/1563
-  yesod-core = dontCheck super.yesod-core;
+  # https://github.com/danfran/cabal-macosx/issues/13
+  cabal-macosx = dontCheck super.cabal-macosx;
+
+  # https://github.com/DanielG/cabal-helper/issues/59
+  cabal-helper = doJailbreak super.cabal-helper;
+
+  # TODO(Profpatsch): factor out local nix store setup from
+  # lib/tests/release.nix and use that for the tests of libnix
+  # libnix = overrideCabal super.libnix (old: {
+  #   testToolDepends = old.testToolDepends or [] ++ [ pkgs.nix ];
+  # });
+  libnix = dontCheck super.libnix;
+
+  # https://github.com/jmillikin/chell/issues/1
+  chell = super.chell.override { patience = self.patience_0_1_1; };
+
+  # The test suite tries to mess with ALSA, which doesn't work in the build sandbox.
+  xmobar = dontCheck super.xmobar;
+
+  # https://github.com/mgajda/json-autotype/issues/25
+  json-autotype = dontCheck super.json-autotype;
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super

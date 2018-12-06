@@ -1,39 +1,37 @@
 { stdenv, fetchMavenArtifact, fetchFromGitHub, jre, makeWrapper }:
 
 let
-  version = "0.9.1";
+  version = "1.0.0";
   nailgun-server = fetchMavenArtifact {
-    groupId = "com.martiansoftware";
+    groupId = "com.facebook";
     artifactId = "nailgun-server";
     inherit version;
-    sha256 = "09ggkkd1s58jmpc74s6m10d3hyf6bmif31advk66zljbpykgl625";
+    sha256 = "1mk8pv0g2xg9m0gsb96plbh6mc24xrlyrmnqac5mlbl4637l4q95";
   };
 in
 stdenv.mkDerivation rec {
   name = "nailgun-${version}";
 
   src = fetchFromGitHub {
-    owner = "martylamb";
+    owner = "facebook";
     repo = "nailgun";
-    rev = "1ad9ad9d2d17c895144a9ee0e7acb1d3d90fb66f";
-    sha256 = "1f8ac5kg7imhix9kqdzwiav1bxh8vljv2hb1mq8yz4rqsrx2r4w3";
+    rev = "nailgun-all-v${version}";
+    sha256 = "1syyk4ss5vq1zf0ma00svn56lal53ffpikgqgzngzbwyksnfdlh6";
   };
 
-  makeFlags = "PREFIX=$(out)";
+  makeFlags = [ "PREFIX=$(out)" ];
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
-  installPhase = ''
-    install -D ng $out/bin/ng
-
+  postInstall = ''
     makeWrapper ${jre}/bin/java $out/bin/ng-server \
-      --add-flags '-cp ${nailgun-server.jar}:$CLASSPATH com.martiansoftware.nailgun.NGServer'
+      --add-flags '-classpath ${nailgun-server.jar}:$CLASSPATH com.facebook.nailgun.NGServer'
   '';
 
   meta = with stdenv.lib; {
     description = "Client, protocol, and server for running Java programs from the command line without incurring the JVM startup overhead";
-    homepage = http://martiansoftware.com/nailgun/;
-    license = licenses.apsl20;
+    homepage = http://www.martiansoftware.com/nailgun/;
+    license = licenses.asl20;
     platforms = platforms.linux;
     maintainers = with maintainers; [ volth ];
   };
