@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "nextcloud-${version}";
-  version = "14.0.3";
+  version = "14.0.4";
 
   src = fetchurl {
     url = "https://download.nextcloud.com/server/releases/${name}.tar.bz2";
-    sha256 = "1vykmvkqds1mjz9hl0xapi70s5s66xd8ysw0sczgavir7092gl6p";
+    sha256 = "1s20dds4sci3g981ql8kp9d1ynss5sa2y3dsbzqx4jv9f5dd2pag";
   };
 
   patches = [ (fetchpatch {
