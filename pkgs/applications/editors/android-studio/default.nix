@@ -18,9 +18,9 @@ let
     sha256Hash = "0apc566l4gwkwvfgj50d4qxm2gw26rxdlyr8kj3kfcra9a33c2b7";
   };
   latestVersion = { # canary & dev
-    version = "3.4.0.5"; # "Android Studio 3.4 Canary 6"
-    build = "183.5146016";
-    sha256Hash = "1z2asimpsw15iild7c4aqicph6v327qx3ffjgvl2n8vr5rspsns1";
+    version = "3.4.0.6"; # "Android Studio 3.4 Canary 7"
+    build = "183.5159543";
+    sha256Hash = "0r685qqx4w1hwbd8jgrh7ks8bw9m7823ffhd3x6pl7j4b9hpc858";
   };
 in rec {
   # Old alias
