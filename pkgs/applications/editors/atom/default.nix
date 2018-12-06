@@ -44,8 +44,7 @@ let
     buildCommand = ''
       mkdir -p $out/usr/
       ar p $src data.tar.xz | tar -C $out -xJ ./usr
-      substituteInPlace $out/usr/share/applications/${pname}.desktop \
-        --replace /usr/share/${pname} $out/bin
+      sed -i -e "s|Exec=.*$|Exec=$out/bin/${pname}|" $out/usr/share/applications/${pname}.desktop
       mv $out/usr/* $out/
       rm -r $out/share/lintian
       rm -r $out/usr/
