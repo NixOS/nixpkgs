@@ -2,6 +2,7 @@
 , pkgconfig, boehmgc, perlPackages, libsodium, brotli, boost
 , autoreconfHook, autoconf-archive, bison, flex, libxml2, libxslt, docbook5, docbook_xsl_ns
 , busybox-sandbox-shell
+, shellcheck, cacert, closureInfo, runCommand
 , storeDir ? "/nix/store"
 , stateDir ? "/nix/var"
 , confDir ? "/etc"
@@ -135,6 +136,67 @@ let
     preBuild = "unset NIX_INDENT_MAKE";
   };
 
+  binaryTarball = { nix }:
+    let installerClosureInfo = closureInfo { rootPaths = [ nix cacert ]; }; in
+    runCommand "nix-binary-tarball-${nix.version}"
+      { nativeBuildInputs = lib.optional (stdenv.targetPlatform.system != "aarch64-linux") shellcheck;
+        meta.description = "Distribution-independent Nix bootstrap binaries for ${stdenv.targetPlatform.system}";
+      }
+      ''
+        cp ${installerClosureInfo}/registration $TMPDIR/reginfo
+        substitute ${./scripts/install-nix-from-closure.sh} $TMPDIR/install \
+          --subst-var-by nix ${nix} \
+          --subst-var-by cacert ${cacert}
+
+        substitute ${./scripts/install-darwin-multi-user.sh} $TMPDIR/install-darwin-multi-user.sh \
+          --subst-var-by nix ${nix} \
+          --subst-var-by cacert ${cacert}
+        substitute ${./scripts/install-systemd-multi-user.sh} $TMPDIR/install-systemd-multi-user.sh \
+          --subst-var-by nix ${nix} \
+          --subst-var-by cacert ${cacert}
+        substitute ${./scripts/install-multi-user.sh} $TMPDIR/install-multi-user \
+          --subst-var-by nix ${nix} \
+          --subst-var-by cacert ${cacert}
+
+        if type -p shellcheck; then
+          # SC1090: Don't worry about not being able to find
+          #         $nix/etc/profile.d/nix.sh
+          shellcheck --exclude SC1090 $TMPDIR/install
+          shellcheck $TMPDIR/install-darwin-multi-user.sh
+          shellcheck $TMPDIR/install-systemd-multi-user.sh
+
+          # SC1091: Don't panic about not being able to source
+          #         /etc/profile
+          # SC2002: Ignore "useless cat" "error", when loading
+          #         .reginfo, as the cat is a much cleaner
+          #         implementation, even though it is "useless"
+          # SC2116: Allow ROOT_HOME=$(echo ~root) for resolving
+          #         root's home directory
+          shellcheck --external-sources \
+            --exclude SC1091,SC2002,SC2116 $TMPDIR/install-multi-user
+        fi
+
+        chmod +x $TMPDIR/install
+        chmod +x $TMPDIR/install-darwin-multi-user.sh
+        chmod +x $TMPDIR/install-systemd-multi-user.sh
+        chmod +x $TMPDIR/install-multi-user
+        dir=nix-${nix.version}-${stdenv.targetPlatform.system}
+        fn=$out/$dir.tar.bz2
+        mkdir -p $out/nix-support
+        echo "file binary-dist $fn" >> $out/nix-support/hydra-build-products
+        tar cvfj $fn \
+          --owner=0 --group=0 --mode=u+rw,uga+r \
+          --absolute-names \
+          --hard-dereference \
+          --transform "s,$TMPDIR/install,$dir/install," \
+          --transform "s,$TMPDIR/reginfo,$dir/.reginfo," \
+          --transform "s,$NIX_STORE,$dir/store,S" \
+          $TMPDIR/install $TMPDIR/install-darwin-multi-user.sh \
+          $TMPDIR/install-systemd-multi-user.sh \
+          $TMPDIR/install-multi-user $TMPDIR/reginfo \
+          $(cat ${installerClosureInfo}/store-paths)
+      '';
+
 in rec {
 
   nix = nixStable;
@@ -145,7 +207,10 @@ in rec {
       url = "http://nixos.org/releases/nix/${name}/${name}.tar.xz";
       sha256 = "0ca5782fc37d62238d13a620a7b4bff6a200bab1bd63003709249a776162357c";
     };
-  }) // { perl-bindings = nix1; };
+  }) // { perl-bindings = nix1; }
+  // { binaryTarball = binaryTarball {
+    nix = nix1;
+  }; };
 
   nixStable = (common rec {
     name = "nix-2.1.1";
@@ -156,6 +221,8 @@ in rec {
   }) // { perl-bindings = perl-bindings {
     nix = nixStable;
     needsBoost = true;
+  }; } // { binaryTarball = binaryTarball {
+    nix = nixStable;
   }; };
 
   nixUnstable = (lib.lowPrio (common rec {
@@ -171,6 +238,8 @@ in rec {
   })) // { perl-bindings = perl-bindings {
     nix = nixUnstable;
     needsBoost = true;
+  }; } // { binaryTarball = binaryTarball {
+    nix = nixUnstable;
   }; };
 
 }
