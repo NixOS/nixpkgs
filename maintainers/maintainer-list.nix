@@ -4718,6 +4718,11 @@
     github = "woffs";
     name = "Frank Doepper";
   };
+  wolfereign = {
+    email = "nvonwolff@gmail.com";
+    github = "Wolfereign";
+    name = "Wolfereign";
+  };
   womfoo = {
     email = "kranium@gikos.net";
     github = "womfoo";
