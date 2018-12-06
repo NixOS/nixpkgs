@@ -1,6 +1,6 @@
 {
   stdenv, fetchFromGitHub, cmake, extra-cmake-modules,
-  zlib, boost, libunwind, elfutils, sparsehash,
+  zlib, boost, libunwind, elfutils, sparsehash, makeWrapper,
   qtbase, kio, kitemmodels, threadweaver, kconfigwidgets, kcoreaddons, kdiagram
 }:
 
@@ -17,9 +17,13 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake extra-cmake-modules ];
   buildInputs = [
-    zlib boost libunwind elfutils sparsehash
+    zlib boost libunwind elfutils sparsehash makeWrapper
     qtbase kio kitemmodels threadweaver kconfigwidgets kcoreaddons kdiagram
   ];
+
+  postInstall = ''
+    wrapProgram $out/bin/heaptrack_gui --set QT_PLUGIN_PATH ${qtbase}/${qtbase.qtPluginPrefix}
+  '';
 
   meta = with stdenv.lib; {
     description = "Heap memory profiler for Linux";
