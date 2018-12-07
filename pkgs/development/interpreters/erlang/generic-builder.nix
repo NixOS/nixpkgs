@@ -59,7 +59,8 @@ in stdenv.mkDerivation ({
 
   debugInfo = enableDebugInfo;
 
-  enableParallelBuilding = true;
+  # On some machines, parallel build reliably crashes on `GEN    asn1ct_eval_ext.erl` step
+  enableParallelBuilding = false;
 
   # Clang 4 (rightfully) thinks signed comparisons of pointers with NULL are nonsense
   prePatch = ''
