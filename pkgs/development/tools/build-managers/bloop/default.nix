@@ -2,7 +2,7 @@
 
 let
   baseName = "bloop";
-  version = "1.1.0";
+  version = "1.1.1";
   deps = stdenv.mkDerivation {
     name = "${baseName}-deps-${version}";
     buildCommand = ''
@@ -16,12 +16,12 @@ let
     '';
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
-    outputHash     = "090ig5k1bd3pv4i8x6byyf9wda1430xysnbcllflcz6cf2ccjy2k";
+    outputHash     = "0w2gk9ladkzm3mx3qsmjqjakj94g7s4s3xfzl6yny1h4dg1456n6";
   };
 in
 stdenv.mkDerivation rec {
   name = "${baseName}-${version}";
-  nailgunCommit = "0c8b937b";
+  nailgunCommit = "6992a3bf";
 
   buildInputs = [ jdk makeWrapper deps ];
 
