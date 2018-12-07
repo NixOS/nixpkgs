@@ -544,6 +544,14 @@ in
                      message = "This kernel does not support rpfilter"; }
                  ];
 
+    runit.services.firewall = {
+      path = [ pkgs.iptables ] ++ cfg.extraPackages;
+
+      script = "${startScript}";
+      oneshot = true;
+      # TODO stop, restart
+    };
+
     systemd.services.firewall = {
       description = "Firewall";
       wantedBy = [ "sysinit.target" ];
