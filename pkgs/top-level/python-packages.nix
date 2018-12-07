@@ -4293,6 +4293,8 @@ in {
 
   tlslite = callPackage ../development/python-modules/tlslite { };
 
+  tlslite-ng = callPackage ../development/python-modules/tlslite-ng { };
+
   qrcode = callPackage ../development/python-modules/qrcode { };
 
   traits = callPackage ../development/python-modules/traits { };
