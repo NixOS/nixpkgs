@@ -83,6 +83,8 @@ rec {
                     (m': let config = (getAttr m' nodes).config; in
                       optionalString (config.networking.primaryIPAddress != "")
                         ("${config.networking.primaryIPAddress} " +
+                         optionalString (config.networking.domain != null)
+                           "${config.networking.hostName}.${config.networking.domain} " +
                          "${config.networking.hostName}\n"));
 
                   virtualisation.qemu.options =
