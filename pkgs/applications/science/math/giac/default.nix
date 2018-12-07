@@ -47,7 +47,9 @@ stdenv.mkDerivation rec {
     libGLU_combined fltk xorg.libX11
   ];
 
-  outputs = [ "out" "doc" ];
+  # xcas Phys and Turtle menus are broken with split outputs
+  # and interactive use is likely to need docs
+  outputs = [ "out" ] ++ stdenv.lib.optional (!enableGUI) "doc";
 
   doCheck = true;
   preCheck = ''
@@ -80,9 +82,15 @@ stdenv.mkDerivation rec {
     # reference cycle
     rm "$out/share/giac/doc/el/"{casinter,tutoriel}/Makefile
 
-    mkdir -p "$doc/share/giac"
-    mv "$out/share/giac/doc" "$doc/share/giac"
-    mv "$out/share/giac/examples" "$doc/share/giac"
+    if [ -n "$doc" ]; then
+      mkdir -p "$doc/share/giac"
+      mv "$out/share/giac/doc" "$doc/share/giac"
+      mv "$out/share/giac/examples" "$doc/share/giac"
+    fi
+  '' + stdenv.lib.optionalString (!enableGUI) ''
+    for i in pixmaps application-registry applications icons; do
+      rm -r "$out/share/$i";
+    done;
   '';
 
   meta = with stdenv.lib; {
