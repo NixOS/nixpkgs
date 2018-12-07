@@ -4446,6 +4446,8 @@ in
 
   pnmixer = callPackage ../tools/audio/pnmixer { };
 
+  pro-office-calculator = libsForQt5.callPackage ../games/pro-office-calculator { };
+
   pulsemixer = callPackage ../tools/audio/pulsemixer { };
 
   pwsafe = callPackage ../applications/misc/pwsafe { };
