@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , mock
+, buildPackages
 }:
 
 buildPythonPackage rec {
@@ -16,6 +17,8 @@ buildPythonPackage rec {
   # No tests in archive
   doCheck = false;
   checkInputs = [ mock ];
+
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
 
   meta = {
     description = "Code coverage measurement for python";
