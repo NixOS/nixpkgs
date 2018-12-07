@@ -13,7 +13,7 @@ let
     [ # Basic startup
       "${crdb}/bin/cockroach start"
       "--logtostderr"
-      "--store=${cfg.dataDir}"
+      "--store=/var/lib/cockroachdb"
       (ifNotNull cfg.locality "--locality='${cfg.locality}'")
 
       # WebUI settings
@@ -41,7 +41,7 @@ let
       };
 
       port = mkOption {
-        type = types.int;
+        type = types.port;
         default = defaultPort;
         description = "Port to bind to for ${descr}";
       };
@@ -70,10 +70,12 @@ in
           like datacenter.  The tiers and order must be the same on all nodes.
           Including more tiers is better than including fewer. For example:
 
+          <literal>
               country=us,region=us-west,datacenter=us-west-1b,rack=12
               country=ca,region=ca-east,datacenter=ca-east-2,rack=4
 
               planet=earth,province=manitoba,colo=secondary,power=3
+          </literal>
         '';
       };
 
@@ -81,12 +83,6 @@ in
         type = types.nullOr types.str;
         default = null;
         description = "The addresses for connecting the node to a cluster.";
-      };
-
-      dataDir = mkOption {
-        type = types.path;
-        default = "/var/lib/cockroachdb";
-        description = "Location where CockroachDB stores its table files";
       };
 
       insecure = mkOption {
@@ -126,9 +122,12 @@ in
           The total size for caches.
 
           This can be a percentage, expressed with a fraction sign or as a
-          decimal-point number, or any bytes-based unit. For example, "25%",
-          "0.25" both represent 25% of the available system memory. The values
-          "1000000000" and "1GB" both represent 1 gigabyte of memory.
+          decimal-point number, or any bytes-based unit. For example,
+          <literal>"25%"</literal>, <literal>"0.25"</literal> both represent
+          25% of the available system memory. The values
+          <literal>"1000000000"</literal> and <literal>"1GB"</literal> both
+          represent 1 gigabyte of memory.
+
         '';
       };
 
@@ -140,9 +139,11 @@ in
           data for SQL queries.
 
           This can be a percentage, expressed with a fraction sign or as a
-          decimal-point number, or any bytes-based unit. For example, "25%",
-          "0.25" both represent 25% of the available system memory. The values
-          "1000000000" and "1GB" both represent 1 gigabyte of memory.
+          decimal-point number, or any bytes-based unit. For example,
+          <literal>"25%"</literal>, <literal>"0.25"</literal> both represent
+          25% of the available system memory. The values
+          <literal>"1000000000"</literal> and <literal>"1GB"</literal> both
+          represent 1 gigabyte of memory.
         '';
       };
 
@@ -193,27 +194,21 @@ in
         requires = [ "time-sync.target" ];
         wantedBy = [ "multi-user.target" ];
 
-        unitConfig.RequiresMountsFor = "${cfg.dataDir}";
-
-        preStart = ''
-          if ! test -e ${cfg.dataDir}; then
-            mkdir -m 0700 -p ${cfg.dataDir}
-            chown -R ${cfg.user} ${cfg.dataDir}
-          fi
-        '';
+        unitConfig.RequiresMountsFor = "/var/lib/cockroachdb";
 
         serviceConfig =
           { ExecStart = startupCommand;
             Type = "notify";
             User = cfg.user;
-            PermissionsStartOnly = true;
+            StateDirectory = "cockroachdb";
+            StateDirectoryMode = "0700";
 
             Restart = "always";
-            TimeoutStopSec="60";
-            RestartSec="10";
-            StandardOutput="syslog";
-            StandardError="syslog";
-            SyslogIdentifier="cockroach";
+
+            # A conservative-ish timeout is alright here, because for Type=notify
+            # cockroach will send systemd pings during startup to keep it alive
+            TimeoutStopSec = 60;
+            RestartSec = 10;
           };
       };
   };

@@ -14,13 +14,13 @@
  }:
 
 stdenv.mkDerivation rec {
-  name = "dino-unstable-2018-11-27";
+  name = "dino-unstable-2018-11-29";
 
   src = fetchFromGitHub {
     owner = "dino";
     repo = "dino";
-    rev = "141db9e40a3a81cfa3ad3587dc47f69c541d0fde";
-    sha256 = "006r1x7drlz39jjxlfdnxgrnambw9amhl9jcgf6p1dx71h1x8221";
+    rev = "680d28360c781ff29e810821801cfaba0493c526";
+    sha256 = "1w08xc842p2nggdxf0dwqw8izhwsrqah10w3s0v1i7dp33yhycln";
     fetchSubmodules = true;
   };
 
@@ -56,6 +56,8 @@ stdenv.mkDerivation rec {
     dbus
     gettext
   ];
+
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "Modern Jabber/XMPP Client using GTK+/Vala";

@@ -8,7 +8,7 @@ import ./make-test.nix ({ pkgs, lib, ...} : with lib; {
 
   nodes = {
     gitlab = { ... }: {
-      virtualisation.memorySize = 4096;
+      virtualisation.memorySize = 2047;
       systemd.services.gitlab.serviceConfig.Restart = mkForce "no";
       systemd.services.gitlab-workhorse.serviceConfig.Restart = mkForce "no";
       systemd.services.gitaly.serviceConfig.Restart = mkForce "no";

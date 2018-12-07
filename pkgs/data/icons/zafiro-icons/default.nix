@@ -3,21 +3,21 @@
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "zafiro-icons";
-  version = "0.7.2";
+  version = "0.7.3";
 
   src = fetchFromGitHub {
     owner = "zayronxio";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1rs3wazmvidlkig5q7x1n9nz7jhfq18wps3wsplax9zcdy0hv248";
+    sha256 = "02q3wcklmqdy4ycyly7477q98y3mkgnpr7c78jqxvy2yr486wwyx";
   };
 
   nativeBuildInputs = [ gtk3 ];
 
   installPhase = ''
-    mkdir -p $out/share/icons/Zafiro
-    cp -a * $out/share/icons/Zafiro
-    gtk-update-icon-cache "$out"/share/icons/Zafiro
+    mkdir -p $out/share/icons/Zafiro-icons
+    cp -a * $out/share/icons/Zafiro-icons
+    gtk-update-icon-cache "$out"/share/icons/Zafiro-icons
   '';
 
   meta = with stdenv.lib; {

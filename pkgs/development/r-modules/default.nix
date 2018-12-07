@@ -950,6 +950,18 @@ let
       preConfigure = "patchShebangs configure";
     });
 
+    littler = old.littler.overrideAttrs (attrs: with pkgs; {
+      buildInputs = [ pcre lzma zlib bzip2 icu which ] ++ attrs.buildInputs;
+      postInstall = ''
+        install -d $out/bin $out/share/man/man1
+        ln -s ../library/littler/bin/r $out/bin/r
+        ln -s ../library/littler/bin/r $out/bin/lr
+        ln -s ../../../library/littler/man-page/r.1 $out/share/man/man1
+        # these won't run without special provisions, so better remove them
+        rm -r $out/library/littler/script-tests
+      '';
+    });
+
   };
 in
   self

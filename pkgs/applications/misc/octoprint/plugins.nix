@@ -1,8 +1,10 @@
-{ stdenv, fetchFromGitHub, octoprint, pythonPackages }:
+{ stdenv, fetchFromGitHub, octoprint, python2Packages }:
 
 let
-  buildPlugin = args: pythonPackages.buildPythonApplication (args // {
-    buildInputs = (args.buildInputs or []) ++ [ octoprint ];
+  buildPlugin = args: python2Packages.buildPythonPackage (args // {
+    propagatedBuildInputs = (args.propagatedBuildInputs or []) ++ [ octoprint ];
+    # none of the following have tests
+    doCheck = false;
   });
 
   self = {
@@ -39,6 +41,28 @@ let
         platforms = platforms.all;
         license = licenses.gpl3;
         maintainers = with maintainers; [ abbradar ];
+      };
+    };
+
+    mqtt = buildPlugin rec {
+      name = "OctoPrint-MQTT-${version}";
+      version = "0.8.0";
+
+      src = fetchFromGitHub {
+        owner = "OctoPrint";
+        repo = "OctoPrint-MQTT";
+        rev = version;
+        sha256 = "1318pgwy39gkdqgll3q5lwm7avslgdwyiwb5v8m23cgyh5w8cjq7";
+      };
+
+      propagatedBuildInputs = with python2Packages; [ paho-mqtt ];
+
+      meta = with stdenv.lib; {
+        homepage = https://github.com/OctoPrint/OctoPrint-MQTT;
+        description = "Publish printer status MQTT";
+        platforms = platforms.all;
+        license = licenses.agpl3;
+        maintainers = with maintainers; [ peterhoeg ];
       };
     };
 

@@ -1,9 +1,9 @@
 { stdenv, lib, fetchurl, unzip, atomEnv, makeDesktopItem,
-  gtk2, wrapGAppsHook, libXScrnSaver, libxkbfile, libsecret }:
+  gtk2, wrapGAppsHook, libXScrnSaver, libxkbfile, libsecret,
+  isInsiders ? false }:
 
 let
-  version = "1.29.1";
-  channel = "stable";
+  executableName = "code" + lib.optionalString isInsiders "-insiders";
 
   plat = {
     "i686-linux" = "linux-ia32";
@@ -31,19 +31,24 @@ let
 in
   stdenv.mkDerivation rec {
     name = "vscode-${version}";
+    version = "1.29.1";
 
     src = fetchurl {
       name = "VSCode_${version}_${plat}.${archive_fmt}";
-      url = "https://vscode-update.azurewebsites.net/${version}/${plat}/${channel}";
+      url = "https://vscode-update.azurewebsites.net/${version}/${plat}/stable";
       inherit sha256;
     };
 
+    passthru = {
+      inherit executableName;
+    };
+
     desktopItem = makeDesktopItem {
-      name = "code";
-      exec = "code";
-      icon = "code";
+      name = executableName;
+      exec = executableName;
+      icon = "@out@/share/pixmaps/code.png";
       comment = "Code editor redefined and optimized for building and debugging modern web and cloud applications";
-      desktopName = "Visual Studio Code";
+      desktopName = "Visual Studio Code" + lib.optionalString isInsiders " Insiders";
       genericName = "Text Editor";
       categories = "GNOME;GTK;Utility;TextEditor;Development;";
     };
@@ -56,17 +61,18 @@ in
       if stdenv.hostPlatform.system == "x86_64-darwin" then ''
         mkdir -p $out/lib/vscode $out/bin
         cp -r ./* $out/lib/vscode
-        ln -s $out/lib/vscode/Contents/Resources/app/bin/code $out/bin
+        ln -s $out/lib/vscode/Contents/Resources/app/bin/${executableName} $out/bin
       '' else ''
         mkdir -p $out/lib/vscode $out/bin
         cp -r ./* $out/lib/vscode
 
-        substituteInPlace $out/lib/vscode/bin/code --replace '"$CLI" "$@"' '"$CLI" "--skip-getting-started" "$@"'
+        substituteInPlace $out/lib/vscode/bin/${executableName} --replace '"$CLI" "$@"' '"$CLI" "--skip-getting-started" "$@"'
 
-        ln -s $out/lib/vscode/bin/code $out/bin
+        ln -s $out/lib/vscode/bin/${executableName} $out/bin
 
         mkdir -p $out/share/applications
-        cp $desktopItem/share/applications/* $out/share/applications
+        substitute $desktopItem/share/applications/${executableName}.desktop $out/share/applications/${executableName}.desktop \
+          --subst-var out
 
         mkdir -p $out/share/pixmaps
         cp $out/lib/vscode/resources/app/resources/linux/code.png $out/share/pixmaps/code.png
@@ -76,7 +82,7 @@ in
       patchelf \
         --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
         --set-rpath "${rpath}" \
-        $out/lib/vscode/code
+        $out/lib/vscode/${executableName}
 
       patchelf \
         --set-rpath "${rpath}" \

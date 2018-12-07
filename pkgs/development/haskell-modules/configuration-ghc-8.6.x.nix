@@ -46,7 +46,7 @@ self: super: {
 
   # LTS-12.x versions do not compile.
   base-orphans = self.base-orphans_0_8;
-  brick = self.brick_0_41_5;
+  brick = self.brick_0_42_1;
   cassava-megaparsec = doJailbreak super.cassava-megaparsec;
   config-ini = doJailbreak super.config-ini;   # https://github.com/aisamanra/config-ini/issues/18
   contravariant = self.contravariant_1_5;
@@ -54,13 +54,11 @@ self: super: {
   free = self.free_5_1;
   haddock-library = dontCheck super.haddock-library_1_7_0;
   HaTeX = doJailbreak super.HaTeX;
-  hledger = doJailbreak super.hledger;
-  hledger-lib = doJailbreak super.hledger-lib;
-  hledger-ui = doJailbreak super.hledger-ui;
   hpack = self.hpack_0_31_1;
   hslua = self.hslua_1_0_1;
   hslua-module-text = self.hslua-module-text_0_2_0;
   hspec = self.hspec_2_6_0;
+  hspec-contrib = self.hspec-contrib_0_5_1;
   hspec-core = self.hspec-core_2_6_0;
   hspec-discover = self.hspec-discover_2_6_0;
   hspec-megaparsec = doJailbreak super.hspec-megaparsec;  # newer versions need megaparsec 7.x

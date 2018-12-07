@@ -9117,6 +9117,19 @@ let
     };
   };
 
+  MailSender = buildPerlPackage rec {
+    name = "Mail-Sender-0.903";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/C/CA/CAPOEIRAB/${name}.tar.gz";
+      sha256 = "4413eb49f520a8318151811ccb05a8d542973aada20aa503ad32f9ffc98a39bf";
+    };
+    meta = {
+      homepage = https://github.com/Perl-Email-Project/Mail-Sender;
+      description = "(DEPRECATED) module for sending mails with attachments through an SMTP server";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   MailSendmail = buildPerlPackage rec {
     name = "Mail-Sendmail-0.80";
     src = fetchurl {
