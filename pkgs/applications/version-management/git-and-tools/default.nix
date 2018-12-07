@@ -104,6 +104,8 @@ let
 
   git-sync = callPackage ./git-sync { };
 
+  git-test = callPackage ./git-test { };
+
   git2cl = callPackage ./git2cl { };
 
   gitFastExport = callPackage ./fast-export { };
