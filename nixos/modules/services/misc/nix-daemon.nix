@@ -410,7 +410,7 @@ in
       limits.nofiles = 4096;
 
       script = ''
-        nix-daemon --daemon
+        exec nix-daemon --daemon
       '';
 
       logging.enable = true;

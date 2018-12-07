@@ -75,7 +75,7 @@ in
       };
 
       script = ''
-        ${package}/sbin/ntpd -p ${pidFile} ${cfg.extraOptions} -d
+        exec ${package}/sbin/ntpd -p ${pidFile} ${cfg.extraOptions} -d
       '';
     };
 

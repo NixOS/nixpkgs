@@ -128,7 +128,7 @@ in
 
       script = ''
         mkdir -p /run/dbus/
-        ${getBin cfg.package}/bin/dbus-daemon --system --nofork --nopidfile
+        exec ${getBin cfg.package}/bin/dbus-daemon --system --nofork --nopidfile
       '';
     };
 

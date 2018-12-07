@@ -96,8 +96,7 @@ in
               in {
                  logging.enable = false;
                  script = ''
-                   echo "Run getty ${name}"
-                   ${(runitGettyCmd " ${name} ${speeds} ${term.type}")}
+                   exec ${(runitGettyCmd " ${name} ${speeds} ${term.type}")}
                  '';
 #                 requires = [ "udev" ];
               };

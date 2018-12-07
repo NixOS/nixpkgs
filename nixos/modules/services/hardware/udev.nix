@@ -313,7 +313,7 @@ in
         enable = true;
       };
       script = ''
-        ${config.services.udev.package}/bin/udevd
+        exec ${config.services.udev.package}/bin/udevd
       '';
       check = ''
         exec ${config.services.udev.package}/bin/udevadm settle

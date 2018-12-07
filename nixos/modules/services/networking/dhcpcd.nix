@@ -169,7 +169,7 @@ in
       logging.redirectStderr = true;
 
       script = ''
-        ${dhcpcd}/sbin/dhcpcd -B -w --quiet ${optionalString cfg.persistent "--persistent"} --config ${dhcpcdConf}
+        exec ${dhcpcd}/sbin/dhcpcd -B -w --quiet ${optionalString cfg.persistent "--persistent"} --config ${dhcpcdConf}
       '';
     };
 
