@@ -203,14 +203,7 @@ let
           Command that buildkite-agent 3 will execute when it spawns a shell.
         '';
       };
-      warnings = mkOption { default = []; };
-};
-  imports = [
-    (mkRenamedOptionModule [ "token" ] [ "tokenPath" ])
-    (mkRenamedOptionModule [ "openssh" "privateKey" ] [ "sshKeyPath" ])
-    (mkRenamedOptionModule [ "openssh" "privateKeyPath" ] [ "sshKeyPath" ])
-    (mkRenamedOptionModule [ "meta-data"] [ "tags" ])
-  ];
+  };
 };
 
   enabledAgents = lib.filterAttrs (n: v: v.enable) cfg;
@@ -223,7 +216,6 @@ in {
       Attribute set of extra agents.
     '';
   };
-  config.warnings = mapAgents (name: cfg: cfg.warnings);
 
   config.users.users = mapAgents (name: cfg: {
     "${cfg.fullName}" =
