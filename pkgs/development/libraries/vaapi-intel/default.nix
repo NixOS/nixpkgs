@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, autoreconfHook, gnum4, pkgconfig, python2
-, intel-gpu-tools, libdrm, libva, libX11, libGL, wayland, libXext
+, intel-gpu-tools, libdrm, libva, libX11, libGL, wayland, libXext, libXfixes
 , enableHybridCodec ? false, vaapi-intel-hybrid
 }:
 
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook gnum4 pkgconfig python2 ];
 
-  buildInputs = [ intel-gpu-tools libdrm libva libX11 libXext libGL wayland ]
+  buildInputs = [ intel-gpu-tools libdrm libva libX11 libXext libXfixes libGL wayland ]
     ++ stdenv.lib.optional enableHybridCodec vaapi-intel-hybrid;
 
   enableParallelBuilding = true;
