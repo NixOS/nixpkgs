@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, six, mock }:
+{ stdenv, buildPythonPackage, fetchPypi, mock, six }:
 
 buildPythonPackage rec {
   pname = "whisper";
@@ -10,7 +10,6 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ six ];
-
   checkInputs = [ mock ];
 
   meta = with stdenv.lib; {

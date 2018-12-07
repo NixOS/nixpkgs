@@ -8,7 +8,15 @@
 
 with lib;
 
-mkDerivation rec {
+let
+  # TODO: Not optimal (maybe we should only package the stable versions)
+  previewPatches = fetchFromGitHub {
+    owner = "primeos";
+    repo = "nixpkgs-tdesktop-patches";
+    rev = "b3c0cbce1b412443a8712c90069932bbcae87fb6";
+    sha256 = "1bymrciaci6plghaz7a6qwsidjm8rg5fqdh158cdp70il4g7kmw9";
+  };
+in mkDerivation rec {
   name = "telegram-desktop-${version}";
   inherit version;
 
@@ -29,7 +37,10 @@ mkDerivation rec {
   };
 
   # TODO: libtgvoip.patch no-gtk2.patch
-  patches = [ "${archPatches}/tdesktop.patch" ]
+  patches =
+    (if stable
+      then [ "${archPatches}/tdesktop.patch" ]
+      else [ "${previewPatches}/tdesktop.patch" ])
     # TODO: Only required to work around a compiler bug.
     # This should be fixed in GCC 7.3.1 (or later?)
     ++ [ ./fix-internal-compiler-error.patch ];

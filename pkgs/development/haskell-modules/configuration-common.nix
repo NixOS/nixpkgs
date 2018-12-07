@@ -93,14 +93,9 @@ self: super: {
     fdo-notify = if pkgs.stdenv.isLinux then self.fdo-notify else null;
     hinotify = if pkgs.stdenv.isLinux then self.hinotify else self.fsnotify;
   };
-  esqueleto = overrideSrc (addBuildDepend (dontCheck (dontHaddock super.esqueleto)) self.unliftio) {
-    src = pkgs.fetchFromGitHub {
-      owner = "bitemyapp";
-      repo = "esqueleto";
-      rev = "b81e0d951e510ebffca03c5a58658ad884cc6fbd";
-      sha256 = "0lz1qxms7cfg5p3j37inlych0r2fwhm8xbarcys3df9m7jy9nixa";
-    };
-  };
+
+  # https://github.com/bitemyapp/esqueleto/issues/105
+  esqueleto = markBrokenVersion "2.5.3" super.esqueleto;
 
   # Fix test trying to access /home directory
   shell-conduit = overrideCabal super.shell-conduit (drv: {
@@ -948,8 +943,12 @@ self: super: {
   # Tries to read a file it is not allowed to in the test suite
   load-env = dontCheck super.load-env;
 
-  # https://github.com/yesodweb/Shelly.hs/issues/162
-  shelly = dontCheck super.shelly;
+  # hledger needs a newer megaparsec version than we have in LTS 12.x.
+  hledger-lib = super.hledger-lib.overrideScope (self: super: {
+    cassava-megaparsec = self.cassava-megaparsec_2_0_0;
+    hspec-megaparsec = self.hspec-megaparsec_2_0_0;
+    megaparsec = self.megaparsec_7_0_4;
+  });
 
   # Copy hledger man pages from data directory into the proper place. This code
   # should be moved into the cabal2nix generator.
@@ -976,7 +975,12 @@ self: super: {
       mkdir -p $out/share/info
       cp -v *.info* $out/share/info/
     '';
-  }));
+  })).overrideScope (self: super: {
+    cassava-megaparsec = self.cassava-megaparsec_2_0_0;
+    config-ini = self.config-ini_0_2_4_0;
+    hspec-megaparsec = self.hspec-megaparsec_2_0_0;
+    megaparsec = self.megaparsec_7_0_4;
+  });
   hledger-web = overrideCabal super.hledger-web (drv: {
     postInstall = ''
       for i in $(seq 1 9); do
@@ -1187,5 +1191,11 @@ self: super: {
 
   # https://github.com/jmillikin/chell/issues/1
   chell = super.chell.override { patience = self.patience_0_1_1; };
+
+  # The test suite tries to mess with ALSA, which doesn't work in the build sandbox.
+  xmobar = dontCheck super.xmobar;
+
+  # https://github.com/mgajda/json-autotype/issues/25
+  json-autotype = dontCheck super.json-autotype;
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super

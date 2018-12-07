@@ -2464,6 +2464,11 @@
     github = "listx";
     name = "Linus Arver";
   };
+  lionello = {
+    email = "lio@lunesu.com";
+    github = "lionello";
+    name = "Lionello Lunesu";
+  };
   lluchs = {
     email = "lukas.werling@gmail.com";
     github = "lluchs";
@@ -3934,6 +3939,11 @@
     email = "sebastian.jordan.mail@googlemail.com";
     github = "seppeljordan";
     name = "Sebastian Jordan";
+  };
+  seqizz = {
+    email = "seqizz@gmail.com";
+    github = "seqizz";
+    name = "Gurkan Gur";
   };
   sfrijters = {
     email = "sfrijters@gmail.com";

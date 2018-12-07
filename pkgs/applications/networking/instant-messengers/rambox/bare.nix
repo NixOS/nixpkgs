@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   name = "rambox-bare-${version}";
-  version = "0.6.2";
+  version = "0.6.3";
 
   src = fetchFromGitHub {
     owner = "ramboxapp";
     repo = "community-edition";
     rev = version;
-    sha256 = "150vf62cp739l9dgpnksgpkffabs2wi15q217m3nai34irhwzk8m";
+    sha256 = "1ghk29d0x6i3j8b1b4xxgyf961lp17qsvvhnilnkh1nhmvxpwmw5";
   };
 
   nativeBuildInputs = [ nodejs-8_x ruby sencha ];
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     inherit src;
 
     nodejs = nodejs-8_x;
-    sha256 = "0hbw47653wh159c34f0rlj3p7xy0lvsyp0wh2hl35kv3fnsfbbm0";
+    sha256 = "03h1kfiaflwbrvcd8v0bsymn7n2dxi3yj4pxkwcigqg4jgcf56k6";
   };
 
   patches = [ ./isDev.patch ];

@@ -8,19 +8,54 @@ rec {
   # Examples:
   #   writeBash = makeScriptWriter { interpreter = "${pkgs.bash}/bin/bash"; }
   #   makeScriptWriter { interpreter = "${pkgs.dash}/bin/dash"; } "hello" "echo hello world"
-  makeScriptWriter = { interpreter, check ? "" }: name: text:
-    assert lib.or (types.path.check name) (builtins.match "([0-9A-Za-z._])[0-9A-Za-z._-]*" name != null);
+  makeScriptWriter = { interpreter, check ? "" }: nameOrPath: content:
+    assert lib.or (types.path.check nameOrPath) (builtins.match "([0-9A-Za-z._])[0-9A-Za-z._-]*" nameOrPath != null);
+    assert lib.or (types.path.check content) (types.string.check content);
+    let
+      name = last (builtins.split "/" nameOrPath);
+    in
 
-    pkgs.writeTextFile {
-      name = last (builtins.split "/" name);
-      executable = true;
-      destination = if types.path.check name then name else "";
-      text = ''
-        #! ${interpreter}
-        ${text}
-        '';
-      checkPhase = check;
-    };
+    pkgs.runCommand name (if (types.string.check content) then {
+      inherit content interpreter;
+      passAsFile = [ "content" ];
+    } else {
+      inherit interpreter;
+      contentPath = content;
+    }) ''
+      echo "#! $interpreter" > $out
+      cat "$contentPath" >> $out
+      chmod +x $out
+      ${optionalString (types.path.check nameOrPath) ''
+        mv $out tmp
+        mkdir -p $out/$(dirname "${nameOrPath}")
+        mv tmp $out/${nameOrPath}
+      ''}
+    '';
+
+  # Base implementation for compiled executables.
+  # Takes a compile script, which in turn takes the name as an argument.
+  #
+  # Examples:
+  #   writeSimpleC = makeBinWriter { compileScript = name: "gcc -o $out $contentPath"; }
+  makeBinWriter = { compileScript }: nameOrPath: content:
+    assert lib.or (types.path.check nameOrPath) (builtins.match "([0-9A-Za-z._])[0-9A-Za-z._-]*" nameOrPath != null);
+    assert lib.or (types.path.check content) (types.string.check content);
+    let
+      name = last (builtins.split "/" nameOrPath);
+    in
+    pkgs.runCommand name (if (types.string.check content) then {
+      inherit content;
+      passAsFile = [ "content" ];
+    } else {
+      contentPath = content;
+    }) ''
+      ${compileScript}
+      ${optionalString (types.path.check nameOrPath) ''
+        mv $out tmp
+        mkdir -p $out/$(dirname "${nameOrPath}")
+        mv tmp $out/${nameOrPath}
+      ''}
+    '';
 
   # Like writeScript but the first line is a shebang to bash
   #
@@ -48,41 +83,33 @@ rec {
   #        return 0;
   #      }
   #    ''
-  writeC = name: {
-    libraries ? [],
-  }: text: pkgs.runCommand name {
-    inherit text;
-    buildInputs = [ pkgs.pkgconfig ] ++ libraries;
-    passAsFile = [ "text" ];
-  } ''
-    PATH=${makeBinPath [
-      pkgs.binutils-unwrapped
-      pkgs.coreutils
-      pkgs.gcc
-      pkgs.pkgconfig
-    ]}
-    mkdir -p "$(dirname "$out")"
-    gcc \
-        ${optionalString (libraries != [])
-          "$(pkg-config --cflags --libs ${
-            concatMapStringsSep " " (lib: escapeShellArg (builtins.parseDrvName lib.name).name) (libraries)
-          })"
-        } \
-        -O \
-        -o "$out" \
-        -Wall \
-        -x c \
-        "$textPath"
-    strip --strip-unneeded "$out"
-  '';
+  writeC = name: { libraries ? [] }:
+    makeBinWriter {
+      compileScript = ''
+        PATH=${makeBinPath [
+          pkgs.binutils-unwrapped
+          pkgs.coreutils
+          pkgs.gcc
+          pkgs.pkgconfig
+        ]}
+        gcc \
+            ${optionalString (libraries != [])
+              "$(pkgs.pkgconfig}/bin/pkg-config --cflags --libs ${
+                concatMapStringsSep " " (lib: escapeShellArg (builtins.parseDrvName lib.name).name) (libraries)
+              })"
+            } \
+            -O \
+            -o "$out" \
+            -Wall \
+            -x c \
+            "$contentPath"
+        strip --strip-unneeded "$out"
+      '';
+    } name;
 
   # writeCBin takes the same arguments as writeC but outputs a directory (like writeScriptBin)
-  writeCBin = name: spec: text:
-    pkgs.runCommand name {
-    } ''
-      mkdir -p $out/bin
-      ln -s ${writeC name spec text} $out/bin/${name}
-    '';
+  writeCBin = name:
+    writeC "/bin/${name}";
 
   # Like writeScript but the first line is a shebang to dash
   #
@@ -103,29 +130,25 @@ rec {
   #
   # Example:
   #   writeHaskell "missiles" { libraries = [ pkgs.haskellPackages.acme-missiles ]; } ''
-  #     Import Acme.Missiles
+  #     import Acme.Missiles
   #
   #     main = launchMissiles
   #   '';
   writeHaskell = name: {
     libraries ? [],
     ghc ? pkgs.ghc
-  }: text: pkgs.runCommand name {
-    inherit text;
-    passAsFile = [ "text" ];
-  } ''
-    cp $textPath ${name}.hs
-    ${ghc.withPackages (_: libraries )}/bin/ghc ${name}.hs
-    cp ${name} $out
-  '';
+  }:
+    makeBinWriter {
+      compileScript = ''
+        cp $contentPath tmp.hs
+        ${ghc.withPackages (_: libraries )}/bin/ghc tmp.hs
+        mv tmp $out
+      '';
+    } name;
 
   # writeHaskellBin takes the same arguments as writeHaskell but outputs a directory (like writeScriptBin)
-  writeHaskellBin = name: spec: text:
-    pkgs.runCommand name {
-    } ''
-      mkdir -p $out/bin
-      ln -s ${writeHaskell name spec text} $out/bin/${name}
-    '';
+  writeHaskellBin = name:
+    writeHaskell "/bin/${name}";
 
   # writeJS takes a name an attributeset with libraries and some JavaScript sourcecode and
   # returns an executable
@@ -137,7 +160,7 @@ rec {
   #     var result = UglifyJS.minify(code);
   #     console.log(result.code);
   #   ''
-  writeJS = name: { libraries ? [] }: text:
+  writeJS = name: { libraries ? [] }: content:
   let
     node-env = pkgs.buildEnv {
       name = "node";
@@ -148,7 +171,7 @@ rec {
     };
   in writeDash name ''
     export NODE_PATH=${node-env}/lib/node_modules
-    exec ${pkgs.nodejs}/bin/node ${pkgs.writeText "js" text}
+    exec ${pkgs.nodejs}/bin/node ${pkgs.writeText "js" content}
   '';
 
   # writeJSBin takes the same arguments as writeJS but outputs a directory (like writeScriptBin)
