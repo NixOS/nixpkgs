@@ -4966,6 +4966,7 @@ in
 
   podiff = callPackage ../tools/text/podiff { };
 
+  conmon = callPackage ../applications/virtualization/podman/conmon.nix { };
   pod2mdoc = callPackage ../tools/misc/pod2mdoc { };
 
   poedit = callPackage ../tools/text/poedit { };
