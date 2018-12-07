@@ -16,6 +16,9 @@ static int nrRedirects = 0;
 static char * from[MAX_REDIRECTS];
 static char * to[MAX_REDIRECTS];
 
+#undef open64 // Needed for musl
+#undef fopen64 // Needed for musl
+
 // FIXME: might run too late.
 static void init() __attribute__((constructor));
 

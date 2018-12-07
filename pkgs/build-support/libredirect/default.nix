@@ -7,7 +7,7 @@ stdenv.mkDerivation {
 
   buildPhase =
     ''
-      gcc -Wall -std=c99 -O3 -shared libredirect.c -o libredirect.so -fPIC -ldl
+      ${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc -Wall -std=c99 -O3 -shared libredirect.c -o libredirect.so -fPIC -ldl
     '';
 
   installPhase = "mkdir -p $out/lib; cp libredirect.so $out/lib";
