@@ -10,11 +10,11 @@ let
         ]);
 in
 stdenv.mkDerivation rec {
-  version = "0.9.24.1";
+  version = "0.9.25";
   name = "hedgewars-${version}";
   src = fetchurl {
     url = "https://www.hedgewars.org/download/releases/hedgewars-src-${version}.tar.bz2";
-    sha256 = "1f2vbndh9fnwklwjicrhy5zv2ciyhadfsny2cdqnc6lim90hldl1";
+    sha256 = "0vhwirh1xzfp3dy9lwrqjyqynbmaczfsl67mjjldxpchpiym5p07";
   };
 
   nativeBuildInputs = [ pkgconfig ];
