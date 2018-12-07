@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, openssl, openldap, kerberos, db, gettext
 , pam, fixDarwinDylibNames, autoreconfHook, fetchpatch, enableLdap ? false
-, buildPackages }:
+, buildPackages, pruneLibtoolFiles }:
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   outputs = [ "bin" "dev" "out" "man" "devdoc" ];
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = [ autoreconfHook fixDarwinDylibNames ];
+  nativeBuildInputs = [ autoreconfHook fixDarwinDylibNames pruneLibtoolFiles ];
   buildInputs =
     [ openssl db gettext kerberos ]
     ++ lib.optional enableLdap openldap
