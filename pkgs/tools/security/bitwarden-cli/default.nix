@@ -2,19 +2,19 @@
 
 stdenv.mkDerivation rec {
   name = "bitwarden-cli-${version}";
-  version = "v1.6.0";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "bitwarden";
     repo = "cli";
-    rev = "${version}";
+    rev = "v${version}";
     fetchSubmodules = true; 
     sha256 = "1csdbv692l69lickzzl8246gvl0gi58hc91aja3xmb1kcxiphc7c";
   };
 
   buildInputs = [ nodejs ];
   buildCommand = ''
-    unpackPhase  
+    unpackPhase
     cd "$sourceRoot"
     export HOME="."
 
