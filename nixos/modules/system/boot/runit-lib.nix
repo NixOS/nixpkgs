@@ -93,9 +93,21 @@ let bin = lib.getBin runit;
       };
     };
 
-    waitForDependencies = timeout: deps: ''
-       ${optionalString (builtins.length deps > 0)
-          "${bin}/bin/sv -w ${builtins.toString timeout} start ${concatStringsSep " " (map (dep: "/run/current-services/${dep}") deps)}"}
+    waitForSoftDep = dep: ''
+    if [ -d "/run/current-services/${dep}" ]; then
+      deps+=" /run/current-services/${dep}"
+    fi
+    '';
+
+    waitForDependencies = timeout: deps: softDeps: ''
+       deps="${concatStringsSep " " (map (dep: "/run/current-services/${dep}") deps)}"
+       ${concatStringsSep "\n" (map waitForSoftDep softDeps)}
+       ${optionalString (builtins.length softDeps > 0 && builtins.length deps == 0)
+         "if [ ! -z \"$deps\" ]; then"}
+       ${optionalString (builtins.length deps > 0 || builtins.length softDeps > 0)
+          "${bin}/bin/sv -w ${builtins.toString timeout} start $deps"}
+       ${optionalString (builtins.length softDeps > 0 && builtins.length deps == 0)
+         "fi"}
      '';
 
     mkScript = script: ''
@@ -181,6 +193,14 @@ in {
         type = types.listOf types.str;
         description = ''
           Units that we require to be up before we start
+        '';
+      };
+
+      softRequires = mkOption {
+        default = [];
+        type = types.listOf types.str;
+        description = ''
+          Units that should be started before we start, if they exist
         '';
       };
 
@@ -321,7 +341,7 @@ in {
       runScript = mkDefault ''
         #!${pkgs.runtimeShell} -e
 
-        ${waitForDependencies config.waitTime config.requires}
+        ${waitForDependencies config.waitTime config.requires config.softRequires}
         >&2 echo "[ init ] starting ${config.name}"
 
         ${lib.optionalString config.oneshot ''

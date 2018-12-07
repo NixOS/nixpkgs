@@ -149,6 +149,7 @@ with import ./runit-lib.nix { inherit pkgs lib; runit = config.runit.package; ma
         '';
         requires = map (i: "network-link-${i.name}")
           (attrValues config.networking.interfaces);
+        softRequires = [ "firewall" ];
       };
       runit.services.network-online = {
         oneshot = true;
