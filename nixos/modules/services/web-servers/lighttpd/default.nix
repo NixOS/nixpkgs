@@ -259,7 +259,7 @@ in
       requires = [ "network" ];
       logging = { enable = true; redirectStderr = true; };
       script = ''
-        ${pkgs.lighttpd}/sbin/lighttpd -D -f ${configFile}
+        exec ${pkgs.lighttpd}/sbin/lighttpd -D -f ${configFile}
       '';
     };
 
