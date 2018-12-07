@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://downloads.vivaldi.com/stable/${product}-stable_${version}_amd64.deb";
-    sha256 = "08x6abyz65vx4ycj8ys8sib9z1adb8ybmnrqjck69b30kbz78rj2";
+    sha256 = "00rxp6rardxjg17g2b28y2rj8szqlainp4ga6c58z981zkxvdlls";
   };
 
   unpackPhase = ''
