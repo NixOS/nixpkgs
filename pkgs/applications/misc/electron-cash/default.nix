@@ -29,7 +29,7 @@ python3Packages.buildPythonApplication rec {
     pysocks
     qrcode
     requests
-    tlslite
+    tlslite-ng
 
     # plugins
     keepkey
