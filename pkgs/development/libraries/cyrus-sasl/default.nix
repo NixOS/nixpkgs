@@ -24,12 +24,7 @@ stdenv.mkDerivation rec {
   patches = [
     ./missing-size_t.patch # https://bugzilla.redhat.com/show_bug.cgi?id=906519
     ./cyrus-sasl-ac-try-run-fix.patch
-  ] ++ lib.optional stdenv.isFreeBSD (
-      fetchurl {
-        url = "http://www.linuxfromscratch.org/patches/blfs/svn/cyrus-sasl-2.1.26-fixes-3.patch";
-        sha256 = "1vh4pc2rxxm6yvykx0b7kg09jbcwcxwv5rs6yq2ag3y8p6a9x86w";
-      }
-    );
+  ];
 
   configureFlags = [
     "--with-openssl=${openssl.dev}"
