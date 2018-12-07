@@ -186,7 +186,7 @@ if ( $totalActions == 0 ) {
         print "Start $unit\n";
 
         if ( $action ne "dry-activate" ) {
-            system("sv start /run/current-services/$unit") == 0 or exit 1;
+            system("sv start /run/current-services/$unit") # Do not fail on failed services
         }
     }
 }
