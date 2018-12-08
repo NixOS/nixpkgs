@@ -16,11 +16,11 @@
 
 buildPythonPackage rec {
   pname = "django-silk";
-  version = "0.5.6";
+  version = "3.0.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "845abc688738858ce06e993c4b7dbbcfcecf33029e828f143463ff96f9a78947";
+    sha256 = "bce0e35d2a6ec3688a0c062c6964695beef4a452be48085f2c1e25f685652d9d";
   };
 
   doCheck = false;

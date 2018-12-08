@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "objgraph";
-  version = "2.0.1";
+  version = "3.4.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "841de52715774ec1d0e97d9b4462d6e3e10406155f9b61f54ba7db984c45442a";
+    sha256 = "4a0c2c6268e10a9e8176ae054ff3faac9a432087801e1f95c3ebbe52550295a0";
   };
 
   # Tests fail with PyPy.

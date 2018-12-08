@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "CherryPy";
-  version = "17.3.0";
+  version = "18.0.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c3e4d76232ade4c47666b9008f92556465df517b8dca833ece3bed027028ae7d";
+    sha256 = "3002fc47b982c3df4d08dbe5996b093fd73f85b650ab8df19e8b9b95f5c00520";
   };
 
   propagatedBuildInputs = [ cheroot contextlib2 portend routes six zc_lockfile ];

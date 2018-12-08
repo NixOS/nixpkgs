@@ -7,11 +7,11 @@
 
 if (pythonAtLeast "3.3") then null else buildPythonPackage rec {
   pname = "ipaddress";
-  version = "1.0.18";
+  version = "1.0.22";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1q8klj9d84cmxgz66073x1j35cplr3r77vx1znhxiwl5w74391ax";
+    sha256 = "b146c751ea45cad6188dd6cf2d9b757f6f4f8d6ffb96a023e6f2e26eea02a72c";
   };
 
   checkPhase = ''

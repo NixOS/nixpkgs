@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "zope.contenttype";
-  version = "4.0.1";
+  version = "4.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9decc7531ad6925057f1a667ac0ef9d658577a92b0b48dafa7daa97b78a02bbb";
+    sha256 = "08c0408f515668e6f0c4fd492b66fbe87a074c1aa21cfc6be8c6292482d8b2f4";
   };
 
   meta = with stdenv.lib; {

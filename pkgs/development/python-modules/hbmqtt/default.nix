@@ -3,21 +3,14 @@
 
 buildPythonPackage rec {
   pname = "hbmqtt";
-  version = "0.9.2";
+  version = "0.9.5";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "6f61e05007648a4f33e300fafcf42776ca95508ba1141799f94169427ce5018c";
+    sha256 = "9886b1c8321d16e971376dc609b902e0c84118846642b5e09f08a4ca876a7f2a";
   };
-
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/beerfactory/hbmqtt/commit/75a85d1ea4cb41f2a15f2681d3114da7158942ae.patch";
-      sha256 = "0bl4v5zxp4kz2w7riwrx48f7yqmp7pxg79g9qavkda0i85lxswnp";
-    })
-  ];
 
   propagatedBuildInputs = [ transitions websockets passlib docopt pyyaml ];
 

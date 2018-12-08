@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "pyelftools";
-  version = "0.24";
+  version = "0.25";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "17259kf6hwwsmizr5myp9jv3k9g5i3dvmnl8m646pfd5hpb9gpg9";
+    sha256 = "89c6da6f56280c37a5ff33468591ba9a124e17d71fe42de971818cbff46c1b24";
   };
 
   checkPhase = ''

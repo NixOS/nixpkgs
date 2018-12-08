@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "ECPy";
-  version = "0.9.1";
+  version = "0.10.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f0df66be67f3de0152dfb3c453f4247bdfa2b4e37aa75b98617a637376032229";
+    sha256 = "8889122d3a8bc1a08b4bda42c073dd22305d770b7876356de806ff91748983bd";
   };
 
   propagatedBuildInputs = lib.optional (!isPy3k) future;
