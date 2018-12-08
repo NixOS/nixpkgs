@@ -23004,6 +23004,32 @@ in
 
   ghc-standalone-archive = callPackage ../os-specific/darwin/ghc-standalone-archive { inherit (darwin) cctools; };
 
+  vdrBundle = callPackage ../applications/video/vdr { };
+  vdr = vdrBundle.vdr;
+  vdrPlugins = recurseIntoAttrs (callPackage ../applications/video/vdr/plugins.nix { });
+  wrapVdr = { vdr }: callPackage ../applications/video/vdr/wrapper.nix {
+    inherit vdr;
+    plugins = let inherit (lib) optional optionals; in with vdrPlugins; with vdrBundle;
+      ([]
+      ++ optional (config.vdr.enableEpgTableId0 or false) epgtableid0
+      ++ optional (config.vdr.enableEpgSearch or false) epgsearch
+      ++ optional (config.vdr.enableHello or false) hello
+      ++ optional (config.vdr.enableFemon or false) femon
+      ++ optional (config.vdr.enableFritzbox or false) fritzbox
+      ++ optional (config.vdr.enableMarkAd or false) markad
+      ++ optional (config.vdr.enableOsdDemo or false) osddemo
+      ++ optional (config.vdr.enablePictures or false) pictures
+      ++ optional (config.vdr.enableServiceDemo or false) servicedemo
+      ++ optional (config.vdr.enableSkinCurses or false) skincurses
+      ++ optional (config.vdr.enableVAApiDevice or false) vaapidevice
+      ++ optional (config.vdr.enableStatus or false) status
+      ++ optional (config.vdr.enableSvdrpDemo or false) svdrpdemo
+      ++ optional (config.vdr.enableText2Skin or false) text2skin
+      ++ optional (config.vdr.enableVnsiServer or false) vnsiserver
+      );
+  };
+  vdr-with-plugins = wrapVdr { inherit vdr; };
+
   chrome-gnome-shell = callPackage  ../desktops/gnome-3/extensions/chrome-gnome-shell {};
 
   chrome-token-signing = libsForQt5.callPackage ../tools/security/chrome-token-signing {};
