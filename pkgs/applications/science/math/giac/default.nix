@@ -1,5 +1,5 @@
 { stdenv, fetchurl, fetchpatch, texlive, bison, flex, liblapack
-, gmp, mpfr, pari, ntl, gsl, blas, mpfi
+, gmp, mpfr, pari, ntl, gsl, blas, mpfi, ecm, glpk
 , readline, gettext, libpng, libao, gfortran, perl
 , enableGUI ? false, libGLU_combined ? null, xorg ? null, fltk ? null
 }:
@@ -37,8 +37,8 @@ stdenv.mkDerivation rec {
 
   # perl is only needed for patchShebangs fixup.
   buildInputs = [
-    gmp mpfr pari ntl gsl blas mpfi
-    readline gettext libpng libao perl
+    gmp mpfr pari ntl gsl blas mpfi glpk
+    readline gettext libpng libao perl ecm
     # gfortran.cc default output contains static libraries compiled without -fPIC
     # we want libgfortran.so.3 instead
     (stdenv.lib.getLib gfortran.cc)
@@ -46,6 +46,13 @@ stdenv.mkDerivation rec {
   ] ++ stdenv.lib.optionals enableGUI [
     libGLU_combined fltk xorg.libX11
   ];
+
+  /* fixes:
+  configure:16211: checking for main in -lntl
+  configure:16230: g++ -o conftest -g -O2   conftest.cpp -lntl  -llapack -lblas -lgfortran -ldl -lpng16 -lm -lmpfi -lmpfr -lgmp  >&5
+  /nix/store/y9c1v4x7y39j2rfbg17agjwqdzxpsn18-ntl-11.3.2/lib/libntl.so: undefined reference to `pthread_key_create'
+  */
+  NIX_CFLAGS_LINK="-lpthread";
 
   # xcas Phys and Turtle menus are broken with split outputs
   # and interactive use is likely to need docs
@@ -66,7 +73,7 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--enable-gc" "--enable-png" "--enable-gsl" "--enable-lapack"
     "--enable-pari" "--enable-ntl" "--enable-gmpxx" # "--enable-cocoa"
-    "--enable-ao"
+    "--enable-ao" "--enable-ecm" "--enable-glpk"
   ] ++ stdenv.lib.optionals enableGUI [
     "--enable-gui" "--with-x"
   ];
