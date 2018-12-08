@@ -1,9 +1,9 @@
 # pcre functionality is tested in nixos/tests/php-pcre.nix
 { lib, stdenv, fetchurl, flex, bison, autoconf
 , mysql, libxml2, readline, zlib, curl, postgresql, gettext
-, openssl, pcre, pkgconfig, sqlite, config, libjpeg, libpng, freetype
+, openssl, pcre, pcre2, pkgconfig, sqlite, config, libjpeg, libpng, freetype
 , libxslt, libmcrypt, bzip2, icu, openldap, cyrus_sasl, libmhash, freetds
-, uwimap, pam, gmp, apacheHttpd, libiconv, systemd, libsodium, html-tidy, libargon2
+, uwimap, pam, gmp, apacheHttpd, libiconv, systemd, libsodium, html-tidy, libargon2, libzip
 }:
 
 with lib;
@@ -42,7 +42,7 @@ let
   , intlSupport ? config.php.intl or true
   , exifSupport ? config.php.exif or true
   , xslSupport ? config.php.xsl or false
-  , mcryptSupport ? config.php.mcrypt or true
+  , mcryptSupport ? (config.php.mcrypt or true) && (versionOlder version "7.2")
   , bz2Support ? config.php.bz2 or false
   , zipSupport ? config.php.zip or true
   , ftpSupport ? config.php.ftp or true
@@ -54,6 +54,7 @@ let
   , sodiumSupport ? (config.php.sodium or true) && (versionAtLeast version "7.2")
   , tidySupport ? (config.php.tidy or false)
   , argon2Support ? (config.php.argon2 or true) && (versionAtLeast version "7.2")
+  , libzipSupport ? (config.php.libzip or true) && (versionAtLeast version "7.3")
   }:
 
     let
@@ -68,7 +69,9 @@ let
       enableParallelBuilding = true;
 
       nativeBuildInputs = [ pkgconfig autoconf ];
-      buildInputs = [ flex bison pcre ]
+      buildInputs = [ flex bison ]
+        ++ optional (versionOlder version "7.3") pcre
+        ++ optional (versionAtLeast version "7.3") pcre2
         ++ optional withSystemd systemd
         ++ optionals imapSupport [ uwimap openssl pam ]
         ++ optionals curlSupport [ curl openssl ]
@@ -96,15 +99,16 @@ let
         ++ optional (mssqlSupport && !stdenv.isDarwin) freetds
         ++ optional sodiumSupport libsodium
         ++ optional tidySupport html-tidy
-        ++ optional argon2Support libargon2;
+        ++ optional argon2Support libargon2
+        ++ optional libzipSupport libzip;
 
       CXXFLAGS = optional stdenv.cc.isClang "-std=c++11";
 
-
       configureFlags = [
         "--with-config-file-scan-dir=/etc/php.d"
-        "--with-pcre-regex=${pcre.dev} PCRE_LIBDIR=${pcre}"
       ]
+      ++ optional (versionOlder version "7.3") "--with-pcre-regex=${pcre.dev} PCRE_LIBDIR=${pcre}"
+      ++ optional (versionAtLeast version "7.3") "--with-pcre-regex=${pcre2.dev} PCRE_LIBDIR=${pcre2}"
       ++ optional stdenv.isDarwin "--with-iconv=${libiconv}"
       ++ optional withSystemd "--with-fpm-systemd"
       ++ optionals imapSupport [
@@ -163,8 +167,8 @@ let
       ++ optional calendarSupport "--enable-calendar"
       ++ optional sodiumSupport "--with-sodium=${libsodium.dev}"
       ++ optional tidySupport "--with-tidy=${html-tidy}"
-      ++ optional argon2Support "--with-password-argon2=${libargon2}";
-
+      ++ optional argon2Support "--with-password-argon2=${libargon2}"
+      ++ optional libzipSupport "--with-libzip=${libzip.dev}";
 
       hardeningDisable = [ "bindnow" ];
 
@@ -241,5 +245,10 @@ in {
 
     # https://bugs.php.net/bug.php?id=76826
     extraPatches = optional stdenv.isDarwin ./php72-darwin-isfinite.patch;
+  };
+
+  php73 = generic {
+    version = "7.3.0";
+    sha256 = "0rvwx37dsmxivgrf4wfc1y778iln498c6a40biy9k6lnr6p7s9ks";
   };
 }
