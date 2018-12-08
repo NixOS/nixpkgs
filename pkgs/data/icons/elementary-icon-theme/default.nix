@@ -13,6 +13,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ meson ninja python3 gtk3 ];
 
+  # Disable installing gimp and inkscape palette files
+  mesonFlags = [
+    "-Dpalettes=false"
+  ];
+
   postPatch = ''
     chmod +x meson/symlink.py
     patchShebangs .
