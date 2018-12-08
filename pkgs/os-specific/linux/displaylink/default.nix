@@ -44,6 +44,7 @@ in stdenv.mkDerivation rec {
       main systemd "$out/lib/udev/rules.d/99-displaylink.rules" "$out/lib/udev/displaylink.sh"
     )
     sed -i '2iPATH=${systemd}/bin:$PATH' $out/lib/udev/displaylink.sh
+    sed -i 's,systemctl start,systemctl start --no-block,g' $out/lib/udev/displaylink.sh
 
     install -Dt $out/lib/displaylink *.spkg
     install -Dm755 ${bins}/DisplayLinkManager $out/bin/DisplayLinkManager
