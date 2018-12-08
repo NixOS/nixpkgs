@@ -299,6 +299,12 @@
       <option>services.kubernetes.addons.dns.replicas</option>.
     </para>
    </listitem>
+   <listitem>
+     <para>
+       The quassel-webserver package and module was removed from nixpkgs due to the lack
+       of maintainers.
+     </para>
+   </listitem>
   </itemizedlist>
  </section>
 </section>
