@@ -49,6 +49,7 @@ in {
       description = "LIRC daemon socket";
       wantedBy = [ "sockets.target" ];
       socketConfig = {
+        # default search path
         ListenStream = "/run/lirc/lircd";
         SocketUser = "lirc";
         SocketMode = "0660";
@@ -66,8 +67,18 @@ in {
       serviceConfig = {
         RuntimeDirectory = "lirc";
 
-        # socket lives in runtime directory; we have to keep is available
+        # Service runtime directory and socket share same folder.
+        # Following hacks are necessary to get everything right:
+
+        # 1. prevent socket deletion during stop and restart
         RuntimeDirectoryPreserve = true;
+
+        # 2. fix runtime folder owner-ship, happens when socket activation
+        #    creates the folder
+        PermissionsStartOnly = true;
+        ExecStartPre = [
+          "${pkgs.coreutils}/bin/chown lirc /run/lirc/"
+        ];
 
         ExecStart = ''
           ${pkgs.lirc}/bin/lircd --nodaemon \
