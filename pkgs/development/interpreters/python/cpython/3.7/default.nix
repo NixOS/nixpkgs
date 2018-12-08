@@ -14,6 +14,7 @@
 , self
 , CF, configd
 , python-setup-hook
+, nukeReferences
 # For the Python package set
 , packageOverrides ? (self: super: {})
 , buildPackages
@@ -34,7 +35,7 @@ let
   sitePackages = "lib/${libPrefix}/site-packages";
 
   buildInputs = filter (p: p != null) [
-    zlib bzip2 expat lzma libffi gdbm sqlite readline ncurses openssl ]
+    zlib bzip2 expat lzma libffi gdbm sqlite readline ncurses openssl nukeReferences ]
     ++ optionals x11Support [ tcl tk libX11 xproto ]
     ++ optionals stdenv.isDarwin [ CF configd ];
 
@@ -173,8 +174,13 @@ in stdenv.mkDerivation {
     # some $TMPDIR references to improve binary reproducibility.
     # Note that the .pyc file of _sysconfigdata.py should be regenerated!
     for i in $out/lib/python${majorVersion}/_sysconfigdata*.py $out/lib/python${majorVersion}/config-${majorVersion}m*/Makefile; do
-      sed -i $i -e "s|-I/nix/store/[^ ']*||g" -e "s|-L/nix/store/[^ ']*||g" -e "s|$TMPDIR|/no-such-path|g"
+      sed -i $i -e "s|$TMPDIR|/no-such-path|g"
+      nuke-refs $i
     done
+
+    # Further get rid of references. https://github.com/NixOS/nixpkgs/issues/51668
+    find $out/lib/python*/config-*-* -type f -print -exec nuke-refs '{}' +
+    find $out/lib -name '_sysconfigdata_m*.py*' -print -exec nuke-refs '{}' +
 
     # Determinism: rebuild all bytecode
     # We exclude lib2to3 because that's Python 2 code which fails
@@ -185,6 +191,10 @@ in stdenv.mkDerivation {
     find $out -name "*.py" | ${pythonForBuild} -O  -m compileall -q -f -x "lib2to3" -i -
     find $out -name "*.py" | ${pythonForBuild} -OO -m compileall -q -f -x "lib2to3" -i -
   '';
+
+  # Enforce that we don't have references to the OpenSSL -dev package, which we
+  # explicitly specify in our configure flags above.
+  disallowedReferences = [ openssl.dev ];
 
   passthru = let
     pythonPackages = callPackage ../../../../../top-level/python-packages.nix {
