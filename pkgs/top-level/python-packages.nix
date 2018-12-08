@@ -835,6 +835,8 @@ in {
 
   appnope = callPackage ../development/python-modules/appnope { };
 
+  approvaltests = callPackage ../development/python-modules/approvaltests { };
+
   apsw = callPackage ../development/python-modules/apsw {};
 
   astor = callPackage ../development/python-modules/astor {};
