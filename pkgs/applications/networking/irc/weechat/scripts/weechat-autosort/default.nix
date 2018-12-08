@@ -13,8 +13,7 @@ stdenv.mkDerivation rec {
 
   passthru.scripts = [ "autosort.py" ];
   installPhase = ''
-    mkdir -p $out/share
-    cp autosort.py $out/share
+    install -D autosort.py $out/share/autosort.py
   '';
 
   meta = with stdenv.lib; {
