@@ -3810,6 +3810,8 @@ in {
 
   robotframework-ride = callPackage ../development/python-modules/robotframework-ride { };
 
+  robotframework-seleniumlibrary = callPackage ../development/python-modules/robotframework-seleniumlibrary { };
+
   robotframework-selenium2library = callPackage ../development/python-modules/robotframework-selenium2library { };
 
   robotframework-tools = callPackage ../development/python-modules/robotframework-tools { };
