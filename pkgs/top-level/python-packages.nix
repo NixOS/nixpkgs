@@ -2969,6 +2969,8 @@ in {
 
   mock-open = callPackage ../development/python-modules/mock-open { };
 
+  mockito = callPackage ../development/python-modules/mockito { };
+
   modestmaps = callPackage ../development/python-modules/modestmaps { };
 
   # Needed here because moinmoin is loaded as a Python library.
