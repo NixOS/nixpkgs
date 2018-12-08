@@ -1,7 +1,7 @@
 { lib, python3Packages, fetchFromGitHub }:
 python3Packages.buildPythonApplication rec {
   pname = "dpt-rp1-py";
-  version = "2018-10-16";
+  version = "unstable-2018-10-16";
 
   src = fetchFromGitHub {
     owner = "janten";
