@@ -3810,6 +3810,8 @@ in {
 
   robotframework-tools = callPackage ../development/python-modules/robotframework-tools { };
 
+  robotstatuschecker = callPackage ../development/python-modules/robotstatuschecker { };
+
   robotsuite = callPackage ../development/python-modules/robotsuite { };
 
   serpent = callPackage ../development/python-modules/serpent { };
