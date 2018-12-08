@@ -1,20 +1,21 @@
-{ stdenv, fetchurl, cmake, llvm, curl, tzdata
+{ stdenv, fetchurl, cmake, llvm, llvm_6, curl, tzdata
 , python, libconfig, lit, gdb, unzip, darwin, bash
 , callPackage, makeWrapper, targetPackages
 , bootstrapVersion ? false
-, version ? "1.11.0"
-, ldcSha256 ? "0w4z261gzji31hn1xdnmi9dfkbyydpy6rz8aj4456q5w8yp4yil5"
+, version ? "1.12.0"
+, ldcSha256 ? "1fdma1w8j37wkr0pqdar11slkk36qymamxnk6d9k8ybhjmxaaawm"
 }:
 
 let
+  llvm_ = if bootstrapVersion then llvm else llvm_6;
 
   bootstrapLdc = if !bootstrapVersion then
     # LDC 0.17.x is the last version which doesn't need a working D compiler to
     # build so we use that version to bootstrap the actual build.
     callPackage ./default.nix {
       bootstrapVersion = true;
-      version = "0.17.5";
-      ldcSha256 = "0200r5y8hs5yv2cx24csgyh00dlg18877b9cfblixypr6nhl19bs";
+      version = "0.17.6";
+      ldcSha256 = "0qf5kbxddgmg3kqzi0kf4bgv8vdrnv16y07hcpm0cwv9mc3qr2w6";
     }
   else
     "";
@@ -51,7 +52,7 @@ let
         #
         #==============================
         #Test failed: expected rc == 0, exited with rc == 1
-        rm ldc-${version}-src/tests/d2/dmd-testsuite/runnable/variadic.d
+        #rm ldc-${version}-src/tests/d2/dmd-testsuite/runnable/variadic.d
     ''
 
     + stdenv.lib.optionalString (!bootstrapVersion) ''
@@ -124,7 +125,7 @@ let
             --replace "tzName == \"+VERSION\"" "baseName(tzName) == \"leapseconds\" || tzName == \"+VERSION\""
     '';
 
-    nativeBuildInputs = [ cmake makeWrapper llvm bootstrapLdc python lit gdb unzip ]
+    nativeBuildInputs = [ cmake makeWrapper llvm_ bootstrapLdc python lit gdb unzip ]
 
     ++ stdenv.lib.optional (bootstrapVersion) [
       libconfig
@@ -180,7 +181,7 @@ let
       homepage = https://github.com/ldc-developers/ldc;
       # from https://github.com/ldc-developers/ldc/blob/master/LICENSE
       license = with licenses; [ bsd3 boost mit ncsa gpl2Plus ];
-      maintainers = with maintainers; [ ThomasMader ];
+      maintainers = with maintainers; [ ThomasMader lionello ];
       platforms = [ "x86_64-linux" "i686-linux" "x86_64-darwin" ];
     };
   };
