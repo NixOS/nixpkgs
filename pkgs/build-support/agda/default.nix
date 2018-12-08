@@ -78,7 +78,7 @@ let
           # Makes a wrapper available to the user. Very useful in
           # nix-shell where all dependencies are -i'd.
           agdaWrapper = writeShellScriptBin "agda" ''
-            ${self.agdaWithArgs} "$@"
+            exec ${self.agdaWithArgs} "$@"
           '';
         in [agdaWrapper] ++ self.buildDepends;
       };
