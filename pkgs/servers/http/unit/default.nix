@@ -3,6 +3,7 @@
 , python
 , php71
 , php72
+, php73
 , perl526
 , perl
 , perldevel
@@ -30,6 +31,7 @@ stdenv.mkDerivation rec {
     python
     php71
     php72
+    php73
     perl526
     perl
     perldevel
@@ -49,6 +51,7 @@ stdenv.mkDerivation rec {
     ./configure python  --module=python    --config=${python}/bin/python-config  --lib-path=${python}/lib
     ./configure php     --module=php71     --config=${php71.dev}/bin/php-config  --lib-path=${php71}/lib
     ./configure php     --module=php72     --config=${php72.dev}/bin/php-config  --lib-path=${php72}/lib
+    ./configure php     --module=php73     --config=${php73.dev}/bin/php-config  --lib-path=${php73}/lib
     ./configure perl    --module=perl526   --perl=${perl526}/bin/perl
     ./configure perl    --module=perl      --perl=${perl}/bin/perl
     ./configure perl    --module=perl529   --perl=${perldevel}/bin/perl

@@ -13573,6 +13573,7 @@ in
   unit = callPackage ../servers/http/unit {
     php71 = php71-unit;
     php72 = php72-unit;
+    php73 = php73-unit;
   };
 
   nginx = nginxStable;
