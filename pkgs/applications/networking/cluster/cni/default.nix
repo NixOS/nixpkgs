@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, go }:
+{ stdenv, fetchFromGitHub, go, removeReferencesTo }:
 
 stdenv.mkDerivation rec {
   name = "cni-${version}";
@@ -11,7 +11,9 @@ stdenv.mkDerivation rec {
     sha256 = "00ajs2r5r2z3l0vqwxrcwhjfc9px12qbcv5vnvs2mdipvvls1y2y";
   };
 
-  buildInputs = [ go ];
+  buildInputs = [ removeReferencesTo go ];
+
+  GOCACHE = "off";
 
   buildPhase = ''
     patchShebangs build.sh
@@ -21,6 +23,10 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out/bin
     mv bin/cnitool $out/bin
+  '';
+
+  preFixup = ''
+    find $out/bin -type f -exec remove-references-to -t ${go} '{}' +
   '';
 
   meta = with stdenv.lib; {
