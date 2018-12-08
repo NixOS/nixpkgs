@@ -7829,6 +7829,15 @@ in
     php = php72;
   });
 
+  phpPackages-unit = php72Packages-unit;
+
+  php71Packages-unit = recurseIntoAttrs (callPackage ./php-packages.nix {
+    php = php71-unit;
+  });
+   php72Packages-unit = recurseIntoAttrs (callPackage ./php-packages.nix {
+    php = php72-unit;
+  });
+
   inherit (callPackages ../development/interpreters/php { })
     php71
     php72;
