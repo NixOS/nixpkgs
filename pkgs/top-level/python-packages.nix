@@ -4629,8 +4629,6 @@ in {
 
   pynvim = callPackage ../development/python-modules/pynvim {};
 
-  neovim_gui = callPackage ../development/python-modules/neovim_gui { };
-
   typogrify = callPackage ../development/python-modules/typogrify { };
 
   smartypants = callPackage ../development/python-modules/smartypants { };

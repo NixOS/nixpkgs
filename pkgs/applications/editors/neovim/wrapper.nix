@@ -16,7 +16,6 @@ let
     , withPython3 ? true,  extraPython3Packages ? (_: []) /* the function you would have passed to python.withPackages */
     , withNodeJs? false
     , withRuby ? true
-    , withPyGUI ? false
     , vimAlias ? false
     , viAlias ? false
     , configure ? {}
@@ -43,7 +42,7 @@ let
 
   pluginPythonPackages = getDeps "pythonDependencies" requiredPlugins;
   pythonEnv = pythonPackages.python.withPackages(ps:
-        (if withPyGUI then [ ps.neovim_gui ] else [ ps.pynvim ])
+        [ ps.pynvim ]
         ++ (extraPythonPackagesFun ps)
         ++ (concatMap (f: f ps) pluginPythonPackages));
 
@@ -88,10 +87,6 @@ let
         makeWrapper ${python3Env}/bin/python3 $out/bin/nvim-python3 --unset PYTHONPATH
     '' + optionalString withRuby ''
       ln -s ${rubyEnv}/bin/neovim-ruby-host $out/bin/nvim-ruby
-    ''
-      + optionalString withPyGUI ''
-      makeWrapper "${pythonEnv}/bin/pynvim" "$out/bin/pynvim" \
-        --prefix PATH : "$out/bin"
     '' + optionalString vimAlias ''
       ln -s $out/bin/nvim $out/bin/vim
     '' + optionalString viAlias ''
