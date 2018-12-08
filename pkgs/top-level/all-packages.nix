@@ -23004,6 +23004,10 @@ in
 
   ghc-standalone-archive = callPackage ../os-specific/darwin/ghc-standalone-archive { inherit (darwin) cctools; };
 
+  vdr = callPackage ../applications/video/vdr { };
+  vdrPlugins = vdr.plugins // (recurseIntoAttrs (callPackages ../applications/video/vdr/plugins.nix { }));
+  wrapVdr = callPackage ../applications/video/vdr/wrapper.nix {};
+
   chrome-gnome-shell = callPackage  ../desktops/gnome-3/extensions/chrome-gnome-shell {};
 
   chrome-token-signing = libsForQt5.callPackage ../tools/security/chrome-token-signing {};
