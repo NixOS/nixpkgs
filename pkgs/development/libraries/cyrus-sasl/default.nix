@@ -36,12 +36,6 @@ stdenv.mkDerivation rec {
 
   installFlags = lib.optional stdenv.isDarwin [ "framedir=$(out)/Library/Frameworks/SASL2.framework" ];
 
-  postInstall = ''
-    for f in $out/lib/*.la $out/lib/sasl2/*.la; do
-      substituteInPlace $f --replace "${openssl.dev}/lib" "${openssl.out}/lib"
-    done
-  '';
-
   meta = {
     homepage = https://www.cyrusimap.org/sasl;
     description = "Library for adding authentication support to connection-based protocols";
