@@ -7779,6 +7779,8 @@ in
 
   mesos-dns = callPackage ../servers/mesos-dns { };
 
+  metamath = callPackage ../development/interpreters/metamath { };
+
   mujs = callPackage ../development/interpreters/mujs { };
 
   nix-exec = callPackage ../development/interpreters/nix-exec {
