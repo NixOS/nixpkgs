@@ -554,6 +554,8 @@ in {
 
   pygame_sdl2 = callPackage ../development/python-modules/pygame_sdl2 { };
 
+  pygdbmi = callPackage ../development/python-modules/pygdbmi { };
+
   pygmo = callPackage ../development/python-modules/pygmo { };
 
   pygobject2 = callPackage ../development/python-modules/pygobject { };
@@ -633,6 +635,8 @@ in {
 
   python-binance = callPackage ../development/python-modules/python-binance { };
 
+  python-engineio = callPackage ../development/python-modules/python-engineio { };
+
   python-hosts = callPackage ../development/python-modules/python-hosts { };
 
   python-lz4 = callPackage ../development/python-modules/python-lz4 { };
@@ -659,6 +663,8 @@ in {
   python-sql = callPackage ../development/python-modules/python-sql { };
 
   python-stdnum = callPackage ../development/python-modules/python-stdnum { };
+
+  python-socketio = callPackage ../development/python-modules/python-socketio { };
 
   python-utils = callPackage ../development/python-modules/python-utils { };
 
@@ -2365,6 +2371,8 @@ in {
   flask_script = callPackage ../development/python-modules/flask-script { };
 
   flask-silk = callPackage ../development/python-modules/flask-silk { };
+
+  flask-socketio = callPackage ../development/python-modules/flask-socketio { };
 
   flask_sqlalchemy = callPackage ../development/python-modules/flask-sqlalchemy { };
 

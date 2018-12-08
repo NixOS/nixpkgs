@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, python3, python3Packages, intltool
 , glibcLocales, gnome3, gtk3, wrapGAppsHook
-, ipodSupport ? false, libgpod, gobjectIntrospection
+, ipodSupport ? false, libgpod, gobject-introspection
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -27,7 +27,7 @@ python3Packages.buildPythonApplication rec {
 
   buildInputs = [
     python3
-    gobjectIntrospection
+    gobject-introspection
     gnome3.defaultIconTheme
   ];
 

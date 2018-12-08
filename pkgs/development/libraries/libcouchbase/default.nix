@@ -17,7 +17,6 @@ stdenv.mkDerivation rec {
   buildInputs = [ libevent openssl ];
 
   doCheck = !stdenv.isDarwin;
-  checkPhase = "ctest";
 
   meta = with stdenv.lib; {
     description = "C client library for Couchbase";

@@ -20,7 +20,7 @@ buildPythonPackage rec {
     sha256 = "1vpvr3zm3f9sxg1z1cl7f7gi8v1xksjdvxj62qnw65aqj3zqxnkz";
   };
 
-  propagatedBuildInputs = [ neovim click pygobject3 pkgs.gobjectIntrospection pkgs.makeWrapper pkgs.gtk3 ];
+  propagatedBuildInputs = [ neovim click pygobject3 pkgs.gobject-introspection pkgs.makeWrapper pkgs.gtk3 ];
 
   patchPhase = ''
     sed -i -e "s|entry_points=entry_points,|entry_points=dict(console_scripts=['pynvim=neovim.ui.cli:main [GUI]']),|" setup.py

@@ -1,32 +1,29 @@
-{ lib, stdenv, fetchurl, openssl, openldap, kerberos, db, gettext,
-  pam, fixDarwinDylibNames, autoreconfHook, fetchpatch, enableLdap ? false }:
+{ lib, stdenv, fetchurl, openssl, openldap, kerberos, db, gettext
+, pam, fixDarwinDylibNames, autoreconfHook, fetchpatch, enableLdap ? false
+, buildPackages }:
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "cyrus-sasl-${version}${optionalString (kerberos == null) "-without-kerberos"}";
-  version = "2.1.26";
+  version = "2.1.27";
 
   src = fetchurl {
     url = "ftp://ftp.cyrusimap.org/cyrus-sasl/${name}.tar.gz";
-    sha256 = "1hvvbcsg21nlncbgs0cgn3iwlnb3vannzwsp6rwvnn9ba4v53g4g";
+    sha256 = "1m85zcpgfdhm43cavpdkhb1s2zq1b31472hq1w1gs3xh94anp1i6";
   };
 
   outputs = [ "bin" "dev" "out" "man" "devdoc" ];
 
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
+  nativeBuildInputs = [ autoreconfHook fixDarwinDylibNames ];
   buildInputs =
     [ openssl db gettext kerberos ]
     ++ lib.optional enableLdap openldap
-    ++ lib.optional stdenv.isFreeBSD autoreconfHook
-    ++ lib.optional stdenv.isLinux pam
-    ++ lib.optional stdenv.isDarwin fixDarwinDylibNames;
+    ++ lib.optional stdenv.isLinux pam;
 
   patches = [
     ./missing-size_t.patch # https://bugzilla.redhat.com/show_bug.cgi?id=906519
-    (fetchpatch {
-      name = "CVE-2013-4122.patch";
-      url = "mirror://sourceforge/miscellaneouspa/files/glibc217/cyrus-sasl-2.1.26-glibc217-crypt.diff";
-      sha256 = "05l7dh1w9d5fvzg0pjwzqh0fy4ah8y5cv6v67s4ssbq8xwd4pkf2";
-    })
+    ./cyrus-sasl-ac-try-run-fix.patch
   ] ++ lib.optional stdenv.isFreeBSD (
       fetchurl {
         url = "http://www.linuxfromscratch.org/patches/blfs/svn/cyrus-sasl-2.1.26-fixes-3.patch";
@@ -41,10 +38,6 @@ stdenv.mkDerivation rec {
     "--enable-login"
     "--enable-shared"
   ] ++ lib.optional enableLdap "--with-ldap=${openldap.dev}";
-
-  # Avoid triggering regenerating using broken autoconf/libtool bits.
-  # (many distributions carry patches to remove/replace, but this works for now)
-  dontUpdateAutotoolsGnuConfigScripts = if stdenv.hostPlatform.isMusl then true else null;
 
   installFlags = lib.optional stdenv.isDarwin [ "framedir=$(out)/Library/Frameworks/SASL2.framework" ];
 

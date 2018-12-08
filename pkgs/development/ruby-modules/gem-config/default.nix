@@ -22,7 +22,8 @@
 , pkgconfig , ncurses, xapian_1_2_22, gpgme, utillinux, fetchpatch, tzdata, icu, libffi
 , cmake, libssh2, openssl, mysql, darwin, git, perl, pcre, gecode_3, curl
 , msgpack, qt59, libsodium, snappy, libossp_uuid, lxc, libpcap, xorg, gtk2, buildRubyGem
-, cairo, re2, rake, gobjectIntrospection, gdk_pixbuf, zeromq, graphicsmagick, libcxx, file
+, cairo, re2, rake, gobject-introspection, gdk_pixbuf, zeromq, graphicsmagick, libcxx, file
+, libselinux ? null, libsepol ? null
 }@args:
 
 let
@@ -156,7 +157,7 @@ in
 
   gio2 = attrs: {
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ gtk2 pcre gobjectIntrospection ];
+    buildInputs = [ gtk2 pcre gobject-introspection ] ++ lib.optionals stdenv.isLinux [ utillinux libselinux libsepol ];
   };
 
   gitlab-markup = attrs: { meta.priority = 1; };
@@ -167,7 +168,7 @@ in
   };
 
   gtk2 = attrs: {
-    nativeBuildInputs = [ pkgconfig ];
+    nativeBuildInputs = [ pkgconfig ] ++ lib.optionals stdenv.isLinux [ utillinux libselinux libsepol ];
     buildInputs = [ gtk2 pcre xorg.libpthreadstubs xorg.libXdmcp];
     # CFLAGS must be set for this gem to detect gdkkeysyms.h correctly
     CFLAGS = "-I${gtk2.dev}/include/gtk-2.0 -I/non-existent-path";
@@ -175,7 +176,7 @@ in
 
   gobject-introspection = attrs: {
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ gobjectIntrospection gtk2 pcre ];
+    buildInputs = [ gobject-introspection gtk2 pcre ];
   };
 
   grpc = attrs: {

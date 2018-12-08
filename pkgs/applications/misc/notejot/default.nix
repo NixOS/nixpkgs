@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, vala_0_40, pkgconfig, meson, ninja, python3, granite
-, gtk3, gnome3, gtksourceview, json-glib, gobjectIntrospection, wrapGAppsHook }:
+, gtk3, gnome3, gtksourceview, json-glib, gobject-introspection, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "notejot";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    gobjectIntrospection
+    gobject-introspection
     meson
     ninja
     pkgconfig

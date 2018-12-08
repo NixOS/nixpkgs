@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, substituteAll, pkgconfig, gettext, gtk3, glib
-, gtk-doc, libarchive, gobjectIntrospection, libxslt, pngquant
+, gtk-doc, libarchive, gobject-introspection, libxslt, pngquant
 , sqlite, libsoup, attr, acl, docbook_xsl, docbook_xml_dtd_42
 , libuuid, json-glib, meson, gperf, ninja
 }:
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     glib gettext sqlite libsoup
     attr acl libuuid json-glib
-    libarchive gobjectIntrospection gperf
+    libarchive gobject-introspection gperf
   ];
   propagatedBuildInputs = [ gtk3 ];
 

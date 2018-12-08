@@ -70,7 +70,8 @@ let
           # Remove static libraries in case dynamic are available.
           for i in $out/lib/*.a; do
             name="$(basename "$i")"
-            if [ -e "$lib/lib/''${name%.a}.so" ] || [ -e "''${i%.a}.so" ]; then
+            ext="${stdenv.hostPlatform.extensions.sharedLibrary}"
+            if [ -e "$lib/lib/''${name%.a}$ext" ] || [ -e "''${i%.a}$ext" ]; then
               rm "$i"
             fi
           done

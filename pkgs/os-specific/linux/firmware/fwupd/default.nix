@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gtk-doc, pkgconfig, gobjectIntrospection, intltool
+{ stdenv, fetchurl, gtk-doc, pkgconfig, gobject-introspection, intltool
 , libgudev, polkit, appstream-glib, gusb, sqlite, libarchive, glib-networking
 , libsoup, help2man, gpgme, libxslt, elfutils, libsmbios, efivar, glibcLocales
 , gnu-efi, libyaml, valgrind, meson, libuuid, colord, docbook_xml_dtd_43, docbook_xsl
@@ -24,7 +24,7 @@ in stdenv.mkDerivation {
   outputs = [ "out" "lib" "dev" "devdoc" "man" "installedTests" ];
 
   nativeBuildInputs = [
-    meson ninja gtk-doc pkgconfig gobjectIntrospection intltool glibcLocales shared-mime-info
+    meson ninja gtk-doc pkgconfig gobject-introspection intltool glibcLocales shared-mime-info
     valgrind gcab docbook_xml_dtd_43 docbook_xsl help2man libxslt python wrapGAppsHook vala
   ];
   buildInputs = [

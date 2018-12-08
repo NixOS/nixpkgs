@@ -13,9 +13,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
   doCheck = !stdenv.isDarwin;
-  checkPhase = ''
+  preCheck = ''
     export LD_LIBRARY_PATH=$(readlink -f ./src)
-    CTEST_OUTPUT_ON_FAILURE=1 make test
   '';
 
   meta = with stdenv.lib; {

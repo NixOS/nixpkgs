@@ -1,11 +1,11 @@
 --- a/gnome-session/gnome-session.in
 +++ b/gnome-session/gnome-session.in
-@@ -13,7 +13,7 @@
+@@ -13,7 +13,7 @@ if [ "x$XDG_SESSION_TYPE" = "xwayland" ] &&
    fi
  fi
  
--SETTING=$(gsettings get org.gnome.system.locale region)
-+SETTING=$(@gsettings@ get org.gnome.system.locale region)
+-SETTING=$(G_MESSAGES_DEBUG= gsettings get org.gnome.system.locale region)
++SETTING=$(G_MESSAGES_DEBUG= @gsettings@ get org.gnome.system.locale region)
  REGION=${SETTING#\'}
  REGION=${REGION%\'}
  

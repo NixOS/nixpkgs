@@ -1,6 +1,6 @@
 { lib, buildPythonPackage, fetchPypi
 , cryptography, ecdsa
-, pytestrunner, pytestcov, pytest_37 }:
+, pytestrunner, pytestcov, pytest }:
 
 buildPythonPackage rec {
   pname = "PyJWT";
@@ -13,7 +13,14 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ cryptography ecdsa ];
 
-  checkInputs = [ pytestrunner pytestcov pytest_37 ];
+  checkInputs = [ pytestrunner pytestcov pytest ];
+
+  # pytest 3.9.0 changed behavior of deprecated_call, see release notes
+  postPatch = ''
+    for x in tests/test_api_*py; do
+      substituteInPlace "$x" --replace AssertionError pytest.fail.Exception
+    done
+  '';
 
   meta = with lib; {
     description = "JSON Web Token implementation in Python";

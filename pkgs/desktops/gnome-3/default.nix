@@ -3,7 +3,7 @@
 lib.makeScope pkgs.newScope (self: with self; {
   updateScript = callPackage ./update.nix { };
 
-  maintainers = with pkgs.lib.maintainers; [ lethalman jtojnar ];
+  maintainers = with pkgs.lib.maintainers; [ lethalman jtojnar hedning ];
 
   corePackages = with gnome3; [
     pkgs.desktop-file-utils
@@ -35,7 +35,7 @@ lib.makeScope pkgs.newScope (self: with self; {
     hitori gnome-taquin
   ];
 
-  inherit (pkgs) atk glib gobjectIntrospection gspell webkitgtk gtk3 gtkmm3
+  inherit (pkgs) atk glib gobject-introspection gspell webkitgtk gtk3 gtkmm3
     libgtop libgudev libhttpseverywhere librsvg libsecret gdk_pixbuf gtksourceview gtksourceview4
     easytag meld orca rhythmbox shotwell gnome-usage
     clutter clutter-gst clutter-gtk cogl gtk-vnc libdazzle;
@@ -45,8 +45,8 @@ lib.makeScope pkgs.newScope (self: with self; {
   gnome3 = self // { recurseForDerivations = false; };
   gtk = gtk3;
   gtkmm = gtkmm3;
-  vala = pkgs.vala_0_40;
-  gegl_0_3 = pkgs.gegl_0_3.override { inherit gtk; };
+  vala = pkgs.vala_0_42;
+  gegl_0_4 = pkgs.gegl_0_4.override { inherit gtk; };
 
 # Simplify the nixos module and gnome packages
   defaultIconTheme = adwaita-icon-theme;
@@ -121,6 +121,8 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   gnome-online-miners = callPackage ./core/gnome-online-miners { };
 
+  gnome-remote-desktop = callPackage ./core/gnome-remote-desktop { };
+
   gnome-session = callPackage ./core/gnome-session { };
 
   gnome-shell = callPackage ./core/gnome-shell { };
@@ -178,6 +180,11 @@ lib.makeScope pkgs.newScope (self: with self; {
   libzapojit = callPackage ./core/libzapojit { };
 
   mutter = callPackage ./core/mutter { };
+
+  # Needed for elementary's gala and greeter until they get around to adapting to all the API breaking changes in libmutter-3
+  # A more detailed explaination can be seen here https://decathorpe.com/2018/09/04/call-for-help-pantheon-on-fedora-29.html
+  # See Also: https://github.com/elementary/gala/issues/303
+  mutter328 = callPackage ./core/mutter/3.28.nix { };
 
   nautilus = callPackage ./core/nautilus { };
 
@@ -246,8 +253,6 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   accerciser = callPackage ./apps/accerciser { };
 
-  bijiben = callPackage ./apps/bijiben { };
-
   cheese = callPackage ./apps/cheese { };
 
   evolution = callPackage ./apps/evolution { };
@@ -280,8 +285,10 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   gnome-nettool = callPackage ./apps/gnome-nettool { };
 
+  gnome-notes = callPackage ./apps/gnome-notes { };
+
   gnome-photos = callPackage ./apps/gnome-photos {
-    gegl = gegl_0_3;
+    gegl = gegl_0_4;
   };
 
   gnome-power-manager = callPackage ./apps/gnome-power-manager { };
@@ -395,12 +402,10 @@ lib.makeScope pkgs.newScope (self: with self; {
   gnome-video-effects = callPackage ./misc/gnome-video-effects { };
 
   gnome-packagekit = callPackage ./misc/gnome-packagekit { };
-
-  # TODO: remove this after 18.09 has forked off
-  gconf = throw "gconf is deprecated since 2009 and has been removed from the package set. Use gnome2.GConf instead. For more details see https://github.com/NixOS/nixpkgs/pull/43268";
 } // lib.optionalAttrs (config.allowAliases or true) {
 #### Legacy aliases
 
+  bijiben = gnome-notes; # added 2018-09-26
   evolution_data_server = evolution-data-server; # added 2018-02-25
   geocode_glib = geocode-glib; # added 2018-02-25
   glib_networking = glib-networking; # added 2018-02-25

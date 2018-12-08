@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gobjectIntrospection
+{ stdenv, fetchurl, gobject-introspection
 , gnutls, cairo, libtool, glib, pkgconfig
 , cyrus_sasl, intltool, libpulseaudio
 , libgcrypt, gtk3, vala, gnome3
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    python3 pkgconfig intltool libtool gobjectIntrospection vala
+    python3 pkgconfig intltool libtool gobject-introspection vala
   ];
   buildInputs = [
     gnutls cairo glib libgcrypt cyrus_sasl libpulseaudio gtk3
@@ -29,6 +29,7 @@ stdenv.mkDerivation rec {
   passthru = {
     updateScript = gnome3.updateScript {
       packageName = "gtk-vnc";
+      versionPolicy = "none";
     };
   };
 

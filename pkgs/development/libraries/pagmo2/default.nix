@@ -31,10 +31,6 @@ stdenv.mkDerivation rec {
                  "-DNLOPT_LIBRARY=${nlopt}/lib/libnlopt_cxx.so" "-DPAGMO_WITH_IPOPT=yes"
                  "-DCMAKE_CXX_FLAGS='-fuse-ld=gold'" ];
 
-  checkPhase = ''
-    ctest
-  '';
-
   # All but one test pass skip for now (tests also take about 30 min to compile)
   doCheck = false;
 

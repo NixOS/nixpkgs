@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, gnome3, gtk3, wrapGAppsHook, gobjectIntrospection
+{ stdenv, fetchurl, pkgconfig, gnome3, gtk3, wrapGAppsHook, gobject-introspection
 , itstool, libxml2, python3Packages, at-spi2-core
 , dbus, intltool, libwnck3 }:
 
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     pkgconfig wrapGAppsHook itstool intltool
-    gobjectIntrospection # For setup hook
+    gobject-introspection # For setup hook
   ];
   buildInputs = [
     gtk3 libxml2 python3Packages.python python3Packages.pyatspi

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, intltool, glib, gobjectIntrospection, python, mate }:
+{ stdenv, fetchurl, pkgconfig, intltool, glib, gobject-introspection, python, mate }:
 
 stdenv.mkDerivation rec {
   name = "mate-menus-${version}";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig intltool ];
 
-  buildInputs = [ glib gobjectIntrospection python ];
+  buildInputs = [ glib gobject-introspection python ];
 
   makeFlags = [
     "INTROSPECTION_GIRDIR=$(out)/share/gir-1.0/"

@@ -1,5 +1,5 @@
-{ stdenv, fetchFromGitLab, meson, ninja, pkgconfig, gtk-doc, docbook_xsl, docbook_xml_dtd_412, glib, json-glib, libsoup, libnotify, gdk_pixbuf
-, modemmanager, avahi, glib-networking, python3, wrapGAppsHook, gobjectIntrospection, vala
+{ stdenv, fetchFromGitLab, intltool, meson, ninja, pkgconfig, gtk-doc, docbook_xsl, docbook_xml_dtd_412, glib, json-glib, libsoup, libnotify, gdk_pixbuf
+, modemmanager, avahi, glib-networking, python3, wrapGAppsHook, gobject-introspection, vala
 , withDemoAgent ? false
 }:
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "devdoc" ];
 
   nativeBuildInputs = [
-    pkgconfig meson ninja wrapGAppsHook python3 vala gobjectIntrospection
+    pkgconfig intltool meson ninja wrapGAppsHook python3 vala gobject-introspection
     # devdoc
     gtk-doc docbook_xsl docbook_xml_dtd_412
   ];

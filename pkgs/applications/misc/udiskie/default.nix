@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, asciidoc-full, gettext
-, gobjectIntrospection, gtk3, hicolor-icon-theme, libappindicator-gtk3, libnotify, librsvg
+, gobject-introspection, gtk3, hicolor-icon-theme, libappindicator-gtk3, libnotify, librsvg
 , udisks2, wrapGAppsHook
 , buildPythonApplication
 , docopt
@@ -26,7 +26,7 @@ buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = [
-    gettext gobjectIntrospection gtk3 libnotify docopt
+    gettext gobject-introspection gtk3 libnotify docopt
     pygobject3 pyyaml udisks2 libappindicator-gtk3
   ];
 

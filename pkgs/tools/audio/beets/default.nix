@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, writeScript, glibcLocales, diffPlugins
-, pythonPackages, imagemagick, gobjectIntrospection, gst_all_1
+, pythonPackages, imagemagick, gobject-introspection, gst_all_1
 , fetchpatch
 
 # Attributes needed for tests of the external plugins
@@ -121,7 +121,7 @@ in pythonPackages.buildPythonApplication rec {
     pythonPackages.unidecode
     pythonPackages.gst-python
     pythonPackages.pygobject3
-    gobjectIntrospection
+    gobject-introspection
   ] ++ optional enableAcoustid      pythonPackages.pyacoustid
     ++ optional (enableFetchart
               || enableEmbyupdate
