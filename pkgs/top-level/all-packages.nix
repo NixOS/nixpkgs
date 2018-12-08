@@ -10285,6 +10285,10 @@ in
 
   iniparser = callPackage ../development/libraries/iniparser { };
 
+  intel-gmmlib = callPackage ../development/libraries/intel-gmmlib { };
+
+  intel-media-driver = callPackage ../development/libraries/intel-media-driver { };
+
   intltool = callPackage ../development/tools/misc/intltool { };
 
   ios-cross-compile = callPackage ../development/compilers/ios-cross-compile/9.2.nix {};
