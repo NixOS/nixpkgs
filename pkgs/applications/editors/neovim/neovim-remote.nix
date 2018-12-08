@@ -14,7 +14,7 @@ pythonPackages.buildPythonPackage rec {
     sha256 = "0gri4d8gg5hvywffvj8r123d06x006qhink7d54yk6lvplw64gyc";
   };
 
-  propagatedBuildInputs = with pythonPackages; [ neovim psutil ];
+  propagatedBuildInputs = with pythonPackages; [ pynvim psutil ];
 
   meta = {
     description = "A tool that helps controlling nvim processes from a terminal";

@@ -4627,7 +4627,7 @@ in {
 
   trollius = callPackage ../development/python-modules/trollius {};
 
-  neovim = callPackage ../development/python-modules/neovim {};
+  pynvim = callPackage ../development/python-modules/pynvim {};
 
   neovim_gui = callPackage ../development/python-modules/neovim_gui { };
 

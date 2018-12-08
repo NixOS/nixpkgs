@@ -43,13 +43,13 @@ let
 
   pluginPythonPackages = getDeps "pythonDependencies" requiredPlugins;
   pythonEnv = pythonPackages.python.withPackages(ps:
-        (if withPyGUI then [ ps.neovim_gui ] else [ ps.neovim ])
+        (if withPyGUI then [ ps.neovim_gui ] else [ ps.pynvim ])
         ++ (extraPythonPackagesFun ps)
         ++ (concatMap (f: f ps) pluginPythonPackages));
 
   pluginPython3Packages = getDeps "python3Dependencies" requiredPlugins;
   python3Env = python3Packages.python.withPackages (ps:
-        [ ps.neovim ]
+        [ ps.pynvim ]
         ++ (extraPython3PackagesFun ps)
         ++ (concatMap (f: f ps) pluginPython3Packages));
 
