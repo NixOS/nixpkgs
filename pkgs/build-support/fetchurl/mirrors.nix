@@ -78,6 +78,7 @@ rec {
     http://mirrors.mit.edu/kde/
     https://mirrors.ustc.edu.cn/kde/
     http://ftp.funet.fi/pub/mirrors/ftp.kde.org/pub/kde/
+    ftp://ftp.kde.org/pub/kde/
   ];
 
   # Gentoo files.
