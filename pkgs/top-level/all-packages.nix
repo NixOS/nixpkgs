@@ -7859,12 +7859,14 @@ in
   php71-unit = php71.override {
     config.php.embed = true;
     config.php.apxs2 = false;
+    config.php.systemd = false;
     config.php.fpm = false;
   };
 
   php72-unit = php72.override {
     config.php.embed = true;
     config.php.apxs2 = false;
+    config.php.systemd = false;
     config.php.fpm = false;
   };
 

@@ -13,6 +13,7 @@ let
   { version
   , sha256
   , extraPatches ? []
+  , withSystemd ? config.php.systemd or stdenv.isLinux
   , imapSupport ? config.php.imap or (!stdenv.isDarwin)
   , ldapSupport ? config.php.ldap or true
   , mhashSupport ? config.php.mhash or true
@@ -68,7 +69,7 @@ let
 
       nativeBuildInputs = [ pkgconfig autoconf ];
       buildInputs = [ flex bison pcre ]
-        ++ optional stdenv.isLinux systemd
+        ++ optional withSystemd systemd
         ++ optionals imapSupport [ uwimap openssl pam ]
         ++ optionals curlSupport [ curl openssl ]
         ++ optionals ldapSupport [ openldap openssl ]
@@ -105,7 +106,7 @@ let
         "--with-pcre-regex=${pcre.dev} PCRE_LIBDIR=${pcre}"
       ]
       ++ optional stdenv.isDarwin "--with-iconv=${libiconv}"
-      ++ optional stdenv.isLinux  "--with-fpm-systemd"
+      ++ optional withSystemd "--with-fpm-systemd"
       ++ optionals imapSupport [
         "--with-imap=${uwimap}"
         "--with-imap-ssl"
