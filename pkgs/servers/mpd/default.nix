@@ -1,136 +1,322 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, glib, systemd, boost, darwin
-, alsaSupport ? true, alsaLib
-, avahiSupport ? true, avahi, dbus
-, flacSupport ? true, flac
-, vorbisSupport ? true, libvorbis
-, madSupport ? true, libmad
-, id3tagSupport ? true, libid3tag
-, mikmodSupport ? true, libmikmod
-, shoutSupport ? true, libshout
-, sqliteSupport ? true, sqlite
-, curlSupport ? true, curl
-, audiofileSupport ? true, audiofile
-, bzip2Support ? true, bzip2
-, ffmpegSupport ? true, ffmpeg
-, fluidsynthSupport ? true, fluidsynth
-, zipSupport ? true, zziplib
-, samplerateSupport ? true, libsamplerate
-, mmsSupport ? true, libmms
-, mpg123Support ? true, mpg123
-, aacSupport ? true, faad2
-, lameSupport ? true, lame
-, pulseaudioSupport ? true, libpulseaudio
-, jackSupport ? true, libjack2
-, gmeSupport ? true, game-music-emu
-, icuSupport ? true, icu
+{ stdenv, fetchFromGitHub, meson, ninja, pkgconfig, boost, python3Packages
+, gtest
+, darwin
+, systemd
+
+# database plugins
+, upnpSupport ? false, libupnp ? null
 , clientSupport ? true, mpd_clientlib
-, opusSupport ? true, libopus
-, soundcloudSupport ? true, yajl
+
+# storage plugins
+, udisksSupport ? false, udisks2 ? null
+, webdavSupport ? false
+
+# input plugins
+, cdioParanoiaSupport ? false, libcdio ? null, libcdio-paranoia ? null
+, curlSupport ? true, curl
+, mmsSupport ? true, glib, libmms
 , nfsSupport ? true, libnfs
 , smbSupport ? true, samba
+
+# commercial services
+, soundcloudSupport ? true
+, qobuzSupport ? false, libgcrypt ? null
+, tidalSupport ? false
+
+# archive plugins
+, bzip2Support ? true, bzip2
+, iso9660Support ? false
+, zipSupport ? true, zziplib
+
+# tag plugins
+, id3tagSupport ? true, libid3tag
+, chromaprintSupport ? false, chromaprint ? null
+
+# decoder plugins
+# , adplugSupport ? false
+, audiofileSupport ? true, audiofile
+, aacSupport ? true, faad2
+, ffmpegSupport ? true, ffmpeg
+, flacSupport ? true, flac
+, fluidsynthSupport ? true, fluidsynth
+, gmeSupport ? true, game-music-emu
+, madSupport ? true, libmad
+, mikmodSupport ? true, libmikmod
+, modplugSupport ? false, libmodplug ? null
+, mpcdecSupport ? false, libmpcdec ? null
+, mpg123Support ? true, mpg123
+, opusSupport ? true, libopus, libogg
+, sidplaySupport ? false, libsidplayfp ? null
+, sndfileSupport ? false, libsndfile ? null
+, vorbisSupport ? true, libvorbis
+, wavpackSupport ? false, wavpack ? null
+, wildmidiSupport ? false, wildmidi ? null
+
+# encoder plugins
+, vorbisencSupport ? true
+, lameSupport ? true, lame
+, twolameSupport ? false, twolame ? null
+# , shineSupport ? false
+
+# filter plugins
+, samplerateSupport ? true, libsamplerate
+, soxrSupport ? false, soxr ? null
+
+# output plugins
+, alsaSupport ? true, alsaLib
+, aoSupport ? true, libao
+, jackSupport ? true, libjack2
+, openalSupport ? false, openal ? null
+, ossSupport ? true
+, pulseaudioSupport ? true, libpulseaudio
+, shoutSupport ? true, libshout
+# , sndioSupport ? false
+, solarisOutputSupport ? false
+
+# misc libraries
+, dbusSupport ? true, dbus
+, expatSupport ? false, expat
+, icuSupport ? true, icu
+, iconvSupport ? true
+, libwrapSupport ? false, tcp_wrappers ? null
+, pcreSupport ? true, pcre
+, sqliteSupport ? true, sqlite
+, yajlSupport ? true, yajl
+, zlibSupport ? false, zlib ? null
+
+# this should be zeroconf support
+, avahiSupport ? true, avahi
 }:
 
-assert avahiSupport -> avahi != null && dbus != null;
+assert upnpSupport -> libupnp != null;
+assert upnpSupport -> curlSupport == true;
+assert upnpSupport -> expatSupport == true;
+
+assert udisksSupport -> udisks2 != null;
+assert udisksSupport -> dbusSupport == true;
+
+assert cdioParanoiaSupport -> libcdio != null && libcdio-paranoia != null;
+
+assert iso9660Support -> libcdio != null;
+
+assert chromaprintSupport -> chromaprint != null;
+
+assert modplugSupport -> libmodplug != null;
+
+assert mpcdecSupport -> libmpcdec != null;
+
+assert sidplaySupport -> libsidplayfp  != null;
+
+assert sndfileSupport -> libsndfile != null;
+
+assert wavpackSupport -> wavpack != null;
+
+assert wildmidiSupport -> wildmidi != null;
+
+assert twolameSupport -> twolame != null;
+
+assert soxrSupport -> soxr != null;
+
+assert openalSupport -> openal != null;
+
+assert webdavSupport -> curlSupport == true;
+assert webdavSupport -> expatSupport == true;
+
+assert libwrapSupport -> tcp_wrappers != null;
+
+assert zlibSupport -> zlib != null;
+
+assert soundcloudSupport -> curlSupport == true;
+assert soundcloudSupport -> yajlSupport == true;
+
+assert qobuzSupport -> libgcrypt != null;
+
+assert vorbisencSupport -> vorbisSupport == true;
 
 let
-  opt = stdenv.lib.optional;
-  mkFlag = c: f: if c then "--enable-${f}" else "--disable-${f}";
-  major = "0.20";
-  minor = "23";
-
+  inherit (stdenv.lib) optional optionals optionalString;
+  flag = c: f: if c
+    then "-D${f}=true"
+    else "-D${f}=false";
+  feature = c: f: if c
+    then "-D${f}=enabled"
+    else "-D${f}=disabled";
+  major = "0.21";
+  minor = "3";
 in stdenv.mkDerivation rec {
-  name = "mpd-${version}";
+  pname = "mpd";
   version = "${major}${if minor == "" then "" else "." + minor}";
 
   src = fetchFromGitHub {
     owner  = "MusicPlayerDaemon";
     repo   = "MPD";
     rev    = "v${version}";
-    sha256 = "1z1pdgiddimnmck0ardrpxkvgk1wn9zxri5wfv5ppasbb7kfm350";
+    sha256 = "06qrx87misfx21mvwlfz4hd51rzlw9vmnvggal4v5k95d7yw5llf";
   };
 
-  patches = [ ./x86.patch ];
+  doCheck = true;
 
-  buildInputs = [ glib boost ]
-    ++ opt stdenv.isDarwin darwin.apple_sdk.frameworks.CoreAudioKit
-    ++ opt stdenv.isLinux systemd
-    ++ opt (stdenv.isLinux && alsaSupport) alsaLib
-    ++ opt avahiSupport avahi
-    ++ opt avahiSupport dbus
-    ++ opt flacSupport flac
-    ++ opt vorbisSupport libvorbis
+  buildInputs = [
+    boost
+  ] ++ optionals stdenv.isLinux [
+    systemd
+  ] ++ optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.CoreAudioKit
+  ]
+    # database plugins
+    ++ optional upnpSupport libupnp
+    ++ optional clientSupport mpd_clientlib
+    # storage plugins
+    ++ optional udisksSupport udisks2
+    # input plugins
+    ++ optionals cdioParanoiaSupport [ libcdio libcdio-paranoia ]
+    ++ optional curlSupport curl
+    ++ optionals mmsSupport [ glib libmms ]
+    ++ optional (!stdenv.isDarwin && nfsSupport) libnfs
+    ++ optional (!stdenv.isDarwin && smbSupport) samba
+    # commercial services
+    ++ optional qobuzSupport libgcrypt
+    # archive plugins
+    ++ optional bzip2Support bzip2
+    ++ optional iso9660Support libcdio
+    ++ optional zipSupport zziplib
+    # tag plugins
+    ++ optional id3tagSupport libid3tag
+    ++ optional chromaprintSupport chromaprint
+    # decoder plugins
+    ++ optional audiofileSupport audiofile
+    ++ optional aacSupport faad2
+    ++ optional ffmpegSupport ffmpeg
+    ++ optional flacSupport flac
+    ++ optional fluidsynthSupport fluidsynth
+    ++ optional gmeSupport game-music-emu
     # using libmad to decode mp3 files on darwin is causing a segfault -- there
     # is probably a solution, but I'm disabling it for now
-    ++ opt (!stdenv.isDarwin && madSupport) libmad
-    ++ opt id3tagSupport libid3tag
-    ++ opt mikmodSupport libmikmod
-    ++ opt shoutSupport libshout
-    ++ opt sqliteSupport sqlite
-    ++ opt curlSupport curl
-    ++ opt bzip2Support bzip2
-    ++ opt audiofileSupport audiofile
-    ++ opt ffmpegSupport ffmpeg
-    ++ opt fluidsynthSupport fluidsynth
-    ++ opt samplerateSupport libsamplerate
-    ++ opt mmsSupport libmms
-    ++ opt mpg123Support mpg123
-    ++ opt aacSupport faad2
-    ++ opt lameSupport lame
-    ++ opt zipSupport zziplib
-    ++ opt (!stdenv.isDarwin && pulseaudioSupport) libpulseaudio
-    ++ opt (!stdenv.isDarwin && jackSupport) libjack2
-    ++ opt gmeSupport game-music-emu
-    ++ opt icuSupport icu
-    ++ opt clientSupport mpd_clientlib
-    ++ opt opusSupport libopus
-    ++ opt soundcloudSupport yajl
-    ++ opt (!stdenv.isDarwin && nfsSupport) libnfs
-    ++ opt (!stdenv.isDarwin && smbSupport) samba;
+    ++ optional (!stdenv.isDarwin && madSupport) libmad
+    ++ optional mikmodSupport libmikmod
+    ++ optional modplugSupport libmodplug
+    ++ optional mpcdecSupport libmpcdec
+    ++ optional mpg123Support mpg123
+    ++ optionals opusSupport [ libopus libogg ]
+    ++ optional sidplaySupport libsidplayfp
+    ++ optional sndfileSupport libsndfile
+    ++ optional vorbisSupport libvorbis
+    ++ optional wavpackSupport wavpack
+    ++ optional wildmidiSupport wildmidi
+    # encoder plugins
+    ++ optional lameSupport lame
+    ++ optional twolameSupport twolame
+    # filter plugins
+    ++ optional samplerateSupport libsamplerate
+    ++ optional soxrSupport soxr
+    # output plugins
+    ++ optional (stdenv.isLinux && alsaSupport) alsaLib
+    ++ optional aoSupport libao
+    ++ optional (!stdenv.isDarwin && jackSupport) libjack2
+    ++ optional openalSupport openal
+    ++ optional (!stdenv.isDarwin && pulseaudioSupport) libpulseaudio
+    ++ optional shoutSupport libshout
+    # misc libraries
+    ++ optional dbusSupport dbus
+    ++ optional expatSupport expat
+    ++ optional icuSupport icu
+    ++ optional libwrapSupport tcp_wrappers
+    ++ optional pcreSupport pcre
+    ++ optional sqliteSupport sqlite
+    ++ optional yajlSupport yajl
+    ++ optional zlibSupport zlib
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+    ++ optional avahiSupport avahi
+  ;
 
-  enableParallelBuilding = true;
+  checkInputs = [
+    gtest
+  ];
 
-  configureFlags =
-    [ (mkFlag (!stdenv.isDarwin && alsaSupport) "alsa")
-      (mkFlag flacSupport "flac")
-      (mkFlag vorbisSupport "vorbis")
-      (mkFlag vorbisSupport "vorbis-encoder")
-      (mkFlag (!stdenv.isDarwin && madSupport) "mad")
-      (mkFlag mikmodSupport "mikmod")
-      (mkFlag id3tagSupport "id3")
-      (mkFlag shoutSupport "shout")
-      (mkFlag sqliteSupport "sqlite")
-      (mkFlag curlSupport "curl")
-      (mkFlag audiofileSupport "audiofile")
-      (mkFlag bzip2Support "bzip2")
-      (mkFlag ffmpegSupport "ffmpeg")
-      (mkFlag fluidsynthSupport "fluidsynth")
-      (mkFlag zipSupport "zzip")
-      (mkFlag samplerateSupport "lsr")
-      (mkFlag mmsSupport "mms")
-      (mkFlag mpg123Support "mpg123")
-      (mkFlag aacSupport "aac")
-      (mkFlag lameSupport "lame-encoder")
-      (mkFlag (!stdenv.isDarwin && pulseaudioSupport) "pulse")
-      (mkFlag (!stdenv.isDarwin && jackSupport) "jack")
-      (mkFlag stdenv.isDarwin "osx")
-      (mkFlag icuSupport "icu")
-      (mkFlag gmeSupport "gme")
-      (mkFlag clientSupport "libmpdclient")
-      (mkFlag opusSupport "opus")
-      (mkFlag soundcloudSupport "soundcloud")
-      (mkFlag (!stdenv.isDarwin && nfsSupport) "libnfs")
-      (mkFlag (!stdenv.isDarwin && smbSupport) "smbclient")
-      "--enable-debug"
-      "--with-zeroconf=avahi"
-    ]
-    ++ opt stdenv.isLinux
-      "--with-systemdsystemunitdir=$(out)/etc/systemd/system";
+  nativeBuildInputs = [
+    meson ninja pkgconfig python3Packages.sphinx
+  ];
 
-  NIX_LDFLAGS = ''
-    ${if shoutSupport then "-lshout" else ""}
-  '';
+  mesonFlags = [
+    (flag true "documentation")
+    (flag true "test")
+    (feature true "ipv6")
+  ] ++ stdenv.lib.optionals stdenv.isLinux [
+    (feature true "systemd")
+    "-Dsystemd_system_unit_dir=${placeholder "out"}/etc/systemd/system"
+    "-Dsystemd_user_unit_dir=${placeholder "out"}/etc/systemd/user"
+  ] ++ [
+    # database plugins
+    (feature upnpSupport "upnp")
+    (feature clientSupport "libmpdclient")
+    # storage plugins
+    (feature udisksSupport "udisks")
+    (feature webdavSupport "webdav")
+    # input plugins
+    (feature cdioParanoiaSupport "cdio_paranoia")
+    (feature curlSupport "curl")
+    (feature mmsSupport "mms")
+    (feature (!stdenv.isDarwin && nfsSupport) "nfs")
+    (feature (!stdenv.isDarwin && smbSupport) "smbclient")
+    # commercial services
+    (feature soundcloudSupport "soundcloud")
+    (feature qobuzSupport "qobuz")
+    (feature tidalSupport "tidal")
+    # archive plugins
+    (feature bzip2Support "bzip2")
+    (feature iso9660Support "iso9660")
+    (feature zipSupport "zzip")
+    # tag plugins
+    (feature id3tagSupport "id3tag")
+    (feature chromaprintSupport "chromaprint")
+    # decoder plugins
+    # (feature adplugSupport "adplug")
+    (feature audiofileSupport "audiofile")
+    (feature aacSupport "faad")
+    (feature ffmpegSupport "ffmpeg")
+    (feature flacSupport "flac")
+    (feature fluidsynthSupport "fluidsynth")
+    (feature gmeSupport "gme")
+    (feature (!stdenv.isDarwin && madSupport) "mad")
+    (feature mikmodSupport "mikmod")
+    (feature modplugSupport "modplug")
+    (feature mpcdecSupport "mpcdec")
+    (feature mpg123Support "mpg123")
+    (feature opusSupport "opus")
+    (feature sidplaySupport "sidplay")
+    (feature sndfileSupport "sndfile")
+    (feature vorbisSupport "vorbis")
+    (feature wavpackSupport "wavpack")
+    (feature wildmidiSupport "wildmidi")
+    # encoder plugins
+    (feature vorbisencSupport "vorbisenc")
+    (feature lameSupport "lame")
+    (feature twolameSupport "twolame")
+    # filter plugins
+    (feature samplerateSupport "libsamplerate")
+    (feature soxrSupport "soxr")
+    # output plugins
+    (feature (stdenv.isLinux && alsaSupport) "alsa")
+    (feature aoSupport "ao")
+    (feature (!stdenv.isDarwin && jackSupport) "jack")
+    (feature openalSupport "openal")
+    (feature ossSupport "oss")
+    (feature (!stdenv.isDarwin && pulseaudioSupport) "pulse")
+    (feature shoutSupport "shout")
+    # (feature sndioSupport "sndio")
+    (feature solarisOutputSupport "solaris_output")
+    # misc libraries
+    (feature dbusSupport "dbus")
+    (feature expatSupport "expat")
+    (feature icuSupport "icu")
+    (feature iconvSupport "iconv")
+    (feature libwrapSupport "libwrap")
+    (feature pcreSupport "pcre")
+    (feature sqliteSupport "sqlite")
+    (feature yajlSupport "yajl")
+    (feature zlibSupport "zlib")
+    (optionalString avahiSupport "-Dzeroconf=avahi")
+  ];
 
   meta = with stdenv.lib; {
     description = "A flexible, powerful daemon for playing music";

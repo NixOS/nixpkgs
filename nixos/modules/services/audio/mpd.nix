@@ -18,7 +18,9 @@ let
     ''}
     state_file          "${cfg.dataDir}/state"
     sticker_file        "${cfg.dataDir}/sticker.sql"
+    ${lib.optionalString (lib.versionOlder pkgs.mpd.version "0.21.0") ''
     log_file            "syslog"
+    ''}
     user                "${cfg.user}"
     group               "${cfg.group}"
 
@@ -144,6 +146,7 @@ in {
   ###### implementation
 
   config = mkIf cfg.enable {
+    environment.systemPackages = [ pkgs.mpd ];
 
     systemd.sockets.mpd = mkIf cfg.startWhenNeeded {
       description = "Music Player Daemon Socket";
