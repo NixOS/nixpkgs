@@ -36,7 +36,7 @@ buildFHSUserEnv {
     libICE libSM libX11 libXcomposite libXdamage libXext libXfixes libXrender
     libXxf86vm libxcb xkeyboardconfig
     curl dbus firefox-bin fontconfig freetype gcc glib gnutar libxml2 libxslt
-    procps zlib
+    procps zlib mesa libxshmfence libpthreadstubs
   ];
 
   extraInstallCommands = ''
