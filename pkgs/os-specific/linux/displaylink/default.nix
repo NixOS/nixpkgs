@@ -11,17 +11,17 @@ let
 
 in stdenv.mkDerivation rec {
   name = "displaylink-${version}";
-  version = "4.1.9";
+  version = "4.4.24";
 
   src = requireFile rec {
     name = "displaylink.zip";
-    sha256 = "d762145014df7fea8ca7af12206a077d73d8e7f2259c8dc2ce7e5fb1e69ef9a3";
+    sha256 = "0c02mg7vbijpfpk9imh0hmls1yiglc216zfllw5ar86r1slhd5y0";
     message = ''
       In order to install the DisplayLink drivers, you must first
       comply with DisplayLink's EULA and download the binaries and
       sources from here:
 
-      http://www.displaylink.com/downloads/file?id=1087
+      http://www.displaylink.com/downloads/file?id=1261
 
       Once you have downloaded the file, please use the following
       commands and re-run the installation:
