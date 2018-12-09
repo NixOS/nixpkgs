@@ -45,7 +45,7 @@ rec {
   dcrd = callPackage ./dcrd.nix { };
   dcrwallet = callPackage ./dcrwallet.nix { };
 
-  dero = callPackage ./dero.nix { };
+  dero = callPackage ./dero.nix { boost = boost165; };
 
   dogecoin  = callPackage ./dogecoin.nix { boost = boost165; withGui = true; };
   dogecoind = callPackage ./dogecoin.nix { boost = boost165; withGui = false; };
