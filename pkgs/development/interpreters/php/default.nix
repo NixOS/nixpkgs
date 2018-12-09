@@ -227,8 +227,8 @@ let
 
 in {
   php71 = generic {
-    version = "7.1.24";
-    sha256 = "02qy76krbdhlbkzs9k1sa5mgmj0qnbb8gcf1j3q0cq3z7kkj9pk6";
+    version = "7.1.25";
+    sha256 = "1b5az5vhap593ggjxirs1zdlg20hcv9h94iq5kgaxky71a4dqb00";
 
     # https://bugs.php.net/bug.php?id=76826
     extraPatches = optional stdenv.isDarwin ./php71-darwin-isfinite.patch;
