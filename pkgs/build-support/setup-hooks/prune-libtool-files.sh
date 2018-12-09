@@ -8,7 +8,7 @@
 fixupOutputHooks+=(_pruneLibtoolFiles)
 
 _pruneLibtoolFiles() {
-    if [ "$dontPruneLibtoolFiles" ]; then
+    if [ "$dontPruneLibtoolFiles" ] || [ ! -e "$prefix" ]; then
        return
     fi
 
