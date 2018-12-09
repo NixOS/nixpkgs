@@ -1664,6 +1664,18 @@ installTargets = "install-bin install-doc";</programlisting>
     </varlistentry>
     <varlistentry>
      <term>
+      <varname>dontPruneLibtoolFiles</varname>
+     </term>
+     <listitem>
+      <para>
+       If set, libtool <literal>.la</literal> files associated with shared
+       libraries won't have their <literal>dependency_libs</literal> field
+       cleared.
+      </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term>
       <varname>forceShare</varname>
      </term>
      <listitem>
