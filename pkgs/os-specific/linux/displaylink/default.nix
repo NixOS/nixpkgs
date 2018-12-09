@@ -1,5 +1,5 @@
 { stdenv, lib, unzip, utillinux,
-  libusb1, evdi, systemd, makeWrapper, requireFile }:
+  libusb1, evdi, systemd, makeWrapper, requireFile, substituteAll }:
 
 let
   arch =
@@ -33,17 +33,23 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ unzip makeWrapper ];
 
-  buildCommand = ''
+  unpackPhase = ''
     unzip $src
     chmod +x displaylink-driver-${version}.run
     ./displaylink-driver-${version}.run --target . --noexec
+  '';
 
+  patches = [ (substituteAll {
+    src = ./udev-installer.patch;
+    inherit systemd;
+  })];
+
+  installPhase = ''
     sed -i "s,/opt/displaylink/udev.sh,$out/lib/udev/displaylink.sh,g" udev-installer.sh
     ( source udev-installer.sh
       mkdir -p $out/lib/udev/rules.d
       main systemd "$out/lib/udev/rules.d/99-displaylink.rules" "$out/lib/udev/displaylink.sh"
     )
-    sed -i '2iPATH=${systemd}/bin:$PATH' $out/lib/udev/displaylink.sh
 
     install -Dt $out/lib/displaylink *.spkg
     install -Dm755 ${bins}/DisplayLinkManager $out/bin/DisplayLinkManager
@@ -53,12 +59,11 @@ in stdenv.mkDerivation rec {
       $out/bin/DisplayLinkManager
     wrapProgram $out/bin/DisplayLinkManager \
       --run "cd $out/lib/displaylink"
-
-    fixupPhase
   '';
 
   dontStrip = true;
   dontPatchELF = true;
+
 
   meta = with stdenv.lib; {
     description = "DisplayLink DL-5xxx, DL-41xx and DL-3x00 Driver for Linux";
