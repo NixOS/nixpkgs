@@ -180,16 +180,6 @@ stdenv.mkDerivation rec {
         --prepend=scripts/bazel-complete-template.bash
   '';
 
-  # Build the CPP and Java examples to verify that Bazel works.
-
-  doCheck = true;
-  checkPhase = ''
-    export TEST_TMPDIR=$(pwd)
-    ./output/bazel test --test_output=errors \
-        examples/cpp:hello-success_test \
-        examples/java-native/src/test/java/com/example/myproject:hello
-  '';
-
   installPhase = ''
     mkdir -p $out/bin
 
