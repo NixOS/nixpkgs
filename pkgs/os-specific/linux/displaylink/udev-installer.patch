@@ -5,7 +5,7 @@
  start_service()
  {
 -  systemctl start dlm
-+  @systemd@/bin/systemctl start dlm
++  @systemd@/bin/systemctl start --no-block dlm
  }
  
  stop_service()

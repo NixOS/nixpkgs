@@ -40,7 +40,7 @@ in stdenv.mkDerivation rec {
   '';
 
   patches = [ (substituteAll {
-    src = ./fix-script.patch;
+    src = ./udev-installer.patch;
     inherit systemd;
   })];
 
