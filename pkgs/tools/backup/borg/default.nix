@@ -2,21 +2,12 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "borgbackup";
-  version = "1.1.7";
+  version = "1.1.8";
 
   src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256 = "f7b51a132e9edfbe1cacb4f478b28caf3622d79fffcb369bdae9f92d8c8a7fdc";
+    sha256 = "0b4370480ca0114cb0bb534286241af8a35c6ffb71404dfa409ed06099661b63";
   };
-
-  patches = [
-    # Workarounds for https://github.com/borgbackup/borg/issues/4093
-    # Can be deleted when 1.1.8 comes out
-    (fetchpatch {
-      url = "https://github.com/borgbackup/borg/commit/975cc33206e0e3644626fb7204c34d2157715b61.patch";
-      sha256 = "0b7apaixpa7bk0sy7g5ycm98cjpkg5gkwcgm7m37xj35lzxdlxhc";
-    })
-  ];
 
   nativeBuildInputs = with python3Packages; [
     # For building documentation:
