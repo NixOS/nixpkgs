@@ -30,11 +30,6 @@ stdenv.mkDerivation rec {
   });
 
   patches = [
-    # Since binutils 2.22, DT_NEEDED flags aren't copied for dynamic outputs.
-    # That requires upstream changes for things to work. So we can patch it to
-    # get the old behaviour by now.
-    ./dtneeded.patch
-
     # Make binutils output deterministic by default.
     ./deterministic.patch
 
