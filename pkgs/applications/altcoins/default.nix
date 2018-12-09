@@ -79,7 +79,7 @@ rec {
 
   stellar-core = callPackage ./stellar-core.nix { };
 
-  sumokoin = callPackage ./sumokoin.nix { };
+  sumokoin = callPackage ./sumokoin.nix { boost = boost165; };
 
   wownero = callPackage ./wownero.nix {
     inherit (darwin.apple_sdk.frameworks) CoreData IOKit PCSC;
