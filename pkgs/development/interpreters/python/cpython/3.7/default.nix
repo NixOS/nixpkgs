@@ -145,7 +145,11 @@ in stdenv.mkDerivation {
     # some $TMPDIR references to improve binary reproducibility.
     # Note that the .pyc file of _sysconfigdata.py should be regenerated!
     for i in $out/lib/python${majorVersion}/_sysconfigdata*.py $out/lib/python${majorVersion}/config-${majorVersion}m*/Makefile; do
-      sed -i $i -e "s|-I/nix/store/[^ ']*||g" -e "s|-L/nix/store/[^ ']*||g" -e "s|$TMPDIR|/no-such-path|g"
+      sed -i $i \
+        -e "s|-I$NIX_STORE/[^ ']*||g" \
+        -e "s|-L$NIX_STORE/[^ ']*||g" \
+        -e "s|$TMPDIR|/no-such-path|g" \
+        -e "s|--with-[^=]*=$NIX_STORE/[^ ']*||g"
     done
 
     # Determinism: rebuild all bytecode
@@ -157,6 +161,10 @@ in stdenv.mkDerivation {
     find $out -name "*.py" | $out/bin/python -O  -m compileall -q -f -x "lib2to3" -i -
     find $out -name "*.py" | $out/bin/python -OO -m compileall -q -f -x "lib2to3" -i -
   '';
+
+  # Enforce that we don't have references to the OpenSSL -dev package, which we
+  # explicitly specify in our configure flags above.
+  disallowedReferences = [ openssl.dev ];
 
   passthru = let
     pythonPackages = callPackage ../../../../../top-level/python-packages.nix {
