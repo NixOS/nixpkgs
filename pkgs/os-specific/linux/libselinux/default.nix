@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ] ++ optionals enablePython [ swig python ];
-  buildInputs = [ libsepol pcre fts ] ++ optionals enablePython [ swig python ];
+  buildInputs = [ libsepol pcre fts ] ++ optionals enablePython [ python ];
 
   # drop fortify here since package uses it by default, leading to compile error:
   # command-line>:0:0: error: "_FORTIFY_SOURCE" redefined [-Werror]
