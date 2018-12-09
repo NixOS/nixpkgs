@@ -65,7 +65,7 @@ rec {
   };
   litecoind = litecoin.override { withGui = false; };
 
-  masari = callPackage ./masari.nix { };
+  masari = callPackage ./masari.nix { boost = boost165; };
 
   memorycoin  = callPackage ./memorycoin.nix { boost = boost165; withGui = true; };
   memorycoind = callPackage ./memorycoin.nix { boost = boost165; withGui = false; };
