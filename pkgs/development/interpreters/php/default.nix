@@ -235,8 +235,8 @@ in {
   };
 
   php72 = generic {
-    version = "7.2.12";
-    sha256 = "1dpnbsv4bdlc5v40ddddi971f456jp1qrn89w5di1dj70g1c895p";
+    version = "7.2.13";
+    sha256 = "0bg9nfc250p24hxn4bdjz7ngcw75h8rpf4qjxqzcs6s9fvxlcjjv";
 
     # https://bugs.php.net/bug.php?id=76826
     extraPatches = optional stdenv.isDarwin ./php72-darwin-isfinite.patch;
