@@ -15941,6 +15941,8 @@ in
   parity-beta = res.altcoins.parity-beta;
   parity-ui = res.altcoins.parity-ui;
 
+  polkadot = res.altcoins.polkadot;
+
   stellar-core = res.altcoins.stellar-core;
 
   particl-core = res.altcoins.particl-core;
