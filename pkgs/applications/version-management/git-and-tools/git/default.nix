@@ -20,7 +20,7 @@ assert sendEmailSupport -> perlSupport;
 assert svnSupport -> perlSupport;
 
 let
-  version = "2.19.2";
+  version = "2.20.0";
   svn = subversionClient.override { perlBindings = perlSupport; };
 in
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://www.kernel.org/pub/software/scm/git/git-${version}.tar.xz";
-    sha256 = "1scbggzghkzzfqg4ky3qh7h9w87c3zya4ls5disz7dbx56is7sgw";
+    sha256 = "07yq186wb3wqvvmzhhsca57m979p7jprkk4h2a516jz1fd87755w";
   };
 
   outputs = [ "out" ] ++ stdenv.lib.optional perlSupport "gitweb";
@@ -45,7 +45,6 @@ stdenv.mkDerivation {
     ./git-sh-i18n.patch
     ./ssh-path.patch
     ./git-send-email-honor-PATH.patch
-    ./installCheck-path.patch
   ];
 
   postPatch = ''
