@@ -34,6 +34,8 @@ let
 
     [device]
     wifi.scan-rand-mac-address=${if cfg.wifi.scanRandMacAddress then "yes" else "no"}
+    ${optionalString (cfg.wifi.backend != null)
+      ''wifi.backend=${cfg.wifi.backend}''}
 
     ${cfg.extraConfig}
   '';
@@ -139,7 +141,7 @@ in {
       # Ugly hack for using the correct gnome3 packageSet
       basePackages = mkOption {
         type = types.attrsOf types.package;
-        default = { inherit networkmanager modemmanager wpa_supplicant
+        default = { inherit networkmanager modemmanager
                             networkmanager-openvpn networkmanager-vpnc
                             networkmanager-openconnect networkmanager-fortisslvpn
                             networkmanager-l2tp networkmanager-iodine; };
@@ -193,6 +195,12 @@ in {
 
       wifi = {
         macAddress = macAddressOpt;
+
+        backend = mkOption {
+          type = types.enum ["wpa_supplicant" "iwd"];
+          default = "wpa_supplicant";
+          description = "WiFi Backend to be used by NetworkManager";
+        };
 
         powersave = mkOption {
           type = types.nullOr types.bool;
@@ -400,6 +408,12 @@ in {
           networking.networkmanager.dns = "dnsmasq"
         '';
       }
+      { assertion = !config.networking.wireless.iwd.enable;
+        message = ''
+          Only one option to enable iwd is allowed: networking.wireless.iwd.enable
+          and networking.networkmanager.wifi.backend = "iwd" are mutually exclusive.
+        '';
+      }
     ];
 
     environment.etc = with cfg.basePackages; [
@@ -510,7 +524,9 @@ in {
     security.polkit.extraConfig = polkitConf;
 
     networking.networkmanager.packages =
-      mkIf cfg.enableStrongSwan [ pkgs.networkmanager_strongswan ];
+      optional (cfg.wifi.backend == "iwd") pkgs.iwd
+      ++ optional (cfg.wifi.backend == "wpa_supplicant") pkgs.wpa_supplicant
+      ++ optional cfg.enableStrongSwan pkgs.networkmanager_strongswan;
 
     services.dbus.packages =
       optional cfg.enableStrongSwan pkgs.strongswanNM ++ cfg.packages;
