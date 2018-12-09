@@ -101,6 +101,7 @@ in {
   subtest "can_start_slurmdbd", sub {
     $dbd->succeed("systemctl restart slurmdbd");
     $dbd->waitForUnit("slurmdbd.service");
+    $dbd->waitForOpenPort(6819);
   };
 
   # there needs to be an entry for the current
