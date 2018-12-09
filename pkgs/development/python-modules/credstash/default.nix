@@ -9,6 +9,8 @@ buildPythonPackage rec {
     sha256 = "814560f99ae2409e2c6d906d878f9dadada5d1d0a950aafb6b2c0d535291bdfb";
   };
 
+  postInstall = "rm $out/bin/credstash.py";
+
   nativeBuildInputs = [ nose ];
 
   propagatedBuildInputs = [ cryptography boto3 pyyaml docutils ];
