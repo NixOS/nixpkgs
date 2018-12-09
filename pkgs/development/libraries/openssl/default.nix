@@ -7,7 +7,7 @@
 with stdenv.lib;
 
 let
-  common = args@{ version, sha256, patches ? [] }: stdenv.mkDerivation rec {
+  common = args@{ version, sha256, patches ? [], withDocs ? false }: stdenv.mkDerivation rec {
     name = "openssl-${version}";
 
     src = fetchurl {
@@ -33,7 +33,7 @@ let
                   '!defined(__ANDROID__) && !defined(__OpenBSD__) && 0'
     '';
 
-    outputs = [ "bin" "dev" "out" "man" ];
+    outputs = [ "bin" "dev" "out" "man" ] ++ optional withDocs "doc";
     setOutputFlags = false;
     separateDebugInfo = stdenv.hostPlatform.isLinux;
 
@@ -135,6 +135,7 @@ in {
     version = "1.1.1a";
     sha256 = "0hcz7znzznbibpy3iyyhvlqrq44y88plxwdj32wjzgbwic7i687w";
     patches = [ ./1.1/nix-ssl-cert-file.patch ];
+    withDocs = true;
   };
 
 }
