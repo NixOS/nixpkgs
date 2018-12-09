@@ -2,6 +2,8 @@
 
 let
   buildPlugin = args: python2Packages.buildPythonPackage (args // {
+    pname = "OctoPrintPlugin-${args.pname}";
+    inherit (args) version;
     propagatedBuildInputs = (args.propagatedBuildInputs or []) ++ [ octoprint ];
     # none of the following have tests
     doCheck = false;
@@ -13,7 +15,7 @@ let
     m3d-fio = self.m33-fio; # added 2016-08-13
 
     m33-fio = buildPlugin rec {
-      name = "M33-Fio-${version}";
+      pname = "M33-Fio";
       version = "1.21";
 
       src = fetchFromGitHub {
@@ -36,15 +38,15 @@ let
       '';
 
       meta = with stdenv.lib; {
-        homepage = https://github.com/donovan6000/M33-Fio;
         description = "OctoPrint plugin for the Micro 3D printer";
+        homepage = https://github.com/donovan6000/M33-Fio;
         license = licenses.gpl3;
         maintainers = with maintainers; [ abbradar ];
       };
     };
 
     mqtt = buildPlugin rec {
-      name = "OctoPrint-MQTT-${version}";
+      pname = "MQTT";
       version = "0.8.0";
 
       src = fetchFromGitHub {
@@ -57,15 +59,15 @@ let
       propagatedBuildInputs = with python2Packages; [ paho-mqtt ];
 
       meta = with stdenv.lib; {
-        homepage = https://github.com/OctoPrint/OctoPrint-MQTT;
         description = "Publish printer status MQTT";
+        homepage = https://github.com/OctoPrint/OctoPrint-MQTT;
         license = licenses.agpl3;
         maintainers = with maintainers; [ peterhoeg ];
       };
     };
 
     titlestatus = buildPlugin rec {
-      name = "OctoPrint-TitleStatus-${version}";
+      pname = "TitleStatus";
       version = "0.0.4";
 
       src = fetchFromGitHub {
@@ -76,15 +78,15 @@ let
       };
 
       meta = with stdenv.lib; {
-        homepage = https://github.com/MoonshineSG/OctoPrint-TitleStatus;
         description = "Show printers status in window title";
+        homepage = https://github.com/MoonshineSG/OctoPrint-TitleStatus;
         license = licenses.agpl3;
         maintainers = with maintainers; [ abbradar ];
       };
     };
 
     stlviewer = buildPlugin rec {
-      name = "OctoPrint-STLViewer-${version}";
+      pname = "STLViewer";
       version = "0.4.1";
 
       src = fetchFromGitHub {
@@ -95,8 +97,8 @@ let
       };
 
       meta = with stdenv.lib; {
-        homepage = https://github.com/jneilliii/Octoprint-STLViewer;
         description = "A simple stl viewer tab for OctoPrint";
+        homepage = https://github.com/jneilliii/Octoprint-STLViewer;
         license = licenses.agpl3;
         maintainers = with maintainers; [ abbradar ];
       };
