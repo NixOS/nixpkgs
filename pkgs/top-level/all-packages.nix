@@ -2353,6 +2353,8 @@ in
 
   dropbear = callPackage ../tools/networking/dropbear { };
 
+  dsview = libsForQt5.callPackage ../applications/science/electronics/dsview { };
+
   dtach = callPackage ../tools/misc/dtach { };
 
   dtc = callPackage ../development/compilers/dtc { };
@@ -8519,6 +8521,10 @@ in
   };
 
   libsigrokdecode = callPackage ../development/tools/libsigrokdecode { };
+
+  # special forks used for dsview
+  libsigrok4dsl = callPackage ../applications/science/electronics/dsview/libsigrok4dsl.nix { };
+  libsigrokdecode4dsl = callPackage ../applications/science/electronics/dsview/libsigrokdecode4dsl.nix { };
 
   dcadec = callPackage ../development/tools/dcadec { };
 
