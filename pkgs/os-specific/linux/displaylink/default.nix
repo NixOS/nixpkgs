@@ -21,7 +21,7 @@ in stdenv.mkDerivation rec {
       comply with DisplayLink's EULA and download the binaries and
       sources from here:
 
-      http://www.displaylink.com/downloads/file?id=1087
+      http://www.displaylink.com/downloads/file?id=1261
 
       Once you have downloaded the file, please use the following
       commands and re-run the installation:
