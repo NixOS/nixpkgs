@@ -1894,6 +1894,10 @@
     github = "ironpinguin";
     name = "Michele Catalano";
   };
+  ivan = {
+    email = "ivan@ludios.org";
+    name = "Ivan Kozik";
+  };
   ivan-tkatchev = {
     email = "tkatchev@gmail.com";
     name = "Ivan Tkatchev";
