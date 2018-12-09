@@ -228,6 +228,8 @@ let
 
     easy-format = callPackage ../development/ocaml-modules/easy-format { };
 
+    elina = callPackage ../development/ocaml-modules/elina { };
+
     eliom = callPackage ../development/ocaml-modules/eliom {
       js_of_ocaml-lwt = js_of_ocaml-lwt.override {
         ocaml_lwt = lwt3;
