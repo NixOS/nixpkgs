@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
-    install -D -m 755 bin/conmon $out/bin/conmon
+    install -D -m 555 bin/conmon $out/bin/conmon
   '';
 
   meta = {
