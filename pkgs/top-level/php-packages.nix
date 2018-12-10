@@ -100,7 +100,7 @@ let
     sha256 = "105nyn703k9p9c7wwy6npq7xd9mczmmlhyn0gn2v2wz0f88spjxs";
   };
 
-  mailparse = buildPecl {
+  mailparse = assert !isPhp73; buildPecl {
     name = "mailparse-3.0.2";
 
     sha256 = "0fw447ralqihsjnn0fm2hkaj8343cvb90v0d1wfclgz49256y6nq";
@@ -166,7 +166,7 @@ let
     nativeBuildInputs = [ pkgs.pkgconfig ];
   };
 
-  zmq = buildPecl {
+  zmq = assert !isPhp73; buildPecl {
     name = "zmq-1.1.3";
 
     sha256 = "1kj487vllqj9720vlhfsmv32hs2dy2agp6176mav6ldx31c3g4n4";
