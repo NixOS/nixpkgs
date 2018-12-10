@@ -2401,6 +2401,7 @@ extra-packages:
   - binary > 0.7 && < 0.8               # keep a 7.x major release around for older compilers
   - binary > 0.8 && < 0.9               # keep a 8.x major release around for older compilers
   - blank-canvas < 0.6.3                # more recent versions depend on base-compat-batteries == 0.10.* but we're on base-compat-0.9.*
+  - brick <0.44                         # https://github.com/simonmichael/hledger/issues/935
   - Cabal == 1.18.*                     # required for cabal-install et al on old GHC versions
   - Cabal == 1.20.*                     # required for cabal-install et al on old GHC versions
   - Cabal == 1.24.*                     # required for jailbreak-cabal etc.
@@ -2440,12 +2441,13 @@ extra-packages:
   - mtl-prelude < 2                     # required for to build postgrest on mtl 2.1.x platforms
   - network == 2.6.3.1                  # newer versions don't compile with GHC 7.4.x and below
   - parallel == 3.2.0.3                 # newer versions don't work with GHC 6.12.3
+  - patience ^>= 0.1                    # required by chell-0.4.x
   - persistent >=2.5 && <2.8            # pre-lts-11.x versions neeed by git-annex 6.20180227
   - persistent-sqlite < 2.7             # pre-lts-11.x versions neeed by git-annex 6.20180227
   - primitive == 0.5.1.*                # required to build alex with GHC 6.12.3
   - proto-lens == 0.2.*                 # required for tensorflow-proto-0.1.x on GHC 8.2.x
-  - proto-lens-protoc == 0.2.*          # required for tensorflow-proto-0.1.x on GHC 8.2.x
   - proto-lens-protobuf-types == 0.2.*  # required for tensorflow-proto-0.1.x on GHC 8.2.x
+  - proto-lens-protoc == 0.2.*          # required for tensorflow-proto-0.1.x on GHC 8.2.x
   - QuickCheck < 2                      # required by test-framework-quickcheck and its users
   - resourcet ==1.1.*                   # pre-lts-11.x versions neeed by git-annex 6.20180227
   - seqid < 0.2                         # newer versions depend on transformers 0.4.x which we cannot provide in GHC 7.8.x
@@ -2461,7 +2463,6 @@ extra-packages:
   - yesod-persistent < 1.5              # pre-lts-11.x versions neeed by git-annex 6.20180227
   - yesod-static ^>= 1.5                # pre-lts-11.x versions neeed by git-annex 6.20180227
   - yesod-test ^>= 1.5                  # pre-lts-11.x versions neeed by git-annex 6.20180227
-  - patience ^>= 0.1                    # required by chell-0.4.x
 
 package-maintainers:
   peti:
