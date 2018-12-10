@@ -23,8 +23,8 @@ buildPythonPackage rec {
 
   checkPhase = ''
     pytest pylint/test -k "not ${lib.concatStringsSep " and not " (
-      # Broken test
-      [ "test_good_comprehension_checks" ] ++
+      # Broken tests
+      [ "test_good_comprehension_checks" "missing_final_newline" ] ++
       # Disable broken darwin tests
       lib.optionals stdenv.isDarwin [
         "test_parallel_execution"
