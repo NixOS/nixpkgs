@@ -7,10 +7,12 @@ let
       inherit (pkgs) stdenv autoreconfHook fetchurl;
     };
 
+  isPhp73 = pkgs.lib.versionAtLeast php.version "7.3";
+
   apcu = buildPecl {
-    name = "apcu-5.1.11";
-    sha256 = "0nz9m3fbxgyc2ij63yqmxm06a1f51g8rkxk85f85ziqdin66q2f1";
-    buildInputs = [ pkgs.pcre ];
+    name = "apcu-5.1.15";
+    sha256 = "0v91fxh3z3amwicqlmz7lvnh4zfl2d7kj2zc8pvlvj2lms8ql5zc";
+    buildInputs = [ (if isPhp73 then pkgs.pcre2 else pkgs.pcre) ];
     doCheck = true;
     checkTarget = "test";
     checkFlagsArray = ["REPORT_EXIT_STATUS=1" "NO_INTERACTION=1"];
