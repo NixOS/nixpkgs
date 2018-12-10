@@ -9,14 +9,14 @@
 # all get the same sources with the same patches applied.
 
 stdenv.mkDerivation rec {
-  version = "8.5.beta5";
+  version = "8.5.beta6";
   name = "sage-src-${version}";
 
   src = fetchFromGitHub {
     owner = "sagemath";
     repo = "sage";
     rev = version;
-    sha256 = "1jnlk4y7njkg095kd3rhsi5929k6q90lzgyb7pshsjz251866nyv";
+    sha256 = "0b3f7m1mxqh2sjb8q2bci7202gw8qi1kin13fzsmvfd3caxvxzcy";
   };
 
   # Patches needed because of particularities of nix or the way this is packaged.
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     # https://trac.sagemath.org/ticket/26110 for an upstream discussion.
     ./patches/Only-test-py2-py3-optional-tests-when-all-of-sage-is.patch
 
-    ./patches/no-invalid-gap-test.patch
+    ./patches/dont-test-guess-gaproot.patch
   ];
 
   # Patches needed because of package updates. We could just pin the versions of
@@ -79,11 +79,6 @@ stdenv.mkDerivation rec {
       stripLen = 1;
     })
 
-    (fetchpatch {
-      name = "cython-0.29.patch";
-      url = "https://git.sagemath.org/sage.git/patch/?h=f77de1d0e7f90ee12761140500cb8cbbb789ab20";
-      sha256 = "14wrpy8jgbnpza1j8a2nx8y2r946y82pll1fv3cn6gpfmm6640l3";
-    })
     # https://trac.sagemath.org/ticket/26360
     (fetchpatch {
       name = "arb-2.15.1.patch";
