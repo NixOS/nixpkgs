@@ -1,4 +1,8 @@
-{ buildDunePackage, cstruct, lwt }:
+{ lib, buildDunePackage, cstruct, lwt }:
+
+if !lib.versionAtLeast (cstruct.version or "1") "3"
+then cstruct
+else
 
 buildDunePackage {
 	pname = "cstruct-lwt";
