@@ -3784,6 +3784,8 @@ in {
 
   geopy = callPackage ../development/python-modules/geopy { };
 
+  geographiclib = callPackage ../development/python-modules/geographiclib { };
+
   django-haystack = callPackage ../development/python-modules/django-haystack { };
 
   django-multiselectfield = callPackage ../development/python-modules/django-multiselectfield { };
