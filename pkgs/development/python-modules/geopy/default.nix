@@ -11,7 +11,7 @@
 buildPythonPackage rec {
   pname = "geopy";
   version = "1.18.0";
-  disabled = !isPy27;
+  disabled = false;
 
   src = fetchPypi {
     inherit pname version;
