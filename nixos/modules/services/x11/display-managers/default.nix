@@ -78,8 +78,7 @@ let
       # This is required by user units using the session bus.
       ${config.systemd.package}/bin/systemctl --user import-environment DISPLAY XAUTHORITY DBUS_SESSION_BUS_ADDRESS
 
-      # Load X defaults.
-      # FIXME: Check XDG_SESSION_TYPE against x11
+      # Load X defaults. This should probably be safe on wayland too.
       ${xorg.xrdb}/bin/xrdb -merge ${xresourcesXft}
       if test -e ~/.Xresources; then
           ${xorg.xrdb}/bin/xrdb -merge ~/.Xresources
@@ -194,6 +193,11 @@ let
       ${concatMapStrings (pkg: ''
         ${xorg.lndir}/bin/lndir ${pkg}/share/xsessions $out/share/xsessions
       '') cfg.displayManager.extraSessionFilePackages}
+
+      mkdir -p "$out/share/wayland-sessions"
+      ${concatMapStrings (pkg: ''
+        ${xorg.lndir}/bin/lndir ${pkg}/share/wayland-sessions $out/share/wayland-sessions
+      '') cfg.displayManager.extraSessionFilePackages}
     '';
 
 in
@@ -240,7 +244,10 @@ in
           ''
             xmessage "Hello World!" &
           '';
-        description = "Shell commands executed just before the window or desktop manager is started.";
+        description = ''
+          Shell commands executed just before the window or desktop manager is
+          started. These commands are not currently sourced for Wayland sessions.
+        '';
       };
 
       hiddenUsers = mkOption {
