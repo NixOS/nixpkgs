@@ -22362,6 +22362,10 @@ in
                   then configuration
                   else [configuration]
                 );
+
+      # The NIXOS_EXTRA_MODULE_PATH environment variable if Nixpkgs
+      # was invoked via impure.nix.
+      extraModules = config.nixosExtraModules or [];
     }).config.system.build;
 
 
@@ -22405,7 +22409,7 @@ in
             { lib, ... }: {
               config.nixpkgs.pkgs = lib.mkDefault pkgs;
             }
-          )];
+          )] ++ config.nixosExtraModules or [];
         });
     in
       test:

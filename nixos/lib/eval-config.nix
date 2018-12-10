@@ -24,6 +24,8 @@
   check ? true
 , prefix ? []
 , lib ? import ../../lib
+  # Extra modules to include. Defaults to NIXOS_EXTRA_MODULE_PATH.
+  # Otherwise equivalent to adding to modules.
 , extraModules ? let e = builtins.getEnv "NIXOS_EXTRA_MODULE_PATH";
                  in if e == "" then [] else [(import e)]
 }:
