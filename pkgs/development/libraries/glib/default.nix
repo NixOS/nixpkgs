@@ -2,6 +2,7 @@
 , libiconv, zlib, libffi, pcre, libelf, gnome3, libselinux, bash, gnum4, gtk-doc, docbook_xsl, docbook_xml_dtd_45
 # use utillinuxMinimal to avoid circular dependency (utillinux, systemd, glib)
 , utillinuxMinimal ? null
+, buildPackages
 
 # this is just for tests (not in the closure of any regular package)
 , doCheck ? stdenv.config.doCheckByDefault or false
@@ -78,12 +79,16 @@ stdenv.mkDerivation rec {
     utillinuxMinimal # for libmount
   ];
 
-  nativeBuildInputs = [ meson ninja pkgconfig perl python3 gettext gtk-doc docbook_xsl docbook_xml_dtd_45 glibcLocales ];
+  nativeBuildInputs = [
+    meson ninja pkgconfig perl python3 gettext gtk-doc docbook_xsl docbook_xml_dtd_45 glibcLocales
+  ];
 
   propagatedBuildInputs = [ zlib libffi gettext libiconv ];
 
   mesonFlags = [
-    "-Dgtk_doc=true"
+    # Avoid the need for gobject introspection binaries in PATH in cross-compiling case.
+    # Instead we just copy them over from the native output.
+    "-Dgtk_doc=${if stdenv.hostPlatform == stdenv.buildPlatform then "true" else "false"}"
   ];
 
   LC_ALL = "en_US.UTF-8";
@@ -126,6 +131,8 @@ stdenv.mkDerivation rec {
     # This file is *included* in gtk3 and would introduce runtime reference via __FILE__.
     sed '1i#line 1 "${name}/include/glib-2.0/gobject/gobjectnotifyqueue.c"' \
       -i "$dev"/include/glib-2.0/gobject/gobjectnotifyqueue.c
+  '' + optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+    cp -r ${buildPackages.glib.devdoc} $devdoc
   '';
 
   checkInputs = [ tzdata libxml2 desktop-file-utils shared-mime-info ];
