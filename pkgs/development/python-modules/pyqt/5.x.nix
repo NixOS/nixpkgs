@@ -6,25 +6,15 @@
 }:
 
 let
-  pname = "PyQt";
-  version = "5.11.3";
 
   inherit (pythonPackages) buildPythonPackage python isPy3k dbus-python enum34;
 
   sip = pythonPackages.sip.override { sip-module = "PyQt5.sip"; };
 
-in buildPythonPackage {
-  pname = pname;
-  version = version;
+in buildPythonPackage rec {
+  pname = "PyQt";
+  version = "5.11.3";
   format = "other";
-
-  meta = with lib; {
-    description = "Python bindings for Qt5";
-    homepage    = http://www.riverbankcomputing.co.uk;
-    license     = licenses.gpl3;
-    platforms   = platforms.mesaPlatforms;
-    maintainers = with maintainers; [ sander ];
-  };
 
   src = fetchurl {
     url = "mirror://sourceforge/pyqt/PyQt5/PyQt-${version}/PyQt5_gpl-${version}.tar.gz";
@@ -73,4 +63,12 @@ in buildPythonPackage {
   '';
 
   enableParallelBuilding = true;
+
+  meta = with lib; {
+    description = "Python bindings for Qt5";
+    homepage    = http://www.riverbankcomputing.co.uk;
+    license     = licenses.gpl3;
+    platforms   = platforms.mesaPlatforms;
+    maintainers = with maintainers; [ sander ];
+  };
 }
