@@ -23,7 +23,7 @@
 , # !!! See comment about check in lib/modules.nix
   check ? true
 , prefix ? []
-, lib ? import ../../lib
+, lib ? import (let res = builtins.tryEval <nixos-lib>; in if res.success then res.value else ../../lib)
 }:
 
 let extraArgs_ = extraArgs; pkgs_ = pkgs;
@@ -54,7 +54,7 @@ in rec {
     modules = modules ++ extraModules ++ baseModules ++ [ pkgsModule ];
     args = extraArgs;
     specialArgs =
-      { modulesPath = builtins.toString ../modules; } // specialArgs;
+      { modulesPath = builtins.toString ../modules; } // specialArgs // { inherit lib; };
   }) config options;
 
   # These are the extra arguments passed to every module.  In
