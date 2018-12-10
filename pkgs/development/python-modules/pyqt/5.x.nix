@@ -1,7 +1,8 @@
 { lib, fetchurl, fetchpatch, pythonPackages, pkgconfig
-, qmake, lndir, qtbase, qtsvg, qtwebkit, qtwebengine, dbus
-, withWebSockets ? false, qtwebsockets
+, qmake, lndir, qtbase, qtsvg, qtwebengine, dbus
 , withConnectivity ? false, qtconnectivity
+, withWebKit ? false, qtwebkit
+, withWebSockets ? false, qtwebsockets
 }:
 
 let
@@ -36,9 +37,11 @@ in buildPythonPackage {
 
   buildInputs = [ dbus sip ];
 
-  propagatedBuildInputs = [
-    qtbase qtsvg qtwebkit qtwebengine
-  ] ++ lib.optional (!isPy3k) enum34 ++ lib.optional withWebSockets qtwebsockets ++ lib.optional withConnectivity qtconnectivity;
+  propagatedBuildInputs = [ qtbase qtsvg qtwebengine ]
+    ++ lib.optional (!isPy3k) enum34
+    ++ lib.optional withConnectivity qtconnectivity
+    ++ lib.optional withWebKit qtwebkit
+    ++ lib.optional withWebSockets qtwebsockets;
 
   configurePhase = ''
     runHook preConfigure
