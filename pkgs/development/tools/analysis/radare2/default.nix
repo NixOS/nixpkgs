@@ -1,10 +1,11 @@
 {stdenv, fetchFromGitHub
+, buildPackages
 , callPackage
-, ninja, meson , pkgconfig
+, pkgconfig
 , libusb, readline, libewf, perl, zlib, openssl
-, libuv
+, libuv, file, libzip, xxHash
 , gtk2 ? null, vte ? null, gtkdialog ? null
-, python ? null
+, python3 ? null
 , ruby ? null
 , lua ? null
 , useX11, rubyBindings, pythonBindings, luaBindings
@@ -12,7 +13,7 @@
 
 assert useX11 -> (gtk2 != null && vte != null && gtkdialog != null);
 assert rubyBindings -> ruby != null;
-assert pythonBindings -> python != null;
+assert pythonBindings -> python3 != null;
 
 
 let
@@ -49,39 +50,42 @@ let
         if ! grep -F "CS_TIP=${cs_tip}" shlr/Makefile; then echo "CS_TIP mismatch"; exit 1; fi
         # When using meson, it expects capstone source relative to build directory
         mkdir -p build/shlr
-        ln -s ${capstone} build/shlr/capstone
+        cp -r ${capstone} shlr/capstone
+        chmod -R +w shlr/capstone
       '';
 
       postInstall = ''
-        ln -s $out/bin/radare2 $out/bin/r2
         install -D -m755 $src/binr/r2pm/r2pm $out/bin/r2pm
       '';
 
-      mesonFlags = [
-        "-Dr2_version_commit=${version_commit}"
-        "-Dr2_gittap=${gittap}"
-        "-Dr2_gittip=${gittip}"
-        # 2.8.0 expects this, but later it becomes an option with default=false.
-        "-Dcapstone_in_builddir=true"
-
-        "-Duse_sys_openssl=true"
-        "-Duse_sys_zlib=true"
+      WITHOUT_PULL="1";
+      makeFlags = [
+        "GITTAP=${gittap}"
+        "GITTIP=${gittip}"
+        "RANLIB=${stdenv.cc.bintools.bintools}/bin/${stdenv.cc.bintools.targetPrefix}ranlib"
+      ];
+      configureFlags = [
+        "--with-sysmagic"
+        "--with-syszip"
+        "--with-sysxxhash"
+        "--with-openssl"
       ];
 
       enableParallelBuilding = true;
+      depsBuildBuild = [ buildPackages.stdenv.cc ];
 
-      nativeBuildInputs = [ pkgconfig ninja meson ];
-      buildInputs = [ readline libusb libewf perl zlib openssl libuv ]
-        ++ optional useX11 [gtkdialog vte gtk2]
-        ++ optional rubyBindings [ruby]
-        ++ optional pythonBindings [python]
-        ++ optional luaBindings [lua];
+      nativeBuildInputs = [ pkgconfig ];
+      buildInputs = [ file libzip xxHash readline libusb libewf perl zlib openssl libuv ]
+        ++ optional useX11 [ gtkdialog vte gtk2 ]
+        ++ optional rubyBindings [ ruby ]
+        ++ optional pythonBindings [ python3 ]
+        ++ optional luaBindings [ lua ];
 
       meta = {
         description = "unix-like reverse engineering framework and commandline tools";
         homepage = http://radare.org/;
         license = stdenv.lib.licenses.gpl2Plus;
-        maintainers = with stdenv.lib.maintainers; [raskin makefu mic92];
+        maintainers = with stdenv.lib.maintainers; [ raskin makefu mic92 ];
         platforms = with stdenv.lib.platforms; linux;
         inherit version;
       };
