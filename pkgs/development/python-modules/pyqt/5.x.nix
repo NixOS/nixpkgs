@@ -49,10 +49,6 @@ in buildPythonPackage {
 
     export PYTHONPATH=$PYTHONPATH:$out/${python.sitePackages}
 
-    substituteInPlace configure.py \
-      --replace 'install_dir=pydbusmoddir' "install_dir='$out/${python.sitePackages}/dbus/mainloop'" \
-      --replace "ModuleMetadata(qmake_QT=['webkitwidgets'])" "ModuleMetadata(qmake_QT=['webkitwidgets', 'printsupport'])"
-
     ${python.executable} configure.py  -w \
       --confirm-license \
       --dbus=${dbus.dev}/include/dbus-1.0 \
