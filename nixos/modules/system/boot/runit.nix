@@ -148,7 +148,7 @@ with import ./runit-lib.nix { inherit pkgs lib; runit = config.runit.package; ma
           ${pkgs.nettools}/bin/ifconfig lo up
         '';
         requires = map (i: "network-link-${i.name}")
-          (attrValues config.networking.interfaces);
+          (attrValues config.networking.interfaces) ++ [ "sysctl" ];
         softRequires = [ "firewall" ];
       };
       runit.services.network-online = {
