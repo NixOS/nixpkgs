@@ -52,6 +52,8 @@ rec {
     # TODO(@Ericson2314): Make unconditional / resolve #33599
     # Check phase
     , doCheck ? config.doCheckByDefault or false
+    # do we want to respect doCheck in cross settings?
+    , doCrossCheck ? false
 
     # TODO(@Ericson2314): Make unconditional / resolve #33599
     # InstallCheck phase
@@ -81,8 +83,8 @@ rec {
     let
       # TODO(@oxij, @Ericson2314): This is here to keep the old semantics, remove when
       # no package has `doCheck = true`.
-      doCheck' = doCheck && stdenv.hostPlatform == stdenv.buildPlatform;
-      doInstallCheck' = doInstallCheck && stdenv.hostPlatform == stdenv.buildPlatform;
+      doCheck' = doCheck && (doCrossCheck || stdenv.hostPlatform == stdenv.buildPlatform);
+      doInstallCheck' = doInstallCheck && (doCrossCheck || stdenv.hostPlatform == stdenv.buildPlatform);
 
       outputs' = outputs ++ lib.optional separateDebugInfo "debug";
 
