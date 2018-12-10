@@ -199,11 +199,11 @@ let
     configureFlags = [ "--with-v8=${pkgs.v8_6_x}" ];
   };
 
-  v8js = buildPecl rec {
-    version = "1.4.1";
+  v8js = assert !isPhp73; buildPecl rec {
+    version = "2.1.0";
     name = "v8js-${version}";
 
-    sha256 = "0k5dc395gzva4l6n9mzvkhkjq914460cwk1grfandcqy73j6m89q";
+    sha256 = "0g63dyhhicngbgqg34wl91nm3556vzdgkq19gy52gvmqj47rj6rg";
 
     buildInputs = [ pkgs.v8_6_x ];
     configureFlags = [ "--with-v8js=${pkgs.v8_6_x}" ];
