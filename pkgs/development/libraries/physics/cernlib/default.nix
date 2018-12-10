@@ -18,6 +18,8 @@ stdenv.mkDerivation rec {
   postPatch = ''
     substituteInPlace 2006/src/config/site.def \
       --replace "# define MakeCmd gmake" "# define MakeCmd make"
+    substituteInPlace 2006/src/config/lnxLib.rules \
+      --replace "# lib" "// lib"
   '';
 
   configurePhase = ''
