@@ -264,6 +264,8 @@ in {
     sha256 = "0rvwx37dsmxivgrf4wfc1y778iln498c6a40biy9k6lnr6p7s9ks";
 
     # https://bugs.php.net/bug.php?id=71041
-    extraPatches = [ ./fix-bug-71041.patch ];
+    # https://bugs.php.net/bug.php?id=76826
+    extraPatches = [ ./fix-bug-71041.patch ]
+      ++ optional stdenv.isDarwin ./php73-darwin-isfinite.patch;
   };
 }
