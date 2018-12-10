@@ -4299,7 +4299,9 @@ in {
     py = python.override{x11Support=true;};
   in callPackage ../development/python-modules/tkinter { py = py; };
 
-  tlslite = callPackage ../development/python-modules/tlslite { };
+  tlslite = throw "deprecated 2018-12-10; use pythonPackages.tlslite-ng instead";
+
+  tlslite-ng = callPackage ../development/python-modules/tlslite-ng { };
 
   qrcode = callPackage ../development/python-modules/qrcode { };
 
