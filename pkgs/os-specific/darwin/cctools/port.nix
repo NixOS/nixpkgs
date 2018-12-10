@@ -29,15 +29,11 @@ let
 
     outputs = [ "out" "dev" ];
 
-    nativeBuildInputs = [
-      autoconf automake libtool autoreconfHook
-    ];
-    buildInputs = [ libuuid ] ++
-      stdenv.lib.optionals stdenv.isDarwin [ llvm libcxxabi libobjc ];
+    nativeBuildInputs = [ autoconf automake libtool autoreconfHook ];
+    buildInputs = [ libuuid ]
+      ++ stdenv.lib.optionals stdenv.isDarwin [ libcxxabi libobjc ];
 
-    patches = [
-      ./ld-rpath-nonfinal.patch ./ld-ignore-rpath-link.patch
-    ];
+    patches = [ ./ld-rpath-nonfinal.patch ./ld-ignore-rpath-link.patch ];
 
     __propagatedImpureHostDeps = [
       # As far as I can tell, otool from cctools is the only thing that depends on these two, and we should fix them
@@ -48,7 +44,9 @@ let
     enableParallelBuilding = true;
 
     # TODO(@Ericson2314): Always pass "--target" and always targetPrefix.
-    configurePlatforms = [ "build" "host" ] ++ stdenv.lib.optional (stdenv.targetPlatform != stdenv.hostPlatform) "target";
+    configurePlatforms = [ "build" "host" ]
+      ++ stdenv.lib.optional (stdenv.targetPlatform != stdenv.hostPlatform) "target";
+    configureFlags = [ "--disable-clang-as" ];
 
     postPatch = stdenv.lib.optionalString stdenv.hostPlatform.isDarwin ''
       substituteInPlace cctools/Makefile.am --replace libobjc2 ""
