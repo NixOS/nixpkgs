@@ -23,7 +23,7 @@ let
   apcu_bc = buildPecl {
     name = "apcu_bc-1.0.4";
     sha256 = "1raww7alwayg9nk0akly1mdrjypxlwg8safnmaczl773cwpw5cbw";
-    buildInputs = [ apcu pkgs.pcre ];
+    buildInputs = [ apcu (if isPhp73 then pkgs.pcre2 else pkgs.pcre) ];
   };
 
   ast = buildPecl {
