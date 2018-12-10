@@ -89,7 +89,7 @@ let
   };
 
   igbinary = buildPecl {
-    name = "igbinary-2.0.4";
+    name = "igbinary-2.0.8";
 
     configureFlags = [ "--enable-igbinary" ];
 
@@ -97,7 +97,7 @@ let
 
     outputs = [ "out" "dev" ];
 
-    sha256 = "0a55l4f0bgbf3f6sh34njd14niwagg829gfkvb8n5fs69xqab67d";
+    sha256 = "105nyn703k9p9c7wwy6npq7xd9mczmmlhyn0gn2v2wz0f88spjxs";
   };
 
   mailparse = buildPecl {
