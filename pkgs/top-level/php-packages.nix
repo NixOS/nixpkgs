@@ -145,10 +145,21 @@ let
     sha256 = "0d4p1gpl8gkzdiv860qzxfz250ryf0wmjgyc8qcaaqgkdyh5jy5p";
   };
 
-  xdebug = buildPecl {
+  xdebug =  if isPhp73 then xdebug73 else xdebug7;
+
+  xdebug7 = assert !isPhp73; buildPecl {
     name = "xdebug-2.6.1";
 
     sha256 = "0xxxy6n4lv7ghi9liqx133yskg07lw316vhcds43n1sjq3b93rns";
+
+    doCheck = true;
+    checkTarget = "test";
+  };
+
+  xdebug73 = assert isPhp73; buildPecl {
+    name = "xdebug-2.7.0beta1";
+
+    sha256 = "1ghh14z55l4jklinkgjkfhkw53lp2r7lgmyh7q8kdnf7jnpwx84h";
 
     doCheck = true;
     checkTarget = "test";
