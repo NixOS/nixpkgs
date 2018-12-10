@@ -10,6 +10,8 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.free;
     maintainers = [ stdenv.lib.maintainers.abigailbuccaneer ];
     platforms = stdenv.lib.platforms.all;
+    # Build uses `-msse` and `-mfpmath=sse`
+    badPlatforms = [ "aarch64-linux" ];
   };
 
   src = fetchFromGitHub {
