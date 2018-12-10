@@ -1,7 +1,7 @@
 { lib, buildPythonPackage, fetchPypi, isPy3k, glibcLocales, future }:
 
 buildPythonPackage rec {
-  pname = "CommonMark";
+  pname = "commonmark";
   version = "0.8.1";
 
   src = fetchPypi {
