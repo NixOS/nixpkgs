@@ -190,3 +190,6 @@ if ( $totalActions == 0 ) {
         }
     }
 }
+
+print STDERR "activating the configuration...\n";
+system("$out/activate", "$out") == 0 or die "Failed to activate configuration";

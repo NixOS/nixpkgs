@@ -1,4 +1,4 @@
-{ config, lib, ... }:
+{ pkgs, config, lib, ... }:
 
 with lib;
 
@@ -51,6 +51,17 @@ in
       { wantedBy = [ "multi-user.target" ];
         restartTriggers = [ config.environment.etc."sysctl.d/nixos.conf".source ];
       };
+
+    runit.services.sysctl = {
+      script = ''
+        while true; do
+          sysctl --system
+
+          inotifywait /etc/sysctl.d/
+        done
+      '';
+      path = [ pkgs.procps pkgs.inotify-tools ];
+    };
 
     # Enable hardlink and symlink restrictions.  See
     # https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/commit/?id=800179c9b8a1e796e441674776d11cd4c05d61d7
