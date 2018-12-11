@@ -22,6 +22,8 @@ stdenv.mkDerivation rec {
     go btrfs-progs libseccomp gpgme lvm2
   ];
 
+  patches = [ ./0001-No-need-to-use-i-in-go-build-with-go-1.10-and-above.patch ];
+
   buildPhase = ''
     patchShebangs .
     mkdir -p .gopath/src/github.com/containers

@@ -1,0 +1,49 @@
+From 0b0096382c8346d463ce019714fcc46256bc4af3 Mon Sep 17 00:00:00 2001
+From: Vincent Demeester <vdemeest@redhat.com>
+Date: Tue, 11 Dec 2018 15:26:01 +0100
+Subject: [PATCH] No need to use `-i` in go build (with go 1.10 and above)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+> The go build command now maintains a cache of recently built
+  packages, separate from the installed packages in $GOROOT/pkg or
+  $GOPATH/pkg. The effect of the cache should be to speed builds that
+  do not explicitly install packages or when switching between
+  different copies of source code (for example, when changing back and
+  forth between different branches in a version control system). The
+  old advice to add the -i flag for speed, as in go build -i or go
+  test -i, is no longer necessary: builds run just as fast without -i.
+
+This should also fix podman builds for NixOS, snap-installed go, …
+
+Signed-off-by: Vincent Demeester <vdemeest@redhat.com>
+---
+ Makefile | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index f99aaaec..55f34bcc 100644
+--- a/Makefile
++++ b/Makefile
+@@ -108,7 +108,7 @@ test/goecho/goecho: .gopathok $(wildcard test/goecho/*.go)
+ 	$(GO) build -ldflags '$(LDFLAGS)' -o $@ $(PROJECT)/test/goecho
+ 
+ podman: .gopathok $(PODMAN_VARLINK_DEPENDENCIES)
+-	$(GO) build -i -ldflags '$(LDFLAGS_PODMAN)' -tags "$(BUILDTAGS)" -o bin/$@ $(PROJECT)/cmd/podman
++	$(GO) build -ldflags '$(LDFLAGS_PODMAN)' -tags "$(BUILDTAGS)" -o bin/$@ $(PROJECT)/cmd/podman
+ 
+ local-cross: $(CROSS_BUILD_TARGETS)
+ 
+@@ -116,7 +116,7 @@ bin/podman.cross.%: .gopathok
+ 	TARGET="$*"; \
+ 	GOOS="$${TARGET%%.*}" \
+ 	GOARCH="$${TARGET##*.}" \
+-	$(GO) build -i -ldflags '$(LDFLAGS_PODMAN)' -tags '$(BUILDTAGS_CROSS)' -o "$@" $(PROJECT)/cmd/podman
++	$(GO) build -ldflags '$(LDFLAGS_PODMAN)' -tags '$(BUILDTAGS_CROSS)' -o "$@" $(PROJECT)/cmd/podman
+ 
+ python:
+ ifdef HAS_PYTHON3
+-- 
+2.19.1
+
