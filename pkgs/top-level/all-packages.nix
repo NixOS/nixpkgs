@@ -8462,6 +8462,7 @@ in
   cppcheck = callPackage ../development/tools/analysis/cppcheck { };
 
   infer = callPackage ../development/tools/analysis/infer { };
+  infer-deps = callPackage ../development/tools/analysis/infer-deps { };
 
   cpplint = callPackage ../development/tools/analysis/cpplint { };
 
