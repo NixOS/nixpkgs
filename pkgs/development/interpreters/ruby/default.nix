@@ -73,20 +73,16 @@ let
         # Have `configure' avoid `/usr/bin/nroff' in non-chroot builds.
         NROFF = if docSupport then "${groff}/bin/nroff" else null;
 
-        nativeBuildInputs =
-             ops useRailsExpress [ autoreconfHook bison ]
-          ++ ops (stdenv.buildPlatform != stdenv.hostPlatform) [
-               buildPackages.ruby
-             ];
+        nativeBuildInputs = [ autoreconfHook bison ]
+          ++ (op docSupport groff)
+          ++ op (stdenv.buildPlatform != stdenv.hostPlatform) buildPackages.ruby;
         buildInputs =
              (op fiddleSupport libffi)
           ++ (ops cursesSupport [ ncurses readline ])
-          ++ (op docSupport groff)
           ++ (op zlibSupport zlib)
           ++ (op opensslSupport openssl)
           ++ (op gdbmSupport gdbm)
           ++ (op yamlSupport libyaml)
-          ++ (op isRuby25 autoconf)
           # Looks like ruby fails to build on darwin without readline even if curses
           # support is not enabled, so add readline to the build inputs if curses
           # support is disabled (if it's enabled, we already have it) and we're
@@ -149,7 +145,7 @@ let
         postInstall = ''
           # Update rubygems
           pushd rubygems
-          ${buildRuby} setup.rb
+          ${buildRuby} setup.rb --destdir $GEM_HOME
           popd
 
           # Remove unnecessary groff reference from runtime closure, since it's big
