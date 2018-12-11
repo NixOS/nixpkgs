@@ -1,5 +1,9 @@
 { lib, gemConfig, ... }:
-rec {
+
+let
+  inherit (lib) attrValues concatMap converge filterAttrs getAttrs;
+
+in rec {
   bundlerFiles = {
     gemfile ? null
   , lockfile ? null
@@ -22,7 +26,19 @@ rec {
     else gemset;
   };
 
-  filterGemset = {ruby, groups,...}: gemset: lib.filterAttrs (name: attrs: platformMatches ruby attrs && groupMatches groups attrs) gemset;
+  filterGemset = { ruby, groups, ... }: gemset:
+    let
+      platformGems = filterAttrs (_: platformMatches ruby) gemset;
+      directlyMatchingGems = filterAttrs (_: groupMatches groups) platformGems;
+
+      expandDependencies = gems:
+        let
+          depNames = concatMap (gem: gem.dependencies or []) (attrValues gems);
+          deps = getAttrs depNames platformGems;
+        in
+          gems // deps;
+    in
+      converge expandDependencies directlyMatchingGems;
 
   platformMatches = {rubyEngine, version, ...}: attrs: (
   !(attrs ? "platforms") ||
