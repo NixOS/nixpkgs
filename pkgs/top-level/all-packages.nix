@@ -6476,6 +6476,8 @@ in
 
   xclip = callPackage ../tools/misc/xclip { };
 
+  xcur2png = callPackage ../tools/graphics/xcur2png { };
+
   xcwd = callPackage ../tools/X11/xcwd { };
 
   xtitle = callPackage ../tools/misc/xtitle { };
