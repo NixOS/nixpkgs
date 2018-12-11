@@ -1,5 +1,5 @@
 { buildPackages, pkgs, pkgs_i686, targetPackages
-, includeSources ? true
+, includeSources ? true, licenseAccepted ? false
 }:
 
 # TODO: use callPackage instead of import to avoid so many inherits
@@ -9,8 +9,19 @@ rec {
     inherit buildPackages pkgs;
   };
 
+  buildToolsSources = let
+    system = pkgs.stdenv.hostPlatform.system;
+    path = if (system == "i686-linux" || system == "x86_64-linux")
+      then ./build-tools-srcs-linux.nix
+      else if system == "x86_64-darwin"
+      then ./build-tools-srcs-macosx.nix
+      else throw "System: ${system} not supported!";
+  in
+    import path { inherit (pkgs) fetchurl; };
+
   buildTools = import ./build-tools.nix {
-    inherit (pkgs) stdenv fetchurl unzip zlib file;
+    inherit (pkgs) stdenv lib fetchurl unzip zlib file coreutils;
+    inherit buildToolsSources;
     stdenv_32bit = pkgs_i686.stdenv;
     zlib_32bit = pkgs_i686.zlib;
     ncurses_32bit = pkgs_i686.ncurses5;
@@ -57,7 +68,7 @@ rec {
 
     inherit platformTools buildTools support
             supportRepository platforms sysimages
-            addons sources includeSources;
+            addons sources includeSources licenseAccepted;
 
     stdenv_32bit = pkgs_i686.stdenv;
   };

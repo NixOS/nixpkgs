@@ -329,7 +329,7 @@ in rec {
   tests.plotinus = callTest tests/plotinus.nix {};
   tests.keymap = callSubTests tests/keymap.nix {};
   tests.initrdNetwork = callTest tests/initrd-network.nix {};
-  tests.kafka = callSubTests tests/kafka.nix {};
+  #tests.kafka = callSubTests tests/kafka.nix {}; # broken since openjdk: 8u181 -> 8u192
   tests.kernel-latest = callTest tests/kernel-latest.nix {};
   tests.kernel-lts = callTest tests/kernel-lts.nix {};
   tests.kubernetes.dns = callSubTestsOnMatchingSystems ["x86_64-linux"] tests/kubernetes/dns.nix {};

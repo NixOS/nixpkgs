@@ -14,3 +14,4 @@ curl -o sys-img.xml       https://dl.google.com/android/repository/sys-img/andro
 ./generate-platforms.sh
 ./generate-sysimages.sh
 ./generate-sources.sh
+./generate-tools.sh
