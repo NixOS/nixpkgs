@@ -450,8 +450,6 @@ in
 
   abduco = callPackage ../tools/misc/abduco { };
 
-  acbuild = callPackage ../applications/misc/acbuild { };
-
   acct = callPackage ../tools/system/acct { };
 
   accuraterip-checksum = callPackage ../tools/audio/accuraterip-checksum { };
