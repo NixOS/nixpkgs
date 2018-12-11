@@ -1,0 +1,46 @@
+{ fetchFromGitHub, gksu, inkscape, stdenv, xcursorgen }:
+
+stdenv.mkDerivation rec {
+  name = "bibata-cursors-${version}";
+  version = "0.4.1";
+
+  src = fetchFromGitHub {
+    owner = "KaizIqbal";
+    repo = "Bibata_Cursor";
+    rev = "v${version}";
+    sha256 = "14gvpjp4gv0m59qr8wls7xs5yjx5llldyzack5kg5cg2mzk2nsml";
+  };
+
+  shellHook = ''
+    gksu () {
+      $@
+    }
+  '';
+
+  postPatch = ''
+    patchShebangs .
+  '';
+
+  buildInputs  = [
+    gksu
+    inkscape
+    xcursorgen
+  ];
+
+  buildPhase = ''
+    HOME="$NIX_BUILD_ROOT" ./build.sh
+  '';
+
+  installPhase = ''
+    install -dm 0755 $out/share/icons
+    cp -pr Bibata_* $out/share/icons/
+  '';
+
+  meta = with stdenv.lib; {
+    description = "Material Based Cursor";
+    homepage = https://github.com/KaizIqbal/Bibata_Cursor;
+    license = licenses.gpl3;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ rawkode ];
+  };
+}
