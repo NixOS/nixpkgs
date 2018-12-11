@@ -34,7 +34,7 @@ let
 
   couchbase = buildPecl rec {
     name = "couchbase-${version}";
-    version = "2.3.4";
+    version = "2.6.0";
 
     buildInputs = [ pkgs.libcouchbase pkgs.zlib igbinary pcs ];
 
@@ -42,7 +42,7 @@ let
       owner = "couchbase";
       repo = "php-couchbase";
       rev = "v${version}";
-      sha256 = "0rdlrl7vh4kbxxj9yxp54xpnnrxydpa9fab7dy4nas474j5vb2bp";
+      sha256 = "0lhcvgd4a0wvxniinxajj48p5krbp44h8932021qq14rv94r4k0b";
     };
 
     configureFlags = [ "--with-couchbase" ];
