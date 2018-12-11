@@ -3738,8 +3738,6 @@ in
 
   logstash-contrib = callPackage ../tools/misc/logstash/contrib.nix { };
 
-  logstash-forwarder = callPackage ../tools/misc/logstash-forwarder { };
-
   lolcat = callPackage ../tools/misc/lolcat { };
 
   lsdvd = callPackage ../tools/cd-dvd/lsdvd {};
