@@ -97,7 +97,7 @@ in
   config = mkIf enabled {
     assertions = [
       {
-        assertion = !config.services.xserver.displayManager.gdm.wayland;
+        assertion = with config.services.xserver.displayManager; gdm.enable -> !gdm.wayland;
         message = "NVidia drivers don't support wayland";
       }
       {
