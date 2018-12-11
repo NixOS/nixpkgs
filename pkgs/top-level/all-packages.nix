@@ -22598,5 +22598,8 @@ with pkgs;
     python = python27;
   };
 
+
+  rmount = callPackage ../tools/filesystems/rmount {};
+
   tsung = callPackage ../applications/networking/tsung {};
 }
