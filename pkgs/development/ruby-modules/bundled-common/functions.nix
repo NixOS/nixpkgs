@@ -1,7 +1,8 @@
 { lib, gemConfig, ... }:
 
 let
-  inherit (lib) attrValues concatMap converge filterAttrs getAttrs;
+  inherit (lib) attrValues concatMap converge filterAttrs getAttrs
+                intersectLists;
 
 in rec {
   bundlerFiles = {
@@ -49,10 +50,9 @@ in rec {
     ) attrs.platforms
   );
 
-  groupMatches = groups: attrs: (
-  !(attrs ? "groups") ||
-    builtins.any (gemGroup: builtins.any (group: group == gemGroup) groups) attrs.groups
-  );
+  groupMatches = groups: attrs:
+    groups == null || !(attrs ? "groups") ||
+      (intersectLists groups attrs.groups) != [];
 
   applyGemConfigs = attrs:
     (if gemConfig ? "${attrs.gemName}"
