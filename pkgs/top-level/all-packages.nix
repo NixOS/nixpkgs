@@ -8439,6 +8439,8 @@ in
     llvmPackages = llvmPackages_7;
   };
 
+  credstash = with python3Packages; toPythonApplication credstash;
+
   creduce = callPackage ../development/tools/misc/creduce {
     inherit (perlPackages) perl
       ExporterLite FileWhich GetoptTabular RegexpCommon TermReadKey;
