@@ -7,10 +7,12 @@ let
       inherit (pkgs) stdenv autoreconfHook fetchurl;
     };
 
+  isPhp73 = pkgs.lib.versionAtLeast php.version "7.3";
+
   apcu = buildPecl {
-    name = "apcu-5.1.11";
-    sha256 = "0nz9m3fbxgyc2ij63yqmxm06a1f51g8rkxk85f85ziqdin66q2f1";
-    buildInputs = [ pkgs.pcre ];
+    name = "apcu-5.1.15";
+    sha256 = "0v91fxh3z3amwicqlmz7lvnh4zfl2d7kj2zc8pvlvj2lms8ql5zc";
+    buildInputs = [ (if isPhp73 then pkgs.pcre2 else pkgs.pcre) ];
     doCheck = true;
     checkTarget = "test";
     checkFlagsArray = ["REPORT_EXIT_STATUS=1" "NO_INTERACTION=1"];
@@ -21,7 +23,7 @@ let
   apcu_bc = buildPecl {
     name = "apcu_bc-1.0.4";
     sha256 = "1raww7alwayg9nk0akly1mdrjypxlwg8safnmaczl773cwpw5cbw";
-    buildInputs = [ apcu pkgs.pcre ];
+    buildInputs = [ apcu (if isPhp73 then pkgs.pcre2 else pkgs.pcre) ];
   };
 
   ast = buildPecl {
@@ -32,7 +34,7 @@ let
 
   couchbase = buildPecl rec {
     name = "couchbase-${version}";
-    version = "2.3.4";
+    version = "2.6.0";
 
     buildInputs = [ pkgs.libcouchbase pkgs.zlib igbinary pcs ];
 
@@ -40,7 +42,7 @@ let
       owner = "couchbase";
       repo = "php-couchbase";
       rev = "v${version}";
-      sha256 = "0rdlrl7vh4kbxxj9yxp54xpnnrxydpa9fab7dy4nas474j5vb2bp";
+      sha256 = "0lhcvgd4a0wvxniinxajj48p5krbp44h8932021qq14rv94r4k0b";
     };
 
     configureFlags = [ "--with-couchbase" ];
@@ -87,7 +89,7 @@ let
   };
 
   igbinary = buildPecl {
-    name = "igbinary-2.0.4";
+    name = "igbinary-2.0.8";
 
     configureFlags = [ "--enable-igbinary" ];
 
@@ -95,10 +97,10 @@ let
 
     outputs = [ "out" "dev" ];
 
-    sha256 = "0a55l4f0bgbf3f6sh34njd14niwagg829gfkvb8n5fs69xqab67d";
+    sha256 = "105nyn703k9p9c7wwy6npq7xd9mczmmlhyn0gn2v2wz0f88spjxs";
   };
 
-  mailparse = buildPecl {
+  mailparse = assert !isPhp73; buildPecl {
     name = "mailparse-3.0.2";
 
     sha256 = "0fw447ralqihsjnn0fm2hkaj8343cvb90v0d1wfclgz49256y6nq";
@@ -109,16 +111,36 @@ let
     sha256 = "0z2nc92xfc5axa9f2dy95rmsd2c81q8cs1pm4anh0a50x9g5ng0z";
     configureFlags = [ "--with-imagick=${pkgs.imagemagick.dev}" ];
     nativeBuildInputs = [ pkgs.pkgconfig ];
-    buildInputs = [ pkgs.pcre ];
+    buildInputs = [ (if isPhp73 then pkgs.pcre2 else pkgs.pcre) ];
   };
 
-  memcached = buildPecl rec {
+  memcached = if isPhp73 then memcached73 else memcached7;
+
+  memcached7 = assert !isPhp73; buildPecl rec {
     name = "memcached-php7";
 
     src = fetchgit {
       url = "https://github.com/php-memcached-dev/php-memcached";
       rev = "e573a6e8fc815f12153d2afd561fc84f74811e2f";
       sha256 = "0asfi6rsspbwbxhwmkxxnapd8w01xvfmwr1n9qsr2pryfk0w6y07";
+    };
+
+    configureFlags = [
+      "--with-zlib-dir=${pkgs.zlib.dev}"
+      "--with-libmemcached-dir=${pkgs.libmemcached}"
+    ];
+
+    nativeBuildInputs = [ pkgs.pkgconfig ];
+    buildInputs = with pkgs; [ cyrus_sasl zlib ];
+  };
+
+  memcached73 = assert isPhp73; buildPecl rec {
+    name = "memcached-php73";
+
+    src = fetchgit {
+      url = "https://github.com/php-memcached-dev/php-memcached";
+      rev = "6d8f5d524f35e72422b9e81319b96f23af02adcc";
+      sha256 = "1s1d5r3n2h9zys8sqvv52fld6jy21ki7cl0gbbvd9dixqc0lf1jh";
     };
 
     configureFlags = [
@@ -143,7 +165,9 @@ let
     sha256 = "0d4p1gpl8gkzdiv860qzxfz250ryf0wmjgyc8qcaaqgkdyh5jy5p";
   };
 
-  xdebug = buildPecl {
+  xdebug =  if isPhp73 then xdebug73 else xdebug7;
+
+  xdebug7 = assert !isPhp73; buildPecl {
     name = "xdebug-2.6.1";
 
     sha256 = "0xxxy6n4lv7ghi9liqx133yskg07lw316vhcds43n1sjq3b93rns";
@@ -152,10 +176,19 @@ let
     checkTarget = "test";
   };
 
-  yaml = buildPecl {
-    name = "yaml-2.0.2";
+  xdebug73 = assert isPhp73; buildPecl {
+    name = "xdebug-2.7.0beta1";
 
-    sha256 = "0f80zy79kyy4hn6iigpgfkwppwldjfj5g7s4gddklv3vskdb1by3";
+    sha256 = "1ghh14z55l4jklinkgjkfhkw53lp2r7lgmyh7q8kdnf7jnpwx84h";
+
+    doCheck = true;
+    checkTarget = "test";
+  };
+
+  yaml = buildPecl {
+    name = "yaml-2.0.4";
+
+    sha256 = "1036zhc5yskdfymyk8jhwc34kvkvsn5kaf50336153v4dqwb11lp";
 
     configureFlags = [
       "--with-yaml=${pkgs.libyaml}"
@@ -164,7 +197,7 @@ let
     nativeBuildInputs = [ pkgs.pkgconfig ];
   };
 
-  zmq = buildPecl {
+  zmq = assert !isPhp73; buildPecl {
     name = "zmq-1.1.3";
 
     sha256 = "1kj487vllqj9720vlhfsmv32hs2dy2agp6176mav6ldx31c3g4n4";
@@ -197,11 +230,11 @@ let
     configureFlags = [ "--with-v8=${pkgs.v8_6_x}" ];
   };
 
-  v8js = buildPecl rec {
-    version = "1.4.1";
+  v8js = assert !isPhp73; buildPecl rec {
+    version = "2.1.0";
     name = "v8js-${version}";
 
-    sha256 = "0k5dc395gzva4l6n9mzvkhkjq914460cwk1grfandcqy73j6m89q";
+    sha256 = "0g63dyhhicngbgqg34wl91nm3556vzdgkq19gy52gvmqj47rj6rg";
 
     buildInputs = [ pkgs.v8_6_x ];
     configureFlags = [ "--with-v8js=${pkgs.v8_6_x}" ];
