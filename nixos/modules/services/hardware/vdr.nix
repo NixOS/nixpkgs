@@ -13,7 +13,7 @@ in {
   options = {
 
     services.vdr = {
-      enable = mkEnableOption "VDR";
+      enable = mkEnableOption "enable VDR. Please put config into ${libDir}.";
 
       package = mkOption {
         type = types.package;
@@ -21,30 +21,15 @@ in {
         description = "Package to use.";
       };
 
-      shutdown = mkOption {
-        type = types.path;
-        default = pkgs.writeScript "vdr-shutdown" ''
-          #!${pkgs.stdenv.shell} -eu
-          next="$2"
-          if [ "$next" -eq 0 ]; then # no timer
-            next=86400 # one day
-          elif [ "$next" -lt 0 ]; then # recording is running
-            next=60 # one minute
-          fi
-          /run/wrappers/bin/sudo ${pkgs.utillinux}/bin/rtcwake -m off -s "$next"
-          '';
-        description = "Shutdown command";
-      };
-
       videoDir = mkOption {
         type = types.path;
         default = "/srv/vdr/video";
-        description = "Recording directory";
+        description = "Recording directory (must exist)";
       };
 
       extraArguments = mkOption {
-        type = types.str;
-        default = "";
+        type = types.listOf types.str;
+        default = [];
         description = "Additional command line arguments to pass to VDR.";
       };
     };
@@ -53,36 +38,22 @@ in {
   ###### implementation
 
   config = mkIf cfg.enable {
-    environment.systemPackages = [ cfg.package ];
-
-    system.activationScripts.vdr = ''
-      if ! [ -d /var/cache/vdr ]; then
-        mkdir -p /var/cache/vdr
-        chown vdr:vdr /var/cache/vdr
-      fi
-
-      if ! [ -d "${libDir}" ]; then
-        mkdir -p "${libDir}"
-        cp --dereference -r "${cfg.package}"/share/vdr/conf/* "${libDir}"
-        chown -R vdr:vdr "${libDir}"
-      fi
-
-      if ! [ -d "${cfg.videoDir}" ]; then
-        mkdir -p "${cfg.videoDir}"
-        chown vdr:vdr "${cfg.videoDir}"
-      fi
-    '';
-
-    security.sudo.configFile = ''
-      vdr ALL=(root) NOPASSWD:${pkgs.utillinux}/bin/rtcwake
-    '';
 
     systemd.services.vdr = {
       description = "VDR";
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
-        ExecStart = "${cfg.package}/bin/vdr --shutdown=\"${cfg.shutdown}\" --video=\"${cfg.videoDir}\" ${cfg.extraArguments}";
+        ExecStart = ''
+          ${cfg.package}/bin/vdr \
+            --video="${cfg.videoDir}" \
+            --config="${libDir}" \
+            ${escapeShellArgs cfg.extraArguments}
+        '';
         User = "vdr";
+
+        CacheDirectory = "vdr";
+
+        StateDirectory = "vdr";
 
         Restart = "on-failure";
       };
