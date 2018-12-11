@@ -540,7 +540,6 @@
   ./services/networking/miredo.nix
   ./services/networking/mstpd.nix
   ./services/networking/murmur.nix
-  ./services/networking/mxisd.nix
   ./services/networking/namecoind.nix
   ./services/networking/nat.nix
   ./services/networking/ndppd.nix
