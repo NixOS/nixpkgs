@@ -52,7 +52,7 @@ in rec {
 
   groupMatches = groups: attrs:
     groups == null || !(attrs ? "groups") ||
-      (intersectLists groups attrs.groups) != [];
+      (intersectLists (groups ++ [ "default" ]) attrs.groups) != [];
 
   applyGemConfigs = attrs:
     (if gemConfig ? "${attrs.gemName}"
