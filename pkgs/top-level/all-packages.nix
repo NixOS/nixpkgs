@@ -8713,6 +8713,10 @@ in
     inherit (perlPackages) XMLSimple;
   };
 
+  ikos = callPackage ../development/tools/analysis/ikos {
+    inherit (llvmPackages_7) stdenv clang llvm;
+  };
+
   include-what-you-use = callPackage ../development/tools/analysis/include-what-you-use {
     llvmPackages = llvmPackages_6;
   };
