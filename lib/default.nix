@@ -4,10 +4,11 @@
  * for new functions in `./tests.nix'.
  */
 let
+  bootstrapLib = mkLib bootstrapLib;
 
-  inherit (import ./fixed-points.nix {}) makeExtensible;
+  lib = bootstrapLib.makeExtensible mkLib;
 
-  lib = makeExtensible (self: let
+  mkLib = self: let
     callLibs = file: import file { lib = self; };
   in with self; {
 
@@ -20,6 +21,8 @@ let
     lists = callLibs ./lists.nix;
     strings = callLibs ./strings.nix;
     stringsWithDeps = callLibs ./strings-with-deps.nix;
+    monoid = callLibs ./monoid.nix;
+    overrides = callLibs ./overrides.nix;
 
     # packaging
     customisation = callLibs ./customisation.nix;
@@ -61,8 +64,7 @@ let
       boolToString mergeAttrs flip mapNullable inNixShell min max
       importJSON warn info nixpkgsVersion version mod compare
       splitByAndCompare functionArgs setFunctionArgs isFunction;
-    inherit (fixedPoints) fix fix' extends composeExtensions
-      makeExtensible makeExtensibleWithCustomName;
+    inherit (fixedPoints) fix fix';
     inherit (attrsets) attrByPath hasAttrByPath setAttrByPath
       getAttrFromPath attrVals attrValues catAttrs filterAttrs
       filterAttrsRecursive foldAttrs collect nameValuePair mapAttrs
@@ -90,6 +92,7 @@ let
       toInt readPathsFromFile fileContents;
     inherit (stringsWithDeps) textClosureList textClosureMap
       noDepEntry fullDepEntry packEntry stringAfter;
+    inherit (overrides) extends composeExtensions makeExtensible;
     inherit (customisation) overrideDerivation makeOverridable
       callPackageWith callPackagesWith extendDerivation hydraJob
       makeScope;
@@ -134,5 +137,5 @@ let
       mergeAttrsNoOverride mergeAttrByFunc mergeAttrsByFuncDefaults
       mergeAttrsByFuncDefaultsClean mergeAttrBy prepareDerivationArgs
       nixType imap overridableDelayableArgs;
-  });
+  };
 in lib
