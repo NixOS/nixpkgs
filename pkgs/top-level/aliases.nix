@@ -161,6 +161,7 @@ mapAliases ({
   libdbusmenu_qt5 = libsForQt5.libdbusmenu;  # added 2015-12-19
   liberation_ttf_v1_from_source = liberation_ttf_v1; # added 2018-12-12
   liberation_ttf_v2_from_source = liberation_ttf_v2; # added 2018-12-12
+  liberationsansnarrow = liberation-sans-narrow; # added 2018-12-12
   libgnome_keyring = libgnome-keyring; # added 2018-02-25
   libgnome_keyring3 = libgnome-keyring3; # added 2018-02-25
   libgumbo = gumbo; # added 2018-01-21
