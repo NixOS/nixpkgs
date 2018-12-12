@@ -450,8 +450,6 @@ in
 
   abduco = callPackage ../tools/misc/abduco { };
 
-  acbuild = callPackage ../applications/misc/acbuild { };
-
   acct = callPackage ../tools/system/acct { };
 
   accuraterip-checksum = callPackage ../tools/audio/accuraterip-checksum { };
@@ -3737,8 +3735,6 @@ in
   logstash = logstash6;
 
   logstash-contrib = callPackage ../tools/misc/logstash/contrib.nix { };
-
-  logstash-forwarder = callPackage ../tools/misc/logstash-forwarder { };
 
   lolcat = callPackage ../tools/misc/lolcat { };
 
