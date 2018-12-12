@@ -13498,9 +13498,7 @@ in
 
   hiawatha = callPackage ../servers/http/hiawatha {};
 
-  home-assistant = callPackage ../servers/home-assistant {
-    python = python36;
-  };
+  home-assistant = callPackage ../servers/home-assistant { };
 
   hydron = callPackage ../servers/hydron { };
 
