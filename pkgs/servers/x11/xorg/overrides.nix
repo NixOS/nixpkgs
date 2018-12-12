@@ -145,7 +145,8 @@ self: super:
     configureFlags = attrs.configureFlags or []
       ++ malloc0ReturnsNullCrossFlag;
     propagatedBuildInputs = [ self.libSM ];
-    CPP = stdenv.lib.optionalString stdenv.isDarwin "clang -E -";
+    depsBuildBuild = [ buildPackages.stdenv.cc ];
+    CPP = if stdenv.isDarwin then "clang -E -" else "${stdenv.cc.targetPrefix}cc -E -";
     outputs = [ "out" "dev" "devdoc" ];
   });
 
