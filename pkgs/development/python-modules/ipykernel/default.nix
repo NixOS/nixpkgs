@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, fetchpatch
 , ipython
 , jupyter_client
 , traitlets
@@ -22,6 +23,14 @@ buildPythonPackage rec {
 
   checkInputs = [ pytest nose ];
   propagatedBuildInputs = [ ipython jupyter_client traitlets tornado ];
+
+  # https://github.com/ipython/ipykernel/pull/377
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/ipython/ipykernel/commit/a3bf849dbd368a1826deb9dfc94c2bd3e5ed04fe.patch";
+      sha256 = "1yhpwqixlf98a3n620z92mfips3riw6psijqnc5jgs2p58fgs2yc";
+    })
+  ];
 
   checkPhase = ''
     HOME=$(mktemp -d) pytest ipykernel
