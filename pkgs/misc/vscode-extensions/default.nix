@@ -28,4 +28,11 @@ rec {
   ms-python.python = callPackage ./python {};
 
   WakaTime.vscode-wakatime = callPackage ./wakatime {};
+
+  vscodevim.vim = callPackage ./vim {};
+
+  github.vscode-pull-request-github = callPackage ./github {};
+
+  akamud.vscode-theme-onelight = callPackage ./theme-onelight {};
+
 }
