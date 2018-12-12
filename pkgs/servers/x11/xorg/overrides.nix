@@ -214,6 +214,8 @@ self: super:
 
   libXinerama = super.libXinerama.overrideAttrs (attrs: {
     outputs = [ "out" "dev" ];
+    configureFlags = attrs.configureFlags or []
+      ++ malloc0ReturnsNullCrossFlag;
   });
 
   libXmu = super.libXmu.overrideAttrs (attrs: {
