@@ -2706,6 +2706,8 @@ in {
 
   jellyfish = callPackage ../development/python-modules/jellyfish { };
 
+  jeepney = callPackage ../development/python-modules/jeepney { };
+
   j2cli = callPackage ../development/python-modules/j2cli { };
 
   jinja2 = callPackage ../development/python-modules/jinja2 { };
