@@ -1417,6 +1417,8 @@ in {
 
   pytest-datafiles = callPackage ../development/python-modules/pytest-datafiles { };
 
+  pytest-dependency = callPackage ../development/python-modules/pytest-dependency { };
+
   pytest-django = callPackage ../development/python-modules/pytest-django { };
 
   pytest-faulthandler = callPackage ../development/python-modules/pytest-faulthandler { };
