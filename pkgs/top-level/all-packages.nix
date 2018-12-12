@@ -7723,6 +7723,8 @@ in
 
   lxtask = callPackage ../desktops/lxde/core/lxtask { };
 
+  lxrandr = callPackage ../desktops/lxde/core/lxrandr { };
+
   kona = callPackage ../development/interpreters/kona {};
 
   lolcode = callPackage ../development/interpreters/lolcode { };
