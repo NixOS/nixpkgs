@@ -11,15 +11,15 @@ stdenv.mkDerivation rec {
   # autoreconfHook is needed to pick up patching of Makefile.am
   # Remove when the patch no longer applies.
   patches = [ ./coregrind-makefile-race.patch ];
-  nativeBuildInputs = [ autoreconfHook ];
+  # Perl is needed for `cg_annotate'.
+  nativeBuildInputs = [ autoreconfHook perl ];
 
   outputs = [ "out" "dev" "man" "doc" ];
 
   hardeningDisable = [ "stackprotector" ];
 
-  # Perl is needed for `cg_annotate'.
   # GDB is needed to provide a sane default for `--db-command'.
-  buildInputs = [ perl gdb ]  ++ stdenv.lib.optionals (stdenv.isDarwin) [ bootstrap_cmds xnu ];
+  buildInputs = [ gdb ]  ++ stdenv.lib.optionals (stdenv.isDarwin) [ bootstrap_cmds xnu ];
 
   enableParallelBuilding = true;
   separateDebugInfo = stdenv.isLinux;
