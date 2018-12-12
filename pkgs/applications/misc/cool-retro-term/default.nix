@@ -1,5 +1,5 @@
-{ stdenv, fetchFromGitHub, qtbase, qtquick1, qmltermwidget,
-qtquickcontrols, qtgraphicaleffects, qmake }:
+{ stdenv, fetchFromGitHub, qtbase, qtquick1, qmltermwidget
+, qtquickcontrols, qtgraphicaleffects, qmake }:
 
 stdenv.mkDerivation rec {
   version = "1.0.1";
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
       eye-candy, customizable, and reasonably lightweight.
     '';
     homepage = https://github.com/Swordfish90/cool-retro-term;
-    license = with stdenv.lib.licenses; [ gpl2 gpl3 ];
+    license = stdenv.lib.licenses.gpl3Plus;
     platforms = with stdenv.lib.platforms; linux ++ darwin;
     maintainers = with stdenv.lib.maintainers; [ skeidel ];
   };
