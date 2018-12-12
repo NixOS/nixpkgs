@@ -2,7 +2,6 @@
 , buildPythonPackage
 , fetchPypi
 , ruamel_base
-, typing
 , ruamel_ordereddict
 , isPy3k
 }:
@@ -19,7 +18,7 @@ buildPythonPackage rec {
   # Tests cannot load the module to test
   doCheck = false;
 
-  propagatedBuildInputs = [ ruamel_base typing ]
+  propagatedBuildInputs = [ ruamel_base ]
     ++ stdenv.lib.optional (!isPy3k) ruamel_ordereddict;
 
   meta = with stdenv.lib; {
