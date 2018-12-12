@@ -2570,7 +2570,10 @@ in {
 
   google_resumable_media = callPackage ../development/python-modules/google_resumable_media { };
 
-  gpgme = toPythonModule (pkgs.gpgme.override { pythonSupport=true; });
+  gpgme = toPythonModule (pkgs.gpgme.override {
+    pythonSupport = true;
+    inherit python;
+  });
 
   gphoto2 = callPackage ../development/python-modules/gphoto2 {
     inherit (pkgs) pkgconfig;
