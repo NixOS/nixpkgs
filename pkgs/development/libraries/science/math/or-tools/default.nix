@@ -1,5 +1,7 @@
 { stdenv, fetchFromGitHub, cmake, google-gflags, which
-, lsb-release, glog, protobuf, cbc, zlib, python3 }:
+, lsb-release, glog, protobuf, cbc, zlib
+, ensureNewerSourcesForZipFilesHook, python, swig
+, pythonProtobuf }:
 
 stdenv.mkDerivation rec {
   name = "or-tools-${version}";
@@ -25,22 +27,35 @@ stdenv.mkDerivation rec {
     EOF
   '';
 
-  makeFlags = [ "prefix=${placeholder "out"}" ];
-  buildFlags = [ "cc" ];
+  makeFlags = [
+    "prefix=${placeholder "out"}"
+    "PROTOBUF_PYTHON_DESC=${pythonProtobuf}/${python.sitePackages}/google/protobuf/descriptor_pb2.py"
+  ];
+  buildFlags = [ "cc" "pypi_archive" ];
 
   checkTarget = "test_cc";
   doCheck = true;
 
   installTargets = [ "install_cc" ];
+  # The upstream install_python target installs to $HOME.
+  postInstall = ''
+    mkdir -p "$python/${python.sitePackages}"
+    (cd temp_python/ortools; PYTHONPATH="$python/${python.sitePackages}:$PYTHONPATH" python setup.py install '--prefix=$python')
+  '';
 
   nativeBuildInputs = [
-    cmake lsb-release which zlib python3
+    cmake lsb-release swig which zlib python
+    ensureNewerSourcesForZipFilesHook
+    python.pkgs.setuptools python.pkgs.wheel
   ];
   propagatedBuildInputs = [
     google-gflags glog protobuf cbc
+    pythonProtobuf python.pkgs.six
   ];
 
   enableParallelBuilding = true;
+
+  outputs = [ "out" "python" ];
 
   meta = with stdenv.lib; {
     homepage = https://github.com/google/or-tools;
