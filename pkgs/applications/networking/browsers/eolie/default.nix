@@ -51,6 +51,11 @@ python3.pkgs.buildPythonApplication rec {
     patchShebangs meson_post_install.py
   '';
 
+  preFixup = ''
+    buildPythonPath "$out $propagatedBuildInputs"
+    patchPythonScript "$out/libexec/eolie-sp"
+  '';
+
   meta = with stdenv.lib; {
     description = "A new GNOME web browser";
     homepage = https://wiki.gnome.org/Apps/Eolie;
