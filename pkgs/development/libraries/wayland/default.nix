@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, pkgconfig
-, libffi, libxml2
+, libffi, libxml2, wayland
 , expat ? null # Build wayland-scanner (currently cannot be disabled as of 1.7.0)
 }:
 
@@ -15,9 +15,18 @@ stdenv.mkDerivation rec {
     sha256 = "1xajhxad43izq9f7sbww1hlg42nayijy8xnp21kgpk09c6sw4wjf";
   };
 
-  configureFlags = [ "--with-scanner" "--disable-documentation" ];
+  configureFlags = [
+    "--disable-documentation"
+  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    "--with-host-scanner"
+  ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [
+    pkgconfig
+  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    # for wayland-scanner during build
+    wayland
+  ];
 
   buildInputs = [ libffi /* docbook_xsl doxygen graphviz libxslt xmlto */ expat libxml2 ];
 
