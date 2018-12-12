@@ -11,14 +11,9 @@ stdenv.mkDerivation rec {
     sha256 = "14gvpjp4gv0m59qr8wls7xs5yjx5llldyzack5kg5cg2mzk2nsml";
   };
 
-  shellHook = ''
-    gksu () {
-      $@
-    }
-  '';
-
   postPatch = ''
     patchShebangs .
+    substituteInPlace build.sh --replace "gksu " ""
   '';
 
   buildInputs  = [
