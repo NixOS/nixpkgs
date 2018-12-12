@@ -5540,6 +5540,8 @@ in
 
   sstp = callPackage ../tools/networking/sstp {};
 
+  strip-nondeterminism = perlPackages.strip-nondeterminism;
+
   structure-synth = callPackage ../tools/graphics/structure-synth { };
 
   su-exec = callPackage ../tools/security/su-exec {};
