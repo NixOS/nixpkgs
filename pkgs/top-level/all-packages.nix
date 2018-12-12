@@ -13553,6 +13553,8 @@ in
     python = python36;
   };
 
+  home-assistant-cli = callPackage ../servers/home-assistant/cli.nix { };
+
   hydron = callPackage ../servers/hydron { };
 
   ircdHybrid = callPackage ../servers/irc/ircd-hybrid { };
