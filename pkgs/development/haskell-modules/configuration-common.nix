@@ -1201,4 +1201,7 @@ self: super: {
   # https://github.com/mgajda/json-autotype/issues/25
   json-autotype = dontCheck super.json-autotype;
 
+  # https://github.com/kazu-yamamoto/iproute/issues/43
+  appar = self.appar_0_1_7;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
