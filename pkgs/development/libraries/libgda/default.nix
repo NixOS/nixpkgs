@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, intltool, itstool, libxml2, gtk3, openssl, gnome3
+{ stdenv, fetchurl, pkgconfig, intltool, itstool, libxml2, gtk3, openssl, gnome3, vala
 , overrideCC, gcc6
 , mysqlSupport ? false, mysql ? null
 , postgresSupport ? false, postgresql ? null
@@ -8,18 +8,13 @@ assert mysqlSupport -> mysql != null;
 assert postgresSupport -> postgresql != null;
 
 (if stdenv.isAarch64 then overrideCC stdenv gcc6 else stdenv).mkDerivation rec {
-  name = "libgda-${version}";
-  version = "5.2.5";
+  pname = "libgda";
+  version = "5.2.8";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/libgda/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "1j4hxhiwr4i8rgbn2ck93y1c2b792sfzlrq7abyjx8h8ik1f9lp3";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "0id4my5wh2m6rd7ijqp2azsjdb4l4yjrv3imq71kly00gjc6v1z2";
   };
-
-  passthru = {
-    updateScript = gnome3.updateScript { packageName = "libgda"; attrPath = "gnome3.libgda"; };
-  };
-
   configureFlags = with stdenv.lib; [ "--enable-gi-system-install=no" ]
     ++ (optional (mysqlSupport) "--with-mysql=yes")
     ++ (optional (postgresSupport) "--with-postgres=yes");
@@ -28,10 +23,16 @@ assert postgresSupport -> postgresql != null;
 
   hardeningDisable = [ "format" ];
 
-  nativeBuildInputs = [ pkgconfig intltool itstool libxml2 ];
-  buildInputs = with stdenv.lib; [ gtk3 openssl ]
+  nativeBuildInputs = [ pkgconfig intltool itstool libxml2 vala ];
+  buildInputs = with stdenv.lib; [ gtk3 openssl gnome3.libgee ]
     ++ optional (mysqlSupport) mysql.connector-c
     ++ optional (postgresSupport) postgresql;
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+    };
+  };
 
   meta = with stdenv.lib; {
     description = "Database access library";
