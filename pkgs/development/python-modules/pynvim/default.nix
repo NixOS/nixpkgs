@@ -10,12 +10,12 @@
 }:
 
 buildPythonPackage rec {
-  pname = "neovim";
-  version = "0.3.0";
+  pname = "pynvim";
+  version = "0.3.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "18x7gi1idsch11hijvy0mm2mk4f42rapz9niax4rnak14x2klqq2";
+    sha256 = "1yxh8zdigzs330m4gchxk6m323glz81x85q5fzgc4saq0naib26x";
   };
 
   checkInputs = [ nose ];
