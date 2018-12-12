@@ -247,6 +247,65 @@
   </listitem>
   <listitem>
    <para>
+     The <literal>nscd</literal> service now disables all caching of
+     <literal>passwd</literal> and <literal>group</literal> databases by
+     default. This was interferring with the correct functioning of the
+     <literal>libnss_systemd.so</literal> module which is used by
+     <literal>systemd</literal> to manage uids and usernames in the presence of
+     <literal>DynamicUser=</literal> in systemd services.  This was already the
+     default behaviour in presence of <literal>services.sssd.enable =
+       true</literal> because nscd caching would interfere with
+     <literal>sssd</literal> in unpredictable ways as well.  Because we're
+     using nscd not for caching, but for convincing glibc to find NSS modules
+     in the nix store instead of an absolute path, we have decided to disable
+     caching globally now, as it's usually not the behaviour the user wants and
+     can lead to surprising behaviour.  Furthermore, negative caching of host
+     lookups is also disabled now by default. This should fix the issue of dns
+     lookups failing in the presence of an unreliable network.
+   </para>
+   <para>
+     If the old behaviour is desired, this can be restored by setting
+     the <literal>services.nscd.config</literal> option
+     with the desired caching parameters.
+     <programlisting>
+     services.nscd.config =
+     ''
+     server-user             nscd
+     threads                 1
+     paranoia                no
+     debug-level             0
+
+     enable-cache            passwd          yes
+     positive-time-to-live   passwd          600
+     negative-time-to-live   passwd          20
+     suggested-size          passwd          211
+     check-files             passwd          yes
+     persistent              passwd          no
+     shared                  passwd          yes
+
+     enable-cache            group           yes
+     positive-time-to-live   group           3600
+     negative-time-to-live   group           60
+     suggested-size          group           211
+     check-files             group           yes
+     persistent              group           no
+     shared                  group           yes
+
+     enable-cache            hosts           yes
+     positive-time-to-live   hosts           600
+     negative-time-to-live   hosts           5
+     suggested-size          hosts           211
+     check-files             hosts           yes
+     persistent              hosts           no
+     shared                  hosts           yes
+     '';
+     </programlisting>
+     See <link xlink:href="https://github.com/NixOS/nixpkgs/pull/50316">#50316</link>
+     for details.
+   </para>
+  </listitem>
+  <listitem>
+   <para>
      GitLab Shell previously used the nix store paths for the
      <literal>gitlab-shell</literal> command in its
      <literal>authorized_keys</literal> file, which might stop working after
