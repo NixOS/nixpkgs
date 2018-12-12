@@ -269,7 +269,7 @@ let
       text = mkDefault
         (''
           # Account management.
-          account ${if cfg.sssdStrictAccess then "required" else "sufficient"} pam_unix.so
+          account required pam_unix.so
           ${optionalString use_ldap
               "account sufficient ${pam_ldap}/lib/security/pam_ldap.so"}
           ${optionalString (config.services.sssd.enable && cfg.sssdStrictAccess==false)
