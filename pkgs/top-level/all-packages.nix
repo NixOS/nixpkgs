@@ -21463,7 +21463,9 @@ in
 
   nauty = callPackage ../applications/science/math/nauty {};
 
-  or-tools = callPackage ../development/libraries/science/math/or-tools {};
+  or-tools = callPackage ../development/libraries/science/math/or-tools {
+    pythonProtobuf = pythonPackages.protobuf;
+  };
 
   rubiks = callPackage ../development/libraries/science/math/rubiks { };
 
