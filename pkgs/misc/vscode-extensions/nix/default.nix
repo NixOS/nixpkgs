@@ -12,7 +12,7 @@ in
     };
     meta = with stdenv.lib; {
       description = ''
-        Pull Request Provider for GitHub
+        Nix language support for Visual Studio Code.
       '';
       license = licenses.mit;
       maintainers = with maintainers; [
