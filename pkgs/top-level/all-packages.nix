@@ -6641,6 +6641,10 @@ in
 
   clang-analyzer = callPackage ../development/tools/analysis/clang-analyzer { };
 
+  facebook-clang = callPackage ../development/tools/analysis/facebook-clang {
+    inherit (darwin.apple_sdk.libs) xpc;
+  };
+
   #Use this instead of stdenv to build with clang
   clangStdenv = if stdenv.cc.isClang then stdenv else lowPrio llvmPackages.stdenv;
   clang-sierraHack-stdenv = overrideCC stdenv clang-sierraHack;
