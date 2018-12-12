@@ -401,6 +401,11 @@
     github = "aszlig";
     name = "aszlig";
   };
+  atnnn = {
+    email = "etienne@atnnn.com";
+    github = "atnnn";
+    name = "Etienne Laurin";
+  };
   auntie = {
     email = "auntieNeo@gmail.com";
     github = "auntie";
