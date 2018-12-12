@@ -10,26 +10,20 @@ with lib.types;
 
 rec {
 
-  /* Evaluate a set of modules.  The result is a set of two
+  evalModules = import ./eval-modules.nix;
+
+  /* Evaluate a set of modules. The result is a set of two
      attributes: ‘options’: the nested set of all option declarations,
-     and ‘config’: the nested set of all option values.
-     !!! Please think twice before adding to this argument list! The more
-     that is specified here instead of in the modules themselves the harder
-     it is to transparently move a set of modules to be a submodule of another
-     config (as the proper arguments need to be replicated at each call to
-     evalModules) and the less declarative the module set is. */
-  evalModules = { modules
-                , prefix ? []
-                , # This should only be used for special arguments that need to be evaluated
-                  # when resolving module structure (like in imports). For everything else,
-                  # there's _module.args. If specialArgs.modulesPath is defined it will be
-                  # used as the base path for disabledModules.
-                  specialArgs ? {}
-                , # This would be remove in the future, Prefer _module.args option instead.
-                  args ? {}
-                , # This would be remove in the future, Prefer _module.check option instead.
-                  check ? true
-                }:
+     and ‘config’: the nested set of all option values. */
+  evalModules' =
+    { modules
+    , prefix ? []
+    , # This should only be used for special arguments that need to be evaluated
+      # when resolving module structure (like in imports). For everything else,
+      # there's _module.args. If specialArgs.modulesPath is defined it will be
+      # used as the base path for disabledModules.
+      specialArgs ? {}
+    }:
     let
       # This internal module declare internal options under the `_module'
       # attribute.  These options are fragile, as they are used by the
@@ -49,17 +43,12 @@ rec {
           _module.check = mkOption {
             type = types.bool;
             internal = true;
-            default = check;
             description = "Whether to check whether all option definitions have matching declarations.";
           };
         };
-
-        config = {
-          _module.args = args;
-        };
       };
 
-      closed = closeModules (modules ++ [ internalModule ]) ({ inherit config options lib; } // specialArgs);
+      closed = closeModules (modules ++ [ internalModule ]) ({ inherit config options; } // specialArgs);
 
       options = mergeModules prefix (reverseList (filterModules (specialArgs.modulesPath or "") closed));
 

@@ -100,7 +100,7 @@ let
       cleanSource sourceByRegex sourceFilesBySuffices
       commitIdFromGitRepo cleanSourceWith pathHasContext
       canCleanSource;
-    inherit (modules) evalModules closeModules unifyModuleSyntax
+    inherit (modules) evalModules evalModules' closeModules unifyModuleSyntax
       applyIfFunction unpackSubmodule packSubmodule mergeModules
       mergeModules' mergeOptionDecls evalOptionValue mergeDefinitions
       pushDownProperties dischargeProperties filterOverrides
