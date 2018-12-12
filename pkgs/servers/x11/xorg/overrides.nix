@@ -251,6 +251,8 @@ self: super:
 
   libXvMC = super.libXvMC.overrideAttrs (attrs: {
     outputs = [ "out" "dev" "doc" ];
+    configureFlags = attrs.configureFlags or []
+      ++ malloc0ReturnsNullCrossFlag;
     buildInputs = attrs.buildInputs ++ [self.renderproto];
   });
 
