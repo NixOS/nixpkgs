@@ -11,28 +11,11 @@ in
 # "${mktplcRef.publisher}.${mktplcRef.name}".
 #
 rec {
-  bbenoist.Nix = buildVscodeMarketplaceExtension {
-    mktplcRef = {
-        name = "Nix";
-        publisher = "bbenoist";
-        version = "1.0.1";
-        sha256 = "0zd0n9f5z1f0ckzfjr38xw2zzmcxg1gjrava7yahg5cvdcw6l35b";
-    };
-    meta = with stdenv.lib; {
-      license = licenses.mit;
-    };
-  };
-
-  ms-vscode.cpptools = callPackage ./cpptools {};
-
-  ms-python.python = callPackage ./python {};
-
   WakaTime.vscode-wakatime = callPackage ./wakatime {};
-
-  vscodevim.vim = callPackage ./vim {};
-
-  github.vscode-pull-request-github = callPackage ./github {};
-
   akamud.vscode-theme-onelight = callPackage ./theme-onelight {};
-
+  bbenoist.Nix = callPackage ./nix {};
+  github.vscode-pull-request-github = callPackage ./pull-request-github {};
+  ms-python.python = callPackage ./python {};
+  ms-vscode.cpptools = callPackage ./cpptools {};
+  vscodevim.vim = callPackage ./vim {};
 }
