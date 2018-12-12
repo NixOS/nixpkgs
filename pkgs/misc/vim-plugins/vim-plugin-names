@@ -15,6 +15,7 @@ artur-shaik/vim-javacomplete2
 bazelbuild/vim-bazel
 bbchung/clighter8
 benekastah/neomake
+benmills/vimux
 bitc/vim-hdevtools
 bling/vim-bufferline
 bronson/vim-trailing-whitespace
@@ -102,6 +103,7 @@ JazzCore/ctrlp-cmatcher
 jceb/vim-hier
 jceb/vim-orgmode
 jeetsukumaran/vim-buffergator
+jeffkreeftmeijer/neovim-sensible
 jgdavey/tslime.vim
 jhradilek/vim-docbk
 jiangmiao/auto-pairs
