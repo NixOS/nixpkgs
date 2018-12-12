@@ -25,7 +25,7 @@
     DESTDIR=$(out)
   '';
 
-  propagatedBuildInputs = with python3Packages; [ pyqt5 ];
+  propagatedBuildInputs = with python3Packages; [ pyqt5_with_qtwebkit ];
 
   postInstall = ''
     # replace with our own wrappers. They need to be changed manually since it wouldn't work otherwise

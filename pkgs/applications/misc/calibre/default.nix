@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   ] ++ stdenv.lib.optional (!unrarSupport) ./dont_build_unrar_plugin.patch;
 
   prePatch = ''
-    sed -i "/pyqt_sip_dir/ s:=.*:= '${python2Packages.pyqt5}/share/sip/PyQt5':"  \
+    sed -i "/pyqt_sip_dir/ s:=.*:= '${python2Packages.pyqt5_with_qtwebkit}/share/sip/PyQt5':"  \
       setup/build_environment.py
 
     # Remove unneeded files and libs
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     fontconfig podofo qtbase chmlib icu sqlite libusb1 libmtp xdg_utils wrapGAppsHook
   ] ++ (with python2Packages; [
     apsw cssselect cssutils dateutil dnspython html5-parser lxml mechanize netifaces pillow
-    python pyqt5 sip
+    python pyqt5_with_qtwebkit sip
     regex msgpack
     # the following are distributed with calibre, but we use upstream instead
     odfpy
