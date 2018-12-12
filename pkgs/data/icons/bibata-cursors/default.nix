@@ -1,4 +1,4 @@
-{ fetchFromGitHub, gksu, inkscape, stdenv, xcursorgen }:
+{ fetchFromGitHub, gnome-themes-extra, inkscape, stdenv, xcursorgen }:
 
 stdenv.mkDerivation rec {
   name = "bibata-cursors-${version}";
@@ -16,8 +16,8 @@ stdenv.mkDerivation rec {
     substituteInPlace build.sh --replace "gksu " ""
   '';
 
-  buildInputs  = [
-    gksu
+  nativeBuildInputs  = [
+    gnome-themes-extra
     inkscape
     xcursorgen
   ];
