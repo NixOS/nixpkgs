@@ -23,7 +23,11 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ numpy cloudpickle ipyparallel numba ];
 
   preBuild = ''
-    cmake -DCMAKE_INSTALL_PREFIX=$out -DPAGMO_BUILD_TESTS=no -DCMAKE_SYSTEM_NAME=Linux -DPagmo_DIR=${pagmo2} -DPAGMO_BUILD_PYGMO=yes -DPAGMO_BUILD_PAGMO=no -DPAGMO_WITH_EIGEN3=yes -DPAGMO_WITH_NLOPT=yes -DNLOPT_LIBRARY=${nlopt}/lib/libnlopt.so -DPAGMO_WITH_IPOPT=yes
+    cmake -DCMAKE_INSTALL_PREFIX=$out \
+      -DPagmo_DIR=${pagmo2} \
+      -DPAGMO_BUILD_PYGMO=yes \
+      -DPAGMO_BUILD_PAGMO=no \
+      -DNLOPT_LIBRARY=${nlopt}/lib/libnlopt.so
 
     make install
     mv $out/lib/python*/site-packages/pygmo wheel
