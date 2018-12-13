@@ -19,7 +19,7 @@
    configuration format of <literal>oh-my-zsh</literal>.
 <programlisting>
 {
-  programs.ohMyZsh = {
+  programs.zsh.ohMyZsh = {
     enable = true;
     plugins = [ "git" "python" "man" ];
     theme = "agnoster";
