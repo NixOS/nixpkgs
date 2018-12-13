@@ -115,6 +115,17 @@ in
         '';
       };
 
+      disabledPlugins = mkOption {
+        default = [];
+        type = with types; listOf string;
+        description = ''
+          Munin plugins to disable, even if
+          <literal>munin-node-configure --suggest</literal> tries to enable
+          them. To disable a wildcard plugin, use an actual wildcard, as in
+          the example.
+        '';
+        example = [ "diskstats" "zfs_usage_*" ];
+      };
     };
 
     services.munin-cron = {
@@ -191,10 +202,16 @@ in
 
         mkdir -p /etc/munin/plugins
         rm -rf /etc/munin/plugins/*
+
+        # Autoconfigure builtin plugins
         ${pkgs.munin}/bin/munin-node-configure --suggest --shell --families contrib,auto,manual --config ${nodeConf} --libdir=${pkgs.munin}/lib/plugins --servicedir=/etc/munin/plugins --sconfdir=${pluginConfDir} 2>/dev/null | ${pkgs.bash}/bin/bash
 
-        # NOTE: we disable disktstats because plugin seems to fail and it hangs html generation (100% CPU + memory leak)
-        rm /etc/munin/plugins/diskstats || true
+
+        ${lib.optionalString (nodeCfg.disabledPlugins != []) ''
+            # Disable plugins
+            cd /etc/munin/plugins
+            rm -f ${toString nodeCfg.disabledPlugins}
+          ''}
       '';
       serviceConfig = {
         ExecStart = "${pkgs.munin}/sbin/munin-node --config ${nodeConf} --servicedir /etc/munin/plugins/ --sconfdir=${pluginConfDir}";
