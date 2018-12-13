@@ -17305,6 +17305,8 @@ EOF
 
   simpy = callPackage ../development/python-modules/simpy { };
 
+  x256 = callPackage ../development/python-modules/x256 { };
+
   z3 = (toPythonModule (pkgs.z3.override {
     inherit python;
   })).python;
