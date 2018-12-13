@@ -303,11 +303,15 @@ with import <nixpkgs> {};
 
 stdenv.mkDerivation {
   name = "rust-env";
-  buildInputs = [
+  nativeBuildInputs = [
     rustc cargo
 
-    # Example Additional Dependencies
-    pkgconfig openssl
+    # Example Build-time Additional Dependencies
+    pkgconfig
+  ];
+  buildInputs = [
+    # Example Run-time Additional Dependencies
+    openssl
   ];
 
   # Set Environment Variables
