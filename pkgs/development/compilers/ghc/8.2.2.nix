@@ -31,6 +31,9 @@
   # deterministic profiling symbol names, at the cost of a slightly
   # non-standard GHC API
   deterministicProfiling ? false
+
+, # Anything to add to build.mk.
+  extraBuildMk ? ""
 }:
 
 assert !enableIntegerSimple -> gmp != null;
@@ -63,7 +66,7 @@ let
     GhcRtsHcOpts += -fPIC
   '' + stdenv.lib.optionalString targetPlatform.useAndroidPrebuilt ''
     EXTRA_CC_OPTS += -std=gnu99
-  '';
+  '' + extraBuildMk;
 
   # Splicer will pull out correct variations
   libDeps = platform: [ ncurses ]

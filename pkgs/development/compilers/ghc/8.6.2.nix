@@ -29,6 +29,9 @@
 , # What flavour to build. An empty string indicates no
   # specific flavour and falls back to ghc default values.
   ghcFlavour ? stdenv.lib.optionalString (stdenv.targetPlatform != stdenv.hostPlatform) "perf-cross"
+
+, # Anything to add to build.mk.
+  extraBuildMk ? ""
 }:
 
 assert !enableIntegerSimple -> gmp != null;
@@ -61,7 +64,7 @@ let
     GhcRtsHcOpts += -fPIC
   '' + stdenv.lib.optionalString targetPlatform.useAndroidPrebuilt ''
     EXTRA_CC_OPTS += -std=gnu99
-  '';
+  '' + extraBuildMk;
 
   # Splicer will pull out correct variations
   libDeps = platform: stdenv.lib.optional enableTerminfo [ ncurses ]
