@@ -4,7 +4,7 @@
 # TODO: LWP/Pg perl libs aren't recognized
 
 # TODO: support fastcgi
-# http://munin-monitoring.org/wiki/CgiHowto2
+# http://guide.munin-monitoring.org/en/latest/example/webserver/apache-cgi.html
 # spawn-fcgi -s /run/munin/fastcgi-graph.sock -U www-data   -u munin -g munin /usr/lib/munin/cgi/munin-cgi-graph
 # spawn-fcgi -s /run/munin/fastcgi-html.sock  -U www-data   -u munin -g munin /usr/lib/munin/cgi/munin-cgi-html
 # https://paste.sh/vofcctHP#-KbDSXVeWoifYncZmLfZzgum
@@ -86,7 +86,7 @@ in
           Enable Munin Node agent. Munin node listens on 0.0.0.0 and
           by default accepts connections only from 127.0.0.1 for security reasons.
 
-          See <link xlink:href='http://munin-monitoring.org/wiki/munin-node.conf' />.
+          See <link xlink:href='http://guide.munin-monitoring.org/en/latest/architecture/index.html' />.
         '';
       };
 
@@ -95,7 +95,7 @@ in
         type = types.lines;
         description = ''
           <filename>munin-node.conf</filename> extra configuration. See
-          <link xlink:href='http://munin-monitoring.org/wiki/munin-node.conf' />
+          <link xlink:href='http://guide.munin-monitoring.org/en/latest/reference/munin-node.conf.html' />
         '';
       };
 
@@ -121,9 +121,9 @@ in
         default = "";
         description = ''
           <filename>munin.conf</filename> extra global configuration.
-          See <link xlink:href='http://munin-monitoring.org/wiki/munin.conf' />.
+          See <link xlink:href='http://guide.munin-monitoring.org/en/latest/reference/munin.conf.html' />.
           Useful to setup notifications, see
-          <link xlink:href='http://munin-monitoring.org/wiki/HowToContact' />
+          <link xlink:href='http://guide.munin-monitoring.org/en/latest/tutorial/alert.html' />
         '';
         example = ''
           contact.email.command mail -s "Munin notification for ''${var:host}" someone@example.com
@@ -137,8 +137,8 @@ in
         '';
         description = ''
           Definitions of hosts of nodes to collect data from. Needs at least one
-          hosts for cron to succeed. See
-          <link xlink:href='http://munin-monitoring.org/wiki/munin.conf' />
+          host for cron to succeed. See
+          <link xlink:href='http://guide.munin-monitoring.org/en/latest/reference/munin.conf.html' />
         '';
       };
 
@@ -173,7 +173,7 @@ in
       environment.MUNIN_PLUGSTATE = "/run/munin";
       environment.MUNIN_LOGDIR = "/var/log/munin";
       preStart = ''
-        echo "updating munin plugins..."
+        echo "Updating munin plugins..."
 
         mkdir -p /etc/munin/plugins
         rm -rf /etc/munin/plugins/*
