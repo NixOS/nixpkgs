@@ -13,7 +13,8 @@
 , debugVersion ? false
 , enableManpages ? false
 , enableSharedLibraries ? true
-, enableWasm ? true
+, targets ? [ stdenv.hostPlatform stdenv.targetPlatform ]
+, enableWasm ? true # TODO fold this into `targets` somehow
 , enablePFM ? !stdenv.isDarwin
 }:
 
@@ -24,17 +25,9 @@ let
   shortVersion = with stdenv.lib;
     concatStringsSep "." (take 1 (splitString "." release_version));
 
-  llvmTarget = platform:
-    if platform.parsed.cpu.family == "x86" then
-      "X86"
-    else if platform.parsed.cpu.name == "aarch64" then
-      "AArch64"
-    else if platform.parsed.cpu.family == "arm" then
-      "ARM"
-    else if platform.parsed.cpu.family == "mips" then
-      "Mips"
-    else
-      throw "Unsupported system";
+  inherit
+    (import ../common.nix { inherit (stdenv) lib; })
+    llvmBackendList;
 in stdenv.mkDerivation (rec {
   name = "llvm-${version}";
 
@@ -92,7 +85,7 @@ in stdenv.mkDerivation (rec {
     "-DLLVM_ENABLE_RTTI=ON"
     "-DLLVM_HOST_TRIPLE=${stdenv.hostPlatform.config}"
     "-DLLVM_DEFAULT_TARGET_TRIPLE=${stdenv.targetPlatform.config}"
-    "-DLLVM_TARGETS_TO_BUILD=${llvmTarget stdenv.hostPlatform};${llvmTarget stdenv.targetPlatform}"
+    "-DLLVM_TARGETS_TO_BUILD=${llvmBackendList targets}"
 
     "-DLLVM_ENABLE_DUMP=ON"
   ]
