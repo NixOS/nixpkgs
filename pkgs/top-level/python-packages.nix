@@ -1671,6 +1671,8 @@ in {
     then callPackage ../development/python-modules/faulthandler {}
     else throw "faulthandler is built into ${python.executable}";
 
+  fb-re2 = callPackage ../development/python-modules/fb-re2 { };
+
   flit = callPackage ../development/python-modules/flit { };
 
   flowlogs_reader = callPackage ../development/python-modules/flowlogs_reader { };
