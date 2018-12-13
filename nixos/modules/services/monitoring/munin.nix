@@ -63,6 +63,8 @@ let
       [ipmi*]
       user root
       group root
+
+      ${nodeCfg.extraPluginConfig}
     '';
 
   pluginConfDir = pkgs.stdenv.mkDerivation {
@@ -100,6 +102,18 @@ in
       };
 
       # TODO: add option to add additional plugins
+      extraPluginConfig = mkOption {
+        default = "";
+        type = types.lines;
+        description = ''
+          <filename>plugin-conf.d</filename> extra plugin configuration. See
+          <link xlink:href='http://guide.munin-monitoring.org/en/latest/plugin/use.html' />
+        '';
+        example = ''
+          [fail2ban_*]
+          user root
+        '';
+      };
 
     };
 
