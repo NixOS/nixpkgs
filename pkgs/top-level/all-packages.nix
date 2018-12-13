@@ -12633,6 +12633,8 @@ in
 
   svrcore = callPackage ../development/libraries/svrcore { };
 
+  swiftclient = python3.pkgs.callPackage ../tools/admin/swiftclient { };
+
   sword = callPackage ../development/libraries/sword { };
 
   biblesync = callPackage ../development/libraries/biblesync { };
