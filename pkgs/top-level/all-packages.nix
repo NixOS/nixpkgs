@@ -2756,6 +2756,8 @@ in
 
   freedroidrpg = callPackage ../games/freedroidrpg { };
 
+  freebind = callPackage ../tools/networking/freebind { };
+
   freeipmi = callPackage ../tools/system/freeipmi {};
 
   freetalk = callPackage ../applications/networking/instant-messengers/freetalk {
