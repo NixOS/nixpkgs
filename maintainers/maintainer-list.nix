@@ -1896,6 +1896,7 @@
   };
   ivan = {
     email = "ivan@ludios.org";
+    github = "ivan";
     name = "Ivan Kozik";
   };
   ivan-tkatchev = {
