@@ -15388,7 +15388,7 @@ with pkgs;
     liberation_ttf_v2_binary;
   liberation_ttf = liberation_ttf_v2_binary;
 
-  liberationsansnarrow = callPackage ../data/fonts/liberationsansnarrow { };
+  liberation-sans-narrow = callPackage ../data/fonts/liberation-sans-narrow { };
 
   liberastika = callPackage ../data/fonts/liberastika { };
 
