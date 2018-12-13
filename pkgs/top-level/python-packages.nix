@@ -422,6 +422,8 @@ in {
 
   mail-parser = callPackage ../development/python-modules/mail-parser { };
 
+  manhole = callPackage ../development/python-modules/manhole { };
+
   markerlib = callPackage ../development/python-modules/markerlib { };
 
   matchpy = callPackage ../development/python-modules/matchpy { };
