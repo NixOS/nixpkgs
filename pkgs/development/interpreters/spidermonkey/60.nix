@@ -1,16 +1,17 @@
-{ stdenv, fetchurl, fetchpatch, autoconf213, pkgconfig, perl, python2, zip, which, readline, icu, zlib, nspr }:
+{ stdenv, fetchurl, fetchpatch, autoconf213, pkgconfig, perl, python2, zip
+, which, readline, zlib, icu }:
 
 let
-  version = "60.3.0";
+  version = "60.4.0";
 in stdenv.mkDerivation rec {
   name = "spidermonkey-${version}";
 
   src = fetchurl {
     url = "mirror://mozilla/firefox/releases/${version}esr/source/firefox-${version}esr.source.tar.xz";
-    sha256 = "0qak5gmkx8xm88xgnxdmj4z7sivbbvmg2v029fp9q5ms38cg6rjm";
+    sha256 = "11gzxd82grc3kg1ha4yni6ag6b97n46qycvv6x15s91ziia5hli0";
   };
 
-  buildInputs = [ readline icu zlib nspr ];
+  buildInputs = [ readline zlib icu ];
   nativeBuildInputs = [ autoconf213 pkgconfig perl which python2 zip ];
 
   patches = [
@@ -31,8 +32,6 @@ in stdenv.mkDerivation rec {
     configureScript=../js/src/configure
   '';
 
-  # We need the flags specified here for gjs:
-  # https://gitlab.gnome.org/GNOME/gnome-sdk-images/blob/bc8829439a4f1019d0c56a293ddd84e936fdf9f9/org.gnome.Sdk.json.in#L744
   configureFlags = [
     "--with-system-zlib"
     "--with-system-icu"
@@ -41,8 +40,17 @@ in stdenv.mkDerivation rec {
     "--enable-shared-js"
     "--enable-posix-nspr-emulation"
     "--disable-jemalloc"
+    # Fedora and Arch disable optimize, but it doesn't seme to be necessary
+    # It turns on -O3 which some gcc version had a problem with:
+    # https://src.fedoraproject.org/rpms/mozjs38/c/761399aba092bcb1299bb4fccfd60f370ab4216e
+    "--enable-optimize"
     "--enable-release"
   ];
+
+  # Remove unnecessary static lib
+  preFixup = ''
+    rm $out/lib/libjs_static.ajs
+  '';
 
   enableParallelBuilding = true;
 
