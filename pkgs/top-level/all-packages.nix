@@ -11467,6 +11467,8 @@ in
     '';
   };
 
+  libxmlb = callPackage ../development/libraries/libxmlb { };
+
   libxmlxx = callPackage ../development/libraries/libxmlxx { };
   libxmlxx3 = callPackage ../development/libraries/libxmlxx/v3.nix { };
 
