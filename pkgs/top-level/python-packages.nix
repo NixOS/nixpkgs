@@ -3076,6 +3076,8 @@ in {
 
   namebench = callPackage ../development/python-modules/namebench { };
 
+  namedlist = callPackage ../development/python-modules/namedlist { };
+
   nameparser = callPackage ../development/python-modules/nameparser { };
 
   nbconvert = callPackage ../development/python-modules/nbconvert { };
