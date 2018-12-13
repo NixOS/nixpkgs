@@ -1176,6 +1176,8 @@ in {
 
   cccolutils = callPackage ../development/python-modules/cccolutils {};
 
+  cchardet = callPackage ../development/python-modules/cchardet { };
+
   CDDB = callPackage ../development/python-modules/cddb { };
 
   cntk = callPackage ../development/python-modules/cntk { };
