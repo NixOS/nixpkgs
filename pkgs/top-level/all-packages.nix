@@ -10317,6 +10317,8 @@ in
 
   ilmbase = callPackage ../development/libraries/ilmbase { };
 
+  intelmetool = callPackage ../tools/misc/intelmetool { };
+
   imlib = callPackage ../development/libraries/imlib {
     libpng = libpng12;
   };
