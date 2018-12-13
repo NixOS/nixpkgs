@@ -1,13 +1,14 @@
-{stdenv, fetchurl, fontforge, pythonPackages, python}:
+{ stdenv, fetchFromGitHub, fontforge, pythonPackages, python }:
 
 stdenv.mkDerivation rec {
-  pname = "liberationsansnarrow";
-  version = "1.07.3";
-  name = "${pname}-${version}";
+  pname = "liberation-sans-narrow";
+  version = "1.07.6";
 
-  src = fetchurl {
-    url = "https://fedorahosted.org/releases/l/i/liberation-fonts/liberation-fonts-ttf-${version}.tar.gz";
-    sha256 = "0qkr7n97jmj4q85jr20nsf6n5b48j118l9hr88vijn22ikad4wsp";
+  src = fetchFromGitHub {
+    owner = "liberationfonts";
+    repo = pname;
+    rev = version;
+    sha256 = "1qw554jbdnqkg6pjjl4cqkgsalq3398kzvww2naw30vykcz752bm";
   };
 
   buildInputs = [ fontforge pythonPackages.fonttools python ];
@@ -16,8 +17,8 @@ stdenv.mkDerivation rec {
     mkdir -p $out/share/fonts/truetype
     cp -v $(find . -name '*Narrow*.ttf') $out/share/fonts/truetype
 
-    mkdir -p "$out/doc/${name}"
-    cp -v AUTHORS ChangeLog COPYING License.txt README "$out/doc/${name}" || true
+    mkdir -p "$out/doc/${pname}-${version}"
+    cp -v AUTHORS ChangeLog COPYING License.txt README "$out/doc/${pname}-${version}" || true
   '';
 
   meta = with stdenv.lib; {
@@ -32,8 +33,7 @@ stdenv.mkDerivation rec {
     '';
 
     license = licenses.gpl2;
-    homepage = https://fedorahosted.org/liberation-fonts/;
-    maintainers = [ maintainers.leenaars
-    ];
+    homepage = https://github.com/liberationfonts;
+    maintainers = [ maintainers.leenaars ];
   };
 }
