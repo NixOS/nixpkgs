@@ -18,6 +18,11 @@ stdenv.mkDerivation rec {
     "--localstatedir=/var"
   ];
 
+  postInstall = ''
+    # remove legacy compatibility-wrapper that would require perl
+    rm $out/bin/stunnel3
+  '';
+
   installFlags = [
     "sysconfdir=\${out}/etc"
     "localstatedir=\${TMPDIR}"
