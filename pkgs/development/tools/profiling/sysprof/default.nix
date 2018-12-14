@@ -28,7 +28,18 @@ in stdenv.mkDerivation rec {
     sha256 = "0gjcd7agxn7cb8xnm8ldss1md7njwqzklqlsxclzqm87s7klnyrg";
   };
 
-  nativeBuildInputs = [ desktop-file-utils gettext itstool libxml2 meson ninja pkgconfig shared-mime-info wrapGAppsHook ];
+  nativeBuildInputs = [
+    desktop-file-utils
+    gettext
+    itstool
+    libxml2
+    meson
+    ninja
+    pkgconfig
+    shared-mime-info
+    wrapGAppsHook
+    gnome3.defaultIconTheme
+  ];
   buildInputs = [ glib gtk3 pango polkit systemd.dev systemd.lib ];
 
   mesonFlags = [
