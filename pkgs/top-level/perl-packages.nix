@@ -16620,17 +16620,7 @@ let
     buildInputs = [ TestDifferences ];
   };
 
-  threads = buildPerlPackage rec {
-    name = "threads-2.21";
-    src = fetchurl {
-      url = "mirror://cpan/authors/id/J/JD/JDHEDDEN/${name}.tar.gz";
-      sha256 = "047i22mdnf7fa0h9w5jhqrjbg561l5jxk8xqzwh6zbmwlac4qf98";
-    };
-    meta = {
-      description = "Perl interpreter-based threads";
-      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-    };
-  };
+  threads = null; # part of Perl 5.28
 
   threadsshared = buildPerlPackage rec {
     name = "threads-shared-1.58";
