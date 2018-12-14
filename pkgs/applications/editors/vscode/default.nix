@@ -12,9 +12,9 @@ let
   }.${stdenv.hostPlatform.system};
 
   sha256 = {
-    "i686-linux" = "0r19i3gg6iz8j7plb89c0k8r3wlh9vxbv7mwbssy0yvhid2af3ww";
-    "x86_64-linux" = "1r66mjz4lgv3dk0rjb9p27ha9y7vj7xld9x9gqnjxqx9ify71r9i";
-    "x86_64-darwin" = "0akr8675hnppxwr8xy5lr6rlqz8zg1fj823vks5mx3ssmd3sg189";
+    "i686-linux" = "0bd2jdn67vnbhrsqy54bymz4di3fw3p18ni5j2wikqkl4d9h4jj1";
+    "x86_64-linux" = "1zbnyff0q15xkvkrs14rfgyn6xb9v0xivcnbl8yckl71s45vb2l1";
+    "x86_64-darwin" = "1qgzhpfzcwym1qyzx2v14336l106hzhs7ii84g356vxkm219x7kw";
   }.${stdenv.hostPlatform.system};
 
   archive_fmt = if stdenv.hostPlatform.system == "x86_64-darwin" then "zip" else "tar.gz";
@@ -31,7 +31,7 @@ let
 in
   stdenv.mkDerivation rec {
     name = "vscode-${version}";
-    version = "1.29.1";
+    version = "1.30.0";
 
     src = fetchurl {
       name = "VSCode_${version}_${plat}.${archive_fmt}";
