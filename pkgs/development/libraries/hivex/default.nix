@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, autoreconfHook, makeWrapper
-, perl, libxml2, IOStringy }:
+, perlPackages, libxml2 }:
 
 stdenv.mkDerivation rec {
   name = "hivex-${version}";
@@ -14,9 +14,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    autoreconfHook makeWrapper
-    perl libxml2 IOStringy
-  ];
+    autoreconfHook makeWrapper libxml2
+  ] ++ (with perlPackages; [ perl IOStringy ]);
 
   postInstall = ''
     for bin in $out/bin/*; do

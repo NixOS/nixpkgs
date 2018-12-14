@@ -1,13 +1,9 @@
-{ stdenv, fetchurl, perl, gettext, makeWrapper, PerlMagick, YAML
-, TextMarkdown, URI, HTMLParser, HTMLScrubber, HTMLTemplate, TimeDate
-, CGISession, CGIFormBuilder, DBFile, LocaleGettext, RpcXML, XMLSimple
-, YAMLLibYAML, which, HTMLTree, AuthenPassphrase, NetOpenIDConsumer
-, LWPxParanoidAgent, CryptSSLeay
+{ stdenv, fetchurl, perlPackages, gettext, makeWrapper, PerlMagick, which
 , gitSupport ? false, git ? null
 , docutilsSupport ? false, python ? null, docutils ? null
 , monotoneSupport ? false, monotone ? null
 , bazaarSupport ? false, bazaar ? null
-, cvsSupport ? false, cvs ? null, cvsps ? null, Filechdir ? null
+, cvsSupport ? false, cvs ? null, cvsps ? null
 , subversionSupport ? false, subversion ? null
 , mercurialSupport ? false, mercurial ? null
 , extraUtils ? []
@@ -17,7 +13,7 @@ assert docutilsSupport -> (python != null && docutils != null);
 assert gitSupport -> (git != null);
 assert monotoneSupport -> (monotone != null);
 assert bazaarSupport -> (bazaar != null);
-assert cvsSupport -> (cvs != null && cvsps != null && Filechdir != null);
+assert cvsSupport -> (cvs != null && cvsps != null && perlPackages.Filechdir != null);
 assert subversionSupport -> (subversion != null);
 assert mercurialSupport -> (mercurial != null);
 
@@ -35,15 +31,16 @@ stdenv.mkDerivation {
     sha256 = "00d7yzv426fvqbhvzyafddv7fa6b4j2647b0wi371wd5yjj9j3sz";
   };
 
-  buildInputs = [ perl TextMarkdown URI HTMLParser HTMLScrubber HTMLTemplate
-    TimeDate gettext makeWrapper DBFile CGISession CGIFormBuilder LocaleGettext
-    RpcXML XMLSimple PerlMagick YAML YAMLLibYAML which HTMLTree AuthenPassphrase
-    NetOpenIDConsumer LWPxParanoidAgent CryptSSLeay ]
+  buildInputs = [ which ]
+    ++ (with perlPackages; [ perl TextMarkdown URI HTMLParser HTMLScrubber HTMLTemplate
+          TimeDate gettext makeWrapper DBFile CGISession CGIFormBuilder LocaleGettext
+          RpcXML XMLSimple PerlMagick YAML YAMLLibYAML HTMLTree AuthenPassphrase
+          NetOpenIDConsumer LWPxParanoidAgent CryptSSLeay ])
     ++ lib.optionals docutilsSupport [python docutils]
     ++ lib.optionals gitSupport [git]
     ++ lib.optionals monotoneSupport [monotone]
     ++ lib.optionals bazaarSupport [bazaar]
-    ++ lib.optionals cvsSupport [cvs cvsps Filechdir]
+    ++ lib.optionals cvsSupport [cvs cvsps perlPackages.Filechdir]
     ++ lib.optionals subversionSupport [subversion]
     ++ lib.optionals mercurialSupport [mercurial];
 
