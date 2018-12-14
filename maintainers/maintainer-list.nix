@@ -2057,6 +2057,11 @@
     github = "jlesquembre";
     name = "José Luis Lafuente";
   };
+  jlogemann = {
+    email = "jake.logemann@gmail.com";
+    github = "jakelogemann";
+    name = "Jake Logemann";
+  };
   jluttine = {
     email = "jaakko.luttinen@iki.fi";
     github = "jluttine";
