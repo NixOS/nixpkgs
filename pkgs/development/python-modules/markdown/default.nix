@@ -7,16 +7,12 @@
 
 buildPythonPackage rec {
   pname = "Markdown";
-  version = "2.6.10";
+  version = "3.0.1";
 
   src = fetchPypi {
-    extension = "zip";
     inherit pname version;
-    sha256 = "cfa536d1ee8984007fcecc5a38a493ff05c174cb74cb2341dafd175e6bc30851";
+    sha256 = "0z6v8649sr434d5r5zmrhydka7v7f9yas4bwcgkcs0650jdhybnh";
   };
-
-  # error: invalid command 'test'
-#   doCheck = false;
 
   checkInputs = [ nose pyyaml ];
 
