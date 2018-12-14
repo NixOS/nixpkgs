@@ -6198,17 +6198,7 @@ let
     };
   };
 
-  FilterSimple = buildPerlPackage {
-    name = "Filter-Simple-0.94";
-    src = fetchurl {
-      url = mirror://cpan/authors/id/S/SM/SMUELLER/Filter-Simple-0.94.tar.gz;
-      sha256 = "1lkrgsqaxf595ha1y29gxqqf4kf8cpm5yzr4gg7zngbq1nb0pz6g";
-    };
-    meta = {
-      description = "Simplified source filtering";
-      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-    };
-  };
+  FilterSimple = null; # part of Perl 5.28
 
   FinanceQuote = buildPerlPackage rec {
     name = "Finance-Quote-1.47";
