@@ -16,7 +16,7 @@
 , gnome3
 }:
 let
-  version = "3.30.0";
+  version = "3.31.1";
   pname = "sysprof";
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
@@ -25,10 +25,21 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "0qrzcs60m44mmj7ln9815kfgvi2pjlhmk0p4vjc0dw3pw95jrk99";
+    sha256 = "0gjcd7agxn7cb8xnm8ldss1md7njwqzklqlsxclzqm87s7klnyrg";
   };
 
-  nativeBuildInputs = [ desktop-file-utils gettext itstool libxml2 meson ninja pkgconfig shared-mime-info wrapGAppsHook ];
+  nativeBuildInputs = [
+    desktop-file-utils
+    gettext
+    itstool
+    libxml2
+    meson
+    ninja
+    pkgconfig
+    shared-mime-info
+    wrapGAppsHook
+    gnome3.defaultIconTheme
+  ];
   buildInputs = [ glib gtk3 pango polkit systemd.dev systemd.lib ];
 
   mesonFlags = [
