@@ -16808,13 +16808,7 @@ let
     };
   };
 
-  TimeHiRes = buildPerlPackage rec {
-    name = "Time-HiRes-1.9758";
-    src = fetchurl {
-      url = mirror://cpan/authors/id/J/JH/JHI/Time-HiRes-1.9758.tar.gz;
-      sha256 = "07jbydcdzpjm6i4nidci0rlklx4kla210fsl6zishw0yq5di9yjv";
-    };
-  };
+  TimeHiRes = null; # part of Perl 5.28
 
   TimeLocal = buildPerlPackage {
     name = "Time-Local-1.28";
