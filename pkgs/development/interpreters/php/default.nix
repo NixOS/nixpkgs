@@ -56,6 +56,7 @@ let
   , cgiSupport ? config.php.cgi or true
   , cliSupport ? config.php.cli or true
   , pharSupport ? config.php.phar or true
+  , xmlrpcSupport ? (config.php.xmlrpc or false) && (libxml2Support)
   }:
 
     let
@@ -178,7 +179,8 @@ let
       ++ optional (!phpdbgSupport) "--disable-phpdbg"
       ++ optional (!cgiSupport) "--disable-cgi"
       ++ optional (!cliSupport) "--disable-cli"
-      ++ optional (!pharSupport) "--disable-phar";
+      ++ optional (!pharSupport) "--disable-phar"
+      ++ optional xmlrpcSupport "--with-xmlrpc";
 
       hardeningDisable = [ "bindnow" ];
 
