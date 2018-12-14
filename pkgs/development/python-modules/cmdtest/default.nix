@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   name = "cmdtest-${version}";
-  version = "0.18";
+  version = "0.32";
   disabled = isPy3k || isPyPy;
 
   src = fetchurl {
     url = "http://code.liw.fi/debian/pool/main/c/cmdtest/cmdtest_${version}.orig.tar.xz";
-    sha256 = "068f24k8ad520hcf8g3gj7wvq1wspyd46ay0k9xa360jlb4dv2mn";
+    sha256 = "0scc47h1nkmbm5zlvk9bsnsg64kb9r4xadchdinf4f1mph9qpgn6";
   };
 
   propagatedBuildInputs = [ cliapp ttystatus markdown ];
