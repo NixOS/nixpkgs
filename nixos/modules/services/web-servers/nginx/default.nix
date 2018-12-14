@@ -599,24 +599,7 @@ in
 
           ${cfg.commonHttpConfig}
 
-          ${vhosts}
-
-          ${optionalString cfg.statusPage ''
-            server {
-              listen 80;
-              ${optionalString enableIPv6 "listen [::]:80;" }
-
-              server_name localhost;
-
-              location /nginx_status {
-                stub_status on;
-                access_log off;
-                allow 127.0.0.1;
-                ${optionalString enableIPv6 "allow ::1;"}
-                deny all;
-              }
-            }
-          ''}
+          include /etc/nginx/vhosts/*.conf
 
           ${cfg.appendHttpConfig}
         }''}
@@ -630,6 +613,27 @@ in
         }''}
 
         ${cfg.appendConfig}
+    '';
+
+    environment.etc."nginx/vhosts/vhosts.conf".text = ''
+      ${vhosts}
+
+      ${optionalString cfg.statusPage ''
+        server {
+          listen 80;
+          ${optionalString enableIPv6 "listen [::]:80;" }
+
+          server_name localhost;
+
+          location /nginx_status {
+            stub_status on;
+            access_log off;
+            allow 127.0.0.1;
+            ${optionalString enableIPv6 "allow ::1;"}
+            deny all;
+          }
+        }
+      ''}
     '';
 
     systemd.services.nginx = {
