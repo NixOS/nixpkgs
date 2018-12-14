@@ -157,7 +157,7 @@ let
 
     # Fully static packages.
     # Currently uses Musl on Linux (couldn’t get static glibc to work).
-    pkgsStatic = lib.warn "This a provisional API backported from master for convenience." (nixpkgsFun ({
+    pkgsStatic = nixpkgsFun ({
       crossOverlays = [ (import ./static.nix) ];
     } // lib.optionalAttrs stdenv.hostPlatform.isLinux {
       crossSystem = {
@@ -170,7 +170,7 @@ let
             or lib.systems.parse.abis.musl;
         };
       };
-    }));
+    });
   };
 
   # The complete chain of package set builders, applied from top to bottom.
