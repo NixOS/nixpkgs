@@ -6,12 +6,12 @@
 
 buildPythonPackage rec {
   pname = "thumbor-pexif";
-  version = "0.14";
+  version = "0.14.1";
   disabled = ! isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "715cd24760c7c28d6270c79c9e29b55b8d952a24e0e56833d827c2c62451bc3c";
+    sha256 = "169dhz44hcwb15fxdvlil8j0p2q4yi0nhkzmp939av86lqzc1p4n";
   };
 
   meta = with stdenv.lib; {
