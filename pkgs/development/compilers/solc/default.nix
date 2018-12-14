@@ -33,11 +33,10 @@ stdenv.mkDerivation {
   cmakeFlags = [
     "-DBoost_USE_STATIC_LIBS=OFF"
     "-DBUILD_SHARED_LIBS=ON"
-    "-DINSTALL_LLLC=ON"
   ];
 
   doCheck = stdenv.hostPlatform.isLinux && stdenv.hostPlatform == stdenv.buildPlatform;
-  checkPhase = "LD_LIBRARY_PATH=./libsolc:./libsolidity:./liblll:./libevmasm:./libdevcore:./libyul:./liblangutil:$LD_LIBRARY_PATH " +
+  checkPhase = "LD_LIBRARY_PATH=./libsolc:./libsolidity:./libevmasm:./libdevcore:./libyul:./liblangutil:$LD_LIBRARY_PATH " +
                "./test/soltest -p -- --no-ipc --no-smt --testpath ../test";
 
   nativeBuildInputs = [ cmake ];
@@ -47,7 +46,6 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Compiler for Ethereum smart contract language Solidity";
-    longDescription = "This package also includes `lllc', the LLL compiler.";
     homepage = https://github.com/ethereum/solidity;
     license = licenses.gpl3;
     platforms = with platforms; linux ++ darwin;

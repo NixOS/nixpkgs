@@ -2,7 +2,7 @@ diff --git a/CMakeLists.txt b/CMakeLists.txt
 index 0c05208f..8893648e 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -48,6 +48,25 @@ add_subdirectory(libevmasm)
+@@ -48,6 +48,22 @@ add_subdirectory(libevmasm)
  add_subdirectory(libsolidity)
  add_subdirectory(libsolc)
  
@@ -20,9 +20,6 @@ index 0c05208f..8893648e 100644
 +        FILES_MATCHING PATTERN "*.h")
 +install(DIRECTORY liblangutil/
 +        DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/liblangutil
-+        FILES_MATCHING PATTERN "*.h")
-+install(DIRECTORY liblll/
-+        DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/liblll
 +        FILES_MATCHING PATTERN "*.h")
 +
  if (NOT EMSCRIPTEN)
@@ -46,15 +43,6 @@ index 86192c1b..e7f15e93 100644
  add_library(evmasm ${sources} ${headers})
  target_link_libraries(evmasm PUBLIC devcore)
 +install(TARGETS evmasm LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
-diff --git a/liblll/CMakeLists.txt b/liblll/CMakeLists.txt
-index 4cdc073a..b61f03c7 100644
---- a/liblll/CMakeLists.txt
-+++ b/liblll/CMakeLists.txt
-@@ -3,3 +3,4 @@ file(GLOB headers "*.h")
- 
- add_library(lll ${sources} ${headers})
- target_link_libraries(lll PUBLIC evmasm devcore)
-+install(TARGETS lll LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
 diff --git a/libsolidity/CMakeLists.txt b/libsolidity/CMakeLists.txt
 index 0bdec4b4..e876177e 100644
 --- a/libsolidity/CMakeLists.txt
