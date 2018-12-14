@@ -1088,8 +1088,6 @@ let
     };
   };
 
-  Carp = null; # part of Perl 5.28
-
   CarpAlways = buildPerlPackage rec {
     name = "Carp-Always-0.16";
     src = fetchurl {
@@ -5308,8 +5306,6 @@ let
     };
   };
 
-  ExtUtilsCBuilder = null; # part of Perl 5.28
-
   ExtUtilsCChecker = buildPerlModule rec {
     name = "ExtUtils-CChecker-0.10";
     src = fetchurl {
@@ -5449,8 +5445,6 @@ let
       sha256 = "1qa7jwhy78byvfzpjnn5k2jm30sb5m1z6k2m79iy6gg2xj41nrq0";
     };
   };
-
-  ExtUtilsParseXS = null; # part of Perl 5.28
 
   ExtUtilsPkgConfig = buildPerlPackage rec {
     name = "ExtUtils-PkgConfig-1.16";
@@ -6175,8 +6169,6 @@ let
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
-
-  FilterSimple = null; # part of Perl 5.28
 
   FinanceQuote = buildPerlPackage rec {
     name = "Finance-Quote-1.47";
@@ -7683,8 +7675,6 @@ let
       description = "supporting module for SOAP::Lite";
     };
   };
-
-  IOSocketIP = null; # part of Perl 5.28
 
   IOSocketInet6 = buildPerlModule rec {
     name = "IO-Socket-INET6-2.72";
@@ -13349,8 +13339,6 @@ let
     };
   };
 
-  SelfLoader = null; # part of Perl 5.28
-
   SerealDecoder = buildPerlPackage rec {
     name = "Sereal-Decoder-4.005";
     src = fetchurl {
@@ -13520,8 +13508,6 @@ let
     };
     buildInputs = [ TestWarn XMLParserLite ];
   };
-
-  Socket = null; # part of Perl 5.28
 
   Socket6 = buildPerlPackage rec {
     name = "Socket6-0.29";
@@ -15116,8 +15102,6 @@ let
     };
   };
 
-  TestHarness = null; # part of Perl 5.28
-
   TestHarnessStraps = buildPerlModule {
     name = "Test-Harness-Straps-0.30";
     src = fetchurl {
@@ -16542,8 +16526,6 @@ let
     buildInputs = [ TestDifferences ];
   };
 
-  threads = null; # part of Perl 5.28
-
   threadsshared = buildPerlPackage rec {
     name = "threads-shared-1.58";
     src = fetchurl {
@@ -16729,8 +16711,6 @@ let
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
-
-  TimeHiRes = null; # part of Perl 5.28
 
   TimeLocal = buildPerlPackage {
     name = "Time-Local-1.28";
@@ -16919,8 +16899,6 @@ let
       license = "unknown";
     };
   };
-
-  UnicodeCollate = null; # part of Perl 5.28
 
   UnicodeLineBreak = buildPerlPackage rec {
     name = "Unicode-LineBreak-2018.003";
@@ -17806,6 +17784,18 @@ let
   ThreadSemaphore = null; # part of Perl 5.26
   UnicodeNormalize = null; # part of Perl 5.26
   XSLoader = null; # part of Perl 5.26
+
+  Carp = null; # part of Perl 5.28
+  ExtUtilsCBuilder = null; # part of Perl 5.28
+  ExtUtilsParseXS = null; # part of Perl 5.28
+  FilterSimple = null; # part of Perl 5.28
+  IOSocketIP = null; # part of Perl 5.28
+  SelfLoader = null; # part of Perl 5.28
+  Socket = null; # part of Perl 5.28
+  TestHarness = null; # part of Perl 5.28
+  threads = null; # part of Perl 5.28
+  TimeHiRes = null; # part of Perl 5.28
+  UnicodeCollate = null; # part of Perl 5.28
 
   ArchiveZip_1_53 = self.ArchiveZip;
   Autobox = self.autobox;
