@@ -7,6 +7,7 @@
 , flatpak
 , glibcLocales
 , gnome3
+, libgit2-glib
 , gobject-introspection
 , gspell
 , gtk-doc
@@ -61,7 +62,7 @@ in stdenv.mkDerivation {
     ctags
     flatpak
     gnome3.devhelp
-    gnome3.libgit2-glib
+    libgit2-glib
     gnome3.libpeas
     gnome3.vte
     gspell

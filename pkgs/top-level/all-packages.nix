@@ -9891,6 +9891,8 @@ in
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  libgit2-glib = callPackage ../development/libraries/libgit2-glib { };
+
   glbinding = callPackage ../development/libraries/glbinding { };
 
   gle = callPackage ../development/libraries/gle { };
