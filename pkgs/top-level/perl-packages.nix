@@ -17004,17 +17004,7 @@ let
     };
   };
 
-  UnicodeCollate = buildPerlPackage rec {
-    name = "Unicode-Collate-1.25";
-    src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SA/SADAHIRO/${name}.tar.gz";
-      sha256 = "1dpvck4saah8hqb9c82i25yimy9x2hkr1k3a2f1ly0k0ifhbiyyx";
-    };
-    meta = {
-      description = "Unicode Collation Algorithm";
-      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-    };
-  };
+  UnicodeCollate = null; # part of Perl 5.28
 
   UnicodeLineBreak = buildPerlPackage rec {
     name = "Unicode-LineBreak-2018.003";
