@@ -737,6 +737,8 @@ in
 
   git-fire = callPackage ../tools/misc/git-fire { };
 
+  github-changelog-generator = callPackage ../development/tools/github-changelog-generator { };
+
   gitless = callPackage ../applications/version-management/gitless { };
 
   gitter = callPackage  ../applications/networking/instant-messengers/gitter { };
