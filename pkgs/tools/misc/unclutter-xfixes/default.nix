@@ -2,7 +2,7 @@
   xlibsWrapper, libev, libXi, libXfixes,
   pkgconfig, asciidoc, libxslt, docbook_xsl }:
 
-let version = "1.3"; in
+let version = "1.4"; in
 
 stdenv.mkDerivation {
   name = "unclutter-xfixes-${version}";
@@ -12,7 +12,7 @@ stdenv.mkDerivation {
     owner = "Airblader";
     repo = "unclutter-xfixes";
     rev = "v${version}";
-    sha256 = "1iikrz0023wygv29ny20xj1hlv9ry7hghlwjii6rj4jm59vl0mlz";
+    sha256 = "0anny6hvwf5nh7ghgi4gdcywhwyhgfvqvp7fjhm59kjc3qxnwf96";
   };
 
   nativeBuildInputs = [pkgconfig];
