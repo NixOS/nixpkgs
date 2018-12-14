@@ -6,7 +6,7 @@ let
   isCross = stdenv.buildPlatform != stdenv.hostPlatform;
   inherit (buildPackages)
     fetchurl removeReferencesTo
-    pkgconfig coreutils gnugrep gnused glibcLocales;
+    pkgconfig coreutils gnused glibcLocales;
 in
 
 { pname
