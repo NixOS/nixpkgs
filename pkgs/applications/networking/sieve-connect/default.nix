@@ -29,7 +29,7 @@
 
     wrapProgram $out/bin/sieve-connect \
       --prefix PERL5LIB : "${stdenv.lib.makePerlPath (with perlPackages; [
-        AuthenSASL Socket6 IOSocketInet6 IOSocketSSL NetSSLeay NetDNS PodUsage
+        AuthenSASL Socket6 IOSocketInet6 IOSocketSSL NetSSLeay NetDNS
         TermReadKey TermReadLineGnu ])}"
   '';
 

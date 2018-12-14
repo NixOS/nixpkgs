@@ -12049,7 +12049,7 @@ let
       sha256 = "0xk4h4dzl80kf97lbx0nznx9ajrb6kkg7k3iwca3rj6f3rqggv9y";
     };
     outputs = [ "out" ];
-    buildInputs = [ DBDmysql DBI IOSocketSSL TermReadKey TimeHiRes ];
+    buildInputs = [ DBDmysql DBI IOSocketSSL TermReadKey ];
     meta = {
       description = ''Collection of advanced command-line tools to perform a variety of MySQL and system tasks.'';
       homepage = http://www.percona.com/software/percona-toolkit;

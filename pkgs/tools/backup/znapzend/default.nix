@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     sha256 = checksum;
   };
 
-  buildInputs = [ wget perl perlPackages.TestHarness MojoIOLoopForkCall-0-17 perlPackages.TAPParserSourceHandlerpgTAP ];
+  buildInputs = [ wget perl MojoIOLoopForkCall-0-17 perlPackages.TAPParserSourceHandlerpgTAP ];
 
   nativeBuildInputs = [ autoconf automake ];
 

@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     install -D -m 644 man/*.1 $out/share/man/man1
   '';
 
-  checkInputs = [ perlPackages.TestCommand perlPackages.TestHarness ];
+  checkInputs = [ perlPackages.TestCommand ];
   preCheck = ''
     export PERL5LIB="${perlPackages.TestCommand}/lib/perl5/site_perl"
   '';
