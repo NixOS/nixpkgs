@@ -644,6 +644,8 @@ with pkgs;
 
   git-fire = callPackage ../tools/misc/git-fire { };
 
+  github-changelog-generator = callPackage ../development/tools/github-changelog-generator { };
+
   gitless = callPackage ../applications/version-management/gitless { };
 
   grc = callPackage ../tools/misc/grc { };
