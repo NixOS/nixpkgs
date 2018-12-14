@@ -1204,4 +1204,7 @@ self: super: {
   # https://github.com/kazu-yamamoto/iproute/issues/43
   appar = self.appar_0_1_7;
 
+  # The LTS-12.x version doesn't suffice to build hlint.
+  hlint = super.hlint.overrideScope (self: super: { haskell-src-exts = self.haskell-src-exts_1_21_0; });
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
