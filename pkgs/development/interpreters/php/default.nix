@@ -32,7 +32,7 @@ let
   , pdo_pgsqlSupport ? config.php.pdo_pgsql or true
   , readlineSupport ? config.php.readline or true
   , sqliteSupport ? config.php.sqlite or true
-  , soapSupport ? config.php.soap or true
+  , soapSupport ? (config.php.soap or true) && (libxml2Support)
   , zlibSupport ? config.php.zlib or true
   , opensslSupport ? config.php.openssl or true
   , mbstringSupport ? config.php.mbstring or true
@@ -127,6 +127,15 @@ let
       ++ optional curlSupport "--with-curl=${curl.dev}"
       ++ optional zlibSupport "--with-zlib=${zlib.dev}"
       ++ optional libxml2Support "--with-libxml-dir=${libxml2.dev}"
+      ++ optional (!libxml2Support) [
+        "--disable-dom"
+        "--disable-libxml"
+        "--disable-simplexml"
+        "--disable-xml"
+        "--disable-xmlreader"
+        "--disable-xmlwriter"
+        "--without-pear"
+      ]
       ++ optional pcntlSupport "--enable-pcntl"
       ++ optional readlineSupport "--with-readline=${readline.dev}"
       ++ optional sqliteSupport "--with-pdo-sqlite=${sqlite.dev}"
