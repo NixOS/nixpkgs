@@ -7716,17 +7716,7 @@ let
     };
   };
 
-  IOSocketIP = buildPerlModule {
-    name = "IO-Socket-IP-0.39";
-    src = fetchurl {
-      url = mirror://cpan/authors/id/P/PE/PEVANS/IO-Socket-IP-0.39.tar.gz;
-      sha256 = "11950da7636cb786efd3bfb5891da4c820975276bce43175214391e5c32b7b96";
-    };
-    meta = {
-      description = "Family-neutral IP socket supporting both IPv4 and IPv6";
-      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-    };
-  };
+  IOSocketIP = null; # part of Perl 5.28
 
   IOSocketInet6 = buildPerlModule rec {
     name = "IO-Socket-INET6-2.72";
