@@ -24,6 +24,8 @@ let
       logdir    /var/log/munin
       rundir    /run/munin
 
+      ${lib.optionalString (cronCfg.extraCSS != "") "staticdir ${customStaticDir}"}
+
       ${cronCfg.extraGlobalConfig}
 
       ${cronCfg.hosts}
@@ -114,6 +116,14 @@ let
       (map
         (path: { name = baseNameOf path; value = path; })
         nodeCfg.extraAutoPlugins));
+
+  customStaticDir = pkgs.runCommand "munin-custom-static-data" {} ''
+    cp -a "${pkgs.munin}/etc/opt/munin/static" "$out"
+    cd "$out"
+    chmod -R u+w .
+    echo "${cronCfg.extraCSS}" >> style.css
+    echo "${cronCfg.extraCSS}" >> style-new.css
+  '';
 in
 
 {
@@ -263,6 +273,24 @@ in
           Definitions of hosts of nodes to collect data from. Needs at least one
           host for cron to succeed. See
           <link xlink:href='http://guide.munin-monitoring.org/en/latest/reference/munin.conf.html' />
+        '';
+      };
+
+      extraCSS = mkOption {
+        default = "";
+        type = types.lines;
+        description = ''
+          Custom styling for the HTML that munin-cron generates. This will be
+          appended to the CSS files used by munin-cron and will thus take
+          precedence over the builtin styles.
+        '';
+        example = ''
+          /* A simple dark theme. */
+          html, body { background: #222222; }
+          #header, #footer { background: #333333; }
+          img.i, img.iwarn, img.icrit, img.iunkn {
+            filter: invert(100%) hue-rotate(-30deg);
+          }
         '';
       };
 
