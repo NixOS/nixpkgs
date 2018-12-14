@@ -2,7 +2,7 @@
 
 let
   baseName = "metals";
-  version = "0.3.1";
+  version = "0.3.2";
   deps = stdenv.mkDerivation {
     name = "${baseName}-deps-${version}";
     buildCommand = ''
@@ -14,7 +14,7 @@ let
     '';
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
-    outputHash     = "09p0y9fh6awl3vrdxwa3jd33y7q0kk97sv45lxyh5a2ri5d85wnc";
+    outputHash     = "12hvnvrm63z2ibwzkr3c9fbx32dfkcfvp1pmmc3s6jqfjl5wnlgm";
   };
 in
 stdenv.mkDerivation {
@@ -47,6 +47,6 @@ stdenv.mkDerivation {
         -Xmx4G
         -Dmetals.client=vim-lsc
     '';
-    maintainers = with maintainers; [ ceedubs ];
+    maintainers = with maintainers; [ ceedubs coconnor ];
   };
 }
