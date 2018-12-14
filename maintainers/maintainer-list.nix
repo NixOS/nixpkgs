@@ -743,6 +743,11 @@
     github = "cdepillabout";
     name = "Dennis Gosnell";
   };
+  ceedubs = {
+    email = "ceedubs@gmail.com";
+    github = "ceedubs";
+    name = "Cody Allen";
+  };
   cfouche = {
     email = "chaddai.fouche@gmail.com";
     github = "Chaddai";

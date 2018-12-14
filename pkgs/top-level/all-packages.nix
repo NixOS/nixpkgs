@@ -8822,6 +8822,8 @@ in
 
   mage = callPackage ../development/tools/build-managers/mage { };
 
+  metals = callPackage ../development/tools/metals {};
+
   minify = callPackage ../development/web/minify { };
 
   minizinc = callPackage ../development/tools/minizinc { };
