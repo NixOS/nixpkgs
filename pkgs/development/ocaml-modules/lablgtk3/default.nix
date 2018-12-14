@@ -5,11 +5,11 @@ then throw "lablgtk3 is not available for OCaml ${ocaml.version}"
 else
 
 stdenv.mkDerivation rec {
-  version = "3.0.beta1";
+  version = "3.0.beta2";
   name = "ocaml${ocaml.version}-lablgtk3-${version}";
   src = fetchurl {
-    url = https://forge.ocamlcore.org/frs/download.php/1769/lablgtk-3.0.beta1.tar.gz;
-    sha256 = "08izn2kwxdz1i74m11lqkl9n50bs7sy6pl8mcq6br77znarvqb91";
+    url = https://forge.ocamlcore.org/frs/download.php/1774/lablgtk-3.0.beta2.tar.gz;
+    sha256 = "1v4qj07l75hqis4j9bx8x1cfn7scqi6nmp4j5jx41x94ws7hp2ch";
   };
 
   nativeBuildInputs = [ pkgconfig ];
