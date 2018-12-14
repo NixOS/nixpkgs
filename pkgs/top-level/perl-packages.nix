@@ -15182,19 +15182,7 @@ let
     };
   };
 
-  TestHarness = buildPerlPackage {
-    name = "Test-Harness-3.42";
-    src = fetchurl {
-      url = mirror://cpan/authors/id/L/LE/LEONT/Test-Harness-3.42.tar.gz;
-      sha256 = "0fd90d4efea82d6e262e6933759e85d27cbcfa4091b14bf4042ae20bab528e53";
-    };
-    doCheck = false; # makes assumptions about path to Perl
-    meta = {
-      homepage = http://testanything.org/;
-      description = "Run Perl standard test scripts with statistics";
-      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-    };
-  };
+  TestHarness = null; # part of Perl 5.28
 
   TestHarnessStraps = buildPerlModule {
     name = "Test-Harness-Straps-0.30";
