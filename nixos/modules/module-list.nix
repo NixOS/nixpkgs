@@ -316,6 +316,7 @@
   ./services/logging/syslog-ng.nix
   ./services/logging/syslogd.nix
   ./services/mail/clamsmtp.nix
+  ./services/mail/davmail.nix
   ./services/mail/dkimproxy-out.nix
   ./services/mail/dovecot.nix
   ./services/mail/dspam.nix
