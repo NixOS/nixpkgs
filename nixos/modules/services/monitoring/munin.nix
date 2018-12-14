@@ -74,6 +74,46 @@ let
       ln -s ${pluginConf} $out/nixos-config
     '';
   };
+
+  # Copy one Munin plugin into the Nix store with a specific name.
+  # This is suitable for use with plugins going directly into /etc/munin/plugins,
+  # i.e. munin.extraPlugins.
+  internOnePlugin = name: path:
+    "cp -a '${path}' '${name}'";
+
+  # Copy an entire tree of Munin plugins into a single directory in the Nix
+  # store, with no renaming.
+  # This is suitable for use with munin-node-configure --suggest, i.e.
+  # munin.extraAutoPlugins.
+  internManyPlugins = name: path:
+    "find '${path}' -type f -perm /a+x -exec cp -a -t . '{}' '+'";
+
+  # Use the appropriate intern-fn to copy the plugins into the store and patch
+  # them afterwards in an attempt to get them to run on NixOS.
+  internAndFixPlugins = name: intern-fn: paths:
+    pkgs.runCommand name {} ''
+      mkdir -p "$out"
+      cd "$out"
+      ${lib.concatStringsSep "\n"
+          (lib.attrsets.mapAttrsToList intern-fn paths)}
+      chmod -R u+w .
+      find . -type f -exec sed -E -i '
+        s,(/usr)?/s?bin/,/run/current-system/sw/bin/,g
+      ' '{}' '+'
+    '';
+
+  # TODO: write a derivation for munin-contrib, so that for contrib plugins
+  # you can just refer to them by name rather than needing to include a copy
+  # of munin-contrib in your nixos configuration.
+  extraPluginDir = internAndFixPlugins "munin-extra-plugins.d"
+    internOnePlugin nodeCfg.extraPlugins;
+
+  extraAutoPluginDir = internAndFixPlugins "munin-extra-auto-plugins.d"
+    internManyPlugins
+    (builtins.listToAttrs
+      (map
+        (path: { name = baseNameOf path; value = path; })
+        nodeCfg.extraAutoPlugins));
 in
 
 {
@@ -101,7 +141,6 @@ in
         '';
       };
 
-      # TODO: add option to add additional plugins
       extraPluginConfig = mkOption {
         default = "";
         type = types.lines;
@@ -112,6 +151,66 @@ in
         example = ''
           [fail2ban_*]
           user root
+        '';
+      };
+
+      extraPlugins = mkOption {
+        default = {};
+        type = with types; attrsOf path;
+        description = ''
+          Additional Munin plugins to activate. Keys are the name of the plugin
+          symlink, values are the path to the underlying plugin script. You
+          can use the same plugin script multiple times (e.g. for wildcard
+          plugins).
+
+          Note that these plugins do not participate in autoconfiguration. If
+          you want to autoconfigure additional plugins, use
+          <option>services.munin-node.extraAutoPlugins</option>.
+
+          Plugins enabled in this manner take precedence over autoconfigured
+          plugins.
+
+          Plugins will be copied into the Nix store, and it will attempt to
+          modify them to run properly by fixing hardcoded references to
+          <literal>/bin</literal>, <literal>/usr/bin</literal>,
+          <literal>/sbin</literal>, and <literal>/usr/sbin</literal>.
+        '';
+        example = literalExample ''
+          {
+            zfs_usage_bigpool = /src/munin-contrib/plugins/zfs/zfs_usage_;
+            zfs_usage_smallpool = /src/munin-contrib/plugins/zfs/zfs_usage_;
+            zfs_list = /src/munin-contrib/plugins/zfs/zfs_list;
+          };
+        '';
+      };
+
+      extraAutoPlugins = mkOption {
+        default = [];
+        type = with types; listOf path;
+        description = ''
+          Additional Munin plugins to autoconfigure, using
+          <literal>munin-node-configure --suggest</literal>. These should be
+          the actual paths to the plugin files (or directories containing them),
+          not just their names.
+
+          If you want to manually enable individual plugins instead, use
+          <option>services.munin-node.extraPlugins</option>.
+
+          Note that only plugins that have the 'autoconfig' capability will do
+          anything if listed here, since plugins that cannot autoconfigure
+          won't be automatically enabled by
+          <literal>munin-node-configure</literal>.
+
+          Plugins will be copied into the Nix store, and it will attempt to
+          modify them to run properly by fixing hardcoded references to
+          <literal>/bin</literal>, <literal>/usr/bin</literal>,
+          <literal>/sbin</literal>, and <literal>/usr/sbin</literal>.
+        '';
+        example = literalExample ''
+          [
+            /src/munin-contrib/plugins/zfs
+            /src/munin-contrib/plugins/ssh
+          ];
         '';
       };
 
@@ -206,6 +305,13 @@ in
         # Autoconfigure builtin plugins
         ${pkgs.munin}/bin/munin-node-configure --suggest --shell --families contrib,auto,manual --config ${nodeConf} --libdir=${pkgs.munin}/lib/plugins --servicedir=/etc/munin/plugins --sconfdir=${pluginConfDir} 2>/dev/null | ${pkgs.bash}/bin/bash
 
+        # Autoconfigure extra plugins
+        ${pkgs.munin}/bin/munin-node-configure --suggest --shell --families contrib,auto,manual --config ${nodeConf} --libdir=${extraAutoPluginDir} --servicedir=/etc/munin/plugins --sconfdir=${pluginConfDir} 2>/dev/null | ${pkgs.bash}/bin/bash
+
+        ${lib.optionalString (nodeCfg.extraPlugins != {}) ''
+            # Link in manually enabled plugins
+            ln -f -s -t /etc/munin/plugins ${extraPluginDir}/*
+          ''}
 
         ${lib.optionalString (nodeCfg.disabledPlugins != []) ''
             # Disable plugins
