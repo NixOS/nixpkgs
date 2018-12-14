@@ -5,13 +5,13 @@
 , drivers ? []
 }:
 let
-  version = "3.8.1";
+  version = "3.9.0";
 in stdenv.mkDerivation rec {
   name = "squirrel-sql-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/squirrel-sql/1-stable/${version}-plainzip/squirrelsql-${version}-standard.zip";
-    sha256 = "1vv38i4rwm8c8h0p9mmz21dyafd71pqprj7b8i5vx7f4q8xns2d2";
+    sha256 = "0b16l7p7klagxnwkx2az4mbyd35kv4aj8xxbwm27pp3spz9dk8m0";
   };
 
   buildInputs = [
