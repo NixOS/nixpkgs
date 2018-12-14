@@ -42,9 +42,8 @@ qtModule {
       ( cd src/3rdparty/chromium; patchShebangs . )
     ''
     # Patch Chromium build files
-    + ''
-      substituteInPlace ./src/3rdparty/chromium/build/common.gypi \
-        --replace /bin/echo ${coreutils}/bin/echo
+    + optionalString (builtins.compareVersions qtCompatVersion "5.12" < 0) ''
+      substituteInPlace ./src/3rdparty/chromium/build/common.gypi --replace /bin/echo ${coreutils}/bin/echo
       substituteInPlace ./src/3rdparty/chromium/v8/${if qt56 then "build" else "gypfiles"}/toolchain.gypi \
         --replace /bin/echo ${coreutils}/bin/echo
       substituteInPlace ./src/3rdparty/chromium/v8/${if qt56 then "build" else "gypfiles"}/standalone.gypi \
