@@ -22,8 +22,9 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "Hashcash is a proof-of-work algorithm, which has been used as a denial-of-service counter measure technique in a number of systems.";
+    description = "Proof-of-work algorithm used as spam and denial-of-service counter measure";
     homepage = http://hashcash.org;
     license = licenses.gpl2;
+    maintainers = with maintainers; [ kisonecat ];
   };
 }
