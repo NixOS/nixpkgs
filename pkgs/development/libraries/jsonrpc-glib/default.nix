@@ -1,10 +1,7 @@
 { stdenv, fetchurl, meson, ninja, glib, json-glib, pkgconfig, gobject-introspection, vala, gtk-doc, docbook_xsl, docbook_xml_dtd_43, gnome3 }:
-let
-  version = "3.30.0";
-  pname = "jsonrpc-glib";
-in
 stdenv.mkDerivation {
-  name = "${pname}-${version}";
+  pname = "jsonrpc-glib";
+  version = "3.30.1";
 
   outputs = [ "out" "dev" "devdoc" ];
 
@@ -13,7 +10,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0z7v2kld9gyh0faarbs82vrdvg8h6a01x9mxlrwkxbghjgmq05w4";
+    sha256 = "1iqxfdymsspsn1xr5bv7xllw73yhqq6k9bfixsggrf2g85pwwxdn";
   };
 
   mesonFlags = [
