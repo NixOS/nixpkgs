@@ -3,19 +3,21 @@
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "deepin-wallpapers";
-  version = "1.7.5";
+  version = "1.7.6";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = "deepin-wallpapers";
     rev = version;
-    sha256 = "0mfjkh81ci0gjwmgycrh32by7v9b73nyvyjbqd29ccpb8bpyyakn";
+    sha256 = "102qbnnpry48n1lclz0rz98d4fd37ml892zlh1q1vlhnzni6yagd";
   };
 
-  nativeBuildInputs = [ dde-api.bin ];
+  nativeBuildInputs = [ dde-api deepin.setupHook ];
 
   postPatch = ''
-    sed -i -e "s:/usr/lib/deepin-api:${dde-api.bin}/lib/deepin-api:" Makefile
+    searchHardCodedPaths # debugging
+
+    sed -i -e "s:/usr/lib/deepin-api:${dde-api}/lib/deepin-api:" Makefile
     sed -i -e "s:/usr/share/wallpapers:$out/share/wallpapers:" Makefile
   '';
 
