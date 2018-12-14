@@ -13573,21 +13573,7 @@ let
     buildInputs = [ TestWarn XMLParserLite ];
   };
 
-  Socket = buildPerlPackage {
-    name = "Socket-2.027";
-    src = fetchurl {
-      url = mirror://cpan/authors/id/P/PE/PEVANS/Socket-2.027.tar.gz;
-      sha256 = "1a725fbqx6bjzjf63bgs5wvzd20kffz1f94pbmv1670p9m4i270l";
-    };
-    postPatch = ''
-      # requires network access
-      rm t/getnameinfo.t t/getaddrinfo.t
-    '';
-    meta = {
-      description = "Networking constants and support functions";
-      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-    };
-  };
+  Socket = null; # part of Perl 5.28
 
   Socket6 = buildPerlPackage rec {
     name = "Socket6-0.29";
