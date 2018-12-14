@@ -44,124 +44,6 @@ let
     }
   ''));
 
-  configFile = pkgs.writeText "nginx.conf" ''
-    user ${cfg.user} ${cfg.group};
-    error_log ${cfg.logError};
-    daemon off;
-
-    ${cfg.config}
-
-    ${optionalString (cfg.eventsConfig != "" || cfg.config == "") ''
-    events {
-      ${cfg.eventsConfig}
-    }
-    ''}
-
-    ${optionalString (cfg.httpConfig == "" && cfg.config == "") ''
-    http {
-      include ${cfg.package}/conf/mime.types;
-      include ${cfg.package}/conf/fastcgi.conf;
-      include ${cfg.package}/conf/uwsgi_params;
-
-      ${optionalString (cfg.resolver.addresses != []) ''
-        resolver ${toString cfg.resolver.addresses} ${optionalString (cfg.resolver.valid != "") "valid=${cfg.resolver.valid}"};
-      ''}
-      ${upstreamConfig}
-
-      ${optionalString (cfg.recommendedOptimisation) ''
-        # optimisation
-        sendfile on;
-        tcp_nopush on;
-        tcp_nodelay on;
-        keepalive_timeout 65;
-        types_hash_max_size 2048;
-      ''}
-
-      ssl_protocols ${cfg.sslProtocols};
-      ssl_ciphers ${cfg.sslCiphers};
-      ${optionalString (cfg.sslDhparam != null) "ssl_dhparam ${cfg.sslDhparam};"}
-
-      ${optionalString (cfg.recommendedTlsSettings) ''
-        ssl_session_cache shared:SSL:42m;
-        ssl_session_timeout 23m;
-        ssl_ecdh_curve secp384r1;
-        ssl_prefer_server_ciphers on;
-        ssl_stapling on;
-        ssl_stapling_verify on;
-      ''}
-
-      ${optionalString (cfg.recommendedGzipSettings) ''
-        gzip on;
-        gzip_disable "msie6";
-        gzip_proxied any;
-        gzip_comp_level 5;
-        gzip_types
-          application/atom+xml
-          application/javascript
-          application/json
-          application/xml
-          application/xml+rss
-          image/svg+xml
-          text/css
-          text/javascript
-          text/plain
-          text/xml;
-        gzip_vary on;
-      ''}
-
-      ${optionalString (cfg.recommendedProxySettings) ''
-        proxy_redirect          off;
-        proxy_connect_timeout   90;
-        proxy_send_timeout      90;
-        proxy_read_timeout      90;
-        proxy_http_version      1.0;
-        include ${recommendedProxyConfig};
-      ''}
-
-      # $connection_upgrade is used for websocket proxying
-      map $http_upgrade $connection_upgrade {
-          default upgrade;
-          '''      close;
-      }
-      client_max_body_size ${cfg.clientMaxBodySize};
-
-      server_tokens ${if cfg.serverTokens then "on" else "off"};
-
-      ${cfg.commonHttpConfig}
-
-      ${vhosts}
-
-      ${optionalString cfg.statusPage ''
-        server {
-          listen 80;
-          ${optionalString enableIPv6 "listen [::]:80;" }
-
-          server_name localhost;
-
-          location /nginx_status {
-            stub_status on;
-            access_log off;
-            allow 127.0.0.1;
-            ${optionalString enableIPv6 "allow ::1;"}
-            deny all;
-          }
-        }
-      ''}
-
-      ${cfg.appendHttpConfig}
-    }''}
-
-    ${optionalString (cfg.httpConfig != "") ''
-    http {
-      include ${cfg.package}/conf/mime.types;
-      include ${cfg.package}/conf/fastcgi.conf;
-      include ${cfg.package}/conf/uwsgi_params;
-      ${cfg.httpConfig}
-    }''}
-
-    ${cfg.appendConfig}
-  '';
-
   vhosts = concatStringsSep "\n" (mapAttrsToList (vhostName: vhost:
     let
         onlySSL = vhost.onlySSL || vhost.enableSSL;
@@ -630,6 +512,126 @@ in
       }
     ];
 
+    environment.etc."nginx/nginx.conf".text = ''
+      user ${cfg.user} ${cfg.group};
+      error_log ${cfg.logError};
+      daemon off;
+
+      ${cfg.config}
+
+      ${optionalString (cfg.eventsConfig != "" || cfg.config == "") ''
+        events {
+          ${cfg.eventsConfig}
+        }
+      ''}
+
+      ${optionalString (cfg.httpConfig == "" && cfg.config == "") ''
+        http {
+          include ${cfg.package}/conf/mime.types;
+          include ${cfg.package}/conf/fastcgi.conf;
+          include ${cfg.package}/conf/uwsgi_params;
+
+          ${optionalString (cfg.resolver.addresses != []) ''
+            resolver ${toString cfg.resolver.addresses} ${optionalString (cfg.resolver.valid != "") "valid=${cfg.resolver.valid}"};
+          ''}
+
+          ${upstreamConfig}
+
+          ${optionalString (cfg.recommendedOptimisation) ''
+            # optimisation
+            sendfile on;
+            tcp_nopush on;
+            tcp_nodelay on;
+            keepalive_timeout 65;
+            types_hash_max_size 2048;
+          ''}
+
+          ssl_protocols ${cfg.sslProtocols};
+          ssl_ciphers ${cfg.sslCiphers};
+          ${optionalString (cfg.sslDhparam != null) "ssl_dhparam ${cfg.sslDhparam};"}
+
+          ${optionalString (cfg.recommendedTlsSettings) ''
+            ssl_session_cache shared:SSL:42m;
+            ssl_session_timeout 23m;
+            ssl_ecdh_curve secp384r1;
+            ssl_prefer_server_ciphers on;
+            ssl_stapling on;
+            ssl_stapling_verify on;
+          ''}
+
+          ${optionalString (cfg.recommendedGzipSettings) ''
+            gzip on;
+            gzip_disable "msie6";
+            gzip_proxied any;
+            gzip_comp_level 5;
+            gzip_types
+              application/atom+xml
+              application/javascript
+              application/json
+              application/xml
+              application/xml+rss
+              image/svg+xml
+              text/css
+              text/javascript
+              text/plain
+              text/xml;
+            gzip_vary on;
+          ''}
+
+          ${optionalString (cfg.recommendedProxySettings) ''
+            proxy_redirect          off;
+            proxy_connect_timeout   90;
+            proxy_send_timeout      90;
+            proxy_read_timeout      90;
+            proxy_http_version      1.0;
+            include ${recommendedProxyConfig};
+          ''}
+
+          # $connection_upgrade is used for websocket proxying
+          map $http_upgrade $connection_upgrade {
+            default upgrade;
+            '''      close;
+          }
+
+          client_max_body_size ${cfg.clientMaxBodySize};
+
+          server_tokens ${if cfg.serverTokens then "on" else "off"};
+
+          ${cfg.commonHttpConfig}
+
+          ${vhosts}
+
+          ${optionalString cfg.statusPage ''
+            server {
+              listen 80;
+              ${optionalString enableIPv6 "listen [::]:80;" }
+
+              server_name localhost;
+
+              location /nginx_status {
+                stub_status on;
+                access_log off;
+                allow 127.0.0.1;
+                ${optionalString enableIPv6 "allow ::1;"}
+                deny all;
+              }
+            }
+          ''}
+
+          ${cfg.appendHttpConfig}
+        }''}
+
+        ${optionalString (cfg.httpConfig != "") ''
+        http {
+          include ${cfg.package}/conf/mime.types;
+          include ${cfg.package}/conf/fastcgi.conf;
+          include ${cfg.package}/conf/uwsgi_params;
+          ${cfg.httpConfig}
+        }''}
+
+        ${cfg.appendConfig}
+    '';
+
     systemd.services.nginx = {
       description = "Nginx Web Server";
       after = [ "network.target" ];
@@ -638,10 +640,10 @@ in
       preStart =
         ''
         ${cfg.preStart}
-        ${cfg.package}/bin/nginx -c ${configFile} -p ${cfg.stateDir} -t
+        ${cfg.package}/bin/nginx -c /etc/nginx/nginx.conf -p ${cfg.stateDir} -t
         '';
       serviceConfig = {
-        ExecStart = "${cfg.package}/bin/nginx -c ${configFile} -p ${cfg.stateDir}";
+        ExecStart = "${cfg.package}/bin/nginx -c /etc/nginx/nginx.conf -p ${cfg.stateDir}";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         Restart = "always";
         RestartSec = "10s";
