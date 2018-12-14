@@ -2640,6 +2640,11 @@
     email = "markus@wotringer.de";
     name = "Markus Wotringer";
   };
+  marius851000 = {
+    email = "mariusdavid@laposte.net";
+    name = "Marius David";
+    github = "marius851000";
+  };
   marsam = {
     email = "marsam@users.noreply.github.com";
     github = "marsam";
