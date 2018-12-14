@@ -7,8 +7,8 @@
 
 {config, pkgs, fetchurl, fetchFromGitHub, stdenv, gnused, perl, overrides}:
 
-# cpan2nix assumes that perl-packages.nix will be used only with perl 5.26 or above
-assert stdenv.lib.versionAtLeast perl.version "5.26";
+# cpan2nix assumes that perl-packages.nix will be used only with perl 5.28.1 or above
+assert stdenv.lib.versionAtLeast perl.version "5.28.1";
 let
   inherit (stdenv.lib) maintainers;
   self = _self // overrides;
