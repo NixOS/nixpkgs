@@ -5466,13 +5466,7 @@ let
     };
   };
 
-  ExtUtilsParseXS = buildPerlPackage rec {
-    name = "ExtUtils-ParseXS-3.35";
-    src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SM/SMUELLER/${name}.tar.gz";
-      sha256 = "077fqiyabydm8j34wxzxwxskyidh8nmwq9gskaxai8kq298z1pj1";
-    };
-  };
+  ExtUtilsParseXS = null; # part of Perl 5.28
 
   ExtUtilsPkgConfig = buildPerlPackage rec {
     name = "ExtUtils-PkgConfig-1.16";
