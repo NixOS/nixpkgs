@@ -27,9 +27,9 @@ let
   };
 
   ast = buildPecl {
-    name = "ast-0.1.5";
+    name = "ast-1.0.0";
 
-    sha256 = "0vv2w5fkkw9n7qdmi5aq50416zxmvyzjym8kb6j1v8kd4xcsjjgw";
+    sha256 = "0abccvwif1pih222lbj2z4cf9ibciz48xj35lfixyry163vabkck";
   };
 
   couchbase = buildPecl rec {
