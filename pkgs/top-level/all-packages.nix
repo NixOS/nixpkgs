@@ -4926,6 +4926,8 @@ in
 
   polkit_gnome = callPackage ../tools/security/polkit-gnome { };
 
+  polyglot = callPackage ../development/tools/misc/polyglot { };
+
   polysh = callPackage ../tools/networking/polysh { };
 
   ponysay = callPackage ../tools/misc/ponysay { };
