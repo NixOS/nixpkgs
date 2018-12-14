@@ -1088,17 +1088,7 @@ let
     };
   };
 
-  Carp = buildPerlPackage rec {
-    name = "Carp-1.50";
-    src = fetchurl {
-      url = mirror://cpan/authors/id/X/XS/XSAWYERX/Carp-1.50.tar.gz;
-      sha256 = "1ngbpjyd9qi7n4h5r3q3qibd8by7rfiv7364jqlv4lbd3973n9zm";
-    };
-    meta = with stdenv.lib; {
-      description = "Alternative warn and die for modules";
-      license = with licenses; [ artistic1 gpl1Plus ];
-    };
-  };
+  Carp = null; # part of Perl 5.28
 
   CarpAlways = buildPerlPackage rec {
     name = "Carp-Always-0.16";
