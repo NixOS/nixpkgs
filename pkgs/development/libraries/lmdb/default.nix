@@ -26,7 +26,6 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     moveToOutput bin "$bin"
-    moveToOutput "lib/*.a" REMOVE # until someone needs it
   ''
     # add lmdb.pc (dynamic only)
     + ''
