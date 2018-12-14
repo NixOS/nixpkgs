@@ -3233,6 +3233,8 @@ in
 
   hardlink = callPackage ../tools/system/hardlink { };
 
+  hashcash = callPackage ../tools/security/hashcash { };
+
   hashcat = callPackage ../tools/security/hashcat { };
 
   hash_extender = callPackage ../tools/security/hash_extender { };
