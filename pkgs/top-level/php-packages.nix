@@ -221,10 +221,10 @@ let
   };
 
   v8 = buildPecl rec {
-    version = "0.1.9";
+    version = "0.2.2";
     name = "v8-${version}";
 
-    sha256 = "0bj77dfmld5wfwl4wgqnpa0i4f3mc1mpsp9dmrwqv050gs84m7h1";
+    sha256 = "103nys7zkpi1hifqp9miyl0m1mn07xqshw3sapyz365nb35g5q71";
 
     buildInputs = [ pkgs.v8_6_x ];
     configureFlags = [ "--with-v8=${pkgs.v8_6_x}" ];
