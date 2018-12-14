@@ -216,8 +216,8 @@ let
   };
 
   redis = buildPecl {
-    name = "redis-3.1.4";
-    sha256 = "0rgjdrqfif8pfn3ipk1v4gyjkkdcdrdk479qbpda89w25vaxzsxd";
+    name = "redis-4.2.0";
+    sha256 = "105k2rfz97svrqzdhd0a0668mn71c8v0j7hks95832fsvn5dhmbn";
   };
 
   v8 = buildPecl rec {
