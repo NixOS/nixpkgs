@@ -2057,7 +2057,7 @@
     github = "jlesquembre";
     name = "José Luis Lafuente";
   };
-  jlogemann = {
+  jakelogemann = {
     email = "jake.logemann@gmail.com";
     github = "jakelogemann";
     name = "Jake Logemann";
