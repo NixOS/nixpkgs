@@ -13391,17 +13391,7 @@ let
     };
   };
 
-  SelfLoader = buildPerlPackage {
-    name = "SelfLoader-1.24";
-    src = fetchurl {
-      url = mirror://cpan/authors/id/S/SM/SMUELLER/SelfLoader-1.24.tar.gz;
-      sha256 = "4c7cd20fd82aa10520ac14b05fa003f60c72bb4c95527bd12aec8bf3c4546098";
-    };
-    meta = {
-      description = "Load functions only on demand";
-      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-    };
-  };
+  SelfLoader = null; # part of Perl 5.28
 
   SerealDecoder = buildPerlPackage rec {
     name = "Sereal-Decoder-4.005";
