@@ -6607,7 +6607,7 @@ in
   };
 
   ccl = callPackage ../development/compilers/ccl {
-    inherit (darwin) bootstrap_cmds;
+    inherit (buildPackages.darwin) bootstrap_cmds;
   };
 
   cdb = callPackage ../development/tools/database/cdb { };
@@ -9080,7 +9080,7 @@ in
   jhiccup = callPackage ../development/tools/java/jhiccup { };
 
   valgrind = callPackage ../development/tools/analysis/valgrind {
-    inherit (darwin) xnu bootstrap_cmds cctools;
+    inherit (buildPackages.darwin) xnu bootstrap_cmds cctools;
   };
   valgrind-light = res.valgrind.override { gdb = null; };
 
@@ -10357,7 +10357,7 @@ in
   kinetic-cpp-client = callPackage ../development/libraries/kinetic-cpp-client { };
 
   krb5 = callPackage ../development/libraries/kerberos/krb5.nix {
-    inherit (darwin) bootstrap_cmds;
+    inherit (buildPackages.darwin) bootstrap_cmds;
   };
   krb5Full = krb5;
   libkrb5 = krb5.override {
@@ -14010,7 +14010,7 @@ in
     inherit (darwin) cf-private;
     inherit (darwin.apple_sdk.frameworks) ApplicationServices Carbon Cocoa;
     inherit (darwin.apple_sdk.libs) Xplugin;
-    bootstrap_cmds = if stdenv.isDarwin then darwin.bootstrap_cmds else null;
+    inherit (buildPackages.darwin) bootstrap_cmds;
     udev = if stdenv.isLinux then udev else null;
     libdrm = if stdenv.isLinux then libdrm else null;
     abiCompat = config.xorg.abiCompat # `config` because we have no `xorg.override`
