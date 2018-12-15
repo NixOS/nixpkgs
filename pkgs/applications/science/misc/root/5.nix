@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, pcre, pkgconfig, python2
+{ stdenv, fetchurl, fetchpatch, cmake, pcre, pkgconfig, python2
 , libX11, libXpm, libXft, libXext, libGLU_combined, zlib, libxml2, lzma, gsl_1
 , Cocoa, OpenGL, noSplash ? false }:
 
@@ -19,6 +19,11 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./sw_vers_root5.patch
+    (fetchpatch {
+      name = "enable_new_gcc.patch";
+      url = "https://aur.archlinux.org/cgit/aur.git/plain/enable_new_gcc.patch?h=root5&id=91c50876081a0af36f84ec4f0f9dba869107fa4f";
+      sha256 = "1rnp0xlw0yqi7mjs4w145njd79i8kkir1qik7zwicdik9axf8ygm";
+    })
   ];
 
   preConfigure = ''
