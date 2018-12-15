@@ -27,6 +27,7 @@ with lib;
     
     services.udisks2.enable = lib.mkDefault false;
     security.polkit.enable = lib.mkDefault false;
+    nixpkgs.config.cairo.gl = lib.mkDefault false;
 
     nixpkgs.overlays = singleton (const (super: {
       dbus = super.dbus.override { x11Support = false; };
