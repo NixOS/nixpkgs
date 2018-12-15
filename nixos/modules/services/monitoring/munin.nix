@@ -66,6 +66,9 @@ let
       user root
       group root
 
+      [munin*]
+      env.UPDATE_STATSFILE /var/lib/munin/munin-update.stats
+
       ${nodeCfg.extraPluginConfig}
     '';
 
@@ -226,13 +229,20 @@ in
       };
 
       disabledPlugins = mkOption {
-        default = [];
+        # TODO: figure out why Munin isn't writing the log file and fix it.
+        # In the meantime this at least suppresses a useless graph full of
+        # NaNs in the output.
+        default = [ "munin_stats" ];
         type = with types; listOf string;
         description = ''
           Munin plugins to disable, even if
           <literal>munin-node-configure --suggest</literal> tries to enable
           them. To disable a wildcard plugin, use an actual wildcard, as in
           the example.
+
+          munin_stats is disabled by default as it tries to read
+          <literal>/var/log/munin/munin-update.log</literal> for timing
+          information, and the NixOS build of Munin does not write this file.
         '';
         example = [ "diskstats" "zfs_usage_*" ];
       };
@@ -312,6 +322,7 @@ in
       description = "Munin monitoring user";
       group = "munin";
       uid = config.ids.uids.munin;
+      home = "/var/lib/munin";
     }];
 
     users.groups = [{
