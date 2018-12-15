@@ -669,7 +669,6 @@ in
   apg = callPackage ../tools/security/apg { };
 
   apt = callPackage ../tools/package-management/apt {
-    inherit (perlPackages) Po4a;
     # include/c++/6.4.0/cstdlib:75:25: fatal error: stdlib.h: No such file or directory
     stdenv = overrideCC stdenv gcc5;
   };
@@ -2068,9 +2067,7 @@ in
 
   client-ip-echo = callPackage ../servers/misc/client-ip-echo { };
 
-  cloc = callPackage ../tools/misc/cloc {
-    inherit (perlPackages) perl AlgorithmDiff ParallelForkManager RegexpCommon;
-  };
+  cloc = callPackage ../tools/misc/cloc { };
 
   cloog = callPackage ../development/libraries/cloog {
     isl = isl_0_14;
@@ -2199,9 +2196,7 @@ in
 
   debianutils = callPackage ../tools/misc/debianutils { };
 
-  debian-devscripts = callPackage ../tools/misc/debian-devscripts {
-    inherit (perlPackages) CryptSSLeay LWP TimeDate DBFile FileDesktopEntry;
-  };
+  debian-devscripts = callPackage ../tools/misc/debian-devscripts { };
 
   debootstrap = callPackage ../tools/misc/debootstrap { };
 
@@ -2303,15 +2298,11 @@ in
 
   dmg2img = callPackage ../tools/misc/dmg2img { };
 
-  docbook2odf = callPackage ../tools/typesetting/docbook2odf {
-    inherit (perlPackages) PerlMagick;
-  };
+  docbook2odf = callPackage ../tools/typesetting/docbook2odf { };
 
   doas = callPackage ../tools/security/doas { };
 
-  docbook2x = callPackage ../tools/typesetting/docbook2x {
-    inherit (perlPackages) XMLSAX XMLSAXBase XMLParser XMLNamespaceSupport;
-  };
+  docbook2x = callPackage ../tools/typesetting/docbook2x { };
 
   docbook2mdoc = callPackage ../tools/misc/docbook2mdoc { };
 
@@ -2545,9 +2536,7 @@ in
 
   ext4magic = callPackage ../tools/filesystems/ext4magic { };
 
-  extract_url = callPackage ../applications/misc/extract_url {
-    inherit (perlPackages) MIMEtools HTMLParser CursesUI URIFind;
-  };
+  extract_url = callPackage ../applications/misc/extract_url { };
 
   extundelete = callPackage ../tools/filesystems/extundelete { };
 
@@ -2629,9 +2618,7 @@ in
 
   ferm = callPackage ../tools/networking/ferm { };
 
-  fgallery = callPackage ../tools/graphics/fgallery {
-    inherit (perlPackages) ImageExifTool CpanelJSONXS;
-  };
+  fgallery = callPackage ../tools/graphics/fgallery { };
 
   flannel = callPackage ../tools/networking/flannel { };
 
@@ -4013,9 +4000,7 @@ in
 
   localtime = callPackage ../tools/system/localtime { };
 
-  logcheck = callPackage ../tools/system/logcheck {
-    inherit (perlPackages) mimeConstruct;
-  };
+  logcheck = callPackage ../tools/system/logcheck { };
 
   logmein-hamachi = callPackage ../tools/networking/logmein-hamachi { };
 
@@ -4252,13 +4237,10 @@ in
   monit = callPackage ../tools/system/monit { };
 
   moreutils = callPackage ../tools/misc/moreutils {
-    inherit (perlPackages) IPCRun TimeDate TimeDuration;
     docbook-xsl = docbook_xsl;
   };
 
-  mosh = callPackage ../tools/networking/mosh {
-    inherit (perlPackages) IOTty;
-  };
+  mosh = callPackage ../tools/networking/mosh { };
 
   motuclient = callPackage ../applications/science/misc/motu-client { };
 
@@ -4764,9 +4746,7 @@ in
     inherit (darwin.apple_sdk.frameworks) IOKit;
   };
 
-  pcsctools = callPackage ../tools/security/pcsctools {
-    inherit (perlPackages) pcscperl Glib Gtk2 Pango Cairo;
-  };
+  pcsctools = callPackage ../tools/security/pcsctools { };
 
   pcsc-cyberjack = callPackage ../tools/security/pcsc-cyberjack { };
 
@@ -5443,9 +5423,7 @@ in
 
   sleepyhead = callPackage ../applications/misc/sleepyhead {};
 
-  slimrat = callPackage ../tools/networking/slimrat {
-    inherit (perlPackages) WWWMechanize LWP;
-  };
+  slimrat = callPackage ../tools/networking/slimrat { };
 
   slsnif = callPackage ../tools/misc/slsnif { };
 
@@ -5622,9 +5600,7 @@ in
 
   swagger-codegen = callPackage ../tools/networking/swagger-codegen { };
 
-  swec = callPackage ../tools/networking/swec {
-    inherit (perlPackages) LWP URI HTMLParser HTTPServerSimple Parent;
-  };
+  swec = callPackage ../tools/networking/swec { };
 
   swfdec = callPackage ../tools/graphics/swfdec {};
 
@@ -5965,10 +5941,7 @@ in
 
   vcftools = callPackage ../applications/science/biology/vcftools { };
 
-  vcsh = callPackage ../applications/version-management/vcsh {
-    inherit (perlPackages) ShellCommand TestMost TestDifferences TestDeep
-      TestException TestWarn;
-  };
+  vcsh = callPackage ../applications/version-management/vcsh { };
 
   vcstool = callPackage ../development/tools/vcstool { };
 
@@ -6274,7 +6247,6 @@ in
   weighttp = callPackage ../tools/networking/weighttp { };
 
   wget = callPackage ../tools/networking/wget {
-    inherit (perlPackages) IOSocketSSL LWP;
     libpsl = null;
   };
 
@@ -8411,16 +8383,12 @@ in
   };
 
   creduce = callPackage ../development/tools/misc/creduce {
-    inherit (perlPackages) perl
-      ExporterLite FileWhich GetoptTabular RegexpCommon TermReadKey;
     inherit (llvmPackages_6) llvm clang-unwrapped;
   };
 
   cscope = callPackage ../development/tools/misc/cscope { };
 
-  csmith = callPackage ../development/tools/misc/csmith {
-    inherit (perlPackages) perl SysCPU;
-  };
+  csmith = callPackage ../development/tools/misc/csmith { };
 
   csslint = callPackage ../development/web/csslint { };
 
@@ -8630,9 +8598,7 @@ in
 
   hcloud = callPackage ../development/tools/hcloud { };
 
-  help2man = callPackage ../development/tools/misc/help2man {
-    inherit (perlPackages) LocaleGettext;
-  };
+  help2man = callPackage ../development/tools/misc/help2man { };
 
   heroku = callPackage ../development/tools/heroku {
     nodejs = nodejs-10_x;
@@ -8650,9 +8616,7 @@ in
 
   icmake = callPackage ../development/tools/build-managers/icmake { };
 
-  iconnamingutils = callPackage ../development/tools/misc/icon-naming-utils {
-    inherit (perlPackages) XMLSimple;
-  };
+  iconnamingutils = callPackage ../development/tools/misc/icon-naming-utils { };
 
   include-what-you-use = callPackage ../development/tools/analysis/include-what-you-use {
     llvmPackages = llvmPackages_6;
@@ -10185,9 +10149,7 @@ in
 
   hiredis = callPackage ../development/libraries/hiredis { };
 
-  hivex = callPackage ../development/libraries/hivex {
-    inherit (perlPackages) IOStringy;
-  };
+  hivex = callPackage ../development/libraries/hivex { };
 
   hound = callPackage ../development/tools/misc/hound { };
 
@@ -10812,7 +10774,6 @@ in
 
   libguestfs-appliance = callPackage ../development/libraries/libguestfs/appliance.nix {};
   libguestfs = callPackage ../development/libraries/libguestfs {
-    inherit (perlPackages) libintl_perl GetoptLong SysVirt;
     appliance = libguestfs-appliance;
   };
 
@@ -13343,16 +13304,12 @@ in
 
   diod = callPackage ../servers/diod { lua = lua5_1; };
 
-  dkimproxy = callPackage ../servers/mail/dkimproxy {
-    inherit (perlPackages) Error MailDKIM MIMETools NetServer;
-  };
+  dkimproxy = callPackage ../servers/mail/dkimproxy { };
 
   dovecot = callPackage ../servers/mail/dovecot { };
   dovecot_pigeonhole = callPackage ../servers/mail/dovecot/plugins/pigeonhole { };
 
-  dspam = callPackage ../servers/mail/dspam {
-    inherit (perlPackages) libnet;
-  };
+  dspam = callPackage ../servers/mail/dspam { };
 
   etcd = callPackage ../servers/etcd { };
 
@@ -13681,7 +13638,7 @@ in
 
   monitoring-plugins = callPackage ../servers/monitoring/plugins { };
 
-  inherit (callPackage ../servers/monitoring/plugins/labs_consol_de.nix { inherit (perlPackages) DBDsybase NetSNMP; })
+  inherit (callPackage ../servers/monitoring/plugins/labs_consol_de.nix { })
     check-mssql-health
     check-nwc-health
     check-ups-health;
@@ -13842,10 +13799,7 @@ in
 
   supervise = callPackage ../tools/system/supervise { };
 
-  spamassassin = callPackage ../servers/mail/spamassassin {
-    inherit (perlPackages) HTMLParser NetDNS NetAddrIP DBFile
-      HTTPDate MailDKIM LWP IOSocketSSL;
-  };
+  spamassassin = callPackage ../servers/mail/spamassassin { };
 
   deadpixi-sam-unstable = callPackage ../applications/editors/deadpixi-sam { };
   deadpixi-sam = deadpixi-sam-unstable;
@@ -15750,7 +15704,6 @@ in
   aacgain = callPackage ../applications/audio/aacgain { };
 
   abcde = callPackage ../applications/audio/abcde {
-    inherit (perlPackages) MusicBrainz MusicBrainzDiscID;
     inherit (pythonPackages) eyeD3;
   };
 
@@ -17455,10 +17408,6 @@ in
   ike = callPackage ../applications/networking/ike { };
 
   ikiwiki = callPackage ../applications/misc/ikiwiki {
-    inherit (perlPackages) TextMarkdown URI HTMLParser HTMLScrubber
-      HTMLTemplate TimeDate CGISession DBFile CGIFormBuilder LocaleGettext
-      RpcXML XMLSimple YAML YAMLLibYAML HTMLTree Filechdir
-      AuthenPassphrase NetOpenIDConsumer LWPxParanoidAgent CryptSSLeay;
     inherit (perlPackages.override { pkgs = pkgs // { imagemagick = imagemagickBig;}; }) PerlMagick;
   };
 
@@ -21224,9 +21173,7 @@ in
 
   bcftools = callPackage ../applications/science/biology/bcftools { };
 
-  conglomerate = callPackage ../applications/science/biology/conglomerate {
-    inherit (perlPackages) GetoptTabular MNI-Perllib;
-  };
+  conglomerate = callPackage ../applications/science/biology/conglomerate { };
 
   dcm2niix = callPackage ../applications/science/biology/dcm2niix { };
 
@@ -21244,9 +21191,7 @@ in
 
   igv = callPackage ../applications/science/biology/igv { };
 
-  inormalize = callPackage ../applications/science/biology/inormalize {
-    inherit (perlPackages) GetoptTabular MNI-Perllib;
-  };
+  inormalize = callPackage ../applications/science/biology/inormalize { };
 
   iv = callPackage ../applications/science/biology/iv {
     neuron-version = neuron.version;
@@ -21258,9 +21203,7 @@ in
 
   muscle = callPackage ../applications/science/biology/muscle { };
 
-  n3 = callPackage ../applications/science/biology/N3 {
-    inherit (perlPackages) perl GetoptTabular MNI-Perllib;
-  };
+  n3 = callPackage ../applications/science/biology/N3 { };
 
   neuron = callPackage ../applications/science/biology/neuron {
     python = null;
@@ -21274,17 +21217,11 @@ in
 
   mrbayes = callPackage ../applications/science/biology/mrbayes { };
 
-  minc_tools = callPackage ../applications/science/biology/minc-tools {
-    inherit (perlPackages) TextFormat;
-  };
+  minc_tools = callPackage ../applications/science/biology/minc-tools { };
 
-  minc_widgets = callPackage ../applications/science/biology/minc-widgets {
-    inherit (perlPackages) GetoptTabular MNI-Perllib;
-  };
+  minc_widgets = callPackage ../applications/science/biology/minc-widgets { };
 
-  mni_autoreg = callPackage ../applications/science/biology/mni_autoreg {
-    inherit (perlPackages) GetoptTabular MNI-Perllib;
-  };
+  mni_autoreg = callPackage ../applications/science/biology/mni_autoreg { };
 
   minimap2 = callPackage ../applications/science/biology/minimap2 { };
 
@@ -22638,12 +22575,7 @@ in
     conf = config.slock.conf or null;
   };
 
-  smokeping = callPackage ../tools/networking/smokeping {
-    inherit fping rrdtool;
-    inherit (perlPackages)
-      FCGI CGI CGIFast ConfigGrammar DigestHMAC NetTelnet
-      NetOpenSSH NetSNMP LWP IOTty perl NetDNS perlldap;
-  };
+  smokeping = callPackage ../tools/networking/smokeping { };
 
   snapraid = callPackage ../tools/filesystems/snapraid { };
 

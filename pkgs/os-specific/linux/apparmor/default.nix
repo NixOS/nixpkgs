@@ -8,6 +8,7 @@
 , swig
 , ncurses
 , pam
+, libnotify
 , buildPackages
 }:
 
@@ -79,6 +80,8 @@ let
     dontDisableStatic = true;
 
     prePatch = prePatchCommon + ''
+      substituteInPlace ./libraries/libapparmor/swig/perl/Makefile.am --replace install_vendor install_site
+      substituteInPlace ./libraries/libapparmor/swig/perl/Makefile.in --replace install_vendor install_site
       substituteInPlace ./libraries/libapparmor/src/Makefile.am --replace "/usr/include/netinet/in.h" "${stdenv.cc.libc.dev}/include/netinet/in.h"
       substituteInPlace ./libraries/libapparmor/src/Makefile.in --replace "/usr/include/netinet/in.h" "${stdenv.cc.libc.dev}/include/netinet/in.h"
     '';
@@ -127,9 +130,10 @@ let
         wrapProgram $out/bin/$prog --prefix PYTHONPATH : "$out/lib/${python.libPrefix}/site-packages:$PYTHONPATH"
       done
 
-      for prog in aa-notify ; do
-        wrapProgram $out/bin/$prog --prefix PERL5LIB : "${libapparmor}/lib/perl5:$PERL5LIB"
-      done
+      substituteInPlace $out/bin/aa-notify --replace /usr/bin/notify-send ${libnotify}/bin/notify-send
+      # aa-notify checks its name and does not work named ".aa-notify-wrapped"
+      mv $out/bin/aa-notify $out/bin/aa-notify-wrapped
+      makeWrapper ${perl}/bin/perl $out/bin/aa-notify --set PERL5LIB ${libapparmor}/${perl.libPrefix} --add-flags $out/bin/aa-notify-wrapped
     '';
 
     inherit doCheck;

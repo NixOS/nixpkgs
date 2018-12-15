@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
 
   checkInputs = [ perlPackages.TestCommand perlPackages.TestHarness ];
   preCheck = ''
-    export PERL5LIB="${perlPackages.TestCommand}/lib/perl5/site_perl"
+    export PERL5LIB="${perlPackages.TestCommand}/${perlPackages.perl.libPrefix}"
   '';
 
   doCheck = true;

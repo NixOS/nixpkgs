@@ -1,6 +1,5 @@
 { stdenv, lib, fetchurl, makeWrapper, pkgconfig, udev, dbus, pcsclite
-, wget, coreutils
-, perl, pcscperl, Glib, Gtk2, Pango, Cairo
+, wget, coreutils, perlPackages
 }:
 
 let deps = lib.makeBinPath [ wget coreutils ];
@@ -13,17 +12,17 @@ in stdenv.mkDerivation rec {
     sha256 = "050x3yqd5ywl385zai3k1zhbm2lz1f5ksalfpm9hd86s50f03ans";
   };
 
-  buildInputs = [ udev dbus perl pcsclite ];
+  buildInputs = [ udev dbus perlPackages.perl pcsclite ];
 
   nativeBuildInputs = [ makeWrapper pkgconfig ];
 
   postInstall = ''
     wrapProgram $out/bin/scriptor \
-      --set PERL5LIB "${lib.makePerlPath [ pcscperl ]}"
+      --set PERL5LIB "${with perlPackages; makePerlPath [ pcscperl ]}"
     wrapProgram $out/bin/gscriptor \
-      --set PERL5LIB "${lib.makePerlPath [ pcscperl Glib Gtk2 Pango Cairo ]}"
+      --set PERL5LIB "${with perlPackages; makePerlPath [ pcscperl Glib Gtk2 Pango Cairo ]}"
     wrapProgram $out/bin/ATR_analysis \
-      --set PERL5LIB "${lib.makePerlPath [ pcscperl ]}"
+      --set PERL5LIB "${with perlPackages; makePerlPath [ pcscperl ]}"
     wrapProgram $out/bin/pcsc_scan \
       --set PATH "$out/bin:${deps}"
   '';
