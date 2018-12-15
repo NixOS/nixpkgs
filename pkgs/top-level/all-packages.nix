@@ -1434,6 +1434,8 @@ in
 
   gh-ost = callPackage ../tools/misc/gh-ost { };
 
+  gif-for-cli = callPackage ../tools/misc/gif-for-cli { };
+
   gist = callPackage ../tools/text/gist { };
 
   gixy = callPackage ../tools/admin/gixy { };
