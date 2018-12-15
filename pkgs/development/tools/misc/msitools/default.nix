@@ -1,12 +1,12 @@
 {stdenv, fetchurl, intltool, glib, pkgconfig, libgsf, libuuid, gcab, bzip2}:
 
 stdenv.mkDerivation rec {
-  version = "0.97";
+  version = "0.98";
   name = "msitools-${version}";
 
   src = fetchurl {
-    url = "https://ftp.gnome.org/pub/GNOME/sources/msitools/0.97/${name}.tar.xz";
-    sha256 = "0pn6izlgwi4ngpk9jk2n38gcjjpk29nm15aad89bg9z3k9n2hnrs";
+    url = "https://ftp.gnome.org/pub/GNOME/sources/msitools/0.98/${name}.tar.xz";
+    sha256 = "19wb3n3nwkpc6bjr0q3f1znaxsfaqgjbdxxnbx8ic8bb5b49hwac";
   };
 
   nativeBuildInputs = [ pkgconfig ];
