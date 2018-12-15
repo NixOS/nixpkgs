@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   name = "imgcat-${version}";
   version = "2.3.0";
 
-  buildTools = [ autoconf automake libtool ncurses ];
+  buildInputs = [ autoconf automake libtool ncurses ];
 
   preConfigure = ''
     ${autoconf}/bin/autoconf

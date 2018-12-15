@@ -2,6 +2,7 @@
 , enableLDAP ? false, openldap
 , enableMySQL ? false, mysql, zlib
 , enableAuthDovecot ? false, dovecot
+, enablePAM ? false, pam
 }:
 
 stdenv.mkDerivation rec {
@@ -16,7 +17,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ coreutils db openssl perl pcre ]
     ++ stdenv.lib.optional enableLDAP openldap
     ++ stdenv.lib.optionals enableMySQL [ mysql zlib ]
-    ++ stdenv.lib.optional enableAuthDovecot dovecot;
+    ++ stdenv.lib.optional enableAuthDovecot dovecot
+    ++ stdenv.lib.optional enablePAM pam;
 
   preBuild = ''
     ${stdenv.lib.optionalString enableMySQL "PKG_CONFIG_PATH=$PKG_CONFIG_PATH:${mysql}/share/mysql/pkgconfig/"}
@@ -25,6 +27,7 @@ stdenv.mkDerivation rec {
       s:^\(CONFIGURE_FILE\)=.*:\1=/etc/exim.conf:
       s:^\(EXIM_USER\)=.*:\1=ref\:nobody:
       s:^\(SPOOL_DIRECTORY\)=.*:\1=/exim-homeless-shelter:
+      s:^# \(TRANSPORT_LMTP\)=.*:\1=yes:
       s:^# \(SUPPORT_MAILDIR\)=.*:\1=yes:
       s:^EXIM_MONITOR=.*$:# &:
       s:^\(FIXED_NEVER_USERS\)=root$:\1=0:
@@ -56,6 +59,11 @@ stdenv.mkDerivation rec {
       ''}
       ${stdenv.lib.optionalString enableAuthDovecot ''
         s:^# \(AUTH_DOVECOT\)=.*:\1=yes:
+      ''}
+      ${stdenv.lib.optionalString enablePAM ''
+        s:^# \(SUPPORT_PAM\)=.*:\1=yes:
+        s:^\(EXTRALIBS_EXIM\)=\(.*\):\1=\2 -lpam:
+        s:^# \(EXTRALIBS_EXIM\)=.*:\1=-lpam:
       ''}
       #/^\s*#.*/d
       #/^\s*$/d

@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
              ++ stdenv.lib.optional useSystemd systemd;
 
   configureFlags = [
-    "--with-systemdsystemunitdir=${if useSystemd then "${placeholder "out"}/etc/systemd/system" else "no"}"
+    "--with-systemdsystemunitdir=${if useSystemd then "$(out)/etc/systemd/system" else "no"}"
     "--enable-warmstarts"
     "--with-rpcuser=rpc"
   ];

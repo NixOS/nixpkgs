@@ -383,7 +383,7 @@
       virtuoso = 44;
       #rtkit = 45; # unused
       dovecot2 = 46;
-      #dovenull = 47; # unused
+      dovenull2 = 47;
       prayer = 49;
       mpd = 50;
       clamav = 51;

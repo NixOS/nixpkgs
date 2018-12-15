@@ -6,6 +6,7 @@
 , pytest
 , cython
 , cymem
+, darwin
 , msgpack-numpy
 , msgpack-python
 , preshed
@@ -35,8 +36,14 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace setup.py \
       --replace "msgpack-python==" "msgpack-python>=" \
-      --replace "msgpack-numpy==" "msgpack-numpy>="
+      --replace "msgpack-numpy==" "msgpack-numpy>=" \
+      --replace "plac>=0.9,<1.0" "plac>=0.9" \
+      --replace "hypothesis>=2,<3" "hypothesis>=2"
   '';
+
+  buildInputs = lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+    Accelerate CoreFoundation CoreGraphics CoreVideo
+  ]);
 
   propagatedBuildInputs = [
    cython

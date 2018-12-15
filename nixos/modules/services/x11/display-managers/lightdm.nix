@@ -61,6 +61,12 @@ let
       ${optionalString hasDefaultUserSession ''
         user-session=${defaultSessionName}
       ''}
+      ${optionalString (dmcfg.setupCommands != "") ''
+        display-setup-script=${pkgs.writeScript "lightdm-display-setup" ''
+          #!${pkgs.bash}/bin/bash
+          ${dmcfg.setupCommands}
+        ''}
+      ''}
       ${cfg.extraSeatDefaults}
     '';
 
@@ -179,7 +185,7 @@ in
       { assertion = cfg.autoLogin.enable -> dmDefault != "none" || wmDefault != "none";
         message = ''
           LightDM auto-login requires that services.xserver.desktopManager.default and
-          services.xserver.windowMananger.default are set to valid values. The current
+          services.xserver.windowManager.default are set to valid values. The current
           default session: ${defaultSessionName} is not valid.
         '';
       }
@@ -197,7 +203,7 @@ in
       # lightdm relaunches itself via just `lightdm`, so needs to be on the PATH
       execCmd = ''
         export PATH=${lightdm}/sbin:$PATH
-        exec ${lightdm}/sbin/lightdm --log-dir=/var/log --run-dir=/run
+        exec ${lightdm}/sbin/lightdm
       '';
     };
 
@@ -246,11 +252,18 @@ in
     '';
 
     users.users.lightdm = {
-      createHome = true;
-      home = "/var/lib/lightdm-data";
+      home = "/var/lib/lightdm";
       group = "lightdm";
       uid = config.ids.uids.lightdm;
     };
+
+    systemd.tmpfiles.rules = [
+      "d /run/lightdm 0711 lightdm lightdm 0"
+      "d /var/cache/lightdm 0711 root lightdm -"
+      "d /var/lib/lightdm 1770 lightdm lightdm -"
+      "d /var/lib/lightdm-data 1775 lightdm lightdm -"
+      "d /var/log/lightdm 0711 root lightdm -"
+    ];
 
     users.groups.lightdm.gid = config.ids.gids.lightdm;
     services.xserver.tty     = null; # We might start multiple X servers so let the tty increment themselves..

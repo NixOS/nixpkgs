@@ -17,25 +17,27 @@ in
 rec {
   # Policy: use the highest stable version as the default (on our master).
   stable = generic {
-    version = "390.77";
-    sha256_32bit = "1yd313ghh2qbn07d5wbkshfwgkm4mh49vcqkydds3b3xk0mx4i8l";
-    sha256_64bit = "10kjccrkdn360035lh985cadhwy6lk9xrw3wlmww2wqfaa25f775";
-    settingsSha256 = "1wvxldpjkrx0ldjm5l6ycm6paxpcw89h0n6hfkznfkahkq7fwxdj";
-    persistencedSha256 = "1gklmc0v17m018cwpdlzwdyd45y4sjvjhj8a3l44baygix5zn30f";
+    version = "390.87";
+    sha256_32bit = "0rlr1f4lnpb8c4qz4w5r8xw5gdy9bzz26qww45qyl1qav3wwaaaw";
+    sha256_64bit = "07k1kq8lkgbvjyr2dnbxcz6nppcwpq17wf925w8kfq78345hla9q";
+    settingsSha256 = "0xlaiy7jr95z0v2c6cwll89nxnb142pybw7m08jg44r7n13ffv3r";
+    persistencedSha256 = "0mhwk321garyl6m12261cj03ycv0qz1sbrlbq6cqwjpq4f1s7h58";
+
+    patches = lib.optional (kernel.meta.branch == "4.19") ./drm_mode_connector.patch;
   };
 
   beta = stable; # not enough interest to maintain beta ATM
 
 
   legacy_340 = generic {
-    version = "340.104";
-    sha256_32bit = "1l8w95qpxmkw33c4lsf5ar9w2fkhky4x23rlpqvp1j66wbw1b473";
-    sha256_64bit = "18k65gx6jg956zxyfz31xdp914sq3msn665a759bdbryksbk3wds";
-    settingsSha256 = "1vvpqimvld2iyfjgb9wvs7ca0b0f68jzfdpr0icbyxk4vhsq7sxk";
-    persistencedSha256 = "0zqws2vsrxbxhv6z0nn2galnghcsilcn3s0f70bpm6jqj9wzy7x8";
+    version = "340.107";
+    sha256_32bit = "0mh83affz6bim26ws7kkwwcfj2s6vkdy4d45hifsbshr82qd52wd";
+    sha256_64bit = "0pv9yv3x0kg9hfkmc50xb54ahxkbnyy2vyy4hj2h0s6m9sb5kqz3";
+    settingsSha256 = "1rgaa24acdyqa1rqrx56293vxpskr792njqqpigqmps04llsx703";
+    persistencedSha256 = "0nwv6kh4gxgy80x1zs6gcg5hy3amg25xhsfa2v4mwqa36sblxz6l";
     useGLVND = false;
 
-    patches = maybePatch_drm_legacy ++ [ ./vm_operations_struct-fault.patch ];
+    patches = [ ./vm_operations_struct-fault.patch ];
   };
 
   legacy_304 = generic {
@@ -63,5 +65,6 @@ rec {
         '';
     in applyPatches [ "fix-typos" ];
     patches = maybePatch_drm_legacy;
+    broken = lib.versionAtLeast kernel.version "4.18";
   };
 }

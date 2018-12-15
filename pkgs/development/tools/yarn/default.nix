@@ -23,5 +23,6 @@ stdenv.mkDerivation rec {
     description = "Fast, reliable, and secure dependency management for javascript";
     license = licenses.bsd2;
     maintainers = [ maintainers.offline ];
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

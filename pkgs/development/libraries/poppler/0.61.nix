@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, cmake, ninja, pkgconfig, libiconv, libintl
-, zlib, curl, cairo, freetype, fontconfig, lcms, libjpeg, openjpeg
+, zlib, curl, cairo, freetype, fontconfig, lcms, libjpeg, openjpeg, fetchpatch
 , withData ? true, poppler_data
 , qt5Support ? false, qtbase ? null
 , introspectionSupport ? false, gobjectIntrospection ? null
@@ -20,6 +20,14 @@ stdenv.mkDerivation rec {
   };
 
   outputs = [ "out" "dev" ];
+
+  patches = [
+    (fetchpatch {
+      name = "CVE-2018-13988";
+      url = "https://cgit.freedesktop.org/poppler/poppler/patch/?id=004e3c10df0abda214f0c293f9e269fdd979c5ee";
+      sha256 = "1l8713s57xc6g81bldw934rsfm140fqc7ggd50ha5mxdl1b3app2";
+    })
+  ];
 
   buildInputs = [ libiconv libintl ] ++ lib.optional withData poppler_data;
 

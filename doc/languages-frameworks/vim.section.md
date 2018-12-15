@@ -5,11 +5,16 @@ date: 2016-06-25
 ---
 # User's Guide to Vim Plugins/Addons/Bundles/Scripts in Nixpkgs
 
-You'll get a vim(-your-suffix) in PATH also loading the plugins you want.
+Both Neovim and Vim can be configured to include your favorite plugins
+and additional libraries.
+
 Loading can be deferred; see examples.
 
-Vim packages, VAM (=vim-addon-manager) and Pathogen are supported to load
-packages.
+At the moment we support three different methods for managing plugins:
+
+- Vim packages (*recommend*)
+- VAM (=vim-addon-manager)
+- Pathogen
 
 ## Custom configuration
 
@@ -17,6 +22,7 @@ Adding custom .vimrc lines can be done using the following code:
 
 ```
 vim_configurable.customize {
+  # `name` specifies the name of the executable and package
   name = "vim-with-plugins";
 
   vimrcConfig.customRC = ''
@@ -25,7 +31,21 @@ vim_configurable.customize {
 }
 ```
 
-## Vim packages
+This configuration is used when vim is invoked with the command specified as name, in this case `vim-with-plugins`.
+
+For Neovim the `configure` argument can be overridden to achieve the same:
+
+```
+neovim.override {
+  configure = {
+    customRC = ''
+      # here your custom configuration goes!
+    '';
+  };
+}
+```
+
+## Managing plugins with Vim packages
 
 To store you plugins in Vim packages the following example can be used:
 
@@ -38,13 +58,51 @@ vim_configurable.customize {
     opt = [ phpCompletion elm-vim ];
     # To automatically load a plugin when opening a filetype, add vimrc lines like:
     # autocmd FileType php :packadd phpCompletion
-  }
-};
+  };
+}
 ```
 
-## VAM
+For Neovim the syntax is
 
-### dependencies by Vim plugins
+```
+neovim.override {
+  configure = {
+    customRC = ''
+      # here your custom configuration goes!
+    '';
+    packages.myVimPackage = with pkgs.vimPlugins; {
+      # see examples below how to use custom packages
+      start = [ ];
+      opt = [ ];
+    };
+  };
+}
+```
+
+The resulting package can be added to `packageOverrides` in `~/.nixpkgs/config.nix` to make it installable:
+
+```
+{
+  packageOverrides = pkgs: with pkgs; {
+    myVim = vim_configurable.customize {
+      # `name` specifies the name of the executable and package
+      name = "vim-with-plugins";
+      # add here code from the example section
+    };
+    myNeovim = neovim.override {
+      configure = {
+      # add here code from the example section
+      };
+    };
+  };
+}
+```
+
+After that you can install your special grafted `myVim` or `myNeovim` packages.
+
+## Managing plugins with VAM
+
+### Handling dependencies of Vim plugins
 
 VAM introduced .json files supporting dependencies without versioning
 assuming that "using latest version" is ok most of the time.

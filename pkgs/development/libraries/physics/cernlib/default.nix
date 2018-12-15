@@ -56,6 +56,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://cernlib.web.cern.ch;
     description = "Legacy collection of libraries and modules for data analysis in high energy physics";
+    broken = stdenv.isDarwin;
     platforms = stdenv.lib.platforms.unix;
     maintainers = with stdenv.lib.maintainers; [ veprbl ];
     license = stdenv.lib.licenses.gpl2;

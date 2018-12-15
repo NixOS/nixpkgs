@@ -1,0 +1,13 @@
+diff -ruN gildas-src-aug18a/kernel/etc/Makefile gildas-src-aug18a.gag-font-bin-rule/kernel/etc/Makefile
+--- gildas-src-aug18a/kernel/etc/Makefile	2016-09-09 09:39:37.000000000 +0200
++++ gildas-src-aug18a.gag-font-bin-rule/kernel/etc/Makefile	2018-09-04 12:03:11.000000000 +0200
+@@ -29,7 +29,8 @@
+ 
+ SEDEXE=sed -e 's?source tree?executable tree?g'
+ 
+-$(datadir)/gag-font.bin: hershey-font.dat $(bindir)/hershey
++$(datadir)/gag-font.bin: hershey-font.dat $(bindir)/hershey \
++	$(gagintdir)/etc/gag.dico.gbl $(gagintdir)/etc/gag.dico.lcl
+ ifeq ($(GAG_ENV_KIND)-$(GAG_TARGET_KIND),cygwin-mingw)
+ 	$(bindir)/hershey `cygpath -w $(datadir)`/gag-font.bin
+ else

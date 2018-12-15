@@ -5,7 +5,7 @@
 , storeDir ? "/nix/store"
 , stateDir ? "/nix/var"
 , confDir ? "/etc"
-, withLibseccomp ? libseccomp.meta.available, libseccomp
+, withLibseccomp ? lib.any (lib.meta.platformMatch stdenv.hostPlatform) libseccomp.meta.platforms, libseccomp
 }:
 
 let
@@ -29,7 +29,7 @@ let
 
     buildInputs = [ curl openssl sqlite xz bzip2 ]
       ++ lib.optional (stdenv.isLinux || stdenv.isDarwin) libsodium
-      ++ lib.optionals is20 [ brotli ] # Since 1.12
+      ++ lib.optionals is20 [ brotli boost ]
       ++ lib.optional withLibseccomp libseccomp
       ++ lib.optional ((stdenv.isLinux || stdenv.isDarwin) && is20)
           ((aws-sdk-cpp.override {
@@ -40,8 +40,7 @@ let
               url = https://github.com/edolstra/aws-sdk-cpp/commit/7d58e303159b2fb343af9a1ec4512238efa147c7.patch;
               sha256 = "103phn6kyvs1yc7fibyin3lgxz699qakhw671kl207484im55id1";
             })];
-          }))
-      ++ lib.optional fromGit boost;
+          }));
 
     propagatedBuildInputs = [ boehmgc ];
 
@@ -51,7 +50,7 @@ let
     preConfigure =
       # Copy libboost_context so we don't get all of Boost in our closure.
       # https://github.com/NixOS/nixpkgs/issues/45462
-      lib.optionalString fromGit
+      lib.optionalString is20
       ''
         mkdir -p $out/lib
         cp ${boost}/lib/libboost_context* $out/lib
@@ -75,7 +74,7 @@ let
           stdenv.hostPlatform != stdenv.buildPlatform && stdenv.hostPlatform ? nix && stdenv.hostPlatform.nix ? system
       ) ''--with-system=${stdenv.hostPlatform.nix.system}''
          # RISC-V support in progress https://github.com/seccomp/libseccomp/pull/50
-      ++ lib.optional (!libseccomp.meta.available) "--disable-seccomp-sandboxing";
+      ++ lib.optional (!withLibseccomp) "--disable-seccomp-sandboxing";
 
     makeFlags = "profiledir=$(out)/etc/profile.d";
 
@@ -148,21 +147,24 @@ in rec {
   }) // { perl-bindings = nix1; };
 
   nixStable = (common rec {
-    name = "nix-2.0.4";
+    name = "nix-2.1.3";
     src = fetchurl {
       url = "http://nixos.org/releases/nix/${name}/${name}.tar.xz";
-      sha256 = "166540ff7b8bb41449586b67e5fc6ab9e25525f6724b6c6bcbfb0648fbd6496b";
+      sha256 = "5d22dad058d5c800d65a115f919da22938c50dd6ba98c5e3a183172d149840a4";
     };
-  }) // { perl-bindings = perl-bindings { nix = nixStable; }; };
+  }) // { perl-bindings = perl-bindings {
+    nix = nixStable;
+    needsBoost = true;
+  }; };
 
   nixUnstable = (lib.lowPrio (common rec {
-    name = "nix-2.1${suffix}";
-    suffix = "pre6377_954d1f4d";
+    name = "nix-2.2${suffix}";
+    suffix = "pre6526_9f99d624";
     src = fetchFromGitHub {
       owner = "NixOS";
       repo = "nix";
-      rev = "954d1f4d0a35063ff431b258beebadf753cb9efe";
-      sha256 = "0wnljxljvcwmniydgxlsjqmbgghmljs75m6083y2nkjql7dnrm7g";
+      rev = "9f99d62480cf7c58c0a110b180f2096b7d25adab";
+      sha256 = "0fkmx7gmgg0yij9kw52fkyvib88hj1jsj90vbpy13ccfwknh1044";
     };
     fromGit = true;
   })) // { perl-bindings = perl-bindings {

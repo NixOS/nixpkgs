@@ -22,6 +22,13 @@ with lib;
     # Not supported in systemd-nspawn containers.
     security.audit.enable = false;
 
+    # Make sure that root user in container will talk to host nix-daemon
+    environment.etc."profile".text = ''
+    export NIX_REMOTE=daemon
+    '';
+
+
+
   };
 
 }

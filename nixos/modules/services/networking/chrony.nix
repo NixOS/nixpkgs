@@ -3,12 +3,10 @@
 with lib;
 
 let
+  cfg = config.services.chrony;
 
   stateDir = "/var/lib/chrony";
-
-  keyFile = "/etc/chrony.keys";
-
-  cfg = config.services.chrony;
+  keyFile = "${stateDir}/chrony.keys";
 
   configFile = pkgs.writeText "chrony.conf" ''
     ${concatMapStringsSep "\n" (server: "server " + server) cfg.servers}
@@ -19,7 +17,6 @@ let
     }
 
     driftfile ${stateDir}/chrony.drift
-
     keyfile ${keyFile}
 
     ${optionalString (!config.time.hardwareClockInLocalTime) "rtconutc"}
@@ -27,18 +24,11 @@ let
     ${cfg.extraConfig}
   '';
 
-  chronyFlags = "-n -m -u chrony -f ${configFile} ${toString cfg.extraFlags}";
-
+  chronyFlags = "-m -u chrony -f ${configFile} ${toString cfg.extraFlags}";
 in
-
 {
-
-  ###### interface
-
   options = {
-
     services.chrony = {
-
       enable = mkOption {
         default = false;
         description = ''
@@ -83,15 +73,9 @@ in
         description = "Extra flags passed to the chronyd command.";
       };
     };
-
   };
 
-
-  ###### implementation
-
   config = mkIf cfg.enable {
-
-    # Make chronyc available in the system path
     environment.systemPackages = [ pkgs.chrony ];
 
     users.groups = singleton
@@ -113,26 +97,31 @@ in
       { description = "chrony NTP daemon";
 
         wantedBy = [ "multi-user.target" ];
-        wants = [ "time-sync.target" ];
-        before = [ "time-sync.target" ];
-        after = [ "network.target" ];
+        wants    = [ "time-sync.target" ];
+        before   = [ "time-sync.target" ];
+        after    = [ "network.target" ];
         conflicts = [ "ntpd.service" "systemd-timesyncd.service" ];
 
         path = [ pkgs.chrony ];
 
-        preStart =
-          ''
-            mkdir -m 0755 -p ${stateDir}
-            touch ${keyFile}
-            chmod 0640 ${keyFile}
-            chown chrony:chrony ${stateDir} ${keyFile}
-          '';
+        preStart = ''
+          mkdir -m 0755 -p ${stateDir}
+          touch ${keyFile}
+          chmod 0640 ${keyFile}
+          chown chrony:chrony ${stateDir} ${keyFile}
+        '';
 
+        unitConfig.ConditionCapability = "CAP_SYS_TIME";
         serviceConfig =
-          { ExecStart = "${pkgs.chrony}/bin/chronyd ${chronyFlags}";
+          { Type = "forking";
+            ExecStart = "${pkgs.chrony}/bin/chronyd ${chronyFlags}";
+
+            ProtectHome = "yes";
+            ProtectSystem = "full";
+            PrivateTmp = "yes";
+
           };
+
       };
-
   };
-
 }

@@ -1,4 +1,6 @@
-{ lib, stdenv, glibc, fetchurl, zlib, readline, libossp_uuid, openssl, libxml2, makeWrapper, tzdata }:
+{ stdenv, lib, fetchurl, makeWrapper
+, glibc, zlib, readline, libossp_uuid, openssl, libxml2, tzdata, systemd
+}:
 
 let
 
@@ -16,7 +18,8 @@ let
 
     buildInputs =
       [ zlib readline openssl libxml2 makeWrapper ]
-      ++ lib.optionals (!stdenv.isDarwin) [ libossp_uuid ];
+      ++ lib.optionals (!stdenv.isDarwin) [ libossp_uuid ]
+      ++ lib.optionals (atLeast "9.6" && !stdenv.isDarwin) [ systemd ];
 
     enableParallelBuilding = true;
 
@@ -33,6 +36,7 @@ let
       "--sysconfdir=/etc"
       "--libdir=$(lib)/lib"
       "--with-system-tzdata=${tzdata}/share/zoneinfo"
+      (lib.optionalString (atLeast "9.6" && !stdenv.isDarwin) "--with-systemd")
       (if stdenv.isDarwin then "--with-uuid=e2fs" else "--with-ossp-uuid")
     ];
 
@@ -100,33 +104,33 @@ let
 in {
 
   postgresql93 = common {
-    version = "9.3.24";
+    version = "9.3.25";
     psqlSchema = "9.3";
-    sha256 = "1a8dnv16n2rxnbwhqw7c0kjpj3xqvkpwk50kvimj4d917cxaf542";
+    sha256 = "1nxn0hjrg4y5v5n2jgzrbicgv4504r2yfjyk6g6rq0sx8603x5g4";
   };
 
   postgresql94 = common {
-    version = "9.4.19";
+    version = "9.4.20";
     psqlSchema = "9.4";
-    sha256 = "12qn9h47rkn4k41gdbxkkvg0pff43k1113jmhc83f19adc1nnxq3";
+    sha256 = "0zzqjz5jrn624hzh04drpj6axh30a9k6bgawid6rwk45nbfxicgf";
   };
 
   postgresql95 = common {
-    version = "9.5.14";
+    version = "9.5.15";
     psqlSchema = "9.5";
-    sha256 = "0k8s62h6qd9p3xlx315j5irniskqsnx1nz4ir5r1yhqp07mdab1y";
+    sha256 = "0i2lylgmsmy2g1ixlvl112fryp7jmrd0i2brk8sxb7vzzpg3znnv";
   };
 
   postgresql96 = common {
-    version = "9.6.10";
+    version = "9.6.11";
     psqlSchema = "9.6";
-    sha256 = "09l4zqs74fqnazdsyln9x657mq3wsbgng9wpvq71yh26cv2sq5c6";
+    sha256 = "0c55akrkzqd6p6a8hr0338wk246hl76r9j16p4zn3s51d7f0l99q";
   };
 
   postgresql100 = common {
-    version = "10.5";
+    version = "10.6";
     psqlSchema = "10.0";
-    sha256 = "04a07jkvc5s6zgh6jr78149kcjmsxclizsqabjw44ld4j5n633kc";
+    sha256 = "0jv26y3f10svrjxzsgqxg956c86b664azyk2wppzpa5x11pjga38";
   };
 
 }

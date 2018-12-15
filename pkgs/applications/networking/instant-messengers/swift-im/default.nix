@@ -14,7 +14,7 @@ in stdenv.mkDerivation rec {
     sha256 = "0w0aiszjd58ynxpacwcgf052zpmbpcym4dhci64vbfgch6wryz0w";
   };
 
-  patches = [ ./scons.patch ];
+  patches = [ ./qt-5.11.patch ./scons.patch ];
 
   nativeBuildInputs = [ pkgconfig qttools scons ];
 
@@ -28,6 +28,8 @@ in stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = [
     "-I${libxml2.dev}/include/libxml2"
     "-I${miniupnpc}/include/miniupnpc"
+    "-I${qtwebkit.dev}/include/QtWebKit"
+    "-I${qtwebkit.dev}/include/QtWebKitWidgets"
   ];
 
   buildPhase = ''

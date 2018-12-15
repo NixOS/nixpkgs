@@ -2,10 +2,10 @@
   stdenv, makeWrapper, lib, fetchurl, fetchpatch,
 
   automake, autoconf, libtool, intltool, mtdev, libevdev, libinput,
-  python, freetype, apple_sdk, tradcpp, fontconfig, mesa_drivers,
+  python, freetype, apple_sdk, tradcpp, fontconfig,
   libGL, spice-protocol, zlib, libGLU, dbus, libunwind, libdrm,
   mesa_noglu, udev, bootstrap_cmds, bison, flex, clangStdenv, autoreconfHook,
-  mcpp, epoxy, openssl, pkgconfig }:
+  mcpp, epoxy, openssl, pkgconfig, llvm_6 }:
 
 let
   inherit (stdenv) lib isDarwin;
@@ -394,7 +394,7 @@ self: super:
   });
 
   xf86videovmware = super.xf86videovmware.overrideAttrs (attrs: {
-    buildInputs =  attrs.buildInputs ++ [ mesa_drivers ]; # for libxatracker
+    buildInputs =  attrs.buildInputs ++ [ mesa_noglu llvm_6 ]; # for libxatracker
     meta = attrs.meta // {
       platforms = ["i686-linux" "x86_64-linux"];
     };

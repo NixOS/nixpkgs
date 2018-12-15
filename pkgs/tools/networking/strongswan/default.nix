@@ -1,4 +1,4 @@
-{ stdenv, fetchurl
+{ stdenv, fetchurl, fetchpatch
 , pkgconfig, autoreconfHook
 , gmp, python, iptables, ldns, unbound, openssl, pcsclite
 , openresolv
@@ -36,6 +36,17 @@ stdenv.mkDerivation rec {
     ./ext_auth-path.patch
     ./firewall_defaults.patch
     ./updown-path.patch
+
+    (fetchpatch {
+      name = "CVE-2018-16151-and-CVE-2018-16152.patch";
+      url = "https://download.strongswan.org/patches/27_gmp_pkcs1_verify_patch/strongswan-5.6.1-5.6.3_gmp-pkcs1-verify.patch";
+      sha256 = "04a5ql6clig5zq9914i4iyrrxcc36w2hzmwsrl69rxnq8hwhw1ql";
+    })
+    (fetchpatch {
+      name = "CVE-2018-17540.patch";
+      url = "https://download.strongswan.org/patches/28_gmp_pkcs1_overflow_patch/strongswan-4.4.0-5.7.0_gmp-pkcs1-overflow.patch";
+      sha256 = "1h8m9rsqzkl71x25h1aavs5xkqm20083law339phfjlrpbjpnizp";
+    })
   ];
 
   postPatch = ''
@@ -78,7 +89,10 @@ stdenv.mkDerivation rec {
          "--with-tss=trousers"
          "--enable-aikgen"
          "--enable-sqlite" ]
-    ++ optional enableNetworkManager "--enable-nm";
+    ++ optionals enableNetworkManager [
+         "--enable-nm"
+         "--with-nm-ca-dir=/etc/ssl/certs"
+    ];
 
   postInstall = ''
     # this is needed for l2tp

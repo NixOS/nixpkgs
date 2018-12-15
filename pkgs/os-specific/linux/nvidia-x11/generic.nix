@@ -10,6 +10,7 @@
 
 , prePatch ? ""
 , patches ? []
+, broken ? false
 }:
 
 { stdenv, callPackage, pkgsi686Linux, fetchurl
@@ -62,7 +63,7 @@ let
     dontStrip = true;
     dontPatchELF = true;
 
-    libPath = makeLibraryPath [ xorg.libXext xorg.libX11 xorg.libXv xorg.libXrandr zlib stdenv.cc.cc ];
+    libPath = makeLibraryPath [ xorg.libXext xorg.libX11 xorg.libXv xorg.libXrandr xorg.libxcb zlib stdenv.cc.cc ];
 
     nativeBuildInputs = [ perl nukeReferences ]
       ++ optionals (!libsOnly) kernel.moduleBuildDependencies;
@@ -84,6 +85,7 @@ let
       platforms = [ "i686-linux" "x86_64-linux" ];
       maintainers = [ maintainers.vcunat ];
       priority = 4; # resolves collision with xorg-server's "lib/xorg/modules/extensions/libglx.so"
+      inherit broken;
     };
   };
 

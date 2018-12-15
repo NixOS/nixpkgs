@@ -25,6 +25,14 @@ buildPythonPackage rec {
     keras-applications keras-preprocessing
   ];
 
+  # Keras 2.2.2 expects older versions of keras_applications
+  # and keras_preprocessing. These substitutions can be removed
+  # for for the next Keras release.
+  postPatch = ''
+    substituteInPlace setup.py --replace "keras_applications==1.0.4" "keras_applications==1.0.5"
+    substituteInPlace setup.py --replace "keras_preprocessing==1.0.2" "keras_preprocessing==1.0.3"
+  '';
+
   # Couldn't get tests working
   doCheck = false;
 

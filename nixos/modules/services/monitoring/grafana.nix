@@ -235,7 +235,7 @@ in {
         but without GF_ prefix
       '';
       default = {};
-      type = types.attrsOf types.str;
+      type = with types; attrsOf (either str path);
     };
   };
 

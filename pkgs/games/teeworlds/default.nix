@@ -1,54 +1,35 @@
-{ fetchurl, stdenv, makeWrapper, python, alsaLib
-, libX11, libGLU, SDL, lua5, zlib, bam, freetype
+{ fetchurl, stdenv, cmake, pkgconfig, makeWrapper, python, alsaLib
+, libX11, libGLU, SDL, lua5, zlib, freetype, wavpack
 }:
 
 stdenv.mkDerivation rec {
-  name = "teeworlds-0.6.4";
+  name = "teeworlds-0.6.5";
 
   src = fetchurl {
-    url = "https://downloads.teeworlds.com/teeworlds-0.6.4-src.tar.gz";
-    sha256 = "1qlqzp4wqh1vnip081lbsjnx5jj5m5y4msrcm8glbd80pfgd2qf2";
+    url = "https://downloads.teeworlds.com/teeworlds-0.6.5-src.tar.gz";
+    sha256 = "07llxjc47d1gd9jqj3vf08cmw26ha6189mwcix1khwa3frfbilqb";
   };
 
-  # we always want to use system libs instead of these
-  postPatch = "rm -r other/{freetype,sdl}/{include,lib32,lib64}";
+  postPatch = ''
+    # we always want to use system libs instead of these
+    rm -r other/{freetype,sdl}/{include,mac,windows}
 
-  buildInputs = [
-    python makeWrapper alsaLib libX11 libGLU SDL lua5 zlib bam freetype
-  ];
-
-  buildPhase = ''
-    bam -a -v release
+    # set compiled-in DATA_DIR so resources can be found
+    substituteInPlace src/engine/shared/storage.cpp \
+      --replace '#define DATA_DIR "data"' \
+                '#define DATA_DIR "${placeholder "out"}/share/teeworlds/data"'
   '';
 
-  installPhase = ''
-    # Copy the graphics, sounds, etc.
-    mkdir -p "$out/share/${name}"
-    cp -rv data other/icons "$out/share/${name}"
+  nativeBuildInputs = [ cmake pkgconfig ];
 
-    # Copy the executables (client, server, etc.).
-    mkdir -p "$out/bin"
-    executables=""
-    for file in *
-    do
-      if [ -f "$file" ] && [ -x "$file" ]
-      then
-          executables="$file $executables"
-      fi
-    done
-    cp -v $executables "$out/bin"
 
-    # Make sure the programs are executed from the right directory so
-    # that they can access the graphics and sounds.
-    for program in $executables
-    do
-      wrapProgram $out/bin/$program \
-        --run "cd $out/share/${name}"
-    done
+  buildInputs = [
+    python alsaLib libX11 libGLU SDL lua5 zlib freetype wavpack
+  ];
 
-    # Copy the documentation.
-    mkdir -p "$out/doc/${name}"
-    cp -v *.txt "$out/doc/${name}"
+  postInstall = ''
+    mkdir -p $out/share/doc/teeworlds
+    cp -v *.txt $out/share/doc/teeworlds/
   '';
 
   meta = {

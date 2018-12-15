@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, python, isPy3k, fetchurl, arrow-cpp, cmake, cython, futures, numpy, pandas, pytest, pytestrunner, parquet-cpp, pkgconfig, setuptools_scm, six }:
+{ lib, buildPythonPackage, python, isPy3k, fetchurl, arrow-cpp, cmake, cython, futures, numpy, pandas, pytest, parquet-cpp, pkgconfig, setuptools_scm, six }:
 
 let
   _arrow-cpp = arrow-cpp.override { inherit python;};
@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ cmake cython pkgconfig setuptools_scm ];
   propagatedBuildInputs = [ numpy six ] ++ lib.optionals (!isPy3k) [ futures ];
-  checkInputs = [ pandas pytest pytestrunner ];
+  checkInputs = [ pandas pytest ];
 
   PYARROW_BUILD_TYPE = "release";
   PYARROW_CMAKE_OPTIONS = "-DCMAKE_INSTALL_RPATH=${ARROW_HOME}/lib;${PARQUET_HOME}/lib";
@@ -54,6 +54,14 @@ buildPythonPackage rec {
   PARQUET_HOME = _parquet-cpp;
 
   setupPyBuildFlags = ["--with-parquet" ];
+
+  checkPhase = ''
+    mv pyarrow/tests tests
+    rm -rf pyarrow
+    mkdir pyarrow
+    mv tests pyarrow/tests
+    pytest -v
+  '';
 
   meta = with lib; {
     description = "A cross-language development platform for in-memory data";

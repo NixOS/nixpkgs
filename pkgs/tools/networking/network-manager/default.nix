@@ -103,6 +103,9 @@ in stdenv.mkDerivation rec {
     # FIXME: Workaround until NixOS' dbus+systemd supports at_console policy
     substituteInPlace $out/etc/dbus-1/system.d/org.freedesktop.NetworkManager.conf --replace 'at_console="true"' 'group="networkmanager"'
 
+    # Fix NetworkManager-wait-online link to NetworkManager.service
+    substituteInPlace $out/etc/systemd/system/NetworkManager-wait-online.service --replace 'NetworkManager.service' 'network-manager.service'
+
     # rename to network-manager to be in style
     mv $out/etc/systemd/system/NetworkManager.service $out/etc/systemd/system/network-manager.service
 

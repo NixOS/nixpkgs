@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
-    "-Dudev_dir=${placeholder "out"}/lib/udev"
+    "-Dudev_dir=lib/udev"
   ];
 
   postPatch = ''

@@ -131,6 +131,18 @@
     };
   };
 
+  opentracing = {
+    src =
+      let src' = fetchFromGitHub {
+        owner = "opentracing-contrib";
+        repo = "nginx-opentracing";
+        rev = "v0.7.0";
+        sha256 = "16jzxhhsyfjaxb50jy5py9ppscidfx1shvc29ihldp0zs6d8khma";
+      };
+      in "${src'}/opentracing";
+    inputs = [ pkgs.opentracing-cpp ];
+  };
+
   pagespeed =
     let
       version = pkgs.psol.version;

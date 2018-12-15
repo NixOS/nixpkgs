@@ -1,5 +1,5 @@
-{ lib, stdenv, fetchurl, pkgconfig, gtk2, pango, perl, python, zip, libIDL
-, libjpeg, zlib, dbus, dbus-glib, bzip2, xorg
+{ lib, stdenv, fetchurl, pkgconfig, gtk2, pango, perl, python, zip, fetchpatch
+, libIDL, libjpeg, zlib, dbus, dbus-glib, bzip2, xorg
 , freetype, fontconfig, file, nspr, nss, libnotify
 , yasm, libGLU_combined, sqlite, unzip
 , hunspell, libevent, libstartup_notification
@@ -24,11 +24,11 @@ let
   gcc = if stdenv.cc.isGNU then stdenv.cc.cc else stdenv.cc.cc.gcc;
 in stdenv.mkDerivation rec {
   name = "thunderbird-${version}";
-  version = "60.0";
+  version = "60.3.2";
 
   src = fetchurl {
     url = "mirror://mozilla/thunderbird/releases/${version}/source/thunderbird-${version}.source.tar.xz";
-    sha512 = "1933csh6swcx1z35lbxfkxlln36mx2mny28rzxz53r480wcvar8zcj77gwb06hzn6j5cvqls7qd5n6a7x43sp7w9ykkf4kf9gmlccya";
+    sha512 = "27hdv1c0jgwk6lkkdfy1rx7r29s2girikbbrriwr9v1gvmf7j3vgdldk7wqijjcp185dbp714wh3n5kp1p9f3sa8mf7z6321xby0mf7";
   };
 
   # from firefox, but without sound libraries
@@ -46,6 +46,11 @@ in stdenv.mkDerivation rec {
 
   # from firefox + m4 + wrapperTool
   nativeBuildInputs = [ m4 autoconf213 which gnused pkgconfig perl python wrapperTool cargo rustc ];
+
+  patches = [
+    # Remove buildconfig.html to prevent a dependency on clang etc.
+    ../../browsers/firefox/no-buildconfig.patch
+  ];
 
   configureFlags =
     [ # from firefox, but without sound libraries (alsa, libvpx, pulseaudio)
@@ -180,6 +185,8 @@ in stdenv.mkDerivation rec {
       # Some basic testing
       "$out/bin/thunderbird" --version
     '';
+
+  disallowedRequisites = [ stdenv.cc ];
 
   meta = with stdenv.lib; {
     description = "A full-featured e-mail client";

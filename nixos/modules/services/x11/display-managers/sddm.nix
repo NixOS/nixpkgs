@@ -20,6 +20,7 @@ let
   Xsetup = pkgs.writeScript "Xsetup" ''
     #!/bin/sh
     ${cfg.setupScript}
+    ${dmcfg.setupCommands}
   '';
 
   Xstop = pkgs.writeScript "Xstop" ''
@@ -137,7 +138,8 @@ in
           xrandr --auto
         '';
         description = ''
-          A script to execute when starting the display server.
+          A script to execute when starting the display server. DEPRECATED, please
+          use <option>services.xserver.displayManager.setupCommands</option>.
         '';
       };
 
@@ -200,7 +202,7 @@ in
       { assertion = cfg.autoLogin.enable -> elem defaultSessionName dmcfg.session.names;
         message = ''
           SDDM auto-login requires that services.xserver.desktopManager.default and
-          services.xserver.windowMananger.default are set to valid values. The current
+          services.xserver.windowManager.default are set to valid values. The current
           default session: ${defaultSessionName} is not valid.
         '';
       }

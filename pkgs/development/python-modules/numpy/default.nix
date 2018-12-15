@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchPypi, python, buildPythonPackage, isPyPy, gfortran, pytest, blas }:
+{ stdenv, lib, fetchPypi, fetchpatch, python, buildPythonPackage, isPyPy, gfortran, pytest, blas }:
 
 buildPythonPackage rec {
   pname = "numpy";
@@ -11,9 +11,17 @@ buildPythonPackage rec {
   };
 
   disabled = isPyPy;
-  buildInputs = [ gfortran pytest blas ];
+  nativeBuildInputs = [ gfortran pytest ];
+  buildInputs = [ blas ];
 
-  patches = lib.optionals (python.hasDistutilsCxxPatch or false) [
+  patches = [
+    # fix a bug with high cpu count (https://github.com/numpy/numpy/issues/12087)
+    (fetchpatch {
+      name = "limit-default-for-get_num_build_jobs-to-8.patch";
+      url = "https://github.com/numpy/numpy/commit/4c05fed01c68a305abf62135695bc61606746683.patch";
+      sha256 = "1j2jlaibbx1fjszxzkgxrz7k8id34kg3gbc2fh4ib6y7hfnbqqz5";
+    })
+  ] ++ lib.optionals (python.hasDistutilsCxxPatch or false) [
     # We patch cpython/distutils to fix https://bugs.python.org/issue1222585
     # Patching of numpy.distutils is needed to prevent it from undoing the
     # patch to distutils.

@@ -1,5 +1,5 @@
-{ stdenv, buildPythonPackage, fetchPypi, flask, jinja2, itsdangerous, events
-, markupsafe, pymongo, flask-pymongo, werkzeug, simplejson, cerberus }:
+{ stdenv, buildPythonPackage, fetchPypi, flask, events
+, pymongo, simplejson, cerberus }:
 
 buildPythonPackage rec {
   pname = "Eve";
@@ -13,14 +13,9 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     cerberus
     events
-    flask-pymongo
     flask
-    itsdangerous
-    jinja2
-    markupsafe
     pymongo
     simplejson
-    werkzeug
   ];
 
   # tests call a running mongodb instance

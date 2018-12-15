@@ -8,6 +8,7 @@
 , pytest
 , pyopenssl
 , trustme
+, sniffio
 }:
 
 buildPythonPackage rec {
@@ -31,6 +32,7 @@ buildPythonPackage rec {
     async_generator
     idna
     outcome
+    sniffio
   ] ++ lib.optionals (pythonOlder "3.7") [ contextvars ];
 
   meta = {

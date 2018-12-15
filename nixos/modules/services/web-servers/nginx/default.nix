@@ -245,8 +245,8 @@ let
         }
       ''
   ) virtualHosts);
-  mkLocations = locations: concatStringsSep "\n" (mapAttrsToList (location: config: ''
-    location ${location} {
+  mkLocations = locations: concatStringsSep "\n" (map (config: ''
+    location ${config.location} {
       ${optionalString (config.proxyPass != null && !cfg.proxyResolveWhileRunning)
         "proxy_pass ${config.proxyPass};"
       }
@@ -266,7 +266,18 @@ let
       ${config.extraConfig}
       ${optionalString (config.proxyPass != null && cfg.recommendedProxySettings) "include ${recommendedProxyConfig};"}
     }
-  '') locations);
+  '') (sortProperties (mapAttrsToList (k: v: v // { location = k; }) locations)));
+  mkBasicAuth = vhostName: authDef: let
+    htpasswdFile = pkgs.writeText "${vhostName}.htpasswd" (
+      concatStringsSep "\n" (mapAttrsToList (user: password: ''
+        ${user}:{PLAIN}${password}
+      '') authDef)
+    );
+  in ''
+    auth_basic secured;
+    auth_basic_user_file ${htpasswdFile};
+  '';
+
   mkHtpasswd = vhostName: authDef: pkgs.writeText "${vhostName}.htpasswd" (
     concatStringsSep "\n" (mapAttrsToList (user: password: ''
       ${user}:{PLAIN}${password}

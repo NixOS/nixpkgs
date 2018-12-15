@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     #! $SHELL -e
     export PERL5LIB=\''${PERL5LIB:+:}$gettext_perl
     ${stdenv.lib.optionalString stdenv.hostPlatform.isCygwin
-        "export PATH=\''${PATH:+:}${gettext}/bin"}
+        ''export PATH=\''${PATH:+:}${gettext}/bin''}
     exec -a \$0 $out/bin/.help2man-wrapped "\$@"
     EOF
     chmod +x $out/bin/help2man

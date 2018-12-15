@@ -2,10 +2,10 @@
 , hicolor-icon-theme, libsoup, gnome3 }:
 
 stdenv.mkDerivation rec {
-  name = "homebank-5.1.8";
+  name = "homebank-5.2.1";
   src = fetchurl {
     url = "http://homebank.free.fr/public/${name}.tar.gz";
-    sha256 = "0fzjmwz2pgi0nw49xljp1za3vp67kjh88gf688d9ig4wc2ygr0qh";
+    sha256 = "0i3pb4v4fs98xd6d4x2gjvhqrsrjvssaws3nkpjia4fagd4dvqbz";
   };
 
   nativeBuildInputs = [ pkgconfig wrapGAppsHook ];

@@ -1,7 +1,7 @@
 { stdenv, buildPythonPackage, fetchFromGitHub, python, pytest, glibcLocales }:
 
 buildPythonPackage rec {
-  version = "3.4.1";
+  version = "3.4.3";
   pname = "pyfakefs";
 
   # no tests in PyPI tarball
@@ -10,22 +10,30 @@ buildPythonPackage rec {
     owner = "jmcgeheeiv";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0i8kq7sl8bczr927hllgfhsmirjqjh89c9184kcqmprc13ac4kxy";
+    sha256 = "0rhbkcb5h2x8kmyxivr5jr1db2xvmpjdbsfjxl142qhfb29hr2hp";
   };
 
   postPatch = ''
     # test doesn't work in sandbox
-    substituteInPlace tests/fake_filesystem_test.py \
+    substituteInPlace pyfakefs/tests/fake_filesystem_test.py \
       --replace "test_expand_root" "notest_expand_root"
-    substituteInPlace tests/fake_os_test.py \
-      --replace "test_append_mode" "notest_append_mode"
-  '';
+    substituteInPlace pyfakefs/tests/fake_os_test.py \
+      --replace "test_path_links_not_resolved" "notest_path_links_not_resolved" \
+      --replace "test_append_mode_tell_linux_windows" "notest_append_mode_tell_linux_windows"
+    substituteInPlace pyfakefs/tests/fake_filesystem_unittest_test.py \
+      --replace "test_copy_real_file" "notest_copy_real_file"
+  '' + (stdenv.lib.optionalString stdenv.isDarwin ''
+    # this test fails on darwin due to case-insensitive file system
+    substituteInPlace pyfakefs/tests/fake_os_test.py \
+      --replace "test_rename_dir_to_existing_dir" "notest_rename_dir_to_existing_dir"
+  '');
 
   checkInputs = [ pytest glibcLocales ];
 
   checkPhase = ''
-    LC_ALL=en_US.UTF-8 ${python.interpreter} -m tests.all_tests
-    py.test tests/pytest_plugin_test.py
+    export LC_ALL=en_US.UTF-8
+    ${python.interpreter} -m pyfakefs.tests.all_tests
+    ${python.interpreter} -m pytest pyfakefs/tests/pytest_plugin_test.py
   '';
 
   meta = with stdenv.lib; {

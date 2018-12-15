@@ -32,8 +32,11 @@ rec {
     boost = boost165; withGui = false;
   };
 
-  btc1 = callPackage ./btc1.nix { boost = boost165; withGui = true; };
-  btc1d = callPackage ./btc1.nix { boost = boost165; withGui = false; };
+  btc1 = callPackage ./btc1.nix {
+    inherit (darwin.apple_sdk.frameworks) AppKit;
+    boost = boost165;
+  };
+  btc1d = btc1.override { withGui = false; };
 
   cryptop = python3.pkgs.callPackage ./cryptop { };
 
@@ -47,7 +50,6 @@ rec {
   dogecoin  = callPackage ./dogecoin.nix { boost = boost165; withGui = true; };
   dogecoind = callPackage ./dogecoin.nix { boost = boost165; withGui = false; };
 
-  ethsign = callPackage ./ethsign { };
 
   freicoin = callPackage ./freicoin.nix { boost = boost155; };
   go-ethereum = callPackage ./go-ethereum.nix {
@@ -59,8 +61,10 @@ rec {
     buildGoPackage = buildGo110Package;
   };
 
-  litecoin  = callPackage ./litecoin.nix { withGui = true; };
-  litecoind = callPackage ./litecoin.nix { withGui = false; };
+  litecoin  = callPackage ./litecoin.nix {
+    inherit (darwin.apple_sdk.frameworks) AppKit;
+  };
+  litecoind = litecoin.override { withGui = false; };
 
   masari = callPackage ./masari.nix { };
 
@@ -73,11 +77,6 @@ rec {
   namecoind = callPackage ./namecoin.nix { withGui = false; };
 
   ethabi = callPackage ./ethabi.nix { };
-  ethrun = callPackage ./ethrun.nix { };
-  seth = callPackage ./seth.nix { };
-  dapp = callPackage ./dapp.nix { };
-
-  hevm = (haskellPackages.callPackage ./hevm.nix {});
 
   stellar-core = callPackage ./stellar-core.nix { };
 

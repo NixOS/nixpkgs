@@ -1,8 +1,8 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, curl, libgit2_0_27, ncurses, pkgconfig, readline }:
+{ stdenv, buildGo19Package, fetchFromGitHub, curl, libgit2_0_27, ncurses, pkgconfig, readline }:
 let
   version = "0.2.0";
 in
-buildGoPackage {
+buildGo19Package {
   name = "grv-${version}";
 
   buildInputs = [ ncurses readline curl libgit2_0_27 ];
@@ -21,7 +21,7 @@ buildGoPackage {
   buildFlagsArray = [ "-ldflags=" "-X main.version=${version}" ];
 
   meta = with stdenv.lib; {
-    description = " GRV is a terminal interface for viewing git repositories";
+    description = "GRV is a terminal interface for viewing Git repositories";
     homepage = https://github.com/rgburke/grv;
     license = licenses.gpl3;
     platforms = platforms.unix;

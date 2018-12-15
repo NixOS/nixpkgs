@@ -188,6 +188,8 @@ in
         uid = config.ids.uids.postgres;
         group = "postgres";
         description = "PostgreSQL server user";
+        home = "${cfg.dataDir}";
+        useDefaultShell = true;
       };
 
     users.groups.postgres.gid = config.ids.gids.postgres;
@@ -245,6 +247,8 @@ in
             # Give Postgres a decent amount of time to clean up after
             # receiving systemd's SIGINT.
             TimeoutSec = 120;
+
+            Type = if versionAtLeast cfg.package.psqlSchema "9.6" then "notify" else "simple";
           };
 
         # Wait for PostgreSQL to be ready to accept connections.

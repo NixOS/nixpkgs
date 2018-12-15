@@ -216,6 +216,8 @@ in {
 
   backports_csv = callPackage ../development/python-modules/backports_csv {};
 
+  backports-shutil-which = callPackage ../development/python-modules/backports-shutil-which {};
+
   bap = callPackage ../development/python-modules/bap {
     bap = pkgs.ocamlPackages.bap;
   };
@@ -297,6 +299,8 @@ in {
   fido2 = callPackage ../development/python-modules/fido2 {  };
 
   fire = callPackage ../development/python-modules/fire { };
+
+  genanki = callPackage ../development/python-modules/genanki { };
 
   globus-sdk = callPackage ../development/python-modules/globus-sdk { };
 
@@ -465,6 +469,8 @@ in {
 
   pymatgen-lammps = callPackage ../development/python-modules/pymatgen-lammps { };
 
+  pymsgbox = callPackage ../development/python-modules/pymsgbox { };
+
   pynisher = callPackage ../development/python-modules/pynisher { };
 
   pyparser = callPackage ../development/python-modules/pyparser { };
@@ -536,6 +542,8 @@ in {
 
   seekpath = callPackage ../development/python-modules/seekpath { };
 
+  selectors2 = callPackage ../development/python-modules/selectors2 { };
+
   serversyncstorage = callPackage ../development/python-modules/serversyncstorage {};
 
   simpleeval = callPackage ../development/python-modules/simpleeval { };
@@ -567,6 +575,8 @@ in {
   trustme = callPackage ../development/python-modules/trustme {};
 
   trio = callPackage ../development/python-modules/trio {};
+
+  sniffio = callPackage ../development/python-modules/sniffio { };
 
   tokenserver = callPackage ../development/python-modules/tokenserver {};
 
@@ -702,7 +712,8 @@ in {
   # argparse is part of stdlib in 2.7 and 3.2+
   argparse = null;
 
-  astroid = callPackage ../development/python-modules/astroid { };
+  astroid = if isPy3k then callPackage ../development/python-modules/astroid { }
+            else callPackage ../development/python-modules/astroid/1.6.nix { };
 
   attrdict = callPackage ../development/python-modules/attrdict { };
 
@@ -1448,6 +1459,8 @@ in {
 
     disabled = !isPy27;
 
+    buildInputs = optionals stdenv.isDarwin [ pkgs.darwin.apple_sdk.frameworks.IOKit ];
+
     src = pkgs.fetchurl {
       url = "http://cddb-py.sourceforge.net/${name}.tar.gz";
       sha256 = "098xhd575ibvdx7i3dny3lwi851yxhjg2hn5jbbgrwj833rg5l5w";
@@ -1645,6 +1658,12 @@ in {
 
   envs = callPackage ../development/python-modules/envs { };
 
+  eth-hash = callPackage ../development/python-modules/eth-hash { };
+
+  eth-typing = callPackage ../development/python-modules/eth-typing { };
+
+  eth-utils = callPackage ../development/python-modules/eth-utils { };
+
   jsonrpc-async = callPackage ../development/python-modules/jsonrpc-async { };
 
   jsonrpc-base = callPackage ../development/python-modules/jsonrpc-base { };
@@ -1704,35 +1723,7 @@ in {
 
   idna = callPackage ../development/python-modules/idna { };
 
-  mahotas = buildPythonPackage rec {
-    name = "python-mahotas-${version}";
-    version = "1.4.2";
-
-    src = pkgs.fetchurl {
-      url = "https://github.com/luispedro/mahotas/archive/v${version}.tar.gz";
-      sha256 = "1mvsxh0pa5vdvbknlv1m68n7gw2cv4pyqgqp3r770rnmf6nxbp7m";
-    };
-
-    buildInputs = with self; [
-      nose
-      pillow
-      scipy
-    ];
-    propagatedBuildInputs = with self; [
-      numpy
-      imread
-    ];
-
-    disabled = stdenv.isi686; # Failing tests
-
-    meta = with stdenv.lib; {
-      description = "Computer vision package based on numpy";
-      homepage = http://mahotas.readthedocs.io/;
-      maintainers = with maintainers; [ luispedro ];
-      license = licenses.mit;
-      platforms = platforms.linux;
-    };
-  };
+  mahotas = callPackage ../development/python-modules/mahotas { };
 
   MDP = callPackage ../development/python-modules/mdp {};
 
@@ -1787,6 +1778,13 @@ in {
     LD_LIBRARY_PATH = makeLibraryPath [ pkgs.mxnet ];
 
     doCheck = !isPy3k;
+
+    postPatch = ''
+      substituteInPlace python/setup.py \
+      --replace "graphviz<0.9.0" "graphviz<0.10.0" \
+      --replace "numpy<=1.15.0" "numpy<1.16.0" \
+      --replace "requests<2.19.0" "requests<2.20.0"
+    '';
 
     preConfigure = ''
       cd python
@@ -2196,27 +2194,9 @@ in {
 
   elasticsearch = callPackage ../development/python-modules/elasticsearch { };
 
-  elasticsearchdsl = buildPythonPackage (rec {
-    name = "elasticsearch-dsl-0.0.9";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/e/elasticsearch-dsl/${name}.tar.gz";
-      sha256 = "1gdcdshk881vy18p0czcmbb3i4s5hl8llnfg6961b6x7jkvhihbj";
-    };
-
-    buildInputs = with self; [ covCore dateutil elasticsearch mock pytest pytestcov unittest2 urllib3 pytz ];
-
-    # ImportError: No module named test_elasticsearch_dsl
-    # Tests require a local instance of elasticsearch
-    doCheck = false;
-
-    meta = {
-      description = "Python client for Elasticsearch";
-      homepage = https://github.com/elasticsearch/elasticsearch-dsl-py;
-      license = licenses.asl20;
-      maintainers = with maintainers; [ desiderius ];
-    };
-  });
+  elasticsearch-dsl = callPackage ../development/python-modules/elasticsearch-dsl { };
+  # alias
+  elasticsearchdsl = self.elasticsearch-dsl;
 
   elasticsearch-curator = callPackage ../development/python-modules/elasticsearch-curator { };
 
@@ -3395,19 +3375,43 @@ in {
 
   python-mapnik = buildPythonPackage rec {
     name = "python-mapnik-${version}";
-    version = "3.0.13";
+    version = "3.0.16";
 
     src = pkgs.fetchFromGitHub {
       owner = "mapnik";
       repo = "python-mapnik";
       rev = "v${version}";
-      sha256 = "0biw9bfkbsgfyjihyvkj4abx9s9r3h81rk6dc1y32022rypsqhkp";
+      sha256 = "1gqs4kvmjawdgl80j0ab5r8y0va9kw0rvwix3093xsv4hwd00lcc";
     };
 
     disabled = isPyPy;
     doCheck = false; # doesn't find needed test data files
-    buildInputs = with pkgs;
-      [ boost cairo harfbuzz icu libjpeg libpng libtiff libwebp mapnik proj zlib ];
+    preBuild = let
+      pythonVersion = with stdenv.lib.versions; "${major python.version}${minor python.version}";
+    in ''
+      export BOOST_PYTHON_LIB="boost_python${pythonVersion}"
+      export BOOST_THREAD_LIB="boost_thread"
+      export BOOST_SYSTEM_LIB="boost_system"
+    '';
+    buildInputs = with pkgs; [
+        (boost.override {
+          enablePython = true;
+          inherit python;
+        })
+        (mapnik.override {
+          inherit python;
+          boost = (boost.override { enablePython = true; inherit python; });
+        })
+        cairo
+        harfbuzz
+        icu
+        libjpeg
+        libpng
+        libtiff
+        libwebp
+        proj
+        zlib
+      ];
     propagatedBuildInputs = with self; [ pillow pycairo ];
 
     meta = with stdenv.lib; {
@@ -6154,13 +6158,13 @@ in {
 
   hetzner = buildPythonPackage rec {
     name = "hetzner-${version}";
-    version = "0.8.0";
+    version = "0.8.1";
 
     src = pkgs.fetchFromGitHub {
       repo = "hetzner";
       owner = "aszlig";
       rev = "v${version}";
-      sha256 = "04q2q2w2qkhfly8rfjg2h5pnh42gs18l6cmipqc37yf7qvkw3nd0";
+      sha256 = "1xd1klvjskv0pg8ginih597jkk491a55b8dq80dsm61m5sbsx3vq";
     };
 
     meta = {
@@ -7937,11 +7941,11 @@ in {
 
   graphviz = buildPythonPackage rec {
     name = "graphviz-${version}";
-    version = "0.5.2";
+    version = "0.9";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/g/graphviz/${name}.zip";
-      sha256 = "0jh31nlm0qbxwylhdkwnb69pcjlc5z03fcfbs0gvgzp3hfrngsk0";
+      sha256 = "14r9brj4r31b3qy1nnn34v3l4h0n39bqxg9sn2fz4p3pp5mglnl6";
     };
 
     propagatedBuildInputs = [ pkgs.graphviz ];
@@ -7953,7 +7957,9 @@ in {
     };
   };
 
-  pygraphviz = callPackage ../development/python-modules/pygraphviz { };
+  pygraphviz = callPackage ../development/python-modules/pygraphviz {
+    graphviz = pkgs.graphviz; # not the python package
+  };
 
   pymc3 = callPackage ../development/python-modules/pymc3 { };
 
@@ -8145,13 +8151,13 @@ in {
 
   slixmpp = buildPythonPackage rec {
     name = "slixmpp-${version}";
-    version = "1.2.4.post1";
+    version = "1.4.0";
 
     disabled = pythonOlder "3.4";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/s/slixmpp/${name}.tar.gz";
-      sha256 = "0v6430dczai8a2nmznhja2dxl6pxa8c5j20nhc5737bqjg7245jk";
+      sha256 = "155qxx4xlkkjb4hphc09nsi2mi4xi3m2akg0z7064kj3nbzkwjn2";
     };
 
     patchPhase = ''
@@ -9415,22 +9421,7 @@ in {
     inherit (pkgs) glibcLocales git;
   };
 
-  pep8 = buildPythonPackage rec {
-    name = "pep8-${version}";
-    version = "1.7.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pep8/${name}.tar.gz";
-      sha256 = "a113d5f5ad7a7abacef9df5ec3f2af23a20a28005921577b15dd584d099d5900";
-    };
-
-    meta = {
-      homepage = "http://pep8.readthedocs.org/";
-      description = "Python style guide checker";
-      license = licenses.mit;
-      maintainers = with maintainers; [ garbas ];
-    };
-  };
+  pep8 = callPackage ../development/python-modules/pep8 { };
 
   pep257 = callPackage ../development/python-modules/pep257 { };
 
@@ -9937,6 +9928,8 @@ in {
 
   python-pushover = callPackage ../development/python-modules/pushover {};
 
+  pystemd = callPackage ../development/python-modules/pystemd { systemd = pkgs.systemd; };
+
   mongodict = buildPythonPackage rec {
     name = "mongodict-${version}";
     version = "0.3.1";
@@ -10357,7 +10350,8 @@ in {
 
   pygpgme = callPackage ../development/python-modules/pygpgme { };
 
-  pylint = callPackage ../development/python-modules/pylint { };
+  pylint = if isPy3k then callPackage ../development/python-modules/pylint { }
+           else callPackage ../development/python-modules/pylint/1.9.nix { };
 
   pyopencl = callPackage ../development/python-modules/pyopencl { };
 
@@ -14951,6 +14945,7 @@ EOF
   };
 
   tornado = callPackage ../development/python-modules/tornado { };
+  tornado_4 = callPackage ../development/python-modules/tornado { version = "4.5.3"; };
 
   tokenlib = buildPythonPackage rec {
     name = "tokenlib-${version}";
@@ -16256,21 +16251,18 @@ EOF
 
   poezio = buildPythonApplication rec {
     name = "poezio-${version}";
-    version = "0.11";
+    version = "0.12";
 
     disabled = pythonOlder "3.4";
 
     buildInputs = with self; [ pytest ];
-    propagatedBuildInputs = with self ; [ aiodns slixmpp pyinotify potr mpd2 ];
+    propagatedBuildInputs = with self ; [ aiodns slixmpp pyinotify potr mpd2 cffi ];
+    nativeBuildInputs = with pkgs; [ pkgconfig ];
 
     src = pkgs.fetchurl {
-      url = "http://dev.louiz.org/attachments/download/118/${name}.tar.gz";
-      sha256 = "07cn3717swarjv47yw8x95bvngz4nvlyyy9m7ck9fhycjgdy82r0";
+      url = "http://dev.louiz.org/attachments/download/129/${name}.tar.gz";
+      sha256 = "11n9x82xyjwbqk28lsfnvqwn8qc9flv6w2c64camh6j3148ykpvz";
     };
-
-    patches = [
-      ../development/python-modules/poezio/fix_gnupg_import.patch
-    ];
 
     checkPhase = ''
       py.test
@@ -16285,6 +16277,8 @@ EOF
   };
 
   potr = callPackage ../development/python-modules/potr {};
+
+  python-u2flib-host = callPackage ../development/python-modules/python-u2flib-host { };
 
   pluggy = callPackage ../development/python-modules/pluggy {};
 
@@ -16802,22 +16796,7 @@ EOF
     cudaSupport = true;
   };
 
-  tflearn = buildPythonPackage rec {
-    name = "tflearn-0.2.1";
-
-    meta = {
-      description = "Deep learning library featuring a higher-level API for TensorFlow";
-      homepage    = "https://github.com/tflearn/tflearn";
-      license     = licenses.mit;
-    };
-
-    propagatedBuildInputs = with self; [ scipy h5py pillow tensorflow ];
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/t/tflearn/${name}.tar.gz";
-      sha256 = "1n884c4j35409id2bncyj5fvmmfpdqj3pk6wrv0s1znnvs0lkii0";
-    };
-  };
+  tflearn = callPackage ../development/python-modules/tflearn { };
 
   simpleai = buildPythonPackage rec {
      version = "0.7.11";
@@ -17332,21 +17311,18 @@ EOF
 
   rfc7464 = callPackage ../development/python-modules/rfc7464 { };
 
-  foundationdb51 = (toPythonModule (pkgs.fdbPackages.override {
-    inherit python;
-  }).foundationdb51).python;
-
-  foundationdb52 = (toPythonModule (pkgs.fdbPackages.override {
-    inherit python;
-  }).foundationdb52).python;
-
-  foundationdb60 = (toPythonModule (pkgs.fdbPackages.override {
-    inherit python;
-  }).foundationdb60).python;
+  foundationdb51 = callPackage ../servers/foundationdb/python.nix { foundationdb = pkgs.foundationdb51; };
+  foundationdb52 = callPackage ../servers/foundationdb/python.nix { foundationdb = pkgs.foundationdb52; };
+  foundationdb60 = callPackage ../servers/foundationdb/python.nix { foundationdb = pkgs.foundationdb60; };
 
   libtorrentRasterbar = (toPythonModule (pkgs.libtorrentRasterbar.override {
     inherit python;
   })).python;
+
+  libiio = (toPythonModule (pkgs.libiio.override {
+    inherit python;
+  })).python;
+
 });
 
 in fix' (extends overrides packages)

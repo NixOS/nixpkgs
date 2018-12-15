@@ -6,6 +6,10 @@ buildGoPackage rec {
 
   goPackagePath = "github.com/elves/elvish";
   excludedPackages = [ "website" ];
+  buildFlagsArray = ''
+    -ldflags=
+      -X ${goPackagePath}/buildinfo.Version=${version}
+  '';
 
   src = fetchFromGitHub {
     repo = "elvish";

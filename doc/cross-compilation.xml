@@ -47,9 +47,10 @@
 
    <para>
     In Nixpkgs, these three platforms are defined as attribute sets under the
-    names <literal>buildPlatform</literal>, <literal>hostPlatform</literal>, and
-    <literal>targetPlatform</literal>. They are always defined as attributes in
-    the standard environment. That means one can access them like:
+    names <literal>buildPlatform</literal>, <literal>hostPlatform</literal>,
+    and <literal>targetPlatform</literal>. They are always defined as
+    attributes in the standard environment. That means one can access them
+    like:
 <programlisting>{ stdenv, fooDep, barDep, .. }: ...stdenv.buildPlatform...</programlisting>
     .
    </para>

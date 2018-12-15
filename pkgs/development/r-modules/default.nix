@@ -367,6 +367,7 @@ let
     tkrplot = [ pkgs.xorg.libX11 pkgs.tk.dev ];
     topicmodels = [ pkgs.gsl_1 ];
     udunits2 = [ pkgs.udunits pkgs.expat ];
+    units = [ pkgs.udunits ];
     V8 = [ pkgs.v8_3_14 ];
     VBLPCM = [ pkgs.gsl_1 ];
     WhopGenome = [ pkgs.zlib.dev ];

@@ -41,7 +41,7 @@ in pythonPackages.buildPythonApplication rec {
 
   preBuild = ''
     mkdir -p rust/target/release
-    ln -s ${native}/bin/libvdirsyncer_rustext* rust/target/release/
+    ln -s ${native}/lib/libvdirsyncer_rustext* rust/target/release/
   '';
 
   LC_ALL = "en_US.utf8";

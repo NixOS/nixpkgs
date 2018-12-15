@@ -4,7 +4,6 @@
 , zope_testrunner
 , transaction
 , six
-, wheel
 , zope_interface
 , zodbpickle
 , zconfig
@@ -24,21 +23,27 @@ buildPythonPackage rec {
     };
 
     patches = [
-      ./ZODB-5.3.0-fix-tests.patch
+      ./ZODB-5.3.0-fix-tests.patch # still needeed with 5.4.0
+      # Upstream patch to fix tests with persistent 4.4,
+      # cannot fetchpatch because only one hunk of the upstream commit applies.
+      # TODO remove on next release
+      ./fix-tests-with-persistent-4.4.patch
     ];
 
     propagatedBuildInputs = [
-      manuel
       transaction
-      zope_testrunner
       six
-      wheel
       zope_interface
       zodbpickle
       zconfig
       persistent
       zc_lockfile
       BTrees
+    ];
+
+    checkInputs = [
+      manuel
+      zope_testrunner
     ];
 
     meta = with stdenv.lib; {

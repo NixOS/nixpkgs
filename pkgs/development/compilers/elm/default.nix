@@ -1,4 +1,6 @@
-{ lib, stdenv, buildEnv, haskell, nodejs, fetchurl, makeWrapper, git }:
+{ lib, stdenv, buildEnv
+, haskell, nodejs
+, fetchurl, fetchpatch, makeWrapper, git }:
 
 # To update:
 
@@ -49,47 +51,24 @@
 # that the default of ~/.elm isn't used.
 
 let
-  makeDotElm = ver: deps:
-    let versionsDat = ./versions.dat;
-        cmds = lib.mapAttrsToList (name: info: let
-                 pkg = stdenv.mkDerivation {
-
-                   name = lib.replaceChars ["/"] ["-"] name + "-${info.version}";
-
-                   src = fetchurl {
-                     url = "https://github.com/${name}/archive/${info.version}.tar.gz";
-                     meta.homepage = "https://github.com/${name}/";
-                     inherit (info) sha256;
-                   };
-
-                   phases = [ "unpackPhase" "installPhase" ];
-
-                   installPhase = ''
-                     mkdir -p $out
-                     cp -r * $out
-                   '';
-
-                 };
-               in ''
-                 mkdir -p .elm/${ver}/package/${name}
-                 cp -R ${pkg} .elm/${ver}/package/${name}/${info.version}
-               '') deps;
-    in (lib.concatStrings cmds) + ''
-      mkdir -p .elm/${ver}/package;
-      cp ${versionsDat} .elm/${ver}/package/versions.dat;
-      chmod -R +w .elm
-    '';
-
+  fetchElmDeps = import ./fetchElmDeps.nix { inherit stdenv lib fetchurl; };
   hsPkgs = haskell.packages.ghc822.override {
     overrides = self: super: with haskell.lib;
       let elmPkgs = {
             elm = overrideCabal (self.callPackage ./packages/elm.nix { }) (drv: {
               # sadly with parallelism most of the time breaks compilation
               enableParallelBuilding = false;
-              preConfigure = ''
-                export ELM_HOME=`pwd`/.elm
-              '' + (makeDotElm "0.19.0" (import ./packages/elm-elm.nix));
+              preConfigure = fetchElmDeps {
+                elmPackages = (import ./packages/elm-elm.nix);
+                versionsDat = ./versions.dat;
+              };
               buildTools = drv.buildTools or [] ++ [ makeWrapper ];
+              patches = [
+                (fetchpatch {
+                  url = "https://github.com/elm/compiler/pull/1784/commits/78d2d8eab310552b1b877a3e90e1e57e7a09ddec.patch";
+                  sha256 = "0vdhk16xqm2hxw12s1b91a0bmi8w4wsxc086qlzglgnjxrl5b3w4";
+                })
+              ];
               postInstall = ''
                 wrapProgram $out/bin/elm \
                   --prefix PATH ':' ${lib.makeBinPath [ nodejs ]}
@@ -99,26 +78,11 @@ let
 
 
             /*
-            This is not a core Elm package, and it's hosted on GitHub.
-            To update, run:
-
-                cabal2nix --jailbreak --revision refs/tags/foo http://github.com/avh4/elm-format > packages/elm-format.nix
-
-            where foo is a tag for a new version, for example "0.8.0".
+            The elm-format expression is updated via a script in the https://github.com/avh4/elm-format repo:
+            `pacakge/nix/build.sh`
             */
-            elm-format = overrideCabal (self.callPackage ./packages/elm-format.nix {  }) (drv: {
-              # https://github.com/avh4/elm-format/issues/529
-              patchPhase = ''
-                cat >Setup.hs <<EOF
-                import Distribution.Simple
-                main = defaultMain
-                EOF
-
-                sed -i '/Build_elm_format/d' elm-format.cabal
-                sed -i 's/Build_elm_format.gitDescribe/""/' src/ElmFormat/Version.hs
-                sed -i '/Build_elm_format/d' src/ElmFormat/Version.hs
-              '';
-            });
+            elm-format = self.callPackage ./packages/elm-format.nix {};
+            inherit fetchElmDeps;
           };
       in elmPkgs // {
         inherit elmPkgs;
@@ -126,6 +90,7 @@ let
 
         # Needed for elm-format
         indents = self.callPackage ./packages/indents.nix {};
+        tasty-quickcheck = self.callPackage ./packages/tasty-quickcheck.nix {};
       };
   };
 in hsPkgs.elmPkgs

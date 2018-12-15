@@ -111,8 +111,8 @@ let
 
         postPatch = if isRuby25 then ''
           sed -i configure.ac -e '/config.guess/d'
-          cp ${config}/config.guess tool/
-          cp ${config}/config.sub tool/
+          cp --remove-destination ${config}/config.guess tool/
+          cp --remove-destination ${config}/config.sub tool/
         ''
         else opString useRailsExpress ''
           sed -i configure.in -e '/config.guess/d'
@@ -202,26 +202,26 @@ let
 
 in {
   ruby_2_3 = generic {
-    version = rubyVersion "2" "3" "7" "";
+    version = rubyVersion "2" "3" "8" "";
     sha256 = {
-      src = "0zvx5kdp1frjs9n95n7ba7dy0alax33wi3nj8034m3ppvnf39k9m";
-      git = "11wbzw2ywwfnvlkg3qjg0as2pzk5zyk63y2iis42d91lg1l2flrk";
+      src = "1gwsqmrhpx1wanrfvrsj3j76rv888zh7jag2si2r14qf8ihns0dm";
+      git = "0158fg1sx6l6applbq0831kl8kzx5jacfl9lfg0shfzicmjlys3f";
     };
   };
 
   ruby_2_4 = generic {
-    version = rubyVersion "2" "4" "4" "";
+    version = rubyVersion "2" "4" "5" "";
     sha256 = {
-      src = "0nmfr2lijik6cykk0zbj11zcapcrvmdvq83k3r6q3k74g4d1qkr5";
-      git = "103cs7hz1v0h84lbrippl87s4lawi20m406rs5dgxl2gr2wyjpy5";
+      src = "162izk7c72y73vmdgcbsh8kqihrbm65xvp53r1s139pzwqd78dv7";
+      git = "181za4h6bd2bkyzyknxc18i5gq0pnqag60ybc17p0ixw3q7pdj43";
     };
   };
 
   ruby_2_5 = generic {
-    version = rubyVersion "2" "5" "1" "";
+    version = rubyVersion "2" "5" "3" "";
     sha256 = {
-      src = "1c99k0fjaq7k09104h1b1cqx6mrk2b14ic1jjnxc6yav68i1ij6s";
-      git = "1j0fd16aq9x98n0kq9c3kfp2sh6xcsq8q4733p0wfqjh3vz50kyj";
+      src = "0v4442aqqlzxwc792kbkfs2k61qg97r680is6gx20z63a8wd0a4q";
+      git = "0r9mgvqk6gj8pc9q6qmy7j2kbln7drc8wy67sb2ij8ciclcw9nn2";
     };
   };
 }

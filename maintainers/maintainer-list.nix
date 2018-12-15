@@ -18,6 +18,11 @@
   for an example on how to work with this data.
   */
 {
+  "1000101" = {
+    email = "jan.hrnko@satoshilabs.com";
+    github = "1000101";
+    name = "Jan Hrnko";
+  };
   a1russell = {
     email = "adamlr6+pub@gmail.com";
     github = "a1russell";
@@ -3259,6 +3264,11 @@
     github = "proglodyte";
     name = "Proglodyte";
   };
+  prusnak = {
+    email = "stick@gk2.sk";
+    github = "prusnak";
+    name = "Pavol Rusnak";
+  };
   pshendry = {
     email = "paul@pshendry.com";
     github = "pshendry";
@@ -3887,6 +3897,11 @@
     email = "florianengel39@gmail.com";
     github = "StillerHarpo";
     name = "Florian Engel";
+  };
+  stites = {
+    email = "sam@stites.io";
+    github = "stites";
+    name = "Sam Stites";
   };
   stumoss = {
     email = "samoss@gmail.com";

@@ -103,18 +103,12 @@ self: super: {
   };
 
   # Fix test trying to access /home directory
-  shell-conduit = (overrideCabal super.shell-conduit (drv: {
+  shell-conduit = overrideCabal super.shell-conduit (drv: {
     postPatch = "sed -i s/home/tmp/ test/Spec.hs";
 
     # the tests for shell-conduit on Darwin illegitimatey assume non-GNU echo
     # see: https://github.com/psibi/shell-conduit/issues/12
     doCheck = !pkgs.stdenv.isDarwin;
-  })).overrideScope (self: super: {
-    # shell-conduit doesn't build with conduit 1.3
-    # see https://github.com/psibi/shell-conduit/issues/15
-    conduit = self.conduit_1_2_13_1;
-    conduit-extra = self.conduit-extra_1_2_3_2;
-    resourcet = self.resourcet_1_1_11;
   });
 
   # https://github.com/froozen/kademlia/issues/2
@@ -683,8 +677,13 @@ self: super: {
   # https://github.com/goldfirere/singletons/issues/122
   singletons = dontCheck super.singletons;
 
-  # https://github.com/fpco/stackage/issues/838
-  cryptonite = dontCheck super.cryptonite;
+  # Fix an aarch64 issue with cryptonite-0.25:
+  # https://github.com/haskell-crypto/cryptonite/issues/234
+  # This has been committed upstream, but there is, as of yet, no new release.
+  cryptonite = appendPatch super.cryptonite (pkgs.fetchpatch {
+    url = https://github.com/haskell-crypto/cryptonite/commit/4622e5fc8ece82f4cf31358e31cd02cf020e558e.patch;
+    sha256 = "1m2d47ni4jbrpvxry50imj91qahr3r7zkqm157clrzlmw6gzpgnq";
+  });
 
   # We cannot build this package w/o the C library from <http://www.phash.org/>.
   phash = markBroken super.phash;
@@ -930,8 +929,9 @@ self: super: {
   text-icu = dontCheck super.text-icu;
 
   # https://github.com/haskell/cabal/issues/4969
-  haddock-library_1_4_4 = dontHaddock super.haddock-library_1_4_4;
-  haddock-api = super.haddock-api.override { haddock-library = self.haddock-library_1_4_4; };
+  haddock-api = (super.haddock-api.overrideScope (self: super: {
+    haddock-library = self.haddock-library_1_6_0;
+  })).override { hspec = self.hspec_2_4_8; };
 
   # Jailbreak "unix-compat >=0.1.2 && <0.5".
   # Jailbreak "graphviz >=2999.18.1 && <2999.20".
@@ -1003,6 +1003,9 @@ self: super: {
       cp -v *.info* $out/share/info/
     '';
   });
+
+  # https://github.com/haskell-rewriting/term-rewriting/issues/11
+  term-rewriting = dontCheck (doJailbreak super.term-rewriting);
 
   # https://github.com/nick8325/twee/pull/1
   twee-lib = dontHaddock super.twee-lib;
@@ -1091,22 +1094,22 @@ self: super: {
   haddock-library = doJailbreak (dontCheck super.haddock-library);
   haddock-library_1_6_0 = doJailbreak (dontCheck super.haddock-library_1_6_0);
 
-  # cabal2nix requires hpack >= 0.29.6 but the LTS has hpack-0.28.2.
-  # Lets remove this once the LTS has upraded to 0.29.6.
-  hpack = super.hpack_0_29_7;
-
-  # The test suite does not know how to find the 'cabal2nix' binary.
+  # The tool needs a newer hpack version than the one mandated by LTS-12.x.
   # Also generate shell completions.
   cabal2nix = generateOptparseApplicativeCompletion "cabal2nix"
-    (overrideCabal super.cabal2nix (drv: {
-      preCheck = ''
-        export PATH="$PWD/dist/build/cabal2nix:$PATH"
-        export HOME="$TMPDIR/home"
-      '';
+    (super.cabal2nix.overrideScope (self: super: {
+      hpack = self.hpack_0_31_0;
+      yaml = self.yaml_0_10_1_1;
     }));
+
+  stack2nix = super.stack2nix.overrideScope (self: super: {
+    hpack = self.hpack_0_31_0;
+    yaml = self.yaml_0_10_1_1;
+  });
 
   # Break out of "aeson <1.3, temporary <1.3".
   stack = generateOptparseApplicativeCompletion "stack" (doJailbreak super.stack);
+
 
   # https://github.com/pikajude/stylish-cabal/issues/11
   stylish-cabal = super.stylish-cabal.override { hspec = self.hspec_2_4_8; hspec-core = self.hspec-core_2_4_8; };
@@ -1139,7 +1142,7 @@ self: super: {
     })) ./patches/sexpr-0.2.1.patch;
 
   # Can be removed once yi-language >= 0.18 is in the LTS
-  yi-core = super.yi-core.override { yi-language = self.yi-language_0_18_0; };
+  yi-core = super.yi-core.overrideScope (self: super: { yi-language = self.yi-language_0_18_0; });
 
   # https://github.com/MarcWeber/hasktags/issues/52
   hasktags = dontCheck super.hasktags;
@@ -1153,4 +1156,37 @@ self: super: {
   # Generate shell completions
   purescript = generateOptparseApplicativeCompletion "purs" super.purescript;
 
+  # https://github.com/NixOS/nixpkgs/issues/46467
+  safe-money-aeson = super.safe-money-aeson.overrideScope (self: super: { safe-money = self.safe-money_0_7; });
+  safe-money-store = super.safe-money-store.overrideScope (self: super: { safe-money = self.safe-money_0_7; });
+  safe-money-cereal = super.safe-money-cereal.overrideScope (self: super: { safe-money = self.safe-money_0_7; });
+  safe-money-serialise = super.safe-money-serialise.overrideScope (self: super: { safe-money = self.safe-money_0_7; });
+  safe-money-xmlbf = super.safe-money-xmlbf.overrideScope (self: super: { safe-money = self.safe-money_0_7; });
+
+  # https://github.com/adinapoli/mandrill/pull/52
+  mandrill = appendPatch super.mandrill (pkgs.fetchpatch {
+    url = https://github.com/adinapoli/mandrill/commit/30356d9dfc025a5f35a156b17685241fc3882c55.patch;
+    sha256 = "1qair09xs6vln3vsjz7sy4hhv037146zak4mq3iv6kdhmp606hqv";
+  });
+
+  # Can be removed once vinyl >= 0.10 is in the LTS.
+  Frames = super.Frames.overrideScope (self: super: { vinyl = self.vinyl_0_10_0; });
+
+  # https://github.com/Euterpea/Euterpea2/pull/22
+  Euterpea = overrideSrc super.Euterpea {
+    src = pkgs.fetchFromGitHub {
+      owner = "Euterpea";
+      repo = "Euterpea2";
+      rev = "6f49b790adfb8b65d95a758116c20098fb0cd34c";
+      sha256 = "0qz1svb96n42nmig16vyphwxas34hypgayvwc91ri7w7xd6yi1ba";
+    };
+  };
+
+  # https://github.com/kcsongor/generic-lens/pull/60
+  generic-lens = appendPatch super.generic-lens (pkgs.fetchpatch {
+    url = https://github.com/kcsongor/generic-lens/commit/d9af1ec22785d6c21e928beb88fc3885c6f05bed.patch;
+    sha256 = "0ljwcha9l52gs5bghxq3gbzxfqmfz3hxxcg9arjsjw8f7kw946xq";
+  });
+
+  arbtt = doJailbreak super.arbtt;
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super

@@ -97,8 +97,8 @@ in
       "google-instance-setup.service"
       "google-network-setup.service"
     ];
-    wantedBy = [ "multi-user.target" ];
     requires = ["network.target"];
+    wantedBy = ["multi-user.target"];
     path = with pkgs; [ shadow ];
     serviceConfig = {
       Type = "simple";
@@ -113,8 +113,8 @@ in
       "google-instance-setup.service"
       "google-network-setup.service"
     ];
-    requires = [ "network.target" ];
-    wantedBy = [ "multi-user.target" ];
+    requires = ["network.target"];
+    wantedBy = ["multi-user.target"];
     serviceConfig = {
       Type = "simple";
       ExecStart = "${gce}/bin/google_clock_skew_daemon --debug";
@@ -123,7 +123,7 @@ in
 
   systemd.services.google-instance-setup = {
     description = "Google Compute Engine Instance Setup";
-    after = ["fs.target" "network-online.target" "network.target" "rsyslog.service"];
+    after = ["local-fs.target" "network-online.target" "network.target" "rsyslog.service"];
     before = ["sshd.service"];
     wants = ["local-fs.target" "network-online.target" "network.target"];
     wantedBy = [ "sshd.service" "multi-user.target" ];
@@ -134,15 +134,17 @@ in
     };
   };
 
-  systemd.services.google-ip-forwarding-daemon = {
-    description = "Google Compute Engine IP Forwarding Daemon";
-    after = ["network.target" "google-instance-setup.service" "google-network-setup.service"];
+  systemd.services.google-network-daemon = {
+    description = "Google Compute Engine Network Daemon";
+    after = ["local-fs.target" "network-online.target" "network.target" "rsyslog.service" "google-instance-setup.service"];
+    wants = ["local-fs.target" "network-online.target" "network.target"];
     requires = ["network.target"];
+    partOf = ["network.target"];
     wantedBy = [ "multi-user.target" ];
     path = with pkgs; [ iproute ];
     serviceConfig = {
+      ExecStart = "${gce}/bin/google_network_daemon --debug";
       Type = "simple";
-      ExecStart = "${gce}/bin/google_ip_forwarding_daemon --debug";
     };
   };
 
@@ -153,8 +155,9 @@ in
       "network-online.target"
       "network.target"
       "rsyslog.service"
+      "systemd-resolved.service"
       "google-instance-setup.service"
-      "google-network-setup.service"
+      "google-network-daemon.service"
     ];
     wants = [ "local-fs.target" "network-online.target" "network.target"];
     wantedBy = [ "multi-user.target" ];
@@ -167,23 +170,6 @@ in
     };
   };
 
-  systemd.services.google-network-setup = {
-    description = "Google Compute Engine Network Setup";
-    after = [
-      "local-fs.target"
-      "network-online.target"
-      "network.target"
-      "rsyslog.service"
-    ];
-    wants = [ "local-fs.target" "network-online.target" "network.target"];
-    wantedBy = [ "multi-user.target" ];
-    serviceConfig = {
-      ExecStart = "${gce}/bin/google_network_setup --debug";
-      KillMode = "process";
-      Type = "oneshot";
-    };
-  };
-
   systemd.services.google-startup-scripts = {
     description = "Google Compute Engine Startup Scripts";
     after = [
@@ -192,9 +178,9 @@ in
       "network.target"
       "rsyslog.service"
       "google-instance-setup.service"
-      "google-network-setup.service"
+      "google-network-daemon.service"
     ];
-    wants = [ "local-fs.target" "network-online.target" "network.target"];
+    wants = ["local-fs.target" "network-online.target" "network.target"];
     wantedBy = [ "multi-user.target" ];
     serviceConfig = {
       ExecStart = "${gce}/bin/google_metadata_script_runner --debug --script-type startup";

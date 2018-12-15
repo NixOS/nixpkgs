@@ -1,9 +1,9 @@
 # pcre functionality is tested in nixos/tests/php-pcre.nix
-{ lib, stdenv, fetchurl, flex, bison
+{ lib, stdenv, fetchurl, flex, bison, autoconf
 , mysql, libxml2, readline, zlib, curl, postgresql, gettext
 , openssl, pcre, pkgconfig, sqlite, config, libjpeg, libpng, freetype
 , libxslt, libmcrypt, bzip2, icu, openldap, cyrus_sasl, libmhash, freetds
-, uwimap, pam, gmp, apacheHttpd, libiconv, systemd, libsodium, html-tidy
+, uwimap, pam, gmp, apacheHttpd, libiconv, systemd, libsodium, html-tidy, libargon2
 }:
 
 with lib;
@@ -12,6 +12,7 @@ let
   generic =
   { version
   , sha256
+  , extraPatches ? []
   , imapSupport ? config.php.imap or (!stdenv.isDarwin)
   , ldapSupport ? config.php.ldap or true
   , mhashSupport ? config.php.mhash or true
@@ -51,6 +52,7 @@ let
   , calendarSupport ? config.php.calendar or true
   , sodiumSupport ? (config.php.sodium or true) && (versionAtLeast version "7.2")
   , tidySupport ? (config.php.tidy or false)
+  , argon2Support ? (config.php.argon2 or true) && (versionAtLeast version "7.2")
   }:
 
     let
@@ -64,7 +66,7 @@ let
 
       enableParallelBuilding = true;
 
-      nativeBuildInputs = [ pkgconfig ];
+      nativeBuildInputs = [ pkgconfig autoconf ];
       buildInputs = [ flex bison pcre ]
         ++ optional stdenv.isLinux systemd
         ++ optionals imapSupport [ uwimap openssl pam ]
@@ -92,7 +94,8 @@ let
         ++ optional bz2Support bzip2
         ++ optional (mssqlSupport && !stdenv.isDarwin) freetds
         ++ optional sodiumSupport libsodium
-        ++ optional tidySupport html-tidy;
+        ++ optional tidySupport html-tidy
+        ++ optional argon2Support libargon2;
 
       CXXFLAGS = optional stdenv.cc.isClang "-std=c++11";
 
@@ -131,6 +134,7 @@ let
       ++ optionals mysqliSupport [
         "--with-mysqli=${if mysqlndSupport then "mysqlnd" else "${mysql.connector-c}/bin/mysql_config"}"
       ]
+      ++ optional ( pdo_mysqlSupport || mysqlSupport || mysqliSupport ) "--with-mysql-sock=/run/mysqld/mysqld.sock"
       ++ optional bcmathSupport "--enable-bcmath"
       # FIXME: Our own gd package doesn't work, see https://bugs.php.net/bug.php?id=60108.
       ++ optionals gdSupport [
@@ -157,7 +161,8 @@ let
       ++ optional ztsSupport "--enable-maintainer-zts"
       ++ optional calendarSupport "--enable-calendar"
       ++ optional sodiumSupport "--with-sodium=${libsodium.dev}"
-      ++ optional tidySupport "--with-tidy=${html-tidy}";
+      ++ optional tidySupport "--with-tidy=${html-tidy}"
+      ++ optional argon2Support "--with-password-argon2=${libargon2}";
 
 
       hardeningDisable = [ "bindnow" ];
@@ -178,6 +183,8 @@ let
 
         configureFlags+=(--with-config-file-path=$out/etc \
           --includedir=$dev/include)
+
+        ./buildconf --force
       '';
 
       postInstall = ''
@@ -206,7 +213,7 @@ let
         outputsToInstall = [ "out" "dev" ];
       };
 
-      patches = [ ./fix-paths-php7.patch ];
+      patches = [ ./fix-paths-php7.patch ] ++ extraPatches;
 
       postPatch = optional stdenv.isDarwin ''
         substituteInPlace configure --replace "-lstdc++" "-lc++"
@@ -220,12 +227,18 @@ let
 
 in {
   php71 = generic {
-    version = "7.1.21";
-    sha256 = "104mn4kppklb21hgz1a50kgmc0ak5y996sx990xpc8yy9dbrqh62";
+    version = "7.1.25";
+    sha256 = "1b5az5vhap593ggjxirs1zdlg20hcv9h94iq5kgaxky71a4dqb00";
+
+    # https://bugs.php.net/bug.php?id=76826
+    extraPatches = optional stdenv.isDarwin ./php71-darwin-isfinite.patch;
   };
 
   php72 = generic {
-    version = "7.2.8";
-    sha256 = "1rky321gcvjm0npbfd4bznh36an0y14viqcvn4yzy3x643sni00z";
+    version = "7.2.13";
+    sha256 = "0bg9nfc250p24hxn4bdjz7ngcw75h8rpf4qjxqzcs6s9fvxlcjjv";
+
+    # https://bugs.php.net/bug.php?id=76826
+    extraPatches = optional stdenv.isDarwin ./php72-darwin-isfinite.patch;
   };
 }

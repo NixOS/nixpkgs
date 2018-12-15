@@ -1,5 +1,6 @@
 { stdenv, fetchurl, makeWrapper
-, boehmgc, libatomic_ops, pcre, libevent, libiconv, llvm, clang, which }:
+, boehmgc, libatomic_ops, pcre, libevent, libiconv, llvm, clang, which
+, openssl, zlib }:
 
 stdenv.mkDerivation rec {
   name = "crystal-${version}";
@@ -33,7 +34,7 @@ stdenv.mkDerivation rec {
 
   # crystal on Darwin needs libiconv to build
   libs = [
-    boehmgc libatomic_ops pcre libevent
+    boehmgc libatomic_ops pcre libevent openssl zlib
   ] ++ stdenv.lib.optionals stdenv.isDarwin [
     libiconv
   ];

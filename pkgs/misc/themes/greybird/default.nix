@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Grey and blue theme (Gtk, Xfce, Emerald, Metacity, Mutter, Unity)";
     homepage = https://github.com/shimmerproject/Greybird;
-    license = with stdenv.lib.licenses; [ gpl2Plus cc-by-nc-sa-30 ];
+    license = with stdenv.lib.licenses; [ gpl2Plus ]; # or alternatively: cc-by-nc-sa-30
     platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.romildo ];
   };

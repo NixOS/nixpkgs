@@ -46,6 +46,6 @@ stdenv.mkDerivation rec {
     homepage    = https://www.timescale.com/;
     maintainers = with maintainers; [ volth ];
     platforms   = platforms.linux;
-    license     = licenses.postgresql;
+    license     = licenses.asl20;
   };
 }

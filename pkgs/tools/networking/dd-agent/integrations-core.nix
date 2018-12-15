@@ -41,10 +41,10 @@ let
   src = pkgs.fetchFromGitHub {
     owner = "DataDog";
     repo = "integrations-core";
-    rev = "7be76e73969a8b9c993903681b300e1dd32f4b4d";
-    sha256 = "1qsqzm5iswgv9jrflh5mvbz9a7js7jf42cb28lzdzsp45iwfs2aa";
+    rev = "7e9bebbb5b79ac30c16814ecefdc8f5c63cb4ea4";
+    sha256 = "0yi7dlbd0rkzzl8cag713r86f40vl87aqrj97ral58csnnj7vfzb";
   };
-  version = "git-2018-05-27";
+  version = "git-2018-09-18";
 
   # Build helper to build a single datadog integration package.
   buildIntegration = { pname, ... }@args: python.pkgs.buildPythonPackage (args // {

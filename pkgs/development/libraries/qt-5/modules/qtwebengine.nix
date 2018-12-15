@@ -189,6 +189,7 @@ EOF
     description = "A web engine based on the Chromium web browser";
     maintainers = with maintainers; [ matthewbauer ];
     platforms = platforms.unix;
+    broken = qt56; # 2018-09-13, no successful build since 2018-04-25
   };
 
 }

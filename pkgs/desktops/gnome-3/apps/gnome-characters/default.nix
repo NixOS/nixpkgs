@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ glib gtk3 gjs pango gnome3.gsettings-desktop-schemas gnome3.defaultIconTheme libunistring ];
 
   mesonFlags = [
-    "-Ddbus_service_dir=${placeholder "out"}/share/dbus-1/services"
+    "-Ddbus_service_dir=share/dbus-1/services"
   ];
 
   meta = with stdenv.lib; {

@@ -136,9 +136,9 @@ rec {
         --prefix PATH : "$out/libexec/docker:$extraPath"
 
       # docker uses containerd now
-      ln -s ${docker-containerd}/bin/containerd $out/libexec/docker/docker-containerd
-      ln -s ${docker-containerd}/bin/containerd-shim $out/libexec/docker/docker-containerd-shim
-      ln -s ${docker-runc}/bin/runc $out/libexec/docker/docker-runc
+      ln -s ${docker-containerd}/bin/containerd $out/libexec/docker/containerd
+      ln -s ${docker-containerd}/bin/containerd-shim $out/libexec/docker/containerd-shim
+      ln -s ${docker-runc}/bin/runc $out/libexec/docker/runc
       ln -s ${docker-proxy}/bin/docker-proxy $out/libexec/docker/docker-proxy
       ln -s ${docker-tini}/bin/tini-static $out/libexec/docker/docker-init
 
@@ -197,10 +197,10 @@ rec {
   # Get revisions from
   # https://github.com/docker/docker-ce/tree/v${version}/components/engine/hack/dockerfile/install/*
 
-  docker_18_06 = dockerGen rec {
-    version = "18.06.1-ce";
-    rev = "e68fc7a215d7133c34aa18e3b72b4a21fd0c6136"; # git commit
-    sha256 = "1bqd6pv5hga4j1s8jm8q5qdnfbjf8lw1ghdk0bw9hhqkn7rcnrv4";
+  docker_18_09 = dockerGen rec {
+    version = "18.09.0";
+    rev = "4d60db472b2bde6931072ca6467f2667c2590dff"; # git commit
+    sha256 = "0py944f5k71c1cf6ci96vnqk43d5979w7r82cngaxk1g6za6k5yj";
     runcRev = "69663f0bd4b60df09991c08812a60108003fa340";
     runcSha256 = "1l37r97l3ra4ph069w190d05r0a43s76nn9jvvlkbwrip1cp6gyq";
     containerdRev = "468a545b9edcd5932818eb9de8e72413e616e86e";

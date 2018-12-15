@@ -11,7 +11,7 @@ let
   inherit (stdenv.lib) optionals versionAtLeast;
 
   pname = "vg";
-  version = "0.9.0";
+  version = "0.9.1";
   webpage = "http://erratique.ch/software/${pname}";
 in
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "${webpage}/releases/${pname}-${version}.tbz";
-    sha256 = "1czd2fq85hy24w5pllarsq4pvbx9rda5zdikxfxdng8s9kff2h3f";
+    sha256 = "07h9a464v0x066mjg3ldkaq94ah47b7rvh54z4rndrg7v6bk7kyp";
   };
 
   buildInputs = [ ocaml findlib ocamlbuild topkg ];
@@ -54,8 +54,8 @@ stdenv.mkDerivation rec {
     module. An API allows to implement new renderers.
     '';
     homepage = "${webpage}";
-    platforms = ocaml.meta.platforms or [];
-    license = licenses.bsd3;
+    inherit (ocaml.meta) platforms;
+    license = licenses.isc;
     maintainers = [ maintainers.jirkamarsik ];
   };
 }

@@ -2,7 +2,7 @@
 
 buildGoPackage rec{
   name = "scaleway-cli-${version}";
-  version = "1.14";
+  version = "1.17";
 
   goPackagePath = "github.com/scaleway/scaleway-cli";
 
@@ -10,7 +10,7 @@ buildGoPackage rec{
     owner = "scaleway";
     repo = "scaleway-cli";
     rev = "v${version}";
-    sha256 = "09rqw82clfdiixa9m3hphxh5v7w1gks3wicz1dvpay2sx28bpddr";
+    sha256 = "0v50wk6q8537880whi6w83dia9y934v0s2xr1z52cn3mrsjghsnd";
   };
 
   meta = with stdenv.lib; {
