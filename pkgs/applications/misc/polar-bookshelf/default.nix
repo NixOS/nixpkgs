@@ -10,12 +10,12 @@
 
 stdenv.mkDerivation rec {
   name = "polar-bookshelf-${version}";
-  version = "1.1.0";
+  version = "1.1.1";
 
   # fetching a .deb because there's no easy way to package this Electron app
   src = fetchurl {
     url = "https://github.com/burtonator/polar-bookshelf/releases/download/v${version}/polar-bookshelf-${version}-amd64.deb";
-    sha256 = "13h6c9sqbc7c5p1rc1wm7wza249sh0j04aq67n6gnqg5p22a7pmw";
+    sha256 = "0i83vwylszx1ci381izzrmcwbqmknrpny4r3rb0xn3jbz27126zr";
   };
 
   buildInputs = [
