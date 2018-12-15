@@ -134,6 +134,7 @@ in
 
       enable = mkOption {
         default = false;
+        type = types.bool;
         description = ''
           Enable Munin Node agent. Munin node listens on 0.0.0.0 and
           by default accepts connections only from 127.0.0.1 for security reasons.
@@ -241,6 +242,7 @@ in
 
       enable = mkOption {
         default = false;
+        type = types.bool;
         description = ''
           Enable munin-cron. Takes care of all heavy lifting to collect data from
           nodes and draws graphs to html. Runs munin-update, munin-limits,
@@ -253,6 +255,7 @@ in
 
       extraGlobalConfig = mkOption {
         default = "";
+        type = types.lines;
         description = ''
           <filename>munin.conf</filename> extra global configuration.
           See <link xlink:href='http://guide.munin-monitoring.org/en/latest/reference/munin.conf.html' />.
@@ -265,14 +268,16 @@ in
       };
 
       hosts = mkOption {
-        example = ''
-          [''${config.networking.hostName}]
-          address localhost
-        '';
+        default = "";
+        type = types.lines;
         description = ''
           Definitions of hosts of nodes to collect data from. Needs at least one
           host for cron to succeed. See
           <link xlink:href='http://guide.munin-monitoring.org/en/latest/reference/munin.conf.html' />
+        '';
+        example = ''
+          [''${config.networking.hostName}]
+          address localhost
         '';
       };
 
