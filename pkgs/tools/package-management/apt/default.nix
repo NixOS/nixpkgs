@@ -35,8 +35,6 @@ stdenv.mkDerivation rec {
   ];
 
   preConfigure = ''
-    export PERL5LIB="$PERL5LIB''${PERL5LIB:+:}${Po4a}/lib/perl5/site_perl";
-
     cmakeFlagsArray+=(
       -DBERKELEY_DB_INCLUDE_DIRS=${db.dev}/include
       -DDOCBOOK_XSL="${docbook_xsl}"/share/xml/docbook-xsl
