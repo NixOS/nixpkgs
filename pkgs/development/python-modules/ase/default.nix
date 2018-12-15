@@ -10,12 +10,12 @@
 }:
 
 buildPythonPackage rec {
-  version = "3.16.2";
+  version = "3.17.0";
   pname = "ase";
 
   src = fetchurl {
      url = "https://gitlab.com/${pname}/${pname}/-/archive/${version}/${pname}-${version}.tar.gz";
-     sha256 = "171j3f4a261cfnqjq98px5fldxql65i3jgf60wc945xvh0mbc8ds";
+     sha256 = "0qwy5n1rgn8smg4462634ky0dsd89xxzk2qyrvgdhvalx7nw9632";
   };
 
   propagatedBuildInputs = [ numpy scipy matplotlib flask pillow psycopg2 ];
