@@ -20,6 +20,6 @@ stdenv.mkDerivation rec {
     description = "Monitors the video signal from cameras";
     homepage = https://motion-project.github.io/;
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ puffnfresh ];
+    maintainers = with maintainers; [ puffnfresh veprbl ];
   };
 }
