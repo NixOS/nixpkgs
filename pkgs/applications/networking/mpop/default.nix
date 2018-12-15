@@ -3,12 +3,12 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  version = "1.4.0";
+  version = "1.4.1";
   name = "mpop-${version}";
 
   src = fetchurl {
     url = "https://marlam.de/mpop/releases/${name}.tar.xz";
-    sha256 = "14xsvpm5bc1wycisq882gqrnamnyi1q4rlk6anlw8ihzvwgm4h2j";
+    sha256 = "1b9mj6yfa8vg5flxw1xb8xalifjg87dghbg523i6fbr7679zl9iy";
   };
 
   nativeBuildInputs = [ pkgconfig ];
