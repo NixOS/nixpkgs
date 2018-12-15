@@ -2607,6 +2607,8 @@ in {
 
   gspread = callPackage ../development/python-modules/gspread { };
 
+  gym = callPackage ../development/python-modules/gym { };
+
   gyp = callPackage ../development/python-modules/gyp { };
 
   guessit = callPackage ../development/python-modules/guessit { };
