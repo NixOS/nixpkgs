@@ -408,4 +408,11 @@ rec {
   */
   generateOptparseApplicativeCompletions = commands: pkg:
     pkgs.lib.foldr generateOptparseApplicativeCompletion pkg commands;
+
+  # Don't fail at configure time if there are multiple versions of the
+  # same package in the (recursive) dependencies of the package being
+  # built. Will delay failures, if any, to compile time.
+  allowInconsistentDependencies = drv: overrideCabal drv (drv: {
+    allowInconsistentDependencies = true;
+  });
 }
