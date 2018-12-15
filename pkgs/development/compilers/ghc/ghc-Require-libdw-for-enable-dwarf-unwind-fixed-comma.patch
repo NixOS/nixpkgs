@@ -1,0 +1,41 @@
+From: Alec Theriault <alec.theriault@gmail.com>
+Date: Sat, 8 Dec 2018 04:18:15 +0000 (-0500)
+Subject: Require 'libdw' for '--enable-dwarf-unwind'
+X-Git-Url: https://git.haskell.org/ghc.git/commitdiff_plain/cb882fc993b4972f7f212b291229ef9e9ade0af9
+
+Require 'libdw' for '--enable-dwarf-unwind'
+
+This causes './configure --enable-dwarf-unwind' to exit with a helpful
+error message when 'libdw' cannot be found (compared to the previous
+behaviour of silently pretending the user hadn't requested DWARF support
+at all).
+
+Test Plan: ./configure --enable-dwarf-unwind # on systems with/without
+libdw
+
+Reviewers: bgamari, nh2
+
+Reviewed By: nh2
+
+Subscribers: nh2, rwbarton, erikd, carter
+
+GHC Trac Issues: #15968
+
+Differential Revision: https://phabricator.haskell.org/D5424
+---
+
+diff --git a/configure.ac b/configure.ac
+index 88eddca..2cf98a7 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -1248,7 +1248,9 @@ USE_LIBDW=0
+ AC_ARG_ENABLE(dwarf-unwind,
+     [AC_HELP_STRING([--enable-dwarf-unwind],
+         [Enable DWARF unwinding support in the runtime system via elfutils' libdw [default=no]])],
+-    [AC_CHECK_LIB(dw, dwfl_attach_state, [UseLibdw=YES], [UseLibdw=NO])],
++    [AC_CHECK_LIB(dw, dwfl_attach_state,
++      [UseLibdw=YES],
++      [AC_MSG_ERROR([Cannot find system libdw (required by --enable-dwarf-unwind)])])],
+     [UseLibdw=NO]
+ )
+ AC_SUBST(UseLibdw)

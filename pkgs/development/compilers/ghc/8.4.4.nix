@@ -3,6 +3,7 @@
 # build-tools
 , bootPkgs
 , autoconf, automake, coreutils, fetchurl, fetchpatch, perl, python3, m4, sphinx
+, elfutils # for DWARF support
 
 , libiconv ? null, ncurses
 
@@ -15,6 +16,9 @@
 , # If enabled, GHC will be built with the GPL-free but slower integer-simple
   # library instead of the faster but GPLed integer-gmp library.
   enableIntegerSimple ? !(stdenv.lib.any (stdenv.lib.meta.platformMatch stdenv.hostPlatform) gmp.meta.platforms), gmp
+
+, # Allows this GHC to produce binaries that have DWARF debug symbols.
+  enableDwarf ? false # disabled by default due to https://github.com/NixOS/nixpkgs/pull/52255#issuecomment-447602333
 
 , # If enabled, use -fPIC when compiling static libs.
   enableRelocatedStaticLibs ? stdenv.targetPlatform != stdenv.hostPlatform
@@ -36,6 +40,9 @@
 }:
 
 assert !enableIntegerSimple -> gmp != null;
+# TODO Use stdenv.???Platform.parsed.kernel.execFormat == stdenv.lib.systems.parse.execFormats.elf
+# instead, see https://github.com/NixOS/nixpkgs/pull/52255#issuecomment-450521802
+assert enableDwarf -> !stdenv.isDarwin; # elfutils libdw supports only ELF
 
 let
   inherit (stdenv) buildPlatform hostPlatform targetPlatform;
@@ -60,6 +67,9 @@ let
     HADDOCK_DOCS = NO
     BUILD_SPHINX_HTML = NO
     BUILD_SPHINX_PDF = NO
+  '' + stdenv.lib.optionalString enableDwarf ''
+    GhcLibHcOpts += -g3
+    GhcRtsHcOpts += -g3
   '' + stdenv.lib.optionalString enableRelocatedStaticLibs ''
     GhcLibHcOpts += -fPIC
     GhcRtsHcOpts += -fPIC
@@ -70,6 +80,7 @@ let
   # Splicer will pull out correct variations
   libDeps = platform: stdenv.lib.optional enableTerminfo [ ncurses ]
     ++ stdenv.lib.optional (!enableIntegerSimple) gmp
+    ++ stdenv.lib.optional enableDwarf elfutils # elfutils provides libdw
     ++ stdenv.lib.optional (platform.libc != "glibc" && !targetPlatform.isWindows) libiconv;
 
   toolsForTarget =
@@ -109,6 +120,10 @@ stdenv.mkDerivation (rec {
       name = "D4388.diff";
       sha256 = "0w6sdcvnqjlnlzpvnzw20b80v150ijjyjvs9548ildc1928j0w7s";
     })
+    # Combination backport of
+    #   https://git.haskell.org/ghc.git/commitdiff_plain/cb882fc993b4972f7f212b291229ef9e9ade0af9
+    #   https://git.haskell.org/ghc.git/commitdiff_plain/126aa794743b807b7447545697b96dd165ec3e16
+    ++ stdenv.lib.optional enableDwarf ./ghc-Require-libdw-for-enable-dwarf-unwind-fixed-comma.patch
     ++ stdenv.lib.optional stdenv.isDarwin ./backport-dylib-command-size-limit.patch
     ++ stdenv.lib.optional (targetPlatform.isAarch32 || targetPlatform.isAarch64) (fetchpatch {
       url = "https://git.haskell.org/ghc.git/patch/d8495549ba9d194815c2d0eaee6797fc7c00756a";
@@ -172,6 +187,8 @@ stdenv.mkDerivation (rec {
     "--with-gmp-includes=${targetPackages.gmp.dev}/include" "--with-gmp-libraries=${targetPackages.gmp.out}/lib"
   ] ++ stdenv.lib.optional (targetPlatform == hostPlatform && hostPlatform.libc != "glibc" && !targetPlatform.isWindows) [
     "--with-iconv-includes=${libiconv}/include" "--with-iconv-libraries=${libiconv}/lib"
+  ] ++ stdenv.lib.optional enableDwarf [
+    "--enable-dwarf-unwind"
   ] ++ stdenv.lib.optionals (targetPlatform != hostPlatform) [
     "--enable-bootstrap-with-devel-snapshot"
   ] ++ stdenv.lib.optionals (targetPlatform.isAarch32) [
