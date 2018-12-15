@@ -1,6 +1,8 @@
 { stdenv, lib, makeWrapper
 , vimUtils
 , bundlerEnv, ruby
+, nodejs
+, nodePackages
 , pythonPackages
 , python3Packages
 }:
@@ -12,8 +14,8 @@ let
   wrapper = {
       withPython ? true,  extraPythonPackages ? (_: []) /* the function you would have passed to python.withPackages */
     , withPython3 ? true,  extraPython3Packages ? (_: []) /* the function you would have passed to python.withPackages */
+    , withNodeJs? false
     , withRuby ? true
-    , withPyGUI ? false
     , vimAlias ? false
     , viAlias ? false
     , configure ? {}
@@ -40,15 +42,17 @@ let
 
   pluginPythonPackages = getDeps "pythonDependencies" requiredPlugins;
   pythonEnv = pythonPackages.python.withPackages(ps:
-        (if withPyGUI then [ ps.neovim_gui ] else [ ps.neovim ])
+        [ ps.pynvim ]
         ++ (extraPythonPackagesFun ps)
         ++ (concatMap (f: f ps) pluginPythonPackages));
 
   pluginPython3Packages = getDeps "python3Dependencies" requiredPlugins;
   python3Env = python3Packages.python.withPackages (ps:
-        [ ps.neovim ]
+        [ ps.pynvim ]
         ++ (extraPython3PackagesFun ps)
         ++ (concatMap (f: f ps) pluginPython3Packages));
+
+  binPath = makeBinPath (optionals withRuby [rubyEnv] ++ optionals withNodeJs [nodejs]);
 
   in
   stdenv.mkDerivation {
@@ -62,10 +66,12 @@ let
 
         makeWrapper "$(readlink -v --canonicalize-existing "${bin}")" \
           "$out/bin/nvim" --add-flags " \
+        --cmd \"${if withNodeJs then "let g:node_host_prog='${nodePackages.neovim}/bin/neovim-node-host'" else "let g:loaded_node_provider=1"}\" \
         --cmd \"${if withPython then "let g:python_host_prog='$out/bin/nvim-python'" else "let g:loaded_python_provider = 1"}\" \
         --cmd \"${if withPython3 then "let g:python3_host_prog='$out/bin/nvim-python3'" else "let g:loaded_python3_provider = 1"}\" \
         --cmd \"${if withRuby then "let g:ruby_host_prog='$out/bin/nvim-ruby'" else "let g:loaded_ruby_provider=1"}\" " \
-         ${optionalString withRuby '' --suffix PATH : ${rubyEnv}/bin --set GEM_HOME ${rubyEnv}/${rubyEnv.ruby.gemPath}'' }
+        --suffix PATH : ${binPath} \
+        ${optionalString withRuby '' --set GEM_HOME ${rubyEnv}/${rubyEnv.ruby.gemPath}'' }
 
       ''
       + optionalString (!stdenv.isDarwin) ''
@@ -81,10 +87,6 @@ let
         makeWrapper ${python3Env}/bin/python3 $out/bin/nvim-python3 --unset PYTHONPATH
     '' + optionalString withRuby ''
       ln -s ${rubyEnv}/bin/neovim-ruby-host $out/bin/nvim-ruby
-    ''
-      + optionalString withPyGUI ''
-      makeWrapper "${pythonEnv}/bin/pynvim" "$out/bin/pynvim" \
-        --prefix PATH : "$out/bin"
     '' + optionalString vimAlias ''
       ln -s $out/bin/nvim $out/bin/vim
     '' + optionalString viAlias ''

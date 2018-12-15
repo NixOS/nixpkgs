@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   name = "crawl-${version}${lib.optionalString tileMode "-tiles"}";
-  version = "0.22.0";
+  version = "0.22.1";
 
   src = fetchFromGitHub {
     owner = "crawl-ref";
     repo = "crawl-ref";
     rev = version;
-    sha256 = "1bzhqrc944rgpdnnid3c5h2r3dvyw70cs70hazzm0cv5aipdkhbl";
+    sha256 = "19yzl241glv2zazifgz59bw3jlh4hj59xx5w002hnh9rp1w15rnr";
   };
 
   # Patch hard-coded paths in the makefile

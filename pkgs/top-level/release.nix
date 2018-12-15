@@ -8,7 +8,7 @@
 
    $ nix-build pkgs/top-level/release.nix -A coreutils.x86_64-linux
 */
-{ nixpkgs ? { outPath = (import ../../lib).cleanSource ../..; revCount = 1234; shortRev = "abcdef"; }
+{ nixpkgs ? { outPath = (import ../../lib).cleanSource ../..; revCount = 1234; shortRev = "abcdef"; revision = "0000000000000000000000000000000000000000"; }
 , officialRelease ? false
   # The platforms for which we build Nixpkgs.
 , supportedSystems ? [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" ]
@@ -32,7 +32,7 @@ let
 
       metrics = import ./metrics.nix { inherit pkgs nixpkgs; };
 
-      manual = import ../../doc;
+      manual = import ../../doc { inherit pkgs nixpkgs; };
       lib-tests = import ../../lib/tests/release.nix { inherit pkgs; };
 
       darwin-tested = if supportDarwin then pkgs.releaseTools.aggregate
@@ -66,7 +66,7 @@ let
               jobs.inkscape.x86_64-darwin
               # jobs.gimp.x86_64-darwin
               jobs.emacs.x86_64-darwin
-              # jobs.wireshark.x86_64-darwin
+              jobs.wireshark.x86_64-darwin
               jobs.transmission-gtk.x86_64-darwin
 
               # Tests
@@ -77,6 +77,7 @@ let
               jobs.tests.cc-wrapper-libcxx-39.x86_64-darwin
               jobs.tests.stdenv-inputs.x86_64-darwin
               jobs.tests.macOSSierraShared.x86_64-darwin
+              jobs.tests.patch-shebangs.x86_64-darwin
             ];
         } else null;
 
@@ -119,6 +120,7 @@ let
               jobs.tests.cc-multilib-gcc.x86_64-linux
               jobs.tests.cc-multilib-clang.x86_64-linux
               jobs.tests.stdenv-inputs.x86_64-linux
+              jobs.tests.patch-shebangs.x86_64-linux
             ]
             ++ lib.collect lib.isDerivation jobs.stdenvBootstrapTools
             ++ lib.optionals supportDarwin [
@@ -148,6 +150,7 @@ let
               jobs.tests.cc-wrapper-libcxx-6.x86_64-darwin
               jobs.tests.stdenv-inputs.x86_64-darwin
               jobs.tests.macOSSierraShared.x86_64-darwin
+              jobs.tests.patch-shebangs.x86_64-darwin
             ];
         };
 

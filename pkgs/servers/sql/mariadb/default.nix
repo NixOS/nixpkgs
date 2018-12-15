@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, pkgconfig, ncurses, zlib, xz, lzo, lz4, bzip2, snappy
+{ stdenv, fetchurl, fetchFromGitHub, cmake, pkgconfig, ncurses, zlib, xz, lzo, lz4, bzip2, snappy
 , libiconv, openssl, pcre, boost, judy, bison, libxml2
 , libaio, libevent, jemalloc, cracklib, systemd, numactl, perl
 , fixDarwinDylibNames, cctools, CoreServices
@@ -180,11 +180,11 @@ everything = stdenv.mkDerivation (common // {
 
 connector-c = stdenv.mkDerivation rec {
   name = "mariadb-connector-c-${version}";
-  version = "2.3.6";
+  version = "2.3.7";
 
   src = fetchurl {
     url = "https://downloads.mariadb.org/interstitial/connector-c-${version}/mariadb-connector-c-${version}-src.tar.gz/from/http%3A//nyc2.mirrors.digitalocean.com/mariadb/";
-    sha256 = "15iy5iqp0njbwbn086x2dq8qnbkaci7ydvi84cf5z8fxvljis9vb";
+    sha256 = "13izi35vvxhiwl2dsnqrz75ciisy2s2k30giv7hrm01qlwnmiycl";
     name   = "mariadb-connector-c-${version}-src.tar.gz";
   };
 
@@ -221,16 +221,19 @@ connector-c = stdenv.mkDerivation rec {
 
 galera = stdenv.mkDerivation rec {
   name = "mariadb-galera-${version}";
-  version = "25.3.23";
+  version = "25.3.24";
 
-  src = fetchurl {
-    url = "https://mirrors.nxthost.com/mariadb/mariadb-10.2.14/galera-${version}/src/galera-${version}.tar.gz";
-    sha256 = "11pfc85z29jk0h6g6bmi3hdv4in4yb00xsr2r0qm1b0y7m2wq3ra";
+  src = fetchFromGitHub {
+    owner = "codership";
+    repo = "galera";
+    rev = "release_${version}";
+    sha256 = "1yx3rqy7r4w2l3hnrri30hvsa296v8xidi18p5fdzcpmnhnlwjbi";
+    fetchSubmodules = true;
   };
 
   buildInputs = [ asio boost check openssl scons ];
 
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace SConstruct \
       --replace "boost_library_path = '''" "boost_library_path = '${boost}/lib'"
   '';
@@ -240,11 +243,9 @@ galera = stdenv.mkDerivation rec {
     export LIBPATH="${galeraLibs}/lib"
   '';
 
-  buildPhase = ''
-     scons -j$NIX_BUILD_CORES ssl=1 system_asio=1 strict_build_flags=0
-  '';
+  sconsFlags = "ssl=1 system_asio=1 strict_build_flags=0";
 
-  installPhase = ''
+  postInstall = ''
     # copied with modifications from scripts/packages/freebsd.sh
     GALERA_LICENSE_DIR="$share/licenses/${name}"
     install -d $out/{bin,lib/galera,share/doc/galera,$GALERA_LICENSE_DIR}

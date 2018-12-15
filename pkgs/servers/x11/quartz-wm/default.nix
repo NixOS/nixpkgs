@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, xorg, pixman, pkgconfig, AppKit, Xplugin, darwin }:
+{ stdenv, fetchurl, xorg, pixman, pkgconfig, AppKit, Foundation, Xplugin, cf-private }:
 
 let version = "1.3.1";
 in stdenv.mkDerivation {
@@ -19,9 +19,11 @@ in stdenv.mkDerivation {
     xorg.libXext
     pixman
     pkgconfig
-    AppKit Xplugin darwin.apple_sdk.frameworks.Foundation
+    AppKit Xplugin Foundation
+    # Needed for CFNotificationCenterAddObserver symbols.
+    cf-private
   ];
-  meta = with lib; {
+  meta = with stdenv.lib; {
     license = licenses.apsl20;
     platforms = platforms.darwin;
     maintainers = with maintainers; [ matthewbauer ];

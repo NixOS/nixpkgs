@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   name = "p11-kit-${version}";
-  version = "0.23.13";
+  version = "0.23.14";
 
   src = fetchFromGitHub {
     owner = "p11-glue";
     repo = "p11-kit";
     rev = version;
-    sha256 = "1z2rbw2qbwj64i88llc1mkf0263qa0kxc2350kg25r7mghxbw1y6";
+    sha256 = "0zmrw1ciybhnxjlsfb07wnf11ak5vrmy8y8fnz3mwm8v3w8dzlvw";
   };
 
   outputs = [ "out" "dev"];

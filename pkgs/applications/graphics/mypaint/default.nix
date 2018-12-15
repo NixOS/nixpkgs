@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, gtk3, intltool, json_c, lcms2, libpng, librsvg, gobjectIntrospection, hicolor-icon-theme
+{ stdenv, fetchFromGitHub, gtk3, intltool, json_c, lcms2, libpng, librsvg, gobject-introspection, hicolor-icon-theme
 , gdk_pixbuf, pkgconfig, python2Packages, scons, swig, wrapGAppsHook }:
 
 let
@@ -17,7 +17,7 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     intltool pkgconfig scons swig wrapGAppsHook
-    gobjectIntrospection # for setup hook
+    gobject-introspection # for setup hook
   ];
 
   buildInputs = [
@@ -26,10 +26,7 @@ in stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ numpy ];
 
-  buildPhase = "scons prefix=$out";
-
-  installPhase = ''
-    scons prefix=$out install
+  postInstall = ''
     sed -i -e 's|/usr/bin/env python2.7|${python}/bin/python|' $out/bin/mypaint
   '';
 

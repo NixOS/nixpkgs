@@ -1,10 +1,10 @@
 { stdenv, fetchFromGitHub
-, meson, ninja, pkgconfig, vala, gobjectIntrospection, gettext, wrapGAppsHook, desktop-file-utils
+, meson, ninja, pkgconfig, vala, gobject-introspection, gettext, wrapGAppsHook, python3, desktop-file-utils
 , gtk3, glib, granite, libgee, libgda, gtksourceview, libxml2, libsecret }:
 
 
 let
-  version = "0.6.0";
+  version = "0.6.4";
   sqlGda = libgda.override {
     mysqlSupport = true;
     postgresSupport = true;
@@ -17,10 +17,10 @@ in stdenv.mkDerivation rec {
     owner = "Alecaddd";
     repo = "sequeler";
     rev = "v${version}";
-    sha256 = "04x3fg665201g3zy66sicfna4vac4n1pmrahbra90gvfzaia1cai";
+    sha256 = "1np7554535vwkjlk5kq4fpighfw92l4j35pfn1b2mgnh7xd6zhaj";
   };
 
-  nativeBuildInputs = [ meson ninja pkgconfig vala gobjectIntrospection gettext wrapGAppsHook desktop-file-utils ];
+  nativeBuildInputs = [ meson ninja pkgconfig vala gobject-introspection gettext wrapGAppsHook python3 desktop-file-utils ];
 
   buildInputs = [ gtk3 glib granite libgee sqlGda gtksourceview libxml2 libsecret ];
 

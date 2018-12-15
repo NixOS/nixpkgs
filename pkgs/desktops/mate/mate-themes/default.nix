@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, pkgconfig, intltool, mate, gtk2, gtk_engines,
-  gtk-engine-murrine, gdk_pixbuf, librsvg }:
+{ stdenv, fetchurl, pkgconfig, intltool, mate, gtk2, gtk3,
+  gtk_engines, gtk-engine-murrine, gdk_pixbuf, librsvg }:
 
 stdenv.mkDerivation rec {
   name = "mate-themes-${version}";
@@ -10,11 +10,15 @@ stdenv.mkDerivation rec {
     sha256 = "0538bw8qismp16ymxbjk0ww7yjw1ch5v3f3d4vib3770xvgmmcfm";
   };
 
-  nativeBuildInputs = [ pkgconfig intltool ];
+  nativeBuildInputs = [ pkgconfig intltool gtk3 ];
 
   buildInputs = [ mate.mate-icon-theme gtk2 gtk_engines gdk_pixbuf librsvg ];
 
   propagatedUserEnvPkgs = [ gtk-engine-murrine ];
+
+  postInstall = ''
+    gtk-update-icon-cache "$out"/share/icons/ContrastHigh
+  '';
 
   meta = {
     description = "A set of themes from MATE";

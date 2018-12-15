@@ -1,4 +1,4 @@
-{ buildPythonPackage, fetchFromGitHub, lib,
+{ buildPythonPackage, isPy3k, fetchFromGitHub, lib,
   z3, ply, python-igraph, oset, ordered-set, dictionaries }:
 
 buildPythonPackage {
@@ -28,6 +28,8 @@ buildPythonPackage {
   postInstall = ''
     $out/bin/cozy --help
   '';
+
+  disabled = !isPy3k;
 
   meta = {
     description = "The collection synthesizer";

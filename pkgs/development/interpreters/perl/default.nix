@@ -37,20 +37,20 @@ let
       stdenv.lib.optional crossCompiling "dev";
     setOutputFlags = false;
 
+    disallowedReferences = [ stdenv.cc ];
+
     patches =
-      [ ]
-      # Do not look in /usr etc. for dependencies.
-      ++ optional (versionOlder version "5.26") ./no-sys-dirs.patch
-      ++ optional (versionAtLeast version "5.26") ./no-sys-dirs-5.26.patch
-      ++ optional (versionAtLeast version "5.24") (
+      [
+        # Do not look in /usr etc. for dependencies.
+        ./no-sys-dirs-5.26.patch
         # Fix parallel building: https://rt.perl.org/Public/Bug/Display.html?id=132360
-        fetchurlBoot {
+        (fetchurlBoot {
           url = "https://rt.perl.org/Public/Ticket/Attachment/1502646/807252/0001-Fix-missing-build-dependency-for-pods.patch";
           sha256 = "1bb4mldfp8kq1scv480wm64n2jdsqa3ar46cjp1mjpby8h5dr2r0";
         })
+      ]
       ++ optional stdenv.isSunOS ./ld-shared.patch
-      ++ optional stdenv.isDarwin ./cpp-precomp.patch
-      ++ optional (stdenv.isDarwin && versionAtLeast version "5.24") ./sw_vers.patch
+      ++ optionals stdenv.isDarwin [ ./cpp-precomp.patch ./sw_vers.patch ]
       ++ optional crossCompiling ./MakeMaker-cross.patch;
 
     postPatch = ''
@@ -77,6 +77,7 @@ let
         "-Dlocincpth=${libcInc}/include"
         "-Dloclibpth=${libcLib}/lib"
       ]
+      ++ optionals ((builtins.match ''5\.[0-9]*[13579]\..+'' version) != null) [ "-Dusedevel" "-Uversiononly" ]
       ++ optional stdenv.isSunOS "-Dcc=gcc"
       ++ optional enableThreading "-Dusethreads";
 
@@ -118,6 +119,7 @@ let
           --replace "${
               if stdenv.cc.cc or null != null then stdenv.cc.cc else "/no-such-path"
             }" /no-such-path \
+          --replace "${stdenv.cc}" /no-such-path \
           --replace "$man" /no-such-path
       '' + stdenv.lib.optionalString crossCompiling
       ''
@@ -151,11 +153,11 @@ let
       platforms = platforms.all;
     };
   } // stdenv.lib.optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform) rec {
-    crossVersion = "1.2";
+    crossVersion = "ab8d05c9e695d3db4f7dc15c70f23623349c2f49"; # Oct 03, 2018
 
     perl-cross-src = fetchurlBoot {
-      url = "https://github.com/arsv/perl-cross/releases/download/${crossVersion}/perl-cross-${crossVersion}.tar.gz";
-      sha256 = "02cic7lk91hgmsg8klkm2kv88m2a8y22m4m8gl4ydxbap2z7g42r";
+      url = "https://github.com/arsv/perl-cross/archive/${crossVersion}.tar.gz";
+      sha256 = "1g7p7mqmx8x3diqvbh881gr72d106cn6yvm4gx7f0ars3n3b3wj0";
     };
 
     depsBuildBuild = [ buildPackages.stdenv.cc makeWrapper ];
@@ -171,23 +173,20 @@ let
     setupHook = ./setup-hook-cross.sh;
   });
 in rec {
-  perl522 = common {
-    version = "5.22.4";
-    sha256 = "1yk1xn4wmnrf2ph02j28khqarpyr24qwysjzkjnjv7vh5dygb7ms";
-  };
-
-  perl524 = common {
-    version = "5.24.4";
-    sha256 = "0w0r6v5k5hw5q1k3p4c7krcxidkj2qzsj5dlrlrxhm01n7fksbxz";
-  };
-
   perl526 = common {
     version = "5.26.2";
     sha256 = "03gpnxx1g6hvlh0v4aqx00580h787sfywp1vlvw64q2xcbm9qbsp";
   };
 
+  # the latest Maint version
   perl528 = common {
     version = "5.28.0";
     sha256 = "1a3f822lcl8dr8v0hk80yyhpzqlljg49z9flb48rs3nbsij9z4ky";
+  };
+
+  # the latest Devel version
+  perldevel = common {
+    version = "5.29.4";
+    sha256 = "153r0f6jdqrl7hxrvhfivf5g8ivhbvggfhg841q3hi3db5rc86k4";
   };
 }

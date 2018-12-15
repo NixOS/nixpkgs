@@ -17,7 +17,7 @@ let
       buildInputs = [ readline ];
 
       patches = [
-        (./. + (builtins.toPath "/dont-create-sysconfdir-${builtins.substring 0 1 version}.patch"))
+        (./. + "/dont-create-sysconfdir-${builtins.substring 0 1 version}.patch")
       ];
 
       configureFlags = [

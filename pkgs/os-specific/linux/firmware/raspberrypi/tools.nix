@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "raspberrypi-tools-${version}";
-  version = "2018-02-05";
+  version = "2018-10-03";
 
   src = fetchFromGitHub {
     owner = "raspberrypi";
     repo = "userland";
-    rev = "a343dcad1dae4e93f4bfb99496697e207f91027e";
-    sha256 = "1z4qrwjb7x3a45mx978q8vyhnx068sgzhymm4z0ayhckji4ngal1";
+    rev = "de4a7f2e3c391e2d3bc76af31864270e7802d9ac";
+    sha256 = "0w96xa98ngdk9m6wv185w8waa7wm2hkn2bhxz52zd477hchzrxlg";
   };
 
   patches = [ ./tools-dont-install-sysv-init-scripts.patch ];

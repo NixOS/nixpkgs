@@ -14,7 +14,7 @@ let
   mkWith = mkFlag "with-" "without-";
   mkOther = mkFlag "" "" true;
 
-  shouldUsePkg = pkg: if pkg != null && pkg.meta.available then pkg else null;
+  shouldUsePkg = pkg: if pkg != null && stdenv.lib.any (stdenv.lib.meta.platformMatch stdenv.hostPlatform) pkg.meta.platforms then pkg else null;
 
   optPam = shouldUsePkg pam;
   optLibidn = shouldUsePkg libidn;
@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage    = http://www.gnu.org/software/shishi/;
+    homepage    = https://www.gnu.org/software/shishi/;
     description = "An implementation of the Kerberos 5 network security system";
     license     = licenses.gpl3Plus;
     maintainers = with maintainers; [ bjg lovek323 wkennington ];

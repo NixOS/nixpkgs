@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, rustPlatform, makeWrapper, rustup, substituteAll }:
+{ stdenv, fetchFromGitHub, rustPlatform, makeWrapper, substituteAll }:
 
 rustPlatform.buildRustPackage rec {
   name = "racer-${version}";
@@ -13,8 +13,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "1j3fviimdxn6xa75z0l9wkgdnznp8q20jjs42mql6ql782dga5lk";
 
-  # rustup is required for test
-  buildInputs = [ makeWrapper rustup ];
+  buildInputs = [ makeWrapper ];
 
   preCheck = ''
     export RUST_SRC_PATH="${rustPlatform.rustcSrc}"

@@ -8,11 +8,11 @@ let
   pname = "tracker-miners";
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
-  version = "2.1.3";
+  version = "2.1.5";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "10j6iifq0ccnqckdx7fqlrfifbvs08jbczgxajldz26057kwp8fz";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    sha256 = "1kdq7fk9c80ngg65p31pjdk4za0fq7nfhblqsma9alvkam5kvzgm";
   };
 
   nativeBuildInputs = [
@@ -63,6 +63,7 @@ in stdenv.mkDerivation rec {
   mesonFlags = [
     # TODO: tests do not like our sandbox
     "-Dfunctional_tests=false"
+    "-Ddbus_services=${placeholder "out"}/share/dbus-1/services"
   ];
 
   patches = [
@@ -77,15 +78,8 @@ in stdenv.mkDerivation rec {
     })
   ];
 
-  # Symlinks require absolute path and we still cannot use placeholders
-  # https://github.com/NixOS/nixpkgs/pull/39534#discussion_r184339131
-  # https://github.com/NixOS/nixpkgs/pull/37693
-  preConfigure = ''
-    mesonFlagsArray+=("-Ddbus_services=$out/share/dbus-1/services")
-  '';
-
   postInstall = ''
-    ${glib.dev}/bin/glib-compile-schemas $out/share/glib-2.0/schemas
+    glib-compile-schemas "$out/share/glib-2.0/schemas"
   '';
 
   passthru = {

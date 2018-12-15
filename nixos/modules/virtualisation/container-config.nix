@@ -22,6 +22,9 @@ with lib;
     # Not supported in systemd-nspawn containers.
     security.audit.enable = false;
 
+    # Use the host's nix-daemon.
+    environment.variables.NIX_REMOTE = "daemon";
+
   };
 
 }

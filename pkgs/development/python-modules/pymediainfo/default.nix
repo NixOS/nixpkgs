@@ -22,6 +22,11 @@ buildPythonPackage rec {
                 'CDLL("${libmediainfo}/lib/libmediainfo${stdenv.hostPlatform.extensions.sharedLibrary}")' \
       --replace 'CDLL("libmediainfo.so.0")' \
                 'CDLL("${libmediainfo}/lib/libmediainfo${stdenv.hostPlatform.extensions.sharedLibrary}.0")'
+
+    # Fix test, remove after version 2.3.0
+    substituteInPlace tests/test_pymediainfo.py \
+      --replace 'codec, "AVC"'    'format, "AVC"' \
+      --replace 'codec, "AAC LC"' 'format, "AAC"'
   '';
 
   nativeBuildInputs = [ setuptools_scm ];

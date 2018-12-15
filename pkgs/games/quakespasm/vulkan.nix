@@ -1,4 +1,5 @@
-{ stdenv, SDL2, fetchFromGitHub, makeWrapper, gzip, libvorbis, libmad, vulkan-loader }:
+{ stdenv, SDL2, fetchFromGitHub, makeWrapper, gzip, libvorbis, libmad, vulkan-headers, vulkan-loader }:
+
 stdenv.mkDerivation rec {
   name = "vkquake-${version}";
   majorVersion = "1.00";
@@ -13,8 +14,12 @@ stdenv.mkDerivation rec {
 
   sourceRoot = "source/Quake";
 
+  nativeBuildInputs = [
+    makeWrapper vulkan-headers
+  ];
+
   buildInputs = [
-    makeWrapper gzip SDL2 libvorbis libmad vulkan-loader.dev
+    gzip SDL2 libvorbis libmad vulkan-loader
   ];
 
   buildFlags = [ "DO_USERDIRS=1" ];

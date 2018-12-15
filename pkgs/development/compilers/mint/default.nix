@@ -1,9 +1,9 @@
 # Updating the dependencies for this package:
 #
-#   wget https://github.com/mint-lang/mint/blob/0.2.1/shard.lock
+#   wget https://raw.githubusercontent.com/mint-lang/mint/0.3.1/shard.lock
 #   nix-shell -p crystal libyaml --run 'crystal run crystal2nix.cr'
 #
-{stdenv, lib, fetchFromGitHub, crystal, zlib, openssl, duktape, which }:
+{stdenv, lib, fetchFromGitHub, crystal, zlib, openssl, duktape, which, libyaml }:
 let
   crystalPackages = lib.mapAttrs (name: src:
     stdenv.mkDerivation {
@@ -33,17 +33,16 @@ let
   };
 in
 stdenv.mkDerivation rec {
-  version = "0.2.1";
+  version = "0.3.1";
   name = "mint-${version}";
   src = fetchFromGitHub {
     owner = "mint-lang";
     repo = "mint";
     rev = version;
-    sha256 = "0r8hv2j5yz0rlvrbpnybihj44562pkmsssa8f0hjs45m1ifvf4b1";
+    sha256 = "1f49ax045zdjj0ypc2j4ms9gx80rl63qcsfzm3r0k0lcavfp57zr";
   };
 
-  nativeBuildInputs = [ which ];
-  buildInputs = [ crystal zlib openssl duktape ];
+  nativeBuildInputs = [ which crystal zlib openssl duktape libyaml ];
 
   buildPhase = ''
     mkdir -p $out/bin tmp

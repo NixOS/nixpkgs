@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "keyutils-${version}";
-  version = "1.5.10";
+  version = "1.6";
 
   src = fetchurl {
     url = "https://people.redhat.com/dhowells/keyutils/${name}.tar.bz2";
-    sha256 = "1dmgjcf7mnwc6h72xkvpaqpzxw8vmlnsmzz0s27pg0giwzm3sp0i";
+    sha256 = "05bi5ja6f3h3kdi7p9dihlqlfrsmi1wh1r2bdgxc0180xh6g5bnk";
   };
 
   outputs = [ "out" "lib" "dev" ];
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with stdenv.lib; {
-    homepage = http://people.redhat.com/dhowells/keyutils/;
+    homepage = https://people.redhat.com/dhowells/keyutils/;
     description = "Tools used to control the Linux kernel key management system";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

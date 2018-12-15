@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, umockdev, gobjectIntrospection
+{ stdenv, fetchFromGitHub, autoreconfHook, umockdev, gobject-introspection
 , pkgconfig, glib, systemd, libgudev, vala }:
 
 stdenv.mkDerivation rec {
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ glib systemd libgudev ];
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig vala gobjectIntrospection ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig vala gobject-introspection ];
 
   enableParallelBuilding = true;
 

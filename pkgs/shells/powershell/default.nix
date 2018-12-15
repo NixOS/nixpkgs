@@ -1,20 +1,21 @@
-{ stdenv, autoPatchelfHook, fetchzip, libunwind, libuuid, icu, curl,
-  makeWrapper, less, openssl, pam, lttng-ust }:
+{ stdenv, autoPatchelfHook, fetchzip, libunwind, libuuid, icu, curl
+, darwin, makeWrapper, less, openssl, pam, lttng-ust }:
 
 let platformString = if stdenv.isDarwin then "osx"
                      else if stdenv.isLinux then "linux"
                      else throw "unsupported platform";
-    platformSha = if stdenv.isDarwin then "01j92myljgphf68la9q753m5wgfmd0kwlsk441yic7qshcly5xkw"
-                     else if stdenv.isLinux then "0al1mrlz3m5ksnq86mqm0axb8bjdxa05j2p5y9bmcykrgkdwi3vk"
+    platformSha = if stdenv.isDarwin then "1zm5q25ny2x6wvdqfrc380467zq0nbrzh2rzldwdkdpkb6wbvpj8"
+                     else if stdenv.isLinux then "0wh5vvh8pk75fy37bm5av4xvp76slqyjhb6a0al55vw9rlg5q3xw"
                      else throw "unsupported platform";
     platformLdLibraryPath = if stdenv.isDarwin then "DYLD_FALLBACK_LIBRARY_PATH"
                      else if stdenv.isLinux then "LD_LIBRARY_PATH"
                      else throw "unsupported platform";
-    libraries = [ libunwind libuuid icu curl openssl lttng-ust ] ++ (if stdenv.isLinux then [ pam ] else []);
+                     libraries = [ libunwind libuuid icu curl openssl ] ++
+                       (if stdenv.isLinux then [ pam lttng-ust ] else [ darwin.Libsystem ]);
 in
 stdenv.mkDerivation rec {
   name = "powershell-${version}";
-  version = "6.0.4";
+  version = "6.1.1";
 
   src = fetchzip {
     url = "https://github.com/PowerShell/PowerShell/releases/download/v${version}/powershell-${version}-${platformString}-x64.tar.gz";
@@ -25,15 +26,12 @@ stdenv.mkDerivation rec {
   buildInputs = [ less ] ++ libraries;
   nativeBuildInputs = [ autoPatchelfHook makeWrapper ];
 
-  # TODO: remove PAGER after upgrading to v6.1.0-preview.1 or later as it has been addressed in
-  # https://github.com/PowerShell/PowerShell/pull/6144
   installPhase = ''
     mkdir -p $out/bin
     mkdir -p $out/share/powershell
     cp -r * $out/share/powershell
-    rm $out/share/powershell/DELETE_ME_TO_DISABLE_CONSOLEHOST_TELEMETRY
     makeWrapper $out/share/powershell/pwsh $out/bin/pwsh --prefix ${platformLdLibraryPath} : "${stdenv.lib.makeLibraryPath libraries}" \
-                                           --set PAGER ${less}/bin/less --set TERM xterm
+                                           --set TERM xterm --set POWERSHELL_TELEMETRY_OPTOUT 1
   '';
 
   dontStrip = true;

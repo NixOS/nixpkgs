@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, lib
 , intltool, glib, pkgconfig, polkit, python, sqlite
-, gobjectIntrospection, vala_0_38, gtk-doc, autoreconfHook, autoconf-archive
+, gobject-introspection, vala_0_38, gtk-doc, autoreconfHook, autoconf-archive
 # TODO: set enableNixBackend to true, as soon as it builds
 , nix, enableNixBackend ? false, boost
 , enableCommandNotFound ? false
@@ -9,16 +9,18 @@
 
 stdenv.mkDerivation rec {
   name = "packagekit-${version}";
-  version = "1.1.10";
+  version = "1.1.12";
+
+  outputs = [ "out" "dev" ];
 
   src = fetchFromGitHub {
     owner = "hughsie";
     repo = "PackageKit";
     rev = "PACKAGEKIT_${lib.replaceStrings ["."] ["_"] version}";
-    sha256 = "11drd6ixx75q3w12am3z1npwllq1kxnhbxv0npng92c69kn291zs";
+    sha256 = "02wq3jw3mkdld90irh5vdfd5bri2g1p89mhrmj56kvif1fqak46x";
   };
 
-  buildInputs = [ glib polkit python gobjectIntrospection vala_0_38 ]
+  buildInputs = [ glib polkit python gobject-introspection vala_0_38 ]
                   ++ lib.optional enableSystemd systemd
                   ++ lib.optional enableBashCompletion bash-completion;
   propagatedBuildInputs = [ sqlite nix boost ];
@@ -33,7 +35,7 @@ stdenv.mkDerivation rec {
     (if enableSystemd then "--enable-systemd" else "--disable-systemd")
     "--disable-dummy"
     "--disable-cron"
-    "--disable-introspection"
+    "--enable-introspection"
     "--disable-offline-update"
     "--localstatedir=/var"
     "--sysconfdir=/etc"

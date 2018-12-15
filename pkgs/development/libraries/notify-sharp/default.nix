@@ -31,5 +31,6 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "D-Bus for .NET";
     platforms = platforms.linux;
+    license = licenses.mit;
   };
 }

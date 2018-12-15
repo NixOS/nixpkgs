@@ -14,18 +14,18 @@ let
 
   packageOverrides = self: super: {
     sqlalchemy = super.sqlalchemy.overridePythonAttrs (old: rec {
-      version = "1.1.10";
+      version = "1.2.6";
       src = old.src.override {
         inherit version;
-        sha256 = "1lvb14qclrx0qf6qqx8a8hkx5akk5lk3dvcqz8760v9hya52pnfv";
+        sha256 = "1nwylglh256mbwwnng6n6bzgxshyz18j12hw76sghbprp74hrc3w";
       };
     });
 
     guessit = super.guessit.overridePythonAttrs (old: rec {
-      version = "2.1.4";
+      version = "3.0.3";
       src = old.src.override {
         inherit version;
-        sha256 = "90e6f9fb49246ad27f34f8b9984357e22562ccc3059241cbc08b4fac1d401c56";
+        sha256 = "1q06b3k31bfb8cxjimpf1rkcrwnc596a9cppjw15minvdangl32r";
       };
     });
   };
@@ -36,11 +36,11 @@ with python'.pkgs;
 
 buildPythonApplication rec {
   pname = "FlexGet";
-  version = "2.14.18";
+  version = "2.17.14";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1pyvm1d23qy71rg7fzxcal8978kni7sn09zw4s4dsq56g8w80ay9";
+    sha256 = "1wh12nspjzsgb0a7qp67s4k8wssbhhf500s8x8mx2smb1mgy4xzz";
   };
 
   postPatch = ''

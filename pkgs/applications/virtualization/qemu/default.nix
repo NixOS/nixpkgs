@@ -10,6 +10,7 @@
 , sdlSupport ? !stdenv.isDarwin, SDL2
 , gtkSupport ? !stdenv.isDarwin && !xenSupport, gtk3, gettext, gnome3
 , vncSupport ? true, libjpeg, libpng
+, smartcardSupport ? true, libcacard
 , spiceSupport ? !stdenv.isDarwin, spice, spice-protocol
 , usbredirSupport ? spiceSupport, usbredir
 , xenSupport ? false, xen
@@ -17,6 +18,10 @@
 , virglSupport ? openGLSupport, virglrenderer
 , smbdSupport ? false, samba
 , hostCpuOnly ? false
+, hostCpuTargets ? (if hostCpuOnly
+                    then (stdenv.lib.optional stdenv.isx86_64 "i386-softmmu"
+                          ++ ["${stdenv.hostPlatform.qemuArch}-softmmu"])
+                    else null)
 , nixosTestRunner ? false
 }:
 
@@ -26,11 +31,6 @@ let
     + optionalString pulseSupport "pa,"
     + optionalString sdlSupport "sdl,";
 
-  hostCpuTargets = if stdenv.isx86_64 then "i386-softmmu,x86_64-softmmu"
-                   else if stdenv.isi686 then "i386-softmmu"
-                   else if stdenv.isAarch32 then "arm-softmmu"
-                   else if stdenv.isAarch64 then "aarch64-softmmu"
-                   else throw "Don't know how to build a 'hostCpuOnly = true' QEMU";
 in
 
 stdenv.mkDerivation rec {
@@ -58,6 +58,7 @@ stdenv.mkDerivation rec {
     ++ optionals sdlSupport [ SDL2 ]
     ++ optionals gtkSupport [ gtk3 gettext gnome3.vte ]
     ++ optionals vncSupport [ libjpeg libpng ]
+    ++ optionals smartcardSupport [ libcacard ]
     ++ optionals spiceSupport [ spice-protocol spice ]
     ++ optionals usbredirSupport [ usbredir ]
     ++ optionals stdenv.isLinux [ alsaLib libaio libcap_ng libcap attr ]
@@ -84,10 +85,7 @@ stdenv.mkDerivation rec {
       url = https://raw.githubusercontent.com/alpinelinux/aports/2bb133986e8fa90e2e76d53369f03861a87a74ef/main/qemu/musl-F_SHLCK-and-F_EXLCK.patch;
       sha256 = "1gm67v41gw6apzgz7jr3zv9z80wvkv0jaxd2w4d16hmipa8bhs0k";
     })
-    (fetchpatch {
-      url = https://raw.githubusercontent.com/alpinelinux/aports/61a7a1b77a868e3b940c0b25e6c2b2a6c32caf20/main/qemu/0006-linux-user-signal.c-define-__SIGRTMIN-MAX-for-non-GN.patch;
-      sha256 = "1ar6r1vpmhnbs72v6mhgyahcjcf7b9b4xi7asx17sy68m171d2g6";
-    })
+    ./sigrtminmax.patch
     (fetchpatch {
       url = https://raw.githubusercontent.com/alpinelinux/aports/2bb133986e8fa90e2e76d53369f03861a87a74ef/main/qemu/fix-sigevent-and-sigval_t.patch;
       sha256 = "0wk0rrcqywhrw9hygy6ap0lfg314m9z1wr2hn8338r5gfcw75mav";
@@ -111,9 +109,10 @@ stdenv.mkDerivation rec {
     ++ optional stdenv.isDarwin "--cpu=x86_64"
     ++ optional numaSupport "--enable-numa"
     ++ optional seccompSupport "--enable-seccomp"
+    ++ optional smartcardSupport "--enable-smartcard"
     ++ optional spiceSupport "--enable-spice"
     ++ optional usbredirSupport "--enable-usb-redir"
-    ++ optional hostCpuOnly "--target-list=${hostCpuTargets}"
+    ++ optional (hostCpuTargets != null) "--target-list=${stdenv.lib.concatStringsSep "," hostCpuTargets}"
     ++ optional stdenv.isDarwin "--enable-cocoa"
     ++ optional stdenv.isLinux "--enable-linux-aio"
     ++ optional gtkSupport "--enable-gtk"
@@ -135,12 +134,13 @@ stdenv.mkDerivation rec {
     '';
 
   # Add a ‘qemu-kvm’ wrapper for compatibility/convenience.
-  postInstall =
-    if stdenv.isx86_64       then ''makeWrapper $out/bin/qemu-system-x86_64  $out/bin/qemu-kvm --add-flags "\$([ -e /dev/kvm ] && echo -enable-kvm)"''
-    else if stdenv.isi686    then ''makeWrapper $out/bin/qemu-system-i386    $out/bin/qemu-kvm --add-flags "\$([ -e /dev/kvm ] && echo -enable-kvm)"''
-    else if stdenv.isAarch32 then ''makeWrapper $out/bin/qemu-system-arm     $out/bin/qemu-kvm --add-flags "\$([ -e /dev/kvm ] && echo -enable-kvm)"''
-    else if stdenv.isAarch64 then ''makeWrapper $out/bin/qemu-system-aarch64 $out/bin/qemu-kvm --add-flags "\$([ -e /dev/kvm ] && echo -enable-kvm)"''
-    else "";
+  postInstall = ''
+    if [ -x $out/bin/qemu-system-${stdenv.hostPlatform.qemuArch} ]; then
+      makeWrapper $out/bin/qemu-system-${stdenv.hostPlatform.qemuArch} \
+                  $out/bin/qemu-kvm \
+                  --add-flags "\$([ -e /dev/kvm ] && echo -enable-kvm)"
+    fi
+  '';
 
   passthru = {
     qemu-system-i386 = "bin/qemu-system-i386";

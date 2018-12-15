@@ -1,11 +1,27 @@
 --- a/gnome-session/gnome-session.in
 +++ b/gnome-session/gnome-session.in
+@@ -3,11 +3,11 @@
+ if [ "x$XDG_SESSION_TYPE" = "xwayland" ] &&
+    [ "x$XDG_SESSION_CLASS" != "xgreeter" ] &&
+    [  -n "$SHELL" ] &&
+-   grep -q "$SHELL" /etc/shells &&
+-   ! (echo "$SHELL" | grep -q "false") &&
+-   ! (echo "$SHELL" | grep -q "nologin"); then
++   @grep@ -q "$SHELL" /etc/shells &&
++   ! (echo "$SHELL" | @grep@ -q "false") &&
++   ! (echo "$SHELL" | @grep@ -q "nologin"); then
+   if [ "$1" != '-l' ]; then
+-    exec bash -c "exec -l '$SHELL' -c '$0 -l $*'"
++    exec @bash@ -c "exec -l '$SHELL' -c '$0 -l $*'"
+   else
+     shift
+   fi
 @@ -13,7 +13,7 @@
    fi
  fi
  
--SETTING=$(gsettings get org.gnome.system.locale region)
-+SETTING=$(@gsettings@ get org.gnome.system.locale region)
+-SETTING=$(G_MESSAGES_DEBUG= gsettings get org.gnome.system.locale region)
++SETTING=$(G_MESSAGES_DEBUG= @gsettings@ get org.gnome.system.locale region)
  REGION=${SETTING#\'}
  REGION=${REGION%\'}
  

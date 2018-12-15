@@ -67,7 +67,7 @@ in with stdenv.lib.licenses;
     buildPhase = "make";
   };
 
-  beetle-pce-fast = (mkLibRetroCore rec {
+  beetle-pce-fast = let der = (mkLibRetroCore rec {
     core = "mednafen-pce-fast";
     src = fetchRetro {
       repo = "beetle-pce-fast-libretro";
@@ -76,12 +76,12 @@ in with stdenv.lib.licenses;
     };
     description = "Port of Mednafen's PC Engine core to libretro";
     license = gpl2;
-  }).override {
+  }); in der.override {
     buildPhase = "make";
-    name = "beetle-pce-fast";
+    name = "beetle-pce-fast-${der.version}";
   };
 
-  beetle-psx = (mkLibRetroCore rec {
+  beetle-psx = let der = (mkLibRetroCore rec {
     core = "mednafen-psx";
     src = fetchRetro {
       repo = "beetle-psx-libretro";
@@ -90,12 +90,12 @@ in with stdenv.lib.licenses;
     };
     description = "Port of Mednafen's PSX Engine core to libretro";
     license = gpl2;
-  }).override {
+  }); in der.override {
     buildPhase = "make";
-    name = "beetle-psx";
+    name = "beetle-psx-${der.version}";
   };
 
-  beetle-saturn = (mkLibRetroCore rec {
+  beetle-saturn = let der = (mkLibRetroCore rec {
     core = "mednafen-saturn";
     src = fetchRetro {
       repo = "beetle-saturn-libretro";
@@ -104,9 +104,9 @@ in with stdenv.lib.licenses;
     };
     description = "Port of Mednafen's Saturn core to libretro";
     license = gpl2;
-  }).override {
+  }); in der.override {
     buildPhase = "make";
-    name = "beetle-saturn";
+    name = "beetle-saturn-${der.version}";
     meta.platforms = [ "x86_64-linux" ];
   };
 
@@ -234,8 +234,8 @@ in with stdenv.lib.licenses;
     core = "mame";
     src = fetchRetro {
       repo = "mame";
-      rev = "9f8a36adeb4dc54ec2ecac992ce91bcdb377519e";
-      sha256 = "0blfvq28hgv9kkpijd8c9d9sa5g2qr448clwi7wrj8kqfdnrr8m1";
+      rev = "9f9e6b6c9bde4d50c72e9a5c80496a1fec6b8aa9";
+      sha256 = "0lfj8bjchkcvyb5x0x29cg10fkfklxndk80947k4qfysclijxpkv";
     };
     description = "Port of MAME to libretro";
     license = gpl2Plus;

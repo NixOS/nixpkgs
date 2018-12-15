@@ -1,0 +1,26 @@
+diff -ur a/src/ext/openexr/CMakeLists.txt b/src/ext/openexr/CMakeLists.txt
+--- a/src/ext/openexr/CMakeLists.txt	1970-01-01 09:00:01.000000000 +0900
++++ b/src/ext/openexr/CMakeLists.txt	2018-08-31 21:44:56.490714484 +0900
+@@ -26,22 +26,4 @@
+   ${CMAKE_CURRENT_BINARY_DIR}/IlmBase/config
+ )
+ 
+-add_custom_target(CopyIlmBaseLibs
+-  COMMAND ${CMAKE_COMMAND} -E copy_directory
+-  ${CMAKE_CURRENT_BINARY_DIR}/IlmBase/Half/$<CONFIGURATION>
+-  ${CMAKE_CURRENT_BINARY_DIR}/OpenEXR/IlmImf/$<CONFIGURATION>
+-  COMMAND ${CMAKE_COMMAND} -E copy_directory
+-  ${CMAKE_CURRENT_BINARY_DIR}/IlmBase/IlmThread/$<CONFIGURATION>
+-  ${CMAKE_CURRENT_BINARY_DIR}/OpenEXR/IlmImf/$<CONFIGURATION>
+-  COMMAND ${CMAKE_COMMAND} -E copy_directory
+-  ${CMAKE_CURRENT_BINARY_DIR}/IlmBase/Iex/$<CONFIGURATION>
+-  ${CMAKE_CURRENT_BINARY_DIR}/OpenEXR/IlmImf/$<CONFIGURATION>
+-  COMMAND ${CMAKE_COMMAND} -E copy_directory
+-  ${CMAKE_CURRENT_BINARY_DIR}/IlmBase/Imath/$<CONFIGURATION>
+-  ${CMAKE_CURRENT_BINARY_DIR}/OpenEXR/IlmImf/$<CONFIGURATION>
+-)
+-add_dependencies(CopyIlmBaseLibs Iex Imath IlmThread Half)
+-
+ add_subdirectory(OpenEXR OpenEXR)
+-add_dependencies(b44ExpLogTable CopyIlmBaseLibs)
+-add_dependencies(dwaLookups CopyIlmBaseLibs)

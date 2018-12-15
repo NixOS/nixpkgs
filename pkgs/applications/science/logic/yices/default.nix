@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   name    = "yices-${version}";
-  version = "2.6.0";
+  version = "2.6.1";
 
   src = fetchurl {
     url = "https://github.com/SRI-CSL/yices2/archive/Yices-${version}.tar.gz";
     name = "${name}-src.tar.gz";
-    sha256 = "10ikq7ib8jhx7hlxfm6mp5qg6r8dflqs8242q5zaicn80qixpm12";
+    sha256 = "14xvflv14qn8ssm8rklvckp6l1q94vn49qz2snz73j40nwzshaww";
   };
 
   nativeBuildInputs = [ autoreconfHook ];

@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   name = "android-file-transfer-${version}";
-  version = "3.4";
+  version = "3.7";
   src = fetchFromGitHub {
     owner = "whoozle";
     repo = "android-file-transfer-linux";
     rev = "v${version}";
-    sha256 = "1xwl0vk57174gdjhgqkzrirwzd2agdm84q30dq9q376ixgxjrifc";
+    sha256 = "0a388pqc0azgn0wy85wb1mjk3b5zb6vcr58l4warwfzhca400zn0";
   };
   buildInputs = [ cmake fuse readline pkgconfig qtbase ];
   buildPhase = ''
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   '';
   meta = with stdenv.lib; {
     description = "Reliable MTP client with minimalistic UI";
-    homepage = http://whoozle.github.io/android-file-transfer-linux/;
+    homepage = https://whoozle.github.io/android-file-transfer-linux/;
     license = licenses.lgpl21;
     maintainers = [ maintainers.xaverdh ];
     platforms = platforms.linux;

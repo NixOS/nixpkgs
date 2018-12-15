@@ -82,7 +82,7 @@ evalNix(){
   set -e
 
   if test $exit_code -eq 0; then
-      cat <<EOF
+      sed '/^warning: Nix search path/d' <<EOF
 $result
 EOF
       return 0;
@@ -90,7 +90,7 @@ EOF
       sed -n '
   /^error/ { s/, at (string):[0-9]*:[0-9]*//; p; };
   /^warning: Nix search path/ { p; };
-' <<EOF
+' >&2 <<EOF
 $result
 EOF
     exit_code=1

@@ -1,20 +1,20 @@
-{ stdenv, fetchurl, meson, ninja, vala, libxslt, pkgconfig, glib, dbus-glib, gtk3, gnome3
-, libxml2, gettext, docbook_xsl, wrapGAppsHook, gobjectIntrospection }:
+{ stdenv, fetchurl, meson, ninja, vala, libxslt, pkgconfig, glib, gtk3, gnome3, python3
+, libxml2, gettext, docbook_xsl, wrapGAppsHook, gobject-introspection }:
 
 let
   pname = "dconf-editor";
-  version = "3.28.0";
+  version = "3.30.2";
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "0nhcpwqrkmpxbhaf0cafvy6dlp6s7vhm5vknl4lgs3l24zc56ns5";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    sha256 = "06f736spn20s7qjsz00xw44v8r8bjhyrz1v3bix6v416jc5jp6ia";
   };
 
-  nativeBuildInputs = [ meson ninja vala libxslt pkgconfig wrapGAppsHook gettext docbook_xsl libxml2 gobjectIntrospection ];
+  nativeBuildInputs = [ meson ninja vala libxslt pkgconfig wrapGAppsHook gettext docbook_xsl libxml2 gobject-introspection python3 ];
 
-  buildInputs = [ glib dbus-glib gtk3 gnome3.defaultIconTheme gnome3.dconf ];
+  buildInputs = [ glib gtk3 gnome3.dconf ];
 
   postPatch = ''
     chmod +x meson_post_install.py

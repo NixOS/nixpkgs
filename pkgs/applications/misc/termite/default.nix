@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "termite-${version}";
-  version = "13";
+  version = "14";
 
   src = fetchFromGitHub {
     owner = "thestinger";
     repo = "termite";
     rev = "v${version}";
-    sha256 = "02cn70ygl93ghhkhs3xdxn5b1yadc255v3yp8cmhhyzsv5027hvj";
+    sha256 = "0dmz9rpc2fdvcwhcmjnhb48ixn403gxpq03g334d1hgjw2hsyx7x";
     fetchSubmodules = true;
   };
 

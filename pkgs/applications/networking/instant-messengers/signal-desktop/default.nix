@@ -1,8 +1,8 @@
 { stdenv, lib, fetchurl, dpkg, wrapGAppsHook
-, gnome2, gtk3, atk, cairo, pango, gdk_pixbuf, glib, freetype, fontconfig
+, gnome2, gtk3, atk, at-spi2-atk, cairo, pango, gdk_pixbuf, glib, freetype, fontconfig
 , dbus, libX11, xorg, libXi, libXcursor, libXdamage, libXrandr, libXcomposite
 , libXext, libXfixes, libXrender, libXtst, libXScrnSaver, nss, nspr, alsaLib
-, cups, expat, udev
+, cups, expat, udev, libnotify
 # Unfortunately this also overwrites the UI language (not just the spell
 # checking language!):
 , hunspellDicts, spellcheckerLanguage ? null # E.g. "de_DE"
@@ -24,6 +24,7 @@ let
   rpath = lib.makeLibraryPath [
     alsaLib
     atk
+    at-spi2-atk
     cairo
     cups
     dbus
@@ -35,6 +36,7 @@ let
     gnome2.GConf
     gtk3
     pango
+    libnotify
     libX11
     libXScrnSaver
     libXcomposite
@@ -48,18 +50,17 @@ let
     libXtst
     nspr
     nss
-    stdenv.cc.cc
     udev
     xorg.libxcb
   ];
 
 in stdenv.mkDerivation rec {
   name = "signal-desktop-${version}";
-  version = "1.15.5";
+  version = "1.19.0";
 
   src = fetchurl {
     url = "https://updates.signal.org/desktop/apt/pool/main/s/signal-desktop/signal-desktop_${version}_amd64.deb";
-    sha256 = "1a63kyxbhdaz6izprg8wryvscmvfjii50xi1v5pxlf74x2pkxs8k";
+    sha256 = "19a585mylbwrxd2m75hgp77ys1r350xkvawq2ysp0cxzr04l46z7";
   };
 
   phases = [ "unpackPhase" "installPhase" ];
@@ -83,6 +84,7 @@ in stdenv.mkDerivation rec {
              --set-rpath ${rpath}:$out/libexec $out/libexec/signal-desktop
     wrapProgram $out/libexec/signal-desktop \
       --prefix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.name}/" \
+      --prefix LD_LIBRARY_PATH : "${stdenv.cc.cc.lib}/lib" \
       ${customLanguageWrapperArgs} \
       "''${gappsWrapperArgs[@]}"
 

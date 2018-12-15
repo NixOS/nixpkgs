@@ -4,7 +4,7 @@
 , flashplayer, hal-flash
 , MPlayerPlugin, ffmpeg, xorg, libpulseaudio, libcanberra-gtk2
 , jrePlugin, icedtea_web
-, trezor-bridge, bluejeans, djview4, adobe-reader
+, bluejeans, djview4, adobe-reader
 , google_talk_plugin, fribid, gnome3/*.gnome-shell*/
 , esteidfirefoxplugin
 , browserpass, chrome-gnome-shell, uget-integrator, plasma-browser-integration, bukubrow
@@ -55,7 +55,6 @@ let
           ++ lib.optional (cfg.enableGoogleTalkPlugin or false) google_talk_plugin
           ++ lib.optional (cfg.enableFriBIDPlugin or false) fribid
           ++ lib.optional (cfg.enableGnomeExtensions or false) gnome3.gnome-shell
-          ++ lib.optional (cfg.enableTrezor or false) trezor-bridge
           ++ lib.optional (cfg.enableBluejeans or false) bluejeans
           ++ lib.optional (cfg.enableAdobeReader or false) adobe-reader
           ++ lib.optional (cfg.enableEsteid or false) esteidfirefoxplugin

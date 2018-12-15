@@ -12,15 +12,16 @@ assert withQt  -> !withGtk && qt5  != null;
 with stdenv.lib;
 
 let
-  version = "2.6.3";
+  version = "2.6.5";
   variant = if withGtk then "gtk" else if withQt then "qt" else "cli";
 
 in stdenv.mkDerivation {
   name = "wireshark-${variant}-${version}";
+  outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "https://www.wireshark.org/download/src/all-versions/wireshark-${version}.tar.xz";
-    sha256 = "1v538h02y8avwy3cr11xz6wkyf9xd8qva4ng4sl9f2fw4skahn6i";
+    sha256 = "12j3fw0j8qcr86c1vsz4bsb55j9inp0ll3wjjdvg1cj4hmwmn5ck";
   };
 
   cmakeFlags = [
@@ -87,6 +88,16 @@ in stdenv.mkDerivation {
       --replace "Exec=wireshark" "Exec=$out/bin/wireshark"
 
     install -Dm644 ../image/wsicon.svg $out/share/icons/wireshark.svg
+    mkdir $dev/include/{epan/{wmem,ftypes,dfilter},wsutil,wiretap} -pv
+
+    cp config.h $dev/include/
+    cp ../ws_*.h $dev/include
+    cp ../epan/*.h $dev/include/epan/
+    cp ../epan/wmem/*.h $dev/include/epan/wmem/
+    cp ../epan/ftypes/*.h $dev/include/epan/ftypes/
+    cp ../epan/dfilter/*.h $dev/include/epan/dfilter/
+    cp ../wsutil/*.h $dev/include/wsutil/
+    cp ../wiretap/*.h $dev/include/wiretap
   '';
 
   enableParallelBuilding = true;

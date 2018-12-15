@@ -14,12 +14,10 @@ let
 in
 stdenv.mkDerivation rec {
   name = "cef-binary-${version}";
-  # Not very recent but more recent versions have problems:
-  # https://github.com/bazukas/obs-linuxbrowser/issues/63
-  version = "3.3325.1750.gaabe4c4";
+  version = "3.3497.1833.g13f506f";
   src = fetchurl {
     url = "http://opensource.spotify.com/cefbuilds/cef_binary_${version}_linux64.tar.bz2";
-    sha256 = "06pj1ci1lwammz1vwmbgw2fri7gkvbpv4iw67pqckd9xz0cfhwzr";
+    sha256 = "02v22yx1ga2yxagjblzkfw0ax7zkrdpc959l1a15m8nah3y7xf9p";
   };
   nativeBuildInputs = [ cmake ];
   makeFlags = "libcef_dll_wrapper";

@@ -3,18 +3,18 @@
 , autoreconfHook }:
 
 stdenv.mkDerivation rec {
-  name = "aircrack-ng-1.2";
+  name = "aircrack-ng-1.4";
 
   src = fetchurl {
     url = "https://download.aircrack-ng.org/${name}.tar.gz";
-    sha256 = "0z7sl1ihgrnc98bpqa1mmkh51w26fnsanvj6ydwcnd8g83azwkvr";
+    sha256 = "0fz1g6sd7dkfgcxrfrnqbygpx8d4ziyidm9wjb0ws9xgyy52l2cn";
   };
 
   nativeBuildInputs = [ pkgconfig makeWrapper autoreconfHook ];
   buildInputs = [ libpcap openssl zlib libnl iw ethtool pciutils ];
 
   patchPhase = ''
-    sed -e 's@/usr/local/bin@'${wirelesstools}@ -i src/osdep/linux.c
+    sed -e 's@/usr/local/bin@'${wirelesstools}@ -i src/aircrack-osdep/linux.c
   '';
 
   postFixup = ''

@@ -78,8 +78,7 @@ let
       # This is required by user units using the session bus.
       ${config.systemd.package}/bin/systemctl --user import-environment DISPLAY XAUTHORITY DBUS_SESSION_BUS_ADDRESS
 
-      # Load X defaults.
-      # FIXME: Check XDG_SESSION_TYPE against x11
+      # Load X defaults. This should probably be safe on wayland too.
       ${xorg.xrdb}/bin/xrdb -merge ${xresourcesXft}
       if test -e ~/.Xresources; then
           ${xorg.xrdb}/bin/xrdb -merge ~/.Xresources
@@ -194,6 +193,11 @@ let
       ${concatMapStrings (pkg: ''
         ${xorg.lndir}/bin/lndir ${pkg}/share/xsessions $out/share/xsessions
       '') cfg.displayManager.extraSessionFilePackages}
+
+      mkdir -p "$out/share/wayland-sessions"
+      ${concatMapStrings (pkg: ''
+        ${xorg.lndir}/bin/lndir ${pkg}/share/wayland-sessions $out/share/wayland-sessions
+      '') cfg.displayManager.extraSessionFilePackages}
     '';
 
 in
@@ -222,6 +226,17 @@ in
         description = "List of arguments for the X server.";
       };
 
+      setupCommands = mkOption {
+        type = types.lines;
+        default = "";
+        description = ''
+          Shell commands executed just after the X server has started.
+
+          This option is only effective for display managers for which this feature
+          is supported; currently these are LightDM, GDM and SDDM.
+        '';
+      };
+
       sessionCommands = mkOption {
         type = types.lines;
         default = "";
@@ -229,7 +244,10 @@ in
           ''
             xmessage "Hello World!" &
           '';
-        description = "Shell commands executed just before the window or desktop manager is started.";
+        description = ''
+          Shell commands executed just before the window or desktop manager is
+          started. These commands are not currently sourced for Wayland sessions.
+        '';
       };
 
       hiddenUsers = mkOption {
@@ -266,7 +284,7 @@ in
           session.  Each session script can set the
           <varname>waitPID</varname> shell variable to make this script
           wait until the end of the user session.  Each script is used
-          to define either a windows manager or a desktop manager.  These
+          to define either a window manager or a desktop manager.  These
           can be differentiated by setting the attribute
           <varname>manage</varname> either to <literal>"window"</literal>
           or <literal>"desktop"</literal>.

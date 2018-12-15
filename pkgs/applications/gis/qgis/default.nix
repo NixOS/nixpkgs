@@ -1,14 +1,15 @@
-{ stdenv, fetchurl, gdal, cmake, qt4, flex, bison, proj, geos, xlibsWrapper, sqlite, gsl
+{ stdenv, fetchurl, fetchpatch, gdal, cmake, qt4, flex, bison, proj, geos, xlibsWrapper, sqlite, gsl
 , qwt, fcgi, python2Packages, libspatialindex, libspatialite, qscintilla, postgresql, makeWrapper
 , qjson, qca2, txt2tags, openssl, darwin, pkgconfig
-, withGrass ? true, grass, IOKit, ApplicationServices
+, withGrass ? true, grass, saga, IOKit, ApplicationServices
 }:
 
 stdenv.mkDerivation rec {
   name = "qgis-2.18.22";
 
   buildInputs = [ gdal qt4 flex openssl bison proj geos xlibsWrapper sqlite gsl qwt qscintilla
-    fcgi libspatialindex libspatialite postgresql qjson qca2 txt2tags pkgconfig ]
+    fcgi libspatialindex libspatialite postgresql qjson qca2 txt2tags pkgconfig
+    saga ]
   ++
     (stdenv.lib.optionals stdenv.isDarwin [IOKit ApplicationServices])
   ++
@@ -37,6 +38,14 @@ stdenv.mkDerivation rec {
     sha256 = "00b3a2hfn3i7bdx7x96vz2nj0976vpkhid4ss7n8c33fdvw3k82a";
   };
 
+  patches = [
+    # https://github.com/qgis/QGIS/pull/7765
+    (fetchpatch {
+      url = "https://github.com/qgis/QGIS/commit/6b61ef361a77f057dc29eb07463007bd9012b253.patch";
+      sha256 = "1xibcahm18n7nxff1xvwwzjf505hvhiw5dk12is7aclv49h0rdf7";
+    })
+  ];
+
   # CMAKE_FIND_FRAMEWORK=never stops the installer choosing system
   # installed frameworks
   # QGIS_MACAPP_BUNDLE=0 stops the installer copying the Qt binaries into the
@@ -60,6 +69,8 @@ stdenv.mkDerivation rec {
       # Necessary for QGIS to find the correct default GRASS path
       # Plugins look for gdal tools like deminfo on the PATH
       ${stdenv.lib.optionalString withGrass "ln -sf ${grass} $out/QGIS.app/Contents/MacOS/grass"}
+      # Necessary for QGIS to find the right SAGA installation
+      ln -sf ${saga}/bin/saga_cmd $out/QGIS.app/Contents/MacOS/bin/saga_cmd
       for file in $(find $out -type f -name "QGIS"); do
         wrapProgram "$file" \
           --prefix DYLD_LIBRARY_PATH : "${qwt}/lib" \

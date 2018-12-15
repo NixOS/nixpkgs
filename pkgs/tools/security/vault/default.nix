@@ -1,21 +1,14 @@
 { stdenv, fetchFromGitHub, go, gox, removeReferencesTo }:
 
-let
-  vaultBashCompletions = fetchFromGitHub {
-    owner = "iljaweis";
-    repo = "vault-bash-completion";
-    rev = "e2f59b64be1fa5430fa05c91b6274284de4ea77c";
-    sha256 = "10m75rp3hy71wlmnd88grmpjhqy0pwb9m8wm19l0f463xla54frd";
-  };
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   name = "vault-${version}";
-  version = "0.10.4";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = "vault";
     rev = "v${version}";
-    sha256 = "1f11arvj7zp8wwkvv3nn7kyga0ci8psdif6djrnzwjksskdgdbx5";
+    sha256 = "0wqqf9mif6icfl888w2izvml7vqs4hkd5hrq4dhzcyig5w1bp0if";
   };
 
   nativeBuildInputs = [ go gox removeReferencesTo ];
@@ -37,7 +30,7 @@ in stdenv.mkDerivation rec {
     cp pkg/*/* $out/bin/
     find $out/bin -type f -exec remove-references-to -t ${go} '{}' +
 
-    cp ${vaultBashCompletions}/vault-bash-completion.sh $out/share/bash-completion/completions/vault
+    echo "complete -C $out/bin/vault vault" > $out/share/bash-completion/completions/vault
   '';
 
   meta = with stdenv.lib; {

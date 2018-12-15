@@ -1,7 +1,7 @@
-{ fetchurl, lib, melpaBuild }:
+{ fetchurl, lib, melpaBuild, writeText }:
 
 melpaBuild {
-  pname = "font-lock-plus";
+  pname = "font-lock+";
   version = "20180101.25";
 
   src = fetchurl {
@@ -10,11 +10,7 @@ melpaBuild {
     name = "font-lock+.el";
   };
 
-  recipe = fetchurl {
-    url = "https://raw.githubusercontent.com/milkypostman/melpa/a5d15f875b0080b12ce45cf696c581f6bbf061ba/recipes/font-lock+";
-    sha256 = "1wn99cb53ykds87lg9mrlfpalrmjj177nwskrnp9wglyqs65lk4g";
-    name = "font-lock-plus";
-  };
+  recipe = writeText "recipe" "(font-lock+ :fetcher github :repo \"\")";
 
   meta = {
     homepage = "https://melpa.org/#/font-lock+";

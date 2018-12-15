@@ -1,30 +1,27 @@
-{ lib, pythonPackages, fetchFromGitHub }:
+{ lib, python3Packages, fetchFromGitHub }:
 
-pythonPackages.buildPythonApplication rec {
-  name = "pgcli-${version}";
-  version = "1.6.0";
+python3Packages.buildPythonApplication rec {
+  pname = "pgcli";
+  version = "2.0.1";
 
-  src = fetchFromGitHub {
-    sha256 = "0f1zv4kwi2991pclf8chrhgjwf8jkqxdh5ndc9qx6igh56iyyncz";
-    rev = "v${version}";
-    repo = "pgcli";
-    owner = "dbcli";
+  # Python 2 won't have prompt_toolkit 2.x.x
+  # See: https://github.com/NixOS/nixpkgs/blob/f49e2ad3657dede09dc998a4a98fd5033fb52243/pkgs/top-level/python-packages.nix#L3408
+  disabled = python3Packages.isPy27;
+
+  src = python3Packages.fetchPypi {
+    inherit pname version;
+    sha256 = "149naq3gp1n922vag7vixs0hd114bpbmbmv70k4kzc1q7jz748l2";
   };
 
-  buildInputs = with pythonPackages; [ pytest mock ];
-  checkPhase = ''
-    mkdir /tmp/homeless-shelter
-    HOME=/tmp/homeless-shelter py.test tests -k 'not test_missing_rc_dir and not test_quoted_db_uri and not test_port_db_uri'
-  '';
-
-  propagatedBuildInputs = with pythonPackages; [
-    click configobj humanize prompt_toolkit psycopg2
-    pygments sqlparse pgspecial setproctitle
+  propagatedBuildInputs = with python3Packages; [
+    cli-helpers click configobj humanize prompt_toolkit psycopg2
+    pygments sqlparse pgspecial setproctitle keyring
   ];
 
-  postPatch = ''
-    substituteInPlace setup.py --replace "==" ">="
-    rm tests/test_rowlimit.py
+  checkInputs = with python3Packages; [ pytest mock ];
+
+  checkPhase = ''
+    pytest
   '';
 
   meta = with lib; {
@@ -35,5 +32,6 @@ pythonPackages.buildPythonApplication rec {
     '';
     homepage = https://pgcli.com;
     license = licenses.bsd3;
+    maintainers = with maintainers; [ dywedir ];
   };
 }

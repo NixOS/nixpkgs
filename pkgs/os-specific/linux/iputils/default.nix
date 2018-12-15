@@ -30,6 +30,16 @@ in stdenv.mkDerivation {
       url = "https://github.com/iputils/iputils/commit/d0ff83e87ea9064d9215a18e93076b85f0f9e828.patch";
       sha256 = "05wrwf0bfmax69bsgzh3b40n7rvyzw097j8z5ix0xsg0kciygjvx";
     })
+    (fetchpatch {
+      name = "add-missing-idn-declarations.patch";
+      url = "https://github.com/iputils/iputils/commit/5007d7067918fb3d950d34c01d059e5222db679a.patch";
+      sha256 = "0dhgxdhjcbb2q6snm3mjp38l066knykmrx4k8rn167cizn7akpdx";
+    })
+    (fetchpatch {
+      name = "fix-ping-idn.patch";
+      url = "https://github.com/iputils/iputils/commit/25899e849aa3abc1ad29ebf0b830262a859eaed5.patch";
+      sha256 = "1bqjcdjjnc2j6indcli7s7gbbhkcaligvh94asixfrmjzkbn533n";
+    })
   ];
 
   prePatch = ''

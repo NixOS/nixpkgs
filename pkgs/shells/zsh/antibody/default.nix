@@ -2,24 +2,23 @@
 
 buildGoPackage rec {
   name = "antibody-${version}";
-  version = "3.6.1";
-  rev = "v${version}";
+  version = "4.0.2";
 
   goPackagePath = "github.com/getantibody/antibody";
 
   src = fetchFromGitHub {
-    inherit rev;
     owner  = "getantibody";
     repo   = "antibody";
-    sha256 = "1xlaf3440hs1ffa23ja0fc185sj0rxjv0808ib8li3rq2qfkd0k8";
+    rev = "v${version}";
+    sha256 = "1lq0bd2l928bgwqiq3fa5ippjhnsfgwdqn6nd3hfis8bijrwc5jv";
   };
 
   goDeps = ./deps.nix;
 
   meta = with lib; {
     description = "The fastest shell plugin manager";
-    homepage    = https://github.com/getantibody/antibody;
-    license     = licenses.mit;
+    homepage = https://github.com/getantibody/antibody;
+    license = licenses.mit;
     maintainers = with maintainers; [ worldofpeace ];
   };
 }

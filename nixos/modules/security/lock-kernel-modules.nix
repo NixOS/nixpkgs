@@ -3,6 +3,10 @@
 with lib;
 
 {
+  meta = {
+    maintainers = [ maintainers.joachifm ];
+  };
+
   options = {
     security.lockKernelModules = mkOption {
       type = types.bool;

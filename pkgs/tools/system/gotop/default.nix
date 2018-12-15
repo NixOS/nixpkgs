@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   name = "gotop-${version}";
-  version = "1.2.9";
+  version = "1.5.0";
 
   goPackagePath = "github.com/cjbassi/gotop";
 
@@ -10,7 +10,7 @@ buildGoPackage rec {
     repo = "gotop";
     owner = "cjbassi";
     rev = version;
-    sha256 = "07s2f04yhc79vqr1gdh2v974kpn7flp4slnp99mavpa331lv9q8a";
+    sha256 = "19kj7mziwkfcf9kkwph05jh5vlkfqpyrpxdk5gdf2swg07w1ld35";
   };
 
   meta = with stdenv.lib; {

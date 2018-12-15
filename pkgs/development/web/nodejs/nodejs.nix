@@ -42,7 +42,7 @@ in
     name = "${baseName}-${version}";
 
     src = fetchurl {
-      url = "http://nodejs.org/dist/v${version}/node-v${version}.tar.xz";
+      url = "https://nodejs.org/dist/v${version}/node-v${version}.tar.xz";
       inherit sha256;
     };
 
@@ -101,7 +101,7 @@ in
     '';
 
     passthru.updateScript = import ./update.nix {
-      inherit writeScript coreutils gnugrep jq curl common-updater-scripts gnupg nix;
+      inherit stdenv writeScript coreutils gnugrep jq curl common-updater-scripts gnupg nix;
       inherit (stdenv) lib;
       majorVersion = with stdenv.lib; elemAt (splitString "." version) 0;
     };

@@ -1,9 +1,9 @@
 { stdenv, fetchFromGitHub, cmake, pkgconfig, pandoc
-, ethtool, nettools, libnl, udev, python, perl
+, ethtool, iproute, libnl, udev, python, perl
 } :
 
 let
-  version = "19";
+  version = "21";
 
 in stdenv.mkDerivation {
   name = "rdma-core-${version}";
@@ -12,11 +12,11 @@ in stdenv.mkDerivation {
     owner = "linux-rdma";
     repo = "rdma-core";
     rev = "v${version}";
-    sha256 = "0c01f9yn9sk7wslyrclsi2jvrn4d36bdw4qjbl0vmcv4858wf4bb";
+    sha256 = "0q4hdm14f1xz2h0m5d821fdyp7i917rvmkas5axmfr1myv5422fl";
   };
 
   nativeBuildInputs = [ cmake pkgconfig pandoc ];
-  buildInputs = [ libnl ethtool nettools udev python perl ];
+  buildInputs = [ libnl ethtool iproute udev python perl ];
 
   cmakeFlags = [
     "-DCMAKE_INSTALL_RUNDIR=/run"
@@ -26,7 +26,8 @@ in stdenv.mkDerivation {
   postPatch = ''
     substituteInPlace providers/rxe/rxe_cfg.in \
       --replace ethtool "${ethtool}/bin/ethtool" \
-      --replace ifconfig "${nettools}/bin/ifconfig"
+      --replace 'ip addr' "${iproute}/bin/ip addr" \
+      --replace 'ip link' "${iproute}/bin/ip link"
   '';
 
   meta = with stdenv.lib; {

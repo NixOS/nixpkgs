@@ -370,9 +370,12 @@ let
     };
 
     container = {
-      NAMESPACES     = option yes; #  Required by 'unshare' used by 'nixos-install'
+      NAMESPACES     = yes; #  Required by 'unshare' used by 'nixos-install'
       RT_GROUP_SCHED = no;
-      CGROUP_DEVICE  = option yes;
+      CGROUP_DEVICE  = yes;
+      CGROUP_HUGETLB = yes;
+      CGROUP_PERF    = yes;
+      CGROUP_RDMA    = whenAtLeast "4.11" yes;
 
       MEMCG                    = yes;
       MEMCG_SWAP               = yes;
@@ -638,6 +641,7 @@ let
       MEGARAID_NEWGEN       = yes;
 
       MLX4_EN_VXLAN = whenOlder "4.8" yes;
+      MLX5_CORE_EN       = option yes;
 
       MODVERSIONS        = whenOlder "4.9" yes;
       MOUSE_PS2_ELANTECH = yes; # Elantech PS/2 protocol extension

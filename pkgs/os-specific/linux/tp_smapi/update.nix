@@ -1,6 +1,7 @@
-{ lib, writeScript, coreutils, curl, gnugrep, jq, common-updater-scripts }:
+{ stdenv, lib, writeScript, coreutils, curl, gnugrep, jq, common-updater-scripts }:
 
 writeScript "update-tp_smapi" ''
+#!${stdenv.shell}
 PATH=${lib.makeBinPath [ common-updater-scripts coreutils curl gnugrep jq ]}
 
 tags=`curl -s https://api.github.com/repos/evgeni/tp_smapi/tags`

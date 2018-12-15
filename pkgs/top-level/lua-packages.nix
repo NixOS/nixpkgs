@@ -7,7 +7,7 @@
 
 { fetchurl, stdenv, lua, callPackage, unzip, zziplib, pkgconfig
 , pcre, oniguruma, gnulib, tre, glibc, sqlite, openssl, expat
-, glib, gobjectIntrospection, libevent, zlib, autoreconfHook, gnum4
+, glib, gobject-introspection, libevent, zlib, autoreconfHook, gnum4
 , mysql, postgresql, cyrus_sasl
 , fetchFromGitHub, libmpack, which, fetchpatch, writeText
 }:
@@ -380,35 +380,36 @@ let
 
   luadbi = buildLuaPackage rec {
     name = "luadbi-${version}";
-    version = "0.5";
-    src = fetchurl {
-      url = "https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/luadbi/luadbi.${version}.tar.gz";
-      sha256 = "07ikxgxgfpimnwf7zrqwcwma83ss3wm2nzjxpwv2a1c0vmc684a9";
+    version = "0.6";
+
+    src = fetchFromGitHub {
+      owner = "mwild1";
+      repo = "luadbi";
+      rev = "v${version}";
+      sha256 = "1cpl84pl75wqd9zph3w4srd5lxij359p8xmmf7xpdbxz67695vah";
     };
-    sourceRoot = ".";
 
-    buildInputs = [ mysql.connector-c postgresql sqlite ];
+    MYSQL_INC="-I${mysql.connector-c}/include/mysql";
 
-    preConfigure = ''
-      substituteInPlace Makefile --replace CC=gcc CC=cc
-    '' + stdenv.lib.optionalString stdenv.isDarwin ''
+    buildInputs = [ mysql postgresql sqlite ];
+
+    preConfigure = stdenv.lib.optionalString stdenv.isDarwin ''
       substituteInPlace Makefile \
         --replace '-shared' '-bundle -undefined dynamic_lookup -all_load'
     '';
 
-    NIX_CFLAGS_COMPILE = [
-      "-I${mysql.connector-c}/include/mysql"
-      "-L${mysql.connector-c}/lib/mysql"
-      "-I${postgresql}/include/server"
+    installFlags = [
+      "LUA_CDIR=$(out)/lib/lua/${lua.luaversion}"
+      "LUA_LDIR=$(out)/share/lua/${lua.luaversion}"
     ];
 
-    installPhase = ''
-      mkdir -p $out/lib/lua/${lua.luaversion}
-      install -p DBI.lua *.so $out/lib/lua/${lua.luaversion}
-    '';
+    installTargets = [
+      "install_lua" "install_mysql" "install_psql" "install_sqlite3"
+    ];
 
     meta = with stdenv.lib; {
-      homepage = "https://code.google.com/archive/p/luadbi/";
+      homepage = https://github.com/mwild1/luadbi;
+      license = licenses.mit;
       platforms = stdenv.lib.platforms.unix;
     };
   };
@@ -595,7 +596,7 @@ let
     };
 
     patchPhase = stdenv.lib.optionalString stdenv.isDarwin ''
-      substituteInPlace src/makefile --replace gcc cc \
+      substituteInPlace src/makefile \
         --replace 10.3 10.5
     '';
 
@@ -603,6 +604,8 @@ let
       makeFlagsArray=(
         LUAV=${lua.luaversion}
         PLAT=${platformString}
+        CC=''${CC}
+        LD=''${CC}
         prefix=$out
       );
     '';
@@ -924,7 +927,7 @@ let
     };
 
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ glib gobjectIntrospection lua ];
+    buildInputs = [ glib gobject-introspection lua ];
 
     makeFlags = [ "LUA_VERSION=${lua.luaversion}" ];
 

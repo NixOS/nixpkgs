@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, fetchpatch
-, zlib, xz, python2, findXMLCatalogs
+, zlib, xz, python2, ncurses, findXMLCatalogs
 , pythonSupport ? stdenv.buildPlatform == stdenv.hostPlatform
 , icuSupport ? false, icu ? null
 , enableShared ? stdenv.hostPlatform.libc != "msvcrt"
@@ -33,10 +33,11 @@ in stdenv.mkDerivation rec {
 
   outputs = [ "bin" "dev" "out" "man" "doc" ]
     ++ lib.optional pythonSupport "py"
-    ++ lib.optional enableStatic "static";
+    ++ lib.optional (enableStatic && enableShared) "static";
   propagatedBuildOutputs = "out bin" + lib.optionalString pythonSupport " py";
 
   buildInputs = lib.optional pythonSupport python
+    ++ lib.optional (pythonSupport && python?isPy3 && python.isPy3) ncurses
     # Libxml2 has an optional dependency on liblzma.  However, on impure
     # platforms, it may end up using that from /usr/lib, and thus lack a
     # RUNPATH for that, leading to undefined references for its users.
@@ -66,7 +67,7 @@ in stdenv.mkDerivation rec {
     moveToOutput bin/xml2-config "$dev"
     moveToOutput lib/xml2Conf.sh "$dev"
     moveToOutput share/man/man1 "$bin"
-  '' + lib.optionalString enableStatic ''
+  '' + lib.optionalString (enableStatic && enableShared) ''
     moveToOutput lib/libxml2.a "$static"
   '';
 

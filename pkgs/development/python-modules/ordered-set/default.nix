@@ -1,14 +1,14 @@
-{ buildPythonPackage, fetchPypi, lib, pytest }:
+{ buildPythonPackage, fetchPypi, lib, pytest, pytestrunner }:
 
 buildPythonPackage rec {
   pname = "ordered-set";
-  version = "3.0.1";
+  version = "3.1";
 
-  buildInputs = [ pytest ];
+  buildInputs = [ pytest pytestrunner ];
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0yyfkkfzpwlx4jlfqzb7p1xpzmn2jyzq2qlakqx62pxizfzxfvrx";
+    sha256 = "0slg1ys58dzxl96mws3sydzavdzqdk0s2nrc852dphd9kbm07dzr";
   };
 
   checkPhase = ''
@@ -21,6 +21,3 @@ buildPythonPackage rec {
     maintainers = [ lib.maintainers.MostAwesomeDude ];
   };
 }
-
-
-

@@ -12,15 +12,40 @@ in
 
 rec {
 
-  # Run the shell command `buildCommand' to produce a store path named
-  # `name'.  The attributes in `env' are added to the environment
-  # prior to running the command.
+  /* Run the shell command `buildCommand' to produce a store path named
+  * `name'.  The attributes in `env' are added to the environment
+  * prior to running the command. By default `runCommand' runs using
+  * stdenv with no compiler environment. `runCommandCC` 
+  *
+  * Examples:
+  * runCommand "name" {envVariable = true;} ''echo hello''
+  * runCommandNoCC "name" {envVariable = true;} ''echo hello'' # equivalent to prior
+  * runCommandCC "name" {} ''gcc -o myfile myfile.c; cp myfile $out''; 
+  */
   runCommand = runCommandNoCC;
   runCommandNoCC = runCommand' stdenvNoCC;
   runCommandCC = runCommand' stdenv;
 
 
-  # Create a single file.
+  /* Writes a text file to the nix store.
+   * The contents of text is added to the file in the store.
+   *
+   * Examples:
+   * # Writes my-file to /nix/store/<store path>
+   * writeTextFile "my-file"
+   *   ''
+   *   Contents of File
+   *   '';
+   *
+   * # Writes executable my-file to /nix/store/<store path>/bin/my-file
+   * writeTextFile "my-file"
+   *   ''
+   *   Contents of File
+   *   ''
+   *   true
+   *   "/bin/my-file";
+   *   true
+   */
   writeTextFile =
     { name # the name of the derivation
     , text
@@ -51,13 +76,69 @@ rec {
       '';
 
 
-  # Shorthands for `writeTextFile'.
+  /*
+   * Writes a text file to nix store with no optional parameters available.
+   *
+   * Example:
+   * # Writes contents of file to /nix/store/<store path>
+   * writeText "my-file"
+   *   ''
+   *   Contents of File
+   *   '';
+   *
+  */
   writeText = name: text: writeTextFile {inherit name text;};
+  /*
+   * Writes a text file to nix store in a specific directory with no
+   * optional parameters available. Name passed is the destination.
+   *
+   * Example:
+   * # Writes contents of file to /nix/store/<store path>/<name>
+   * writeTextDir "share/my-file"
+   *   ''
+   *   Contents of File
+   *   '';
+   *
+  */
   writeTextDir = name: text: writeTextFile {inherit name text; destination = "/${name}";};
+  /*
+   * Writes a text file to /nix/store/<store path> and marks the file as executable.
+   *
+   * Example:
+   * # Writes my-file to /nix/store/<store path>/bin/my-file and makes executable
+   * writeScript "my-file"
+   *   ''
+   *   Contents of File
+   *   '';
+   *
+  */
   writeScript = name: text: writeTextFile {inherit name text; executable = true;};
+  /*
+   * Writes a text file to /nix/store/<store path>/bin/<name> and
+   * marks the file as executable.
+   *
+   * Example:
+   * # Writes my-file to /nix/store/<store path>/bin/my-file and makes executable.
+   * writeScript "my-file"
+   *   ''
+   *   Contents of File
+   *   '';
+   *
+  */
   writeScriptBin = name: text: writeTextFile {inherit name text; executable = true; destination = "/bin/${name}";};
 
-  # Create a Shell script, check its syntax
+  /*
+   * Writes a Shell script and check its syntax. Automatically includes interpreter
+   * above the contents passed.
+   *
+   * Example:
+   * # Writes my-file to /nix/store/<store path>/bin/my-file and makes executable.
+   * writeScript "my-file"
+   *   ''
+   *   Contents of File
+   *   '';
+   *
+  */
   writeShellScriptBin = name : text :
     writeTextFile {
       inherit name;
@@ -90,7 +171,18 @@ rec {
     $CC -x c code.c -o "$n"
     '';
 
-  # Create a forest of symlinks to the files in `paths'.
+  /*
+  * Create a forest of symlinks to the files in `paths'.
+  *
+  * Examples:
+  * # adds symlinks of hello to current build.
+  * { symlinkJoin, hello }:
+  * symlinkJoin { name = "myhello"; paths = [ hello ]; }
+  *
+  * # adds symlinks of hello to current build and prints "links added"
+  * { symlinkJoin, hello }:
+  * symlinkJoin { name = "myhello"; paths = [ hello ]; postBuild = "echo links added"; }
+  */
   symlinkJoin =
     args_@{ name
          , paths
@@ -112,7 +204,23 @@ rec {
       '';
 
 
-  # Make a package that just contains a setup hook with the given contents.
+  /*
+   * Make a package that just contains a setup hook with the given contents.
+   * This setup hook will be invoked by any package that includes this package
+   * as a buildInput. Optionally takes a list of substitutions that should be
+   * applied to the resulting script.
+   *
+   * Examples:
+   * # setup hook that depends on the hello package and runs ./myscript.sh
+   * myhellohook = makeSetupHook { deps = [ hello ]; } ./myscript.sh;
+   *
+   * # wrotes a setup hook where @bash@ myscript.sh is substituted for the
+   * # bash interpreter. 
+   * myhellohookSub = makeSetupHook {
+   *                 deps = [ hello ];
+   *                 substitutions = { bash = "${pkgs.bash}/bin/bash"; };
+   *               } ./myscript.sh;
+   */
   makeSetupHook = { name ? "hook", deps ? [], substitutions ? {} }: script:
     runCommand name substitutions
       (''
@@ -126,6 +234,7 @@ rec {
 
 
   # Write the references (i.e. the runtime dependencies in the Nix store) of `path' to a file.
+
   writeReferencesToFile = path: runCommand "runtime-deps"
     {
       exportReferencesGraph = ["graph" path];
@@ -141,8 +250,17 @@ rec {
     '';
 
 
-  # Quickly create a set of symlinks to derivations.
-  # entries is a list of attribute sets like { name = "name" ; path = "/nix/store/..."; }
+  /*
+   * Quickly create a set of symlinks to derivations.
+   * entries is a list of attribute sets like
+   * { name = "name" ; path = "/nix/store/..."; }
+   *
+   * Example:
+   *
+   * # Symlinks hello path in store to current $out/hello
+   * linkFarm "hello" entries = [ { name = "hello"; path = pkgs.hello; } ];
+   *
+   */
   linkFarm = name: entries: runCommand name { preferLocalBuild = true; }
     ("mkdir -p $out; cd $out; \n" +
       (lib.concatMapStrings (x: ''
@@ -151,9 +269,20 @@ rec {
       '') entries));
 
 
-  # Print an error message if the file with the specified name and
-  # hash doesn't exist in the Nix store. Do not use this function; it
-  # produces packages that cannot be built automatically.
+  /* Print an error message if the file with the specified name and
+   * hash doesn't exist in the Nix store. This function should only
+   * be used by non-redistributable software with an unfree license
+   * that we need to require the user to download manually. It produces
+   * packages that cannot be built automatically.
+   *
+   * Examples:
+   * 
+   * requireFile {
+   *   name = "my-file";
+   *   url = "http://example.com/download/";
+   *   sha256 = "ffffffffffffffffffffffffffffffffffffffffffffffffffff";
+   * }
+   */
   requireFile = { name ? null
                 , sha256 ? null
                 , sha1 ? null

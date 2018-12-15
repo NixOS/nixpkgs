@@ -67,6 +67,8 @@ stdenv.mkDerivation rec {
       mkdir -p $out/share/icons/hicolor/$size/apps
       convert -size $size ../far2l/DE/icons/hicolor/$size/apps/far2l.svg $out/share/icons/hicolor/$size/apps/far2l.png
     done
+  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+    wrapProgram $out/bin/far2l --argv0 $out/bin/far2l
   '';
 
   stripDebugList = "bin share";

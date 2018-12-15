@@ -3,7 +3,7 @@
 }:
 buildPythonPackage rec {
   pname = "django-hijack";
-  version = "2.1.5";
+  version = "2.1.9";
   name = pname + "-" + version;
 
   # the pypi packages don't include everything required for the tests
@@ -11,7 +11,7 @@ buildPythonPackage rec {
     owner = "arteria";
     repo = "django-hijack";
     rev = "v${version}";
-    sha256 = "1paiyxhc034336xcd9yzf3azpsapsv26j7w2baxiby71z2hhg0sj";
+    sha256 = "109xi93xj37ycdsvainybhg89pcb5sawv6w80px4r6fjvaq4732c";
   };
 
   checkInputs = [ django_nose ];

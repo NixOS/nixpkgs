@@ -1,15 +1,15 @@
 { stdenv, fetchurl, substituteAll, pkgconfig, glib, itstool, libxml2, xorg
-, intltool, accountsservice, libX11, gnome3, systemd, autoreconfHook
-, gtk, libcanberra-gtk3, pam, libtool, gobjectIntrospection, plymouth
-, librsvg, coreutils, xwayland }:
+, accountsservice, libX11, gnome3, systemd, autoreconfHook
+, gtk, libcanberra-gtk3, pam, libtool, gobject-introspection, plymouth
+, librsvg, coreutils, xwayland, fetchpatch }:
 
 stdenv.mkDerivation rec {
   name = "gdm-${version}";
-  version = "3.28.3";
+  version = "3.30.2";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gdm/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "12d1cp2dyca8rwh9y9cg8xn6grdp8nmxkkqwg4xpkr8i8ml65n88";
+    url = "mirror://gnome/sources/gdm/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    sha256 = "1handy65r1n0zby09jr492b3643wszzigdkxp7q2ypgxb3hyv45y";
   };
 
   # Only needed to make it build
@@ -24,26 +24,40 @@ stdenv.mkDerivation rec {
     "--enable-gdm-xsession"
     "--with-initial-vt=7"
     "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
+    "--with-udevdir=$(out)/lib/udev"
   ];
 
-  nativeBuildInputs = [ pkgconfig libxml2 itstool intltool autoreconfHook libtool gnome3.dconf ];
+  nativeBuildInputs = [ pkgconfig libxml2 itstool autoreconfHook libtool gnome3.dconf ];
   buildInputs = [
     glib accountsservice systemd
-    gobjectIntrospection libX11 gtk
+    gobject-introspection libX11 gtk
     libcanberra-gtk3 pam plymouth librsvg
   ];
 
   enableParallelBuilding = true;
 
-  # Disable Access Control because our X does not support FamilyServerInterpreted yet
   patches = [
+    # Change hardcoded paths to nix store paths.
     (substituteAll {
       src = ./fix-paths.patch;
       inherit coreutils plymouth xwayland;
     })
-    ./sessions_dir.patch
+
+    # The following patches implement certain environment variables in GDM which are set by
+    # the gdm configuration module (nixos/modules/services/x11/display-managers/gdm.nix).
+
     ./gdm-x-session_extra_args.patch
-    ./gdm-session-worker_xserver-path.patch
+
+    # Allow specifying a wrapper for running the session command.
+    ./gdm-x-session_session-wrapper.patch
+
+    # Forwards certain environment variables to the gdm-x-session child process
+    # to ensure that the above two patches actually work.
+    ./gdm-session-worker_forward-vars.patch
+
+    # Set up the environment properly when launching sessions
+    # https://github.com/NixOS/nixpkgs/issues/48255
+    ./reset-environment.patch
   ];
 
   installFlags = [

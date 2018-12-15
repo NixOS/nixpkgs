@@ -1,12 +1,12 @@
-{ lib, python3Packages, stdenv, writeTextDir, substituteAll }:
+{ lib, python3Packages, stdenv, writeTextDir, substituteAll, targetPackages }:
 
 python3Packages.buildPythonApplication rec {
-  version = "0.46.1";
+  version = "0.48.2";
   pname = "meson";
 
   src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256 = "1jdxs2mkniy1hpdjc4b4jb95axsjp6j5fzphmm6d4gqmqyykjvqc";
+    sha256 = "1shfbr0mf8gmwpw5ivrmwp8282qw9mfhxmccd7fsgidp4x3nslby";
   };
 
   postFixup = ''
@@ -16,6 +16,9 @@ python3Packages.buildPythonApplication rec {
       mv ".$i-wrapped" "$i"
     done
     popd
+
+    # Do not propagate Python
+    rm $out/nix-support/propagated-build-inputs
   '';
 
   patches = [
@@ -47,20 +50,20 @@ python3Packages.buildPythonApplication rec {
 
   crossFile = writeTextDir "cross-file.conf" ''
     [binaries]
-    c = '${stdenv.cc.targetPrefix}cc'
-    cpp = '${stdenv.cc.targetPrefix}c++'
-    ar = '${stdenv.cc.bintools.targetPrefix}ar'
-    strip = '${stdenv.cc.bintools.targetPrefix}strip'
+    c = '${targetPackages.stdenv.cc.targetPrefix}cc'
+    cpp = '${targetPackages.stdenv.cc.targetPrefix}c++'
+    ar = '${targetPackages.stdenv.cc.bintools.targetPrefix}ar'
+    strip = '${targetPackages.stdenv.cc.bintools.targetPrefix}strip'
     pkgconfig = 'pkg-config'
 
     [properties]
     needs_exe_wrapper = true
 
     [host_machine]
-    system = '${stdenv.targetPlatform.parsed.kernel.name}'
-    cpu_family = '${stdenv.targetPlatform.parsed.cpu.family}'
-    cpu = '${stdenv.targetPlatform.parsed.cpu.name}'
-    endian = ${if stdenv.targetPlatform.isLittleEndian then "'little'" else "'big'"}
+    system = '${targetPackages.stdenv.targetPlatform.parsed.kernel.name}'
+    cpu_family = '${targetPackages.stdenv.targetPlatform.parsed.cpu.family}'
+    cpu = '${targetPackages.stdenv.targetPlatform.parsed.cpu.name}'
+    endian = ${if targetPackages.stdenv.targetPlatform.isLittleEndian then "'little'" else "'big'"}
   '';
 
   # 0.45 update enabled tests but they are failing
@@ -70,7 +73,7 @@ python3Packages.buildPythonApplication rec {
 
   inherit (stdenv) cc;
 
-  isCross = stdenv.buildPlatform != stdenv.hostPlatform;
+  isCross = stdenv.targetPlatform != stdenv.hostPlatform;
 
   meta = with lib; {
     homepage = http://mesonbuild.com;

@@ -1,5 +1,4 @@
-{ stdenv, fetchFromGitHub, autoconf, automake, libtool, which, gnome2, glib,
-  pkgconfig, gobjectIntrospection }:
+{ stdenv, meson, ninja, fetchFromGitHub, glib, pkgconfig, gobject-introspection }:
 
 stdenv.mkDerivation rec {
   name = "playerctl-${version}";
@@ -12,13 +11,12 @@ stdenv.mkDerivation rec {
     sha256 = "0jnylj5d6i29c5y6yjxg1a88r2qfbac5pj95f2aljjkfh9428jbb";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [
-    which autoconf automake libtool gnome2.gtkdoc glib
-    gobjectIntrospection
-  ];
+  nativeBuildInputs = [ meson ninja pkgconfig gobject-introspection ];
+  buildInputs = [ glib ];
 
-  preConfigure = "./autogen.sh";
+  # docs somehow crashes the install phase:
+  # https://github.com/acrisci/playerctl/issues/85
+  mesonFlags = [ "-Dgtk-doc=false" ];
 
   meta = with stdenv.lib; {
     description = "Command-line utility and library for controlling media players that implement MPRIS";

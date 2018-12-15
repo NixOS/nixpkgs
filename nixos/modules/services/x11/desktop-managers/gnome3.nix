@@ -107,9 +107,11 @@ in {
     services.gnome3.gnome-documents.enable = mkDefault true;
     services.gnome3.gnome-keyring.enable = true;
     services.gnome3.gnome-online-accounts.enable = mkDefault true;
+    services.gnome3.gnome-remote-desktop.enable = mkDefault true;
     services.gnome3.gnome-terminal-server.enable = mkDefault true;
     services.gnome3.gnome-user-share.enable = mkDefault true;
     services.gnome3.gvfs.enable = true;
+    services.gnome3.rygel.enable = mkDefault true;
     services.gnome3.seahorse.enable = mkDefault true;
     services.gnome3.sushi.enable = mkDefault true;
     services.gnome3.tracker.enable = mkDefault true;
@@ -132,22 +134,19 @@ in {
 
     fonts.fonts = [ pkgs.dejavu_fonts pkgs.cantarell-fonts ];
 
-    services.xserver.displayManager.gdm.enable = mkDefault true;
     services.xserver.displayManager.extraSessionFilePackages = [ pkgs.gnome3.gnome-session ];
 
-    services.xserver.displayManager.sessionCommands = ''
-      if test "$XDG_CURRENT_DESKTOP" = "GNOME"; then
-          ${concatMapStrings (p: ''
-            if [ -d "${p}/share/gsettings-schemas/${p.name}" ]; then
-              export XDG_DATA_DIRS=$XDG_DATA_DIRS''${XDG_DATA_DIRS:+:}${p}/share/gsettings-schemas/${p.name}
-            fi
+    environment.extraInit = ''
+      ${concatMapStrings (p: ''
+        if [ -d "${p}/share/gsettings-schemas/${p.name}" ]; then
+          export XDG_DATA_DIRS=$XDG_DATA_DIRS''${XDG_DATA_DIRS:+:}${p}/share/gsettings-schemas/${p.name}
+        fi
 
-            if [ -d "${p}/lib/girepository-1.0" ]; then
-              export GI_TYPELIB_PATH=$GI_TYPELIB_PATH''${GI_TYPELIB_PATH:+:}${p}/lib/girepository-1.0
-              export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}${p}/lib
-            fi
-          '') cfg.sessionPath}
-      fi
+        if [ -d "${p}/lib/girepository-1.0" ]; then
+          export GI_TYPELIB_PATH=$GI_TYPELIB_PATH''${GI_TYPELIB_PATH:+:}${p}/lib/girepository-1.0
+          export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}${p}/lib
+        fi
+      '') cfg.sessionPath}
     '';
 
     environment.variables.GNOME_SESSION_DEBUG = optionalString cfg.debug "1";

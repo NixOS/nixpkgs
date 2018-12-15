@@ -1,6 +1,7 @@
 { lib
 , fetchFromGitHub
 , buildPythonPackage
+, pytest
 }:
 
 buildPythonPackage rec {
@@ -13,6 +14,16 @@ buildPythonPackage rec {
      rev = "v${version}";
      sha256 = "1pp561lj80jnvr2038nrzhmks2akxsbdqxvfrqa6n340x81981lm";
   };
+
+  checkInputs = [
+    pytest
+  ];
+
+  checkPhase = ''
+    runHook preCheck
+    pytest -k "not TestActual"
+    runHook postCheck
+  '';
 
   meta = {
     description = "Get CPU info with pure Python 2 & 3";

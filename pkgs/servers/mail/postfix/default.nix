@@ -1,9 +1,9 @@
 { stdenv, lib, fetchurl, makeWrapper, gnused, db, openssl, cyrus_sasl, libnsl
-, coreutils, findutils, gnugrep, gawk, icu, pcre
+, coreutils, findutils, gnugrep, gawk, icu, pcre, m4
+, withLDAP ? true, openldap
 , withPgSQL ? false, postgresql
 , withMySQL ? false, mysql
 , withSQLite ? false, sqlite
-, withLDAP ? false, openldap
 }:
 
 let
@@ -13,7 +13,7 @@ let
    ] ++ lib.optional withPgSQL "-DHAS_PGSQL"
      ++ lib.optionals withMySQL [ "-DHAS_MYSQL" "-I${mysql.connector-c}/include/mysql" "-L${mysql.connector-c}/lib/mysql" ]
      ++ lib.optional withSQLite "-DHAS_SQLITE"
-     ++ lib.optional withLDAP "-DHAS_LDAP");
+     ++ lib.optionals withLDAP ["-DHAS_LDAP" "-DUSE_LDAP_SASL"]);
    auxlibs = lib.concatStringsSep " " ([
      "-ldb" "-lnsl" "-lresolv" "-lsasl2" "-lcrypto" "-lssl"
    ] ++ lib.optional withPgSQL "-lpq"
@@ -25,14 +25,14 @@ in stdenv.mkDerivation rec {
 
   name = "postfix-${version}";
 
-  version = "3.3.1";
+  version = "3.3.2";
 
   src = fetchurl {
     url = "ftp://ftp.cs.uu.nl/mirror/postfix/postfix-release/official/${name}.tar.gz";
-    sha256 = "0fvymsklp32njsv0ngc1f45j01kcy61r5in99g5palibwkd19xal";
+    sha256 = "0nxkszdgs6fs86j6w1lf3vhxvjh1hw2jmrii5icqx9a9xqgg74rw";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper m4 ];
   buildInputs = [ db openssl cyrus_sasl icu libnsl pcre ]
                 ++ lib.optional withPgSQL postgresql
                 ++ lib.optional withMySQL mysql.connector-c

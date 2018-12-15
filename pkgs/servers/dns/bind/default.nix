@@ -8,14 +8,14 @@
 assert enableSeccomp -> libseccomp != null;
 assert enablePython -> python3 != null;
 
-let version = "9.12.2"; in
+let version = "9.12.3"; in
 
 stdenv.mkDerivation rec {
   name = "bind-${version}";
 
   src = fetchurl {
     url = "https://ftp.isc.org/isc/bind9/${version}/${name}.tar.gz";
-    sha256 = "0ll46igs9xfq2qclc5wzqsnj3zv7ssga0544gm24s1m7765lqslz";
+    sha256 = "0f5rjs6zsq8sp6iv5r4q5y65xv05dk2sgvsj6lcir3i564k7d00f";
   };
 
   outputs = [ "out" "lib" "dev" "man" "dnsutils" "host" ];

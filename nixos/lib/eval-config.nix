@@ -28,7 +28,7 @@
 
 let extraArgs_ = extraArgs; pkgs_ = pkgs;
     extraModules = let e = builtins.getEnv "NIXOS_EXTRA_MODULE_PATH";
-                   in if e == "" then [] else [(import (builtins.toPath e))];
+                   in if e == "" then [] else [(import e)];
 in
 
 let
@@ -53,7 +53,8 @@ in rec {
     inherit prefix check;
     modules = modules ++ extraModules ++ baseModules ++ [ pkgsModule ];
     args = extraArgs;
-    specialArgs = { modulesPath = ../modules; } // specialArgs;
+    specialArgs =
+      { modulesPath = builtins.toString ../modules; } // specialArgs;
   }) config options;
 
   # These are the extra arguments passed to every module.  In

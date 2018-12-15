@@ -36,9 +36,7 @@ in stdenv.mkDerivation (rec {
   nativeBuildInputs = [ cmake python ]
     ++ stdenv.lib.optional enableManpages python.pkgs.sphinx;
 
-  buildInputs = [ libxml2 libffi ]
-    # TODO(@Ericson2314): Remove next mass rebuild
-    ++ stdenv.lib.optionals (stdenv.isDarwin && stdenv.hostPlatform == stdenv.buildPlatform) [ libcxxabi ];
+  buildInputs = [ libxml2 libffi ];
 
   propagatedBuildInputs = [ ncurses zlib ];
 
@@ -119,12 +117,14 @@ in stdenv.mkDerivation (rec {
   + stdenv.lib.optionalString enableSharedLibraries ''
     moveToOutput "lib/libLLVM-*" "$lib"
     moveToOutput "lib/libLLVM${stdenv.hostPlatform.extensions.sharedLibrary}" "$lib"
+    moveToOutput "lib/libLTO${stdenv.hostPlatform.extensions.sharedLibrary}" "$lib"
     substituteInPlace "$out/lib/cmake/llvm/LLVMExports-${if debugVersion then "debug" else "release"}.cmake" \
       --replace "\''${_IMPORT_PREFIX}/lib/libLLVM-" "$lib/lib/libLLVM-"
   ''
   + stdenv.lib.optionalString (stdenv.isDarwin && enableSharedLibraries) ''
     substituteInPlace "$out/lib/cmake/llvm/LLVMExports-${if debugVersion then "debug" else "release"}.cmake" \
-      --replace "\''${_IMPORT_PREFIX}/lib/libLLVM.dylib" "$lib/lib/libLLVM.dylib"
+      --replace "\''${_IMPORT_PREFIX}/lib/libLLVM.dylib" "$lib/lib/libLLVM.dylib" \
+      --replace "\''${_IMPORT_PREFIX}/lib/libLTO.dylib" "$lib/lib/libLTO.dylib"
     ln -s $lib/lib/libLLVM.dylib $lib/lib/libLLVM-${shortVersion}.dylib
     ln -s $lib/lib/libLLVM.dylib $lib/lib/libLLVM-${release_version}.dylib
   '';

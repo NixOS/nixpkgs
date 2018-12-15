@@ -9,41 +9,41 @@ let
   # plex-media-player is updated, the versions for these files are changed,
   # so the build IDs (and SHAs) below will need to be updated!
   depSrcs = rec {
-    webClientBuildId = "56-23317d81e49651";
-    webClientDesktopBuildId = "3.57.1-1e49651";
-    webClientTvBuildId = "3.60.1-23317d8";
+    webClientBuildId = "85-88b3ac67015f76";
+    webClientDesktopBuildId = "3.77.2-7015f76";
+    webClientTvBuildId = "3.78.0-88b3ac6";
 
     webClient = fetchurl {
       url = "https://artifacts.plex.tv/web-client-pmp/${webClientBuildId}/buildid.cmake";
-      sha256 = "1a48a65zzdx347kfnxriwkb0yjlhvn2g8jkda5pz10r3lwja0gbi";
+      sha256 = "0j7i4yr95ljw9cwyaygld41j7yvndj3dza3cbydv4x8mh2hn05v1";
     };
     webClientDesktopHash = fetchurl {
       url = "https://artifacts.plex.tv/web-client-pmp/${webClientBuildId}/web-client-desktop-${webClientDesktopBuildId}.tar.xz.sha1";
-      sha256 = "04wdgpsh33y8hyjhjrfw6ymf9g002jny7hvhld4xp33lwxhd2j5w";
+      sha256 = "106kx9ahz7jgskpjraff2g235n1whwvf18yw0nmp5dwr9ys9h8jp";
     };
     webClientDesktop = fetchurl {
       url = "https://artifacts.plex.tv/web-client-pmp/${webClientBuildId}/web-client-desktop-${webClientDesktopBuildId}.tar.xz";
-      sha256 = "1asw9f84z9sm3w7ifnc7j631j84rgx23c6msmn2dnw48ckv3bj2z";
+      sha256 = "0h23h3fd3w43glvnhrg9qiajs0ql490kb00g3i4cpi29hy1ky45r";
     };
     webClientTvHash = fetchurl {
       url = "https://artifacts.plex.tv/web-client-pmp/${webClientBuildId}/web-client-tv-${webClientTvBuildId}.tar.xz.sha1";
-      sha256 = "0d1hsvmpwczwx442f8qdvfr8c3w84630j9qwpg2y4qm423sgdvja";
+      sha256 = "05zk2zpmcdf276ys5zyirsmvhvyvz99fa6hlgymma8ql6w67133r";
     };
     webClientTv = fetchurl {
       url = "https://artifacts.plex.tv/web-client-pmp/${webClientBuildId}/web-client-tv-${webClientTvBuildId}.tar.xz";
-      sha256 = "1ih3l5paf1jl68b1xq3iqqmvs3m07fybz57hcz4f78v0gwq2kryq";
+      sha256 = "1cflpgaf4kyj6ccqa11j28rkp8s7zlbnid7s00m5n2c907dihmw2";
     };
   };
 in stdenv.mkDerivation rec {
   name = "plex-media-player-${version}";
-  version = "2.14.1.880";
-  vsnHash = "301a4b6c";
+  version = "2.23.0.920";
+  vsnHash = "5bc1a2e5";
 
   src = fetchFromGitHub {
     owner = "plexinc";
     repo = "plex-media-player";
     rev = "v${version}-${vsnHash}";
-    sha256 = "0xz41r697vl6s3qvy6jwriv3pb9cfy61j6sydvdq121x5a0jnh9a";
+    sha256 = "1jzlyj32gr3ar89qnk8slazrbchqkjfx9dchzkzfvpi6742v9igm";
   };
 
   nativeBuildInputs = [ pkgconfig cmake python3 ];

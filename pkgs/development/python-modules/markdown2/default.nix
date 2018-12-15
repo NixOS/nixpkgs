@@ -2,12 +2,12 @@
 
 buildPythonPackage rec {
   pname = "markdown2";
-  version = "2.3.5";
+  version = "2.3.6";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "8bb9a24eb2aa02f1427aabe46483f0f0215ab18c8a345315ae8e2ee3c3a09c03";
+    sha256 = "08a124043aa0ad36ba2136239547d5011a2b770278abb11a5609611e0040ea05";
   };
 
   meta = with stdenv.lib; {

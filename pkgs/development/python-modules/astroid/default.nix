@@ -5,13 +5,13 @@
 
 buildPythonPackage rec {
   pname = "astroid";
-  version = "2.0.4";
+  version = "2.1.0";
 
   disabled = pythonOlder "3.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c7013d119ec95eb626f7a2011f0b63d0c9a095df9ad06d8507b37084eada1a8d";
+    sha256 = "08hz675knh4294bancdapql392fmbjyimhbyrmfkz1ka7l035c1m";
   };
 
   # From astroid/__pkginfo__.py
@@ -22,8 +22,8 @@ buildPythonPackage rec {
   checkInputs = [ pytestrunner pytest ];
 
   meta = with lib; {
-    description = "A abstract syntax tree for Python with inference support";
-    homepage = https://bitbucket.org/logilab/astroid;
+    description = "An abstract syntax tree for Python with inference support";
+    homepage = https://github.com/PyCQA/astroid;
     license = licenses.lgpl2;
     platforms = platforms.all;
     maintainers = with maintainers; [ nand0p ];

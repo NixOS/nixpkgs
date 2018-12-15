@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, intltool, gnome3
-, glib, gtk3, gobjectIntrospection, python3Packages, ncurses
+, glib, gtk3, gobject-introspection, python3Packages, ncurses
 }:
 
 stdenv.mkDerivation rec {
@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   version = "1.22.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/libpeas/${gnome3.versionBranch version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/libpeas/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
     sha256 = "0qm908kisyjzjxvygdl18hjqxvvgkq9w0phs2g55pck277sw0bsv";
   };
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   buildInputs =  [ intltool glib gtk3 gnome3.defaultIconTheme ncurses python3Packages.python python3Packages.pygobject3 ];
   propagatedBuildInputs = [
     # Required by libpeas-1.0.pc
-    gobjectIntrospection
+    gobject-introspection
   ];
 
   meta = with stdenv.lib; {

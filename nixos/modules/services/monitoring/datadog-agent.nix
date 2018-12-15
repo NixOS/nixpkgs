@@ -7,8 +7,7 @@ let
 
   ddConf = {
     dd_url              = "https://app.datadoghq.com";
-    skip_ssl_validation = "no";
-    api_key             = "";
+    skip_ssl_validation = false;
     confd_path          = "/etc/datadog-agent/conf.d";
     additional_checksd  = "/etc/datadog-agent/checks.d";
     use_dogstatsd       = true;
@@ -16,6 +15,8 @@ let
   // optionalAttrs (cfg.logLevel != null) { log_level = cfg.logLevel; }
   // optionalAttrs (cfg.hostname != null) { inherit (cfg) hostname; }
   // optionalAttrs (cfg.tags != null ) { tags = concatStringsSep ", " cfg.tags; }
+  // optionalAttrs (cfg.enableLiveProcessCollection) { process_config = { enabled = "true"; }; }
+  // optionalAttrs (cfg.enableTraceAgent) { apm_config = { enabled = true; }; }
   // cfg.extraConfig;
 
   # Generate Datadog configuration files for each configured checks.
@@ -125,6 +126,22 @@ in {
       '';
      };
 
+    enableLiveProcessCollection = mkOption {
+      description = ''
+        Whether to enable the live process collection agent.
+      '';
+      default = false;
+      type = types.bool;
+    };
+
+    enableTraceAgent = mkOption {
+      description = ''
+        Whether to enable the trace agent.
+      '';
+      default = false;
+      type = types.bool;
+    };
+
     checks = mkOption {
       description = ''
         Configuration for all Datadog checks. Keys of this attribute
@@ -206,7 +223,6 @@ in {
           Group = "datadog";
           Restart = "always";
           RestartSec = 2;
-          PrivateTmp = true;
         };
         restartTriggers = [ datadogPkg ] ++ map (etc: etc.source) etcfiles;
       } attrs;
@@ -229,6 +245,25 @@ in {
         path = [ datadogPkg pkgs.python pkgs.sysstat pkgs.procps pkgs.jdk ];
         serviceConfig.ExecStart = "${datadogPkg}/bin/dd-jmxfetch";
       });
+
+      datadog-process-agent = lib.mkIf cfg.enableLiveProcessCollection (makeService {
+        description = "Datadog Live Process Agent";
+        path = [ ];
+        script = ''
+          export DD_API_KEY=$(head -n 1 ${cfg.apiKeyFile})
+          ${pkgs.datadog-process-agent}/bin/agent --config /etc/datadog-agent/datadog.yaml
+        '';
+      });
+
+      datadog-trace-agent = lib.mkIf cfg.enableTraceAgent (makeService {
+        description = "Datadog Trace Agent";
+        path = [ ];
+        script = ''
+          export DD_API_KEY=$(head -n 1 ${cfg.apiKeyFile})
+          ${pkgs.datadog-trace-agent}/bin/trace-agent -config /etc/datadog-agent/datadog.yaml
+        '';
+      });
+
     };
 
     environment.etc = etcfiles;

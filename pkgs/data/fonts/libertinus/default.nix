@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "libertinus-${version}";
-  version = "6.4";
+  version = "6.6";
 
   src = fetchFromGitHub {
     rev    = "v${version}";
     owner  = "khaledhosny";
     repo   = "libertinus";
-    sha256 = "0acnq4vpplp2s7kdnhncz61diji3wmhca04g27yqpk03ahb40x9g";
+    sha256 = "0syagjmwy6q1ysncchl9bgyfrm7f6fghj1aipbr6md7l6gafz7ji";
   };
 
   installPhase = ''
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   outputHashAlgo = "sha256";
   outputHashMode = "recursive";
-  outputHash = "0yn526kwb4xjyf6gvf0wflqi45z5dlzicycz2q003a6if5fgqcz3";
+  outputHash = "11pxb2zwvjlk06zbqrfv2pgwsl4awf68fak1ks4881i8xbl1910m";
 
   meta = with stdenv.lib; {
     description = "A fork of the Linux Libertine and Linux Biolinum fonts";

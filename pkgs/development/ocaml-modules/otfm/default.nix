@@ -21,8 +21,6 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ uutf result ];
 
-  unpackCmd = "tar xjf $src";
-
   inherit (topkg) buildPhase installPhase;
 
   meta = with stdenv.lib; {

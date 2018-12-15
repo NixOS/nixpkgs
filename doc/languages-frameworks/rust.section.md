@@ -64,9 +64,6 @@ When the `Cargo.lock`, provided by upstream, is not in sync with the
 added in `cargoPatches` will also be prepended to the patches in `patches` at
 build-time.
 
-To install crates with nix there is also an experimental project called
-[nixcrates](https://github.com/fractalide/nixcrates).
-
 ## Compiling Rust crates using Nix instead of Cargo
 
 ### Simple operation

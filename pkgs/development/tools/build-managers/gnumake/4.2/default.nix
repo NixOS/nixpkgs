@@ -32,7 +32,7 @@ stdenv.mkDerivation {
   outputs = [ "out" "man" "info" ];
 
   meta = with stdenv.lib; {
-    homepage = http://www.gnu.org/software/make/;
+    homepage = https://www.gnu.org/software/make/;
     description = "A tool to control the generation of non-source files from sources";
     license = licenses.gpl3Plus;
 

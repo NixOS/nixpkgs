@@ -4,57 +4,65 @@
 , lib
 , python
 , fetchurl
-, substituteAll
+, fetchpatch
 , lame
 , mplayer
 , libpulseaudio
-, pyqt4
+, pyqt5
+, decorator
+, beautifulsoup4
 , sqlalchemy
 , pyaudio
-, httplib2
+, requests
+, markdown
 , matplotlib
 , pytest
 , glibcLocales
 , nose
+, send2trash
 # This little flag adds a huge number of dependencies, but we assume that
 # everyone wants Anki to draw plots with statistics by default.
 , plotsSupport ? true
 }:
 
-let
-    # Development version of anki has bumped to beautifulsoup4
-    beautifulsoup = callPackage ./beautifulsoup.nix { };
-
-    qt4 = pyqt4.qt;
-
-in buildPythonApplication rec {
-    version = "2.0.52";
+buildPythonApplication rec {
+    version = "2.1.6-beta2";
     name = "anki-${version}";
 
     src = fetchurl {
       urls = [
-        "https://apps.ankiweb.net/downloads/current/${name}-source.tgz"
+        "https://apps.ankiweb.net/downloads/beta/${name}-source.tgz"
+        # "https://apps.ankiweb.net/downloads/current/${name}-source.tgz"
         # "http://ankisrs.net/download/mirror/${name}.tgz"
         # "http://ankisrs.net/download/mirror/archive/${name}.tgz"
       ];
-      sha256 = "0yjyxgpk79rplz9z2r93kmlk09ari6xxfrz1cfm2yl9v8zfw1n6l";
+      sha256 = "0h71s1j1269x0b8481z8xf019caqglcjs32xlpzk72087ps169fa";
     };
 
-    propagatedBuildInputs = [ pyqt4 sqlalchemy pyaudio beautifulsoup httplib2 ]
+    propagatedBuildInputs = [ pyqt5 sqlalchemy
+      beautifulsoup4 send2trash pyaudio requests decorator markdown ]
                             ++ lib.optional plotsSupport matplotlib;
 
     checkInputs = [ pytest glibcLocales nose ];
 
     buildInputs = [ lame mplayer libpulseaudio  ];
 
+    makeWrapperArgs = [
+        ''--prefix PATH ':' "${lame}/bin:${mplayer}/bin"''
+    ];
+
     patches = [
       # Disable updated version check.
       ./no-version-check.patch
 
-      (substituteAll {
-        src = ./fix-paths.patch;
-        inherit lame mplayer qt4;
-        qt4name = qt4.name;
+      # This is needed to fix python 3.7 compatibilty, where the
+      # behaviour of `re.escape()` was changed in a way that it no
+      # longer escapes `%`. This patch detects this difference at
+      # runtime and makes anki work with any python version.
+      # Upstream PR: https://github.com/dae/anki/pull/266
+      (fetchpatch {
+        url = "https://github.com/dae/anki/commit/3d69aa9ce454a151ba75deafd7de117af2c7307d.patch";
+        sha256 = "0kf9gajhy0wcajp24xfia71z6gn1mc4vl37svvq4sqbhj3gigd0h";
       })
     ];
 
@@ -64,12 +72,9 @@ in buildPythonApplication rec {
     '';
 
     postPatch = ''
-      substituteInPlace oldanki/lang.py --subst-var-by anki $out
-      substituteInPlace anki/lang.py --subst-var-by anki $out
-
       # Remove unused starter. We'll create our own, minimalistic,
       # starter.
-      rm anki/anki
+      # rm anki/anki
 
       # Remove QT translation files. We'll use the standard QT ones.
       rm "locale/"*.qm
@@ -108,16 +113,14 @@ in buildPythonApplication rec {
       cp -v anki.xml $out/share/mime/packages/
       cp -v anki.{png,xpm} $out/share/pixmaps/
       cp -rv locale $out/share/
-      cp -rv anki aqt thirdparty/send2trash $pp/
+      cp -rv anki aqt web $pp/
 
       wrapPythonPrograms
     '';
 
     meta = with stdenv.lib; {
-      homepage = http://ankisrs.net/;
+      homepage = "https://apps.ankiweb.net/";
       description = "Spaced repetition flashcard program";
-      license = licenses.gpl3;
-
       longDescription = ''
         Anki is a program which makes remembering things easy. Because it is a lot
         more efficient than traditional study methods, you can either greatly
@@ -130,8 +133,9 @@ in buildPythonApplication rec {
         people's names and faces, brushing up on geography, mastering long poems,
         or even practicing guitar chords!
       '';
-
-      maintainers = with maintainers; [ the-kenny ];
+      license = licenses.agpl3Plus;
+      broken = stdenv.hostPlatform.isAarch64;
       platforms = platforms.mesaPlatforms;
+      maintainers = with maintainers; [ the-kenny ];
     };
 }

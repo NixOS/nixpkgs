@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, meson, ninja, pkgconfig, glib, gobjectIntrospection, gnome3
+{ stdenv, fetchurl, meson, ninja, pkgconfig, glib, gobject-introspection, gnome3
 , webkitgtk, libsoup, libxml2, libarchive }:
 
 let
@@ -8,13 +8,13 @@ in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
     sha256 = "16dkyywqdnfngmwsgbyga0kl9vcnzczxi3lmhm27pifrq5f3k2n7";
   };
 
   doCheck = true;
 
-  nativeBuildInputs = [ meson ninja pkgconfig gobjectIntrospection ];
+  nativeBuildInputs = [ meson ninja pkgconfig gobject-introspection ];
   buildInputs = [ glib webkitgtk libsoup libxml2 libarchive ];
 
   passthru = {

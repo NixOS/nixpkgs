@@ -2,14 +2,14 @@
 
 buildPythonPackage rec {
   pname = "python-utils";
-  version = "2.2.0";
+  version = "2.3.0";
   name = pname + "-" + version;
 
   src = fetchFromGitHub {
     owner = "WoLpH";
     repo = "python-utils";
     rev = "v${version}";
-    sha256 = "1i3q9frai08nvrcmh4dg4rr0grncm68w2c097z5g1mfwdf9sv7df";
+    sha256 = "14gyphcqwa77wfbnrzj363v3fdkxy08378lgd7l3jqnpvr8pfp5c";
   };
 
   checkInputs = [ pytest pytestrunner pytestcov pytestflakes pytestpep8 sphinx ];

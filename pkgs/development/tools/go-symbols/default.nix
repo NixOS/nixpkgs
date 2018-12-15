@@ -1,17 +1,18 @@
-{ stdenv, buildGoPackage, fetchgit }:
+{ stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   name = "go-symbols-${version}";
-  version = "unstable-2017-02-06";
-  rev = "5a7f75904fb552189036c640d04cd6afef664836";
+  version = "unstable-2018-05-23";
+  rev = "953befd75e223f514580fcb698aead0dd6ad3421";
 
   goPackagePath = "github.com/acroca/go-symbols";
   goDeps = ./deps.nix;
 
-  src = fetchgit {
+  src = fetchFromGitHub {
     inherit rev;
-    url = "https://github.com/acroca/go-symbols";
-    sha256 = "0qh2jjhwwk48gi8yii0z031bah11anxfz81nwflsiww7n426a8bb";
+    owner = "acroca";
+    repo = "go-symbols";
+    sha256 = "0dwf7w3zypv5brk68n7siakz222jwnhrhkzvwk1iwdffk79gqp3x";
   };
 
   meta = {

@@ -1,7 +1,6 @@
 { stdenv, lib, pkgArches,
   name, version, src, monos, geckos, platforms,
-  # flex 2.6.3 causes: undefined reference to `yywrap'
-  pkgconfig, fontforge, makeWrapper, flex_2_6_1, bison,
+  pkgconfig, fontforge, makeWrapper, flex, bison,
   supportFlags,
   buildScript ? null, configureFlags ? []
 }:
@@ -14,7 +13,7 @@ stdenv.mkDerivation ((lib.optionalAttrs (! isNull buildScript) {
   inherit name src configureFlags;
 
   nativeBuildInputs = [
-    pkgconfig fontforge makeWrapper flex_2_6_1 bison
+    pkgconfig fontforge makeWrapper flex bison
   ];
 
   buildInputs = toBuildInputs pkgArches (with supportFlags; (pkgs:
@@ -46,6 +45,7 @@ stdenv.mkDerivation ((lib.optionalAttrs (! isNull buildScript) {
   ++ lib.optional xineramaSupport        pkgs.xorg.libXinerama
   ++ lib.optional udevSupport            pkgs.udev
   ++ lib.optional vulkanSupport          pkgs.vulkan-loader
+  ++ lib.optional sdlSupport             pkgs.SDL2
   ++ lib.optionals gstreamerSupport      (with pkgs.gst_all_1; [ gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad gst-plugins-ugly gst-libav ])
   ++ lib.optionals gtkSupport    [ pkgs.gtk3 pkgs.glib ]
   ++ lib.optionals openclSupport [ pkgs.opencl-headers pkgs.ocl-icd ]

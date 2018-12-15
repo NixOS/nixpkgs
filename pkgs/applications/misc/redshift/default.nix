@@ -1,12 +1,15 @@
 { stdenv, fetchFromGitHub, autoconf, automake, gettext, intltool
-, libtool, pkgconfig, wrapGAppsHook, wrapPython, gobjectIntrospection
+, libtool, pkgconfig, wrapGAppsHook, wrapPython, gobject-introspection
 , gtk3, python, pygobject3, hicolor-icon-theme, pyxdg
 
-, withCoreLocation ? stdenv.isDarwin, CoreLocation, Foundation, Cocoa
 , withQuartz ? stdenv.isDarwin, ApplicationServices
 , withRandr ? stdenv.isLinux, libxcb
 , withDrm ? stdenv.isLinux, libdrm
-, withGeoclue ? stdenv.isLinux, geoclue }:
+
+, withGeolocation ? true
+, withCoreLocation ? withGeolocation && stdenv.isDarwin, CoreLocation, Foundation, Cocoa
+, withGeoclue ? withGeolocation && stdenv.isLinux, geoclue
+}:
 
 stdenv.mkDerivation rec {
   name = "redshift-${version}";
@@ -44,7 +47,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    gobjectIntrospection
+    gobject-introspection
     gtk3
     python
     hicolor-icon-theme

@@ -1,39 +1,115 @@
-Idris packages
-==============
+# Idris packages
 
-This directory contains build rules for idris packages. In addition,
-it contains several functions to build and compose those packages.
-Everything is exposed to the user via the `idrisPackages` attribute.
+## Installing Idris
 
-callPackage
-------------
+The easiest way to get a working idris version is to install the `idris` attribute:
 
-This is like the normal nixpkgs callPackage function, specialized to
-idris packages.
+```
+$ # On NixOS
+$ nix-env -i nixos.idris
+$ # On non-NixOS
+$ nix-env -i nixpkgs.idris
+```
 
-builtins
----------
+This however only provides the `prelude` and `base` libraries. To install additional libraries:
 
-This is a list of all of the libraries that come packaged with Idris
-itself.
+```
+$ nix-env -iE 'pkgs: pkgs.idrisPackages.with-packages (with pkgs.idrisPackages; [ contrib pruviloj ])'
+```
 
-build-idris-package
---------------------
+To see all available Idris packages:
+```
+$ # On NixOS
+$ nix-env -qaPA nixos.idrisPackages
+$ # On non-NixOS
+$ nix-env -qaPA nixpkgs.idrisPackages
+```
 
-A function to build an idris package. Its sole argument is a set like
-you might pass to `stdenv.mkDerivation`, except `build-idris-package`
-sets several attributes for you. See `build-idris-package.nix` for
-details.
+Similarly, entering a `nix-shell`:
+```
+$ nix-shell -p 'idrisPackages.with-packages (with idrisPackages; [ contrib pruviloj ])'
+```
 
-build-builtin-package
-----------------------
+## Starting Idris with library support
 
-A version of `build-idris-package` specialized to builtin libraries.
-Mostly for internal use.
+To have access to these libraries in idris, call it with an argument `-p <library name>` for each library:
 
-with-packages
--------------
+```
+$ nix-shell -p 'idrisPackages.with-packages (with idrisPackages; [ contrib pruviloj ])'
+[nix-shell:~]$ idris -p contrib -p pruviloj
+```
 
-Bundle idris together with a list of packages. Because idris currently
-only supports a single directory in its library path, you must include
-all desired libraries here, including `prelude` and `base`.
+A listing of all available packages the Idris binary has access to is available via `--listlibs`:
+
+```
+$ idris --listlibs
+00prelude-idx.ibc
+pruviloj
+base
+contrib
+prelude
+00pruviloj-idx.ibc
+00base-idx.ibc
+00contrib-idx.ibc
+```
+
+## Building an Idris project with Nix
+
+As an example of how a Nix expression for an Idris package can be created, here is the one for `idrisPackages.yaml`:
+
+```nix
+{ build-idris-package
+, fetchFromGitHub
+, contrib
+, lightyear
+, lib
+}:
+build-idris-package  {
+  name = "yaml";
+  version = "2018-01-25";
+
+  # This is the .ipkg file that should be built, defaults to the package name
+  # In this case it should build `Yaml.ipkg` instead of `yaml.ipkg`
+  # This is only necessary because the yaml packages ipkg file is
+  # different from its package name here.
+  ipkgName = "Yaml";
+  # Idris dependencies to provide for the build
+  idrisDeps = [ contrib lightyear ];
+
+  src = fetchFromGitHub {
+    owner = "Heather";
+    repo = "Idris.Yaml";
+    rev = "5afa51ffc839844862b8316faba3bafa15656db4";
+    sha256 = "1g4pi0swmg214kndj85hj50ccmckni7piprsxfdzdfhg87s0avw7";
+  };
+
+  meta = {
+    description = "Idris YAML lib";
+    homepage = https://github.com/Heather/Idris.Yaml;
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.brainrape ];
+  };
+}
+```
+
+Assuming this file is saved as `yaml.nix`, it's buildable using
+
+```
+$ nix-build -E '(import <nixpkgs> {}).idrisPackages.callPackage ./yaml.nix {}'
+```
+
+Or it's possible to use
+
+```nix
+with import <nixpkgs> {};
+
+{
+  yaml = idrisPackages.callPackage ./yaml.nix {};
+}
+```
+
+in another file (say `default.nix`) to be able to build it with
+
+```
+$ nix-build -A yaml
+```

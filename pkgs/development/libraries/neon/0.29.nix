@@ -40,9 +40,10 @@ stdenv.mkDerivation rec {
   checkInputs = [ perl ];
   doCheck = false; # fails, needs the net
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "An HTTP and WebDAV client library";
     homepage = http://www.webdav.org/neon/;
-    platforms = stdenv.lib.platforms.unix;
+    platforms = platforms.unix;
+    license = licenses.lgpl2;
   };
 }

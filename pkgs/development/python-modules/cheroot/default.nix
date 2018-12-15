@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   patches = fetchpatch {
     name = "cheroot-fix-setup-python3.patch";
-    url = "https://git.archlinux.org/svntogit/community.git/plain/trunk/cheroot-fix-setup-python3.patch?h=packages/python-cheroot";
+    url = "https://git.archlinux.org/svntogit/community.git/plain/trunk/cheroot-fix-setup-python3.patch?h=packages/python-cheroot&id=9b33cb0885b3c0d91adeacae23761a4321eb0e64";
     sha256 = "1rlgz0qln536y00mfqlf0i9hz3f53id73wh47cg5q2vcsw1w2bpc";
   };
 

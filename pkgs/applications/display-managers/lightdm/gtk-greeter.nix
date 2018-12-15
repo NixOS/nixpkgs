@@ -9,14 +9,14 @@
 
 let
   ver_branch = "2.0";
-  version = "2.0.5";
+  version = "2.0.6";
 in
 stdenv.mkDerivation rec {
   name = "lightdm-gtk-greeter-${version}";
 
   src = fetchurl {
     url = "${meta.homepage}/${ver_branch}/${version}/+download/${name}.tar.gz";
-    sha256 = "1pw70db8320wvkhkrw4i2qprxlrqy3jmb6yrr4bm3lgrizahiijx";
+    sha256 = "1pis5qyg95pg31dvnfqq34bzgj00hg4vs547r8h60lxjk81z8p15";
   };
 
   nativeBuildInputs = [ pkgconfig ];

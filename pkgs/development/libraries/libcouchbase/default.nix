@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "libcouchbase-${version}";
-  version = "2.9.2";
+  version = "2.10.0";
 
   src = fetchFromGitHub {
     owner = "couchbase";
     repo = "libcouchbase";
     rev = version;
-    sha256 = "1ca3jp1nr5dk2w35wwyhsf96pblbw6n6n7a3ja264ivc9nhpkz4z";
+    sha256 = "08bvnd0m18qs5akbblf80l54khm1523fdiiajp7fj88vrs86nbi2";
   };
 
   cmakeFlags = "-DLCB_NO_MOCK=ON";
@@ -16,8 +16,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkgconfig ];
   buildInputs = [ libevent openssl ];
 
+  # Running tests in parallel does not work
+  enableParallelChecking = false;
+
   doCheck = !stdenv.isDarwin;
-  checkPhase = "ctest";
 
   meta = with stdenv.lib; {
     description = "C client library for Couchbase";

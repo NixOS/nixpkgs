@@ -35,15 +35,9 @@ stdenv.mkDerivation rec {
     libxmlxx ffmpeg enca
     ];
 
-  buildPhase = ''
-    scons PREFIX=$out -j$NIX_BUILD_CORES -l$NIX_BUILD_CORES
-    '';
+  prefixKey = "PREFIX=";
 
   enableParallelBuilding = true;
-
-  installPhase = ''
-    scons install
-    '';
 
   meta = {
     description = "a DVD authoring program for personal computers";

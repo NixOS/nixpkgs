@@ -3,7 +3,7 @@
 with import pkgspath { inherit system; };
 
 let
-  llvmPackages = llvmPackages_4;
+  llvmPackages = llvmPackages_5;
 in rec {
   coreutils_ = coreutils.override (args: {
     # We want coreutils without ACL support.
@@ -11,6 +11,10 @@ in rec {
     # Cannot use a single binary build, or it gets dynamically linked against gmp.
     singleBinary = false;
   });
+
+  # We want a version of cctools without LLVM, because the LTO support ends up making
+  # the bootstrap tools huge and isn't really necessary for bootstrap
+  cctools_ = darwin.cctools.override { llvm = null; };
 
   # Avoid debugging larger changes for now.
   bzip2_ = bzip2.override (args: { linkStatic = true; });
@@ -73,6 +77,7 @@ in rec {
       cp -d ${gettext}/lib/libintl*.dylib $out/lib
       chmod +x $out/lib/libintl*.dylib
       cp -d ${ncurses.out}/lib/libncurses*.dylib $out/lib
+      cp -d ${libxml2.out}/lib/libxml2*.dylib $out/lib
 
       # Copy what we need of clang
       cp -d ${llvmPackages.clang-unwrapped}/bin/clang $out/bin
@@ -94,7 +99,7 @@ in rec {
 
       # Copy binutils.
       for i in as ld ar ranlib nm strip otool install_name_tool dsymutil lipo; do
-        cp ${darwin.cctools}/bin/$i $out/bin
+        cp ${cctools_}/bin/$i $out/bin
       done
 
       cp -rd ${pkgs.darwin.CF}/Library $out
@@ -104,9 +109,9 @@ in rec {
       nuke-refs $out/bin/*
 
       rpathify() {
-        local libs=$(${darwin.cctools}/bin/otool -L "$1" | tail -n +2 | grep -o "$NIX_STORE.*-\S*") || true
+        local libs=$(${cctools_}/bin/otool -L "$1" | tail -n +2 | grep -o "$NIX_STORE.*-\S*") || true
         for lib in $libs; do
-          ${darwin.cctools}/bin/install_name_tool -change $lib "@rpath/$(basename $lib)" "$1"
+          ${cctools_}/bin/install_name_tool -change $lib "@rpath/$(basename $lib)" "$1"
         done
       }
 

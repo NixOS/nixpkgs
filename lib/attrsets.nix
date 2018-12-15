@@ -94,6 +94,15 @@ rec {
   attrValues = builtins.attrValues or (attrs: attrVals (attrNames attrs) attrs);
 
 
+  /* Given a set of attribute names, return the set of the corresponding
+     attributes from the given set.
+
+     Example:
+       getAttrs [ "a" "b" ] { a = 1; b = 2; c = 3; }
+       => { a = 1; b = 2; }
+  */
+  getAttrs = names: attrs: genAttrs names (name: attrs.${name});
+
   /* Collect each attribute named `attr' from a list of attribute
      sets.  Sets that don't contain the named attribute are ignored.
 
@@ -435,12 +444,15 @@ rec {
     useful for deep-overriding.
 
     Example:
-      x = { a = { b = 4; c = 3; }; }
-      overrideExisting x { a = { b = 6; d = 2; }; }
-      => { a = { b = 6; d = 2; }; }
+      overrideExisting {} { a = 1; }
+      => {}
+      overrideExisting { b = 2; } { a = 1; }
+      => { b = 2; }
+      overrideExisting { a = 3; b = 2; } { a = 1; }
+      => { a = 1; b = 2; }
   */
   overrideExisting = old: new:
-    old // listToAttrs (map (attr: nameValuePair attr (attrByPath [attr] old.${attr} new)) (attrNames old));
+    mapAttrs (name: value: new.${name} or value) old;
 
   /* Get a package output.
      If no output is found, fallback to `.out` and then to the default.

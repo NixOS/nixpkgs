@@ -31,13 +31,13 @@ let
 
 in buildPythonApplication rec {
   name = "pykms-${version}";
-  version = "20171224";
+  version = "20180208";
 
   src = fetchFromGitHub {
     owner  = "ThunderEX";
     repo   = "py-kms";
-    rev    = "885f67904f002042d7758e38f9c5426461c5cdc7";
-    sha256 = "155khy1285f8xkzi6bsqm9vzz043jsjmp039va1qsh675gz3q9ha";
+    rev    = "a1666a0ee5b404569a234afd05b164accc9a8845";
+    sha256 = "17yj5n8byxp09l5zkap73hpphjy35px84wy68ps824w8l0l8kcd4";
   };
 
   propagatedBuildInputs = [ argparse pytz ];
@@ -61,8 +61,8 @@ in buildPythonApplication rec {
 
     mv * $siteDir
     for b in client server ; do
-      chmod 0755 $siteDir/$b.py
       makeWrapper ${python.interpreter} $out/bin/$b.py \
+        --argv0 $b \
         --add-flags $siteDir/$b.py
     done
 

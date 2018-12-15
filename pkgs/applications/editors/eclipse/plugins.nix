@@ -470,12 +470,12 @@ rec {
 
   jdt = buildEclipseUpdateSite rec {
     name = "jdt-${version}";
-    version = "4.8";
+    version = "4.9";
 
     src = fetchzip {
       stripRoot = false;
-      url = https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops4/R-4.8-201806110500/org.eclipse.jdt-4.8.zip;
-      sha256 = "1my0d1114mx5gzxmwqlx0rcny39ly97ixlwx53ljk6qcryhdnr88";
+      url = https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops4/R-4.9-201809060745/org.eclipse.jdt-4.9.zip;
+      sha256 = "144rqrw0crxd2v862dqxm2p5y60n4pbzdryv709xnhcw54rycm7n";
     };
 
     meta = with stdenv.lib; {
@@ -555,12 +555,12 @@ rec {
 
   spotbugs = buildEclipseUpdateSite rec {
     name = "spotbugs-${version}";
-    version = "3.1.6";
+    version = "3.1.9";
 
     src = fetchzip {
       stripRoot = false;
       url = "https://github.com/spotbugs/spotbugs/releases/download/${version}/eclipsePlugin.zip";
-      sha256 = "1qsams12n64slp00nfc9v943sy9bzffzm7anqqaz2hjw64iia7fh";
+      sha256 = "0m68jbyaiz0rm4qq3nnwnvgndzv2c6ay6i29kh0p0vdbanggq3xz";
     };
 
     meta = with stdenv.lib; {

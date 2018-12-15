@@ -15,6 +15,7 @@ with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "libvmi-${version}";
   version = "0.12.0";
+  libVersion = "0.0.12";
 
   src = fetchFromGitHub {
     owner = "libvmi";
@@ -27,6 +28,13 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook bison flex pkgconfig ];
 
   configureFlags = optional (!xenSupport) "--disable-xen";
+
+  # libvmi uses dlopen() for the xen libraries, however autoPatchelfHook doesn't work here
+  postFixup = optionalString xenSupport ''
+    libvmi="$out/lib/libvmi.so.${libVersion}"
+    oldrpath=$(patchelf --print-rpath "$libvmi")
+    patchelf --set-rpath "$oldrpath:${makeLibraryPath [ xen ]}" "$libvmi"
+  '';
 
   meta = with stdenv.lib; {
     homepage = "http://libvmi.com/";

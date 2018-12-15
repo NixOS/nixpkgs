@@ -148,4 +148,37 @@ in
     };
   };
 
+  source_26 = buildSource {
+    name = "android-source-26";
+    src = fetchurl {
+      url = https://dl.google.com/android/repository/sources-26_r01.zip;
+      sha1 = "2af701ee3223d580409288540b1d06932fd8f9b9";
+    };
+    meta = {
+      description = "Source code for Android API 26";
+    };
+  };
+
+  source_27 = buildSource {
+    name = "android-source-27";
+    src = fetchurl {
+      url = https://dl.google.com/android/repository/sources-27_r01.zip;
+      sha1 = "7b714670561d08f54751af42aca929867b806596";
+    };
+    meta = {
+      description = "Source code for Android API 27";
+    };
+  };
+
+  source_28 = buildSource {
+    name = "android-source-28";
+    src = fetchurl {
+      url = https://dl.google.com/android/repository/sources-28_r01.zip;
+      sha1 = "5610e0c24235ee3fa343c899ddd551be30315255";
+    };
+    meta = {
+      description = "Source code for Android API 28";
+    };
+  };
+
 }

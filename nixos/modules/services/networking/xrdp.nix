@@ -36,7 +36,7 @@ in
 
     services.xrdp = {
 
-      enable = mkEnableOption "Whether xrdp should be run on startup.";
+      enable = mkEnableOption "xrdp, the Remote Desktop Protocol server";
 
       package = mkOption {
         type = types.package;

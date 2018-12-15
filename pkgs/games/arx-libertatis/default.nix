@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   name = "arx-libertatis-${version}";
-  version = "2017-10-30";
+  version = "2018-08-26";
 
   src = fetchFromGitHub {
     owner  = "arx";
     repo   = "ArxLibertatis";
-    rev    = "e5ea4e8f0f7e86102cfc9113c53daeb0bdee6dd3";
-    sha256 = "11z0ndhk802jr3w3z5gfqw064g98v99xin883q1qd36jw96s27p5";
+    rev    = "7b551739cc22fa25dae83bcc1a2b784ddecc729c";
+    sha256 = "1ybv3p74rywn0ajdbw7pyk7pd7py1db9h6x2pav2d28ndkkj4z8n";
   };
 
   buildInputs = [

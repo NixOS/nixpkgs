@@ -1,4 +1,4 @@
-{ stdenv, lib, qtbase, qtsvg,  fetchurl, makeDesktopItem }:
+{ stdenv, lib, qtbase, qtsvg, libglvnd, fetchurl, makeDesktopItem }:
 stdenv.mkDerivation rec {
   name = "write_stylus-${version}";
   version = "209";
@@ -43,9 +43,10 @@ stdenv.mkDerivation rec {
   '';
   preFixup = let
     libPath = lib.makeLibraryPath [
-      qtbase        # libQt5PrintSupport.so.5
-      qtsvg         # libQt5Svg.so.5
+      qtbase            # libQt5PrintSupport.so.5
+      qtsvg             # libQt5Svg.so.5
       stdenv.cc.cc.lib  # libstdc++.so.6
+      libglvnd          # ibGL.so.1
     ];
   in ''
     patchelf \

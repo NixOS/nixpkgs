@@ -51,6 +51,7 @@ stdenv.mkDerivation rec {
   gettextNeedsLdflags = stdenv.hostPlatform.libc != "glibc" && !stdenv.hostPlatform.isMusl;
 
   enableParallelBuilding = true;
+  enableParallelChecking = false; # fails sometimes
 
   meta = with lib; {
     description = "Well integrated set of translation tools and documentation";
@@ -74,7 +75,7 @@ stdenv.mkDerivation rec {
       GNU packages produce multi-lingual messages.
     '';
 
-    homepage = http://www.gnu.org/software/gettext/;
+    homepage = https://www.gnu.org/software/gettext/;
 
     maintainers = with maintainers; [ zimbatm vrthra ];
     license = licenses.gpl2Plus;

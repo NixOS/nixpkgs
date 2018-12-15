@@ -1,5 +1,5 @@
 { stdenv, fetchurl, python3, wrapGAppsHook, gettext, intltool, libsoup, gnome3, gtk3, gdk_pixbuf,
-  tag ? "", xvfb_run, dbus, glibcLocales, glib, gobjectIntrospection,
+  tag ? "", xvfb_run, dbus, glibcLocales, glib, glib-networking, gobject-introspection,
   gst_all_1, withGstPlugins ? true,
   xineBackend ? false, xineLib,
   withDbusPython ? false, withPyInotify ? false, withMusicBrainzNgs ? false, withPahoMqtt ? false,
@@ -9,7 +9,7 @@
 let optionals = stdenv.lib.optionals; in
 python3.pkgs.buildPythonApplication rec {
   pname = "quodlibet${tag}";
-  version = "4.1.0";
+  version = "4.2.0";
 
   # XXX, tests fail
   # https://github.com/quodlibet/quodlibet/issues/2820
@@ -17,14 +17,14 @@ python3.pkgs.buildPythonApplication rec {
 
   src = fetchurl {
     url = "https://github.com/quodlibet/quodlibet/releases/download/release-${version}/quodlibet-${version}.tar.gz";
-    sha256 = "1vcxx4sz5i4ag74pjpdfw7jkwxfb8jhvn8igcjwd5cccw4gscm2z";
+    sha256 = "0w64i999ipzgjb4c4lzw7jp792amd6km46wahx7m3bpzly55r3f6";
   };
 
   nativeBuildInputs = [ wrapGAppsHook gettext intltool ];
 
   checkInputs = with python3.pkgs; [ pytest pytest_xdist pyflakes pycodestyle polib xvfb_run dbus.daemon glibcLocales ];
 
-  buildInputs = [ gnome3.defaultIconTheme libsoup glib gtk3 webkitgtk gdk_pixbuf keybinder3 gtksourceview libmodplug libappindicator-gtk3 kakasi gobjectIntrospection ]
+  buildInputs = [ gnome3.defaultIconTheme libsoup glib glib-networking gtk3 webkitgtk gdk_pixbuf keybinder3 gtksourceview libmodplug libappindicator-gtk3 kakasi gobject-introspection ]
     ++ (if xineBackend then [ xineLib ] else with gst_all_1;
     [ gstreamer gst-plugins-base ] ++ optionals withGstPlugins [ gst-plugins-good gst-plugins-ugly gst-plugins-bad ]);
 

@@ -1,8 +1,8 @@
-{ stdenv, buildPerlPackage, fetchgit, perl, openssl, perlPackages, gettext, python34Packages
+{ stdenv, fetchgit, perl, openssl, perlPackages, gettext, python3Packages
 # TODO: Remove extra dependencies once it is clear that they are NOT needed somewhere.
 , extraDependencies1 ? false, extraDependencies2 ? false, extraDependencies3 ? false }:
 
-buildPerlPackage {
+perlPackages.buildPerlPackage {
   name = "openxpki-git20150807";
 
   src = fetchgit {
@@ -11,7 +11,7 @@ buildPerlPackage {
     sha256 = "05bmhani2c7ays488xv3hx5xbxb612bnwq5rdjwmsj51xpaz454p";
   };
 
-  buildInputs = [ perl openssl gettext python34Packages.sphinx ];
+  buildInputs = [ perl openssl gettext python3Packages.sphinx ];
   propagatedBuildInputs = with perlPackages;
     [ # dependencies from Makefile.PL
       libintl_perl ConfigVersioned LWP ClassAccessorChained IOSocketSSL ClassStd

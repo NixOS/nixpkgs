@@ -1,0 +1,20 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index d869979..185144d 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -143,13 +143,13 @@ INSTALL(TARGETS
+         module-bluez5-device
+         module-bluetooth-discover
+         module-bluetooth-policy
+-        LIBRARY DESTINATION ${PulseAudio_modlibexecdir})
++        LIBRARY DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/pulse-${PulseAudio_VERSION}/modules/)
+ 
+ if(NOT ${HAVE_SYSTEM_LDAC})
+ 
+ INSTALL(TARGETS
+         ldacBT_enc
+         ldacBT_abr
+-        LIBRARY DESTINATION ${PulseAudio_modlibexecdir})
++        LIBRARY DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/pulse-${PulseAudio_VERSION}/modules/)
+ 
+ endif()

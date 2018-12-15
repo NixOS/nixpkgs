@@ -277,8 +277,7 @@ if ($virt eq "qemu" || $virt eq "kvm" || $virt eq "bochs") {
 
 # Also for Hyper-V.
 if ($virt eq "microsoft") {
-    push @initrdAvailableKernelModules, "hv_storvsc";
-    $videoDriver = "fbdev";
+    push @attrs, "virtualisation.hypervGuest.enable = true;"
 }
 
 
@@ -315,14 +314,16 @@ push @attrs, "services.xserver.videoDrivers = [ \"$videoDriver\" ];" if $videoDr
 
 # Generate the swapDevices option from the currently activated swap
 # devices.
-my @swaps = read_file("/proc/swaps");
-shift @swaps;
+my @swaps = read_file("/proc/swaps", err_mode => 'carp');
 my @swapDevices;
-foreach my $swap (@swaps) {
-    $swap =~ /^(\S+)\s/;
-    next unless -e $1;
-    my $dev = findStableDevPath $1;
-    push @swapDevices, "{ device = \"$dev\"; }";
+if (@swaps) {
+    shift @swaps;
+    foreach my $swap (@swaps) {
+        $swap =~ /^(\S+)\s/;
+        next unless -e $1;
+        my $dev = findStableDevPath $1;
+        push @swapDevices, "{ device = \"$dev\"; }";
+    }
 }
 
 

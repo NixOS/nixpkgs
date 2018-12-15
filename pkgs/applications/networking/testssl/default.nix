@@ -2,7 +2,7 @@
 , dnsutils, coreutils, openssl, nettools, utillinux, procps }:
 
 let
-  version = "2.9.5-5";
+  version = "2.9.5-7";
 
 in stdenv.mkDerivation rec {
   name = "testssl.sh-${version}";
@@ -11,7 +11,7 @@ in stdenv.mkDerivation rec {
     owner = "drwetter";
     repo = "testssl.sh";
     rev = "v${version}";
-    sha256 = "0zgj9vhd8fv3a1cn8dxqmjd8qmgryc867gq7zbvbr41lkqc06a1r";
+    sha256 = "02xp0yi53xf6jw6v633zs2ws2iyyvq3mlkimg0cv3zvj7nw9x5wr";
   };
 
   nativeBuildInputs = [ makeWrapper ];

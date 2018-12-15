@@ -1,14 +1,14 @@
-{ stdenv, fetchFromGitHub, pkgconfig, which, freetype, pango }:
+{ stdenv, fetchFromGitHub, pkgconfig, which, docutils, freetype, pango }:
 
 stdenv.mkDerivation rec {
   name = "abcm2ps-${version}";
-  version = "8.13.24";
+  version = "8.14.1";
 
   src = fetchFromGitHub {
     owner = "leesavide";
     repo = "abcm2ps";
     rev = "v${version}";
-    sha256 = "0xb0gdxbagy6bzrh61s667svab43r06d6yi20gw52dh022mj99ag";
+    sha256 = "1i39wfrnjflhfbqhcphr9dw08q4si5i724wv423996whk5xni61l";
   };
 
   prePatch = ''
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     "CC=${stdenv.cc}/bin/cc"
   ];
 
-  nativeBuildInputs = [ which pkgconfig ];
+  nativeBuildInputs = [ which pkgconfig docutils ];
 
   buildInputs = [ freetype pango ];
 

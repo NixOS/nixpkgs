@@ -3,19 +3,19 @@
 , libsndfile, xorg, libdrm, libxkbcommon, udev, utillinux, bullet, luajit
 , python27Packages, openjpeg, doxygen, expat, harfbuzz, jbig2dec, librsvg
 , dbus, alsaLib, poppler, ghostscript, libraw, libspectre, xineLib, libwebp
-, curl, libinput, systemd, mesa_noglu, writeText
+, curl, libinput, systemd, mesa_noglu, writeText, gtk3
 }:
 
 stdenv.mkDerivation rec {
   name = "efl-${version}";
-  version = "1.21.0";
+  version = "1.21.1";
 
   src = fetchurl {
     url = "http://download.enlightenment.org/rel/libs/efl/${name}.tar.xz";
-    sha256 = "0jxfrcz2aq1synxzd6sh9nhxz7fg9qgz0idr8zj6gaiplmwbwrby";
+    sha256 = "0a5907h896pvpix7a6idc2fspzy6d78xrzf84k8y9fyvnd14nxs4";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig gtk3 ];
 
   buildInputs = [ openssl zlib lz4 freetype fontconfig SDL libGL mesa_noglu
     giflib libpng libtiff glib gst_all_1.gstreamer gst_all_1.gst-plugins-base gst_all_1.gst-plugins-good
@@ -71,6 +71,9 @@ stdenv.mkDerivation rec {
     modules=$(for i in "$out/include/"*/; do printf ' -I''${includedir}/'`basename $i`; done)
     substituteInPlace "$out/lib/pkgconfig/efl.pc" --replace 'Cflags: -I''${includedir}/efl-1' \
       'Cflags: -I''${includedir}/eina-1/eina'"$modules"
+
+    # build icon cache
+    gtk-update-icon-cache "$out"/share/icons/Enlightenment-X
   '';
 
   # EFL applications depend on libcurl, although it is linked at

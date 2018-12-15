@@ -1,0 +1,7 @@
+Kill the reference from libgc.so to the documentation directory.
+It's bad for closure, and probably not really good for anything.
+--- a/base/gs.mak
++++ b/base/gs.mak
+@@ -538,1 +538,1 @@
+-	$(EXP)$(ECHOGS_XE) -a $(gconfigd_h) -x 23 define -s -u GS_DOCDIR -x 2022 $(GS_DOCDIR) -x 22
++	$(EXP)$(ECHOGS_XE) -a $(gconfigd_h) -x 23 define -s -u GS_DOCDIR -x 2022 /no-path-to-docs -x 22

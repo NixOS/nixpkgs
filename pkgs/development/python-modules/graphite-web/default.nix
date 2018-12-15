@@ -6,13 +6,13 @@ if django.version != "1.8.18"
 then throw "graphite-web should be build with django_1_8 and django_tagging_0_4_3"
 else buildPythonPackage rec {
   pname = "graphite-web";
-  version = "1.1.3";
+  version = "1.1.4";
 
   disabled = isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0nvyq1859abdch2l90avsjk9vb03s7wgxgrjsqvjhf2b9c1ncsfh";
+    sha256 = "4430929f954998d77aa0a61246c62d64a00a2f9464320f9a462294dd3448e522";
   };
 
   propagatedBuildInputs = [

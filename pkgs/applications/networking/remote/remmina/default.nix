@@ -1,45 +1,37 @@
-{ stdenv, fetchFromGitLab, cmake, pkgconfig, wrapGAppsHook
-, glib, gtk3, gettext, libxkbfile, libgnome-keyring, libX11
+{ stdenv, fetchFromGitLab, cmake, ninja, pkgconfig, wrapGAppsHook
+, glib, gtk3, gettext, libxkbfile, libX11
 , freerdp, libssh, libgcrypt, gnutls, makeDesktopItem
-, pcre, webkitgtk, libdbusmenu-gtk3, libappindicator-gtk3
+, pcre, libdbusmenu-gtk3, libappindicator-gtk3
 , libvncserver, libpthreadstubs, libXdmcp, libxkbcommon
-, libsecret, spice-protocol, spice-gtk, epoxy, at-spi2-core
+, libsecret, libsoup, spice-protocol, spice-gtk, epoxy, at-spi2-core
 , openssl, gsettings-desktop-schemas, json-glib
 # The themes here are soft dependencies; only icons are missing without them.
 , hicolor-icon-theme, adwaita-icon-theme
 }:
 
-let
-  version = "1.2.31.3";
+with stdenv.lib;
 
-  desktopItem = makeDesktopItem {
-    name = "remmina";
-    desktopName = "Remmina";
-    genericName = "Remmina Remote Desktop Client";
-    exec = "remmina";
-    icon = "remmina";
-    comment = "Connect to remote desktops";
-    categories = "GTK;GNOME;X-GNOME-NetworkSettings;Network;";
-  };
-
-in stdenv.mkDerivation {
-  name = "remmina-${version}";
+stdenv.mkDerivation rec {
+  pname = "remmina";
+  version = "1.2.32.1";
 
   src = fetchFromGitLab {
     owner  = "Remmina";
     repo   = "Remmina";
     rev    = "v${version}";
-    sha256 = "0lvang4587wz292c3k3s8n4icc25cia1phmij34ndrl1f9lg34dp";
+    sha256 = "1b77gs68j5j4nlv69vl81d0kp2623ysvshq7495y6hq5wgi5l3gc";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ cmake wrapGAppsHook gsettings-desktop-schemas
-                  glib gtk3 gettext libxkbfile libgnome-keyring libX11
-                  freerdp libssh libgcrypt gnutls
-                  pcre webkitgtk libdbusmenu-gtk3 libappindicator-gtk3
-                  libvncserver libpthreadstubs libXdmcp libxkbcommon
-                  libsecret spice-protocol spice-gtk epoxy at-spi2-core
-                  openssl hicolor-icon-theme adwaita-icon-theme json-glib ];
+  nativeBuildInputs = [ cmake ninja pkgconfig wrapGAppsHook ];
+  buildInputs = [
+    gsettings-desktop-schemas
+    glib gtk3 gettext libxkbfile libX11
+    freerdp libssh libgcrypt gnutls
+    pcre libdbusmenu-gtk3 libappindicator-gtk3
+    libvncserver libpthreadstubs libXdmcp libxkbcommon
+    libsecret libsoup spice-protocol spice-gtk epoxy at-spi2-core
+    openssl hicolor-icon-theme adwaita-icon-theme json-glib
+  ];
 
   cmakeFlags = [
     "-DWITH_VTE=OFF"
@@ -57,13 +49,8 @@ in stdenv.mkDerivation {
     )
   '';
 
-  postInstall = ''
-    mkdir -pv $out/share/applications
-    cp ${desktopItem}/share/applications/* $out/share/applications
-  '';
-
-  meta = with stdenv.lib; {
-    license = stdenv.lib.licenses.gpl2;
+  meta = {
+    license = licenses.gpl2;
     homepage = https://gitlab.com/Remmina/Remmina;
     description = "Remote desktop client written in GTK+";
     maintainers = with maintainers; [ melsigl ryantm ];

@@ -42,6 +42,22 @@ in buildPythonPackage rec {
     export CUDNN_INCLUDE_DIR=${cudnn}/include
   '';
 
+  preFixup = ''
+    function join_by { local IFS="$1"; shift; echo "$*"; }
+    function strip2 {
+      IFS=':'
+      read -ra RP <<< $(patchelf --print-rpath $1)
+      IFS=' '
+      RP_NEW=$(join_by : ''${RP[@]:2})
+      patchelf --set-rpath \$ORIGIN:''${RP_NEW} "$1"
+    }
+
+    for f in $(find ''${out} -name 'libcaffe2*.so')
+    do
+      strip2 $f
+    done
+  '';
+
   buildInputs = [
      cmake
      numpy.blas
@@ -56,7 +72,7 @@ in buildPythonPackage rec {
   ] ++ lib.optional (pythonOlder "3.5") typing;
 
   checkPhase = ''
-    ${cudaStubEnv}python test/run_test.py --exclude distributed autograd distributions jit sparse torch utils nn
+    ${cudaStubEnv}python test/run_test.py --exclude dataloader sparse torch utils distributed
   '';
 
   meta = {

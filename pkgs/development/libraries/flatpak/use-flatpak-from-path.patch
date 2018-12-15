@@ -1,6 +1,6 @@
 --- a/common/flatpak-dir.c
 +++ b/common/flatpak-dir.c
-@@ -5467,7 +5467,7 @@ export_desktop_file (const char   *app,
+@@ -5758,7 +5758,7 @@ export_desktop_file (const char   *app,
  
        new_exec = g_string_new ("");
        g_string_append_printf (new_exec,
@@ -9,7 +9,7 @@
                                escaped_branch,
                                escaped_arch);
  
-@@ -6644,8 +6644,8 @@ flatpak_dir_deploy (FlatpakDir          *self,
+@@ -6935,8 +6935,8 @@ flatpak_dir_deploy (FlatpakDir          *self,
                                         error))
          return FALSE;
  

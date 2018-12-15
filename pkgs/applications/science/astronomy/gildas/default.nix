@@ -7,13 +7,16 @@ let
 in
 
 stdenv.mkDerivation rec {
-  srcVersion = "aug18a";
-  version = "20180801_a";
+  srcVersion = "dec18a";
+  version = "20181201_a";
   name = "gildas-${version}";
 
   src = fetchurl {
-    url = "http://www.iram.fr/~gildas/dist/gildas-src-${srcVersion}.tar.gz";
-    sha256 = "0mg3wijrj8x1p912vkgrhxbypjx7aj9b1492yxvq2y3fxban6bj1";
+    # For each new release, the upstream developers of Gildas move the
+    # source code of the previous release to a different directory
+    urls = [ "http://www.iram.fr/~gildas/dist/gildas-src-${srcVersion}.tar.gz"
+      "http://www.iram.fr/~gildas/dist/archive/gildas/gildas-src-${srcVersion}.tar.gz" ];
+    sha256 = "f295b5b7f999c0d746a52b307af7b7bdbed0d9b3d87100a6a102e0cc64f3a9bd";
   };
 
   enableParallelBuilding = true;
@@ -22,7 +25,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ gtk2-x11 lesstif cfitsio python27Env ];
 
-  patches = [ ./wrapper.patch ./return-error-code.patch ./clang.patch ./aarch64.patch ];
+  patches = [ ./wrapper.patch ./clang.patch ./aarch64.patch ];
+
+  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.cc.isClang "-Wno-unused-command-line-argument";
 
   configurePhase=''
     substituteInPlace admin/wrapper.sh --replace '%%OUT%%' $out

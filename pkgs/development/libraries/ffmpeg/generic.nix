@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pkgconfig, perl, texinfo, yasm
 , alsaLib, bzip2, fontconfig, freetype, gnutls, libiconv, lame, libass, libogg
-, libtheora, libva, libvorbis, libvpx, lzma, libpulseaudio, soxr
-, x264, x265, xvidcore, zlib, libopus
+, libssh, libtheora, libva, libdrm, libvorbis, libvpx, lzma, libpulseaudio, soxr
+, x264, x265, xvidcore, zlib, libopus, speex
 , openglSupport ? false, libGLU_combined ? null
 # Build options
 , runtimeCpuDetectBuild ? true # Detect CPU capabilities at runtime
@@ -128,7 +128,9 @@ stdenv.mkDerivation rec {
       "--enable-libmp3lame"
       (ifMinVer "1.2" "--enable-iconv")
       "--enable-libtheora"
+      (ifMinVer "2.1" "--enable-libssh")
       (ifMinVer "0.6" (enableFeature vaapiSupport "vaapi"))
+      (ifMinVer "3.4" (enableFeature vaapiSupport "libdrm"))
       "--enable-vdpau"
       "--enable-libvorbis"
       (ifMinVer "0.6" (enableFeature vpxSupport "libvpx"))
@@ -141,6 +143,7 @@ stdenv.mkDerivation rec {
       "--enable-libxvid"
       "--enable-zlib"
       (ifMinVer "2.8" "--enable-libopus")
+      "--enable-libspeex"
       (ifMinVer "2.8" "--enable-libx265")
     # Developer flags
       (enableFeature debugDeveloper "debug")
@@ -157,12 +160,13 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ perl pkgconfig texinfo yasm ];
 
   buildInputs = [
-    bzip2 fontconfig freetype gnutls libiconv lame libass libogg libtheora
-    libvdpau libvorbis lzma soxr x264 x265 xvidcore zlib libopus
+    bzip2 fontconfig freetype gnutls libiconv lame libass libogg libssh libtheora
+    libvdpau libvorbis lzma soxr x264 x265 xvidcore zlib libopus speex
   ] ++ optional openglSupport libGLU_combined
     ++ optional vpxSupport libvpx
     ++ optionals (!isDarwin && !isAarch32) [ libpulseaudio ] # Need to be fixed on Darwin and ARM
     ++ optional ((isLinux || isFreeBSD) && !isAarch32) libva
+    ++ optional ((isLinux || isFreeBSD) && !isAarch32) libdrm
     ++ optional isLinux alsaLib
     ++ optionals isDarwin darwinFrameworks
     ++ optional vdpauSupport libvdpau

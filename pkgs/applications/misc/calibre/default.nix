@@ -1,16 +1,16 @@
 { stdenv, fetchurl, poppler_utils, pkgconfig, libpng
 , imagemagick, libjpeg, fontconfig, podofo, qtbase, qmake, icu, sqlite
 , makeWrapper, unrarSupport ? false, chmlib, python2Packages, libusb1, libmtp
-, xdg_utils, makeDesktopItem, wrapGAppsHook
+, xdg_utils, makeDesktopItem, wrapGAppsHook, removeReferencesTo
 }:
 
 stdenv.mkDerivation rec {
-  version = "3.30.0";
+  version = "3.31.0";
   name = "calibre-${version}";
 
   src = fetchurl {
     url = "https://download.calibre-ebook.com/${version}/${name}.tar.xz";
-    sha256 = "0j7w63kniqnpr8v1aldzbim2dyrk79n23mzw9y56jqd0k47m8zfz";
+    sha256 = "1xg1bx0klvrywqry5rhci37fr7shpvb2wbx4bva20vhqkal169rw";
   };
 
   patches = [
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ makeWrapper pkgconfig qmake ];
+  nativeBuildInputs = [ makeWrapper pkgconfig qmake removeReferencesTo ];
 
   buildInputs = [
     poppler_utils libpng imagemagick libjpeg
@@ -58,8 +58,8 @@ stdenv.mkDerivation rec {
     export MAGICK_LIB=${imagemagick.out}/lib
     export FC_INC_DIR=${fontconfig.dev}/include/fontconfig
     export FC_LIB_DIR=${fontconfig.lib}/lib
-    export PODOFO_INC_DIR=${podofo}/include/podofo
-    export PODOFO_LIB_DIR=${podofo}/lib
+    export PODOFO_INC_DIR=${podofo.dev}/include/podofo
+    export PODOFO_LIB_DIR=${podofo.lib}/lib
     export SIP_BIN=${python2Packages.sip}/bin/sip
     ${python2Packages.python.interpreter} setup.py install --prefix=$out
 
@@ -87,6 +87,15 @@ stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
+
+  # Remove some references to shrink the closure size. This reference (as of
+  # 2018-11-06) was a single string like the following:
+  #   /nix/store/xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx-podofo-0.9.6-dev/include/podofo/base/PdfVariant.h
+  preFixup = ''
+    remove-references-to -t ${podofo.dev} $out/lib/calibre/calibre/plugins/podofo.so
+  '';
+
+  disallowedReferences = [ podofo.dev ];
 
   calibreDesktopItem = makeDesktopItem {
     name = "calibre";

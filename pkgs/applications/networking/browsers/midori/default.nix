@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     gtk3 webkitgtk librsvg libnotify sqlite gsettings-desktop-schemas pcre gnome3.gcr
     libxcb libpthreadstubs libXdmcp libxkbcommon epoxy at-spi2-core
-    (libsoup.override {gnomeSupport = true; valaSupport = true;})
+    (libsoup.override {gnomeSupport = true;})
   ] ++ stdenv.lib.optionals zeitgeistSupport [
     zeitgeist
   ];

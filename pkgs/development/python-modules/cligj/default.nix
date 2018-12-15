@@ -4,13 +4,13 @@
 
 buildPythonPackage rec {
   pname = "cligj";
-  version = "0.4.0";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "mapbox";
     repo = "cligj";
     rev = version;
-    sha256 = "0fclxagxv23v75yiypb29a8sja23dakhvmx3blmxyhg2sci92sx8";
+    sha256 = "13vlibbn86dhh6iy8k831vsa249746jnk419wcr9vvr3pqxml6g2";
   };
 
   propagatedBuildInputs = [

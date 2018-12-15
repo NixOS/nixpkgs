@@ -8,7 +8,7 @@
 -	    "--ro-bind", "/usr", "/usr",
 -	    "--ro-bind", "/lib", "/lib",
 -	    "--ro-bind", "/lib64", "/lib64",
-+	    "@BUBBLEWRAP_BIN@",
++	    "@bubblewrap_bin@",
 +      "--ro-bind", "/nix/store", "/nix/store",
  	    "--proc", "/proc",
  	    "--dev", "/dev",

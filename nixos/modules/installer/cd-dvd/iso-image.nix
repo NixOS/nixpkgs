@@ -233,7 +233,7 @@ let
             "
     # Make our own efi program, we can't rely on "grub-install" since it seems to
     # probe for devices, even with --skip-fs-probe.
-    ${pkgs.grub2_efi}/bin/grub-mkimage -o $out/EFI/boot/${if targetArch == "x64" then "bootx64" else "bootx32"}.efi -p /EFI/boot -O ${if targetArch == "x64" then "x86_64" else "i386"}-efi \
+    ${pkgs.grub2_efi}/bin/grub-mkimage -o $out/EFI/boot/${if targetArch == "x64" then "bootx64" else "bootia32"}.efi -p /EFI/boot -O ${if targetArch == "x64" then "x86_64" else "i386"}-efi \
       $MODULES
     cp ${pkgs.grub2_efi}/share/grub/unicode.pf2 $out/EFI/boot/
 
@@ -339,7 +339,9 @@ let
       echo "Image size: $image_size"
       truncate --size=$image_size "$out"
       ${pkgs.libfaketime}/bin/faketime "2000-01-01 00:00:00" ${pkgs.dosfstools}/sbin/mkfs.vfat -i 12345678 -n EFIBOOT "$out"
-      mcopy -bpsvm -i "$out" ./* ::
+      mcopy -psvm -i "$out" ./* ::
+      # Verify the FAT partition.
+      ${pkgs.dosfstools}/sbin/fsck.vfat -vn "$out"
     ''; # */
 
   targetArch = if pkgs.stdenv.isi686 then

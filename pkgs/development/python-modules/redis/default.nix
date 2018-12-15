@@ -1,11 +1,11 @@
 { fetchPypi, buildPythonPackage }:
 buildPythonPackage rec {
   pname = "redis";
-  version = "2.10.6";
+  version = "3.0.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "03vcgklykny0g0wpvqmy8p6azi2s078317wgb2xjv5m2rs9sjb52";
+    sha256 = "1kw3a1618pl908abiaxd41jg5z0rwyl2w2i0d8xi9zxy5437a011";
   };
 
   # tests require a running redis

@@ -31,6 +31,9 @@ in {
               latitude = "0.0";
               longitude = "0.0";
               elevation = 0;
+              auth_providers = [
+                { type = "legacy_api_password"; }
+              ];
             };
             frontend = { };
             http.api_password = apiPassword;
@@ -74,7 +77,6 @@ in {
     print "$log\n";
 
     # Check that no errors were logged
-    # The timer can get out of sync due to Hydra's load, so this error is ignored
-    $hass->fail("cat ${configDir}/home-assistant.log | grep -vF 'Timer got out of sync' | grep -qF ERROR");
+    $hass->fail("cat ${configDir}/home-assistant.log | grep -qF ERROR");
   '';
 })

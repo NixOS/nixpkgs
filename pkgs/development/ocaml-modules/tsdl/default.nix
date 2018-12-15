@@ -22,8 +22,6 @@ stdenv.mkDerivation {
   buildInputs = [ ocaml findlib ocamlbuild topkg result ocb-stubblr ];
   propagatedBuildInputs = [ SDL2 ctypes ];
 
-  unpackCmd = "tar xjf $src";
-
   preConfigure = ''
     # The following is done to avoid an additional dependency (ncurses)
     # due to linking in the custom bytecode runtime. Instead, just

@@ -12,13 +12,13 @@
 
 buildPythonPackage rec {
   pname = "qasm2image";
-  version = "0.7.0";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
-    owner = "nelimeee";
+    owner = "nelimee";
     repo = "qasm2image";
-    rev = "57a640621bbbc74244f07e2e068a26411b0d9b24";
-    sha256 = "1ha5vfl4jfwcwbipsq07xlknkrvx79z5bwbzndybclyk9pa69dlz";
+    rev = "2c01756946ba9782973359dbd7bbf6651af6bee5";
+    sha256 = "1bnkzv7wrdvrq71dmsqanb3v2hcsxh5zaglfcxm2d9zzpmvb4a2n";
   };
 
   propagatedBuildInputs = [
@@ -35,6 +35,8 @@ buildPythonPackage rec {
   checkPhase = ''
     ${python.interpreter} tests/launch_tests.py
   '';
+
+  LC_ALL="en_US.UTF-8";
 
   meta = {
     description = "A Python module to visualise quantum circuit";

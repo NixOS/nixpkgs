@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, intltool, gnupg, p11-kit, glib
 , libgcrypt, libtasn1, dbus-glib, gtk, pango, gdk_pixbuf, atk
-, gobjectIntrospection, makeWrapper, libxslt, vala, gnome3
+, gobject-introspection, makeWrapper, libxslt, vala, gnome3
 , python2 }:
 
 stdenv.mkDerivation rec {
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
   version = "3.28.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gcr/${gnome3.versionBranch version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/gcr/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
     sha256 = "02xgky22xgvhgd525khqh64l5i21ca839fj9jzaqdi3yvb8pbq8m";
   };
 
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ pkgconfig intltool gobjectIntrospection libxslt makeWrapper vala ];
+  nativeBuildInputs = [ pkgconfig intltool gobject-introspection libxslt makeWrapper vala ];
 
   buildInputs = let
     gpg = gnupg.override { guiSupport = false; }; # prevent build cycle with pinentry_gnome

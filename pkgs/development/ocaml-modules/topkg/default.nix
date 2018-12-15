@@ -32,7 +32,6 @@ stdenv.mkDerivation rec {
   buildInputs = [ ocaml findlib ocamlbuild ];
   propagatedBuildInputs = [ result ];
 
-  unpackCmd = "tar xjf ${src}";
   buildPhase = "${run} build";
   createFindlibDestdir = true;
   installPhase = "${opaline}/bin/opaline -prefix $out -libdir $OCAMLFIND_DESTDIR";

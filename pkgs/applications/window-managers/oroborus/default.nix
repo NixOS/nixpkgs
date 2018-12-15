@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
   version = "2.0.20";
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ freetype fribidi libSM libICE libXt libXaw libXmu libXext libXft libXpm libXrandr libXrender xextproto libXinerama ];
+  buildInputs = [ freetype fribidi libSM libICE libXt libXaw libXmu libXext
+                  libXft libXpm libXrandr libXrender xextproto libXinerama ];
 
   src = fetchurl {
     url = "http://ftp.debian.org/debian/pool/main/o/oroborus/oroborus_${version}.tar.gz";

@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, qmake, qtbase, qttools, subversion, apr }:
 
 let
-  version = "1.0.12";
+  version = "1.0.13";
 in
 stdenv.mkDerivation {
   name = "svn-all-fast-export-${version}";
@@ -10,7 +10,7 @@ stdenv.mkDerivation {
     owner = "svn-all-fast-export";
     repo = "svn2git";
     rev = version;
-    sha256 = "158w2ynz16dlp992g8nfk7v2f5962z88b4xyv5dyjvbl4l1v7r0v";
+    sha256 = "0f1qj0c4cdq46mz54wcy17g7rq1fy2q0bq3sswhr7r5a2s433x4f";
   };
 
   nativeBuildInputs = [ qmake qttools ];

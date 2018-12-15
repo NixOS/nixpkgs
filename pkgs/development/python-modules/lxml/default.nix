@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "lxml";
-  version = "4.2.4";
+  version = "4.2.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e2afbe403090f5893e254958d02875e0732975e73c4c0cdd33c1f009a61963ca";
+    sha256 = "36720698c29e7a9626a0dc802ef8885f8f0239bfd1689628ecd459a061f2807f";
   };
 
   buildInputs = [ libxml2 libxslt ];

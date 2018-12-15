@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   name = "delve-${version}";
-  version = "1.0.0";
+  version = "1.1.0";
 
   goPackagePath = "github.com/derekparker/delve";
   excludedPackages = "\\(_fixtures\\|scripts\\|service/test\\)";
@@ -11,7 +11,7 @@ buildGoPackage rec {
     owner = "derekparker";
     repo = "delve";
     rev = "v${version}";
-    sha256 = "08hsairhrifh41d288jhc65zbhs9k0hs738dbdzsbcvlmycrhvgx";
+    sha256 = "0gpsd9hb7r65rn4ml9jzsmy72b8j0id6wik2l48ghzkwjm72rsdz";
   };
 
   meta = with stdenv.lib; {

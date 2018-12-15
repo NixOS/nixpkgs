@@ -11,11 +11,11 @@
 
 buildPythonPackage rec {
   pname = "Flask-Babel";
-  version = "0.11.2";
+  version = "0.12.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0ff9n165vhf1nhv6807ckhpp224jw7k7sd7jz5kfh3sbpl85gmy0";
+    sha256 = "11jwp8vvq1gnm31qh6ihy2h393hy18yn9yjp569g60r0wj1x2sii";
   };
 
   propagatedBuildInputs = [

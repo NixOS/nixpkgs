@@ -112,8 +112,8 @@ in with pkgs; rec {
         cp -d ${gcc.cc.out}/bin/gcc $out/bin
         cp -d ${gcc.cc.out}/bin/cpp $out/bin
         cp -d ${gcc.cc.out}/bin/g++ $out/bin
-        cp -d ${gcc.cc.lib}/lib*/libgcc_s.so* $out/lib
-        cp -d ${gcc.cc.lib}/lib*/libstdc++.so* $out/lib
+        cp -d ${gcc.cc.lib}/lib/libgcc_s.so* $out/lib
+        cp -d ${gcc.cc.lib}/lib/libstdc++.so* $out/lib
         cp -rd ${gcc.cc.out}/lib/gcc $out/lib
         chmod -R u+w $out/lib
         rm -f $out/lib/gcc/*/*/include*/linux
@@ -150,6 +150,7 @@ in with pkgs; rec {
         for i in as ld ar ranlib nm strip readelf objdump; do
           cp ${binutils.bintools.out}/bin/$i $out/bin
         done
+        cp '${lib.getLib binutils.bintools}'/lib/* "$out/lib/"
 
         chmod -R u+w $out
 

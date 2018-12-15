@@ -21,15 +21,16 @@
 , libiconv, postgresql, v8_3_16_14, clang, sqlite, zlib, imagemagick
 , pkgconfig , ncurses, xapian_1_2_22, gpgme, utillinux, fetchpatch, tzdata, icu, libffi
 , cmake, libssh2, openssl, mysql, darwin, git, perl, pcre, gecode_3, curl
-, msgpack, qt48, libsodium, snappy, libossp_uuid, lxc, libpcap, xorg, gtk2, buildRubyGem
-, cairo, re2, rake, gobjectIntrospection, gdk_pixbuf, zeromq, graphicsmagick, libcxx
+, msgpack, qt59, libsodium, snappy, libossp_uuid, lxc, libpcap, xorg, gtk2, buildRubyGem
+, cairo, re2, rake, gobject-introspection, gdk_pixbuf, zeromq, graphicsmagick, libcxx, file
+, libselinux ? null, libsepol ? null
 }@args:
 
 let
   v8 = v8_3_16_14;
 
   rainbow_rake = buildRubyGem {
-    name = "rake";
+    pname = "rake";
     gemName = "rake";
     source.sha256 = "01j8fc9bqjnrsxbppncai05h43315vmz9fwg28qdsgcjw9ck1d7n";
     type = "gem";
@@ -69,7 +70,7 @@ in
   };
 
   capybara-webkit = attrs: {
-    buildInputs = [ qt48 ] ++ stdenv.lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Cocoa ];
+    buildInputs = [ qt59.qtbase qt59.qtwebkit ] ++ stdenv.lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Cocoa ];
     NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isDarwin "-I${libcxx}/include/c++/v1";
   };
 
@@ -156,7 +157,7 @@ in
 
   gio2 = attrs: {
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ gtk2 pcre gobjectIntrospection ];
+    buildInputs = [ gtk2 pcre gobject-introspection ] ++ lib.optionals stdenv.isLinux [ utillinux libselinux libsepol ];
   };
 
   gitlab-markup = attrs: { meta.priority = 1; };
@@ -167,7 +168,7 @@ in
   };
 
   gtk2 = attrs: {
-    nativeBuildInputs = [ pkgconfig ];
+    nativeBuildInputs = [ pkgconfig ] ++ lib.optionals stdenv.isLinux [ utillinux libselinux libsepol ];
     buildInputs = [ gtk2 pcre xorg.libpthreadstubs xorg.libXdmcp];
     # CFLAGS must be set for this gem to detect gdkkeysyms.h correctly
     CFLAGS = "-I${gtk2.dev}/include/gtk-2.0 -I/non-existent-path";
@@ -175,7 +176,7 @@ in
 
   gobject-introspection = attrs: {
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ gobjectIntrospection gtk2 pcre ];
+    buildInputs = [ gobject-introspection gtk2 pcre ];
   };
 
   grpc = attrs: {
@@ -189,6 +190,10 @@ in
     buildInputs =
       stdenv.lib.optionals stdenv.isDarwin
         [ darwin.apple_sdk.frameworks.CoreServices ];
+  };
+
+  iconv = attrs: {
+    buildFlags = lib.optional stdenv.isDarwin "--with-iconv-dir=${libiconv}";
   };
 
   # disable bundle install as it can't install anything in addition to what is
@@ -216,6 +221,20 @@ in
       "--with-xml2-lib=${libxml2.out}/lib"
       "--with-xml2-include=${libxml2.dev}/include/libxml2"
     ];
+  };
+
+  magic = attrs: {
+    buildInputs = [ file ];
+    postInstall = ''
+      installPath=$(cat $out/nix-support/gem-meta/install-path)
+      sed -e 's@ENV\["MAGIC_LIB"\] ||@ENV\["MAGIC_LIB"\] || "${file}/lib/libmagic.so" ||@' -i $installPath/lib/magic/api.rb
+    '';
+  };
+
+  metasploit-framework = attrs: {
+    preInstall = ''
+      export HOME=$TMPDIR
+    '';
   };
 
   msgpack = attrs: {
@@ -317,6 +336,10 @@ in
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ cmake openssl libssh2 zlib ];
     dontUseCmakeConfigure = true;
+  };
+
+  sassc = attrs: {
+    nativeBuildInputs = [ rake ];
   };
 
   scrypt = attrs:

@@ -3,14 +3,14 @@
 with lib;
 
 stdenv.mkDerivation rec {
-  name = "kubectx";
-  version = "0.5.1";
+  pname = "kubectx";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "ahmetb";
-    repo = "${name}";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "1bmmaj5fffx4hy55l6x4vl5gr9rp2yhg4vs5b9sya9rjvdkamdx5";
+    sha256 = "1507g8sm73mqfsxl3fabmj37pk9l4jddsdi4qlpf0ixhk3z1lfkg";
   };
 
   buildInputs = [ makeWrapper ];
@@ -20,8 +20,23 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/bin
+    mkdir -p $out/share/zsh/site-functions
+    mkdir -p $out/share/bash-completion/completions
+    mkdir -p $out/share/fish/vendor_completions.d
+
     cp kubectx $out/bin
     cp kubens $out/bin
+
+    # Provide ZSH completions
+    cp completion/kubectx.zsh $out/share/zsh/site-functions/_kubectx
+    cp completion/kubens.zsh $out/share/zsh/site-functions/_kubens
+
+    # Provide BASH completions
+    cp completion/kubectx.bash $out/share/bash-completion/completions/kubectx
+    cp completion/kubens.bash $out/share/bash-completion/completions/kubens
+
+    # Provide FISH completions
+    cp completion/*.fish $out/share/fish/vendor_completions.d/
 
     for f in $out/bin/*; do
       wrapProgram $f --prefix PATH : ${makeBinPath [ kubectl ]}

@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   name = "newsboat-${version}";
-  version = "2.12";
+  version = "2.13";
 
   src = fetchurl {
     url = "https://newsboat.org/releases/${version}/${name}.tar.xz";
-    sha256 = "1x23zlgljaqf46v7sp8wnkyf6wighvirvn48ankpa34yr8mvrgcv";
+    sha256 = "0pik1d98ydzqi6055vdbkjg5krwifbk2hy2f5jp5p1wcy2s16dn7";
   };
 
   prePatch = ''

@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, removeReferencesTo, which, go_1_9, go-bindata, makeWrapper, rsync, utillinux
+{ stdenv, lib, fetchFromGitHub, removeReferencesTo, which, go, go-bindata, makeWrapper, rsync, utillinux
 , coreutils, kerberos, clang
 , components ? [
   "cmd/oc"
@@ -9,15 +9,15 @@
 with lib;
 
 let
-  version = "3.10.0";
+  version = "3.11.0";
   ver = stdenv.lib.elemAt (stdenv.lib.splitString "." version);
   versionMajor = ver 0;
   versionMinor = ver 1;
   versionPatch = ver 2;
-  gitCommit = "dd10d17";
+  gitCommit = "0cbc58b";
   # version is in vendor/k8s.io/kubernetes/pkg/version/base.go
-  k8sversion = "v1.10.0";
-  k8sgitcommit = "b81c8f8";
+  k8sversion = "v1.11.1";
+  k8sgitcommit = "b1b2997";
   k8sgitMajor = "0";
   k8sgitMinor = "1";
 in stdenv.mkDerivation rec {
@@ -28,12 +28,12 @@ in stdenv.mkDerivation rec {
     owner = "openshift";
     repo = "origin";
     rev = "v${version}";
-    sha256 = "13aglz005jl48z17vnggkvr39l5h6jcqgkfyvkaz4c3jakms1hi9";
+    sha256 = "06q4v2a1mm6c659ab0rzkqz6b66vx4avqfg0s9xckwhq420lzgka";
 };
 
   # go > 1.10
-  # [FATAL] [14:44:02+0000] Please install Go version go1.9 or use PERMISSIVE_GO=y to bypass this check.
-  buildInputs = [ removeReferencesTo makeWrapper which go_1_9 rsync go-bindata kerberos clang ];
+  # [FATAL] [14:44:02+0000] Please install Go version go or use PERMISSIVE_GO=y to bypass this check.
+  buildInputs = [ removeReferencesTo makeWrapper which go rsync go-bindata kerberos clang ];
 
   outputs = [ "out" ];
 
@@ -78,7 +78,7 @@ in stdenv.mkDerivation rec {
   '';
 
   preFixup = ''
-    find $out/bin -type f -exec remove-references-to -t ${go_1_9} '{}' +
+    find $out/bin -type f -exec remove-references-to -t ${go} '{}' +
   '';
 
   meta = with stdenv.lib; {

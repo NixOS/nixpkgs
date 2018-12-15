@@ -1,14 +1,14 @@
 { stdenv, lib, fetchpatch, fetchFromGitHub, autoconf, automake, libtool, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  version = "1.21.0";
+  version = "1.23.2";
   name = "libuv-${version}";
 
   src = fetchFromGitHub {
     owner = "libuv";
     repo = "libuv";
     rev = "v${version}";
-    sha256 = "1jjg34ppnlrnb634q9mla7whl7rm9xmjgnzckrznqcycwzir074b";
+    sha256 = "1xfggj0mbbshj7zyccnfw7wyk42qfg4ng3l4aslw014mg8gaskv7";
   };
 
   patches = [
@@ -40,7 +40,11 @@ stdenv.mkDerivation rec {
         "tcp_open" "tcp_write_queue_order" "tcp_try_write" "tcp_writealot"
         "multiple_listen" "delayed_accept"
         "shutdown_close_tcp" "shutdown_eof" "shutdown_twice" "callback_stack"
-        "tty_pty"
+        "tty_pty" "condvar_5"
+      ] ++ stdenv.lib.optionals stdenv.isAarch32 [
+        # I observe this test failing with some regularity on ARMv7:
+        # https://github.com/libuv/libuv/issues/1871
+        "shutdown_close_pipe"
       ];
     tdRegexp = lib.concatStringsSep "\\|" toDisable;
     in lib.optionalString doCheck ''
@@ -62,6 +66,7 @@ stdenv.mkDerivation rec {
     homepage    = https://github.com/libuv/libuv;
     maintainers = with maintainers; [ cstrahan ];
     platforms   = with platforms; linux ++ darwin;
+    license     = with licenses; [ mit isc bsd2 bsd3 cc-by-40 ];
   };
 
 }

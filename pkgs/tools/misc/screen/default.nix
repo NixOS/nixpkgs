@@ -23,13 +23,19 @@ stdenv.mkDerivation rec {
       stripLen = 1;
     });
 
+  postPatch = stdenv.lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform)
+    # XXX: Awful hack to allow cross-compilation.
+    '' sed -i ./configure \
+           -e 's/^as_fn_error .. \("cannot run test program while cross compiling\)/$as_echo \1/g'
+    ''; # "
+
   buildInputs = [ ncurses ] ++ stdenv.lib.optional stdenv.isLinux pam
                             ++ stdenv.lib.optional stdenv.isDarwin utmp;
 
   doCheck = true;
 
   meta = with stdenv.lib; {
-    homepage = http://www.gnu.org/software/screen/;
+    homepage = https://www.gnu.org/software/screen/;
     description = "A window manager that multiplexes a physical terminal";
     license = licenses.gpl2Plus;
 

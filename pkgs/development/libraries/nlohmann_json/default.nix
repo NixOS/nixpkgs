@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   name = "nlohmann_json-${version}";
-  version = "3.2.0";
+  version = "3.4.0";
 
   src = fetchFromGitHub {
     owner = "nlohmann";
     repo = "json";
     rev = "v${version}";
-    sha256 = "0585r6ai9x1bhspffn5w5620wxfl1q1gj476brsnaf7wwnr60hwk";
+    sha256 = "1140gz5za7yvfcphdgxaq1dm4b1vxy1m8d1w0s0smv4vvdvl26ym";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -18,8 +18,6 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DBuildTests=${if doCheck then "ON" else "OFF"}"
-  ] ++ stdenv.lib.optionals (stdenv.hostPlatform.libc == "msvcrt") [
-    "-DCMAKE_SYSTEM_NAME=Windows"
   ];
 
   doCheck = stdenv.hostPlatform == stdenv.buildPlatform;

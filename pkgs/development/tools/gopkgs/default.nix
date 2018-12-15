@@ -2,17 +2,16 @@
 
 buildGoPackage rec {
   name = "gopkgs-${version}";
-  version = "unstable-2017-12-29";
-  rev = "b2ea2ecd37740e6ce0e020317d90c729aab4dc6d";
+  version = "2.0.1";
 
   goPackagePath = "github.com/uudashr/gopkgs";
   goDeps = ./deps.nix;
 
   src = fetchFromGitHub {
-    inherit rev;
+    rev = "v${version}";
     owner = "uudashr";
     repo = "gopkgs";
-    sha256 = "1hwzxrf2h8xjbbx6l86mjpjh4csxxsy17zkh8h3qzncyfnsnczzg";
+    sha256 = "03zfwkmzwx2knkghky3irb2r78lbc1ccszjcg9y445b4pbqkn6w4";
   };
 
   meta = {

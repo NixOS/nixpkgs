@@ -1,11 +1,13 @@
-{ stdenv, fetchurl, cmake, zlib, c-ares, pkgconfig, openssl, protobuf, gflags }:
+{ stdenv, fetchFromGitHub, cmake, zlib, c-ares, pkgconfig, openssl, protobuf, gflags }:
 
 stdenv.mkDerivation rec {
-  version = "1.10.1";
+  version = "1.16.1";
   name = "grpc-${version}";
-  src = fetchurl {
-    url = "https://github.com/grpc/grpc/archive/v${version}.tar.gz";
-    sha256 = "0l721r24d6wz889vz4g6i67ijz0zc0ah967i3immi90zdmjwlyjg";
+  src = fetchFromGitHub {
+    owner = "grpc";
+    repo = "grpc";
+    rev = "v${version}";
+    sha256 = "1jimqz3115f9pli5w6ik9wi7mjc7ix6y7yrq4a1ab9fc3dalj7p2";
   };
   nativeBuildInputs = [ cmake pkgconfig ];
   buildInputs = [ zlib c-ares c-ares.cmake-config openssl protobuf gflags ];
@@ -23,6 +25,8 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     rm -vf BUILD
   '';
+
+  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.cc.isClang "-Wno-error=unknown-warning-option";
 
   enableParallelBuilds = true;
 

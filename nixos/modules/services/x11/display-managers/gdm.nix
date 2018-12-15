@@ -7,6 +7,13 @@ let
   cfg = config.services.xserver.displayManager;
   gdm = pkgs.gnome3.gdm;
 
+  xSessionWrapper = if (cfg.setupCommands == "") then null else
+    pkgs.writeScript "gdm-x-session-wrapper" ''
+      #!${pkgs.bash}/bin/bash
+      ${cfg.setupCommands}
+      exec "$@"
+    '';
+
 in
 
 {
@@ -109,9 +116,14 @@ in
         environment = {
           GDM_X_SERVER_EXTRA_ARGS = toString
             (filter (arg: arg != "-terminate") cfg.xserverArgs);
-          GDM_SESSIONS_DIR = "${cfg.session.desktops}/share/xsessions";
+          XDG_DATA_DIRS = "${cfg.session.desktops}/share/";
           # Find the mouse
           XCURSOR_PATH = "~/.icons:${pkgs.gnome3.adwaita-icon-theme}/share/icons";
+        } // optionalAttrs (xSessionWrapper != null) {
+          # Make GDM use this wrapper before running the session, which runs the
+          # configured setupCommands. This relies on a patched GDM which supports
+          # this environment variable.
+          GDM_X_SESSION_WRAPPER = "${xSessionWrapper}";
         };
         execCmd = "exec ${gdm}/bin/gdm";
       };
@@ -142,7 +154,10 @@ in
 
     systemd.user.services.dbus.wantedBy = [ "default.target" ];
 
-    programs.dconf.profiles.gdm = "${gdm}/share/dconf/profile/gdm";
+    programs.dconf.profiles.gdm = pkgs.writeText "dconf-gdm-profile" ''
+      system-db:local
+      ${gdm}/share/dconf/profile/gdm
+    '';
 
     # Use AutomaticLogin if delay is zero, because it's immediate.
     # Otherwise with TimedLogin with zero seconds the prompt is still

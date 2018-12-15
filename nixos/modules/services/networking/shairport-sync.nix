@@ -27,7 +27,7 @@ in
       };
 
       arguments = mkOption {
-        default = "-v -o pulse";
+        default = "-v -d pulse";
         description = ''
           Arguments to pass to the daemon. Defaults to a local pulseaudio
           server.
@@ -72,6 +72,7 @@ in
         serviceConfig = {
           User = cfg.user;
           ExecStart = "${pkgs.shairport-sync}/bin/shairport-sync ${cfg.arguments}";
+          RuntimeDirectory = "shairport-sync";
         };
       };
 

@@ -1,0 +1,33 @@
+From f285beab62594f73e57190c49848c848487214cf Mon Sep 17 00:00:00 2001
+From: stdgregwar <gregoirehirt@gmail.com>
+Date: Sun, 1 Jul 2018 00:00:41 +0200
+Subject: [PATCH] Shader previewer base
+
+
+diff --git a/include/widgets/tileset_view.h b/include/widgets/tileset_view.h
+index 615f432..799a4c6 100644
+--- a/include/widgets/tileset_view.h
++++ b/include/widgets/tileset_view.h
+@@ -23,6 +23,7 @@
+ #include "pattern_separation.h"
+ #include <QGraphicsView>
+ #include <QPointer>
++#include <QMenu>
+ 
+ class QAction;
+ 
+diff --git a/src/widgets/text_editor.cpp b/src/widgets/text_editor.cpp
+index 4f2ff68..90080a9 100644
+--- a/src/widgets/text_editor.cpp
++++ b/src/widgets/text_editor.cpp
+@@ -26,6 +26,7 @@
+ #include <QList>
+ #include <QPlainTextEdit>
+ #include <QScrollBar>
++#include <QAction>
+ #include <QTextStream>
+ #include <QUndoStack>
+ 
+-- 
+2.18.0
+

@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   name    = "exercism-${version}";
-  version = "3.0.6";
+  version = "3.0.9";
 
   goPackagePath = "github.com/exercism/cli";
 
@@ -10,7 +10,7 @@ buildGoPackage rec {
     owner  = "exercism";
     repo   = "cli";
     rev    = "v${version}";
-    sha256 = "0xr5bqzm0md1vllnr384k92k7w1nxzw9lhqgm23zkxx5a4vqzy56";
+    sha256 = "0nr3dzipylicrbplh25dw0w84qklr0xcyq442i9aswzibqrb2vc6";
   };
 
   goDeps = ./deps.nix;

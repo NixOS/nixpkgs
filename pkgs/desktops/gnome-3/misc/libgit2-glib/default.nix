@@ -1,12 +1,12 @@
 { stdenv, fetchurl, gnome3, meson, ninja, pkgconfig, vala, libssh2
-, gtk-doc, gobjectIntrospection, libgit2, glib, python3 }:
+, gtk-doc, gobject-introspection, libgit2, glib, python3 }:
 
 stdenv.mkDerivation rec {
   name = "libgit2-glib-${version}";
   version = "0.26.4";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/libgit2-glib/${gnome3.versionBranch version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/libgit2-glib/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
     sha256 = "0nhyqas110q7ingw97bvyjdb7v4dzch517dq8sn8c33s8910wqcp";
   };
 
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    meson ninja pkgconfig vala gtk-doc gobjectIntrospection
+    meson ninja pkgconfig vala gtk-doc gobject-introspection
   ];
 
   propagatedBuildInputs = [

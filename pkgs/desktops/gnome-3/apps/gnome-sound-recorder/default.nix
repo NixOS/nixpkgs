@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, intltool, gobjectIntrospection, wrapGAppsHook, gjs, glib, gtk3, gdk_pixbuf, gst_all_1, gnome3 }:
+{ stdenv, fetchurl, pkgconfig, intltool, gobject-introspection, wrapGAppsHook, gjs, glib, gtk3, gdk_pixbuf, gst_all_1, gnome3 }:
 
 let
   pname = "gnome-sound-recorder";
@@ -7,11 +7,11 @@ in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
     sha256 = "0y0srj1hvr1waa35p6dj1r1mlgcsscc0i99jni50ijp4zb36fjqy";
   };
 
-  nativeBuildInputs = [ pkgconfig intltool gobjectIntrospection wrapGAppsHook ];
+  nativeBuildInputs = [ pkgconfig intltool gobject-introspection wrapGAppsHook ];
   buildInputs = [ gjs glib gtk3 gdk_pixbuf ] ++ (with gst_all_1; [ gstreamer.dev gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad ]);
 
   # TODO: fix this in gstreamer

@@ -21,10 +21,15 @@ stdenv.mkDerivation rec {
     sed 's,-ludev,-L${systemd.lib}/lib -ludev,' -i $out/lib/libusb-1.0.la
   '';
 
-  meta = {
-    homepage = http://www.libusb.info;
-    description = "User-space USB library";
-    platforms = stdenv.lib.platforms.all;
+  meta = with stdenv.lib; {
+    homepage = "https://libusb.info/";
+    repositories.git = "https://github.com/libusb/libusb";
+    description = "cross-platform user-mode USB device library";
+    longDescription = ''
+      libusb is a cross-platform user-mode library that provides access to USB devices.
+    '';
+    platforms = platforms.all;
+    license = licenses.lgpl21Plus;
     maintainers = [ ];
   };
 }

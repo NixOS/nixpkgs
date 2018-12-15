@@ -1,12 +1,17 @@
-{ stdenv, fetchurl, perl, gdb, llvm, cctools, xnu, bootstrap_cmds }:
+{ stdenv, fetchurl, perl, gdb, llvm, cctools, xnu, bootstrap_cmds, autoreconfHook }:
 
 stdenv.mkDerivation rec {
-  name = "valgrind-3.13.0";
+  name = "valgrind-3.14.0";
 
   src = fetchurl {
     url = "https://sourceware.org/pub/valgrind/${name}.tar.bz2";
-    sha256 = "0fqc3684grrbxwsic1rc5ryxzxmigzjx9p5vf3lxa37h0gpq0rnp";
+    sha256 = "19ds42jwd89zrsjb94g7gizkkzipn8xik3xykrpcqxylxyzi2z03";
   };
+
+  # autoreconfHook is needed to pick up patching of Makefile.am
+  # Remove when the patch no longer applies.
+  patches = [ ./coregrind-makefile-race.patch ];
+  nativeBuildInputs = [ autoreconfHook ];
 
   outputs = [ "out" "dev" "man" "doc" ];
 
@@ -17,6 +22,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ perl gdb ]  ++ stdenv.lib.optionals (stdenv.isDarwin) [ bootstrap_cmds xnu ];
 
   enableParallelBuilding = true;
+  separateDebugInfo = stdenv.isLinux;
 
   preConfigure = stdenv.lib.optionalString stdenv.isDarwin (
     let OSRELEASE = ''

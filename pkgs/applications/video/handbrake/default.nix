@@ -20,20 +20,33 @@
 
 stdenv.mkDerivation rec {
   # TODO: Release 1.2.0 would switch LibAV to FFmpeg.
-  version = "1.1.0";
+  version = "1.1.2";
   name = "handbrake-${version}";
 
   src = fetchurl {
     url = ''https://download2.handbrake.fr/${version}/HandBrake-${version}-source.tar.bz2'';
-    sha256 = "1nj0ihflisxcfkmsk7fm3b5cn7cpnpg66dk2lkp2ip6qidppqbm0";
+    sha256 = "0bny0hwlr55g2c69rsamv0xvwmfh1s4a582b9vq20xv5ly84m6ms";
   };
 
   patched_libav_12 = libav_12.overrideAttrs (super: {
-    # NOTE: 2018-04-26: HandBrake compilation (1.1.0) requires a patch of LibAV (12.3) from HandBrake team. This patch not went LibAV upstream.
     patches = (super.patches or []) ++ [(
+      # NOTE: 2018-04-26: HandBrake compilation (1.1.0) requires
+      # a patch of LibAV (12.3) from HandBrake team. This patch
+      # not went LibAV upstream.
       fetchurl {
         url = ''https://raw.githubusercontent.com/HandBrake/HandBrake/9e1f245708a157231c427c0ef9b91729d59a30e1/contrib/ffmpeg/A21-mp4-sdtp.patch'';
         sha256 = "14grzyvb1qbb90k31ibabnwmwnrc48ml6h2z0rjamdv83q45jq4g";
+      })
+      # NOTE: 2018-11-11: Transcoding to MP4 can fail with:
+      #
+      # Tag avc1/0x31637661 incompatible with output codec id '28'
+      # muxavformat: avformat_write_header failed!
+      #
+      # Fix using Handbrake patch that is not upstream in libav.
+      (
+      fetchurl {
+        url = ''https://raw.githubusercontent.com/HandBrake/HandBrake/df6c26fa261423237ee2bec0bf784c32cbfda3fa/contrib/ffmpeg/A20-avc3-hvc1-override.patch'';
+        sha256 = "1vijd7bmkzp3sb6zhpcpdni8fz4h13wgglnml6cz9f44j41w2c3v";
       })
     ];
   });

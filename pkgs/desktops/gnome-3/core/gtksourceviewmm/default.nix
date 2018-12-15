@@ -5,12 +5,16 @@ stdenv.mkDerivation rec {
   version = "3.21.3";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gtksourceviewmm/${gnome3.versionBranch version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/gtksourceviewmm/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
     sha256 = "1danc9mp5mnb65j01qxkwj92z8jf1gns41wbgp17qh7050f0pc6v";
   };
 
   passthru = {
-    updateScript = gnome3.updateScript { packageName = "gtksourceviewmm"; attrPath = "gnome3.gtksourceviewmm"; };
+    updateScript = gnome3.updateScript {
+      packageName = "gtksourceviewmm";
+      attrPath = "gnome3.gtksourceviewmm";
+      versionPolicy = "none";
+    };
   };
 
   nativeBuildInputs = [ pkgconfig ];

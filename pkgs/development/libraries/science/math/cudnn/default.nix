@@ -1,13 +1,11 @@
-{ callPackage, cudatoolkit_7, cudatoolkit_7_5, cudatoolkit_8, cudatoolkit_9_0, cudatoolkit_9 }:
+{ callPackage, cudatoolkit_7, cudatoolkit_7_5, cudatoolkit_8, cudatoolkit_9_0, cudatoolkit_9_1, cudatoolkit_9_2, cudatoolkit_10_0 }:
 
 let
   generic = args: callPackage (import ./generic.nix (removeAttrs args ["cudatoolkit"])) {
     inherit (args) cudatoolkit;
   };
 
-in
-
-{
+in rec {
   cudnn_cudatoolkit_7 = generic rec {
     # Old URL is v4 instead of v4.0 for some reason...
     version = "4";
@@ -38,16 +36,34 @@ in
   };
 
   cudnn_cudatoolkit_9_0 = generic rec {
-    version = "7.0.5";
+    version = "7.3.0";
     cudatoolkit = cudatoolkit_9_0;
-    srcName = "cudnn-${cudatoolkit.majorVersion}-linux-x64-v7.tgz";
-    sha256 = "03mbv4m5lhwnc181xz8li067pjzzhxqbxgnrfc68dffm8xj0fghs";
+    srcName = "cudnn-${cudatoolkit.majorVersion}-linux-x64-v7.3.0.29.tgz";
+    sha256 = "16z4vgbcmbayk4hppz0xshgs3g07blkp4j25cxcjqyrczx1r0gs0";
   };
 
-  cudnn_cudatoolkit_9 = generic rec {
-    version = "7.0.5";
-    cudatoolkit = cudatoolkit_9;
-    srcName = "cudnn-${cudatoolkit.majorVersion}-linux-x64-v7.tgz";
-    sha256 = "1rfmdd2v47p83fm3sfyvik31gci0q17qs6kjng6mvcsd6akmvb8y";
+  cudnn_cudatoolkit_9_1 = generic rec {
+    version = "7.1.3";
+    cudatoolkit = cudatoolkit_9_1;
+    srcName = "cudnn-${cudatoolkit.majorVersion}-linux-x64-v7.1.tgz";
+    sha256 = "0a0237gpr0p63s92njai0xvxmkbailzgfsvh7n9fnz0njhvnsqfx";
   };
+
+  cudnn_cudatoolkit_9_2 = generic rec {
+    version = "7.2.1";
+    cudatoolkit = cudatoolkit_9_2;
+    srcName = "cudnn-${cudatoolkit.majorVersion}-linux-x64-v7.2.1.38.tgz";
+    sha256 = "1sf215wm6zgr17gs6sxfhw61b7a0qmcxiwhgy1b4nqdyxpqgay1y";
+  };
+
+  cudnn_cudatoolkit_9 = cudnn_cudatoolkit_9_2;
+
+  cudnn_cudatoolkit_10_0 = generic rec {
+    version = "7.3.1";
+    cudatoolkit = cudatoolkit_10_0;
+    srcName = "cudnn-${cudatoolkit.majorVersion}-linux-x64-v7.3.1.20.tgz";
+    sha256 = "1yp35mng4ym40g5rqp63dcpa6jg4q1pnjkspnhlakzzdy8is65af";
+  };
+
+  cudnn_cudatoolkit_10 = cudnn_cudatoolkit_10_0;
 }

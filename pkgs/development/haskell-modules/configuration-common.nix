@@ -33,7 +33,7 @@ self: super: {
   unbuildable = throw "package depends on meta package 'unbuildable'";
 
   # Use the latest version of the Cabal library.
-  cabal-install = super.cabal-install.overrideScope (self: super: { Cabal = self.Cabal_2_2_0_1; });
+  cabal-install = super.cabal-install.overrideScope (self: super: { Cabal = self.Cabal_2_4_1_0; });
 
   # The test suite depends on old versions of tasty and QuickCheck.
   hackage-security = dontCheck super.hackage-security;
@@ -86,35 +86,24 @@ self: super: {
       name = "git-annex-${super.git-annex.version}-src";
       url = "git://git-annex.branchable.com/";
       rev = "refs/tags/" + super.git-annex.version;
-      sha256 = "0a7h21cwfvprj5xfyivjzg2hbs71xp85l9v6kyp58mlqvwy3zffl";
+      sha256 = "0wczijw80pw31k6h3a65m76aq9i02aarr2zxl7k5m7p0l6rn82vd";
     };
   }).override {
     dbus = if pkgs.stdenv.isLinux then self.dbus else null;
     fdo-notify = if pkgs.stdenv.isLinux then self.fdo-notify else null;
     hinotify = if pkgs.stdenv.isLinux then self.hinotify else self.fsnotify;
   };
-  esqueleto = overrideSrc (addBuildDepend (dontCheck (dontHaddock super.esqueleto)) self.unliftio) {
-    src = pkgs.fetchFromGitHub {
-      owner = "bitemyapp";
-      repo = "esqueleto";
-      rev = "b81e0d951e510ebffca03c5a58658ad884cc6fbd";
-      sha256 = "0lz1qxms7cfg5p3j37inlych0r2fwhm8xbarcys3df9m7jy9nixa";
-    };
-  };
+
+  # https://github.com/bitemyapp/esqueleto/issues/105
+  esqueleto = markBrokenVersion "2.5.3" super.esqueleto;
 
   # Fix test trying to access /home directory
-  shell-conduit = (overrideCabal super.shell-conduit (drv: {
+  shell-conduit = overrideCabal super.shell-conduit (drv: {
     postPatch = "sed -i s/home/tmp/ test/Spec.hs";
 
     # the tests for shell-conduit on Darwin illegitimatey assume non-GNU echo
     # see: https://github.com/psibi/shell-conduit/issues/12
     doCheck = !pkgs.stdenv.isDarwin;
-  })).overrideScope (self: super: {
-    # shell-conduit doesn't build with conduit 1.3
-    # see https://github.com/psibi/shell-conduit/issues/15
-    conduit = self.conduit_1_2_13_1;
-    conduit-extra = self.conduit-extra_1_2_3_2;
-    resourcet = self.resourcet_1_1_11;
   });
 
   # https://github.com/froozen/kademlia/issues/2
@@ -257,6 +246,10 @@ self: super: {
   # Fails for non-obvious reasons while attempting to use doctest.
   search = dontCheck super.search;
 
+  # see https://github.com/LumiGuide/haskell-opencv/commit/cd613e200aa20887ded83256cf67d6903c207a60
+  opencv = dontCheck (appendPatch super.opencv ./patches/opencv-fix-116.patch);
+  opencv-extra = dontCheck (appendPatch super.opencv-extra ./patches/opencv-fix-116.patch);
+
   # https://github.com/ekmett/structures/issues/3
   structures = dontCheck super.structures;
 
@@ -340,7 +333,7 @@ self: super: {
   itanium-abi = dontCheck super.itanium-abi;
   katt = dontCheck super.katt;
   language-slice = dontCheck super.language-slice;
-  language-nix = if pkgs.stdenv.isi686 then dontCheck super.language-nix else super.language-nix;
+  language-nix = if (pkgs.stdenv.hostPlatform.isAarch64 || pkgs.stdenv.hostPlatform.isi686) then dontCheck super.language-nix else super.language-nix; # aarch64: https://ghc.haskell.org/trac/ghc/ticket/15275
   ldap-client = dontCheck super.ldap-client;
   lensref = dontCheck super.lensref;
   lucid = dontCheck super.lucid; #https://github.com/chrisdone/lucid/issues/25
@@ -349,6 +342,7 @@ self: super: {
   MemoTrie = dontHaddock (dontCheck super.MemoTrie);
   metrics = dontCheck super.metrics;
   milena = dontCheck super.milena;
+  modular-arithmetic = dontCheck super.modular-arithmetic; # tests require a very old Glob (0.7.*)
   nats-queue = dontCheck super.nats-queue;
   netpbm = dontCheck super.netpbm;
   network = dontCheck super.network;
@@ -362,6 +356,7 @@ self: super: {
   optional = dontCheck super.optional;
   orgmode-parse = dontCheck super.orgmode-parse;
   os-release = dontCheck super.os-release;
+  pandoc-crossref = dontCheck super.pandoc-crossref;  # (most likely change when no longer 0.3.2.1) https://github.com/lierdakil/pandoc-crossref/issues/199
   persistent-redis = dontCheck super.persistent-redis;
   pipes-extra = dontCheck super.pipes-extra;
   pipes-websockets = dontCheck super.pipes-websockets;
@@ -377,6 +372,7 @@ self: super: {
   safecopy = dontCheck super.safecopy;
   sai-shape-syb = dontCheck super.sai-shape-syb;
   scp-streams = dontCheck super.scp-streams;
+  sdl2 = dontCheck super.sdl2; # the test suite needs an x server
   sdl2-ttf = dontCheck super.sdl2-ttf; # as of version 0.2.1, the test suite requires user intervention
   separated = dontCheck super.separated;
   shadowsocks = dontCheck super.shadowsocks;
@@ -490,6 +486,7 @@ self: super: {
 
   # Test suite won't compile against tasty-hunit 0.10.x.
   binary-parser = dontCheck super.binary-parser;
+  binary-parsers = dontCheck super.binary-parsers;
   bytestring-strict-builder = dontCheck super.bytestring-strict-builder;
   bytestring-tree-builder = dontCheck super.bytestring-tree-builder;
 
@@ -683,16 +680,17 @@ self: super: {
   # https://github.com/goldfirere/singletons/issues/122
   singletons = dontCheck super.singletons;
 
-  # https://github.com/fpco/stackage/issues/838
-  cryptonite = dontCheck super.cryptonite;
+  # Fix an aarch64 issue with cryptonite-0.25:
+  # https://github.com/haskell-crypto/cryptonite/issues/234
+  # This has been committed upstream, but there is, as of yet, no new release.
+  # Also, disable the test suite to avoid https://github.com/haskell-crypto/cryptonite/issues/260.
+  cryptonite = appendPatch (dontCheck super.cryptonite) (pkgs.fetchpatch {
+    url = https://github.com/haskell-crypto/cryptonite/commit/4622e5fc8ece82f4cf31358e31cd02cf020e558e.patch;
+    sha256 = "1m2d47ni4jbrpvxry50imj91qahr3r7zkqm157clrzlmw6gzpgnq";
+  });
 
   # We cannot build this package w/o the C library from <http://www.phash.org/>.
   phash = markBroken super.phash;
-
-  # https://github.com/deech/fltkhs/issues/16
-  # linking fails because the build doesn't pull in the libGLU_combined libraries
-  fltkhs = markBroken super.fltkhs;
-  fltkhs-fluid-examples = dontDistribute super.fltkhs-fluid-examples;
 
   # We get lots of strange compiler errors during the test suite run.
   jsaddle = dontCheck super.jsaddle;
@@ -704,9 +702,6 @@ self: super: {
     if pkgs.stdenv.isDarwin
     then appendConfigureFlag super.gtk "-fhave-quartz-gtk"
     else super.gtk;
-
-  # vaultenv is not available from Hackage.
-  vaultenv = self.callPackage ../tools/haskell/vaultenv { };
 
   # https://github.com/Philonous/hs-stun/pull/1
   # Remove if a version > 0.1.0.1 ever gets released.
@@ -895,6 +890,7 @@ self: super: {
   cryptohash-md5 = doJailbreak super.cryptohash-md5;
   text-short = doJailbreak super.text-short;
   gitHUD = dontCheck super.gitHUD;
+  githud = dontCheck super.githud;
 
   # https://github.com/aisamanra/config-ini/issues/12
   config-ini = dontCheck super.config-ini;
@@ -930,15 +926,13 @@ self: super: {
   text-icu = dontCheck super.text-icu;
 
   # https://github.com/haskell/cabal/issues/4969
-  haddock-library_1_4_4 = dontHaddock super.haddock-library_1_4_4;
-  haddock-api = super.haddock-api.override { haddock-library = self.haddock-library_1_4_4; };
+  # haddock-api = (super.haddock-api.overrideScope (self: super: {
+  #   haddock-library = self.haddock-library_1_6_0;
+  # })).override { hspec = self.hspec_2_4_8; };
 
   # Jailbreak "unix-compat >=0.1.2 && <0.5".
   # Jailbreak "graphviz >=2999.18.1 && <2999.20".
   darcs = overrideCabal super.darcs (drv: { preConfigure = "sed -i -e 's/unix-compat .*,/unix-compat,/' -e 's/fgl .*,/fgl,/' -e 's/graphviz .*,/graphviz,/' darcs.cabal"; });
-
-  # https://github.com/Twinside/Juicy.Pixels/issues/149
-  JuicyPixels = dontHaddock super.JuicyPixels;
 
   # aarch64 and armv7l fixes.
   happy = if (pkgs.stdenv.hostPlatform.isAarch32 || pkgs.stdenv.hostPlatform.isAarch64) then dontCheck super.happy else super.happy; # Similar to https://ghc.haskell.org/trac/ghc/ticket/13062
@@ -952,17 +946,11 @@ self: super: {
   # Tries to read a file it is not allowed to in the test suite
   load-env = dontCheck super.load-env;
 
-  # Add support for https://github.com/haskell-hvr/multi-ghc-travis.
-  multi-ghc-travis = self.callPackage ../tools/haskell/multi-ghc-travis {};
-
-  # https://github.com/yesodweb/Shelly.hs/issues/162
-  shelly = dontCheck super.shelly;
-
-  # https://github.com/simonmichael/hledger/issues/852
-  hledger-lib = appendPatch super.hledger-lib (pkgs.fetchpatch {
-    url = "https://github.com/simonmichael/hledger/commit/007b9f8caaf699852511634752a7d7c86f6adc67.patch";
-    sha256 = "1lfp29mi1qyrcr9nfjigbyric0xb9n4ann5w6sr0g5sanr4maqs2";
-    stripLen = 1;
+  # hledger needs a newer megaparsec version than we have in LTS 12.x.
+  hledger-lib = super.hledger-lib.overrideScope (self: super: {
+    cassava-megaparsec = self.cassava-megaparsec_2_0_0;
+    hspec-megaparsec = self.hspec-megaparsec_2_0_0;
+    megaparsec = self.megaparsec_7_0_4;
   });
 
   # Copy hledger man pages from data directory into the proper place. This code
@@ -990,7 +978,12 @@ self: super: {
       mkdir -p $out/share/info
       cp -v *.info* $out/share/info/
     '';
-  }));
+  })).overrideScope (self: super: {
+    cassava-megaparsec = self.cassava-megaparsec_2_0_0;
+    config-ini = self.config-ini_0_2_4_0;
+    hspec-megaparsec = self.hspec-megaparsec_2_0_0;
+    megaparsec = self.megaparsec_7_0_4;
+  });
   hledger-web = overrideCabal super.hledger-web (drv: {
     postInstall = ''
       for i in $(seq 1 9); do
@@ -1003,6 +996,9 @@ self: super: {
       cp -v *.info* $out/share/info/
     '';
   });
+
+  # https://github.com/haskell-rewriting/term-rewriting/issues/11
+  term-rewriting = dontCheck (doJailbreak super.term-rewriting);
 
   # https://github.com/nick8325/twee/pull/1
   twee-lib = dontHaddock super.twee-lib;
@@ -1089,22 +1085,19 @@ self: super: {
 
   # The test suite is broken. Break out of "base-compat >=0.9.3 && <0.10, hspec >=2.4.4 && <2.5".
   haddock-library = doJailbreak (dontCheck super.haddock-library);
-  haddock-library_1_6_0 = doJailbreak (dontCheck super.haddock-library_1_6_0);
+  # haddock-library_1_6_0 = doJailbreak (dontCheck super.haddock-library_1_6_0);
 
-  # cabal2nix requires hpack >= 0.29.6 but the LTS has hpack-0.28.2.
-  # Lets remove this once the LTS has upraded to 0.29.6.
-  hpack = super.hpack_0_29_7;
-
-  # The test suite does not know how to find the 'cabal2nix' binary.
+  # The tool needs a newer hpack version than the one mandated by LTS-12.x.
   # Also generate shell completions.
   cabal2nix = generateOptparseApplicativeCompletion "cabal2nix"
-    (overrideCabal super.cabal2nix (drv: {
-      preCheck = ''
-        export PATH="$PWD/dist/build/cabal2nix:$PATH"
-        export HOME="$TMPDIR/home"
-      '';
+    (super.cabal2nix.overrideScope (self: super: {
+      hpack = self.hpack_0_31_1;
+      yaml = self.yaml_0_11_0_0;
     }));
-
+  stack2nix = super.stack2nix.overrideScope (self: super: {
+    hpack = self.hpack_0_31_1;
+    yaml = self.yaml_0_11_0_0;
+  });
   # Break out of "aeson <1.3, temporary <1.3".
   stack = generateOptparseApplicativeCompletion "stack" (doJailbreak super.stack);
 
@@ -1139,10 +1132,7 @@ self: super: {
     })) ./patches/sexpr-0.2.1.patch;
 
   # Can be removed once yi-language >= 0.18 is in the LTS
-  yi-core = super.yi-core.override { yi-language = self.yi-language_0_18_0; };
-
-  # https://github.com/MarcWeber/hasktags/issues/52
-  hasktags = dontCheck super.hasktags;
+  yi-core = super.yi-core.overrideScope (self: super: { yi-language = self.yi-language_0_18_0; });
 
   # https://github.com/haskell/hoopl/issues/50
   hoopl = dontCheck super.hoopl;
@@ -1152,5 +1142,70 @@ self: super: {
 
   # Generate shell completions
   purescript = generateOptparseApplicativeCompletion "purs" super.purescript;
+
+  # https://github.com/NixOS/nixpkgs/issues/46467
+  safe-money-aeson = super.safe-money-aeson.overrideScope (self: super: { safe-money = self.safe-money_0_7; });
+  safe-money-store = super.safe-money-store.overrideScope (self: super: { safe-money = self.safe-money_0_7; });
+  safe-money-cereal = super.safe-money-cereal.overrideScope (self: super: { safe-money = self.safe-money_0_7; });
+  safe-money-serialise = super.safe-money-serialise.overrideScope (self: super: { safe-money = self.safe-money_0_7; });
+  safe-money-xmlbf = super.safe-money-xmlbf.overrideScope (self: super: { safe-money = self.safe-money_0_7; });
+
+  # https://github.com/adinapoli/mandrill/pull/52
+  mandrill = appendPatch super.mandrill (pkgs.fetchpatch {
+    url = https://github.com/adinapoli/mandrill/commit/30356d9dfc025a5f35a156b17685241fc3882c55.patch;
+    sha256 = "1qair09xs6vln3vsjz7sy4hhv037146zak4mq3iv6kdhmp606hqv";
+  });
+
+  # Can be removed once vinyl >= 0.10 is in the LTS.
+  Frames = super.Frames.overrideScope (self: super: { vinyl = self.vinyl_0_10_0; });
+
+  # https://github.com/Euterpea/Euterpea2/pull/22
+  Euterpea = overrideSrc super.Euterpea {
+    src = pkgs.fetchFromGitHub {
+      owner = "Euterpea";
+      repo = "Euterpea2";
+      rev = "6f49b790adfb8b65d95a758116c20098fb0cd34c";
+      sha256 = "0qz1svb96n42nmig16vyphwxas34hypgayvwc91ri7w7xd6yi1ba";
+    };
+  };
+
+  # https://github.com/kcsongor/generic-lens/pull/60
+  generic-lens = appendPatch super.generic-lens (pkgs.fetchpatch {
+    url = https://github.com/kcsongor/generic-lens/commit/d9af1ec22785d6c21e928beb88fc3885c6f05bed.patch;
+    sha256 = "0ljwcha9l52gs5bghxq3gbzxfqmfz3hxxcg9arjsjw8f7kw946xq";
+  });
+
+  xmonad-extras = doJailbreak super.xmonad-extras;
+
+  arbtt = doJailbreak super.arbtt;
+
+  # https://github.com/danfran/cabal-macosx/issues/13
+  cabal-macosx = dontCheck super.cabal-macosx;
+
+  # https://github.com/DanielG/cabal-helper/issues/59
+  cabal-helper = doJailbreak super.cabal-helper;
+
+  # TODO(Profpatsch): factor out local nix store setup from
+  # lib/tests/release.nix and use that for the tests of libnix
+  # libnix = overrideCabal super.libnix (old: {
+  #   testToolDepends = old.testToolDepends or [] ++ [ pkgs.nix ];
+  # });
+  libnix = dontCheck super.libnix;
+
+  # https://github.com/jmillikin/chell/issues/1
+  chell = super.chell.override { patience = self.patience_0_1_1; };
+
+  # The test suite tries to mess with ALSA, which doesn't work in the build sandbox.
+  xmobar = dontCheck super.xmobar;
+
+  # https://github.com/mgajda/json-autotype/issues/25
+  json-autotype = dontCheck super.json-autotype;
+
+  # https://github.com/kazu-yamamoto/iproute/issues/43
+  appar = self.appar_0_1_7;
+
+  # The LTS-12.x version doesn't suffice to build hlint, hoogle, etc.
+  hlint = super.hlint.overrideScope (self: super: { haskell-src-exts = self.haskell-src-exts_1_21_0; });
+  hoogle = super.hoogle.overrideScope (self: super: { haskell-src-exts = self.haskell-src-exts_1_21_0; });
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super

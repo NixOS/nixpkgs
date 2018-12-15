@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, buildPerlPackage, makeWrapper, gawk
+{ stdenv, fetchFromGitHub, makeWrapper, gawk
 , makeFontsConf, freefont_ttf, gnuplot, perl, perlPackages
 }:
 
@@ -8,15 +8,15 @@ let
 
 in
 
-buildPerlPackage rec {
+perlPackages.buildPerlPackage rec {
   name = "feedgnuplot-${version}";
-  version = "1.49";
+  version = "1.51";
 
   src = fetchFromGitHub {
     owner = "dkogan";
     repo = "feedgnuplot";
     rev = "v${version}";
-    sha256 = "1bjnx36rsxlj845w9apvdjpza8vd9rbs3dlmgvky6yznrwa6sm02";
+    sha256 = "0npk2l032cnmibjj5zf3ii09mpxciqn32lx6g5bal91bkxwn7r5i";
   };
 
   outputs = [ "out" ];

@@ -1,39 +1,42 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, zlib, pkgconfig, libuuid }:
+{ stdenv, fetchurl, autoreconfHook, pkgconfig, zlib, libuuid, libossp_uuid, CoreFoundation, IOKit }:
 
 stdenv.mkDerivation rec{
-  version = "1.10.0";
+  version = "1.11.1";
   name = "netdata-${version}";
 
-  src = fetchFromGitHub {
-    rev = "v${version}";
-    owner = "firehol";
-    repo = "netdata";
-    sha256 = "02spfisabjkkgd9fairldlf84n83vbv2xafg0g5jrpfa972pjl9r";
+  src = fetchurl {
+    url = "https://github.com/netdata/netdata/releases/download/v${version}/netdata-v${version}.tar.gz";
+    sha256 = "0djph4586cc14vavj6za6k255lscf3b415dx8k45q3nsc2hb4l01";
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
-  buildInputs = [ zlib libuuid ];
+  buildInputs = [ zlib ]
+    ++ (if stdenv.isDarwin then [ libossp_uuid CoreFoundation IOKit ] else [ libuuid ]);
 
-  # Build will fail trying to create /var/{cache,lib,log}/netdata without this
-  postPatch = ''
-   sed -i '/dist_.*_DATA = \.keep/d' src/Makefile.am
+  patches = [
+    ./no-files-in-etc-and-var.patch
+  ];
+
+  postInstall = stdenv.lib.optionalString (!stdenv.isDarwin) ''
+    # rename this plugin so netdata will look for setuid wrapper
+    mv $out/libexec/netdata/plugins.d/apps.plugin \
+      $out/libexec/netdata/plugins.d/apps.plugin.org
   '';
 
   configureFlags = [
     "--localstatedir=/var"
+    "--sysconfdir=/etc"
   ];
 
-  # App fails on runtime if the default config file is not detected
-  # The upstream installer does prepare an empty file too
-  postInstall = ''
-    touch $out/etc/netdata/netdata.conf
+  postFixup = ''
+    rm -r $out/sbin
   '';
 
   meta = with stdenv.lib; {
     description = "Real-time performance monitoring tool";
-    homepage = http://netdata.firehol.org;
+    homepage = https://my-netdata.io/;
     license = licenses.gpl3;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = [ maintainers.lethalman ];
   };
 

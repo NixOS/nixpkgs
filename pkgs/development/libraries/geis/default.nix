@@ -7,7 +7,7 @@
 , evemu
 , frame
 , gdk_pixbuf
-, gobjectIntrospection
+, gobject-introspection
 , grail
 , gtk3
 , libX11
@@ -29,13 +29,15 @@ stdenv.mkDerivation rec {
     sha256 = "1svhbjibm448ybq6gnjjzj0ak42srhihssafj0w402aj71lgaq4a";
   };
 
-  NIX_CFLAGS_COMPILE = "-Wno-format -Wno-misleading-indentation -Wno-error";
+  NIX_CFLAGS_COMPILE = [ "-Wno-error=misleading-indentation" "-Wno-error=pointer-compare" ];
+
+  hardeningDisable = [ "format" ];
 
   pythonPath = with python3Packages;
     [ pygobject3  ];
 
   nativeBuildInputs = [ pkgconfig wrapGAppsHook python3Packages.wrapPython];
-  buildInputs = [ atk dbus evemu frame gdk_pixbuf gobjectIntrospection grail
+  buildInputs = [ atk dbus evemu frame gdk_pixbuf gobject-introspection grail
     gtk3 libX11 libXext libXi libXtst pango python3Packages.python xorgserver
   ];
 

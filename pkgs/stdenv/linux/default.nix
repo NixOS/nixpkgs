@@ -92,7 +92,6 @@ let
              else lib.makeOverridable (import ../../build-support/cc-wrapper) {
           name = "${name}-gcc-wrapper";
           nativeTools = false;
-          propagateDoc = false;
           nativeLibc = false;
           buildPackages = lib.optionalAttrs (prevStage ? stdenv) {
             inherit (prevStage) stdenv;
@@ -189,7 +188,9 @@ in
 
     # Rebuild binutils to use from stage2 onwards.
     overrides = self: super: {
-      binutils = super.binutils_nogold;
+      binutils-unwrapped = super.binutils-unwrapped.override {
+        gold = false;
+      };
       inherit (prevStage)
         ccWrapperStdenv
         gcc-unwrapped coreutils gnugrep;
@@ -346,8 +347,8 @@ in
       # Mainly avoid reference to bootstrap tools
       allowedRequisites = with prevStage; with lib;
         # Simple executable tools
-        concatMap (p: [ (getBin p) (getLib p) ])
-          [ gzip bzip2 xz bash binutils.bintools coreutils diffutils findutils
+        concatMap (p: [ (getBin p) (getLib p) ]) [
+            gzip bzip2 xz bash binutils.bintools coreutils diffutils findutils
             gawk gnumake gnused gnutar gnugrep gnupatch patchelf ed paxctl
           ]
         # Library dependencies

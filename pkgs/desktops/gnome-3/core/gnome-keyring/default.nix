@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   version = "3.28.2";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-keyring/${gnome3.versionBranch version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/gnome-keyring/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
     sha256 = "0sk4las4ji8wv9nx8mldzqccmpmkvvr9pdwv9imj26r10xyin5w1";
   };
 
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     patchShebangs build
   '';
 
-  doCheck = true;
+  doCheck = !stdenv.isi686; # https://github.com/NixOS/nixpkgs/issues/51121
   # In 3.20.1, tests do not support Python 3
   checkInputs = [ dbus python2 ];
 

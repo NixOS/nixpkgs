@@ -1,6 +1,10 @@
 { stdenv, fetchurl, makeFontsConf, makeWrapper
 , cairo, coreutils, fontconfig, freefont_ttf
-, glib, gmp, gtk3, libedit, libffi, libjpeg
+, glib, gmp
+, gtk3
+, libedit, libffi
+, libiconv
+, libjpeg
 , libpng, libtool, mpfr, openssl, pango, poppler
 , readline, sqlite
 , disableDocs ? false
@@ -36,7 +40,7 @@ in
 
 stdenv.mkDerivation rec {
   name = "racket-${version}";
-  version = "7.0";
+  version = "7.1"; # always change at once with ./minimal.nix
 
   src = (stdenv.lib.makeOverridable ({ name, sha256 }:
     fetchurl rec {
@@ -45,7 +49,7 @@ stdenv.mkDerivation rec {
     }
   )) {
     inherit name;
-    sha256 = "1glv5amsp9xp480d4yr63hhm9kkyav06yl3a6p489nkr4cln0j9a";
+    sha256 = "180z0z6srzyipi9wfnbh61nbvzxr5d1cls7wxapv6fw92y52jwz9";
   };
 
   FONTCONFIG_FILE = fontsConf;
@@ -56,7 +60,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [ fontconfig libffi libtool makeWrapper sqlite gsettings-desktop-schemas gtk3 ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ CoreFoundation ];
+    ++ stdenv.lib.optionals stdenv.isDarwin [ libiconv CoreFoundation ];
 
   preConfigure = ''
     unset AR
@@ -98,6 +102,6 @@ stdenv.mkDerivation rec {
     homepage = http://racket-lang.org/;
     license = licenses.lgpl3;
     maintainers = with maintainers; [ kkallio henrytill vrthra ];
-    platforms = [ "x86_64-linux" ];
+    platforms = [ "x86_64-darwin" "x86_64-linux" ];
   };
 }

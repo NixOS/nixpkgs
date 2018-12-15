@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, meson, ninja, pkgconfig, wrapGAppsHook
+{ stdenv, fetchurl, meson, ninja, pkgconfig, python3, wrapGAppsHook
 , gettext, gnome3, glib, gtk, libpeas
 , gnome-online-accounts, gsettings-desktop-schemas
 , evolution-data-server, libxml2, libsoup, libical, rest, json-glib }:
@@ -10,12 +10,12 @@ in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
     sha256 = "08ygqbib72jlf9y0a16k54zz51sncpq2wa18wp81v46q8301ymy7";
   };
 
   nativeBuildInputs = [
-    meson ninja pkgconfig gettext wrapGAppsHook
+    meson ninja pkgconfig gettext python3 wrapGAppsHook
   ];
   buildInputs = [
     glib gtk libpeas gnome-online-accounts

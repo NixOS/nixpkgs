@@ -2,6 +2,7 @@
 , libgtkhtml, gtkhtml, libgnomeprint, goffice, enchant, gettext, libbonoboui
 , intltool, perl, guile, slibGuile, swig, isocodes, bzip2, makeWrapper, libglade
 , libgsf, libart_lgpl, perlPackages, aqbanking, gwenhywfar, hicolor-icon-theme
+, pcre
 }:
 
 /* If you experience GConf errors when running GnuCash on NixOS, see
@@ -23,7 +24,7 @@ stdenv.mkDerivation rec {
     libgnomeprint goffice enchant gettext intltool perl guile slibGuile
     swig isocodes bzip2 makeWrapper libofx libglade libgsf libart_lgpl
     perlPackages.DateManip perlPackages.FinanceQuote aqbanking gwenhywfar
-    hicolor-icon-theme
+    hicolor-icon-theme pcre
   ];
   propagatedUserEnvPkgs = [ gconf ];
 

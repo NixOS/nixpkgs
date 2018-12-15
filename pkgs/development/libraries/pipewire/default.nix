@@ -1,10 +1,10 @@
 { stdenv, fetchFromGitHub, meson, ninja, pkgconfig, doxygen, graphviz, valgrind
-, glib, dbus, gst_all_1, v4l_utils, alsaLib, ffmpeg, libjack2, udev, libva, xorg
+, glib, dbus, gst_all_1, libv4l, alsaLib, ffmpeg, libjack2, udev, libva, xorg
 , sbc, SDL2, makeFontsConf, freefont_ttf
 }:
 
 let
-  version = "0.1.9";
+  version = "0.2.3";
 
   fontsConf = makeFontsConf {
     fontDirectories = [ freefont_ttf ];
@@ -16,22 +16,22 @@ in stdenv.mkDerivation rec {
     owner = "PipeWire";
     repo = "pipewire";
     rev = version;
-    sha256 = "0r9mgwbggnnijhdz49fnv0qdka364xn1h8yml2jakyqpfrm3i2nm";
+    sha256 = "1y04brfi5bv4y0hdyqzrcbayr674njf6a5hiwjfv2yi6lazkqv1k";
   };
 
-  outputs = [ "out" "dev" "doc" ];
+  outputs = [ "out" "lib" "dev" "doc" ];
 
   nativeBuildInputs = [
     meson ninja pkgconfig doxygen graphviz valgrind
   ];
   buildInputs = [
-    glib dbus gst_all_1.gst-plugins-base gst_all_1.gstreamer v4l_utils
+    glib dbus gst_all_1.gst-plugins-base gst_all_1.gstreamer libv4l
     alsaLib ffmpeg libjack2 udev libva xorg.libX11 sbc SDL2
   ];
 
   mesonFlags = [
-    "-Denable_docs=true"
-    "-Denable_gstreamer=true"
+    "-Ddocs=true"
+    "-Dgstreamer=true"
   ];
 
   PKG_CONFIG_SYSTEMD_SYSTEMDUSERUNITDIR = "${placeholder "out"}/lib/systemd/user";

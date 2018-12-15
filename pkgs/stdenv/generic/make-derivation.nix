@@ -41,6 +41,7 @@ rec {
 
     # Configure Phase
     , configureFlags ? []
+    , cmakeFlags ? []
     , # Target is not included by default because most programs don't care.
       # Including it then would cause needless mass rebuilds.
       #
@@ -64,6 +65,8 @@ rec {
     , pos ? # position used in error messages and for meta.position
         (if attrs.meta.description or null != null
           then builtins.unsafeGetAttrPos "description" attrs.meta
+          else if attrs.version or null != null
+          then builtins.unsafeGetAttrPos "version" attrs
           else builtins.unsafeGetAttrPos "name" attrs)
     , separateDebugInfo ? false
     , outputs ? [ "out" ]
@@ -78,21 +81,26 @@ rec {
     , ... } @ attrs:
 
     let
+      computedName = if name != "" then name else "${attrs.pname}-${attrs.version}";
+
       # TODO(@oxij, @Ericson2314): This is here to keep the old semantics, remove when
       # no package has `doCheck = true`.
       doCheck' = doCheck && stdenv.hostPlatform == stdenv.buildPlatform;
       doInstallCheck' = doInstallCheck && stdenv.hostPlatform == stdenv.buildPlatform;
 
-      outputs' = outputs ++ lib.optional separateDebugInfo "debug";
+      separateDebugInfo' = separateDebugInfo && stdenv.hostPlatform.isLinux;
+      outputs' = outputs ++ lib.optional separateDebugInfo' "debug";
 
       fixedOutputDrv = attrs ? outputHash;
       noNonNativeDeps = builtins.length (depsBuildTarget ++ depsBuildTargetPropagated
                                       ++ depsHostHost ++ depsHostHostPropagated
                                       ++ buildInputs ++ propagatedBuildInputs
                                       ++ depsTargetTarget ++ depsTargetTargetPropagated) == 0;
-      runtimeSensativeIfFixedOutput = fixedOutputDrv -> !noNonNativeDeps;
+      dontAddHostSuffix = attrs ? outputHash && !noNonNativeDeps || stdenv.cc == null;
       supportedHardeningFlags = [ "fortify" "stackprotector" "pie" "pic" "strictoverflow" "format" "relro" "bindnow" ];
-      defaultHardeningFlags = lib.remove "pie" supportedHardeningFlags;
+      defaultHardeningFlags = if stdenv.hostPlatform.isMusl
+                              then supportedHardeningFlags
+                              else lib.remove "pie" supportedHardeningFlags;
       enabledHardeningOptions =
         if builtins.elem "all" hardeningDisable
         then []
@@ -116,7 +124,7 @@ rec {
         [
           (map (drv: drv.__spliced.buildBuild or drv) depsBuildBuild)
           (map (drv: drv.nativeDrv or drv) nativeBuildInputs
-             ++ lib.optional separateDebugInfo ../../build-support/setup-hooks/separate-debug-info.sh
+             ++ lib.optional separateDebugInfo' ../../build-support/setup-hooks/separate-debug-info.sh
              ++ lib.optional stdenv.hostPlatform.isWindows ../../build-support/setup-hooks/win-dll-link.sh)
           (map (drv: drv.__spliced.buildTarget or drv) depsBuildTarget)
         ]
@@ -174,12 +182,12 @@ rec {
         // {
           # A hack to make `nix-env -qa` and `nix search` ignore broken packages.
           # TODO(@oxij): remove this assert when something like NixOS/nix#1771 gets merged into nix.
-          name = assert validity.handled && (separateDebugInfo -> stdenv.hostPlatform.isLinux); name + lib.optionalString
+          name = assert validity.handled; computedName + lib.optionalString
             # Fixed-output derivations like source tarballs shouldn't get a host
             # suffix. But we have some weird ones with run-time deps that are
             # just used for their side-affects. Those might as well since the
             # hash can't be the same. See #32986.
-            (stdenv.hostPlatform != stdenv.buildPlatform && runtimeSensativeIfFixedOutput)
+            (stdenv.hostPlatform != stdenv.buildPlatform && !dontAddHostSuffix)
             ("-" + stdenv.hostPlatform.config);
 
           builder = attrs.realBuilder or stdenv.shell;
@@ -225,6 +233,19 @@ rec {
           inherit doCheck doInstallCheck;
 
           inherit outputs;
+        } // lib.optionalAttrs (stdenv.hostPlatform != stdenv.buildPlatform) {
+          cmakeFlags =
+            (/**/ if lib.isString cmakeFlags then [cmakeFlags]
+             else if cmakeFlags == null      then []
+             else                                     cmakeFlags)
+          ++ lib.optional (stdenv.hostPlatform.uname.system != null) "-DCMAKE_SYSTEM_NAME=${stdenv.hostPlatform.uname.system}"
+          ++ lib.optional (stdenv.hostPlatform.uname.processor != null) "-DCMAKE_SYSTEM_PROCESSOR=${stdenv.hostPlatform.uname.processor}"
+          ++ lib.optional (stdenv.hostPlatform.uname.release != null) "-DCMAKE_SYSTEM_VERSION=${stdenv.hostPlatform.release}"
+          ++ lib.optional (stdenv.buildPlatform.uname.system != null) "-DCMAKE_HOST_SYSTEM_NAME=${stdenv.buildPlatform.uname.system}"
+          ++ lib.optional (stdenv.buildPlatform.uname.processor != null) "-DCMAKE_HOST_SYSTEM_PROCESSOR=${stdenv.buildPlatform.uname.processor}"
+          ++ lib.optional (stdenv.buildPlatform.uname.release != null) "-DCMAKE_HOST_SYSTEM_VERSION=${stdenv.buildPlatform.uname.release}";
+        } // lib.optionalAttrs (attrs.enableParallelBuilding or false) {
+          enableParallelChecking = attrs.enableParallelChecking or true;
         } // lib.optionalAttrs (hardeningDisable != [] || hardeningEnable != []) {
           NIX_HARDENING_ENABLE = enabledHardeningOptions;
         } // lib.optionalAttrs (stdenv.buildPlatform.isDarwin) {
@@ -257,7 +278,7 @@ rec {
       meta = {
           # `name` above includes cross-compilation cruft (and is under assert),
           # lets have a clean always accessible version here.
-          inherit name;
+          name = computedName;
 
           # If the packager hasn't specified `outputsToInstall`, choose a default,
           # which is the name of `p.bin or p.out or p`;

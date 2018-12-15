@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, buildPackages, perl
-, withCryptodev ? false, cryptodevHeaders
+{ stdenv, fetchurl, buildPackages, perl, coreutils
+, withCryptodev ? false, cryptodev
 , enableSSL2 ? false
 , static ? false
 }:
@@ -7,7 +7,7 @@
 with stdenv.lib;
 
 let
-  common = args@{ version, sha256, patches ? [] }: stdenv.mkDerivation rec {
+  common = args@{ version, sha256, patches ? [], withDocs ? false }: stdenv.mkDerivation rec {
     name = "openssl-${version}";
 
     src = fetchurl {
@@ -15,13 +15,7 @@ let
       inherit sha256;
     };
 
-    patches =
-      (args.patches or [])
-      ++ [ ./nix-ssl-cert-file.patch ]
-      ++ optional (versionOlder version "1.1.0")
-          (if stdenv.hostPlatform.isDarwin then ./use-etc-ssl-certs-darwin.patch else ./use-etc-ssl-certs.patch)
-      ++ optional (versionOlder version "1.0.2" && stdenv.hostPlatform.isDarwin)
-           ./darwin-arch.patch;
+    inherit patches;
 
     postPatch = ''
       patchShebangs Configure
@@ -31,24 +25,28 @@ let
         substituteInPlace "$a" \
           --replace /bin/rm rm
       done
+    '' + optionalString (versionAtLeast version "1.1.1") ''
+      substituteInPlace config --replace '/usr/bin/env' '${coreutils}/bin/env'
     '' + optionalString (versionAtLeast version "1.1.0" && stdenv.hostPlatform.isMusl) ''
       substituteInPlace crypto/async/arch/async_posix.h \
         --replace '!defined(__ANDROID__) && !defined(__OpenBSD__)' \
                   '!defined(__ANDROID__) && !defined(__OpenBSD__) && 0'
     '';
 
-    outputs = [ "bin" "dev" "out" "man" ];
+    outputs = [ "bin" "dev" "out" "man" ] ++ optional withDocs "doc";
     setOutputFlags = false;
     separateDebugInfo = stdenv.hostPlatform.isLinux;
 
     nativeBuildInputs = [ perl ];
-    buildInputs = stdenv.lib.optional withCryptodev cryptodevHeaders;
+    buildInputs = stdenv.lib.optional withCryptodev cryptodev;
 
     # TODO(@Ericson2314): Improve with mass rebuild
     configurePlatforms = [];
     configureScript = {
         "x86_64-darwin"  = "./Configure darwin64-x86_64-cc";
         "x86_64-solaris" = "./Configure solaris64-x86_64-gcc";
+        "armv6l-linux" = "./Configure linux-armv4 -march=armv6";
+        "armv7l-linux" = "./Configure linux-armv4 -march=armv7-a";
       }.${stdenv.hostPlatform.system} or (
         if stdenv.hostPlatform == stdenv.buildPlatform
           then "./config"
@@ -89,6 +87,7 @@ let
     '' +
     ''
       mkdir -p $bin
+      substituteInPlace $out/bin/c_rehash --replace ${buildPackages.perl} ${perl}
       mv $out/bin $bin/
 
       mkdir $dev
@@ -121,13 +120,22 @@ let
 in {
 
   openssl_1_0_2 = common {
-    version = "1.0.2p";
-    sha256 = "003xh9f898i56344vpvpxxxzmikivxig4xwlm7vbi7m8n43qxaah";
+    version = "1.0.2q";
+    sha256 = "115nisqy7kazbg6br2wrcra9nphyph1l4dgp563b9cf2rv5wyi2p";
+    patches = [
+      ./1.0.2/nix-ssl-cert-file.patch
+
+      (if stdenv.hostPlatform.isDarwin
+       then ./1.0.2/use-etc-ssl-certs-darwin.patch
+       else ./1.0.2/use-etc-ssl-certs.patch)
+    ];
   };
 
-  openssl_1_1_0 = common {
-    version = "1.1.0i";
-    sha256 = "16fgaf113p6s5ixw227sycvihh3zx6f6rf0hvjjhxk68m12cigzb";
+  openssl_1_1 = common {
+    version = "1.1.1a";
+    sha256 = "0hcz7znzznbibpy3iyyhvlqrq44y88plxwdj32wjzgbwic7i687w";
+    patches = [ ./1.1/nix-ssl-cert-file.patch ];
+    withDocs = true;
   };
 
 }

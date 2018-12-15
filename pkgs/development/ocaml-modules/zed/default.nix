@@ -1,14 +1,14 @@
-{ stdenv, fetchzip, ocaml, findlib, ocamlbuild, camomile, react, jbuilder }:
+{ stdenv, fetchzip, ocaml, findlib, ocamlbuild, camomile, react, dune }:
 
 let param =
   if stdenv.lib.versionAtLeast ocaml.version "4.02" then
   {
     version = "1.6";
     sha256 = "00hhxcjf3bj3w2qm8nzs9x6vrqkadf4i0277s5whzy2rmiknj63v";
-    buildInputs = [ jbuilder ];
+    buildInputs = [ dune ];
     extra = {
-     buildPhase = "jbuilder build -p zed";
-     inherit (jbuilder) installPhase; };
+     buildPhase = "dune build -p zed";
+     inherit (dune) installPhase; };
   } else {
     version = "1.4";
     sha256 = "0d8qfy0qiydrrqi8qc9rcwgjigql6vx9gl4zp62jfz1lmjgb2a3w";

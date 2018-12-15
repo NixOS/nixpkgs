@@ -1,11 +1,11 @@
 { fetchurl, stdenv, libcdio, zlib, bzip2, readline, acl, attr, libiconv }:
 
 stdenv.mkDerivation rec {
-  name = "xorriso-1.4.8";
+  name = "xorriso-1.5.0";
 
   src = fetchurl {
     url = "mirror://gnu/xorriso/${name}.tar.gz";
-    sha256 = "10c44yr3dpmwxa7rf23mwfsy1bahny3jpcg9ig0xjv090jg0d0pc";
+    sha256 = "0aq6lvlwlkxz56l5sbvgycr6j5c82ch2bv6zrnc2345ibfpafgx9";
   };
 
   doCheck = true;
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
     license = licenses.gpl3Plus;
 
-    homepage = http://www.gnu.org/software/xorriso/;
+    homepage = https://www.gnu.org/software/xorriso/;
 
     maintainers = [ maintainers.vrthra ];
     platforms = platforms.unix;

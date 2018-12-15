@@ -1,18 +1,25 @@
 {stdenv, fetchurl}:
 stdenv.mkDerivation rec {
   name = "nauty-${version}";
-  version = "26r10";
+  version = "26r11";
   src = fetchurl {
     url = "http://pallini.di.uniroma1.it/nauty${version}.tar.gz";
-    sha256 = "16pdklh066z6mx424wkisr88fz9divn2caj7ggs03wy3y848spq6";
+    sha256 = "05z6mk7c31j70md83396cdjmvzzip1hqb88pfszzc6k4gy8h3m2y";
   };
+  outputs = [ "out" "dev" ];
   buildInputs = [];
   installPhase = ''
-    mkdir -p "$out"/{bin,share/doc/nauty}
+    mkdir -p "$out"/{bin,share/doc/nauty} "$dev"/{lib,include/nauty}
 
-    cp $(find . -type f -perm -111 \! -name '*.*' ) "$out/bin"
+    find . -type f -perm -111 \! -name '*.*' \! -name configure -exec cp '{}' "$out/bin" \;
     cp [Rr][Ee][Aa][Dd]* COPYRIGHT This* [Cc]hange* "$out/share/doc/nauty"
+
+    cp *.h $dev/include/nauty
+    for i in *.a; do
+      cp "$i" "$dev/lib/lib$i";
+    done
   '';
+  checkTarget = "checks";
   meta = {
     inherit version;
     description = ''Programs for computing automorphism groups of graphs and digraphs'';

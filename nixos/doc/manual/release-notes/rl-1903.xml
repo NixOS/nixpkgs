@@ -1,0 +1,369 @@
+<section xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         version="5.0"
+         xml:id="sec-release-19.03">
+ <title>Release 19.03 (“Koi”, 2019/03/??)</title>
+
+ <section xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         version="5.0"
+         xml:id="sec-release-19.03-highlights">
+  <title>Highlights</title>
+
+  <para>
+   In addition to numerous new and upgraded packages, this release has the
+   following highlights:
+  </para>
+
+  <itemizedlist>
+   <listitem>
+    <para>
+    The default Python 3 interpreter is now CPython 3.7 instead of CPython 3.6.
+    </para>
+   </listitem>
+  </itemizedlist>
+ </section>
+
+ <section xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         version="5.0"
+         xml:id="sec-release-19.03-new-services">
+  <title>New Services</title>
+
+  <para>
+   The following new services were added since the last release:
+  </para>
+
+  <itemizedlist>
+   <listitem>
+    <para>
+     <literal>./programs/nm-applet.nix</literal>
+    </para>
+   </listitem>
+  </itemizedlist>
+ </section>
+
+ <section xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         version="5.0"
+         xml:id="sec-release-19.03-incompatibilities">
+  <title>Backward Incompatibilities</title>
+
+  <para>
+   When upgrading from a previous release, please be aware of the following
+   incompatible changes:
+  </para>
+
+  <itemizedlist>
+   <listitem>
+    <para>
+     The minimum version of Nix required to evaluate Nixpkgs is now 2.0.
+    </para>
+    <itemizedlist>
+     <listitem>
+      <para>
+       For users of NixOS 18.03 and 19.03, NixOS defaults to Nix 2.0, but
+       supports using Nix 1.11 by setting <literal>nix.package =
+       pkgs.nix1;</literal>. If this option is set to a Nix 1.11 package, you
+       will need to either unset the option or upgrade it to Nix 2.0.
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       For users of NixOS 17.09, you will first need to upgrade Nix by setting
+       <literal>nix.package = pkgs.nixStable2;</literal> and run
+       <command>nixos-rebuild switch</command> as the <literal>root</literal>
+       user.
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       For users of a daemon-less Nix installation on Linux or macOS, you can
+       upgrade Nix by running <command>curl https://nixos.org/nix/install |
+       sh</command>, or prior to doing a channel update, running
+       <command>nix-env -iA nix</command>.
+      </para>
+      <para>
+       If you have already run a channel update and Nix is no longer able to
+       evaluate Nixpkgs, the error message printed should provide adequate
+       directions for upgrading Nix.
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       For users of the Nix daemon on macOS, you can upgrade Nix by running
+       <command>sudo -i sh -c 'nix-channel --update &amp;&amp; nix-env -iA
+       nixpkgs.nix'; sudo launchctl stop org.nixos.nix-daemon; sudo launchctl
+       start org.nixos.nix-daemon</command>.
+      </para>
+     </listitem>
+    </itemizedlist>
+   </listitem>
+   <listitem>
+    <para>
+      The Syncthing state and configuration data has been moved from
+      <varname>services.syncthing.dataDir</varname> to the newly defined
+      <varname>services.syncthing.configDir</varname>, which default to
+      <literal>/var/lib/syncthing/.config/syncthing</literal>.
+      This change makes possible to share synced directories using ACLs
+      without Syncthing resetting the permission on every start.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+      The <literal>ntp</literal> module now has sane default restrictions.
+      If you're relying on the previous defaults, which permitted all queries
+      and commands from all firewall-permitted sources, you can set
+      <varname>services.ntp.restrictDefault</varname> and
+      <varname>services.ntp.restrictSource</varname> to
+      <literal>[]</literal>.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     Package <varname>rabbitmq_server</varname> is renamed to
+     <varname>rabbitmq-server</varname>.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     The <literal>light</literal> module no longer uses setuid binaries, but
+     udev rules. As a consequence users of that module have to belong to the
+     <literal>video</literal> group in order to use the executable (i.e.
+     <literal>users.users.yourusername.extraGroups = ["video"];</literal>).
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     Buildbot now supports Python 3 and its packages have been moved to
+     <literal>pythonPackages</literal>. The options
+     <option>services.buildbot-master.package</option> and
+     <option>services.buildbot-worker.package</option> can be used to select
+     the Python 2 or 3 version of the package.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+      Options
+      <literal>services.znc.confOptions.networks.<replaceable>name</replaceable>.userName</literal> and
+      <literal>services.znc.confOptions.networks.<replaceable>name</replaceable>.modulePackages</literal>
+      were removed. They were never used for anything and can therefore safely be removed.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     Package <literal>wasm</literal> has been renamed <literal>proglodyte-wasm</literal>. The package
+     <literal>wasm</literal> will be pointed to <literal>ocamlPackages.wasm</literal> in 19.09, so
+     make sure to update your configuration if you want to keep <literal>proglodyte-wasm</literal>
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     When the <literal>nixpkgs.pkgs</literal> option is set, NixOS will no
+     longer ignore the <literal>nixpkgs.overlays</literal> option. The old
+     behavior can be recovered by setting <literal>nixpkgs.overlays =
+     lib.mkForce [];</literal>.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     OpenSMTPD has been upgraded to version 6.4.0p1. This release makes
+     backwards-incompatible changes to the configuration file format. See
+     <command>man smtpd.conf</command> for more information on the new file
+     format.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     The versioned <varname>postgresql</varname> have been renamed to use
+     underscore number seperators. For example, <varname>postgresql96</varname>
+     has been renamed to <varname>postgresql_9_6</varname>.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     Package <literal>consul-ui</literal> and passthrough <literal>consul.ui</literal> have been removed.
+     The package <literal>consul</literal> now uses upstream releases that vendor the UI into the binary.
+     See <link xlink:href="https://github.com/NixOS/nixpkgs/pull/48714#issuecomment-433454834">#48714</link>
+     for details.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+      Slurm introduces the new option
+      <literal>services.slurm.stateSaveLocation</literal>,
+      which is now set to <literal>/var/spool/slurm</literal> by default
+      (instead of <literal>/var/spool</literal>).
+      Make sure to move all files to the new directory or to set the option accordingly.
+    </para>
+    <para>
+      The slurmctld now runs as user <literal>slurm</literal> instead of <literal>root</literal>.
+      If you want to keep slurmctld running as <literal>root</literal>, set
+      <literal>services.slurm.user = root</literal>.
+    </para>
+    <para>
+      The options <literal>services.slurm.nodeName</literal> and
+      <literal>services.slurm.partitionName</literal> are now sets of
+      strings to correctly reflect that fact that each of these
+      options can occour more than once in the configuration.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+      The <literal>solr</literal> package has been upgraded from 4.10.3 to 7.5.0 and has undergone
+      some major changes. The <literal>services.solr</literal> module has been updated to reflect
+      these changes. Please review http://lucene.apache.org/solr/ carefully before upgrading.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     Package <literal>ckb</literal> is renamed to <literal>ckb-next</literal>,
+     and options <literal>hardware.ckb.*</literal> are renamed to
+     <literal>hardware.ckb-next.*</literal>.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     The option <literal>services.xserver.displayManager.job.logToFile</literal> which was
+     previously set to <literal>true</literal> when using the display managers
+     <literal>lightdm</literal>, <literal>sddm</literal> or <literal>xpra</literal> has been
+     reset to the default value (<literal>false</literal>).
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     Network interface indiscriminate NixOS firewall options
+     (<literal>networking.firewall.allow*</literal>) are now preserved when also
+     setting interface specific rules such as <literal>networking.firewall.interfaces.en0.allow*</literal>.
+     These rules continue to use the pseudo device "default"
+     (<literal>networking.firewall.interfaces.default.*</literal>), and assigning
+     to this pseudo device will override the (<literal>networking.firewall.allow*</literal>)
+     options.
+   </para>
+  </listitem>
+  <listitem>
+   <para>
+     The <literal>nscd</literal> service now disables all caching of
+     <literal>passwd</literal> and <literal>group</literal> databases by
+     default. This was interferring with the correct functioning of the
+     <literal>libnss_systemd.so</literal> module which is used by
+     <literal>systemd</literal> to manage uids and usernames in the presence of
+     <literal>DynamicUser=</literal> in systemd services.  This was already the
+     default behaviour in presence of <literal>services.sssd.enable =
+       true</literal> because nscd caching would interfere with
+     <literal>sssd</literal> in unpredictable ways as well.  Because we're
+     using nscd not for caching, but for convincing glibc to find NSS modules
+     in the nix store instead of an absolute path, we have decided to disable
+     caching globally now, as it's usually not the behaviour the user wants and
+     can lead to surprising behaviour.  Furthermore, negative caching of host
+     lookups is also disabled now by default. This should fix the issue of dns
+     lookups failing in the presence of an unreliable network.
+   </para>
+   <para>
+     If the old behaviour is desired, this can be restored by setting
+     the <literal>services.nscd.config</literal> option
+     with the desired caching parameters.
+     <programlisting>
+     services.nscd.config =
+     ''
+     server-user             nscd
+     threads                 1
+     paranoia                no
+     debug-level             0
+
+     enable-cache            passwd          yes
+     positive-time-to-live   passwd          600
+     negative-time-to-live   passwd          20
+     suggested-size          passwd          211
+     check-files             passwd          yes
+     persistent              passwd          no
+     shared                  passwd          yes
+
+     enable-cache            group           yes
+     positive-time-to-live   group           3600
+     negative-time-to-live   group           60
+     suggested-size          group           211
+     check-files             group           yes
+     persistent              group           no
+     shared                  group           yes
+
+     enable-cache            hosts           yes
+     positive-time-to-live   hosts           600
+     negative-time-to-live   hosts           5
+     suggested-size          hosts           211
+     check-files             hosts           yes
+     persistent              hosts           no
+     shared                  hosts           yes
+     '';
+     </programlisting>
+     See <link xlink:href="https://github.com/NixOS/nixpkgs/pull/50316">#50316</link>
+     for details.
+   </para>
+  </listitem>
+  <listitem>
+   <para>
+     GitLab Shell previously used the nix store paths for the
+     <literal>gitlab-shell</literal> command in its
+     <literal>authorized_keys</literal> file, which might stop working after
+     garbage collection. To circumvent that, we regenerated that file on each
+     startup.  As <literal>gitlab-shell</literal> has now been changed to use
+     <literal>/var/run/current-system/sw/bin/gitlab-shell</literal>, this is
+     not necessary anymore, but there might be leftover lines with a nix store
+     path. Regenerate the <literal>authorized_keys</literal> file via
+     <command>sudo -u git -H gitlab-rake gitlab:shell:setup</command> in that
+     case.
+   </para>
+  </listitem>
+  </itemizedlist>
+ </section>
+
+ <section xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         version="5.0"
+         xml:id="sec-release-19.03-notable-changes">
+  <title>Other Notable Changes</title>
+
+  <itemizedlist>
+   <listitem>
+    <para>
+     The <option>services.matomo</option> module gained the option
+     <option>services.matomo.package</option> which determines the used
+     Matomo version.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     The deprecated <literal>truecrypt</literal> package has been removed
+     and <literal>truecrypt</literal> attribute is now an alias for
+     <literal>veracrypt</literal>. VeraCrypt is backward-compatible with
+     TrueCrypt volumes. Note that <literal>cryptsetup</literal> also
+     supports loading TrueCrypt volumes.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+      The Kubernetes DNS addons, kube-dns, has been replaced with CoreDNS.
+      This change is made in accordance with Kubernetes making CoreDNS the official default
+      starting from
+      <link xlink:href="https://github.com/kubernetes/kubernetes/blob/master/CHANGELOG-1.11.md#sig-cluster-lifecycle">Kubernetes v1.11</link>.
+      Please beware that upgrading DNS-addon on existing clusters might induce
+      minor downtime while the DNS-addon terminates and re-initializes.
+      Also note that the DNS-service now runs with 2 pod replicas by default.
+      The desired number of replicas can be configured using:
+      <option>services.kubernetes.addons.dns.replicas</option>.
+    </para>
+   </listitem>
+   <listitem>
+     <para>
+       The quassel-webserver package and module was removed from nixpkgs due to the lack
+       of maintainers.
+     </para>
+   </listitem>
+  </itemizedlist>
+ </section>
+</section>

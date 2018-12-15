@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = with stdenv.lib; {
-    homepage = http://splint.org/;
+    homepage = http://www.splint.org/;
     description = "Annotation-assisted lightweight static analyzer for C";
 
     longDescription = ''

@@ -196,6 +196,8 @@ in {
       wantedBy = [ "multi-user.target" ];
       path = with pkgs; [ coreutils libvirt gawk ];
       restartIfChanged = false;
+
+      environment.ON_SHUTDOWN = "${cfg.onShutdown}";
     };
 
     systemd.sockets.virtlogd = {

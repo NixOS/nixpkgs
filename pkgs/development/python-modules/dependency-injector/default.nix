@@ -1,18 +1,20 @@
-{ stdenv, buildPythonPackage, fetchPypi, six }:
+{ stdenv, buildPythonPackage, fetchPypi, six, unittest2 }:
 
 buildPythonPackage rec {
   pname = "dependency-injector";
-  version = "3.13.1";
+  version = "3.13.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0bmcgdfjavgxdzkb904q968ig1x44arvpj2m4rpm5nc9vhhgq43q";
+    sha256 = "0kgb40qspibr1x8ksv0whrr7v0jy20dnqzmc591hm2y4kwzl5hdw";
   };
 
-  # TODO: Enable tests after upstream merges https://github.com/ets-labs/python-dependency-injector/pull/204
-  doCheck = false;
-
   propagatedBuildInputs = [ six ];
+  checkInputs = [ unittest2 ];
+
+  checkPhase = ''
+    unit2 discover tests/unit
+  '';
 
   meta = with stdenv.lib; {
     description = "Dependency injection microframework for Python";

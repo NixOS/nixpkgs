@@ -1,6 +1,6 @@
 { stdenv,
   lib,
-  fetchgit,
+  fetchFromGitHub,
   rustPlatform,
   cmake,
   makeWrapper,
@@ -18,6 +18,7 @@
   libGL,
   xclip,
   # Darwin Frameworks
+  cf-private,
   AppKit,
   CoreFoundation,
   CoreGraphics,
@@ -40,29 +41,18 @@ let
     libGL
     libXi
   ];
-  darwinFrameworks = [
-    AppKit
-    CoreFoundation
-    CoreGraphics
-    CoreServices
-    CoreText
-    Foundation
-    OpenGL
-  ];
 in buildRustPackage rec {
-  name = "alacritty-unstable-${version}";
-  version = "2018-08-30";
+  name = "alacritty-${version}";
+  version = "0.2.3";
 
-  # At the moment we cannot handle git dependencies in buildRustPackage.
-  # This fork only replaces rust-fontconfig/libfontconfig with a git submodules.
-  src = fetchgit {
-    url = https://github.com/Mic92/alacritty.git;
-    rev = "rev-${version}";
-    sha256 = "0izvg7dwwb763jc6gnmn47i5zrkxvmh3vssn6vzrrmqhd4j3msmf";
-    fetchSubmodules = true;
+  src = fetchFromGitHub {
+    owner = "jwilm";
+    repo = "alacritty";
+    rev = "v${version}";
+    sha256 = "0p9q5cpxw5v2ka1ylaa009sfbncnlrva9yam4hag6npcnd8x4f95";
   };
 
-  cargoSha256 = "1ijgkwv9ij4haig1h6n2b9xbhp5vahy9vp1sx72wxaaj9476msjx";
+  cargoSha256 = "0664fi16kyly8hhfj0hgddsnfdk3y0z31758gvb0xq13ssdb6sv6";
 
   nativeBuildInputs = [
     cmake
@@ -73,9 +63,16 @@ in buildRustPackage rec {
   ];
 
   buildInputs = rpathLibs
-             ++ lib.optionals stdenv.isDarwin darwinFrameworks;
+    ++ lib.optionals stdenv.isDarwin [
+      AppKit CoreFoundation CoreGraphics CoreServices CoreText Foundation OpenGL
+      # Needed for CFURLResourceIsReachable symbols.
+      cf-private
+    ];
 
- outputs = [ "out" "terminfo" ];
+  outputs = [ "out" "terminfo" ];
+
+  # https://github.com/NixOS/nixpkgs/issues/49693
+  doCheck = !stdenv.isDarwin;
 
   postPatch = ''
     substituteInPlace copypasta/src/x11.rs \
@@ -119,5 +116,6 @@ in buildRustPackage rec {
     homepage = https://github.com/jwilm/alacritty;
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ mic92 ];
+    platforms = [ "x86_64-linux" "x86_64-darwin" ];
   };
 }

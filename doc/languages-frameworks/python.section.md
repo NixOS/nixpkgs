@@ -186,7 +186,7 @@ building Python libraries is `buildPythonPackage`. Let's see how we can build th
 `toolz` package.
 
 ```nix
-{ # ...
+{ lib, buildPythonPackage, fetchPypi }:
 
   toolz = buildPythonPackage rec {
     pname = "toolz";
@@ -199,8 +199,8 @@ building Python libraries is `buildPythonPackage`. Let's see how we can build th
 
     doCheck = false;
 
-    meta = {
-      homepage = "https://github.com/pytoolz/toolz/";
+    meta = with lib; {
+      homepage = https://github.com/pytoolz/toolz;
       description = "List processing tools and functional utilities";
       license = licenses.bsd3;
       maintainers = with maintainers; [ fridh ];
@@ -267,12 +267,13 @@ that we introduced with the `let` expression.
 
 #### Handling dependencies
 
-Our example, `toolz`, does not have any dependencies on other Python
-packages or system libraries. According to the manual,  `buildPythonPackage`
-uses the arguments `buildInputs` and `propagatedBuildInputs` to specify dependencies. If something is
-exclusively a build-time dependency, then the dependency should be included as a
-`buildInput`, but if it is (also) a runtime dependency, then it should be added
-to `propagatedBuildInputs`. Test dependencies are considered build-time dependencies.
+Our example, `toolz`, does not have any dependencies on other Python packages or
+system libraries. According to the manual, `buildPythonPackage` uses the
+arguments `buildInputs` and `propagatedBuildInputs` to specify dependencies. If
+something is exclusively a build-time dependency, then the dependency should be
+included as a `buildInput`, but if it is (also) a runtime dependency, then it
+should be added to `propagatedBuildInputs`. Test dependencies are considered
+build-time dependencies and passed to `checkInputs`.
 
 The following example shows which arguments are given to `buildPythonPackage` in
 order to build [`datashape`](https://github.com/blaze/datashape).
@@ -292,7 +293,7 @@ order to build [`datashape`](https://github.com/blaze/datashape).
     checkInputs = with self; [ pytest ];
     propagatedBuildInputs = with self; [ numpy multipledispatch dateutil ];
 
-    meta = {
+    meta = with lib; {
       homepage = https://github.com/ContinuumIO/datashape;
       description = "A data description language";
       license = licenses.bsd2;
@@ -326,7 +327,7 @@ when building the bindings and are therefore added as `buildInputs`.
 
     buildInputs = with self; [ pkgs.libxml2 pkgs.libxslt ];
 
-    meta = {
+    meta = with lib; {
       description = "Pythonic binding for the libxml2 and libxslt libraries";
       homepage = https://lxml.de;
       license = licenses.bsd3;
@@ -370,9 +371,9 @@ and `CFLAGS`.
       export CFLAGS="-I${pkgs.fftw.dev}/include -I${pkgs.fftwFloat.dev}/include -I${pkgs.fftwLongDouble.dev}/include"
     '';
 
-    meta = {
+    meta = with lib; {
       description = "A pythonic wrapper around FFTW, the FFT library, presenting a unified interface for all the supported transforms";
-      homepage = http://hgomersall.github.com/pyFFTW/;
+      homepage = http://hgomersall.github.com/pyFFTW;
       license = with licenses; [ bsd2 bsd3 ];
       maintainers = with maintainers; [ fridh ];
     };
@@ -478,18 +479,16 @@ don't explicitly define which `python` derivation should be used. In the above
 example we use `buildPythonPackage` that is part of the set `python35Packages`,
 and in this case the `python35` interpreter is automatically used.
 
-
-
 ## Reference
 
 ### Interpreters
 
-Versions 2.7, 3.4, 3.5, 3.6 and 3.7 of the CPython interpreter are available as
-respectively `python27`, `python34`, `python35` and `python36`. The PyPy interpreter
-is available as `pypy`. The aliases `python2` and `python3` correspond to respectively `python27` and
-`python35`. The default interpreter, `python`, maps to `python2`.
-The Nix expressions for the interpreters can be found in
-`pkgs/development/interpreters/python`.
+Versions 2.7, 3.5, 3.6 and 3.7 of the CPython interpreter are available as
+respectively `python27`, `python35`, `python36`, and `python37`. The PyPy
+interpreter is available as `pypy`. The aliases `python2` and `python3`
+correspond to respectively `python27` and `python37`. The default interpreter,
+`python`, maps to `python2`. The Nix expressions for the interpreters can be
+found in `pkgs/development/interpreters/python`.
 
 All packages depending on any Python interpreter get appended
 `out/{python.sitePackages}` to `$PYTHONPATH` if such directory
@@ -508,7 +507,7 @@ Each interpreter has the following attributes:
 - `buildEnv`. Function to build python interpreter environments with extra packages bundled together. See section *python.buildEnv function* for usage and documentation.
 - `withPackages`. Simpler interface to `buildEnv`. See section *python.withPackages function* for usage and documentation.
 - `sitePackages`. Alias for `lib/${libPrefix}/site-packages`.
-- `executable`. Name of the interpreter executable, e.g. `python3.4`.
+- `executable`. Name of the interpreter executable, e.g. `python3.7`.
 - `pkgs`. Set of Python packages for that specific interpreter. The package set can be modified by overriding the interpreter and passing `packageOverrides`.
 
 ### Building packages and applications
@@ -530,7 +529,6 @@ attribute set is created for each available Python interpreter. The available
 sets are
 
 * `pkgs.python27Packages`
-* `pkgs.python34Packages`
 * `pkgs.python35Packages`
 * `pkgs.python36Packages`
 * `pkgs.python37Packages`
@@ -539,7 +537,7 @@ sets are
 and the aliases
 
 * `pkgs.python2Packages` pointing to `pkgs.python27Packages`
-* `pkgs.python3Packages` pointing to `pkgs.python36Packages`
+* `pkgs.python3Packages` pointing to `pkgs.python37Packages`
 * `pkgs.pythonPackages` pointing to `pkgs.python2Packages`
 
 #### `buildPythonPackage` function
@@ -549,31 +547,31 @@ The `buildPythonPackage` function is implemented in
 
 The following is an example:
 ```nix
+{ lib, buildPythonPackage, fetchPypi, hypothesis, setuptools_scm, attrs, py, setuptools, six, pluggy }:
 
 buildPythonPackage rec {
-  version = "3.3.1";
   pname = "pytest";
-
-  preCheck = ''
-    # don't test bash builtins
-    rm testing/test_argcomplete.py
-  '';
+  version = "3.3.1";
 
   src = fetchPypi {
     inherit pname version;
     sha256 = "cf8436dc59d8695346fcd3ab296de46425ecab00d64096cebe79fb51ecb2eb93";
   };
 
+  postPatch = ''
+    # don't test bash builtins
+    rm testing/test_argcomplete.py
+  '';
+
   checkInputs = [ hypothesis ];
   buildInputs = [ setuptools_scm ];
   propagatedBuildInputs = [ attrs py setuptools six pluggy ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     maintainers = with maintainers; [ domenkozar lovek323 madjar lsix ];
     description = "Framework for writing tests";
   };
 }
-
 ```
 
 The `buildPythonPackage` mainly does four things:
@@ -654,6 +652,39 @@ modules won't be made available.
 Another difference is that `buildPythonPackage` by default prefixes the names of
 the packages with the version of the interpreter. Because this is irrelevant for
 applications, the prefix is omitted.
+
+When packaging a python application with `buildPythonApplication`, it should be
+called with `callPackage` and passed `python` or `pythonPackages` (possibly
+specifying an interpreter version), like this:
+
+```nix
+{ lib, python3Packages }:
+
+python3Packages.buildPythonApplication rec {
+  pname = "luigi";
+  version = "2.7.9";
+
+  src = python3Packages.fetchPypi {
+    inherit pname version;
+    sha256 = "035w8gqql36zlan0xjrzz9j4lh9hs0qrsgnbyw07qs7lnkvbdv9x";
+  };
+
+  propagatedBuildInputs = with python3Packages; [ tornado_4 python-daemon ];
+
+  meta = with lib; {
+    ...
+  };
+}
+```
+
+This is then added to `all-packages.nix` just as any other application would be.
+
+```nix
+luigi = callPackage ../applications/networking/cluster/luigi { };
+```
+
+Since the package is an application, a consumer doesn't need to care about
+python versions or modules, which is why they don't go in `pythonPackages`.
 
 #### `toPythonApplication` function
 
@@ -805,7 +836,7 @@ community to help save time. No tool is preferred at the moment.
 
 ### Deterministic builds
 
-Python 2.7, 3.5 and 3.6 are now built deterministically and 3.4 mostly.
+The Python interpreters are now built deterministically.
 Minor modifications had to be made to the interpreters in order to generate
 deterministic bytecode. This has security implications and is relevant for
 those using Python in a `nix-shell`.
@@ -1047,8 +1078,7 @@ To modify only a Python package set instead of a whole Python derivation, use th
 Use the following overlay template:
 
 ```nix
-self: super:
-{
+self: super: {
   python = super.python.override {
     packageOverrides = python-self: python-super: {
       zerobin = python-super.zerobin.overrideAttrs (oldAttrs: {
@@ -1058,6 +1088,25 @@ self: super:
           sha256 = "16d769kmnrpbdr0ph0whyf4yff5df6zi4kmwx7sz1d3r6c8p6xji";
         };
       });
+    };
+  };
+}
+```
+
+### How to use Intel's MKL with numpy and scipy?
+
+A `site.cfg` is created that configures BLAS based on the `blas` parameter
+of the `numpy` derivation. By passing in `mkl`, `numpy` and packages depending
+on `numpy` will be built with `mkl`.
+
+The following is an overlay that configures `numpy` to use `mkl`:
+```nix
+self: super: {
+  python36 = super.python36.override {
+    packageOverrides = python-self: python-super: {
+      numpy = python-super.numpy.override {
+        blas = super.pkgs.mkl;
+      };
     };
   };
 }

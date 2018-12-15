@@ -2,7 +2,7 @@
 , gmp, libGLU_combined, libjpeg, libpng
 , expat, gettext, perl, guile
 , SDL, SDL_image, SDL_mixer, SDL_ttf
-, curl, sqlite
+, curl, sqlite, libtool, readline
 , libogg, libvorbis, libcaca, csound, cunit } :
 
 stdenv.mkDerivation rec {
@@ -22,6 +22,7 @@ stdenv.mkDerivation rec {
     curl sqlite
     libogg libvorbis csound
     libXrender libcaca cunit
+    libtool readline
   ];
 
   hardeningDisable = [ "format" ];
@@ -33,7 +34,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Quick tactics game";
-    homepage = http://www.gnu.org/software/liquidwar6/;
+    homepage = https://www.gnu.org/software/liquidwar6/;
     maintainers = [ maintainers.raskin ];
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

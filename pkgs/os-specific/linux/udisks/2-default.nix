@@ -1,12 +1,12 @@
 { stdenv, fetchFromGitHub, substituteAll, libtool, pkgconfig, intltool, gnused
 , gnome3, gtk-doc, acl, systemd, glib, libatasmart, polkit, coreutils, bash
 , expat, libxslt, docbook_xsl, utillinux, mdadm, libgudev, libblockdev, parted
-, gobjectIntrospection, docbook_xml_dtd_412, docbook_xml_dtd_43
-, libxfs, f2fs-tools, dosfstools, e2fsprogs, btrfs-progs, exfat, nilfs-utils, ntfs3g
+, gobject-introspection, docbook_xml_dtd_412, docbook_xml_dtd_43
+, xfsprogs, f2fs-tools, dosfstools, e2fsprogs, btrfs-progs, exfat, nilfs-utils, ntfs3g
 }:
 
 let
-  version = "2.8.0";
+  version = "2.8.1";
 in stdenv.mkDerivation rec {
   name = "udisks-${version}";
 
@@ -14,7 +14,7 @@ in stdenv.mkDerivation rec {
     owner = "storaged-project";
     repo = "udisks";
     rev = name;
-    sha256 = "110g3vyai3p6vjzy01yd0bbvxk7n7dl5glxf54f3jvqf0zmaqipx";
+    sha256 = "073iqa0pwa7ab0qw33h3ic89508a78incmg6rq914d6br7s030zy";
   };
 
   outputs = [ "out" "man" "dev" "devdoc" ];
@@ -33,12 +33,12 @@ in stdenv.mkDerivation rec {
     })
     (substituteAll {
       src = ./force-path.patch;
-      path = stdenv.lib.makeBinPath [ btrfs-progs coreutils dosfstools e2fsprogs exfat f2fs-tools nilfs-utils libxfs ntfs3g parted utillinux ];
+      path = stdenv.lib.makeBinPath [ btrfs-progs coreutils dosfstools e2fsprogs exfat f2fs-tools nilfs-utils xfsprogs ntfs3g parted utillinux ];
     })
   ];
 
   nativeBuildInputs = [
-    pkgconfig gnome3.gnome-common libtool intltool gobjectIntrospection
+    pkgconfig gnome3.gnome-common libtool intltool gobject-introspection
     gtk-doc libxslt docbook_xml_dtd_412 docbook_xml_dtd_43 docbook_xsl
   ];
 

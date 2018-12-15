@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libxml2, glib, gtk3, enchant2, isocodes, vala, gobjectIntrospection, gnome3 }:
+{ stdenv, fetchurl, pkgconfig, libxml2, glib, gtk3, enchant2, isocodes, vala, gobject-introspection, gnome3 }:
 
 let
   pname = "gspell";
@@ -10,13 +10,13 @@ in stdenv.mkDerivation rec {
   outputBin = "dev";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
     sha256 = "1rdv873ixhwr15jwgc2z6k6y0hj353fqnwsy7zkh0c30qwiiv6l1";
   };
 
   propagatedBuildInputs = [ enchant2 ]; # required for pkgconfig
 
-  nativeBuildInputs = [ pkgconfig vala gobjectIntrospection libxml2 ];
+  nativeBuildInputs = [ pkgconfig vala gobject-introspection libxml2 ];
   buildInputs = [ glib gtk3 isocodes ];
 
   passthru = {

@@ -10,7 +10,8 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ nose pytest ];
-  buildInputs = [ gfortran numpy.blas ];
+  nativeBuildInputs = [ gfortran ];
+  buildInputs = [ numpy.blas ];
   propagatedBuildInputs = [ numpy ];
 
   # Remove tests because of broken wrapper
@@ -28,12 +29,7 @@ buildPythonPackage rec {
   '';
 
   preBuild = ''
-    echo "Creating site.cfg file..."
-    cat << EOF > site.cfg
-    [openblas]
-    include_dirs = ${numpy.blas}/include
-    library_dirs = ${numpy.blas}/lib
-    EOF
+    ln -s ${numpy.cfg} site.cfg
   '';
 
   enableParallelBuilding = true;

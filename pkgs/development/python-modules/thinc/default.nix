@@ -6,6 +6,7 @@
 , pytest
 , cython
 , cymem
+, darwin
 , msgpack-numpy
 , msgpack-python
 , preshed
@@ -18,25 +19,22 @@
 , plac
 , six
 , mock
-, termcolor
 , wrapt
 , dill
 }:
 
 buildPythonPackage rec {
   pname = "thinc";
-  version = "6.11.2";
+  version = "6.12.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "028a014192e1914c151222794781d14e1c9fddf47a859aa36077f07871d0c30a";
+    sha256 = "1kkp8b3xcs3yn3ia5sxrh086c9xv27s2khdxd17abdypxxa99ich";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "msgpack-python==" "msgpack-python>=" \
-      --replace "msgpack-numpy==" "msgpack-numpy>="
-  '';
+  buildInputs = lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+    Accelerate CoreFoundation CoreGraphics CoreVideo
+  ]);
 
   propagatedBuildInputs = [
    cython
@@ -46,31 +44,26 @@ buildPythonPackage rec {
    preshed
    numpy
    murmurhash
-   pytest
-   hypothesis
    tqdm
    cytoolz
    plac
    six
-   mock
-   termcolor
    wrapt
    dill
   ] ++ lib.optional (pythonOlder "3.4") pathlib;
 
 
   checkInputs = [
+    hypothesis
+    mock
     pytest
   ];
 
   prePatch = ''
-    substituteInPlace setup.py --replace \
-      "'pathlib>=1.0.0,<2.0.0'," \
-      "\"pathlib>=1.0.0,<2.0.0; python_version<'3.4'\","
-
-    substituteInPlace setup.py --replace \
-      "'cytoolz>=0.8,<0.9'," \
-      "'cytoolz>=0.8',"
+    substituteInPlace setup.py \
+      --replace "pathlib==1.0.1" "pathlib>=1.0.0,<2.0.0" \
+      --replace "plac>=0.9.6,<1.0.0" "plac>=0.9.6" \
+      --replace "msgpack-numpy<0.4.4" "msgpack-numpy"
   '';
 
   # Cannot find cython modules.
