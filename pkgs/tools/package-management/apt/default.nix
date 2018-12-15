@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   ];
 
   preConfigure = ''
-    export PERL5LIB="$PERL5LIB''${PERL5LIB:+:}${Po4a}/lib/perl5";
+    export PERL5LIB="$PERL5LIB''${PERL5LIB:+:}${Po4a}/lib/perl5/site_perl";
 
     cmakeFlagsArray+=(
       -DBERKELEY_DB_INCLUDE_DIRS=${db.dev}/include
