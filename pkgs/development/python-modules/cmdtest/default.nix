@@ -9,7 +9,7 @@
 }:
 
 buildPythonPackage rec {
-  name = "cmdtest-${version}";
+  pname = "cmdtest";
   version = "0.32";
   disabled = isPy3k || isPyPy;
 
