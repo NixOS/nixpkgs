@@ -8,7 +8,7 @@
         url = "https://repo1.maven.org/maven2/org/flywaydb/flyway-commandline/${version}/flyway-commandline-${version}.tar.gz";
         sha256 = "16ia6nlvj4cgmdkn66bjg73h5vah82hpzk9mf0n5kmqnwcaa8hmc";
       };
-      buildInputs = [ makeWrapper ];
+      nativeBuildInputs = [ makeWrapper ];
       dontBuild = true;
       dontStrip = true;
       installPhase = ''
