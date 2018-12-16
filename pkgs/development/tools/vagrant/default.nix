@@ -40,7 +40,13 @@ in buildRubyGem rec {
   patches = [
     ./unofficial-installation-nowarn.patch
     ./use-system-bundler-version.patch
+    ./0004-Support-system-installed-plugins.patch
   ];
+
+  postPatch = ''
+    substituteInPlace lib/vagrant/plugin/manager.rb --subst-var-by \
+      system_plugin_dir "$out/vagrant-plugins"
+  '';
 
   # PATH additions:
   #   - libarchive: Make `bsdtar` available for extracting downloaded boxes
@@ -53,6 +59,9 @@ in buildRubyGem rec {
         --prefix PKG_CONFIG_PATH ':' \
           "${lib.makeSearchPath "lib/pkgconfig" [ libvirt ]}"
       ''}
+
+    mkdir -p "$out/vagrant-plugins/plugins.d"
+    echo '{}' > "$out/vagrant-plugins/plugins.json"
   '';
 
   installCheckPhase = ''
