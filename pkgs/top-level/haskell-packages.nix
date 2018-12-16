@@ -224,5 +224,24 @@ in {
       };
     });
 
+    # The dwarf attribute set contains package sets for all the GHC compilers
+    # with all packages compiled with `-g` debugging info.
+    dwarf = pkgs.lib.genAttrs normalGhcCompilers (name: packages."${name}".override {
+      ghc = bh.compiler.dwarf."${name}";
+      buildHaskellPackages = bh.packages.dwarf."${name}";
+      overrides = self : super : {
+        # Override the mkDerivation function so that the GHC flags that
+        # are needed for debugging symbols are passed to all Cabal invocations.
+        mkDerivation = old: super.mkDerivation (old // {
+          configureFlags = (old.configureFlags or []) ++ [
+            "--enable-debug-info=3"
+            "--disable-library-stripping"
+            "--disable-executable-stripping"
+          ];
+          # Disable nixpkgs' own stripping.
+          dontStrip = true;
+        });
+      };
+    });
   };
 }
