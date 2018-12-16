@@ -12,11 +12,10 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ openssl gnutls gsasl libidn ]
+  buildInputs = [ gnutls gsasl libidn ]
     ++ optional stdenv.isDarwin Security;
 
-  configureFlags = [ "--with-tls=openssl" ] ++
-    optional stdenv.isDarwin [ "--with-macosx-keyring" ];
+  configureFlags = optional stdenv.isDarwin [ "--with-macosx-keyring" ];
 
   meta = {
       description = "POP3 mail retrieval agent";
