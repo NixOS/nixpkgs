@@ -23298,4 +23298,6 @@ in
   newlibCross = callPackage ../development/misc/newlib {
     stdenv = crossLibcStdenv;
   };
+
+  frogatto = callPackage ../games/frogatto { };
 }
