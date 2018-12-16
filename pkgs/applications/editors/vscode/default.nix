@@ -1,9 +1,9 @@
 { stdenv, lib, fetchurl, unzip, atomEnv, makeDesktopItem,
-  gtk2, wrapGAppsHook, libXScrnSaver, libxkbfile, libsecret }:
+  gtk2, wrapGAppsHook, libXScrnSaver, libxkbfile, libsecret,
+  isInsiders ? false }:
 
 let
-  version = "1.28.2";
-  channel = "stable";
+  executableName = "code" + lib.optionalString isInsiders "-insiders";
 
   plat = {
     "i686-linux" = "linux-ia32";
@@ -12,9 +12,9 @@ let
   }.${stdenv.hostPlatform.system};
 
   sha256 = {
-    "i686-linux" = "13zgx80qzq1wvss3byh56rvp2bdxywc4xmhhljsqrxf17g86g2zr";
-    "x86_64-linux" = "1z50hkr9mcf76hlr1jb80nbvpxbpm2bh0l63yh9yqpalmz66xbfy";
-    "x86_64-darwin" = "0n7lavpylg1q89qa64z4z1v7pgmwb2kidc57cgpvjnhjg8idys33";
+    "i686-linux" = "0bd2jdn67vnbhrsqy54bymz4di3fw3p18ni5j2wikqkl4d9h4jj1";
+    "x86_64-linux" = "1zbnyff0q15xkvkrs14rfgyn6xb9v0xivcnbl8yckl71s45vb2l1";
+    "x86_64-darwin" = "1qgzhpfzcwym1qyzx2v14336l106hzhs7ii84g356vxkm219x7kw";
   }.${stdenv.hostPlatform.system};
 
   archive_fmt = if stdenv.hostPlatform.system == "x86_64-darwin" then "zip" else "tar.gz";
@@ -31,19 +31,24 @@ let
 in
   stdenv.mkDerivation rec {
     name = "vscode-${version}";
+    version = "1.30.0";
 
     src = fetchurl {
       name = "VSCode_${version}_${plat}.${archive_fmt}";
-      url = "https://vscode-update.azurewebsites.net/${version}/${plat}/${channel}";
+      url = "https://vscode-update.azurewebsites.net/${version}/${plat}/stable";
       inherit sha256;
     };
 
+    passthru = {
+      inherit executableName;
+    };
+
     desktopItem = makeDesktopItem {
-      name = "code";
-      exec = "code";
-      icon = "code";
+      name = executableName;
+      exec = executableName;
+      icon = "@out@/share/pixmaps/code.png";
       comment = "Code editor redefined and optimized for building and debugging modern web and cloud applications";
-      desktopName = "Visual Studio Code";
+      desktopName = "Visual Studio Code" + lib.optionalString isInsiders " Insiders";
       genericName = "Text Editor";
       categories = "GNOME;GTK;Utility;TextEditor;Development;";
     };
@@ -56,17 +61,18 @@ in
       if stdenv.hostPlatform.system == "x86_64-darwin" then ''
         mkdir -p $out/lib/vscode $out/bin
         cp -r ./* $out/lib/vscode
-        ln -s $out/lib/vscode/Contents/Resources/app/bin/code $out/bin
+        ln -s $out/lib/vscode/Contents/Resources/app/bin/${executableName} $out/bin
       '' else ''
         mkdir -p $out/lib/vscode $out/bin
         cp -r ./* $out/lib/vscode
 
-        substituteInPlace $out/lib/vscode/bin/code --replace '"$CLI" "$@"' '"$CLI" "--skip-getting-started" "$@"'
+        substituteInPlace $out/lib/vscode/bin/${executableName} --replace '"$CLI" "$@"' '"$CLI" "--skip-getting-started" "$@"'
 
-        ln -s $out/lib/vscode/bin/code $out/bin
+        ln -s $out/lib/vscode/bin/${executableName} $out/bin
 
         mkdir -p $out/share/applications
-        cp $desktopItem/share/applications/* $out/share/applications
+        substitute $desktopItem/share/applications/${executableName}.desktop $out/share/applications/${executableName}.desktop \
+          --subst-var out
 
         mkdir -p $out/share/pixmaps
         cp $out/lib/vscode/resources/app/resources/linux/code.png $out/share/pixmaps/code.png
@@ -76,7 +82,7 @@ in
       patchelf \
         --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
         --set-rpath "${rpath}" \
-        $out/lib/vscode/code
+        $out/lib/vscode/${executableName}
 
       patchelf \
         --set-rpath "${rpath}" \
