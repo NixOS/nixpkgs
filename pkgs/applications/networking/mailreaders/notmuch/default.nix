@@ -2,7 +2,7 @@
 , pkgconfig, gnupg
 , xapian, gmime, talloc, zlib
 , doxygen, perl
-, python3Packages
+, pythonPackages
 , bash-completion
 , emacs
 , ruby
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     gnupg # undefined dependencies
     xapian gmime talloc zlib  # dependencies described in INSTALL
     doxygen perl  # (optional) api docs
-    python3Packages.sphinx python3Packages.python  # (optional) documentation -> doc/INSTALL
+    pythonPackages.sphinx pythonPackages.python  # (optional) documentation -> doc/INSTALL
     bash-completion  # (optional) dependency to install bash completion
     emacs  # (optional) to byte compile emacs code, also needed for tests
     ruby  # (optional) ruby bindings
