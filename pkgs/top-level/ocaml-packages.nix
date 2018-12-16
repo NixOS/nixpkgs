@@ -202,6 +202,8 @@ let
       then callPackage ../development/ocaml-modules/csv { }
       else callPackage ../development/ocaml-modules/csv/1.5.nix { };
 
+    csv-lwt = callPackage ../development/ocaml-modules/csv/lwt.nix { };
+
     curses = callPackage ../development/ocaml-modules/curses { };
 
     custom_printf = callPackage ../development/ocaml-modules/custom_printf { };
