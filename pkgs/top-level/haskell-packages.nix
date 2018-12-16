@@ -1,5 +1,6 @@
 { buildPackages, pkgs
 , newScope
+, stdenv
 }:
 
 let
@@ -21,8 +22,23 @@ let
     "ghc844"
   ];
 
+  dwarfExcludes = [
+    # GHC 8.2.2 can't be built with DWARF support due to
+    # https://github.com/NixOS/nixpkgs/pull/52255#issuecomment-447611164
+    "ghc822"
+    # At the time of writing, ghcHEAD's version is too old
+    # (ghc-8.5.20180118) and thus suffers from the same problem as
+    # https://github.com/NixOS/nixpkgs/pull/52255#issuecomment-447611164.
+    # We can remove this as soon as we have one of the 8.8 series.
+    "ghcHEAD"
+  ];
+
   integerSimpleGhcNames = pkgs.lib.filter
     (name: ! builtins.elem name integerSimpleExcludes)
+    normalGhcCompilers;
+
+  dwarfGhcNames = pkgs.lib.filter
+    (name: ! builtins.elem name dwarfExcludes)
     normalGhcCompilers;
 
   haskellLib = import ../development/haskell-modules/lib.nix {
@@ -112,6 +128,15 @@ in {
     integer-simple = pkgs.recurseIntoAttrs (pkgs.lib.genAttrs
       integerSimpleGhcNames
       (name: compiler."${name}".override { enableIntegerSimple = true; }));
+
+    # The dwarf attribute set contains all the GHC compilers
+    # built with DWARF support.
+    # We don't do it on Darwin because that doesn't have the required
+    # elfutils.
+    dwarf = if stdenv.isDarwin then {} else
+      pkgs.recurseIntoAttrs (pkgs.lib.genAttrs
+        dwarfGhcNames
+        (name: compiler."${name}".override { enableDwarf = true; }));
   };
 
   # Default overrides that are applied to all package sets.
