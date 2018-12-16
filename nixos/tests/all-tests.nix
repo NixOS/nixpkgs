@@ -156,7 +156,6 @@ in
   openssh = handleTest ./openssh.nix {};
   osquery = handleTest ./osquery.nix {};
   ostree = handleTest ./ostree.nix {};
-  owncloud = handleTest ./owncloud.nix {};
   pam-oath-login = handleTest ./pam-oath-login.nix {};
   peerflix = handleTest ./peerflix.nix {};
   pgjwt = handleTest ./pgjwt.nix {};
