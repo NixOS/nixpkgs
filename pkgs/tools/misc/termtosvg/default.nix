@@ -2,14 +2,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "termtosvg";
-  version = "0.6.0";
+  version = "0.7.0";
 
   # tests are not available when fetching from pypi
   src = fetchFromGitHub {
     owner = "nbedos";
     repo = pname;
     rev = version;
-    sha256 = "07d9ashxph16phhawypm99wlx82975hqk08v1n56hxr0nr4f7nd2";
+    sha256 = "17hhdrsn9ggcrwqp2c1h2la9cwhdazfrczd7nnm5mz7w6rk25lx3";
   };
 
   propagatedBuildInputs = with python3.pkgs; [ lxml pyte ];
