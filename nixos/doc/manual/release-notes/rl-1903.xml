@@ -364,6 +364,12 @@
        of maintainers.
      </para>
    </listitem>
+   <listitem>
+     <para>
+       The owncloud server packages and httpd subservice module were removed
+       from nixpkgs due to the lack of maintainers.
+     </para>
+   </listitem>
   </itemizedlist>
  </section>
 </section>
