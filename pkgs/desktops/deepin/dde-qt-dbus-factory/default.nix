@@ -3,13 +3,13 @@
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "dde-qt-dbus-factory";
-  version = "1.0.5";
+  version = "1.0.6";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "0cz55hsbhy1ab1mndv0sp6xnqrhz2y66w7pcxy8v9k87ii32czf8";
+    sha256 = "13q1313dnil6p5fx4x2aa8jxyqmygifh9xwzxvh7chjw3bp8n7fx";
   };
 
   nativeBuildInputs = [
