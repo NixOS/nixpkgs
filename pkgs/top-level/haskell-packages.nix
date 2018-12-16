@@ -213,7 +213,13 @@ in {
       ghc = bh.compiler.integer-simple."${name}";
       buildHaskellPackages = bh.packages.integer-simple."${name}";
       overrides = _self : _super : {
+        # Usually, integer-simple is a normal package that you can build.
+        # In this package set, it is a ghc-bundled library, so we
+        # set it to `null` (ghc-bundled libraries are always `null`
+        # in `haskellPackages` package sets).
         integer-simple = null;
+        # Get rid of `integer-gmp` as a safety measure to notice
+        # when anything hard-depends on it.
         integer-gmp = null;
       };
     });
