@@ -18776,6 +18776,8 @@ in
 
   protonmail-bridge = libsForQt5.callPackage ../applications/networking/protonmail-bridge { };
 
+  ps2client = callPackage ../applications/networking/ps2client { };
+
   psi = callPackage ../applications/networking/instant-messengers/psi { };
 
   psi-plus = callPackage ../applications/networking/instant-messengers/psi-plus { };
