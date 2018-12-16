@@ -203,10 +203,14 @@ rec {
    * This includes dontStrip.
    */
   enableDWARFDebugging = drv:
-   # -g: enables debugging symbols
+   # --enable-debug-info: enables debugging symbols
    # --disable-*-stripping: tell GHC not to strip resulting binaries
    # dontStrip: see above
-   appendConfigureFlag (dontStrip drv) "--ghc-options=-g --disable-executable-stripping --disable-library-stripping";
+   appendConfigureFlags (dontStrip drv) [
+     "--enable-debug-info=3"
+     "--disable-library-stripping"
+     "--disable-executable-stripping"
+   ];
 
   /* Create a source distribution tarball like those found on hackage,
      instead of building the package.
