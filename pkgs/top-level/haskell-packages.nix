@@ -3,19 +3,27 @@
 }:
 
 let
+  # These are attributes in compiler for which we can build special
+  # ghc variants like integer-simple, DWARF etc.
+  # The entries in here must only have 1 level (they cannot be package
+  # sets like e.g. `integer-simple`).
+  normalGhcCompilers = [
+    "ghc822"
+    "ghc844"
+    "ghc861"
+    "ghc862"
+    "ghc863"
+    "ghcHEAD"
+  ];
+
   # These are attributes in compiler and packages that don't support integer-simple.
   integerSimpleExcludes = [
-    "ghc822Binary"
     "ghc844"
-    "ghcjs"
-    "ghcjs82"
-    "ghcjs84"
-    "integer-simple"
   ];
 
   integerSimpleGhcNames = pkgs.lib.filter
     (name: ! builtins.elem name integerSimpleExcludes)
-    (pkgs.lib.attrNames compiler);
+    normalGhcCompilers;
 
   haskellLib = import ../development/haskell-modules/lib.nix {
     inherit (pkgs) lib;
@@ -78,6 +86,8 @@ in {
       buildLlvmPackages = buildPackages.llvmPackages_6;
       llvmPackages = pkgs.llvmPackages_6;
     };
+    # When adding a new compiler here, don't forget to update
+    # normalGhcCompilers.
     ghcHEAD = callPackage ../development/compilers/ghc/head.nix {
       bootPkgs = packages.ghc822Binary;
       inherit (buildPackages.python3Packages) sphinx;
