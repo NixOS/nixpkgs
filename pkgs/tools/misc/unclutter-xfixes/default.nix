@@ -2,12 +2,10 @@
   xlibsWrapper, libev, libXi, libXfixes,
   pkgconfig, asciidoc, libxslt, docbook_xsl }:
 
-let version = "1.4"; in
+stdenv.mkDerivation rec {
+  pname = "unclutter-xfixes";
+  version = "1.4";
 
-stdenv.mkDerivation {
-  name = "unclutter-xfixes-${version}";
-  version = version;
-  
   src = fetchFromGitHub {
     owner = "Airblader";
     repo = "unclutter-xfixes";
@@ -15,32 +13,12 @@ stdenv.mkDerivation {
     sha256 = "0anny6hvwf5nh7ghgi4gdcywhwyhgfvqvp7fjhm59kjc3qxnwf96";
   };
 
-  nativeBuildInputs = [pkgconfig];
-  buildInputs = [
-    xlibsWrapper libev libXi libXfixes
-    asciidoc libxslt docbook_xsl
-  ];
+  nativeBuildInputs = [ pkgconfig asciidoc libxslt docbook_xsl ];
+  buildInputs = [ xlibsWrapper libev libXi libXfixes ];
 
-  postPatch = ''
-    substituteInPlace Makefile --replace "CC = gcc" "CC = cc"
-  '';
+  makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
 
-  preBuild = ''
-    # The Makefile calls git only to discover the package version,
-    # but that doesn't work right in the build environment,
-    # so we fake it.
-    git() { echo v${version}; }
-    export -f git
-  '';
-
-  preInstall = ''
-    export DESTDIR=$out MANDIR=/man/man1
-  '';
-  
-  postInstall = ''
-    mv $out/usr/bin $out/bin
-    mv $out/usr/share/man $out/man
-  '';
+  installFlags = [ "PREFIX=$(out)" ];
 
   meta = with stdenv.lib; {
     description = "Rewrite of unclutter using the X11 Xfixes extension";
