@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   name = "glabels-${version}";
-  version = "3.4.0";
+  version = "3.4.1";
 
   src = fetchurl {
-    url = "https://ftp.gnome.org/pub/GNOME/sources/glabels/3.4/glabels-3.4.0.tar.xz";
-    sha256 = "04345crf5yrhq6rlrymz630rxnm8yw41vx04hb6xn2nkjn9hf3nl";
+    url = "https://ftp.gnome.org/pub/GNOME/sources/glabels/3.4/glabels-3.4.1.tar.xz";
+    sha256 = "0f2rki8i27pkd9r0gz03cdl1g4vnmvp0j49nhxqn275vi8lmgr0q";
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig makeWrapper intltool ];
