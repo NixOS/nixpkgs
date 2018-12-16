@@ -41,11 +41,9 @@ core-packages:
   - ghcjs-base-0
 
 default-package-overrides:
-  # Newer versions require contravariant-1.5.*, which many builds refuse at the moment.
-  - base-compat-batteries ==0.10.1
   # Newer versions don't work in LTS-12.x
   - cassava-megaparsec < 2
-  # LTS Haskell 12.21
+  # LTS Haskell 12.22
   - abstract-deque ==0.3
   - abstract-deque-tests ==0.3
   - abstract-par ==0.3.3
@@ -184,7 +182,7 @@ default-package-overrides:
   - ansi-wl-pprint ==0.6.8.2
   - ANum ==0.2.0.2
   - api-field-json-th ==0.1.0.2
-  - appar ==0.1.4
+  - appar ==0.1.5
   - apply-refact ==0.5.0.0
   - apportionment ==0.0.0.3
   - approximate ==0.3.1
@@ -230,7 +228,7 @@ default-package-overrides:
   - base16-bytestring ==0.1.1.6
   - base32string ==0.9.1
   - base58string ==0.10.0
-  - base64-bytestring ==1.0.0.1
+  - base64-bytestring ==1.0.0.2
   - base64-bytestring-type ==1
   - base64-string ==0.2
   - base-compat ==0.10.5
@@ -361,7 +359,7 @@ default-package-overrides:
   - cereal-time ==0.1.0.0
   - cereal-vector ==0.2.0.1
   - cfenv ==0.1.0.0
-  - chan ==0.0.4
+  - chan ==0.0.4.1
   - ChannelT ==0.0.0.7
   - charset ==0.3.7.1
   - charsetdetect-ae ==1.1.0.4
@@ -565,7 +563,7 @@ default-package-overrides:
   - Decimal ==0.5.1
   - declarative ==0.5.2
   - deepseq-generics ==0.2.0.0
-  - dejafu ==1.11.0.3
+  - dejafu ==1.11.0.4
   - dependent-map ==0.2.4.0
   - dependent-sum ==0.4
   - dependent-sum-template ==0.0.0.6
@@ -732,11 +730,11 @@ default-package-overrides:
   - fileplow ==0.1.0.0
   - filter-logger ==0.6.0.0
   - filtrable ==0.1.1.0
-  - Fin ==0.2.6.0
   - fin ==0.0.1
+  - Fin ==0.2.6.0
   - FindBin ==0.0.5
   - find-clumpiness ==0.2.3.1
-  - fingertree ==0.1.4.1
+  - fingertree ==0.1.4.2
   - finite-typelits ==0.1.4.2
   - first-class-patterns ==0.3.2.4
   - fixed ==0.2.1.1
@@ -754,7 +752,7 @@ default-package-overrides:
   - fmlist ==0.9.2
   - fn ==0.3.0.2
   - focus ==0.1.5.2
-  - focuslist ==0.1.0.0
+  - focuslist ==0.1.0.1
   - foldable1 ==0.1.0.0
   - fold-debounce ==0.2.0.8
   - fold-debounce-conduit ==0.2.0.3
@@ -960,7 +958,7 @@ default-package-overrides:
   - hebrew-time ==0.1.1
   - hedgehog ==0.6.1
   - hedgehog-corpus ==0.1.0
-  - hedis ==0.10.8
+  - hedis ==0.10.10
   - here ==1.2.13
   - heredoc ==0.2.0.0
   - heterocephalus ==1.0.5.2
@@ -1016,8 +1014,8 @@ default-package-overrides:
   - hsdns ==1.7.1
   - hsebaysdk ==0.4.0.0
   - hsemail ==2
-  - HSet ==0.0.1
   - hset ==2.2.0
+  - HSet ==0.0.1
   - hsexif ==0.6.1.6
   - hs-functors ==0.1.3.0
   - hs-GeoIP ==0.3
@@ -1083,7 +1081,7 @@ default-package-overrides:
   - hvect ==0.4.0.0
   - hvega ==0.1.0.3
   - hw-balancedparens ==0.2.0.2
-  - hw-bits ==0.7.0.4
+  - hw-bits ==0.7.0.5
   - hw-conduit ==0.2.0.5
   - hw-diagnostics ==0.0.0.5
   - hweblib ==0.6.3
@@ -1130,7 +1128,7 @@ default-package-overrides:
   - Imlib ==0.1.2
   - immortal ==0.3
   - include-file ==0.1.0.3
-  - incremental-parser ==0.3.2
+  - incremental-parser ==0.3.2.1
   - indentation-core ==0.0.0.2
   - indentation-parsec ==0.0.0.2
   - indents ==0.5.0.0
@@ -1316,7 +1314,7 @@ default-package-overrides:
   - markdown-unlit ==0.5.0
   - markov-chain ==0.0.3.4
   - marvin-interpolate ==1.1.2
-  - massiv ==0.2.4.0
+  - massiv ==0.2.5.0
   - massiv-io ==0.1.4.0
   - mathexpr ==0.3.0.0
   - math-functions ==0.2.1.0
@@ -1772,7 +1770,7 @@ default-package-overrides:
   - rhine ==0.4.0.1
   - riak ==1.1.2.5
   - riak-protobuf ==0.23.0.0
-  - rio ==0.1.5.0
+  - rio ==0.1.6.0
   - rio-orphans ==0.1.1.0
   - rng-utils ==0.3.0
   - roles ==0.2.0.0
@@ -1802,8 +1800,8 @@ default-package-overrides:
   - say ==0.1.0.1
   - sbp ==2.3.17
   - sbv ==7.12
-  - SCalendar ==1.1.0
   - scalendar ==1.2.0
+  - SCalendar ==1.1.0
   - scalpel ==0.5.1
   - scalpel-core ==0.5.1
   - scanner ==0.2
@@ -1899,8 +1897,8 @@ default-package-overrides:
   - siphash ==1.0.3
   - size-based ==0.1.2.0
   - skein ==1.0.9.4
-  - skylighting ==0.7.4
-  - skylighting-core ==0.7.4
+  - skylighting ==0.7.5
+  - skylighting-core ==0.7.5
   - slack-web ==0.2.0.9
   - slave-thread ==1.0.2
   - smallcheck ==1.1.5
@@ -2026,7 +2024,7 @@ default-package-overrides:
   - tardis ==0.4.1.0
   - tasty ==1.1.0.4
   - tasty-ant-xml ==1.1.4
-  - tasty-dejafu ==1.2.0.7
+  - tasty-dejafu ==1.2.0.8
   - tasty-discover ==4.2.1
   - tasty-expected-failure ==0.11.1.1
   - tasty-golden ==2.3.2
@@ -2220,7 +2218,7 @@ default-package-overrides:
   - valor ==0.1.0.0
   - vault ==0.3.1.2
   - vec ==0.1
-  - vector ==0.12.0.1
+  - vector ==0.12.0.2
   - vector-algorithms ==0.7.0.4
   - vector-binary-instances ==0.2.5.1
   - vector-buffer ==0.4.1
@@ -2236,7 +2234,7 @@ default-package-overrides:
   - verbosity ==0.2.3.0
   - versions ==3.4.0.1
   - ViennaRNAParser ==1.3.3
-  - viewprof ==0.0.0.24
+  - viewprof ==0.0.0.25
   - vinyl ==0.8.1.1
   - vivid ==0.3.0.2
   - vivid-osc ==0.3.0.0
@@ -2357,7 +2355,7 @@ default-package-overrides:
   - yesod-auth-fb ==1.9.1
   - yesod-auth-hashdb ==1.7.1
   - yesod-bin ==1.6.0.3
-  - yesod-core ==1.6.8.1
+  - yesod-core ==1.6.9
   - yesod-csp ==0.2.4.0
   - yesod-eventsource ==1.6.0
   - yesod-fb ==0.5.0
@@ -2403,9 +2401,6 @@ extra-packages:
   - binary > 0.7 && < 0.8               # keep a 7.x major release around for older compilers
   - binary > 0.8 && < 0.9               # keep a 8.x major release around for older compilers
   - blank-canvas < 0.6.3                # more recent versions depend on base-compat-batteries == 0.10.* but we're on base-compat-0.9.*
-  - Cabal == 1.18.*                     # required for cabal-install et al on old GHC versions
-  - Cabal == 1.20.*                     # required for cabal-install et al on old GHC versions
-  - Cabal == 1.24.*                     # required for jailbreak-cabal etc.
   - Cabal == 2.2.*                      # required for jailbreak-cabal etc.
   - colour < 2.3.4                      # newer versions don't support GHC 7.10.x
   - conduit >=1.1 && <1.3               # pre-lts-11.x versions neeed by git-annex 6.20180227

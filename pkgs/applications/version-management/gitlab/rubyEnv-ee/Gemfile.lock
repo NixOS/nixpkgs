@@ -625,7 +625,7 @@ GEM
       get_process_mem (~> 0.2)
       puma (>= 2.7, < 4)
     pyu-ruby-sasl (0.0.3.3)
-    rack (1.6.11)
+    rack (1.6.10)
     rack-accept (0.4.5)
       rack (>= 0.4)
     rack-attack (4.4.1)

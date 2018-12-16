@@ -14109,6 +14109,39 @@ let
     buildInputs = [ TestToolbox ];
   };
 
+  strip-nondeterminism = buildPerlPackage rec {
+    name = "strip-nondeterminism-${version}";
+    version = "1.0.0";
+
+    outputs = [ "out" "dev" ]; # no "devdoc"
+
+    src = pkgs.fetchFromGitLab {
+      owner = "reproducible-builds";
+      repo = "strip-nondeterminism";
+      domain = "salsa.debian.org";
+      rev = version;
+      sha256 = "1pwar1fyadqxmvb7x4zyw2iawbi5lsfjcg0ps9n9rdjb6an7vv64";
+    };
+
+    # stray test failure
+    doCheck = false;
+
+    buildInputs = [ ArchiveZip ArchiveCpio pkgs.file ];
+
+    perlPostHook = ''
+      # we don’t need the debhelper script
+      rm $out/bin/dh_strip_nondeterminism
+      rm $out/share/man/man1/dh_strip_nondeterminism.1.gz
+    '';
+
+    meta = with stdenv.lib; {
+      description = "A Perl module for stripping bits of non-deterministic information";
+      license = licenses.gpl3;
+      platforms = platforms.all;
+      maintainers = with maintainers; [ pSub ];
+    };
+  };
+
   SubExporter = buildPerlPackage {
     name = "Sub-Exporter-0.987";
     src = fetchurl {

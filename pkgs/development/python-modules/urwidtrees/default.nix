@@ -6,13 +6,13 @@
 
 buildPythonPackage rec {
   pname = "urwidtrees";
-  version  = "1.0";
+  version  = "1.0.2";
 
   src = fetchFromGitHub {
     owner = "pazz";
     repo = "urwidtrees";
     rev = "${version}";
-    sha256 = "03gpcdi45z2idy1fd9zv8v9naivmpfx65hshm8r984k9wklv1dsa";
+    sha256 = "1n1kpidvkdnsqyb82vlvk78gmly96kh8351lqxn2pzgwwns6fml2";
   };
 
   propagatedBuildInputs = [ urwid ];

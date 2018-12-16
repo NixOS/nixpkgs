@@ -3,11 +3,11 @@
 , autoreconfHook }:
 
 stdenv.mkDerivation rec {
-  name = "aircrack-ng-1.4";
+  name = "aircrack-ng-1.5.2";
 
   src = fetchurl {
     url = "https://download.aircrack-ng.org/${name}.tar.gz";
-    sha256 = "0fz1g6sd7dkfgcxrfrnqbygpx8d4ziyidm9wjb0ws9xgyy52l2cn";
+    sha256 = "0hc2x17bxk2n00z8jj5jfwq3z41681fd19n018724il0cpkjyncy";
   };
 
   nativeBuildInputs = [ pkgconfig makeWrapper autoreconfHook ];

@@ -20,6 +20,7 @@ let
       coq-haskell = callPackage ../development/coq-modules/coq-haskell { };
       coqprime = callPackage ../development/coq-modules/coqprime {};
       coquelicot = callPackage ../development/coq-modules/coquelicot {};
+      corn = callPackage ../development/coq-modules/corn {};
       dpdgraph = callPackage ../development/coq-modules/dpdgraph {};
       equations = callPackage ../development/coq-modules/equations { };
       fiat_HEAD = callPackage ../development/coq-modules/fiat/HEAD.nix {};
@@ -35,6 +36,7 @@ let
       multinomials = callPackage ../development/coq-modules/multinomials {};
       paco = callPackage ../development/coq-modules/paco {};
       QuickChick = callPackage ../development/coq-modules/QuickChick {};
+      simple-io = callPackage ../development/coq-modules/simple-io { };
       ssreflect = callPackage ../development/coq-modules/ssreflect { };
       stdpp = callPackage ../development/coq-modules/stdpp { };
       StructTact = callPackage ../development/coq-modules/StructTact {};
@@ -43,11 +45,17 @@ let
       Verdi = callPackage ../development/coq-modules/Verdi {};
     };
 
-  filterCoqPackages = coq:
-    lib.filterAttrsRecursive
-    (_: p:
-      let pred = p.compatibleCoqVersions or (_: true);
-      in pred coq.coq-version
+  filterCoqPackages = coq: set:
+    lib.listToAttrs (
+      lib.concatMap (name:
+        let v = set.${name}; in
+        let p = v.compatibleCoqVersions or (_: true); in
+        lib.optional (p coq.coq-version)
+          (lib.nameValuePair name (
+            if lib.isAttrs v && v.recurseForDerivations or false
+            then filterCoqPackages coq v
+            else v))
+      ) (lib.attrNames set)
     );
 
 in rec {

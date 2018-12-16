@@ -50,7 +50,7 @@ stdenv.mkDerivation {
     # But not to break old cargoSha256, if the previous behavior was enough,
     # we don't store the config.
     if ! cmp $CARGO_CONFIG ${./fetchcargo-default-config.toml} > /dev/null; then
-      install -Dt $out/.cargo $CARGO_CONFIG;
+      install -D $CARGO_CONFIG $out/.cargo/config;
     fi;
   '';
 
