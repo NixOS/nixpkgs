@@ -63,9 +63,11 @@ let
     };
 
   };
-in {
-  inherit vdr;
-  skincurses = (mkPlugin "skincurses").overrideAttrs(
+in vdr // {
+  plugins = {
+    skincurses = (mkPlugin "skincurses").overrideAttrs(
     oldAttr: { buildInputs = oldAttr.buildInputs ++ [ ncurses ]; });
-} // stdenv.lib.genAttrs [ "epgtableid0" "hello" "osddemo"
-  "pictures" "servicedemo" "status" "svdrpdemo" ] mkPlugin
+  } // (stdenv.lib.genAttrs [
+    "epgtableid0" "hello" "osddemo" "pictures" "servicedemo" "status" "svdrpdemo"
+  ] mkPlugin);
+}
