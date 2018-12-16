@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "hub-${version}";
+  name = "lab-${version}";
   version = "0.14.0";
 
   goPackagePath = "github.com/zaquestion/lab";
