@@ -2,12 +2,12 @@
 , gtk-doc, gobject-introspection, libgit2, glib, python3 }:
 
 stdenv.mkDerivation rec {
-  name = "libgit2-glib-${version}";
-  version = "0.26.4";
+  pname = "libgit2-glib";
+  version = "0.27.7";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/libgit2-glib/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "0nhyqas110q7ingw97bvyjdb7v4dzch517dq8sn8c33s8910wqcp";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "1hpgs8dx0dk25mc8jsizi2cwwhnmahrn3dyry9p7a1g48mnxyc8i";
   };
 
   postPatch = ''
@@ -18,7 +18,10 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = gnome3.updateScript { packageName = "libgit2-glib"; attrPath = "gnome3.libgit2-glib"; };
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+      versionPolicy = "none";
+    };
   };
 
   nativeBuildInputs = [

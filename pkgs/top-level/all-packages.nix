@@ -993,9 +993,7 @@ in
 
   blockdiag = with python3Packages; toPythonApplication blockdiag;
 
-  blsd = callPackage ../tools/misc/blsd {
-    libgit2 = libgit2_0_27;
-  };
+  blsd = callPackage ../tools/misc/blsd { };
 
   bluez-alsa = callPackage ../tools/bluetooth/bluez-alsa { };
 
@@ -9887,9 +9885,7 @@ in
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  libgit2_0_27 = callPackage ../development/libraries/git2/0.27.nix {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
+  libgit2-glib = callPackage ../development/libraries/libgit2-glib { };
 
   glbinding = callPackage ../development/libraries/glbinding { };
 
