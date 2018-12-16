@@ -13,6 +13,10 @@ let
     "integer-simple"
   ];
 
+  integerSimpleGhcNames = pkgs.lib.filter
+    (name: ! builtins.elem name integerSimpleExcludes)
+    (pkgs.lib.attrNames compiler);
+
   haskellLib = import ../development/haskell-modules/lib.nix {
     inherit (pkgs) lib;
     inherit pkgs;
@@ -94,12 +98,8 @@ in {
     };
 
     # The integer-simple attribute set contains all the GHC compilers
-    # build with integer-simple instead of integer-gmp.
-    integer-simple = let
-      integerSimpleGhcNames = pkgs.lib.filter
-        (name: ! builtins.elem name integerSimpleExcludes)
-        (pkgs.lib.attrNames compiler);
-    in pkgs.recurseIntoAttrs (pkgs.lib.genAttrs
+    # built with integer-simple instead of integer-gmp.
+    integer-simple = pkgs.recurseIntoAttrs (pkgs.lib.genAttrs
       integerSimpleGhcNames
       (name: compiler."${name}".override { enableIntegerSimple = true; }));
   };
@@ -174,11 +174,7 @@ in {
 
     # The integer-simple attribute set contains package sets for all the GHC compilers
     # using integer-simple instead of integer-gmp.
-    integer-simple = let
-      integerSimpleGhcNames = pkgs.lib.filter
-        (name: ! builtins.elem name integerSimpleExcludes)
-        (pkgs.lib.attrNames packages);
-    in pkgs.lib.genAttrs integerSimpleGhcNames (name: packages."${name}".override {
+    integer-simple = pkgs.lib.genAttrs integerSimpleGhcNames (name: packages."${name}".override {
       ghc = bh.compiler.integer-simple."${name}";
       buildHaskellPackages = bh.packages.integer-simple."${name}";
       overrides = _self : _super : {
