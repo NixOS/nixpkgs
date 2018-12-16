@@ -5,13 +5,13 @@
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "deepin-mutter";
-  version = "3.20.35";
+  version = "3.20.36";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "0mwk06kgw8qp8rg1j6px1zlya4x5rr9llax0qks59j56b3m9yim7";
+    sha256 = "1pjyd84vj7q8yfywxrxmzk4mm75aqicgf1z1q5g6xlzd3im7ns0w";
   };
 
   nativeBuildInputs = [
