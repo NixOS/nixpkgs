@@ -122,6 +122,8 @@ let
 
   hubUnstable = throw "use gitAndTools.hub instead";
 
+  lab = callPackage ./lab { };
+
   pre-commit = callPackage ./pre-commit { };
 
   pass-git-helper = python3Packages.callPackage ./pass-git-helper { };
