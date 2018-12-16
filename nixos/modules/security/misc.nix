@@ -22,6 +22,14 @@ with lib;
         a user namespace fails with "no space left on device" (ENOSPC).
       '';
     };
+
+    security.protectKernelImage = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Whether to prevent replacing the running kernel image.
+      '';
+    };
   };
 
   config = mkMerge [
@@ -36,6 +44,13 @@ with lib;
           message = "`nix.useSandbox = true` conflicts with `!security.allowUserNamespaces`.";
         }
       ];
+    })
+
+    (mkIf config.security.protectKernelImage {
+      # Disable hibernation (allows replacing the running kernel)
+      boot.kernelParams = [ "nohibernate" ];
+      # Prevent replacing the running kernel image w/o reboot
+      boot.kernel.sysctl."kernel.kexec_load_disabled" = mkDefault true;
     })
   ];
 }
