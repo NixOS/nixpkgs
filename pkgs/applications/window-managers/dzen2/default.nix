@@ -1,14 +1,14 @@
 { stdenv, fetchurl, pkgconfig, libX11, libXft, libXinerama, libXpm }:
 
 stdenv.mkDerivation rec {
-  name = "dzen2-0.9.5";
+  name = "dzen2-1379930259.488ab66";
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ libX11 libXft libXinerama libXpm ];
 
   src = fetchurl {
-    url = "https://github.com/robm/dzen/tarball/master/dzen2-0.9.5git.tar.gz";
-    sha256 = "d4f7943cd39dc23fd825eb684b49dc3484860fa8443d30b06ee38af72a53b556";
+    url = "https://github.com/robm/dzen/tarball/master/dzen2-1379930259.488ab66git.tar.gz";
+    sha256 = "0mmmacmgg2p3dsq30ga4m07qd11lvi4lns7b4pc3zhlxscy99xyl";
   };
 
   patchPhase = ''
