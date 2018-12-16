@@ -9,14 +9,14 @@
 # all get the same sources with the same patches applied.
 
 stdenv.mkDerivation rec {
-  version = "8.5.beta6";
+  version = "8.5.rc1";
   name = "sage-src-${version}";
 
   src = fetchFromGitHub {
     owner = "sagemath";
     repo = "sage";
     rev = version;
-    sha256 = "0b3f7m1mxqh2sjb8q2bci7202gw8qi1kin13fzsmvfd3caxvxzcy";
+    sha256 = "0pb0x5ay2xr5ywpnq0av7p6gf9mifg31yq645phyc8wc4vnhmz7z";
   };
 
   # Patches needed because of particularities of nix or the way this is packaged.
@@ -77,13 +77,6 @@ stdenv.mkDerivation rec {
       url = "https://salsa.debian.org/science-team/sagemath/raw/58bbba93a807ca2933ca317501d093a1bb4b84db/debian/patches/dt-version-glpk-4.65-ignore-warnings.patch";
       sha256 = "0b9293v73wb4x13wv5zwyjgclc01zn16msccfzzi6znswklgvddp";
       stripLen = 1;
-    })
-
-    # https://trac.sagemath.org/ticket/26360
-    (fetchpatch {
-      name = "arb-2.15.1.patch";
-      url = "https://git.sagemath.org/sage.git/patch/?id=30cc778d46579bd0c7537ed33e8d7a4f40fd5c31";
-      sha256 = "13vc2q799dh745sm59xjjabllfj0sfjzcacf8k59kwj04x755d30";
     })
 
     # https://trac.sagemath.org/ticket/26326
