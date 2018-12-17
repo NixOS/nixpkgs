@@ -6,12 +6,17 @@ assert x11Support -> libX11 != null && cairo != null;
 
 with stdenv.lib;
 
-stdenv.mkDerivation rec {
-  name = "hwloc-2.0.2";
+let
+  version = "2.0.3";
+  versmm = versions.major version + "." + versions.minor version;
+  name = "hwloc-${version}";
+
+in stdenv.mkDerivation {
+  inherit name;
 
   src = fetchurl {
-    url = "http://www.open-mpi.org/software/hwloc/v2.0/downloads/${name}.tar.bz2";
-    sha256 = "1phc863d5b2fvwpyyq4mlh4rkjdslh6h0h197zmyk3prwrq7si8l";
+    url = "http://www.open-mpi.org/software/hwloc/v${versmm}/downloads/${name}.tar.bz2";
+    sha256 = "09f7ajak8wv5issr0hw72vs3jkldc7crcc7z5fd34sspkvrsm4z3";
   };
 
   configureFlags = [
