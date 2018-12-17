@@ -20,12 +20,12 @@
 
 stdenv.mkDerivation rec {
   # TODO: Release 1.2.0 would switch LibAV to FFmpeg.
-  version = "1.1.2";
+  version = "1.2.0";
   name = "handbrake-${version}";
 
   src = fetchurl {
     url = ''https://download2.handbrake.fr/${version}/HandBrake-${version}-source.tar.bz2'';
-    sha256 = "0bny0hwlr55g2c69rsamv0xvwmfh1s4a582b9vq20xv5ly84m6ms";
+    sha256 = "03clkknaq3mz84p85cvr21gsy9b8vv2g4vvyfz44hz8la253jfqi";
   };
 
   patched_libav_12 = libav_12.overrideAttrs (super: {
