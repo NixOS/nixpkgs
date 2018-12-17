@@ -47,6 +47,8 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional pythonSupport python3
     ++ stdenv.lib.optional doCheck dejagnu;
 
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
+
   propagatedNativeBuildInputs = [ setupDebugInfoDirs ];
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
