@@ -68,7 +68,7 @@ runCommand "${wrappedPkgName}-with-extensions-${wrappedPkgVersion}" {
 
   ln -sT "${vscode}/share/pixmaps/code.png" "$out/share/pixmaps/code.png"
   ln -sT "${vscode}/share/applications/${executableName}.desktop" "$out/share/applications/${executableName}.desktop"
-  makeWrapper "${vscode}/bin/${executableName}" "$out/bin/${executableName}" \
-    --add-flags \
-      "--extensions-dir ${combinedExtensionsDrv}/share/${wrappedPkgName}/extensions"
+  makeWrapper "${vscode}/bin/${executableName}" "$out/bin/${executableName}" ${lib.optionalString (vscodeExtensions != []) ''
+    --add-flags "--extensions-dir ${combinedExtensionsDrv}/share/${wrappedPkgName}/extensions"
+  ''}
 ''
