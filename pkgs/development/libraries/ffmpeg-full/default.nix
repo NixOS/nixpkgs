@@ -232,11 +232,11 @@ assert nvenc -> nvidia-video-sdk != null && nonfreeLicensing;
 
 stdenv.mkDerivation rec {
   name = "ffmpeg-full-${version}";
-  version = "4.0.2";
+  version = "4.0.3";
 
   src = fetchurl {
     url = "https://www.ffmpeg.org/releases/ffmpeg-${version}.tar.xz";
-    sha256 = "15rgzcmdccy4flajs63gkz4n3k24wkkg50r13l1r83lrxg4hqp59";
+    sha256 = "1vg229mxcrm415cq6q1nfm891hm4x56mb5p4cqjnlqnky7ikfg15";
   };
 
   prePatch = ''
