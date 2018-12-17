@@ -35,11 +35,6 @@ let
 
 in {
 
-  libressl_2_6 = generic {
-    version = "2.6.5";
-    sha256 = "0anx9nlgixdjn811zclim85jm5yxmxwycj71ix27rlhr233xz7l5";
-  };
-
   libressl_2_7 = generic {
     version = "2.7.4";
     sha256 = "19kxa5i97q7p6rrps9qm0nd8zqhdjvzx02j72400c73cl2nryfhy";
