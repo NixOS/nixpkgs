@@ -1,6 +1,8 @@
-{ stdenv, lib, fetchurl, unzip, atomEnv, makeDesktopItem,
-  gtk2, wrapGAppsHook, libXScrnSaver, libxkbfile, libsecret,
-  isInsiders ? false }:
+{ stdenv, lib, fetchurl, makeDesktopItem
+, unzip, libsecret, libXScrnSaver, wrapGAppsHook
+, gtk2, atomEnv, at-spi2-atk, autoPatchelfHook
+, systemd, fontconfig
+, isInsiders ? false }:
 
 let
   executableName = "code" + lib.optionalString isInsiders "-insiders";
@@ -18,16 +20,6 @@ let
   }.${stdenv.hostPlatform.system};
 
   archive_fmt = if stdenv.hostPlatform.system == "x86_64-darwin" then "zip" else "tar.gz";
-
-  rpath = lib.concatStringsSep ":" [
-    atomEnv.libPath
-    "${lib.makeLibraryPath [gtk2]}"
-    "${lib.makeLibraryPath [libsecret]}/libsecret-1.so.0"
-    "${lib.makeLibraryPath [libXScrnSaver]}/libXss.so.1"
-    "${lib.makeLibraryPath [libxkbfile]}/libxkbfile.so.1"
-    "$out/lib/vscode"
-  ];
-
 in
   stdenv.mkDerivation rec {
     name = "vscode-${version}";
@@ -53,9 +45,12 @@ in
       categories = "GNOME;GTK;Utility;TextEditor;Development;";
     };
 
-    buildInputs = if stdenv.hostPlatform.system == "x86_64-darwin"
-      then [ unzip libXScrnSaver libsecret ]
-      else [ wrapGAppsHook libXScrnSaver libxkbfile libsecret ];
+    buildInputs = (if stdenv.isDarwin
+      then [ unzip ]
+      else [ gtk2 at-spi2-atk wrapGAppsHook ] ++ atomEnv.packages)
+        ++ [ libsecret libXScrnSaver ];
+
+    nativeBuildInputs = lib.optional (!stdenv.isDarwin) autoPatchelfHook;
 
     installPhase =
       if stdenv.hostPlatform.system == "x86_64-darwin" then ''
@@ -79,19 +74,8 @@ in
       '';
 
     postFixup = lib.optionalString (stdenv.hostPlatform.system == "i686-linux" || stdenv.hostPlatform.system == "x86_64-linux") ''
-      patchelf \
-        --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-        --set-rpath "${rpath}" \
-        $out/lib/vscode/${executableName}
-
-      patchelf \
-        --set-rpath "${rpath}" \
-        $out/lib/vscode/resources/app/node_modules.asar.unpacked/keytar/build/Release/keytar.node
-
-      patchelf \
-        --set-rpath "${rpath}" \
-        "$out/lib/vscode/resources/app/node_modules.asar.unpacked/native-keymap/build/Release/\
-      keymapping.node"
+      wrapProgram $out/lib/vscode/${executableName} \
+        --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ systemd fontconfig ]}
 
       ln -s ${lib.makeLibraryPath [libsecret]}/libsecret-1.so.0 $out/lib/vscode/libsecret-1.so.0
     '';
