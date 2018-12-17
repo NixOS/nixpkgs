@@ -1,7 +1,7 @@
 { lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "duplicacy-${version}";
+  pname = "duplicacy";
   version = "2.1.2";
 
   goPackagePath = "github.com/gilbertchen/duplicacy/";
@@ -19,8 +19,7 @@ buildGoPackage rec {
   '';
 
   installPhase = ''
-    mkdir -p $bin/bin
-    cp duplicacy_main $bin/bin/duplicacy
+    install -D duplicacy_main $bin/bin/duplicacy
   '';
 
   meta = with lib; {
