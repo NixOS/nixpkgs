@@ -6,12 +6,12 @@ with lib;
 
 stdenv.mkDerivation rec {
   name = "podman-${version}";
-  version = "0.12.1";
+  version = "0.12.1.2";
   src = fetchFromGitHub {
     owner = "containers";
     repo = "libpod";
     rev = "v${version}";
-    sha256 = "18vmzq9nqjndxa3gkc7y1rrfsyrbcrpglipp38jmn7m45w1g8dj7";
+    sha256 = "1gz7vci273bgrihrxbks2zxlb2lsmlj3lisw7s3d54ci0zr7avv3";
   };
   
   # Optimizations break compilation of libseccomp c bindings
@@ -21,8 +21,6 @@ stdenv.mkDerivation rec {
   buildInputs = [
     go btrfs-progs libseccomp gpgme lvm2
   ];
-
-  patches = [ ./0001-No-need-to-use-i-in-go-build-with-go-1.10-and-above.patch ];
 
   buildPhase = ''
     patchShebangs .
