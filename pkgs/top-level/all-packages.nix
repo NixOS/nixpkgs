@@ -15653,6 +15653,8 @@ in
 
   penna = callPackage ../data/fonts/penna { };
 
+  plata-theme = callPackage ../data/themes/plata {};
+
   poly = callPackage ../data/fonts/poly { };
 
   polytopes_db = callPackage ../data/misc/polytopes_db { };
