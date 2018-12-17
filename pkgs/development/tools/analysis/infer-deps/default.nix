@@ -16,8 +16,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     autoconf
-	automake
-	gnum4
+    automake
+    gnum4
     ocaml
     opam_1_2
     perl
@@ -42,8 +42,8 @@ stdenv.mkDerivation rec {
     eval $(SHELL=bash opam config env --switch=$INFER_OPAM_SWITCH)
 
     # install infer deps
-	opam pin add -k git lock 'https://github.com/rgrinberg/opam-lock'
-	opam lock --install < ${opamlock}
+    opam pin add -k git lock 'https://github.com/rgrinberg/opam-lock'
+    opam lock --install < ${opamlock}
   ";
 
   meta = with stdenv.lib; {

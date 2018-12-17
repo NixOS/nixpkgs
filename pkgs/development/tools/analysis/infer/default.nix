@@ -17,6 +17,7 @@ stdenv.mkDerivation rec {
     sha256 = "1fzm5s0cwah6jk37rrb9dsrfd61f2ird3av0imspyi4qyp6pyrm6";
   };
 
+  # TODO - only fetch this is withC == true
   facebook-clang-plugins = fetchFromGitHub {
     owner = "facebook";
     repo = "facebook-clang-plugins";
@@ -38,7 +39,6 @@ stdenv.mkDerivation rec {
   buildInputs = [
     autoconf
     automake
-    facebook-clang
     gnum4
     infer-deps
     ocaml
@@ -51,9 +51,9 @@ stdenv.mkDerivation rec {
     zlib
   ]
   # infer will need recent gcc or clang to work properly on linux (custom clang depends on libs)
-  #++ stdenv.lib.optionals stdenv.isLinux [ gcc ]
-  ++ stdenv.lib.optionals withC [ cmake facebook-clang ]
-  ++ stdenv.lib.optionals withJava [ openjdk ]
+  #++ stdenv.lib.optionals stdenv.isLinux    [ gcc ]
+  ++ stdenv.lib.optionals withC             [ cmake facebook-clang ]
+  ++ stdenv.lib.optionals withJava          [ openjdk ]
   ;
 
   postUnpack = "
@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
     chmod -R u+w $OPAMROOT
 
     eval $(SHELL=bash opam config env --switch=$INFER_OPAM_SWITCH)
-
+  " + stdenv.lib.optionalString withC "
     # link facebook clang plugins and the custom clang itself (bit hacky)
     chmod u+w $src
     rm -rf $src/facebook-clang-plugins
@@ -89,8 +89,9 @@ stdenv.mkDerivation rec {
 
   preConfigure = "./autogen.sh";
 
-  configureFlags = [ "--with-fcp-clang" ]
-    ++ stdenv.lib.optionals (!withC) [ "--disable-c-analyzers" ]
+  configureFlags =
+       stdenv.lib.optionals withC       [ "--with-fcp-clang" ]
+    ++ stdenv.lib.optionals (!withC)    [ "--disable-c-analyzers" ]
     ++ stdenv.lib.optionals (!withJava) [ "--disable-java-analyzers" ]
   ;
 
