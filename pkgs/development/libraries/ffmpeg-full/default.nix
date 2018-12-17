@@ -95,6 +95,7 @@
 , libxcbxfixesExtlib ? true # X11 grabbing mouse rendering
 , libxcbshapeExtlib ? true # X11 grabbing shape rendering
 , libXv ? null # Xlib support
+, libXext ? null # Xlib support
 , lzma ? null # xz-utils
 , nvenc ? false, nvidia-video-sdk ? null # NVIDIA NVENC support
 , callPackage # needed for NVENC to access external ffmpeg nvidia headers
@@ -357,7 +358,7 @@ stdenv.mkDerivation rec {
     (enableFeature (libvorbis != null) "libvorbis")
     (enableFeature (libvpx != null) "libvpx")
     (enableFeature (libwebp != null) "libwebp")
-    (enableFeature (libX11 != null && libXv != null) "xlib")
+    (enableFeature (libX11 != null && libXv != null && libXext != null) "xlib")
     (enableFeature (libxcb != null) "libxcb")
     (enableFeature libxcbshmExtlib "libxcb-shm")
     (enableFeature libxcbxfixesExtlib "libxcb-xfixes")
@@ -410,7 +411,7 @@ stdenv.mkDerivation rec {
     bzip2 celt fontconfig freetype frei0r fribidi game-music-emu gnutls gsm
     libjack2 ladspaH lame libaom libass libbluray libbs2b libcaca libdc1394 libmodplug libmysofa
     libogg libopus libssh libtheora libvdpau libvorbis libvpx libwebp libX11
-    libxcb libXv lzma openal openjpeg libpulseaudio rtmpdump opencore-amr
+    libxcb libXv libXext lzma openal openjpeg libpulseaudio rtmpdump opencore-amr
     samba SDL2 soxr speex vid-stab vo-amrwbenc wavpack x264 x265 xavs xvidcore
     zeromq4 zlib
   ] ++ optional openglExtlib libGLU_combined
