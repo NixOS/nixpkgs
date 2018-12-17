@@ -5719,6 +5719,8 @@ in
 
   renderdoc = libsForQt5.callPackage ../applications/graphics/renderdoc { };
 
+  rendersvg = libsForQt5.callPackage ../applications/graphics/rendersvg { };
+
   replace = callPackage ../tools/text/replace { };
 
   reckon = callPackage ../tools/text/reckon { };
