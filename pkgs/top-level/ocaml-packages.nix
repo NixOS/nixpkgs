@@ -580,6 +580,8 @@ let
     piqi = callPackage ../development/ocaml-modules/piqi { };
     piqi-ocaml = callPackage ../development/ocaml-modules/piqi-ocaml { };
 
+    ppxfind = callPackage ../development/ocaml-modules/ppxfind { };
+
     ppxlib = callPackage ../development/ocaml-modules/ppxlib { };
 
     psmt2-frontend = callPackage ../development/ocaml-modules/psmt2-frontend { };
