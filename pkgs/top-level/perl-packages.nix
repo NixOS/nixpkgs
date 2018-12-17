@@ -14369,6 +14369,19 @@ let
     };
   };
 
+  SysMmap = buildPerlPackage rec {
+    name = "Sys-Mmap-0.19";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/SW/SWALTERS/${name}.tar.gz";
+      sha256 = "1yh0170xfw3z7n3lynffcb6axv7wi6zb46cx03crj1cvrhjmwa89";
+    };
+    meta = with stdenv.lib; {
+      description = "Use mmap to map in a file as a Perl variable";
+      maintainers = with maintainers; [ peterhoeg ];
+      license = with licenses; [ gpl2Plus ];
+    };
+  };
+
   SysMemInfo = buildPerlPackage rec {
     name = "Sys-MemInfo-0.99";
     src = fetchurl {
