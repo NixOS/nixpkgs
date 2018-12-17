@@ -119,7 +119,8 @@ stdenv.mkDerivation rec {
       find src/main/java/com/google/devtools -type f -print0 | while IFS="" read -r -d "" path; do
         substituteInPlace "$path" \
           --replace /bin/bash ${customBash}/bin/bash \
-          --replace /usr/bin/env ${coreutils}/bin/env
+          --replace /usr/bin/env ${coreutils}/bin/env \
+          --replace /bin/true ${coreutils}/bin/true
       done
       # Fixup scripts that generate scripts. Not fixed up by patchShebangs below.
       substituteInPlace scripts/bootstrap/compile.sh \
