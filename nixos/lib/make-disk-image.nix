@@ -192,7 +192,7 @@ in pkgs.vmTools.runInLinuxVM (
         ${if format == "raw" then ''
           mv $diskImage $out/${filename}
         '' else ''
-          ${pkgs.qemu}/bin/qemu-img convert -f raw -O ${format} ${compress} $diskImage $out/${filename}
+          ${pkgs.qemu-img}/bin/qemu-img convert -f raw -O ${format} ${compress} $diskImage $out/${filename}
         ''}
         diskImage=$out/${filename}
         ${postVM}

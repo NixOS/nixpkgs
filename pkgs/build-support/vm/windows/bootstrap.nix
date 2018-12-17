@@ -1,5 +1,5 @@
 { stdenv, fetchurl, vmTools, writeScript, writeText, runCommand, makeInitrd
-, python, perl, coreutils, dosfstools, gzip, mtools, netcat-gnu, openssh, qemu
+, python, perl, coreutils, dosfstools, gzip, mtools, netcat-gnu, openssh, qemu-img
 , samba, socat, vde2, cdrkit, pathsFromGraph, gnugrep
 }:
 
@@ -22,7 +22,7 @@ let
 
   installer = import ./install {
     inherit controller mkCygwinImage;
-    inherit stdenv runCommand openssh qemu writeText dosfstools mtools;
+    inherit stdenv runCommand openssh qemu-img writeText dosfstools mtools;
   };
 in rec {
   installedVM = installer {
@@ -65,7 +65,7 @@ in rec {
   suspendedVM = stdenv.mkDerivation {
     name = "cygwin-suspended-vm";
     buildCommand = ''
-      ${qemu}/bin/qemu-img create \
+      ${qemu-img}/bin/qemu-img create \
         -b "${installedVM}/disk.img" \
         -f qcow2 winvm.img
       ${runAndSuspend}

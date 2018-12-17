@@ -145,7 +145,7 @@ in {
 
       environment.LIBVIRTD_ARGS = ''--config "${configFile}" ${concatStringsSep " " cfg.extraOptions}'';
 
-      path = [ cfg.qemuPackage ] # libvirtd requires qemu-img to manage disk images
+      path = [ pkgs.qemu-img ]
              ++ optional vswitch.enable vswitch.package;
 
       preStart = ''

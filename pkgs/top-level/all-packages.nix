@@ -18819,6 +18819,8 @@ in
     inherit (darwin.apple_sdk.frameworks) CoreServices Cocoa;
     inherit (darwin.stubs) rez setfile;
   };
+  qemu-ga = callPackage ../applications/virtualization/qemu/qemu-ga.nix { };
+  qemu-img = callPackage ../applications/virtualization/qemu/qemu-img.nix { };
 
   qgis = callPackage ../applications/gis/qgis {
     inherit (darwin.apple_sdk.frameworks) IOKit ApplicationServices;

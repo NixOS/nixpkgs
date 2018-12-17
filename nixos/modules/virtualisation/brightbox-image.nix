@@ -22,7 +22,7 @@ in
             ''
               PATH=$PATH:${lib.makeBinPath [ pkgs.gnutar pkgs.gzip ]}
               pushd $out
-              ${pkgs.qemu_kvm}/bin/qemu-img convert -c -O qcow2 $diskImageBase nixos.qcow2
+              ${pkgs.qemu-img}/bin/qemu-img convert -c -O qcow2 $diskImageBase nixos.qcow2
               rm $diskImageBase
               popd
             '';
