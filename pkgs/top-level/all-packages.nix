@@ -10297,10 +10297,6 @@ in
 
   hwloc = callPackage ../development/libraries/hwloc {};
 
-  hwloc-nox = hwloc.override {
-    x11Support = false;
-  };
-
   hydra = callPackage ../development/tools/misc/hydra { };
 
   hydraAntLogger = callPackage ../development/libraries/java/hydra-ant-logger { };
@@ -18135,7 +18131,6 @@ in
 
   xmr-stak = callPackage ../applications/misc/xmr-stak {
     stdenvGcc6 = overrideCC stdenv gcc6;
-    hwloc = hwloc-nox;
   };
 
   xmrig = callPackage ../applications/misc/xmrig { };
