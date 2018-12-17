@@ -1,6 +1,6 @@
 { buildPythonPackage, pythonOlder,
   cudaSupport ? false, cudatoolkit ? null, cudnn ? null,
-  fetchFromGitHub, lib, numpy, pyyaml, cffi, typing, cmake,
+  fetchFromGitHub, lib, numpy, pyyaml, cffi, typing, cmake, hypothesis,
   linkFarm, symlinkJoin,
   utillinux, which }:
 
@@ -25,7 +25,7 @@ let
     "LD_LIBRARY_PATH=${cudaStub}\${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH} ";
 
 in buildPythonPackage rec {
-  version = "0.4.1";
+  version = "1.0.0";
   pname = "pytorch";
 
   src = fetchFromGitHub {
@@ -33,7 +33,7 @@ in buildPythonPackage rec {
     repo   = "pytorch";
     rev    = "v${version}";
     fetchSubmodules = true;
-    sha256 = "1cr8h47jxgfar5bamyvlayvqymnb2qvp7rr0ka2d2d4rdldf9lrp";
+    sha256 = "076cpbig4sywn9vv674c0xdg832sdrd5pk1d0725pjkm436kpvlm";
   };
 
   preConfigure = lib.optionalString cudaSupport ''
@@ -71,8 +71,9 @@ in buildPythonPackage rec {
     pyyaml
   ] ++ lib.optional (pythonOlder "3.5") typing;
 
+  checkInputs = [ hypothesis ];
   checkPhase = ''
-    ${cudaStubEnv}python test/run_test.py --exclude dataloader sparse torch utils distributed
+    ${cudaStubEnv}python test/run_test.py --exclude dataloader sparse torch utils thd_distributed distributed cpp_extensions
   '';
 
   meta = {
