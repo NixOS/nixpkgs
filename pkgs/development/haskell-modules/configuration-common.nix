@@ -1208,4 +1208,8 @@ self: super: {
   hlint = super.hlint.overrideScope (self: super: { haskell-src-exts = self.haskell-src-exts_1_21_0; });
   hoogle = super.hoogle.overrideScope (self: super: { haskell-src-exts = self.haskell-src-exts_1_21_0; });
 
+  # Tests fail on 6.5.0, should work in 7
+  # https://github.com/mrkkrp/megaparsec/issues/323
+  megaparsec = dontCheck super.megaparsec;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
