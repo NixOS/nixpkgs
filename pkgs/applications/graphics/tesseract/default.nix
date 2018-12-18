@@ -1,11 +1,18 @@
 { callPackage, lowPrio }:
 
 let
-  tesseract3 = callPackage ./tesseract3.nix {};
-  tesseract4 = callPackage ./tesseract4.nix {};
+  base3 = callPackage ./tesseract3.nix {};
+  base4 = callPackage ./tesseract4.nix {};
+  languages = callPackage ./languages.nix {};
 in
 {
-  tesseract = tesseract3;
+  tesseract = callPackage ./wrapper.nix {
+    tesseractBase = base3;
+    languages = languages.v3;
+  };
 
-  tesseract_4 = lowPrio tesseract4;
+  tesseract_4 = lowPrio (callPackage ./wrapper.nix {
+    tesseractBase = base4;
+    languages = languages.v4;
+  });
 }
