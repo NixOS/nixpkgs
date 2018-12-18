@@ -15,7 +15,7 @@ in stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ makeWrapper unzip ];
-  buildInputs = [ jre stdenv ];
+  buildInputs = [ jre ];
 
   unpackPhase = ''
     runHook preUnpack
