@@ -113,9 +113,6 @@ let self = toPythonModule (python.stdenv.mkDerivation (builtins.removeAttrs attr
 passthru = {
   updateScript = let
     filename = builtins.head (lib.splitString ":" self.meta.position);
-  in writeScript "update-python" ''
-    #!${python.stdenv.shell}
-    ${update-python-libraries} ${filename}
-  '';
+  in [ update-python-libraries filename ];
 };
 in lib.extendDerivation true passthru self
