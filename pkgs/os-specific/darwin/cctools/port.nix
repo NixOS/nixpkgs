@@ -90,13 +90,6 @@ let
       popd
     '';
 
-    postInstall = ''
-      cat >$out/bin/dsymutil << EOF
-      #!${stdenv.shell}
-      EOF
-      chmod +x $out/bin/dsymutil
-    '';
-
     passthru = {
       inherit targetPrefix;
     };
