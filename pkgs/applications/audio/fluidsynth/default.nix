@@ -21,6 +21,7 @@ with versionMap.${version};
 
 stdenv.mkDerivation  rec {
   name = "fluidsynth-${fluidsynthVersion}";
+  version = fluidsynthVersion;
 
   src = fetchFromGitHub {
     owner = "FluidSynth";
