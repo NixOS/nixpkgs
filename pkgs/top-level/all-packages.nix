@@ -6355,7 +6355,7 @@ with pkgs;
   };
 
   ccl = callPackage ../development/compilers/ccl {
-    inherit (darwin) bootstrap_cmds;
+    inherit (buildPackages.darwin) bootstrap_cmds;
   };
 
   chez = callPackage ../development/compilers/chez {
@@ -8827,7 +8827,7 @@ with pkgs;
   jhiccup = callPackage ../development/tools/java/jhiccup { };
 
   valgrind = callPackage ../development/tools/analysis/valgrind {
-    inherit (darwin) xnu bootstrap_cmds cctools;
+    inherit (buildPackages.darwin) xnu bootstrap_cmds cctools;
     llvm = llvm_39;
   };
   valgrind-light = self.valgrind.override { gdb = null; };
@@ -10085,7 +10085,7 @@ with pkgs;
   kinetic-cpp-client = callPackage ../development/libraries/kinetic-cpp-client { };
 
   krb5 = callPackage ../development/libraries/kerberos/krb5.nix {
-    inherit (darwin) bootstrap_cmds;
+    inherit (buildPackages.darwin) bootstrap_cmds;
   };
   krb5Full = krb5;
   libkrb5 = krb5.override {
@@ -13658,7 +13658,7 @@ with pkgs;
   xorg = recurseIntoAttrs ((lib.callPackageWith __splicedPackages ../servers/x11/xorg {
   }).overrideScope' (lib.callPackageWith __splicedPackages ../servers/x11/xorg/overrides.nix {
     inherit (darwin) apple_sdk;
-    bootstrap_cmds = if stdenv.isDarwin then darwin.bootstrap_cmds else null;
+    bootstrap_cmds = if stdenv.isDarwin then buildPackages.darwin.bootstrap_cmds else null;
     python = python2; # Incompatible with Python 3x
     udev = if stdenv.isLinux then udev else null;
     libdrm = if stdenv.isLinux then libdrm else null;
