@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, gettext, pkgconfig, perl
+{ stdenv, fetchurl, gettext, pkgconfig, perlPackages
 , libidn2, zlib, pcre, libuuid, libiconv, libintl
-, IOSocketSSL, LWP, python3, lzip
+, python3, lzip
 , libpsl ? null
 , openssl ? null }:
 
@@ -28,12 +28,12 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  nativeBuildInputs = [ gettext pkgconfig perl lzip libiconv libintl ];
+  nativeBuildInputs = [ gettext pkgconfig perlPackages.perl lzip libiconv libintl ];
   buildInputs = [ libidn2 zlib pcre libuuid ]
-    ++ stdenv.lib.optionals doCheck [ IOSocketSSL LWP python3 ]
+    ++ stdenv.lib.optionals doCheck [ perlPackages.IOSocketSSL perlPackages.LWP python3 ]
     ++ stdenv.lib.optional (openssl != null) openssl
     ++ stdenv.lib.optional (libpsl != null) libpsl
-    ++ stdenv.lib.optional stdenv.isDarwin perl;
+    ++ stdenv.lib.optional stdenv.isDarwin perlPackages.perl;
 
   configureFlags = [
     (stdenv.lib.withFeatureAs (openssl != null) "ssl" "openssl")

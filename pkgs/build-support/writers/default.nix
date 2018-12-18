@@ -192,12 +192,12 @@ rec {
       name = "perl-environment";
       paths = libraries;
       pathsToLink = [
-        "/lib/perl5/site_perl"
+        "/${pkgs.perl.libPrefix}"
       ];
     };
   in
   makeScriptWriter {
-    interpreter = "${pkgs.perl}/bin/perl -I ${perl-env}/lib/perl5/site_perl";
+    interpreter = "${pkgs.perl}/bin/perl -I ${perl-env}/${pkgs.perl.libPrefix}";
   } name;
 
   # writePerlBin takes the same arguments as writePerl but outputs a directory (like writeScriptBin)

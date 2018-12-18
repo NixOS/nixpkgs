@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, makeWrapper, perl, GetoptTabular, MNI-Perllib, libminc }:
+{ stdenv, fetchFromGitHub, cmake, makeWrapper, perlPackages, libminc }:
 
 stdenv.mkDerivation rec {
   pname = "mni_autoreg";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake makeWrapper ];
   buildInputs = [ libminc ];
-  propagatedBuildInputs = [ perl GetoptTabular MNI-Perllib ];
+  propagatedBuildInputs = with perlPackages; [ perl GetoptTabular MNI-Perllib ];
 
   cmakeFlags = [ "-DLIBMINC_DIR=${libminc}/lib/" "-DBUILD_TESTING=FALSE" ];
   # testing broken: './minc_wrapper: Permission denied' from Testing/ellipse0.mnc

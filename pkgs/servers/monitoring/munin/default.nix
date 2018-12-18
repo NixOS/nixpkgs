@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, makeWrapper, which, coreutils, rrdtool, perl, perlPackages
+{ stdenv, fetchFromGitHub, makeWrapper, which, coreutils, rrdtool, perlPackages
 , python, ruby, jre, nettools, bc
 }:
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     coreutils
     rrdtool
     nettools
-    perl
+    perlPackages.perl
     perlPackages.ModuleBuild
     perlPackages.HTMLTemplate
     perlPackages.NetCIDR
@@ -59,8 +59,8 @@ stdenv.mkDerivation rec {
   doCheck = false;
 
   checkPhase = ''
-   export PERL5LIB="$PERL5LIB:${rrdtool}/lib/perl5/site_perl"
-   LC_ALL=C make -j1 test 
+   export PERL5LIB="$PERL5LIB:${rrdtool}/${perlPackages.perl.libPrefix}"
+   LC_ALL=C make -j1 test
   '';
 
   patches = [
@@ -94,8 +94,8 @@ stdenv.mkDerivation rec {
   makeFlags = ''
     PREFIX=$(out)
     DESTDIR=$(out)
-    PERLLIB=$(out)/lib/perl5/site_perl
-    PERL=${perl}/bin/perl
+    PERLLIB=$(out)/${perlPackages.perl.libPrefix}
+    PERL=${perlPackages.perl}/bin/perl
     PYTHON=${python}/bin/python
     RUBY=${ruby}/bin/ruby
     JAVARUN=${jre}/bin/java
@@ -117,7 +117,7 @@ stdenv.mkDerivation rec {
             *.jar) continue;;
         esac
         wrapProgram "$file" \
-          --set PERL5LIB "$out/lib/perl5/site_perl:${with perlPackages; stdenv.lib.makePerlPath [
+          --set PERL5LIB "$out/${perlPackages.perl.libPrefix}:${with perlPackages; makePerlPath [
                 LogLog4perl IOSocketInet6 Socket6 URI DBFile DateManip
                 HTMLTemplate FileCopyRecursive FCGI NetCIDR NetSNMP NetServer
                 ListMoreUtils DBDPg LWP rrdtool
