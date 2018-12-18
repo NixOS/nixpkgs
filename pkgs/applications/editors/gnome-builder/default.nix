@@ -30,14 +30,14 @@
 , wrapGAppsHook
 }:
 let
-  version = "3.30.0";
+  version = "3.30.2";
   pname = "gnome-builder";
 in stdenv.mkDerivation {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1pshzpjy9rk6gijlm97s316aihykzxrmb07vilp17q5857passak";
+    sha256 = "05yax7iv9g831xvw9xdc01qc0l7qpmh6rfd692x8cbg76hljxdrr";
   };
 
   nativeBuildInputs = [
