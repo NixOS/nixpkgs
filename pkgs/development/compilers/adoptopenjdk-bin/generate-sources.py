@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell --pure -i python3 -p python3 -p python3Packages.requests
+#!nix-shell --pure -i python3 -p "python3.withPackages (ps: with ps; [ requests ])"
 
 import json
 import re
