@@ -4,25 +4,10 @@
 , enableLanguages ? null
 
 # A list of files or a directory containing files
-, tessdata ? (
-    if enableLanguages == null then
-       languages.all
-    else stdenv.mkDerivation ({
-      name = "tessdata";
-      buildCommand = ''
-        for lang in ${stdenv.lib.concatMapStringsSep " " (x: x + ".traineddata") enableLanguages}; do
-          install -Dt $out ${languages.all}/$lang
-        done
-      '';
-      preferLocalBuild = true;
-      } // (stdenv.lib.optionalAttrs (enableLanguagesHash != null) {
-        # when a hash is given, we make this a fixed output derivation.
-        outputHashMode = "recursive";
-        outputHashAlgo = "sha256";
-        outputHash = enableLanguagesHash;
-      }))
-  )
+, tessdata ? (if enableLanguages == null then languages.all
+              else map (lang: languages.${lang}) enableLanguages)
 
+# This argument is obsolete
 , enableLanguagesHash ? null
 }:
 
@@ -66,4 +51,8 @@ let
 
   tesseract = (if enableLanguages == [] then tesseractBase else tesseractWithData) // passthru;
 in
-  tesseract
+  if enableLanguagesHash == null then
+    tesseract
+  else
+    stdenv.lib.warn "Argument `enableLanguagesHash` is obsolete and can be removed."
+    tesseract
