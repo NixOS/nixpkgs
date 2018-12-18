@@ -1,44 +1,46 @@
-{ stdenv, lib, fetchurl,
-  dpkg,
-  alsaLib,
-  at-spi2-atk,
-  atk,
-  cairo,
-  cups,
-  dbus,
-  expat,
-  fontconfig,
-  freetype,
-  gdk_pixbuf,
-  glib,
-  gnome2,
-  gnome3,
-  gtk3,
-  libuuid,
-  libX11,
-  libXcomposite,
-  libXcursor,
-  libXdamage,
-  libXext,
-  libXfixes,
-  libXi,
-  libXrandr,
-  libXrender,
-  libXScrnSaver,
-  libXtst,
-  nspr,
-  nss,
-  pango,
-  udev,
-  xorg,
-  zlib,
-  xdg_utils,
-  wrapGAppsHook
+{ stdenv, lib, fetchurl
+, dpkg
+, alsaLib
+, at-spi2-atk
+, at-spi2-core
+, atk
+, cairo
+, cups
+, dbus
+, expat
+, fontconfig
+, freetype
+, gdk_pixbuf
+, glib
+, gnome2
+, gnome3
+, gtk3
+, libuuid
+, libX11
+, libXcomposite
+, libXcursor
+, libXdamage
+, libXext
+, libXfixes
+, libXi
+, libXrandr
+, libXrender
+, libXScrnSaver
+, libXtst
+, nspr
+, nss
+, pango
+, udev
+, xorg
+, zlib
+, xdg_utils
+, wrapGAppsHook
 }:
 
 let rpath = lib.makeLibraryPath [
     alsaLib
     at-spi2-atk
+    at-spi2-core
     atk
     cairo
     cups
@@ -50,8 +52,8 @@ let rpath = lib.makeLibraryPath [
     glib
     gnome2.GConf
     gtk3
-    libuuid
     libX11
+    libXScrnSaver
     libXcomposite
     libXcursor
     libXdamage
@@ -60,15 +62,15 @@ let rpath = lib.makeLibraryPath [
     libXi
     libXrandr
     libXrender
-    libXScrnSaver
     libXtst
+    libuuid
     nspr
     nss
     pango
     udev
+    xdg_utils
     xorg.libxcb
     zlib
-    xdg_utils
 ];
 
 
