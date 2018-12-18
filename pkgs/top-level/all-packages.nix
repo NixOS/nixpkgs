@@ -14640,6 +14640,8 @@ in
 
     rtl8814au = callPackage ../os-specific/linux/rtl8814au { };
 
+    rtl8821au = callPackage ../os-specific/linux/rtl8821au { };
+
     rtlwifi_new = callPackage ../os-specific/linux/rtlwifi_new { };
 
     openafs = callPackage ../servers/openafs/1.6/module.nix { };
