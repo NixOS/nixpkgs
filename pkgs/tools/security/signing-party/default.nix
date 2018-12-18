@@ -10,7 +10,7 @@ let
   GnuPGInterfaceRuntimeDependencies = with perlPackages; [
     strictures ClassMethodModifiers DataPerl DevelGlobalDestruction ExporterTiny
     GnuPGInterface ListMoreUtils ModuleRuntime Moo MooXHandlesVia MooXlate
-    RoleTiny SubExporterProgressive SubQuote TypeTiny XSLoader
+    RoleTiny SubExporterProgressive SubQuote TypeTiny
   ];
 in stdenv.mkDerivation rec {
   pname = "signing-party";
