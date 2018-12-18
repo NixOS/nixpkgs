@@ -807,6 +807,8 @@ in
     inherit (darwin.apple_sdk.frameworks) Carbon;
   };
 
+  wiiload = callPackage ../development/tools/wiiload { };
+
   xcodeenv = callPackage ../development/mobile/xcodeenv { };
 
   ssh-agents = callPackage ../tools/networking/ssh-agents { };
