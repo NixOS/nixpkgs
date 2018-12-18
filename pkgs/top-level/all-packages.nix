@@ -730,6 +730,8 @@ in
 
   genymotion = callPackage ../development/mobile/genymotion { };
 
+  gamecube-tools = callPackage ../development/tools/gamecube-tools { };
+
   gams = callPackage ../tools/misc/gams {
     licenseFile = config.gams.licenseFile or null;
     optgamsFile = config.gams.optgamsFile or null;
