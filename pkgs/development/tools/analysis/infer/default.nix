@@ -29,8 +29,8 @@ stdenv.mkDerivation rec {
   case_pass = ./PassingTest.java;
 
   dontUseCmakeConfigure = true;
-  dontBuild = true;
-  doCheck = false; # for now, but want to set to true later
+
+  doCheck = true;
 
   depsBuildBuild = [ git ];
 
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
   ++ stdenv.lib.optionals withJava          [ openjdk ]
   ;
 
-  postUnpack = "
+  postUnpack = ''
     # setup opam stuff
     export OPAMROOT=${infer-deps}/opam
     export OPAM_BACKUP=${infer-deps}/opam.bak
@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
     chmod -R u+w $OPAMROOT
 
     eval $(SHELL=bash opam config env --switch=$INFER_OPAM_SWITCH)
-  " + stdenv.lib.optionalString withC "
+  '' + stdenv.lib.optionalString withC ''
     # link facebook clang plugins and the custom clang itself (bit hacky)
     chmod u+w $src
     rm -rf $src/facebook-clang-plugins
@@ -85,7 +85,7 @@ stdenv.mkDerivation rec {
     ln -s ${facebook-clang}/include $src/facebook-clang-plugins/clang/include
     shasum -a 256 setup.sh src/clang-7.0.tar.xz > installed.version
     popd > /dev/null
-  ";
+  '';
 
   preConfigure = "./autogen.sh";
 
@@ -95,18 +95,16 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optionals (!withJava) [ "--disable-java-analyzers" ]
   ;
 
-  installPhase = "make install";
+  # make test works for full infer: fails to config_tests if either java or c analyzer is disabled
+  checkPhase = "make test || make config_tests";
 
-  postInstall = "
+  postInstall = ''
     # restore original opam state
+    chmod u+w $OPAM_BACKUP
     rm -rf $OPAMROOT
     mv $OPAM_BACKUP $OPAMROOT
-  ";
-
-  #checkPhase = ''
-  #  #$out/bin/infer --fail-on-issue -- javac ${case_fail}
-  #  #$out/bin/infer --fail-on-issue -- javac ${case_pass}
-  #'';
+    chmod u-w $OPAMROOT
+  '';
 
   meta = with stdenv.lib; {
     description = "A static analyzer for Java, C, C++, and Objective-C";

@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     zlib
   ];
 
-  installPhase = "
+  installPhase = ''
     # make sure we can git clone stuff (opam pin add -k git)
     export GIT_SSL_NO_VERIFY=true
 
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     # install infer deps
     opam pin add -k git lock 'https://github.com/rgrinberg/opam-lock'
     opam lock --install < ${opamlock}
-  ";
+  '';
 
   meta = with stdenv.lib; {
     description = "Opam dependencies for infer";
