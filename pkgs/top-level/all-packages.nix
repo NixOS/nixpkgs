@@ -4783,7 +4783,7 @@ in
 
   fmodex = callPackage ../games/zandronum/fmod.nix { };
 
-  pdfmod = callPackage ../applications/misc/pdfmod { mono = mono4; };
+  pdfmod = callPackage ../applications/misc/pdfmod { mono = mono514; };
 
   pdf-quench = callPackage ../applications/misc/pdf-quench { };
 
