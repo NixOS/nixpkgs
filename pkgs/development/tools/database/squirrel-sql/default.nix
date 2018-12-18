@@ -14,20 +14,25 @@ in stdenv.mkDerivation rec {
     sha256 = "0b16l7p7klagxnwkx2az4mbyd35kv4aj8xxbwm27pp3spz9dk8m0";
   };
 
-  buildInputs = [
-    jre makeWrapper stdenv unzip
-  ];
+  nativeBuildInputs = [ makeWrapper unzip ];
+  buildInputs = [ jre stdenv ];
 
   unpackPhase = ''
+    runHook preUnpack
     unzip ${src}
+    runHook postUnpack
   '';
 
   buildPhase = ''
+    runHook preBuild
     cd squirrelsql-${version}-standard
     chmod +x squirrel-sql.sh
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
+    
     mkdir -p $out/share/squirrel-sql
     cp -r . $out/share/squirrel-sql
 
@@ -47,6 +52,8 @@ in stdenv.mkDerivation rec {
     ln -s $out/share/squirrel-sql/icons/acorn.png \
       $out/share/icons/hicolor/32x32/apps/squirrel-sql.png
     ln -s ${desktopItem}/share/applications $out/share
+    
+    runHook postInstall
   '';
 
   desktopItem = makeDesktopItem {
@@ -59,11 +66,11 @@ in stdenv.mkDerivation rec {
     icon = "squirrel-sql";
   };
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Universal SQL Client";
     homepage = http://squirrel-sql.sourceforge.net/;
-    license = stdenv.lib.licenses.lgpl21;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ khumba ];
+    license = licenses.lgpl21;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ khumba ];
   };
 }
