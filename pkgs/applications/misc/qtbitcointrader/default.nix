@@ -1,8 +1,10 @@
 { stdenv, fetchzip, qt5 }:
 
+let
+  version = "1.40.30";
+in
 stdenv.mkDerivation {
   name = "qtbitcointrader-${version}";
-  version = "1.40.30";
 
   src = fetchzip {
     url = "https://github.com/JulyIGHOR/QtBitcoinTrader/archive/v${version}.tar.gz";
@@ -23,11 +25,11 @@ stdenv.mkDerivation {
     runHook postConfigure
   '';
 
-  meta = with stdenv.lib;
-    { description = "Bitcoin trading client";
-      homepage = https://centrabit.com/;
-      license = licenses.gpl3;
-      platforms = qt5.qtbase.meta.platforms;
-      maintainers = [ maintainers.ehmry ];
-    };
+  meta = with stdenv.lib; {
+    description = "Bitcoin trading client";
+    homepage = https://centrabit.com/;
+    license = licenses.gpl3;
+    platforms = qt5.qtbase.meta.platforms;
+    maintainers = [ maintainers.ehmry ];
+  };
 }
