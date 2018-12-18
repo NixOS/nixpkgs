@@ -12037,6 +12037,14 @@ in
 
   pybind11 = callPackage ../development/libraries/pybind11 { };
 
+  python-qt = callPackage ../development/libraries/python-qt {
+    python = python27;
+    qmake = qt59.qmake;
+    qttools = qt59.qttools;
+    qtwebengine = qt59.qtwebengine;
+    qtxmlpatterns = qt59.qtxmlpatterns;
+  };
+
   re2 = callPackage ../development/libraries/re2 { };
 
   qbs = libsForQt5.callPackage ../development/tools/build-managers/qbs { };
@@ -16319,6 +16327,12 @@ in
   csa = callPackage ../applications/audio/csa { };
 
   csound = callPackage ../applications/audio/csound { };
+
+  csound-qt = callPackage ../applications/audio/csound/csound-qt {
+    python = python27;
+    qmake = qt59.qmake;
+    qtwebengine = qt59.qtwebengine;
+  };
 
   cinepaint = callPackage ../applications/graphics/cinepaint {
     fltk = fltk13;
