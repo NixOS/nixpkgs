@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     description = "Gnuradio block for gsm";
     homepage = https://github.com/ptrkrysik/gr-gsm;
     license = licenses.gpl3Plus;
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ mog ];
   };
 }

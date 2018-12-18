@@ -74,7 +74,6 @@ stdenv.mkDerivation rec {
     Moo
     NetDBus
     OpenGL
-    threads
     XMLSAX
   ]);
 

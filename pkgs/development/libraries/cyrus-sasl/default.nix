@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, openssl, openldap, kerberos, db, gettext
 , pam, fixDarwinDylibNames, autoreconfHook, fetchpatch, enableLdap ? false
-, buildPackages }:
+, buildPackages, pruneLibtoolFiles }:
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   outputs = [ "bin" "dev" "out" "man" "devdoc" ];
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = [ autoreconfHook fixDarwinDylibNames ];
+  nativeBuildInputs = [ autoreconfHook fixDarwinDylibNames pruneLibtoolFiles ];
   buildInputs =
     [ openssl db gettext kerberos ]
     ++ lib.optional enableLdap openldap
@@ -24,12 +24,7 @@ stdenv.mkDerivation rec {
   patches = [
     ./missing-size_t.patch # https://bugzilla.redhat.com/show_bug.cgi?id=906519
     ./cyrus-sasl-ac-try-run-fix.patch
-  ] ++ lib.optional stdenv.isFreeBSD (
-      fetchurl {
-        url = "http://www.linuxfromscratch.org/patches/blfs/svn/cyrus-sasl-2.1.26-fixes-3.patch";
-        sha256 = "1vh4pc2rxxm6yvykx0b7kg09jbcwcxwv5rs6yq2ag3y8p6a9x86w";
-      }
-    );
+  ];
 
   configureFlags = [
     "--with-openssl=${openssl.dev}"
@@ -40,12 +35,6 @@ stdenv.mkDerivation rec {
   ] ++ lib.optional enableLdap "--with-ldap=${openldap.dev}";
 
   installFlags = lib.optional stdenv.isDarwin [ "framedir=$(out)/Library/Frameworks/SASL2.framework" ];
-
-  postInstall = ''
-    for f in $out/lib/*.la $out/lib/sasl2/*.la; do
-      substituteInPlace $f --replace "${openssl.dev}/lib" "${openssl.out}/lib"
-    done
-  '';
 
   meta = {
     homepage = https://www.cyrusimap.org/sasl;

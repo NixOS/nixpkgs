@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation rec {
   name = "packagekit-${version}";
-  version = "1.1.11";
+  version = "1.1.12";
 
   outputs = [ "out" "dev" ];
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     owner = "hughsie";
     repo = "PackageKit";
     rev = "PACKAGEKIT_${lib.replaceStrings ["."] ["_"] version}";
-    sha256 = "0zr4b3ax8lcd3wkgj1cybs2cqf38br2nvl91qkw9g2jmzlq6bvic";
+    sha256 = "02wq3jw3mkdld90irh5vdfd5bri2g1p89mhrmj56kvif1fqak46x";
   };
 
   buildInputs = [ glib polkit python gobject-introspection vala_0_38 ]

@@ -138,6 +138,8 @@ let
 
     cairo2 = callPackage ../development/ocaml-modules/cairo2 { };
 
+    checkseum = callPackage ../development/ocaml-modules/checkseum { };
+
     cil = callPackage ../development/ocaml-modules/cil { };
 
     cmdliner = callPackage ../development/ocaml-modules/cmdliner { };
@@ -225,6 +227,8 @@ let
     earley_ocaml = callPackage ../development/ocaml-modules/earley_ocaml { };
 
     easy-format = callPackage ../development/ocaml-modules/easy-format { };
+
+    elina = callPackage ../development/ocaml-modules/elina { };
 
     eliom = callPackage ../development/ocaml-modules/eliom {
       js_of_ocaml-lwt = js_of_ocaml-lwt.override {
@@ -358,6 +362,8 @@ let
     jsonm = callPackage ../development/ocaml-modules/jsonm { };
 
     lablgl = callPackage ../development/ocaml-modules/lablgl { };
+
+    lablgtk3 = callPackage ../development/ocaml-modules/lablgtk3 { };
 
     lablgtk_2_14 = callPackage ../development/ocaml-modules/lablgtk/2.14.0.nix {
       inherit (pkgs.gnome2) libgnomecanvas libglade gtksourceview;
@@ -556,6 +562,8 @@ let
     opam-file-format = callPackage ../development/ocaml-modules/opam-file-format { };
 
     opti = callPackage ../development/ocaml-modules/opti { };
+
+    optint = callPackage ../development/ocaml-modules/optint { };
 
     otfm = callPackage ../development/ocaml-modules/otfm { };
 

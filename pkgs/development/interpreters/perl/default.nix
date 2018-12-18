@@ -173,11 +173,6 @@ let
     setupHook = ./setup-hook-cross.sh;
   });
 in rec {
-  perl526 = common {
-    version = "5.26.3";
-    sha256 = "14y46c1cnrfnd1k5nk6fj5w5vxna5xav6pmk44qaabr9x06y8nmp";
-  };
-
   # the latest Maint version
   perl528 = common {
     version = "5.28.1";

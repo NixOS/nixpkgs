@@ -1,23 +1,29 @@
-{ stdenv, fetchurl, meson, ninja, pkgconfig, gettext, libxml2, desktop-file-utils, python3, wrapGAppsHook
-, gtk, gnome3, gnome-autoar, glib-networking, shared-mime-info, libnotify, libexif, libseccomp
-, exempi, librsvg, tracker, tracker-miners, gnome-desktop, gexiv2, libselinux, gdk_pixbuf }:
+{ stdenv, fetchurl, meson, ninja, pkgconfig, gettext, libxml2
+, desktop-file-utils, python3, wrapGAppsHook , gtk, gnome3, gnome-autoar
+, glib-networking, shared-mime-info, libnotify, libexif, libseccomp , exempi
+, librsvg, tracker, tracker-miners, gexiv2, libselinux, gdk_pixbuf
+, substituteAll, bubblewrap
+}:
 
 let
   pname = "nautilus";
-  version = "3.30.4";
+  version = "3.30.5";
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "1fcavvv85mpaz53k5kx5mls7npx7b95s8isnhrgq2iglz4kpr7s1";
+    sha256 = "144r4py9b8w9ycsg6fggjg05kwvymh003qsb3h6apgpch5y3zgnv";
   };
 
-  nativeBuildInputs = [ meson ninja pkgconfig libxml2 gettext python3 wrapGAppsHook desktop-file-utils ];
+  nativeBuildInputs = [
+    meson ninja pkgconfig libxml2 gettext python3 wrapGAppsHook
+    desktop-file-utils
+  ];
 
   buildInputs = [
     glib-networking shared-mime-info libexif gtk exempi libnotify libselinux
-    tracker tracker-miners gnome-desktop gexiv2 libseccomp
+    tracker tracker-miners gexiv2 libseccomp bubblewrap
     gnome3.adwaita-icon-theme gnome3.gsettings-desktop-schemas
   ];
 
@@ -36,7 +42,16 @@ in stdenv.mkDerivation rec {
     patchShebangs build-aux/meson/postinstall.py
   '';
 
-  patches = [ ./extension_dir.patch ];
+  patches = [
+    ./extension_dir.patch
+    # 3.30 now generates it's own thummbnails,
+    # and no longer depends on `gnome-desktop`
+    (substituteAll {
+      src = ./bubblewrap-paths.patch;
+      bubblewrap_bin = "${bubblewrap}/bin/bwrap";
+      inherit (builtins) storeDir;
+    })
+  ];
 
   passthru = {
     updateScript = gnome3.updateScript {

@@ -1,7 +1,7 @@
 { stdenv, fetchurl, meson, ninja, makeWrapper, pkgconfig
 , appstream-glib, desktop-file-utils, python3
 , gtk, girara, gettext, libxml2
-, file, sqlite, glib, texlive, libintl, libseccomp
+, sqlite, glib, texlive, libintl, libseccomp
 , gtk-mac-integration, synctexSupport ? true
 }:
 
@@ -18,21 +18,18 @@ stdenv.mkDerivation rec {
     sha256 = "1znr3psqda06xklzj8mn452w908llapcg1rj468jwpg0wzv6pxfn";
   };
 
+  outputs = [ "bin" "man" "dev" "out" ];
+
   nativeBuildInputs = [
     meson ninja pkgconfig appstream-glib desktop-file-utils python3.pkgs.sphinx
     gettext makeWrapper libxml2
   ];
 
   buildInputs = [
-    file gtk girara libintl libseccomp
+    gtk girara libintl libseccomp
     sqlite glib
   ] ++ optional synctexSupport texlive.bin.core
     ++ optional stdenv.isDarwin [ gtk-mac-integration ];
-
-  postInstall = ''
-    wrapProgram "$out/bin/zathura" \
-      --prefix PATH ":" "${makeBinPath [ file ]}"
-  '';
 
   meta = {
     homepage = https://pwmt.org/projects/zathura/;

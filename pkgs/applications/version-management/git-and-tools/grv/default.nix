@@ -1,11 +1,11 @@
-{ stdenv, buildGo19Package, fetchFromGitHub, curl, libgit2_0_27, ncurses, pkgconfig, readline }:
+{ stdenv, buildGo19Package, fetchFromGitHub, curl, libgit2, ncurses, pkgconfig, readline }:
 let
   version = "0.3.0";
 in
 buildGo19Package {
   name = "grv-${version}";
 
-  buildInputs = [ ncurses readline curl libgit2_0_27 ];
+  buildInputs = [ ncurses readline curl libgit2 ];
   nativeBuildInputs = [ pkgconfig ];
 
   goPackagePath = "github.com/rgburke/grv";

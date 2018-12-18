@@ -36,7 +36,6 @@ stdenv.mkDerivation rec {
     perlPackages.NetSNMP
     perlPackages.NetServer
     perlPackages.ListMoreUtils
-    perlPackages.TimeHiRes
     perlPackages.LWP
     perlPackages.DBDPg
     python
@@ -121,7 +120,7 @@ stdenv.mkDerivation rec {
           --set PERL5LIB "$out/${perlPackages.perl.libPrefix}:${with perlPackages; makePerlPath [
                 LogLog4perl IOSocketInet6 Socket6 URI DBFile DateManip
                 HTMLTemplate FileCopyRecursive FCGI NetCIDR NetSNMP NetServer
-                ListMoreUtils TimeHiRes DBDPg LWP rrdtool
+                ListMoreUtils DBDPg LWP rrdtool
                 ]}"
     done
   '';

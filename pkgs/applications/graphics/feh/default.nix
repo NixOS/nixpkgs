@@ -6,11 +6,11 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "feh-${version}";
-  version = "3.0";
+  version = "3.1.1";
 
   src = fetchurl {
     url = "https://feh.finalrewind.org/${name}.tar.bz2";
-    sha256 = "00fwf8yz7k8vzd30ly5ndlj6ax9w85dkjzjnlk95vd0zdrf4wyxn";
+    sha256 = "1sy8z6rv5sy1bhk3846hgfdy96wdi874yr2fnxfprks46qp29l31";
   };
 
   outputs = [ "out" "man" "doc" ];
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     install -D -m 644 man/*.1 $out/share/man/man1
   '';
 
-  checkInputs = [ perlPackages.TestCommand perlPackages.TestHarness ];
+  checkInputs = [ perlPackages.TestCommand ];
   preCheck = ''
     export PERL5LIB="${perlPackages.TestCommand}/${perlPackages.perl.libPrefix}"
   '';

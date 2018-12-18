@@ -1,8 +1,8 @@
-{ stdenv, lib, go, procps, removeReferencesTo, fetchFromGitHub }:
+{ buildGoPackage, fetchpatch, stdenv, lib, procps, fetchFromGitHub }:
 
 let
-  common = { stname, target, patches ? [], postInstall ? "" }:
-    stdenv.mkDerivation rec {
+  common = { stname, target, postInstall ? "" }:
+    buildGoPackage rec {
       version = "0.14.52";
       name = "${stname}-${version}";
 
@@ -13,28 +13,35 @@ let
         sha256 = "1qzzbqfyjqlgzysyf6dr0xsm3gn35irmllxjjd94v169swvkk5kd";
       };
 
-      inherit patches;
+      goPackagePath = "github.com/syncthing/syncthing";
 
-      buildInputs = [ go ];
-      nativeBuildInputs = [ removeReferencesTo ];
+      patches = [
+        ./add-stcli-target.patch
+        (fetchpatch {
+          url = "https://github.com/syncthing/syncthing/commit/e7072feeb7669948c3e43f55d21aec15481c33ba.patch";
+          sha256 = "1pcybww2vdx45zhd1sd53v7fp40vfgkwqgy8flv7hxw2paq8hxd4";
+        })
+      ];
+      BUILD_USER="nix";
+      BUILD_HOST="nix";
 
       buildPhase = ''
-        # Syncthing expects that it is checked out in $GOPATH, if that variable is
-        # set.  Since this isn't true when we're fetching source, we can explicitly
-        # unset it and force Syncthing to set up a temporary one for us.
-        env GOPATH= BUILD_USER=nix BUILD_HOST=nix go run build.go -no-upgrade -version v${version} build ${target}
+        runHook preBuild
+        pushd go/src/${goPackagePath}
+        go run build.go -no-upgrade -version v${version} build ${target}
+        popd
+        runHook postBuild
       '';
 
       installPhase = ''
-        install -Dm755 ${target} $out/bin/${target}
+        pushd go/src/${goPackagePath}
+        runHook preInstall
+        install -Dm755 ${target} $bin/bin/${target}
         runHook postInstall
+        popd
       '';
 
       inherit postInstall;
-
-      preFixup = ''
-        find $out/bin -type f -exec remove-references-to -t ${go} '{}' '+'
-      '';
 
       meta = with lib; {
         homepage = https://www.syncthing.net/;
@@ -79,7 +86,6 @@ in {
   syncthing-cli = common {
     stname = "syncthing-cli";
 
-    patches = [ ./add-stcli-target.patch ];
     target = "stcli";
   };
 

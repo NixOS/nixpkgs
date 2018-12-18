@@ -2,7 +2,7 @@
 , pkgconfig, intltool, autoreconfHook
 , file, expat, libdrm, xorg, wayland, wayland-protocols, openssl
 , llvmPackages, libffi, libomxil-bellagio, libva-minimal
-, libelf, libvdpau, valgrind-light, python2
+, libelf, libvdpau, valgrind-light, python2, python2Packages
 , libglvnd
 , enableRadv ? true
 , galliumDrivers ? null
@@ -134,11 +134,14 @@ let self = stdenv.mkDerivation {
     "--disable-opencl"
   ];
 
-  nativeBuildInputs = [ autoreconfHook intltool pkgconfig file ];
+  nativeBuildInputs = [
+    autoreconfHook intltool pkgconfig file
+    python2 python2Packages.Mako
+  ];
 
-  propagatedBuildInputs = with xorg;
-    [ libXdamage libXxf86vm ]
-    ++ optional stdenv.isLinux libdrm
+  propagatedBuildInputs = with xorg; [
+    libXdamage libXxf86vm
+  ] ++ optional stdenv.isLinux libdrm
     ++ optionals stdenv.isDarwin [ OpenGL Xplugin ];
 
   buildInputs = with xorg; [
@@ -147,7 +150,6 @@ let self = stdenv.mkDerivation {
     libX11 libXext libxcb libXt libXfixes libxshmfence libXrandr
     libffi libvdpau libelf libXvMC
     libpthreadstubs openssl /*or another sha1 provider*/
-    python2 python2.pkgs.Mako
   ] ++ lib.optionals (elem "wayland" eglPlatforms) [ wayland wayland-protocols ]
     ++ lib.optionals stdenv.isLinux [ valgrind-light libomxil-bellagio libva-minimal ];
 

@@ -33,6 +33,9 @@ stdenv.mkDerivation rec {
     "INTROSPECTION_TYPELIBDIR=$(out)/lib/girepository-1.0"
   ];
 
+  # Make plank's application launcher hidden in Pantheon
+  patches = [ ./hide-in-pantheon.patch ];
+
   postPatch = ''
     substituteInPlace ./configure \
       --replace "/usr/bin/file" "${file}/bin/file"

@@ -1,9 +1,11 @@
-{ stdenv, appleDerivation, cpio, xnu, Libc, Libm, libdispatch, cctools, Libinfo,
-  dyld, Csu, architecture, libclosure, CarbonHeaders, ncurses, CommonCrypto, copyfile,
-  removefile, libresolv, Libnotify, libplatform, libpthread, mDNSResponder, launchd, libutil }:
+{ stdenv, appleDerivation, cpio, xnu, Libc, Libm, libdispatch, cctools, Libinfo
+, dyld, Csu, architecture, libclosure, CarbonHeaders, ncurses, CommonCrypto
+, copyfile, removefile, libresolv, Libnotify, libplatform, libpthread
+, mDNSResponder, launchd, libutil, hfs }:
 
 appleDerivation rec {
-  phases = [ "unpackPhase" "installPhase" ];
+  dontBuild = true;
+  dontFixup = true;
 
   nativeBuildInputs = [ cpio ];
 
@@ -17,12 +19,13 @@ appleDerivation rec {
     cp ${xnu}/Library/Frameworks/Kernel.framework/Versions/A/Headers/Availability*.h $out/include
     cp ${xnu}/Library/Frameworks/Kernel.framework/Versions/A/Headers/stdarg.h        $out/include
 
-    for dep in ${Libc} ${Libm} ${Libinfo} ${dyld} ${architecture} ${libclosure} ${CarbonHeaders} \
-               ${libdispatch} ${ncurses.dev} ${CommonCrypto} ${copyfile} ${removefile} ${libresolv} \
-               ${Libnotify} ${libplatform} ${mDNSResponder} ${launchd} ${libutil} ${libpthread}; do
+    for dep in ${Libc} ${Libm} ${Libinfo} ${dyld} ${architecture} \
+               ${libclosure} ${CarbonHeaders} ${libdispatch} ${ncurses.dev} \
+               ${CommonCrypto} ${copyfile} ${removefile} ${libresolv} \
+               ${Libnotify} ${libplatform} ${mDNSResponder} ${launchd} \
+               ${libutil} ${libpthread} ${hfs}; do
       (cd $dep/include && find . -name '*.h' | cpio -pdm $out/include)
     done
-
 
     (cd ${cctools.dev}/include/mach-o && find . -name '*.h' | cpio -pdm $out/include/mach-o)
 
@@ -30,6 +33,7 @@ appleDerivation rec {
     #ifndef __TARGETCONDITIONALS__
     #define __TARGETCONDITIONALS__
     #define TARGET_OS_MAC           1
+    #define TARGET_OS_OSX           1
     #define TARGET_OS_WIN32         0
     #define TARGET_OS_UNIX          0
     #define TARGET_OS_EMBEDDED      0
