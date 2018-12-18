@@ -22901,6 +22901,8 @@ in
 
   virglrenderer = callPackage ../development/libraries/virglrenderer { };
 
+  vivid = callPackage ../tools/misc/vivid { };
+
   vokoscreen = libsForQt5.callPackage ../applications/video/vokoscreen { };
 
   wavegain = callPackage ../applications/audio/wavegain { };
