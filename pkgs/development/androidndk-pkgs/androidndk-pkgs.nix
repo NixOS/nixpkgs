@@ -38,14 +38,16 @@ let
 
   hostInfo = ndkInfoFun stdenv.hostPlatform;
   targetInfo = ndkInfoFun stdenv.targetPlatform;
-
 in
 
 rec {
   # Misc tools
   binaries = let
       ndkBinDir =
-        "${androidndk}/libexec/${androidndk.name}/toolchains/${targetInfo.triple}-${targetInfo.gccVer}/prebuilt/${hostInfo.double}/bin";
+        "${androidndk}/libexec/android-sdk/ndk-bundle/toolchains/${targetInfo.triple}-${targetInfo.gccVer}/prebuilt/${hostInfo.double}/bin";
+      ndkGCCLibDir =
+        "${androidndk}/libexec/android-sdk/ndk-bundle/toolchains/${targetInfo.triple}-${targetInfo.gccVer}/prebuilt/${hostInfo.double}/lib/gcc/${targetInfo.triple}/4.9.x";
+
     in runCommand "ndk-gcc-binutils" {
       isGNU = true; # for cc-wrapper
       nativeBuildInputs = [ makeWrapper ];
@@ -54,8 +56,15 @@ rec {
       mkdir -p $out/bin
       for prog in ${ndkBinDir}/${targetInfo.triple}-*; do
         prog_suffix=$(basename $prog | sed 's/${targetInfo.triple}-//')
-        ln -s $prog $out/bin/${stdenv.targetPlatform.config}-$prog_suffix
+        cat > $out/bin/${stdenv.targetPlatform.config}-$prog_suffix <<EOF
+      #! ${stdenv.shell} -e
+      $prog "\$@"
+      EOF
+        chmod +x $out/bin/${stdenv.targetPlatform.config}-$prog_suffix
       done
+
+      ln -s $out/bin/${stdenv.targetPlatform.config}-ld $out/bin/ld
+      ln -s ${ndkGCCLibDir} $out/lib
     '';
 
   binutils = wrapBintoolsWith {
@@ -109,18 +118,16 @@ rec {
   # anyways.
   libraries =
     let
-      includePath = if buildAndroidndk.version == "10e" then
-          "${buildAndroidndk}/libexec/${buildAndroidndk.name}/platforms/android-${stdenv.hostPlatform.sdkVer}/arch-${hostInfo.arch}/usr/include/"
-        else
-          "${buildAndroidndk}/libexec/${buildAndroidndk.name}/sysroot/usr/include";
-      libPath = "${buildAndroidndk}/libexec/${buildAndroidndk.name}/platforms/android-${stdenv.hostPlatform.sdkVer}/arch-${hostInfo.arch}/usr/lib/";
+      includePath = "${buildAndroidndk}/libexec/android-sdk/ndk-bundle/sysroot/usr/include";
+      asmIncludePath = "${buildAndroidndk}/libexec/android-sdk/ndk-bundle/sysroot/usr/include/${targetInfo.triple}";
+      libPath = "${buildAndroidndk}/libexec/android-sdk/ndk-bundle/platforms/android-${stdenv.hostPlatform.sdkVer}/arch-${hostInfo.arch}/usr/lib/";
     in
     runCommand "bionic-prebuilt" {} ''
       mkdir -p $out
       cp -r ${includePath} $out/include
+      chmod u+w $out/include
+      cp -r ${asmIncludePath}/* $out/include
       chmod +w $out/include
-      ${lib.optionalString (lib.versionOlder "10e" buildAndroidndk.version)
-        "ln -s $out/include/${hostInfo.triple}/asm $out/include/asm"}
       ln -s ${libPath} $out/lib
     '';
 }

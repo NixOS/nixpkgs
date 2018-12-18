@@ -834,9 +834,8 @@ in
     licenseAccepted = config.android_sdk.accept_license or false;
   };
 
-  androidndkPkgs = androidndkPkgs_17c;
-  androidndkPkgs_17c = (callPackage ../development/androidndk-pkgs {})."17c";
-  androidndkPkgs_10e = (callPackage ../development/androidndk-pkgs {})."10e";
+  androidndkPkgs = androidndkPkgs_18b;
+  androidndkPkgs_18b = (callPackage ../development/androidndk-pkgs {})."18b";
 
   androidsdk_9_0 = androidenv.androidPkgs_9_0.androidsdk;
 
@@ -9353,7 +9352,7 @@ in
 
   # TODO(@Ericson2314): Build bionic libc from source
   bionic = assert stdenv.hostPlatform.useAndroidPrebuilt;
-    androidenv."androidndkPkgs_${stdenv.hostPlatform.ndkVer}".libraries;
+    pkgs."androidndkPkgs_${stdenv.hostPlatform.ndkVer}".libraries;
 
   bobcat = callPackage ../development/libraries/bobcat { };
 
