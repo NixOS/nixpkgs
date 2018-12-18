@@ -20,5 +20,6 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl3;
     platforms = platforms.unix;
     maintainers = with maintainers; [ puffnfresh ];
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }
