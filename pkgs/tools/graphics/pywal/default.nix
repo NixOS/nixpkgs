@@ -2,11 +2,11 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "pywal";
-  version = "3.1.0";
+  version = "3.2.1";
 
   src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256 = "1i4i9jjnm4f0zhz4nqbb4253517w33bsh5f246n5930hwrr9xn76";
+    sha256 = "1pj30h19ijwhmbm941yzbkgr19q06dhp9492h9nrqw1wfjfdbdic";
   };
 
   # necessary for imagemagick to be found during tests
