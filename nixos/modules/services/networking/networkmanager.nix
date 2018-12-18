@@ -488,7 +488,7 @@ in {
       '') cfg.dynamicHosts.hostsDirs);
       serviceConfig = {
         Type = "oneshot";
-        RemainAfterExist = true;
+        RemainAfterExit = true;
       };
     };
 

@@ -5,13 +5,13 @@
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "dde-calendar";
-  version = "1.2.5";
+  version = "1.2.6";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "1a5zxpz7zncw6mrzv8zmn0j1vk0c8fq0m1xhmnwllffzybrhn4y7";
+    sha256 = "0k973rv0prvr7cg1xwg7kr14fkx13aslhiqc3q7vpakfk53qsw4n";
   };
 
   nativeBuildInputs = [

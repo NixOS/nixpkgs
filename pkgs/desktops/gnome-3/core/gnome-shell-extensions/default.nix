@@ -25,9 +25,11 @@ stdenv.mkDerivation rec {
   ];
 
   doCheck = true;
+  # 52 is required for tests
+  # https://gitlab.gnome.org/GNOME/gnome-shell-extensions/blob/3.30.1/meson.build#L25
+  checkInputs = [ spidermonkey_52 ];
 
   nativeBuildInputs = [ meson ninja pkgconfig gettext glib ];
-  buildInputs = [ spidermonkey_52 ];
 
   mesonFlags = [ "-Dextension_set=all" ];
 

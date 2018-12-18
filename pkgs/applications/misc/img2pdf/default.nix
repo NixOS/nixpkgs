@@ -4,11 +4,11 @@ with python3Packages;
 
 buildPythonApplication rec {
   pname = "img2pdf";
-  version = "0.3.1";
+  version = "0.3.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "071s3gf28nb8ifxkix7dzjny6vib7791mnp0v3f4zagcjcic22a4";
+    sha256 = "07wxgn5khmy94zqqv8l84q9b3yy84ddvwr2f7j4pjycrj2gg7si8";
   };
 
   doCheck = false; # needs pdfrw

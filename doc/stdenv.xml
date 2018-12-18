@@ -2500,17 +2500,17 @@ addEnvHooks "$hostOffset" myBashFunction
      <listitem>
       <para>
        This hook will make a build pause instead of stopping when a failure
-       happen. It prevents nix to cleanup the build environment immediatly and
+       happens. It prevents nix from cleaning up the build environment immediately and
        allows the user to attach to a build environment using the
-       <command>cntr</command> command. On build error it will print the
-       instruction that are neccessary for <command>cntr</command>. Installing
+       <command>cntr</command> command. Upon build error it will print
+       instructions on how to use <command>cntr</command>. Installing
        cntr and running the command will provide shell access to the build
        sandbox of failed build. At <filename>/var/lib/cntr</filename> the
-       sandbox filesystem is mounted. All commands and files of the system are
+       sandboxed filesystem is mounted. All commands and files of the system are
        still accessible within the shell. To execute commands from the sandbox
        use the cntr exec subcommand. Note that <command>cntr</command> also
        needs to be executed on the machine that is doing the build, which might
-       be not the case when remote builders are enabled.
+       not be the case when remote builders are enabled.
        <command>cntr</command> is only supported on Linux-based platforms. To
        use it first add <literal>cntr</literal> to your
        <literal>environment.systemPackages</literal> on NixOS or alternatively to

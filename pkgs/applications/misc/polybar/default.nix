@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     };
 
     meta = with stdenv.lib; {
-      description = "A fast and easy-to-use tool for creatin status bars.";
+      description = "A fast and easy-to-use tool for creating status bars";
       longDescription = ''
         Polybar aims to help users build beautiful and highly customizable
         status bars for their desktop environment, without the need of

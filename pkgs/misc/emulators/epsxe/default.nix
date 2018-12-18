@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, alsaLib, curl, gdk_pixbuf, glib, gtk3,
+{ stdenv, fetchurl, alsaLib, curl, gdk_pixbuf, glib, gtk3, libGLU_combined,
   libX11, openssl, ncurses5, SDL, SDL_ttf, unzip, zlib, wrapGAppsHook }:
 
 with stdenv.lib;
@@ -27,6 +27,7 @@ stdenv.mkDerivation rec {
     glib
     gtk3
     libX11
+    libGLU_combined
     openssl
     ncurses5
     SDL

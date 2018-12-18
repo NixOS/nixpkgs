@@ -86,7 +86,7 @@ self: super: {
       name = "git-annex-${super.git-annex.version}-src";
       url = "git://git-annex.branchable.com/";
       rev = "refs/tags/" + super.git-annex.version;
-      sha256 = "0f0pp0d5q4122cjh4j7iasnjh234fmkvlwgb3f49087cg8rr2czh";
+      sha256 = "0wczijw80pw31k6h3a65m76aq9i02aarr2zxl7k5m7p0l6rn82vd";
     };
   }).override {
     dbus = if pkgs.stdenv.isLinux then self.dbus else null;
@@ -342,6 +342,7 @@ self: super: {
   MemoTrie = dontHaddock (dontCheck super.MemoTrie);
   metrics = dontCheck super.metrics;
   milena = dontCheck super.milena;
+  modular-arithmetic = dontCheck super.modular-arithmetic; # tests require a very old Glob (0.7.*)
   nats-queue = dontCheck super.nats-queue;
   netpbm = dontCheck super.netpbm;
   network = dontCheck super.network;
@@ -485,6 +486,7 @@ self: super: {
 
   # Test suite won't compile against tasty-hunit 0.10.x.
   binary-parser = dontCheck super.binary-parser;
+  binary-parsers = dontCheck super.binary-parsers;
   bytestring-strict-builder = dontCheck super.bytestring-strict-builder;
   bytestring-tree-builder = dontCheck super.bytestring-tree-builder;
 
@@ -681,7 +683,8 @@ self: super: {
   # Fix an aarch64 issue with cryptonite-0.25:
   # https://github.com/haskell-crypto/cryptonite/issues/234
   # This has been committed upstream, but there is, as of yet, no new release.
-  cryptonite = appendPatch super.cryptonite (pkgs.fetchpatch {
+  # Also, disable the test suite to avoid https://github.com/haskell-crypto/cryptonite/issues/260.
+  cryptonite = appendPatch (dontCheck super.cryptonite) (pkgs.fetchpatch {
     url = https://github.com/haskell-crypto/cryptonite/commit/4622e5fc8ece82f4cf31358e31cd02cf020e558e.patch;
     sha256 = "1m2d47ni4jbrpvxry50imj91qahr3r7zkqm157clrzlmw6gzpgnq";
   });
@@ -1197,5 +1200,12 @@ self: super: {
 
   # https://github.com/mgajda/json-autotype/issues/25
   json-autotype = dontCheck super.json-autotype;
+
+  # https://github.com/kazu-yamamoto/iproute/issues/43
+  appar = self.appar_0_1_7;
+
+  # The LTS-12.x version doesn't suffice to build hlint, hoogle, etc.
+  hlint = super.hlint.overrideScope (self: super: { haskell-src-exts = self.haskell-src-exts_1_21_0; });
+  hoogle = super.hoogle.overrideScope (self: super: { haskell-src-exts = self.haskell-src-exts_1_21_0; });
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super

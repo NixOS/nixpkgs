@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   name = "vulkan-tools-${version}";
-  version = "1.1.85.0";
+  version = "1.1.92";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "Vulkan-Tools";
     rev = "sdk-${version}";
-    sha256 = "0f4dfr8g0vy7y1hvs6z9lw52kissailzisby4qnz4akv0zz5y5s5";
+    sha256 = "1khbfxp2mha7h0vqs0fkqscxm76gn3zlia8yya11lkhk7sn3h0d3";
   };
 
   nativeBuildInputs = [ cmake pkgconfig ];

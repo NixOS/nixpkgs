@@ -401,6 +401,11 @@
     github = "aszlig";
     name = "aszlig";
   };
+  atnnn = {
+    email = "etienne@atnnn.com";
+    github = "atnnn";
+    name = "Etienne Laurin";
+  };
   auntie = {
     email = "auntieNeo@gmail.com";
     github = "auntie";
@@ -1889,6 +1894,11 @@
     github = "ironpinguin";
     name = "Michele Catalano";
   };
+  ivan = {
+    email = "ivan@ludios.org";
+    github = "ivan";
+    name = "Ivan Kozik";
+  };
   ivan-tkatchev = {
     email = "tkatchev@gmail.com";
     name = "Ivan Tkatchev";
@@ -1917,6 +1927,11 @@
     email = "ars.seroka@gmail.com";
     github = "jagajaga";
     name = "Arseniy Seroka";
+  };
+  jakelogemann = {
+    email = "jake.logemann@gmail.com";
+    github = "jakelogemann";
+    name = "Jake Logemann";
   };
   jammerful = {
     email = "jammerful@gmail.com";
@@ -3414,6 +3429,11 @@
     github = "pkmx";
     name = "Chih-Mao Chen";
   };
+  plchldr = {
+    email = "mail@oddco.de";
+    github = "plchldr";
+    name = "Jonas Beyer";
+  };
   plcplc = {
     email = "plcplc@gmail.com";
     github = "plcplc";
@@ -4277,6 +4297,11 @@
     email = "kim.lindberger@gmail.com";
     github = "talyz";
     name = "Kim Lindberger";
+  };
+  taneb = {
+    email = "nvd1234@gmail.com";
+    github = "Taneb";
+    name = "Nathan van Doorn";
   };
   tari = {
     email = "peter@taricorp.net";

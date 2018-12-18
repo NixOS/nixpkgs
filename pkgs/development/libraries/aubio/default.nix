@@ -3,11 +3,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "aubio-0.4.7";
+  name = "aubio-0.4.8";
 
   src = fetchurl {
     url = "https://aubio.org/pub/${name}.tar.bz2";
-    sha256 = "0hd0kzfmr46am00ygxar8alrldv92c5azqy701iilfmbqpz4mvfb";
+    sha256 = "1fjbz1l9axscrb7dl6jv4ifhvmq1g77ihvg0bbwwfg0j3qz4gxyw";
   };
 
   nativeBuildInputs = [ pkgconfig python wafHook ];

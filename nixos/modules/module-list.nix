@@ -11,6 +11,8 @@
   ./config/xdg/icons.nix
   ./config/xdg/menus.nix
   ./config/xdg/mime.nix
+  ./config/appstream.nix
+  ./config/xdg/sounds.nix
   ./config/gtk/gtk-icon-cache.nix
   ./config/gnu.nix
   ./config/i18n.nix
@@ -715,7 +717,6 @@
   ./services/web-apps/restya-board.nix
   ./services/web-apps/tt-rss.nix
   ./services/web-apps/selfoss.nix
-  ./services/web-apps/quassel-webserver.nix
   ./services/web-apps/virtlyst.nix
   ./services/web-apps/youtrack.nix
   ./services/web-servers/apache-httpd/default.nix

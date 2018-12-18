@@ -39,6 +39,12 @@ buildPythonPackage rec {
       url = "https://github.com/alpernebbi/git-annex-adapter/commit/9f64c4b99cae7b681820c6c7382e1e40489f4d1e.patch";
       sha256 = "0yh66gial6bx7kbl7s7lkzljnkpgvgr8yahqqcq9z76d0w752dir";
     })
+
+    # fix test broken due to renaming of repository version 6 to 7
+    (fetchpatch {
+      url = https://github.com/alpernebbi/git-annex-adapter/commit/a72efea02ec9b2ed9c7aad0b222056d72eb0c143.patch;
+      sha256 = "0nv9ms01jnwp3qzwsla4w8pcpakq5lh7c77xdbhiidbrx0n1p4q7";
+    })
   ] ++ stdenv.lib.optionals stdenv.isDarwin [
     # `rev` is part of utillinux on NixOS which is not available on `nixpks` for darwin:
     # https://logs.nix.ci/?key=nixos/nixpkgs.45061&attempt_id=271763ba-2ae7-4098-b469-b82b1d8edb9b

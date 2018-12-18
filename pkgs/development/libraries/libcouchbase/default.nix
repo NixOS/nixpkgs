@@ -16,6 +16,9 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkgconfig ];
   buildInputs = [ libevent openssl ];
 
+  # Running tests in parallel does not work
+  enableParallelChecking = false;
+
   doCheck = !stdenv.isDarwin;
 
   meta = with stdenv.lib; {

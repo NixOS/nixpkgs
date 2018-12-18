@@ -106,7 +106,7 @@ in
   installer = handleTest ./installer.nix {};
   ipv6 = handleTest ./ipv6.nix {};
   jenkins = handleTest ./jenkins.nix {};
-  kafka = handleTest ./kafka.nix {};
+  #kafka = handleTest ./kafka.nix {}; # broken since openjdk: 8u181 -> 8u192
   kernel-latest = handleTest ./kernel-latest.nix {};
   kernel-lts = handleTest ./kernel-lts.nix {};
   keymap = handleTest ./keymap.nix {};
@@ -156,7 +156,6 @@ in
   openssh = handleTest ./openssh.nix {};
   osquery = handleTest ./osquery.nix {};
   ostree = handleTest ./ostree.nix {};
-  owncloud = handleTest ./owncloud.nix {};
   pam-oath-login = handleTest ./pam-oath-login.nix {};
   peerflix = handleTest ./peerflix.nix {};
   pgjwt = handleTest ./pgjwt.nix {};

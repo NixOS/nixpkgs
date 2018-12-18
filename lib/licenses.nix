@@ -505,6 +505,12 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
     free = false;
   };
 
+  nasa13 = spdx {
+    spdxId = "NASA-1.3";
+    fullName = "NASA Open Source Agreement 1.3";
+    free = false;
+  };
+
   ncsa = spdx {
     spdxId = "NCSA";
     fullName  = "University of Illinois/NCSA Open Source License";

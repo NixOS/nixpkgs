@@ -3,7 +3,7 @@
 with stdenv.lib;
 
 let
-  version = "1.33";
+  version = "1.34";
 in
 
 stdenv.mkDerivation rec {
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://download.geany.org/${name}.tar.bz2";
-    sha256 = "66baaff43f12caebcf0efec9a5533044dc52837f799c73a1fd7312caa86099c2";
+    sha256 = "63b93d25d037eaffa77895ae6dd29c91bca570e4053eff5cc8490f87e6021f8e";
   };
 
   nativeBuildInputs = [ pkgconfig intltool libintl ];

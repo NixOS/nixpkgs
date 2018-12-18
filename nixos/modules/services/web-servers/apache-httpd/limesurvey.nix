@@ -85,7 +85,7 @@ in rec {
     id = mkOption {
       default = "main";
       description = ''
-        A unique identifier necessary to keep multiple owncloud server
+        A unique identifier necessary to keep multiple Limesurvey server
         instances on the same machine apart.  This is used to
         disambiguate the administrative scripts, which get names like
         mediawiki-$id-change-password.
