@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "shades-of-gray-theme-${version}";
-  version = "1.1.1";
+  version = "1.1.3";
 
   src = fetchFromGitHub {
     owner = "WernerFP";
     repo = "Shades-of-gray-theme";
     rev = version;
-    sha256 = "1m75m6aq4hh39m8qrmbkaw31j4gzkh63ial4xnhw2habf31av682";
+    sha256 = "14p1s1pmzqnn9j9vwqfxfd4i045p356a6d9rwzzs0gx3c6ibqx3a";
   };
 
   buildInputs = [ gtk_engines ];
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/share/themes
-    cp -a Shades-of-gray* README.md preview_01.png $out/share/themes/
+    cp -a Shades-of-gray* $out/share/themes/
   '';
 
   meta = with stdenv.lib; {
