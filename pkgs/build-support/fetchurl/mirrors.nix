@@ -159,12 +159,8 @@ rec {
 
   # CPAN mirrors.
   cpan = [
-    https://ftp.gwdg.de/pub/languages/perl/CPAN/
-    https://download.xs4all.nl/mirror/CPAN/
     https://cpan.metacpan.org/
     https://cpan.perl.org/
-    http://ftp.tuwien.ac.at/pub/CPAN/
-    http://ftp.funet.fi/pub/CPAN/
     http://backpan.perl.org/  # for old releases
   ];
 
