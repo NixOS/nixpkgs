@@ -1,4 +1,7 @@
-sourcePerArch:
+{ name
+, url
+, sha256
+}:
 
 { swingSupport ? true # not used for now
 , stdenv
@@ -6,12 +9,10 @@ sourcePerArch:
 }:
 
 let result = stdenv.mkDerivation rec {
-  name = if sourcePerArch.packageType == "jdk"
-    then "adoptopenjdk-${sourcePerArch.vmType}-bin-${sourcePerArch.version}"
-    else "adoptopenjdk-${sourcePerArch.packageType}-${sourcePerArch.vmType}-bin-${sourcePerArch.version}";
+  inherit name;
 
   src = fetchurl {
-    inherit (sourcePerArch.${stdenv.hostPlatform.parsed.cpu.name}) url sha256;
+    inherit url sha256;
   };
 
   # See: https://github.com/NixOS/patchelf/issues/10

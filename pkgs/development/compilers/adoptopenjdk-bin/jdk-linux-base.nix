@@ -1,4 +1,7 @@
-sourcePerArch:
+{ name
+, url
+, sha256
+}:
 
 { swingSupport ? true
 , stdenv
@@ -45,12 +48,10 @@ let
 in
 
 let result = stdenv.mkDerivation rec {
-  name = if sourcePerArch.packageType == "jdk"
-    then "adoptopenjdk-${sourcePerArch.vmType}-bin-${sourcePerArch.version}"
-    else "adoptopenjdk-${sourcePerArch.packageType}-${sourcePerArch.vmType}-bin-${sourcePerArch.version}";
+  inherit name;
 
   src = fetchurl {
-    inherit (sourcePerArch.${stdenv.hostPlatform.parsed.cpu.name}) url sha256;
+    inherit url sha256;
   };
 
   nativeBuildInputs = [ file ];
@@ -111,7 +112,7 @@ let result = stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     license = licenses.gpl2Classpath;
     description = "AdoptOpenJDK, prebuilt OpenJDK binary";
-    platforms = stdenv.lib.mapAttrsToList (arch: _: arch + "-linux") sourcePerArch; # some inherit jre.meta.platforms
+    platforms = [ "x86_64-linux" ]; # some inherit jre.meta.platforms
     maintainers = with stdenv.lib.maintainers; [ taku0 ];
   };
 
