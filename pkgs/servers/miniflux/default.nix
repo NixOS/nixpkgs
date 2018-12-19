@@ -5,7 +5,7 @@
 
 buildGoPackage rec {
   name = "miniflux-${version}";
-  version = "2.0.12";
+  version = "2.0.13";
 
   goPackagePath = "miniflux.app";
 
@@ -13,7 +13,7 @@ buildGoPackage rec {
     owner = "miniflux";
     repo = "miniflux";
     rev = "refs/tags/${version}";
-    sha256 = "13d1dwcwig7b5phymgxqm227k5l3zzzvx997cywarbl953ji2y1d";
+    sha256 = "16c9jszrz3153kr0xyj7na09hpqvnjsrmsbic7qkp5a9aa839b9s";
   };
     
   goDeps = ./deps.nix;
