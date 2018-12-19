@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "plano-theme-${version}";
-  version = "3.30-1";
+  version = "3.30-2";
 
   src = fetchFromGitHub {
     owner = "lassekongo83";
     repo = "plano-theme";
     rev = "v${version}";
-    sha256 = "152iqfhwxmxx817n05j603263nbmry626zxq8hiljww8zpmqh8j2";
+    sha256 = "06yagpb0dpb8nzh3lvs607rzg6y5l6skl4mjcmbxayapsqka45hj";
   };
 
   buildInputs = [ gdk_pixbuf gtk_engines ];

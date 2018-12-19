@@ -15676,6 +15676,8 @@ in
 
   penna = callPackage ../data/fonts/penna { };
 
+  plano-theme = callPackage ../data/themes/plano { };
+
   plata-theme = callPackage ../data/themes/plata {};
 
   poly = callPackage ../data/fonts/poly { };
@@ -22655,8 +22657,6 @@ in
   physlock = callPackage ../misc/screensavers/physlock { };
 
   pjsip = callPackage ../applications/networking/pjsip { };
-
-  plano-theme = callPackage ../data/themes/plano { };
 
   ppsspp = libsForQt5.callPackage ../misc/emulators/ppsspp { };
 
