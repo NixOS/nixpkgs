@@ -14,7 +14,7 @@ let
 
 in stdenv.mkDerivation rec {
   name = "freetype-${version}";
-  version = "2.9";
+  version = "2.9.1";
 
   meta = with stdenv.lib; {
     description = "A font rendering engine";
@@ -33,7 +33,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://savannah/freetype/${name}.tar.bz2";
-    sha256 = "12jcdz1in20yaa55izxalg3hm1pf7nydfrzps5bzb4zgihybmzz6";
+    sha256 = "0kg8w6qyiizlyzh4a8lpzslipcbv96hcg3rqqpnxba8ffbm8g3fv";
   };
 
   propagatedBuildInputs = [ zlib bzip2 libpng ]; # needed when linking against freetype
@@ -61,11 +61,5 @@ in stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  postInstall = glib.flattenInclude + ''
-    substituteInPlace $dev/bin/freetype-config \
-      --replace ${buildPackages.pkgconfig} ${pkgconfig}
-
-    wrapProgram "$dev/bin/freetype-config" \
-      --set PKG_CONFIG_PATH "$PKG_CONFIG_PATH:$dev/lib/pkgconfig"
-  '';
+  postInstall = glib.flattenInclude;
 }
