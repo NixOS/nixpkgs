@@ -1,4 +1,4 @@
-{ lib, python
+{ lib, python36, python27
 , delugeSupport ? true, deluge ? null
 }:
 
@@ -10,7 +10,7 @@ assert delugeSupport -> deluge != null;
 # -- Mic92
 
 let
-  python' = python.override { inherit packageOverrides; };
+  python' = python36.override { inherit packageOverrides; };
 
   packageOverrides = self: super: {
     sqlalchemy = super.sqlalchemy.overridePythonAttrs (old: rec {
@@ -36,22 +36,25 @@ with python'.pkgs;
 
 buildPythonApplication rec {
   pname = "FlexGet";
-  version = "2.17.14";
+  version = "2.17.20";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1wh12nspjzsgb0a7qp67s4k8wssbhhf500s8x8mx2smb1mgy4xzz";
+    sha256 = "1hw16rn3wsc3adkx5ja16cxc9ic7jv2hhkcbxfb7wkym5r4gk7m0";
   };
 
   postPatch = ''
     # remove dependency constraints
     sed 's/==\([0-9]\.\?\)\+//' -i requirements.txt
+    # Set python to 3.6
+    sed -i -e 's/py27/py36/g' setup.cfg
   '';
 
   # ~400 failures
   doCheck = false;
 
   propagatedBuildInputs = [
+    python27
     feedparser sqlalchemy pyyaml
     chardet beautifulsoup4 html5lib
     PyRSS2Gen pynzb rpyc jinja2
@@ -61,10 +64,10 @@ buildPythonApplication rec {
     cherrypy flask flask-restful
     flask-restplus flask-compress
     flask_login flask-cors safe
-    pyparsing future zxcvbn-python
+    pyparsing zxcvbn-python
     werkzeug tempora cheroot rebulk
     portend transmissionrpc aniso8601
-    babelfish certifi click futures
+    babelfish certifi click future
     idna itsdangerous markupsafe
     plumbum pytz six tzlocal urllib3
     webencodings werkzeug zxcvbn-python
