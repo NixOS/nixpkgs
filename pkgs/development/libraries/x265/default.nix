@@ -35,6 +35,11 @@ stdenv.mkDerivation rec {
       url = "https://bitbucket.org/multicoreware/x265/commits/471726d3a0462739ff8e3518eb1a1e8a01de4e8d/raw";
       sha256 = "0mj8lb8ng8lrhzjavap06vjhqf6j0r3sn76c6rhs3012f86lv928";
     })
+    # Fix build on ARM (#406) 
+    (fetchpatch {
+      url = "https://bitbucket.org/multicoreware/x265/issues/attachments/406/multicoreware/x265/1527562952.26/406/X265-2.8-asm-primitives.patch";
+      sha256 = "1vf8bpl37gbd9dcbassgkq9i0rp24qm3bl6hx9zv325174bn402v";
+    })
   ];
 
   postPatch = ''
