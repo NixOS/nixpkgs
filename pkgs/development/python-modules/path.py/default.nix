@@ -39,6 +39,7 @@ buildPythonPackage rec {
   checkPhase = ''
     # Ignore pytest configuration
     rm pytest.ini
-    py.test test_path.py
+    # ignore performance test which may fail when the system is under load
+    py.test -v -k 'not TestPerformance' test_path.py
   '';
 }
