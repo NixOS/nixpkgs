@@ -221,7 +221,7 @@ in
 
     services.xserver.displayManager.job.execCmd = ''
       ${optionalString (cfg.pulseaudio)
-        "export PULSE_COOKIE=/var/run/pulse/.config/pulse/cookie"}
+        "export PULSE_COOKIE=/run/pulse/.config/pulse/cookie"}
       exec ${pkgs.xpra}/bin/xpra start \
         --daemon=off \
         --log-dir=/var/log \
@@ -233,7 +233,7 @@ in
         --mdns=no \
         --pulseaudio=no \
         ${optionalString (cfg.pulseaudio) "--sound-source=pulse"} \
-        --socket-dirs=/var/run/xpra \
+        --socket-dirs=/run/xpra \
         --xvfb="xpra_Xdummy ${concatStringsSep " " dmcfg.xserverArgs}" \
         ${optionalString (cfg.bindTcp != null) "--bind-tcp=${cfg.bindTcp}"} \
         --auth=${cfg.auth} \
