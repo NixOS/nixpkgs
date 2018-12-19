@@ -8508,10 +8508,10 @@ let
   };
 
   LocaleCodes = buildPerlPackage {
-    name = "Locale-Codes-3.58";
+    name = "Locale-Codes-3.59";
     src = fetchurl {
-      url = mirror://cpan/authors/id/S/SB/SBECK/Locale-Codes-3.58.tar.gz;
-      sha256 = "345c0b0170288d74a147fbe218b7c78147aa2baf4e839fe8680a2b0a2d8e505b";
+      url = mirror://cpan/authors/id/S/SB/SBECK/Locale-Codes-3.59.tar.gz;
+      sha256 = "388dea3d088aa0513f21091e0fe4a9c61ab2c173c83052b3120a52b103592c03";
     };
     meta = {
       description = "A distribution of modules to handle locale codes";
