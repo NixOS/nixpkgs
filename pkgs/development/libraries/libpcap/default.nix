@@ -25,6 +25,8 @@ stdenv.mkDerivation rec {
 
   prePatch = stdenv.lib.optionalString stdenv.isDarwin ''
     substituteInPlace configure --replace " -arch i386" ""
+  '' + ''
+    sed -i '1i#include <limits.h>' pcap-usb-linux.c
   '';
 
   preInstall = ''mkdir -p $out/bin'';
