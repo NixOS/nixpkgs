@@ -226,9 +226,7 @@ in
 
     environment.shells =
       [ "/run/current-system/sw/bin/bash"
-        "/var/run/current-system/sw/bin/bash"
         "/run/current-system/sw/bin/sh"
-        "/var/run/current-system/sw/bin/sh"
         "${pkgs.bashInteractive}/bin/bash"
         "${pkgs.bashInteractive}/bin/sh"
       ];
