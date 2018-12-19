@@ -214,7 +214,7 @@ in
 
     systemd.sockets.avahi-daemon =
       { description = "Avahi mDNS/DNS-SD Stack Activation Socket";
-        listenStreams = [ "/var/run/avahi-daemon/socket" ];
+        listenStreams = [ "/run/avahi-daemon/socket" ];
         wantedBy = [ "sockets.target" ];
       };
 
@@ -229,7 +229,7 @@ in
 
         path = [ pkgs.coreutils pkgs.avahi ];
 
-        preStart = "mkdir -p /var/run/avahi-daemon";
+        preStart = "mkdir -p /run/avahi-daemon";
 
         script =
           ''
