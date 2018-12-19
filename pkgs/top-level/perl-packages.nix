@@ -114,13 +114,13 @@ let
   };
 
   AlienBuild = buildPerlPackage {
-    name = "Alien-Build-1.48";
+    name = "Alien-Build-1.49";
     src = fetchurl {
-      url = mirror://cpan/authors/id/P/PL/PLICEASE/Alien-Build-1.48.tar.gz;
-      sha256 = "1sv4544g2qhwigpj1x2qycafab04p2b0vdr2x07wzriq5fqgsspp";
+      url = mirror://cpan/authors/id/P/PL/PLICEASE/Alien-Build-1.49.tar.gz;
+      sha256 = "1wsg794pbqgywyfqdrwrsjcj5qgas3h72j4w2iph9ir6b93rb11p";
     };
-    propagatedBuildInputs = [ CaptureTiny FFICheckLib FileWhich Filechdir PathTiny Test2Suite ];
-    buildInputs = [ DevelHide PkgConfig ];
+    propagatedBuildInputs = [ CaptureTiny FFICheckLib FileWhich Filechdir PathTiny ];
+    buildInputs = [ DevelHide PkgConfig Test2Suite ];
     meta = {
       description = "Build external dependencies for use in CPAN";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
