@@ -9299,10 +9299,10 @@ let
   };
 
   MathRandomMTAuto = buildPerlPackage {
-    name = "Math-Random-MT-Auto-6.22";
+    name = "Math-Random-MT-Auto-6.23";
     src = fetchurl {
-      url = mirror://cpan/authors/id/J/JD/JDHEDDEN/Math-Random-MT-Auto-6.22.tar.gz;
-      sha256 = "07zha5zjxyvqwnycb1vzk4hk2m46n9yc5lrbvhkc22595dsyjahz";
+      url = mirror://cpan/authors/id/J/JD/JDHEDDEN/Math-Random-MT-Auto-6.23.tar.gz;
+      sha256 = "04v3fxbqg6bs7dpljw64v62jqb10l2xdrln4l3slz5k266nvbg2q";
     };
     propagatedBuildInputs = [ ObjectInsideOut ];
     meta = {
