@@ -36,6 +36,11 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     rm -rf $out/share/clickhouse-test
+
+    sed -i -e '\!<log>/var/log/clickhouse-server/clickhouse-server\.log</log>!d' \
+      $out/etc/clickhouse-server/config.xml
+    substituteInPlace $out/etc/clickhouse-server/config.xml \
+      --replace "<errorlog>/var/log/clickhouse-server/clickhouse-server.err.log</errorlog>" "<console>1</console>"
   '';
 
   meta = with stdenv.lib; {

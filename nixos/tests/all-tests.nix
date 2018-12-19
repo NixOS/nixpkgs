@@ -39,6 +39,7 @@ in
   cfssl = handleTestOn ["x86_64-linux"] ./cfssl.nix {};
   chromium = (handleTestOn ["x86_64-linux"] ./chromium.nix {}).stable or {};
   cjdns = handleTest ./cjdns.nix {};
+  clickhouse = handleTest ./clickhouse.nix {};
   cloud-init = handleTest ./cloud-init.nix {};
   codimd = handleTest ./codimd.nix {};
   containers-bridge = handleTest ./containers-bridge.nix {};
