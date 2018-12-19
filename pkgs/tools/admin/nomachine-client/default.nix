@@ -1,4 +1,5 @@
-{ stdenv, lib, file, fetchurl, makeWrapper, autoPatchelfHook, jsoncpp }:
+{ stdenv, lib, file, fetchurl, makeWrapper,
+  autoPatchelfHook, jsoncpp, libpulseaudio }:
 let
   versionMajor = "6.4";
   versionMinor = "6_1";
@@ -31,7 +32,7 @@ in
     '';
   
     nativeBuildInputs = [ file makeWrapper autoPatchelfHook ];
-    buildInputs = [ jsoncpp ];
+    buildInputs = [ jsoncpp libpulseaudio ];
 
     installPhase = ''
       rm bin/nxplayer bin/nxclient
@@ -63,6 +64,10 @@ in
     postFixup = ''
       makeWrapper $out/bin/nxplayer.bin $out/bin/nxplayer --set NX_SYSTEM $out/NX
       makeWrapper $out/bin/nxclient.bin $out/bin/nxclient --set NX_SYSTEM $out/NX
+
+      # libnxcau.so needs libpulse.so.0 for audio to work, but doesn't
+      # have a DT_NEEDED entry for it.
+      patchelf --add-needed libpulse.so.0 $out/NX/lib/libnxcau.so
     '';
   
     dontBuild = true;
