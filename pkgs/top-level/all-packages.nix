@@ -15708,6 +15708,8 @@ in
 
   shaderc = callPackage ../development/compilers/shaderc { };
 
+  shades-of-gray-theme = callPackage ../data/themes/shades-of-gray { };
+
   mime-types = callPackage ../data/misc/mime-types { };
 
   shared-mime-info = callPackage ../data/misc/shared-mime-info { };
@@ -22775,8 +22777,6 @@ in
     libselinux = libselinux.override { python = python3; };
     libsemanage = libsemanage.override { python = python3; };
   };
-
-  shades-of-gray-theme = callPackage ../misc/themes/shades-of-gray { };
 
   sierra-gtk-theme = callPackage ../misc/themes/sierra { };
 
