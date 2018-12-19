@@ -25,7 +25,7 @@ let
     logger_stdout=-1
     logger_stdout_level=2
 
-    ctrl_interface=/var/run/hostapd
+    ctrl_interface=/run/hostapd
     ctrl_interface_group=${cfg.group}
 
     ${if cfg.wpa then ''
