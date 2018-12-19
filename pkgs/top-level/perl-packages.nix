@@ -2285,10 +2285,10 @@ let
 
 
   Clone = buildPerlPackage rec {
-    name = "Clone-0.39";
+    name = "Clone-0.41";
     src = fetchurl {
       url = "mirror://cpan/authors/id/G/GA/GARU/${name}.tar.gz";
-      sha256 = "0bgsidb96gxzf3zhy6v1ksj1c200vxbwykk32fqm1mj97rl4dc5c";
+      sha256 = "060mlm31lacirpnp5fl9jqk4m9cl07vjlh89k83qk25wykf5dh78";
     };
     meta = {
       description = "Recursively copy Perl datatypes";
