@@ -8085,10 +8085,10 @@ let
   };
 
   JSONXS = buildPerlPackage {
-    name = "JSON-XS-3.04";
+    name = "JSON-XS-4.0";
     src = fetchurl {
-      url = mirror://cpan/authors/id/M/ML/MLEHMANN/JSON-XS-3.04.tar.gz;
-      sha256 = "0b3w14zqjxnm93jjfzjqz8pkxp3a2l9242y7zxxhnvzav1mq7n35";
+      url = mirror://cpan/authors/id/M/ML/MLEHMANN/JSON-XS-4.0.tar.gz;
+      sha256 = "0118yrzagwlcfj5yldn3h23zzqs2rx282jlm068nf7fjlvy4m7s7";
     };
     propagatedBuildInputs = [ TypesSerialiser ];
     meta = {
