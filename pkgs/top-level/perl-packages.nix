@@ -16577,10 +16577,10 @@ let
   };
 
   threadsshared = buildPerlPackage rec {
-    name = "threads-shared-1.58";
+    name = "threads-shared-1.59";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JD/JDHEDDEN/${name}.tar.gz";
-      sha256 = "04qbypzgp49sq1wq5kip0m95lffv0pc8xj2wplrdpyqz87y105xd";
+      sha256 = "1krz69ks3siz0fhc9waf817nnlmxsgq7rc5rq99xvqg1f1g9iz6i";
     };
     meta = {
       description = "Perl extension for sharing data structures between threads";
