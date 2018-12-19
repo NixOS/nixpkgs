@@ -498,6 +498,8 @@ in {
     mpi = pkgs.openmpi;
   };
 
+  msrest = callPackage ../development/python-modules/msrest { };
+
   multiset = callPackage ../development/python-modules/multiset { };
 
   mwclient = callPackage ../development/python-modules/mwclient { };
