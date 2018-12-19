@@ -31,7 +31,7 @@ in
     listenOptions =
       mkOption {
         type = types.listOf types.str;
-        default = ["/var/run/docker.sock"];
+        default = ["/run/docker.sock"];
         description =
           ''
             A list of unix and tcp docker should listen to. The format follows
