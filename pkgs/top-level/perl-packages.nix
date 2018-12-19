@@ -9531,12 +9531,12 @@ let
      };
   };
 
-  ModernPerl = buildPerlModule {
-    name = "Modern-Perl-1.20180928";
+  ModernPerl = buildPerlPackage {
+    name = "Modern-Perl-1.20181021";
 
     src = fetchurl {
-      url = mirror://cpan/authors/id/C/CH/CHROMATIC/Modern-Perl-1.20180928.tar.gz;
-      sha256 = "377b4f16b27ca3b38fdb148468111e3463eff148beb7a00826353268f240f577";
+      url = mirror://cpan/authors/id/C/CH/CHROMATIC/Modern-Perl-1.20181021.tar.gz;
+      sha256 = "1d482b528f7c6c60f868d7d0bf0fcc9c3668250dc44fcb39a95b7c63e092c9c5";
     };
     meta = {
       homepage = https://github.com/chromatic/Modern-Perl;
