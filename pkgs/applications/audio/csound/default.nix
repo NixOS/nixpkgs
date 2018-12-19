@@ -14,6 +14,9 @@
 
 stdenv.mkDerivation rec {
   name = "csound-${version}";
+  # When updating, please check if https://github.com/csound/csound/issues/1078
+  # has been fixed in the new version so we can use the normal fluidsynth
+  # version and remove fluidsynth 1.x from nixpkgs again.
   version = "6.12.0";
 
   enableParallelBuilding = true;

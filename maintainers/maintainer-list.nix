@@ -3429,6 +3429,11 @@
     github = "pkmx";
     name = "Chih-Mao Chen";
   };
+  plchldr = {
+    email = "mail@oddco.de";
+    github = "plchldr";
+    name = "Jonas Beyer";
+  };
   plcplc = {
     email = "plcplc@gmail.com";
     github = "plcplc";

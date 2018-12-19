@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "0.83.3";
+  version = "0.84.3";
   components = {
     "abode" = ps: with ps; [  ];
     "ads" = ps: with ps; [  ];
@@ -264,6 +264,8 @@
     "climate.zwave" = ps: with ps; [  ];
     "cloud" = ps: with ps; [ aiohttp-cors warrant ];
     "cloud.auth_api" = ps: with ps; [  ];
+    "cloud.cloud_api" = ps: with ps; [  ];
+    "cloud.cloudhooks" = ps: with ps; [  ];
     "cloud.const" = ps: with ps; [  ];
     "cloud.http_api" = ps: with ps; [  ];
     "cloud.iot" = ps: with ps; [  ];
@@ -438,6 +440,7 @@
     "geo_location.demo" = ps: with ps; [  ];
     "geo_location.geo_json_events" = ps: with ps; [  ];
     "geo_location.nsw_rural_fire_service_feed" = ps: with ps; [  ];
+    "geo_location.usgs_earthquakes_feed" = ps: with ps; [  ];
     "geofency" = ps: with ps; [ aiohttp-cors ];
     "goalfeed" = ps: with ps; [  ];
     "google" = ps: with ps; [ google_api_python_client httplib2 oauth2client ];
@@ -467,6 +470,7 @@
     "history" = ps: with ps; [ aiohttp-cors sqlalchemy ];
     "history_graph" = ps: with ps; [ aiohttp-cors sqlalchemy ];
     "hive" = ps: with ps; [  ];
+    "hlk_sw16" = ps: with ps; [  ];
     "homekit" = ps: with ps; [  ];
     "homekit.const" = ps: with ps; [  ];
     "homekit.util" = ps: with ps; [  ];
@@ -564,6 +568,7 @@
     "light.knx" = ps: with ps; [  ];
     "light.lifx" = ps: with ps; [  ];
     "light.lifx_legacy" = ps: with ps; [  ];
+    "light.lightwave" = ps: with ps; [  ];
     "light.limitlessled" = ps: with ps; [  ];
     "light.litejet" = ps: with ps; [  ];
     "light.lutron" = ps: with ps; [  ];
@@ -571,8 +576,6 @@
     "light.lw12wifi" = ps: with ps; [  ];
     "light.mochad" = ps: with ps; [  ];
     "light.mqtt" = ps: with ps; [ paho-mqtt ];
-    "light.mqtt_json" = ps: with ps; [ paho-mqtt ];
-    "light.mqtt_template" = ps: with ps; [ paho-mqtt ];
     "light.mysensors" = ps: with ps; [  ];
     "light.mystrom" = ps: with ps; [  ];
     "light.nanoleaf_aurora" = ps: with ps; [ nanoleaf ];
@@ -608,6 +611,7 @@
     "light.zha" = ps: with ps; [  ];
     "light.zigbee" = ps: with ps; [  ];
     "light.zwave" = ps: with ps; [  ];
+    "lightwave" = ps: with ps; [  ];
     "linode" = ps: with ps; [ linode-api ];
     "lirc" = ps: with ps; [  ];
     "litejet" = ps: with ps; [  ];
@@ -770,7 +774,6 @@
     "notify.hipchat" = ps: with ps; [  ];
     "notify.homematic" = ps: with ps; [ pyhomematic ];
     "notify.html5" = ps: with ps; [ aiohttp-cors ];
-    "notify.instapush" = ps: with ps; [  ];
     "notify.ios" = ps: with ps; [ aiohttp-cors zeroconf ];
     "notify.joaoapps_join" = ps: with ps; [  ];
     "notify.knx" = ps: with ps; [  ];
@@ -866,6 +869,7 @@
     "scene" = ps: with ps; [  ];
     "scene.deconz" = ps: with ps; [  ];
     "scene.elkm1" = ps: with ps; [  ];
+    "scene.fibaro" = ps: with ps; [  ];
     "scene.homeassistant" = ps: with ps; [  ];
     "scene.hunterdouglas_powerview" = ps: with ps; [  ];
     "scene.knx" = ps: with ps; [  ];
@@ -896,6 +900,7 @@
     "sensor.arlo" = ps: with ps; [  ];
     "sensor.arwn" = ps: with ps; [ paho-mqtt ];
     "sensor.asuswrt" = ps: with ps; [  ];
+    "sensor.awair" = ps: with ps; [  ];
     "sensor.bbox" = ps: with ps; [  ];
     "sensor.bh1750" = ps: with ps; [  ];
     "sensor.bitcoin" = ps: with ps; [  ];
@@ -948,6 +953,7 @@
     "sensor.emoncms" = ps: with ps; [  ];
     "sensor.enocean" = ps: with ps; [  ];
     "sensor.enphase_envoy" = ps: with ps; [  ];
+    "sensor.entur_public_transport" = ps: with ps; [  ];
     "sensor.envirophat" = ps: with ps; [  ];
     "sensor.envisalink" = ps: with ps; [  ];
     "sensor.etherscan" = ps: with ps; [  ];
@@ -1066,6 +1072,7 @@
     "sensor.pushbullet" = ps: with ps; [ pushbullet ];
     "sensor.pvoutput" = ps: with ps; [  ];
     "sensor.pyload" = ps: with ps; [  ];
+    "sensor.qbittorrent" = ps: with ps; [  ];
     "sensor.qnap" = ps: with ps; [  ];
     "sensor.qwikswitch" = ps: with ps; [  ];
     "sensor.radarr" = ps: with ps; [  ];
@@ -1235,6 +1242,7 @@
     "switch.hdmi_cec" = ps: with ps; [  ];
     "switch.hikvisioncam" = ps: with ps; [  ];
     "switch.hive" = ps: with ps; [  ];
+    "switch.hlk_sw16" = ps: with ps; [  ];
     "switch.homekit_controller" = ps: with ps; [  ];
     "switch.homematic" = ps: with ps; [ pyhomematic ];
     "switch.homematicip_cloud" = ps: with ps; [  ];
@@ -1246,6 +1254,7 @@
     "switch.kankun" = ps: with ps; [  ];
     "switch.knx" = ps: with ps; [  ];
     "switch.konnected" = ps: with ps; [ aiohttp-cors netdisco ];
+    "switch.lightwave" = ps: with ps; [  ];
     "switch.linode" = ps: with ps; [ linode-api ];
     "switch.litejet" = ps: with ps; [  ];
     "switch.lupusec" = ps: with ps; [  ];
@@ -1319,6 +1328,8 @@
     "telegram_bot.polling" = ps: with ps; [  ];
     "telegram_bot.webhooks" = ps: with ps; [ aiohttp-cors ];
     "tellduslive" = ps: with ps; [  ];
+    "tellduslive.const" = ps: with ps; [  ];
+    "tellduslive.entry" = ps: with ps; [  ];
     "tellstick" = ps: with ps; [  ];
     "tesla" = ps: with ps; [  ];
     "thethingsnetwork" = ps: with ps; [  ];
@@ -1402,11 +1413,15 @@
     "wemo" = ps: with ps; [  ];
     "wink" = ps: with ps; [  ];
     "wirelesstag" = ps: with ps; [  ];
+    "wunderlist" = ps: with ps; [  ];
     "xiaomi_aqara" = ps: with ps; [  ];
     "zabbix" = ps: with ps; [  ];
     "zeroconf" = ps: with ps; [ aiohttp-cors zeroconf ];
     "zha" = ps: with ps; [  ];
+    "zha.config_flow" = ps: with ps; [  ];
     "zha.const" = ps: with ps; [  ];
+    "zha.entities" = ps: with ps; [  ];
+    "zha.helpers" = ps: with ps; [  ];
     "zigbee" = ps: with ps; [  ];
     "zone" = ps: with ps; [  ];
     "zone.config_flow" = ps: with ps; [  ];

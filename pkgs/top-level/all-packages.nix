@@ -622,7 +622,7 @@ in
 
   aws-env = callPackage ../tools/admin/aws-env { };
 
-  aws-google-auth = pythonPackages.callPackage ../tools/admin/aws-google-auth { };
+  aws-google-auth = python3Packages.callPackage ../tools/admin/aws-google-auth { };
 
   aws-okta = callPackage ../tools/security/aws-okta { };
 
@@ -729,12 +729,16 @@ in
 
   genymotion = callPackage ../development/mobile/genymotion { };
 
+  gamecube-tools = callPackage ../development/tools/gamecube-tools { };
+
   gams = callPackage ../tools/misc/gams {
     licenseFile = config.gams.licenseFile or null;
     optgamsFile = config.gams.optgamsFile or null;
   };
 
   git-fire = callPackage ../tools/misc/git-fire { };
+
+  github-changelog-generator = callPackage ../development/tools/github-changelog-generator { };
 
   gitless = callPackage ../applications/version-management/gitless { };
 
@@ -803,6 +807,8 @@ in
   qes = callPackage ../os-specific/darwin/qes {
     inherit (darwin.apple_sdk.frameworks) Carbon;
   };
+
+  wiiload = callPackage ../development/tools/wiiload { };
 
   xcodeenv = callPackage ../development/mobile/xcodeenv { };
 
@@ -2735,8 +2741,6 @@ in
 
   fprintd = callPackage ../tools/security/fprintd { };
 
-  fprint_demo = callPackage ../tools/security/fprint_demo { };
-
   franz = callPackage ../applications/networking/instant-messengers/franz { };
 
   freedroidrpg = callPackage ../games/freedroidrpg { };
@@ -4392,11 +4396,7 @@ in
 
   nextcloud = callPackage ../servers/nextcloud { };
 
-  nextcloud-client-unwrapped = libsForQt5.callPackage ../applications/networking/nextcloud-client { };
-
-  nextcloud-client = callPackage ../applications/networking/nextcloud-client/wrapper.nix {
-    nextcloud-client = nextcloud-client-unwrapped;
-  };
+  nextcloud-client = libsForQt5.callPackage ../applications/networking/nextcloud-client { };
 
   nextcloud-news-updater = callPackage ../servers/nextcloud/news-updater.nix { };
 
@@ -9331,6 +9331,7 @@ in
   boost166 = callPackage ../development/libraries/boost/1.66.nix { };
   boost167 = callPackage ../development/libraries/boost/1.67.nix { };
   boost168 = callPackage ../development/libraries/boost/1.68.nix { };
+  boost169 = callPackage ../development/libraries/boost/1.69.nix { };
   boost16x = boost167;
   boost = boost16x;
 
@@ -10182,6 +10183,8 @@ in
 
   gtksourceview4 = callPackage ../development/libraries/gtksourceview/4.x.nix { };
 
+  gtksourceviewmm = callPackage ../development/libraries/gtksourceviewmm { };
+
   gtkspell2 = callPackage ../development/libraries/gtkspell { };
 
   gtkspell3 = callPackage ../development/libraries/gtkspell/3.nix { };
@@ -10254,10 +10257,6 @@ in
   hunspellWithDicts = dicts: callPackage ../development/libraries/hunspell/wrapper.nix { inherit dicts; };
 
   hwloc = callPackage ../development/libraries/hwloc {};
-
-  hwloc-nox = hwloc.override {
-    x11Support = false;
-  };
 
   hydra = callPackage ../development/tools/misc/hydra { };
 
@@ -11168,6 +11167,8 @@ in
 
   liboop = callPackage ../development/libraries/liboop { };
 
+  libopenaptx = callPackage ../development/libraries/libopenaptx { };
+
   libopus = callPackage ../development/libraries/libopus { };
 
   libopusenc = callPackage ../development/libraries/libopusenc { };
@@ -11817,11 +11818,11 @@ in
   openvdb = callPackage ../development/libraries/openvdb {};
 
   inherit (callPackages ../development/libraries/libressl { })
-    libressl_2_6
     libressl_2_7
-    libressl_2_8;
+    libressl_2_8
+    libressl_2_9;
 
-  libressl = libressl_2_7;
+  libressl = libressl_2_8;
 
   boringssl = callPackage ../development/libraries/boringssl { };
 
@@ -11990,6 +11991,14 @@ in
   pugixml = callPackage ../development/libraries/pugixml { };
 
   pybind11 = callPackage ../development/libraries/pybind11 { };
+
+  python-qt = callPackage ../development/libraries/python-qt {
+    python = python27;
+    qmake = qt59.qmake;
+    qttools = qt59.qttools;
+    qtwebengine = qt59.qtwebengine;
+    qtxmlpatterns = qt59.qtxmlpatterns;
+  };
 
   re2 = callPackage ../development/libraries/re2 { };
 
@@ -13448,6 +13457,7 @@ in
 
   freeswitch = callPackage ../servers/sip/freeswitch {
     openssl = openssl_1_0_2;
+    inherit (darwin.apple_sdk.frameworks) SystemConfiguration;
   };
 
   fusionInventory = callPackage ../servers/monitoring/fusion-inventory { };
@@ -13804,10 +13814,10 @@ in
 
   inherit (callPackage ../servers/monitoring/prometheus {
     buildGoPackage = buildGo110Package;
-  })
-      prometheus_1
-      prometheus_2
-      ;
+  }) prometheus_1;
+
+  inherit (callPackage ../servers/monitoring/prometheus { })
+    prometheus_2;
 
   prom2json = callPackage ../servers/monitoring/prometheus/prom2json.nix { };
   prometheus = prometheus_1;
@@ -14154,6 +14164,12 @@ in
   pulseaudio-modules-bt = callPackage ../applications/audio/pulseaudio-modules-bt { };
 
   bluez = bluez5;
+
+  bluezFull = bluez.override {
+    enableWiimote = true;
+    enableMidi = true;
+    enableSixaxis = true;
+  };
 
   inherit (python3Packages) bedup;
 
@@ -14575,6 +14591,8 @@ in
     rtl8812au = callPackage ../os-specific/linux/rtl8812au { };
 
     rtl8814au = callPackage ../os-specific/linux/rtl8814au { };
+
+    rtl8821au = callPackage ../os-specific/linux/rtl8821au { };
 
     rtlwifi_new = callPackage ../os-specific/linux/rtlwifi_new { };
 
@@ -15456,14 +15474,12 @@ in
   league-of-moveable-type = callPackage ../data/fonts/league-of-moveable-type {};
 
   inherit (callPackages ../data/fonts/redhat-liberation-fonts { })
-    liberation_ttf_v1_from_source
-    liberation_ttf_v1_binary
-    liberation_ttf_v2_from_source
-    liberation_ttf_v2_binary;
-  liberation_ttf = liberation_ttf_v2_binary;
+    liberation_ttf_v1
+    liberation_ttf_v2
+    ;
+  liberation_ttf = liberation_ttf_v2;
 
-  liberationsansnarrow = callPackage ../data/fonts/liberationsansnarrow { };
-  liberationsansnarrow_binary = callPackage ../data/fonts/liberationsansnarrow/binary.nix { };
+  liberation-sans-narrow = callPackage ../data/fonts/liberation-sans-narrow { };
 
   liberastika = callPackage ../data/fonts/liberastika { };
 
@@ -15593,6 +15609,8 @@ in
   pari-seadata-small = callPackage ../data/misc/pari-seadata-small {};
 
   penna = callPackage ../data/fonts/penna { };
+
+  plata-theme = callPackage ../data/themes/plata {};
 
   poly = callPackage ../data/fonts/poly { };
 
@@ -16249,7 +16267,15 @@ in
 
   csa = callPackage ../applications/audio/csa { };
 
-  csound = callPackage ../applications/audio/csound { };
+  csound = callPackage ../applications/audio/csound {
+    fluidsynth = fluidsynth_1;
+  };
+
+  csound-qt = callPackage ../applications/audio/csound/csound-qt {
+    python = python27;
+    qmake = qt59.qmake;
+    qtwebengine = qt59.qtwebengine;
+  };
 
   cinepaint = callPackage ../applications/graphics/cinepaint {
     fltk = fltk13;
@@ -16818,6 +16844,7 @@ in
   fluidsynth = callPackage ../applications/audio/fluidsynth {
      inherit (darwin.apple_sdk.frameworks) AudioUnit CoreAudio CoreMIDI CoreServices;
   };
+  fluidsynth_1 = fluidsynth.override { version = "1"; };
 
   fmit = libsForQt5.callPackage ../applications/audio/fmit { };
 
@@ -17822,8 +17849,8 @@ in
       fontDirectories = [
         carlito dejavu_fonts
         freefont_ttf xorg.fontmiscmisc
-        liberation_ttf_v1_binary
-        liberation_ttf_v2_binary
+        liberation_ttf_v1
+        liberation_ttf_v2
       ];
     };
     clucene_core = clucene_core_2;
@@ -18075,7 +18102,6 @@ in
 
   xmr-stak = callPackage ../applications/misc/xmr-stak {
     stdenvGcc6 = overrideCC stdenv gcc6;
-    hwloc = hwloc-nox;
   };
 
   xmrig = callPackage ../applications/misc/xmrig { };
@@ -22797,6 +22823,8 @@ in
   nip2 = callPackage ../tools/graphics/nip2 { };
 
   virglrenderer = callPackage ../development/libraries/virglrenderer { };
+
+  vivid = callPackage ../tools/misc/vivid { };
 
   vokoscreen = libsForQt5.callPackage ../applications/video/vokoscreen { };
 

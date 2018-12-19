@@ -1,5 +1,9 @@
 { stdenv, fetchurl, ocaml, findlib, tcl, tk }:
 
+if !stdenv.lib.versionAtLeast ocaml.version "4.04"
+then throw "labltk is not available for OCaml ${ocaml.version}"
+else
+
 let param = {
   "4.04" = {
     version = "8.06.2";

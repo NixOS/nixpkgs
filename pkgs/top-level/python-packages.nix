@@ -1617,11 +1617,10 @@ in {
 
   easy-thumbnails = callPackage ../development/python-modules/easy-thumbnails { };
 
-  eccodes = disabledIf (!isPy27)
-    (toPythonModule (pkgs.eccodes.override {
-      enablePython = true;
-      pythonPackages = self;
-    }));
+  eccodes = toPythonModule (pkgs.eccodes.override {
+    enablePython = true;
+    pythonPackages = self;
+  });
 
   EditorConfig = callPackage ../development/python-modules/editorconfig { };
 
@@ -4337,8 +4336,6 @@ in {
   tkinter = let
     py = python.override{x11Support=true;};
   in callPackage ../development/python-modules/tkinter { py = py; };
-
-  tlslite = throw "deprecated 2018-12-10; use pythonPackages.tlslite-ng instead";
 
   tlslite-ng = callPackage ../development/python-modules/tlslite-ng { };
 

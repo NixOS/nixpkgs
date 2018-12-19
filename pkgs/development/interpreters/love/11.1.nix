@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     owner = "rude";
     repo = "love";
     rev = "${version}";
-    sha256 = "0bp22mzkjy48gncj5vm9b7whzrggcbs5pd4cnb6k8jpl9j02dhdv";
+    sha256 = "0q1lsgc1621czrg49nmabq6am9sgxa9syxrwzlksqqr4dyzw4nmf";
   };
 
   nativeBuildInputs = [ pkgconfig ];

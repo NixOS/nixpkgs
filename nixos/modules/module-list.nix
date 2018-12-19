@@ -11,6 +11,8 @@
   ./config/xdg/icons.nix
   ./config/xdg/menus.nix
   ./config/xdg/mime.nix
+  ./config/appstream.nix
+  ./config/xdg/sounds.nix
   ./config/gtk/gtk-icon-cache.nix
   ./config/gnu.nix
   ./config/i18n.nix
@@ -34,6 +36,7 @@
   ./config/vpnc.nix
   ./config/zram.nix
   ./hardware/all-firmware.nix
+  ./hardware/bladeRF.nix
   ./hardware/brightnessctl.nix
   ./hardware/ckb-next.nix
   ./hardware/cpu/amd-microcode.nix

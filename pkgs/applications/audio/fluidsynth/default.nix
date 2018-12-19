@@ -1,17 +1,33 @@
 { stdenv, lib, fetchFromGitHub, pkgconfig, cmake
 , alsaLib, glib, libjack2, libsndfile, libpulseaudio
 , AudioUnit, CoreAudio, CoreMIDI, CoreServices
+, version ? "2"
 }:
 
+let
+  versionMap = {
+    "1" = {
+      fluidsynthVersion = "1.1.11";
+      sha256 = "0n75jq3xgq46hfmjkaaxz3gic77shs4fzajq40c8gk043i84xbdh";
+    };
+    "2" = {
+      fluidsynthVersion = "2.0.1";
+      sha256 = "1mqyym5qkh8xd1rqj3yhfxbw5dxjcrljb6nkfqzvcarlv4h6rjn7";
+    };
+  };
+in
+
+with versionMap.${version};
+
 stdenv.mkDerivation  rec {
-  name = "fluidsynth-${version}";
-  version = "2.0.1";
+  name = "fluidsynth-${fluidsynthVersion}";
+  version = fluidsynthVersion;
 
   src = fetchFromGitHub {
     owner = "FluidSynth";
     repo = "fluidsynth";
-    rev = "v${version}";
-    sha256 = "1mqyym5qkh8xd1rqj3yhfxbw5dxjcrljb6nkfqzvcarlv4h6rjn7";
+    rev = "v${fluidsynthVersion}";
+    inherit sha256;
   };
 
   nativeBuildInputs = [ pkgconfig cmake ];
