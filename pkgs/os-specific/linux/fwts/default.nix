@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
     substituteInPlace src/lib/include/fwts_binpaths.h --replace "/usr/bin/iasl"       "${iasl}/bin/iasl"
   '';
 
+  enableParallelBuilding = true;
+
   meta = with stdenv.lib; {
     homepage = "https://wiki.ubuntu.com/FirmwareTestSuite";
     description = "Firmware Test Suite";
