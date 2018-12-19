@@ -12876,10 +12876,10 @@ let
   };
 
   prefork = buildPerlPackage {
-    name = "prefork-1.04";
+    name = "prefork-1.05";
     src = fetchurl {
-      url = mirror://cpan/authors/id/A/AD/ADAMK/prefork-1.04.tar.gz;
-      sha256 = "1xzxx9wgrrfl1ys05yglp2q3bwscvdzlnsiybqk8drbvwlzj5kz3";
+      url = mirror://cpan/authors/id/E/ET/ETHER/prefork-1.05.tar.gz;
+      sha256 = "01ckn45ij3nbrsc0yc4wl4z0wndn36jh6247zbycwa1vlvgvr1vd";
     };
     meta = {
       description = "Optimized module loading for forking or non-forking processes";
