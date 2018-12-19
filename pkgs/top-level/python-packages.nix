@@ -3067,7 +3067,9 @@ in {
 
   pyte = callPackage ../development/python-modules/pyte { };
 
-  graphviz = callPackage ../development/python-modules/graphviz { };
+  graphviz = callPackage ../development/python-modules/graphviz {
+    inherit (pkgs) graphviz;
+  };
 
   pygraphviz = callPackage ../development/python-modules/pygraphviz {
     graphviz = pkgs.graphviz; # not the python package
