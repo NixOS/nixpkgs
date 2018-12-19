@@ -14380,10 +14380,10 @@ let
   };
 
   TAPParserSourceHandlerpgTAP = buildPerlModule rec {
-    name = "TAP-Parser-SourceHandler-pgTAP-3.33";
+    name = "TAP-Parser-SourceHandler-pgTAP-3.34";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DW/DWHEELER/${name}.tar.gz";
-      sha256 = "15q46y2hbp2ij5n9ir76lmspqj3n8gb0z9l5ipb5g7q90l160m4k";
+      sha256 = "1q9h5h3m31vfch17djjacnjqvfkyw0b8ndwv1kk8a09bp8sbsh8v";
     };
     meta = {
       description = "Stream TAP from pgTAP test scripts";
