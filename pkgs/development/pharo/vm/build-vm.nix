@@ -92,9 +92,9 @@ stdenv.mkDerivation rec {
     LD_LIBRARY_PATH="\$LD_LIBRARY_PATH:$libs" exec $out/pharo "\$@"
     EOF
     chmod +x "$out/bin/${cmd}"
-    cp ${libgit2}/lib/libgit2.so.0.26.6 "$out/"
-    cp ${libgit2}/lib/libgit2.so.26 "$out/"
-    cp ${libgit2}/lib/libgit2.so "$out/"
+    ln -s ${libgit2}/lib/libgit2.so.0.26.6 "$out/"
+    ln -s ${libgit2}/lib/libgit2.so.26 "$out/"
+    ln -s ${libgit2}/lib/libgit2.so "$out/"
   '';
 
   enableParallelBuilding = true;
