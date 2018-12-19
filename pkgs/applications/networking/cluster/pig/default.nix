@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   };
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
     mkdir -p $out
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://pig.apache.org/;
+    homepage = https://pig.apache.org/;
     description = "High-level language for Apache Hadoop";
     license = licenses.asl20;
 
