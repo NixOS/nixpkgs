@@ -1,6 +1,6 @@
 { mkDerivation, lib, fetchFromGitHub, makeWrapper, qtbase,
   qtdeclarative, qtsvg, qtx11extras, muparser, cmake, python3,
-  qt5 }:
+  qtcharts }:
 
 mkDerivation rec {
   pname = "albert";
@@ -16,7 +16,7 @@ mkDerivation rec {
 
   nativeBuildInputs = [ cmake makeWrapper ];
 
-  buildInputs = [ qtbase qtdeclarative qtsvg qtx11extras muparser python3 qt5.qtcharts ];
+  buildInputs = [ qtbase qtdeclarative qtsvg qtx11extras muparser python3 qtcharts ];
 
   enableParallelBuilding = true;
 
