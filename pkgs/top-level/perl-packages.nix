@@ -5902,10 +5902,10 @@ let
   };
 
   FileNFSLock = buildPerlPackage {
-    name = "File-NFSLock-1.27";
+    name = "File-NFSLock-1.29";
     src = fetchurl {
-      url = mirror://cpan/authors/id/B/BB/BBB/File-NFSLock-1.27.tar.gz;
-      sha256 = "0hhh3cmbby98b1xh64dvj31wqcr9hsk1zqrq3ci8fjd4xb7xch8g";
+      url = mirror://cpan/authors/id/B/BB/BBB/File-NFSLock-1.29.tar.gz;
+      sha256 = "0dzssj15faz9cn1w3xi7jwm64gyjyazapv4bkgglw5l1njcibm31";
     };
     meta = {
       maintainers = with maintainers; [ ];
