@@ -2705,10 +2705,10 @@ let
   };
 
   Coro = buildPerlPackage rec {
-     name = "Coro-6.52";
+     name = "Coro-6.54";
      src = fetchurl {
-       url = mirror://cpan/authors/id/M/ML/MLEHMANN/Coro-6.52.tar.gz;
-       sha256 = "1q744smw6m676v8n0ww8jvmh1zg1iw7f7clzblwbfgmhy03h5ja9";
+       url = mirror://cpan/authors/id/M/ML/MLEHMANN/Coro-6.54.tar.gz;
+       sha256 = "0a00b351m7fxm39vfk726wpva2xx8qxlx5nv4yjgkbqap502ld2m";
      };
      propagatedBuildInputs = [ AnyEvent Guard commonsense ];
      buildInputs = [ CanaryStability ];
