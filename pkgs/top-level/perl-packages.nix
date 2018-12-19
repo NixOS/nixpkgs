@@ -14905,10 +14905,10 @@ let
   };
 
   TestCleanNamespaces = buildPerlPackage {
-    name = "Test-CleanNamespaces-0.23";
+    name = "Test-CleanNamespaces-0.24";
     src = fetchurl {
-      url = mirror://cpan/authors/id/E/ET/ETHER/Test-CleanNamespaces-0.23.tar.gz;
-      sha256 = "c7bf97f3c786b75f84341135904b492a1a36646aa65db3e0fd15a3cbe0864872";
+      url = mirror://cpan/authors/id/E/ET/ETHER/Test-CleanNamespaces-0.24.tar.gz;
+      sha256 = "338d5569e8e89a654935f843ec0bc84aaa486fe8dd1898fb9cab3eccecd5327a";
     };
     buildInputs = [ Filepushd Moo Mouse RoleTiny SubExporter TestDeep TestNeeds TestWarnings namespaceclean ];
     propagatedBuildInputs = [ PackageStash SubIdentify ];
