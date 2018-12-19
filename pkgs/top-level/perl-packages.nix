@@ -14806,7 +14806,7 @@ let
        url = mirror://cpan/authors/id/R/RJ/RJBS/Test-Abortable-0.002.tar.gz;
        sha256 = "0v97y31j56f4mxw0vxyjbdprq4951h4wcdh4acnfm63np7wvg44p";
      };
-     propagatedBuildInputs = [ SubExporter TestSimple13 ];
+     propagatedBuildInputs = [ SubExporter ];
      buildInputs = [ TestNeeds ];
      meta = {
        description = "subtests that you can die your way out of ... but survive";
