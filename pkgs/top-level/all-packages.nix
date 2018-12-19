@@ -19486,8 +19486,9 @@ in
   termtosvg = callPackage ../tools/misc/termtosvg { };
 
   inherit (callPackage ../applications/graphics/tesseract {})
-    tesseract
+    tesseract3
     tesseract4;
+  tesseract = tesseract3;
 
   tetraproc = callPackage ../applications/audio/tetraproc { };
 
