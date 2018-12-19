@@ -42,6 +42,7 @@ core-packages:
 
 default-package-overrides:
   # Newer versions don't work in LTS-12.x
+  - alsa-mixer < 0.3
   - cassava-megaparsec < 2
   # LTS Haskell 12.23
   - abstract-deque ==0.3
