@@ -27,6 +27,7 @@ let
     deepin-metacity = callPackage ./deepin-metacity { };
     deepin-movie-reborn = callPackage ./deepin-movie-reborn { };
     deepin-mutter = callPackage ./deepin-mutter { };
+    deepin-screenshot = callPackage ./deepin-screenshot { };
     deepin-shortcut-viewer = callPackage ./deepin-shortcut-viewer { };
     deepin-sound-theme = callPackage ./deepin-sound-theme { };
     deepin-terminal = callPackage ./deepin-terminal {
