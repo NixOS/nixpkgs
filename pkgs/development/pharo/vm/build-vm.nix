@@ -92,9 +92,7 @@ stdenv.mkDerivation rec {
     LD_LIBRARY_PATH="\$LD_LIBRARY_PATH:$libs" exec $out/pharo "\$@"
     EOF
     chmod +x "$out/bin/${cmd}"
-    ln -s ${libgit2}/lib/libgit2.so.0.26.6 "$out/"
-    ln -s ${libgit2}/lib/libgit2.so.26 "$out/"
-    ln -s ${libgit2}/lib/libgit2.so "$out/"
+    ln -s ${libgit2}/lib/libgit2.so* "$out/"
   '';
 
   enableParallelBuilding = true;
@@ -107,7 +105,7 @@ stdenv.mkDerivation rec {
   #
   # (stack protection is disabled above for gcc 4.8 compatibility.)
   nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ bash unzip glibc openssl gcc48 libgit2 libGLU_combined freetype xorg.libX11 xorg.libICE xorg.libSM alsaLib cairo pharo-share libuuid ];
+  buildInputs = [ bash unzip glibc openssl gcc48 libGLU_combined freetype xorg.libX11 xorg.libICE xorg.libSM alsaLib cairo pharo-share libuuid ];
 
   meta = with stdenv.lib; {
     description = "Clean and innovative Smalltalk-inspired environment";
