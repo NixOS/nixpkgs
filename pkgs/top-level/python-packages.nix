@@ -3514,7 +3514,9 @@ in {
 
   pydispatcher = callPackage ../development/python-modules/pydispatcher { };
 
-  pydot = callPackage ../development/python-modules/pydot { };
+  pydot = callPackage ../development/python-modules/pydot {
+    inherit (pkgs) graphviz;
+  };
 
   pydot_ng = callPackage ../development/python-modules/pydot_ng { };
 
