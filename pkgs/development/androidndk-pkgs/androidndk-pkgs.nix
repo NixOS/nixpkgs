@@ -125,9 +125,8 @@ rec {
     runCommand "bionic-prebuilt" {} ''
       mkdir -p $out
       cp -r ${includePath} $out/include
-      chmod u+w $out/include
-      cp -r ${asmIncludePath}/* $out/include
       chmod +w $out/include
+      cp -r ${asmIncludePath}/* $out/include
       ln -s ${libPath} $out/lib
     '';
 }
