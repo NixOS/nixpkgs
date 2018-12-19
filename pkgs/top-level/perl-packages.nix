@@ -8407,10 +8407,10 @@ let
   };
 
   LinuxInotify2 = buildPerlPackage rec {
-    name = "Linux-Inotify2-1.22";
+    name = "Linux-Inotify2-2.1";
     src = fetchurl {
-      url = mirror://cpan/authors/id/M/ML/MLEHMANN/Linux-Inotify2-1.22.tar.gz;
-      sha256 = "1l916p8xak6c51x4x1vrzd8wpi55bld74wf0p5w5m4vr80zjb7dw";
+      url = mirror://cpan/authors/id/M/ML/MLEHMANN/Linux-Inotify2-2.1.tar.gz;
+      sha256 = "0w7jyq5pjy28s0ck34gy1vfbr069lhcn579bz0fh29h071sbcrbj";
     };
     propagatedBuildInputs = [ commonsense ];
   };
