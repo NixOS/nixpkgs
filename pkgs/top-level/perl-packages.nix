@@ -6031,10 +6031,10 @@ let
   };
 
   FilesysDiskUsage = buildPerlPackage rec {
-    name = "Filesys-DiskUsage-0.11";
+    name = "Filesys-DiskUsage-0.12";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MA/MANWAR/${name}.tar.gz";
-      sha256 = "e69237c035e18a6ed69e36e058d7b3491d54a803a308f756e62a8e7f48b2a281";
+      sha256 = "e8afee07014df5868f9a2784e041c82c3c8c38550f4cd48bec56d0d6c4997273";
     };
     buildInputs = [ TestWarn ];
     meta = {
