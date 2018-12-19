@@ -622,7 +622,7 @@ in
 
   aws-env = callPackage ../tools/admin/aws-env { };
 
-  aws-google-auth = pythonPackages.callPackage ../tools/admin/aws-google-auth { };
+  aws-google-auth = python3Packages.callPackage ../tools/admin/aws-google-auth { };
 
   aws-okta = callPackage ../tools/security/aws-okta { };
 
@@ -2755,8 +2755,6 @@ in
   fprot = callPackage ../tools/security/fprot { };
 
   fprintd = callPackage ../tools/security/fprintd { };
-
-  fprint_demo = callPackage ../tools/security/fprint_demo { };
 
   franz = callPackage ../applications/networking/instant-messengers/franz { };
 
@@ -15532,14 +15530,12 @@ in
   league-of-moveable-type = callPackage ../data/fonts/league-of-moveable-type {};
 
   inherit (callPackages ../data/fonts/redhat-liberation-fonts { })
-    liberation_ttf_v1_from_source
-    liberation_ttf_v1_binary
-    liberation_ttf_v2_from_source
-    liberation_ttf_v2_binary;
-  liberation_ttf = liberation_ttf_v2_binary;
+    liberation_ttf_v1
+    liberation_ttf_v2
+    ;
+  liberation_ttf = liberation_ttf_v2;
 
-  liberationsansnarrow = callPackage ../data/fonts/liberationsansnarrow { };
-  liberationsansnarrow_binary = callPackage ../data/fonts/liberationsansnarrow/binary.nix { };
+  liberation-sans-narrow = callPackage ../data/fonts/liberation-sans-narrow { };
 
   liberastika = callPackage ../data/fonts/liberastika { };
 
@@ -16328,7 +16324,9 @@ in
 
   csa = callPackage ../applications/audio/csa { };
 
-  csound = callPackage ../applications/audio/csound { };
+  csound = callPackage ../applications/audio/csound {
+    fluidsynth = fluidsynth_1;
+  };
 
   csound-qt = callPackage ../applications/audio/csound/csound-qt {
     python = python27;
@@ -16903,6 +16901,7 @@ in
   fluidsynth = callPackage ../applications/audio/fluidsynth {
      inherit (darwin.apple_sdk.frameworks) AudioUnit CoreAudio CoreMIDI CoreServices;
   };
+  fluidsynth_1 = fluidsynth.override { version = "1"; };
 
   fmit = libsForQt5.callPackage ../applications/audio/fmit { };
 
@@ -17911,8 +17910,8 @@ in
       fontDirectories = [
         carlito dejavu_fonts
         freefont_ttf xorg.fontmiscmisc
-        liberation_ttf_v1_binary
-        liberation_ttf_v2_binary
+        liberation_ttf_v1
+        liberation_ttf_v2
       ];
     };
     clucene_core = clucene_core_2;
@@ -22902,6 +22901,8 @@ in
   nip2 = callPackage ../tools/graphics/nip2 { };
 
   virglrenderer = callPackage ../development/libraries/virglrenderer { };
+
+  vivid = callPackage ../tools/misc/vivid { };
 
   vokoscreen = libsForQt5.callPackage ../applications/video/vokoscreen { };
 

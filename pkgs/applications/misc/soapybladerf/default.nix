@@ -3,7 +3,7 @@
 } :
 
 let
-  version = "0.3.5";
+  version = "0.4.0";
 
 in stdenv.mkDerivation {
   name = "soapybladerf-${version}";
@@ -12,7 +12,7 @@ in stdenv.mkDerivation {
     owner = "pothosware";
     repo = "SoapyBladeRF";
     rev = "soapy-bladerf-${version}";
-    sha256 = "1n7vy6y8k1smq3l729npxbhxbnrc79gz06dxkibsihz4k8sddkrg";
+    sha256 = "1gf1azfydw033nlg2bgs9cbsbp9npjdrgjwlsffn0d9x0qbgxjqp";
   };
 
   nativeBuildInputs = [ cmake pkgconfig ];

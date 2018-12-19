@@ -164,8 +164,8 @@ in rec {
       if lib.length invalidNodeNames > 0 then
         throw ''
           Cannot create machines out of (${lib.concatStringsSep ", " invalidNodeNames})!
-          All machines are references as perl variables in the testing framework which will break the
-          script when special characters are allowed.
+          All machines are referenced as perl variables in the testing framework which will break the
+          script when special characters are used.
 
           Please stick to alphanumeric chars and underscores as separation.
         ''

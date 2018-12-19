@@ -2,14 +2,14 @@
 
 stdenv.mkDerivation rec {
   name = "radarr-${version}";
-  version = "0.2.0.1120";
+  version = "0.2.0.1217";
 
   src = fetchurl {
-    url = "https://github.com/Radarr/Radarr/releases/download/v${version}/Radarr.develop.${version}.linux.tar.gz";
-    sha256 = "0vsjaza0k4djb3vnazl2py4qmbxqfyyr0x9p4flq78yn79hp3439";
+    url = "https://github.com/Radarr/Radarr/releases/download/v${version}/Radarr.v${version}.linux.tar.gz";
+    sha256 = "09zzvfqpv58b79a906013pjq42qwbibf16rz24gnqg7wq7az83jy";
   };
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
     mkdir -p $out/{bin,share/${name}}
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "A Usenet/BitTorrent movie downloader.";
+    description = "A Usenet/BitTorrent movie downloader";
     homepage = https://radarr.video/;
     license = licenses.gpl3;
     maintainers = with maintainers; [ edwtjo ];

@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = https://www.geany.org/;
     license = licenses.gpl2;
-    maintainers = [];
+    maintainers = with maintainers; [ frlan ];
     platforms = platforms.all;
   };
 }
