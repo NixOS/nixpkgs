@@ -11,7 +11,7 @@ with lib;
   machine = {
     services.osquery.enable = true;
     services.osquery.loggerPath = "/var/log/osquery/logs";
-    services.osquery.pidfile = "/var/run/osqueryd.pid";
+    services.osquery.pidfile = "/run/osqueryd.pid";
   };
 
   testScript = ''
@@ -23,6 +23,6 @@ with lib;
       "echo 'SELECT value FROM osquery_flags WHERE name = \"logger_path\";' | osqueryi | grep /var/log/osquery/logs"
     );
 
-    $machine->succeed("echo 'SELECT value FROM osquery_flags WHERE name = \"pidfile\";' | osqueryi | grep /var/run/osqueryd.pid");
+    $machine->succeed("echo 'SELECT value FROM osquery_flags WHERE name = \"pidfile\";' | osqueryi | grep /run/osqueryd.pid");
   '';
 })
