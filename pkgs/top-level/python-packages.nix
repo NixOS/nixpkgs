@@ -3205,7 +3205,9 @@ in {
 
   obfsproxy = callPackage ../development/python-modules/obfsproxy { };
 
-  objgraph = callPackage ../development/python-modules/objgraph { };
+  objgraph = callPackage ../development/python-modules/objgraph {
+    graphvizPkg = pkgs.graphviz;
+  };
 
   odo = callPackage ../development/python-modules/odo { };
 
