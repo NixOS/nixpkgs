@@ -4,11 +4,11 @@
 
 buildPythonPackage rec {
   pname = "pylint";
-  version = "1.9.2";
+  version = "1.9.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1cxr1j037hsm4spmvl64v2j2rdq72pc2z0gnn3iggd4np6y21wpz";
+    sha256 = "09bc539f85706f2cca720a7ddf28f5c6cf8185708d6cb5bbf7a90a32c3b3b0aa";
   };
 
   checkInputs = [ pytest pytestrunner pyenchant ];

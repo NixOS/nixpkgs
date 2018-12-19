@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "ofxparse";
-  version = "0.14";
+  version = "0.19";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d8c486126a94d912442d040121db44fbc4a646ea70fa935df33b5b4dbfbbe42a";
+    sha256 = "d8c81fd5089332106da1a2e8919c412c7c677f08af04d557ca767701a04e0918";
   };
 
   propagatedBuildInputs = [ six beautifulsoup4 ];

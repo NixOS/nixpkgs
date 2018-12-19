@@ -1,19 +1,24 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi
-, nose
+, pytestrunner
+, pytest
+, psutil
+, pkgconfig
+, setuptools_scm
 }:
 
 buildPythonPackage rec {
   pname = "lz4";
-  version = "0.8.2";
+  version = "2.1.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1irad4sq4hdr30fr53smvv3zzk4rddcf9b4jx19w8s9xsxhr1x3b";
+    sha256 = "ec265f7c3fc3df706e9579bde632ceeef9278858d7ae87c376a2954d11e9ea39";
   };
 
-  buildInputs = [ nose ];
+  buildInputs = [ setuptools_scm pytestrunner pkgconfig ];
+  checkInputs = [ pytest psutil ];
 
   meta = with stdenv.lib; {
     description = "Compression library";

@@ -15,11 +15,11 @@
 
 buildPythonPackage rec {
   pname = "rainbowstream";
-  version = "1.3.7";
+  version = "1.4.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0zpi1x3b535pwx8rkq57nnrb5d5ma65vvlalar9vi6ilp124x1w2";
+    sha256 = "16881d8bb15416389eeaf4ceee7a588069060c216b55e7602dbcff5134feb7cc";
   };
 
   patches = [ ./image.patch ];

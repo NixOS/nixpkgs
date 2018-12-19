@@ -32,9 +32,9 @@ buildPythonPackage rec {
   checkInputs = [ nose ];
   propagatedBuildInputs = [ toolz ];
 
-  # Disable failing test https://github.com/pytoolz/cytoolz/issues/97
+  # Failing test https://github.com/pytoolz/cytoolz/issues/122
   checkPhase = ''
-    NOSE_EXCLUDE=test_curried_exceptions nosetests -v $out/${python.sitePackages}
+    NOSE_EXCLUDE=test_introspect_builtin_modules nosetests -v $out/${python.sitePackages}
   '';
 
   meta = {

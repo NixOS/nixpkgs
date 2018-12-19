@@ -1,11 +1,11 @@
 { stdenv, buildPythonPackage, fetchPypi, six, setuptools_scm }:
 buildPythonPackage rec {
   pname = "python-dateutil";
-  version = "2.7.3";
+  version = "2.7.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e27001de32f627c22380a688bcc43ce83504a7bc5da472209b4c70f02829f0b8";
+    sha256 = "88f9287c0174266bb0d8cedd395cfba9c58e87e5ad86b2ce58859bc11be3cf02";
   };
 
   propagatedBuildInputs = [ six setuptools_scm ];
