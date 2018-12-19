@@ -498,6 +498,7 @@ in {
     mpi = pkgs.openmpi;
   };
 
+  msrestazure = callPackage ../development/python-modules/msrestazure { };
   msrest = callPackage ../development/python-modules/msrest { };
 
   multiset = callPackage ../development/python-modules/multiset { };
