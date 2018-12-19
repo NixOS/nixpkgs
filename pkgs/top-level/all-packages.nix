@@ -17525,6 +17525,8 @@ in
     extra-packages = [ csound ];
   };
 
+  hyperledger-fabric = callPackage ../tools/misc/hyperledger-fabric { };
+
   jackline = callPackage ../applications/networking/instant-messengers/jackline { };
 
   slack = callPackage ../applications/networking/instant-messengers/slack { };
