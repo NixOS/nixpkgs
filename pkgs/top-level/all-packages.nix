@@ -22658,7 +22658,7 @@ in
 
   pjsip = callPackage ../applications/networking/pjsip { };
 
-  plano-theme = callPackage ../misc/themes/plano { };
+  plano-theme = callPackage ../data/themes/plano { };
 
   ppsspp = libsForQt5.callPackage ../misc/emulators/ppsspp { };
 
