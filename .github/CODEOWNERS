@@ -69,8 +69,8 @@
 /pkgs/development/r-modules         @peti
 
 # Ruby
-/pkgs/development/interpreters/ruby @zimbatm
-/pkgs/development/ruby-modules      @zimbatm
+/pkgs/development/interpreters/ruby @alyssais @zimbatm
+/pkgs/development/ruby-modules      @alyssais @zimbatm
 
 # Rust
 /pkgs/development/compilers/rust @Mic92 @LnL7
