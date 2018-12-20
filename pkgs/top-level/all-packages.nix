@@ -20613,7 +20613,7 @@ in
 
   gcs = callPackage ../games/gcs { };
 
-  gcompris = libsForQt59.callPackage ../games/gcompris { };
+  gcompris = libsForQt5.callPackage ../games/gcompris { };
 
   gemrb = callPackage ../games/gemrb { };
 
