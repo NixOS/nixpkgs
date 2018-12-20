@@ -42,7 +42,7 @@ stdenv.mkDerivation {
 
   patches = [
     ./docbook2texi.patch
-    #./git-sh-i18n.patch
+    ./git-sh-i18n.patch
     ./ssh-path.patch
     ./git-send-email-honor-PATH.patch
     ./installCheck-path.patch
