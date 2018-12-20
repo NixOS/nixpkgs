@@ -1,5 +1,8 @@
 { stdenv, lib, fetchgit, perl, cdrkit, syslinux, xz, openssl
 , embedScript ? null
+, trustedRootCert ? null
+, optionDownloadProtoHttps ? true
+, optionImageTrustCmd ? false
 }:
 
 let
@@ -27,10 +30,12 @@ stdenv.mkDerivation {
     [ "ECHO_E_BIN_ECHO=echo" "ECHO_E_BIN_ECHO_E=echo" # No /bin/echo here.
       "ISOLINUX_BIN_LIST=${syslinux}/share/syslinux/isolinux.bin"
       "LDLINUX_C32=${syslinux}/share/syslinux/ldlinux.c32"
-    ] ++ lib.optional (embedScript != null) "EMBED=${embedScript}";
+    ] ++ lib.optional (trustedRootCert != null) "TRUST=${trustedRootCert}"
+      ++ lib.optional (embedScript != null) "EMBED=${embedScript}";
 
 
-  enabledOptions = [ "DOWNLOAD_PROTO_HTTPS" ];
+  enabledOptions = lib.optional optionDownloadProtoHttps "DOWNLOAD_PROTO_HTTPS"
+    ++ lib.optional optionImageTrustCmd "IMAGE_TRUST_CMD";
 
   configurePhase = ''
     runHook preConfigure
