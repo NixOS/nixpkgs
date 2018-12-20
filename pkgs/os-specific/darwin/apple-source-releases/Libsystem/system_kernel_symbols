@@ -403,7 +403,6 @@ _fs_snapshot_list
 _fs_snapshot_mount
 _fs_snapshot_rename
 _fs_snapshot_revert
-_fs_snapshot_root
 _fsctl
 _fsetattrlist
 _fsetxattr
@@ -678,7 +677,6 @@ _mig_strncpy_zerofill
 _mincore
 _minherit
 _mk_timer_arm
-_mk_timer_arm_leeway
 _mk_timer_cancel
 _mk_timer_create
 _mk_timer_destroy
