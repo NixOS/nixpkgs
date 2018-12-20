@@ -1,6 +1,6 @@
 { stdenv, fetchurl, fetchgit, vdr, pkgconfig, gettext, ffmpeg_2, alsaLib, fetchFromGitHub
 , libvdpau, libxcb, xcbutilwm, graphicsmagick, libav, pcre, xorgserver, ffmpeg
-, libiconv, boost, libgcrypt, perl, utillinux, groff, libva-full, xorg }:
+, libiconv, boost, libgcrypt, perl, utillinux, groff, libva, xorg }:
 {
   femon = stdenv.mkDerivation rec {
 
@@ -35,7 +35,7 @@
     ++ (with xorg; [ libxcb libX11 ])
     ++ [ alsaLib ]
     ++ [ libvdpau ] # vdpau
-    ++ [ libva-full ] # va-api
+    ++ [ libva ] # va-api
     ;
 
     makeFlags = [ "DESTDIR=$(out)" ];
