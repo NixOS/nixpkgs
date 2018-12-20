@@ -147,7 +147,15 @@ stdenv.mkDerivation rec {
     cp --no-preserve=mode -r "${contribSrc}/modules" "$NIX_BUILD_TOP/opencv_contrib"
   '';
 
-  patches =
+  patches = [
+    # https://github.com/opencv/opencv/pull/13232
+    # This also fixes the test of haskell-opencv HEAD where we got the following error:
+    # libgomp: Out of memory allocating 927712937064 bytes
+    (fetchpatch {
+      url = https://github.com/opencv/opencv/commit/e1ac8589f8a19b9bf5598bbae073ae12721c541d.patch;
+      sha256 = "1ap2818lixjhc5jgf779c57kwacafc0ap40lqrx6nqfz31silglj";
+    })
+  ] ++
     # https://github.com/opencv/opencv/pull/13254
     lib.optional enablePython (fetchpatch {
       url = https://github.com/opencv/opencv/commit/ad35b79e3f98b4ce30481e0299cca550ed77aef0.patch;
