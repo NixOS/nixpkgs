@@ -89,6 +89,15 @@ stdenv.mkDerivation rec {
 
   inherit blas64;
 
+  patches = [
+    # Fixes build on x86_64-darwin. See:
+    # https://github.com/xianyi/OpenBLAS/issues/1926
+    (fetchpatch {
+      url = https://github.com/xianyi/OpenBLAS/commit/701ea88347461e4c5d896765438dc870281b3834.patch;
+      sha256 = "18rcfgkjsijl9d2510jn961wqvz7zdlz2fgy1yjmax29kvv8fqd9";
+    })
+  ];
+
   # Some hardening features are disabled due to sporadic failures in
   # OpenBLAS-based programs. The problem may not be with OpenBLAS itself, but
   # with how these flags interact with hardening measures used downstream.
@@ -117,8 +126,6 @@ stdenv.mkDerivation rec {
       "NO_STATIC=1"
     ] ++ stdenv.lib.optional (stdenv.hostPlatform.libc == "musl") "NO_AFFINITY=1"
     ++ mapAttrsToList (var: val: var + "=" + val) config;
-
-    patches = [];
 
   doCheck = true;
   checkTarget = "tests";
