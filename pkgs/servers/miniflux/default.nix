@@ -4,7 +4,7 @@
 }:
 
 buildGoPackage rec {
-  name = "miniflux-${version}";
+  pname = "miniflux";
   version = "2.0.13";
 
   goPackagePath = "miniflux.app";
@@ -29,7 +29,7 @@ buildGoPackage rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "Miniflux is a minimalist and opinionated feed reader.";
+    description = "Minimalist and opinionated feed reader";
     homepage = https://miniflux.app/;
     license = licenses.asl20;
     maintainers = with maintainers; [ benpye ];
