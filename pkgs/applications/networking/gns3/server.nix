@@ -1,9 +1,9 @@
 { stable, branch, version, sha256Hash }:
 
-{ stdenv, python3Packages, fetchFromGitHub, fetchurl }:
+{ stdenv, python36Packages, fetchFromGitHub, fetchurl }:
 
 let
-  pythonPackages = python3Packages;
+  pythonPackages = python36Packages;
   async-timeout = (stdenv.lib.overrideDerivation pythonPackages.async-timeout
     (oldAttrs:
       rec {
@@ -24,8 +24,7 @@ let
           sha256 = "8adda6583ba438a4c70693374e10b60168663ffa6564c5c75d3c7a9055290964";
         };
         propagatedBuildInputs = [ async-timeout ]
-          ++ (with pythonPackages; [ attrs chardet multidict yarl ])
-          ++ stdenv.lib.optional (pythonPackages.pythonOlder "3.7") pythonPackages.idna-ssl;
+          ++ (with pythonPackages; [ attrs chardet multidict yarl idna-ssl ]);
       }));
   aiohttp-cors = (stdenv.lib.overrideDerivation pythonPackages.aiohttp-cors
     (oldAttrs:
@@ -57,7 +56,7 @@ in pythonPackages.buildPythonPackage rec {
     ++ (with pythonPackages; [
       yarl aiohttp multidict
       jinja2 psutil zipstream raven jsonschema typing
-      prompt_toolkit
+      (pythonPackages.callPackage ../../../development/python-modules/prompt_toolkit/1.nix {})
     ]);
 
   # Requires network access
