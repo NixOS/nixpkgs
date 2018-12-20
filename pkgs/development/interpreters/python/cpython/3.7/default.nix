@@ -16,6 +16,7 @@
 , python-setup-hook
 # For the Python package set
 , packageOverrides ? (self: super: {})
+, buildPackages
 }:
 
 assert x11Support -> tcl != null
@@ -38,13 +39,20 @@ let
     ++ optionals stdenv.isDarwin [ CF configd ];
 
   hasDistutilsCxxPatch = !(stdenv.cc.isGNU or false);
-
+  pythonForBuild = if stdenv.hostPlatform == stdenv.buildPlatform then
+    "$out/bin/python"
+  else
+    buildPackages.python37.interpreter;
 in stdenv.mkDerivation {
   name = "python3-${version}";
   pythonVersion = majorVersion;
   inherit majorVersion version;
 
   inherit buildInputs;
+
+  nativeBuildInputs =
+    optionals (stdenv.hostPlatform != stdenv.buildPlatform)
+    [ buildPackages.stdenv.cc buildPackages.python37 ];
 
   src = fetchurl {
     url = "https://www.python.org/ftp/python/${majorVersion}.${minorVersion}/Python-${version}.tar.xz";
@@ -95,6 +103,27 @@ in stdenv.mkDerivation {
     "--with-system-expat"
     "--with-system-ffi"
     "--with-openssl=${openssl.dev}"
+  ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    "ac_cv_buggy_getaddrinfo=no"
+    # Assume little-endian IEEE 754 floating point when cross compiling
+    "ac_cv_little_endian_double=yes"
+    "ac_cv_big_endian_double=no"
+    "ac_cv_mixed_endian_double=no"
+    "ac_cv_x87_double_rounding=yes"
+    "ac_cv_tanh_preserves_zero_sign=yes"
+    # Generally assume that things are present and work
+    "ac_cv_posix_semaphores_enabled=yes"
+    "ac_cv_broken_sem_getvalue=no"
+    "ac_cv_wchar_t_signed=yes"
+    "ac_cv_rshift_extends_sign=yes"
+    "ac_cv_broken_nice=no"
+    "ac_cv_broken_poll=no"
+    "ac_cv_working_tzset=yes"
+    "ac_cv_have_long_long_format=yes"
+    "ac_cv_have_size_t_format=yes"
+    "ac_cv_computed_gotos=yes"
+    "ac_cv_file__dev_ptmx=yes"
+    "ac_cv_file__dev_ptc=yes"
   ];
 
   preConfigure = ''
@@ -153,9 +182,9 @@ in stdenv.mkDerivation {
     # We rebuild three times, once for each optimization level
     # Python 3.7 implements PEP 552, introducing support for deterministic bytecode.
     # This is automatically used when `SOURCE_DATE_EPOCH` is set.
-    find $out -name "*.py" | $out/bin/python     -m compileall -q -f -x "lib2to3" -i -
-    find $out -name "*.py" | $out/bin/python -O  -m compileall -q -f -x "lib2to3" -i -
-    find $out -name "*.py" | $out/bin/python -OO -m compileall -q -f -x "lib2to3" -i -
+    find $out -name "*.py" | ${pythonForBuild}     -m compileall -q -f -x "lib2to3" -i -
+    find $out -name "*.py" | ${pythonForBuild} -O  -m compileall -q -f -x "lib2to3" -i -
+    find $out -name "*.py" | ${pythonForBuild} -OO -m compileall -q -f -x "lib2to3" -i -
   '';
 
   passthru = let
