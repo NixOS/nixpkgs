@@ -702,6 +702,8 @@ in {
 
   selectors2 = callPackage ../development/python-modules/selectors2 { };
 
+  sepaxml = callPackage ../development/python-modules/sepaxml { };
+
   serversyncstorage = callPackage ../development/python-modules/serversyncstorage {};
 
   shellingham = callPackage ../development/python-modules/shellingham {};
