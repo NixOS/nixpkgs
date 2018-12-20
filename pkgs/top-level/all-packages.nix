@@ -20034,7 +20034,9 @@ with pkgs;
 
   openrw = callPackage ../games/openrw { };
 
-  openspades = callPackage ../games/openspades { };
+  openspades = callPackage ../games/openspades {
+    inherit (darwin.apple_sdk.frameworks) Cocoa;
+  };
 
   openttd = callPackage ../games/openttd {
     zlib = zlibStatic;
