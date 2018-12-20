@@ -1,8 +1,9 @@
-{ stdenv, fetchFromGitLab, git, go }:
+{ stdenv, lib, fetchFromGitLab, buildGoPackage }:
 
-stdenv.mkDerivation rec {
+with lib;
+
+buildGoPackage rec {
   name = "gitlab-workhorse-${version}";
-
   version = "7.1.3";
 
   src = fetchFromGitLab {
@@ -11,12 +12,20 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "1r75jj0xb4jv5fq2ihxk0vlv43gsk523zx86076mwph1g75gi1nz";
   };
-
-  buildInputs = [ git go ];
+  goPackagePath = "gitlab.com/gitlab-org/gitlab-workhorse";
 
   patches = [ ./remove-hardcoded-paths.patch ];
 
-  makeFlags = [ "PREFIX=$(out)" "VERSION=${version}" ];
+  buildPhase = ''
+    cd go/src/${goPackagePath}
+    make VERSION=${version}
+  '';
+
+  installPhase = ''
+    for b in gitlab-*; do
+      install -Dm555 $b $bin/bin/$b
+    done
+  '';
 
   meta = with stdenv.lib; {
     homepage = http://www.gitlab.com/;
