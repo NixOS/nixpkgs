@@ -1,6 +1,7 @@
-{ stdenv, fetchurl, fetchFromGitHub, cmake, unzip, zip, file
+{ stdenv, fetchurl, fetchFromGitHub, fetchpatch, cmake, unzip, zip, file
 , curl, glew , libGL, SDL2, SDL2_image, zlib, freetype, imagemagick
 , openal , opusfile, libogg
+, Cocoa
 }:
 
 stdenv.mkDerivation rec {
@@ -19,6 +20,16 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     freetype SDL2 SDL2_image libGL zlib curl glew opusfile openal libogg
+  ] ++ stdenv.lib.optionals stdenv.hostPlatform.isDarwin [
+    Cocoa
+  ];
+
+  patches = [
+    # https://github.com/yvt/openspades/pull/793 fix Darwin build
+    (fetchpatch {
+      url = "https://github.com/yvt/openspades/commit/2d13704fefc475b279337e89057b117f711a35d4.diff";
+      sha256 = "1i7rcpjzkjhbv5pp6byzrxv7sb1iamqq5k1vyqlvkbr38k2dz0rv";
+    })
   ];
 
   cmakeFlags = [
@@ -43,6 +54,6 @@ stdenv.mkDerivation rec {
     description = "A compatible client of Ace of Spades 0.75";
     homepage    = "https://github.com/yvt/openspades/";
     license     = licenses.gpl3;
-    platforms   = platforms.linux;
+    platforms   = platforms.all;
   };
 }
