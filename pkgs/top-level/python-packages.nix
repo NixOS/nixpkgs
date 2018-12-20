@@ -3729,6 +3729,8 @@ in {
 
   pyls-mypy = callPackage ../development/python-modules/pyls-mypy {};
 
+  pyu2f = callPackage ../development/python-modules/pyu2f { };
+
   pyudev = callPackage ../development/python-modules/pyudev {
     inherit (pkgs) systemd;
   };
