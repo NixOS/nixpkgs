@@ -27,7 +27,11 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
+  NIX_CFLAGS_COMPILE =
+    "-Wno-error=deprecated-declarations" +
+    # Avoid GL_GLEXT_VERSION double definition
+    " -DNO_SDL_GLEXT"
+  ;
 
   # To avoid problems finding SDL_types.h.
   configureFlags = [ "CFLAGS=-I${SDL.dev}/include/SDL" ];
