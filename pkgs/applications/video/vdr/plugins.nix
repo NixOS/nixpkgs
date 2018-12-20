@@ -159,7 +159,7 @@
 
   vnsiserver = let
     name = "vnsiserver";
-    version = "1.5.1";
+    version = "1.8.0";
   in stdenv.mkDerivation {
 
     name = "vdr-${name}-${version}";
@@ -168,10 +168,11 @@
 
     installFlags = [ "DESTDIR=$(out)" ];
 
-    src = fetchgit {
-      url = "https://github.com/FernetMenta/vdr-plugin-${name}.git";
-      sha256 = "0yhyakqs71v1ygp27zm8y8sfxbm7mz8xg8xqh0gn1gmsznd8s791";
+    src = fetchFromGitHub {
+      repo = "vdr-plugin-${name}";
+      owner = "FernetMenta";
       rev = "refs/tags/v${version}";
+      sha256 = "0n7idpxqx7ayd63scl6xwdx828ik4kb2mwz0c30cfjnmnxxd45lw";
     };
 
     meta = with stdenv.lib; {
