@@ -652,7 +652,7 @@ lib.mapAttrs (n: v: v // { shortName = n; }) {
   sspl = {
     shortName = "SSPL";
     fullName = "Server Side Public License";
-    url = https://www.mongodb.com/licensing/server-side-public-license
+    url = https://www.mongodb.com/licensing/server-side-public-license;
   };
 
   tcltk = spdx {
