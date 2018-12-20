@@ -12243,7 +12243,7 @@ in
     qmltermwidget = callPackage ../development/libraries/qmltermwidget {
       inherit (darwin.apple_sdk.libs) utmp;
     };
-    qmlbox2d = libsForQt59.callPackage ../development/libraries/qmlbox2d { };
+    qmlbox2d = libsForQt5.callPackage ../development/libraries/qmlbox2d { };
 
     qscintilla = callPackage ../development/libraries/qscintilla {
       withQt5 = true;
@@ -20615,7 +20615,7 @@ in
 
   gcs = callPackage ../games/gcs { };
 
-  gcompris = libsForQt59.callPackage ../games/gcompris { };
+  gcompris = libsForQt5.callPackage ../games/gcompris { };
 
   gemrb = callPackage ../games/gemrb { };
 
