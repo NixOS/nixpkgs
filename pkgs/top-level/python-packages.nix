@@ -358,6 +358,8 @@ in {
 
   filterpy = callPackage ../development/python-modules/filterpy { };
 
+  fints = callPackage ../development/python-modules/fints { };
+
   fire = callPackage ../development/python-modules/fire { };
 
   fdint = callPackage ../development/python-modules/fdint { };
