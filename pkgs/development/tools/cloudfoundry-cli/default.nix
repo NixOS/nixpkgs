@@ -15,8 +15,6 @@ buildGoPackage rec {
     sha256 = "1v4f1fyydpzkfir46g4ppbf3zmk3ym6kxswpkdjls8h3dbb2fbnv";
   };
 
-  outputs = [ "out" ];
-
   makeTarget = let hps = stdenv.hostPlatform.system; in
     if hps == "x86_64-darwin" then
       "out/cf-cli_osx"
@@ -34,9 +32,8 @@ buildGoPackage rec {
   '';
 
   installPhase = ''
-    install -Dm555 out/cf "$out/bin/cf"
-    remove-references-to -t ${go} "$out/bin/cf"
-    install -Dm444 -t "$out/share/bash-completion/completions/" "$src/ci/installers/completion/cf"
+    install -Dm555 out/cf "$bin/bin/cf"
+    install -Dm444 -t "$bin/share/bash-completion/completions/" "$src/ci/installers/completion/cf"
   '';
 
   meta = with stdenv.lib; {
