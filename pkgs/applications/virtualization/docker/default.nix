@@ -28,7 +28,7 @@ rec {
       patches = [];
     });
 
-    docker-containerd = (containerd.override { inherit go; }).overrideAttrs (oldAttrs: rec {
+    docker-containerd = containerd.overrideAttrs (oldAttrs: rec {
       name = "docker-containerd-${version}";
       inherit version;
       src = fetchFromGitHub {
@@ -39,8 +39,6 @@ rec {
       };
 
       hardeningDisable = [ "fortify" ];
-
-      buildInputs = [ removeReferencesTo go btrfs-progs ];
     });
 
     docker-tini = tini.overrideAttrs  (oldAttrs: rec {
