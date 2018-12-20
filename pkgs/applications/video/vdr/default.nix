@@ -11,7 +11,7 @@ let
 
   mkPlugin = name: stdenv.mkDerivation {
     name = "vdr-${name}-${version}";
-    inherit (vdr) src patches;
+    inherit (vdr) src;
     buildInputs = [ gettext vdr ];
     nativeBuildInputs = [ pkgconfig ];
     preConfigure = "cd PLUGINS/src/${name}";
