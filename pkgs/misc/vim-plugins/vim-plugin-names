@@ -28,6 +28,7 @@ Chiel92/vim-autoformat
 chikatoike/concealedyank.vim
 chikatoike/sourcemap.vim
 chrisbra/CheckAttach
+chrisbra/Recover.vim
 chrisbra/csv.vim
 chrisgeo/sparkup
 chriskempson/base16-vim
