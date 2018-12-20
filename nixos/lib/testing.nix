@@ -116,7 +116,7 @@ in rec {
 
       vms = map (m: m.config.system.build.vm) (lib.attrValues nodes);
 
-      ocrProg = tesseract_4.override { enableLanguages = [ "eng" ]; };
+      ocrProg = tesseract4.override { enableLanguages = [ "eng" ]; };
 
       imagemagick_tiff = imagemagick_light.override { inherit libtiff; };
 

@@ -19523,8 +19523,10 @@ in
 
   termtosvg = callPackage ../tools/misc/termtosvg { };
 
-  tesseract = callPackage ../applications/graphics/tesseract { };
-  tesseract_4 = lowPrio (callPackage ../applications/graphics/tesseract/4.x.nix { });
+  inherit (callPackage ../applications/graphics/tesseract {})
+    tesseract3
+    tesseract4;
+  tesseract = tesseract3;
 
   tetraproc = callPackage ../applications/audio/tetraproc { };
 

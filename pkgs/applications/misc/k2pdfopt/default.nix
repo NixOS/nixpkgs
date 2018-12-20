@@ -75,19 +75,21 @@ stdenv.mkDerivation rec {
         cp ${src}/leptonica_mod/* src/
       '';
     });
-    tesseract_modded = tesseract.overrideAttrs (attrs: {
-      prePatch = ''
-        cp ${src}/tesseract_mod/{ambigs.cpp,ccutil.h,ccutil.cpp} ccutil/
-        cp ${src}/tesseract_mod/dawg.cpp api/
-        cp ${src}/tesseract_mod/{imagedata.cpp,tessdatamanager.cpp} ccstruct/
-        cp ${src}/tesseract_mod/openclwrapper.h opencl/
-        cp ${src}/tesseract_mod/{tessedit.cpp,thresholder.cpp} ccmain/
-        cp ${src}/tesseract_mod/tess_lang_mod_edge.h cube/
-        cp ${src}/tesseract_mod/tesscapi.cpp api/
-        cp ${src}/include_mod/{tesseract.h,leptonica.h} api/
-      '';
-      patches = [ ./tesseract.patch ];
-    });
+    tesseract_modded = tesseract.override {
+      tesseractBase = tesseract.tesseractBase.overrideAttrs (_: {
+        prePatch = ''
+          cp ${src}/tesseract_mod/{ambigs.cpp,ccutil.h,ccutil.cpp} ccutil/
+          cp ${src}/tesseract_mod/dawg.cpp api/
+          cp ${src}/tesseract_mod/{imagedata.cpp,tessdatamanager.cpp} ccstruct/
+          cp ${src}/tesseract_mod/openclwrapper.h opencl/
+          cp ${src}/tesseract_mod/{tessedit.cpp,thresholder.cpp} ccmain/
+          cp ${src}/tesseract_mod/tess_lang_mod_edge.h cube/
+          cp ${src}/tesseract_mod/tesscapi.cpp api/
+          cp ${src}/include_mod/{tesseract.h,leptonica.h} api/
+        '';
+        patches = [ ./tesseract.patch ];
+      });
+    };
   in
     [ zlib libpng ] ++
     optional enableGSL gsl ++
