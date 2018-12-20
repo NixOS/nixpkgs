@@ -17,6 +17,10 @@ stdenv.mkDerivation rec {
     sha256 = "0vww6irijw5ss7vawkdi5z5wdpcgw4iqljn5vs3vbd4y3d0lzrbs";
   };
 
+  patches = [
+    ./add-option-for-installation-sysconfdir.patch
+  ];
+
   outputs = [ "out" "dev" "devdoc" ];
 
   nativeBuildInputs = [
@@ -36,6 +40,8 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     "-Dsystemd-system-unit-dir=${placeholder "out"}/etc/systemd/system"
     "-Ddemo-agent=${if withDemoAgent then "true" else "false"}"
+    "--sysconfdir=/etc"
+    "-Dsysconfdir_install=${placeholder "out"}/etc"
   ] ++ optionals stdenv.isDarwin [
     "-D3g-source=false"
     "-Dcdma-source=false"
