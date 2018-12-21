@@ -4857,6 +4857,8 @@ with pkgs;
 
   pirate-get = callPackage ../tools/networking/pirate-get { };
 
+  pipreqs = callPackage ../tools/misc/pipreqs { };
+
   pius = callPackage ../tools/security/pius { };
 
   pixiewps = callPackage ../tools/networking/pixiewps {};
