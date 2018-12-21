@@ -3610,6 +3610,8 @@ in
 
   jnettop = callPackage ../tools/networking/jnettop { };
 
+  junkie = callPackage ../tools/networking/junkie { };
+
   go-jira = callPackage ../applications/misc/go-jira { };
 
   john = callPackage ../tools/security/john { };
