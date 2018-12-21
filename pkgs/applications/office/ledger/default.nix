@@ -22,7 +22,15 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  cmakeFlags = [ "-DCMAKE_INSTALL_LIBDIR=lib" (stdenv.lib.optionalString usePython "-DUSE_PYTHON=true") ];
+  cmakeFlags = [
+    "-DCMAKE_INSTALL_LIBDIR=lib"
+    "-DBUILD_DOCS:BOOL=ON"
+    (stdenv.lib.optionalString usePython "-DUSE_PYTHON=true")
+   ];
+
+  postBuild = ''
+    make doc
+  '';
 
   # Skip byte-compiling of emacs-lisp files because this is currently
   # broken in ledger...
