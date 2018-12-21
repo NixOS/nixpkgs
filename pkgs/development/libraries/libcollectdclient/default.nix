@@ -5,11 +5,7 @@ collectd.overrideAttrs (oldAttrs: {
   name = "libcollectdclient-${collectd.version}";
   buildInputs = [ ];
 
-  NIX_CFLAGS_COMPILE = oldAttrs.NIX_CFLAGS_COMPILE ++ [
-    "-Wno-error=unused-function"
-  ];
-
-  configureFlags = oldAttrs.configureFlags ++ [
+  configureFlags = (oldAttrs.configureFlags or []) ++ [
     "--disable-daemon"
     "--disable-all-plugins"
   ];
