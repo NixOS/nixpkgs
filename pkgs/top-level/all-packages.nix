@@ -17004,7 +17004,7 @@ in
 
   gcal = callPackage ../applications/misc/gcal { };
 
-  geany = callPackage ../applications/editors/geany { };
+  geany = callPackage ../applications/editors/geany { gtk=gtk2; };
   geany-with-vte = callPackage ../applications/editors/geany/with-vte.nix { };
 
   ghostwriter = libsForQt5.callPackage ../applications/editors/ghostwriter { };
