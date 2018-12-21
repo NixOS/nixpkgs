@@ -4373,8 +4373,6 @@ in {
 
   unittest-xml-reporting = callPackage ../development/python-modules/unittest-xml-reporting { };
 
-  uritemplate_py = callPackage ../development/python-modules/uritemplate_py { };
-
   traceback2 = callPackage ../development/python-modules/traceback2 { };
 
   linecache2 = callPackage ../development/python-modules/linecache2 { };
