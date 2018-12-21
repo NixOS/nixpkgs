@@ -2818,6 +2818,8 @@ in {
 
   starfish = callPackage ../development/python-modules/starfish { };
 
+  swagger-ui-bundle = callPackage ../development/python-modules/swagger-ui-bundle { };
+
   multi_key_dict = callPackage ../development/python-modules/multi_key_dict { };
 
   random2 = callPackage ../development/python-modules/random2 { };
