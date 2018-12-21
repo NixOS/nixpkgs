@@ -171,7 +171,7 @@
     src = fetchFromGitHub {
       repo = "vdr-plugin-${name}";
       owner = "FernetMenta";
-      rev = "refs/tags/v${version}";
+      rev = "v${version}";
       sha256 = "0n7idpxqx7ayd63scl6xwdx828ik4kb2mwz0c30cfjnmnxxd45lw";
     };
 

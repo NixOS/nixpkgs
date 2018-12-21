@@ -5,7 +5,7 @@ symlinkJoin {
 
   paths = [ vdr ] ++ plugins;
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   postBuild = ''
     wrapProgram $out/bin/vdr --add-flags "-L $out/lib/vdr --localedir=$out/share/locale"
