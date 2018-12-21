@@ -4,7 +4,7 @@
 # This can be useful for deploying packages with NixOps, and to share
 # binary dependencies between projects.
 
-{ lib, stdenv, defaultCrateOverrides, fetchCrate, rustc }:
+{ lib, stdenv, defaultCrateOverrides, fetchCrate, rustc, rust }:
 
 let
     # This doesn't appear to be officially documented anywhere yet.
@@ -59,7 +59,7 @@ let
     '';
 
     configureCrate = import ./configure-crate.nix { inherit lib stdenv echo_build_heading noisily makeDeps; };
-    buildCrate = import ./build-crate.nix { inherit lib stdenv echo_build_heading noisily makeDeps; };
+    buildCrate = import ./build-crate.nix { inherit lib stdenv echo_build_heading noisily makeDeps rust; };
     installCrate = import ./install-crate.nix;
 
     in
