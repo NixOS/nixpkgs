@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "gnused-${version}";
-  version = "4.6";
+  version = "4.7";
 
   src = fetchurl {
     url = "mirror://gnu/sed/sed-${version}.tar.xz";
-    sha256 = "17mv15mmjbqmfp6x600ypp9jyvkh9sk47l8l4xrcqf3q3k7nmzxy";
+    sha256 = "0smxcx66vx29djzb542nxcynl7qnzxqa5032ibazi7x2s267d198";
   };
 
   outputs = [ "out" "info" ];
