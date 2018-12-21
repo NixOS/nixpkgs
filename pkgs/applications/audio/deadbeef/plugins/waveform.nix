@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "cboxdoerfer";
     repo = "ddb_waveform_seekbar";
     rev = "v${version}";
-#    sha256 = "1v1schvnps7ypjqgcbqi74a45w8r2gbhrawz7filym22h1qr9wn0";
+    sha256 = "1v1schvnps7ypjqgcbqi74a45w8r2gbhrawz7filym22h1qr9wn0";
   };
 
   nativeBuildInputs = [ pkgconfig ];
