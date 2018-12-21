@@ -9,6 +9,10 @@ buildPythonPackage rec {
     sha256 = "1z2hx357xp3v4cv44xmqp7lli3frndqpyfmpbxf7n76h7s1zaaxm";
   };
 
+  # Disable tests that fail on Darwin
+  # Some of the failures are due to Nix using GNU coreutils
+  patches = [ ./disable-broken-tests-darwin.patch ];
+
   postPatch = ''
     sed -i 's#/usr/bin/env python#${python.interpreter}#' test.py
   '';
