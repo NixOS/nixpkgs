@@ -65,6 +65,7 @@ in buildPythonPackage {
   '';
 
   postInstall = ''
+    ln -s ${sip}/${python.sitePackages}/PyQt5/* $out/${python.sitePackages}/PyQt5
     for i in $out/bin/*; do
       wrapProgram $i --prefix PYTHONPATH : "$PYTHONPATH"
     done
