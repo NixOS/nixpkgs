@@ -36,5 +36,7 @@ stdenv.mkDerivation rec {
       extensive test suite.
     '';
     platforms = stdenv.lib.platforms.unix;
+    # Failing "eigen" tests on aarch64.
+    badPlatforms = [ "aarch64-linux" ];
   };
 }
