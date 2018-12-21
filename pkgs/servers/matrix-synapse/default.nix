@@ -64,7 +64,13 @@ in buildPythonApplication rec {
     netaddr
     phonenumbers
     pillow
-    prometheus_client
+    (prometheus_client.overrideAttrs (x: {
+      src = fetchPypi {
+        pname = "prometheus_client";
+        version = "0.3.1";
+        sha256 = "093yhvz7lxl7irnmsfdnf2030lkj4gsfkg6pcmy4yr1ijk029g0p";
+      };
+    }))
     psutil
     psycopg2
     pyasn1
