@@ -6,6 +6,7 @@
 , curl
 , enableTNC            ? false, trousers, sqlite, libxml2
 , enableNetworkManager ? false, networkmanager
+, libpcap
 }:
 
 # Note on curl support: If curl is built with gnutls as its backend, the
@@ -30,7 +31,10 @@ stdenv.mkDerivation rec {
     [ curl gmp python iptables ldns unbound openssl pcsclite ]
     ++ optionals enableTNC [ trousers sqlite libxml2 ]
     ++ optionals stdenv.isLinux [ systemd.dev pam ]
-    ++ optionals enableNetworkManager [ networkmanager ];
+    ++ optionals enableNetworkManager [ networkmanager ]
+    # ad-hoc fix for https://github.com/NixOS/nixpkgs/pull/51787
+    # Remove when the above PR lands in master
+    ++ [ libpcap ];
 
   patches = [
     ./ext_auth-path.patch
