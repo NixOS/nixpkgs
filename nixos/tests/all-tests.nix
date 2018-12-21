@@ -137,6 +137,7 @@ in
   matrix-synapse = handleTest ./matrix-synapse.nix {};
   memcached = handleTest ./memcached.nix {};
   mesos = handleTest ./mesos.nix {};
+  miniflux = handleTest ./miniflux.nix {};
   minio = handleTest ./minio.nix {};
   misc = handleTest ./misc.nix {};
   mongodb = handleTest ./mongodb.nix {};
