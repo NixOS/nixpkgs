@@ -8576,6 +8576,8 @@ in
       binutils = binutils;
     };
 
+  dive = callPackage ../development/tools/dive { };
+
   doclifter = callPackage ../development/tools/misc/doclifter { };
 
   docutils = pythonPackages.docutils;
