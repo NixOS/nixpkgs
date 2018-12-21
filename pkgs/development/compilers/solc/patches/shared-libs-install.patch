@@ -57,11 +57,10 @@ index 0bdec4b4..e876177e 100644
    target_link_libraries(solidity PUBLIC ${Z3_LIBRARY})
 --- a/libyul/CMakeLists.txt
 +++ b/libyul/CMakeLists.txt
-@@ -42,3 +42,4 @@ endif()
+@@ -43,3 +43,4 @@ endif()
  	optimiser/VarDeclPropagator.cpp
  )
--target_link_libraries(yul PUBLIC devcore)
-+target_link_libraries(yul PUBLIC evmasm devcore langutil)
+ target_link_libraries(yul PUBLIC evmasm devcore langutil)
 +install(TARGETS yul LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
 --- a/liblangutil/CMakeLists.txt
 +++ b/liblangutil/CMakeLists.txt
