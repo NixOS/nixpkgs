@@ -64,6 +64,11 @@
 /pkgs/development/haskell-modules/generic-builder.nix @peti @ryantm @basvandijk
 /pkgs/development/haskell-modules/hoogle.nix          @peti @ryantm @basvandijk
 
+# Perl
+/pkgs/development/interpreters/perl @volth
+/pkgs/top-level/perl-packages.nix   @volth
+/pkgs/development/perl-modules      @volth
+
 # R
 /pkgs/applications/science/math/R   @peti
 /pkgs/development/r-modules         @peti
