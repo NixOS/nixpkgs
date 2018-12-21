@@ -43,6 +43,15 @@
      <literal>./programs/nm-applet.nix</literal>
     </para>
    </listitem>
+   <listitem>
+    <para>
+     There is a new <varname>security.googleOsLogin</varname> module for using
+     <link xlink:href="https://cloud.google.com/compute/docs/instances/managing-instance-access">OS Login</link>
+     to manage SSH access to Google Compute Engine instances, which supersedes
+     the imperative and broken <literal>google-accounts-daemon</literal> used
+     in <literal>nixos/modules/virtualisation/google-compute-config.nix</literal>.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
