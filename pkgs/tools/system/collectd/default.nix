@@ -1,44 +1,41 @@
 { stdenv, fetchurl, fetchpatch, darwin
-, autoreconfHook
-, pkgconfig
-, curl
-, iptables
-, jdk
-, libapparmor
-, libatasmart
-, libcap_ng
-, libcredis
-, libdbi
-, libgcrypt
-, libmemcached, cyrus_sasl
-, libmicrohttpd
-, libmodbus
-, libnotify, gdk_pixbuf
-, liboping
-, libpcap
-, libsigrok
-, libvirt
-, libxml2
-, libtool
-, lm_sensors
-, lvm2
-, mysql
-, numactl
-, postgresql
-, protobufc
-, python
-, rabbitmq-c
-, riemann_c_client
-, rrdtool
-, udev
-, varnish
-, yajl
-, net_snmp
-, hiredis
-, libmnl
-, mosquitto
-, rdkafka
-, mongoc
+# optional:
+, pkgconfig ? null  # most of the extra deps need pkgconfig to be found
+, curl ? null
+, iptables ? null
+, jdk ? null
+, libatasmart ? null
+, libcredis ? null
+, libdbi ? null
+, libgcrypt ? null
+, libmemcached ? null, cyrus_sasl ? null
+, libmicrohttpd ? null
+, libmodbus ? null
+, libnotify ? null, gdk_pixbuf ? null
+, liboping ? null
+, libpcap ? null
+, libsigrok ? null
+, libvirt ? null
+, libxml2 ? null
+, libtool ? null
+, lm_sensors ? null
+, lvm2 ? null
+, mysql ? null
+, postgresql ? null
+, protobufc ? null
+, python ? null
+, rabbitmq-c ? null
+, riemann_c_client ? null
+, rrdtool ? null
+, udev ? null
+, varnish ? null
+, yajl ? null
+, net_snmp ? null
+, hiredis ? null
+, libmnl ? null
+, mosquitto ? null
+, rdkafka ? null
+, mongoc ? null
 }:
 stdenv.mkDerivation rec {
   version = "5.8.1";
@@ -49,14 +46,10 @@ stdenv.mkDerivation rec {
     sha256 = "1njk8hh56gb755xafsh7ahmqr9k2d4lam4ddj7s7fqz0gjigv5p7";
   };
 
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/rpv-tomsk/collectd/commit/d5a3c020d33cc33ee8049f54c7b4dffcd123bf83.patch";
-      sha256 = "1n65zw4d2k2bxapayaaw51ym7hy72a0cwi2abd8jgxcw3d0m5g15";
-    })
-  ];
+  # on 5.8.0: lvm2app.h:21:2: error: #warning "liblvm2app is deprecated, use D-Bus API instead." [-Werror=cpp]
+  NIX_CFLAGS_COMPILE = [ "-Wno-error=cpp" ];
 
-  nativeBuildInputs = [ pkgconfig autoreconfHook ];
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
     curl libdbi libgcrypt libmemcached
     cyrus_sasl libnotify gdk_pixbuf liboping libpcap libvirt
@@ -67,16 +60,12 @@ stdenv.mkDerivation rec {
   ] ++ stdenv.lib.optionals stdenv.isLinux [
     iptables libatasmart libcredis libmodbus libsigrok
     lm_sensors lvm2 rabbitmq-c udev net_snmp libmnl
-    libapparmor numactl libcap_ng
   ] ++ stdenv.lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.IOKit
     darwin.apple_sdk.frameworks.ApplicationServices
   ];
 
-  configureFlags = [
-    "--localstatedir=/var"
-    "--disable-werror"
-  ];
+  configureFlags = [ "--localstatedir=/var" ];
 
   # do not create directories in /var during installPhase
   postConfigure = ''
