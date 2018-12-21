@@ -1130,6 +1130,8 @@ in
 
   catclock = callPackage ../applications/misc/catclock { };
 
+  cardpeek = callPackage ../applications/misc/cardpeek { };
+
   cde = callPackage ../tools/package-management/cde { };
 
   cdemu-daemon = callPackage ../misc/emulators/cdemu/daemon.nix { };
