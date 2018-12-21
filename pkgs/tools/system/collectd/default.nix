@@ -67,6 +67,8 @@ stdenv.mkDerivation rec {
   ] ++ stdenv.lib.optionals stdenv.isLinux [
     iptables libatasmart libcredis libmodbus libsigrok
     lm_sensors lvm2 rabbitmq-c udev net_snmp libmnl
+    # those might be no longer required when https://github.com/NixOS/nixpkgs/pull/51767
+    # is merged
     libapparmor numactl libcap_ng
   ] ++ stdenv.lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.IOKit
