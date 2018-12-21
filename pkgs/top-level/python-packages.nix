@@ -4006,6 +4006,8 @@ in {
 
   sqlalchemy_migrate = callPackage ../development/python-modules/sqlalchemy-migrate { };
 
+  staticjinja = callPackage ../development/python-modules/staticjinja { };
+
   statsmodels = callPackage ../development/python-modules/statsmodels { };
 
   structlog = callPackage ../development/python-modules/structlog { };
