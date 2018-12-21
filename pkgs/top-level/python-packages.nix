@@ -748,6 +748,8 @@ in {
 
   WazeRouteCalculator = callPackage ../development/python-modules/WazeRouteCalculator { };
 
+  yarg = callPackage ../development/python-modules/yarg { };
+
   # packages defined here
 
   aafigure = callPackage ../development/python-modules/aafigure { };
