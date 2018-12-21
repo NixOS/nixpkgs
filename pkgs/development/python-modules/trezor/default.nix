@@ -4,13 +4,13 @@
 
 buildPythonPackage rec {
   pname = "trezor";
-  version = "0.10.2";
+  version = "0.11.0";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4dba4d5c53d3ca22884d79fb4aa68905fb8353a5da5f96c734645d8cf537138d";
+    sha256 = "1132f6a97afb0979c5018b067494bc8917b881c02d965f991270a70543b5050c";
   };
 
   propagatedBuildInputs = [ protobuf hidapi ecdsa mnemonic requests pyblake2 click libusb1 rlp ];
@@ -19,9 +19,9 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = {
-    description = "Python library for communicating with TREZOR Bitcoin Hardware Wallet";
+    description = "Python library for communicating with TREZOR Hardware Wallet";
     homepage = https://github.com/trezor/python-trezor;
     license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ np ];
+    maintainers = with lib.maintainers; [ np maintainers."1000101"];
   };
 }
