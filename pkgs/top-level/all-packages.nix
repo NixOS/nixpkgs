@@ -10412,7 +10412,7 @@ in
       stdenv = overrideCC stdenv gcc6; # with gcc-7: undefined reference to `__divmoddi4'
     }));
 
-  icu = icu59;
+  icu = icu63;
 
   id3lib = callPackage ../development/libraries/id3lib { };
 
