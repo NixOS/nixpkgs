@@ -475,6 +475,8 @@ in {
 
   clifford = callPackage ../development/python-modules/clifford { };
 
+  clickclick = callPackage ../development/python-modules/clickclick { };
+
   clustershell = callPackage ../development/python-modules/clustershell { };
 
   cnvkit = callPackage ../development/python-modules/cnvkit { };
