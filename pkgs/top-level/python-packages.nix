@@ -2295,6 +2295,8 @@ in {
 
   dtopt = callPackage ../development/python-modules/dtopt { };
 
+  easywatch = callPackage ../development/python-modules/easywatch { };
+
   ecdsa = callPackage ../development/python-modules/ecdsa { };
 
   effect = callPackage ../development/python-modules/effect {};
