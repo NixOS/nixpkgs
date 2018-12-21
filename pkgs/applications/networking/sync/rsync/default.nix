@@ -1,6 +1,7 @@
 { stdenv, fetchurl, perl, libiconv, zlib, popt
 , enableACLs ? true, acl ? null
 , enableCopyDevicesPatch ? false
+, enableIgnoreCasePatch  ? true
 }:
 
 assert enableACLs -> acl != null;
@@ -15,8 +16,9 @@ stdenv.mkDerivation rec {
 
   patchesSrc = base.upstreamPatchTarball;
 
-  srcs = [mainSrc] ++ stdenv.lib.optional enableCopyDevicesPatch patchesSrc;
-  patches = stdenv.lib.optional enableCopyDevicesPatch "./patches/copy-devices.diff";
+  srcs = [mainSrc patchesSrc];
+  patches = stdenv.lib.optional enableCopyDevicesPatch "./patches/copy-devices.diff"
+    ++ stdenv.lib.optional enableIgnoreCasePatch "./patches/ignore-case.diff";
 
   buildInputs = [libiconv zlib popt] ++ stdenv.lib.optional enableACLs acl;
   nativeBuildInputs = [perl];
