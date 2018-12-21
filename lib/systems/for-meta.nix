@@ -12,7 +12,11 @@ in rec {
   arm     = [ patterns.isAarch32 ];
   aarch64 = [ patterns.isAarch64 ];
   x86     = [ patterns.isx86 ];
+  i386    = [ patterns.isi386 ];
+  i486    = [ patterns.isi486 ];
+  i586    = [ patterns.isi586 ];
   i686    = [ patterns.isi686 ];
+  x86_32  = [ patterns.isx86_32 ];
   x86_64  = [ patterns.isx86_64 ];
   mips    = [ patterns.isMips ];
   riscv   = [ patterns.isRiscV ];

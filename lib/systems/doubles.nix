@@ -12,11 +12,14 @@ let
     "mipsel-linux"
 
     "i686-cygwin" "i686-freebsd" "i686-linux" "i686-netbsd" "i686-openbsd"
+    "i586-cygwin" "i586-freebsd" "i586-linux" "i586-netbsd" "i586-openbsd"
+    "i486-cygwin" "i486-freebsd" "i486-linux" "i486-netbsd" "i486-openbsd"
+    "i386-cygwin" "i386-freebsd" "i386-linux" "i386-netbsd" "i386-openbsd"
 
     "x86_64-cygwin" "x86_64-darwin" "x86_64-freebsd" "x86_64-linux"
     "x86_64-netbsd" "x86_64-openbsd" "x86_64-solaris"
 
-    "x86_64-windows" "i686-windows"
+    "x86_64-windows" "i686-windows" "i586-windows"
   ];
 
   allParsed = map parse.mkSystemFromString all;
@@ -31,7 +34,11 @@ in rec {
   arm     = filterDoubles predicates.isAarch32;
   aarch64 = filterDoubles predicates.isAarch64;
   x86     = filterDoubles predicates.isx86;
+  i386    = filterDoubles predicates.isi386;
+  i486    = filterDoubles predicates.isi486;
+  i586    = filterDoubles predicates.isi586;
   i686    = filterDoubles predicates.isi686;
+  x86_32  = filterDoubles predicates.isx86_32;
   x86_64  = filterDoubles predicates.isx86_64;
   mips    = filterDoubles predicates.isMips;
 
