@@ -2,10 +2,10 @@
 , makeWrapper, unzip, which
 , curl, tzdata, gdb, darwin
 , callPackage, targetPackages, ldc
-, version ? "2.081.2"
-, dmdSha256 ? "1wwk4shqldvgyczv1ihmljpfj3yidq7mxcj69i9kjl7jqx54hw62"
-, druntimeSha256 ? "0dqfsy34q2q7mk2gsi4ix3vgqg7szg3m067fghgx53vnvrzlpsc0"
-, phobosSha256 ? "1dan59lc4wggsrv5aax7jsxnzg7fz37xah84k1cbwjb3xxhhkd9n"
+, version ? "2.083.1"
+, dmdSha256 ? "0b52yq7slgbrawb22kib9bk2x9xjiy6axwz1317fck5axl093d90"
+, druntimeSha256 ? "1hm9p59ih21yv8x7cqjhkyy94677q4f8wk9fs9i1rybx8x19njyn"
+, phobosSha256 ? "1zmz0f1wj0dgxy2cy63ljjc1sl2sgb7ij8bamlxw9nxrchwi3l43"
 }:
 
 let
@@ -48,12 +48,15 @@ let
         # Remove cppa test for now because it doesn't work.
         rm dmd/test/runnable/cppa.d
         rm dmd/test/runnable/extra-files/cppb.cpp
+    ''
+
+    + stdenv.lib.optionalString (stdenv.hostPlatform.isDarwin) ''
+        rm dmd/test/runnable/test16096.sh
     '';
 
     # Compile with PIC to prevent colliding modules with binutils 2.28.
     # https://issues.dlang.org/show_bug.cgi?id=17375
     usePIC = "-fPIC";
-    ROOT_HOME_DIR = "$(echo ~root)";
 
     phobosPatches = ''
         # Ugly hack so the dlopen call has a chance to succeed.
@@ -105,13 +108,14 @@ let
         cd ../druntime
         make -j$NIX_BUILD_CORES -f posix.mak BUILD=release ENABLE_RELEASE=1 PIC=1 INSTALL_DIR=$out DMD=${pathToDmd}
         cd ../phobos
-        make -j$NIX_BUILD_CORES -f posix.mak BUILD=release ENABLE_RELEASE=1 PIC=1 INSTALL_DIR=$out DMD=${pathToDmd} TZ_DATABASE_DIR=${tzdata}/share/zoneinfo/
+        echo ${tzdata}/share/zoneinfo/ > TZDatabaseDirFile
+        make -j$NIX_BUILD_CORES -f posix.mak BUILD=release ENABLE_RELEASE=1 PIC=1 INSTALL_DIR=$out DMD=${pathToDmd} DFLAGS="-version=TZDatabaseDir -J$(pwd)"
         cd ..
     '';
 
     # Disable tests on Darwin for now because of
     # https://github.com/NixOS/nixpkgs/issues/41099
-    doCheck = !stdenv.hostPlatform.isDarwin;
+    doCheck = true;
 
     checkPhase = ''
         cd dmd
@@ -197,7 +201,8 @@ let
 
       buildPhase = ''
           cd phobos
-          make -j$NIX_BUILD_CORES -f posix.mak unittest BUILD=release ENABLE_RELEASE=1 PIC=1 DMD=${dmdBuild}/bin/dmd TZ_DATABASE_DIR=${tzdata}/share/zoneinfo/
+          echo ${tzdata}/share/zoneinfo/ > TZDatabaseDirFile
+          make -j$NIX_BUILD_CORES -f posix.mak unittest BUILD=release ENABLE_RELEASE=1 PIC=1 DMD=${dmdBuild}/bin/dmd DFLAGS="-version=TZDatabaseDir -J$(pwd)"
       '';
 
       installPhase = ''
