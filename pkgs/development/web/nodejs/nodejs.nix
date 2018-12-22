@@ -88,7 +88,6 @@ in
     doCheck = false; # fails 4 out of 1453 tests
 
     postInstall = ''
-      paxmark m $out/bin/node
       PATH=$out/bin:$PATH patchShebangs $out
 
       ${optionalString enableNpm ''
