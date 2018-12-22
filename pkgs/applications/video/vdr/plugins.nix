@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchgit, vdr, pkgconfig, gettext, ffmpeg_2, alsaLib, fetchFromGitHub
+{ stdenv, fetchurl, fetchgit, vdr, ffmpeg_2, alsaLib, fetchFromGitHub
 , libvdpau, libxcb, xcbutilwm, graphicsmagick, libav, pcre, xorgserver, ffmpeg
 , libiconv, boost, libgcrypt, perl, utillinux, groff, libva, xorg }:
 {
@@ -128,12 +128,15 @@
       done
     '';
 
-    buildInputs = [
-      vdr
-      pcre
+    nativeBuildInputs = [
       perl # for pod2man and pos2html
       utillinux
       groff
+    ];
+
+    buildInputs = [
+      vdr
+      pcre
     ];
 
     buildFlags = [

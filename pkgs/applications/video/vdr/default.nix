@@ -12,8 +12,7 @@ let
   mkPlugin = name: stdenv.mkDerivation {
     name = "vdr-${name}-${version}";
     inherit (vdr) src;
-    buildInputs = [ gettext vdr ];
-    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ vdr ];
     preConfigure = "cd PLUGINS/src/${name}";
     installFlags = [ "DESTDIR=$(out)" "PREFIX=" ];
   };
@@ -31,15 +30,18 @@ let
 
     postPatch = "substituteInPlace Makefile --replace libsystemd-daemon libsystemd";
 
-    buildInputs = [ fontconfig libjpeg libcap freetype perl ]
-      ++ stdenv.lib.optional enableSystemd systemd
-      ++ stdenv.lib.optional enableBidi fribidi;
+    buildInputs = [ fontconfig libjpeg libcap freetype ]
+    ++ stdenv.lib.optional enableSystemd systemd
+    ++ stdenv.lib.optional enableBidi fribidi;
 
     buildFlags = [ "vdr" "i18n" ]
-      ++ stdenv.lib.optional enableSystemd "SDNOTIFY=1"
-      ++ stdenv.lib.optional enableBidi "BIDI=1";
+    ++ stdenv.lib.optional enableSystemd "SDNOTIFY=1"
+    ++ stdenv.lib.optional enableBidi "BIDI=1";
 
-    propagatedBuildInputs = [ pkgconfig gettext ];
+    nativeBuildInputs = [ perl ];
+
+    # plugins uses the same build environment as vdr
+    propagatedNativeBuildInputs = [ pkgconfig gettext ];
 
     installFlags = [ "DESTDIR=$(out)" "PREFIX=" ];
 
