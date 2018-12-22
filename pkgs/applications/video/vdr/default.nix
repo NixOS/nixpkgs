@@ -14,7 +14,7 @@ let
     inherit (vdr) src;
     buildInputs = [ vdr ];
     preConfigure = "cd PLUGINS/src/${name}";
-    installFlags = [ "DESTDIR=$(out)" "PREFIX=" ];
+    installFlags = [ "DESTDIR=$(out)" ];
   };
 
   vdr = stdenv.mkDerivation {
@@ -43,7 +43,10 @@ let
     # plugins uses the same build environment as vdr
     propagatedNativeBuildInputs = [ pkgconfig gettext ];
 
-    installFlags = [ "DESTDIR=$(out)" "PREFIX=" ];
+    installFlags = [
+      "DESTDIR=$(out)"
+      "PREFIX=" # needs to be empty, otherwise plugins try to install at same prefix
+    ];
 
     installTargets = [ "install-pc" "install-bin" "install-doc" "install-i18n"
       "install-includes" ];
