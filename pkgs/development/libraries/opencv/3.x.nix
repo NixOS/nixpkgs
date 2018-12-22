@@ -35,20 +35,20 @@
 }:
 
 let
-  version = "3.4.4";
+  version = "3.4.5";
 
   src = fetchFromGitHub {
     owner  = "opencv";
     repo   = "opencv";
     rev    = version;
-    sha256 = "1xzbv0922r2zq4fgpkc1ldyq3kxp4c6x6dizydbspka18jrrxqlr";
+    sha256 = "0hz9316ys2qi0lx9dcbsk3mkn8cn08q12hc96p6zz2d4is6d5wsc";
   };
 
   contribSrc = fetchFromGitHub {
     owner  = "opencv";
     repo   = "opencv_contrib";
     rev    = version;
-    sha256 = "0ylsljkmgfj5vam05cv0z3qwkqwjwz5fs5f5yif3pwvb99lxlbib";
+    sha256 = "1fw7qwgibiznqal2dg4alkw8hrrrpjc0jaicf2406604rjm2lx6h";
   };
 
   # Contrib must be built in order to enable Tesseract support:
@@ -146,21 +146,6 @@ stdenv.mkDerivation rec {
   postUnpack = lib.optionalString buildContrib ''
     cp --no-preserve=mode -r "${contribSrc}/modules" "$NIX_BUILD_TOP/opencv_contrib"
   '';
-
-  patches = [
-    # https://github.com/opencv/opencv/pull/13232
-    # This also fixes the test of haskell-opencv HEAD where we got the following error:
-    # libgomp: Out of memory allocating 927712937064 bytes
-    (fetchpatch {
-      url = https://github.com/opencv/opencv/commit/e1ac8589f8a19b9bf5598bbae073ae12721c541d.patch;
-      sha256 = "1ap2818lixjhc5jgf779c57kwacafc0ap40lqrx6nqfz31silglj";
-    })
-  ] ++
-    # https://github.com/opencv/opencv/pull/13254
-    lib.optional enablePython (fetchpatch {
-      url = https://github.com/opencv/opencv/commit/ad35b79e3f98b4ce30481e0299cca550ed77aef0.patch;
-      sha256 = "0rkvg6wm5fyncszfpd83wa4lvsb8srvk21r1jcld758i4f334sws";
-    });
 
   # This prevents cmake from using libraries in impure paths (which
   # causes build failure on non NixOS)
