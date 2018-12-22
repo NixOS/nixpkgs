@@ -2,13 +2,13 @@
 
 python3Packages.buildPythonApplication rec {
   name = "syncplay-${version}";
-  version = "1.6.0";
+  version = "1.6.1";
 
   format = "other";
 
   src = fetchurl {
-    url = https://github.com/Syncplay/syncplay/archive/v1.6.0.tar.gz;
-    sha256 = "19x7b694p8b3qp578qk8q4g0pybhfjd4zk8rgrggz40s1yyfnwy5";
+    url = https://github.com/Syncplay/syncplay/archive/v1.6.1.tar.gz;
+    sha256 = "15rhbc3r7l012d330hb64p8bhcpy4ydy89iv34c34a1r554b8k97";
   };
 
   propagatedBuildInputs = with python3Packages; [ pyside twisted ];
