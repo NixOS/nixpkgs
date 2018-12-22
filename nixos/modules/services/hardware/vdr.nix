@@ -25,7 +25,7 @@ in {
       videoDir = mkOption {
         type = types.path;
         default = "/srv/vdr/video";
-        description = "Recording directory (must exist)";
+        description = "Recording directory";
       };
 
       extraArguments = mkOption {
@@ -39,6 +39,10 @@ in {
   ###### implementation
 
   config = mkIf cfg.enable {
+    systemd.tmpfiles.rules = [
+      "d ${cfg.videoDir} 0755 vdr vdr 0"
+      "Z ${cfg.videoDir} - vdr vdr -"
+    ];
 
     systemd.services.vdr = {
       description = "VDR";
