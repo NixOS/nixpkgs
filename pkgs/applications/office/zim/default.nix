@@ -42,5 +42,6 @@ python2Packages.buildPythonApplication rec {
     homepage = http://zim-wiki.org;
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ pSub ];
+    broken = stdenv.isDarwin; # https://github.com/NixOS/nixpkgs/pull/52658#issuecomment-449565790
   };
 }
