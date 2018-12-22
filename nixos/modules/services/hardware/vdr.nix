@@ -60,12 +60,11 @@ in {
       };
     };
 
-    users.extraUsers.vdr = {
-      uid = config.ids.uids.vdr;
+    users.users.vdr = {
       group = "vdr";
       home = libDir;
     };
 
-    users.groups.vdr.gid = config.ids.gids.vdr;
+    users.groups.vdr = {};
   };
 }
