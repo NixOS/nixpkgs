@@ -280,10 +280,6 @@ if [ -z "${SHELL:-}" ]; then echo "SHELL not set"; exit 1; fi
 BASH="$SHELL"
 export CONFIG_SHELL="$SHELL"
 
-# Dummy implementation of the paxmark function. On Linux, this is
-# overwritten by paxctl's setup hook.
-paxmark() { true; }
-
 
 # Execute the pre-hook.
 if [ -z "${shell:-}" ]; then export shell="$SHELL"; fi

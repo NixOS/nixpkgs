@@ -125,9 +125,6 @@ stdenv.mkDerivation rec {
 
   postFixup =
     ''
-      for exe in $out/bin/qemu-system-* ; do
-        paxmark m $exe
-      done
       # copy qemu-ga (guest agent) to separate output
       mkdir -p $ga/bin
       cp $out/bin/qemu-ga $ga/bin/

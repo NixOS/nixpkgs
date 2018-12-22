@@ -112,7 +112,6 @@ stdenv.mkDerivation {
     patchelf --set-interpreter $interpreter \
              --set-rpath ${stdenv.lib.makeLibraryPath deps}:$out/lib \
              $out/bin/mendeleydesktop
-    paxmark m $out/bin/mendeleydesktop
 
     wrapProgram $out/bin/mendeleydesktop \
       --add-flags "--unix-distro-build" \

@@ -282,8 +282,6 @@ let
           MENUNAME="Chromium"
           process_template chrome/app/resources/manpage.1.in "${buildPath}/chrome.1"
         )
-      '' + optionalString (target == "mksnapshot" || target == "chrome") ''
-        paxmark m "${buildPath}/${target}"
       '';
       targets = extraAttrs.buildTargets or [];
       commands = map buildCommand targets;
