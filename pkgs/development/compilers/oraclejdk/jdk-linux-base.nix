@@ -93,14 +93,6 @@ let result = stdenv.mkDerivation rec {
   installPhase = ''
     cd ..
 
-    # Set PaX markings
-    exes=$(file $sourceRoot/bin/* $sourceRoot/jre/bin/* 2> /dev/null | grep -E 'ELF.*(executable|shared object)' | sed -e 's/: .*$//')
-    for file in $exes; do
-      paxmark m "$file" || true
-      # On x86 for heap sizes over 700MB disable SEGMEXEC and PAGEEXEC as well.
-      ${stdenv.lib.optionalString stdenv.isi686 ''paxmark msp "$file"''}
-    done
-
     if test -z "$installjdk"; then
       mv $sourceRoot/jre $out
     else

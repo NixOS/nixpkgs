@@ -14,7 +14,7 @@
 , enableProprietaryCodecs ? true
 , gn, darwin, openbsm
 , ffmpeg ? null
-, lib, stdenv # lib.optional, needsPax
+, lib, stdenv
 }:
 
 with stdenv.lib;
@@ -181,7 +181,6 @@ EOF
     [Paths]
     Prefix = ..
     EOF
-    paxmark m $out/libexec/QtWebEngineProcess
   '';
 
   meta = with lib; {

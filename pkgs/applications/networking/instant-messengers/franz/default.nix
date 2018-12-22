@@ -54,7 +54,6 @@ in stdenv.mkDerivation rec {
   '';
 
   postFixup = ''
-    paxmark m $out/opt/franz/Franz
     wrapProgram $out/opt/franz/Franz --prefix PATH : ${xdg_utils}/bin
   '';
 

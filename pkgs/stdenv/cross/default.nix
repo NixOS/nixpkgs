@@ -59,7 +59,7 @@ in lib.init bootStages ++ [
       extraNativeBuildInputs = old.extraNativeBuildInputs
         ++ lib.optionals
              (hostPlatform.isLinux && !buildPlatform.isLinux)
-             [ buildPackages.patchelf buildPackages.paxctl ]
+             [ buildPackages.patchelf ]
         ++ lib.optional
              (let f = p: !p.isx86 || p.libc == "musl"; in f hostPlatform && !(f buildPlatform))
              buildPackages.updateAutotoolsGnuConfigScriptsHook

@@ -52,7 +52,6 @@ in stdenv.mkDerivation rec {
   '';
 
   postFixup = ''
-    paxmark m $out/opt/wavebox/Wavebox
     makeWrapper $out/opt/wavebox/Wavebox $out/bin/wavebox \
       --prefix PATH : ${xdg_utils}/bin
   '';
