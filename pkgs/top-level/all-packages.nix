@@ -7158,7 +7158,7 @@ in
           ((openjdk11.override { minimal = true; }) // {}));
 
   jdk = jdk8;
-  jre = jre8;
+  jre = if stdenv.isAarch32 || stdenv.isAarch64 then adoptopenjdk-jre-bin else jre8;
   jre_headless = jre8_headless;
 
   inherit (callPackages ../development/compilers/graalvm { }) mx jvmci8 graalvm8;
