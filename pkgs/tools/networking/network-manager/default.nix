@@ -25,8 +25,6 @@ in stdenv.mkDerivation rec {
   preConfigure = ''
     substituteInPlace configure --replace /usr/bin/uname ${coreutils}/bin/uname
     substituteInPlace configure --replace /usr/bin/file ${file}/bin/file
-    # to enable link-local connections
-    configureFlags="$configureFlags --with-udev-dir=$out/lib/udev"
 
     # Fixes: error: po/Makefile.in.in was not created by intltoolize.
     intltoolize --automake --copy --force
@@ -42,10 +40,11 @@ in stdenv.mkDerivation rec {
     "--with-dhcpcd=no"
     "--with-pppd=${ppp}/bin/pppd"
     "--with-iptables=${iptables}/bin/iptables"
-    #"--with-udev-dir=$(out)/lib/udev"
+    # to enable link-local connections
+    "--with-udev-dir=${placeholder "out"}/lib/udev"
     "--with-resolvconf=${openresolv}/sbin/resolvconf"
     "--sysconfdir=/etc" "--localstatedir=/var"
-    "--with-dbus-sys-dir=\${out}/etc/dbus-1/system.d"
+    "--with-dbus-sys-dir=${placeholder "out"}/etc/dbus-1/system.d"
     "--with-crypto=gnutls" "--disable-more-warnings"
     "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
     "--with-kernel-firmware-dir=/run/current-system/firmware"
@@ -77,9 +76,11 @@ in stdenv.mkDerivation rec {
 
   doCheck = false; # requires /sys, the net
 
-  preInstall = ''
-    installFlagsArray=( "sysconfdir=$out/etc" "localstatedir=$out/var" "runstatedir=$out/var/run" )
-  '';
+  installFlags = [
+    "sysconfdir=${placeholder "out"}/etc"
+    "localstatedir=${placeholder "out"}/var"
+    "runstatedir=${placeholder "out"}/var/run"
+  ];
 
   postInstall = ''
     mkdir -p $out/lib/NetworkManager
