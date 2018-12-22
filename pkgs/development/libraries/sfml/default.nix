@@ -1,6 +1,6 @@
 { stdenv, fetchzip, cmake, libX11, freetype, libjpeg, openal, flac, libvorbis
 , glew, libXrandr, libXrender, udev, xcbutilimage
-, IOKit, Foundation, AppKit, OpenAL
+, darwin, IOKit, Foundation, AppKit, OpenAL
 }:
 
 let
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libX11 freetype libjpeg openal flac libvorbis glew
                   libXrandr libXrender xcbutilimage
                 ] ++ stdenv.lib.optional stdenv.isLinux udev
-                  ++ stdenv.lib.optionals stdenv.isDarwin [ IOKit Foundation AppKit OpenAL ];
+                  ++ stdenv.lib.optionals stdenv.isDarwin [ IOKit Foundation AppKit OpenAL darwin.cf-private ];
 
   cmakeFlags = [ "-DSFML_INSTALL_PKGCONFIG_FILES=yes"
                  "-DSFML_MISC_INSTALL_PREFIX=share/SFML"
