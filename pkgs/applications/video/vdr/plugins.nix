@@ -83,10 +83,6 @@
 
       substituteInPlace command/markad-standalone.cpp \
         --replace "/var/lib/markad" "$out/var/lib/markad"
-
-      sed -i -e 's,^VDRDIR *=.*,VDRDIR = ${vdr.dev}/include/vdr,' \
-        -e 's,^LIBDIR *=.*,LIBDIR = $(DESTDIR)/lib/vdr,' \
-        -e 's,^LOCALEDIR *=.*,LOCALEDIR = $(DESTDIR)/share/locale,' plugin/Makefile
     '';
 
     preBuild = ''
@@ -97,6 +93,7 @@
       "DESTDIR=$(out)"
       "LIBDIR=$(out)/lib/vdr"
       "VDRDIR=${vdr.dev}/include/vdr"
+      "LOCALEDIR=$(DESTDIR)/share/locale"
     ];
 
     installFlags = buildFlags;
@@ -200,15 +197,13 @@
 
     buildInputs = [ vdr graphicsmagick ];
 
-    buildFlags = [ "DESTDIR=$(out)" ];
-
-    postPatch = ''
-      sed -i Makefile \
-        -e 's,IMAGELIB = imagemagick,IMAGELIB = graphicsmagic,' \
-        -e 's,^VDRDIR *=.*,VDRDIR = ${vdr.dev}/include/vdr,' \
-        -e 's,^LOCALEDIR *=.*,LOCALEDIR = $(DESTDIR)/share/locale,' \
-        -e 's,^LIBDIR *=.*,LIBDIR = $(DESTDIR)/lib/vdr,'
-    '';
+    buildFlags = [
+      "DESTDIR=$(out)"
+      "IMAGELIB=graphicsmagic"
+      "VDRDIR=${vdr.dev}/include/vdr"
+      "LOCALEDIR=$(DESTDIR)/share/locale"
+      "LIBDIR=$(DESTDIR)/lib/vdr"
+    ];
 
     preBuild = ''
       mkdir -p $out/lib/vdr
