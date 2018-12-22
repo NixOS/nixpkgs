@@ -1,11 +1,13 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, configobj
 , terminaltables
 , tabulate
 , backports_csv
 , wcwidth
 , pytest
+, mock
 , isPy27
 }:
 
@@ -19,12 +21,13 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
+    configobj
     terminaltables
     tabulate
     wcwidth
   ] ++ (lib.optionals isPy27 [ backports_csv ]);
 
-  checkInputs = [ pytest ];
+  checkInputs = [ pytest mock ];
 
   checkPhase = ''
     py.test
