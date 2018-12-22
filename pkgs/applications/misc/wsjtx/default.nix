@@ -1,21 +1,21 @@
 { stdenv, fetchurl, asciidoc, asciidoctor, autoconf, automake, cmake,
-  docbook_xsl, fftw, fftwFloat, gfortran, libtool, qtbase,
+  docbook_xsl, fftw, fftwFloat, gfortran, git, libtool, qtbase,
   qtmultimedia, qtserialport, texinfo, libusb1 }:
 
 stdenv.mkDerivation rec {
   name = "wsjtx-${version}";
-  version = "1.9.1";
+  version = "2.0.0";
 
   # This is a composite source tarball containing both wsjtx and a hamlib fork
   src = fetchurl {
     url = "http://physics.princeton.edu/pulsar/K1JT/wsjtx-${version}.tgz";
-    sha256 = "143r17fri08mwz28g17wcfxy60h3xgfk46mln5lmdr9k6355aqqc";
+    sha256 = "056hgfvqb8q41hqimyqb9xhv5jk48hgcazh5zshjsx2ny9llyhv6";
   };
 
   # Hamlib builds with autotools, wsjtx builds with cmake
   # Omitting pkgconfig because it causes issues locating the built hamlib
   nativeBuildInputs = [
-    asciidoc asciidoctor autoconf automake cmake docbook_xsl gfortran libtool
+    asciidoc asciidoctor autoconf automake cmake docbook_xsl gfortran git libtool
     texinfo
   ];
   buildInputs = [ fftw fftwFloat libusb1 qtbase qtmultimedia qtserialport ];
