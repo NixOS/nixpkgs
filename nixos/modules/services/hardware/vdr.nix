@@ -40,7 +40,7 @@ in {
 
   config = mkIf cfg.enable {
     systemd.tmpfiles.rules = [
-      "d ${cfg.videoDir} 0755 vdr vdr 0"
+      "d ${cfg.videoDir} 0755 vdr vdr -"
       "Z ${cfg.videoDir} - vdr vdr -"
     ];
 
