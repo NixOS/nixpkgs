@@ -177,6 +177,11 @@ with generated;
     dependencies = ["nvim-yarp"];
   });
 
+  ncm2-jedi = ncm2-jedi.overrideAttrs(old: {
+    dependencies = ["nvim-yarp" "ncm2"];
+    passthru.python3Dependencies = ps: with ps; [ jedi ];
+  });
+
   ncm2-ultisnips = ncm2-ultisnips.overrideAttrs(old: {
     dependencies = ["ultisnips"];
   });
