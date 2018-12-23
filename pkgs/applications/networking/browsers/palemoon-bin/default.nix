@@ -18,6 +18,7 @@ stdenv.mkDerivation rec {
     url = "https://linux.palemoon.org/datastore/release/palemoon-${version}.${arch}.tar.bz2";
     sha256 = "f1a6a54238a658d645149736e21074c51a1c770ad0b084500b8489f807eb700d";
   };
+  outputs = [ "out" "orig" ];
   sourceRoot = ".";
   unpackCmd = ''
     cat "$src" | tar xj
@@ -26,15 +27,15 @@ stdenv.mkDerivation rec {
   buildPhase = ":";   # nothing to build
 
   installPhase = ''
-    mkdir -p $out/bin
-    cp -R palemoon/* $out/
-    ln -s $out/palemoon $out/bin/palemoon
+    mkdir -p $out/bin $orig
+    cp -R palemoon/* $orig/
+    ln -s $orig/palemoon $out/bin/palemoon
     __desktop_icon="[Desktop Entry]
 Version=1.0
 Name=Pale Moon Web Browser
 Comment=Browse the World Wide Web
 Keywords=Internet;WWW;Browser;Web;Explorer
-Exec=$out/bin/palemoon %u
+Exec=$orig/palemoon %u
 Terminal=false
 X-MultipleArgs=false
 Type=Application
@@ -42,8 +43,8 @@ Icon=palemoon
 Categories=Network;WebBrowser;Internet
 MimeType=text/html;text/xml;application/xhtml+xml;application/xml;application/rss+xml;application/rdf+xml;image/gif;image/jpeg;image/png;x-scheme-handler/http;x-scheme-handler/https;x-scheme-handler/ftp;x-scheme-handler/chrome;video/webm;application/x-xpinstall;
 StartupNotify=true"
-    echo "$__desktop_icon" > $out/palemoon.desktop
-    chmod a+x $out/palemoon.desktop
+    echo "$__desktop_icon" > $orig/palemoon.desktop
+    chmod a+x $orig/palemoon.desktop
   '';
 
   #preFixup = let
