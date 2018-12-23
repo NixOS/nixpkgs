@@ -1,5 +1,5 @@
 { stdenv, fetchurl, xproto, libX11, libXrender
-, gmp, libGLU_combined, libjpeg, libpng
+, gmp, libjpeg, libpng
 , expat, gettext, perl, guile
 , SDL, SDL_image, SDL_mixer, SDL_ttf
 , curl, sqlite, libtool, readline
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     xproto libX11 gmp guile
-    libGLU_combined libjpeg libpng
+    libjpeg libpng
     expat gettext perl
     SDL SDL_image SDL_mixer SDL_ttf
     curl sqlite
@@ -27,7 +27,11 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
+  NIX_CFLAGS_COMPILE =
+    "-Wno-error=deprecated-declarations" +
+    # Avoid GL_GLEXT_VERSION double definition
+    " -DNO_SDL_GLEXT"
+  ;
 
   # To avoid problems finding SDL_types.h.
   configureFlags = [ "CFLAGS=-I${SDL.dev}/include/SDL" ];
