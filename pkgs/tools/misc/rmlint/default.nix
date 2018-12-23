@@ -1,5 +1,6 @@
-{ stdenv, fetchFromGitHub,
-  gettext, glib, json-glib, libelf, pkgconfig, scons, sphinx, utillinux }:
+{ stdenv, fetchFromGitHub
+, gettext, pkgconfig, scons
+, glib, json-glib, libelf, sphinx, utillinux }:
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
@@ -13,13 +14,15 @@ stdenv.mkDerivation rec {
     sha256 = "1gc7gbnh0qg1kl151cv1ld87vhpm1v3pnkn7prhscdcc21jrg8nz";
   };
 
+  CFLAGS="-I${stdenv.lib.getDev utillinux}/include";
 
-  patches = [
-    ./blkid-hack.patch
+  nativeBuildInputs = [
+    pkgconfig sphinx gettext scons
   ];
 
-  nativeBuildInputs = [ pkgconfig sphinx ];
-  buildInputs = [ gettext glib json-glib libelf scons utillinux ];
+  buildInputs = [
+    glib json-glib libelf utillinux
+  ];
 
   prefixKey = "--prefix=";
 
