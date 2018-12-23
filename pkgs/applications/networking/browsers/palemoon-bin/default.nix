@@ -47,19 +47,6 @@ StartupNotify=true"
     chmod a+x $orig/palemoon.desktop
   '';
 
-  #preFixup = let
-  #  # we prepare our library path in the let clause to avoid it become part of the input of mkDerivation
-  #  libPath = lib.makeLibraryPath [
-  #    stdenv.cc.cc.lib  # libstdc++.so.6
-  #    freetype          # libfreetype.so.6
-  #  ];
-  #in ''
-  #  patchelf \
-  #    --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-  #    --set-rpath "${libPath}" \
-  #    $out/palemoon
-  #'';
-
   meta = with stdenv.lib; {
     description = "Goanna-based web browser";
     longDescription = ''
