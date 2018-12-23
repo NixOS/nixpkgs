@@ -61,7 +61,7 @@ StartupNotify=true"
   #'';
 
   meta = with stdenv.lib; {
-    description = "Palemoon, Goanna-based web browser";
+    description = "Goanna-based web browser";
     longDescription = ''
       Pale Moon is an Open Source, Goanna-based web browser focusing on
       efficiency and customization.
@@ -73,9 +73,12 @@ StartupNotify=true"
       experience, while offering full customization and a growing collection of
       extensions and themes to make the browser truly your own.
     '';
-    homepage    = https://www.palemoon.org/;
-    license     = http://www.palemoon.org/licensing.shtml;
+    homepage = https://www.palemoon.org/;
+    license = {
+      free = false;
+      url = https://www.palemoon.org/licensing.shtml;
+    };
     maintainers = with maintainers; [ rnhmjoj AndersonTorres ];
-    platforms   = platforms.linux;
+    platforms = platforms.linux;
   };
 }
