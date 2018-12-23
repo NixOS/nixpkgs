@@ -116,10 +116,14 @@ in
         ++ optional hasDocker "docker.service";
       requires = optional hasDocker "docker.service";
       wantedBy = [ "multi-user.target" ];
+      preStart = "cp ${configFile} /var/lib/gitlab-runner/config.toml";
+      reload = "cp ${configFile} /var/lib/gitlab-runner/config.toml";
+      reloadIfChanged = true;
       serviceConfig = {
+        StateDirectory = "gitlab-runner";
         ExecStart = ''${cfg.package.bin}/bin/gitlab-runner run \
           --working-directory ${cfg.workDir} \
-          --config ${configFile} \
+          --config /var/lib/gitlab-runner/config.toml \
           --service gitlab-runner \
           --user gitlab-runner \
         '';
