@@ -4,8 +4,8 @@
 
 { nixpkgs ? { outPath = (import ../lib).cleanSource ./..; revCount = 56789; shortRev = "gfedcba"; }
 , stableBranch ? false
-, supportedSystems ? [ "x86_64-linux" "aarch64-linux" ]
-, limitedSupportedSystems ? [ "i686-linux" ]
+, supportedSystems ? [ "x86_64-linux" ]
+, limitedSupportedSystems ? [ "i686-linux" "aarch64-linux" ]
 }:
 
 let
@@ -54,10 +54,12 @@ in rec {
         (all nixos.dummy)
         (all nixos.manual)
 
-        nixos.iso_minimal.x86_64-linux or []
-        nixos.iso_minimal.i686-linux or []
         nixos.iso_graphical.x86_64-linux or []
+        nixos.iso_minimal.aarch64-linux or []
+        nixos.iso_minimal.i686-linux or []
+        nixos.iso_minimal.x86_64-linux or []
         nixos.ova.x86_64-linux or []
+        nixos.sd_image.aarch64-linux or []
 
         #(all nixos.tests.containers)
         (all nixos.tests.containers-imperative)
