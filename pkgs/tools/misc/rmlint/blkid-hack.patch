@@ -1,0 +1,18 @@
+# HACK: For some reason the file blkid/blkid.h is not found during build.
+# I assueme it is due to the fact that -I [...]util-linux-2.33-dev/include/blkid
+# is added during the build and not just   -I [...]util-linux-2.33-dev/include
+# For the time being this patch is the only way I could find to fix the build.
+
+diff --git a/lib/utilities.c b/lib/utilities.c
+index e768fa41..1f96fd68 100644
+--- a/lib/utilities.c
++++ b/lib/utilities.c
+@@ -76,7 +76,7 @@
+ #endif
+ 
+ #if HAVE_BLKID
+-#include <blkid/blkid.h>
++#include <blkid.h>
+ #endif
+ 
+ #if HAVE_JSON_GLIB
