@@ -30,7 +30,6 @@ stdenv.mkDerivation rec {
   ]
   ++ stdenv.lib.optionals withLLVM [
     "--enable-llvm"
-    "--enable-llvmloaded"
     "--with-llvm=${llvm}"
   ];
 
