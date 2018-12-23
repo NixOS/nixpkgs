@@ -18443,6 +18443,8 @@ with pkgs;
     stdenv = overrideCC stdenv gcc49;
   };
 
+  palemoon-bin = callPackage ../applications/networking/browsers/palemoon-bin {};
+
   pamix = callPackage ../applications/audio/pamix { };
 
   pamixer = callPackage ../applications/audio/pamixer { };
