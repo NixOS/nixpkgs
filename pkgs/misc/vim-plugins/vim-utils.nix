@@ -293,8 +293,18 @@ let
       (let
         link = (packageName: dir: pluginPath: "ln -sf ${pluginPath}/share/vim-plugins/* $out/pack/${packageName}/${dir}");
         packageLinks = (packageName: {start ? [], opt ? []}:
+        let
+          # `nativeImpl` expects packages to be derivations, not strings (as
+          # opposed to older implementations that have to maintain backwards
+          # compatibility). Therefore we don't need to deal with "knownPlugins"
+          # and can simply pass `null`.
+          depsOfOptionalPlugins = lib.subtractLists opt (findDependenciesRecursively null opt);
+          startWithDeps = findDependenciesRecursively null start;
+        in
           ["mkdir -p $out/pack/${packageName}/start"]
-          ++ (builtins.map (link packageName "start") start)
+          # To avoid confusion, even dependencies of optional plugins are added
+          # to `start` (except if they are explicitly listed as optional plugins).
+          ++ (builtins.map (link packageName "start") (lib.unique (startWithDeps ++ depsOfOptionalPlugins)))
           ++ ["mkdir -p $out/pack/${packageName}/opt"]
           ++ (builtins.map (link packageName "opt") opt)
         );
