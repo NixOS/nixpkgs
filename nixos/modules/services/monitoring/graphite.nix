@@ -60,7 +60,7 @@ let
   carbonEnv = {
     PYTHONPATH = let
       cenv = pkgs.python.buildEnv.override {
-        extraLibs = [ pkgs.pythonPackages.carbon ];
+        extraLibs = [ pkgs.python27Packages.carbon ];
       };
       cenvPack =  "${cenv}/${pkgs.python.sitePackages}";
     # opt/graphite/lib contains twisted.plugins.carbon-cache
@@ -130,7 +130,7 @@ in {
       finders = mkOption {
         description = "List of finder plugins to load.";
         default = [];
-        example = literalExample "[ pkgs.python3Packages.influxgraph ]";
+        example = literalExample "[ pkgs.python27Packages.influxgraph ]";
         type = types.listOf types.package;
       };
 
