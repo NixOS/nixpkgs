@@ -60,7 +60,7 @@ let
   carbonEnv = {
     PYTHONPATH = let
       cenv = pkgs.python.buildEnv.override {
-        extraLibs = [ pkgs.python3Packages.carbon ];
+        extraLibs = [ pkgs.pythonPackages.carbon ];
       };
       cenvPack =  "${cenv}/${pkgs.python.sitePackages}";
     # opt/graphite/lib contains twisted.plugins.carbon-cache
@@ -535,10 +535,10 @@ in {
         after = [ "network.target" ];
         environment = {
           PYTHONPATH = let
-              aenv = pkgs.python.buildEnv.override {
-                extraLibs = [ cfg.api.package pkgs.cairo pkgs.pythonPackages.cffi ] ++ cfg.api.finders;
+              aenv = pkgs.python3.buildEnv.override {
+                extraLibs = [ cfg.api.package pkgs.cairo pkgs.python3Packages.cffi ] ++ cfg.api.finders;
               };
-            in "${aenv}/${pkgs.python.sitePackages}";
+            in "${aenv}/${pkgs.python3.sitePackages}";
           GRAPHITE_API_CONFIG = graphiteApiConfig;
           LD_LIBRARY_PATH = "${pkgs.cairo.out}/lib";
         };
@@ -616,7 +616,7 @@ in {
         wantedBy = [ "multi-user.target" ];
         serviceConfig = {
           ExecStart = ''
-            ${pkgs.pythonPackages.graphite_beacon}/bin/graphite-beacon \
+            ${pkgs.python3Packages.graphite_beacon}/bin/graphite-beacon \
               --config=${pkgs.writeText "graphite-beacon.json" (builtins.toJSON cfg.beacon.config)}
           '';
           User = "graphite";
