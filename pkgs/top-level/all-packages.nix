@@ -3039,6 +3039,8 @@ in
 
   google-compute-engine = python2.pkgs.google-compute-engine;
 
+  google-compute-engine-oslogin = callPackage ../tools/virtualization/google-compute-engine-oslogin { };
+
   gource = callPackage ../applications/version-management/gource { };
 
   govc = callPackage ../tools/virtualization/govc { };
