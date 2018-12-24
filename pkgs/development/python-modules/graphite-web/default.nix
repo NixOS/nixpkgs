@@ -1,7 +1,7 @@
 { stdenv, buildPythonPackage, fetchPypi, isPy3k, which
 , django, django_tagging, whisper, pycairo, cairocffi, ldap, memcached, pytz, urllib3, scandir
 }:
-if django.version != "1.8.18"
+if django.version != "1.8.19"
 || django_tagging.version != "0.4.3"
 then throw "graphite-web should be build with django_1_8 and django_tagging_0_4_3"
 else buildPythonPackage rec {
