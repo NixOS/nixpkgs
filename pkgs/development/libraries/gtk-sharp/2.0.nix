@@ -1,4 +1,8 @@
-{ stdenv, fetchurl, pkgconfig, mono
+{ stdenv
+, lib
+, fetchFromGitHub
+, pkgconfig
+, mono
 , glib
 , pango
 , gtk2
@@ -12,25 +16,23 @@
 , libgnomeprintui ? null
 , libxml2
 , monoDLLFixer
+, autoconf
+, automake
+, libtool
+, which
 }:
 
-stdenv.mkDerivation {
-  name = "gtk-sharp-2.12.10";
+stdenv.mkDerivation rec {
+  name = "gtk-sharp-${version}";
+  version = "2.12.45";
 
   builder = ./builder.sh;
-  src = fetchurl {
-    url = mirror://gnome/sources/gtk-sharp/2.12/gtk-sharp-2.12.10.tar.gz;
-    sha256 = "1y55vc2cp4lggmbil2lb28d0gn71iq6wfyja1l9mya5xll8svzwc";
+  src = fetchFromGitHub {
+    owner = "mono";
+    repo = "gtk-sharp";
+    rev = version;
+    sha256 = "1vy6yfwkfv6bb45bzf4g6dayiqkvqqvlr02rsnhd10793hlpqlgg";
   };
-
-  # patches = [ ./dllmap-glue.patch ];
-
-  # patch bad usage of glib, which wasn't tolerated anymore
-  prePatch = ''
-    for f in glib/glue/{thread,list,slist}.c; do
-      sed -i 's,#include <glib/.*\.h>,#include <glib.h>,g' "$f"
-    done
-  '';
 
   postInstall = ''
     pushd $out/bin
@@ -41,12 +43,16 @@ stdenv.mkDerivation {
     popd
   '';
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig autoconf automake libtool which ];
 
   buildInputs = [
     mono glib pango gtk2 GConf libglade libgnomecanvas
     libgtkhtml libgnomeui libgnomeprint libgnomeprintui gtkhtml libxml2
   ];
+
+  preConfigure = ''
+    ./bootstrap-${lib.versions.majorMinor version}
+  '';
 
   dontStrip = true;
 
