@@ -3938,6 +3938,8 @@ in {
 
   snowballstemmer = callPackage ../development/python-modules/snowballstemmer { };
 
+  snscrape = callPackage ../development/python-modules/snscrape { };
+
   snug = callPackage ../development/python-modules/snug { };
 
   snuggs = callPackage ../development/python-modules/snuggs { };

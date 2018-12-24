@@ -22816,6 +22816,8 @@ in
 
   snapraid = callPackage ../tools/filesystems/snapraid { };
 
+  snscrape = with python3Packages; toPythonApplication snscrape;
+
   soundOfSorting = callPackage ../misc/sound-of-sorting { };
 
   sourceAndTags = callPackage ../misc/source-and-tags {
