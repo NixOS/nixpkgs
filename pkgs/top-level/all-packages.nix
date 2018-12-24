@@ -539,7 +539,7 @@ in
   ansifilter = callPackage ../tools/text/ansifilter {};
 
   apktool = callPackage ../development/tools/apktool {
-    buildTools = androidenv.buildTools;
+    inherit (androidenv.androidPkgs_9_0) build-tools;
   };
 
   appimage-run = callPackage ../tools/package-management/appimage-run {};
@@ -815,26 +815,29 @@ in
 
   ssh-agents = callPackage ../tools/networking/ssh-agents { };
 
-  titaniumenv = callPackage ../development/mobile/titaniumenv { };
+  titaniumenv = callPackage ../development/mobile/titaniumenv {
+    pkgs_i686 = pkgsi686Linux;
+  };
 
   abootimg = callPackage ../development/mobile/abootimg {};
 
   adbfs-rootless = callPackage ../development/mobile/adbfs-rootless {
-    adb = androidenv.platformTools;
+    adb = androidenv.androidPkgs_9_0.platform-tools;
   };
 
-  adb-sync = callPackage ../development/mobile/adb-sync { };
+  adb-sync = callPackage ../development/mobile/adb-sync {
+    inherit (androidenv.androidPkgs_9_0) platform-tools;
+  };
 
   androidenv = callPackage ../development/mobile/androidenv {
     pkgs_i686 = pkgsi686Linux;
-    licenseAccepted = (config.android_sdk.accept_license or false);
+    licenseAccepted = config.android_sdk.accept_license or false;
   };
 
-  inherit (androidenv) androidndk;
+  androidndkPkgs = androidndkPkgs_18b;
+  androidndkPkgs_18b = (callPackage ../development/androidndk-pkgs {})."18b";
 
-  androidsdk = androidenv.androidsdk_8_0;
-
-  androidsdk_extras = res.androidenv.androidsdk_8_0_extras;
+  androidsdk_9_0 = androidenv.androidPkgs_9_0.androidsdk;
 
   webos = recurseIntoAttrs {
     cmake-modules = callPackage ../development/mobile/webos/cmake-modules.nix { };
@@ -2676,7 +2679,7 @@ in
   flamerobin = callPackage ../applications/misc/flamerobin { };
 
   flashtool = pkgsi686Linux.callPackage ../development/mobile/flashtool {
-    platformTools = androidenv.platformTools;
+    inherit (androidenv.androidPkgs_9_0) platform-tools;
   };
 
   flashrom = callPackage ../tools/misc/flashrom { };
@@ -5313,7 +5316,7 @@ in
   };
 
   scrcpy = callPackage ../misc/scrcpy {
-    inherit (androidenv) platformTools;
+    inherit (androidenv.androidPkgs_9_0) platform-tools;
   };
 
   screen-message = callPackage ../tools/X11/screen-message { };
@@ -9350,7 +9353,7 @@ in
 
   # TODO(@Ericson2314): Build bionic libc from source
   bionic = assert stdenv.hostPlatform.useAndroidPrebuilt;
-    androidenv."androidndkPkgs_${stdenv.hostPlatform.ndkVer}".libraries;
+    pkgs."androidndkPkgs_${stdenv.hostPlatform.ndkVer}".libraries;
 
   bobcat = callPackage ../development/libraries/bobcat { };
 
