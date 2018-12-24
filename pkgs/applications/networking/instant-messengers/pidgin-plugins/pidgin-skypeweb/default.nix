@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "pidgin-skypeweb-${version}";
-  version = "1.2.2";
+  version = "1.5";
 
   src = fetchFromGitHub {
     owner = "EionRobb";
     repo = "skype4pidgin";
-    rev = "${version}";
-    sha256 = "1lxpz316jmns6i143v4j6sd6k0a4a54alw08rvwjckf2rig57lj2";
+    rev = version;
+    sha256 = "1bd9gd36yhrbrww0dvai9rnzxxj1c9sb4003c72wg27w12y47xfv";
   };
 
   setSourceRoot = ''
@@ -18,13 +18,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ pidgin json-glib ];
 
-  makeFlags = [
-    "PLUGIN_DIR_PURPLE=/lib/pidgin/"
-    "DATA_ROOT_DIR_PURPLE=/share"
-    "DESTDIR=$(out)"
-  ];
-
-  postInstall = "ln -s \$out/lib/pidgin \$out/share/pidgin-skypeweb";
+  PKG_CONFIG_PURPLE_PLUGINDIR = "${placeholder "out"}/lib/purple-2";
+  PKG_CONFIG_PURPLE_DATADIR = "${placeholder "out"}/share";
 
   meta = with stdenv.lib; {
     homepage = https://github.com/EionRobb/skype4pidgin;

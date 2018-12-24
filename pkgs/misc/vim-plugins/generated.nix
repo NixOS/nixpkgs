@@ -1280,6 +1280,16 @@
     };
   };
 
+  Recover-vim = buildVimPluginFrom2Nix {
+    name = "Recover-vim-2018-10-22";
+    src = fetchFromGitHub {
+      owner = "chrisbra";
+      repo = "Recover.vim";
+      rev = "28195f7d1047515438c43a3ae8ac39648376412b";
+      sha256 = "03jd3jzq0b1djym448vyg0bvrkfrhk86djkbkyzajrsfj46ygs8q";
+    };
+  };
+
   Rename = buildVimPluginFrom2Nix {
     name = "Rename-2011-08-31";
     src = fetchFromGitHub {

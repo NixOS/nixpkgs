@@ -359,8 +359,6 @@ lib.makeScope pkgs.newScope (self: with self; {
 
 #### Misc -- other packages on http://ftp.gnome.org/pub/GNOME/sources/
 
-  california = callPackage ./misc/california { };
-
   geary = callPackage ./misc/geary { };
 
   gfbgraph = callPackage ./misc/gfbgraph { };

@@ -39,6 +39,7 @@ in
   cfssl = handleTestOn ["x86_64-linux"] ./cfssl.nix {};
   chromium = (handleTestOn ["x86_64-linux"] ./chromium.nix {}).stable or {};
   cjdns = handleTest ./cjdns.nix {};
+  clickhouse = handleTest ./clickhouse.nix {};
   cloud-init = handleTest ./cloud-init.nix {};
   codimd = handleTest ./codimd.nix {};
   containers-bridge = handleTest ./containers-bridge.nix {};
@@ -80,6 +81,7 @@ in
   gitlab = handleTest ./gitlab.nix {};
   gitolite = handleTest ./gitolite.nix {};
   gjs = handleTest ./gjs.nix {};
+  google-oslogin = handleTest ./google-oslogin {};
   gnome3 = handleTestOn ["x86_64-linux"] ./gnome3.nix {}; # libsmbios is unsupported on aarch64
   gnome3-gdm = handleTestOn ["x86_64-linux"] ./gnome3-gdm.nix {}; # libsmbios is unsupported on aarch64
   gocd-agent = handleTest ./gocd-agent.nix {};

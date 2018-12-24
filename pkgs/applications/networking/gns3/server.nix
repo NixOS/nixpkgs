@@ -1,10 +1,10 @@
 { stable, branch, version, sha256Hash }:
 
-{ stdenv, python3Packages, fetchFromGitHub, fetchurl }:
+{ stdenv, python36Packages, fetchFromGitHub, fetchurl }:
 
 let
-  pythonPackages = python3Packages;
-  async-timeout = (stdenv.lib.overrideDerivation pythonPackages.async-timeout
+  pythonPackages = python36Packages;
+  async-timeout = pythonPackages.async-timeout.overrideAttrs
     (oldAttrs:
       rec {
         pname = "async-timeout";
@@ -13,8 +13,8 @@ let
           inherit pname version;
           sha256 = "1l3kg062m02mph6rf9rdv8r5c5n356clxa6b6mrn0i77vk9g9kq0";
         };
-      }));
-  aiohttp = (stdenv.lib.overrideDerivation pythonPackages.aiohttp
+      });
+  aiohttp = pythonPackages.aiohttp.overrideAttrs
     (oldAttrs:
       rec {
         pname = "aiohttp";
@@ -24,10 +24,9 @@ let
           sha256 = "8adda6583ba438a4c70693374e10b60168663ffa6564c5c75d3c7a9055290964";
         };
         propagatedBuildInputs = [ async-timeout ]
-          ++ (with pythonPackages; [ attrs chardet multidict yarl ])
-          ++ stdenv.lib.optional (pythonPackages.pythonOlder "3.7") pythonPackages.idna-ssl;
-      }));
-  aiohttp-cors = (stdenv.lib.overrideDerivation pythonPackages.aiohttp-cors
+          ++ (with pythonPackages; [ attrs chardet multidict yarl idna-ssl ]);
+      });
+  aiohttp-cors = pythonPackages.aiohttp-cors.overrideAttrs
     (oldAttrs:
       rec {
         pname = "aiohttp-cors";
@@ -41,7 +40,7 @@ let
           ++ stdenv.lib.optional
                (pythonPackages.pythonOlder "3.5")
                pythonPackages.typing;
-      }));
+      });
 in pythonPackages.buildPythonPackage rec {
   name = "${pname}-${version}";
   pname = "gns3-server";
@@ -57,7 +56,7 @@ in pythonPackages.buildPythonPackage rec {
     ++ (with pythonPackages; [
       yarl aiohttp multidict
       jinja2 psutil zipstream raven jsonschema typing
-      prompt_toolkit
+      (pythonPackages.callPackage ../../../development/python-modules/prompt_toolkit/1.nix {})
     ]);
 
   # Requires network access

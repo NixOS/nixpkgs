@@ -42,8 +42,9 @@ core-packages:
 
 default-package-overrides:
   # Newer versions don't work in LTS-12.x
+  - alsa-mixer < 0.3
   - cassava-megaparsec < 2
-  # LTS Haskell 12.22
+  # LTS Haskell 12.23
   - abstract-deque ==0.3
   - abstract-deque-tests ==0.3
   - abstract-par ==0.3.3
@@ -76,7 +77,7 @@ default-package-overrides:
   - alarmclock ==0.5.0.2
   - alerts ==0.1.0.0
   - alex ==3.2.4
-  - alg ==0.2.8.0
+  - alg ==0.2.9.0
   - algebra ==4.3.1
   - algebraic-graphs ==0.2
   - Allure ==0.8.3.0
@@ -182,7 +183,7 @@ default-package-overrides:
   - ansi-wl-pprint ==0.6.8.2
   - ANum ==0.2.0.2
   - api-field-json-th ==0.1.0.2
-  - appar ==0.1.5
+  - appar ==0.1.7
   - apply-refact ==0.5.0.0
   - apportionment ==0.0.0.3
   - approximate ==0.3.1
@@ -281,7 +282,7 @@ default-package-overrides:
   - blake2 ==0.2.0
   - blank-canvas ==0.6.3
   - blas-carray ==0.0.1.1
-  - blas-ffi ==0.0.1.1
+  - blas-ffi ==0.0.2
   - blas-hs ==0.1.1.0
   - blaze-bootstrap ==0.1.0.1
   - blaze-builder ==0.4.1.0
@@ -701,7 +702,7 @@ default-package-overrides:
   - exp-pairs ==0.1.6.0
   - extensible ==0.4.9
   - extensible-exceptions ==0.1.1.4
-  - extra ==1.6.13
+  - extra ==1.6.14
   - extractable-singleton ==0.0.1
   - extrapolate ==0.3.3
   - facts ==0.0.1.0
@@ -730,8 +731,8 @@ default-package-overrides:
   - fileplow ==0.1.0.0
   - filter-logger ==0.6.0.0
   - filtrable ==0.1.1.0
+  - Fin ==0.2.6.1
   - fin ==0.0.1
-  - Fin ==0.2.6.0
   - FindBin ==0.0.5
   - find-clumpiness ==0.2.3.1
   - fingertree ==0.1.4.2
@@ -870,12 +871,12 @@ default-package-overrides:
   - GLUT ==2.7.0.14
   - gnuplot ==0.5.5.3
   - goggles ==0.3.2
-  - google-oauth2-jwt ==0.3.0
+  - google-oauth2-jwt ==0.3.1
   - gpolyline ==0.1.0.1
   - graph-core ==0.3.0.0
   - graphs ==0.7.1
   - graphviz ==2999.20.0.2
-  - graph-wrapper ==0.2.5.1
+  - graph-wrapper ==0.2.5.2
   - gravatar ==0.8.0
   - graylog ==0.1.0.1
   - greskell ==0.2.2.0
@@ -907,7 +908,7 @@ default-package-overrides:
   - hapistrano ==0.3.7.0
   - happstack-server ==7.5.1.1
   - happy ==1.19.9
-  - hasbolt ==0.1.3.1
+  - hasbolt ==0.1.3.2
   - hashable ==1.2.7.0
   - hashids ==1.0.2.4
   - hashing ==0.1.0.1
@@ -1122,7 +1123,7 @@ default-package-overrides:
   - iff ==0.0.6
   - ihaskell ==0.9.1.0
   - ihaskell-hvega ==0.1.0.3
-  - ihs ==0.1.0.2
+  - ihs ==0.1.0.3
   - ilist ==0.3.1.0
   - imagesize-conduit ==1.1
   - Imlib ==0.1.2
@@ -1154,7 +1155,7 @@ default-package-overrides:
   - invariant ==0.5.1
   - invertible ==0.2.0.5
   - invertible-grammar ==0.1.1
-  - io-choice ==0.0.6
+  - io-choice ==0.0.7
   - io-machine ==0.2.0.0
   - io-manager ==0.1.0.2
   - io-memoize ==1.1.1.0
@@ -1164,7 +1165,7 @@ default-package-overrides:
   - io-streams-haproxy ==1.0.0.2
   - ip ==1.3.0
   - ip6addr ==1.0.0
-  - iproute ==1.7.6
+  - iproute ==1.7.7
   - IPv6Addr ==1.1.1
   - IPv6DB ==0.3.1
   - ipython-kernel ==0.9.1.0
@@ -1330,7 +1331,7 @@ default-package-overrides:
   - median-stream ==0.7.0.0
   - med-module ==0.1.1
   - megaparsec ==6.5.0
-  - mega-sdist ==0.3.3.1
+  - mega-sdist ==0.3.3.2
   - memory ==0.14.18
   - MemoTrie ==0.6.9
   - mercury-api ==0.1.0.1
@@ -1733,6 +1734,7 @@ default-package-overrides:
   - refined ==0.2.3.0
   - reflection ==2.1.4
   - RefSerialize ==0.4.0
+  - regex ==1.0.1.4
   - regex-applicative ==0.3.3
   - regex-applicative-text ==0.1.0.1
   - regex-base ==0.93.2
@@ -1800,8 +1802,8 @@ default-package-overrides:
   - say ==0.1.0.1
   - sbp ==2.3.17
   - sbv ==7.12
-  - scalendar ==1.2.0
   - SCalendar ==1.1.0
+  - scalendar ==1.2.0
   - scalpel ==0.5.1
   - scalpel-core ==0.5.1
   - scanner ==0.2
@@ -1878,7 +1880,7 @@ default-package-overrides:
   - shell-escape ==0.2.0
   - shelltestrunner ==1.9
   - shelly ==1.8.1
-  - shortcut-links ==0.4.2.0
+  - shortcut-links ==0.4.2.1
   - should-not-typecheck ==2.1.0
   - show-combinators ==0.1.0.0
   - show-prettyprint ==0.2.2
@@ -2184,7 +2186,7 @@ default-package-overrides:
   - unix-bytestring ==0.3.7.3
   - unix-compat ==0.5.1
   - unix-time ==0.3.8
-  - unliftio ==0.2.8.1
+  - unliftio ==0.2.9.0
   - unliftio-core ==0.1.2.0
   - unlit ==0.4.0.0
   - unordered-containers ==0.2.9.0
@@ -2303,7 +2305,7 @@ default-package-overrides:
   - word-wrap ==0.4.1
   - world-peace ==0.1.0.0
   - wrap ==0.0.0
-  - wreq ==0.5.3.0
+  - wreq ==0.5.3.1
   - wreq-stringless ==0.5.9.1
   - writer-cps-full ==0.1.0.0
   - writer-cps-lens ==0.1.0.1

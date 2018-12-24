@@ -2,7 +2,7 @@
 , lib, fetchurl, fetchpatch, fetchFromGitHub
 
 , which, findutils, m4, gawk
-, python, openjdk, mono58, libressl
+, python, openjdk, mono, libressl
 }:
 
 let
@@ -50,7 +50,7 @@ let
           inherit rev sha256;
         };
 
-        nativeBuildInputs = [ python openjdk gawk which m4 findutils mono58 ];
+        nativeBuildInputs = [ python openjdk gawk which m4 findutils mono ];
         buildInputs = [ libressl boost ];
 
         patches =

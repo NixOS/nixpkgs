@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchPypi, isPy3k
 , cheroot, contextlib2, portend, routes, six
 , setuptools_scm, zc_lockfile
 , backports_unittest-mock, objgraph, pathpy, pytest, pytestcov
@@ -8,6 +8,8 @@
 buildPythonPackage rec {
   pname = "CherryPy";
   version = "18.0.1";
+
+  disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;

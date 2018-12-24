@@ -19,6 +19,9 @@ python3Packages.buildPythonApplication rec {
   # Requires tox, hadoop, and google cloud
   doCheck = false;
 
+  # This enables accessing modules stored in cwd
+  makeWrapperArgs = ["--prefix PYTHONPATH . :"];
+
   meta = with lib; {
     homepage = https://github.com/spotify/luigi;
     description = "Python package that helps you build complex pipelines of batch jobs";

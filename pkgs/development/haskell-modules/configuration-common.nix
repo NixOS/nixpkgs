@@ -1201,9 +1201,6 @@ self: super: {
   # https://github.com/mgajda/json-autotype/issues/25
   json-autotype = dontCheck super.json-autotype;
 
-  # https://github.com/kazu-yamamoto/iproute/issues/43
-  appar = self.appar_0_1_7;
-
   # The LTS-12.x version doesn't suffice to build hlint, hoogle, etc.
   hlint = super.hlint.overrideScope (self: super: { haskell-src-exts = self.haskell-src-exts_1_21_0; });
   hoogle = super.hoogle.overrideScope (self: super: { haskell-src-exts = self.haskell-src-exts_1_21_0; });

@@ -4,7 +4,7 @@
 , librsvg, gobject-introspection, yelp-tools, gspell
 , recentListSize ? null # 5 is not enough, allow passing a different number
 , supportXPS ? false    # Open XML Paper Specification via libgxps
-, autoreconfHook
+, autoreconfHook, pruneLibtoolFiles
 }:
 
 stdenv.mkDerivation rec {
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    pkgconfig gobject-introspection intltool itstool wrapGAppsHook yelp-tools autoreconfHook
+    pkgconfig gobject-introspection intltool itstool wrapGAppsHook yelp-tools autoreconfHook pruneLibtoolFiles
   ];
 
   buildInputs = [

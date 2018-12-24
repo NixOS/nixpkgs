@@ -256,6 +256,11 @@
     github = "AndrewMorsillo";
     name = "Andrew Morsillo";
   };
+  andersk = {
+    email = "andersk@mit.edu";
+    github = "andersk";
+    name = "Anders Kaseorg";
+  };
   AndersonTorres = {
     email = "torres.anderson.85@protonmail.com";
     github = "AndersonTorres";
@@ -1323,6 +1328,11 @@
     email = "nixos@ellisw.net";
     github = "ellis";
     name = "Ellis Whitehead";
+  };
+  elohmeier = {
+    email = "elo-nixos@nerdworks.de";
+    github = "elohmeier";
+    name = "Enno Lohmeier";
   };
   elseym = {
     email = "elseym@me.com";
