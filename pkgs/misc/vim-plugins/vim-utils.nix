@@ -150,23 +150,35 @@ vim_with_plugins can be installed like any other application within Nix.
 let
   inherit (stdenv) lib;
 
-  toNames = x:
+  # transitive closure of plugin dependencies
+  transitiveClosure = knownPlugins: plugin:
+  let
+    # vam puts out a list of strings as the dependency list, we need to be able to deal with that.
+    # Because of that, "plugin" may be a string or a derivation. If it is a string, it is resolved
+    # using `knownPlugins`. Otherwise `knownPlugins` can be null.
+    knownPlugins' = if knownPlugins == null then vimPlugins else knownPlugins;
+    pluginDrv = if builtins.isString plugin then knownPlugins'.${plugin} else plugin;
+  in
+    [ pluginDrv ] ++ (
+      lib.unique (builtins.concatLists (map (transitiveClosure knownPlugins) pluginDrv.dependencies or []))
+    );
+
+  findDependenciesRecursively = knownPlugins: plugins: lib.concatMap (transitiveClosure knownPlugins) plugins;
+
+  attrnamesToPlugins = { knownPlugins, names }:
+    map (name: if builtins.isString name then knownPlugins.${name} else name) knownPlugins;
+
+  pluginToAttrname = plugin:
+    plugin.pname;
+
+  pluginsToAttrnames = plugins: map pluginToAttrname plugins;
+
+  vamDictToNames = x:
       if builtins.isString x then [x]
       else (lib.optional (x ? name) x.name)
             ++ (x.names or []);
-  findDependenciesRecursively = {knownPlugins, names}:
 
-    let depsOf = name: (builtins.getAttr name knownPlugins).dependencies or [];
-
-        recurseNames = path: names: lib.concatMap (name: recurse ([name]++path)) names;
-
-        recurse = path:
-          let name = builtins.head path;
-          in if builtins.elem name (builtins.tail path)
-            then throw "recursive vim dependencies"
-            else [name] ++ recurseNames path (depsOf name);
-
-    in lib.uniqList { inputList = recurseNames [] names; };
+  rtpPath = "share/vim-plugins";
 
   vimrcFile = {
     packages ? null,
@@ -183,11 +195,11 @@ let
       (let
         knownPlugins = pathogen.knownPlugins or vimPlugins;
 
-        plugins = map (name: knownPlugins.${name}) (findDependenciesRecursively { inherit knownPlugins; names = pathogen.pluginNames; });
+        plugins = findDependenciesRecursively knownPlugins pathogen.pluginNames;
 
         pluginsEnv = buildEnv {
           name = "pathogen-plugin-env";
-          paths = map (x: "${x}/${vimPlugins.rtpPath}") plugins;
+          paths = map (x: "${x}/${rtpPath}") plugins;
         };
       in
       ''
@@ -228,7 +240,7 @@ let
       (let
         knownPlugins = vam.knownPlugins or vimPlugins;
 
-        names = findDependenciesRecursively { inherit knownPlugins; names = lib.concatMap toNames vam.pluginDictionaries; };
+        plugins = findDependenciesRecursively knownPlugins (lib.concatMap vamDictToNames vam.pluginDictionaries);
 
         # Vim almost reads JSON, so eventually JSON support should be added to Nix
         # TODO: proper quoting
@@ -242,9 +254,9 @@ let
       in assert builtins.hasAttr "vim-addon-manager" knownPlugins;
       ''
         let g:nix_plugin_locations = {}
-        ${lib.concatMapStrings (name: ''
-          let g:nix_plugin_locations['${name}'] = "${knownPlugins.${name}.rtp}"
-        '') names}
+        ${lib.concatMapStrings (plugin: ''
+          let g:nix_plugin_locations['${plugin.pname}'] = "${plugin.rtp}"
+        '') plugins}
         let g:nix_plugin_locations['vim-addon-manager'] = "${knownPlugins."vim-addon-manager".rtp}"
 
         let g:vim_addon_manager = {}
@@ -381,8 +393,6 @@ rec {
     '';
   };
 
-  rtpPath = "share/vim-plugins";
-
   vimHelpTags = ''
   vimHelpTags(){
     if [ -d "$1/doc" ]; then
@@ -450,13 +460,13 @@ rec {
                      if vam != null && vam ? knownPlugins then vam.knownPlugins else
                      if pathogen != null && pathogen ? knownPlugins then pathogen.knownPlugins else
                      vimPlugins;
-      pathogenNames = map (name: knownPlugins.${name}) (findDependenciesRecursively { inherit knownPlugins; names = pathogen.pluginNames; });
-      vamNames = findDependenciesRecursively { inherit knownPlugins; names = lib.concatMap toNames vam.pluginDictionaries; };
+      pathogenNames = findDependenciesRecursively knownPlugins pathogen.pluginNames;
+      vamNames = findDependenciesRecursively knownPlugins (lib.concatMap vamDictToNames vam.pluginDictionaries);
       names = (lib.optionals (pathogen != null) pathogenNames) ++
               (lib.optionals (vam != null) vamNames);
       nonNativePlugins = map (name: knownPlugins.${name}) names ++ (lib.optionals (plug != null) plug.plugins);
       nativePluginsConfigs = lib.attrsets.attrValues packages;
-      nativePlugins = lib.concatMap ({start?[], opt?[]}: start++opt) nativePluginsConfigs;
+      nativePlugins = lib.concatMap ({start?[], opt?[], knownPlugins?vimPlugins}: start++opt) nativePluginsConfigs;
     in
       nativePlugins ++ nonNativePlugins;
 
