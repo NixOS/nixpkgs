@@ -14,7 +14,8 @@
 , debugVersion ? false
 , enableManpages ? false
 , enableSharedLibraries ? true
-, enableTargets ? [ stdenv.hostPlatform stdenv.targetPlatform ]
+# Mesa requires AMDGPU target
+, enableTargets ? [ stdenv.hostPlatform stdenv.targetPlatform "AMDGPU" ]
 , enablePFM ? !stdenv.isDarwin
 }:
 
