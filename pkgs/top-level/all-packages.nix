@@ -10464,6 +10464,8 @@ in
 
   languageMachines = recurseIntoAttrs (import ../development/libraries/languagemachines/packages.nix { inherit callPackage; });
 
+  lasem = callPackage ../development/libraries/lasem { };
+
   lasso = callPackage ../development/libraries/lasso { };
 
   LASzip = callPackage ../development/libraries/LASzip { };
