@@ -4785,7 +4785,7 @@ in
 
   fmodex = callPackage ../games/zandronum/fmod.nix { };
 
-  pdfmod = callPackage ../applications/misc/pdfmod { mono = mono4; };
+  pdfmod = callPackage ../applications/misc/pdfmod { };
 
   pdf-quench = callPackage ../applications/misc/pdf-quench { };
 
@@ -10298,7 +10298,7 @@ in
 
   hydraAntLogger = callPackage ../development/libraries/java/hydra-ant-logger { };
 
-  hyena = callPackage ../development/libraries/hyena { mono = mono4; };
+  hyena = callPackage ../development/libraries/hyena { };
 
   hyperscan = callPackage ../development/libraries/hyperscan { };
 
