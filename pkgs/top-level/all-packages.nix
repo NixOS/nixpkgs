@@ -3934,6 +3934,8 @@ in
 
   libee = callPackage ../development/libraries/libee { };
 
+  libepc = callPackage ../development/libraries/libepc { };
+
   libestr = callPackage ../development/libraries/libestr { };
 
   libevdev = callPackage ../development/libraries/libevdev { };
@@ -10035,6 +10037,7 @@ in
 
   goocanvas = callPackage ../development/libraries/goocanvas { };
   goocanvas2 = callPackage ../development/libraries/goocanvas/2.x.nix { };
+  goocanvasmm2 = callPackage ../development/libraries/goocanvasmm { };
 
   google-gflags = callPackage ../development/libraries/google-gflags { };
   gflags = google-gflags; # TODO: move to aliases.nix
@@ -10245,6 +10248,8 @@ in
   gtksourceview4 = callPackage ../development/libraries/gtksourceview/4.x.nix { };
 
   gtksourceviewmm = callPackage ../development/libraries/gtksourceviewmm { };
+
+  gtksourceviewmm4 = callPackage ../development/libraries/gtksourceviewmm/4.x.nix { };
 
   gtkspell2 = callPackage ../development/libraries/gtkspell { };
 
@@ -10813,6 +10818,8 @@ in
   libgap = callPackage ../development/libraries/libgap { };
 
   libgda = callPackage ../development/libraries/libgda { };
+
+  libgdamm = callPackage ../development/libraries/libgdamm { };
 
   libgdata = gnome3.libgdata;
 
@@ -18281,6 +18288,8 @@ in
 
   mm = callPackage ../applications/networking/instant-messengers/mm { };
 
+  mm-common = callPackage ../development/libraries/mm-common { };
+
   matrique = libsForQt5.callPackage ../applications/networking/instant-messengers/matrique { };
 
   mpc-qt = libsForQt5.callPackage ../applications/video/mpc-qt { };
@@ -21751,6 +21760,8 @@ in
   giac-with-xcas = giac.override { enableGUI = true; };
 
   ginac = callPackage ../applications/science/math/ginac { };
+
+  glom = callPackage ../applications/misc/glom { };
 
   glucose = callPackage ../applications/science/logic/glucose { };
   glucose-syrup = callPackage ../applications/science/logic/glucose/syrup.nix { };
