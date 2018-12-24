@@ -8719,6 +8719,8 @@ in
 
   gtkdialog = callPackage ../development/tools/misc/gtkdialog { };
 
+  guff = callPackage ../tools/graphics/guff { };
+
   guile-lint = callPackage ../development/tools/guile/guile-lint {
     guile = guile_1_8;
   };
