@@ -58,6 +58,12 @@ in buildPythonPackage rec {
     done
   '';
 
+  # Override the (weirdly) wrong version set by default. See
+  # https://github.com/NixOS/nixpkgs/pull/52437#issuecomment-449718038
+  # https://github.com/pytorch/pytorch/blob/v1.0.0/setup.py#L267
+  PYTORCH_BUILD_VERSION = version;
+  PYTORCH_BUILD_NUMBER = 0;
+
   buildInputs = [
      cmake
      numpy.blas
