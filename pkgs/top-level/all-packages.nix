@@ -2783,6 +2783,8 @@ in
 
   ftop = callPackage ../os-specific/linux/ftop { };
 
+  fsarchiver = callPackage ../tools/archivers/fsarchiver { };
+
   fsfs = callPackage ../tools/filesystems/fsfs { };
 
   fstl = qt5.callPackage ../applications/graphics/fstl { };
