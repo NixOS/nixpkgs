@@ -2166,8 +2166,6 @@ in {
     gdal = self.gdal;
   };
 
-  django_1_8 = callPackage ../development/python-modules/django/1_8.nix { };
-
   django-allauth = callPackage ../development/python-modules/django-allauth { };
 
   django_appconf = callPackage ../development/python-modules/django_appconf { };
@@ -2214,16 +2212,16 @@ in {
 
   django_tagging = callPackage ../development/python-modules/django_tagging { };
 
-  django_tagging_0_4_3 = if
-       self.django.version != "1.8.19"
-  then throw "django_tagging_0_4_3 should be build with django_1_8"
+  django_tagging_0_4_6 = if
+       self.django.version != "2.0.9"
+  then throw "django_tagging_0_4_6 should be build with django_2_0"
   else (callPackage ../development/python-modules/django_tagging {}).overrideAttrs (attrs: rec {
     pname = "django-tagging";
-    version = "0.4.3";
+    version = "0.4.6";
 
     src = fetchPypi {
       inherit pname version;
-      sha256 = "0617azpmp6jpg3d88v2ir97qrc9aqcs2s9gyvv9bgf2cp55khxhs";
+      sha256 = "0s7b4v45j783yaxs7rni10k24san0ya77nqz4s7zdf3jhfpk42r1";
     };
     propagatedBuildInputs = with self; [ django ];
   });

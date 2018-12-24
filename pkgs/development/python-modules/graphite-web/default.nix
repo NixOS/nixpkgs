@@ -1,19 +1,22 @@
 { stdenv, buildPythonPackage, fetchPypi, isPy3k, which
 , django, django_tagging, whisper, pycairo, cairocffi, ldap, memcached, pytz, urllib3, scandir
 }:
-if django.version != "1.8.19"
-|| django_tagging.version != "0.4.3"
-then throw "graphite-web should be build with django_1_8 and django_tagging_0_4_3"
+if django.version != "2.0.9"
+|| django_tagging.version != "0.4.6"
+then throw "graphite-web should be build with django_2_0 and django_tagging_0_4_6"
 else buildPythonPackage rec {
   pname = "graphite-web";
-  version = "1.1.4";
-
-  disabled = isPy3k;
+  version = "1.1.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4430929f954998d77aa0a61246c62d64a00a2f9464320f9a462294dd3448e522";
+    sha256 = "17drhc445by2fb6m0gsrvj9mwsfk3fdcwsmaip8sdczjj38laffl";
   };
+
+  prePatch = ''
+    substituteInPlace setup.py \
+      --replace "django-tagging==0.4.3" "django-tagging==0.4.6"
+  '';
 
   propagatedBuildInputs = [
     django django_tagging whisper pycairo cairocffi

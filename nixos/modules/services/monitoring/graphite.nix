@@ -60,7 +60,7 @@ let
   carbonEnv = {
     PYTHONPATH = let
       cenv = pkgs.python.buildEnv.override {
-        extraLibs = [ pkgs.python27Packages.carbon ];
+        extraLibs = [ pkgs.python3Packages.carbon ];
       };
       cenvPack =  "${cenv}/${pkgs.python.sitePackages}";
     # opt/graphite/lib contains twisted.plugins.carbon-cache
@@ -130,7 +130,7 @@ in {
       finders = mkOption {
         description = "List of finder plugins to load.";
         default = [];
-        example = literalExample "[ pkgs.python27Packages.influxgraph ]";
+        example = literalExample "[ pkgs.python3Packages.influxgraph ]";
         type = types.listOf types.package;
       };
 
@@ -157,8 +157,8 @@ in {
 
       package = mkOption {
         description = "Package to use for graphite api.";
-        default = pkgs.python27Packages.graphite_api;
-        defaultText = "pkgs.python27Packages.graphite_api";
+        default = pkgs.python3Packages.graphite_api;
+        defaultText = "pkgs.python3Packages.graphite_api";
         type = types.package;
       };
 
@@ -460,13 +460,13 @@ in {
     })
 
     (mkIf cfg.web.enable (let
-      python27' = pkgs.python27.override {
+      python3' = pkgs.python3.override {
         packageOverrides = self: super: {
-          django = self.django_1_8;
-          django_tagging = self.django_tagging_0_4_3;
+          django = self.django_2_0;
+          django_tagging = self.django_tagging_0_4_6;
         };
       };
-      pythonPackages = python27'.pkgs;
+      pythonPackages = python3'.pkgs;
     in {
       systemd.services.graphiteWeb = {
         description = "Graphite Web Interface";
@@ -475,19 +475,19 @@ in {
         path = [ pkgs.perl ];
         environment = {
           PYTHONPATH = let
-              penv = pkgs.python.buildEnv.override {
+              penv = python3'.buildEnv.override {
                 extraLibs = [
                   pythonPackages.graphite-web
-                  pythonPackages.pysqlite
+                  # TODO: do we need this? pythonPackages.pysqlite
                 ];
               };
-              penvPack = "${penv}/${pkgs.python.sitePackages}";
+              penvPack = "${penv}/${python3'.sitePackages}";
             in concatStringsSep ":" [
                  "${graphiteLocalSettingsDir}"
                  "${penvPack}/opt/graphite/webapp"
                  "${penvPack}"
                  # explicitly adding pycairo in path because it cannot be imported via buildEnv
-                 "${pkgs.pythonPackages.pycairo}/${pkgs.python.sitePackages}"
+                 "${pythonPackages.pycairo}/${python3'.sitePackages}"
                ];
           DJANGO_SETTINGS_MODULE = "graphite.settings";
           GRAPHITE_CONF_DIR = configDir;
@@ -496,7 +496,7 @@ in {
         };
         serviceConfig = {
           ExecStart = ''
-            ${pkgs.python27Packages.waitress-django}/bin/waitress-serve-django \
+            ${pythonPackages.waitress-django}/bin/waitress-serve-django \
               --host=${cfg.web.listenAddress} --port=${toString cfg.web.port}
           '';
           User = "graphite";
@@ -508,7 +508,7 @@ in {
             mkdir -p ${dataDir}/{whisper/,log/webapp/}
             chmod 0700 ${dataDir}/{whisper/,log/webapp/}
 
-            ${pkgs.pythonPackages.django_1_8}/bin/django-admin.py migrate --noinput
+            ${pythonPackages.django_2_0}/bin/django-admin.py migrate --noinput
 
             chown -R graphite:graphite ${dataDir}
 
@@ -518,7 +518,7 @@ in {
           # Only collect static files when graphite_web changes.
           if ! [ "${dataDir}/current_graphite_web" -ef "${pythonPackages.graphite-web}" ]; then
             mkdir -p ${staticDir}
-            ${pkgs.pythonPackages.django_1_8}/bin/django-admin.py collectstatic  --noinput --clear
+            ${pythonPackages.django_2_0}/bin/django-admin.py collectstatic  --noinput --clear
             chown -R graphite:graphite ${staticDir}
             ln -sfT "${pythonPackages.graphite-web}" "${dataDir}/current_graphite_web"
           fi
@@ -544,7 +544,7 @@ in {
         };
         serviceConfig = {
           ExecStart = ''
-            ${pkgs.python27Packages.waitress}/bin/waitress-serve \
+            ${pkgs.python3Packages.waitress}/bin/waitress-serve \
             --host=${cfg.api.listenAddress} --port=${toString cfg.api.port} \
             graphite_api.app:app
           '';
