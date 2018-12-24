@@ -3538,9 +3538,7 @@ in
 
   jaaa = callPackage ../applications/audio/jaaa { };
 
-  jackett = callPackage ../servers/jackett {
-    mono = mono514;
-  };
+  jackett = callPackage ../servers/jackett { };
 
   jade = callPackage ../tools/text/sgml/jade { };
 
@@ -7042,9 +7040,7 @@ in
 
   fsharp = callPackage ../development/compilers/fsharp { };
 
-  fsharp41 = callPackage ../development/compilers/fsharp41 {
-    mono = mono46;
-  };
+  fsharp41 = callPackage ../development/compilers/fsharp41 { mono = mono4; };
 
   fstar = callPackage ../development/compilers/fstar { };
 
@@ -7357,36 +7353,14 @@ in
 
   mlton = mlton20180207;
 
-  mono  = mono5;
-  mono5 = mono58;
-  mono4 = mono48;
+  mono = mono5;
 
-  mono46 = lowPrio (callPackage ../development/compilers/mono/4.6.nix {
+  mono4 = lowPrio (callPackage ../development/compilers/mono/4.nix {
     inherit (darwin) libobjc;
     inherit (darwin.apple_sdk.frameworks) Foundation;
   });
 
-  mono48 = lowPrio (callPackage ../development/compilers/mono/4.8.nix {
-    inherit (darwin) libobjc;
-    inherit (darwin.apple_sdk.frameworks) Foundation;
-  });
-
-  mono50 = lowPrio (callPackage ../development/compilers/mono/5.0.nix {
-    inherit (darwin) libobjc;
-    inherit (darwin.apple_sdk.frameworks) Foundation;
-  });
-
-  mono54 = lowPrio (callPackage ../development/compilers/mono/5.4.nix {
-    inherit (darwin) libobjc;
-    inherit (darwin.apple_sdk.frameworks) Foundation;
-  });
-
-  mono58 = callPackage ../development/compilers/mono/5.8.nix {
-    inherit (darwin) libobjc;
-    inherit (darwin.apple_sdk.frameworks) Foundation;
-  };
-
-  mono514 = callPackage ../development/compilers/mono/5.14.nix {
+  mono5 = callPackage ../development/compilers/mono/5.nix {
     inherit (darwin) libobjc;
     inherit (darwin.apple_sdk.frameworks) Foundation;
   };
@@ -13516,7 +13490,7 @@ in
   elasticmq = callPackage ../servers/elasticmq { };
 
   eventstore = callPackage ../servers/nosql/eventstore {
-    mono = mono46;
+    mono = mono4;
     v8 = v8_6_x;
   };
 
@@ -16890,9 +16864,7 @@ in
   inherit (gnome3) evince;
   evolution-data-server = gnome3.evolution-data-server;
 
-  keepass = callPackage ../applications/misc/keepass {
-    buildDotnetPackage = buildDotnetPackage.override { mono = mono54; };
-  };
+  keepass = callPackage ../applications/misc/keepass { };
 
   keepass-keeagent = callPackage ../applications/misc/keepass-plugins/keeagent { };
 
