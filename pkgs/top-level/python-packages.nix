@@ -4230,6 +4230,8 @@ in {
 
   virtualenv = callPackage ../development/python-modules/virtualenv { };
 
+  warcio = callPackage ../development/python-modules/warcio { };
+
   webassets = callPackage ../development/python-modules/webassets { };
 
   webcolors = callPackage ../development/python-modules/webcolors { };
