@@ -1,5 +1,5 @@
 { lib, stdenv
-, fetchurl, fetchFromGitHub, fetchpatch
+, fetchurl, fetchFromGitHub
 , cmake, pkgconfig, unzip, zlib, pcre, hdf5
 , glog, boost, google-gflags, protobuf
 , config
@@ -47,10 +47,8 @@ let
   contribSrc = fetchFromGitHub {
     owner  = "opencv";
     repo   = "opencv_contrib";
-    # TODO: set to `version` when opencv_contrib-4.0.1 is released;
-    # See: http://answers.opencv.org/question/205793/will-there-be-a-opencv_contrib-401-release-now-that-opencv-401-is-out/
-    rev    = "4.0.0";
-    sha256 = "1g4pzw7hv1v9jp1nrqjxqwpi1byl3mxkj6w6ibq6ydsn0138p66z";
+    rev    = version;
+    sha256 = "0svw8f6nvnzmrc0baj6priq4hbijla4kl6gzy8yif1jfvcwb1syy";
   };
 
   # Contrib must be built in order to enable Tesseract support:
@@ -161,16 +159,6 @@ stdenv.mkDerivation rec {
   postUnpack = lib.optionalString buildContrib ''
     cp --no-preserve=mode -r "${contribSrc}/modules" "$NIX_BUILD_TOP/source/opencv_contrib"
   '';
-
-  patches =
-    # Fixes issue: https://github.com/opencv/opencv_contrib/issues/1923
-    # PR: https://github.com/opencv/opencv_contrib/pull/1913
-    lib.optional buildContrib (fetchpatch {
-      url = https://github.com/opencv/opencv_contrib/commit/e068b62a1432d4d5688693a9e20bf175dfaa9a3e.patch;
-      sha256 = "102mq1qgmla40hhj8mda70inhakdazm9agyah98kq9931scvf0c9";
-      stripLen = 2;
-      extraPrefix = "opencv_contrib/";
-    });
 
   # This prevents cmake from using libraries in impure paths (which
   # causes build failure on non NixOS)
