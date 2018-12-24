@@ -700,7 +700,9 @@ in
 
   deskew = callPackage ../applications/graphics/deskew { };
 
-  diskus = callPackage ../tools/misc/diskus { };
+  diskus = callPackage ../tools/misc/diskus {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   djmount = callPackage ../tools/filesystems/djmount { };
 
