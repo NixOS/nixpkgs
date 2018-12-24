@@ -32,7 +32,17 @@ stdenv.mkDerivation {
     done
   '';
 
+  postInstall = ''
+    pushd $out/bin
+    for f in gapi2-*
+    do
+      substituteInPlace $f --replace mono ${mono}/bin/mono
+    done
+    popd
+  '';
+
   nativeBuildInputs = [ pkgconfig ];
+
   buildInputs = [
     mono glib pango gtk2 GConf libglade libgnomecanvas
     libgtkhtml libgnomeui libgnomeprint libgnomeprintui gtkhtml libxml2
