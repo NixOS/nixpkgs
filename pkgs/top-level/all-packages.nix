@@ -4834,7 +4834,7 @@ in
   };
 
   pinentry_gnome = res.pinentry.override {
-    gcr = gnome3.gcr;
+    inherit gcr;
   };
 
   pinentry_qt4 = res.pinentry.override {
@@ -9786,6 +9786,8 @@ in
   ganv = callPackage ../development/libraries/ganv { };
 
   gcab = callPackage ../development/libraries/gcab { };
+
+  gcr = callPackages ../development/libraries/gcr { };
 
   gdome2 = callPackage ../development/libraries/gdome2 {
     inherit (gnome2) gtkdoc;

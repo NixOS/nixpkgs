@@ -2,7 +2,7 @@
 , python3Packages, libsoup, polkit, clutter, networkmanager, docbook_xsl , docbook_xsl_ns, at-spi2-core
 , libstartup_notification, telepathy-glib, telepathy-logger, libXtst, unzip, glibcLocales, shared-mime-info
 , libgweather, libcanberra-gtk3, librsvg, geoclue2, perl, docbook_xml_dtd_42, desktop-file-utils
-, libpulseaudio, libical, gobject-introspection, gstreamer, wrapGAppsHook, libxslt
+, libpulseaudio, libical, gobject-introspection, gstreamer, wrapGAppsHook, libxslt, gcr
 , accountsservice, gdk_pixbuf, gdm, upower, ibus, networkmanagerapplet
 , sassc, systemd, gst_all_1 }:
 

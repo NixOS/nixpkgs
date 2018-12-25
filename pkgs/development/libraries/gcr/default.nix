@@ -1,19 +1,19 @@
 { stdenv, fetchurl, pkgconfig, intltool, gnupg, p11-kit, glib
-, libgcrypt, libtasn1, dbus-glib, gtk, pango, gdk_pixbuf, atk
+, libgcrypt, libtasn1, dbus-glib, gtk3, pango, gdk_pixbuf, atk
 , gobject-introspection, makeWrapper, libxslt, vala, gnome3
 , python2 }:
 
 stdenv.mkDerivation rec {
-  name = "gcr-${version}";
+  pname = "gcr";
   version = "3.28.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gcr/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "02xgky22xgvhgd525khqh64l5i21ca839fj9jzaqdi3yvb8pbq8m";
   };
 
   passthru = {
-    updateScript = gnome3.updateScript { packageName = "gcr"; attrPath = "gnome3.gcr"; };
+    updateScript = gnome3.updateScript { packageName = pname; };
   };
 
   postPatch = ''
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     gpg libgcrypt libtasn1 dbus-glib pango gdk_pixbuf atk
   ];
 
-  propagatedBuildInputs = [ glib gtk p11-kit ];
+  propagatedBuildInputs = [ glib gtk3 p11-kit ];
 
   checkInputs = [ python2 ];
   doCheck = false; # fails 21 out of 603 tests, needs dbus daemon

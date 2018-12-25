@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, intltool, libxml2, glib, json-glib
+{ stdenv, fetchurl, pkgconfig, intltool, libxml2, glib, json-glib, gcr
 , gobject-introspection, liboauth, gnome3, p11-kit, openssl, uhttpmock }:
 
 stdenv.mkDerivation rec {
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "0fj54yqxdapdppisqm1xcyrpgcichdmipq0a0spzz6009ikzgi45";
   };
 
-  NIX_CFLAGS_COMPILE = "-I${gnome3.libsoup.dev}/include/libsoup-gnome-2.4/ -I${gnome3.gcr}/include/gcr-3 -I${gnome3.gcr}/include/gck-1";
+  NIX_CFLAGS_COMPILE = "-I${gnome3.libsoup.dev}/include/libsoup-gnome-2.4/ -I${gcr}/include/gcr-3 -I${gcr}/include/gck-1";
 
   nativeBuildInputs = [ pkgconfig intltool gobject-introspection ];
 
