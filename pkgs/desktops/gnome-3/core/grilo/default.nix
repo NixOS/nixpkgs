@@ -1,6 +1,6 @@
 { stdenv, fetchurl, meson, ninja, pkgconfig, gettext, vala, glib, liboauth, gtk3
 , gtk-doc, docbook_xsl, docbook_xml_dtd_43
-, libxml2, gnome3, gobject-introspection, libsoup }:
+, libxml2, gnome3, gobject-introspection, libsoup, totem-pl-parser }:
 
 let
   pname = "grilo";
@@ -34,7 +34,7 @@ in stdenv.mkDerivation rec {
     meson ninja pkgconfig gettext gobject-introspection vala
     gtk-doc docbook_xsl docbook_xml_dtd_43
   ];
-  buildInputs = [ glib liboauth gtk3 libxml2 libsoup gnome3.totem-pl-parser ];
+  buildInputs = [ glib liboauth gtk3 libxml2 libsoup totem-pl-parser ];
 
   passthru = {
     updateScript = gnome3.updateScript {

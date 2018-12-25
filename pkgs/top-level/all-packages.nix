@@ -12773,6 +12773,8 @@ in
 
   torch-hdf5 = callPackage ../development/libraries/torch-hdf5 {};
 
+  totem-pl-parser = callPackage ../development/libraries/totem-pl-parser { };
+
   tremor = callPackage ../development/libraries/tremor { };
 
   twolame = callPackage ../development/libraries/twolame { };
