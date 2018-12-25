@@ -1,5 +1,5 @@
-{ stdenv, fetchFromGitHub, ocamlPackages, makeWrapper, writeScript
-, dune, python3, rsync, fetchpatch, buck }:
+{ stdenv, fetchFromGitHub, ocamlPackages, writeScript
+, dune, python3, rsync, buck, watchman }:
 let
   # Manually set version - the setup script requires
   # hg and git + keeping the .git directory around.
@@ -103,6 +103,10 @@ in python3.pkgs.buildPythonApplication rec {
     substituteInPlace scripts/build-pypi-package.sh \
         --replace 'NIX_BINARY_FILE' '${pyre-bin}/bin/pyre.bin' \
         --replace 'BUILD_ROOT="$(mktemp -d)"' "BUILD_ROOT=$PWD/build"
+    for file in client/pyre.py client/commands/initialize.py client/commands/tests/initialize_test.py; do
+      substituteInPlace "$file" \
+          --replace '"watchman"' '"${watchman}/bin/watchman"'
+    done
     substituteInPlace client/buck.py \
         --replace '"buck"' '"${buck}/bin/buck"'
     substituteInPlace client/tests/buck_test.py \

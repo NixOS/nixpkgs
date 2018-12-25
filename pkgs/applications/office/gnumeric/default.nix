@@ -5,33 +5,23 @@
 
 let
   inherit (pythonPackages) python pygobject3;
-  isopub = fetchurl { url = http://www.oasis-open.org/docbook/xml/4.5/ent/isopub.ent; sha256 = "073l492jz70chcadr2p7ssx7gz5hd731s2cazhxx4r845kilyr77"; };
-  isonum = fetchurl { url = http://www.oasis-open.org/docbook/xml/4.5/ent/isonum.ent; sha256 = "04b62dw2g3cj9i4vn9xyrsrlz8fpmmijq98dm0nrkky31bwbbrs3"; };
-  isogrk1 = fetchurl { url = http://www.oasis-open.org/docbook/xml/4.5/ent/isogrk1.ent; sha256 = "04b23anhs5wr62n4rgsjirzvw7rpjcsf8smz4ffzaqh3b0vw90vm"; };
 in stdenv.mkDerivation rec {
-  name = "gnumeric-1.12.43";
+  pname = "gnumeric";
+  version = "1.12.44";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnumeric/1.12/${name}.tar.xz";
-    sha256 = "87c9abd6260cf29401fa1e0fcce374e8c7bcd1986608e4049f6037c9d32b5fd5";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "0147962c6ybdsj57rz95nla0rls7g545wc2n7pz59zmzyd5pksk0";
   };
 
   configureFlags = [ "--disable-component" ];
 
-  prePatch = ''
-    substituteInPlace doc/C/gnumeric.xml \
-      --replace http://www.oasis-open.org/docbook/xml/4.5/ent/isopub.ent ${isopub} \
-      --replace http://www.oasis-open.org/docbook/xml/4.5/ent/isonum.ent ${isonum} \
-      --replace http://www.oasis-open.org/docbook/xml/4.5/ent/isogrk1.ent ${isogrk1}
-  '';
-
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig intltool bison itstool makeWrapper ];
 
   # ToDo: optional libgda, introspection?
   buildInputs = [
-    intltool bison
-    goffice gtk3 makeWrapper gnome3.defaultIconTheme
-    python pygobject3 itstool
+    goffice gtk3 gnome3.defaultIconTheme
+    python pygobject3
   ] ++ (with perlPackages; [ perl XMLParser ]);
 
   enableParallelBuilding = true;
@@ -43,6 +33,12 @@ in stdenv.mkDerivation rec {
         ${stdenv.lib.optionalString (!stdenv.isDarwin) "--prefix GIO_EXTRA_MODULES : '${stdenv.lib.getLib gnome3.dconf}/lib/gio/modules'"}
     done
   '';
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+    };
+  };
 
   meta = with stdenv.lib; {
     description = "The GNOME Office Spreadsheet";

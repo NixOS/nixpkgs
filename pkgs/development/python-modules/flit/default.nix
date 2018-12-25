@@ -28,14 +28,15 @@ buildPythonPackage rec {
   };
 
   disabled = !isPy3k;
-  propagatedBuildInputs = [ docutils requests requests_download pytoml ] ++ lib.optional (pythonOlder "3.6") zipfile36;
+  propagatedBuildInputs = [ docutils requests requests_download pytoml ]
+    ++ lib.optional (pythonOlder "3.6") zipfile36;
 
   checkInputs = [ pytest testpath responses ];
 
   # Disable test that needs some ini file.
   # Disable test that wants hg
   checkPhase = ''
-    py.test -k "not test_invalid_classifier and not test_build_sdist"
+    HOME=$(mktemp -d) pytest -k "not test_invalid_classifier and not test_build_sdist"
   '';
 
   meta = {

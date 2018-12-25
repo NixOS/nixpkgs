@@ -49,8 +49,9 @@ in python2Packages.buildPythonApplication {
       cp -v hgweb.cgi contrib/hgweb.wsgi $out/share/cgi-bin
       chmod u+x $out/share/cgi-bin/hgweb.cgi
 
-      # install bash completion
-      install -D -v contrib/bash_completion $out/share/bash-completion/completions/mercurial
+      # install bash/zsh completions
+      install -v -m644 -D contrib/bash_completion $out/share/bash-completion/completions/_hg
+      install -v -m644 -D contrib/zsh_completion $out/share/zsh/site-functions/_hg
     '';
 
   meta = {

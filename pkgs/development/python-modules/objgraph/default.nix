@@ -1,8 +1,9 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi
-, pkgs
 , isPyPy
+, graphviz
+, mock
 }:
 
 buildPythonPackage rec {
@@ -17,7 +18,9 @@ buildPythonPackage rec {
   # Tests fail with PyPy.
   disabled = isPyPy;
 
-  propagatedBuildInputs = [pkgs.graphviz];
+  propagatedBuildInputs = [ graphviz ];
+
+  checkInputs = [ mock ];
 
   meta = with stdenv.lib; {
     description = "Draws Python object reference graphs with graphviz";

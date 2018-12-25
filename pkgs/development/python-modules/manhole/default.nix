@@ -19,7 +19,10 @@ buildPythonPackage rec {
   #
   # {test_locals,test_socket_path} fail to remove /tmp/manhole-socket
   # on the x86_64-darwin builder.
-  doCheck = stdenv.isLinux;
+  #
+  # TODO: change this back to `doCheck = stdenv.isLinux` after
+  # https://github.com/ionelmc/python-manhole/issues/54 is fixed
+  doCheck = false;
 
   checkInputs = [ pytest requests process-tests ];
   checkPhase = ''

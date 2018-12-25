@@ -110,12 +110,7 @@ let self = toPythonModule (python.stdenv.mkDerivation (builtins.removeAttrs attr
   } // meta;
 }));
 
-passthru = {
-  updateScript = let
+passthru.updateScript = let
     filename = builtins.head (lib.splitString ":" self.meta.position);
-  in writeScript "update-python" ''
-    #!${python.stdenv.shell}
-    ${update-python-libraries} ${filename}
-  '';
-};
+  in attrs.passthru.updateScript or [ update-python-libraries filename ];
 in lib.extendDerivation true passthru self

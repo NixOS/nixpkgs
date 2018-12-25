@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, rustPlatform }:
+{ stdenv, fetchFromGitHub, rustPlatform, Security }:
 
 rustPlatform.buildRustPackage rec {
   name = "diskus-${version}";
@@ -11,6 +11,8 @@ rustPlatform.buildRustPackage rec {
     sha256 = "18scxspi5ncags8bnxq4ah9w8hrlwwlgpq7q9qfh4d81asmbyr8n";
   };
 
+  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
+
   cargoSha256 = "1syrmm5qpz7d1h17xpw1wa3d2snaz9n7d1avsjp7xz8s2qcx1wdc";
 
   meta = with stdenv.lib; {
@@ -18,6 +20,6 @@ rustPlatform.buildRustPackage rec {
     homepage = https://github.com/sharkdp/diskus;
     license = with licenses; [ asl20 /* or */ mit ];
     maintainers = [ maintainers.fuerbringer ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

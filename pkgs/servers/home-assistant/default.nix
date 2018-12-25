@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, fetchpatch, python
+{ lib, fetchFromGitHub, fetchpatch, python3
 
 # Look up dependencies of specified components in component-packages.nix
 , extraComponents ? []
@@ -52,7 +52,7 @@ let
     (mkOverride "colorlog" "3.1.4"
       "418db638c9577f37f0fae4914074f395847a728158a011be2a193ac491b9779d")
 
-    # hass-frontend does not exist in python.pkgs
+    # hass-frontend does not exist in python3.pkgs
     (self: super: {
       hass-frontend = self.callPackage ./frontend.nix { };
     })
@@ -68,7 +68,7 @@ let
       });
     };
     
-  py = python.override {
+  py = python3.override {
     # Put packageOverrides at the start so they are applied after defaultOverrides
     packageOverrides = lib.foldr lib.composeExtensions (self: super: { }) ([ packageOverrides ] ++ defaultOverrides);
   };
@@ -85,7 +85,7 @@ let
   extraBuildInputs = extraPackages py.pkgs;
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "0.84.3";
+  hassVersion = "0.84.6";
 
 in with py.pkgs; buildPythonApplication rec {
   pname = "homeassistant";
@@ -100,7 +100,7 @@ in with py.pkgs; buildPythonApplication rec {
     owner = "home-assistant";
     repo = "home-assistant";
     rev = version;
-    sha256 = "0b7634niqqmcckhqb7vx1wimibfs4v042bwja7am90jy0hzafbji";
+    sha256 = "142hxsvhb9lh77h54975vkvl1fx5lslrydq1vbqyy51dy85ms8lc";
   };
 
   propagatedBuildInputs = [

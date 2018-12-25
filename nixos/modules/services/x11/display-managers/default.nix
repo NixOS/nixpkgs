@@ -194,9 +194,12 @@ let
         ${xorg.lndir}/bin/lndir ${pkg}/share/xsessions $out/share/xsessions
       '') cfg.displayManager.extraSessionFilePackages}
 
-      mkdir -p "$out/share/wayland-sessions"
+      
       ${concatMapStrings (pkg: ''
-        ${xorg.lndir}/bin/lndir ${pkg}/share/wayland-sessions $out/share/wayland-sessions
+        if test -d ${pkg}/share/wayland-sessions; then
+          mkdir -p "$out/share/wayland-sessions"
+          ${xorg.lndir}/bin/lndir ${pkg}/share/wayland-sessions $out/share/wayland-sessions
+        fi
       '') cfg.displayManager.extraSessionFilePackages}
     '';
 

@@ -1,51 +1,19 @@
-{ buildPackages, pkgs }:
+{deployAndroidPackage, lib, package, os, autoPatchelfHook, pkgs}:
 
-let
-  inherit (buildPackages) fetchurl unzip;
-  inherit (pkgs) stdenv zlib;
-in
-
-stdenv.mkDerivation rec {
-  version = "28.0.1";
-  name = "android-platform-tools-r${version}";
-  src = if (stdenv.hostPlatform.system == "i686-linux" || stdenv.hostPlatform.system == "x86_64-linux")
-    then fetchurl {
-      url = "https://dl.google.com/android/repository/platform-tools_r${version}-linux.zip";
-      sha256 = "14kkr9xib5drjjd0bclm0jn3f5xlmlg652mbv4xd83cv7a53a49y";
-    }
-    else if stdenv.hostPlatform.system == "x86_64-darwin" then fetchurl {
-      url = "https://dl.google.com/android/repository/platform-tools_r${version}-darwin.zip";
-      sha256 = "117syrddq1haicwyjzd1p4pfphj0wldjs7w10fpk3n2b7yp37j1v";
-    }
-    else throw "System ${stdenv.hostPlatform.system} not supported!";
-
-  buildCommand = ''
-    mkdir -p $out
-    cd $out
-    unzip $src
-    cd platform-tools
-
-    ${stdenv.lib.optionalString (stdenv.hostPlatform.system == "i686-linux" || stdenv.hostPlatform.system == "x86_64-linux")
-      ''
-        for i in adb dmtracedump e2fsdroid fastboot hprof-conv make_f2fs mke2fs sload_f2fs sqlite3
-        do
-            patchelf --set-interpreter ${stdenv.cc.libc.out}/lib/ld-linux-x86-64.so.2 $i
-            patchelf --set-rpath ${stdenv.cc.cc.lib}/lib:`pwd`/lib64 $i
-        done
-
-        for i in etc1tool
-        do
-            patchelf --set-interpreter ${stdenv.cc.libc.out}/lib/ld-linux-x86-64.so.2 $i
-            patchelf --set-rpath ${stdenv.cc.cc.lib}/lib:${zlib.out}/lib:`pwd`/lib64 $i
-        done
-    ''}
+deployAndroidPackage {
+  inherit package os;
+  buildInputs = [ autoPatchelfHook ]
+    ++ lib.optional (os == "linux") [ pkgs.glibc pkgs.zlib pkgs.ncurses5 ];
+  patchInstructions = lib.optionalString (os == "linux") ''
+    addAutoPatchelfSearchPath $packageBaseDir/lib64
+    autoPatchelf --no-recurse $packageBaseDir/lib64
+    autoPatchelf --no-recurse $packageBaseDir
 
     mkdir -p $out/bin
-    for i in adb fastboot
+    cd $out/bin
+    find $out/libexec/android-sdk/platform-tools -type f -executable -mindepth 1 -maxdepth 1 -not -name sqlite3 | while read i
     do
-        ln -sf $out/platform-tools/$i $out/bin/$i
+        ln -s $i
     done
   '';
-
-  nativeBuildInputs = [ unzip ];
 }
