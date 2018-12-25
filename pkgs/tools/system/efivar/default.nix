@@ -1,8 +1,8 @@
-{ stdenv, fetchFromGitHub, pkgconfig, popt }:
+{ stdenv, buildPackages, fetchFromGitHub, pkgconfig, popt }:
 
 stdenv.mkDerivation rec {
   name = "efivar-${version}";
-  version = "36";
+  version = "37";
 
   outputs = [ "bin" "out" "dev" "man" ];
 
@@ -10,11 +10,12 @@ stdenv.mkDerivation rec {
     owner = "rhinstaller";
     repo = "efivar";
     rev = version;
-    sha256 = "0r39kx6sqgpk8rz19g1sil4dp7r82d5g1wlkbw1czwas95s50y7n";
+    sha256 = "1z2dw5x74wgvqgd8jvibfff0qhwkc53kxg54v12pzymyibagwf09";
   };
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ popt ];
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
 
   makeFlags = [
     "prefix=$(out)"

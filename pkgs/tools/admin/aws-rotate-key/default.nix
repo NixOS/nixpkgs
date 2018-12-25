@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   name = "aws-rotate-key-${version}";
-  version = "1.0.3";
+  version = "1.0.4";
 
   goPackagePath = "github.com/Fullscreen/aws-rotate-key";
 
@@ -10,7 +10,7 @@ buildGoPackage rec {
     rev = "v${version}";
     owner = "Fullscreen";
     repo = "aws-rotate-key";
-    sha256 = "15na7flc0vp14amaq3116a5glqlb4ydvdlzv0q7mwl73pc38zxn3";
+    sha256 = "14bcs434646qdywws55r1a1v8ncwz8n0yljaa8zb5796pv4445wf";
   };
 
   goDeps = ./deps.nix;

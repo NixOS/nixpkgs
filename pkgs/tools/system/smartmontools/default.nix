@@ -4,11 +4,11 @@
 let
   version = "6.6";
 
-  dbrev = "4548";
+  dbrev = "4852";
   drivedbBranch = "RELEASE_${builtins.replaceStrings ["."] ["_"] version}_DRIVEDB";
   driverdb = fetchurl {
-    url    = "http://sourceforge.net/p/smartmontools/code/${dbrev}/tree/branches/${drivedbBranch}/smartmontools/drivedb.h?format=raw";
-    sha256 = "0nwk4ir0c40b01frqm7a0lvljh5k9yhslc3j4485zjsx3v5w269f";
+    url    = "https://sourceforge.net/p/smartmontools/code/${dbrev}/tree/branches/${drivedbBranch}/smartmontools/drivedb.h?format=raw";
+    sha256 = "15gbwiw38yzl3cdvys6r7wknv5zdycm7zbswa2p9vzxlc8s63rlr";
     name   = "smartmontools-drivedb.h";
   };
 
@@ -36,7 +36,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Tools for monitoring the health of hard drives";
-    homepage    = http://smartmontools.sourceforge.net/;
+    homepage    = https://www.smartmontools.org/;
     license     = licenses.gpl2Plus;
     maintainers = with maintainers; [ peti ];
     platforms   = with platforms; linux ++ darwin;

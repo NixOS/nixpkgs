@@ -3,7 +3,7 @@
 } :
 
 let
-  version = "0.1.1";
+  version = "0.1.2";
 
 in stdenv.mkDerivation {
   name = "soapyairspy-${version}";
@@ -12,7 +12,7 @@ in stdenv.mkDerivation {
     owner = "pothosware";
     repo = "SoapyAirspy";
     rev = "soapy-airspy-${version}";
-    sha256 = "072vc9619s9f22k7639krr1p2418cmhgm44yhzy7x9dzapc43wvk";
+    sha256 = "061r77vs6ywxbxfif12y6v5xkz6gcvbz9k060q12vmdh6sisdwk2";
   };
 
   nativeBuildInputs = [ cmake ];

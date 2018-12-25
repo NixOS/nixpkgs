@@ -51,6 +51,17 @@ bundlerEnv rec {
  </para>
 
  <para>
+  Updating Ruby packages can then be done like this:
+ </para>
+
+<screen>
+<![CDATA[$ cd pkgs/servers/monitoring/sensu
+$ nix-shell -p bundler --run 'bundle lock --update'
+$ nix-shell -p bundix --run 'bundix'
+]]>
+</screen>
+
+ <para>
   For tools written in Ruby - i.e. where the desire is to install a package and
   then execute e.g. <command>rake</command> at the command line, there is an
   alternative builder called <literal>bundlerApp</literal>. Set up the

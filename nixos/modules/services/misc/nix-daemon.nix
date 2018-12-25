@@ -62,11 +62,15 @@ let
         ''}
         $extraOptions
         END
-      '' + optionalString cfg.checkConfig ''
-        echo "Checking that Nix can read nix.conf..."
-        ln -s $out ./nix.conf
-        NIX_CONF_DIR=$PWD ${cfg.package}/bin/nix show-config >/dev/null
-      '');
+      '' + optionalString cfg.checkConfig (
+            if pkgs.stdenv.hostPlatform != pkgs.stdenv.buildPlatform then ''
+              echo "Ignore nix.checkConfig when cross-compiling"
+            '' else ''
+              echo "Checking that Nix can read nix.conf..."
+              ln -s $out ./nix.conf
+              NIX_CONF_DIR=$PWD ${cfg.package}/bin/nix show-config >/dev/null
+            '')
+      );
 
 in
 
@@ -113,11 +117,11 @@ in
 
       buildCores = mkOption {
         type = types.int;
-        default = 1;
+        default = 0;
         example = 64;
         description = ''
           This option defines the maximum number of concurrent tasks during
-          one build. It affects, e.g., -j option for make. The default is 1.
+          one build. It affects, e.g., -j option for make.
           The special value 0 means that the builder should use all
           available CPU cores in the system. Some builds may become
           non-deterministic with this option; use with care! Packages will

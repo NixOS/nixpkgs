@@ -159,13 +159,13 @@ in rec {
   }; };
 
   nixUnstable = (lib.lowPrio (common rec {
-    name = "nix-2.1${suffix}";
-    suffix = "pre6377_954d1f4d";
+    name = "nix-2.2${suffix}";
+    suffix = "pre6526_9f99d624";
     src = fetchFromGitHub {
       owner = "NixOS";
       repo = "nix";
-      rev = "954d1f4d0a35063ff431b258beebadf753cb9efe";
-      sha256 = "0wnljxljvcwmniydgxlsjqmbgghmljs75m6083y2nkjql7dnrm7g";
+      rev = "9f99d62480cf7c58c0a110b180f2096b7d25adab";
+      sha256 = "0fkmx7gmgg0yij9kw52fkyvib88hj1jsj90vbpy13ccfwknh1044";
     };
     fromGit = true;
   })) // { perl-bindings = perl-bindings {

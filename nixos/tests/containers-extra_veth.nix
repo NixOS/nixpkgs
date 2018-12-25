@@ -43,7 +43,6 @@ import ./make-test.nix ({ pkgs, ...} : {
           config =
             {
               networking.firewall.allowedTCPPorts = [ 80 ];
-              networking.firewall.allowPing = true;
             };
         };
 

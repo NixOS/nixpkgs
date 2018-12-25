@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ ptlib srtp libtheora speex
                   ffmpeg x264 cyrus_sasl openldap openssl expat unixODBC ];
-  propagatedBuildInputs = [ speex ]; 
+  propagatedBuildInputs = [ speex ];
 
   configureFlags = [ "--enable-h323" ];
 
@@ -21,11 +21,12 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = "-D__STDC_CONSTANT_MACROS=1 -std=gnu++98";
 
   patches = [ ./disable-samples-ftbfs.diff ./libav9.patch ./libav10.patch ];
-      
+
   meta = with stdenv.lib; {
     description = "VoIP library";
     maintainers = [ maintainers.raskin ];
     platforms = platforms.linux;
+    license = with licenses; [ bsdOriginal mpl10 gpl2Plus lgpl21 ];
   };
 
   passthru = {

@@ -10,13 +10,13 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "qbittorrent-${version}";
-  version = "4.1.3";
+  version = "4.1.4";
 
   src = fetchFromGitHub {
     owner = "qbittorrent";
     repo = "qbittorrent";
     rev = "release-${version}";
-    sha256 = "1hpcn1x4z3vdjscw035d18vqhfs7c6yv002akgmbgdf9jl3vfrsl";
+    sha256 = "1hclyahgzj775h1fnv2rck9cw3r2yp2r6p1q263mj890n32gf3hp";
   };
 
   # NOTE: 2018-05-31: CMake is working but it is not officially supported

@@ -5,11 +5,12 @@
 , openssl ? null }:
 
 stdenv.mkDerivation rec {
-  name = "wget-1.19.5";
+  name = "wget-${version}";
+  version = "1.20";
 
   src = fetchurl {
     url = "mirror://gnu/wget/${name}.tar.lz";
-    sha256 = "0xfaxmlnih7dhkyks5wi4vrn0n1xshmy6gx6fb2k1120sprydyr9";
+    sha256 = "07k8yd8rdn27x5fbzlnsz4db7z7qnisiqhs7r1b5wzy2b9b0zf5h";
   };
 
   patches = [
@@ -52,7 +53,7 @@ stdenv.mkDerivation rec {
 
     license = licenses.gpl3Plus;
 
-    homepage = http://www.gnu.org/software/wget/;
+    homepage = https://www.gnu.org/software/wget/;
 
     maintainers = with maintainers; [ fpletz ];
     platforms = platforms.all;

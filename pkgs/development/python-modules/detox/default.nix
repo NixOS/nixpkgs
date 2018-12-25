@@ -3,11 +3,11 @@
 
 buildPythonPackage rec {
   pname = "detox";
-  version = "0.13";
+  version = "0.15";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f0c2af9c29f8e200a50b561ccc531df3087c80e7d3de6cfa9828f5fea3c8f56c";
+    sha256 = "accde1a79b621df9dfd55b97460e80743a771a3d9a1acd900489a4355f0cc8c7";
   };
 
   buildInputs = [ pytest ];

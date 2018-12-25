@@ -18,6 +18,11 @@ stdenv.mkDerivation rec {
     patchShebangs meson/post_install.py
   '';
 
+  postInstall = ''
+    # The cache for Paper-Mono-Dark is missing
+    gtk-update-icon-cache "$out"/share/icons/Paper-Mono-Dark;
+  '';
+
   meta = with stdenv.lib; {
     description = "Modern icon theme designed around bold colours and simple geometric shapes";
     homepage = https://snwh.org/paper;

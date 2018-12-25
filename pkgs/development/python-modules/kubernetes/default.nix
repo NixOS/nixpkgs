@@ -4,7 +4,7 @@
 
 buildPythonPackage rec {
   pname = "kubernetes";
-  version = "7.0.0";
+  version = "8.0.0";
 
   prePatch = ''
     sed -e 's/sphinx>=1.2.1,!=1.3b1,<1.4 # BSD/sphinx/' -i test-requirements.txt
@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "84dfb4319afac189e8327b71b9332b5329d2a78074f58958c5f06a870edf32ba";
+    sha256 = "54f8e7bb1dd9a55cf416dff76a63c4ae441764280942d9913f2243676f29d02c";
   };
 
   checkInputs = [ isort coverage pytest mock sphinx autopep8 pep8 codecov recommonmark nose ];

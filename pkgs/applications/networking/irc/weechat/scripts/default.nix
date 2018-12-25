@@ -9,5 +9,9 @@
     inherit (luaPackages) cjson;
   };
 
-  wee-slack = callPackage ./wee-slack { };
+  wee-slack = callPackage ./wee-slack {
+    inherit pythonPackages;
+  };
+
+  weechat-autosort = callPackage ./weechat-autosort { };
 }

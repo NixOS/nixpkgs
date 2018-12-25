@@ -1,14 +1,14 @@
 { stdenv, cmake, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  version = "1.1.4";
+  version = "1.1.5";
   name = "nanomsg-${version}";
 
   src = fetchFromGitHub {
     owner = "nanomsg";
     repo = "nanomsg";
     rev = version;
-    sha256 = "11mxbhkxkzqwdmpl79mfiiqby7zawgkalips7zr0bbdfyhq7jyrl";
+    sha256 = "01ddfzjlkf2dgijrmm3j3j8irccsnbgfvjcnwslsfaxnrmrq5s64";
   };
 
   buildInputs = [ cmake ];

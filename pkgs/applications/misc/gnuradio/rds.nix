@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "bastibl";
     repo = "gr-rds";
-    rev = "$v{version}";
+    rev = "v${version}";
     sha256 = "008284ya464q4h4fd0zvcn6g7bym231p8fl3kdxncz9ks4zsbsxs";
   };
 

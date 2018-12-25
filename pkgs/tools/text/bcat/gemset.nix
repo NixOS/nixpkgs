@@ -11,9 +11,9 @@
   rack = {
     source = {
       remotes = ["http://rubygems.org"];
-      sha256 = "19m7aixb2ri7p1n0iqaqx8ldi97xdhvbxijbyrrcdcl6fv5prqza";
+      sha256 = "1g9926ln2lw12lfxm4ylq1h6nl0rafl10za3xvjzc87qvnqic87f";
       type = "gem";
     };
-    version = "1.6.8";
+    version = "1.6.11";
   };
 }

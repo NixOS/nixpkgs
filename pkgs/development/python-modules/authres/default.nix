@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "authres";
-  version = "1.1.0";
+  version = "1.1.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1mcllhrwr23hwa2jn3m15k29ks1205ymwafjzchh8ma664hnzv6v";
+    sha256 = "0bxclx021zn4hhrpaw5fl61bhnf17yqjd0pvwxqfqwdkxdjpx37b";
   };
 
   checkPhase = ''

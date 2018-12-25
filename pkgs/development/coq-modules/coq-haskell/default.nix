@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     inherit (param) rev sha256;
   };
 
-  buildInputs = [ coq.ocaml coq.camlp5 coq.findlib ];
+  buildInputs = with coq.ocamlPackages; [ ocaml camlp5 findlib ];
   propagatedBuildInputs = [ coq ssreflect ];
 
   enableParallelBuilding = false;

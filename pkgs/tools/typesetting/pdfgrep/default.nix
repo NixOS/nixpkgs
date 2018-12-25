@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "pdfgrep-${version}";
-  version = "2.1.1";
+  version = "2.1.2";
 
   src = fetchurl {
     url = "https://pdfgrep.org/download/${name}.tar.gz";
-    sha256 = "02qcl5kmr5qzjfc99qpbpfb1890bxlrq3r208gnding51zrmb09c";
+    sha256 = "1fia10djcxxl7n9jw2prargw4yzbykk6izig2443ycj9syhxrwqf";
   };
 
   postPatch = ''

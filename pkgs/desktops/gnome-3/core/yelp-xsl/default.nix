@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   name = "yelp-xsl-${version}";
-  version = "3.28.0";
+  version = "3.30.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/yelp-xsl/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "14rznm1qpsnmkwksnkd5j7zplakl01kvrcw0fdmd5gdc65xz9kcc";
+    sha256 = "0ffgp3ymcc11r9sdndliwwngljcy1mfqpfxsdfbm8rlcjg2k3vzw";
   };
 
   passthru = {

@@ -1,4 +1,4 @@
-{ newScope, stdenv, makeWrapper, makeDesktopItem, ed
+{ newScope, stdenv, llvmPackages, makeWrapper, makeDesktopItem, ed
 , glib, gtk3, gnome3, gsettings-desktop-schemas
 
 # package customization
@@ -14,10 +14,13 @@
 , commandLineArgs ? ""
 }:
 
+assert stdenv.cc.isClang -> (stdenv == llvmPackages.stdenv);
 let
   callPackage = newScope chromium;
 
   chromium = {
+    inherit stdenv llvmPackages;
+
     upstream-info = (callPackage ./update.nix {}).getChannel channel;
 
     mkChromiumDerivation = callPackage ./common.nix {

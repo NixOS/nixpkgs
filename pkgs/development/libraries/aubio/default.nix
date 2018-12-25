@@ -1,23 +1,17 @@
 { stdenv, fetchurl, alsaLib, fftw, libjack2, libsamplerate
-, libsndfile, pkgconfig, python
+, libsndfile, pkgconfig, python, wafHook
 }:
 
 stdenv.mkDerivation rec {
-  name = "aubio-0.4.7";
+  name = "aubio-0.4.8";
 
   src = fetchurl {
     url = "https://aubio.org/pub/${name}.tar.bz2";
-    sha256 = "0hd0kzfmr46am00ygxar8alrldv92c5azqy701iilfmbqpz4mvfb";
+    sha256 = "1fjbz1l9axscrb7dl6jv4ifhvmq1g77ihvg0bbwwfg0j3qz4gxyw";
   };
 
-  nativeBuildInputs = [ pkgconfig python ];
+  nativeBuildInputs = [ pkgconfig python wafHook ];
   buildInputs = [ alsaLib fftw libjack2 libsamplerate libsndfile ];
-
-  configurePhase = "python waf configure --prefix=$out";
-
-  buildPhase = "python waf";
-
-  installPhase = "python waf install";
 
   meta = with stdenv.lib; {
     description = "Library for audio labelling";

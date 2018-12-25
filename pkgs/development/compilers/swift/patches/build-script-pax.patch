@@ -1,6 +1,6 @@
 --- swift/utils/build-script-impl	2017-01-23 12:47:20.401326309 -0600
 +++ swift-pax/utils/build-script-impl	2017-01-23 13:24:10.339366996 -0600
-@@ -1823,6 +1823,17 @@ function set_lldb_xcodebuild_options() {
+@@ -1837,6 +1837,17 @@ function set_lldb_xcodebuild_options() {
      fi
  }
  
@@ -18,7 +18,7 @@
  #
  # Configure and build each product
  #
-@@ -2624,6 +2634,12 @@ for host in "${ALL_HOSTS[@]}"; do
+@@ -2735,6 +2746,12 @@ for host in "${ALL_HOSTS[@]}"; do
              fi
  
              call "${CMAKE_BUILD[@]}" "${build_dir}" $(cmake_config_opt ${product}) -- "${BUILD_ARGS[@]}" ${build_targets[@]}

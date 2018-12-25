@@ -24,11 +24,11 @@ let
   gcc = if stdenv.cc.isGNU then stdenv.cc.cc else stdenv.cc.cc.gcc;
 in stdenv.mkDerivation rec {
   name = "thunderbird-${version}";
-  version = "60.2.1";
+  version = "60.3.3";
 
   src = fetchurl {
     url = "mirror://mozilla/thunderbird/releases/${version}/source/thunderbird-${version}.source.tar.xz";
-    sha512 = "018l9pq03nzlirpaf285qpwvb8s4msam8n91d15lzc1bc1caq9zcy2dnrnvn5av3jlapm9ckz028iar66nhqxi2kkqbmiaq0v4s6kfp";
+    sha512 = "04m6mgm4nfnq3nfkv0d1al5b7bw95kfcjpyd7aschqi6wnn21g8qacx42ynj89i5l9vc1jx8nz0wy266sy6x5iv9q585c6l6j9gvkrh";
   };
 
   # from firefox, but without sound libraries
@@ -48,14 +48,6 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [ m4 autoconf213 which gnused pkgconfig perl python wrapperTool cargo rustc ];
 
   patches = [
-    # https://bugzilla.mozilla.org/show_bug.cgi?format=default&id=1479540
-    # https://hg.mozilla.org/releases/mozilla-release/rev/bc651d3d910c
-    (fetchpatch {
-      name = "bc651d3d910c.patch";
-      url = "https://hg.mozilla.org/releases/mozilla-release/raw-rev/bc651d3d910c";
-      sha256 = "0iybkadsgsf6a3pq3jh8z1p110vmpkih8i35jfj8micdkhxzi89g";
-    })
-
     # Remove buildconfig.html to prevent a dependency on clang etc.
     ../../browsers/firefox/no-buildconfig.patch
   ];
@@ -210,6 +202,6 @@ in stdenv.mkDerivation rec {
   passthru.updateScript = import ./../../browsers/firefox/update.nix {
     attrPath = "thunderbird";
     baseUrl = "http://archive.mozilla.org/pub/thunderbird/releases/";
-    inherit writeScript lib common-updater-scripts xidel coreutils gnused gnugrep curl;
+    inherit stdenv writeScript lib common-updater-scripts xidel coreutils gnused gnugrep curl;
   };
 }

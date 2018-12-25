@@ -6,6 +6,7 @@ let
   cfg = config.services.gitea;
   gitea = cfg.package;
   pg = config.services.postgresql;
+  useMysql = cfg.database.type == "mysql";
   usePostgresql = cfg.database.type == "postgres";
   configFile = pkgs.writeText "app.ini" ''
     APP_NAME = ${cfg.appName}
@@ -14,7 +15,7 @@ let
 
     [database]
     DB_TYPE = ${cfg.database.type}
-    HOST = ${cfg.database.host}:${toString cfg.database.port}
+    HOST = ${if cfg.database.socket != null then cfg.database.socket else cfg.database.host + ":" + toString cfg.database.port}
     NAME = ${cfg.database.name}
     USER = ${cfg.database.user}
     PASSWD = #dbpass#
@@ -148,6 +149,13 @@ in
           '';
         };
 
+        socket = mkOption {
+          type = types.nullOr types.path;
+          default = null;
+          example = "/run/mysqld/mysqld.sock";
+          description = "Path to the unix socket file to use for authentication.";
+        };
+
         path = mkOption {
           type = types.str;
           default = "${cfg.stateDir}/data/gitea.db";
@@ -253,7 +261,7 @@ in
 
     systemd.services.gitea = {
       description = "gitea";
-      after = [ "network.target" "postgresql.service" ];
+      after = [ "network.target" ] ++ lib.optional usePostgresql "postgresql.service" ++ lib.optional useMysql "mysql.service";
       wantedBy = [ "multi-user.target" ];
       path = [ gitea.bin ];
 

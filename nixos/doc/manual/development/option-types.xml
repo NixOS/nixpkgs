@@ -106,7 +106,7 @@
      </para>
     </listitem>
    </varlistentry>
-   <varlistentry>
+   <varlistentry xml:id='types.ints.ux'>
     <term>
      <varname>types.ints.{u8, u16, u32}</varname>
     </term>
@@ -128,6 +128,17 @@
     <listitem>
      <para>
       A positive integer (that is > 0).
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>
+     <varname>types.port</varname>
+    </term>
+    <listitem>
+     <para>
+      A port number. This type is an alias to
+      <link linkend='types.ints.ux'><varname>types.ints.u16</varname></link>.
      </para>
     </listitem>
    </varlistentry>

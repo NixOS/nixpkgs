@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   patches = optional stdenv.hostPlatform.isCygwin ./coreutils-8.23-4.cygwin.patch;
 
   # The test tends to fail on btrfs and maybe other unusual filesystems.
-  postPatch = optionalString (!stdenv.hostPlatform.isDarwin) ''
+  postPatch = ''
     sed '2i echo Skipping dd sparse test && exit 0' -i ./tests/dd/sparse.sh
     sed '2i echo Skipping cp sparse test && exit 0' -i ./tests/cp/sparse.sh
     sed '2i echo Skipping rm deep-2 test && exit 0' -i ./tests/rm/deep-2.sh
@@ -97,7 +97,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = http://www.gnu.org/software/coreutils/;
+    homepage = https://www.gnu.org/software/coreutils/;
     description = "The basic file, shell and text manipulation utilities of the GNU operating system";
 
     longDescription = ''
@@ -109,7 +109,7 @@ stdenv.mkDerivation rec {
 
     license = licenses.gpl3Plus;
 
-    platforms = platforms.unix;
+    platforms = platforms.unix ++ platforms.windows;
 
     maintainers = [ maintainers.eelco ];
   };

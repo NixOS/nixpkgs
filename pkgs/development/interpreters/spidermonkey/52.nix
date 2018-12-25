@@ -10,6 +10,9 @@ in stdenv.mkDerivation rec {
     sha256 = "1mlx34fgh1kaqamrkl5isf0npch3mm6s4lz3jsjb7hakiijhj7f0";
   };
 
+  outputs = [ "out" "dev" ];
+  setOutputFlags = false; # Configure script only understands --includedir
+
   buildInputs = [ readline icu zlib nspr ];
   nativeBuildInputs = [ autoconf213 pkgconfig perl which python2 zip ];
 
@@ -32,6 +35,7 @@ in stdenv.mkDerivation rec {
     export CXXFLAGS="-fpermissive"
     export LIBXUL_DIST=$out
     export PYTHON="${python2.interpreter}"
+    configureFlagsArray+=("--includedir=$dev/include")
 
     cd js/src
 
@@ -48,6 +52,12 @@ in stdenv.mkDerivation rec {
   ] ++ stdenv.lib.optional stdenv.hostPlatform.isMusl "--disable-jemalloc";
 
   enableParallelBuilding = true;
+
+  postInstall = ''
+    moveToOutput bin/js52-config "$dev"
+    # Nuke a static lib.
+    rm $out/lib/libjs_static.ajs
+  '';
 
   meta = with stdenv.lib; {
     description = "Mozilla's JavaScript engine written in C/C++";

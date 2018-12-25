@@ -8,9 +8,10 @@ stdenv.mkDerivation rec {
     sha256 = "0dsqvsgzam3mypj2ladn6v1yjq9zd47p3lg21jx6kz5azkkkn0gm";
   };
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://tclap.sourceforge.net/;
     description = "Templatized C++ Command Line Parser Library";
-    platforms = stdenv.lib.platforms.all;
+    platforms = platforms.all;
+    license = licenses.mit;
   };
 }

@@ -36,6 +36,7 @@ stdenv.mkDerivation rec {
     updateScript = gnome3.updateScript {
       packageName = "nemiver";
       attrPath = "gnome3.nemiver";
+      versionPolicy = "none";
     };
   };
 

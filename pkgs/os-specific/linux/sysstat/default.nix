@@ -1,11 +1,11 @@
 { stdenv, fetchurl, gettext, bzip2 }:
 
 stdenv.mkDerivation rec {
-  name = "sysstat-12.0.1";
+  name = "sysstat-12.1.1";
 
   src = fetchurl {
     url = "http://perso.orange.fr/sebastien.godard/${name}.tar.xz";
-    sha256 = "114wh7iqi82c0az8wn3dg3y56279fb2wg81v8kvx87mq5975bg51";
+    sha256 = "0drrlv2fr64g5zf0a2bkla2rql4nmq4n192wvcr9r4zppg58d8k4";
   };
 
   buildInputs = [ gettext ];

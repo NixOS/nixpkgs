@@ -40,19 +40,17 @@ let
     disallowedReferences = [ stdenv.cc ];
 
     patches =
-      [ ]
-      # Do not look in /usr etc. for dependencies.
-      ++ optional (versionOlder version "5.26") ./no-sys-dirs.patch
-      ++ optional (versionAtLeast version "5.26") ./no-sys-dirs-5.26.patch
-      ++ optional (versionAtLeast version "5.24") (
+      [
+        # Do not look in /usr etc. for dependencies.
+        ./no-sys-dirs-5.26.patch
         # Fix parallel building: https://rt.perl.org/Public/Bug/Display.html?id=132360
-        fetchurlBoot {
+        (fetchurlBoot {
           url = "https://rt.perl.org/Public/Ticket/Attachment/1502646/807252/0001-Fix-missing-build-dependency-for-pods.patch";
           sha256 = "1bb4mldfp8kq1scv480wm64n2jdsqa3ar46cjp1mjpby8h5dr2r0";
         })
+      ]
       ++ optional stdenv.isSunOS ./ld-shared.patch
-      ++ optional stdenv.isDarwin ./cpp-precomp.patch
-      ++ optional (stdenv.isDarwin && versionAtLeast version "5.24") ./sw_vers.patch
+      ++ optionals stdenv.isDarwin [ ./cpp-precomp.patch ./sw_vers.patch ]
       ++ optional crossCompiling ./MakeMaker-cross.patch;
 
     postPatch = ''
@@ -188,7 +186,7 @@ in rec {
 
   # the latest Devel version
   perldevel = common {
-    version = "5.29.3";
-    sha256 = "054xi629408p2hv9475jghv6zd1bj69qqpiby8cy9qw5vismgi17";
+    version = "5.29.4";
+    sha256 = "153r0f6jdqrl7hxrvhfivf5g8ivhbvggfhg841q3hi3db5rc86k4";
   };
 }

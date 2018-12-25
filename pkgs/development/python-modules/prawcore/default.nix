@@ -6,13 +6,13 @@
 
 buildPythonPackage rec {
   pname = "prawcore";
-  version = "0.15.0";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "praw-dev";
     repo = "prawcore";
     rev = "v${version}";
-    sha256 = "0v16n6bzf483i00bn0qykrg3wvw9dbnfdl512pw8n635ld1g7cb8";
+    sha256 = "1j905wi5n2xgik3yk2hrv8dky318ahfjl5k1zs21mrl81jk0907f";
   };
 
   postPatch = ''

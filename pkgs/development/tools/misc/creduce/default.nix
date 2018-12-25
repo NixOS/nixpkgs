@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   # On Linux, c-reduce's preferred way to reason about
   # the cpu architecture/topology is to use 'lscpu',
   # so let's make sure it knows where to find it:
-  patchPhase = stdenv.lib.optionalString stdenv.isLinux ''
+  postPatch = stdenv.lib.optionalString stdenv.isLinux ''
     substituteInPlace creduce/creduce_utils.pm --replace \
       lscpu ${utillinux}/bin/lscpu
   '';

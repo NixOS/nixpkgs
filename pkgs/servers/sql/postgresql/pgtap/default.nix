@@ -28,5 +28,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ willibutz ];
     homepage = https://pgtap.org;
     inherit (postgresql.meta) platforms;
+    license = licenses.mit;
   };
 }

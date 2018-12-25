@@ -267,7 +267,7 @@ stdenv.mkDerivation ((drvAttrs config stdenv.hostPlatform.platform kernelPatches
       ++ optionals (stdenv.lib.versionAtLeast version "4.16") [ bison flex ]
       ;
 
-  hardeningDisable = [ "bindnow" "format" "fortify" "stackprotector" "pic" ];
+  hardeningDisable = [ "bindnow" "format" "fortify" "stackprotector" "pic" "pie" ];
 
   # Absolute paths for compilers avoid any PATH-clobbering issues.
   makeFlags = commonMakeFlags ++ [

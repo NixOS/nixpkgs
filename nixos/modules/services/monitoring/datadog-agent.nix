@@ -7,7 +7,7 @@ let
 
   ddConf = {
     dd_url              = "https://app.datadoghq.com";
-    skip_ssl_validation = "no";
+    skip_ssl_validation = false;
     confd_path          = "/etc/datadog-agent/conf.d";
     additional_checksd  = "/etc/datadog-agent/checks.d";
     use_dogstatsd       = true;
@@ -16,6 +16,7 @@ let
   // optionalAttrs (cfg.hostname != null) { inherit (cfg) hostname; }
   // optionalAttrs (cfg.tags != null ) { tags = concatStringsSep ", " cfg.tags; }
   // optionalAttrs (cfg.enableLiveProcessCollection) { process_config = { enabled = "true"; }; }
+  // optionalAttrs (cfg.enableTraceAgent) { apm_config = { enabled = true; }; }
   // cfg.extraConfig;
 
   # Generate Datadog configuration files for each configured checks.
@@ -132,6 +133,15 @@ in {
       default = false;
       type = types.bool;
     };
+
+    enableTraceAgent = mkOption {
+      description = ''
+        Whether to enable the trace agent.
+      '';
+      default = false;
+      type = types.bool;
+    };
+
     checks = mkOption {
       description = ''
         Configuration for all Datadog checks. Keys of this attribute
@@ -244,6 +254,16 @@ in {
           ${pkgs.datadog-process-agent}/bin/agent --config /etc/datadog-agent/datadog.yaml
         '';
       });
+
+      datadog-trace-agent = lib.mkIf cfg.enableTraceAgent (makeService {
+        description = "Datadog Trace Agent";
+        path = [ ];
+        script = ''
+          export DD_API_KEY=$(head -n 1 ${cfg.apiKeyFile})
+          ${pkgs.datadog-trace-agent}/bin/trace-agent -config /etc/datadog-agent/datadog.yaml
+        '';
+      });
+
     };
 
     environment.etc = etcfiles;

@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
       compiles to about 130Kb.
     '';
 
-    homepage = http://www.gnu.org/software/zile/;
+    homepage = https://www.gnu.org/software/zile/;
 
     license = licenses.gpl3Plus;
 

@@ -149,7 +149,10 @@ in {
       after = [ "network.target" "elasticsearch.service" ];
       environment = { BABEL_CACHE_PATH = "${cfg.dataDir}/.babelcache.json"; };
       serviceConfig = {
-        ExecStart = "${cfg.package}/bin/kibana --config ${cfgFile}";
+        ExecStart =
+          "${cfg.package}/bin/kibana" +
+          " --config ${cfgFile}" +
+          " --path.data ${cfg.dataDir}";
         User = "kibana";
         WorkingDirectory = cfg.dataDir;
       };

@@ -2,7 +2,7 @@
 
 pythonPackages.buildPythonApplication rec {
   name = "git-review-${version}";
-  version = "1.26.0";
+  version = "1.27.0";
 
   # Manually set version because prb wants to get it from the git
   # upstream repository (and we are installing from tarball instead)
@@ -14,7 +14,7 @@ pythonPackages.buildPythonApplication rec {
 
   src = fetchurl rec {
     url = "https://github.com/openstack-infra/git-review/archive/${version}.tar.gz";
-    sha256 = "106nk6p7byf5vi68b2fvmwma5nk7qrv39nfj9p1bfxmb1gjdixhc";
+    sha256 = "0smdkps9avnj58izyfc5m0amq8nafgs9iqlyaf7ncrlvypia1f3q";
   };
 
   propagatedBuildInputs = with pythonPackages; [ pbr requests setuptools ];

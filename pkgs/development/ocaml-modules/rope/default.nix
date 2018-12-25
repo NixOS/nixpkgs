@@ -8,7 +8,6 @@ let param =
     sha256 = "06pkbnkad2ck50jn59ggwv154yd9vb01abblihvam6p27m4za1pc";
     buildInputs = [ dune ];
     extra = {
-      unpackCmd = "tar -xjf $curSrc";
       buildPhase = "dune build -p rope";
       inherit (dune) installPhase;
     };

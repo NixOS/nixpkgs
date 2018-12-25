@@ -70,6 +70,11 @@ with lib;
       };
     };
 
+    environment.systemPackages = [ pkgs.clickhouse ];
+
+    # startup requires a `/etc/localtime` which only if exists if `time.timeZone != null`
+    time.timeZone = mkDefault "UTC";
+
   };
 
 }

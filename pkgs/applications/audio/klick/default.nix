@@ -12,14 +12,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ scons libsamplerate libsndfile liblo libjack2 boost ];
+  prefixKey = "PREFIX=";
   NIX_CFLAGS_COMPILE = "-fpermissive";
-
-  buildPhase = ''
-    mkdir -p $out
-    scons PREFIX=$out
-  '';
-
-  installPhase = "scons install";
 
   meta = {
     homepage = http://das.nasophon.de/klick/;
@@ -28,4 +22,3 @@ stdenv.mkDerivation rec {
     platforms = stdenv.lib.platforms.linux;
   };
 }
-

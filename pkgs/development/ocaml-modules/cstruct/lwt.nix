@@ -1,12 +1,14 @@
-{ stdenv, ocaml, cstruct, lwt }:
+{ lib, buildDunePackage, cstruct, lwt }:
 
-assert stdenv.lib.versionAtLeast ocaml.version "4.02";
+if !lib.versionAtLeast (cstruct.version or "1") "3"
+then cstruct
+else
 
-stdenv.mkDerivation rec {
-	name = "ocaml${ocaml.version}-cstruct-lwt-${version}";
-	inherit (cstruct) version src unpackCmd buildInputs installPhase meta;
+buildDunePackage {
+	pname = "cstruct-lwt";
+	inherit (cstruct) version src meta;
+
+  minimumOCamlVersion = "4.02";
 
 	propagatedBuildInputs = [ cstruct lwt ];
-
-	buildPhase = "${cstruct.buildPhase}-lwt";
 }

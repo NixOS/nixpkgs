@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   PERL = if stdenv.hostPlatform == stdenv.buildPlatform then null else "missing";
 
   meta = {
-    homepage = http://www.gnu.org/software/sed/;
+    homepage = https://www.gnu.org/software/sed/;
     description = "GNU sed, a batch stream editor";
 
     longDescription = ''
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
     license = stdenv.lib.licenses.gpl3Plus;
 
-    platforms = stdenv.lib.platforms.all;
+    platforms = stdenv.lib.platforms.unix;
     maintainers = [ ];
   };
 }

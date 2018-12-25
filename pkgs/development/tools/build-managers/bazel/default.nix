@@ -13,8 +13,8 @@
 let
   srcDeps = lib.singleton (
     fetchurl {
-      url = "https://github.com/google/desugar_jdk_libs/archive/f5e6d80c6b4ec6b0a46603f72b015d45cf3c11cd.zip";
-      sha256 = "c80f3f3d442d8a6ca7adc83f90ecd638c3864087fdd6787ffac070b6f1cc8f9b";
+      url = "https://github.com/google/desugar_jdk_libs/archive/fd937f4180c1b557805219af4482f1a27eb0ff2b.zip";
+      sha256 = "04hs399340xfwcdajbbcpywnb2syp6z5ydwg966if3hqdb2zrf23";
     }
   );
 
@@ -28,7 +28,7 @@ let
 in
 stdenv.mkDerivation rec {
 
-  version = "0.17.1";
+  version = "0.20.0";
 
   meta = with lib; {
     homepage = "https://github.com/bazelbuild/bazel/";
@@ -42,19 +42,13 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel-${version}-dist.zip";
-    sha256 = "081z40vsxvw6ndiinik4pn09gxmv140k6l9zv93dgjr86qf2ir13";
+    sha256 = "1g9hglly5199gcw929fzc5f0d0dwlharkh387h58p1fq9ylayi8r";
   };
 
   sourceRoot = ".";
 
   patches =
-    lib.optional enableNixHacks ./nix-hacks.patch
-    # patch perl out of the bash completions
-    # should land in 0.18
-    ++ [(fetchpatch {
-           url = "https://github.com/bazelbuild/bazel/commit/27be70979b54d7510bf401d9581fb4075737ef34.patch";
-           sha256 = "04rip46lnibrsdyzjpi29wf444b49cbwb1xjcbrr3kdqsdj4d8h5";
-       })];
+    lib.optional enableNixHacks ./nix-hacks.patch;
 
   # Bazel expects several utils to be available in Bash even without PATH. Hence this hack.
 
@@ -125,7 +119,8 @@ stdenv.mkDerivation rec {
       find src/main/java/com/google/devtools -type f -print0 | while IFS="" read -r -d "" path; do
         substituteInPlace "$path" \
           --replace /bin/bash ${customBash}/bin/bash \
-          --replace /usr/bin/env ${coreutils}/bin/env
+          --replace /usr/bin/env ${coreutils}/bin/env \
+          --replace /bin/true ${coreutils}/bin/true
       done
       # Fixup scripts that generate scripts. Not fixed up by patchShebangs below.
       substituteInPlace scripts/bootstrap/compile.sh \
@@ -137,10 +132,10 @@ stdenv.mkDerivation rec {
       echo "build --host_copt=\"$(echo $NIX_CFLAGS_COMPILE | sed -e 's/ /" --host_copt=\"/g')\"" >> .bazelrc
       echo "build --linkopt=\"-Wl,$(echo $NIX_LDFLAGS | sed -e 's/ /" --linkopt=\"-Wl,/g')\"" >> .bazelrc
       echo "build --host_linkopt=\"-Wl,$(echo $NIX_LDFLAGS | sed -e 's/ /" --host_linkopt=\"-Wl,/g')\"" >> .bazelrc
-      sed -i -e "362 a --copt=\"$(echo $NIX_CFLAGS_COMPILE | sed -e 's/ /" --copt=\"/g')\" \\\\" scripts/bootstrap/compile.sh
-      sed -i -e "362 a --host_copt=\"$(echo $NIX_CFLAGS_COMPILE | sed -e 's/ /" --host_copt=\"/g')\" \\\\" scripts/bootstrap/compile.sh
-      sed -i -e "362 a --linkopt=\"-Wl,$(echo $NIX_LDFLAGS | sed -e 's/ /" --linkopt=\"-Wl,/g')\" \\\\" scripts/bootstrap/compile.sh
-      sed -i -e "362 a --host_linkopt=\"-Wl,$(echo $NIX_LDFLAGS | sed -e 's/ /" --host_linkopt=\"-Wl,/g')\" \\\\" scripts/bootstrap/compile.sh
+      sed -i -e "420 a --copt=\"$(echo $NIX_CFLAGS_COMPILE | sed -e 's/ /" --copt=\"/g')\" \\\\" scripts/bootstrap/compile.sh
+      sed -i -e "420 a --host_copt=\"$(echo $NIX_CFLAGS_COMPILE | sed -e 's/ /" --host_copt=\"/g')\" \\\\" scripts/bootstrap/compile.sh
+      sed -i -e "420 a --linkopt=\"-Wl,$(echo $NIX_LDFLAGS | sed -e 's/ /" --linkopt=\"-Wl,/g')\" \\\\" scripts/bootstrap/compile.sh
+      sed -i -e "420 a --host_linkopt=\"-Wl,$(echo $NIX_LDFLAGS | sed -e 's/ /" --host_linkopt=\"-Wl,/g')\" \\\\" scripts/bootstrap/compile.sh
 
       # --experimental_strict_action_env (which will soon become the
       # default, see bazelbuild/bazel#2574) hardcodes the default
@@ -186,23 +181,51 @@ stdenv.mkDerivation rec {
         --prepend=scripts/bazel-complete-template.bash
   '';
 
-  # Build the CPP and Java examples to verify that Bazel works.
-
-  doCheck = true;
-  checkPhase = ''
-    export TEST_TMPDIR=$(pwd)
-    ./output/bazel test --test_output=errors \
-        examples/cpp:hello-success_test \
-        examples/java-native/src/test/java/com/example/myproject:hello
-  '';
-
   installPhase = ''
     mkdir -p $out/bin
-    mv output/bazel $out/bin
-    wrapProgram "$out/bin/bazel" --set JAVA_HOME "${runJdk}"
+
+    # official wrapper scripts that searches for $WORKSPACE_ROOT/tools/bazel
+    # if it can’t find something in tools, it calls $out/bin/bazel-real
+    cp scripts/packages/bazel.sh $out/bin/bazel
+    mv output/bazel $out/bin/bazel-real
+
+    wrapProgram "$out/bin/bazel" --add-flags --server_javabase="${runJdk}"
+
+    # shell completion files
     mkdir -p $out/share/bash-completion/completions $out/share/zsh/site-functions
     mv output/bazel-complete.bash $out/share/bash-completion/completions/bazel
     cp scripts/zsh_completion/_bazel $out/share/zsh/site-functions/
+  '';
+
+  doInstallCheck = true;
+  installCheckPhase = ''
+    export TEST_TMPDIR=$(pwd)
+
+    hello_test () {
+      $out/bin/bazel test --test_output=errors \
+        examples/cpp:hello-success_test \
+        examples/java-native/src/test/java/com/example/myproject:hello
+    }
+
+    # test whether $WORKSPACE_ROOT/tools/bazel works
+
+    mkdir -p tools
+    cat > tools/bazel <<"EOF"
+    #!${stdenv.shell} -e
+    exit 1
+    EOF
+    chmod +x tools/bazel
+
+    # first call should fail if tools/bazel is used
+    ! hello_test
+
+    cat > tools/bazel <<"EOF"
+    #!${stdenv.shell} -e
+    exec "$BAZEL_REAL" "$@"
+    EOF
+
+    # second call succeeds because it defers to $out/bin/bazel-real
+    hello_test
   '';
 
   # Save paths to hardcoded dependencies so Nix can detect them.

@@ -9,11 +9,11 @@
 
 python2Packages.buildPythonApplication rec {
   name = "zim-${version}";
-  version = "0.68";
+  version = "0.69";
 
   src = fetchurl {
     url = "http://zim-wiki.org/downloads/${name}.tar.gz";
-    sha256 = "05fzb24a2s3pm89zb6gwa48wb925an5i652klx8yk9pn23h1h5fr";
+    sha256 = "1j04l1914iw87b0jd3r1czrh0q491fdgbqbi0biacxiri5q0i6a1";
   };
 
   propagatedBuildInputs = with python2Packages; [ pyGtkGlade pyxdg pygobject2 ];
@@ -42,5 +42,6 @@ python2Packages.buildPythonApplication rec {
     homepage = http://zim-wiki.org;
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ pSub ];
+    broken = stdenv.isDarwin; # https://github.com/NixOS/nixpkgs/pull/52658#issuecomment-449565790
   };
 }

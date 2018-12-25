@@ -61,11 +61,12 @@ stdenv.mkDerivation rec {
   '';
 
   doInstallCheck = stdenv.hostPlatform == stdenv.buildPlatform;
+  installCheckInputs = [ xvfb_run ];
   installCheckPhase = let
     pluginPath = "${qtbase.bin}/${qtbase.qtPluginPrefix}";
   in lib.optionalString doInstallCheck ''
-    QT_PLUGIN_PATH=${lib.escapeShellArg pluginPath} CTEST_OUTPUT_ON_FAILURE=1 \
-      ${xvfb_run}/bin/xvfb-run -s '-screen 0 1024x768x24' make test \
+    QT_PLUGIN_PATH=${lib.escapeShellArg pluginPath} \
+      xvfb-run -s '-screen 0 1024x768x24' make test \
       ARGS="-E '(reports-chart-test)'" # Test fails, so exclude it for now.
   '';
 

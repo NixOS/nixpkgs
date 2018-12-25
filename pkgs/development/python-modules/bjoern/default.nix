@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "bjoern";
-  version = "2.2.2";
+  version = "2.2.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1w5z9agacci4shmkg9gh46ifj2a724rrgbykdv14830f7jq3dcmi";
+    sha256 = "1lbwqmqrl32jlfzhffxsb1fm7xbbjgbhjr21imk656agvpib2wx2";
   };
 
   buildInputs = [ libev ];

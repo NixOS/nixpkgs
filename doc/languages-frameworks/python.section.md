@@ -483,12 +483,14 @@ and in this case the `python35` interpreter is automatically used.
 
 ### Interpreters
 
-Versions 2.7, 3.4, 3.5, 3.6 and 3.7 of the CPython interpreter are available as
-respectively `python27`, `python34`, `python35` and `python36`. The PyPy interpreter
-is available as `pypy`. The aliases `python2` and `python3` correspond to respectively `python27` and
-`python35`. The default interpreter, `python`, maps to `python2`.
-The Nix expressions for the interpreters can be found in
-`pkgs/development/interpreters/python`.
+Versions 2.7, 3.5, 3.6 and 3.7 of the CPython interpreter are available as
+respectively `python27`, `python35`, `python36` and `python37`. The aliases
+`python2` and `python3` correspond to respectively `python27` and
+`python37`. The default interpreter, `python`, maps to `python2`. The PyPy
+interpreters compatible with Python 2.7 and 3 are available as `pypy27` and
+`pypy3`, with aliases `pypy2` mapping to `pypy27` and `pypy` mapping to
+`pypy2`. The Nix expressions for the interpreters can be
+found in `pkgs/development/interpreters/python`.
 
 All packages depending on any Python interpreter get appended
 `out/{python.sitePackages}` to `$PYTHONPATH` if such directory
@@ -507,7 +509,7 @@ Each interpreter has the following attributes:
 - `buildEnv`. Function to build python interpreter environments with extra packages bundled together. See section *python.buildEnv function* for usage and documentation.
 - `withPackages`. Simpler interface to `buildEnv`. See section *python.withPackages function* for usage and documentation.
 - `sitePackages`. Alias for `lib/${libPrefix}/site-packages`.
-- `executable`. Name of the interpreter executable, e.g. `python3.4`.
+- `executable`. Name of the interpreter executable, e.g. `python3.7`.
 - `pkgs`. Set of Python packages for that specific interpreter. The package set can be modified by overriding the interpreter and passing `packageOverrides`.
 
 ### Building packages and applications
@@ -529,7 +531,6 @@ attribute set is created for each available Python interpreter. The available
 sets are
 
 * `pkgs.python27Packages`
-* `pkgs.python34Packages`
 * `pkgs.python35Packages`
 * `pkgs.python36Packages`
 * `pkgs.python37Packages`
@@ -538,7 +539,7 @@ sets are
 and the aliases
 
 * `pkgs.python2Packages` pointing to `pkgs.python27Packages`
-* `pkgs.python3Packages` pointing to `pkgs.python36Packages`
+* `pkgs.python3Packages` pointing to `pkgs.python37Packages`
 * `pkgs.pythonPackages` pointing to `pkgs.python2Packages`
 
 #### `buildPythonPackage` function
@@ -670,7 +671,7 @@ python3Packages.buildPythonApplication rec {
     sha256 = "035w8gqql36zlan0xjrzz9j4lh9hs0qrsgnbyw07qs7lnkvbdv9x";
   };
 
-  propagatedBuildInputs = with python3Packages; [ tornado_4 pythondaemon ];
+  propagatedBuildInputs = with python3Packages; [ tornado_4 python-daemon ];
 
   meta = with lib; {
     ...
@@ -837,7 +838,7 @@ community to help save time. No tool is preferred at the moment.
 
 ### Deterministic builds
 
-Python 2.7, 3.5 and 3.6 are now built deterministically and 3.4 mostly.
+The Python interpreters are now built deterministically.
 Minor modifications had to be made to the interpreters in order to generate
 deterministic bytecode. This has security implications and is relevant for
 those using Python in a `nix-shell`.
@@ -1079,8 +1080,7 @@ To modify only a Python package set instead of a whole Python derivation, use th
 Use the following overlay template:
 
 ```nix
-self: super:
-{
+self: super: {
   python = super.python.override {
     packageOverrides = python-self: python-super: {
       zerobin = python-super.zerobin.overrideAttrs (oldAttrs: {
@@ -1094,6 +1094,34 @@ self: super:
   };
 }
 ```
+
+### How to use Intel's MKL with numpy and scipy?
+
+A `site.cfg` is created that configures BLAS based on the `blas` parameter
+of the `numpy` derivation. By passing in `mkl`, `numpy` and packages depending
+on `numpy` will be built with `mkl`.
+
+The following is an overlay that configures `numpy` to use `mkl`:
+```nix
+self: super: {
+  python37 = super.python37.override {
+    packageOverrides = python-self: python-super: {
+      numpy = python-super.numpy.override {
+        blas = super.pkgs.mkl;
+      };
+    };
+  };
+}
+```
+
+`mkl` requires an `openmp` implementation when running with multiple processors.
+By default, `mkl` will use Intel's `iomp` implementation if no other is
+specified, but this is a runtime-only dependency and binary compatible with the
+LLVM implementation. To use that one instead, Intel recommends users set it with
+`LD_PRELOAD`.
+
+Note that `mkl` is only available on `x86_64-{linux,darwin}` platforms;
+moreover, Hydra is not building and distributing pre-compiled binaries using it.
 
 ## Contributing
 

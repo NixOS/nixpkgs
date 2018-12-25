@@ -2,15 +2,18 @@
 
 buildGoPackage rec {
   name = "hcloud-${version}";
-  version = "1.6.1";
+  version = "1.9.1";
+  
   goPackagePath = "github.com/hetznercloud/cli";
 
   src = fetchFromGitHub {
     owner = "hetznercloud";
     repo = "cli";
     rev = "v${version}";
-    sha256 = "0v5n7y8vb23iva51kb15da198yk7glc1fix193icrk3pvcbj5bjr";
+    sha256 = "0qc4mzjd1q3xv1j0dxv5qvk443bdhh5hlbv3i3444v36wycj3171";
   };
+
+  goDeps = ./deps.nix;
 
   buildFlagsArray = [ "-ldflags=" "-w -X github.com/hetznercloud/cli/cli.Version=${version}" ];
 

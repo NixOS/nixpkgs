@@ -1,12 +1,12 @@
-{ stdenv, fetchFromGitHub, bc, python, fuse, libarchive }:
+{ stdenv, fetchFromGitHub, bc, python, bison, flex, fuse, libarchive }:
 
 stdenv.mkDerivation rec {
-  name = "lkl-2018-03-10";
-  rev  = "8772a4da6064444c5b70766b806fe272b0287c31";
+  name = "lkl-2018-08-22";
+  rev  = "5221c547af3d29582703f01049617a6bf9f6232a";
 
   outputs = [ "dev" "lib" "out" ];
 
-  nativeBuildInputs = [ bc python ];
+  nativeBuildInputs = [ bc bison flex python ];
 
   buildInputs = [ fuse libarchive ];
 
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     inherit rev;
     owner  = "lkl";
     repo   = "linux";
-    sha256 = "1m6gh4zcx1q7rv05d0knjpk3ivk2b3kc0kwjndciadqc45kws4wh";
+    sha256 = "1k2plyx40xaphm8zsk2dd1lyv6dhsp7kj6hfmdgiamvl80bjajqy";
   };
 
   # Fix a /usr/bin/env reference in here that breaks sandboxed builds

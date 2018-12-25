@@ -17,6 +17,8 @@ let
 
     buildOcaml = callPackage ../build-support/ocaml { };
 
+    buildDunePackage = callPackage ../build-support/ocaml/dune.nix {};
+
     alcotest = callPackage ../development/ocaml-modules/alcotest {};
 
     angstrom = callPackage ../development/ocaml-modules/angstrom { };
@@ -51,6 +53,8 @@ let
       else null;
 
     atd = callPackage ../development/ocaml-modules/atd { };
+
+    atdgen = callPackage ../development/ocaml-modules/atdgen { };
 
     base64 = callPackage ../development/ocaml-modules/base64 { };
 
@@ -129,9 +133,14 @@ let
 
     bin_prot_p4 = callPackage ../development/ocaml-modules/bin_prot { };
 
+    bisect_ppx = callPackage ../development/ocaml-modules/bisect_ppx { };
+    bisect_ppx-ocamlbuild = callPackage ../development/ocaml-modules/bisect_ppx-ocamlbuild { };
+
     ocaml_cairo = callPackage ../development/ocaml-modules/ocaml-cairo { };
 
     cairo2 = callPackage ../development/ocaml-modules/cairo2 { };
+
+    checkseum = callPackage ../development/ocaml-modules/checkseum { };
 
     cil = callPackage ../development/ocaml-modules/cil { };
 
@@ -193,6 +202,8 @@ let
       then callPackage ../development/ocaml-modules/csv { }
       else callPackage ../development/ocaml-modules/csv/1.5.nix { };
 
+    csv-lwt = callPackage ../development/ocaml-modules/csv/lwt.nix { };
+
     curses = callPackage ../development/ocaml-modules/curses { };
 
     custom_printf = callPackage ../development/ocaml-modules/custom_printf { };
@@ -220,6 +231,8 @@ let
     earley_ocaml = callPackage ../development/ocaml-modules/earley_ocaml { };
 
     easy-format = callPackage ../development/ocaml-modules/easy-format { };
+
+    elina = callPackage ../development/ocaml-modules/elina { };
 
     eliom = callPackage ../development/ocaml-modules/eliom {
       js_of_ocaml-lwt = js_of_ocaml-lwt.override {
@@ -353,6 +366,8 @@ let
     jsonm = callPackage ../development/ocaml-modules/jsonm { };
 
     lablgl = callPackage ../development/ocaml-modules/lablgl { };
+
+    lablgtk3 = callPackage ../development/ocaml-modules/lablgtk3 { };
 
     lablgtk_2_14 = callPackage ../development/ocaml-modules/lablgtk/2.14.0.nix {
       inherit (pkgs.gnome2) libgnomecanvas libglade gtksourceview;
@@ -550,6 +565,10 @@ let
 
     opam-file-format = callPackage ../development/ocaml-modules/opam-file-format { };
 
+    opti = callPackage ../development/ocaml-modules/opti { };
+
+    optint = callPackage ../development/ocaml-modules/optint { };
+
     otfm = callPackage ../development/ocaml-modules/otfm { };
 
     otr = callPackage ../development/ocaml-modules/otr { };
@@ -560,6 +579,8 @@ let
 
     piqi = callPackage ../development/ocaml-modules/piqi { };
     piqi-ocaml = callPackage ../development/ocaml-modules/piqi-ocaml { };
+
+    ppxfind = callPackage ../development/ocaml-modules/ppxfind { };
 
     ppxlib = callPackage ../development/ocaml-modules/ppxlib { };
 
@@ -735,6 +756,8 @@ let
 
     vg = callPackage ../development/ocaml-modules/vg { };
 
+    visitors = callPackage ../development/ocaml-modules/visitors { };
+
     wasm = callPackage ../development/ocaml-modules/wasm { };
 
     wtf8 = callPackage ../development/ocaml-modules/wtf8 { };
@@ -752,6 +775,10 @@ let
     zarith = callPackage ../development/ocaml-modules/zarith { };
 
     zed = callPackage ../development/ocaml-modules/zed { };
+
+    zmq = callPackage ../development/ocaml-modules/zmq { };
+
+    zmq-lwt = callPackage ../development/ocaml-modules/zmq/lwt.nix { };
 
     ocsigen_deriving = callPackage ../development/ocaml-modules/ocsigen-deriving {
       oasis = ocaml_oasis;
@@ -1020,12 +1047,6 @@ let
 
     omake_rc1 = callPackage ../development/tools/ocaml/omake/0.9.8.6-rc1.nix { };
 
-    verasco = callPackage ../development/tools/analysis/verasco (
-      if system == "x86_64-linux"
-      then { tools = pkgs.pkgsi686Linux.stdenv.cc; }
-      else {}
-    );
-
     google-drive-ocamlfuse = callPackage ../applications/networking/google-drive-ocamlfuse { };
 
 
@@ -1037,7 +1058,9 @@ let
       enableX11 = config.unison.enableX11 or true;
     };
 
-    hol_light = callPackage ../applications/science/logic/hol_light { };
+    hol_light = callPackage ../applications/science/logic/hol_light {
+      camlp5 = callPackage ../development/tools/ocaml/camlp5 { legacy = true; };
+    };
 
   };
     in (ocamlPackages.janeStreet // ocamlPackages);

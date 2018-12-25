@@ -9,11 +9,11 @@ assert pariSupport -> pari != null;
 
 buildPythonPackage rec {
   pname = "cysignals";
-  version = "1.7.2";
+  version = "1.8.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0rzwd9bjw6bj01xcmimqfim1g0njjyyyal0f93frm1la4hcmq96v";
+    sha256 = "1yh4lyrinhxxra42p0k4hiyjdrqjmifg4gnmf4bky5wa0mqnyai6";
   };
 
   # explicit check:

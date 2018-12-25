@@ -9,7 +9,7 @@ addEnvHooks "$hostOffset" make_glib_find_gsettings_schemas
 
 # Install gschemas, if any, in a package-specific directory
 glibPreInstallPhase() {
-  installFlagsArray+=("gsettingsschemadir=${!outputLib}/share/gsettings-schemas/$name/glib-2.0/schemas/")
+  makeFlagsArray+=("gsettingsschemadir=${!outputLib}/share/gsettings-schemas/$name/glib-2.0/schemas/")
 }
 preInstallPhases+=" glibPreInstallPhase"
 

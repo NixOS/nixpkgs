@@ -1,6 +1,6 @@
 { stdenv, fetchgit, boost, ganv, glibmm, gtkmm2, libjack2, lilv
 , lv2Unstable, makeWrapper, pkgconfig, python, raul, rdflib, serd, sord, sratom
-
+, wafHook
 , suil
 }:
 
@@ -15,23 +15,19 @@ stdenv.mkDerivation  rec {
     deepClone = true;
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig wafHook ];
   buildInputs = [
     boost ganv glibmm gtkmm2 libjack2 lilv lv2Unstable makeWrapper
     python raul serd sord sratom suil
   ];
 
-  configurePhase = ''
+  preConfigure = ''
     sed -e "s@{PYTHONDIR}/'@out/'@" -i wscript
-    ${python.interpreter} waf configure --prefix=$out
   '';
 
   propagatedBuildInputs = [ rdflib ];
 
-  buildPhase = "${python.interpreter} waf";
-
-  installPhase = ''
-    ${python.interpreter} waf install
+  postInstall = ''
     for program in ingenams ingenish
     do
       wrapProgram $out/bin/$program \

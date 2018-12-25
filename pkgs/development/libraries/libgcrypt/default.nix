@@ -6,11 +6,11 @@ assert enableCapabilities -> stdenv.isLinux;
 
 stdenv.mkDerivation rec {
   name = "libgcrypt-${version}";
-  version = "1.8.3";
+  version = "1.8.4";
 
   src = fetchurl {
     url = "mirror://gnupg/libgcrypt/${name}.tar.bz2";
-    sha256 = "0z5gs1khzyknyfjr19k8gk4q148s6q987ya85cpn0iv70fz91v36";
+    sha256 = "09r27ywj9zplq6n9qw3mn7zmvf6y2jdmwx5d1kg8yqkj0qx18f7n";
   };
 
   outputs = [ "out" "dev" "info" ];
@@ -21,21 +21,13 @@ stdenv.mkDerivation rec {
   # The build enables -O2 by default for everything else.
   hardeningDisable = stdenv.lib.optional stdenv.cc.isClang "fortify";
 
-  # Accepted upstream, should be in next update: #42150, https://dev.gnupg.org/T4034
-  patches = [ ./fix-jent-locking.patch ];
-
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
   buildInputs = [ libgpgerror ]
     ++ stdenv.lib.optional stdenv.isDarwin gettext
     ++ stdenv.lib.optional enableCapabilities libcap;
 
-  preConfigure = stdenv.lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
-    # This is intentional: gpg-error-config is a shell script that will work during the build
-    mkdir -p "$NIX_BUILD_TOP"/bin
-    ln -s ${libgpgerror.dev}/bin/gpg-error-config "$NIX_BUILD_TOP/bin"
-    export PATH="$NIX_BUILD_TOP/bin:$PATH"
-  '';
+  configureFlags = [ "--with-libgpg-error-prefix=${libgpgerror.dev}" ];
 
   # Make sure libraries are correct for .pc and .la files
   # Also make sure includes are fixed for callers who don't use libgpgcrypt-config

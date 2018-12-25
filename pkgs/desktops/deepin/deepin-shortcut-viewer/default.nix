@@ -1,6 +1,5 @@
 { stdenv, fetchFromGitHub, pkgconfig, qmake, dtkcore, dtkwidget,
-  qt5integration
-}:
+  qt5integration, deepin }:
 
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
@@ -26,6 +25,8 @@ stdenv.mkDerivation rec {
   ];
 
   enableParallelBuilding = true;
+
+  passthru.updateScript = deepin.updateScript { inherit name; };
 
   meta = with stdenv.lib; {
     description = "Pop-up shortcut viewer for Deepin applications";

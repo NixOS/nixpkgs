@@ -35,11 +35,11 @@ import ./generic.nix { inherit lib stdenv emacs texinfo; } ({
     then pname
     else ename;
 
-  melpa = fetchFromGitHub {
+  packageBuild = fetchFromGitHub {
     owner = "melpa";
-    repo = "melpa";
-    rev = "7103313a7c31bb1ebb71419e365cd2e279ee4609";
-    sha256 = "0m10f83ix0mzjk0vjd4kkb1m1p4b8ha0ll2yjsgk9bqjd7fwapqb";
+    repo = "package-build";
+    rev = "0a22c3fbbf661822ec1791739953b937a12fa623";
+    sha256 = "0dpy5p34il600sc8ic5jdgb3glya9si3lrvhxab0swks8fdydjgs";
   };
 
   elpa2nix = ./elpa2nix.el;
@@ -51,7 +51,7 @@ import ./generic.nix { inherit lib stdenv emacs texinfo; } ({
       cp "$recipe" "$NIX_BUILD_TOP/recipes/$ename"
     fi
 
-    ln -s "$melpa/package-build" "$NIX_BUILD_TOP/package-build"
+    ln -s "$packageBuild" "$NIX_BUILD_TOP/package-build"
 
     mkdir -p "$NIX_BUILD_TOP/packages"
   '';
@@ -61,19 +61,18 @@ import ./generic.nix { inherit lib stdenv emacs texinfo; } ({
     ln -s "$NIX_BUILD_TOP/$sourceRoot" "$NIX_BUILD_TOP/working/$ename"
   '';
 
-  buildPhase =
-    ''
-      runHook preBuild
+  buildPhase = ''
+    runHook preBuild
 
-      cd "$NIX_BUILD_TOP"
+    cd "$NIX_BUILD_TOP"
 
-      emacs --batch -Q \
-          -L "$melpa/package-build" \
-          -l "$melpa2nix" \
-          -f melpa2nix-build-package \
-          $ename $version
+    emacs --batch -Q \
+        -L "$NIX_BUILD_TOP/package-build" \
+        -l "$melpa2nix" \
+        -f melpa2nix-build-package \
+        $ename $version
 
-      runHook postBuild
+    runHook postBuild
     '';
 
   installPhase = ''

@@ -64,6 +64,9 @@ stdenv.mkDerivation rec {
   '');
 
   preBuild = ''
+    for manpage in wpa_supplicant/doc/docbook/wpa_supplicant.conf* ; do
+      substituteInPlace "$manpage" --replace /usr/share/doc $out/share/doc
+    done
     cd wpa_supplicant
     cp -v defconfig .config
     echo "$extraConfig" >> .config
@@ -132,6 +135,7 @@ stdenv.mkDerivation rec {
     cp -v dbus/dbus-wpa_supplicant.conf $out/etc/dbus-1/system.d
     cp -v "systemd/"*.service $out/etc/systemd/system
     rm $out/share/man/man8/wpa_priv.8
+    install -Dm444 wpa_supplicant.conf $out/share/doc/wpa_supplicant/wpa_supplicant.conf.example
   '';
 
   meta = with stdenv.lib; {

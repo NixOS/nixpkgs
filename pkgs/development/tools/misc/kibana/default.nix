@@ -18,12 +18,12 @@ let
   shas =
     if enableUnfree
     then {
-      "x86_64-linux"  = "1kk97ggpzmblhqm6cfd2sv5940f58h323xcyg6rba1njj7lzanv0";
-      "x86_64-darwin" = "1xvwffk8d8br92h0laf4b1m76kvki6cj0pbgcvirfcj1r70vk6c3";
+      "x86_64-linux"  = "0lip4bj3jazv83gydw99dnp03cb0fd1p4z3lvpjbisgmqffbbg5v";
+      "x86_64-darwin" = "0hjdnqagcwbjhpcfyr6w0zmy4sjnx4fyp79czb0vp7dig5arnwm3";
     }
     else {
-      "x86_64-linux"  = "0m81ki1v61gpwb3s6zf84azqrirlm9pdfx65g3xmvdp3d3wii5ly";
-      "x86_64-darwin" = "0zh9p6vsq1d0gh6ks7z6bh8sbhn6rm4jshjcfp3c9k7n2qa8vv9b";
+      "x86_64-linux"  = "1jybn4q7pz61iijzl85d948szlacfcbldn2nhhsb6063xwvf30sa";
+      "x86_64-darwin" = "1bl1h6hgp9l5cjq6pzj2x855wjaka8hbs0fn2c03lbzsc991dppr";
     };
 
   # For the correct phantomjs version see:
@@ -46,6 +46,13 @@ in stdenv.mkDerivation rec {
     url = "https://artifacts.elastic.co/downloads/kibana/${name}-${plat}-${arch}.tar.gz";
     sha256 = shas."${stdenv.hostPlatform.system}" or (throw "Unknown architecture");
   };
+
+  patches = [
+    # Kibana specifies it specifically needs nodejs 8.11.4 but nodejs in nixpkgs is at 8.12.0.
+    # The <nixpkgs/nixos/tests/elk.nix> test succeeds with this newer version so lets just
+    # disable the version check.
+    ./disable-nodejs-version-check.patch
+  ];
 
   buildInputs = [ makeWrapper ];
 

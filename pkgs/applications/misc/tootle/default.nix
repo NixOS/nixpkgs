@@ -1,13 +1,13 @@
 { stdenv, fetchFromGitHub
 , meson, ninja, pkgconfig, python3
-, gnome3, vala, gobjectIntrospection, wrapGAppsHook
+, gnome3, vala_0_40, gobject-introspection, wrapGAppsHook
 , gtk3, granite
-, json-glib, glib, glib-networking
+, json-glib, glib, glib-networking, hicolor-icon-theme
 }:
 
 let
   pname = "tootle";
-  version = "0.1.5";
+  version = "0.2.0";
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
@@ -15,12 +15,20 @@ in stdenv.mkDerivation rec {
     owner = "bleakgrey";
     repo = pname;
     rev = version;
-    sha256 = "022h1rh1jk3m1f9al0s1rylmnqnkydyc81idfc8jf1g0frnvn5i6";
+    sha256 = "1z3wyx316nns6gi7vlvcfmalhvxncmvcmmlgclbv6b6hwl5x2ysi";
   };
 
-  nativeBuildInputs = [ meson ninja pkgconfig python3 vala gobjectIntrospection wrapGAppsHook ];
+  nativeBuildInputs = [
+    gobject-introspection
+    meson
+    ninja
+    pkgconfig
+    python3
+    vala_0_40 # should be `elementary.vala` when elementary attribute set is merged
+    wrapGAppsHook
+  ];
   buildInputs = [
-    gtk3 granite json-glib glib glib-networking
+    gtk3 granite json-glib glib glib-networking hicolor-icon-theme
     gnome3.libgee gnome3.libsoup gnome3.gsettings-desktop-schemas
   ];
 

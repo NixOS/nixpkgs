@@ -24,6 +24,6 @@ stdenv.mkDerivation rec {
     ];
     platforms = platforms.linux;
     license = licenses.lgpl21;
-    downloadPage = "http://sourceforge.net/projects/dssi/files/dssi/";
+    downloadPage = "https://sourceforge.net/projects/dssi/files/dssi/";
   };
 }

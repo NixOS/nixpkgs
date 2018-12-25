@@ -8,13 +8,13 @@
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "libopenshot-${version}";
-  version = "0.2.1";
+  version = "0.2.2";
 
   src = fetchFromGitHub {
     owner = "OpenShot";
     repo = "libopenshot";
     rev = "v${version}";
-    sha256 = "0n8ksnv6y2qh9iz352zqibfhnfvyjq7pkvy51prl47620ac40pc3";
+    sha256 = "1x4kv05pdq1pglb6y056aa7llc6iyibyhzg93k7zwj0q08cp5ixd";
   };
 
   patchPhase = ''

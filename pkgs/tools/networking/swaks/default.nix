@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "swaks-${version}";
-  version = "20170101.0";
+  version = "20181104.0";
 
   src = fetchurl {
     url = "https://www.jetmore.org/john/code/swaks/files/${name}.tar.gz";
-    sha256 = "0pli4mlhasnqqxmmxalwyg3x7n2vhcbgsnp2xgddamjavv82vrl4";
+    sha256 = "0n1yd27xcyb1ylp5gln3yv5gzi9r377hjy1j32367kgb3247ygq2";
   };
 
   buildInputs = [ perl makeWrapper ];

@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, nose, numpy }:
+{ lib, buildPythonPackage, fetchPypi, cython, nose, numpy }:
 
 buildPythonPackage rec {
   pname = "pyjet";
@@ -8,6 +8,15 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "1glcwv9ni8i40smfw6m456xjadlkackim5nk33xmas1fa96lpagg";
   };
+
+  # fix for python37
+  # https://github.com/scikit-hep/pyjet/issues/8
+  nativeBuildInputs = [ cython ];
+  preBuild = ''
+    for f in pyjet/src/*.{pyx,pxd}; do
+      cython --cplus "$f"
+    done
+  '';
 
   propagatedBuildInputs = [ numpy ];
   checkInputs = [ nose ];

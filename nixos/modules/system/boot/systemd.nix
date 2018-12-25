@@ -387,7 +387,7 @@ let
 
   logindHandlerType = types.enum [
     "ignore" "poweroff" "reboot" "halt" "kexec" "suspend"
-    "hibernate" "hybrid-sleep" "lock"
+    "hibernate" "hybrid-sleep" "suspend-then-hibernate" "lock"
   ];
 
 in
@@ -587,13 +587,41 @@ in
       '';
     };
 
+    services.journald.forwardToSyslog = mkOption {
+      default = config.services.rsyslogd.enable || config.services.syslog-ng.enable;
+      defaultText = "config.services.rsyslogd.enable || config.services.syslog-ng.enable";
+      type = types.bool;
+      description = ''
+        Whether to forward log messages to syslog.
+      '';
+    };
+
     services.logind.extraConfig = mkOption {
       default = "";
       type = types.lines;
       example = "IdleAction=lock";
       description = ''
-        Extra config options for systemd-logind. See man logind.conf for
-        available options.
+        Extra config options for systemd-logind. See
+        <link xlink:href="https://www.freedesktop.org/software/systemd/man/logind.conf.html">
+        logind.conf(5)</link> for available options.
+      '';
+    };
+
+    services.logind.killUserProcesses = mkOption {
+      default = false;
+      type = types.bool;
+      description = ''
+        Specifies whether the processes of a user should be killed
+        when the user logs out.  If true, the scope unit corresponding
+        to the session and all processes inside that scope will be
+        terminated.  If false, the scope is "abandoned" (see
+        <link xlink:href="https://www.freedesktop.org/software/systemd/man/systemd.scope.html#">
+        systemd.scope(5)</link>), and processes are not killed.
+        </para>
+
+        <para>
+        See <link xlink:href="https://www.freedesktop.org/software/systemd/man/logind.conf.html#KillUserProcesses=">logind.conf(5)</link>
+        for more details.
       '';
     };
 
@@ -754,12 +782,15 @@ in
           ForwardToConsole=yes
           TTYPath=${config.services.journald.console}
         ''}
+        ${optionalString (config.services.journald.forwardToSyslog) ''
+          ForwardToSyslog=yes
+        ''}
         ${config.services.journald.extraConfig}
       '';
 
       "systemd/logind.conf".text = ''
         [Login]
-        KillUserProcesses=no
+        KillUserProcesses=${if config.services.logind.killUserProcesses then "yes" else "no"}
         HandleLidSwitch=${config.services.logind.lidSwitch}
         HandleLidSwitchDocked=${config.services.logind.lidSwitchDocked}
         ${config.services.logind.extraConfig}

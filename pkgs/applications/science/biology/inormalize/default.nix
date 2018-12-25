@@ -21,8 +21,6 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [ "-DLIBMINC_DIR=${libminc}/lib/" "-DEBTKS_DIR=${EBTKS}/lib/" ];
 
-  checkPhase = "ctest --output-on-failure";  # but no tests
-
   postFixup = ''
     for p in $out/bin/*; do
       wrapProgram $p --prefix PERL5LIB : $PERL5LIB

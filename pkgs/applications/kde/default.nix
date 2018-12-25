@@ -129,6 +129,7 @@ let
       kontact = callPackage ./kontact.nix {};
       kontactinterface = callPackage ./kontactinterface.nix {};
       konquest = callPackage ./konquest.nix {};
+      konqueror = callPackage ./konqueror.nix {};
       korganizer = callPackage ./korganizer.nix {};
       kpimtextedit = callPackage ./kpimtextedit.nix {};
       ksmtp = callPackage ./ksmtp {};
@@ -164,7 +165,6 @@ let
       pim-sieve-editor = callPackage ./pim-sieve-editor.nix {};
       print-manager = callPackage ./print-manager.nix {};
       spectacle = callPackage ./spectacle.nix {};
-      syndication = callPackage ./syndication.nix {};
       # Okteta was removed from kde applications and will now be released independently
       # Lets keep an alias for compatibility reasons
       inherit okteta;

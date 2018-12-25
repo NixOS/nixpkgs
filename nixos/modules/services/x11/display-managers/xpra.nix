@@ -219,30 +219,26 @@ in
       VideoRam 192000
     '';
 
-    services.xserver.displayManager.job = {
-      logToFile = true;
-
-      execCmd = ''
-        ${optionalString (cfg.pulseaudio)
-          "export PULSE_COOKIE=/var/run/pulse/.config/pulse/cookie"}
-        exec ${pkgs.xpra}/bin/xpra start \
-          --daemon=off \
-          --log-dir=/var/log \
-          --log-file=xpra.log \
-          --opengl=on \
-          --clipboard=on \
-          --notifications=on \
-          --speaker=yes \
-          --mdns=no \
-          --pulseaudio=no \
-          ${optionalString (cfg.pulseaudio) "--sound-source=pulse"} \
-          --socket-dirs=/var/run/xpra \
-          --xvfb="xpra_Xdummy ${concatStringsSep " " dmcfg.xserverArgs}" \
-          ${optionalString (cfg.bindTcp != null) "--bind-tcp=${cfg.bindTcp}"} \
-          --auth=${cfg.auth} \
-          ${concatStringsSep " " cfg.extraOptions}
-      '';
-    };
+    services.xserver.displayManager.job.execCmd = ''
+      ${optionalString (cfg.pulseaudio)
+        "export PULSE_COOKIE=/var/run/pulse/.config/pulse/cookie"}
+      exec ${pkgs.xpra}/bin/xpra start \
+        --daemon=off \
+        --log-dir=/var/log \
+        --log-file=xpra.log \
+        --opengl=on \
+        --clipboard=on \
+        --notifications=on \
+        --speaker=yes \
+        --mdns=no \
+        --pulseaudio=no \
+        ${optionalString (cfg.pulseaudio) "--sound-source=pulse"} \
+        --socket-dirs=/var/run/xpra \
+        --xvfb="xpra_Xdummy ${concatStringsSep " " dmcfg.xserverArgs}" \
+        ${optionalString (cfg.bindTcp != null) "--bind-tcp=${cfg.bindTcp}"} \
+        --auth=${cfg.auth} \
+        ${concatStringsSep " " cfg.extraOptions}
+    '';
 
     services.xserver.terminateOnReset = false;
 
