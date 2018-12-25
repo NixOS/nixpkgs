@@ -1,8 +1,7 @@
-{ buildPythonPackage
-, fetchgit
+{ stdenv
+, buildPythonPackage
+, fetchFromGitHub
 , isPy27
-, testfixtures
-, unittest2
 , webtest
 , pyramid
 , sqlalchemy
@@ -13,29 +12,46 @@
 , pymysql
 , pymysqlsa
 , umemcache
-, WSGIProxy
 , requests
 , pybrowserid
 }:
 
 buildPythonPackage rec {
   pname = "serversyncstorage";
-  version = "1.6.11";
+  version = "1.6.14";
   disabled = !isPy27;
 
-  src = fetchgit {
-    url = https://github.com/mozilla-services/server-syncstorage.git;
-    rev = "refs/tags/${version}";
-    sha256 = "197gj2jfs2c6nzs20j37kqxwi91wabavxnfm4rqmrjwhgqjwhnm0";
+  src = fetchFromGitHub {
+    owner = "mozilla-services";
+    repo = "server-syncstorage";
+    rev = version;
+    sha256 = "08xclxj38rav8yay9cijiavv35jbyf6a9jzr24vgcna8pjjnbbmh";
   };
 
-  checkInputs = [ testfixtures unittest2 webtest ];
   propagatedBuildInputs = [
     pyramid sqlalchemy simplejson mozsvc cornice pyramid_hawkauth pymysql
-    pymysqlsa umemcache WSGIProxy requests pybrowserid
+    pymysqlsa umemcache requests pybrowserid
+    webtest
   ];
 
-  meta = {
-    broken = true; # 2018-11-04
+  postPatch = ''
+    # conflict between WSGIProxy & WSGIProxy2 required by webtest
+    # (which is required by pyramid_hawkauth)
+    sed -i "s/WSGIProxy.*//" requirements.txt
+    sed -i "s/'wsgiproxy',//" setup.py
+
+    # since we disabled tests (which would need WSGIProxy)
+    # lets get rid of the rest of the test dependencies as well:
+    sed -i "s/unittest2.*//; s/webtest.*//; s/testfixtures.*//" requirements.txt
+    sed -i "s/'unittest2',//; s/'webtest',//; s/, 'testfixtures'//" setup.py
+  '';
+
+  doCheck = false;
+
+  meta = with stdenv.lib; {
+    description = "The SyncServer server software, as used by Firefox Sync";
+    homepage = "https://github.com/mozilla-services/server-syncstorage";
+    platforms = platforms.unix;
+    license = licenses.mpl20;
   };
 }
