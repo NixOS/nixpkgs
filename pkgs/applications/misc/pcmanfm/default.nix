@@ -7,10 +7,10 @@ let
   inherit (stdenv.lib) optional;
 in
 stdenv.mkDerivation rec {
-  name = "pcmanfm-1.3.0";
+  name = "pcmanfm-1.3.1";
   src = fetchurl {
     url = "mirror://sourceforge/pcmanfm/${name}.tar.xz";
-    sha256 = "1ywgfyklms5hqkapsbjps4kyx20ac0d1qk16ww74yagkyfdkwsas";
+    sha256 = "0mb8hg76x1z0szdyl0w7jpz0bdblc6a29is1vvnh79z37qxh8138";
   };
 
   buildInputs = [ glib gtk libfm' libX11 pango gnome3.defaultIconTheme ];
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   configureFlags = optional withGtk3 "--with-gtk=3";
 
   meta = with stdenv.lib; {
-    homepage = http://blog.lxde.org/?cat=28/;
+    homepage = https://blog.lxde.org/category/pcmanfm/;
     license = licenses.gpl2Plus;
     description = "File manager with GTK+ interface";
     maintainers = [ maintainers.ttuegel ];
