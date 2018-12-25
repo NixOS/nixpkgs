@@ -9806,6 +9806,8 @@ in
 
   geoclue2 = callPackage ../development/libraries/geoclue {};
 
+  geocode-glib = callPackage ../development/libraries/geocode-glib {};
+
   geoipWithDatabase = makeOverridable (callPackage ../development/libraries/geoip) {
     drvName = "geoip-tools";
     geoipDatabase = geolite-legacy;

@@ -1,13 +1,13 @@
 { fetchurl, stdenv, meson, ninja, pkgconfig, gettext, gtk-doc, docbook_xsl, gobject-introspection, gnome3, libsoup, json-glib }:
 
 stdenv.mkDerivation rec {
-  name = "geocode-glib-${version}";
+  pname = "geocode-glib";
   version = "3.26.0";
 
-  outputs = [ "out" "dev" "installedTests" ];
+  outputs = [ "out" "dev" "devdoc" "installedTests" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/geocode-glib/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/geocode-glib/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "1vmydxs5xizcmaxpkfrq75xpj6pqrpdjizxyb30m00h54yqqch7a";
   };
 
@@ -24,8 +24,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome3.updateScript {
-      packageName = "geocode-glib";
-      attrPath = "gnome3.geocode-glib";
+      packageName = pname;
     };
   };
 
