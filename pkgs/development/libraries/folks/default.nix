@@ -1,20 +1,19 @@
 { fetchurl, stdenv, pkgconfig, glib, gnome3, nspr, intltool, gobject-introspection
-, vala, sqlite, libxml2, dbus-glib, libsoup, nss, dbus
+, vala, sqlite, libxml2, dbus-glib, libsoup, nss, dbus, libgee
 , telepathy-glib, evolution-data-server, libsecret, db }:
 
 # TODO: enable more folks backends
 
-let
+stdenv.mkDerivation rec {
+  pname = "folks";
   version = "0.11.4";
-in stdenv.mkDerivation rec {
-  name = "folks-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/folks/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "16hqh2gxlbx0b0hgq216hndr1m72vj54jvryzii9zqkk0g9kxc57";
   };
 
-  propagatedBuildInputs = [ glib gnome3.libgee sqlite ];
+  propagatedBuildInputs = [ glib libgee sqlite ];
   # dbus_daemon needed for tests
   buildInputs = [
     dbus-glib telepathy-glib evolution-data-server dbus
@@ -33,19 +32,15 @@ in stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome3.updateScript {
-      packageName = "folks";
-      attrPath = "gnome3.folks";
+      packageName = pname;
       versionPolicy = "none";
     };
   };
 
   meta = {
-    description = "Folks";
-
+    description = "A library that aggregates people from multiple sources to create metacontacts";
     homepage = https://wiki.gnome.org/Projects/Folks;
-
     license = stdenv.lib.licenses.lgpl2Plus;
-
     maintainers = gnome3.maintainers;
     platforms = stdenv.lib.platforms.gnu ++ stdenv.lib.platforms.linux;  # arbitrary choice
   };

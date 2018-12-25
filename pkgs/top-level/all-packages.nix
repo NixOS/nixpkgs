@@ -9752,6 +9752,8 @@ in
 
   folly = callPackage ../development/libraries/folly { };
 
+  folks = callPackage ../development/libraries/folks { };
+
   makeFontsConf = let fontconfig_ = fontconfig; in {fontconfig ? fontconfig_, fontDirectories}:
     callPackage ../development/libraries/fontconfig/make-fonts-conf.nix {
       inherit fontconfig fontDirectories;
