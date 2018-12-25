@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "granite";
-  version = "5.2.1";
+  version = "5.2.2";
 
   name = "${pname}-${version}";
 
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "18rw1lv6zk5w2cq8bv6b869z3cdikn9gzk30gw1s9f8n06bh737h";
+    sha256 = "1zp0pp5v3j8k6ail724p7h5jj2zmznj0a2ybwfw5sspfdw5bfydh";
   };
 
   cmakeFlags = [
