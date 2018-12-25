@@ -10785,6 +10785,8 @@ in
 
   libgrss = callPackage ../development/libraries/libgrss { };
 
+  libgweather = callPackage ../development/libraries/libgweather { };
+
   libgxps = callPackage ../development/libraries/libgxps { };
 
   libiio = callPackage ../development/libraries/libiio { };

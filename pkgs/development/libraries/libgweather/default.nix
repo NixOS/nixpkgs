@@ -1,21 +1,19 @@
-{ stdenv, fetchurl, meson, ninja, pkgconfig, libxml2, glib, gtk, gettext, libsoup
+{ stdenv, fetchurl, meson, ninja, pkgconfig, libxml2, glib, gtk3, gettext, libsoup
 , gtk-doc, docbook_xsl, docbook_xml_dtd_43, gobject-introspection, python3, tzdata, geocode-glib, vala, gnome3 }:
 
-let
+stdenv.mkDerivation rec {
   pname = "libgweather";
   version = "3.28.2";
-in stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "0xfy5ghwvnz2g9074dy6512m4z2pv66pmja14vhi9imgacbfh708";
   };
 
   nativeBuildInputs = [ meson ninja pkgconfig gettext vala gtk-doc docbook_xsl docbook_xml_dtd_43 gobject-introspection python3 ];
-  buildInputs = [ glib gtk libsoup libxml2 geocode-glib ];
+  buildInputs = [ glib gtk3 libsoup libxml2 geocode-glib ];
 
   postPatch = ''
     chmod +x meson/meson_post_install.py
@@ -31,7 +29,6 @@ in stdenv.mkDerivation rec {
   passthru = {
     updateScript = gnome3.updateScript {
       packageName = pname;
-      attrPath = "gnome3.${pname}";
     };
   };
 
