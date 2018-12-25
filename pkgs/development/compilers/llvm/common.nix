@@ -2,7 +2,9 @@
 
 rec {
   llvmBackend = platform:
-    if platform.parsed.cpu.family == "x86" then
+    if builtins.typeOf platform == "string" then
+      platform
+    else if platform.parsed.cpu.family == "x86" then
       "X86"
     else if platform.parsed.cpu.name == "aarch64" then
       "AArch64"

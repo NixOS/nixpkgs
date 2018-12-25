@@ -13,7 +13,8 @@
 , fetchpatch
 , debugVersion ? false
 , enableManpages ? false
-, enableTargets ? [ stdenv.hostPlatform stdenv.targetPlatform ]
+# Mesa requires AMDGPU target
+, enableTargets ? [ stdenv.hostPlatform stdenv.targetPlatform "AMDGPU" ]
 , enableSharedLibraries ? true
 }:
 
