@@ -10951,6 +10951,8 @@ in
 
   libmcrypt = callPackage ../development/libraries/libmcrypt {};
 
+  libmediaart = callPackage ../development/libraries/libmediaart { };
+
   libmediainfo = callPackage ../development/libraries/libmediainfo { };
 
   libmhash = callPackage ../development/libraries/libmhash {};
