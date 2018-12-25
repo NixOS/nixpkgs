@@ -1981,7 +1981,7 @@ in
   libpinyin = callPackage ../development/libraries/libpinyin { };
 
   libskk = callPackage ../development/libraries/libskk {
-    inherit (gnome3) gnome-common libgee;
+    inherit (gnome3) gnome-common;
   };
 
   m17n_db = callPackage ../tools/inputmethods/m17n-db { };
@@ -1999,9 +1999,7 @@ in
     inherit (pythonPackages) marisa;
   };
 
-  libkkc = callPackage ../tools/inputmethods/libkkc {
-    inherit (gnome3) libgee;
-  };
+  libkkc = callPackage ../tools/inputmethods/libkkc { };
 
   ibus = callPackage ../tools/inputmethods/ibus {
     gconf = gnome2.GConf;
@@ -6205,9 +6203,7 @@ in
 
   urlwatch = callPackage ../tools/networking/urlwatch { };
 
-  valum = callPackage ../development/web/valum {
-    inherit (gnome3) libgee;
-  };
+  valum = callPackage ../development/web/valum { };
 
   inherit (callPackages ../servers/varnish { })
     varnish4 varnish5 varnish6;
@@ -10767,6 +10763,8 @@ in
   libgdamm = callPackage ../development/libraries/libgdamm { };
 
   libgdata = callPackage ../development/libraries/libgdata { };
+
+  libgee = callPackage ../development/libraries/libgee { };
 
   libgepub = callPackage ../development/libraries/libgepub { };
 
@@ -18408,9 +18406,7 @@ in
     ruby = ruby_2_3.override { cursesSupport = true; };
   };
 
-  synapse = callPackage ../applications/misc/synapse {
-    inherit (gnome3) libgee;
-  };
+  synapse = callPackage ../applications/misc/synapse { };
 
   synapse-bt = callPackage ../applications/networking/p2p/synapse-bt {
     inherit (darwin.apple_sdk.frameworks) Security;
@@ -18657,7 +18653,6 @@ in
   pdfgrep  = callPackage ../tools/typesetting/pdfgrep { };
 
   pdfpc = callPackage ../applications/misc/pdfpc {
-    inherit (gnome3) libgee;
     inherit (gst_all_1) gstreamer gst-plugins-base;
   };
 
@@ -19243,7 +19238,6 @@ in
   lightdm_qt = lightdm.override { withQt5 = true; };
 
   lightdm-enso-os-greeter = callPackage ../applications/display-managers/lightdm-enso-os-greeter {
-    inherit (gnome3) libgee;
     inherit (xorg) libX11 libXdmcp libpthreadstubs;
   };
 
@@ -23085,7 +23079,7 @@ in
   iterm2 = callPackage ../applications/misc/iterm2 {};
 
   sequeler = callPackage ../applications/misc/sequeler {
-    inherit (gnome3) gtksourceview libgda libgee;
+    inherit (gnome3) gtksourceview libgda;
   };
 
   sequelpro = callPackage ../applications/misc/sequelpro {};

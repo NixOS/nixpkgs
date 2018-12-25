@@ -1,15 +1,13 @@
 { stdenv, fetchurl, autoconf, vala, pkgconfig, glib, gobject-introspection, gnome3 }:
-let
+
+stdenv.mkDerivation rec {
   pname = "libgee";
   version = "0.20.1";
-in
-stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "0c26x8gi3ivmhlbqcmiag4jwrkvcy28ld24j55nqr3jikb904a5v";
   };
 
@@ -24,7 +22,6 @@ stdenv.mkDerivation rec {
   passthru = {
     updateScript = gnome3.updateScript {
       packageName = pname;
-      attrPath = "gnome3.${pname}";
     };
   };
 
