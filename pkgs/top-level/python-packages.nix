@@ -1771,6 +1771,8 @@ in {
 
   faker = callPackage ../development/python-modules/faker { };
 
+  fakeredis = callPackage ../development/python-modules/fakeredis { };
+
   fake_factory = callPackage ../development/python-modules/fake_factory { };
 
   factory_boy = callPackage ../development/python-modules/factory_boy { };
