@@ -4010,6 +4010,8 @@ in {
 
   texttable = callPackage ../development/python-modules/texttable { };
 
+  tinyprog = callPackage ../development/python-modules/tinyprog {};
+
   tiros = callPackage ../development/python-modules/tiros { };
 
   tifffile = callPackage ../development/python-modules/tifffile { };
