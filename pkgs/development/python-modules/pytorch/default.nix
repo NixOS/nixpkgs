@@ -91,10 +91,10 @@ in buildPythonPackage rec {
   '';
 
   meta = {
-    description = "Tensors and Dynamic neural networks in Python with strong GPU acceleration.";
-    homepage = https://pytorch.org/;
-    license = lib.licenses.bsd3;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ teh ];
+    description = "Open source, prototype-to-production deep learning platform";
+    homepage    = https://pytorch.org/;
+    license     = lib.licenses.bsd3;
+    platforms   = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ teh thoughtpolice ];
   };
 }
