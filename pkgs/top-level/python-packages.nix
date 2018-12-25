@@ -4583,6 +4583,8 @@ in {
 
   webtest = callPackage ../development/python-modules/webtest { };
 
+  wsgiprox = callPackage ../development/python-modules/wsgiprox { };
+
   wsgiproxy2 = callPackage ../development/python-modules/wsgiproxy2 { };
 
   xcaplib = callPackage ../development/python-modules/xcaplib { };
