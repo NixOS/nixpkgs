@@ -10145,6 +10145,8 @@ in
 
   gnome-sharp = callPackage ../development/libraries/gnome-sharp { mono = mono4; };
 
+  gnome-menus = callPackage ../development/libraries/gnome-menus { };
+
   granite = callPackage ../development/libraries/granite { };
   elementary-cmake-modules = callPackage ../development/libraries/elementary-cmake-modules { };
 
