@@ -1999,6 +1999,8 @@ in {
 
   luftdaten = callPackage ../development/python-modules/luftdaten { };
 
+  lupa = callPackage ../development/python-modules/lupa { };
+
   m2r = callPackage ../development/python-modules/m2r { };
 
   mailchimp = callPackage ../development/python-modules/mailchimp { };
