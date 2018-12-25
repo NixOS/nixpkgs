@@ -10768,6 +10768,8 @@ in
 
   libgdata = callPackage ../development/libraries/libgdata { };
 
+  libgepub = callPackage ../development/libraries/libgepub { };
+
   libgig = callPackage ../development/libraries/libgig { };
 
   libgnome-keyring = callPackage ../development/libraries/libgnome-keyring { };
