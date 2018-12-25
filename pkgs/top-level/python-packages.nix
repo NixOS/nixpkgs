@@ -4049,6 +4049,8 @@ in {
 
   update_checker = callPackage ../development/python-modules/update_checker {};
 
+  update-copyright = callPackage ../development/python-modules/update-copyright {};
+
   uritemplate = callPackage ../development/python-modules/uritemplate { };
 
   uproot = callPackage ../development/python-modules/uproot {};
