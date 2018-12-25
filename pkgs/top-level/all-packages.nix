@@ -10766,7 +10766,7 @@ in
 
   libgdamm = callPackage ../development/libraries/libgdamm { };
 
-  libgdata = gnome3.libgdata;
+  libgdata = callPackage ../development/libraries/libgdata { };
 
   libgig = callPackage ../development/libraries/libgig { };
 
