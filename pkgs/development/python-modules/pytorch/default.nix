@@ -1,6 +1,6 @@
-{ fetchurl, buildPythonPackage, pythonOlder,
+{ stdenv, fetchurl, buildPythonPackage, pythonOlder,
   cudaSupport ? false, cudatoolkit ? null, cudnn ? null,
-  fetchFromGitHub, lib, numpy, pyyaml, cffi, typing, cmake, hypothesis,
+  fetchFromGitHub, lib, numpy, pyyaml, cffi, typing, cmake, hypothesis, numactl,
   linkFarm, symlinkJoin,
   utillinux, which }:
 
@@ -77,7 +77,8 @@ in buildPythonPackage rec {
      numpy.blas
      utillinux
      which
-  ] ++ lib.optionals cudaSupport [cudatoolkit_joined cudnn];
+  ] ++ lib.optionals cudaSupport [ cudatoolkit_joined cudnn ]
+    ++ lib.optionals stdenv.isLinux [ numactl ];
 
   propagatedBuildInputs = [
     cffi
