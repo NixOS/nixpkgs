@@ -2757,6 +2757,8 @@ in {
 
   jsondiff = callPackage ../development/python-modules/jsondiff { };
 
+  jsonmerge = callPackage ../development/python-modules/jsonmerge { };
+
   jsonnet = buildPythonPackage {
     inherit (pkgs.jsonnet) name src;
   };
