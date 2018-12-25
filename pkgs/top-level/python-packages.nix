@@ -4382,6 +4382,8 @@ in {
 
   unicodecsv = callPackage ../development/python-modules/unicodecsv { };
 
+  unidiff = callPackage ../development/python-modules/unidiff { };
+
   unittest2 = callPackage ../development/python-modules/unittest2 { };
 
   unittest-xml-reporting = callPackage ../development/python-modules/unittest-xml-reporting { };
