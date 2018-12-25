@@ -10786,6 +10786,8 @@ in
   libgnome-keyring = callPackage ../development/libraries/libgnome-keyring { };
   libgnome-keyring3 = gnome3.libgnome-keyring;
 
+  libgnomekbd = callPackage ../development/libraries/libgnomekbd { };
+
   libglvnd = callPackage ../development/libraries/libglvnd { };
 
   libgnurl = callPackage ../development/libraries/libgnurl { };

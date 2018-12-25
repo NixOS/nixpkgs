@@ -3,7 +3,7 @@
 , libstartup_notification, telepathy-glib, telepathy-logger, libXtst, unzip, glibcLocales, shared-mime-info
 , libgweather, libcanberra-gtk3, librsvg, geoclue2, perl, docbook_xml_dtd_42, desktop-file-utils
 , libpulseaudio, libical, gobject-introspection, gstreamer, wrapGAppsHook, libxslt, gcr
-, accountsservice, gdk_pixbuf, gdm, upower, ibus, networkmanagerapplet
+, accountsservice, gdk_pixbuf, gdm, upower, ibus, networkmanagerapplet, libgnomekbd
 , sassc, systemd, gst_all_1 }:
 
 # http://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/gnome-base/gnome-shell/gnome-shell-3.10.2.1.ebuild?revision=1.3&view=markup
@@ -56,8 +56,7 @@ in stdenv.mkDerivation rec {
     })
     (substituteAll {
       src = ./fix-paths.patch;
-      inherit (gnome3) libgnomekbd;
-      inherit unzip;
+      inherit libgnomekbd unzip;
     })
   ];
 
