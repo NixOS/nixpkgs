@@ -6,17 +6,17 @@
 
 buildPythonPackage rec {
   pname = "intelhex";
-  version = "2.1";
+  version = "2.2.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0k5l1mn3gv1vb0jd24ygxksx8xqr57y1ivgyj37jsrwpzrp167kw";
+    sha256 = "009d8511e0d50639230c39af9607deee771cf026f67ef7507a8c3fd4fa927832";
   };
 
   patches = [
     (fetchurl {
-      url = https://github.com/bialix/intelhex/commit/f251aef214daa2116e15ff7f7dcec1639eb12d5b.patch;
-      sha256 = "02i15qjmcz7mwbwvyj3agl5y7098rag2iwypdilkaadhbslsl9b9";
+      url = https://github.com/bialix/intelhex/commit/1597874d2bce3e5cefa1c0bf10cf2e98b6181337.patch;
+      sha256 = "19a5b535brgpsm1y9b37i4465k0z7skxijw44ykv7kpirh8mzxaq";
     })
   ];
 
