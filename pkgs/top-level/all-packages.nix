@@ -11500,6 +11500,8 @@ in
 
   libyubikey = callPackage ../development/libraries/libyubikey { };
 
+  libzapojit = callPackage ../development/libraries/libzapojit { };
+
   libzen = callPackage ../development/libraries/libzen { };
 
   libzip = callPackage ../development/libraries/libzip { };
