@@ -11217,6 +11217,8 @@ in
 
   libpcap = callPackage ../development/libraries/libpcap { };
 
+  libpeas = callPackage ../development/libraries/libpeas { };
+
   libpipeline = callPackage ../development/libraries/libpipeline { };
 
   libpgf = callPackage ../development/libraries/libpgf { };
@@ -17933,7 +17935,7 @@ in
   libvmi = callPackage ../development/libraries/libvmi { };
 
   liferea = callPackage ../applications/networking/newsreaders/liferea {
-    inherit (gnome3) libpeas gsettings-desktop-schemas dconf;
+    inherit (gnome3) gsettings-desktop-schemas dconf;
   };
 
   lightworks = callPackage ../applications/video/lightworks {
