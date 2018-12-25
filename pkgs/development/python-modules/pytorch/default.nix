@@ -72,6 +72,11 @@ in buildPythonPackage rec {
   PYTORCH_BUILD_VERSION = version;
   PYTORCH_BUILD_NUMBER = 0;
 
+  # Suppress a weird warning in mkl-dnn, part of ideep in pytorch
+  # (upstream seems to have fixed this in the wrong place?)
+  # https://github.com/intel/mkl-dnn/commit/8134d346cdb7fe1695a2aa55771071d455fae0bc
+  NIX_CFLAGS_COMPILE = lib.optionals (numpy.blasImplementation == "mkl") [ "-Wno-error=array-bounds" ];
+
   buildInputs = [
      cmake
      numpy.blas
