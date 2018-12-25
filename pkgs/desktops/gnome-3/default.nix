@@ -38,7 +38,7 @@ lib.makeScope pkgs.newScope (self: with self; {
   inherit (pkgs) atk glib gobject-introspection gspell webkitgtk gtk3 gtkmm3
     libgtop libgudev libhttpseverywhere librsvg libsecret gdk_pixbuf gtksourceview gtksourceviewmm gtksourceview4
     easytag meld orca rhythmbox shotwell gnome-usage
-    clutter clutter-gst clutter-gtk cogl gtk-vnc libdazzle libgda libgit2-glib;
+    clutter clutter-gst clutter-gtk cogl gtk-vnc libdazzle libgda libgit2-glib libgxps;
 
   libsoup = pkgs.libsoup.override { gnomeSupport = true; };
   libchamplain = pkgs.libchamplain.override { libsoup = libsoup; };
@@ -168,8 +168,6 @@ lib.makeScope pkgs.newScope (self: with self; {
   libgepub = callPackage ./core/libgepub { };
 
   libgdata = callPackage ./core/libgdata { };
-
-  libgxps = callPackage ./core/libgxps { };
 
   libpeas = callPackage ./core/libpeas {};
 

@@ -10783,6 +10783,8 @@ in
 
   libgrss = callPackage ../development/libraries/libgrss { };
 
+  libgxps = callPackage ../development/libraries/libgxps { };
+
   libiio = callPackage ../development/libraries/libiio { };
 
   libseccomp = callPackage ../development/libraries/libseccomp { };
