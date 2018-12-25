@@ -48,6 +48,17 @@ let
         sha256 = "1c4aq8lk8g3mlfq3mdjnxvmhss3qs7nni5rmw0k054dmj6q1xj5n";
       })
     ];
+
+    postPatch = ''
+      for i in texk/kpathsea/mktex*; do
+        sed -i '/^mydir=/d' "$i"
+      done
+      cp -pv texk/web2c/pdftexdir/pdftoepdf{-poppler0.70.0,}.cc
+      cp -pv texk/web2c/pdftexdir/pdftosrc{-newpoppler,}.cc
+      # fix build with poppler 0.71
+      find texk/web2c/{lua,pdf}texdir -type f | xargs sed -e 's|gTrue|true|g' -e 's|gFalse|false|g' -e 's|GBool|bool|g' -e 's|getCString|c_str|g' -i
+    '';
+
     # remove when removing synctex-missing-header.patch
     preAutoreconf = "pushd texk/web2c";
     postAutoreconf = "popd";
@@ -82,7 +93,7 @@ texliveYear = year;
 core = stdenv.mkDerivation rec {
   name = "texlive-bin-${version}";
 
-  inherit (common) src patches preAutoreconf postAutoreconf;
+  inherit (common) src patches postPatch preAutoreconf postAutoreconf;
 
   outputs = [ "out" "doc" ];
 
@@ -94,16 +105,6 @@ core = stdenv.mkDerivation rec {
   ];
 
   hardeningDisable = [ "format" ];
-
-  postPatch = ''
-    for i in texk/kpathsea/mktex*; do
-      sed -i '/^mydir=/d' "$i"
-    done
-    cp -pv texk/web2c/pdftexdir/pdftoepdf{-poppler0.70.0,}.cc
-    cp -pv texk/web2c/pdftexdir/pdftosrc{-newpoppler,}.cc
-    # fix build with poppler 0.71
-    find texk/web2c/{lua,pdf}texdir -type f | xargs sed -e 's|gTrue|true|g' -e 's|gFalse|false|g' -e 's|GBool|bool|g' -e 's|getCString|c_str|g' -i
-  '';
 
   preConfigure = ''
     rm -r libs/{cairo,freetype2,gd,gmp,graphite2,harfbuzz,icu,libpaper,libpng} \
@@ -184,7 +185,7 @@ inherit (core-big) metafont metapost luatex xetex;
 core-big = stdenv.mkDerivation { #TODO: upmendex
   name = "texlive-core-big.bin-${version}";
 
-  inherit (common) src patches preAutoreconf postAutoreconf;
+  inherit (common) src patches postPatch preAutoreconf postAutoreconf;
 
   hardeningDisable = [ "format" ];
 
