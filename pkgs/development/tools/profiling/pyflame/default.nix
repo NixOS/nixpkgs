@@ -94,7 +94,7 @@ stdenv.mkDerivation rec {
       PYMAJORVERSION=${lib.substring 0 1 python.version} \
         PATH=${lib.makeBinPath [ coreutils ]}\
         PYTHONPATH= \
-        ${python.pkgs.pytest}/bin/pytest tests/
+        ${python.pkgs.pytest}/bin/pytest -v tests/
       set +x
     '') (lib.filter (x: x != null) buildInputs);
 
