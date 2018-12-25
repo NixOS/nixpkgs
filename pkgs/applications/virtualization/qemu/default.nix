@@ -8,7 +8,7 @@
 , seccompSupport ? stdenv.isLinux, libseccomp
 , pulseSupport ? !stdenv.isDarwin, libpulseaudio
 , sdlSupport ? !stdenv.isDarwin, SDL2
-, gtkSupport ? !stdenv.isDarwin && !xenSupport, gtk3, gettext, gnome3
+, gtkSupport ? !stdenv.isDarwin && !xenSupport, gtk3, gettext, vte
 , vncSupport ? true, libjpeg, libpng
 , smartcardSupport ? true, libcacard
 , spiceSupport ? !stdenv.isDarwin, spice, spice-protocol
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     ++ optionals numaSupport [ numactl ]
     ++ optionals pulseSupport [ libpulseaudio ]
     ++ optionals sdlSupport [ SDL2 ]
-    ++ optionals gtkSupport [ gtk3 gettext gnome3.vte ]
+    ++ optionals gtkSupport [ gtk3 gettext vte ]
     ++ optionals vncSupport [ libjpeg libpng ]
     ++ optionals smartcardSupport [ libcacard ]
     ++ optionals spiceSupport [ spice-protocol spice ]

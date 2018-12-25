@@ -12886,6 +12886,12 @@ in
 
   vsqlite = callPackage ../development/libraries/vsqlite { };
 
+  vte = callPackage ../development/libraries/vte { };
+
+  vte_290 = callPackage ../development/libraries/vte/2.90.nix { };
+
+  vte-ng = callPackage ../development/libraries/vte/ng.nix { };
+
   vtk = callPackage ../development/libraries/vtk {
     inherit (darwin) cf-private libobjc;
     inherit (darwin.apple_sdk.libs) xpc;
@@ -17439,9 +17445,7 @@ in
     inherit (gnome2) gtk;
   };
 
-  guake = callPackage ../applications/misc/guake {
-    inherit (gnome3) vte;
-  };
+  guake = callPackage ../applications/misc/guake { };
 
   guitone = callPackage ../applications/version-management/guitone {
     graphviz = graphviz_2_32;
@@ -19114,9 +19118,7 @@ in
 
   udiskie = python3Packages.callPackage ../applications/misc/udiskie { };
 
-  sakura = callPackage ../applications/misc/sakura {
-    vte = gnome3.vte;
-  };
+  sakura = callPackage ../applications/misc/sakura { };
 
   sayonara = callPackage ../applications/audio/sayonara { };
 
@@ -19201,7 +19203,6 @@ in
   ssvnc = callPackage ../applications/networking/remote/ssvnc { };
 
   stupidterm = callPackage ../applications/misc/stupidterm {
-    vte = gnome3.vte;
     gtk = gtk3;
   };
 
@@ -19504,18 +19505,14 @@ in
 
   terminus = callPackage ../applications/misc/terminus { };
 
-  lxterminal = callPackage ../applications/misc/lxterminal {
-    vte = gnome3.vte;
-  };
+  lxterminal = callPackage ../applications/misc/lxterminal { };
 
   aminal = callPackage ../applications/misc/aminal {
     inherit (darwin.apple_sdk.frameworks) Carbon Cocoa Kernel;
     inherit (darwin) cf-private;
   };
 
-  termite-unwrapped = callPackage ../applications/misc/termite {
-    vte = gnome3.vte-ng;
-  };
+  termite-unwrapped = callPackage ../applications/misc/termite { };
 
   termite = callPackage ../applications/misc/termite/wrapper.nix { termite = termite-unwrapped; };
 
@@ -19551,7 +19548,6 @@ in
   tig = gitAndTools.tig;
 
   tilda = callPackage ../applications/misc/tilda {
-    vte = gnome3.vte;
     gtk = gtk3;
   };
 
@@ -19759,7 +19755,6 @@ in
   virt-what = callPackage ../applications/virtualization/virt-what { };
 
   virtmanager = callPackage ../applications/virtualization/virt-manager {
-    vte = gnome3.vte;
     dconf = gnome3.dconf;
     system-libvirt = libvirt;
   };
@@ -20261,13 +20256,12 @@ in
   xterm = callPackage ../applications/misc/xterm { };
 
   mlterm = callPackage ../applications/misc/mlterm {
-    vte = gnome3.vte;
     libssh2 = null;
     openssl = null;
   };
 
   roxterm = callPackage ../applications/misc/roxterm {
-    inherit (gnome3) gsettings-desktop-schemas vte;
+    inherit (gnome3) gsettings-desktop-schemas;
   };
 
   termonad-with-packages = callPackage ../applications/misc/termonad {

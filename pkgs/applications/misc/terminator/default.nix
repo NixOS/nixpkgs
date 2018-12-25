@@ -1,5 +1,5 @@
 { stdenv, fetchurl, python2, keybinder3, intltool, file, gtk3, gobject-introspection
-, libnotify, wrapGAppsHook, gnome3
+, libnotify, wrapGAppsHook, vte
 }:
 
 python2.pkgs.buildPythonApplication rec {
@@ -12,7 +12,7 @@ python2.pkgs.buildPythonApplication rec {
   };
 
   nativeBuildInputs = [ file intltool wrapGAppsHook gobject-introspection ];
-  buildInputs = [ gtk3 gnome3.vte libnotify keybinder3 ];
+  buildInputs = [ gtk3 vte libnotify keybinder3 ];
   propagatedBuildInputs = with python2.pkgs; [ pygobject3 psutil pycairo ];
 
   postPatch = ''
