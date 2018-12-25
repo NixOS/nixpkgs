@@ -2875,6 +2875,8 @@ in
 
   gftp = callPackage ../tools/networking/gftp { };
 
+  gfbgraph = callPackage ../development/libraries/gfbgraph { };
+
   ggobi = callPackage ../tools/graphics/ggobi { };
 
   gibo = callPackage ../tools/misc/gibo { };

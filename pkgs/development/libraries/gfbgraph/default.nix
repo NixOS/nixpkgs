@@ -1,22 +1,20 @@
-{ stdenv, fetchurl, pkgconfig, glib
+{ stdenv, fetchurl, pkgconfig, glib, librest
 , gnome3, libsoup, json-glib, gobject-introspection }:
 
-let
+stdenv.mkDerivation rec {
   pname = "gfbgraph";
   version = "0.2.3";
-in stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "1dp0v8ia35fxs9yhnqpxj3ir5lh018jlbiwifjfn8ayy7h47j4fs";
   };
 
   nativeBuildInputs = [ pkgconfig gobject-introspection ];
   buildInputs = [ glib gnome3.gnome-online-accounts ];
-  propagatedBuildInputs = [ libsoup json-glib gnome3.rest ];
+  propagatedBuildInputs = [ libsoup json-glib librest ];
 
   configureFlags = [ "--enable-introspection" ];
 
@@ -25,11 +23,11 @@ in stdenv.mkDerivation rec {
   passthru = {
     updateScript = gnome3.updateScript {
       packageName = pname;
-      attrPath = "gnome3.${pname}";
     };
   };
 
   meta = with stdenv.lib; {
+    homepage = https://wiki.gnome.org/Projects/GFBGraph;
     description = "GLib/GObject wrapper for the Facebook Graph API";
     maintainers = gnome3.maintainers;
     license = licenses.lgpl2;
