@@ -4481,6 +4481,8 @@ in {
 
   sure = callPackage ../development/python-modules/sure { };
 
+  surt = callPackage ../development/python-modules/surt { };
+
   svgwrite = callPackage ../development/python-modules/svgwrite { };
 
   freezegun = callPackage ../development/python-modules/freezegun { };
