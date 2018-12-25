@@ -5016,6 +5016,8 @@ in
 
   pywal = with python3Packages; toPythonApplication pywal;
 
+  pywb = callPackage ../tools/backup/pywb { };
+
   remarshal = callPackage ../development/tools/remarshal { };
 
   rig = callPackage ../tools/misc/rig { };
