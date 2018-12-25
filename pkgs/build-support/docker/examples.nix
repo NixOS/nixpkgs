@@ -155,6 +155,7 @@ rec {
   layered-image = pkgs.dockerTools.buildLayeredImage {
     name = "layered-image";
     tag = "latest";
+    extraCommands = ''echo "(extraCommand)" > extraCommands'';
     config.Cmd = [ "${pkgs.hello}/bin/hello" ];
     contents = [ pkgs.hello pkgs.bash pkgs.coreutils ];
   };
