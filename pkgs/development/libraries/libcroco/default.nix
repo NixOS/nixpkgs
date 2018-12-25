@@ -1,12 +1,11 @@
 { stdenv, fetchurl, pkgconfig, libxml2, glib, fetchpatch, gnome3 }:
-let
+
+stdenv.mkDerivation rec {
   pname = "libcroco";
   version = "0.6.12";
-in stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "0q7qhi7z64i26zabg9dbs5706fa8pmzp1qhpa052id4zdiabbi6x";
   };
 

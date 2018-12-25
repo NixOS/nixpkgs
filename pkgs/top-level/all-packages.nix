@@ -3709,6 +3709,8 @@ in
 
   libcloudproviders = callPackage ../development/libraries/libcloudproviders { };
 
+  libcroco = callPackage ../development/libraries/libcroco { };
+
   libsmi = callPackage ../development/libraries/libsmi { };
 
   lesspipe = callPackage ../tools/misc/lesspipe { };
@@ -10610,8 +10612,6 @@ in
   libclxclient = callPackage ../development/libraries/libclxclient  { };
 
   libconfuse = callPackage ../development/libraries/libconfuse { };
-
-  inherit (gnome3) libcroco;
 
   libcangjie = callPackage ../development/libraries/libcangjie { };
 
