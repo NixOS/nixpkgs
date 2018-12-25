@@ -10089,6 +10089,8 @@ in
 
   gsoap = callPackage ../development/libraries/gsoap { };
 
+  gsound = callPackages ../development/libraries/gsound { };
+
   gss = callPackage ../development/libraries/gss { };
 
   gtkimageview = callPackage ../development/libraries/gtkimageview { };
