@@ -2873,6 +2873,8 @@ in
 
   getopt = callPackage ../tools/misc/getopt { };
 
+  gexiv2 = callPackage ../development/libraries/gexiv2 { };
+
   gftp = callPackage ../tools/networking/gftp { };
 
   gfbgraph = callPackage ../development/libraries/gfbgraph { };
@@ -5966,7 +5968,6 @@ in
 
   viking = callPackage ../applications/misc/viking {
     inherit (gnome2) scrollkeeper;
-    inherit (gnome3) gexiv2;
   };
 
   vim-vint = callPackage ../development/tools/vim-vint { };
@@ -17221,7 +17222,6 @@ in
   gimp = callPackage ../applications/graphics/gimp {
     gegl = gegl_0_4;
     lcms = lcms2;
-    inherit (gnome3) gexiv2;
     inherit (darwin.apple_sdk.frameworks) AppKit Cocoa;
     inherit (darwin) cf-private;
   };
