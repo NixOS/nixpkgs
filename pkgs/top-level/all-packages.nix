@@ -4003,6 +4003,8 @@ in
 
   libreswan = callPackage ../tools/networking/libreswan { };
 
+  librest = callPackage ../development/libraries/librest { };
+
   libwebsockets = callPackage ../development/libraries/libwebsockets { };
 
   lidarr = callPackage ../servers/lidarr { };
