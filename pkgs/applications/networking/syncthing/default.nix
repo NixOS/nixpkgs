@@ -71,11 +71,11 @@ in {
 
       substitute etc/linux-systemd/system/syncthing@.service \
                  $out/lib/systemd/system/syncthing@.service \
-                 --replace /usr/bin/syncthing $out/bin/syncthing
+                 --replace /usr/bin/syncthing $bin/bin/syncthing
 
       substitute etc/linux-systemd/user/syncthing.service \
                  $out/lib/systemd/user/syncthing.service \
-                 --replace /usr/bin/syncthing $out/bin/syncthing
+                 --replace /usr/bin/syncthing $bin/bin/syncthing
     '';
   };
 
@@ -99,7 +99,7 @@ in {
 
       substitute cmd/strelaysrv/etc/linux-systemd/strelaysrv.service \
                  $out/lib/systemd/system/strelaysrv.service \
-                 --replace /usr/bin/strelaysrv $out/bin/strelaysrv
+                 --replace /usr/bin/strelaysrv $bin/bin/strelaysrv
     '';
   };
 }
