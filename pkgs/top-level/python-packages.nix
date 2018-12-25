@@ -648,6 +648,7 @@ in {
   python-hosts = callPackage ../development/python-modules/python-hosts { };
 
   python-lz4 = callPackage ../development/python-modules/python-lz4 { };
+  lz4 = self.python-lz4; # alias 2018-12-05
 
   python-ldap-test = callPackage ../development/python-modules/python-ldap-test { };
 
@@ -3267,8 +3268,6 @@ in {
   logutils = callPackage ../development/python-modules/logutils { };
 
   ldappool = callPackage ../development/python-modules/ldappool { };
-
-  lz4 = callPackage ../development/python-modules/lz4 { };
 
   retrying = callPackage ../development/python-modules/retrying { };
 

@@ -1693,9 +1693,7 @@ in
 
   mongodb-tools = callPackage ../tools/misc/mongodb-tools { };
 
-  mozlz4a = callPackage ../tools/compression/mozlz4a {
-    pylz4 = python3Packages.lz4;
-  };
+  mozlz4a = callPackage ../tools/compression/mozlz4a { };
 
   msr-tools = callPackage ../os-specific/linux/msr-tools { };
 

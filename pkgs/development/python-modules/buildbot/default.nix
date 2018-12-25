@@ -1,7 +1,7 @@
 { stdenv, lib, buildPythonPackage, fetchPypi, makeWrapper, isPy3k,
   python, twisted, jinja2, zope_interface, future, sqlalchemy,
   sqlalchemy_migrate, dateutil, txaio, autobahn, pyjwt, treq, txrequests,
-  txgithub, pyjade, boto3, moto, mock, lz4, setuptoolsTrial, isort, pylint,
+  txgithub, pyjade, boto3, moto, mock, python-lz4, setuptoolsTrial, isort, pylint,
   flake8, buildbot-worker, buildbot-pkg, glibcLocales }:
 
 let
@@ -55,7 +55,7 @@ let
       boto3
       moto
       mock
-      lz4
+      python-lz4
       setuptoolsTrial
       isort
       pylint
