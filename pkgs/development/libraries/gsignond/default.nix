@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitLab, pkgconfig, meson, ninja, glib, glib-networking
-, sqlite, gobjectIntrospection, vala, gtk-doc, libsecret, docbook_xsl
+, sqlite, gobject-introspection, vala, gtk-doc, libsecret, docbook_xsl
 , docbook_xml_dtd_43, docbook_xml_dtd_45, glibcLocales, makeWrapper
 , symlinkJoin, gsignondPlugins, plugins }:
 
@@ -22,7 +22,7 @@ unwrapped = stdenv.mkDerivation rec {
     docbook_xml_dtd_45
     docbook_xsl
     glibcLocales
-    gobjectIntrospection
+    gobject-introspection
     gtk-doc
     meson
     ninja

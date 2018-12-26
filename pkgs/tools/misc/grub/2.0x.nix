@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, flex, bison, python
+{ stdenv, fetchurl, fetchpatch, flex, bison, python
 , gettext, ncurses, libusb, freetype, qemu, lvm2, unifont, pkgconfig
 , fuse # only needed for grub-mount
 , zfs ? null
@@ -82,7 +82,16 @@ stdenv.mkDerivation rec {
       unset CPP # setting CPP intereferes with dependency calculation
     '';
 
-  patches = [ ./fix-bash-completion.patch ];
+  patches = [
+    ./fix-bash-completion.patch
+    # This patch makes grub compatible with the XFS sparse inode
+    # feature introduced by xfsprogs-4.16.
+    # to be removed in grub-2.03
+    (fetchpatch {
+      url = https://git.savannah.gnu.org/cgit/grub.git/patch/?id=cda0a857dd7a27cd5d621747464bfe71e8727fff;
+      sha256 = "0k9qrkdxwdqk6sz05q9smqwjr6pvgc9adx1mlf0807g4im91xnm0";
+    })
+  ];
 
   configureFlags = [ "--enable-grub-mount" ] # dep of os-prober
     ++ optional zfsSupport "--enable-libzfs"

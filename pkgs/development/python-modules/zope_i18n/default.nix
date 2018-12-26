@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "zope.i18n";
-  version = "3.8.0";
+  version = "4.6.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "045nnimmshibcq71yym2d8yrs6wzzhxq5gl7wxjnkpyjm5y0hfkm";
+    sha256 = "14f7339f6d4fed5e94882a7f1b2e40fd90ad00b3c28a7f4353762101395e3304";
   };
 
   propagatedBuildInputs = [ pytz zope_component ];

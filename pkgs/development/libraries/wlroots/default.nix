@@ -2,28 +2,11 @@
 , wayland, libGL, wayland-protocols, libinput, libxkbcommon, pixman
 , xcbutilwm, libX11, libcap, xcbutilimage, xcbutilerrors, mesa_noglu
 , libpng, ffmpeg_4
-, python3Packages # TODO: Temporary
 }:
 
 let
   pname = "wlroots";
   version = "0.2";
-  meson480 = meson.overrideAttrs (oldAttrs: rec {
-    name = pname + "-" + version;
-    pname = "meson";
-    version = "0.48.0";
-
-    src = python3Packages.fetchPypi {
-      inherit pname version;
-      sha256 = "0qawsm6px1vca3babnqwn0hmkzsxy4w0gi345apd2qk3v0cv7ipc";
-    };
-    # Remove gir-fallback-path.patch and
-    # a87496addd9160300837aa50193f4798c6f1d251.patch (already in 0.48.0):
-    patches = builtins.filter
-      (str: !(stdenv.lib.hasSuffix "gir-fallback-path.patch" str
-              || stdenv.lib.hasSuffix "a87496addd9160300837aa50193f4798c6f1d251.patch" str))
-      oldAttrs.patches;
-  });
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
@@ -43,7 +26,7 @@ in stdenv.mkDerivation rec {
   # programs (in examples) AND rootston
   outputs = [ "out" "bin" "examples" ];
 
-  nativeBuildInputs = [ meson480 ninja pkgconfig ];
+  nativeBuildInputs = [ meson ninja pkgconfig ];
 
   buildInputs = [
     wayland libGL wayland-protocols libinput libxkbcommon pixman

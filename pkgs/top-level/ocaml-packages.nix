@@ -54,6 +54,8 @@ let
 
     atd = callPackage ../development/ocaml-modules/atd { };
 
+    atdgen = callPackage ../development/ocaml-modules/atdgen { };
+
     base64 = callPackage ../development/ocaml-modules/base64 { };
 
     bap = callPackage ../development/ocaml-modules/bap {
@@ -138,6 +140,8 @@ let
 
     cairo2 = callPackage ../development/ocaml-modules/cairo2 { };
 
+    checkseum = callPackage ../development/ocaml-modules/checkseum { };
+
     cil = callPackage ../development/ocaml-modules/cil { };
 
     cmdliner = callPackage ../development/ocaml-modules/cmdliner { };
@@ -198,6 +202,8 @@ let
       then callPackage ../development/ocaml-modules/csv { }
       else callPackage ../development/ocaml-modules/csv/1.5.nix { };
 
+    csv-lwt = callPackage ../development/ocaml-modules/csv/lwt.nix { };
+
     curses = callPackage ../development/ocaml-modules/curses { };
 
     custom_printf = callPackage ../development/ocaml-modules/custom_printf { };
@@ -225,6 +231,8 @@ let
     earley_ocaml = callPackage ../development/ocaml-modules/earley_ocaml { };
 
     easy-format = callPackage ../development/ocaml-modules/easy-format { };
+
+    elina = callPackage ../development/ocaml-modules/elina { };
 
     eliom = callPackage ../development/ocaml-modules/eliom {
       js_of_ocaml-lwt = js_of_ocaml-lwt.override {
@@ -358,6 +366,8 @@ let
     jsonm = callPackage ../development/ocaml-modules/jsonm { };
 
     lablgl = callPackage ../development/ocaml-modules/lablgl { };
+
+    lablgtk3 = callPackage ../development/ocaml-modules/lablgtk3 { };
 
     lablgtk_2_14 = callPackage ../development/ocaml-modules/lablgtk/2.14.0.nix {
       inherit (pkgs.gnome2) libgnomecanvas libglade gtksourceview;
@@ -557,6 +567,8 @@ let
 
     opti = callPackage ../development/ocaml-modules/opti { };
 
+    optint = callPackage ../development/ocaml-modules/optint { };
+
     otfm = callPackage ../development/ocaml-modules/otfm { };
 
     otr = callPackage ../development/ocaml-modules/otr { };
@@ -567,6 +579,8 @@ let
 
     piqi = callPackage ../development/ocaml-modules/piqi { };
     piqi-ocaml = callPackage ../development/ocaml-modules/piqi-ocaml { };
+
+    ppxfind = callPackage ../development/ocaml-modules/ppxfind { };
 
     ppxlib = callPackage ../development/ocaml-modules/ppxlib { };
 

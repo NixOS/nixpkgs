@@ -3,7 +3,7 @@
 , cups
 , fetchurl
 , gmp, gnutls
-, libffi
+, libffi, libbfd
 , libjpeg, libtiff, libpng, giflib, libungif
 , libxml2, libxslt, libiconv
 , libobjc, libgcrypt
@@ -24,7 +24,7 @@ gsmakeDerivation {
     aspell audiofile
     cups
     gmp gnutls
-    libffi
+    libffi libbfd
     libjpeg libtiff libpng giflib libungif
     libxml2 libxslt libiconv
     libobjc libgcrypt

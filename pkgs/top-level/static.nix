@@ -139,6 +139,10 @@ in {
     # it doesn’t like the --disable-shared flag
     stdenv = super.stdenv;
   };
+  lz4 = super.lz4.override {
+    enableShared = false;
+    enableStatic = true;
+  };
 
   darwin = super.darwin // {
     libiconv = super.darwin.libiconv.override {

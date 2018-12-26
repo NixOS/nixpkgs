@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub
 , vala, cmake, ninja, wrapGAppsHook, pkgconfig, gettext
-, gobjectIntrospection, gnome3, glib, gdk_pixbuf, gtk3, glib-networking
+, gobject-introspection, gnome3, glib, gdk_pixbuf, gtk3, glib-networking
 , xorg, libXdmcp, libxkbcommon
 , libnotify, libsoup
 , libgcrypt
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     qrencode
-    gobjectIntrospection
+    gobject-introspection
     glib-networking
     glib
     gnome3.libgee

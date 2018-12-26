@@ -101,8 +101,8 @@ in
   config = mkIf enabled {
     assertions = [
       {
-        assertion = config.services.xserver.displayManager.gdm.wayland;
-        message = "NVIDIA drivers don't support wayland";
+        assertion = with config.services.xserver.displayManager; gdm.enable -> !gdm.wayland;
+        message = "NVIDIA drivers don't support wayland, set services.xserver.displayManager.gdm.wayland=false";
       }
       {
         assertion = !optimusCfg.enable ||

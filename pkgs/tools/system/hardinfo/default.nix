@@ -19,6 +19,9 @@ stdenv.mkDerivation rec {
   # Fixes '#error You must compile this program without "-O"'
   hardeningDisable = [ "all" ];
 
+  # Ignore undefined references to a bunch of libsoup symbols
+  NIX_LDFLAGS = "--unresolved-symbol=ignore-all";
+
   preConfigure = ''
     patchShebangs configure
 

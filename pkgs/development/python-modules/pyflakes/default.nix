@@ -11,7 +11,8 @@ buildPythonPackage rec {
 
   buildInputs = [ unittest2 ];
 
-  doCheck = !isPyPy;
+  # https://github.com/PyCQA/pyflakes/issues/386
+  doCheck = false;
 
   meta = with stdenv.lib; {
     homepage = https://launchpad.net/pyflakes;

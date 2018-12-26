@@ -60,7 +60,9 @@ stdenv.mkDerivation rec {
     ++ optional (libpaper != null) "--enable-libpaper"
     ++ optional stdenv.isDarwin "--disable-launchd";
 
+  # AR has to be an absolute path
   preConfigure = ''
+    export AR="${getBin stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}ar"
     configureFlagsArray+=(
       # Put just lib/* and locale into $lib; this didn't work directly.
       # lib/cups is moved back to $out in postInstall.

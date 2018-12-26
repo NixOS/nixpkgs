@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, substituteAll, libtool, pkgconfig, intltool, gnused
 , gnome3, gtk-doc, acl, systemd, glib, libatasmart, polkit, coreutils, bash
 , expat, libxslt, docbook_xsl, utillinux, mdadm, libgudev, libblockdev, parted
-, gobjectIntrospection, docbook_xml_dtd_412, docbook_xml_dtd_43
+, gobject-introspection, docbook_xml_dtd_412, docbook_xml_dtd_43
 , xfsprogs, f2fs-tools, dosfstools, e2fsprogs, btrfs-progs, exfat, nilfs-utils, ntfs3g
 }:
 
@@ -38,7 +38,7 @@ in stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    pkgconfig gnome3.gnome-common libtool intltool gobjectIntrospection
+    pkgconfig gnome3.gnome-common libtool intltool gobject-introspection
     gtk-doc libxslt docbook_xml_dtd_412 docbook_xml_dtd_43 docbook_xsl
   ];
 

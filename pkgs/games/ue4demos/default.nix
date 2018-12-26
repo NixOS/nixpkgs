@@ -1,6 +1,13 @@
 { stdenv, fetchurl, unzip, patchelf, xorg, openal }:
 
 let
+  urls = file:
+    [
+      # Untrusted mirrors - do not update hashes
+      "https://ludios.org/mirror/ue4demos/${file}"
+      "http://web.archive.org/web/20140824192039/http://ue4linux.raxxy.com/${file}"
+    ];
+
   buildDemo = { name, src }:
     stdenv.mkDerivation rec {
       inherit name src;
@@ -53,7 +60,7 @@ in {
   tappy_chicken = buildDemo rec {
     name = "ue4demos-tappy_chicken";
     src = fetchurl {
-      url = "http://ue4linux.raxxy.com/tappy_chicken.zip";
+      urls = urls "tappy_chicken.zip";
       sha256 = "0lwhvk3lpb2r5ng2cnzk7fpjj5lwhy2sch1a8v154x1xfhfb3h4v";
     };
   };
@@ -61,7 +68,7 @@ in {
   swing_ninja = buildDemo rec {
     name = "ue4demos-swing_ninja";
     src = fetchurl {
-      url = "http://ue4linux.raxxy.com/swing_ninja.zip";
+      urls = urls "swing_ninja.zip";
       sha256 = "1bmgqqk3lda5h7nnqi59jgyrsn0clr3xs0k1jclnqf9fk0m8hjcv";
     };
   };
@@ -69,7 +76,7 @@ in {
   card_game = buildDemo rec {
     name = "ue4demos-card_game";
     src = fetchurl {
-      url = "http://ue4linux.raxxy.com/card_game.zip";
+      urls = urls "card_game.zip";
       sha256 = "154baqias5q7kad0c89k35jbmnmlm865sll02mi7bk1yllcckz5z";
     };
   };
@@ -77,7 +84,7 @@ in {
   vehicle_game = buildDemo rec {
     name = "ue4demos-vehicle_game";
     src = fetchurl {
-      url = "http://ue4linux.raxxy.com/vehicle_game.zip";
+      urls = urls "vehicle_game.zip";
       sha256 = "03dlacf1iv7sgn7pl3sx9r6243wy8fsi2kd858syfm9slg0190bs";
     };
   };
@@ -85,7 +92,7 @@ in {
   shooter_game = buildDemo rec {
     name = "ue4demos-shooter_game";
     src = fetchurl {
-      url = "http://ue4linux.raxxy.com/shooter_game.zip";
+      urls = urls "shooter_game.zip";
       sha256 = "1bk32k349iqbqk8x8jffnqq0pjiqmvrvv675xxmlvkkr8qrlhz98";
     };
   };
@@ -93,7 +100,7 @@ in {
   strategy_game = buildDemo rec {
     name = "ue4demos-strategy_game";
     src = fetchurl {
-      url = "http://ue4linux.raxxy.com/strategy_game.zip";
+      urls = urls "strategy_game.zip";
       sha256 = "1p7i966v1ssm20y12g4wsccpgnky3szy19qyjlacynk7bgbk6lg7";
     };
   };
@@ -101,7 +108,7 @@ in {
   black_jack = buildDemo rec {
     name = "ue4demos-black_jack";
     src = fetchurl {
-      url = "http://ue4linux.raxxy.com/black_jack.zip";
+      urls = urls "black_jack.zip";
       sha256 = "0g52wkzn5isa3az32y25yx5b56wxks97pajqwkmm6gf4qpkfksxv";
     };
   };
@@ -109,7 +116,7 @@ in {
   landscape_mountains = buildDemo rec {
     name = "ue4demos-landscape_mountains";
     src = fetchurl {
-      url = "http://ue4linux.raxxy.com/landscape_mountains.zip";
+      urls = urls "landscape_mountains.zip";
       sha256 = "14jzajhs3cpydvf3ag7lpj4hkpbjpwnn3xkdvdx92fi0pcl8cwym";
     };
   };
@@ -117,7 +124,7 @@ in {
   matinee_demo = buildDemo rec {
     name = "ue4demos-matinee_demo";
     src = fetchurl {
-      url = "http://ue4linux.raxxy.com/matinee_demo.zip";
+      urls = urls "matinee_demo.zip";
       sha256 = "0ib8k6fl15cxzdarar2sqq5v3g3c7p2jidkdjd00nym6cvkibb4d";
     };
   };
@@ -125,7 +132,7 @@ in {
   elemental_demo = buildDemo rec {
     name = "ue4demos-elemental_demo";
     src = fetchurl {
-      url = "http://ue4linux.raxxy.com/elemental_demo.zip";
+      urls = urls "elemental_demo.zip";
       sha256 = "1v4jdsy8jvv8wgc8dx17q17xigfrya5q0nfdzw4md7fzm3bg9z0v";
     };
   };
@@ -133,7 +140,7 @@ in {
   effects_cave_demo = buildDemo rec {
     name = "ue4demos-effects_cave_demo";
     src = fetchurl {
-      url = "http://ue4linux.raxxy.com/effects_cave_demo.zip";
+      urls = urls "effects_cave_demo.zip";
       sha256 = "0lvd3aaha2x9pnpkdmrzi6nf7hymr95834z3l8shygjf9kbbzsz4";
     };
   };
@@ -141,7 +148,7 @@ in {
   realistic_rendering = buildDemo rec {
     name = "ue4demos-realistic_rendering";
     src = fetchurl {
-      url = "http://ue4linux.raxxy.com/realistic_rendering_demo.zip";
+      urls = urls "realistic_rendering_demo.zip";
       sha256 = "0r16nznkv475hkw5rnngqsc69ch8vh86dppyyyr9nn43dkr2110a";
     };
   };
@@ -149,7 +156,7 @@ in {
   reflections_subway = buildDemo rec {
     name = "ue4demos-reflections_subway";
     src = fetchurl {
-      url = "http://ue4linux.raxxy.com/reflections_subway_demo.zip";
+      urls = urls "reflections_subway_demo.zip";
       sha256 = "0dw5sm7405gxw9iqz0vpnhdprrb4wl5i14pvzl1381k973m8bd00";
     };
   };
@@ -157,7 +164,7 @@ in {
   scifi_hallway_demo = buildDemo rec {
     name = "ue4demos-scifi_hallway_demo";
     src = fetchurl {
-      url = "http://ue4linux.raxxy.com/sci-fi_hallway_demo.zip";
+      urls = urls "sci-fi_hallway_demo.zip";
       sha256 = "14qp9iwm47awn8d9j6ijh6cnds308x60xs4vi2fvz2666jlz1pq2";
     };
   };
@@ -165,7 +172,7 @@ in {
   mobile_temple_demo = buildDemo rec {
     name = "ue4demos-mobile_temple_demo";
     src = fetchurl {
-      url = "http://ue4linux.raxxy.com/mobile_temple_demo.zip";
+      urls = urls "mobile_temple_demo.zip";
       sha256 = "12bz4h1b9lhmqglwsa6r8q48ijqbjdha9fql31540d01kigaka75";
     };
   };
@@ -173,7 +180,7 @@ in {
   stylized_demo = buildDemo rec {
     name = "ue4demos-stylized_demo";
     src = fetchurl {
-      url = "http://ue4linux.raxxy.com/stylized_demo.zip";
+      urls = urls "stylized_demo.zip";
       sha256 = "1676ridmj8rk4y4hbdscfnnka5l636av1xxl0qwvk236kq9j7v0l";
     };
   };
@@ -181,7 +188,7 @@ in {
   blueprint_examples_demo = buildDemo rec {
     name = "ue4demos-blueprint_examples_demo";
     src = fetchurl {
-      url = "http://ue4linux.raxxy.com/blueprint_examples_demo.zip";
+      urls = urls "blueprint_examples_demo.zip";
       sha256 = "076q33h2hy965fvr805hsprkpcmizf638lj2ik8k923v86b15nbv";
     };
   };

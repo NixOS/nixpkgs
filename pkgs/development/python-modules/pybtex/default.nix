@@ -1,7 +1,7 @@
 { stdenv, buildPythonPackage, fetchPypi, latexcodec, pyyaml }:
 
 buildPythonPackage rec {
-  version = "0.21";
+  version = "0.22.0";
   pname = "pybtex";
 
   doCheck = false;
@@ -9,7 +9,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit version pname;
-    sha256 = "00300j8dn5pxq4ndxmfmbmycg2znawkqs49val2x6jlmfiy6r2mg";
+    sha256 = "0rprg7h12pv9rb6bi950mz1disc265sg5qcg34637ns1z74hxdr6";
   };
 
   meta = {

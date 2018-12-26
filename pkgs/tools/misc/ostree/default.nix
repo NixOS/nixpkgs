@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch, pkgconfig, gtk-doc, gobjectIntrospection, gnome3
+{ stdenv, fetchFromGitHub, fetchpatch, pkgconfig, gtk-doc, gobject-introspection, gnome3
 , glib, systemd, xz, e2fsprogs, libsoup, gpgme, which, autoconf, automake, libtool, fuse, utillinuxMinimal, libselinux
 , libarchive, libcap, bzip2, yacc, libxslt, docbook_xsl, docbook_xml_dtd_42, python3
 }:
@@ -46,7 +46,7 @@ in stdenv.mkDerivation {
   ];
 
   nativeBuildInputs = [
-    autoconf automake libtool pkgconfig gtk-doc gobjectIntrospection which yacc
+    autoconf automake libtool pkgconfig gtk-doc gobject-introspection which yacc
     libxslt docbook_xsl docbook_xml_dtd_42
   ];
 

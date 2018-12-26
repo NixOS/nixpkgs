@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "parsedatetime";
-  version = "2.3";
+  version = "2.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1vkrmd398s11h1zn3zaqqsiqhj9lwy1ikcg6irx2lrgjzjg3rjll";
+    sha256 = "3d817c58fb9570d1eec1dd46fa9448cd644eeed4fb612684b02dfda3a79cb84b";
   };
 
   buildInputs = [ pytest pytestrunner ];

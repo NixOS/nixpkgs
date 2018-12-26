@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, gnome3, gmime3, webkitgtk222x
+{ stdenv, fetchFromGitHub, cmake, pkgconfig, gnome3, gmime3, webkitgtk
 , libsass, notmuch, boost, wrapGAppsHook, glib-networking, protobuf, vim_configurable
 , makeWrapper, python3, python3Packages
 , vim ? vim_configurable.override {
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ronn pkgconfig wrapGAppsHook ];
 
-  buildInputs = [ gnome3.gtkmm gmime3 webkitgtk222x libsass gnome3.libpeas
+  buildInputs = [ gnome3.gtkmm gmime3 webkitgtk libsass gnome3.libpeas
                   python3 python3Packages.pygobject3
                   notmuch boost gnome3.gsettings-desktop-schemas gnome3.defaultIconTheme
                   glib-networking protobuf ] ++ (if vim == null then [] else [ vim ]);

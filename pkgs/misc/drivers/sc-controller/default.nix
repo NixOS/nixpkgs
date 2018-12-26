@@ -1,5 +1,5 @@
 { lib, buildPythonApplication, fetchFromGitHub, wrapGAppsHook
-, gtk3, gobjectIntrospection, libappindicator-gtk3, librsvg
+, gtk3, gobject-introspection, libappindicator-gtk3, librsvg
 , evdev, pygobject3, pylibacl, pytest, bluez
 , linuxHeaders
 , libX11, libXext, libXfixes, libusb1, udev
@@ -7,18 +7,18 @@
 
 buildPythonApplication rec {
   pname = "sc-controller";
-  version = "0.4.5";
+  version = "0.4.6";
 
   src = fetchFromGitHub {
     owner  = "kozec";
     repo   = pname;
     rev    = "v${version}";
-    sha256 = "0mb9r4811rfj5rs4vrdhaf3x38iy1fvxr4sk2zg3xhvc29cdf5wv";
+    sha256 = "0527igjgc5jf60ldsrc4xv3k8gw2480pmqyp6nv5xcrm5j0ah4q5";
   };
 
   nativeBuildInputs = [ wrapGAppsHook ];
 
-  buildInputs = [ gtk3 gobjectIntrospection libappindicator-gtk3 librsvg ];
+  buildInputs = [ gtk3 gobject-introspection libappindicator-gtk3 librsvg ];
 
   propagatedBuildInputs = [ evdev pygobject3 pylibacl ];
 

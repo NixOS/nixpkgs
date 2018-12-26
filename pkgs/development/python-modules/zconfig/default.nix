@@ -8,15 +8,14 @@
 
 buildPythonPackage rec {
   pname = "ZConfig";
-  version = "3.2.0";
+  version = "3.3.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "de0a802e5dfea3c0b3497ccdbe33a5023c4265f950f33e35dd4cf078d2a81b19";
+    sha256 = "22d7fd3b8b12405f4856898995fd69e40bbe239c4c689502ee6d766a7368f585";
   };
 
-  patches = [ ./skip-broken-test.patch ]
-    ++ stdenv.lib.optional stdenv.hostPlatform.isMusl ./remove-setlocale-test.patch;
+  patches = stdenv.lib.optional stdenv.hostPlatform.isMusl ./remove-setlocale-test.patch;
 
   buildInputs = [ manuel docutils ];
   propagatedBuildInputs = [ zope_testrunner ];

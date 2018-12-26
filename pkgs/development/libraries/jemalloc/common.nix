@@ -1,11 +1,15 @@
 { version, sha256 }:
-{ stdenv, fetchurl,
+{ stdenv, fetchurl
 # By default, jemalloc puts a je_ prefix onto all its symbols on OSX, which
 # then stops downstream builds (mariadb in particular) from detecting it. This
 # option should remove the prefix and give us a working jemalloc.
 # Causes segfaults with some software (ex. rustc), but defaults to true for backward
 # compatibility. Ignored on non OSX.
-stripPrefix ? true }:
+, stripPrefix ? true
+, disableInitExecTls ? false
+}:
+
+with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "jemalloc-${version}";
@@ -17,7 +21,11 @@ stdenv.mkDerivation rec {
   };
 
   # see the comment on stripPrefix
-  configureFlags = stdenv.lib.optional (stdenv.isDarwin && stripPrefix) "--with-jemalloc-prefix=";
+  configureFlags = []
+    ++ optional (stdenv.isDarwin && stripPrefix) [ "--with-jemalloc-prefix=" ]
+    ++ optional disableInitExecTls [ "--disable-initial-exec-tls" ]
+  ;
+
   doCheck = true;
 
   enableParallelBuilding = true;

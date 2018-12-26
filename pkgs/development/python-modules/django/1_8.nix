@@ -6,12 +6,11 @@
 
 buildPythonPackage rec {
   name = "Django-${version}";
-  version = "1.8.18";
-  disabled = pythonOlder "2.7";
+  version = "1.8.19";
 
   src = fetchurl {
     url = "http://www.djangoproject.com/m/releases/1.8/${name}.tar.gz";
-    sha256 = "1ishvbihr9pain0486qafb18dnb7v2ppq34nnx1s8f95bvfiqqf7";
+    sha256 = "0iy0ni9j1rnx9b06ycgbg2dkrf3qid3y2jipk9x28cykz5f4mm1k";
   };
 
   # too complicated to setup

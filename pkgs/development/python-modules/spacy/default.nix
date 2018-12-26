@@ -2,14 +2,12 @@
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
-, html5lib
 , pytest
 , preshed
 , ftfy
 , numpy
 , murmurhash
 , plac
-, six
 , ujson
 , dill
 , requests
@@ -23,19 +21,17 @@
 
 buildPythonPackage rec {
   pname = "spacy";
-  version = "2.0.16";
+  version = "2.0.18";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1ghgbv819ff4777904p1kzayq1dj34i7853anvg859sak59r7pj1";
+    sha256 = "0mybdms7c40jvk8ak180n65anjiyg4c8gkaqwkzicrd1mxq3ngqj";
   };
 
   prePatch = ''
     substituteInPlace setup.py \
       --replace "regex==" "regex>=" \
-      --replace "plac<1.0.0,>=0.9.6" "plac>=0.9.6" \
-      --replace "thinc>=6.12.0,<6.13.0" "thinc>=6.12.0" \
-      --replace "wheel>=0.32.0,<0.33.0" "wheel>=0.31.0"
+      --replace "plac<1.0.0,>=0.9.6" "plac>=0.9.6"
   '';
 
   propagatedBuildInputs = [
@@ -45,8 +41,6 @@ buildPythonPackage rec {
    preshed
    thinc
    plac
-   six
-   html5lib
    ujson
    dill
    requests

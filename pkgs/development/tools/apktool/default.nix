@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, jre, buildTools }:
+{ stdenv, fetchurl, makeWrapper, jre, build-tools }:
 
 stdenv.mkDerivation rec {
   name = "apktool-${version}";
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     mkdir -p "$out/bin"
     makeWrapper "${jre}/bin/java" "$out/bin/apktool" \
         --add-flags "-jar $out/libexec/apktool/apktool.jar" \
-        --prefix PATH : "${buildTools.v25_0_1}/build-tools/25.0.1/"
+        --prefix PATH : "${builtins.head build-tools}/libexec/android-sdk/build-tools/28.0.3"
   '';
 
   meta = with stdenv.lib; {

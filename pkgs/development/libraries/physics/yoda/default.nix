@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "yoda-${version}";
-  version = "1.7.3";
+  version = "1.7.4";
 
   src = fetchurl {
     url = "https://www.hepforge.org/archive/yoda/YODA-${version}.tar.bz2";
-    sha256 = "0n40qii2ych5yfx6drj79b3rk29dvc3gysjqs719qgl26d3hkxpb";
+    sha256 = "0fl9y1mh48xkjmqc76rfhvr3vs4v4lzybh06bwxyflzy82ylwi71";
   };
 
   pythonPath = []; # python wrapper support

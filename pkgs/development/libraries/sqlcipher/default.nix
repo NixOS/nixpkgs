@@ -4,13 +4,13 @@ assert readline != null -> ncurses != null;
 
 stdenv.mkDerivation rec {
   name = "sqlcipher-${version}";
-  version = "3.4.2";
+  version = "4.0.0";
 
   src = fetchFromGitHub {
     owner = "sqlcipher";
     repo = "sqlcipher";
     rev = "v${version}";
-    sha256 = "168wb6fvyap7y8j86fb3xl5rd4wmhiq0dxvx9wxwi5kwm1j4vn1a";
+    sha256 = "0faadjr4qnm1pvm5yx37jfqqxqwii02nzlmmi2h91z6371888m7g";
   };
 
   buildInputs = [ readline ncurses openssl tcl ];

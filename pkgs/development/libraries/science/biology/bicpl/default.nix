@@ -19,7 +19,6 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [ "-DLIBMINC_DIR=${libminc}/lib" "-DBUILD_TESTING=FALSE" ];
 
-  checkPhase = "ctest --output-on-failure";
   doCheck = false;
   # internal_volume_io.h: No such file or directory
 

@@ -1,5 +1,5 @@
-{ stdenv, fetchFromGitLab, meson, ninja, pkgconfig, gtk-doc, docbook_xsl, docbook_xml_dtd_412, glib, json-glib, libsoup, libnotify, gdk_pixbuf
-, modemmanager, avahi, glib-networking, python3, wrapGAppsHook, gobjectIntrospection, vala
+{ stdenv, fetchFromGitLab, intltool, meson, ninja, pkgconfig, gtk-doc, docbook_xsl, docbook_xml_dtd_412, glib, json-glib, libsoup, libnotify, gdk_pixbuf
+, modemmanager, avahi, glib-networking, python3, wrapGAppsHook, gobject-introspection, vala
 , withDemoAgent ? false
 }:
 
@@ -17,10 +17,14 @@ stdenv.mkDerivation rec {
     sha256 = "0vww6irijw5ss7vawkdi5z5wdpcgw4iqljn5vs3vbd4y3d0lzrbs";
   };
 
+  patches = [
+    ./add-option-for-installation-sysconfdir.patch
+  ];
+
   outputs = [ "out" "dev" "devdoc" ];
 
   nativeBuildInputs = [
-    pkgconfig meson ninja wrapGAppsHook python3 vala gobjectIntrospection
+    pkgconfig intltool meson ninja wrapGAppsHook python3 vala gobject-introspection
     # devdoc
     gtk-doc docbook_xsl docbook_xml_dtd_412
   ];
@@ -36,6 +40,8 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     "-Dsystemd-system-unit-dir=${placeholder "out"}/etc/systemd/system"
     "-Ddemo-agent=${if withDemoAgent then "true" else "false"}"
+    "--sysconfdir=/etc"
+    "-Dsysconfdir_install=${placeholder "out"}/etc"
   ] ++ optionals stdenv.isDarwin [
     "-D3g-source=false"
     "-Dcdma-source=false"

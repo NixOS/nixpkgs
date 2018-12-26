@@ -3,13 +3,13 @@
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "zafiro-icons";
-  version = "0.7.3";
+  version = "0.7.7";
 
   src = fetchFromGitHub {
     owner = "zayronxio";
     repo = pname;
     rev = "v${version}";
-    sha256 = "02q3wcklmqdy4ycyly7477q98y3mkgnpr7c78jqxvy2yr486wwyx";
+    sha256 = "0471gf4s32dhcm3667l1bnam04jk4miw3c6s557vix59rih1y71p";
   };
 
   nativeBuildInputs = [ gtk3 ];

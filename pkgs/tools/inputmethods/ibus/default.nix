@@ -1,5 +1,5 @@
 { stdenv, fetchurl, fetchFromGitHub, autoreconfHook, gconf, intltool, makeWrapper, pkgconfig
-, vala, wrapGAppsHook, dbus, dconf ? null, glib, gdk_pixbuf, gobjectIntrospection, gtk2
+, vala, wrapGAppsHook, dbus, dconf ? null, glib, gdk_pixbuf, gobject-introspection, gtk2
 , gtk3, gtk-doc, isocodes, python3, json-glib, libnotify ? null, enablePythonLibrary ? true
 , enableUI ? true, withWayland ? false, libxkbcommon ? null, wayland ? null
 , buildPackages }:
@@ -113,7 +113,7 @@ stdenv.mkDerivation rec {
     dbus
     dconf
     gdk_pixbuf
-    gobjectIntrospection
+    gobject-introspection
     gtk2
     gtk3
     isocodes

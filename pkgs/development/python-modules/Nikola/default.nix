@@ -2,6 +2,7 @@
 , buildPythonPackage
 , isPy3k
 , fetchPypi
+, fetchpatch
 , doit
 , glibcLocales
 , pytest
@@ -52,6 +53,11 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit pname version;
     sha256 = "18bq68f9v7xk9ahjl6x4k77yysq5g6g07ng2ndbg35kcsdnw4nk6";
+  };
+
+  patches = fetchpatch {
+    url = https://github.com/getnikola/nikola/commit/d40be74a86af71b5206dc22beb82fcd0d08ea2f6.patch;
+    sha256 = "0disr8bxbfjymwlbm82mxkal3ynnv8zfiqsgfh9fkqhb35bn4l8j";
   };
 
   checkPhase = ''

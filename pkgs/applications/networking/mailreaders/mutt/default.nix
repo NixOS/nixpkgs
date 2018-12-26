@@ -27,15 +27,15 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "mutt-${version}";
-  version = "1.10.1";
+  version = "1.11.1";
 
   src = fetchurl {
     url = "http://ftp.mutt.org/pub/mutt/${name}.tar.gz";
-    sha256 = "182lkbkpd3q3l1x6bvyds90ycp38gyyxhf35ry0d3hwf2n1khjkk";
+    sha256 = "01fvn5h7l9rkwx6qz46svl4hmww108v4bmcywiw3prb26q0l2lbh";
   };
 
   patches = optional smimeSupport (fetchpatch {
-    url = "https://salsa.debian.org/mutt-team/mutt/raw/debian/1.10.1-2/debian/patches/misc/smime.rc.patch";
+    url = "https://salsa.debian.org/mutt-team/mutt/raw/debian/1.11.1-2/debian/patches/misc/smime.rc.patch";
     sha256 = "1rl27qqwl4nw321ll5jcvfmkmz4fkvcsh5vihjcrhzzyf6vz8wmj";
   });
 

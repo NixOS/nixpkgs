@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "gcovr";
-  version = "2.4";
+  version = "4.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "2c878e03c2eff2282e64035bec0a30532b2b1173aadf08486401883b79e4dab1";
+    sha256 = "ca94c337f2d9a70db177ec4330534fad7b2b772beda625c1ec071fbcf1361e22";
   };
 
   meta = with stdenv.lib; {

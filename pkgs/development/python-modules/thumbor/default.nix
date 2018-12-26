@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "thumbor";
-  version = "6.5.2";
+  version = "6.6.0";
 
   disabled = isPy3k; # see https://github.com/thumbor/thumbor/issues/1004
 
@@ -16,14 +16,14 @@ buildPythonPackage rec {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "1ys5ymwbvgh2ir85g9nyrzzf8vgi16j6pzzi53b0rgjx0kwlmnxg";
+    sha256 = "0m4q40fcha1aydyr1khjhnb08cdfma67yxgyhsvwar5a6sl0906i";
   };
 
   postPatch = ''
     substituteInPlace "setup.py" \
       --replace '"argparse",' "" ${lib.optionalString isPy3k ''--replace '"futures",' ""''}
-    substituteInPlace "setup.py" \
-      --replace "piexif>=1.0.13,<1.1.0" "piexif>=1.0.13"
+    sed -i setup.py \
+        -e 's/piexif[^"]*/piexif/;s/Pillow[^"]*/Pillow/'
     substituteInPlace "tests/test_utils.py" \
       --replace "/bin/ls" "${coreutils}/bin/ls"
     substituteInPlace "tests/detectors/test_face_detector.py" \

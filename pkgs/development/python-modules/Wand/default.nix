@@ -1,5 +1,4 @@
 { stdenv
-, lib
 , buildPythonPackage
 , fetchPypi
 , imagemagick
@@ -15,20 +14,16 @@ let
   imagemagick_library = "${imagemagick}/lib/libMagickCore-6.Q16${soext}";
 in buildPythonPackage rec {
   pname = "Wand";
-  version = "0.4.4";
+  version = "0.4.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "28e0454c9d16d69c5d5034918d96320d8f9f1377b4fdaf4944eec2f938c74704";
+    sha256 = "b40a2215545e8c7193b3fccd6e7251dc556ec9b878a4f67d992b056ff396bc65";
   };
 
   checkInputs = [ pytest pytest_xdist memory_profiler psutil ];
 
   buildInputs = [ imagemagick ];
-
-  patches = [
-    ./libraries.patch
-  ];
 
   inherit magick_wand_library imagemagick_library;
 
@@ -36,12 +31,13 @@ in buildPythonPackage rec {
     substituteAllInPlace wand/api.py
   '';
 
-  # No tests
+  # tests not included with pypi release
   doCheck = false;
-  meta = {
+
+  meta = with stdenv.lib; {
     description = "Ctypes-based simple MagickWand API binding for Python";
     homepage = http://wand-py.org/;
-    license = with lib.licenses; [ mit ];
+    license = [ licenses.mit ];
   };
 
   passthru = {

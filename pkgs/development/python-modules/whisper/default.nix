@@ -10,7 +10,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ six ];
-  checkInputs           = [ mock ];
+  checkInputs = [ mock ];
 
   meta = with stdenv.lib; {
     homepage = http://graphite.wikidot.com/;
