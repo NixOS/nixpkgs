@@ -1137,9 +1137,6 @@ self: super: {
     sha256 = "1qair09xs6vln3vsjz7sy4hhv037146zak4mq3iv6kdhmp606hqv";
   });
 
-  # Can be removed once vinyl >= 0.10 is in the LTS.
-  Frames = super.Frames.overrideScope (self: super: { vinyl = self.vinyl_0_10_0; });
-
   # https://github.com/Euterpea/Euterpea2/pull/22
   Euterpea = overrideSrc super.Euterpea {
     src = pkgs.fetchFromGitHub {
