@@ -4,7 +4,6 @@
 , libxslt, gst_all_1 ? null
 , withPdfReader        ? true
 , withMediaPlayback    ? true
-, withWebEngineDefault ? true
 }:
 
 assert withMediaPlayback -> gst_all_1 != null;
@@ -39,7 +38,7 @@ in python3Packages.buildPythonApplication rec {
   ] ++ lib.optionals withMediaPlayback (with gst_all_1; [
     gst-plugins-base gst-plugins-good
     gst-plugins-bad gst-plugins-ugly gst-libav
-  ]) ++ lib.optional (!withWebEngineDefault) python3Packages.qtwebkit-plugins;
+  ]);
 
   nativeBuildInputs = [
     makeWrapper wrapGAppsHook asciidoc
@@ -88,10 +87,6 @@ in python3Packages.buildPythonApplication rec {
     for i in $scripts; do
       patchPythonScript "$i"
     done
-  '';
-
-  postFixup = lib.optionalString (! withWebEngineDefault) ''
-    wrapProgram $out/bin/qutebrowser --add-flags "--backend webkit"
   '';
 
   meta = with stdenv.lib; {
