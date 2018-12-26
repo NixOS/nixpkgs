@@ -263,6 +263,11 @@
        <literal>false</literal>.
      </para>
    </listitem>
+   <listitem>
+    <para>
+     Amazon EC2 images will no longer reset their configuration to that provided by the user data mechanism on every start. This can be changed using the <option>ec2.userData</option> option.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 

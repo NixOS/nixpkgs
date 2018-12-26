@@ -121,10 +121,19 @@ in {
     script = ''
       $machine->start;
       $machine->waitForFile("/etc/testFile");
-      $machine->succeed("cat /etc/testFile | grep -q 'whoa'");
+      $machine->succeed("grep -q 'whoa' /etc/testFile");
 
       $machine->waitForUnit("httpd.service");
       $machine->succeed("curl http://localhost | grep Valgrind");
+
+      $machine->waitForFile("/etc/nixos/.user-data-applied");
+      $machine->succeed("sed -i 's/testFile/bestFile/g' /etc/nixos/configuration.nix");
+      $machine->succeed("nixos-rebuild switch");
+      $machine->waitForFile("/etc/bestFile");
+      $machine->shutdown;
+      $machine->start;
+      $machine->succeed("nixos-rebuild switch");
+      $machine->succeed("grep -q 'whoa' /etc/bestFile");
     '';
   };
 }
