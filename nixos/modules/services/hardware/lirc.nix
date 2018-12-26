@@ -33,6 +33,13 @@ in {
         description = "Extra arguments to lircd.";
       };
 
+      socket = mkOption {
+        type = types.path;
+        # default search path of many applications
+        default = "/run/lirc/lircd";
+        description = "Socket path";
+      };
+
     };
   };
 
@@ -49,8 +56,7 @@ in {
       description = "LIRC daemon socket";
       wantedBy = [ "sockets.target" ];
       socketConfig = {
-        # default search path
-        ListenStream = "/run/lirc/lircd";
+        ListenStream = cfg.socket;
         SocketUser = "lirc";
         SocketMode = "0660";
       };

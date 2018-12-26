@@ -33,12 +33,14 @@ in {
         default = [];
         description = "Additional command line arguments to pass to VDR.";
       };
+
+      enableLirc = mkEnableOption "enable LIRC";
     };
   };
 
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = mkIf cfg.enable (mkMerge [{
     systemd.tmpfiles.rules = [
       "d ${cfg.videoDir} 0755 vdr vdr -"
       "Z ${cfg.videoDir} - vdr vdr -"
@@ -67,5 +69,13 @@ in {
     };
 
     users.groups.vdr = {};
-  };
+  }
+
+  (mkIf cfg.enableLirc {
+    services.lirc.enable = true;
+    users.users.vdr.extraGroups = [ "lirc" ];
+    services.vdr.extraArguments = [
+      "--lirc=${config.services.lirc.socket}"
+    ];
+  })]);
 }
