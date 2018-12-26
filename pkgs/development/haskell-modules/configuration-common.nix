@@ -868,10 +868,6 @@ self: super: {
     testToolDepends = drv.testToolDepends or [] ++ [pkgs.procps];
   });
 
-  # These packages depend on each other, forming an infinite loop.
-  scalendar = markBroken (super.scalendar.override { SCalendar = null; });
-  SCalendar = markBroken (super.SCalendar.override { scalendar = null; });
-
   # Needs QuickCheck <2.10, which we don't have.
   edit-distance = doJailbreak super.edit-distance;
   blaze-markup = doJailbreak super.blaze-markup;
