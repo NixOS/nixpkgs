@@ -5,21 +5,22 @@
 
 stdenv.mkDerivation rec {
   name = "ip2unix-${version}";
-  version = "1.2.0";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "nixcloud";
     repo = "ip2unix";
     rev = "v${version}";
-    sha256 = "0blrhcmska06ydkl15jjgblygkwrimdnbaq3hhifgmffymfk2652";
+    sha256 = "0xxwx1ip5jhkq93b91gcqd1i4njlvl9c4vjzijbdhjrrzz971iwk";
   };
 
   nativeBuildInputs = [
     meson ninja pkgconfig asciidoc libxslt.bin docbook_xml_dtd_45 docbook_xsl
     libxml2.bin docbook5 python3Packages.pytest python3Packages.pytest-timeout
+    systemd
   ];
 
-  buildInputs = [ libyamlcpp systemd ];
+  buildInputs = [ libyamlcpp ];
 
   doCheck = true;
 
