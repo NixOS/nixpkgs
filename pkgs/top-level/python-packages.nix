@@ -2416,6 +2416,8 @@ in {
     cudaSupport = pkgs.config.cudaSupport or false;
   };
 
+  opt-einsum = callPackage ../development/python-modules/opt-einsum {};
+
   pytorchWithCuda = self.pytorch.override {
     cudaSupport = true;
   };
