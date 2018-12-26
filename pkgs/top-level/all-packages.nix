@@ -3160,7 +3160,8 @@ in
 
   gt5 = callPackage ../tools/system/gt5 { };
 
-  gtest = callPackage ../development/libraries/gtest {};
+  gtest = callPackage ../development/libraries/gtest { };
+  gtest_static = callPackage ../development/libraries/gtest { static = true; };
   gmock = gtest; # TODO: move to aliases.nix
 
   gbenchmark = callPackage ../development/libraries/gbenchmark {};
