@@ -1,6 +1,6 @@
 { stdenv, fetchurl, meson, ninja, pkgconfig, gettext, sqlite
 , gnome3, libxml2, gupnp, gssdp, lua5, liboauth, gupnp-av
-, gmime, json-glib, avahi, tracker, dleyna-server, itstool }:
+, gmime, json-glib, avahi, tracker, dleyna-server, itstool, totem-pl-parser }:
 
 let
   pname = "grilo-plugins";
@@ -17,7 +17,7 @@ in stdenv.mkDerivation rec {
   buildInputs = [
     gnome3.grilo libxml2 gupnp gssdp gnome3.libgdata
     lua5 liboauth gupnp-av sqlite gnome3.gnome-online-accounts
-    gnome3.totem-pl-parser gnome3.rest gmime json-glib
+    totem-pl-parser gnome3.rest gmime json-glib
     avahi gnome3.libmediaart tracker dleyna-server
   ];
 

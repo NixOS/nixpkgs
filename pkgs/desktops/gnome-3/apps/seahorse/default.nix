@@ -1,7 +1,7 @@
 { stdenv, fetchurl, vala, meson, ninja
 , pkgconfig, gtk3, glib, gobject-introspection
 , wrapGAppsHook, itstool, gnupg, libsoup
-, gnome3, gpgme, python3, openldap
+, gnome3, gpgme, python3, openldap, gcr
 , libsecret, avahi, p11-kit, openssh }:
 
 stdenv.mkDerivation rec {
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     python3 gobject-introspection
   ];
   buildInputs = [
-    gtk3 glib gnome3.gcr
+    gtk3 glib gcr
     gnome3.gsettings-desktop-schemas gnupg
     gnome3.defaultIconTheme gpgme
     libsecret avahi libsoup p11-kit

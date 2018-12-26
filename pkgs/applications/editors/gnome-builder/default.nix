@@ -27,6 +27,7 @@
 , sysprof
 , template-glib
 , vala
+, vte
 , webkitgtk
 , wrapGAppsHook
 }:
@@ -64,7 +65,7 @@ in stdenv.mkDerivation {
     gnome3.devhelp
     libgit2-glib
     gnome3.libpeas
-    gnome3.vte
+    vte
     gspell
     gtk3
     gtksourceview4

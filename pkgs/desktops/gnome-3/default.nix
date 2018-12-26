@@ -38,7 +38,7 @@ lib.makeScope pkgs.newScope (self: with self; {
   inherit (pkgs) atk glib gobject-introspection gspell webkitgtk gtk3 gtkmm3
     libgtop libgudev libhttpseverywhere librsvg libsecret gdk_pixbuf gtksourceview gtksourceviewmm gtksourceview4
     easytag meld orca rhythmbox shotwell gnome-usage
-    clutter clutter-gst clutter-gtk cogl gtk-vnc libdazzle libgda libgit2-glib libgxps libgdata libgepub libcroco libpeas libgee geocode-glib libgweather librest libzapojit libmediaart gfbgraph gexiv2;
+    clutter clutter-gst clutter-gtk cogl gtk-vnc libdazzle libgda libgit2-glib libgxps libgdata libgepub libcroco libpeas libgee geocode-glib libgweather librest libzapojit libmediaart gfbgraph gexiv2 folks totem-pl-parser gcr gsound libgnomekbd vte vte_290 vte-ng gnome-menus;
 
   libsoup = pkgs.libsoup.override { gnomeSupport = true; };
   libchamplain = pkgs.libchamplain.override { libsoup = libsoup; };
@@ -74,8 +74,6 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   evolution-data-server = callPackage ./core/evolution-data-server { };
 
-  gcr = callPackage ./core/gcr { }; # ToDo: tests fail
-
   gdm = callPackage ./core/gdm { };
 
   gjs = callPackage ./core/gjs { };
@@ -106,15 +104,9 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   gnome-font-viewer = callPackage ./core/gnome-font-viewer { };
 
-  gnome-menus = callPackage ./core/gnome-menus { };
-
   gnome-keyring = callPackage ./core/gnome-keyring { };
 
   libgnome-keyring = callPackage ./core/libgnome-keyring { };
-
-  libgnomekbd = callPackage ./core/libgnomekbd { };
-
-  folks = callPackage ./core/folks { };
 
   gnome-online-accounts = callPackage ./core/gnome-online-accounts { };
 
@@ -151,8 +143,6 @@ lib.makeScope pkgs.newScope (self: with self; {
   grilo-plugins = callPackage ./core/grilo-plugins { };
 
   gsettings-desktop-schemas = callPackage ./core/gsettings-desktop-schemas { };
-
-  gsound = callPackage ./core/gsound { };
 
   gucharmap = callPackage ./core/gucharmap { };
 
@@ -205,17 +195,9 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   totem = callPackage ./core/totem { };
 
-  totem-pl-parser = callPackage ./core/totem-pl-parser { };
-
   tracker = callPackage ./core/tracker { };
 
   tracker-miners = callPackage ./core/tracker-miners { };
-
-  vte = callPackage ./core/vte { };
-
-  vte_290 = callPackage ./core/vte/2.90.nix { };
-
-  vte-ng = callPackage ./core/vte/ng.nix { };
 
   vino = callPackage ./core/vino { };
 

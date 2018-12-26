@@ -1,6 +1,6 @@
-{ gnome3, fetchFromGitHub, autoconf, automake, gtk-doc, gettext, libtool, gperf }:
+{ vte, fetchFromGitHub, autoconf, automake, gtk-doc, gettext, libtool, gperf }:
 
-gnome3.vte.overrideAttrs (oldAttrs: rec {
+vte.overrideAttrs (oldAttrs: rec {
   name = "vte-ng-${version}";
   version = "0.50.2.a";
 

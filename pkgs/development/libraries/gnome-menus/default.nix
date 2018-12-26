@@ -1,11 +1,11 @@
 { stdenv, fetchurl, intltool, pkgconfig, glib, gobject-introspection }:
 
 stdenv.mkDerivation rec {
-  name = "gnome-menus-${version}";
+  pname = "gnome-menus";
   version = "3.10.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-menus/3.10/${name}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "0wcacs1vk3pld8wvrwq7fdrm11i56nrajkrp6j1da6jc4yx0m5a6";
   };
 
@@ -16,8 +16,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = https://www.gnome.org;
-    description = "Gnome menu specification";
-
+    description = "Library that implements freedesktops's Desktop Menu Specification in GNOME";
     platforms = stdenv.lib.platforms.linux;
   };
 }
