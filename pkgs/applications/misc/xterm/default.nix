@@ -3,14 +3,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "xterm-339";
+  name = "xterm-341";
 
   src = fetchurl {
     urls = [
      "ftp://ftp.invisible-island.net/xterm/${name}.tgz"
      "https://invisible-mirror.net/archives/xterm/${name}.tgz"
    ];
-    sha256 = "1kigkl4va1jxycqcf5dkg4d74j1fgrxhfbp8ib367crn6fqnprk5";
+    sha256 = "0i6b6gpr5qzbgv3jfl86q8d47bgppxr5gq503ng1ll2x5gx7v833";
   };
 
   buildInputs =
