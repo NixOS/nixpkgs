@@ -55,7 +55,7 @@
 /pkgs/top-level/python-packages.nix     @FRidh
 /pkgs/development/interpreters/python   @FRidh
 /pkgs/development/python-modules        @FRidh
-/doc/languages-frameworks/python.md     @FRidh
+/doc/languages-frameworks/python.section.md     @FRidh
 
 # Haskell
 /pkgs/development/compilers/ghc                       @peti @ryantm @basvandijk
