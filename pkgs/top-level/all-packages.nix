@@ -7006,7 +7006,7 @@ in
 
   haskell = callPackage ./haskell-packages.nix { };
 
-  haskellPackages = haskell.packages.ghc844.override {
+  haskellPackages = haskell.packages.ghc863.override {
     overrides = config.haskellPackageOverrides or haskell.packageOverrides;
   };
 
