@@ -8073,7 +8073,8 @@ in
   })
     ruby_2_3
     ruby_2_4
-    ruby_2_5;
+    ruby_2_5
+    ruby_2_6;
 
   ruby = ruby_2_5;
 
