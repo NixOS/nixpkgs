@@ -1122,9 +1122,6 @@ self: super: {
       libraryHaskellDepends = drv.libraryHaskellDepends ++ [self.QuickCheck];
     })) ./patches/sexpr-0.2.1.patch;
 
-  # Can be removed once yi-language >= 0.18 is in the LTS
-  yi-core = super.yi-core.overrideScope (self: super: { yi-language = self.yi-language_0_18_0; });
-
   # https://github.com/haskell/hoopl/issues/50
   hoopl = dontCheck super.hoopl;
 
