@@ -30,6 +30,41 @@ with lib;
         Whether to prevent replacing the running kernel image.
       '';
     };
+
+    security.virtualization.flushL1DataCache = mkOption {
+      type = types.nullOr (types.enum [ "never" "cond" "always" ]);
+      default = null;
+      description = ''
+        Whether the hypervisor should flush the L1 data cache before
+        entering guests.
+        </para>
+
+        <para>
+          <variablelist>
+          <varlistentry>
+            <term><literal>null</literal></term>
+            <listitem><para>uses the kernel default</para></listitem>
+          </varlistentry>
+          <varlistentry>
+            <term><literal>"never"</literal></term>
+            <listitem><para>disables L1 data cache flushing entirely.
+            May be appropriate if all guests are trusted.</para></listitem>
+          </varlistentry>
+          <varlistentry>
+            <term><literal>"cond"</literal></term>
+            <listitem><para>flushes L1 data cache only for pre-determined
+            code paths.  May leak information about the host address space
+            layout.</para></listitem>
+          </varlistentry>
+          <varlistentry>
+            <term><literal>"always"</literal></term>
+            <listitem><para>flushes L1 data cache every time the hypervisor
+            enters the guest.  May incur significant performance cost.
+            </para></listitem>
+          </varlistentry>
+          </variablelist>
+      '';
+    };
   };
 
   config = mkMerge [
@@ -51,6 +86,10 @@ with lib;
       boot.kernelParams = [ "nohibernate" ];
       # Prevent replacing the running kernel image w/o reboot
       boot.kernel.sysctl."kernel.kexec_load_disabled" = mkDefault true;
+    })
+
+    (mkIf (config.security.virtualization.flushL1DataCache != null) {
+      boot.kernelParams = [ "kvm-intel.vmentry_l1d_flush=${config.security.virtualization.flushL1DataCache}" ];
     })
   ];
 }

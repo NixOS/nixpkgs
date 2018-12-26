@@ -22,6 +22,8 @@ with lib;
 
   security.protectKernelImage = mkDefault true;
 
+  security.virtualization.flushL1DataCache = mkDefault "always";
+
   security.apparmor.enable = mkDefault true;
 
   boot.kernelParams = [
