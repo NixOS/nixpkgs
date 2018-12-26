@@ -1,0 +1,36 @@
+--- a/configure.py
++++ b/configure.py
+@@ -2440,7 +2440,7 @@ def get_sip_flags(target_config):
+     the target configuration.
+     """
+ 
+-    sip_flags = ['-n', 'PyQt5.sip']
++    sip_flags = []
+ 
+     # If we don't check for signed interpreters, we exclude the 'VendorID'
+     # feature
+--- a/designer/pluginloader.cpp
++++ b/designer/pluginloader.cpp
+@@ -167,7 +167,7 @@ bool PyCustomWidgets::importPlugins(const QString &dir, const QStringList &plugi
+     // Make sure we have sip.unwrapinstance.
+     if (!sip_unwrapinstance)
+     {
+-        sip_unwrapinstance = getModuleAttr("PyQt5.sip", "unwrapinstance");
++        sip_unwrapinstance = getModuleAttr("sip", "unwrapinstance");
+ 
+         if (!sip_unwrapinstance)
+             return true;
+--- a/qmlscene/pluginloader.cpp
++++ b/qmlscene/pluginloader.cpp
+@@ -412,9 +412,9 @@ PyObject *PyQt5QmlPlugin::getModuleAttr(const char *module, const char *attr)
+ void PyQt5QmlPlugin::getSipAPI()
+ {
+ #if defined(SIP_USE_PYCAPSULE)
+-    sip = (const sipAPIDef *)PyCapsule_Import("PyQt5.sip._C_API", 0);
++    sip = (const sipAPIDef *)PyCapsule_Import("sip._C_API", 0);
+ #else
+-    PyObject *c_api = getModuleAttr("PyQt5.sip", "_C_API");
++    PyObject *c_api = getModuleAttr("sip", "_C_API");
+ 
+     if (c_api)
+     {

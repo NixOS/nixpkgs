@@ -28,6 +28,8 @@ in buildPythonPackage {
     sha256 = "0wqh4srqkcc03rvkwrcshaa028psrq58xkys6npnyhqxc0apvdf9";
   };
 
+  patches = [ ./sip.patch ];
+
   outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [ pkgconfig qmake lndir ];
@@ -61,7 +63,6 @@ in buildPythonPackage {
   '';
 
   postInstall = ''
-    ln -s ${sip}/${python.sitePackages}/PyQt5/* $out/${python.sitePackages}/PyQt5
     for i in $out/bin/*; do
       wrapProgram $i --prefix PYTHONPATH : "$PYTHONPATH"
     done

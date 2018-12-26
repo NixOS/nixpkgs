@@ -14,7 +14,6 @@ buildPythonPackage rec {
 
   configurePhase = ''
     ${python.executable} ./configure.py \
-      --sip-module PyQt5.sip \
       -d $out/lib/${python.libPrefix}/site-packages \
       -b $out/bin -e $out/include
   '';
