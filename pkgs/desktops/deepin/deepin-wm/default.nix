@@ -1,49 +1,56 @@
 { stdenv, fetchFromGitHub, pkgconfig, intltool, libtool, vala, gnome3,
-  bamf, clutter-gtk, granite, libcanberra-gtk3, libwnck3,
+  bamf, clutter-gtk, granite, libcanberra-gtk3, libwnck3, deepin-menu,
   deepin-mutter, deepin-wallpapers, deepin-desktop-schemas,
-  hicolor-icon-theme, deepin }:
+  wrapGAppsHook, deepin }:
 
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "deepin-wm";
-  version = "1.9.34";
+  version = "1.9.35";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "13hydcalifdc6723k8l4pk905y9sxic5x1fqww0fyx7j6b3hm13f";
+    sha256 = "1syjh1w98yfa0gcnidxp7f1prmwxwyj0q3j84fgzh5rcp33gzsdh";
   };
 
   nativeBuildInputs = [
     pkgconfig
     intltool
     libtool
-    gnome3.gnome-common
     vala
+    gnome3.gnome-common
+    wrapGAppsHook
+    deepin.setupHook
   ];
 
   buildInputs = [
-    gnome3.gnome-desktop
-    gnome3.libgee
     bamf
     clutter-gtk
+    deepin-desktop-schemas
+    deepin-menu
+    deepin-mutter
+    deepin-wallpapers
+    gnome3.gnome-desktop
+    gnome3.libgee
     granite
     libcanberra-gtk3
     libwnck3
-    deepin-mutter
-    deepin-wallpapers
-    deepin-desktop-schemas
-    hicolor-icon-theme
   ];
 
   postPatch = ''
-    sed -i src/Background/BackgroundSource.vala \
-      -e 's;/usr/share/backgrounds/default_background.jpg;${deepin-wallpapers}/share/backgrounds/deepin/desktop.jpg;'
+    searchHardCodedPaths
+    patchShebangs .
+    fixPath ${deepin-wallpapers} /usr/share/backgrounds src/Background/BackgroundSource.vala
+    # fix background path
+    sed -i 's|default_background.jpg|deepin/desktop.jpg|' src/Background/BackgroundSource.vala
   '';
 
+  NIX_CFLAGS_COMPILE = "-DWNCK_I_KNOW_THIS_IS_UNSTABLE";
+
   preConfigure = ''
-    ./autogen.sh
+    NOCONFIGURE=1 ./autogen.sh
   '';
 
   enableParallelBuilding = true;
