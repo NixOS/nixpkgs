@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, cmake, pkgconfig, zip, gettext, perl
-, wxGTK31, libXi, libXt, libXtst, xercesc, xextproto
+, wxGTK31, libXi, libXt, libXtst, xercesc, xorgproto
 , libqrencode, libuuid, libyubikey, yubikey-personalization
 }:
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkgconfig zip ];
   buildInputs = [
     gettext perl libqrencode libuuid
-    libXi libXt libXtst wxGTK31 xercesc xextproto
+    libXi libXt libXtst wxGTK31 xercesc xorgproto
     libyubikey yubikey-personalization
   ];
   cmakeFlags = [

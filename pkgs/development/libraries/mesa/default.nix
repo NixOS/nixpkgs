@@ -143,7 +143,7 @@ let self = stdenv.mkDerivation {
 
   buildInputs = with xorg; [
     expat llvmPackages.llvm libglvnd
-    glproto dri2proto dri3proto presentproto
+    xorgproto
     libX11 libXext libxcb libXt libXfixes libxshmfence libXrandr
     libffi libvdpau libelf libXvMC
     libpthreadstubs openssl/*or another sha1 provider*/

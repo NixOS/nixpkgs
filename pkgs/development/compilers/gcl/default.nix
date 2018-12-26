@@ -1,6 +1,6 @@
 { stdenv, fetchurl, mpfr, m4, binutils, emacs, zlib, which
-, texinfo, libX11, xproto, inputproto, libXi, gmp
-, libXext, xextproto, libXt, libXaw, libXmu } :
+, texinfo, libX11, libXi, gmp
+, libXext, xorgproto, libXt, libXaw, libXmu } :
 
 assert stdenv ? cc ;
 assert stdenv.cc.isGNU ;
@@ -23,8 +23,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     mpfr m4 binutils emacs gmp
-    libX11 xproto inputproto libXi
-    libXext xextproto libXt libXaw libXmu
+    libX11 libXi
+    libXext xorgproto libXt libXaw libXmu
     zlib which texinfo
   ];
 

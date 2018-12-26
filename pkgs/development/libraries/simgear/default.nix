@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, plib, freeglut, xproto, libX11, libXext, xextproto, libXi
-, inputproto, libICE, libSM, libXt, libXmu, libGLU_combined, boost, zlib, libjpeg, freealut
+{ stdenv, fetchurl, plib, freeglut, xorgproto, libX11, libXext, libXi
+, libICE, libSM, libXt, libXmu, libGLU_combined, boost, zlib, libjpeg, freealut
 , openscenegraph, openal, expat, cmake, apr
 , curl
 }:
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "f61576bc36aae36f350154749df1cee396763604c06b8a71c4b50452d9151ce5";
   };
 
-  buildInputs = [ plib freeglut xproto libX11 libXext xextproto libXi inputproto
+  buildInputs = [ plib freeglut xorgproto libX11 libXext libXi
                   libICE libSM libXt libXmu libGLU_combined boost zlib libjpeg freealut
                   openscenegraph openal expat cmake apr curl ];
 

@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     gnome2.vte glib pango gnome2.gtk cairo gdk_pixbuf atk freetype xorg.libX11
-    xorg.xproto xorg.kbproto xorg.libXext xorg.xextproto makeWrapper pkgconfig
+    xorg.libXext xorg.xorgproto makeWrapper pkgconfig
   ];
 
   buildPhase = ''

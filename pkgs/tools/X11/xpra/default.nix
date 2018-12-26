@@ -32,9 +32,8 @@ in buildPythonApplication rec {
   buildInputs = [
     cython
 
-    xorg.libX11 xorg.renderproto xorg.libXrender xorg.libXi xorg.inputproto xorg.kbproto
-    xorg.randrproto xorg.damageproto xorg.compositeproto xorg.xextproto xorg.recordproto
-    xorg.xproto xorg.fixesproto xorg.libXtst xorg.libXfixes xorg.libXcomposite xorg.libXdamage
+    xorg.libX11 xorg.libXrender xorg.libXi xorg.xorgproto xorg.libXtst
+    xorg.libXfixes xorg.libXcomposite xorg.libXdamage
     xorg.libXrandr xorg.libxkbfile
 
     pango cairo gdk_pixbuf atk gtk3 glib

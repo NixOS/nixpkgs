@@ -37,8 +37,7 @@ in stdenv.mkDerivation rec {
       dbus dbus-glib pango freetype fontconfig xorg.libXi
       xorg.libX11 xorg.libXrender xorg.libXft xorg.libXt file
       nspr nss libnotify xorg.pixman yasm libGLU_combined
-      xorg.libXScrnSaver xorg.scrnsaverproto
-      xorg.libXext xorg.xextproto sqlite unzip
+      xorg.libXScrnSaver xorg.libXext xorg.xorgproto sqlite unzip
       hunspell libevent libstartup_notification /* cairo */
       icu libpng jemalloc
     ]

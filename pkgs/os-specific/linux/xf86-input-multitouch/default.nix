@@ -2,11 +2,8 @@
 , fetchgit
 , mtdev
 , xorgserver
-, xproto
+, xorgproto
 , pixman
-, xextproto
-, inputproto
-, randrproto
 , xorg
 , libpciaccess
 }:
@@ -30,9 +27,8 @@ stdenv.mkDerivation {
   '';
 
   buildInputs = with xorg; [
-    mtdev xproto xextproto inputproto libpciaccess randrproto renderproto
-    xineramaproto resourceproto scrnsaverproto kbproto libxcb videoproto
-    dri3proto presentproto
+    mtdev xorgproto libpciaccess 
+    libxcb 
   ];
 
   buildPhase = ''
