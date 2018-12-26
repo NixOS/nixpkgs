@@ -19,6 +19,14 @@ python3Packages.buildPythonApplication rec {
     HOME=$PWD/tmp
   '';
 
+  patches = [
+    ./convert.patch
+  ];
+
+  postPatch = ''
+    substituteInPlace pywal/backends/wal.py --subst-var-by convert "${imagemagick}/bin/convert"
+  '';
+
   meta = with lib; {
     description = "Generate and change colorschemes on the fly. A 'wal' rewrite in Python 3.";
     homepage = https://github.com/dylanaraps/pywal;
