@@ -15718,6 +15718,8 @@ in
 
   proggyfonts = callPackage ../data/fonts/proggyfonts { };
 
+  qogir-theme = callPackage ../data/themes/qogir { };
+
   route159 = callPackage ../data/fonts/route159 { };
 
   sampradaya = callPackage ../data/fonts/sampradaya { };
