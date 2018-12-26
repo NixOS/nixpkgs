@@ -4,6 +4,7 @@
 , isPy3k
 , oauth2client
 , gdata
+, google_api_python_client
 , simplejson
 , httplib2
 , keyring
@@ -21,7 +22,7 @@ buildPythonPackage rec {
     sha256 = "139a98d646d5c5963670944d5cfcc1a107677ee11fa98329221bd600457fda6d";
   };
 
-  propagatedBuildInputs = [ oauth2client gdata simplejson httplib2 keyring six rsa ];
+  propagatedBuildInputs = [ oauth2client gdata google_api_python_client simplejson httplib2 keyring six rsa ];
 
   preConfigure = ''
     sed -i '/distribute/d' setup.py
