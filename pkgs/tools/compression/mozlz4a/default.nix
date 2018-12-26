@@ -1,4 +1,5 @@
-{stdenv, fetchurl, python3, pylz4}:
+{ stdenv, fetchurl, python3 }:
+
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "mozlz4a";
@@ -21,7 +22,7 @@ stdenv.mkDerivation rec {
     chmod a+x "$out/bin/mozlz4a"
   '';
 
-  buildInputs = [ pylz4 python3 ];
+  buildInputs = [ python3 python3.pkgs.python-lz4 ];
 
   meta = {
     inherit version;
