@@ -1690,9 +1690,7 @@ in
 
   mongodb-tools = callPackage ../tools/misc/mongodb-tools { };
 
-  mozlz4a = callPackage ../tools/compression/mozlz4a {
-    pylz4 = python3Packages.lz4;
-  };
+  mozlz4a = callPackage ../tools/compression/mozlz4a { };
 
   msr-tools = callPackage ../os-specific/linux/msr-tools { };
 
@@ -4780,7 +4778,7 @@ in
 
   fmodex = callPackage ../games/zandronum/fmod.nix { };
 
-  pdfmod = callPackage ../applications/misc/pdfmod { mono = mono4; };
+  pdfmod = callPackage ../applications/misc/pdfmod { };
 
   pdf-quench = callPackage ../applications/misc/pdf-quench { };
 
@@ -10284,7 +10282,7 @@ in
 
   hydraAntLogger = callPackage ../development/libraries/java/hydra-ant-logger { };
 
-  hyena = callPackage ../development/libraries/hyena { mono = mono4; };
+  hyena = callPackage ../development/libraries/hyena { };
 
   hyperscan = callPackage ../development/libraries/hyperscan { };
 

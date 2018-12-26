@@ -1,8 +1,9 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , pytest
 , pytestrunner
+, functools32
 , six
 , w3lib
 , lxml
@@ -19,13 +20,13 @@ buildPythonPackage rec {
   };
 
   buildInputs = [ pytest pytestrunner ];
-  propagatedBuildInputs = [ six w3lib lxml cssselect ];
+  propagatedBuildInputs = [ functools32 six w3lib lxml cssselect ];
 
   checkPhase = ''
     py.test
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/scrapy/parsel";
     description = "Parsel is a library to extract data from HTML and XML using XPath and CSS selectors";
     license = licenses.bsd3;

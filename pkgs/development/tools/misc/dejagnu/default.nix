@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   # Note: The test-suite *requires* /dev/pts among the `build-chroot-dirs' of
   # the build daemon when building in a chroot.  See
-  # <http://thread.gmane.org/gmane.linux.distributions.nixos/1036> for
+  # <https://www.mail-archive.com/nix-dev@cs.uu.nl/msg01056.html> for
   # details.
 
   # The test-suite needs to have a non-empty stdin:

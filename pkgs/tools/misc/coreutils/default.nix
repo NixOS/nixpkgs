@@ -74,8 +74,8 @@ stdenv.mkDerivation rec {
     ++ optional (stdenv.hostPlatform != stdenv.buildPlatform && stdenv.hostPlatform.libc != "glibc") libiconv;
 
   # The tests are known broken on Cygwin
-  # (http://thread.gmane.org/gmane.comp.gnu.core-utils.bugs/19025),
-  # Darwin (http://thread.gmane.org/gmane.comp.gnu.core-utils.bugs/19351),
+  # (http://article.gmane.org/gmane.comp.gnu.core-utils.bugs/19025),
+  # Darwin (http://article.gmane.org/gmane.comp.gnu.core-utils.bugs/19351),
   # and {Open,Free}BSD.
   # With non-standard storeDir: https://github.com/NixOS/nix/issues/512
   doCheck = stdenv.hostPlatform == stdenv.buildPlatform

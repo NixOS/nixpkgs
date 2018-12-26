@@ -1,5 +1,6 @@
 { stdenv
 , buildPythonPackage
+, isPy27
 , fetchPypi
 , six
 , pillow
@@ -18,6 +19,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ six pillow pymaging_png ];
   checkInputs = [ mock ];
+  doCheck = isPy27; # https://github.com/lincolnloop/python-qrcode/issues/163
 
   meta = with stdenv.lib; {
     description = "Quick Response code generation for Python";
