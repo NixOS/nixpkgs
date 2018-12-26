@@ -43,7 +43,7 @@ let
     ln -sr -t "''${!outputInclude}/include/" "''${!outputInclude}"/lib/*/include/* 2>/dev/null || true
   '';
 
-  version = "2.58.1";
+  version = "2.58.2";
 in
 
 stdenv.mkDerivation rec {
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/glib/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "1mnp4vankish8bqxymdl591p9v1ynk7pfc5dmpx3vamn4vcskmlp";
+    sha256 = "0jrxfm4gn1qz3y1450z709v74ys2bkjr8yffkgy106kgagb4xcn7";
   };
 
   patches = optional stdenv.isDarwin ./darwin-compilation.patch
