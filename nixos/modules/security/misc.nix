@@ -31,12 +31,38 @@ with lib;
       '';
     };
 
+    security.allowSimultaneousMultithreading = mkOption {
+      type = types.bool;
+      default = true;
+      description = ''
+        Whether to allow SMT/hyperthreading.  Disabling SMT means that only
+        physical CPU cores will be usable at runtime, potentially at
+        significant performance cost.
+        </para>
+
+        <para>
+        The primary motivation for disabling SMT is to mitigate the risk of
+        leaking data between threads running on the same CPU core (due to
+        e.g., shared caches).  This attack vector is unproven.
+        </para>
+
+        <para>
+        Disabling SMT is a supplement to the L1 data cache flushing mitigation
+        (see <xref linkend="opt-security.virtualization.flushL1DataCache"/>)
+        versus malicious VM guests (SMT could "bring back" previously flushed
+        data).
+        </para>
+        <para>
+      '';
+    };
+
     security.virtualization.flushL1DataCache = mkOption {
       type = types.nullOr (types.enum [ "never" "cond" "always" ]);
       default = null;
       description = ''
         Whether the hypervisor should flush the L1 data cache before
         entering guests.
+        See also <xref linkend="opt-security.allowSimultaneousMultithreading"/>.
         </para>
 
         <para>
@@ -86,6 +112,10 @@ with lib;
       boot.kernelParams = [ "nohibernate" ];
       # Prevent replacing the running kernel image w/o reboot
       boot.kernel.sysctl."kernel.kexec_load_disabled" = mkDefault true;
+    })
+
+    (mkIf (!config.security.allowSimultaneousMultithreading) {
+      boot.kernelParams = [ "nosmt" ];
     })
 
     (mkIf (config.security.virtualization.flushL1DataCache != null) {
