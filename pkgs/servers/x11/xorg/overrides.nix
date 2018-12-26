@@ -20,7 +20,7 @@ in
 self: super:
 {
   bdftopcf = super.bdftopcf.overrideAttrs (attrs: {
-    buildInputs = attrs.buildInputs ++ [ self.xproto self.fontsproto ];
+    buildInputs = attrs.buildInputs ++ [ self.xorgproto ];
   });
 
   bitmap = super.bitmap.overrideAttrs (attrs: {
@@ -75,7 +75,7 @@ self: super:
     preBuild = "substituteInPlace mkfontdir.in --replace @bindir@ ${self.mkfontscale}/bin";
   });
 
-  libxcb = super.libxcb.overrideAttrs (attrs : {
+  libxcb = super.libxcb.overrideAttrs (attrs: {
     configureFlags = [ "--enable-xkb" "--enable-xinput" ];
     outputs = [ "out" "dev" "man" "doc" ];
   });
@@ -94,6 +94,7 @@ self: super:
         rm -rf $out/share/doc
       '';
     CPP = stdenv.lib.optionalString stdenv.isDarwin "clang -E -";
+    propagatedBuildInputs = [ self.xorgproto ];
   });
 
   libAppleWM = super.libAppleWM.overrideAttrs (attrs: {
@@ -105,6 +106,7 @@ self: super:
 
   libXau = super.libXau.overrideAttrs (attrs: {
     outputs = [ "out" "dev" ];
+    propagatedBuildInputs = [ self.xorgproto ];
   });
 
   libXdmcp = super.libXdmcp.overrideAttrs (attrs: {
@@ -146,10 +148,6 @@ self: super:
     configureFlags = [ "--disable-selective-werror" ];
   });
 
-  compositeproto = super.compositeproto.overrideAttrs (attrs: {
-    propagatedBuildInputs = [ self.fixesproto ];
-  });
-
   libICE = super.libICE.overrideAttrs (attrs: {
     outputs = [ "out" "dev" "doc" ];
   });
@@ -188,7 +186,7 @@ self: super:
 
   libXext = super.libXext.overrideAttrs (attrs: {
     outputs = [ "out" "dev" "man" "doc" ];
-    propagatedBuildInputs = [ self.xproto self.libXau ];
+    propagatedBuildInputs = [ self.xorgproto self.libXau ];
     configureFlags = attrs.configureFlags or []
       ++ malloc0ReturnsNullCrossFlag;
   });
@@ -227,7 +225,7 @@ self: super:
     outputs = [ "out" "dev" "doc" ];
     configureFlags = attrs.configureFlags or []
       ++ malloc0ReturnsNullCrossFlag;
-    propagatedBuildInputs = [ self.renderproto ];
+    propagatedBuildInputs = [ self.xorgproto ];
   });
 
   libXres = super.libXres.overrideAttrs (attrs: {
@@ -242,7 +240,7 @@ self: super:
 
   libXvMC = super.libXvMC.overrideAttrs (attrs: {
     outputs = [ "out" "dev" "doc" ];
-    buildInputs = attrs.buildInputs ++ [self.renderproto];
+    buildInputs = attrs.buildInputs ++ [self.xorgproto];
   });
 
   libXp = super.libXp.overrideAttrs (attrs: {
@@ -380,6 +378,10 @@ self: super:
     configureFlags = [ "--with-xorg-conf-dir=$(out)/share/X11/xorg.conf.d" ];
   });
 
+  xorgproto = super.xorgproto.overrideAttrs (attrs: {
+    buildInputs = [];
+  });
+
   xf86videoati = super.xf86videoati.overrideAttrs (attrs: {
     NIX_CFLAGS_COMPILE = "-I${self.xorgserver.dev or self.xorgserver}/include/xorg";
   });
@@ -438,7 +440,12 @@ self: super:
     let
       version = (builtins.parseDrvName attrs_passed.name).version;
       attrs =
-        if (abiCompat == null || lib.hasPrefix abiCompat version) then attrs_passed
+        if (abiCompat == null || lib.hasPrefix abiCompat version) then attrs_passed // { buildInputs = attrs_passed.buildInputs ++ [ libdrm.dev ]; patchPhase = ''
+  for i in dri3/*.c
+  do
+    sed -i -e "s|#include <drm_fourcc.h>|#include <libdrm/drm_fourcc.h>|" $i
+  done
+'';}
         else if (abiCompat == "1.17") then {
           name = "xorg-server-1.17.4";
           builder = ./builder.sh;
@@ -447,7 +454,7 @@ self: super:
             sha256 = "0mv4ilpqi5hpg182mzqn766frhi6rw48aba3xfbaj4m82v0lajqc";
           };
           nativeBuildInputs = [ pkgconfig ];
-          buildInputs = [ dri2proto dri3proto renderproto libdrm openssl libX11 libXau libXaw libxcb xcbutil xcbutilwm xcbutilimage xcbutilkeysyms xcbutilrenderutil libXdmcp libXfixes libxkbfile libXmu libXpm libXrender libXres libXt ];
+          buildInputs = [ xorgproto libdrm openssl libX11 libXau libXaw libxcb xcbutil xcbutilwm xcbutilimage xcbutilkeysyms xcbutilrenderutil libXdmcp libXfixes libxkbfile libXmu libXpm libXrender libXres libXt ];
           meta.platforms = stdenv.lib.platforms.unix;
         } else if (abiCompat == "1.18") then {
             name = "xorg-server-1.18.4";
@@ -457,7 +464,7 @@ self: super:
               sha256 = "1j1i3n5xy1wawhk95kxqdc54h34kg7xp4nnramba2q8xqfr5k117";
             };
             nativeBuildInputs = [ pkgconfig ];
-            buildInputs = [ dri2proto dri3proto renderproto libdrm openssl libX11 libXau libXaw libxcb xcbutil xcbutilwm xcbutilimage xcbutilkeysyms xcbutilrenderutil libXdmcp libXfixes libxkbfile libXmu libXpm libXrender libXres libXt ]
+            buildInputs = [ xorgproto libdrm openssl libX11 libXau libXaw libxcb xcbutil xcbutilwm xcbutilimage xcbutilkeysyms xcbutilrenderutil libXdmcp libXfixes libxkbfile libXmu libXpm libXrender libXres libXt ]
               ++ stdenv.lib.optionals stdenv.isDarwin [
                 # Needed for NSDefaultRunLoopMode symbols.
                 cf-private
@@ -472,14 +479,8 @@ self: super:
       commonBuildInputs = attrs.buildInputs ++ [ xtrans ];
       commonPropagatedBuildInputs = [
         zlib libGL libGLU dbus
-        xf86bigfontproto glproto xf86driproto
-        compositeproto scrnsaverproto resourceproto
-        xf86dgaproto
-        dmxproto /*libdmx not used*/ xf86vidmodeproto
-        recordproto libXext pixman libXfont libxshmfence libunwind
-        damageproto xcmiscproto  bigreqsproto
-        inputproto xextproto randrproto renderproto presentproto
-        dri2proto dri3proto kbproto xineramaproto resourceproto scrnsaverproto videoproto
+        xorgproto
+        libXext pixman libXfont libxshmfence libunwind
         libXfont2
       ];
       # XQuartz requires two compilations: the first to get X / XQuartz,
@@ -536,7 +537,7 @@ self: super:
           Xplugin Carbon Cocoa
         ];
         propagatedBuildInputs = commonPropagatedBuildInputs ++ [
-          libAppleWM applewmproto
+          libAppleWM xorgproto
         ];
 
         # XQuartz patchset
@@ -621,7 +622,7 @@ self: super:
       "--with-launchagents-dir=\${out}/LaunchAgents"
     ];
     propagatedBuildInputs = [ self.xauth ]
-                         ++ lib.optionals isDarwin [ self.libX11 self.xproto ];
+                         ++ lib.optionals isDarwin [ self.libX11 self.xorgproto ];
     prePatch = ''
       sed -i 's|^defaultserverargs="|&-logfile \"$HOME/.xorg.log\"|p' startx.cpp
     '';
@@ -667,18 +668,6 @@ self: super:
 
   xwd = super.xwd.overrideAttrs (attrs: {
     buildInputs = with self; attrs.buildInputs ++ [libXt libxkbfile];
-  });
-
-  kbproto = super.kbproto.overrideAttrs (attrs: {
-    outputs = [ "out" "doc" ];
-  });
-
-  xextproto = super.xextproto.overrideAttrs (attrs: {
-    outputs = [ "out" "doc" ];
-  });
-
-  xproto = super.xproto.overrideAttrs (attrs: {
-    outputs = [ "out" "doc" ];
   });
 
   xrdb = super.xrdb.overrideAttrs (attrs: {
