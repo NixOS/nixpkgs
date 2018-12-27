@@ -5,6 +5,7 @@
 , typing
 , isPy3k
 , pythonOlder
+, python
 }:
 
 buildPythonPackage rec {
@@ -21,8 +22,9 @@ buildPythonPackage rec {
     ++ lib.optional (pythonOlder "3.5") typing
   ;
 
-  # https://gitlab.com/python-devs/importlib_resources/issues/69
-  doCheck = !isPy3k;
+  checkPhase = ''
+    ${python.interpreter} -m unittest discover
+  '';
 
   meta = with lib; {
     description = "Read resources from Python packages";

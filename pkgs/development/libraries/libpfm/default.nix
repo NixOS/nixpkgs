@@ -9,7 +9,12 @@ stdenv.mkDerivation rec {
     sha256 = "0jabhjx77yppr7x38bkfww6n2a480gj62rw0qp7prhdmg19mf766";
   };
 
-  installFlags = "DESTDIR=\${out} PREFIX= LDCONFIG=true";
+  makeFlags = [
+    "PREFIX=${placeholder "out"}"
+    "LDCONFIG=true"
+    "ARCH=${stdenv.targetPlatform.uname.processor}"
+    "SYS=${stdenv.targetPlatform.uname.system}"
+  ];
 
   NIX_CFLAGS_COMPILE = [ "-Wno-error" ];
 

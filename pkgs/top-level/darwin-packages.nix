@@ -15,6 +15,7 @@ in
   binutils-unwrapped = callPackage ../os-specific/darwin/binutils {
     inherit (darwin) cctools;
     inherit (pkgs) binutils-unwrapped;
+    inherit (pkgs.llvmPackages_5) llvm;
   };
 
   binutils = pkgs.wrapBintoolsWith {
@@ -59,10 +60,6 @@ in
   opencflite = callPackage ../os-specific/darwin/opencflite { };
 
   osx_private_sdk = callPackage ../os-specific/darwin/osx-private-sdk { };
-
-  security_tool = darwin.callPackage ../os-specific/darwin/security-tool {
-    Security-framework = darwin.apple_sdk.frameworks.Security;
-  };
 
   stubs = callPackages ../os-specific/darwin/stubs { };
 

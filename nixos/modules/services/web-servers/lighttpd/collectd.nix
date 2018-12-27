@@ -48,7 +48,7 @@ in
           "/collectd" => "${cfg.collectionCgi}"
         )
         setenv.add-environment = (
-          "PERL5LIB" => "${with pkgs; lib.makePerlPath [ perlPackages.CGI perlPackages.HTMLParser perlPackages.URI rrdtool ]}",
+          "PERL5LIB" => "${with pkgs.perlPackages; makePerlPath [ CGI HTMLParser URI pkgs.rrdtool ]}",
           "COLLECTION_CONF" => "${collectionConf}"
         )
       }

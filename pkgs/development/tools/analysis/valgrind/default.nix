@@ -11,15 +11,15 @@ stdenv.mkDerivation rec {
   # autoreconfHook is needed to pick up patching of Makefile.am
   # Remove when the patch no longer applies.
   patches = [ ./coregrind-makefile-race.patch ];
-  nativeBuildInputs = [ autoreconfHook ];
+  # Perl is needed for `cg_annotate'.
+  nativeBuildInputs = [ autoreconfHook perl ];
 
   outputs = [ "out" "dev" "man" "doc" ];
 
   hardeningDisable = [ "stackprotector" ];
 
-  # Perl is needed for `cg_annotate'.
   # GDB is needed to provide a sane default for `--db-command'.
-  buildInputs = [ perl gdb ]  ++ stdenv.lib.optionals (stdenv.isDarwin) [ bootstrap_cmds xnu ];
+  buildInputs = [ gdb ]  ++ stdenv.lib.optionals (stdenv.isDarwin) [ bootstrap_cmds xnu ];
 
   enableParallelBuilding = true;
   separateDebugInfo = stdenv.isLinux;
@@ -73,8 +73,6 @@ stdenv.mkDerivation rec {
         --replace 'obj:/usr/X11R6/lib' 'obj:*/lib' \
         --replace 'obj:/usr/lib' 'obj:*/lib'
     done
-
-    paxmark m $out/lib/valgrind/*-*-linux
   '';
 
   meta = {

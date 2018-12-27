@@ -1,6 +1,6 @@
 { stdenv, fetchurl, meson, ninja, intltool, gst_all_1
 , clutter-gtk, clutter-gst, python3Packages, shared-mime-info
-, pkgconfig, gtk3, glib, gobject-introspection
+, pkgconfig, gtk3, glib, gobject-introspection, totem-pl-parser
 , wrapGAppsHook, itstool, libxml2, vala, gnome3
 , gdk_pixbuf, tracker, nautilus }:
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ meson ninja vala pkgconfig intltool python3Packages.python itstool gobject-introspection wrapGAppsHook ];
   buildInputs = [
-    gtk3 glib gnome3.grilo clutter-gtk clutter-gst gnome3.totem-pl-parser gnome3.grilo-plugins
+    gtk3 glib gnome3.grilo clutter-gtk clutter-gst totem-pl-parser gnome3.grilo-plugins
     gst_all_1.gstreamer gst_all_1.gst-plugins-base gst_all_1.gst-plugins-good gst_all_1.gst-plugins-bad
     gst_all_1.gst-plugins-ugly gst_all_1.gst-libav gnome3.libpeas shared-mime-info
     gdk_pixbuf libxml2 gnome3.defaultIconTheme gnome3.gnome-desktop

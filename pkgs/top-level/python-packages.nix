@@ -1679,9 +1679,9 @@ in {
     then callPackage ../development/python-modules/faulthandler {}
     else throw "faulthandler is built into ${python.executable}";
 
-  flexmock = callPackage ../development/python-modules/flexmock { };
-
   fb-re2 = callPackage ../development/python-modules/fb-re2 { };
+
+  flexmock = callPackage ../development/python-modules/flexmock { };
 
   flit = callPackage ../development/python-modules/flit { };
 

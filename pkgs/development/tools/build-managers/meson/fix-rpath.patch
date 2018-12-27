@@ -1,27 +1,18 @@
 --- a/mesonbuild/compilers/compilers.py
 +++ b/mesonbuild/compilers/compilers.py
-@@ -1112,6 +1112,8 @@
-         for p in rpath_paths:
-             if p == from_dir:
-                 relative = '' # relpath errors out in this case
-+            elif os.path.isabs(p):
-+                relative = p # These can be outside of build dir.
-             else:
-                 relative = os.path.relpath(os.path.join(build_dir, p), os.path.join(build_dir, from_dir))
-             rel_rpaths.append(relative)
-@@ -1121,8 +1123,10 @@
-             if paths != '':
-                 paths += ':'
-             paths += build_rpath
--        if len(paths) < len(install_rpath):
--            padding = 'X' * (len(install_rpath) - len(paths))
-+        store_paths = ':'.join(filter(lambda path: path.startswith('@storeDir@'), paths.split(':')))
-+        extra_space_needed = len(install_rpath + (':' if install_rpath and store_paths else '') + store_paths) - len(paths)
-+        if extra_space_needed > 0:
-+            padding = 'X' * extra_space_needed
-             if not paths:
-                 paths = padding
-             else:
+@@ -1202,8 +1202,10 @@
+             # In order to avoid relinking for RPATH removal, the binary needs to contain just
+             # enough space in the ELF header to hold the final installation RPATH.
+             paths = ':'.join(all_paths)
+-            if len(paths) < len(install_rpath):
+-                padding = 'X' * (len(install_rpath) - len(paths))
++            store_paths = ':'.join(filter(lambda path: path.startswith('@storeDir@'), all_paths))
++            extra_space_needed = len(install_rpath + (':' if install_rpath and store_paths else '') + store_paths) - len(paths)
++            if extra_space_needed > 0:
++                padding = 'X' * extra_space_needed
+                 if not paths:
+                     paths = padding
+                 else:
 --- a/mesonbuild/scripts/depfixer.py
 +++ b/mesonbuild/scripts/depfixer.py
 @@ -303,6 +303,14 @@

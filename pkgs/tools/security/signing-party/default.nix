@@ -10,7 +10,7 @@ let
   GnuPGInterfaceRuntimeDependencies = with perlPackages; [
     strictures ClassMethodModifiers DataPerl DevelGlobalDestruction ExporterTiny
     GnuPGInterface ListMoreUtils ModuleRuntime Moo MooXHandlesVia MooXlate
-    RoleTiny SubExporterProgressive SubQuote TypeTiny XSLoader
+    RoleTiny SubExporterProgressive SubQuote TypeTiny
   ];
 in stdenv.mkDerivation rec {
   pname = "signing-party";
@@ -122,14 +122,14 @@ in stdenv.mkDerivation rec {
     # scripts)
 
     wrapProgram $out/bin/caff --set PERL5LIB \
-      ${with perlPackages; stdenv.lib.makePerlPath ([
+      ${with perlPackages; makePerlPath ([
         TextTemplate MIMETools MailTools TimeDate NetIDNEncode ]
         ++ GnuPGInterfaceRuntimeDependencies)} \
       --prefix PATH ":" \
       "${stdenv.lib.makeBinPath [ nettools gnupg1 ]}"
 
     wrapProgram $out/bin/gpg-key2latex --set PERL5LIB \
-      ${stdenv.lib.makePerlPath GnuPGInterfaceRuntimeDependencies} \
+      ${perlPackages.makePerlPath GnuPGInterfaceRuntimeDependencies} \
       --prefix PATH ":" \
       "${stdenv.lib.makeBinPath [ gnupg1 libpaper ]}"
 
@@ -140,7 +140,7 @@ in stdenv.mkDerivation rec {
       "${stdenv.lib.makeBinPath [ gnupg1 qprint ]}"
 
     wrapProgram $out/bin/gpgdir --set PERL5LIB \
-      ${with perlPackages; stdenv.lib.makePerlPath ([
+      ${with perlPackages; makePerlPath ([
         TermReadKey ]
         ++ GnuPGInterfaceRuntimeDependencies)} \
       --prefix PATH ":" \
@@ -155,7 +155,7 @@ in stdenv.mkDerivation rec {
 #    wrapProgram $out/bin/gpgparticipants-prefill
 
     wrapProgram $out/bin/gpgsigs --set PERL5LIB \
-      ${stdenv.lib.makePerlPath GnuPGInterfaceRuntimeDependencies} \
+      ${perlPackages.makePerlPath GnuPGInterfaceRuntimeDependencies} \
       --prefix PATH ":" \
       "${stdenv.lib.makeBinPath [ gnupg1 ]}"
 
@@ -171,12 +171,12 @@ in stdenv.mkDerivation rec {
       "${stdenv.lib.makeBinPath [ gnupg1 ]}"
 
     wrapProgram $out/bin/pgp-clean --set PERL5LIB \
-      ${stdenv.lib.makePerlPath GnuPGInterfaceRuntimeDependencies} \
+      ${perlPackages.makePerlPath GnuPGInterfaceRuntimeDependencies} \
       --prefix PATH ":" \
       "${stdenv.lib.makeBinPath [ gnupg1 ]}"
 
     wrapProgram $out/bin/pgp-fixkey --set PERL5LIB \
-      ${stdenv.lib.makePerlPath GnuPGInterfaceRuntimeDependencies} \
+      ${perlPackages.makePerlPath GnuPGInterfaceRuntimeDependencies} \
       --prefix PATH ":" \
       "${stdenv.lib.makeBinPath [ gnupg1 ]}"
 
@@ -189,7 +189,7 @@ in stdenv.mkDerivation rec {
 #    wrapProgram $out/bin/sig2dot
 
     wrapProgram $out/bin/springgraph --set PERL5LIB \
-      ${with perlPackages; stdenv.lib.makePerlPath [ GD ]}
+      ${with perlPackages; makePerlPath [ GD ]}
   '';
 
   meta = with stdenv.lib; {

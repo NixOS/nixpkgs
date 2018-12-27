@@ -10,26 +10,16 @@
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "cups-${version}";
-  version = "2.2.6";
+  version = "2.2.10";
 
   passthru = { inherit version; };
 
   src = fetchurl {
     url = "https://github.com/apple/cups/releases/download/v${version}/cups-${version}-source.tar.gz";
-    sha256 = "16qn41b84xz6khrr2pa2wdwlqxr29rrrkjfi618gbgdkq9w5ff20";
+    sha256 = "1fq52aw1mini3ld2czv5gg37wbbvh4n7yc7wzzxvbs3zpfrv5j3p";
   };
 
   outputs = [ "out" "lib" "dev" "man" ];
-
-  patches = [
-    (fetchpatch {
-      name = "cups"; # weird name to avoid change (for now)
-      url = "https://git.archlinux.org/svntogit/packages.git/plain/trunk/cups-systemd-socket.patch"
-          + "?h=packages/cups&id=41fefa22ac518";
-      sha256 = "1ddgdlg9s0l2ph6l8lx1m1lx6k50gyxqi3qiwr44ppq1rxs80ny5";
-    })
-    ./cups-clean-dirty.patch
-  ];
 
   postPatch = ''
     substituteInPlace cups/testfile.c \

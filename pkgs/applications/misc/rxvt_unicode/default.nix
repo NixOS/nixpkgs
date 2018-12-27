@@ -51,8 +51,8 @@ stdenv.mkDerivation (rec {
     ''
     # make urxvt find its perl file lib/perl5/site_perl is added to PERL5LIB automatically
     + stdenv.lib.optionalString perlSupport ''
-      mkdir -p $out/lib/perl5
-      ln -s $out/{lib/urxvt,lib/perl5/site_perl}
+      mkdir -p $(dirname ${perl.libPrefix})
+      ln -s $out/lib/urxvt $out/${perl.libPrefix}
     '';
 
   postInstall = ''

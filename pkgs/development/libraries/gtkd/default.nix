@@ -1,5 +1,5 @@
 { stdenv, fetchzip, atk, cairo, dmd, gdk_pixbuf, gnome3, gst_all_1, librsvg
-, pango, pkgconfig, which }:
+, pango, pkgconfig, which, vte }:
 
 stdenv.mkDerivation rec {
   name = "gtkd-${version}";
@@ -89,7 +89,7 @@ stdenv.mkDerivation rec {
   dontStrip = true;
 
   inherit atk cairo gdk_pixbuf librsvg pango;
-  inherit (gnome3) glib gtk3 gtksourceview libgda libpeas vte;
+  inherit (gnome3) glib gtk3 gtksourceview libgda libpeas;
   inherit (gst_all_1) gstreamer;
   gst_plugins_base = gst_all_1.gst-plugins-base;
 

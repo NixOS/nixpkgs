@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, libxml2, libxslt, docbook-xsl, docbook_xml_dtd_44, perl, IPCRun, TimeDate, TimeDuration, makeWrapper, darwin }:
+{ stdenv, fetchgit, libxml2, libxslt, docbook-xsl, docbook_xml_dtd_44, perlPackages, makeWrapper, darwin }:
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libxml2 libxslt docbook-xsl docbook_xml_dtd_44 makeWrapper ]
     ++ optional stdenv.isDarwin darwin.cctools;
 
-  propagatedBuildInputs = [ perl IPCRun TimeDate TimeDuration ];
+  propagatedBuildInputs = with perlPackages; [ perl IPCRun TimeDate TimeDuration ];
 
   buildFlags = "CC=cc";
   installFlags = "PREFIX=$(out)";

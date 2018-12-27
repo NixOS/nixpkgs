@@ -31,7 +31,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ cmake python which swig ];
   buildInputs = [ ncurses zlib libedit libxml2 llvm ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ darwin.libobjc darwin.apple_sdk.libs.xpc darwin.apple_sdk.frameworks.Foundation darwin.bootstrap_cmds darwin.apple_sdk.frameworks.Carbon darwin.apple_sdk.frameworks.Cocoa ];
+    ++ stdenv.lib.optionals stdenv.isDarwin [ darwin.libobjc darwin.apple_sdk.libs.xpc darwin.apple_sdk.frameworks.Foundation darwin.bootstrap_cmds darwin.apple_sdk.frameworks.Carbon darwin.apple_sdk.frameworks.Cocoa darwin.cf-private ];
 
   CXXFLAGS = "-fno-rtti";
   hardeningDisable = [ "format" ];

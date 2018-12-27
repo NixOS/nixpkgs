@@ -1,5 +1,4 @@
-{ fetchurl, stdenv, makeWrapper, perl, LWP, URI, HTMLParser
-, HTTPServerSimple, Parent }:
+{ fetchurl, stdenv, makeWrapper, perlPackages }:
 
 stdenv.mkDerivation rec {
   name = "swec-0.4";
@@ -9,13 +8,13 @@ stdenv.mkDerivation rec {
     sha256 = "1m3971z4z1wr0paggprfz0n8ng8vsnkc9m6s3bdplgyz7qjk6jwx";
   };
 
-  buildInputs = [ makeWrapper perl LWP URI HTMLParser ];
-  checkInputs = [ HTTPServerSimple Parent ];
+  buildInputs = [ makeWrapper perlPackages.perl perlPackages.LWP perlPackages.URI perlPackages.HTMLParser ];
+  checkInputs = [ perlPackages.HTTPServerSimple perlPackages.Parent ];
 
   configurePhase = ''
     for i in swec tests/{runTests,testServer}
     do
-      sed -i "$i" -e's|/usr/bin/perl|${perl}/bin/perl|g'
+      sed -i "$i" -e's|/usr/bin/perl|${perlPackages.perl}/bin/perl|g'
     done
   '';
 
@@ -29,9 +28,7 @@ stdenv.mkDerivation rec {
     sed -i "$out/bin/swec" -e"s|realpath(\$0)|'$out/share/${name}/swec'|g"
 
     wrapProgram "$out/bin/swec" \
-      --prefix PERL5LIB : \
-      ${stdenv.lib.concatStringsSep ":"
-          (map (x: "${x}/lib/perl5/site_perl") [ LWP URI HTMLParser ])}
+      --prefix PERL5LIB : ${with perlPackages; makePerlPath [ LWP URI HTMLParser ]}
   '';
 
   doCheck = true;

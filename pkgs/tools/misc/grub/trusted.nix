@@ -90,10 +90,6 @@ stdenv.mkDerivation rec {
   doCheck = false;
   enableParallelBuilding = true;
 
-  postInstall = ''
-    paxmark pms $out/sbin/grub-{probe,bios-setup}
-  '';
-
   meta = with stdenv.lib; {
     description = "GRUB 2.0 extended with TCG (TPM) support for integrity measured boot process (trusted boot)";
     homepage = https://github.com/Sirrix-AG/TrustedGRUB2;
