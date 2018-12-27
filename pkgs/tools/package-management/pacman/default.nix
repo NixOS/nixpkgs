@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, autoreconfHook, pkgconfig, perl, libarchive, openssl,
-zlib, bzip2, lzma }:
+zlib, bzip2, lzma, runtimeShell }:
 
 stdenv.mkDerivation rec {
   pname = "pacman";
@@ -15,6 +15,7 @@ stdenv.mkDerivation rec {
     "--disable-doc"
 
     "--localstatedir=/var"
+    "--with-scriptlet-shell=${runtimeShell}"
   ];
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
