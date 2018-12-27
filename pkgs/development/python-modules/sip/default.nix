@@ -1,7 +1,11 @@
-{ lib, fetchurl, buildPythonPackage, python, isPyPy, sip-module ? "sip" }:
+{ lib, fetchurl, buildPythonPackage, python, isPyPy
+, sipModule ? "sip"
+, withModule ? true
+, withTools ? sipModule == "sip"
+}:
 
 buildPythonPackage rec {
-  pname = sip-module;
+  pname = sipModule;
   version = "4.19.13";
   format = "other";
 
@@ -12,12 +16,23 @@ buildPythonPackage rec {
     sha256 = "0pniq03jk1n5bs90yjihw3s3rsmjd8m89y9zbnymzgwrcl2sflz3";
   };
 
-  configurePhase = ''
-    ${python.executable} ./configure.py \
-      --sip-module ${sip-module} \
-      -d $out/lib/${python.libPrefix}/site-packages \
-      -b $out/bin -e $out/include
-  '';
+  nativeBuildInputs = [ python ];
+
+  configureScript = "python configure.py";
+
+  configureFlags = (
+    if (!withModule) then [ "--no-module" ] else [
+      "--sip-module" sipModule
+      "-d" "${placeholder "out"}/${python.sitePackages}"
+    ]
+  ) ++ (
+    if (!withTools) then [ "--no-tools" ] else [
+      "-b" "${placeholder "out"}/bin"
+      "-e" "${placeholder "out"}/include"
+    ]
+  );
+
+  dontAddPrefix = true;
 
   enableParallelBuilding = true;
 
