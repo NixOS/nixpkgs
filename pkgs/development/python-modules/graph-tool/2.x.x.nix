@@ -8,7 +8,7 @@
 buildPythonPackage rec {
   pname = "graph-tool";
   format = "other";
-  version = "2.26";
+  version = "2.27";
 
   meta = with stdenv.lib; {
     description = "Python module for manipulation and statistical analysis of graphs";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   src = fetchurl {
     url = "https://downloads.skewed.de/graph-tool/graph-tool-${version}.tar.bz2";
-    sha256 = "0w7pd2h8ayr88kjl82c8fdshnk6f3xslc77gy7ma09zkbvf76qnz";
+    sha256 = "04s31qwlfcl7bwsggnic8gqcqmx2wsrmfw77nf7vzgnz42bwch27";
   };
 
   patches = [

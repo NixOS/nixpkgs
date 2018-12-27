@@ -2824,6 +2824,8 @@ in {
 
   fs-s3fs = callPackage ../development/python-modules/fs-s3fs { };
 
+  libarcus = callPackage ../development/python-modules/libarcus { };
+
   libcloud = callPackage ../development/python-modules/libcloud { };
 
   libgpuarray = callPackage ../development/python-modules/libgpuarray {
@@ -2841,6 +2843,8 @@ in {
   libnacl = callPackage ../development/python-modules/libnacl {
     inherit (pkgs) libsodium;
   };
+
+  libsavitar = callPackage ../development/python-modules/libsavitar { };
 
   libplist = disabledIf isPy3k
     (toPythonModule (pkgs.libplist.override{python2Packages=self; })).py;
@@ -3733,6 +3737,8 @@ in {
 
   pyutil = callPackage ../development/python-modules/pyutil { };
 
+  pywal = callPackage ../development/python-modules/pywal { };
+
   pywebkitgtk = callPackage ../development/python-modules/pywebkitgtk { };
 
   pywinrm = callPackage ../development/python-modules/pywinrm { };
@@ -4490,8 +4496,6 @@ in {
   libasyncns = callPackage ../development/python-modules/libasyncns {
     inherit (pkgs) libasyncns pkgconfig;
   };
-
-  libarcus = callPackage ../development/python-modules/libarcus { };
 
   pybrowserid = callPackage ../development/python-modules/pybrowserid { };
 

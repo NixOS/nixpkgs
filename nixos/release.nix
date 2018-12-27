@@ -172,6 +172,14 @@ in rec {
     inherit system;
   });
 
+  sd_image_new_kernel = forMatchingSystems [ "aarch64-linux" ] (system: makeSdImage {
+    module = {
+        aarch64-linux = ./modules/installer/cd-dvd/sd-image-aarch64-new-kernel.nix;
+      }.${system};
+    type = "minimal-new-kernel";
+    inherit system;
+  });
+
   # A bootable VirtualBox virtual appliance as an OVA file (i.e. packaged OVF).
   ova = forMatchingSystems [ "x86_64-linux" ] (system:
 

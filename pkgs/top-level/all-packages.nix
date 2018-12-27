@@ -3147,7 +3147,8 @@ in
 
   gt5 = callPackage ../tools/system/gt5 { };
 
-  gtest = callPackage ../development/libraries/gtest {};
+  gtest = callPackage ../development/libraries/gtest { };
+  gtest_static = callPackage ../development/libraries/gtest { static = true; };
   gmock = gtest; # TODO: move to aliases.nix
 
   gbenchmark = callPackage ../development/libraries/gbenchmark {};
@@ -4695,6 +4696,13 @@ in
       mkdir -p $out/share/man/man1
       cp man/pandoc.1 $out/share/man/man1/
     '';
+    # Newer tasty version works
+    # https://github.com/jgm/pandoc/commit/3bf398b15ff28a39133a8ce27ba3d2728d255b17#diff-d37211f38c72504621b9d03eef12ffd7
+    # Note the patch doesn't apply because we fetch the cabal file from elsewhere
+    # This should be removed with pandoc 2.6.
+    postPatch = ''
+      substituteInPlace pandoc.cabal --replace "tasty >= 0.11 && < 1.2" "tasty >= 0.11 && < 1.3"
+    '';
   });
 
   pamtester = callPackage ../tools/security/pamtester { };
@@ -5001,7 +5009,7 @@ in
 
   pytrainer = callPackage ../applications/misc/pytrainer { };
 
-  pywal = callPackage ../tools/graphics/pywal {};
+  pywal = with python3Packages; toPythonApplication pywal;
 
   remarshal = callPackage ../development/tools/remarshal { };
 
@@ -6979,7 +6987,7 @@ in
 
   haskell = callPackage ./haskell-packages.nix { };
 
-  haskellPackages = haskell.packages.ghc844.override {
+  haskellPackages = haskell.packages.ghc863.override {
     overrides = config.haskellPackageOverrides or haskell.packageOverrides;
   };
 
@@ -7437,7 +7445,9 @@ in
 
   cargo-download = callPackage ../tools/package-management/cargo-download { };
   cargo-edit = callPackage ../tools/package-management/cargo-edit { };
-  cargo-release = callPackage ../tools/package-management/cargo-release { };
+  cargo-release = callPackage ../tools/package-management/cargo-release {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
   cargo-tree = callPackage ../tools/package-management/cargo-tree { };
   cargo-update = callPackage ../tools/package-management/cargo-update { };
 
@@ -8046,7 +8056,8 @@ in
   })
     ruby_2_3
     ruby_2_4
-    ruby_2_5;
+    ruby_2_5
+    ruby_2_6;
 
   ruby = ruby_2_5;
 
@@ -14551,20 +14562,16 @@ in
   linux_4_19 = callPackage ../os-specific/linux/kernel/linux-4.19.nix {
     kernelPatches =
       [ kernelPatches.bridge_stp_helper
-        # See pkgs/os-specific/linux/kernel/cpu-cgroup-v2-patches/README.md
-        # when adding a new linux version
-        # kernelPatches.cpu-cgroup-v2."4.11"
         kernelPatches.modinst_arg_list_too_long
+        kernelPatches.revert-vfs-dont-open-real
       ];
   };
 
   linux_4_20 = callPackage ../os-specific/linux/kernel/linux-4.20.nix {
     kernelPatches =
       [ kernelPatches.bridge_stp_helper
-        # See pkgs/os-specific/linux/kernel/cpu-cgroup-v2-patches/README.md
-        # when adding a new linux version
-        # kernelPatches.cpu-cgroup-v2."4.11"
         kernelPatches.modinst_arg_list_too_long
+        kernelPatches.revert-vfs-dont-open-real
       ];
   };
 
@@ -14656,6 +14663,7 @@ in
 
     nvidia_x11_legacy304 = nvidiaPackages.legacy_304;
     nvidia_x11_legacy340 = nvidiaPackages.legacy_340;
+    nvidia_x11_legacy390 = nvidiaPackages.legacy_390;
     nvidia_x11_beta      = nvidiaPackages.beta;
     nvidia_x11           = nvidiaPackages.stable;
 
@@ -14742,7 +14750,7 @@ in
   });
 
   # The current default kernel / kernel modules.
-  linuxPackages = linuxPackages_4_14;
+  linuxPackages = linuxPackages_4_19;
   linux = linuxPackages.kernel;
 
   # Update this when adding the newest kernel major version!
@@ -15596,6 +15604,8 @@ in
   marathi-cursive = callPackage ../data/fonts/marathi-cursive { };
 
   man-pages = callPackage ../data/documentation/man-pages { };
+
+  matcha = callPackage ../data/themes/matcha { };
 
   materia-theme = callPackage ../data/themes/materia-theme { };
 
@@ -22366,8 +22376,6 @@ in
   };
 
   martyr = callPackage ../development/libraries/martyr { };
-
-  matcha = callPackage ../misc/themes/matcha { };
 
   mess = callPackage ../misc/emulators/mess {
     inherit (pkgs.gnome2) GConf;
