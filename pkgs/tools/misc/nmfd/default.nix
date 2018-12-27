@@ -14,6 +14,7 @@ stdenv.mkDerivation rec {
 
   preBuild = ''
     mkdir -p $out/bin
+    mkdir -p $out/share/man/man1
     '';
 
   meta = with stdenv.lib; {
