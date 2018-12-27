@@ -4,7 +4,7 @@
 #
 
 { stdenv, lib, fetchurl,
-  python2, pkgconfig, autoconf, automake, yasm, libtool, m4,
+  python2, pkgconfig, autoconf, automake, cmake, yasm, libtool, m4,
   fribidi, fontconfig, freetype, jansson, zlib,
   libass, libiconv, libsamplerate, libxml2, bzip2,
   ffmpeg_4, libtheora, x264, x265, libvpx, mpeg2dec,
@@ -35,8 +35,8 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    python2 pkgconfig autoconf automake yasm libtool m4
-  ] ++ lib.optionals useGtk [ wrapGAppsHook intltool ];
+    python2 pkgconfig autoconf automake cmake yasm libtool m4
+  ] ++ lib.optionals useGtk [ intltool wrapGAppsHook ];
 
   buildInputs = [
     fribidi fontconfig freetype jansson zlib
@@ -51,6 +51,10 @@ stdenv.mkDerivation rec {
     libgudev hicolor-icon-theme
   ] ++ lib.optional useFdk fdk_aac;
 
+  # NOTE: 2018-12-25: v1.2.0 now requires cmake dep
+  # (default distribution bundles&builds 3rd party libs),
+  # don't trigger cmake build
+  dontUseCmakeConfigure = true;
   enableParallelBuilding = true;
 
   preConfigure = ''
