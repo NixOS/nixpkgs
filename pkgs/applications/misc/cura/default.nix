@@ -2,24 +2,26 @@
 
 mkDerivation rec {
   name = "cura-${version}";
-  version = "3.4.1";
+  version = "3.6.0";
 
   src = fetchFromGitHub {
     owner = "Ultimaker";
     repo = "Cura";
     rev = version;
-    sha256 = "03s9nf1aybbnbf1rzqja41m9g6991bbvrcly1lcrfqksianfn06w";
+    sha256 = "0wzkbqdd1670smw1vnq634rkpcjwnhwcvimhvjq904gy2fylgr90";
   };
 
   materials = fetchFromGitHub {
     owner = "Ultimaker";
     repo = "fdm_materials";
-    rev = "3.4.1";
-    sha256 = "1pw30clxqd7qgnidsyx6grizvlgfn8rhj6rd5ppkvv3rdjh0gj28";
+    rev = version;
+    sha256 = "0g2dkph0ll7d9109n17vmfwb4fpc8lhyb1z1q68j8vblyvg08d12";
   };
 
   buildInputs = [ qtbase qtquickcontrols2 ];
-  propagatedBuildInputs = with python3.pkgs; [ uranium zeroconf pyserial numpy-stl ];
+  propagatedBuildInputs = with python3.pkgs; [
+    libsavitar numpy-stl pyserial requests uranium zeroconf
+  ];
   nativeBuildInputs = [ cmake python3.pkgs.wrapPython ];
 
   cmakeFlags = [
@@ -44,7 +46,7 @@ mkDerivation rec {
   meta = with lib; {
     description = "3D printer / slicing GUI built on top of the Uranium framework";
     homepage = https://github.com/Ultimaker/Cura;
-    license = licenses.agpl3;
+    license = licenses.lgpl3Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ abbradar ];
   };
