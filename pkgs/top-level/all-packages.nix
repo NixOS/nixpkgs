@@ -3416,6 +3416,7 @@ in
   iftop = callPackage ../tools/networking/iftop { };
 
   ifuse = callPackage ../tools/filesystems/ifuse { };
+  ideviceinstaller = callPackage ../tools/misc/ideviceinstaller { };
 
   inherit (callPackages ../tools/filesystems/irods rec {
             stdenv = llvmPackages_38.libcxxStdenv;
