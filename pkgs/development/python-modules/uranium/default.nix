@@ -1,5 +1,5 @@
 { stdenv, buildPythonPackage, fetchFromGitHub, python, cmake
-, pyqt5, numpy, scipy, libarcus, doxygen, gettext, pythonOlder }:
+, pyqt5, numpy, scipy, shapely, libarcus, doxygen, gettext, pythonOlder }:
 
 buildPythonPackage rec {
   version = "3.5.1";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   disabled = pythonOlder "3.5.0";
 
   buildInputs = [ python gettext ];
-  propagatedBuildInputs = [ pyqt5 numpy scipy libarcus ];
+  propagatedBuildInputs = [ pyqt5 numpy scipy shapely libarcus ];
   nativeBuildInputs = [ cmake doxygen ];
 
   postPatch = ''
