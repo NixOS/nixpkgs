@@ -3867,6 +3867,8 @@ in
 
   nixnote2 = libsForQt5.callPackage ../applications/misc/nixnote2 { };
 
+  nmfd = callPackage ../tools/misc/nmfd { };
+
   nodejs = hiPrio nodejs-8_x;
 
   nodejs-slim = nodejs-slim-6_x;

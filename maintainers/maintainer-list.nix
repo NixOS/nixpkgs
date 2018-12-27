@@ -231,6 +231,11 @@
     github = "ambrop72";
     name = "Ambroz Bizjak";
   };
+  amelorate = {
+    email = "ameilorate2+nixos@gmail.com";
+    github = "Ameliorate";
+    name = "Amelorate";
+  };
   amiddelk = {
     email = "amiddelk@gmail.com";
     github = "amiddelk";
