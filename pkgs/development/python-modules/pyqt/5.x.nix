@@ -13,9 +13,9 @@
 
 let
 
-  inherit (pythonPackages) buildPythonPackage python isPy3k dbus-python enum34;
+  inherit (pythonPackages) buildPythonPackage python isPy3k dbus-python enum34 sip;
 
-  sip = (pythonPackages.sip.override { sip-module = "PyQt5.sip"; }).overridePythonAttrs(oldAttrs: {
+  pyqt5-sip = (sip.override { sipModule = "PyQt5.sip"; }).overridePythonAttrs(oldAttrs: {
     # If we install sip in another folder, then we need to create a __init__.py as well
     # if we want to be able to import it with Python 2.
     # Python 3 could rely on it being an implicit namespace package, however,
@@ -104,7 +104,7 @@ in buildPythonPackage rec {
   '';
 
   postInstall = ''
-    ln -s ${sip}/${python.sitePackages}/PyQt5/sip.* $out/${python.sitePackages}/PyQt5/
+    ln -s ${pyqt5-sip}/${python.sitePackages}/PyQt5/* $out/${python.sitePackages}/PyQt5/
     for i in $out/bin/*; do
       wrapProgram $i --prefix PYTHONPATH : "$PYTHONPATH"
     done

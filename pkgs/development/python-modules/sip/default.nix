@@ -1,7 +1,11 @@
-{ lib, fetchurl, buildPythonPackage, python, isPyPy, sip-module ? "sip" }:
+{ lib, fetchurl, buildPythonPackage, python, isPyPy
+, sipModule ? "sip"
+, withModule ? true
+, withTools ? sipModule == "sip"
+}:
 
 buildPythonPackage rec {
-  pname = sip-module;
+  pname = sipModule;
   version = "4.19.24";
   format = "other";
 
@@ -12,18 +16,29 @@ buildPythonPackage rec {
     sha256 = "1ra15vb5i9gkg2vdvh16cq9x2mmzw1yi3xphxs8q34q1pf83gkgd";
   };
 
-  configurePhase = ''
-    ${python.executable} ./configure.py \
-      --sip-module ${sip-module} \
-      -d $out/${python.sitePackages} \
-      -b $out/bin -e $out/include
-  '';
+  nativeBuildInputs = [ python ];
+
+  configureScript = "${python.interpreter} configure.py";
+
+  configureFlags = (
+    if (!withModule) then [ "--no-module" ] else [
+      "--sip-module" sipModule
+      "-d" "${placeholder "out"}/${python.sitePackages}"
+    ]
+  ) ++ (
+    if (!withTools) then [ "--no-tools" ] else [
+      "-b" "${placeholder "out"}/bin"
+      "-e" "${placeholder "out"}/include"
+    ]
+  );
+
+  dontAddPrefix = true;
 
   enableParallelBuilding = true;
 
   installCheckPhase = let
     modules = [
-      sip-module
+      sipModule
       "sipconfig"
     ];
     imports = lib.concatMapStrings (module: "import ${module};") modules;
