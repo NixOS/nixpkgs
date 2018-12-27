@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, fetchpatch, scons, boost, gperftools, pcre-cpp, snappy
-, zlib, libyamlcpp, sasl, openssl, libpcap, wiredtiger, Security, python27, libtool, curl
+{ stdenv, fetchurl, fetchpatch, scons, boost, gperftools, pcre-cpp, snappy, zlib,
+  libyamlcpp, sasl, openssl, libpcap, wiredtiger, Security, python27, libtool, curl
 }:
 
 # Note:
@@ -20,6 +20,7 @@ let version = "4.0.4";
       #"stemmer"  -- not nice to package yet (no versioning, no makefile, no shared libs).
       "yaml"
     ] ++ optionals stdenv.isLinux [ "tcmalloc" ];
+    inherit (stdenv.lib) systems subtractLists;
 
 in stdenv.mkDerivation {
   pname = "mongodb";
@@ -103,6 +104,6 @@ in stdenv.mkDerivation {
     broken = stdenv.hostPlatform.isAarch64; #g++ has internal compiler errors
 
     maintainers = with maintainers; [ bluescreen303 offline cstrahan ];
-    platforms = platforms.unix;
+    platforms = subtractLists systems.doubles.i686 systems.doubles.unix;
   };
 }
