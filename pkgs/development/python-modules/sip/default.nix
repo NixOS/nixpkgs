@@ -19,6 +19,8 @@ buildPythonPackage rec {
       -b $out/bin -e $out/include
   '';
 
+  enableParallelBuilding = true;
+
   meta = with lib; {
     description = "Creates C++ bindings for Python modules";
     homepage    = "http://www.riverbankcomputing.co.uk/";
