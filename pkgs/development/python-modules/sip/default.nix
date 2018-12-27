@@ -1,20 +1,20 @@
-{ lib, fetchurl, buildPythonPackage, python, isPyPy }:
+{ lib, fetchurl, buildPythonPackage, python, isPyPy, sip-module ? "sip" }:
 
 buildPythonPackage rec {
-  pname = "sip";
+  pname = sip-module;
   version = "4.19.13";
   format = "other";
 
   disabled = isPyPy;
 
   src = fetchurl {
-    url = "mirror://sourceforge/pyqt/sip/${pname}-${version}/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/pyqt/sip/sip-${version}/sip-${version}.tar.gz";
     sha256 = "0pniq03jk1n5bs90yjihw3s3rsmjd8m89y9zbnymzgwrcl2sflz3";
   };
 
   configurePhase = ''
     ${python.executable} ./configure.py \
-      --sip-module PyQt5.sip \
+      --sip-module ${sip-module} \
       -d $out/lib/${python.libPrefix}/site-packages \
       -b $out/bin -e $out/include
   '';
