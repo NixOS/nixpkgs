@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, autoreconfHook, pkgconfig, perl, libarchive, openssl,
-zlib, bzip2, lzma, runtimeShell }:
+zlib, bzip2, lzma, curl, runtimeShell }:
 
 stdenv.mkDerivation rec {
   pname = "pacman";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
-  buildInputs = [ perl libarchive openssl zlib bzip2 lzma ];
+  buildInputs = [ curl perl libarchive openssl zlib bzip2 lzma ];
 
   postFixup = ''
     substituteInPlace $out/bin/repo-add \
