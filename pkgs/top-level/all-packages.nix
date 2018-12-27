@@ -7465,7 +7465,9 @@ in
 
   cargo-download = callPackage ../tools/package-management/cargo-download { };
   cargo-edit = callPackage ../tools/package-management/cargo-edit { };
-  cargo-release = callPackage ../tools/package-management/cargo-release { };
+  cargo-release = callPackage ../tools/package-management/cargo-release {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
   cargo-tree = callPackage ../tools/package-management/cargo-tree { };
   cargo-update = callPackage ../tools/package-management/cargo-update { };
 
