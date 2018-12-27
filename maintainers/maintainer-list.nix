@@ -4677,6 +4677,11 @@
     github = "vklquevs";
     name = "vklquevs";
   };
+  vlaci = {
+    email = "laszlo.vasko@outlook.com";
+    github = "vlaci";
+    name = "László Vaskó";
+  };
   vlstill = {
     email = "xstill@fi.muni.cz";
     github = "vlstill";
