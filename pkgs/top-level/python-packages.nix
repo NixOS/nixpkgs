@@ -716,6 +716,7 @@ in {
   singledispatch = callPackage ../development/python-modules/singledispatch { };
 
   sip = callPackage ../development/python-modules/sip { };
+  sip_forPyQt5 = callPackage ../development/python-modules/sip { forPyQt5 = true; };
 
   sortedcontainers = callPackage ../development/python-modules/sortedcontainers { };
 

@@ -8,7 +8,7 @@ let
   pname = "PyQt";
   version = "5.11.3";
 
-  inherit (pythonPackages) buildPythonPackage python isPy3k dbus-python sip enum34;
+  inherit (pythonPackages) buildPythonPackage python isPy3k dbus-python sip_forPyQt5 enum34;
 
 in buildPythonPackage {
   pname = pname;
@@ -35,7 +35,7 @@ in buildPythonPackage {
   buildInputs = [ dbus ];
 
   propagatedBuildInputs = [
-    sip qtbase qtsvg qtwebkit qtwebengine
+    sip_forPyQt5 qtbase qtsvg qtwebkit qtwebengine
   ] ++ lib.optional (!isPy3k) enum34 ++ lib.optional withWebSockets qtwebsockets ++ lib.optional withConnectivity qtconnectivity;
 
   configurePhase = ''
@@ -65,7 +65,7 @@ in buildPythonPackage {
   '';
 
   postInstall = ''
-    ln -s ${sip}/${python.sitePackages}/PyQt5/* $out/${python.sitePackages}/PyQt5
+    ln -s ${sip_forPyQt5}/${python.sitePackages}/PyQt5/* $out/${python.sitePackages}/PyQt5
     for i in $out/bin/*; do
       wrapProgram $i --prefix PYTHONPATH : "$PYTHONPATH"
     done

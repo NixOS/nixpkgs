@@ -1,4 +1,5 @@
-{ lib, fetchurl, buildPythonPackage, python, isPyPy }:
+{ lib, fetchurl, buildPythonPackage, python, isPyPy
+, forPyQt5 ? false }:
 
 buildPythonPackage rec {
   pname = "sip";
@@ -14,7 +15,7 @@ buildPythonPackage rec {
 
   configurePhase = ''
     ${python.executable} ./configure.py \
-      --sip-module PyQt5.sip \
+      ${lib.optionalString forPyQt5 "--sip-module PyQt5.sip"} \
       -d $out/lib/${python.libPrefix}/site-packages \
       -b $out/bin -e $out/include
   '';
