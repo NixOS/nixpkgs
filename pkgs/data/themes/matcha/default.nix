@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "matcha-${version}";
-  version = "2018-11-12";
+  version = "2018-12-24";
 
   src = fetchFromGitHub {
     owner = "vinceliuice";
     repo = "matcha";
     rev = version;
-    sha256 = "04alnwb3r0546y7xk2lx8bsdm47q6j89vld3g19rfb3622iv85la";
+    sha256 = "178y5s5jfprkw8y6clqb8ss4kvfswivfrh6cn67fk4z7wg72i3yc";
   };
 
   buildInputs = [ gdk_pixbuf librsvg ];
@@ -17,8 +17,8 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     patchShebangs .
-    substituteInPlace Install --replace '$HOME/.themes' "$out/share/themes"
-    ./Install
+    mkdir -p $out/share/themes
+    name= ./Install -d $out/share/themes
     install -D -t $out/share/gtksourceview-3.0/styles src/extra/gedit/matcha.xml
   '';
 

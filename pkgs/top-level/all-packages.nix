@@ -15600,6 +15600,8 @@ in
 
   man-pages = callPackage ../data/documentation/man-pages { };
 
+  matcha = callPackage ../data/themes/matcha { };
+
   materia-theme = callPackage ../data/themes/materia-theme { };
 
   material-icons = callPackage ../data/fonts/material-icons { };
@@ -22403,8 +22405,6 @@ in
   };
 
   martyr = callPackage ../development/libraries/martyr { };
-
-  matcha = callPackage ../misc/themes/matcha { };
 
   mess = callPackage ../misc/emulators/mess {
     inherit (pkgs.gnome2) GConf;
