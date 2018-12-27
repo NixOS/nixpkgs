@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation rec {
   name = "wget-${version}";
-  version = "1.20";
+  version = "1.20.1";
 
   src = fetchurl {
     url = "mirror://gnu/wget/${name}.tar.lz";
-    sha256 = "07k8yd8rdn27x5fbzlnsz4db7z7qnisiqhs7r1b5wzy2b9b0zf5h";
+    sha256 = "0a29qsqxkk8145vkyy35q5a1wc7qzwx3qj3gmfrkmi9xs96yhqqg";
   };
 
   patches = [
