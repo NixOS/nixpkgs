@@ -403,59 +403,9 @@ rec {
     '';
   };
 
-  vimHelpTags = ''
-  vimHelpTags(){
-    if [ -d "$1/doc" ]; then
-      ${vim}/bin/vim -N -u NONE -i NONE -n -E -s -c "helptags $1/doc" +quit! || echo "docs to build failed"
-    fi
-  }
-  '';
-
-  addRtp = path: attrs: derivation:
-    derivation // { rtp = "${derivation}/${path}"; } // {
-      overrideAttrs = f: buildVimPlugin (attrs // f attrs);
-    };
-
-  buildVimPlugin = a@{
-    name,
-    namePrefix ? "vimplugin-",
-    src,
-    unpackPhase ? "",
-    configurePhase ? "",
-    buildPhase ? "",
-    preInstall ? "",
-    postInstall ? "",
-    path ? (builtins.parseDrvName name).name,
-    addonInfo ? null,
-    ...
-  }:
-    addRtp "${rtpPath}/${path}" a (stdenv.mkDerivation (a // {
-      name = namePrefix + name;
-
-      inherit unpackPhase configurePhase buildPhase addonInfo preInstall postInstall;
-
-      installPhase = ''
-        runHook preInstall
-
-        target=$out/${rtpPath}/${path}
-        mkdir -p $out/${rtpPath}
-        cp -r . $target
-        ${vimHelpTags}
-        vimHelpTags $target
-        if [ -n "$addonInfo" ]; then
-          echo "$addonInfo" > $target/addon-info.json
-        fi
-
-        runHook postInstall
-      '';
-    }));
-
   vim_with_vim2nix = vim_configurable.customize { name = "vim"; vimrcConfig.vam.pluginDictionaries = [ "vim-addon-vim2nix" ]; };
 
-  buildVimPluginFrom2Nix = a: buildVimPlugin ({
-    buildPhase = ":";
-    configurePhase =":";
-  } // a);
+  inherit (import ./build-vim-plugin.nix { inherit stdenv rtpPath vim; }) buildVimPlugin buildVimPluginFrom2Nix;
 
   requiredPlugins = {
     packages ? {},

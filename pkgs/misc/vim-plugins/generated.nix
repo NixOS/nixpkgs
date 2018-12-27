@@ -3,8 +3,8 @@
 
 {
   a-vim = buildVimPluginFrom2Nix {
-    name = "a-vim-2010-11-06";
     pname = "a-vim";
+    version = "2010-11-06";
     src = fetchFromGitHub {
       owner = "vim-scripts";
       repo = "a.vim";
@@ -14,8 +14,8 @@
   };
 
   ack-vim = buildVimPluginFrom2Nix {
-    name = "ack-vim-2018-02-27";
     pname = "ack-vim";
+    version = "2018-02-27";
     src = fetchFromGitHub {
       owner = "mileszs";
       repo = "ack.vim";
@@ -25,8 +25,8 @@
   };
 
   acp = buildVimPluginFrom2Nix {
-    name = "acp-2013-02-05";
     pname = "acp";
+    version = "2013-02-05";
     src = fetchFromGitHub {
       owner = "eikenb";
       repo = "acp";
@@ -36,8 +36,8 @@
   };
 
   agda-vim = buildVimPluginFrom2Nix {
-    name = "agda-vim-2018-11-10";
     pname = "agda-vim";
+    version = "2018-11-10";
     src = fetchFromGitHub {
       owner = "derekelkins";
       repo = "agda-vim";
@@ -47,8 +47,8 @@
   };
 
   alchemist-vim = buildVimPluginFrom2Nix {
-    name = "alchemist-vim-2018-12-07";
     pname = "alchemist-vim";
+    version = "2018-12-07";
     src = fetchFromGitHub {
       owner = "slashmili";
       repo = "alchemist.vim";
@@ -58,8 +58,8 @@
   };
 
   ale = buildVimPluginFrom2Nix {
-    name = "ale-2018-12-20";
     pname = "ale";
+    version = "2018-12-20";
     src = fetchFromGitHub {
       owner = "w0rp";
       repo = "ale";
@@ -69,8 +69,8 @@
   };
 
   align = buildVimPluginFrom2Nix {
-    name = "align-2012-08-08";
     pname = "align";
+    version = "2012-08-08";
     src = fetchFromGitHub {
       owner = "vim-scripts";
       repo = "align";
@@ -80,8 +80,8 @@
   };
 
   argtextobj-vim = buildVimPluginFrom2Nix {
-    name = "argtextobj-vim-2010-10-18";
     pname = "argtextobj-vim";
+    version = "2010-10-18";
     src = fetchFromGitHub {
       owner = "vim-scripts";
       repo = "argtextobj.vim";
@@ -91,8 +91,8 @@
   };
 
   auto-pairs = buildVimPluginFrom2Nix {
-    name = "auto-pairs-2018-09-23";
     pname = "auto-pairs";
+    version = "2018-09-23";
     src = fetchFromGitHub {
       owner = "jiangmiao";
       repo = "auto-pairs";
@@ -102,8 +102,8 @@
   };
 
   autoload_cscope-vim = buildVimPluginFrom2Nix {
-    name = "autoload_cscope-vim-2011-01-28";
     pname = "autoload_cscope-vim";
+    version = "2011-01-28";
     src = fetchFromGitHub {
       owner = "vim-scripts";
       repo = "autoload_cscope.vim";
@@ -113,8 +113,8 @@
   };
 
   awesome-vim-colorschemes = buildVimPluginFrom2Nix {
-    name = "awesome-vim-colorschemes-2018-12-16";
     pname = "awesome-vim-colorschemes";
+    version = "2018-12-16";
     src = fetchFromGitHub {
       owner = "rafi";
       repo = "awesome-vim-colorschemes";
@@ -124,8 +124,8 @@
   };
 
   base16-vim = buildVimPluginFrom2Nix {
-    name = "base16-vim-2018-11-30";
     pname = "base16-vim";
+    version = "2018-11-30";
     src = fetchFromGitHub {
       owner = "chriskempson";
       repo = "base16-vim";
@@ -135,8 +135,8 @@
   };
 
   bats-vim = buildVimPluginFrom2Nix {
-    name = "bats-vim-2013-07-03";
     pname = "bats-vim";
+    version = "2013-07-03";
     src = fetchFromGitHub {
       owner = "vim-scripts";
       repo = "bats.vim";
@@ -146,8 +146,8 @@
   };
 
   calendar-vim = buildVimPluginFrom2Nix {
-    name = "calendar-vim-2018-11-02";
     pname = "calendar-vim";
+    version = "2018-11-02";
     src = fetchFromGitHub {
       owner = "itchyny";
       repo = "calendar.vim";
@@ -157,8 +157,8 @@
   };
 
   caw-vim = buildVimPluginFrom2Nix {
-    name = "caw-vim-2018-12-25";
     pname = "caw-vim";
+    version = "2018-12-25";
     src = fetchFromGitHub {
       owner = "tyru";
       repo = "caw.vim";
@@ -168,8 +168,8 @@
   };
 
   changeColorScheme-vim = buildVimPluginFrom2Nix {
-    name = "changeColorScheme-vim-2010-10-18";
     pname = "changeColorScheme-vim";
+    version = "2010-10-18";
     src = fetchFromGitHub {
       owner = "vim-scripts";
       repo = "changeColorScheme.vim";
@@ -179,8 +179,8 @@
   };
 
   CheckAttach = buildVimPluginFrom2Nix {
-    name = "CheckAttach-2018-09-02";
     pname = "CheckAttach";
+    version = "2018-09-02";
     src = fetchFromGitHub {
       owner = "chrisbra";
       repo = "CheckAttach";
@@ -190,8 +190,8 @@
   };
 
   clang_complete = buildVimPluginFrom2Nix {
-    name = "clang_complete-2018-09-19";
     pname = "clang_complete";
+    version = "2018-09-19";
     src = fetchFromGitHub {
       owner = "Rip-Rip";
       repo = "clang_complete";
@@ -201,8 +201,8 @@
   };
 
   clighter8 = buildVimPluginFrom2Nix {
-    name = "clighter8-2018-07-25";
     pname = "clighter8";
+    version = "2018-07-25";
     src = fetchFromGitHub {
       owner = "bbchung";
       repo = "clighter8";
@@ -212,8 +212,8 @@
   };
 
   Colour-Sampler-Pack = buildVimPluginFrom2Nix {
-    name = "Colour-Sampler-Pack-2012-11-30";
     pname = "Colour-Sampler-Pack";
+    version = "2012-11-30";
     src = fetchFromGitHub {
       owner = "vim-scripts";
       repo = "Colour-Sampler-Pack";
@@ -223,8 +223,8 @@
   };
 
   command-t = buildVimPluginFrom2Nix {
-    name = "command-t-2018-09-19";
     pname = "command-t";
+    version = "2018-09-19";
     src = fetchFromGitHub {
       owner = "wincent";
       repo = "command-t";
@@ -235,8 +235,8 @@
   };
 
   committia-vim = buildVimPluginFrom2Nix {
-    name = "committia-vim-2018-10-23";
     pname = "committia-vim";
+    version = "2018-10-23";
     src = fetchFromGitHub {
       owner = "rhysd";
       repo = "committia.vim";
@@ -246,8 +246,8 @@
   };
 
   concealedyank-vim = buildVimPluginFrom2Nix {
-    name = "concealedyank-vim-2013-03-24";
     pname = "concealedyank-vim";
+    version = "2013-03-24";
     src = fetchFromGitHub {
       owner = "chikatoike";
       repo = "concealedyank.vim";
@@ -257,8 +257,8 @@
   };
 
   context_filetype-vim = buildVimPluginFrom2Nix {
-    name = "context_filetype-vim-2018-08-30";
     pname = "context_filetype-vim";
+    version = "2018-08-30";
     src = fetchFromGitHub {
       owner = "Shougo";
       repo = "context_filetype.vim";
@@ -268,8 +268,8 @@
   };
 
   cosco-vim = buildVimPluginFrom2Nix {
-    name = "cosco-vim-2018-08-07";
     pname = "cosco-vim";
+    version = "2018-08-07";
     src = fetchFromGitHub {
       owner = "lfilho";
       repo = "cosco.vim";
@@ -279,8 +279,8 @@
   };
 
   cpsm = buildVimPluginFrom2Nix {
-    name = "cpsm-2018-09-08";
     pname = "cpsm";
+    version = "2018-09-08";
     src = fetchFromGitHub {
       owner = "nixprime";
       repo = "cpsm";
@@ -290,8 +290,8 @@
   };
 
   csapprox = buildVimPluginFrom2Nix {
-    name = "csapprox-2013-07-27";
     pname = "csapprox";
+    version = "2013-07-27";
     src = fetchFromGitHub {
       owner = "godlygeek";
       repo = "csapprox";
@@ -301,8 +301,8 @@
   };
 
   csv-vim = buildVimPluginFrom2Nix {
-    name = "csv-vim-2018-10-04";
     pname = "csv-vim";
+    version = "2018-10-04";
     src = fetchFromGitHub {
       owner = "chrisbra";
       repo = "csv.vim";
@@ -312,8 +312,8 @@
   };
 
   ctrlp-cmatcher = buildVimPluginFrom2Nix {
-    name = "ctrlp-cmatcher-2015-10-15";
     pname = "ctrlp-cmatcher";
+    version = "2015-10-15";
     src = fetchFromGitHub {
       owner = "JazzCore";
       repo = "ctrlp-cmatcher";
@@ -323,8 +323,8 @@
   };
 
   ctrlp-py-matcher = buildVimPluginFrom2Nix {
-    name = "ctrlp-py-matcher-2017-11-01";
     pname = "ctrlp-py-matcher";
+    version = "2017-11-01";
     src = fetchFromGitHub {
       owner = "FelikZ";
       repo = "ctrlp-py-matcher";
@@ -334,8 +334,8 @@
   };
 
   ctrlp-z = buildVimPluginFrom2Nix {
-    name = "ctrlp-z-2015-10-17";
     pname = "ctrlp-z";
+    version = "2015-10-17";
     src = fetchFromGitHub {
       owner = "amiorin";
       repo = "ctrlp-z";
@@ -345,8 +345,8 @@
   };
 
   ctrlp-vim = buildVimPluginFrom2Nix {
-    name = "ctrlp-vim-2018-11-22";
     pname = "ctrlp-vim";
+    version = "2018-11-22";
     src = fetchFromGitHub {
       owner = "ctrlpvim";
       repo = "ctrlp.vim";
@@ -356,8 +356,8 @@
   };
 
   denite-extra = buildVimPluginFrom2Nix {
-    name = "denite-extra-2018-09-20";
     pname = "denite-extra";
+    version = "2018-09-20";
     src = fetchFromGitHub {
       owner = "chemzqm";
       repo = "denite-extra";
@@ -367,8 +367,8 @@
   };
 
   denite-git = buildVimPluginFrom2Nix {
-    name = "denite-git-2018-07-19";
     pname = "denite-git";
+    version = "2018-07-19";
     src = fetchFromGitHub {
       owner = "chemzqm";
       repo = "denite-git";
@@ -378,8 +378,8 @@
   };
 
   denite-nvim = buildVimPluginFrom2Nix {
-    name = "denite-nvim-2018-12-24";
     pname = "denite-nvim";
+    version = "2018-12-24";
     src = fetchFromGitHub {
       owner = "Shougo";
       repo = "denite.nvim";
@@ -389,8 +389,8 @@
   };
 
   deol-nvim = buildVimPluginFrom2Nix {
-    name = "deol-nvim-2018-12-25";
     pname = "deol-nvim";
+    version = "2018-12-25";
     src = fetchFromGitHub {
       owner = "Shougo";
       repo = "deol.nvim";
@@ -400,8 +400,8 @@
   };
 
   deoplete-clang = buildVimPluginFrom2Nix {
-    name = "deoplete-clang-2018-12-24";
     pname = "deoplete-clang";
+    version = "2018-12-24";
     src = fetchFromGitHub {
       owner = "zchee";
       repo = "deoplete-clang";
@@ -412,8 +412,8 @@
   };
 
   deoplete-go = buildVimPluginFrom2Nix {
-    name = "deoplete-go-2018-11-23";
     pname = "deoplete-go";
+    version = "2018-11-23";
     src = fetchFromGitHub {
       owner = "zchee";
       repo = "deoplete-go";
@@ -424,8 +424,8 @@
   };
 
   deoplete-jedi = buildVimPluginFrom2Nix {
-    name = "deoplete-jedi-2018-12-24";
     pname = "deoplete-jedi";
+    version = "2018-12-24";
     src = fetchFromGitHub {
       owner = "zchee";
       repo = "deoplete-jedi";
@@ -436,8 +436,8 @@
   };
 
   deoplete-julia = buildVimPluginFrom2Nix {
-    name = "deoplete-julia-2018-06-11";
     pname = "deoplete-julia";
+    version = "2018-06-11";
     src = fetchFromGitHub {
       owner = "JuliaEditorSupport";
       repo = "deoplete-julia";
@@ -447,8 +447,8 @@
   };
 
   deoplete-rust = buildVimPluginFrom2Nix {
-    name = "deoplete-rust-2017-07-18";
     pname = "deoplete-rust";
+    version = "2017-07-18";
     src = fetchFromGitHub {
       owner = "sebastianmarkow";
       repo = "deoplete-rust";
@@ -458,8 +458,8 @@
   };
 
   deoplete-ternjs = buildVimPluginFrom2Nix {
-    name = "deoplete-ternjs-2018-11-29";
     pname = "deoplete-ternjs";
+    version = "2018-11-29";
     src = fetchFromGitHub {
       owner = "carlitux";
       repo = "deoplete-ternjs";
@@ -469,8 +469,8 @@
   };
 
   deoplete-nvim = buildVimPluginFrom2Nix {
-    name = "deoplete-nvim-2018-12-26";
     pname = "deoplete-nvim";
+    version = "2018-12-26";
     src = fetchFromGitHub {
       owner = "Shougo";
       repo = "deoplete.nvim";
@@ -480,8 +480,8 @@
   };
 
   dhall-vim = buildVimPluginFrom2Nix {
-    name = "dhall-vim-2018-12-26";
     pname = "dhall-vim";
+    version = "2018-12-26";
     src = fetchFromGitHub {
       owner = "vmchale";
       repo = "dhall-vim";
@@ -491,8 +491,8 @@
   };
 
   direnv-vim = buildVimPluginFrom2Nix {
-    name = "direnv-vim-2018-11-10";
     pname = "direnv-vim";
+    version = "2018-11-10";
     src = fetchFromGitHub {
       owner = "direnv";
       repo = "direnv.vim";
@@ -502,8 +502,8 @@
   };
 
   echodoc-vim = buildVimPluginFrom2Nix {
-    name = "echodoc-vim-2018-12-09";
     pname = "echodoc-vim";
+    version = "2018-12-09";
     src = fetchFromGitHub {
       owner = "Shougo";
       repo = "echodoc.vim";
@@ -513,8 +513,8 @@
   };
 
   editorconfig-vim = buildVimPluginFrom2Nix {
-    name = "editorconfig-vim-2018-11-15";
     pname = "editorconfig-vim";
+    version = "2018-11-15";
     src = fetchFromGitHub {
       owner = "editorconfig";
       repo = "editorconfig-vim";
@@ -525,8 +525,8 @@
   };
 
   elm-vim = buildVimPluginFrom2Nix {
-    name = "elm-vim-2018-11-13";
     pname = "elm-vim";
+    version = "2018-11-13";
     src = fetchFromGitHub {
       owner = "elmcast";
       repo = "elm-vim";
@@ -536,8 +536,8 @@
   };
 
   emmet-vim = buildVimPluginFrom2Nix {
-    name = "emmet-vim-2018-11-29";
     pname = "emmet-vim";
+    version = "2018-11-29";
     src = fetchFromGitHub {
       owner = "mattn";
       repo = "emmet-vim";
@@ -548,8 +548,8 @@
   };
 
   ensime-vim = buildVimPluginFrom2Nix {
-    name = "ensime-vim-2018-10-10";
     pname = "ensime-vim";
+    version = "2018-10-10";
     src = fetchFromGitHub {
       owner = "ensime";
       repo = "ensime-vim";
@@ -559,8 +559,8 @@
   };
 
   falcon = buildVimPluginFrom2Nix {
-    name = "falcon-2018-12-21";
     pname = "falcon";
+    version = "2018-12-21";
     src = fetchFromGitHub {
       owner = "fenetikm";
       repo = "falcon";
@@ -570,8 +570,8 @@
   };
 
   fastfold = buildVimPluginFrom2Nix {
-    name = "fastfold-2018-09-24";
     pname = "fastfold";
+    version = "2018-09-24";
     src = fetchFromGitHub {
       owner = "konfekt";
       repo = "fastfold";
@@ -581,8 +581,8 @@
   };
 
   ferret = buildVimPluginFrom2Nix {
-    name = "ferret-2018-12-25";
     pname = "ferret";
+    version = "2018-12-25";
     src = fetchFromGitHub {
       owner = "wincent";
       repo = "ferret";
@@ -592,8 +592,8 @@
   };
 
   flake8-vim = buildVimPluginFrom2Nix {
-    name = "flake8-vim-2017-02-17";
     pname = "flake8-vim";
+    version = "2017-02-17";
     src = fetchFromGitHub {
       owner = "andviro";
       repo = "flake8-vim";
@@ -604,8 +604,8 @@
   };
 
   floobits-neovim = buildVimPluginFrom2Nix {
-    name = "floobits-neovim-2018-08-01";
     pname = "floobits-neovim";
+    version = "2018-08-01";
     src = fetchFromGitHub {
       owner = "floobits";
       repo = "floobits-neovim";
@@ -615,8 +615,8 @@
   };
 
   forms = buildVimPluginFrom2Nix {
-    name = "forms-2012-11-28";
     pname = "forms";
+    version = "2012-11-28";
     src = fetchFromGitHub {
       owner = "megaannum";
       repo = "forms";
@@ -626,8 +626,8 @@
   };
 
   fugitive-gitlab-vim = buildVimPluginFrom2Nix {
-    name = "fugitive-gitlab-vim-2018-07-04";
     pname = "fugitive-gitlab-vim";
+    version = "2018-07-04";
     src = fetchFromGitHub {
       owner = "shumphrey";
       repo = "fugitive-gitlab.vim";
@@ -637,8 +637,8 @@
   };
 
   fzf-vim = buildVimPluginFrom2Nix {
-    name = "fzf-vim-2018-12-11";
     pname = "fzf-vim";
+    version = "2018-12-11";
     src = fetchFromGitHub {
       owner = "junegunn";
       repo = "fzf.vim";
@@ -648,8 +648,8 @@
   };
 
   ghcmod-vim = buildVimPluginFrom2Nix {
-    name = "ghcmod-vim-2016-06-19";
     pname = "ghcmod-vim";
+    version = "2016-06-19";
     src = fetchFromGitHub {
       owner = "eagletmt";
       repo = "ghcmod-vim";
@@ -659,8 +659,8 @@
   };
 
   gist-vim = buildVimPluginFrom2Nix {
-    name = "gist-vim-2018-11-09";
     pname = "gist-vim";
+    version = "2018-11-09";
     src = fetchFromGitHub {
       owner = "mattn";
       repo = "gist-vim";
@@ -670,8 +670,8 @@
   };
 
   gitv = buildVimPluginFrom2Nix {
-    name = "gitv-2018-11-24";
     pname = "gitv";
+    version = "2018-11-24";
     src = fetchFromGitHub {
       owner = "gregsexton";
       repo = "gitv";
@@ -681,8 +681,8 @@
   };
 
   goyo-vim = buildVimPluginFrom2Nix {
-    name = "goyo-vim-2017-05-31";
     pname = "goyo-vim";
+    version = "2017-05-31";
     src = fetchFromGitHub {
       owner = "junegunn";
       repo = "goyo.vim";
@@ -692,8 +692,8 @@
   };
 
   gruvbox = buildVimPluginFrom2Nix {
-    name = "gruvbox-2018-02-25";
     pname = "gruvbox";
+    version = "2018-02-25";
     src = fetchFromGitHub {
       owner = "morhetz";
       repo = "gruvbox";
@@ -703,8 +703,8 @@
   };
 
   gundo-vim = buildVimPluginFrom2Nix {
-    name = "gundo-vim-2017-05-09";
     pname = "gundo-vim";
+    version = "2017-05-09";
     src = fetchFromGitHub {
       owner = "sjl";
       repo = "gundo.vim";
@@ -714,8 +714,8 @@
   };
 
   haskell-vim = buildVimPluginFrom2Nix {
-    name = "haskell-vim-2018-05-22";
     pname = "haskell-vim";
+    version = "2018-05-22";
     src = fetchFromGitHub {
       owner = "neovimhaskell";
       repo = "haskell-vim";
@@ -725,8 +725,8 @@
   };
 
   hasksyn = buildVimPluginFrom2Nix {
-    name = "hasksyn-2014-09-04";
     pname = "hasksyn";
+    version = "2014-09-04";
     src = fetchFromGitHub {
       owner = "travitch";
       repo = "hasksyn";
@@ -736,8 +736,8 @@
   };
 
   hlint-refactor-vim = buildVimPluginFrom2Nix {
-    name = "hlint-refactor-vim-2015-12-05";
     pname = "hlint-refactor-vim";
+    version = "2015-12-05";
     src = fetchFromGitHub {
       owner = "mpickering";
       repo = "hlint-refactor-vim";
@@ -747,8 +747,8 @@
   };
 
   iceberg-vim = buildVimPluginFrom2Nix {
-    name = "iceberg-vim-2018-10-17";
     pname = "iceberg-vim";
+    version = "2018-10-17";
     src = fetchFromGitHub {
       owner = "cocopon";
       repo = "iceberg.vim";
@@ -758,8 +758,8 @@
   };
 
   idris-vim = buildVimPluginFrom2Nix {
-    name = "idris-vim-2017-12-04";
     pname = "idris-vim";
+    version = "2017-12-04";
     src = fetchFromGitHub {
       owner = "idris-hackers";
       repo = "idris-vim";
@@ -769,8 +769,8 @@
   };
 
   Improved-AnsiEsc = buildVimPluginFrom2Nix {
-    name = "Improved-AnsiEsc-2015-08-26";
     pname = "Improved-AnsiEsc";
+    version = "2015-08-26";
     src = fetchFromGitHub {
       owner = "vim-scripts";
       repo = "Improved-AnsiEsc";
@@ -780,8 +780,8 @@
   };
 
   incsearch-easymotion-vim = buildVimPluginFrom2Nix {
-    name = "incsearch-easymotion-vim-2016-01-18";
     pname = "incsearch-easymotion-vim";
+    version = "2016-01-18";
     src = fetchFromGitHub {
       owner = "haya14busa";
       repo = "incsearch-easymotion.vim";
@@ -791,8 +791,8 @@
   };
 
   incsearch-vim = buildVimPluginFrom2Nix {
-    name = "incsearch-vim-2017-11-24";
     pname = "incsearch-vim";
+    version = "2017-11-24";
     src = fetchFromGitHub {
       owner = "haya14busa";
       repo = "incsearch.vim";
@@ -802,8 +802,8 @@
   };
 
   intero-neovim = buildVimPluginFrom2Nix {
-    name = "intero-neovim-2018-08-07";
     pname = "intero-neovim";
+    version = "2018-08-07";
     src = fetchFromGitHub {
       owner = "parsonsmatt";
       repo = "intero-neovim";
@@ -813,8 +813,8 @@
   };
 
   iosvkem = buildVimPluginFrom2Nix {
-    name = "iosvkem-2018-08-26";
     pname = "iosvkem";
+    version = "2018-08-26";
     src = fetchFromGitHub {
       owner = "neutaaaaan";
       repo = "iosvkem";
@@ -824,8 +824,8 @@
   };
 
   jedi-vim = buildVimPluginFrom2Nix {
-    name = "jedi-vim-2018-12-03";
     pname = "jedi-vim";
+    version = "2018-12-03";
     src = fetchFromGitHub {
       owner = "davidhalter";
       repo = "jedi-vim";
@@ -836,8 +836,8 @@
   };
 
   Jenkinsfile-vim-syntax = buildVimPluginFrom2Nix {
-    name = "Jenkinsfile-vim-syntax-2018-11-25";
     pname = "Jenkinsfile-vim-syntax";
+    version = "2018-11-25";
     src = fetchFromGitHub {
       owner = "martinda";
       repo = "Jenkinsfile-vim-syntax";
@@ -847,8 +847,8 @@
   };
 
   julia-vim = buildVimPluginFrom2Nix {
-    name = "julia-vim-2018-12-11";
     pname = "julia-vim";
+    version = "2018-12-11";
     src = fetchFromGitHub {
       owner = "JuliaEditorSupport";
       repo = "julia-vim";
@@ -858,8 +858,8 @@
   };
 
   last256 = buildVimPluginFrom2Nix {
-    name = "last256-2017-06-10";
     pname = "last256";
+    version = "2017-06-10";
     src = fetchFromGitHub {
       owner = "sk1418";
       repo = "last256";
@@ -869,8 +869,8 @@
   };
 
   latex-box = buildVimPluginFrom2Nix {
-    name = "latex-box-2015-06-01";
     pname = "latex-box";
+    version = "2015-06-01";
     src = fetchFromGitHub {
       owner = "latex-box-team";
       repo = "latex-box";
@@ -880,8 +880,8 @@
   };
 
   lightline-vim = buildVimPluginFrom2Nix {
-    name = "lightline-vim-2018-12-12";
     pname = "lightline-vim";
+    version = "2018-12-12";
     src = fetchFromGitHub {
       owner = "itchyny";
       repo = "lightline.vim";
@@ -891,8 +891,8 @@
   };
 
   limelight-vim = buildVimPluginFrom2Nix {
-    name = "limelight-vim-2016-06-23";
     pname = "limelight-vim";
+    version = "2016-06-23";
     src = fetchFromGitHub {
       owner = "junegunn";
       repo = "limelight.vim";
@@ -902,8 +902,8 @@
   };
 
   lushtags = buildVimPluginFrom2Nix {
-    name = "lushtags-2017-04-19";
     pname = "lushtags";
+    version = "2017-04-19";
     src = fetchFromGitHub {
       owner = "mkasa";
       repo = "lushtags";
@@ -913,8 +913,8 @@
   };
 
   matchit-zip = buildVimPluginFrom2Nix {
-    name = "matchit-zip-2010-10-18";
     pname = "matchit-zip";
+    version = "2010-10-18";
     src = fetchFromGitHub {
       owner = "vim-scripts";
       repo = "matchit.zip";
@@ -924,8 +924,8 @@
   };
 
   mayansmoke = buildVimPluginFrom2Nix {
-    name = "mayansmoke-2010-10-18";
     pname = "mayansmoke";
+    version = "2010-10-18";
     src = fetchFromGitHub {
       owner = "vim-scripts";
       repo = "mayansmoke";
@@ -935,8 +935,8 @@
   };
 
   molokai = buildVimPluginFrom2Nix {
-    name = "molokai-2015-11-11";
     pname = "molokai";
+    version = "2015-11-11";
     src = fetchFromGitHub {
       owner = "tomasr";
       repo = "molokai";
@@ -946,8 +946,8 @@
   };
 
   ncm2 = buildVimPluginFrom2Nix {
-    name = "ncm2-2018-12-27";
     pname = "ncm2";
+    version = "2018-12-27";
     src = fetchFromGitHub {
       owner = "ncm2";
       repo = "ncm2";
@@ -957,8 +957,8 @@
   };
 
   ncm2-bufword = buildVimPluginFrom2Nix {
-    name = "ncm2-bufword-2018-12-06";
     pname = "ncm2-bufword";
+    version = "2018-12-06";
     src = fetchFromGitHub {
       owner = "ncm2";
       repo = "ncm2-bufword";
@@ -968,8 +968,8 @@
   };
 
   ncm2-jedi = buildVimPluginFrom2Nix {
-    name = "ncm2-jedi-2018-07-18";
     pname = "ncm2-jedi";
+    version = "2018-07-18";
     src = fetchFromGitHub {
       owner = "ncm2";
       repo = "ncm2-jedi";
@@ -979,8 +979,8 @@
   };
 
   ncm2-path = buildVimPluginFrom2Nix {
-    name = "ncm2-path-2018-09-12";
     pname = "ncm2-path";
+    version = "2018-09-12";
     src = fetchFromGitHub {
       owner = "ncm2";
       repo = "ncm2-path";
@@ -990,8 +990,8 @@
   };
 
   ncm2-tmux = buildVimPluginFrom2Nix {
-    name = "ncm2-tmux-2018-12-06";
     pname = "ncm2-tmux";
+    version = "2018-12-06";
     src = fetchFromGitHub {
       owner = "ncm2";
       repo = "ncm2-tmux";
@@ -1001,8 +1001,8 @@
   };
 
   ncm2-ultisnips = buildVimPluginFrom2Nix {
-    name = "ncm2-ultisnips-2018-08-01";
     pname = "ncm2-ultisnips";
+    version = "2018-08-01";
     src = fetchFromGitHub {
       owner = "ncm2";
       repo = "ncm2-ultisnips";
@@ -1012,8 +1012,8 @@
   };
 
   neco-ghc = buildVimPluginFrom2Nix {
-    name = "neco-ghc-2018-05-13";
     pname = "neco-ghc";
+    version = "2018-05-13";
     src = fetchFromGitHub {
       owner = "eagletmt";
       repo = "neco-ghc";
@@ -1023,8 +1023,8 @@
   };
 
   neco-look = buildVimPluginFrom2Nix {
-    name = "neco-look-2018-11-09";
     pname = "neco-look";
+    version = "2018-11-09";
     src = fetchFromGitHub {
       owner = "ujihisa";
       repo = "neco-look";
@@ -1034,8 +1034,8 @@
   };
 
   neco-syntax = buildVimPluginFrom2Nix {
-    name = "neco-syntax-2017-10-01";
     pname = "neco-syntax";
+    version = "2017-10-01";
     src = fetchFromGitHub {
       owner = "Shougo";
       repo = "neco-syntax";
@@ -1045,8 +1045,8 @@
   };
 
   neco-vim = buildVimPluginFrom2Nix {
-    name = "neco-vim-2018-10-30";
     pname = "neco-vim";
+    version = "2018-10-30";
     src = fetchFromGitHub {
       owner = "Shougo";
       repo = "neco-vim";
@@ -1056,8 +1056,8 @@
   };
 
   neocomplete-vim = buildVimPluginFrom2Nix {
-    name = "neocomplete-vim-2018-11-19";
     pname = "neocomplete-vim";
+    version = "2018-11-19";
     src = fetchFromGitHub {
       owner = "Shougo";
       repo = "neocomplete.vim";
@@ -1067,8 +1067,8 @@
   };
 
   neodark-vim = buildVimPluginFrom2Nix {
-    name = "neodark-vim-2018-10-17";
     pname = "neodark-vim";
+    version = "2018-10-17";
     src = fetchFromGitHub {
       owner = "KeitaNakamura";
       repo = "neodark.vim";
@@ -1078,8 +1078,8 @@
   };
 
   neoformat = buildVimPluginFrom2Nix {
-    name = "neoformat-2018-12-21";
     pname = "neoformat";
+    version = "2018-12-21";
     src = fetchFromGitHub {
       owner = "sbdchd";
       repo = "neoformat";
@@ -1089,8 +1089,8 @@
   };
 
   neoinclude-vim = buildVimPluginFrom2Nix {
-    name = "neoinclude-vim-2018-05-21";
     pname = "neoinclude-vim";
+    version = "2018-05-21";
     src = fetchFromGitHub {
       owner = "Shougo";
       repo = "neoinclude.vim";
@@ -1100,8 +1100,8 @@
   };
 
   neomake = buildVimPluginFrom2Nix {
-    name = "neomake-2018-12-27";
     pname = "neomake";
+    version = "2018-12-27";
     src = fetchFromGitHub {
       owner = "benekastah";
       repo = "neomake";
@@ -1111,8 +1111,8 @@
   };
 
   neomru-vim = buildVimPluginFrom2Nix {
-    name = "neomru-vim-2018-11-29";
     pname = "neomru-vim";
+    version = "2018-11-29";
     src = fetchFromGitHub {
       owner = "Shougo";
       repo = "neomru.vim";
@@ -1122,8 +1122,8 @@
   };
 
   neosnippet-snippets = buildVimPluginFrom2Nix {
-    name = "neosnippet-snippets-2018-09-30";
     pname = "neosnippet-snippets";
+    version = "2018-09-30";
     src = fetchFromGitHub {
       owner = "Shougo";
       repo = "neosnippet-snippets";
@@ -1133,8 +1133,8 @@
   };
 
   neosnippet-vim = buildVimPluginFrom2Nix {
-    name = "neosnippet-vim-2018-12-03";
     pname = "neosnippet-vim";
+    version = "2018-12-03";
     src = fetchFromGitHub {
       owner = "Shougo";
       repo = "neosnippet.vim";
@@ -1144,8 +1144,8 @@
   };
 
   neovim-sensible = buildVimPluginFrom2Nix {
-    name = "neovim-sensible-2017-09-20";
     pname = "neovim-sensible";
+    version = "2017-09-20";
     src = fetchFromGitHub {
       owner = "jeffkreeftmeijer";
       repo = "neovim-sensible";
@@ -1155,8 +1155,8 @@
   };
 
   neoyank-vim = buildVimPluginFrom2Nix {
-    name = "neoyank-vim-2018-12-03";
     pname = "neoyank-vim";
+    version = "2018-12-03";
     src = fetchFromGitHub {
       owner = "Shougo";
       repo = "neoyank.vim";
@@ -1166,8 +1166,8 @@
   };
 
   nerdcommenter = buildVimPluginFrom2Nix {
-    name = "nerdcommenter-2018-12-26";
     pname = "nerdcommenter";
+    version = "2018-12-26";
     src = fetchFromGitHub {
       owner = "scrooloose";
       repo = "nerdcommenter";
@@ -1177,8 +1177,8 @@
   };
 
   nerdtree = buildVimPluginFrom2Nix {
-    name = "nerdtree-2018-12-12";
     pname = "nerdtree";
+    version = "2018-12-12";
     src = fetchFromGitHub {
       owner = "scrooloose";
       repo = "nerdtree";
@@ -1188,8 +1188,8 @@
   };
 
   nerdtree-git-plugin = buildVimPluginFrom2Nix {
-    name = "nerdtree-git-plugin-2018-11-15";
     pname = "nerdtree-git-plugin";
+    version = "2018-11-15";
     src = fetchFromGitHub {
       owner = "albfan";
       repo = "nerdtree-git-plugin";
@@ -1199,8 +1199,8 @@
   };
 
   nim-vim = buildVimPluginFrom2Nix {
-    name = "nim-vim-2018-12-16";
     pname = "nim-vim";
+    version = "2018-12-16";
     src = fetchFromGitHub {
       owner = "zah";
       repo = "nim.vim";
@@ -1210,8 +1210,8 @@
   };
 
   nvim-cm-racer = buildVimPluginFrom2Nix {
-    name = "nvim-cm-racer-2017-07-27";
     pname = "nvim-cm-racer";
+    version = "2017-07-27";
     src = fetchFromGitHub {
       owner = "roxma";
       repo = "nvim-cm-racer";
@@ -1221,8 +1221,8 @@
   };
 
   nvim-completion-manager = buildVimPluginFrom2Nix {
-    name = "nvim-completion-manager-2018-07-27";
     pname = "nvim-completion-manager";
+    version = "2018-07-27";
     src = fetchFromGitHub {
       owner = "roxma";
       repo = "nvim-completion-manager";
@@ -1232,8 +1232,8 @@
   };
 
   nvim-yarp = buildVimPluginFrom2Nix {
-    name = "nvim-yarp-2018-12-23";
     pname = "nvim-yarp";
+    version = "2018-12-23";
     src = fetchFromGitHub {
       owner = "roxma";
       repo = "nvim-yarp";
@@ -1243,8 +1243,8 @@
   };
 
   nvimdev-nvim = buildVimPluginFrom2Nix {
-    name = "nvimdev-nvim-2018-11-07";
     pname = "nvimdev-nvim";
+    version = "2018-11-07";
     src = fetchFromGitHub {
       owner = "neovim";
       repo = "nvimdev.nvim";
@@ -1254,8 +1254,8 @@
   };
 
   onehalf = buildVimPluginFrom2Nix {
-    name = "onehalf-2018-10-21";
     pname = "onehalf";
+    version = "2018-10-21";
     src = fetchFromGitHub {
       owner = "sonph";
       repo = "onehalf";
@@ -1265,8 +1265,8 @@
   };
 
   open-browser-vim = buildVimPluginFrom2Nix {
-    name = "open-browser-vim-2018-11-29";
     pname = "open-browser-vim";
+    version = "2018-11-29";
     src = fetchFromGitHub {
       owner = "tyru";
       repo = "open-browser.vim";
@@ -1276,8 +1276,8 @@
   };
 
   papercolor-theme = buildVimPluginFrom2Nix {
-    name = "papercolor-theme-2018-09-04";
     pname = "papercolor-theme";
+    version = "2018-09-04";
     src = fetchFromGitHub {
       owner = "NLKNguyen";
       repo = "papercolor-theme";
@@ -1287,8 +1287,8 @@
   };
 
   peskcolor-vim = buildVimPluginFrom2Nix {
-    name = "peskcolor-vim-2016-06-11";
     pname = "peskcolor-vim";
+    version = "2016-06-11";
     src = fetchFromGitHub {
       owner = "andsild";
       repo = "peskcolor.vim";
@@ -1298,8 +1298,8 @@
   };
 
   pig-vim = buildVimPluginFrom2Nix {
-    name = "pig-vim-2017-06-08";
     pname = "pig-vim";
+    version = "2017-06-08";
     src = fetchFromGitHub {
       owner = "motus";
       repo = "pig.vim";
@@ -1309,8 +1309,8 @@
   };
 
   pony-vim-syntax = buildVimPluginFrom2Nix {
-    name = "pony-vim-syntax-2017-09-26";
     pname = "pony-vim-syntax";
+    version = "2017-09-26";
     src = fetchFromGitHub {
       owner = "dleonard0";
       repo = "pony-vim-syntax";
@@ -1320,8 +1320,8 @@
   };
 
   PreserveNoEOL = buildVimPluginFrom2Nix {
-    name = "PreserveNoEOL-2013-06-14";
     pname = "PreserveNoEOL";
+    version = "2013-06-14";
     src = fetchFromGitHub {
       owner = "vim-scripts";
       repo = "PreserveNoEOL";
@@ -1331,8 +1331,8 @@
   };
 
   psc-ide-vim = buildVimPluginFrom2Nix {
-    name = "psc-ide-vim-2018-03-11";
     pname = "psc-ide-vim";
+    version = "2018-03-11";
     src = fetchFromGitHub {
       owner = "frigoeu";
       repo = "psc-ide-vim";
@@ -1342,8 +1342,8 @@
   };
 
   purescript-vim = buildVimPluginFrom2Nix {
-    name = "purescript-vim-2018-12-10";
     pname = "purescript-vim";
+    version = "2018-12-10";
     src = fetchFromGitHub {
       owner = "raichoo";
       repo = "purescript-vim";
@@ -1353,8 +1353,8 @@
   };
 
   python-mode = buildVimPluginFrom2Nix {
-    name = "python-mode-2018-04-29";
     pname = "python-mode";
+    version = "2018-04-29";
     src = fetchFromGitHub {
       owner = "python-mode";
       repo = "python-mode";
@@ -1364,8 +1364,8 @@
   };
 
   quickfixstatus = buildVimPluginFrom2Nix {
-    name = "quickfixstatus-2011-09-03";
     pname = "quickfixstatus";
+    version = "2011-09-03";
     src = fetchFromGitHub {
       owner = "dannyob";
       repo = "quickfixstatus";
@@ -1375,8 +1375,8 @@
   };
 
   rainbow = buildVimPluginFrom2Nix {
-    name = "rainbow-2018-07-31";
     pname = "rainbow";
+    version = "2018-07-31";
     src = fetchFromGitHub {
       owner = "luochen1990";
       repo = "rainbow";
@@ -1386,8 +1386,8 @@
   };
 
   rainbow_parentheses-vim = buildVimPluginFrom2Nix {
-    name = "rainbow_parentheses-vim-2013-03-05";
     pname = "rainbow_parentheses-vim";
+    version = "2013-03-05";
     src = fetchFromGitHub {
       owner = "kien";
       repo = "rainbow_parentheses.vim";
@@ -1397,8 +1397,8 @@
   };
 
   random-vim = buildVimPluginFrom2Nix {
-    name = "random-vim-2010-10-18";
     pname = "random-vim";
+    version = "2010-10-18";
     src = fetchFromGitHub {
       owner = "vim-scripts";
       repo = "random.vim";
@@ -1408,8 +1408,8 @@
   };
 
   ranger-vim = buildVimPluginFrom2Nix {
-    name = "ranger-vim-2018-12-21";
     pname = "ranger-vim";
+    version = "2018-12-21";
     src = fetchFromGitHub {
       owner = "rafaqz";
       repo = "ranger.vim";
@@ -1419,8 +1419,8 @@
   };
 
   Recover-vim = buildVimPluginFrom2Nix {
-    name = "Recover-vim-2018-10-22";
     pname = "Recover-vim";
+    version = "2018-10-22";
     src = fetchFromGitHub {
       owner = "chrisbra";
       repo = "Recover.vim";
@@ -1430,8 +1430,8 @@
   };
 
   Rename = buildVimPluginFrom2Nix {
-    name = "Rename-2011-08-31";
     pname = "Rename";
+    version = "2011-08-31";
     src = fetchFromGitHub {
       owner = "vim-scripts";
       repo = "Rename";
@@ -1441,8 +1441,8 @@
   };
 
   ReplaceWithRegister = buildVimPluginFrom2Nix {
-    name = "ReplaceWithRegister-2014-10-31";
     pname = "ReplaceWithRegister";
+    version = "2014-10-31";
     src = fetchFromGitHub {
       owner = "vim-scripts";
       repo = "ReplaceWithRegister";
@@ -1452,8 +1452,8 @@
   };
 
   riv-vim = buildVimPluginFrom2Nix {
-    name = "riv-vim-2018-10-17";
     pname = "riv-vim";
+    version = "2018-10-17";
     src = fetchFromGitHub {
       owner = "Rykka";
       repo = "riv.vim";
@@ -1463,8 +1463,8 @@
   };
 
   robotframework-vim = buildVimPluginFrom2Nix {
-    name = "robotframework-vim-2017-04-14";
     pname = "robotframework-vim";
+    version = "2017-04-14";
     src = fetchFromGitHub {
       owner = "mfukar";
       repo = "robotframework-vim";
@@ -1474,8 +1474,8 @@
   };
 
   rtorrent-syntax-file = buildVimPluginFrom2Nix {
-    name = "rtorrent-syntax-file-2016-03-19";
     pname = "rtorrent-syntax-file";
+    version = "2016-03-19";
     src = fetchFromGitHub {
       owner = "ccarpita";
       repo = "rtorrent-syntax-file";
@@ -1485,8 +1485,8 @@
   };
 
   rust-vim = buildVimPluginFrom2Nix {
-    name = "rust-vim-2018-12-23";
     pname = "rust-vim";
+    version = "2018-12-23";
     src = fetchFromGitHub {
       owner = "rust-lang";
       repo = "rust.vim";
@@ -1496,8 +1496,8 @@
   };
 
   self = buildVimPluginFrom2Nix {
-    name = "self-2014-05-28";
     pname = "self";
+    version = "2014-05-28";
     src = fetchFromGitHub {
       owner = "megaannum";
       repo = "self";
@@ -1507,8 +1507,8 @@
   };
 
   shabadou-vim = buildVimPluginFrom2Nix {
-    name = "shabadou-vim-2016-07-19";
     pname = "shabadou-vim";
+    version = "2016-07-19";
     src = fetchFromGitHub {
       owner = "osyo-manga";
       repo = "shabadou.vim";
@@ -1518,8 +1518,8 @@
   };
 
   sourcemap-vim = buildVimPluginFrom2Nix {
-    name = "sourcemap-vim-2012-09-19";
     pname = "sourcemap-vim";
+    version = "2012-09-19";
     src = fetchFromGitHub {
       owner = "chikatoike";
       repo = "sourcemap.vim";
@@ -1529,8 +1529,8 @@
   };
 
   Spacegray-vim = buildVimPluginFrom2Nix {
-    name = "Spacegray-vim-2018-12-25";
     pname = "Spacegray-vim";
+    version = "2018-12-25";
     src = fetchFromGitHub {
       owner = "ajh17";
       repo = "Spacegray.vim";
@@ -1540,8 +1540,8 @@
   };
 
   spacevim = buildVimPluginFrom2Nix {
-    name = "spacevim-2018-03-29";
     pname = "spacevim";
+    version = "2018-03-29";
     src = fetchFromGitHub {
       owner = "ctjhoa";
       repo = "spacevim";
@@ -1551,8 +1551,8 @@
   };
 
   sparkup = buildVimPluginFrom2Nix {
-    name = "sparkup-2012-06-11";
     pname = "sparkup";
+    version = "2012-06-11";
     src = fetchFromGitHub {
       owner = "chrisgeo";
       repo = "sparkup";
@@ -1562,8 +1562,8 @@
   };
 
   splice-vim = buildVimPluginFrom2Nix {
-    name = "splice-vim-2017-09-03";
     pname = "splice-vim";
+    version = "2017-09-03";
     src = fetchFromGitHub {
       owner = "sjl";
       repo = "splice.vim";
@@ -1573,8 +1573,8 @@
   };
 
   supertab = buildVimPluginFrom2Nix {
-    name = "supertab-2017-11-14";
     pname = "supertab";
+    version = "2017-11-14";
     src = fetchFromGitHub {
       owner = "ervandew";
       repo = "supertab";
@@ -1584,8 +1584,8 @@
   };
 
   swift-vim = buildVimPluginFrom2Nix {
-    name = "swift-vim-2018-09-12";
     pname = "swift-vim";
+    version = "2018-09-12";
     src = fetchFromGitHub {
       owner = "keith";
       repo = "swift.vim";
@@ -1595,8 +1595,8 @@
   };
 
   syntastic = buildVimPluginFrom2Nix {
-    name = "syntastic-2018-11-24";
     pname = "syntastic";
+    version = "2018-11-24";
     src = fetchFromGitHub {
       owner = "scrooloose";
       repo = "syntastic";
@@ -1606,8 +1606,8 @@
   };
 
   tabmerge = buildVimPluginFrom2Nix {
-    name = "tabmerge-2010-10-18";
     pname = "tabmerge";
+    version = "2010-10-18";
     src = fetchFromGitHub {
       owner = "vim-scripts";
       repo = "tabmerge";
@@ -1617,8 +1617,8 @@
   };
 
   tabpagebuffer-vim = buildVimPluginFrom2Nix {
-    name = "tabpagebuffer-vim-2014-09-30";
     pname = "tabpagebuffer-vim";
+    version = "2014-09-30";
     src = fetchFromGitHub {
       owner = "Shougo";
       repo = "tabpagebuffer.vim";
@@ -1628,8 +1628,8 @@
   };
 
   tabular = buildVimPluginFrom2Nix {
-    name = "tabular-2016-05-04";
     pname = "tabular";
+    version = "2016-05-04";
     src = fetchFromGitHub {
       owner = "godlygeek";
       repo = "tabular";
@@ -1639,8 +1639,8 @@
   };
 
   tagbar = buildVimPluginFrom2Nix {
-    name = "tagbar-2017-12-17";
     pname = "tagbar";
+    version = "2017-12-17";
     src = fetchFromGitHub {
       owner = "majutsushi";
       repo = "tagbar";
@@ -1650,8 +1650,8 @@
   };
 
   taglist-vim = buildVimPluginFrom2Nix {
-    name = "taglist-vim-2010-10-18";
     pname = "taglist-vim";
+    version = "2010-10-18";
     src = fetchFromGitHub {
       owner = "vim-scripts";
       repo = "taglist.vim";
@@ -1661,8 +1661,8 @@
   };
 
   targets-vim = buildVimPluginFrom2Nix {
-    name = "targets-vim-2018-12-21";
     pname = "targets-vim";
+    version = "2018-12-21";
     src = fetchFromGitHub {
       owner = "wellle";
       repo = "targets.vim";
@@ -1672,8 +1672,8 @@
   };
 
   tender-vim = buildVimPluginFrom2Nix {
-    name = "tender-vim-2017-03-14";
     pname = "tender-vim";
+    version = "2017-03-14";
     src = fetchFromGitHub {
       owner = "jacoborus";
       repo = "tender.vim";
@@ -1683,8 +1683,8 @@
   };
 
   tern_for_vim = buildVimPluginFrom2Nix {
-    name = "tern_for_vim-2017-11-27";
     pname = "tern_for_vim";
+    version = "2017-11-27";
     src = fetchFromGitHub {
       owner = "ternjs";
       repo = "tern_for_vim";
@@ -1694,8 +1694,8 @@
   };
 
   thumbnail-vim = buildVimPluginFrom2Nix {
-    name = "thumbnail-vim-2017-04-24";
     pname = "thumbnail-vim";
+    version = "2017-04-24";
     src = fetchFromGitHub {
       owner = "itchyny";
       repo = "thumbnail.vim";
@@ -1705,8 +1705,8 @@
   };
 
   tlib_vim = buildVimPluginFrom2Nix {
-    name = "tlib_vim-2018-04-08";
     pname = "tlib_vim";
+    version = "2018-04-08";
     src = fetchFromGitHub {
       owner = "tomtom";
       repo = "tlib_vim";
@@ -1716,8 +1716,8 @@
   };
 
   traces-vim = buildVimPluginFrom2Nix {
-    name = "traces-vim-2018-12-25";
     pname = "traces-vim";
+    version = "2018-12-25";
     src = fetchFromGitHub {
       owner = "markonm";
       repo = "traces.vim";
@@ -1727,8 +1727,8 @@
   };
 
   tslime-vim = buildVimPluginFrom2Nix {
-    name = "tslime-vim-2018-07-23";
     pname = "tslime-vim";
+    version = "2018-07-23";
     src = fetchFromGitHub {
       owner = "jgdavey";
       repo = "tslime.vim";
@@ -1738,8 +1738,8 @@
   };
 
   tsuquyomi = buildVimPluginFrom2Nix {
-    name = "tsuquyomi-2018-12-26";
     pname = "tsuquyomi";
+    version = "2018-12-26";
     src = fetchFromGitHub {
       owner = "Quramy";
       repo = "tsuquyomi";
@@ -1749,8 +1749,8 @@
   };
 
   typescript-vim = buildVimPluginFrom2Nix {
-    name = "typescript-vim-2018-10-17";
     pname = "typescript-vim";
+    version = "2018-10-17";
     src = fetchFromGitHub {
       owner = "leafgarland";
       repo = "typescript-vim";
@@ -1760,8 +1760,8 @@
   };
 
   ultisnips = buildVimPluginFrom2Nix {
-    name = "ultisnips-2018-04-30";
     pname = "ultisnips";
+    version = "2018-04-30";
     src = fetchFromGitHub {
       owner = "SirVer";
       repo = "ultisnips";
@@ -1771,8 +1771,8 @@
   };
 
   undotree = buildVimPluginFrom2Nix {
-    name = "undotree-2018-10-15";
     pname = "undotree";
+    version = "2018-10-15";
     src = fetchFromGitHub {
       owner = "mbbill";
       repo = "undotree";
@@ -1782,8 +1782,8 @@
   };
 
   unite-vim = buildVimPluginFrom2Nix {
-    name = "unite-vim-2018-12-14";
     pname = "unite-vim";
+    version = "2018-12-14";
     src = fetchFromGitHub {
       owner = "Shougo";
       repo = "unite.vim";
@@ -1793,8 +1793,8 @@
   };
 
   verilog_systemverilog-vim = buildVimPluginFrom2Nix {
-    name = "verilog_systemverilog-vim-2018-12-08";
     pname = "verilog_systemverilog-vim";
+    version = "2018-12-08";
     src = fetchFromGitHub {
       owner = "vhda";
       repo = "verilog_systemverilog.vim";
@@ -1804,8 +1804,8 @@
   };
 
   vim = buildVimPluginFrom2Nix {
-    name = "vim-2018-12-22";
     pname = "vim";
+    version = "2018-12-22";
     src = fetchFromGitHub {
       owner = "dracula";
       repo = "vim";
@@ -1815,8 +1815,8 @@
   };
 
   vim-abolish = buildVimPluginFrom2Nix {
-    name = "vim-abolish-2018-11-25";
     pname = "vim-abolish";
+    version = "2018-11-25";
     src = fetchFromGitHub {
       owner = "tpope";
       repo = "vim-abolish";
@@ -1826,8 +1826,8 @@
   };
 
   vim-addon-actions = buildVimPluginFrom2Nix {
-    name = "vim-addon-actions-2018-01-18";
     pname = "vim-addon-actions";
+    version = "2018-01-18";
     src = fetchFromGitHub {
       owner = "MarcWeber";
       repo = "vim-addon-actions";
@@ -1837,8 +1837,8 @@
   };
 
   vim-addon-async = buildVimPluginFrom2Nix {
-    name = "vim-addon-async-2017-03-20";
     pname = "vim-addon-async";
+    version = "2017-03-20";
     src = fetchFromGitHub {
       owner = "MarcWeber";
       repo = "vim-addon-async";
@@ -1848,8 +1848,8 @@
   };
 
   vim-addon-background-cmd = buildVimPluginFrom2Nix {
-    name = "vim-addon-background-cmd-2015-12-11";
     pname = "vim-addon-background-cmd";
+    version = "2015-12-11";
     src = fetchFromGitHub {
       owner = "MarcWeber";
       repo = "vim-addon-background-cmd";
@@ -1859,8 +1859,8 @@
   };
 
   vim-addon-commenting = buildVimPluginFrom2Nix {
-    name = "vim-addon-commenting-2013-06-10";
     pname = "vim-addon-commenting";
+    version = "2013-06-10";
     src = fetchFromGitHub {
       owner = "MarcWeber";
       repo = "vim-addon-commenting";
@@ -1870,8 +1870,8 @@
   };
 
   vim-addon-completion = buildVimPluginFrom2Nix {
-    name = "vim-addon-completion-2015-02-10";
     pname = "vim-addon-completion";
+    version = "2015-02-10";
     src = fetchFromGitHub {
       owner = "MarcWeber";
       repo = "vim-addon-completion";
@@ -1881,8 +1881,8 @@
   };
 
   vim-addon-errorformats = buildVimPluginFrom2Nix {
-    name = "vim-addon-errorformats-2014-11-05";
     pname = "vim-addon-errorformats";
+    version = "2014-11-05";
     src = fetchFromGitHub {
       owner = "MarcWeber";
       repo = "vim-addon-errorformats";
@@ -1892,8 +1892,8 @@
   };
 
   vim-addon-goto-thing-at-cursor = buildVimPluginFrom2Nix {
-    name = "vim-addon-goto-thing-at-cursor-2012-01-10";
     pname = "vim-addon-goto-thing-at-cursor";
+    version = "2012-01-10";
     src = fetchFromGitHub {
       owner = "MarcWeber";
       repo = "vim-addon-goto-thing-at-cursor";
@@ -1903,8 +1903,8 @@
   };
 
   vim-addon-local-vimrc = buildVimPluginFrom2Nix {
-    name = "vim-addon-local-vimrc-2015-03-19";
     pname = "vim-addon-local-vimrc";
+    version = "2015-03-19";
     src = fetchFromGitHub {
       owner = "MarcWeber";
       repo = "vim-addon-local-vimrc";
@@ -1914,8 +1914,8 @@
   };
 
   vim-addon-manager = buildVimPluginFrom2Nix {
-    name = "vim-addon-manager-2018-07-27";
     pname = "vim-addon-manager";
+    version = "2018-07-27";
     src = fetchFromGitHub {
       owner = "MarcWeber";
       repo = "vim-addon-manager";
@@ -1925,8 +1925,8 @@
   };
 
   vim-addon-mru = buildVimPluginFrom2Nix {
-    name = "vim-addon-mru-2013-08-08";
     pname = "vim-addon-mru";
+    version = "2013-08-08";
     src = fetchFromGitHub {
       owner = "MarcWeber";
       repo = "vim-addon-mru";
@@ -1936,8 +1936,8 @@
   };
 
   vim-addon-mw-utils = buildVimPluginFrom2Nix {
-    name = "vim-addon-mw-utils-2018-03-09";
     pname = "vim-addon-mw-utils";
+    version = "2018-03-09";
     src = fetchFromGitHub {
       owner = "MarcWeber";
       repo = "vim-addon-mw-utils";
@@ -1947,8 +1947,8 @@
   };
 
   vim-addon-nix = buildVimPluginFrom2Nix {
-    name = "vim-addon-nix-2017-09-11";
     pname = "vim-addon-nix";
+    version = "2017-09-11";
     src = fetchFromGitHub {
       owner = "MarcWeber";
       repo = "vim-addon-nix";
@@ -1958,8 +1958,8 @@
   };
 
   vim-addon-other = buildVimPluginFrom2Nix {
-    name = "vim-addon-other-2014-07-15";
     pname = "vim-addon-other";
+    version = "2014-07-15";
     src = fetchFromGitHub {
       owner = "MarcWeber";
       repo = "vim-addon-other";
@@ -1969,8 +1969,8 @@
   };
 
   vim-addon-php-manual = buildVimPluginFrom2Nix {
-    name = "vim-addon-php-manual-2015-01-01";
     pname = "vim-addon-php-manual";
+    version = "2015-01-01";
     src = fetchFromGitHub {
       owner = "MarcWeber";
       repo = "vim-addon-php-manual";
@@ -1980,8 +1980,8 @@
   };
 
   vim-addon-signs = buildVimPluginFrom2Nix {
-    name = "vim-addon-signs-2013-04-19";
     pname = "vim-addon-signs";
+    version = "2013-04-19";
     src = fetchFromGitHub {
       owner = "MarcWeber";
       repo = "vim-addon-signs";
@@ -1991,8 +1991,8 @@
   };
 
   vim-addon-sql = buildVimPluginFrom2Nix {
-    name = "vim-addon-sql-2017-02-11";
     pname = "vim-addon-sql";
+    version = "2017-02-11";
     src = fetchFromGitHub {
       owner = "MarcWeber";
       repo = "vim-addon-sql";
@@ -2002,8 +2002,8 @@
   };
 
   vim-addon-syntax-checker = buildVimPluginFrom2Nix {
-    name = "vim-addon-syntax-checker-2017-06-26";
     pname = "vim-addon-syntax-checker";
+    version = "2017-06-26";
     src = fetchFromGitHub {
       owner = "MarcWeber";
       repo = "vim-addon-syntax-checker";
@@ -2013,8 +2013,8 @@
   };
 
   vim-addon-toggle-buffer = buildVimPluginFrom2Nix {
-    name = "vim-addon-toggle-buffer-2012-01-13";
     pname = "vim-addon-toggle-buffer";
+    version = "2012-01-13";
     src = fetchFromGitHub {
       owner = "MarcWeber";
       repo = "vim-addon-toggle-buffer";
@@ -2024,8 +2024,8 @@
   };
 
   vim-addon-xdebug = buildVimPluginFrom2Nix {
-    name = "vim-addon-xdebug-2014-08-29";
     pname = "vim-addon-xdebug";
+    version = "2014-08-29";
     src = fetchFromGitHub {
       owner = "MarcWeber";
       repo = "vim-addon-xdebug";
@@ -2035,8 +2035,8 @@
   };
 
   vim-airline = buildVimPluginFrom2Nix {
-    name = "vim-airline-2018-12-18";
     pname = "vim-airline";
+    version = "2018-12-18";
     src = fetchFromGitHub {
       owner = "vim-airline";
       repo = "vim-airline";
@@ -2046,8 +2046,8 @@
   };
 
   vim-airline-themes = buildVimPluginFrom2Nix {
-    name = "vim-airline-themes-2018-11-15";
     pname = "vim-airline-themes";
+    version = "2018-11-15";
     src = fetchFromGitHub {
       owner = "vim-airline";
       repo = "vim-airline-themes";
@@ -2057,8 +2057,8 @@
   };
 
   vim-android = buildVimPluginFrom2Nix {
-    name = "vim-android-2018-07-31";
     pname = "vim-android";
+    version = "2018-07-31";
     src = fetchFromGitHub {
       owner = "hsanson";
       repo = "vim-android";
@@ -2068,8 +2068,8 @@
   };
 
   vim-anzu = buildVimPluginFrom2Nix {
-    name = "vim-anzu-2018-02-28";
     pname = "vim-anzu";
+    version = "2018-02-28";
     src = fetchFromGitHub {
       owner = "osyo-manga";
       repo = "vim-anzu";
@@ -2079,8 +2079,8 @@
   };
 
   vim-auto-save = buildVimPluginFrom2Nix {
-    name = "vim-auto-save-2017-11-08";
     pname = "vim-auto-save";
+    version = "2017-11-08";
     src = fetchFromGitHub {
       owner = "907th";
       repo = "vim-auto-save";
@@ -2090,8 +2090,8 @@
   };
 
   vim-autoformat = buildVimPluginFrom2Nix {
-    name = "vim-autoformat-2018-12-19";
     pname = "vim-autoformat";
+    version = "2018-12-19";
     src = fetchFromGitHub {
       owner = "Chiel92";
       repo = "vim-autoformat";
@@ -2101,8 +2101,8 @@
   };
 
   vim-bazel = buildVimPluginFrom2Nix {
-    name = "vim-bazel-2018-01-11";
     pname = "vim-bazel";
+    version = "2018-01-11";
     src = fetchFromGitHub {
       owner = "bazelbuild";
       repo = "vim-bazel";
@@ -2112,8 +2112,8 @@
   };
 
   vim-better-whitespace = buildVimPluginFrom2Nix {
-    name = "vim-better-whitespace-2018-06-11";
     pname = "vim-better-whitespace";
+    version = "2018-06-11";
     src = fetchFromGitHub {
       owner = "ntpeters";
       repo = "vim-better-whitespace";
@@ -2123,8 +2123,8 @@
   };
 
   vim-buffergator = buildVimPluginFrom2Nix {
-    name = "vim-buffergator-2018-05-02";
     pname = "vim-buffergator";
+    version = "2018-05-02";
     src = fetchFromGitHub {
       owner = "jeetsukumaran";
       repo = "vim-buffergator";
@@ -2134,8 +2134,8 @@
   };
 
   vim-bufferline = buildVimPluginFrom2Nix {
-    name = "vim-bufferline-2016-02-09";
     pname = "vim-bufferline";
+    version = "2016-02-09";
     src = fetchFromGitHub {
       owner = "bling";
       repo = "vim-bufferline";
@@ -2145,8 +2145,8 @@
   };
 
   vim-closetag = buildVimPluginFrom2Nix {
-    name = "vim-closetag-2018-12-08";
     pname = "vim-closetag";
+    version = "2018-12-08";
     src = fetchFromGitHub {
       owner = "alvan";
       repo = "vim-closetag";
@@ -2156,8 +2156,8 @@
   };
 
   vim-codefmt = buildVimPluginFrom2Nix {
-    name = "vim-codefmt-2018-12-15";
     pname = "vim-codefmt";
+    version = "2018-12-15";
     src = fetchFromGitHub {
       owner = "google";
       repo = "vim-codefmt";
@@ -2167,8 +2167,8 @@
   };
 
   vim-coffee-script = buildVimPluginFrom2Nix {
-    name = "vim-coffee-script-2018-02-27";
     pname = "vim-coffee-script";
+    version = "2018-02-27";
     src = fetchFromGitHub {
       owner = "kchmck";
       repo = "vim-coffee-script";
@@ -2178,8 +2178,8 @@
   };
 
   vim-colemak = buildVimPluginFrom2Nix {
-    name = "vim-colemak-2016-10-16";
     pname = "vim-colemak";
+    version = "2016-10-16";
     src = fetchFromGitHub {
       owner = "kalbasit";
       repo = "vim-colemak";
@@ -2189,8 +2189,8 @@
   };
 
   vim-colors-solarized = buildVimPluginFrom2Nix {
-    name = "vim-colors-solarized-2011-05-09";
     pname = "vim-colors-solarized";
+    version = "2011-05-09";
     src = fetchFromGitHub {
       owner = "altercation";
       repo = "vim-colors-solarized";
@@ -2200,8 +2200,8 @@
   };
 
   vim-colorschemes = buildVimPluginFrom2Nix {
-    name = "vim-colorschemes-2018-11-20";
     pname = "vim-colorschemes";
+    version = "2018-11-20";
     src = fetchFromGitHub {
       owner = "flazz";
       repo = "vim-colorschemes";
@@ -2211,8 +2211,8 @@
   };
 
   vim-colorstepper = buildVimPluginFrom2Nix {
-    name = "vim-colorstepper-2016-01-28";
     pname = "vim-colorstepper";
+    version = "2016-01-28";
     src = fetchFromGitHub {
       owner = "jonbri";
       repo = "vim-colorstepper";
@@ -2222,8 +2222,8 @@
   };
 
   vim-commentary = buildVimPluginFrom2Nix {
-    name = "vim-commentary-2018-07-27";
     pname = "vim-commentary";
+    version = "2018-07-27";
     src = fetchFromGitHub {
       owner = "tpope";
       repo = "vim-commentary";
@@ -2233,8 +2233,8 @@
   };
 
   vim-css-color = buildVimPluginFrom2Nix {
-    name = "vim-css-color-2018-11-20";
     pname = "vim-css-color";
+    version = "2018-11-20";
     src = fetchFromGitHub {
       owner = "ap";
       repo = "vim-css-color";
@@ -2244,8 +2244,8 @@
   };
 
   vim-cursorword = buildVimPluginFrom2Nix {
-    name = "vim-cursorword-2017-10-19";
     pname = "vim-cursorword";
+    version = "2017-10-19";
     src = fetchFromGitHub {
       owner = "itchyny";
       repo = "vim-cursorword";
@@ -2255,8 +2255,8 @@
   };
 
   vim-cute-python = buildVimPluginFrom2Nix {
-    name = "vim-cute-python-2016-04-04";
     pname = "vim-cute-python";
+    version = "2016-04-04";
     src = fetchFromGitHub {
       owner = "ehamberg";
       repo = "vim-cute-python";
@@ -2266,8 +2266,8 @@
   };
 
   vim-devicons = buildVimPluginFrom2Nix {
-    name = "vim-devicons-2018-06-21";
     pname = "vim-devicons";
+    version = "2018-06-21";
     src = fetchFromGitHub {
       owner = "ryanoasis";
       repo = "vim-devicons";
@@ -2277,8 +2277,8 @@
   };
 
   vim-dirdiff = buildVimPluginFrom2Nix {
-    name = "vim-dirdiff-2018-01-31";
     pname = "vim-dirdiff";
+    version = "2018-01-31";
     src = fetchFromGitHub {
       owner = "will133";
       repo = "vim-dirdiff";
@@ -2288,8 +2288,8 @@
   };
 
   vim-dirvish = buildVimPluginFrom2Nix {
-    name = "vim-dirvish-2018-12-04";
     pname = "vim-dirvish";
+    version = "2018-12-04";
     src = fetchFromGitHub {
       owner = "justinmk";
       repo = "vim-dirvish";
@@ -2299,8 +2299,8 @@
   };
 
   vim-dispatch = buildVimPluginFrom2Nix {
-    name = "vim-dispatch-2018-10-31";
     pname = "vim-dispatch";
+    version = "2018-10-31";
     src = fetchFromGitHub {
       owner = "tpope";
       repo = "vim-dispatch";
@@ -2310,8 +2310,8 @@
   };
 
   vim-docbk = buildVimPluginFrom2Nix {
-    name = "vim-docbk-2015-04-01";
     pname = "vim-docbk";
+    version = "2015-04-01";
     src = fetchFromGitHub {
       owner = "jhradilek";
       repo = "vim-docbk";
@@ -2321,8 +2321,8 @@
   };
 
   vim-easy-align = buildVimPluginFrom2Nix {
-    name = "vim-easy-align-2017-06-03";
     pname = "vim-easy-align";
+    version = "2017-06-03";
     src = fetchFromGitHub {
       owner = "junegunn";
       repo = "vim-easy-align";
@@ -2332,8 +2332,8 @@
   };
 
   vim-easygit = buildVimPluginFrom2Nix {
-    name = "vim-easygit-2018-07-08";
     pname = "vim-easygit";
+    version = "2018-07-08";
     src = fetchFromGitHub {
       owner = "neoclide";
       repo = "vim-easygit";
@@ -2343,8 +2343,8 @@
   };
 
   vim-easymotion = buildVimPluginFrom2Nix {
-    name = "vim-easymotion-2018-06-04";
     pname = "vim-easymotion";
+    version = "2018-06-04";
     src = fetchFromGitHub {
       owner = "easymotion";
       repo = "vim-easymotion";
@@ -2354,8 +2354,8 @@
   };
 
   vim-easytags = buildVimPluginFrom2Nix {
-    name = "vim-easytags-2015-07-01";
     pname = "vim-easytags";
+    version = "2015-07-01";
     src = fetchFromGitHub {
       owner = "xolox";
       repo = "vim-easytags";
@@ -2365,8 +2365,8 @@
   };
 
   vim-eighties = buildVimPluginFrom2Nix {
-    name = "vim-eighties-2016-12-15";
     pname = "vim-eighties";
+    version = "2016-12-15";
     src = fetchFromGitHub {
       owner = "justincampbell";
       repo = "vim-eighties";
@@ -2376,8 +2376,8 @@
   };
 
   vim-elixir = buildVimPluginFrom2Nix {
-    name = "vim-elixir-2018-12-12";
     pname = "vim-elixir";
+    version = "2018-12-12";
     src = fetchFromGitHub {
       owner = "elixir-lang";
       repo = "vim-elixir";
@@ -2387,8 +2387,8 @@
   };
 
   vim-eunuch = buildVimPluginFrom2Nix {
-    name = "vim-eunuch-2018-09-09";
     pname = "vim-eunuch";
+    version = "2018-09-09";
     src = fetchFromGitHub {
       owner = "tpope";
       repo = "vim-eunuch";
@@ -2398,8 +2398,8 @@
   };
 
   vim-expand-region = buildVimPluginFrom2Nix {
-    name = "vim-expand-region-2013-08-19";
     pname = "vim-expand-region";
+    version = "2013-08-19";
     src = fetchFromGitHub {
       owner = "terryma";
       repo = "vim-expand-region";
@@ -2409,8 +2409,8 @@
   };
 
   vim-extradite = buildVimPluginFrom2Nix {
-    name = "vim-extradite-2015-09-22";
     pname = "vim-extradite";
+    version = "2015-09-22";
     src = fetchFromGitHub {
       owner = "int3";
       repo = "vim-extradite";
@@ -2420,8 +2420,8 @@
   };
 
   vim-fireplace = buildVimPluginFrom2Nix {
-    name = "vim-fireplace-2018-06-01";
     pname = "vim-fireplace";
+    version = "2018-06-01";
     src = fetchFromGitHub {
       owner = "tpope";
       repo = "vim-fireplace";
@@ -2431,8 +2431,8 @@
   };
 
   vim-flagship = buildVimPluginFrom2Nix {
-    name = "vim-flagship-2018-08-15";
     pname = "vim-flagship";
+    version = "2018-08-15";
     src = fetchFromGitHub {
       owner = "tpope";
       repo = "vim-flagship";
@@ -2442,8 +2442,8 @@
   };
 
   vim-flake8 = buildVimPluginFrom2Nix {
-    name = "vim-flake8-2018-09-21";
     pname = "vim-flake8";
+    version = "2018-09-21";
     src = fetchFromGitHub {
       owner = "nvie";
       repo = "vim-flake8";
@@ -2453,8 +2453,8 @@
   };
 
   vim-ft-diff_fold = buildVimPluginFrom2Nix {
-    name = "vim-ft-diff_fold-2013-02-10";
     pname = "vim-ft-diff_fold";
+    version = "2013-02-10";
     src = fetchFromGitHub {
       owner = "thinca";
       repo = "vim-ft-diff_fold";
@@ -2464,8 +2464,8 @@
   };
 
   vim-fugitive = buildVimPluginFrom2Nix {
-    name = "vim-fugitive-2018-12-26";
     pname = "vim-fugitive";
+    version = "2018-12-26";
     src = fetchFromGitHub {
       owner = "tpope";
       repo = "vim-fugitive";
@@ -2475,8 +2475,8 @@
   };
 
   vim-ghost = buildVimPluginFrom2Nix {
-    name = "vim-ghost-2018-12-12";
     pname = "vim-ghost";
+    version = "2018-12-12";
     src = fetchFromGitHub {
       owner = "raghur";
       repo = "vim-ghost";
@@ -2486,8 +2486,8 @@
   };
 
   vim-gista = buildVimPluginFrom2Nix {
-    name = "vim-gista-2017-02-20";
     pname = "vim-gista";
+    version = "2017-02-20";
     src = fetchFromGitHub {
       owner = "lambdalisue";
       repo = "vim-gista";
@@ -2497,8 +2497,8 @@
   };
 
   vim-gitbranch = buildVimPluginFrom2Nix {
-    name = "vim-gitbranch-2017-05-27";
     pname = "vim-gitbranch";
+    version = "2017-05-27";
     src = fetchFromGitHub {
       owner = "itchyny";
       repo = "vim-gitbranch";
@@ -2508,8 +2508,8 @@
   };
 
   vim-gitgutter = buildVimPluginFrom2Nix {
-    name = "vim-gitgutter-2018-12-15";
     pname = "vim-gitgutter";
+    version = "2018-12-15";
     src = fetchFromGitHub {
       owner = "airblade";
       repo = "vim-gitgutter";
@@ -2519,8 +2519,8 @@
   };
 
   vim-github-dashboard = buildVimPluginFrom2Nix {
-    name = "vim-github-dashboard-2018-09-03";
     pname = "vim-github-dashboard";
+    version = "2018-09-03";
     src = fetchFromGitHub {
       owner = "junegunn";
       repo = "vim-github-dashboard";
@@ -2530,8 +2530,8 @@
   };
 
   vim-go = buildVimPluginFrom2Nix {
-    name = "vim-go-2018-12-24";
     pname = "vim-go";
+    version = "2018-12-24";
     src = fetchFromGitHub {
       owner = "fatih";
       repo = "vim-go";
@@ -2541,8 +2541,8 @@
   };
 
   vim-grammarous = buildVimPluginFrom2Nix {
-    name = "vim-grammarous-2018-09-13";
     pname = "vim-grammarous";
+    version = "2018-09-13";
     src = fetchFromGitHub {
       owner = "rhysd";
       repo = "vim-grammarous";
@@ -2552,8 +2552,8 @@
   };
 
   vim-grepper = buildVimPluginFrom2Nix {
-    name = "vim-grepper-2018-12-22";
     pname = "vim-grepper";
+    version = "2018-12-22";
     src = fetchFromGitHub {
       owner = "mhinz";
       repo = "vim-grepper";
@@ -2563,8 +2563,8 @@
   };
 
   vim-gutentags = buildVimPluginFrom2Nix {
-    name = "vim-gutentags-2018-11-17";
     pname = "vim-gutentags";
+    version = "2018-11-17";
     src = fetchFromGitHub {
       owner = "ludovicchabant";
       repo = "vim-gutentags";
@@ -2574,8 +2574,8 @@
   };
 
   vim-hardtime = buildVimPluginFrom2Nix {
-    name = "vim-hardtime-2017-03-31";
     pname = "vim-hardtime";
+    version = "2017-03-31";
     src = fetchFromGitHub {
       owner = "takac";
       repo = "vim-hardtime";
@@ -2585,8 +2585,8 @@
   };
 
   vim-haskellconceal = buildVimPluginFrom2Nix {
-    name = "vim-haskellconceal-2017-06-15";
     pname = "vim-haskellconceal";
+    version = "2017-06-15";
     src = fetchFromGitHub {
       owner = "twinside";
       repo = "vim-haskellconceal";
@@ -2596,8 +2596,8 @@
   };
 
   vim-haskellConcealPlus = buildVimPluginFrom2Nix {
-    name = "vim-haskellConcealPlus-2018-12-26";
     pname = "vim-haskellConcealPlus";
+    version = "2018-12-26";
     src = fetchFromGitHub {
       owner = "enomsg";
       repo = "vim-haskellConcealPlus";
@@ -2607,8 +2607,8 @@
   };
 
   vim-hdevtools = buildVimPluginFrom2Nix {
-    name = "vim-hdevtools-2018-11-19";
     pname = "vim-hdevtools";
+    version = "2018-11-19";
     src = fetchFromGitHub {
       owner = "bitc";
       repo = "vim-hdevtools";
@@ -2618,8 +2618,8 @@
   };
 
   vim-hier = buildVimPluginFrom2Nix {
-    name = "vim-hier-2011-08-27";
     pname = "vim-hier";
+    version = "2011-08-27";
     src = fetchFromGitHub {
       owner = "jceb";
       repo = "vim-hier";
@@ -2629,8 +2629,8 @@
   };
 
   vim-highlightedyank = buildVimPluginFrom2Nix {
-    name = "vim-highlightedyank-2018-10-08";
     pname = "vim-highlightedyank";
+    version = "2018-10-08";
     src = fetchFromGitHub {
       owner = "machakann";
       repo = "vim-highlightedyank";
@@ -2640,8 +2640,8 @@
   };
 
   vim-hindent = buildVimPluginFrom2Nix {
-    name = "vim-hindent-2018-07-31";
     pname = "vim-hindent";
+    version = "2018-07-31";
     src = fetchFromGitHub {
       owner = "alx741";
       repo = "vim-hindent";
@@ -2651,8 +2651,8 @@
   };
 
   vim-hoogle = buildVimPluginFrom2Nix {
-    name = "vim-hoogle-2018-03-04";
     pname = "vim-hoogle";
+    version = "2018-03-04";
     src = fetchFromGitHub {
       owner = "Twinside";
       repo = "vim-hoogle";
@@ -2662,8 +2662,8 @@
   };
 
   vim-husk = buildVimPluginFrom2Nix {
-    name = "vim-husk-2015-11-29";
     pname = "vim-husk";
+    version = "2015-11-29";
     src = fetchFromGitHub {
       owner = "vim-utils";
       repo = "vim-husk";
@@ -2673,8 +2673,8 @@
   };
 
   vim-iced-coffee-script = buildVimPluginFrom2Nix {
-    name = "vim-iced-coffee-script-2013-12-26";
     pname = "vim-iced-coffee-script";
+    version = "2013-12-26";
     src = fetchFromGitHub {
       owner = "noc7c9";
       repo = "vim-iced-coffee-script";
@@ -2684,8 +2684,8 @@
   };
 
   vim-indent-guides = buildVimPluginFrom2Nix {
-    name = "vim-indent-guides-2018-05-14";
     pname = "vim-indent-guides";
+    version = "2018-05-14";
     src = fetchFromGitHub {
       owner = "nathanaelkane";
       repo = "vim-indent-guides";
@@ -2695,8 +2695,8 @@
   };
 
   vim-indent-object = buildVimPluginFrom2Nix {
-    name = "vim-indent-object-2018-04-08";
     pname = "vim-indent-object";
+    version = "2018-04-08";
     src = fetchFromGitHub {
       owner = "michaeljsmith";
       repo = "vim-indent-object";
@@ -2706,8 +2706,8 @@
   };
 
   vim-ipython = buildVimPluginFrom2Nix {
-    name = "vim-ipython-2015-06-23";
     pname = "vim-ipython";
+    version = "2015-06-23";
     src = fetchFromGitHub {
       owner = "ivanov";
       repo = "vim-ipython";
@@ -2717,8 +2717,8 @@
   };
 
   vim-isort = buildVimPluginFrom2Nix {
-    name = "vim-isort-2018-08-22";
     pname = "vim-isort";
+    version = "2018-08-22";
     src = fetchFromGitHub {
       owner = "fisadev";
       repo = "vim-isort";
@@ -2728,8 +2728,8 @@
   };
 
   vim-jade = buildVimPluginFrom2Nix {
-    name = "vim-jade-2018-09-10";
     pname = "vim-jade";
+    version = "2018-09-10";
     src = fetchFromGitHub {
       owner = "digitaltoad";
       repo = "vim-jade";
@@ -2739,8 +2739,8 @@
   };
 
   vim-janah = buildVimPluginFrom2Nix {
-    name = "vim-janah-2018-10-01";
     pname = "vim-janah";
+    version = "2018-10-01";
     src = fetchFromGitHub {
       owner = "mhinz";
       repo = "vim-janah";
@@ -2750,8 +2750,8 @@
   };
 
   vim-javacomplete2 = buildVimPluginFrom2Nix {
-    name = "vim-javacomplete2-2018-12-25";
     pname = "vim-javacomplete2";
+    version = "2018-12-25";
     src = fetchFromGitHub {
       owner = "artur-shaik";
       repo = "vim-javacomplete2";
@@ -2761,8 +2761,8 @@
   };
 
   vim-javascript = buildVimPluginFrom2Nix {
-    name = "vim-javascript-2018-12-23";
     pname = "vim-javascript";
+    version = "2018-12-23";
     src = fetchFromGitHub {
       owner = "pangloss";
       repo = "vim-javascript";
@@ -2772,8 +2772,8 @@
   };
 
   vim-jinja = buildVimPluginFrom2Nix {
-    name = "vim-jinja-2016-11-16";
     pname = "vim-jinja";
+    version = "2016-11-16";
     src = fetchFromGitHub {
       owner = "lepture";
       repo = "vim-jinja";
@@ -2783,8 +2783,8 @@
   };
 
   vim-jsbeautify = buildVimPluginFrom2Nix {
-    name = "vim-jsbeautify-2018-10-23";
     pname = "vim-jsbeautify";
+    version = "2018-10-23";
     src = fetchFromGitHub {
       owner = "maksimr";
       repo = "vim-jsbeautify";
@@ -2795,8 +2795,8 @@
   };
 
   vim-jsdoc = buildVimPluginFrom2Nix {
-    name = "vim-jsdoc-2018-05-05";
     pname = "vim-jsdoc";
+    version = "2018-05-05";
     src = fetchFromGitHub {
       owner = "heavenshell";
       repo = "vim-jsdoc";
@@ -2806,8 +2806,8 @@
   };
 
   vim-json = buildVimPluginFrom2Nix {
-    name = "vim-json-2018-01-10";
     pname = "vim-json";
+    version = "2018-01-10";
     src = fetchFromGitHub {
       owner = "elzr";
       repo = "vim-json";
@@ -2817,8 +2817,8 @@
   };
 
   vim-jsonnet = buildVimPluginFrom2Nix {
-    name = "vim-jsonnet-2018-10-08";
     pname = "vim-jsonnet";
+    version = "2018-10-08";
     src = fetchFromGitHub {
       owner = "google";
       repo = "vim-jsonnet";
@@ -2828,8 +2828,8 @@
   };
 
   vim-lastplace = buildVimPluginFrom2Nix {
-    name = "vim-lastplace-2017-06-13";
     pname = "vim-lastplace";
+    version = "2017-06-13";
     src = fetchFromGitHub {
       owner = "farmergreg";
       repo = "vim-lastplace";
@@ -2839,8 +2839,8 @@
   };
 
   vim-latex-live-preview = buildVimPluginFrom2Nix {
-    name = "vim-latex-live-preview-2018-09-25";
     pname = "vim-latex-live-preview";
+    version = "2018-09-25";
     src = fetchFromGitHub {
       owner = "xuhdev";
       repo = "vim-latex-live-preview";
@@ -2850,8 +2850,8 @@
   };
 
   vim-lawrencium = buildVimPluginFrom2Nix {
-    name = "vim-lawrencium-2018-11-04";
     pname = "vim-lawrencium";
+    version = "2018-11-04";
     src = fetchFromGitHub {
       owner = "ludovicchabant";
       repo = "vim-lawrencium";
@@ -2861,8 +2861,8 @@
   };
 
   vim-leader-guide = buildVimPluginFrom2Nix {
-    name = "vim-leader-guide-2018-10-06";
     pname = "vim-leader-guide";
+    version = "2018-10-06";
     src = fetchFromGitHub {
       owner = "hecal3";
       repo = "vim-leader-guide";
@@ -2872,8 +2872,8 @@
   };
 
   vim-ledger = buildVimPluginFrom2Nix {
-    name = "vim-ledger-2017-12-12";
     pname = "vim-ledger";
+    version = "2017-12-12";
     src = fetchFromGitHub {
       owner = "ledger";
       repo = "vim-ledger";
@@ -2883,8 +2883,8 @@
   };
 
   vim-localvimrc = buildVimPluginFrom2Nix {
-    name = "vim-localvimrc-2018-11-06";
     pname = "vim-localvimrc";
+    version = "2018-11-06";
     src = fetchFromGitHub {
       owner = "embear";
       repo = "vim-localvimrc";
@@ -2894,8 +2894,8 @@
   };
 
   vim-logreview = buildVimPluginFrom2Nix {
-    name = "vim-logreview-2017-07-08";
     pname = "vim-logreview";
+    version = "2017-07-08";
     src = fetchFromGitHub {
       owner = "andreshazard";
       repo = "vim-logreview";
@@ -2905,8 +2905,8 @@
   };
 
   vim-maktaba = buildVimPluginFrom2Nix {
-    name = "vim-maktaba-2018-12-13";
     pname = "vim-maktaba";
+    version = "2018-12-13";
     src = fetchFromGitHub {
       owner = "google";
       repo = "vim-maktaba";
@@ -2916,8 +2916,8 @@
   };
 
   vim-markdown = buildVimPluginFrom2Nix {
-    name = "vim-markdown-2018-10-24";
     pname = "vim-markdown";
+    version = "2018-10-24";
     src = fetchFromGitHub {
       owner = "plasticboy";
       repo = "vim-markdown";
@@ -2927,8 +2927,8 @@
   };
 
   vim-misc = buildVimPluginFrom2Nix {
-    name = "vim-misc-2015-05-21";
     pname = "vim-misc";
+    version = "2015-05-21";
     src = fetchFromGitHub {
       owner = "xolox";
       repo = "vim-misc";
@@ -2938,8 +2938,8 @@
   };
 
   vim-monokai-pro = buildVimPluginFrom2Nix {
-    name = "vim-monokai-pro-2018-12-27";
     pname = "vim-monokai-pro";
+    version = "2018-12-27";
     src = fetchFromGitHub {
       owner = "phanviet";
       repo = "vim-monokai-pro";
@@ -2949,8 +2949,8 @@
   };
 
   vim-multiple-cursors = buildVimPluginFrom2Nix {
-    name = "vim-multiple-cursors-2018-10-16";
     pname = "vim-multiple-cursors";
+    version = "2018-10-16";
     src = fetchFromGitHub {
       owner = "terryma";
       repo = "vim-multiple-cursors";
@@ -2960,8 +2960,8 @@
   };
 
   vim-nerdtree-tabs = buildVimPluginFrom2Nix {
-    name = "vim-nerdtree-tabs-2018-12-21";
     pname = "vim-nerdtree-tabs";
+    version = "2018-12-21";
     src = fetchFromGitHub {
       owner = "jistr";
       repo = "vim-nerdtree-tabs";
@@ -2971,8 +2971,8 @@
   };
 
   vim-niceblock = buildVimPluginFrom2Nix {
-    name = "vim-niceblock-2018-09-06";
     pname = "vim-niceblock";
+    version = "2018-09-06";
     src = fetchFromGitHub {
       owner = "kana";
       repo = "vim-niceblock";
@@ -2982,8 +2982,8 @@
   };
 
   vim-nix = buildVimPluginFrom2Nix {
-    name = "vim-nix-2018-08-27";
     pname = "vim-nix";
+    version = "2018-08-27";
     src = fetchFromGitHub {
       owner = "LnL7";
       repo = "vim-nix";
@@ -2993,8 +2993,8 @@
   };
 
   vim-obsession = buildVimPluginFrom2Nix {
-    name = "vim-obsession-2018-09-17";
     pname = "vim-obsession";
+    version = "2018-09-17";
     src = fetchFromGitHub {
       owner = "tpope";
       repo = "vim-obsession";
@@ -3004,8 +3004,8 @@
   };
 
   vim-one = buildVimPluginFrom2Nix {
-    name = "vim-one-2018-07-22";
     pname = "vim-one";
+    version = "2018-07-22";
     src = fetchFromGitHub {
       owner = "rakr";
       repo = "vim-one";
@@ -3015,8 +3015,8 @@
   };
 
   vim-operator-replace = buildVimPluginFrom2Nix {
-    name = "vim-operator-replace-2015-02-24";
     pname = "vim-operator-replace";
+    version = "2015-02-24";
     src = fetchFromGitHub {
       owner = "kana";
       repo = "vim-operator-replace";
@@ -3026,8 +3026,8 @@
   };
 
   vim-operator-surround = buildVimPluginFrom2Nix {
-    name = "vim-operator-surround-2018-11-01";
     pname = "vim-operator-surround";
+    version = "2018-11-01";
     src = fetchFromGitHub {
       owner = "rhysd";
       repo = "vim-operator-surround";
@@ -3037,8 +3037,8 @@
   };
 
   vim-operator-user = buildVimPluginFrom2Nix {
-    name = "vim-operator-user-2015-02-17";
     pname = "vim-operator-user";
+    version = "2015-02-17";
     src = fetchFromGitHub {
       owner = "kana";
       repo = "vim-operator-user";
@@ -3048,8 +3048,8 @@
   };
 
   vim-orgmode = buildVimPluginFrom2Nix {
-    name = "vim-orgmode-2018-07-25";
     pname = "vim-orgmode";
+    version = "2018-07-25";
     src = fetchFromGitHub {
       owner = "jceb";
       repo = "vim-orgmode";
@@ -3059,8 +3059,8 @@
   };
 
   vim-pager = buildVimPluginFrom2Nix {
-    name = "vim-pager-2015-08-26";
     pname = "vim-pager";
+    version = "2015-08-26";
     src = fetchFromGitHub {
       owner = "lambdalisue";
       repo = "vim-pager";
@@ -3070,8 +3070,8 @@
   };
 
   vim-pandoc = buildVimPluginFrom2Nix {
-    name = "vim-pandoc-2018-10-07";
     pname = "vim-pandoc";
+    version = "2018-10-07";
     src = fetchFromGitHub {
       owner = "vim-pandoc";
       repo = "vim-pandoc";
@@ -3081,8 +3081,8 @@
   };
 
   vim-pandoc-after = buildVimPluginFrom2Nix {
-    name = "vim-pandoc-after-2017-11-21";
     pname = "vim-pandoc-after";
+    version = "2017-11-21";
     src = fetchFromGitHub {
       owner = "vim-pandoc";
       repo = "vim-pandoc-after";
@@ -3092,8 +3092,8 @@
   };
 
   vim-pandoc-syntax = buildVimPluginFrom2Nix {
-    name = "vim-pandoc-syntax-2017-04-13";
     pname = "vim-pandoc-syntax";
+    version = "2017-04-13";
     src = fetchFromGitHub {
       owner = "vim-pandoc";
       repo = "vim-pandoc-syntax";
@@ -3103,8 +3103,8 @@
   };
 
   vim-pathogen = buildVimPluginFrom2Nix {
-    name = "vim-pathogen-2018-12-13";
     pname = "vim-pathogen";
+    version = "2018-12-13";
     src = fetchFromGitHub {
       owner = "tpope";
       repo = "vim-pathogen";
@@ -3114,8 +3114,8 @@
   };
 
   vim-peekaboo = buildVimPluginFrom2Nix {
-    name = "vim-peekaboo-2017-03-20";
     pname = "vim-peekaboo";
+    version = "2017-03-20";
     src = fetchFromGitHub {
       owner = "junegunn";
       repo = "vim-peekaboo";
@@ -3125,8 +3125,8 @@
   };
 
   vim-pencil = buildVimPluginFrom2Nix {
-    name = "vim-pencil-2017-06-14";
     pname = "vim-pencil";
+    version = "2017-06-14";
     src = fetchFromGitHub {
       owner = "reedes";
       repo = "vim-pencil";
@@ -3136,8 +3136,8 @@
   };
 
   vim-plug = buildVimPluginFrom2Nix {
-    name = "vim-plug-2018-11-03";
     pname = "vim-plug";
+    version = "2018-11-03";
     src = fetchFromGitHub {
       owner = "junegunn";
       repo = "vim-plug";
@@ -3147,8 +3147,8 @@
   };
 
   vim-plugin-AnsiEsc = buildVimPluginFrom2Nix {
-    name = "vim-plugin-AnsiEsc-2018-05-10";
     pname = "vim-plugin-AnsiEsc";
+    version = "2018-05-10";
     src = fetchFromGitHub {
       owner = "powerman";
       repo = "vim-plugin-AnsiEsc";
@@ -3158,8 +3158,8 @@
   };
 
   vim-polyglot = buildVimPluginFrom2Nix {
-    name = "vim-polyglot-2018-12-26";
     pname = "vim-polyglot";
+    version = "2018-12-26";
     src = fetchFromGitHub {
       owner = "sheerun";
       repo = "vim-polyglot";
@@ -3169,8 +3169,8 @@
   };
 
   vim-prettyprint = buildVimPluginFrom2Nix {
-    name = "vim-prettyprint-2016-07-16";
     pname = "vim-prettyprint";
+    version = "2016-07-16";
     src = fetchFromGitHub {
       owner = "thinca";
       repo = "vim-prettyprint";
@@ -3180,8 +3180,8 @@
   };
 
   vim-projectionist = buildVimPluginFrom2Nix {
-    name = "vim-projectionist-2018-10-21";
     pname = "vim-projectionist";
+    version = "2018-10-21";
     src = fetchFromGitHub {
       owner = "tpope";
       repo = "vim-projectionist";
@@ -3191,8 +3191,8 @@
   };
 
   vim-ps1 = buildVimPluginFrom2Nix {
-    name = "vim-ps1-2017-10-20";
     pname = "vim-ps1";
+    version = "2017-10-20";
     src = fetchFromGitHub {
       owner = "PProvost";
       repo = "vim-ps1";
@@ -3202,8 +3202,8 @@
   };
 
   vim-puppet = buildVimPluginFrom2Nix {
-    name = "vim-puppet-2018-11-15";
     pname = "vim-puppet";
+    version = "2018-11-15";
     src = fetchFromGitHub {
       owner = "rodjek";
       repo = "vim-puppet";
@@ -3213,8 +3213,8 @@
   };
 
   vim-qml = buildVimPluginFrom2Nix {
-    name = "vim-qml-2018-07-22";
     pname = "vim-qml";
+    version = "2018-07-22";
     src = fetchFromGitHub {
       owner = "peterhoeg";
       repo = "vim-qml";
@@ -3224,8 +3224,8 @@
   };
 
   vim-quickrun = buildVimPluginFrom2Nix {
-    name = "vim-quickrun-2018-11-27";
     pname = "vim-quickrun";
+    version = "2018-11-27";
     src = fetchFromGitHub {
       owner = "thinca";
       repo = "vim-quickrun";
@@ -3235,8 +3235,8 @@
   };
 
   vim-racer = buildVimPluginFrom2Nix {
-    name = "vim-racer-2018-08-26";
     pname = "vim-racer";
+    version = "2018-08-26";
     src = fetchFromGitHub {
       owner = "racer-rust";
       repo = "vim-racer";
@@ -3246,8 +3246,8 @@
   };
 
   vim-repeat = buildVimPluginFrom2Nix {
-    name = "vim-repeat-2018-07-02";
     pname = "vim-repeat";
+    version = "2018-07-02";
     src = fetchFromGitHub {
       owner = "tpope";
       repo = "vim-repeat";
@@ -3257,8 +3257,8 @@
   };
 
   vim-rhubarb = buildVimPluginFrom2Nix {
-    name = "vim-rhubarb-2018-11-16";
     pname = "vim-rhubarb";
+    version = "2018-11-16";
     src = fetchFromGitHub {
       owner = "tpope";
       repo = "vim-rhubarb";
@@ -3268,8 +3268,8 @@
   };
 
   vim-ruby = buildVimPluginFrom2Nix {
-    name = "vim-ruby-2018-12-11";
     pname = "vim-ruby";
+    version = "2018-12-11";
     src = fetchFromGitHub {
       owner = "vim-ruby";
       repo = "vim-ruby";
@@ -3279,8 +3279,8 @@
   };
 
   vim-sayonara = buildVimPluginFrom2Nix {
-    name = "vim-sayonara-2017-03-13";
     pname = "vim-sayonara";
+    version = "2017-03-13";
     src = fetchFromGitHub {
       owner = "mhinz";
       repo = "vim-sayonara";
@@ -3290,8 +3290,8 @@
   };
 
   vim-scala = buildVimPluginFrom2Nix {
-    name = "vim-scala-2017-11-10";
     pname = "vim-scala";
+    version = "2017-11-10";
     src = fetchFromGitHub {
       owner = "derekwyatt";
       repo = "vim-scala";
@@ -3301,8 +3301,8 @@
   };
 
   vim-scouter = buildVimPluginFrom2Nix {
-    name = "vim-scouter-2014-08-10";
     pname = "vim-scouter";
+    version = "2014-08-10";
     src = fetchFromGitHub {
       owner = "thinca";
       repo = "vim-scouter";
@@ -3312,8 +3312,8 @@
   };
 
   vim-scriptease = buildVimPluginFrom2Nix {
-    name = "vim-scriptease-2018-12-19";
     pname = "vim-scriptease";
+    version = "2018-12-19";
     src = fetchFromGitHub {
       owner = "tpope";
       repo = "vim-scriptease";
@@ -3323,8 +3323,8 @@
   };
 
   vim-sensible = buildVimPluginFrom2Nix {
-    name = "vim-sensible-2018-10-27";
     pname = "vim-sensible";
+    version = "2018-10-27";
     src = fetchFromGitHub {
       owner = "tpope";
       repo = "vim-sensible";
@@ -3334,8 +3334,8 @@
   };
 
   vim-signature = buildVimPluginFrom2Nix {
-    name = "vim-signature-2018-07-06";
     pname = "vim-signature";
+    version = "2018-07-06";
     src = fetchFromGitHub {
       owner = "kshenoy";
       repo = "vim-signature";
@@ -3345,8 +3345,8 @@
   };
 
   vim-signify = buildVimPluginFrom2Nix {
-    name = "vim-signify-2018-12-20";
     pname = "vim-signify";
+    version = "2018-12-20";
     src = fetchFromGitHub {
       owner = "mhinz";
       repo = "vim-signify";
@@ -3356,8 +3356,8 @@
   };
 
   vim-sleuth = buildVimPluginFrom2Nix {
-    name = "vim-sleuth-2018-08-19";
     pname = "vim-sleuth";
+    version = "2018-08-19";
     src = fetchFromGitHub {
       owner = "tpope";
       repo = "vim-sleuth";
@@ -3367,8 +3367,8 @@
   };
 
   vim-smalls = buildVimPluginFrom2Nix {
-    name = "vim-smalls-2015-05-02";
     pname = "vim-smalls";
+    version = "2015-05-02";
     src = fetchFromGitHub {
       owner = "t9md";
       repo = "vim-smalls";
@@ -3378,8 +3378,8 @@
   };
 
   vim-snipmate = buildVimPluginFrom2Nix {
-    name = "vim-snipmate-2017-04-20";
     pname = "vim-snipmate";
+    version = "2017-04-20";
     src = fetchFromGitHub {
       owner = "garbas";
       repo = "vim-snipmate";
@@ -3389,8 +3389,8 @@
   };
 
   vim-snippets = buildVimPluginFrom2Nix {
-    name = "vim-snippets-2018-12-14";
     pname = "vim-snippets";
+    version = "2018-12-14";
     src = fetchFromGitHub {
       owner = "honza";
       repo = "vim-snippets";
@@ -3400,8 +3400,8 @@
   };
 
   vim-solidity = buildVimPluginFrom2Nix {
-    name = "vim-solidity-2018-04-17";
     pname = "vim-solidity";
+    version = "2018-04-17";
     src = fetchFromGitHub {
       owner = "tomlion";
       repo = "vim-solidity";
@@ -3411,8 +3411,8 @@
   };
 
   vim-sort-motion = buildVimPluginFrom2Nix {
-    name = "vim-sort-motion-2018-07-15";
     pname = "vim-sort-motion";
+    version = "2018-07-15";
     src = fetchFromGitHub {
       owner = "christoomey";
       repo = "vim-sort-motion";
@@ -3422,8 +3422,8 @@
   };
 
   vim-speeddating = buildVimPluginFrom2Nix {
-    name = "vim-speeddating-2018-10-31";
     pname = "vim-speeddating";
+    version = "2018-10-31";
     src = fetchFromGitHub {
       owner = "tpope";
       repo = "vim-speeddating";
@@ -3433,8 +3433,8 @@
   };
 
   vim-startify = buildVimPluginFrom2Nix {
-    name = "vim-startify-2018-12-16";
     pname = "vim-startify";
+    version = "2018-12-16";
     src = fetchFromGitHub {
       owner = "mhinz";
       repo = "vim-startify";
@@ -3444,8 +3444,8 @@
   };
 
   vim-stylish-haskell = buildVimPluginFrom2Nix {
-    name = "vim-stylish-haskell-2018-08-31";
     pname = "vim-stylish-haskell";
+    version = "2018-08-31";
     src = fetchFromGitHub {
       owner = "nbouscal";
       repo = "vim-stylish-haskell";
@@ -3455,8 +3455,8 @@
   };
 
   vim-stylishask = buildVimPluginFrom2Nix {
-    name = "vim-stylishask-2018-07-05";
     pname = "vim-stylishask";
+    version = "2018-07-05";
     src = fetchFromGitHub {
       owner = "alx741";
       repo = "vim-stylishask";
@@ -3466,8 +3466,8 @@
   };
 
   vim-surround = buildVimPluginFrom2Nix {
-    name = "vim-surround-2018-07-23";
     pname = "vim-surround";
+    version = "2018-07-23";
     src = fetchFromGitHub {
       owner = "tpope";
       repo = "vim-surround";
@@ -3477,8 +3477,8 @@
   };
 
   vim-SyntaxRange = buildVimPluginFrom2Nix {
-    name = "vim-SyntaxRange-2018-03-09";
     pname = "vim-SyntaxRange";
+    version = "2018-03-09";
     src = fetchFromGitHub {
       owner = "inkarkat";
       repo = "vim-SyntaxRange";
@@ -3488,8 +3488,8 @@
   };
 
   vim-table-mode = buildVimPluginFrom2Nix {
-    name = "vim-table-mode-2018-10-21";
     pname = "vim-table-mode";
+    version = "2018-10-21";
     src = fetchFromGitHub {
       owner = "dhruvasagar";
       repo = "vim-table-mode";
@@ -3499,8 +3499,8 @@
   };
 
   vim-tabpagecd = buildVimPluginFrom2Nix {
-    name = "vim-tabpagecd-2013-11-29";
     pname = "vim-tabpagecd";
+    version = "2013-11-29";
     src = fetchFromGitHub {
       owner = "kana";
       repo = "vim-tabpagecd";
@@ -3510,8 +3510,8 @@
   };
 
   vim-tbone = buildVimPluginFrom2Nix {
-    name = "vim-tbone-2018-06-28";
     pname = "vim-tbone";
+    version = "2018-06-28";
     src = fetchFromGitHub {
       owner = "tpope";
       repo = "vim-tbone";
@@ -3521,8 +3521,8 @@
   };
 
   vim-terraform = buildVimPluginFrom2Nix {
-    name = "vim-terraform-2018-12-25";
     pname = "vim-terraform";
+    version = "2018-12-25";
     src = fetchFromGitHub {
       owner = "hashivim";
       repo = "vim-terraform";
@@ -3532,8 +3532,8 @@
   };
 
   vim-test = buildVimPluginFrom2Nix {
-    name = "vim-test-2018-12-24";
     pname = "vim-test";
+    version = "2018-12-24";
     src = fetchFromGitHub {
       owner = "janko-m";
       repo = "vim-test";
@@ -3543,8 +3543,8 @@
   };
 
   vim-textobj-multiblock = buildVimPluginFrom2Nix {
-    name = "vim-textobj-multiblock-2014-06-02";
     pname = "vim-textobj-multiblock";
+    version = "2014-06-02";
     src = fetchFromGitHub {
       owner = "osyo-manga";
       repo = "vim-textobj-multiblock";
@@ -3554,8 +3554,8 @@
   };
 
   vim-themis = buildVimPluginFrom2Nix {
-    name = "vim-themis-2017-12-27";
     pname = "vim-themis";
+    version = "2017-12-27";
     src = fetchFromGitHub {
       owner = "thinca";
       repo = "vim-themis";
@@ -3565,8 +3565,8 @@
   };
 
   vim-tmux-navigator = buildVimPluginFrom2Nix {
-    name = "vim-tmux-navigator-2018-11-03";
     pname = "vim-tmux-navigator";
+    version = "2018-11-03";
     src = fetchFromGitHub {
       owner = "christoomey";
       repo = "vim-tmux-navigator";
@@ -3576,8 +3576,8 @@
   };
 
   vim-toml = buildVimPluginFrom2Nix {
-    name = "vim-toml-2018-11-27";
     pname = "vim-toml";
+    version = "2018-11-27";
     src = fetchFromGitHub {
       owner = "cespare";
       repo = "vim-toml";
@@ -3587,8 +3587,8 @@
   };
 
   vim-trailing-whitespace = buildVimPluginFrom2Nix {
-    name = "vim-trailing-whitespace-2017-09-23";
     pname = "vim-trailing-whitespace";
+    version = "2017-09-23";
     src = fetchFromGitHub {
       owner = "bronson";
       repo = "vim-trailing-whitespace";
@@ -3598,8 +3598,8 @@
   };
 
   vim-tsx = buildVimPluginFrom2Nix {
-    name = "vim-tsx-2017-03-16";
     pname = "vim-tsx";
+    version = "2017-03-16";
     src = fetchFromGitHub {
       owner = "ianks";
       repo = "vim-tsx";
@@ -3609,8 +3609,8 @@
   };
 
   vim-unimpaired = buildVimPluginFrom2Nix {
-    name = "vim-unimpaired-2018-12-20";
     pname = "vim-unimpaired";
+    version = "2018-12-20";
     src = fetchFromGitHub {
       owner = "tpope";
       repo = "vim-unimpaired";
@@ -3620,8 +3620,8 @@
   };
 
   vim-vinegar = buildVimPluginFrom2Nix {
-    name = "vim-vinegar-2018-08-06";
     pname = "vim-vinegar";
+    version = "2018-08-06";
     src = fetchFromGitHub {
       owner = "tpope";
       repo = "vim-vinegar";
@@ -3631,8 +3631,8 @@
   };
 
   vim-visualstar = buildVimPluginFrom2Nix {
-    name = "vim-visualstar-2015-08-27";
     pname = "vim-visualstar";
+    version = "2015-08-27";
     src = fetchFromGitHub {
       owner = "thinca";
       repo = "vim-visualstar";
@@ -3642,8 +3642,8 @@
   };
 
   vim-vue = buildVimPluginFrom2Nix {
-    name = "vim-vue-2018-11-11";
     pname = "vim-vue";
+    version = "2018-11-11";
     src = fetchFromGitHub {
       owner = "posva";
       repo = "vim-vue";
@@ -3653,8 +3653,8 @@
   };
 
   vim-wakatime = buildVimPluginFrom2Nix {
-    name = "vim-wakatime-2018-12-19";
     pname = "vim-wakatime";
+    version = "2018-12-19";
     src = fetchFromGitHub {
       owner = "wakatime";
       repo = "vim-wakatime";
@@ -3664,8 +3664,8 @@
   };
 
   vim-watchdogs = buildVimPluginFrom2Nix {
-    name = "vim-watchdogs-2017-12-03";
     pname = "vim-watchdogs";
+    version = "2017-12-03";
     src = fetchFromGitHub {
       owner = "osyo-manga";
       repo = "vim-watchdogs";
@@ -3675,8 +3675,8 @@
   };
 
   vim-wordy = buildVimPluginFrom2Nix {
-    name = "vim-wordy-2018-03-10";
     pname = "vim-wordy";
+    version = "2018-03-10";
     src = fetchFromGitHub {
       owner = "reedes";
       repo = "vim-wordy";
@@ -3686,8 +3686,8 @@
   };
 
   vim-xdebug = buildVimPluginFrom2Nix {
-    name = "vim-xdebug-2012-08-15";
     pname = "vim-xdebug";
+    version = "2012-08-15";
     src = fetchFromGitHub {
       owner = "joonty";
       repo = "vim-xdebug";
@@ -3697,8 +3697,8 @@
   };
 
   vim-xkbswitch = buildVimPluginFrom2Nix {
-    name = "vim-xkbswitch-2017-03-27";
     pname = "vim-xkbswitch";
+    version = "2017-03-27";
     src = fetchFromGitHub {
       owner = "lyokha";
       repo = "vim-xkbswitch";
@@ -3708,8 +3708,8 @@
   };
 
   vim-yapf = buildVimPluginFrom2Nix {
-    name = "vim-yapf-2018-10-04";
     pname = "vim-yapf";
+    version = "2018-10-04";
     src = fetchFromGitHub {
       owner = "mindriot101";
       repo = "vim-yapf";
@@ -3719,8 +3719,8 @@
   };
 
   vim2hs = buildVimPluginFrom2Nix {
-    name = "vim2hs-2014-04-16";
     pname = "vim2hs";
+    version = "2014-04-16";
     src = fetchFromGitHub {
       owner = "dag";
       repo = "vim2hs";
@@ -3730,8 +3730,8 @@
   };
 
   vimoutliner = buildVimPluginFrom2Nix {
-    name = "vimoutliner-2018-07-04";
     pname = "vimoutliner";
+    version = "2018-07-04";
     src = fetchFromGitHub {
       owner = "vimoutliner";
       repo = "vimoutliner";
@@ -3741,8 +3741,8 @@
   };
 
   vimpreviewpandoc = buildVimPluginFrom2Nix {
-    name = "vimpreviewpandoc-2018-11-05";
     pname = "vimpreviewpandoc";
+    version = "2018-11-05";
     src = fetchFromGitHub {
       owner = "tex";
       repo = "vimpreviewpandoc";
@@ -3752,8 +3752,8 @@
   };
 
   vimproc-vim = buildVimPluginFrom2Nix {
-    name = "vimproc-vim-2018-10-11";
     pname = "vimproc-vim";
+    version = "2018-10-11";
     src = fetchFromGitHub {
       owner = "Shougo";
       repo = "vimproc.vim";
@@ -3763,8 +3763,8 @@
   };
 
   vimshell-vim = buildVimPluginFrom2Nix {
-    name = "vimshell-vim-2018-06-02";
     pname = "vimshell-vim";
+    version = "2018-06-02";
     src = fetchFromGitHub {
       owner = "Shougo";
       repo = "vimshell.vim";
@@ -3774,8 +3774,8 @@
   };
 
   vimtex = buildVimPluginFrom2Nix {
-    name = "vimtex-2018-12-25";
     pname = "vimtex";
+    version = "2018-12-25";
     src = fetchFromGitHub {
       owner = "lervag";
       repo = "vimtex";
@@ -3785,8 +3785,8 @@
   };
 
   vimux = buildVimPluginFrom2Nix {
-    name = "vimux-2017-10-24";
     pname = "vimux";
+    version = "2017-10-24";
     src = fetchFromGitHub {
       owner = "benmills";
       repo = "vimux";
@@ -3796,8 +3796,8 @@
   };
 
   vimwiki = buildVimPluginFrom2Nix {
-    name = "vimwiki-2018-10-12";
     pname = "vimwiki";
+    version = "2018-10-12";
     src = fetchFromGitHub {
       owner = "vimwiki";
       repo = "vimwiki";
@@ -3807,8 +3807,8 @@
   };
 
   vissort-vim = buildVimPluginFrom2Nix {
-    name = "vissort-vim-2014-01-31";
     pname = "vissort-vim";
+    version = "2014-01-31";
     src = fetchFromGitHub {
       owner = "navicore";
       repo = "vissort.vim";
@@ -3818,8 +3818,8 @@
   };
 
   vundle = buildVimPluginFrom2Nix {
-    name = "vundle-2018-02-03";
     pname = "vundle";
+    version = "2018-02-03";
     src = fetchFromGitHub {
       owner = "gmarik";
       repo = "vundle";
@@ -3829,8 +3829,8 @@
   };
 
   wal-vim = buildVimPluginFrom2Nix {
-    name = "wal-vim-2018-06-04";
     pname = "wal-vim";
+    version = "2018-06-04";
     src = fetchFromGitHub {
       owner = "dylanaraps";
       repo = "wal.vim";
@@ -3840,8 +3840,8 @@
   };
 
   webapi-vim = buildVimPluginFrom2Nix {
-    name = "webapi-vim-2018-03-14";
     pname = "webapi-vim";
+    version = "2018-03-14";
     src = fetchFromGitHub {
       owner = "mattn";
       repo = "webapi-vim";
@@ -3851,8 +3851,8 @@
   };
 
   wombat256-vim = buildVimPluginFrom2Nix {
-    name = "wombat256-vim-2010-10-18";
     pname = "wombat256-vim";
+    version = "2010-10-18";
     src = fetchFromGitHub {
       owner = "vim-scripts";
       repo = "wombat256.vim";
@@ -3862,8 +3862,8 @@
   };
 
   workflowish = buildVimPluginFrom2Nix {
-    name = "workflowish-2015-12-03";
     pname = "workflowish";
+    version = "2015-12-03";
     src = fetchFromGitHub {
       owner = "lukaszkorecki";
       repo = "workflowish";
@@ -3873,8 +3873,8 @@
   };
 
   xptemplate = buildVimPluginFrom2Nix {
-    name = "xptemplate-2017-12-06";
     pname = "xptemplate";
+    version = "2017-12-06";
     src = fetchFromGitHub {
       owner = "drmingdrmer";
       repo = "xptemplate";
@@ -3884,8 +3884,8 @@
   };
 
   xterm-color-table-vim = buildVimPluginFrom2Nix {
-    name = "xterm-color-table-vim-2014-01-01";
     pname = "xterm-color-table-vim";
+    version = "2014-01-01";
     src = fetchFromGitHub {
       owner = "guns";
       repo = "xterm-color-table.vim";
@@ -3895,8 +3895,8 @@
   };
 
   YankRing-vim = buildVimPluginFrom2Nix {
-    name = "YankRing-vim-2015-07-29";
     pname = "YankRing-vim";
+    version = "2015-07-29";
     src = fetchFromGitHub {
       owner = "vim-scripts";
       repo = "YankRing.vim";
@@ -3906,8 +3906,8 @@
   };
 
   yats-vim = buildVimPluginFrom2Nix {
-    name = "yats-vim-2018-12-15";
     pname = "yats-vim";
+    version = "2018-12-15";
     src = fetchFromGitHub {
       owner = "HerringtonDarkholme";
       repo = "yats.vim";
@@ -3918,8 +3918,8 @@
   };
 
   youcompleteme = buildVimPluginFrom2Nix {
-    name = "youcompleteme-2018-12-23";
     pname = "youcompleteme";
+    version = "2018-12-23";
     src = fetchFromGitHub {
       owner = "valloric";
       repo = "youcompleteme";
@@ -3930,8 +3930,8 @@
   };
 
   YUNOcommit-vim = buildVimPluginFrom2Nix {
-    name = "YUNOcommit-vim-2014-11-26";
     pname = "YUNOcommit-vim";
+    version = "2014-11-26";
     src = fetchFromGitHub {
       owner = "esneider";
       repo = "YUNOcommit.vim";
@@ -3941,8 +3941,8 @@
   };
 
   zeavim-vim = buildVimPluginFrom2Nix {
-    name = "zeavim-vim-2018-03-22";
     pname = "zeavim-vim";
+    version = "2018-03-22";
     src = fetchFromGitHub {
       owner = "KabbAmine";
       repo = "zeavim.vim";
@@ -3952,8 +3952,8 @@
   };
 
   zenburn = buildVimPluginFrom2Nix {
-    name = "zenburn-2018-04-29";
     pname = "zenburn";
+    version = "2018-04-29";
     src = fetchFromGitHub {
       owner = "jnurmine";
       repo = "zenburn";
@@ -3963,8 +3963,8 @@
   };
 
   zig-vim = buildVimPluginFrom2Nix {
-    name = "zig-vim-2018-12-12";
     pname = "zig-vim";
+    version = "2018-12-12";
     src = fetchFromGitHub {
       owner = "zig-lang";
       repo = "zig.vim";
@@ -3974,8 +3974,8 @@
   };
 
   zoomwintab-vim = buildVimPluginFrom2Nix {
-    name = "zoomwintab-vim-2018-04-14";
     pname = "zoomwintab-vim";
+    version = "2018-04-14";
     src = fetchFromGitHub {
       owner = "troydm";
       repo = "zoomwintab.vim";
