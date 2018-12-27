@@ -3,13 +3,16 @@
 # Derivation patches HandBrake to use Nix closure dependencies.
 #
 
-{ stdenv, lib, fetchurl,
-  python2, pkgconfig, autoconf, automake, cmake, yasm, libtool, m4,
-  fribidi, fontconfig, freetype, jansson, zlib,
-  libass, libiconv, libsamplerate, libxml2, bzip2,
-  ffmpeg_4, libtheora, x264, x265, libvpx, mpeg2dec,
-  libopus, lame, libvorbis, a52dec,
-  libogg, libmkv, mp4v2,
+{ stdenv, lib, fetchurl, callPackage,
+  # Main build tools
+  python2, pkgconfig, autoconf, automake, cmake, nasm, libtool, m4,
+  # Processing, video codecs, containers
+  ffmpeg_4, libogg, x264, x265, libvpx, libtheora,
+  # Codecs, audio
+  libopus, lame, libvorbis, a52dec, speex, libsamplerate,
+  # Text processing
+  libiconv, fribidi, fontconfig, freetype, libass, jansson, libxml2,
+  # Optical media
   libdvdread, libdvdnav, libdvdcss, libbluray,
   useGtk ? true, wrapGAppsHook ? null,
                  intltool ? null,
@@ -25,6 +28,12 @@
   useFdk ? false, fdk_aac ? null
 }:
 
+let
+
+  nv-codec-headers = callPackage ../../../development/libraries/ffmpeg-full/nv-codec-headers.nix { };
+
+in
+
 stdenv.mkDerivation rec {
   version = "1.2.0";
   name = "handbrake-${version}";
@@ -35,21 +44,22 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    python2 pkgconfig autoconf automake cmake yasm libtool m4
+    python2 pkgconfig autoconf automake cmake nasm libtool m4
   ] ++ lib.optionals useGtk [ intltool wrapGAppsHook ];
 
   buildInputs = [
-    fribidi fontconfig freetype jansson zlib
-    libass libiconv libsamplerate libxml2 bzip2
-    ffmpeg_4 libtheora x264 x265 libvpx mpeg2dec
-    libopus lame libvorbis a52dec
-    libogg libmkv mp4v2
+    ffmpeg_4 libogg libtheora x264 x265 libvpx
+    libopus lame libvorbis a52dec speex libsamplerate
+    libiconv fribidi fontconfig freetype libass jansson libxml2
     libdvdread libdvdnav libdvdcss libbluray
   ] ++ lib.optionals useGtk [
     glib gtk3 libappindicator-gtk3 libnotify
     gst_all_1.gstreamer gst_all_1.gst-plugins-base dbus-glib udev
     libgudev hicolor-icon-theme
-  ] ++ lib.optional useFdk fdk_aac;
+  ] ++ lib.optional useFdk fdk_aac
+  # NOTE: 2018-12-27: Handbrake supports nv-codec-headers for Linux only,
+  # look at ./make/configure.py search "enable_nvenc"
+    ++ lib.optional stdenv.isLinux nv-codec-headers;
 
   # NOTE: 2018-12-25: v1.2.0 now requires cmake dep
   # (default distribution bundles&builds 3rd party libs),
