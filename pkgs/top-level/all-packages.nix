@@ -17793,6 +17793,7 @@ in
   k3d = callPackage ../applications/graphics/k3d {
     inherit (pkgs.gnome2) gtkglext;
     stdenv = overrideCC stdenv gcc6;
+    boost = boost166.override { enablePython = true; };
   };
 
   k9copy = libsForQt5.callPackage ../applications/video/k9copy {};
