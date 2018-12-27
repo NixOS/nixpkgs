@@ -2,7 +2,7 @@
 , pyqt5, numpy, scipy, shapely, libarcus, doxygen, gettext, pythonOlder }:
 
 buildPythonPackage rec {
-  version = "3.5.1";
+  version = "3.6.0";
   pname = "uranium";
   format = "other";
 
@@ -10,7 +10,7 @@ buildPythonPackage rec {
     owner = "Ultimaker";
     repo = "Uranium";
     rev = version;
-    sha256 = "1qfci5pl4yhirkkck1rm4i766j8gi56p81mfc6vgbdnhchcjyhy9";
+    sha256 = "02hid13h8anb9bgv2hhrcdg10bxdxa9hj9pbdv3gw3lpn9r2va98";
   };
 
   disabled = pythonOlder "3.5.0";
@@ -30,7 +30,7 @@ buildPythonPackage rec {
   meta = with stdenv.lib; {
     description = "A Python framework for building Desktop applications";
     homepage = https://github.com/Ultimaker/Uranium;
-    license = licenses.agpl3;
+    license = licenses.lgpl3Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ abbradar ];
   };
