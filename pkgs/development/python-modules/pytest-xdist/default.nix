@@ -1,4 +1,4 @@
-{ stdenv, fetchPypi, buildPythonPackage, execnet, pytest, setuptools_scm, pytest-forked, filelock }:
+{ stdenv, fetchPypi, buildPythonPackage, execnet, pytest, setuptools_scm, pytest-forked, filelock, six }:
 
 buildPythonPackage rec {
   pname = "pytest-xdist";
@@ -9,9 +9,9 @@ buildPythonPackage rec {
     sha256 = "909bb938bdb21e68a28a8d58c16a112b30da088407b678633efb01067e3923de";
   };
 
-  nativeBuildInputs = [ setuptools_scm ];
-  checkInputs = [ pytest pytest-forked filelock ];
-  propagatedBuildInputs = [ execnet ];
+  nativeBuildInputs = [ setuptools_scm pytest ];
+  checkInputs = [ pytest filelock ];
+  propagatedBuildInputs = [ execnet pytest-forked six ];
 
   checkPhase = ''
     # Excluded tests access file system

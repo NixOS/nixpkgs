@@ -51,7 +51,6 @@ self: super: {
   clock = dontCheck super.clock;
   Dust-crypto = dontCheck super.Dust-crypto;
   hasql-postgres = dontCheck super.hasql-postgres;
-  hspec = super.hspec.override { stringbuilder = dontCheck self.stringbuilder; };
   hspec-core = super.hspec-core.override { silently = dontCheck self.silently; temporary = dontCheck self.temporary; };
   hspec-expectations = dontCheck super.hspec-expectations;
   HTTP = dontCheck super.HTTP;
@@ -869,10 +868,6 @@ self: super: {
     testToolDepends = drv.testToolDepends or [] ++ [pkgs.procps];
   });
 
-  # These packages depend on each other, forming an infinite loop.
-  scalendar = markBroken (super.scalendar.override { SCalendar = null; });
-  SCalendar = markBroken (super.SCalendar.override { scalendar = null; });
-
   # Needs QuickCheck <2.10, which we don't have.
   edit-distance = doJailbreak super.edit-distance;
   blaze-markup = doJailbreak super.blaze-markup;
@@ -948,9 +943,9 @@ self: super: {
 
   # hledger needs a newer megaparsec version than we have in LTS 12.x.
   hledger-lib = super.hledger-lib.overrideScope (self: super: {
-    cassava-megaparsec = self.cassava-megaparsec_2_0_0;
-    hspec-megaparsec = self.hspec-megaparsec_2_0_0;
-    megaparsec = self.megaparsec_7_0_4;
+    # cassava-megaparsec = self.cassava-megaparsec_2_0_0;
+    # hspec-megaparsec = self.hspec-megaparsec_2_0_0;
+    # megaparsec = self.megaparsec_7_0_4;
   });
 
   # Copy hledger man pages from data directory into the proper place. This code
@@ -979,10 +974,10 @@ self: super: {
       cp -v *.info* $out/share/info/
     '';
   })).overrideScope (self: super: {
-    cassava-megaparsec = self.cassava-megaparsec_2_0_0;
-    config-ini = self.config-ini_0_2_4_0;
-    hspec-megaparsec = self.hspec-megaparsec_2_0_0;
-    megaparsec = self.megaparsec_7_0_4;
+    # cassava-megaparsec = self.cassava-megaparsec_2_0_0;
+    # config-ini = self.config-ini_0_2_4_0;
+    # hspec-megaparsec = self.hspec-megaparsec_2_0_0;
+    # megaparsec = self.megaparsec_7_0_4;
   });
   hledger-web = overrideCabal super.hledger-web (drv: {
     postInstall = ''
@@ -1087,19 +1082,15 @@ self: super: {
   haddock-library = doJailbreak (dontCheck super.haddock-library);
   # haddock-library_1_6_0 = doJailbreak (dontCheck super.haddock-library_1_6_0);
 
-  # The tool needs a newer hpack version than the one mandated by LTS-12.x.
-  # Also generate shell completions.
-  cabal2nix = generateOptparseApplicativeCompletion "cabal2nix"
-    (super.cabal2nix.overrideScope (self: super: {
-      hpack = self.hpack_0_31_1;
-      yaml = self.yaml_0_11_0_0;
-    }));
-  stack2nix = super.stack2nix.overrideScope (self: super: {
-    hpack = self.hpack_0_31_1;
-    yaml = self.yaml_0_11_0_0;
-  });
-  # Break out of "aeson <1.3, temporary <1.3".
-  stack = generateOptparseApplicativeCompletion "stack" (doJailbreak super.stack);
+  # Break out of tasty >=0.10 && <1.2.
+  aeson-compat = doJailbreak super.aeson-compat;
+
+  # Break out of pretty-show >=1.6 && <1.9
+  hedgehog = doJailbreak super.hedgehog;
+
+  # Generate shell completion.
+  cabal2nix = generateOptparseApplicativeCompletion "cabal2nix" super.cabal2nix;
+  stack = generateOptparseApplicativeCompletion "stack" super.stack;
 
   # https://github.com/pikajude/stylish-cabal/issues/11
   stylish-cabal = super.stylish-cabal.override { hspec = self.hspec_2_4_8; hspec-core = self.hspec-core_2_4_8; };
@@ -1131,9 +1122,6 @@ self: super: {
       libraryHaskellDepends = drv.libraryHaskellDepends ++ [self.QuickCheck];
     })) ./patches/sexpr-0.2.1.patch;
 
-  # Can be removed once yi-language >= 0.18 is in the LTS
-  yi-core = super.yi-core.overrideScope (self: super: { yi-language = self.yi-language_0_18_0; });
-
   # https://github.com/haskell/hoopl/issues/50
   hoopl = dontCheck super.hoopl;
 
@@ -1143,21 +1131,11 @@ self: super: {
   # Generate shell completions
   purescript = generateOptparseApplicativeCompletion "purs" super.purescript;
 
-  # https://github.com/NixOS/nixpkgs/issues/46467
-  safe-money-aeson = super.safe-money-aeson.overrideScope (self: super: { safe-money = self.safe-money_0_7; });
-  safe-money-store = super.safe-money-store.overrideScope (self: super: { safe-money = self.safe-money_0_7; });
-  safe-money-cereal = super.safe-money-cereal.overrideScope (self: super: { safe-money = self.safe-money_0_7; });
-  safe-money-serialise = super.safe-money-serialise.overrideScope (self: super: { safe-money = self.safe-money_0_7; });
-  safe-money-xmlbf = super.safe-money-xmlbf.overrideScope (self: super: { safe-money = self.safe-money_0_7; });
-
   # https://github.com/adinapoli/mandrill/pull/52
   mandrill = appendPatch super.mandrill (pkgs.fetchpatch {
     url = https://github.com/adinapoli/mandrill/commit/30356d9dfc025a5f35a156b17685241fc3882c55.patch;
     sha256 = "1qair09xs6vln3vsjz7sy4hhv037146zak4mq3iv6kdhmp606hqv";
   });
-
-  # Can be removed once vinyl >= 0.10 is in the LTS.
-  Frames = super.Frames.overrideScope (self: super: { vinyl = self.vinyl_0_10_0; });
 
   # https://github.com/Euterpea/Euterpea2/pull/22
   Euterpea = overrideSrc super.Euterpea {
