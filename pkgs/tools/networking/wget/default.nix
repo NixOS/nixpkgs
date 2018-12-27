@@ -35,6 +35,7 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional stdenv.isDarwin perl;
 
   configureFlags = [
+    (stdenv.lib.enableFeature false "xattr")  # CVE-2018-20483 fixed in 1.20.1
     (stdenv.lib.withFeatureAs (openssl != null) "ssl" "openssl")
   ];
 
