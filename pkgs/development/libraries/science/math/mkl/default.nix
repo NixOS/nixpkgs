@@ -60,7 +60,7 @@ stdenvNoCC.mkDerivation rec {
   outputHashAlgo = "sha256";
   outputHashMode = "recursive";
   outputHash = if stdenvNoCC.isDarwin
-    then "0000000000000000000000000000000000000000000000000000"
+    then "00d49ls9vcjan1ngq2wx2q4p6lnm05zwh67hsmj7bnq43ykrfibw"
     else "1amagcaan0hk3x9v7gg03gkw02n066v4kmjb32yyzsy5rfrivb1a";
 
   meta = with stdenvNoCC.lib; {
