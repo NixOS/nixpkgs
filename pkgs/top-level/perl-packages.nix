@@ -471,10 +471,10 @@ let
   };
 
   ArrayCompare = buildPerlModule rec {
-    name = "Array-Compare-3.0.1";
+    name = "Array-Compare-3.0.2";
     src = fetchurl {
-      url = mirror://cpan/authors/id/D/DA/DAVECROSS/Array-Compare-v3.0.1.tar.gz;
-      sha256 = "0fyj6jdfshga4kj4567529a1aiqy49awxg62lslx54166j4mhkzb";
+      url = mirror://cpan/authors/id/D/DA/DAVECROSS/Array-Compare-v3.0.2.tar.gz;
+      sha256 = "0ci8pb6nh73rmmwd8fvg6n2064v8nbraqyg1axsncfi28nfz522s";
     };
 
     buildInputs = [ TestNoWarnings ];
