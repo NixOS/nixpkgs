@@ -2731,17 +2731,16 @@ let
   };
 
   CPAN = buildPerlPackage rec {
-    name = "CPAN-2.16";
+    name = "CPAN-2.22";
     src = fetchurl {
       url = "mirror://cpan/authors/id/A/AN/ANDK/${name}.tar.gz";
-      sha256 = "7dbd61c172b99b05c16a2fce790140489494c744190f6c4f80c162d5ae3ccc2c";
+      sha256 = "c6f2a44cd95ef5989ef0abc83dca38ae645bd5ea09de67461251f2d782989990";
     };
-    propagatedBuildInputs = [ Expect FileWhich LWP ModuleBuild ModuleSignature TermReadKey TextGlob YAML ];
+    propagatedBuildInputs = [ ArchiveZip CPANChecksums Expect FileHomeDir LWP LogLog4perl ModuleBuild TermReadKey YAML YAMLLibYAML YAMLSyck ];
     meta = {
       description = "Query, download and build perl modules from CPAN sites";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
-    buildInputs = [ ArchiveZip ];
   };
 
   CpanelJSONXS = buildPerlPackage rec {
@@ -2764,6 +2763,18 @@ let
     };
     meta = {
       description = "Read and write Changes files";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  CPANChecksums = buildPerlPackage {
+    name = "CPAN-Checksums-2.12";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/A/AN/ANDK/CPAN-Checksums-2.12.tar.gz;
+      sha256 = "0f1dbpp4638jfdfwrywjmz88na5wzw4fdsmm2r7gh1x0s6r0yq4r";
+    };
+    propagatedBuildInputs = [ CompressBzip2 DataCompare ModuleSignature ];
+    meta = {
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
