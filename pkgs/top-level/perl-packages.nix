@@ -9367,10 +9367,10 @@ let
   };
 
   MetaBuilder = buildPerlModule {
-    name = "Meta-Builder-0.003";
+    name = "Meta-Builder-0.004";
     src = fetchurl {
-      url = mirror://cpan/authors/id/E/EX/EXODIST/Meta-Builder-0.003.tar.gz;
-      sha256 = "e7ac289b88d1662e87708d716877ac66a1a8414660996fe58c1db96d834a5375";
+      url = mirror://cpan/authors/id/E/EX/EXODIST/Meta-Builder-0.004.tar.gz;
+      sha256 = "acb499aa7206eb9db21eb85357a74521bfe3bdae4a6416d50a7c75b939cf56fe";
     };
     buildInputs = [ FennecLite TestException ];
     meta = {
