@@ -167,15 +167,6 @@ self: super: {
     dependencies = with super; [ ultisnips ];
   });
 
-  taglist-vim = super.taglist-vim.overrideAttrs(old: {
-    setSourceRoot = ''
-      export sourceRoot=taglist
-      mkdir taglist
-      mv doc taglist
-      mv plugin taglist
-    '';
-  });
-
   vimshell-vim = super.vimshell-vim.overrideAttrs(old: {
     dependencies = with super; [ vimproc-vim ];
   });
