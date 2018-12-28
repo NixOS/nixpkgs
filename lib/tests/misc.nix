@@ -401,6 +401,114 @@ runTests {
     expected  = "«foo»";
   };
 
+# WRAPPERS
+
+  testSetSingleValue = {
+    expr = wrappers.set "VARIABLE" {
+      value = "foo";
+    };
+    expected = "--set VARIABLE foo";
+  };
+
+  testSetListOfValues = {
+    expr = wrappers.set "VARIABLE" {
+      value = [ "foo" "bar" ];
+      valueModifier = makeBinPath;
+    };
+    expected = "--set VARIABLE foo/bin:bar/bin";
+  };
+
+  testUnset = {
+    expr = wrappers.unset "VARIABLE" { };
+    expected = "--unset VARIABLE";
+  };
+
+  testPrefix = {
+    expr = wrappers.prefix ":" "VARIABLE" {
+      value = [ "foo" "bar" ];
+      valueModifier = makeBinPath;
+    };
+    expected = "--prefix VARIABLE : foo/bin:bar/bin";
+  };
+
+  testOverwrite = {
+    expr = wrappers.overwrite { value = 5; foo = "bar"; } { value = 10; };
+    expected = { value = 10; };
+  };
+
+#   testDiscard = {
+#     expr = wrappers.discard {};
+#   };
+
+  testGenerateMakeWrapperArgs = {
+    expr = wrappers.generateMakeWrapperArgs {
+      argv0 = "foo";
+      flags = [ "--verbose" ];
+      vars = {
+        VARIABLE = {
+          value = "foo";
+          action = wrappers.set;
+        };
+      };
+    };
+    expected = [
+      "--argv0 foo"
+      "--add-flags --verbose" # TODO
+      "--set VARIABLE foo"
+    ];
+  };
+
+  testGenerateMakeWrapperArgsNoWrapper = {
+    expr = wrappers.generateMakeWrapperArgs { };
+    expected = [];
+  };
+
+  /* Test generating a wrapper where we don't set a value for an environment variable.
+  In that case we expected the wrapper to be created without mentioning that variable.
+
+  This represents e.g. merging the defaults with passed-in values.
+  */
+  testGenerateMakeWrapperArgsWithoutValue = {
+    expr = wrappers.generateMakeWrapperArgs {
+      argv0 = "foo";
+      flags = [ "--verbose" ];
+      vars = {
+        VARIABLE = {
+          action = wrappers.set;
+        };
+      };
+    };
+    expected = [
+      "--argv0 foo"
+      "--add-flags --verbose" # TODO
+    ];
+  };
+
+  testMakeWrapperCallNoWrapper = {
+    expr = wrappers.makeWrapperCall "$out/bin" { };
+    expected = "";
+  };
+
+  testMakeWrapperCallSpecificExecutable = {
+    expr = wrappers.makeWrapperCall "$out/bin/foo" {
+      argv0 = "foo";
+      flags = [ "--verbose" ];
+      vars = {
+        VARIABLE = {
+          value = "foo";
+          action = wrappers.set;
+        };
+      };
+    };
+    expected = "find $out/bin/foo -type f -executable -exec sh -c 'wrapProgram \"$0\" --argv0 foo --add-flags --verbose --set VARIABLE foo' {} \\;";
+  };
+
+  testMakeWrapperCallPath = {
+    expr = wrappers.makeWrapperCall "$out/bin" {
+      flags = [ "--verbose" ];
+    };
+    expected = "find $out/bin -type f -executable -exec sh -c 'wrapProgram \"$0\" --add-flags --verbose' {} \\;";
+  };
 
 # MISC
 

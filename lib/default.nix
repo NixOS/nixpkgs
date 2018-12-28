@@ -43,6 +43,9 @@ let
     generators = callLibs ./generators.nix;
     misc = callLibs ./deprecated.nix;
 
+    # declarative wrappers
+    wrappers = callLibs ./wrappers.nix;
+
     # domain-specific
     fetchers = callLibs ./fetchers.nix;
 

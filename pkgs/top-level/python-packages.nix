@@ -125,6 +125,14 @@ let
       };
     });
 
+
+  # Default values for when generating wrappers.
+  wrapperDefaults.PYTHONPATH = {
+    valueModifier = makePythonPath;
+      action = lib.wrappers.set;
+      onMerge = lib.wrappers.prepend;
+  };
+
   disabledIf = x: drv:
     if x then throw "${removePythonPrefix (drv.pname or drv.name)} not supported for interpreter ${python.executable}" else drv;
 

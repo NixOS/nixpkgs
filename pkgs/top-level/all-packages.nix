@@ -94,6 +94,13 @@ in
 
   ### BUILD SUPPORT
 
+  addWrappers = drv: wrappers: let
+    makeWrapperCalls = lib.concatStringsSep "; " (lib.mapAttrsToList lib.wrappers.makeWrapperCall wrappers);
+  in drv.overrideAttrs(oldAttrs: {
+      inherit makeWrapperCalls;
+      nativeBuildInputs = (oldAttrs.nativeBuildInputs or []) ++ [ makeDeclarativeWrapper ];
+  });
+
   autoreconfHook = makeSetupHook
     { deps = [ autoconf automake gettext libtool ]; }
     ../build-support/setup-hooks/autoreconf.sh;
@@ -357,8 +364,14 @@ in
       inherit contents compressor prepend;
     };
 
-  makeWrapper = makeSetupHook { deps = [ dieHook ]; substitutions = { shell = pkgs.runtimeShell; }; }
-                              ../build-support/setup-hooks/make-wrapper.sh;
+  makeDeclarativeWrapper = makeSetupHook {
+    deps = [ makeWrapper ];
+  } ../build-support/setup-hooks/make-declarative-wrapper.sh;
+
+  makeWrapper = makeSetupHook {
+    deps = [ dieHook ];
+    substitutions = { shell = pkgs.runtimeShell; };
+  } ../build-support/setup-hooks/make-wrapper.sh;
 
   makeModulesClosure = { kernel, firmware, rootModules, allowMissing ? false }:
     callPackage ../build-support/kernel/modules-closure.nix {
