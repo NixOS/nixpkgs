@@ -5194,10 +5194,10 @@ let
   };
 
   EV = buildPerlPackage rec {
-    name = "EV-4.22";
+    name = "EV-4.25";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/ML/MLEHMANN/${name}.tar.gz";
-      sha256 = "2ae7f8734e2e4945510252152c3bea4be35f4aa58aad3db0504c38844b08a991";
+      sha256 = "2e65c8e8f2358599f9a48f766cc1b3ad0eaf2e6cef416adc8ad9cddc3f329c6a";
     };
     buildInputs = [ CanaryStability ];
     propagatedBuildInputs = [ commonsense ];
