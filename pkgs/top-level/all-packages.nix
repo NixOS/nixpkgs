@@ -577,6 +577,8 @@ in
 
   argtable = callPackage ../tools/misc/argtable {};
 
+  argtable2 = callPackage ../tools/misc/argtable2 {};
+
   argyllcms = callPackage ../tools/graphics/argyllcms {};
 
   arp-scan = callPackage ../tools/misc/arp-scan { };
