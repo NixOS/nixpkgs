@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, gdk_pixbuf, librsvg, gtk-engine-murrine }:
 
 stdenv.mkDerivation rec {
-  pname = "qogir";
+  pname = "qogir-theme";
   version = "2018-11-12";
 
   src = fetchFromGitHub {
