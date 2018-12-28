@@ -9870,11 +9870,11 @@ let
     };
   };
 
-  ModuleScanDeps = let version = "1.25"; in buildPerlPackage {
+  ModuleScanDeps = let version = "1.26"; in buildPerlPackage {
     name = "Module-ScanDeps-${version}";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RS/RSCHUPP/Module-ScanDeps-${version}.tar.gz";
-      sha256 = "13280nq0d6zc58mcz3kvs2m85a741czq0fabk69ks1nr4j1w2nl4";
+      sha256 = "1awin0lfliskrw86mhks6qszxrwbwhr66fc79cv00598mrjzn223";
     };
     buildInputs = [ TestRequires ];
     meta = {
