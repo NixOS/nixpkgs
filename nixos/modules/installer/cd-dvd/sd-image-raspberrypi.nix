@@ -15,13 +15,6 @@ in
     ./sd-image.nix
   ];
 
-  assertions = lib.singleton {
-    assertion = pkgs.stdenv.hostPlatform.system == "armv6l-linux"
-      && pkgs.stdenv.hostPlatform.system == pkgs.stdenv.buildPlatform.system;
-    message = "sd-image-raspberrypi.nix can be only built natively on ARMv6; " +
-      "it cannot be cross compiled";
-  };
-
   boot.loader.grub.enable = false;
   boot.loader.generic-extlinux-compatible.enable = true;
 

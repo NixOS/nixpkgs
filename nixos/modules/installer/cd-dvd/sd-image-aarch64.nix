@@ -15,13 +15,6 @@ in
     ./sd-image.nix
   ];
 
-  assertions = lib.singleton {
-    assertion = pkgs.stdenv.hostPlatform.system == "aarch64-linux"
-      && pkgs.stdenv.hostPlatform.system == pkgs.stdenv.buildPlatform.system;
-    message = "sd-image-aarch64.nix can be only built natively on Aarch64 / ARM64; " +
-      "it cannot be cross compiled";
-  };
-
   boot.loader.grub.enable = false;
   boot.loader.generic-extlinux-compatible.enable = true;
 
