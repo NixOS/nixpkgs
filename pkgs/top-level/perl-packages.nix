@@ -5571,10 +5571,10 @@ let
   };
 
   FFICheckLib = buildPerlPackage {
-    name = "FFI-CheckLib-0.20";
+    name = "FFI-CheckLib-0.23";
     src = fetchurl {
-      url = mirror://cpan/authors/id/P/PL/PLICEASE/FFI-CheckLib-0.20.tar.gz;
-      sha256 = "1pggqj5cs77myp4g62jzkld95a286vwkygi7i0hbqjgwf3w3f5gl";
+      url = mirror://cpan/authors/id/P/PL/PLICEASE/FFI-CheckLib-0.23.tar.gz;
+      sha256 = "0rjivas0rsp7d5599cjcxss80zfj7a5b8did771dlw7h2p5apisf";
     };
     buildInputs = [ Test2Suite ];
     meta = {
