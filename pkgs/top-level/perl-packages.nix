@@ -3159,10 +3159,10 @@ let
   };
 
   CryptX = buildPerlPackage rec {
-    name = "CryptX-0.061";
+    name = "CryptX-0.063";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MI/MIK/${name}.tar.gz";
-      sha256 = "26729d8d4f711fd83f9b728ad8227e8986343e23fa37cbe58564645ce5d3f8c2";
+      sha256 = "6cfc672e0e56d56cf849caf0b929ed94f87cb4e6be5c20757ca3d3dbe5569595";
     };
     meta = {
       description = "Crypto toolkit";
