@@ -7968,7 +7968,6 @@ let
 
       maintainers = [ ];
     };
-    buildInputs = [ ExtUtilsMakeMaker ];
   };
 
   IPCSignal = buildPerlPackage rec {
