@@ -17754,10 +17754,10 @@ let
   };
 
   YAMLSyck = buildPerlPackage rec {
-    name = "YAML-Syck-1.30";
+    name = "YAML-Syck-1.31";
     src = fetchurl {
       url = "mirror://cpan/authors/id/T/TO/TODDR/${name}.tar.gz";
-      sha256 = "1iwd4pbwg7m1vwc74s3f3hk9yyqmhn1ssrbh9466lmbnc4hl9cv2";
+      sha256 = "14420hp7vxhrs0hgsmrfc9s9dassw1bns4jbmdq55b735xrwbbfp";
     };
     meta = {
       description = "Fast, lightweight YAML loader and dumper";
