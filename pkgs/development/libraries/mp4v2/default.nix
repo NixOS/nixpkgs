@@ -25,6 +25,12 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = {
+    description = "Abandoned library. Provides functions to read, create, and modify mp4 files";
+    longDescription = ''
+      MP4v2 library provides an API to work with mp4 files
+      as defined by ISO-IEC:14496-1:2001 MPEG-4 Systems.
+      This container format is derived from Apple's QuickTime format.
+    '';
     homepage = https://code.google.com/archive/p/mp4v2/;
     maintainers = [ ];
     platforms = lib.platforms.unix;
