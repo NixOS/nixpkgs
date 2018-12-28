@@ -7054,10 +7054,10 @@ let
   };
 
   HTMLSelectorXPath = buildPerlPackage {
-    name = "HTML-Selector-XPath-0.23";
+    name = "HTML-Selector-XPath-0.25";
     src = fetchurl {
-      url = mirror://cpan/authors/id/C/CO/CORION/HTML-Selector-XPath-0.23.tar.gz;
-      sha256 = "0vvvdrccypwv3qpf9hq5h2b6k0p5qrmz60p2swjh009dvr601h7j";
+      url = mirror://cpan/authors/id/C/CO/CORION/HTML-Selector-XPath-0.25.tar.gz;
+      sha256 = "1qbad8ayffpx7wj76ip05p6rh9p1lkir6qknpl76zy679ghlsp8s";
     };
     buildInputs = [ TestBase ];
     meta = {
