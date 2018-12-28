@@ -3767,10 +3767,10 @@ let
   };
 
   DateTimeFormatNatural = buildPerlModule {
-    name = "DateTime-Format-Natural-1.05";
+    name = "DateTime-Format-Natural-1.06";
     src = fetchurl {
-      url = mirror://cpan/authors/id/S/SC/SCHUBIGER/DateTime-Format-Natural-1.05.tar.gz;
-      sha256 = "10ldrhz5rnpsd8qmqn1a4s0w5hhfbjrr13a93yx7kpp89g85pxqv";
+      url = mirror://cpan/authors/id/S/SC/SCHUBIGER/DateTime-Format-Natural-1.06.tar.gz;
+      sha256 = "1n68b5hnw4n55q554v7y4ffwiypz6rk40mh0r550fxwv69bvyky0";
     };
     buildInputs = [ ModuleUtil TestMockTime ];
     propagatedBuildInputs = [ Clone DateTime ListMoreUtils ParamsValidate boolean ];
