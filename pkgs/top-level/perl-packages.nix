@@ -6941,10 +6941,10 @@ let
   };
 
   HTMLFormFu = buildPerlPackage rec {
-    name = "HTML-FormFu-2.06";
+    name = "HTML-FormFu-2.07";
     src = fetchurl {
-      url = mirror://cpan/authors/id/C/CF/CFRANKS/HTML-FormFu-2.06.tar.gz;
-      sha256 = "1g9zi7cg53527hlqb9h73i75vfzm52dwjrm8784vykn4kw4kklsv";
+      url = mirror://cpan/authors/id/C/CF/CFRANKS/HTML-FormFu-2.07.tar.gz;
+      sha256 = "0cpbcrip95rvihc7i8dywca6lx9ws67ch1hjx6vgnm47g9zh2bsg";
     };
     buildInputs = [ CGI FileShareDirInstall RegexpAssemble TestException TestMemoryCycle TestRequiresInternet ];
     propagatedBuildInputs = [ ConfigAny DataVisitor DateTimeFormatBuilder DateTimeFormatNatural EmailValid HTMLScrubber HTMLTokeParserSimple HTTPMessage HashFlatten JSONMaybeXS MooseXAliases MooseXAttributeChained NumberFormat PathClass Readonly RegexpCommon YAMLLibYAML ];
