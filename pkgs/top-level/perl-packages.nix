@@ -6303,11 +6303,11 @@ let
     };
   };
 
-  GDSecurityImage = buildPerlModule {
-    name = "GD-SecurityImage-1.73";
+  GDSecurityImage = buildPerlPackage {
+    name = "GD-SecurityImage-1.75";
     src = fetchurl {
-      url = mirror://cpan/authors/id/B/BU/BURAK/GD-SecurityImage-1.73.tar.gz;
-      sha256 = "1kaxs67rfd4w46lxgcg3pa05a596l0h1k8n4zk2gwrrar4022wpx";
+      url = mirror://cpan/authors/id/B/BU/BURAK/GD-SecurityImage-1.75.tar.gz;
+      sha256 = "19lf1kzdavrkkx3f900jnpynr55d5kjd2sdmwpfir5dsmkcj9pix";
     };
     propagatedBuildInputs = [ GD ];
     meta = {
