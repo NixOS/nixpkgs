@@ -15774,10 +15774,10 @@ let
   };
 
   TestSimple13 = buildPerlPackage rec {
-    name = "Test-Simple-1.302140";
+    name = "Test-Simple-1.302141";
     src = fetchurl {
-      url = mirror://cpan/authors/id/E/EX/EXODIST/Test-Simple-1.302140.tar.gz;
-      sha256 = "73f5440c7ae55e13706e9ebeaa7247df973226470f028344ea3cd21e1642bd1d";
+      url = mirror://cpan/authors/id/E/EX/EXODIST/Test-Simple-1.302141.tar.gz;
+      sha256 = "d7045bc814cba0426684a32c44d90ced5b83075659f0fcefed88c32f8fd395b7";
     };
     meta = {
       description = "Basic utilities for writing tests";
