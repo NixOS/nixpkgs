@@ -6044,12 +6044,12 @@ let
   };
 
   FileSlurp = buildPerlPackage {
-    name = "File-Slurp-9999.22";
+    name = "File-Slurp-9999.25";
     # WARNING: check on next update if deprecation warning is gone
     patches = [ ../development/perl-modules/File-Slurp/silence-deprecation.patch ];
     src = fetchurl {
-      url = mirror://cpan/authors/id/C/CA/CAPOEIRAB/File-Slurp-9999.22.tar.gz;
-      sha256 = "0sgi53jin36sqvvj8fsqxddb8vprrv99inbs2bmgjdpqhs0a0vmf";
+      url = mirror://cpan/authors/id/C/CA/CAPOEIRAB/File-Slurp-9999.25.tar.gz;
+      sha256 = "1hg3bhf5m78d77p4174cnldd75ppyrvr5rkc8w289ihvwsx9gsn7";
     };
     meta = {
       description = "Simple and Efficient Reading/Writing/Modifying of Complete Files";
