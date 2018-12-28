@@ -61,11 +61,11 @@ rec {
   # Reverts a change related to the overlayfs overhaul in 4.19
   # https://github.com/NixOS/nixpkgs/issues/48828#issuecomment-445208626
   revert-vfs-dont-open-real = rec {
-	name = "revert-vfs-dont-open-real";
-	patch = fetchpatch {
-	  name = name + ".patch";
-	  url = https://github.com/samueldr/linux/commit/ee23fa215caaa8102f4ab411d39fcad5858147f2.patch;
-	  sha256 = "0bp4jryihg1y2sl8zlj6w7vvnxj0kmb6xdy42hpvdv43kb6ngiaq";
-	};
+    name = "revert-vfs-dont-open-real";
+    patch = fetchpatch {
+      name = name + ".patch";
+      url = https://github.com/samueldr/linux/commit/ee23fa215caaa8102f4ab411d39fcad5858147f2.patch;
+      sha256 = "0bp4jryihg1y2sl8zlj6w7vvnxj0kmb6xdy42hpvdv43kb6ngiaq";
+    };
   };
 }
