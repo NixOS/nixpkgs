@@ -13793,10 +13793,10 @@ let
   };
 
   StatisticsDescriptive = buildPerlModule {
-    name = "Statistics-Descriptive-3.0701";
+    name = "Statistics-Descriptive-3.0702";
     src = fetchurl {
-      url = mirror://cpan/authors/id/S/SH/SHLOMIF/Statistics-Descriptive-3.0701.tar.gz;
-      sha256 = "35b09ed91b8660a6095c272a36ed2c61b3c660aa535fc23a20beadf7769e1919";
+      url = mirror://cpan/authors/id/S/SH/SHLOMIF/Statistics-Descriptive-3.0702.tar.gz;
+      sha256 = "f98a10c625640170cdda408cccc72bdd7f66f8ebe5f59dec1b96185171ef11d0";
     };
     meta = {
       #homepage = http://web-cpan.berlios.de/modules/Statistics-Descriptive/; # berlios shut down; I found no replacement
