@@ -56,6 +56,22 @@ let
       };
     };
 
+    openssh.forceCommand = mkOption {
+      type = types.nullOr types.str;
+      default = null;
+      description = "Force execution of this command when the user logs in over ssh.
+See <literal>man sshd_config</literal> for more details.";
+      example = "internal-sftp";
+    };
+
+    openssh.chrootDirectory = mkOption {
+      type = types.nullOr types.str;
+      default = null;
+      description = "Chroot to directory after successfull login of this user.
+See <literal>man sshd_config</literal> for more details.";
+      example = "%h";
+    };
+
   };
 
   authKeysFiles = let
@@ -70,6 +86,18 @@ let
       length u.openssh.authorizedKeys.keys != 0 || length u.openssh.authorizedKeys.keyFiles != 0
     ));
   in listToAttrs (map mkAuthKeyFile usersWithKeys);
+
+  matchBlocks = let
+    mkMatchBlock = u: ''
+      Match User ${u.name}
+      ${optionalString (u.openssh.forceCommand != null) "ForceCommand ${u.openssh.forceCommand}"}
+      ${optionalString (u.openssh.chrootDirectory != null) "ChrootDirectory ${u.openssh.chrootDirectory}"}
+    '';
+
+    usersWithForceCmdOrChrootDir = attrValues (flip filterAttrs config.users.users (n: u:
+      u.openssh.forceCommand != null || u.openssh.chrootDirectory != null
+    ));
+  in concatMapStringsSep "\n" mkMatchBlock usersWithForceCmdOrChrootDir;
 
 in
 
@@ -356,7 +384,7 @@ in
 
     environment.etc = authKeysFiles //
       { "ssh/moduli".source = cfg.moduliFile;
-        "ssh/sshd_config".source = sshconf;
+        "ssh/sshd_config".text = concatStringsSep "\n" [ cfg.extraConfig matchBlocks ];
       };
 
     systemd =
