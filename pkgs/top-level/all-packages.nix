@@ -16086,6 +16086,8 @@ in
   bitcoin-xt = altcoins.bitcoin-xt;
   cryptop = altcoins.cryptop;
 
+  jnetmap = callPackage ../applications/networking/jnetmap {};
+
   libbitcoin = callPackage ../tools/misc/libbitcoin/libbitcoin.nix {
     secp256k1 = secp256k1.override { enableECDH = true; };
   };
