@@ -32,9 +32,8 @@ let
 
       # `sagelib`, i.e. all of sage except some wrappers and runtime dependencies
       sagelib = self.callPackage ./sagelib.nix {
-        inherit ecl;
-        inherit sage-src;
-        pynac = pkgs.pynac; # *not* python.pkgs.pynac
+        inherit flint ecl arb;
+        inherit sage-src pynac singular;
         linbox = pkgs.linbox.override { withSage = true; };
       };
     };
@@ -60,6 +59,7 @@ let
   # the files its looking fore are located. Also see `sage-env`.
   env-locations = callPackage ./env-locations.nix {
     inherit pari_data ecl;
+    inherit singular;
     cysignals = python.pkgs.cysignals;
     three = nodePackages.three;
     mathjax = nodePackages.mathjax;
@@ -70,7 +70,7 @@ let
   sage-env = callPackage ./sage-env.nix {
     sagelib = python.pkgs.sagelib;
     inherit env-locations;
-    inherit python ecl palp pythonEnv;
+    inherit python ecl singular palp flint pynac pythonEnv;
     pkg-config = pkgs.pkgconfig; # not to confuse with pythonPackages.pkgconfig
   };
 
@@ -84,6 +84,7 @@ let
   sage-with-env = callPackage ./sage-with-env.nix {
     inherit pythonEnv;
     inherit sage-env;
+    inherit pynac singular;
     pkg-config = pkgs.pkgconfig; # not to confuse with pythonPackages.pkgconfig
     three = nodePackages.three;
   };
@@ -122,6 +123,19 @@ let
     extraLibs = pythonRuntimeDeps;
     ignoreCollisions = true;
   } // { extraLibs = pythonRuntimeDeps; }; # make the libs accessible
+
+  arb = pkgs.arb.override { inherit flint; };
+
+  singular = pkgs.singular.override { inherit flint; };
+
+  # *not* to confuse with the python package "pynac"
+  pynac = pkgs.pynac.override { inherit singular flint; };
+
+  # With openblas (64 bit), the tests fail the same way as when sage is build with
+  # openblas instead of openblasCompat. Apparently other packages somehow use flints
+  # blas when it is available. Alternative would be to override flint to use
+  # openblasCompat.
+  flint = pkgs.flint.override { withBlas = false; };
 
   # Multiple palp dimensions need to be available and sage expects them all to be
   # in the same folder.

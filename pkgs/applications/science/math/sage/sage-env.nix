@@ -163,17 +163,6 @@ writeTextFile rec {
 
   # for find_library
     export DYLD_LIBRARY_PATH="${lib.makeLibraryPath [stdenv.cc.libc singular]}:$DYLD_LIBRARY_PATH"
-
-    # Make sure the correct openblas library is picked up. Without this, sage
-    # can either end up using flints openblas (which is not openblasCopmat, thus
-    # leading to the issues described in https://trac.sagemath.org/ticket/26000)
-    # or R's blas, leading to the issues described in
-    # https://bitbucket.org/rpy2/rpy2/issues/491.
-    # The first issue could alternatively be solved by overriding flint's
-    # openblas dependency and the second one is effectively solved by loading
-    # rpy2 lazily in sage. Preloading explicitly makes all the headaches go
-    # away much easier and more future proof though.
-    export LD_PRELOAD="${openblasCompat}/lib/libopenblas.so:$LD_PRELOAD"
   '';
 } // {
   lib = sagelib; # equivalent of `passthru`, which `writeTextFile` doesn't support
