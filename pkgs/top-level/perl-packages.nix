@@ -5186,10 +5186,10 @@ let
   };
 
   Error = buildPerlModule rec {
-    name = "Error-0.17026";
+    name = "Error-0.17027";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SH/SHLOMIF/${name}.tar.gz";
-      sha256 = "1nam651w5ffsh64nnqjpzirm5g3ck92idzz1f0sf0fnp5jb0ln9p";
+      sha256 = "1gnkxf12dq2w1jmjpllp5f30ya4nll01jv2sfi24386zfn1arch7";
     };
   };
 
