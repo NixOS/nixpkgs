@@ -7247,10 +7247,10 @@ let
   };
 
   HTTPDAV = buildPerlPackage rec {
-    name = "HTTP-DAV-0.48";
+    name = "HTTP-DAV-0.49";
     src = fetchurl {
-      url = mirror://cpan/authors/id/C/CO/COSIMO/HTTP-DAV-0.48.tar.gz;
-      sha256 = "1fnw3wd9zrkxq54jqgi4iw48ndysgy73glva4129s8243pn05a86";
+      url = mirror://cpan/authors/id/C/CO/COSIMO/HTTP-DAV-0.49.tar.gz;
+      sha256 = "0z4mgb8mc6l5nfsm3ihndjqgpk43q39x1kq9hryy6v8hxkwrscrk";
     };
     meta = {
       description = "WebDAV client library.";
