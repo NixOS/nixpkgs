@@ -80,6 +80,11 @@ let
         url = "https://github.com/python/cpython/pull/8985.patch";
         sha256 = "1c8nq2c9sjqa8ipl62hiandg6a7lzrwwfhi3ky6jd3pxgyalrh97";
       })
+      # CVE-2018-14647. See https://bugs.python.org/issue34623
+      (fetchpatch {
+        url = "https://github.com/python/cpython/commit/18b20bad75b4ff0486940fba4ec680e96e70f3a2.patch";
+        sha256 = "0qm1x603l922xa3g9qdf2zd0wyxkszgab7pgk29cx5af3y3fwaxx";
+      })
     ] ++ optionals (x11Support && stdenv.isDarwin) [
       ./use-correct-tcl-tk-on-darwin.patch
     ] ++ optionals stdenv.isLinux [
