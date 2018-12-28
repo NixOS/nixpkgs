@@ -8606,10 +8606,10 @@ let
   };
 
   LocaleTextDomainOO = buildPerlPackage rec {
-     name = "Locale-TextDomain-OO-1.033";
+     name = "Locale-TextDomain-OO-1.035";
      src = fetchurl {
-       url = mirror://cpan/authors/id/S/ST/STEFFENW/Locale-TextDomain-OO-1.033.tar.gz;
-       sha256 = "1nkjncwa5kg7avrly0ldfxijgkrjgwj3rggb2r6mi72h427xwjic";
+       url = mirror://cpan/authors/id/S/ST/STEFFENW/Locale-TextDomain-OO-1.035.tar.gz;
+       sha256 = "1nvg0lggrd15j394fkxwsgi6w228pld5zpgb3zfd7im4r4mm50qy";
      };
      propagatedBuildInputs = [ ClassLoad Clone JSON LocaleMOFile LocalePO LocaleTextDomainOOUtil LocaleUtilsPlaceholderBabelFish LocaleUtilsPlaceholderMaketext LocaleUtilsPlaceholderNamed MooXSingleton PathTiny TieSub ];
      buildInputs = [ TestDifferences TestException TestNoWarnings ];
