@@ -1,5 +1,6 @@
 { stdenv
 , fetchFromGitHub
+, fetchpatch
 , cmake
 , fdk_aac
 , ffmpeg
@@ -38,6 +39,13 @@ in stdenv.mkDerivation rec {
     rev = "${version}";
     sha256 = "0ri9qkqk3h71b1a5bwpjzqdr21bbmfqbykg48l779d20zln23n1i";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://patch-diff.githubusercontent.com/raw/obsproject/obs-studio/pull/1557.diff";
+      sha256 = "0xq3sh1g8j58mpa4ryi9agqqpr41prrzagxmqafkbgfv6fjv3h0c";
+    })
+  ];
 
   nativeBuildInputs = [ cmake
                         pkgconfig
