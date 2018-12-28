@@ -7,7 +7,7 @@
   # Main build tools
   python2, pkgconfig, autoconf, automake, cmake, nasm, libtool, m4,
   # Processing, video codecs, containers
-  ffmpeg_4, libogg, x264, x265, libvpx, libtheora,
+  ffmpeg-full, libogg, x264, x265, libvpx, libtheora,
   # Codecs, audio
   libopus, lame, libvorbis, a52dec, speex, libsamplerate,
   # Text processing
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals useGtk [ intltool wrapGAppsHook ];
 
   buildInputs = [
-    ffmpeg_4 libogg libtheora x264 x265 libvpx
+    ffmpeg-full libogg libtheora x264 x265 libvpx
     libopus lame libvorbis a52dec speex libsamplerate
     libiconv fribidi fontconfig freetype libass jansson libxml2
     libdvdread libdvdnav libdvdcss libbluray
