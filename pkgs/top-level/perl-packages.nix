@@ -2321,10 +2321,10 @@ let
   };
 
   CodeTidyAll = buildPerlPackage rec {
-     name = "Code-TidyAll-0.71";
+     name = "Code-TidyAll-0.72";
      src = fetchurl {
-       url = mirror://cpan/authors/id/D/DR/DROLSKY/Code-TidyAll-0.71.tar.gz;
-       sha256 = "043s0fkg8y9g38m9p87jh9p1kkznz7yq96x2rnjj221hpl3zysdr";
+       url = mirror://cpan/authors/id/D/DR/DROLSKY/Code-TidyAll-0.72.tar.gz;
+       sha256 = "0py9z3f7ld93a7qibrc917qkwjh7pcl0r9khzg7dlr4rra0xq9fn";
      };
      propagatedBuildInputs = [ CaptureTiny ConfigINI FileWhich Filepushd IPCRun3 IPCSystemSimple ListCompare ListSomeUtils LogAny Moo ScopeGuard SpecioLibraryPathTiny TextDiff TimeDate TimeDurationParse ];
      buildInputs = [ TestClass TestClassMost TestDeep TestDifferences TestException TestFatal TestMost TestWarn TestWarnings librelative ];
