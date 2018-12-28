@@ -8530,10 +8530,10 @@ let
   };
 
   LocaleMOFile = buildPerlPackage rec {
-     name = "Locale-MO-File-0.08";
+     name = "Locale-MO-File-0.09";
      src = fetchurl {
-       url = mirror://cpan/authors/id/S/ST/STEFFENW/Locale-MO-File-0.08.tar.gz;
-       sha256 = "1flpk7jdn5cp7pld3f0vi3v5527p76jp1fqp4pzrhhqjlhyp3im4";
+       url = mirror://cpan/authors/id/S/ST/STEFFENW/Locale-MO-File-0.09.tar.gz;
+       sha256 = "0gsaaqimsh5bdhns2v67j1nvb178hx2536lxmr971cwxy31ns0wp";
      };
      propagatedBuildInputs = [ ConstFast MooXStrictConstructor MooXTypesMooseLike ParamsValidate namespaceautoclean ];
      buildInputs = [ TestDifferences TestException TestHexDifferences TestNoWarnings ];
