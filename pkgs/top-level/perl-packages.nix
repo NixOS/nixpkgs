@@ -495,10 +495,10 @@ let
   };
 
   ArrayFIFO = buildPerlPackage rec {
-    name = "Array-FIFO-0.10";
+    name = "Array-FIFO-0.12";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DB/DBURKE/${name}.tar.gz";
-      sha256 = "8082b7ca456d02c7c862ba409cbd62a9cafdb8c5832f5d7fb1d37ba8698ee5b1";
+      sha256 = "806a931d5a953255a0416978c39987a75e5cbe592a88d44a7b909f4f86888d5d";
     };
     buildInputs = [ TestDeep TestSpec TestTrap ];
     propagatedBuildInputs = [ Moose namespaceautoclean ];
