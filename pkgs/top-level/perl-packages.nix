@@ -12536,10 +12536,10 @@ let
   };
 
   PPIxRegexp = buildPerlModule rec {
-    name = "PPIx-Regexp-0.062";
+    name = "PPIx-Regexp-0.063";
     src = fetchurl {
       url = "mirror://cpan/authors/id/W/WY/WYANT/${name}.tar.gz";
-      sha256 = "1218fe4c94b3cb9d894c6cd8a69bb4172eac54ce083b70f7a8bf13868a5a0733";
+      sha256 = "23950e68df05bce869766e81dd6b01471e27fb70980737ea1c2286a7ecf948bc";
     };
     propagatedBuildInputs = [ PPI ];
     meta = {
