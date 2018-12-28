@@ -309,7 +309,8 @@ def generate_nix(plugins: List[Tuple[str, str, Plugin]]):
             f.write(
                 f"""
   {plugin.normalized_name} = buildVimPluginFrom2Nix {{
-    name = "{plugin.normalized_name}-{plugin.version}";
+    pname = "{plugin.normalized_name}";
+    version = "{plugin.version}";
     src = fetchFromGitHub {{
       owner = "{owner}";
       repo = "{repo}";
