@@ -3220,10 +3220,10 @@ let
   };
 
   DataDumper = buildPerlPackage rec {
-    name = "Data-Dumper-2.172";
+    name = "Data-Dumper-2.173";
     src = fetchurl {
-      url = mirror://cpan/authors/id/X/XS/XSAWYERX/Data-Dumper-2.172.tar.gz;
-      sha256 = "a95a3037163817221021ac145500968be44dc155c261f4097136392c0a9fecd9";
+      url = mirror://cpan/authors/id/X/XS/XSAWYERX/Data-Dumper-2.173.tar.gz;
+      sha256 = "697608b39330988e519131be667ff47168aaaaf99f06bd2095d5b46ad05d76fa";
     };
     outputs = [ "out" ];
     meta = {
