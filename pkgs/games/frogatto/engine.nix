@@ -3,20 +3,18 @@
   glew, zlib, icu, pkgconfig, cairo, libvpx,
 }:
 
-let
-  version = "0.0.2018-11-28";
-  source = fetchFromGitHub {
+stdenv.mkDerivation rec {
+  pname = "anura-engine";
+  version = "unstable-2018-11-28";
+
+  src = fetchFromGitHub {
     owner = "anura-engine";
     repo = "anura";
-    fetchSubmodules = true;
     # trunk branch as of 2018-11-28
     rev = "8070111467802dc772c0a6c7806ecd16b0bcdaa9";
     sha256 = "0xbqwfmws69n7iiz17n93h4jiw39cwyf7hxw0qi2c8cccr37b1nr";
+    fetchSubmodules = true;
   };
-in stdenv.mkDerivation {
-  name = "anura-${version}";
-
-  src = source;
 
   buildInputs = [
     bash
@@ -33,6 +31,7 @@ in stdenv.mkDerivation {
     cairo
     libvpx
   ];
+
   enableParallelBuilding = true;
 
   installPhase = ''
@@ -46,6 +45,6 @@ in stdenv.mkDerivation {
     description = "Game engine used by Frogatto";
     license = licenses.zlib;
     platforms = platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ astro ];
+    maintainers = with maintainers; [ astro ];
   };
 }

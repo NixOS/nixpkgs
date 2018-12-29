@@ -15,9 +15,9 @@ let
     genericName = "frogatto";
     categories = "Application;Game;ArcadeGame;";
   };
-  version = "0.0.2018-12-09";
 in buildEnv rec {
   name = "frogatto-${version}";
+  version = "unstable-2018-12-18";
 
   buildInputs = [ makeWrapper ];
   paths = [ engine data desktopItem ];
@@ -34,8 +34,8 @@ in buildEnv rec {
   meta = with stdenv.lib; {
     homepage = https://frogatto.com;
     description = description;
-    license = [ licenses.cc-by-30 licenses.unfree ];
+    license = with licenses; [ cc-by-30 unfree ];
     platforms = platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ astro ];
+    maintainers = with maintainers; [ astro ];
   };
 }
