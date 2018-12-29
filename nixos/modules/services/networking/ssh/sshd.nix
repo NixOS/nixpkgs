@@ -352,6 +352,10 @@ in
             path = [ cfgc.package pkgs.gawk ];
             environment.LD_LIBRARY_PATH = nssModulesPath;
 
+            restartTriggers = optionals (!cfg.startWhenNeeded) [
+              config.environment.etc."ssh/sshd_config".source
+            ];
+
             preStart =
               ''
                 # Make sure we don't write to stdout, since in case of
@@ -387,6 +391,7 @@ in
                 Restart = "always";
                 Type = "simple";
               });
+
           };
       in
 
