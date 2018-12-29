@@ -16,19 +16,6 @@ Signed-off-by: Mark Wielaard <mark@klomp.org>
  tests/backtrace-subr.sh | 1 +
  2 files changed, 6 insertions(+)
 
-diff --git a/tests/ChangeLog b/tests/ChangeLog
-index 08358d29..f6b0a672 100644
---- a/tests/ChangeLog
-+++ b/tests/ChangeLog
-@@ -1,3 +1,8 @@
-+2018-11-21  Mark Wielaard  <mark@klomp.org>
-+
-+	* backtrace-subr.sh (check_unsupported): Call test_cleanup before
-+	exit.
-+
- 2018-11-17  Mark Wielaard  <mark@klomp.org>
- 
- 	* run-strip-version.sh: New test.
 diff --git a/tests/backtrace-subr.sh b/tests/backtrace-subr.sh
 index ff42c6ff..53c719df 100644
 --- a/tests/backtrace-subr.sh
