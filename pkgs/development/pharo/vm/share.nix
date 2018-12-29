@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   version = "1.0";
   name = "pharo-share-${version}";
 
-  src = ./resources;
+  dontUnpack = true;
 
   sources10Zip = fetchurl {
     url = http://files.pharo.org/sources/PharoV10.sources.zip;
@@ -40,8 +40,6 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $prefix/lib
-
-    cp -R "$src/"* "$prefix/"
 
     unzip ${sources10Zip} -d $prefix/lib/
     unzip ${sources20Zip} -d $prefix/lib/
