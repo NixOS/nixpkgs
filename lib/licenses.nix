@@ -453,7 +453,7 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
 
   libpng2 = {
     fullName = "libpng License v2"; # 1.6.36+
-    inherit (libpng) url;
+    url = "http://www.libpng.org/pub/png/src/libpng-LICENSE.txt";
   };
 
   libtiff = spdx {
