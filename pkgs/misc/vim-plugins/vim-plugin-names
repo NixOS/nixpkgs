@@ -192,6 +192,7 @@ mkasa/lushtags
 morhetz/gruvbox
 motus/pig.vim
 mpickering/hlint-refactor-vim
+natebosch/vim-lsc
 nathanaelkane/vim-indent-guides
 navicore/vissort.vim
 nbouscal/vim-stylish-haskell

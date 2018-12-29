@@ -2907,6 +2907,16 @@ let
     };
   };
 
+  vim-lsc = buildVimPluginFrom2Nix {
+    name = "vim-lsc-2018-12-12";
+    src = fetchFromGitHub {
+      owner = "natebosch";
+      repo = "vim-lsc";
+      rev = "fe6d3bd6328d60cfe8c799a10c35f11153c082c9";
+      sha256 = "03rjbgj8647pvr1p2dqrp13z5793ivkb0ajwc65r604wgr5nva8j";
+    };
+  };
+
   vim-maktaba = buildVimPluginFrom2Nix {
     pname = "vim-maktaba";
     version = "2018-12-13";
