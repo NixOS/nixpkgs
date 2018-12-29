@@ -5,8 +5,8 @@
 , zlibSupport ? true, zlib ? null
 , sslSupport ? zlibSupport, openssl ? null
 , gnutlsSupport ? false, gnutls ? null
-, scpSupport ? zlibSupport && !stdenv.isSunOS && !stdenv.isCygwin, libssh2 ? null
-, gssSupport ? !stdenv.hostPlatform.isWindows, libkrb5 ? null
+, scpSupport ? false, libssh2 ? null
+, gssSupport ? false, libkrb5 ? null
 , c-aresSupport ? false, c-ares ? null
 , brotliSupport ? false, brotli ? null
 }:

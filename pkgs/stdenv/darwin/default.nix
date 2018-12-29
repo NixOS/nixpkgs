@@ -221,7 +221,7 @@ in rec {
         libxml2 gettext sharutils gmp libarchive ncurses pkg-config libedit groff
         openssh sqlite sed serf openldap db cyrus-sasl expat apr-util subversion xz
         findfreetype libssh curl cmake autoconf automake libtool ed cpio coreutils
-        libssh2 nghttp2 libkrb5 python2 ninja;
+        nghttp2 python2 ninja;
 
       darwin = super.darwin // {
         inherit (darwin)
@@ -240,8 +240,7 @@ in rec {
     allowedRequisites =
       [ bootstrapTools ] ++
       (with pkgs; [
-        xz.bin xz.out libcxx libcxxabi zlib libxml2.out curl.out openssl.out libssh2.out
-        nghttp2.lib libkrb5
+        xz.bin xz.out libcxx libcxxabi zlib libxml2.out curl.out openssl.out nghttp2.lib
       ]) ++
       (with pkgs.darwin; [ dyld Libsystem CF ICU locale ]);
 
@@ -255,7 +254,7 @@ in rec {
         gettext sharutils libarchive pkg-config groff bash subversion
         openssh sqlite sed serf openldap db cyrus-sasl expat apr-util
         findfreetype libssh curl cmake autoconf automake libtool cpio
-        libssh2 nghttp2 libkrb5 python2 ninja;
+        python2 ninja;
 
       # Avoid pulling in a full python and its extra dependencies for the llvm/clang builds.
       libxml2 = super.libxml2.override { pythonSupport = false; };
@@ -290,8 +289,7 @@ in rec {
     allowedRequisites =
       [ bootstrapTools ] ++
       (with pkgs; [
-        xz.bin xz.out bash libcxx libcxxabi zlib libxml2.out curl.out openssl.out libssh2.out
-        nghttp2.lib libkrb5
+        xz.bin xz.out bash libcxx libcxxabi zlib libxml2.out curl.out openssl.out nghttp2.lib
       ]) ++
       (with pkgs.darwin; [ dyld ICU Libsystem locale ]);
 
@@ -426,7 +424,7 @@ in rec {
       gzip ncurses.out ncurses.dev ncurses.man gnused bash gawk
       gnugrep llvmPackages.clang-unwrapped llvmPackages.clang-unwrapped.lib patch pcre.out gettext
       binutils.bintools darwin.binutils darwin.binutils.bintools
-      curl.out openssl.out libssh2.out nghttp2.lib libkrb5
+      curl.out openssl.out nghttp2.lib
       cc.expand-response-params
     ]) ++ (with pkgs.darwin; [
       dyld Libsystem CF cctools ICU libiconv locale libxml2-nopython.out
