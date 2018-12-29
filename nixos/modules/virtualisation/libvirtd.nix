@@ -219,7 +219,7 @@ in {
       wantedBy = [ "multi-user.target" ];
       requires = [ "libvirtd-config.service" ];
       after = [ "systemd-udev-settle.service" "libvirtd-config.service" ]
-              ++ optional vswitch.enable "vswitchd.service";
+              ++ optional vswitch.enable "ovs-vswitchd.service";
 
       environment.LIBVIRTD_ARGS = ''--config "${configFile}" ${concatStringsSep " " cfg.extraOptions}'';
 

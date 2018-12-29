@@ -10,7 +10,7 @@ let
 
   slaves = concatMap (i: i.interfaces) (attrValues cfg.bonds)
     ++ concatMap (i: i.interfaces) (attrValues cfg.bridges)
-    ++ concatMap (i: i.interfaces) (attrValues cfg.vswitches)
+    ++ concatMap (i: attrNames (filterAttrs (_: config: config.type != "internal") i.interfaces)) (attrValues cfg.vswitches)
     ++ concatMap (i: [i.interface]) (attrValues cfg.macvlans)
     ++ concatMap (i: [i.interface]) (attrValues cfg.vlans);
 
@@ -336,34 +336,47 @@ let
 
         createVswitchDevice = n: v: nameValuePair "${n}-netdev"
           (let
-            deps = concatLists (map deviceDependency v.interfaces);
+            deps = concatLists (map deviceDependency (attrNames (filterAttrs (_: config: config.type != "internal") v.interfaces)));
+            internalConfigs = concatMap (i: ["network-link-${i}.service" "network-addresses-${i}.service"]) (attrNames (filterAttrs (_: config: config.type == "internal") v.interfaces));
             ofRules = pkgs.writeText "vswitch-${n}-openFlowRules" v.openFlowRules;
           in
           { description = "Open vSwitch Interface ${n}";
-            wantedBy = [ "network-setup.service" "vswitchd.service" ] ++ deps;
-            bindsTo =  [ "vswitchd.service" (subsystemDevice n) ] ++ deps;
-            partOf = [ "network-setup.service" "vswitchd.service" ];
-            after = [ "network-pre.target" "vswitchd.service" ] ++ deps;
-            before = [ "network-setup.service" ];
+            wantedBy = [ "network-setup.service" (subsystemDevice n) ] ++ internalConfigs;
+            # before = [ "network-setup.service" ];
+            # should work without internalConfigs dependencies because address/link configuration depends
+            # on the device, which is created by ovs-vswitchd with type=internal, but it does not...
+            before = [ "network-setup.service" ] ++ internalConfigs;
+            partOf = [ "network-setup.service" ]; # shutdown the bridge when network is shutdown
+            bindsTo = [ "ovs-vswitchd.service" ]; # requires ovs-vswitchd to be alive at all times
+            after = [ "network-pre.target" "ovs-vswitchd.service" ] ++ deps; # start switch after physical interfaces and vswitch daemon
+            wants = deps; # if one or more interface fails, the switch should continue to run
             serviceConfig.Type = "oneshot";
             serviceConfig.RemainAfterExit = true;
             path = [ pkgs.iproute config.virtualisation.vswitch.package ];
+            preStart = ''
+              echo "Resetting Open vSwitch ${n}..."
+              ovs-vsctl --if-exists del-br ${n} -- add-br ${n} \
+                        -- set bridge ${n} protocols=${concatStringsSep "," v.supportedOpenFlowVersions}
+            '';
             script = ''
-              echo "Removing old Open vSwitch ${n}..."
-              ovs-vsctl --if-exists del-br ${n}
-
-              echo "Adding Open vSwitch ${n}..."
-              ovs-vsctl -- add-br ${n} ${concatMapStrings (i: " -- add-port ${n} ${i}") v.interfaces} \
+              echo "Configuring Open vSwitch ${n}..."
+              ovs-vsctl ${concatStrings (mapAttrsToList (name: config: " -- add-port ${n} ${name}" + optionalString (config.vlan != null) " tag=${toString config.vlan}") v.interfaces)} \
+                ${concatStrings (mapAttrsToList (name: config: optionalString (config.type != null) " -- set interface ${name} type=${config.type}") v.interfaces)} \
                 ${concatMapStrings (x: " -- set-controller ${n} " + x)  v.controllers} \
                 ${concatMapStrings (x: " -- " + x) (splitString "\n" v.extraOvsctlCmds)}
 
+
               echo "Adding OpenFlow rules for Open vSwitch ${n}..."
-              ovs-ofctl add-flows ${n} ${ofRules}
+              ovs-ofctl --protocols=${v.openFlowVersion} add-flows ${n} ${ofRules}
             '';
             postStop = ''
+              echo "Cleaning Open vSwitch ${n}"
+              echo "Shuting down internal ${n} interface"
               ip link set ${n} down || true
-              ovs-ofctl del-flows ${n} || true
-              ovs-vsctl --if-exists del-br ${n}
+              echo "Deleting flows for ${n}"
+              ovs-ofctl --protocols=${v.openFlowVersion} del-flows ${n} || true
+              echo "Deleting Open vSwitch ${n}"
+              ovs-vsctl --if-exists del-br ${n} || true
             '';
           });
 
@@ -476,9 +489,9 @@ let
               # Remove Dead Interfaces
               ip link show "${n}" >/dev/null 2>&1 && ip link delete "${n}"
               ip link add link "${v.interface}" name "${n}" type vlan id "${toString v.id}"
-              
-              # We try to bring up the logical VLAN interface. If the master 
-              # interface the logical interface is dependent upon is not up yet we will 
+
+              # We try to bring up the logical VLAN interface. If the master
+              # interface the logical interface is dependent upon is not up yet we will
               # fail to immediately bring up the logical interface. The resulting logical
               # interface will brought up later when the master interface is up.
               ip link set "${n}" up || true

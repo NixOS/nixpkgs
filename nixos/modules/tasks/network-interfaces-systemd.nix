@@ -1,4 +1,4 @@
-{ config, lib, utils, ... }:
+{ config, lib, utils, pkgs, ... }:
 
 with utils;
 with lib;
@@ -18,7 +18,10 @@ let
     concatLists (map (bond: bond.interfaces) (attrValues cfg.bonds))
     ++ concatLists (map (bridge: bridge.interfaces) (attrValues cfg.bridges))
     ++ map (sit: sit.dev) (attrValues cfg.sits)
-    ++ map (vlan: vlan.interface) (attrValues cfg.vlans);
+    ++ map (vlan: vlan.interface) (attrValues cfg.vlans)
+    # add dependency to physical or independently created vswitch member interface
+    # TODO: warn the user that any address configured on those interfaces will be useless
+    ++ concatMap (i: attrNames (filterAttrs (_: config: config.type != "internal") i.interfaces)) (attrValues cfg.vswitches);
 
 in
 
@@ -50,11 +53,6 @@ in
     });
 
     networking.dhcpcd.enable = mkDefault false;
-
-    systemd.services.network-local-commands = {
-      after = [ "systemd-networkd.service" ];
-      bindsTo = [ "systemd-networkd.service" ];
-    };
 
     systemd.network =
       let
@@ -233,6 +231,63 @@ in
     # This forces the network interface creator to initialize slaves.
     networking.interfaces = listToAttrs (map (i: nameValuePair i { }) slaves);
 
+    systemd.services = let
+      # We must escape interfaces due to the systemd interpretation
+      subsystemDevice = interface:
+        "sys-subsystem-net-devices-${escapeSystemdPath interface}.device";
+      # support for creating openvswitch switches
+      createVswitchDevice = n: v: nameValuePair "${n}-netdev"
+          (let
+            deps = map subsystemDevice (attrNames (filterAttrs (_: config: config.type != "internal") v.interfaces));
+            ofRules = pkgs.writeText "vswitch-${n}-openFlowRules" v.openFlowRules;
+          in
+          { description = "Open vSwitch Interface ${n}";
+            wantedBy = [ "network.target" (subsystemDevice n) ];
+            # and create bridge before systemd-networkd starts because it might create internal interfaces
+            before = [ "systemd-networkd.service" ];
+            # shutdown the bridge when network is shutdown
+            partOf = [ "network.target" ];
+            # requires ovs-vswitchd to be alive at all times
+            bindsTo = [ "ovs-vswitchd.service" ];
+            # start switch after physical interfaces and vswitch daemon
+            after = [ "network-pre.target" "ovs-vswitchd.service" ] ++ deps;
+            wants = deps; # if one or more interface fails, the switch should continue to run
+            serviceConfig.Type = "oneshot";
+            serviceConfig.RemainAfterExit = true;
+            path = [ pkgs.iproute config.virtualisation.vswitch.package ];
+            preStart = ''
+              echo "Resetting Open vSwitch ${n}..."
+              ovs-vsctl --if-exists del-br ${n} -- add-br ${n} \
+                        -- set bridge ${n} protocols=${concatStringsSep "," v.supportedOpenFlowVersions}
+            '';
+            script = ''
+              echo "Configuring Open vSwitch ${n}..."
+              ovs-vsctl ${concatStrings (mapAttrsToList (name: config: " -- add-port ${n} ${name}" + optionalString (config.vlan != null) " tag=${toString config.vlan}") v.interfaces)} \
+                ${concatStrings (mapAttrsToList (name: config: optionalString (config.type != null) " -- set interface ${name} type=${config.type}") v.interfaces)} \
+                ${concatMapStrings (x: " -- set-controller ${n} " + x)  v.controllers} \
+                ${concatMapStrings (x: " -- " + x) (splitString "\n" v.extraOvsctlCmds)}
+
+
+              echo "Adding OpenFlow rules for Open vSwitch ${n}..."
+              ovs-ofctl --protocols=${v.openFlowVersion} add-flows ${n} ${ofRules}
+            '';
+            postStop = ''
+              echo "Cleaning Open vSwitch ${n}"
+              echo "Shuting down internal ${n} interface"
+              ip link set ${n} down || true
+              echo "Deleting flows for ${n}"
+              ovs-ofctl --protocols=${v.openFlowVersion} del-flows ${n} || true
+              echo "Deleting Open vSwitch ${n}"
+              ovs-vsctl --if-exists del-br ${n} || true
+            '';
+          });
+    in mapAttrs' createVswitchDevice cfg.vswitches
+      // {
+            "network-local-commands" = {
+              after = [ "systemd-networkd.service" ];
+              bindsTo = [ "systemd-networkd.service" ];
+          };
+      };
   };
 
 }
