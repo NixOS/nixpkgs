@@ -1,0 +1,64 @@
+From 63160fceaaac2f9bd13da7abf929907a5f723aab Mon Sep 17 00:00:00 2001
+From: Mark Wielaard <mark@klomp.org>
+Date: Wed, 28 Nov 2018 13:58:31 +0100
+Subject: [PATCH] tests: Improve backtrace-data SKIP message.
+
+The backtrace-data testcase is x86_64 linux only because it uses its
+own set_initial_registers and scans its own /proc/pid/maps file.
+The SKIP message it gave on other platforms was misleading. It said
+"Unwinding not supported for this architecture". Change it to
+"x86_64 linux only test" to be less confusing.
+
+Signed-off-by: Mark Wielaard <mark@klomp.org>
+---
+ tests/ChangeLog             | 5 +++++
+ tests/backtrace-data.c      | 2 +-
+ tests/run-backtrace-data.sh | 6 +++++-
+ 3 files changed, 11 insertions(+), 2 deletions(-)
+
+diff --git a/tests/ChangeLog b/tests/ChangeLog
+index f6b0a672..225a51d5 100644
+--- a/tests/ChangeLog
++++ b/tests/ChangeLog
+@@ -1,3 +1,8 @@
++2018-11-28  Mark Wielaard  <mark@klomp.org>
++
++	* backtrace-data.c (main): Improve error message.
++	* run-backtrace-data.sh: Skip exit 77 return.
++
+ 2018-11-21  Mark Wielaard  <mark@klomp.org>
+ 
+ 	* backtrace-subr.sh (check_unsupported): Call test_cleanup before
+diff --git a/tests/backtrace-data.c b/tests/backtrace-data.c
+index 67ecd475..3a91c664 100644
+--- a/tests/backtrace-data.c
++++ b/tests/backtrace-data.c
+@@ -47,7 +47,7 @@
+ int
+ main (int argc __attribute__ ((unused)), char **argv)
+ {
+-  fprintf (stderr, "%s: Unwinding not supported for this architecture\n",
++  fprintf (stderr, "%s: x86_64 linux only test\n",
+           argv[0]);
+   return 77;
+ }
+diff --git a/tests/run-backtrace-data.sh b/tests/run-backtrace-data.sh
+index 34a4f01d..3062c304 100755
+--- a/tests/run-backtrace-data.sh
++++ b/tests/run-backtrace-data.sh
+@@ -22,7 +22,11 @@
+ unset VALGRIND_CMD
+ 
+ tempfiles data.{bt,err}
+-(set +ex; testrun ${abs_builddir}/backtrace-data 1>data.bt 2>data.err; true)
++(set +ex;
++ testrun ${abs_builddir}/backtrace-data 1>data.bt 2>data.err;
++ if test $? == 77; then cat data.{bt,err}; exit 77; fi
++ true)
++
+ cat data.{bt,err}
+ check_unsupported data.err data
+ check_all data.{bt,err} data
+-- 
+2.20.1
+

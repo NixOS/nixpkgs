@@ -18,6 +18,8 @@ stdenv.mkDerivation rec {
       sha256 = "06gmpp0mi0i82gi5qpl33a9jai3048s19rd4j9y3crixb3cqbpdh";
       extraPrefix = "";
     })
+    ./backtrace-test-fix.patch
+    ./backtrace-test-touchup.patch
   ];
 
   postPatch = ''
