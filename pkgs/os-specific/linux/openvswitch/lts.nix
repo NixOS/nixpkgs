@@ -1,25 +1,24 @@
 { stdenv, fetchurl, makeWrapper, pkgconfig, utillinux, which
-, procps, libcap_ng, openssl, python27 , perl
+, procps, libcap_ng, openssl, python27, iproute , perl
 , kernel ? null }:
 
 with stdenv.lib;
 
 let
   _kernel = kernel;
-  python = python27.withPackages (ps: with ps; [ six ]);
 in stdenv.mkDerivation rec {
-  version = "2.12.0";
+  version = "2.5.6";
   pname = "openvswitch";
 
   src = fetchurl {
     url = "http://openvswitch.org/releases/${pname}-${version}.tar.gz";
-    sha256 = "1y78ix5inhhcvicbvyy2ij38am1215nr55vydhab3d4065q45z8k";
+    sha256 = "14zjcd0ddjv90rwb24l3cac6psd34a9r04jjghn1av0kf6b76zj4";
   };
 
   kernel = optional (_kernel != null) _kernel.dev;
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ makeWrapper utillinux openssl libcap_ng python
+  buildInputs = [ makeWrapper utillinux openssl libcap_ng python27
                   perl procps which ];
 
   configureFlags = [
@@ -37,12 +36,26 @@ in stdenv.mkDerivation rec {
 
   postBuild = ''
     # fix tests
-    substituteInPlace xenserver/opt_xensource_libexec_interface-reconfigure --replace '/usr/bin/env python' '${python.interpreter}'
-    substituteInPlace vtep/ovs-vtep --replace '/usr/bin/env python' '${python.interpreter}'
+    substituteInPlace xenserver/opt_xensource_libexec_interface-reconfigure --replace '/usr/bin/env python' '${python27.interpreter}'
+    substituteInPlace vtep/ovs-vtep --replace '/usr/bin/env python' '${python27.interpreter}'
   '';
 
   enableParallelBuilding = true;
   doCheck = false; # bash-completion test fails with "compgen: command not found"
+
+  postInstall = ''
+    cp debian/ovs-monitor-ipsec $out/share/openvswitch/scripts
+    makeWrapper \
+      $out/share/openvswitch/scripts/ovs-monitor-ipsec \
+      $out/bin/ovs-monitor-ipsec \
+      --prefix PYTHONPATH : "$out/share/openvswitch/python"
+    substituteInPlace $out/share/openvswitch/scripts/ovs-monitor-ipsec \
+      --replace "UnixctlServer.create(None)" "UnixctlServer.create(os.environ['UNIXCTLPATH'])"
+    substituteInPlace $out/share/openvswitch/scripts/ovs-monitor-ipsec \
+      --replace "self.psk_file" "root_prefix + self.psk_file"
+    substituteInPlace $out/share/openvswitch/scripts/ovs-monitor-ipsec \
+      --replace "self.cert_dir" "root_prefix + self.cert_dir"
+  '';
 
   meta = with stdenv.lib; {
     platforms = platforms.linux;
@@ -60,6 +73,5 @@ in stdenv.mkDerivation rec {
       '';
     homepage = http://openvswitch.org/;
     license = licenses.asl20;
-    maintainers = [ maintainers.netixx ];
   };
 }

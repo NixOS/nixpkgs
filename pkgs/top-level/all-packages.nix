@@ -5246,6 +5246,8 @@ in
     openssl = openssl_1_0_2;
   };
 
+  openvswitch-lts = callPackage ../os-specific/linux/openvswitch/lts.nix { };
+
   optipng = callPackage ../tools/graphics/optipng {
     libpng = libpng12;
   };
