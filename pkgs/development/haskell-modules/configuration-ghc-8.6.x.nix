@@ -87,6 +87,7 @@ self: super: {
   psqueues = dontCheck super.psqueues;    # won't cope with QuickCheck 2.12.x
   system-fileio = dontCheck super.system-fileio;  # avoid dependency on broken "patience"
   unicode-transforms = dontCheck super.unicode-transforms;
+  RSA = dontCheck super.RSA; # https://github.com/GaloisInc/RSA/issues/14 
   monad-par = dontCheck super.monad-par;  # https://github.com/simonmar/monad-par/issues/66
 
   # https://github.com/jgm/skylighting/issues/55
