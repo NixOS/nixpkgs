@@ -9,14 +9,14 @@
 # all get the same sources with the same patches applied.
 
 stdenv.mkDerivation rec {
-  version = "8.4";
+  version = "8.5";
   name = "sage-src-${version}";
 
   src = fetchFromGitHub {
     owner = "sagemath";
     repo = "sage";
     rev = version;
-    sha256 = "0gips1hagiz9m7s21bg5as8hrrm2x5k47h1bsq0pc46iplfwmv2d";
+    sha256 = "08mb9626phsls2phdzqxsnp2df5pn5qr72m0mm4nncby26pwn19c";
   };
 
   # Patches needed because of particularities of nix or the way this is packaged.
@@ -46,6 +46,8 @@ stdenv.mkDerivation rec {
     # tests) are also run. That is necessary to test dochtml individually. See
     # https://trac.sagemath.org/ticket/26110 for an upstream discussion.
     ./patches/Only-test-py2-py3-optional-tests-when-all-of-sage-is.patch
+
+    ./patches/dont-test-guess-gaproot.patch
   ];
 
   # Patches needed because of package updates. We could just pin the versions of
@@ -68,6 +70,7 @@ stdenv.mkDerivation rec {
     );
   in [
     # New glpk version has new warnings, filter those out until upstream sage has found a solution
+    # Should be fixed with glpk > 4.65.
     # https://trac.sagemath.org/ticket/24824
     ./patches/pari-stackwarn.patch # not actually necessary since the pari upgrade, but necessary for the glpk patch to apply
     (fetchpatch {
@@ -76,31 +79,8 @@ stdenv.mkDerivation rec {
       stripLen = 1;
     })
 
-    # https://trac.sagemath.org/ticket/25260
-    ./patches/numpy-1.15.1.patch
-
     # https://trac.sagemath.org/ticket/26315
     ./patches/giac-1.5.0.patch
-
-    # needed for ntl update
-    # https://trac.sagemath.org/ticket/25532
-    (fetchpatch {
-      name = "lcalc-c++11.patch";
-      url = "https://git.archlinux.org/svntogit/community.git/plain/trunk/sagemath-lcalc-c++11.patch?h=packages/sagemath&id=0e31ae526ab7c6b5c0bfacb3f8b1c4fd490035aa";
-      sha256 = "0p5wnvbx65i7cp0bjyaqgp4rly8xgnk12pqwaq3dqby0j2bk6ijb";
-    })
-
-    (fetchpatch {
-      name = "cython-0.29.patch";
-      url = "https://git.sagemath.org/sage.git/patch/?h=f77de1d0e7f90ee12761140500cb8cbbb789ab20";
-      sha256 = "14wrpy8jgbnpza1j8a2nx8y2r946y82pll1fv3cn6gpfmm6640l3";
-    })
-    # https://trac.sagemath.org/ticket/26360
-    (fetchpatch {
-      name = "arb-2.15.1.patch";
-      url = "https://git.sagemath.org/sage.git/patch/?id=30cc778d46579bd0c7537ed33e8d7a4f40fd5c31";
-      sha256 = "13vc2q799dh745sm59xjjabllfj0sfjzcacf8k59kwj04x755d30";
-    })
 
     # https://trac.sagemath.org/ticket/26326
     # needs to be split because there is a merge commit in between

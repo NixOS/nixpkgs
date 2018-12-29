@@ -77,6 +77,7 @@ let
     singular
     giac
     palp
+    # needs to be rWrapper since the default `R` doesn't include R's default libraries
     rWrapper
     gfan
     cddlib
