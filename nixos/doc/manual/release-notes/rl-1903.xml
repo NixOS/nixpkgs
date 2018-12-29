@@ -343,6 +343,13 @@
      <literal><![CDATA[security.pam.services.<name?>.text]]></literal>.
    </para>
   </listitem>
+   <listitem>
+    <para>
+     <literal>fish</literal> has been upgraded to 3.0.
+     It comes with a number of improvements and backwards incompatible changes.
+     See the <literal>fish</literal> <link xlink:href="https://github.com/fish-shell/fish-shell/releases/tag/3.0.0">release notes</link> for more information.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
