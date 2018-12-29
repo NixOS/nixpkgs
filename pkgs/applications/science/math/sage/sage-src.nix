@@ -79,6 +79,9 @@ stdenv.mkDerivation rec {
       stripLen = 1;
     })
 
+    # https://trac.sagemath.org/ticket/26315
+    ./patches/giac-1.5.0.patch
+
     # https://trac.sagemath.org/ticket/26326
     # needs to be split because there is a merge commit in between
     (fetchSageDiff {

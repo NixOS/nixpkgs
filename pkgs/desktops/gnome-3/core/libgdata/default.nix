@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, intltool, libxml2, glib, json-glib
-, gobjectIntrospection, liboauth, gnome3, p11-kit, openssl, uhttpmock }:
+, gobject-introspection, liboauth, gnome3, p11-kit, openssl, uhttpmock }:
 
 let
   pname = "libgdata";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = "-I${gnome3.libsoup.dev}/include/libsoup-gnome-2.4/ -I${gnome3.gcr}/include/gcr-3 -I${gnome3.gcr}/include/gck-1";
 
   buildInputs = with gnome3;
-    [ pkgconfig libsoup intltool libxml2 glib gobjectIntrospection
+    [ pkgconfig libsoup intltool libxml2 glib gobject-introspection
       liboauth gcr gnome-online-accounts p11-kit openssl uhttpmock ];
 
   propagatedBuildInputs = [ json-glib ];

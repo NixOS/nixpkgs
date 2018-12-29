@@ -1,17 +1,16 @@
-{ stdenv, pythonPackages, fetchFromGitHub }:
+{ stdenv, python3Packages, fetchFromGitHub }:
 
-with pythonPackages;
+with python3Packages;
 
-buildPythonPackage rec {
-  namePrefix = "";
-  name = "gandi-cli-${version}";
-  version = "0.19";
+buildPythonApplication rec {
+  pname = "gandi-cli";
+  version = "1.3";
 
   src = fetchFromGitHub {
-    sha256 = "0xbf97p75zl6sjxqcgmaa4p5rax2h6ixn8srwdr4rsx2zz9dpwgp";
-    rev = version;
-    repo = "gandi.cli";
     owner = "Gandi";
+    repo = "gandi.cli";
+    rev = version;
+    sha256 = "07i1y88j5awsw7qadk7gnmax8mi7vgh1nflnc8j54z53fjyamlcs";
   };
 
   propagatedBuildInputs = [ click ipy pyyaml requests ];
@@ -22,6 +21,6 @@ buildPythonPackage rec {
     description = "Command-line interface to the public Gandi.net API";
     homepage = http://cli.gandi.net/;
     license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ ckampka ];
   };
 }
-

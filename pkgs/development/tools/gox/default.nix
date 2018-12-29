@@ -2,15 +2,15 @@
 
 buildGoPackage rec {
   name = "gox-${version}";
-  version = "0.4.0";
+  version = "20181025";
 
   goPackagePath = "github.com/mitchellh/gox";
 
   src = fetchFromGitHub {
     owner = "mitchellh";
     repo = "gox";
-    rev = "v${version}";
-    sha256 = "1q4fdkw904mrmh1q5z8pfd3r0gcn5dm776kldqawddy93iiwnp8r";
+    rev = "9cc487598128d0963ff9dcc51176e722788ec645";
+    sha256 = "18indkdwq2m1wy95d71lgbf46jxxrfc5km1fys5laapz993h77v6";
   };
 
   goDeps = ./deps.nix;

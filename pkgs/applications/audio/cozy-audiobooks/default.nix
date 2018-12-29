@@ -8,7 +8,7 @@
 , desktop-file-utils
 , gtk3
 , gst_all_1
-, gobjectIntrospection
+, gobject-introspection
 , python3Packages
 , file
 , cairo
@@ -36,7 +36,7 @@ python3Packages.buildPythonApplication rec {
     wrapGAppsHook
     appstream-glib
     desktop-file-utils
-    gobjectIntrospection
+    gobject-introspection
   ];
 
   buildInputs = [
@@ -64,10 +64,6 @@ python3Packages.buildPythonApplication rec {
     chmod +x data/meson_post_install.py
     patchShebangs data/meson_post_install.py
     substituteInPlace cozy/magic/magic.py --replace "ctypes.util.find_library('magic')" "'${file}/lib/libmagic${stdenv.hostPlatform.extensions.sharedLibrary}'"
-  '';
-
-  checkPhase = ''
-    ninja test
   '';
 
   postInstall = ''

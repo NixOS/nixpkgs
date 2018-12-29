@@ -6,12 +6,12 @@
 
 buildPythonPackage rec {
   pname = "percol";
-  version = "0.0.8";
+  version = "0.2.1";
   disabled = isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "169s5mhw1s60qbsd6pkf9bb2x6wfgx8hn8nw9d4qgc68qnnpp2cj";
+    sha256 = "7a649c6fae61635519d12a6bcacc742241aad1bff3230baef2cedd693ed9cfe8";
   };
 
   meta = with stdenv.lib; {

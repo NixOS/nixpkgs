@@ -1,11 +1,11 @@
 { stdenv, fetchurl, ocaml, findlib, ocamlbuild, cppo, ppx_tools, ppx_deriving, result }:
 
 stdenv.mkDerivation {
-  name = "ocaml${ocaml.version}-visitors-20171124";
+  name = "ocaml${ocaml.version}-visitors-20180513";
 
   src = fetchurl {
-    url = http://gallium.inria.fr/~fpottier/visitors/visitors-20171124.tar.gz;
-    sha256 = "04047k2v0pgwcdkgw7jk4955pgil0nj2ji0zfhmlqrdbinyfqzac";
+    url = http://gallium.inria.fr/~fpottier/visitors/visitors-20180513.tar.gz;
+    sha256 = "12j8n9fkl43sd0j78x2zqix8m1vinswl2jgwndd62vmx98f5rl1v";
   };
 
   buildInputs = [ ocaml findlib ocamlbuild cppo ];

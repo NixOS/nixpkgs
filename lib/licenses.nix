@@ -29,13 +29,13 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
   };
 
   agpl3 = spdx {
-    spdxId = "AGPL-3.0";
-    fullName = "GNU Affero General Public License v3.0";
+    spdxId = "AGPL-3.0-only";
+    fullName = "GNU Affero General Public License v3.0 only";
   };
 
-  agpl3Plus = {
+  agpl3Plus = spdx {
+    spdxId = "AGPL-3.0-or-later";
     fullName = "GNU Affero General Public License v3.0 or later";
-    inherit (agpl3) url;
   };
 
   amazonsl = {
@@ -266,13 +266,23 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
   };
 
   fdl12 = spdx {
-    spdxId = "GFDL-1.2";
-    fullName = "GNU Free Documentation License v1.2";
+    spdxId = "GFDL-1.2-only";
+    fullName = "GNU Free Documentation License v1.2 only";
+  };
+
+  fdl12Plus = spdx {
+    spdxId = "GFDL-1.2-or-later";
+    fullName = "GNU Free Documentation License v1.2 or later";
   };
 
   fdl13 = spdx {
-    spdxId = "GFDL-1.3";
-    fullName = "GNU Free Documentation License v1.3";
+    spdxId = "GFDL-1.3-only";
+    fullName = "GNU Free Documentation License v1.3 only";
+  };
+
+  fdl13Plus = spdx {
+    spdxId = "GFDL-1.3-or-later";
+    fullName = "GNU Free Documentation License v1.3 or later";
   };
 
   ffsl = {
@@ -297,24 +307,23 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
   };
 
   gpl1 = spdx {
-    spdxId = "GPL-1.0";
+    spdxId = "GPL-1.0-only";
     fullName = "GNU General Public License v1.0 only";
   };
 
   gpl1Plus = spdx {
-    spdxId = "GPL-1.0+";
+    spdxId = "GPL-1.0-or-later";
     fullName = "GNU General Public License v1.0 or later";
   };
 
   gpl2 = spdx {
-    spdxId = "GPL-2.0";
+    spdxId = "GPL-2.0-only";
     fullName = "GNU General Public License v2.0 only";
   };
 
-  gpl2Classpath = {
+  gpl2Classpath = spdx {
     spdxId = "GPL-2.0-with-classpath-exception";
     fullName = "GNU General Public License v2.0 only (with Classpath exception)";
-    url = https://fedoraproject.org/wiki/Licensing/GPL_Classpath_Exception;
   };
 
   gpl2ClasspathPlus = {
@@ -328,17 +337,17 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
   };
 
   gpl2Plus = spdx {
-    spdxId = "GPL-2.0+";
+    spdxId = "GPL-2.0-or-later";
     fullName = "GNU General Public License v2.0 or later";
   };
 
   gpl3 = spdx {
-    spdxId = "GPL-3.0";
+    spdxId = "GPL-3.0-only";
     fullName = "GNU General Public License v3.0 only";
   };
 
   gpl3Plus = spdx {
-    spdxId = "GPL-3.0+";
+    spdxId = "GPL-3.0-or-later";
     fullName = "GNU General Public License v3.0 or later";
   };
 
@@ -408,32 +417,32 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
   };
 
   lgpl2 = spdx {
-    spdxId = "LGPL-2.0";
+    spdxId = "LGPL-2.0-only";
     fullName = "GNU Library General Public License v2 only";
   };
 
   lgpl2Plus = spdx {
-    spdxId = "LGPL-2.0+";
+    spdxId = "LGPL-2.0-or-later";
     fullName = "GNU Library General Public License v2 or later";
   };
 
   lgpl21 = spdx {
-    spdxId = "LGPL-2.1";
+    spdxId = "LGPL-2.1-only";
     fullName = "GNU Library General Public License v2.1 only";
   };
 
   lgpl21Plus = spdx {
-    spdxId = "LGPL-2.1+";
+    spdxId = "LGPL-2.1-or-later";
     fullName = "GNU Library General Public License v2.1 or later";
   };
 
   lgpl3 = spdx {
-    spdxId = "LGPL-3.0";
+    spdxId = "LGPL-3.0-only";
     fullName = "GNU Lesser General Public License v3.0 only";
   };
 
   lgpl3Plus = spdx {
-    spdxId = "LGPL-3.0+";
+    spdxId = "LGPL-3.0-or-later";
     fullName = "GNU Lesser General Public License v3.0 or later";
   };
 
@@ -502,6 +511,12 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
   msrla = {
     fullName  = "Microsoft Research License Agreement";
     url       = "http://research.microsoft.com/en-us/projects/pex/msr-la.txt";
+    free = false;
+  };
+
+  nasa13 = spdx {
+    spdxId = "NASA-1.3";
+    fullName = "NASA Open Source Agreement 1.3";
     free = false;
   };
 
@@ -691,7 +706,7 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
   };
 
   wxWindows = spdx {
-    spdxId = "WXwindows";
+    spdxId = "wxWindows";
     fullName = "wxWindows Library Licence, Version 3.1";
   };
 

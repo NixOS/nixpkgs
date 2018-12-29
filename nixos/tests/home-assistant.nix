@@ -4,6 +4,7 @@ let
   configDir = "/var/lib/foobar";
   apiPassword = "some_secret";
   mqttPassword = "another_secret";
+  hassCli = "hass-cli --server http://hass:8123 --password '${apiPassword}'";
 
 in {
   name = "home-assistant";
@@ -16,7 +17,7 @@ in {
       { pkgs, ... }:
       {
         environment.systemPackages = with pkgs; [
-          mosquitto
+          mosquitto home-assistant-cli
         ];
         services.home-assistant = {
           inherit configDir;
@@ -31,6 +32,9 @@ in {
               latitude = "0.0";
               longitude = "0.0";
               elevation = 0;
+              auth_providers = [
+                { type = "legacy_api_password"; }
+              ];
             };
             frontend = { };
             http.api_password = apiPassword;
@@ -67,6 +71,11 @@ in {
     $hass->succeed("curl http://localhost:8123/api/states/binary_sensor.mqtt_binary_sensor -H 'x-ha-access: ${apiPassword}' | grep -qF '\"state\": \"off\"'");
     $hass->waitUntilSucceeds("mosquitto_pub -V mqttv311 -t home-assistant/test -u homeassistant -P '${mqttPassword}' -m let_there_be_light");
     $hass->succeed("curl http://localhost:8123/api/states/binary_sensor.mqtt_binary_sensor -H 'x-ha-access: ${apiPassword}' | grep -qF '\"state\": \"on\"'");
+
+    # Toggle a binary sensor using hass-cli
+    $hass->succeed("${hassCli} entity get binary_sensor.mqtt_binary_sensor | grep -qF '\"state\": \"on\"'");
+    $hass->succeed("${hassCli} entity edit binary_sensor.mqtt_binary_sensor --json='{\"state\": \"off\"}'");
+    $hass->succeed("curl http://localhost:8123/api/states/binary_sensor.mqtt_binary_sensor -H 'x-ha-access: ${apiPassword}' | grep -qF '\"state\": \"off\"'");
 
     # Print log to ease debugging
     my $log = $hass->succeed("cat ${configDir}/home-assistant.log");

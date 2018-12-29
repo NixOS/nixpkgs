@@ -15,16 +15,15 @@ infoFile: let
 
   script = writeText "build-maven-repository.sh" ''
     ${lib.concatStrings (map (dep: let
-      inherit (dep)
-        url sha1 groupId artifactId
-        version metadata repository-id;
+      inherit (dep) sha1 groupId artifactId version metadata repository-id;
 
       versionDir = dep.unresolved-version or version;
       authenticated = dep.authenticated or false;
+      url = dep.url or "";
 
-      fetch = (if authenticated then requireFile else fetchurl) {
+      fetch = if (url != "") then ((if authenticated then requireFile else fetchurl) {
         inherit url sha1;
-      };
+      }) else "";
 
       fetchMetadata = (if authenticated then requireFile else fetchurl) {
         inherit (metadata) url sha1;
@@ -32,10 +31,15 @@ infoFile: let
     in ''
       dir=$out/$(echo ${groupId} | sed 's|\.|/|g')/${artifactId}/${versionDir}
       mkdir -p $dir
-      ln -sv ${fetch} $dir/${fetch.name}
+
+      ${lib.optionalString (fetch != "") ''
+        ln -sv ${fetch} $dir/${fetch.name}
+      ''}
       ${lib.optionalString (dep ? metadata) ''
         ln -svf ${fetchMetadata} $dir/maven-metadata-${repository-id}.xml
-        ln -sv ${fetch} $dir/$(echo ${fetch.name} | sed 's|${version}|${dep.unresolved-version}|')
+        ${lib.optionalString (fetch != "") ''
+          ln -sv ${fetch} $dir/$(echo ${fetch.name} | sed 's|${version}|${dep.unresolved-version}|')
+        ''}
       ''}
     '') info.dependencies)}
   '';

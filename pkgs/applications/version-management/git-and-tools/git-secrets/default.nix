@@ -1,40 +1,32 @@
-{ stdenv, lib, fetchFromGitHub, makeWrapper, git }:
+{ stdenv, fetchFromGitHub, makeWrapper, git, coreutils }:
 
-let
+stdenv.mkDerivation rec {
+  name = "git-secrets-${version}";
   version = "1.2.1";
-  repo = "git-secrets";
-
-in stdenv.mkDerivation {
-  name = "${repo}-${version}";
 
   src = fetchFromGitHub {
-    inherit repo;
     owner = "awslabs";
+    repo = "git-secrets";
     rev = "${version}";
     sha256 = "14jsm4ks3k5d9iq3jr23829izw040pqpmv7dz8fhmvx6qz8fybzg";
   };
 
-  buildInputs = [ makeWrapper git];
+  nativeBuildInputs = [ makeWrapper ];
 
-  # buildPhase = ''
-  #  make man # TODO: need rst2man.py
-  # '';
-  
+  dontBuild = true;
+
   installPhase = ''
-    install -D git-secrets $out/bin/git-secrets
+    install -m755 -Dt $out/bin git-secrets
+    install -m444 -Dt $out/share/man/man1 git-secrets.1
 
     wrapProgram $out/bin/git-secrets \
-      --prefix PATH : "${lib.makeBinPath [ git ]}"
-
-    # TODO: see above note on rst2man.py
-    # mkdir $out/share
-    # cp -r man $out/share
+      --prefix PATH : "${stdenv.lib.makeBinPath [ git coreutils ]}"
   '';
 
-  meta = {
-    description = "Prevents you from committing passwords and other sensitive information to a git repository";
+  meta = with stdenv.lib; {
+    description = "Prevents you from committing secrets and credentials into git repositories";
     homepage = https://github.com/awslabs/git-secrets;
-    license = stdenv.lib.licenses.asl20;
-    platforms = stdenv.lib.platforms.all;
+    license = licenses.asl20;
+    platforms = platforms.all;
   };
 }

@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     })
     (fetchurl {
       url = "https://github.com/EliverLara/Nordic/releases/download/v${version}/Nordic-standard-buttons.tar.xz";
-      sha256 = "0xnj1am1q26xppp8y07iik648hhgn3gmzqvkdhg3il4qnkndjvld";
+      sha256 = "1h0690cijaipidb5if2bxhvvkrx5src3akyxvfywxg4bf8x7jxs5";
     })
   ];
 

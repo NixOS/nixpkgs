@@ -34,6 +34,11 @@ stdenv.mkDerivation rec {
     sha256 = "084niy7cin13ba65p8x38w2xcyc54n3fgzbin40fa2shfr0ca0kq";
   };
 
+  patches = [
+    # Cherry picked fix for https://github.com/curl/curl/issues/3218
+    ./fix-ipv6-url-parsing.patch
+  ];
+
   outputs = [ "bin" "dev" "out" "man" "devdoc" ];
   separateDebugInfo = stdenv.isLinux;
 

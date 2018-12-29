@@ -23,7 +23,7 @@
 
 let
   pname = "gnome-panel";
-  version = "3.28.0";
+  version = "3.30.0";
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
@@ -31,15 +31,15 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "1004cp9cxqpic9lsraqn5c1739acn4sn4ql3c1fja99hv22h1ziv";
+    sha256 = "12q0l7wy6hzl46i7xpvv82ka3bn14z0jg6fhv5xhnk7j9mkbmgqw";
   };
 
   patches = [
     # https://github.com/NixOS/nixpkgs/issues/36468
-    # https://gitlab.gnome.org/GNOME/gnome-panel/issues/6
+    # https://gitlab.gnome.org/GNOME/gnome-panel/issues/8
     (fetchpatch {
-      url = https://gitlab.gnome.org/GNOME/gnome-panel/commit/be26e170a10c297949a6d9f3cbc70b6caaf04b56.patch;
-      sha256 = "10gxl9fwbv5j0s1lz7gkz6wqpda5wfzs49r5khbk1h05lv0hk4l4";
+      url = https://gitlab.gnome.org/GNOME/gnome-panel/commit/77be9c3507bd1b5d70d97649b85ec9f47f6c359c.patch;
+      sha256 = "00b1ihnc6hp2g6x1v1njbc6mhsk44izl2wigviibmka2znfk03nv";
     })
   ];
 

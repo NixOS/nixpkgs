@@ -55,6 +55,7 @@ buildPythonPackage rec {
 
   # let sagenb use mathjax
   postInstall = ''
-    ln -s ${mathjax}/lib/node_modules/mathjax "$out/${python.sitePackages}/mathjax"
+    mkdir -p "$out/${python.sitePackages}/sagenb/data"
+    ln -s ${mathjax}/lib/node_modules/mathjax "$out/${python.sitePackages}/sagenb/data/mathjax"
   '';
 }

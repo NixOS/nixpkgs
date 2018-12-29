@@ -385,7 +385,7 @@ nix-build &lt;nixpkgs&gt; --arg crossSystem '(import &lt;nixpkgs/lib&gt;).system
     Eventually we would like to make these platform examples an unnecessary
     convenience so that
 <programlisting>
-nix-build &lt;nixpkgs&gt; --arg crossSystem.config '&lt;arch&gt;-&lt;os&gt;-&lt;vendor&gt;-&lt;abi&gt;' -A whatever</programlisting>
+nix-build &lt;nixpkgs&gt; --arg crossSystem '{ config = "&lt;arch&gt;-&lt;os&gt;-&lt;vendor&gt;-&lt;abi&gt;"; }' -A whatever</programlisting>
     works in the vast majority of cases. The problem today is dependencies on
     other sorts of configuration which aren't given proper defaults. We rely on
     the examples to crudely to set those configuration parameters in some

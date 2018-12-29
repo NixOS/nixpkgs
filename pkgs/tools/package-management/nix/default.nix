@@ -51,10 +51,11 @@ let
     preConfigure =
       # Copy libboost_context so we don't get all of Boost in our closure.
       # https://github.com/NixOS/nixpkgs/issues/45462
-      lib.optionalString is20
-      ''
+      if is20 then ''
         mkdir -p $out/lib
         cp ${boost}/lib/libboost_context* $out/lib
+      '' else ''
+        configureFlagsArray+=(BDW_GC_LIBS="-lgc -lgccpp")
       '';
 
     configureFlags =

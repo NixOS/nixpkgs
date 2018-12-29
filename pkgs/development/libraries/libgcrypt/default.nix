@@ -27,12 +27,7 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional stdenv.isDarwin gettext
     ++ stdenv.lib.optional enableCapabilities libcap;
 
-  preConfigure = stdenv.lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
-    # This is intentional: gpg-error-config is a shell script that will work during the build
-    mkdir -p "$NIX_BUILD_TOP"/bin
-    ln -s ${libgpgerror.dev}/bin/gpg-error-config "$NIX_BUILD_TOP/bin"
-    export PATH="$NIX_BUILD_TOP/bin:$PATH"
-  '';
+  configureFlags = [ "--with-libgpg-error-prefix=${libgpgerror.dev}" ];
 
   # Make sure libraries are correct for .pc and .la files
   # Also make sure includes are fixed for callers who don't use libgpgcrypt-config

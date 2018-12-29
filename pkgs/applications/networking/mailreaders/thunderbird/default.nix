@@ -24,11 +24,11 @@ let
   gcc = if stdenv.cc.isGNU then stdenv.cc.cc else stdenv.cc.cc.gcc;
 in stdenv.mkDerivation rec {
   name = "thunderbird-${version}";
-  version = "60.3.1";
+  version = "60.3.3";
 
   src = fetchurl {
     url = "mirror://mozilla/thunderbird/releases/${version}/source/thunderbird-${version}.source.tar.xz";
-    sha512 = "266m4kwxiwh1zi60z4gcs54k4w903aximafngmmqaa5nkxnsxh6sp62j1mazdh52g40pzdy9sqb8zkcjsm7dp937kpcl2lvw778lanm";
+    sha512 = "04m6mgm4nfnq3nfkv0d1al5b7bw95kfcjpyd7aschqi6wnn21g8qacx42ynj89i5l9vc1jx8nz0wy266sy6x5iv9q585c6l6j9gvkrh";
   };
 
   # from firefox, but without sound libraries
@@ -202,6 +202,6 @@ in stdenv.mkDerivation rec {
   passthru.updateScript = import ./../../browsers/firefox/update.nix {
     attrPath = "thunderbird";
     baseUrl = "http://archive.mozilla.org/pub/thunderbird/releases/";
-    inherit writeScript lib common-updater-scripts xidel coreutils gnused gnugrep curl;
+    inherit stdenv writeScript lib common-updater-scripts xidel coreutils gnused gnugrep curl;
   };
 }

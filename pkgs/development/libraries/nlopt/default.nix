@@ -1,13 +1,8 @@
 { fetchurl, stdenv, octave ? null, cmake }:
 
-let
-
-  version = "2.5.0";
-
-in
-
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "nlopt-${version}";
+  version = "2.5.0";
 
   src = fetchurl {
     url = "https://github.com/stevengj/nlopt/archive/v${version}.tar.gz";

@@ -1,7 +1,7 @@
 { stdenv, fetchgit
 , cmake, pkgconfig, git
 , boost, miniupnpc, openssl, unbound, cppzmq
-, zeromq, pcsclite, readline, libsodium
+, zeromq, pcsclite, readline, libsodium, hidapi
 , CoreData, IOKit, PCSC
 }:
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     boost miniupnpc openssl unbound
     cppzmq zeromq pcsclite readline
-    libsodium
+    libsodium hidapi
   ] ++ optionals stdenv.isDarwin [ IOKit CoreData PCSC ];
 
   cmakeFlags = [

@@ -1,23 +1,23 @@
 { fetchurl, stdenv, meson, ninja, gtk3, libexif, libgphoto2, libsoup, libxml2, vala, sqlite
 , webkitgtk, pkgconfig, gnome3, gst_all_1, libgudev, libraw, glib, json-glib
 , gettext, desktop-file-utils, gdk_pixbuf, librsvg, wrapGAppsHook
-, gobjectIntrospection, itstool, libgdata }:
+, gobject-introspection, itstool, libgdata, python3 }:
 
 # for dependencies see https://wiki.gnome.org/Apps/Shotwell/BuildingAndInstalling
 
 let
   pname = "shotwell";
-  version = "0.28.2";
+  version = "0.30.1";
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "0pa7lb33i4hdnz7hr7x938d48ilrnj47jzb99la79rmm08yyin8n";
+    sha256 = "01hsmig06hjv34yf9y60hv2gml593xfkza4ilq4b22gr8l4v2qip";
   };
 
   nativeBuildInputs = [
-    meson ninja vala pkgconfig itstool gettext desktop-file-utils wrapGAppsHook gobjectIntrospection
+    meson ninja vala pkgconfig itstool gettext desktop-file-utils python3 wrapGAppsHook gobject-introspection
   ];
 
   buildInputs = [
@@ -28,8 +28,9 @@ in stdenv.mkDerivation rec {
     gnome3.gcr gnome3.defaultIconTheme libgdata
   ];
 
-  postInstall = ''
-    glib-compile-schemas $out/share/glib-2.0/schemas
+  postPatch = ''
+    chmod +x build-aux/meson/postinstall.py # patchShebangs requires executable file
+    patchShebangs build-aux/meson/postinstall.py
   '';
 
   passthru = {

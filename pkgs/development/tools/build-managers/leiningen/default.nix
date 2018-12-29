@@ -24,11 +24,14 @@ stdenv.mkDerivation rec {
   buildInputs = [ makeWrapper ];
   propagatedBuildInputs = [ jdk ];
 
+  # the jar is not in share/java, because it's a standalone jar and should
+  # never be picked up by set-java-classpath.sh
+
   installPhase = ''
-    mkdir -p $out/bin $out/share/java
+    mkdir -p $out/bin $out/share
 
     cp -v $src $out/bin/lein
-    cp -v $jarsrc $out/share/java/$JARNAME
+    cp -v $jarsrc $out/share/$JARNAME
   '';
 
   fixupPhase = ''
@@ -36,7 +39,7 @@ stdenv.mkDerivation rec {
     patchShebangs $out/bin/lein
 
     substituteInPlace $out/bin/lein \
-      --replace 'LEIN_JAR=/usr/share/java/leiningen-$LEIN_VERSION-standalone.jar' "LEIN_JAR=$out/share/java/$JARNAME"
+      --replace 'LEIN_JAR=/usr/share/java/leiningen-$LEIN_VERSION-standalone.jar' "LEIN_JAR=$out/share/$JARNAME"
 
     wrapProgram $out/bin/lein \
       --prefix PATH ":" "${stdenv.lib.makeBinPath [ rlwrap coreutils ]}" \

@@ -1,0 +1,16 @@
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -51,11 +51,11 @@
+ 	usbreset.c
+ 
+ lsusb.py: $(srcdir)/lsusb.py.in
+-	sed 's|VERSION|$(VERSION)|g;s|@usbids@|$(datadir)/usb.ids|g' $< >$@
++	sed 's|VERSION|$(VERSION)|g;s|@usbids@|@hwdata@/share/hwdata/usb.ids|g' $< >$@
+ 	chmod 755 $@
+ 
+ lsusb.8: $(srcdir)/lsusb.8.in
+-	sed 's|VERSION|$(VERSION)|g;s|@usbids@|$(datadir)/usb.ids|g' $< >$@
++	sed 's|VERSION|$(VERSION)|g;s|@usbids@|@hwdata@/share/hwdata/usb.ids|g' $< >$@
+ 
+ usb-devices.1: $(srcdir)/usb-devices.1.in
+ 	sed 's|VERSION|$(VERSION)|g' $< >$@

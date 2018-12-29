@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoconf, vala, pkgconfig, glib, gobjectIntrospection, gnome3 }:
+{ stdenv, fetchurl, autoconf, vala, pkgconfig, glib, gobject-introspection, gnome3 }:
 let
   pname = "libgee";
   version = "0.20.1";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  nativeBuildInputs = [ pkgconfig autoconf vala gobjectIntrospection ];
+  nativeBuildInputs = [ pkgconfig autoconf vala gobject-introspection ];
   buildInputs = [ glib ];
 
   PKG_CONFIG_GOBJECT_INTROSPECTION_1_0_GIRDIR = "${placeholder "dev"}/share/gir-1.0";

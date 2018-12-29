@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, gettext, gobjectIntrospection, gtk-doc, docbook_xsl, docbook_xml_dtd_412, glib, gupnp }:
+{ stdenv, fetchurl, pkgconfig, gettext, gobject-introspection, gtk-doc, docbook_xsl, docbook_xml_dtd_412, glib, gupnp }:
 
 stdenv.mkDerivation rec {
   name = "gupnp-igd-${version}";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "081v1vhkbz3wayv49xfiskvrmvnpx93k25am2wnarg5cifiiljlb";
   };
 
-  nativeBuildInputs = [ pkgconfig gettext gobjectIntrospection gtk-doc docbook_xsl docbook_xml_dtd_412 ];
+  nativeBuildInputs = [ pkgconfig gettext gobject-introspection gtk-doc docbook_xsl docbook_xml_dtd_412 ];
   propagatedBuildInputs = [ glib gupnp ];
 
   configureFlags = [

@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, libX11, libXext, libXcursor, libXrandr, libjack2, alsaLib,
-  mpg123, makeWrapper, releasePath ? null }:
+{ stdenv, fetchurl, libX11, libXext, libXcursor, libXrandr, libjack2, alsaLib
+, mpg123, releasePath ? null }:
 
 with stdenv.lib;
 
@@ -36,8 +36,7 @@ stdenv.mkDerivation rec {
         releasePath
     else throw "Platform is not supported by Renoise";
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ libX11 libXext libXcursor libXrandr alsaLib libjack2 ];
+  buildInputs = [ alsaLib libjack2 libX11 libXcursor libXext libXrandr ];
 
   installPhase = ''
     cp -r Resources $out
@@ -56,9 +55,13 @@ stdenv.mkDerivation rec {
 
     mkdir $out/bin
     ln -s $out/renoise $out/bin/renoise
+  '';
 
-    patchelf --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) --set-rpath $out/lib $out/renoise
-    wrapProgram "$out/renoise" --prefix LD_LIBRARY_PATH : "${mpg123}/lib"
+  postFixup = ''
+    patchelf \
+      --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
+      --set-rpath ${mpg123}/lib:$out/lib \
+      $out/renoise
   '';
 
   meta = {

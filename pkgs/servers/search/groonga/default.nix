@@ -7,11 +7,11 @@
 stdenv.mkDerivation rec {
 
   name    = "groonga-${version}";
-  version = "8.0.8";
+  version = "8.0.9";
 
   src = fetchurl {
     url    = "https://packages.groonga.org/source/groonga/${name}.tar.gz";
-    sha256 = "1fl5s0a5ncw8lj3ild2qqqxa3h4d3k98dmyki760c54kw6p6bycv";
+    sha256 = "1fd5smhqchnjv0injj3x0zsqzffw1r4gq625znqljg6chny3cq08";
   };
 
   buildInputs = with stdenv.lib;

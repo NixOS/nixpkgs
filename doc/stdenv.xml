@@ -671,6 +671,43 @@ passthru = {
      </para>
     </listitem>
    </varlistentry>
+   <varlistentry>
+    <term>
+     <varname>passthru.updateScript</varname>
+    </term>
+    <listitem>
+     <para>
+      A script to be run by <filename>maintainers/scripts/update.nix</filename> when
+      the package is matched. It needs to be an executable file, either on the file
+      system:
+<programlisting>
+passthru.updateScript = ./update.sh;
+</programlisting>
+      or inside the expression itself:
+<programlisting>
+passthru.updateScript = writeScript "update-zoom-us" ''
+  #!/usr/bin/env nix-shell
+  #!nix-shell -i bash -p curl pcre common-updater-scripts
+
+  set -eu -o pipefail
+
+  version="$(curl -sI https://zoom.us/client/latest/zoom_x86_64.tar.xz | grep -Fi 'Location:' | pcregrep -o1 '/(([0-9]\.?)+)/')"
+  update-source-version zoom-us "$version"
+'';
+</programlisting>
+      The attribute can also contain a list, a script followed by arguments to be passed to it:
+<programlisting>
+passthru.updateScript = [ ../../update.sh pname "--requested-release=unstable" ];
+</programlisting>
+      Note that the update scripts will be run in parallel by default; you should avoid running <command>git commit</command> or any other commands that cannot handle that.
+     </para>
+
+     <para>
+      For information about how to run the updates, execute
+      <cmdsynopsis><command>nix-shell</command> <arg>maintainers/scripts/update.nix</arg></cmdsynopsis>.
+     </para>
+    </listitem>
+   </varlistentry>
   </variablelist>
  </section>
  <section xml:id="sec-stdenv-phases">
@@ -2463,17 +2500,17 @@ addEnvHooks "$hostOffset" myBashFunction
      <listitem>
       <para>
        This hook will make a build pause instead of stopping when a failure
-       happen. It prevents nix to cleanup the build environment immediatly and
+       happens. It prevents nix from cleaning up the build environment immediately and
        allows the user to attach to a build environment using the
-       <command>cntr</command> command. On build error it will print the
-       instruction that are neccessary for <command>cntr</command>. Installing
+       <command>cntr</command> command. Upon build error it will print
+       instructions on how to use <command>cntr</command>. Installing
        cntr and running the command will provide shell access to the build
        sandbox of failed build. At <filename>/var/lib/cntr</filename> the
-       sandbox filesystem is mounted. All commands and files of the system are
+       sandboxed filesystem is mounted. All commands and files of the system are
        still accessible within the shell. To execute commands from the sandbox
        use the cntr exec subcommand. Note that <command>cntr</command> also
        needs to be executed on the machine that is doing the build, which might
-       be not the case when remote builders are enabled.
+       not be the case when remote builders are enabled.
        <command>cntr</command> is only supported on Linux-based platforms. To
        use it first add <literal>cntr</literal> to your
        <literal>environment.systemPackages</literal> on NixOS or alternatively to
@@ -2486,6 +2523,23 @@ addEnvHooks "$hostOffset" myBashFunction
        When a build failure happens there will be an instruction printed that
        shows how to attach with <literal>cntr</literal> to the build sandbox.
       </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term>
+      libiconv, libintl
+     </term>
+     <listitem>
+       <para>
+	 A few libraries automatically add to
+	 <literal>NIX_LDFLAGS</literal> their library, making their
+	 symbols automatically available to the linker. This includes
+	 libiconv and libintl (gettext). This is done to provide
+	 compatibility between GNU Linux, where libiconv and libintl
+	 are bundled in, and other systems where that might not be the
+	 case. Sometimes, this behavior is not desired. To disable
+	 this behavior, set <literal>dontAddExtraLibs</literal>.
+       </para>
      </listitem>
     </varlistentry>
     <varlistentry>

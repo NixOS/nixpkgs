@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
       user.  It provides X authentication facilities for running
       programs in an X session.
     '';
-    homepage = http://www.nongnu.org/gksu/;
+    homepage = https://www.nongnu.org/gksu/;
     license = stdenv.lib.licenses.lgpl2;
     maintainers = [ stdenv.lib.maintainers.romildo ];
     platforms = stdenv.lib.platforms.linux;

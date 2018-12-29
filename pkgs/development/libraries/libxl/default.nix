@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "libxl";
+  pname = "libxl";
   version = "3.8.1";
 
   src = fetchurl {
-    url = "http://www.libxl.com/download/${name}-lin-${version}.tar.gz";
+    url = "http://www.libxl.com/download/${pname}-lin-${version}.tar.gz";
     sha256 = "1zdbahhyhr70s8hygwp43j9z4zmglyrr782hkcm1078yvkr2f2fm";
   };
 

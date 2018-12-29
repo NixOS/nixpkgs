@@ -16,12 +16,9 @@ in stdenv.mkDerivation {
 
   buildInputs = [ xproto libXau libXt libXext libXaw libXpm ];
 
-  buildPhase = ''
-    xmkmf
-    make WORLDOPTS="" World
-  '';
+  buildFlags = [ "WORLDOPTS=" "World" ];
 
-  installFlags = "LDLIBS=-lfl DESTDIR=\${out}";
+  installFlags = [ "LDLIBS=-lfl" "DESTDIR=${placeholder "out"}" ];
 
   postInstall = ''
     mv $out/${xorgcffiles}/* $out

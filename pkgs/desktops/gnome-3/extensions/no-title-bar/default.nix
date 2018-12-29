@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "gnome-shell-extension-no-title-bar-${version}";
-  version = "8";
+  version = "9";
 
   src = fetchFromGitHub {
     owner = "franglais125";
     repo = "no-title-bar";
     rev = "v${version}";
-    sha256 = "0n3ayf7k2icy913sjl1d6iwm21i8fivv0f7wj7gck8q7q2j7i3bz";
+    sha256 = "02zm61fg40r005fn2rvgrbsz2hbcsmp2hkhyilqbmpilw35y0nbq";
   };
 
   nativeBuildInputs = [

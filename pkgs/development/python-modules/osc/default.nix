@@ -11,14 +11,14 @@
 
 buildPythonPackage {
   pname = "osc";
-  version = "0.162.0-55-gb730f88";
-  disabled = isPy3k;
+  version = "0.163.0-40-gb4b1ec7";
+  disabled = isPy3k;    # urlgrabber doesn't support python-3.x
 
   src = fetchFromGitHub {
     owner = "openSUSE";
     repo = "osc";
-    rev = "b730f880cfe85a8547f569355a21706f27ebfa78";
-    sha256 = "0hh9j5zd2kc0804d2jmf1q3w5xm9l9s69hhgysbncrv5fw0414lh";
+    rev = "b4b1ec7b64d4f9bb42f140754519221b810e232c";
+    sha256 = "01z1b15x9vzhd7j94f6n3g50h5br7lwz86akgic0wpp41zv37jad";
   };
 
   buildInputs = [ pkgs.bashInteractive ]; # needed for bash-completion helper

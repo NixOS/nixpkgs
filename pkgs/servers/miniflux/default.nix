@@ -4,8 +4,8 @@
 }:
 
 buildGoPackage rec {
-  name = "miniflux-${version}";
-  version = "2.0.12";
+  pname = "miniflux";
+  version = "2.0.13";
 
   goPackagePath = "miniflux.app";
 
@@ -13,7 +13,7 @@ buildGoPackage rec {
     owner = "miniflux";
     repo = "miniflux";
     rev = "refs/tags/${version}";
-    sha256 = "13d1dwcwig7b5phymgxqm227k5l3zzzvx997cywarbl953ji2y1d";
+    sha256 = "16c9jszrz3153kr0xyj7na09hpqvnjsrmsbic7qkp5a9aa839b9s";
   };
     
   goDeps = ./deps.nix;
@@ -29,7 +29,7 @@ buildGoPackage rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "Miniflux is a minimalist and opinionated feed reader.";
+    description = "Minimalist and opinionated feed reader";
     homepage = https://miniflux.app/;
     license = licenses.asl20;
     maintainers = with maintainers; [ benpye ];

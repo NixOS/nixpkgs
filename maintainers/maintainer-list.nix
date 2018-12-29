@@ -256,6 +256,11 @@
     github = "AndrewMorsillo";
     name = "Andrew Morsillo";
   };
+  andersk = {
+    email = "andersk@mit.edu";
+    github = "andersk";
+    name = "Anders Kaseorg";
+  };
   AndersonTorres = {
     email = "torres.anderson.85@protonmail.com";
     github = "AndersonTorres";
@@ -400,6 +405,11 @@
     email = "aszlig@nix.build";
     github = "aszlig";
     name = "aszlig";
+  };
+  atnnn = {
+    email = "etienne@atnnn.com";
+    github = "atnnn";
+    name = "Etienne Laurin";
   };
   auntie = {
     email = "auntieNeo@gmail.com";
@@ -1319,6 +1329,11 @@
     github = "ellis";
     name = "Ellis Whitehead";
   };
+  elohmeier = {
+    email = "elo-nixos@nerdworks.de";
+    github = "elohmeier";
+    name = "Enno Lohmeier";
+  };
   elseym = {
     email = "elseym@me.com";
     github = "elseym";
@@ -1889,6 +1904,11 @@
     github = "ironpinguin";
     name = "Michele Catalano";
   };
+  ivan = {
+    email = "ivan@ludios.org";
+    github = "ivan";
+    name = "Ivan Kozik";
+  };
   ivan-tkatchev = {
     email = "tkatchev@gmail.com";
     name = "Ivan Tkatchev";
@@ -1917,6 +1937,11 @@
     email = "ars.seroka@gmail.com";
     github = "jagajaga";
     name = "Arseniy Seroka";
+  };
+  jakelogemann = {
+    email = "jake.logemann@gmail.com";
+    github = "jakelogemann";
+    name = "Jake Logemann";
   };
   jammerful = {
     email = "jammerful@gmail.com";
@@ -2051,6 +2076,11 @@
     email = "jaakko.luttinen@iki.fi";
     github = "jluttine";
     name = "Jaakko Luttinen";
+  };
+  jmagnusj = {
+    email = "jmagnusj@gmail.com";
+    github = "magnusjonsson";
+    name = "Johan Magnus Jonsson";
   };
   jmettes = {
     email = "jonathan@jmettes.com";
@@ -2458,6 +2488,11 @@
     email = "linusarver@gmail.com";
     github = "listx";
     name = "Linus Arver";
+  };
+  lionello = {
+    email = "lio@lunesu.com";
+    github = "lionello";
+    name = "Lionello Lunesu";
   };
   lluchs = {
     email = "lukas.werling@gmail.com";
@@ -3404,6 +3439,11 @@
     github = "pkmx";
     name = "Chih-Mao Chen";
   };
+  plchldr = {
+    email = "mail@oddco.de";
+    github = "plchldr";
+    name = "Jonas Beyer";
+  };
   plcplc = {
     email = "plcplc@gmail.com";
     github = "plcplc";
@@ -3856,6 +3896,11 @@
     github = "sboosali";
     name = "Sam Boosalis";
   };
+  scalavision = {
+    email = "scalavision@gmail.com";
+    github = "scalavision";
+    name = "Tom Sorlie";
+  };
   schmitthenner = {
     email = "development@schmitthenner.eu";
     github = "fkz";
@@ -3924,6 +3969,11 @@
     email = "sebastian.jordan.mail@googlemail.com";
     github = "seppeljordan";
     name = "Sebastian Jordan";
+  };
+  seqizz = {
+    email = "seqizz@gmail.com";
+    github = "seqizz";
+    name = "Gurkan Gur";
   };
   sfrijters = {
     email = "sfrijters@gmail.com";
@@ -4257,6 +4307,11 @@
     email = "kim.lindberger@gmail.com";
     github = "talyz";
     name = "Kim Lindberger";
+  };
+  taneb = {
+    email = "nvd1234@gmail.com";
+    github = "Taneb";
+    name = "Nathan van Doorn";
   };
   tari = {
     email = "peter@taricorp.net";

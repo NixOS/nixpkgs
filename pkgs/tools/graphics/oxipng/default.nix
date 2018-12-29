@@ -1,17 +1,17 @@
 { stdenv, fetchFromGitHub, rustPlatform }:
 
 rustPlatform.buildRustPackage rec {
-  version = "2.1.6";
+  version = "2.1.8";
   name = "oxipng-${version}";
 
   src = fetchFromGitHub {
     owner = "shssoichiro";
     repo = "oxipng";
     rev = "v${version}";
-    sha256 = "0n3v2dxybfkf07hb4p2hbhhkwx907b85wzj8wa4whwil89igyrdm";
+    sha256 = "18ld65vm58s6x918g6bhfkrg7lw2lca8daidv88ff14wm5khjvik";
   };
 
-  cargoSha256 = "1ycacwhwbn27i81jpp55m1446b9a50knlqv0kzkjcv8yf27213y9";
+  cargoSha256 = "034i8hgi0zgv085bimlja1hl3nd096rqpi167pw6rda5aj18c625";
 
   meta = with stdenv.lib; {
     homepage = https://github.com/shssoichiro/oxipng;

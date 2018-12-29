@@ -65,7 +65,7 @@ in rec {
 
   mx = stdenv.mkDerivation rec {
     version = "5.192.0";
-    name = "mx";
+    pname = "mx";
     src = fetchFromGitHub {
       owner  = "graalvm";
       repo   = "mx";

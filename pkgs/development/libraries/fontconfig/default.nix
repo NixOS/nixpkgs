@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   outputs = [ "bin" "dev" "lib" "out" ]; # $out contains all the config
 
   propagatedBuildInputs = [ freetype ];
-  nativeBuildInputs = [ pkgconfig gperf ];
+  nativeBuildInputs = [ pkgconfig gperf libxslt ];
   buildInputs = [ expat ];
 
   configureFlags = [
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     cd "$out/etc/fonts"
-    "${libxslt.bin}/bin/xsltproc" --stringparam fontDirectories "${dejavu_fonts.minimal}" \
+    xsltproc --stringparam fontDirectories "${dejavu_fonts.minimal}" \
       --stringparam fontconfigConfigVersion "${configVersion}" \
       --path $out/share/xml/fontconfig \
       ${./make-fonts-conf.xsl} $out/etc/fonts/fonts.conf \
@@ -77,4 +77,3 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.vcunat ];
   };
 }
-

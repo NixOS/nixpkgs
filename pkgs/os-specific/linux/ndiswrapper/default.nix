@@ -34,8 +34,8 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "pgiri";
     repo = "ndiswrapper";
-    rev = "f4d16afb29ab04408d02e38d4ea1148807778e21";
-    sha256 = "0iaw0vhchmqf1yh14v4a6whnbg4sx1hag8a4hrsh4fzgw9fx0ij4";
+    rev = "5e29f6a9d41df949b435066c173e3b1947f179d3";
+    sha256 = "0sprrmxxkf170bmh1nz9xw00gs89dddr84djlf666bn5bhy6jffi";
   };
 
   buildInputs = [ perl libelf ];

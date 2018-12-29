@@ -1,13 +1,14 @@
-{ stdenv, fetchurl, gtk-doc, pkgconfig, gobjectIntrospection, intltool
-, libgudev, polkit, appstream-glib, gusb, sqlite, libarchive, glib-networking
+{ stdenv, fetchurl, gtk-doc, pkgconfig, gobject-introspection, intltool
+, libgudev, polkit, libxmlb, gusb, sqlite, libarchive, glib-networking
 , libsoup, help2man, gpgme, libxslt, elfutils, libsmbios, efivar, glibcLocales
 , gnu-efi, libyaml, valgrind, meson, libuuid, colord, docbook_xml_dtd_43, docbook_xsl
 , ninja, gcab, gnutls, python3, wrapGAppsHook, json-glib, bash-completion
 , shared-mime-info, umockdev, vala, makeFontsConf, freefont_ttf
+, cairo, freetype, fontconfig, pango
 }:
 let
   # Updating? Keep $out/etc synchronized with passthru.filesInstalledToEtc
-  version = "1.1.2";
+  version = "1.2.1";
   python = python3.withPackages (p: with p; [ pygobject3 pycairo pillow ]);
   installedTestsPython = python3.withPackages (p: with p; [ pygobject3 requests ]);
 
@@ -18,25 +19,26 @@ in stdenv.mkDerivation {
   name = "fwupd-${version}";
   src = fetchurl {
     url = "https://people.freedesktop.org/~hughsient/releases/fwupd-${version}.tar.xz";
-    sha256 = "1qhg8h1dv9k3i0429j0wl37rpxfbahggfd1j8s7a4cw83k42cgfs";
+    sha256 = "126b3lsh4gkyajsqm2c8l6wqr4dd7m26krz2527khmlps0lxdhg1";
   };
 
   outputs = [ "out" "lib" "dev" "devdoc" "man" "installedTests" ];
 
   nativeBuildInputs = [
-    meson ninja gtk-doc pkgconfig gobjectIntrospection intltool glibcLocales shared-mime-info
+    meson ninja gtk-doc pkgconfig gobject-introspection intltool glibcLocales shared-mime-info
     valgrind gcab docbook_xml_dtd_43 docbook_xsl help2man libxslt python wrapGAppsHook vala
   ];
   buildInputs = [
-    polkit appstream-glib gusb sqlite libarchive libsoup elfutils libsmbios gnu-efi libyaml
+    polkit libxmlb gusb sqlite libarchive libsoup elfutils libsmbios gnu-efi libyaml
     libgudev colord gpgme libuuid gnutls glib-networking efivar json-glib umockdev
-    bash-completion
+    bash-completion cairo freetype fontconfig pango
   ];
 
   LC_ALL = "en_US.UTF-8"; # For po/make-images
 
   patches = [
     ./fix-paths.patch
+    ./add-option-for-installation-sysconfdir.patch
   ];
 
   postPatch = ''
@@ -63,6 +65,8 @@ in stdenv.mkDerivation {
     "-Defi-ldsdir=${gnu-efi}/lib"
     "-Defi-includedir=${gnu-efi}/include/efi"
     "--localstatedir=/var"
+    "--sysconfdir=/etc"
+    "-Dsysconfdir_install=${placeholder "out"}/etc"
   ];
 
   # TODO: We need to be able to override the directory flags from meson setup hook
@@ -100,7 +104,7 @@ in stdenv.mkDerivation {
       "fwupd/remotes.d/lvfs.conf"
       "fwupd/remotes.d/vendor.conf"
       "pki/fwupd/GPG-KEY-Hughski-Limited"
-      "pki/fwupd/GPG-KEY-Linux-Foundation-Metadata"
+      "pki/fwupd/GPG-KEY-Linux-Foundation-Firmware"
       "pki/fwupd/GPG-KEY-Linux-Vendor-Firmware-Service"
       "pki/fwupd/LVFS-CA.pem"
       "pki/fwupd-metadata/GPG-KEY-Linux-Foundation-Metadata"

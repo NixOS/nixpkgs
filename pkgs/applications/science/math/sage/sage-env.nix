@@ -44,6 +44,7 @@
 , zlib
 , gsl
 , ntl
+, jdk
 }:
 
 # This generates a `sage-env` shell file that will be sourced by sage on startup.
@@ -92,6 +93,7 @@ let
     lcalc
     rubiks
     flintqs
+    jdk # only needed for `jmol` which may be replaced in the future
   ]
   ));
 in

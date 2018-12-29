@@ -25,7 +25,7 @@ mkDerivation rec {
     patchShebangs .
     sed -i -e '/unix:!macx:INSTALLROOT += \/usr/d' \
             -e "s@\$\$LIBSDIR/qt4/plugins@''${qtPluginPrefix}@" \
-            -e "s@/etc/udev/rules.d@''${out}/lib/udev@" \
+            -e "s@/etc/udev/rules.d@''${out}/lib/udev/rules.d@" \
       variables.pri
   '';
 

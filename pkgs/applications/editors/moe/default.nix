@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
       completion, directory browser, duplicate removal from prompt histories,
       delimiter matching, text conversion from/to UTF-8, romanization, etc.
     '';
-    homepage = http://www.gnu.org/software/moe/;
+    homepage = https://www.gnu.org/software/moe/;
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.unix;

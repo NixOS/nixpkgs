@@ -1,15 +1,15 @@
 { stdenv, fetchurl, pkgconfig, atk, cairo, glib, gtk3, pango, vala_0_40
-, libxml2, perl, intltool, gettext, gnome3, gobjectIntrospection, dbus, xvfb_run, shared-mime-info }:
+, libxml2, perl, intltool, gettext, gnome3, gobject-introspection, dbus, xvfb_run, shared-mime-info }:
 
 let
   checkInputs = [ xvfb_run dbus ];
 in stdenv.mkDerivation rec {
   name = "gtksourceview-${version}";
-  version = "3.24.6";
+  version = "3.24.9";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gtksourceview/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "7aa6bdfebcdc73a763dddeaa42f190c40835e6f8495bb9eb8f78587e2577c188";
+    sha256 = "1hh7brcvpip96mkf9460ksy2qpx2pwynwd0634rx78z6afj7d7b9";
   };
 
   propagatedBuildInputs = [
@@ -21,7 +21,7 @@ in stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ pkgconfig intltool perl gobjectIntrospection vala_0_40 ]
+  nativeBuildInputs = [ pkgconfig intltool perl gobject-introspection vala_0_40 ]
     ++ stdenv.lib.optionals doCheck checkInputs;
 
   buildInputs = [ atk cairo glib pango libxml2 gettext ];

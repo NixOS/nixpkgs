@@ -4055,7 +4055,7 @@ let
       \$(BASEEXT)\$(OBJ_EXT): \$(BASEEXT).xsi
 
       \$(BASEEXT).xsi: \$(DBI_DRIVER_XST) $autodir/Driver_xst.h
-        \$(PERL) -p -e "s/~DRIVER~/\$(BASEEXT)/g" \$(DBI_DRIVER_XST) > \$(BASEEXT).xsi
+      ''\t\$(PERL) -p -e "s/~DRIVER~/\$(BASEEXT)/g" \$(DBI_DRIVER_XST) > \$(BASEEXT).xsi
 
       # ---
       ';
@@ -7462,6 +7462,21 @@ let
     };
   };
 
+  Imager = buildPerlPackage rec {
+    name = "Imager-1.006";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/T/TO/TONYC/${name}.tar.gz";
+      sha256 = "c1e434a4de6250e3b229aa74aa653e56c38f981864f71a975366c50559c9d52b";
+    };
+    buildInputs = [ ExtUtilsPkgConfig pkgs.freetype pkgs.fontconfig pkgs.libjpeg pkgs.libpng ];
+    makeMakerFlags = "--incpath ${pkgs.libjpeg.dev}/include --libpath ${pkgs.libjpeg.out}/lib --incpath ${pkgs.libpng.dev}/include --libpath ${pkgs.libpng.out}/lib";
+    meta = {
+      homepage = http://imager.perl.org/;
+      description = "Perl extension for Generating 24 bit Images";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   ImageInfo = buildPerlPackage rec {
     name = "Image-Info-1.41";
     src = fetchurl {
@@ -8880,7 +8895,7 @@ let
     meta = with stdenv.lib; {
       description = "The World-Wide Web library for Perl";
       license = with licenses; [ artistic1 gpl1Plus ];
-      platforms = platforms.unix;
+      platforms = platforms.unix ++ platforms.windows;
     };
     buildInputs = [ TestFatal TestNeeds TestRequiresInternet ];
   };
@@ -9099,6 +9114,19 @@ let
     src = fetchurl {
       url = mirror://cpan/authors/id/P/PD/PDWARREN/Mail-RFC822-Address-0.3.tar.gz;
       sha256 = "351ef4104ecb675ecae69008243fae8243d1a7e53c681eeb759e7b781684c8a7";
+    };
+  };
+
+  MailSender = buildPerlPackage rec {
+    name = "Mail-Sender-0.903";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/C/CA/CAPOEIRAB/${name}.tar.gz";
+      sha256 = "4413eb49f520a8318151811ccb05a8d542973aada20aa503ad32f9ffc98a39bf";
+    };
+    meta = {
+      homepage = https://github.com/Perl-Email-Project/Mail-Sender;
+      description = "(DEPRECATED) module for sending mails with attachments through an SMTP server";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
 
@@ -14081,6 +14109,39 @@ let
     buildInputs = [ TestToolbox ];
   };
 
+  strip-nondeterminism = buildPerlPackage rec {
+    name = "strip-nondeterminism-${version}";
+    version = "1.0.0";
+
+    outputs = [ "out" "dev" ]; # no "devdoc"
+
+    src = pkgs.fetchFromGitLab {
+      owner = "reproducible-builds";
+      repo = "strip-nondeterminism";
+      domain = "salsa.debian.org";
+      rev = version;
+      sha256 = "1pwar1fyadqxmvb7x4zyw2iawbi5lsfjcg0ps9n9rdjb6an7vv64";
+    };
+
+    # stray test failure
+    doCheck = false;
+
+    buildInputs = [ ArchiveZip ArchiveCpio pkgs.file ];
+
+    perlPostHook = ''
+      # we don’t need the debhelper script
+      rm $out/bin/dh_strip_nondeterminism
+      rm $out/share/man/man1/dh_strip_nondeterminism.1.gz
+    '';
+
+    meta = with stdenv.lib; {
+      description = "A Perl module for stripping bits of non-deterministic information";
+      license = licenses.gpl3;
+      platforms = platforms.all;
+      maintainers = with maintainers; [ pSub ];
+    };
+  };
+
   SubExporter = buildPerlPackage {
     name = "Sub-Exporter-0.987";
     src = fetchurl {
@@ -14367,12 +14428,12 @@ let
   };
 
   SysVirt = buildPerlModule rec {
-    version = "4.7.0";
+    version = "4.10.0";
     name = "Sys-Virt-${version}";
     src = assert version == pkgs.libvirt.version; pkgs.fetchgit {
       url = git://libvirt.org/libvirt-perl.git;
       rev = "v${version}";
-      sha256 = "14q8s6k3d9a1qh6sh618qp30ib4p9qma2z4p2ynyh223i4w3virg";
+      sha256 = "1dfwq4d46kx18lz27rb3jkxb0g1hirpq70vr4572sc38rybpq59v";
     };
     nativeBuildInputs = [ pkgs.pkgconfig ];
     buildInputs = [ pkgs.libvirt CPANChanges TestPod TestPodCoverage XMLXPath ];

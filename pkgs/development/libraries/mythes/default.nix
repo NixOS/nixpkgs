@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, hunspell, pkgconfig, perl }:
+{ stdenv, fetchurl, hunspell, ncurses, pkgconfig, perl }:
 
 stdenv.mkDerivation rec {
   name = "mythes-1.2.4";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ hunspell ];
-  nativeBuildInputs = [ pkgconfig perl ];
+  nativeBuildInputs = [ ncurses pkgconfig perl ];
 
   meta = {
     homepage = http://hunspell.sourceforge.net/;

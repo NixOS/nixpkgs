@@ -10,7 +10,7 @@
 
  stdenv.mkDerivation rec {
   version = "0.9.0";
-  name = "cadence";
+  pname = "cadence";
 
   src = fetchzip {
     url = "https://github.com/falkTX/Cadence/archive/v${version}.tar.gz";

@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, makeWrapper, gnused, db, openssl, cyrus_sasl, libnsl
-, coreutils, findutils, gnugrep, gawk, icu, pcre
+, coreutils, findutils, gnugrep, gawk, icu, pcre, m4
 , withLDAP ? true, openldap
 , withPgSQL ? false, postgresql
 , withMySQL ? false, mysql
@@ -25,14 +25,14 @@ in stdenv.mkDerivation rec {
 
   name = "postfix-${version}";
 
-  version = "3.3.1";
+  version = "3.3.2";
 
   src = fetchurl {
     url = "ftp://ftp.cs.uu.nl/mirror/postfix/postfix-release/official/${name}.tar.gz";
-    sha256 = "0fvymsklp32njsv0ngc1f45j01kcy61r5in99g5palibwkd19xal";
+    sha256 = "0nxkszdgs6fs86j6w1lf3vhxvjh1hw2jmrii5icqx9a9xqgg74rw";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper m4 ];
   buildInputs = [ db openssl cyrus_sasl icu libnsl pcre ]
                 ++ lib.optional withPgSQL postgresql
                 ++ lib.optional withMySQL mysql.connector-c

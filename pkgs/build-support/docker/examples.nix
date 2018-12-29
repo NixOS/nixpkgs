@@ -156,5 +156,24 @@ rec {
     name = "layered-image";
     tag = "latest";
     config.Cmd = [ "${pkgs.hello}/bin/hello" ];
+    contents = [ pkgs.hello pkgs.bash pkgs.coreutils ];
+  };
+
+  # 11. Create an image on top of a layered image
+  layered-on-top = pkgs.dockerTools.buildImage {
+    name = "layered-on-top";
+    tag = "latest";
+    fromImage = layered-image;
+    extraCommands = ''
+      mkdir ./example-output
+      chmod 777 ./example-output
+    '';
+    config = {
+      Env = [ "PATH=${pkgs.coreutils}/bin/" ];
+      WorkingDir = "/example-output";
+      Cmd = [
+        "${pkgs.bash}/bin/bash" "-c" "echo hello > foo; cat foo"
+      ];
+    };
   };
 }

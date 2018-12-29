@@ -1,5 +1,6 @@
 [
   "alloy"
+, "azure-cli"
 , "bower"
 , "coffee-script"
 , "grunt-cli"

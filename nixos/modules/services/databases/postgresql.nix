@@ -238,6 +238,9 @@ in
             User = "postgres";
             Group = "postgres";
             PermissionsStartOnly = true;
+            Type = if lib.versionAtLeast cfg.package.version "9.6"
+                   then "notify"
+                   else "simple";
 
             # Shut down Postgres using SIGINT ("Fast Shutdown mode").  See
             # http://www.postgresql.org/docs/current/static/server-shutdown.html

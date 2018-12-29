@@ -2,7 +2,7 @@
 , responses, mock, pytestcov, pytest, pytestcache, pytestpep8, coverage, six }:
 
 buildPythonPackage rec {
-  version = "0.9.2";
+  version = "0.9.3";
   pname = "mwclient";
   name = "${pname}-${version}";
 
@@ -10,7 +10,7 @@ buildPythonPackage rec {
     owner = "mwclient";
     repo = "mwclient";
     rev = "v${version}";
-    sha256 = "0553pa5gm74k0lsrbcw5ic8jypnh5c3p58i50kzjvgcqz4frsafi";
+    sha256 = "1kbrmq8zli2j93vmc2887bs7mqr4q1n908nbi1jjcci5v4cd4cqw";
   };
 
   buildInputs = [ mock responses pytestcov pytest pytestcache pytestpep8 coverage ];

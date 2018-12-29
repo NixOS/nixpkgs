@@ -8,7 +8,7 @@ if md5 != "" then
   throw "fetchegg does not support md5 anymore, please use sha256"
 else
 stdenvNoCC.mkDerivation {
-  name = "chicken-${name}-export";
+  name = "chicken-${name}-export-${version}";
   builder = ./builder.sh;
   nativeBuildInputs = [ chicken ];
 

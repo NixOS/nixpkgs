@@ -7,8 +7,19 @@ let
   swayPackage = cfg.package;
 
   swayWrapped = pkgs.writeShellScriptBin "sway" ''
-    ${cfg.extraSessionCommands}
-    exec ${pkgs.dbus.dbus-launch} --exit-with-session ${swayPackage}/bin/sway
+    set -o errexit
+
+    if [ ! "$_SWAY_WRAPPER_ALREADY_EXECUTED" ]; then
+      export _SWAY_WRAPPER_ALREADY_EXECUTED=1
+      ${cfg.extraSessionCommands}
+    fi
+
+    if [ "$DBUS_SESSION_BUS_ADDRESS" ]; then
+      export DBUS_SESSION_BUS_ADDRESS
+      exec ${swayPackage}/bin/sway "$@"
+    else
+      exec ${pkgs.dbus}/bin/dbus-run-session ${swayPackage}/bin/sway "$@"
+    fi
   '';
   swayJoined = pkgs.symlinkJoin {
     name = "sway-joined";
