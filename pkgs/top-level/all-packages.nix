@@ -5905,6 +5905,8 @@ in
 
   txtw = callPackage ../tools/misc/txtw { };
 
+  u2f-udev-rules = callPackage ../tools/security/u2f-udev-rules { };
+
   u9fs = callPackage ../servers/u9fs { };
 
   ua = callPackage ../tools/networking/ua { };

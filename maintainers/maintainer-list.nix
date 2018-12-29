@@ -510,6 +510,11 @@
     github = "bdimcheff";
     name = "Brandon Dimcheff";
   };
+  benbals = {
+    name = "Ben Justus Bals";
+    github = "BenBals";
+    email = "benbals@posteo.de";
+  };
   bendlas = {
     email = "herwig@bendlas.net";
     github = "bendlas";
