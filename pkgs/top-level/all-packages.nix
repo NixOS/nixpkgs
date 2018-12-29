@@ -20894,6 +20894,8 @@ in
     };
   };
 
+  riko4 = callPackage ../games/riko4 { };
+
   rili = callPackage ../games/rili { };
 
   rimshot = callPackage ../games/rimshot { love = love_0_7; };
