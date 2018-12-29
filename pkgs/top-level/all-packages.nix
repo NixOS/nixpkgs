@@ -9535,6 +9535,8 @@ in
 
   curlcpp = callPackage ../development/libraries/curlcpp { };
 
+  curlpp = callPackage ../development/libraries/curlpp { };
+
   cutee = callPackage ../development/libraries/cutee { };
 
   cutelyst = libsForQt5.callPackage ../development/libraries/cutelyst { };
