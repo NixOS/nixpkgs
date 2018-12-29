@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage = https://strace.io/;
     description = "A system call tracer for Linux";
-    license = licenses.bsd3;
+    license =  with licenses; [ lgpl21Plus gpl2Plus ]; # gpl2Plus is for the test suite
     platforms = platforms.linux;
     maintainers = with maintainers; [ jgeerds globin ];
   };
