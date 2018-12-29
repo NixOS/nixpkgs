@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, pkgconfig, libsoup, webkit, gtk3, glib-networking
-, gsettings-desktop-schemas, makeWrapper
+, gsettings-desktop-schemas, wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
@@ -13,16 +13,10 @@ stdenv.mkDerivation rec {
     sha256 = "1qg18z2gnsli9qgrqfhqfrsi6g9mcgr90w8yab28nxrq4aha6brf";
   };
 
-  nativeBuildInputs = [ makeWrapper pkgconfig ];
-  buildInputs = [ gtk3 libsoup webkit gsettings-desktop-schemas ];
+  nativeBuildInputs = [ wrapGAppsHook pkgconfig ];
+  buildInputs = [ gtk3 libsoup webkit glib-networking gsettings-desktop-schemas ];
 
-  makeFlags = [ "PREFIX=$(out)" ];
-
-  preFixup = ''
-    wrapProgram "$out/bin/vimb" \
-      --prefix GIO_EXTRA_MODULES : "${glib-networking.out}/lib/gio/modules" \
-      --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
-  '';
+  makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
   meta = {
     description = "A Vim-like browser";
