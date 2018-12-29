@@ -4,7 +4,7 @@
 , tag ? "" # tag added to the package name
 , static ? false # link statically
 
-, stdenv, fetchurl, cmake, makeWrapper, dconf
+, stdenv, fetchFromGitHub, cmake, makeWrapper, dconf
 , qtbase, qtscript
 , phonon, libdbusmenu, qca-qt5
 
@@ -30,12 +30,17 @@ assert !buildClient -> !withKDE; # KDE is used by the client only
 
 let
   edf = flag: feature: [("-D" + feature + (if flag then "=ON" else "=OFF"))];
-  source = import ./source.nix { inherit fetchurl; };
 
 in with stdenv; mkDerivation rec {
-  inherit (source) src version;
-
   name = "quassel${tag}-${version}";
+  version = "0.13.0";
+
+  src = fetchFromGitHub {
+    owner = "quassel";
+    repo = "quassel";
+    rev = version;
+    sha256 = "1jnmc0xky91h81xjjgwg5zylfns0f1pvjy2rv39wlah890k143zr";
+  };
 
   enableParallelBuilding = true;
 
@@ -71,8 +76,6 @@ in with stdenv; mkDerivation rec {
           --prefix GIO_EXTRA_MODULES : "${dconf}/lib/gio/modules"
     '';
 
-  patches = [ ./qt5_11.patch ];
-
   meta = with stdenv.lib; {
     homepage = https://quassel-irc.org/;
     description = "Qt/KDE distributed IRC client suppporting a remote daemon";
@@ -83,7 +86,7 @@ in with stdenv; mkDerivation rec {
       combination of screen and a text-based IRC client such
       as WeeChat, but graphical (based on Qt4/KDE4 or Qt5/KF5).
     '';
-    license = stdenv.lib.licenses.gpl3;
+    license = licenses.gpl3;
     maintainers = with maintainers; [ phreedom ttuegel ];
     repositories.git = https://github.com/quassel/quassel.git;
     inherit (qtbase.meta) platforms;
