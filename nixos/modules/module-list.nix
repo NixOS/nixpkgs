@@ -710,7 +710,6 @@
   ./services/web-apps/atlassian/confluence.nix
   ./services/web-apps/atlassian/crowd.nix
   ./services/web-apps/atlassian/jira.nix
-  ./services/web-apps/codimd.nix
   ./services/web-apps/frab.nix
   ./services/web-apps/mattermost.nix
   ./services/web-apps/nextcloud.nix
