@@ -1,6 +1,7 @@
 # Generic builder.
 
 { lib
+, buildPackages
 , config
 , python
 , wrapPython
@@ -100,7 +101,7 @@ let self = toPythonModule (python.stdenv.mkDerivation (builtins.removeAttrs attr
     # Check if we have two packages with the same name in the closure and fail.
     # If this happens, something went wrong with the dependencies specs.
     # Intentionally kept in a subdirectory, see catch_conflicts/README.md.
-    ${python.interpreter} ${./catch_conflicts}/catch_conflicts.py
+    ${buildPackages.python.interpreter} ${./catch_conflicts}/catch_conflicts.py
   '' + attrs.postFixup or '''';
 
   meta = {
