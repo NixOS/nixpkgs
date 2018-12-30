@@ -2,13 +2,14 @@
 , cmake }:
 
 stdenv.mkDerivation rec {
-  name = "exiv2-0.27-rc2";
+  name = "exiv2-${version}";
+  version = "0.27";
 
   src = fetchFromGitHub rec {
     owner = "exiv2";
     repo  = "exiv2";
-    rev = "0.27-RC2";
-    sha256 = "04zcfspdg5ypyky3g8p1mxbfy8i083iqbaihnjk6cqnhf6w6pq6r";
+    rev = version;
+    sha256 = "07gagwrankj9igjag95qhwn2cbj5g8n0m26xm9v7cwp0h16xr4a3";
   };
 
   outputs = [ "out" "dev" ];
