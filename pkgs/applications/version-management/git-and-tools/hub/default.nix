@@ -26,7 +26,7 @@ buildGoPackage rec {
   postInstall = ''
     cd go/src/${goPackagePath}
     install -D etc/hub.zsh_completion "$bin/share/zsh/site-functions/_hub"
-    install -D etc/hub.bash_completion.sh "$bin/etc/bash_completion.d/hub.bash_completion.sh"
+    install -D etc/hub.bash_completion.sh "$bin/share/bash-completion/completions/hub"
     install -D etc/hub.fish_completion  "$bin/share/fish/vendor_completions.d/hub.fish"
 
     make man-pages
