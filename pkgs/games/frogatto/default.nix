@@ -15,9 +15,9 @@ let
     genericName = "frogatto";
     categories = "Application;Game;ArcadeGame;";
   };
+  version = "unstable-2018-12-18";
 in buildEnv rec {
   name = "frogatto-${version}";
-  version = "unstable-2018-12-18";
 
   buildInputs = [ makeWrapper ];
   paths = [ engine data desktopItem ];
