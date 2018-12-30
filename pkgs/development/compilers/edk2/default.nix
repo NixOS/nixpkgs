@@ -1,16 +1,25 @@
-{ stdenv, fetchFromGitHub, fetchpatch, libuuid, python2, iasl }:
+{ stdenv, buildPackages, targetPlatform, buildPlatform, fetchFromGitHub, fetchpatch, libuuid, python2 }:
 
 let
-  pythonEnv = python2.withPackages(ps: [ps.tkinter]);
+# Given a stdenv, returns the edk2-valid arch.
+envToArch = env:
+  if env.isi686 then
+    "IA32"
+  else if env.isx86_64 then
+    "X64"
+  else if env.isAarch64 then
+    "AARCH64"
+  else if env.isAarch32 then
+    "ARM"
+  else
+    throw "Unsupported architecture" 
+;
 
-targetArch = if stdenv.isi686 then
-  "IA32"
-else if stdenv.isx86_64 then
-  "X64"
-else if stdenv.isAarch64 then
-  "AARCH64"
-else
-  throw "Unsupported architecture";
+buildPythonEnv = buildPackages.python2.withPackages(ps: [ps.tkinter]);
+pythonEnv = python2.withPackages(ps: [ps.tkinter]);
+
+targetArch = envToArch targetPlatform;
+hostArch = envToArch buildPlatform;
 
 edk2 = stdenv.mkDerivation {
   name = "edk2-2017-12-05";
@@ -30,9 +39,16 @@ edk2 = stdenv.mkDerivation {
     })
   ];
 
-  buildInputs = [ libuuid pythonEnv ];
+  buildInputs = [ libuuid ];
 
-  makeFlags = "-C BaseTools";
+  depsBuildBuild = [ buildPackages.stdenv.cc buildPackages.libuuid buildPythonEnv ];
+
+  makeFlags = [
+    "-C" "BaseTools"
+    # HOST_ARCH is detected through uname, better specify it.
+    "HOST_ARCH=${hostArch}"
+    "ARCH=${targetArch}"
+  ];
 
   hardeningDisable = [ "format" "fortify" ];
 
@@ -50,13 +66,17 @@ edk2 = stdenv.mkDerivation {
     homepage = https://sourceforge.net/projects/edk2/;
     license = stdenv.lib.licenses.bsd2;
     branch = "UDK2017";
-    platforms = ["x86_64-linux" "i686-linux" "aarch64-linux"];
+    platforms = ["x86_64-linux" "i686-linux" "aarch64-linux" "armv7l-linux"];
   };
 
   passthru = {
+    inherit targetArch hostArch;
     setup = projectDscPath: attrs: {
-      buildInputs = [ pythonEnv ] ++
-        stdenv.lib.optionals (attrs ? buildInputs) attrs.buildInputs;
+      buildInputs = stdenv.lib.optionals (attrs ? buildInputs) attrs.buildInputs;
+      nativeBuildInputs = [ buildPythonEnv ] ++
+        stdenv.lib.optionals (attrs ? nativeBuildInputs) attrs.nativeBuildInputs;
+
+      depsBuildBuild = [ buildPackages.iasl ];
 
       configurePhase = ''
         mkdir -v Conf
@@ -72,7 +92,7 @@ edk2 = stdenv.mkDerivation {
         sed -i Conf/tools_def.txt \
           -e 's|DEFINE GCC48_IA32_PREFIX       = /usr/bin/|DEFINE GCC48_IA32_PREFIX       = ""|' \
           -e 's|DEFINE GCC48_X64_PREFIX        = /usr/bin/|DEFINE GCC48_X64_PREFIX        = ""|' \
-          -e 's|DEFINE UNIX_IASL_BIN           = /usr/bin/iasl|DEFINE UNIX_IASL_BIN           = ${iasl}/bin/iasl|'
+          -e 's|DEFINE UNIX_IASL_BIN           = /usr/bin/iasl|DEFINE UNIX_IASL_BIN           = ${buildPackages.iasl}/bin/iasl|'
 
         export WORKSPACE="$PWD"
         export EFI_SOURCE="$PWD/EdkCompatibilityPkg"
@@ -81,6 +101,8 @@ edk2 = stdenv.mkDerivation {
         . ${edk2}/edksetup.sh BaseTools
       '';
 
+      # This probably is not enough for most builds as it won't handle
+      # setting targets or other needed flags to the `build` tool.
       buildPhase = "
         build
       ";
