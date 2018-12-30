@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out/bin $out/lib/${name}/ebin
     cp ebin/* $out/lib/${name}/ebin
-    cp -R icons textures shaders plugins $out/lib/$name
+    cp -R textures shaders plugins $out/lib/$name
     cat << EOF > $out/bin/wings
     #!/bin/sh
     ${erlang}/bin/erl \
