@@ -28,7 +28,9 @@ in buildEnv rec {
   in ''
     wrapProgram $out/bin/frogatto \
       --run "cd $out/share/frogatto"
-    cp -r ${desktopItem}/share/applications $out/share/
+
+    mkdir -p $out/share/applications
+    ln -s ${desktopItem}/share/applications/* $out/share/applications/
   '';
 
   meta = with stdenv.lib; {
