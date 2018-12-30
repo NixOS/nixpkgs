@@ -1551,6 +1551,10 @@ in {
 
   libais = callPackage ../development/python-modules/libais { };
 
+  libfdt = disabledIf isPy3k (toPythonModule (pkgs.dtc.override {
+    python2 = python;
+  }));
+
   libtmux = callPackage ../development/python-modules/libtmux { };
 
   libusb1 = callPackage ../development/python-modules/libusb1 { inherit (pkgs) libusb1; };
