@@ -232,9 +232,6 @@ in
         wantedBy = [ "multi-user.target" ];
 
         preStart = ''
-          mkdir -p /run/nslcd
-          rm -f /run/nslcd/nslcd.pid;
-          chown nslcd.nslcd /run/nslcd
           ${optionalString (cfg.bind.distinguishedName != "") ''
             if test -s "${cfg.bind.password}" ; then
               ln -sfT "${cfg.bind.password}" /run/nslcd/bindpw
@@ -254,6 +251,7 @@ in
           Type = "forking";
           PIDFile = "/run/nslcd/nslcd.pid";
           Restart = "always";
+          RuntimeDirectory = [ "nslcd" ];
         };
       };
 
