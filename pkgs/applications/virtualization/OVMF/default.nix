@@ -1,19 +1,24 @@
 { stdenv, lib, edk2, nasm, iasl, seabios, openssl, secureBoot ? false }:
 
 let
-
   projectDscPath = if stdenv.isi686 then
     "OvmfPkg/OvmfPkgIa32.dsc"
   else if stdenv.isx86_64 then
     "OvmfPkg/OvmfPkgX64.dsc"
-  else if stdenv.isAarch64 then
+  else if stdenv.isAarch64 || stdenv.isAarch32 then
     "ArmVirtPkg/ArmVirtQemu.dsc"
   else
     throw "Unsupported architecture";
 
+  crossCompiling = stdenv.buildPlatform != stdenv.hostPlatform;
+
   version = (builtins.parseDrvName edk2.name).version;
 
-  src = edk2.src;
+  inherit (edk2) src targetArch;
+
+  buildFlags = if stdenv.isAarch64 then ""
+    else if seabios == null then ''${lib.optionalString secureBoot "-DSECURE_BOOT_ENABLE=TRUE"}''
+    else ''-D CSM_ENABLE -D FD_SIZE_2MB ${lib.optionalString secureBoot "-DSECURE_BOOT_ENABLE=TRUE"}'';
 in
 
 stdenv.mkDerivation (edk2.setup projectDscPath {
@@ -38,7 +43,7 @@ stdenv.mkDerivation (edk2.setup projectDscPath {
       ln -sv "$file" .
     done
 
-    ${if stdenv.isAarch64 then ''
+    ${if stdenv.isAarch64 || stdenv.isAarch32 then ''
       ln -sv ${src}/ArmPkg .
       ln -sv ${src}/ArmPlatformPkg .
       ln -sv ${src}/ArmVirtPkg .
@@ -58,15 +63,22 @@ stdenv.mkDerivation (edk2.setup projectDscPath {
     ''}
   '';
 
-  buildPhase = if stdenv.isAarch64 then ''
-      build -n $NIX_BUILD_CORES
-    '' else if seabios == null then ''
-      build -n $NIX_BUILD_CORES ${lib.optionalString secureBoot "-DSECURE_BOOT_ENABLE=TRUE"}
-    '' else ''
-      build -n $NIX_BUILD_CORES -D CSM_ENABLE -D FD_SIZE_2MB ${lib.optionalString secureBoot "-DSECURE_BOOT_ENABLE=TRUE"}
-    '';
+  buildPhase = lib.optionalString crossCompiling ''
+    # This is required, even though it is set in target.txt in edk2/default.nix.
+    export EDK2_TOOLCHAIN=GCC49
 
-  postFixup = if stdenv.isAarch64 then ''
+    # Configures for cross-compiling
+    export ''${EDK2_TOOLCHAIN}_${targetArch}_PREFIX=${stdenv.targetPlatform.config}-
+    export EDK2_HOST_ARCH=${targetArch}
+    '' + ''
+    build \
+      -n $NIX_BUILD_CORES \
+      ${buildFlags} \
+      -a ${targetArch} \
+      ${lib.optionalString crossCompiling "-t $EDK2_TOOLCHAIN"}
+  '';
+
+  postFixup = if stdenv.isAarch64 || stdenv.isAarch32 then ''
     mkdir -vp $fd/FV
     mkdir -vp $fd/AAVMF
     mv -v $out/FV/QEMU_{EFI,VARS}.fd $fd/FV
@@ -87,6 +99,6 @@ stdenv.mkDerivation (edk2.setup projectDscPath {
     description = "Sample UEFI firmware for QEMU and KVM";
     homepage = https://github.com/tianocore/tianocore.github.io/wiki/OVMF;
     license = stdenv.lib.licenses.bsd2;
-    platforms = ["x86_64-linux" "i686-linux" "aarch64-linux"];
+    platforms = ["x86_64-linux" "i686-linux" "aarch64-linux" "armv7l-linux"];
   };
 })
