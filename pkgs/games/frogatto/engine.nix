@@ -1,7 +1,6 @@
-{ stdenv, fetchFromGitHub, bash, which,
-  boost, SDL2, SDL2_image, SDL2_mixer, SDL2_ttf,
-  glew, zlib, icu, pkgconfig, cairo, libvpx,
-}:
+{ stdenv, fetchFromGitHub, bash, which
+, boost, SDL2, SDL2_image, SDL2_mixer, SDL2_ttf
+, glew, zlib, icu, pkgconfig, cairo, libvpx }:
 
 stdenv.mkDerivation rec {
   pname = "anura-engine";
