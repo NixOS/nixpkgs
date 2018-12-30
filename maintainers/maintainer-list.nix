@@ -1973,6 +1973,11 @@
     github = "jbgi";
     name = "Jean-Baptiste Giraudeau";
   };
+  jchw = {
+    email = "johnwchadwick@gmail.com";
+    github = "jchv";
+    name = "John Chadwick";
+  };
   jcumming = {
     email = "jack@mudshark.org";
     name = "Jack Cummings";
