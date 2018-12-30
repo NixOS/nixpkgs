@@ -17,7 +17,6 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    bash
     which
     boost
     SDL2
