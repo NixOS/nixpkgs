@@ -12,7 +12,7 @@ python3Packages.buildPythonApplication rec {
   };
 
   propagatedBuildInputs = with python3Packages; [
-    lilypond pygame python-ly
+    lilypond pygame python-ly sip
     pyqt5_with_qtwebkit (poppler-qt5.override { pyqt5 = pyqt5_with_qtwebkit; })
   ];
 
