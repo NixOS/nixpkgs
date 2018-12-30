@@ -60,7 +60,7 @@ in stdenv.mkDerivation rec {
     Name: mupdf
     Description: Library for rendering PDF documents
     Version: ${version}
-    Libs: -L$out/lib -lmupdf -lmupdfthird
+    Libs: -L$out/lib -lmupdf -lmupdf-third
     Cflags: -I$dev/include
     EOF
 
