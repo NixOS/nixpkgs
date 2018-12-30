@@ -1,5 +1,6 @@
-{ stdenv, fetchurl, fetchFromGitHub, zlib, expat, gettext
-, cmake }:
+{ stdenv, fetchurl, fetchFromGitHub, zlib, expat, cmake
+, which, libxml2, python3
+}:
 
 stdenv.mkDerivation rec {
   name = "exiv2-${version}";
@@ -14,8 +15,33 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ gettext cmake ];
+  nativeBuildInputs = [ cmake ];
   propagatedBuildInputs = [ zlib expat ];
+
+  enableParallelBuilding = true;
+
+  doCheck = true;
+  # Test setup found by inspecting ${src}/.travis/run.sh; problems without cmake.
+  checkTarget = "tests";
+  checkInputs = [ which libxml2.bin python3 ];
+  preCheck = ''
+    patchShebangs ../test/
+    mkdir ../test/tmp
+    export LD_LIBRARY_PATH="$(realpath ../build/lib)"
+  '';
+  postCheck = ''
+    (cd ../tests/ && python3 runner.py)
+  '';
+
+  # With cmake it installs lots of additional stuff.
+  postInstall = ''
+    ( cd "$out/bin"
+      mv exiv2 .exiv2
+      rm *
+      mv .exiv2 exiv2
+    )
+    rm "$out"/lib/libxmp.a
+  '';
 
   meta = with stdenv.lib; {
     homepage = http://www.exiv2.org/;
