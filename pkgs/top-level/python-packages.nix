@@ -615,6 +615,13 @@ in {
     pythonPackages = self;
   };
 
+  /*
+    `pyqt5_with_qtwebkit` should not be used by python libraries in
+    pkgs/development/python-modules/*. Putting this attribute in
+    `propagatedBuildInputs` may cause collisions.
+  */
+  pyqt5_with_qtwebkit = self.pyqt5.override { withWebKit = true; };
+
   pysc2 = callPackage ../development/python-modules/pysc2 { };
 
   pyscard = callPackage ../development/python-modules/pyscard { inherit (pkgs.darwin.apple_sdk.frameworks) PCSC; };
