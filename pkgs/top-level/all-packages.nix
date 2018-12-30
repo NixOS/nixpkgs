@@ -20653,6 +20653,8 @@ in
 
   frotz = callPackage ../games/frotz { };
 
+  frogatto = callPackage ../games/frogatto { };
+
   fsg = callPackage ../games/fsg {
     wxGTK = wxGTK28.override { unicode = false; };
   };
@@ -23298,6 +23300,4 @@ in
   newlibCross = callPackage ../development/misc/newlib {
     stdenv = crossLibcStdenv;
   };
-
-  frogatto = callPackage ../games/frogatto { };
 }
