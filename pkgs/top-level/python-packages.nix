@@ -220,6 +220,8 @@ in {
 
   aws-adfs = callPackage ../development/python-modules/aws-adfs { };
 
+  serverlessrepo = callPackage ../development/python-modules/serverlessrepo { };
+
   atomman = callPackage ../development/python-modules/atomman { };
 
   # packages defined elsewhere
