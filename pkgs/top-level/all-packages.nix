@@ -19093,6 +19093,8 @@ in
 
   rkt = callPackage ../applications/virtualization/rkt { };
 
+  rkdeveloptool = callPackage ../misc/rkdeveloptool { };
+
   rofi-unwrapped = callPackage ../applications/misc/rofi { };
   rofi = callPackage ../applications/misc/rofi/wrapper.nix { };
 
