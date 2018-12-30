@@ -1,8 +1,10 @@
 { stdenv, fetchFromGitHub, python3Packages }:
 
 python3Packages.buildPythonApplication rec {
-  name = "peru-${version}";
+  pname = "peru";
   version = "1.2.0";
+
+  disabled = python3Packages.pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "buildinspace";
