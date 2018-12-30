@@ -20,14 +20,17 @@ in buildEnv rec {
 
   buildInputs = [ makeWrapper ];
   paths = [ engine data desktopItem ];
-  pathsToLink = [ "/bin" "/share/frogatto/data" "/share/frogatto/images" "/share/frogatto/modules" ];
+  pathsToLink = [
+    "/bin"
+    "/share/frogatto/data"
+    "/share/frogatto/images"
+    "/share/frogatto/modules"
+    "/share/applications"
+  ];
 
   postBuild = ''
     wrapProgram $out/bin/frogatto \
       --run "cd $out/share/frogatto"
-
-    mkdir -p $out/share/applications
-    ln -s ${desktopItem}/share/applications/* $out/share/applications/
   '';
 
   meta = with stdenv.lib; {
