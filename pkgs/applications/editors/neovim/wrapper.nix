@@ -83,18 +83,17 @@ let
       ''
       + optionalString withPython ''
         makeWrapper ${pythonEnv}/bin/python $out/bin/nvim-python --unset PYTHONPATH
-    '' + optionalString withPython3 ''
+      '' + optionalString withPython3 ''
         makeWrapper ${python3Env}/bin/python3 $out/bin/nvim-python3 --unset PYTHONPATH
-    '' + optionalString withRuby ''
-      ln -s ${rubyEnv}/bin/neovim-ruby-host $out/bin/nvim-ruby
-    '' + optionalString vimAlias ''
-      ln -s $out/bin/nvim $out/bin/vim
-    '' + optionalString viAlias ''
-      ln -s $out/bin/nvim $out/bin/vi
-    '' + optionalString (configure != {}) ''
-    wrapProgram $out/bin/nvim --add-flags "-u ${vimUtils.vimrcFile configure}"
-    ''
-    ;
+      '' + optionalString withRuby ''
+        ln -s ${rubyEnv}/bin/neovim-ruby-host $out/bin/nvim-ruby
+      '' + optionalString vimAlias ''
+        ln -s $out/bin/nvim $out/bin/vim
+      '' + optionalString viAlias ''
+        ln -s $out/bin/nvim $out/bin/vi
+      '' + optionalString (configure != {}) ''
+        wrapProgram $out/bin/nvim --add-flags "-u ${vimUtils.vimrcFile configure}"
+      '';
 
     preferLocalBuild = true;
 
