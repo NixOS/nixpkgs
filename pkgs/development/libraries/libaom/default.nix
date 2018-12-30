@@ -14,10 +14,6 @@ stdenv.mkDerivation rec {
     yasm perl cmake pkgconfig python3
   ];
 
-  cmakeFlags = [
-    "-DBUILD_SHARED_LIBS=ON"
-  ];
-
   preConfigure = ''
     # build uses `git describe` to set the build version
     cat > $NIX_BUILD_TOP/git << "EOF"
