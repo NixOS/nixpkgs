@@ -23,9 +23,7 @@ in buildEnv rec {
   paths = [ engine data desktopItem ];
   pathsToLink = [ "/bin" "/share/frogatto/data" "/share/frogatto/images" "/share/frogatto/modules" ];
 
-  postBuild = with stdenv.lib; let
-    engine_path = lib.getOutput "bin" engine;
-  in ''
+  postBuild = ''
     wrapProgram $out/bin/frogatto \
       --run "cd $out/share/frogatto"
 
