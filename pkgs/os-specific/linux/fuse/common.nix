@@ -5,6 +5,8 @@
 , meson, ninja, pkgconfig
 , autoreconfHook
 , python3Packages, which
+, userAllowOther ? false
+, mountMax ? null
 }:
 
 let
@@ -73,7 +75,11 @@ in stdenv.mkDerivation rec {
   '' else ''
     cp ${fusePackages.fuse_3.common}/etc/fuse.conf etc/fuse.conf
     cp ${fusePackages.fuse_3.common}/etc/udev/rules.d/99-fuse.rules etc/udev/rules.d/99-fuse.rules
-  '');
+  '') + stdenv.lib.optionalString userAllowOther ''
+    sed -e 's@#user_allow_other@user_allow_other@' -i $out/etc/fuse.conf
+  '' + stdenv.lib.optionalString (mountMax != null) ''
+    sed -e 's@#mount_max = 1000@mount_max = ${mountMax}@' -i $out/etc/fuse.conf
+  '';
 
   enableParallelBuilding = true;
 
