@@ -25,7 +25,7 @@ python3Packages.buildPythonApplication rec {
     pbkdf2
     pyaes
     pycrypto
-    pyqt5_with_qtwebkit # TODO: qtwebkit not needed?
+    pyqt5
     pysocks
     qrcode
     requests
