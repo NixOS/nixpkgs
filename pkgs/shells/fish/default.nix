@@ -102,7 +102,7 @@ let
 
     nativeBuildInputs = [ cmake ];
     buildInputs = [ ncurses libiconv pcre2 ];
-    configureFlags = [ "--without-included-pcre2" ];
+    cmakeFlags = [ "-DINTERNAL_WCWIDTH=OFF" ];
 
     preConfigure = ''
       patchShebangs ./build_tools/git_version_gen.sh
