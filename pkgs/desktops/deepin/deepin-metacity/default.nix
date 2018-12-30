@@ -5,13 +5,13 @@
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "deepin-metacity";
-  version = "3.22.22";
+  version = "3.22.24";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "0gr10dv8vphla6z7zqiyyg3n3ag4rrlz43c4kr7fd5xwx2bfvp3d";
+    sha256 = "1im0wz1zlxiag4kpp5d4hv0aa0ybr4bizarr3903hrqv0lp46hyx";
   };
 
   nativeBuildInputs = [
