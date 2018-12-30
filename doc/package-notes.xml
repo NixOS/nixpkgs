@@ -205,7 +205,7 @@ $ cat $(PRINT_PATH=1 nix-prefetch-url $i | tail -n 1) \
 
   <para>
    Nixpkgs provides a number of packages that will install Eclipse in its
-   various forms, these range from the bare-bones Eclipse Platform to the more
+   various forms. These range from the bare-bones Eclipse Platform to the more
    fully featured Eclipse SDK or Scala-IDE packages and multiple version are
    often available. It is possible to list available Eclipse packages by
    issuing the command:

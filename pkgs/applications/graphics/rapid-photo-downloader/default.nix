@@ -1,5 +1,5 @@
 { stdenv, fetchurl, python3Packages
-, file, intltool, gobjectIntrospection, libgudev
+, file, intltool, gobject-introspection, libgudev
 , udisks, glib, gnome3, gst_all_1, libnotify
 , exiv2, exiftool, qt5, gdk_pixbuf
 }:
@@ -23,7 +23,7 @@ python3Packages.buildPythonApplication rec {
       --replace "import problemnotification" "import raphodo.problemnotification"
   '';
 
-  nativeBuildInputs = [ file intltool gobjectIntrospection ];
+  nativeBuildInputs = [ file intltool gobject-introspection ];
 
   buildInputs = [
     libgudev

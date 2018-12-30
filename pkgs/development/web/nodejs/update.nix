@@ -1,4 +1,5 @@
-{ lib
+{ stdenv
+, lib
 , writeScript
 , coreutils
 , curl
@@ -11,6 +12,7 @@
 }:
 
 writeScript "update-nodejs" ''
+  #!${stdenv.shell}
   PATH=${lib.makeBinPath [ common-updater-scripts coreutils curl gnugrep jq gnupg nix ]}
 
   HOME=`mktemp -d`

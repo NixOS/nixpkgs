@@ -481,7 +481,7 @@ in {
   # Test whether opening encrypted filesystem with keyfile
   # Checks for regression of missing cryptsetup, when no luks device without
   # keyfile is configured
-  filesystemEncryptedWithKeyfile = makeInstallerTest "filesystemEncryptedWithKeyfile"
+  encryptedFSWithKeyfile = makeInstallerTest "encryptedFSWithKeyfile"
     { createPartitions = ''
        $machine->succeed(
           "flock /dev/vda parted --script /dev/vda -- mklabel msdos"

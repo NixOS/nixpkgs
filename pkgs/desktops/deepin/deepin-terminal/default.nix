@@ -1,5 +1,5 @@
 { stdenv, fetchurl, fetchFromGitHub, pkgconfig, cmake, ninja, vala,
-  gettext, gobjectIntrospection, at-spi2-core, dbus, epoxy, expect,
+  gettext, gobject-introspection, at-spi2-core, dbus, epoxy, expect,
   gtk3, json-glib, libXdmcp, libgee, libpthreadstubs, librsvg,
   libsecret, libtasn1, libxcb, libxkbcommon, p11-kit, pcre, vte, wnck,
   deepin-menu, deepin-shortcut-viewer, deepin }:
@@ -7,13 +7,13 @@
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "deepin-terminal";
-  version = "3.0.10";
+  version = "3.0.10.2";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = "deepin-terminal";
     rev = version;
-    sha256 = "1jrzx0igq2csb25k4ak5hj81gpvb7zwbg4i64p4mln4vl7x27i5q";
+    sha256 = "0ylhp8q9kfdq9l69drawjaf0q8vcqyflb2a3zfnwbnf06dlpvkz6";
   };
 
   nativeBuildInputs = [
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     ninja
     vala
     gettext
-    gobjectIntrospection # For setup hook
+    gobject-introspection # For setup hook
   ];
 
   buildInputs = [

@@ -12,27 +12,22 @@ let
     let
       pName = _p: (builtins.parseDrvName (_p.name)).name;
     in pName mysql == pName pkgs.mariadb;
+  isMysqlAtLeast57 =
+    let
+      pName = _p: (builtins.parseDrvName (_p.name)).name;
+    in (pName mysql == pName pkgs.mysql57)
+       && ((builtins.compareVersions mysql.version "5.7") >= 0);
 
   pidFile = "${cfg.pidDir}/mysqld.pid";
 
+  mysqldAndInstallOptions =
+    "--user=${cfg.user} --datadir=${cfg.dataDir} --basedir=${mysql}";
   mysqldOptions =
-    "--user=${cfg.user} --datadir=${cfg.dataDir} --basedir=${mysql} " +
-    "--pid-file=${pidFile}";
-
-  myCnf = pkgs.writeText "my.cnf"
-  ''
-    [mysqld]
-    port = ${toString cfg.port}
-    datadir = ${cfg.dataDir}
-    ${optionalString (cfg.bind != null) "bind-address = ${cfg.bind}" }
-    ${optionalString (cfg.replication.role == "master" || cfg.replication.role == "slave") "log-bin=mysql-bin"}
-    ${optionalString (cfg.replication.role == "master" || cfg.replication.role == "slave") "server-id = ${toString cfg.replication.serverId}"}
-    ${optionalString (cfg.ensureUsers != [])
-    ''
-      plugin-load-add = auth_socket.so
-    ''}
-    ${cfg.extraOptions}
-  '';
+    "${mysqldAndInstallOptions} --pid-file=${pidFile}";
+  # For MySQL 5.7+, --insecure creates the root user without password
+  # (earlier versions and MariaDB do this by default).
+  installOptions =
+    "${mysqldAndInstallOptions} ${lib.optionalString isMysqlAtLeast57 "--insecure"}";
 
 in
 
@@ -232,6 +227,21 @@ in
 
     environment.systemPackages = [mysql];
 
+    environment.etc."my.cnf".text =
+    ''
+      [mysqld]
+      port = ${toString cfg.port}
+      datadir = ${cfg.dataDir}
+      ${optionalString (cfg.bind != null) "bind-address = ${cfg.bind}" }
+      ${optionalString (cfg.replication.role == "master" || cfg.replication.role == "slave") "log-bin=mysql-bin"}
+      ${optionalString (cfg.replication.role == "master" || cfg.replication.role == "slave") "server-id = ${toString cfg.replication.serverId}"}
+      ${optionalString (cfg.ensureUsers != [])
+      ''
+        plugin-load-add = auth_socket.so
+      ''}
+      ${cfg.extraOptions}
+    '';
+
     systemd.services.mysql = let
       hasNotify = (cfg.package == pkgs.mariadb);
     in {
@@ -253,7 +263,7 @@ in
             if ! test -e ${cfg.dataDir}/mysql; then
                 mkdir -m 0700 -p ${cfg.dataDir}
                 chown -R ${cfg.user} ${cfg.dataDir}
-                ${mysql}/bin/mysql_install_db ${mysqldOptions}
+                ${mysql}/bin/mysql_install_db --defaults-file=/etc/my.cnf ${installOptions}
                 touch /tmp/mysql_init
             fi
 
@@ -264,7 +274,7 @@ in
         serviceConfig = {
           Type = if hasNotify then "notify" else "simple";
           RuntimeDirectory = "mysqld";
-          ExecStart = "${mysql}/bin/mysqld --defaults-extra-file=${myCnf} ${mysqldOptions}";
+          ExecStart = "${mysql}/bin/mysqld --defaults-file=/etc/my.cnf ${mysqldOptions}";
         };
 
         postStart = ''

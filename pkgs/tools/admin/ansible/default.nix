@@ -63,8 +63,8 @@ in rec {
   };
 
   ansible_2_7 = generic {
-    version = "2.7.1";
-    sha256  = "0fg95x2nr3j4rwnlyd2n03h91xx9fssi34c32356vk3z6ir395g7";
+    version = "2.7.4";
+    sha256  = "0p1n6yyc632522fl2r247p0jg4mncc7z4hqngzbh1zxq3dcb12s9";
   };
 
   ansible2 = ansible_2_7;

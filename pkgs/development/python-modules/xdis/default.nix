@@ -24,7 +24,7 @@ buildPythonPackage rec {
   meta = with stdenv.lib; {
     description = "Python cross-version byte-code disassembler and marshal routines";
     homepage = https://github.com/rocky/python-xdis/;
-    license = licenses.mit;
+    license = licenses.gpl2;
   };
 
 }

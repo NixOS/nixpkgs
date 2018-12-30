@@ -6,13 +6,13 @@
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "dde-session-ui";
-  version = "4.6.1";
+  version = "4.6.2";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "190dgrwr5ji2bjndg2bmggpyccdz6pa3acx86yqmxfmirx669w92";
+    sha256 = "1fxlrj7vv7nqllwpwc8mxiv9bfqcj9b2qwkpjaq326pfmg5p5lhq";
   };
 
   nativeBuildInputs = [

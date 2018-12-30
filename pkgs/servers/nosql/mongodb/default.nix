@@ -20,25 +20,6 @@ let version = "3.4.10";
       "yaml"
     ] ++ optionals stdenv.isLinux [ "tcmalloc" ];
 
-    buildInputs = [
-      sasl boost gperftools pcre-cpp snappy
-      zlib libyamlcpp sasl openssl.dev openssl.out libpcap
-    ] ++ stdenv.lib.optionals stdenv.isDarwin [ Security ];
-
-    other-args = concatStringsSep " " ([
-      "--ssl"
-      #"--rocksdb" # Don't have this packaged yet
-      "--wiredtiger=${if stdenv.is64bit then "on" else "off"}"
-      "--js-engine=mozjs"
-      "--use-sasl-client"
-      "--disable-warnings-as-errors"
-      "VARIANT_DIR=nixos" # Needed so we don't produce argument lists that are too long for gcc / ld
-      "CC=$CC"
-      "CXX=$CXX"
-      "CCFLAGS=\"${concatStringsSep " " (map (input: "-I${input}/include") buildInputs)}\""
-      "LINKFLAGS=\"${concatStringsSep " " (map (input: "-L${input}/lib") buildInputs)}\""
-    ] ++ map (lib: "--use-system-${lib}") system-libraries);
-
 in stdenv.mkDerivation rec {
   name = "mongodb-${version}";
 
@@ -48,7 +29,10 @@ in stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ scons ];
-  inherit buildInputs;
+  buildInputs = [
+    sasl boost gperftools pcre-cpp snappy
+    zlib libyamlcpp sasl openssl.dev openssl.out libpcap
+  ] ++ stdenv.lib.optionals stdenv.isDarwin [ Security ];
 
   patches =
     [
@@ -83,14 +67,26 @@ in stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = stdenv.lib.optional stdenv.cc.isClang "-Wno-unused-command-line-argument";
 
-  buildPhase = ''
-    scons -j $NIX_BUILD_CORES core --release ${other-args}
+  sconsFlags = [
+    "--release"
+    "--ssl"
+    #"--rocksdb" # Don't have this packaged yet
+    "--wiredtiger=${if stdenv.is64bit then "on" else "off"}"
+    "--js-engine=mozjs"
+    "--use-sasl-client"
+    "--disable-warnings-as-errors"
+    "VARIANT_DIR=nixos" # Needed so we don't produce argument lists that are too long for gcc / ld
+  ] ++ map (lib: "--use-system-${lib}") system-libraries;
+
+  preBuild = ''
+    sconsFlags+=" CC=$CC"
+    sconsFlags+=" CXX=$CXX"
   '';
 
-  installPhase = ''
+  preInstall = ''
     mkdir -p $out/lib
-    scons -j $NIX_BUILD_CORES install --release --prefix=$out ${other-args}
   '';
+  prefixKey = "--prefix=";
 
   enableParallelBuilding = true;
 

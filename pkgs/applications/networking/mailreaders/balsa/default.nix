@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, intltool, glib, gtk3, gmime, gnutls,
-  webkitgtk, libesmtp, openssl, libnotify, enchant, gpgme,
-  libcanberra-gtk3, libsecret, gtksourceview, gobjectIntrospection,
+  webkitgtk, libesmtp, openssl, libnotify, gtkspell3, gpgme,
+  libcanberra-gtk3, libsecret, gtksourceview, gobject-introspection,
   hicolor-icon-theme, wrapGAppsHook
 }:
 
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     pkgconfig
     intltool
-    gobjectIntrospection
+    gobject-introspection
     hicolor-icon-theme
     wrapGAppsHook
   ];
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     webkitgtk
     openssl
     libnotify
-    enchant
+    gtkspell3
     gpgme
     libcanberra-gtk3
     gtksourceview
@@ -45,6 +45,7 @@ stdenv.mkDerivation rec {
     "--with-ssl"
     "--with-unique"
     "--without-gnome"
+    "--with-spell-checker=gtkspell"
   ];
 
   NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";

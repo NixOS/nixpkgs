@@ -67,7 +67,7 @@ let
 in
 
 let
-  version = "18.2.2";
+  version = "18.2.6";
   branch  = head (splitString "." version);
 in
 
@@ -81,7 +81,7 @@ let self = stdenv.mkDerivation {
       "ftp://ftp.freedesktop.org/pub/mesa/older-versions/${branch}.x/${version}/mesa-${version}.tar.xz"
       "https://mesa.freedesktop.org/archive/mesa-${version}.tar.xz"
     ];
-    sha256 = "1i3ky3d210vi3f5hlr9la1kspdyv093npndxsbzdklw95aqq5fn3";
+    sha256 = "04nwxykmc80gicmal0zkk8is34rmbqawmfckirqhrps9h97zmfly";
   };
 
   prePatch = "patchShebangs .";
@@ -148,8 +148,8 @@ let self = stdenv.mkDerivation {
     libffi libvdpau libelf libXvMC
     libpthreadstubs openssl/*or another sha1 provider*/
     valgrind-light python2 python2.pkgs.Mako
-  ] ++ lib.optionals stdenv.isLinux [ wayland wayland-protocols
-                                      libomxil-bellagio libva-minimal ];
+  ] ++ lib.optionals (elem "wayland" eglPlatforms) [ wayland wayland-protocols ]
+    ++ lib.optionals stdenv.isLinux [ libomxil-bellagio libva-minimal ];
 
   enableParallelBuilding = true;
   doCheck = false;

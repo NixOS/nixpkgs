@@ -11,11 +11,11 @@
 
 buildPythonPackage rec {
   pname = "elpy";
-  version = "1.25.0";
+  version = "1.27.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "10n20lw7n728ahnfrx03vgx9zim7jb8s1zqhw8yivksm9c1a6i12";
+    sha256 = "0fpxxmxjzcam3kharbmvprf4kagspya1rx9piacmxbgcp6w2lc4s";
   };
 
   propagatedBuildInputs = [ flake8 autopep8 jedi importmagic ]

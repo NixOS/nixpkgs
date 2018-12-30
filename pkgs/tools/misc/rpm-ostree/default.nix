@@ -1,5 +1,5 @@
 { stdenv, fetchpatch, fetchFromGitHub, ostree, rpm, which, autoconf, automake, libtool, pkgconfig,
-  gobjectIntrospection, gtk-doc, libxml2, libxslt, docbook_xsl, docbook_xml_dtd_42, gperf, cmake,
+  gobject-introspection, gtk-doc, libxml2, libxslt, docbook_xsl, docbook_xml_dtd_42, gperf, cmake,
   libcap, glib, systemd, json-glib, libarchive, libsolv, librepo, polkit,
   bubblewrap, pcre, check, python }:
 
@@ -33,7 +33,7 @@ in stdenv.mkDerivation {
 
   nativeBuildInputs = [
     pkgconfig which autoconf automake libtool cmake gperf
-    gobjectIntrospection gtk-doc libxml2 libxslt docbook_xsl docbook_xml_dtd_42
+    gobject-introspection gtk-doc libxml2 libxslt docbook_xsl docbook_xml_dtd_42
   ];
   buildInputs = [
     libcap ostree rpm glib systemd polkit bubblewrap

@@ -1,15 +1,15 @@
-{ stdenv, fetchurl, gd, ncurses }:
+{ stdenv, fetchurl, gd, ncurses, sqlite }:
 
 stdenv.mkDerivation rec {
   name = "vnstat-${version}";
-  version = "1.18";
+  version = "2.1";
 
   src = fetchurl {
-    sha256 = "1mc7qqvrnl0zyhgh8n7wx1g1cbwq74xpvbz8rfjmyi77p693a6fp";
+    sha256 = "0yk0x6bg9f36dsslhayyyi8fg04yvzjzqkjmlrcsrv6nnggchb6i";
     url = "https://humdi.net/vnstat/${name}.tar.gz";
   };
 
-  buildInputs = [ gd ncurses ];
+  buildInputs = [ gd ncurses sqlite ];
 
   postPatch = ''
     substituteInPlace src/cfg.c --replace /usr/local $out

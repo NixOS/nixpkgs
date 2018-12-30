@@ -1,5 +1,5 @@
 { stdenv
-, fetchgit
+, fetchFromGitLab
 , pkgconfig
 , intltool
 , automake111x
@@ -10,34 +10,39 @@
 , python
 }:
 
-let version = "20170425";
+let version = "unstable-2018-03-25";
 
 in stdenv.mkDerivation {
   name = "planner-${version}";
 
-  src = fetchgit {
-    url = https://gitlab.gnome.org/GNOME/planner.git;
-    rev = "6a79647e5711b2b8d7435cacc3452e643d2f05e6";
-    sha256 = "18k40s0f665qclrzvkgyfqmvjk0nqdc8aj3m8n4ky85di4qbqlwd";
+  src = fetchFromGitLab {
+    domain = "gitlab.gnome.org";
+    owner = "GNOME";
+    repo = "planner";
+    rev = "2a2bf11d96a7f5d64f05c9053661baa848e47797";
+    sha256 = "1bhh05kkbnhibldc1fc7kv7bwf8aa1vh4q379syqd3jbas8y521g";
   };
 
-  buildInputs = with gnome2; [
+  # planner-popup-button.c:81:2: error: 'g_type_class_add_private' is deprecated [-Werror=deprecated-declarations]
+  NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
+
+  nativeBuildInputs = with gnome2; [
     pkgconfig
     intltool
     automake111x
     autoconf
     libtool
-
     gnome-common
     gtk-doc
+    scrollkeeper
+  ];
 
+  buildInputs = with gnome2; [
     GConf
     gtk
     libgnomecanvas
     libgnomeui
     libglade
-    scrollkeeper
-
     libxslt
     python
   ];

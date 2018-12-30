@@ -43,7 +43,9 @@ stdenv.mkDerivation {
     sed -E -e 's@^include (.*)(/firejail/.*.local)$@include /etc\2@g' -i $out/etc/firejail/*.profile
   '';
 
-  enableParallelBuilding = true;
+  # At high parallelism, the build sometimes fails with:
+  # bash: src/fsec-optimize/fsec-optimize: No such file or directory
+  enableParallelBuilding = false;
 
   meta = {
     inherit (s) version;
@@ -52,6 +54,6 @@ stdenv.mkDerivation {
     maintainers = [stdenv.lib.maintainers.raskin];
     platforms = stdenv.lib.platforms.linux;
     homepage = https://l3net.wordpress.com/projects/firejail/;
-    downloadPage = "http://sourceforge.net/projects/firejail/files/firejail/";
+    downloadPage = "https://sourceforge.net/projects/firejail/files/firejail/";
   };
 }

@@ -1,0 +1,54 @@
+From b28094833a971870fd8c07960b3b12bf6fbbaad3 Mon Sep 17 00:00:00 2001
+From: Daniel Stenberg <daniel@haxx.se>
+Date: Fri, 2 Nov 2018 15:11:16 +0100
+Subject: [PATCH] URL: fix IPv6 numeral address parser
+
+Regression from 46e164069d1a52. Extended test 1560 to verify.
+
+Reported-by: tpaukrt on github
+Fixes #3218
+Closes #3219
+---
+ lib/urlapi.c            | 8 ++++++--
+ tests/libtest/lib1560.c | 9 +++++++++
+ 2 files changed, 15 insertions(+), 2 deletions(-)
+
+diff --git a/lib/urlapi.c b/lib/urlapi.c
+index c53e523434..18a6076fff 100644
+--- a/lib/urlapi.c
++++ b/lib/urlapi.c
+@@ -499,8 +499,12 @@ static CURLUcode parse_port(struct Curl_URL *u, char *hostname)
+      (']' == endbracket)) {
+     /* this is a RFC2732-style specified IP-address */
+     portptr = &hostname[len];
+-    if (*portptr != ':')
+-      return CURLUE_MALFORMED_INPUT;
++    if(*portptr) {
++      if(*portptr != ':')
++        return CURLUE_MALFORMED_INPUT;
++    }
++    else
++      portptr = NULL;
+   }
+   else
+     portptr = strchr(hostname, ':');
+diff --git a/tests/libtest/lib1560.c b/tests/libtest/lib1560.c
+index e0faa12b29..57469a9063 100644
+--- a/tests/libtest/lib1560.c
++++ b/tests/libtest/lib1560.c
+@@ -128,6 +128,15 @@ struct querycase {
+ };
+ 
+ static struct testcase get_parts_list[] ={
++  {"http://[fd00:a41::50]:8080",
++   "http | [11] | [12] | [13] | [fd00:a41::50] | 8080 | / | [16] | [17]",
++   CURLU_DEFAULT_SCHEME, 0, CURLUE_OK},
++  {"http://[fd00:a41::50]/",
++   "http | [11] | [12] | [13] | [fd00:a41::50] | [15] | / | [16] | [17]",
++   CURLU_DEFAULT_SCHEME, 0, CURLUE_OK},
++  {"http://[fd00:a41::50]",
++   "http | [11] | [12] | [13] | [fd00:a41::50] | [15] | / | [16] | [17]",
++   CURLU_DEFAULT_SCHEME, 0, CURLUE_OK},
+   {"https://[::1%252]:1234",
+    "https | [11] | [12] | [13] | [::1%252] | 1234 | / | [16] | [17]",
+    CURLU_DEFAULT_SCHEME, 0, CURLUE_OK},

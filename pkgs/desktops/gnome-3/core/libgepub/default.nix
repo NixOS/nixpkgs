@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, meson, ninja, pkgconfig, glib, gobjectIntrospection, gnome3
+{ stdenv, fetchurl, meson, ninja, pkgconfig, glib, gobject-introspection, gnome3
 , webkitgtk, libsoup, libxml2, libarchive }:
 
 let
@@ -14,7 +14,7 @@ in stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  nativeBuildInputs = [ meson ninja pkgconfig gobjectIntrospection ];
+  nativeBuildInputs = [ meson ninja pkgconfig gobject-introspection ];
   buildInputs = [ glib webkitgtk libsoup libxml2 libarchive ];
 
   passthru = {

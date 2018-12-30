@@ -7,7 +7,7 @@
 
 { fetchurl, stdenv, lua, callPackage, unzip, zziplib, pkgconfig
 , pcre, oniguruma, gnulib, tre, glibc, sqlite, openssl, expat
-, glib, gobjectIntrospection, libevent, zlib, autoreconfHook, gnum4
+, glib, gobject-introspection, libevent, zlib, autoreconfHook, gnum4
 , mysql, postgresql, cyrus_sasl
 , fetchFromGitHub, libmpack, which, fetchpatch, writeText
 }:
@@ -596,7 +596,7 @@ let
     };
 
     patchPhase = stdenv.lib.optionalString stdenv.isDarwin ''
-      substituteInPlace src/makefile --replace gcc cc \
+      substituteInPlace src/makefile \
         --replace 10.3 10.5
     '';
 
@@ -604,6 +604,8 @@ let
       makeFlagsArray=(
         LUAV=${lua.luaversion}
         PLAT=${platformString}
+        CC=''${CC}
+        LD=''${CC}
         prefix=$out
       );
     '';
@@ -925,7 +927,7 @@ let
     };
 
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ glib gobjectIntrospection lua ];
+    buildInputs = [ glib gobject-introspection lua ];
 
     makeFlags = [ "LUA_VERSION=${lua.luaversion}" ];
 

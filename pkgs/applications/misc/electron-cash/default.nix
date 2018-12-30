@@ -7,14 +7,14 @@ let
 in
 
 python3Packages.buildPythonApplication rec {
-  version = "3.3.1";
+  version = "3.3.2";
   name = "electron-cash-${version}";
 
   src = fetchurl {
     url = "https://electroncash.org/downloads/${version}/win-linux/ElectronCash-${version}.tar.gz";
     # Verified using official SHA-1 and signature from
     # https://github.com/fyookball/keys-n-hashes
-    sha256 = "1jdy89rfdwc2jadx3rqj5yvynpcn90cx6482ax9f1cj9gfxp9j2b";
+    sha256 = "4538044cfaa4f87a847635849e0733f32b183ac79abbd2797689c86dc3cb0d53";
   };
 
   propagatedBuildInputs = with python3Packages; [
@@ -29,7 +29,7 @@ python3Packages.buildPythonApplication rec {
     pysocks
     qrcode
     requests
-    tlslite
+    tlslite-ng
 
     # plugins
     keepkey

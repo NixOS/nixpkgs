@@ -68,10 +68,6 @@ nodePackages // {
     postInstall = "npm run-script prepublish";
   };
 
-  phantomjs = nodePackages.phantomjs.override {
-    buildInputs = [ pkgs.phantomjs2 ];
-  };
-
   pnpm = nodePackages.pnpm.override {
     nativeBuildInputs = [ pkgs.makeWrapper ];
     postInstall = let

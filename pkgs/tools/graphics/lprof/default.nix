@@ -5,7 +5,8 @@
 */
 stdenv.mkDerivation {
   name = "lprof-1.11.4.1";
-  buildInputs = [ scons qt3 lcms1 libtiff vigra ];
+  nativeBuildInputs = [ scons ];
+  buildInputs = [ qt3 lcms1 libtiff vigra ];
 
   hardeningDisable = [ "format" ];
 
@@ -19,14 +20,11 @@ stdenv.mkDerivation {
     sha256 = "0q8x24fm5yyvm151xrl3l03p7hvvciqnkbviprfnvlr0lyg9wsrn";
   };
 
-  buildPhase = ''
-    mkdir -p $out
+  sconsFlags = "SYSLIBS=1";
+  preBuild = ''
     export CXX=g++
-
-    scons PREFIX=$out SYSLIBS=1 install
   '';
-
-  installPhase = ":";
+  prefixKey = "PREFIX=";
 
   patches = [ ./lcms-1.17.patch  ./keep-environment.patch ];
 

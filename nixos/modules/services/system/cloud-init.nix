@@ -119,7 +119,7 @@ in
           { Type = "oneshot";
             ExecStart = "${pkgs.cloud-init}/bin/cloud-init init --local";
             RemainAfterExit = "yes";
-            TimeoutSec = "0";
+            TimeoutSec = "infinity";
             StandardOutput = "journal+console";
           };
       };
@@ -137,7 +137,7 @@ in
           { Type = "oneshot";
             ExecStart = "${pkgs.cloud-init}/bin/cloud-init init";
             RemainAfterExit = "yes";
-            TimeoutSec = "0";
+            TimeoutSec = "infinity";
             StandardOutput = "journal+console";
           };
       };
@@ -153,7 +153,7 @@ in
           { Type = "oneshot";
             ExecStart = "${pkgs.cloud-init}/bin/cloud-init modules --mode=config";
             RemainAfterExit = "yes";
-            TimeoutSec = "0";
+            TimeoutSec = "infinity";
             StandardOutput = "journal+console";
           };
       };
@@ -169,7 +169,7 @@ in
           { Type = "oneshot";
             ExecStart = "${pkgs.cloud-init}/bin/cloud-init modules --mode=final";
             RemainAfterExit = "yes";
-            TimeoutSec = "0";
+            TimeoutSec = "infinity";
             StandardOutput = "journal+console";
           };
       };

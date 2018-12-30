@@ -10,7 +10,7 @@ updateSourceDateEpoch() {
     local newestFile="${res[1]}"
 
     # Update $SOURCE_DATE_EPOCH if the most recent file we found is newer.
-    if [ "$time" -gt "$SOURCE_DATE_EPOCH" ]; then
+    if [ "${time:-0}" -gt "$SOURCE_DATE_EPOCH" ]; then
         echo "setting SOURCE_DATE_EPOCH to timestamp $time of file $newestFile"
         export SOURCE_DATE_EPOCH="$time"
 

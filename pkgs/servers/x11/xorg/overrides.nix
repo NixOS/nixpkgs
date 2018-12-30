@@ -1,8 +1,8 @@
 { abiCompat ? null,
-  stdenv, makeWrapper, lib, fetchurl, fetchpatch,
+  stdenv, makeWrapper, lib, fetchurl, fetchpatch, buildPackages,
 
   automake, autoconf, libtool, intltool, mtdev, libevdev, libinput,
-  python, freetype, tradcpp, fontconfig,
+  freetype, tradcpp, fontconfig,
   libGL, spice-protocol, zlib, libGLU, dbus, libunwind, libdrm,
   mesa_noglu, udev, bootstrap_cmds, bison, flex, clangStdenv, autoreconfHook,
   mcpp, epoxy, openssl, pkgconfig, llvm_6,
@@ -63,12 +63,12 @@ self: super:
     inherit (self) xorgcffiles;
     x11BuildHook = ./imake.sh;
     patches = [./imake.patch ./imake-cc-wrapper-uberhack.patch];
-    setupHook = if stdenv.isDarwin then ./darwin-imake-setup-hook.sh else null;
-    CFLAGS = [ "-DIMAKE_COMPILETIME_CPP=\\\"${if stdenv.isDarwin
+    setupHook = ./imake-setup-hook.sh;
+    CFLAGS = [ ''-DIMAKE_COMPILETIME_CPP='"${if stdenv.isDarwin
       then "${tradcpp}/bin/cpp"
-      else "gcc"}\\\""
+      else "gcc"}"' ''
     ];
-    tradcpp = if stdenv.isDarwin then tradcpp else null;
+    inherit tradcpp;
   });
 
   mkfontdir = super.mkfontdir.overrideAttrs (attrs: {
@@ -85,19 +85,15 @@ self: super:
   });
 
   libxcb = super.libxcb.overrideAttrs (attrs: {
-    nativeBuildInputs = attrs.nativeBuildInputs ++ [ python ];
     configureFlags = [ "--enable-xkb" "--enable-xinput" ];
     outputs = [ "out" "dev" "man" "doc" ];
-  });
-
-  xcbproto = super.xcbproto.overrideAttrs (attrs: {
-    nativeBuildInputs = attrs.nativeBuildInputs ++ [ python ];
   });
 
   libX11 = super.libX11.overrideAttrs (attrs: {
     outputs = [ "out" "dev" "man" ];
     configureFlags = attrs.configureFlags or []
       ++ malloc0ReturnsNullCrossFlag;
+    depsBuildBuild = [ buildPackages.stdenv.cc ];
     preConfigure = ''
       sed 's,^as_dummy.*,as_dummy="\$PATH",' -i configure
     '';
@@ -249,6 +245,8 @@ self: super:
 
   libXv = super.libXv.overrideAttrs (attrs: {
     outputs = [ "out" "dev" "devdoc" ];
+    configureFlags = attrs.configureFlags or []
+      ++ malloc0ReturnsNullCrossFlag;
   });
 
   libXvMC = super.libXvMC.overrideAttrs (attrs: {
@@ -640,11 +638,11 @@ self: super:
 
   xf86videointel = super.xf86videointel.overrideAttrs (attrs: {
     # the update script only works with released tarballs :-/
-    name = "xf86-video-intel-2017-10-19";
+    name = "xf86-video-intel-2018-12-03";
     src = fetchurl {
       url = "http://cgit.freedesktop.org/xorg/driver/xf86-video-intel/snapshot/"
-          + "4798e18b2b2c8b0a05dc967e6140fd9962bc1a73.tar.gz";
-      sha256 = "1zpgbibfpdassswfj68zwhhfpvd2p80rpxw92bis6lv81ssknwby";
+          + "e5ff8e1828f97891c819c919d7115c6e18b2eb1f.tar.gz";
+      sha256 = "01136zljk6liaqbk8j9m43xxzqj6xy4v50yjgi7l7g6pp8pw0gx6";
     };
     buildInputs = attrs.buildInputs ++ [self.libXfixes self.libXScrnSaver self.pixman];
     nativeBuildInputs = attrs.nativeBuildInputs ++ [autoreconfHook self.utilmacros];

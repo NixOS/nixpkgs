@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   name = "aisleriot-${version}";
-  version = "3.22.5";
+  version = "3.22.7";
 
   src = fetchurl {
     url = "mirror://gnome/sources/aisleriot/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "0rl39psr5xi584310pyrgw36ini4wn7yr2m1q5118w3a3v1dkhzh";
+    sha256 = "1ysljnrlvzssgbhxcgb28n9k3l0rybxi5lkrm8pg6a4nspaw5mc4";
   };
 
   configureFlags = [

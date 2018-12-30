@@ -1,4 +1,4 @@
-{ stdenv, cacert, git, rust, cargo-vendor, python3 }:
+{ stdenv, cacert, git, cargo, cargo-vendor, python3 }:
 let cargo-vendor-normalise = stdenv.mkDerivation {
   name = "cargo-vendor-normalise";
   src = ./cargo-vendor-normalise.py;
@@ -20,7 +20,7 @@ in
 { name ? "cargo-deps", src, srcs, patches, sourceRoot, sha256, cargoUpdateHook ? "" }:
 stdenv.mkDerivation {
   name = "${name}-vendor";
-  nativeBuildInputs = [ cacert cargo-vendor git cargo-vendor-normalise rust.cargo ];
+  nativeBuildInputs = [ cacert cargo-vendor git cargo-vendor-normalise cargo ];
   inherit src srcs patches sourceRoot;
 
   phases = "unpackPhase patchPhase installPhase";
@@ -38,18 +38,19 @@ stdenv.mkDerivation {
     fi
 
     export CARGO_HOME=$(mktemp -d cargo-home.XXX)
+    CARGO_CONFIG=$(mktemp cargo-config.XXXX)
 
     ${cargoUpdateHook}
 
     mkdir -p $out
-    cargo vendor $out | cargo-vendor-normalise > config
+    cargo vendor $out | cargo-vendor-normalise > $CARGO_CONFIG
     # fetchcargo used to never keep the config output by cargo vendor
     # and instead hardcode the config in ./fetchcargo-default-config.toml.
     # This broke on packages needing git dependencies, so now we keep the config.
     # But not to break old cargoSha256, if the previous behavior was enough,
     # we don't store the config.
-    if ! cmp config ${./fetchcargo-default-config.toml} > /dev/null; then
-      install -Dt $out/.cargo config;
+    if ! cmp $CARGO_CONFIG ${./fetchcargo-default-config.toml} > /dev/null; then
+      install -D $CARGO_CONFIG $out/.cargo/config;
     fi;
   '';
 

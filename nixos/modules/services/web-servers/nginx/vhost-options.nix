@@ -69,7 +69,7 @@ with lib;
     acmeRoot = mkOption {
       type = types.str;
       default = "/var/lib/acme/acme-challenge";
-      description = "Directory to store certificates and keys managed by the ACME service.";
+      description = "Directory for the acme challenge which is PUBLIC, don't put certs or keys in here";
     };
 
     acmeFallbackHost = mkOption {

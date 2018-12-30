@@ -1,10 +1,10 @@
-{ stdenv, fetchFromGitHub, qtbase, qmake, qttools }:
+{ stdenv, fetchFromGitHub, qtbase, qmake, qttools, qtsvg }:
 
 stdenv.mkDerivation rec {
   name = "flameshot-${version}";
-  version = "0.5.1";
+  version = "0.6.0";
 
-  nativeBuildInputs = [ qmake qttools ];
+  nativeBuildInputs = [ qmake qttools qtsvg ];
   buildInputs = [ qtbase ];
 
   qmakeFlags = [
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     owner = "lupoDharkael";
     repo = "flameshot";
     rev = "v${version}";
-    sha256 = "13h77np93r796jf289v4r687cmnpqkyqs34dm9gif4akaig74ky0";
+    sha256 = "193szslh55v44jzxzx5g9kxhl8p8di7vbcnxlid4acfidhnvgazm";
   };
 
   enableParallelBuilding = true;

@@ -1,22 +1,40 @@
 { stdenv
 , buildPythonPackage
-, fetchurl
+, fetchPypi
+, pythonAtLeast
+, pythonOlder
 , paver
 , python
 , isPyPy
+, six
+, pathlib
+, python_magic
+, isPy3k
+, lib
 }:
 
 buildPythonPackage rec {
-  version = "0.7.8";
+  version = "0.8.8";
   pname    = "eyeD3";
   disabled = isPyPy;
 
-  src = fetchurl {
-    url = "http://eyed3.nicfit.net/releases/${pname}-${version}.tar.gz";
-    sha256 = "1nv7nhfn1d0qm7rgkzksbccgqisng8klf97np0nwaqwd5dbmdf86";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "197lszkyzm377ym5r0ssryfsiz20yjx8y4rii3wc81n92d1qzlaq";
   };
 
+  # https://github.com/nicfit/eyeD3/pull/284
+  postPatch = lib.optionalString (pythonAtLeast "3.4") ''
+    sed -ie '/pathlib/d' requirements/requirements.yml
+  '';
+
   buildInputs = [ paver ];
+
+  # requires special test data:
+  # https://github.com/nicfit/eyeD3/blob/103198e265e3279384f35304e8218be6717c2976/Makefile#L97
+  doCheck = false;
+
+  propagatedBuildInputs = [ six python_magic ] ++ lib.optional (pythonOlder "3.4") pathlib;
 
   postInstall = ''
     for prog in "$out/bin/"*; do

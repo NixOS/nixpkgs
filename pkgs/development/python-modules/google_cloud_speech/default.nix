@@ -13,8 +13,9 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ google_api_core ];
   checkInputs = [ pytest mock ];
 
-  # needs credentials
-  doCheck = false;
+  checkPhase = ''
+    pytest tests/unit
+  '';
 
   meta = with stdenv.lib; {
     description = "Cloud Speech API enables integration of Google speech recognition into applications.";

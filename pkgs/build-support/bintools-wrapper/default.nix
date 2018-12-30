@@ -177,7 +177,7 @@ stdenv.mkDerivation {
       /**/ if targetPlatform.isAarch64 then endianPrefix + "aarch64"
       else if targetPlatform.isAarch32     then endianPrefix + "arm"
       else if targetPlatform.isx86_64  then "x86-64"
-      else if targetPlatform.isi686    then "i386"
+      else if targetPlatform.isx86     then "i386"
       else if targetPlatform.isMips    then {
           "mips"     = "btsmipn32"; # n32 variant
           "mipsel"   = "ltsmipn32"; # n32 variant
@@ -269,9 +269,8 @@ stdenv.mkDerivation {
       ## Man page and info support
       ##
 
-      mkdir -p $man/nix-support $info/nix-support
-      echo ${bintools.man or ""} >> $man/nix-support/propagated-user-env-packages
-      echo ${bintools.info or ""} >> $info/nix-support/propagated-user-env-packages
+      ln -s ${bintools.man} $man
+      ln -s ${bintools.info} $info
     ''
 
     + ''

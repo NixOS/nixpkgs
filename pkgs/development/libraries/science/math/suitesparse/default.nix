@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gfortran, openblas, cmake
+{ stdenv, fetchurl, gfortran, openblas, cmake, fixDarwinDylibNames
 , enableCuda  ? false, cudatoolkit
 }:
 
@@ -96,8 +96,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [ openblas gfortran.cc.lib ] ++ stdenv.lib.optionals enableCuda [cudatoolkit];
+  nativeBuildInputs = [ cmake ]
+    ++ stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
+
+  buildInputs = [ openblas gfortran.cc.lib ]
+    ++ stdenv.lib.optional enableCuda cudatoolkit;
 
   meta = with stdenv.lib; {
     homepage = http://faculty.cse.tamu.edu/davis/suitesparse.html;

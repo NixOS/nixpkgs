@@ -79,7 +79,7 @@ stdenv.mkDerivation {
          development cycle.
       '';
 
-    homepage = http://www.gnu.org/software/mit-scheme/;
+    homepage = https://www.gnu.org/software/mit-scheme/;
 
     license = licenses.gpl2Plus;
 

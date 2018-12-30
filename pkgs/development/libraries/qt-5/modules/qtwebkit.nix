@@ -27,7 +27,7 @@ qtModule {
     ++ optional (stdenv.isDarwin && lib.versionAtLeast qtbase.version "5.9.0") qtmultimedia
     ++ optional (lib.versionAtLeast qtbase.version "5.11.0") qtwebchannel;
   buildInputs = [ fontconfig libwebp libxml2 libxslt sqlite glib gst_all_1.gstreamer gst_all_1.gst-plugins-base ]
-    ++ optionals (stdenv.isDarwin) (with darwin.apple_sdk.frameworks; [ OpenGL ])
+    ++ optionals (stdenv.isDarwin) (with darwin; with apple_sdk.frameworks; [ cf-private OpenGL ])
     ++ optionals (lib.versionAtLeast qtbase.version "5.11.0") [ hyphen ];
   nativeBuildInputs = [
     bison2 flex gdb gperf perl pkgconfig python2 ruby

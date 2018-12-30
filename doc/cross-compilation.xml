@@ -6,17 +6,17 @@
   <title>Introduction</title>
 
   <para>
-   "Cross-compilation" means compiling a program on one machine for another
-   type of machine. For example, a typical use of cross compilation is to
-   compile programs for embedded devices. These devices often don't have the
-   computing power and memory to compile their own programs. One might think
-   that cross-compilation is a fairly niche concern, but there are advantages
-   to being rigorous about distinguishing build-time vs run-time environments
-   even when one is developing and deploying on the same machine. Nixpkgs is
-   increasingly adopting the opinion that packages should be written with
-   cross-compilation in mind, and nixpkgs should evaluate in a similar way (by
-   minimizing cross-compilation-specific special cases) whether or not one is
-   cross-compiling.
+   "Cross-compilation" means compiling a program on one machine for another type
+   of machine. For example, a typical use of cross-compilation is to compile
+   programs for embedded devices. These devices often don't have the computing
+   power and memory to compile their own programs. One might think that
+   cross-compilation is a fairly niche concern. However, there are significant
+   advantages to rigorously distinguishing between build-time and run-time
+   environments! This applies even when one is developing and deploying on the
+   same machine. Nixpkgs is increasingly adopting the opinion that packages
+   should be written with cross-compilation in mind, and nixpkgs should evaluate
+   in a similar way (by minimizing cross-compilation-specific special cases)
+   whether or not one is cross-compiling.
   </para>
 
   <para>
@@ -34,15 +34,15 @@
    <title>Platform parameters</title>
 
    <para>
-    Nixpkgs follows the
-    <link xlink:href="https://gcc.gnu.org/onlinedocs/gccint/Configure-Terms.html">common
-    historical convention of GNU autoconf</link> of distinguishing between 3
-    types of platform: <wordasword>build</wordasword>,
-    <wordasword>host</wordasword>, and <wordasword>target</wordasword>. In
-    summary, <wordasword>build</wordasword> is the platform on which a package
-    is being built, <wordasword>host</wordasword> is the platform on which it
-    is to run. The third attribute, <wordasword>target</wordasword>, is
-    relevant only for certain specific compilers and build tools.
+     Nixpkgs follows the <link
+     xlink:href="https://gcc.gnu.org/onlinedocs/gccint/Configure-Terms.html">conventions
+     of GNU autoconf</link>. We distinguish between 3 types of platforms when
+     building a derivation: <wordasword>build</wordasword>,
+     <wordasword>host</wordasword>, and <wordasword>target</wordasword>. In
+     summary, <wordasword>build</wordasword> is the platform on which a package
+     is being built, <wordasword>host</wordasword> is the platform on which it
+     will run. The third attribute, <wordasword>target</wordasword>, is relevant
+     only for certain specific compilers and build tools.
    </para>
 
    <para>
@@ -64,7 +64,7 @@
       <para>
        The "build platform" is the platform on which a package is built. Once
        someone has a built package, or pre-built binary package, the build
-       platform should not matter and be safe to ignore.
+       platform should not matter and can be ignored.
       </para>
      </listitem>
     </varlistentry>
@@ -94,11 +94,11 @@
       <para>
        The build process of certain compilers is written in such a way that the
        compiler resulting from a single build can itself only produce binaries
-       for a single platform. The task specifying this single "target platform"
-       is thus pushed to build time of the compiler. The root cause of this
-       mistake is often that the compiler (which will be run on the host) and
-       the the standard library/runtime (which will be run on the target) are
-       built by a single build process.
+       for a single platform. The task of specifying this single "target
+       platform" is thus pushed to build time of the compiler. The root cause of
+       this that the compiler (which will be run on the host) and the standard
+       library/runtime (which will be run on the target) are built by a single
+       build process.
       </para>
       <para>
        There is no fundamental need to think about a single target ahead of
@@ -135,8 +135,10 @@
       <para>
        This is a two-component shorthand for the platform. Examples of this
        would be "x86_64-darwin" and "i686-linux"; see
-       <literal>lib.systems.doubles</literal> for more. This format isn't very
-       standard, but has built-in support in Nix, such as the
+       <literal>lib.systems.doubles</literal> for more. The first component
+       corresponds to the CPU architecture of the platform and the second to the
+       operating system of the platform (<literal>[cpu]-[os]</literal>). This
+       format has built-in support in Nix, such as the
        <varname>builtins.currentSystem</varname> impure string.
       </para>
      </listitem>
@@ -147,12 +149,13 @@
      </term>
      <listitem>
       <para>
-       This is a 3- or 4- component shorthand for the platform. Examples of
-       this would be "x86_64-unknown-linux-gnu" and "aarch64-apple-darwin14".
-       This is a standard format called the "LLVM target triple", as they are
-       pioneered by LLVM and traditionally just used for the
-       <varname>targetPlatform</varname>. This format is strictly more
-       informative than the "Nix host double", as the previous format could
+       This is a 3- or 4- component shorthand for the platform. Examples of this
+       would be <literal>x86_64-unknown-linux-gnu</literal> and
+       <literal>aarch64-apple-darwin14</literal>. This is a standard format
+       called the "LLVM target triple", as they are pioneered by LLVM. In the
+       4-part form, this corresponds to
+       <literal>[cpu]-[vendor]-[os]-[abi]</literal>. This format is strictly
+       more informative than the "Nix host double", as the previous format could
        analogously be termed. This needs a better name than
        <varname>config</varname>!
       </para>
@@ -164,12 +167,11 @@
      </term>
      <listitem>
       <para>
-       This is a nix representation of a parsed LLVM target triple with
-       white-listed components. This can be specified directly, or actually
-       parsed from the <varname>config</varname>. [Technically, only one need
-       be specified and the others can be inferred, though the precision of
-       inference may not be very good.] See
-       <literal>lib.systems.parse</literal> for the exact representation.
+       This is a Nix representation of a parsed LLVM target triple
+       with white-listed components. This can be specified directly,
+       or actually parsed from the <varname>config</varname>. See
+       <literal>lib.systems.parse</literal> for the exact
+       representation.
       </para>
      </listitem>
     </varlistentry>
@@ -193,7 +195,7 @@
      <listitem>
       <para>
        These predicates are defined in <literal>lib.systems.inspect</literal>,
-       and slapped on every platform. They are superior to the ones in
+       and slapped onto every platform. They are superior to the ones in
        <varname>stdenv</varname> as they force the user to be explicit about
        which platform they are inspecting. Please use these instead of those.
       </para>
@@ -221,7 +223,7 @@
 
    <para>
     In this section we explore the relationship between both runtime and
-    buildtime dependencies and the 3 Autoconf platforms.
+    build-time dependencies and the 3 Autoconf platforms.
    </para>
 
    <para>
@@ -249,17 +251,17 @@
    </para>
 
    <para>
-    Some examples will probably make this clearer. If a package is being built
-    with a <literal>(build, host, target)</literal> platform triple of
-    <literal>(foo, bar, bar)</literal>, then its build-time dependencies would
-    have a triple of <literal>(foo, foo, bar)</literal>, and <emphasis>those
-    packages'</emphasis> build-time dependencies would have triple of
-    <literal>(foo, foo, foo)</literal>. In other words, it should take two
-    "rounds" of following build-time dependency edges before one reaches a
-    fixed point where, by the sliding window principle, the platform triple no
-    longer changes. Indeed, this happens with cross compilation, where only
-    rounds of native dependencies starting with the second necessarily coincide
-    with native packages.
+    Some examples will make this clearer. If a package is being built with a
+    <literal>(build, host, target)</literal> platform triple of <literal>(foo,
+    bar, bar)</literal>, then its build-time dependencies would have a triple of
+    <literal>(foo, foo, bar)</literal>, and <emphasis>those packages'</emphasis>
+    build-time dependencies would have a triple of <literal>(foo, foo,
+    foo)</literal>. In other words, it should take two "rounds" of following
+    build-time dependency edges before one reaches a fixed point where, by the
+    sliding window principle, the platform triple no longer changes. Indeed,
+    this happens with cross-compilation, where only rounds of native
+    dependencies starting with the second necessarily coincide with native
+    packages.
    </para>
 
    <note>
@@ -271,23 +273,23 @@
    </note>
 
    <para>
-    How does this work in practice? Nixpkgs is now structured so that
-    build-time dependencies are taken from <varname>buildPackages</varname>,
-    whereas run-time dependencies are taken from the top level attribute set.
-    For example, <varname>buildPackages.gcc</varname> should be used at build
-    time, while <varname>gcc</varname> should be used at run time. Now, for
-    most of Nixpkgs's history, there was no <varname>buildPackages</varname>,
-    and most packages have not been refactored to use it explicitly. Instead,
-    one can use the six (<emphasis>gasp</emphasis>) attributes used for
-    specifying dependencies as documented in
-    <xref linkend="ssec-stdenv-dependencies"/>. We "splice" together the
-    run-time and build-time package sets with <varname>callPackage</varname>,
-    and then <varname>mkDerivation</varname> for each of four attributes pulls
-    the right derivation out. This splicing can be skipped when not cross
-    compiling as the package sets are the same, but is a bit slow for cross
-    compiling. Because of this, a best-of-both-worlds solution is in the works
-    with no splicing or explicit access of <varname>buildPackages</varname>
-    needed. For now, feel free to use either method.
+    How does this work in practice? Nixpkgs is now structured so that build-time
+    dependencies are taken from <varname>buildPackages</varname>, whereas
+    run-time dependencies are taken from the top level attribute set. For
+    example, <varname>buildPackages.gcc</varname> should be used at build-time,
+    while <varname>gcc</varname> should be used at run-time. Now, for most of
+    Nixpkgs's history, there was no <varname>buildPackages</varname>, and most
+    packages have not been refactored to use it explicitly. Instead, one can use
+    the six (<emphasis>gasp</emphasis>) attributes used for specifying
+    dependencies as documented in <xref linkend="ssec-stdenv-dependencies"/>. We
+    "splice" together the run-time and build-time package sets with
+    <varname>callPackage</varname>, and then <varname>mkDerivation</varname> for
+    each of four attributes pulls the right derivation out. This splicing can be
+    skipped when not cross-compiling as the package sets are the same, but is a
+    bit slow for cross-compiling. Because of this, a best-of-both-worlds
+    solution is in the works with no splicing or explicit access of
+    <varname>buildPackages</varname> needed. For now, feel free to use either
+    method.
    </para>
 
    <note>
@@ -305,11 +307,11 @@
    <title>Cross packaging cookbook</title>
 
    <para>
-    Some frequently problems when packaging for cross compilation are good to
-    just spell and answer. Ideally the information above is exhaustive, so this
-    section cannot provide any new information, but its ludicrous and cruel to
-    expect everyone to spend effort working through the interaction of many
-    features just to figure out the same answer to the same common problem.
+    Some frequently encountered problems when packaging for cross-compilation
+    should be answered here. Ideally, the information above is exhaustive, so
+    this section cannot provide any new information, but it is ludicrous and
+    cruel to expect everyone to spend effort working through the interaction of
+    many features just to figure out the same answer to the same common problem.
     Feel free to add to this list!
    </para>
 
@@ -364,17 +366,9 @@
  <section xml:id="sec-cross-usage">
   <title>Cross-building packages</title>
 
-  <note>
-   <para>
-    More information needs to moved from the old wiki, especially
-    <link xlink:href="https://nixos.org/wiki/CrossCompiling" />, for this
-    section.
-   </para>
-  </note>
-
   <para>
    Nixpkgs can be instantiated with <varname>localSystem</varname> alone, in
-   which case there is no cross compiling and everything is built by and for
+   which case there is no cross-compiling and everything is built by and for
    that system, or also with <varname>crossSystem</varname>, in which case
    packages run on the latter, but all building happens on the former. Both
    parameters take the same schema as the 3 (build, host, and target) platforms
@@ -391,7 +385,7 @@ nix-build &lt;nixpkgs&gt; --arg crossSystem '(import &lt;nixpkgs/lib&gt;).system
     Eventually we would like to make these platform examples an unnecessary
     convenience so that
 <programlisting>
-nix-build &lt;nixpkgs&gt; --arg crossSystem.config '&lt;arch&gt;-&lt;os&gt;-&lt;vendor&gt;-&lt;abi&gt;' -A whatever</programlisting>
+nix-build &lt;nixpkgs&gt; --arg crossSystem '{ config = "&lt;arch&gt;-&lt;os&gt;-&lt;vendor&gt;-&lt;abi&gt;"; }' -A whatever</programlisting>
     works in the vast majority of cases. The problem today is dependencies on
     other sorts of configuration which aren't given proper defaults. We rely on
     the examples to crudely to set those configuration parameters in some
@@ -440,15 +434,14 @@ nix-build &lt;nixpkgs&gt; --arg crossSystem.config '&lt;arch&gt;-&lt;os&gt;-&lt;
    build plan or package set. A simple "build vs deploy" dichotomy is adequate:
    the sliding window principle described in the previous section shows how to
    interpolate between the these two "end points" to get the 3 platform triple
-   for each bootstrapping stage. That means for any package a given package
-   set, even those not bound on the top level but only reachable via
-   dependencies or <varname>buildPackages</varname>, the three platforms will
-   be defined as one of <varname>localSystem</varname> or
-   <varname>crossSystem</varname>, with the former replacing the latter as one
-   traverses build-time dependencies. A last simple difference then is
-   <varname>crossSystem</varname> should be null when one doesn't want to
-   cross-compile, while the <varname>*Platform</varname>s are always non-null.
-   <varname>localSystem</varname> is always non-null.
+   for each bootstrapping stage. That means for any package a given package set,
+   even those not bound on the top level but only reachable via dependencies or
+   <varname>buildPackages</varname>, the three platforms will be defined as one
+   of <varname>localSystem</varname> or <varname>crossSystem</varname>, with the
+   former replacing the latter as one traverses build-time dependencies. A last
+   simple difference is that <varname>crossSystem</varname> should be null when
+   one doesn't want to cross-compile, while the <varname>*Platform</varname>s
+   are always non-null. <varname>localSystem</varname> is always non-null.
   </para>
  </section>
 <!--============================================================-->
@@ -461,14 +454,14 @@ nix-build &lt;nixpkgs&gt; --arg crossSystem.config '&lt;arch&gt;-&lt;os&gt;-&lt;
 
   <note>
    <para>
-    If one explores nixpkgs, they will see derivations with names like
-    <literal>gccCross</literal>. Such <literal>*Cross</literal> derivations is
-    a holdover from before we properly distinguished between the host and
-    target platforms —the derivation with "Cross" in the name covered the
-    <literal>build = host != target</literal> case, while the other covered the
-    <literal>host = target</literal>, with build platform the same or not based
-    on whether one was using its <literal>.nativeDrv</literal> or
-    <literal>.crossDrv</literal>. This ugliness will disappear soon.
+    If one explores Nixpkgs, they will see derivations with names like
+    <literal>gccCross</literal>. Such <literal>*Cross</literal> derivations is a
+    holdover from before we properly distinguished between the host and target
+    platforms—the derivation with "Cross" in the name covered the <literal>build
+    = host != target</literal> case, while the other covered the <literal>host =
+    target</literal>, with build platform the same or not based on whether one
+    was using its <literal>.nativeDrv</literal> or <literal>.crossDrv</literal>.
+    This ugliness will disappear soon.
    </para>
   </note>
  </section>

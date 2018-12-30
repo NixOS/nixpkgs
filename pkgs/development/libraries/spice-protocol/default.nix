@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Protocol headers for the SPICE protocol";
-    homepage = http://www.spice-space.org;
+    homepage = https://www.spice-space.org/;
     license = licenses.bsd3;
     maintainers = with maintainers; [ bluescreen303 ];
     platforms = platforms.linux;

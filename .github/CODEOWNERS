@@ -55,7 +55,7 @@
 /pkgs/top-level/python-packages.nix     @FRidh
 /pkgs/development/interpreters/python   @FRidh
 /pkgs/development/python-modules        @FRidh
-/doc/languages-frameworks/python.md     @FRidh
+/doc/languages-frameworks/python.section.md     @FRidh
 
 # Haskell
 /pkgs/development/compilers/ghc                       @peti @ryantm @basvandijk
@@ -64,13 +64,18 @@
 /pkgs/development/haskell-modules/generic-builder.nix @peti @ryantm @basvandijk
 /pkgs/development/haskell-modules/hoogle.nix          @peti @ryantm @basvandijk
 
+# Perl
+/pkgs/development/interpreters/perl @volth
+/pkgs/top-level/perl-packages.nix   @volth
+/pkgs/development/perl-modules      @volth
+
 # R
 /pkgs/applications/science/math/R   @peti
 /pkgs/development/r-modules         @peti
 
 # Ruby
-/pkgs/development/interpreters/ruby @zimbatm
-/pkgs/development/ruby-modules      @zimbatm
+/pkgs/development/interpreters/ruby @alyssais @zimbatm
+/pkgs/development/ruby-modules      @alyssais @zimbatm
 
 # Rust
 /pkgs/development/compilers/rust @Mic92 @LnL7
@@ -123,3 +128,6 @@
 
 # Idris
 /pkgs/development/idris-modules @Infinisil
+
+# Bazel
+/pkgs/development/tools/build-managers/bazel @mboes @Profpatsch

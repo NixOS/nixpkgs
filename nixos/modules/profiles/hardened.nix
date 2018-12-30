@@ -12,11 +12,19 @@ with lib;
 
   boot.kernelPackages = mkDefault pkgs.linuxPackages_hardened;
 
+  nix.allowedUsers = mkDefault [ "@users" ];
+
   security.hideProcessInformation = mkDefault true;
 
   security.lockKernelModules = mkDefault true;
 
   security.allowUserNamespaces = mkDefault false;
+
+  security.protectKernelImage = mkDefault true;
+
+  security.allowSimultaneousMultithreading = mkDefault false;
+
+  security.virtualization.flushL1DataCache = mkDefault "always";
 
   security.apparmor.enable = mkDefault true;
 
@@ -26,9 +34,6 @@ with lib;
 
     # Disable legacy virtual syscalls
     "vsyscall=none"
-
-    # Disable hibernation (allows replacing the running kernel)
-    "nohibernate"
   ];
 
   boot.blacklistedKernelModules = [
@@ -41,9 +46,6 @@ with lib;
   # Restrict ptrace() usage to processes with a pre-defined relationship
   # (e.g., parent/child)
   boot.kernel.sysctl."kernel.yama.ptrace_scope" = mkOverride 500 1;
-
-  # Prevent replacing the running kernel image w/o reboot
-  boot.kernel.sysctl."kernel.kexec_load_disabled" = mkDefault true;
 
   # Restrict access to kernel ring buffer (information leaks)
   boot.kernel.sysctl."kernel.dmesg_restrict" = mkDefault true;

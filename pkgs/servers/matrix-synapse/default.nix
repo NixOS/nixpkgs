@@ -37,11 +37,11 @@ let
 
 in buildPythonApplication rec {
   pname = "matrix-synapse";
-  version = "0.33.8";
+  version = "0.34.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0j8knnqpkidkmpwr2i1k9cwlnwfqpzn3q6ysjvrwpa76hpfcg40l";
+    sha256 = "1bqwivzfx3kikzjmn4mng829ll8y62pd08hvsx99arr7cyzp6gri";
   };
 
   patches = [
@@ -64,7 +64,13 @@ in buildPythonApplication rec {
     netaddr
     phonenumbers
     pillow
-    prometheus_client
+    (prometheus_client.overrideAttrs (x: {
+      src = fetchPypi {
+        pname = "prometheus_client";
+        version = "0.3.1";
+        sha256 = "093yhvz7lxl7irnmsfdnf2030lkj4gsfkg6pcmy4yr1ijk029g0p";
+      };
+    }))
     psutil
     psycopg2
     pyasn1

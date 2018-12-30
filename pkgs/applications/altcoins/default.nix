@@ -45,7 +45,7 @@ rec {
   dcrd = callPackage ./dcrd.nix { };
   dcrwallet = callPackage ./dcrwallet.nix { };
 
-  dero = callPackage ./dero.nix { };
+  dero = callPackage ./dero.nix { boost = boost165; };
 
   dogecoin  = callPackage ./dogecoin.nix { boost = boost165; withGui = true; };
   dogecoind = callPackage ./dogecoin.nix { boost = boost165; withGui = false; };
@@ -65,7 +65,7 @@ rec {
   };
   litecoind = litecoin.override { withGui = false; };
 
-  masari = callPackage ./masari.nix { };
+  masari = callPackage ./masari.nix { boost = boost165; };
 
   memorycoin  = callPackage ./memorycoin.nix { boost = boost165; withGui = true; };
   memorycoind = callPackage ./memorycoin.nix { boost = boost165; withGui = false; };
@@ -79,7 +79,7 @@ rec {
 
   stellar-core = callPackage ./stellar-core.nix { };
 
-  sumokoin = callPackage ./sumokoin.nix { };
+  sumokoin = callPackage ./sumokoin.nix { boost = boost165; };
 
   wownero = callPackage ./wownero.nix {
     inherit (darwin.apple_sdk.frameworks) CoreData IOKit PCSC;
@@ -93,6 +93,8 @@ rec {
   parity = callPackage ./parity { };
   parity-beta = callPackage ./parity/beta.nix { };
   parity-ui = callPackage ./parity-ui { };
+
+  polkadot = callPackage ./polkadot { };
 
   particl-core = callPackage ./particl/particl-core.nix { miniupnpc = miniupnpc_2; };
 }

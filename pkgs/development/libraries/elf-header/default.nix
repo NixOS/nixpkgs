@@ -12,7 +12,7 @@ let
 in
 
 stdenvNoCC.mkDerivation {
-  name = "elf-header";
+  pname = "elf-header";
   inherit (libc) version;
 
   src = null;

@@ -8,7 +8,7 @@ import ./make-test.nix ({ pkgs, lib, ...} : with lib; {
 
   nodes = {
     gitlab = { ... }: {
-      virtualisation.memorySize = 4096;
+      virtualisation.memorySize = if pkgs.stdenv.is64bit then 4096 else 2047;
       systemd.services.gitlab.serviceConfig.Restart = mkForce "no";
       systemd.services.gitlab-workhorse.serviceConfig.Restart = mkForce "no";
       systemd.services.gitaly.serviceConfig.Restart = mkForce "no";
@@ -16,6 +16,7 @@ import ./make-test.nix ({ pkgs, lib, ...} : with lib; {
 
       services.nginx = {
         enable = true;
+        recommendedProxySettings = true;
         virtualHosts = {
           "localhost" = {
             locations."/".proxyPass = "http://unix:/run/gitlab/gitlab-workhorse.socket";
@@ -75,7 +76,8 @@ import ./make-test.nix ({ pkgs, lib, ...} : with lib; {
     $gitlab->waitForUnit("gitlab.service");
     $gitlab->waitForUnit("gitlab-sidekiq.service");
     $gitlab->waitForFile("/var/gitlab/state/tmp/sockets/gitlab.socket");
-    $gitlab->waitUntilSucceeds("curl -sSf http://localhost/users/sign_in");
+    $gitlab->waitUntilSucceeds("curl -sSf http://gitlab/users/sign_in");
+    $gitlab->succeed("curl -isSf http://gitlab  | grep -i location | grep -q http://gitlab/users/sign_in");
     $gitlab->succeed("${pkgs.sudo}/bin/sudo -u gitlab -H gitlab-rake gitlab:check 1>&2")
   '';
 })

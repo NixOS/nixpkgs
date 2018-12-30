@@ -1,4 +1,4 @@
-{ fetchurl, makeWrapper, patchelf, pkgs, stdenv, SDL, libglvnd, libogg, libvorbis, curl }:
+{ fetchurl, makeWrapper, patchelf, pkgs, stdenv, SDL, libglvnd, libogg, libvorbis, curl, openal }:
 
 stdenv.mkDerivation rec {
   name = "openarena-${version}";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   installPhase = let
     gameDir = "$out/openarena-$version";
     interpreter = "$(< \"$NIX_CC/nix-support/dynamic-linker\")";
-    libPath = stdenv.lib.makeLibraryPath [ SDL libglvnd libogg libvorbis curl ];
+    libPath = stdenv.lib.makeLibraryPath [ SDL libglvnd libogg libvorbis curl openal ];
   in ''
     mkdir -pv $out/bin
     cd $out

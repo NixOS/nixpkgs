@@ -11,10 +11,17 @@ To run this test:
  */
 { pkgs, lib, stdenv, ... }:
 
-lib.optionalAttrs stdenv.hostPlatform.isLinux (
+let
+  dummyVersioning = {
+    revision = "test";
+    versionSuffix = "test";
+    label = "test";
+  };
+in lib.optionalAttrs stdenv.hostPlatform.isLinux (
   pkgs.recurseIntoAttrs {
 
     nixos-test = (pkgs.nixos {
+      system.nixos = dummyVersioning;
       boot.loader.grub.enable = false;
       fileSystems."/".device = "/dev/null";
     }).toplevel;
@@ -22,6 +29,7 @@ lib.optionalAttrs stdenv.hostPlatform.isLinux (
     nixosTest-test = pkgs.nixosTest ({ lib, pkgs, ... }: {
       name = "nixosTest-test";
       machine = { pkgs, ... }: {
+        system.nixos = dummyVersioning;
         environment.systemPackages = [ pkgs.hello ];
       };
       testScript = ''

@@ -1,15 +1,20 @@
-{ stdenv, fetchurl, glib, readline, bison, flex, pkgconfig }:
+{ stdenv, fetchFromGitHub, glib, readline
+, bison, flex, pkgconfig, autoreconfHook
+, txt2man, which }:
 
-stdenv.mkDerivation {
-  name = "mdbtools-0.6pre1";
+let version = "0.7.1";
+in stdenv.mkDerivation {
+  name = "mdbtools-${version}";
 
-  src = fetchurl {
-    url = mirror://sourceforge/mdbtools/mdbtools-0.6pre1.tar.gz;
-    sha256 = "1lz33lmqifjszad7rl1r7rpxbziprrm5rkb27wmswyl5v98dqsbi";
+  src = fetchFromGitHub {
+    owner = "brianb";
+    repo = "mdbtools";
+    rev = version;
+    sha256 = "0gwcpp9y09xhs21g7my2fs8ncb8i6ahlyixcx8jd3q97jbzj441l";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [glib readline bison flex];
+  nativeBuildInputs = [ pkgconfig bison flex autoreconfHook txt2man which ];
+  buildInputs = [ glib readline ];
 
   preConfigure = ''
     sed -e 's@static \(GHashTable [*]mdb_backends;\)@\1@' -i src/libmdb/backend.c

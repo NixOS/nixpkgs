@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, fetchpatch, vala_0_40, pkgconfig, meson, ninja, python3, granite, gtk3
-, gnome3, desktop-file-utils, json-glib, libsoup, poppler, gobjectIntrospection, wrapGAppsHook }:
+, gnome3, desktop-file-utils, json-glib, libsoup, poppler, gobject-introspection, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "aesop";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     desktop-file-utils
-    gobjectIntrospection
+    gobject-introspection
     meson
     ninja
     pkgconfig

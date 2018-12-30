@@ -33,11 +33,15 @@ stdenv.mkDerivation rec {
     "-I${SDL2}/include/SDL2"
   ];
 
-  patches = [ ./rootdir_env.patch ];
-
-  postPatch = ''
-    sed -i 's/MOZJS_MINOR_VERSION/false \&\& MOZJS_MINOR_VERSION/' source/scriptinterface/ScriptTypes.h
-  '';
+  patches = [
+    ./rootdir_env.patch
+    # Fixes build with spidermonkey-38.8.0, includes the minor version check:
+    # https://src.fedoraproject.org/rpms/0ad/c/26dc1657f6e3c0ad9f1180ca38cd79b933ef0c8b
+    (fetchurl {
+      url = https://src.fedoraproject.org/rpms/0ad/raw/26dc1657f6e3c0ad9f1180ca38cd79b933ef0c8b/f/0ad-mozjs-incompatible.patch;
+      sha256 = "1rzpaalcrzihsgvlk3nqd87n2kxjldlwvb3qp5fcd5ffzr6k90wa";
+    })
+  ];
 
   configurePhase = ''
     # Delete shipped libraries which we don't need.

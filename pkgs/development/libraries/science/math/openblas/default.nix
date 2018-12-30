@@ -79,15 +79,24 @@ let
 in
 stdenv.mkDerivation rec {
   name = "openblas-${version}";
-  version = "0.3.3";
+  version = "0.3.4";
   src = fetchFromGitHub {
     owner = "xianyi";
     repo = "OpenBLAS";
     rev = "v${version}";
-    sha256 = "0cpkvfvc14xm9mifrm919rp8vrq70gpl7r2sww4f0izrl39wklwx";
+    sha256 = "1jdq4msfyg13pdmwwfqpixf4fshss68qzls820lmn0i6y7h4aix3";
   };
 
   inherit blas64;
+
+  patches = [
+    # Fixes build on x86_64-darwin. See:
+    # https://github.com/xianyi/OpenBLAS/issues/1926
+    (fetchpatch {
+      url = https://github.com/xianyi/OpenBLAS/commit/701ea88347461e4c5d896765438dc870281b3834.patch;
+      sha256 = "18rcfgkjsijl9d2510jn961wqvz7zdlz2fgy1yjmax29kvv8fqd9";
+    })
+  ];
 
   # Some hardening features are disabled due to sporadic failures in
   # OpenBLAS-based programs. The problem may not be with OpenBLAS itself, but
@@ -117,8 +126,6 @@ stdenv.mkDerivation rec {
       "NO_STATIC=1"
     ] ++ stdenv.lib.optional (stdenv.hostPlatform.libc == "musl") "NO_AFFINITY=1"
     ++ mapAttrsToList (var: val: var + "=" + val) config;
-
-    patches = [];
 
   doCheck = true;
   checkTarget = "tests";

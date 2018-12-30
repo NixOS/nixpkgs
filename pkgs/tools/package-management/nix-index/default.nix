@@ -1,5 +1,5 @@
-{ stdenv, rustPlatform, fetchFromGitHub, pkgconfig, openssl, curl
-, Security
+{ stdenv, rustPlatform, fetchFromGitHub, pkgconfig, makeWrapper, openssl, curl
+, nix, Security
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -13,15 +13,19 @@ rustPlatform.buildRustPackage rec {
     sha256 = "05fqfwz34n4ijw7ydw2n6bh4bv64rhks85cn720sy5r7bmhfmfa8";
   };
   cargoSha256 = "045qm7cyg3sdvf22i8b9cz8gsvggs5bn9xz8k1pvn5gxb7zj24cx";
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig makeWrapper ];
   buildInputs = [ openssl curl ]
     ++ stdenv.lib.optional stdenv.isDarwin Security;
+
+  doCheck = !stdenv.isDarwin;
 
   postInstall = ''
     mkdir -p $out/etc/profile.d
     cp ./command-not-found.sh $out/etc/profile.d/command-not-found.sh
     substituteInPlace $out/etc/profile.d/command-not-found.sh \
       --replace "@out@" "$out"
+    wrapProgram $out/bin/nix-index \
+      --prefix PATH : "${stdenv.lib.makeBinPath [ nix ]}"
   '';
 
   meta = with stdenv.lib; {

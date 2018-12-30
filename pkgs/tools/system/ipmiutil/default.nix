@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.linux;
     license = licenses.bsd3;
-    downloadPage = "http://sourceforge.net/projects/ipmiutil/files/ipmiutil/";
+    downloadPage = "https://sourceforge.net/projects/ipmiutil/files/ipmiutil/";
     inherit version;
   };
 }

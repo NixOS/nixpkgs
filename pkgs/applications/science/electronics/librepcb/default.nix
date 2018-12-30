@@ -2,14 +2,14 @@
 
 stdenv.mkDerivation rec {
   name = "librepcb-${version}";
-  version = "20181031";
+  version = "0.1.0";
 
   src = fetchFromGitHub {
     owner = "LibrePCB";
     repo = "LibrePCB";
     fetchSubmodules = true;
-    rev = "3cf8dba9fa88e5b392d639c9fdbcf3a44664170a";
-    sha256 = "0kr4mii5w3kj3kqvhgq7zjxjrq44scx8ky0x77gyqmwvwfwk7nmx";
+    rev = "d7458d3b3e126499902e1a66a0ef889f516a7c97";
+    sha256 = "19wh0398fzzpd65nh4mmc4jllkrgcrwxvxdby0gb5wh1sqyaqac4";
   };
 
   enableParallelBuilding = true;

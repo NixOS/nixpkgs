@@ -107,5 +107,7 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ artuuge zimbatm ];
     platforms = platforms.linux;
+    # Requires libdrm_intel
+    badPlatforms = [ "aarch64-linux" ];
   };
 }
