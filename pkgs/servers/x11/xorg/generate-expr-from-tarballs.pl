@@ -1,13 +1,9 @@
 #! /usr/bin/env perl
 
-# Typical command to generate the list of tarballs:
-
-# export i="mirror://xorg/X11R7.7/src/everything/"; cat $(PRINT_PATH=1 nix-prefetch-url $i | tail -n 1) | perl -e 'while (<>) { if (/(href|HREF)="([^"]*.bz2)"/) { print "$ENV{'i'}$2\n"; }; }' | sort > tarballs-7.7.list
-# manually update extra.list
-# then run: cat tarballs-7.7.list extra.list old.list | perl ./generate-expr-from-tarballs.pl
-# tarballs-x.y.list is generated + changes for individual packages
-# extra.list are packages not contained in the tarballs
-# old.list are packages that used to be part of the tarballs
+# Usage:
+#
+# manually update tarballs.list
+# then run: cat tarballs.list | perl ./generate-expr-from-tarballs.pl
 
 
 use strict;
