@@ -22,7 +22,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "http://goodies.xfce.org/projects/panel-plugins/${p_name}";
-    description = "Battery plugin for Xfce panel";
+    description = "A simple XFCE panel plugin that lets the user run an alarm at a specified time or at the end of a specified countdown period";
+    longDescription = "The plugin is quite simple – it displays a progressbar showing the percentage of the time elapsed. Left-clicking on the plugin area opens a menu of available alarms. After selecting one, the user can start or stop the timer by selecting “start/stop timer” entry in the same menu. New alarms are added through the preferences window. Each alarm is either a countdown or is run at a specified time. By default a simple dialog pops up at the end of the countdown. The user can choose an external command to be run as the alarm and may also choose to have this repeated a specified number of times with a given interval between repetitions.";
     platforms = platforms.linux;
     license = licenses.gpl2;
     maintainers = [ ];
