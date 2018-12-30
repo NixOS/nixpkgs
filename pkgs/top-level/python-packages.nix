@@ -3226,6 +3226,8 @@ in {
 
   ordereddict = callPackage ../development/python-modules/ordereddict { };
 
+  od = callPackage ../development/python-modules/od { };
+
   orderedset = callPackage ../development/python-modules/orderedset { };
 
   python-otr = callPackage ../development/python-modules/python-otr { };
