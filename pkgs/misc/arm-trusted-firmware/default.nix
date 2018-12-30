@@ -6,7 +6,7 @@ let
             , platform
             , extraMakeFlags ? []
             , extraMeta ? {}
-            , version ? "1.5"
+            , version ? "2.0"
             , ... } @ args:
            stdenv.mkDerivation (rec {
 
@@ -17,7 +17,7 @@ let
       owner = "ARM-software";
       repo = "arm-trusted-firmware";
       rev = "refs/tags/v${version}";
-      sha256 = "1gm0bn2llzfzz9bfsz11fhwxj5lxvyrq7bc13fjj033nljzxn7k8";
+      sha256 = "087pkwa6slxff0aiz3v42gww007nww97bl1p96fvvs7rr1y14gjx";
     };
 
     depsBuildBuild = [ buildPackages.stdenv.cc ];
