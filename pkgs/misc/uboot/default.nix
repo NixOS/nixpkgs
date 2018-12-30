@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, bc, bison, dtc, flex, openssl, python2, swig
+{ stdenv, lib, fetchurl, fetchpatch, bc, bison, dtc, flex, openssl, python2, swig
 , armTrustedFirmwareAllwinner
 , buildPackages
 }:
@@ -14,7 +14,7 @@ let
            stdenv.mkDerivation (rec {
 
     name = "uboot-${defconfig}-${version}";
-    version = "2018.09";
+    version = args.version or "2018.09";
 
     src = fetchurl {
       url = "ftp://ftp.denx.de/pub/u-boot/u-boot-${version}.tar.bz2";
@@ -22,10 +22,6 @@ let
     };
 
     patches = [
-      (fetchpatch {
-        url = https://github.com/dezgeg/u-boot/commit/pythonpath-2018-07.patch;
-        sha256 = "096zqrlr8m9lxjma0iv7y6x78qswfs3q1w2irjkbmcvniz1azbs8";
-      })
       (fetchpatch {
         url = https://github.com/dezgeg/u-boot/commit/extlinux-path-length-2018-03.patch;
         sha256 = "07jafdnxvqv8lz256qy29agjc2k1zj5ad4k28r1w5qkhwj4ixmf8";
@@ -36,7 +32,15 @@ let
       patchShebangs tools
     '';
 
-    nativeBuildInputs = [ bc bison dtc flex openssl python2 swig ];
+    nativeBuildInputs = [
+      bc
+      bison
+      dtc
+      flex
+      openssl
+      (buildPackages.python2.withPackages (p: [ p.libfdt ]))
+      swig
+    ];
     depsBuildBuild = [ buildPackages.stdenv.cc ];
 
     hardeningDisable = [ "all" ];
@@ -58,7 +62,7 @@ let
       runHook preInstall
 
       mkdir -p ${installDir}
-      cp ${stdenv.lib.concatStringsSep " " filesToInstall} ${installDir}
+      cp ${lib.concatStringsSep " " filesToInstall} ${installDir}
 
       runHook postInstall
     '';
@@ -68,7 +72,7 @@ let
 
     dontStrip = true;
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       homepage = http://www.denx.de/wiki/U-Boot/;
       description = "Boot loader for embedded systems";
       license = licenses.gpl2;
@@ -84,7 +88,7 @@ in rec {
     installDir = "$out/bin";
     hardeningDisable = [];
     dontStrip = false;
-    extraMeta.platforms = stdenv.lib.platforms.linux;
+    extraMeta.platforms = lib.platforms.linux;
     extraMakeFlags = [ "HOST_TOOLS_ALL=y" "CROSS_BUILD_TOOLS=1" "NO_SDL=1" "tools" ];
     postConfigure = ''
       sed -i '/CONFIG_SYS_TEXT_BASE/c\CONFIG_SYS_TEXT_BASE=0x00000000' .config

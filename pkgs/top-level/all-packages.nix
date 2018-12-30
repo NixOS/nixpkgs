@@ -15304,6 +15304,8 @@ in
 
   ubootRock64 = callPackage ../misc/uboot/rock64.nix { };
 
+  ubootRockPro64 = callPackage ../misc/uboot/rockpro64.nix { };
+
   uclibc = callPackage ../os-specific/linux/uclibc { };
 
   uclibcCross = callPackage ../os-specific/linux/uclibc {
