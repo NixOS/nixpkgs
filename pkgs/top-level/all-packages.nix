@@ -15632,6 +15632,8 @@ in
 
   materia-theme = callPackage ../data/themes/materia-theme { };
 
+  material-design-icons = callPackage ../data/fonts/material-design-icons { };
+
   material-icons = callPackage ../data/fonts/material-icons { };
 
   meslo-lg = callPackage ../data/fonts/meslo-lg {};
