@@ -22,8 +22,10 @@ appleDerivation {
   installPhase = ''
     install -D Products/Release/libdisk.a $out/lib/libdisk.a
     rm Products/Release/libdisk.a
-    for bin in Products/Release/*; do
-      install -D $bin $out/bin/$(basename $bin)
+    for f in Products/Release/*; do
+      if [ -f $f ]; then
+        install -D $file $out/bin/$(basename $f)
+      done
     done
   '';
 
