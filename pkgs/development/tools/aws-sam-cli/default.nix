@@ -6,33 +6,44 @@ with python.pkgs;
 
 buildPythonApplication rec {
   pname = "aws-sam-cli";
-  version = "0.5.0";
+  version = "0.10.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "2acf9517f467950adb4939746658091e60cf60ee80093ffd0d3d821cb8a1f9fc";
+    sha256 = "523cd125bd89cd1d42559101a8500f74f88067fd9b26f72b1d05c5d00a76bed9";
   };
 
-  # Tests are not included in the PyPI package
+   # Tests are not included in the PyPI package
   doCheck = false;
 
   propagatedBuildInputs = [
     aws-sam-translator
+    six
+    chevron
+    click
+    flask
     boto3
     click
+    pyyaml
     cookiecutter
+    aws-sam-translator
     dateparser
     docker
+    python-dateutil
+    requests
+    aws-lambda-builders
+    serverlessrepo
     enum34
     flask
     python-dateutil
     pyyaml
     six
+    pathlib2
   ];
 
   postPatch = ''
-    substituteInPlace ./requirements/base.txt \
-      --replace 'aws-sam-translator==1.6.0' 'aws-sam-translator>=1.6.0';
+    substituteInPlace ./requirements/base.txt --replace 'click~=6.7' 'click>=6.7';
+    substituteInPlace ./requirements/base.txt --replace 'serverlessrepo==0.1.5' 'serverlessrepo>=0.1.5';
   '';
 
   meta = with lib; {
