@@ -34,6 +34,13 @@ in with pkgs; rec {
   };
 
   bootGCC = gcc.cc.override { enableLTO = false; };
+  bootBinutils = binutils.bintools.override {
+    withAllTargets = false;
+    # Don't need two linkers, disable whatever's not primary/default.
+    gold = false;
+    # bootstrap is easier w/static
+    enableShared = false;
+  };
 
   build =
 
@@ -150,7 +157,7 @@ in with pkgs; rec {
 
         # Copy binutils.
         for i in as ld ar ranlib nm strip readelf objdump; do
-          cp ${binutils.bintools.out}/bin/$i $out/bin
+          cp ${bootBinutils.out}/bin/$i $out/bin
         done
         cp '${lib.getLib binutils.bintools}'/lib/* "$out/lib/"
 
