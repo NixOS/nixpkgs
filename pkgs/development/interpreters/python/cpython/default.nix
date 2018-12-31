@@ -8,7 +8,7 @@
 , openssl
 , readline
 , sqlite
-, tcl ? null, tk ? null, tix ? null, libX11 ? null, xproto ? null, x11Support ? false
+, tcl ? null, tk ? null, tix ? null, libX11 ? null, xorgproto ? null, x11Support ? false
 , zlib
 , callPackage
 , self
@@ -26,7 +26,7 @@
 
 assert x11Support -> tcl != null
                   && tk != null
-                  && xproto != null
+                  && xorgproto != null
                   && libX11 != null;
 with stdenv.lib;
 
@@ -53,7 +53,7 @@ let
 
   buildInputs = filter (p: p != null) [
     zlib bzip2 expat lzma libffi gdbm sqlite readline ncurses openssl ]
-    ++ optionals x11Support [ tcl tk libX11 xproto ]
+    ++ optionals x11Support [ tcl tk libX11 xorgproto ]
     ++ optionals stdenv.isDarwin [ CF configd ];
 
   hasDistutilsCxxPatch = !(stdenv.cc.isGNU or false);

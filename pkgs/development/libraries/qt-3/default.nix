@@ -1,18 +1,18 @@
 { stdenv, fetchurl
 , xftSupport ? true, libXft ? null
 , xrenderSupport ? true, libXrender ? null
-, xrandrSupport ? true, libXrandr ? null, randrproto ? null
+, xrandrSupport ? true, libXrandr ? null
 , xineramaSupport ? true, libXinerama ? null
 , cursorSupport ? true, libXcursor ? null
 , threadSupport ? true
 , mysqlSupport ? false, mysql ? null
 , openglSupport ? false, libGLU_combined ? null, libXmu ? null
-, xlibsWrapper, xextproto, zlib, libjpeg, libpng, which
+, xlibsWrapper, xorgproto, zlib, libjpeg, libpng, which
 }:
 
 assert xftSupport -> libXft != null;
 assert xrenderSupport -> xftSupport && libXrender != null;
-assert xrandrSupport -> libXrandr != null && randrproto != null;
+assert xrandrSupport -> libXrandr != null;
 assert cursorSupport -> libXcursor != null;
 assert mysqlSupport -> mysql != null;
 assert openglSupport -> libGLU_combined != null && libXmu != null;
@@ -40,7 +40,7 @@ stdenv.mkDerivation {
     "-v"
     "-system-zlib" "-system-libpng" "-system-libjpeg"
     "-qt-gif"
-    "-I${xextproto}/include"
+    "-I${xorgproto}/include"
     (mk threadSupport "thread")
     (mk xrenderSupport "xrender")
     (mk xrandrSupport "xrandr")
@@ -55,7 +55,6 @@ stdenv.mkDerivation {
     "-L${libXrender.out}/lib" "-I${libXrender.dev}/include"
   ] ++ stdenv.lib.optionals xrandrSupport [
     "-L${libXrandr.out}/lib" "-I${libXrandr.dev}/include"
-    "-I${randrproto}/include"
   ] ++ stdenv.lib.optionals xineramaSupport [
     "-L${libXinerama.out}/lib" "-I${libXinerama.dev}/include"
   ] ++ stdenv.lib.optionals cursorSupport [

@@ -1326,7 +1326,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xcbutil = callPackage ({ stdenv, pkgconfig, fetchurl, gperf, m4, libxcb, xorgproto }: stdenv.mkDerivation {
+  xcbutil = callPackage ({ stdenv, pkgconfig, fetchurl, gperf, m4, libxcb }: stdenv.mkDerivation {
     name = "xcb-util-0.4.0";
     builder = ./builder.sh;
     src = fetchurl {
@@ -1335,11 +1335,11 @@ lib.makeScope newScope (self: with self; {
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ gperf m4 libxcb xorgproto ];
+    buildInputs = [ gperf m4 libxcb ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xcbutilcursor = callPackage ({ stdenv, pkgconfig, fetchurl, gperf, m4, libxcb, xcbutilimage, xcbutilrenderutil, xorgproto }: stdenv.mkDerivation {
+  xcbutilcursor = callPackage ({ stdenv, pkgconfig, fetchurl, gperf, m4, libxcb, xcbutilimage, xcbutilrenderutil }: stdenv.mkDerivation {
     name = "xcb-util-cursor-0.1.3";
     builder = ./builder.sh;
     src = fetchurl {
@@ -1348,11 +1348,11 @@ lib.makeScope newScope (self: with self; {
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ gperf m4 libxcb xcbutilimage xcbutilrenderutil xorgproto ];
+    buildInputs = [ gperf m4 libxcb xcbutilimage xcbutilrenderutil ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xcbutilerrors = callPackage ({ stdenv, pkgconfig, fetchurl, gperf, m4, libxcb, xcbproto, xorgproto }: stdenv.mkDerivation {
+  xcbutilerrors = callPackage ({ stdenv, pkgconfig, fetchurl, gperf, m4, libxcb, xcbproto }: stdenv.mkDerivation {
     name = "xcb-util-errors-1.0";
     builder = ./builder.sh;
     src = fetchurl {
@@ -1361,7 +1361,7 @@ lib.makeScope newScope (self: with self; {
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ gperf m4 libxcb xcbproto xorgproto ];
+    buildInputs = [ gperf m4 libxcb xcbproto ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
@@ -1391,7 +1391,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xcbutilrenderutil = callPackage ({ stdenv, pkgconfig, fetchurl, gperf, m4, libxcb, xorgproto }: stdenv.mkDerivation {
+  xcbutilrenderutil = callPackage ({ stdenv, pkgconfig, fetchurl, gperf, m4, libxcb }: stdenv.mkDerivation {
     name = "xcb-util-renderutil-0.3.9";
     builder = ./builder.sh;
     src = fetchurl {
@@ -1400,11 +1400,11 @@ lib.makeScope newScope (self: with self; {
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ gperf m4 libxcb xorgproto ];
+    buildInputs = [ gperf m4 libxcb ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xcbutilwm = callPackage ({ stdenv, pkgconfig, fetchurl, gperf, m4, libxcb, xorgproto }: stdenv.mkDerivation {
+  xcbutilwm = callPackage ({ stdenv, pkgconfig, fetchurl, gperf, m4, libxcb }: stdenv.mkDerivation {
     name = "xcb-util-wm-0.4.1";
     builder = ./builder.sh;
     src = fetchurl {
@@ -1413,7 +1413,7 @@ lib.makeScope newScope (self: with self; {
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ gperf m4 libxcb xorgproto ];
+    buildInputs = [ gperf m4 libxcb ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
@@ -2470,7 +2470,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xorgserver = callPackage ({ stdenv, pkgconfig, fetchurl, dri2proto, dri3proto, renderproto, openssl, libX11, libXau, libXaw, libxcb, xcbutil, xcbutilwm, xcbutilimage, xcbutilkeysyms, xcbutilrenderutil, libXdmcp, libXfixes, libxkbfile, libXmu, libXpm, libXrender, libXres, libXt }: stdenv.mkDerivation {
+  xorgserver = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, openssl, libX11, libXau, libXaw, libxcb, xcbutil, xcbutilwm, xcbutilimage, xcbutilkeysyms, xcbutilrenderutil, libXdmcp, libXfixes, libxkbfile, libXmu, libXpm, libXrender, libXres, libXt }: stdenv.mkDerivation {
     name = "xorg-server-1.19.6";
     builder = ./builder.sh;
     src = fetchurl {
@@ -2479,7 +2479,7 @@ lib.makeScope newScope (self: with self; {
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ dri2proto dri3proto renderproto openssl libX11 libXau libXaw libxcb xcbutil xcbutilwm xcbutilimage xcbutilkeysyms xcbutilrenderutil libXdmcp libXfixes libxkbfile libXmu libXpm libXrender libXres libXt ];
+    buildInputs = [ xorgproto openssl libX11 libXau libXaw libxcb xcbutil xcbutilwm xcbutilimage xcbutilkeysyms xcbutilrenderutil libXdmcp libXfixes libxkbfile libXmu libXpm libXrender libXres libXt ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 

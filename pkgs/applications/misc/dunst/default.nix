@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, makeWrapper
 , pkgconfig, which, perl, libXrandr
 , cairo, dbus, systemd, gdk_pixbuf, glib, libX11, libXScrnSaver
-, libXinerama, libnotify, libxdg_basedir, pango, xproto, librsvg, dunstify ? false
+, libXinerama, libnotify, libxdg_basedir, pango, xorgproto, librsvg, dunstify ? false
 }:
 
 stdenv.mkDerivation rec {
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     cairo dbus gdk_pixbuf glib libX11 libXScrnSaver
-    libXinerama libnotify libxdg_basedir pango xproto librsvg libXrandr
+    libXinerama libnotify libxdg_basedir pango xorgproto librsvg libXrandr
   ];
 
   outputs = [ "out" "man" ];

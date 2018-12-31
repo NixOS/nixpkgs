@@ -37,9 +37,9 @@ $pcMap{"libudev"} = "udev";
 $pcMap{"gl"} = "libGL";
 $pcMap{"gbm"} = "mesa_noglu";
 $pcMap{"\$PIXMAN"} = "pixman";
-$pcMap{"\$RENDERPROTO"} = "renderproto";
-$pcMap{"\$DRI3PROTO"} = "dri3proto";
-$pcMap{"\$DRI2PROTO"} = "dri2proto";
+$pcMap{"\$RENDERPROTO"} = "xorgproto";
+$pcMap{"\$DRI3PROTO"} = "xorgproto";
+$pcMap{"\$DRI2PROTO"} = "xorgproto";
 
 
 my $downloadCache = "./download-cache";
@@ -225,7 +225,7 @@ while (<>) {
     process \@requires, $1 while $file =~ /XORG_DRIVER_CHECK_EXT\([^,]*,([^\)]*)\)/g;
 
     push @requires, "libxslt" if $pkg =~ /libxcb/;
-    push @requires, "gperf", "m4", "xproto" if $pkg =~ /xcbutil/;
+    push @requires, "gperf", "m4", "xorgproto" if $pkg =~ /xcbutil/;
 
     print "REQUIRES $pkg => @requires\n";
     print "NATIVE_REQUIRES $pkg => @nativeRequires\n";
