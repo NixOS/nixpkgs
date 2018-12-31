@@ -2,7 +2,7 @@
 , glib, libgudev, udisks2, libgcrypt, libcap, polkit
 , libgphoto2, avahi, libarchive, fuse, libcdio
 , libxml2, libxslt, docbook_xsl, docbook_xml_dtd_42, samba, libmtp
-, gnomeSupport ? false, gnome, makeWrapper, gcr
+, gnomeSupport ? false, gnome, gcr, wrapGAppsHook
 , libimobiledevice, libbluray, libcdio-paranoia, libnfs, openssh
 , libsecret, libgdata, python3
 }:
@@ -28,7 +28,7 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     meson ninja python3
-    pkgconfig gettext makeWrapper
+    pkgconfig gettext wrapGAppsHook
     libxml2 libxslt docbook_xsl docbook_xml_dtd_42
   ];
 
@@ -40,6 +40,7 @@ in stdenv.mkDerivation rec {
     # ToDo: a ligther version of libsoup to have FTP/HTTP support?
   ] ++ stdenv.lib.optionals gnomeSupport (with gnome; [
     libsoup gcr
+    glib-networking # TLS support
     gnome-online-accounts libsecret libgdata
   ]);
 
@@ -56,14 +57,6 @@ in stdenv.mkDerivation rec {
 
   doCheck = false; # fails with "ModuleNotFoundError: No module named 'gi'"
   doInstallCheck = doCheck;
-
-  preFixup = ''
-    for f in $out/libexec/*; do
-      wrapProgram $f \
-        ${stdenv.lib.optionalString gnomeSupport "--prefix GIO_EXTRA_MODULES : \"${stdenv.lib.getLib gnome.dconf}/lib/gio/modules\""} \
-        --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
-    done
-  '';
 
   passthru = {
     updateScript = gnome3.updateScript {

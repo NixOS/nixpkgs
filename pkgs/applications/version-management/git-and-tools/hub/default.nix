@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   name = "hub-${version}";
-  version = "2.6.1";
+  version = "2.7.0";
 
   goPackagePath = "github.com/github/hub";
 
@@ -10,7 +10,7 @@ buildGoPackage rec {
     owner = "github";
     repo = "hub";
     rev = "v${version}";
-    sha256 = "1gq8nmzdsqicjgam3h48l0dad46dn9mx9blr1413rc2cp9qmg7d4";
+    sha256 = "1p90m1xp3jahs5y0lp0qfmfa7wqn7gxyygn7x45a6cbf2zzlb86l";
   };
 
   nativeBuildInputs = [ groff ronn utillinux ];
@@ -26,7 +26,7 @@ buildGoPackage rec {
   postInstall = ''
     cd go/src/${goPackagePath}
     install -D etc/hub.zsh_completion "$bin/share/zsh/site-functions/_hub"
-    install -D etc/hub.bash_completion.sh "$bin/etc/bash_completion.d/hub.bash_completion.sh"
+    install -D etc/hub.bash_completion.sh "$bin/share/bash-completion/completions/hub"
     install -D etc/hub.fish_completion  "$bin/share/fish/vendor_completions.d/hub.fish"
 
     make man-pages

@@ -87,14 +87,37 @@ stdenv.mkDerivation rec {
     cp -r lib $out/
     cp -r include $out/
     cp -r share $out/
+    ''
+    + stdenv.lib.optionalString stdenv.isDarwin ''
+    # The fixDarwinDylibNames in nixpkgs can't seem to fix all the libraries.
+    # We manually fix them up here.
+    fixDarwinDylibNames() {
+        local flags=()
+        local old_id
 
+        for fn in "$@"; do
+            flags+=(-change "$PWD/lib/$(basename "$fn")" "$fn")
+        done
+
+        for fn in "$@"; do
+            if [ -L "$fn" ]; then continue; fi
+            echo "$fn: fixing dylib"
+            install_name_tool -id "$fn" "''${flags[@]}" "$fn"
+        done
+    }
+
+    fixDarwinDylibNames $(find "$out" -name "*.dylib")
+    ''
+    + stdenv.lib.optionalString (!stdenv.isDarwin) ''
     # Fix rpaths
     cd $out
     find -name \*.so\* -type f -exec \
       patchelf --set-rpath "$out/lib:${stdenv.lib.makeLibraryPath buildInputs}" {} \;
-
+    ''
+    +
+    ''
     runHook postInstall
-  '';
+    '';
 
   nativeBuildInputs = [ cmake ]
     ++ stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;

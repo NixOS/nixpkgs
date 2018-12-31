@@ -615,6 +615,13 @@ in {
     pythonPackages = self;
   };
 
+  /*
+    `pyqt5_with_qtwebkit` should not be used by python libraries in
+    pkgs/development/python-modules/*. Putting this attribute in
+    `propagatedBuildInputs` may cause collisions.
+  */
+  pyqt5_with_qtwebkit = self.pyqt5.override { withWebKit = true; };
+
   pysc2 = callPackage ../development/python-modules/pysc2 { };
 
   pyscard = callPackage ../development/python-modules/pyscard { inherit (pkgs.darwin.apple_sdk.frameworks) PCSC; };
@@ -2416,6 +2423,10 @@ in {
     cudaSupport = pkgs.config.cudaSupport or false;
   };
 
+  pyro-ppl = callPackage ../development/python-modules/pyro-ppl {};
+
+  opt-einsum = callPackage ../development/python-modules/opt-einsum {};
+
   pytorchWithCuda = self.pytorch.override {
     cudaSupport = true;
   };
@@ -3225,6 +3236,8 @@ in {
   opentimestamps = callPackage ../development/python-modules/opentimestamps { };
 
   ordereddict = callPackage ../development/python-modules/ordereddict { };
+
+  od = callPackage ../development/python-modules/od { };
 
   orderedset = callPackage ../development/python-modules/orderedset { };
 
@@ -4060,6 +4073,8 @@ in {
 
   update_checker = callPackage ../development/python-modules/update_checker {};
 
+  update-copyright = callPackage ../development/python-modules/update-copyright {};
+
   uritemplate = callPackage ../development/python-modules/uritemplate { };
 
   uproot = callPackage ../development/python-modules/uproot {};
@@ -4381,6 +4396,8 @@ in {
   umalqurra = callPackage ../development/python-modules/umalqurra { };
 
   unicodecsv = callPackage ../development/python-modules/unicodecsv { };
+
+  unidiff = callPackage ../development/python-modules/unidiff { };
 
   unittest2 = callPackage ../development/python-modules/unittest2 { };
 
@@ -5089,6 +5106,8 @@ in {
   qasm2image = callPackage ../development/python-modules/qasm2image { };
 
   simpy = callPackage ../development/python-modules/simpy { };
+
+  x256 = callPackage ../development/python-modules/x256 { };
 
   yattag = callPackage ../development/python-modules/yattag { };
 

@@ -17,9 +17,8 @@ let
 in
 stdenv.mkDerivation ({
   name = "chicken-${name}";
-  propagatedBuildInputs = buildInputs ++ [ chicken ];
-  propagatedUserEnvPkgs = buildInputs ++ [ chicken ];
-  buildInputs = [ makeWrapper ];
+  propagatedBuildInputs = buildInputs;
+  buildInputs = [ makeWrapper chicken ];
 
   CSC_OPTIONS = stdenv.lib.concatStringsSep " " cscOptions;
 

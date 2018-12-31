@@ -176,4 +176,13 @@ rec {
       ];
     };
   };
+
+  # 12. example of running something as root on top of a parent image
+  # Regression test related to PR #52109
+  runAsRootParentImage = buildImage {
+    name = "runAsRootParentImage";
+    tag = "latest";
+    runAsRoot = "touch /example-file";
+    fromImage = bash;
+  };
 }
