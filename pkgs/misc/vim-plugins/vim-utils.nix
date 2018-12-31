@@ -1,4 +1,4 @@
-{stdenv, vim, vimPlugins, vim_configurable, buildEnv, writeText, writeScriptBin
+{stdenv, vim, vimPlugins, vim_configurable, neovim, buildEnv, writeText, writeScriptBin
 , nix-prefetch-hg, nix-prefetch-git }:
 
 /*
@@ -407,6 +407,7 @@ rec {
 
   inherit (import ./build-vim-plugin.nix { inherit stdenv rtpPath vim; }) buildVimPlugin buildVimPluginFrom2Nix;
 
+  # used to figure out which python dependencies etc. neovim needs
   requiredPlugins = {
     packages ? {},
     givenKnownPlugins ? null,
@@ -420,11 +421,11 @@ rec {
                      if vam != null && vam ? knownPlugins then vam.knownPlugins else
                      if pathogen != null && pathogen ? knownPlugins then pathogen.knownPlugins else
                      vimPlugins;
-      pathogenNames = findDependenciesRecursively knownPlugins pathogen.pluginNames;
-      vamNames = findDependenciesRecursively knownPlugins (lib.concatMap vamDictToNames vam.pluginDictionaries);
-      names = (lib.optionals (pathogen != null) pathogenNames) ++
-              (lib.optionals (vam != null) vamNames);
-      nonNativePlugins = map (name: knownPlugins.${name}) names ++ (lib.optionals (plug != null) plug.plugins);
+      pathogenPlugins = findDependenciesRecursively knownPlugins pathogen.pluginNames;
+      vamPlugins = findDependenciesRecursively knownPlugins (lib.concatMap vamDictToNames vam.pluginDictionaries);
+      nonNativePlugins = (lib.optionals (pathogen != null) pathogenPlugins)
+                      ++ (lib.optionals (vam != null) vamPlugins)
+                      ++ (lib.optionals (plug != null) plug.plugins);
       nativePluginsConfigs = lib.attrsets.attrValues packages;
       nativePlugins = lib.concatMap ({start?[], opt?[], knownPlugins?vimPlugins}: start++opt) nativePluginsConfigs;
     in
@@ -450,5 +451,10 @@ rec {
   test_vim_with_vim_nix = vim_configurable.customize {
     name = "vim-with-vim-addon-nix";
     vimrcConfig.packages.myVimPackage.start = with vimPlugins; [ vim-nix ];
+  };
+
+  # only neovim makes use of `requiredPlugins`, test this here
+  test_nvim_with_vim_nix_using_pathogen = neovim.override {
+    configure.pathogen.pluginNames = [ "vim-nix" ];
   };
 }
