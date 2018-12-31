@@ -62,7 +62,7 @@ while (<>) {
       #next unless $pkg eq "xcbutil";
     }
 
-    $tarball =~ /\/([^\/]*)\.tar\.(bz2|gz|xz)$/;
+    $tarball =~ /\/([^\/]*)\.(tar\.(bz2|gz|xz)|tgz)$/;
     my $pkgName = $1;
 
     print "  $pkg $pkgName\n";
