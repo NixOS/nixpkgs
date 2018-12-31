@@ -1222,6 +1222,19 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
+  oclock = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libXext, libXmu, libXt }: stdenv.mkDerivation {
+    name = "oclock-1.0.4";
+    builder = ./builder.sh;
+    src = fetchurl {
+      url = mirror://xorg/individual/app/oclock-1.0.4.tar.bz2;
+      sha256 = "1zmfzfmdp42nvapf0qz1bc3i3waq5sjrpkgfw64qs4nmq30wy86c";
+    };
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ libX11 libXext libXmu libXt ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
+
   sessreg = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto }: stdenv.mkDerivation {
     name = "sessreg-1.1.1";
     builder = ./builder.sh;
