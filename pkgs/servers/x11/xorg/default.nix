@@ -2146,11 +2146,11 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   xf86videovmware = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libdrm, udev, libpciaccess, libX11, libXext, xorgserver }: stdenv.mkDerivation {
-    name = "xf86-video-vmware-13.2.1";
+    name = "xf86-video-vmware-13.3.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-video-vmware-13.2.1.tar.bz2;
-      sha256 = "0azn3g0vcki47n5jddagk2rmbwdvp845k8p7d2r56zxs3w8ggxz2";
+      url = mirror://xorg/individual/driver/xf86-video-vmware-13.3.0.tar.bz2;
+      sha256 = "0v06qhm059klq40m2yx4wypzb7h53aaassbjfmm6clcyclj1k5s7";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
