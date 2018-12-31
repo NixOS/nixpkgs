@@ -37,7 +37,7 @@ with frameworks; with libs; {
   CoreText                = [ CF CoreGraphics ];
   CoreVideo               = [ ApplicationServices CF CoreGraphics IOSurface OpenGL ];
   CoreWLAN                = [ SecurityFoundation ];
-  DVComponentGlue         = [ CoreServices QuickTime ];
+  DVComponentGlue         = [ CoreServices ];
   DVDPlayback             = [];
   DirectoryService        = [ CF ];
   DiscRecording           = [ CF CoreServices IOKit ];
@@ -82,9 +82,7 @@ with frameworks; with libs; {
   PCSC                    = [ CoreData ];
   PreferencePanes         = [];
   PubSub                  = [];
-  QTKit                   = [ CoreMediaIO CoreMedia MediaToolbox QuickTime VideoToolbox ];
   QuickLook               = [ ApplicationServices CF ];
-  QuickTime               = [ ApplicationServices AudioUnit Carbon CoreAudio CoreServices OpenGL QuartzCore ];
   SceneKit                = [];
   ScreenSaver             = [];
   Scripting               = [];

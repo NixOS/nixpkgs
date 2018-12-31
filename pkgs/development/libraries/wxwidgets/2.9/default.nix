@@ -2,7 +2,7 @@
 , gstreamer, gst-plugins-base, GConf, setfile
 , withMesa ? true, libGLU ? null, libGL ? null
 , compat24 ? false, compat26 ? true, unicode ? true
-, Carbon ? null, Cocoa ? null, Kernel ? null, QuickTime ? null, AGL ? null
+, Carbon ? null, Cocoa ? null, Kernel ? null, AGL ? null
 }:
 
 assert withMesa -> libGLU != null && libGL != null;
@@ -32,7 +32,7 @@ stdenv.mkDerivation {
     [ gtk2 libXinerama libSM libXxf86vm xf86vidmodeproto gstreamer
       gst-plugins-base GConf ]
     ++ optional withMesa libGLU
-    ++ optionals stdenv.isDarwin [ setfile Carbon Cocoa Kernel QuickTime ];
+    ++ optionals stdenv.isDarwin [ setfile Carbon Cocoa Kernel ];
 
   nativeBuildInputs = [ pkgconfig ];
 
@@ -73,7 +73,7 @@ stdenv.mkDerivation {
   };
 
   enableParallelBuilding = true;
-  
+
   meta = {
     platforms = with platforms; darwin ++ linux;
     license = licenses.wxWindows;

@@ -32,9 +32,6 @@ rec {
     "/System/Library/Frameworks/VideoToolbox.framework"
     "/System/Library/PrivateFrameworks/AppleVA.framework/Versions/A/AppleVA"
   ];
-  QuickTime = [
-    "/System/Library/Frameworks/QuickTime.framework"
-  ];
   CoreMedia = [
     "/System/Library/Frameworks/CoreMedia.framework"
   ];
