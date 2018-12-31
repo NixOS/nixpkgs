@@ -2,13 +2,13 @@
 
 let
   pname = "cantarell-fonts";
-  version = "0.110";
+  version = "0.111";
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "19rll0h4xjn83lqm0zc4088y0vkrx1wxg8jz9imvgd8snmfxfm54";
+    sha256 = "05hpnhihwm9sxlq1qn993g03pwkmpjbn0dvnba71r1gfjv0jp2w5";
   };
 
   nativeBuildInputs = [ meson ninja gettext appstream-glib ];
@@ -21,7 +21,7 @@ in stdenv.mkDerivation rec {
 
   outputHashAlgo = "sha256";
   outputHashMode = "recursive";
-  outputHash = "052nxmhw2j8yvcj90r8xhjf0mzim8h6syip7winxb28vavj6jnba";
+  outputHash = "12ps2gjv1lmzbmkv16vgjmaahl3ayadpniyrx0z31sqn443r57hq";
 
   passthru = {
     updateScript = gnome3.updateScript {
