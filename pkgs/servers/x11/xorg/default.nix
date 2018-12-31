@@ -531,6 +531,19 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
+  fonttosfnt = callPackage ({ stdenv, pkgconfig, fetchurl, libfontenc, freetype, xorgproto }: stdenv.mkDerivation {
+    name = "fonttosfnt-1.0.5";
+    builder = ./builder.sh;
+    src = fetchurl {
+      url = mirror://xorg/individual/app/fonttosfnt-1.0.5.tar.bz2;
+      sha256 = "00w5in1gznai141wishz8ng7spvi5274n16zj0pdl1ma2vsmy2n8";
+    };
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ libfontenc freetype xorgproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
+
   fontutil = callPackage ({ stdenv, pkgconfig, fetchurl }: stdenv.mkDerivation {
     name = "font-util-1.3.1";
     builder = ./builder.sh;
