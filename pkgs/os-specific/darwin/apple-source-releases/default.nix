@@ -232,7 +232,7 @@ let
       hfs = pkgs.darwin.hfs.override { headersOnly = true; };
     };
     libutil         = applePackage "libutil"           "osx-10.12.6"     "0lqdxaj82h8yjbjm856jjz9k2d96k0viimi881akfng08xk1246y" {};
-    libunwind       = applePackage "libunwind"         "osx-10.12.6"     "0miffaa41cv0lzf8az5k1j1ng8jvqvxcr4qrlkf3xyj479arbk10" {};
+    libunwind       = applePackage "libunwind"         "osx-10.12.6"     "0miffaa41cv0lzf8az5k1j1ng8jvqvxcr4qrlkf3xyj479arbk1b" {};
     mDNSResponder   = applePackage "mDNSResponder"     "osx-10.12.6"     "02ms1p8zlgmprzn65jzr7yaqxykh3zxjcrw0c06aayim6h0dsqfy" {};
     objc4           = applePackage "objc4"             "osx-10.12.6"     "1cj1vhbcs9pkmag2ms8wslagicnq9bxi2qjkszmp3ys7z7ccrbwz" {};
     ppp             = applePackage "ppp"               "osx-10.12.6"     "1kcc2nc4x1kf8sz0a23i6nfpvxg381kipi0qdisrp8x9z2gbkxb8" {};

@@ -2,7 +2,7 @@
 
 appleDerivation {
   installPhase = lib.optionalString headersOnly ''
-    mkdir -p $out/include
-    cp core/*.h $out/include
+    mkdir -p $out/include/hfs
+    cp core/*.h $out/include/hfs
   '';
 }

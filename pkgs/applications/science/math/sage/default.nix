@@ -70,7 +70,7 @@ let
   sage-env = callPackage ./sage-env.nix {
     sagelib = python.pkgs.sagelib;
     inherit env-locations;
-    inherit python rWrapper ecl singular palp flint pynac pythonEnv;
+    inherit python ecl singular palp flint pynac pythonEnv;
     pkg-config = pkgs.pkgconfig; # not to confuse with pythonPackages.pkgconfig
   };
 
@@ -123,19 +123,6 @@ let
     extraLibs = pythonRuntimeDeps;
     ignoreCollisions = true;
   } // { extraLibs = pythonRuntimeDeps; }; # make the libs accessible
-
-  # needs to be rWrapper, standard "R" doesn't include default packages
-  rWrapper = pkgs.rWrapper.override {
-    # https://trac.sagemath.org/ticket/25674
-    R = pkgs.R.overrideAttrs (attrs: rec {
-      name = "R-3.4.4";
-      doCheck = false;
-      src = fetchurl {
-        url = "http://cran.r-project.org/src/base/R-3/${name}.tar.gz";
-        sha256 = "0dq3jsnwsb5j3fhl0wi3p5ycv8avf8s5j1y4ap3d2mkjmcppvsdk";
-      };
-    });
-  };
 
   arb = pkgs.arb.override { inherit flint; };
 

@@ -343,6 +343,13 @@
      <literal><![CDATA[security.pam.services.<name?>.text]]></literal>.
    </para>
   </listitem>
+   <listitem>
+    <para>
+     <literal>fish</literal> has been upgraded to 3.0.
+     It comes with a number of improvements and backwards incompatible changes.
+     See the <literal>fish</literal> <link xlink:href="https://github.com/fish-shell/fish-shell/releases/tag/3.0.0">release notes</link> for more information.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
@@ -359,6 +366,12 @@
      The <option>services.matomo</option> module gained the option
      <option>services.matomo.package</option> which determines the used
      Matomo version.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     <literal>composableDerivation</literal> along with supporting library functions
+     has been removed.
     </para>
    </listitem>
    <listitem>

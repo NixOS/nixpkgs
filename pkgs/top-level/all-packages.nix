@@ -398,8 +398,6 @@ in
 
   releaseTools = callPackage ../build-support/release { };
 
-  composableDerivation = callPackage ../../lib/composable-derivation.nix { };
-
   inherit (lib.systems) platforms;
 
   setJavaClassPath = makeSetupHook { } ../build-support/setup-hooks/set-java-classpath.sh;
@@ -698,6 +696,8 @@ in
   cozy = callPackage ../applications/audio/cozy-audiobooks { };
 
   deskew = callPackage ../applications/graphics/deskew { };
+
+  detect-secrets = python3Packages.callPackage ../development/tools/detect-secrets { };
 
   diskus = callPackage ../tools/misc/diskus {
     inherit (darwin.apple_sdk.frameworks) Security;
@@ -1443,6 +1443,8 @@ in
   genromfs = callPackage ../tools/filesystems/genromfs { };
 
   gh-ost = callPackage ../tools/misc/gh-ost { };
+
+  gif-for-cli = callPackage ../tools/misc/gif-for-cli { };
 
   gist = callPackage ../tools/text/gist { };
 
@@ -3148,7 +3150,6 @@ in
   gt5 = callPackage ../tools/system/gt5 { };
 
   gtest = callPackage ../development/libraries/gtest { };
-  gtest_static = callPackage ../development/libraries/gtest { static = true; };
   gmock = gtest; # TODO: move to aliases.nix
 
   gbenchmark = callPackage ../development/libraries/gbenchmark {};
@@ -3403,6 +3404,7 @@ in
   iftop = callPackage ../tools/networking/iftop { };
 
   ifuse = callPackage ../tools/filesystems/ifuse { };
+  ideviceinstaller = callPackage ../tools/misc/ideviceinstaller { };
 
   inherit (callPackages ../tools/filesystems/irods rec {
             stdenv = llvmPackages_38.libcxxStdenv;
@@ -3871,6 +3873,13 @@ in
     openssl = openssl_1_1;
   };
   nodejs-slim-10_x = callPackage ../development/web/nodejs/v10.nix {
+    enableNpm = false;
+    openssl = openssl_1_1;
+  };
+  nodejs-11_x = callPackage ../development/web/nodejs/v11.nix {
+    openssl = openssl_1_1;
+  };
+  nodejs-slim-11_x = callPackage ../development/web/nodejs/v11.nix {
     enableNpm = false;
     openssl = openssl_1_1;
   };
@@ -4410,7 +4419,9 @@ in
 
   networkmanager_dmenu = callPackage ../tools/networking/network-manager/dmenu.nix  { };
 
-  newsboat = callPackage ../applications/networking/feedreaders/newsboat { };
+  newsboat = callPackage ../applications/networking/feedreaders/newsboat {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   nextcloud = callPackage ../servers/nextcloud { };
 
@@ -6585,17 +6596,15 @@ in
 
   colm = callPackage ../development/compilers/colm { };
 
-  fetchegg = callPackage ../build-support/fetchegg { };
+  chickenPackages_4 = callPackage ../development/compilers/chicken/4 { };
+  chickenPackages_5 = callPackage ../development/compilers/chicken/5 { };
+  chickenPackages = chickenPackages_5;
 
-  eggDerivation = callPackage ../development/compilers/chicken/eggDerivation.nix { };
-
-  chicken = callPackage ../development/compilers/chicken {
-    bootstrap-chicken = chicken.override { bootstrap-chicken = null; };
-  };
-
-  egg2nix = callPackage ../development/tools/egg2nix {
-    chickenEggs = callPackage ../development/tools/egg2nix/chicken-eggs.nix { };
-  };
+  inherit (chickenPackages)
+    fetchegg
+    eggDerivation
+    chicken
+    egg2nix;
 
   ccl = callPackage ../development/compilers/ccl {
     inherit (buildPackages.darwin) bootstrap_cmds;
@@ -6684,6 +6693,8 @@ in
   eli = callPackage ../development/compilers/eli { };
 
   eql = callPackage ../development/compilers/eql {};
+
+  elm2nix = haskell.lib.justStaticExecutables (haskellPackages.callPackage ../development/tools/elm2nix {});
 
   elmPackages = recurseIntoAttrs (callPackage ../development/compilers/elm { });
 
@@ -9263,7 +9274,9 @@ in
 
   armadillo = callPackage ../development/libraries/armadillo {};
 
-  arrow-cpp = callPackage ../development/libraries/arrow-cpp {};
+  arrow-cpp = callPackage ../development/libraries/arrow-cpp {
+    gtest = gtest.override { static = true; };
+  };
 
   assimp = callPackage ../development/libraries/assimp { };
 
@@ -10772,11 +10785,17 @@ in
         url = "https://www.gap-system.org/pub/gap/gap48/tar.bz2/gap${version}_${pkgVer}.tar.bz2";
         sha256 = "19n2p1mdg33s2x9rs51iak7rgndc1cwr56jyqnah0g1ydgg1yh6b";
       };
-      patches = (oldAttrs.patches or []) ++ [
+      patches = [
         # don't install any packages by default (needed for interop with libgap, probably obsolete  with 4r10
         (fetchpatch {
           url = "https://git.sagemath.org/sage.git/plain/build/pkgs/gap/patches/nodefaultpackages.patch?id=07d6c37d18811e2b377a9689790a7c5e24da16ba";
           sha256 = "1xwj766m3axrxbkyx13hy3q8s2wkqxy3m6mgpwq3c3n4vk3v416v";
+        })
+
+        #  fix infinite loop in writeandcheck() when writing an error message fails.
+        (fetchpatch {
+          url = "https://git.sagemath.org/sage.git/plain/build/pkgs/gap/patches/writeandcheck.patch?id=07d6c37d18811e2b377a9689790a7c5e24da16ba";
+          sha256 = "1r1511x4kc2i2mbdq1b61rb6p3misvkf1v5qy3z6fmn6vqwziaz1";
         })
       ];
   });
@@ -15609,6 +15628,8 @@ in
 
   materia-theme = callPackage ../data/themes/materia-theme { };
 
+  material-design-icons = callPackage ../data/fonts/material-design-icons { };
+
   material-icons = callPackage ../data/fonts/material-icons { };
 
   meslo-lg = callPackage ../data/fonts/meslo-lg {};
@@ -15722,6 +15743,8 @@ in
   profont = callPackage ../data/fonts/profont { };
 
   proggyfonts = callPackage ../data/fonts/proggyfonts { };
+
+  qogir-theme = callPackage ../data/themes/qogir { };
 
   route159 = callPackage ../data/fonts/route159 { };
 
@@ -17780,6 +17803,7 @@ in
   k3d = callPackage ../applications/graphics/k3d {
     inherit (pkgs.gnome2) gtkglext;
     stdenv = overrideCC stdenv gcc6;
+    boost = boost166.override { enablePython = true; };
   };
 
   k9copy = libsForQt5.callPackage ../applications/video/k9copy {};

@@ -1,4 +1,4 @@
-{ stdenv, symlinkJoin, fetchurl, fetchFromGitHub, boost, brotli, cmake, double-conversion, flatbuffers, gflags, glog, gtest_static, lz4, perl, python, rapidjson, snappy, thrift, which, zlib, zstd }:
+{ stdenv, symlinkJoin, fetchurl, fetchFromGitHub, boost, brotli, cmake, double-conversion, flatbuffers, gflags, glog, gtest, lz4, perl, python, rapidjson, snappy, thrift, which, zlib, zstd }:
 
 let
   parquet-testing = fetchFromGitHub {
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
   FLATBUFFERS_HOME = flatbuffers;
   GFLAGS_HOME = gflags;
   GLOG_HOME = glog;
-  GTEST_HOME = symlinkJoin { name="gtest-wrap"; paths = [ gtest_static gtest_static.dev ]; };
+  GTEST_HOME = symlinkJoin { name="gtest-wrap"; paths = [ gtest gtest.dev ]; };
   LZ4_HOME = symlinkJoin { name="lz4-wrap"; paths = [ lz4 lz4.dev ]; };
   RAPIDJSON_HOME = rapidjson;
   SNAPPY_HOME = symlinkJoin { name="snappy-wrap"; paths = [ snappy snappy.dev ]; };

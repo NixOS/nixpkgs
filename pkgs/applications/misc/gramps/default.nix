@@ -9,7 +9,7 @@
 let
   inherit (pythonPackages) python buildPythonApplication;
 in buildPythonApplication rec {
-  version = "5.0.0";
+  version = "5.0.1";
   name = "gramps-${version}";
 
   nativeBuildInputs = [ wrapGAppsHook ];
@@ -27,7 +27,7 @@ in buildPythonApplication rec {
     owner = "gramps-project";
     repo = "gramps";
     rev = "v${version}";
-    sha256 = "056l4ihmd3gdsiv6wwv4ckgh8bfzd5nii6z4afsdn2nmjbj4hw9m";
+    sha256 = "1jz1fbjj6byndvir7qxzhd2ryirrd5h2kwndxpp53xdc05z1i8g7";
   };
 
   pythonPath = with pythonPackages; [ bsddb3 PyICU pygobject3 pycairo ];
