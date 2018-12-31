@@ -2678,6 +2678,19 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
+  xsm = callPackage ({ stdenv, pkgconfig, fetchurl, libICE, libSM, libX11, libXaw, libXt }: stdenv.mkDerivation {
+    name = "xsm-1.0.4";
+    builder = ./builder.sh;
+    src = fetchurl {
+      url = mirror://xorg/individual/app/xsm-1.0.4.tar.bz2;
+      sha256 = "09a4ss1fnrh1sgm21r4n5pivawf34paci3rn6mscyljf7a4vcd4r";
+    };
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ libICE libSM libX11 libXaw libXt ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
+
   xtrans = callPackage ({ stdenv, pkgconfig, fetchurl }: stdenv.mkDerivation {
     name = "xtrans-1.3.5";
     builder = ./builder.sh;
