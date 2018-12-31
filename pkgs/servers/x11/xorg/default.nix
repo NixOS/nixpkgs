@@ -2197,16 +2197,16 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xfs = callPackage ({ stdenv, pkgconfig, fetchurl, libXfont, xorgproto, xtrans }: stdenv.mkDerivation {
-    name = "xfs-1.1.4";
+  xfs = callPackage ({ stdenv, pkgconfig, fetchurl, libXfont2, xorgproto, xtrans }: stdenv.mkDerivation {
+    name = "xfs-1.2.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/xfs-1.1.4.tar.bz2;
-      sha256 = "1ylz4r7adf567rnlbb52yi9x3qi4pyv954kkhm7ld4f0fkk7a2x4";
+      url = mirror://xorg/individual/app/xfs-1.2.0.tar.bz2;
+      sha256 = "0q4q4rbzx159sfn2n52y039fki6nc6a39qdfxa78yjc3aw8i48nv";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ libXfont xorgproto xtrans ];
+    buildInputs = [ libXfont2 xorgproto xtrans ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
