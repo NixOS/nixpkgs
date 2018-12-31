@@ -2497,11 +2497,11 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   xpr = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libXmu, xorgproto }: stdenv.mkDerivation {
-    name = "xpr-1.0.4";
+    name = "xpr-1.0.5";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/xpr-1.0.4.tar.bz2;
-      sha256 = "1dbcv26w2yand2qy7b3h5rbvw1mdmdd57jw88v53sgdr3vrqvngy";
+      url = mirror://xorg/individual/app/xpr-1.0.5.tar.bz2;
+      sha256 = "07qy9lwjvxighcmg6qvjkgagad3wwvidrfx0jz85lgynz3qy0dmr";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
