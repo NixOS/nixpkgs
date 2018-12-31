@@ -16,8 +16,8 @@ let
     src = fetchFromGitHub {
       owner = "neovim";
       repo = "neovim";
-      rev = "7e97587daec2bc9e5989e4c2b15785d84314debc";
-      sha256 = "0jbgj84409fgd8i0f1k0n84m37wx8k7qpqrf6q3hvkkignnbcldz";
+      rev = "v${version}";
+      sha256 = "0gniick8jbra1xz5nmg9jyxr7dsnbh9n9bcbp7fq3acb2qnrd22y";
     };
 
     enableParallelBuilding = true;
