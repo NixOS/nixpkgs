@@ -1808,11 +1808,11 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   xf86videoi740 = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libpciaccess, xorgserver }: stdenv.mkDerivation {
-    name = "xf86-video-i740-1.3.6";
+    name = "xf86-video-i740-1.4.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-video-i740-1.3.6.tar.bz2;
-      sha256 = "0c8nl0yyyw08n4zd6sgw9p3a858wpgf6raczjd70gf47lncms389";
+      url = mirror://xorg/individual/driver/xf86-video-i740-1.4.0.tar.bz2;
+      sha256 = "0l3s1m95bdsg4gki943qipq8agswbb84dzcflpxa3vlckwhh3r26";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
