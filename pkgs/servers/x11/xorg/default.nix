@@ -2367,11 +2367,11 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   xlsclients = callPackage ({ stdenv, pkgconfig, fetchurl, libxcb }: stdenv.mkDerivation {
-    name = "xlsclients-1.1.3";
+    name = "xlsclients-1.1.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/xlsclients-1.1.3.tar.bz2;
-      sha256 = "0g9x7rrggs741x9xwvv1k9qayma980d88nhdqw7j3pn3qvy6d5jx";
+      url = mirror://xorg/individual/app/xlsclients-1.1.4.tar.bz2;
+      sha256 = "1h8931sn34mcip6vpi4v7hdmr1r58gkbw4s2p97w98kykks2lgvp";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
