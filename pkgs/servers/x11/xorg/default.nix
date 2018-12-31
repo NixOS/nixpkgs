@@ -1860,11 +1860,11 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   xf86videoneomagic = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libpciaccess, xorgserver }: stdenv.mkDerivation {
-    name = "xf86-video-neomagic-1.2.9";
+    name = "xf86-video-neomagic-1.3.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-video-neomagic-1.2.9.tar.bz2;
-      sha256 = "1whb2kgyqaxdjim27ya404acz50izgmafwnb6y9m89q5n6b97y3j";
+      url = mirror://xorg/individual/driver/xf86-video-neomagic-1.3.0.tar.bz2;
+      sha256 = "0r4h673kw8fl7afc30anwbjlbhp82mg15fvaxf470xg7z983k0wk";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
