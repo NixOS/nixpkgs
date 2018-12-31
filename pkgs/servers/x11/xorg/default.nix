@@ -1119,11 +1119,11 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   libxshmfence = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto }: stdenv.mkDerivation {
-    name = "libxshmfence-1.2";
+    name = "libxshmfence-1.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/lib/libxshmfence-1.2.tar.bz2;
-      sha256 = "032b0nlkdrpbimdld4gqvhqx53rzn8fawvf1ybhzn7lcswgjs6yj";
+      url = mirror://xorg/individual/lib/libxshmfence-1.3.tar.bz2;
+      sha256 = "1ir0j92mnd1nk37mrv9bz5swnccqldicgszvfsh62jd14q6k115q";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
