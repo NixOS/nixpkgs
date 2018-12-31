@@ -1041,11 +1041,11 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   libdmx = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libX11, libXext }: stdenv.mkDerivation {
-    name = "libdmx-1.1.3";
+    name = "libdmx-1.1.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/lib/libdmx-1.1.3.tar.bz2;
-      sha256 = "00djlxas38kbsrglcmwmxfbmxjdchlbj95pqwjvdg8jn5rns6zf9";
+      url = mirror://xorg/individual/lib/libdmx-1.1.4.tar.bz2;
+      sha256 = "0hvjfhrcym770cr0zpqajdy3cda30aiwbjzv16iafkqkbl090gr5";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
