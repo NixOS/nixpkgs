@@ -1951,11 +1951,11 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   xf86videorendition = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libpciaccess, xorgserver }: stdenv.mkDerivation {
-    name = "xf86-video-rendition-4.2.6";
+    name = "xf86-video-rendition-4.2.7";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-video-rendition-4.2.6.tar.bz2;
-      sha256 = "1a7rqafxzc2hd0s5pnq8s8j9d3jg64ndc0xnq4160kasyqhwy3k6";
+      url = mirror://xorg/individual/driver/xf86-video-rendition-4.2.7.tar.bz2;
+      sha256 = "0yzqcdfrnnyaaaa76d4hpwycpq4x2j8qvg9m4q19lj4xbicwc4cm";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
