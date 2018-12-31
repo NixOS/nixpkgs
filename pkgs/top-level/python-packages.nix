@@ -5139,6 +5139,8 @@ in {
 
   importlib-resources = callPackage ../development/python-modules/importlib-resources {};
 
+  uvloop = callPackage ../development/python-modules/uvloop { };
+
 });
 
 in fix' (extends overrides packages)
