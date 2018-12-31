@@ -60,7 +60,7 @@ mirror://xorg/individual/doc/xorg-docs-1.7.1.tar.bz2
 mirror://xorg/individual/driver/xf86-input-evdev-2.10.5.tar.bz2
 mirror://xorg/individual/driver/xf86-input-joystick-1.6.3.tar.bz2
 mirror://xorg/individual/driver/xf86-input-keyboard-1.9.0.tar.bz2
-mirror://xorg/individual/driver/xf86-input-libinput-0.28.0.tar.bz2
+mirror://xorg/individual/driver/xf86-input-libinput-0.28.1.tar.bz2
 mirror://xorg/individual/driver/xf86-input-mouse-1.9.2.tar.bz2
 mirror://xorg/individual/driver/xf86-input-synaptics-1.9.0.tar.bz2
 mirror://xorg/individual/driver/xf86-input-vmmouse-13.1.0.tar.bz2
