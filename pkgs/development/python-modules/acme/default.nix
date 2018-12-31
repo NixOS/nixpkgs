@@ -1,6 +1,5 @@
 { buildPythonPackage
 , certbot
-, nose
 , pytest
 , cryptography
 , pyasn1
@@ -26,9 +25,9 @@ buildPythonPackage rec {
     werkzeug mock ndg-httpsclient josepy
   ];
 
-  checkInputs = [ nose pytest ];
+  checkInputs = [ pytest ];
 
-  postUnpack = "sourceRoot=\${sourceRoot}/acme";
+  sourceRoot = "source/${pname}";
 
   meta = certbot.meta // {
     description = "ACME protocol implementation in Python";
