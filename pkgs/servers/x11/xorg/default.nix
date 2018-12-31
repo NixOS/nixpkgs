@@ -44,6 +44,19 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
+  editres = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libXaw, libXmu, xorgproto, libXt }: stdenv.mkDerivation {
+    name = "editres-1.0.7";
+    builder = ./builder.sh;
+    src = fetchurl {
+      url = mirror://xorg/individual/app/editres-1.0.7.tar.bz2;
+      sha256 = "04awfwmy3f9f0bchidc4ssbgrbicn5gzasg3jydpfnp5513d76h8";
+    };
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ libX11 libXaw libXmu xorgproto libXt ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
+
   encodings = callPackage ({ stdenv, pkgconfig, fetchurl }: stdenv.mkDerivation {
     name = "encodings-1.0.4";
     builder = ./builder.sh;
