@@ -5143,6 +5143,8 @@ in {
 
   httptools = callPackage ../development/python-modules/httptools { };
 
+  sanic = callPackage ../development/python-modules/sanic { };
+
 });
 
 in fix' (extends overrides packages)
