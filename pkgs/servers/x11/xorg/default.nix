@@ -2574,16 +2574,16 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xsetroot = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, xbitmaps, libXcursor, libXmu }: stdenv.mkDerivation {
-    name = "xsetroot-1.1.0";
+  xsetroot = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, xbitmaps, libXcursor, libXmu, xorgproto }: stdenv.mkDerivation {
+    name = "xsetroot-1.1.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/xsetroot-1.1.0.tar.bz2;
-      sha256 = "1bazzsf9sy0q2bj4lxvh1kvyrhmpggzb7jg575i15sksksa3xwc8";
+      url = mirror://xorg/individual/app/xsetroot-1.1.2.tar.bz2;
+      sha256 = "0z21mqvmdl6rl63q77479wgkfygnll57liza1i3va7sr4fx45i0h";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ libX11 xbitmaps libXcursor libXmu ];
+    buildInputs = [ libX11 xbitmaps libXcursor libXmu xorgproto ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
