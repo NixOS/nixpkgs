@@ -1600,11 +1600,11 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   xf86inputmouse = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, xorgserver }: stdenv.mkDerivation {
-    name = "xf86-input-mouse-1.9.2";
+    name = "xf86-input-mouse-1.9.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-input-mouse-1.9.2.tar.bz2;
-      sha256 = "0bsbgww9421792zan43j60mndqprhfxhc48agsi15d3abjqda9gl";
+      url = mirror://xorg/individual/driver/xf86-input-mouse-1.9.3.tar.bz2;
+      sha256 = "1iawr1wyl2qch1mqszcs0s84i92mh4xxprflnycbw1adc18b7v4k";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
