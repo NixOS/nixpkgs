@@ -573,11 +573,11 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   iceauth = callPackage ({ stdenv, pkgconfig, fetchurl, libICE, xorgproto }: stdenv.mkDerivation {
-    name = "iceauth-1.0.7";
+    name = "iceauth-1.0.8";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/iceauth-1.0.7.tar.bz2;
-      sha256 = "02izdyzhwpgiyjd8brzilwvwnfr72ncjb6mzz3y1icwrxqnsy5hj";
+      url = mirror://xorg/individual/app/iceauth-1.0.8.tar.bz2;
+      sha256 = "1ik0mdidmyvy48hn8p2hwvf3535rf3m96hhf0mvcqrbj44x23vp6";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
