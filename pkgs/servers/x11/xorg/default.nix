@@ -1301,11 +1301,11 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   xbitmaps = callPackage ({ stdenv, pkgconfig, fetchurl }: stdenv.mkDerivation {
-    name = "xbitmaps-1.1.1";
+    name = "xbitmaps-1.1.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/data/xbitmaps-1.1.1.tar.bz2;
-      sha256 = "178ym90kwidia6nas4qr5n5yqh698vv8r02js0r4vg3b6lsb0w9n";
+      url = mirror://xorg/individual/data/xbitmaps-1.1.2.tar.bz2;
+      sha256 = "1vh73sc13s7w5r6gnc6irca56s7998bja7wgdivkfn8jccawgw5r";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
