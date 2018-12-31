@@ -2406,11 +2406,11 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   xmessage = callPackage ({ stdenv, pkgconfig, fetchurl, libXaw, libXt }: stdenv.mkDerivation {
-    name = "xmessage-1.0.4";
+    name = "xmessage-1.0.5";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/xmessage-1.0.4.tar.bz2;
-      sha256 = "0s5bjlpxnmh8sxx6nfg9m0nr32r1sr3irr71wsnv76s33i34ppxw";
+      url = mirror://xorg/individual/app/xmessage-1.0.5.tar.bz2;
+      sha256 = "0a90kfm0qz8cn2pbpqfyqrc5s9bfvvy14nj848ynvw56wy0zng9p";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
