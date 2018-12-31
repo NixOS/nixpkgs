@@ -75,15 +75,6 @@ self: super:
     preBuild = "substituteInPlace mkfontdir.in --replace @bindir@ ${self.mkfontscale}/bin";
   });
 
-  mkfontscale = super.mkfontscale.overrideAttrs (attrs: {
-    patches = lib.singleton (fetchpatch {
-      name = "mkfontscale-fix-sig11.patch";
-      url = "https://bugs.freedesktop.org/attachment.cgi?id=113951";
-      sha256 = "0i2xf768mz8kvm7i514v0myna9m6jqw82f9a03idabdpamxvwnim";
-    });
-    patchFlags = [ "-p0" ];
-  });
-
   libxcb = super.libxcb.overrideAttrs (attrs: {
     configureFlags = [ "--enable-xkb" "--enable-xinput" ];
     outputs = [ "out" "dev" "man" "doc" ];
