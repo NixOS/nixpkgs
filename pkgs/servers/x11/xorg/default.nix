@@ -1847,11 +1847,11 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   xf86videomga = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libdrm, libpciaccess, xorgserver }: stdenv.mkDerivation {
-    name = "xf86-video-mga-1.6.5";
+    name = "xf86-video-mga-2.0.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-video-mga-1.6.5.tar.bz2;
-      sha256 = "08ll52hlar9z446v0wwca5qkj3hxhswwm7vvcgic9xv4cf7csqxn";
+      url = mirror://xorg/individual/driver/xf86-video-mga-2.0.0.tar.bz2;
+      sha256 = "0yaxpgyyj9398nzzr5vnsfxcis76z46p9814yzj8179yl7hld296";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
