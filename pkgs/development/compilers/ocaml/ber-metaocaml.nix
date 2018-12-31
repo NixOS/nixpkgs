@@ -1,11 +1,11 @@
 { stdenv, fetchurl
 , ncurses
-, libX11, xproto, buildEnv
+, libX11, xorgproto, buildEnv
 }:
 
 let
    useX11 = stdenv.isi686 || stdenv.isx86_64;
-   x11deps = [ libX11 xproto ];
+   x11deps = [ libX11 xorgproto ];
    inherit (stdenv.lib) optionals;
 
    baseOcamlBranch  = "4.07";

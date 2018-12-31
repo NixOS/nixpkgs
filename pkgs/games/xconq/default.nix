@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cpio, xproto, libX11, libXmu, libXaw, libXt, tcl, tk
+{ stdenv, fetchurl, cpio, xorgproto, libX11, libXmu, libXaw, libXt, tcl, tk
 , libXext, fontconfig, makeWrapper }:
 
 stdenv.mkDerivation rec {
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "1za78yx57mgwcmmi33wx3533yz1x093dnqis8q2qmqivxav51lca";
   };
 
-  buildInputs = [ cpio xproto libX11 libXmu libXaw libXt tcl tk libXext
+  buildInputs = [ cpio xorgproto libX11 libXmu libXaw libXt tcl tk libXext
     fontconfig makeWrapper ];
 
   configureFlags = [

@@ -13041,9 +13041,8 @@ in
   # Avoid using this. It isn't really a wrapper anymore, but we keep the name.
   xlibsWrapper = callPackage ../development/libraries/xlibs-wrapper {
     packages = [
-      freetype fontconfig xorg.xproto xorg.libX11 xorg.libXt
+      freetype fontconfig xorg.xorgproto xorg.libX11 xorg.libXt
       xorg.libXft xorg.libXext xorg.libSM xorg.libICE
-      xorg.xextproto
     ];
   };
 

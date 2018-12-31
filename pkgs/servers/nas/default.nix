@@ -1,5 +1,5 @@
 { stdenv, fetchurl, imake, bison, flex, gccmakedep
-, xproto, libXau, libXt, libXext, libXaw, libXpm, xorgcffiles }:
+, xorgproto, libXau, libXt, libXext, libXaw, libXpm, xorgcffiles }:
 
 let
   pname = "nas";
@@ -14,7 +14,7 @@ in stdenv.mkDerivation {
 
   nativeBuildInputs = [ imake bison flex gccmakedep ];
 
-  buildInputs = [ xproto libXau libXt libXext libXaw libXpm ];
+  buildInputs = [ xorgproto libXau libXt libXext libXaw libXpm ];
 
   buildFlags = [ "WORLDOPTS=" "World" ];
 

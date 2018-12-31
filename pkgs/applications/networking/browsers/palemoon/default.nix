@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     libpulseaudio sqlite unzip which yasm zip zlib
   ] ++ (with xorg; [
     libX11 libXext libXft libXi libXrender libXScrnSaver
-    libXt pixman scrnsaverproto xextproto
+    libXt pixman xorgproto
   ]);
 
   enableParallelBuilding = true;

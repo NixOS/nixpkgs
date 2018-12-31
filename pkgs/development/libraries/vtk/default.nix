@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, libGLU_combined, libX11, xproto, libXt
+{ stdenv, fetchurl, cmake, libGLU_combined, libX11, xorgproto, libXt
 , qtLib ? null
 # Darwin support
 , Cocoa, CoreServices, DiskArbitration, IOKit, CFNetwork, Security, GLUT, OpenGL
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     if !stdenv.isDarwin
-    then [ cmake libGLU_combined libX11 xproto libXt ] ++ optional (qtLib != null) qtLib
+    then [ cmake libGLU_combined libX11 xorgproto libXt ] ++ optional (qtLib != null) qtLib
     else [ cmake qtLib xpc CoreServices DiskArbitration IOKit cf-private
            CFNetwork Security ApplicationServices CoreText IOSurface ImageIO
            OpenGL GLUT ];
