@@ -48,7 +48,7 @@ lib.makeScope newScope (self: with self; {
     name = "encodings-1.0.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/encodings-1.0.4.tar.bz2;
+      url = mirror://xorg/individual/font/encodings-1.0.4.tar.bz2;
       sha256 = "0ffmaw80vmfwdgvdkp6495xgsqszb6s0iira5j0j6pd4i0lk3mnf";
     };
     hardeningDisable = [ "bindnow" "relro" ];
@@ -61,7 +61,7 @@ lib.makeScope newScope (self: with self; {
     name = "font-adobe-100dpi-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/font-adobe-100dpi-1.0.3.tar.bz2;
+      url = mirror://xorg/individual/font/font-adobe-100dpi-1.0.3.tar.bz2;
       sha256 = "0m60f5bd0caambrk8ksknb5dks7wzsg7g7xaf0j21jxmx8rq9h5j";
     };
     hardeningDisable = [ "bindnow" "relro" ];
@@ -75,7 +75,7 @@ lib.makeScope newScope (self: with self; {
     name = "font-adobe-75dpi-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/font-adobe-75dpi-1.0.3.tar.bz2;
+      url = mirror://xorg/individual/font/font-adobe-75dpi-1.0.3.tar.bz2;
       sha256 = "02advcv9lyxpvrjv8bjh1b797lzg6jvhipclz49z8r8y98g4l0n6";
     };
     hardeningDisable = [ "bindnow" "relro" ];
@@ -89,7 +89,7 @@ lib.makeScope newScope (self: with self; {
     name = "font-adobe-utopia-100dpi-1.0.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/font-adobe-utopia-100dpi-1.0.4.tar.bz2;
+      url = mirror://xorg/individual/font/font-adobe-utopia-100dpi-1.0.4.tar.bz2;
       sha256 = "19dd9znam1ah72jmdh7i6ny2ss2r6m21z9v0l43xvikw48zmwvyi";
     };
     hardeningDisable = [ "bindnow" "relro" ];
@@ -103,7 +103,7 @@ lib.makeScope newScope (self: with self; {
     name = "font-adobe-utopia-75dpi-1.0.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/font-adobe-utopia-75dpi-1.0.4.tar.bz2;
+      url = mirror://xorg/individual/font/font-adobe-utopia-75dpi-1.0.4.tar.bz2;
       sha256 = "152wigpph5wvl4k9m3l4mchxxisgsnzlx033mn5iqrpkc6f72cl7";
     };
     hardeningDisable = [ "bindnow" "relro" ];
@@ -117,7 +117,7 @@ lib.makeScope newScope (self: with self; {
     name = "font-adobe-utopia-type1-1.0.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/font-adobe-utopia-type1-1.0.4.tar.bz2;
+      url = mirror://xorg/individual/font/font-adobe-utopia-type1-1.0.4.tar.bz2;
       sha256 = "0xw0pdnzj5jljsbbhakc6q9ha2qnca1jr81zk7w70yl9bw83b54p";
     };
     hardeningDisable = [ "bindnow" "relro" ];
@@ -131,7 +131,7 @@ lib.makeScope newScope (self: with self; {
     name = "font-alias-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/font-alias-1.0.3.tar.bz2;
+      url = mirror://xorg/individual/font/font-alias-1.0.3.tar.bz2;
       sha256 = "16ic8wfwwr3jicaml7b5a0sk6plcgc1kg84w02881yhwmqm3nicb";
     };
     hardeningDisable = [ "bindnow" "relro" ];
@@ -144,7 +144,7 @@ lib.makeScope newScope (self: with self; {
     name = "font-arabic-misc-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/font-arabic-misc-1.0.3.tar.bz2;
+      url = mirror://xorg/individual/font/font-arabic-misc-1.0.3.tar.bz2;
       sha256 = "1x246dfnxnmflzf0qzy62k8jdpkb6jkgspcjgbk8jcq9lw99npah";
     };
     hardeningDisable = [ "bindnow" "relro" ];
@@ -158,7 +158,7 @@ lib.makeScope newScope (self: with self; {
     name = "font-bh-100dpi-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/font-bh-100dpi-1.0.3.tar.bz2;
+      url = mirror://xorg/individual/font/font-bh-100dpi-1.0.3.tar.bz2;
       sha256 = "10cl4gm38dw68jzln99ijix730y7cbx8np096gmpjjwff1i73h13";
     };
     hardeningDisable = [ "bindnow" "relro" ];
@@ -172,7 +172,7 @@ lib.makeScope newScope (self: with self; {
     name = "font-bh-75dpi-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/font-bh-75dpi-1.0.3.tar.bz2;
+      url = mirror://xorg/individual/font/font-bh-75dpi-1.0.3.tar.bz2;
       sha256 = "073jmhf0sr2j1l8da97pzsqj805f7mf9r2gy92j4diljmi8sm1il";
     };
     hardeningDisable = [ "bindnow" "relro" ];
@@ -186,7 +186,7 @@ lib.makeScope newScope (self: with self; {
     name = "font-bh-lucidatypewriter-100dpi-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/font-bh-lucidatypewriter-100dpi-1.0.3.tar.bz2;
+      url = mirror://xorg/individual/font/font-bh-lucidatypewriter-100dpi-1.0.3.tar.bz2;
       sha256 = "1fqzckxdzjv4802iad2fdrkpaxl4w0hhs9lxlkyraq2kq9ik7a32";
     };
     hardeningDisable = [ "bindnow" "relro" ];
@@ -200,7 +200,7 @@ lib.makeScope newScope (self: with self; {
     name = "font-bh-lucidatypewriter-75dpi-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/font-bh-lucidatypewriter-75dpi-1.0.3.tar.bz2;
+      url = mirror://xorg/individual/font/font-bh-lucidatypewriter-75dpi-1.0.3.tar.bz2;
       sha256 = "0cfbxdp5m12cm7jsh3my0lym9328cgm7fa9faz2hqj05wbxnmhaa";
     };
     hardeningDisable = [ "bindnow" "relro" ];
@@ -214,7 +214,7 @@ lib.makeScope newScope (self: with self; {
     name = "font-bh-ttf-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/font-bh-ttf-1.0.3.tar.bz2;
+      url = mirror://xorg/individual/font/font-bh-ttf-1.0.3.tar.bz2;
       sha256 = "0pyjmc0ha288d4i4j0si4dh3ncf3jiwwjljvddrb0k8v4xiyljqv";
     };
     hardeningDisable = [ "bindnow" "relro" ];
@@ -228,7 +228,7 @@ lib.makeScope newScope (self: with self; {
     name = "font-bh-type1-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/font-bh-type1-1.0.3.tar.bz2;
+      url = mirror://xorg/individual/font/font-bh-type1-1.0.3.tar.bz2;
       sha256 = "1hb3iav089albp4sdgnlh50k47cdjif9p4axm0kkjvs8jyi5a53n";
     };
     hardeningDisable = [ "bindnow" "relro" ];
@@ -242,7 +242,7 @@ lib.makeScope newScope (self: with self; {
     name = "font-bitstream-100dpi-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/font-bitstream-100dpi-1.0.3.tar.bz2;
+      url = mirror://xorg/individual/font/font-bitstream-100dpi-1.0.3.tar.bz2;
       sha256 = "1kmn9jbck3vghz6rj3bhc3h0w6gh0qiaqm90cjkqsz1x9r2dgq7b";
     };
     hardeningDisable = [ "bindnow" "relro" ];
@@ -256,7 +256,7 @@ lib.makeScope newScope (self: with self; {
     name = "font-bitstream-75dpi-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/font-bitstream-75dpi-1.0.3.tar.bz2;
+      url = mirror://xorg/individual/font/font-bitstream-75dpi-1.0.3.tar.bz2;
       sha256 = "13plbifkvfvdfym6gjbgy9wx2xbdxi9hfrl1k22xayy02135wgxs";
     };
     hardeningDisable = [ "bindnow" "relro" ];
@@ -270,7 +270,7 @@ lib.makeScope newScope (self: with self; {
     name = "font-bitstream-type1-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/font-bitstream-type1-1.0.3.tar.bz2;
+      url = mirror://xorg/individual/font/font-bitstream-type1-1.0.3.tar.bz2;
       sha256 = "1256z0jhcf5gbh1d03593qdwnag708rxqa032izmfb5dmmlhbsn6";
     };
     hardeningDisable = [ "bindnow" "relro" ];
@@ -284,7 +284,7 @@ lib.makeScope newScope (self: with self; {
     name = "font-cronyx-cyrillic-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/font-cronyx-cyrillic-1.0.3.tar.bz2;
+      url = mirror://xorg/individual/font/font-cronyx-cyrillic-1.0.3.tar.bz2;
       sha256 = "0ai1v4n61k8j9x2a1knvfbl2xjxk3xxmqaq3p9vpqrspc69k31kf";
     };
     hardeningDisable = [ "bindnow" "relro" ];
@@ -298,7 +298,7 @@ lib.makeScope newScope (self: with self; {
     name = "font-cursor-misc-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/font-cursor-misc-1.0.3.tar.bz2;
+      url = mirror://xorg/individual/font/font-cursor-misc-1.0.3.tar.bz2;
       sha256 = "0dd6vfiagjc4zmvlskrbjz85jfqhf060cpys8j0y1qpcbsrkwdhp";
     };
     hardeningDisable = [ "bindnow" "relro" ];
@@ -312,7 +312,7 @@ lib.makeScope newScope (self: with self; {
     name = "font-daewoo-misc-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/font-daewoo-misc-1.0.3.tar.bz2;
+      url = mirror://xorg/individual/font/font-daewoo-misc-1.0.3.tar.bz2;
       sha256 = "1s2bbhizzgbbbn5wqs3vw53n619cclxksljvm759h9p1prqdwrdw";
     };
     hardeningDisable = [ "bindnow" "relro" ];
@@ -326,7 +326,7 @@ lib.makeScope newScope (self: with self; {
     name = "font-dec-misc-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/font-dec-misc-1.0.3.tar.bz2;
+      url = mirror://xorg/individual/font/font-dec-misc-1.0.3.tar.bz2;
       sha256 = "0yzza0l4zwyy7accr1s8ab7fjqkpwggqydbm2vc19scdby5xz7g1";
     };
     hardeningDisable = [ "bindnow" "relro" ];
@@ -340,7 +340,7 @@ lib.makeScope newScope (self: with self; {
     name = "font-ibm-type1-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/font-ibm-type1-1.0.3.tar.bz2;
+      url = mirror://xorg/individual/font/font-ibm-type1-1.0.3.tar.bz2;
       sha256 = "1pyjll4adch3z5cg663s6vhi02k8m6488f0mrasg81ssvg9jinzx";
     };
     hardeningDisable = [ "bindnow" "relro" ];
@@ -354,7 +354,7 @@ lib.makeScope newScope (self: with self; {
     name = "font-isas-misc-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/font-isas-misc-1.0.3.tar.bz2;
+      url = mirror://xorg/individual/font/font-isas-misc-1.0.3.tar.bz2;
       sha256 = "0rx8q02rkx673a7skkpnvfkg28i8gmqzgf25s9yi0lar915sn92q";
     };
     hardeningDisable = [ "bindnow" "relro" ];
@@ -368,7 +368,7 @@ lib.makeScope newScope (self: with self; {
     name = "font-jis-misc-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/font-jis-misc-1.0.3.tar.bz2;
+      url = mirror://xorg/individual/font/font-jis-misc-1.0.3.tar.bz2;
       sha256 = "0rdc3xdz12pnv951538q6wilx8mrdndpkphpbblszsv7nc8cw61b";
     };
     hardeningDisable = [ "bindnow" "relro" ];
@@ -382,7 +382,7 @@ lib.makeScope newScope (self: with self; {
     name = "font-micro-misc-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/font-micro-misc-1.0.3.tar.bz2;
+      url = mirror://xorg/individual/font/font-micro-misc-1.0.3.tar.bz2;
       sha256 = "1dldxlh54zq1yzfnrh83j5vm0k4ijprrs5yl18gm3n9j1z0q2cws";
     };
     hardeningDisable = [ "bindnow" "relro" ];
@@ -396,7 +396,7 @@ lib.makeScope newScope (self: with self; {
     name = "font-misc-cyrillic-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/font-misc-cyrillic-1.0.3.tar.bz2;
+      url = mirror://xorg/individual/font/font-misc-cyrillic-1.0.3.tar.bz2;
       sha256 = "0q2ybxs8wvylvw95j6x9i800rismsmx4b587alwbfqiw6biy63z4";
     };
     hardeningDisable = [ "bindnow" "relro" ];
@@ -410,7 +410,7 @@ lib.makeScope newScope (self: with self; {
     name = "font-misc-ethiopic-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/font-misc-ethiopic-1.0.3.tar.bz2;
+      url = mirror://xorg/individual/font/font-misc-ethiopic-1.0.3.tar.bz2;
       sha256 = "19cq7iq0pfad0nc2v28n681fdq3fcw1l1hzaq0wpkgpx7bc1zjsk";
     };
     hardeningDisable = [ "bindnow" "relro" ];
@@ -424,7 +424,7 @@ lib.makeScope newScope (self: with self; {
     name = "font-misc-meltho-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/font-misc-meltho-1.0.3.tar.bz2;
+      url = mirror://xorg/individual/font/font-misc-meltho-1.0.3.tar.bz2;
       sha256 = "148793fqwzrc3bmh2vlw5fdiwjc2n7vs25cic35gfp452czk489p";
     };
     hardeningDisable = [ "bindnow" "relro" ];
@@ -438,7 +438,7 @@ lib.makeScope newScope (self: with self; {
     name = "font-misc-misc-1.1.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/font-misc-misc-1.1.2.tar.bz2;
+      url = mirror://xorg/individual/font/font-misc-misc-1.1.2.tar.bz2;
       sha256 = "150pq6n8n984fah34n3k133kggn9v0c5k07igv29sxp1wi07krxq";
     };
     hardeningDisable = [ "bindnow" "relro" ];
@@ -452,7 +452,7 @@ lib.makeScope newScope (self: with self; {
     name = "font-mutt-misc-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/font-mutt-misc-1.0.3.tar.bz2;
+      url = mirror://xorg/individual/font/font-mutt-misc-1.0.3.tar.bz2;
       sha256 = "13qghgr1zzpv64m0p42195k1kc77pksiv059fdvijz1n6kdplpxx";
     };
     hardeningDisable = [ "bindnow" "relro" ];
@@ -466,7 +466,7 @@ lib.makeScope newScope (self: with self; {
     name = "font-schumacher-misc-1.1.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/font-schumacher-misc-1.1.2.tar.bz2;
+      url = mirror://xorg/individual/font/font-schumacher-misc-1.1.2.tar.bz2;
       sha256 = "0nkym3n48b4v36y4s927bbkjnsmicajarnf6vlp7wxp0as304i74";
     };
     hardeningDisable = [ "bindnow" "relro" ];
@@ -480,7 +480,7 @@ lib.makeScope newScope (self: with self; {
     name = "font-screen-cyrillic-1.0.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/font-screen-cyrillic-1.0.4.tar.bz2;
+      url = mirror://xorg/individual/font/font-screen-cyrillic-1.0.4.tar.bz2;
       sha256 = "0yayf1qlv7irf58nngddz2f1q04qkpr5jwp4aja2j5gyvzl32hl2";
     };
     hardeningDisable = [ "bindnow" "relro" ];
@@ -494,7 +494,7 @@ lib.makeScope newScope (self: with self; {
     name = "font-sony-misc-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/font-sony-misc-1.0.3.tar.bz2;
+      url = mirror://xorg/individual/font/font-sony-misc-1.0.3.tar.bz2;
       sha256 = "1xfgcx4gsgik5mkgkca31fj3w72jw9iw76qyrajrsz1lp8ka6hr0";
     };
     hardeningDisable = [ "bindnow" "relro" ];
@@ -508,7 +508,7 @@ lib.makeScope newScope (self: with self; {
     name = "font-sun-misc-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/font-sun-misc-1.0.3.tar.bz2;
+      url = mirror://xorg/individual/font/font-sun-misc-1.0.3.tar.bz2;
       sha256 = "1q6jcqrffg9q5f5raivzwx9ffvf7r11g6g0b125na1bhpz5ly7s8";
     };
     hardeningDisable = [ "bindnow" "relro" ];
@@ -535,7 +535,7 @@ lib.makeScope newScope (self: with self; {
     name = "font-winitzki-cyrillic-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/font-winitzki-cyrillic-1.0.3.tar.bz2;
+      url = mirror://xorg/individual/font/font-winitzki-cyrillic-1.0.3.tar.bz2;
       sha256 = "181n1bgq8vxfxqicmy1jpm1hnr6gwn1kdhl6hr4frjigs1ikpldb";
     };
     hardeningDisable = [ "bindnow" "relro" ];
@@ -549,7 +549,7 @@ lib.makeScope newScope (self: with self; {
     name = "font-xfree86-type1-1.0.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/font-xfree86-type1-1.0.4.tar.bz2;
+      url = mirror://xorg/individual/font/font-xfree86-type1-1.0.4.tar.bz2;
       sha256 = "0jp3zc0qfdaqfkgzrb44vi9vi0a8ygb35wp082yz7rvvxhmg9sya";
     };
     hardeningDisable = [ "bindnow" "relro" ];
@@ -602,7 +602,7 @@ lib.makeScope newScope (self: with self; {
     name = "libAppleWM-1.4.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/libAppleWM-1.4.1.tar.bz2;
+      url = mirror://xorg/individual/lib/libAppleWM-1.4.1.tar.bz2;
       sha256 = "0r8x28n45q89x91mz8mv0zkkcxi8wazkac886fyvflhiv2y8ap2y";
     };
     hardeningDisable = [ "bindnow" "relro" ];
@@ -654,7 +654,7 @@ lib.makeScope newScope (self: with self; {
     name = "libWindowsWM-1.0.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/libWindowsWM-1.0.1.tar.bz2;
+      url = mirror://xorg/individual/lib/libWindowsWM-1.0.1.tar.bz2;
       sha256 = "1p0flwb67xawyv6yhri9w17m1i4lji5qnd0gq8v1vsfb8zw7rw15";
     };
     hardeningDisable = [ "bindnow" "relro" ];
@@ -680,7 +680,7 @@ lib.makeScope newScope (self: with self; {
     name = "libXScrnSaver-1.2.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/libXScrnSaver-1.2.2.tar.bz2;
+      url = mirror://xorg/individual/lib/libXScrnSaver-1.2.2.tar.bz2;
       sha256 = "07ff4r20nkkrj7h08f9fwamds9b3imj8jz5iz6y38zqw6jkyzwcg";
     };
     hardeningDisable = [ "bindnow" "relro" ];
@@ -1148,7 +1148,7 @@ lib.makeScope newScope (self: with self; {
     name = "luit-1.1.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/luit-1.1.1.tar.bz2;
+      url = mirror://xorg/individual/app/luit-1.1.1.tar.bz2;
       sha256 = "0dn694mk56x6hdk6y9ylx4f128h5jcin278gnw2gb807rf3ygc1h";
     };
     hardeningDisable = [ "bindnow" "relro" ];
@@ -1174,7 +1174,7 @@ lib.makeScope newScope (self: with self; {
     name = "mkfontdir-1.0.7";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/mkfontdir-1.0.7.tar.bz2;
+      url = mirror://xorg/individual/app/mkfontdir-1.0.7.tar.bz2;
       sha256 = "0c3563kw9fg15dpgx4dwvl12qz6sdqdns1pxa574hc7i5m42mman";
     };
     hardeningDisable = [ "bindnow" "relro" ];
@@ -1304,7 +1304,7 @@ lib.makeScope newScope (self: with self; {
     name = "xbitmaps-1.1.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/xbitmaps-1.1.1.tar.bz2;
+      url = mirror://xorg/individual/data/xbitmaps-1.1.1.tar.bz2;
       sha256 = "178ym90kwidia6nas4qr5n5yqh698vv8r02js0r4vg3b6lsb0w9n";
     };
     hardeningDisable = [ "bindnow" "relro" ];
@@ -1876,7 +1876,7 @@ lib.makeScope newScope (self: with self; {
     name = "xf86-video-newport-0.2.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/xf86-video-newport-0.2.4.tar.bz2;
+      url = mirror://xorg/individual/driver/xf86-video-newport-0.2.4.tar.bz2;
       sha256 = "1yafmp23jrfdmc094i6a4dsizapsc9v0pl65cpc8w1kvn7343k4i";
     };
     hardeningDisable = [ "bindnow" "relro" ];
@@ -2110,7 +2110,7 @@ lib.makeScope newScope (self: with self; {
     name = "xf86-video-v4l-0.2.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/xf86-video-v4l-0.2.0.tar.bz2;
+      url = mirror://xorg/individual/driver/xf86-video-v4l-0.2.0.tar.bz2;
       sha256 = "0pcjc75hgbih3qvhpsx8d4fljysfk025slxcqyyhr45dzch93zyb";
     };
     hardeningDisable = [ "bindnow" "relro" ];
@@ -2175,7 +2175,7 @@ lib.makeScope newScope (self: with self; {
     name = "xf86-video-wsfb-0.4.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/xf86-video-wsfb-0.4.0.tar.bz2;
+      url = mirror://xorg/individual/driver/xf86-video-wsfb-0.4.0.tar.bz2;
       sha256 = "0hr8397wpd0by1hc47fqqrnaw3qdqd8aqgwgzv38w5k3l3jy6p4p";
     };
     hardeningDisable = [ "bindnow" "relro" ];
@@ -2487,7 +2487,7 @@ lib.makeScope newScope (self: with self; {
     name = "xorg-sgml-doctools-1.11";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/xorg-sgml-doctools-1.11.tar.bz2;
+      url = mirror://xorg/individual/doc/xorg-sgml-doctools-1.11.tar.bz2;
       sha256 = "0k5pffyi5bx8dmfn033cyhgd3gf6viqj3x769fqixifwhbgy2777";
     };
     hardeningDisable = [ "bindnow" "relro" ];
@@ -2500,7 +2500,7 @@ lib.makeScope newScope (self: with self; {
     name = "xpr-1.0.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/xpr-1.0.4.tar.bz2;
+      url = mirror://xorg/individual/app/xpr-1.0.4.tar.bz2;
       sha256 = "1dbcv26w2yand2qy7b3h5rbvw1mdmdd57jw88v53sgdr3vrqvngy";
     };
     hardeningDisable = [ "bindnow" "relro" ];
@@ -2578,7 +2578,7 @@ lib.makeScope newScope (self: with self; {
     name = "xsetroot-1.1.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/xsetroot-1.1.0.tar.bz2;
+      url = mirror://xorg/individual/app/xsetroot-1.1.0.tar.bz2;
       sha256 = "1bazzsf9sy0q2bj4lxvh1kvyrhmpggzb7jg575i15sksksa3xwc8";
     };
     hardeningDisable = [ "bindnow" "relro" ];
@@ -2643,7 +2643,7 @@ lib.makeScope newScope (self: with self; {
     name = "xwud-1.0.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/xwud-1.0.4.tar.bz2;
+      url = mirror://xorg/individual/app/xwud-1.0.4.tar.bz2;
       sha256 = "1ggql6maivah58kwsh3z9x1hvzxm1a8888xx4s78cl77ryfa1cyn";
     };
     hardeningDisable = [ "bindnow" "relro" ];
