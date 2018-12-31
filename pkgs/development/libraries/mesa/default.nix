@@ -93,7 +93,7 @@ let self = stdenv.mkDerivation {
     ./symlink-drivers.patch
     ./missing-includes.patch # dev_t needs sys/stat.h, time_t needs time.h, etc.-- fixes build w/musl
     ./disk_cache-include-dri-driver-path-in-cache-key.patch
-  ] ++ lib.optional stdenv.isDarwin ./darwin-clock-gettime.patch;
+  ];
 
   outputs = [ "out" "dev" "drivers" ]
             ++ lib.optional (elem "swrast" galliumDrivers) "osmesa";
@@ -163,7 +163,9 @@ let self = stdenv.mkDerivation {
   ];
 
   # TODO: probably not all .la files are completely fixed, but it shouldn't matter;
-  postInstall = optionalString (galliumDrivers != []) ''
+  postInstall = ''
+    mkdir -p $drivers
+  '' + optionalString (galliumDrivers != []) ''
     # move gallium-related stuff to $drivers, so $out doesn't depend on LLVM
     mv -t "$drivers/lib/"    \
       $out/lib/libXvMC*      \
