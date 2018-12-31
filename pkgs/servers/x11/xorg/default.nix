@@ -638,11 +638,11 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   libSM = callPackage ({ stdenv, pkgconfig, fetchurl, libICE, libuuid, xorgproto, xtrans }: stdenv.mkDerivation {
-    name = "libSM-1.2.2";
+    name = "libSM-1.2.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/lib/libSM-1.2.2.tar.bz2;
-      sha256 = "1gc7wavgs435g9qkp9jw4lhmaiq6ip9llv49f054ad6ryp4sib0b";
+      url = mirror://xorg/individual/lib/libSM-1.2.3.tar.bz2;
+      sha256 = "1fwwfq9v3sqmpzpscymswxn76xhxnysa24pfim1mcpxhvjcl89id";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
