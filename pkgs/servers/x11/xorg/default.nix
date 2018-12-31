@@ -2028,6 +2028,19 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
+  xf86videoomap = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libdrm, xorgserver }: stdenv.mkDerivation {
+    name = "xf86-video-omap-0.4.5";
+    builder = ./builder.sh;
+    src = fetchurl {
+      url = mirror://xorg/individual/driver/xf86-video-omap-0.4.5.tar.bz2;
+      sha256 = "0nmbrx6913dc724y8wj2p6vqfbj5zdjfmsl037v627jj0whx9rwk";
+    };
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ xorgproto libdrm xorgserver ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
+
   xf86videoopenchrome = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libdrm, udev, libpciaccess, libX11, libXext, xorgserver, libXvMC }: stdenv.mkDerivation {
     name = "xf86-video-openchrome-0.6.0";
     builder = ./builder.sh;
