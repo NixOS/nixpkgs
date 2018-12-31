@@ -2614,11 +2614,11 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   xwd = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, xorgproto }: stdenv.mkDerivation {
-    name = "xwd-1.0.6";
+    name = "xwd-1.0.7";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/xwd-1.0.6.tar.bz2;
-      sha256 = "0ybx48agdvjp9lgwvcw79r1x6jbqbyl3fliy3i5xwy4d4si9dcrv";
+      url = mirror://xorg/individual/app/xwd-1.0.7.tar.bz2;
+      sha256 = "1537i8q8pgf0sjklakzfvjwrq5b246qjywrx9ll8xfg0p6w1as6d";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
