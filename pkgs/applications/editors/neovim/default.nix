@@ -86,6 +86,9 @@ let
       license = with licenses; [ asl20 vim ];
       maintainers = with maintainers; [ manveru garbas rvolosatovs ];
       platforms   = platforms.unix;
+      # `lua: bad light userdata pointer`
+      # https://nix-cache.s3.amazonaws.com/log/9ahcb52905d9d417zsskjpc331iailpq-neovim-unwrapped-0.2.2.drv
+      broken = stdenv.isAarch64;
     };
   };
 

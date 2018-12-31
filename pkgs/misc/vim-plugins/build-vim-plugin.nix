@@ -36,7 +36,13 @@ rec {
 
         # build help tags
         if [ -d "$target/doc" ]; then
-          ${vim}/bin/vim -N -u NONE -i NONE -n -E -s -c "helptags $1/doc" +quit! || echo "docs to build failed"
+          echo "Building help tags"
+          if ! ${vim}/bin/vim -N -u NONE -i NONE -n -E -s -c "helptags $target/doc" +quit!; then
+            echo "Failed to build help tags!"
+            exit 1
+          fi
+        else
+          echo "No docs available"
         fi
 
         if [ -n "$addonInfo" ]; then

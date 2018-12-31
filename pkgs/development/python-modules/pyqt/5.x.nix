@@ -1,29 +1,20 @@
 { lib, fetchurl, fetchpatch, pythonPackages, pkgconfig
-, qmake, lndir, qtbase, qtsvg, qtwebkit, qtwebengine, dbus
-, withWebSockets ? false, qtwebsockets
+, qmake, lndir, qtbase, qtsvg, qtwebengine, dbus
 , withConnectivity ? false, qtconnectivity
+, withWebKit ? false, qtwebkit
+, withWebSockets ? false, qtwebsockets
 }:
 
 let
-  pname = "PyQt";
-  version = "5.11.3";
 
   inherit (pythonPackages) buildPythonPackage python isPy3k dbus-python enum34;
 
   sip = pythonPackages.sip.override { sip-module = "PyQt5.sip"; };
 
-in buildPythonPackage {
-  pname = pname;
-  version = version;
+in buildPythonPackage rec {
+  pname = "PyQt";
+  version = "5.11.3";
   format = "other";
-
-  meta = with lib; {
-    description = "Python bindings for Qt5";
-    homepage    = http://www.riverbankcomputing.co.uk;
-    license     = licenses.gpl3;
-    platforms   = platforms.mesaPlatforms;
-    maintainers = with maintainers; [ sander ];
-  };
 
   src = fetchurl {
     url = "mirror://sourceforge/pyqt/PyQt5/PyQt-${version}/PyQt5_gpl-${version}.tar.gz";
@@ -36,9 +27,11 @@ in buildPythonPackage {
 
   buildInputs = [ dbus sip ];
 
-  propagatedBuildInputs = [
-    qtbase qtsvg qtwebkit qtwebengine
-  ] ++ lib.optional (!isPy3k) enum34 ++ lib.optional withWebSockets qtwebsockets ++ lib.optional withConnectivity qtconnectivity;
+  propagatedBuildInputs = [ qtbase qtsvg qtwebengine ]
+    ++ lib.optional (!isPy3k) enum34
+    ++ lib.optional withConnectivity qtconnectivity
+    ++ lib.optional withWebKit qtwebkit
+    ++ lib.optional withWebSockets qtwebsockets;
 
   configurePhase = ''
     runHook preConfigure
@@ -48,10 +41,6 @@ in buildPythonPackage {
     rm -rf "$out/nix-support"
 
     export PYTHONPATH=$PYTHONPATH:$out/${python.sitePackages}
-
-    substituteInPlace configure.py \
-      --replace 'install_dir=pydbusmoddir' "install_dir='$out/${python.sitePackages}/dbus/mainloop'" \
-      --replace "ModuleMetadata(qmake_QT=['webkitwidgets'])" "ModuleMetadata(qmake_QT=['webkitwidgets', 'printsupport'])"
 
     ${python.executable} configure.py  -w \
       --confirm-license \
@@ -74,4 +63,12 @@ in buildPythonPackage {
   '';
 
   enableParallelBuilding = true;
+
+  meta = with lib; {
+    description = "Python bindings for Qt5";
+    homepage    = http://www.riverbankcomputing.co.uk;
+    license     = licenses.gpl3;
+    platforms   = platforms.mesaPlatforms;
+    maintainers = with maintainers; [ sander ];
+  };
 }
