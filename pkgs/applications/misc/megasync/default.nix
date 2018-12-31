@@ -10,13 +10,13 @@
 , freeimage
 , fetchFromGitHub
 , hicolor-icon-theme
-, inkscape
 , libmediainfo
 , libraw
 , libsodium
 , libtool
 , libuv
 , libzen
+, lsb-release
 , makeDesktopItem
 , pkgconfig
 , qt5
@@ -51,8 +51,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ 
     doxygen
-    inkscape
     libsodium
+    lsb-release
     qt5.qmake
     qt5.qttools
     swig
