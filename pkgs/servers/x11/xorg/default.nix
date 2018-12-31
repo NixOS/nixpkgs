@@ -1509,11 +1509,11 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   xdriinfo = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libX11 }: stdenv.mkDerivation {
-    name = "xdriinfo-1.0.5";
+    name = "xdriinfo-1.0.6";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/xdriinfo-1.0.5.tar.bz2;
-      sha256 = "0681d0y8liqakkpz7mmsf689jcxrvs5291r20qi78mc9xxk3gfjc";
+      url = mirror://xorg/individual/app/xdriinfo-1.0.6.tar.bz2;
+      sha256 = "0lcx8h3zd11m4w8wf7dyp89826d437iz78cyrix436bqx31x5k6r";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
