@@ -23,7 +23,7 @@ appleDerivation rec {
     for f in Products/Release/*; do
       if [ -f $f ]; then
         install -D $file $out/bin/$(basename $f)
-      done
+      fi
     done
 
     for n in 1 5; do
