@@ -2549,11 +2549,11 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   xrefresh = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, xorgproto }: stdenv.mkDerivation {
-    name = "xrefresh-1.0.5";
+    name = "xrefresh-1.0.6";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/xrefresh-1.0.5.tar.bz2;
-      sha256 = "1mlinwgvql6s1rbf46yckbfr9j22d3c3z7jx3n6ix7ca18dnf4rj";
+      url = mirror://xorg/individual/app/xrefresh-1.0.6.tar.bz2;
+      sha256 = "0lv3rlshh7s0z3aqx5ahnnf8cl082m934bk7gv881mz8nydznz98";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
