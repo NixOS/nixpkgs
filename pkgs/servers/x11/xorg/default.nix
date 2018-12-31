@@ -2341,11 +2341,11 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   xkill = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libXmu, xorgproto }: stdenv.mkDerivation {
-    name = "xkill-1.0.4";
+    name = "xkill-1.0.5";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/xkill-1.0.4.tar.bz2;
-      sha256 = "0bl1ky8ps9jg842j4mnmf4zbx8nkvk0h77w7bqjlpwij9wq2mvw8";
+      url = mirror://xorg/individual/app/xkill-1.0.5.tar.bz2;
+      sha256 = "0szzd9nzn0ybkhnfyizb876irwnjsnb78rcaxx6prb71jmmbpw65";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
