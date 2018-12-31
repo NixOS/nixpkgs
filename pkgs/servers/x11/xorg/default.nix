@@ -1795,11 +1795,11 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   xf86videoi128 = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libpciaccess, xorgserver }: stdenv.mkDerivation {
-    name = "xf86-video-i128-1.3.6";
+    name = "xf86-video-i128-1.4.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-video-i128-1.3.6.tar.bz2;
-      sha256 = "171b8lbxr56w3isph947dnw7x87hc46v6m3mcxdcz44gk167x0pq";
+      url = mirror://xorg/individual/driver/xf86-video-i128-1.4.0.tar.bz2;
+      sha256 = "1snhpv1igrhifcls3r498kjd14ml6x2xvih7zk9xlsd1ymmhlb4g";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
