@@ -15465,6 +15465,8 @@ in
 
   conway_polynomials = callPackage ../data/misc/conway_polynomials { };
 
+  cooper-hewitt = callPackage ../data/fonts/cooper-hewitt { };
+
   dosis = callPackage ../data/fonts/dosis { };
 
   dosemu_fonts = callPackage ../data/fonts/dosemu-fonts { };
