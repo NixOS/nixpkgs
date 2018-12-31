@@ -1470,11 +1470,11 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   xcursorthemes = callPackage ({ stdenv, pkgconfig, fetchurl, libXcursor }: stdenv.mkDerivation {
-    name = "xcursor-themes-1.0.4";
+    name = "xcursor-themes-1.0.5";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/data/xcursor-themes-1.0.4.tar.bz2;
-      sha256 = "11mv661nj1p22sqkv87ryj2lcx4m68a04b0rs6iqh3fzp42jrzg3";
+      url = mirror://xorg/individual/data/xcursor-themes-1.0.5.tar.bz2;
+      sha256 = "0whjiq6d5z4z75zh37pji6llfcyrg6q3mg9zx5zqyncnj39q30xf";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
