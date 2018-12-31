@@ -220,6 +220,8 @@ in {
 
   aws-adfs = callPackage ../development/python-modules/aws-adfs { };
 
+  aws-lambda-builders = callPackage ../development/python-modules/aws-lambda-builders { };
+
   atomman = callPackage ../development/python-modules/atomman { };
 
   # packages defined elsewhere
