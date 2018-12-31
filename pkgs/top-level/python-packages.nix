@@ -5141,6 +5141,8 @@ in {
 
   uvloop = callPackage ../development/python-modules/uvloop { };
 
+  httptools = callPackage ../development/python-modules/httptools { };
+
 });
 
 in fix' (extends overrides packages)
