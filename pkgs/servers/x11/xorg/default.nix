@@ -1756,11 +1756,11 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   xf86videogeode = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libpciaccess, xorgserver }: stdenv.mkDerivation {
-    name = "xf86-video-geode-2.11.17";
+    name = "xf86-video-geode-2.11.19";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-video-geode-2.11.17.tar.bz2;
-      sha256 = "0h9w6cfj7s86rg72c6qci8f733hg4g7paan5fwmmj7p74ckd9d07";
+      url = mirror://xorg/individual/driver/xf86-video-geode-2.11.19.tar.bz2;
+      sha256 = "0zn9gb49grds5mcs1dlrx241k2w1sgqmx4i5x7v6159xxqhlqsf6";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
