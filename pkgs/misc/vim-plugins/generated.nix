@@ -1607,6 +1607,16 @@ let
     };
   };
 
+  sved = buildVimPluginFrom2Nix {
+    name = "sved-2019-01-25";
+    src = fetchFromGitHub {
+      owner = "peder2tm";
+      repo = "sved";
+      rev = "3362db72447e8ac812c7299c15ecfc9f41341713";
+      sha256 = "1r2nv069d6r2q6gbiz795x94mfjm9hnv05zka085hhq9a3yf1pgx";
+    };
+  };
+
   swift-vim = buildVimPluginFrom2Nix {
     pname = "swift-vim";
     version = "2018-09-12";
