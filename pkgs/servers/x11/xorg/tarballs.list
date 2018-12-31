@@ -26,7 +26,7 @@ mirror://xorg/individual/driver/xf86-video-omap-0.4.5.tar.bz2
 mirror://xorg/individual/app/bdftopcf-1.1.tar.bz2
 mirror://xorg/individual/app/bitmap-1.0.8.tar.gz
 mirror://xorg/individual/app/iceauth-1.0.8.tar.bz2
-mirror://xorg/individual/app/luit-1.1.1.tar.bz2
+ftp://ftp.invisible-island.net/luit/luit-20181211.tgz
 mirror://xorg/individual/app/mkfontdir-1.0.7.tar.bz2
 mirror://xorg/individual/app/mkfontscale-1.1.3.tar.bz2
 mirror://xorg/individual/app/sessreg-1.1.1.tar.bz2
