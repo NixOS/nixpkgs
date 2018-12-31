@@ -140,7 +140,7 @@
  *  Darwin frameworks
  */
 , Cocoa, CoreAudio, CoreServices, AVFoundation, MediaToolbox
-, VideoDecodeAcceleration, CF
+, VideoDecodeAcceleration, cf-private
 }:
 
 /* Maintainer notes:
@@ -434,7 +434,7 @@ stdenv.mkDerivation rec {
     FILES+=($(ls $out/lib/*.dylib))
     for f in ''${FILES[@]}; do
       if [ ! -h "$f" ]; then
-        install_name_tool -change ${CF}/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation /System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation "$f"
+        install_name_tool -change ${cf-private}/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation /System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation "$f"
       fi
     done
   '';
