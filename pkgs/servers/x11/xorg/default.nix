@@ -1209,16 +1209,16 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  luit = callPackage ({ stdenv, pkgconfig, fetchurl, libfontenc }: stdenv.mkDerivation {
-    name = "luit-1.1.1";
+  luit = callPackage ({ stdenv, pkgconfig, fetchurl }: stdenv.mkDerivation {
+    name = "luit-20181211";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/luit-1.1.1.tar.bz2;
-      sha256 = "0dn694mk56x6hdk6y9ylx4f128h5jcin278gnw2gb807rf3ygc1h";
+      url = ftp://ftp.invisible-island.net/luit/luit-20181211.tgz;
+      sha256 = "18mf3savxjs29hf4xhhc5h278qy0bbj9ddssx44w0bnlg107jhp1";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ libfontenc ];
+    buildInputs = [ ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
