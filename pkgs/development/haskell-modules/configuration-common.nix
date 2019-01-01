@@ -173,12 +173,14 @@ self: super: {
 
   inline-c-cpp = if !pkgs.stdenv.isDarwin
     then super.inline-c-cpp
-    else addExtraLibrary (overrideCabal super.inline-c-cpp (drv:
-      {
-        postPatch = ''
-          substituteInPlace inline-c-cpp.cabal --replace stdc++ c++
-        '';
-      })) pkgs.libcxx;
+    else
+      let drv = addExtraLibrary (overrideCabal super.inline-c-cpp (drv: {
+          postPatch = ''
+            substituteInPlace inline-c-cpp.cabal --replace  stdc++ c++
+          '';
+        })) pkgs.libcxx;
+      in # https://github.com/fpco/inline-c/issues/75
+         dontCheck drv;
 
   inline-java = addBuildDepend super.inline-java pkgs.jdk;
 
