@@ -198,7 +198,7 @@
     "camera.logi_circle" = ps: with ps; [  ];
     "camera.mjpeg" = ps: with ps; [  ];
     "camera.mqtt" = ps: with ps; [ paho-mqtt ];
-    "camera.neato" = ps: with ps; [  ];
+    "camera.neato" = ps: with ps; [ pybotvac ];
     "camera.nest" = ps: with ps; [  ];
     "camera.netatmo" = ps: with ps; [  ];
     "camera.onvif" = ps: with ps; [ ha-ffmpeg ];
@@ -743,7 +743,7 @@
     "mysensors.handler" = ps: with ps; [  ];
     "mysensors.helpers" = ps: with ps; [  ];
     "namecheapdns" = ps: with ps; [  ];
-    "neato" = ps: with ps; [  ];
+    "neato" = ps: with ps; [ pybotvac ];
     "nest" = ps: with ps; [  ];
     "nest.config_flow" = ps: with ps; [  ];
     "nest.const" = ps: with ps; [  ];
@@ -1265,7 +1265,7 @@
     "switch.mqtt" = ps: with ps; [ paho-mqtt ];
     "switch.mysensors" = ps: with ps; [  ];
     "switch.mystrom" = ps: with ps; [  ];
-    "switch.neato" = ps: with ps; [  ];
+    "switch.neato" = ps: with ps; [ pybotvac ];
     "switch.netio" = ps: with ps; [ aiohttp-cors ];
     "switch.orvibo" = ps: with ps; [  ];
     "switch.pilight" = ps: with ps; [  ];
@@ -1369,7 +1369,7 @@
     "vacuum.dyson" = ps: with ps; [  ];
     "vacuum.ecovacs" = ps: with ps; [  ];
     "vacuum.mqtt" = ps: with ps; [ paho-mqtt ];
-    "vacuum.neato" = ps: with ps; [  ];
+    "vacuum.neato" = ps: with ps; [ pybotvac ];
     "vacuum.roomba" = ps: with ps; [  ];
     "vacuum.xiaomi_miio" = ps: with ps; [ construct ];
     "velbus" = ps: with ps; [  ];
