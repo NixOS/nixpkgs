@@ -93,6 +93,7 @@ self: super: {
   # https://github.com/jgm/skylighting/issues/55
   skylighting-core = dontCheck super.skylighting-core;
 
+  github = dontCheck super.github; # hspec upper bound exceeded; https://github.com/phadej/github/pull/341
   # Break out of "yaml >=0.10.4.0 && <0.11".
   stack = doJailbreak super.stack;
 
