@@ -5145,6 +5145,8 @@ in {
 
   pyatv = callPackage ../development/python-modules/pyatv { };
 
+  pybotvac = callPackage ../development/python-modules/pybotvac { };
+
 });
 
 in fix' (extends overrides packages)
