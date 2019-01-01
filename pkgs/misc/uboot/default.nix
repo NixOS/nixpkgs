@@ -7,6 +7,7 @@ let
   buildUBoot = { filesToInstall
             , installDir ? "$out"
             , defconfig
+            , extraConfig ? ""
             , extraPatches ? []
             , extraMakeFlags ? []
             , extraMeta ? {}
@@ -50,10 +51,14 @@ let
       "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
     ] ++ extraMakeFlags;
 
+    passAsFile = [ "extraConfig" ];
+
     configurePhase = ''
       runHook preConfigure
 
       make ${defconfig}
+
+      cat $extraConfigPath >> .config
 
       runHook postConfigure
     '';
@@ -242,10 +247,8 @@ in rec {
     extraMeta.platforms = ["armv7l-linux"];
     filesToInstall = ["u-boot-with-nand-spl.imx"];
     buildFlags = "u-boot-with-nand-spl.imx";
-    postConfigure = ''
-      cat >> .config << EOF
+    extraConfig = ''
       CONFIG_CMD_SETEXPR=y
-      EOF
     '';
     # sata init; load sata 0 $loadaddr u-boot-with-nand-spl.imx
     # sf probe; sf update $loadaddr 0 80000
