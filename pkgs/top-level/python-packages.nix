@@ -5139,6 +5139,12 @@ in {
 
   importlib-resources = callPackage ../development/python-modules/importlib-resources {};
 
+  srptools = callPackage ../development/python-modules/srptools { };
+
+  curve25519-donna = callPackage ../development/python-modules/curve25519-donna { };
+
+  pyatv = callPackage ../development/python-modules/pyatv { };
+
 });
 
 in fix' (extends overrides packages)
