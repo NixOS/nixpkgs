@@ -3115,6 +3115,16 @@ let
     };
   };
 
+  vim-parinfer = buildVimPluginFrom2Nix {
+    name = "vim-parinfer-2018-08-31";
+    src = fetchFromGitHub {
+      owner = "bhurlow";
+      repo = "vim-parinfer";
+      rev = "d599e41dd1b9034059524af8156dcbebe68d96d2";
+      sha256 = "0h4zw1yfnrbb3w5brcsy2l43jk7569dhslpkahczqxj6wr6hsxcc";
+    };
+  };
+
   vim-pathogen = buildVimPluginFrom2Nix {
     pname = "vim-pathogen";
     version = "2018-12-13";
