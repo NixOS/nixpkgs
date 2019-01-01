@@ -14,7 +14,21 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ SDL2 libpng ];
 
+  configureFlags = [
+    "--with-tests"
+  ];
+
   doCheck = true;
+
+  checkPhase = ''
+    runHook preCheck
+
+    pushd tests
+    ./test_basic.sh
+    popd
+
+    runHook postCheck
+  '';
 
   meta = with stdenv.lib; {
     homepage = https://fukuchi.org/works/qrencode/;
