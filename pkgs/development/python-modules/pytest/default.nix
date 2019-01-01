@@ -3,8 +3,35 @@
 , atomicwrites, mock, writeText, pathlib2
 }:
 
-let generic = { version, sha256 }:
-  buildPythonPackage rec {
+let generic = { version, sha256 }: let
+
+  # runTests is a function that returns a string that can be used as a checkPhase.
+  runTests = with stdenv.lib; {
+    disabledTests ? [],     # Disable tests that match expression.
+    disabledTestIds ? [],   # Disable tests that match given node id's. This is useful in case a test in a specific file needs to be disabled.
+    options ? [],           # py.test options.
+    targets ? [],           # py.test files or folders.
+    variables ? {},         # Environment variables to export.
+  }: let
+    varsString = concatStringsSep " " (mapAttrsToList (var: value: "${var}=${value}") variables);
+    disabledTestsString = optionalString (disabledTests != []) "-k '${concatMapStringsSep " and " (s: "not " + s) disabledTests}'";
+    disabledTestIdsString = optionalString (disabledTestIds != []) "--deselect=$(concatStringsSep ',' disabledTestIds}";
+    invocation = concatStringsSep " " [
+      varsString
+      "py.test"
+      disabledTestsString
+      disabledTestIdsString
+      (concatStringsSep " " options)
+      (concatStringsSep " " targets)
+    ];
+  in ''
+    runHook preCheck
+    echo "Running tests using: ${invocation}"
+    ${invocation}
+    runHook postCheck
+  '';
+
+  pytest = buildPythonPackage rec {
     pname = "pytest";
     inherit version;
 
@@ -38,14 +65,16 @@ let generic = { version, sha256 }:
       preDistPhases+=" pytestcachePhase"
     '';
 
+    passthru.runTests = runTests;
+
     meta = with stdenv.lib; {
       homepage = https://docs.pytest.org;
       description = "Framework for writing tests";
       maintainers = with maintainers; [ domenkozar lovek323 madjar lsix ];
       license = licenses.mit;
-      platforms = platforms.unix;
     };
   };
+  in pytest;
 
 in {
   pytest_39 = generic {
