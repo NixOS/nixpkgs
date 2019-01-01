@@ -35,7 +35,7 @@ let
   sitePackages = "lib/${libPrefix}/site-packages";
 
   buildInputs = filter (p: p != null) [
-    zlib bzip2 expat lzma libffi gdbm sqlite readline ncurses openssl nukeReferences ]
+    zlib bzip2 expat lzma libffi gdbm sqlite readline ncurses openssl ]
     ++ optionals x11Support [ tcl tk libX11 xproto ]
     ++ optionals stdenv.isDarwin [ CF configd ];
 
@@ -51,7 +51,7 @@ in stdenv.mkDerivation {
 
   inherit buildInputs;
 
-  nativeBuildInputs =
+  nativeBuildInputs = [ nukeReferences ] ++
     optionals (stdenv.hostPlatform != stdenv.buildPlatform)
     [ buildPackages.stdenv.cc buildPackages.python37 ];
 
