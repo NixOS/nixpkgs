@@ -98,9 +98,32 @@ in {
     inherit passthruFun;
   };
 
-#   pypy27 = callPackage ./pypy {
-#     self = pypy27;
-#     implementation = "pypy";
-#   };
+  pypy27 = callPackage ./pypy {
+    self = pypy27;
+    sourceVersion = {
+      major = "6";
+      minor = "0";
+      patch = "0";
+    };
+    sha256 = "1qjwpc8n68sxxlfg36s5vn1h2gdfvvd6lxvr4lzbvfwhzrgqahsw";
+    pythonVersion = "2.7";
+    db = db.override { dbmSupport = true; };
+    python = python27;
+    inherit passthruFun;
+  };
+
+  pypy3 = callPackage ./pypy {
+    self = pypy3;
+    sourceVersion = {
+      major = "6";
+      minor = "0";
+      patch = "0";
+    };
+    sha256 = "0lwq8nn0r5yj01bwmkk5p7xvvrp4s550l8184mkmn74d3gphrlwg";
+    pythonVersion = "3.5";
+    db = db.override { dbmSupport = true; };
+    python = python27;
+    inherit passthruFun;
+  };
 
 })

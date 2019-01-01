@@ -7954,18 +7954,7 @@ in
   python3Packages = python3.pkgs;
 
   pythonInterpreters = callPackage ./../development/interpreters/python {};
-  inherit (pythonInterpreters) python27 python35 python36 python37;
-
-  pypy27 = callPackage ../development/interpreters/python/pypy/2.7 {
-    self = pypy27;
-    python = python27.override{x11Support=true;};
-    db = db.override { dbmSupport = true; };
-  };
-  pypy3 = callPackage ../development/interpreters/python/pypy/3 {
-    self = pypy3;
-    python = python27;
-    db = db.override { dbmSupport = true; };
-  };
+  inherit (pythonInterpreters) python27 python35 python36 python37 pypy27 pypy3;
 
   # Python package sets.
   python27Packages = lib.hiPrioSet (recurseIntoAttrs python27.pkgs);
