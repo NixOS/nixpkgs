@@ -1,21 +1,191 @@
 { stdenv, lib, fetchFromGitHub, fetchpatch, fetchurl, pkgconfig, intltool, gperf, libcap, kmod
-, xz, pam, acl, libuuid, m4, utillinux, libffi
-, glib, kbd, libxslt, coreutils, libgcrypt, libgpgerror, libidn2, libapparmor
-, audit, lz4, bzip2, libmicrohttpd, pcre2
+, libuuid, m4, utillinux, libffi
+, kbd, coreutils
 , linuxHeaders ? stdenv.cc.libc.linuxHeaders
-, iptables, gnu-efi
-, gettext, docbook_xsl, docbook_xml_dtd_42, docbook_xml_dtd_45
+, gettext
 , ninja, meson, python3Packages, glibcLocales
 , patchelf
 , getent
 , buildPackages
-, withSelinux ? false, libselinux
-, withLibseccomp ? lib.any (lib.meta.platformMatch stdenv.hostPlatform) libseccomp.meta.platforms, libseccomp
+
+# dependencies for optional features
+, acl
+, audit
+, bzip2
+, cryptsetup
+, curl
+, dbus_libs
+, docbook_xml_dtd_42
+, docbook_xml_dtd_45
+, docbook_xsl
+, elfutils
+, glib
+, gnu-efi
+, gnutls
+, iptables
+, libapparmor
+, libgcrypt
+, libgpgerror
+, libidn
+, libidn2
+, libmicrohttpd
+, libseccomp
+, libselinux
+, libxkbcommon
+, libxslt
+, lz4
+, pam
+, pcre2
+, polkit
+, qrencode
+, xz
+, zlib
+
+, features ? {}
+, withSelinux ? false
+, withLibseccomp ? lib.any (lib.meta.platformMatch stdenv.hostPlatform) libseccomp.meta.platforms
 , withKexectools ? lib.any (lib.meta.platformMatch stdenv.hostPlatform) kexectools.meta.platforms, kexectools
 }:
 
 let
   pythonLxmlEnv = buildPackages.python3Packages.python.withPackages ( ps: with ps; [ python3Packages.lxml ]);
+
+  # Runtime features that depend on additional packages. Initial list
+  # constructed by running:
+  #   meson build
+  #   cd build
+  #   meson configure | sed -n '
+  #     1,/^Project options:/d;
+  #     /Testing options:/q;
+  #     s/^ *\([^ ]*\).*\[.*auto.*\].*/\1/p'
+  # and then checking which dependency checks corresponded to each feature in
+  # meson.build.
+  allFeatures = metaFeatures ++ (lib.attrNames (featureBuildInputs // featureNativeBuildInputs));
+
+  featureBuildInputs = {
+    "acl" = [ acl ];
+    "apparmor" = [ libapparmor ];
+    "audit" = [ audit ];
+    "blkid" = [ utillinux ];
+    "bzip2" = [ bzip2 ];
+    "dbus" = [ dbus_libs ];
+    "elfutils" = [ elfutils ];
+    "gcrypt" = [ libgcrypt libgpgerror ];
+    "glib" = [ glib ];
+    "gnu-efi" = [ gnu-efi ]; # requires "efi" and maybe "efi-*" features also
+    "gnutls" = [ gnutls ];
+    "kmod" = [ kmod ];
+    "libcryptsetup" = [ cryptsetup ];
+    "libcurl" = [ curl ];
+    "libidn" = [ libidn ];
+    "libidn2" = [ libidn2 ];
+    "libiptc" = [ iptables ];
+    "lz4" = [ lz4 ];
+    "microhttpd" = [ libmicrohttpd ];
+    "pam" = [ pam ];
+    "pcre2" = [ pcre2 ];
+    "qrencode" = [ qrencode ];
+    "seccomp" = [ libseccomp ];
+    "selinux" = [ libselinux ];
+    "xkbcommon" = [ libxkbcommon ];
+    "xz" = [ xz ];
+    "zlib" = [ zlib ];
+  };
+
+  featureNativeBuildInputs = {
+    "html" = [ libxslt.bin docbook_xsl docbook_xml_dtd_42 docbook_xml_dtd_45 ];
+    "man" = [ libxslt.bin docbook_xsl docbook_xml_dtd_42 docbook_xml_dtd_45 pythonLxmlEnv ];
+  };
+
+  metaFeatures = [
+    "dns-over-tls" # requires "gnutls" feature as well
+    "importd" # requires "libcurl", "zlib", "xz", and "gcrypt" features also
+    "polkit" # if polkit package is present, there's a build-time version check
+    "remote" # requires "microhttpd" and "libcurl" features also
+    "split-bin"
+    "split-usr"
+  ];
+
+  # Disable all features that have dependencies, then turn back on the features
+  # that NixOS wants.
+  defaultFeatures = lib.genAttrs allFeatures (_: false) //
+    {
+      # Features systemd would try to auto-detect that we want turned on:
+      "acl" = true;
+      "apparmor" = true;
+      "audit" = true;
+      "blkid" = true;
+      "bzip2" = true;
+      "gcrypt" = true;
+      "glib" = true;
+      "gnu-efi" = !stdenv.isAarch32 && !stdenv.isAarch64 && stdenv.hostPlatform.isEfi;
+      "kmod" = true;
+      "libidn2" = true;
+      "libiptc" = true;
+      "lz4" = true;
+      "man" = true;
+      "microhttpd" = true;
+      "pam" = true;
+      "pcre2" = true;
+      "polkit" = true;
+      "remote" = "auto"; # only way to get sd-j-remote without sd-j-upload
+      "seccomp" = withLibseccomp;
+      "selinux" = withSelinux;
+      "split-bin" = true;
+      "xz" = true;
+      "zlib" = true;
+
+      # Other flags:
+      "tests" = false; # TODO: fails a bunch of tests
+      "hostnamed" = true;
+      "networkd" = true;
+      "sysusers" = false;
+      "timedated" = true;
+      "timesyncd" = true;
+      "firstboot" = false;
+      "localed" = true;
+      "resolve" = true;
+      "quotacheck" = false;
+      "ldconfig" = false;
+      "smack" = true;
+
+      # NixOS-specific settings, overridable if desired:
+      "tty-gid" = 3; # tty in NixOS has gid 3
+      "system-uid-max" = 499; #TODO: debug why awking around in /etc/login.defs doesn't work
+      "system-gid-max" = 499;
+      "ntp-servers" = "0.nixos.pool.ntp.org 1.nixos.pool.ntp.org 2.nixos.pool.ntp.org 3.nixos.pool.ntp.org";
+      # "time-epoch" = 1;
+
+      # NixOS doesn't need SysV init compatibility.
+      "sysvinit-path" = "";
+      "sysvrcnd-path" = "";
+
+      # Needed if the gnu-efi feature is enabled; ignored otherwise.
+      "efi-includedir" = "${toString gnu-efi}/include/efi";
+      "efi-ldsdir" = "${toString gnu-efi}/lib";
+      "efi-libdir" = "${toString gnu-efi}/lib";
+
+      # Paths to binaries that systemd invokes:
+      "kill-path" = "${coreutils}/bin/kill";
+      "loadkeys-path" = "${kbd}/bin/loadkeys";
+      "setfont-path" = "${kbd}/bin/setfont";
+      "kmod-path" = "${kmod}/bin/kmod";
+      "sulogin-path" = "${utillinux}/bin/sulogin";
+      "mount-path" = "${utillinux}/bin/mount";
+      "umount-path" = "${utillinux}/bin/umount";
+    };
+
+  finalFeatures = defaultFeatures // features;
+
+  enabledFeature = name: let v = finalFeatures.${name}; in v != false && v != "false";
+
+  getDeps = avail: lib.concatLists (lib.mapAttrsToList (name: deps: lib.optionals (enabledFeature name) deps) avail);
+
+  featureFlag = name: value:
+    let v =
+      if lib.isBool value then if value then "true" else "false"
+      else toString value;
+    in "-D${name}=${v}";
 
 in stdenv.mkDerivation rec {
   version = "239";
@@ -46,79 +216,39 @@ in stdenv.mkDerivation rec {
       patches="$patches $(cat debian/patches/series | grep -v '^debian/' | sed 's|^|debian/patches/|')"
     '';
 
-  outputs = [ "out" "lib" "man" "dev" ];
+  outputs = [ "out" "lib" "dev" ] ++
+    lib.optional (enabledFeature "man") "man";
 
   nativeBuildInputs =
-    [ pkgconfig intltool gperf libxslt gettext docbook_xsl docbook_xml_dtd_42 docbook_xml_dtd_45
+    [ pkgconfig intltool gperf gettext
       ninja meson
       coreutils # meson calls date, stat etc.
       glibcLocales
       patchelf getent m4
-    ];
+    ] ++ getDeps featureNativeBuildInputs;
+
   buildInputs =
-    [ linuxHeaders libcap kmod xz pam acl
-      /* cryptsetup */ libuuid glib libgcrypt libgpgerror libidn2
-      libmicrohttpd pcre2 ] ++
-      stdenv.lib.optional withKexectools kexectools ++
-      stdenv.lib.optional withLibseccomp libseccomp ++
-    [ libffi audit lz4 bzip2 libapparmor
-      iptables gnu-efi
-      # This is actually native, but we already pull it from buildPackages
-      pythonLxmlEnv
-    ] ++ stdenv.lib.optional withSelinux libselinux;
+    [ linuxHeaders libcap libuuid libffi ] ++
+    getDeps featureBuildInputs ++
+    stdenv.lib.optional withKexectools kexectools;
 
   #dontAddPrefix = true;
 
-  mesonFlags = [
-    "-Dloadkeys-path=${kbd}/bin/loadkeys"
-    "-Dsetfont-path=${kbd}/bin/setfont"
-    "-Dtty-gid=3" # tty in NixOS has gid 3
-    # "-Dtests=" # TODO
-    "-Dlz4=true"
-    "-Dhostnamed=true"
-    "-Dnetworkd=true"
-    "-Dsysusers=false"
-    "-Dtimedated=true"
-    "-Dtimesyncd=true"
-    "-Dfirstboot=false"
-    "-Dlocaled=true"
-    "-Dresolve=true"
-    "-Dsplit-usr=false"
-    "-Dlibcurl=false"
-    "-Dlibidn=false"
-    "-Dlibidn2=true"
-    "-Dquotacheck=false"
-    "-Dldconfig=false"
-    "-Dsmack=true"
-    "-Dsystem-uid-max=499" #TODO: debug why awking around in /etc/login.defs doesn't work
-    "-Dsystem-gid-max=499"
-    # "-Dtime-epoch=1"
-
-    (if stdenv.isAarch32 || stdenv.isAarch64 || !stdenv.hostPlatform.isEfi then "-Dgnu-efi=false" else "-Dgnu-efi=true")
-    "-Defi-libdir=${toString gnu-efi}/lib"
-    "-Defi-includedir=${toString gnu-efi}/include/efi"
-    "-Defi-ldsdir=${toString gnu-efi}/lib"
-
-    "-Dsysvinit-path="
-    "-Dsysvrcnd-path="
-
-    "-Dkill-path=${coreutils}/bin/kill"
-    "-Dkmod-path=${kmod}/bin/kmod"
-    "-Dsulogin-path=${utillinux}/bin/sulogin"
-    "-Dmount-path=${utillinux}/bin/mount"
-    "-Dumount-path=${utillinux}/bin/umount"
-  ];
-
+  # Passing either mesonFlags or mesonFlagsArray via the environment makes it
+  # very difficult to preserve flags which might contain whitespace or shell
+  # special characters, so we use bash syntax to set mesonFlagsArray instead.
   preConfigure = ''
-    mesonFlagsArray+=(-Dntp-servers="0.nixos.pool.ntp.org 1.nixos.pool.ntp.org 2.nixos.pool.ntp.org 3.nixos.pool.ntp.org")
-    mesonFlagsArray+=(-Ddbuspolicydir=$out/etc/dbus-1/system.d)
-    mesonFlagsArray+=(-Ddbussessionservicedir=$out/share/dbus-1/services)
-    mesonFlagsArray+=(-Ddbussystemservicedir=$out/share/dbus-1/system-services)
-    mesonFlagsArray+=(-Dpamconfdir=$out/etc/pam.d)
-    mesonFlagsArray+=(-Drootprefix=$out)
-    mesonFlagsArray+=(-Drootlibdir=$lib/lib)
-    mesonFlagsArray+=(-Dpkgconfiglibdir=$dev/lib/pkgconfig)
-    mesonFlagsArray+=(-Dpkgconfigdatadir=$dev/share/pkgconfig)
+    mesonFlagsArray+=(${lib.concatStringsSep " " [
+      (lib.escapeShellArgs (lib.mapAttrsToList featureFlag finalFeatures))
+      "-Ddbuspolicydir=$out/etc/dbus-1/system.d"
+      "-Ddbussessionservicedir=$out/share/dbus-1/services"
+      "-Ddbussystemservicedir=$out/share/dbus-1/system-services"
+      "-Dpamconfdir=$out/etc/pam.d"
+      "-Dpkgconfigdatadir=$dev/share/pkgconfig"
+      "-Dpkgconfiglibdir=$dev/lib/pkgconfig"
+      "-Drootlibdir=$lib/lib"
+      "-Drootprefix=$out"
+    ]})
 
     export LC_ALL="en_US.UTF-8";
     # FIXME: patch this in systemd properly (and send upstream).
@@ -158,6 +288,11 @@ in stdenv.mkDerivation rec {
       --replace "POLKIT_AGENT_BINARY_PATH" "_POLKIT_AGENT_BINARY_PATH" \
       --replace "SYSTEMD_BINARY_PATH" "_SYSTEMD_BINARY_PATH" \
       --replace "SYSTEMD_CGROUP_AGENT_PATH" "_SYSTEMD_CGROUP_AGENT_PATH"
+
+    if meson configure | grep ' auto ' | grep -v '^ *remote '; then
+      echo "The above features should be explicitly set. Aborting."
+      exit 1
+    fi
   '';
 
   NIX_CFLAGS_COMPILE =
@@ -173,7 +308,7 @@ in stdenv.mkDerivation rec {
       "-USYSTEMD_BINARY_PATH" "-DSYSTEMD_BINARY_PATH=\"/run/current-system/systemd/lib/systemd/systemd\""
     ];
 
-  doCheck = false; # fails a bunch of tests
+  doCheck = enabledFeature "tests";
 
   postInstall = ''
     # sysinit.target: Don't depend on
@@ -212,6 +347,8 @@ in stdenv.mkDerivation rec {
   # systemd builds is the same, then we can switch between them at
   # runtime; otherwise we can't and we need to reboot.
   passthru.interfaceVersion = 2;
+
+  passthru.features = finalFeatures;
 
   meta = with stdenv.lib; {
     homepage = http://www.freedesktop.org/wiki/Software/systemd;
