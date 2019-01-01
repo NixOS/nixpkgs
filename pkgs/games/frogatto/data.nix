@@ -16,4 +16,11 @@ stdenv.mkDerivation rec {
     mkdir -p $out/share/frogatto/modules
     cp -ar . $out/share/frogatto/modules/frogatto
   '';
+
+  meta = with stdenv.lib; {
+    homepage = https://github.com/frogatto/frogatto;
+    description = "Data files to the frogatto game";
+    license = with licenses; [ cc-by-30 unfree ];
+    maintainers = with maintainers; [ astro ];
+  };
 }
