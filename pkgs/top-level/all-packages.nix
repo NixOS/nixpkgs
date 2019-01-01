@@ -4774,6 +4774,10 @@ in
 
   patchage = callPackage ../applications/audio/patchage { };
 
+  patchbay = callPackage ../applications/networking/ssb/patchbay { };
+
+  patchwork = callPackage ../applications/networking/ssb/patchwork { };
+
   patchwork-classic = callPackage ../applications/networking/ssb/patchwork-classic { };
 
   pcapfix = callPackage ../tools/networking/pcapfix { };
