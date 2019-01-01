@@ -16,10 +16,14 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "858588f1983ca497f1cf4ffde01d978a3ea02b01c8a26a8bbc5cd2e66d816917";
   };
-  checkPhase = ''
+
+  postPatch = ''
     rm prompt_toolkit/win32_types.py
-    py.test -k 'not test_pathcompleter_can_expanduser'
   '';
+
+  checkPhase = pytest.runTests {
+    disabledTests = [ "test_pathcompleter_can_expanduser" ];
+  };
 
   checkInputs = [ pytest ];
   propagatedBuildInputs = [ docopt six wcwidth pygments ];

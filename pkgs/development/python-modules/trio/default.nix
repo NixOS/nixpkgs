@@ -25,9 +25,16 @@ buildPythonPackage rec {
 
   checkInputs = [ pytest pyopenssl trustme jedi pylint ];
   # It appears that the build sandbox doesn't include /etc/services, and these tests try to use it.
-  checkPhase = ''
-    HOME="$(mktemp -d)" py.test -k 'not test_getnameinfo and not test_SocketType_resolve and not test_getprotobyname and not test_waitpid'
-  '';
+  checkPhase = pytest.runTests {
+    variables.HOME = "$(mktemp -d)";
+    disabledTests = [
+      "test_getnameinfo"
+      "test_SocketType_resolve"
+      "test_getprotobyname"
+      "test_waitpid"
+    ];
+  };
+
   propagatedBuildInputs = [
     attrs
     sortedcontainers

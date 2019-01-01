@@ -26,18 +26,19 @@ buildPythonPackage rec {
   checkInputs = [ pytest dask ];
   propagatedBuildInputs = [ datashape numpy pandas toolz multipledispatch networkx ];
 
-  # Disable failing tests
-  # https://github.com/blaze/odo/issues/609
-  checkPhase = ''
-    py.test -k "not test_numpy_asserts_type_after_dataframe" odo/tests
-  '';
+  checkPhase = pytest.runTests {
+    targets = [ "odo/tests" ];
+    # Disable failing tests
+    # https://github.com/blaze/odo/issues/609
+    disabledTests = [ "test_numpy_asserts_type_after_dataframe" ];
+  };
 
   meta = {
     homepage = https://github.com/ContinuumIO/odo;
     description = "Data migration utilities";
     license = lib.licenses.bsdOriginal;
     maintainers = with lib.maintainers; [ fridh ];
-    # incomaptible with Networkx 2
+    # incompatible with Networkx 2
     # see https://github.com/blaze/odo/pull/601
     broken = true;
   };

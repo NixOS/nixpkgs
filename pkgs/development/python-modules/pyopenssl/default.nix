@@ -39,14 +39,7 @@ let
     "test_fallback_default_verify_paths"
   ] ++ (optionals (hasPrefix "libressl" openssl.meta.name) failingLibresslTests);
 
-  # Compose the final string expression, including the "-k" and the single quotes.
-  testExpression = optionalString (disabledTests != [])
-    "-k 'not ${concatStringsSep " and not " disabledTests}'";
-
-in
-
-
-buildPythonPackage rec {
+in buildPythonPackage rec {
   pname = "pyOpenSSL";
   version = "18.0.0";
 
@@ -57,12 +50,10 @@ buildPythonPackage rec {
 
   outputs = [ "out" "dev" ];
 
-  checkPhase = ''
-    runHook preCheck
-    export LANG="en_US.UTF-8"
-    py.test tests ${testExpression}
-    runHook postCheck
-  '';
+  checkPhase = pytest.runTests {
+    variables.LANG = "en_US.UTF-8";
+    inherit disabledTests;
+  };
 
   # Seems to fail unpredictably on Darwin. See http://hydra.nixos.org/build/49877419/nixlog/1
   # for one example, but I've also seen ContextTests.test_set_verify_callback_exception fail.

@@ -65,45 +65,43 @@ in buildPythonPackage rec {
                 "['pandas/src/klib', 'pandas/src', '$cpp_sdk']"
   '';
 
-
-  disabledTests = stdenv.lib.concatMapStringsSep " and " (s: "not " + s) ([
-    # since dateutil 0.6.0 the following fails: test_fallback_plural, test_ambiguous_flags, test_ambiguous_compat
-    # was supposed to be solved by https://github.com/dateutil/dateutil/issues/321, but is not the case
-    "test_fallback_plural"
-    "test_ambiguous_flags"
-    "test_ambiguous_compat"
-    # Locale-related
-    "test_names"
-    "test_dt_accessor_datetime_name_accessors"
-    "test_datetime_name_accessors"
-    # Can't import from test folder
-    "test_oo_optimizable"
-    # Disable IO related tests because IO data is no longer distributed
-    "io"
-    # KeyError Timestamp
-    "test_to_excel"
-  ] ++ optionals isDarwin [
-    "test_locale"
-    "test_clipboard"
-  ]);
-
   doCheck = !stdenv.isAarch64; # upstream doesn't test this architecture
 
-  checkPhase = ''
-    runHook preCheck
-  ''
-  # TODO: Get locale and clipboard support working on darwin.
-  #       Until then we disable the tests.
-  + optionalString isDarwin ''
+  preCheck = optionalString isDarwin ''
+    # TODO: Get locale and clipboard support working on darwin.
+    #       Until then we disable the tests.
     # Fake the impure dependencies pbpaste and pbcopy
     echo "#!/bin/sh" > pbcopy
     echo "#!/bin/sh" > pbpaste
     chmod a+x pbcopy pbpaste
     export PATH=$(pwd):$PATH
-  '' + ''
-    LC_ALL="en_US.UTF-8" py.test $out/${python.sitePackages}/pandas --skip-slow --skip-network -k "$disabledTests"
-    runHook postCheck
   '';
+
+  checkPhase = pytest.runTests {
+    variables.LC_ALL = "en_US.UTF-8";
+    targets = [ "$out/${python.sitePackages}/pandas" ];
+    options = [ "--skip-slow" "--skip-network" ];
+    disabledTests = [
+      # since dateutil 0.6.0 the following fails: test_fallback_plural, test_ambiguous_flags, test_ambiguous_compat
+      # was supposed to be solved by https://github.com/dateutil/dateutil/issues/321, but is not the case
+      "test_fallback_plural"
+      "test_ambiguous_flags"
+      "test_ambiguous_compat"
+      # Locale-related
+      "test_names"
+      "test_dt_accessor_datetime_name_accessors"
+      "test_datetime_name_accessors"
+      # Can't import from test folder
+      "test_oo_optimizable"
+      # Disable IO related tests because IO data is no longer distributed
+      "io"
+      # KeyError Timestamp
+      "test_to_excel"
+    ] ++ optionals isDarwin [
+      "test_locale"
+      "test_clipboard"
+    ];
+  };
 
   meta = {
     # https://github.com/pandas-dev/pandas/issues/14866

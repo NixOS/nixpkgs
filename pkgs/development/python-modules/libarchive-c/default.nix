@@ -25,9 +25,13 @@ buildPythonPackage rec {
       "find_library('archive')" "'${libarchive.lib}/lib/libarchive${stdenv.hostPlatform.extensions.sharedLibrary}'"
   '';
 
-  checkPhase = ''
-    py.test tests -k 'not test_check_archiveentry_with_unicode_entries_and_name_zip and not test_check_archiveentry_using_python_testtar'
-  '';
+  checkPhase = pytest.runTests {
+    targets = [ "tests "];
+    disabledTests = [
+      "test_check_archiveentry_with_unicode_entries_and_name_zip"
+      "test_check_archiveentry_using_python_testtar"
+    ];
+  };
 
   meta = with stdenv.lib; {
     homepage = https://github.com/Changaco/python-libarchive-c;

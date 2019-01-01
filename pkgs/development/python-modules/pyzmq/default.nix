@@ -20,14 +20,17 @@ buildPythonPackage rec {
   buildInputs = [ zeromq ];
   propagatedBuildInputs = [ py ];
 
-  # test_socket.py seems to be hanging
-  # others fail
-  checkPhase = ''
-    py.test $out/${python.sitePackages}/zmq/ -k "not test_socket \
-      and not test_current \
-      and not test_instance \
-      and not test_callable_check \
-      and not test_on_recv_basic \
-      and not test_on_recv_wake"
-  '';
+  checkPhase = pytest.runTests {
+    targets = [ "$out/${python.sitePackages}/zmq/" ];
+    # test_socket.py seems to be hanging
+    # others fail
+    disabledTests = [
+      "test_socket"
+      "test_current"
+      "test_instance"
+      "test_callable_check"
+      "test_on_recv_basic"
+      "test_on_recv_wake"
+    ];
+  };
 }

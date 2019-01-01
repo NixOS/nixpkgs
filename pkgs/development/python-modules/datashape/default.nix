@@ -31,11 +31,19 @@ in buildPythonPackage rec {
   checkInputs = [ pytest mock ];
   propagatedBuildInputs = [ numpy multipledispatch dateutil ];
 
-  # Disable several tests
-  # https://github.com/blaze/datashape/issues/232
-  checkPhase = ''
-    py.test -k "not test_validate and not test_nested_iteratables and not test_validate_dicts and not test_tuples_can_be_records_too" datashape/tests
-  '';
+  checkPhase = pytest.runTests {
+    # Disable several tests
+    # https://github.com/blaze/datashape/issues/232
+    disabledTests = [
+      "test_validate"
+      "test_nested_iteratables"
+      "test_validate_dicts"
+      "test_tuples_can_be_records_too"
+    ];
+    targets = [
+      "datashape/tests"
+    ];
+  };
 
   meta = {
     homepage = https://github.com/ContinuumIO/datashape;

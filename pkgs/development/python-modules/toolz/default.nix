@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, nose
+, pytest
 }:
 
 buildPythonPackage rec{
@@ -13,13 +13,8 @@ buildPythonPackage rec{
     sha256 = "929f0a7ea7f61c178bd951bdae93920515d3fbdbafc8e6caf82d752b9b3b31c9";
   };
 
-  checkInputs = [ nose ];
-
-  checkPhase = ''
-    # https://github.com/pytoolz/toolz/issues/357
-    rm toolz/tests/test_serialization.py
-    nosetests toolz/tests
-  '';
+  checkInputs = [ pytest ];
+  checkPhase = pytest.runTests {};
 
   meta = with lib; {
     homepage = https://github.com/pytoolz/toolz;
