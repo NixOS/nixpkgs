@@ -1,4 +1,4 @@
-with import <nixpkgs> {};
+{ stdenv, fetchurl, autoreconfHook }:
 stdenv.mkDerivation rec {
   name = "sdate-${version}";
   version = "0.5";
