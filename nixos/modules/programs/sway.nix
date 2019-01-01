@@ -7,11 +7,18 @@ let
   swayPackage = pkgs.sway;
 
   swayWrapped = pkgs.writeShellScriptBin "sway" ''
-    if [[ "$#" -ge 1 ]]; then
+    set -o errexit
+
+    if [ ! "$_SWAY_WRAPPER_ALREADY_EXECUTED" ]; then
+      export _SWAY_WRAPPER_ALREADY_EXECUTED=1
+      ${cfg.extraSessionCommands}
+    fi
+
+    if [ "$DBUS_SESSION_BUS_ADDRESS" ]; then
+      export DBUS_SESSION_BUS_ADDRESS
       exec sway-setcap "$@"
     else
-      ${cfg.extraSessionCommands}
-      exec ${pkgs.dbus.dbus-launch} --exit-with-session sway-setcap
+      exec ${pkgs.dbus}/bin/dbus-run-session sway-setcap "$@"
     fi
   '';
   swayJoined = pkgs.symlinkJoin {
