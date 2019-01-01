@@ -5139,6 +5139,8 @@ in {
 
   importlib-resources = callPackage ../development/python-modules/importlib-resources {};
 
+  srptools = callPackage ../development/python-modules/srptools { };
+
 });
 
 in fix' (extends overrides packages)
