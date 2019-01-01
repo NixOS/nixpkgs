@@ -237,16 +237,16 @@ in rec {
   };
 
   tor-browser-8-0 = tbcommon rec {
-    ffversion = "60.3.0esr";
-    tbversion = "8.0.3";
+    ffversion = "60.4.0esr";
+    tbversion = "8.0.4";
 
     # FIXME: fetchFromGitHub is not ideal, unpacked source is >900Mb
     src = fetchFromGitHub {
       owner = "SLNOS";
       repo  = "tor-browser";
-      # branch "tor-browser-60.3.0esr-8.0-1-slnos"
-      rev   = "bd512ad9c40069adfc983f4f03dbd9d220cdf2f9";
-      sha256 = "1j349aqiqrf58zrx8pkqvh292w41v1vwr7x7dmd74hq4pi2iwpn8";
+      # branch "tor-browser-60.4.0esr-8.0-1-slnos"
+      rev   = "69b3852b8dfae74eec0ba2a88f7a4287d6f77446";
+      sha256 = "0v6c020lhncnhrwpm4frnpzclwaw7pvfm1z2n8xszxdy4i0dppxd";
     };
   };
 
