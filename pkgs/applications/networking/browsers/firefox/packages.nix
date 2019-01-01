@@ -92,6 +92,80 @@ rec {
 
 } // (let
 
+  iccommon = args: common (args // {
+    pname = "icecat";
+    isIceCatLike = true;
+
+    meta = (args.meta or {}) // {
+      description = "The GNU version of the Firefox web browser";
+      longDescription = ''
+        GNUzilla is the GNU version of the Mozilla suite, and GNU
+        IceCat is the GNU version of the Firefox web browser.
+
+        Notable differences from mainline Firefox:
+
+        - entirely free software, no non-free plugins, addons,
+          artwork,
+        - no telemetry, no "studies",
+        - sane privacy and security defaults (for instance, unlike
+          Firefox, IceCat does _zero_ network requests on startup by
+          default, which means that with IceCat you won't need to
+          unplug your Ethernet cable each time you want to create a
+          new browser profile without announcing that action to a
+          bunch of data-hungry corporations),
+        - all essential privacy and security settings can be
+          configured directly from the main screen,
+        - optional first party isolation (like TorBrowser),
+        - comes with HTTPS Everywhere (like TorBrowser), Tor Browser
+          Button (like TorBrowser Bundle), LibreJS, and SpyBlock
+          plugins out of the box.
+
+        This package can be installed together with Firefox and
+        TorBrowser, it will use distinct binary names and profile
+        directories.
+      '';
+      homepage = "https://www.gnu.org/software/gnuzilla/";
+      platforms = lib.platforms.unix;
+      license = with lib.licenses; [ mpl20 gpl3Plus ];
+    };
+  });
+
+in rec {
+
+  icecat = iccommon rec {
+    ffversion = "60.3.0";
+    icversion = "${ffversion}-gnu1";
+
+    src = fetchurl {
+      url = "mirror://gnu/gnuzilla/${ffversion}/icecat-${icversion}.tar.bz2";
+      sha256 = "0icnl64nxcyf7dprpdpygxhabsvyhps8c3ixysj9bcdlj9q34ib1";
+    };
+
+    patches = nixpkgsPatches ++ [
+      ./no-buildconfig.patch
+    ];
+  };
+
+  icecat-52 = iccommon rec {
+    ffversion = "52.6.0";
+    icversion = "${ffversion}-gnu1";
+
+    src = fetchurl {
+      url = "mirror://gnu/gnuzilla/${ffversion}/icecat-${icversion}.tar.bz2";
+      sha256 = "09fn54glqg1aa93hnz5zdcy07cps09dbni2b4200azh6nang630a";
+    };
+
+    patches = nixpkgsPatches ++ [
+      # this one is actually an omnipresent bug
+      # https://bugzilla.mozilla.org/show_bug.cgi?id=1444519
+      ./fix-pa-context-connect-retval.patch
+    ];
+
+    meta.knownVulnerabilities = [ "Support ended in August 2018." ];
+  };
+
+}) // (let
+
   tbcommon = args: common (args // {
     pname = "tor-browser";
     isTorBrowserLike = true;
@@ -109,7 +183,7 @@ rec {
 
     patches = nixpkgsPatches;
 
-    meta = {
+    meta = (args.meta or {}) // {
       description = "A web browser built from TorBrowser source tree";
       longDescription = ''
         This is a version of TorBrowser with bundle-related patches
