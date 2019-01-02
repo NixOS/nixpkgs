@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   name = "doxygen-1.8.14";
 
   src = fetchurl {
-    url = "ftp://ftp.stack.nl/pub/users/dimitri/${name}.src.tar.gz";
+    url = "http://doxygen.nl/files/${name}.src.tar.gz";
     sha256 = "d1757e02755ef6f56fd45f1f4398598b920381948d6fcfa58f5ca6aa56f59d4d";
   };
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     license = stdenv.lib.licenses.gpl2Plus;
-    homepage = http://doxygen.org/;
+    homepage = http://doxygen.nl/;
     description = "Source code documentation generator tool";
 
     longDescription = ''
