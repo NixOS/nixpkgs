@@ -251,7 +251,7 @@
     "climate.radiotherm" = ps: with ps; [  ];
     "climate.sensibo" = ps: with ps; [  ];
     "climate.spider" = ps: with ps; [  ];
-    "climate.tado" = ps: with ps; [  ];
+    "climate.tado" = ps: with ps; [ pytado ];
     "climate.tesla" = ps: with ps; [  ];
     "climate.toon" = ps: with ps; [  ];
     "climate.touchline" = ps: with ps; [  ];
@@ -375,7 +375,7 @@
     "device_tracker.sky_hub" = ps: with ps; [  ];
     "device_tracker.snmp" = ps: with ps; [ pysnmp ];
     "device_tracker.swisscom" = ps: with ps; [  ];
-    "device_tracker.tado" = ps: with ps; [  ];
+    "device_tracker.tado" = ps: with ps; [ pytado ];
     "device_tracker.tesla" = ps: with ps; [  ];
     "device_tracker.thomson" = ps: with ps; [  ];
     "device_tracker.tile" = ps: with ps; [  ];
@@ -1124,7 +1124,7 @@
     "sensor.synologydsm" = ps: with ps; [  ];
     "sensor.systemmonitor" = ps: with ps; [ psutil ];
     "sensor.sytadin" = ps: with ps; [ beautifulsoup4 ];
-    "sensor.tado" = ps: with ps; [  ];
+    "sensor.tado" = ps: with ps; [ pytado ];
     "sensor.tahoma" = ps: with ps; [  ];
     "sensor.tank_utility" = ps: with ps; [  ];
     "sensor.tautulli" = ps: with ps; [  ];
@@ -1321,7 +1321,7 @@
     "switch.zoneminder" = ps: with ps; [  ];
     "switch.zwave" = ps: with ps; [  ];
     "system_log" = ps: with ps; [ aiohttp-cors ];
-    "tado" = ps: with ps; [  ];
+    "tado" = ps: with ps; [ pytado ];
     "tahoma" = ps: with ps; [  ];
     "telegram_bot" = ps: with ps; [ python-telegram-bot ];
     "telegram_bot.broadcast" = ps: with ps; [  ];

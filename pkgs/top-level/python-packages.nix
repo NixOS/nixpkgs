@@ -5147,6 +5147,8 @@ in {
 
   pybotvac = callPackage ../development/python-modules/pybotvac { };
 
+  pytado = callPackage ../development/python-modules/pytado { };
+
 });
 
 in fix' (extends overrides packages)
