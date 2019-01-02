@@ -361,28 +361,6 @@ let
 
   tramp = callPackage ../applications/editors/emacs-modes/tramp { };
 
-  weechat = melpaBuild rec {
-    pname   = "weechat.el";
-    version = "0.2.2";
-    src = fetchFromGitHub {
-      owner  = "the-kenny";
-      repo   = pname;
-      rev    = version;
-      sha256 = "0f90m2s40jish4wjwfpmbgw024r7n2l5b9q9wr6rd3vdcwks3mcl";
-    };
-    postPatch = lib.optionalString (!stdenv.isLinux) ''
-      rm weechat-sauron.el weechat-secrets.el
-    '';
-    packageRequires = [ s ];
-    recipe = writeText "recipe" ''
-      (weechat :repo "the-kenny/weechat" :fetcher github)
-    '';
-    meta = {
-      description = "A weechat IRC client frontend for Emacs";
-      license = gpl3Plus;
-    };
-  };
-
   yaoddmuse = callPackage ../applications/editors/emacs-modes/yaoddmuse { };
 
   zeitgeist = callPackage ../applications/editors/emacs-modes/zeitgeist { };
