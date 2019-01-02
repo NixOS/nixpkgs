@@ -32,6 +32,9 @@ assert x11Support -> tcl != null
 with stdenv.lib;
 
 let
+
+  pythonForBuild = buildPackages.${"python${sourceVersion.major}${sourceVersion.minor}"};
+
   passthru = passthruFun rec {
     inherit self sourceVersion packageOverrides;
     implementation = "cpython";

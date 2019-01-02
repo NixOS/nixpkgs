@@ -21,7 +21,6 @@ with pkgs;
         overrides = packageOverrides;
       };
     in rec {
-        sitePackages = "lib/${libPrefix}/site-packages";
         isPy27 = pythonVersion == "2.7";
         isPy33 = pythonVersion == "3.3"; # TODO: remove
         isPy34 = pythonVersion == "3.4"; # TODO: remove
@@ -35,7 +34,7 @@ with pkgs;
         withPackages = import ./with-packages.nix { inherit buildEnv pythonPackages;};
         pkgs = pythonPackages;
         interpreter = "${self}/bin/${executable}";
-        inherit executable implementation libPrefix pythonVersion;
+        inherit executable implementation libPrefix pythonVersion sitePackages;
         inherit sourceVersion;
         pythonAtLeast = lib.versionAtLeast pythonVersion;
         pythonOlder = lib.versionOlder pythonVersion;
@@ -112,8 +111,8 @@ in {
     inherit passthruFun;
   };
 
-  pypy3 = callPackage ./pypy {
-    self = pypy3;
+  pypy35 = callPackage ./pypy {
+    self = pypy35;
     sourceVersion = {
       major = "6";
       minor = "0";

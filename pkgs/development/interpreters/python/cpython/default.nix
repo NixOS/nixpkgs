@@ -21,6 +21,7 @@
 , sourceVersion
 , sha256
 , passthruFun
+, bash
 }:
 
 assert x11Support -> tcl != null
@@ -46,7 +47,8 @@ let
   nativeBuildInputs = [
     nukeReferences
   ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-    buildPackages.stdenv.cc crossPython
+    buildPackages.stdenv.cc
+    pythonForBuild
   ];
 
   buildInputs = filter (p: p != null) [
@@ -56,11 +58,11 @@ let
 
   hasDistutilsCxxPatch = !(stdenv.cc.isGNU or false);
 
-  crossPython = buildPackages.${"python${sourceVersion.major}${sourceVersion.minor}"};
+  pythonForBuild = buildPackages.${"python${sourceVersion.major}${sourceVersion.minor}"};
 
-  pythonForBuild = if stdenv.hostPlatform == stdenv.buildPlatform then
+  pythonForBuildInterpreter = if stdenv.hostPlatform == stdenv.buildPlatform then
     "$out/bin/python"
-  else crossPython.interpreter;
+  else pythonForBuild.interpreter;
 
 in with passthru; stdenv.mkDerivation {
   pname = "python3";
@@ -215,14 +217,25 @@ in with passthru; stdenv.mkDerivation {
     # We rebuild three times, once for each optimization level
     # Python 3.7 implements PEP 552, introducing support for deterministic bytecode.
     # This is automatically used when `SOURCE_DATE_EPOCH` is set.
-    find $out -name "*.py" | ${pythonForBuild}     -m compileall -q -f -x "lib2to3" -i -
-    find $out -name "*.py" | ${pythonForBuild} -O  -m compileall -q -f -x "lib2to3" -i -
-    find $out -name "*.py" | ${pythonForBuild} -OO -m compileall -q -f -x "lib2to3" -i -
+    find $out -name "*.py" | ${pythonForBuildInterpreter}     -m compileall -q -f -x "lib2to3" -i -
+    find $out -name "*.py" | ${pythonForBuildInterpreter} -O  -m compileall -q -f -x "lib2to3" -i -
+    find $out -name "*.py" | ${pythonForBuildInterpreter} -OO -m compileall -q -f -x "lib2to3" -i -
+  '';
+
+  preFixup = stdenv.lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+    # Ensure patch-shebangs uses shebangs of host interpreter.
+    export PATH=${stdenv.lib.makeBinPath [ "$out" bash ]}:$PATH
   '';
 
   # Enforce that we don't have references to the OpenSSL -dev package, which we
   # explicitly specify in our configure flags above.
-  disallowedReferences = [ openssl.dev ];
+  disallowedReferences = [
+    openssl.dev
+  ] ++ stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    # Ensure we don't have references to build-time packages.
+    # These typically end up in shebangs.
+    pythonForBuild buildPackages.bash
+  ];
 
   inherit passthru;
 
