@@ -10,8 +10,6 @@ let
   else
     throw "Unsupported architecture";
 
-  crossCompiling = stdenv.buildPlatform != stdenv.hostPlatform;
-
   version = (builtins.parseDrvName edk2.name).version;
 
   inherit (edk2) src;
@@ -64,19 +62,19 @@ stdenv.mkDerivation (edk2.setup projectDscPath {
     ''}
   '';
 
-  buildPhase = lib.optionalString crossCompiling ''
+  buildPhase = ''
     # This is required, even though it is set in target.txt in edk2/default.nix.
     export EDK2_TOOLCHAIN=GCC49
 
     # Configures for cross-compiling
     export ''${EDK2_TOOLCHAIN}_${hostArch}_PREFIX=${stdenv.targetPlatform.config}-
     export EDK2_HOST_ARCH=${hostArch}
-    '' + ''
+
     build \
       -n $NIX_BUILD_CORES \
       ${buildFlags} \
       -a ${hostArch} \
-      ${lib.optionalString crossCompiling "-t $EDK2_TOOLCHAIN"}
+      -t $EDK2_TOOLCHAIN
   '';
 
   postFixup = if stdenv.isAarch64 || stdenv.isAarch32 then ''
