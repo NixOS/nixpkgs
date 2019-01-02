@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, python, pkgconfig, perl, libxslt, docbook_xsl, rpcgen
+{ lib, stdenv, fetchurl, python3, pkgconfig, perl, libxslt, docbook_xsl, rpcgen
 , fixDarwinDylibNames
 , docbook_xml_dtd_42, readline
 , popt, iniparser, libbsd, libarchive, libiconv, gettext
@@ -36,12 +36,15 @@ stdenv.mkDerivation rec {
     ./4.x-fix-makeflags-parsing.patch
   ];
 
-  nativeBuildInputs = optionals stdenv.isDarwin [ rpcgen fixDarwinDylibNames ];
+  nativeBuildInputs = [
+    python3 pkgconfig perl gettext
+    libxslt docbook_xsl docbook_xml_dtd_42
+    /* docbook_xml_dtd_45 */
+  ] ++ (optionals stdenv.isDarwin [ rpcgen fixDarwinDylibNames ]);
 
   buildInputs = [
-    python pkgconfig perl libxslt docbook_xsl docbook_xml_dtd_42 /*
-    docbook_xml_dtd_45 */ readline popt iniparser jansson
-    libbsd libarchive zlib fam libiconv gettext libunwind krb5Full
+    readline popt iniparser jansson
+    libbsd libarchive zlib fam libiconv libunwind krb5Full
   ] ++ optionals stdenv.isLinux [ libaio systemd ]
     ++ optional enableLDAP openldap
     ++ optional (enablePrinting && stdenv.isLinux) cups
