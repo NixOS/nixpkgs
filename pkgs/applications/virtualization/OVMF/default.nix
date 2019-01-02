@@ -1,4 +1,4 @@
-{ stdenv, lib, buildPackages, edk2, nasm, iasl, seabios, openssl, secureBoot ? false }:
+{ stdenv, lib, buildPackages, edk2, seabios, openssl, secureBoot ? false }:
 
 let
   projectDscPath = if stdenv.isi686 then
@@ -28,7 +28,9 @@ stdenv.mkDerivation (edk2.setup projectDscPath {
   outputs = [ "out" "fd" ];
 
   # TODO: properly include openssl for secureBoot
-  buildInputs = [nasm iasl] ++ stdenv.lib.optionals (secureBoot == true) [ openssl ];
+  buildInputs = [ ] ++ stdenv.lib.optionals (secureBoot == true) [ openssl ];
+
+  nativeBuildInputs = [ buildPackages.iasl ];
 
   hardeningDisable = [ "stackprotector" "pic" "fortify" ];
 
