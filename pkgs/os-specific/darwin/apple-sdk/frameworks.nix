@@ -14,8 +14,8 @@ with frameworks; with libs; {
   AppKitScripting         = [];
   AppleScriptKit          = [];
   AppleScriptObjC         = [];
-  AudioToolbox            = [ AudioUnit CoreAudio CF CoreMIDI ];
-  AudioUnit               = [ Carbon CoreAudio CF ];
+  AudioToolbox            = [ CoreAudio CF CoreMIDI ];
+  AudioUnit               = [ AudioToolbox Carbon CoreAudio CF ];
   AudioVideoBridging      = [ Foundation ];
   Automator               = [];
   CFNetwork               = [ CF ];
