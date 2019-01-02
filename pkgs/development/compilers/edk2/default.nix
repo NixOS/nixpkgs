@@ -39,9 +39,9 @@ edk2 = stdenv.mkDerivation {
     })
   ];
 
-  buildInputs = [ libuuid ];
+  nativeBuildInputs = [ libuuid buildPythonEnv ];
 
-  depsBuildBuild = [ buildPackages.stdenv.cc buildPackages.libuuid buildPythonEnv ];
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
 
   makeFlags = [
     "-C" "BaseTools"
