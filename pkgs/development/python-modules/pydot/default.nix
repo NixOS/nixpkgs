@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "pydot";
-  version = "1.4.0";
+  version = "1.4.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "02yp2k7p1kh0azwd932jhvfc3nxxdv9dimh7hdgwdnmp05yms6cq";
+    sha256 = "00az4cbf8bv447lkk9xi6pjm7gcc7ia33y4pm71fwfwis56rv76l";
   };
   checkInputs = [ chardet ];
   # No tests in archive
