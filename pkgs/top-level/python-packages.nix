@@ -1129,6 +1129,8 @@ in {
 
   blockdiag = callPackage ../development/python-modules/blockdiag { };
 
+  blockdiagcontrib-cisco = callPackage ../development/python-modules/blockdiagcontrib-cisco { };
+
   bpython = callPackage ../development/python-modules/bpython {};
 
   bsddb3 = callPackage ../development/python-modules/bsddb3 { };
