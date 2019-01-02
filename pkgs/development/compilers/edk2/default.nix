@@ -19,7 +19,7 @@ buildPythonEnv = buildPackages.python2.withPackages(ps: [ps.tkinter]);
 pythonEnv = python2.withPackages(ps: [ps.tkinter]);
 
 targetArch = envToArch targetPlatform;
-hostArch = envToArch buildPlatform;
+hostArch = envToArch hostPlatform;
 
 edk2 = stdenv.mkDerivation {
   name = "edk2-2017-12-05";
