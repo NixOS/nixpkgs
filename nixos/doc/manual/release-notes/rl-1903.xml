@@ -408,6 +408,16 @@
        from nixpkgs due to the lack of maintainers.
      </para>
    </listitem>
+   <listitem>
+    <para>
+       The <option>powerManagement.cpuFreqGovernor</option> option has been
+       aliased to <option>powerManagement.cpufreq.governor</option>.  On laptops,
+       <option>powerManagement.cpuFreqGovernor</option> is sometimes set in
+       <literal>/etc/nixos/hardware-configuration.nix</literal>, so you can
+       rename it to the new name, or run
+       <literal>nixos-generate-config</literal> again.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 </section>
