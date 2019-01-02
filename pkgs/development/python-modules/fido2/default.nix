@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "fido2";
-  version = "0.4.0";
+  version = "0.5.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "12245b16czsgq4a251jqlk5qs3sldlcryfcganswzk2lbgplmn7q";
+    sha256 = "1pl8d2pr6jzqj4y9qiaddhjgnl92kikjxy0bgzm2jshkzzic8mp3";
   };
 
   # The pypi package does not include tests
