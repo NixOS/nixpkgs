@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python3, wrapGAppsHook, gettext, intltool, libsoup, gnome3, gtk3, gdk_pixbuf,
+{ stdenv, fetchurl, python3, wrapGAppsHook, gettext, libsoup, gnome3, gtk3, gdk_pixbuf,
   tag ? "", xvfb_run, dbus, glibcLocales, glib, glib-networking, gobject-introspection,
   gst_all_1, withGstPlugins ? true,
   xineBackend ? false, xineLib,
@@ -9,18 +9,14 @@
 let optionals = stdenv.lib.optionals; in
 python3.pkgs.buildPythonApplication rec {
   pname = "quodlibet${tag}";
-  version = "4.2.0";
-
-  # XXX, tests fail
-  # https://github.com/quodlibet/quodlibet/issues/2820
-  doCheck = false;
+  version = "4.2.1";
 
   src = fetchurl {
     url = "https://github.com/quodlibet/quodlibet/releases/download/release-${version}/quodlibet-${version}.tar.gz";
-    sha256 = "0w64i999ipzgjb4c4lzw7jp792amd6km46wahx7m3bpzly55r3f6";
+    sha256 = "0b1rvr4hqs2bjmhayms7vxxkn3d92k9v7p1269rjhf11hpk122l7";
   };
 
-  nativeBuildInputs = [ wrapGAppsHook gettext intltool ];
+  nativeBuildInputs = [ wrapGAppsHook gettext ];
 
   checkInputs = with python3.pkgs; [ pytest pytest_xdist pyflakes pycodestyle polib xvfb_run dbus.daemon glibcLocales ];
 
@@ -39,13 +35,11 @@ python3.pkgs.buildPythonApplication rec {
 
   checkPhase = ''
     runHook preCheck
-    checkHomeDir=$(mktemp -d)
-    mkdir -p $checkHomeDir/.cache/thumbnails/normal # Required by TThumb.test_recreate_broken_cache_file
     env XDG_DATA_DIRS="$out/share:${gtk3}/share/gsettings-schemas/${gtk3.name}:$XDG_DATA_DIRS" \
-      HOME=$checkHomeDir \
+      HOME=$(mktemp -d) \
       xvfb-run -s '-screen 0 800x600x24' dbus-run-session \
         --config-file=${dbus.daemon}/share/dbus-1/session.conf \
-        py.test
+        py.test${stdenv.lib.optionalString (xineBackend || !withGstPlugins) " --ignore=tests/plugin/test_replaygain.py"}
     runHook postCheck
   '';
 
