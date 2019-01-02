@@ -1,9 +1,10 @@
 { stdenv, fetchurl, gfortran, openblas, cmake, fixDarwinDylibNames
+, gnum4
 , enableCuda  ? false, cudatoolkit
 }:
 
 let
-  version = "5.3.0";
+  version = "5.4.0";
   name = "suitesparse-${version}";
 
   SHLIB_EXT = stdenv.hostPlatform.extensions.sharedLibrary;
@@ -13,7 +14,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://faculty.cse.tamu.edu/davis/SuiteSparse/SuiteSparse-${version}.tar.gz";
-    sha256 = "0gcn1xj3z87wpp26gxn11k8073bxv6jswfd8jmddlm64v09rgrlh";
+    sha256 = "1lfvjj787yqyhk25w7brlrkrl7dnnn5dq4ijxws3wrbcd4vd2k9p";
   };
 
   dontUseCmakeConfigure = true;
@@ -119,8 +120,10 @@ stdenv.mkDerivation rec {
     runHook postInstall
     '';
 
-  nativeBuildInputs = [ cmake ]
-    ++ stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
+  nativeBuildInputs = [
+    cmake
+    gnum4
+  ] ++ stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
   buildInputs = [ openblas gfortran.cc.lib ]
     ++ stdenv.lib.optional enableCuda cudatoolkit;

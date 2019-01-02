@@ -44,7 +44,7 @@
     "android_ip_webcam" = ps: with ps; [  ];
     "apcupsd" = ps: with ps; [  ];
     "api" = ps: with ps; [ aiohttp-cors ];
-    "apple_tv" = ps: with ps; [  ];
+    "apple_tv" = ps: with ps; [ pyatv ];
     "aqualogic" = ps: with ps; [  ];
     "arduino" = ps: with ps; [  ];
     "arlo" = ps: with ps; [  ];
@@ -198,7 +198,7 @@
     "camera.logi_circle" = ps: with ps; [  ];
     "camera.mjpeg" = ps: with ps; [  ];
     "camera.mqtt" = ps: with ps; [ paho-mqtt ];
-    "camera.neato" = ps: with ps; [  ];
+    "camera.neato" = ps: with ps; [ pybotvac ];
     "camera.nest" = ps: with ps; [  ];
     "camera.netatmo" = ps: with ps; [  ];
     "camera.onvif" = ps: with ps; [ ha-ffmpeg ];
@@ -251,7 +251,7 @@
     "climate.radiotherm" = ps: with ps; [  ];
     "climate.sensibo" = ps: with ps; [  ];
     "climate.spider" = ps: with ps; [  ];
-    "climate.tado" = ps: with ps; [  ];
+    "climate.tado" = ps: with ps; [ pytado ];
     "climate.tesla" = ps: with ps; [  ];
     "climate.toon" = ps: with ps; [  ];
     "climate.touchline" = ps: with ps; [  ];
@@ -375,7 +375,7 @@
     "device_tracker.sky_hub" = ps: with ps; [  ];
     "device_tracker.snmp" = ps: with ps; [ pysnmp ];
     "device_tracker.swisscom" = ps: with ps; [  ];
-    "device_tracker.tado" = ps: with ps; [  ];
+    "device_tracker.tado" = ps: with ps; [ pytado ];
     "device_tracker.tesla" = ps: with ps; [  ];
     "device_tracker.thomson" = ps: with ps; [  ];
     "device_tracker.tile" = ps: with ps; [  ];
@@ -658,7 +658,7 @@
     "media_extractor" = ps: with ps; [ aiohttp-cors youtube-dl-light ];
     "media_player" = ps: with ps; [ aiohttp-cors ];
     "media_player.anthemav" = ps: with ps; [  ];
-    "media_player.apple_tv" = ps: with ps; [  ];
+    "media_player.apple_tv" = ps: with ps; [ pyatv ];
     "media_player.aquostv" = ps: with ps; [  ];
     "media_player.blackbird" = ps: with ps; [  ];
     "media_player.bluesound" = ps: with ps; [ xmltodict ];
@@ -743,7 +743,7 @@
     "mysensors.handler" = ps: with ps; [  ];
     "mysensors.helpers" = ps: with ps; [  ];
     "namecheapdns" = ps: with ps; [  ];
-    "neato" = ps: with ps; [  ];
+    "neato" = ps: with ps; [ pybotvac ];
     "nest" = ps: with ps; [  ];
     "nest.config_flow" = ps: with ps; [  ];
     "nest.const" = ps: with ps; [  ];
@@ -850,7 +850,7 @@
     "recorder.util" = ps: with ps; [  ];
     "remember_the_milk" = ps: with ps; [ httplib2 ];
     "remote" = ps: with ps; [  ];
-    "remote.apple_tv" = ps: with ps; [  ];
+    "remote.apple_tv" = ps: with ps; [ pyatv ];
     "remote.demo" = ps: with ps; [  ];
     "remote.harmony" = ps: with ps; [  ];
     "remote.itach" = ps: with ps; [  ];
@@ -1124,7 +1124,7 @@
     "sensor.synologydsm" = ps: with ps; [  ];
     "sensor.systemmonitor" = ps: with ps; [ psutil ];
     "sensor.sytadin" = ps: with ps; [ beautifulsoup4 ];
-    "sensor.tado" = ps: with ps; [  ];
+    "sensor.tado" = ps: with ps; [ pytado ];
     "sensor.tahoma" = ps: with ps; [  ];
     "sensor.tank_utility" = ps: with ps; [  ];
     "sensor.tautulli" = ps: with ps; [  ];
@@ -1265,7 +1265,7 @@
     "switch.mqtt" = ps: with ps; [ paho-mqtt ];
     "switch.mysensors" = ps: with ps; [  ];
     "switch.mystrom" = ps: with ps; [  ];
-    "switch.neato" = ps: with ps; [  ];
+    "switch.neato" = ps: with ps; [ pybotvac ];
     "switch.netio" = ps: with ps; [ aiohttp-cors ];
     "switch.orvibo" = ps: with ps; [  ];
     "switch.pilight" = ps: with ps; [  ];
@@ -1321,7 +1321,7 @@
     "switch.zoneminder" = ps: with ps; [  ];
     "switch.zwave" = ps: with ps; [  ];
     "system_log" = ps: with ps; [ aiohttp-cors ];
-    "tado" = ps: with ps; [  ];
+    "tado" = ps: with ps; [ pytado ];
     "tahoma" = ps: with ps; [  ];
     "telegram_bot" = ps: with ps; [ python-telegram-bot ];
     "telegram_bot.broadcast" = ps: with ps; [  ];
@@ -1369,7 +1369,7 @@
     "vacuum.dyson" = ps: with ps; [  ];
     "vacuum.ecovacs" = ps: with ps; [  ];
     "vacuum.mqtt" = ps: with ps; [ paho-mqtt ];
-    "vacuum.neato" = ps: with ps; [  ];
+    "vacuum.neato" = ps: with ps; [ pybotvac ];
     "vacuum.roomba" = ps: with ps; [  ];
     "vacuum.xiaomi_miio" = ps: with ps; [ construct ];
     "velbus" = ps: with ps; [  ];

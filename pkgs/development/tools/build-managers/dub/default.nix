@@ -4,7 +4,7 @@ let
 
   dubBuild = stdenv.mkDerivation rec {
     name = "dubBuild-${version}";
-    version = "1.10.0";
+    version = "1.12.1";
 
     enableParallelBuilding = true;
 
@@ -12,7 +12,7 @@ let
       owner = "dlang";
       repo = "dub";
       rev = "v${version}";
-      sha256 = "02xxpfcjs427jqbwz0vh5vl3bh62ys65zmi9gpa3svzqffyx13n4";
+      sha256 = "0q4968vxgfxhq6ywhdvj6sqddwf7aadqmmpfqc6nl65r7jyga52a";
     };
 
     postUnpack = ''

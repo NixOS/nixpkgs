@@ -42,13 +42,14 @@ let
     patches =
       [
         # Do not look in /usr etc. for dependencies.
-        ./no-sys-dirs-5.26.patch
+        (if (versionOlder version "5.29.6") then ./no-sys-dirs-5.26.patch else ./no-sys-dirs-5.29.patch)
+      ]
+      ++ optional (versionOlder version "5.29.6")
         # Fix parallel building: https://rt.perl.org/Public/Bug/Display.html?id=132360
         (fetchurlBoot {
           url = "https://rt.perl.org/Public/Ticket/Attachment/1502646/807252/0001-Fix-missing-build-dependency-for-pods.patch";
           sha256 = "1bb4mldfp8kq1scv480wm64n2jdsqa3ar46cjp1mjpby8h5dr2r0";
         })
-      ]
       ++ optional stdenv.isSunOS ./ld-shared.patch
       ++ optionals stdenv.isDarwin [ ./cpp-precomp.patch ./sw_vers.patch ]
       ++ optional crossCompiling ./MakeMaker-cross.patch;
@@ -181,7 +182,7 @@ in rec {
 
   # the latest Devel version
   perldevel = common {
-    version = "5.29.4";
-    sha256 = "153r0f6jdqrl7hxrvhfivf5g8ivhbvggfhg841q3hi3db5rc86k4";
+    version = "5.29.6";
+    sha256 = "0wj2bia8s30788f69mf5s533l72zbhqpdr85kkk97yrh1c9sgcd6";
   };
 }
