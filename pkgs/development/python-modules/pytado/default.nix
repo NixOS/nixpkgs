@@ -7,6 +7,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "wmalgadey";
     repo = pname;
+    # Upstream hasn't tagged this release yet. This commit fixes the build.
     rev = "79a5dfdf75cd9a3e1a1ee8a8ff0d08923aebda7b";
     sha256 = "14xdfw4913g4j4h576hjbigm7fiw8k0dc8s98gh2ag9xrc2ifgr0";
   };
