@@ -12,11 +12,11 @@
 
 buildPythonPackage rec {
   pname = "av";
-  version = "6.0.0";
+  version = "6.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9037d73d7a812c3dc75d9cc27d03215483c9e782eae63a07142c0725c6bd2df0";
+    sha256 = "0h5d6yy6mjaflzh9z8fv3j1rjwijmzqfrpz88zxk0qfmbprdc91z";
   };
 
   buildInputs = [ nose pillow numpy ffmpeg_4 git pkgconfig ];
