@@ -15,8 +15,11 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
+  nativeBuildInputs = [
+    which pkgconfig
+  ];
+
   buildInputs = [
-    which
     boost
     SDL2
     SDL2_image
@@ -25,7 +28,6 @@ stdenv.mkDerivation rec {
     glew
     zlib
     icu
-    pkgconfig
     cairo
     libvpx
   ];
