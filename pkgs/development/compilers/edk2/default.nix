@@ -72,8 +72,8 @@ edk2 = stdenv.mkDerivation {
   passthru = {
     inherit targetArch hostArch;
     setup = projectDscPath: attrs: {
-      buildInputs = [] ++ attrs.buildInputs or [];
       nativeBuildInputs = [ buildPythonEnv buildPackages.iasl ] ++ attrs.nativeBuildInputs or [];
+      nativeBuildInputs = [ buildPythonEnv ] ++ attrs.nativeBuildInputs or [];
 
       configurePhase = ''
         mkdir -v Conf
@@ -105,7 +105,7 @@ edk2 = stdenv.mkDerivation {
       ";
 
       installPhase = "mv -v Build/*/* $out";
-    } // (removeAttrs attrs [ "buildInputs" "nativeBuildInputs" ] );
+    } // (removeAttrs attrs [ "nativeBuildInputs" ] );
   };
 };
 
