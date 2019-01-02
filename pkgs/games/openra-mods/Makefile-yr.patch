@@ -1,0 +1,19 @@
+diff --git a/Makefile b/Makefile
+index e637d82..4440f1d 100644
+--- a/Makefile
++++ b/Makefile
+@@ -40,7 +40,6 @@ LUA_FILES = $(shell find mods/*/maps/* -iname '*.lua')
+ PROJECT_DIRS = $(shell dirname $$(find . -iname "*.csproj" -not -path "$(ENGINE_DIRECTORY)/*"))
+
+ engine:
+-	@./fetch-engine.sh || (printf "Unable to continue without engine files\n"; exit 1)
+ 	@cd $(ENGINE_DIRECTORY) && make core
+
+ utility: engine
+@@ -91,4 +90,4 @@ check: utility stylecheck
+
+ test: utility
+ 	@echo "Testing $(MOD_ID) mod MiniYAML..."
+-	@MOD_SEARCH_PATHS="$(MOD_SEARCH_PATHS)" mono --debug "$(ENGINE_DIRECTORY)/OpenRA.Utility.exe" $(MOD_ID) --check-yaml
+\ No newline at end of file
++	@MOD_SEARCH_PATHS="$(MOD_SEARCH_PATHS)" mono --debug "$(ENGINE_DIRECTORY)/OpenRA.Utility.exe" $(MOD_ID) --check-yaml

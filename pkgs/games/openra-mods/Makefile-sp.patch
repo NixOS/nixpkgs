@@ -1,0 +1,12 @@
+diff --git a/Makefile b/Makefile
+index 4ecdb4b..600660a 100644
+--- a/Makefile
++++ b/Makefile
+@@ -48,7 +48,6 @@ variables:
+ 		fi
+ 
+ engine: variables
+-	@./fetch-engine.sh || (printf "Unable to continue without engine files\n"; exit 1)
+ 	@cd $(ENGINE_DIRECTORY) && make core
+ 
+ utility: engine

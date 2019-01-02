@@ -1,0 +1,19 @@
+diff --git a/Makefile b/Makefile
+index 4ecdb4bc..600660aa 100644
+--- a/Makefile
++++ b/Makefile
+@@ -48,7 +48,6 @@ variables:
+ 		fi
+
+ engine: variables
+-	@./fetch-engine.sh || (printf "Unable to continue without engine files\n"; exit 1)
+ 	@cd $(ENGINE_DIRECTORY) && make core
+
+ utility: engine
+@@ -99,4 +98,4 @@ check: utility stylecheck
+
+ test: utility
+ 	@echo "Testing $(MOD_ID) mod MiniYAML..."
+-	@MOD_SEARCH_PATHS="$(MOD_SEARCH_PATHS)" mono --debug "$(ENGINE_DIRECTORY)/OpenRA.Utility.exe" $(MOD_ID) --check-yaml
+\ No newline at end of file
++	@MOD_SEARCH_PATHS="$(MOD_SEARCH_PATHS)" mono --debug "$(ENGINE_DIRECTORY)/OpenRA.Utility.exe" $(MOD_ID) --check-yaml

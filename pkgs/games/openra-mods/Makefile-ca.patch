@@ -1,0 +1,25 @@
+diff --git a/Makefile b/Makefile
+index ea94401..a91dc32 100644
+--- a/Makefile
++++ b/Makefile
+@@ -37,11 +37,8 @@ PROJECT_DIRS = $(shell dirname $$(find . -iname "*.csproj" -not -path "$(ENGINE_
+ 
+ check-sdk-scripts:
+ 	@awk '/\r$$/ { exit(1); }' mod.config || (printf "Invalid mod.config format: file must be saved using unix-style (CR, not CRLF) line endings.\n"; exit 1)
+-	@if [ ! -x "fetch-engine.sh" ] || [ ! -x "launch-dedicated.sh" ] || [ ! -x "launch-game.sh" ] || [ ! -x "utility.sh" ]; then \
++	@if [ ! -x "launch-dedicated.sh" ] || [ ! -x "launch-game.sh" ] || [ ! -x "utility.sh" ]; then \
+ 		echo "Required SDK scripts are not executable:"; \
+-		if [ ! -x "fetch-engine.sh" ]; then \
+-			echo "   fetch-engine.sh"; \
+-		fi; \
+ 		if [ ! -x "launch-dedicated.sh" ]; then \
+ 			echo "   launch-dedicated.sh"; \
+ 		fi; \
+@@ -95,7 +92,6 @@ check-variables:
+ 	fi
+ 
+ engine: check-variables check-sdk-scripts
+-	@./fetch-engine.sh || (printf "Unable to continue without engine files\n"; exit 1)
+ 	@cd $(ENGINE_DIRECTORY) && make core
+ 
+ utility: engine

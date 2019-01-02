@@ -20807,6 +20807,14 @@ in
 
   openra = callPackage ../games/openra { lua = lua5_1; };
 
+  openra-mods = builtins.listToAttrs (map (attrs: {
+    inherit (attrs.mod) name;
+    value = callPackage ../games/openra-mods ({
+      lua = lua5_1;
+      inherit (gnome3) zenity;
+    } // attrs);
+  }) (import ../games/openra-mods/mods.nix { inherit fetchFromGitHub; }));
+
   openrw = callPackage ../games/openrw { };
 
   openspades = callPackage ../games/openspades {
