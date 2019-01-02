@@ -1,25 +1,32 @@
-{ stdenv, fetchurl, pkgconfig, gobject-introspection, vala, gtk-doc, docbook_xsl, docbook_xml_dtd_412, libsoup, gtk3, glib }:
+{ stdenv, fetchurl, meson, ninja, pkgconfig, gobject-introspection, vala, gtk-doc, docbook_xsl, docbook_xml_dtd_412, libsoup, gtk3, glib, gnome3 }:
 
 stdenv.mkDerivation rec {
-  name = "gssdp-${version}";
-  version = "1.0.2";
+  pname = "gssdp";
+  version = "1.1.1";
 
   outputs = [ "out" "bin" "dev" "devdoc" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gssdp/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "1p1m2m3ndzr2whipqw4vfb6s6ia0g7rnzzc4pnq8b8g1qw4prqd1";
+    url = "mirror://gnome/sources/gssdp/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "0xwykd2ks3nyy67kirxbcl0xplj7mdjx5m3pqvgja129k0b1kf99";
   };
 
-  nativeBuildInputs = [ pkgconfig gobject-introspection vala gtk-doc docbook_xsl docbook_xml_dtd_412 ];
+  nativeBuildInputs = [ meson ninja pkgconfig gobject-introspection vala gtk-doc docbook_xsl docbook_xml_dtd_412 ];
   buildInputs = [ libsoup gtk3 ];
   propagatedBuildInputs = [ glib ];
 
-  configureFlags = [
-    "--enable-gtk-doc"
+  mesonFlags = [
+    "-Dgtk_doc=true"
   ];
 
   doCheck = true;
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+      versionPolicy = "none";
+    };
+  };
 
   meta = with stdenv.lib; {
     description = "GObject-based API for handling resource discovery and announcement over SSDP";
