@@ -1,4 +1,4 @@
-{ lib, fetchurl, buildRubyGem, bundlerEnv, ruby, libarchive, writeText, withLibvirt ? true}:
+{ lib, fetchurl, buildRubyGem, bundlerEnv, ruby, libarchive, libguestfs, qemu, writeText, withLibvirt ? true}:
 
 let
   # NOTE: bumping the version and updating the hash is insufficient;
@@ -48,10 +48,22 @@ in buildRubyGem rec {
 
   # PATH additions:
   #   - libarchive: Make `bsdtar` available for extracting downloaded boxes
-  postInstall = ''
+  # withLibvirt only:
+  #   - libguestfs: Make 'virt-sysprep' available for 'vagrant package'
+  #   - qemu: Make 'qemu-img' available for 'vagrant package'
+  postInstall =
+    let
+      pathAdditions = lib.makeSearchPath "bin"
+        (map (x: "${lib.getBin x}") ([
+          libarchive
+        ] ++ lib.optionals withLibvirt [
+          libguestfs
+          qemu
+        ]));
+    in ''
     wrapProgram "$out/bin/vagrant" \
       --set GEM_PATH "${deps}/lib/ruby/gems/${ruby.version.libDir}" \
-      --prefix PATH ':' "${lib.getBin libarchive}/bin"
+      --prefix PATH ':' ${pathAdditions}
 
     mkdir -p "$out/vagrant-plugins/plugins.d"
     echo '{}' > "$out/vagrant-plugins/plugins.json"
