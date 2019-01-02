@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "unclutter-xfixes";
-  version = "1.4";
+  version = "1.5";
 
   src = fetchFromGitHub {
     owner = "Airblader";
     repo = "unclutter-xfixes";
     rev = "v${version}";
-    sha256 = "0anny6hvwf5nh7ghgi4gdcywhwyhgfvqvp7fjhm59kjc3qxnwf96";
+    sha256 = "148m4wx8v57s3l2wb69y9imb00y8ca2li27hsxibwnl1wrkb7z4b";
   };
 
   nativeBuildInputs = [ pkgconfig asciidoc libxslt docbook_xsl ];
