@@ -1,26 +1,22 @@
 { stdenv, fetchurl, python3, bdftopcf, mkfontdir, mkfontscale }:
 
 stdenv.mkDerivation rec {
-  name = "terminus-font-4.46";
+  name = "terminus-font-4.47";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/terminus-font/${name}/${name}.tar.gz";
-    sha256 = "1kavqw38aarz0vpwz4b7l6l8xkyc5096zaf9ypqnvdwraqz46aaf";
+    sha256 = "15qjcpalcxjiwsjgjg5k88vkwp56cs2nnx4ghya6mqp4i1c206qg";
   };
 
-  buildInputs = [ python3 bdftopcf mkfontdir mkfontscale ];
+  nativeBuildInputs = [ python3 bdftopcf mkfontdir mkfontscale ];
 
   patchPhase = ''
     substituteInPlace Makefile --replace 'fc-cache' '#fc-cache'
   '';
 
-  configurePhase = ''
-    sh ./configure --prefix=$out
-  '';
+  enableParallelBuilding = true;
 
-  installPhase = ''
-    make install fontdir
-  '';
+  installTargets = [ "install" "fontdir" ];
 
   meta = with stdenv.lib; {
     description = "A clean fixed width font";
@@ -36,7 +32,7 @@ stdenv.mkDerivation rec {
       16x32. The styles are normal and bold (except for 6x12), plus
       EGA/VGA-bold for 8x14 and 8x16.
     '';
-    homepage = http://www.is-vn.bg/hamster/;
+    homepage = http://terminus-font.sourceforge.net/;
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ astsmtl ];
     platforms = platforms.linux;
