@@ -173,12 +173,14 @@ self: super: {
 
   inline-c-cpp = if !pkgs.stdenv.isDarwin
     then super.inline-c-cpp
-    else addExtraLibrary (overrideCabal super.inline-c-cpp (drv:
-      {
-        postPatch = ''
-          substituteInPlace inline-c-cpp.cabal --replace stdc++ c++
-        '';
-      })) pkgs.libcxx;
+    else
+      let drv = addExtraLibrary (overrideCabal super.inline-c-cpp (drv: {
+          postPatch = ''
+            substituteInPlace inline-c-cpp.cabal --replace  stdc++ c++
+          '';
+        })) pkgs.libcxx;
+      in # https://github.com/fpco/inline-c/issues/75
+         dontCheck drv;
 
   inline-java = addBuildDepend super.inline-java pkgs.jdk;
 
@@ -686,6 +688,13 @@ self: super: {
   cryptonite = appendPatch (dontCheck super.cryptonite) (pkgs.fetchpatch {
     url = https://github.com/haskell-crypto/cryptonite/commit/4622e5fc8ece82f4cf31358e31cd02cf020e558e.patch;
     sha256 = "1m2d47ni4jbrpvxry50imj91qahr3r7zkqm157clrzlmw6gzpgnq";
+  });
+
+  # Djinn's last release was 2014, incompatible with Semigroup-Monoid Proposal
+  # https://github.com/augustss/djinn/pull/8
+  djinn = appendPatch super.djinn (pkgs.fetchpatch {
+    url = https://github.com/augustss/djinn/commit/6cb9433a137fb6b5194afe41d616bd8b62b95630.patch;
+    sha256 = "0s021y5nzrh74gfp8xpxpxm11ivzfs3jwg6mkrlyry3iy584xqil";
   });
 
   # We cannot build this package w/o the C library from <http://www.phash.org/>.

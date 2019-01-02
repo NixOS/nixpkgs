@@ -171,6 +171,7 @@ mapAliases ({
   libjson_rpc_cpp = libjson-rpc-cpp; # added 2017-02-28
   liblapackWithoutAtlas = liblapack; # added 2018-11-05
   libmysql = mysql.connector-c; # added # 2017-12-28, this was a misnomer refering to libmysqlclient
+  libqrencode = qrencode;  # added 2019-01-01
   librecad2 = librecad;  # backwards compatibility alias, added 2015-10
   libsysfs = sysfsutils; # added 2018-04-25
   libtidy = html-tidy;  # added 2014-12-21
@@ -234,7 +235,6 @@ mapAliases ({
   pltScheme = racket; # just to be sure
   pmtools = acpica-tools; # added 2018-11-01
   poppler_qt5 = libsForQt5.poppler;  # added 2015-12-19
-  postgresql93 = postgresql_9_3;
   postgresql94 = postgresql_9_4;
   postgresql95 = postgresql_9_5;
   postgresql96 = postgresql_9_6;

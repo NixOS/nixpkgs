@@ -3981,8 +3981,6 @@ in
 
   libqmi = callPackage ../development/libraries/libqmi { };
 
-  libqrencode = callPackage ../development/libraries/libqrencode { };
-
   libmbim = callPackage ../development/libraries/libmbim { };
 
   libmongo-client = callPackage ../development/libraries/libmongo-client { };
@@ -5344,6 +5342,8 @@ in
 
   scrypt = callPackage ../tools/security/scrypt { };
 
+  sdate = callPackage ../tools/misc/sdate { };
+
   sdcv = callPackage ../applications/misc/sdcv { };
 
   sdl-jstest = callPackage ../tools/misc/sdl-jstest { };
@@ -5854,6 +5854,8 @@ in
   inherit (nodePackages) triton;
 
   triggerhappy = callPackage ../tools/inputmethods/triggerhappy {};
+
+  trilium = callPackage ../applications/office/trilium { };
 
   trousers = callPackage ../tools/security/trousers { };
 
@@ -9621,8 +9623,6 @@ in
   enet = callPackage ../development/libraries/enet { };
 
   epoxy = callPackage ../development/libraries/epoxy {};
-
-  esdl = callPackage ../development/libraries/esdl { };
 
   libesmtp = callPackage ../development/libraries/libesmtp { };
 
@@ -13889,7 +13889,6 @@ in
 
   pgbouncer = callPackage ../servers/sql/pgbouncer { };
 
-  pgpool93 = pgpool.override { postgresql = postgresql_9_3; };
   pgpool94 = pgpool.override { postgresql = postgresql_9_4; };
 
   pgpool = callPackage ../servers/sql/pgpool {
@@ -13902,7 +13901,6 @@ in
   postgresql = postgresql_9_6;
 
   inherit (callPackages ../servers/sql/postgresql { })
-    postgresql_9_3
     postgresql_9_4
     postgresql_9_5
     postgresql_9_6
@@ -15462,6 +15460,8 @@ in
 
   conway_polynomials = callPackage ../data/misc/conway_polynomials { };
 
+  cooper-hewitt = callPackage ../data/fonts/cooper-hewitt { };
+
   dosis = callPackage ../data/fonts/dosis { };
 
   dosemu_fonts = callPackage ../data/fonts/dosemu-fonts { };
@@ -15509,8 +15509,6 @@ in
   font-awesome_5 = callPackage ../data/fonts/font-awesome-5 { };
 
   freefont_ttf = callPackage ../data/fonts/freefont-ttf { };
-
-  font-droid = callPackage ../data/fonts/droid { };
 
   freepats = callPackage ../data/misc/freepats { };
 
@@ -16981,6 +16979,8 @@ in
 
   fritzing = libsForQt5.callPackage ../applications/science/electronics/fritzing { };
 
+  fsv = callPackages ../applications/misc/fsv { };
+
   fvwm = callPackage ../applications/window-managers/fvwm { };
 
   ganttproject-bin = callPackage ../applications/misc/ganttproject-bin { };
@@ -17224,6 +17224,8 @@ in
 
   fomp = callPackage ../applications/audio/fomp { };
 
+  fractal = callPackage ../applications/networking/instant-messengers/fractal { };
+
   freecad = callPackage ../applications/graphics/freecad { mpi = openmpi; };
 
   freemind = callPackage ../applications/misc/freemind { };
@@ -17313,32 +17315,7 @@ in
     inherit (gnome3) dconf;
   };
 
-  gnucash24 = callPackage ../applications/office/gnucash/2.4.nix {
-    inherit (gnome2) libgnomeui libgtkhtml gtkhtml libbonoboui libgnomeprint libglade libart_lgpl;
-    gconf = gnome2.GConf;
-    guile = guile_1_8;
-    slibGuile = slibGuile.override { scheme = guile_1_8; };
-    goffice = goffice_0_8;
-  };
-
-  gnucash26 = lowPrio (callPackage ../applications/office/gnucash/2.6.nix {
-    inherit (gnome2) libgnomecanvas;
-    inherit (gnome3) dconf;
-    gconf = gnome2.GConf;
-    goffice = goffice_0_8;
-    webkit = webkitgtk24x-gtk2;
-    guile = guile_1_8;
-    slibGuile = slibGuile.override { scheme = guile_1_8; };
-    glib = glib;
-  });
-
   goffice = callPackage ../development/libraries/goffice { };
-
-  goffice_0_8 = callPackage ../development/libraries/goffice/0.8.nix {
-    inherit (pkgs.gnome2) libglade libgnomeui;
-    gconf = pkgs.gnome2.GConf;
-    libart = pkgs.gnome2.libart_lgpl;
-  };
 
   jetbrains = (recurseIntoAttrs (callPackages ../applications/editors/jetbrains {
     jdk = jetbrains.jdk;
@@ -17420,7 +17397,7 @@ in
     java = if stdenv.isLinux then jre else jdk;
   };
 
-  qrencode = callPackage ../tools/graphics/qrencode { };
+  qrencode = callPackage ../development/libraries/qrencode { };
 
   geeqie = callPackage ../applications/graphics/geeqie { };
 
@@ -19965,8 +19942,7 @@ in
   winswitch = callPackage ../tools/X11/winswitch { };
 
   wings = callPackage ../applications/graphics/wings {
-    esdl = esdl.override { erlang = erlangR18; };
-    erlang = erlangR18;
+    erlang = erlangR21;
   };
 
   write_stylus = libsForQt5.callPackage ../applications/graphics/write_stylus { };
@@ -20624,6 +20600,8 @@ in
   freesweep = callPackage ../games/freesweep { };
 
   frotz = callPackage ../games/frotz { };
+
+  frogatto = callPackage ../games/frogatto { };
 
   fsg = callPackage ../games/fsg {
     wxGTK = wxGTK28.override { unicode = false; };

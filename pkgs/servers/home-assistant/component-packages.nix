@@ -44,7 +44,7 @@
     "android_ip_webcam" = ps: with ps; [  ];
     "apcupsd" = ps: with ps; [  ];
     "api" = ps: with ps; [ aiohttp-cors ];
-    "apple_tv" = ps: with ps; [  ];
+    "apple_tv" = ps: with ps; [ pyatv ];
     "aqualogic" = ps: with ps; [  ];
     "arduino" = ps: with ps; [  ];
     "arlo" = ps: with ps; [  ];
@@ -198,7 +198,7 @@
     "camera.logi_circle" = ps: with ps; [  ];
     "camera.mjpeg" = ps: with ps; [  ];
     "camera.mqtt" = ps: with ps; [ paho-mqtt ];
-    "camera.neato" = ps: with ps; [  ];
+    "camera.neato" = ps: with ps; [ pybotvac ];
     "camera.nest" = ps: with ps; [  ];
     "camera.netatmo" = ps: with ps; [  ];
     "camera.onvif" = ps: with ps; [ ha-ffmpeg ];
@@ -658,7 +658,7 @@
     "media_extractor" = ps: with ps; [ aiohttp-cors youtube-dl-light ];
     "media_player" = ps: with ps; [ aiohttp-cors ];
     "media_player.anthemav" = ps: with ps; [  ];
-    "media_player.apple_tv" = ps: with ps; [  ];
+    "media_player.apple_tv" = ps: with ps; [ pyatv ];
     "media_player.aquostv" = ps: with ps; [  ];
     "media_player.blackbird" = ps: with ps; [  ];
     "media_player.bluesound" = ps: with ps; [ xmltodict ];
@@ -743,7 +743,7 @@
     "mysensors.handler" = ps: with ps; [  ];
     "mysensors.helpers" = ps: with ps; [  ];
     "namecheapdns" = ps: with ps; [  ];
-    "neato" = ps: with ps; [  ];
+    "neato" = ps: with ps; [ pybotvac ];
     "nest" = ps: with ps; [  ];
     "nest.config_flow" = ps: with ps; [  ];
     "nest.const" = ps: with ps; [  ];
@@ -850,7 +850,7 @@
     "recorder.util" = ps: with ps; [  ];
     "remember_the_milk" = ps: with ps; [ httplib2 ];
     "remote" = ps: with ps; [  ];
-    "remote.apple_tv" = ps: with ps; [  ];
+    "remote.apple_tv" = ps: with ps; [ pyatv ];
     "remote.demo" = ps: with ps; [  ];
     "remote.harmony" = ps: with ps; [  ];
     "remote.itach" = ps: with ps; [  ];
@@ -1265,7 +1265,7 @@
     "switch.mqtt" = ps: with ps; [ paho-mqtt ];
     "switch.mysensors" = ps: with ps; [  ];
     "switch.mystrom" = ps: with ps; [  ];
-    "switch.neato" = ps: with ps; [  ];
+    "switch.neato" = ps: with ps; [ pybotvac ];
     "switch.netio" = ps: with ps; [ aiohttp-cors ];
     "switch.orvibo" = ps: with ps; [  ];
     "switch.pilight" = ps: with ps; [  ];
@@ -1369,7 +1369,7 @@
     "vacuum.dyson" = ps: with ps; [  ];
     "vacuum.ecovacs" = ps: with ps; [  ];
     "vacuum.mqtt" = ps: with ps; [ paho-mqtt ];
-    "vacuum.neato" = ps: with ps; [  ];
+    "vacuum.neato" = ps: with ps; [ pybotvac ];
     "vacuum.roomba" = ps: with ps; [  ];
     "vacuum.xiaomi_miio" = ps: with ps; [ construct ];
     "velbus" = ps: with ps; [  ];
