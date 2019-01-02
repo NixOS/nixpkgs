@@ -20805,7 +20805,9 @@ in
 
   openmw-tes3mp = libsForQt5.callPackage ../games/openmw/tes3mp.nix { };
 
-  openra = callPackage ../games/openra { lua = lua5_1; };
+  openraPackages = import ../games/openra pkgs;
+
+  openra = openraPackages.engines.release;
 
   openrw = callPackage ../games/openrw { };
 
