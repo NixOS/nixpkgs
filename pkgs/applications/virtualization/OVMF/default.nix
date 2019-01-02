@@ -67,7 +67,7 @@ stdenv.mkDerivation (edk2.setup projectDscPath {
     export EDK2_TOOLCHAIN=GCC49
 
     # Configures for cross-compiling
-    export ''${EDK2_TOOLCHAIN}_${hostArch}_PREFIX=${stdenv.targetPlatform.config}-
+    export ''${EDK2_TOOLCHAIN}_${hostArch}_PREFIX=${stdenv.cc.targetPrefix}
     export EDK2_HOST_ARCH=${hostArch}
 
     build \
