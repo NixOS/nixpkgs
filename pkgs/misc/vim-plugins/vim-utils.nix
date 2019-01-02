@@ -427,7 +427,7 @@ rec {
                      if vam != null && vam ? knownPlugins then vam.knownPlugins else
                      if pathogen != null && pathogen ? knownPlugins then pathogen.knownPlugins else
                      vimPlugins;
-      pathogenPlugins = findDependenciesRecursively ((map pluginToDrv knownPlugins) pathogen.pluginNames);
+      pathogenPlugins = findDependenciesRecursively (map (pluginToDrv knownPlugins) pathogen.pluginNames);
       vamPlugins = findDependenciesRecursively (map (pluginToDrv knownPlugins) (lib.concatMap vamDictToNames vam.pluginDictionaries));
       nonNativePlugins = (lib.optionals (pathogen != null) pathogenPlugins)
                       ++ (lib.optionals (vam != null) vamPlugins)
