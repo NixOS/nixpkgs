@@ -13798,7 +13798,7 @@ let
     base14Fonts = "${ghostscript}/share/ghostscript/fonts";
   };
 
-  xkb_switch = callPackage ../tools/X11/xkb-switch { };
+  xkb-switch = callPackage ../tools/X11/xkb-switch { };
 
   xkblayout-state = callPackage ../applications/misc/xkblayout-state { };
 
