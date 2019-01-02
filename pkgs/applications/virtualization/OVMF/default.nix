@@ -1,4 +1,4 @@
-{ stdenv, lib, edk2, nasm, iasl, seabios, openssl, secureBoot ? false }:
+{ stdenv, lib, buildPackages, edk2, nasm, iasl, seabios, openssl, secureBoot ? false }:
 
 let
   projectDscPath = if stdenv.isi686 then
@@ -14,7 +14,8 @@ let
 
   version = (builtins.parseDrvName edk2.name).version;
 
-  inherit (edk2) src targetArch;
+  inherit (edk2) src;
+  hostArch = buildPackages.edk2.targetArch;
 
   buildFlags = if stdenv.isAarch64 then ""
     else if seabios == null then ''${lib.optionalString secureBoot "-DSECURE_BOOT_ENABLE=TRUE"}''
@@ -68,13 +69,13 @@ stdenv.mkDerivation (edk2.setup projectDscPath {
     export EDK2_TOOLCHAIN=GCC49
 
     # Configures for cross-compiling
-    export ''${EDK2_TOOLCHAIN}_${targetArch}_PREFIX=${stdenv.targetPlatform.config}-
-    export EDK2_HOST_ARCH=${targetArch}
+    export ''${EDK2_TOOLCHAIN}_${hostArch}_PREFIX=${stdenv.targetPlatform.config}-
+    export EDK2_HOST_ARCH=${hostArch}
     '' + ''
     build \
       -n $NIX_BUILD_CORES \
       ${buildFlags} \
-      -a ${targetArch} \
+      -a ${hostArch} \
       ${lib.optionalString crossCompiling "-t $EDK2_TOOLCHAIN"}
   '';
 
