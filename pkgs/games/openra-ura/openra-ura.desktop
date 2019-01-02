@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Version=1.0
+Name=OpenRA - Red Alert Unplugged
+GenericName=Real Time Strategy Game
+GenericName[de]=Echtzeit-Strategiespiel
+Comment=Reimagining of the Red Alert game
+Icon=openra-ura
+Exec=openra-ura
+Terminal=false
+Categories=Game;StrategyGame;X-RTS;X-RealTimeStrategy;X-RealTimeStrategyGame;

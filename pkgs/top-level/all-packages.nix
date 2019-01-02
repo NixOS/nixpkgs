@@ -20807,6 +20807,11 @@ in
 
   openra = callPackage ../games/openra { lua = lua5_1; };
 
+  openra-ura = callPackage ../games/openra-ura {
+    lua = lua5_1;
+    inherit (gnome3) zenity;
+  };
+
   openrw = callPackage ../games/openrw { };
 
   openspades = callPackage ../games/openspades {
