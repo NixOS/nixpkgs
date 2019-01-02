@@ -1,7 +1,7 @@
 { stdenv, buildPackages, targetPlatform, buildPlatform, fetchFromGitHub, fetchpatch, libuuid, python2 }:
 
 let
-# Given a stdenv, returns the edk2-valid arch.
+# Given a platform, returns the edk2-valid arch.
 envToArch = env:
   if env.isi686 then
     "IA32"
