@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libXft, cairo, harfbuzz
+{ stdenv, fetchurl, fetchpatch, pkgconfig, libXft, cairo, harfbuzz
 , libintl, gobject-introspection, darwin, fribidi, gnome3
 , gtk-doc, docbook_xsl, docbook_xml_dtd_43, makeFontsConf, freefont_ttf
 , meson, ninja
@@ -31,7 +31,11 @@ in stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  patches = [ ./gobject-linking.patch ];
+  patches = [ (fetchpatch {
+    name = "fix-gobject-linking.patch";
+    url = https://gitlab.gnome.org/GNOME/pango/commit/d0cb6be7431d1a3c711bd45bcf05b34601604037.patch;
+    sha256 = "1cqhy4xbwx3ad7z5d1ks7smf038b9as8c6qy84rml44h0fgiq4m2";
+  }) ];
 
   # Fontconfig error: Cannot load default config file
   FONTCONFIG_FILE = makeFontsConf {
