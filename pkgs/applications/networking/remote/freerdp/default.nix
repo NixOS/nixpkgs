@@ -4,12 +4,14 @@
 , libxkbcommon, libxkbfile
 , wayland
 , gstreamer, gst-plugins-base, gst-plugins-good, libunwind, orc
+, libuuid, dbus-glib, libusb1
 , libpulseaudio ? null
 , cups ? null
 , pcsclite ? null
 , systemd ? null
 , buildServer ? true
 , optimize ? true
+, buildUsbRedirect ? false
 }:
 
 stdenv.mkDerivation rec {
@@ -40,7 +42,8 @@ stdenv.mkDerivation rec {
     libX11 libXcursor libXdamage libXext libXi libXinerama libXrandr libXrender libXv
     libxkbcommon libxkbfile
     wayland
-  ] ++ optional stdenv.isLinux systemd;
+  ] ++ (optional stdenv.isLinux [ systemd ])
+    ++ (optional buildUsbRedirect [ libuuid dbus-glib libusb1 ]);
 
   nativeBuildInputs = [
     cmake pkgconfig
@@ -58,7 +61,8 @@ stdenv.mkDerivation rec {
     ++ optional (cups != null)                "-DWITH_CUPS=ON"
     ++ optional (pcsclite != null)            "-DWITH_PCSC=ON"
     ++ optional buildServer                   "-DWITH_SERVER=ON"
-    ++ optional (optimize && stdenv.isx86_64) "-DWITH_SSE2=ON";
+    ++ optional (optimize && stdenv.isx86_64) "-DWITH_SSE2=ON"
+    ++ optional buildUsbRedirect              "-DCHANNEL_URBDRC_CLIENT=ON";
 
   meta = with lib; {
     description = "A Remote Desktop Protocol Client";
