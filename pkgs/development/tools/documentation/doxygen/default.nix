@@ -5,7 +5,10 @@ stdenv.mkDerivation rec {
   name = "doxygen-1.8.14";
 
   src = fetchurl {
-    url = "http://doxygen.nl/files/${name}.src.tar.gz";
+    urls = [
+      "mirror://sourceforge/doxygen/${name}.src.tar.gz" # faster, with https, etc.
+      "http://doxygen.nl/files/${name}.src.tar.gz"
+    ];
     sha256 = "d1757e02755ef6f56fd45f1f4398598b920381948d6fcfa58f5ca6aa56f59d4d";
   };
 
