@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   name = "the-powder-toy-${version}";
-  version = "92.5";
+  version = "93.3";
 
   src = fetchFromGitHub {
     owner = "simtr";
