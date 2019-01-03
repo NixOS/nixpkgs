@@ -5881,6 +5881,8 @@ in
 
   trousers = callPackage ../tools/security/trousers { };
 
+  trx = callPackage ../tools/audio/trx { };
+
   tryton = callPackage ../applications/office/tryton { };
 
   trytond = callPackage ../applications/office/trytond { };
