@@ -1,7 +1,8 @@
-{ stdenv, fetchurl, dpkg, makeDesktopItem, gnome2, gtk2, atk, cairo, pango, gdk_pixbuf, glib
-, freetype, fontconfig, dbus, libnotify, libX11, xorg, libXi, libXcursor, libXdamage
-, libXrandr, libXcomposite, libXext, libXfixes, libXrender, libXtst, libXScrnSaver
-, nss, nspr, alsaLib, cups, expat, udev, xdg_utils, hunspell, pulseaudio, pciutils
+{ stdenv, fetchurl, dpkg, makeDesktopItem, libuuid, gtk3, atk, cairo, pango
+, gdk_pixbuf, glib, freetype, fontconfig, dbus, libnotify, libX11, xorg, libXi
+, libXcursor, libXdamage, libXrandr, libXcomposite, libXext, libXfixes
+, libXrender, libXtst, libXScrnSaver, nss, nspr, alsaLib, cups, expat, udev
+, xdg_utils, hunspell, pulseaudio, pciutils, at-spi2-atk
 }:
 let
   rpath = stdenv.lib.makeLibraryPath [
@@ -15,9 +16,10 @@ let
     freetype
     gdk_pixbuf
     glib
-    gnome2.GConf
-    gtk2
+    gtk3
+    at-spi2-atk
     hunspell
+    libuuid
     libnotify
     libX11
     libXcomposite
@@ -41,7 +43,7 @@ let
     xorg.libxcb
   ];
 
-  version = "3.3.2872";
+  version = "3.5.2881";
 
   plat = {
     "i686-linux" = "i386";
@@ -49,8 +51,8 @@ let
   }.${stdenv.hostPlatform.system};
 
   sha256 = {
-    "i686-linux" = "16dw4ycajxviqrf4i32rkrhg1j1mdkmk252y8vjwr18xlyn958qb";
-    "x86_64-linux" = "04ysk91h2izyb41b243zki4j08bis9yzjq2va9bakp1lv6ywm8pw";
+    "i686-linux" = "0s5j6acsiymsikvah9f1ywandzvcdx5m8csrc7ymhv0gx2a9xm1d";
+    "x86_64-linux" = "17siis4xws27jmhf1gyb6cvip6clak27zxckyk0b312kkc4q363i";
   }.${stdenv.hostPlatform.system};
 
 in
