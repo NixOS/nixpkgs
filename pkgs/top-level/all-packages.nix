@@ -12496,6 +12496,7 @@ in
 
   sfml = callPackage ../development/libraries/sfml {
     inherit (darwin.apple_sdk.frameworks) IOKit Foundation AppKit OpenAL;
+    inherit (darwin) cf-private;
   };
   csfml = callPackage ../development/libraries/csfml { };
 
