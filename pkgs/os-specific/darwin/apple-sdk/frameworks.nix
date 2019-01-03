@@ -111,7 +111,7 @@ with frameworks; with libs; {
   IOBluetooth         = [ IOKit ];
   JavaVM              = [];
   OpenDirectory       = [];
-  Quartz              = [ QuickLook QTKit ];
+  Quartz              = [ QuickLook ];
   QuartzCore          = [ ApplicationServices CF CoreVideo OpenCL ];
 
   vmnet = [];
