@@ -21172,6 +21172,8 @@ in
 
   rofi-menugen = callPackage ../applications/misc/rofi-menugen { };
 
+  rofimoji = callPackage ../applications/misc/rofimoji { };
+
   rofi-systemd = callPackage ../tools/system/rofi-systemd { };
 
   rootlesskit = callPackage ../tools/virtualization/rootlesskit {};
