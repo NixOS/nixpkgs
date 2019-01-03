@@ -1275,6 +1275,11 @@
     github = "eadwu";
     name = "Edmund Wu";
   };
+  eamsden = {
+    email = "edward@blackriversoft.com";
+    github = "eamsden";
+    name = "Edward Amsden";
+  };
   earldouglas = {
     email = "james@earldouglas.com";
     github = "earldouglas";
