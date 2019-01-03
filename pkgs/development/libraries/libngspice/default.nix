@@ -2,12 +2,13 @@
 
 # Note that this does not provide the ngspice command-line utility. For that see
 # the ngspice derivation.
-stdenv.mkDerivation {
-  name = "libngspice-29";
+stdenv.mkDerivation rec {
+  name = "libngspice-${version}";
+  version = "30";
 
   src = fetchurl {
-    url = "mirror://sourceforge/ngspice/ngspice-29.tar.gz";
-    sha256 = "0jjwz73naq7l9yhwdqbpnrfckywp2ffkppivxjv8w92zq7xhyvcd";
+    url = "mirror://sourceforge/ngspice/ngspice-${version}.tar.gz";
+    sha256 = "15v0jdfy2a2zxp8dmy04fdp7w7a4vwvffcwa688r81b86wphxzh8";
   };
 
   nativeBuildInputs = [ flex bison ];
