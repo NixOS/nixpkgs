@@ -556,8 +556,21 @@ rec {
   #
   mkAliasDefinitions = mkAliasAndWrapDefinitions id;
   mkAliasAndWrapDefinitions = wrap: option:
-    mkIf (isOption option && option.isDefined) (wrap (mkMerge option.definitions));
+    mkAliasIfDef option (wrap (mkMerge option.definitions));
 
+  # Similar to mkAliasAndWrapDefinitions but copies over the priority from the
+  # option as well.
+  #
+  # If a priority is not set, it assumes a priority of 100.
+  mkAliasAndWrapDefsWithPriority = wrap: option:
+    let
+      defaultPrio = 100;
+      prio = option.highestPrio or defaultPrio;
+      defsWithPrio = map (mkOverride prio) option.definitions;
+    in mkAliasIfDef option (wrap (mkMerge defsWithPrio));
+
+  mkAliasIfDef = option:
+    mkIf (isOption option && option.isDefined);
 
   /* Compatibility. */
   fixMergeModules = modules: args: evalModules { inherit modules args; check = false; };
@@ -690,7 +703,16 @@ rec {
     use = id;
   };
 
-  doRename = { from, to, visible, warn, use }:
+  /* Like ‘mkAliasOptionModule’, but copy over the priority of the option as well. */
+  mkAliasOptionModuleWithPriority = from: to: doRename {
+    inherit from to;
+    visible = true;
+    warn = false;
+    use = id;
+    withPriority = true;
+  };
+
+  doRename = { from, to, visible, warn, use, withPriority ? false }:
     { config, options, ... }:
     let
       fromOpt = getAttrFromPath from options;
@@ -708,7 +730,9 @@ rec {
           warnings = optional (warn && fromOpt.isDefined)
             "The option `${showOption from}' defined in ${showFiles fromOpt.files} has been renamed to `${showOption to}'.";
         }
-        (mkAliasAndWrapDefinitions (setAttrByPath to) fromOpt)
+        (if withPriority
+          then mkAliasAndWrapDefsWithPriority (setAttrByPath to) fromOpt
+          else mkAliasAndWrapDefinitions (setAttrByPath to) fromOpt)
       ];
     };
 

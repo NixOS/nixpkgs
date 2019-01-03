@@ -32,7 +32,7 @@ with lib;
 
   imports = [
     # Create an alias for the "enable" option.
-    (mkAliasOptionModule [ "enableAlias" ] [ "enable" ])
+    (mkAliasOptionModuleWithPriority [ "enableAlias" ] [ "enable" ])
 
     # Disable the aliased option, but with a default (low) priority so it
     # should be able to be overridden by the next import.
