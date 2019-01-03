@@ -19136,6 +19136,8 @@ in
 
   uade123 = callPackage ../applications/audio/uade123 {};
 
+  udev = systemd; # TODO: move to aliases.nix
+
   udevil = callPackage ../applications/misc/udevil {};
 
   udiskie = python3Packages.callPackage ../applications/misc/udiskie { };
