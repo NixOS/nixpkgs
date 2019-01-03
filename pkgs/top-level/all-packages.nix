@@ -1331,6 +1331,8 @@ in
     gtk = gtk3;
   };
 
+  dro2midi = callPackage ../tools/audio/dro2midi { };
+
   dtools = callPackage ../development/tools/dtools { };
 
   dtrx = callPackage ../tools/compression/dtrx { };
