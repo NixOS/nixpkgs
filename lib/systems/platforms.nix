@@ -467,7 +467,6 @@ rec {
   };
 
   selectBySystem = system: {
-      "i386-linux" = pc32;
       "i486-linux" = pc32;
       "i586-linux" = pc32;
       "i686-linux" = pc32;
