@@ -3165,7 +3165,6 @@ in
   gt5 = callPackage ../tools/system/gt5 { };
 
   gtest = callPackage ../development/libraries/gtest { };
-  gmock = gtest; # TODO: move to aliases.nix
 
   gbenchmark = callPackage ../development/libraries/gbenchmark {};
 
@@ -4085,7 +4084,6 @@ in
   luxcorerender = callPackage ../tools/graphics/luxcorerender { };
 
   xz = callPackage ../tools/compression/xz { };
-  lzma = xz; # TODO: move to aliases.nix
 
   lz4 = callPackage ../tools/compression/lz4 { };
 
@@ -10047,7 +10045,6 @@ in
   goocanvasmm2 = callPackage ../development/libraries/goocanvasmm { };
 
   google-gflags = callPackage ../development/libraries/google-gflags { };
-  gflags = google-gflags; # TODO: move to aliases.nix
 
   gperftools = callPackage ../development/libraries/gperftools { };
 
@@ -10491,7 +10488,6 @@ in
     fetchurl = fetchurlBoot;
     type = "lib";
   };
-  kerberos = libkrb5; # TODO: move to aliases.nix
 
   languageMachines = recurseIntoAttrs (import ../development/libraries/languagemachines/packages.nix { inherit callPackage; });
 
@@ -11617,7 +11613,6 @@ in
 
   mbedtls = callPackage ../development/libraries/mbedtls { };
   mbedtls_1_3 = callPackage ../development/libraries/mbedtls/1.3.nix { };
-  polarssl = mbedtls; # TODO: add to aliases.nix
 
   mdds = callPackage ../development/libraries/mdds { };
 
@@ -13798,7 +13793,6 @@ in
     inherit (darwin) cctools;
     inherit (pkgs.darwin.apple_sdk.frameworks) CoreServices;
   };
-  mysql = mariadb; # TODO: move to aliases.nix
 
   mongodb = callPackage ../servers/nosql/mongodb {
     sasl = cyrus_sasl;
@@ -15213,7 +15207,6 @@ in
   systemd = callPackage ../os-specific/linux/systemd {
     utillinux = utillinuxMinimal; # break the cyclic dependency
   };
-  udev = systemd; # TODO: move to aliases.nix
 
   # standalone cryptsetup generator for systemd
   systemd-cryptsetup-generator = callPackage ../os-specific/linux/systemd/cryptsetup-generator.nix { };
@@ -22394,7 +22387,6 @@ in
     inherit (darwin.apple_sdk.frameworks) AudioToolbox CoreAudio CoreFoundation;
   };
   libjack2 = jack2.override { prefix = "lib"; };
-  jack2Full = jack2; # TODO: move to aliases.nix
 
   keynav = callPackage ../tools/X11/keynav { };
 

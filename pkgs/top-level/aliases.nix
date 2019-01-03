@@ -106,8 +106,10 @@ mapAliases ({
   gccApple = throw "gccApple is no longer supported"; # added 2018-04-25
   gdb-multitarget = gdb; # added 2017-11-13
   gettextWithExpat = gettext; # 2016-02-19
+  gflags = google-gflags; # added 2019-01-03
   git-hub = gitAndTools.git-hub; # added 2016-04-29
   glib_networking = glib-networking; # added 2018-02-25
+  gmock = gtest; # added 2019-01-03
   gnome-themes-standard = gnome-themes-extra; # added 2018-03-14
   gnome_doc_utils = gnome-doc-utils; # added 2018-02-25
   gnome_themes_standard = gnome-themes-standard; # added 2018-02-25
@@ -141,6 +143,7 @@ mapAliases ({
   iana_etc = iana-etc;  # added 2017-03-08
   idea = jetbrains; # added 2017-04-03
   inotifyTools = inotify-tools;
+  jack2Full = jack2; # added 2019-01-03
   jbuilder = dune; # added 2018-09-09
   joseki = apache-jena-fuseki; # added 2016-02-28
   json_glib = json-glib; # added 2018-02-25
@@ -149,6 +152,7 @@ mapAliases ({
   keepassx-community = keepassxc; # added 2017-11
   keepassx-reboot = keepassx-community; # added 2017-02-01
   keepassx2-http = keepassx-reboot; # added 2016-10-17
+  kerberos = libkrb5; # added 2019-01-03
   keybase-go = keybase;  # added 2016-08-24
   krename-qt5 = krename; # added 2017-02-18
   kvm = qemu_kvm; # added 2018-04-25
@@ -182,6 +186,7 @@ mapAliases ({
   lua5_1_sockets = lua51Packages.luasocket; # added 2017-05-02
   lua5_expat = luaPackages.luaexpat; # added 2017-05-02
   lua5_sec = luaPackages.luasec; # added 2017-05-02
+  lzma = xz; # added 2019-01-03
   m3d-linux = m33-linux; # added 2016-08-13
   man_db = man-db; # added 2016-05
   manpages = man-pages; # added 2015-12-06
@@ -195,6 +200,7 @@ mapAliases ({
   mssys = ms-sys; # added 2015-12-13
   multipath_tools = multipath-tools;  # added 2016-01-21
   mupen64plus1_5 = mupen64plus; # added 2016-02-12
+  mysql = mariadb; # added 2019-01-03
   mysqlWorkbench = mysql-workbench; # added 2017-01-19
   nagiosPluginsOfficial = monitoring-plugins;
   ncat = nmap;  # added 2016-01-26
@@ -234,6 +240,7 @@ mapAliases ({
   piwik = matomo; # added 2018-01-16
   pltScheme = racket; # just to be sure
   pmtools = acpica-tools; # added 2018-11-01
+  polarssl = mbedtls; # added 2019-01-03
   poppler_qt5 = libsForQt5.poppler;  # added 2015-12-19
   postgresql94 = postgresql_9_4;
   postgresql95 = postgresql_9_5;
@@ -319,6 +326,7 @@ mapAliases ({
   truecrypt = veracrypt; # added 2018-10-24
   tshark = wireshark-cli; # added 2018-04-25
   ucsFonts = ucs-fonts; # added 2016-07-15
+  udev = systemd; # added 2019-01-03
   ultrastardx-beta = ultrastardx; # added 2017-08-12
   usb_modeswitch = usb-modeswitch; # added 2016-05-10
   vimbWrapper = vimb; # added 2015-01
