@@ -4,44 +4,49 @@ with lib;
 
 let
   cpupower = config.boot.kernelPackages.cpupower;
-  cfg = config.powerManagement.cpufreq;
+  cfg = config.powerManagement;
 in
 
 {
   ###### interface
 
-  options.powerManagement.cpufreq = {
+  options.powerManagement = {
 
-    governor = mkOption {
+    # TODO: This should be aliased to powerManagement.cpufreq.governor.
+    # https://github.com/NixOS/nixpkgs/pull/53041#commitcomment-31825338
+    cpuFreqGovernor = mkOption {
       type = types.nullOr types.str;
       default = null;
       example = "ondemand";
       description = ''
         Configure the governor used to regulate the frequence of the
         available CPUs. By default, the kernel configures the
-        performance governor, although this may be overwriten in your
+        performance governor, although this may be overwritten in your
         hardware-configuration.nix file.
 
         Often used values: "ondemand", "powersave", "performance"
       '';
     };
 
-    max = mkOption {
-      type = types.nullOr types.ints.unsigned;
-      default = null;
-      example = 2200000;
-      description = ''
-        The maximum frequency the CPU will use.  Defaults to the maximum possible.
-      '';
-    };
+    cpufreq = {
 
-    min = mkOption {
-      type = types.nullOr types.ints.unsigned;
-      default = null;
-      example = 800000;
-      description = ''
-        The minimum frequency the CPU will use.
-      '';
+      max = mkOption {
+        type = types.nullOr types.ints.unsigned;
+        default = null;
+        example = 2200000;
+        description = ''
+          The maximum frequency the CPU will use.  Defaults to the maximum possible.
+        '';
+      };
+
+      min = mkOption {
+        type = types.nullOr types.ints.unsigned;
+        default = null;
+        example = 800000;
+        description = ''
+          The minimum frequency the CPU will use.
+        '';
+      };
     };
 
   };
@@ -51,16 +56,16 @@ in
 
   config =
     let
-      governorEnable = cfg.governor != null;
-      maxEnable = cfg.max != null;
-      minEnable = cfg.min != null;
+      governorEnable = cfg.cpuFreqGovernor != null;
+      maxEnable = cfg.cpufreq.max != null;
+      minEnable = cfg.cpufreq.min != null;
       enable =
         !config.boot.isContainer &&
         (governorEnable || maxEnable || minEnable);
     in
     mkIf enable {
 
-      boot.kernelModules = optional governorEnable "cpufreq_${cfg.governor}";
+      boot.kernelModules = optional governorEnable "cpufreq_${cfg.cpuFreqGovernor}";
 
       environment.systemPackages = [ cpupower ];
 
@@ -74,9 +79,9 @@ in
           Type = "oneshot";
           RemainAfterExit = "yes";
           ExecStart = "${cpupower}/bin/cpupower frequency-set " +
-            optionalString governorEnable "--governor ${cfg.governor} " +
-            optionalString maxEnable "--max ${toString cfg.max} " +
-            optionalString minEnable "--min ${toString cfg.min} ";
+            optionalString governorEnable "--governor ${cfg.cpuFreqGovernor} " +
+            optionalString maxEnable "--max ${toString cfg.cpufreq.max} " +
+            optionalString minEnable "--min ${toString cfg.cpufreq.min} ";
           SuccessExitStatus = "0 237";
         };
       };

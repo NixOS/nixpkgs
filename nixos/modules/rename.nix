@@ -286,9 +286,6 @@ with lib;
     (mkRenamedOptionModule [ "hardware" "ckb" "enable" ] [ "hardware" "ckb-next" "enable" ])
     (mkRenamedOptionModule [ "hardware" "ckb" "package" ] [ "hardware" "ckb-next" "package" ])
 
-    # cpufeq
-    (mkAliasOptionModule [ "powerManagement" "cpuFreqGovernor" ] [ "powerManagement" "cpufreq" "governor" ])
-
   ] ++ (flip map [ "blackboxExporter" "collectdExporter" "fritzboxExporter"
                    "jsonExporter" "minioExporter" "nginxExporter" "nodeExporter"
                    "snmpExporter" "unifiExporter" "varnishExporter" ]
