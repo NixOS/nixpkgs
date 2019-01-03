@@ -123,4 +123,32 @@ in {
     inherit passthruFun;
   };
 
+  pypy27_prebuilt = callPackage ./pypy/prebuilt.nix {
+    # Not included at top-level
+    self = pythonInterpreters.pypy27_prebuilt;
+    sourceVersion = {
+      major = "6";
+      minor = "0";
+      patch = "0";
+    };
+    sha256 = "0rxgnp3fm18b87ln8bbjr13g2fsf4ka4abkaim6m03y9lwmr9gvc"; # linux64
+    pythonVersion = "2.7";
+    inherit passthruFun;
+    ncurses = ncurses5;
+  };
+
+  pypy35_prebuilt = callPackage ./pypy/prebuilt.nix {
+  # Not included at top-level
+    self = pythonInterpreters.pypy35_prebuilt;
+    sourceVersion = {
+      major = "6";
+      minor = "0";
+      patch = "0";
+    };
+    sha256 = "0j3h08s7wpglghasmym3baycpif5jshvmk9rpav4pwwy5clzmzsc"; # linux64
+    pythonVersion = "3.5";
+    inherit passthruFun;
+    ncurses = ncurses5;
+  };
+
 })
