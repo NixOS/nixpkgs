@@ -1,16 +1,13 @@
-{ lib, callPackage, newScope, pkgs, config }:
+{ lib, newScope, pkgs, config }:
 
 let
   inherit (pkgs.stdenv.hostPlatform) system;
 
-  mkOcamlPackages = ocaml: overrides:
-    let
-      packageSet = self:
-        with self; let inherit (self) callPackage; in
-     let ocamlPackages =
-  {
-    callPackage = newScope self;
+  liftJaneStreet = self: super: super.janeStreet // super;
 
+  mkOcamlPackages = ocaml:
+    (lib.makeScope newScope (self: with self;
+  {
     inherit ocaml;
 
     # Libs
@@ -1062,29 +1059,26 @@ let
       camlp5 = callPackage ../development/tools/ocaml/camlp5 { legacy = true; };
     };
 
-  };
-    in (ocamlPackages.janeStreet // ocamlPackages);
-    in lib.fix' (lib.extends overrides packageSet);
-in rec
+  })).overrideScope' liftJaneStreet;
+
+in let inherit (pkgs) callPackage; in rec
 {
 
-  inherit mkOcamlPackages;
+  ocamlPackages_4_00_1 = mkOcamlPackages (callPackage ../development/compilers/ocaml/4.00.1.nix { });
 
-  ocamlPackages_4_00_1 = mkOcamlPackages (callPackage ../development/compilers/ocaml/4.00.1.nix { }) (self: super: { });
+  ocamlPackages_4_01_0 = mkOcamlPackages (callPackage ../development/compilers/ocaml/4.01.0.nix { });
 
-  ocamlPackages_4_01_0 = mkOcamlPackages (callPackage ../development/compilers/ocaml/4.01.0.nix { }) (self: super: { });
+  ocamlPackages_4_02 = mkOcamlPackages (callPackage ../development/compilers/ocaml/4.02.nix { });
 
-  ocamlPackages_4_02 = mkOcamlPackages (callPackage ../development/compilers/ocaml/4.02.nix { }) (self: super: { });
+  ocamlPackages_4_03 = mkOcamlPackages (callPackage ../development/compilers/ocaml/4.03.nix { });
 
-  ocamlPackages_4_03 = mkOcamlPackages (callPackage ../development/compilers/ocaml/4.03.nix { }) (self: super: { });
+  ocamlPackages_4_04 = mkOcamlPackages (callPackage ../development/compilers/ocaml/4.04.nix { });
 
-  ocamlPackages_4_04 = mkOcamlPackages (callPackage ../development/compilers/ocaml/4.04.nix { }) (self: super: { });
+  ocamlPackages_4_05 = mkOcamlPackages (callPackage ../development/compilers/ocaml/4.05.nix { });
 
-  ocamlPackages_4_05 = mkOcamlPackages (callPackage ../development/compilers/ocaml/4.05.nix { }) (self: super: { });
+  ocamlPackages_4_06 = mkOcamlPackages (callPackage ../development/compilers/ocaml/4.06.nix { });
 
-  ocamlPackages_4_06 = mkOcamlPackages (callPackage ../development/compilers/ocaml/4.06.nix { }) (self: super: { });
-
-  ocamlPackages_4_07 = mkOcamlPackages (callPackage ../development/compilers/ocaml/4.07.nix { }) (self: super: { });
+  ocamlPackages_4_07 = mkOcamlPackages (callPackage ../development/compilers/ocaml/4.07.nix { });
 
   ocamlPackages_latest = ocamlPackages_4_07;
 
