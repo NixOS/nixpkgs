@@ -39,8 +39,6 @@ with pkgs;
         pythonAtLeast = lib.versionAtLeast pythonVersion;
         pythonOlder = lib.versionOlder pythonVersion;
         inherit pythonForBuild;
-
-        majorVersion = pythonVersion; # Backwards compatibility. Should be dropped.
   };
 
 in {

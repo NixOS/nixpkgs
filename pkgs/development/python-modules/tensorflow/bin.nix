@@ -45,7 +45,7 @@ in buildPythonPackage rec {
   format = "wheel";
 
   src = let
-    pyVerNoDot = lib.strings.stringAsChars (x: if x == "." then "" else x) "${python.majorVersion}";
+    pyVerNoDot = lib.strings.stringAsChars (x: if x == "." then "" else x) "${python.pythonVersion}";
     pyver = if stdenv.isDarwin then builtins.substring 0 1 pyVerNoDot else pyVerNoDot;
     platform = if stdenv.isDarwin then "mac" else "linux";
     unit = if cudaSupport then "gpu" else "cpu";
