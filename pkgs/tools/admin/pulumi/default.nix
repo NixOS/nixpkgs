@@ -2,13 +2,13 @@
 
 let
 
-  version = "0.16.7";
+  version = "0.16.9";
 
   # switch the dropdown to “manual” on https://pulumi.io/quickstart/install.html # TODO: update script
   pulumiArchPackage = {
     "x86_64-linux" = {
       url = "https://get.pulumi.com/releases/sdk/pulumi-v${version}-linux-x64.tar.gz";
-      sha256 = "1l1cn8pk05vl7vpmhny9rlz1hj0iqclqjj1r2q12qip7f4qkgsfw";
+      sha256 = "03zgxj1q1wxngmrp5kn7vavvchqr8rzr09mlhjb1lk6n6bsk99xp";
     };
     "x86_64-darwin" = {
       url = "https://get.pulumi.com/releases/sdk/pulumi-v${version}-darwin-x64.tar.gz";
