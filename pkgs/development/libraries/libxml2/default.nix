@@ -11,25 +11,12 @@ let
 
 in stdenv.mkDerivation rec {
   name = "libxml2-${version}";
-  version = "2.9.8";
+  version = "2.9.9";
 
   src = fetchurl {
     url = "http://xmlsoft.org/sources/${name}.tar.gz";
-    sha256 = "0ci7is75bwqqw2p32vxvrk6ds51ik7qgx73m920rakv5jlayax0b";
+    sha256 = "0wd881jzvqayx0ihzba29jl80k06xj9ywp16kxacdqs3064p1ywl";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "CVE-2018-14567_CVE-2018-9251.patch";
-      url = https://gitlab.gnome.org/GNOME/libxml2/commit/2240fbf5912054af025fb6e01e26375100275e74.patch;
-      sha256 = "1xpqsfkzhrqasza51c821mnds5l317djrz8086fmzpyf68vld03h";
-    })
-    (fetchpatch {
-      name = "CVE-2018-14404.patch";
-      url = https://gitlab.gnome.org/GNOME/libxml2/commit/a436374994c47b12d5de1b8b1d191a098fa23594.patch;
-      sha256 = "19vp7p32vrninnfa7vk9ipw7n4cl1gg16xxbhjy2d0kwp1crvzqh";
-    })
-  ];
 
   outputs = [ "bin" "dev" "out" "man" "doc" ]
     ++ lib.optional pythonSupport "py"
