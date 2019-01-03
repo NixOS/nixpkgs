@@ -18,8 +18,6 @@ stdenv.mkDerivation rec {
     sed -i 's,^CPPFLAGS.*,\0 -DBOOST_ERROR_CODE_HEADER_ONLY -DBOOST_SYSTEM_NO_DEPRECATED,' src/lib/Makefile.in
   '';
 
-  configureFlags = stdenv.lib.optional stdenv.cc.isClang "--disable-werror";
-
   CXXFLAGS="--std=gnu++0x"; # For c++11 constants in lcms2.h
 
   meta = {
