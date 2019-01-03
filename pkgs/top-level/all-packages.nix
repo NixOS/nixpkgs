@@ -22967,6 +22967,8 @@ in
 
   webfs = callPackage ../servers/http/webfs { };
 
+  websocketd = callPackage ../applications/networking/websocketd { };
+
   wikicurses = callPackage ../applications/misc/wikicurses {
     pythonPackages = python3Packages;
   };
