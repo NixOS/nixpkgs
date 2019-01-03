@@ -19081,6 +19081,8 @@ in
 
   rofi-menugen = callPackage ../applications/misc/rofi-menugen { };
 
+  rofimoji = callPackage ../applications/misc/rofimoji { };
+
   rofi-systemd = callPackage ../tools/system/rofi-systemd { };
 
   rpcs3 = libsForQt5.callPackage ../misc/emulators/rpcs3 { };
