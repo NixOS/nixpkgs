@@ -1,10 +1,10 @@
 { stdenv, fetchFromGitHub
 , meson, ninja, pkgconfig, vala, gobject-introspection, gettext, wrapGAppsHook, python3, desktop-file-utils
-, gtk3, glib, granite, libgee, libgda, gtksourceview, libxml2, libsecret }:
+, gtk3, glib, granite, libgee, libgda, gtksourceview, libxml2, libsecret, libfixposix, libssh2 }:
 
 
 let
-  version = "0.6.5";
+  version = "0.6.7";
   sqlGda = libgda.override {
     mysqlSupport = true;
     postgresSupport = true;
@@ -17,16 +17,16 @@ in stdenv.mkDerivation rec {
     owner = "Alecaddd";
     repo = "sequeler";
     rev = "v${version}";
-    sha256 = "18d0dwrsn69fx1lwm6ihhk2r4996pxiy4hfv608gc1kl4s4f4sqp";
+    sha256 = "0sxmky27pl0aqnh857xb54rnfg1kbr2smdzyrzw67cbv00f6d30p";
   };
 
   nativeBuildInputs = [ meson ninja pkgconfig vala gobject-introspection gettext wrapGAppsHook python3 desktop-file-utils ];
 
-  buildInputs = [ gtk3 glib granite libgee sqlGda gtksourceview libxml2 libsecret ];
+  buildInputs = [ gtk3 glib granite libgee sqlGda gtksourceview libxml2 libsecret libfixposix libssh2 ];
 
   postPatch = ''
-    chmod +x meson/post_install.py
-    patchShebangs meson/post_install.py
+    chmod +x build-aux/meson_post_install.py
+    patchShebangs build-aux/meson_post_install.py
   '';
 
   meta = with stdenv.lib; {
