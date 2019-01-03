@@ -80,6 +80,8 @@ rec {
 
     , ... } @ attrs:
 
+    assert (name != "") || (attrs?pname && attrs?version);
+
     let
       computedName = if name != "" then name else "${attrs.pname}-${attrs.version}";
 
