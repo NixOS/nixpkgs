@@ -1,10 +1,12 @@
 { stdenv, fetchurl, python3, bdftopcf, mkfontdir, mkfontscale }:
 
 stdenv.mkDerivation rec {
-  name = "terminus-font-4.47";
+  pname = "terminus-font";
+  version = "4.47";
+  name = "${pname}-${version}"; # set here for use in URL below
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/terminus-font/${name}/${name}.tar.gz";
+    url = "mirror://sourceforge/project/${pname}/${name}/${name}.tar.gz";
     sha256 = "15qjcpalcxjiwsjgjg5k88vkwp56cs2nnx4ghya6mqp4i1c206qg";
   };
 
