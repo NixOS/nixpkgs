@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "Flask-API";
-  version = "1.0";
+  version = "1.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0dffcy2hdkajbvl2wkz9dam49v05x9d87cf2mh2cyvza2c5ah47w";
+    sha256 = "0r23pdlaz6ibz9vml3m7v6v3firvykbrsi1zzxkdhls0zi9jq560";
   };
 
   propagatedBuildInputs = [ flask markdown ];

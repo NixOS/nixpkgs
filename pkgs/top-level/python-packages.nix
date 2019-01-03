@@ -5151,6 +5151,8 @@ in {
 
   pytado = callPackage ../development/python-modules/pytado { };
 
+  casttube = callPackage ../development/python-modules/casttube { };
+
 });
 
 in fix' (extends overrides packages)

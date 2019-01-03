@@ -12496,6 +12496,7 @@ in
 
   sfml = callPackage ../development/libraries/sfml {
     inherit (darwin.apple_sdk.frameworks) IOKit Foundation AppKit OpenAL;
+    inherit (darwin) cf-private;
   };
   csfml = callPackage ../development/libraries/csfml { };
 
@@ -15648,11 +15649,13 @@ in
 
   mobile-broadband-provider-info = callPackage ../data/misc/mobile-broadband-provider-info { };
 
+  mojave-gtk-theme = callPackage ../data/themes/mojave { };
+
+  moka-icon-theme = callPackage ../data/icons/moka-icon-theme { };
+
   monoid = callPackage ../data/fonts/monoid { };
 
   mononoki = callPackage ../data/fonts/mononoki { };
-
-  moka-icon-theme = callPackage ../data/icons/moka-icon-theme { };
 
   montserrat = callPackage ../data/fonts/montserrat { };
 
@@ -20212,7 +20215,7 @@ in
 
   xpointerbarrier = callPackage ../tools/X11/xpointerbarrier {};
 
-  xkb_switch = callPackage ../tools/X11/xkb-switch { };
+  xkb-switch = callPackage ../tools/X11/xkb-switch { };
 
   xkblayout-state = callPackage ../applications/misc/xkblayout-state { };
 
@@ -22920,6 +22923,8 @@ in
   wcalc = callPackage ../applications/misc/wcalc { };
 
   webfs = callPackage ../servers/http/webfs { };
+
+  websocketd = callPackage ../applications/networking/websocketd { };
 
   wikicurses = callPackage ../applications/misc/wikicurses {
     pythonPackages = python3Packages;
