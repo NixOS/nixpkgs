@@ -26,7 +26,7 @@ let
             The elm-format expression is updated via a script in the https://github.com/avh4/elm-format repo:
             `pacakge/nix/build.sh`
             */
-            elm-format = doJailbreak (self.callPackage ./packages/elm-format.nix {});
+            elm-format = justStaticExecutables (doJailbreak (self.callPackage ./packages/elm-format.nix {}));
 
             inherit fetchElmDeps;
             elmVersion = elmPkgs.elm.version;
