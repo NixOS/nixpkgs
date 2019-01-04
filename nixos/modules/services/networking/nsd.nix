@@ -435,7 +435,7 @@ let
 
   dnssecZones = (filterAttrs (n: v: if v ? dnssec then v.dnssec else false) zoneConfigs);
 
-  dnssec = length (attrNames dnssecZones) != 0; 
+  dnssec = dnssecZones != {};
 
   dnssecTools = pkgs.bind.override { enablePython = true; };
 
