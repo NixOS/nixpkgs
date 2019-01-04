@@ -9,7 +9,7 @@ mkDerivation {
   name = "minuet";
   meta = with lib; {
     license = with licenses; [ lgpl21 gpl3 ];
-    maintainers = with maintainers; [ peterhoeg ];
+    maintainers = with maintainers; [ peterhoeg HaoZeke ];
   };
 
   nativeBuildInputs = [ extra-cmake-modules gettext kdoctools python qtdeclarative ];
