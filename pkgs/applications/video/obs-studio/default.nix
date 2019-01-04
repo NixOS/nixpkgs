@@ -43,7 +43,7 @@ in stdenv.mkDerivation rec {
   patches = [
     (fetchpatch {
       url = "https://patch-diff.githubusercontent.com/raw/obsproject/obs-studio/pull/1557.diff";
-      sha256 = "0xq3sh1g8j58mpa4ryi9agqqpr41prrzagxmqafkbgfv6fjv3h0c";
+      sha256 = "162fnkxh2wyn6wrrm1kzv7c2mn96kx35vlmk2qwn1nqlifbpsfyq";
     })
   ];
 
