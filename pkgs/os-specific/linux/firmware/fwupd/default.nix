@@ -48,7 +48,6 @@ in stdenv.mkDerivation {
 
     patchShebangs .
     substituteInPlace data/installed-tests/fwupdmgr.test.in --subst-var-by installedtestsdir "$installedTests/share/installed-tests/fwupd"
-    substituteInPlace data/installed-tests/meson.build --replace sysconfdir sysconfdir_install
   '';
 
   # /etc/os-release not available in sandbox

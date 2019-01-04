@@ -40,7 +40,7 @@ in {
 
       blacklistPlugins = mkOption {
         type = types.listOf types.string;
-        default = [];
+        default = [ "test" ];
         example = [ "udev" ];
         description = ''
           Allow blacklisting specific plugins
