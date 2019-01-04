@@ -2,7 +2,7 @@
   stdenv, makeWrapper, lib, fetchurl, fetchpatch, buildPackages,
 
   automake, autoconf, libtool, intltool, mtdev, libevdev, libinput,
-  freetype, tradcpp, fontconfig,
+  freetype, tradcpp, fontconfig, meson, ninja,
   libGL, spice-protocol, zlib, libGLU, dbus, libunwind, libdrm,
   mesa_noglu, udev, bootstrap_cmds, bison, flex, clangStdenv, autoreconfHook,
   mcpp, epoxy, openssl, pkgconfig, llvm_6,
@@ -438,6 +438,9 @@ self: super:
 
   xorgproto = super.xorgproto.overrideAttrs (attrs: {
     buildInputs = [];
+    nativeBuildInputs = attrs.nativeBuildInputs ++ [ meson ninja ];
+    # adds support for printproto needed for libXp
+    mesonFlags = [ "-Dlegacy=true" ];
   });
 
   xorgserver = with self; super.xorgserver.overrideAttrs (attrs_passed:
