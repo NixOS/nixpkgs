@@ -25,11 +25,6 @@ buildPythonPackage rec {
     py.test
   '';
 
-  postPatch = ''
-    # File says it's utf-8 so instead of relying on the environment, fix the decoding when reading.
-    substituteInPlace setup.py --replace "open('README.md')" "open('README.md',encoding='utf-8')"
-  '';
-
   propagatedBuildInputs = [ future six ecdsa rsa ];
 
   meta = with stdenv.lib; {
