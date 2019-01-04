@@ -589,6 +589,8 @@ let
 
     re2_p4 = callPackage ../development/ocaml-modules/re2 { };
 
+    resource-pooling = callPackage ../development/ocaml-modules/resource-pooling { };
+
     result = callPackage ../development/ocaml-modules/ocaml-result { };
 
     seq = callPackage ../development/ocaml-modules/seq { };
