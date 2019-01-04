@@ -9,6 +9,10 @@ stdenv.mkDerivation rec {
   };
   buildInputs = [ SDL SDL_image SDL_mixer ];
 
+  NIX_LDFLAGS = [
+    "-lm"
+  ];
+
   meta = with stdenv.lib; {
     homepage = "https://jump.gnu.sinusoid.es/";
     description = "A clone of the simple yet addictive game Xjump";
