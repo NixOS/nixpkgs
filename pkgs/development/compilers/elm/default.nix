@@ -4,7 +4,7 @@
 
 let
   fetchElmDeps = import ./fetchElmDeps.nix { inherit stdenv lib fetchurl; };
-  hsPkgs = haskell.packages.ghc822.override {
+  hsPkgs = haskell.packages.ghc863.override {
     overrides = self: super: with haskell.lib;
       let elmPkgs = {
             elm = overrideCabal (self.callPackage ./packages/elm.nix { }) (drv: {
@@ -15,12 +15,7 @@ let
                 versionsDat = ./versions.dat;
               };
               buildTools = drv.buildTools or [] ++ [ makeWrapper ];
-              patches = [
-                (fetchpatch {
-                  url = "https://github.com/elm/compiler/pull/1784/commits/78d2d8eab310552b1b877a3e90e1e57e7a09ddec.patch";
-                  sha256 = "0vdhk16xqm2hxw12s1b91a0bmi8w4wsxc086qlzglgnjxrl5b3w4";
-                })
-              ];
+              jailbreak = true;
               postInstall = ''
                 wrapProgram $out/bin/elm \
                   --prefix PATH ':' ${lib.makeBinPath [ nodejs ]}
@@ -31,16 +26,16 @@ let
             The elm-format expression is updated via a script in the https://github.com/avh4/elm-format repo:
             `pacakge/nix/build.sh`
             */
-            elm-format = self.callPackage ./packages/elm-format.nix {};
+            elm-format = doJailbreak (self.callPackage ./packages/elm-format.nix {});
+
             inherit fetchElmDeps;
+            elmVersion = elmPkgs.elm.version;
           };
       in elmPkgs // {
         inherit elmPkgs;
-        elmVersion = elmPkgs.elm.version;
 
         # Needed for elm-format
         indents = self.callPackage ./packages/indents.nix {};
-        tasty-quickcheck = self.callPackage ./packages/tasty-quickcheck.nix {};
       };
   };
 in hsPkgs.elmPkgs
