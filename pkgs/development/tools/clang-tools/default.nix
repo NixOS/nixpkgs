@@ -1,14 +1,15 @@
-{ stdenv, makeWrapper, writeScript, llvmPackages }:
+{ stdenv, writeScript, llvmPackages_latest }:
 
 let
-  clang = llvmPackages.clang-unwrapped;
+  clang = llvmPackages_latest.clang-unwrapped;
   version = stdenv.lib.getVersion clang;
 in
 
 stdenv.mkDerivation {
   name = "clang-tools-${version}";
-  builder = writeScript "builder" ''
-    source $stdenv/setup
+  unpackPhase = ":";
+  installPhase = ''
+    mkdir -p $out/bin
     for tool in \
       clang-apply-replacements \
       clang-check \
@@ -16,11 +17,9 @@ stdenv.mkDerivation {
       clang-rename \
       clang-tidy
     do
-      makeWrapper $clang/bin/$tool $out/bin/$tool --argv0 $tool
+      ln -s ${clang}/bin/$tool $out/bin/$tool
     done
   '';
-  buildInputs = [ makeWrapper ];
-  inherit clang;
   meta = clang.meta // {
     description = "Standalone command line tools for C++ development";
     maintainers = with stdenv.lib.maintainers; [ aherrmann ];
