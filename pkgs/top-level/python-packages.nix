@@ -1053,6 +1053,10 @@ in {
 
   pyechonest = callPackage ../development/python-modules/pyechonest { };
 
+  minc2_simple = callPackage ../development/python-modules/minc2-simple {
+    inherit (pkgs) minc2_simple;
+  };
+
   pyezminc = callPackage ../development/python-modules/pyezminc { };
 
   billiard = callPackage ../development/python-modules/billiard { };
