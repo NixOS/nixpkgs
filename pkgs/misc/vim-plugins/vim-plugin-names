@@ -218,6 +218,7 @@ osyo-manga/vim-textobj-multiblock
 osyo-manga/vim-watchdogs
 pangloss/vim-javascript
 parsonsmatt/intero-neovim
+pearofducks/ansible-vim
 peterhoeg/vim-qml
 phanviet/vim-monokai-pro
 plasticboy/vim-markdown
