@@ -1,11 +1,11 @@
 { stdenv, fetchurl, openssl, zlib, ncurses }:
 
 stdenv.mkDerivation rec {
-  name = "polygraph-4.12.0";
+  name = "polygraph-4.13.0";
 
   src = fetchurl {
     url = "http://www.web-polygraph.org/downloads/srcs/${name}-src.tgz";
-    sha256 = "1anrdc30yi9pb67642flmn7w82q37cnc45r9bh15mpbc66yk3kzz";
+    sha256 = "1rwzci3n7q33hw3spd79adnclzwgwlxcisc9szzjmcjqhbkcpj1a";
   };
 
   buildInputs = [ openssl zlib ncurses ];

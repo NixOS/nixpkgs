@@ -93,9 +93,6 @@ self: super: {
     hinotify = if pkgs.stdenv.isLinux then self.hinotify else self.fsnotify;
   };
 
-  # https://github.com/bitemyapp/esqueleto/issues/105
-  esqueleto = markBrokenVersion "2.5.3" super.esqueleto;
-
   # Fix test trying to access /home directory
   shell-conduit = overrideCabal super.shell-conduit (drv: {
     postPatch = "sed -i s/home/tmp/ test/Spec.hs";

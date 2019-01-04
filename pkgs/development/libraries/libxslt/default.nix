@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libxml2, findXMLCatalogs, python2
+{ stdenv, fetchurl, libxml2, findXMLCatalogs, python2, libgcrypt
 , cryptoSupport ? false
 , pythonSupport ? stdenv.buildPlatform == stdenv.hostPlatform
 }:
@@ -28,7 +28,9 @@ stdenv.mkDerivation rec {
 
   outputs = [ "bin" "dev" "out" "man" "doc" ] ++ stdenv.lib.optional pythonSupport "py";
 
-  buildInputs = [ libxml2.dev ] ++ stdenv.lib.optionals pythonSupport [ libxml2.py python2 ];
+  buildInputs = [ libxml2.dev ]
+    ++ stdenv.lib.optionals pythonSupport [ libxml2.py python2 ]
+    ++ stdenv.lib.optionals cryptoSupport [ libgcrypt ];
 
   propagatedBuildInputs = [ findXMLCatalogs ];
 
