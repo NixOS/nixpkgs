@@ -1,4 +1,5 @@
 { stdenv
+, buildPackages
 , fetchPypi
 , python
 , wrapPython
@@ -24,7 +25,7 @@ stdenv.mkDerivation rec {
       dst=$out/${python.sitePackages}
       mkdir -p $dst
       export PYTHONPATH="$dst:$PYTHONPATH"
-      ${python.interpreter} setup.py install --prefix=$out
+      ${buildPackages.python.interpreter} setup.py install --prefix=$out
       wrapPythonPrograms
   '';
 

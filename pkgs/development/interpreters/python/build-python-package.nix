@@ -2,6 +2,7 @@
 # and can build packages that use distutils, setuptools or flit.
 
 { lib
+, buildPackages
 , config
 , python
 , wrapPython
@@ -24,6 +25,7 @@ let
   mkPythonDerivation = import ./mk-python-derivation.nix {
     inherit lib config python wrapPython setuptools unzip ensureNewerSourcesForZipFilesHook;
     inherit toPythonModule namePrefix writeScript update-python-libraries;
+    inherit buildPackages;
   };
 in
 

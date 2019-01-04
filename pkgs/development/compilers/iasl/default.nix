@@ -1,4 +1,4 @@
-{stdenv, fetchurl, bison, flex}:
+{stdenv, fetchurl, bison, flex, m4}:
 
 stdenv.mkDerivation rec {
   name = "iasl-${version}";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   buildFlags = "iasl";
 
-  buildInputs = [ bison flex ];
+  nativeBuildInputs = [ m4 bison flex ];
 
   installPhase =
     ''
