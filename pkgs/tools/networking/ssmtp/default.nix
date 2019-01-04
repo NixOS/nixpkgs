@@ -36,6 +36,8 @@ stdenv.mkDerivation {
 
   buildInputs = stdenv.lib.optional tlsSupport openssl;
 
+  NIX_LDFLAGS = stdenv.lib.optional tlsSupport [ "-lcrypto" ];
+
   meta = with stdenv.lib; {
     platforms = platforms.linux;
     license = licenses.gpl2;
