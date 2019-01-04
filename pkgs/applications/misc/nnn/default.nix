@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, ncurses, readline, conf ? null }:
+{ stdenv, fetchFromGitHub, pkgconfig, ncurses, conf ? null }:
 
 with stdenv.lib;
 
@@ -17,9 +17,9 @@ stdenv.mkDerivation rec {
   preBuild = optionalString (conf!=null) "cp ${configFile} nnn.h";
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ ncurses readline ];
+  buildInputs = [ ncurses ];
 
-  installFlags = [ "DESTDIR=$(out)" "PREFIX=" ];
+  makeFlags = [ "DESTDIR=${placeholder "out"}" "PREFIX=" ];
 
   meta = {
     description = "Small ncurses-based file browser forked from noice";
