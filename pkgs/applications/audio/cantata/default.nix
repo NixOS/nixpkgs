@@ -28,7 +28,7 @@ assert withOnlineServices -> withTaglib;
 assert withReplaygain -> withTaglib;
 
 let
-  version = "2.3.2";
+  version = "2.3.3";
   pname = "cantata";
   fstat = x: fn: "-DENABLE_" + fn + "=" + (if x then "ON" else "OFF");
   fstats = x: map (fstat x);
@@ -42,7 +42,7 @@ in stdenv.mkDerivation rec {
     owner  = "CDrummond";
     repo   = "cantata";
     rev    = "v${version}";
-    sha256 = "11hjday5vj0wzkc8yb5wbs05jwa8mvgxswd5qvhpci0zkl975yzn";
+    sha256 = "1m651fmdbnb50glym75kzma0bllvqbmrb2afp1g9g5cxm1898c0f";
   };
 
   buildInputs = [ vlc qtbase qtmultimedia qtsvg ]
