@@ -8,7 +8,7 @@
 }:
 let
   # Updating? Keep $out/etc synchronized with passthru.filesInstalledToEtc
-  version = "1.2.1";
+  version = "1.2.3";
   python = python3.withPackages (p: with p; [ pygobject3 pycairo pillow ]);
   installedTestsPython = python3.withPackages (p: with p; [ pygobject3 requests ]);
 
@@ -19,10 +19,10 @@ in stdenv.mkDerivation {
   name = "fwupd-${version}";
   src = fetchurl {
     url = "https://people.freedesktop.org/~hughsient/releases/fwupd-${version}.tar.xz";
-    sha256 = "126b3lsh4gkyajsqm2c8l6wqr4dd7m26krz2527khmlps0lxdhg1";
+    sha256 = "11qpgincndahq96rbm2kgcy9kw5n9cmbbilsrqcqcyk7mvv464sl";
   };
 
-  outputs = [ "out" "lib" "dev" "devdoc" "man" "installedTests" ];
+  outputs = [ "out" "dev" "devdoc" "man" "installedTests" ];
 
   nativeBuildInputs = [
     meson ninja gtk-doc pkgconfig gobject-introspection intltool glibcLocales shared-mime-info
@@ -48,6 +48,7 @@ in stdenv.mkDerivation {
 
     patchShebangs .
     substituteInPlace data/installed-tests/fwupdmgr.test.in --subst-var-by installedtestsdir "$installedTests/share/installed-tests/fwupd"
+    substituteInPlace data/installed-tests/meson.build --replace sysconfdir sysconfdir_install
   '';
 
   # /etc/os-release not available in sandbox
@@ -103,6 +104,7 @@ in stdenv.mkDerivation {
       "fwupd/remotes.d/lvfs-testing.conf"
       "fwupd/remotes.d/lvfs.conf"
       "fwupd/remotes.d/vendor.conf"
+      "fwupd/remotes.d/fwupd-tests.conf"
       "pki/fwupd/GPG-KEY-Hughski-Limited"
       "pki/fwupd/GPG-KEY-Linux-Foundation-Firmware"
       "pki/fwupd/GPG-KEY-Linux-Vendor-Firmware-Service"
