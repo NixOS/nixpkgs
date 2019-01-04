@@ -116,7 +116,10 @@ stdenv.mkDerivation rec {
       done
     '';
     genericPatches = ''
-      find src/main/java/com/google/devtools -type f -print0 | while IFS="" read -r -d "" path; do
+      # substituteInPlace is rather slow, so prefilter the files with grep
+      grep -rlZ /bin src/main/java/com/google/devtools | while IFS="" read -r -d "" path; do
+        # If you add more replacements here, you must change the grep above!
+        # Only files containing /bin are taken into account.
         substituteInPlace "$path" \
           --replace /bin/bash ${customBash}/bin/bash \
           --replace /usr/bin/env ${coreutils}/bin/env \
