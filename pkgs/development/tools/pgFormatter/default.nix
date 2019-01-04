@@ -1,4 +1,4 @@
-{ buildPerlPackage, fetchFromGitHub, glibcLocales, lib, ... }:
+{ buildPerlPackage, fetchFromGitHub, glibcLocales, lib, makeWrapper, ... }:
 
 # original implementation stolen from https://github.com/ariutta/nixpkgs-custom/blob/aa72a115a71bb248a2a7f0deac55132e68b54365/perl-packages.nix#L13
 
@@ -13,10 +13,14 @@ buildPerlPackage rec {
     sha256 = "1rvamvgymm4b60bq0s46mdxhqavl628vcqp7f7j1slrs4wm62ykc";
   };
 
-  # glibcLocales is needed to fix a locale issue. See this comment:
-  # https://github.com/NixOS/nixpkgs/issues/8398#issuecomment-186832814
-  # TODO: is buildInputs the right way to specify this dependency?
-  buildInputs = [ glibcLocales ];
+  buildInputs = [
+    # glibcLocales is needed to fix a locale issue. See this comment:
+    # https://github.com/NixOS/nixpkgs/issues/8398#issuecomment-186832814
+    # TODO: is buildInputs the right way to specify this dependency?
+    glibcLocales
+
+    makeWrapper
+  ];
 
   outputs = [ "out" ];
 
@@ -26,6 +30,11 @@ buildPerlPackage rec {
   patchPhase = ''
     sed -i "s#'DESTDIR'      => \$DESTDIR,#'DESTDIR'      => '$out/',#" Makefile.PL
     sed -i "s#'INSTALLDIRS'  => \$INSTALLDIRS,#'INSTALLDIRS'  => \$INSTALLDIRS, 'INSTALLVENDORLIB'  => 'bin/lib', 'INSTALLVENDORBIN'  => 'bin', 'INSTALLVENDORSCRIPT'  => 'bin', 'INSTALLVENDORMAN1DIR'  => 'share/man/man1', 'INSTALLVENDORMAN3DIR'  => 'share/man/man3',#" Makefile.PL
+  '';
+
+  # Wrap perl scripts so they can find libraries
+  postInstall = ''
+    wrapProgram "$out/bin/pg_format" --prefix PERL5LIB : "$PERL5LIB"
   '';
 
   doCheck = false;
