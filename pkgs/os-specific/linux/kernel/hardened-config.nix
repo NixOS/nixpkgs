@@ -113,6 +113,9 @@ ${optionalString (versionAtLeast version "4.11") ''
 ${optionalString (versionAtLeast version "4.14") ''
   GCC_PLUGIN_STRUCTLEAK_BYREF_ALL y # Also cover structs passed by address
 ''}
+${optionalString (versionAtLeast version "4.20") ''
+  GCC_PLUGIN_STACKLEAK y # A port of the PaX stackleak plugin
+''}
 
 # Disable various dangerous settings
 ACPI_CUSTOM_METHOD n # Allows writing directly to physical memory
