@@ -14,6 +14,10 @@ stdenv.mkDerivation rec {
 
   setOutputFlags = false;
 
+  # These defines are needed for cross-compiling. See https://groups.google.com/forum/#!topic/comp.lang.tcl/P56Gge5_3Z8
+  ac_cv_func_strtod = if stdenv.hostPlatform.config != stdenv.buildPlatform.config then "yes" else null;
+  tcl_cv_strtod_buggy = if stdenv.hostPlatform.config != stdenv.buildPlatform.config then "1" else null;
+
   preConfigure = ''
     # Note: using $out instead of $man to prevent a runtime dependency on $man.
     configureFlagsArray+=(--mandir=$out/share/man --enable-man-symlinks)
