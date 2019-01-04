@@ -3911,6 +3911,10 @@
     github = "fkz";
     name = "Fabian Schmitthenner";
   };
+  schmittlauch = {
+    email = "t.schmittlauch+nixos@orlives.de";
+    github = "schmittlauch";
+  };
   schneefux = {
     email = "schneefux+nixos_pkg@schneefux.xyz";
     github = "schneefux";
