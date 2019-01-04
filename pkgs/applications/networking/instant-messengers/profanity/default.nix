@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
     ++ optionals pythonPluginSupport [ "-I${python}/include/${python.libPrefix}" ];
 
   LDFLAGS = [ ]
-    ++ optionals pythonPluginSupport [ "-L${python}/lib" "-lpython${python.majorVersion}m" ];
+    ++ optionals pythonPluginSupport [ "-L${python}/lib" "-l${python.libPrefix}" ];
 
   meta = {
     description = "A console based XMPP client";
