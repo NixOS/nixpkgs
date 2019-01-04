@@ -1,5 +1,6 @@
 { stdenv, lib, fetchFromGitHub, cmake, pkgconfig, makeWrapper
-, qtbase, libuuid, libcap, uwsgi, grantlee }:
+, qtbase, libuuid, libcap, uwsgi, grantlee, pcre
+}:
 
 stdenv.mkDerivation rec {
   name = "cutelyst-${version}";
@@ -13,7 +14,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake pkgconfig makeWrapper ];
-  buildInputs = [ qtbase libuuid libcap uwsgi grantlee ];
+  buildInputs = [ qtbase libuuid libcap uwsgi grantlee pcre ];
 
   cmakeFlags = [
     "-DPLUGIN_UWSGI=ON"
