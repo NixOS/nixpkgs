@@ -43,8 +43,7 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/coelckers/gzdoom;
     description = "A Doom source port based on ZDoom. It features an OpenGL renderer and lots of new features";
     license = licenses.gpl3;
-    platforms = platforms.linux;
+    platforms = ["x86_64-linux"];
     maintainers = with maintainers; [ lassulus ];
   };
 }
-
