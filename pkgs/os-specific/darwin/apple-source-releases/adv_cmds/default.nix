@@ -68,12 +68,7 @@ in appleDerivation {
     for f in Products/Release/*; do
       if [ -f $f ]; then
         install -D $file $out/bin/$(basename $f)
-      done
-    done
-
-    for n in 1 8; do
-      mkdir -p $out/share/man/man$n
-      install */*.$n $out/share/man/man$n
+      fi
     done
 
     bsdmake -C usr-share-locale.tproj install DESTDIR="$locale/share/locale"
