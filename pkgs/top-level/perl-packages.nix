@@ -11520,6 +11520,14 @@ let
     };
   };
 
+  NumberBytesHuman = buildPerlPackage rec {
+    name = "Number-Bytes-Human-0.11";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/F/FE/FERREIRA/${name}.tar.gz";
+      sha256 = "0b3gprpbcrdwc2gqalpys5m2ngilh5injhww8y0gf3dln14rrisz";
+    };
+  };
+
   NumberCompare = buildPerlPackage rec {
     name = "Number-Compare-0.03";
     src = fetchurl {
