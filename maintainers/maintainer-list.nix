@@ -1750,6 +1750,11 @@
     github = "hamhut1066";
     name = "Hamish Hutchings";
   };
+  hansjoergschurr = {
+    email = "commits@schurr.at";
+    github = "hansjoergschurr";
+    name = "Hans-Jörg Schurr";
+  };
   haslersn = {
     email = "haslersn@fius.informatik.uni-stuttgart.de";
     github = "haslersn";
