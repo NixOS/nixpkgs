@@ -16,6 +16,9 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ scons pkgconfig wrapGAppsHook ];
   buildInputs = [ glfw3 gtk3 libpng12 ];
+  NIX_LDFLAGS = [
+    "-lpthread"
+  ];
 
   buildPhase = ''
     make release
