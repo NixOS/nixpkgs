@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ alsaLib libopus ortp bctoolbox ];
-  makeFlags = [ "DESTDIR=$(out)" ];
+  makeFlags = [ "PREFIX=$(out)" ];
 
   meta = with stdenv.lib; {
     description = "A simple toolset for broadcasting live audio using RTP/UDP and Opus";
