@@ -40,6 +40,9 @@ with lib;
 
     # Disable legacy virtual syscalls
     "vsyscall=none"
+
+    # Enable PTI even if CPU claims to be safe from meltdown
+    "pti=on"
   ];
 
   boot.blacklistedKernelModules = [
