@@ -21,9 +21,12 @@
 , libX11
 , libXScrnSaver
 , libXcomposite
+, libxcb
+, libXcursor
 , libXdamage
 , libXext
 , libXfixes
+, libXi
 , libXinerama
 , libXrender
 , libXt
@@ -99,10 +102,13 @@ stdenv.mkDerivation {
       kerberos
       libX11
       libXScrnSaver
+      libxcb
       libXcomposite
+      libXcursor
       libXdamage
       libXext
       libXfixes
+      libXi
       libXinerama
       libXrender
       libXt
