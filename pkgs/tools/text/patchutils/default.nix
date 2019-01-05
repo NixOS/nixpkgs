@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, perl }:
 
 stdenv.mkDerivation rec {
   name = "patchutils-0.3.3";
@@ -9,6 +9,11 @@ stdenv.mkDerivation rec {
   };
 
   patches = [ ./drop-comments.patch ]; # we would get into a cycle when using fetchpatch on this one
+
+  buildInputs = [
+    # necessary for ./configure to generate the correct shebangs
+    perl
+  ];
 
   hardeningDisable = [ "format" ];
 
