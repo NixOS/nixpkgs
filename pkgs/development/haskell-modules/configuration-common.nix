@@ -520,6 +520,10 @@ self: super: {
   # generic-deriving bound is too tight
   aeson = doJailbreak super.aeson;
 
+  # containers >=0.4 && <0.6 is too tight
+  # https://github.com/RaphaelJ/friday/issues/34
+  friday = doJailbreak super.friday;
+
   # Won't compile with recent versions of QuickCheck.
   inilist = dontCheck super.inilist;
   MissingH = dontCheck super.MissingH;
