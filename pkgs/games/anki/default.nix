@@ -26,7 +26,7 @@
 }:
 
 buildPythonApplication rec {
-    version = "2.1.7";
+    version = "2.1.8";
     name = "anki-${version}";
 
     src = fetchurl {
@@ -36,7 +36,7 @@ buildPythonApplication rec {
         # "http://ankisrs.net/download/mirror/${name}.tgz"
         # "http://ankisrs.net/download/mirror/archive/${name}.tgz"
       ];
-      sha256 = "0cvlimfxb7kficlf20hg7a345pahvr093b7yqvssww15h4y4va9d";
+      sha256 = "08wb9hwpmbq7636h7sinim33qygdwwlh3frqqh2gfgm49f46di2p";
     };
 
     propagatedBuildInputs = [ pyqt5 sqlalchemy
