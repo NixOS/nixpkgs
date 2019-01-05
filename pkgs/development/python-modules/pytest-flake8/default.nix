@@ -7,7 +7,7 @@ buildPythonPackage rec {
   # although pytest is a runtime dependency, do not add it as
   # propagatedBuildInputs in order to allow packages depend on another version
   # of pytest more easily
-  buildInputs = [ pytest ];
+  checkInputs = [ pytest ];
   propagatedBuildInputs = [ flake8 ];
 
   src = fetchPypi {

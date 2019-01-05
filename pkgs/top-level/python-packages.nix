@@ -534,7 +534,9 @@ in {
 
   pyaxmlparser = callPackage ../development/python-modules/pyaxmlparser { };
 
-  pycairo = callPackage ../development/python-modules/pycairo { };
+  pycairo = callPackage ../development/python-modules/pycairo {
+    inherit (pkgs) pkgconfig;
+  };
 
   pycangjie = disabledIf (!isPy3k) (callPackage ../development/python-modules/pycangjie { });
 
@@ -572,9 +574,13 @@ in {
 
   pygmo = callPackage ../development/python-modules/pygmo { };
 
-  pygobject2 = callPackage ../development/python-modules/pygobject { };
+  pygobject2 = callPackage ../development/python-modules/pygobject {
+    inherit (pkgs) pkgconfig;
+  };
 
-  pygobject3 = callPackage ../development/python-modules/pygobject/3.nix { };
+  pygobject3 = callPackage ../development/python-modules/pygobject/3.nix {
+    inherit (pkgs) pkgconfig;
+  };
 
   pygtail = callPackage ../development/python-modules/pygtail { };
 
@@ -2839,7 +2845,9 @@ in {
 
   jsonpath_rw = callPackage ../development/python-modules/jsonpath_rw { };
 
-  kerberos = callPackage ../development/python-modules/kerberos { };
+  kerberos = callPackage ../development/python-modules/kerberos {
+    inherit (pkgs) kerberos;
+  };
 
   lazy-object-proxy = callPackage ../development/python-modules/lazy-object-proxy { };
 
@@ -2902,7 +2910,7 @@ in {
   livereload = callPackage ../development/python-modules/livereload { };
 
   llfuse = callPackage ../development/python-modules/llfuse {
-    fuse = pkgs.fuse;  # use "real" fuse, not the python module
+    inherit (pkgs) fuse pkgconfig; # use "real" fuse and pkgconfig, not the python modules
   };
 
   locustio = callPackage ../development/python-modules/locustio { };
@@ -4625,7 +4633,7 @@ in {
   };
 
   libvirt = callPackage ../development/python-modules/libvirt {
-    inherit (pkgs) libvirt;
+    inherit (pkgs) libvirt pkgconfig;
   };
 
   rpdb = callPackage ../development/python-modules/rpdb { };

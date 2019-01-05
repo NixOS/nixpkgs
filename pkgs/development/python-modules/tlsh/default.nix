@@ -1,7 +1,7 @@
 { stdenv
 , buildPythonPackage
 , fetchFromGitHub
-, pkgs
+, cmake
 }:
 
 buildPythonPackage rec {
@@ -15,7 +15,7 @@ buildPythonPackage rec {
     sha256 = "1ydliir308xn4ywy705mmsh7863ldlixdvpqwdhbipzq9vfpmvll";
   };
 
-  buildInputs = [ pkgs.cmake ];
+  nativeBuildInputs = [ cmake ];
 
   # no test data
   doCheck = false;
