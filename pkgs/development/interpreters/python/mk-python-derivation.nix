@@ -71,10 +71,10 @@ toPythonModule (python.stdenv.mkDerivation (builtins.removeAttrs attrs [
   name = namePrefix + name;
 
   nativeBuildInputs = [ ensureNewerSourcesForZipFilesHook ]
+    ++ lib.optional (lib.hasSuffix "zip" (attrs.src.name or "")) unzip
     ++ nativeBuildInputs;
 
   buildInputs = [ wrapPython ]
-    ++ lib.optional (lib.hasSuffix "zip" (attrs.src.name or "")) unzip
     ++ lib.optional catchConflicts setuptools # If we no longer propagate setuptools
     ++ buildInputs
     ++ pythonPath;
