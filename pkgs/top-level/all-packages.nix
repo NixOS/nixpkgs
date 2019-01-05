@@ -22741,6 +22741,8 @@ in
 
   putty = callPackage ../applications/networking/remote/putty { };
 
+  qMasterPassword = libsForQt5.callPackage ../applications/misc/qMasterPassword { };
+
   redprl = callPackage ../applications/science/logic/redprl { };
 
   retroarchBare = callPackage ../misc/emulators/retroarch {
