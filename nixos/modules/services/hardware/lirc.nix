@@ -32,14 +32,6 @@ in {
         default = [];
         description = "Extra arguments to lircd.";
       };
-
-      socket = mkOption {
-        type = types.path;
-        # default search path of many applications
-        default = "/run/lirc/lircd";
-        description = "Socket path";
-      };
-
     };
   };
 
@@ -50,13 +42,15 @@ in {
     # Note: LIRC executables raises a warning, if lirc_options.conf do not exists
     environment.etc."lirc/lirc_options.conf".text = cfg.options;
 
+    passthru.lirc.socket = "/run/lirc/lircd";
+
     environment.systemPackages = [ pkgs.lirc ];
 
     systemd.sockets.lircd = {
       description = "LIRC daemon socket";
       wantedBy = [ "sockets.target" ];
       socketConfig = {
-        ListenStream = cfg.socket;
+        ListenStream = config.passthru.lirc.socket;
         SocketUser = "lirc";
         SocketMode = "0660";
       };
