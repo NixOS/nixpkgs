@@ -69,6 +69,9 @@ let
           debugInfo = true;
         };
 
+        # Remove old versions of elixir, when the supports fades out:
+        #   https://hexdocs.pm/elixir/compatibility-and-deprecations.html
+
         lfe = lfe_1_2;
         lfe_1_2 = lib.callLFE ../interpreters/lfe/1.2.nix { inherit erlang buildRebar3 buildHex; };
 
