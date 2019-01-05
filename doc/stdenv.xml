@@ -1810,7 +1810,7 @@ set debug-file-directory ~/.nix-profile/lib/debug
      <listitem>
       <para>
        A list of dependencies used by the phase. This gets included in
-       <varname>buildInputs</varname> when <varname>doInstallCheck</varname> is
+       <varname>nativeBuildInputs</varname> when <varname>doInstallCheck</varname> is
        set.
       </para>
      </listitem>
