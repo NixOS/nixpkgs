@@ -15,6 +15,19 @@ stdenv.mkDerivation rec {
     perl
   ];
 
+  nativeBuildInputs = [
+    makeWrapper
+  ];
+
+  # The different tools depend on each other, for example `splitdiff` calls
+  # `lsdiff`.
+  postInstall = ''
+    for bin in $out/bin/*; do
+      wrapProgram "$bin" \
+        --prefix PATH : "$out/bin"
+    done
+  '';
+
   hardeningDisable = [ "format" ];
 
   doCheck = false; # fails
