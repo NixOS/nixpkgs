@@ -3,6 +3,7 @@
 # pointer width, but some expect to use 32-bit integers always
 # (for compatibility with reference BLAS).
 , blas64 ? null
+, buildPackages
 }:
 
 with stdenv.lib;
@@ -16,7 +17,6 @@ let
       BINARY = "32";
       TARGET = "ARMV6";
       DYNAMIC_ARCH = "0";
-      CC = "gcc";
       USE_OPENMP = "1";
     };
 
@@ -24,7 +24,6 @@ let
       BINARY = "32";
       TARGET = "ARMV7";
       DYNAMIC_ARCH = "0";
-      CC = "gcc";
       USE_OPENMP = "1";
     };
 
@@ -32,7 +31,6 @@ let
       BINARY = "64";
       TARGET = "ARMV8";
       DYNAMIC_ARCH = "1";
-      CC = "gcc";
       USE_OPENMP = "1";
     };
 
@@ -40,7 +38,6 @@ let
       BINARY = "32";
       TARGET = "P2";
       DYNAMIC_ARCH = "1";
-      CC = "gcc";
       USE_OPENMP = "1";
     };
 
@@ -48,9 +45,6 @@ let
       BINARY = "64";
       TARGET = "ATHLON";
       DYNAMIC_ARCH = "1";
-      # Note that clang is available through the stdenv on OSX and
-      # thus is not an explicit dependency.
-      CC = "clang";
       USE_OPENMP = "0";
       MACOSX_DEPLOYMENT_TARGET = "10.7";
     };
@@ -59,7 +53,6 @@ let
       BINARY = "64";
       TARGET = "ATHLON";
       DYNAMIC_ARCH = "1";
-      CC = "gcc";
       USE_OPENMP = "1";
     };
   };
@@ -113,21 +106,29 @@ stdenv.mkDerivation rec {
     "relro" "bindnow"
   ];
 
-  nativeBuildInputs =
-    [gfortran perl which]
-    ++ optionals stdenv.isDarwin [coreutils];
+  nativeBuildInputs = [
+    perl
+    which
+    buildPackages.gfortran
+    buildPackages.stdenv.cc
+  ] ++ optionals stdenv.isDarwin [
+    coreutils
+  ];
 
   makeFlags =
     [
-      "FC=gfortran"
+      "FC=${optionalString (stdenv.hostPlatform != stdenv.buildPlatform) stdenv.cc.targetPrefix}gfortran"
+      "CC=${optionalString (stdenv.hostPlatform != stdenv.buildPlatform) stdenv.cc.targetPrefix}cc"
       ''PREFIX="''$(out)"''
       "NUM_THREADS=64"
       "INTERFACE64=${if blas64 then "1" else "0"}"
       "NO_STATIC=1"
-    ] ++ stdenv.lib.optional (stdenv.hostPlatform.libc == "musl") "NO_AFFINITY=1"
+    ]
+    ++ stdenv.lib.optional (stdenv.hostPlatform.libc == "musl") "NO_AFFINITY=1"
+    ++ stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [ "NO_BINARY_MODE=1" "HOSTCC=cc" "CROSS=1" ]
     ++ mapAttrsToList (var: val: var + "=" + val) config;
 
-  doCheck = true;
+  doCheck = stdenv.hostPlatform != stdenv.buildPlatform;
   checkTarget = "tests";
 
   postInstall = ''
