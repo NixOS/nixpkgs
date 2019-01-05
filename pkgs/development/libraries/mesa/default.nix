@@ -163,7 +163,10 @@ let self = stdenv.mkDerivation {
   ];
 
   # TODO: probably not all .la files are completely fixed, but it shouldn't matter;
-  postInstall = optionalString (galliumDrivers != []) ''
+  postInstall = ''
+    # Some installs don't have any drivers so this directory is never created.
+    mkdir -p $drivers
+  '' + optionalString (galliumDrivers != []) ''
     # move gallium-related stuff to $drivers, so $out doesn't depend on LLVM
     mv -t "$drivers/lib/"    \
       $out/lib/libXvMC*      \
