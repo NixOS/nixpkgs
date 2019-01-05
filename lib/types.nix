@@ -100,6 +100,11 @@ rec {
       name = "unspecified";
     };
 
+    args = mkOptionType {
+      name = "module arguments";
+      merge = loc: defs: last defs;
+    };
+
     bool = mkOptionType {
       name = "bool";
       description = "boolean";

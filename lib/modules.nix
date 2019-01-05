@@ -41,7 +41,7 @@ rec {
 
         options = {
           _module.args = mkOption {
-            type = types.attrsOf types.unspecified;
+            type = types.attrsOf types.args;
             internal = true;
             description = "Arguments passed to each module.";
           };
