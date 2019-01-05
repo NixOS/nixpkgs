@@ -3,7 +3,7 @@
 , oggSupport ? true, libogg, libvorbis
 , openalSupport ? true, openal
 , zipSupport ? true, zlib
-}:
+, Cocoa, OpenAL }:
 
 let
   mkFlag = b: if b then "ON" else "OFF";
@@ -30,7 +30,8 @@ let
     buildInputs = [ SDL2 libGL ]
       ++ lib.optionals oggSupport [ libogg libvorbis ]
       ++ lib.optional openalSupport openal
-      ++ lib.optional zipSupport zlib;
+      ++ lib.optional zipSupport zlib
+      ++ lib.optionals stdenv.isDarwin [Cocoa OpenAL];
 
     cmakeFlags = [
       "-DCMAKE_BUILD_TYPE=Release"
