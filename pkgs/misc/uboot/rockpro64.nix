@@ -6,7 +6,6 @@
     sha256 = "189f7h6wj2yrcc5ga103jnyysykf9j3j9p1vcy7791bxwxqxnggf";
   };
 in buildUBoot rec {
-  name = "uboot-${defconfig}-${version}";
   version = "2017.09";
 
   src = fetchFromGitHub {

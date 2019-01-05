@@ -4,7 +4,8 @@
 }:
 
 let
-  buildUBoot = { filesToInstall
+  buildUBoot = { version ? "2018.09"
+            , filesToInstall
             , installDir ? "$out"
             , defconfig
             , extraConfig ? ""
@@ -14,8 +15,8 @@ let
             , ... } @ args:
            stdenv.mkDerivation (rec {
 
-    name = "uboot-${defconfig}-${version}";
-    version = args.version or "2018.09";
+    pname = "uboot-${defconfig}";
+    inherit version;
 
     src = fetchurl {
       url = "ftp://ftp.denx.de/pub/u-boot/u-boot-${version}.tar.bz2";
