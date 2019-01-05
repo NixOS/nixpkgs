@@ -1194,6 +1194,8 @@ in {
 
   case = callPackage ../development/python-modules/case {};
 
+  cbor = callPackage ../development/python-modules/cbor {};
+
   cassandra-driver = callPackage ../development/python-modules/cassandra-driver { };
 
   cccolutils = callPackage ../development/python-modules/cccolutils {};

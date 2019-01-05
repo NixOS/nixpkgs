@@ -1,7 +1,7 @@
-{ stdenv, writeScript, llvmPackages_latest }:
+{ stdenv, writeScript, llvmPackages }:
 
 let
-  clang = llvmPackages_latest.clang-unwrapped;
+  clang = llvmPackages.clang-unwrapped;
   version = stdenv.lib.getVersion clang;
 in
 
