@@ -6668,7 +6668,9 @@ in
   clang_37 = llvmPackages_37.clang;
   clang_35 = wrapCC llvmPackages_35.clang;
 
-  clang-tools = callPackage ../development/tools/clang-tools { };
+  clang-tools = callPackage ../development/tools/clang-tools {
+    llvmPackages = llvmPackages_latest;
+  };
 
   clang-analyzer = callPackage ../development/tools/analysis/clang-analyzer { };
 
