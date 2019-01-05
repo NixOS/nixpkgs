@@ -87,6 +87,9 @@ let self = toPythonModule (python.stdenv.mkDerivation (builtins.removeAttrs attr
   # Propagate python and setuptools. We should stop propagating setuptools.
   propagatedBuildInputs = propagatedBuildInputs ++ [ python setuptools ];
 
+  # Enabled to detect some (native)BuildInputs mistakes
+  strictDeps = true;
+
   # Python packages don't have a checkPhase, only an installCheckPhase
   doCheck = false;
   doInstallCheck = doCheck;
