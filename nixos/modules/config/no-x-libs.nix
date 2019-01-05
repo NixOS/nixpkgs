@@ -41,6 +41,7 @@ with lib;
       networkmanager-iodine = super.networkmanager-iodine.override { withGnome = false; };
       pinentry = super.pinentry_ncurses;
       gobjectIntrospection = super.gobjectIntrospection.override { x11Support = false; };
+      w3m = super.w3m.override { graphicsSupport = false; };
     }));
   };
 }
