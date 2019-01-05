@@ -15,21 +15,18 @@ let
       url    = "http://lcamtuf.coredump.cx/afl/releases/${name}.tgz";
       sha256 = "0ig0ij4n1pwry5dw1hk4q88801jzzy2cric6y2gd6560j55lnqa3";
     };
+    enableParallelBuilding = true;
 
     # Note: libcgroup isn't needed for building, just for the afl-cgroup
     # script.
-    buildInputs  = [ makeWrapper llvm which ];
+    nativeBuildInputs = [ makeWrapper which ];
+    buildInputs = [ llvm ];
 
-    buildPhase   = ''
-      make PREFIX=$out
-      cd llvm_mode
-      make PREFIX=$out
-      cd ..
+    makeFlags = [ "PREFIX=$(out)" ];
+    postBuild = ''
+      make -C llvm_mode $makeFlags -j$NIX_BUILD_CORES
     '';
-    installPhase = ''
-      # Do the normal installation
-      make install PREFIX=$out
-
+    postInstall = ''
       # Install the custom QEMU emulator for binary blob fuzzing.
       cp ${afl-qemu}/bin/${qemu-exe-name} $out/bin/afl-qemu-trace
 
@@ -55,9 +52,7 @@ let
       done
     '';
 
-    passthru = {
-      qemu = afl-qemu;
-    };
+    passthru.qemu = afl-qemu;
 
     meta = {
       description = "Powerful fuzzer via genetic algorithms and instrumentation";
@@ -78,5 +73,3 @@ let
     };
   };
 in afl
-
-
