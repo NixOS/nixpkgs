@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, m4, zlib, bzip2, bison, flex, gettext, xz, setupDebugInfoDirs }:
+{ lib, stdenv, fetchurl, fetchpatch, m4, zlib, bzip2, bison, flex, gettext, utillinux, xz, setupDebugInfoDirs }:
 
 # TODO: Look at the hardcoded paths to kernel, modules etc.
 stdenv.mkDerivation rec {
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     patchShebangs tests
   '';
 
-  nativeBuildInputs = [ m4 bison flex gettext ];
+  nativeBuildInputs = [ m4 bison flex gettext utillinux /* flock */ ];
   buildInputs = [ zlib bzip2 xz ];
 
   propagatedNativeBuildInputs = [ setupDebugInfoDirs ];
