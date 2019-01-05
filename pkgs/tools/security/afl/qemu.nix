@@ -36,12 +36,14 @@ stdenv.mkDerivation rec {
       --replace "../patches/afl-qemu-cpu-inl.h" "afl-qemu-cpu-inl.h"
   '';
 
-  buildInputs =
-    [ python2 zlib pkgconfig glib pixman ncurses perl attr libcap
-      vde2 texinfo libuuid flex bison lzo snappy autoconf
-      libcap_ng gnutls
-    ]
-    ++ optionals (hasSuffix "linux" stdenv.hostPlatform.system) [ libaio ];
+  nativeBuildInputs = [
+    python2 perl pkgconfig flex bison autoconf texinfo
+  ];
+
+  buildInputs = [
+    zlib glib pixman ncurses attr libcap
+    vde2 libuuid lzo snappy libcap_ng gnutls
+  ] ++ optionals (stdenv.isLinux) [ libaio ];
 
   enableParallelBuilding = true;
 
