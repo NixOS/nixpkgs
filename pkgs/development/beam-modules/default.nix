@@ -69,11 +69,6 @@ let
           debugInfo = true;
         };
 
-        elixir_1_3 = lib.callElixir ../interpreters/elixir/1.3.nix {
-          inherit rebar erlang;
-          debugInfo = true;
-        };
-
         lfe = lfe_1_2;
         lfe_1_2 = lib.callLFE ../interpreters/lfe/1.2.nix { inherit erlang buildRebar3 buildHex; };
 
