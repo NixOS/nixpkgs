@@ -7,7 +7,7 @@
   # Main build tools
   python2, pkgconfig, autoconf, automake, cmake, nasm, libtool, m4,
   # Processing, video codecs, containers
-  ffmpeg-full, libogg, x264, x265, libvpx, libtheora,
+  ffmpeg-full, nv-codec-headers, libogg, x264, x265, libvpx, libtheora,
   # Codecs, audio
   libopus, lame, libvorbis, a52dec, speex, libsamplerate,
   # Text processing
@@ -27,12 +27,6 @@
                  hicolor-icon-theme ? null,
   useFdk ? false, fdk_aac ? null
 }:
-
-let
-
-  nv-codec-headers = callPackage ../../../development/libraries/ffmpeg-full/nv-codec-headers.nix { };
-
-in
 
 stdenv.mkDerivation rec {
   version = "1.2.0";
