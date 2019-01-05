@@ -99,6 +99,9 @@ ${optionalString (versionAtLeast version "4.14") ''
   SLAB_FREELIST_HARDENED y
 ''}
 
+# Allow enabling slub/slab free poisoning with slub_debug=P
+SLUB_DEBUG y
+
 # Wipe higher-level memory allocations on free() with page_poison=1
 PAGE_POISONING y
 PAGE_POISONING_NO_SANITY y
