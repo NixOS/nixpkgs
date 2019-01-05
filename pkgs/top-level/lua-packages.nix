@@ -380,18 +380,18 @@ let
 
   luadbi = buildLuaPackage rec {
     name = "luadbi-${version}";
-    version = "0.6";
+    version = "0.7.1";
 
     src = fetchFromGitHub {
       owner = "mwild1";
       repo = "luadbi";
       rev = "v${version}";
-      sha256 = "1cpl84pl75wqd9zph3w4srd5lxij359p8xmmf7xpdbxz67695vah";
+      sha256 = "01i8018zb7w2bhaqglm7cnvbiirgd95b9d07irgz3sci91p08cwp";
     };
 
     MYSQL_INC="-I${mysql.connector-c}/include/mysql";
 
-    buildInputs = [ mysql postgresql sqlite ];
+    buildInputs = [ mysql.client mysql.connector-c postgresql sqlite ];
 
     preConfigure = stdenv.lib.optionalString stdenv.isDarwin ''
       substituteInPlace Makefile \

@@ -41,40 +41,6 @@ self: super: {
   unix = null;
   xhtml = null;
 
-  # LTS-12.x versions do not compile.
-  # base-orphans = self.base-orphans_0_8;
-  # brick = self.brick_0_45;
-  # cassava-megaparsec = doJailbreak super.cassava-megaparsec;
-  # config-ini = doJailbreak super.config-ini;   # https://github.com/aisamanra/config-ini/issues/18
-  # contravariant = self.contravariant_1_5;
-  # fgl = self.fgl_5_7_0_1;
-  # free = self.free_5_1;
-  # haddock-library = dontCheck super.haddock-library_1_7_0;
-  # HaTeX = doJailbreak super.HaTeX;
-  # hpack = self.hpack_0_31_1;
-  # hslua = self.hslua_1_0_1;
-  # hslua-module-text = self.hslua-module-text_0_2_0;
-  # hspec = self.hspec_2_6_0;
-  # hspec-contrib = self.hspec-contrib_0_5_1;
-  # hspec-core = self.hspec-core_2_6_0;
-  # hspec-discover = self.hspec-discover_2_6_0;
-  # hspec-megaparsec = doJailbreak super.hspec-megaparsec;  # newer versions need megaparsec 7.x
-  # hspec-meta = self.hspec-meta_2_6_0;
-  # JuicyPixels = self.JuicyPixels_3_3_3;
-  # lens = self.lens_4_17;
-  # megaparsec = dontCheck (doJailbreak super.megaparsec);
-  # pandoc = self.pandoc_2_5;
-  # pandoc-citeproc = self.pandoc-citeproc_0_15;
-  # pandoc-citeproc_0_15 = doJailbreak super.pandoc-citeproc_0_15;
-  # patience = markBrokenVersion "0.1.1" super.patience;
-  # polyparse = self.polyparse_1_12_1;
-  # semigroupoids = self.semigroupoids_5_3_1;
-  # tagged = self.tagged_0_8_6;
-  # vty = self.vty_5_25_1;
-  # wizards = doJailbreak super.wizards;
-  # wl-pprint-extras = doJailbreak super.wl-pprint-extras;
-  # yaml = self.yaml_0_11_0_0;
-
   # https://github.com/tibbe/unordered-containers/issues/214
   unordered-containers = dontCheck super.unordered-containers;
 
@@ -87,13 +53,16 @@ self: super: {
   psqueues = dontCheck super.psqueues;    # won't cope with QuickCheck 2.12.x
   system-fileio = dontCheck super.system-fileio;  # avoid dependency on broken "patience"
   unicode-transforms = dontCheck super.unicode-transforms;
-  RSA = dontCheck super.RSA; # https://github.com/GaloisInc/RSA/issues/14 
+  RSA = dontCheck super.RSA; # https://github.com/GaloisInc/RSA/issues/14
   monad-par = dontCheck super.monad-par;  # https://github.com/simonmar/monad-par/issues/66
 
   # https://github.com/jgm/skylighting/issues/55
   skylighting-core = dontCheck super.skylighting-core;
 
-  # Break out of "yaml >=0.10.4.0 && <0.11".
+  # Break out of "yaml >=0.10.4.0 && <0.11": https://github.com/commercialhaskell/stack/issues/4485
   stack = doJailbreak super.stack;
+
+  # Break out of "tasty >= 0.11 && < 1.2": https://github.com/jgm/pandoc/issues/5200
+  pandoc = doJailbreak super.pandoc;
 
 }

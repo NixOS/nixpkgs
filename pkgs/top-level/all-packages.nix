@@ -526,6 +526,8 @@ in
     inherit (darwin.apple_sdk.frameworks) AppKit CoreFoundation CoreGraphics CoreServices CoreText Foundation OpenGL;
   };
 
+  amazon-ecs-cli = callPackage ../tools/virtualization/amazon-ecs-cli { };
+
   amazon-glacier-cmd-interface = callPackage ../tools/backup/amazon-glacier-cmd-interface { };
 
   ammonite = callPackage ../development/tools/ammonite {};
@@ -5859,6 +5861,8 @@ in
 
   trousers = callPackage ../tools/security/trousers { };
 
+  trx = callPackage ../tools/audio/trx { };
+
   tryton = callPackage ../applications/office/tryton { };
 
   trytond = callPackage ../applications/office/trytond { };
@@ -7319,6 +7323,8 @@ in
   } // stdenv.lib.optionalAttrs (stdenv.cc.isGNU && stdenv.hostPlatform.isi686) {
     stdenv = overrideCC stdenv buildPackages.gcc6; # with gcc-7: undefined reference to `__divmoddi4'
   });
+
+  llvmPackages_latest = llvmPackages_7;
 
   manticore = callPackage ../development/compilers/manticore { };
 
@@ -12470,6 +12476,7 @@ in
 
   sfml = callPackage ../development/libraries/sfml {
     inherit (darwin.apple_sdk.frameworks) IOKit Foundation AppKit OpenAL;
+    inherit (darwin) cf-private;
   };
   csfml = callPackage ../development/libraries/csfml { };
 
@@ -15621,11 +15628,13 @@ in
 
   mobile-broadband-provider-info = callPackage ../data/misc/mobile-broadband-provider-info { };
 
+  mojave-gtk-theme = callPackage ../data/themes/mojave { };
+
+  moka-icon-theme = callPackage ../data/icons/moka-icon-theme { };
+
   monoid = callPackage ../data/fonts/monoid { };
 
   mononoki = callPackage ../data/fonts/mononoki { };
-
-  moka-icon-theme = callPackage ../data/icons/moka-icon-theme { };
 
   montserrat = callPackage ../data/fonts/montserrat { };
 
@@ -16954,7 +16963,7 @@ in
 
   fritzing = libsForQt5.callPackage ../applications/science/electronics/fritzing { };
 
-  fsv = callPackages ../applications/misc/fsv { };
+  fsv = callPackage ../applications/misc/fsv { };
 
   fvwm = callPackage ../applications/window-managers/fvwm { };
 
@@ -17776,9 +17785,9 @@ in
 
   inherit (kdeApplications)
     akonadi akregator ark dolphin dragon ffmpegthumbs filelight gwenview k3b
-    kaddressbook kate kcachegrind kcalc kcolorchooser kcontacts kdenlive kdf kdialog keditbookmarks
-    kget kgpg khelpcenter kig kleopatra kmail kmix kolourpaint kompare konsole kpkpass kitinerary
-    kontact korganizer krdc krfb ksystemlog kwalletmanager marble minuet okular spectacle;
+    kaddressbook kate kcachegrind kcalc kcharselect kcolorchooser kcontacts kdenlive kdf kdialog
+    keditbookmarks kget kgpg khelpcenter kig kleopatra kmail kmix kolourpaint kompare konsole
+    kpkpass kitinerary kontact korganizer krdc krfb ksystemlog kwalletmanager marble minuet okular spectacle;
 
   okteta = libsForQt5.callPackage ../applications/editors/okteta { };
 
@@ -20185,7 +20194,7 @@ in
 
   xpointerbarrier = callPackage ../tools/X11/xpointerbarrier {};
 
-  xkb_switch = callPackage ../tools/X11/xkb-switch { };
+  xkb-switch = callPackage ../tools/X11/xkb-switch { };
 
   xkblayout-state = callPackage ../applications/misc/xkblayout-state { };
 
@@ -22893,6 +22902,8 @@ in
   wcalc = callPackage ../applications/misc/wcalc { };
 
   webfs = callPackage ../servers/http/webfs { };
+
+  websocketd = callPackage ../applications/networking/websocketd { };
 
   wikicurses = callPackage ../applications/misc/wikicurses {
     pythonPackages = python3Packages;

@@ -55,7 +55,7 @@ in
   config = mkIf cfg.enable {
 
     powerManagement.scsiLinkPolicy = null;
-    powerManagement.cpufreq.governor = null;
+    powerManagement.cpuFreqGovernor = null;
     powerManagement.cpufreq.max = null;
     powerManagement.cpufreq.min = null;
 

@@ -191,7 +191,9 @@ let
       '') names}
 
       ${concatMapStrings (pkg: ''
-        ${xorg.lndir}/bin/lndir ${pkg}/share/xsessions $out/share/xsessions
+        if test -d ${pkg}/share/xsessions; then
+          ${xorg.lndir}/bin/lndir ${pkg}/share/xsessions $out/share/xsessions
+        fi
       '') cfg.displayManager.extraSessionFilePackages}
 
       

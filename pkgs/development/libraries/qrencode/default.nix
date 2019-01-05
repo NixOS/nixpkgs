@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, SDL2, libpng }:
+{ stdenv, fetchurl, pkgconfig, SDL2, libpng, libiconv }:
 
 stdenv.mkDerivation rec {
   pname = "qrencode";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ SDL2 libpng ];
+  buildInputs = [ SDL2 libpng ] ++ stdenv.lib.optionals stdenv.isDarwin [ libiconv ];
 
   configureFlags = [
     "--with-tests"
