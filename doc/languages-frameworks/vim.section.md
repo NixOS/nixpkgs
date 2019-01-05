@@ -46,6 +46,21 @@ neovim.override {
 }
 ```
 
+If you want to use `neovim-qt` as a graphical editor, you can configure it by overriding neovim in an overlay
+or passing it an overridden neovimn:
+
+```
+neovim-qt.override {
+  neovim = neovim.override {
+    configure = {
+      customRC = ''
+        # your custom configuration
+      '';
+    };
+  };
+}
+```
+
 ## Managing plugins with Vim packages
 
 To store you plugins in Vim packages (the native vim plugin manager, see `:help packages`) the following example can be used:
