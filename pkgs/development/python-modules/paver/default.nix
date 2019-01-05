@@ -8,12 +8,12 @@
 }:
 
 buildPythonPackage rec {
-  version = "1.2.2";
+  version = "1.3.4";
   pname   = "Paver";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0lix9d33ndb3yk56sm1zlj80fbmxp0w60yk0d9pr2xqxiwi88sqy";
+    sha256 = "d3e6498881485ab750efe40c5278982a9343bc627e137b11adced627719308c7";
   };
 
   buildInputs = [ cogapp mock virtualenv ];

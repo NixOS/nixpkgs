@@ -13,7 +13,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Library for rasterizing 2-D vector graphics";
-    homepage = http://www.gnu.org/software/libxmi/;
+    homepage = https://www.gnu.org/software/libxmi/;
     license = stdenv.lib.licenses.gpl2Plus;
     platforms = stdenv.lib.platforms.gnu ++ stdenv.lib.platforms.linux;  # arbitrary choice
     maintainers = [ ];

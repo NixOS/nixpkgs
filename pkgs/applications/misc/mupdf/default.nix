@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, pkgconfig, freetype, harfbuzz, openjpeg
+{ stdenv, lib, fetchurl, fetchpatch, pkgconfig, freetype, harfbuzz, openjpeg
 , jbig2dec, libjpeg , darwin
 , enableX11 ? true, libX11, libXext, libXi, libXrandr
 , enableCurl ? true, curl, openssl
@@ -24,7 +24,14 @@ in stdenv.mkDerivation rec {
 
   patches =
     # Use shared libraries to decrease size
-       stdenv.lib.optional (!stdenv.isDarwin) ./mupdf-1.14-shared_libs.patch
+    [( fetchpatch
+      {
+          name = "CVE-2018-18662";
+          url = "http://git.ghostscript.com/?p=mupdf.git;a=patch;h=164ddc22ee0d5b63a81d5148f44c37dd132a9356";
+          sha256 = "1jkzh20n3b854871h86cy5y7fvy0d5wyqy51b3fg6gj3a0jqpzzd";
+      }
+    )]
+    ++ stdenv.lib.optional (!stdenv.isDarwin) ./mupdf-1.14-shared_libs.patch
     ++ stdenv.lib.optional stdenv.isDarwin ./darwin.patch
   ;
 

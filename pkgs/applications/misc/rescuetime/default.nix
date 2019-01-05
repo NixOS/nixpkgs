@@ -1,19 +1,19 @@
-{ stdenv, lib, fetchurl, dpkg, patchelf, qt4, libXtst, libXext, libX11, makeWrapper, libXScrnSaver }:
+{ stdenv, lib, fetchurl, dpkg, patchelf, qt5, libXtst, libXext, libX11, makeWrapper, libXScrnSaver }:
 
 let
   src =
     if stdenv.hostPlatform.system == "i686-linux" then fetchurl {
       name = "rescuetime-installer.deb";
       url = "https://www.rescuetime.com/installers/rescuetime_current_i386.deb";
-      sha256 = "06q1jwqsrjvlj820dd4vl80jznwafsqshsg0p6si8qx4721blryz";
+      sha256 = "136ci4q0ns0qzikndlkbab947m47zv2nmnn8mda2374ip43kn6ri";
     } else fetchurl {
       name = "rescuetime-installer.deb";
       url = "https://www.rescuetime.com/installers/rescuetime_current_amd64.deb";
-      sha256 = "0b56iglg8g45biddwsdn1hmx9gsz4kxr64civwyy7f69f022ppab";
+      sha256 = "1cw10lr7hrsr9xvq3wv1wkyk7jqsgfnnlkq4km9kxr39f51hv6na";
     };
 in stdenv.mkDerivation {
   # https://www.rescuetime.com/updates/linux_release_notes.html
-  name = "rescuetime-2.10.0.1322";
+  name = "rescuetime-2.14.2.1";
   inherit src;
   buildInputs = [ dpkg makeWrapper ];
   # avoid https://github.com/NixOS/patchelf/issues/99
@@ -29,7 +29,7 @@ in stdenv.mkDerivation {
 
     ${patchelf}/bin/patchelf \
       --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-      --set-rpath "${lib.makeLibraryPath [ qt4 libXtst libXext libX11 libXScrnSaver ]}" \
+      --set-rpath "${lib.makeLibraryPath [ qt5.qtbase libXtst libXext libX11 libXScrnSaver ]}" \
       $out/bin/rescuetime
   '';
   meta = with lib; {

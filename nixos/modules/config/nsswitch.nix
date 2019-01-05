@@ -1,6 +1,6 @@
 # Configuration for the Name Service Switch (/etc/nsswitch.conf).
 
-{ config, lib, ... }:
+{ config, lib, pkgs, ... }:
 
 with lib;
 
@@ -15,6 +15,7 @@ let
   ldap = canLoadExternalModules && (config.users.ldap.enable && config.users.ldap.nsswitch);
   sssd = canLoadExternalModules && config.services.sssd.enable;
   resolved = canLoadExternalModules && config.services.resolved.enable;
+  googleOsLogin = canLoadExternalModules && config.security.googleOsLogin.enable;
 
   hostArray = [ "files" ]
     ++ optional mymachines "mymachines"
@@ -29,6 +30,7 @@ let
     ++ optional sssd "sss"
     ++ optional ldap "ldap"
     ++ optional mymachines "mymachines"
+    ++ optional googleOsLogin "cache_oslogin oslogin"
     ++ [ "systemd" ];
 
   shadowArray = [ "files" ]
@@ -97,7 +99,7 @@ in {
     # configured IP addresses, or ::1 and 127.0.0.2 as
     # fallbacks. Systemd also provides nss-mymachines to return IP
     # addresses of local containers.
-    system.nssModules = optionals canLoadExternalModules [ config.systemd.package.out ];
-
+    system.nssModules = (optionals canLoadExternalModules [ config.systemd.package.out ])
+      ++ optional googleOsLogin pkgs.google-compute-engine-oslogin.out;
   };
 }

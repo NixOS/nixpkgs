@@ -1,7 +1,7 @@
 { stdenv, fetchurl, vala, atk, cairo, glib, gnome3, gtk3, libwnck3
 , libX11, libXfixes, libXi, pango, intltool, pkgconfig, libxml2
 , bamf, gdk_pixbuf, libdbusmenu-gtk3, file
-, wrapGAppsHook, autoreconfHook, gobjectIntrospection }:
+, wrapGAppsHook, autoreconfHook, gobject-introspection }:
 
 stdenv.mkDerivation rec {
   pname = "plank";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     intltool
     libxml2 # xmllint
     wrapGAppsHook
-    gobjectIntrospection
+    gobject-introspection
     autoreconfHook
   ];
 
@@ -32,6 +32,9 @@ stdenv.mkDerivation rec {
     "INTROSPECTION_GIRDIR=$(out)/share/gir-1.0/"
     "INTROSPECTION_TYPELIBDIR=$(out)/lib/girepository-1.0"
   ];
+
+  # Make plank's application launcher hidden in Pantheon
+  patches = [ ./hide-in-pantheon.patch ];
 
   postPatch = ''
     substituteInPlace ./configure \

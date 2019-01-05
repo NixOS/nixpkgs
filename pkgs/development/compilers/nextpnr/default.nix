@@ -7,13 +7,13 @@ let
 in
 stdenv.mkDerivation rec {
   name = "nextpnr-${version}";
-  version = "2018.10.17";
+  version = "2018.12.29";
 
   src = fetchFromGitHub {
     owner  = "yosyshq";
     repo   = "nextpnr";
-    rev    = "529a595157a2eef24f8529b0de0c504a40ed503b";
-    sha256 = "06yp89rpvb2s4zc1qkbcp76kqwkk9s8j2ckblqw547dy5ah2cl7h";
+    rev    = "eb456ef476e8342b4709d71cbff6ef22a714d6ec";
+    sha256 = "1gw9r8c6wyfhbzhm3hz1xpbq8ax27qnjwlrimzcykrr9r1cykiik";
   };
 
   nativeBuildInputs = [ cmake ];

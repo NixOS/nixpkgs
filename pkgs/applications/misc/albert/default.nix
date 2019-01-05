@@ -1,24 +1,22 @@
 { mkDerivation, lib, fetchFromGitHub, makeWrapper, qtbase,
-  qtdeclarative, qtsvg, qtx11extras, muparser, cmake, python3 }:
+  qtdeclarative, qtsvg, qtx11extras, muparser, cmake, python3,
+  qtcharts }:
 
-let
-  pname = "albert";
-  version = "0.14.22";
-in
 mkDerivation rec {
-  name = "${pname}-${version}";
+  pname = "albert";
+  version = "0.15.0";
 
   src = fetchFromGitHub {
     owner  = "albertlauncher";
     repo   = "albert";
     rev    = "v${version}";
-    sha256 = "0i9kss5szirmd0pzw3cm692kl9rhkan1zfywfqrjdf3i3b6914sg";
+    sha256 = "063z9yq6bsxcsqsw1n93ks5dzhzv6i252mjz1d5mxhxvgmqlfk0v";
     fetchSubmodules = true;
   };
 
   nativeBuildInputs = [ cmake makeWrapper ];
 
-  buildInputs = [ qtbase qtdeclarative qtsvg qtx11extras muparser python3 ];
+  buildInputs = [ qtbase qtdeclarative qtsvg qtx11extras muparser python3 qtcharts ];
 
   enableParallelBuilding = true;
 

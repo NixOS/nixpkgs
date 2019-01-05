@@ -13,13 +13,13 @@ let
         sha512 = "nne9/IiQ/hzIhY6pdDnbBtz7DjPTKrY00P/zvPSm5pOFkl6xuGrGnXn/VtTNNfNtAfZ9/1RtehkszU9qcTii0Q==";
       };
     };
-    "ajv-6.5.5" = {
+    "ajv-6.6.1" = {
       name = "ajv";
       packageName = "ajv";
-      version = "6.5.5";
+      version = "6.6.1";
       src = fetchurl {
-        url = "https://registry.npmjs.org/ajv/-/ajv-6.5.5.tgz";
-        sha512 = "7q7gtRQDJSyuEHjuVgHoUa2VuemFiCMrfQc9Tc08XTAc4Zj/5U1buQJ0HU6i7fKjXU09SVgSmxa4sLvuvS8Iyg==";
+        url = "https://registry.npmjs.org/ajv/-/ajv-6.6.1.tgz";
+        sha512 = "ZoJjft5B+EJBjUyu9C9Hc0OZyPZSSlOF+plzouTrg6UlA8f+e/n8NIgBFG/9tppJtpPWfthHakK7juJdNDODww==";
       };
     };
     "ansi-regex-2.1.1" = {
@@ -1228,13 +1228,13 @@ let
         sha512 = "Gi1W4k059gyRbyVUZQ4mEqLm0YIUiGYfvxhF6SIlk3ui1WVxMTGfGdQ2SInh3PDrRTVvPKgULkpJtT4RH10+VA==";
       };
     };
-    "minizlib-1.1.1" = {
+    "minizlib-1.2.1" = {
       name = "minizlib";
       packageName = "minizlib";
-      version = "1.1.1";
+      version = "1.2.1";
       src = fetchurl {
-        url = "https://registry.npmjs.org/minizlib/-/minizlib-1.1.1.tgz";
-        sha512 = "TrfjCjk4jLhcJyGMYymBH6oTXcWjYbUAXTHDbtnWHjZC25h0cdajHuPE1zxb4DVmu8crfh+HwH/WMuyLG0nHBg==";
+        url = "https://registry.npmjs.org/minizlib/-/minizlib-1.2.1.tgz";
+        sha512 = "7+4oTUOWKg7AuL3vloEWekXY2/D20cevzsrNT2kGWm+39J9hGTCBv8VI5Pm5lXZ/o3/mdR4f8rflAPhnQb8mPA==";
       };
     };
     "mixin-deep-1.3.1" = {
@@ -1854,7 +1854,7 @@ let
       packageName = "string_decoder";
       version = "1.1.1";
       src = fetchurl {
-        url = "https://registry.npmjs.org/string_decoder/-/string_decoder-1.1.1.tgz";
+        url = "http://registry.npmjs.org/string_decoder/-/string_decoder-1.1.1.tgz";
         sha512 = "n/ShnvDi6FHbbVfviro+WojiFzv+s8MPMHBczVePfUpDJLwoLT0ht1l4YwBCbi8pJAveEEdnkHyPyTP/mzRfwg==";
       };
     };
@@ -2065,13 +2065,13 @@ let
         sha1 = "b5243d8f3ec1aa35f1364605bc0d1036e30ab69f";
       };
     };
-    "yallist-3.0.2" = {
+    "yallist-3.0.3" = {
       name = "yallist";
       packageName = "yallist";
-      version = "3.0.2";
+      version = "3.0.3";
       src = fetchurl {
-        url = "https://registry.npmjs.org/yallist/-/yallist-3.0.2.tgz";
-        sha1 = "8452b4bb7e83c7c188d8041c1a837c773d6d8bb9";
+        url = "https://registry.npmjs.org/yallist/-/yallist-3.0.3.tgz";
+        sha512 = "S+Zk8DEWE6oKpV+vI3qWkaK+jSbIK86pCwe2IF/xwIpQ8jEuxpw9NyaGjmp9+BoJv5FV2piqCDcoCtStppiq2A==";
       };
     };
   };
@@ -2082,7 +2082,7 @@ in
     packageName = "bower";
     version = "1.8.4";
     src = fetchurl {
-      url = "https://registry.npmjs.org/bower/-/bower-1.8.4.tgz";
+      url = "http://registry.npmjs.org/bower/-/bower-1.8.4.tgz";
       sha1 = "e7876a076deb8137f7d06525dc5e8c66db82f28a";
     };
     buildInputs = globalBuildInputs;
@@ -2391,7 +2391,7 @@ in
     };
     dependencies = [
       sources."abbrev-1.1.1"
-      sources."ajv-6.5.5"
+      sources."ajv-6.6.1"
       sources."ansi-regex-2.1.1"
       sources."aproba-1.2.0"
       sources."are-we-there-yet-1.1.5"
@@ -2502,10 +2502,10 @@ in
   node-gyp-build = nodeEnv.buildNodePackage {
     name = "node-gyp-build";
     packageName = "node-gyp-build";
-    version = "3.5.0";
+    version = "3.5.1";
     src = fetchurl {
-      url = "https://registry.npmjs.org/node-gyp-build/-/node-gyp-build-3.5.0.tgz";
-      sha512 = "qjEE8eIWVyqZhkAFUzytGpOGvLHeX5kXBB6MYyTOCPZBrBlsLyXAAzTsp/hWMbVlg8kVpzDJCZZowIrnKpwmqQ==";
+      url = "https://registry.npmjs.org/node-gyp-build/-/node-gyp-build-3.5.1.tgz";
+      sha512 = "AKJ4SyHiYvqwy5P9GaAnxi5IG3HSEPHV/1YDMlBA0vEEmi7qxeeSfKlCAau3XFvAPFR9EV6gvD9p2b0s8ghyww==";
     };
     buildInputs = globalBuildInputs;
     meta = {
@@ -2555,7 +2555,7 @@ in
       sources."minimatch-3.0.4"
       sources."minimist-0.0.8"
       sources."minipass-2.3.5"
-      sources."minizlib-1.1.1"
+      sources."minizlib-1.2.1"
       sources."mkdirp-0.5.1"
       sources."ms-2.0.0"
       sources."needle-2.2.4"
@@ -2592,7 +2592,7 @@ in
       sources."util-deprecate-1.0.2"
       sources."wide-align-1.1.3"
       sources."wrappy-1.0.2"
-      sources."yallist-3.0.2"
+      sources."yallist-3.0.3"
     ];
     buildInputs = globalBuildInputs;
     meta = {
@@ -2606,10 +2606,10 @@ in
   pnpm = nodeEnv.buildNodePackage {
     name = "pnpm";
     packageName = "pnpm";
-    version = "2.18.2";
+    version = "2.21.1";
     src = fetchurl {
-      url = "https://registry.npmjs.org/pnpm/-/pnpm-2.18.2.tgz";
-      sha512 = "yJu5pCPFmzxD9xQtWay4nI7JdcrpIIom/VwwMmUvU6itN0wAbbyIaGKz57JCu1E+ZfbOvcaOzEmifbypHfFNXw==";
+      url = "https://registry.npmjs.org/pnpm/-/pnpm-2.21.1.tgz";
+      sha512 = "0UEIdUM8VqRHolaBPREYhTEuu/Zfi4qp3Kp0u6ioCtn7Yi33sGFdApEczb/SenmaqtnWD7OUIO74v8Aw9wnYeg==";
     };
     buildInputs = globalBuildInputs;
     meta = {

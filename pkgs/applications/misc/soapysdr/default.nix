@@ -19,7 +19,7 @@ in stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ cmake pkgconfig ];
-  buildInputs = [ libusb ncurses numpy swig2 python ];
+  buildInputs = [ libusb ncurses numpy swig2 python makeWrapper ];
 
   cmakeFlags = [
     "-DCMAKE_BUILD_TYPE=Release"
@@ -33,8 +33,8 @@ in stdenv.mkDerivation {
     done
 
     # Needed for at least the remote plugin server
-    for file in out/bin/*; do
-        ${makeWrapper}/bin/wrapProgram "$file" \
+    for file in $out/bin/*; do
+        wrapProgram "$file" \
             --prefix SOAPY_SDR_PLUGIN_PATH : ${lib.makeSearchPath "lib/SoapySDR/modules0.6" extraPackages}
     done
   '';

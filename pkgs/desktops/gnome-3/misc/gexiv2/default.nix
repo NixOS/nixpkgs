@@ -1,22 +1,22 @@
-{ stdenv, fetchurl, meson, ninja, pkgconfig, exiv2, glib, gnome3, gobjectIntrospection, vala }:
+{ stdenv, fetchurl, meson, ninja, pkgconfig, exiv2, glib, gnome3, gobject-introspection, vala }:
 
 let
   pname = "gexiv2";
-  version = "0.10.8";
+  version = "0.10.9";
 in
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "0088m7p044n741ly1m6i7w25z513h9wpgyw0rmx5f0sy3vyjiic1";
+    sha256 = "1vf0zv92p9hybdhn7zx53h3ia53ph97a21xz8rfk877xlr5261l8";
   };
 
   preConfigure = ''
     patchShebangs .
   '';
 
-  nativeBuildInputs = [ meson ninja pkgconfig gobjectIntrospection vala ];
+  nativeBuildInputs = [ meson ninja pkgconfig gobject-introspection vala ];
   buildInputs = [ glib ];
   propagatedBuildInputs = [ exiv2 ];
 

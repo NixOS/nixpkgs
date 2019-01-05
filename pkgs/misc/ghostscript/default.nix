@@ -9,8 +9,8 @@ assert x11Support -> xlibsWrapper != null;
 assert cupsSupport -> cups != null;
 let
   version = "9.${ver_min}";
-  ver_min = "25";
-  sha512 = "18pcqzva7pq2a9mmqf9pq8x4winb6qmzni49vq2qx50k60rwyv1kdmixik3ym2bpj5p1j8g0vb47w7w2cf4lba5q583ylpd8rshn73s";
+  ver_min = "26";
+  sha512 = "0z2mvsh06qgnxl7p9isw7swg8jp8xcx3rnbqk727avw7ammvfh8785d2bn5i4fhz8y45ka3cpgp7b598m06yq5zawijhcnzkq187nrx";
 
   fonts = stdenv.mkDerivation {
     name = "ghostscript-fonts";

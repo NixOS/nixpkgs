@@ -29,7 +29,7 @@ rustPlatform.buildRustPackage rec {
   patches = [
     (substituteAll {
       src = ./paths.patch;
-      adb = "${androidenv.platformTools}/bin/adb";
+      adb = "${androidenv.androidPkgs_9_0.platform-tools}/bin/adb";
       inherit apk;
     })
   ];

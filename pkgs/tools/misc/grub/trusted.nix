@@ -21,7 +21,7 @@ let
 
   po_src = fetchurl {
     name = "grub-2.02-beta2.tar.gz";
-    url = "http://alpha.gnu.org/gnu/grub/grub-2.02~beta2.tar.gz";
+    url = "https://alpha.gnu.org/gnu/grub/grub-2.02~beta2.tar.gz";
     sha256 = "1lr9h3xcx0wwrnkxdnkfjwy08j7g7mdlmmbdip2db4zfgi69h0rm";
 
   };

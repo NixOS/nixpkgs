@@ -2,20 +2,21 @@
 , buildPythonPackage
 , fetchurl
 , isPyPy
-, pkgs
+, liblo
+, cython
 }:
 
 buildPythonPackage rec {
   pname = "pyliblo";
-  version = "0.9.2";
+  version = "0.10.0";
   disabled = isPyPy;
 
   src = fetchurl {
     url = "http://das.nasophon.de/download/${pname}-${version}.tar.gz";
-    sha256 = "382ee7360aa00aeebf1b955eef65f8491366657a626254574c647521b36e0eb0";
+    sha256 = "13vry6xhxm7adnbyj28w1kpwrh0kf7nw83cz1yq74wl21faz2rzw";
   };
 
-  propagatedBuildInputs = [ pkgs.liblo ];
+  buildInputs = [ liblo cython ];
 
   meta = with stdenv.lib; {
     homepage = http://das.nasophon.de/pyliblo/;

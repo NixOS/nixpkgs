@@ -94,6 +94,8 @@ let
 
   git-remote-hg = callPackage ./git-remote-hg { };
 
+  git-reparent = callPackage ./git-reparent { };
+
   git-secret = callPackage ./git-secret { };
 
   git-secrets = callPackage ./git-secrets { };
@@ -101,6 +103,8 @@ let
   git-stree = callPackage ./git-stree { };
 
   git-sync = callPackage ./git-sync { };
+
+  git-test = callPackage ./git-test { };
 
   git2cl = callPackage ./git2cl { };
 
@@ -117,6 +121,8 @@ let
   };
 
   hubUnstable = throw "use gitAndTools.hub instead";
+
+  lab = callPackage ./lab { };
 
   pre-commit = callPackage ./pre-commit { };
 

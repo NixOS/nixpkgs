@@ -1,4 +1,8 @@
-{ buildDunePackage, cstruct, ppx_tools_versioned }:
+{ lib, buildDunePackage, cstruct, ppx_tools_versioned }:
+
+if !lib.versionAtLeast (cstruct.version or "1") "3"
+then cstruct
+else
 
 buildDunePackage {
 	pname = "ppx_cstruct";

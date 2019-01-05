@@ -70,5 +70,11 @@ import ./make-test.nix ({ pkgs, ...} : {
         $machine->fail("su -l nobody -s /bin/sh -c 'nix ping-store'");
         $machine->succeed("su -l alice -c 'nix ping-store'") =~ "OK";
       };
+
+      # Test kernel image protection
+      subtest "kernelimage", sub {
+        $machine->fail("systemctl hibernate");
+        $machine->fail("systemctl kexec");
+      };
     '';
 })

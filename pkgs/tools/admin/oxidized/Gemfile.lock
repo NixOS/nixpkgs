@@ -2,43 +2,51 @@ GEM
   remote: https://rubygems.org/
   specs:
     asetus (0.3.0)
-    backports (3.11.2)
+    backports (3.11.4)
+    charlock_holmes (0.7.6)
     emk-sinatra-url-for (0.2.1)
       sinatra (>= 0.9.1.1)
-    ffi (1.9.23)
-    haml (4.0.7)
+    ffi (1.9.25)
+    haml (5.0.4)
+      temple (>= 0.8.0)
       tilt
     htmlentities (4.3.4)
+    json (2.1.0)
     multi_json (1.13.1)
     net-ssh (4.1.0)
-    oxidized (0.21.0)
+    net-telnet (0.1.1)
+    oxidized (0.25.0)
       asetus (~> 0.1)
       net-ssh (~> 4.1.0)
+      net-telnet (~> 0.1.1)
       rugged (~> 0.21, >= 0.21.4)
       slop (~> 3.5)
-    oxidized-script (0.5.0)
-      oxidized (~> 0.21.0)
+    oxidized-script (0.6.0)
+      oxidized (~> 0.25)
       slop (~> 3.5)
-    oxidized-web (0.9.3)
+    oxidized-web (0.12.0)
+      charlock_holmes (~> 0.7.5)
       emk-sinatra-url-for (~> 0.2)
-      haml (~> 4.0)
+      haml (~> 5.0)
       htmlentities (~> 4.3)
-      oxidized (~> 0.21.0)
-      puma (~> 3)
+      json (>= 1.7.0)
+      oxidized (~> 0.25)
+      puma (~> 3.11.4)
+      rack-test (~> 0.7.0)
       sass (~> 3.3)
       sinatra (~> 1.4, >= 1.4.6)
       sinatra-contrib (~> 1.4, >= 1.4.6)
-    puma (3.11.3)
+    puma (3.11.4)
     rack (1.6.11)
     rack-protection (1.5.5)
       rack
-    rack-test (1.0.0)
+    rack-test (0.7.0)
       rack (>= 1.0, < 3)
     rb-fsevent (0.10.3)
-    rb-inotify (0.9.10)
-      ffi (>= 0.5.0, < 2)
-    rugged (0.27.0)
-    sass (3.5.6)
+    rb-inotify (0.10.0)
+      ffi (~> 1.0)
+    rugged (0.27.7)
+    sass (3.7.2)
       sass-listen (~> 4.0.0)
     sass-listen (4.0.0)
       rb-fsevent (~> 0.9, >= 0.9.4)
@@ -55,15 +63,16 @@ GEM
       sinatra (~> 1.4.0)
       tilt (>= 1.3, < 3)
     slop (3.6.0)
-    tilt (2.0.8)
+    temple (0.8.0)
+    tilt (2.0.9)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
-  oxidized
-  oxidized-script
-  oxidized-web
+  oxidized (= 0.25.0)
+  oxidized-script (= 0.6.0)
+  oxidized-web (= 0.12.0)
 
 BUNDLED WITH
-   1.16.4
+   1.17.1

@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, autoreconfHook, libzip, boost, wt3, libconfig, pkgconfig } :
 
 stdenv.mkDerivation rec {
-  name = "fileshelter";
+  pname = "fileshelter";
   version = "3.0.0";
 
   src = fetchFromGitHub {

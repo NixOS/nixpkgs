@@ -26,6 +26,8 @@ stdenv.mkDerivation {
       sed -e '/INSTALLED_CONFIGURATION_FILE/d' \
           -e 's|/lib/sendmail|$(TMPDIR)/sendmail|' \
           -i Makefile
+      substituteInPlace Makefile \
+        --replace '$(INSTALL) -s' '$(INSTALL) -s --strip-program $(STRIP)'
     '';
 
   installFlags = "etcdir=$(out)/etc";

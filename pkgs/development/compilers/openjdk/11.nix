@@ -67,8 +67,8 @@ let
         # See https://www.mail-archive.com/openembedded-devel@lists.openembedded.org/msg49006.html
         "--with-extra-cflags=-Wno-error=deprecated-declarations -Wno-error=format-contains-nul -Wno-error=unused-result"
     ''
-    + lib.optionalString (architecture == "amd64") "\"--with-jvm-features=zgc\""
-    + lib.optionalString minimal "\"--enable-headless-only\""
+    + lib.optionalString (architecture == "amd64") " \"--with-jvm-features=zgc\""
+    + lib.optionalString minimal " \"--enable-headless-only\""
     + ");"
     # https://bugzilla.redhat.com/show_bug.cgi?id=1306558
     # https://github.com/JetBrains/jdk8u/commit/eaa5e0711a43d64874111254d74893fa299d5716

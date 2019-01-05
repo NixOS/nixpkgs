@@ -10,19 +10,16 @@
 assert zlibSupport -> zlib != null;
 
 let
-  majorVersion = "6.0";
-  minorVersion = "0";
-  minorVersionSuffix = "";
+  version = "6.0.0";
   pythonVersion = "2.7";
-  version = "${majorVersion}.${minorVersion}${minorVersionSuffix}";
-  libPrefix = "pypy${majorVersion}";
+  libPrefix = "pypy${pythonVersion}";
   sitePackages = "site-packages";
 
   pythonForPypy = python.withPackages (ppkgs: [ ppkgs.pycparser ]);
 
 in stdenv.mkDerivation rec {
   name = "pypy-${version}";
-  inherit majorVersion version pythonVersion;
+  inherit version pythonVersion;
 
   src = fetchurl {
     url = "https://bitbucket.org/pypy/pypy/get/release-pypy${pythonVersion}-v${version}.tar.bz2";
@@ -69,12 +66,7 @@ in stdenv.mkDerivation rec {
     ${pythonForPypy.interpreter} rpython/bin/rpython \
       --make-jobs="$NIX_BUILD_CORES" \
       -Ojit \
-      --batch pypy/goal/targetpypystandalone.py \
-      --withmod-_minimal_curses \
-      --withmod-unicodedata \
-      --withmod-thread \
-      --withmod-bz2 \
-      --withmod-_multiprocessing
+      --batch pypy/goal/targetpypystandalone.py
   '';
 
   setupHook = python-setup-hook sitePackages;
@@ -87,9 +79,7 @@ in stdenv.mkDerivation rec {
     # disable shutils because it assumes gid 0 exists
     # disable socket because it has two actual network tests that fail
     # disable test_urllib2net, test_urllib2_localnet, and test_urllibnet because they require networking (example.com)
-    # disable test_ssl because no shared cipher' not found in '[Errno 1] error:14077410:SSL routines:SSL23_GET_SERVER_HELLO:sslv3 alert handshake failure
-    # disable test_zipfile64 because it causes ENOSPACE
-    ./pypy-c ./pypy/test_all.py --pypy=./pypy-c -k 'not ( test_ssl or test_urllib2net or test_urllibnet or test_urllib2_localnet or test_socket or test_shutil or test_zipfile64 )' lib-python
+    ./pypy-c ./pypy/test_all.py --pypy=./pypy-c -k 'not ( test_urllib2net or test_urllibnet or test_urllib2_localnet or test_socket or test_shutil )' lib-python
   '';
 
   installPhase = ''
@@ -126,6 +116,8 @@ in stdenv.mkDerivation rec {
     inherit zlibSupport libPrefix sitePackages;
     executable = "pypy";
     isPypy = true;
+    isPy2 = true;
+    isPy27 = true;
     buildEnv = callPackage ../../wrapper.nix { python = self; inherit (pythonPackages) requiredPythonModules; };
     interpreter = "${self}/bin/${executable}";
     withPackages = import ../../with-packages.nix { inherit buildEnv pythonPackages;};

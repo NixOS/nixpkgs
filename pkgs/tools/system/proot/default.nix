@@ -1,6 +1,5 @@
 { stdenv, fetchFromGitHub, fetchpatch
-, talloc, docutils
-, enableStatic ? true }:
+, talloc, docutils }:
 
 ({ version, rev, sha256, patches }: stdenv.mkDerivation {
   name = "proot-${version}";
@@ -12,16 +11,12 @@
     owner = "cedric-vincent";
   };
 
-  buildInputs = [ talloc ] ++ stdenv.lib.optional enableStatic stdenv.cc.libc.static;
+  buildInputs = [ talloc ];
   nativeBuildInputs = [ docutils ];
 
   enableParallelBuilding = true;
 
   inherit patches;
-
-  preBuild = stdenv.lib.optionalString enableStatic ''
-    export LDFLAGS="-static"
-  '';
 
   makeFlags = [ "-C src" ];
 

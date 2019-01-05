@@ -11,11 +11,11 @@
 
 buildPythonPackage rec {
   pname = "readme";
-  version = "0.6.0";
+  version = "0.7.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "08j2w67nilczn1i5r7h22vag9673i6vnfhyq2rv27r1bdmi5a30m";
+    sha256 = "32fbe1538a437da160fa4e4477270bfdcd8876e2e364d0d12898302644496231";
   };
 
   buildInputs = [ pytest ];

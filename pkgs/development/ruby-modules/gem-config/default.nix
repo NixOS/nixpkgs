@@ -22,14 +22,15 @@
 , pkgconfig , ncurses, xapian_1_2_22, gpgme, utillinux, fetchpatch, tzdata, icu, libffi
 , cmake, libssh2, openssl, mysql, darwin, git, perl, pcre, gecode_3, curl
 , msgpack, qt59, libsodium, snappy, libossp_uuid, lxc, libpcap, xorg, gtk2, buildRubyGem
-, cairo, re2, rake, gobjectIntrospection, gdk_pixbuf, zeromq, graphicsmagick, libcxx, file
+, cairo, re2, rake, gobject-introspection, gdk_pixbuf, zeromq, graphicsmagick, libcxx, file
+, libselinux ? null, libsepol ? null, libvirt
 }@args:
 
 let
   v8 = v8_3_16_14;
 
   rainbow_rake = buildRubyGem {
-    name = "rake";
+    pname = "rake";
     gemName = "rake";
     source.sha256 = "01j8fc9bqjnrsxbppncai05h43315vmz9fwg28qdsgcjw9ck1d7n";
     type = "gem";
@@ -156,7 +157,7 @@ in
 
   gio2 = attrs: {
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ gtk2 pcre gobjectIntrospection ];
+    buildInputs = [ gtk2 pcre gobject-introspection ] ++ lib.optionals stdenv.isLinux [ utillinux libselinux libsepol ];
   };
 
   gitlab-markup = attrs: { meta.priority = 1; };
@@ -167,7 +168,7 @@ in
   };
 
   gtk2 = attrs: {
-    nativeBuildInputs = [ pkgconfig ];
+    nativeBuildInputs = [ pkgconfig ] ++ lib.optionals stdenv.isLinux [ utillinux libselinux libsepol ];
     buildInputs = [ gtk2 pcre xorg.libpthreadstubs xorg.libXdmcp];
     # CFLAGS must be set for this gem to detect gdkkeysyms.h correctly
     CFLAGS = "-I${gtk2.dev}/include/gtk-2.0 -I/non-existent-path";
@@ -175,7 +176,7 @@ in
 
   gobject-introspection = attrs: {
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ gobjectIntrospection gtk2 pcre ];
+    buildInputs = [ gobject-introspection gtk2 pcre ];
   };
 
   grpc = attrs: {
@@ -269,13 +270,6 @@ in
     ] ++ lib.optional stdenv.isDarwin "--with-iconv-dir=${libiconv}";
   };
 
-  oxidized = attrs: {
-    postInstall = ''
-      cd "$(cat "$out/nix-support/gem-meta/install-path")"
-      patch -p1 < ${../../../tools/admin/oxidized/temporary-x-series.patch}
-    '';
-  };
-
   pango = attrs: {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ gtk2 xorg.libXdmcp pcre xorg.libpthreadstubs ];
@@ -318,6 +312,14 @@ in
   rmagick = attrs: {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ imagemagick which ];
+  };
+
+  ruby-libvirt = attrs: {
+    buildInputs = [ libvirt pkgconfig ];
+    buildFlags = [
+      "--with-libvirt-include=${libvirt}/include"
+      "--with-libvirt-lib=${libvirt}/lib"
+    ];
   };
 
   ruby-lxc = attrs: {

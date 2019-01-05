@@ -36,11 +36,11 @@ assert !isPy3k -> configparser != null;
 
 buildPythonPackage rec {
   pname = "nipype";
-  version = "1.1.3";
+  version = "1.1.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c14856f3d4823aa5d63d0c19e8f04d70c74e156361ce607d86694046bab06806";
+    sha256 = "d49bbe531cdbf0a049f1581e4d3c63231ff5978445cb380aa6e7f8f1d256a29c";
   };
 
   # see https://github.com/nipy/nipype/issues/2240

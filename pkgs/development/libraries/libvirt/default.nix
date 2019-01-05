@@ -16,19 +16,19 @@ let
   buildFromTarball = stdenv.isDarwin;
 in stdenv.mkDerivation rec {
   name = "libvirt-${version}";
-  version = "4.7.0";
+  version = "4.10.0";
 
   src =
     if buildFromTarball then
       fetchurl {
         url = "http://libvirt.org/sources/${name}.tar.xz";
-        sha256 = "1r37aw1xxlwjkk4n6k503mw1caldijz8n7x86xdaq90n6bvpkhlj";
+        sha256 = "0v17zzyyb25nn9l18v5244myg7590dp6ppwgi8xysipifc0q77bz";
       }
     else
       fetchgit {
         url = git://libvirt.org/libvirt.git;
         rev = "v${version}";
-        sha256 = "17byylhx0bny4b771hqv92d87a5dg21a5qjv861y50sckgwwi6f1";
+        sha256 = "0dlpv3v6jpbmgvhpn29ryp0w2a1xny8ciqid8hnlf3klahz9kwz9";
         fetchSubmodules = true;
       };
 

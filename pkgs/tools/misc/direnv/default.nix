@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, buildGoPackage, bash}:
+{ stdenv, fetchFromGitHub, buildGoPackage, bash, fetchpatch }:
 
 buildGoPackage rec {
   name = "direnv-${version}";
@@ -16,9 +16,10 @@ buildGoPackage rec {
     cd $NIX_BUILD_TOP/go/src/$goPackagePath
   '';
 
-  buildPhase = ''
-    make BASH_PATH=${bash}/bin/bash
-  '';
+  # we have no bash at the moment for windows
+  makeFlags = stdenv.lib.optional (!stdenv.hostPlatform.isWindows) [
+    "BASH_PATH=${bash}/bin/bash"
+  ];
 
   installPhase = ''
     mkdir -p $out

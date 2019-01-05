@@ -109,7 +109,11 @@ stdenv.mkDerivation (rec {
       name = "D4388.diff";
       sha256 = "0w6sdcvnqjlnlzpvnzw20b80v150ijjyjvs9548ildc1928j0w7s";
     })
-    ++ stdenv.lib.optional stdenv.isDarwin ./backport-dylib-command-size-limit.patch;
+    ++ stdenv.lib.optional stdenv.isDarwin ./backport-dylib-command-size-limit.patch
+    ++ stdenv.lib.optional (targetPlatform.isAarch32 || targetPlatform.isAarch64) (fetchpatch {
+      url = "https://git.haskell.org/ghc.git/patch/d8495549ba9d194815c2d0eaee6797fc7c00756a";
+      sha256 = "1czx12qcl088vjn7mqxvyja4b2ia2n09c28br8c777fd0xk069pm";
+    });
 
   postPatch = "patchShebangs .";
 
@@ -181,6 +185,9 @@ stdenv.mkDerivation (rec {
 
   # Make sure we never relax`$PATH` and hooks support for compatability.
   strictDeps = true;
+
+  # Don’t add -liconv to LDFLAGS automatically so that GHC will add it itself.
+  dontAddExtraLibs = true;
 
   nativeBuildInputs = [
     perl autoconf automake m4 python3 sphinx

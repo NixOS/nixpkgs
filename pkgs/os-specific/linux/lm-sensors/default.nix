@@ -1,27 +1,21 @@
-{ sensord ? false,
-  stdenv, fetchurl, bison, flex, which, perl,
-  rrdtool ? null
+{ stdenv, fetchzip, bison, flex, which, perl
+, sensord ? false, rrdtool ? null
 }:
 
 assert sensord -> rrdtool != null;
 
 stdenv.mkDerivation rec {
   name = "lm-sensors-${version}";
-  version = "3.4.0"; # don't forget to tweak fedoraproject mirror URL hash
+  version = "3.5.0";
 
-  src = fetchurl {
-    urls = [
-      # "http://dl.lm-sensors.org/lm-sensors/releases/lm_sensors-${version}.tar.bz2" # dead
-      # https://github.com/lm-sensors/lm-sensors/releases/... # only generated tarballs
-      "https://src.fedoraproject.org/repo/pkgs/lm_sensors/lm_sensors-${version}.tar.bz2/c03675ae9d43d60322110c679416901a/lm_sensors-${version}.tar.bz2"
-    ];
-    sha256 = "07q6811l4pp0f7pxr8bk3s97ippb84mx5qdg7v92s9hs10b90mz0";
+  src = fetchzip {
+    url = "https://github.com/lm-sensors/lm-sensors/archive/V${stdenv.lib.replaceStrings ["."] ["-"] version}.tar.gz";
+    sha256 = "1mdrnb9r01z1xfdm6dpkywvf9yy9a4yzb59paih9sijwmigv19fj";
   };
 
-  buildInputs = [ bison flex which perl ]
+  nativeBuildInputs = [ bison flex which ];
+  buildInputs = [ perl ]
    ++ stdenv.lib.optional sensord rrdtool;
-
-  patches = [ ./musl-fix-includes.patch ];
 
   preBuild = ''
     makeFlagsArray=(PREFIX=$out ETCDIR=$out/etc
@@ -31,7 +25,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage = https://hwmon.wiki.kernel.org/lm_sensors;
     description = "Tools for reading hardware sensors";
-    license = with licenses; [ gpl2 lgpl21 ];
+    license = with licenses; [ gpl2Plus lgpl21Plus ];
     platforms = platforms.linux;
   };
 }

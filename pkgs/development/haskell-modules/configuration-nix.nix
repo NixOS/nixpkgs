@@ -322,6 +322,9 @@ self: super: builtins.intersectAttrs super {
   # https://github.com/bos/pcap/issues/5
   pcap = addExtraLibrary super.pcap pkgs.libpcap;
 
+  # https://github.com/NixOS/nixpkgs/issues/53336
+  greenclip = addExtraLibrary super.greenclip pkgs.xorg.libXdmcp;
+
   # The cabal files for these libraries do not list the required system dependencies.
   miniball = overrideCabal super.miniball (drv: {
     librarySystemDepends = [ pkgs.miniball ];
@@ -474,7 +477,7 @@ self: super: builtins.intersectAttrs super {
   hapistrano = addBuildTool super.hapistrano pkgs.buildPackages.git;
 
   # This propagates this to everything depending on haskell-gi-base
-  haskell-gi-base = addBuildDepend super.haskell-gi-base pkgs.gobjectIntrospection;
+  haskell-gi-base = addBuildDepend super.haskell-gi-base pkgs.gobject-introspection;
 
   # requires valid, writeable $HOME
   hatex-guide = overrideCabal super.hatex-guide (drv: {

@@ -2,7 +2,7 @@
 , zlib, curl, cairo, freetype, fontconfig, lcms, libjpeg, openjpeg
 , withData ? true, poppler_data
 , qt5Support ? false, qtbase ? null
-, introspectionSupport ? false, gobjectIntrospection ? null
+, introspectionSupport ? false, gobject-introspection ? null
 , utils ? false, nss ? null
 , minimal ? false, suffix ? "glib"
 }:
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     ++ optionals (!minimal) [ cairo lcms curl ]
     ++ optional qt5Support qtbase
     ++ optional utils nss
-    ++ optional introspectionSupport gobjectIntrospection;
+    ++ optional introspectionSupport gobject-introspection;
 
   nativeBuildInputs = [ cmake ninja pkgconfig ];
 

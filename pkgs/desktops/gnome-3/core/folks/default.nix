@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, pkgconfig, glib, gnome3, nspr, intltool
+{ fetchurl, stdenv, pkgconfig, glib, gnome3, nspr, intltool, gobject-introspection
 , vala, sqlite, libxml2, dbus-glib, libsoup, nss, dbus
 , telepathy-glib, evolution-data-server, libsecret, db }:
 
@@ -16,9 +16,11 @@ in stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ glib gnome3.libgee sqlite ];
   # dbus_daemon needed for tests
-  buildInputs = [ dbus-glib telepathy-glib evolution-data-server dbus
-                  vala libsecret libxml2 libsoup nspr nss intltool db ];
-  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [
+    dbus-glib telepathy-glib evolution-data-server dbus
+    libsecret libxml2 libsoup nspr nss db
+  ];
+  nativeBuildInputs = [ pkgconfig intltool vala gobject-introspection ];
 
   configureFlags = [ "--disable-fatal-warnings" ];
 

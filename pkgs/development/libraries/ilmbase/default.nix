@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, automake, autoconf, libtool, which }:
+{ stdenv, fetchurl, buildPackages, automake, autoconf, libtool, which }:
 
 stdenv.mkDerivation rec {
   name = "ilmbase-${version}";
@@ -16,11 +16,12 @@ stdenv.mkDerivation rec {
     ./bootstrap
   '';
 
-  buildInputs = [ automake autoconf libtool which ];
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
+  nativeBuildInputs = [ automake autoconf libtool which ];
 
   NIX_CFLAGS_LINK = [ "-pthread" ];
 
-  patches = [ ./bootstrap.patch ];
+  patches = [ ./bootstrap.patch ./cross.patch ];
 
   # fails 1 out of 1 tests with
   # "lt-ImathTest: testBoxAlgo.cpp:892: void {anonymous}::boxMatrixTransform(): Assertion `b21 == b2' failed"

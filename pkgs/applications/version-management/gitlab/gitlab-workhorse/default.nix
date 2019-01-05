@@ -3,13 +3,13 @@
 stdenv.mkDerivation rec {
   name = "gitlab-workhorse-${version}";
 
-  version = "7.1.0";
+  version = "7.1.3";
 
   src = fetchFromGitLab {
     owner = "gitlab-org";
     repo = "gitlab-workhorse";
     rev = "v${version}";
-    sha256 = "1jq28z2kf58wnbv8jkwfx2bm8ki22hpm9ssdy2ymza22gq0zx00g";
+    sha256 = "1r75jj0xb4jv5fq2ihxk0vlv43gsk523zx86076mwph1g75gi1nz";
   };
 
   buildInputs = [ git go ];

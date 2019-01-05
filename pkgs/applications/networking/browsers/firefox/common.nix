@@ -168,6 +168,10 @@ stdenv.mkDerivation rec {
     configureFlagsArray+=("--with-google-api-keyfile=$TMPDIR/ga")
   '' + lib.optionalString (lib.versionOlder ffversion "58") ''
     cd obj-*
+  ''
+  # AS=as in the environment causes build failure https://bugzilla.mozilla.org/show_bug.cgi?id=1497286
+  + lib.optionalString (lib.versionAtLeast ffversion "64") ''
+    unset AS
   '';
 
   configureFlags = [
@@ -189,10 +193,10 @@ stdenv.mkDerivation rec {
     "--disable-necko-wifi" # maybe we want to enable this at some point
     "--disable-updater"
     "--enable-jemalloc"
-    "--disable-maintenance-service"
     "--disable-gconf"
     "--enable-default-toolkit=${default-toolkit}"
   ]
+  ++ lib.optional (lib.versionOlder ffversion "64") "--disable-maintenance-service"
   ++ lib.optional (stdenv.isDarwin && lib.versionAtLeast ffversion "61") "--disable-xcode-checks"
   ++ lib.optional (lib.versionOlder ffversion "61") "--enable-system-hunspell"
   ++ lib.optionals (lib.versionAtLeast ffversion "56") [

@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "scp";
-  version = "0.12.1";
+  version = "0.13.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0cjyc19v46lwrhdyc18f87z589rhqg7zjg0s8a05w6mv3262b6ai";
+    sha256 = "09219c45hafq6pb8z6rsinsfhp3rsx5mr9cgz2099rcs4if2gk6g";
   };
 
   propagatedBuildInputs = [

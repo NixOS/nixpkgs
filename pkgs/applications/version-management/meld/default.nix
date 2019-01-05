@@ -1,18 +1,18 @@
 { stdenv, fetchurl, itstool, python3Packages, intltool, wrapGAppsHook
-, libxml2, gobjectIntrospection, gtk3, gnome3, cairo, file
+, libxml2, gobject-introspection, gtk3, gnome3, cairo, file
 }:
 
 
 let
   pname = "meld";
-  version = "3.18.2";
+  version = "3.18.3";
   inherit (python3Packages) python buildPythonApplication pycairo pygobject3;
 in buildPythonApplication rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "109px6phfizi2jqrc7d7k7j6nvmanbfp5lykqfrk2sky77sand0r";
+    sha256 = "0vn1qx60f8113x8wh7f4bflhzir1vx7p0wdfi7nbip6fh8gaf3ln";
   };
 
   buildInputs = [
@@ -20,7 +20,7 @@ in buildPythonApplication rec {
     gnome3.gtksourceview gnome3.gsettings-desktop-schemas pycairo cairo
     gnome3.defaultIconTheme gnome3.dconf file
   ];
-  propagatedBuildInputs = [ gobjectIntrospection pygobject3 gtk3 ];
+  propagatedBuildInputs = [ gobject-introspection pygobject3 gtk3 ];
 
   installPhase = ''
     mkdir -p "$out/lib/${python.libPrefix}/site-packages"

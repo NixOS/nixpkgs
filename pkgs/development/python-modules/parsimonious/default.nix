@@ -1,22 +1,21 @@
 { stdenv
 , buildPythonPackage
-, fetchFromGitHub
+, fetchPypi
 , nose
 , six
 }:
 
 buildPythonPackage rec {
-  version = "0.7.0";
+  version = "0.8.1";
   pname = "parsimonious";
 
-  src = fetchFromGitHub {
-    repo = "parsimonious";
-    owner = "erikrose";
-    rev = version;
-    sha256 = "087npc8ccryrxabmqifcz56w4wd0hzmv0mc91wrbhc1sil196j0a";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "3add338892d580e0cb3b1a39e4a1b427ff9f687858fdd61097053742391a9f6b";
   };
 
-  propagatedBuildInputs = [ nose six ];
+  checkInputs = [ nose ];
+  propagatedBuildInputs = [ six ];
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/erikrose/parsimonious";

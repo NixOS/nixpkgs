@@ -11,6 +11,15 @@ let
       installPhase = ''
         mkdir -p $out/share/artwork/gnome
         ln -s $src $out/share/artwork/gnome/${src.name}
+
+        # KDE
+        mkdir -p $out/share/wallpapers/${name}/contents/images
+        ln -s $src $out/share/wallpapers/${name}/contents/images/${src.name}
+        cat >>$out/share/wallpapers/${name}/metadata.desktop <<_EOF
+[Desktop Entry]
+Name=${name}
+X-KDE-PluginInfo-Name=${name}
+_EOF
       '';
 
       meta = with stdenv.lib; {

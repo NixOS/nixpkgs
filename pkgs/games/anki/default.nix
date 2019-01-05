@@ -4,6 +4,7 @@
 , lib
 , python
 , fetchurl
+, fetchpatch
 , lame
 , mplayer
 , libpulseaudio
@@ -25,17 +26,17 @@
 }:
 
 buildPythonApplication rec {
-    version = "2.1.6-beta1";
+    version = "2.1.7";
     name = "anki-${version}";
 
     src = fetchurl {
       urls = [
-        "https://apps.ankiweb.net/downloads/beta/${name}-source.tgz"
+        "https://apps.ankiweb.net/downloads/current/${name}-source.tgz"
         # "https://apps.ankiweb.net/downloads/current/${name}-source.tgz"
         # "http://ankisrs.net/download/mirror/${name}.tgz"
         # "http://ankisrs.net/download/mirror/archive/${name}.tgz"
       ];
-      sha256 = "0yqn8qjx9dyf754jljhyyrk8mahii188nz0yifl1lr3py9sxzbsf";
+      sha256 = "0cvlimfxb7kficlf20hg7a345pahvr093b7yqvssww15h4y4va9d";
     };
 
     propagatedBuildInputs = [ pyqt5 sqlalchemy

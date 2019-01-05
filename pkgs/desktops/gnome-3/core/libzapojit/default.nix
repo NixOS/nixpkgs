@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, glib, intltool, json-glib, rest, libsoup, gnome-online-accounts, gnome3, gobjectIntrospection }:
+{ stdenv, fetchurl, pkgconfig, glib, intltool, json-glib, rest, libsoup, gnome-online-accounts, gnome3, gobject-introspection }:
 let
   pname = "libzapojit";
   version = "0.0.3";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "0zn3s7ryjc3k1abj4k55dr2na844l451nrg9s6cvnnhh569zj99x";
   };
 
-  nativeBuildInputs = [ pkgconfig intltool gobjectIntrospection ];
+  nativeBuildInputs = [ pkgconfig intltool gobject-introspection ];
   propagatedBuildInputs = [ glib json-glib rest libsoup gnome-online-accounts ]; # zapojit-0.0.pc
 
   passthru = {

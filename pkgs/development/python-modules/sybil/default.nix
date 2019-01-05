@@ -1,4 +1,4 @@
-{ stdenv, buildPythonApplication, fetchPypi
+{ stdenv, buildPythonApplication, fetchPypi, fetchpatch
 , pytest, nose }:
 
 buildPythonApplication rec {
@@ -9,6 +9,13 @@ buildPythonApplication rec {
     inherit pname version;
     sha256 = "41d2f1dba8fd1d8ead5e9b1220b590fab8b0d1ca01d43da08555b1fb08d4d8e8";
   };
+
+  patches = [
+    (fetchpatch {
+      url = https://github.com/cjw296/sybil/commit/6461d8156cfb68bd073ec613a5a516916e97e549.patch;
+      sha256 = "0aqny0i7l6g6d7vr025b90zz8wzszqdbmi05mp67dxw5xqjqvxj2";
+    })
+  ];
 
   checkInputs = [ pytest nose ];
 

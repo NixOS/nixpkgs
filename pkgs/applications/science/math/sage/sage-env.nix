@@ -44,6 +44,7 @@
 , zlib
 , gsl
 , ntl
+, jdk
 }:
 
 # This generates a `sage-env` shell file that will be sourced by sage on startup.
@@ -76,6 +77,7 @@ let
     singular
     giac
     palp
+    # needs to be rWrapper since the default `R` doesn't include R's default libraries
     rWrapper
     gfan
     cddlib
@@ -91,6 +93,7 @@ let
     lcalc
     rubiks
     flintqs
+    jdk # only needed for `jmol` which may be replaced in the future
   ]
   ));
 in

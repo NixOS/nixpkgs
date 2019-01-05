@@ -1,6 +1,5 @@
 [
   "asar"
-, "azure-cli"
 , "azure-functions-core-tools"
 , "bower"
 , "bower2nix"
@@ -87,7 +86,6 @@
 , "parcel-bundler"
 , "prettier"
 , "pulp"
-, "quassel-webserver"
 , "react-tools"
 , "react-native-cli"
 , "s3http"

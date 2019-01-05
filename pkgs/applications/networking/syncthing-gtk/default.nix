@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, fetchpatch, libnotify, librsvg, killall
 , gtk3, libappindicator-gtk3, substituteAll, syncthing, wrapGAppsHook
 , gnome3, buildPythonApplication, dateutil, pyinotify, pygobject3
-, bcrypt, gobjectIntrospection }:
+, bcrypt, gobject-introspection }:
 
 buildPythonApplication rec {
   version = "0.9.4";
@@ -17,7 +17,7 @@ buildPythonApplication rec {
   nativeBuildInputs = [
     wrapGAppsHook
     # For setup hook populating GI_TYPELIB_PATH
-    gobjectIntrospection
+    gobject-introspection
   ];
 
   buildInputs = [

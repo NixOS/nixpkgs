@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, dpkg, wrapGAppsHook
-, gnome2, gtk3, atk, cairo, pango, gdk_pixbuf, glib, freetype, fontconfig
+, gnome2, gtk3, atk, at-spi2-atk, cairo, pango, gdk_pixbuf, glib, freetype, fontconfig
 , dbus, libX11, xorg, libXi, libXcursor, libXdamage, libXrandr, libXcomposite
 , libXext, libXfixes, libXrender, libXtst, libXScrnSaver, nss, nspr, alsaLib
 , cups, expat, udev, libnotify
@@ -24,6 +24,7 @@ let
   rpath = lib.makeLibraryPath [
     alsaLib
     atk
+    at-spi2-atk
     cairo
     cups
     dbus
@@ -49,18 +50,17 @@ let
     libXtst
     nspr
     nss
-    stdenv.cc.cc
     udev
     xorg.libxcb
   ];
 
 in stdenv.mkDerivation rec {
   name = "signal-desktop-${version}";
-  version = "1.18.0";
+  version = "1.19.0";
 
   src = fetchurl {
     url = "https://updates.signal.org/desktop/apt/pool/main/s/signal-desktop/signal-desktop_${version}_amd64.deb";
-    sha256 = "0l5q55k5dp7hbvw3dnjsz39blbsahx6nh9ln4c69752zg473yv4v";
+    sha256 = "19a585mylbwrxd2m75hgp77ys1r350xkvawq2ysp0cxzr04l46z7";
   };
 
   phases = [ "unpackPhase" "installPhase" ];
@@ -84,6 +84,7 @@ in stdenv.mkDerivation rec {
              --set-rpath ${rpath}:$out/libexec $out/libexec/signal-desktop
     wrapProgram $out/libexec/signal-desktop \
       --prefix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.name}/" \
+      --prefix LD_LIBRARY_PATH : "${stdenv.cc.cc.lib}/lib" \
       ${customLanguageWrapperArgs} \
       "''${gappsWrapperArgs[@]}"
 

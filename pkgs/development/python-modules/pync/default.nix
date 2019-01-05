@@ -7,13 +7,13 @@
 }:
 
 buildPythonPackage rec {
-  version  = "1.4";
+  version  = "2.0.3";
   pname = "pync";
   disabled = ! isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0lc1x0pai85avm1r452xnvxc12wijnhz87xv20yp3is9fs6rnkrh";
+    sha256 = "38b9e61735a3161f9211a5773c5f5ea698f36af4ff7f77fa03e8d1ff0caa117f";
   };
 
   buildInputs = [ pkgs.coreutils ];

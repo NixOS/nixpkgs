@@ -5,8 +5,8 @@ let
 
   inherit (vimUtils.override {inherit vim;}) buildVimPluginFrom2Nix;
 
-  generated = callPackage ./generated.nix {
-    inherit buildVimPluginFrom2Nix;
+  plugins = callPackage ./generated.nix {
+    inherit buildVimPluginFrom2Nix overrides;
   };
 
   # TL;DR
@@ -22,10 +22,8 @@ let
     inherit llvmPackages;
   };
 
-  overriden = generated // (overrides generated);
-
-  aliases = lib.optionalAttrs (config.allowAliases or true) (import ./aliases.nix lib overriden);
+  aliases = lib.optionalAttrs (config.allowAliases or true) (import ./aliases.nix lib plugins);
 
 in
 
-overriden // aliases
+plugins // aliases

@@ -13,13 +13,13 @@
 
 buildPythonPackage rec {
   pname = "pygal";
-  version = "2.3.1";
+  version = "2.4.0";
 
   doCheck = !isPyPy;  # one check fails with pypy
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7ba5a191233d0c2d8bf4b4d26b06e42bd77483a59ba7d3e5b884d81d1a870667";
+    sha256 = "9204f05380b02a8a32f9bf99d310b51aa2a932cba5b369f7a4dc3705f0a4ce83";
   };
 
   buildInputs = [ flask pyquery pytest ];

@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, intltool, gnupg, p11-kit, glib
 , libgcrypt, libtasn1, dbus-glib, gtk, pango, gdk_pixbuf, atk
-, gobjectIntrospection, makeWrapper, libxslt, vala, gnome3
+, gobject-introspection, makeWrapper, libxslt, vala, gnome3
 , python2 }:
 
 stdenv.mkDerivation rec {
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ pkgconfig intltool gobjectIntrospection libxslt makeWrapper vala ];
+  nativeBuildInputs = [ pkgconfig intltool gobject-introspection libxslt makeWrapper vala ];
 
   buildInputs = let
     gpg = gnupg.override { guiSupport = false; }; # prevent build cycle with pinentry_gnome

@@ -10,11 +10,11 @@
 
 buildPythonPackage rec {
   pname = "python-can";
-  version = "2.2.1";
+  version = "3.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b5e93b2ee32bdd597d9d908afe5171c402a04c9678ba47b60f33506738b1375b";
+    sha256 = "0d2ddb3b663af51b11a4c7fb7a577c63302a831986239f82bb6af65efc065b07";
   };
 
   propagatedBuildInputs = [ wrapt pyserial ];

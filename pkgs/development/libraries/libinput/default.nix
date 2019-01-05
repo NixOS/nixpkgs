@@ -16,11 +16,11 @@ in
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "libinput-${version}";
-  version = "1.12.2";
+  version = "1.12.3";
 
   src = fetchurl {
     url = "https://www.freedesktop.org/software/libinput/${name}.tar.xz";
-    sha256 = "1w8wkh03j5zdgbamyj7wv2f6k76kd0w4z04abxxf5b0mnplrb6vb";
+    sha256 = "0mg2zqbjcgj0aq7d9nwawvyhx43vakilahrc83hrfyif3a3gyrpj";
   };
 
   outputs = [ "bin" "out" "dev" ];
@@ -29,13 +29,10 @@ stdenv.mkDerivation rec {
     (mkFlag documentationSupport "documentation")
     (mkFlag eventGUISupport "debug-gui")
     (mkFlag testsSupport "tests")
+    "--libexecdir=${placeholder "bin"}/libexec"
   ];
 
-  preConfigure = ''
-    mesonFlags="$mesonFlags --libexecdir=$bin/libexec"
-  '';
-
-  nativeBuildInputs = [ pkgconfig meson ninja ]
+  nativeBuildInputs = [ pkgconfig meson ninja python3Packages.python ]
     ++ optionals documentationSupport [ doxygen graphviz ]
     ++ optionals testsSupport [ check valgrind python3Packages.pyparsing ];
 

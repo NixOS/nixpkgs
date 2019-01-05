@@ -18,10 +18,6 @@ buildPythonPackage rec {
 
   buildInputs = [ nix boost ];
 
-  checkPhase = ''
-    ninja test
-  '';
-
   meta = with stdenv.lib; {
     description = ''
        Eval nix code from python.

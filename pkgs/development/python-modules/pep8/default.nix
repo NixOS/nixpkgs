@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "pep8";
-  version = "1.7.0";
+  version = "1.7.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a113d5f5ad7a7abacef9df5ec3f2af23a20a28005921577b15dd584d099d5900";
+    sha256 = "fe249b52e20498e59e0b5c5256aa52ee99fc295b26ec9eaa85776ffdb9fe6374";
   };
 
   # FAIL: test_checkers_testsuite (testsuite.test_all.Pep8TestCase)

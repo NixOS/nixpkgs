@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   name = "fwup-${version}";
-  version = "1.2.6";
+  version = "1.2.7";
 
   src = fetchFromGitHub {
     owner = "fhunleth";
     repo = "fwup";
     rev = "v${version}";
-    sha256 = "1rbpa0dcm9w1anz2bhcpmj2b678807s8j43zzkbkwh71aymfwr14";
+    sha256 = "0r48l5jcb4pxb72ykigmaissm4ikadi7f6lkfma4jnd037w15bnl";
   };
 
   doCheck = true;
