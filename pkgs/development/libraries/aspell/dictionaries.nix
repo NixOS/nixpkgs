@@ -57,8 +57,6 @@ let
   buildOfficialDict =
     {language, version, filename, fullName, sha256, ...}@args:
     let buildArgs = {
-      name = "aspell-dict-${language}";
-
       shortName = "${language}-${version}";
 
       src = fetchurl {
