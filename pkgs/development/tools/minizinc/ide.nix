@@ -15,7 +15,7 @@ stdenv.mkDerivation {
     sha256 = "1hanq7c6li59awlwghgvpd8w93a7zb6iw7p4062nphnbd1dmg92f";
   };
 
-  postUnpack = ''export sourceRoot="$sourceRoot/MiniZincIDE"'';
+  sourceRoot = "source/MiniZincIDE";
 
   enableParallelBuilding = true;
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     homepage = https://www.minizinc.org/;
-    description = "IDE for MiniZinc, a medium-level constraint modelling language.";
+    description = "IDE for MiniZinc, a medium-level constraint modelling language";
 
     longDescription = ''
       MiniZinc is a medium-level constraint modelling
