@@ -1,4 +1,5 @@
-{ stdenv, fetchFromGitHub, autoconf, automake, libtool, gettext, flex, perl, pkgconfig, pcsclite, libusb }:
+{ stdenv, fetchFromGitHub, autoconf, automake, libtool
+, gettext, flex, perl, pkgconfig, pcsclite, libusb, libiconv }:
 
 stdenv.mkDerivation rec {
   version = "1.1.6";
@@ -14,7 +15,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ pcsclite libusb autoconf automake libtool gettext flex perl ];
+  buildInputs = [ pcsclite libusb autoconf automake libtool gettext flex perl libiconv ];
 
   postPatch = ''
     sed -e s_/bin/echo_echo_g -i src/Makefile.am
