@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch, cmake, python, xxd, boost }:
+{ stdenv, fetchFromGitHub, fetchpatch, cmake, python3, xxd, boost }:
 
 stdenv.mkDerivation rec {
   name = "cryptominisat-${version}";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "1a1494gj4j73yij0hjbzsn2hglk9zy5c5wfwgig3j67cis28saf5";
   };
 
-  buildInputs = [ python boost ];
+  buildInputs = [ python3 boost ];
   nativeBuildInputs = [ cmake xxd ];
 
   meta = with stdenv.lib; {
