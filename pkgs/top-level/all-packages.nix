@@ -7564,6 +7564,8 @@ in
 
   metaBuildEnv = callPackage ../development/compilers/meta-environment/meta-build-env { };
 
+  svd2rust = callPackage ../development/tools/rust/svd2rust { };
+
   swift = callPackage ../development/compilers/swift { };
 
   swiProlog = callPackage ../development/compilers/swi-prolog { };
