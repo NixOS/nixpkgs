@@ -29,7 +29,15 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  doCheck = false; # fails
+  doCheck = true;
+  preCheck = ''
+    find tests -type f -name 'run-test' \
+      -exec echo "Patching {}" \; \
+      -exec sed -i '{}' -e 's|/bin/echo|echo|g' \;
+
+    patchShebangs tests
+    chmod a+x scripts/*
+  '';
 
   meta = with stdenv.lib; {
     description = "Tools to manipulate patch files";
