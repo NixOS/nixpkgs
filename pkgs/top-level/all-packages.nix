@@ -526,6 +526,8 @@ in
     inherit (darwin.apple_sdk.frameworks) AppKit CoreFoundation CoreGraphics CoreServices CoreText Foundation OpenGL;
   };
 
+  amazon-ecs-cli = callPackage ../tools/virtualization/amazon-ecs-cli { };
+
   amazon-glacier-cmd-interface = callPackage ../tools/backup/amazon-glacier-cmd-interface { };
 
   ammonite = callPackage ../development/tools/ammonite {};
@@ -3992,8 +3994,6 @@ in
 
   libqmi = callPackage ../development/libraries/libqmi { };
 
-  libqrencode = callPackage ../development/libraries/libqrencode { };
-
   libmbim = callPackage ../development/libraries/libmbim { };
 
   libmongo-client = callPackage ../development/libraries/libmongo-client { };
@@ -5877,7 +5877,11 @@ in
 
   triggerhappy = callPackage ../tools/inputmethods/triggerhappy {};
 
+  trilium = callPackage ../applications/office/trilium { };
+
   trousers = callPackage ../tools/security/trousers { };
+
+  trx = callPackage ../tools/audio/trx { };
 
   tryton = callPackage ../applications/office/tryton { };
 
@@ -6664,7 +6668,9 @@ in
   clang_37 = llvmPackages_37.clang;
   clang_35 = wrapCC llvmPackages_35.clang;
 
-  clang-tools = callPackage ../development/tools/clang-tools { };
+  clang-tools = callPackage ../development/tools/clang-tools {
+    llvmPackages = llvmPackages_latest;
+  };
 
   clang-analyzer = callPackage ../development/tools/analysis/clang-analyzer { };
 
@@ -7347,6 +7353,8 @@ in
     stdenv = overrideCC stdenv buildPackages.gcc6; # with gcc-7: undefined reference to `__divmoddi4'
   });
 
+  llvmPackages_latest = llvmPackages_7;
+
   manticore = callPackage ../development/compilers/manticore { };
 
   mercury = callPackage ../development/compilers/mercury { };
@@ -7695,7 +7703,7 @@ in
   inherit (beam.interpreters)
     erlang erlangR18 erlangR19 erlangR20 erlangR21
     erlang_odbc erlang_javac erlang_odbc_javac erlang_nox erlang_basho_R16B02
-    elixir elixir_1_7 elixir_1_6 elixir_1_5 elixir_1_4 elixir_1_3
+    elixir elixir_1_8 elixir_1_7 elixir_1_6 elixir_1_5 elixir_1_4
     lfe lfe_1_2;
 
   inherit (beam.packages.erlang)
@@ -12494,6 +12502,7 @@ in
 
   sfml = callPackage ../development/libraries/sfml {
     inherit (darwin.apple_sdk.frameworks) IOKit Foundation AppKit OpenAL;
+    inherit (darwin) cf-private;
   };
   csfml = callPackage ../development/libraries/csfml { };
 
@@ -15465,6 +15474,8 @@ in
 
   conway_polynomials = callPackage ../data/misc/conway_polynomials { };
 
+  cooper-hewitt = callPackage ../data/fonts/cooper-hewitt { };
+
   dosis = callPackage ../data/fonts/dosis { };
 
   dosemu_fonts = callPackage ../data/fonts/dosemu-fonts { };
@@ -15512,8 +15523,6 @@ in
   font-awesome_5 = callPackage ../data/fonts/font-awesome-5 { };
 
   freefont_ttf = callPackage ../data/fonts/freefont-ttf { };
-
-  font-droid = callPackage ../data/fonts/droid { };
 
   freepats = callPackage ../data/misc/freepats { };
 
@@ -15651,11 +15660,13 @@ in
 
   mobile-broadband-provider-info = callPackage ../data/misc/mobile-broadband-provider-info { };
 
+  mojave-gtk-theme = callPackage ../data/themes/mojave { };
+
+  moka-icon-theme = callPackage ../data/icons/moka-icon-theme { };
+
   monoid = callPackage ../data/fonts/monoid { };
 
   mononoki = callPackage ../data/fonts/mononoki { };
-
-  moka-icon-theme = callPackage ../data/icons/moka-icon-theme { };
 
   montserrat = callPackage ../data/fonts/montserrat { };
 
@@ -16985,7 +16996,7 @@ in
 
   fritzing = libsForQt5.callPackage ../applications/science/electronics/fritzing { };
 
-  fsv = callPackages ../applications/misc/fsv { };
+  fsv = callPackage ../applications/misc/fsv { };
 
   fvwm = callPackage ../applications/window-managers/fvwm { };
 
@@ -17322,32 +17333,7 @@ in
     inherit (gnome3) dconf;
   };
 
-  gnucash24 = callPackage ../applications/office/gnucash/2.4.nix {
-    inherit (gnome2) libgnomeui libgtkhtml gtkhtml libbonoboui libgnomeprint libglade libart_lgpl;
-    gconf = gnome2.GConf;
-    guile = guile_1_8;
-    slibGuile = slibGuile.override { scheme = guile_1_8; };
-    goffice = goffice_0_8;
-  };
-
-  gnucash26 = lowPrio (callPackage ../applications/office/gnucash/2.6.nix {
-    inherit (gnome2) libgnomecanvas;
-    inherit (gnome3) dconf;
-    gconf = gnome2.GConf;
-    goffice = goffice_0_8;
-    webkit = webkitgtk24x-gtk2;
-    guile = guile_1_8;
-    slibGuile = slibGuile.override { scheme = guile_1_8; };
-    glib = glib;
-  });
-
   goffice = callPackage ../development/libraries/goffice { };
-
-  goffice_0_8 = callPackage ../development/libraries/goffice/0.8.nix {
-    inherit (pkgs.gnome2) libglade libgnomeui;
-    gconf = pkgs.gnome2.GConf;
-    libart = pkgs.gnome2.libart_lgpl;
-  };
 
   jetbrains = (recurseIntoAttrs (callPackages ../applications/editors/jetbrains {
     jdk = jetbrains.jdk;
@@ -17429,7 +17415,7 @@ in
     java = if stdenv.isLinux then jre else jdk;
   };
 
-  qrencode = callPackage ../tools/graphics/qrencode { };
+  qrencode = callPackage ../development/libraries/qrencode { };
 
   geeqie = callPackage ../applications/graphics/geeqie { };
 
@@ -17839,9 +17825,9 @@ in
 
   inherit (kdeApplications)
     akonadi akregator ark dolphin dragon ffmpegthumbs filelight gwenview k3b
-    kaddressbook kate kcachegrind kcalc kcolorchooser kcontacts kdenlive kdf kdialog keditbookmarks
-    kget kgpg khelpcenter kig kleopatra kmail kmix kolourpaint kompare konsole kpkpass kitinerary
-    kontact korganizer krdc krfb ksystemlog kwalletmanager marble minuet okular spectacle;
+    kaddressbook kate kcachegrind kcalc kcharselect kcolorchooser kcontacts kdenlive kdf kdialog
+    keditbookmarks kget kgpg khelpcenter kig kleopatra kmail kmix kolourpaint kompare konsole
+    kpkpass kitinerary kontact korganizer krdc krfb ksystemlog kwalletmanager marble minuet okular spectacle;
 
   okteta = libsForQt5.callPackage ../applications/editors/okteta { };
 
@@ -20261,7 +20247,7 @@ in
 
   xpointerbarrier = callPackage ../tools/X11/xpointerbarrier {};
 
-  xkb_switch = callPackage ../tools/X11/xkb-switch { };
+  xkb-switch = callPackage ../tools/X11/xkb-switch { };
 
   xkblayout-state = callPackage ../applications/misc/xkblayout-state { };
 
@@ -20652,6 +20638,8 @@ in
   freesweep = callPackage ../games/freesweep { };
 
   frotz = callPackage ../games/frotz { };
+
+  frogatto = callPackage ../games/frogatto { };
 
   fsg = callPackage ../games/fsg {
     wxGTK = wxGTK28.override { unicode = false; };
@@ -22985,6 +22973,8 @@ in
   wcalc = callPackage ../applications/misc/wcalc { };
 
   webfs = callPackage ../servers/http/webfs { };
+
+  websocketd = callPackage ../applications/networking/websocketd { };
 
   wikicurses = callPackage ../applications/misc/wikicurses {
     pythonPackages = python3Packages;

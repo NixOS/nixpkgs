@@ -152,15 +152,21 @@ vim_with_plugins can be installed like any other application within Nix.
 let
   inherit (stdenv) lib;
 
-  # make sure a plugin is a derivation. If plugin already is a derivation, this
-  # is a no-op. If it is a string, it is looked up in knownPlugins.
+  # make sure a plugin is a derivation and its dependencies are derivations. If
+  # plugin already is a derivation, this is a no-op. If it is a string, it is
+  # looked up in knownPlugins.
   pluginToDrv = knownPlugins: plugin:
-    if builtins.isString plugin then
-      # make sure `pname` is set to that we are able to convert the derivation
-      # back to a string.
-      ( knownPlugins.${plugin} // { pname = plugin; })
-    else
-      plugin;
+  let
+    drv =
+      if builtins.isString plugin then
+        # make sure `pname` is set to that we are able to convert the derivation
+        # back to a string.
+        ( knownPlugins.${plugin} // { pname = plugin; })
+      else
+        plugin;
+  in
+    # make sure all the dependencies of the plugin are also derivations
+    drv // { dependencies = map (pluginToDrv knownPlugins) (drv.dependencies or []); };
 
   # transitive closure of plugin dependencies (plugin needs to be a derivation)
   transitiveClosure = plugin:
@@ -169,14 +175,6 @@ let
     );
 
   findDependenciesRecursively = plugins: lib.concatMap transitiveClosure plugins;
-
-  attrnamesToPlugins = { knownPlugins, names }:
-    map (name: if builtins.isString name then knownPlugins.${name} else name) knownPlugins;
-
-  pluginToAttrname = plugin:
-    plugin.pname;
-
-  pluginsToAttrnames = plugins: map pluginToAttrname plugins;
 
   vamDictToNames = x:
       if builtins.isString x then [x]
@@ -429,7 +427,7 @@ rec {
                      if vam != null && vam ? knownPlugins then vam.knownPlugins else
                      if pathogen != null && pathogen ? knownPlugins then pathogen.knownPlugins else
                      vimPlugins;
-      pathogenPlugins = findDependenciesRecursively ((map pluginToDrv knownPlugins) pathogen.pluginNames);
+      pathogenPlugins = findDependenciesRecursively (map (pluginToDrv knownPlugins) pathogen.pluginNames);
       vamPlugins = findDependenciesRecursively (map (pluginToDrv knownPlugins) (lib.concatMap vamDictToNames vam.pluginDictionaries));
       nonNativePlugins = (lib.optionals (pathogen != null) pathogenPlugins)
                       ++ (lib.optionals (vam != null) vamPlugins)
@@ -482,7 +480,8 @@ rec {
             rev = "4c596548216b7c19971f8fc94e38ef1a2b55fee6";
             sha256 = "0f1cpnp1nxb4i5hgymjn2yn3k1jwkqmlgw1g02sq270lavp2dzs9";
           };
-          dependencies = [];
+          # make sure string dependencies are handled
+          dependencies = [ "vim-nix" ];
         };
       });
     vimrcConfig.vam.pluginDictionaries = [ { names = [ "vim-trailing-whitespace" ]; } ];

@@ -391,6 +391,11 @@
     github = "asppsa";
     name = "Alastair Pharo";
   };
+  astro = {
+    email = "astro@spaceboyz.net";
+    github = "astro";
+    name = "Astro";
+  };
   astsmtl = {
     email = "astsmtl@yandex.ru";
     github = "astsmtl";
@@ -1744,6 +1749,11 @@
     email = "github@hamhut1066.com";
     github = "hamhut1066";
     name = "Hamish Hutchings";
+  };
+  hansjoergschurr = {
+    email = "commits@schurr.at";
+    github = "hansjoergschurr";
+    name = "Hans-Jörg Schurr";
   };
   haslersn = {
     email = "haslersn@fius.informatik.uni-stuttgart.de";
@@ -3905,6 +3915,10 @@
     email = "development@schmitthenner.eu";
     github = "fkz";
     name = "Fabian Schmitthenner";
+  };
+  schmittlauch = {
+    email = "t.schmittlauch+nixos@orlives.de";
+    github = "schmittlauch";
   };
   schneefux = {
     email = "schneefux+nixos_pkg@schneefux.xyz";

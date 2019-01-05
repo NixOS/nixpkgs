@@ -1,7 +1,7 @@
 { lib, stdenv
 , python, cmake, vim, ruby
 , which, fetchgit, llvmPackages, rustPlatform
-, xkb_switch, fzf, skim
+, xkb-switch, fzf, skim
 , python3, boost, icu, ncurses
 , ycmd, rake
 , substituteAll
@@ -308,9 +308,9 @@ self: super: {
   vim-xkbswitch = super.vim-xkbswitch.overrideAttrs(old: {
     patchPhase = ''
       substituteInPlace plugin/xkbswitch.vim \
-        --replace /usr/local/lib/libxkbswitch.so ${xkb_switch}/lib/libxkbswitch.so
+        --replace /usr/local/lib/libxkbswitch.so ${xkb-switch}/lib/libxkbswitch.so
     '';
-    buildInputs = [ xkb_switch ];
+    buildInputs = [ xkb-switch ];
   });
 
   vim-yapf = super.vim-yapf.overrideAttrs(old: {

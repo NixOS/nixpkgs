@@ -279,8 +279,14 @@ rec {
     "2" = # We only do 2-part hacks for things Nix already supports
       if elemAt l 1 == "cygwin"
         then { cpu = elemAt l 0;                      kernel = "windows";  abi = "cygnus";   }
+      # MSVC ought to be the default ABI so this case isn't needed. But then it
+      # becomes difficult to handle the gnu* variants for Aarch32 correctly for
+      # minGW. So it's easier to make gnu* the default for the MinGW, but
+      # hack-in MSVC for the non-MinGW case right here.
+      else if elemAt l 1 == "windows"
+        then { cpu = elemAt l 0;                      kernel = "windows";  abi = "msvc";     }
       else if (elemAt l 1) == "elf"
-      then { cpu = elemAt l 0; vendor = "unknown";    kernel = "none";     abi = elemAt l 1; }
+        then { cpu = elemAt l 0; vendor = "unknown";  kernel = "none";     abi = elemAt l 1; }
       else   { cpu = elemAt l 0;                      kernel = elemAt l 1;                   };
     "3" = # Awkwards hacks, beware!
       if elemAt l 1 == "apple"
@@ -288,7 +294,7 @@ rec {
       else if (elemAt l 1 == "linux") || (elemAt l 2 == "gnu")
         then { cpu = elemAt l 0;                      kernel = elemAt l 1; abi = elemAt l 2; }
       else if (elemAt l 2 == "mingw32") # autotools breaks on -gnu for window
-        then { cpu = elemAt l 0; vendor = elemAt l 1; kernel = "windows";  abi = "gnu"; }
+        then { cpu = elemAt l 0; vendor = elemAt l 1; kernel = "windows";                    }
       else if hasPrefix "netbsd" (elemAt l 2)
         then { cpu = elemAt l 0; vendor = elemAt l 1;    kernel = elemAt l 2;                }
       else if (elem (elemAt l 2) ["eabi" "eabihf" "elf"])
@@ -324,13 +330,12 @@ rec {
                else                                   getKernel args.kernel;
       abi =
         /**/ if args ? abi       then getAbi args.abi
-        else if isLinux   parsed then
+        else if isLinux parsed || isWindows parsed then
           if isAarch32 parsed then
             if lib.versionAtLeast (parsed.cpu.version or "0") "6"
             then abis.gnueabihf
             else abis.gnueabi
           else abis.gnu
-        else if isWindows parsed then abis.gnu
         else                     abis.unknown;
     };
 

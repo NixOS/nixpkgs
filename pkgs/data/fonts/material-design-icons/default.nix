@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "material-design-icons-${version}";
-  version = "3.2.89";
+  version = "3.3.92";
 
   src = fetchFromGitHub {
     owner  = "Templarian";
     repo   = "MaterialDesign-Webfont";
     rev    = "v${version}";
-    sha256 = "1rxaiiij96kqncsrlkyp109m36v28cgxild7z04k4jh79fvmhjvn";
+    sha256 = "0k8pv2nsp3al4i4awx5mv7cscpm8akjn567jl9dwzangcsai0l53";
   };
 
   installPhase = ''

@@ -4,6 +4,7 @@
 , Babel
 , pytz
 , nine
+, nose
 }:
 
 buildPythonPackage rec {
@@ -16,6 +17,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ Babel pytz nine ];
+  checkInputs = [ nose ];
 
   meta = with stdenv.lib; {
     description = "Kajiki provides fast well-formed XML templates";

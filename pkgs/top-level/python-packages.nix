@@ -1129,6 +1129,8 @@ in {
 
   blockdiag = callPackage ../development/python-modules/blockdiag { };
 
+  blockdiagcontrib-cisco = callPackage ../development/python-modules/blockdiagcontrib-cisco { };
+
   bpython = callPackage ../development/python-modules/bpython {};
 
   bsddb3 = callPackage ../development/python-modules/bsddb3 { };
@@ -1191,6 +1193,8 @@ in {
   cartopy = callPackage ../development/python-modules/cartopy {};
 
   case = callPackage ../development/python-modules/case {};
+
+  cbor = callPackage ../development/python-modules/cbor {};
 
   cassandra-driver = callPackage ../development/python-modules/cassandra-driver { };
 
@@ -5146,6 +5150,10 @@ in {
   pyatv = callPackage ../development/python-modules/pyatv { };
 
   pybotvac = callPackage ../development/python-modules/pybotvac { };
+
+  pytado = callPackage ../development/python-modules/pytado { };
+
+  casttube = callPackage ../development/python-modules/casttube { };
 
 });
 
