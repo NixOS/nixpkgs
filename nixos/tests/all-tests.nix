@@ -158,6 +158,7 @@ in
   opensmtpd = handleTest ./opensmtpd.nix {};
   openssh = handleTest ./openssh.nix {};
   osquery = handleTest ./osquery.nix {};
+  osrm-backend = handleTest ./osrm-backend.nix {};
   ostree = handleTest ./ostree.nix {};
   pam-oath-login = handleTest ./pam-oath-login.nix {};
   peerflix = handleTest ./peerflix.nix {};
