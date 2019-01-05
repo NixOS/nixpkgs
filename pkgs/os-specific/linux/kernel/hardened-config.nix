@@ -66,6 +66,9 @@ ${optionalString (versionAtLeast version "4.12") ''
 ''}
 
 DEBUG_WX y # boot-time warning on RWX mappings
+${optionalString (versionAtLeast version "4.11") ''
+  STRICT_KERNEL_RWX y
+''}
 
 # Stricter /dev/mem
 STRICT_DEVMEM? y
