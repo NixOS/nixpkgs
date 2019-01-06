@@ -65,6 +65,12 @@ in appleDerivation {
   '';
 
   installPhase = ''
+    for f in Products/Release/*; do
+      if [ -f $f ]; then
+        install -D $file $out/bin/$(basename $f)
+      fi
+    done
+
     bsdmake -C usr-share-locale.tproj install DESTDIR="$locale/share/locale"
 
     # need to get rid of runtime dependency on flex

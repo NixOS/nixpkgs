@@ -7,8 +7,8 @@
 
 {config, pkgs, fetchurl, fetchFromGitHub, stdenv, gnused, perl, overrides}:
 
-# cpan2nix assumes that perl-packages.nix will be used only with perl 5.26 or above
-assert stdenv.lib.versionAtLeast perl.version "5.26";
+# cpan2nix assumes that perl-packages.nix will be used only with perl 5.28.1 or above
+assert stdenv.lib.versionAtLeast perl.version "5.28.1";
 let
   inherit (stdenv.lib) maintainers;
   self = _self // overrides;
@@ -29,6 +29,24 @@ let
       installPhase = "./Build install";
       checkPhase = "./Build test";
     });
+
+  /* Construct a perl search path (such as $PERL5LIB)
+
+     Example:
+       pkgs = import <nixpkgs> { }
+       makePerlPath [ pkgs.perlPackages.libnet ]
+       => "/nix/store/n0m1fk9c960d8wlrs62sncnadygqqc6y-perl-Net-SMTP-1.25/lib/perl5/site_perl"
+  */
+  makePerlPath = stdenv.lib.makeSearchPathOutput "lib" perl.libPrefix;
+
+  /* Construct a perl search path recursively including all dependencies (such as $PERL5LIB)
+
+     Example:
+       pkgs = import <nixpkgs> { }
+       makeFullPerlPath [ pkgs.perlPackages.CGI ]
+       => "/nix/store/fddivfrdc1xql02h9q500fpnqy12c74n-perl-CGI-4.38/lib/perl5/site_perl:/nix/store/8hsvdalmsxqkjg0c5ifigpf31vc4vsy2-perl-HTML-Parser-3.72/lib/perl5/site_perl:/nix/store/zhc7wh0xl8hz3y3f71nhlw1559iyvzld-perl-HTML-Tagset-3.20/lib/perl5/site_perl"
+  */
+  makeFullPerlPath = deps: makePerlPath (stdenv.lib.misc.closePropagation deps);
 
 
   ack = buildPerlPackage rec {
@@ -1085,18 +1103,6 @@ let
     meta = {
       description = "Capture STDOUT and STDERR from Perl, XS or external programs";
       license = stdenv.lib.licenses.asl20;
-    };
-  };
-
-  Carp = buildPerlPackage rec {
-    name = "Carp-1.50";
-    src = fetchurl {
-      url = mirror://cpan/authors/id/X/XS/XSAWYERX/Carp-1.50.tar.gz;
-      sha256 = "1ngbpjyd9qi7n4h5r3q3qibd8by7rfiv7364jqlv4lbd3973n9zm";
-    };
-    meta = with stdenv.lib; {
-      description = "Alternative warn and die for modules";
-      license = with licenses; [ artistic1 gpl1Plus ];
     };
   };
 
@@ -4026,8 +4032,8 @@ let
       sha256 = "5509e532cdd0e3d91eda550578deaac29e2f008a12b64576e8c261bb92e8c2c1";
     };
     postInstall = stdenv.lib.optionalString (perl ? crossVersion) ''
-      mkdir -p $out/lib/perl5/site_perl/cross_perl/${perl.version}/DBI
-      cat > $out/lib/perl5/site_perl/cross_perl/${perl.version}/DBI.pm <<EOF
+      mkdir -p $out/${perl.libPrefix}/cross_perl/${perl.version}/DBI
+      cat > $out/${perl.libPrefix}/cross_perl/${perl.version}/DBI.pm <<EOF
       package DBI;
       BEGIN {
       our \$VERSION = "$version";
@@ -4035,8 +4041,8 @@ let
       1;
       EOF
 
-      autodir=$(echo $out/lib/perl5/site_perl/${perl.version}/*/auto/DBI)
-      cat > $out/lib/perl5/site_perl/cross_perl/${perl.version}/DBI/DBD.pm <<EOF
+      autodir=$(echo $out/${perl.libPrefix}/${perl.version}/*/auto/DBI)
+      cat > $out/${perl.libPrefix}/cross_perl/${perl.version}/DBI/DBD.pm <<EOF
       package DBI::DBD;
       use Exporter ();
       use vars qw (@ISA @EXPORT);
@@ -5318,14 +5324,6 @@ let
     };
   };
 
-  ExtUtilsCBuilder = buildPerlPackage rec {
-    name = "ExtUtils-CBuilder-0.280230";
-    src = fetchurl {
-      url = mirror://cpan/authors/id/A/AM/AMBS/ExtUtils-CBuilder-0.280230.tar.gz;
-      sha256 = "1mcwvic01x0flcz3jsny5j8j5zz96r63qjwq75hs42cpf3by3ahx";
-    };
-  };
-
   ExtUtilsCChecker = buildPerlModule rec {
     name = "ExtUtils-CChecker-0.10";
     src = fetchurl {
@@ -5463,14 +5461,6 @@ let
     src = fetchurl {
       url = mirror://cpan/authors/id/B/BI/BINGOS/ExtUtils-Manifest-1.71.tar.gz;
       sha256 = "1qa7jwhy78byvfzpjnn5k2jm30sb5m1z6k2m79iy6gg2xj41nrq0";
-    };
-  };
-
-  ExtUtilsParseXS = buildPerlPackage rec {
-    name = "ExtUtils-ParseXS-3.35";
-    src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SM/SMUELLER/${name}.tar.gz";
-      sha256 = "077fqiyabydm8j34wxzxwxskyidh8nmwq9gskaxai8kq298z1pj1";
     };
   };
 
@@ -6194,18 +6184,6 @@ let
     };
     meta = {
       description = "Source Filters";
-      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-    };
-  };
-
-  FilterSimple = buildPerlPackage {
-    name = "Filter-Simple-0.94";
-    src = fetchurl {
-      url = mirror://cpan/authors/id/S/SM/SMUELLER/Filter-Simple-0.94.tar.gz;
-      sha256 = "1lkrgsqaxf595ha1y29gxqqf4kf8cpm5yzr4gg7zngbq1nb0pz6g";
-    };
-    meta = {
-      description = "Simplified source filtering";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -7716,18 +7694,6 @@ let
     };
   };
 
-  IOSocketIP = buildPerlModule {
-    name = "IO-Socket-IP-0.39";
-    src = fetchurl {
-      url = mirror://cpan/authors/id/P/PE/PEVANS/IO-Socket-IP-0.39.tar.gz;
-      sha256 = "11950da7636cb786efd3bfb5891da4c820975276bce43175214391e5c32b7b96";
-    };
-    meta = {
-      description = "Family-neutral IP socket supporting both IPv4 and IPv6";
-      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-    };
-  };
-
   IOSocketInet6 = buildPerlModule rec {
     name = "IO-Socket-INET6-2.72";
     src = fetchurl {
@@ -9162,7 +9128,7 @@ let
     buildInputs = [ ModuleBuild NetDNSResolverProgrammable ];
     propagatedBuildInputs = [ Error NetAddrIP NetDNS URI ];
 
-    buildPhase = "perl Build.PL --install_base=$out --install_path=\"sbin=$out/bin\" --install_path=\"lib=$out/lib/perl5/site_perl\"; ./Build build ";
+    buildPhase = "perl Build.PL --install_base=$out --install_path=\"sbin=$out/bin\" --install_path=\"lib=$out/${perl.libPrefix}\"; ./Build build ";
 
     doCheck = false; # The main test performs network access
     meta = {
@@ -12101,7 +12067,7 @@ let
       sha256 = "0xk4h4dzl80kf97lbx0nznx9ajrb6kkg7k3iwca3rj6f3rqggv9y";
     };
     outputs = [ "out" ];
-    buildInputs = [ DBDmysql DBI IOSocketSSL TermReadKey TimeHiRes ];
+    buildInputs = [ DBDmysql DBI IOSocketSSL TermReadKey ];
     meta = {
       description = ''Collection of advanced command-line tools to perform a variety of MySQL and system tasks.'';
       homepage = http://www.percona.com/software/percona-toolkit;
@@ -13391,18 +13357,6 @@ let
     };
   };
 
-  SelfLoader = buildPerlPackage {
-    name = "SelfLoader-1.24";
-    src = fetchurl {
-      url = mirror://cpan/authors/id/S/SM/SMUELLER/SelfLoader-1.24.tar.gz;
-      sha256 = "4c7cd20fd82aa10520ac14b05fa003f60c72bb4c95527bd12aec8bf3c4546098";
-    };
-    meta = {
-      description = "Load functions only on demand";
-      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-    };
-  };
-
   SerealDecoder = buildPerlPackage rec {
     name = "Sereal-Decoder-4.005";
     src = fetchurl {
@@ -13571,22 +13525,6 @@ let
       platforms   = stdenv.lib.platforms.unix;
     };
     buildInputs = [ TestWarn XMLParserLite ];
-  };
-
-  Socket = buildPerlPackage {
-    name = "Socket-2.027";
-    src = fetchurl {
-      url = mirror://cpan/authors/id/P/PE/PEVANS/Socket-2.027.tar.gz;
-      sha256 = "1a725fbqx6bjzjf63bgs5wvzd20kffz1f94pbmv1670p9m4i270l";
-    };
-    postPatch = ''
-      # requires network access
-      rm t/getnameinfo.t t/getaddrinfo.t
-    '';
-    meta = {
-      description = "Networking constants and support functions";
-      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-    };
   };
 
   Socket6 = buildPerlPackage rec {
@@ -15215,20 +15153,6 @@ let
     };
   };
 
-  TestHarness = buildPerlPackage {
-    name = "Test-Harness-3.42";
-    src = fetchurl {
-      url = mirror://cpan/authors/id/L/LE/LEONT/Test-Harness-3.42.tar.gz;
-      sha256 = "0fd90d4efea82d6e262e6933759e85d27cbcfa4091b14bf4042ae20bab528e53";
-    };
-    doCheck = false; # makes assumptions about path to Perl
-    meta = {
-      homepage = http://testanything.org/;
-      description = "Run Perl standard test scripts with statistics";
-      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-    };
-  };
-
   TestHarnessStraps = buildPerlModule {
     name = "Test-Harness-Straps-0.30";
     src = fetchurl {
@@ -16175,7 +16099,7 @@ let
       install_name_tool -change "$oldPath" "$newPath" "$out/bin/biblex"
       install_name_tool -change "$oldPath" "$newPath" "$out/bin/bibparse"
       install_name_tool -change "$oldPath" "$newPath" "$out/bin/dumpnames"
-      install_name_tool -change "$oldPath" "$newPath" "$out/lib/perl5/site_perl/${perl.version}/darwin-2level/auto/Text/BibTeX/BibTeX.bundle"
+      install_name_tool -change "$oldPath" "$newPath" "$out/${perl.libPrefix}/${perl.version}/darwin-2level/auto/Text/BibTeX/BibTeX.bundle"
     '';
     meta = {
       description = "Interface to read and parse BibTeX files";
@@ -16653,18 +16577,6 @@ let
     buildInputs = [ TestDifferences ];
   };
 
-  threads = buildPerlPackage rec {
-    name = "threads-2.21";
-    src = fetchurl {
-      url = "mirror://cpan/authors/id/J/JD/JDHEDDEN/${name}.tar.gz";
-      sha256 = "047i22mdnf7fa0h9w5jhqrjbg561l5jxk8xqzwh6zbmwlac4qf98";
-    };
-    meta = {
-      description = "Perl interpreter-based threads";
-      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-    };
-  };
-
   threadsshared = buildPerlPackage rec {
     name = "threads-shared-1.58";
     src = fetchurl {
@@ -16848,14 +16760,6 @@ let
     meta = {
       description = "Parse string that represents time duration";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-    };
-  };
-
-  TimeHiRes = buildPerlPackage rec {
-    name = "Time-HiRes-1.9758";
-    src = fetchurl {
-      url = mirror://cpan/authors/id/J/JH/JHI/Time-HiRes-1.9758.tar.gz;
-      sha256 = "07jbydcdzpjm6i4nidci0rlklx4kla210fsl6zishw0yq5di9yjv";
     };
   };
 
@@ -17044,18 +16948,6 @@ let
     };
     meta = {
       license = "unknown";
-    };
-  };
-
-  UnicodeCollate = buildPerlPackage rec {
-    name = "Unicode-Collate-1.25";
-    src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SA/SADAHIRO/${name}.tar.gz";
-      sha256 = "1dpvck4saah8hqb9c82i25yimy9x2hkr1k3a2f1ly0k0ifhbiyyx";
-    };
-    meta = {
-      description = "Unicode Collation Algorithm";
-      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
 
@@ -17943,6 +17835,18 @@ let
   ThreadSemaphore = null; # part of Perl 5.26
   UnicodeNormalize = null; # part of Perl 5.26
   XSLoader = null; # part of Perl 5.26
+
+  Carp = null; # part of Perl 5.28
+  ExtUtilsCBuilder = null; # part of Perl 5.28
+  ExtUtilsParseXS = null; # part of Perl 5.28
+  FilterSimple = null; # part of Perl 5.28
+  IOSocketIP = null; # part of Perl 5.28
+  SelfLoader = null; # part of Perl 5.28
+  Socket = null; # part of Perl 5.28
+  TestHarness = null; # part of Perl 5.28
+  threads = null; # part of Perl 5.28
+  TimeHiRes = null; # part of Perl 5.28
+  UnicodeCollate = null; # part of Perl 5.28
 
   ArchiveZip_1_53 = self.ArchiveZip;
   Autobox = self.autobox;

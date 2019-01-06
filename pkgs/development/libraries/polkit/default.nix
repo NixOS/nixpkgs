@@ -72,13 +72,6 @@ stdenv.mkDerivation rec {
 
   makeFlags = "INTROSPECTION_GIRDIR=$(out)/share/gir-1.0 INTROSPECTION_TYPELIBDIR=$(out)/lib/girepository-1.0";
 
-  # The following is required on grsecurity/PaX due to spidermonkey's JIT
-  postBuild = stdenv.lib.optionalString stdenv.isLinux ''
-    paxmark mr src/polkitbackend/.libs/polkitd
-  '' + stdenv.lib.optionalString (stdenv.isLinux && doCheck) ''
-    paxmark mr test/polkitbackend/.libs/polkitbackendjsauthoritytest
-  '';
-
   installFlags=["datadir=$(out)/share" "sysconfdir=$(out)/etc"];
 
   inherit doCheck;

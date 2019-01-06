@@ -1,5 +1,5 @@
 { fetchurl, stdenv, meson, ninja, gtk3, libexif, libgphoto2, libsoup, libxml2, vala, sqlite
-, webkitgtk, pkgconfig, gnome3, gst_all_1, libgudev, libraw, glib, json-glib
+, webkitgtk, pkgconfig, gnome3, gst_all_1, libgudev, libraw, glib, json-glib, gcr
 , gettext, desktop-file-utils, gdk_pixbuf, librsvg, wrapGAppsHook
 , gobject-introspection, itstool, libgdata, python3 }:
 
@@ -25,7 +25,7 @@ in stdenv.mkDerivation rec {
     gst_all_1.gstreamer gst_all_1.gst-plugins-base gnome3.libgee
     libgudev gnome3.gexiv2 gnome3.gsettings-desktop-schemas
     libraw json-glib glib gdk_pixbuf librsvg gnome3.rest
-    gnome3.gcr gnome3.defaultIconTheme libgdata
+    gcr gnome3.defaultIconTheme libgdata
   ];
 
   postPatch = ''

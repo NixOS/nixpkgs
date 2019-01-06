@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, vala, intltool, pkgconfig, gtk3, glib
+{ stdenv, fetchurl, fetchpatch, vala, intltool, pkgconfig, gtk3, glib
 , json-glib, wrapGAppsHook, libpeas, bash, gobject-introspection
 , gnome3, gtkspell3, shared-mime-info, libgee, libgit2-glib, libsecret
 , meson, ninja, python3
@@ -14,6 +14,13 @@ in stdenv.mkDerivation rec {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
     sha256 = "1fz8q1aiql6k740savdjh0vzbyhcflgf94cfdhvzcrrvm929n2ss";
   };
+
+  patches = [
+    (fetchpatch {
+      url = https://gitlab.gnome.org/GNOME/gitg/commit/42bceea265f53fe7fd4a41037b936deed975fc6c.patch;
+      sha256 = "1xq245rsi1bi66lswk33pdiazfaagxf77836ds5q73900rx4r7fw";
+    })
+  ];
 
   postPatch = ''
     chmod +x meson_post_install.py

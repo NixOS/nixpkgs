@@ -77,8 +77,6 @@ stdenv.mkDerivation rec {
     ''
       ln -s $out/share/man/man1/{python2.7.1.gz,python.1.gz}
 
-      paxmark E $out/bin/python2.7
-
       rm "$out"/lib/python*/plat-*/regen # refers to glibc.dev
     '';
 

@@ -1,6 +1,6 @@
 { stdenv, fetchurl, vala, atk, cairo, glib, gnome3, gtk3, libwnck3
 , libX11, libXfixes, libXi, pango, intltool, pkgconfig, libxml2
-, bamf, gdk_pixbuf, libdbusmenu-gtk3, file
+, bamf, gdk_pixbuf, libdbusmenu-gtk3, file, gnome-menus
 , wrapGAppsHook, autoreconfHook, gobject-introspection }:
 
 stdenv.mkDerivation rec {
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     autoreconfHook
   ];
 
-  buildInputs = [ vala atk cairo glib gnome3.gnome-menus
+  buildInputs = [ vala atk cairo glib gnome-menus
                   gtk3 gnome3.libgee libwnck3 libX11 libXfixes
                   libXi pango gnome3.gnome-common bamf gdk_pixbuf
                   libdbusmenu-gtk3 gnome3.dconf ];

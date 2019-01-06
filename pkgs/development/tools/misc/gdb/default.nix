@@ -1,7 +1,7 @@
 { stdenv
 
 # Build time
-, fetchurl, fetchpatch, pkgconfig, perl, texinfo, setupDebugInfoDirs
+, fetchurl, fetchpatch, pkgconfig, perl, texinfo, setupDebugInfoDirs, buildPackages
 
 # Run time
 , ncurses, readline, gmp, mpfr, expat, zlib, dejagnu
@@ -48,6 +48,8 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional doCheck dejagnu;
 
   propagatedNativeBuildInputs = [ setupDebugInfoDirs ];
+
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
 
   enableParallelBuilding = true;
 

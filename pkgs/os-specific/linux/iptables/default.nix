@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, bison, flex, pkgconfig
+{ stdenv, fetchurl, fetchpatch, bison, flex, pkgconfig, pruneLibtoolFiles
 , libnetfilter_conntrack, libnftnl, libmnl, libpcap }:
 
 stdenv.mkDerivation rec {
@@ -21,16 +21,24 @@ stdenv.mkDerivation rec {
       url = "https://git.netfilter.org/iptables/patch/?id=51d374ba41ae4f1bb851228c06b030b83dd2092f";
       sha256 = "05fwrq03f9sm0v2bfwshbrg7pi2p978w1460arnmpay3135gj266";
     })
-    # extensions: libip6t_mh: fix bogus translation error
+    # Extensions: libip6t_mh: fix bogus translation error
     (fetchpatch {
       url = "https://git.netfilter.org/iptables/patch/?id=5839d7fe62ff667af7132fc7d589b386951f27b3";
       sha256 = "0578jn1ip710z9kijwg9g2vjq2kfrbafl03m1rgi4fasz215gvkf";
     })
     # Prevent headers collisions between linux and netfilter (in.h and in6.h)
-    (./netinet-headers-collision.patch)
+    # Fixed upstream with two commits
+    (fetchpatch {
+      url = "https://git.netfilter.org/iptables/patch/?id=8d9d7e4b9ef4c6e6abab2cf35c747d7ca36824bd";
+      sha256 = "0q3wcspiqym1r6dg1jhg7h8hpvsjzx1k7cs39z36mzlbmj9lm0zb";
+    })
+    (fetchpatch {
+      url = "https://git.netfilter.org/iptables/patch/?id=2908eda10bf9fc81119d4f3ad672c67918ab5955";
+      sha256 = "1dci4c8b7gcdrf77l2aicrcwlbp320xjz76fhavams0b4kgs6yr3";
+    })
   ];
 
-  nativeBuildInputs = [ bison flex pkgconfig ];
+  nativeBuildInputs = [ bison flex pkgconfig pruneLibtoolFiles ];
 
   buildInputs = [ libnetfilter_conntrack libnftnl libmnl libpcap ];
 

@@ -98,7 +98,7 @@ rec {
       in
         if final.parsed.kernel.name == pkgs.stdenv.hostPlatform.parsed.kernel.name &&
            (final.parsed.cpu.name == pkgs.stdenv.hostPlatform.parsed.cpu.name ||
-            (final.platform.isi686 && pkgs.stdenv.hostPlatform.isx86_64))
+            (final.isi686 && pkgs.stdenv.hostPlatform.isx86_64))
         then pkgs.runtimeShell
         else if final.isWindows
         then "${wine}/bin/${wine-name}"

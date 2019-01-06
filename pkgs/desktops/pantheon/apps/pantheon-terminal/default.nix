@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl, cmake, vala_0_38, pkgconfig, glib, gtk3, granite, gnome3, libnotify, gettext, wrapGAppsHook, gobject-introspection }:
+{ stdenv, fetchurl, perl, cmake, vala_0_38, pkgconfig, glib, gtk3, granite, gnome3, vte_290, libnotify, gettext, wrapGAppsHook, gobject-introspection }:
 
 stdenv.mkDerivation rec {
   majorVersion = "0.4";

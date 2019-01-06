@@ -2,7 +2,7 @@
 , meson, ninja, pkgconfig, vala, wrapGAppsHook, bzip2, dbus, evolution-data-server
 , exempi, flac, giflib, glib, gnome3, gst_all_1, icu, json-glib, libcue, libexif
 , libgrss, libgsf, libiptcdata, libjpeg, libpng, libseccomp, libsoup, libtiff, libuuid
-, libvorbis, libxml2, poppler, taglib, upower }:
+, libvorbis, libxml2, poppler, taglib, upower, totem-pl-parser }:
 
 let
   pname = "tracker-miners";
@@ -36,7 +36,7 @@ in stdenv.mkDerivation rec {
     giflib
     glib
     gnome3.gexiv2
-    gnome3.totem-pl-parser
+    totem-pl-parser
     gnome3.tracker
     gst_all_1.gst-plugins-base
     gst_all_1.gstreamer

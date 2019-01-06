@@ -34,14 +34,14 @@ in rec {
         cp ${./test-driver/test-driver.pl} $out/bin/nixos-test-driver
         chmod u+x $out/bin/nixos-test-driver
 
-        libDir=$out/lib/perl5/site_perl
+        libDir=$out/${perl.libPrefix}
         mkdir -p $libDir
         cp ${./test-driver/Machine.pm} $libDir/Machine.pm
         cp ${./test-driver/Logger.pm} $libDir/Logger.pm
 
         wrapProgram $out/bin/nixos-test-driver \
           --prefix PATH : "${lib.makeBinPath [ qemu_test vde2 netpbm coreutils ]}" \
-          --prefix PERL5LIB : "${with perlPackages; lib.makePerlPath [ TermReadLineGnu XMLWriter IOTty FileSlurp ]}:$out/lib/perl5/site_perl"
+          --prefix PERL5LIB : "${with perlPackages; makePerlPath [ TermReadLineGnu XMLWriter IOTty FileSlurp ]}:$out/${perl.libPrefix}"
       '';
   };
 

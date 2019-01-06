@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl, zlib, pcre, libxml2, libxslt
+{ stdenv, fetchurl, fetchpatch, openssl, zlib, pcre, libxml2, libxslt
 , gd, geoip
 , withDebug ? false
 , withStream ? true
@@ -60,7 +60,24 @@ stdenv.mkDerivation {
 
   NIX_CFLAGS_COMPILE = [ "-I${libxml2.dev}/include/libxml2" ] ++ optional stdenv.isDarwin "-Wno-error=deprecated-declarations";
 
+  configurePlatforms = [];
+
   preConfigure = (concatMapStringsSep "\n" (mod: mod.preConfigure or "") modules);
+
+  patches = stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    (fetchpatch {
+      url = "https://raw.githubusercontent.com/openwrt/packages/master/net/nginx/patches/102-sizeof_test_fix.patch";
+      sha256 = "0i2k30ac8d7inj9l6bl0684kjglam2f68z8lf3xggcc2i5wzhh8a";
+    })
+    (fetchpatch {
+      url = "https://raw.githubusercontent.com/openwrt/packages/master/net/nginx/patches/101-feature_test_fix.patch";
+      sha256 = "0v6890a85aqmw60pgj3mm7g8nkaphgq65dj4v9c6h58wdsrc6f0y";
+    })
+    (fetchpatch {
+      url = "https://raw.githubusercontent.com/openwrt/packages/master/net/nginx/patches/103-sys_nerr.patch";
+      sha256 = "0s497x6mkz947aw29wdy073k8dyjq8j99lax1a1mzpikzr4rxlmd";
+    })
+  ];
 
   hardeningEnable = optional (!stdenv.isDarwin) "pie";
 

@@ -37,6 +37,5 @@ let
 
 in callPackage ./binaryBuild.nix
   { inherit version src platform;
-    buildRustPackage = null;
     versionType = "bootstrap";
   }

@@ -61,7 +61,6 @@ let
     qtscript = [ ./qtscript.patch ];
     qtserialport = [ ./qtserialport.patch ];
     qttools = [ ./qttools.patch ];
-    qtwebengine = optional stdenv.needsPax ./qtwebengine-paxmark-mksnapshot.patch;
     qtwebkit = [ ./qtwebkit.patch ];
   };
 

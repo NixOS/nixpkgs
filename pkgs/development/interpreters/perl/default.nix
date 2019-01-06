@@ -154,11 +154,11 @@ let
       platforms = platforms.all;
     };
   } // stdenv.lib.optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform) rec {
-    crossVersion = "ab8d05c9e695d3db4f7dc15c70f23623349c2f49"; # Oct 03, 2018
+    crossVersion = "276849e62f472c1b241d9e7b38a28e4cc9f98563"; # Dez 02, 2018
 
     perl-cross-src = fetchurlBoot {
       url = "https://github.com/arsv/perl-cross/archive/${crossVersion}.tar.gz";
-      sha256 = "1g7p7mqmx8x3diqvbh881gr72d106cn6yvm4gx7f0ars3n3b3wj0";
+      sha256 = "1fpr1m9lgkwdp1vmdr0s6gvmcpd0m8q6jwn024bkczc2h37bdynd";
     };
 
     depsBuildBuild = [ buildPackages.stdenv.cc makeWrapper ];
@@ -174,15 +174,10 @@ let
     setupHook = ./setup-hook-cross.sh;
   });
 in rec {
-  perl526 = common {
-    version = "5.26.2";
-    sha256 = "03gpnxx1g6hvlh0v4aqx00580h787sfywp1vlvw64q2xcbm9qbsp";
-  };
-
   # the latest Maint version
   perl528 = common {
-    version = "5.28.0";
-    sha256 = "1a3f822lcl8dr8v0hk80yyhpzqlljg49z9flb48rs3nbsij9z4ky";
+    version = "5.28.1";
+    sha256 = "0iy3as4hnbjfyws4in3j9d6zhhjxgl5m95i5n9jy2bnzcpz8bgry";
   };
 
   # the latest Devel version

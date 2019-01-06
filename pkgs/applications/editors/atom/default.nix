@@ -70,9 +70,6 @@ let
       ln -s ${pkgs.git}/bin/git $dugite/git/libexec/git-core/git
 
       find $share -name "*.node" -exec patchelf --set-rpath "${atomEnv.libPath}:$share" {} \;
-
-      paxmark m $share/atom
-      paxmark m $share/resources/app/apm/bin/node
     '';
 
     meta = with stdenv.lib; {

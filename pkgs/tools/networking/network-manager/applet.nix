@@ -2,7 +2,7 @@
 , libnotify, libsecret, polkit, isocodes, modemmanager, libxml2, docbook_xsl, docbook_xml_dtd_43
 , mobile-broadband-provider-info, glib-networking, gsettings-desktop-schemas
 , libgudev, jansson, wrapGAppsHook, gobject-introspection, python3
-, libappindicator-gtk3, withGnome ? false }:
+, libappindicator-gtk3, withGnome ? false, gcr }:
 
 let
   pname = "network-manager-applet";
@@ -29,7 +29,7 @@ in stdenv.mkDerivation rec {
     polkit isocodes mobile-broadband-provider-info libgudev
     modemmanager jansson glib-networking
     libappindicator-gtk3 gnome3.defaultIconTheme
-  ] ++ stdenv.lib.optionals withGnome [ gnome3.gcr ]; # advanced certificate chooser
+  ] ++ stdenv.lib.optionals withGnome [ gcr ]; # advanced certificate chooser
 
   nativeBuildInputs = [ meson ninja intltool pkgconfig wrapGAppsHook gobject-introspection python3 gtk-doc docbook_xsl docbook_xml_dtd_43 libxml2 ];
 

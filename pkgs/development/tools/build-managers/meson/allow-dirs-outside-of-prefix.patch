@@ -1,6 +1,6 @@
 --- a/mesonbuild/coredata.py
 +++ b/mesonbuild/coredata.py
-@@ -298,18 +298,13 @@
+@@ -375,18 +375,13 @@
          '''
          if option.endswith('dir') and os.path.isabs(value) and \
             option not in builtin_dir_noprefix_options:

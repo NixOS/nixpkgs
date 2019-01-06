@@ -60,7 +60,7 @@ in stdenv.mkDerivation rec {
   postFixup =
     let wrapperArgs = runtimeDeps:
           "--prefix PERL5LIB : "
-          + (with perlPackages; stdenv.lib.makePerlPath [
+          + (with perlPackages; makePerlPath [
               CryptOpenSSLRSA
               CryptOpenSSLBignum
             ])

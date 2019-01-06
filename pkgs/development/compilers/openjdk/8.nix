@@ -25,7 +25,6 @@ let
   build = "26";
   baseurl = "http://hg.openjdk.java.net/jdk8u/jdk8u";
   repover = "jdk8u${update}-b${build}";
-  paxflags = if stdenv.isi686 then "msp" else "m";
   jdk8 = fetchurl {
              url = "${baseurl}/archive/${repover}.tar.gz";
              sha256 = "1hx5sfsglc101aqs9n7cz7rh447d6rxfxkbw03crvzbvy9n6ag2d";
@@ -175,14 +174,6 @@ let
       # https://youtrack.jetbrains.com/issue/IDEA-147272
       rm -rf $out/lib/openjdk/jre/lib/cmm
       ln -s {$jre,$out}/lib/openjdk/jre/lib/cmm
-
-      # Set PaX markings
-      exes=$(file $out/lib/openjdk/bin/* $jre/lib/openjdk/jre/bin/* 2> /dev/null | grep -E 'ELF.*(executable|shared object)' | sed -e 's/: .*$//')
-      echo "to mark: *$exes*"
-      for file in $exes; do
-        echo "marking *$file*"
-        paxmark ${paxflags} "$file"
-      done
 
       # Remove duplicate binaries.
       for i in $(cd $out/lib/openjdk/bin && echo *); do

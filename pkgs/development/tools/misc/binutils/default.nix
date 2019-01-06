@@ -30,18 +30,8 @@ stdenv.mkDerivation rec {
   });
 
   patches = [
-    # Since binutils 2.22, DT_NEEDED flags aren't copied for dynamic outputs.
-    # That requires upstream changes for things to work. So we can patch it to
-    # get the old behaviour by now.
-    ./dtneeded.patch
-
     # Make binutils output deterministic by default.
     ./deterministic.patch
-
-    # Always add PaX flags section to ELF files.
-    # This is needed, for instance, so that running "ldd" on a binary that is
-    # PaX-marked to disable mprotect doesn't fail with permission denied.
-    ./pt-pax-flags.patch
 
     # Bfd looks in BINDIR/../lib for some plugins that don't
     # exist. This is pointless (since users can't install plugins

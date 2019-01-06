@@ -695,7 +695,7 @@
   ./services/system/dbus.nix
   ./services/system/earlyoom.nix
   ./services/system/localtime.nix
-  ./services/system/kerberos.nix
+  ./services/system/kerberos/default.nix
   ./services/system/nscd.nix
   ./services/system/saslauthd.nix
   ./services/system/uptimed.nix
