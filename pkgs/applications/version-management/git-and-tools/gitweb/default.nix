@@ -1,8 +1,7 @@
-{ stdenv, git, gzip, perlPackages, fetchFromGitHub
+{ stdenv, git, fetchFromGitHub
 , gitwebTheme ? false }:
 
 let
-  gitwebPerlLibs = with perlPackages; [ CGI HTMLParser CGIFast FCGI FCGIProcManager HTMLTagCloud ];
   gitwebThemeSrc = fetchFromGitHub {
     owner = "kogakure";
     repo = "gitweb-theme";
@@ -17,16 +16,6 @@ in stdenv.mkDerivation {
   installPhase = ''
       mkdir $out
       mv * $out
-
-      # gzip (and optionally bzip2, xz, zip) are runtime dependencies for
-      # gitweb.cgi, need to patch so that it's found
-      sed -i -e "s|'compressor' => \['gzip'|'compressor' => ['${gzip}/bin/gzip'|" \
-          $out/gitweb.cgi
-      # Give access to CGI.pm and friends (was removed from perl core in 5.22)
-      for p in ${stdenv.lib.concatStringsSep " " gitwebPerlLibs}; do
-          sed -i -e "/use CGI /i use lib \"$p/${perlPackages.perl.libPrefix}\";" \
-              "$out/gitweb.cgi"
-      done
 
       ${stdenv.lib.optionalString gitwebTheme "cp ${gitwebThemeSrc}/* $out/static"}
   '';
