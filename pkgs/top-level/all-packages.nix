@@ -2467,6 +2467,8 @@ in
 
   efibootmgr = callPackage ../tools/system/efibootmgr { };
 
+  efitools = callPackage ../tools/system/efitools { };
+  
   efivar = callPackage ../tools/system/efivar { };
 
   evemu = callPackage ../tools/system/evemu { };
