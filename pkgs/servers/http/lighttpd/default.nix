@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
   '';
 
   checkInputs = [ perl ];
-  doCheck = false; # fails 2 tests
+  doCheck = true;
 
   postInstall = ''
     mkdir -p "$out/share/lighttpd/doc/config"
