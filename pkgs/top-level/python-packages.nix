@@ -2102,6 +2102,8 @@ in {
 
   svg-path = callPackage ../development/python-modules/svg-path { };
 
+  r2pipe = callPackage ../development/python-modules/r2pipe { };
+
   regex = callPackage ../development/python-modules/regex { };
 
   ratelimiter = callPackage ../development/python-modules/ratelimiter { };
