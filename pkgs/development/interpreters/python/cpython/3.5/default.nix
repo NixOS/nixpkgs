@@ -133,6 +133,7 @@ in stdenv.mkDerivation {
     for item in $out/lib/python${majorVersion}/test/*; do
       if [[ "$item" != */test_support.py*
          && "$item" != */test/support
+         && "$item" != */test/*.pem
          && "$item" != */test/libregrtest
          && "$item" != */test/regrtest.py* ]]; then
         rm -rf "$item"
