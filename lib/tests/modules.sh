@@ -151,6 +151,9 @@ checkConfigOutput "1 2 3 4 5 6 7 8 9 10" config.result ./loaOf-with-many-list-me
 
 # Check mkAliasOptionModuleWithPriority.
 checkConfigOutput "true" config.enable ./alias-with-priority.nix
+checkConfigOutput "true" config.enableAlias ./alias-with-priority.nix
+checkConfigOutput "false" config.enable ./alias-with-priority-can-override.nix
+checkConfigOutput "false" config.enableAlias ./alias-with-priority-can-override.nix
 
 cat <<EOF
 ====== module tests ======
