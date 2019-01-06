@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libGLU_combined, SDL, scons, SDL_ttf, SDL_image, zlib, SDL_net
+{ stdenv, fetchurl, libGLU_combined, SDL, sconsPackages, SDL_ttf, SDL_image, zlib, SDL_net
 , speex, libvorbis, libogg, boost, fribidi, bsdiff
 , fetchpatch
 }:
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     sed -i -e "s@env = Environment()@env = Environment( ENV = os.environ )@" SConstruct
   '';
 
-  nativeBuildInputs = [ scons ];
+  nativeBuildInputs = [ sconsPackages.scons_3_0_1 ];
   buildInputs = [ libGLU_combined SDL SDL_ttf SDL_image zlib SDL_net speex libvorbis libogg boost fribidi bsdiff ];
 
   postConfigure = ''
