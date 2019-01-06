@@ -15,11 +15,12 @@ stdenv.mkDerivation rec
     postInstall = ''
       for dir in $out/*; do # */
         if [ -d $dir/lib ]; then
-	  mv $dir/* $out # */
+          mv $dir/* $out # */
           rmdir $dir
           break
         fi
       done
+    '' + stdenv.lib.optionalString (!stdenv.isDarwin) ''
       patchelf --add-needed ${libX11}/lib/libX11.so $out/lib/libIVhines.so
     '';
     meta = with stdenv.lib;
