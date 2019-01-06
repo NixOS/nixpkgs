@@ -544,6 +544,19 @@ self: super: builtins.intersectAttrs super {
       '';
     });
 
+  # On Darwin, git-annex mis-detects options to `cp`, so we wrap the binary to
+  # ensure it uses Nixpkgs' coreutils.
+  git-annex = with pkgs;
+    if (!stdenv.isLinux) then
+      let path = stdenv.lib.makeBinPath [ coreutils ];
+      in overrideCabal (addBuildTool super.git-annex makeWrapper) (_drv: {
+        postFixup = ''
+          wrapProgram $out/bin/git-annex \
+            --prefix PATH : "${path}"
+        '';
+      })
+    else super.git-annex;
+
   # The test suite has undeclared dependencies on git.
   githash = dontCheck super.githash;
 
