@@ -532,7 +532,7 @@ self: super: builtins.intersectAttrs super {
   # The test-suite requires a running PostgreSQL server.
   Frames-beam = dontCheck super.Frames-beam;
 
-  futhark = with pkgs;
+  futhark = if pkgs.stdenv.isDarwin then super.futhark else with pkgs;
     let path = stdenv.lib.makeBinPath [ gcc ];
     in overrideCabal (addBuildTool super.futhark makeWrapper) (_drv: {
       postInstall = ''
