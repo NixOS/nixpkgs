@@ -18,6 +18,9 @@ in stdenv.mkDerivation rec {
 
   hardeningDisable = [ "pic" ];
 
+  # The RANDSTRUCT gcc plugin rewrites structs using designated initializers
+  NIX_CFLAGS_COMPILE = [ "-Wno-error=designated-init" ];
+
   configureFlags = [
     "--with-linux-kernel-build=${kernelBuildDir}"
     "--sysconfdir=/etc"
