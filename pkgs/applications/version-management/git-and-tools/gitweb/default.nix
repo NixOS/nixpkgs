@@ -1,4 +1,4 @@
-{ stdenv, git, fetchFromGitHub
+{ stdenv, buildEnv, git, fetchFromGitHub
 , gitwebTheme ? false }:
 
 let
@@ -6,19 +6,20 @@ let
     owner = "kogakure";
     repo = "gitweb-theme";
     rev = "049b88e664a359f8ec25dc6f531b7e2aa60dd1a2";
-    sha256 = "0wksqma41z36dbv6w6iplkjfdm0ha3njp222fakyh4lismajr71p";
+    extraPostFetch = ''
+      mkdir -p "$TMPDIR/gitwebTheme"
+      mv "$out"/* "$TMPDIR/gitwebTheme/"
+      mkdir "$out/static"
+      mv "$TMPDIR/gitwebTheme"/* "$out/static/"
+    '';
+    sha256 = "17hypq6jvhy6zhh26lp3nyi52npfd5wy5752k6sq0shk4na2acqi";
   };
-in stdenv.mkDerivation {
+in buildEnv {
   name = "gitweb-${stdenv.lib.getVersion git}";
 
-  src = git.gitweb;
-
-  installPhase = ''
-      mkdir $out
-      mv * $out
-
-      ${stdenv.lib.optionalString gitwebTheme "cp ${gitwebThemeSrc}/* $out/static"}
-  '';
+  ignoreCollisions = true;
+  paths = stdenv.lib.optional gitwebTheme "${gitwebThemeSrc}"
+       ++ [ "${git}/share/gitweb" ];
 
   meta = git.meta // {
     maintainers = with stdenv.lib.maintainers; [ gnidorah ];

@@ -35,7 +35,7 @@ stdenv.mkDerivation {
     sha256 = "1scbggzghkzzfqg4ky3qh7h9w87c3zya4ls5disz7dbx56is7sgw";
   };
 
-  outputs = [ "out" ] ++ stdenv.lib.optional perlSupport "gitweb";
+  outputs = [ "out" ];
 
   hardeningDisable = [ "format" ];
 
@@ -87,7 +87,6 @@ stdenv.mkDerivation {
 
   makeFlags = [
     "prefix=\${out}"
-    "gitwebdir=\${gitweb}"  # put in separate package for simpler maintenance
     "SHELL_PATH=${stdenv.shell}"
   ]
   ++ (if perlSupport then ["PERL_PATH=${perlPackages.perl}/bin/perl"] else ["NO_PERL=1"])
@@ -190,11 +189,11 @@ stdenv.mkDerivation {
       # gzip (and optionally bzip2, xz, zip) are runtime dependencies for
       # gitweb.cgi, need to patch so that it's found
       sed -i -e "s|'compressor' => \['gzip'|'compressor' => ['${gzip}/bin/gzip'|" \
-          $gitweb/gitweb.cgi
+          $out/share/gitweb/gitweb.cgi
       # Give access to CGI.pm and friends (was removed from perl core in 5.22)
       for p in ${stdenv.lib.concatStringsSep " " gitwebPerlLibs}; do
           sed -i -e "/use CGI /i use lib \"$p/${perlPackages.perl.libPrefix}\";" \
-              "$gitweb/gitweb.cgi"
+              "$out/share/gitweb/gitweb.cgi"
       done
     ''
 
