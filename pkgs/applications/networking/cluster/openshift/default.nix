@@ -10,7 +10,7 @@ with lib;
 
 let
   version = "3.11.0";
-  ver = stdenv.lib.elemAt (stdenv.lib.splitString "." version);
+  ver = stdenv.lib.elemAt (stdenv.lib.splitVersion version);
   versionMajor = ver 0;
   versionMinor = ver 1;
   versionPatch = ver 2;

@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     inherit cudatoolkit;
-    majorVersion = lib.head (lib.splitString "." version);
+    majorVersion = lib.head (lib.splitVersion version);
   };
 
   meta = with stdenv.lib; {

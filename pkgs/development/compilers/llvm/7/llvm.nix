@@ -26,7 +26,7 @@ let
 
   # Used when creating a version-suffixed symlink of libLLVM.dylib
   shortVersion = with stdenv.lib;
-    concatStringsSep "." (take 1 (splitString "." release_version));
+    concatStringsSep "." (take 1 (splitVersion release_version));
 
   inherit
     (import ../common.nix { inherit (stdenv) lib; })
