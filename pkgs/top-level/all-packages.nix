@@ -10120,7 +10120,7 @@ in
 
   gsoap = callPackage ../development/libraries/gsoap { };
 
-  gsound = callPackages ../development/libraries/gsound { };
+  gsound = callPackage ../development/libraries/gsound { };
 
   gss = callPackage ../development/libraries/gss { };
 
