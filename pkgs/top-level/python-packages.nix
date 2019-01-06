@@ -5159,6 +5159,8 @@ in {
     inherit python;
   })).python;
 
+  zm-py = callPackage ../development/python-modules/zm-py { };
+
   rfc7464 = callPackage ../development/python-modules/rfc7464 { };
 
   foundationdb51 = callPackage ../servers/foundationdb/python.nix { foundationdb = pkgs.foundationdb51; };
