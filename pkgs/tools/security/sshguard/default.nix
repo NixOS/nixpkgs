@@ -1,12 +1,12 @@
 { stdenv, fetchurl, autoreconfHook, yacc, flex}:
 
 stdenv.mkDerivation rec {
-  version = "2.3.0";
+  version = "2.3.1";
   name = "sshguard-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/sshguard/${name}.tar.gz";
-    sha256 = "0s501hdgnjvhqblvvxda6rmaapw1dd81d6w9lbjm4rn2lf3kzdfl";
+    sha256 = "18i0kmjvym9xym3ysg5kap0298nzcprar9y96k54p3zpdpi5b43n";
   };
 
   doCheck = true;
