@@ -1,8 +1,9 @@
-{ stdenv, fetchurl, pkgconfig, pcre, libxml2, zlib, attr, bzip2, which, file
+{ stdenv, fetchurl, pkgconfig, pcre, libxml2, zlib, bzip2, which, file
 , openssl, enableMagnet ? false, lua5_1 ? null
 , enableMysql ? false, mysql ? null
 , enableLdap ? false, openldap ? null
 , enableWebDAV ? false, sqlite ? null, libuuid ? null
+, enableExtendedAttrs ? false, attr ? null
 , perl
 }:
 
@@ -11,6 +12,7 @@ assert enableMysql -> mysql != null;
 assert enableLdap -> openldap != null;
 assert enableWebDAV -> sqlite != null;
 assert enableWebDAV -> libuuid != null;
+assert enableExtendedAttrs -> attr != null;
 
 stdenv.mkDerivation rec {
   name = "lighttpd-1.4.52";
@@ -25,7 +27,7 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ pcre libxml2 zlib attr bzip2 which file openssl ]
+  buildInputs = [ pcre libxml2 zlib bzip2 which file openssl ]
              ++ stdenv.lib.optional enableMagnet lua5_1
              ++ stdenv.lib.optional enableMysql mysql.connector-c
              ++ stdenv.lib.optional enableLdap openldap
@@ -37,7 +39,8 @@ stdenv.mkDerivation rec {
                 ++ stdenv.lib.optional enableMysql "--with-mysql"
                 ++ stdenv.lib.optional enableLdap "--with-ldap"
                 ++ stdenv.lib.optional enableWebDAV "--with-webdav-props"
-                ++ stdenv.lib.optional enableWebDAV "--with-webdav-locks";
+                ++ stdenv.lib.optional enableWebDAV "--with-webdav-locks"
+                ++ stdenv.lib.optional enableExtendedAttrs "--with-attr";
 
   preConfigure = ''
     sed -i "s:/usr/bin/file:${file}/bin/file:g" configure
@@ -59,7 +62,7 @@ stdenv.mkDerivation rec {
     description = "Lightweight high-performance web server";
     homepage = http://www.lighttpd.net/;
     license = stdenv.lib.licenses.bsd3;
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
     maintainers = [ maintainers.bjornfor ];
   };
 }
