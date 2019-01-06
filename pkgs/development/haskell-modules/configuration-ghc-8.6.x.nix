@@ -64,7 +64,4 @@ self: super: {
   # Break out of "yaml >=0.10.4.0 && <0.11": https://github.com/commercialhaskell/stack/issues/4485
   stack = doJailbreak super.stack;
 
-  # Break out of "tasty >= 0.11 && < 1.2": https://github.com/jgm/pandoc/issues/5200
-  pandoc = doJailbreak super.pandoc;
-
 }
