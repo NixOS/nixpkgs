@@ -8837,6 +8837,7 @@ in
   minify = callPackage ../development/web/minify { };
 
   minizinc = callPackage ../development/tools/minizinc { };
+  minizincide = qt5.callPackage ../development/tools/minizinc/ide.nix { };
 
   mk = callPackage ../development/tools/build-managers/mk { };
 
@@ -13475,7 +13476,7 @@ in
   clamsmtp = callPackage ../servers/mail/clamsmtp { };
 
   clickhouse = callPackage ../servers/clickhouse {
-    inherit (llvmPackages_6) clang-unwrapped lld llvm;
+    inherit (llvmPackages_latest) clang-unwrapped lld llvm;
   };
 
   couchdb = callPackage ../servers/http/couchdb {
@@ -20402,7 +20403,9 @@ in
 
   angband = callPackage ../games/angband { };
 
-  anki = python3Packages.callPackage ../games/anki { };
+  anki = python3Packages.callPackage ../games/anki {
+    inherit (darwin.apple_sdk.frameworks) CoreAudio;
+  };
 
   armagetronad = callPackage ../games/armagetronad { };
 

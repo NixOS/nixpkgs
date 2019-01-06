@@ -1732,7 +1732,11 @@ in {
 
   gateone = callPackage ../development/python-modules/gateone { };
 
-  gcutil = callPackage ../development/python-modules/gcutil { };
+  # TODO: Remove after 19.03 is branched off:
+  gcutil = throw ''
+    pythonPackages.gcutil is deprecated and can be replaced with "gcloud
+    compute" from the package google-cloud-sdk.
+  '';
 
   GeoIP = callPackage ../development/python-modules/GeoIP { };
 
@@ -2294,6 +2298,8 @@ in {
   hg-git = callPackage ../development/python-modules/hg-git { };
 
   dtopt = callPackage ../development/python-modules/dtopt { };
+
+  easywatch = callPackage ../development/python-modules/easywatch { };
 
   ecdsa = callPackage ../development/python-modules/ecdsa { };
 
@@ -3999,6 +4005,8 @@ in {
   sqlalchemy = callPackage ../development/python-modules/sqlalchemy { };
 
   sqlalchemy_migrate = callPackage ../development/python-modules/sqlalchemy-migrate { };
+
+  staticjinja = callPackage ../development/python-modules/staticjinja { };
 
   statsmodels = callPackage ../development/python-modules/statsmodels { };
 
