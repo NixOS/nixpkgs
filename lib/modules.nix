@@ -450,8 +450,7 @@ rec {
 
   filterOverrides' = defs:
     let
-      defaultPrio = 100;
-      getPrio = def: if def.value._type or "" == "override" then def.value.priority else defaultPrio;
+      getPrio = def: if def.value._type or "" == "override" then def.value.priority else defaultPriority;
       highestPrio = foldl' (prio: def: min (getPrio def) prio) 9999 defs;
       strip = def: if def.value._type or "" == "override" then def // { value = def.value.content; } else def;
     in {
@@ -534,6 +533,8 @@ rec {
   mkBefore = mkOrder 500;
   mkAfter = mkOrder 1500;
 
+  # The default priority for things that don't have a priority specified.
+  defaultPriority = 100;
 
   # Convenient property used to transfer all definitions and their
   # properties from one option to another. This property is useful for
@@ -561,11 +562,10 @@ rec {
   # Similar to mkAliasAndWrapDefinitions but copies over the priority from the
   # option as well.
   #
-  # If a priority is not set, it assumes a priority of 100.
+  # If a priority is not set, it assumes a priority of defaultPriority.
   mkAliasAndWrapDefsWithPriority = wrap: option:
     let
-      defaultPrio = 100;
-      prio = option.highestPrio or defaultPrio;
+      prio = option.highestPrio or defaultPriority;
       defsWithPrio = map (mkOverride prio) option.definitions;
     in mkAliasIfDef option (wrap (mkMerge defsWithPrio));
 
