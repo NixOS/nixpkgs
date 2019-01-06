@@ -2,7 +2,7 @@
 , openssl, enableMagnet ? false, lua5_1 ? null
 , enableMysql ? false, mysql ? null
 , enableLdap ? false, openldap ? null
-, enableWebDAV ? true, sqlite ? null, libuuid ? null
+, enableWebDAV ? false, sqlite ? null, libuuid ? null
 , perl
 }:
 
