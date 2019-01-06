@@ -3787,9 +3787,7 @@ in
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
 
-  medfile = callPackage ../development/libraries/medfile {
-    hdf5 = hdf5_1_8;
-  };
+  medfile = callPackage ../development/libraries/medfile { };
 
   memtester = callPackage ../tools/system/memtester { };
 
