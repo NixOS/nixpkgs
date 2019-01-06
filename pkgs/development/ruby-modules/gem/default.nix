@@ -63,7 +63,6 @@ let
     else if type == "git" then
       fetchgit {
         inherit (attrs.source) url rev sha256 fetchSubmodules;
-        leaveDotGit = true;
       }
     else if type == "url" then
       fetchurl attrs.source
@@ -94,6 +93,7 @@ stdenv.mkDerivation ((builtins.removeAttrs attrs ["source"]) // {
   name = attrs.name or "${namePrefix}${gemName}-${version}";
 
   inherit src;
+
 
   unpackPhase = attrs.unpackPhase or ''
     runHook preUnpack
@@ -142,6 +142,13 @@ stdenv.mkDerivation ((builtins.removeAttrs attrs ["source"]) // {
       gempkg=$(echo "$output" | grep -oP 'File: \K(.*)')
 
       echo "gem package built: $gempkg"
+    elif [[ "$type" == "git" ]]; then
+      ls .git | head -n 10
+      git init
+      git config user.email nixbld@localhost.none
+      git config user.name Nix
+      git add .
+      git commit -m "Nixpkgs setup for rubygems" || true
     fi
 
     runHook postBuild
