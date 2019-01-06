@@ -62,6 +62,7 @@ let
     netfilterRPFilter = true;
     grsecurity = false;
     xen_dom0 = false;
+    ia32Emulation = true;
   } // features) kernelPatches;
 
   intermediateNixConfig = import ./common-config.nix {
