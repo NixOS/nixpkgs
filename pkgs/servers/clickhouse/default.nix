@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, libtool
+{ stdenv, fetchFromGitHub, fetchpatch, cmake, libtool
 , boost, capnproto, cctz, clang-unwrapped, double-conversion, gperftools, icu
 , libcpuid, libxml2, lld, llvm, lz4 , mysql, openssl, poco, re2, rdkafka
 , readline, sparsehash, unixODBC, zstd, ninja, jemalloc
@@ -28,10 +28,16 @@ stdenv.mkDerivation rec {
     "-DUSE_STATIC_LIBRARIES=OFF"
     "-DUSE_INTERNAL_SSL_LIBRARY=False"
   ];
-  hardeningDisable = [ "format" ];
 
-  patchPhase = ''
-    patchShebangs .
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/yandex/ClickHouse/commit/afbcdf2f00a04e747c5279414cf4691f29bb5cc2.patch";
+      sha256 = "17y891q0dp179w3jv32h74pbfwyzgnz4dxxwv73vzdwvys4i8c8z";
+    })
+  ];
+
+  postPatch = ''
+    patchShebangs copy_headers.sh
   '';
 
   postInstall = ''
@@ -42,6 +48,8 @@ stdenv.mkDerivation rec {
     substituteInPlace $out/etc/clickhouse-server/config.xml \
       --replace "<errorlog>/var/log/clickhouse-server/clickhouse-server.err.log</errorlog>" "<console>1</console>"
   '';
+
+  hardeningDisable = [ "format" ];
 
   meta = with stdenv.lib; {
     homepage = https://clickhouse.yandex/;
