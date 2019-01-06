@@ -524,6 +524,7 @@
   ./services/networking/epmd.nix
   ./services/networking/eternal-terminal.nix
   ./services/networking/fakeroute.nix
+  ./services/networking/fastd.nix
   ./services/networking/ferm.nix
   ./services/networking/firefox/sync-server.nix
   ./services/networking/fireqos.nix

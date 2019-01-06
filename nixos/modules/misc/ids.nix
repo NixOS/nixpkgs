@@ -338,6 +338,7 @@
       minetest = 311;
       rss2email = 312;
       cockroachdb = 313;
+      fastd = 314;
 
       # When adding a uid, make sure it doesn't match an existing gid. And don't use uids above 399!
 
