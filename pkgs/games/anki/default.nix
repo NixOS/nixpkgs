@@ -20,13 +20,14 @@
 , glibcLocales
 , nose
 , send2trash
+, CoreAudio
 # This little flag adds a huge number of dependencies, but we assume that
 # everyone wants Anki to draw plots with statistics by default.
 , plotsSupport ? true
 }:
 
 buildPythonApplication rec {
-    version = "2.1.7";
+    version = "2.1.8";
     name = "anki-${version}";
 
     src = fetchurl {
@@ -36,12 +37,16 @@ buildPythonApplication rec {
         # "http://ankisrs.net/download/mirror/${name}.tgz"
         # "http://ankisrs.net/download/mirror/archive/${name}.tgz"
       ];
-      sha256 = "0cvlimfxb7kficlf20hg7a345pahvr093b7yqvssww15h4y4va9d";
+      sha256 = "08wb9hwpmbq7636h7sinim33qygdwwlh3frqqh2gfgm49f46di2p";
     };
 
-    propagatedBuildInputs = [ pyqt5 sqlalchemy
-      beautifulsoup4 send2trash pyaudio requests decorator markdown ]
-                            ++ lib.optional plotsSupport matplotlib;
+    propagatedBuildInputs = [
+      pyqt5 sqlalchemy beautifulsoup4 send2trash pyaudio requests decorator
+      markdown
+    ]
+      ++ lib.optional plotsSupport matplotlib
+      ++ lib.optional stdenv.isDarwin [ CoreAudio ]
+      ;
 
     checkInputs = [ pytest glibcLocales nose ];
 

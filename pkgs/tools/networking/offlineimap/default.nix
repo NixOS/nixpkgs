@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, python2Packages,
-  asciidoc, libxml2, libxslt, docbook_xsl }:
+  asciidoc, cacert, libxml2, libxslt, docbook_xsl }:
 
 python2Packages.buildPythonApplication rec {
   version = "7.2.2";
@@ -15,6 +15,9 @@ python2Packages.buildPythonApplication rec {
   postPatch = ''
     # Skip xmllint to stop failures due to no network access
     sed -i docs/Makefile -e "s|a2x -v -d |a2x -L -v -d |"
+
+    # Provide CA certificates (Used when "sslcacertfile = OS-DEFAULT" is configured")
+    sed -i offlineimap/utils/distro.py -e '/def get_os_sslcertfile():/a\ \ \ \ return "${cacert}/etc/ssl/certs/ca-bundle.crt"'
   '';
 
   doCheck = false;

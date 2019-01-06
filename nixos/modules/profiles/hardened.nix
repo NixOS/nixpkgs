@@ -29,11 +29,20 @@ with lib;
   security.apparmor.enable = mkDefault true;
 
   boot.kernelParams = [
+    # Slab/slub sanity checks, redzoning, and poisoning
+    "slub_debug=FZP"
+
+    # Disable slab merging to make certain heap overflow attacks harder
+    "slab_nomerge"
+
     # Overwrite free'd memory
     "page_poison=1"
 
     # Disable legacy virtual syscalls
     "vsyscall=none"
+
+    # Enable PTI even if CPU claims to be safe from meltdown
+    "pti=on"
   ];
 
   boot.blacklistedKernelModules = [
