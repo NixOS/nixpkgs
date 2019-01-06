@@ -669,6 +669,11 @@
     github = "bstrik";
     name = "Berno Strik";
   };
+  buffet = {
+    email = "niclas@countingsort.com";
+    github = "buffet";
+    name = "Niclas Meyer";
+  };
   bugworm = {
     email = "bugworm@zoho.com";
     github = "bugworm";
@@ -926,11 +931,6 @@
     email = "couchemar@yandex.ru";
     github = "couchemar";
     name = "Andrey Pavlov";
-  };
-  countingsort = {
-    email = "niclas@countingsort.com";
-    github = "countingsort";
-    name = "Niclas Meyer";
   };
   cpages = {
     email = "page@ruiec.cat";
