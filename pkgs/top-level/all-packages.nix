@@ -9818,7 +9818,7 @@ in
 
   gcab = callPackage ../development/libraries/gcab { };
 
-  gcr = callPackages ../development/libraries/gcr { };
+  gcr = callPackage ../development/libraries/gcr { };
 
   gdome2 = callPackage ../development/libraries/gdome2 {
     inherit (gnome2) gtkdoc;
