@@ -11,7 +11,7 @@
 mkDerivation {
   name = "kdelibs4support";
   meta = { maintainers = [ lib.maintainers.ttuegel ]; };
-  patches = copyPathsToStore (lib.readPathsFromFile ./. ./series);
+  patches = [ ./nix-kde-include-dir.patch ];
   setupHook = ./setup-hook.sh;
   nativeBuildInputs = [ extra-cmake-modules qttools ];
   propagatedNativeBuildInputs = [ kdoctools ];

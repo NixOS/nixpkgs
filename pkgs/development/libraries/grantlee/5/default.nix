@@ -15,7 +15,10 @@ mkDerivation rec {
   buildInputs = [ qtbase qtscript ];
   nativeBuildInputs = [ cmake ];
 
-  patches = copyPathsToStore (lib.readPathsFromFile ./. ./series);
+  patches = [
+    ./grantlee-nix-profiles.patch
+    ./grantlee-no-canonicalize-filepath.patch
+  ];
 
   outputs = [ "out" "dev" ];
   postFixup =

@@ -8,7 +8,7 @@
 mkDerivation {
   name = "kiconthemes";
   meta = { maintainers = [ lib.maintainers.ttuegel ]; };
-  patches = copyPathsToStore (lib.readPathsFromFile ./. ./series);
+  patches = [./default-theme-breeze.patch];
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [
     breeze-icons karchive kcoreaddons kconfigwidgets ki18n kitemviews

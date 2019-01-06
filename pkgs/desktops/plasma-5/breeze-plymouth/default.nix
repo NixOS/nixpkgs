@@ -24,7 +24,7 @@ mkDerivation {
   name = "breeze-plymouth";
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [ plymouth ] ++ lib.optionals nixosBranding [ imagemagick netpbm perl ];
-  patches = copyPathsToStore (lib.readPathsFromFile ./. ./series);
+  patches = [./install-paths.patch];
   cmakeFlags = lib.optionals nixosBranding [
     "-DDISTRO_NAME=${nixosName}"
     "-DDISTRO_VERSION=${nixosVersion}"

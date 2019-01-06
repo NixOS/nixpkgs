@@ -15,5 +15,8 @@ mkDerivation {
   ];
   propagatedBuildInputs = [ kconfig kcoreaddons ];
   propagatedUserEnvPkgs = [ shared-mime-info ]; # for kbuildsycoca5
-  patches = copyPathsToStore (lib.readPathsFromFile ./. ./series);
+  patches = [
+    ./qdiriterator-follow-symlinks.patch
+    ./no-canonicalize-path.patch
+  ];
 }

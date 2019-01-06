@@ -11,7 +11,7 @@ mkDerivation {
     maintainers = kdepimTeam;
   };
   output = [ "out" "dev" ];
-  patches = copyPathsToStore (lib.readPathsFromFile ./. ./series);
+  patches = [./grantlee-merge-theme-dirs.patch];
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
     grantlee ki18n kiconthemes knewstuff kservice kxmlgui qtbase
