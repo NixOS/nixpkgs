@@ -1,6 +1,4 @@
-{ stdenv, fetchurl, meson, ninja, fetchFromGitHub, gcc-unwrapped, which, python }:
-
-with import <nixpkgs> {}; 
+{ stdenv, meson, ninja, fetchFromGitHub, which, python }:
 
 stdenv.mkDerivation rec {
   name = "ksh-${version}";
@@ -23,7 +21,7 @@ stdenv.mkDerivation rec {
       provides access to the UNIX system and to many other systems, on the
       many different computers and workstations on which it is implemented. 
     '';
-    homepage = http://www.kornshell.com/i;
+    homepage = https://github.com/att/ast;
     license = licenses.cpl10;
     maintainers = with maintainers; [ ];
     platforms = platforms.all;
@@ -33,3 +31,4 @@ stdenv.mkDerivation rec {
     shellPath = "/bin/ksh";
   };
 }
+
