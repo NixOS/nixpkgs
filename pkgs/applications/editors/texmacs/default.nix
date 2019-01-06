@@ -24,6 +24,7 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [ guile_1_8 qt4 makeWrapper ghostscriptX freetype ];
+  NIX_LDFLAGS = [ "-lz" ];
 
   postInstall = "wrapProgram $out/bin/texmacs --suffix PATH : " +
         (if ghostscriptX == null then "" else "${ghostscriptX}/bin:") +
@@ -32,12 +33,6 @@ stdenv.mkDerivation {
         "${xmodmap}/bin:${which}/bin";
 
   inherit (common) postPatch;
-
-  postFixup = ''
-    bin="$out/libexec/TeXmacs/bin/texmacs.bin"
-    rpath=$(patchelf --print-rpath "$bin")
-    patchelf --set-rpath "$rpath:${zlib.out}/lib" "$bin"
-  '';
 
   meta = common.meta // {
     maintainers = [ stdenv.lib.maintainers.roconnor ];

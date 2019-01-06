@@ -41,6 +41,10 @@ stdenv.mkDerivation rec {
     sconsFlags+=" DATADIR=$out/share/globulation2/glob2"
   '';
 
+  NIX_LDFLAGS = [
+    "-lboost_system"
+  ];
+
   meta = with stdenv.lib; {
     description = "RTS without micromanagement";
     maintainers = with maintainers; [ raskin ];

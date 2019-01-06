@@ -16,6 +16,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
   buildInputs = [ libzip boost wt3 libconfig ];
 
+  NIX_LDFLAGS = [
+    "-lpthread"
+  ];
+
   postInstall = ''
     ln -s ${wt3}/share/Wt/resources $out/share/fileshelter/docroot/resources
   '';
