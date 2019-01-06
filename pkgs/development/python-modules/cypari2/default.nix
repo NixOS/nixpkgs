@@ -1,5 +1,4 @@
 { stdenv
-, bootstrapped-pip
 , buildPythonPackage
 , python
 , fetchPypi
@@ -24,11 +23,11 @@ buildPythonPackage rec {
   # That is because while the default install phase succeeds to build the package,
   # it fails to generate the file "auto_paridecl.pxd".
   installPhase = ''
-    mkdir -p "$out/lib/${python.libPrefix}/site-packages"
-    export PYTHONPATH="$out/lib/${python.libPrefix}/site-packages:$PYTHONPATH"
+    mkdir -p "$out/lib/${python.sitePackages}"
+    export PYTHONPATH="$out/lib/${python.sitePackages}:$PYTHONPATH"
 
     # install "." instead of "*.whl"
-    ${bootstrapped-pip}/bin/pip install --no-index --prefix=$out --no-cache --build=tmpdir .
+    ${python.pythonForBuild.pkgs.bootstrapped-pip}/bin/pip install --no-index --prefix=$out --no-cache --build=tmpdir .
   '';
 
   buildInputs = [

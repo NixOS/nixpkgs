@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ openssl zlib lz4 freetype fontconfig SDL libGL mesa_noglu
     giflib libpng libtiff glib gst_all_1.gstreamer gst_all_1.gst-plugins-base gst_all_1.gst-plugins-good
-    gst_all_1.gst-libav libpulseaudio libsndfile xorg.libXcursor xorg.printproto
+    gst_all_1.gst-libav libpulseaudio libsndfile xorg.libXcursor xorg.xorgproto
     xorg.libX11 udev systemd ];
 
   propagatedBuildInputs = [ libxkbcommon python27Packages.dbus-python dbus libjpeg xorg.libXcomposite
