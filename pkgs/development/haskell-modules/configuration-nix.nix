@@ -550,4 +550,7 @@ self: super: builtins.intersectAttrs super {
   # The test suite has undeclared dependencies on git.
   githash = dontCheck super.githash;
 
+  # Avoid infitite recursion with yaya.
+  yaya-hedgehog = super.yaya-hedgehog.override { yaya = dontCheck self.yaya; };
+
 }
