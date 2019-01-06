@@ -1,8 +1,8 @@
 { stdenv, fetchurl, alsaLib, bzip2, cairo, dpkg, freetype, gdk_pixbuf
-, glib, gtk2, harfbuzz, jdk, lib, xorg
-, libbsd, libjack2, libpng
+, glib, gtk2, gtk3, harfbuzz, jdk, lib, xorg
+, libbsd, libjack2, libpng, ffmpeg
 , libxkbcommon
-, makeWrapper, pixman
+, makeWrapper, pixman, autoPatchelfHook
 , xdg_utils, zenity, zlib }:
 
 stdenv.mkDerivation rec {
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "0n0fxh9gnmilwskjcayvjsjfcs3fz9hn00wh7b3gg0cv3qqhich8";
   };
 
-  nativeBuildInputs = [ dpkg makeWrapper ];
+  nativeBuildInputs = [ dpkg makeWrapper autoPatchelfHook ];
 
   unpackCmd = "mkdir root ; dpkg-deb -x $curSrc root";
 
@@ -22,14 +22,14 @@ stdenv.mkDerivation rec {
   dontPatchELF = true;
   dontStrip    = true;
 
-  libPath = with xorg; lib.makeLibraryPath [
-    alsaLib bzip2.out cairo freetype gdk_pixbuf glib gtk2 harfbuzz libX11 libXau
+  buildInputs = with xorg; [
+    alsaLib bzip2.out cairo freetype gdk_pixbuf glib gtk2 gtk3 harfbuzz libX11 libXau
     libXcursor libXdmcp libXext libXfixes libXrender libbsd libjack2 libpng libxcb
     libxkbfile pixman xcbutil xcbutilwm zlib
   ];
 
   binPath = lib.makeBinPath [
-    xdg_utils zenity
+    xdg_utils zenity ffmpeg
   ];
 
   installPhase = ''
@@ -67,12 +67,8 @@ stdenv.mkDerivation rec {
       -not -name '*.so' \
       -not -path '*/resources/*' | \
     while IFS= read -r f ; do
-      patchelf \
-        --set-interpreter $(cat ${stdenv.cc}/nix-support/dynamic-linker) \
-        $f && \
       wrapProgram $f \
         --prefix PATH : "${binPath}" \
-        --prefix LD_LIBRARY_PATH : "${libPath}" \
         --set LD_PRELOAD "${libxkbcommon.out}/lib/libxkbcommon.so" || true
     done
 

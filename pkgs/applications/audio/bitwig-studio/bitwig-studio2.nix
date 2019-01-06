@@ -1,5 +1,5 @@
 { stdenv, fetchurl, bitwig-studio1,
-  xdg_utils, zenity, ffmpeg }:
+  xdg_utils, zenity, ffmpeg, pulseaudio }:
 
 bitwig-studio1.overrideAttrs (oldAttrs: rec {
   name = "bitwig-studio-${version}";
@@ -10,9 +10,7 @@ bitwig-studio1.overrideAttrs (oldAttrs: rec {
     sha256 = "1v62z08hqla8fz5m7hl9ynf2hpr0j0arm0nb5lpd99qrv36ibrsc";
   };
 
-  buildInputs = bitwig-studio1.buildInputs ++ [ ffmpeg ];
-
-  binPath = stdenv.lib.makeBinPath [
-    ffmpeg xdg_utils zenity
+  runtimeDependencies = [
+    pulseaudio
   ];
 })
