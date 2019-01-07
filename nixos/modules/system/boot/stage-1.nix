@@ -525,18 +525,35 @@ in
       };
 
     fileSystems = mkOption {
-      options.neededForBoot = mkOption {
-        default = false;
-        type = types.bool;
-        description = ''
-          If set, this file system will be mounted in the initial
-          ramdisk.  By default, this applies to the root file system
-          and to the file system containing
-          <filename>/nix/store</filename>.
-        '';
-      };
-    };
+      type = types.loaOf (types.submodule (
+        { config
+        , ...
+        }:
+        {
+          options = {
+            luksTarget = mkOption {
+              default = null;
+              type = types.nullOr types.string;
+              description = ''
+              '';
+            };
 
+            neededForBoot = mkOption {
+              default = false;
+              type = types.bool;
+              description = ''
+                If set, this file system will be mounted in the initial
+                ramdisk.  By default, this applies to the root file system
+                and to the file system containing
+                <filename>/nix/store</filename>.
+              '';
+            };
+          };
+
+          config.options = mkIf (config.luksTarget != null) [ "x-nixos.lukstarget=${config.luksTarget}"];
+        }
+      ));
+    };
   };
 
   config = mkIf (!config.boot.isContainer) {
@@ -561,5 +578,6 @@ in
 
     boot.initrd.supportedFilesystems = map (fs: fs.fsType) fileSystems;
 
+    boot.initrd.luks.forceLuksSupportInInitrd = mkIf (lib.any (fs: fs.luksTarget != null) fileSystems) true;
   };
 }

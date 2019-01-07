@@ -260,7 +260,7 @@ checkFS() {
         return 0
     fi
 
-    # Device might be already mounted manually 
+    # Device might be already mounted manually
     # e.g. NBD-device or the host filesystem of the file which contains encrypted root fs
     if mount | grep -q "^$device on "; then
         echo "skip checking already mounted $device"
@@ -329,24 +329,35 @@ mountFS() {
     # Filter out x- options, which busybox doesn't do yet.
     local optionsFiltered="$(IFS=,; for i in $options; do if [ "${i:0:2}" != "x-" ]; then echo -n $i,; fi; done)"
 
-    echo "$device /mnt-root$mountPoint $fsType $optionsFiltered" >> /etc/fstab
-
     checkFS "$device" "$fsType"
 
     # Optionally resize the filesystem.
-    case $options in
-        *x-nixos.autoresize*)
-            if [ "$fsType" = ext2 -o "$fsType" = ext3 -o "$fsType" = ext4 ]; then
-                echo "resizing $device..."
-                e2fsck -fp "$device"
-                resize2fs "$device"
-            elif [ "$fsType" = f2fs ]; then
-                echo "resizing $device..."
-                fsck.f2fs -fp "$device"
-                resize.f2fs "$device" 
-            fi
-            ;;
-    esac
+    OIFS=$IFS;
+    IFS=,;
+    for option in $options; do
+        case $option in
+            x-nixos.autoresize*)
+                if [ "$fsType" = ext2 -o "$fsType" = ext3 -o "$fsType" = ext4 ]; then
+                    echo "resizing $device..."
+                    e2fsck -fp "$device"
+                    resize2fs "$device"
+                elif [ "$fsType" = f2fs ]; then
+                    echo "resizing $device..."
+                    fsck.f2fs -fp "$device"
+                    resize.f2fs "$device"
+                fi
+                ;;
+            x-nixos.lukstarget*)
+                target=${option#x-nixos.lukstarget=}
+
+                cryptsetup luksOpen $device $target
+                device=/dev/mapper/$target
+                ;;
+        esac
+    done
+    IFS=$OIFS
+
+    echo "$device /mnt-root$mountPoint $fsType $optionsFiltered" >> /etc/fstab
 
     # Create backing directories for unionfs-fuse.
     if [ "$fsType" = unionfs-fuse ]; then
