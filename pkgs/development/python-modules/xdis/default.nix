@@ -18,8 +18,9 @@ buildPythonPackage rec {
   checkInputs = [ pytest ];
   propagatedBuildInputs = [ six click ];
 
-  # newest release moves to pytest (tests not packaged with release)
-  doCheck = false;
+  checkPhase = ''
+    make check
+  '';
 
   meta = with stdenv.lib; {
     description = "Python cross-version byte-code disassembler and marshal routines";
