@@ -290,6 +290,8 @@ in {
 
   chalice = callPackage ../development/python-modules/chalice { };
 
+  cleo = callPackage ../development/python-modules/cleo { };
+
   clikit = callPackage ../development/python-modules/clikit { };
 
   clustershell = callPackage ../development/python-modules/clustershell { };
