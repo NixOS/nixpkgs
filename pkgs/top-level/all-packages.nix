@@ -634,6 +634,8 @@ in
 
   aws-vault = callPackage ../tools/admin/aws-vault { };
 
+  aws-xray-daemon = callPackage ../tools/networking/aws-xray-daemon { };
+
   iamy = callPackage ../tools/admin/iamy { };
 
   azure-cli = nodePackages_8_x.azure-cli;
