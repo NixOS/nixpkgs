@@ -2,17 +2,14 @@
 
 stdenv.mkDerivation rec {
   name = "libunwind-${version}";
-  version = "1.2.1";
+  version = "1.3.0";
 
   src = fetchurl {
     url = "mirror://savannah/libunwind/${name}.tar.gz";
-    sha256 = "1jsslwkilwrsj959dc8b479qildawz67r8m4lzxm7glcwa8cngiz";
+    sha256 = "06jn720nk4qg1nyswlxdq1swn6kbx5a85kc8jw9dw84aqqvxa1zc";
   };
 
-  patches = [
-    ./version-1.2.1.patch
-    ./backtrace-only-with-glibc.patch
-  ];
+  patches = [ ./backtrace-only-with-glibc.patch ];
 
   nativeBuildInputs = [ autoreconfHook ];
 
