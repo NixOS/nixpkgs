@@ -6012,6 +6012,8 @@ in
 
   vobsub2srt = callPackage ../tools/cd-dvd/vobsub2srt { };
 
+  void = callPackage ../tools/misc/void { };
+
   volume_key = callPackage ../development/libraries/volume-key { };
 
   vorbisgain = callPackage ../tools/misc/vorbisgain { };
