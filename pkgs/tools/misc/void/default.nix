@@ -12,14 +12,14 @@ rustPlatform.buildRustPackage rec {
   };
 
   # The tests are long-running and not that useful
-  checkPhase = null;
+  doCheck = false;
 
   cargoSha256 = "1rq947s82icl7gdkjynjwz426bpmd96dip2dv2y7p8rg7yz29x0m";
 
   meta = with stdenv.lib; {
     description = "Terminal-based personal organizer";
     homepage = https://github.com/spacejam/void;
-    license = licenses.mit;
+    license = licenses.gpl3;
     maintainers = with maintainers; [ spacekookie ];
     platforms = platforms.all;
   };
