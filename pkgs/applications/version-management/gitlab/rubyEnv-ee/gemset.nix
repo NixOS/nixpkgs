@@ -1213,12 +1213,14 @@
   };
   gitlab-sidekiq-fetcher = {
     dependencies = ["sidekiq"];
+    groups = ["default"];
+    platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "08bwgagrdryva8vlwiiwfa3v60w9k13nknmjjfadrkn68a4ihk2a";
+      sha256 = "1xaag97iclmiay8fx7dkiws8dsws2gi6l0axq4yljq5g7xm78qjr";
       type = "gem";
     };
-    version = "0.1.0";
+    version = "0.4.0";
   };
   gitlab-styles = {
     dependencies = ["rubocop" "rubocop-gitlab-security" "rubocop-rspec"];
