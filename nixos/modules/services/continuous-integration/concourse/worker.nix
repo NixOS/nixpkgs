@@ -213,6 +213,7 @@ in
           gzip
           iproute
           iptables
+          kmod
           utillinux
         ];
 
