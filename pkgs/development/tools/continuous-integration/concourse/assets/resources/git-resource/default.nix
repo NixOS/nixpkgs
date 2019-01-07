@@ -8,12 +8,12 @@
   runCommand,
 }:
 let
-  version = "1.0.1";
+  version = "1.1.0";
   src = fetchFromGitHub {
     owner = "concourse";
     repo = "git-resource";
     rev = "v${version}";
-    sha256 = "1nhzk9mxawzvdwk601ykllwhalfc64hpfva1x2v3xsacsgn3zvym";
+    sha256 = "0mkc4scc8n49ah2yqjp0s0ivhinfi4992362sk1iybivz0dr8sxz";
   };
   env = buildEnv {
     name = "system-path";

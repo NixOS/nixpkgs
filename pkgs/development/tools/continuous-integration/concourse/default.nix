@@ -8,13 +8,13 @@
 
 let
 
-  version = "d41bd4369bedff638cb02ad16ab042c3c9165b3a";
+  version = "c862322702eea2fd561b1a04de18ab1c1ef4810b";
 
   src = fetchFromGitHub {
     repo = "concourse";
     owner = "concourse";
     rev = "${version}";
-    sha256 = "1wmx675xrav3mwcmk52fav69wmni8cn1xf9xklk18lpr8vz7khcw";
+    sha256 = "1l8grpr6w5badz9khwdcrhf07a8g8p9gax6djkbr0sq50xn68lfc";
   };
 
   main-asset = callPackage ./assets/main {

@@ -13,12 +13,12 @@
 }:
 
 let
-  version = "1.16.6";
+  version = "1.17.1";
 
   garden_src = fetchgit {
     rev = "v${version}";
     url = "https://github.com/cloudfoundry/garden-runc-release.git";
-    sha256 = "1rk0k04r8mwabsj6pd63sc7653ahjbxs4bxmnihzsr5naihaxd4n";
+    sha256 = "0rzyqg9c3mdn6cz54716izgqdsdjv8h1xlvsx1sq21dcq9jj5ia0";
     fetchSubmodules = true;
   };
 

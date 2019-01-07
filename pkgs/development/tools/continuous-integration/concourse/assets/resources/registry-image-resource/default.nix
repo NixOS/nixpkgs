@@ -8,7 +8,7 @@
   runCommand,
 }:
 let
-  version = "0.1.1";
+  version = "0.2.0";
   registry-image-resource = buildGoPackage {
     name = "registry-image-resource";
     goPackagePath = "github.com/concourse/registry-image-resource";
@@ -17,7 +17,7 @@ let
       owner = "concourse";
       repo = "registry-image-resource";
       rev = "v${version}";
-      sha256 = "134fqvvcyldhpkv38f0anlrmplmsz0if71fvmgzm1d0wi5lxg9za";
+      sha256 = "0sz5ig1f1297ma3yi7fc3p4jmn9wm2svnlv2j1l2j5zpv0nqpjx2";
     };
   };
 
