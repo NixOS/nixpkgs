@@ -2798,6 +2798,8 @@ in
 
   fuse-7z-ng = callPackage ../tools/filesystems/fuse-7z-ng { };
 
+  fuse-overlayfs = callPackage ../tools/filesystems/fuse-overlayfs {};
+
   fusee-launcher = callPackage ../development/tools/fusee-launcher { };
 
   fwknop = callPackage ../tools/security/fwknop { };
