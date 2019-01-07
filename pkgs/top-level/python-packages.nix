@@ -512,6 +512,8 @@ in {
 
   plantuml = callPackage ../tools/misc/plantuml { };
 
+  poetry = callPackage ../development/python-modules/poetry { };
+
   progress = callPackage ../development/python-modules/progress { };
 
   pymysql = callPackage ../development/python-modules/pymysql { };
