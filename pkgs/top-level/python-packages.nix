@@ -488,6 +488,8 @@ in {
 
   palettable = callPackage ../development/python-modules/palettable { };
 
+  pastel = callPackage ../development/python-modules/pastel { };
+
   pathlib = callPackage ../development/python-modules/pathlib { };
 
   pdf2image = callPackage ../development/python-modules/pdf2image { };
