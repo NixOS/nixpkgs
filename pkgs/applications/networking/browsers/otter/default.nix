@@ -18,6 +18,7 @@ stdenv.mkDerivation {
   buildInputs = [ qtbase qtmultimedia qtwebengine ];
 
   meta = with stdenv.lib; {
+    homepage = https://otter-browser.org;
     license = licenses.gpl3Plus;
     description = "Browser aiming to recreate the best aspects of the classic Opera (12.x) UI using Qt5";
     maintainers = with maintainers; [ lheckemann ];
