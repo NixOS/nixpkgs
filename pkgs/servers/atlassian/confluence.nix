@@ -5,14 +5,12 @@
 
 stdenv.mkDerivation rec {
   name = "atlassian-confluence-${version}";
-  version = "6.12.2";
+  version = "6.13.0";
 
   src = fetchurl {
     url = "https://www.atlassian.com/software/confluence/downloads/binary/${name}.tar.gz";
-    sha256 = "043ng5q1rawmajgvdjzgch8baack8rxsi3qyln79gb00cy3sv9y0";
+    sha256 = "1ckpcb0dq964gwdls5q71260r0i8zxgx8nzv8y4sizr37jvpi8mw";
   };
-
-  phases = [ "unpackPhase" "buildPhase" "installPhase" ];
 
   buildPhase = ''
     echo "confluence.home=/run/confluence/home" > confluence/WEB-INF/classes/confluence-init.properties
