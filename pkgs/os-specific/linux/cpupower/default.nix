@@ -26,6 +26,7 @@ stdenv.mkDerivation {
     "localedir=$(out)/share/locale"
     "docdir=$(out)/share/doc/cpupower"
     "confdir=$(out)/etc"
+    "bash_completion_dir=$(out)/share/bash-completion/completions"
   ];
 
   enableParallelBuilding = true;
