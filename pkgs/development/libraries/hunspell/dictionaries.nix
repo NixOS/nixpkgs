@@ -250,6 +250,41 @@ let
       };
     };
 
+  mkDictFromBB =
+    { shortName, shortDescription, dictFileName }:
+    stdenv.mkDerivation rec {
+      name = "hunspell-dict-${shortName}-BB-${version}";
+      version = "20131101";
+      folderName = "ru_RU_UTF-8_${version}";
+
+      src = fetchurl {
+        url = "https://bitbucket.org/Shaman_Alex/russian-dictionary-hunspell/downloads/ru_RU_UTF-8_${version}.zip";
+        sha256 = "024lm9cmdd69vzb5qjjkm9v0cy9v7xv3f0c1lkz92mkh0nihrhy9";
+      };
+
+      buildInputs = [ ispell perl hunspell unzip ];
+
+      phases = ["unpackPhase" "installPhase"];
+        unpackCmd = ''
+        unzip $src ${dictFileName}.dic ${dictFileName}.aff -d src
+        '';
+      installPhase = ''
+        # hunspell dicts
+        install -dm755 "$out/share/hunspell"
+        install -m644 ${dictFileName}.dic "$out/share/hunspell/"
+        install -m644 ${dictFileName}.aff "$out/share/hunspell/"
+      '';
+
+      meta = with stdenv.lib; {
+        homepage = https://code.google.com/archive/p/hunspell-ru/;
+        description = shortDescription;
+        license = with licenses; [ lgpl3 ];
+        maintainers = with maintainers; [ ];
+        platforms = platforms.all;
+      };
+    };
+
+
 in {
 
   /* ENGLISH */
@@ -544,4 +579,13 @@ in {
     shortDescription = "German (Switzerland)";
     dictFileName = "de_CH";
   };
+
+  /* RUSSIAN */
+
+  ru-ru = mkDictFromBB {
+    shortName = "ru-ru";
+    shortDescription = "Russian (Russia)";
+    dictFileName = "ru_RU";
+  };
+
 }
