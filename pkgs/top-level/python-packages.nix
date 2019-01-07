@@ -595,6 +595,8 @@ in {
 
   pykeepass = callPackage ../development/python-modules/pykeepass { };
 
+  pylev = callPackage ../development/python-modules/pylev { };
+
   pymatgen = callPackage ../development/python-modules/pymatgen { };
 
   pymatgen-lammps = callPackage ../development/python-modules/pymatgen-lammps { };
