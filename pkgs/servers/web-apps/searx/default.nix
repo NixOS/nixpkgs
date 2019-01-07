@@ -4,26 +4,31 @@ with python3Packages;
 
 buildPythonApplication rec {
   pname = "searx";
-  version = "0.14.0";
+  version = "0.15.0";
 
   # Can not use PyPI because certain test files are missing.
   src = fetchFromGitHub {
     owner = "asciimoo";
     repo = "searx";
     rev = "v${version}";
-    sha256 = "046xg6xcs1mxgahz7kwf3fsmwd99q3hhms6pdjlvyczidlfhpmxl";
+    sha256 = "05si0fn57z1g80l6003cs0ypag2m6zyi3dgsi06pvjp066xbrjvd";
   };
 
   postPatch = ''
     substituteInPlace requirements.txt \
       --replace 'certifi==2017.11.5' 'certifi' \
-      --replace 'flask==0.12.2' 'flask==0.12.*' \
+      --replace 'flask==1.0.2' 'flask==1.0.*' \
       --replace 'flask-babel==0.11.2' 'flask-babel==0.11.*' \
-      --replace 'lxml==4.1.1' 'lxml==4.1.*' \
-      --replace 'idna==2.5' 'idna' \
+      --replace 'lxml==4.2.3' 'lxml==4.2.*' \
+      --replace 'idna==2.7' 'idna' \
       --replace 'pygments==2.1.3' 'pygments>=2.1,<3.0' \
-      --replace 'pyopenssl==17.4.0' 'pyopenssl' \
-      --replace 'python-dateutil==2.6.1' 'python-dateutil==2.6.*'
+      --replace 'pyopenssl==18.0.0' 'pyopenssl' \
+      --replace 'python-dateutil==2.7.3' 'python-dateutil==2.7.*'
+    substituteInPlace requirements-dev.txt \
+      --replace 'plone.testing==5.0.0' 'plone.testing' \
+      --replace 'pep8==1.7.1' 'pep8==1.7.*' \
+      --replace 'splinter==0.7.5' 'splinter' \
+      --replace 'selenium==3.5.0' 'selenium'
   '';
 
   propagatedBuildInputs = [
@@ -33,7 +38,8 @@ buildPythonApplication rec {
   ];
 
   checkInputs = [
-    splinter mock plone-testing robotsuite unittest2 selenium
+    Babel mock nose2 covCore pep8 plone-testing splinter
+    unittest2 zope_testrunner selenium
   ];
 
   preCheck = ''
