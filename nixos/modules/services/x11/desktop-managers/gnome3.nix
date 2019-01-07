@@ -179,7 +179,10 @@ in {
                               networkmanager-iodine networkmanager-l2tp; };
 
     # Needed for themes and backgrounds
-    environment.pathsToLink = [ "/share" ];
+    environment.pathsToLink = [
+      "/share"
+      "/share/nautilus-python/extensions"
+    ];
 
   };
 
