@@ -1,0 +1,26 @@
+diff --git a/meson.build b/meson.build
+index feff315..cb92631 100644
+--- a/meson.build
++++ b/meson.build
+@@ -93,12 +93,8 @@ source_root = meson.source_root()
+ sources_dir = include_directories('source/')
+ 
+ # Dependencies
+-# Note relying on dub to fetch and build dependencies before running meson build is temporary due to a bug in Meson 0.48
+-# gtkd_dep = dependency('gtkd-3', version: '>= 3.8.5')
+-# vted_dep = dependency('vted-3', version: '>= 3.8.5')
+-
+-gtkd_dep = dependency('gtk-d:gtkd', version: '>=3.8.5', method: 'dub')
+-vted_dep = dependency('gtk-d:vte', version: '>=3.8.5', method: 'dub')
++gtkd_dep = dependency('gtkd-3', version: '>= 3.8.5')
++vted_dep = dependency('vted-3', version: '>= 3.8.5')
+ xlib_dep = dependency('x11')
+ libunwind_dep = dependency('libunwind')
+ msgfmt = find_program('msgfmt')
+@@ -130,4 +126,4 @@ executable('tilix',
+ #)
+ #test('tilix_test', tilix_test_exe)
+ 
+-meson.add_install_script('meson_post_install.py')
+\ No newline at end of file
++meson.add_install_script('meson_post_install.py')
