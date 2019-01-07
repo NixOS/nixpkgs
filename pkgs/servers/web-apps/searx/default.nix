@@ -29,6 +29,12 @@ buildPythonApplication rec {
       --replace 'pep8==1.7.1' 'pep8==1.7.*' \
       --replace 'splinter==0.7.5' 'splinter' \
       --replace 'selenium==3.5.0' 'selenium'
+
+    # fix decoding when loading the README
+    substituteInPlace setup.py --replace \
+      'open(os.path.join(os.path.dirname(__file__), *rnames)).read()' \
+      'open(os.path.join(os.path.dirname(__file__), *rnames),
+            encoding="utf-8").read()'
   '';
 
   propagatedBuildInputs = [
