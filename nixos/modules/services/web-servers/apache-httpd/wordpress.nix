@@ -85,10 +85,10 @@ let
       # remove bundled themes(s) coming with wordpress
       rm -Rf $out/wp-content/themes/*
 
-      # symlink additional theme(s)
-      ${concatMapStrings (theme: "ln -s ${theme} $out/wp-content/themes/${theme.name}\n") config.themes}
-      # symlink additional plugin(s)
-      ${concatMapStrings (plugin: "ln -s ${plugin} $out/wp-content/plugins/${plugin.name}\n") (config.plugins) }
+      # copy additional theme(s)
+      ${concatMapStrings (theme: "cp -r ${theme} $out/wp-content/themes/${theme.name}\n") config.themes}
+      # copy additional plugin(s)
+      ${concatMapStrings (plugin: "cp -r ${plugin} $out/wp-content/plugins/${plugin.name}\n") (config.plugins) }
 
       # symlink additional translation(s)
       mkdir -p $out/wp-content/languages
