@@ -12,7 +12,11 @@ stdenv.mkDerivation {
 
   configureFlags = [ "--with-tcl=${tcl}/lib" "--with-tk=${tk}/lib" ];
 
-  postUnpack = ''sourceRoot="$sourceRoot/unix"'';
+  # math.h must be before the #define rounds
+  postUnpack = ''
+    sourceRoot="$sourceRoot/unix"
+    sed -i -e '/#include "math.h"/d' -e '1s@$@\n#include "math.h"@' $sourceRoot/../generic/jkFormatMP3.c
+    '';
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ python tcl tk vorbis-tools xlibsWrapper ];
