@@ -5,8 +5,8 @@ gem 'bundler', '>= 1.16.5'
 
 gem 'rugged', '~> 0.27'
 gem 'github-linguist', '~> 6.1', require: 'linguist'
-gem 'gitlab-markup', '~> 1.6.4'
-gem 'gitaly-proto', '~> 0.123.0', require: 'gitaly'
+gem 'gitlab-markup', '~> 1.6.5'
+gem 'gitaly-proto', '~> 1.3.0'
 gem 'activesupport', '~> 5.0.2'
 gem 'rdoc', '~> 4.2'
 gem 'gitlab-gollum-lib', '~> 4.2', require: false

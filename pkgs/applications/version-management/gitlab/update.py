@@ -115,6 +115,7 @@ def _update_data_json(filename: str, repo: GitLabRepo, rev: str, flavour: str):
             data = json.load(f)
             data[flavour] = flavour_data
             f.seek(0)
+            f.truncate()
             json.dump(data, f, indent=2)
 
 
