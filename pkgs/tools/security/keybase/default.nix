@@ -5,7 +5,7 @@
 
 buildGoPackage rec {
   name = "keybase-${version}";
-  version = "2.10.1";
+  version = "2.11.0";
 
   goPackagePath = "github.com/keybase/client";
   subPackages = [ "go/keybase" ];
@@ -16,7 +16,7 @@ buildGoPackage rec {
     owner  = "keybase";
     repo   = "client";
     rev    = "v${version}";
-    sha256 = "1gfxnqzs8msxmykg1zrhrrl2slmb29gl7b8s4m2g44zxaj91gfi9";
+    sha256 = "1mj78cs6j0f1f86c71j4gdphas75j3rfaqygpy87dc40kc2yj0gd";
   };
 
   buildInputs = lib.optionals stdenv.isDarwin [
