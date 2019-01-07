@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, six
 , zope_testing
 , setuptools
 }:
@@ -14,7 +15,7 @@ buildPythonPackage rec {
     sha256 = "8aa7c45237b883ea1d1c28fb465322f69310b084b9f9b6a79af64401b649dc4c";
   };
 
-  propagatedBuildInputs = [ setuptools zope_testing ];
+  propagatedBuildInputs = [ six setuptools zope_testing ];
 
   # Huge amount of testing dependencies (including Zope2)
   doCheck = false;
