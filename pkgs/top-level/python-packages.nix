@@ -3388,6 +3388,8 @@ in {
 
   pg8000 = callPackage ../development/python-modules/pg8000 { };
 
+  pgsanity = callPackage ../development/python-modules/pgsanity { };
+
   pgspecial = callPackage ../development/python-modules/pgspecial { };
 
   pickleshare = callPackage ../development/python-modules/pickleshare { };

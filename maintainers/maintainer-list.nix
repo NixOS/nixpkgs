@@ -3053,6 +3053,11 @@
     github = "nadrieril";
     name = "Nadrieril Feneanar";
   };
+  nalbyuites = {
+    email = "ashijit007@gmail.com";
+    github = "nalbyuites";
+    name = "Ashijit Pramanik";
+  };
   namore = {
     email = "namor@hemio.de";
     github = "namore";
