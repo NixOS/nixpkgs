@@ -774,6 +774,8 @@ in {
 
   toml = callPackage ../development/python-modules/toml { };
 
+  tomlkit = callPackage ../development/python-modules/tomlkit { };
+
   unifi = callPackage ../development/python-modules/unifi { };
 
   vidstab = callPackage ../development/python-modules/vidstab { };
