@@ -11357,6 +11357,8 @@ in
     inherit (darwin.apple_sdk.frameworks) IOKit;
   };
 
+  libsvg = callPackage ../development/libraries/libsvg { };
+      
   libsvm = callPackage ../development/libraries/libsvm { };
 
   libtar = callPackage ../development/libraries/libtar { };

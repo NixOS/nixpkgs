@@ -2303,6 +2303,11 @@
     github = "kirelagin";
     name = "Kirill Elagin";
   };
+  kisonecat = {
+    email = "kisonecat@gmail.com";
+    github = "kisonecat";
+    name = "Jim Fowler";
+  };
   kkallio = {
     email = "tierpluspluslists@gmail.com";
     name = "Karn Kallio";
