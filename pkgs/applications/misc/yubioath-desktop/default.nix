@@ -27,7 +27,7 @@ python27Packages.buildPythonApplication rec {
       cp resources/yubioath*.{icns,ico,png,xpm} $out/share/yubioath/icons
       substituteInPlace $out/share/applications/yubioath.desktop \
         --replace 'Exec=yubioath-gui' "Exec=$out/bin/yubioath-gui" \
-        --replace 'Icon=yubioath' "Icon=$out/share/yubioath/icons"
+        --replace 'Icon=yubioath' "Icon=$out/share/yubioath/icons/yubioath-desktop.png"
 
     '';
 
