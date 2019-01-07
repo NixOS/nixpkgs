@@ -82,7 +82,7 @@ in stdenv.mkDerivation rec {
       --replace 'set(COMPILER_RT_HAS_TSAN TRUE)' 'set(COMPILER_RT_HAS_TSAN FALSE)'
 
     substituteInPlace CMakeLists.txt \
-      --replace 'set(_install_name_dir INSTALL_NAME_DIR "@rpath")' "set(_install_name_dir)" \
+      --replace 'set(CMAKE_INSTALL_NAME_DIR "@rpath")' "set(CMAKE_INSTALL_NAME_DIR "$lib/lib")" \
       --replace 'set(CMAKE_INSTALL_RPATH "@executable_path/../lib")' ""
   ''
   # Patch llvm-config to return correct library path based on --link-{shared,static}.

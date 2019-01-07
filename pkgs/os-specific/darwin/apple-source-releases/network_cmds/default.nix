@@ -22,7 +22,7 @@ appleDerivation rec {
   installPhase = ''
     for f in Products/Release/*; do
       if [ -f $f ]; then
-        install -D $file $out/bin/$(basename $f)
+        install -D $f $out/bin/$(basename $f)
       fi
     done
 
