@@ -1,8 +1,6 @@
 { stdenv, fetchFromGitHub, cmake
 , boost, python3
-
-# TODO: also add libtrellis, later on
-, icestorm
+, icestorm, trellis
 
 # TODO(thoughtpolice) Currently the GUI build seems broken at runtime on my
 # laptop (and over a remote X server on my server...), so mark it broken for
@@ -13,6 +11,19 @@
 
 let
   boostPython = boost.override { python = python3; enablePython = true; };
+
+  # This is a massive hack. For now, Trellis doesn't really support
+  # installation through an already-built package; you have to build it once to
+  # get the tools, then reuse the build directory to build nextpnr -- the
+  # 'install' phase doesn't install everything it needs.  This will be fixed in
+  # the future but for now we can do this horrific thing.
+  trellisRoot = trellis.overrideAttrs (_: {
+    installPhase = ''
+      mkdir -p $out
+      cp *.so ..
+      cd ../../.. && cp -R trellis database $out/
+    '';
+  });
 in
 stdenv.mkDerivation rec {
   name = "nextpnr-${version}";
@@ -32,8 +43,9 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
   cmakeFlags =
-    [ "-DARCH=generic;ice40"
+    [ "-DARCH=generic;ice40;ecp5"
       "-DICEBOX_ROOT=${icestorm}/share/icebox"
+      "-DTRELLIS_ROOT=${trellisRoot}/trellis"
     ] ++ (stdenv.lib.optional (!enableGui) "-DBUILD_GUI=OFF");
 
   # Fix the version number. This is a bit stupid (and fragile) in practice
