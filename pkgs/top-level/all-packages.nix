@@ -8929,6 +8929,8 @@ in
 
   patchelfUnstable = lowPrio (callPackage ../development/tools/misc/patchelf/unstable.nix { });
 
+  pax = callPackage ../development/tools/pax { };
+
   peg = callPackage ../development/tools/parsing/peg { };
 
   pgcli = callPackage ../development/tools/database/pgcli {};
