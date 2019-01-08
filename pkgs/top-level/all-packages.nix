@@ -12364,6 +12364,8 @@ in
 
   readline70 = callPackage ../development/libraries/readline/7.0.nix { };
 
+  readline80 = callPackage ../development/libraries/readline/8.0.nix { };
+
   readosm = callPackage ../development/libraries/readosm { };
 
   lambdabot = callPackage ../development/tools/haskell/lambdabot {
