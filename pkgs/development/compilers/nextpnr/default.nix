@@ -36,6 +36,13 @@ stdenv.mkDerivation rec {
       "-DICEBOX_ROOT=${icestorm}/share/icebox"
     ] ++ (stdenv.lib.optional (!enableGui) "-DBUILD_GUI=OFF");
 
+  # Fix the version number. This is a bit stupid (and fragile) in practice
+  # but works ok. We should probably make this overrideable upstream.
+  patchPhase = with builtins; ''
+    substituteInPlace ./CMakeLists.txt \
+      --replace 'git log -1 --format=%h' 'echo ${substring 0 11 src.rev}'
+  '';
+
   meta = with stdenv.lib; {
     description = "Place and route tool for FPGAs";
     homepage    = https://github.com/yosyshq/nextpnr;
