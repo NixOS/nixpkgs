@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   name = "cutelyst-${version}";
-  version = "2.5.1";
+  version = "2.6.0";
 
   src = fetchFromGitHub {
     owner = "cutelyst";
     repo = "cutelyst";
     rev = "v${version}";
-    sha256 = "0iamavr5gj213c8knrh2mynhn8wcrv83x6s46jq93x93kc5127ks";
+    sha256 = "092qzam3inmj3kvn1s0ygwf3jcikifzkk5hv02b5ym18nqz1025d";
   };
 
   nativeBuildInputs = [ cmake pkgconfig makeWrapper ];
