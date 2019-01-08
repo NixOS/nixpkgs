@@ -1,5 +1,14 @@
 { stdenv, fetchFromGitHub, cmake
-, icestorm, python3, boost, qtbase
+, boost, python3
+
+# TODO: also add libtrellis, later on
+, icestorm
+
+# TODO(thoughtpolice) Currently the GUI build seems broken at runtime on my
+# laptop (and over a remote X server on my server...), so mark it broken for
+# now, with intent to fix later.
+, enableGui ? false
+, qtbase
 }:
 
 let
@@ -17,13 +26,15 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ boostPython python3 qtbase ];
+  buildInputs
+     = [ boostPython python3 ]
+    ++ (stdenv.lib.optional enableGui qtbase);
 
   enableParallelBuilding = true;
   cmakeFlags =
     [ "-DARCH=generic;ice40"
       "-DICEBOX_ROOT=${icestorm}/share/icebox"
-    ];
+    ] ++ (stdenv.lib.optional (!enableGui) "-DBUILD_GUI=OFF");
 
   meta = with stdenv.lib; {
     description = "Place and route tool for FPGAs";
@@ -31,5 +42,7 @@ stdenv.mkDerivation rec {
     license     = licenses.isc;
     platforms   = platforms.linux;
     maintainers = with maintainers; [ thoughtpolice ];
+
+    broken = enableGui;
   };
 }
