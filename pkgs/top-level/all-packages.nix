@@ -464,6 +464,13 @@ in
 
   actkbd = callPackage ../tools/system/actkbd { };
 
+  adlplug = callPackage ../applications/audio/adlplug { };
+
+  opnplug = callPackage ../applications/audio/adlplug {
+    adlplugChip = "-DADLplug_CHIP=OPN2";
+    pname = "OPNplug";
+  };
+
   advancecomp = callPackage ../tools/compression/advancecomp {};
 
   aefs = callPackage ../tools/filesystems/aefs { };
