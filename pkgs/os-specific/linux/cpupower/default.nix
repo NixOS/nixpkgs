@@ -17,16 +17,16 @@ stdenv.mkDerivation {
   makeFlags = [ "CROSS=${stdenv.cc.targetPrefix}" ];
 
   installFlags = stdenv.lib.mapAttrsToList
-    (n: v: "${n}=${placeholder "out"}/${v}") {
-    bindir = "bin";
-    sbindir = "sbin";
-    mandir = "share/man";
-    includedir = "include";
-    libdir = "lib";
-    localedir = "share/locale";
-    docdir = "share/doc/cpupower";
-    confdir = "etc";
-    bash_completion_dir = "share/bash-completion/completions";
+    (n: v: "${n}dir=${placeholder "out"}/${v}") {
+    bin = "bin";
+    sbin = "sbin";
+    man = "share/man";
+    include = "include";
+    lib = "lib";
+    locale = "share/locale";
+    doc = "share/doc/cpupower";
+    conf = "etc";
+    bash_completion_ = "share/bash-completion/completions";
   };
 
   enableParallelBuilding = true;
