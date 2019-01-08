@@ -48,6 +48,7 @@ self: super: {
   cereal = dontCheck super.cereal;
   data-clist = doJailbreak super.data-clist;  # won't cope with QuickCheck 2.12.x
   Diff = dontCheck super.Diff;
+  hpc-coveralls = doJailbreak super.hpc-coveralls; # https://github.com/guillaume-nargeot/hpc-coveralls/issues/82
   http-api-data = doJailbreak super.http-api-data;
   persistent-sqlite = dontCheck super.persistent-sqlite;
   psqueues = dontCheck super.psqueues;    # won't cope with QuickCheck 2.12.x
