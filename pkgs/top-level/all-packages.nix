@@ -126,7 +126,7 @@ with pkgs;
 
   corgi = callPackage ../development/tools/corgi { };
 
-  concourse = callPackage ../development/tools/continuous-integration/concourse { };
+  inherit (callPackage ../development/tools/continuous-integration/concourse { }) concourse fly;
 
   garden-runc = callPackage ../development/tools/continuous-integration/concourse/garden-runc { };
 
