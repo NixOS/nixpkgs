@@ -3412,6 +3412,17 @@ let
     };
   };
 
+  vim-slime = buildVimPluginFrom2Nix {
+    pname = "vim-slime";
+    version = "2019-01-03";
+    src = fetchFromGitHub {
+      owner = "jpalardy";
+      repo = "vim-slime";
+      rev = "faad1bc20cd12ce6ac6a9966ff84d13a44b16a2c";
+      sha256 = "0aivii3p7vw42zxpy758gq9qbsm7v8701jbig4r69vy0mwm6i2vd";
+    };
+  };
+
   vim-smalls = buildVimPluginFrom2Nix {
     pname = "vim-smalls";
     version = "2015-05-02";

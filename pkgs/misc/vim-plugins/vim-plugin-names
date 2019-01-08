@@ -113,6 +113,7 @@ jistr/vim-nerdtree-tabs
 jnurmine/zenburn
 jonbri/vim-colorstepper
 joonty/vim-xdebug
+jpalardy/vim-slime
 JuliaEditorSupport/deoplete-julia
 JuliaEditorSupport/julia-vim
 junegunn/fzf.vim
