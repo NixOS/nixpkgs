@@ -2885,6 +2885,8 @@ in
 
   ggobi = callPackage ../tools/graphics/ggobi { };
 
+  github-desktop = callPackage ../applications/version-management/github-desktop { };
+
   gibo = callPackage ../tools/misc/gibo { };
 
   gifsicle = callPackage ../tools/graphics/gifsicle { };
