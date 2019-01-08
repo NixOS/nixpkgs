@@ -6529,9 +6529,9 @@ in
   fish-foreign-env = callPackage ../shells/fish/fish-foreign-env { };
 
   ion = callPackage ../shells/ion { };
-  
+
   ksh = callPackage ../shells/ksh { };
-  
+
   mksh = callPackage ../shells/mksh { };
 
   oh = callPackage ../shells/oh { };
@@ -8929,7 +8929,7 @@ in
 
   patchelfUnstable = lowPrio (callPackage ../development/tools/misc/patchelf/unstable.nix { });
 
-  pax = callPackage ../development/tools/pax { };
+  pax-rs = callPackage ../development/tools/pax-rs { };
 
   peg = callPackage ../development/tools/parsing/peg { };
 
