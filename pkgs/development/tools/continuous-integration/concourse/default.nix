@@ -29,35 +29,50 @@ let
   mkResourcesDir = callPackage ./assets/resources/make-resource-dir.nix {};
 
   resourceDir = mkResourcesDir resources;
+
+  buildConcourse = { name, packages, platforms, passthru ? {}, preBuild ? "" }:
+    buildGoPackage rec {
+      inherit name;
+      goPackagePath = "github.com/concourse/concourse";
+      subPackages = packages;
+      goDeps = ./deps.nix;
+      nativeBuildInputs = [ go-packr ];
+      inherit src;
+
+      inherit passthru;
+
+      # TODO: Get Worker version
+      #-X github.com/concourse/atc/atccmd.WorkerVersion=${worker_version}
+      #-X main.WorkerVersion=${worker_version}
+      buildFlagsArray = ''
+        -ldflags=
+        -X github.com/concourse/concourse/fly/version.Version=${version}
+        -X main.Version=${version}
+        -X github.com/concourse/concourse/atc/atccmd.Version=${version}
+      '';
+
+      meta = {
+        inherit platforms;
+      };
+    };
 in
-buildGoPackage rec {
-  passthru = {
-    inherit resources main-asset mkResourcesDir resourceDir;
+{
+  concourse = buildConcourse {
+    name = "concourse-unstable";
+    passthru = {
+      inherit resources main-asset mkResourcesDir resourceDir;
+    };
+    packages = [ "bin/cmd/concourse" ];
+    platforms = stdenv.lib.platforms.linux;
+    preBuild =''
+      cp -R ${main-asset}/. go/src/github.com/concourse/concourse/web/
+      packr -i go/src/github.com/concourse
+    '';
   };
 
-  name = "concourse-unstable";
-  goPackagePath = "github.com/concourse/concourse";
-  subPackages = [ "bin/cmd/concourse" "fly"];
-  goDeps = ./deps.nix;
-  nativeBuildInputs = [ go-packr ];
-  inherit src;
-
-  preBuild = ''
-    cp -R ${main-asset}/. go/src/github.com/concourse/concourse/web/
-    packr -i go/src/github.com/concourse
-  '';
-
-  # TODO: Get Worker version
-  #-X github.com/concourse/atc/atccmd.WorkerVersion=${worker_version}
-  #-X main.WorkerVersion=${worker_version}
-  buildFlagsArray = ''
-    -ldflags=
-    -X github.com/concourse/concourse/fly/version.Version=${version}
-    -X main.Version=${version}
-    -X github.com/concourse/concourse/atc/atccmd.Version=${version}
-  '';
-
-  meta = {
-    platforms = stdenv.lib.platforms.linux;
+  fly = buildConcourse {
+    name = "fly-unstable";
+    packages = [ "fly" ];
+    platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
   };
 }
