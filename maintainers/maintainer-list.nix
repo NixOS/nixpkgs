@@ -1953,6 +1953,11 @@
     github = "jakelogemann";
     name = "Jake Logemann";
   };
+  jakewaksbaum = {
+    email = "jake.waksbaum@gmail.com";
+    github = "jbaum98";
+    name = "Jake Waksbaum";
+  };
   jammerful = {
     email = "jammerful@gmail.com";
     github = "jammerful";
