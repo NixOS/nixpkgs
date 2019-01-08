@@ -1,5 +1,5 @@
 { stdenv, buildPackages
-, fetchurl, binutils ? null, bison, autoconf, utillinux
+, fetchurl, binutils ? null, bison, utillinux
 
 # patch for cygwin requires readline support
 , interactive ? stdenv.isCygwin, readline80 ? null
@@ -44,12 +44,7 @@ stdenv.mkDerivation rec {
   patchFlags = "-p0";
 
   patches = upstreamPatches
-    ++ optional stdenv.hostPlatform.isCygwin ./cygwin-bash-4.4.11-2.src.patch
-    # https://lists.gnu.org/archive/html/bug-bash/2016-10/msg00006.html
-    ++ optional stdenv.hostPlatform.isMusl (fetchurl {
-      url = "https://lists.gnu.org/archive/html/bug-bash/2016-10/patchJxugOXrY2y.patch";
-      sha256 = "1m4v9imidb1cc1h91f2na0b8y9kc5c5fgmpvy9apcyv2kbdcghg1";
-    });
+    ++ optional stdenv.hostPlatform.isCygwin ./cygwin-bash-4.4.11-2.src.patch;
 
   configureFlags = [
     (if interactive then "--with-installed-readline" else "--disable-readline")
@@ -73,8 +68,7 @@ stdenv.mkDerivation rec {
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ bison ]
     ++ optional withDocs texinfo
-    ++ optional stdenv.hostPlatform.isDarwin binutils
-    ++ optional (stdenv.hostPlatform.libc == "musl") autoconf;
+    ++ optional stdenv.hostPlatform.isDarwin binutils;
 
   buildInputs = optional interactive readline80;
 
