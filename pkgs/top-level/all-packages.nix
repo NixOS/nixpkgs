@@ -1333,6 +1333,8 @@ in
 
   dro2midi = callPackage ../tools/audio/dro2midi { };
 
+  dro2imf = callPackage ../tools/audio/dro2imf { };
+
   dtools = callPackage ../development/tools/dtools { };
 
   dtrx = callPackage ../tools/compression/dtrx { };
