@@ -1,23 +1,27 @@
 { stdenv, fetchurl, openssl }:
 
 stdenv.mkDerivation rec {
-  name = "hashcash-${version}";
+  pname = "hashcash";
   version = "1.22";
-
+  
   buildInputs = [ openssl ];
 
   src = fetchurl {
-      url = "http://www.hashcash.org/source/hashcash-1.22.tgz";
-      sha256 = "15kqaimwb2y8wvzpn73021bvay9mz1gqqfc40gk4hj6f84nz34h1";
+    url = "http://www.hashcash.org/source/hashcash-${version}.tgz";
+    sha256 = "15kqaimwb2y8wvzpn73021bvay9mz1gqqfc40gk4hj6f84nz34h1";
   };
+  
+  makeFlags = [
+    "generic-openssl"
+    "LIBCRYPTO=-lcrypto"
+  ];
 
-  makeFlags = "generic-openssl LIBCRYPTO=-lcrypto";
-
-  installPhase = ''
-    install -D -m 0755 --target $out/bin hashcash sha1
-    install -D -m 0444 hashcash.1 $out/share/man/man1/hashcash.1
-  '';
-
+  installFlags = [
+    "INSTALL_PATH=${placeholder "out"}/bin"
+    "MAN_INSTALL_PATH=${placeholder "out"}/share/man/man1"
+    "DOC_INSTALL_PATH=${placeholder "out"}/share/doc/hashcash-$(version)"
+  ];
+  
   meta = with stdenv.lib; {
     description = "Proof-of-work algorithm used as spam and denial-of-service counter measure";
     homepage = http://hashcash.org;
