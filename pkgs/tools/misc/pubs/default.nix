@@ -1,46 +1,21 @@
-{ stdenv, fetchFromGitHub, python3 }:
+{ stdenv, fetchFromGitHub, python3Packages }:
 
-let
-  python3Packages = (python3.override {
-    packageOverrides = self: super: {
-      # https://github.com/pubs/pubs/issues/131
-      pyfakefs = super.pyfakefs.overridePythonAttrs (oldAttrs: rec {
-        version = "3.3";
-        src = self.fetchPypi {
-          pname = "pyfakefs";
-          inherit version;
-          sha256 = "e3e198dea5e0d5627b73ba113fd0b139bb417da6bc15d920b2c873143d2f12a6";
-        };
-        postPatch = "";
-        doCheck = false;
-      });
-    };
-  }).pkgs;
-
-in python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "pubs";
-  version = "0.7.0";
+  version = "0.8.2";
 
   src = fetchFromGitHub {
     owner = "pubs";
     repo = "pubs";
     rev = "v${version}";
-    sha256 = "0n5wbjx9wqy6smfg625mhma739jyg7c92766biaiffp0a2bzr475";
+    sha256 = "16zwdqfbmlla6906g3a57a4nj8wnl11fq78r20qms717bzv211j0";
   };
 
   propagatedBuildInputs = with python3Packages; [
-    dateutil configobj bibtexparser pyyaml requests beautifulsoup4
+    argcomplete dateutil configobj feedparser bibtexparser pyyaml requests six beautifulsoup4
   ];
 
-  checkInputs = with python3Packages; [ pyfakefs ddt ];
-
-  preCheck = ''
-    # API tests require networking
-    rm tests/test_apis.py
-
-    # pyfakefs works weirdly in the sandbox
-    export HOME=/
-  '';
+  checkInputs = with python3Packages; [ pyfakefs mock ddt ];
 
   meta = with stdenv.lib; {
     description = "Command-line bibliography manager";
