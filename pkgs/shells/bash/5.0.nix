@@ -78,9 +78,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = optional interactive readline80;
 
-  # Bash randomly fails to build because of a recursive invocation to
-  # build `version.h'.
-  enableParallelBuilding = false;
+  enableParallelBuilding = true;
 
   makeFlags = optional stdenv.hostPlatform.isCygwin [
     "LOCAL_LDFLAGS=-Wl,--export-all,--out-implib,libbash.dll.a"
