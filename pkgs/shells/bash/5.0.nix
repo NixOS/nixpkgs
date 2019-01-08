@@ -118,7 +118,7 @@ stdenv.mkDerivation rec {
 
     platforms = platforms.all;
 
-    maintainers = [ maintainers.peti ];
+    maintainers = with maintainers; [ peti dtzWill ];
   };
 
   passthru = {
