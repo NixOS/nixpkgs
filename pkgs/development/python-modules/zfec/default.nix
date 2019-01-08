@@ -3,7 +3,6 @@
 , fetchPypi
 , setuptoolsDarcs
 , pyutil
-, argparse
 , isPyPy
 }:
 
@@ -18,7 +17,12 @@ buildPythonPackage rec {
   };
 
   buildInputs = [ setuptoolsDarcs ];
-  propagatedBuildInputs = [ pyutil argparse ];
+  propagatedBuildInputs = [ pyutil ];
+
+  # argparse is in the stdlib but zfec doesn't know that.
+  postPatch = ''
+    sed -i -e '/argparse/d' setup.py
+  '';
 
   meta = with stdenv.lib; {
     homepage = http://allmydata.org/trac/zfec;
