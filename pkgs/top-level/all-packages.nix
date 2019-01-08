@@ -159,6 +159,8 @@ in
 
   docker-ls = callPackage ../tools/misc/docker-ls { };
 
+  docker-sync = callPackage ../tools/misc/docker-sync { };
+
   dotfiles = callPackage ../applications/misc/dotfiles { };
 
   dotnetenv = callPackage ../build-support/dotnetenv {
