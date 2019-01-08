@@ -714,6 +714,8 @@ in
   dkimpy = with pythonPackages; toPythonApplication dkimpy;
 
   dpt-rp1-py = callPackage ../tools/misc/dpt-rp1-py { };
+ 
+  ec2_hibernate_linux_agent = callPackage ../os-specific/linux/ec2_hibernate_agent { };
 
   ecdsautils = callPackage ../tools/security/ecdsautils { };
 
