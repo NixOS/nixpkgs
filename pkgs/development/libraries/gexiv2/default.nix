@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gexiv2";
-  version = "0.10.9";
+  version = "0.10.10";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1vf0zv92p9hybdhn7zx53h3ia53ph97a21xz8rfk877xlr5261l8";
+    sha256 = "1qbcwq89g4r67k1dj4laqj441pj4195c8hzhxn8vc6mmg8adg6kx";
   };
 
   nativeBuildInputs = [ meson ninja pkgconfig gobject-introspection vala gtk-doc docbook_xsl docbook_xml_dtd_43 ];
