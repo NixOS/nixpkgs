@@ -12,13 +12,28 @@
 # standard library dependencies
 , curl, fftwSinglePrec, fftw, gmp, libgit2, mpfr, openlibm, openspecfun, pcre2
 # linear algebra
+#### # block for OpenBLAS
+/* , openblas */
+#### # block for MKL
 , mkl, llvmPackages
+####
+, arpack
 # Darwin frameworks
 , CoreServices, ApplicationServices
 }:
 
 with stdenv.lib;
 
+#### # block for openblas
+# All dependencies must use the same OpenBLAS.
+/* let
+  arpack_ = arpack;
+in
+let
+  arpack = arpack_.override { inherit openblas; };
+in */
+#### # block for MKL
+####
 
 let
   dsfmtVersion = "2.2.3";
@@ -104,8 +119,14 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [
-    fftw fftwSinglePrec gmp libgit2 libunwind mpfr
-    pcre2.dev mkl llvmPackages.openmp openlibm openspecfun readline utf8proc
+    arpack fftw fftwSinglePrec gmp libgit2 libunwind mpfr
+    pcre2.dev
+    #### # block for openblas
+    /* openblas */
+    #### # block for MKL
+    mkl llvmPackages.openmp
+    ####
+    openlibm openspecfun readline utf8proc
     zlib
   ]
   ++ stdenv.lib.optionals stdenv.isDarwin [CoreServices ApplicationServices]
@@ -130,15 +151,19 @@ stdenv.mkDerivation rec {
       "prefix=$(out)"
       "SHELL=${stdenv.shell}"
 
+      "USE_SYSTEM_ARPACK=1"
+      #### # block for openblas
       /* "USE_SYSTEM_BLAS=1"
       "USE_BLAS64=${if openblas.blas64 then "1" else "0"}"
       "LIBBLAS=-lopenblas"
-      "LIBBLASNAME=libopenblas" */
-      "USE_INTEL_MKL=1"
-
-      /* "USE_SYSTEM_LAPACK=1"
+      "LIBBLASNAME=libopenblas"
+      "USE_SYSTEM_LAPACK=1"
       "LIBLAPACK=-lopenblas"
       "LIBLAPACKNAME=libopenblas" */
+      #### # block for MKL
+      "USE_INTEL_MKL=1"
+      ####
+
 
       "USE_SYSTEM_FFTW=1"
       "USE_SYSTEM_GMP=1"
@@ -163,7 +188,13 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = [ "-fPIC" ];
 
   LD_LIBRARY_PATH = makeLibraryPath [
-    fftw fftwSinglePrec gmp libgit2 mpfr mkl llvmPackages.openmp openlibm
+    arpack fftw fftwSinglePrec gmp libgit2 mpfr
+    #### # block for openblas
+    /* openblas */
+    #### # block for MKL
+    mkl llvmPackages.openmp
+    ####
+    openlibm
     openspecfun pcre2
   ];
 
