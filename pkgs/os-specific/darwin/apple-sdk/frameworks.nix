@@ -37,13 +37,11 @@ with frameworks; with libs; {
   CoreText                = [ CF CoreGraphics ];
   CoreVideo               = [ ApplicationServices CF CoreGraphics IOSurface OpenGL ];
   CoreWLAN                = [ SecurityFoundation ];
-  DVComponentGlue         = [ CoreServices ];
   DVDPlayback             = [];
   DirectoryService        = [ CF ];
   DiscRecording           = [ CF CoreServices IOKit ];
   DiscRecordingUI         = [];
   DiskArbitration         = [ CF IOKit ];
-  DrawSprocket            = [ Carbon ];
   EventKit                = [];
   ExceptionHandling       = [];
   FWAUserLib              = [];
@@ -82,6 +80,7 @@ with frameworks; with libs; {
   PCSC                    = [ CoreData ];
   PreferencePanes         = [];
   PubSub                  = [];
+  QTKit                   = [ CoreMediaIO CoreMedia MediaToolbox VideoToolbox ];
   QuickLook               = [ ApplicationServices CF ];
   SceneKit                = [];
   ScreenSaver             = [];
@@ -111,7 +110,7 @@ with frameworks; with libs; {
   IOBluetooth         = [ IOKit ];
   JavaVM              = [];
   OpenDirectory       = [];
-  Quartz              = [ QuickLook ];
+  Quartz              = [ QuickLook QTKit ];
   QuartzCore          = [ ApplicationServices CF CoreVideo OpenCL ];
 
   vmnet = [];
