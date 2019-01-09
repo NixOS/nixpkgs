@@ -14,11 +14,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "tor-0.3.4.10";
+  name = "tor-0.3.5.7";
 
   src = fetchurl {
     url = "https://dist.torproject.org/${name}.tar.gz";
-    sha256 = "12i51i6swkdpnbcpa6f1csc00q177sbjnw2x31j53glxshmwpv5d";
+    sha256 = "17l31p58rsd30w4b6r4d8pbr84z3y7awahvjxbpmnlxc47y8f20v";
   };
 
   outputs = [ "out" "geoip" ];
