@@ -3107,7 +3107,9 @@ in {
 
   pyte = callPackage ../development/python-modules/pyte { };
 
-  graphviz = callPackage ../development/python-modules/graphviz { };
+  graphviz = callPackage ../development/python-modules/graphviz {
+    inherit (pkgs) graphviz;
+  };
 
   pygraphviz = callPackage ../development/python-modules/pygraphviz {
     graphviz = pkgs.graphviz; # not the python package
@@ -3243,7 +3245,9 @@ in {
 
   obfsproxy = callPackage ../development/python-modules/obfsproxy { };
 
-  objgraph = callPackage ../development/python-modules/objgraph { };
+  objgraph = callPackage ../development/python-modules/objgraph {
+    graphvizPkg = pkgs.graphviz;
+  };
 
   odo = callPackage ../development/python-modules/odo { };
 
@@ -3550,7 +3554,9 @@ in {
 
   pydispatcher = callPackage ../development/python-modules/pydispatcher { };
 
-  pydot = callPackage ../development/python-modules/pydot { };
+  pydot = callPackage ../development/python-modules/pydot {
+    inherit (pkgs) graphviz;
+  };
 
   pydot_ng = callPackage ../development/python-modules/pydot_ng { };
 
