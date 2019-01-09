@@ -1,6 +1,6 @@
 {stdenv, fetchurl, cmake}:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "cmtk-3.3.1";
 
   src = fetchurl {
@@ -11,7 +11,7 @@ stdenv.mkDerivation {
 
   buildInputs = [cmake];
 
-  meta = {
+  meta = with stdenv.lib; {
     description     = "Computational Morphometry Toolkit ";
     longDescription = ''A software toolkit for computational morphometry of
       biomedical images, CMTK comprises a set of command line tools and a
