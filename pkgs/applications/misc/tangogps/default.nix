@@ -11,6 +11,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ gettext gtk2 gconf curl libexif sqlite libxml2 ];
+  NIX_LDFLAGS = [ "-lm" ];
 
   # bogus includes fail with newer library version
   postPatch = ''

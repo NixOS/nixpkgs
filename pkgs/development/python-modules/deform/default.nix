@@ -4,11 +4,11 @@
 
 buildPythonPackage rec {
   pname = "deform";
-  version = "2.0.6";
+  version = "2.0.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "bda0b809c8a668e105e30650a6766103207eafdd12c313acd59274ccd2c4d297";
+    sha256 = "2ff29c32ebe544c0f0a77087e268b2cd9cb4b11fa35af3635d5b42913f88d74a";
   };
 
   postPatch = ''

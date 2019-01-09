@@ -27,7 +27,7 @@ in
       };
 
       arguments = mkOption {
-        default = "-v -d pulse";
+        default = "-v -o pa";
         description = ''
           Arguments to pass to the daemon. Defaults to a local pulseaudio
           server.

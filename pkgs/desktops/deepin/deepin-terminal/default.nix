@@ -1,5 +1,5 @@
 { stdenv, fetchurl, fetchFromGitHub, pkgconfig, cmake, ninja, vala,
-  gettext, gobjectIntrospection, at-spi2-core, dbus, epoxy, expect,
+  gettext, gobject-introspection, at-spi2-core, dbus, epoxy, expect,
   gtk3, json-glib, libXdmcp, libgee, libpthreadstubs, librsvg,
   libsecret, libtasn1, libxcb, libxkbcommon, p11-kit, pcre, vte, wnck,
   deepin-menu, deepin-shortcut-viewer, deepin }:
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     ninja
     vala
     gettext
-    gobjectIntrospection # For setup hook
+    gobject-introspection # For setup hook
   ];
 
   buildInputs = [

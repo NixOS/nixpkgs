@@ -13,7 +13,7 @@ stdenv.mkDerivation {
   outputs = [ "out" "info" ];
 
   meta = {
-    homepage = http://www.gnu.org/software/sed/;
+    homepage = https://www.gnu.org/software/sed/;
     description = "GNU sed, a batch stream editor";
 
     longDescription = ''

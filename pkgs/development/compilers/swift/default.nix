@@ -27,7 +27,6 @@
 , git
 , libgit2
 , fetchFromGitHub
-, paxctl
 , findutils
 , makeWrapper
 , gnumake
@@ -150,7 +149,7 @@ stdenv.mkDerivation rec {
     findutils
     makeWrapper
     gnumake
-  ] ++ stdenv.lib.optional stdenv.needsPax paxctl;
+  ];
 
   # TODO: Revisit what's propagated and how
   propagatedBuildInputs = [
@@ -218,9 +217,6 @@ stdenv.mkDerivation rec {
     substituteInPlace swift/utils/build-script-impl \
       --replace '/usr/include/c++' "${clang.cc.gcc}/include/c++"
     patch -p1 -d swift -i ${./patches/glibc-arch-headers.patch}
-  '' + stdenv.lib.optionalString stdenv.needsPax ''
-    patch -p1 -d swift -i ${./patches/build-script-pax.patch}
-  '' + ''
     patch -p1 -d swift -i ${./patches/0001-build-presets-linux-don-t-require-using-Ninja.patch}
     patch -p1 -d swift -i ${./patches/0002-build-presets-linux-allow-custom-install-prefix.patch}
     patch -p1 -d swift -i ${./patches/0004-build-presets-linux-plumb-extra-cmake-options.patch}
@@ -265,9 +261,6 @@ stdenv.mkDerivation rec {
     PREFIX=''${out/#\/}
     tar xf $INSTALLABLE_PACKAGE -C $out --strip-components=3 $PREFIX
     find $out -type d -empty -delete
-
-    paxmark pmr $out/bin/swift
-    paxmark pmr $out/bin/*
 
     # TODO: Use wrappers to get these on the PATH for swift tools, instead
     ln -s ${clang}/bin/* $out/bin/

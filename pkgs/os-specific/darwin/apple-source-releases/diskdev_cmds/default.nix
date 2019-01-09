@@ -18,12 +18,16 @@ appleDerivation {
     cp xnu-*/bsd/i386/disklabel.h i386
     cp -r xnu-*/bsd/sys System
     cp -r Libc-*/uuid System
+    substituteInPlace diskdev_cmds.xcodeproj/project.pbxproj \
+      --replace 'DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";' ""
   '';
   installPhase = ''
     install -D Products/Release/libdisk.a $out/lib/libdisk.a
     rm Products/Release/libdisk.a
-    for bin in Products/Release/*; do
-      install -D $bin $out/bin/$(basename $bin)
+    for f in Products/Release/*; do
+      if [ -f $f ]; then
+        install -D $f $out/bin/$(basename $f)
+      fi
     done
   '';
 

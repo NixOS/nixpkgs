@@ -9,11 +9,11 @@
 
 buildPythonPackage rec {
   pname = "freezegun";
-  version = "0.3.8";
+  version = "0.3.11";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1sf38d3ibv1jhhvr52x7dhrsiyqk1hm165dfv8w8wh0fhmgxg151";
+    sha256 = "e839b43bfbe8158b4d62bb97e6313d39f3586daf48e1314fb1083d2ef17700da";
   };
 
   propagatedBuildInputs = [ dateutil six ];

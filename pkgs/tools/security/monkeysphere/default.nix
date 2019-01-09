@@ -2,12 +2,22 @@
 , perl, libassuan, libgcrypt
 , perlPackages, lockfileProgs, gnupg, coreutils
 # For the tests:
-, bash, openssh, which, socat, cpio, hexdump
+, bash, openssh, which, socat, cpio, hexdump, openssl
 }:
 
-stdenv.mkDerivation rec {
+let
+  # A patch is needed to run the tests inside the Nix sandbox:
+  # /etc/passwd: "nixbld:x:1000:100:Nix build user:/build:/noshell"
+  # sshd: "User nixbld not allowed because shell /noshell does not exist"
+  opensshUnsafe = openssh.overrideAttrs (oldAttrs: {
+    patches = oldAttrs.patches ++ [ ./openssh-nixos-sandbox.patch ];
+  });
+in stdenv.mkDerivation rec {
   name = "monkeysphere-${version}";
   version = "0.42";
+
+  # The patched OpenSSH binary MUST NOT be used (except in the check phase):
+  disallowedRequisites = [ opensshUnsafe ];
 
   src = fetchurl {
     url = "http://archive.monkeysphere.info/debian/pool/monkeysphere/m/monkeysphere/monkeysphere_${version}.orig.tar.gz";
@@ -23,7 +33,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ perl libassuan libgcrypt ]
     ++ stdenv.lib.optional doCheck
-      ([ gnupg openssh which socat cpio hexdump lockfileProgs ] ++
+      ([ gnupg opensshUnsafe which socat cpio hexdump lockfileProgs ] ++
       (with perlPackages; [ CryptOpenSSLRSA CryptOpenSSLBignum ]));
 
   makeFlags = ''
@@ -31,20 +41,26 @@ stdenv.mkDerivation rec {
     DESTDIR=$(out)
   '';
 
-  # Not all checks pass yet (NixOS specific problems) and the tests "drain"
-  # entropy (apparently GnuPG still uses /dev/random).
+  # The tests should be run (and succeed) when making changes to this package
+  # but they aren't enabled by default because they "drain" entropy (GnuPG
+  # still uses /dev/random).
   doCheck = false;
-  preCheck = ''
+  preCheck = stdenv.lib.optionalString doCheck ''
     patchShebangs tests/
     patchShebangs src/
-    sed -i "s,/usr/sbin/sshd,${openssh}/bin/sshd," tests/basic
+    sed -i \
+      -e "s,/usr/sbin/sshd,${opensshUnsafe}/bin/sshd," \
+      -e "s,/bin/true,${coreutils}/bin/true," \
+      -e "s,/bin/false,${coreutils}/bin/false," \
+      -e "s,openssl\ req,${openssl}/bin/openssl req," \
+      tests/basic
     sed -i "s/<(hd/<(hexdump/" tests/keytrans
   '';
 
   postFixup =
     let wrapperArgs = runtimeDeps:
           "--prefix PERL5LIB : "
-          + (with perlPackages; stdenv.lib.makePerlPath [
+          + (with perlPackages; makePerlPath [
               CryptOpenSSLRSA
               CryptOpenSSLBignum
             ])

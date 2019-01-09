@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, qmake, pcsclite, pkgconfig }:
+{ stdenv, fetchFromGitHub, qmake, pcsclite, pkgconfig, opensc }:
 
 stdenv.mkDerivation rec {
   name = "chrome-token-signing-${version}";
@@ -16,6 +16,9 @@ stdenv.mkDerivation rec {
 
   patchPhase = ''
     substituteInPlace host-linux/ee.ria.esteid.json --replace /usr $out
+    # TODO: macos
+    substituteInPlace host-shared/PKCS11Path.cpp \
+      --replace opensc-pkcs11.so ${opensc}/lib/pkcs11/opensc-pkcs11.so
   '';
 
   installPhase = ''

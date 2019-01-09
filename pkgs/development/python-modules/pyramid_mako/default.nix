@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "pyramid_mako";
-  version = "0.3.1";
+  version = "1.0.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "00811djmsc4rz20kpy2paam05fbx6dmrv2i5jf90f6xp6zw4isy6";
+    sha256 = "6da0987b9874cf53e72139624665a73965bbd7fbde504d1753e4231ce916f3a1";
   };
 
   buildInputs = [ webtest ];

@@ -6,12 +6,12 @@ in
 
 stdenv.mkDerivation rec {
   pname = "spoofer";
-  version = "1.4.0";
+  version = "1.4.2";
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "https://www.caida.org/projects/spoofer/downloads/${name}.tar.gz";
-    sha256 = "0d745w7cy83hw7j950dah4h5qzclcibj16dik2gpsjnw1zq63cna";
+    sha256 = "041piwc2r4fig5b4apm2ibq1wyd11ic8p3xv3ss2hrbn5d8inza1";
   };
 
   nativeBuildInputs = [ pkgconfig ];

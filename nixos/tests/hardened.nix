@@ -5,7 +5,7 @@ import ./make-test.nix ({ pkgs, ...} : {
   };
 
   machine =
-    { lib, pkgs, ... }:
+    { lib, pkgs, config, ... }:
     with lib;
     { users.users.alice = { isNormalUser = true; extraGroups = [ "proc" ]; };
       users.users.sybil = { isNormalUser = true; group = "wheel"; };
@@ -22,11 +22,18 @@ import ./make-test.nix ({ pkgs, ...} : {
           options = [ "noauto" ];
         };
       };
+      boot.extraModulePackages = [ config.boot.kernelPackages.wireguard ];
+      boot.kernelModules = [ "wireguard" ];
     };
 
   testScript =
     ''
       $machine->waitForUnit("multi-user.target");
+
+      # Test loading out-of-tree modules
+      subtest "extra-module-packages", sub {
+          $machine->succeed("grep -Fq wireguard /proc/modules");
+      };
 
       # Test hidepid
       subtest "hidepid", sub {
@@ -69,6 +76,12 @@ import ./make-test.nix ({ pkgs, ...} : {
       subtest "nix-daemon", sub {
         $machine->fail("su -l nobody -s /bin/sh -c 'nix ping-store'");
         $machine->succeed("su -l alice -c 'nix ping-store'") =~ "OK";
+      };
+
+      # Test kernel image protection
+      subtest "kernelimage", sub {
+        $machine->fail("systemctl hibernate");
+        $machine->fail("systemctl kexec");
       };
     '';
 })

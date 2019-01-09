@@ -9,11 +9,11 @@
 
 buildPythonPackage rec {
   pname = "sphinxcontrib-openapi";
-  version = "0.3.0";
+  version = "0.3.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0fyniq37nnmhrk4j7mzvg6vfcpb624hb9x70g6mccyw4xrnhadv6";
+    sha256 = "411da1819fda0593976a157f1a14ec1cfaef9ee1b4b708e795d0bf3953f0142b";
   };
 
   propagatedBuildInputs = [setuptools_scm pyyaml jsonschema sphinxcontrib_httpdomain];

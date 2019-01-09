@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   name = "stress-ng-${version}";
-  version = "0.09.46";
+  version = "0.09.49";
 
   src = fetchurl {
-    url = "http://kernel.ubuntu.com/~cking/tarballs/stress-ng/${name}.tar.xz";
-    sha256 = "0m1f46vqixx2mgqdrjwkl8w9did7n99sy96rbcgkkn9g99y59qjm";
+    url = "https://kernel.ubuntu.com/~cking/tarballs/stress-ng/${name}.tar.xz";
+    sha256 = "1ll2i7vgnwpfhvq963m2aqwffkrmjggnscpmwn8qbdh0a82lmq2x";
   };
 
   # All platforms inputs then Linux-only ones
@@ -42,8 +42,8 @@ stdenv.mkDerivation rec {
       hardware issues such as thermal overruns as well as operating system
       bugs that only occur when a system is being thrashed hard.
     '';
-    homepage = http://kernel.ubuntu.com/~cking/stress-ng/;
-    downloadPage = http://kernel.ubuntu.com/~cking/tarballs/stress-ng/;
+    homepage = https://kernel.ubuntu.com/~cking/stress-ng/;
+    downloadPage = https://kernel.ubuntu.com/~cking/tarballs/stress-ng/;
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ c0bw3b ];
     platforms = platforms.linux; # TODO: fix https://github.com/NixOS/nixpkgs/pull/50506#issuecomment-439635963

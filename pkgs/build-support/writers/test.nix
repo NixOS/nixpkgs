@@ -1,4 +1,4 @@
-{ stdenv, lib, runCommand, haskellPackages, nodePackages, perlPackages, python2Packages, python3Packages, writers}:
+{ stdenv, lib, runCommand, haskellPackages, nodePackages, perlPackages, python2Packages, python3Packages, writers, writeText }:
 with writers;
 let
 
@@ -128,6 +128,24 @@ let
     '';
   };
 
+
+  path = {
+    bash = writeBash "test_bash" (writeText "test" ''
+      if [[ "test" == "test" ]]; then echo "success"; fi
+    '');
+    haskell = writeHaskell "test_haskell" { libraries = [ haskellPackages.acme-default ]; } (writeText "test" ''
+      import Data.Default
+
+      int :: Int
+      int = def
+
+      main :: IO ()
+      main = case int of
+        18871 -> putStrLn $ id "success"
+        _ -> print "fail"
+    '');
+  };
+
   writeTest = expectedValue: test:
     writeDash "test-writers" ''
       if test "$(${test})" != "${expectedValue}"; then
@@ -142,6 +160,7 @@ in runCommand "test-writers" {
 } ''
   ${lib.concatMapStringsSep "\n" (test: writeTest "success" "${test}/bin/test_writers") (lib.attrValues bin)}
   ${lib.concatMapStringsSep "\n" (test: writeTest "success" "${test}") (lib.attrValues simple)}
+  ${lib.concatMapStringsSep "\n" (test: writeTest "success" "${test}") (lib.attrValues path)}
 
   echo 'nix-writers successfully tested' >&2
   touch $out

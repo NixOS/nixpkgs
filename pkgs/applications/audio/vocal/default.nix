@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, cmake, ninja, pkgconfig, vala_0_40, gtk3, libxml2, granite, webkitgtk, clutter-gtk
-, clutter-gst, libunity, libnotify, sqlite, gst_all_1, libsoup, json-glib, gnome3, gobjectIntrospection, wrapGAppsHook }:
+, clutter-gst, libunity, libnotify, sqlite, gst_all_1, libsoup, json-glib, gnome3, gobject-introspection, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "vocal";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
-    gobjectIntrospection
+    gobject-introspection
     libxml2
     ninja
     pkgconfig

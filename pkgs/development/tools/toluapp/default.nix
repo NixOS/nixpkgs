@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, scons, lua }:
+{ stdenv, fetchFromGitHub, sconsPackages, lua }:
 
 stdenv.mkDerivation rec {
   version = "1.0.93";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0zd55bc8smmgk9j4cf0jpibb03lgsvl0knpwhplxbv93mcdnw7s0";
   };
 
-  nativeBuildInputs = [ scons ];
+  nativeBuildInputs = [ sconsPackages.scons_3_0_1 ];
   buildInputs = [ lua ];
 
   patches = [ ./environ-and-linux-is-kinda-posix.patch ];

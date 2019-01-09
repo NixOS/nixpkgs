@@ -2,13 +2,13 @@
 , zlib, curl, cairo, freetype, fontconfig, lcms, libjpeg, openjpeg
 , withData ? true, poppler_data
 , qt5Support ? false, qtbase ? null
-, introspectionSupport ? false, gobjectIntrospection ? null
+, introspectionSupport ? false, gobject-introspection ? null
 , utils ? false, nss ? null
 , minimal ? false, suffix ? "glib"
 }:
 
 let # beware: updates often break cups-filters build
-  version = "0.67.0";
+  version = "0.72.0";
   mkFlag = optset: flag: "-DENABLE_${flag}=${if optset then "on" else "off"}";
 in
 stdenv.mkDerivation rec {
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "${meta.homepage}/poppler-${version}.tar.xz";
-    sha256 = "1yb6agmcxf0ixqm65d4aknl0hgmswf94x0k59ic0qqav1wd4yjm3";
+    sha256 = "0lfs1b1jfamxl13zbl5n448dqvl9n8frbv8180y7b7kfyaw7wx61";
   };
 
   outputs = [ "out" "dev" ];
@@ -29,12 +29,12 @@ stdenv.mkDerivation rec {
     ++ optionals (!minimal) [ cairo lcms curl ]
     ++ optional qt5Support qtbase
     ++ optional utils nss
-    ++ optional introspectionSupport gobjectIntrospection;
+    ++ optional introspectionSupport gobject-introspection;
 
   nativeBuildInputs = [ cmake ninja pkgconfig ];
 
   # Not sure when and how to pass it.  It seems an upstream bug anyway.
-  CXXFLAGS = stdenv.lib.optionalString stdenv.cc.isClang "-std=c++11";
+  CXXFLAGS = stdenv.lib.optionalString stdenv.cc.isClang "-std=c++14";
 
   cmakeFlags = [
     (mkFlag true "XPDF_HEADERS")

@@ -3,7 +3,7 @@
 , configFile ? "all"
 
 # Userspace dependencies
-, zlib, libuuid, python, attr, openssl
+, zlib, libuuid, python3, attr, openssl
 , libtirpc
 , nfs-utils
 , gawk, gnugrep, gnused, systemd
@@ -54,7 +54,7 @@ let
         ++ optional buildKernel (kernel.moduleBuildDependencies ++ [ perl ]);
       buildInputs =
            optionals buildKernel [ spl ]
-        ++ optionals buildUser [ zlib libuuid python attr ]
+        ++ optionals buildUser [ zlib libuuid python3 attr ]
         ++ optionals (buildUser && (isUnstable || isLegacyCrypto)) [ openssl ]
         ++ optional stdenv.hostPlatform.isMusl [ libtirpc ];
 

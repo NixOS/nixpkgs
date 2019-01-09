@@ -4,6 +4,7 @@
 , lib
 , python
 , fetchurl
+, fetchpatch
 , lame
 , mplayer
 , libpulseaudio
@@ -19,28 +20,33 @@
 , glibcLocales
 , nose
 , send2trash
+, CoreAudio
 # This little flag adds a huge number of dependencies, but we assume that
 # everyone wants Anki to draw plots with statistics by default.
 , plotsSupport ? true
 }:
 
 buildPythonApplication rec {
-    version = "2.1.6-beta1";
+    version = "2.1.8";
     name = "anki-${version}";
 
     src = fetchurl {
       urls = [
-        "https://apps.ankiweb.net/downloads/beta/${name}-source.tgz"
+        "https://apps.ankiweb.net/downloads/current/${name}-source.tgz"
         # "https://apps.ankiweb.net/downloads/current/${name}-source.tgz"
         # "http://ankisrs.net/download/mirror/${name}.tgz"
         # "http://ankisrs.net/download/mirror/archive/${name}.tgz"
       ];
-      sha256 = "0yqn8qjx9dyf754jljhyyrk8mahii188nz0yifl1lr3py9sxzbsf";
+      sha256 = "08wb9hwpmbq7636h7sinim33qygdwwlh3frqqh2gfgm49f46di2p";
     };
 
-    propagatedBuildInputs = [ pyqt5 sqlalchemy
-      beautifulsoup4 send2trash pyaudio requests decorator markdown ]
-                            ++ lib.optional plotsSupport matplotlib;
+    propagatedBuildInputs = [
+      pyqt5 sqlalchemy beautifulsoup4 send2trash pyaudio requests decorator
+      markdown
+    ]
+      ++ lib.optional plotsSupport matplotlib
+      ++ lib.optional stdenv.isDarwin [ CoreAudio ]
+      ;
 
     checkInputs = [ pytest glibcLocales nose ];
 

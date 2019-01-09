@@ -6,13 +6,13 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.3.40";
+  version = "1.3.41";
   pname = "flrig";
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/fldigi/${name}.tar.gz";
-    sha256 = "1wr7bb2577gha7y3a8m5w60m4xdv8m0199cj2c6349sgbds373w9";
+    sha256 = "0vh14azg3pppyg3fb7kf6q3ighw1ka9m60jf2dzsd77f4hidhqx4";
   };
 
   buildInputs = [

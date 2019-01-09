@@ -12,7 +12,9 @@ stdenv.mkDerivation rec {
     sha256 = "1pqywkidfpdbj18i03h97f4cimld4fb3mqfy8jjsxs12kihm18fs";
   };
 
-  buildInputs = [ tcl tk libX11 which yacc flex imake xproto gccmakedep ];
+  nativeBuildInputs = [ which yacc flex imake gccmakedep ];
+  buildInputs = [ tcl tk libX11 xproto ];
+  dontUseImakeConfigure = true;
 
   patchPhase = ''
     sed -i config.h \

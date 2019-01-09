@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
     name = "monero-wallet-gui";
     exec = "monero-wallet-gui";
     icon = "monero";
-    desktopName = "Monero Wallet";
+    desktopName = "Monero";
     genericName = "Wallet";
     categories  = "Application;Network;Utility;";
   };

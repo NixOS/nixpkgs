@@ -337,7 +337,8 @@
       alerta = 310;
       minetest = 311;
       rss2email = 312;
-      concourse = 313;
+      cockroachdb = 313;
+      concourse = 314;
 
       # When adding a uid, make sure it doesn't match an existing gid. And don't use uids above 399!
 
@@ -635,7 +636,8 @@
       alerta = 310;
       minetest = 311;
       rss2email = 312;
-      concourse = 313;
+      cockroachdb = 313;
+      concourse = 314;
 
       # When adding a gid, make sure it doesn't match an existing
       # uid. Users and groups with the same name should have equal

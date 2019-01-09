@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "tlslite";
-  version = "0.4.8";
+  version = "0.4.9";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1fxx6d3nw5r1hqna1h2jvqhcygn9fyshlm0gh3gp0b1ji824gd6r";
+    sha256 = "9b9a487694c239efea8cec4454a99a56ee1ae1a5f3af0858ccf8029e2ac2d42d";
   };
 
   meta = with stdenv.lib; {

@@ -42,8 +42,8 @@
 
 
 let
-  version = "2.5.0";
-  sha256 = "1m9n1shhqhjrhbq6fd9fyfccxcgpng37s3lffhlmyrp98zbsnwxy";
+  version = "2.5.1";
+  sha256 = "14bsh4kflp4bxilypkpmhrpldknc9s9vgiax8yfhxbisyib704zv";
 in stdenv.mkDerivation rec {
   name = "postgis-${version}";
 

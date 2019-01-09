@@ -269,9 +269,8 @@ stdenv.mkDerivation {
       ## Man page and info support
       ##
 
-      mkdir -p $man/nix-support $info/nix-support
-      echo ${bintools.man or ""} >> $man/nix-support/propagated-user-env-packages
-      echo ${bintools.info or ""} >> $info/nix-support/propagated-user-env-packages
+      ln -s ${bintools.man} $man
+      ln -s ${bintools.info} $info
     ''
 
     + ''

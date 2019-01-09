@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "keyutils-${version}";
-  version = "1.5.10";
+  version = "1.6";
 
   src = fetchurl {
     url = "https://people.redhat.com/dhowells/keyutils/${name}.tar.bz2";
-    sha256 = "1dmgjcf7mnwc6h72xkvpaqpzxw8vmlnsmzz0s27pg0giwzm3sp0i";
+    sha256 = "05bi5ja6f3h3kdi7p9dihlqlfrsmi1wh1r2bdgxc0180xh6g5bnk";
   };
 
   outputs = [ "out" "lib" "dev" ];

@@ -3,11 +3,14 @@
 # Based on https://projects.archlinux.org/svntogit/packages.git/tree/trunk/PKGBUILD
 stdenv.mkDerivation rec {
   name = "live555-${version}";
-  version = "2018.10.17";
+  version = "2018.12.14";
 
   src = fetchurl { # the upstream doesn't provide a stable URL
-    url = "mirror://sourceforge/slackbuildsdirectlinks/live.${version}.tar.gz";
-    sha256 = "1s69ipvdc6ldscp0cr1zpsll8xc3qcagr95nl84x7b1rbg4xjs3w";
+    urls = [
+      "mirror://sourceforge/slackbuildsdirectlinks/live.${version}.tar.gz"
+      "https://download.videolan.org/contrib/live555/live.${version}.tar.gz"
+    ];
+    sha256 = "0irafygp23m2xmjv06qgs1sccymbwqvn51wggk0c60lnj1v1zhwd";
   };
 
   postPatch = ''

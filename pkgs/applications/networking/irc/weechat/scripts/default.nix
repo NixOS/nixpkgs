@@ -12,4 +12,6 @@
   wee-slack = callPackage ./wee-slack {
     inherit pythonPackages;
   };
+
+  weechat-autosort = callPackage ./weechat-autosort { };
 }

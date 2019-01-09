@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   name = "git-reparent-${version}";
-  version = "2017-09-03";
+  version = "unstable-2017-09-03";
 
   src = fetchFromGitHub {
     owner  = "MarkLodato";

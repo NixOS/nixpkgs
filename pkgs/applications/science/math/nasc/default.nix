@@ -8,7 +8,7 @@
 , cmake
 , vala_0_40
 , libqalculate
-, gobjectIntrospection
+, gobject-introspection
 , wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     wrapGAppsHook
     vala_0_40 # should be `elementary.vala` when elementary attribute set is merged
     cmake
-    gobjectIntrospection # for setup-hook
+    gobject-introspection # for setup-hook
   ];
 
   buildInputs = [

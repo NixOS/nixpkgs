@@ -7,7 +7,7 @@
 }:
 
 buildPythonPackage rec {
-  name = "rbtools";
+  pname = "rbtools";
   version = "0.7.2";
   disabled = isPy3k;
 

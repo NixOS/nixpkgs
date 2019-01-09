@@ -26,6 +26,7 @@ let self = stdenv.mkDerivation rec {
         let impl = import "${self}/share/nix/api.nix" { inherit pkgs pinConfig; }; in
         { inherit (impl) augmentedPkgs pins callPackage; };
       updateScript = ''
+        #!${stdenv.shell}
         set -e
         echo
         cd ${toString ./.}

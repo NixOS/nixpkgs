@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libxml2, glib, gtk3, enchant2, isocodes, vala, gobjectIntrospection, gnome3 }:
+{ stdenv, fetchurl, pkgconfig, libxml2, glib, gtk3, enchant2, isocodes, vala, gobject-introspection, gnome3 }:
 
 let
   pname = "gspell";
@@ -16,7 +16,7 @@ in stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ enchant2 ]; # required for pkgconfig
 
-  nativeBuildInputs = [ pkgconfig vala gobjectIntrospection libxml2 ];
+  nativeBuildInputs = [ pkgconfig vala gobject-introspection libxml2 ];
   buildInputs = [ glib gtk3 isocodes ];
 
   passthru = {

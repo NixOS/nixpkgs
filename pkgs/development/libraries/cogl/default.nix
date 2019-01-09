@@ -1,5 +1,5 @@
 { stdenv, fetchurl, fetchpatch, pkgconfig, libGL, glib, gdk_pixbuf, xorg, libintl
-, pangoSupport ? true, pango, cairo, gobjectIntrospection, wayland, gnome3
+, pangoSupport ? true, pango, cairo, gobject-introspection, wayland, gnome3
 , mesa_noglu
 , gstreamerSupport ? true, gst_all_1 }:
 
@@ -44,7 +44,7 @@ in stdenv.mkDerivation rec {
     ++ stdenv.lib.optionals (!stdenv.isDarwin) [ "--enable-gles1" "--enable-gles2" ];
 
   propagatedBuildInputs = with xorg; [
-      glib gdk_pixbuf gobjectIntrospection wayland mesa_noglu
+      glib gdk_pixbuf gobject-introspection wayland mesa_noglu
       libGL libXrandr libXfixes libXcomposite libXdamage
     ]
     ++ stdenv.lib.optionals gstreamerSupport [ gst_all_1.gstreamer

@@ -5,14 +5,12 @@
 
 buildPythonPackage rec {
   pname = "Yapsy";
-  version = "1.11.223";
+  version = "1.12.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "19pjsnqizswnczhlav4lb7zlzs0n73ijrsgksy4374b14jkkkfs5";
+    sha256 = "0g1yd8nvhfdasckb929rijmj040x25ycns2b3l5wq53gm4lv537h";
   };
-
-  doCheck = false;
 
   meta = with stdenv.lib; {
     homepage = http://yapsy.sourceforge.net/;

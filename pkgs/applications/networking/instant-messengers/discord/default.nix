@@ -32,8 +32,6 @@ stdenv.mkDerivation rec {
         patchelf --set-interpreter ${stdenv.cc.bintools.dynamicLinker} \
                  $out/opt/discord/Discord
 
-        paxmark m $out/opt/discord/Discord
-
         wrapProgram $out/opt/discord/Discord --prefix LD_LIBRARY_PATH : ${libPath}
 
         ln -s $out/opt/discord/Discord $out/bin/

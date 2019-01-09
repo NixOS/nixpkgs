@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "rivet-${version}";
-  version = "2.6.1";
+  version = "2.6.2";
 
   src = fetchurl {
     url = "https://www.hepforge.org/archive/rivet/Rivet-${version}.tar.bz2";
-    sha256 = "08lhr10h97vqhy6ci4zna4ngx9875j32zs8ad5sy38xgbbrx3474";
+    sha256 = "0yp3mllr2b4bhsmixjmmpl2n4x78bgw74a9xy2as4f10q3alkplx";
   };
 
   patches = [
@@ -28,8 +28,6 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ fastjet ghostscript gsl yoda ];
 
   preConfigure = ''
-    substituteInPlace Makefile.in \
-      --replace "SUBDIRS = src pyext data include bin analyses doc test" "SUBDIRS = src pyext data include bin analyses test"
     substituteInPlace analyses/Makefile.in \
       --replace "!(tmp)" ""
     substituteInPlace bin/rivet-buildplugin.in \

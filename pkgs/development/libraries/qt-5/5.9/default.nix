@@ -38,12 +38,11 @@ let
   srcs = import ./srcs.nix { inherit fetchurl; inherit mirror; };
 
   patches = {
-    qtbase = [ ./qtbase.patch ] ++ optional stdenv.isDarwin ./qtbase-darwin.patch;
+    qtbase = [ ./qtbase.patch ./qtbase-fixguicmake.patch ] ++ optional stdenv.isDarwin ./qtbase-darwin.patch;
     qtdeclarative = [ ./qtdeclarative.patch ];
     qtscript = [ ./qtscript.patch ];
     qtserialport = [ ./qtserialport.patch ];
     qttools = [ ./qttools.patch ];
-    qtwebengine = optional stdenv.needsPax ./qtwebengine-paxmark-mksnapshot.patch;
     qtwebkit = [ ./qtwebkit.patch ];
   };
 

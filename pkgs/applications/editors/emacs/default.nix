@@ -119,7 +119,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "The extensible, customizable GNU text editor";
-    homepage    = http://www.gnu.org/software/emacs/;
+    homepage    = https://www.gnu.org/software/emacs/;
     license     = licenses.gpl3Plus;
     maintainers = with maintainers; [ chaoflow lovek323 peti the-kenny jwiegley ];
     platforms   = platforms.all;

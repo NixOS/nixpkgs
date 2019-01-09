@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "html2text";
-  version = "2016.9.19";
+  version = "2018.1.9";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "554ef5fd6c6cf6e3e4f725a62a3e9ec86a0e4d33cd0928136d1c79dbeb7b2d55";
+    sha256 = "627514fb30e7566b37be6900df26c2c78a030cc9e6211bda604d8181233bcdd4";
   };
 
   meta = with stdenv.lib; {

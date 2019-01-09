@@ -34,10 +34,8 @@ stdenv.mkDerivation {
     "--enable-multibyte"
     "--with-tcsetpgrp"
     "--enable-pcre"
+    "--enable-zprofile=${placeholder "out"}/etc/zprofile"
   ];
-  preConfigure = ''
-    configureFlagsArray+=(--enable-zprofile=$out/etc/zprofile)
-  '';
 
   # the zsh/zpty module is not available on hydra
   # so skip groups Y Z

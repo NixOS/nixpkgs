@@ -1,15 +1,15 @@
 { stdenv, fetchurl
 , meson, ninja, gettext, pkgconfig, wrapGAppsHook, itstool, desktop-file-utils
-, vala, gobjectIntrospection, libxml2, gtk3, glib, gsound, sound-theme-freedesktop
+, vala, gobject-introspection, libxml2, gtk3, glib, gsound, sound-theme-freedesktop
 , gnome3, gdk_pixbuf, geoclue2, libgweather }:
 
 stdenv.mkDerivation rec {
   name = "gnome-clocks-${version}";
-  version = "3.28.0";
+  version = "3.30.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-clocks/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "1dd739vchb592mck1dia2hkywn4213cpramyqzgmlmwv8z80p3nl";
+    sha256 = "009fr6zwv37wryi0c0syi4i7pxpdbn3gliws68l99cjsbn2qd6pc";
   };
 
   passthru = {
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     vala meson ninja pkgconfig gettext itstool wrapGAppsHook desktop-file-utils libxml2
-    gobjectIntrospection # for finding vapi files
+    gobject-introspection # for finding vapi files
   ];
   buildInputs = [
     gtk3 glib gnome3.gsettings-desktop-schemas gdk_pixbuf gnome3.defaultIconTheme

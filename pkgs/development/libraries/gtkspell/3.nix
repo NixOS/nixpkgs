@@ -1,4 +1,4 @@
-{stdenv, fetchurl, gtk3, aspell, pkgconfig, enchant2, isocodes, intltool, gobjectIntrospection, vala}:
+{stdenv, fetchurl, gtk3, aspell, pkgconfig, enchant2, isocodes, intltool, gobject-introspection, vala}:
 
 stdenv.mkDerivation rec {
   name = "gtkspell-${version}";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0cjp6xdcnzh6kka42w9g0w2ihqjlq8yl8hjm9wsfnixk6qwgch5h";
   };
 
-  nativeBuildInputs = [ pkgconfig intltool gobjectIntrospection vala ];
+  nativeBuildInputs = [ pkgconfig intltool gobject-introspection vala ];
   buildInputs = [ aspell gtk3 enchant2 isocodes ];
   propagatedBuildInputs = [ enchant2 ];
 

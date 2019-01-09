@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   name = "motion-${version}";
-  version = "4.2";
+  version = "4.2.1";
 
   src = fetchFromGitHub {
     owner  = "Motion-Project";
     repo   = "motion";
     rev    = "release-${version}";
-    sha256 = "0c0q6dl4v561m5y8bp0c0h4p3s52fjgcdnsrrf5ygdi288d3rfxv";
+    sha256 = "1h359hngbkazdli7vl949r6glrq4xxs70js6n1j8jxcyw1wxian9";
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
@@ -20,6 +20,6 @@ stdenv.mkDerivation rec {
     description = "Monitors the video signal from cameras";
     homepage = https://motion-project.github.io/;
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ puffnfresh ];
+    maintainers = with maintainers; [ puffnfresh veprbl ];
   };
 }

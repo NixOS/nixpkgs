@@ -3,24 +3,23 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  version = "1.2.6";
+  version = "1.4.1";
   name = "mpop-${version}";
 
   src = fetchurl {
-    url = "mirror://sourceforge/mpop/${name}.tar.xz";
-    sha256 = "0p1ix63jh64dibrlccch8q7gxl9nn18wd2qpyr5z1h4gs2fpmv4z";
+    url = "https://marlam.de/mpop/releases/${name}.tar.xz";
+    sha256 = "1b9mj6yfa8vg5flxw1xb8xalifjg87dghbg523i6fbr7679zl9iy";
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ openssl gnutls gsasl libidn ]
+  buildInputs = [ gnutls gsasl libidn ]
     ++ optional stdenv.isDarwin Security;
 
-  configureFlags =
-    optional stdenv.isDarwin [ "--with-macosx-keyring" ];
+  configureFlags = optional stdenv.isDarwin [ "--with-macosx-keyring" ];
 
   meta = {
       description = "POP3 mail retrieval agent";
-      homepage = http://mpop.sourceforge.net/;
+      homepage = https://marlam.de/mpop;
       license = licenses.gpl3Plus;
       platforms = platforms.unix;
     };

@@ -24,11 +24,11 @@ let
   gcc = if stdenv.cc.isGNU then stdenv.cc.cc else stdenv.cc.cc.gcc;
 in stdenv.mkDerivation rec {
   name = "thunderbird-${version}";
-  version = "60.3.1";
+  version = "60.4.0";
 
   src = fetchurl {
     url = "mirror://mozilla/thunderbird/releases/${version}/source/thunderbird-${version}.source.tar.xz";
-    sha512 = "266m4kwxiwh1zi60z4gcs54k4w903aximafngmmqaa5nkxnsxh6sp62j1mazdh52g40pzdy9sqb8zkcjsm7dp937kpcl2lvw778lanm";
+    sha512 = "0flg3j0bvgpyk4wbb8d17yl8rddww7q9m9n5brqx1jlj0vjk8lrf8awvxxhn5ssyhy2ys2sklnw75y35hnws3hijs8l9l8ahznfqjq8";
   };
 
   # from firefox, but without sound libraries
@@ -100,7 +100,7 @@ in stdenv.mkDerivation rec {
     ''
       cxxLib=$( echo -n ${gcc}/include/c++/* )
       archLib=$cxxLib/$( ${gcc}/bin/gcc -dumpmachine )
-  
+
       test -f layout/style/ServoBindings.toml && sed -i -e '/"-DRUST_BINDGEN"/ a , "-cxx-isystem", "'$cxxLib'", "-isystem", "'$archLib'"' layout/style/ServoBindings.toml
 
       configureScript="$(realpath ./configure)"
@@ -108,18 +108,9 @@ in stdenv.mkDerivation rec {
       cd ../objdir
     '';
 
-  preInstall =
-    ''
-      # The following is needed for startup cache creation on grsecurity kernels.
-      paxmark m ../objdir/dist/bin/xpcshell
-    '';
-
   dontWrapGApps = true; # we do it ourselves
   postInstall =
     ''
-      # For grsecurity kernels
-      paxmark m $out/lib/thunderbird/thunderbird
-
       # TODO: Move to a dev output?
       rm -rf $out/include $out/lib/thunderbird-devel-* $out/share/idl
 
@@ -202,6 +193,6 @@ in stdenv.mkDerivation rec {
   passthru.updateScript = import ./../../browsers/firefox/update.nix {
     attrPath = "thunderbird";
     baseUrl = "http://archive.mozilla.org/pub/thunderbird/releases/";
-    inherit writeScript lib common-updater-scripts xidel coreutils gnused gnugrep curl;
+    inherit stdenv writeScript lib common-updater-scripts xidel coreutils gnused gnugrep curl;
   };
 }

@@ -20,9 +20,9 @@ buildPythonPackage rec {
   checkInputs = [ mock psutil ];
   propagatedBuildInputs = [ pyopenssl pysendfile ];
 
-  checkPhase = ''
-    ${python.interpreter} pyftpdlib/test/runner.py
-  '';
+  # impure filesystem-related tests cause timeouts
+  # on Hydra: https://hydra.nixos.org/build/84374861
+  doCheck = false;
 
   meta = with stdenv.lib; {
     homepage = https://github.com/giampaolo/pyftpdlib/;

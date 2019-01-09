@@ -54,6 +54,13 @@ in
         description = "The database directory.";
       };
 
+      logLevel = mkOption {
+        type = types.str;
+        default = "0";
+        example = "acl trace";
+        description = "The log level selector of slapd.";
+      };
+
       configDir = mkOption {
         type = types.nullOr types.path;
         default = null;
@@ -139,7 +146,7 @@ in
         chown -R "${cfg.user}:${cfg.group}" "${cfg.dataDir}"
       '';
       serviceConfig.ExecStart =
-        "${openldap.out}/libexec/slapd -d 0 " +
+        "${openldap.out}/libexec/slapd -d ${cfg.logLevel} " +
           "-u '${cfg.user}' -g '${cfg.group}' " +
           "-h '${concatStringsSep " " cfg.urlList}' " +
           "${configOpts}";
