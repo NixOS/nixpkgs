@@ -7234,18 +7234,6 @@ in
   julia_1 = julia_10;
   julia = julia_1;
 
-  julia-mkl_10 = callPackage ../development/compilers/julia-mkl/1.0.nix {
-    gmp = gmp6;
-    inherit (darwin.apple_sdk.frameworks) CoreServices ApplicationServices;
-  };
-
-  julia-mkl = julia-mkl_10;
-
-  julia-packages = callPackage ../development/compilers/julia-packages { };
-  julia-binary = julia-packages.julia-binary;
-  julia-chroot = julia-packages.julia-chroot;
-  julia-run = julia-chroot.run;
-
   jwasm =  callPackage ../development/compilers/jwasm { };
 
   kotlin = callPackage ../development/compilers/kotlin { };
@@ -16395,6 +16383,8 @@ in
   clp = callPackage ../applications/science/math/clp { };
 
   cmatrix = callPackage ../applications/misc/cmatrix { };
+
+  cmtk = callPackage ../applications/science/biology/cmtk { };
 
   cmus = callPackage ../applications/audio/cmus {
     inherit (darwin.apple_sdk.frameworks) CoreAudio;
