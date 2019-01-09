@@ -1198,7 +1198,7 @@ self: super: {
   hlint = super.hlint.overrideScope (self: super: { haskell-src-exts = self.haskell-src-exts_1_21_0; });
   hoogle = super.hoogle.overrideScope (self: super: { haskell-src-exts = self.haskell-src-exts_1_21_0; });
 
-  # jailbreak tasty < 1.2: https://github.com/phadej/tdigest/issues/30
+  # Jailbreak tasty < 1.2: https://github.com/phadej/tdigest/issues/30
   tdigest = doJailbreak super.tdigest; # until tdigest > 0.2.1
 
   # These patches contain fixes for 8.6 that should be safe for
