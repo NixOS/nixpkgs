@@ -27,11 +27,11 @@ let
       };
       armv7l-linux = fetchurl {
         url = "https://github.com/electron/electron/releases/download/v${version}/electron-v${version}-linux-armv7l.zip";
-        sha256 = "1ayfcy7jm7mymmbdq08id9wpjj6cja2cyix1sw2r3m8gpn4l6ih2";
+        sha256 = "04yj58v1sqnw64csazpfcchv2498ppxs2izadpnirawk09azl3bl";
       };
       aarch64-linux = fetchurl {
         url = "https://github.com/electron/electron/releases/download/v${version}/electron-v${version}-linux-arm64.zip";
-        sha256 = "18cqg9zb98c0rfrdg7ri26dvhjwrwzj41jn8dfra9131xc84nl3i";
+        sha256 = "0cjf4i24qpgkmzb4nm89kgl07bwrncpz66xs5jjvi94pmr6wx6jm";
       };
     }.${stdenv.hostPlatform.system} or throwSystem;
 
