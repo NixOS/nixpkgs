@@ -43,8 +43,7 @@ stdenv.mkDerivation rec {
 
   patchFlags = "-p0";
 
-  patches = upstreamPatches
-    ++ optional stdenv.hostPlatform.isCygwin ./cygwin-bash-4.4.11-2.src.patch;
+  patches = upstreamPatches;
 
   configureFlags = [
     (if interactive then "--with-installed-readline" else "--disable-readline")
