@@ -17,9 +17,8 @@ in stdenv.mkDerivation rec {
 
   kernel = optional (_kernel != null) _kernel.dev;
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ makeWrapper utillinux openssl libcap_ng python27
-                  perl procps which ];
+  nativeBuildInputs = [ pkgconfig openssl python27 perl which ];
+  buildInputs = [ makeWrapper utillinux openssl libcap_ng python27 procps ];
 
   configureFlags = [
     "--localstatedir=/var"

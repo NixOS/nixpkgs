@@ -5298,7 +5298,7 @@ in
   opentracing-cpp = callPackage ../development/libraries/opentracing-cpp { };
 
   openvswitch = callPackage ../os-specific/linux/openvswitch {
-    openssl = openssl_1_0_2;
+    openssl = __splicedPackages.openssl_1_0_2;
   };
 
   optipng = callPackage ../tools/graphics/optipng {
