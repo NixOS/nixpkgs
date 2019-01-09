@@ -42,6 +42,11 @@ python27Packages.buildPythonApplication rec {
     homepage = https://www.nicotine-plus.org;
     license = licenses.gpl3;
     maintainers = with maintainers; [ klntsky ];
-    platforms = platforms.all;
+    platforms = platforms.unix;
   };
 }
+
+# Known problems:
+#
+# - Offline guide does not work because of hardcoded path.
+#   see pynicotine/gtkgui/frame.py
