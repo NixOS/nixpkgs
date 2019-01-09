@@ -22,6 +22,8 @@ stdenv.mkDerivation {
 
   meta = {
     platforms = stdenv.lib.platforms.linux;
+    license = stdenv.lib.licenses.asl20;
+    maintainers = with stdenv.lib.maintainers; [ edude03 dxf ];
   };
 
 }

@@ -65,6 +65,12 @@ in
 runCommand "wrapped-garden-runc" {
   inherit extractDir;
   passthru = { inherit gdn; };
+
+  meta = {
+    platforms = stdenv.lib.platforms.linux;
+    license = stdenv.lib.licenses.asl20;
+    maintainers = with stdenv.lib.maintainers; [ edude03 dxf ];
+  };
 } ''
   mkdir -p $out/bin
   cat >$out/bin/gdn <<EOF

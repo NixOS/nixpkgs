@@ -53,6 +53,8 @@ let
 
       meta = {
         inherit platforms;
+        license = stdenv.lib.licenses.asl20;
+        maintainers = with stdenv.lib.maintainers; [ edude03 dxf ];
       };
     };
 in
