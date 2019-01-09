@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, vte, gtk3, ncurses, wrapGAppsHook }:
+{ stdenv, fetchFromGitHub, pkgconfig, vte-ng, gtk3, ncurses, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   name = "termite-${version}";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "VERSION=v${version}" "PREFIX=" "DESTDIR=$(out)" ];
 
-  buildInputs = [ vte gtk3 ncurses ];
+  buildInputs = [ vte-ng gtk3 ncurses ];
 
   nativeBuildInputs = [ wrapGAppsHook pkgconfig ];
 

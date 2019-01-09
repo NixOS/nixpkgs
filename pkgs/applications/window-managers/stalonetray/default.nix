@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateInfo = {
-      downloadPage = "http://sourceforge.net/projects/stalonetray/files/";
+      downloadPage = "https://sourceforge.net/projects/stalonetray/files/";
     };
   };
 }

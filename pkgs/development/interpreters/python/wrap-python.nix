@@ -7,7 +7,7 @@ with lib;
 
 makeSetupHook {
       deps = makeWrapper;
-      substitutions.libPrefix = python.libPrefix;
+      substitutions.sitePackages = python.sitePackages;
       substitutions.executable = python.interpreter;
       substitutions.python = python;
       substitutions.magicalSedExpression = let

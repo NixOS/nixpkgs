@@ -1,10 +1,10 @@
-{ stdenv, fetchurl, pkgconfig, file, intltool, vala, glib, liboauth, gtk3
+{ stdenv, fetchurl, meson, ninja, pkgconfig, gettext, vala, glib, liboauth, gtk3
 , gtk-doc, docbook_xsl, docbook_xml_dtd_43
-, libxml2, gnome3, gobjectIntrospection, libsoup }:
+, libxml2, gnome3, gobject-introspection, libsoup, totem-pl-parser }:
 
 let
   pname = "grilo";
-  version = "0.3.6"; # if you change minor, also change ./setup-hook.sh
+  version = "0.3.7"; # if you change minor, also change ./setup-hook.sh
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
@@ -13,29 +13,28 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "14cwpk9jxi8rfjcmkav37zf0m52b1lqpkpkz858h80jqvn1clr8y";
+    sha256 = "1dz965l743r4bhj78wij9k1mb6635gnkb1lnk9j7gw9dd5qsyfza";
   };
+
+  patches = [
+    # Fix meson build: https://gitlab.gnome.org/GNOME/grilo/merge_requests/34
+    (fetchurl {
+      url = "https://gitlab.gnome.org/GNOME/grilo/commit/166612aeff09e5fc2fec1f62185c84cbdcf8f889.diff";
+      sha256 = "07zamy927iaa7knrwq5yxz7ypl1i02pymkcdrg5l55alhdvb81pw";
+    })
+  ];
 
   setupHook = ./setup-hook.sh;
 
-  configureFlags = [
-    "--enable-grl-pls"
-    "--enable-grl-net"
-    "--enable-gtk-doc"
+  mesonFlags = [
+    "-Dgtk_doc=true"
   ];
-
-  preConfigure = ''
-    for f in src/Makefile.in libs/pls/Makefile.in libs/net/Makefile.in; do
-       substituteInPlace $f --replace @INTROSPECTION_GIRDIR@ "$dev/share/gir-1.0/"
-       substituteInPlace $f --replace @INTROSPECTION_TYPELIBDIR@ "$out/lib/girepository-1.0"
-    done
-  '';
 
   nativeBuildInputs = [
-    file intltool pkgconfig gobjectIntrospection vala
+    meson ninja pkgconfig gettext gobject-introspection vala
     gtk-doc docbook_xsl docbook_xml_dtd_43
   ];
-  buildInputs = [ glib liboauth gtk3 libxml2 libsoup gnome3.totem-pl-parser ];
+  buildInputs = [ glib liboauth gtk3 libxml2 libsoup totem-pl-parser ];
 
   passthru = {
     updateScript = gnome3.updateScript {

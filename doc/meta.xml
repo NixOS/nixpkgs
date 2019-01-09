@@ -14,7 +14,7 @@ meta = with stdenv.lib; {
     GNU Hello is a program that prints "Hello, world!" when you run it.
     It is fully customizable.
   '';
-  homepage = http://www.gnu.org/software/hello/manual/;
+  homepage = https://www.gnu.org/software/hello/manual/;
   license = licenses.gpl3Plus;
   maintainers = [ maintainers.eelco ];
   platforms = platforms.all;
@@ -35,7 +35,7 @@ $ nix-env -qa hello --json
     "hello": {
         "meta": {
             "description": "A program that produces a familiar, friendly greeting",
-            "homepage": "http://www.gnu.org/software/hello/manual/",
+            "homepage": "https://www.gnu.org/software/hello/manual/",
             "license": {
                 "fullName": "GNU General Public License version 3 or later",
                 "shortName": "GPLv3+",
@@ -135,7 +135,7 @@ hello-2.3  A program that produces a familiar, friendly greeting
     <listitem>
      <para>
       The package’s homepage. Example:
-      <literal>http://www.gnu.org/software/hello/manual/</literal>
+      <literal>https://www.gnu.org/software/hello/manual/</literal>
      </para>
     </listitem>
    </varlistentry>
@@ -146,7 +146,7 @@ hello-2.3  A program that produces a familiar, friendly greeting
     <listitem>
      <para>
       The page where a link to the current version can be found. Example:
-      <literal>http://ftp.gnu.org/gnu/hello/</literal>
+      <literal>https://ftp.gnu.org/gnu/hello/</literal>
      </para>
     </listitem>
    </varlistentry>

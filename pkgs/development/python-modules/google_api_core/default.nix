@@ -3,11 +3,11 @@
 
 buildPythonPackage rec {
   pname = "google-api-core";
-  version = "1.5.0";
+  version = "1.5.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "16ximavy7zgg0427790fmyma03xnkywar9krp4lx6bcphvyiahh3";
+    sha256 = "16knimv41rjhrqkibm1p8f5ssmbbcjn7njc71lpr8v03l7mr6f9q";
   };
 
   propagatedBuildInputs = [

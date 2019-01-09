@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   src = fetchgit {
     sha256 = "0vpxb6z5g9fjavrgx8gz8fsjvskfz64f63qibh5s00fvvndlwi88";
-    url = "http://git.savannah.gnu.org/r/gcl.git";
+    url = "https://git.savannah.gnu.org/r/gcl.git";
     rev = "refs/tags/Version_2_6_13pre50";
   };
 

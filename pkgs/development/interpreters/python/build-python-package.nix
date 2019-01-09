@@ -12,6 +12,8 @@
 , namePrefix
 , bootstrapped-pip
 , flit
+, writeScript
+, update-python-libraries
 }:
 
 let
@@ -20,7 +22,8 @@ let
   wheel-specific = import ./build-python-package-wheel.nix { };
   common = import ./build-python-package-common.nix { inherit python bootstrapped-pip; };
   mkPythonDerivation = import ./mk-python-derivation.nix {
-    inherit lib config python wrapPython setuptools unzip ensureNewerSourcesForZipFilesHook toPythonModule namePrefix;
+    inherit lib config python wrapPython setuptools unzip ensureNewerSourcesForZipFilesHook;
+    inherit toPythonModule namePrefix writeScript update-python-libraries;
   };
 in
 

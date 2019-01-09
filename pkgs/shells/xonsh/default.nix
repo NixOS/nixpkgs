@@ -28,7 +28,7 @@ python3Packages.buildPythonApplication rec {
 
   checkInputs = [ python3Packages.pytest glibcLocales git ];
 
-  propagatedBuildInputs = with python3Packages; [ ply prompt_toolkit_2 pygments ];
+  propagatedBuildInputs = with python3Packages; [ ply prompt_toolkit pygments ];
 
   meta = with stdenv.lib; {
     description = "A Python-ish, BASHwards-compatible shell";

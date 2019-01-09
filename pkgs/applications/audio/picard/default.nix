@@ -4,11 +4,11 @@ let
   pythonPackages = python3Packages;
 in pythonPackages.buildPythonApplication rec {
   pname = "picard";
-  version = "2.0.4";
+  version = "2.1";
 
   src = fetchurl {
     url = "http://ftp.musicbrainz.org/pub/musicbrainz/picard/picard-${version}.tar.gz";
-    sha256 = "0ds3ylpqn717fnzcjrfn05v5xram01bj6n3hwn9igmkd1jgf8vhc";
+    sha256 = "054a37q5828q59jzml4npkyczsp891d89kawgsif9kwpi0dxa06c";
   };
 
   buildInputs = [ gettext ];

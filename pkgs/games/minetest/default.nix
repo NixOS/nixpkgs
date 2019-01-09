@@ -4,13 +4,13 @@
 }:
 
 let
-  version = "0.4.17";
+  version = "0.4.17.1";
   sources = {
     src = fetchFromGitHub {
       owner = "minetest";
       repo = "minetest";
       rev = "${version}";
-      sha256 = "0ri9hyhvcnyyy2k83qvv543s10476g9fn3vcbjwvxjfqap9mkc5m";
+      sha256 = "19sfblgh9mchkgw32n7gdvm7a8a9jxsl9cdlgmxn9bk9m939a2sg";
     };
     data = fetchFromGitHub {
       owner = "minetest";

@@ -259,6 +259,9 @@ rec {
    */
   buildStrictly = pkg: buildFromSdist (failOnAllWarnings pkg);
 
+  /* Disable core optimizations, significantly speeds up build time */
+  disableOptimization = pkg: appendConfigureFlag pkg "--disable-optimization";
+
   /* Turn on most of the compiler warnings and fail the build if any
      of them occur. */
   failOnAllWarnings = drv: appendConfigureFlag drv "--ghc-option=-Wall --ghc-option=-Werror";
@@ -405,4 +408,11 @@ rec {
   */
   generateOptparseApplicativeCompletions = commands: pkg:
     pkgs.lib.foldr generateOptparseApplicativeCompletion pkg commands;
+
+  # Don't fail at configure time if there are multiple versions of the
+  # same package in the (recursive) dependencies of the package being
+  # built. Will delay failures, if any, to compile time.
+  allowInconsistentDependencies = drv: overrideCabal drv (drv: {
+    allowInconsistentDependencies = true;
+  });
 }

@@ -19,7 +19,9 @@
 
   <itemizedlist>
    <listitem>
-    <para />
+    <para>
+    The default Python 3 interpreter is now CPython 3.7 instead of CPython 3.6.
+    </para>
    </listitem>
   </itemizedlist>
  </section>
@@ -37,7 +39,18 @@
 
   <itemizedlist>
    <listitem>
-    <para />
+    <para>
+     <literal>./programs/nm-applet.nix</literal>
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     There is a new <varname>security.googleOsLogin</varname> module for using
+     <link xlink:href="https://cloud.google.com/compute/docs/instances/managing-instance-access">OS Login</link>
+     to manage SSH access to Google Compute Engine instances, which supersedes
+     the imperative and broken <literal>google-accounts-daemon</literal> used
+     in <literal>nixos/modules/virtualisation/google-compute-config.nix</literal>.
+    </para>
    </listitem>
   </itemizedlist>
  </section>
@@ -107,6 +120,16 @@
       <literal>/var/lib/syncthing/.config/syncthing</literal>.
       This change makes possible to share synced directories using ACLs
       without Syncthing resetting the permission on every start.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+      The <literal>ntp</literal> module now has sane default restrictions.
+      If you're relying on the previous defaults, which permitted all queries
+      and commands from all firewall-permitted sources, you can set
+      <varname>services.ntp.restrictDefault</varname> and
+      <varname>services.ntp.restrictSource</varname> to
+      <literal>[]</literal>.
     </para>
    </listitem>
    <listitem>
@@ -220,6 +243,113 @@
      reset to the default value (<literal>false</literal>).
     </para>
    </listitem>
+   <listitem>
+    <para>
+     Network interface indiscriminate NixOS firewall options
+     (<literal>networking.firewall.allow*</literal>) are now preserved when also
+     setting interface specific rules such as <literal>networking.firewall.interfaces.en0.allow*</literal>.
+     These rules continue to use the pseudo device "default"
+     (<literal>networking.firewall.interfaces.default.*</literal>), and assigning
+     to this pseudo device will override the (<literal>networking.firewall.allow*</literal>)
+     options.
+   </para>
+  </listitem>
+  <listitem>
+   <para>
+     The <literal>nscd</literal> service now disables all caching of
+     <literal>passwd</literal> and <literal>group</literal> databases by
+     default. This was interferring with the correct functioning of the
+     <literal>libnss_systemd.so</literal> module which is used by
+     <literal>systemd</literal> to manage uids and usernames in the presence of
+     <literal>DynamicUser=</literal> in systemd services.  This was already the
+     default behaviour in presence of <literal>services.sssd.enable =
+       true</literal> because nscd caching would interfere with
+     <literal>sssd</literal> in unpredictable ways as well.  Because we're
+     using nscd not for caching, but for convincing glibc to find NSS modules
+     in the nix store instead of an absolute path, we have decided to disable
+     caching globally now, as it's usually not the behaviour the user wants and
+     can lead to surprising behaviour.  Furthermore, negative caching of host
+     lookups is also disabled now by default. This should fix the issue of dns
+     lookups failing in the presence of an unreliable network.
+   </para>
+   <para>
+     If the old behaviour is desired, this can be restored by setting
+     the <literal>services.nscd.config</literal> option
+     with the desired caching parameters.
+     <programlisting>
+     services.nscd.config =
+     ''
+     server-user             nscd
+     threads                 1
+     paranoia                no
+     debug-level             0
+
+     enable-cache            passwd          yes
+     positive-time-to-live   passwd          600
+     negative-time-to-live   passwd          20
+     suggested-size          passwd          211
+     check-files             passwd          yes
+     persistent              passwd          no
+     shared                  passwd          yes
+
+     enable-cache            group           yes
+     positive-time-to-live   group           3600
+     negative-time-to-live   group           60
+     suggested-size          group           211
+     check-files             group           yes
+     persistent              group           no
+     shared                  group           yes
+
+     enable-cache            hosts           yes
+     positive-time-to-live   hosts           600
+     negative-time-to-live   hosts           5
+     suggested-size          hosts           211
+     check-files             hosts           yes
+     persistent              hosts           no
+     shared                  hosts           yes
+     '';
+     </programlisting>
+     See <link xlink:href="https://github.com/NixOS/nixpkgs/pull/50316">#50316</link>
+     for details.
+   </para>
+  </listitem>
+  <listitem>
+   <para>
+     GitLab Shell previously used the nix store paths for the
+     <literal>gitlab-shell</literal> command in its
+     <literal>authorized_keys</literal> file, which might stop working after
+     garbage collection. To circumvent that, we regenerated that file on each
+     startup.  As <literal>gitlab-shell</literal> has now been changed to use
+     <literal>/var/run/current-system/sw/bin/gitlab-shell</literal>, this is
+     not necessary anymore, but there might be leftover lines with a nix store
+     path. Regenerate the <literal>authorized_keys</literal> file via
+     <command>sudo -u git -H gitlab-rake gitlab:shell:setup</command> in that
+     case.
+   </para>
+  </listitem>
+  <listitem>
+   <para>
+     The <literal>pam_unix</literal> account module is now loaded with its
+     control field set to <literal>required</literal> instead of
+     <literal>sufficient</literal>, so that later pam account modules that
+     might do more extensive checks are being executed.
+     Previously, the whole account module verification was exited prematurely
+     in case a nss module provided the account name to
+     <literal>pam_unix</literal>.
+     The LDAP and SSSD NixOS modules already add their NSS modules when
+     enabled. In case your setup breaks due to some later pam account module
+     previosuly shadowed, or failing NSS lookups, please file a bug. You can
+     get back the old behaviour by manually setting
+     <literal><![CDATA[security.pam.services.<name?>.text]]></literal>.
+   </para>
+  </listitem>
+   <listitem>
+    <para>
+     <literal>fish</literal> has been upgraded to 3.0.
+     It comes with a number of improvements and backwards incompatible changes.
+     See the <literal>fish</literal> <link xlink:href="https://github.com/fish-shell/fish-shell/releases/tag/3.0.0">release notes</link> for more information.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
@@ -236,6 +366,12 @@
      The <option>services.matomo</option> module gained the option
      <option>services.matomo.package</option> which determines the used
      Matomo version.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     <literal>composableDerivation</literal> along with supporting library functions
+     has been removed.
     </para>
    </listitem>
    <listitem>
@@ -259,6 +395,18 @@
       The desired number of replicas can be configured using:
       <option>services.kubernetes.addons.dns.replicas</option>.
     </para>
+   </listitem>
+   <listitem>
+     <para>
+       The quassel-webserver package and module was removed from nixpkgs due to the lack
+       of maintainers.
+     </para>
+   </listitem>
+   <listitem>
+     <para>
+       The owncloud server packages and httpd subservice module were removed
+       from nixpkgs due to the lack of maintainers.
+     </para>
    </listitem>
   </itemizedlist>
  </section>

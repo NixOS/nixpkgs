@@ -1,7 +1,8 @@
-{stdenv, fetchFromGitHub
-  , llvmPackages
-  , cmake, boehmgc, gmp, zlib, ncurses, boost
-  , python, git, sbcl
+{ stdenv, fetchFromGitHub
+, llvmPackages
+, cmake, boehmgc, gmp, zlib, ncurses, boost
+, python, git, sbcl
+, wafHook
 }:
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
@@ -16,7 +17,7 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ cmake python git sbcl ];
+  nativeBuildInputs = [ cmake python git sbcl wafHook ];
 
   buildInputs = with llvmPackages; (
     builtins.map (x: stdenv.lib.overrideDerivation x
@@ -32,36 +33,14 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = " -frtti ";
 
-  configurePhase = ''
-    runHook preConfigure
-
-    export CXX=clang++
-    export CC=clang
-
+  postPatch = ''
     echo "
       INSTALL_PATH_PREFIX = '$out'
     " | sed -e 's/^ *//' > wscript.config
-
-    python ./waf configure update_submodules
-
-    runHook postConfigure
   '';
 
-  buildPhase = ''
-    runHook preBuild
-
-    python ./waf build_cboehm
-
-    runHook postBuild
-  '';
-
-  installPhase = ''
-    runHook preInstall
-
-    python ./waf install_cboehm
-
-    runHook postInstall
-  '';
+  buildTargets = "build_cboehm";
+  installTargets = "install_cboehm";
 
   meta = {
     inherit version;

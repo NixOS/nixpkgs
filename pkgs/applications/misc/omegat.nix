@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "4.1.5.2";
-  name = "omegat";
+  pname = "omegat";
 
   src = fetchurl {  # their zip has repeated files or something, so no fetchzip
     url = mirror://sourceforge/project/omegat/OmegaT%20-%20Latest/OmegaT%204.1.5%20update%202/OmegaT_4.1.5_02_Beta_Without_JRE.zip;

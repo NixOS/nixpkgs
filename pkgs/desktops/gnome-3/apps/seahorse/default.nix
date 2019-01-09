@@ -1,32 +1,35 @@
-{ stdenv, intltool, fetchurl, vala
-, pkgconfig, gtk3, glib
+{ stdenv, fetchurl, vala, meson, ninja
+, pkgconfig, gtk3, glib, gobject-introspection
 , wrapGAppsHook, itstool, gnupg, libsoup
-, gnome3, gpgme
+, gnome3, gpgme, python3, openldap, gcr
 , libsecret, avahi, p11-kit, openssh }:
 
-let
+stdenv.mkDerivation rec {
   pname = "seahorse";
-  version = "3.20.0";
-in stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+  version = "3.30.1.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "e2b07461ed54a8333e5628e9b8e517ec2b731068377bf376570aad998274c6df";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "12x7xmwh62yl0ax90v8nkx3jqzviaz9hz2g56yml78wzww20gawy";
   };
 
   doCheck = true;
 
-  NIX_CFLAGS_COMPILE = "-I${gnome3.glib.dev}/include/gio-unix-2.0";
-
-  nativeBuildInputs = [ pkgconfig vala intltool itstool wrapGAppsHook ];
+  nativeBuildInputs = [
+    meson ninja pkgconfig vala itstool wrapGAppsHook
+    python3 gobject-introspection
+  ];
   buildInputs = [
-    gtk3 glib gnome3.gcr
+    gtk3 glib gcr
     gnome3.gsettings-desktop-schemas gnupg
     gnome3.defaultIconTheme gpgme
     libsecret avahi libsoup p11-kit
-    openssh
+    openssh openldap
   ];
+
+  postPatch = ''
+    patchShebangs build-aux/
+  '';
 
   passthru = {
     updateScript = gnome3.updateScript {

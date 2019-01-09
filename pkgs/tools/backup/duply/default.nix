@@ -28,11 +28,11 @@ stdenv.mkDerivation rec {
     description = "Shell front end for the duplicity backup tool";
     longDescription = ''
       Duply is a shell front end for the duplicity backup tool
-      http://duplicity.nongnu.org/. It greatly simplifies it's usage by
+      https://www.nongnu.org/duplicity. It greatly simplifies its usage by
       implementing backup job profiles, batch commands and more. Who says
       secure backups on non-trusted spaces are no child's play?
     '';
-    homepage = http://duply.net/;
+    homepage = https://duply.net/;
     license = licenses.gpl2;
     maintainers = [ maintainers.bjornfor ];
     platforms = stdenv.lib.platforms.unix;

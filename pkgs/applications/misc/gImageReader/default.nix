@@ -1,12 +1,12 @@
 { stdenv, fetchFromGitHub, cmake, pkgconfig, libuuid
 , sane-backends, podofo, libjpeg, djvulibre, libxmlxx3, libzip, tesseract
-, enchant, intltool, poppler, json-glib
+, intltool, poppler, json-glib
 , ninja
 , python3
 
 # Gtk deps
 # upstream gImagereader supports Qt too
-, gtk3, gobjectIntrospection, wrapGAppsHook
+, gtk3, gobject-introspection, wrapGAppsHook
 , gnome3, gtkspell3, gtkspellmm, cairomm
 }:
 
@@ -33,11 +33,10 @@ stdenv.mkDerivation rec {
 
     # Gtk specific
     wrapGAppsHook
-    gobjectIntrospection
+    gobject-introspection
   ];
 
   buildInputs = [
-    enchant
     libxmlxx3
     libzip
     libuuid

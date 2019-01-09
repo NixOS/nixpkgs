@@ -32,26 +32,11 @@ stdenv.mkDerivation rec {
     "opus=1"
   ];
 
-  buildPhase = ''
-    runHook preBuild
-    mkdir -p "$out"
-    scons \
-      -j$NIX_BUILD_CORES -l$NIX_BUILD_CORES \
-      $sconsFlags "prefix=$out"
-    runHook postBuild
-  '';
-
-  installPhase = ''
-    runHook preInstall
-    scons $sconsFlags "prefix=$out" install
-    runHook postInstall
-  '';
-
   fixupPhase = ''
     wrapProgram $out/bin/mixxx \
       --set LOCALE_ARCHIVE ${glibcLocales}/lib/locale/locale-archive;
   '';
-    
+
   meta = with stdenv.lib; {
     homepage = https://mixxx.org;
     description = "Digital DJ mixing software";

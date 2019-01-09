@@ -1,7 +1,4 @@
-{ name
-, url
-, sha256
-}:
+sourcePerArch:
 
 { swingSupport ? true
 , stdenv
@@ -48,10 +45,12 @@ let
 in
 
 let result = stdenv.mkDerivation rec {
-  inherit name;
+  name = if sourcePerArch.packageType == "jdk"
+    then "adoptopenjdk-${sourcePerArch.vmType}-bin-${sourcePerArch.version}"
+    else "adoptopenjdk-${sourcePerArch.packageType}-${sourcePerArch.vmType}-bin-${sourcePerArch.version}";
 
   src = fetchurl {
-    inherit url sha256;
+    inherit (sourcePerArch.${stdenv.hostPlatform.parsed.cpu.name}) url sha256;
   };
 
   nativeBuildInputs = [ file ];
@@ -61,14 +60,6 @@ let result = stdenv.mkDerivation rec {
 
   installPhase = ''
     cd ..
-
-    # Set PaX markings
-    exes=$(file $sourceRoot/bin/* 2> /dev/null | grep -E 'ELF.*(executable|shared object)' | sed -e 's/: .*$//')
-    for file in $exes; do
-      paxmark m "$file"
-      # On x86 for heap sizes over 700MB disable SEGMEXEC and PAGEEXEC as well.
-      ${stdenv.lib.optionalString stdenv.isi686 ''paxmark msp "$file"''}
-    done
 
     mv $sourceRoot $out
 
@@ -112,7 +103,7 @@ let result = stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     license = licenses.gpl2Classpath;
     description = "AdoptOpenJDK, prebuilt OpenJDK binary";
-    platforms = [ "x86_64-linux" ]; # some inherit jre.meta.platforms
+    platforms = stdenv.lib.mapAttrsToList (arch: _: arch + "-linux") sourcePerArch; # some inherit jre.meta.platforms
     maintainers = with stdenv.lib.maintainers; [ taku0 ];
   };
 

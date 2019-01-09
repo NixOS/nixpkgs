@@ -20,6 +20,7 @@ top-level attribute to `top-level/all-packages.nix`.
   stdenv, fetchurl, fetchFromGitHub, makeSetupHook,
   bison, cups ? null, harfbuzz, libGL, perl,
   gstreamer, gst-plugins-base, gtk3, dconf,
+  cf-private,
 
   # options
   developerBuild ? false,
@@ -52,6 +53,7 @@ let
       ./qtbase.patch
       ./qtbase-darwin.patch
       ./qtbase-revert-no-macos10.10.patch
+      ./qtbase-fixguicmake.patch
     ] ++ optionals stdenv.isDarwin [
       ./qtbase-darwin-nseventtype.patch
     ];
@@ -59,7 +61,6 @@ let
     qtscript = [ ./qtscript.patch ];
     qtserialport = [ ./qtserialport.patch ];
     qttools = [ ./qttools.patch ];
-    qtwebengine = optional stdenv.needsPax ./qtwebengine-paxmark-mksnapshot.patch;
     qtwebkit = [ ./qtwebkit.patch ];
   };
 
@@ -95,7 +96,9 @@ let
       qtgraphicaleffects = callPackage ../modules/qtgraphicaleffects.nix {};
       qtimageformats = callPackage ../modules/qtimageformats.nix {};
       qtlocation = callPackage ../modules/qtlocation.nix {};
-      qtmacextras = callPackage ../modules/qtmacextras.nix {};
+      qtmacextras = callPackage ../modules/qtmacextras.nix {
+        inherit cf-private;
+      };
       qtmultimedia = callPackage ../modules/qtmultimedia.nix {
         inherit gstreamer gst-plugins-base;
       };

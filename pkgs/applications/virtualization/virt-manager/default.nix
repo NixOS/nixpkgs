@@ -1,6 +1,6 @@
 { stdenv, fetchurl, python3Packages, intltool, file
 , wrapGAppsHook, gtk-vnc, vte, avahi, dconf
-, gobjectIntrospection, libvirt-glib, system-libvirt
+, gobject-introspection, libvirt-glib, system-libvirt
 , gsettings-desktop-schemas, glib, libosinfo, gnome3, gtk3
 , spiceSupport ? true, spice-gtk ? null
 , cpio, e2fsprogs, findutils, gzip
@@ -20,7 +20,7 @@ python3Packages.buildPythonApplication rec {
 
   nativeBuildInputs = [
     wrapGAppsHook intltool file
-    gobjectIntrospection # for setup hook populating GI_TYPELIB_PATH
+    gobject-introspection # for setup hook populating GI_TYPELIB_PATH
   ];
 
   buildInputs =

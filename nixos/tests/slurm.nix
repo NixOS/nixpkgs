@@ -63,6 +63,12 @@ in {
             ensurePermissions = { "slurm_acct_db.*" = "ALL PRIVILEGES"; };
             name = "slurm";
           }];
+          extraOptions = ''
+            # recommendations from: https://slurm.schedmd.com/accounting.html#mysql-configuration
+            innodb_buffer_pool_size=1024M
+            innodb_log_file_size=64M
+            innodb_lock_wait_timeout=900
+          '';
         };
       };
 
@@ -95,6 +101,7 @@ in {
   subtest "can_start_slurmdbd", sub {
     $dbd->succeed("systemctl restart slurmdbd");
     $dbd->waitForUnit("slurmdbd.service");
+    $dbd->waitForOpenPort(6819);
   };
 
   # there needs to be an entry for the current

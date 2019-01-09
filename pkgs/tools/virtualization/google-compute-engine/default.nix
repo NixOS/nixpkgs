@@ -2,6 +2,7 @@
 , fetchFromGitHub
 , buildPythonApplication
 , bash
+, bashInteractive
 , systemd
 , utillinux
 , boto
@@ -11,21 +12,21 @@
 
 buildPythonApplication rec {
   name = "google-compute-engine-${version}";
-  version = "20181011";
+  version = "20181206";
   namePrefix = "";
 
   src = fetchFromGitHub {
     owner = "GoogleCloudPlatform";
     repo = "compute-image-packages";
     rev = version;
-    sha256 = "1b3wyr412qh113xvs671dqnacidil61gisfvg79wbq6wrdwswkp8";
+    sha256 = "090gbkfk3jh403jzs133isxk8263i16vnj5021l7pxbjgj1zzzwf";
   };
 
   postPatch = ''
     for file in $(find google_compute_engine -type f); do
       substituteInPlace "$file" \
         --replace /bin/systemctl "${systemd}/bin/systemctl" \
-        --replace /bin/bash "${bash}/bin/bash" \
+        --replace /bin/bash "${bashInteractive}/bin/bash" \
         --replace /sbin/hwclock "${utillinux}/bin/hwclock"
 
       # SELinux tool ???  /sbin/restorecon

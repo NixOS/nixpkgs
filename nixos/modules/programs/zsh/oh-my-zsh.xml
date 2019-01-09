@@ -19,7 +19,7 @@
    configuration format of <literal>oh-my-zsh</literal>.
 <programlisting>
 {
-  programs.ohMyZsh = {
+  programs.zsh.ohMyZsh = {
     enable = true;
     plugins = [ "git" "python" "man" ];
     theme = "agnoster";
@@ -51,7 +51,7 @@
    The module can do this as well:
 <programlisting>
 {
-  programs.ohMyZsh.custom = "~/path/to/custom/scripts";
+  programs.zsh.ohMyZsh.custom = "~/path/to/custom/scripts";
 }
 </programlisting>
   </para>
@@ -73,7 +73,7 @@
 <programlisting>
 { pkgs, ... }:
 {
-  programs.ohMyZsh.customPkgs = with pkgs; [
+  programs.zsh.ohMyZsh.customPkgs = with pkgs; [
     pkgs.nix-zsh-completions
     # and even more...
   ];
@@ -87,7 +87,7 @@
 
   <para>
    <emphasis>Please keep in mind that this is not compatible with
-   <literal>programs.ohMyZsh.custom</literal> as it requires an immutable store
+   <literal>programs.zsh.ohMyZsh.custom</literal> as it requires an immutable store
    path while <literal>custom</literal> shall remain mutable! An evaluation
    failure will be thrown if both <literal>custom</literal> and
    <literal>customPkgs</literal> are set.</emphasis>

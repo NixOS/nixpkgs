@@ -20,7 +20,7 @@ release and `nixos-unstable` for the latest successful build of master:
 % git rebase channels/nixos-18.09
 ```
 
-For pull-requests, please rebase onto nixpkgs `master`.
+For pull requests, please rebase onto nixpkgs `master`.
 
 [NixOS](https://nixos.org/nixos/) Linux distribution source code is located inside
 `nixos/` folder.

@@ -9,7 +9,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "dovecot-2.3.3";
+  name = "dovecot-2.3.4";
 
   nativeBuildInputs = [ perl pkgconfig ];
   buildInputs =
@@ -21,8 +21,10 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://dovecot.org/releases/2.3/${name}.tar.gz";
-    sha256 = "13kd0rxdg9scwnx6n24p6mv8p6dyh7v8s7sqv55gp2i54pp2gbqm";
+    sha256 = "01ggzf7b3jpl89mjiqr7xbpbs181g2gjf6wzg70qaqfzz3ppc6yr";
   };
+
+  enableParallelBuilding = true;
 
   preConfigure = ''
     patchShebangs src/config/settings-get.pl
@@ -57,6 +59,21 @@ stdenv.mkDerivation rec {
     "--with-ldap"
     "--with-lucene"
     "--with-icu"
+  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    "i_cv_epoll_works=${if stdenv.isLinux then "yes" else "no"}"
+    "i_cv_posix_fallocate_works=${if stdenv.isDarwin then "no" else "yes"}"
+    "i_cv_inotify_works=${if stdenv.isLinux then "yes" else "no"}"
+    "i_cv_signed_size_t=no"
+    "i_cv_signed_time_t=yes"
+    "i_cv_c99_vsnprintf=yes"
+    "lib_cv_va_copy=yes"
+    "i_cv_mmap_plays_with_write=yes"
+    "i_cv_gmtime_max_time_t=${toString stdenv.hostPlatform.parsed.cpu.bits}"
+    "i_cv_signed_time_t=yes"
+    "i_cv_fd_passing=yes"
+    "lib_cv_va_copy=yes"
+    "lib_cv___va_copy=yes"
+    "lib_cv_va_val_copy=yes"
   ] ++ lib.optional (stdenv.isLinux) "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
     ++ lib.optional (stdenv.isDarwin) "--enable-static"
     ++ lib.optional withMySQL "--with-mysql"

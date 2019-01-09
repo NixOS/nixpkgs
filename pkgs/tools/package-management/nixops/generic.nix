@@ -26,6 +26,7 @@ python2Packages.buildPythonApplication {
       datadog
       digital-ocean
       libvirt
+      typing
     ];
 
   doCheck = false;

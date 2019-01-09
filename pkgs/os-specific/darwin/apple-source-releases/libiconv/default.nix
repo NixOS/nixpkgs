@@ -15,7 +15,7 @@ appleDerivation {
     (lib.enableFeature enableShared "shared")
   ];
 
-  postInstall = lib.optionalString (!enableStatic) ''
+  postInstall = lib.optionalString enableShared ''
     mv $out/lib/libiconv.dylib $out/lib/libiconv-nocharset.dylib
     ${stdenv.cc.bintools.targetPrefix}install_name_tool -id $out/lib/libiconv-nocharset.dylib $out/lib/libiconv-nocharset.dylib
 

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, imagemagick, libqrencode
+{ stdenv, fetchFromGitHub, imagemagick, qrencode
 , testQR ? false, zbar ? null
 }:
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "0yrc302a2fhbzryb10718ky4fymfcps3lk67ivis1qab5kbp6z8r";
   };
 
-  buildInputs = [ imagemagick libqrencode ] ++ stdenv.lib.optional testQR zbar;
+  buildInputs = [ imagemagick qrencode ] ++ stdenv.lib.optional testQR zbar;
   dontBuild = true;
   dontStrip = true;
   dontPatchELF = true;
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   preInstall = ''
     substituteInPlace asc-to-gif.sh \
       --replace "convert" "${imagemagick}/bin/convert" \
-      --replace "qrencode" "${libqrencode}/bin/qrencode"
+      --replace "qrencode" "${qrencode.bin}/bin/qrencode"
   '';
 
   installPhase = ''

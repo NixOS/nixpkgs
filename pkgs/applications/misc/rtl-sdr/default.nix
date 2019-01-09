@@ -26,13 +26,7 @@ stdenv.mkDerivation rec {
     grep -q "Requires:" "$pcfile" && { echo "Upstream has added 'Requires:' in $(basename "$pcfile"); update nix expression."; exit 1; }
     echo "Requires: libusb-1.0" >> "$pcfile"
   '';
-  patches = lib.optionals stdenv.isDarwin [
-    (fetchpatch {
-      name = "linker-fix.patch";
-      url = "https://github.com/lukeadams/rtl-sdr/commit/7a66dcf268305b5aa507d1756799942c74549b72.patch";
-      sha256 = "0cn9fyf4ay4i3shvxj1ivgyxjvfm401irk560jdjl594nzadrcsl";
-    })
-  ];
+
   meta = with stdenv.lib; {
     description = "Turns your Realtek RTL2832 based DVB dongle into a SDR receiver";
     homepage = http://sdr.osmocom.org/trac/wiki/rtl-sdr;

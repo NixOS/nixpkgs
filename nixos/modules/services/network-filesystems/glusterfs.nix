@@ -201,7 +201,6 @@ in
 
       serviceConfig = {
         Type="simple";
-        Environment="PYTHONPATH=${glusterfs}/usr/lib/python2.7/site-packages";
         PIDFile="/run/glustereventsd.pid";
         ExecStart="${glusterfs}/sbin/glustereventsd --pid-file /run/glustereventsd.pid";
         ExecReload="/bin/kill -SIGUSR2 $MAINPID";

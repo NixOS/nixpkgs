@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub
 , autoreconfHook, docbook2x, pkgconfig
-, gtk3, dconf, gobjectIntrospection
+, gtk3, dconf, gobject-introspection
 , ibus, python3 }:
 
 stdenv.mkDerivation rec {
@@ -26,10 +26,11 @@ stdenv.mkDerivation rec {
         -e "/export IBUS_DATAROOTDIR=/ s/^.$//" \
         -e "/export IBUS_LOCALEDIR=/ s/^.$//" \
         -i "setup/ibus-setup-table.in"
+    substituteInPlace engine/tabcreatedb.py --replace '/usr/share/ibus-table' $out/share/ibus-table
   '';
 
   buildInputs = [
-    dconf gtk3 gobjectIntrospection ibus (python3.withPackages (pypkgs: with pypkgs; [ pygobject3 ]))
+    dconf gtk3 gobject-introspection ibus (python3.withPackages (pypkgs: with pypkgs; [ pygobject3 ]))
   ];
 
   nativeBuildInputs = [ autoreconfHook docbook2x pkgconfig python3.pkgs.wrapPython ];

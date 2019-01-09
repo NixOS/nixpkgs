@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   name = "twa-${version}";
-  version = "1.6.0";
+  version = "1.6.2";
 
   src = fetchFromGitHub {
     owner = "trailofbits";
     repo = "twa";
     rev = version;
-    sha256 = "19jn4wp4f0vp2bxvrbyhjrwqgbphr5y1l17qawy8vdv3yswbyw46";
+    sha256 = "0b3wg6ia4dbf47baz3c6jinsi31n8iq7jrlsq86jr2ncggq7hlhj";
   };
 
   dontBuild = true;

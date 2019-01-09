@@ -9,7 +9,7 @@
 , gnome3
 , meson
 , ninja
-, gobjectIntrospection
+, gobject-introspection
 , gsettings-desktop-schemas
 , vala_0_40
 , wrapGAppsHook }:
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     gettext
-    gobjectIntrospection
+    gobject-introspection
     libxml2
     vala_0_40 # should be `elementary.vala` when elementary attribute set is merged
     wrapGAppsHook

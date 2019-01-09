@@ -133,9 +133,7 @@ stdenv.mkDerivation ({
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ bison ];
-  # TODO make linuxHeaders unconditional next mass rebuild
-  buildInputs = lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) linuxHeaders
-    ++ lib.optionals withGd [ gd libpng ];
+  buildInputs = [ linuxHeaders ] ++ lib.optionals withGd [ gd libpng ];
 
   # Needed to install share/zoneinfo/zone.tab.  Set to impure /bin/sh to
   # prevent a retained dependency on the bootstrap tools in the stdenv-linux
@@ -189,7 +187,7 @@ stdenv.mkDerivation ({
   doCheck = false; # fails
 
   meta = {
-    homepage = http://www.gnu.org/software/libc/;
+    homepage = https://www.gnu.org/software/libc/;
     description = "The GNU C Library";
 
     longDescription =

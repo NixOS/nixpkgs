@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, openssl, boost, libevent, autoreconfHook, db4, miniupnpc, eject, pkgconfig, qt4, protobuf, libqrencode, hexdump
+{ stdenv, fetchFromGitHub, openssl, boost, libevent, autoreconfHook, db4, miniupnpc, eject, pkgconfig, qt4, protobuf, qrencode, hexdump
 , withGui }:
 
 with stdenv.lib;
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   ] ++ optionals withGui [
     qt4
     protobuf
-    libqrencode
+    qrencode
   ];
 
   enableParallelBuilding = true;

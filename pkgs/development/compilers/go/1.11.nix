@@ -1,43 +1,49 @@
 { stdenv, fetchFromGitHub, tzdata, iana-etc, go_bootstrap, runCommand, writeScriptBin
-, perl, which, pkgconfig, patch, procps, pcre, cacert, llvm, Security, Foundation }:
+, perl, which, pkgconfig, patch, procps, pcre, cacert, llvm, Security, Foundation
+, buildPackages, targetPackages }:
 
 let
 
   inherit (stdenv.lib) optionals optionalString;
 
-  clangHack = writeScriptBin "clang" ''
-    #!${stdenv.shell}
-    exec ${stdenv.cc}/bin/clang "$@" 2> >(sed '/ld: warning:.*ignoring unexpected dylib file/ d' 1>&2)
-  '';
-
   goBootstrap = runCommand "go-bootstrap" {} ''
     mkdir $out
-    cp -rf ${go_bootstrap}/* $out/
+    cp -rf ${buildPackages.go_bootstrap}/* $out/
     chmod -R u+w $out
     find $out -name "*.c" -delete
     cp -rf $out/bin/* $out/share/go/bin/
   '';
 
+  goarch = platform: {
+    "i686" = "386";
+    "x86_64" = "amd64";
+    "aarch64" = "arm64";
+    "arm" = "arm";
+    "armv5tel" = "arm";
+    "armv6l" = "arm";
+    "armv7l" = "arm";
+  }.${platform.parsed.cpu.name} or (throw "Unsupported system");
+
 in
 
 stdenv.mkDerivation rec {
   name = "go-${version}";
-  version = "1.11";
+  version = "1.11.4";
 
   src = fetchFromGitHub {
     owner = "golang";
     repo = "go";
     rev = "go${version}";
-    sha256 = "1k18d6rkijlgzn1zw4wphzcv6a6w9hb1msgrsh1102jb18644f2q";
+    sha256 = "036nc17hffy0gcfs9j64qzwpjry65znbm4klf2h0xn81dp8d6mxk";
   };
-
-  GOCACHE = "off";
 
   # perl is used for testing go vet
   nativeBuildInputs = [ perl which pkgconfig patch procps ];
   buildInputs = [ cacert pcre ]
     ++ optionals stdenv.isLinux [ stdenv.cc.libc.out ]
     ++ optionals (stdenv.hostPlatform.libc == "glibc") [ stdenv.cc.libc.static ];
+
+
   propagatedBuildInputs = optionals stdenv.isDarwin [ Security Foundation ];
 
   hardeningDisable = [ "all" ];
@@ -131,60 +137,97 @@ stdenv.mkDerivation rec {
     substituteInPlace "src/cmd/link/internal/ld/lib.go" --replace dsymutil ${llvm}/bin/llvm-dsymutil
   '';
 
-  GOOS = stdenv.hostPlatform.parsed.kernel.name;
-  GOARCH = {
-    "i686" = "386";
-    "x86_64" = "amd64";
-    "aarch64" = "arm64";
-    "arm" = "arm";
-    "armv5tel" = "arm";
-    "armv6l" = "arm";
-    "armv7l" = "arm";
-  }.${stdenv.hostPlatform.parsed.cpu.name} or (throw "Unsupported system");
+  GOOS = stdenv.targetPlatform.parsed.kernel.name;
+  GOARCH = goarch stdenv.targetPlatform;
+  # GOHOSTOS/GOHOSTARCH must match the building system, not the host system.
+  # Go will nevertheless build a for host system that we will copy over in
+  # the install phase.
+  GOHOSTOS = stdenv.buildPlatform.parsed.kernel.name;
+  GOHOSTARCH = goarch stdenv.buildPlatform;
+
+  # {CC,CXX}_FOR_TARGET must be only set for cross compilation case as go expect those
+  # to be different from CC/CXX
+  CC_FOR_TARGET = if (stdenv.hostPlatform != stdenv.targetPlatform) then
+      "${targetPackages.stdenv.cc}/bin/${targetPackages.stdenv.cc.targetPrefix}cc"
+    else if (stdenv.buildPlatform != stdenv.targetPlatform) then
+      "${stdenv.cc.targetPrefix}cc"
+    else
+      null;
+  CXX_FOR_TARGET = if (stdenv.hostPlatform != stdenv.targetPlatform) then
+      "${targetPackages.stdenv.cc}/bin/${targetPackages.stdenv.cc.targetPrefix}c++"
+    else if (stdenv.buildPlatform != stdenv.targetPlatform) then
+      "${stdenv.cc.targetPrefix}c++"
+    else
+      null;
+
   GOARM = toString (stdenv.lib.intersectLists [(stdenv.hostPlatform.parsed.cpu.version or "")] ["5" "6" "7"]);
   GO386 = 387; # from Arch: don't assume sse2 on i686
   CGO_ENABLED = 1;
-  GOROOT_BOOTSTRAP = "${goBootstrap}/share/go";
   # Hopefully avoids test timeouts on Hydra
   GO_TEST_TIMEOUT_SCALE = 3;
 
-  # The go build actually checks for CC=*/clang and does something different, so we don't
-  # just want the generic `cc` here.
-  CC = if stdenv.isDarwin then "clang" else "cc";
+  # Indicate that we are running on build infrastructure
+  # Some tests assume things like home directories and users exists
+  GO_BUILDER_NAME = "nix";
 
-  configurePhase = ''
-    # Indicate that we are running on build infrastructure
-    # Some tests assume things like home directories and users exists
-    export GO_BUILDER_NAME=nix
+  GOROOT_BOOTSTRAP="${goBootstrap}/share/go";
 
-    mkdir -p $out/share/go/bin
-    export GOROOT=$out/share/go
-    export GOBIN=$GOROOT/bin
-    export PATH=$GOBIN:$PATH
+  postConfigure = ''
+    export GOCACHE=$TMPDIR/go-cache
+    # this is compiled into the binary
+    export GOROOT_FINAL=$out/share/go
+
+    export PATH=$(pwd)/bin:$PATH
+
+    # Independent from host/target, CC should produce code for the building system.
+    export CC=${buildPackages.stdenv.cc}/bin/cc
     ulimit -a
   '';
 
-  postConfigure = optionalString stdenv.isDarwin ''
-    export PATH=${clangHack}/bin:$PATH
+  postBuild = ''
+    (cd src && ./make.bash)
   '';
+
+  doCheck = stdenv.hostPlatform == stdenv.targetPlatform;
+
+  checkPhase = ''
+    runHook preCheck
+    (cd src && ./run.bash --no-rebuild)
+    runHook postCheck
+  '';
+
+  preInstall = ''
+    rm -r pkg/{bootstrap,obj}
+    # Contains the wrong perl shebang when cross compiling,
+    # since it is not used for anything we can deleted as well.
+    rm src/regexp/syntax/make_perl_groups.pl
+  '' + (if (stdenv.buildPlatform != stdenv.hostPlatform) then ''
+    mv bin/*_*/* bin
+    rmdir bin/*_*
+    ${optionalString (!(GOHOSTARCH == GOARCH && GOOS == GOHOSTOS)) ''
+      rm -rf pkg/${GOHOSTOS}_${GOHOSTARCH} pkg/tool/${GOHOSTOS}_${GOHOSTARCH}
+    ''}
+  '' else if (stdenv.hostPlatform != stdenv.targetPlatform) then ''
+    rm -rf bin/*_*
+    ${optionalString (!(GOHOSTARCH == GOARCH && GOOS == GOHOSTOS)) ''
+      rm -rf pkg/${GOOS}_${GOARCH} pkg/tool/${GOOS}_${GOARCH}
+    ''}
+  '' else "");
 
   installPhase = ''
-    cp -r . $GOROOT
-    ( cd $GOROOT/src && ./all.bash )
-  '';
-
-  preFixup = ''
-    rm -r $out/share/go/pkg/bootstrap
-    rm -r $out/share/go/pkg/obj
-    ln -s $out/share/go/bin $out/bin
+    runHook preInstall
+    mkdir -p $GOROOT_FINAL
+    cp -a bin pkg src lib misc api doc $GOROOT_FINAL
+    ln -s $GOROOT_FINAL/bin $out/bin
+    runHook postInstall
   '';
 
   setupHook = ./setup-hook.sh;
 
-  disallowedReferences = [ go_bootstrap ];
+  disallowedReferences = [ goBootstrap ];
 
   meta = with stdenv.lib; {
-    branch = "1.9";
+    branch = "1.11";
     homepage = http://golang.org/;
     description = "The Go Programming language";
     license = licenses.bsd3;

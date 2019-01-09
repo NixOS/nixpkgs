@@ -2,12 +2,12 @@
 
 buildPythonPackage rec {
   pname = "pymongo";
-  version = "3.7.1";
+  version = "3.7.2";
   name  = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f14fb6c4058772a0d74d82874d3b89d7264d89b4ed7fa0413ea0ef8112b268b9";
+    sha256 = "8c74e2a9b594f7962c62cef7680a4cb92a96b4e6e3c2f970790da67cc0213a7e";
   };
 
   doCheck = false;

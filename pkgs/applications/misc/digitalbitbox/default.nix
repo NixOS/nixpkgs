@@ -6,7 +6,7 @@
 , libcap
 , libevent
 , libtool
-, libqrencode
+, qrencode
 , udev
 , libusb
 , makeWrapper
@@ -74,7 +74,7 @@ in stdenv.mkDerivation rec {
     libtool
     udev
     libusb
-    libqrencode
+    qrencode
 
     qtbase
     qtwebsockets

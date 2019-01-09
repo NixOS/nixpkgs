@@ -9,11 +9,11 @@
 
 buildPythonPackage rec {
   pname = "xarray";
-  version = "0.10.9";
+  version = "0.11.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "cb3028ba157e1953fd279bbe17c07bb5faa459ddf555bbe687c927e4cdfeecc3";
+    sha256 = "1cnghx1xcgdq675abmrys311vspmzgjgiji4wh8iyw194qalfwdg";
   };
 
   checkInputs = [ pytest ];

@@ -8,23 +8,24 @@
 
 buildPythonPackage rec {
   pname = "xdis";
-  version = "3.8.8";
+  version = "3.8.9";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4d212df8a85ab55a35f6ad71b2c29818d903c3e6a95e31eb26d5f3fc66a4e015";
+    sha256 = "1q2dg3hnsmmpjcc7lzjf5nd041mpbwa2bq3dgr4p6wv65vncny9v";
   };
 
   checkInputs = [ pytest ];
   propagatedBuildInputs = [ six click ];
 
-  # newest release moves to pytest (tests not packaged with release)
-  doCheck = false;
+  checkPhase = ''
+    make check
+  '';
 
   meta = with stdenv.lib; {
     description = "Python cross-version byte-code disassembler and marshal routines";
     homepage = https://github.com/rocky/python-xdis/;
-    license = licenses.mit;
+    license = licenses.gpl2;
   };
 
 }

@@ -35,7 +35,7 @@ python3Packages.buildPythonApplication rec {
     qdarkstyle
     qrcode
     requests
-    tlslite
+    tlslite-ng
     typing
 
     # plugins

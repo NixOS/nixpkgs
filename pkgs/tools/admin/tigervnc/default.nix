@@ -11,14 +11,14 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  version = "1.8.0pre20170419";
+  version = "1.9.0";
   name = "tigervnc-${version}";
 
   src = fetchFromGitHub {
     owner = "TigerVNC";
     repo = "tigervnc";
-    sha256 = "1y3fn7dwlkm7ilqn8bwyqj3bw7s7clnv7d4jml4wyvfihzz9j90b";
-    rev = "v1.7.90";
+    rev = "v1.9.0";
+    sha256 = "0b47fg3741qs3zdpl2zr0s6jz46dypp2j6gqrappbzm3ywnnmm1x";
   };
 
   inherit fontDirectories;
@@ -63,13 +63,13 @@ stdenv.mkDerivation rec {
         --with-xkb-path=${xkeyboard_config}/share/X11/xkb \
         --with-xkb-bin-directory=${xorg.xkbcomp}/bin \
         --with-xkb-output=$out/share/X11/xkb/compiled
-    make TIGERVNC_SRCDIR=`pwd`/../.. -j$NIX_BUILD_CORES -l$NIX_BUILD_CORES
+    make TIGERVNC_SRC=$src TIGERVNC_BUILDDIR=`pwd`/../.. -j$NIX_BUILD_CORES -l$NIX_BUILD_CORES
     popd
   '';
 
   postInstall = ''
     pushd unix/xserver/hw/vnc
-    make TIGERVNC_SRCDIR=`pwd`/../.. install
+    make TIGERVNC_SRC=$src TIGERVNC_BUILDDIR=`pwd`/../../../.. install
     popd
     rm -f $out/lib/xorg/protocol.txt
 

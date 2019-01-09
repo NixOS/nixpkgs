@@ -8,11 +8,11 @@ assert stdenv.lib.versionAtLeast ocaml.version "4.01.0";
 
 stdenv.mkDerivation rec {
   name = "ocaml-${pname}-${version}";
-  version = "1.0.2";
+  version = "1.0.3";
 
   src = fetchurl {
     url = "http://erratique.ch/software/${pname}/releases/${pname}-${version}.tbz";
-    sha256 = "18jqphjiifljlh9jg8zpl6310p3iwyaqphdkmf89acyaix0s4kj1";
+    sha256 = "0g3w4hvc1cx9x2yp5aqn6m2rl8lf9x1dn754hfq8m1sc1102lxna";
   };
 
   nativeBuildInputs = [ ocamlbuild topkg ];

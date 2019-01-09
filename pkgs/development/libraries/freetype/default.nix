@@ -62,6 +62,9 @@ in stdenv.mkDerivation rec {
   doCheck = true;
 
   postInstall = glib.flattenInclude + ''
+    substituteInPlace $dev/bin/freetype-config \
+      --replace ${buildPackages.pkgconfig} ${pkgconfig}
+
     wrapProgram "$dev/bin/freetype-config" \
       --set PKG_CONFIG_PATH "$PKG_CONFIG_PATH:$dev/lib/pkgconfig"
   '';

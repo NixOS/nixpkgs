@@ -3,11 +3,11 @@
 
 buildPythonPackage rec {
   pname = "pytest-cov";
-  version = "2.5.1";
+  version = "2.6.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "03aa752cf11db41d281ea1d807d954c4eda35cfa1b21d6971966cc041bbf6e2d";
+    sha256 = "e360f048b7dae3f2f2a9a4d067b2dd6b6a015d384d1577c994a43f3f7cbad762";
   };
 
   buildInputs = [ pytest pytest_xdist virtualenv process-tests ];

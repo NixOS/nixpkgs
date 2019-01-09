@@ -34,10 +34,10 @@ let
       "8d10113ca826a4c29d5b85b2c4e045ffa8bad74fb525ee0eceb1d38d4c70dfd6")
     (mkOverride "cryptography_vectors" "2.3.1" # required by cryptography==2.3.1
       "bf4d9b61dce69c49e830950aa36fad194706463b0b6dfe81425b9e0bc6644d46")
-    (mkOverride "requests" "2.20.0"
-      "99dcfdaaeb17caf6e526f32b6a7b780461512ab3f1d992187801694cba42770c")
-    (mkOverride "ruamel_yaml" "0.15.72"
-      "97652b9e3a76958cf6684d5d963674adf345d8cc192ddd95e2a21b22cda29f40")
+    (mkOverride "requests" "2.20.1"
+      "ea881206e59f41dbd0bd445437d792e43906703fff75ca8ff43ccdb11f33f263")
+    (mkOverride "ruamel_yaml" "0.15.80"
+      "4f203351575dba0829c7b1e5d376d08cf5f58e4a2b844e8ce552b3e41cd414e6")
     (mkOverride "voluptuous" "0.11.5"
       "567a56286ef82a9d7ae0628c5842f65f516abcb496e74f3f59f1d7b28df314ef")
     (mkOverride "voluptuous-serialize" "2.0.0"
@@ -85,7 +85,7 @@ let
   extraBuildInputs = extraPackages py.pkgs;
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "0.82.0";
+  hassVersion = "0.84.6";
 
 in with py.pkgs; buildPythonApplication rec {
   pname = "homeassistant";
@@ -100,7 +100,7 @@ in with py.pkgs; buildPythonApplication rec {
     owner = "home-assistant";
     repo = "home-assistant";
     rev = version;
-    sha256 = "1vvq6frzwmbnynpq6269ykifwmvm8zj5zraslsph3jidppx2bnd4";
+    sha256 = "142hxsvhb9lh77h54975vkvl1fx5lslrydq1vbqyy51dy85ms8lc";
   };
 
   propagatedBuildInputs = [
@@ -111,7 +111,7 @@ in with py.pkgs; buildPythonApplication rec {
   ] ++ componentBuildInputs ++ extraBuildInputs;
 
   checkInputs = [
-    pytest requests-mock pydispatcher pytest-aiohttp
+    asynctest pytest pytest-aiohttp requests-mock pydispatcher
   ];
 
   checkPhase = ''

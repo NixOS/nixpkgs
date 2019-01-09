@@ -13,6 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
+    ./allegro4-mesa-18.2.5.patch
     ./nix-unstable-sandbox-fix.patch
   ];
 

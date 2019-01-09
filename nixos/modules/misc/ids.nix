@@ -175,7 +175,7 @@
       dnsmasq = 141;
       uhub = 142;
       yandexdisk = 143;
-      #collectd = 144; #unused
+      mxisd = 144; # was once collectd
       consul = 145;
       mailpile = 146;
       redmine = 147;
@@ -336,6 +336,8 @@
       solr = 309;
       alerta = 310;
       minetest = 311;
+      rss2email = 312;
+      cockroachdb = 313;
 
       # When adding a uid, make sure it doesn't match an existing gid. And don't use uids above 399!
 
@@ -483,7 +485,7 @@
       #dnsmasq = 141; # unused
       uhub = 142;
       #yandexdisk = 143; # unused
-      #collectd = 144; # unused
+      mxisd = 144; # was once collectd
       #consul = 145; # unused
       mailpile = 146;
       redmine = 147;
@@ -632,6 +634,8 @@
       solr = 309;
       alerta = 310;
       minetest = 311;
+      rss2email = 312;
+      cockroachdb = 313;
 
       # When adding a gid, make sure it doesn't match an existing
       # uid. Users and groups with the same name should have equal

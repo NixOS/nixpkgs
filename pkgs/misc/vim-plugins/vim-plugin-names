@@ -15,6 +15,8 @@ artur-shaik/vim-javacomplete2
 bazelbuild/vim-bazel
 bbchung/clighter8
 benekastah/neomake
+benmills/vimux
+bhurlow/vim-parinfer
 bitc/vim-hdevtools
 bling/vim-bufferline
 bronson/vim-trailing-whitespace
@@ -27,6 +29,7 @@ Chiel92/vim-autoformat
 chikatoike/concealedyank.vim
 chikatoike/sourcemap.vim
 chrisbra/CheckAttach
+chrisbra/Recover.vim
 chrisbra/csv.vim
 chrisgeo/sparkup
 chriskempson/base16-vim
@@ -102,6 +105,7 @@ JazzCore/ctrlp-cmatcher
 jceb/vim-hier
 jceb/vim-orgmode
 jeetsukumaran/vim-buffergator
+jeffkreeftmeijer/neovim-sensible
 jgdavey/tslime.vim
 jhradilek/vim-docbk
 jiangmiao/auto-pairs
@@ -109,6 +113,7 @@ jistr/vim-nerdtree-tabs
 jnurmine/zenburn
 jonbri/vim-colorstepper
 joonty/vim-xdebug
+jpalardy/vim-slime
 JuliaEditorSupport/deoplete-julia
 JuliaEditorSupport/julia-vim
 junegunn/fzf.vim
@@ -126,6 +131,7 @@ kana/vim-niceblock
 kana/vim-operator-replace
 kana/vim-operator-user
 kana/vim-tabpagecd
+kassio/neoterm
 kchmck/vim-coffee-script
 KeitaNakamura/neodark.vim
 keith/swift.vim
@@ -189,11 +195,13 @@ mkasa/lushtags
 morhetz/gruvbox
 motus/pig.vim
 mpickering/hlint-refactor-vim
+natebosch/vim-lsc
 nathanaelkane/vim-indent-guides
 navicore/vissort.vim
 nbouscal/vim-stylish-haskell
 ncm2/ncm2
 ncm2/ncm2-bufword
+ncm2/ncm2-jedi
 ncm2/ncm2-path
 ncm2/ncm2-tmux
 ncm2/ncm2-ultisnips
@@ -212,11 +220,13 @@ osyo-manga/vim-textobj-multiblock
 osyo-manga/vim-watchdogs
 pangloss/vim-javascript
 parsonsmatt/intero-neovim
+pearofducks/ansible-vim
 peterhoeg/vim-qml
 phanviet/vim-monokai-pro
 plasticboy/vim-markdown
 posva/vim-vue
 powerman/vim-plugin-AnsiEsc
+PProvost/vim-ps1
 python-mode/python-mode
 Quramy/tsuquyomi
 racer-rust/vim-racer

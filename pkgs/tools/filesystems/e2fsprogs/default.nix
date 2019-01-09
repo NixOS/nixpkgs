@@ -18,8 +18,8 @@ stdenv.mkDerivation rec {
   patches = if stdenv.hostPlatform.libc == "glibc" then null
     else [
       (fetchpatch {
-      url = "https://raw.githubusercontent.com/void-linux/void-packages/1f3b51493031cc0309009804475e3db572fc89ad/srcpkgs/e2fsprogs/patches/fix-glibcism.patch";
-      sha256 = "1q7y8nhsfwl9r1q7nhrlikazxxj97p93kgz5wh7723cshlji2vaa";
+      url = "https://raw.githubusercontent.com/void-linux/void-packages/9583597eb3e6e6b33f61dbc615d511ce030bc443/srcpkgs/e2fsprogs/patches/fix-glibcism.patch";
+      sha256 = "1fyml1iwrs412xn2w36ra28am3sq4klrrj60lnf7rysyw069nxk3";
       extraPrefix = "";
       })
     ];

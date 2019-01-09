@@ -10,18 +10,26 @@
 
 buildPythonPackage rec {
   pname = "livereload";
-  version = "2.5.1";
+  version = "2.6.0";
 
   src = fetchFromGitHub {
     owner = "lepture";
     repo = "python-livereload";
     rev = "v${version}";
-    sha256 = "1irs59wqmffp8q4l9fh7givs05mamlgm5n7ga49gwxp5imwrdzba";
+    sha256 = "0p3yvvr1iv3fv3pwc2qfzl3mi3b5zv6dh7kmfm1k7krxvganj87n";
   };
 
   buildInputs = [ nose django ];
 
   propagatedBuildInputs = [ tornado six ];
+
+  # Remove this patch when PR merged
+  # https://github.com/lepture/python-livereload/pull/173
+  postPatch = ''
+   substituteInPlace tests/test_watcher.py \
+     --replace 'watcher.watch(filepath, add_count)' \
+               'add_count.repr_str = "add_count test task"; watcher.watch(filepath, add_count)'
+  '';
 
   checkInputs = [ pytest ];
   checkPhase = "pytest tests";

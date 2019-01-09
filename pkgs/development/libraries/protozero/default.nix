@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "protozero-${version}";
-  version = "1.6.3";
+  version = "1.6.4";
 
   src = fetchFromGitHub {
     owner = "mapbox";
     repo = "protozero";
     rev = "v${version}";
-    sha256 = "0lalk6hp7hqfn4fhhl2zb214idwm4y8dj32vi383arckzmsryhiw";
+    sha256 = "0hcawgyj3wxqikx5xqs1ag12w8vz00gb1rzx131jq51yhzc6bwrb";
   };
 
   nativeBuildInputs = [ cmake ];

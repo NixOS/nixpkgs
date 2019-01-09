@@ -11,13 +11,13 @@ let
 
   neovim = stdenv.mkDerivation rec {
     name = "neovim-unwrapped-${version}";
-    version = "0.3.1";
+    version = "0.3.3";
 
     src = fetchFromGitHub {
       owner = "neovim";
       repo = "neovim";
       rev = "v${version}";
-      sha256 = "19jy9nr2ffscli6wsysqkdvqvh7sgkkwhzkw3yypfrvg4pj9rl56";
+      sha256 = "0jf39br0c7kkvmc8b5n9b3lgy9cmf5sv1gghzafc8qk54bqymy2f";
     };
 
     enableParallelBuilding = true;
@@ -86,6 +86,9 @@ let
       license = with licenses; [ asl20 vim ];
       maintainers = with maintainers; [ manveru garbas rvolosatovs ];
       platforms   = platforms.unix;
+      # `lua: bad light userdata pointer`
+      # https://nix-cache.s3.amazonaws.com/log/9ahcb52905d9d417zsskjpc331iailpq-neovim-unwrapped-0.2.2.drv
+      broken = stdenv.isAarch64;
     };
   };
 

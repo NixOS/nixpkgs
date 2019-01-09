@@ -33,7 +33,7 @@ self: super: {
   unbuildable = throw "package depends on meta package 'unbuildable'";
 
   # Use the latest version of the Cabal library.
-  cabal-install = super.cabal-install.overrideScope (self: super: { Cabal = self.Cabal_2_4_0_1; });
+  cabal-install = super.cabal-install.overrideScope (self: super: { Cabal = self.Cabal_2_4_1_0; });
 
   # The test suite depends on old versions of tasty and QuickCheck.
   hackage-security = dontCheck super.hackage-security;
@@ -51,7 +51,6 @@ self: super: {
   clock = dontCheck super.clock;
   Dust-crypto = dontCheck super.Dust-crypto;
   hasql-postgres = dontCheck super.hasql-postgres;
-  hspec = super.hspec.override { stringbuilder = dontCheck self.stringbuilder; };
   hspec-core = super.hspec-core.override { silently = dontCheck self.silently; temporary = dontCheck self.temporary; };
   hspec-expectations = dontCheck super.hspec-expectations;
   HTTP = dontCheck super.HTTP;
@@ -86,20 +85,12 @@ self: super: {
       name = "git-annex-${super.git-annex.version}-src";
       url = "git://git-annex.branchable.com/";
       rev = "refs/tags/" + super.git-annex.version;
-      sha256 = "0dnrihpdshrldais74jm5wjfw650i4va8znc1k2zq8gl9p4i8p39";
+      sha256 = "0wczijw80pw31k6h3a65m76aq9i02aarr2zxl7k5m7p0l6rn82vd";
     };
   }).override {
     dbus = if pkgs.stdenv.isLinux then self.dbus else null;
     fdo-notify = if pkgs.stdenv.isLinux then self.fdo-notify else null;
     hinotify = if pkgs.stdenv.isLinux then self.hinotify else self.fsnotify;
-  };
-  esqueleto = overrideSrc (addBuildDepend (dontCheck (dontHaddock super.esqueleto)) self.unliftio) {
-    src = pkgs.fetchFromGitHub {
-      owner = "bitemyapp";
-      repo = "esqueleto";
-      rev = "b81e0d951e510ebffca03c5a58658ad884cc6fbd";
-      sha256 = "0lz1qxms7cfg5p3j37inlych0r2fwhm8xbarcys3df9m7jy9nixa";
-    };
   };
 
   # Fix test trying to access /home directory
@@ -179,12 +170,14 @@ self: super: {
 
   inline-c-cpp = if !pkgs.stdenv.isDarwin
     then super.inline-c-cpp
-    else addExtraLibrary (overrideCabal super.inline-c-cpp (drv:
-      {
-        postPatch = ''
-          substituteInPlace inline-c-cpp.cabal --replace stdc++ c++
-        '';
-      })) pkgs.libcxx;
+    else
+      let drv = addExtraLibrary (overrideCabal super.inline-c-cpp (drv: {
+          postPatch = ''
+            substituteInPlace inline-c-cpp.cabal --replace  stdc++ c++
+          '';
+        })) pkgs.libcxx;
+      in # https://github.com/fpco/inline-c/issues/75
+         dontCheck drv;
 
   inline-java = addBuildDepend super.inline-java pkgs.jdk;
 
@@ -347,6 +340,7 @@ self: super: {
   MemoTrie = dontHaddock (dontCheck super.MemoTrie);
   metrics = dontCheck super.metrics;
   milena = dontCheck super.milena;
+  modular-arithmetic = dontCheck super.modular-arithmetic; # tests require a very old Glob (0.7.*)
   nats-queue = dontCheck super.nats-queue;
   netpbm = dontCheck super.netpbm;
   network = dontCheck super.network;
@@ -490,6 +484,7 @@ self: super: {
 
   # Test suite won't compile against tasty-hunit 0.10.x.
   binary-parser = dontCheck super.binary-parser;
+  binary-parsers = dontCheck super.binary-parsers;
   bytestring-strict-builder = dontCheck super.bytestring-strict-builder;
   bytestring-tree-builder = dontCheck super.bytestring-tree-builder;
 
@@ -521,6 +516,10 @@ self: super: {
 
   # generic-deriving bound is too tight
   aeson = doJailbreak super.aeson;
+
+  # containers >=0.4 && <0.6 is too tight
+  # https://github.com/RaphaelJ/friday/issues/34
+  friday = doJailbreak super.friday;
 
   # Won't compile with recent versions of QuickCheck.
   inilist = dontCheck super.inilist;
@@ -686,18 +685,21 @@ self: super: {
   # Fix an aarch64 issue with cryptonite-0.25:
   # https://github.com/haskell-crypto/cryptonite/issues/234
   # This has been committed upstream, but there is, as of yet, no new release.
-  cryptonite = appendPatch super.cryptonite (pkgs.fetchpatch {
+  # Also, disable the test suite to avoid https://github.com/haskell-crypto/cryptonite/issues/260.
+  cryptonite = appendPatch (dontCheck super.cryptonite) (pkgs.fetchpatch {
     url = https://github.com/haskell-crypto/cryptonite/commit/4622e5fc8ece82f4cf31358e31cd02cf020e558e.patch;
     sha256 = "1m2d47ni4jbrpvxry50imj91qahr3r7zkqm157clrzlmw6gzpgnq";
   });
 
+  # Djinn's last release was 2014, incompatible with Semigroup-Monoid Proposal
+  # https://github.com/augustss/djinn/pull/8
+  djinn = appendPatch super.djinn (pkgs.fetchpatch {
+    url = https://github.com/augustss/djinn/commit/6cb9433a137fb6b5194afe41d616bd8b62b95630.patch;
+    sha256 = "0s021y5nzrh74gfp8xpxpxm11ivzfs3jwg6mkrlyry3iy584xqil";
+  });
+
   # We cannot build this package w/o the C library from <http://www.phash.org/>.
   phash = markBroken super.phash;
-
-  # https://github.com/deech/fltkhs/issues/16
-  # linking fails because the build doesn't pull in the libGLU_combined libraries
-  fltkhs = markBroken super.fltkhs;
-  fltkhs-fluid-examples = dontDistribute super.fltkhs-fluid-examples;
 
   # We get lots of strange compiler errors during the test suite run.
   jsaddle = dontCheck super.jsaddle;
@@ -738,7 +740,7 @@ self: super: {
           rev = "v${ver}";
           sha256 = "0kqglih3rv12nmkzxvalhfaaafk4b2irvv9x5xmc48i1ns71y23l";
         }}/doc";
-        buildInputs = with pkgs.pythonPackages; [ sphinx recommonmark sphinx_rtd_theme ];
+        nativeBuildInputs = with pkgs.buildPackages.pythonPackages; [ sphinx recommonmark sphinx_rtd_theme ];
         makeFlags = "html";
         installPhase = ''
           mv _build/html $out
@@ -876,10 +878,6 @@ self: super: {
     testToolDepends = drv.testToolDepends or [] ++ [pkgs.procps];
   });
 
-  # These packages depend on each other, forming an infinite loop.
-  scalendar = markBroken (super.scalendar.override { SCalendar = null; });
-  SCalendar = markBroken (super.SCalendar.override { scalendar = null; });
-
   # Needs QuickCheck <2.10, which we don't have.
   edit-distance = doJailbreak super.edit-distance;
   blaze-markup = doJailbreak super.blaze-markup;
@@ -897,6 +895,7 @@ self: super: {
   cryptohash-md5 = doJailbreak super.cryptohash-md5;
   text-short = doJailbreak super.text-short;
   gitHUD = dontCheck super.gitHUD;
+  githud = dontCheck super.githud;
 
   # https://github.com/aisamanra/config-ini/issues/12
   config-ini = dontCheck super.config-ini;
@@ -952,8 +951,12 @@ self: super: {
   # Tries to read a file it is not allowed to in the test suite
   load-env = dontCheck super.load-env;
 
-  # https://github.com/yesodweb/Shelly.hs/issues/162
-  shelly = dontCheck super.shelly;
+  # hledger needs a newer megaparsec version than we have in LTS 12.x.
+  hledger-lib = super.hledger-lib.overrideScope (self: super: {
+    # cassava-megaparsec = self.cassava-megaparsec_2_0_0;
+    # hspec-megaparsec = self.hspec-megaparsec_2_0_0;
+    # megaparsec = self.megaparsec_7_0_4;
+  });
 
   # Copy hledger man pages from data directory into the proper place. This code
   # should be moved into the cabal2nix generator.
@@ -980,7 +983,12 @@ self: super: {
       mkdir -p $out/share/info
       cp -v *.info* $out/share/info/
     '';
-  }));
+  })).overrideScope (self: super: {
+    # cassava-megaparsec = self.cassava-megaparsec_2_0_0;
+    # config-ini = self.config-ini_0_2_4_0;
+    # hspec-megaparsec = self.hspec-megaparsec_2_0_0;
+    # megaparsec = self.megaparsec_7_0_4;
+  });
   hledger-web = overrideCabal super.hledger-web (drv: {
     postInstall = ''
       for i in $(seq 1 9); do
@@ -1084,19 +1092,15 @@ self: super: {
   haddock-library = doJailbreak (dontCheck super.haddock-library);
   # haddock-library_1_6_0 = doJailbreak (dontCheck super.haddock-library_1_6_0);
 
-  # The tool needs a newer hpack version than the one mandated by LTS-12.x.
-  # Also generate shell completions.
-  cabal2nix = generateOptparseApplicativeCompletion "cabal2nix"
-    (super.cabal2nix.overrideScope (self: super: {
-      hpack = self.hpack_0_31_1;
-      yaml = self.yaml_0_11_0_0;
-    }));
-  stack2nix = super.stack2nix.overrideScope (self: super: {
-    hpack = self.hpack_0_31_1;
-    yaml = self.yaml_0_11_0_0;
-  });
-  # Break out of "aeson <1.3, temporary <1.3".
-  stack = generateOptparseApplicativeCompletion "stack" (doJailbreak super.stack);
+  # Break out of tasty >=0.10 && <1.2.
+  aeson-compat = doJailbreak super.aeson-compat;
+
+  # Break out of pretty-show >=1.6 && <1.9
+  hedgehog = doJailbreak super.hedgehog;
+
+  # Generate shell completion.
+  cabal2nix = generateOptparseApplicativeCompletion "cabal2nix" super.cabal2nix;
+  stack = generateOptparseApplicativeCompletion "stack" super.stack;
 
   # https://github.com/pikajude/stylish-cabal/issues/11
   stylish-cabal = super.stylish-cabal.override { hspec = self.hspec_2_4_8; hspec-core = self.hspec-core_2_4_8; };
@@ -1128,9 +1132,6 @@ self: super: {
       libraryHaskellDepends = drv.libraryHaskellDepends ++ [self.QuickCheck];
     })) ./patches/sexpr-0.2.1.patch;
 
-  # Can be removed once yi-language >= 0.18 is in the LTS
-  yi-core = super.yi-core.overrideScope (self: super: { yi-language = self.yi-language_0_18_0; });
-
   # https://github.com/haskell/hoopl/issues/50
   hoopl = dontCheck super.hoopl;
 
@@ -1140,21 +1141,11 @@ self: super: {
   # Generate shell completions
   purescript = generateOptparseApplicativeCompletion "purs" super.purescript;
 
-  # https://github.com/NixOS/nixpkgs/issues/46467
-  safe-money-aeson = super.safe-money-aeson.overrideScope (self: super: { safe-money = self.safe-money_0_7; });
-  safe-money-store = super.safe-money-store.overrideScope (self: super: { safe-money = self.safe-money_0_7; });
-  safe-money-cereal = super.safe-money-cereal.overrideScope (self: super: { safe-money = self.safe-money_0_7; });
-  safe-money-serialise = super.safe-money-serialise.overrideScope (self: super: { safe-money = self.safe-money_0_7; });
-  safe-money-xmlbf = super.safe-money-xmlbf.overrideScope (self: super: { safe-money = self.safe-money_0_7; });
-
   # https://github.com/adinapoli/mandrill/pull/52
   mandrill = appendPatch super.mandrill (pkgs.fetchpatch {
     url = https://github.com/adinapoli/mandrill/commit/30356d9dfc025a5f35a156b17685241fc3882c55.patch;
     sha256 = "1qair09xs6vln3vsjz7sy4hhv037146zak4mq3iv6kdhmp606hqv";
   });
-
-  # Can be removed once vinyl >= 0.10 is in the LTS.
-  Frames = super.Frames.overrideScope (self: super: { vinyl = self.vinyl_0_10_0; });
 
   # https://github.com/Euterpea/Euterpea2/pull/22
   Euterpea = overrideSrc super.Euterpea {
@@ -1181,5 +1172,25 @@ self: super: {
 
   # https://github.com/DanielG/cabal-helper/issues/59
   cabal-helper = doJailbreak super.cabal-helper;
+
+  # TODO(Profpatsch): factor out local nix store setup from
+  # lib/tests/release.nix and use that for the tests of libnix
+  # libnix = overrideCabal super.libnix (old: {
+  #   testToolDepends = old.testToolDepends or [] ++ [ pkgs.nix ];
+  # });
+  libnix = dontCheck super.libnix;
+
+  # https://github.com/jmillikin/chell/issues/1
+  chell = super.chell.override { patience = self.patience_0_1_1; };
+
+  # The test suite tries to mess with ALSA, which doesn't work in the build sandbox.
+  xmobar = dontCheck super.xmobar;
+
+  # https://github.com/mgajda/json-autotype/issues/25
+  json-autotype = dontCheck super.json-autotype;
+
+  # The LTS-12.x version doesn't suffice to build hlint, hoogle, etc.
+  hlint = super.hlint.overrideScope (self: super: { haskell-src-exts = self.haskell-src-exts_1_21_0; });
+  hoogle = super.hoogle.overrideScope (self: super: { haskell-src-exts = self.haskell-src-exts_1_21_0; });
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super

@@ -1,0 +1,86 @@
+diff -ruN orig/Makefile.am new/Makefile.am
+--- orig/Makefile.am	2018-11-02 08:56:21.000000000 -0500
++++ new/Makefile.am	2018-11-16 10:30:22.000000000 -0500
+@@ -99,10 +99,10 @@
+ 	$(NULL)
+ 
+ sbin_PROGRAMS =
+-dist_cache_DATA = installer/.keep
+-dist_varlib_DATA = installer/.keep
+-dist_registry_DATA = installer/.keep
+-dist_log_DATA = installer/.keep
++dist_cache_DATA =
++dist_varlib_DATA =
++dist_registry_DATA =
++dist_log_DATA =
+ plugins_PROGRAMS =
+ 
+ LIBNETDATA_FILES = \
+diff -ruN orig/collectors/charts.d.plugin/Makefile.am new/collectors/charts.d.plugin/Makefile.am
+--- orig/collectors/charts.d.plugin/Makefile.am	2018-11-02 08:56:21.000000000 -0500
++++ new/collectors/charts.d.plugin/Makefile.am	2018-11-16 11:16:47.000000000 -0500
+@@ -32,7 +32,6 @@
+ 
+ userchartsconfigdir=$(configdir)/charts.d
+ dist_userchartsconfig_DATA = \
+-    $(top_srcdir)/installer/.keep \
+     $(NULL)
+ 
+ chartsconfigdir=$(libconfigdir)/charts.d
+diff -ruN orig/collectors/node.d.plugin/Makefile.am new/collectors/node.d.plugin/Makefile.am
+--- orig/collectors/node.d.plugin/Makefile.am	2018-11-02 08:56:21.000000000 -0500
++++ new/collectors/node.d.plugin/Makefile.am	2018-11-16 11:16:42.000000000 -0500
+@@ -23,7 +23,6 @@
+ 
+ usernodeconfigdir=$(configdir)/node.d
+ dist_usernodeconfig_DATA = \
+-    $(top_srcdir)/installer/.keep \
+     $(NULL)
+ 
+ nodeconfigdir=$(libconfigdir)/node.d
+diff -ruN orig/collectors/python.d.plugin/Makefile.am new/collectors/python.d.plugin/Makefile.am
+--- orig/collectors/python.d.plugin/Makefile.am	2018-11-02 08:56:21.000000000 -0500
++++ new/collectors/python.d.plugin/Makefile.am	2018-11-16 10:56:06.000000000 -0500
+@@ -29,7 +29,6 @@
+ 
+ userpythonconfigdir=$(configdir)/python.d
+ dist_userpythonconfig_DATA = \
+-    $(top_srcdir)/installer/.keep \
+     $(NULL)
+ 
+ pythonconfigdir=$(libconfigdir)/python.d
+diff -ruN orig/collectors/statsd.plugin/Makefile.am new/collectors/statsd.plugin/Makefile.am
+--- orig/collectors/statsd.plugin/Makefile.am	2018-11-02 08:56:21.000000000 -0500
++++ new/collectors/statsd.plugin/Makefile.am	2018-11-16 10:53:04.000000000 -0500
+@@ -15,6 +15,5 @@
+ 
+ userstatsdconfigdir=$(configdir)/statsd.d
+ dist_userstatsdconfig_DATA = \
+-    $(top_srcdir)/installer/.keep \
+     $(NULL)
+ 
+diff -ruN orig/health/Makefile.am new/health/Makefile.am
+--- orig/health/Makefile.am	2018-11-02 08:56:21.000000000 -0500
++++ new/health/Makefile.am	2018-11-16 10:56:30.000000000 -0500
+@@ -16,7 +16,6 @@
+ 
+ userhealthconfigdir=$(configdir)/health.d
+ dist_userhealthconfig_DATA = \
+-    $(top_srcdir)/installer/.keep \
+     $(NULL)
+ 
+ healthconfigdir=$(libconfigdir)/health.d
+diff -ruN orig/system/Makefile.am new/system/Makefile.am
+--- orig/system/Makefile.am	2018-11-02 08:56:21.000000000 -0500
++++ new/system/Makefile.am	2018-11-16 10:29:21.000000000 -0500
+@@ -17,10 +17,6 @@
+ include $(top_srcdir)/build/subst.inc
+ SUFFIXES = .in
+ 
+-dist_config_SCRIPTS = \
+-    edit-config \
+-    $(NULL)
+-
+ nodist_noinst_DATA = \
+ 	netdata-openrc \
+ 	netdata.logrotate \

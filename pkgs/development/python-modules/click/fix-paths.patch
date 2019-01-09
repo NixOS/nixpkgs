@@ -1,11 +1,13 @@
---- a/click/_unicodefun.py	2018-06-11 15:08:59.369358278 +0200
-+++ b/click/_unicodefun.py	2018-06-11 15:09:09.342325998 +0200
-@@ -60,7 +60,7 @@
-     extra = ''
+diff --git a/click/_unicodefun.py b/click/_unicodefun.py
+index 620edff..85a3c98 100644
+--- a/click/_unicodefun.py
++++ b/click/_unicodefun.py
+@@ -63,7 +63,7 @@ def _verify_python3_env():
      if os.name == 'posix':
          import subprocess
--        rv = subprocess.Popen(['locale', '-a'], stdout=subprocess.PIPE,
-+        rv = subprocess.Popen(['@locale@', '-a'], stdout=subprocess.PIPE,
-                               stderr=subprocess.PIPE).communicate()[0]
-         good_locales = set()
-         has_c_utf8 = False
+         try:
+-            rv = subprocess.Popen(['locale', '-a'], stdout=subprocess.PIPE,
++            rv = subprocess.Popen(['@locale@', '-a'], stdout=subprocess.PIPE,
+                                   stderr=subprocess.PIPE).communicate()[0]
+         except OSError:
+             rv = b''

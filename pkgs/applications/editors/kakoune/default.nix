@@ -21,6 +21,10 @@ stdenv.mkDerivation rec {
     sed -ie 's#--no-xmllint#--no-xmllint --xsltproc-opts="--nonet"#g' Makefile
   '';
 
+  preConfigure = ''
+    export version="v${version}"
+  '';
+
   meta = {
     homepage = http://kakoune.org/;
     description = "A vim inspired text editor";

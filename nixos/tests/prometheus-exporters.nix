@@ -106,6 +106,25 @@ let
       '';
     };
 
+    bind = {
+      exporterConfig = {
+        enable = true;
+      };
+      metricProvider = {
+        services.bind.enable = true;
+        services.bind.extraConfig = ''
+          statistics-channels {
+            inet 127.0.0.1 port 8053 allow { localhost; };
+          };
+        '';
+      };
+      exporterTest = ''
+        waitForUnit("prometheus-bind-exporter.service");
+        waitForOpenPort(9119);
+        succeed("curl -sSf http://localhost:9119/metrics" | grep -q 'bind_query_recursions_total 0');
+      '';
+    };
+
     dovecot = {
       exporterConfig = {
         enable = true;

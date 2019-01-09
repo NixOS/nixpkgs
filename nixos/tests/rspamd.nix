@@ -235,6 +235,7 @@ in
       services.rspamd = {
         enable = true;
         postfix.enable = true;
+        workers.rspamd_proxy.type = "proxy";
       };
     };
     testScript = ''

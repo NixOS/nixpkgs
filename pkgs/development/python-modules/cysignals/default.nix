@@ -9,11 +9,11 @@ assert pariSupport -> pari != null;
 
 buildPythonPackage rec {
   pname = "cysignals";
-  version = "1.7.2";
+  version = "1.8.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0rzwd9bjw6bj01xcmimqfim1g0njjyyyal0f93frm1la4hcmq96v";
+    sha256 = "1hnkcrrxgh6g8a197v2yw61xz43iyv81jbl6jpy19ql3k66w81zx";
   };
 
   # explicit check:
@@ -22,9 +22,9 @@ buildPythonPackage rec {
     "fortify"
   ];
 
-  # currently fails, probably because of formatting changes in gdb 8.0
-  # https://trac.sagemath.org/ticket/24692
+  # known failure: https://github.com/sagemath/cysignals/blob/582dbf6a7b0f9ade0abe7a7b8720b7fb32435c3c/testgdb.py#L5
   doCheck = false;
+  checkTarget = "check-install";
 
   preCheck = ''
     # Make sure cysignals-CSI is in PATH

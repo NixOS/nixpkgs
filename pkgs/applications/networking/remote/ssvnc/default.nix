@@ -12,7 +12,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ imake zlib jdk libX11 libXt libXmu libXaw libXext libXpm openjpeg openssl ];
 
-  configurePhase = "makeFlags=PREFIX=$out";
+  dontUseImakeConfigure = true;
+
+  makeFlags = "PREFIX=$(out)";
 
   hardeningDisable = [ "format" ];
 

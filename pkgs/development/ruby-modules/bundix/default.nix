@@ -6,13 +6,13 @@ buildRubyGem rec {
 
   name = "${gemName}-${version}";
   gemName = "bundix";
-  version = "2.3.1";
+  version = "2.4.1";
 
   src = fetchFromGitHub {
     owner = "manveru";
     repo = "bundix";
     rev = version;
-    sha256 = "0ap23abv6chiv7v97ic6b1qf5by6b26as5yrpxg5q7p2giyiv33v";
+    sha256 = "175qmv7dj7v50v71b78dzn5pb4a35ml6p15asks9q1rrlkz0n4gn";
   };
 
   buildInputs = [ ruby bundler ];
@@ -38,7 +38,7 @@ buildRubyGem rec {
     '';
     homepage = https://github.com/manveru/bundix;
     license = "MIT";
-    maintainers = with lib.maintainers; [ manveru zimbatm ];
+    maintainers = with lib.maintainers; [ manveru qyliss zimbatm ];
     platforms = lib.platforms.all;
   };
 }

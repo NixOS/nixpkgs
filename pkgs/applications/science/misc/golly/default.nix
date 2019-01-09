@@ -35,6 +35,6 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.gpl2;
     maintainers = [stdenv.lib.maintainers.raskin];
     platforms = stdenv.lib.platforms.linux;
-    downloadPage = "http://sourceforge.net/projects/golly/files/golly";
+    downloadPage = "https://sourceforge.net/projects/golly/files/golly";
   };
 }

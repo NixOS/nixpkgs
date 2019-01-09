@@ -99,7 +99,7 @@ in pkgs.lib.mapAttrs mkKeyboardTest {
       homerow.expect = [ "a" "r" "s" "t" "n" "e" "i" "o"         ];
     };
 
-    extraConfig.i18n.consoleKeyMap = "en-latin9";
+    extraConfig.i18n.consoleKeyMap = "colemak/colemak";
     extraConfig.services.xserver.layout = "us";
     extraConfig.services.xserver.xkbVariant = "colemak";
   };

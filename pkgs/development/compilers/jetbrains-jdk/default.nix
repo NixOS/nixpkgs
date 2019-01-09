@@ -25,11 +25,6 @@ let drv = stdenv.mkDerivation rec {
   installPhase = ''
     cd ..
 
-    exes=$(file $sourceRoot/bin/* $sourceRoot/jre/bin/* 2> /dev/null | grep -E 'ELF.*(executable|shared object)' | sed -e 's/: .*$//')
-    for file in $exes; do
-      paxmark m "$file"
-    done
-
     mv $sourceRoot $out
     jrePath=$out/jre
   '';

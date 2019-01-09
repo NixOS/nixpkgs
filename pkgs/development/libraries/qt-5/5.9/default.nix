@@ -20,6 +20,7 @@ top-level attribute to `top-level/all-packages.nix`.
   stdenv, fetchurl, makeSetupHook,
   bison, cups ? null, harfbuzz, libGL, perl,
   gstreamer, gst-plugins-base, gtk3, dconf,
+  cf-private,
 
   # options
   developerBuild ? false,
@@ -37,12 +38,11 @@ let
   srcs = import ./srcs.nix { inherit fetchurl; inherit mirror; };
 
   patches = {
-    qtbase = [ ./qtbase.patch ] ++ optional stdenv.isDarwin ./qtbase-darwin.patch;
+    qtbase = [ ./qtbase.patch ./qtbase-fixguicmake.patch ] ++ optional stdenv.isDarwin ./qtbase-darwin.patch;
     qtdeclarative = [ ./qtdeclarative.patch ];
     qtscript = [ ./qtscript.patch ];
     qtserialport = [ ./qtserialport.patch ];
     qttools = [ ./qttools.patch ];
-    qtwebengine = optional stdenv.needsPax ./qtwebengine-paxmark-mksnapshot.patch;
     qtwebkit = [ ./qtwebkit.patch ];
   };
 
@@ -78,7 +78,9 @@ let
       qtgraphicaleffects = callPackage ../modules/qtgraphicaleffects.nix {};
       qtimageformats = callPackage ../modules/qtimageformats.nix {};
       qtlocation = callPackage ../modules/qtlocation.nix {};
-      qtmacextras = callPackage ../modules/qtmacextras.nix {};
+      qtmacextras = callPackage ../modules/qtmacextras.nix {
+        inherit cf-private;
+      };
       qtmultimedia = callPackage ../modules/qtmultimedia.nix {
         inherit gstreamer gst-plugins-base;
       };
