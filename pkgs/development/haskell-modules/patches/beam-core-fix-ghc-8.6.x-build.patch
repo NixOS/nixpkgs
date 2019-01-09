@@ -1,0 +1,72 @@
+diff --git a/beam-core/Database/Beam/Backend/SQL.hs b/beam-core/Database/Beam/Backend/SQL.hs
+index e2cd37d0..6f9db126 100644
+--- a/Database/Beam/Backend/SQL.hs
++++ b/Database/Beam/Backend/SQL.hs
+@@ -10,6 +10,7 @@
+ import Database.Beam.Backend.Types
+ 
+ import Control.Monad.IO.Class
++import Control.Monad.Fail (MonadFail)
+ 
+ -- * MonadBeam class
+ 
+@@ -29,7 +30,7 @@
+ --   strategies. More complicated strategies (for example, Postgres's @COPY@)
+ --   are supported in individual backends. See the documentation of those
+ --   backends for more details.
+-class (BeamBackend be, Monad m, MonadIO m, Sql92SanityCheck syntax) =>
++class (BeamBackend be, Monad m, MonadIO m, MonadFail m, Sql92SanityCheck syntax) =>
+   MonadBeam syntax be handle m | m -> syntax be handle where
+ 
+   {-# MINIMAL withDatabaseDebug, runReturningMany #-}
+diff --git a/Database/Beam/Backend/SQL/Builder.hs b/Database/Beam/Backend/SQL/Builder.hs
+index 9e734036..e9849912 100644
+--- a/Database/Beam/Backend/SQL/Builder.hs
++++ b/Database/Beam/Backend/SQL/Builder.hs
+@@ -33,6 +33,7 @@
+ import           Data.Hashable
+ import           Data.Int
+ import           Data.String
++import qualified Control.Monad.Fail as Fail
+ #if !MIN_VERSION_base(4, 11, 0)
+ import           Data.Semigroup
+ #endif
+@@ -507,8 +508,10 @@
+   type BackendFromField SqlSyntaxBackend = Trivial
+ 
+ newtype SqlSyntaxM a = SqlSyntaxM (IO a)
+-  deriving (Applicative, Functor, Monad, MonadIO)
++  deriving (Applicative, Functor, Monad, MonadIO, Fail.MonadFail)
+ 
+ instance MonadBeam SqlSyntaxBuilder SqlSyntaxBackend SqlSyntaxBackend SqlSyntaxM where
+-  withDatabaseDebug _ _ _ = fail "absurd"
+-  runReturningMany _ _ = fail "absurd"
++  withDatabaseDebug _ _ _ = Fail.fail "absurd"
++  runReturningMany _ _ = Fail.fail "absurd"
++
++
+diff --git a/Database/Beam/Schema/Lenses.hs b/Database/Beam/Schema/Lenses.hs
+index b21dddb6..5df0654c 100644
+--- a/Database/Beam/Schema/Lenses.hs
++++ b/Database/Beam/Schema/Lenses.hs
+@@ -1,4 +1,5 @@
+ {-# LANGUAGE PolyKinds #-}
++{-# LANGUAGE UndecidableInstances #-}
+ module Database.Beam.Schema.Lenses
+     ( tableLenses
+     , TableLens(..)
+diff --git a/beam-core.cabal b/beam-core.cabal
+index 4bf4ffd9..251d4d85 100644
+--- a/beam-core.cabal
++++ b/beam-core.cabal
+@@ -64,8 +64,8 @@
+                        time         >=1.6     && <1.10,
+                        hashable     >=1.1     && <1.3,
+                        network-uri  >=2.6     && <2.7,
+-                       containers   >=0.5     && <0.6,
+-                       vector-sized >=0.5     && <1.1,
++                       containers   >=0.5     && <0.7,
++                       vector-sized >=0.5     && <1.3,
+                        tagged       >=0.8     && <0.9
+   Default-language:    Haskell2010
+   default-extensions:  ScopedTypeVariables, OverloadedStrings, GADTs, RecursiveDo, FlexibleInstances, FlexibleContexts, TypeFamilies,
