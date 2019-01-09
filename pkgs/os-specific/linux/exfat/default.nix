@@ -28,16 +28,12 @@ stdenv.mkDerivation rec {
   '';
 
   patches = [
-    # fix compile-errors in 4.18
+    # fix compile-errors in 4.18 and 4.20
+    # ref: https://github.com/dorimanx/exfat-nofuse/pull/137
     (fetchpatch {
-      url = https://aur.archlinux.org/cgit/aur.git/plain/4.18.patch?h=exfat-dkms-git;
-      sha256 = "18l5h631w8yja7m2kkcf9h335pvlxms23ls539i81nf6xd6yvd78";
+      url = https://github.com/dorimanx/exfat-nofuse/compare/01c30ad52625a7261e1b0d874553b6ca7af25966...f93a47e6414d567a1e7f6ab7f34b015b20f9a050.patch ;
+      sha256 = "0w57pi9h6dwjxfgc3zpwy6sr4zw42hn1zj72f7wgfpqrx6d8xkh5";
     } )
-    # fix compile-errors in 4.20
-    (fetchpatch {
-      url = https://aur.archlinux.org/cgit/aur.git/plain/4.20.patch?h=exfat-dkms-git;
-      sha256 = "05l5x5yvd4vlvnr1bjl751gzcylvm3g9551fqdx7lqphhyiyv3bc";
-    })
   ];
 
   meta = {
