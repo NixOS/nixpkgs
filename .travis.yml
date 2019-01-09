@@ -1,2 +1,2 @@
 language: nix
-script: nix-build --dry-run --show-trace
+script: nix-build release.nix --dry-run --show-trace
