@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   name = "pasystray-${version}";
-  version = "0.7.0";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "christophgysin";
     repo = "pasystray";
     rev = name;
-    sha256 = "0cc9hjyw4gr4ip4lw74pzb1l9sxs3ffhf0xn0m1fhmyfbjyixwkh";
+    sha256 = "0xx1bm9kimgq11a359ikabdndqg5q54pn1d1dyyjnrj0s41168fk";
   };
 
   nativeBuildInputs = [ pkgconfig ];
