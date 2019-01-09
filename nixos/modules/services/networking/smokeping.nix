@@ -301,6 +301,7 @@ in
       serviceConfig = {
         User = cfg.user;
         Restart = "on-failure";
+        ExecStart = "${cfg.package}/bin/smokeping --config=${configPath} --nodaemon";
       };
       preStart = ''
         mkdir -m 0755 -p ${smokepingHome}/cache ${smokepingHome}/data
@@ -311,15 +312,23 @@ in
         ${cfg.package}/bin/smokeping --check --config=${configPath}
         ${cfg.package}/bin/smokeping --static --config=${configPath}
       '';
-      script = "${cfg.package}/bin/smokeping --config=${configPath} --nodaemon";
     };
     systemd.services.thttpd = mkIf cfg.webService {
       wantedBy = [ "multi-user.target"];
       requires = [ "smokeping.service"];
       partOf = [ "smokeping.service"];
       path = with pkgs; [ bash rrdtool smokeping thttpd ];
-      script = ''thttpd -u ${cfg.user} -c "**.fcgi" -d ${smokepingHome} -p ${builtins.toString cfg.port} -D -nos'';
-      serviceConfig.Restart = "always";
+      serviceConfig = {
+        Restart = "always";
+        ExecStart = lib.concatStringsSep " " (lib.concatLists [
+          [ "${pkgs.thttpd}/bin/thttpd" ]
+          [ "-u ${cfg.user}" ]
+          [ ''-c "**.fcgi"'' ]
+          [ "-d ${smokepingHome}" ]
+          [ "-p ${builtins.toString cfg.port}" ]
+          [ "-D -nos" ]
+        ]);
+      };
     };
   };
 
