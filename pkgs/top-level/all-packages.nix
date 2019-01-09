@@ -6529,9 +6529,9 @@ in
   fish-foreign-env = callPackage ../shells/fish/fish-foreign-env { };
 
   ion = callPackage ../shells/ion { };
-  
+
   ksh = callPackage ../shells/ksh { };
-  
+
   mksh = callPackage ../shells/mksh { };
 
   oh = callPackage ../shells/oh { };
@@ -18402,6 +18402,8 @@ in
   neomutt = callPackage ../applications/networking/mailreaders/neomutt { };
 
   natron = callPackage ../applications/video/natron { };
+
+  nicotine-plus = callPackage ../applications/networking/soulseek/nicotine-plus { };
 
   notion = callPackage ../applications/window-managers/notion { };
 
