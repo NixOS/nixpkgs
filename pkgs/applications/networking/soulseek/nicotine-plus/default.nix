@@ -35,7 +35,17 @@ python27Packages.buildPythonApplication rec {
          }));
      }));
 
-  postFixup = "mv $out/bin/nicotine $out/bin/nicotine-plus";
+  # Insert real docs directory.
+  # os.getcwd() is not needed
+  patchPhase = ''
+    sed -e 's|paths.append(os.getcwd())|paths.append("'"$out"/doc'")|' -i ./pynicotine/gtkgui/frame.py
+  '';
+
+  postFixup = ''
+    mkdir -p $out/doc/
+    mv ./doc/NicotinePlusGuide $out/doc/
+    mv $out/bin/nicotine $out/bin/nicotine-plus
+  '';
 
   meta = {
     description = "A graphical client for the SoulSeek peer-to-peer system";
@@ -45,8 +55,3 @@ python27Packages.buildPythonApplication rec {
     platforms = platforms.unix;
   };
 }
-
-# Known problems:
-#
-# - Offline guide does not work because of hardcoded path.
-#   see pynicotine/gtkgui/frame.py
