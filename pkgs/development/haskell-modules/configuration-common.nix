@@ -1178,4 +1178,16 @@ self: super: {
   hlint = super.hlint.overrideScope (self: super: { haskell-src-exts = self.haskell-src-exts_1_21_0; });
   hoogle = super.hoogle.overrideScope (self: super: { haskell-src-exts = self.haskell-src-exts_1_21_0; });
 
+  # jailbreak tasty < 1.2: https://github.com/phadej/tdigest/issues/30
+  tdigest = doJailbreak super.tdigest; # until tdigest > 0.2.1
+
+  # These patches contain fixes for 8.6 that should be safe for
+  # earlier versions, but we need the relaxed version bounds in GHC
+  # 8.4 builds. beam needs to release a round of updates that relax
+  # bounds and include the 8.6 fixes:
+  # https://github.com/tathougies/beam/issues/315
+  beam-core = appendPatch super.beam-core ./patches/beam-core-fix-ghc-8.6.x-build.patch;
+  beam-migrate = appendPatch super.beam-migrate ./patches/beam-migrate-fix-ghc-8.6.x-build.patch;
+  beam-postgres = appendPatch super.beam-postgres ./patches/beam-postgres-fix-ghc-8.6.x-build.patch;
+  beam-sqlite = appendPatch super.beam-sqlite ./patches/beam-sqlite-fix-ghc-8.6.x-build.patch;
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
