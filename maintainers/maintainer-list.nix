@@ -1754,6 +1754,11 @@
     email = "commits@schurr.at";
     github = "hansjoergschurr";
     name = "Hans-Jörg Schurr";
+    };
+  HaoZeke = {
+    email = "r95g10@gmail.com";
+    github = "haozeke";
+    name = "Rohit Goswami";
   };
   haslersn = {
     email = "haslersn@fius.informatik.uni-stuttgart.de";
