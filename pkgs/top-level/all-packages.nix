@@ -5911,6 +5911,8 @@ in
 
   ua = callPackage ../tools/networking/ua { };
 
+  ubridge = callPackage ../tools/networking/ubridge { };
+
   ucl = callPackage ../development/libraries/ucl { };
 
   ucspi-tcp = callPackage ../tools/networking/ucspi-tcp { };
