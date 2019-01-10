@@ -24,6 +24,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ pythonPkg libftdi ];
   makeFlags = [ "PREFIX=$(out)" ];
 
+  enableParallelBuilding = true;
+
   # fix icebox_vlog chipdb path. icestorm issue:
   #   https://github.com/cliffordwolf/icestorm/issues/125
   #
