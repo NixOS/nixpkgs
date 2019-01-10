@@ -1254,6 +1254,8 @@ in {
 
   click-completion = callPackage ../development/python-modules/click-completion {};
 
+  click-default-group = callPackage ../development/python-modules/click-default-group { };
+
   click-didyoumean = callPackage ../development/python-modules/click-didyoumean {};
 
   click-log = callPackage ../development/python-modules/click-log {};
