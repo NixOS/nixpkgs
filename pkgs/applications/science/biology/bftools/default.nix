@@ -10,12 +10,15 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
-    mkdir -p $out/bin
+    find . -maxdepth 1 -perm -111 -type f -not -name "*.sh" \
+      -exec install -vD {} "$out"/bin/{} \;
+
     mkdir $out/libexec
     mkdir -p $out/share/java
-    cp $(find . -maxdepth 1 -perm -111 -type f) $out/bin
+
     cp ./*.sh $out/libexec
     cp ./*.jar $out/share/java
+
     for file in $out/bin/*; do
       substituteInPlace $file --replace "\$BF_DIR" $out/libexec
     done
@@ -23,8 +26,7 @@ stdenv.mkDerivation rec {
   '';
 
   postFixup = ''
-    chmod +x $out/bin/bf.sh
-    wrapProgram $out/bin/bf.sh --prefix PATH : "${lib.makeBinPath [ jre ]}"
+    wrapProgram $out/libexec/bf.sh --prefix PATH : "${lib.makeBinPath [ jre ]}"
   '';
 
   nativeBuildInputs = [ makeWrapper ];
