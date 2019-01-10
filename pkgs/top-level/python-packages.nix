@@ -1799,6 +1799,8 @@ in {
 
   google-music-proto = callPackage ../development/python-modules/google-music-proto { };
 
+  google-music-utils = callPackage ../development/python-modules/google-music-utils { };
+
   gpapi = callPackage ../development/python-modules/gpapi { };
   gplaycli = callPackage ../development/python-modules/gplaycli { };
 
