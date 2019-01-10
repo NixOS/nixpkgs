@@ -144,10 +144,8 @@ stdenv.mkDerivation ((builtins.removeAttrs attrs ["source"]) // {
       echo "gem package built: $gempkg"
     elif [[ "$type" == "git" ]]; then
       git init
-      git config user.email nixbld@localhost.none
-      git config user.name Nix
       git add .
-      git commit -m "Nixpkgs setup for rubygems" || true
+      rm -rf .git/logs/ .git/hooks/ .git/index .git/FETCH_HEAD .git/ORIG_HEAD .git/refs/remotes/origin/HEAD .git/config
     fi
 
     runHook postBuild
