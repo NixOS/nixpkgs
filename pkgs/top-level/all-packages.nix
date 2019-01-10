@@ -9680,6 +9680,8 @@ in
 
   ffcast = callPackage ../tools/X11/ffcast { };
 
+  fff = callPackage ../applications/misc/fff { };
+
   fflas-ffpack = callPackage ../development/libraries/fflas-ffpack {
     # We need to use blas instead of openblas on darwin,
     # see https://github.com/NixOS/nixpkgs/pull/45013.
