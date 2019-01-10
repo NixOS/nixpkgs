@@ -2621,6 +2621,8 @@ in {
 
   google_cloud_websecurityscanner = callPackage ../development/python-modules/google_cloud_websecurityscanner { };
 
+  google-i18n-address = callPackage ../development/python-modules/google-i18n-address { };
+
   google_resumable_media = callPackage ../development/python-modules/google_resumable_media { };
 
   gpgme = toPythonModule (pkgs.gpgme.override {
