@@ -510,6 +510,8 @@ in {
 
   poetry = callPackage ../development/python-modules/poetry { };
 
+  pprintpp = callPackage ../development/python-modules/pprintpp { };
+
   progress = callPackage ../development/python-modules/progress { };
 
   pymysql = callPackage ../development/python-modules/pymysql { };
