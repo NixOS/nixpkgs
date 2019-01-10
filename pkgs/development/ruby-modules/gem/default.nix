@@ -143,7 +143,6 @@ stdenv.mkDerivation ((builtins.removeAttrs attrs ["source"]) // {
 
       echo "gem package built: $gempkg"
     elif [[ "$type" == "git" ]]; then
-      ls .git | head -n 10
       git init
       git config user.email nixbld@localhost.none
       git config user.name Nix
