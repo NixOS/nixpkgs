@@ -772,6 +772,8 @@ in {
 
   sniffio = callPackage ../development/python-modules/sniffio { };
 
+  tenacity = callPackage ../development/python-modules/tenacity { };
+
   tokenserver = callPackage ../development/python-modules/tokenserver {};
 
   toml = callPackage ../development/python-modules/toml { };
