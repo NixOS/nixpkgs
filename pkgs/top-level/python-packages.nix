@@ -935,6 +935,8 @@ in {
 
   atsim_potentials = callPackage ../development/python-modules/atsim_potentials { };
 
+  audio-metadata = callPackage ../development/python-modules/audio-metadata { };
+
   audioread = callPackage ../development/python-modules/audioread { };
 
   audiotools = callPackage ../development/python-modules/audiotools { };
