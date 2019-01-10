@@ -11,7 +11,15 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/bin
-    cp $(find ./* -maxdepth 1 ! -path "*.bat") $out/bin
+    mkdir $out/libexec
+    mkdir -p $out/share/java
+    cp $(find . -maxdepth 1 -perm -111 -type f) $out/bin
+    cp ./*.sh $out/libexec
+    cp ./*.jar $out/share/java
+    for file in $out/bin/*; do
+      substituteInPlace $file --replace "\$BF_DIR" $out/libexec
+    done
+    substituteInPlace $out/libexec/bf.sh --replace "\$BF_JAR_DIR" $out/share/java
   '';
 
   postFixup = ''
