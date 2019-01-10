@@ -6,8 +6,8 @@
      static bool done = false;
 -    static const char* libname = "libstartup-notification-1.so";
 +    static const char* libname = "@libstartup_notification@";
-     if (!done) {
-         done = true;
+     // some installs are missing the .so symlink, so try the full name
+     static const char* libname2 = "libstartup-notification-1.so.0";
 
 --- a/docs/Makefile
 +++ b/docs/Makefile

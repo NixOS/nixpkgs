@@ -1,6 +1,6 @@
 { stdenv, newScope, makeWrapper
 , wrapGAppsHook, gnome3, glib
-, electron, xdg_utils, makeDesktopItem
+, electron_3, xdg_utils, makeDesktopItem
 , auth0ClientID ? "0spuNKfIGeLAQ_Iki9t3fGxbfJl3k8SU"
 , auth0Domain ? "nixpkgs.auth0.com" }:
 
@@ -43,7 +43,7 @@ stdenv.mkDerivation {
   '';
 
   postFixup = ''
-    makeWrapper ${electron}/bin/electron $out/bin/rambox \
+    makeWrapper ${electron_3}/bin/electron $out/bin/rambox \
       --add-flags "${rambox-bare} --without-update" \
       "''${gappsWrapperArgs[@]}" \
       --prefix PATH : ${xdg_utils}/bin

@@ -16,6 +16,7 @@ stdenv.mkDerivation {
   patches = [ ./conference.patch ];
 
   buildInputs = [ cmake lame id3lib libvorbis qt4 libogg ];
+  NIX_LDFLAGS = [ "-lvorbis" ];
 
   meta = {
     homepage = http://atdot.ch/scr/;

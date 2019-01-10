@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "scapy";
-  version = "2.4.0";
+  version = "2.4.1";
 
   disabled = isPyPy;
 
@@ -21,13 +21,16 @@ buildPythonPackage rec {
     owner = "secdev";
     repo = "scapy";
     rev = "v${version}";
-    sha256 = "0dw6kl1qi9bf3rbm79gb1h40ms8y0b5dbmpip841p2905d5r2isj";
+    sha256 = "1k5hfhgq87b99x854s50ffyzh6jqv263n1lnr4y3pm6as9r7iff5";
   };
 
   # TODO: Temporary workaround
-  patches = [ ./fix-version-1.patch ./fix-version-2.patch ];
+  patches = [ ./fix-version.patch ];
 
-  postPatch = lib.optionalString withManufDb ''
+  postPatch = ''
+    sed -i "s/NIXPKGS_SCAPY_VERSION/${version}/" \
+      setup.py scapy/__init__.py
+  '' + lib.optionalString withManufDb ''
     substituteInPlace scapy/data.py --replace "/opt/wireshark" "${wireshark}"
   '';
 

@@ -125,11 +125,6 @@ ${optionalString (versionAtLeast version "4.20") ''
   GCC_PLUGIN_STACKLEAK y # A port of the PaX stackleak plugin
 ''}
 
-${optionalString (versionAtLeast version "4.13") ''
-  GCC_PLUGIN_RANDSTRUCT y # A port of the PaX randstruct plugin
-  GCC_PLUGIN_RANDSTRUCT_PERFORMANCE y
-''}
-
 # Disable various dangerous settings
 ACPI_CUSTOM_METHOD n # Allows writing directly to physical memory
 PROC_KCORE n # Exposes kernel text image layout

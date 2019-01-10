@@ -1,14 +1,14 @@
 { stdenv, fetchzip, qt5 }:
 
 let
-  version = "1.40.30";
+  version = "1.40.40";
 in
 stdenv.mkDerivation {
   name = "qtbitcointrader-${version}";
 
   src = fetchzip {
     url = "https://github.com/JulyIGHOR/QtBitcoinTrader/archive/v${version}.tar.gz";
-    sha256 = "0xbgdmwb8d3lrddcnx2amfsknd3g408f5gy5mdydcm3vqqfi9a0c";
+    sha256 = "10gxxkmn7w2hbmznpx6ybbbvlvh640nyzya1yfn162vzbjg14jdi";
   };
 
   buildInputs = [ qt5.qtbase qt5.qtmultimedia qt5.qtscript ];

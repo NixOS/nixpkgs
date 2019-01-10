@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-menus";
-  version = "3.10.1";
+  version = "3.31.3";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0wcacs1vk3pld8wvrwq7fdrm11i56nrajkrp6j1da6jc4yx0m5a6";
+    sha256 = "11i5m0w15by1k8d94xla54nr4r8nnb63wk6iq0dzki4cv5d55qgw";
   };
 
   makeFlags = "INTROSPECTION_GIRDIR=$(out)/share/gir-1.0/ INTROSPECTION_TYPELIBDIR=$(out)/lib/girepository-1.0";

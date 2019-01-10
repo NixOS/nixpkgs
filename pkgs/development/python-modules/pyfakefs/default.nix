@@ -1,7 +1,7 @@
 { stdenv, buildPythonPackage, fetchFromGitHub, python, pytest, glibcLocales }:
 
 buildPythonPackage rec {
-  version = "3.4.3";
+  version = "3.5.5";
   pname = "pyfakefs";
 
   # no tests in PyPI tarball
@@ -10,7 +10,7 @@ buildPythonPackage rec {
     owner = "jmcgeheeiv";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0rhbkcb5h2x8kmyxivr5jr1db2xvmpjdbsfjxl142qhfb29hr2hp";
+    sha256 = "1pww444ih4bf84a0jgl1r446mjywhlls890mnw76flx8maahlik1";
   };
 
   postPatch = ''
@@ -33,7 +33,8 @@ buildPythonPackage rec {
   checkPhase = ''
     export LC_ALL=en_US.UTF-8
     ${python.interpreter} -m pyfakefs.tests.all_tests
-    ${python.interpreter} -m pytest pyfakefs/tests/pytest_plugin_test.py
+    ${python.interpreter} -m pyfakefs.tests.all_tests_without_extra_packages
+    ${python.interpreter} -m pytest pyfakefs/tests/pytest/pytest_plugin_test.py
   '';
 
   meta = with stdenv.lib; {

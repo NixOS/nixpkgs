@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, scons, pkgconfig, SDL, libGLU_combined, zlib, smpeg
+{ stdenv, fetchurl, fetchpatch, sconsPackages, pkgconfig, SDL, libGLU_combined, zlib, smpeg
 , SDL_image, libvorbis, expat, zip, lua5_1 }:
 
 stdenv.mkDerivation rec {
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "0ha35kxc8xlbg74wsrbapfgxvcrwy6psjkqi7c6adxs55dmcxliz";
   };
 
-  nativeBuildInputs = [ scons pkgconfig ];
+  nativeBuildInputs = [ sconsPackages.scons_3_0_1 pkgconfig ];
   buildInputs = [ SDL libGLU_combined zlib smpeg SDL_image libvorbis expat zip lua5_1 ];
 
   NIX_CFLAGS_COMPILE = "-I${SDL_image}/include/SDL";

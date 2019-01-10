@@ -1,0 +1,91 @@
+From 2e0e557e7512ddd0376f179e82c811d8b4cce401 Mon Sep 17 00:00:00 2001
+From: Joey Hess <joeyh@joeyh.name>
+Date: Sat, 5 Jan 2019 11:54:06 -0400
+Subject: [PATCH] Support being built with ghc 8.0.1 (MonadFail)
+
+Tested on an older ghc by enabling MonadFailDesugaring globally.
+
+In TransferQueue, the lack of a MonadFail for STM exposed what would
+normally be a bug in the pattern matching, although in this case an
+earlier check that the queue was not empty avoided a pattern match
+failure.
+---
+ Annex.hs                   |  2 ++
+ Assistant/Monad.hs         |  2 ++
+ Assistant/TransferQueue.hs | 21 +++++++++++----------
+ CHANGELOG                  |  1 +
+ 4 files changed, 16 insertions(+), 10 deletions(-)
+
+diff --git a/Annex.hs b/Annex.hs
+index 0a0368d36..af0ede1f4 100644
+--- a/Annex.hs
++++ b/Annex.hs
+@@ -74,6 +74,7 @@ import "mtl" Control.Monad.Reader
+ import Control.Concurrent
+ import Control.Concurrent.Async
+ import Control.Concurrent.STM
++import qualified Control.Monad.Fail as Fail
+ import qualified Control.Concurrent.SSem as SSem
+ import qualified Data.Map.Strict as M
+ import qualified Data.Set as S
+@@ -93,6 +94,7 @@ newtype Annex a = Annex { runAnnex :: ReaderT (MVar AnnexState) IO a }
+ 		MonadCatch,
+ 		MonadThrow,
+ 		MonadMask,
++		Fail.MonadFail,
+ 		Functor,
+ 		Applicative
+ 	)
+diff --git a/Assistant/Monad.hs b/Assistant/Monad.hs
+index 403ee16a8..ef2ee6012 100644
+--- a/Assistant/Monad.hs
++++ b/Assistant/Monad.hs
+@@ -27,6 +27,7 @@ module Assistant.Monad (
+ 
+ import "mtl" Control.Monad.Reader
+ import System.Log.Logger
++import qualified Control.Monad.Fail as Fail
+ 
+ import Annex.Common
+ import Assistant.Types.ThreadedMonad
+@@ -49,6 +50,7 @@ newtype Assistant a = Assistant { mkAssistant :: ReaderT AssistantData IO a }
+ 		Monad,
+ 		MonadIO,
+ 		MonadReader AssistantData,
++		Fail.MonadFail,
+ 		Functor,
+ 		Applicative
+ 	)
+diff --git a/Assistant/TransferQueue.hs b/Assistant/TransferQueue.hs
+index 6a4473262..7c0ab80d0 100644
+--- a/Assistant/TransferQueue.hs
++++ b/Assistant/TransferQueue.hs
+@@ -191,17 +191,18 @@ getNextTransfer acceptable = do
+ 		sz <- readTVar (queuesize q)
+ 		if sz < 1
+ 			then retry -- blocks until queuesize changes
+-			else do
+-				(r@(t,info):rest) <- readTList (queuelist q)
+-				void $ modifyTVar' (queuesize q) pred
+-				setTList (queuelist q) rest
+-				if acceptable info
+-					then do
+-						adjustTransfersSTM dstatus $
+-							M.insert t info
+-						return $ Just r
+-					else return Nothing
++			else readTList (queuelist q) >>= \case
++				[] -> retry -- blocks until something is queued
++				(r@(t,info):rest) -> do
++					void $ modifyTVar' (queuesize q) pred
++					setTList (queuelist q) rest
++					if acceptable info
++						then do
++							adjustTransfersSTM dstatus $
++								M.insert t info
++							return $ Just r
++						else return Nothing
+ 
+ {- Moves transfers matching a condition from the queue, to the
+  - currentTransfers map. -}
+ 
