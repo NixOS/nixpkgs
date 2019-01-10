@@ -14,10 +14,10 @@ rec {
 
   firefox = common rec {
     pname = "firefox";
-    ffversion = "64.0";
+    ffversion = "64.0.2";
     src = fetchurl {
       url = "mirror://mozilla/firefox/releases/${ffversion}/source/firefox-${ffversion}.source.tar.xz";
-      sha512 = "10zbzwpdadj3ap2z66d0bz8l11qkgzlzd22nj7n3k2bzy7rd0m6cfznd9d4mgyl4ivxjv6wz8pasvacrala2dr0m78ysxiz2fpvrahs";
+      sha512 = "2xvzbx20i2qwld04g3wl9j6j8bkcja3i83sf9cpngayllhrjki29020izrwjxrgm0z3isg7zijw656v1v2zzmhlfkpkbk71n2gjj7md";
     };
 
     patches = nixpkgsPatches ++ [
