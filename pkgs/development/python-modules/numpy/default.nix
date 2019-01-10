@@ -24,7 +24,6 @@ in buildPythonPackage rec {
     sha256 = "3d734559db35aa3697dadcea492a423118c5c55d176da2f3be9c98d4803fc2a7";
   };
 
-  disabled = isPyPy;
   nativeBuildInputs = [ gfortran pytest ];
   buildInputs = [ blas ];
 
@@ -58,6 +57,8 @@ in buildPythonPackage rec {
 
   enableParallelBuilding = true;
 
+  doCheck = !isPyPy;
+  
   checkPhase = ''
     runHook preCheck
     pushd dist
