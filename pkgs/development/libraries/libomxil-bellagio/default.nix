@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
 
   patches = [ ./fedora-fixes.patch ];
 
+  NIX_CFLAGS_COMPILE = [ "-Wno-error=array-bounds" ];
+
   doCheck = false; # fails
 
   meta = with stdenv.lib; {
