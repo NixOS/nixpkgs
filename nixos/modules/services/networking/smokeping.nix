@@ -131,10 +131,15 @@ in
       };
       imgUrl = mkOption {
         type = types.str;
-        default = "http://${cfg.hostName}:${toString cfg.port}/cache";
-        defaultText = literalExpression ''"http://''${hostName}:''${toString port}/cache"'';
+        default = "cache";
+        defaultText = literalExpression ''"cache"'';
         example = "https://somewhere.example.com/cache";
-        description = "Base url for images generated in the cgi.";
+        description = ''
+          Base url for images generated in the cgi.
+
+          The default is a relative URL to ensure it works also when e.g. forwarding
+          the GUI port via SSH.
+        '';
       };
       linkStyle = mkOption {
         type = types.enum ["original" "absolute" "relative"];
