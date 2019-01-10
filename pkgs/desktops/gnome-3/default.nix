@@ -19,7 +19,7 @@ lib.makeScope pkgs.newScope (self: with self; {
   optionalPackages = with gnome3; [ baobab eog epiphany evince
     gucharmap nautilus totem vino yelp gnome-bluetooth
     gnome-calculator gnome-contacts gnome-font-viewer gnome-screenshot
-    gnome-system-log gnome-system-monitor simple-scan
+    gnome-system-monitor simple-scan
     gnome-terminal gnome-user-docs evolution file-roller gedit
     gnome-clocks gnome-music gnome-tweaks gnome-photos
     nautilus-sendto dconf-editor vinagre gnome-weather gnome-logs
@@ -125,8 +125,6 @@ lib.makeScope pkgs.newScope (self: with self; {
   gnome-settings-daemon = callPackage ./core/gnome-settings-daemon { };
 
   gnome-software = callPackage ./core/gnome-software { };
-
-  gnome-system-log = callPackage ./core/gnome-system-log { };
 
   gnome-system-monitor = callPackage ./core/gnome-system-monitor { };
 
