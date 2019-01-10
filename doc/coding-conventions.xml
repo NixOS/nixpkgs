@@ -876,6 +876,107 @@ src = fetchFromGitHub {
    </itemizedlist>
   </para>
  </section>
+ <section xml:id="sec-source-hashes">
+  <title>Obtaining source hash</title>
+
+  <para>
+   Preferred source hash type is sha256. There are several ways to get it.
+  </para>
+
+  <itemizedlist>
+   <listitem>
+    <para>
+     Prefetch URL (with <literal>nix-prefetch-<replaceable>XXX</replaceable>
+     <replaceable>URL</replaceable></literal>, where
+     <replaceable>XXX</replaceable> is one of <literal>url</literal>,
+     <literal>git</literal>, <literal>hg</literal>, <literal>cvs</literal>,
+     <literal>bzr</literal>, <literal>svn</literal>). Hash is printed to
+     stdout.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     Prefetch by package source (with <literal>nix-prefetch-url
+     '&lt;nixpkgs&gt;' -A <replaceable>PACKAGE</replaceable>.src</literal>,
+     where <replaceable>PACKAGE</replaceable> is package attribute name). Hash
+     is printed to stdout.
+    </para>
+    <para>
+     This works well when you've upgraded existing package version and want to
+     find out new hash, but is useless if package doesn't have top-level
+     attribute or package has multiple sources (<literal>.srcs</literal>,
+     architecture-dependent sources, etc).
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     Upstream provided hash: use it when upstream provides
+     <literal>sha256</literal> or <literal>sha512</literal> (when upstream
+     provides <literal>md5</literal>, don't use it, compute
+     <literal>sha256</literal> instead).
+    </para>
+    <para>
+     A little nuance is that <literal>nix-prefetch-*</literal> tools produce
+     hash encoded with <literal>base32</literal>, but upstream usually provides
+     hexadecimal (<literal>base16</literal>) encoding. Fetchers understand both
+     formats. Nixpkgs doesn't stadartize on any one format.
+    </para>
+    <para>
+     You can convert between formats with nix-hash, for example:
+<screen>
+$ nix-hash --type sha256 --to-base32 <replaceable>HASH</replaceable>
+</screen>
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     Extracting hash from local source tarball can be done with
+     <literal>sha256sum</literal>. Use <literal>nix-prefetch-url
+     file:///path/to/tarball </literal> if you want base32 hash.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     Fake hash: set fake hash in package expression, perform build and extract
+     correct hash from error Nix prints.
+    </para>
+    <para>
+     You can use <literal>lib.fakeSha256</literal>,
+     <literal>lib.fakeSha512</literal> or any other fake hash for this purpose.
+     This is last resort method when reconstructing source URL is non-trivial
+     and <literal>nix-prefetch-url -A</literal> isn't applicable (for example,
+     <link xlink:href="https://github.com/NixOS/nixpkgs/blob/d2ab091dd308b99e4912b805a5eb088dd536adb9/pkgs/applications/video/kodi/default.nix#L73">
+     one of <literal>kodi</literal> dependencies</link>). The easiest way then
+     would be replace hash with a fake one and rebuild. Nix build will fail and
+     error message will contain wanted hash.
+    </para>
+   </listitem>
+  </itemizedlist>
+
+  <section xml:id="sec-source-hashes-security">
+   <title>Obtaining hashes securely</title>
+
+   <para>
+    From security point of view first four methods are most secure.
+    nix-prefetch-url does verify TLS certificates for
+    <literal>https://</literal> URLs. <emphasis>TLS certificates aren't
+    verified in fake hash method even when there is <literal>https://</literal>
+    URL</emphasis>. Obviously, getting hashes for <literal>http://</literal>
+    URLs isn't secure, so recheck using some other network that hash is same.
+   </para>
+
+   <para>
+    Upstream provided hashes are not secure if obtained over
+    <literal>http://</literal>.
+   </para>
+
+   <para>
+    Nixpkgs build farm can act as an additional verification step. When
+    compromised hash was obtained, package may be rejected on Hydra due to hash
+    mismatch.
+   </para>
+  </section>
+ </section>
  <section xml:id="sec-patches">
   <title>Patches</title>
 
