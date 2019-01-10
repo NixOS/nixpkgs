@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     "--localstatedir=/var"
   ] ++ stdenv.lib.optionals (openldap != null) [ "--with-ldap" "--with-ldapcrypto" ];
 
-  NIX_CFLAGS_COMPILE = [ "-Wno-error=pointer-compare" ];
+  NIX_CFLAGS_COMPILE = [ "-Wno-error=pointer-compare" "-Wno-error=format-truncation" ];
 
   installFlags = [ "DESTDIR=\${out}" ];
 
