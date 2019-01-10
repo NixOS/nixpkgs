@@ -49,13 +49,13 @@ in {
 
     ghc822 = callPackage ../development/compilers/ghc/8.2.2.nix {
       bootPkgs = packages.ghc822Binary;
-      inherit (buildPackages.python3Packages) sphinx;
+      sphinx = buildPackages.python3Packages.sphinx_1_7_9;
       buildLlvmPackages = buildPackages.llvmPackages_39;
       llvmPackages = pkgs.llvmPackages_39;
     };
     ghc844 = callPackage ../development/compilers/ghc/8.4.4.nix {
       bootPkgs = packages.ghc822Binary;
-      sphinx = null;            # broken with sphinx 1.8.x
+      sphinx = buildPackages.python3Packages.sphinx_1_7_9;
       buildLlvmPackages = buildPackages.llvmPackages_5;
       llvmPackages = pkgs.llvmPackages_5;
     };

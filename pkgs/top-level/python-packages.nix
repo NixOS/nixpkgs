@@ -4116,6 +4116,17 @@ in {
 
   sphinx = callPackage ../development/python-modules/sphinx { };
 
+  # sphinx update to 1.8.x broke ghc versions < 8.6
+  sphinx_1_7_9 = self.sphinx.overridePythonAttrs
+    {
+      version = "1.7.9";
+      src = fetchPypi {
+        pname = "Sphinx";
+        inherit version;
+        sha256 = "217a7705adcb573da5bbe1e0f5cab4fa0bd89fd9342c9159121746f593c2d5a4";
+      };
+    };
+
   sphinx-argparse = callPackage ../development/python-modules/sphinx-argparse { };
 
   sphinxcontrib-websupport = callPackage ../development/python-modules/sphinxcontrib-websupport { };
