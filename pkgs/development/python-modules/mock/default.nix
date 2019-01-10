@@ -6,6 +6,7 @@
 , six
 , pbr
 , python
+, isPyPy
 }:
 
 buildPythonPackage rec {
@@ -20,6 +21,7 @@ buildPythonPackage rec {
   buildInputs = [ unittest2 ];
   propagatedBuildInputs = [ funcsigs six pbr ];
 
+  doCheck = !isPyPy;
   checkPhase = ''
     ${python.interpreter} -m unittest discover
   '';
