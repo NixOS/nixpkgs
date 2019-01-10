@@ -253,13 +253,11 @@ in {
   };
 
   php72 = generic {
-    version = "7.2.13";
-    sha256 = "0bg9nfc250p24hxn4bdjz7ngcw75h8rpf4qjxqzcs6s9fvxlcjjv";
+    version = "7.2.14";
+    sha256 = "15v5gbdxi6jkgdflpj5rqqzzfvwdb55hls4azh71xgy793934qgm";
 
-    # https://bugs.php.net/bug.php?id=71041
     # https://bugs.php.net/bug.php?id=76826
-    extraPatches = [ ./fix-bug-71041.patch ]
-      ++ optional stdenv.isDarwin ./php72-darwin-isfinite.patch;
+    extraPatches = optional stdenv.isDarwin ./php72-darwin-isfinite.patch;
   };
 
   php73 = generic {
