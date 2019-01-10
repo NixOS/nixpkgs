@@ -428,6 +428,8 @@ in {
 
   logster = callPackage ../development/python-modules/logster { };
 
+  logzero = callPackage ../development/python-modules/logzero { };
+
   mail-parser = callPackage ../development/python-modules/mail-parser { };
 
   manhole = callPackage ../development/python-modules/manhole { };
