@@ -167,6 +167,17 @@ in
         defaultText = literalExpression "pkgs.smokeping";
         description = "Specify a custom smokeping package";
       };
+      host = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        example = "192.0.2.1"; # rfc5737 example IP for documentation
+        description = ''
+          Host/IP to bind to for the web server.
+
+          Setting it to <literal>null</literal> skips passing the -h option to thttpd,
+          which makes it bind to all interfaces.
+        '';
+      };
       port = mkOption {
         type = types.int;
         default = 8081;
@@ -325,6 +336,7 @@ in
           [ "-u ${cfg.user}" ]
           [ ''-c "**.fcgi"'' ]
           [ "-d ${smokepingHome}" ]
+          (lib.optional (cfg.host != null) "-h ${cfg.host}")
           [ "-p ${builtins.toString cfg.port}" ]
           [ "-D -nos" ]
         ]);
