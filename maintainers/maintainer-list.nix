@@ -217,7 +217,7 @@
     name = "Nix Committers";
   };
   alunduil = {
-    email = "alunduil@alunduil.com";
+    email = "alunduil@gmail.com";
     github = "alunduil";
     name = "Alex Brandt";
   };
