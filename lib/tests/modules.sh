@@ -149,6 +149,9 @@ checkConfigOutput "1 2 3 4 5 6 7 8 9 10" config.result ./loaOf-with-long-list.ni
 # Check loaOf with many merges of lists.
 checkConfigOutput "1 2 3 4 5 6 7 8 9 10" config.result ./loaOf-with-many-list-merges.nix
 
+# Check the merge behaviour of the selectorFunction type.
+checkConfigOutput "a b" config.result ./selectorFunction.nix
+
 cat <<EOF
 ====== module tests ======
 $pass Pass

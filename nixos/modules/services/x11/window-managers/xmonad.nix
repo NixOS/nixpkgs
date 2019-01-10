@@ -28,6 +28,7 @@ in
       };
 
       extraPackages = mkOption {
+        type = types.selectorFunction;
         default = self: [];
         defaultText = "self: []";
         example = literalExample ''

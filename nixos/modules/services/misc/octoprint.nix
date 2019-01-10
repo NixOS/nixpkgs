@@ -66,6 +66,7 @@ in
       };
 
       plugins = mkOption {
+        type = types.selectorFunction;
         default = plugins: [];
         defaultText = "plugins: []";
         example = literalExample "plugins: [ m3d-fio ]";
