@@ -1,6 +1,6 @@
 { stdenv, buildPythonPackage, pythonOlder, fetchPypi, attrs, hypothesis, py
 , setuptools_scm, setuptools, six, pluggy, funcsigs, isPy3k, more-itertools
-, atomicwrites, mock, writeText, pathlib2
+, atomicwrites, mock, writeText, pathlib2, isPyPy
 }:
 
 let generic = { version, sha256 }:
@@ -23,6 +23,7 @@ let generic = { version, sha256 }:
       ++ stdenv.lib.optionals (!isPy3k) [ funcsigs ]
       ++ stdenv.lib.optionals (pythonOlder "3.6") [ pathlib2 ];
 
+    doCheck = !isPyPy;
     checkPhase = ''
       runHook preCheck
       $out/bin/py.test -x testing/
