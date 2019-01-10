@@ -3045,6 +3045,8 @@ in
 
   google-compute-engine-oslogin = callPackage ../tools/virtualization/google-compute-engine-oslogin { };
 
+  google-music-scripts = callPackage ../tools/audio/google-music-scripts { };
+
   gource = callPackage ../applications/version-management/gource { };
 
   govc = callPackage ../tools/virtualization/govc { };
