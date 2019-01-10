@@ -475,6 +475,11 @@
     github = "bandresen";
     name = "Benjamin Andresen";
   };
+  baracoder = {
+    email = "baracoder@googlemail.com";
+    github = "baracoder";
+    name = "Herman Fries";
+  };
   barrucadu = {
     email = "mike@barrucadu.co.uk";
     github = "barrucadu";
