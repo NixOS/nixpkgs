@@ -21428,6 +21428,8 @@ in
 
   bcftools = callPackage ../applications/science/biology/bcftools { };
 
+  bftools = callPackage ../applications/science/biology/bftools { };
+
   conglomerate = callPackage ../applications/science/biology/conglomerate { };
 
   dcm2niix = callPackage ../applications/science/biology/dcm2niix { };

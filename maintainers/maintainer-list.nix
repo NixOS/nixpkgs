@@ -4361,6 +4361,11 @@
     github = "tazjin";
     name = "Vincent Ambo";
   };
+  tbenst = {
+    email = "nix@tylerbenster.com";
+    github = "tbenst";
+    name = "Tyler Benster";
+  };
   teh = {
     email = "tehunger@gmail.com";
     github = "teh";
