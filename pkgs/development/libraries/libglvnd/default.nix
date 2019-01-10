@@ -25,7 +25,8 @@ stdenv.mkDerivation rec {
     "-UDEFAULT_EGL_VENDOR_CONFIG_DIRS"
     # FHS paths are added so that non-NixOS applications can find vendor files.
     "-DDEFAULT_EGL_VENDOR_CONFIG_DIRS=\"${addOpenGLRunpath.driverLink}/share/glvnd/egl_vendor.d:/etc/glvnd/egl_vendor.d:/usr/share/glvnd/egl_vendor.d\""
-  ] ++ lib.optional stdenv.cc.isClang "-Wno-error";
+    "-Wno-error"
+  ];
 
   # Indirectly: https://bugs.freedesktop.org/show_bug.cgi?id=35268
   configureFlags  = stdenv.lib.optional stdenv.hostPlatform.isMusl "--disable-tls";
