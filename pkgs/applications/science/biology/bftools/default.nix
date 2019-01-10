@@ -1,4 +1,4 @@
-{ stdenv, lib, makeWrapper, fetchurl, unzip, openjdk }:
+{ stdenv, lib, makeWrapper, fetchurl, unzip, jre }:
 
 stdenv.mkDerivation rec {
   name = "bftools-${version}";
@@ -11,13 +11,12 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/bin
-    cp $(find ./* -maxdepth 1 ! -path "*.bat") $out/
+    cp $(find ./* -maxdepth 1 ! -path "*.bat") $out/bin
   '';
 
   postFixup = ''
-    for script in "$out"/bin/*; do
-      wrapProgram "$script" --prefix PATH : "${lib.makeBinPath [ openjdk ]}"
-    done
+    chmod +x $out/bin/bf.sh
+    wrapProgram $out/bin/bf.sh --prefix PATH : "${lib.makeBinPath [ jre ]}"
   '';
 
   buildInputs = [ unzip ];
