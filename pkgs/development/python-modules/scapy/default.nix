@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "scapy";
-  version = "2.4.1";
+  version = "2.4.2";
 
   disabled = isPyPy;
 
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "secdev";
     repo = "scapy";
     rev = "v${version}";
-    sha256 = "1k5hfhgq87b99x854s50ffyzh6jqv263n1lnr4y3pm6as9r7iff5";
+    sha256 = "03xzjklvc6y4d87k0rqpx5h112ld5nvgfldrbd8c4mx6f9mmd11n";
   };
 
   # TODO: Temporary workaround
