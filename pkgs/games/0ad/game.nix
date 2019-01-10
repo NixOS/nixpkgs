@@ -10,11 +10,11 @@ assert withEditor -> wxGTK != null;
 
 stdenv.mkDerivation rec {
   name = "0ad-${version}";
-  version = "0.0.23";
+  version = "0.0.23b";
 
   src = fetchurl {
     url = "http://releases.wildfiregames.com/0ad-${version}-alpha-unix-build.tar.xz";
-    sha256 = "0qz1sg4n5y766qwgi63drrrx6k17kk0rcnn9a4a9crllk2vf78fg";
+    sha256 = "0draa53xg69i5qhqym85658m45xhwkbiimaldj4sr3703rjgggq1";
   };
 
   nativeBuildInputs = [ python2 perl pkgconfig ];
