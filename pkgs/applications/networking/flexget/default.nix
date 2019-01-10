@@ -54,7 +54,9 @@ buildPythonApplication rec {
     flask_login flask-cors
     pyparsing zxcvbn-python future
     # Optional requirements
-    deluge-client transmissionrpc
+    deluge-client
+    # Plugins
+    transmissionrpc
   ] ++ lib.optional (pythonOlder "3.4") pathlib;
 
   meta = with lib; {
