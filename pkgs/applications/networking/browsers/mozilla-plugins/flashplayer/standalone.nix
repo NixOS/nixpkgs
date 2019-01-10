@@ -99,5 +99,7 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.unfree;
     maintainers = [];
     platforms = [ "x86_64-linux" ];
+    # Application crashed with an unhandled SIGSEGV
+    broken = true;
   };
 }
