@@ -1,0 +1,16 @@
+diff --git a/drivers/mmc/host/sdhci-iproc.c b/drivers/mmc/host/sdhci-iproc.c
+index d0e83db42ae5..94eeed2a1b53 100644
+--- a/drivers/mmc/host/sdhci-iproc.c
++++ b/drivers/mmc/host/sdhci-iproc.c
+@@ -279,7 +279,10 @@ static int sdhci_iproc_probe(struct platform_device *pdev)
+ 
+ 	iproc_host->data = iproc_data;
+ 
+-	mmc_of_parse(host->mmc);
++	ret = mmc_of_parse(host->mmc);
++	if (ret)
++		goto err;
++
+ 	sdhci_get_of_property(pdev);
+ 
+ 	host->mmc->caps |= iproc_host->data->mmc_caps;
