@@ -191,7 +191,7 @@ in {
         options = {
 
           paths = mkOption {
-            type = with types; coercedTo path lib.singleton (listOf str);
+            type = with types; coercedTo str lib.singleton (listOf str);
             description = "Path(s) to back up.";
             example = "/home/user";
           };
