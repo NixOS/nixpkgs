@@ -43,16 +43,16 @@ let
   ];
 in buildRustPackage rec {
   name = "alacritty-${version}";
-  version = "0.2.4";
+  version = "0.2.5";
 
   src = fetchFromGitHub {
     owner = "jwilm";
     repo = "alacritty";
     rev = "v${version}";
-    sha256 = "1mf0x8dc196qf08lqpm0n4a5954cx9qfb09dq8ab7mp3xnyrnqzx";
+    sha256 = "17802fgfkp80872wr6qkjhs3gdjjw2cibigcifqnzcfzwabp07iv";
   };
 
-  cargoSha256 = "0p3bygvmpmy09h7972nhmma51lxp8q91cdlaw3s6p35i79hq3bmp";
+  cargoSha256 = "0adw5zwxy1x9laa1fx11j2bhhs2w7c9n0xnjwxw8vchqi4xwqvy5";
 
   nativeBuildInputs = [
     cmake
@@ -70,9 +70,6 @@ in buildRustPackage rec {
     ];
 
   outputs = [ "out" "terminfo" ];
-
-  # https://github.com/NixOS/nixpkgs/issues/49693
-  doCheck = !stdenv.isDarwin;
 
   postPatch = ''
     substituteInPlace copypasta/src/x11.rs \

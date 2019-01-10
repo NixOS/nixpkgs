@@ -98,7 +98,7 @@ in rec {
       cp -d ${xz.out}/lib/liblzma*.*     $out/lib
 
       # Copy binutils.
-      for i in as ld ar ranlib nm strip otool install_name_tool dsymutil lipo; do
+      for i in as ld ar ranlib nm strip otool install_name_tool lipo; do
         cp ${cctools_}/bin/$i $out/bin
       done
 

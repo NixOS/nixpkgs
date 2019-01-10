@@ -10,8 +10,12 @@ stdenv.mkDerivation rec {
     sha256 = "17g497q6ylq73rql9k2ji2l2b2bj3dd4am30z8i6khnhc0x8s2il";
   };
 
-  # trying to build docs fails with a2x errors, unable to fix through asciidoc
-  configureFlags = [ "--disable-doc" ];
+  configureFlags = [
+    # trying to build docs fails with a2x errors, unable to fix through asciidoc
+    "--disable-doc"
+
+    "--localstatedir=/var"
+  ];
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
   buildInputs = [ perl libarchive openssl zlib bzip2 lzma ];

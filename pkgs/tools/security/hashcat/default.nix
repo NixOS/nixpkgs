@@ -14,17 +14,11 @@ stdenv.mkDerivation rec {
   buildInputs = [ opencl-headers xxHash ];
 
   makeFlags = [
+    "PREFIX=${placeholder "out"}"
     "OPENCL_HEADERS_KHRONOS=${opencl-headers}/include"
     "COMPTIME=1337"
     "VERSION_TAG=${version}"
   ];
-
-  # $out is not known until the build has started.
-  configurePhase = ''
-    runHook preConfigure
-    makeFlags="$makeFlags PREFIX=$out"
-    runHook postConfigure
-  '';
 
   postFixup = ''
     wrapProgram $out/bin/hashcat --prefix LD_LIBRARY_PATH : ${ocl-icd}/lib

@@ -6,14 +6,14 @@ let
 
 in buildGoPackage rec {
   name = "datadog-agent-${version}";
-  version = "6.4.2";
+  version = "6.8.3";
   owner   = "DataDog";
   repo    = "datadog-agent";
 
   src = fetchFromGitHub {
     inherit owner repo;
-    rev    = "155fddb3547919bd54530dfdb250e0cb2defae7d";
-    sha256 = "0l7ic0p2h27x386k1gzzm20af2s06cpalmqz0h0c5zq4wszmw5zy";
+    rev    = "${version}";
+    sha256 = "18kk3f10pbcxplshxzbblga6bqlkk5mgy536yy27j463l4xps92q";
   };
 
   subPackages = [
@@ -57,7 +57,7 @@ in buildGoPackage rec {
   # into standard paths.
   postInstall = ''
     mkdir -p $bin/${python.sitePackages} $bin/share/datadog-agent
-    cp -R $src/cmd/agent/dist/{conf.d,trace-agent.conf} $bin/share/datadog-agent
+    cp -R $src/cmd/agent/dist/conf.d $bin/share/datadog-agent
     cp -R $src/cmd/agent/dist/{checks,utils,config.py} $bin/${python.sitePackages}
 
     cp -R $src/pkg/status/dist/templates $bin/share/datadog-agent

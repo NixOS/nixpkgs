@@ -260,6 +260,8 @@ in {
 
   blivet = callPackage ../development/python-modules/blivet { };
 
+  boltons = callPackage ../development/python-modules/boltons { };
+
   breathe = callPackage ../development/python-modules/breathe { };
 
   brotli = callPackage ../development/python-modules/brotli { };
@@ -342,6 +344,8 @@ in {
 
   eradicate = callPackage ../development/python-modules/eradicate {  };
 
+  face = callPackage ../development/python-modules/face { };
+
   fastpbkdf2 = callPackage ../development/python-modules/fastpbkdf2 {  };
 
   fido2 = callPackage ../development/python-modules/fido2 {  };
@@ -363,6 +367,8 @@ in {
   gin-config = callPackage ../development/python-modules/gin-config { };
 
   globus-sdk = callPackage ../development/python-modules/globus-sdk { };
+
+  glom = callPackage ../development/python-modules/glom { };
 
   goocalendar = callPackage ../development/python-modules/goocalendar { };
 
@@ -2092,6 +2098,8 @@ in {
 
   svg-path = callPackage ../development/python-modules/svg-path { };
 
+  r2pipe = callPackage ../development/python-modules/r2pipe { };
+
   regex = callPackage ../development/python-modules/regex { };
 
   ratelimiter = callPackage ../development/python-modules/ratelimiter { };
@@ -3089,7 +3097,9 @@ in {
 
   pyte = callPackage ../development/python-modules/pyte { };
 
-  graphviz = callPackage ../development/python-modules/graphviz { };
+  graphviz = callPackage ../development/python-modules/graphviz {
+    inherit (pkgs) graphviz;
+  };
 
   pygraphviz = callPackage ../development/python-modules/pygraphviz {
     graphviz = pkgs.graphviz; # not the python package
@@ -3225,7 +3235,9 @@ in {
 
   obfsproxy = callPackage ../development/python-modules/obfsproxy { };
 
-  objgraph = callPackage ../development/python-modules/objgraph { };
+  objgraph = callPackage ../development/python-modules/objgraph {
+    graphvizPkg = pkgs.graphviz;
+  };
 
   odo = callPackage ../development/python-modules/odo { };
 
@@ -3532,7 +3544,9 @@ in {
 
   pydispatcher = callPackage ../development/python-modules/pydispatcher { };
 
-  pydot = callPackage ../development/python-modules/pydot { };
+  pydot = callPackage ../development/python-modules/pydot {
+    inherit (pkgs) graphviz;
+  };
 
   pydot_ng = callPackage ../development/python-modules/pydot_ng { };
 

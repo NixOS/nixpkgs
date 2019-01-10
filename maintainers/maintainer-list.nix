@@ -217,7 +217,7 @@
     name = "Nix Committers";
   };
   alunduil = {
-    email = "alunduil@alunduil.com";
+    email = "alunduil@gmail.com";
     github = "alunduil";
     name = "Alex Brandt";
   };
@@ -669,6 +669,11 @@
     github = "bstrik";
     name = "Berno Strik";
   };
+  buffet = {
+    email = "niclas@countingsort.com";
+    github = "buffet";
+    name = "Niclas Meyer";
+  };
   bugworm = {
     email = "bugworm@zoho.com";
     github = "bugworm";
@@ -926,11 +931,6 @@
     email = "couchemar@yandex.ru";
     github = "couchemar";
     name = "Andrey Pavlov";
-  };
-  countingsort = {
-    email = "niclas@countingsort.com";
-    github = "countingsort";
-    name = "Niclas Meyer";
   };
   cpages = {
     email = "page@ruiec.cat";
@@ -2303,11 +2303,20 @@
     github = "kirelagin";
     name = "Kirill Elagin";
   };
+  kisonecat = {
+    email = "kisonecat@gmail.com";
+    github = "kisonecat";
+    name = "Jim Fowler";
+  };
   kkallio = {
     email = "tierpluspluslists@gmail.com";
     name = "Karn Kallio";
   };
-
+  klntsky = {
+    email = "klntsky@gmail.com";
+    name = "Vladimir Kalnitsky";
+    github = "8084";
+  };
   kmeakin = {
     email = "karlwfmeakin@gmail.com";
     name = "Karl Meakin";

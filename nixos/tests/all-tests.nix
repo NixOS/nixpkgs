@@ -92,7 +92,7 @@ in
   hadoop.yarn = handleTestOn [ "x86_64-linux" ] ./hadoop/yarn.nix {};
   handbrake = handleTestOn ["x86_64-linux"] ./handbrake.nix {};
   haproxy = handleTest ./haproxy.nix {};
-  #hardened = handleTest ./hardened.nix {}; # broken due useSandbox = true
+  hardened = handleTest ./hardened.nix {};
   hibernate = handleTest ./hibernate.nix {};
   hitch = handleTest ./hitch {};
   hocker-fetchdocker = handleTest ./hocker-fetchdocker {};

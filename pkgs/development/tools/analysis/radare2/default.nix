@@ -75,11 +75,18 @@ let
       depsBuildBuild = [ buildPackages.stdenv.cc ];
 
       nativeBuildInputs = [ pkgconfig ];
-      buildInputs = [ file libzip xxHash readline libusb libewf perl zlib openssl libuv ]
+      buildInputs = [ file readline libusb libewf perl zlib openssl libuv ]
         ++ optional useX11 [ gtkdialog vte gtk2 ]
         ++ optional rubyBindings [ ruby ]
         ++ optional pythonBindings [ python3 ]
         ++ optional luaBindings [ lua ];
+
+      propagatedBuildInputs = [
+        # radare2 exposes r_lib which depends on these libraries
+        file # for its list of magic numbers (`libmagic`)
+        libzip
+        xxHash
+      ];
 
       meta = {
         description = "unix-like reverse engineering framework and commandline tools";

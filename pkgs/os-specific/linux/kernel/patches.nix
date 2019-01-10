@@ -68,4 +68,12 @@ rec {
       sha256 = "0bp4jryihg1y2sl8zlj6w7vvnxj0kmb6xdy42hpvdv43kb6ngiaq";
     };
   };
+
+  raspberry_pi_wifi_fix = rec {
+    name = "raspberry-pi-wifi-fix";
+    patch = fetchpatch {
+      url = https://raw.githubusercontent.com/archlinuxarm/PKGBUILDs/730522ae76aa57b89fa317c5084613d3d50cf3b8/core/linux-aarch64/0005-mmc-sdhci-iproc-handle-mmc_of_parse-errors-during-pr.patch;
+      sha256 = "0gbfycky28vbdjgys1z71wl5q073dmbrkvbnr6693jsda3qhp6za";
+    };
+  };
 }
