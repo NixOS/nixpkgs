@@ -964,6 +964,8 @@ in
 
   bfr = callPackage ../tools/misc/bfr { };
 
+  bftools = callPackage ../applications/science/biology/bftools { };
+
   bibtool = callPackage ../tools/misc/bibtool { };
 
   bibutils = callPackage ../tools/misc/bibutils { };
