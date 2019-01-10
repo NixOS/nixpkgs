@@ -1,4 +1,4 @@
-{ stdenv, lib, pkgs, fetchurl, unzip, openjdk }:
+{ stdenv, lib, makeWrapper, fetchurl, unzip, openjdk }:
 
 stdenv.mkDerivation rec {
   name = "bftools-${version}";
@@ -11,25 +11,23 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/bin
-    cp ./* $out/
-    for script in $(find . -maxdepth 1 -perm -111 -type f); do
-      ln -s $out/$script $out/bin/$script
-    done
+    cp $(find ./* -maxdepth 1 ! -path "*.bat") $out/
   '';
 
   postFixup = ''
-        for script in "$out"/bin/*; do
-          wrapProgram "$script" --prefix PATH : "${lib.makeBinPath [ openjdk ]}"
-        done
-      '';
+    for script in "$out"/bin/*; do
+      wrapProgram "$script" --prefix PATH : "${lib.makeBinPath [ openjdk ]}"
+    done
+  '';
 
-  buildInputs = [ unzip pkgs.makeWrapper ];
+  buildInputs = [ unzip ];
 
-  # phases = [ "unpackPhase" "installPhase" "fixupPhase" ];
+  nativeBuildInputs = [ makeWrapper ];
 
   meta = with stdenv.lib; {
-    description = "A bundle of scripts for using Bio-Formats on the command line with bioformats_package.jar already included.";
+    description = "A bundle of scripts for using Bio-Formats on the command line with bioformats_package.jar already included";
     license = licenses.gpl3;
+    meta.platforms = platforms.all;
     homepage = https://www.openmicroscopy.org/bio-formats/;
     maintainers = [ maintainers.tbenst ];
   };
