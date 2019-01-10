@@ -1,12 +1,12 @@
-{ stdenv, lib, makeWrapper, fetchurl, unzip, jre }:
+{ stdenv, lib, makeWrapper, fetchzip, jre }:
 
 stdenv.mkDerivation rec {
   name = "bftools-${version}";
   version = "5.9.2";
 
-  src = fetchurl {
+  src = fetchzip {
     url = "http://downloads.openmicroscopy.org/bio-formats/${version}/artifacts/bftools.zip";
-    sha256 = "02x8p07z7js41kgiblkr9k8v9v4ka8rm7pg3f1vy9s5p6hmpfvnx";
+    sha256 = "08lmbg3kfxh17q6548il0i2h3f9a6ch8r0r067p14dajhzfpjyqj";
   };
 
   installPhase = ''
@@ -18,8 +18,6 @@ stdenv.mkDerivation rec {
     chmod +x $out/bin/bf.sh
     wrapProgram $out/bin/bf.sh --prefix PATH : "${lib.makeBinPath [ jre ]}"
   '';
-
-  buildInputs = [ unzip ];
 
   nativeBuildInputs = [ makeWrapper ];
 
