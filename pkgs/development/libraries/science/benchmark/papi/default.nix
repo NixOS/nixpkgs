@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "13mngf9kl0y2wfxqvkad0smdaag7k8fvw82b4312gx62nwhc1i6r";
   };
 
-  buildInputs = [ stdenv ];
+  NIX_CFLAGS_COMPILE = [ "-Wno-error=format-truncation" ];
 
   preConfigure = ''
     cd src
