@@ -8,6 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "1n2wkmvw6n80ybdwkjq8ka43z2x8mvxq49byv61b52iyz69slf7b";
   };
 
+  NIX_CFLAGS_COMPILE = [ "-Wno-error=format-truncation" ];
+
   buildInputs = [ ncurses perl ];
 
   configureFlags = stdenv.lib.optional (perl == null) "--with-perl-bindings=no";
