@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   '';
 
   patches = [ (fetchpatch {
-    url = "https://gitweb.gentoo.org/proj/musl.git/plain/dev-libs/boehm-gc/files/boehm-gc-7.6.0-sys_select.patch";
+    url = "https://gitweb.gentoo.org/proj/musl.git/plain/dev-libs/boehm-gc/files/boehm-gc-7.6.0-sys_select.patch?id=85b6a600996bdd71162b357e9ba93d8559342432";
     sha256 = "1gydwlklvci30f5dpp5ccw2p2qpph5y41r55wx9idamjlq66fbb3";
   }) ] ++
     # https://github.com/ivmai/bdwgc/pull/208
