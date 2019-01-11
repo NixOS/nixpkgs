@@ -53,7 +53,12 @@ stdenv.mkDerivation rec {
     "--enable-sage"
   ];
 
-  patches = stdenv.lib.optionals withSage [
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/linbox-team/linbox/commit/56be8673613fff87fb2329f71bceb0c793c00b82.patch";
+      sha256 = "0lwxaxgvs17f81qnjgd03cy5lxqgpz7vap6p19dk197kmwll75ha";
+    })
+  ] ++ stdenv.lib.optionals withSage [
     # https://trac.sagemath.org/ticket/24214#comment:39
     # Will be resolved by
     # https://github.com/linbox-team/linbox/issues/69
