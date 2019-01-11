@@ -8,13 +8,13 @@ with python3.pkgs;
 
 buildPythonApplication rec {
   pname = "setools";
-  version = "2017-11-10";
+  version = "4.2.0";
 
   src = fetchFromGitHub {
-    owner = "TresysTechnology";
+    owner = "SELinuxProject";
     repo = pname;
-    rev = "a1aa0f33f5c428d3f9fe82960ed5de36f38047f7";
-    sha256 = "0iyj35fff93cprjkzbkg9dn5xz8dg5h2kjx3476fl625nxxskndn";
+    rev = version;
+    sha256 = "1bjwcvr6rjx79cdcvaxn68bdrnl4f2a8gnnqsngdxhkhwpddksjy";
   };
 
   nativeBuildInputs = [ bison flex swig ];
@@ -34,8 +34,8 @@ buildPythonApplication rec {
   '';
 
   meta = {
-    description = "SELinux Tools";
-    homepage = https://github.com/TresysTechnology/setools/wiki;
+    description = "SELinux Policy Analysis Tools";
+    homepage = https://github.com/SELinuxProject/setools;
     license = licenses.gpl2;
     platforms = platforms.linux;
   };
