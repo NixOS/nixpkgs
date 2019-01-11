@@ -2,13 +2,15 @@
 , which, cycler, dateutil, nose, numpy, pyparsing, sphinx, tornado, kiwisolver
 , freetype, libpng, pkgconfig, mock, pytz, pygobject3, functools32, subprocess32
 , enableGhostscript ? true, ghostscript ? null, gtk3
+, pango, gdk_pixbuf, atk
 , enableGtk2 ? false, pygtk ? null, gobject-introspection
-, enableGtk3 ? false, cairo
+, enableGtk3 ? true, cairo
 , enableTk ? false, tcl ? null, tk ? null, tkinter ? null, libX11 ? null
 , enableQt ? false, pyqt4
 , libcxx
 , Cocoa
 , pythonOlder
+, python3
 }:
 
 assert enableGhostscript -> ghostscript != null;
@@ -38,6 +40,13 @@ buildPythonPackage rec {
   buildInputs = [ python which sphinx stdenv ]
     ++ stdenv.lib.optional enableGhostscript ghostscript
     ++ stdenv.lib.optional stdenv.isDarwin [ Cocoa ];
+
+  preBuild = let
+    gi_typelib_path = stdenv.lib.makeSearchPath "lib/girepository-1.0" [ gtk3 pango.out gdk_pixbuf atk ];
+  in ''
+    ${python3.interpreter} ${./add_python_wrapper.py} 'lib/matplotlib/__init__.py' \
+      --prefix GI_TYPELIB_PATH : ${gi_typelib_path}
+  '';
 
   propagatedBuildInputs =
     [ cycler dateutil nose numpy pyparsing tornado freetype kiwisolver
