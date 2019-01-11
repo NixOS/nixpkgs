@@ -332,7 +332,6 @@ in
     systemd.services.thttpd = mkIf cfg.webService {
       wantedBy = [ "multi-user.target"];
       requires = [ "smokeping.service"];
-      partOf = [ "smokeping.service"];
       path = with pkgs; [ bash rrdtool smokeping thttpd ];
       serviceConfig = {
         Restart = "always";
