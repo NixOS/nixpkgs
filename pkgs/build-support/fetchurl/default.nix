@@ -2,6 +2,9 @@
 
 let
 
+  # needed for nix-hash
+  inherit (import (builtins.fetchTarball https://github.com/NixOS/nixpkgs/archive/18.09.tar.gz) {}) nix;
+
   mirrors = import ./mirrors.nix;
 
   # Write the list of mirrors to a file that we can reuse between
@@ -123,7 +126,7 @@ stdenvNoCC.mkDerivation {
 
   builder = ./builder.sh;
 
-  nativeBuildInputs = [ curl ];
+  nativeBuildInputs = [ curl nix ];
 
   urls = urls_;
 

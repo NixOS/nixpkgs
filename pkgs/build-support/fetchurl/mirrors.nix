@@ -2,7 +2,10 @@
 
   # Content-addressable Nix mirrors.
   hashedMirrors = [
-    "http://tarballs.nixos.org"
+    "http://tarballs.nixos.org/@outputHashAlgo@/@outputHash@"
+
+    # sha1 and sha256 can work
+    "https://archive.softwareheritage.org/api/1/content/@outputHashAlgo@:@outputHash_base16@/raw/"
   ];
 
   # Mirrors for mirror://site/filename URIs, where "site" is
