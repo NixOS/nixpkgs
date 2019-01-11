@@ -15589,6 +15589,19 @@ let
     };
   };
 
+  TestRequiresGit = buildPerlPackage rec {
+    name = "Test-Requires-Git-1.008";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/B/BO/BOOK/${name}.tar.gz";
+      sha256 = "70916210970d84d7491451159ab8b67e15251c8c0dae7c3df6c8d88542ea42a6";
+    };
+    propagatedBuildInputs = [ GitVersionCompare ];
+    meta = {
+      description = "Check your test requirements against the available version of Git";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   TestRequiresInternet = buildPerlPackage rec {
      name = "Test-RequiresInternet-0.05";
      src = fetchurl {
