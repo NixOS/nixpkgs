@@ -6438,6 +6438,20 @@ let
     };
   };
 
+  GitRepository = buildPerlPackage rec {
+    name = "Git-Repository-1.323";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/B/BO/BOOK/${name}.tar.gz";
+      sha256 = "966575fcecc9f56ab8739ea451b3825e278bc9179d785a20a9ae52473f33683e";
+    };
+    buildInputs = [ TestRequiresGit ];
+    propagatedBuildInputs = [ GitVersionCompare SystemCommand namespaceclean ];
+    meta = {
+      description = "Perl interface to Git repositories";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   GitVersionCompare = buildPerlPackage rec {
     name = "Git-Version-Compare-1.004";
     src = fetchurl {
