@@ -14477,6 +14477,19 @@ let
     };
   };
 
+  SystemCommand = buildPerlPackage rec {
+    name = "System-Command-1.119";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/B/BO/BOOK/${name}.tar.gz";
+      sha256 = "c8c9fb1e527c52463cab1476500efea70396a0b62bea625d2d6faea994dc46e7";
+    };
+    propagatedBuildInputs = [ IPCRun ];
+    meta = {
+      description = "Object for running system commands";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   SysVirt = buildPerlModule rec {
     version = "4.10.0";
     name = "Sys-Virt-${version}";
