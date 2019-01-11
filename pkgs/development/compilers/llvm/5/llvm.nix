@@ -1,5 +1,6 @@
 { stdenv
 , fetch
+, fetchpatch
 , cmake
 , python
 , libffi
@@ -43,6 +44,13 @@ stdenv.mkDerivation (rec {
 
   propagatedBuildInputs = [ ncurses zlib ];
 
+  patches = [
+    (fetchpatch {
+      url = "https://bugzilla.redhat.com/attachment.cgi?id=1389687";
+      name = "llvm-gcc8-type-mismatch.patch";
+      sha256 = "0ga2123aclq3x9w72d0rm0az12m8c1i4r1106vh701hf4cghgbch";
+    })
+  ];
   postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
     substituteInPlace cmake/modules/AddLLVM.cmake \
       --replace 'set(_install_name_dir INSTALL_NAME_DIR "@rpath")' "set(_install_name_dir)" \
