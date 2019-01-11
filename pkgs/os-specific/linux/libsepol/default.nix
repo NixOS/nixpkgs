@@ -2,15 +2,15 @@
 
 stdenv.mkDerivation rec {
   name = "libsepol-${version}";
-  version = "2.7";
-  se_release = "20170804";
+  version = "2.8";
+  se_release = "20180524";
   se_url = "https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases";
 
   outputs = [ "bin" "out" "dev" "man" ];
 
   src = fetchurl {
     url = "${se_url}/${se_release}/libsepol-${version}.tar.gz";
-    sha256 = "1rzr90d3f1g5wy1b8sh6fgnqb9migys2zgpjmpakn6lhxkc3p7fn";
+    sha256 = "1mi4kpx7b94wjphv8k2fz5b8rd7mllvq1k4ssjxg1gjjhdm93mis";
   };
 
   nativeBuildInputs = [ flex ];
