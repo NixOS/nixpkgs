@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
     rev = "6547c0b21b977b327b3c5e8142963f4bc246187a";
   };
 
+  NIX_CFLAGS_COMPILE = [ "-Wno-error=cast-function-type" ];
+
   buildInputs = [
     libconfig libevent openssl readline zlib
     lua5_2 python pkgconfig jansson
