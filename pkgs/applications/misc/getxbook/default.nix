@@ -9,6 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "0ihwrx4gspj8l7fc8vxch6dpjrw1lvv9z3c19f0wxnmnxhv1cjvs";
   };
 
+  NIX_CFLAGS_COMPILE = [ "-Wno-error=format-truncation" ];
+
   buildInputs = [ openssl ];
 
   makeFlags = [ "PREFIX=$(out)" ];
