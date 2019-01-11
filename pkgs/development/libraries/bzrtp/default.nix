@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ bctoolbox sqlite ];
   nativeBuildInputs = [ cmake ];
 
+  NIX_CFLAGS_COMPILE = "-Wno-error=cast-function-type";
+
   meta = with stdenv.lib; {
     description = "BZRTP is an opensource implementation of ZRTP keys exchange protocol";
     homepage = https://github.com/BelledonneCommunications/bzrtp;
