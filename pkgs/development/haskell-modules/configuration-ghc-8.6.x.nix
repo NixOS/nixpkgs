@@ -47,6 +47,7 @@ self: super: {
   # Test suite does not compile.
   cereal = dontCheck super.cereal;
   data-clist = doJailbreak super.data-clist;  # won't cope with QuickCheck 2.12.x
+  dates = doJailbreak super.dates; # base >=4.9 && <4.12
   Diff = dontCheck super.Diff;
   HaTeX = doJailbreak super.HaTeX; # containers >=0.4 && <0.6 is too tight; https://github.com/Daniel-Diaz/HaTeX/issues/126
   hpc-coveralls = doJailbreak super.hpc-coveralls; # https://github.com/guillaume-nargeot/hpc-coveralls/issues/82
