@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  NIX_CFLAGS_COMPILE = "-Wno-error=format-truncation";
+
   /*
   ** We patch out a very annoying 'feature' in ./configure, which
   ** tries to use 'git' to update submodules.
