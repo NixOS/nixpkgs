@@ -1,61 +1,41 @@
 { stdenv
 , buildPythonPackage
-, fetchPypi
-, fetchpatch
-, repoze_who
-, paste
-, cryptography
-, pycrypto
-, pyopenssl
-, ipaddress
-, six
-, cffi
-, idna
-, enum34
-, pytz
-, setuptools
-, zope_interface
-, dateutil
-, requests
-, pyasn1
-, webob
-, decorator
-, pycparser
-, defusedxml
-, Mako
-, pytest
-, memcached
-, pymongo
-, mongodict
-, pkgs
+, fetchFromGitHub
+, substituteAll
+, xmlsec
+, cryptography, defusedxml, future, pyopenssl, dateutil, pytz, requests, six
+, mock, pyasn1, pymongo, pytest, responses
 }:
 
 buildPythonPackage rec {
   pname = "pysaml2";
-  version = "3.0.2";
+  version = "4.6.5";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0y2iw1dddcvi13xjh3l52z1mvnrbc41ik9k4nn7lwj8x5kimnk9n";
+  # No tests in PyPI tarball
+  src = fetchFromGitHub {
+    owner = "IdentityPython";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "0xlbr52vzx1j9sg65jhqv01vp4a49afjy03lc2zb0ggx0xxzngvb";
   };
 
   patches = [
-    (fetchpatch {
-      name = "CVE-2016-10127.patch";
-      url = "https://sources.debian.net/data/main/p/python-pysaml2/3.0.0-5/debian/patches/fix-xxe-in-xml-parsing.patch";
-      sha256 = "184lkwdayjqiahzsn4yp15parqpmphjsb1z7zwd636jvarxqgs2q";
+    (substituteAll {
+      src = ./hardcode-xmlsec1-path.patch;
+      inherit xmlsec;
     })
   ];
 
-  propagatedBuildInputs = [ repoze_who paste cryptography pycrypto pyopenssl ipaddress six cffi idna enum34 pytz setuptools zope_interface dateutil requests pyasn1 webob decorator pycparser defusedxml ];
-  buildInputs = [ Mako pytest memcached pymongo mongodict pkgs.xmlsec ];
+  propagatedBuildInputs = [ cryptography defusedxml future pyopenssl dateutil pytz requests six ];
 
-  preConfigure = ''
-    sed -i 's/pymongo==3.0.1/pymongo/' setup.py
+  checkInputs = [ mock pyasn1 pymongo pytest responses ];
+
+  # Disabled tests try to access the network
+  checkPhase = ''
+    py.test -k "not test_load_extern_incommon \
+            and not test_load_remote_encoding \
+            and not test_load_external"
   '';
-
-  # 16 failed, 427 passed, 17 error in 88.85 seconds
-  doCheck = false;
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/rohe/pysaml2";
