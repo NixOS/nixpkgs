@@ -21712,6 +21712,8 @@ in
 
   dafny = dotnetPackages.Dafny;
 
+  groove = callPackage ../applications/science/programming/groove { };
+
   plm = callPackage ../applications/science/programming/plm { };
 
   scyther = callPackage ../applications/science/programming/scyther { };
