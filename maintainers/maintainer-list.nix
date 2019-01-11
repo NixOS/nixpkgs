@@ -3661,6 +3661,11 @@
     github = "PsyanticY";
     name = "Psyanticy";
   };
+  ptival = {
+    email = "valentin.robert.42@gmail.com";
+    github = "Ptival";
+    name = "Valentin Robert";
+  };
   puffnfresh = {
     email = "brian@brianmckenna.org";
     github = "puffnfresh";
