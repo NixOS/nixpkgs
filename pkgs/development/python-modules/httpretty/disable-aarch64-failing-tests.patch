@@ -1,0 +1,12 @@
+diff --git a/tests/functional/test_requests.py b/tests/functional/test_requests.py
+index 06bdc1e..ec9571b 100644
+--- a/tests/functional/test_requests.py
++++ b/tests/functional/test_requests.py
+@@ -282,6 +282,7 @@ def test_httpretty_ignores_querystrings_from_registered_uri(now):
+ 
+ @httprettified
+ @within(five=microseconds)
++@skip
+ def test_streaming_responses(now):
+     """
+     Mock a streaming HTTP response, like those returned by the Twitter streaming

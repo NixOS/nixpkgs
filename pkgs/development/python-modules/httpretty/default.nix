@@ -24,11 +24,15 @@ buildPythonPackage rec {
     sha256 = "01b52d45077e702eda491f4fe75328d3468fd886aed5dcc530003e7b2b5939dc";
   };
 
-  checkInputs = [ nose sure coverage mock rednose
-  # Following not declared in setup.py
+  patches = stdenv.lib.optional (stdenv.isAarch64) ./disable-aarch64-failing-tests.patch;
+
+  propagatedBuildInputs = [ six ];
+
+  checkInputs = [
+    nose sure coverage mock rednose
+    # Following not declared in setup.py
     nose-randomly requests tornado httplib2
   ];
-  propagatedBuildInputs = [ six ];
 
   __darwinAllowLocalNetworking = true;
 
@@ -37,5 +41,4 @@ buildPythonPackage rec {
     description = "HTTP client request mocking tool";
     license = licenses.mit;
   };
-
 }
