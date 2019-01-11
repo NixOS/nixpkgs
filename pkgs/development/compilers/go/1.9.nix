@@ -31,6 +31,8 @@ stdenv.mkDerivation rec {
     sha256 = "15dx1b71xv7b265gqk9nv02pirggpw7d83apikhrza2qkj64ydd0";
   };
 
+  NIX_CFLAGS_COMPILE = [ "-Wno-error=stringop-truncation" ];
+
   # perl is used for testing go vet
   nativeBuildInputs = [ perl which pkgconfig patch procps ];
   buildInputs = [ cacert pcre ]
