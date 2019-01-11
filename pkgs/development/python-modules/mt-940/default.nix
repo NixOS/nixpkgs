@@ -3,14 +3,15 @@
 }:
 
 buildPythonPackage rec {
-  version = "4.12.2";
+  version = "4.13.0";
   pname = "mt-940";
 
+  # No tests in PyPI tarball
   src = fetchFromGitHub {
     owner = "WoLpH";
     repo = "mt940";
     rev = "v${version}";
-    sha256 = "0l7q8v00dhpbc9mh6baaaqc55kf44rszygx28dq3pwp5b5x33nir";
+    sha256 = "0p6z4ipj0drph3ryn8mnb3xn0vjfv54y1c5w5i9ixrxwz48h6bga";
   };
 
   postPatch = ''
@@ -24,9 +25,8 @@ buildPythonPackage rec {
 
   checkInputs = [ pyyaml pytestpep8 pytestflakes pytest glibcLocales ];
 
-  # See https://github.com/WoLpH/mt940/issues/64 for the disabled test
   checkPhase = ''
-    py.test -k "not mt940.models.FixedOffset"
+    py.test
   '';
 
   meta = with stdenv.lib; {
