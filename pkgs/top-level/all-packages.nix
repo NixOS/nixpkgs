@@ -7578,6 +7578,8 @@ in
 
   tinycc = callPackage ../development/compilers/tinycc { };
 
+  tinyscheme = callPackage ../development/interpreters/tinyscheme { };
+
   inherit (ocaml-ng.ocamlPackages_4_02) trv;
 
   bupc = callPackage ../development/compilers/bupc { };
