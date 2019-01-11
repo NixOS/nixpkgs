@@ -201,7 +201,19 @@ in
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ openssl ];
     hardeningDisable = [ "format" ];
-    NIX_CFLAGS_COMPILE = [ "-Wno-error=stringop-overflow" "-Wno-error=implicit-fallthrough" ];
+    NIX_CFLAGS_COMPILE = [
+      "-Wno-error=stringop-overflow"
+      "-Wno-error=implicit-fallthrough"
+      "-Wno-error=sizeof-pointer-memaccess"
+      "-Wno-error=cast-function-type"
+      "-Wno-error=class-memaccess"
+      "-Wno-error=ignored-qualifiers"
+    ];
+    dontBuild = false;
+    postPatch = ''
+      substituteInPlace Makefile \
+        --replace '-Wno-invalid-source-encoding' ""
+    '';
   };
 
   hitimes = attrs: {
