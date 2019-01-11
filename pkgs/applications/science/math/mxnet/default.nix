@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, bash, cmake
+{ stdenv, lib, fetchgit, bash, cmake
 , opencv, gtest, openblas, liblapack, perl
 , cudaSupport ? false, cudatoolkit, nvidia_x11
 , cudnnSupport ? false, cudnn
@@ -8,14 +8,12 @@ assert cudnnSupport -> cudaSupport;
 
 stdenv.mkDerivation rec {
   name = "mxnet-${version}";
-  version = "1.2.1";
+  version = "1.3.1";
 
-  # Fetching from git does not work at the time (1.2.1) due to an
-  # incorrect hash in one of the submodules. The provided tarballs
-  # contain all necessary sources.
-  src = fetchurl {
-    url = "https://github.com/apache/incubator-mxnet/releases/download/${version}/apache-mxnet-src-${version}-incubating.tar.gz";
-    sha256 = "053zbdgs4j8l79ipdz461zc7wyfbfcflmi5bw7lj2q08zm1glnb2";
+  src = fetchgit {
+    url = "https://github.com/apache/incubator-mxnet";
+    rev = "1.3.1";
+    sha256 = "06vk4q7bh17sjhnr72bzmggcqlp2injnsah5yflklg360p7vpijj";
   };
 
   nativeBuildInputs = [ cmake perl ];
@@ -43,6 +41,8 @@ stdenv.mkDerivation rec {
   postInstall = ''
     rm "$out"/lib/*.a
   '';
+
+  NIX_CFLAGS_COMPILE = "-Wno-error=format-truncation";
 
   enableParallelBuilding = true;
 
