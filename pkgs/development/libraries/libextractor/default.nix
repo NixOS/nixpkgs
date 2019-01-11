@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
     sha256 = "1z1cb35griqzvshqdv5ck98dy0sgpsswn7fgiy7lbzi34sma8dg2";
   };
 
+  patches = [ ./fix-gcc8-build.patch ];
+
   preConfigure =
     '' echo "patching installation directory in \`extractor.c'..."
        sed -i "src/main/extractor.c" \
