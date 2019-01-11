@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  NIX_CFLAGS_COMPILE = [ "-Wno-error=unused-result" "-Wno-error=duplicate-decl-specifier" ];
+  NIX_CFLAGS_COMPILE = [ "-Wno-error=unused-result" "-Wno-error=duplicate-decl-specifier" "-Wno-error=format-truncation" ];
 
   meta = {
     description = "An IRC proxy (bouncer)";
