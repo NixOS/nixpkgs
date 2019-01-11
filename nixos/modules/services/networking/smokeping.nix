@@ -313,7 +313,7 @@ in
     };
     users.groups.${cfg.user} = {};
     systemd.services.smokeping = {
-      wantedBy = [ "multi-user.target"];
+      requiredBy = [ "multi-user.target"];
       serviceConfig = {
         User = cfg.user;
         Restart = "on-failure";
@@ -330,7 +330,7 @@ in
       '';
     };
     systemd.services.thttpd = mkIf cfg.webService {
-      wantedBy = [ "multi-user.target"];
+      requiredBy = [ "multi-user.target"];
       requires = [ "smokeping.service"];
       path = with pkgs; [ bash rrdtool smokeping thttpd ];
       serviceConfig = {
