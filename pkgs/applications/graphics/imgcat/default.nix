@@ -4,6 +4,8 @@ stdenv.mkDerivation rec {
   name = "imgcat-${version}";
   version = "2.3.0";
 
+  NIX_CFLAGS_COMPILE = [ "-Wno-error=class-memaccess" ];
+
   buildInputs = [ autoconf automake libtool ncurses ];
 
   preConfigure = ''
