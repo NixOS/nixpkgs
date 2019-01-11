@@ -1,8 +1,8 @@
-{ lib, stdenv, python2
+{ lib, stdenv, python3
 , enableSystemd ? true
 }:
 
-with python2.pkgs;
+with python3.pkgs;
 
 let
   matrix-synapse-ldap3 = buildPythonPackage rec {
