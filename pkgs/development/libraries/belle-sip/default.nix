@@ -18,7 +18,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ zlib ];
 
-  NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
+  NIX_CFLAGS_COMPILE = [
+    "-Wno-error=deprecated-declarations"
+    "-Wno-error=format-truncation"
+    "-Wno-error=cast-function-type"
+  ];
 
   propagatedBuildInputs = [ antlr3_4 libantlr3c polarssl bctoolbox ];
 
@@ -26,7 +30,8 @@ stdenv.mkDerivation rec {
     "--with-polarssl=${polarssl}"
   ];
 
-  enableParallelBuilding = true;
+  # Fails to build with lots of parallel jobs
+  enableParallelBuilding = false;
 
   meta = with stdenv.lib; {
     homepage = http://www.linphone.org/index.php/eng;
