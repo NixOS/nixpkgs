@@ -144,6 +144,7 @@ stdenv.mkDerivation ((builtins.removeAttrs attrs ["source"]) // {
       echo "gem package built: $gempkg"
     elif [[ "$type" == "git" ]]; then
       git init
+      # remove variations to improve the likelihood of a bit-reproducible output
       rm -rf .git/logs/ .git/hooks/ .git/index .git/FETCH_HEAD .git/ORIG_HEAD .git/refs/remotes/origin/HEAD .git/config
       # support `git ls-files`
       git add .
