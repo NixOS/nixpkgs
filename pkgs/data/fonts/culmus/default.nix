@@ -7,11 +7,10 @@ in stdenv.mkDerivation {
 
   src = fetchzip {
     url = "mirror://sourceforge/culmus/culmus/${version}/culmus-${version}.tar.gz";
-    sha256 = "c0c6873742d07544f6bacf2ad52eb9cb392974d56427938dc1dfbc8399c64d05";
-  }
-  
+    sha256 = "0q80j3vixn364sc23hcy6098rkgy0kb4p91lky6224am1dwn2qmr";
+  };
+
   installPhase = ''
-    tar -xzvf $downloadedFile --strip-components=1
     mkdir -p $out/share/fonts/{truetype,type1}
     cp -v *.pfa $out/share/fonts/type1/
     cp -v *.afm $out/share/fonts/type1/
@@ -20,8 +19,6 @@ in stdenv.mkDerivation {
     cp -v *.otf $out/share/fonts/truetype/
     cp -v fonts.scale-ttf $out/share/fonts/truetype/fonts.scale
   '';
-
-  
 
   meta = {
     description = "Culmus Hebrew fonts";
