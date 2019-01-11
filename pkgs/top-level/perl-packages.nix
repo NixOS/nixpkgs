@@ -17619,6 +17619,17 @@ let
     propagatedBuildInputs = [ XMLLibXML ];
   };
 
+  XMLMini = buildPerlPackage rec {
+    name = "XML-Mini-1.38";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PD/PDEEGAN/${name}.tar.gz";
+      sha256 = "af803d38036a3184e124a682e5466f1bc107f48a89ef35b0c7647e11a073fe2d";
+    };
+    meta = {
+      license = "unknown";
+    };
+  };
+
   XMLNamespaceSupport = buildPerlPackage {
     name = "XML-NamespaceSupport-1.12";
     src = fetchurl {
