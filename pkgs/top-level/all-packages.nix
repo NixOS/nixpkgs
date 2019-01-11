@@ -9059,7 +9059,6 @@ in
 
   sconsPackages = callPackage ../development/tools/build-managers/scons { };
   scons = sconsPackages.scons_3_0_3;
-  scons_2_5_1 = sconsPackages.scons_2_5_1;
 
   mill = callPackage ../development/tools/build-managers/mill { };
 
