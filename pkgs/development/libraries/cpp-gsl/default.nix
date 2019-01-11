@@ -1,18 +1,21 @@
 { stdenv, fetchFromGitHub, cmake, catch }:
 
 stdenv.mkDerivation rec {
-  pname = "GSL-unstable";
-  version = "2017-02-15";
+  pname = "GSL";
+  version = "2.0.0";
   name = "${pname}-${version}";
 
   src = fetchFromGitHub {
     owner = "Microsoft";
     repo = "GSL";
-    rev = "c87c123d1b3e64ae2cf725584f0c004da4d90f1c";
-    sha256 = "0h8py468bvxnydkjs352d7a9s8hk0ihc7msjkcnzj2d7nzp5nsc1";
+    rev = "v${version}";
+    sha256 = "1kxfca9ik934nkzyn34ingkyvwpc09li81cg1yc6vqcrdw51l4ri";
   };
 
   NIX_CFLAGS_COMPILE = "-Wno-error=sign-conversion";
+  postPatch = ''
+    sed -i 's/-Wno-unknown-attributes/-Wno-error=catch-value/' tests/CMakeLists.txt
+  '';
   nativeBuildInputs = [ cmake catch ];
 
   meta = with stdenv.lib; {
