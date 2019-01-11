@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, which, zlib, openssl, libarchive }:
+{ stdenv, fetchFromGitHub, fetchpatch, pkgconfig, which, zlib, openssl, libarchive }:
 
 stdenv.mkDerivation rec {
   name = "xbps-${version}";
@@ -15,7 +15,13 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ zlib openssl libarchive ];
 
-  patches = [ ./cert-paths.patch ];
+  patches = [
+    ./cert-paths.patch
+    (fetchpatch {
+      url = "https://patch-diff.githubusercontent.com/raw/void-linux/xbps/pull/38.patch";
+      sha256 = "050a9chw0cxy67nm2phz67mgndarrxrv50d54m3l1s5sx83axww3";
+    })
+  ];
 
   postPatch = ''
     # fix unprefixed ranlib (needed on cross)
