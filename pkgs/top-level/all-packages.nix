@@ -6670,7 +6670,10 @@ in
   clang-sierraHack-stdenv = overrideCC stdenv clang-sierraHack;
   libcxxStdenv = if stdenv.isDarwin then stdenv else lowPrio llvmPackages.libcxxStdenv;
 
-  clasp-common-lisp = callPackage ../development/compilers/clasp {};
+  clasp-common-lisp = callPackage ../development/compilers/clasp {
+    llvmPackages = llvmPackages_6;
+    stdenv = llvmPackages_6.stdenv;
+  };
 
   clean = callPackage ../development/compilers/clean { };
 
