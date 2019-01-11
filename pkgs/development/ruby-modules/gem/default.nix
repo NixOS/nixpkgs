@@ -144,8 +144,8 @@ stdenv.mkDerivation ((builtins.removeAttrs attrs ["source"]) // {
       echo "gem package built: $gempkg"
     elif [[ "$type" == "git" ]]; then
       git init
-      git add .
       rm -rf .git/logs/ .git/hooks/ .git/index .git/FETCH_HEAD .git/ORIG_HEAD .git/refs/remotes/origin/HEAD .git/config
+      git add .
     fi
 
     runHook postBuild
