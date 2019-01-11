@@ -2,12 +2,15 @@
 
 let
   version = "0.133";
-in fetchzip {
+in stdenv.mkDerivation {
   name = "culmus-${version}";
 
-  url = "mirror://sourceforge/culmus/culmus/${version}/culmus-${version}.tar.gz";
-
-  postFetch = ''
+  src = fetchzip {
+    url = "mirror://sourceforge/culmus/culmus/${version}/culmus-${version}.tar.gz";
+    sha256 = "c0c6873742d07544f6bacf2ad52eb9cb392974d56427938dc1dfbc8399c64d05";
+  }
+  
+  installPhase = ''
     tar -xzvf $downloadedFile --strip-components=1
     mkdir -p $out/share/fonts/{truetype,type1}
     cp -v *.pfa $out/share/fonts/type1/
@@ -18,7 +21,7 @@ in fetchzip {
     cp -v fonts.scale-ttf $out/share/fonts/truetype/fonts.scale
   '';
 
-  sha256 = "1lvwv15lpk4cqarh2ncl83c43fmqxnzqaqzfm251zkx6svi1l0is";
+  
 
   meta = {
     description = "Culmus Hebrew fonts";
