@@ -6438,6 +6438,19 @@ let
     };
   };
 
+  GitVersionCompare = buildPerlPackage rec {
+    name = "Git-Version-Compare-1.004";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/B/BO/BOOK/${name}.tar.gz";
+      sha256 = "63e8264ed351cb2371b47852a72366214164b5f3fad9dbd68309c7fc63d06491";
+    };
+    buildInputs = [ TestNoWarnings ];
+    meta = {
+      description = "Functions to compare Git versions";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   Glib = buildPerlPackage rec {
     name = "Glib-1.329";
     src = fetchurl {
