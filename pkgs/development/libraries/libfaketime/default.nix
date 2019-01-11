@@ -25,6 +25,8 @@ stdenv.mkDerivation rec {
     makeFlagsArray+=(PREFIX="$out" LIBDIRNAME=/lib)
   '';
 
+  NIX_CFLAGS_COMPILE = "-Wno-error=cast-function-type -Wno-error=format-truncation";
+
   checkInputs = [ perl ];
 
   meta = with stdenv.lib; {
