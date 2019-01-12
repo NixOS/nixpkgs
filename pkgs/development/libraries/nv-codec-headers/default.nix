@@ -2,18 +2,18 @@
 
 stdenv.mkDerivation rec {
   name = "nv-codec-headers-${version}";
-  version = "n8.1.24.2";
+  version = "8.2.15.6";
 
   src = fetchgit {
     url = "https://git.videolan.org/git/ffmpeg/nv-codec-headers.git";
-    rev = "${version}";
-    sha256 = "122i3f6whiz5yp44dhk73ifr1973z8vvfbg4216vb782bl8b5bam";
+    rev = "n${version}";
+    sha256 = "0216ww8byjxz639kagyw0mr9vxxwj89xdnj448d579vjr54jychv";
   };
 
   makeFlags = [ "PREFIX=$(out)" ];
 
   meta = {
-    description = "ffmpeg nvidia headers for NVENC";
+    description = "FFmpeg version of headers for NVENC";
     homepage = http://ffmpeg.org/;
     license = stdenv.lib.licenses.gpl3Plus;
     maintainers = [ stdenv.lib.maintainers.MP2E ];

@@ -13,8 +13,8 @@
 let
   srcDeps = lib.singleton (
     fetchurl {
-      url = "https://github.com/google/desugar_jdk_libs/archive/fd937f4180c1b557805219af4482f1a27eb0ff2b.zip";
-      sha256 = "04hs399340xfwcdajbbcpywnb2syp6z5ydwg966if3hqdb2zrf23";
+      url = "https://github.com/google/desugar_jdk_libs/archive/915f566d1dc23bc5a8975320cd2ff71be108eb9c.zip";
+      sha256 = "0b926df7yxyyyiwm9cmdijy6kplf0sghm23sf163zh8wrk87wfi7";
     }
   );
 
@@ -23,12 +23,12 @@ let
     for i in ${builtins.toString srcDeps}; do cp $i $out/$(stripHash $i); done
   '';
 
-  defaultShellPath = lib.makeBinPath [ bash coreutils findutils gnugrep gnused which ];
+  defaultShellPath = lib.makeBinPath [ bash coreutils findutils gnugrep gnused which unzip ];
 
 in
 stdenv.mkDerivation rec {
 
-  version = "0.20.0";
+  version = "0.21.0";
 
   meta = with lib; {
     homepage = "https://github.com/bazelbuild/bazel/";
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel-${version}-dist.zip";
-    sha256 = "1g9hglly5199gcw929fzc5f0d0dwlharkh387h58p1fq9ylayi8r";
+    sha256 = "1d3x0f1hzaiqq00pd65bks7v8kbv57m13jsing7y0y9id0g87jvc";
   };
 
   sourceRoot = ".";
@@ -78,6 +78,7 @@ stdenv.mkDerivation rec {
   '';
 
   postPatch = let
+
     darwinPatches = ''
       # Disable Bazel's Xcode toolchain detection which would configure compilers
       # and linkers from Xcode instead of from PATH
@@ -115,27 +116,45 @@ stdenv.mkDerivation rec {
         sed -i -e "s,/usr/bin/install_name_tool,${cctools}/bin/install_name_tool,g" $wrapper
       done
     '';
+
     genericPatches = ''
-      find src/main/java/com/google/devtools -type f -print0 | while IFS="" read -r -d "" path; do
+      # substituteInPlace is rather slow, so prefilter the files with grep
+      grep -rlZ /bin src/main/java/com/google/devtools | while IFS="" read -r -d "" path; do
+        # If you add more replacements here, you must change the grep above!
+        # Only files containing /bin are taken into account.
         substituteInPlace "$path" \
           --replace /bin/bash ${customBash}/bin/bash \
           --replace /usr/bin/env ${coreutils}/bin/env \
           --replace /bin/true ${coreutils}/bin/true
       done
+
       # Fixup scripts that generate scripts. Not fixed up by patchShebangs below.
       substituteInPlace scripts/bootstrap/compile.sh \
           --replace /bin/sh ${customBash}/bin/bash
 
-      echo "build --experimental_distdir=${distDir}" >> .bazelrc
-      echo "fetch --experimental_distdir=${distDir}" >> .bazelrc
-      echo "build --copt=\"$(echo $NIX_CFLAGS_COMPILE | sed -e 's/ /" --copt=\"/g')\"" >> .bazelrc
-      echo "build --host_copt=\"$(echo $NIX_CFLAGS_COMPILE | sed -e 's/ /" --host_copt=\"/g')\"" >> .bazelrc
-      echo "build --linkopt=\"-Wl,$(echo $NIX_LDFLAGS | sed -e 's/ /" --linkopt=\"-Wl,/g')\"" >> .bazelrc
-      echo "build --host_linkopt=\"-Wl,$(echo $NIX_LDFLAGS | sed -e 's/ /" --host_linkopt=\"-Wl,/g')\"" >> .bazelrc
-      sed -i -e "420 a --copt=\"$(echo $NIX_CFLAGS_COMPILE | sed -e 's/ /" --copt=\"/g')\" \\\\" scripts/bootstrap/compile.sh
-      sed -i -e "420 a --host_copt=\"$(echo $NIX_CFLAGS_COMPILE | sed -e 's/ /" --host_copt=\"/g')\" \\\\" scripts/bootstrap/compile.sh
-      sed -i -e "420 a --linkopt=\"-Wl,$(echo $NIX_LDFLAGS | sed -e 's/ /" --linkopt=\"-Wl,/g')\" \\\\" scripts/bootstrap/compile.sh
-      sed -i -e "420 a --host_linkopt=\"-Wl,$(echo $NIX_LDFLAGS | sed -e 's/ /" --host_linkopt=\"-Wl,/g')\" \\\\" scripts/bootstrap/compile.sh
+      # We only build with JDK8 for now, since JDK11 does not compile bazel
+      substituteInPlace tools/jdk/default_java_toolchain.bzl \
+        --replace '"jvm_opts": JDK9_JVM_OPTS' \
+                  '"jvm_opts": JDK8_JVM_OPTS'
+
+      # add nix environment vars to .bazelrc
+      cat >> .bazelrc <<EOF
+      build --experimental_distdir=${distDir}
+      fetch --experimental_distdir=${distDir}
+      build --copt="$(echo $NIX_CFLAGS_COMPILE | sed -e 's/ /" --copt="/g')"
+      build --host_copt="$(echo $NIX_CFLAGS_COMPILE | sed -e 's/ /" --host_copt="/g')"
+      build --linkopt="-Wl,$(echo $NIX_LDFLAGS | sed -e 's/ /" --linkopt="-Wl,/g')"
+      build --host_linkopt="-Wl,$(echo $NIX_LDFLAGS | sed -e 's/ /" --host_linkopt="-Wl,/g')"
+      build --host_javabase='@local_jdk//:jdk'
+      EOF
+
+      # add the same environment vars to compile.sh
+      sed -e "/\$command \\\\$/a --copt=\"$(echo $NIX_CFLAGS_COMPILE | sed -e 's/ /" --copt=\"/g')\" \\\\" \
+          -e "/\$command \\\\$/a --host_copt=\"$(echo $NIX_CFLAGS_COMPILE | sed -e 's/ /" --host_copt=\"/g')\" \\\\" \
+          -e "/\$command \\\\$/a --linkopt=\"-Wl,$(echo $NIX_LDFLAGS | sed -e 's/ /" --linkopt=\"-Wl,/g')\" \\\\" \
+          -e "/\$command \\\\$/a --host_linkopt=\"-Wl,$(echo $NIX_LDFLAGS | sed -e 's/ /" --host_linkopt=\"-Wl,/g')\" \\\\" \
+          -e "/\$command \\\\$/a --host_javabase='@local_jdk//:jdk' \\\\" \
+          -i scripts/bootstrap/compile.sh
 
       # --experimental_strict_action_env (which will soon become the
       # default, see bazelbuild/bazel#2574) hardcodes the default
@@ -159,6 +178,8 @@ stdenv.mkDerivation rec {
     buildJdk
   ];
 
+  # when a command can’t be found in a bazel build, you might also
+  # need to add it to `defaultShellPath`.
   nativeBuildInputs = [
     zip
     python

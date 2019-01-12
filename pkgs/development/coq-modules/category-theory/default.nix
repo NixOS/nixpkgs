@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ coq ] ++ (with coq.ocamlPackages; [ ocaml camlp5 findlib ]);
   propagatedBuildInputs = [ ssreflect equations ];
 
-  enableParallelBuilding = false;
+  buildFlags = [ "JOBS=$(NIX_BUILD_CORES)" ];
 
   installPhase = ''
     make -f Makefile.coq COQLIB=$out/lib/coq/${coq.coq-version}/ install

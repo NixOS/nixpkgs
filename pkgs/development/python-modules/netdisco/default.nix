@@ -2,13 +2,13 @@
 
 buildPythonPackage rec {
   pname = "netdisco";
-  version = "2.2.0";
+  version = "2.3.0";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b5e810721a266660f7f90fc43f12c4635ec95c3db87d9e30ca408bb922cb1007";
+    sha256 = "2571fc094f3bf8c60be211e90474515f565f3ef1c92e857176daab8577493a3b";
   };
 
   propagatedBuildInputs = [ requests zeroconf netifaces ];
