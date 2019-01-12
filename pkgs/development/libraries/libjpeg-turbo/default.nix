@@ -13,6 +13,7 @@ stdenv.mkDerivation rec {
     stdenv.lib.optional (stdenv.hostPlatform.libc or null == "msvcrt")
       ./mingw-boolean.patch
   ++ [
+    ./djpeg-rgb-islow-icc-cmp.patch # https://github.com/libjpeg-turbo/libjpeg-turbo/pull/321
     (fetchpatch {
       name = "cve-2018-19664.diff";
       url = "https://github.com/libjpeg-turbo/libjpeg-turbo/commit/f8cca819a4fb.diff";
