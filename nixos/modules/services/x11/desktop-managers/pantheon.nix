@@ -81,9 +81,7 @@ in
 
     services.xserver.displayManager.lightdm.greeters.pantheon.enable = mkDefault true;
 
-    # If not set manually Pantheon session cannot be started
-    # Known issue of https://github.com/NixOS/nixpkgs/pull/43992
-    services.xserver.desktopManager.default = mkForce "pantheon";
+    services.xserver.displayManager.defaultSession = "pantheon";
 
     services.xserver.displayManager.sessionCommands = ''
       if test "$XDG_CURRENT_DESKTOP" = "Pantheon"; then

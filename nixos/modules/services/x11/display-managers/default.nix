@@ -327,6 +327,37 @@ in
         };
       };
 
+      defaultSession = mkOption {
+        type = with types; str // {
+          description = "session name";
+          check = d: let
+            sessionNames = cfg.displayManager.session.names ++
+              (concatMap (p: p.providedSessions) cfg.displayManager.sessionPackages);
+          in
+            assertMsg (str.check d && (d == "none" || (elem d sessionNames))) ''
+                Default graphical session, '${d}', not found.
+                Valid names for 'services.xserver.displayManager.defaultSession' are:
+                  ${concatStringsSep "\n  " sessionNames}
+              '';
+        };
+        default = let
+            dmDefault = cfg.desktopManager.default;
+            wmDefault = cfg.windowManager.default;
+            defaultPackage =
+              if cfg.displayManager.sessionPackages != [] then
+                (head (head cfg.displayManager.sessionPackages).providedSessions)
+              else
+                null;
+            defaultDmWm = dmDefault + optionalString (wmDefault != "none") ("+" + wmDefault);
+          in
+            if defaultDmWm == "none" && isString defaultPackage then
+              defaultPackage
+            else
+              defaultDmWm;
+        example = "gnome";
+        description = "Default graphical session (only effective for LightDM and SDDM).";
+      };
+
       job = {
 
         preStart = mkOption {
