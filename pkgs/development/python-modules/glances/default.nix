@@ -2,7 +2,11 @@
 , psutil, setuptools, bottle, batinfo, pysnmp
 , hddtemp
 , unittest2
+# disabled by default since it triples the closure size (100MB -> 300MB)
+, graphSupport ? false, pygal ? null
 }:
+
+assert graphSupport -> pygal != null;
 
 buildPythonPackage rec {
   name = "glances-${version}";
@@ -22,7 +26,16 @@ buildPythonPackage rec {
   doCheck = true;
 
   buildInputs = [ unittest2 ];
-  propagatedBuildInputs = [ psutil setuptools bottle batinfo pysnmp hddtemp ];
+  propagatedBuildInputs = [
+    psutil
+    setuptools
+    bottle
+    batinfo
+    pysnmp
+    hddtemp
+  ] ++ (lib.optionals graphSupport [
+    pygal
+  ]);
 
   preConfigure = ''
     sed -i 's/data_files\.append((conf_path/data_files.append(("etc\/glances"/' setup.py;
