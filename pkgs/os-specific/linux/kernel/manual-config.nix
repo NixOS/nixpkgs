@@ -30,6 +30,9 @@ in {
   # Manually specified nixexpr representing the config
   # If unspecified, this will be autodetected from the .config
   config ? stdenv.lib.optionalAttrs allowImportFromDerivation (readConfig configfile),
+  # Custom seed used for CONFIG_GCC_PLUGIN_RANDSTRUCT if enabled. This is
+  # automatically extended with extra per-version and per-config values.
+  randstructSeed ? "",
   # Use defaultMeta // extraMeta
   extraMeta ? {},
   # Whether to utilize the controversial import-from-derivation feature to parse the config
@@ -111,7 +114,7 @@ let
         if [ -f scripts/gcc-plugins/gen-random-seed.sh ]; then
           substituteInPlace scripts/gcc-plugins/gen-random-seed.sh \
             --replace NIXOS_RANDSTRUCT_SEED \
-            $(echo ${src} ${configfile} | sha256sum | cut -d ' ' -f 1 | tr -d '\n')
+            $(echo ${randstructSeed}${src} ${configfile} | sha256sum | cut -d ' ' -f 1 | tr -d '\n')
         fi
       '';
 
