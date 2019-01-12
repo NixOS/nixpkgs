@@ -32,6 +32,7 @@
 , rubberband
 , mda_lv2
 , hicolor-icon-theme
+, gnome3
 }:
 
 let
@@ -85,6 +86,7 @@ in stdenv.mkDerivation rec {
     fftwFloat
     zita-convolver
     hicolor-icon-theme
+    gnome3.defaultIconTheme
   ];
 
   postPatch = ''
