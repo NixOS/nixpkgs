@@ -616,7 +616,7 @@ self: super:
   });
 
   xcursorthemes = super.xcursorthemes.overrideAttrs (attrs: {
-    buildInputs = attrs.buildInputs ++ [self.xcursorgen];
+    buildInputs = attrs.buildInputs ++ [ self.xcursorgen self.xorgproto ];
     configureFlags = [ "--with-cursordir=$(out)/share/icons" ];
   });
 
