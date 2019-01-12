@@ -194,14 +194,15 @@ let
         if test -d ${pkg}/share/xsessions; then
           ${xorg.lndir}/bin/lndir ${pkg}/share/xsessions $out/share/xsessions
         fi
-      '') cfg.displayManager.extraSessionFilePackages}
+      '') cfg.displayManager.sessionPackages}
+
 
       ${concatMapStrings (pkg: ''
         if test -d ${pkg}/share/wayland-sessions; then
           mkdir -p "$out/share/wayland-sessions"
           ${xorg.lndir}/bin/lndir ${pkg}/share/wayland-sessions $out/share/wayland-sessions
         fi
-      '') cfg.displayManager.extraSessionFilePackages}
+      '') cfg.displayManager.sessionPackages}
     '';
 
 in
@@ -261,11 +262,11 @@ in
         '';
       };
 
-      extraSessionFilePackages = mkOption {
+      sessionPackages = mkOption {
         type = types.listOf types.package;
         default = [];
         description = ''
-          A list of packages containing xsession files to be passed to the display manager.
+          A list of packages containing x11 or wayland session files to be passed to the display manager.
         '';
       };
 

@@ -144,7 +144,7 @@ in
       services.gnome3.core-shell.enable = true;
       services.gnome3.core-utilities.enable = mkDefault true;
 
-      services.xserver.displayManager.extraSessionFilePackages = [ pkgs.gnome3.gnome-session ];
+      services.xserver.displayManager.sessionPackages = [ pkgs.gnome3.gnome-session ];
 
       environment.extraInit = ''
         ${concatMapStrings (p: ''
@@ -171,7 +171,7 @@ in
     })
 
     (mkIf flashbackEnabled {
-      services.xserver.displayManager.extraSessionFilePackages =  map
+      services.xserver.displayManager.sessionPackages =  map
         (wm: pkgs.gnome3.gnome-flashback.mkSessionForWm {
           inherit (wm) wmName wmLabel wmCommand;
         }) (optional cfg.flashback.enableMetacity {
