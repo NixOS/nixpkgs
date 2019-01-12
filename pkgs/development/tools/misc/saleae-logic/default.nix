@@ -9,7 +9,7 @@
 { stdenv, fetchurl, unzip, glib, libSM, libICE, gtk2, libXext, libXft
 , fontconfig, libXrender, libXfixes, libX11, libXi, libXrandr, libXcursor
 , freetype, libXinerama, libxcb, zlib, pciutils
-, makeDesktopItem, xkeyboardconfig, runtimeShell
+, makeDesktopItem, xkeyboardconfig, dbus, runtimeShell, libGL
 }:
 
 let
@@ -17,30 +17,23 @@ let
   libPath = stdenv.lib.makeLibraryPath [
     glib libSM libICE gtk2 libXext libXft fontconfig libXrender libXfixes libX11
     libXi libXrandr libXcursor freetype libXinerama libxcb zlib stdenv.cc.cc.lib
+    dbus libGL
   ];
 
 in
 
+assert stdenv.hostPlatform.system == "x86_64-linux";
+
 stdenv.mkDerivation rec {
   pname = "saleae-logic";
-  version = "1.2.10";
+  version = "1.2.28";
   name = "${pname}-${version}";
 
-  src =
-    if stdenv.hostPlatform.system == "i686-linux" then
-      fetchurl {
-        name = "saleae-logic-${version}-32bit.zip";
-        url = "http://downloads.saleae.com/logic/${version}/Logic%20${version}%20(32-bit).zip";
-        sha256 = "1dyrj07cgj2fvwi1sk97vady9ri8f8n7mxy9zyzmw9isngs7bmll";
-      }
-    else if stdenv.hostPlatform.system == "x86_64-linux" then
-      fetchurl {
-        name = "saleae-logic-${version}-64bit.zip";
-        url = "http://downloads.saleae.com/logic/${version}/Logic%20${version}%20(64-bit).zip";
-        sha256 = "1skx2pfnic7pyss7c69qb7kg2xvflpxf112xkf9awk516dw1w4h7";
-      }
-    else
-      throw "Saleae Logic software requires i686-linux or x86_64-linux";
+  src = fetchurl {
+    name = "saleae-logic-${version}-64bit.zip";
+    url = "http://downloads.saleae.com/logic/${version}/Logic%20${version}%20(64-bit).zip";
+    sha256 = "0apq8hmn39k0ads4xy8iyy9rp8bvia60mh7a944rk1gjpqv227g5";
+  };
 
   desktopItem = makeDesktopItem {
     name = "saleae-logic";
@@ -61,7 +54,15 @@ stdenv.mkDerivation rec {
 
     # Patch it
     patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" "$out/Logic"
-    patchelf --set-rpath "${stdenv.cc.cc.lib}/lib:${stdenv.cc.cc.lib}/lib64:${libPath}:\$ORIGIN/Analyzers:\$ORIGIN" "$out/Logic"
+    for bin in "$out/Logic"              \
+               "$out/libQt5Widgets.so.5" \
+               "$out/libQt5Gui.so.5"     \
+               "$out/libQt5Core.so.5"    \
+               "$out/libQt5Network.so.5" ; do
+        patchelf --set-rpath "${stdenv.cc.cc.lib}/lib:${stdenv.cc.cc.lib}/lib64:${libPath}:\$ORIGIN/Analyzers:\$ORIGIN" "$bin"
+    done
+
+    patchelf --set-rpath "${stdenv.cc.cc.lib}/lib:${stdenv.cc.cc.lib}/lib64:${libPath}:\$ORIGIN/../" "$out/platforms/libqxcb.so"
 
     # Build the LD_PRELOAD library that makes Logic work from a read-only directory
     mkdir -p "$out/lib"
@@ -91,7 +92,7 @@ stdenv.mkDerivation rec {
     description = "Software for Saleae logic analyzers";
     homepage = http://www.saleae.com/;
     license = licenses.unfree;
-    platforms = [ "x86_64-linux" "i686-linux" ];
+    platforms = platforms.linux;
     maintainers = [ maintainers.bjornfor ];
   };
 }
