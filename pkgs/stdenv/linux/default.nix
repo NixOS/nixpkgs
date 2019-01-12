@@ -4,7 +4,7 @@
 # compiler and linker that do not search in default locations,
 # ensuring purity of components produced by it.
 { lib
-, localSystem, crossSystem, config, overlays
+, localSystem, crossSystem, config, overlays, crossOverlays ? []
 
 , bootstrapFiles ?
   let table = {
@@ -32,7 +32,7 @@
   in files
 }:
 
-assert crossSystem == null;
+assert crossSystem == localSystem;
 
 let
   inherit (localSystem) system platform;

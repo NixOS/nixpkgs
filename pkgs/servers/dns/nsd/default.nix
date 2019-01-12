@@ -15,11 +15,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "nsd-4.1.24";
+  name = "nsd-4.1.26";
 
   src = fetchurl {
     url = "https://www.nlnetlabs.nl/downloads/nsd/${name}.tar.gz";
-    sha256 = "04ck8ia6xq1xqdk2g922262xywzd070pl4iad7c0lqclwk48gdjg";
+    sha256 = "1x0mvj4872dzj1rr9adnchdm4dhn41xmc459p5j4s0r13m1l32lz";
   };
 
   prePatch = ''

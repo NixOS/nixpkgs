@@ -2,18 +2,12 @@
 
 stdenv.mkDerivation rec {
   name = "nextcloud-${version}";
-  version = "14.0.4";
+  version = "15.0.0";
 
   src = fetchurl {
     url = "https://download.nextcloud.com/server/releases/${name}.tar.bz2";
-    sha256 = "1s20dds4sci3g981ql8kp9d1ynss5sa2y3dsbzqx4jv9f5dd2pag";
+    sha256 = "0y7bk1588n5rmmranmmrkajh50074460hr4v052ahg9mf60wbc2v";
   };
-
-  patches = [ (fetchpatch {
-    name = "Mailer-discover-sendmail-path-instead-of-hardcoding-.patch";
-    url = https://github.com/nextcloud/server/pull/11404.patch;
-    sha256 = "1h0cqnfwn735vqrm3yh9nh6a7h6srr9h29p13vywd6rqbcndqjjd";
-  }) ];
 
   installPhase = ''
     mkdir -p $out/

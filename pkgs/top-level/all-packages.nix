@@ -3629,6 +3629,8 @@ with pkgs;
 
   mxt-app = callPackage ../misc/mxt-app { };
 
+  mxisd = callPackage ../servers/mxisd { };
+
   nagstamon = callPackage ../tools/misc/nagstamon {
     pythonPackages = python3Packages;
   };
@@ -4237,7 +4239,11 @@ with pkgs;
 
   nextcloud = callPackage ../servers/nextcloud { };
 
-  nextcloud-client = libsForQt5.callPackage ../applications/networking/nextcloud-client { };
+  nextcloud-client-unwrapped = libsForQt5.callPackage ../applications/networking/nextcloud-client { };
+
+  nextcloud-client = callPackage ../applications/networking/nextcloud-client/wrapper.nix {
+    nextcloud-client = nextcloud-client-unwrapped;
+  };
 
   nextcloud-news-updater = callPackage ../servers/nextcloud/news-updater.nix { };
 
@@ -6310,6 +6316,29 @@ with pkgs;
 
   abcl = callPackage ../development/compilers/abcl {};
 
+  adoptopenjdk-bin-11-packages-linux = import ../development/compilers/adoptopenjdk-bin/jdk11-linux.nix;
+  adoptopenjdk-bin-11-packages-darwin = import ../development/compilers/adoptopenjdk-bin/jdk11-darwin.nix;
+
+  adoptopenjdk-hotspot-bin-11 = if stdenv.isLinux
+    then callPackage adoptopenjdk-bin-11-packages-linux.jdk-hotspot {}
+    else callPackage adoptopenjdk-bin-11-packages-darwin.jdk-hotspot {};
+  adoptopenjdk-jre-hotspot-bin-11 = if stdenv.isLinux
+    then callPackage adoptopenjdk-bin-11-packages-linux.jre-hotspot {}
+    else callPackage adoptopenjdk-bin-11-packages-darwin.jre-hotspot {};
+
+  adoptopenjdk-openj9-bin-11 = if stdenv.isLinux
+    then callPackage adoptopenjdk-bin-11-packages-linux.jdk-openj9 {}
+    else callPackage adoptopenjdk-bin-11-packages-darwin.jdk-openj9 {};
+
+  # openj9 jre builds for mac are currently missing (upstream)
+  #adoptopenjdk-jre-openj9-bin-11 = if stdenv.isLinux
+  #  then callPackage adoptopenjdk-bin-11-packages-linux.jre-openj9 {}
+  #  else callPackage adoptopenjdk-bin-11-packages-darwin.jre-openj9 {};
+  adoptopenjdk-jre-openj9-bin-11 = callPackage adoptopenjdk-bin-11-packages-linux.jre-openj9 {};
+
+  adoptopenjdk-bin = adoptopenjdk-hotspot-bin-11;
+  adoptopenjdk-jre-bin = adoptopenjdk-jre-hotspot-bin-11;
+
   aldor = callPackage ../development/compilers/aldor { };
 
   aliceml = callPackage ../development/compilers/aliceml { };
@@ -6349,7 +6378,7 @@ with pkgs;
   };
 
   ccl = callPackage ../development/compilers/ccl {
-    inherit (darwin) bootstrap_cmds;
+    inherit (buildPackages.darwin) bootstrap_cmds;
   };
 
   chez = callPackage ../development/compilers/chez {
@@ -6429,6 +6458,8 @@ with pkgs;
   eli = callPackage ../development/compilers/eli { };
 
   eql = callPackage ../development/compilers/eql {};
+
+  elm2nix = haskell.lib.justStaticExecutables (haskellPackages.callPackage ../development/tools/elm2nix {});
 
   elmPackages = recurseIntoAttrs (callPackage ../development/compilers/elm { });
 
@@ -6885,7 +6916,7 @@ with pkgs;
           ((openjdk10.override { minimal = true; }).jre // { outputs = [ "jre" ]; }));
 
   jdk = jdk8;
-  jre = jre8;
+  jre = if stdenv.isAarch32 || stdenv.isAarch64 then adoptopenjdk-jre-bin else jre8;
   jre_headless = jre8_headless;
 
   inherit (callPackages ../development/compilers/graalvm { }) mx jvmci8 graalvm8;
@@ -7246,6 +7277,7 @@ with pkgs;
   rustracerd = callPackage ../development/tools/rust/racerd { };
   rust-bindgen = callPackage ../development/tools/rust/bindgen { };
   rust-cbindgen = callPackage ../development/tools/rust/cbindgen { };
+  rust-cbindgen_0_6_7 = callPackage ../development/tools/rust/cbindgen/0_6_7.nix { };
   rustup = callPackage ../development/tools/rust/rustup {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -7961,6 +7993,8 @@ with pkgs;
   awf = callPackage ../development/tools/misc/awf { };
 
   electron = callPackage ../development/tools/electron { };
+
+  electron_3 = callPackage ../development/tools/electron/3.x.nix { };
 
   autobuild = callPackage ../development/tools/misc/autobuild { };
 
@@ -8820,7 +8854,7 @@ with pkgs;
   jhiccup = callPackage ../development/tools/java/jhiccup { };
 
   valgrind = callPackage ../development/tools/analysis/valgrind {
-    inherit (darwin) xnu bootstrap_cmds cctools;
+    inherit (buildPackages.darwin) xnu bootstrap_cmds cctools;
     llvm = llvm_39;
   };
   valgrind-light = self.valgrind.override { gdb = null; };
@@ -10078,7 +10112,7 @@ with pkgs;
   kinetic-cpp-client = callPackage ../development/libraries/kinetic-cpp-client { };
 
   krb5 = callPackage ../development/libraries/kerberos/krb5.nix {
-    inherit (darwin) bootstrap_cmds;
+    inherit (buildPackages.darwin) bootstrap_cmds;
   };
   krb5Full = krb5;
   libkrb5 = krb5.override {
@@ -13651,7 +13685,7 @@ with pkgs;
   xorg = recurseIntoAttrs ((lib.callPackageWith __splicedPackages ../servers/x11/xorg {
   }).overrideScope' (lib.callPackageWith __splicedPackages ../servers/x11/xorg/overrides.nix {
     inherit (darwin) apple_sdk;
-    bootstrap_cmds = if stdenv.isDarwin then darwin.bootstrap_cmds else null;
+    bootstrap_cmds = if stdenv.isDarwin then buildPackages.darwin.bootstrap_cmds else null;
     python = python2; # Incompatible with Python 3x
     udev = if stdenv.isLinux then udev else null;
     libdrm = if stdenv.isLinux then libdrm else null;
@@ -14079,6 +14113,7 @@ with pkgs;
         # when adding a new linux version
         # kernelPatches.cpu-cgroup-v2."4.11"
         kernelPatches.modinst_arg_list_too_long
+        kernelPatches.raspberry_pi_wifi_fix
       ];
   };
 
@@ -15734,13 +15769,19 @@ with pkgs;
 
   browsh = callPackage ../applications/networking/browsers/browsh { };
 
-  chromium = callPackage ../applications/networking/browsers/chromium {
+  chromium = callPackage ../applications/networking/browsers/chromium ({
     channel = "stable";
     pulseSupport = config.pulseaudio or true;
     enablePepperFlash = config.chromium.enablePepperFlash or false;
     enableWideVine = config.chromium.enableWideVine or false;
     gnome = gnome2;
-  };
+  } // (if stdenv.isAarch64 then {
+          stdenv = gcc8Stdenv;
+        } else {
+          llvmPackages = llvmPackages_7;
+          stdenv = llvmPackages_7.stdenv;
+        })
+   );
 
   chronos = callPackage ../applications/networking/cluster/chronos { };
 
@@ -20087,7 +20128,9 @@ with pkgs;
 
   openrw = callPackage ../games/openrw { };
 
-  openspades = callPackage ../games/openspades { };
+  openspades = callPackage ../games/openspades {
+    inherit (darwin.apple_sdk.frameworks) Cocoa;
+  };
 
   openttd = callPackage ../games/openttd {
     zlib = zlibStatic;

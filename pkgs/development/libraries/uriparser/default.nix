@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   name = "uriparser-${version}";
-  version = "0.9.0";
+  version = "0.9.1";
 
   # Release tarball differs from source tarball
   src = fetchurl {
     url = "https://github.com/uriparser/uriparser/releases/download/${name}/${name}.tar.bz2";
-    sha256 = "0b2yagxzhq9ghpszci6a9xlqg0yl7vq9j5r8dwbar3nszqsfnrzc";
+    sha256 = "1gisi7h8hd6mswbiaaa3s25bnb77xf37pzrmjy63rcdpwcyqy93m";
   };
 
   nativeBuildInputs = [ pkgconfig gtest doxygen graphviz ];

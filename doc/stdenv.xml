@@ -2452,7 +2452,7 @@ addEnvHooks "$hostOffset" myBashFunction
      <listitem>
       <para>
        This hook will make a build pause instead of stopping when a failure
-       happen. It prevents nix to cleanup the build environment immediatly and
+       happen. It prevents nix from cleaning up the build environment immediatly and
        allows the user to attach to a build environment using the
        <command>cntr</command> command. On build error it will print the
        instruction that are neccessary for <command>cntr</command>. Installing

@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, makeWrapper, git, gnupg }:
+{ stdenv, lib, fetchFromGitHub, makeWrapper, git, gnupg, gawk }:
 
 let
   version = "0.2.4";
@@ -20,7 +20,7 @@ in stdenv.mkDerivation {
     install -D git-secret $out/bin/git-secret
 
     wrapProgram $out/bin/git-secret \
-      --prefix PATH : "${lib.makeBinPath [ git gnupg ]}"
+      --prefix PATH : "${lib.makeBinPath [ git gnupg gawk ]}"
 
     mkdir $out/share
     cp -r man $out/share

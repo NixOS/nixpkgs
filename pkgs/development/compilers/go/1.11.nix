@@ -25,13 +25,13 @@ in
 
 stdenv.mkDerivation rec {
   name = "go-${version}";
-  version = "1.11";
+  version = "1.11.4";
 
   src = fetchFromGitHub {
     owner = "golang";
     repo = "go";
     rev = "go${version}";
-    sha256 = "1k18d6rkijlgzn1zw4wphzcv6a6w9hb1msgrsh1102jb18644f2q";
+    sha256 = "036nc17hffy0gcfs9j64qzwpjry65znbm4klf2h0xn81dp8d6mxk";
   };
 
   GOCACHE = "off";
@@ -186,7 +186,7 @@ stdenv.mkDerivation rec {
   disallowedReferences = [ go_bootstrap ];
 
   meta = with stdenv.lib; {
-    branch = "1.9";
+    branch = "1.11";
     homepage = http://golang.org/;
     description = "The Go Programming language";
     license = licenses.bsd3;
