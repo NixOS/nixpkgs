@@ -326,7 +326,7 @@ $ ./result/bin/run-*-vm
      </term>
      <listitem>
        <para>
-         Allow to specify remote builders ad-hoc for building the new system.
+         Allow ad-hoc remote builders for building the new system.
          This requires the user executing <command>nixos-rebuild</command> (usually
          root) to be configured as a trusted user in the Nix daemon. This can be
          achived by using the <literal>nix.trustedUsers</literal> NixOS option.
