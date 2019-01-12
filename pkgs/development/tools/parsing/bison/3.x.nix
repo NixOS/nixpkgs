@@ -1,11 +1,11 @@
 { stdenv, fetchurl, m4, perl, help2man }:
 
 stdenv.mkDerivation rec {
-  name = "bison-3.2.2";
+  name = "bison-3.2.4";
 
   src = fetchurl {
     url = "mirror://gnu/bison/${name}.tar.gz";
-    sha256 = "0v3q6ym34krb4iskg0pspvpm35wmp3gx9njb9c35cv0w0h0j5z9z";
+    sha256 = "16n7xs3sa1rlhs8y8zg4gi2s2kbkz8d69w3xp935wjykk0i3wryb";
   };
 
   patches = []; # remove on another rebuild

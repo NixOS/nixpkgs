@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, nasm }:
+{ stdenv, fetchurl, fetchpatch, cmake, nasm }:
 
 stdenv.mkDerivation rec {
   name = "libjpeg-turbo-${version}";
@@ -11,7 +11,14 @@ stdenv.mkDerivation rec {
 
   patches =
     stdenv.lib.optional (stdenv.hostPlatform.libc or null == "msvcrt")
-      ./mingw-boolean.patch;
+      ./mingw-boolean.patch
+  ++ [
+    (fetchpatch {
+      name = "cve-2018-19664.diff";
+      url = "https://github.com/libjpeg-turbo/libjpeg-turbo/commit/f8cca819a4fb.diff";
+      sha256 = "1kgfag62qmphlrq0mz15g17zw7zrg9nzaz7d2vg50m6m7m5aw4y5";
+    })
+  ];
 
   outputs = [ "bin" "dev" "out" "man" "doc" ];
 

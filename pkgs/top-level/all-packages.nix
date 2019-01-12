@@ -7971,6 +7971,7 @@ in
   python3 = python37;
   pypy = pypy2;
   pypy2 = pypy27;
+  pypy3 = pypy35;
 
   # Python interpreter that is build with all modules, including tkinter.
   # These are for compatibility and should not be used inside Nixpkgs.
@@ -7987,33 +7988,8 @@ in
   python2Packages = python2.pkgs;
   python3Packages = python3.pkgs;
 
-  python27 = callPackage ../development/interpreters/python/cpython/2.7 {
-    self = python27;
-    inherit (darwin) CF configd;
-  };
-  python35 = callPackage ../development/interpreters/python/cpython/3.5 {
-    inherit (darwin) CF configd;
-    self = python35;
-  };
-  python36 = callPackage ../development/interpreters/python/cpython/3.6 {
-    inherit (darwin) CF configd;
-    self = python36;
-  };
-  python37 = callPackage ../development/interpreters/python/cpython/3.7 {
-    inherit (darwin) CF configd;
-    self = python37;
-  };
-
-  pypy27 = callPackage ../development/interpreters/python/pypy/2.7 {
-    self = pypy27;
-    python = python27.override{x11Support=true;};
-    db = db.override { dbmSupport = true; };
-  };
-  pypy3 = callPackage ../development/interpreters/python/pypy/3 {
-    self = pypy3;
-    python = python27;
-    db = db.override { dbmSupport = true; };
-  };
+  pythonInterpreters = callPackage ./../development/interpreters/python {};
+  inherit (pythonInterpreters) python27 python35 python36 python37 pypy27 pypy35;
 
   # Python package sets.
   python27Packages = lib.hiPrioSet (recurseIntoAttrs python27.pkgs);
@@ -13111,9 +13087,8 @@ in
   # Avoid using this. It isn't really a wrapper anymore, but we keep the name.
   xlibsWrapper = callPackage ../development/libraries/xlibs-wrapper {
     packages = [
-      freetype fontconfig xorg.xproto xorg.libX11 xorg.libXt
+      freetype fontconfig xorg.xorgproto xorg.libX11 xorg.libXt
       xorg.libXft xorg.libXext xorg.libSM xorg.libICE
-      xorg.xextproto
     ];
   };
 

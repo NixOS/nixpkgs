@@ -1,7 +1,7 @@
 { pkgs, version, configTxt }:
 
 let
-  isAarch64 = pkgs.stdenv.isAarch64;
+  isAarch64 = pkgs.stdenv.hostPlatform.isAarch64;
 
   uboot =
     if version == 0 then
@@ -18,18 +18,17 @@ let
 
   extlinuxConfBuilder =
     import ../generic-extlinux-compatible/extlinux-conf-builder.nix {
-      inherit pkgs;
+      pkgs = pkgs.buildPackages;
     };
 in
 pkgs.substituteAll {
   src = ./uboot-builder.sh;
   isExecutable = true;
-  inherit (pkgs) bash;
-  path = [pkgs.coreutils pkgs.gnused pkgs.gnugrep];
+  inherit (pkgs.buildPackages) bash;
+  path = with pkgs.buildPackages; [coreutils gnused gnugrep];
   firmware = pkgs.raspberrypifw;
   inherit uboot;
   inherit configTxt;
   inherit extlinuxConfBuilder;
   inherit version;
 }
-

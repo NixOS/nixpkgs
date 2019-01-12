@@ -92,8 +92,8 @@ stdenv.mkDerivation rec {
     dbus dbus-glib pango freetype fontconfig xorg.libXi xorg.libXcursor
     xorg.libX11 xorg.libXrender xorg.libXft xorg.libXt file
     libnotify xorg.pixman yasm libGLU_combined
-    xorg.libXScrnSaver xorg.scrnsaverproto
-    xorg.libXext xorg.xextproto sqlite unzip makeWrapper
+    xorg.libXScrnSaver xorg.xorgproto
+    xorg.libXext sqlite unzip makeWrapper
     libevent libstartup_notification libvpx /* cairo */
     icu libpng jemalloc glib
   ]
