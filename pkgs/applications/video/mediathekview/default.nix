@@ -1,14 +1,14 @@
-{ stdenv, fetchurl, jre, unzip }:
+{ stdenv, fetchurl, oraclejre, gnutar }:
 
 stdenv.mkDerivation {
-  name = "mediathekview-9";
+  name = "mediathekview-13.2.1";
   src = fetchurl {
-    url = "mirror://sourceforge/zdfmediathk/MediathekView_9.zip";
-    sha256 = "1wff0igr33z9p1mjw7yvb6658smdwnp22dv8klz0y8qg116wx7a4";
+    url = "https://github.com/mediathekview/MediathekView/releases/download/13.2.1/MediathekView-13.2.1.tar.gz";
+    sha256 = "11wg6klviig0h7pprfaygamsgqr7drqra2s4yxgfak6665033l2a";
   };
   unpackPhase = "true";
 
-  buildInputs = [ unzip ];
+  buildInputs = [ gnutar ];
   
   # Could use some more love
   # Maybe we can also preconfigure locations for vlc and the others.
@@ -16,10 +16,10 @@ stdenv.mkDerivation {
     mkdir -p $out/bin
     mkdir -p $out/opt/mediathekview
     cd $out/opt/mediathekview
-    unzip $src
+    tar xf $src --strip 1
     find . -iname '*.exe' -delete
-    sed -i -e 's, java, ${jre}/bin/java,' MediathekView__Linux.sh
-    ln -s $out/opt/mediathekview/MediathekView__Linux.sh $out/bin/mediathekview
+    sed -i -e 's, java, ${oraclejre}/bin/java,' MediathekView.sh
+    ln -s $out/opt/mediathekview/MediathekView.sh $out/bin/mediathekview
   '';
 
   meta = with stdenv.lib; {
