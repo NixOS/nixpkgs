@@ -5432,7 +5432,7 @@ in
   silc_server = callPackage ../servers/silc-server { };
 
   sile = callPackage ../tools/typesetting/sile {
-  inherit (lua52Packages) lua luaexpat luazlib luafilesystem lpeg;
+  inherit (lua52Packages) lua luaexpat luazlib luafilesystem lpeg luasocket luasec;
   };
 
   silver-searcher = callPackage ../tools/text/silver-searcher { };
