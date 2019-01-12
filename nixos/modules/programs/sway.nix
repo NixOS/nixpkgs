@@ -24,6 +24,7 @@ let
   swayJoined = pkgs.symlinkJoin {
     name = "sway-joined";
     paths = [ swayWrapped swayPackage ];
+    passthru.providedSessions = [ "sway" ];
   };
 in {
   options.programs.sway = {

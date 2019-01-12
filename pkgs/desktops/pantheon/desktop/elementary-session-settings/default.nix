@@ -131,6 +131,7 @@ stdenv.mkDerivation rec {
       inherit repoName;
       attrPath = pname;
     };
+    providedSessions = [ "pantheon" ];
   };
 
   meta = with stdenv.lib; {

@@ -55,6 +55,7 @@ stdenv.mkDerivation rec {
       packageName = "gnome-session";
       attrPath = "gnome3.gnome-session";
     };
+    providedSessions = [ "gnome" "gnome-xorg" ];
   };
 
   meta = with stdenv.lib; {
