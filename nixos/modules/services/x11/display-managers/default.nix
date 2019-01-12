@@ -191,13 +191,18 @@ let
       '') names}
 
       ${concatMapStrings (pkg: ''
+        for n in ${concatStringsSep " " pkg.providedSessions}; do
+          if ! test -f ${pkg}/share/wayland-sessions/$n.desktop -o \
+                    -f ${pkg}/share/xsessions/$n.desktop; then
+            echo "Couldn't find provided session name, $n.desktop, in session package ${pkg.name}:"
+            echo "  ${pkg}"
+            return 1
+          fi
+        done
+
         if test -d ${pkg}/share/xsessions; then
           ${xorg.lndir}/bin/lndir ${pkg}/share/xsessions $out/share/xsessions
         fi
-      '') cfg.displayManager.sessionPackages}
-
-
-      ${concatMapStrings (pkg: ''
         if test -d ${pkg}/share/wayland-sessions; then
           mkdir -p "$out/share/wayland-sessions"
           ${xorg.lndir}/bin/lndir ${pkg}/share/wayland-sessions $out/share/wayland-sessions
