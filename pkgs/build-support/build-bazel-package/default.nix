@@ -50,6 +50,7 @@ in stdenv.mkDerivation (fBuildAttrs // {
 
       # Patching markers to make them deterministic
       sed -i 's, -\?[0-9][0-9]*$, 1,' $bazelOut/external/\@*.marker
+      sed -i '/^ENV:TMP.*/d' $bazelOut/external/\@*.marker
 
       # Remove all vcs files
       rm -rf $(find $bazelOut/external -type d -name .git)

@@ -8396,6 +8396,8 @@ in
     buildBazelPackage = buildBazelPackage.override { enableNixHacks = false; };
   };
 
+  bazel-remote = callPackage ../development/tools/build-managers/bazel/bazel-remote { };
+
   bazel-watcher = callPackage ../development/tools/bazel-watcher { };
 
   buildBazelPackage = callPackage ../build-support/build-bazel-package { };
