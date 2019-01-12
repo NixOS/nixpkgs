@@ -26,6 +26,11 @@ def system_dir(profile, generation):
     else:
         return "/nix/var/nix/profiles/system-%d-link" % (generation)
 
+SECURE_BOOT_ENTRY = """title NixOS{profile}
+version Generation {generation} {description} (Secure Boot)
+efi {efi}
+"""
+
 BOOT_ENTRY = """title NixOS{profile}
 version Generation {generation} {description}
 linux {kernel}
@@ -106,6 +111,74 @@ def write_entry(profile, generation, machine_id):
         if machine_id is not None:
             f.write("machine-id %s\n" % machine_id)
     os.rename(tmp_path, entry_file)
+
+def write_secureboot_entry(profile, generation, machine_id):
+    if profile:
+        entry_file = "@efiSysMountPoint@/loader/entries/nixos-%s-generation-%d.conf" % (profile, generation)
+        efi_file_relative = "EFI/nixos/nixos-%s-generation-%d.efi" % (profile, generation)
+        efi_file = "@efiSysMountPoint@/%s" % (efi_file_relative)
+    else:
+        entry_file = "@efiSysMountPoint@/loader/entries/nixos-generation-%d.conf" % (generation)
+        efi_file_relative = "EFI/nixos/nixos-generation-%d.efi" % (generation)
+        efi_file = "@efiSysMountPoint@/%s" % (efi_file_relative)
+
+    initrd = "%s.initrd.tmp" % (efi_file)
+    shutil.copyfile(
+        profile_path(profile, generation, "initrd"),
+        initrd
+    )
+
+    try:
+        append_initrd_secrets = profile_path(profile, generation, "append-initrd-secrets")
+        subprocess.check_call([append_initrd_secrets, "@efiSysMountPoint@%s" % (initrd)])
+    except FileNotFoundError:
+        pass
+
+    generation_dir = os.readlink(system_dir(profile, generation))
+    tmp_path = "%s.tmp" % (efi_file)
+
+    kernel_params = "systemConfig=%s init=%s/init " % (generation_dir, generation_dir)
+    with open("%s/kernel-params" % (generation_dir)) as params_file:
+        kernel_params = kernel_params + params_file.read()
+    kernel_param_file = "%s.kernel_params.tmp" % (efi_file)
+    with open(kernel_param_file, 'w') as f:
+        f.write(kernel_params)
+
+    subprocess.check_call([
+        "@binutils@/bin/objcopy",
+        "--add-section", ".osrel={}/etc/os-release".format(generation_dir), "--change-section-vma", ".osrel=0x20000",
+        "--add-section", ".cmdline={}".format(kernel_param_file),           "--change-section-vma", ".cmdline=0x30000",
+        "--add-section", ".linux={}/kernel".format(generation_dir),         "--change-section-vma", ".linux=0x40000",
+        "--add-section", ".initrd={}".format(initrd),                       "--change-section-vma", ".initrd=0x3000000",
+        "{}/sw/lib/systemd/boot/efi/linuxx64.efi.stub".format(generation_dir),
+        tmp_path
+    ])
+    sign_path(tmp_path, efi_file)
+
+    entry_tmp = entry_file + ".tmp";
+    with open(entry_tmp, 'w') as fp:
+        fp.write(SECURE_BOOT_ENTRY.format(
+            profile=" [" + profile + "]" if profile else "",
+            generation=generation,
+            efi=efi_file_relative,
+            description=describe_generation(generation_dir)
+        ))
+        if machine_id is not None:
+            fp.write("machine-id %s\n" % machine_id)
+
+    os.rename(entry_tmp, entry_file)
+    os.unlink(tmp_path)
+    os.unlink(kernel_param_file)
+    os.unlink(initrd)
+
+def sign_path(src, output):
+    subprocess.check_call([
+        "@sbsigntool@/bin/sbsign",
+        "--key", "@signingKey@",
+        "--cert", "@signingCertificate@",
+        "--output", output,
+        src
+    ])
 
 def mkdir_p(path):
     try:
@@ -190,12 +263,19 @@ def main():
     mkdir_p("@efiSysMountPoint@/efi/nixos")
     mkdir_p("@efiSysMountPoint@/loader/entries")
 
+    if "@signed@" == "1":
+        sign_path("@efiSysMountPoint@/EFI/BOOT/BOOTX64.EFI", "@efiSysMountPoint@/EFI/BOOT/BOOTX64.EFI")
+        sign_path("@efiSysMountPoint@/EFI/systemd/systemd-bootx64.efi", "@efiSysMountPoint@/EFI/systemd/systemd-bootx64.efi")
+
     gens = get_generations()
     for profile in get_profiles():
         gens += get_generations(profile)
     remove_old_entries(gens)
     for gen in gens:
-        write_entry(*gen, machine_id)
+        if "@signed@"== "1":
+            write_secureboot_entry(*gen, machine_id)
+        else:
+            write_entry(*gen, machine_id)
         if os.readlink(system_dir(*gen)) == args.default_config:
             write_loader_conf(*gen)
 

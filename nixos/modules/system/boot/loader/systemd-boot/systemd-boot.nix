@@ -12,7 +12,9 @@ let
 
     isExecutable = true;
 
-    inherit (pkgs.buildPackages) python3;
+    inherit (pkgs.buildPackages) python3 sbsigntool;
+
+    binutils = pkgs.buildPackages.binutils-unwrapped;
 
     systemd = config.systemd.package;
 
@@ -25,6 +27,10 @@ let
     inherit (cfg) consoleMode;
 
     inherit (efi) efiSysMountPoint canTouchEfiVariables;
+
+    inherit (cfg) signed;
+    signingKey = if cfg.signed then cfg.signing-key else "/no-signing-key";
+    signingCertificate = if cfg.signed then cfg.signing-certificate else "/no-signing-crt";
   };
 in {
 
@@ -39,6 +45,38 @@ in {
       type = types.bool;
 
       description = "Whether to enable the systemd-boot (formerly gummiboot) EFI boot manager";
+    };
+
+    signed = mkOption {
+      default = false;
+      type = types.bool;
+      description = ''
+        Whether or not the bootloader files, including systemd-boot
+        EFI programs should be signed.
+      '';
+    };
+
+    signing-key = mkOption {
+      type = types.path;
+      example = "/root/secure-boot/db.key";
+      description = ''
+        The <literal>db.key</literal> signing key, for signing EFI
+        programs. Note: Do not pass a store path. Passing the key like
+        <literal>signing-key = ./db.key;</literal> will copy the
+        private key in to the Nix store and make it world-readable.
+
+        Instead, pass the path as an absolute path string, like:
+        <literal>signing-key = "/root/secure-boot/db.key";</literal>.
+      '';
+    };
+
+    signing-certificate = mkOption {
+      type = types.path;
+      example = "/root/secure-boot/db.crt";
+      description = ''
+        The <literal>db.crt</literal> signing certificate, for signing
+        EFI programs. Note: certificate files are not private.
+      '';
     };
 
     editor = mkOption {
