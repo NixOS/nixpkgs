@@ -71,11 +71,7 @@ let
     ${cfg.extraConfig}
   '';
 
-  defaultSessionName =
-    let
-      dm = xcfg.desktopManager.default;
-      wm = xcfg.windowManager.default;
-    in dm + optionalString (wm != "none") ("+" + wm);
+  defaultSessionName = dmcfg.defaultSession;
 
 in
 {
@@ -210,7 +206,7 @@ in
           SDDM auto-login requires services.xserver.displayManager.sddm.autoLogin.user to be set
         '';
       }
-      { assertion = cfg.autoLogin.enable -> elem defaultSessionName dmcfg.session.names;
+      { assertion = cfg.autoLogin.enable -> defaultSessionName != "none";
         message = ''
           SDDM auto-login requires that services.xserver.desktopManager.default and
           services.xserver.windowManager.default are set to valid values. The current

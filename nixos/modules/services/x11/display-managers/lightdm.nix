@@ -9,9 +9,8 @@ let
   xEnv = config.systemd.services.display-manager.environment;
   cfg = dmcfg.lightdm;
 
-  dmDefault = xcfg.desktopManager.default;
-  wmDefault = xcfg.windowManager.default;
-  hasDefaultUserSession = dmDefault != "none" || wmDefault != "none";
+  defaultSessionName = dmcfg.defaultSession;
+  hasDefaultUserSession = defaultSessionName != "none";
 
   inherit (pkgs) lightdm writeScript writeText;
 
@@ -71,7 +70,6 @@ let
       ${cfg.extraSeatDefaults}
     '';
 
-  defaultSessionName = dmDefault + optionalString (wmDefault != "none") ("+" + wmDefault);
 in
 {
   # Note: the order in which lightdm greeter modules are imported
@@ -199,7 +197,7 @@ in
           LightDM auto-login requires services.xserver.displayManager.lightdm.autoLogin.user to be set
         '';
       }
-      { assertion = cfg.autoLogin.enable -> dmDefault != "none" || wmDefault != "none";
+      { assertion = cfg.autoLogin.enable -> hasDefaultUserSession;
         message = ''
           LightDM auto-login requires that services.xserver.desktopManager.default and
           services.xserver.windowManager.default are set to valid values. The current
