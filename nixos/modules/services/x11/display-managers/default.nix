@@ -263,7 +263,20 @@ in
       };
 
       sessionPackages = mkOption {
-        type = types.listOf types.package;
+        type = with types; listOf (package // {
+          description = "package with provided sessions";
+          check = p: assertMsg
+            (package.check p && p ? providedSessions
+            && p.providedSessions != [] && all isString p.providedSessions)
+            ''
+              Package, '${p.name}', did not specify any session names, as strings, in
+              'passthru.providedSessions'. This is required when used as a session package.
+
+              The session names can be looked up in:
+                ${p}/share/xsessions
+                ${p}/share/wayland-sessions
+           '';
+        });
         default = [];
         description = ''
           A list of packages containing x11 or wayland session files to be passed to the display manager.
