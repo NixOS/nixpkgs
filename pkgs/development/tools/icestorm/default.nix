@@ -6,7 +6,7 @@
 let
   pypyCompatible = stdenv.isx86_64; /* pypy3 seems broken on i686 */
   pythonPkg      = if pypyCompatible then pypy3 else python3;
-  pythonInterp   = if pypyCompatible then "pypy3" else "python3";
+  pythonInterp   = pythonPkg.interpreter;
 in
 
 stdenv.mkDerivation rec {
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
 
     for x in $(find . -type f -iname '*.py'); do
       substituteInPlace "$x" \
-        --replace '/usr/bin/env python3' '${pythonPkg}/bin/${pythonInterp}'
+        --replace '/usr/bin/env python3' '${pythonInterp}'
     done
   '';
 
