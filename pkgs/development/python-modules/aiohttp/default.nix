@@ -23,11 +23,11 @@
 
 buildPythonPackage rec {
   pname = "aiohttp";
-  version = "3.5.3";
+  version = "3.5.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7967b760d0e96eb7ac6b20a9143112ce5c03a00b4f74d8a5ee66c8e88e6b6800";
+    sha256 = "9c4c83f4fa1938377da32bc2d59379025ceeee8e24b89f72fcbccd8ca22dc9bf";
   };
 
   disabled = pythonOlder "3.5";
