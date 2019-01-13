@@ -217,6 +217,36 @@ in
 
   mht2htm = callPackage ../tools/misc/mht2htm { };
 
+  /* Fetches and unpacks an archive using one of tools specified in `inputs`.
+
+     Hash is computed from archive contents, instead of archive itself. This 
+     means that archive metadata and compression algorithm do not matter as
+     long as archive contents stay the same.
+
+     All `inputs` should have a `setupHook` that appends to `unpackCmdHooks`.
+     For example, see `pkgs/tools/archivers/unzip/setup-hook.sh`.
+
+     Takes an SRI hash, available in Nix 2.2: https://git.io/fhnKx
+
+     Example:
+       fetchArchive {
+         url = https://github.com/NixOS/nix/archive/2.2.1.tar.gz;
+         hash = "sha512-U8y9gVgvjowXZ/lTp7fxqRrWFbxZwrbS4LY95XduiM2plvhQ37rJ5TACo/PHStCILSvhzHG19UBZ1bWP62jEgQ==";
+         inputs = [];
+       }
+
+       fetchArchive {
+         url = https://github.com/NixOS/nix/archive/2.2.1.zip;
+         hash = "sha512-U8y9gVgvjowXZ/lTp7fxqRrWFbxZwrbS4LY95XduiM2plvhQ37rJ5TACo/PHStCILSvhzHG19UBZ1bWP62jEgQ==";
+         inputs = [ unzip ];
+       }
+
+       fetchArchive {
+         url = https://deb.debian.org/debian/pool/main/a/apt/apt_1.4.8_arm64.deb;
+         hash = "sha512-/6NY2ZhfJIKA6Qzg5vBxVaG9qfR7TqF/kK2ntzwMGXGpg2ycopjUAtxLqqRsM87OZQsYS7hklQhHcvx/NVz3dQ==";
+         inputs = [ dpkg ];
+       }
+  */
   fetchArchive = callPackage ../build-support/fetch-archive { };
 
   fetchpatch = callPackage ../build-support/fetchpatch { };
