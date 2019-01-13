@@ -232,7 +232,6 @@ in
        fetchArchive {
          url = https://github.com/NixOS/nix/archive/2.2.1.tar.gz;
          hash = "sha512-U8y9gVgvjowXZ/lTp7fxqRrWFbxZwrbS4LY95XduiM2plvhQ37rJ5TACo/PHStCILSvhzHG19UBZ1bWP62jEgQ==";
-         inputs = [];
        }
 
        fetchArchive {

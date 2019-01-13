@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }: { url, hash, inputs }:
+{ stdenv, fetchurl }: { url, hash, inputs ? [] }:
 
 (fetchurl {
   inherit url;
