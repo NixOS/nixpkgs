@@ -1,4 +1,9 @@
 { lib }:
+
+let
+  inherit (builtins) attrNames head readDir;
+in
+
 { # haskellPathsInDir : Path -> Map String Path
   # A map of all haskell packages defined in the given path,
   # identified by having a cabal file with the same name as the
@@ -42,4 +47,15 @@
               type = (builtins.readDir parent).${base} or null;
           in file == /. || type == "directory";
     in go (if isDir then file else parent);
+
+  /* Given a dir, return absolute path to its first child as a string.
+
+     Example:
+       stripRoot (runCommand "dir" {} ''
+         mkdir -p $out/a
+         touch $out/a/b
+       '')
+       => "/nix/store/alnqnc3hfhnk72cjhs1xz7xkwgl6k6xz-dir/a"
+  */
+  stripRoot = dir: dir + "/" + head (attrNames (readDir dir));
 }
