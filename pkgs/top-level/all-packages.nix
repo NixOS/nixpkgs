@@ -18298,6 +18298,8 @@ in
 
   ncmpcpp = callPackage ../applications/audio/ncmpcpp { };
 
+  nicotineplus = callPackage ../applications/networking/p2p/nicotineplus { };
+
   ympd = callPackage ../applications/audio/ympd { };
 
   nload = callPackage ../applications/networking/nload { };
