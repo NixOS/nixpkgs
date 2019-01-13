@@ -50,6 +50,158 @@ let
     SMTP_FROM_ADDRESS = cfg.smtp.fromAddress;
   } // cfg.extraOptions;
 
+  datasourceConfiguration = {
+    apiVersion = 1;
+    datasources = cfg.provision.datasources;
+  };
+
+  datasourceFile = pkgs.writeText "datasource.yaml" (builtins.toJSON datasourceConfiguration);
+
+  dashboardConfiguration = {
+    apiVersion = 1;
+    providers = cfg.provision.dashboards;
+  };
+
+  dashboardFile = pkgs.writeText "dashboard.yaml" (builtins.toJSON dashboardConfiguration);
+
+  provisionConfDir =  pkgs.runCommand "grafana-provisioning" { } ''
+    mkdir -p $out/{datasources,dashboards}
+    ln -sf ${datasourceFile} $out/datasources/datasource.yaml
+    ln -sf ${dashboardFile} $out/dashboards/dashboard.yaml
+  '';
+
+  # Get a submodule without any embedded metadata:
+  _filter = x: filterAttrs (k: v: k != "_module") x;
+
+  # http://docs.grafana.org/administration/provisioning/#datasources
+  grafanaTypes.datasourceConfig = types.submodule {
+    options = {
+      name = mkOption {
+        type = types.str;
+        description = "Name of the datasource. Required";
+      };
+      type = mkOption {
+        type = types.enum ["graphite" "prometheus" "cloudwatch" "elasticsearch" "influxdb" "opentsdb" "mysql" "mssql" "postgres" "loki"];
+        description = "Datasource type. Required";
+      };
+      access = mkOption {
+        type = types.enum ["proxy" "direct"];
+        default = "proxy";
+        description = "Access mode. proxy or direct (Server or Browser in the UI). Required";
+      };
+      orgId = mkOption {
+        type = types.int;
+        default = 1;
+        description = "Org id. will default to orgId 1 if not specified";
+      };
+      url = mkOption {
+        type = types.str;
+        description = "Url of the datasource";
+      };
+      password = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description = "Database password, if used";
+      };
+      user = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description = "Database user, if used";
+      };
+      database = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description = "Database name, if used";
+      };
+      basicAuth = mkOption {
+        type = types.nullOr types.bool;
+        default = null;
+        description = "Enable/disable basic auth";
+      };
+      basicAuthUser = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description = "Basic auth username";
+      };
+      basicAuthPassword = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description = "Basic auth password";
+      };
+      withCredentials = mkOption {
+        type = types.bool;
+        default = false;
+        description = "Enable/disable with credentials headers";
+      };
+      isDefault = mkOption {
+        type = types.bool;
+        default = false;
+        description = "Mark as default datasource. Max one per org";
+      };
+      jsonData = mkOption {
+        type = types.nullOr types.attrs;
+        default = null;
+        description = "Datasource specific configuration";
+      };
+      secureJsonData = mkOption {
+        type = types.nullOr types.attrs;
+        default = null;
+        description = "Datasource specific secure configuration";
+      };
+      version = mkOption {
+        type = types.int;
+        default = 1;
+        description = "Version";
+      };
+      editable = mkOption {
+        type = types.bool;
+        default = false;
+        description = "Allow users to edit datasources from the UI.";
+      };
+    };
+  };
+
+  # http://docs.grafana.org/administration/provisioning/#dashboards
+  grafanaTypes.dashboardConfig = types.submodule {
+    options = {
+      name = mkOption {
+        type = types.str;
+        default = "default";
+        description = "Provider name";
+      };
+      orgId = mkOption {
+        type = types.int;
+        default = 1;
+        description = "Organization ID";
+      };
+      folder = mkOption {
+        type = types.str;
+        default = "";
+        description = "Add dashboards to the speciied folder";
+      };
+      type = mkOption {
+        type = types.str;
+        default = "file";
+        description = "Dashboard provider type";
+      };
+      disableDeletion = mkOption {
+        type = types.bool;
+        default = false;
+        description = "Disable deletion when JSON file is removed";
+      };
+      updateIntervalSeconds = mkOption {
+        type = types.int;
+        default = 10;
+        description = "How often Grafana will scan for changed dashboards";
+      };
+      options = {
+        path = mkOption {
+          type = types.path;
+          description = "Path grafana will watch for dashboards";
+        };
+      };
+    };
+  };
 in {
   options.services.grafana = {
     enable = mkEnableOption "grafana";
@@ -172,6 +324,22 @@ in {
         default = "unlimited";
         example = 14400;
         type = types.either types.int (types.enum [ "unlimited" ]);
+      };
+    };
+
+    provision = {
+      enable = mkEnableOption "provision";
+      datasources = mkOption {
+        description = "Grafana datasources configuration";
+        default = [];
+        type = types.listOf grafanaTypes.datasourceConfig;
+        apply = x: map _filter x;
+      };
+      dashboards = mkOption {
+        description = "Grafana dashboard configuration";
+        default = [];
+        type = types.listOf grafanaTypes.dashboardConfig;
+        apply = x: map _filter x;
       };
     };
 
@@ -313,10 +481,15 @@ in {
   };
 
   config = mkIf cfg.enable {
-    warnings = optional (
-      cfg.database.password != opt.database.password.default ||
-      cfg.security.adminPassword != opt.security.adminPassword.default
-    ) "Grafana passwords will be stored as plaintext in the Nix store!";
+    warnings = flatten [
+      (optional (
+        cfg.database.password != opt.database.password.default ||
+        cfg.security.adminPassword != opt.security.adminPassword.default
+      ) "Grafana passwords will be stored as plaintext in the Nix store!")
+      (optional (
+        any (x: x.password != null || x.basicAuthPassword != null || x.secureJsonData != null) cfg.provision.datasources
+      ) "Datasource passwords will be stored as plaintext in the Nix store!")
+    ];
 
     environment.systemPackages = [ cfg.package ];
 
@@ -358,6 +531,9 @@ in {
         ''}
         ${optionalString (cfg.smtp.passwordFile != null) ''
           export GF_SMTP_PASSWORD="$(cat ${escapeShellArg cfg.smtp.passwordFile})"
+        ''}
+        ${optionalString cfg.provision.enable ''
+          export GF_PATHS_PROVISIONING=${provisionConfDir};
         ''}
         exec ${cfg.package.bin}/bin/grafana-server -homepath ${cfg.dataDir}
       '';
