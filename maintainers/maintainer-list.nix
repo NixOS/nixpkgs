@@ -23,7 +23,7 @@
     github = "1000101";
     name = "Jan Hrnko";
   };
-  "6AA4FD" = {
+  6AA4FD = {
     email = "6AA4FD@airmail.cc";
     github = "6AA4FD";
     name = "Quinn";
