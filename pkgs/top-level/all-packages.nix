@@ -813,6 +813,8 @@ in
 
   cue = callPackage ../development/tools/cue { };
 
+  create_ap = callPackage ../tools/networking/create_ap { };
+
   deskew = callPackage ../applications/graphics/deskew { };
 
   detect-secrets = python3Packages.callPackage ../development/tools/detect-secrets { };

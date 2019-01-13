@@ -1,0 +1,27 @@
+diff --git a/create_ap b/create_ap
+index 8fa6671..3949c75 100755
+--- a/create_ap
++++ b/create_ap
+@@ -138,10 +138,6 @@ init_lock() {
+     eval "exec $LOCK_FD>$LOCK_FILE" > /dev/null 2>&1 || return 1
+     umask $SCRIPT_UMASK
+ 
+-    # there is a case where lock file was created from a normal
+-    # user. change the owner to root as soon as we can.
+-    [[ $(id -u) -eq 0 ]] && chown 0:0 $LOCK_FILE
+-
+     # create mutex counter lock file
+     echo 0 > $COUNTER_LOCK_FILE
+ 
+@@ -1267,11 +1263,6 @@ if [[ -n "$LIST_CLIENTS_ID" ]]; then
+     exit 0
+ fi
+ 
+-if [[ $(id -u) -ne 0 ]]; then
+-    echo "You must run it as root." >&2
+-    exit 1
+-fi
+-
+ if [[ -n "$STOP_ID" ]]; then
+     echo "Trying to kill $PROGNAME instance associated with $STOP_ID..."
+     send_stop "$STOP_ID"
