@@ -310,7 +310,7 @@ with stdenv.lib;
     NFS_V4_SECURITY_LABEL y
   ''}
   CIFS_XATTR y
-  CIFS_POSIX y
+  CIFS_POSIX? y
   CIFS_FSCACHE y
   CIFS_STATS y
   CIFS_WEAK_PW_HASH y
