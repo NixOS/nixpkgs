@@ -6,8 +6,8 @@ python2Packages.buildPythonApplication rec {
 
   src = fetchFromGitHub {
     owner = "Nicotine-Plus";
-    repo = "nicotine-plus";
-    rev = "${version}";
+    repo = pname;
+    rev = version;
     sha256 = "11j2qm67sszfqq730czsr2zmpgkghsb50556ax1vlpm7rw3gm33c";
   };
 
