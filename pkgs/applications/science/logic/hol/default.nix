@@ -1,15 +1,13 @@
-{stdenv, pkgs, fetchurl, graphviz, fontconfig, liberation_ttf,
+{stdenv, pkgs, fetchFromGitHub, graphviz, fontconfig, liberation_ttf, gmp,
  experimentalKernel ? true}:
 
 let
   pname = "hol4";
-  vnum = "10";
+  vnum = "12";
 in
 
 let
   version = "k.${vnum}";
-  longVersion = "kananaskis-${vnum}";
-  holsubdir = "hol-${longVersion}";
   kernelFlag = if experimentalKernel then "-expk" else "-stdknl";
 in
 
@@ -22,15 +20,17 @@ in
 stdenv.mkDerivation {
   name = "${pname}-${version}";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/hol/hol/${longVersion}/${holsubdir}.tar.gz";
-    sha256 = "0x2wxksr305h1lrbklf6p42lp09rbhb4rsh74g0l70sgapyiac9b";
+  src = fetchFromGitHub {
+    owner = "HOL-Theorem-Prover";
+    repo = "HOL";
+    sha256 = "0hdxrgava85gk713pixmlcv099bsrcgc6sh4slwqjdh3zif57bcm";
+    rev = "26e80a62cb4b3b7d64dea8531041adb2494342a2";
+    # date = 2019-01-10T03:14:10+01:00;
   };
 
-  buildInputs = [polymlEnableShared graphviz fontconfig liberation_ttf];
+  buildInputs = [polymlEnableShared graphviz fontconfig liberation_ttf gmp];
 
-  buildCommand = ''
-
+  buildPhase = ''
     mkdir chroot-fontconfig
     cat ${fontconfig.out}/etc/fonts/fonts.conf > chroot-fontconfig/fonts.conf
     sed -e 's@</fontconfig>@@' -i chroot-fontconfig/fonts.conf
@@ -39,30 +39,25 @@ stdenv.mkDerivation {
 
     export FONTCONFIG_FILE=$(pwd)/chroot-fontconfig/fonts.conf
 
-    mkdir -p "$out/src"
-    cd  "$out/src"
-
-    tar -xzf "$src"
-    cd ${holsubdir}
-
     substituteInPlace tools/Holmake/Holmake_types.sml \
       --replace "\"/bin/mv\"" "\"mv\"" \
       --replace "\"/bin/cp\"" "\"cp\""
 
-    for f in tools/buildutils.sml help/src-sml/DOT;
-    do
-      substituteInPlace $f --replace "\"/usr/bin/dot\"" "\"${graphviz}/bin/dot\""
-    done
-
-    #sed -ie "/compute/,999 d" tools/build-sequence # for testing
+    substituteInPlace src/HolSat/sat_solvers/zc2hs/Makefile \
+      --replace "g++" "${stdenv.cc.targetPrefix}c++"
+    substituteInPlace src/HolSat/sat_solvers/minisat/Makefile \
+      --replace "g++" "${stdenv.cc.targetPrefix}c++"
+    substituteInPlace tools/Holmake/Holmake_tools.sml \
+      --replace "if Systeml.isUnix then xterm_log" \
+                "if false then xterm_log"
 
     poly < tools/smart-configure.sml
 
-    bin/build ${kernelFlag} -symlink
+    #bin/build ${kernelFlag} -symlink
+    bin/build
 
-    mkdir -p "$out/bin"
-    ln -st $out/bin  $out/src/${holsubdir}/bin/*
-    # ln -s $out/src/hol4.${version}/bin $out/bin
+    mkdir -p $out/bin
+    cp -p bin/hol $out/bin
   '';
 
   meta = with stdenv.lib; {
@@ -82,7 +77,6 @@ stdenv.mkDerivation {
     homepage = http://hol.sourceforge.net/;
     license = licenses.bsd3;
     maintainers = with maintainers; [ mudri ];
-    platforms = with platforms; linux;
-    broken = true;
+    platforms = with platforms; unix;
   };
 }
