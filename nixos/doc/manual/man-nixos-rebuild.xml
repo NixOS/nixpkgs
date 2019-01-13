@@ -331,7 +331,7 @@ $ ./result/bin/run-*-vm
          root) to be configured as a trusted user in the Nix daemon. This can be
          achieved by using the <literal>nix.trustedUsers</literal> NixOS option.
          Examples values for that option are described in the
-         <literal>Remote builds chapter<literal> in the Nix manual,
+		 <literal>Remote builds chapter</literal> in the Nix manual,
          (i.e. <command>--builders "ssh://bigbrother x86_64-linux"</command>).
          By specifying an empty string existing builders specified in
          <filename>/etc/nix/machines</filename> can be ignored:
