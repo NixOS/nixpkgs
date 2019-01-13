@@ -51,8 +51,8 @@ let
 
     # used by check_config script
     # can be unpinned once https://github.com/home-assistant/home-assistant/issues/11917 is resolved
-    (mkOverride "colorlog" "3.1.4"
-      "418db638c9577f37f0fae4914074f395847a728158a011be2a193ac491b9779d")
+    (mkOverride "colorlog" "4.0.2"
+      "3cf31b25cbc8f86ec01fef582ef3b840950dea414084ed19ab922c8b493f9b42")
 
     # hass-frontend does not exist in python3.pkgs
     (self: super: {
@@ -87,7 +87,7 @@ let
   extraBuildInputs = extraPackages py.pkgs;
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "0.85.0";
+  hassVersion = "0.85.1";
 
 in with py.pkgs; buildPythonApplication rec {
   pname = "homeassistant";
@@ -102,7 +102,7 @@ in with py.pkgs; buildPythonApplication rec {
     owner = "home-assistant";
     repo = "home-assistant";
     rev = version;
-    sha256 = "10lpah90ia2ycw22s65kqxd2az7l69n9hs1i4lvx1179ncvnfq9r";
+    sha256 = "0i9s0mgzfs3s6k4vw2zvwgqziz77fghpijrjrxx5nbrmm592h01a";
   };
 
   propagatedBuildInputs = [

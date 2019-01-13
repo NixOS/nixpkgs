@@ -278,9 +278,15 @@ in {
 
   cachecontrol = callPackage ../development/python-modules/cachecontrol { };
 
+  cachy = callPackage ../development/python-modules/cachy { };
+
   cdecimal = callPackage ../development/python-modules/cdecimal { };
 
   chalice = callPackage ../development/python-modules/chalice { };
+
+  cleo = callPackage ../development/python-modules/cleo { };
+
+  clikit = callPackage ../development/python-modules/clikit { };
 
   clustershell = callPackage ../development/python-modules/clustershell { };
 
@@ -484,6 +490,8 @@ in {
 
   palettable = callPackage ../development/python-modules/palettable { };
 
+  pastel = callPackage ../development/python-modules/pastel { };
+
   pathlib = callPackage ../development/python-modules/pathlib { };
 
   pdf2image = callPackage ../development/python-modules/pdf2image { };
@@ -499,6 +507,8 @@ in {
   pims = callPackage ../development/python-modules/pims { };
 
   plantuml = callPackage ../tools/misc/plantuml { };
+
+  poetry = callPackage ../development/python-modules/poetry { };
 
   progress = callPackage ../development/python-modules/progress { };
 
@@ -590,6 +600,8 @@ in {
   pykerberos = callPackage ../development/python-modules/pykerberos { };
 
   pykeepass = callPackage ../development/python-modules/pykeepass { };
+
+  pylev = callPackage ../development/python-modules/pylev { };
 
   pymatgen = callPackage ../development/python-modules/pymatgen { };
 
@@ -759,6 +771,8 @@ in {
   tokenserver = callPackage ../development/python-modules/tokenserver {};
 
   toml = callPackage ../development/python-modules/toml { };
+
+  tomlkit = callPackage ../development/python-modules/tomlkit { };
 
   unifi = callPackage ../development/python-modules/unifi { };
 
@@ -2610,6 +2624,8 @@ in {
   google_cloud_vision = callPackage ../development/python-modules/google_cloud_vision { };
 
   google_cloud_websecurityscanner = callPackage ../development/python-modules/google_cloud_websecurityscanner { };
+
+  google-i18n-address = callPackage ../development/python-modules/google-i18n-address { };
 
   google_resumable_media = callPackage ../development/python-modules/google_resumable_media { };
 

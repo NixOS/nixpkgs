@@ -4,6 +4,7 @@
 , six
 , pytest
 , hypothesis
+, pytestrunner
 }:
 
 buildPythonPackage rec {
@@ -16,11 +17,11 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ six ];
-  buildInputs = [ pytest hypothesis ];
 
-  checkPhase = ''
-    py.test
-  '';
+  checkInputs = [ pytestrunner pytest hypothesis ];
+
+  # pytestrunner is only needed to run tests
+  patches = [ ./no-setup-requires-pytestrunner.patch ];
 
   meta = with stdenv.lib; {
     homepage = https://github.com/tobgu/pyrsistent/;

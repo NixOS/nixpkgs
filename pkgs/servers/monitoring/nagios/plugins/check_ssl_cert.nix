@@ -2,14 +2,19 @@
 
 stdenv.mkDerivation rec {
   name = "check_ssl_cert-${version}";
-  version = "1.79.0";
+  version = "1.80.0";
 
   src = fetchFromGitHub {
     owner = "matteocorti";
     repo = "check_ssl_cert";
     rev = "v${version}";
-    sha256 = "0pqk09xypa9vdxw5lbaa1j8w3mbmdwh2y1sq768rqq0izyfynf4d";
+    sha256 = "1jkwii45hynil1jail9gmz4bak066rdi8zfcczicjsa6npbz50w4";
   };
+
+  postPatch = ''
+    substituteInPlace Makefile \
+      --replace 'YEAR=`date +"%Y"`' 'YEAR=2018'
+  '';
 
   nativeBuildInputs = [ makeWrapper ];
 

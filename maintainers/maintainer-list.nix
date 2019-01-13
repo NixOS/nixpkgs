@@ -475,6 +475,11 @@
     github = "bandresen";
     name = "Benjamin Andresen";
   };
+  baracoder = {
+    email = "baracoder@googlemail.com";
+    github = "baracoder";
+    name = "Herman Fries";
+  };
   barrucadu = {
     email = "mike@barrucadu.co.uk";
     github = "barrucadu";
@@ -1952,6 +1957,11 @@
     email = "jake.logemann@gmail.com";
     github = "jakelogemann";
     name = "Jake Logemann";
+  };
+  jakewaksbaum = {
+    email = "jake.waksbaum@gmail.com";
+    github = "jbaum98";
+    name = "Jake Waksbaum";
   };
   jammerful = {
     email = "jammerful@gmail.com";
@@ -4355,6 +4365,11 @@
     email = "mail@tazj.in";
     github = "tazjin";
     name = "Vincent Ambo";
+  };
+  tbenst = {
+    email = "nix@tylerbenster.com";
+    github = "tbenst";
+    name = "Tyler Benster";
   };
   teh = {
     email = "tehunger@gmail.com";

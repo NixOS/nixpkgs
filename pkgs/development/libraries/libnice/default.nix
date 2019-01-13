@@ -47,7 +47,8 @@ stdenv.mkDerivation rec {
     "-Dintrospection=enabled"
   ];
 
-  doCheck = true;
+  # TODO; see #53293 etc.
+  #doCheck = true;
 
   meta = with stdenv.lib; {
     homepage = https://nice.freedesktop.org/wiki/;

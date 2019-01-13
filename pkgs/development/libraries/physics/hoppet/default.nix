@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gfortran }:
+{ stdenv, fetchurl, gfortran, perl }:
 
 stdenv.mkDerivation rec {
   name = "hoppet-${version}";
@@ -10,8 +10,13 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ gfortran ];
+  nativeBuildInputs = [ perl ];
 
   enableParallelBuilding = true;
+
+  preConfigure = ''
+    patchShebangs .
+  '';
 
   meta = with stdenv.lib; {
     description = "Higher Order Perturbative Parton Evolution Toolkit";
