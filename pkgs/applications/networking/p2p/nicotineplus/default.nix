@@ -15,7 +15,7 @@ python2Packages.buildPythonApplication rec {
     homepage = http://www.nicotine-plus.org/;
     downloadPage = https://github.com/Nicotine-Plus/nicotine-plus/releases;
     license = licenses.gpl3;
-    maintainers = with maintainers; [ 6AA4FD ];
+    maintainers = with maintainers; [ "6AA4FD" ];
     platforms = platforms.all;
     longDescription = ''
     Nicotine+ is an updated fork of the popular Nicotine client for Soulseek,
