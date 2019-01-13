@@ -2,20 +2,20 @@
 
 buildPythonApplication rec {
   pname = "detect-secrets";
-  version = "0.11.0";
+  version = "0.11.4";
 
   # PyPI tarball doesn't ship tests
   src = fetchFromGitHub {
     owner = "Yelp";
     repo = "detect-secrets";
     rev = "v${version}";
-    sha256 = "11r11q6d8aajqqnhhz4lsa93qf1x745331kl9jd3z4y4w91l4gdz";
+    sha256 = "1ydigridkjirrfhyfr8barw0yrd4hw6w0k9g7mbd0gdqng6gpmgc";
   };
 
-  propagatedBuildInputs = [ pyyaml unidiff ]
+  propagatedBuildInputs = [ pyyaml ]
     ++ lib.optionals isPy27 [ configparser enum34 future functools32 ];
 
-  checkInputs = [ mock pytest ];
+  checkInputs = [ mock pytest unidiff ];
 
   # deselect tests which require git setup
   checkPhase = ''
