@@ -9,6 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "0w8vhvwnhvwq3k3cw9d1jiy61v4r81wv6q5rkliq2nq6z0naxwpq";
   };
 
+  setupHook = ./setup-hook.sh;
+
   configureFlags = [
     "--disable-dselect"
     "--with-admindir=/var/lib/dpkg"
