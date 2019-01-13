@@ -2,11 +2,11 @@
 
 python2Packages.buildPythonApplication rec {
   name = "duplicity-${version}";
-  version = "0.7.18";
+  version = "0.7.18.2";
 
   src = fetchurl {
     url = "http://code.launchpad.net/duplicity/${stdenv.lib.versions.majorMinor version}-series/${version}/+download/${name}.tar.gz";
-    sha256 = "1qlika4l1k1nx8zr657ihcy0yzr1c1cdnjlbs325l5krvc3zbc5b";
+    sha256 = "0j37dgyji36hvb5dbzlmh5rj83jwhni02yq16g6rd3hj8f7qhdn2";
   };
 
   buildInputs = [ librsync makeWrapper python2Packages.wrapPython ];

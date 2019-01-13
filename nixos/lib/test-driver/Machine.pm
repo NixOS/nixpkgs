@@ -250,7 +250,7 @@ sub connect {
         $self->start;
 
         local $SIG{ALRM} = sub { die "timed out waiting for the VM to connect\n"; };
-        alarm 300;
+        alarm 600;
         readline $self->{socket} or die "the VM quit before connecting\n";
         alarm 0;
 
