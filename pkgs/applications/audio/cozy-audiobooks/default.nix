@@ -21,14 +21,14 @@ python3Packages.buildPythonApplication rec {
 
   format = "other"; # no setup.py
 
-  name = "cozy-${version}";
-  version = "0.6.3";
+  pname = "cozy";
+  version = "0.6.7";
 
   src = fetchFromGitHub {
     owner = "geigi";
-    repo = "cozy";
+    repo = pname;
     rev = version;
-    sha256 = "0xs6vzvmx0nvybpjqlrngggv2x8b2ky073slh760iirs1p0dclbc";
+    sha256 = "0f8dyqj6111czn8spgsnic1fqs3kimjwl1b19mw55fa924b9bhsa";
   };
 
   nativeBuildInputs = [
@@ -71,9 +71,7 @@ python3Packages.buildPythonApplication rec {
   '';
 
   meta = with stdenv.lib; {
-    description = ''
-       A modern audio book player for Linux using GTK+ 3
-    '';
+    description = "A modern audio book player for Linux using GTK+ 3";
     homepage = https://cozy.geigi.de/;
     maintainers = [ maintainers.makefu ];
     license = licenses.gpl3;
