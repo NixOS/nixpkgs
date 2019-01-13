@@ -677,6 +677,8 @@ in
 
   bcachefs-tools = callPackage ../tools/filesystems/bcachefs-tools { };
 
+  bitwarden-cli = callPackage ../tools/security/bitwarden-cli { };
+
   bmap-tools = callPackage ../tools/misc/bmap-tools { };
 
   bonnie = callPackage ../tools/filesystems/bonnie { };
