@@ -20,8 +20,8 @@ python2Packages.buildPythonApplication rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ "6AA4FD" ];
     longDescription = ''
-    Nicotine+ is an updated fork of the popular Nicotine client for Soulseek,
-    a peer to peer file sharing network generally used for music.
+      Nicotine+ is an updated fork of the popular Nicotine client for Soulseek,
+      a peer to peer file sharing network generally used for music.
     '';
   };
 }
