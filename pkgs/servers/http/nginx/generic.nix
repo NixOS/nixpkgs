@@ -87,6 +87,8 @@ stdenv.mkDerivation {
     mv $out/sbin $out/bin
   '';
 
+  passthru.modules = modules;
+
   meta = {
     description = "A reverse proxy and lightweight webserver";
     homepage    = http://nginx.org;
