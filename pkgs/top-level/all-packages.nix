@@ -14518,6 +14518,8 @@ in
 
   openisns = callPackage ../os-specific/linux/open-isns { };
 
+  osxfuse = callPackage ../os-specific/darwin/osxfuse { };
+
   powerstat = callPackage ../os-specific/linux/powerstat { };
 
   smemstat = callPackage ../os-specific/linux/smemstat { };
