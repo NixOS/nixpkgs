@@ -102,13 +102,14 @@ let
   hash_ =
     if md5 != "" then throw "fetchurl does not support md5 anymore, please use sha256 or sha512"
     else if (outputHash != "" && outputHashAlgo != "") then { inherit outputHashAlgo outputHash; }
+    else if (outputHash != "") then { inherit outputHash; }
     else if sha512 != "" then { outputHashAlgo = "sha512"; outputHash = sha512; }
     else if sha256 != "" then { outputHashAlgo = "sha256"; outputHash = sha256; }
     else if sha1   != "" then { outputHashAlgo = "sha1";   outputHash = sha1; }
     else throw "fetchurl requires a hash for fixed-output derivation: ${lib.concatStringsSep ", " urls_}";
 in
 
-stdenvNoCC.mkDerivation {
+stdenvNoCC.mkDerivation (hash_ // {
   name =
     if showURLs then "urls"
     else if name != "" then name
@@ -123,9 +124,6 @@ stdenvNoCC.mkDerivation {
   # If set, prefer the content-addressable mirrors
   # (http://tarballs.nixos.org) over the original URLs.
   preferHashedMirrors = true;
-
-  # New-style output content requirements.
-  inherit (hash_) outputHashAlgo outputHash;
 
   outputHashMode = if (recursiveHash || executable) then "recursive" else "flat";
 
@@ -146,4 +144,4 @@ stdenvNoCC.mkDerivation {
 
   inherit meta;
   inherit passthru;
-}
+})
