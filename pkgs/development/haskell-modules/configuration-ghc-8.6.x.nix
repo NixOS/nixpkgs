@@ -55,6 +55,7 @@ self: super: {
   psqueues = dontCheck super.psqueues;    # won't cope with QuickCheck 2.12.x
   system-fileio = dontCheck super.system-fileio;  # avoid dependency on broken "patience"
   unicode-transforms = dontCheck super.unicode-transforms;
+  wl-pprint-extras = doJailbreak super.wl-pprint-extras; # containers >=0.4 && <0.6 is too tight; https://github.com/ekmett/wl-pprint-extras/issues/17
   RSA = dontCheck super.RSA; # https://github.com/GaloisInc/RSA/issues/14
   monad-par = dontCheck super.monad-par;  # https://github.com/simonmar/monad-par/issues/66
   github = dontCheck super.github; # hspec upper bound exceeded; https://github.com/phadej/github/pull/341
