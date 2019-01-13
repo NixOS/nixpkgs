@@ -116,6 +116,7 @@
 , "@webassemblyjs/wasm-text-gen"
 , "@webassemblyjs/wast-refmt"
 , "webpack"
+, "webpack-cli"
 , "webtorrent-cli"
 , "web-ext"
 , "wring"
