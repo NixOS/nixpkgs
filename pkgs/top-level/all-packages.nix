@@ -217,6 +217,8 @@ in
 
   mht2htm = callPackage ../tools/misc/mht2htm { };
 
+  fetchArchive = callPackage ../build-support/fetch-archive { };
+
   fetchpatch = callPackage ../build-support/fetchpatch { };
 
   fetchs3 = callPackage ../build-support/fetchs3 { };
