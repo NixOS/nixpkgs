@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, zlib, openssl, libedit, pkgconfig, pam, autoreconfHook
+{ stdenv, fetchurl, fetchpatch, zlib, openssl, libedit, pkgconfig, pam, autoreconfHook, patchutils
 , etcDir ? null
 , hpnSupport ? false
 , withKerberos ? true
@@ -49,6 +49,20 @@ stdenv.mkDerivation rec {
 
       # See discussion in https://github.com/NixOS/nixpkgs/pull/16966
       ./dont_create_privsep_path.patch
+
+      # CVE-2018-20685, can probably be dropped with next version bump
+      # See https://sintonen.fi/advisories/scp-client-multiple-vulnerabilities.txt
+      # for details
+      (fetchpatch {
+        name = "CVE-2018-20685.patch";
+        url = https://github.com/openssh/openssh-portable/commit/6010c0303a422a9c5fa8860c061bf7105eb7f8b2.patch;
+        sha256 = "1bzbdfww5rbr3kwlvr1hg9glxkz5xr1qg2pc3zmd5z3z5k4sx5fs";
+        # remove the CVS headers since they do not apply to this OpenSSH version
+        postFetch = ''
+          ${patchutils}/bin/filterdiff --lines=1100-1200 --clean "$out" > "$TMPDIR/postFetch"
+          mv "$TMPDIR/postFetch" "$out"
+        '';
+      })
     ]
     ++ optional withGssapiPatches (assert withKerberos; gssapiPatch);
 
