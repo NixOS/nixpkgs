@@ -231,16 +231,7 @@ let
 
     elina = callPackage ../development/ocaml-modules/elina { };
 
-    eliom = callPackage ../development/ocaml-modules/eliom {
-      js_of_ocaml-lwt = js_of_ocaml-lwt.override {
-        ocaml_lwt = lwt3;
-        lwt_log = lib.overrideDerivation
-          (lwt_log.override { lwt = lwt3; })
-          (_: { inherit (lwt3) src; });
-      };
-      lwt_react = lwt_react.override { lwt = lwt3; };
-      lwt_ssl = lwt_ssl.override { lwt = lwt3; };
-    };
+    eliom = callPackage ../development/ocaml-modules/eliom { };
 
     elpi = callPackage ../development/ocaml-modules/elpi { };
 
