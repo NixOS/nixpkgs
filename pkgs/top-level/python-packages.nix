@@ -450,6 +450,8 @@ in {
 
   mwoauth = callPackage ../development/python-modules/mwoauth { };
 
+  nanomsg-python = callPackage ../development/python-modules/nanomsg-python { inherit (pkgs) nanomsg; };
+
   nbval = callPackage ../development/python-modules/nbval { };
 
   nest-asyncio = callPackage ../development/python-modules/nest-asyncio { };
