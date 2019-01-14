@@ -44,7 +44,7 @@ let
         greeter-user = ${config.users.users.lightdm.name}
         greeters-directory = ${cfg.greeter.package}
       ''}
-      sessions-directory = ${dmcfg.session.desktops}/share/xsessions
+      sessions-directory = ${dmcfg.session.desktops}/share/xsessions:${dmcfg.session.desktops}/share/wayland-sessions
       ${cfg.extraConfig}
 
       [Seat:*]
