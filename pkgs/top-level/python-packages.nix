@@ -1523,6 +1523,8 @@ in {
 
   cssutils = callPackage ../development/python-modules/cssutils { };
 
+  css-parser = callPackage ../development/python-modules/css-parser { };
+
   darcsver = callPackage ../development/python-modules/darcsver { };
 
   dask = callPackage ../development/python-modules/dask { };
