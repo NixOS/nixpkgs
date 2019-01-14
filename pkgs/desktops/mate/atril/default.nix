@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "atril-${version}";
-  version = "1.20.0";
+  version = "1.20.3";
 
   src = fetchurl {
     url = "https://pub.mate-desktop.org/releases/${mate.getRelease version}/${name}.tar.xz";
-    sha256 = "1639jxcdhcn5wvb4gj9xncdj5d5c3rnyydwwsgqj66cmfmb53l1n";
+    sha256 = "00vrqyfk370fdhlfv3m6n0l6hnx30hrsrcg1xja03957cgvcvnvr";
   };
 
   nativeBuildInputs = [
