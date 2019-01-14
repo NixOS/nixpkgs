@@ -16,12 +16,12 @@ let
 in
 rec {
   # Policy: use the highest stable version as the default (on our master).
-  stable = if stdenv.hostPlatform.system == "x86_64-linux" then stable_410 else legacy_390;
+  stable = if stdenv.hostPlatform.system == "x86_64-linux" then stable_415 else legacy_390;
 
   # No active beta right now
   beta = stable;
 
-  stable_410 = generic {
+  stable_415 = generic {
     version = "415.25";
     sha256_64bit = "0jck3sjhkdf9j40fqa6hpm2m9i11bfka9diaxmk2apni4f4mpdk4";
     settingsSha256 = "0x5a9dhr29g67rbgl1w973fzgjfg1lyn3dpq7fpc7chfp91vxzrp";
