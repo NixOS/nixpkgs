@@ -3579,7 +3579,7 @@
   };
   psyanticy = {
     email = "iuns@outlook.fr";
-    github = "Assassinkin";
+    github = "PsyanticY";
     name = "Psyanticy";
   };
   puffnfresh = {
