@@ -1270,14 +1270,6 @@ in {
 
   CommonMark = callPackage ../development/python-modules/commonmark { };
 
-  CommonMark_54 = self.CommonMark.overridePythonAttrs (oldAttrs: rec {
-    version = "0.5.4";
-    src = oldAttrs.src.override {
-      inherit version;
-      sha256 = "34d73ec8085923c023930dfc0bcd1c4286e28a2a82de094bb72fabcc0281cbe5";
-    };
-  });
-
   coilmq = callPackage ../development/python-modules/coilmq { };
 
   colander = callPackage ../development/python-modules/colander { };
