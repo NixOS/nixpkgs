@@ -4,8 +4,6 @@ python3Packages.buildPythonApplication rec {
   pname = "asciinema";
   version = "2.0.2";
 
-  propagatedBuildInputs = with python3Packages; [ requests ];
-
   src = fetchFromGitHub {
     owner = "asciinema";
     repo = "asciinema";
