@@ -4665,6 +4665,8 @@ in {
 
   funcy = callPackage ../development/python-modules/funcy { };
 
+  fuzzywuzzy = callPackage ../development/python-modules/fuzzywuzzy { };
+
   vxi11 = callPackage ../development/python-modules/vxi11 { };
 
   svg2tikz = callPackage ../development/python-modules/svg2tikz { };
