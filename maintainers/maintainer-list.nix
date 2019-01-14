@@ -3978,6 +3978,11 @@
     github = "sdll";
     name = "Sasha Illarionov";
   };
+  sdorminey = {
+    email = "amabel.dorminey@gmail.com";
+    github = "sdorminey";
+    name = "Star Dorminey";
+  };
   SeanZicari = {
     email = "sean.zicari@gmail.com";
     github = "SeanZicari";
