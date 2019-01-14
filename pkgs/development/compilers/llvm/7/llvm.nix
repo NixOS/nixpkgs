@@ -15,7 +15,8 @@
 , enableManpages ? false
 , enableSharedLibraries ? true
 # Mesa requires AMDGPU target
-, enableTargets ? [ stdenv.hostPlatform stdenv.targetPlatform "AMDGPU" ]
+# BPF is used by bcc
+, enableTargets ? [ stdenv.hostPlatform stdenv.targetPlatform "AMDGPU" "BPF" ]
 , enablePFM ? !stdenv.isDarwin
 }:
 
