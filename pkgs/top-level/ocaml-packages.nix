@@ -412,6 +412,8 @@ let
 
     ocaml_lwt = if lib.versionOlder "4.02" ocaml.version then lwt4 else lwt2;
 
+    lwt_camlp4 = callPackage ../development/ocaml-modules/lwt/camlp4.nix { };
+
     lwt_log = callPackage ../development/ocaml-modules/lwt_log {
       lwt = lwt4;
     };
