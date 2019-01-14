@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
     sha256 = "18xqhxjm8dl4w3izg7202i8vicfggkcvi0p9ii28k43b5ps1akg1";
   };
 
+  patches = [ ./poppler-0.73.0.patch ];
+
   enableParallelBuilding = true;
 
   buildInputs = [
