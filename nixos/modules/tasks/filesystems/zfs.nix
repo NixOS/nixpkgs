@@ -535,6 +535,7 @@ in
 
       systemd.timers.zfs-scrub = {
         wantedBy = [ "timers.target" ];
+        after = [ "multi-user.target" ]; # Apparently scrubbing before boot is complete hangs the system? #53583
         timerConfig = {
           OnCalendar = cfgScrub.interval;
           Persistent = "yes";
