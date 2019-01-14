@@ -8842,6 +8842,8 @@ in
 
   mage = callPackage ../development/tools/build-managers/mage { };
 
+  mbed-cli = callPackage ../development/tools/mbed-cli { };
+
   minify = callPackage ../development/web/minify { };
 
   minizinc = callPackage ../development/tools/minizinc { };
