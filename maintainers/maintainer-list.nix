@@ -3930,6 +3930,11 @@
     github = "sauyon";
     name = "Sauyon Lee";
   };
+  sb0 = {
+    email = "sb@m-labs.hk";
+    github = "sbourdeauducq";
+    name = "Sébastien Bourdeauducq";
+  };
   sboosali = {
     email = "SamBoosalis@gmail.com";
     github = "sboosali";
