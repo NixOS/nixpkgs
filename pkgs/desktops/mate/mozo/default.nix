@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "mozo-${version}";
-  version = "1.20.1";
+  version = "1.20.2";
 
   src = fetchurl {
     url = "http://pub.mate-desktop.org/releases/${mate.getRelease version}/${name}.tar.xz";
-    sha256 = "16rkwbq385i2acll0kcsnp4ghdyljylhp06bjdsvbwv6bjspyyrp";
+    sha256 = "1q4hqhigimxav2a8xxyd53lq8q80szsphcv37y2jhm6g6wvdmvhd";
   };
   
   pythonPath = [ mate.mate-menus pythonPackages.pygobject3 ];
