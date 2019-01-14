@@ -4562,6 +4562,8 @@ in
 
   obexd = callPackage ../tools/bluetooth/obexd { };
 
+  oci-image-tool = callPackage ../tools/misc/oci-image-tool { };
+
   ocproxy = callPackage ../tools/networking/ocproxy { };
 
   ocserv = callPackage ../tools/networking/ocserv { };

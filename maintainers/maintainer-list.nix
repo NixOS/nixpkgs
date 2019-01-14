@@ -3235,6 +3235,11 @@
     github = "nyarly";
     name = "Judson Lester";
   };
+  nzhang-zh = {
+    email = "n.zhang.hp.au@gmail.com";
+    github = "nzhang-zh";
+    name = "Ning Zhang";
+  };
   obadz = {
     email = "obadz-nixos@obadz.com";
     github = "obadz";
