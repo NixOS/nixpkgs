@@ -13,7 +13,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "6.1-20190105";
+  version = "6.1-20190112";
   name = "ncurses-${version}" + lib.optionalString (abiVersion == "5") "-abi5-compat";
 
   src = fetchurl {
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
       "https://invisible-mirror.net/archives/ncurses/current/ncurses-${version}.tgz"
       "ftp://ftp.invisible-island.net/ncurses/current/ncurses-${version}.tgz"
     ];
-    sha256 = "14addfq4dqxzwbys69966ml8x1x1z864h2xw7yzdwhx7a82rghms";
+    sha256 = "10s9r1lci2zym401ddw4w9cb3jmgprjnzpzr08djl3mmr0vpqnx2";
   };
 
   patches = lib.optional (!stdenv.cc.isClang) ./clang.patch;
