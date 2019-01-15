@@ -14,9 +14,6 @@
 , debugVersion ? false
 , enableManpages ? false
 , enableSharedLibraries ? true
-# Mesa requires AMDGPU target
-# BPF is used by bcc
-, enableTargets ? [ stdenv.hostPlatform stdenv.targetPlatform "AMDGPU" "BPF" ]
 , enablePFM ? !stdenv.isDarwin
 }:
 
@@ -29,9 +26,6 @@ let
   shortVersion = with stdenv.lib;
     concatStringsSep "." (take 1 (splitString "." release_version));
 
-  inherit
-    (import ../common.nix { inherit (stdenv) lib; })
-    llvmBackendList;
 in stdenv.mkDerivation (rec {
   name = "llvm-${version}";
 
@@ -89,7 +83,6 @@ in stdenv.mkDerivation (rec {
     "-DLLVM_ENABLE_RTTI=ON"
     "-DLLVM_HOST_TRIPLE=${stdenv.hostPlatform.config}"
     "-DLLVM_DEFAULT_TARGET_TRIPLE=${stdenv.targetPlatform.config}"
-    "-DLLVM_TARGETS_TO_BUILD=${llvmBackendList enableTargets}"
     "-DLLVM_EXPERIMENTAL_TARGETS_TO_BUILD=WebAssembly"
     "-DLLVM_ENABLE_DUMP=ON"
   ] ++ optionals enableSharedLibraries [

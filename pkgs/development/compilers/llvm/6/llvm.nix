@@ -28,10 +28,6 @@ let
   shortVersion = with stdenv.lib;
     concatStringsSep "." (take 2 (splitString "." release_version));
 
-  inherit
-    (import ../common.nix { inherit (stdenv) lib; })
-    llvmBackendList;
-
 in stdenv.mkDerivation (rec {
   name = "llvm-${version}";
 
@@ -52,10 +48,15 @@ in stdenv.mkDerivation (rec {
   propagatedBuildInputs = [ ncurses zlib ];
 
   patches = [
-    # fixes tests, included in llvm_7
+    # Patches to fix tests, included in llvm_7
     (fetchpatch {
       url = "https://github.com/llvm-mirror/llvm/commit/737553be0c9c25c497b45a241689994f177d5a5d.patch";
       sha256 = "0hnaxnkx7zy5yg98f1ggv8a9l0r6g19n6ygqsv26masrnlcbccli";
+    })
+    (fetchpatch {
+      url = "https://github.com/llvm-mirror/llvm/commit/1c0dd31a7837c3e2f1c4ac14e4d5ac640688bd1f.patch";
+      includes = [ "test/tools/gold/X86/common.ll" ];
+      sha256 = "0fxgrxmfnjx17w3lcq19rk68b2xksh1bynz3ina784kma7hp4wdb";
     })
   ];
 
@@ -94,7 +95,6 @@ in stdenv.mkDerivation (rec {
     "-DLLVM_ENABLE_RTTI=ON"
     "-DLLVM_HOST_TRIPLE=${stdenv.hostPlatform.config}"
     "-DLLVM_DEFAULT_TARGET_TRIPLE=${stdenv.targetPlatform.config}"
-    "-DLLVM_TARGETS_TO_BUILD=${llvmBackendList enableTargets}"
     "-DLLVM_EXPERIMENTAL_TARGETS_TO_BUILD=WebAssembly"
     "-DLLVM_ENABLE_DUMP=ON"
   ] ++ optionals enableSharedLibraries [
