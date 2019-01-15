@@ -117,8 +117,8 @@ stdenv.mkDerivation rec {
 
   makeFlags =
     [
-      "FC=${optionalString (stdenv.hostPlatform != stdenv.buildPlatform) stdenv.cc.targetPrefix}gfortran"
-      "CC=${optionalString (stdenv.hostPlatform != stdenv.buildPlatform) stdenv.cc.targetPrefix}cc"
+      "FC=${stdenv.cc.targetPrefix}gfortran"
+      "CC=${stdenv.cc.targetPrefix}cc"
       ''PREFIX="''$(out)"''
       "NUM_THREADS=64"
       "INTERFACE64=${if blas64 then "1" else "0"}"
@@ -128,7 +128,7 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [ "NO_BINARY_MODE=1" "HOSTCC=cc" "CROSS=1" ]
     ++ mapAttrsToList (var: val: var + "=" + val) config;
 
-  doCheck = stdenv.hostPlatform != stdenv.buildPlatform;
+  doCheck = true;
   checkTarget = "tests";
 
   postInstall = ''
