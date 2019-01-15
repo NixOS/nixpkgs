@@ -175,6 +175,13 @@ with import ./runit-lib.nix { inherit pkgs lib; runit = config.runit.package; ma
          '';
          deps = [ "modprobe" ];
       };
+
+      system.activationScripts.mounts = {
+        text = ''
+          ${pkgs.utillinux}/bin/mount -aF
+        '';
+        deps = [ "specialfs" ];
+      };
     };
 
 }
