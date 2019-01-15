@@ -115,18 +115,17 @@ stdenv.mkDerivation rec {
     coreutils
   ];
 
-  makeFlags =
-    [
-      "FC=${stdenv.cc.targetPrefix}gfortran"
-      "CC=${stdenv.cc.targetPrefix}cc"
-      ''PREFIX="''$(out)"''
-      "NUM_THREADS=64"
-      "INTERFACE64=${toString (if blas64 then true else false)}"
-      "NO_STATIC=1"
-    ]
-    ++ stdenv.lib.optional (stdenv.hostPlatform.libc == "musl") "NO_AFFINITY=1"
-    ++ stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [ "NO_BINARY_MODE=1" "HOSTCC=cc" "CROSS=1" ]
-    ++ mapAttrsToList (var: val: "${var}=${toString val}") config;
+  makeFlags = mapAttrsToList (var: val: "${var}=${toString val}") (config // {
+    FC = "${stdenv.cc.targetPrefix}gfortran";
+    CC = "${stdenv.cc.targetPrefix}cc";
+    PREFIX = placeholder "out";
+    NUM_THREADS = 64;
+    INTERFACE64 = blas64;
+    NO_STATIC = true;
+    CROSS = stdenv.hostPlatform != stdenv.buildPlatform;
+    HOSTCC = "${buildPackages.stdenv.cc.targetPrefix}cc";
+    NO_BINARY_MODE = stdenv.hostPlatform != stdenv.buildPlatform;
+  });
 
   doCheck = true;
   checkTarget = "tests";
