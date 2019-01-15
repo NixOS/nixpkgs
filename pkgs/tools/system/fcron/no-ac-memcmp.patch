@@ -1,0 +1,16 @@
+diff -u ../fcron-3.3.0.orig/configure.in ./configure.in
+--- ../fcron-3.3.0.orig/configure.in	2019-01-05 21:24:05.463395749 -0800
++++ ./configure.in	2019-01-05 21:24:14.771544523 -0800
+@@ -81,7 +81,6 @@
+ 
+ dnl Checks for library functions.
+ AC_PROG_GCC_TRADITIONAL
+-AC_FUNC_MEMCMP
+ AC_TYPE_SIGNAL
+ AC_FUNC_STRFTIME
+ AC_FUNC_WAIT3
+Common subdirectories: ../fcron-3.3.0.orig/debian and ./debian
+Common subdirectories: ../fcron-3.3.0.orig/doc and ./doc
+Common subdirectories: ../fcron-3.3.0.orig/files and ./files
+Common subdirectories: ../fcron-3.3.0.orig/m4 and ./m4
+Common subdirectories: ../fcron-3.3.0.orig/script and ./script
