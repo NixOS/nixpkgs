@@ -308,6 +308,7 @@ let
           ''}
 
           # Authentication management.
+          auth requisite pam_nologin.so
           ${optionalString cfg.googleOsLoginAuthentication
               "auth [success=done perm_denied=bad default=ignore] ${pkgs.google-compute-engine-oslogin}/lib/pam_oslogin_login.so"}
           ${optionalString cfg.rootOK
