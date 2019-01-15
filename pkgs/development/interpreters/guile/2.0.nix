@@ -115,6 +115,6 @@
 
 (stdenv.lib.optionalAttrs (!stdenv.isLinux) {
   # Work around <https://bugs.gnu.org/14201>.
-  SHELL = "/bin/sh";
-  CONFIG_SHELL = "/bin/sh";
+  SHELL = "${stdenv.shell}";
+  CONFIG_SHELL = "${stdenv.shell}";
 })

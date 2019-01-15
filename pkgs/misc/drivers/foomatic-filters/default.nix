@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   preConfigure =
     ''
-      substituteInPlace foomaticrip.c --replace /bin/bash /bin/sh
+      substituteInPlace foomaticrip.c --replace /bin/bash ${stdenv.shell}
     '';
 
   installTargets = "install-cups";

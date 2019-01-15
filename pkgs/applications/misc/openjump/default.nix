@@ -17,9 +17,9 @@ stdenv.mkDerivation {
     s=$out/bin/OpenJump
     dir=$(echo $out/openjump-*)
     cat >> $s << EOF
-    #!/bin/sh
+    #!${stdenv.shell}
     cd $dir/bin
-    exec /bin/sh openjump.sh
+    exec ${stdenv.shell} openjump.sh
     EOF
     chmod +x $s
     ln -s /tmp/openjump.log $dir/bin/jump.log

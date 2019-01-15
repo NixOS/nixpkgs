@@ -21,7 +21,7 @@ mkDerivation rec {
     install -m644 -t $out/share/licenses Copyright/{*.*,_copyright}
     bin="$out/bin/mediathek"
     cat >> "$bin" << EOF
-    #!/bin/sh
+    #!${stdenv.shell}
     exec ${jre}/bin/java -cp "$out/lib/*" -Xms128M -Xmx1G -jar "$out/MediathekView.jar" "\$@"
     EOF
     chmod +x "$bin"

@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     cp -v $src $out/lib/minecraft/server.jar
 
     cat > $out/bin/minecraft-server << EOF
-    #!/bin/sh
+    #!${stdenv.shell}
     exec ${jre}/bin/java \$@ -jar $out/lib/minecraft/server.jar nogui
     EOF
 
