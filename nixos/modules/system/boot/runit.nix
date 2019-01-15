@@ -59,7 +59,7 @@ with import ./runit-lib.nix { inherit pkgs lib; runit = config.runit.package; ma
           done
 
           # Swap script
-          ${map mkSwapScript config.swapDevices}
+          ${lib.concatStringsSep "\n\n" (map mkSwapScript config.swapDevices)}
 
           exec runsvdir -P /run/current-services/
         '';
