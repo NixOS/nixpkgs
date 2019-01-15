@@ -202,7 +202,7 @@ in buildFHSUserEnv rec {
     **
     WARNING: Steam is not set up. Add the following options to /etc/nixos/configuration.nix
     and then run \`sudo nixos-rebuild switch\`:
-    {
+    { 
       hardware.opengl.driSupport32Bit = true;
       hardware.pulseaudio.support32Bit = true;
     }
@@ -232,7 +232,7 @@ in buildFHSUserEnv rec {
       fi
       shift
       ${lib.optionalString (!nativeOnly) "export LD_LIBRARY_PATH=${lib.concatStringsSep ":" ldPath}:$LD_LIBRARY_PATH"}
-      exec -- julia "$@"
+      exec -- "$run" "$@"
     '';
   };
 }

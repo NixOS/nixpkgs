@@ -16395,8 +16395,6 @@ in
 
   cmatrix = callPackage ../applications/misc/cmatrix { };
 
-  cmtk = callPackage ../applications/science/biology/cmtk { };
-
   cmus = callPackage ../applications/audio/cmus {
     inherit (darwin.apple_sdk.frameworks) CoreAudio;
     libjack = libjack2;
@@ -21440,6 +21438,8 @@ in
 
   bftools = callPackage ../applications/science/biology/bftools { };
 
+  cmtk = callPackage ../applications/science/biology/cmtk { }; 
+
   conglomerate = callPackage ../applications/science/biology/conglomerate { };
 
   dcm2niix = callPackage ../applications/science/biology/dcm2niix { };
@@ -21581,11 +21581,7 @@ in
 
   m4rie = callPackage ../development/libraries/science/math/m4rie { };
 
-  mkl-pkgs = callPackage ../development/libraries/science/math/mkl {
-    inherit (llvmPackages) openmp;
-  };
-
-  inherit (mkl-pkgs) mkl mkl-unwrapped;
+  mkl = callPackage ../development/libraries/science/math/mkl { };
 
   nasc = callPackage ../applications/science/math/nasc { };
 
