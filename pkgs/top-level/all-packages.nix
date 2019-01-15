@@ -11213,6 +11213,8 @@ in
 
   libnet = callPackage ../development/libraries/libnet { };
 
+  libnetfilter_acct = callPackage ../development/libraries/libnetfilter_acct { };
+
   libnetfilter_conntrack = callPackage ../development/libraries/libnetfilter_conntrack { };
 
   libnetfilter_cthelper = callPackage ../development/libraries/libnetfilter_cthelper { };
