@@ -2794,6 +2794,10 @@ in {
     inherit (self) systemd pytest;
   };
 
+  jq = callPackage ../development/python-modules/jq {
+    inherit (pkgs) jq;
+  };
+
   jsondate = callPackage ../development/python-modules/jsondate { };
 
   jsondiff = callPackage ../development/python-modules/jsondiff { };
