@@ -4,22 +4,21 @@
 
 stdenv.mkDerivation rec {
   name = "retroshare-${version}";
-  version = "0.6.2";
+  version = "0.6.4";
 
   src = fetchFromGitHub {
     owner = "RetroShare";
     repo = "RetroShare";
     rev = "v${version}";
-    sha256 = "0hly2x87wdvqzzwf3wjzi7092bj8fk4xs6302rkm8gp9bkkmiiw8";
+    sha256 = "14shxjzx3szbqlmil05q3n5pwsfgb42lr82clwkq62zqw7170az1";
+    fetchSubmodules = true;
   };
 
   # NIX_CFLAGS_COMPILE = [ "-I${glib.dev}/include/glib-2.0" "-I${glib.dev}/lib/glib-2.0/include" "-I${libxml2.dev}/include/libxml2" "-I${sqlcipher}/include/sqlcipher" ];
 
-  patchPhase = ''
-    # Fix build error
-    sed -i 's/UpnpString_get_String(es_event->PublisherUrl)/es_event->PublisherUrl/' \
-      libretroshare/src/upnp/UPnPBase.cpp
-  '';
+  patches = [ ./0000-libupnp-fixes.patch
+              ./0001-qt-fixes.patch
+            ];
 
   nativeBuildInputs = [ pkgconfig qmake ];
   buildInputs = [
@@ -36,13 +35,15 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     mkdir -p $out/bin
-    mv $out/RetroShare06-nogui $out/bin/RetroShare-nogui
-    mv $out/RetroShare06 $out/bin/Retroshare
-    ln -s $out/bin/RetroShare-nogui $out/bin/retroshare-nogui
+    mv $out/retroshare-nogui $out/bin/retroshare-nogui
+    mv $out/retroshare $out/bin/retroshare
+    ln -s $out/bin/retroshare-nogui $out/bin/RetroShare-nogui
+    ln -s $out/bin/retroshare $out/bin/RetroShare
 
     # plugins
     mkdir -p $out/share/retroshare
-    mv $out/lib* $out/share/retroshare
+    # No lib is created. Need to build plugins with extra make invocations
+    #mv $out/lib* $out/share/retroshare
 
     # BT DHT bootstrap
     cp libbitdht/src/bitdht/bdboot.txt $out/share/retroshare
@@ -54,6 +55,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.domenkozar ];
-    broken = true; # broken by libupnp: 1.6.21 -> 1.8.3 (#41684)
   };
 }

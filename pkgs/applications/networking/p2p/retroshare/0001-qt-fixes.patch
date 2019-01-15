@@ -1,0 +1,48 @@
+diff --git a/retroshare-gui/src/gui/Posted/PostedItem.cpp b/retroshare-gui/src/gui/Posted/PostedItem.cpp
+index 7d70b3e15..d9cd9c54b 100644
+--- a/retroshare-gui/src/gui/Posted/PostedItem.cpp
++++ b/retroshare-gui/src/gui/Posted/PostedItem.cpp
+@@ -22,6 +22,7 @@
+  */
+ 
+ #include <QDateTime>
++#include <QStyle>
+ 
+ #include "rshare.h"
+ #include "PostedItem.h"
+diff --git a/retroshare-gui/src/gui/common/RSTabWidget.h b/retroshare-gui/src/gui/common/RSTabWidget.h
+index 674445069..f341b6aec 100644
+--- a/retroshare-gui/src/gui/common/RSTabWidget.h
++++ b/retroshare-gui/src/gui/common/RSTabWidget.h
+@@ -23,6 +23,7 @@
+ #define _RSTABWIDGET_H
+ 
+ #include <QTabWidget>
++#include <QTabBar>
+ 
+ /* Subclassing QTabWidget to get the instance of QTabBar. The base method of QTabWidget is protected. */
+ class RSTabWidget : public QTabWidget
+diff --git a/retroshare-gui/src/gui/feeds/GxsChannelPostItem.cpp b/retroshare-gui/src/gui/feeds/GxsChannelPostItem.cpp
+index d154408b7..f0ffa768b 100644
+--- a/retroshare-gui/src/gui/feeds/GxsChannelPostItem.cpp
++++ b/retroshare-gui/src/gui/feeds/GxsChannelPostItem.cpp
+@@ -23,6 +23,7 @@
+ 
+ #include <QTimer>
+ #include <QFileInfo>
++#include <QStyle>
+ 
+ #include "rshare.h"
+ #include "GxsChannelPostItem.h"
+diff --git a/retroshare-gui/src/gui/feeds/GxsForumMsgItem.cpp b/retroshare-gui/src/gui/feeds/GxsForumMsgItem.cpp
+index 97ac9dd75..230d0af8a 100644
+--- a/retroshare-gui/src/gui/feeds/GxsForumMsgItem.cpp
++++ b/retroshare-gui/src/gui/feeds/GxsForumMsgItem.cpp
+@@ -23,6 +23,7 @@
+ 
+ #include <QTimer>
+ #include <QFileInfo>
++#include <QStyle>
+ 
+ #include "rshare.h"
+ #include "GxsForumMsgItem.h"
