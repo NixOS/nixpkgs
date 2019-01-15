@@ -13,35 +13,35 @@
  </refnamediv>
  <refsynopsisdiv>
   <cmdsynopsis>
-   <command>nixos-rebuild</command><group choice='req'> 
+   <command>nixos-rebuild</command><group choice='req'>
    <arg choice='plain'>
     <option>switch</option>
    </arg>
-    
+
    <arg choice='plain'>
     <option>boot</option>
    </arg>
-    
+
    <arg choice='plain'>
     <option>test</option>
    </arg>
-    
+
    <arg choice='plain'>
     <option>build</option>
    </arg>
-    
+
    <arg choice='plain'>
     <option>dry-build</option>
    </arg>
-    
+
    <arg choice='plain'>
     <option>dry-activate</option>
    </arg>
-    
+
    <arg choice='plain'>
     <option>build-vm</option>
    </arg>
-    
+
    <arg choice='plain'>
     <option>build-vm-with-bootloader</option>
    </arg>
@@ -50,29 +50,33 @@
    <arg>
     <option>--upgrade</option>
    </arg>
-    
+
    <arg>
     <option>--install-bootloader</option>
    </arg>
-    
+
    <arg>
     <option>--no-build-nix</option>
    </arg>
-    
+
    <arg>
     <option>--fast</option>
    </arg>
-    
+
    <arg>
     <option>--rollback</option>
    </arg>
+   <arg>
+     <option>--builders</option>
+     <replaceable>builder-spec</replaceable>
+   </arg>
    <sbr />
    <arg>
-    <group choice='req'> 
+    <group choice='req'>
     <arg choice='plain'>
      <option>--profile-name</option>
     </arg>
-     
+
     <arg choice='plain'>
      <option>-p</option>
     </arg>
@@ -314,6 +318,27 @@ $ ./result/bin/run-*-vm
       <filename>/nix/var/nix/profiles/system</filename>.)
      </para>
     </listitem>
+   </varlistentry>
+   <varlistentry>
+     <term>
+       <option>--builders</option>
+       <replaceable>builder-spec</replaceable>
+     </term>
+     <listitem>
+       <para>
+         Allow ad-hoc remote builders for building the new system.
+         This requires the user executing <command>nixos-rebuild</command> (usually
+         root) to be configured as a trusted user in the Nix daemon. This can be
+         achieved by using the <literal>nix.trustedUsers</literal> NixOS option.
+         Examples values for that option are described in the
+		 <literal>Remote builds chapter</literal> in the Nix manual,
+         (i.e. <command>--builders "ssh://bigbrother x86_64-linux"</command>).
+         By specifying an empty string existing builders specified in
+         <filename>/etc/nix/machines</filename> can be ignored:
+         <command>--builders ""</command> for example when they are not
+         reachable due to network connectivity.
+       </para>
+     </listitem>
    </varlistentry>
    <varlistentry>
     <term>

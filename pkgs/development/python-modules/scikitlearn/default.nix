@@ -11,7 +11,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "bc5bc7c7ee2572a1edcb51698a6caf11fae554194aaab9a38105d9ec419f29e6";
+    sha256 = "1ri9kx0yrn85h6ivkaja35afbyhimxn8lsairgns2wi5xv3wfnxw";
   };
 
   buildInputs = [ pillow gfortran glibcLocales ];

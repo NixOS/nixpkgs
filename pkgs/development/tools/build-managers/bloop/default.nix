@@ -2,7 +2,7 @@
 
 let
   baseName = "bloop";
-  version = "1.1.2";
+  version = "1.2.1";
   deps = stdenv.mkDerivation {
     name = "${baseName}-deps-${version}";
     buildCommand = ''
@@ -16,14 +16,14 @@ let
     '';
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
-    outputHash     = "0ki4xh8z31nv42jik998r7gvsxcm0vysx83w0nyvbhi18cah1qh6";
+    outputHash     = "1hr9d9fzp1vd60iqxbn316vzgayhsx9cffl1jclmdycqv0yzgfx3";
   };
 in
 stdenv.mkDerivation rec {
   name = "${baseName}-${version}";
 
   # Fetched from https://github.com/scalacenter/bloop/releases/download/v${version}/install.py
-  nailgunCommit = "dc1dd806";
+  nailgunCommit = "933f482b";
 
   buildInputs = [ jdk makeWrapper deps ];
 

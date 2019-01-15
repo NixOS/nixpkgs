@@ -56,7 +56,7 @@ let
       cp -pv texk/web2c/pdftexdir/pdftoepdf{-poppler0.70.0,}.cc
       cp -pv texk/web2c/pdftexdir/pdftosrc{-newpoppler,}.cc
       # fix build with poppler 0.71
-      find texk/web2c/{lua,pdf}texdir -type f | xargs sed -e 's|gTrue|true|g' -e 's|gFalse|false|g' -e 's|GBool|bool|g' -e 's|getCString|c_str|g' -i
+      find texk/web2c/{lua,pdf}texdir -type f | xargs sed -e 's|gTrue|true|g' -e 's|gFalse|false|g' -e 's|GBool|bool|g' -e 's|getCString|c_str|g' -e 's|Gulong|unsigned long|g' -e 's|Guint|unsigned int|g' -e 's|Gushort|unsigned short|g' -e 's|Guchar|unsigned char|g' -i
     '';
 
     # remove when removing synctex-missing-header.patch

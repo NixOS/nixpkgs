@@ -4,11 +4,11 @@
 
 python.pkgs.buildPythonPackage rec {
   pname = "memory_profiler";
-  version = "0.54.0";
+  version = "0.55.0";
 
   src = python.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "06ld8h8mhm8pk0sv7fxgx0y2q8nri65qlh4vjbs0bq9j7yi44hyn";
+    sha256 = "1hdgh5f59bya079w4ahx4l0hf4gc5yvaz44irp5x57cj9hkpp92z";
   };
 
   propagatedBuildInputs = with python.pkgs; [

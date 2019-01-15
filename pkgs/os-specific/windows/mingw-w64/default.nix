@@ -21,6 +21,6 @@ in stdenv.mkDerivation {
   patches = [ ./osvi.patch ];
 
   meta = {
-    platforms = stdenv.lib.platforms.windows;
+    platforms = stdenv.lib.platforms.all;
   };
 }
