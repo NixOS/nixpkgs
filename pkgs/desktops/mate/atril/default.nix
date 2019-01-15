@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, intltool, gtk3, libxml2, libsecret, poppler, itstool, hicolor-icon-theme, mate, wrapGAppsHook }:
+{ stdenv, fetchurl, pkgconfig, intltool, gtk3, glib, libxml2, libsecret, poppler, itstool, hicolor-icon-theme, mate, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   name = "atril-${version}";
@@ -17,6 +17,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     gtk3
+    glib
     itstool
     libsecret
     libxml2
@@ -25,7 +26,9 @@ stdenv.mkDerivation rec {
     mate.mate-desktop
     hicolor-icon-theme
   ];
-  
+
+  NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
+
   makeFlags = [ "cajaextensiondir=$$out/lib/caja/extensions-2.0" ];
 
   meta = {
