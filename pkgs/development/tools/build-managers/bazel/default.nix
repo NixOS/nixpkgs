@@ -53,9 +53,8 @@ stdenv.mkDerivation rec {
   sourceRoot = ".";
 
   patches = [
-    (lib.optional enableNixHacks ./nix-hacks.patch)
     ./python-stub-path-fix.patch
-    ];
+  ] ++ lib.optional enableNixHacks ./nix-hacks.patch;
 
   # Bazel expects several utils to be available in Bash even without PATH. Hence this hack.
 
@@ -147,7 +146,6 @@ stdenv.mkDerivation rec {
       substituteInPlace tools/jdk/default_java_toolchain.bzl \
         --replace '"jvm_opts": JDK9_JVM_OPTS' \
                   '"jvm_opts": JDK8_JVM_OPTS'
-
 
       # add nix environment vars to .bazelrc
       cat >> .bazelrc <<EOF
