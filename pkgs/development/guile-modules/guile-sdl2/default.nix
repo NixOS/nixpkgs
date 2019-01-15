@@ -5,18 +5,18 @@
 let
   name = "${pname}-${version}";
   pname = "guile-sdl2";
-  version = "0.2.0";
+  version = "0.3.1";
 in stdenv.mkDerivation {
   inherit name;
 
   src = fetchurl {
     url = "https://files.dthompson.us/${pname}/${name}.tar.gz";
-    sha256 = "0yq9lsl17cdvj77padvpk3jcw2g6g0pck9jrchc7n2767rrc012b";
+    sha256 = "0bw7x2lx90k4banc5k7yfkn3as93y25gr1xdr225ll7lmij21k64";
   };
 
+  nativeBuildInputs = [ libtool pkgconfig ];
   buildInputs = [
-    guile libtool pkgconfig
-    SDL2 SDL2_image SDL2_ttf SDL2_mixer
+    guile SDL2 SDL2_image SDL2_ttf SDL2_mixer
   ];
 
   configureFlags = [

@@ -1,19 +1,24 @@
 { stdenv
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
+, nose
 }:
 
 buildPythonPackage rec {
   pname = "munkres";
-  version = "1.0.6";
+  version = "1.0.12";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "c78f803b9b776bfb20a25c9c7bb44adbf0f9202c2024d51aa5969d21e560208d";
+  # No sdist for 1.0.12, see https://github.com/bmc/munkres/issues/25
+  src = fetchFromGitHub {
+    owner = "bmc";
+    repo = pname;
+    rev = "release-${version}";
+    sha256 = "0m3rkn0z3ialndxmyg26xn081znna34i5maa1i4nkhy6nf0ixdjm";
   };
 
-  # error: invalid command 'test'
-  doCheck = false;
+  checkInputs = [ nose ];
+
+  checkPhase = "nosetests";
 
   meta = with stdenv.lib; {
     homepage = http://bmc.github.com/munkres/;

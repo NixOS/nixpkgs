@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip, cmake, libGLU_combined, freeglut, libX11, xproto, inputproto
+{ stdenv, fetchurl, unzip, cmake, libGLU_combined, freeglut, libX11, xorgproto
 , libXi, pkgconfig }:
 
 stdenv.mkDerivation rec {
@@ -14,10 +14,14 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    unzip cmake libGLU_combined freeglut libX11 xproto inputproto libXi
+    unzip cmake libGLU_combined freeglut libX11 xorgproto libXi
   ];
 
-  cmakeFlags = [ "-DBOX2D_INSTALL=ON" "-DBOX2D_BUILD_SHARED=ON" ];
+  cmakeFlags = [
+    "-DBOX2D_INSTALL=ON"
+    "-DBOX2D_BUILD_SHARED=ON"
+    "-DBOX2D_BUILD_EXAMPLES=OFF"
+  ];
 
   prePatch = ''
     substituteInPlace Box2D/Common/b2Settings.h \

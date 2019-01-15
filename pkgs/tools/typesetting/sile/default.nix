@@ -1,5 +1,5 @@
 { stdenv, darwin, fetchurl, makeWrapper, pkgconfig
-, harfbuzz, icu, lpeg, luaexpat, luazlib, luafilesystem
+, harfbuzz, icu, lpeg, luaexpat, luazlib, luafilesystem, luasocket, luasec
 , fontconfig, lua, libiconv
 }:
 
@@ -7,7 +7,7 @@ with stdenv.lib;
 
 let
 
-  libs          = [lpeg luaexpat luazlib luafilesystem];
+  libs          = [ lpeg luaexpat luazlib luafilesystem luasocket luasec ];
   getPath       = lib : type : "${lib}/lib/lua/${lua.luaversion}/?.${type};${lib}/share/lua/${lua.luaversion}/?.${type}";
   getLuaPath    = lib : getPath lib "lua";
   getLuaCPath   = lib : getPath lib "so";
@@ -18,15 +18,16 @@ in
 
 stdenv.mkDerivation rec {
   name = "sile-${version}";
-  version = "0.9.4";
+  version = "0.9.5";
 
   src = fetchurl {
     url = "https://github.com/simoncozens/sile/releases/download/v${version}/${name}.tar.bz2";
-    sha256 = "1mald727hy9bi17rcaph8q400yn5xqkn5f2xf1408g94wmwncs8w";
+    sha256 = "0m80rkbkma11xsr7bbrmq5mdwi5k79clsrmc75blbnsf9wqil8dp";
   };
 
   nativeBuildInputs = [pkgconfig makeWrapper];
-  buildInputs = [ harfbuzz icu lua lpeg luaexpat luazlib luafilesystem fontconfig libiconv ]
+  buildInputs = [ harfbuzz icu lua fontconfig libiconv ]
+  ++ libs
   ++ optional stdenv.isDarwin darwin.apple_sdk.frameworks.AppKit
   ;
 

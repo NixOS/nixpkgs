@@ -3,27 +3,22 @@
 
 stdenv.mkDerivation rec {
   name = "mosquitto-${version}";
-  version = "1.5.3";
+  version = "1.5.5";
 
   src = fetchFromGitHub {
     owner  = "eclipse";
     repo   = "mosquitto";
     rev    = "v${version}";
-    sha256 = "0bknmnvssix7c1cps6mzjjnw9zxdlyfsy6ksqx4zfglcw41p8gnz";
+    sha256 = "1sfwmvrglfy5gqfk004kvbjldqr36dqz6xmppbgfhr47j5zs66xc";
   };
-
-  patches = [
-    # https://github.com/eclipse/mosquitto/issues/983
-    (fetchpatch {
-      url    = "https://github.com/eclipse/mosquitto/commit/7f1419e4de981f5cc38aa3a9684369b1de27ba46.patch";
-      sha256 = "05npr0h79mbaxzjyhdw78hi9gs1cwydf2fv67bqxm81jzj2yhx2s";
-      name   = "fix_threading_on_cmake.patch";
-    })
-  ];
 
   postPatch = ''
     substituteInPlace man/manpage.xsl \
       --replace /usr/share/xml/docbook/stylesheet/ ${docbook_xsl}/share/xml/
+
+    for f in {lib,lib/cpp,src}/CMakeLists.txt ; do
+      substituteInPlace $f --replace /sbin/ldconfig ldconfig
+    done
 
     # the manpages are not generated when using cmake
     pushd man
@@ -39,6 +34,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DWITH_THREADING=ON"
+    "-DWITH_WEBSOCKETS=ON"
   ];
 
   meta = with stdenv.lib; {

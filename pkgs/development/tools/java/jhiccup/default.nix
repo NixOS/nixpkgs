@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "jhiccup-${version}";
-  version = "2.0.9";
+  version = "2.0.10";
 
   src = fetchzip {
     url    = "https://www.azul.com/files/jHiccup-${version}-dist.zip";
-    sha256 = "1y089kzj191j3vclkma4vi1w66pw4jqrnm5z0qw264wqcn0hnq11";
+    sha256 = "1hsvi8wjh615fnjf75h7b5afp04chqcgvini30vfcn3m9a5icbgy";
   };
 
   configurePhase = ":";

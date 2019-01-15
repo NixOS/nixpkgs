@@ -1,6 +1,6 @@
 --- a/giscanner/scannermain.py
 +++ b/giscanner/scannermain.py
-@@ -100,6 +100,39 @@
+@@ -101,6 +101,39 @@
      return group
  
  
@@ -8,7 +8,7 @@
 +    # Newer multiple-output-optimized stdenv has an environment variable
 +    # $outputLib which in turn specifies another variable which then is used as
 +    # the destination for the library contents (${!outputLib}/lib).
-+    store_path = os.environ.get(os.environ.get("outputLib"))
++    store_path = os.environ.get(os.environ.get("outputLib")) if "outputLib" in os.environ else None
 +    if store_path is None:
 +        outputs = os.environ.get("outputs", "out").split()
 +        if "lib" in outputs:
@@ -38,9 +38,9 @@
 +
 +
  def _get_option_parser():
-     parser = optparse.OptionParser('%prog [options] sources')
-     parser.add_option('', "--quiet",
-@@ -209,6 +242,10 @@
+     parser = optparse.OptionParser('%prog [options] sources',
+                                    version='%prog ' + giscanner.__version__)
+@@ -211,6 +244,10 @@
      parser.add_option("", "--filelist",
                        action="store", dest="filelist", default=[],
                        help="file containing headers and sources to be scanned")
@@ -53,48 +53,63 @@
      parser.add_option_group(group)
 --- a/giscanner/shlibs.py
 +++ b/giscanner/shlibs.py
-@@ -63,6 +63,11 @@
-         pattern = "([^\s]*lib*%s[^A-Za-z0-9_-][^\s\(\)]*)"
-     return re.compile(pattern % re.escape(library_name))
+@@ -62,6 +62,12 @@
+     $""" % re.escape(library_name), re.VERBOSE)
+ 
  
 +def _ldd_library_nix_pattern(library_name):
 +    nix_store_dir = re.escape('@nixStoreDir@'.rstrip('/'))
 +    pattern = r'(%s(?:/[^/]*)+lib%s[^A-Za-z0-9_-][^\s\(\)]*)'
 +    return re.compile(pattern % (nix_store_dir, re.escape(library_name)))
 +
- 
++
  # This is a what we do for non-la files. We assume that we are on an
  # ELF-like system where ldd exists and the soname extracted with ldd is
-@@ -112,7 +117,7 @@
-         proc = subprocess.Popen(args, stdout=subprocess.PIPE)
-         patterns = {}
-         for library in libraries:
+ # a filename that can be opened with dlopen().
+@@ -110,17 +116,16 @@ def _resolve_non_libtool(options, binary, libraries):
+         if isinstance(output, bytes):
+             output = output.decode("utf-8", "replace")
+ 
+-        # Use absolute paths on OS X to conform to how libraries are usually
+-        # referenced on OS X systems, and file names everywhere else.
+-        basename = platform.system() != 'Darwin'
+-        return resolve_from_ldd_output(libraries, output, basename=basename)
++        # Never strip away absolute paths in Nix
++        basename = False
++        return resolve_from_ldd_output(libraries, output, basename=basename, fallback_libpath=options.fallback_libpath)
+ 
+ 
+-def resolve_from_ldd_output(libraries, output, basename=False):
++def resolve_from_ldd_output(libraries, output, basename=False, fallback_libpath=""):
+     patterns = {}
+     for library in libraries:
+         if not os.path.isfile(library):
 -            patterns[library] = _ldd_library_pattern(library)
 +            patterns[library] = (_ldd_library_pattern(library), _ldd_library_nix_pattern(library))
+     if len(patterns) == 0:
+         return []
  
-         shlibs = []
-         for line in proc.stdout:
-@@ -122,11 +127,14 @@
-             # possible for the name of the binary to match _ldd_library_pattern.
-             if line == binary.args[0] + ':\n':
-                 continue
+@@ -129,11 +134,14 @@ def resolve_from_ldd_output(libraries, output, basename=False):
+         if line.endswith(':'):
+             continue
+         for word in line.split():
 -            for library, pattern in patterns.items():
--                m = pattern.search(line)
+-                m = pattern.match(word)
 +            for library, (pattern, nix_pattern) in patterns.items():
 +                if line.find('@nixStoreDir@') != -1:
-+                    m = nix_pattern.search(line)
++                    m = nix_pattern.match(word)
 +                else:
-+                    m = pattern.search(line)
++                    m = pattern.match(word)
                  if m:
                      del patterns[library]
--                    shlibs.append(m.group(1))
-+                    shlibs.append(os.path.join(options.fallback_libpath, m.group(1)))
+-                    shlibs.append(_sanitize_install_name(m.group()))
++                    shlibs.append(os.path.join(fallback_libpath, _sanitize_install_name(m.group())))
                      break
  
-         if len(patterns) > 0:
+     if len(patterns) > 0:
 --- a/giscanner/utils.py
 +++ b/giscanner/utils.py
-@@ -113,17 +113,11 @@
+@@ -116,17 +116,11 @@
      if dlname is None:
          return None
  

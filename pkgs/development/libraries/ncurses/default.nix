@@ -4,6 +4,7 @@
 , mouseSupport ? false
 , unicode ? true
 , enableStatic ? stdenv.hostPlatform.useAndroidPrebuilt
+, enableShared ? !enableStatic
 , withCxx ? !stdenv.hostPlatform.useAndroidPrebuilt
 
 , gpm
@@ -12,26 +13,29 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "6.1";
+  version = "6.1-20181027";
   name = "ncurses-${version}" + lib.optionalString (abiVersion == "5") "-abi5-compat";
 
   src = fetchurl {
-    url = "mirror://gnu/ncurses/ncurses-${version}.tar.gz";
-    sha256 = "05qdmbmrrn88ii9f66rkcmcyzp1kb1ymkx7g040lfkd1nkp7w1da";
+    urls = [
+      "https://invisible-mirror.net/archives/ncurses/current/ncurses-${version}.tgz"
+      "ftp://ftp.invisible-island.net/ncurses/current/ncurses-${version}.tgz"
+    ];
+    sha256 = "1xn6wpi22jc61158w4ifq6s1fvilhmsy1in2srn3plk8pm0d4902";
   };
 
-  # The patch st-0.7.patch needs to be removed, if ncurses is upgraded in the future.
-  # It is necessary for the 6.1 version of ncurses.
-  patches = [ ./st-0.7.patch ] ++ lib.optional (!stdenv.cc.isClang) ./clang.patch;
+  patches = lib.optional (!stdenv.cc.isClang) ./clang.patch;
 
   outputs = [ "out" "dev" "man" ];
   setOutputFlags = false; # some aren't supported
 
   configureFlags = [
-    "--with-shared"
+    (lib.withFeature enableShared "shared")
     "--without-debug"
     "--enable-pc-files"
     "--enable-symlinks"
+    "--with-manpage-format=normal"
+    "--disable-stripping"
   ] ++ lib.optional unicode "--enable-widec"
     ++ lib.optional (!withCxx) "--without-cxx"
     ++ lib.optional (abiVersion == "5") "--with-abi-version=5"
@@ -157,7 +161,7 @@ stdenv.mkDerivation rec {
       ported to OS/2 Warp!
     '';
 
-    homepage = http://www.gnu.org/software/ncurses/;
+    homepage = https://www.gnu.org/software/ncurses/;
 
     license = lib.licenses.mit;
     platforms = lib.platforms.all;

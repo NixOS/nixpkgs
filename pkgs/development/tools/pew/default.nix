@@ -11,6 +11,8 @@ with python3Packages; buildPythonApplication rec {
 
     propagatedBuildInputs = [ virtualenv virtualenv-clone setuptools ];
 
+    LC_ALL = "en_US.UTF-8";
+
     postFixup = ''
       set -euo pipefail
       PEW_SITE="$out/lib/${python.libPrefix}/site-packages"
@@ -24,6 +26,7 @@ with python3Packages; buildPythonApplication rec {
     '';
 
     meta = with stdenv.lib; {
+      homepage = https://github.com/berdario/pew;
       description = "Tools to manage multiple virtualenvs written in pure python";
       license = licenses.mit;
       platforms = platforms.all;

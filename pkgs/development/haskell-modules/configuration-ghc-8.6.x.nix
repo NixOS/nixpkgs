@@ -41,69 +41,34 @@ self: super: {
   unix = null;
   xhtml = null;
 
-  # Use to be a core-library, but no longer is since GHC 8.4.x.
-  hoopl = self.hoopl_3_10_2_2;
-
-  # LTS-12.x versions do not compile.
-  base-orphans = self.base-orphans_0_8;
-  brick = self.brick_0_41_2;
-  cassava-megaparsec = doJailbreak super.cassava-megaparsec;
-  config-ini = doJailbreak super.config-ini;   # https://github.com/aisamanra/config-ini/issues/18
-  contravariant = self.contravariant_1_5;
-  free = self.free_5_1;
-  haddock-library = dontCheck super.haddock-library_1_7_0;
-  HaTeX = doJailbreak super.HaTeX;
-  hledger = doJailbreak super.hledger;
-  hledger-lib = doJailbreak super.hledger-lib;
-  hledger-ui = doJailbreak super.hledger-ui;
-  hpack = self.hpack_0_31_1;
-  hslua = self.hslua_1_0_1;
-  hslua-module-text = self.hslua-module-text_0_2_0;
-  hspec = self.hspec_2_6_0;
-  hspec-core = self.hspec-core_2_6_0;
-  hspec-discover = self.hspec-discover_2_6_0;
-  hspec-megaparsec = doJailbreak super.hspec-megaparsec;  # newer versions need megaparsec 7.x
-  hspec-meta = self.hspec-meta_2_5_6;
-  HTF = dontCheck super.HTF_0_13_2_5; # https://github.com/skogsbaer/HTF/issues/74
-  JuicyPixels = self.JuicyPixels_3_3_2;
-  lens = self.lens_4_17;
-  megaparsec = dontCheck (doJailbreak super.megaparsec);
-  patience = markBrokenVersion "0.1.1" super.patience;
-  polyparse = self.polyparse_1_12_1;
-  primitive = self.primitive_0_6_4_0;
-  QuickCheck = self.QuickCheck_2_12_6_1;
-  semigroupoids = self.semigroupoids_5_3_1;
-  tagged = self.tagged_0_8_6;
-  vty = self.vty_5_25_1;
-  wizards = doJailbreak super.wizards;
-  wl-pprint-extras = doJailbreak super.wl-pprint-extras;
-  yaml = self.yaml_0_11_0_0;
-
   # https://github.com/tibbe/unordered-containers/issues/214
   unordered-containers = dontCheck super.unordered-containers;
-
-  # https://github.com/haskell/fgl/issues/79
-  # https://github.com/haskell/fgl/issues/81
-  fgl = appendPatch (overrideCabal super.fgl (drv: { editedCabalFile = null; })) ./patches/fgl-monad-fail.patch;
 
   # Test suite does not compile.
   cereal = dontCheck super.cereal;
   data-clist = doJailbreak super.data-clist;  # won't cope with QuickCheck 2.12.x
+  dates = doJailbreak super.dates; # base >=4.9 && <4.12
   Diff = dontCheck super.Diff;
+  HaTeX = doJailbreak super.HaTeX; # containers >=0.4 && <0.6 is too tight; https://github.com/Daniel-Diaz/HaTeX/issues/126
+  hpc-coveralls = doJailbreak super.hpc-coveralls; # https://github.com/guillaume-nargeot/hpc-coveralls/issues/82
   http-api-data = doJailbreak super.http-api-data;
   persistent-sqlite = dontCheck super.persistent-sqlite;
   psqueues = dontCheck super.psqueues;    # won't cope with QuickCheck 2.12.x
   system-fileio = dontCheck super.system-fileio;  # avoid dependency on broken "patience"
   unicode-transforms = dontCheck super.unicode-transforms;
+  wl-pprint-extras = doJailbreak super.wl-pprint-extras; # containers >=0.4 && <0.6 is too tight; https://github.com/ekmett/wl-pprint-extras/issues/17
+  RSA = dontCheck super.RSA; # https://github.com/GaloisInc/RSA/issues/14
   monad-par = dontCheck super.monad-par;  # https://github.com/simonmar/monad-par/issues/66
+  github = dontCheck super.github; # hspec upper bound exceeded; https://github.com/phadej/github/pull/341
+  binary-orphans = dontCheck super.binary-orphans; # tasty upper bound exceeded; https://github.com/phadej/binary-orphans/commit/8ce857226595dd520236ff4c51fa1a45d8387b33
 
   # https://github.com/jgm/skylighting/issues/55
   skylighting-core = dontCheck super.skylighting-core;
 
-  # https://github.com/jgm/pandoc/issues/4974
-  pandoc = doJailbreak super.pandoc_2_4;
-
-  # Break out of "yaml >=0.10.4.0 && <0.11".
+  # Break out of "yaml >=0.10.4.0 && <0.11": https://github.com/commercialhaskell/stack/issues/4485
   stack = doJailbreak super.stack;
+
+  # Fix build with ghc 8.6.x.
+  git-annex = appendPatch super.git-annex ./patches/git-annex-fix-ghc-8.6.x-build.patch;
 
 }

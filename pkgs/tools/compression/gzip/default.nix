@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "gzip-${version}";
-  version = "1.9";
+  version = "1.10";
 
   src = fetchurl {
     url = "mirror://gnu/gzip/${name}.tar.xz";
-    sha256 = "16h8g4acy7fgfxcjacr3wijjsnixwsfd2jhz3zwdi2qrzi262l5f";
+    sha256 = "1h6p374d3j8d4cdfydzls021xa2yby8myc0h8d6m8bc7k6ncq9c4";
   };
 
   outputs = [ "out" "man" "info" ];
@@ -15,10 +15,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ xz.bin ];
 
-  # In stdenv-linux, prevent a dependency on bootstrap-tools.
-  makeFlags = "SHELL=/bin/sh GREP=grep";
-
-  doCheck = false; # fails
+  makeFlags = [ "SHELL=/bin/sh" "GREP=grep" ];
 
   meta = {
     homepage = https://www.gnu.org/software/gzip/;

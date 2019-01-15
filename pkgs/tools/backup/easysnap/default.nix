@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "easysnap-${version}";
-  version = "unstable-2018-10-28";
+  version = "unstable-2018-11-20";
 
   src = fetchFromGitHub {
     owner = "sjau";
     repo = "easysnap";
-    rev = "aa2768762da7730aa3eb90fdc2190a8359976edc";
-    sha256 = "0csn7capsmlkin4cf1fgl766gvszvqfllqkiyz0g9bvbapxv7nba";
+    rev = "dbf58c06a339cb040dbdcaf7e6ffec5af4add3c7";
+    sha256 = "0rvikmj2k103ffgnvkway8n6ajq0vzwcxb4l5vhka1hqh8047lam";
   };
 
   installPhase = ''

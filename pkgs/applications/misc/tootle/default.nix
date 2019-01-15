@@ -1,8 +1,8 @@
 { stdenv, fetchFromGitHub
 , meson, ninja, pkgconfig, python3
-, gnome3, vala, gobjectIntrospection, wrapGAppsHook
+, gnome3, vala_0_40, gobject-introspection, wrapGAppsHook
 , gtk3, granite
-, json-glib, glib, glib-networking
+, json-glib, glib, glib-networking, hicolor-icon-theme
 }:
 
 let
@@ -18,9 +18,17 @@ in stdenv.mkDerivation rec {
     sha256 = "1z3wyx316nns6gi7vlvcfmalhvxncmvcmmlgclbv6b6hwl5x2ysi";
   };
 
-  nativeBuildInputs = [ meson ninja pkgconfig python3 vala gobjectIntrospection wrapGAppsHook ];
+  nativeBuildInputs = [
+    gobject-introspection
+    meson
+    ninja
+    pkgconfig
+    python3
+    vala_0_40 # should be `elementary.vala` when elementary attribute set is merged
+    wrapGAppsHook
+  ];
   buildInputs = [
-    gtk3 granite json-glib glib glib-networking
+    gtk3 granite json-glib glib glib-networking hicolor-icon-theme
     gnome3.libgee gnome3.libsoup gnome3.gsettings-desktop-schemas
   ];
 

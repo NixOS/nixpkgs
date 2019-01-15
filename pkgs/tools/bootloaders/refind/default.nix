@@ -13,12 +13,12 @@ in
 
 stdenv.mkDerivation rec {
   name = "refind-${version}";
-  version = "0.11.3";
+  version = "0.11.4";
   srcName = "refind-src-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/refind/${version}/${srcName}.tar.gz";
-    sha256 = "13q1yap9r4lzm5xjx1zi434gckd3gk5p8n4vh6jav0h3r3ayp633";
+    sha256 = "1bjd0dl77bc5k6g3kc7s8m57vpbg2zscph9qh84xll9rc10g3fir";
   };
 
   buildInputs = [ gnu-efi ];

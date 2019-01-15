@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, glib, intltool, makeWrapper, shadow
-, gobjectIntrospection, polkit, systemd, coreutils, meson, dbus
+, gobject-introspection, polkit, systemd, coreutils, meson, dbus
 , ninja, python3 }:
 
 stdenv.mkDerivation rec {
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig makeWrapper meson ninja python3 ];
 
-  buildInputs = [ glib intltool gobjectIntrospection polkit systemd dbus ];
+  buildInputs = [ glib intltool gobject-introspection polkit systemd dbus ];
 
   mesonFlags = [ "-Dsystemdsystemunitdir=etc/systemd/system"
                  "-Dlocalstatedir=/var" ];

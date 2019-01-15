@@ -1,24 +1,10 @@
-{ lib, stdenv, python2
+{ lib, stdenv, python3
 , enableSystemd ? true
 }:
 
-with python2.pkgs;
+with python3.pkgs;
 
 let
-  matrix-angular-sdk = buildPythonPackage rec {
-    pname = "matrix-angular-sdk";
-    version = "0.6.8";
-
-    src = fetchPypi {
-      inherit pname version;
-      sha256 = "0gmx4y5kqqphnq3m7xk2vpzb0w2a4palicw7wfdr1q2schl9fhz2";
-    };
-
-    # no checks from Pypi but as this is abandonware, there will be no
-    # new version anyway
-    doCheck = false;
-  };
-
   matrix-synapse-ldap3 = buildPythonPackage rec {
     pname = "matrix-synapse-ldap3";
     version = "0.1.3";
@@ -37,11 +23,11 @@ let
 
 in buildPythonApplication rec {
   pname = "matrix-synapse";
-  version = "0.33.8";
+  version = "0.34.1.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0j8knnqpkidkmpwr2i1k9cwlnwfqpzn3q6ysjvrwpa76hpfcg40l";
+    sha256 = "13jmbcabll3gk0b6yqwfwpc7aymqhpv6iririzskhm4pgbjcp3yk";
   };
 
   patches = [
@@ -58,13 +44,18 @@ in buildPythonApplication rec {
     jinja2
     jsonschema
     lxml
-    matrix-angular-sdk
     matrix-synapse-ldap3
     msgpack-python
     netaddr
     phonenumbers
     pillow
-    prometheus_client
+    (prometheus_client.overrideAttrs (x: {
+      src = fetchPypi {
+        pname = "prometheus_client";
+        version = "0.3.1";
+        sha256 = "093yhvz7lxl7irnmsfdnf2030lkj4gsfkg6pcmy4yr1ijk029g0p";
+      };
+    }))
     psutil
     psycopg2
     pyasn1
@@ -82,12 +73,11 @@ in buildPythonApplication rec {
     unpaddedbase64
   ] ++ lib.optional enableSystemd systemd;
 
-  # tests fail under py3 for now, but version 0.34.0 will use py3 by default
-  # https://github.com/matrix-org/synapse/issues/4036
-  doCheck = true;
-  checkPhase = "python -m twisted.trial test";
+  checkInputs = [ mock ];
 
-  checkInputs = [ mock setuptoolsTrial ];
+  checkPhase = ''
+    PYTHONPATH=".:$PYTHONPATH" trial tests
+  '';
 
   meta = with stdenv.lib; {
     homepage = https://matrix.org;

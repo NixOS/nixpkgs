@@ -45,7 +45,9 @@ let
       else "${config.socket}${maybeOption "mode"}${maybeOption "owner"}${maybeOption "group"}";
   };
 
-  workerOpts = { name, ... }: {
+  traceWarning = w: x: builtins.trace "[1;31mwarning: ${w}[0m" x;
+
+  workerOpts = { name, options, ... }: {
     options = {
       enable = mkOption {
         type = types.nullOr types.bool;
@@ -59,9 +61,18 @@ let
       };
       type = mkOption {
         type = types.nullOr (types.enum [
-          "normal" "controller" "fuzzy_storage" "rspamd_proxy" "lua"
+          "normal" "controller" "fuzzy_storage" "rspamd_proxy" "lua" "proxy"
         ]);
-        description = "The type of this worker";
+        description = ''
+          The type of this worker. The type <literal>proxy</literal> is
+          deprecated and only kept for backwards compatibility and should be
+          replaced with <literal>rspamd_proxy</literal>.
+        '';
+        apply = let
+            from = "services.rspamd.workers.\”${name}\".type";
+            files = options.type.files;
+            warning = "The option `${from}` defined in ${showFiles files} has enum value `proxy` which has been renamed to `rspamd_proxy`";
+          in x: if x == "proxy" then traceWarning warning "rspamd_proxy" else x;
       };
       bindSockets = mkOption {
         type = types.listOf (types.either types.str (types.submodule bindSocketOpts));

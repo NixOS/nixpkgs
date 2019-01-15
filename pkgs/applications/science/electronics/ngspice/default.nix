@@ -1,12 +1,13 @@
 {stdenv, fetchurl, bison, flex
 , readline, libX11, libICE, libXaw, libXmu, libXext, libXt, fftw }:
 
-stdenv.mkDerivation {
-  name = "ngspice-29";
+stdenv.mkDerivation rec {
+  name = "ngspice-${version}";
+  version = "30";
 
   src = fetchurl {
-    url = "mirror://sourceforge/ngspice/ngspice-29.tar.gz";
-    sha256 = "0jjwz73naq7l9yhwdqbpnrfckywp2ffkppivxjv8w92zq7xhyvcd";
+    url = "mirror://sourceforge/ngspice/ngspice-${version}.tar.gz";
+    sha256 = "15v0jdfy2a2zxp8dmy04fdp7w7a4vwvffcwa688r81b86wphxzh8";
   };
 
   nativeBuildInputs = [ flex bison ];

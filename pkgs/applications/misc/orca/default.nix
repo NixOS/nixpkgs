@@ -1,15 +1,15 @@
 { stdenv, pkgconfig, fetchurl, buildPythonApplication
-, autoreconfHook, wrapGAppsHook, gobjectIntrospection
+, autoreconfHook, wrapGAppsHook, gobject-introspection
 , intltool, yelp-tools, itstool, libxmlxx3
 , python, pygobject3, gtk3, gnome3, substituteAll
 , at-spi2-atk, at-spi2-core, pyatspi, dbus, dbus-python, pyxdg
-, xkbcomp, gsettings-desktop-schemas
+, xkbcomp, procps, lsof, coreutils, gsettings-desktop-schemas
 , speechd, brltty, setproctitle, gst_all_1, gst-python
 }:
 
 let
   pname = "orca";
-  version = "3.28.2";
+  version = "3.30.1";
 in buildPythonApplication rec {
   name = "${pname}-${version}";
 
@@ -17,19 +17,22 @@ in buildPythonApplication rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "08rh6ji680g5nrw2n7jrxrw7nwg04sj52jxffcfasgss2f51d38q";
+    sha256 = "1b9s69frjmghjm1p9a4rrvknl9m0qlwr7mr4lsxkvjnblhsnw0g7";
   };
 
   patches = [
     (substituteAll {
       src = ./fix-paths.patch;
+      cat = "${coreutils}/bin/cat";
+      lsof = "${lsof}/bin/lsof";
+      pgrep = "${procps}/bin/pgrep";
       xkbcomp = "${xkbcomp}/bin/xkbcomp";
     })
   ];
 
   nativeBuildInputs = [
     autoreconfHook wrapGAppsHook pkgconfig libxmlxx3
-    intltool yelp-tools itstool gobjectIntrospection
+    intltool yelp-tools itstool gobject-introspection
   ];
 
   propagatedBuildInputs = [

@@ -14,10 +14,10 @@ rec {
 
   firefox = common rec {
     pname = "firefox";
-    ffversion = "63.0.1";
+    ffversion = "64.0.2";
     src = fetchurl {
       url = "mirror://mozilla/firefox/releases/${ffversion}/source/firefox-${ffversion}.source.tar.xz";
-      sha512 = "29acad70259d71a924cbaf4c2f01fb034cf8090759b3a2d74a5eabc2823f83b6508434e619d8501d3930702e2bbad373581a70e2ce57aead9af77fc42766fbe2";
+      sha512 = "2xvzbx20i2qwld04g3wl9j6j8bkcja3i83sf9cpngayllhrjki29020izrwjxrgm0z3isg7zijw656v1v2zzmhlfkpkbk71n2gjj7md";
     };
 
     patches = nixpkgsPatches ++ [
@@ -35,6 +35,7 @@ rec {
     };
     updateScript = callPackage ./update.nix {
       attrPath = "firefox-unwrapped";
+      versionKey = "ffversion";
     };
   };
 
@@ -59,15 +60,16 @@ rec {
     updateScript = callPackage ./update.nix {
       attrPath = "firefox-esr-52-unwrapped";
       ffversionSuffix = "esr";
+      versionKey = "ffversion";
     };
   };
 
   firefox-esr-60 = common rec {
     pname = "firefox-esr";
-    ffversion = "60.3.0esr";
+    ffversion = "60.4.0esr";
     src = fetchurl {
       url = "mirror://mozilla/firefox/releases/${ffversion}/source/firefox-${ffversion}.source.tar.xz";
-      sha512 = "7ded25a38835fbd73a58085e24ad83308afee1784a3bf853d75093c1500ad46988f5865c106abdae938cfbd1fb10746cc1795ece7994fd7eba8a002158cf1bcd";
+      sha512 = "3a2r2xyxqw86ihzbmzmxmj8wh3ay4mrjqrnyn73yl6ry19m1pjqbmy1fxnsmxnykfn35a1w18gmbj26kpn1yy7hif37cvy05wmza6c1";
     };
 
     patches = nixpkgsPatches ++ [
@@ -84,6 +86,7 @@ rec {
     updateScript = callPackage ./update.nix {
       attrPath = "firefox-esr-60-unwrapped";
       versionSuffix = "esr";
+      versionKey = "ffversion";
     };
   };
 

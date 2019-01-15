@@ -1,14 +1,14 @@
-{ stdenv, fetchFromGitHub, ocamlPackages, makeWrapper, writeScript
-, dune, python3, rsync, fetchpatch, buck }:
+{ stdenv, fetchFromGitHub, ocamlPackages, writeScript
+, dune, python3, rsync, buck, watchman }:
 let
   # Manually set version - the setup script requires
   # hg and git + keeping the .git directory around.
-  pyre-version = "0.0.17";  # also change typeshed revision below with $pyre-src/.typeshed-version
+  pyre-version = "0.0.18";  # also change typeshed revision below with $pyre-src/.typeshed-version
   pyre-src = fetchFromGitHub {
     owner = "facebook";
     repo = "pyre-check";
     rev = "v${pyre-version}";
-    sha256 = "0y86a3g5xbgh0byksyx5jw7yq7w840x85dhz9inz6mkg5j06mcis";
+    sha256 = "1sy1lk9j3hq20dabfkr9s4r7prrcndrs345a5iqz6yzvakr4r74d";
   };
   versionFile = writeScript "version.ml" ''
     cat > "./version.ml" <<EOF
@@ -21,14 +21,13 @@ let
     let log_version_banner () =
       Log.info "Running as pid: %d" (Pid.to_int (Unix.getpid ()));
       Log.info "Version: %s" (version ());
+      Log.info "Build info: %s" (build_info ())
     EOF
   '';
  pyre-bin = stdenv.mkDerivation {
   name = "pyre-${pyre-version}";
 
   src = pyre-src;
-
-  nativeBuildInputs = [ makeWrapper ];
 
   buildInputs = with ocamlPackages; [
     ocaml
@@ -45,32 +44,29 @@ let
     # python36Packages.python36Full # TODO
   ];
 
-  buildPhase = ''
+  preBuild = ''
     # build requires HOME to be set
-    export HOME=.
+    export HOME=$TMPDIR
 
     # "external" because https://github.com/facebook/pyre-check/pull/8/files
     sed "s/%VERSION%/external/" dune.in > dune
 
-    cp ${versionFile} ./scripts/generate-version-number.sh
+    ln -sf ${versionFile} ./scripts/generate-version-number.sh
 
     mkdir $(pwd)/build
     export OCAMLFIND_DESTDIR=$(pwd)/build
     export OCAMLPATH=$OCAMLPATH:$(pwd)/build
-
-    make release
   '';
 
-  checkPhase = ''
-    make test
-    # ./scripts/run-python-tests.sh # TODO: once typeshed and python bits are added
-  '';
+  buildFlags = [ "release" ];
+
+  doCheck = true;
+  # ./scripts/run-python-tests.sh # TODO: once typeshed and python bits are added
 
   # Note that we're not installing the typeshed yet.
   # Improvement for a future version.
   installPhase = ''
-    mkdir -p $out/bin
-    cp ./_build/default/main.exe $out/bin/pyre.bin
+    install -D ./_build/default/main.exe $out/bin/pyre.bin
   '';
 
   meta = with stdenv.lib; {
@@ -82,7 +78,7 @@ let
   };
 };
 typeshed = stdenv.mkDerivation {
-  name = "typeshed";
+  pname = "typeshed";
   version = pyre-version;
   src = fetchFromGitHub {
     owner = "python";
@@ -107,6 +103,10 @@ in python3.pkgs.buildPythonApplication rec {
     substituteInPlace scripts/build-pypi-package.sh \
         --replace 'NIX_BINARY_FILE' '${pyre-bin}/bin/pyre.bin' \
         --replace 'BUILD_ROOT="$(mktemp -d)"' "BUILD_ROOT=$PWD/build"
+    for file in client/pyre.py client/commands/initialize.py client/commands/tests/initialize_test.py; do
+      substituteInPlace "$file" \
+          --replace '"watchman"' '"${watchman}/bin/watchman"'
+    done
     substituteInPlace client/buck.py \
         --replace '"buck"' '"${buck}/bin/buck"'
     substituteInPlace client/tests/buck_test.py \

@@ -1,5 +1,6 @@
 { system ? builtins.currentSystem
-, pkgs ? import ../.. { inherit system; }
+, config ? {}
+, pkgs ? import ../.. { inherit system config; }
 , channelMap ? {
     stable = pkgs.chromium;
     beta   = pkgs.chromiumBeta;
@@ -7,7 +8,7 @@
   }
 }:
 
-with import ../lib/testing.nix { inherit system; };
+with import ../lib/testing.nix { inherit system pkgs; };
 with pkgs.lib;
 
 mapAttrs (channel: chromiumPkg: makeTest rec {

@@ -1,18 +1,19 @@
 { stdenv, fetchFromGitHub, ocamlPackages, cf-private, CoreServices }:
 
 stdenv.mkDerivation rec {
-  version = "0.85.0";
+  version = "0.90.0";
   name = "flow-${version}";
 
   src = fetchFromGitHub {
     owner  = "facebook";
     repo   = "flow";
     rev    = "refs/tags/v${version}";
-    sha256 = "0kci017bl4ihq89zpwlgdlwzv7kili8146940kyar5v66kgf7xsh";
+    sha256 = "12y34l4nhcmdcv91gzdrxw0cvd8w0cg69c5km1nkydgayk82a3x2";
   };
 
   installPhase = ''
-    install -Dm755 -t $out/bin bin/flow
+    install -Dm755 bin/flow $out/bin/flow
+    install -Dm644 resources/shell/bash-completion $out/share/bash-completion/completions/flow
   '';
 
   buildInputs = (with ocamlPackages; [ ocaml findlib ocamlbuild dtoa core_kernel sedlex ocaml_lwt lwt_log lwt_ppx ppx_deriving ppx_gen_rec ppx_tools_versioned visitors wtf8 ])

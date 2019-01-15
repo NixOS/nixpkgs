@@ -19,7 +19,7 @@ with stdenv.lib;
 # make sure libglx.so of ati is used. xorg.xorgserver does provide it as well
 # which is a problem because it doesn't contain the xorgserver patch supporting
 # the XORG_DRI_DRIVER_PATH env var.
-# See http://thread.gmane.org/gmane.linux.distributions.nixos/4145 for a
+# See https://marc.info/?l=nix-dev&m=139641585515351 for a
 # workaround (TODO)
 
 # The gentoo ebuild contains much more "magic" and is usually a great resource to
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
   libXrandr = xorg.libXrandr;
   libXrender = xorg.libXrender;
   libXxf86vm = xorg.libXxf86vm;
-  xf86vidmodeproto = xorg.xf86vidmodeproto;
+  xorgproto = xorg.xorgproto;
   libSM = xorg.libSM;
   libICE = xorg.libICE;
   libfreetype = freetype;
@@ -87,7 +87,7 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [ xorg.libXrender xorg.libXext xorg.libX11 xorg.libXinerama xorg.libSM
-      xorg.libXrandr xorg.libXxf86vm xorg.xf86vidmodeproto xorg.imake xorg.libICE
+      xorg.libXrandr xorg.libXxf86vm xorg.xorgproto xorg.imake xorg.libICE
       patchelf
       unzip
       libGLU_combined
@@ -107,7 +107,7 @@ stdenv.mkDerivation rec {
   # outputs TODO: probably many fixes are needed;
   LD_LIBRARY_PATH = makeLibraryPath
     [ xorg.libXrender xorg.libXext xorg.libX11 xorg.libXinerama xorg.libSM
-      xorg.libXrandr xorg.libXxf86vm xorg.xf86vidmodeproto xorg.imake xorg.libICE
+      xorg.libXrandr xorg.libXxf86vm xorg.xorgproto xorg.imake xorg.libICE
       libGLU_combined
       fontconfig
       freetype

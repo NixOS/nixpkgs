@@ -56,25 +56,30 @@ foo { arg = ...; }
      or list elements should be aligned:
 <programlisting>
 # A long list.
-list =
-  [ elem1
-    elem2
-    elem3
-  ];
+list = [
+  elem1
+  elem2
+  elem3
+];
 
 # A long attribute set.
-attrs =
-  { attr1 = short_expr;
-    attr2 =
-      if true then big_expr else big_expr;
-  };
-
-# Alternatively:
 attrs = {
   attr1 = short_expr;
   attr2 =
     if true then big_expr else big_expr;
 };
+
+# Combined
+listOfAttrs = [
+  {
+    attr1 = 3;
+    attr2 = "fff";
+  }
+  {
+    attr1 = 5;
+    attr2 = "ggg";
+  }
+];
 </programlisting>
     </para>
    </listitem>
@@ -192,6 +197,23 @@ args.stdenv.mkDerivation (args // {
   <title>Package naming</title>
 
   <para>
+    The key words
+    <emphasis>must</emphasis>,
+    <emphasis>must not</emphasis>,
+    <emphasis>required</emphasis>,
+    <emphasis>shall</emphasis>,
+    <emphasis>shall not</emphasis>,
+    <emphasis>should</emphasis>,
+    <emphasis>should not</emphasis>,
+    <emphasis>recommended</emphasis>,
+    <emphasis>may</emphasis>,
+    and <emphasis>optional</emphasis> in this section
+    are to be interpreted as described in
+    <link xlink:href="https://tools.ietf.org/html/rfc2119">RFC 2119</link>.
+    Only <emphasis>emphasized</emphasis> words are to be interpreted in this way.
+  </para>
+
+  <para>
    In Nixpkgs, there are generally three different names associated with a
    package:
    <itemizedlist>
@@ -231,14 +253,15 @@ args.stdenv.mkDerivation (args // {
    <itemizedlist>
     <listitem>
      <para>
-      Generally, try to stick to the upstream package name.
+       The <literal>name</literal> attribute <emphasis>should</emphasis>
+       be identical to the upstream package name.
      </para>
     </listitem>
     <listitem>
      <para>
-      Don’t use uppercase letters in the <literal>name</literal> attribute
-      — e.g., <literal>"mplayer-1.0rc2"</literal> instead of
-      <literal>"MPlayer-1.0rc2"</literal>.
+       The <literal>name</literal> attribute <emphasis>must not</emphasis>
+       contain uppercase letters — e.g., <literal>"mplayer-1.0rc2"</literal>
+       instead of <literal>"MPlayer-1.0rc2"</literal>.
      </para>
     </listitem>
     <listitem>
@@ -252,14 +275,14 @@ args.stdenv.mkDerivation (args // {
      <para>
       If a package is not a release but a commit from a repository, then the
       version part of the name <emphasis>must</emphasis> be the date of that
-      (fetched) commit. The date must be in <literal>"YYYY-MM-DD"</literal>
+      (fetched) commit. The date <emphasis>must</emphasis> be in <literal>"YYYY-MM-DD"</literal>
       format. Also append <literal>"unstable"</literal> to the name - e.g.,
       <literal>"pkgname-unstable-2014-09-23"</literal>.
      </para>
     </listitem>
     <listitem>
      <para>
-      Dashes in the package name should be preserved in new variable names,
+      Dashes in the package name <emphasis>should</emphasis> be preserved in new variable names,
       rather than converted to underscores or camel cased — e.g.,
       <varname>http-parser</varname> instead of <varname>http_parser</varname>
       or <varname>httpParser</varname>. The hyphenated style is preferred in
@@ -268,7 +291,7 @@ args.stdenv.mkDerivation (args // {
     </listitem>
     <listitem>
      <para>
-      If there are multiple versions of a package, this should be reflected in
+      If there are multiple versions of a package, this <emphasis>should</emphasis> be reflected in
       the variable names in <filename>all-packages.nix</filename>, e.g.
       <varname>json-c-0-9</varname> and <varname>json-c-0-11</varname>. If
       there is an obvious “default” version, make an attribute like

@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, autoreconfHook, libzip, boost, wt3, libconfig, pkgconfig } :
 
 stdenv.mkDerivation rec {
-  name = "fileshelter";
+  pname = "fileshelter";
   version = "3.0.0";
 
   src = fetchFromGitHub {
@@ -15,6 +15,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
   buildInputs = [ libzip boost wt3 libconfig ];
+
+  NIX_LDFLAGS = [
+    "-lpthread"
+  ];
 
   postInstall = ''
     ln -s ${wt3}/share/Wt/resources $out/share/fileshelter/docroot/resources

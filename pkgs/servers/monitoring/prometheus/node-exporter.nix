@@ -1,10 +1,8 @@
-{ stdenv, buildGo19Package, fetchFromGitHub }:
+{ stdenv, buildGoPackage, fetchFromGitHub }:
 
-# Go 1.10 causes segfaults:
-# https://github.com/prometheus/node_exporter/issues/870
-buildGo19Package rec {
+buildGoPackage rec {
   name = "node_exporter-${version}";
-  version = "0.16.0";
+  version = "0.17.0";
   rev = "v${version}";
 
   goPackagePath = "github.com/prometheus/node_exporter";
@@ -13,7 +11,7 @@ buildGo19Package rec {
     inherit rev;
     owner = "prometheus";
     repo = "node_exporter";
-    sha256 = "0rm6ahccgr1djpwvsa3p1kfal3mpy4a6g5w974pra84gk3krli5a";
+    sha256 = "08g4dg6zcr95j88apsxp828jfyx4vq271w1mgkf77c46c16d2nh0";
   };
 
   # FIXME: tests fail due to read-only nix store

@@ -1,6 +1,6 @@
 { stdenv, fetchurl, libcdio-paranoia, cddiscid, wget, which, vorbis-tools, id3v2, eyeD3
 , lame, flac, glyr
-, perl, MusicBrainz, MusicBrainzDiscID
+, perlPackages
 , makeWrapper }:
 
 let version = "2.9.2";
@@ -29,7 +29,7 @@ in
 
     nativeBuildInputs = [ makeWrapper ];
 
-    buildInputs = [ perl MusicBrainz MusicBrainzDiscID ];
+    buildInputs = with perlPackages; [ perl MusicBrainz MusicBrainzDiscID ];
 
     installFlags = [ "sysconfdir=$(out)/etc" ];
 

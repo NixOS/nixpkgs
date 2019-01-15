@@ -1,13 +1,13 @@
 { stdenv, fetchzip, atk, cairo, dmd, gdk_pixbuf, gnome3, gst_all_1, librsvg
-, pango, pkgconfig, which }:
+, pango, pkgconfig, which, vte }:
 
 stdenv.mkDerivation rec {
   name = "gtkd-${version}";
-  version = "3.8.3";
+  version = "3.8.4";
 
   src = fetchzip {
     url = "https://gtkd.org/Downloads/sources/GtkD-${version}.zip";
-    sha256 = "10jhwy1421bypq62ki1dzv8irvlgwr7s40z6l6vxallm4jkgk9gj";
+    sha256 = "0q2kf1jwr89i8ajjzyf3b4bbla33djvnwrvljq17y206q7qknfyz";
     stripRoot = false;
   };
 
@@ -89,7 +89,7 @@ stdenv.mkDerivation rec {
   dontStrip = true;
 
   inherit atk cairo gdk_pixbuf librsvg pango;
-  inherit (gnome3) glib gtk3 gtksourceview libgda libpeas vte;
+  inherit (gnome3) glib gtk3 gtksourceview libgda libpeas;
   inherit (gst_all_1) gstreamer;
   gst_plugins_base = gst_all_1.gst-plugins-base;
 

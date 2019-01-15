@@ -11,8 +11,6 @@ buildDunePackage rec {
     sha256 = "17hqf7z5afp2z2c55fk5myxkm7cm74259rqm94hcxkqlpdaqhm8h";
   };
 
-  unpackCmd = "tar -xjf $curSrc";
-
   propagatedBuildInputs = [ cstruct ];
   doCheck = true;
 

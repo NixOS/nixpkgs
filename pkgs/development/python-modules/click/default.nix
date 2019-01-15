@@ -2,11 +2,12 @@
 
 buildPythonPackage rec {
   pname = "click";
-  version = "6.7";
+  version = "7.0";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "02qkfpykbq35id8glfgwc38yc430427yd05z1wc5cnld8zgicmgi";
+    pname = "Click";
+    inherit version;
+    sha256 = "5b94b49521f6456670fdb30cd82a4eca9412788a93fa6dd6df72c94d5a8ff2d7";
   };
 
   patches = stdenv.lib.optional (stdenv.lib.versionAtLeast version "6.7") (substituteAll {

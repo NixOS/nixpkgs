@@ -1,24 +1,24 @@
 { stdenv, fetchFromGitHub
-, pkgconfig, SDL2, SDL, SDL2_ttf, openssl, spice-protocol, fontconfig
+, cmake, pkgconfig, SDL2, SDL, SDL2_ttf, openssl, spice-protocol, fontconfig
 , libX11, freefont_ttf, nettle, libconfig
 }:
 
 stdenv.mkDerivation rec {
   name = "looking-glass-client-${version}";
-  version = "a11";
+  version = "a12";
 
   src = fetchFromGitHub {
     owner = "gnif";
     repo = "LookingGlass";
     rev = version;
-    sha256 = "0q4isn86pl5wddf6h8qd62fw3577ns2sd2myzw969sbl796bwcil";
+    sha256 = "0r6bvl9q94039r6ff4f2bg8si95axx9w8bf1h1qr5730d2kv5yxq";
   };
 
   nativeBuildInputs = [ pkgconfig ];
 
   buildInputs = [
     SDL SDL2 SDL2_ttf openssl spice-protocol fontconfig
-    libX11 freefont_ttf nettle libconfig
+    libX11 freefont_ttf nettle libconfig cmake
   ];
 
   enableParallelBuilding = true;
@@ -26,8 +26,8 @@ stdenv.mkDerivation rec {
   sourceRoot = "source/client";
 
   installPhase = ''
-    mkdir -p $out
-    mv bin $out/
+    mkdir -p $out/bin
+    mv looking-glass-client $out/bin
   '';
 
   meta = with stdenv.lib; {

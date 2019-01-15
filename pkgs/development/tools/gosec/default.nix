@@ -5,7 +5,7 @@
 
 buildGoPackage rec {
   name = "gosec-${version}";
-  version = "1.1.0";
+  version = "1.2.0";
 
   goPackagePath = "github.com/securego/gosec";
   excludedPackages = ''cmd/tlsconfig'';
@@ -14,7 +14,7 @@ buildGoPackage rec {
     owner = "securego";
     repo = "gosec";
     rev = "${version}";
-    sha256 = "0vjn3g6w4y4ayx0g766jp31vb78cipl90fcg0mccjr0a539qrpy6";
+    sha256 = "1420yl4cjp4v4xv0l0wbahgl6bjhz77lx5va9hqa6abddmqvx1hg";
   };
 
   goDeps = ./deps.nix;

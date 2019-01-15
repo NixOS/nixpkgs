@@ -36,7 +36,7 @@ let
         #! ${pkgs.runtimeShell} -e
 
         # Initialise the container side of the veth pair.
-        if [ "$PRIVATE_NETWORK" = 1 ]; then
+        if [ -n "$HOST_ADDRESS" ] || [ -n "$LOCAL_ADDRESS" ]; then
 
           ip link set host0 name eth0
           ip link set dev eth0 up
@@ -85,6 +85,10 @@ let
       cp --remove-destination /etc/resolv.conf "$root/etc/resolv.conf"
 
       if [ "$PRIVATE_NETWORK" = 1 ]; then
+        extraFlags+=" --private-network"
+      fi
+
+      if [ -n "$HOST_ADDRESS" ] || [ -n "$LOCAL_ADDRESS" ]; then
         extraFlags+=" --network-veth"
         if [ -n "$HOST_BRIDGE" ]; then
           extraFlags+=" --network-bridge=$HOST_BRIDGE"
@@ -153,7 +157,7 @@ let
       # Clean up existing machined registration and interfaces.
       machinectl terminate "$INSTANCE" 2> /dev/null || true
 
-      if [ "$PRIVATE_NETWORK" = 1 ]; then
+      if [ -n "$HOST_ADDRESS" ] || [ -n "$LOCAL_ADDRESS" ]; then
         ip link del dev "ve-$INSTANCE" 2> /dev/null || true
         ip link del dev "vb-$INSTANCE" 2> /dev/null || true
       fi
@@ -184,6 +188,8 @@ let
           ''
         else
           ''
+            echo "Bring ${name} up"
+            ip link set dev ${name} up
             # Set IPs and routes for ${name}
             ${optionalString (cfg.hostAddress != null) ''
               ip addr add ${cfg.hostAddress} dev ${name}
@@ -200,7 +206,7 @@ let
           '';
     in
       ''
-        if [ "$PRIVATE_NETWORK" = 1 ]; then
+        if [ -n "$HOST_ADDRESS" ] || [ -n "$LOCAL_ADDRESS" ]; then
           if [ -z "$HOST_BRIDGE" ]; then
             ifaceHost=ve-$INSTANCE
             ip link set dev $ifaceHost up
@@ -352,7 +358,7 @@ let
         List of forwarded ports from host to container. Each forwarded port
         is specified by protocol, hostPort and containerPort. By default,
         protocol is tcp and hostPort and containerPort are assumed to be
-        the same if containerPort is not explicitly given. 
+        the same if containerPort is not explicitly given.
       '';
     };
 
@@ -457,6 +463,16 @@ in
                       { boot.isContainer = true;
                         networking.hostName = mkDefault name;
                         networking.useDHCP = false;
+                        assertions = [
+                          {
+                            assertion =  config.privateNetwork -> stringLength name < 12;
+                            message = ''
+                              Container name `${name}` is too long: When `privateNetwork` is enabled, container names can
+                              not be longer than 11 characters, because the container's interface name is derived from it.
+                              This might be fixed in the future. See https://github.com/NixOS/nixpkgs/issues/38509
+                            '';
+                          }
+                        ];
                       };
                     in [ extraConfig ] ++ (map (x: x.value) defs);
                   prefix = [ "containers" name ];
@@ -699,7 +715,7 @@ in
     # container so that container@.target can get the container
     # configuration.
     environment.etc =
-      let mkPortStr = p: p.protocol + ":" + (toString p.hostPort) + ":" + (if p.containerPort == null then toString p.hostPort else toString p.containerPort); 
+      let mkPortStr = p: p.protocol + ":" + (toString p.hostPort) + ":" + (if p.containerPort == null then toString p.hostPort else toString p.containerPort);
       in mapAttrs' (name: cfg: nameValuePair "containers/${name}.conf"
       { text =
           ''

@@ -10,11 +10,11 @@
 
 buildPythonPackage rec {
   pname = "moviepy";
-  version = "0.2.2.11";
+  version = "0.2.3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d937d817e534efc54eaee2fc4c0e70b48fcd81e1528cd6425f22178704681dc3";
+    sha256 = "1jrdpnzyk373zlh8lvjdabyvljz3sahshbdgbpk6w9vx5hfacvjk";
   };
 
   # No tests

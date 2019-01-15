@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, pkgconfig
+{ stdenv, fetchurl, cmake, pkgconfig, alsaLib
 , libjack2, libsndfile, fftw, curl, gcc
 , libXt, qtbase, qttools, qtwebkit, readline
 , useSCEL ? false, emacs
@@ -28,6 +28,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     gcc libjack2 libsndfile fftw curl libXt qtbase qtwebkit readline ]
+      ++ optional (!stdenv.isDarwin) alsaLib
       ++ optional useSCEL emacs;
 
   meta = {

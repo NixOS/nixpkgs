@@ -3,14 +3,14 @@
 
 buildPythonPackage rec {
   pname = "libarcus";
-  version = "3.4.1";
+  version = "3.6.0";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "Ultimaker";
     repo = "libArcus";
     rev = version;
-    sha256 = "0mln8myvfl7rq2p4g1vadvlykckd8490jijag4xa5hhj3w3p19bk";
+    sha256 = "1zbp6axai47k3p2q497wiajls1h17wss143zynbwbwrqinsfiw43";
   };
 
   disabled = pythonOlder "3.4.0";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
   meta = with stdenv.lib; {
     description = "Communication library between internal components for Ultimaker software";
     homepage = https://github.com/Ultimaker/libArcus;
-    license = licenses.agpl3;
+    license = licenses.lgpl3Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ abbradar ];
   };

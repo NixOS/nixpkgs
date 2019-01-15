@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, apfel, apfelgrid, applgrid, blas, gfortran, lhapdf, liblapackWithoutAtlas, libyaml, lynx, mela, root5, qcdnum, which }:
+{ stdenv, fetchurl, apfel, apfelgrid, applgrid, blas, gfortran, lhapdf, liblapack, libyaml, lynx, mela, root5, qcdnum, which }:
 
 stdenv.mkDerivation rec {
   name = "xfitter-${version}";
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ gfortran which ];
   buildInputs =
-    [ apfel apfelgrid applgrid blas lhapdf liblapackWithoutAtlas mela root5 qcdnum ]
+    [ apfel apfelgrid applgrid blas lhapdf liblapack mela root5 qcdnum ]
     # pdf2yaml requires fmemopen and open_memstream which are not readily available on Darwin
     ++ stdenv.lib.optional (!stdenv.isDarwin) libyaml
     ;

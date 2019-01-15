@@ -2,17 +2,17 @@
 , meson, ninja, pkgconfig, vala, wrapGAppsHook, bzip2, dbus, evolution-data-server
 , exempi, flac, giflib, glib, gnome3, gst_all_1, icu, json-glib, libcue, libexif
 , libgrss, libgsf, libiptcdata, libjpeg, libpng, libseccomp, libsoup, libtiff, libuuid
-, libvorbis, libxml2, poppler, taglib, upower }:
+, libvorbis, libxml2, poppler, taglib, upower, totem-pl-parser }:
 
 let
   pname = "tracker-miners";
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
-  version = "2.1.3";
+  version = "2.1.5";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "10j6iifq0ccnqckdx7fqlrfifbvs08jbczgxajldz26057kwp8fz";
+    sha256 = "1kdq7fk9c80ngg65p31pjdk4za0fq7nfhblqsma9alvkam5kvzgm";
   };
 
   nativeBuildInputs = [
@@ -36,7 +36,7 @@ in stdenv.mkDerivation rec {
     giflib
     glib
     gnome3.gexiv2
-    gnome3.totem-pl-parser
+    totem-pl-parser
     gnome3.tracker
     gst_all_1.gst-plugins-base
     gst_all_1.gstreamer
@@ -63,6 +63,7 @@ in stdenv.mkDerivation rec {
   mesonFlags = [
     # TODO: tests do not like our sandbox
     "-Dfunctional_tests=false"
+    "-Ddbus_services=${placeholder "out"}/share/dbus-1/services"
   ];
 
   patches = [
@@ -76,13 +77,6 @@ in stdenv.mkDerivation rec {
       sha256 = "187flswvzymjfxwfrrhizb1cvs780zm39aa3i2vwa5fbllr7kcpf";
     })
   ];
-
-  # Symlinks require absolute path and we still cannot use placeholders
-  # https://github.com/NixOS/nixpkgs/pull/39534#discussion_r184339131
-  # https://github.com/NixOS/nixpkgs/pull/37693
-  preConfigure = ''
-    mesonFlagsArray+=("-Ddbus_services=$out/share/dbus-1/services")
-  '';
 
   postInstall = ''
     glib-compile-schemas "$out/share/glib-2.0/schemas"

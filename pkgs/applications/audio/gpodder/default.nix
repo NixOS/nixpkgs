@@ -1,18 +1,18 @@
 { stdenv, fetchFromGitHub, python3, python3Packages, intltool
 , glibcLocales, gnome3, gtk3, wrapGAppsHook
-, ipodSupport ? false, libgpod, gobjectIntrospection
+, ipodSupport ? false, libgpod, gobject-introspection
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "gpodder";
-  version = "3.10.5";
+  version = "3.10.6";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "gpodder";
     repo = "gpodder";
     rev = version;
-    sha256 = "00lvma40d62h4haybabh15x1y7rnmd84whbjgjv773igwagkn9vw";
+    sha256 = "11nccsnlxrj8wwl8dyz9a0yrzma6ipx5gwj2lc7m308z60r8wvjs";
   };
 
   postPatch = with stdenv.lib; ''
@@ -27,7 +27,7 @@ python3Packages.buildPythonApplication rec {
 
   buildInputs = [
     python3
-    gobjectIntrospection
+    gobject-introspection
     gnome3.defaultIconTheme
   ];
 

@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url="https://github.com/stedolan/jq/releases/download/jq-${version}/jq-${version}.tar.gz";
-    sha256="1a76f46a652i2g333kfvrl6mp2w7whf6h1yly519izg4y967h9cn";
+    sha256="0wmapfskhzfwranf6515nzmm84r7kwljgfs7dg6bjgxakbicis2x";
   };
 
   outputs = [ "bin" "doc" "man" "dev" "lib" "out" ];

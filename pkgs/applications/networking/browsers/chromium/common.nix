@@ -15,6 +15,7 @@
 , libXScrnSaver, libXcursor, libXtst, libGLU_combined
 , protobuf, speechd, libXdamage, cups
 , ffmpeg, libxslt, libxml2, at-spi2-core
+, jdk
 
 # optional dependencies
 , libgcrypt ? null # gnomeSupport || cupsSupport
@@ -120,12 +121,12 @@ let
       bison gperf kerberos
       glib gtk2 gtk3 dbus-glib
       libXScrnSaver libXcursor libXtst libGLU_combined
-      pciutils protobuf speechd libXdamage
+      pciutils protobuf speechd libXdamage at-spi2-core
     ] ++ optional gnomeKeyringSupport libgnome-keyring3
       ++ optionals gnomeSupport [ gnome.GConf libgcrypt ]
       ++ optionals cupsSupport [ libgcrypt cups ]
       ++ optional pulseSupport libpulseaudio
-      ++ optional (versionAtLeast version "71") at-spi2-core;
+      ++ optional (versionAtLeast version "72") jdk.jre;
 
     patches = optional enableWideVine ./patches/widevine.patch ++ [
       ./patches/nix_plugin_paths_68.patch
@@ -139,15 +140,8 @@ let
       # - https://github.com/chromium/chromium/search?q=GCC&s=committer-date&type=Commits
       #
       # ++ optional (versionRange "68" "72") ( githubPatch "<patch>" "0000000000000000000000000000000000000000000000000000000000000000" )
-    ] ++ optionals (!stdenv.cc.isClang && (versionRange "70" "71")) [
-       ( githubPatch "cbdb8bd6567c8143dc8c1e5e86a21a8ea064eea4" "0258qlffp6f6izswczb11p8zdpn550z5yqa9z7gdg2rg5171n5i8" )
-       ( githubPatch "e98f8ef8b2f236ecbb01df8c39e6ee1c8fbe8d7d" "1ky5xrzch6aya87kn0bgb31lksl3g8kh2v8k676ks7pdl2v132p9" )
-       ( githubPatch "a4de8da116585357c123d71e5f54d1103824c6df" "1y7afnjrsz6j2l3vy1ms8mrkbb51xhcafw9r371algi48il7rajm" )
-       ( githubPatch "b033d2ba32da5ea237656568c25908d4f12b7bac" "008dg8vk822wyrinirx4nh92yq9bki4mwfwvcwnxdjmvz3y0jfcc" )
-       ( githubPatch "2f9563e49f6c28dfe52940901417a4031b95a49b" "1q8qhpzx611yzrxa8lgpw0bad9bxx84rsrvczl4xvk5qh93zna7i" )
-       ( githubPatch "a66e0a3f3f57eb045639e2752a99ade348dc17e9" "1c5x9856b167z270357wr8l6m1wrznxcx89ykj6kfz5djqmv251g" )
-       ( githubPatch "4d9714247f617bf9e1cf95f735148f5e598a9529" "1423jf3lzbljzgbcwvfrrfyhyl3fab988hsyjvk95zyclxff7iij" )
-       ( githubPatch "87902b3202f81d689dd314c17006ffc907fe12a1" "15q37cd26s73girq1imcs52fb1irh0qlfvhksh6g0l0jjrdyzk6r" )
+    ] ++ optionals (!stdenv.cc.isClang && (versionRange "71" "72")) [
+      ( githubPatch "65be571f6ac2f7942b4df9e50b24da517f829eec" "1sqv0aba0mpdi4x4f21zdkxz2cf8ji55ffgbfcr88c5gcg0qn2jh" )
     ] ++ optional stdenv.isAarch64
            (if (versionOlder version "71") then
               fetchpatch {
@@ -288,8 +282,6 @@ let
           MENUNAME="Chromium"
           process_template chrome/app/resources/manpage.1.in "${buildPath}/chrome.1"
         )
-      '' + optionalString (target == "mksnapshot" || target == "chrome") ''
-        paxmark m "${buildPath}/${target}"
       '';
       targets = extraAttrs.buildTargets or [];
       commands = map buildCommand targets;

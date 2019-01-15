@@ -1,9 +1,9 @@
-{ stdenv, buildPythonPackage, fetchPypi, pythonOlder }:
+{ stdenv, buildPythonPackage, fetchPypi, isPy34 }:
 
 buildPythonPackage rec {
   pname = "asyncio";
   version = "3.4.3";
-  disabled = pythonOlder "3.3";
+  disabled = !isPy34;
 
   src = fetchPypi {
     inherit pname version;

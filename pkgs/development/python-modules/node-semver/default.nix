@@ -1,14 +1,14 @@
 { stdenv, fetchPypi, buildPythonPackage, pytest }:
 
 buildPythonPackage rec {
-  version = "0.4.2";
+  version = "0.6.1";
   pname = "node-semver";
 
   checkInputs = [ pytest ];
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0p1in8lw0s5zrya47xn73n10nynrambh62ms4xb6jbadvb06jkz9";
+    sha256 = "1dv6mjsm67l1razcgmq66riqmsb36wns17mnipqr610v0z0zf5j0";
   };
 
   meta = with stdenv.lib; {

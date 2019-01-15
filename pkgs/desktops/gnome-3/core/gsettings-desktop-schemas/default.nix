@@ -1,14 +1,14 @@
-{ stdenv, fetchurl, pkgconfig, intltool, glib, gobjectIntrospection
+{ stdenv, fetchurl, pkgconfig, intltool, glib, gobject-introspection
   # just for passthru
 , gnome3 }:
 
 stdenv.mkDerivation rec {
   name = "gsettings-desktop-schemas-${version}";
-  version = "3.28.0";
+  version = "3.28.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gsettings-desktop-schemas/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "0rwidacwrxlc54x90h9g3wx2zlisc4vm49vmxi15azmpj1vwvd2c";
+    sha256 = "0bshwm49cd01ighsxqlbqn10q0ch71ff99gcrx8pr2gyky2ad3pq";
   };
 
   passthru = {
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     EOF
   '';
 
-  buildInputs = [ glib gobjectIntrospection ];
+  buildInputs = [ glib gobject-introspection ];
 
   nativeBuildInputs = [ pkgconfig intltool ];
 

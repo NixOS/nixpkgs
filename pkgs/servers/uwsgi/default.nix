@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, pkgconfig, jansson
+{ stdenv, lib, fetchurl, pkgconfig, jansson, pcre
 # plugins: list of strings, eg. [ "python2" "python3" ]
 , plugins
 , pam, withPAM ? false
@@ -7,7 +7,7 @@
 , ruby, php-embed, mysql
 }:
 
-let pythonPlugin = pkg : lib.nameValuePair "python${if pkg ? isPy2 then "2" else "3"}" {
+let pythonPlugin = pkg : lib.nameValuePair "python${if pkg.isPy2 then "2" else "3"}" {
                            interpreter = pkg.interpreter;
                            path = "plugins/python";
                            inputs = [ pkg ncurses ];
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ python3 pkgconfig ];
 
-  buildInputs =  [ jansson ]
+  buildInputs =  [ jansson pcre ]
               ++ lib.optional withPAM pam
               ++ lib.optional withSystemd systemd
               ++ lib.concatMap (x: x.inputs) needed
@@ -89,10 +89,10 @@ stdenv.mkDerivation rec {
     ${lib.concatMapStringsSep "\n" (x: x.install or "") needed}
   '';
 
-  NIX_CFLAGS_LINK = [ "-lsystemd" ] ++ lib.concatMap (x: x.NIX_CFLAGS_LINK or []) needed;
+  NIX_CFLAGS_LINK = lib.optional withSystemd "-lsystemd" ++ lib.concatMap (x: x.NIX_CFLAGS_LINK or []) needed;
 
   meta = with stdenv.lib; {
-    homepage = http://uwsgi-docs.readthedocs.org/en/latest/;
+    homepage = https://uwsgi-docs.readthedocs.org/en/latest/;
     description = "A fast, self-healing and developer/sysadmin-friendly application container server coded in pure C";
     license = licenses.gpl2;
     maintainers = with maintainers; [ abbradar schneefux ];

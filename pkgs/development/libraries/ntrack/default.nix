@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
   name = "ntrack-${version}";
 
   src = fetchurl {
-    url = "http://launchpad.net/ntrack/main/${version}/+download/${name}.tar.gz";
+    url = "https://launchpad.net/ntrack/main/${version}/+download/${name}.tar.gz";
     sha256 = "037ig5y0mp327m0hh4pnfr3vmsk3wrxgfjy3645q4ws9vdhx807w";
   };
 

@@ -1,4 +1,4 @@
-{ lib, fetchurl, buildRubyGem, bundlerEnv, ruby, libarchive, writeText, withLibvirt ? true, libvirt, pkgconfig }:
+{ lib, fetchurl, buildRubyGem, bundlerEnv, ruby, libarchive, writeText, withLibvirt ? true}:
 
 let
   # NOTE: bumping the version and updating the hash is insufficient;
@@ -35,24 +35,31 @@ in buildRubyGem rec {
   dontBuild = false;
   src = fetchurl { inherit url sha256; };
 
-  buildInputs = lib.optional withLibvirt [ libvirt pkgconfig ];
-
   patches = [
     ./unofficial-installation-nowarn.patch
     ./use-system-bundler-version.patch
+    ./0004-Support-system-installed-plugins.patch
   ];
+
+  postPatch = ''
+    substituteInPlace lib/vagrant/plugin/manager.rb --subst-var-by \
+      system_plugin_dir "$out/vagrant-plugins"
+  '';
 
   # PATH additions:
   #   - libarchive: Make `bsdtar` available for extracting downloaded boxes
   postInstall = ''
     wrapProgram "$out/bin/vagrant" \
       --set GEM_PATH "${deps}/lib/ruby/gems/${ruby.version.libDir}" \
-      --prefix PATH ':' "${lib.getBin libarchive}/bin" \
-      ${lib.optionalString withLibvirt ''
-        --prefix PATH ':' "${pkgconfig}/bin" \
-        --prefix PKG_CONFIG_PATH ':' \
-          "${lib.makeSearchPath "lib/pkgconfig" [ libvirt ]}"
-      ''}
+      --prefix PATH ':' "${lib.getBin libarchive}/bin"
+
+    mkdir -p "$out/vagrant-plugins/plugins.d"
+    echo '{}' > "$out/vagrant-plugins/plugins.json"
+  '' +
+  lib.optionalString withLibvirt ''
+    substitute ${./vagrant-libvirt.json.in} $out/vagrant-plugins/plugins.d/vagrant-libvirt.json \
+      --subst-var-by ruby_version ${ruby.version} \
+      --subst-var-by vagrant_version ${version}
   '';
 
   installCheckPhase = ''

@@ -11,8 +11,6 @@ buildDunePackage rec {
     sha256 = "0qy0wa3rd5yh1612jijadi1yddfslpsmmmf69phi2dhr3vmkhza7";
   };
 
-  unpackCmd = "tar xjf $src";
-
   buildInputs = [ ocaml-migrate-parsetree ];
 
   meta = with stdenv.lib; {

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libX11, xproto }:
+{ stdenv, fetchurl, libX11, xorgproto }:
 
 stdenv.mkDerivation rec {
   name = "stalonetray-${version}";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "0k7xnpdb6dvx25d67v0crlr32cdnzykdsi9j889njiididc8lm1n";
   };
 
-  buildInputs = [ libX11 xproto ];
+  buildInputs = [ libX11 xorgproto ];
 
   hardeningDisable = [ "format" ];
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateInfo = {
-      downloadPage = "http://sourceforge.net/projects/stalonetray/files/";
+      downloadPage = "https://sourceforge.net/projects/stalonetray/files/";
     };
   };
 }

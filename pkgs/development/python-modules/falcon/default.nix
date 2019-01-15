@@ -13,11 +13,11 @@
 
 buildPythonPackage rec {
   pname = "falcon";
-  version = "1.0.0";
+  version = "1.4.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ddce23a2dd0abba6d19775e9bf7ba64e184b15a0e7163e65f62af63354193f63";
+    sha256 = "3981f609c0358a9fcdb25b0e7fab3d9e23019356fb429c635ce4133135ae1bc4";
   };
 
   checkInputs = [coverage ddt nose pyyaml requests testtools];

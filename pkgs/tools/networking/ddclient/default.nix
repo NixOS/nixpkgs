@@ -2,19 +2,17 @@
 
 perlPackages.buildPerlPackage rec {
   name = "ddclient-${version}";
-  version = "3.8.3";
+  version = "3.9.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/ddclient/${name}.tar.gz";
-    sha256 = "1j8zdn7fy7i0bjk3jf0hxnbnshc2yf054vxq64imxdpfd7n5zgfy";
+    sha256 = "0fwyhab8yga2yi1kdfkbqxa83wxhwpagmj1w1mwkg2iffh1fjjlw";
   };
 
   # perl packages by default get devdoc which isn't present
   outputs = [ "out" ];
 
-  buildInputs = with perlPackages; [ IOSocketSSL DigestSHA1 ];
-
-  patches = [ ./ddclient-line-buffer-stdout.patch ];
+  buildInputs = with perlPackages; [ IOSocketSSL DigestSHA1 DataValidateIP JSONPP ];
 
   # Use iproute2 instead of ifconfig
   preConfigure = ''

@@ -1,16 +1,16 @@
-{ lib, fetchurl, buildPythonPackage, requests, six, zeroconf, protobuf }:
+{ lib, fetchurl, buildPythonPackage, requests, six, zeroconf, protobuf, casttube }:
 
 buildPythonPackage rec {
   pname = "PyChromecast";
-  version = "2.2.0";
+  version = "2.3.0";
   name = pname + "-" + version;
 
   src = fetchurl {
     url    = "mirror://pypi/p/pychromecast/${name}.tar.gz";
-    sha256 = "7c3773c0e134e762fd65a3407e680ab4c5c656fe7c5665b2f8f5ef445c7605a4";
+    sha256 = "f385168e34d2ef47f976c8e41bad2f58f5ca004634c0ccb1a12623d8beb2fa38";
   };
 
-  propagatedBuildInputs = [ requests six zeroconf protobuf ];
+  propagatedBuildInputs = [ requests six zeroconf protobuf casttube ];
 
   meta = with lib; {
     description = "Library for Python 2 and 3 to communicate with the Google Chromecast";

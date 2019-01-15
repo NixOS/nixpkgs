@@ -2,16 +2,21 @@
 
 stdenv.mkDerivation rec {
   name = "elementary-icon-theme-${version}";
-  version = "5.0";
+  version = "5.0.2";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "icons";
     rev = version;
-    sha256 = "146s26q4bb5sag35iv42hrnbdciam2ajl7s5s5jayli5vp8bw08w";
+    sha256 = "12j582f0kggv2lp935r75xg7q26zpl0f05s11xcs4qxazhj1ly2r";
   };
 
   nativeBuildInputs = [ meson ninja python3 gtk3 ];
+
+  # Disable installing gimp and inkscape palette files
+  mesonFlags = [
+    "-Dpalettes=false"
+  ];
 
   postPatch = ''
     chmod +x meson/symlink.py

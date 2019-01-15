@@ -1,18 +1,19 @@
-{ stdenv, fetchgit, cmake
+{ stdenv, fetchFromGitHub, cmake
 , libsodium, mbedtls, libev, c-ares, pcre
 , asciidoc, xmlto, docbook_xml_dtd_45, docbook_xsl, libxslt
 }:
 
 stdenv.mkDerivation rec {
   name = "shadowsocks-libev-${version}";
-  version = "3.2.0";
+  version = "3.2.3";
 
   # Git tag includes CMake build files which are much more convenient.
-  # fetchgit because submodules.
-  src = fetchgit {
-    url = "https://github.com/shadowsocks/shadowsocks-libev";
+  src = fetchFromGitHub {
+    owner = "shadowsocks";
+    repo = "shadowsocks-libev";
     rev = "refs/tags/v${version}";
-    sha256 = "0i9vz5b2c2bkdl2k9kqzvqyrlpdl94lf7k7rzxds8hn2kk0jizhb";
+    sha256 = "1nj2z3j41lqd6gvj6j7xc8g7jbn2f8b75phlkgwvw0j3zsqnbq30";
+    fetchSubmodules = true;
   };
 
   buildInputs = [ libsodium mbedtls libev c-ares pcre ];

@@ -2,7 +2,6 @@
 
 { lib
 , python
-, bootstrapped-pip
 }:
 
 {
@@ -26,13 +25,13 @@ in attrs // {
   buildPhase = attrs.buildPhase or ''
     runHook preBuild
     cp ${setuppy} nix_run_setup
-    ${python.interpreter} nix_run_setup ${lib.optionalString (setupPyBuildFlags != []) ("build_ext " + (lib.concatStringsSep " " setupPyBuildFlags))} bdist_wheel
+    ${python.pythonForBuild.interpreter} nix_run_setup ${lib.optionalString (setupPyBuildFlags != []) ("build_ext " + (lib.concatStringsSep " " setupPyBuildFlags))} bdist_wheel
     runHook postBuild
   '';
 
   installCheckPhase = attrs.checkPhase or ''
     runHook preCheck
-    ${python.interpreter} nix_run_setup test
+    ${python.pythonForBuild.interpreter} nix_run_setup test
     runHook postCheck
   '';
 
@@ -47,9 +46,9 @@ in attrs // {
     if test -e setup.py; then
       tmp_path=$(mktemp -d)
       export PATH="$tmp_path/bin:$PATH"
-      export PYTHONPATH="$tmp_path/${python.sitePackages}:$PYTHONPATH"
-      mkdir -p $tmp_path/${python.sitePackages}
-      ${bootstrapped-pip}/bin/pip install -e . --prefix $tmp_path >&2
+      export PYTHONPATH="$tmp_path/${python.pythonForBuild.sitePackages}:$PYTHONPATH"
+      mkdir -p $tmp_path/${python.pythonForBuild.sitePackages}
+      ${python.pythonForBuild.pkgs.bootstrapped-pip}/bin/pip install -e . --prefix $tmp_path >&2
     fi
     ${postShellHook}
   '';

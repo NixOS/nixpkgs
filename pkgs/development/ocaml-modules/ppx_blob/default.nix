@@ -9,8 +9,6 @@ buildDunePackage rec {
     sha256 = "1xmslk1mwdzhy1bydgsjlcb7h544c39hvxa8lywp8w72gaggjl16";
   };
 
-  unpackCmd = "tar xjf $curSrc";
-
   buildInputs = [ alcotest ocaml-migrate-parsetree ];
   doCheck = true;
 
