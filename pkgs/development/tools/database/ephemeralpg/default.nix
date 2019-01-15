@@ -12,9 +12,11 @@ stdenv.mkDerivation rec {
     PREFIX=$out make install
     wrapProgram $out/bin/pg_tmp --prefix PATH : ${stdenv.lib.makeBinPath [ postgresql getopt ]}
   '';
-  meta = {
+  meta = with stdenv.lib; {
     description = ''Run tests on an isolated, temporary PostgreSQL database.'';
-    license = stdenv.lib.licenses.isc;
+    license = licenses.isc;
     homepage = http://ephemeralpg.org/;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ hrdinka ];
   };
 }
