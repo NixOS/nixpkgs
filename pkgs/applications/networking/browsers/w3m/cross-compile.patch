@@ -1,0 +1,71 @@
+Common subdirectories: ../w3m-orig/Bonus and ./Bonus
+diff -u ../w3m-orig/configure.ac ./configure.ac
+--- ../w3m-orig/configure.ac	2019-01-04 23:08:11.726436983 -0800
++++ ./configure.ac	2019-01-04 23:06:43.654568976 -0800
+@@ -33,6 +33,12 @@
+ AC_EXEEXT
+ AC_SUBST(EXEEXT)
+ 
++AX_PROG_CC_FOR_BUILD
++AC_SUBST(CC_FOR_BUILD)
++AC_SUBST(CPP_FOR_BUILD)
++AC_SUBST(BUILD_EXEEXT)
++AC_SUBST(BUILD_OBJEXT)
++
+ AUXBIN_TARGETS=
+ 
+ AC_SUBST(W3M_TARGET)
+Common subdirectories: ../w3m-orig/doc and ./doc
+Common subdirectories: ../w3m-orig/doc-de and ./doc-de
+Common subdirectories: ../w3m-orig/doc-jp and ./doc-jp
+Common subdirectories: ../w3m-orig/libwc and ./libwc
+diff -u ../w3m-orig/Makefile.in ./Makefile.in
+--- ../w3m-orig/Makefile.in	2019-01-04 23:08:11.724436918 -0800
++++ ./Makefile.in	2019-01-05 06:37:25.336358148 -0800
+@@ -136,12 +136,12 @@
+ 
+ $(OBJS) $(LOBJS): fm.h funcname1.h
+ 
+-tagtable.c: tagtable.tab mktable$(EXT) html.h 
+-	./mktable$(EXT) 100 $(srcdir)/tagtable.tab > $@
++tagtable.c: tagtable.tab mktable$(BUILD_EXEEXT) html.h 
++	./mktable$(BUILD_EXEEXT) 100 $(srcdir)/tagtable.tab > $@
+ 
+-entity.h: entity.tab mktable$(EXT)
++entity.h: entity.tab mktable$(BUILD_EXEEXT)
+ 	echo '/* $$I''d$$ */' > $@
+-	./mktable$(EXT) 100 $(srcdir)/entity.tab >> $@
++	./mktable$(BUILD_EXEEXT) 100 $(srcdir)/entity.tab >> $@
+ 
+ indep.o: indep.c fm.h funcname1.h entity.h
+ func.o: funcname.c functable.c funcname1.h
+@@ -172,13 +172,13 @@
+ funcname2.h: funcname.tab
+ 	sort funcname.tab | $(AWK) -f $(top_srcdir)/funcname2.awk > $@
+ 
+-functable.c: funcname.tab mktable$(EXT)
++functable.c: funcname.tab mktable$(BUILD_EXEEXT)
+ 	sort funcname.tab | $(AWK) -f $(top_srcdir)/functable.awk > functable.tab
+-	./mktable$(EXT) 100 functable.tab > $@
++	./mktable$(BUILD_EXEEXT) 100 functable.tab > $@
+ 	-rm -f functable.tab
+ 
+-mktable$(EXT): mktable.o dummy.o Str.o hash.o myctype.o
+-	$(CC) $(CFLAGS) -o mktable mktable.o dummy.o Str.o hash.o myctype.o $(LDFLAGS) $(LIBS) $(GC_LIBS)
++mktable$(BUILD_EXEEXT): mktable.build.o dummy.build.o Str.build.o hash.build.oo myctype.build.o
++	$(CC_FOR_BUILD) $(CFLAGS) -o mktable mktable.build.o dummy.build.o Str.build.o hash.build.o myctype.build.o $(LDFLAGS) $(LIBS) $(GC_LIBS)
+ 
+ $(BOOKMARKER): w3mbookmark.o dummy.o $(ALIB)
+ 	$(CC) $(CFLAGS) -o $(BOOKMARKER) w3mbookmark.o dummy.o $(LDFLAGS) $(LIBS) $(EXT_LIBS)
+@@ -327,3 +327,6 @@
+ bindist:
+ 	cd ..; tar cvfz w3m-$(VERSION)-$(MODEL).tar.gz w3m/w3m* w3m/doc* w3m/Bonus* w3m/README w3m/scripts 
+ 
++
++%.build.o: %.c
++	$(CC_FOR_BUILD) -c $(CPPFLAGS) $(CFLAGS) $< -o $@
+Common subdirectories: ../w3m-orig/po and ./po
+Common subdirectories: ../w3m-orig/scripts and ./scripts
+Common subdirectories: ../w3m-orig/Symbols and ./Symbols
+Common subdirectories: ../w3m-orig/w3m-doc and ./w3m-doc
+Common subdirectories: ../w3m-orig/w3mimg and ./w3mimg
