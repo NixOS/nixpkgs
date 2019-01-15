@@ -10,6 +10,7 @@ use Cwd;
 use File::Basename;
 use File::Path qw(make_path);
 use File::Slurp;
+use Time::HiRes qw(clock_gettime CLOCK_MONOTONIC);
 
 
 my $showGraphics = defined $ENV{'DISPLAY'};
@@ -249,12 +250,15 @@ sub connect {
 
         $self->start;
 
+        my $now = clock_gettime(CLOCK_MONOTONIC);
         local $SIG{ALRM} = sub { die "timed out waiting for the VM to connect\n"; };
-        alarm 300;
+        alarm 600;
         readline $self->{socket} or die "the VM quit before connecting\n";
         alarm 0;
 
         $self->log("connected to guest root shell");
+        # We're interested in tracking how close we are to `alarm`.
+        $self->log(sprintf("(connecting took %.2f seconds)", clock_gettime(CLOCK_MONOTONIC) - $now));
         $self->{connected} = 1;
 
     });

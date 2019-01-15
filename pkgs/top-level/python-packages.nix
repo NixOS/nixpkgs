@@ -698,6 +698,8 @@ in {
 
   pyxml = disabledIf isPy3k (callPackage ../development/python-modules/pyxml{ });
 
+  pyvcd = callPackage ../development/python-modules/pyvcd { };
+
   pyvoro = callPackage ../development/python-modules/pyvoro { };
 
   relatorio = callPackage ../development/python-modules/relatorio { };
@@ -783,6 +785,8 @@ in {
   pyunbound = callPackage ../tools/networking/unbound/python.nix { };
 
   WazeRouteCalculator = callPackage ../development/python-modules/WazeRouteCalculator { };
+
+  yarg = callPackage ../development/python-modules/yarg { };
 
   # packages defined here
 
@@ -1518,6 +1522,8 @@ in {
   cssselect2 = callPackage ../development/python-modules/cssselect2 { };
 
   cssutils = callPackage ../development/python-modules/cssutils { };
+
+  css-parser = callPackage ../development/python-modules/css-parser { };
 
   darcsver = callPackage ../development/python-modules/darcsver { };
 
@@ -3151,7 +3157,9 @@ in {
 
   sleekxmpp = callPackage ../development/python-modules/sleekxmpp { };
 
-  slixmpp = callPackage ../development/python-modules/slixmpp { };
+  slixmpp = callPackage ../development/python-modules/slixmpp {
+    inherit (pkgs) gnupg;
+  };
 
   netaddr = callPackage ../development/python-modules/netaddr { };
 
@@ -3518,7 +3526,9 @@ in {
 
   pysam = callPackage ../development/python-modules/pysam { };
 
-  pysaml2 = callPackage ../development/python-modules/pysaml2 { };
+  pysaml2 = callPackage ../development/python-modules/pysaml2 {
+    inherit (pkgs) xmlsec;
+  };
 
   python-pushover = callPackage ../development/python-modules/pushover {};
 
@@ -3597,6 +3607,8 @@ in {
   pygments = callPackage ../development/python-modules/Pygments { };
 
   pygpgme = callPackage ../development/python-modules/pygpgme { };
+
+  pyment = callPackage ../development/python-modules/pyment { };
 
   pylint = if isPy3k then callPackage ../development/python-modules/pylint { }
            else callPackage ../development/python-modules/pylint/1.9.nix { };

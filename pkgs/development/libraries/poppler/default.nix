@@ -8,7 +8,7 @@
 }:
 
 let # beware: updates often break cups-filters build
-  version = "0.72.0";
+  version = "0.73.0";
   mkFlag = optset: flag: "-DENABLE_${flag}=${if optset then "on" else "off"}";
 in
 stdenv.mkDerivation rec {
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "${meta.homepage}/poppler-${version}.tar.xz";
-    sha256 = "0lfs1b1jfamxl13zbl5n448dqvl9n8frbv8180y7b7kfyaw7wx61";
+    sha256 = "00yv7011y40jc5iw9b7zjyg8ij5wsfbjm32kli5qha1ij11majz4";
   };
 
   outputs = [ "out" "dev" ];
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   CXXFLAGS = stdenv.lib.optionalString stdenv.cc.isClang "-std=c++14";
 
   cmakeFlags = [
-    (mkFlag true "XPDF_HEADERS")
+    (mkFlag true "UNSTABLE_API_ABI_HEADERS") # previously "XPDF_HEADERS"
     (mkFlag (!minimal) "GLIB")
     (mkFlag (!minimal) "CPP")
     (mkFlag (!minimal) "LIBCURL")

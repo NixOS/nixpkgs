@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake
+{ stdenv, fetchFromGitHub, cmake, makeWrapper
 , boost, python3
 , icestorm, trellis
 
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     sha256 = "082ac03s6164s7dwz1l9phshl8m1lizn45jykabrhks5jcccchbh";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake makeWrapper ];
   buildInputs
      = [ boostPython python3 ]
     ++ (stdenv.lib.optional enableGui qtbase);
@@ -53,6 +53,13 @@ stdenv.mkDerivation rec {
   patchPhase = with builtins; ''
     substituteInPlace ./CMakeLists.txt \
       --replace 'git log -1 --format=%h' 'echo ${substring 0 11 src.rev}'
+  '';
+
+  postInstall = stdenv.lib.optionalString enableGui ''
+    for x in generic ice40 ecp5; do
+      wrapProgram $out/bin/nextpnr-$x \
+        --prefix QT_PLUGIN_PATH : ${qtbase}/lib/qt-${qtbase.qtCompatVersion}/plugins
+    done
   '';
 
   meta = with stdenv.lib; {

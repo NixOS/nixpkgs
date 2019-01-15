@@ -3485,6 +3485,8 @@ in
 
   invoice2data  = callPackage ../tools/text/invoice2data  { };
 
+  inxi = callPackage ../tools/system/inxi { };
+
   iodine = callPackage ../tools/networking/iodine { };
 
   ioping = callPackage ../tools/system/ioping { };
@@ -4710,7 +4712,9 @@ in
 
   pagmo2 = callPackage ../development/libraries/pagmo2 { };
 
-  pakcs = callPackage ../development/compilers/pakcs {};
+  pakcs = callPackage ../development/compilers/pakcs {
+    haskellPackages = haskell.packages.ghc844;
+  };
 
   pal = callPackage ../tools/misc/pal { };
 
@@ -4884,6 +4888,8 @@ in
   pingtcp = callPackage ../tools/networking/pingtcp { };
 
   pirate-get = callPackage ../tools/networking/pirate-get { };
+
+  pipreqs = callPackage ../tools/misc/pipreqs { };
 
   pius = callPackage ../tools/security/pius { };
 
@@ -5432,7 +5438,7 @@ in
   silc_server = callPackage ../servers/silc-server { };
 
   sile = callPackage ../tools/typesetting/sile {
-  inherit (lua52Packages) lua luaexpat luazlib luafilesystem lpeg;
+  inherit (lua52Packages) lua luaexpat luazlib luafilesystem lpeg luasocket luasec;
   };
 
   silver-searcher = callPackage ../tools/text/silver-searcher { };
@@ -6811,7 +6817,7 @@ in
   # built with, and use, that cross-compiled libc.
   gccCrossStageStatic = assert stdenv.targetPlatform != stdenv.hostPlatform; let
     libcCross1 =
-      if stdenv.targetPlatform.libc == "msvcrt" then targetPackages.windows.mingw_w64_headers
+      if stdenv.targetPlatform.libc == "msvcrt" then windows.mingw_w64_headers
       else if stdenv.targetPlatform.libc == "libSystem" then darwin.xcode
       else null;
     binutils1 = wrapBintoolsWith {
@@ -7406,7 +7412,11 @@ in
 
   neko = callPackage ../development/compilers/neko { };
 
-  nextpnr = libsForQt5.callPackage ../development/compilers/nextpnr { };
+  nextpnr = libsForQt5.callPackage ../development/compilers/nextpnr {
+    # QT 5.12 has a weird regression involving the floorplanning window having
+    # a 'blank' or 'transparent' background, so fall back to 5.11 for now.
+    qtbase = qt511.qtbase;
+  };
 
   nasm = callPackage ../development/compilers/nasm { };
 
@@ -8837,6 +8847,8 @@ in
   go-md2man = callPackage ../development/tools/misc/md2man {};
 
   mage = callPackage ../development/tools/build-managers/mage { };
+
+  mbed-cli = callPackage ../development/tools/mbed-cli { };
 
   minify = callPackage ../development/web/minify { };
 
@@ -12202,8 +12214,9 @@ in
 
   libsForQt512 = recurseIntoAttrs (lib.makeScope qt512.newScope mkLibsForQt5);
 
-  qt5 = qt512;
-  libsForQt5 = libsForQt512;
+  # TODO bump to 5.12 on darwin once it's not broken
+  qt5 = if stdenv.isDarwin then qt511 else qt512;
+  libsForQt5 = if stdenv.isDarwin then libsForQt511 else libsForQt512;
 
   qt5ct = libsForQt5.callPackage ../tools/misc/qt5ct { };
 
@@ -17594,6 +17607,8 @@ in
 
   sway = callPackage ../applications/window-managers/sway { };
   sway-beta = callPackage ../applications/window-managers/sway/beta.nix { };
+  swayidle = callPackage ../applications/window-managers/sway/idle.nix { };
+  swaylock = callPackage ../applications/window-managers/sway/lock.nix { };
 
   velox = callPackage ../applications/window-managers/velox {
     stConf = config.st.conf or null;
@@ -21244,6 +21259,7 @@ in
     clipboard-indicator = callPackage ../desktops/gnome-3/extensions/clipboard-indicator { };
     dash-to-dock = callPackage ../desktops/gnome-3/extensions/dash-to-dock { };
     dash-to-panel = callPackage ../desktops/gnome-3/extensions/dash-to-panel { };
+    gsconnect = callPackage ../desktops/gnome-3/extensions/gsconnect { };
     icon-hider = callPackage ../desktops/gnome-3/extensions/icon-hider { };
     impatience = callPackage ../desktops/gnome-3/extensions/impatience.nix { };
     mediaplayer = callPackage ../desktops/gnome-3/extensions/mediaplayer { };
@@ -22218,6 +22234,8 @@ in
   epson-escpr = callPackage ../misc/drivers/epson-escpr { };
 
   epson_201207w = callPackage ../misc/drivers/epson_201207w { };
+
+  epson-workforce-635-nx625-series = callPackage ../misc/drivers/epson-workforce-635-nx625-series { };
 
   gutenprint = callPackage ../misc/drivers/gutenprint { };
 

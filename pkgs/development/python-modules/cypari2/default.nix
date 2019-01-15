@@ -23,8 +23,7 @@ buildPythonPackage rec {
   # That is because while the default install phase succeeds to build the package,
   # it fails to generate the file "auto_paridecl.pxd".
   installPhase = ''
-    mkdir -p "$out/lib/${python.sitePackages}"
-    export PYTHONPATH="$out/lib/${python.sitePackages}:$PYTHONPATH"
+    export PYTHONPATH="$out/${python.sitePackages}:$PYTHONPATH"
 
     # install "." instead of "*.whl"
     ${python.pythonForBuild.pkgs.bootstrapped-pip}/bin/pip install --no-index --prefix=$out --no-cache --build=tmpdir .
