@@ -2462,7 +2462,7 @@ in
 
   cholmod-extra = callPackage ../development/libraries/science/math/cholmod-extra { };
 
-  emscriptenVersion = "1.37.36";
+  emscriptenVersion = "1.38.22";
 
   emscripten = callPackage ../development/compilers/emscripten { };
 
