@@ -49,7 +49,7 @@ in stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  configureFlags = [ "--disable-static" "--bindir=$(dev)/bin" ];
+  configureFlags = [ "--disable-static" "--bindir=$(dev)/bin" "--enable-freetype-config" ];
 
   # native compiler to generate building tool
   CC_BUILD = "${buildPackages.stdenv.cc}/bin/cc";
@@ -61,5 +61,12 @@ in stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  postInstall = glib.flattenInclude;
+  postInstall = glib.flattenInclude + ''
+    substituteInPlace $dev/bin/freetype-config \
+      --replace ${buildPackages.pkgconfig} ${pkgconfig}
+
+    wrapProgram "$dev/bin/freetype-config" \
+      --set PKG_CONFIG_PATH "$PKG_CONFIG_PATH:$dev/lib/pkgconfig"
+  '';
+
 }
