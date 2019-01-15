@@ -1,26 +1,26 @@
 { stdenv, fetchurl, makeDesktopItem, makeWrapper
-, alsaLib, atk, cairo, cups, dbus, expat, fontconfig, freetype, gdk_pixbuf
-, glib, gnome2, gtk2, libnotify, libX11, libXcomposite, libXcursor, libXdamage
+, alsaLib, atk, at-spi2-atk, cairo, cups, dbus, expat, fontconfig, freetype, gdk_pixbuf
+, glib, gtk3, libnotify, libX11, libXcomposite, libXcursor, libXdamage, libuuid
 , libXext, libXfixes, libXi, libXrandr, libXrender, libXtst, nspr, nss, libxcb
 , pango, systemd, libXScrnSaver, libcxx, libpulseaudio }:
 
 stdenv.mkDerivation rec {
 
     pname = "discord";
-    version = "0.0.5";
+    version = "0.0.7";
     name = "${pname}-${version}";
 
     src = fetchurl {
         url = "https://cdn.discordapp.com/apps/linux/${version}/${pname}-${version}.tar.gz";
-        sha256 = "067gb72qsxrzfma04njkbqbmsvwnnyhw4k9igg5769jkxay68i1g";
+        sha256 = "1jjlwbx80vwhc8il48lb4sqzdb8zdwg28d8vnxsvhcqylfhwf8d8";
     };
 
     nativeBuildInputs = [ makeWrapper ];
 
     libPath = stdenv.lib.makeLibraryPath [
         libcxx systemd libpulseaudio
-        stdenv.cc.cc alsaLib atk cairo cups dbus expat fontconfig freetype
-        gdk_pixbuf glib gnome2.GConf gtk2 libnotify libX11 libXcomposite
+        stdenv.cc.cc alsaLib atk at-spi2-atk cairo cups dbus expat fontconfig freetype
+        gdk_pixbuf glib gtk3 libnotify libX11 libXcomposite libuuid
         libXcursor libXdamage libXext libXfixes libXi libXrandr libXrender
         libXtst nspr nss libxcb pango systemd libXScrnSaver
      ];
@@ -29,6 +29,7 @@ stdenv.mkDerivation rec {
         mkdir -p $out/{bin,opt/discord,share/pixmaps}
         mv * $out/opt/discord
 
+        chmod +x $out/opt/discord/Discord
         patchelf --set-interpreter ${stdenv.cc.bintools.dynamicLinker} \
                  $out/opt/discord/Discord
 

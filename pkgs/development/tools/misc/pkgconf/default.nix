@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "pkgconf-1.5.4";
+  name = "pkgconf-1.6.0";
 
   src = fetchurl {
     url = "https://distfiles.dereferenced.org/pkgconf/${name}.tar.xz";
-    sha256 = "0r26qmij9lxpz183na3dxj6lamcma94cjhasy19fya44w2j68n4w";
+    sha256 = "1rgcw7lbmxv45y4ybnlh1wzhd1d15d2616499ajjnrvnnnms6db1";
   };
 
   meta = with stdenv.lib; {

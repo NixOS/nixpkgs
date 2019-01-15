@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, tcl, tk, libX11, glibc, which, yacc, flex, imake, xproto, gccmakedep }:
+{ stdenv, fetchurl, tcl, tk, libX11, glibc, which, yacc, flex, imake, xorgproto, gccmakedep }:
 
 let
   libiconvInc = stdenv.lib.optionalString stdenv.isLinux "${glibc.dev}/include";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ which yacc flex imake gccmakedep ];
-  buildInputs = [ tcl tk libX11 xproto ];
+  buildInputs = [ tcl tk libX11 xorgproto ];
   dontUseImakeConfigure = true;
 
   patchPhase = ''

@@ -221,6 +221,8 @@ in stdenv.mkDerivation rec {
   doInstallCheck = true;
   installCheckPhase = ''
     ${python3.interpreter} "$out/bin/retdec-tests-runner.py"
+
+    rm -rf $out/bin/__pycache__
   '';
 
   meta = with lib; {

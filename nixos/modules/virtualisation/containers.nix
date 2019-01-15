@@ -188,6 +188,8 @@ let
           ''
         else
           ''
+            echo "Bring ${name} up"
+            ip link set dev ${name} up
             # Set IPs and routes for ${name}
             ${optionalString (cfg.hostAddress != null) ''
               ip addr add ${cfg.hostAddress} dev ${name}

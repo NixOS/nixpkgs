@@ -1,13 +1,9 @@
 #! /usr/bin/env perl
 
-# Typical command to generate the list of tarballs:
-
-# export i="mirror://xorg/X11R7.7/src/everything/"; cat $(PRINT_PATH=1 nix-prefetch-url $i | tail -n 1) | perl -e 'while (<>) { if (/(href|HREF)="([^"]*.bz2)"/) { print "$ENV{'i'}$2\n"; }; }' | sort > tarballs-7.7.list
-# manually update extra.list
-# then run: cat tarballs-7.7.list extra.list old.list | perl ./generate-expr-from-tarballs.pl
-# tarballs-x.y.list is generated + changes for individual packages
-# extra.list are packages not contained in the tarballs
-# old.list are packages that used to be part of the tarballs
+# Usage:
+#
+# manually update tarballs.list
+# then run: cat tarballs.list | perl ./generate-expr-from-tarballs.pl
 
 
 use strict;
@@ -41,9 +37,9 @@ $pcMap{"libudev"} = "udev";
 $pcMap{"gl"} = "libGL";
 $pcMap{"gbm"} = "mesa_noglu";
 $pcMap{"\$PIXMAN"} = "pixman";
-$pcMap{"\$RENDERPROTO"} = "renderproto";
-$pcMap{"\$DRI3PROTO"} = "dri3proto";
-$pcMap{"\$DRI2PROTO"} = "dri2proto";
+$pcMap{"\$RENDERPROTO"} = "xorgproto";
+$pcMap{"\$DRI3PROTO"} = "xorgproto";
+$pcMap{"\$DRI2PROTO"} = "xorgproto";
 
 
 my $downloadCache = "./download-cache";
@@ -66,7 +62,7 @@ while (<>) {
       #next unless $pkg eq "xcbutil";
     }
 
-    $tarball =~ /\/([^\/]*)\.tar\.(bz2|gz|xz)$/;
+    $tarball =~ /\/([^\/]*)\.(tar\.(bz2|gz|xz)|tgz)$/;
     my $pkgName = $1;
 
     print "  $pkg $pkgName\n";
@@ -229,7 +225,7 @@ while (<>) {
     process \@requires, $1 while $file =~ /XORG_DRIVER_CHECK_EXT\([^,]*,([^\)]*)\)/g;
 
     push @requires, "libxslt" if $pkg =~ /libxcb/;
-    push @requires, "gperf", "m4", "xproto" if $pkg =~ /xcbutil/;
+    push @requires, "gperf", "m4", "xorgproto" if $pkg =~ /xcbutil/;
 
     print "REQUIRES $pkg => @requires\n";
     print "NATIVE_REQUIRES $pkg => @nativeRequires\n";

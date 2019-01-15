@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "nexus-${version}";
-  version = "3.12.1-01";
+  version = "3.14.0-04";
 
   src = fetchurl {
     url = "https://sonatype-download.global.ssl.fastly.net/nexus/3/nexus-${version}-unix.tar.gz";
-    sha256 = "1vv50zv3cr42rq1g16gdl2d1hrxna2jjynlr7kivzlbyfq89ic3f";
+    sha256 = "1ql707672xhybmfajjmli9w0wcf1f26skq8i5kqirms2364wg35f";
   };
 
   sourceRoot = name;
@@ -41,6 +41,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.sonatype.org/nexus;
     license = licenses.epl10;
     platforms = platforms.all;
-    maintainers = with maintainers; [ aespinosa ironpinguin ma27 ];
+    maintainers = with maintainers; [ aespinosa ironpinguin ma27 zaninime ];
   };
 }

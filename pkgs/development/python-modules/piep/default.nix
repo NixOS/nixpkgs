@@ -1,21 +1,21 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi
+, nose
 , pygments
-, isPy3k
 }:
 
 buildPythonPackage rec {
-  version = "0.8.0";
+  version = "0.9.2";
   pname = "piep";
-  disabled = isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1wgkg1kc28jpya5k4zvbc9jmpa60b3d5c3gwxfbp15hw6smyqirj";
+    sha256 = "0b5anpsq16xkiisws95jif5s5mplkl1kdnhy0w0i6m0zcy50jnxq";
   };
 
   propagatedBuildInputs = [ pygments ];
+  checkInputs = [ nose ];
 
   meta = with stdenv.lib; {
     description = "Bringing the power of python to stream editing";

@@ -16,7 +16,10 @@ buildPythonPackage rec {
     sha256 = "18n14ha2d3j3ghg2f2aqnf2mks94nn7ma9ii7vkiwcay93zm82cf";
   };
 
-  buildInputs = [ pkgs.swig1 pkgs.coin3d pkgs.soqt pkgs.libGLU_combined pkgs.xorg.libXi ];
+  buildInputs = with pkgs; with xorg; [
+    swig1 coin3d soqt libGLU_combined
+    libXi libXext libSM libICE libX11
+  ];
 
   meta = with stdenv.lib; {
     homepage = http://pivy.coin3d.org/;

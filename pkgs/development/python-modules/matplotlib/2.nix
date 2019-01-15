@@ -45,7 +45,7 @@ buildPythonPackage rec {
     ++ stdenv.lib.optionals enableGtk3 [ cairo pycairo gtk3 gobject-introspection pygobject3 ]
     ++ stdenv.lib.optionals enableTk [ tcl tk tkinter libX11 ]
     ++ stdenv.lib.optionals enableQt [ pyqt4 ]
-    ++ stdenv.lib.optionals (builtins.hasAttr "isPy2" python) [ functools32 subprocess32 ];
+    ++ stdenv.lib.optionals python.isPy2 [ functools32 subprocess32 ];
 
   patches =
     [ ./basedirlist.patch ] ++

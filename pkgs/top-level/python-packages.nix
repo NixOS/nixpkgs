@@ -18,16 +18,7 @@ let
   packages = ( self:
 
 let
-  pythonAtLeast = versionAtLeast python.pythonVersion;
-  pythonOlder = versionOlder python.pythonVersion;
-  isPy27 = python.pythonVersion == "2.7";
-  isPy33 = python.pythonVersion == "3.3";
-  isPy34 = python.pythonVersion == "3.4";
-  isPy35 = python.pythonVersion == "3.5";
-  isPy36 = python.pythonVersion == "3.6";
-  isPy37 = python.pythonVersion == "3.7";
-  isPyPy = strings.substring 0 4 python.executable == "pypy";
-  isPy3k = strings.substring 0 1 python.pythonVersion == "3";
+  inherit (python.passthru) isPy27 isPy33 isPy34 isPy35 isPy36 isPy37 isPy3k isPyPy pythonAtLeast pythonOlder;
 
   callPackage = pkgs.newScope self;
 
@@ -52,7 +43,6 @@ let
       else ff;
 
   buildPythonPackage = makeOverridablePythonPackage ( makeOverridable (callPackage ../development/interpreters/python/build-python-package.nix {
-    inherit bootstrapped-pip;
     flit = self.flit;
     # We want Python libraries to be named like e.g. "python3.6-${name}"
     inherit namePrefix;
@@ -60,7 +50,6 @@ let
   }));
 
   buildPythonApplication = makeOverridablePythonPackage ( makeOverridable (callPackage ../development/interpreters/python/build-python-package.nix {
-    inherit bootstrapped-pip;
     flit = self.flit;
     namePrefix = "";
     toPythonModule = x: x; # Application does not provide modules.
@@ -130,7 +119,8 @@ let
 
 in {
 
-  inherit python bootstrapped-pip pythonAtLeast pythonOlder isPy27 isPy33 isPy34 isPy35 isPy36 isPy37 isPyPy isPy3k buildPythonPackage buildPythonApplication;
+  inherit (python.passthru) isPy27 isPy33 isPy34 isPy35 isPy36 isPy37 isPy3k isPyPy pythonAtLeast pythonOlder;
+  inherit python bootstrapped-pip buildPythonPackage buildPythonApplication;
   inherit fetchPypi callPackage;
   inherit hasPythonModule requiredPythonModules makePythonPath disabledIf;
   inherit toPythonModule toPythonApplication;
@@ -288,9 +278,15 @@ in {
 
   cachecontrol = callPackage ../development/python-modules/cachecontrol { };
 
+  cachy = callPackage ../development/python-modules/cachy { };
+
   cdecimal = callPackage ../development/python-modules/cdecimal { };
 
   chalice = callPackage ../development/python-modules/chalice { };
+
+  cleo = callPackage ../development/python-modules/cleo { };
+
+  clikit = callPackage ../development/python-modules/clikit { };
 
   clustershell = callPackage ../development/python-modules/clustershell { };
 
@@ -494,6 +490,8 @@ in {
 
   palettable = callPackage ../development/python-modules/palettable { };
 
+  pastel = callPackage ../development/python-modules/pastel { };
+
   pathlib = callPackage ../development/python-modules/pathlib { };
 
   pdf2image = callPackage ../development/python-modules/pdf2image { };
@@ -509,6 +507,8 @@ in {
   pims = callPackage ../development/python-modules/pims { };
 
   plantuml = callPackage ../tools/misc/plantuml { };
+
+  poetry = callPackage ../development/python-modules/poetry { };
 
   progress = callPackage ../development/python-modules/progress { };
 
@@ -600,6 +600,8 @@ in {
   pykerberos = callPackage ../development/python-modules/pykerberos { };
 
   pykeepass = callPackage ../development/python-modules/pykeepass { };
+
+  pylev = callPackage ../development/python-modules/pylev { };
 
   pymatgen = callPackage ../development/python-modules/pymatgen { };
 
@@ -696,6 +698,8 @@ in {
 
   pyxml = disabledIf isPy3k (callPackage ../development/python-modules/pyxml{ });
 
+  pyvcd = callPackage ../development/python-modules/pyvcd { };
+
   pyvoro = callPackage ../development/python-modules/pyvoro { };
 
   relatorio = callPackage ../development/python-modules/relatorio { };
@@ -770,6 +774,8 @@ in {
 
   toml = callPackage ../development/python-modules/toml { };
 
+  tomlkit = callPackage ../development/python-modules/tomlkit { };
+
   unifi = callPackage ../development/python-modules/unifi { };
 
   vidstab = callPackage ../development/python-modules/vidstab { };
@@ -779,6 +785,8 @@ in {
   pyunbound = callPackage ../tools/networking/unbound/python.nix { };
 
   WazeRouteCalculator = callPackage ../development/python-modules/WazeRouteCalculator { };
+
+  yarg = callPackage ../development/python-modules/yarg { };
 
   # packages defined here
 
@@ -1514,6 +1522,8 @@ in {
   cssselect2 = callPackage ../development/python-modules/cssselect2 { };
 
   cssutils = callPackage ../development/python-modules/cssutils { };
+
+  css-parser = callPackage ../development/python-modules/css-parser { };
 
   darcsver = callPackage ../development/python-modules/darcsver { };
 
@@ -2621,6 +2631,8 @@ in {
 
   google_cloud_websecurityscanner = callPackage ../development/python-modules/google_cloud_websecurityscanner { };
 
+  google-i18n-address = callPackage ../development/python-modules/google-i18n-address { };
+
   google_resumable_media = callPackage ../development/python-modules/google_resumable_media { };
 
   gpgme = toPythonModule (pkgs.gpgme.override {
@@ -3145,7 +3157,9 @@ in {
 
   sleekxmpp = callPackage ../development/python-modules/sleekxmpp { };
 
-  slixmpp = callPackage ../development/python-modules/slixmpp { };
+  slixmpp = callPackage ../development/python-modules/slixmpp {
+    inherit (pkgs) gnupg;
+  };
 
   netaddr = callPackage ../development/python-modules/netaddr { };
 
@@ -3398,6 +3412,8 @@ in {
 
   pg8000 = callPackage ../development/python-modules/pg8000 { };
 
+  pgsanity = callPackage ../development/python-modules/pgsanity { };
+
   pgspecial = callPackage ../development/python-modules/pgspecial { };
 
   pickleshare = callPackage ../development/python-modules/pickleshare { };
@@ -3510,7 +3526,9 @@ in {
 
   pysam = callPackage ../development/python-modules/pysam { };
 
-  pysaml2 = callPackage ../development/python-modules/pysaml2 { };
+  pysaml2 = callPackage ../development/python-modules/pysaml2 {
+    inherit (pkgs) xmlsec;
+  };
 
   python-pushover = callPackage ../development/python-modules/pushover {};
 
@@ -3589,6 +3607,8 @@ in {
   pygments = callPackage ../development/python-modules/Pygments { };
 
   pygpgme = callPackage ../development/python-modules/pygpgme { };
+
+  pyment = callPackage ../development/python-modules/pyment { };
 
   pylint = if isPy3k then callPackage ../development/python-modules/pylint { }
            else callPackage ../development/python-modules/pylint/1.9.nix { };
