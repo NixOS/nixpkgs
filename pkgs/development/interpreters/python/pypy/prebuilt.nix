@@ -115,7 +115,7 @@ in with passthru; stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     homepage = http://pypy.org/;
-    description = "Fast, compliant alternative implementation of the Python language (3.5.3)";
+    description = "Fast, compliant alternative implementation of the Python language (${pythonVersion})";
     license = licenses.mit;
     platforms = [ "x86_64-linux" ];
   };
