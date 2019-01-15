@@ -24,6 +24,15 @@ let
     postPatch = ''
         substituteInPlace test/fetchzip.sh \
             --replace "dub remove" "\"${dubvar}\" remove"
+
+        substituteInPlace test/interactive-remove.sh \
+            --replace "0.9.20" "1.9.0"
+
+        substituteInPlace test/interactive-remove.sh \
+            --replace "0.9.21" "1.10.0"
+
+        substituteInPlace test/interactive-remove.sh \
+            --replace "select.*0\.9\.20.*0\.9\.21.*" "select.*1\.9\.0.*1\.10\.0.*"
     '';
 
     nativeBuildInputs = [ dmd libevent rsync ];
