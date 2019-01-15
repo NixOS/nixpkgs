@@ -1,7 +1,7 @@
 # restart using 'killall -TERM fcron; fcron -b
 # use convert-fcrontab to update fcrontab files
 
-{ stdenv, fetchurl, perl, busybox, vim }:
+{ stdenv, fetchurl, perl, busybox, vim, autoreconfHook, coreutils }:
 
 stdenv.mkDerivation rec {
   name = "fcron-${version}";
@@ -13,8 +13,15 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ perl ];
+  nativeBuildInputs = [ autoreconfHook ];
 
-  patches = [ ./relative-fcronsighup.patch ];
+  preAutoreconf = ''
+    mv configure.in configure.ac
+  '';
+  AUTOHEADER="${coreutils}/bin/true";
+
+  patches = [ ./relative-fcronsighup.patch
+              ./no-ac-memcmp.patch ];
 
   configureFlags =
     [ "--with-sendmail=${busybox}/sbin/sendmail"

@@ -141,6 +141,25 @@ in
         group = "fcron";
       };
     };
+
+    runit.services.fcron = {
+      path = [ pkgs.fcron ];
+      script = ''
+        install \
+          --mode 0770 \
+          --owner fcron \
+          --group fcron \
+          --directory /var/spool/fcron
+        /run/wrappers/bin/fcrontab -u systab - < ${pkgs.writeText "systab" cfg.systab}
+        exec ${pkgs.fcron}/sbin/fcron -m ${toString cfg.maxSerialJobs} ${queuelen} -f
+      '';
+
+      logging = {
+        redirectStderr = true;
+        enable = true;
+      };
+    };
+
     systemd.services.fcron = {
       description = "fcron daemon";
       after = [ "local-fs.target" ];
