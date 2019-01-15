@@ -44,6 +44,12 @@ with import ./runit-lib.nix { inherit pkgs lib; runit = config.runit.package; ma
           ${pkgs.utillinux}/bin/swapon -ae
         '';
 
+        mkSwapScript = sw: ''
+          # Swap script for ${sw.device}
+          echo "Activating swap ${sw.device}"
+          swapon ${sw.realDevice}
+        '';
+
         runit2 = pkgs.writeScript "runit2" ''
           #!${pkgs.runtimeShell} -e
           mkdir -p /run/current-services/
@@ -51,6 +57,9 @@ with import ./runit-lib.nix { inherit pkgs lib; runit = config.runit.package; ma
           for i in /etc/sv/*; do
             ln -s $(readlink -f "$i") /run/current-services/$(basename "$i")
           done
+
+          # Swap script
+          ${map mkSwapScript config.swapDevices}
 
           exec runsvdir -P /run/current-services/
         '';
