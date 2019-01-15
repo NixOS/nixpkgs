@@ -1488,7 +1488,7 @@
     name = "Felipe Espinoza";
   };
   fgaz = {
-    email = "francygazz@gmail.com";
+    email = "fgaz@fgaz.me";
     github = "fgaz";
     name = "Francesco Gazzetta";
   };
