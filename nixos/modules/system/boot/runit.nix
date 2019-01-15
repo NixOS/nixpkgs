@@ -58,9 +58,6 @@ with import ./runit-lib.nix { inherit pkgs lib; runit = config.runit.package; ma
             ln -s $(readlink -f "$i") /run/current-services/$(basename "$i")
           done
 
-          # Swap script
-          ${lib.concatStringsSep "\n\n" (map mkSwapScript config.swapDevices)}
-
           exec runsvdir -P /run/current-services/
         '';
 
@@ -174,13 +171,6 @@ with import ./runit-lib.nix { inherit pkgs lib; runit = config.runit.package; ma
              (map (mod: "${pkgs.kmod}/bin/modprobe -d $systemConfig/kernel-modules ${mod} || echo Could not load ${mod}") config.boot.kernelModules)}
          '';
          deps = [ "modprobe" ];
-      };
-
-      system.activationScripts.mounts = {
-        text = ''
-          ${pkgs.utillinux}/bin/mount -aF
-        '';
-        deps = [ "specialfs" ];
       };
     };
 
