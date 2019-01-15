@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "haiwen";
     repo = "seafile";
     rev = "v${version}";
-    sha256 = "18gnri8zpgaxcfg08lwzlrkc4zmqszdjg930vy4q8ixggh6jywjf";
+    sha256 = "1bl22dmbl9gbavwxqbxfzq838k7aiv8ihgyr8famj9954xy7b7qn";
   };
 
   nativeBuildInputs = [ pkgconfig which autoreconfHook vala intltool ];
