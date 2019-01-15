@@ -14,46 +14,46 @@ let
   # To add support for a new platform, add an element to this set.
   configs = {
     armv6l-linux = {
-      BINARY = "32";
+      BINARY = 32;
       TARGET = "ARMV6";
-      DYNAMIC_ARCH = "0";
-      USE_OPENMP = "1";
+      DYNAMIC_ARCH = false;
+      USE_OPENMP = true;
     };
 
     armv7l-linux = {
-      BINARY = "32";
+      BINARY = 32;
       TARGET = "ARMV7";
-      DYNAMIC_ARCH = "0";
-      USE_OPENMP = "1";
+      DYNAMIC_ARCH = false;
+      USE_OPENMP = true;
     };
 
     aarch64-linux = {
-      BINARY = "64";
+      BINARY = 64;
       TARGET = "ARMV8";
-      DYNAMIC_ARCH = "1";
-      USE_OPENMP = "1";
+      DYNAMIC_ARCH = true;
+      USE_OPENMP = true;
     };
 
     i686-linux = {
-      BINARY = "32";
+      BINARY = 32;
       TARGET = "P2";
-      DYNAMIC_ARCH = "1";
-      USE_OPENMP = "1";
+      DYNAMIC_ARCH = true;
+      USE_OPENMP = true;
     };
 
     x86_64-darwin = {
-      BINARY = "64";
+      BINARY = 64;
       TARGET = "ATHLON";
-      DYNAMIC_ARCH = "1";
-      USE_OPENMP = "0";
+      DYNAMIC_ARCH = true;
+      USE_OPENMP = false;
       MACOSX_DEPLOYMENT_TARGET = "10.7";
     };
 
     x86_64-linux = {
-      BINARY = "64";
+      BINARY = 64;
       TARGET = "ATHLON";
-      DYNAMIC_ARCH = "1";
-      USE_OPENMP = "1";
+      DYNAMIC_ARCH = true;
+      USE_OPENMP = true;
     };
   };
 in
@@ -121,12 +121,12 @@ stdenv.mkDerivation rec {
       "CC=${stdenv.cc.targetPrefix}cc"
       ''PREFIX="''$(out)"''
       "NUM_THREADS=64"
-      "INTERFACE64=${if blas64 then "1" else "0"}"
+      "INTERFACE64=${toString (if blas64 then true else false)}"
       "NO_STATIC=1"
     ]
     ++ stdenv.lib.optional (stdenv.hostPlatform.libc == "musl") "NO_AFFINITY=1"
     ++ stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [ "NO_BINARY_MODE=1" "HOSTCC=cc" "CROSS=1" ]
-    ++ mapAttrsToList (var: val: var + "=" + val) config;
+    ++ mapAttrsToList (var: val: "${var}=${toString val}") config;
 
   doCheck = true;
   checkTarget = "tests";
