@@ -1,9 +1,8 @@
-{ stdenv, buildOcaml, fetchurl
-, ocaml, findlib, pkgconfig, perl
-, gmp
-}:
+{ stdenv, fetchurl, ocaml, findlib, pkgconfig, gmp, perl }:
 
-let source =
+assert stdenv.lib.versionAtLeast ocaml.version "3.12.1";
+
+let param =
   if stdenv.lib.versionAtLeast ocaml.version "4.02"
   then {
     version = "1.7";
@@ -16,19 +15,17 @@ let source =
   };
 in
 
-buildOcaml rec {
-  name = "zarith";
-  inherit (source) version;
-  src = fetchurl { inherit (source) url sha256; };
+stdenv.mkDerivation rec {
+  name = "zarith-${version}";
+  inherit (param) version;
 
-  minimumSupportedOcamlVersion = "3.12.1";
+  src = fetchurl {
+    inherit (param) url sha256;
+  };
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ ocaml findlib perl ];
   propagatedBuildInputs = [ gmp ];
-
-  # needed so setup-hook.sh sets CAML_LD_LIBRARY_PATH for dllzarith.so
-  hasSharedObjects = true;
 
   patchPhase = "patchShebangs ./z_pp.pl";
   configurePhase = ''
