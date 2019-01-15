@@ -16,6 +16,7 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = [
     "-Wno-implicit-fallthrough"
     "-Wno-error=clobbered"
+    "-Wno-error=cast-function-type"
   ];
 
 
