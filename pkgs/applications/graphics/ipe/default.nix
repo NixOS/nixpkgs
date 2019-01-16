@@ -3,11 +3,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "ipe-7.2.8";
+  name = "ipe-7.2.9";
 
   src = fetchurl {
     url = "https://dl.bintray.com/otfried/generic/ipe/7.2/${name}-src.tar.gz";
-    sha256 = "1mrk3gxrgfdv9cj1831kwlmnj179l57i2ncg6vc36wf98bdjf2gy";
+    sha256 = "1i0h0q32xvbb0d3y2ff76jxnaw05hjf2z5gzww886z8arxwar1xn";
   };
 
   # changes taken from Gentoo portage
