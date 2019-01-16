@@ -2508,6 +2508,11 @@
     github = "kirelagin";
     name = "Kirill Elagin";
   };
+  kirikaza = {
+    email = "k@kirikaza.ru";
+    github = "kirikaza";
+    name = "Kirill Kazakov";
+  };
   kisonecat = {
     email = "kisonecat@gmail.com";
     github = "kisonecat";
