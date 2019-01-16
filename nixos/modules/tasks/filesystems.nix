@@ -258,12 +258,13 @@ in
 
     runit.services.mounts = {
       script = ''
-        exec ${pkgs.utillinux}/bin/mount -a
+        while true; do
+          ${pkgs.utillinux}/bin/mount -a
+          ${pkgs.inotifyTools}/bin/inotifywait /etc/fstab -e modify
+        done
       '';
       stop = ''
-        if [ "$1" == "0" ]; then
-          exec ${pkgs.inotifyTools}/bin/inotifywait /etc/fstab -e modify
-        else
+        if [ "$1" != "0" ]; then
           >&2 echo '[ init ] retrying mounts'
           exec ${pkgs.coreutils}/bin/sleep 5
         fi
