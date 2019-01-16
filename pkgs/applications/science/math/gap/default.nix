@@ -107,7 +107,16 @@ stdenv.mkDerivation rec {
     popd
   '';
 
-  installPhase = ''
+  installTargets = [
+    "install-libgap"
+    "install-headers"
+  ];
+
+  # full `make install` is not yet implemented, just for libgap and headers
+  postInstall = ''
+    # Install config.h, which is not currently handled by `make install-headers`
+    cp gen/config.h "$out/include/gap"
+
     mkdir -p "$out/bin" "$out/share/gap/"
 
     mkdir -p "$out/share/gap"
