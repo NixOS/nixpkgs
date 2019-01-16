@@ -22,17 +22,6 @@
 +PROGRAM="@shell@ -c '@ethtool@/bin/ethtool -i $1 | @coreutils@/bin/sed -n s/^driver:\ //p' -- $env{INTERFACE}", RESULT=="?*", ENV{ID_NET_DRIVER}="%c"
  
  LABEL="nm_drivers_end"
---- a/data/90-nm-thunderbolt.rules
-+++ b/data/90-nm-thunderbolt.rules
-@@ -5,7 +5,7 @@
- 
- # Load he thunderbolt-net driver if we a device of type thunderbolt_xdomain
- # is added.
--SUBSYSTEM=="thunderbolt", ENV{DEVTYPE}=="thunderbolt_xdomain", RUN{builtin}+="kmod load thunderbolt-net"
-+SUBSYSTEM=="thunderbolt", ENV{DEVTYPE}=="thunderbolt_xdomain", RUN{builtin}+="@kmod@/bin/kmod load thunderbolt-net"
- 
- # For all thunderbolt network devices, we want to enable link-local configuration
- SUBSYSTEM=="net", ENV{ID_NET_DRIVER}=="thunderbolt-net", ENV{NM_AUTO_DEFAULT_LINK_LOCAL_ONLY}="1"
 --- a/data/NetworkManager.service.in
 +++ b/data/NetworkManager.service.in
 @@ -8,7 +8,7 @@
