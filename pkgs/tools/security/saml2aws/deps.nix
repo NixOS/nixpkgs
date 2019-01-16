@@ -127,6 +127,15 @@
     };
   }
   {
+    goPackagePath  = "github.com/headzoo/surf";
+    fetch = {
+      type = "git";
+      url = "https://github.com/headzoo/surf";
+      rev =  "a4a8c16c01dc47ef3a25326d21745806f3e6797a";
+      sha256 = "1dzcp0wdh3qmm5s5hixk9vj2s2kcvkpbhjdwz7kh2crvnavdgwh6";
+    };
+  }
+  {
     goPackagePath  = "github.com/jmespath/go-jmespath";
     fetch = {
       type = "git";
@@ -187,6 +196,15 @@
       url = "https://github.com/pmezard/go-difflib";
       rev =  "792786c7400a136282c1664665ae0a8db921c6c2";
       sha256 = "0c1cn55m4rypmscgf0rrb88pn58j3ysvc2d0432dp3c6fqg6cnzw";
+    };
+  }
+  {
+    goPackagePath  = "github.com/robertkrimen/otto";
+    fetch = {
+      type = "git";
+      url = "https://github.com/robertkrimen/otto";
+      rev =  "15f95af6e78dcd2030d8195a138bd88d4f403546";
+      sha256 = "07j7l340lmqwpfscwyb8llk3k37flvs20a4a8vzc85f16xyd9npf";
     };
   }
   {
@@ -286,6 +304,15 @@
       url = "https://github.com/go-ini/ini";
       rev =  "06f5f3d67269ccec1fe5fe4134ba6e982984f7f5";
       sha256 = "0fx123601aiqqn0yr9vj6qp1bh8gp240w4qdm76irs73q8dxlk7a";
+    };
+  }
+  {
+    goPackagePath  = "gopkg.in/sourcemap.v1";
+    fetch = {
+      type = "git";
+      url = "https://github.com/go-sourcemap/sourcemap";
+      rev =  "6e83acea0053641eff084973fee085f0c193c61a";
+      sha256 = "08rf2dl13hbnm3fq2cm0nnsspy9fhf922ln23cz5463cv7h62as4";
     };
   }
 ]
