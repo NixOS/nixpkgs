@@ -32,6 +32,24 @@ in
     environment.etc = optionals (cfg.profiles != {})
       (mapAttrsToList mkDconfProfile cfg.profiles);
 
+    environment.extraSetup = optionalString cfg.enable ''
+      if [ -d  $out/share/gsettings-schemas/ ]; then
+        # Create the standard schemas directory
+        mkdir -p $out/share/glib-2.0/schemas
+
+        # symlink any schema files to the standard schema directory
+        for d in $out/share/gsettings-schemas/*; do
+          # Force symlink, in case there's duplicates
+          ln -fs $d/glib-2.0/schemas/*.xml $out/share/glib-2.0/schemas
+        done
+
+        # and compile them
+        if [ -w $out/share/glib-2.0/schemas ]; then
+          ${pkgs.glib.dev}/bin/glib-compile-schemas $out/share/glib-2.0/schemas
+        fi
+      fi
+    '';
+
     services.dbus.packages = [ pkgs.gnome3.dconf ];
 
     environment.variables.GIO_EXTRA_MODULES = optional cfg.enable
