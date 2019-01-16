@@ -10,6 +10,15 @@ stdenv.mkDerivation rec {
     sha256 = "03kfc65s5a9csa5i7xjsv0psq144k8d9yw7xlny61bg1h2kg1db4";
   };
 
+  # Almost the same as https://github.com/DNS-OARC/dnsperf/pull/12
+  postPatch = ''
+    find . -name '*.h' -o -name '*.c' | xargs sed \
+      -e 's/\<isc_boolean_t\>/bool/g' -e 's/\<ISC_TRUE\>/true/g' -e 's/\<ISC_FALSE\>/false/g' \
+      -e 's/\<isc_uint/uint/g' -e 's/\<ISC_UINT/UINT/g' -e 's/\<isc_int/int/g' \
+      -e 's/\<ISC_PRINT_QUADFORMAT\>/PRIu64/g' -e 's/\<ISC_TF\>//g' \
+      -i --
+  '';
+
   outputs = [ "out" "man" "doc" ];
 
   buildInputs = [ bind zlib openssl ]
