@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   dontBuild = true;
 
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace ./install --replace " 2>/dev/null" ""
     substituteInPlace src/lib/Gitolite/Hooks/PostUpdate.pm \
       --replace /usr/bin/perl "${perl}/bin/perl"
