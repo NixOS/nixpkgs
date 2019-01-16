@@ -143,8 +143,8 @@ let bin = lib.getBin runit;
           fi
 
           if [ -n "$finishScriptPath" ]; then
-            mv "$finishScriptPath" "$out/check"
-            chmod +x "$out/check"
+            mv "$finishScriptPath" "$out/finish"
+            chmod +x "$out/finish"
           fi
 
           if [ -n "$enableLogging" ] && [ -n "$logScriptPath" ]; then

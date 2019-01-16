@@ -171,6 +171,14 @@ in
       (isYes "SWAP")
     ];
 
+    runit.services.swap = {
+      name = "swap";
+      script = ''
+        ${pkgs.utillinux}/bin/swapon -ae
+      '';
+      requires = [ "udev" ];
+    };
+
     # Create missing swapfiles.
     # FIXME: support changing the size of existing swapfiles.
     systemd.services =

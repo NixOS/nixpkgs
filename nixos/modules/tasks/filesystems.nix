@@ -256,6 +256,21 @@ in
         )}
       '';
 
+    runit.services.mounts = {
+      script = ''
+        exec ${pkgs.utillinux}/bin/mount -a
+      '';
+      stop = ''
+        if [ "$1" == "0" ]; then
+          exec ${pkgs.inotifyTools}/bin/inotifywait /etc/fstab
+        else
+          >&2 echo '[ init ] retrying mounts'
+          exec ${pkgs.coreutils}/bin/sleep 5
+        fi
+      '';
+      requires = [ "udev" ];
+    };
+
     # Provide a target that pulls in all filesystems.
     systemd.targets.fs =
       { description = "All File Systems";
