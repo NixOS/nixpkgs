@@ -96,6 +96,14 @@ stdenv.mkDerivation rec {
       rev = "db10d327ade93711da735a599a67580524e6f7b4";
       sha256 = "09v87id25fa5r9snfn4mv79syhc77jxfawj5aizmdpwdmpgxjk1f";
     })
+
+    # https://trac.sagemath.org/ticket/26442
+    (fetchSageDiff {
+      name = "cypari2-2.0.3.patch";
+      base = "8.6.rc1";
+      rev = "cd62d45bcef93fb4f7ed62609a46135e6de07051";
+      sha256 = "08l2b9w0rn1zrha6188j72f7737xs126gkgmydjd31baa6367np2";
+    })
   ];
 
   patches = nixPatches ++ packageUpgradePatches;
