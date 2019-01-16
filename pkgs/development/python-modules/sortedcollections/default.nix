@@ -13,9 +13,9 @@ buildPythonPackage rec {
     sha256 = "12nkw69lnyvh9wy6rsd0ng4bcia81vkhj1rj1kj1k3vzppn0sgmr";
   };
 
-  buildInputs = [ sortedcontainers ];
+  propagatedBuildInputs = [ sortedcontainers ];
 
-  # wants to test all python versions with tox:
+  # No tests in PyPi tarball
   doCheck = false;
 
   meta = with stdenv.lib; {
