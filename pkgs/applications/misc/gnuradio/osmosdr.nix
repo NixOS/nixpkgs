@@ -1,23 +1,23 @@
 { stdenv, fetchgit, cmake, pkgconfig, boost, gnuradio, rtl-sdr, uhd
-, makeWrapper, hackrf, airspy
+, makeWrapper, hackrf, airspy, libbladeRF
 , pythonSupport ? true, python, swig
 }:
 
 assert pythonSupport -> python != null && swig != null;
 
 stdenv.mkDerivation rec {
-  name = "gnuradio-osmosdr-${version}";
-  version = "0.1.4";
+  name = "gnuradio-osmosdr-unstable-2018-06-26";
+# version = "0.1.4";
 
   src = fetchgit {
     url = "git://git.osmocom.org/gr-osmosdr";
-    rev = "refs/tags/v${version}";
-    sha256 = "0vyzr4fhkblf2v3d7m0ch5hws4c493jw3ydl4y6b2dfbfzchhsz8";
+    rev = "4d83c6067f059b0c5015c3f59f8117bbd361e877";
+    sha256 = "1d5nb47506qry52bg4cn02d3l4lwxwz44g2fz1ph0q93c7892j60";
   };
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    cmake boost gnuradio rtl-sdr uhd makeWrapper hackrf airspy
+    cmake boost gnuradio rtl-sdr uhd makeWrapper hackrf airspy libbladeRF
   ] ++ stdenv.lib.optionals pythonSupport [ python swig ];
 
   postInstall = ''
