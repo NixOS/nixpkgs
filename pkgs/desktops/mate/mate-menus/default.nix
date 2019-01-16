@@ -9,9 +9,9 @@ stdenv.mkDerivation rec {
     sha256 = "18y4nka38dqqxycxpf7ig4vmrk4i05xqqjk4fxr1ghkj60xxyxz2";
   };
 
-  nativeBuildInputs = [ pkgconfig intltool ];
+  nativeBuildInputs = [ pkgconfig intltool gobject-introspection ];
 
-  buildInputs = [ glib gobject-introspection python ];
+  buildInputs = [ glib python ];
 
   makeFlags = [
     "INTROSPECTION_GIRDIR=$(out)/share/gir-1.0/"
