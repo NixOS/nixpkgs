@@ -262,7 +262,7 @@ in
       '';
       stop = ''
         if [ "$1" == "0" ]; then
-          exec ${pkgs.inotifyTools}/bin/inotifywait /etc/fstab
+          exec ${pkgs.inotifyTools}/bin/inotifywait /etc/fstab -e modify
         else
           >&2 echo '[ init ] retrying mounts'
           exec ${pkgs.coreutils}/bin/sleep 5
