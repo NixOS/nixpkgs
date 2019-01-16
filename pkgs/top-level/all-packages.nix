@@ -1382,7 +1382,7 @@ in
 
   esptool-ck = callPackage ../tools/misc/esptool-ck { };
 
-  ephemeralpg = callPackage ../applications/misc/ephemeralpg {};
+  ephemeralpg = callPackage ../development/tools/database/ephemeralpg {};
 
   et = callPackage ../applications/misc/et {};
 
@@ -11994,8 +11994,6 @@ in
   pg_repack = callPackage ../servers/sql/postgresql/pg_repack {};
 
   pg_similarity = callPackage ../servers/sql/postgresql/pg_similarity {};
-
-  pg_tmp = callPackage ../development/tools/database/pg_tmp { };
 
   pgroonga = callPackage ../servers/sql/postgresql/pgroonga {};
 
