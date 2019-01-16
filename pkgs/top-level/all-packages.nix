@@ -7823,6 +7823,7 @@ in
   wabt = callPackage ../development/tools/wabt { };
 
   ### LUA MODULES
+  lua-setup-hook = callPackage ../development/interpreters/lua-5/setup-hook.nix { };
 
   # don't add ./?.lua or if you do it change the checks
   # else every folder is going to be added and generate

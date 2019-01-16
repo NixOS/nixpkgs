@@ -15,13 +15,8 @@ let
 in
 stdenv.mkDerivation rec {
   name = "lua-${version}";
-  majorVersion = "5.1";
-  version = "${majorVersion}.5";
-
-  # helper functions for dealing with LUA_PATH and LUA_CPATH
-  LuaPathSearchPaths    = getLuaPath majorVersion;
-  LuaCPathSearchPaths   = getLuaCPath majorVersion;
-  setupHook = lua-setup-hook LuaPathSearchPaths LuaCPathSearchPaths;
+  version = "5.1.5";
+  luaversion = "5.1";
 
   src = fetchurl {
     url = "https://www.lua.org/ftp/${name}.tar.gz";

@@ -1141,4 +1141,5 @@ with self; {
     };
   };
 
-}; in self
+});
+in packages

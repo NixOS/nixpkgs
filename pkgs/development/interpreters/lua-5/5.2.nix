@@ -22,8 +22,8 @@ stdenv.mkDerivation rec {
   version = "${luaversion}.4";
 
   # helper functions for dealing with LUA_PATH and LUA_CPATH
-  LuaPathSearchPaths    = getLuaPath majorVersion;
-  LuaCPathSearchPaths   = getLuaCPath majorVersion;
+  LuaPathSearchPaths    = getLuaPath luaversion;
+  LuaCPathSearchPaths   = getLuaCPath luaversion;
 
   setupHook = lua-setup-hook LuaPathSearchPaths LuaCPathSearchPaths;
 
@@ -54,11 +54,11 @@ stdenv.mkDerivation rec {
   configurePhase =
     if stdenv.isDarwin
     then ''
-    makeFlagsArray=( INSTALL_TOP=$out INSTALL_MAN=$out/share/man/man1 PLAT=macosx CFLAGS="-DLUA_USE_LINUX -fno-common -O2 -fPIC${if compat then " -DLUA_COMPAT_ALL" else ""}" LDFLAGS="-fPIC" V=${majorVersion} R=${majorVersion} CC="$CC")
+    makeFlagsArray=( INSTALL_TOP=$out INSTALL_MAN=$out/share/man/man1 PLAT=macosx CFLAGS="-DLUA_USE_LINUX -fno-common -O2 -fPIC${if compat then " -DLUA_COMPAT_ALL" else ""}" LDFLAGS="-fPIC" V=${luaversion} R=${version}  CC="$CC" )
     installFlagsArray=( TO_BIN="lua luac" TO_LIB="liblua.${version}.dylib" INSTALL_DATA='cp -d' )
   '' else ''
-    makeFlagsArray=( INSTALL_TOP=$out INSTALL_MAN=$out/share/man/man1 PLAT=linux CFLAGS="-DLUA_USE_LINUX -O2 -fPIC${if compat then " -DLUA_COMPAT_ALL" else ""}" LDFLAGS="-fPIC" V=${majorVersion} R=${version} CC="$CC" AR="$AR q" RANLIB="$RANLIB")
-    installFlagsArray=( TO_BIN="lua luac" TO_LIB="liblua.a liblua.so liblua.so.${majorVersion} liblua.so.${version}" INSTALL_DATA='cp -d' )
+    makeFlagsArray=( INSTALL_TOP=$out INSTALL_MAN=$out/share/man/man1 PLAT=linux CFLAGS="-DLUA_USE_LINUX -O2 -fPIC${if compat then " -DLUA_COMPAT_ALL" else ""}" LDFLAGS="-fPIC" V=${luaversion} R=${version} CC="$CC" AR="$AR q" RANLIB="$RANLIB" )
+    installFlagsArray=( TO_BIN="lua luac" TO_LIB="liblua.a liblua.so liblua.so.${luaversion} liblua.so.${version}" INSTALL_DATA='cp -d' )
   '';
 
   postInstall = ''

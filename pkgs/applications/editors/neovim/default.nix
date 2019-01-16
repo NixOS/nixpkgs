@@ -43,7 +43,6 @@ in
       neovimLuaEnv
     ] ++ optional withJemalloc jemalloc
       ++ optional stdenv.isDarwin libiconv
-      ++ lualibs
       ++ optionals doCheck [ glibcLocales procps ]
     ;
 
@@ -66,6 +65,7 @@ in
     cmakeFlags = [
       "-DLUA_PRG=${neovimLuaEnv}/bin/lua"
       "-DGPERF_PRG=${gperf}/bin/gperf"
+      "-DUNIBILIUM_LIBRARY=${unibilium}/lib/libunibilium${stdenv.targetPlatform.extensions.sharedLibrary}"
     ]
     # for now don't support luajit
     ++ optional (true) "-DPREFER_LUA=ON"
@@ -86,6 +86,11 @@ in
       install_name_tool -change libjemalloc.1.dylib \
                 ${jemalloc}/lib/libjemalloc.1.dylib \
                 $out/bin/nvim
+    '';
+
+    # export PATH=$PWD/build/bin:${PATH}
+    shellHook=''
+      export VIMRUNTIME=$PWD/runtime
     '';
 
     meta = {
