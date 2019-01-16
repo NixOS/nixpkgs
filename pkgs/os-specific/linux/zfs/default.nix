@@ -93,6 +93,7 @@ let
 
       configureFlags = [
         "--with-config=${configFile}"
+        "--with-python=${python3}/bin/python3"
       ] ++ optionals buildUser [
         "--with-dracutdir=$(out)/lib/dracut"
         "--with-udevdir=$(out)/lib/udev"
@@ -180,10 +181,10 @@ in {
     # incompatibleKernelVersion = "4.19";
 
     # this package should point to a version / git revision compatible with the latest kernel release
-    version = "0.8.0-rc2";
+    version = "0.8.0-rc3";
 
-    rev = "af2e8411dacbc694b1aaf9074e68a9d12270e74c";
-    sha256 = "0wm7x9dwrw30jnjlnz6a224h88qd6a5794pzbjsih50lqb10g2gy";
+    rev = "9b626c126e78cdc36200b66c7cd1dc6a06cf400d";
+    sha256 = "0wmkis0q2gbj7sgx3ipxngbgzjcf7ay353v3mglf2ay50q4da5i7";
     isUnstable = true;
 
     extraPatches = [
