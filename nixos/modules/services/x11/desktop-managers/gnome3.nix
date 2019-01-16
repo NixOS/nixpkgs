@@ -128,6 +128,7 @@ in {
     services.udev.packages = [ pkgs.gnome3.gnome-settings-daemon ];
     systemd.packages = [ pkgs.gnome3.vino ];
     services.flatpak.extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
+    programs.dconf.enable = true;
 
     # If gnome3 is installed, build vim for gtk3 too.
     nixpkgs.config.vim.gui = "gtk3";
@@ -163,12 +164,12 @@ in {
 
     services.xserver.updateDbusEnvironment = true;
 
-    environment.variables.GIO_EXTRA_MODULES = [ "${lib.getLib pkgs.gnome3.dconf}/lib/gio/modules"
-                                                "${pkgs.gnome3.glib-networking.out}/lib/gio/modules"
+    environment.variables.GIO_EXTRA_MODULES = [ "${pkgs.gnome3.glib-networking.out}/lib/gio/modules"
                                                 "${pkgs.gnome3.gvfs}/lib/gio/modules" ];
     environment.systemPackages = pkgs.gnome3.corePackages ++ cfg.sessionPath
       ++ (removePackagesByName pkgs.gnome3.optionalPackages config.environment.gnome3.excludePackages) ++ [
       pkgs.xdg-user-dirs # Update user dirs as described in http://freedesktop.org/wiki/Software/xdg-user-dirs/
+      pkgs.gnome3.mutter # Give eg. gnome-control-center access to schema
     ];
 
     # Use the correct gnome3 packageSet
