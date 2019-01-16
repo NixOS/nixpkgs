@@ -2,7 +2,7 @@
 
 buildPythonApplication rec {
   pname = "yq";
-  version = "2.7.1";
+  version = "2.7.2";
 
   propagatedBuildInputs = [ pyyaml xmltodict jq ];
 
@@ -11,7 +11,7 @@ buildPythonApplication rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1c10wbhgx8d8s44a8g2vzn4cmvkf7z7yqxrnk88aapgi51i786q0";
+    sha256 = "1fwvwy75n4rqzh6sxyp2jmjqc7939s0xmrhxw7zhdy6iacggvnpp";
   };
 
   meta = with lib; {
