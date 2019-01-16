@@ -268,6 +268,9 @@ in
           exec ${pkgs.coreutils}/bin/sleep 5
         fi
       '';
+      check = ''
+        exec ${pkgs.utillinux}/bin/mount -a
+      '';
       requires = [ "udev" ];
     };
 
