@@ -387,6 +387,14 @@
     root CA (for example Let's Encrypt).
    </para>
   </listitem>
+   <listitem>
+    <para>
+     <literal>mailutils</literal> now works by default when
+     <literal>sendmail</literal> is not in a setuid wrapper. As a consequence,
+     the <literal>sendmailPath</literal> argument, having lost its main use, has
+     been removed.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
