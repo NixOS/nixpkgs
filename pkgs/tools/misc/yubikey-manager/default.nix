@@ -2,11 +2,11 @@
   yubikey-personalization, libu2f-host, libusb1 }:
 
 pythonPackages.buildPythonPackage rec {
-  name = "yubikey-manager-1.0.1";
+  name = "yubikey-manager-2.0.0";
 
   srcs = fetchurl {
     url = "https://developers.yubico.com/yubikey-manager/Releases/${name}.tar.gz";
-    sha256 = "0i7w1f89hqlw7g800fjhbb6yvq9wjmj5d7w7p6v8bkyvk645v48z";
+    sha256 = "1x36pyg9g3by2pa11j6d73d79sdlb7qy98lwwn05f43fjm74qnz9";
   };
 
   propagatedBuildInputs =
@@ -35,8 +35,7 @@ pythonPackages.buildPythonPackage rec {
     _YKMAN_COMPLETE=source $out/bin/ykman > $out/share/bash-completion/completions/ykman || :
   '';
 
-  # See https://github.com/NixOS/nixpkgs/issues/29169
-  doCheck = false;
+  checkInputs = with pythonPackages; lib.optionals (pythonPackages.pythonOlder "3.3") [ mock ];
 
   meta = with lib; {
     homepage = https://developers.yubico.com/yubikey-manager;
