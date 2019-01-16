@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "pyowm";
-  version = "2.9.0";
+  version = "2.10.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ed175873823a2fedb48e453505c974ca39f3f75006ef1af54fdbcf72e6796849";
+    sha256 = "1xvcv3sbcn9na8cwz21nnjlixysfk5lymnf65d1nqkbgacc1mm4g";
   };
 
   propagatedBuildInputs = [ requests geojson ];
