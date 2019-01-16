@@ -4,6 +4,7 @@ stdenv.mkDerivation rec {
   name = "dnsperf-${version}";
   version = "2.1.0.0";
 
+  # The same as the initial commit of the new GitHub repo (only readme changed).
   src = fetchurl {
     url = "ftp://ftp.nominum.com/pub/nominum/dnsperf/${version}/"
         + "dnsperf-src-${version}-1.tar.gz";
@@ -22,7 +23,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "man" "doc" ];
 
   buildInputs = [ bind zlib openssl ]
-              ++ stdenv.lib.optional stdenv.isLinux [ libcap libcap.lib libseccomp ];
+    ++ stdenv.lib.optionals stdenv.isLinux [ libcap.lib ];
 
   postInstall = ''
     mkdir -p "$out/share/doc/"
@@ -33,7 +34,7 @@ stdenv.mkDerivation rec {
     outputsToInstall = outputs; # The man pages and PDFs are likely useful to most.
 
     description = "Tools for DNS benchmaring";
-    homepage = https://www.akamai.com/us/en/products/network-operator/measurement-tools.jsp;
+    homepage = "https://github.com/DNS-OARC/dnsperf";
     license = licenses.isc;
     platforms = platforms.unix;
     maintainers = [ maintainers.vcunat ];
