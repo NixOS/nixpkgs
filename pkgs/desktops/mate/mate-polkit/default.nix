@@ -10,13 +10,13 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    pkgconfig
+    gobjectIntrospection
     intltool
+    pkgconfig
   ];
 
   buildInputs = [
     gtk3
-    gobjectIntrospection
     libappindicator-gtk3
     libindicator-gtk3
     polkit
