@@ -11993,8 +11993,6 @@ in
 
   pg_similarity = callPackage ../servers/sql/postgresql/pg_similarity {};
 
-  pg_tmp = ephemeralpg;
-
   pgroonga = callPackage ../servers/sql/postgresql/pgroonga {};
 
   plv8 = callPackage ../servers/sql/postgresql/plv8 {
