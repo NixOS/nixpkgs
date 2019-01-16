@@ -325,7 +325,8 @@ let
   promTypes.relabel_config = types.submodule {
     options = {
       source_labels = mkOption {
-        type = types.listOf types.str;
+        type = with types; nullOr (listOf str);
+        default = null;
         description = ''
           The source labels select values from existing labels. Their content
           is concatenated using the configured separator and matched against
