@@ -129,6 +129,7 @@ stdenv.mkDerivation rec {
     [
       raskin
       chrisjefferson
+      timokau
     ];
     platforms = platforms.all;
     # keeping all packages increases the package size considerably, wchich
