@@ -3,7 +3,7 @@
 let newPython = python3.override {
   packageOverrides = self: super: {
     distro = super.distro.overridePythonAttrs (oldAttrs: rec {
-      version = "1.2.0";
+      version = "1.1.0";
       src = oldAttrs.src.override {
         inherit version;
         sha256 = "1vn1db2akw98ybnpns92qi11v94hydwp130s8753k6ikby95883j";
