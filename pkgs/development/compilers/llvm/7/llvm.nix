@@ -1,5 +1,6 @@
 { stdenv
 , fetch
+, fetchpatch
 , cmake
 , python
 , libffi
@@ -45,6 +46,14 @@ in stdenv.mkDerivation (rec {
     ++ optional enablePFM libpfm; # exegesis
 
   propagatedBuildInputs = [ ncurses zlib ];
+
+  patches = [
+    # https://bugs.llvm.org/show_bug.cgi?id=39427
+    (fetchpatch {
+      url = "https://salsa.debian.org/pkg-llvm-team/llvm-toolchain/raw/5a7d283d4e00bc4822c7b0226e593c344c8f6050/debian/patches/pr39427-misscompile.diff";
+      sha256 = "03mpydsaw0xvcp7kb4sgjzcl5v22620r5z78kv3mz5wp7sn76fg5";
+    })
+  ];
 
   postPatch = optionalString stdenv.isDarwin ''
     substituteInPlace cmake/modules/AddLLVM.cmake \
