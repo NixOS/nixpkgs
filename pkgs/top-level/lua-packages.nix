@@ -73,32 +73,22 @@ let
   #     isLua51 isLua52 isLuaJIT buildLuaPackage lua;
   # });
 
+in
+with self; {
+
   # TODO add list of derivations
-  getLuaPaths = majorVersion: [
+  getLuaPath = majorVersion: [
      "lib/lua/${majorVersion}/?.lua" "share/lua/${majorVersion}/?.lua"
     "share/lua/${majorVersion}/?/init.lua" "lib/lua/${majorVersion}/?/init.lua"
   ];
-  getLuaCPaths = majorVersion: [
+  getLuaCPath = majorVersion: [
      "lib/lua/${majorVersion}/?.so" "share/lua/${majorVersion}/?.so" "share/lua/${majorVersion}/?/init.so"
   ];
 
 
-
-  # # makeSearchPath = subDir: packages:
-  # #   concatStringsSep ":" (map (path: path + "/" + subDir) (builtins.filter (x: x != null) packages));
-  # makeLuaPath =
-  # makeLuaCPath
-  # makeLuaPath = drvs: stdenv.lib.makeSearchPath python.sitePackages (requiredLuaModules drvs);
-  # makeLuaCPath = drvs: stdenv.lib.makeSearchPath python.sitePackages (requiredLuaModules drvs);
-
-  # inspired by makePythonPath
-  # makeLuaPath = :
-in
-with self; {
-
     inherit toLuaModule;
     inherit requiredLuaModules luaOlder luaAtLeast
-      isLua51 isLua52 isLuaJIT buildLuaPackage lua callPackage;
+      isLua51 isLua52 isLuaJIT buildLuarocksPackage buildLuaPackage lua callPackage;
 
   wrapLua = callPackage ../development/interpreters/lua-5/wrap-lua.nix {
     inherit lua; inherit (pkgs) makeSetupHook makeWrapper;
@@ -1142,4 +1132,5 @@ with self; {
   };
 
 });
+# TODO self ?
 in packages

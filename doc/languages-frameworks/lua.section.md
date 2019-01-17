@@ -155,9 +155,9 @@ Each interpreter has the following attributes:
 - `pkgs`. Set of Lua packages for that specific interpreter. The package set can be modified by overriding the interpreter and passing `packageOverrides`.
 
 
-#### `buildLuaPackage` function
+#### `buildLuarocksPackage` function
 
-The `buildLuaPackage` function is implemented in `pkgs/development/interpreters/lua-5/build-lua-package.nix`
+The `buildLuarocksPackage` function is implemented in `pkgs/development/interpreters/lua-5/build-lua-package.nix`
 The following is an example:
 ```nix
 luaexpat = buildLuaPackage rec {
@@ -170,7 +170,7 @@ luaexpat = buildLuaPackage rec {
   };
   disabled = luaOlder "5.1";
 
-  propagatedBuildInputs = [lua   ];
+  propagatedBuildInputs = [ lua ];
 
   buildType="builtin";
 
@@ -184,7 +184,7 @@ luaexpat = buildLuaPackage rec {
 };
 ```
 
-The `buildLuaPackage` delegates most tasks to luarocks:
+The `buildLuarocksPackage` delegates most tasks to luarocks:
 
 * it adds `luarocks` as an unpacker for `src.rock` files (in fact zip files)
 * configurePhase` writes a temporary luarocks configuration file which location

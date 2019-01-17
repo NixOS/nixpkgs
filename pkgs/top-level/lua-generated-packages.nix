@@ -5,7 +5,7 @@ nixpkgs$ maintainers/scripts/update-luarocks-packages.sh pkgs/top-level/lua-gene
 {
 self
 , lua
-, buildLuaPackage
+, buildLuarocksPackage
 , stdenv
 , fetchurl
 , luaAtLeast
@@ -16,7 +16,7 @@ self
 } @ args:
 with self;
 rec {
-lrexlib-posix = buildLuaPackage rec {
+lrexlib-posix = buildLuarocksPackage rec {
   pname = "lrexlib-posix";
   version = "2.9.0-1";
 
@@ -38,7 +38,7 @@ lrexlib-posix = buildLuaPackage rec {
     };
   };
 };
-luaevent = buildLuaPackage rec {
+luaevent = buildLuarocksPackage rec {
   pname = "luaevent";
   version = "0.4.4-1";
 
@@ -60,7 +60,7 @@ luaevent = buildLuaPackage rec {
     };
   };
 };
-coxpcall = buildLuaPackage rec {
+coxpcall = buildLuarocksPackage rec {
   pname = "coxpcall";
   version = "1.17.0-1";
 
@@ -82,7 +82,7 @@ coxpcall = buildLuaPackage rec {
     };
   };
 };
-std__debug = buildLuaPackage rec {
+std__debug = buildLuarocksPackage rec {
   pname = "std._debug";
   version = "1.0-1";
 
@@ -104,7 +104,7 @@ std__debug = buildLuaPackage rec {
     };
   };
 };
-luv = buildLuaPackage rec {
+luv = buildLuarocksPackage rec {
   pname = "luv";
   version = "1.9.1-1";
 
@@ -126,7 +126,7 @@ luv = buildLuaPackage rec {
     };
   };
 };
-nvim-client = buildLuaPackage rec {
+nvim-client = buildLuarocksPackage rec {
   pname = "nvim-client";
   version = "0.0.1-26";
 
@@ -148,7 +148,7 @@ nvim-client = buildLuaPackage rec {
     };
   };
 };
-lrexlib-gnu = buildLuaPackage rec {
+lrexlib-gnu = buildLuarocksPackage rec {
   pname = "lrexlib-gnu";
   version = "2.9.0-1";
 
@@ -170,7 +170,7 @@ lrexlib-gnu = buildLuaPackage rec {
     };
   };
 };
-lpeg = buildLuaPackage rec {
+lpeg = buildLuarocksPackage rec {
   pname = "lpeg";
   version = "1.0.1-1";
 
@@ -192,7 +192,7 @@ lpeg = buildLuaPackage rec {
     };
   };
 };
-luasystem = buildLuaPackage rec {
+luasystem = buildLuarocksPackage rec {
   pname = "luasystem";
   version = "0.2.1-0";
 
@@ -214,7 +214,7 @@ luasystem = buildLuaPackage rec {
     };
   };
 };
-luadbi = buildLuaPackage rec {
+luadbi = buildLuarocksPackage rec {
   pname = "luadbi";
   version = "0.6-2";
 
@@ -236,7 +236,7 @@ luadbi = buildLuaPackage rec {
     };
   };
 };
-lua-iconv = buildLuaPackage rec {
+lua-iconv = buildLuarocksPackage rec {
   pname = "lua-iconv";
   version = "7-3";
 
@@ -258,7 +258,7 @@ lua-iconv = buildLuaPackage rec {
     };
   };
 };
-lua-cmsgpack = buildLuaPackage rec {
+lua-cmsgpack = buildLuarocksPackage rec {
   pname = "lua-cmsgpack";
   version = "0.3-2";
 
@@ -280,7 +280,7 @@ lua-cmsgpack = buildLuaPackage rec {
     };
   };
 };
-luaffi = buildLuaPackage rec {
+luaffi = buildLuarocksPackage rec {
   pname = "luaffi";
   version = "scm-1";
 
@@ -302,7 +302,7 @@ luaffi = buildLuaPackage rec {
     };
   };
 };
-std_normalize = buildLuaPackage rec {
+std_normalize = buildLuarocksPackage rec {
   pname = "std.normalize";
   version = "2.0.2-1";
 
@@ -324,7 +324,7 @@ std_normalize = buildLuaPackage rec {
     };
   };
 };
-lua-term = buildLuaPackage rec {
+lua-term = buildLuarocksPackage rec {
   pname = "lua-term";
   version = "0.3-1";
 
@@ -346,7 +346,7 @@ lua-term = buildLuaPackage rec {
     };
   };
 };
-lua_cliargs = buildLuaPackage rec {
+lua_cliargs = buildLuarocksPackage rec {
   pname = "lua_cliargs";
   version = "3.0-1";
 
@@ -368,7 +368,7 @@ lua_cliargs = buildLuaPackage rec {
     };
   };
 };
-say = buildLuaPackage rec {
+say = buildLuarocksPackage rec {
   pname = "say";
   version = "1.2-1";
 
@@ -390,7 +390,7 @@ say = buildLuaPackage rec {
     };
   };
 };
-lpty = buildLuaPackage rec {
+lpty = buildLuarocksPackage rec {
   pname = "lpty";
   version = "1.2.2-1";
 
@@ -412,7 +412,7 @@ lpty = buildLuaPackage rec {
     };
   };
 };
-luaposix = buildLuaPackage rec {
+luaposix = buildLuarocksPackage rec {
   pname = "luaposix";
   version = "34.0.4-1";
 
@@ -434,7 +434,7 @@ luaposix = buildLuaPackage rec {
     };
   };
 };
-lua-cjson = buildLuaPackage rec {
+lua-cjson = buildLuarocksPackage rec {
   pname = "lua-cjson";
   version = "2.1.0-1";
 
@@ -456,7 +456,7 @@ lua-cjson = buildLuaPackage rec {
     };
   };
 };
-dkjson = buildLuaPackage rec {
+dkjson = buildLuarocksPackage rec {
   pname = "dkjson";
   version = "2.5-2";
 
@@ -478,7 +478,7 @@ dkjson = buildLuaPackage rec {
     };
   };
 };
-busted = buildLuaPackage rec {
+busted = buildLuarocksPackage rec {
   pname = "busted";
   version = "2.0.rc12-1";
 
@@ -500,7 +500,7 @@ busted = buildLuaPackage rec {
     };
   };
 };
-mpack = buildLuaPackage rec {
+mpack = buildLuarocksPackage rec {
   pname = "mpack";
   version = "1.0.7-0";
 
@@ -522,7 +522,7 @@ mpack = buildLuaPackage rec {
     };
   };
 };
-luassert = buildLuaPackage rec {
+luassert = buildLuarocksPackage rec {
   pname = "luassert";
   version = "1.7.10-0";
 
@@ -544,7 +544,7 @@ luassert = buildLuaPackage rec {
     };
   };
 };
-ltermbox = buildLuaPackage rec {
+ltermbox = buildLuarocksPackage rec {
   pname = "ltermbox";
   version = "0.2-1";
 
@@ -566,7 +566,7 @@ ltermbox = buildLuaPackage rec {
     };
   };
 };
-luafilesystem = buildLuaPackage rec {
+luafilesystem = buildLuarocksPackage rec {
   pname = "luafilesystem";
   version = "1.7.0-2";
 
@@ -588,7 +588,7 @@ luafilesystem = buildLuaPackage rec {
     };
   };
 };
-luaexpat = buildLuaPackage rec {
+luaexpat = buildLuarocksPackage rec {
   pname = "luaexpat";
   version = "1.3.0-1";
 
@@ -610,7 +610,7 @@ luaexpat = buildLuaPackage rec {
     };
   };
 };
-mediator_lua = buildLuaPackage rec {
+mediator_lua = buildLuarocksPackage rec {
   pname = "mediator_lua";
   version = "1.1.2-0";
 
@@ -632,7 +632,7 @@ mediator_lua = buildLuaPackage rec {
     };
   };
 };
-luacheck = buildLuaPackage rec {
+luacheck = buildLuarocksPackage rec {
   pname = "luacheck";
   version = "0.21.2-1";
 
@@ -654,7 +654,7 @@ luacheck = buildLuaPackage rec {
     };
   };
 };
-lua-zlib = buildLuaPackage rec {
+lua-zlib = buildLuarocksPackage rec {
   pname = "lua-zlib";
   version = "1.2-0";
 
@@ -676,7 +676,7 @@ lua-zlib = buildLuaPackage rec {
     };
   };
 };
-ansicolors = buildLuaPackage rec {
+ansicolors = buildLuarocksPackage rec {
   pname = "ansicolors";
   version = "1.0.2-3";
 
@@ -698,7 +698,7 @@ ansicolors = buildLuaPackage rec {
     };
   };
 };
-penlight = buildLuaPackage rec {
+penlight = buildLuarocksPackage rec {
   pname = "penlight";
   version = "1.3.1-1";
 
@@ -720,7 +720,7 @@ penlight = buildLuaPackage rec {
     };
   };
 };
-luuid = buildLuaPackage rec {
+luuid = buildLuarocksPackage rec {
   pname = "luuid";
   version = "20120509-2";
 
@@ -742,7 +742,7 @@ luuid = buildLuaPackage rec {
     };
   };
 };
-luazip = buildLuaPackage rec {
+luazip = buildLuarocksPackage rec {
   pname = "luazip";
   version = "1.2.7-1";
 
@@ -764,7 +764,7 @@ luazip = buildLuaPackage rec {
     };
   };
 };
-luasec = buildLuaPackage rec {
+luasec = buildLuarocksPackage rec {
   pname = "luasec";
   version = "0.7alpha-2";
 
@@ -786,7 +786,7 @@ luasec = buildLuaPackage rec {
     };
   };
 };
-luasocket = buildLuaPackage rec {
+luasocket = buildLuarocksPackage rec {
   pname = "luasocket";
   version = "3.0rc1-2";
 

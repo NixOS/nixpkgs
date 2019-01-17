@@ -2,8 +2,8 @@
 , hostPlatform, makeWrapper
 , lua-setup-hook, callPackage
 , self
-, getLuaPath, getLuaCPath
-, luaPackages, packageOverrides ? (self: super: {})
+# , luaPackages
+, packageOverrides ? (self: super: {})
 }:
 
 let
@@ -12,6 +12,8 @@ let
     sha256 = "11fcyb4q55p4p7kdb8yp85xlw8imy14kzamp2khvcyxss4vw8ipw";
     name = "lua-arch.patch";
   };
+   luaPackages = callPackage ../../lua-modules {lua=self; overrides=packageOverrides;};
+  # luaPackages = (callPackage ../../../top-level/lua-packages.nix {lua=self; overrides=packageOverrides;}) self ;
 in
 stdenv.mkDerivation rec {
   name = "lua-${version}";
@@ -22,6 +24,10 @@ stdenv.mkDerivation rec {
     url = "https://www.lua.org/ftp/${name}.tar.gz";
     sha256 = "2640fc56a795f29d28ef15e13c34a47e223960b0240e8cb0a82d9b0738695333";
   };
+
+  # helper functions for dealing with LUA_PATH and LUA_CPATH
+  LuaPathSearchPaths    = luaPackages.getLuaPath luaversion;
+  LuaCPathSearchPaths   = luaPackages.getLuaCPath luaversion;
 
   buildInputs = [ readline ];
 
@@ -45,9 +51,7 @@ stdenv.mkDerivation rec {
     rmdir $out/{share,lib}/lua/5.1 $out/{share,lib}/lua
   '';
 
-  passthru = let
-    luaPackages = callPackage ../../../top-level/lua-packages.nix {lua=self; overrides=packageOverrides;};
-  in rec {
+  passthru = rec {
     buildEnv = callPackage ./wrapper.nix { lua=self;
     inherit (luaPackages) requiredLuaModules;
     };
@@ -68,6 +72,7 @@ stdenv.mkDerivation rec {
       for configuration, scripting, and rapid prototyping.
     '';
     license = stdenv.lib.licenses.mit;
+    platforms = with stdenv.lib.platforms; linux ++ darwin;
     hydraPlatforms = stdenv.lib.platforms.linux;
   };
 }
