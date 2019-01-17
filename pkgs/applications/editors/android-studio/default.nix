@@ -23,8 +23,15 @@ let
     sha256Hash = "1f7lllj85fia02hgy4ksbqh80sdcml16fv1g892jc6lwykjrdw5y";
   };
 in rec {
-  # Old alias
-  preview = beta;
+  # Old alias (TODO @primeos: Remove after 19.03 is branched off):
+  preview = throw ''
+    The attributes "android-studio-preview" and "androidStudioPackages.preview"
+    are now deprecated and will be removed soon, please use
+    "androidStudioPackages.beta" instead. This attribute corresponds to the
+    beta channel, if you want the latest release you can use
+    "androidStudioPackages.dev" or "androidStudioPackages.canary" instead
+    (currently, there is no difference between both channels).
+  '';
 
   # Attributes are named by their corresponding release channels
 
