@@ -12096,6 +12096,8 @@ in
     qtxmlpatterns = qt59.qtxmlpatterns;
   };
 
+  pyotherside = libsForQt5.callPackage ../development/libraries/pyotherside {};
+
   re2 = callPackage ../development/libraries/re2 { };
 
   qbs = libsForQt5.callPackage ../development/tools/build-managers/qbs { };
@@ -13115,7 +13117,7 @@ in
 
   yojimbo = callPackage ../development/libraries/yojimbo { };
 
-  yubioath-desktop = callPackage ../applications/misc/yubioath-desktop { };
+  yubioath-desktop = libsForQt5.callPackage ../applications/misc/yubioath-desktop { };
 
   yubico-piv-tool = callPackage ../tools/misc/yubico-piv-tool { };
 
