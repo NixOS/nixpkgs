@@ -135,6 +135,7 @@ in
             requires = [ "dev-${dev}.device" "zram-reloader.service" ];
             before = [ "dev-${dev}.swap" ];
             requiredBy = [ "dev-${dev}.swap" ];
+            unitConfig.DefaultDependencies = false; # needed to prevent a cycle
             serviceConfig = {
               Type = "oneshot";
               RemainAfterExit = true;
@@ -158,6 +159,7 @@ in
           description = "Reload zram kernel module when number of devices changes";
           wants = [ "systemd-udevd.service" ];
           after = [ "systemd-udevd.service" ];
+          unitConfig.DefaultDependencies = false; # needed to prevent a cycle
           serviceConfig = {
             Type = "oneshot";
             RemainAfterExit = true;
