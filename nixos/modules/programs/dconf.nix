@@ -39,7 +39,7 @@ in
 
         # symlink any schema files to the standard schema directory
         for d in $out/share/gsettings-schemas/*; do
-          # Force symlink, in case there's duplicates
+          # Force symlink, in case there are duplicates
           ln -fs $d/glib-2.0/schemas/*.xml $out/share/glib-2.0/schemas
         done
 
