@@ -17,7 +17,7 @@ lib.makeScope pkgs.newScope (self: with self; {
       pkgName = drv: (builtins.parseDrvName drv.name).name;
       namesToRemove = map pkgName packagesToRemove;
     in
-      filter (x: !(builtins.elem (pkgName x) namesToRemove)) packages;
+      lib.filter (x: !(builtins.elem (pkgName x) namesToRemove)) packages;
 
   maintainers = with pkgs.lib.maintainers; [ lethalman jtojnar hedning ];
 
