@@ -63,6 +63,7 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = [
     "-I${libxml2.dev}/include/libxml2"
     "-Wno-error=implicit-fallthrough"
+    "-Wno-error=cast-function-type"
   ] ++ optional stdenv.isDarwin "-Wno-error=deprecated-declarations";
 
   preConfigure = (concatMapStringsSep "\n" (mod: mod.preConfigure or "") modules);
