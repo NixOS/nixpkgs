@@ -35,6 +35,7 @@ stdenv.mkDerivation rec {
     "MAN3DIR=$(man)/share/man/man3"
     "MAN5DIR=$(man)/share/man/man5"
     "MAN8DIR=$(man)/share/man/man8"
+    "PYTHONLIBDIR=$(py)/${python.sitePackages}"
     "SBINDIR=$(bin)/sbin"
     "SHLIBDIR=$(out)/lib"
 
@@ -42,10 +43,6 @@ stdenv.mkDerivation rec {
   ];
 
   installTargets = [ "install" ] ++ optional enablePython "install-pywrap";
-
-  postInstall = ''
-    moveToOutput "${python.sitePackages}" "$py"
-  '';
 
   meta = removeAttrs libsepol.meta ["outputsToInstall"] // {
     description = "SELinux core library";
