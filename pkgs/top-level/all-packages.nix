@@ -10822,47 +10822,6 @@ in
 
   libgadu = callPackage ../development/libraries/libgadu { };
 
-  # Deprecated since gap itself now ships with a library component. This is
-  # still necessary for sage 8.5 but will be removed once we switch to sage
-  # 8.6.
-  gap-libgap-compatible = let
-    version = "4r8p6";
-    pkgVer = "2016_11_12-14_25";
-  in
-    (gap.override { packageSet = "minimal"; }).overrideAttrs (oldAttrs: {
-      name = "libgap-${oldAttrs.pname}-${version}";
-      inherit version;
-      src = fetchurl {
-        url = "https://www.gap-system.org/pub/gap/gap48/tar.bz2/gap${version}_${pkgVer}.tar.bz2";
-        sha256 = "19n2p1mdg33s2x9rs51iak7rgndc1cwr56jyqnah0g1ydgg1yh6b";
-      };
-      # libgap targets not yet available for 4r8p6
-      installPhase = ''
-        mkdir -p "$out/bin" "$out/share/gap/"
-
-        mkdir -p "$out/share/gap"
-        echo "Copying files to target directory"
-        cp -ar . "$out/share/gap/build-dir"
-
-        makeWrapper "$out/share/gap/build-dir/bin/gap.sh" "$out/bin/gap" \
-          --set GAP_DIR $out/share/gap/build-dir
-      '';
-      patches = [
-        # don't install any packages by default (needed for interop with libgap, probably obsolete  with 4r10
-        (fetchpatch {
-          url = "https://git.sagemath.org/sage.git/plain/build/pkgs/gap/patches/nodefaultpackages.patch?id=07d6c37d18811e2b377a9689790a7c5e24da16ba";
-          sha256 = "1xwj766m3axrxbkyx13hy3q8s2wkqxy3m6mgpwq3c3n4vk3v416v";
-        })
-
-        #  fix infinite loop in writeandcheck() when writing an error message fails.
-        (fetchpatch {
-          url = "https://git.sagemath.org/sage.git/plain/build/pkgs/gap/patches/writeandcheck.patch?id=07d6c37d18811e2b377a9689790a7c5e24da16ba";
-          sha256 = "1r1511x4kc2i2mbdq1b61rb6p3misvkf1v5qy3z6fmn6vqwziaz1";
-        })
-      ];
-  });
-  libgap = callPackage ../development/libraries/libgap { };
-
   libgda = callPackage ../development/libraries/libgda { };
 
   libgdamm = callPackage ../development/libraries/libgdamm { };
