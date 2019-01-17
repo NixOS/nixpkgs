@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchgit, bash, cmake
+{ stdenv, lib, fetchgit, bash, cmake, pkgconfig
 , opencv, gtest, openblas, liblapack, perl
 , cudaSupport ? false, cudatoolkit, nvidia_x11
 , cudnnSupport ? false, cudnn
@@ -16,14 +16,14 @@ stdenv.mkDerivation rec {
     sha256 = "06vk4q7bh17sjhnr72bzmggcqlp2injnsah5yflklg360p7vpijj";
   };
 
-  nativeBuildInputs = [ cmake perl ];
+  nativeBuildInputs = [ cmake perl pkgconfig ];
 
   buildInputs = [ opencv gtest openblas liblapack ]
               ++ lib.optionals cudaSupport [ cudatoolkit nvidia_x11 ]
               ++ lib.optional cudnnSupport cudnn;
 
-  cmakeFlags =
-    (if cudaSupport then [
+  cmakeFlags = [ "-DBLAS=open" "-DUSE_MKLDNN=0" ]
+    ++ (if cudaSupport then [
       "-DCUDA_ARCH_NAME=All"
       "-DCUDA_HOST_COMPILER=${cudatoolkit.cc}/bin/cc"
     ] else [ "-DUSE_CUDA=OFF" ])
