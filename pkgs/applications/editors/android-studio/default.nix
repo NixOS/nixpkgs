@@ -35,7 +35,7 @@ in rec {
 
   beta = mkStudio (betaVersion // {
     channel = "beta";
-    pname = "android-studio-preview";
+    pname = "android-studio-beta";
   });
 
   dev = mkStudio (latestVersion // {
