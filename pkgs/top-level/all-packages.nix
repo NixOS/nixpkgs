@@ -10822,17 +10822,31 @@ in
 
   libgadu = callPackage ../development/libraries/libgadu { };
 
+  # Deprecated since gap itself now ships with a library component. This is
+  # still necessary for sage 8.5 but will be removed once we switch to sage
+  # 8.6.
   gap-libgap-compatible = let
     version = "4r8p6";
     pkgVer = "2016_11_12-14_25";
   in
-    (gap.override { keepAllPackages = false; }).overrideAttrs (oldAttrs: {
+    (gap.override { packageSet = "minimal"; }).overrideAttrs (oldAttrs: {
       name = "libgap-${oldAttrs.pname}-${version}";
       inherit version;
       src = fetchurl {
         url = "https://www.gap-system.org/pub/gap/gap48/tar.bz2/gap${version}_${pkgVer}.tar.bz2";
         sha256 = "19n2p1mdg33s2x9rs51iak7rgndc1cwr56jyqnah0g1ydgg1yh6b";
       };
+      # libgap targets not yet available for 4r8p6
+      installPhase = ''
+        mkdir -p "$out/bin" "$out/share/gap/"
+
+        mkdir -p "$out/share/gap"
+        echo "Copying files to target directory"
+        cp -ar . "$out/share/gap/build-dir"
+
+        makeWrapper "$out/share/gap/build-dir/bin/gap.sh" "$out/bin/gap" \
+          --set GAP_DIR $out/share/gap/build-dir
+      '';
       patches = [
         # don't install any packages by default (needed for interop with libgap, probably obsolete  with 4r10
         (fetchpatch {
@@ -22007,7 +22021,9 @@ in
 
   gap = callPackage ../applications/science/math/gap { };
 
-  gap-minimal = lowPrio (gap.override { keepAllPackages = false; });
+  gap-minimal = lowPrio (gap.override { packageSet = "minimal"; });
+
+  gap-full = lowPrio (gap.override { packageSet = "full"; });
 
   geogebra = callPackage ../applications/science/math/geogebra { };
 
