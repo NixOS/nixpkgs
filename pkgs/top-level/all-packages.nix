@@ -2582,6 +2582,8 @@ in
 
   wl-clipboard = callPackage ../tools/misc/wl-clipboard { };
 
+  z-lua = callPackage ../tools/misc/z-lua { };
+
   zabbix-cli = callPackage ../tools/misc/zabbix-cli { };
 
   zzuf = callPackage ../tools/security/zzuf { };
