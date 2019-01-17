@@ -1,26 +1,28 @@
-{ stdenv, fetchurl, makeDesktopItem, makeWrapper
-, alsaLib, atk, cairo, cups, dbus, expat, fontconfig, freetype, gdk_pixbuf
-, glib, gnome2, gtk2, libnotify, libX11, libXcomposite, libXcursor, libXdamage
+{ stdenv, fetchurl, makeDesktopItem, wrapGAppsHook
+, alsaLib, atk, at-spi2-atk, cairo, cups, dbus, expat, fontconfig, freetype, gdk_pixbuf
+, glib, gtk3, libnotify, libX11, libXcomposite, libXcursor, libXdamage, libuuid
 , libXext, libXfixes, libXi, libXrandr, libXrender, libXtst, nspr, nss, libxcb
 , pango, systemd, libXScrnSaver, libcxx, libpulseaudio }:
 
 stdenv.mkDerivation rec {
 
     pname = "discord";
-    version = "0.0.5";
+    version = "0.0.8";
     name = "${pname}-${version}";
 
     src = fetchurl {
         url = "https://cdn.discordapp.com/apps/linux/${version}/${pname}-${version}.tar.gz";
-        sha256 = "067gb72qsxrzfma04njkbqbmsvwnnyhw4k9igg5769jkxay68i1g";
+        sha256 = "1p786ma54baljs0bw8nl9sr37ypbpjblcndxsw4djgyxkd9ii16r";
     };
 
-    nativeBuildInputs = [ makeWrapper ];
+    nativeBuildInputs = [ wrapGAppsHook ];
+
+    dontWrapGApps = true;
 
     libPath = stdenv.lib.makeLibraryPath [
         libcxx systemd libpulseaudio
-        stdenv.cc.cc alsaLib atk cairo cups dbus expat fontconfig freetype
-        gdk_pixbuf glib gnome2.GConf gtk2 libnotify libX11 libXcomposite
+        stdenv.cc.cc alsaLib atk at-spi2-atk cairo cups dbus expat fontconfig freetype
+        gdk_pixbuf glib gtk3 libnotify libX11 libXcomposite libuuid
         libXcursor libXdamage libXext libXfixes libXi libXrandr libXrender
         libXtst nspr nss libxcb pango systemd libXScrnSaver
      ];
@@ -29,10 +31,14 @@ stdenv.mkDerivation rec {
         mkdir -p $out/{bin,opt/discord,share/pixmaps}
         mv * $out/opt/discord
 
+        chmod +x $out/opt/discord/Discord
         patchelf --set-interpreter ${stdenv.cc.bintools.dynamicLinker} \
                  $out/opt/discord/Discord
 
-        wrapProgram $out/opt/discord/Discord --prefix LD_LIBRARY_PATH : ${libPath}
+        wrapProgram $out/opt/discord/Discord \
+          "''${gappsWrapperArgs[@]}" \
+          --prefix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.name}/" \
+          --prefix LD_LIBRARY_PATH : ${libPath}
 
         ln -s $out/opt/discord/Discord $out/bin/
         ln -s $out/opt/discord/discord.png $out/share/pixmaps

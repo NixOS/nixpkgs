@@ -1,7 +1,7 @@
 { stdenv, substituteAll, fetchurl
 , zlib ? null, zlibSupport ? true, bzip2, pkgconfig, libffi
 , sqlite, openssl, ncurses, python, expat, tcl, tk, tix, xlibsWrapper, libX11
-, makeWrapper, callPackage, self, gdbm, db, lzma
+, callPackage, self, gdbm, db, lzma
 , python-setup-hook
 # For the Python package set
 , packageOverrides ? (self: super: {})
@@ -37,7 +37,7 @@ in with passthru; stdenv.mkDerivation rec {
     inherit sha256;
   };
 
-  nativeBuildInputs = [ pkgconfig makeWrapper ];
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
     bzip2 openssl pythonForPypy libffi ncurses expat sqlite tk tcl xlibsWrapper libX11 gdbm db
   ]  ++ optionals isPy3k [
@@ -128,15 +128,6 @@ in with passthru; stdenv.mkDerivation rec {
     ln -s $out/${executable}/include $out/include/${libPrefix}
     ln -s $out/${executable}-c/lib-python/${if isPy3k then "3" else pythonVersion} $out/lib/${libPrefix}
 
-    # We must wrap the original, not the symlink.
-    # PyPy uses argv[0] to find its standard library, and while it knows
-    # how to follow symlinks, it doesn't know about wrappers. So, it
-    # will think the wrapper is the original. As long as the wrapper has
-    # the same path as the original, this is OK.
-    wrapProgram "$out/${executable}-c/${executable}-c" \
-      --set LD_LIBRARY_PATH "${LD_LIBRARY_PATH}:$out/lib" \
-      --set LIBRARY_PATH "${LIBRARY_PATH}:$out/lib"
-
     # verify cffi modules
     $out/bin/${executable} -c ${if isPy3k then "'import tkinter;import sqlite3;import curses;import lzma'" else "'import Tkinter;import sqlite3;import curses'"}
 
@@ -149,7 +140,7 @@ in with passthru; stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     homepage = http://pypy.org/;
-    description = "Fast, compliant alternative implementation of the Python language (3.5.3)";
+    description = "Fast, compliant alternative implementation of the Python language (${pythonVersion})";
     license = licenses.mit;
     platforms = [ "i686-linux" "x86_64-linux" ];
     maintainers = with maintainers; [ andersk ];
