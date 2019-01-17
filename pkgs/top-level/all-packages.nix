@@ -19373,7 +19373,9 @@ in
     libpng = libpng12;
   };
 
-  smartgithg = callPackage ../applications/version-management/smartgithg { };
+  smartgithg = callPackage ../applications/version-management/smartgithg {
+    jre = openjdk11;
+  };
 
   slimThemes = recurseIntoAttrs (callPackage ../applications/display-managers/slim/themes.nix {});
 
