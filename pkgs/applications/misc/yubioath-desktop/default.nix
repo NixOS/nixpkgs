@@ -45,11 +45,12 @@ stdenv.mkDerivation rec {
         --replace 'Exec=yubioath-desktop' "Exec=$out/bin/yubioath-desktop" \
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Yubikey Desktop Authenticator";
 
     homepage = https://www.yubico.com/support/knowledge-base/categories/articles/yubico-authenticator-download/;
 
     license = stdenv.lib.licenses.gpl3;
+    maintainers = with maintainers; [ mic92 ];
   };
 }
