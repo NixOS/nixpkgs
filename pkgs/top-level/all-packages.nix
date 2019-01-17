@@ -7224,11 +7224,17 @@ in
 
   oraclejdk8distro = installjdk: pluginSupport:
     (if pluginSupport then appendToName "with-plugin" else x: x)
-      (callPackage ../development/compilers/oraclejdk/jdk8cpu-linux.nix { inherit installjdk pluginSupport; });
+      (callPackage ../development/compilers/oraclejdk/jdk8cpu-linux.nix {
+        inherit installjdk pluginSupport;
+        licenseAccepted = config.oraclejdk.accept_license or false;
+      });
 
   oraclejdk8psu_distro = installjdk: pluginSupport:
     (if pluginSupport then appendToName "with-plugin" else x: x)
-      (callPackage ../development/compilers/oraclejdk/jdk8psu-linux.nix { inherit installjdk pluginSupport; });
+      (callPackage ../development/compilers/oraclejdk/jdk8psu-linux.nix {
+        inherit installjdk pluginSupport;
+        licenseAccepted = config.oraclejdk.accept_license or false;
+      });
 
   javacard-devkit = pkgsi686Linux.callPackage ../development/compilers/javacard-devkit { };
 
