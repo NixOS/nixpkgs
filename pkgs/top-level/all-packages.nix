@@ -197,6 +197,7 @@ in
 
   fetchgit = callPackage ../build-support/fetchgit {
     git = buildPackages.gitMinimal;
+    cacert = buildPackages.cacert;
   };
 
   fetchgitPrivate = callPackage ../build-support/fetchgit/private.nix { };
