@@ -17,11 +17,11 @@
   };
 in stdenv.mkDerivation (rec {
   name = "libgpg-error-${version}";
-  version = "1.33";
+  version = "1.34";
 
   src = fetchurl {
     url = "mirror://gnupg/libgpg-error/${name}.tar.bz2";
-    sha256 = "1zq3pw93d0ani8bam7f4qjivll1b0zg9qbblwwvcjip7ark84f2x";
+    sha256 = "10cc76y7zi6wsdmpy1abf3i0q17bj59q5ysy8cpnpf3ixsfpk006";
   };
 
   postPatch = ''
