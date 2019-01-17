@@ -814,7 +814,7 @@ args.stdenv.mkDerivation (args // {
 
   <para>
    There are multiple ways to fetch a package source in nixpkgs. The general
-   guideline is that you should package sources with a high degree of
+   guideline is that you should package reproducible sources with a high degree of
    availability. Right now there is only one fetcher which has mirroring
    support and that is <literal>fetchurl</literal>. Note that you should also
    prefer protocols which have a corresponding proxy environment variable.
@@ -883,7 +883,7 @@ src = fetchFromGitHub {
    Preferred source hash type is sha256. There are several ways to get it.
   </para>
 
-  <itemizedlist>
+  <orderedlist>
    <listitem>
     <para>
      Prefetch URL (with <literal>nix-prefetch-<replaceable>XXX</replaceable>
@@ -903,7 +903,7 @@ src = fetchFromGitHub {
     </para>
     <para>
      This works well when you've upgraded existing package version and want to
-     find out new hash, but is useless if package doesn't have top-level
+     find out new hash, but is useless if package can't be accessed by
      attribute or package has multiple sources (<literal>.srcs</literal>,
      architecture-dependent sources, etc).
     </para>
@@ -919,7 +919,7 @@ src = fetchFromGitHub {
      A little nuance is that <literal>nix-prefetch-*</literal> tools produce
      hash encoded with <literal>base32</literal>, but upstream usually provides
      hexadecimal (<literal>base16</literal>) encoding. Fetchers understand both
-     formats. Nixpkgs doesn't stadartize on any one format.
+     formats. Nixpkgs does not standardize on any one format.
     </para>
     <para>
      You can convert between formats with nix-hash, for example:
@@ -941,40 +941,56 @@ $ nix-hash --type sha256 --to-base32 <replaceable>HASH</replaceable>
      correct hash from error Nix prints.
     </para>
     <para>
-     You can use <literal>lib.fakeSha256</literal>,
-     <literal>lib.fakeSha512</literal> or any other fake hash for this purpose.
+     For package updates it is enough to change one symbol to make hash fake.
+     For new packages, you can use <literal>lib.fakeSha256</literal>,
+     <literal>lib.fakeSha512</literal> or any other fake hash.
+    </para>
+    <para>
      This is last resort method when reconstructing source URL is non-trivial
      and <literal>nix-prefetch-url -A</literal> isn't applicable (for example,
      <link xlink:href="https://github.com/NixOS/nixpkgs/blob/d2ab091dd308b99e4912b805a5eb088dd536adb9/pkgs/applications/video/kodi/default.nix#L73">
      one of <literal>kodi</literal> dependencies</link>). The easiest way then
      would be replace hash with a fake one and rebuild. Nix build will fail and
-     error message will contain wanted hash.
+     error message will contain desired hash.
     </para>
+    <warning><para>This method has security problems. Check below for details.</para></warning>
    </listitem>
-  </itemizedlist>
+  </orderedlist>
 
   <section xml:id="sec-source-hashes-security">
    <title>Obtaining hashes securely</title>
-
    <para>
-    From security point of view first four methods are most secure.
-    nix-prefetch-url does verify TLS certificates for
-    <literal>https://</literal> URLs. <emphasis>TLS certificates aren't
-    verified in fake hash method even when there is <literal>https://</literal>
-    URL</emphasis>. Obviously, getting hashes for <literal>http://</literal>
-    URLs isn't secure, so recheck using some other network that hash is same.
+    Let's say Man-in-the-Middle (MITM) sits close to your network. Then instead of fetching
+    source you can fetch malware, and instead of source hash you get hash of malware. Here are
+    security considerations for this scenario:
    </para>
-
-   <para>
-    Upstream provided hashes are not secure if obtained over
-    <literal>http://</literal>.
-   </para>
-
-   <para>
-    Nixpkgs build farm can act as an additional verification step. When
-    compromised hash was obtained, package may be rejected on Hydra due to hash
-    mismatch.
-   </para>
+   <itemizedlist>
+    <listitem>
+     <para>
+      <literal>http://</literal> URLs are not secure to prefetch hash from;
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      hashes from upstream (in method 3) should be obtained via secure protocol;
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      <literal>https://</literal> URLs are secure in methods 1, 2, 3;
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      <literal>https://</literal> URLs are not secure in method 5. When obtaining hashes
+      with fake hash method, TLS checks are disabled. So
+      refetch source hash from several different networks to exclude MITM scenario.
+      Alternatively, use fake hash method to make Nix error, but instead of extracting
+      hash from error, extract <literal>https://</literal> URL and prefetch it
+      with method 1.
+     </para>
+    </listitem>
+   </itemizedlist>
   </section>
  </section>
  <section xml:id="sec-patches">
