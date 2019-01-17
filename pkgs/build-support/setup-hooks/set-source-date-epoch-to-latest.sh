@@ -1,14 +1,23 @@
 updateSourceDateEpoch() {
     local path="$1"
 
-    # Get the last modification time of all regular files, sort them,
-    # and get the most recent. Maybe we should use
-    # https://github.com/0-wiz-0/findnewest here.
-    local -a res=($(find "$path" -type f -not -newer "$NIX_BUILD_TOP/.." -printf '%T@ %p\0' \
-                    | sort -n --zero-terminated | tail -n1 --zero-terminated | head -c -1))
-    local time="${res[0]//\.[0-9]*/}" # remove the fraction part
-    local newestFile="${res[1]}"
-
+    # Get the last modification time of all regular files, sort them, and get the most recent. 
+    local time="0"
+    local newestFile=""
+    local threshold=$(date +%s -r "$NIX_BUILD_TOP/..")
+    IFS=$'\n'
+    for r in $(find "$path" -type f -printf '%T@ %p\n'); do
+      IFS=' '
+      local -a res=( $r )
+      local t="${res[0]//\.[0-9]*/}" # remove the fraction part
+      if [ "$t" -ge "$threshold" ]; then
+        echo "ignore generated file ${res[1]}"
+      elif [ "$time" -lt "$t" ]; then
+        time="$t"
+        newestFile="${res[1]}"
+      fi
+    done
+    
     # Update $SOURCE_DATE_EPOCH if the most recent file we found is newer.
     if [ "${time:-0}" -gt "$SOURCE_DATE_EPOCH" ]; then
         echo "setting SOURCE_DATE_EPOCH to timestamp $time of file $newestFile"
