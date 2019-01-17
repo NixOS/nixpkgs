@@ -197,6 +197,7 @@ in
 
   fetchgit = callPackage ../build-support/fetchgit {
     git = buildPackages.gitMinimal;
+    cacert = buildPackages.cacert;
   };
 
   fetchgitPrivate = callPackage ../build-support/fetchgit/private.nix { };
@@ -1382,7 +1383,7 @@ in
 
   esptool-ck = callPackage ../tools/misc/esptool-ck { };
 
-  ephemeralpg = callPackage ../applications/misc/ephemeralpg {};
+  ephemeralpg = callPackage ../development/tools/database/ephemeralpg {};
 
   et = callPackage ../applications/misc/et {};
 
@@ -5815,6 +5816,8 @@ in
 
   tokei = callPackage ../development/tools/misc/tokei { };
 
+  toml2nix = (callPackage ../tools/toml2nix { }).toml2nix { };
+
   tor = callPackage ../tools/security/tor {
     openssl = openssl_1_1;
     # remove this, when libevent's openssl is upgraded to 1_1_0 or newer.
@@ -7222,11 +7225,17 @@ in
 
   oraclejdk8distro = installjdk: pluginSupport:
     (if pluginSupport then appendToName "with-plugin" else x: x)
-      (callPackage ../development/compilers/oraclejdk/jdk8cpu-linux.nix { inherit installjdk pluginSupport; });
+      (callPackage ../development/compilers/oraclejdk/jdk8cpu-linux.nix {
+        inherit installjdk pluginSupport;
+        licenseAccepted = config.oraclejdk.accept_license or false;
+      });
 
   oraclejdk8psu_distro = installjdk: pluginSupport:
     (if pluginSupport then appendToName "with-plugin" else x: x)
-      (callPackage ../development/compilers/oraclejdk/jdk8psu-linux.nix { inherit installjdk pluginSupport; });
+      (callPackage ../development/compilers/oraclejdk/jdk8psu-linux.nix {
+        inherit installjdk pluginSupport;
+        licenseAccepted = config.oraclejdk.accept_license or false;
+      });
 
   javacard-devkit = pkgsi686Linux.callPackage ../development/compilers/javacard-devkit { };
 
@@ -8500,7 +8509,11 @@ in
   cpplint = callPackage ../development/tools/analysis/cpplint { };
 
   cquery = callPackage ../development/tools/misc/cquery {
-    llvmPackages = llvmPackages_7;
+    llvmPackages = llvmPackages_latest;
+  };
+
+  ccls = callPackage ../development/tools/misc/ccls {
+    llvmPackages = llvmPackages_latest;
   };
 
   credstash = with python3Packages; toPythonApplication credstash;
@@ -11992,8 +12005,6 @@ in
   pg_repack = callPackage ../servers/sql/postgresql/pg_repack {};
 
   pg_similarity = callPackage ../servers/sql/postgresql/pg_similarity {};
-
-  pg_tmp = callPackage ../development/tools/database/pg_tmp { };
 
   pgroonga = callPackage ../servers/sql/postgresql/pgroonga {};
 

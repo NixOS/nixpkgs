@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   name = "x11vnc-${version}";
-  version = "0.9.15";
+  version = "0.9.16";
 
   src = fetchFromGitHub {
     owner = "LibVNC";
     repo = "x11vnc";
     rev = version;
-    sha256 = "1a1b65k1hsy4nhg2sx1yrpaz3vx6s7rmrx8nwygpaam8wpdlkh8p";
+    sha256 = "1g652mmi79pfq4p5p7spaswa164rpzjhc5rn2phy5pm71lm0vib1";
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];

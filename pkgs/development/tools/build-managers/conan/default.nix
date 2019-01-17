@@ -1,4 +1,4 @@
-{ lib, python3, fetchpatch, git }:
+{ lib, python3, git }:
 
 let newPython = python3.override {
   packageOverrides = self: super: {
@@ -10,71 +10,64 @@ let newPython = python3.override {
       };
     });
     node-semver = super.node-semver.overridePythonAttrs (oldAttrs: rec {
-      version = "0.2.0";
+      version = "0.6.1";
       src = oldAttrs.src.override {
         inherit version;
-        sha256 = "1080pdxrvnkr8i7b7bk0dfx6cwrkkzzfaranl7207q6rdybzqay3";
+        sha256 = "1dv6mjsm67l1razcgmq66riqmsb36wns17mnipqr610v0z0zf5j0";
       };
     });
-    astroid = super.astroid.overridePythonAttrs (oldAttrs: rec {
-      version = "1.6.5";
+    future = super.future.overridePythonAttrs (oldAttrs: rec {
+      version = "0.16.0";
       src = oldAttrs.src.override {
         inherit version;
-        sha256 = "fc9b582dba0366e63540982c3944a9230cbc6f303641c51483fa547dcc22393a";
+        sha256 = "1nzy1k4m9966sikp0qka7lirh8sqrsyainyf8rk97db7nwdfv773";
       };
     });
-    pylint = super.pylint.overridePythonAttrs (oldAttrs: rec {
-      version = "1.8.4";
+    tqdm = super.tqdm.overridePythonAttrs (oldAttrs: rec {
+      version = "4.28.1";
       src = oldAttrs.src.override {
         inherit version;
-        sha256 = "34738a82ab33cbd3bb6cd4cef823dbcabdd2b6b48a4e3a3054a2bbbf0c712be9";
+        sha256 = "1fyybgbmlr8ms32j7h76hz5g9xc6nf0644mwhc40a0s5k14makav";
       };
-
     });
   };
 };
 
 in newPython.pkgs.buildPythonApplication rec {
-  version = "1.6.0";
+  version = "1.11.2";
   pname = "conan";
 
   src = newPython.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "386476d3af1fa390e4cd96e737876e7d1f1c0bca09519e51fd44c1bb45990caa";
+    sha256 = "0b4r9n6541jjp2lsdzc1nc6mk1a953w0d4ynjss3ns7pp89y4nd4";
   };
-
-  # Bump PyYAML to 3.13
-  patches = fetchpatch {
-    url = https://github.com/conan-io/conan/commit/9d3d7a5c6e89b3aa321735557e5ad3397bb80568.patch;
-    sha256 = "1qdy6zj3ypl1bp9872mzaqg1gwigqldxb1glvrkq3p4za62p546k";
-  };
-
   checkInputs = [
     git
   ] ++ (with newPython.pkgs; [
+    codecov
+    mock
+    node-semver
     nose
     parameterized
-    mock
     webtest
-    codecov
   ]);
 
   propagatedBuildInputs = with newPython.pkgs; [
-    requests fasteners pyyaml pyjwt colorama patch
-    bottle pluginbase six distro pylint node-semver
-    future pygments mccabe deprecation
+    colorama deprecation distro fasteners bottle
+    future node-semver patch pygments pluginbase
+    pyjwt pylint pyyaml requests six tqdm
   ];
 
   checkPhase = ''
     export HOME="$TMP/conan-home"
     mkdir -p "$HOME"
-    nosetests conans.test
   '';
 
   meta = with lib; {
     homepage = https://conan.io;
     description = "Decentralized and portable C/C++ package manager";
     license = licenses.mit;
+    maintainers = with maintainers; [ HaoZeke ];
     platforms = platforms.linux;
   };
 }

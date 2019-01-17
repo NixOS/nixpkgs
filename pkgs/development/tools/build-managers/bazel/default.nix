@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, fetchpatch, runCommand, makeWrapper
+{ stdenv, callPackage, lib, fetchurl, fetchpatch, runCommand, makeWrapper
 , jdk, zip, unzip, bash, writeCBin, coreutils
 , which, python, perl, gnused, gnugrep, findutils
 # Apple dependencies
@@ -38,6 +38,11 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux ++ platforms.darwin;
   };
 
+  # additional tests that check bazel’s functionality
+  passthru.tests = {
+    python_bin_path = callPackage ./python-bin-path-test.nix {};
+  };
+
   name = "bazel-${version}";
 
   src = fetchurl {
@@ -47,8 +52,9 @@ stdenv.mkDerivation rec {
 
   sourceRoot = ".";
 
-  patches =
-    lib.optional enableNixHacks ./nix-hacks.patch;
+  patches = [
+    ./python-stub-path-fix.patch
+  ] ++ lib.optional enableNixHacks ./nix-hacks.patch;
 
   # Bazel expects several utils to be available in Bash even without PATH. Hence this hack.
 
@@ -118,6 +124,10 @@ stdenv.mkDerivation rec {
     '';
 
     genericPatches = ''
+      # Substitute python's stub shebang to plain python path. (see TODO add pr URL)
+      substituteInPlace src/main/java/com/google/devtools/build/lib/bazel/rules/python/python_stub_template.txt\
+          --replace "/usr/bin/env python" "${python}/bin/python" \
+          --replace "NIX_STORE_PYTHON_PATH" "${python}/bin/python" \
       # substituteInPlace is rather slow, so prefilter the files with grep
       grep -rlZ /bin src/main/java/com/google/devtools | while IFS="" read -r -d "" path; do
         # If you add more replacements here, you must change the grep above!

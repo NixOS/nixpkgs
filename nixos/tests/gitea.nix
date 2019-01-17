@@ -64,6 +64,7 @@ with pkgs.lib;
     machine =
       { config, pkgs, ... }:
       { services.gitea.enable = true;
+        services.gitea.disableRegistration = true;
       };
 
     testScript = ''
@@ -72,6 +73,7 @@ with pkgs.lib;
       $machine->waitForUnit('gitea.service');
       $machine->waitForOpenPort('3000');
       $machine->succeed("curl --fail http://localhost:3000/");
+      $machine->succeed("curl --fail http://localhost:3000/user/sign_up | grep 'Registration is disabled. Please contact your site administrator.'");
     '';
   };
 }

@@ -4,19 +4,18 @@
 
 stdenv.mkDerivation rec {
   name = "opensmtpd-${version}";
-  version = "6.4.0p2";
+  version = "6.4.1p2";
 
   nativeBuildInputs = [ autoconf automake libtool bison ];
   buildInputs = [ libasr libevent zlib libressl db pam ];
 
   src = fetchurl {
     url = "https://www.opensmtpd.org/archives/${name}.tar.gz";
-    sha256 = "1y7snhsrcdi56vaa23iwjpybhyrnnh2f6dxrfnacn7xgy5xwzbvn";
+    sha256 = "0cppqlx4fk6l8rbim5symh2fm1kzshf421256g596j6c9f9q96xn";
   };
 
   patches = [
-    ./proc_path.diff
-    ./fix-build.diff # See https://github.com/OpenSMTPD/OpenSMTPD/pull/884
+    ./proc_path.diff # TODO: upstream to OpenSMTPD, see https://github.com/NixOS/nixpkgs/issues/54045
   ];
 
   # See https://github.com/OpenSMTPD/OpenSMTPD/issues/885 for the `sh bootstrap`

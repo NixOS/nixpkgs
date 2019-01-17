@@ -32,6 +32,6 @@ stdenv.mkDerivation rec {
     description = "Desktop client for Seafile, the Next-generation Open Source Cloud Storage";
     license = licenses.asl20;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [ ];
   };
 }
