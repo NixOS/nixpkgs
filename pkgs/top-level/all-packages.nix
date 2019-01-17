@@ -15383,6 +15383,9 @@ in
 
   android-udev-rules = callPackage ../os-specific/linux/android-udev-rules { };
 
+  ankacoder = callPackage ../data/fonts/ankacoder { };
+  ankacoder-condensed = callPackage ../data/fonts/ankacoder/condensed.nix { };
+
   anonymousPro = callPackage ../data/fonts/anonymous-pro { };
 
   ant-theme = callPackage ../data/themes/ant-theme { };
