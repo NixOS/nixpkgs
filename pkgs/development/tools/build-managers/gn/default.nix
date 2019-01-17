@@ -1,5 +1,5 @@
 { stdenv, lib, fetchgit, fetchzip, fetchpatch, darwin, writeText
-, git, ninja, python }:
+, git, ninja, python2 }:
 
 let
   rev = "96ff462cddf35f98e25fd5d098fc27bc81eab94a";
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
       --replace "NSArray<NSString*>*" "NSArray*"
   '';
 
-  nativeBuildInputs = [ ninja python git ];
+  nativeBuildInputs = [ ninja python2 git ];
   buildInputs = lib.optionals stdenv.isDarwin (with darwin; with apple_sdk.frameworks; [
     libobjc
     cctools
