@@ -15422,6 +15422,8 @@ in
 
   charis-sil = callPackage ../data/fonts/charis-sil { };
 
+  cherry = callPackage ../data/fonts/cherry { };
+
   comfortaa = callPackage ../data/fonts/comfortaa {};
 
   comic-neue = callPackage ../data/fonts/comic-neue { };
