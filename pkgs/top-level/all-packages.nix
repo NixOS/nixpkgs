@@ -4676,6 +4676,12 @@ in
 
   olsrd = callPackage ../tools/networking/olsrd { };
 
+  ory-hydra = callPackage ../servers/ory/hydra {};
+
+  ory-keto = callPackage ../servers/ory/keto {};
+
+  ory-oathkeeper = callPackage ../servers/ory/oathkeeper {};
+
   os-prober = callPackage ../tools/misc/os-prober {};
 
   osl = callPackage ../development/compilers/osl { };
