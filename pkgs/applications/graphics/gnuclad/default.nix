@@ -10,6 +10,8 @@ stdenv.mkDerivation rec {
     sha256 = "0ka2kscpjff7gflsargv3r9fdaxhkf3nym9mfaln3pnq6q7fwdki";
   };
 
+  NIX_CFLAGS_COMPILE = [ "-Wno-error=catch-value" ];
+
   nativeBuildInputs = [ pkgconfig ];
 
   meta = with stdenv.lib; {
