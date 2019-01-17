@@ -43,6 +43,6 @@ python3Packages.buildPythonPackage rec {
 
     license = licenses.bsd2;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ benley ];
+    maintainers = with maintainers; [ benley mic92 ];
   };
 }
