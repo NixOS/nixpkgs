@@ -320,6 +320,7 @@ let
       SQUASHFS_LZO                 = yes;
       SQUASHFS_XZ                  = yes;
       SQUASHFS_LZ4                 = yes;
+      SQUASHFS_ZSTD                = whenAtLeast "4.14" yes;
 
       # Native Language Support modules, needed by some filesystems
       NLS              = yes;
