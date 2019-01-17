@@ -1919,6 +1919,11 @@
     github = "infinisil";
     name = "Silvan Mosberger";
   };
+  ingenieroariel = {
+    email = "ariel@nunez.co";
+    github = "ingenieroariel";
+    name = "Ariel Nunez";
+  };
   ironpinguin = {
     email = "michele@catalano.de";
     github = "ironpinguin";
