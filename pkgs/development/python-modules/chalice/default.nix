@@ -46,7 +46,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace 'pip>=9,<=18' 'pip' \
+      --replace 'pip>=9,<=18.1' 'pip' \
       --replace 'typing==3.6.4' 'typing' \
       --replace 'attrs==17.4.0' 'attrs' \
       --replace 'click>=6.6,<7.0' 'click'
