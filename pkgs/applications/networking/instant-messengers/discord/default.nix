@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeDesktopItem, makeWrapper
+{ stdenv, fetchurl, makeDesktopItem, wrapGAppsHook
 , alsaLib, atk, at-spi2-atk, cairo, cups, dbus, expat, fontconfig, freetype, gdk_pixbuf
 , glib, gtk3, libnotify, libX11, libXcomposite, libXcursor, libXdamage, libuuid
 , libXext, libXfixes, libXi, libXrandr, libXrender, libXtst, nspr, nss, libxcb
@@ -15,7 +15,9 @@ stdenv.mkDerivation rec {
         sha256 = "1p786ma54baljs0bw8nl9sr37ypbpjblcndxsw4djgyxkd9ii16r";
     };
 
-    nativeBuildInputs = [ makeWrapper ];
+    nativeBuildInputs = [ wrapGAppsHook ];
+
+    dontWrapGApps = true;
 
     libPath = stdenv.lib.makeLibraryPath [
         libcxx systemd libpulseaudio
@@ -33,7 +35,10 @@ stdenv.mkDerivation rec {
         patchelf --set-interpreter ${stdenv.cc.bintools.dynamicLinker} \
                  $out/opt/discord/Discord
 
-        wrapProgram $out/opt/discord/Discord --prefix LD_LIBRARY_PATH : ${libPath}
+        wrapProgram $out/opt/discord/Discord \
+          "''${gappsWrapperArgs[@]}" \
+          --prefix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.name}/" \
+          --prefix LD_LIBRARY_PATH : ${libPath}
 
         ln -s $out/opt/discord/Discord $out/bin/
         ln -s $out/opt/discord/discord.png $out/share/pixmaps
