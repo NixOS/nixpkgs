@@ -409,6 +409,40 @@ let
     };
   };
 
+  phpstan = pkgs.stdenv.mkDerivation rec {
+    name = "phpstan-${version}";
+    version = "0.11";
+
+    src = pkgs.fetchurl {
+      url = "https://github.com/phpstan/phpstan/releases/download/${version}/phpstan.phar";
+      sha256 = "09p3cg5ii862p2l44fcv7hh400nsmxvwn1jjr929y21p01wsjhkp";
+    };
+
+    phases = [ "installPhase" ];
+    nativeBuildInputs = [ pkgs.makeWrapper ];
+
+    installPhase = ''
+      mkdir -p $out/bin
+      install -D $src $out/libexec/phpstan/phpstan.phar
+      makeWrapper ${php}/bin/php $out/bin/phpstan \
+        --add-flags "$out/libexec/phpstan/phpstan.phar"
+    '';
+
+    meta = with pkgs.lib; {
+      description = "PHP Static Analysis Tool";
+      longDescription = ''
+        PHPStan focuses on finding errors in your code without actually running
+        it. It catches whole classes of bugs even before you write tests for the
+        code. It moves PHP closer to compiled languages in the sense that the
+        correctness of each line of the code can be checked before you run the
+        actual line.
+      '';
+      license = licenses.mit;
+      homepage = https://github.com/phpstan/phpstan;
+      maintainers = with maintainers; [ etu ];
+    };
+  };
+
   psysh = pkgs.stdenv.mkDerivation rec {
     name = "psysh-${version}";
     version = "0.9.8";

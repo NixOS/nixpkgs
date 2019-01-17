@@ -6524,6 +6524,11 @@ in
   any-nix-shell = callPackage ../shells/any-nix-shell { };
 
   bash = lowPrio (callPackage ../shells/bash/4.4.nix { });
+  bash_5 = lowPrio (callPackage ../shells/bash/5.0.nix { });
+  bashInteractive_5 = lowPrio (callPackage ../shells/bash/5.0.nix {
+    interactive = true;
+    withDocs = true;
+  });
 
   # WARNING: this attribute is used by nix-shell so it shouldn't be removed/renamed
   bashInteractive = callPackage ../shells/bash/4.4.nix {
@@ -10817,33 +10822,6 @@ in
 
   libgadu = callPackage ../development/libraries/libgadu { };
 
-  gap-libgap-compatible = let
-    version = "4r8p6";
-    pkgVer = "2016_11_12-14_25";
-  in
-    (gap.override { keepAllPackages = false; }).overrideAttrs (oldAttrs: {
-      name = "libgap-${oldAttrs.pname}-${version}";
-      inherit version;
-      src = fetchurl {
-        url = "https://www.gap-system.org/pub/gap/gap48/tar.bz2/gap${version}_${pkgVer}.tar.bz2";
-        sha256 = "19n2p1mdg33s2x9rs51iak7rgndc1cwr56jyqnah0g1ydgg1yh6b";
-      };
-      patches = [
-        # don't install any packages by default (needed for interop with libgap, probably obsolete  with 4r10
-        (fetchpatch {
-          url = "https://git.sagemath.org/sage.git/plain/build/pkgs/gap/patches/nodefaultpackages.patch?id=07d6c37d18811e2b377a9689790a7c5e24da16ba";
-          sha256 = "1xwj766m3axrxbkyx13hy3q8s2wkqxy3m6mgpwq3c3n4vk3v416v";
-        })
-
-        #  fix infinite loop in writeandcheck() when writing an error message fails.
-        (fetchpatch {
-          url = "https://git.sagemath.org/sage.git/plain/build/pkgs/gap/patches/writeandcheck.patch?id=07d6c37d18811e2b377a9689790a7c5e24da16ba";
-          sha256 = "1r1511x4kc2i2mbdq1b61rb6p3misvkf1v5qy3z6fmn6vqwziaz1";
-        })
-      ];
-  });
-  libgap = callPackage ../development/libraries/libgap { };
-
   libgda = callPackage ../development/libraries/libgda { };
 
   libgdamm = callPackage ../development/libraries/libgdamm { };
@@ -12396,6 +12374,8 @@ in
   readline63 = callPackage ../development/libraries/readline/6.3.nix { };
 
   readline70 = callPackage ../development/libraries/readline/7.0.nix { };
+
+  readline80 = callPackage ../development/libraries/readline/8.0.nix { };
 
   readosm = callPackage ../development/libraries/readosm { };
 
@@ -16048,7 +16028,7 @@ in
   androidStudioPackages = recurseIntoAttrs
     (callPackage ../applications/editors/android-studio { });
   android-studio = androidStudioPackages.stable;
-  android-studio-preview = androidStudioPackages.beta;
+  android-studio-preview = androidStudioPackages.preview;
 
   animbar = callPackage ../applications/graphics/animbar { };
 
@@ -22002,7 +21982,9 @@ in
 
   gap = callPackage ../applications/science/math/gap { };
 
-  gap-minimal = lowPrio (gap.override { keepAllPackages = false; });
+  gap-minimal = lowPrio (gap.override { packageSet = "minimal"; });
+
+  gap-full = lowPrio (gap.override { packageSet = "full"; });
 
   geogebra = callPackage ../applications/science/math/geogebra { };
 

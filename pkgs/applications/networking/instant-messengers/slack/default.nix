@@ -1,14 +1,15 @@
 { darkMode ? false, stdenv, fetchurl, dpkg, makeWrapper
 , alsaLib, atk, cairo, cups, curl, dbus, expat, fontconfig, freetype, glib
 , gnome2, gtk3, gdk_pixbuf, libnotify, libxcb, nspr, nss, pango
-, systemd, xorg }:
+, systemd, xorg, at-spi2-atk }:
 
 let
 
-  version = "3.3.3";
+  version = "3.3.7";
 
   rpath = stdenv.lib.makeLibraryPath [
     alsaLib
+    at-spi2-atk
     atk
     cairo
     cups
@@ -47,7 +48,7 @@ let
     if stdenv.hostPlatform.system == "x86_64-linux" then
       fetchurl {
         url = "https://downloads.slack-edge.com/linux_releases/slack-desktop-${version}-amd64.deb";
-        sha256 = "01x4anbm62y49zfkyfvxih5rk8g2qi32ppb8j2a5pwssyw4wqbfi";
+        sha256 = "1q3866iaby8rqim8h2m398wzi0isnnlsxirlq63fzz7a4g1hnc8p";
       }
     else
       throw "Slack is not supported on ${stdenv.hostPlatform.system}";
