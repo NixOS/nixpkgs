@@ -10,10 +10,12 @@ let
     buildGoPackage rec {
       inherit (data) owner repo version sha256;
       name = "${repo}-${version}";
+      subPackages = [ "." ];
       src = fetchFromGitHub {
         inherit owner repo sha256;
         rev = "v${version}";
       };
+      
 
       # Terraform allow checking the provider versions, but this breaks
       # if the versions are not provided via file paths.
