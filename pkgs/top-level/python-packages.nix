@@ -4503,6 +4503,8 @@ in {
 
   vultr = callPackage ../development/python-modules/vultr { };
 
+  wavedrom = callPackage ../development/python-modules/wavedrom { };
+
   waitress = callPackage ../development/python-modules/waitress { };
 
   waitress-django = callPackage ../development/python-modules/waitress-django { };
