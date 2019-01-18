@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, requests, geojson }:
+{ lib, buildPythonPackage, fetchPypi, requests, geojson, isPy27 }:
 
 buildPythonPackage rec {
   pname = "pyowm";
@@ -9,14 +9,9 @@ buildPythonPackage rec {
     sha256 = "1xvcv3sbcn9na8cwz21nnjlixysfk5lymnf65d1nqkbgacc1mm4g";
   };
 
-  propagatedBuildInputs = [ requests geojson ];
+  disabled = isPy27;
 
-  # This may actually break the package.
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "requests>=2.18.2,<2.19" "requests"  \
-      --replace "geojson>=2.3.0,<2.4" "geojson<2.5,>=2.3.0"
-  '';
+  propagatedBuildInputs = [ requests geojson ];
 
   # No tests in archive
   doCheck = false;
