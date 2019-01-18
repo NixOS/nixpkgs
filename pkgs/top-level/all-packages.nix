@@ -7081,7 +7081,7 @@ in
   tamarin-prover =
     (haskellPackages.callPackage ../applications/science/logic/tamarin-prover {
       # NOTE: do not use the haskell packages 'graphviz' and 'maude'
-      inherit maude which sapic;
+      inherit maude which;
       graphviz = graphviz-nox;
     });
 
