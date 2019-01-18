@@ -86,12 +86,13 @@
 <programlisting>
 { config, pkgs, ...} :
 {
+  security.rngd.enable = false; // otherwise vm will not boot
   ...
 
   fileSystems."/virtualboxshare" = {
     fsType = "vboxsf";
     device = "nameofthesharedfolder";
-    options = [ "rw" ];
+    options = [ "rw" "nofail" ];
   };
 }
 </programlisting>
