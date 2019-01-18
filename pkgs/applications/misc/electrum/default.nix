@@ -14,11 +14,11 @@ in
 
 python3Packages.buildPythonApplication rec {
   name = "electrum-${version}";
-  version = "3.2.3";
+  version = "3.2.4";
 
   src = fetchurl {
     url = "https://download.electrum.org/${version}/Electrum-${version}.tar.gz";
-    sha256 = "022iw4cq0c009wvqn7wd815jc0nv8198lq3cawn8h6c28hw2mhs1";
+    sha256 = "0nwipn1alk3r54zpsv2bdwsqxw4f08bxnfmygnwakfkiaifmmhxg";
   };
 
   propagatedBuildInputs = with python3Packages; [
