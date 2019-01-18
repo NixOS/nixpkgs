@@ -11497,6 +11497,14 @@ let
     };
   };
 
+  NumberBytesHuman = buildPerlPackage rec {
+    name = "Number-Bytes-Human-0.11";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/F/FE/FERREIRA/${name}.tar.gz";
+      sha256 = "0b3gprpbcrdwc2gqalpys5m2ngilh5injhww8y0gf3dln14rrisz";
+    };
+  };
+
   NumberCompare = buildPerlPackage rec {
     name = "Number-Compare-0.03";
     src = fetchurl {
@@ -14315,6 +14323,19 @@ let
       homepage = https://github.com/frioux/Syntax-Keyword-Junction;
       description = "Perl6 style Junction operators in Perl5";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  SysMmap = buildPerlPackage rec {
+    name = "Sys-Mmap-0.19";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/SW/SWALTERS/${name}.tar.gz";
+      sha256 = "1yh0170xfw3z7n3lynffcb6axv7wi6zb46cx03crj1cvrhjmwa89";
+    };
+    meta = with stdenv.lib; {
+      description = "Use mmap to map in a file as a Perl variable";
+      maintainers = with maintainers; [ peterhoeg ];
+      license = with licenses; [ gpl2Plus ];
     };
   };
 
