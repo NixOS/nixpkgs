@@ -5499,7 +5499,7 @@ with pkgs;
 
   ted = callPackage ../tools/typesetting/ted { };
 
-  teamviewer = libsForQt5.callPackage ../applications/networking/remote/teamviewer { };
+  teamviewer = libsForQt56.callPackage ../applications/networking/remote/teamviewer { };
 
   telegraf = callPackage ../servers/monitoring/telegraf { };
 
