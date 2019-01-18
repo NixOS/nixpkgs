@@ -1,8 +1,9 @@
 { stdenv, fetchurl, fetchpatch, readline
 , hostPlatform, makeWrapper
-, lua-setup-hook, callPackage
 , self
 # , luaPackages
+# might be ignored ?
+, lua-setup-hook, callPackage
 , packageOverrides ? (self: super: {})
 }:
 
@@ -28,6 +29,7 @@ stdenv.mkDerivation rec {
   # helper functions for dealing with LUA_PATH and LUA_CPATH
   LuaPathSearchPaths    = luaPackages.getLuaPath luaversion;
   LuaCPathSearchPaths   = luaPackages.getLuaCPath luaversion;
+  setupHook = lua-setup-hook LuaPathSearchPaths LuaCPathSearchPaths;
 
   buildInputs = [ readline ];
 
