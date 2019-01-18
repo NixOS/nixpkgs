@@ -19875,6 +19875,8 @@ in
 
   vmpk = callPackage ../applications/audio/vmpk { };
 
+  vmware-horizon-client = callPackage ../applications/networking/remote/vmware-horizon-client { };
+
   vnstat = callPackage ../applications/networking/vnstat { };
 
   vocal = callPackage ../applications/audio/vocal { };
