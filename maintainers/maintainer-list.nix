@@ -1923,6 +1923,11 @@
     email = "tkatchev@gmail.com";
     name = "Ivan Tkatchev";
   };
+  ivegotasthma = {
+    email = "ivegotasthma@protonmail.com";
+    github = "ivegotasthma";
+    name = "Hristo Mihaylov";
+  };
   ixmatus = {
     email = "parnell@digitalmentat.com";
     github = "ixmatus";
