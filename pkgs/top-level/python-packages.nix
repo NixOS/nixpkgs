@@ -531,7 +531,9 @@ in {
 
   pyannotate = callPackage ../development/python-modules/pyannotate { };
 
-  pyatspi = callPackage ../development/python-modules/pyatspi { };
+  pyatspi = callPackage ../development/python-modules/pyatspi {
+    inherit (pkgs) pkgconfig;
+  };
 
   pyaxmlparser = callPackage ../development/python-modules/pyaxmlparser { };
 
