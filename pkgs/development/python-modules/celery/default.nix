@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, fetchpatch, iana-etc, libredirect,
+{ stdenv, buildPythonPackage, fetchPypi, isPy37, fetchpatch, iana-etc, libredirect,
   pytest, case, kombu, billiard, pytz, anyjson, amqp, eventlet
 }:
 
@@ -10,6 +10,10 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "0y66rz7z8dfcgs3s0qxmdddlaq57bzbgxgfz896nbp14grkv9nkp";
   };
+
+  # See https://github.com/celery/celery/issues/4500
+  # TODO: Remove once upgraded to 4.3
+  disabled = isPy37;
 
   patches = [
     # Skip test_RedisBackend.test_timeouts_in_url_coerced
