@@ -6,7 +6,7 @@
 buildOcaml rec
 {
   name = "ocsigen-start";
-  version = "1.4.0";
+  version = "1.5.0";
 
   buildInputs = [ eliom js_of_ocaml-camlp4 ];
   propagatedBuildInputs = [ pgocaml macaque safepass ocaml_pcre ocsigen-toolkit yojson ocsigen_deriving ocsigen_server resource-pooling ];
@@ -21,7 +21,7 @@ buildOcaml rec
     owner = "ocsigen";
     repo = name;
     rev = version;
-    sha256 = "1kicbw5cjb9gkfmfbqf6fiwbi0rzpqgk2lzd4v6nxaiyinxm73ff";
+    sha256 = "07478hz5jhxb242hfr808516k81vdbzj4j6cycvls3b9lzbyszha";
   };
 
   meta = {
