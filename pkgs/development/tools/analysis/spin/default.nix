@@ -21,6 +21,8 @@ in stdenv.mkDerivation rec {
   sourceRoot = "Spin/Src${version}";
 
   installPhase = ''
+    install -Dm644 ../Man/spin.1 $out/share/man/man1/spin.1
+
     install -Dm755 spin $out/bin/spin
     wrapProgram $out/bin/spin \
       --prefix PATH : ${binPath}
