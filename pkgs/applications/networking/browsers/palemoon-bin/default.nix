@@ -12,7 +12,7 @@ in
 
 stdenv.mkDerivation rec {
   name = "palemoon-bin-${version}";
-  version = "28.2.2";
+  version = "28.3.0";
 
   src = fetchurl {
     url = "https://linux.palemoon.org/datastore/release/palemoon-${version}.${arch}.tar.bz2";
