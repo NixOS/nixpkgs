@@ -13933,9 +13933,9 @@ in
 
   timescaledb-parallel-copy = callPackage ../development/tools/database/timescaledb-parallel-copy { };
 
-  postgresql = postgresql_9_6;
-
-  inherit (callPackages ../servers/sql/postgresql { })
+  inherit (import ../servers/sql/postgresql pkgs super)
+    postgresql
+    postgresqlPackages
     postgresql_9_4
     postgresql_9_5
     postgresql_9_6
