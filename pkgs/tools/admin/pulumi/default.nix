@@ -1,4 +1,6 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl, autoPatchelfHook }:
+
+with lib;
 
 let
 
@@ -27,7 +29,9 @@ in stdenv.mkDerivation rec {
     cp * $out/bin/
   '';
 
-  meta = with stdenv.lib; {
+  buildInputs = optionals stdenv.isLinux [ autoPatchelfHook ];
+
+  meta = {
     homepage = https://pulumi.io/;
     description = "Pulumi is a cloud development platform that makes creating cloud programs easy and productive";
     license = with licenses; [ asl20 ];
