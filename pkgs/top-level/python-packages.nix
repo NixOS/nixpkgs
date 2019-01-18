@@ -714,6 +714,8 @@ in {
 
   python-utils = callPackage ../development/python-modules/python-utils { };
 
+  pythonparser = callPackage ../development/python-modules/pythonparser { };
+
   pytimeparse =  callPackage ../development/python-modules/pytimeparse { };
 
   PyWebDAV = callPackage ../development/python-modules/pywebdav { };

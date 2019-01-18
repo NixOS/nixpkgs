@@ -1,0 +1,14 @@
+diff --git a/pythonparser/test/test_parser.py b/pythonparser/test/test_parser.py
+index ff02f0d..b8af242 100644
+--- a/pythonparser/test/test_parser.py
++++ b/pythonparser/test/test_parser.py
+@@ -12,9 +12,6 @@ UnicodeOnly = test_utils.UnicodeOnly
+ if sys.version_info >= (3,):
+     def unicode(x): return x
+ 
+-def tearDownModule():
+-    coverage.report(parser)
+-
+ class ParserTestCase(unittest.TestCase):
+ 
+     maxDiff = None
