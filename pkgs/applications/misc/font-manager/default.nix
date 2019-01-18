@@ -1,24 +1,25 @@
 { stdenv, fetchFromGitHub, automake, autoconf, libtool,
-  pkgconfig, file, intltool, libxml2, json-glib , sqlite, itstool,
-  librsvg, vala, gnome3, wrapGAppsHook, gobject-introspection
+  pkgconfig, file, libxml2, json-glib , sqlite, itstool,
+  librsvg, vala, gnome3, wrapGAppsHook, gobject-introspection,
+  which
 }:
 
 stdenv.mkDerivation rec {
   name = "font-manager-${version}";
-  version = "0.7.3.1";
+  version = "0.7.4.1";
 
   src = fetchFromGitHub {
     owner = "FontManager";
     repo = "master";
     rev = version;
-    sha256 = "0i65br0bk3r6x8wcl8jhc0v0agl0k6fy5g60ss1bnw4md7ldpgyi";
-    };
+    sha256 = "1zy419zzc95h4gxvl88acqjbwlnmwybj23rx3vkc62j3v3w4nlay";
+  };
 
   nativeBuildInputs = [
     pkgconfig
     automake autoconf libtool
     file
-    intltool
+    which
     itstool
     vala
     gnome3.yelp-tools
@@ -33,7 +34,6 @@ stdenv.mkDerivation rec {
     sqlite
     librsvg
     gnome3.gtk
-    gnome3.libgee
     gnome3.defaultIconTheme
   ];
 
@@ -45,7 +45,6 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = [
-    "--with-file-roller"
     "--disable-pycompile"
   ];
 
