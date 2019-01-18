@@ -13,9 +13,6 @@
 # Disabled flag
 , disabled ? false
 
-# Go import path of the package
-, goPackagePath
-
 # Go package aliases
 , goPackageAliases ? [ ]
 
@@ -41,7 +38,9 @@
 with builtins;
 
 let
-  args = lib.filterAttrs (name: _: name != "extraSrcs") args';
+  goPackagePath = args'.goPackagePath or args'.src.nakedUrl;
+
+  args = lib.filterAttrs (name: _: name != "extraSrcs") args' // { inherit goPackagePath; };
 
   removeReferences = [ ] ++ lib.optional (!allowGoReference) go;
 
