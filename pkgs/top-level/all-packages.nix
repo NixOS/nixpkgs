@@ -7996,8 +7996,11 @@ in
   python37Full = python37.override{x11Support=true;};
 
   # pythonPackages further below, but assigned here because they need to be in sync
+  _merge_pythonPackages = true;
   pythonPackages = python.pkgs;
+  _merge_python2Packages = true;
   python2Packages = python2.pkgs;
+  _merge_python3Packages = true;
   python3Packages = python3.pkgs;
 
   pythonInterpreters = callPackage ./../development/interpreters/python {};

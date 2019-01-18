@@ -63,7 +63,19 @@ rec {
   #             = self: { foo = "foo"; bar = "bar"; foobar = self.foo + self.bar; } // { foo = "foo" + " + "; }
   #             = self: { foo = "foo + "; bar = "bar"; foobar = self.foo + self.bar; }
   #
-  extends = f: rattrs: self: let super = rattrs self; in super // f self super;
+  mergeUpdate = lhs: rhs:
+    let
+      merge = name: value:
+        if builtins.hasAttr name lhs
+            && (rhs."_merge_${name}" or lhs."_merge_${name}" or false)
+          then mergeUpdate lhs.${name} value
+          else value;
+    in lhs // (builtins.mapAttrs merge rhs);
+
+  extends = f: rattrs: self:
+    let super = rattrs self;
+    in mergeUpdate super (f self super);
+    #in super // (f self super); # <-- NON RECURSIVE
 
   # Compose two extending functions of the type expected by 'extends'
   # into one where changes made in the first are available in the
