@@ -1,4 +1,9 @@
-{ pkgs, stdenv, buildFHSUserEnv, fetchurl, makeDesktopItem }:
+{ stdenv, buildFHSUserEnv, fetchurl, makeDesktopItem, libxslt, atk
+, fontconfig, freetype, gdk_pixbuf, glib, gtk2, libudev0-shim, libxml2
+, pango, pixman, libX11, libXext, libXinerama, libXrandr , libXrender
+, libXtst, libXcursor, libXi, libxkbfile , libXScrnSaver, zlib
+}:
+
 let
     version = "4.10.0-11053294";
 
@@ -20,7 +25,7 @@ let
         name = "vmwareHorizonClientFiles";
         inherit version;
         src = vmwareBundle;
-        buildInputs = [ vmwareBundleUnpacker pkgs.libxslt ];
+        buildInputs = [ vmwareBundleUnpacker libxslt ];
         unpackPhase = ''
             echo '
                 ebegin(){
@@ -70,7 +75,7 @@ let
 
 in buildFHSUserEnv {
     name = "vmware-horizon-client";
-    targetPkgs = pkgs: with pkgs; [
+    targetPkgs = pkgs: [
         vmwareHorizonClientFiles
         atk
         fontconfig
@@ -82,16 +87,16 @@ in buildFHSUserEnv {
         libxml2
         pango
         pixman
-        xorg.libX11
-        xorg.libXext
-        xorg.libXinerama
-        xorg.libXrandr
-        xorg.libXrender
-        xorg.libXtst
-        xorg.libXcursor
-        xorg.libXi
-        xorg.libxkbfile
-        xorg.libXScrnSaver
+        libX11
+        libXext
+        libXinerama
+        libXrandr
+        libXrender
+        libXtst
+        libXcursor
+        libXi
+        libxkbfile
+        libXScrnSaver
         zlib
     ];
     runScript = ''${vmwareHorizonClientFiles}/bin/vmware-view_wrapper'';
