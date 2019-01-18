@@ -1,7 +1,7 @@
 { stdenv, buildFHSUserEnv, fetchurl, makeDesktopItem, libxslt, atk
 , fontconfig, freetype, gdk_pixbuf, glib, gtk2, libudev0-shim, libxml2
 , pango, pixman, libX11, libXext, libXinerama, libXrandr , libXrender
-, libXtst, libXcursor, libXi, libxkbfile , libXScrnSaver, zlib
+, libXtst, libXcursor, libXi, libxkbfile , libXScrnSaver, zlib, liberation_ttf
 }:
 
 let
@@ -87,6 +87,7 @@ in buildFHSUserEnv {
         libxml2
         pango
         pixman
+        liberation_ttf
         libX11
         libXext
         libXinerama
