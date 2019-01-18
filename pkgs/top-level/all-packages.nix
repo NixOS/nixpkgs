@@ -19678,6 +19678,8 @@ in
 
   trayer = callPackage ../applications/window-managers/trayer { };
 
+  tdrop = callPackage ../applications/misc/tdrop { };
+
   tree = callPackage ../tools/system/tree {};
 
   treesheets = callPackage ../applications/office/treesheets { wxGTK = wxGTK31; };
