@@ -33,7 +33,7 @@ with pkgs;
         isPyPy = interpreter == "pypy";
 
         buildEnv = callPackage ./wrapper.nix { python = self; inherit (pythonPackages) requiredPythonModules; };
-        withPackages = import ./with-packages.nix { inherit buildEnv pythonPackages;};
+        withPackages = import ./with-packages.nix { inherit buildEnv; pythonPackages = self.pkgs; };
         pkgs = pythonPackages;
         interpreter = "${self}/bin/${executable}";
         inherit executable implementation libPrefix pythonVersion sitePackages;
