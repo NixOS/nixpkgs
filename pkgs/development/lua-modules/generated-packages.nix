@@ -838,10 +838,12 @@ luv = buildLuarocksPackage {
       (fetchurl {
     url    = https://luarocks.org/luv-1.22.0-1.rockspec;
     sha256 = "0yxjy9wj4aqbv1my8fkciy2xar5si6bcsszipgyls24rl6lnmga3";
-  }) (fetchurl {
+  })
+  (fetchurl {
     url    = https://github.com/luvit/luv/releases/download/1.22.0-1/luv-1.22.0-1.tar.gz;
     sha256 = "1xvz4a0r6kd1xqxwm55g9n6imprxb79600x7dhyillrz7p5nm217";
-  })  ];
+  })
+  ];
   disabled = ( luaOlder "5.1");
 
   propagatedBuildInputs = [lua pkgs.libuv ];

@@ -1,6 +1,6 @@
 {stdenv, fetchurl
 , curl, makeWrapper, which, unzip
-,lua
+, lua
 # for 'luarocks pack'
 , zip
 # some packages need to be compiled with cmake
@@ -57,11 +57,16 @@ toLuaModule (stdenv.mkDerivation {
 
   propagatedBuildInputs = [ zip unzip cmake ];
 
-  # unpack hook for src.rock files
+  # unpack hook for src.rock and rockspec files
   setupHook = ./setup-hook.sh;
 
-  # cmake is just to compile packages wit cmake types, not luarocks itself
+  # cmake is just to compile packages with "cmake" buildType, not luarocks itself
   dontUseCmakeConfigure = true;
+
+  shellHook = ''
+    export PATH="src/bin:''${PATH:-}"
+    export LUA_PATH="src/?.lua;''${LUA_PATH:-}"
+  '';
 
   meta = with stdenv.lib; {
     inherit (s) version;

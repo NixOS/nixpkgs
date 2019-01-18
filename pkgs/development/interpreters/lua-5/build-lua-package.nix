@@ -17,6 +17,9 @@ name ? "${attrs.pname}-${attrs.version}"
 # by default prefix `name` e.g. "lua5.2-${name}"
 , namePrefix ? "lua" + lua.luaversion + "-"
 
+# for rockspec derivations, we need to
+, srcs ? null
+
 # Dependencies for building the package
 , buildInputs ? []
 
@@ -53,8 +56,10 @@ name ? "${attrs.pname}-${attrs.version}"
 # as explained in https://github.com/luarocks/luarocks/issues/766
 , extraConfig ? ""
 
-# relative to srcRoot, path to the rockspec to use
+# relative to srcRoot, path to the rockspec to use when using j
 , rockspecFilename ?  "../*.rockspec"
+
+, rockspecBased ? srcs != null
 
 , ... } @ attrs:
 
@@ -84,6 +89,10 @@ let
     }
     ${extraConfig}
   '';
+
+  #
+  rockspecs = lib.filter (a: lib.hasSuffix ".rockspec" ) srcs;
+  rockspecFilename = if rockspecs == [] then null else builtins.head rockspecs;
 
 in
 toLuaModule ( lua.stdenv.mkDerivation (
@@ -157,7 +166,9 @@ builtins.removeAttrs attrs ["disabled" "checkInputs"] // {
     # we force the use of the upper level since it is
     # the sole rockspec in that folder
     # maybe we could reestablish dependency checking via passing --rock-trees
-    $LUAROCKS make --deps-mode=none --tree $out ${rockspecFilename}
+    echo "ROCKSPEC $rockspecFilename"
+    nix_warn "cwd: $PWD"
+    $LUAROCKS make --deps-mode=none --tree $out ''${rockspecFilename}
 
     # to prevent collisions when creating environments
     # also added -f as it doesn't always exist

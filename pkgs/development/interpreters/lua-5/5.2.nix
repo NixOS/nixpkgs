@@ -5,7 +5,7 @@
 , makeWrapper
 , lua-setup-hook, callPackage
 , self
-, getLuaPath, getLuaCPath
+# , getLuaPath, getLuaCPath
 , luaPackages, packageOverrides ? (self: super: {})
 }:
 
@@ -15,6 +15,7 @@ let
     sha256 = "1by1dy4ql61f5c6njq9ibf9kaqm3y633g2q8j54iyjr4cxvqwqz9";
     name = "lua-arch.patch";
   };
+  luaPackages = callPackage ../../lua-modules {lua=self; overrides=packageOverrides;};
 in
 stdenv.mkDerivation rec {
   name = "lua-${version}";
@@ -22,8 +23,8 @@ stdenv.mkDerivation rec {
   version = "${luaversion}.4";
 
   # helper functions for dealing with LUA_PATH and LUA_CPATH
-  LuaPathSearchPaths    = getLuaPath luaversion;
-  LuaCPathSearchPaths   = getLuaCPath luaversion;
+  LuaPathSearchPaths    = luaPackages.getLuaPath luaversion;
+  LuaCPathSearchPaths   = luaPackages.getLuaCPath luaversion;
 
   setupHook = lua-setup-hook LuaPathSearchPaths LuaCPathSearchPaths;
 
@@ -37,9 +38,7 @@ stdenv.mkDerivation rec {
   patches = if stdenv.isDarwin then [ ./5.2.darwin.patch ] else [ dsoPatch ];
 
 
-  passthru = let
-    luaPackages = callPackage ../../../top-level/lua-packages.nix {lua=self; overrides=packageOverrides;};
-  in rec {
+  passthru = rec {
     # executable = "${libPrefix}m";
     buildEnv = callPackage ./wrapper.nix { lua = self;
     inherit (luaPackages) requiredLuaModules;

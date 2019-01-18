@@ -14,7 +14,6 @@ let
     name = "lua-arch.patch";
   };
    luaPackages = callPackage ../../lua-modules {lua=self; overrides=packageOverrides;};
-  # luaPackages = (callPackage ../../../top-level/lua-packages.nix {lua=self; overrides=packageOverrides;}) self ;
 in
 stdenv.mkDerivation rec {
   name = "lua-${version}";
