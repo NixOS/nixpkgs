@@ -4,14 +4,14 @@
 , pytest, requests }:
 
 buildPythonPackage rec {
-  version = "2.1.3";
+  version = "2.2.0";
   pname = "beancount";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4b7b0d3633c82ca88d3cb3d31ad2fd2e45a42401cfa94eaa1cb938ffece34f22";
+    sha256 = "1j3fyyqnr5gq71rmkb9q3im8pqppa134zzhmmp4hk4b274g18w31";
   };
 
   # No tests in archive
