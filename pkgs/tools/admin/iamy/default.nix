@@ -4,7 +4,6 @@ buildGoPackage rec {
   name = "iamy-${version}";
   version = "2.1.1";
 
-  goPackagePath = "github.com/99designs/iamy";
 
   src = fetchFromGitHub {
     owner = "99designs";

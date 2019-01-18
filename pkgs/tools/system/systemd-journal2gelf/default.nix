@@ -4,7 +4,6 @@ buildGoPackage rec {
   name = "SystemdJournal2Gelf-${version}";
   version = "20170413";
 
-  goPackagePath = "github.com/parse-nl/SystemdJournal2Gelf";
 
   src = fetchFromGitHub {
     rev = "862b1d60d2ba12cd8480304ca95041066cc8bdd0";

@@ -4,7 +4,6 @@ buildGoPackage rec {
   name = "tychus-${version}";
   version = "0.6.3";
 
-  goPackagePath = "github.com/devlocker/tychus";
   goDeps = ./deps.nix;
   subPackages = [];
 

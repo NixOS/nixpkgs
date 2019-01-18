@@ -4,7 +4,6 @@ buildGoPackage rec {
   name = "cayley-${version}";
   version = "0.6.1";
 
-  goPackagePath = "github.com/cayleygraph/cayley";
 
   src = fetchFromGitHub {
     owner = "cayleygraph";

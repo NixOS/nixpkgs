@@ -4,7 +4,6 @@ buildGoPackage rec {
   name = "kapacitor-${version}";
   version = "1.5.1";
 
-  goPackagePath = "github.com/influxdata/kapacitor";
 
   src = fetchFromGitHub {
     owner = "influxdata";

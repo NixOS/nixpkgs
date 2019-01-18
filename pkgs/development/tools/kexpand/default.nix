@@ -3,7 +3,6 @@
 buildGoPackage rec {
   name = "kexpand-unstable-2017-05-12";
 
-  goPackagePath = "github.com/kopeio/kexpand";
 
   subPackages = [ "." ];
 

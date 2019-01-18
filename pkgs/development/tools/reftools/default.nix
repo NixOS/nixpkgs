@@ -8,7 +8,6 @@ buildGoPackage rec {
   version = "2018-09-14";
   rev = "654d0ba4f96d62286ca33cd46f7674b84f76d399";
 
-  goPackagePath = "github.com/davidrjenni/reftools";
   excludedPackages = "\\(cmd/fillswitch/test-fixtures\\)";
 
   src = fetchFromGitHub {

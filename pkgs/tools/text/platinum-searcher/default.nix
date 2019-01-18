@@ -5,7 +5,6 @@ buildGoPackage rec {
   version = "2.1.5";
   rev = "v${version}";
 
-  goPackagePath = "github.com/monochromegane/the_platinum_searcher";
 
   src = fetchFromGitHub {
     inherit rev;

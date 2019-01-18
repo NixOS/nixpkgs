@@ -5,7 +5,6 @@ buildGoPackage rec {
   version = "0.4.18";
   rev = "v${version}";
 
-  goPackagePath = "github.com/ipfs/go-ipfs";
 
   extraSrcPaths = [
     (fetchgx {

@@ -4,7 +4,6 @@ buildGoPackage rec {
   name = "webhook-${version}";
   version = "2.6.8";
 
-  goPackagePath = "github.com/adnanh/webhook";
   excludedPackages = [ "test" ];
 
   src = fetchFromGitHub {

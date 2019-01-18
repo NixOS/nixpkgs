@@ -11,7 +11,6 @@ let beat = package : extraArgs : buildGoPackage (rec {
         sha256 = "1qnrq9bhk7csgcxycb8c7975lq0p7cxw29i6sji777zv4hn7442m";
       };
 
-      goPackagePath = "github.com/elastic/beats";
 
       subPackages = [ package ];
 

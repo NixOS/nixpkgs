@@ -3,7 +3,6 @@ buildGoPackage rec {
   name = "terraform-provider-gandi-${version}";
   version = "1.0.0";
 
-  goPackagePath = "github.com/tiramiseb/terraform-provider-gandi";
   goDeps = ./deps.nix;
 
   src = fetchFromGitHub {

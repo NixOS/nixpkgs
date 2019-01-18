@@ -5,7 +5,6 @@ buildGoPackage rec {
   version = "20161221-${stdenv.lib.strings.substring 0 7 rev}";
   rev = "4e1717c7cd5f31c47d0c37274464cbaabdd462ba";
 
-  goPackagePath = "github.com/digitalocean/bind_exporter";
 
   src = fetchFromGitHub {
     inherit rev;

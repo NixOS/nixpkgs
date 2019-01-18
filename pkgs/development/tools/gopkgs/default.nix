@@ -4,7 +4,6 @@ buildGoPackage rec {
   name = "gopkgs-${version}";
   version = "2.0.1";
 
-  goPackagePath = "github.com/uudashr/gopkgs";
   goDeps = ./deps.nix;
 
   src = fetchFromGitHub {

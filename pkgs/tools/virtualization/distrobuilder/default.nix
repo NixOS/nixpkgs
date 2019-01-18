@@ -11,7 +11,6 @@ buildGoPackage rec {
   version = "2018_10_04";
   rev = "d2329be9569d45028a38836186d2353b8ddfe1ca";
 
-  goPackagePath = "github.com/lxc/distrobuilder";
 
   src = fetchFromGitHub {
     inherit rev;

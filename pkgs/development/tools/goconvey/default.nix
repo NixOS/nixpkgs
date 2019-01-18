@@ -4,7 +4,6 @@ buildGoPackage rec {
   name = "goconvey-${version}";
   version = "1.6.3";
 
-  goPackagePath = "github.com/smartystreets/goconvey";
   excludedPackages = "web/server/watch/integration_testing";
 
   goDeps = ./deps.nix;

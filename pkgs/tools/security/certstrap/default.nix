@@ -4,7 +4,6 @@ buildGoPackage rec {
   name = "certstrap-${version}";
   version = "1.1.1";
 
-  goPackagePath = "github.com/square/certstrap";
 
   src = fetchFromGitHub {
     owner = "square";

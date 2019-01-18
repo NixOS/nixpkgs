@@ -4,7 +4,6 @@ buildGoPackage rec {
   name = "c14-cli-${version}";
   version = "0.3";
 
-  goPackagePath = "github.com/online-net/c14-cli";
 
   src = fetchFromGitHub {
     owner = "online-net";

@@ -4,7 +4,6 @@ buildGoPackage rec {
   name = "ghq-${version}";
   version = "0.8.0";
 
-  goPackagePath = "github.com/motemen/ghq";
 
   src = fetchFromGitHub {
     owner = "motemen";

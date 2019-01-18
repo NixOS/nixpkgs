@@ -5,7 +5,6 @@ buildGoPackage rec {
   version = "0.4.0";
   rev = version;
 
-  goPackagePath = "github.com/prometheus/statsd_bridge";
 
   src = fetchFromGitHub {
     rev = "v${version}";

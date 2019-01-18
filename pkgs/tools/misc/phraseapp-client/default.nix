@@ -4,7 +4,6 @@ buildGoPackage rec {
   name = "phraseapp-client-${version}";
   version = "1.11.0";
 
-  goPackagePath = "github.com/phrase/phraseapp-client";
   subPackages = [ "." ];
 
   src = fetchFromGitHub {

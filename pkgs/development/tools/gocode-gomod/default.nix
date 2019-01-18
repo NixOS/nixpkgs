@@ -5,7 +5,6 @@ buildGoPackage rec {
   version = "2018-10-16";
   rev = "12640289f65065d652cc942ffa01a52bece1dd53";
 
-  goPackagePath = "github.com/stamblerre/gocode";
 
   # we must allow references to the original `go` package,
   # because `gocode` needs to dig into $GOROOT to provide completions for the

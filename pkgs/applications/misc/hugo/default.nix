@@ -4,7 +4,6 @@ buildGoPackage rec {
   name = "hugo-${version}";
   version = "0.50";
 
-  goPackagePath = "github.com/gohugoio/hugo";
 
   src = fetchFromGitHub {
     owner  = "gohugoio";

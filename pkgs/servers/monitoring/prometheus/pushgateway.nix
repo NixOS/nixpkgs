@@ -5,7 +5,6 @@ buildGoPackage rec {
   version = "0.4.0";
   rev = "v${version}";
 
-  goPackagePath = "github.com/prometheus/pushgateway";
 
   src = fetchFromGitHub {
     inherit rev;

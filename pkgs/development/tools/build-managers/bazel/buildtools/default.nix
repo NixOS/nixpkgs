@@ -4,7 +4,6 @@ buildGoPackage rec {
   name = "bazel-buildtools-unstable-${version}";
   version = "2018-10-11";
 
-  goPackagePath = "github.com/bazelbuild/buildtools";
 
   src = fetchFromGitHub {
     owner = "bazelbuild";

@@ -5,7 +5,6 @@ buildGoPackage rec {
   version = "1.0.0";
   rev = "v${version}";
 
-  goPackagePath = "github.com/mailhog/MailHog";
 
   src = fetchFromGitHub {
     inherit rev;

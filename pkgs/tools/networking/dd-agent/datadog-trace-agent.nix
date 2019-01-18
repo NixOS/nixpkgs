@@ -13,7 +13,6 @@ buildGoPackage rec {
   };
 
   goDeps = ./datadog-trace-agent-deps.nix;
-  goPackagePath = "github.com/${owner}/${repo}";
 
   meta = with stdenv.lib; {
     description = "Live trace collector for the DataDog Agent v6";

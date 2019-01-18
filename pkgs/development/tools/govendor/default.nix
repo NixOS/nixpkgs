@@ -4,7 +4,6 @@ buildGoPackage rec {
   name = "govendor-${version}";
   version = "1.0.9";
 
-  goPackagePath = "github.com/kardianos/govendor";
 
   src = fetchFromGitHub {
     owner = "kardianos";

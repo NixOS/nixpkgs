@@ -4,7 +4,6 @@ buildGoPackage rec {
   name = "dovecot_exporter-${version}";
   version = "0.1.3";
 
-  goPackagePath = "github.com/kumina/dovecot_exporter";
 
   src = fetchFromGitHub {
     owner = "kumina";

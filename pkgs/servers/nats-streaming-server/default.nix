@@ -7,7 +7,6 @@ buildGoPackage rec {
   version = "0.11.2";
   rev = "v${version}";
 
-  goPackagePath = "github.com/nats-io/nats-streaming-server";
 
   src = fetchFromGitHub {
     inherit rev;

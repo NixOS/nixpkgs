@@ -12,7 +12,6 @@ buildGoPackage {
     sha256 = "1xldh1ca8ym8cg3w5cxizmhqxwi5kmiin28f320mxdr28fzljc2w";
   };
 
-  goPackagePath = "github.com/xetys/hetzner-kube";
 
   meta = {
     description = "A CLI tool for provisioning Kubernetes clusters on Hetzner Cloud";

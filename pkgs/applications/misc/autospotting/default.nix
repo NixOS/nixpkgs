@@ -3,7 +3,6 @@
 buildGoPackage rec {
   name = "autospotting-${version}";
   version = "unstable-2018-11-17";
-  goPackagePath = "github.com/AutoSpotting/AutoSpotting";
 
   src = fetchFromGitHub {
     owner = "AutoSpotting";

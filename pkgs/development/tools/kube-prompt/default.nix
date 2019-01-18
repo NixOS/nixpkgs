@@ -5,7 +5,6 @@ buildGoPackage rec {
   version = "1.0.5";
   rev = "v${version}";
 
-  goPackagePath = "github.com/c-bata/kube-prompt";
 
   src = fetchFromGitHub {
     inherit rev;

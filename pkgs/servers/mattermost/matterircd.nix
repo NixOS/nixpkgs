@@ -11,7 +11,6 @@ buildGoPackage rec {
     sha256 = "0g57g91v7208yynf758k9v73jdhz4fbc1v23p97rzrl97aq0rd5r";
   };
 
-  goPackagePath = "github.com/42wim/matterircd";
 
   meta = with stdenv.lib; {
     inherit (src.meta) homepage;

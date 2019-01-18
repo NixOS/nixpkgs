@@ -4,7 +4,6 @@ buildGoPackage rec {
   name = "jid-${version}";
   version = "0.7.2";
 
-  goPackagePath = "github.com/simeji/jid";
 
   src = fetchFromGitHub {
     owner = "simeji";

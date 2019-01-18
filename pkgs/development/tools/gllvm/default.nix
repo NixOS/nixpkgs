@@ -4,7 +4,6 @@ buildGoPackage rec {
   name = "gllvm-${version}";
   version = "1.2.3";
 
-  goPackagePath = "github.com/SRI-CSL/gllvm";
 
   src = fetchFromGitHub {
     owner = "SRI-CSL";

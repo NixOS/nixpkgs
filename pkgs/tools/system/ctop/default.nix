@@ -5,7 +5,6 @@ buildGoPackage rec {
   version = "2017-05-28";
   rev = "b4e1fbf29073625ec803025158636bdbcf2357f4";
 
-  goPackagePath = "github.com/bcicen/ctop";
 
   src = fetchFromGitHub {
     inherit rev;

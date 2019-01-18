@@ -6,7 +6,6 @@ buildGoPackage rec {
   name = "${pname}-${version}";
   rev = "v${version}";
 
-  goPackagePath = "github.com/justjanne/powerline-go";
 
   src = fetchFromGitHub {
     owner = "justjanne";

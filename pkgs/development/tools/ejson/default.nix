@@ -13,7 +13,6 @@ in buildGoPackage rec {
 
   nativeBuildInputs = [ gems ];
 
-  goPackagePath = "github.com/Shopify/ejson";
   subPackages = [ "cmd/ejson" ];
 
   goDeps = ./deps.nix;

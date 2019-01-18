@@ -4,7 +4,6 @@
 buildGoPackage rec {
   name = "hydron-unstable-${version}";
   version = "2018-10-08";
-  goPackagePath = "github.com/bakape/hydron";
   goDeps = ./deps.nix;
 
   src = fetchFromGitHub {

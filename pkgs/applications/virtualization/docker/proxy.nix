@@ -11,7 +11,6 @@ buildGoPackage rec {
     sha256 = "1ng577k11cyv207bp0vaz5jjfcn2igd6w95zn4izcq1nldzp5935";
   };
 
-  goPackagePath = "github.com/docker/libnetwork";
 
   goDeps = null;
 

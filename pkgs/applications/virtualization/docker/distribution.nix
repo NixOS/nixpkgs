@@ -5,7 +5,6 @@ buildGoPackage rec {
   version = "2.6.2";
   rev = "v${version}";
 
-  goPackagePath = "github.com/docker/distribution";
 
   src = fetchFromGitHub {
     owner = "docker";

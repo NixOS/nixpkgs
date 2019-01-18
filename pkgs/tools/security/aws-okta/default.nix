@@ -4,7 +4,6 @@ buildGoPackage rec {
   name = "aws-okta-${version}";
   version = "0.19.0";
 
-  goPackagePath = "github.com/segmentio/aws-okta";
 
   src = fetchFromGitHub {
     owner = "segmentio";

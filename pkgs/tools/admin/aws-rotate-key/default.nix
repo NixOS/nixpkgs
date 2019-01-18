@@ -4,7 +4,6 @@ buildGoPackage rec {
   name = "aws-rotate-key-${version}";
   version = "1.0.4";
 
-  goPackagePath = "github.com/Fullscreen/aws-rotate-key";
 
   src = fetchFromGitHub {
     rev = "v${version}";

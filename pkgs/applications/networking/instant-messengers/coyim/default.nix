@@ -5,7 +5,6 @@ buildGoPackage rec {
   name = "coyim-${version}";
   version = "0.3.7_1";
 
-  goPackagePath = "github.com/twstrike/coyim";
 
   src = fetchFromGitHub {
     owner = "twstrike";

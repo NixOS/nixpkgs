@@ -4,7 +4,6 @@ buildGoPackage rec {
   name = "joker-${version}";
   version = "0.10.1";
 
-  goPackagePath = "github.com/candid82/joker";
 
   src = fetchFromGitHub {
     rev = "v${version}";

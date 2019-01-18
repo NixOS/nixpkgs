@@ -42,7 +42,6 @@ in buildGoPackage rec {
   name = "gometalinter-${version}";
   version = "2.0.11";
 
-  goPackagePath = "github.com/alecthomas/gometalinter";
   excludedPackages = "\\(regressiontests\\)";
 
   src = fetchFromGitHub {

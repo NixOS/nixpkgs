@@ -10,7 +10,6 @@ buildGoPackage rec {
     sha256 = "1a7yry846iwi9cs9xam2vjbw73fjy45agjrwk214k0n1ziaawz2f";
   };
 
-  goPackagePath = "github.com/Shopify/toxiproxy";
   subPackages = ["cmd" "cli"];
   buildFlagsArray = "-ldflags=-X github.com/Shopify/toxiproxy.Version=v${version}";
 

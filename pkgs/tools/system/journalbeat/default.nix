@@ -9,7 +9,6 @@ in buildGoPackage rec {
   name = "journalbeat-${version}";
   version = "5.6.8";
 
-  goPackagePath = "github.com/mheese/journalbeat";
 
   buildInputs = [ makeWrapper pkgs.systemd ];
 

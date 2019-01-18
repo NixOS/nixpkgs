@@ -4,7 +4,6 @@ buildGoPackage rec {
   name = "dnscrypt-proxy2-${version}";
   version = "2.0.15";
 
-  goPackagePath = "github.com/jedisct1/dnscrypt-proxy";
 
   src = fetchFromGitHub {
     owner = "jedisct1";

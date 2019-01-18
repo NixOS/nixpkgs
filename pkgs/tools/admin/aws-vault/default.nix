@@ -4,7 +4,6 @@ buildGoPackage rec {
   pname = "aws-vault";
   version = "4.3.0";
 
-  goPackagePath = "github.com/99designs/${pname}";
 
   src = fetchFromGitHub {
     owner = "99designs";

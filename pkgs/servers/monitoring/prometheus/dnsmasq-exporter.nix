@@ -4,7 +4,6 @@ buildGoPackage rec {
   name = "dnsmasq_exporter-${version}";
   version = "0.1.0";
 
-  goPackagePath = "github.com/google/dnsmasq_exporter";
 
   src = fetchFromGitHub {
     owner = "google";

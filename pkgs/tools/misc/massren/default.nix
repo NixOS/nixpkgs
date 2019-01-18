@@ -11,7 +11,6 @@ buildGoPackage rec {
     sha256 = "1bn6qy30kpxi3rkr3bplsc80xnhj0hgfl0qaczbg3zmykfmsl3bl";
   };
 
-  goPackagePath = "github.com/laurent22/massren";
 
   meta = with lib; {
     description = "Easily rename multiple files using your text editor";

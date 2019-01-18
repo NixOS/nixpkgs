@@ -4,7 +4,6 @@ buildGoPackage rec {
   name = "snmp_exporter-${version}";
   version = "0.13.0";
 
-  goPackagePath = "github.com/prometheus/snmp_exporter";
 
   src = fetchFromGitHub {
     owner = "prometheus";

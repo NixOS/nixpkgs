@@ -4,7 +4,6 @@ buildGoPackage rec {
   name = "assh-${version}";
   version = "2.7.0";
 
-  goPackagePath = "github.com/moul/advanced-ssh-config";
   subPackages = [ "cmd/assh" ];
 
   nativeBuildInputs = [ makeWrapper ];

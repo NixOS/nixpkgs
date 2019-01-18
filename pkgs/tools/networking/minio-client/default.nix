@@ -12,7 +12,6 @@ buildGoPackage rec {
     sha256 = "1hbw3yam5lc9414f3f8yh32ycj0wz2xc934ksvjnrhkk4xzyal6h";
   };
 
-  goPackagePath = "github.com/minio/mc";
 
   buildFlagsArray = [''-ldflags=
     -X github.com/minio/mc/cmd.Version=${version}

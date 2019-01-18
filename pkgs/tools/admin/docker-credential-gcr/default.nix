@@ -4,7 +4,6 @@ buildGoPackage rec {
   name = "docker-credential-gcr-${version}";
   version = "1.4.3";
 
-  goPackagePath = "github.com/GoogleCloudPlatform/docker-credential-gcr";
 
   src = fetchFromGitHub {
     owner = "GoogleCloudPlatform";

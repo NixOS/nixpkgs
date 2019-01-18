@@ -3,7 +3,6 @@
 buildGoPackage rec {
     name = "terminal-parrot-1.1.0";
     version = "1.1.0";
-    goPackagePath = "github.com/jmhobbs/terminal-parrot";
 
     src = fetchFromGitHub {
         owner = "jmhobbs";

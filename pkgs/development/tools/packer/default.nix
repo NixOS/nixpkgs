@@ -3,7 +3,6 @@ buildGoPackage rec {
   name = "packer-${version}";
   version = "1.3.1";
 
-  goPackagePath = "github.com/hashicorp/packer";
 
   subPackages = [ "." ];
 

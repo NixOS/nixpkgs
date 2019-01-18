@@ -37,7 +37,6 @@ buildGoPackage rec {
       --prefix PATH : ${makeBinPath [ bash git gzip openssh ]}
   '';
 
-  goPackagePath = "github.com/gogs/gogs";
 
   meta = {
     description = "A painless self-hosted Git service";

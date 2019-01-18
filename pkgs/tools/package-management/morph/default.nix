@@ -11,7 +11,6 @@ buildGoPackage rec {
     sha256 = "0pixm48is9if9d2b4qc5mwwa4lzma6snkib6z2a1d4pmdx1lmpmm";
   };
 
-  goPackagePath = "github.com/dbcdk/morph";
   goDeps = ./deps.nix;
 
   buildInputs = [ go-bindata ];

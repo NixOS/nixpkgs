@@ -4,7 +4,6 @@
 buildGoPackage rec {
   name = "meguca-unstable-${version}";
   version = "2018-12-06";
-  goPackagePath = "github.com/bakape/meguca";
   goDeps = ./server_deps.nix;
 
   src = fetchFromGitHub {

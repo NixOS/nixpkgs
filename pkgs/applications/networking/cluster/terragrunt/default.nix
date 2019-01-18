@@ -4,7 +4,6 @@ buildGoPackage rec {
   name = "terragrunt-${version}";
   version = "0.17.4";
 
-  goPackagePath = "github.com/gruntwork-io/terragrunt";
 
   src = fetchFromGitHub {
     owner  = "gruntwork-io";

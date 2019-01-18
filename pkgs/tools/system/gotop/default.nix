@@ -4,7 +4,6 @@ buildGoPackage rec {
   name = "gotop-${version}";
   version = "1.7.1";
 
-  goPackagePath = "github.com/cjbassi/gotop";
 
   src = fetchFromGitHub {
     repo = "gotop";

@@ -4,7 +4,6 @@
 buildGoPackage rec {
   name = "skydive-${version}";
   version = "0.17.0";
-  goPackagePath = "github.com/skydive-project/skydive";
 
   src = fetchFromGitHub {
     owner = "skydive-project";

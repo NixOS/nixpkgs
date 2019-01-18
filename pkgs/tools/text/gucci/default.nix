@@ -4,7 +4,6 @@ buildGoPackage rec {
   name = "gucci-${version}";
   version = "0.1.0";
 
-  goPackagePath = "github.com/noqcks/gucci";
 
   src = fetchFromGitHub {
     owner = "noqcks";

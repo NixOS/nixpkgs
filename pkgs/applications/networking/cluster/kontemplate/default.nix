@@ -3,7 +3,6 @@
 buildGoPackage rec {
   name          = "kontemplate-${version}";
   version       = "1.7.0";
-  goPackagePath = "github.com/tazjin/kontemplate";
   goDeps        = ./deps.nix;
 
   src = fetchFromGitHub {

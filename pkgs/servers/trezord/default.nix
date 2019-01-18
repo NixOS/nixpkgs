@@ -7,7 +7,6 @@ buildGoPackage rec {
   # Fixes Cgo related build failures (see https://github.com/NixOS/nixpkgs/issues/25959 )
   hardeningDisable = [ "fortify" ];
 
-  goPackagePath = "github.com/trezor/trezord-go";
 
   src = fetchFromGitHub {
     owner  = "trezor";

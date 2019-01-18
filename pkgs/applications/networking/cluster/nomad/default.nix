@@ -5,7 +5,6 @@ buildGoPackage rec {
   version = "0.8.6";
   rev = "v${version}";
 
-  goPackagePath = "github.com/hashicorp/nomad";
   subPackages = [ "." ];
 
   src = fetchFromGitHub {

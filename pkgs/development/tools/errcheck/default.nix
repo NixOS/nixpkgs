@@ -7,7 +7,6 @@ buildGoPackage rec {
   name = "errcheck-${version}";
   version = "1.1.0";
 
-  goPackagePath = "github.com/kisielk/errcheck";
   excludedPackages = "\\(testdata\\)";
 
   src = fetchFromGitHub {

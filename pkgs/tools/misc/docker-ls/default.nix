@@ -11,7 +11,6 @@ buildGoPackage rec {
     sha256 = "1dhadi1s3nm3r8q5a0m59fy4jdya8p7zvm22ci7ifm3mmw960xly";
   };
 
-  goPackagePath = "github.com/mayflower/docker-ls";
 
   meta = with stdenv.lib; {
     description = "Tools for browsing and manipulating docker registries";

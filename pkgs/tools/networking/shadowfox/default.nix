@@ -11,7 +11,6 @@ buildGoPackage rec {
     sha256 = "07695hba72q722d18q75pwa45azg9jibj6vqnhwb7mnwz2i7hkkc";
   };
 
-  goPackagePath = "github.com/SrKomodo/shadowfox-updater";
   goDeps = ./deps.nix;
 
   buildFlags = "--tags release";

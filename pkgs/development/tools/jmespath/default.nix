@@ -5,7 +5,6 @@ buildGoPackage rec {
   version = "0.2.2";
   rev = "${version}";
 
-  goPackagePath = "github.com/jmespath/go-jmespath";
 
   src = fetchFromGitHub {
     inherit rev;

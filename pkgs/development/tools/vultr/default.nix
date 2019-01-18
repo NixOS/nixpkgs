@@ -3,7 +3,6 @@
 buildGoPackage rec {
   name = "vultr-${version}";
   version = "1.15.0";
-  goPackagePath = "github.com/JamesClonk/vultr";
 
   src = fetchFromGitHub {
     owner = "JamesClonk";

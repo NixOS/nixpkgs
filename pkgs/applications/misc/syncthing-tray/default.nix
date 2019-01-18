@@ -4,7 +4,6 @@ buildGoPackage rec {
   name = "syncthing-tray-${version}";
   version = "0.7";
 
-  goPackagePath = "github.com/alex2108/syncthing-tray";
 
   src = fetchFromGitHub {
     owner = "alex2108";

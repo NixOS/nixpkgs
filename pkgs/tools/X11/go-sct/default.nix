@@ -5,7 +5,6 @@ buildGoPackage rec {
   version = "20180605-${stdenv.lib.strings.substring 0 7 rev}";
   rev = "eb1e851f2d5017038d2b8e3653645c36d3a279f4";
 
-  goPackagePath = "github.com/d4l3k/go-sct";
 
   src = fetchFromGitHub {
     inherit rev;

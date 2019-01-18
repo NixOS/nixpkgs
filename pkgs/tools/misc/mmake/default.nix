@@ -4,7 +4,6 @@ buildGoPackage rec {
   name = "mmake-${version}";
   version = "1.2.0";
 
-  goPackagePath = "github.com/tj/mmake";
 
   src = fetchFromGitHub {
     owner = "tj";

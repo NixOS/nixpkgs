@@ -4,7 +4,6 @@ buildGoPackage rec {
   name = "simplehttp2server-${version}";
   version = "3.1.3";
 
-  goPackagePath = "github.com/GoogleChromeLabs/simplehttp2server";
 
   src = fetchFromGitHub {
      owner = "GoogleChromeLabs";

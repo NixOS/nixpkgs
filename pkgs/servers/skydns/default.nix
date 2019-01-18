@@ -5,7 +5,6 @@ buildGoPackage rec {
   version = "2.5.3a";
   rev = "${version}";
   
-  goPackagePath = "github.com/skynetservices/skydns";
 
   src = fetchFromGitHub {
     inherit rev;

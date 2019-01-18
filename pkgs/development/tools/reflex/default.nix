@@ -5,7 +5,6 @@ buildGoPackage rec {
   name = "reflex-${version}";
   version = "0.2.0";
 
-  goPackagePath = "github.com/cespare/reflex";
 
   src = fetchFromGitHub {
     owner = "cespare";

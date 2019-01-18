@@ -5,7 +5,6 @@ buildGoPackage rec {
   version = "1.4.6";
   rev = "v${version}";
 
-  goPackagePath = "github.com/pachyderm/pachyderm";
   subPackages = [ "src/server/cmd/pachctl" ];
 
   src = fetchFromGitHub {

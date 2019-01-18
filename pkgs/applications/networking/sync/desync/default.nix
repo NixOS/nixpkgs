@@ -5,7 +5,6 @@ buildGoPackage rec {
   version = "0.4.0";
   rev = "v${version}";
 
-  goPackagePath = "github.com/folbricht/desync";
 
   src = fetchFromGitHub {
     inherit rev;

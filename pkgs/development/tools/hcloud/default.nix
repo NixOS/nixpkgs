@@ -4,7 +4,6 @@ buildGoPackage rec {
   name = "hcloud-${version}";
   version = "1.11.0";
   
-  goPackagePath = "github.com/hetznercloud/cli";
 
   src = fetchFromGitHub {
     owner = "hetznercloud";

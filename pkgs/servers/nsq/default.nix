@@ -5,7 +5,6 @@ buildGoPackage rec {
   version = "0.3.5";
   rev = "v${version}";
 
-  goPackagePath = "github.com/bitly/nsq";
 
   src = fetchFromGitHub {
     inherit rev;

@@ -4,7 +4,6 @@ buildGoPackage rec {
   name = "ical2org-${version}";
   version="1.1.5";
 
-  goPackagePath = "github.com/rjhorniii/ical2org";
 
   src = fetchFromGitHub {
     owner = "rjhorniii";

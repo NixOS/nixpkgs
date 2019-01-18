@@ -4,7 +4,6 @@ buildGoPackage rec {
   name = "todolist-${version}";
   version = "v0.8.1";
 
-  goPackagePath = "github.com/gammons/todolist";
 
   src = fetchFromGitHub {
     owner = "gammons";

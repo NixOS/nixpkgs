@@ -6,7 +6,6 @@ buildGoPackage rec {
   name = "fscrypt-${version}";
   version = "0.2.4";
 
-  goPackagePath = "github.com/google/fscrypt";
 
   src = fetchFromGitHub {
     owner = "google";

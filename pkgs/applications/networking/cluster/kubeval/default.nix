@@ -25,7 +25,6 @@ buildGoPackage rec {
   name = "kubeval-${version}";
   version = "0.7.3";
 
-  goPackagePath = "github.com/garethr/kubeval";
   src = fetchFromGitHub {
     owner = "garethr";
     repo = "kubeval";

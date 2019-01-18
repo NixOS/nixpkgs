@@ -5,7 +5,6 @@ buildGoPackage rec {
   version = "0.8.1";
   rev = "v${version}";
 
-  goPackagePath = "github.com/hashicorp/serf";
 
   src = fetchFromGitHub {
     owner = "hashicorp";

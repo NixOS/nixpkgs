@@ -5,7 +5,6 @@ buildGoPackage rec {
   name = "${pname}-${version}";
   version = "1.0.0";
 
-  goPackagePath = "github.com/github/git-sizer";
 
   src = fetchFromGitHub {
     owner = "github";

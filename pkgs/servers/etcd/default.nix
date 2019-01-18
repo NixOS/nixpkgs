@@ -7,7 +7,6 @@ buildGoPackage rec {
   version = "3.3.1"; # After updating check that nixos tests pass
   rev = "v${version}";
 
-  goPackagePath = "github.com/coreos/etcd";
 
   src = fetchFromGitHub {
     inherit rev;

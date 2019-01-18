@@ -5,7 +5,6 @@ buildGoPackage rec {
   name = "dep2nix-${version}";
   version = "0.0.2";
 
-  goPackagePath = "github.com/nixcloud/dep2nix";
 
   src = fetchFromGitHub {
     owner = "nixcloud";

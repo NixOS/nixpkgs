@@ -3,7 +3,6 @@
 buildGoPackage rec {
   name = "go-ethereum-${version}";
   version = "1.8.20";
-  goPackagePath = "github.com/ethereum/go-ethereum";
 
   # Fix for usb-related segmentation faults on darwin
   propagatedBuildInputs =

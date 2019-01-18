@@ -10,7 +10,6 @@ buildGoPackage rec {
   version = "2016-07-24";
   rev = "210d2dc333e90c7e3eedf4f2242507a8e83ed4ab";
 
-  goPackagePath = "github.com/tsenart/deadcode";
   excludedPackages = "\\(cmd/fillswitch/test-fixtures\\)";
 
   src = fetchFromGitHub {

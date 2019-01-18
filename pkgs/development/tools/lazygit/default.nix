@@ -4,7 +4,6 @@ buildGoPackage rec {
   name = "lazygit-${version}";
   version = "0.5";
 
-  goPackagePath = "github.com/jesseduffield/lazygit";
 
   src = fetchFromGitHub {
     owner = "jesseduffield";

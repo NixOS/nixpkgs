@@ -22,7 +22,6 @@ buildGoPackage rec {
     runHook postBuild
   '';
 
-  goPackagePath = "github.com/theupdateframework/notary";
 
   installPhase = ''
     runHook preInstall

@@ -4,7 +4,6 @@ buildGoPackage rec {
   name = "git-lfs-${version}";
   version = "2.5.2";
 
-  goPackagePath = "github.com/git-lfs/git-lfs";
 
   src = fetchFromGitHub {
     rev = "v${version}";

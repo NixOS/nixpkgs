@@ -4,7 +4,6 @@ buildGoPackage rec {
   pname = "terraform-docs";
   version = "0.5.0";
 
-  goPackagePath = "github.com/segmentio/${pname}";
 
   src = fetchFromGitHub {
     owner  = "segmentio";

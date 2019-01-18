@@ -5,7 +5,6 @@ buildGoPackage rec {
   version = "20160816-${stdenv.lib.strings.substring 0 7 rev}";
   rev = "b8c84ff5ade15a6238ca61c20d3afc70d2e41276";
 
-  goPackagePath = "github.com/robfig/glock";
 
   src = fetchFromGitHub {
     inherit rev;

@@ -5,7 +5,6 @@ buildGoPackage rec {
   version = "2018-01-04";
   rev = "1e59b77b52bf8e4b449a57e6f79f21226d571845";
 
-  goPackagePath = "github.com/golang/protobuf";
 
   src = fetchFromGitHub {
     inherit rev;

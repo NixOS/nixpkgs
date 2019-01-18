@@ -4,7 +4,6 @@ buildGoPackage rec {
   name = "kbfs-${version}";
   version = "2.11.0";
 
-  goPackagePath = "github.com/keybase/kbfs";
   subPackages = [ "kbfsfuse" "kbfsgit/git-remote-keybase" ];
 
   dontRenameImports = true;

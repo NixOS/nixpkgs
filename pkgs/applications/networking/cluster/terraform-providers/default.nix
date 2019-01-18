@@ -10,7 +10,6 @@ let
     buildGoPackage rec {
       inherit (data) owner repo version sha256;
       name = "${repo}-${version}";
-      goPackagePath = "github.com/${owner}/${repo}";
       src = fetchFromGitHub {
         inherit owner repo sha256;
         rev = "v${version}";

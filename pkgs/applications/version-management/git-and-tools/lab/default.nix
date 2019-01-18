@@ -4,7 +4,6 @@ buildGoPackage rec {
   name = "lab-${version}";
   version = "0.14.0";
 
-  goPackagePath = "github.com/zaquestion/lab";
 
   src = fetchFromGitHub {
     owner = "zaquestion";

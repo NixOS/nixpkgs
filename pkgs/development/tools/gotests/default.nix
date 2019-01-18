@@ -5,7 +5,6 @@ buildGoPackage rec {
   version = "1.5.2";
   rev = "v${version}";
 
-  goPackagePath = "github.com/cweill/gotests";
   excludedPackages = "testdata";
   goDeps = ./deps.nix;
 

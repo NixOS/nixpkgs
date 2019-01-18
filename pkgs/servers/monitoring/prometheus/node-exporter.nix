@@ -5,7 +5,6 @@ buildGoPackage rec {
   version = "0.17.0";
   rev = "v${version}";
 
-  goPackagePath = "github.com/prometheus/node_exporter";
 
   src = fetchFromGitHub {
     inherit rev;

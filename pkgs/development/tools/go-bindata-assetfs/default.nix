@@ -4,7 +4,6 @@ buildGoPackage rec {
   name = "go-bindata-assetfs-${version}";
   version = "20160814-${rev}";
   rev = "e1a2a7e";
-  goPackagePath = "github.com/elazarl/go-bindata-assetfs";
 
   src = fetchFromGitHub {
     inherit rev;

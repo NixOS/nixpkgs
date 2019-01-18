@@ -6,7 +6,6 @@ buildGoPackage rec {
   name = "go-md2man-${version}";
   version = "1.0.6";
 
-  goPackagePath = "github.com/cpuguy83/go-md2man";
 
   src = fetchFromGitHub {
     rev = "v${version}";

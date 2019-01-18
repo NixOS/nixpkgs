@@ -5,7 +5,6 @@ buildGoPackage rec {
   version = "2017-05-15";
   rev = "a2a179a222144fa9a10030367045f075375a2803";
 
-  goPackagePath = "github.com/kumina/openvpn_exporter";
 
   src = fetchFromGitHub {
     owner = "kumina";

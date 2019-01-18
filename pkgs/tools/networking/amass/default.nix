@@ -8,7 +8,6 @@ buildGoPackage rec {
   name = "amass-${version}";
   version = "2.8.5";
 
-  goPackagePath = "github.com/OWASP/Amass";
 
   src = fetchFromGitHub {
     owner = "OWASP";

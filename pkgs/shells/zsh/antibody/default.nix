@@ -4,7 +4,6 @@ buildGoPackage rec {
   name = "antibody-${version}";
   version = "4.0.2";
 
-  goPackagePath = "github.com/getantibody/antibody";
 
   src = fetchFromGitHub {
     owner  = "getantibody";

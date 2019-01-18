@@ -4,7 +4,6 @@ buildGoPackage rec {
   name = "cfssl-${version}";
   version = "1.3.2";
 
-  goPackagePath = "github.com/cloudflare/cfssl";
 
   src = fetchFromGitHub {
     owner = "cloudflare";

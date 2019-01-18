@@ -5,7 +5,6 @@ buildGoPackage rec {
   version = "2017-07-06";
   rev = "d87a3f9990ed24ebbb51695879cd640cb07a4b40";
 
-  goPackagePath = "github.com/moby/tool";
 
   src = fetchFromGitHub {
     owner = "moby";

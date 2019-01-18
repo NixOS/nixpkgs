@@ -5,7 +5,6 @@ buildGoPackage rec {
   name = "slack-term-${version}";
   version = "0.4.1";
 
-  goPackagePath = "github.com/erroneousboat/slack-term";
 
   src = fetchFromGitHub {
     owner = "erroneousboat";

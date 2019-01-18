@@ -5,7 +5,6 @@ buildGoPackage rec {
   version = "0.1.0";
   rev = version;
 
-  goPackagePath = "github.com/prometheus/mesos_exporter";
 
   src = fetchFromGitHub {
     inherit rev;

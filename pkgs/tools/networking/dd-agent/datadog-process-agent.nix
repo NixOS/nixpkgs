@@ -14,7 +14,6 @@ buildGoPackage rec {
   };
 
   goDeps = ./datadog-process-agent-deps.nix;
-  goPackagePath = "github.com/${owner}/${repo}";
 
   meta = with stdenv.lib; {
     description = "Live process collector for the DataDog Agent v6";

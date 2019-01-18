@@ -5,7 +5,6 @@ buildGoPackage rec {
   version = "0.0.13";
   rev = "v${version}";
 
-  goPackagePath = "github.com/yudai/gotty";
 
   src = fetchFromGitHub {
     inherit rev;

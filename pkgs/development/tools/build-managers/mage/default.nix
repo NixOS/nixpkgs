@@ -6,7 +6,6 @@ buildGoPackage rec {
   name = "mage-${version}";
   version = "1.7.1";
 
-  goPackagePath = "github.com/magefile/mage";
   subPackages = [ "." ];
 
   src = fetchFromGitHub {

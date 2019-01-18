@@ -4,7 +4,6 @@ buildGoPackage rec {
   version = "1.8.4";
   name = "gopass-${version}";
 
-  goPackagePath = "github.com/gopasspw/gopass";
 
   nativeBuildInputs = [ makeWrapper ];
 

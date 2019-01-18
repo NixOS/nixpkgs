@@ -7,7 +7,6 @@ buildGoPackage rec {
   name = "goconst-${version}";
   version = "1.1.0";
 
-  goPackagePath = "github.com/jgautheron/goconst";
   excludedPackages = ''testdata'';
 
   src = fetchFromGitHub {

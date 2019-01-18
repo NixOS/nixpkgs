@@ -4,7 +4,6 @@ buildGoPackage rec {
   name = "librarian-puppet-go-${version}";
   version = "0.3.9";
 
-  goPackagePath = "github.com/tmtk75/librarian-puppet-go";
 
   src = fetchFromGitHub {
     owner = "tmtk75";

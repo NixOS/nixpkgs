@@ -4,7 +4,6 @@ buildGoPackage rec {
   name = "heptio-ark-${version}";
   version = "0.9.6";
 
-  goPackagePath = "github.com/heptio/ark";
 
   src = fetchFromGitHub {
     rev = "v${version}";

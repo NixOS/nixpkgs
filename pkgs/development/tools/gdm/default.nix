@@ -4,7 +4,6 @@ buildGoPackage rec {
   name = "gdm-${version}";
   version = "1.4";
 
-  goPackagePath = "github.com/sparrc/gdm";
 
   src = fetchFromGitHub {
     owner = "sparrc";

@@ -4,7 +4,6 @@ buildGoPackage rec {
   name = "saml2aws-${version}";
   version = "2.10.0";
 
-  goPackagePath = "github.com/versent/saml2aws";
   goDeps = ./deps.nix;
 
   buildFlagsArray = ''

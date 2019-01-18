@@ -9,7 +9,6 @@ buildGoPackage rec {
   version = "2018-07-03";
   rev = "1a9a0a0a3594e9363e49545fb6a4e24ac4c68b7b";
 
-  goPackagePath = "github.com/mdempsky/unconvert";
 
   src = fetchFromGitHub {
     inherit rev;

@@ -4,7 +4,6 @@ buildGoPackage rec {
   name = "blsd-${version}";
   version = "2017-07-27";
 
-  goPackagePath = "github.com/junegunn/blsd";
 
   src = fetchFromGitHub {
     owner = "junegunn";

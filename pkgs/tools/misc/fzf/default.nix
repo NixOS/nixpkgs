@@ -5,7 +5,6 @@ buildGoPackage rec {
   version = "0.17.5";
   rev = "${version}";
 
-  goPackagePath = "github.com/junegunn/fzf";
 
   src = fetchFromGitHub {
     inherit rev;

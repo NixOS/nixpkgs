@@ -4,7 +4,6 @@ buildGoPackage rec {
   name = "xmonad-log-${version}";
   version = "0.1.0";
 
-  goPackagePath = "github.com/xintron/xmonad-log";
 
   src = fetchFromGitHub {
     owner = "xintron";

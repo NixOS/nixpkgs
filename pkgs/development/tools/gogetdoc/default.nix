@@ -8,7 +8,6 @@ buildGoPackage rec {
   version = "2018-10-25";
   rev = "9098cf5fc236a5e25060730544af2ba6d65cd968";
 
-  goPackagePath = "github.com/zmb3/gogetdoc";
   excludedPackages = "\\(testdata\\)";
 
   src = fetchFromGitHub {

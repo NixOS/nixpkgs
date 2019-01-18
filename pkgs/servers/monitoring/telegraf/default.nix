@@ -4,7 +4,6 @@ buildGoPackage rec {
   name = "telegraf-${version}";
   version = "1.7.0";
 
-  goPackagePath = "github.com/influxdata/telegraf";
 
   excludedPackages = "test";
 

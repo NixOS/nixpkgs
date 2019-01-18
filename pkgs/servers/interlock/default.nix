@@ -7,7 +7,6 @@ buildGoPackage rec {
   version = "2016.04.13";
   rev = "v${version}";
 
-  goPackagePath = "github.com/inversepath/interlock";
 
   subPackages = [ "./cmd/interlock" ];
 

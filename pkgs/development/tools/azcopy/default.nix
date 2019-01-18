@@ -4,7 +4,6 @@ buildGoPackage rec {
   name = "azure-storage-azcopy-${version}";
   version = "10.0.1-pre";
   revision = "10.0.1";
-  goPackagePath = "github.com/Azure/azure-storage-azcopy";
 
   goDeps= ./deps.nix;
 

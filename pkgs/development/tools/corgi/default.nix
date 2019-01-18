@@ -4,7 +4,6 @@ buildGoPackage rec {
   name = "corgi-${rev}";
   rev = "v0.2.4";
 
-  goPackagePath = "github.com/DrakeW/corgi";
 
   src = fetchFromGitHub {
     inherit rev;

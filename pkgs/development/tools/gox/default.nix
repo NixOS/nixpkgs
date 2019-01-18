@@ -4,7 +4,6 @@ buildGoPackage rec {
   name = "gox-${version}";
   version = "20181025";
 
-  goPackagePath = "github.com/mitchellh/gox";
 
   src = fetchFromGitHub {
     owner = "mitchellh";

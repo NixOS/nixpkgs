@@ -5,7 +5,6 @@ buildGoPackage rec {
   version = "1.1.0";
   rev = "v${version}";
 
-  goPackagePath = "github.com/mvdan/sh";
 
   src = fetchFromGitHub {
     owner = "mvdan";

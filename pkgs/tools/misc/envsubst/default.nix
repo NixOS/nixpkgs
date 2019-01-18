@@ -4,7 +4,6 @@ buildGoPackage rec {
   name = "envsubst-${version}";
   version = "1.1.0";
 
-  goPackagePath = "github.com/a8m/envsubst";
   src = fetchFromGitHub {
     owner = "a8m";
     repo = "envsubst";

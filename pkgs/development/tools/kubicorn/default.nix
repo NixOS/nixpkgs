@@ -15,7 +15,6 @@ buildGoPackage rec {
   };
 
   subPackages = ["."];
-  goPackagePath = "github.com/kubicorn/kubicorn";
 
   meta = {
     description = "Simple, cloud native infrastructure for Kubernetes";

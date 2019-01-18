@@ -4,7 +4,6 @@ buildGoPackage rec {
   name = "awless-${version}";
   version = "0.0.14";
 
-  goPackagePath = "github.com/wallix/awless";
 
   src = fetchFromGitHub {
     owner  = "wallix";

@@ -3,7 +3,6 @@
 buildGoPackage rec {
   name = "quicktemplate-unstable-${version}";
   version = "2018-11-26";
-  goPackagePath = "github.com/valyala/quicktemplate";
   goDeps = ./deps.nix;
 
   src = fetchFromGitHub {

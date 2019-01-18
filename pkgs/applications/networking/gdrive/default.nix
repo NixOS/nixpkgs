@@ -5,7 +5,6 @@ buildGoPackage rec {
   version = "2.1.0";
   rev     = "${version}";
 
-  goPackagePath = "github.com/prasmussen/gdrive";
 
   src = fetchFromGitHub {
     owner  = "prasmussen";

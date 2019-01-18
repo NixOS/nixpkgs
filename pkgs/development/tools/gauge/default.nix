@@ -4,7 +4,6 @@ buildGoPackage rec {
   name = "gauge-${version}";
   version = "1.0.3";
 
-  goPackagePath = "github.com/getgauge/gauge";
   excludedPackages = ''\(build\|man\)'';
 
   src = fetchFromGitHub {

@@ -12,7 +12,6 @@ buildGoPackage rec {
     sha256 = "1b2cv78v54afflz3gfyidkwzq7r2h5j45rmz0ybps03pr0hs4gk3";
   };
 
-  goPackagePath = "github.com/xenolf/lego";
   goDeps = ./deps.nix;
 
   meta = with lib; {

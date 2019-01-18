@@ -15,7 +15,6 @@ buildGoPackage rec {
 
   doCheck = true;
 
-  goPackagePath = "github.com/wal-g/wal-g";
   meta = {
     inherit (src.meta) homepage;
     license = stdenv.lib.licenses.asl20;

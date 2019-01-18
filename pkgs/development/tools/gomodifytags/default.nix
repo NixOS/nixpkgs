@@ -5,7 +5,6 @@ buildGoPackage rec {
   version = "2018-09-14";
   rev = "141225bf62b6e5c9c0c9554a2e993e8c30aebb1d";
 
-  goPackagePath = "github.com/fatih/gomodifytags";
 
   src = fetchFromGitHub {
     inherit rev;

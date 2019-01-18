@@ -4,7 +4,6 @@ buildGoPackage rec {
   name    = "exercism-${version}";
   version = "3.0.9";
 
-  goPackagePath = "github.com/exercism/cli";
 
   src = fetchFromGitHub {
     owner  = "exercism";

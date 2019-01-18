@@ -4,7 +4,6 @@ buildGoPackage rec{
   name = "scaleway-cli-${version}";
   version = "1.17";
 
-  goPackagePath = "github.com/scaleway/scaleway-cli";
 
   src = fetchFromGitHub {
     owner = "scaleway";

@@ -5,7 +5,6 @@ buildGoPackage rec {
   version = "0.5.0";
   rev = "v${version}";
 
-  goPackagePath = "github.com/golang/dep";
   subPackages = [ "cmd/dep" ];
 
   src = fetchFromGitHub {

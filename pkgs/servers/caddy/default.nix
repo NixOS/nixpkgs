@@ -4,7 +4,6 @@ buildGoPackage rec {
   name = "caddy-${version}";
   version = "0.11.1";
 
-  goPackagePath = "github.com/mholt/caddy";
 
   subPackages = [ "caddy" ];
 

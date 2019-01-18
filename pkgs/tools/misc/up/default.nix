@@ -11,7 +11,6 @@ buildGoPackage rec {
     sha256 = "171bwbk2c7jbi51xdawzv7qy71492mfs9z5j0a5j52qmnr4vjjgs";
   };
 
-  goPackagePath = "github.com/akavel/up";
   goDeps = ./deps.nix;
 
   meta = with lib; {

@@ -4,7 +4,6 @@ buildGoPackage rec {
   name = "vale-${version}";
   version = "1.3.0";
 
-  goPackagePath = "github.com/errata-ai/vale";
 
   src = fetchFromGitHub {
     owner  = "errata-ai";

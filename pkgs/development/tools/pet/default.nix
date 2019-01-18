@@ -4,7 +4,6 @@ buildGoPackage rec {
   name = "pet-${version}";
   version = "0.3.2";
 
-  goPackagePath = "github.com/knqyf263/pet";
 
   src = fetchFromGitHub {
     owner = "knqyf263";

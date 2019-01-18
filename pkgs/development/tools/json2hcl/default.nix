@@ -13,7 +13,6 @@ buildGoPackage rec {
   };
 
   owner = "kvz";
-  goPackagePath = "github.com/${owner}/${pname}";
   goDeps = ./deps.nix;
 
   meta = with lib; {

@@ -4,7 +4,6 @@ buildGoPackage rec {
   name = "mustache-go-${version}";
   version = "1.0.1";
 
-  goPackagePath = "github.com/cbroglie/mustache";
 
   src = fetchFromGitHub {
     owner = "cbroglie";

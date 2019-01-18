@@ -3,7 +3,6 @@
 buildGoPackage rec {
   name = "manul-unstable-2016-09-30";
 
-  goPackagePath = "github.com/kovetskiy/manul";
   excludedPackages = "tests";
 
   src = fetchFromGitHub {

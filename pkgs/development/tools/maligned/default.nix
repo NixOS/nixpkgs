@@ -8,7 +8,6 @@ buildGoPackage rec {
   version = "2018-07-07";
   rev = "6e39bd26a8c8b58c5a22129593044655a9e25959";
 
-  goPackagePath = "github.com/mdempsky/maligned";
 
   src = fetchFromGitHub {
     inherit rev;

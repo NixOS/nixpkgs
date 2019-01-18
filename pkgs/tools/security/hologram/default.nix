@@ -11,7 +11,6 @@ buildGoPackage rec {
     sha256 = "00scryz8js6gbw8lp2y23qikbazz2dd992r97rqh0l1q4baa0ckn";
   };
 
-  goPackagePath = "github.com/AdRoll/hologram";
 
   goDeps = ./deps.nix;
 

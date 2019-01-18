@@ -4,7 +4,6 @@ buildGoPackage rec {
   name = "glide-${version}";
   version = "0.12.3";
 
-  goPackagePath = "github.com/Masterminds/glide";
 
    buildFlagsArray = ''
    -ldflags=

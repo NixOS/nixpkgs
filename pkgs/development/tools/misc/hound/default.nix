@@ -5,7 +5,6 @@ buildGoPackage rec {
   version = "2018-11-02";
   rev = "74ec7448a234d8d09e800b92e52c92e378c07742";
 
-  goPackagePath = "github.com/etsy/hound";
 
   src = fetchFromGitHub {
     inherit rev;

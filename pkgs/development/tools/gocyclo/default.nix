@@ -8,7 +8,6 @@ buildGoPackage rec {
   version = "2015-02-08";
   rev = "aa8f8b160214d8dfccfe3e17e578dd0fcc6fede7";
 
-  goPackagePath = "github.com/alecthomas/gocyclo";
 
   src = fetchFromGitHub {
     inherit rev;

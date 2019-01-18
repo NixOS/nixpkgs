@@ -13,7 +13,6 @@ buildGoPackage rec {
     sha256 = "1rpfk7ds4lpff30aq4d8rw7g9j4bl2hd1bvcwd1pfxalp222zkxn";
   };
 
-  goPackagePath = "github.com/dop251/diskrsync";
   goDeps = ./deps.nix;
 
   buildInputs = [ makeWrapper ];

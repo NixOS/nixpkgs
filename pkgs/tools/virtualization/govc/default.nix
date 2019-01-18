@@ -4,7 +4,6 @@ buildGoPackage rec {
   name = "govc-${version}";
   version = "0.16.0";
 
-  goPackagePath = "github.com/vmware/govmomi";
 
   subPackages = [ "govc" ];
 

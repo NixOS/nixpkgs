@@ -5,7 +5,6 @@ buildGoPackage rec {
   version = "0.9.0";
   rev = "v${version}";
 
-  goPackagePath = "github.com/svent/sift";
 
   src = fetchFromGitHub {
     inherit rev;

@@ -4,7 +4,6 @@ buildGoPackage rec {
   version = "0.5.1";
   name = "grobi-${version}";
 
-  goPackagePath = "github.com/fd0/grobi";
 
   src = fetchFromGitHub {
     rev = "5ddc167b9e4f84755a515828360abda15c54b7de";

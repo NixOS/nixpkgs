@@ -21,7 +21,6 @@ buildGoPackage rec {
   name = "terraform-provider-libvirt-${version}";
   version = "0.4";
 
-  goPackagePath = "github.com/dmacvicar/terraform-provider-libvirt";
 
   src = fetchFromGitHub {
     owner = "dmacvicar";

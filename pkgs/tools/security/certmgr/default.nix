@@ -4,7 +4,6 @@ buildGoPackage rec {
   version = "1.6.1";
   name = "certmgr-${version}";
 
-  goPackagePath = "github.com/cloudflare/certmgr/";
 
   src = fetchFromGitHub {
     owner = "cloudflare";

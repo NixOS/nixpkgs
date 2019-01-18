@@ -5,7 +5,6 @@ buildGoPackage rec {
   version = "0.19.4";
   rev = "v${version}";
 
-  goPackagePath = "github.com/hashicorp/consul-template";
 
   src = fetchFromGitHub {
     inherit rev;

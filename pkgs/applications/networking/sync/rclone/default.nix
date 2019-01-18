@@ -4,7 +4,6 @@ buildGoPackage rec {
   name = "rclone-${version}";
   version = "1.45";
 
-  goPackagePath = "github.com/ncw/rclone";
   subPackages = [ "." ];
 
   src = fetchFromGitHub {

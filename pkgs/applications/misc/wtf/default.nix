@@ -7,7 +7,6 @@ buildGoPackage rec {
   name = "wtf-${version}";
   version = "0.4.0";
 
-  goPackagePath = "github.com/senorprogrammer/wtf";
 
   src = fetchFromGitHub {
     owner = "senorprogrammer";

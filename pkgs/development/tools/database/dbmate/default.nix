@@ -4,7 +4,6 @@ buildGoPackage rec {
   name = "dbmate-${version}";
   version = "1.4.1";
 
-  goPackagePath = "github.com/amacneil/dbmate";
 
   src = fetchFromGitHub {
     owner = "amacneil";

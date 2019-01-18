@@ -4,7 +4,6 @@ buildGoPackage rec {
   pname = "hyperledger-fabric";
   version = "1.3.0";
 
-  goPackagePath = "github.com/hyperledger/fabric";
 
   # taken from https://github.com/hyperledger/fabric/blob/v1.3.0/Makefile#L108
   subPackages = [

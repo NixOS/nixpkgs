@@ -4,7 +4,6 @@ buildGoPackage rec {
   pname = "clair";
   version = "2.0.7";
 
-  goPackagePath = "github.com/coreos/clair";
 
   src = fetchFromGitHub {
     owner = "coreos";

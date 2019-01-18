@@ -7,7 +7,6 @@ buildGoPackage rec {
   version = "1.0";
 
   goDeps = ./deps.nix;
-  goPackagePath = "github.com/kamilchm/nixops-dns";
 
   src = fetchFromGitHub {
     owner = "kamilchm";

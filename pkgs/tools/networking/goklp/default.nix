@@ -4,7 +4,6 @@ buildGoPackage rec {
   name = "goklp-${version}";
   version = "1.6";
 
-  goPackagePath = "github.com/AppliedTrust/goklp";
 
   src = fetchFromGitHub {
     owner = "AppliedTrust";

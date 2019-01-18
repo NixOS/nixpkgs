@@ -12,7 +12,6 @@ buildGoPackage {
     sha256 = "12kv1p707kdxjx5l8rcikd1gjwp5xjxdmmyvlpnvyagrphgrwpsf";
   };
 
-  goPackagePath = "github.com/ksonnet/kubecfg";
 
   meta = {
     description = "A tool for managing Kubernetes resources as code";

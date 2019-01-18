@@ -4,7 +4,6 @@ buildGoPackage rec {
   name = "traefik-${version}";
   version = "1.7.4";
 
-  goPackagePath = "github.com/containous/traefik";
 
   src = fetchFromGitHub {
     owner = "containous";

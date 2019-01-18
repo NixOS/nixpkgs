@@ -3,7 +3,6 @@
 buildGoPackage rec {
   name = "richgo-${version}";
   version = "0.2.8";
-  goPackagePath = "github.com/kyoh86/richgo";
 
   src = fetchFromGitHub {
     owner = "kyoh86";

@@ -7,7 +7,6 @@ buildGoPackage rec {
   version = "0.6.2";
   rev = "v${version}";
 
-  goPackagePath = "github.com/coreos/flannel";
 
   hardeningDisable = [ "fortify" ];
 

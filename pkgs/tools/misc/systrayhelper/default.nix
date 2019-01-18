@@ -5,7 +5,6 @@ buildGoPackage rec {
   version = "0.0.4";
   rev = "ded1f2ed4d30f6ca2c89a13db0bd3046c6d6d0f9";
 
-  goPackagePath = "github.com/ssbc/systrayhelper";
 
   src = fetchFromGitHub {
     rev = "v${version}";

@@ -8,7 +8,6 @@ buildGoPackage rec {
   name = "asmfmt-${version}";
   version = "1.1";
 
-  goPackagePath = "github.com/klauspost/asmfmt";
 
   src = fetchFromGitHub {
     owner = "klauspost";

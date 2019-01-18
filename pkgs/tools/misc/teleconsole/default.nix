@@ -4,7 +4,6 @@ buildGoPackage rec {
   name = "teleconsole-${version}";
   version = "0.4.0";
 
-  goPackagePath = "github.com/gravitational/teleconsole";
 
   src = fetchFromGitHub {
     owner = "gravitational";

@@ -5,7 +5,6 @@ buildGoPackage rec {
   version = "2017-03-08";
   rev = "d447e567232bcb84cedd3b2be012c7127f31f469";
 
-  goPackagePath = "github.com/githubnemo/CompileDaemon";
 
   src = fetchFromGitHub {
     owner = "githubnemo";

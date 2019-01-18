@@ -7,7 +7,6 @@ buildGoPackage rec {
   version = "2.0.1";
   rev = "v${version}";
 
-  goPackagePath = "github.com/IzakMarais/reporter";
 
   nativeBuildInputs = [ makeWrapper ];
 

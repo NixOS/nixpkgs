@@ -5,7 +5,6 @@ buildGoPackage rec {
   version = "0.12.0";
   rev = version;
 
-  goPackagePath = "github.com/prometheus/blackbox_exporter";
 
   src = fetchFromGitHub {
     rev = "v${version}";

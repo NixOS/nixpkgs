@@ -5,7 +5,6 @@ buildGoPackage rec {
   version = "2018-11-05";
   rev = "0af7a86943a6e0237c90f8aeb74a882e1862c898";
 
-  goPackagePath = "github.com/mdempsky/gocode";
   excludedPackages = ''internal/suggest/testdata'';
 
   # we must allow references to the original `go` package,

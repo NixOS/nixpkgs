@@ -3,7 +3,6 @@
 buildGoPackage rec {
   name = "mtail-${version}";
   version = "3.0.0-rc4";
-  goPackagePath = "github.com/google/mtail";
 
   src = fetchFromGitHub {
     owner = "google";

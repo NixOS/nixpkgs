@@ -4,7 +4,6 @@ buildGoPackage rec {
   name = "goa-${version}";
   version = "1.4.0";
 
-  goPackagePath = "github.com/goadesign/goa";
   subPackages = [ "goagen" ];
 
   src = fetchFromGitHub {

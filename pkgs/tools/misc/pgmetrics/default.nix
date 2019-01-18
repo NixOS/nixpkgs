@@ -4,7 +4,6 @@ buildGoPackage rec {
   name = "pgmetrics-${version}";
   version = "1.5.0";
 
-  goPackagePath = "github.com/rapidloop/pgmetrics";
 
   src = fetchFromGitHub {
     owner  = "rapidloop";

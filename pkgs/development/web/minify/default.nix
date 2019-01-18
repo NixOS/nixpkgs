@@ -5,7 +5,6 @@ buildGoPackage rec {
   version = "v2.0.0";
   rev = "41f3effd65817bac8acea89d49b3982211803a4d";
 
-  goPackagePath = "github.com/tdewolff/minify";
 
   src = fetchFromGitHub {
     inherit rev;

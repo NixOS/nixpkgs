@@ -6,7 +6,6 @@ buildGoPackage rec {
   name = "${pname}-${version}";
   rev = "v${version}";
 
-  goPackagePath = "github.com/Droplr/aws-env";
 
   src = fetchFromGitHub {
     owner = "Droplr";

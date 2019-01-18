@@ -5,7 +5,6 @@ buildGoPackage rec {
   version = "0.10.0";
   rev = "v${version}";
 
-  goPackagePath = "github.com/prometheus/mysqld_exporter";
 
   src = fetchFromGitHub {
     inherit rev;

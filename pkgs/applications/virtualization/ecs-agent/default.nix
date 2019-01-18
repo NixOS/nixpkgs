@@ -5,7 +5,6 @@ buildGoPackage rec {
   pname   = "amazon-ecs-agent";
   version = "1.18.0";
 
-  goPackagePath = "github.com/aws/${pname}";
   subPackages   = [ "agent" ];
 
   src = fetchFromGitHub {

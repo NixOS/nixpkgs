@@ -3,7 +3,6 @@
 buildGoPackage rec {
   name = "golangci-lint-${version}";
   version = "1.9.2";
-  goPackagePath = "github.com/golangci/golangci-lint";
 
   subPackages = [ "cmd/golangci-lint" ];
 

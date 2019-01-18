@@ -4,7 +4,6 @@ buildGoPackage rec {
   name = "kompose-${version}";
   version = "1.9.0";
 
-  goPackagePath = "github.com/kubernetes/kompose";
 
   src = fetchFromGitHub {
     rev = "v${version}";

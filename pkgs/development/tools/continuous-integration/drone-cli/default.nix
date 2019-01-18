@@ -5,7 +5,6 @@ buildGoPackage rec {
   name = "drone-cli-${version}";
   version = "0.8.6";
   revision = "v${version}";
-  goPackagePath = "github.com/drone/drone-cli";
 
   goDeps= ./deps.nix;
 

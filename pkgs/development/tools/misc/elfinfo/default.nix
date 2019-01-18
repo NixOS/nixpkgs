@@ -4,7 +4,6 @@ buildGoPackage rec {
   name = "elfinfo-${version}";
   version = "0.7.5";
 
-  goPackagePath = "github.com/xyproto/elfinfo";
   src = fetchFromGitHub {
     rev = version;
     owner = "xyproto";

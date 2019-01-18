@@ -5,7 +5,6 @@ buildGoPackage rec {
   version = "1.3.0";
   rev = "v${version}";
 
-  goPackagePath = "github.com/hashicorp/consul";
 
   # Note: Currently only release tags are supported, because they have the Consul UI
   # vendored. See

@@ -5,7 +5,6 @@ buildGoPackage rec {
   version = "unstable-2018-03-05";
   rev = "5d7a5dd74738978d635f709669241f164c120ebd";
 
-  goPackagePath = "github.com/sourcegraph/go-langserver";
   subPackages = [ "." ];
 
   src = fetchFromGitHub {

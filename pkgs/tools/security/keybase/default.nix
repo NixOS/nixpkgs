@@ -7,7 +7,6 @@ buildGoPackage rec {
   name = "keybase-${version}";
   version = "2.11.0";
 
-  goPackagePath = "github.com/keybase/client";
   subPackages = [ "go/keybase" ];
 
   dontRenameImports = true;

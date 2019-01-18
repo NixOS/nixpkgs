@@ -6,7 +6,6 @@ buildGoPackage rec {
   name = "livepeer-${version}";
   version = "0.2.4";
 
-  goPackagePath = "github.com/livepeer/go-livepeer";
   goDeps = ./deps.nix;
 
   src = fetchFromGitHub {

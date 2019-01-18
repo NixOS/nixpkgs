@@ -4,7 +4,6 @@ buildGoPackage rec {
   name = "delve-${version}";
   version = "1.1.0";
 
-  goPackagePath = "github.com/derekparker/delve";
   excludedPackages = "\\(_fixtures\\|scripts\\|service/test\\)";
 
   src = fetchFromGitHub {

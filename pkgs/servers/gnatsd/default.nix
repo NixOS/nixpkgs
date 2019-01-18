@@ -7,7 +7,6 @@ buildGoPackage rec {
   version = "1.2.0";
   rev = "v${version}";
 
-  goPackagePath = "github.com/nats-io/gnatsd";
 
   src = fetchFromGitHub {
     inherit rev;

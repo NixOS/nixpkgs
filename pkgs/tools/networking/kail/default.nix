@@ -4,7 +4,6 @@ buildGoPackage rec {
   name = "kail-${version}";
   version = "0.7.0";
 
-  goPackagePath = "github.com/boz/kail";
 
   src = fetchFromGitHub {
     owner = "boz";

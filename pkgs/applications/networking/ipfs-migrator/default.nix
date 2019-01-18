@@ -4,7 +4,6 @@ buildGoPackage rec {
   name = "ipfs-migrator-${version}";
   version = "7";
 
-  goPackagePath = "github.com/ipfs/fs-repo-migrations";
 
   goDeps = ./deps.nix;
 

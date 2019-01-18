@@ -4,7 +4,6 @@ buildGoPackage rec {
   name = "bettercap-${version}";
   version = "2.11";
 
-  goPackagePath = "github.com/bettercap/bettercap";
 
   src = fetchFromGitHub {
     owner = "bettercap";

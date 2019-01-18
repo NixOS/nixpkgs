@@ -5,7 +5,6 @@ buildGoPackage rec {
   version = "unstable-2018-05-23";
   rev = "953befd75e223f514580fcb698aead0dd6ad3421";
 
-  goPackagePath = "github.com/acroca/go-symbols";
   goDeps = ./deps.nix;
 
   src = fetchFromGitHub {

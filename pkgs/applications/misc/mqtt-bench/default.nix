@@ -5,7 +5,6 @@ buildGoPackage rec {
   version = "0.3.0";
   rev = "v${version}";
 
-  goPackagePath = "github.com/takanorig/mqtt-bench";
 
   src = fetchFromGitHub {
     inherit rev;

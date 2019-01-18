@@ -5,7 +5,6 @@ buildGoPackage rec {
   version = "2018-06-14";
   rev = "385fac0ced9acaae6dc5b39144194008ded00697";
 
-  goPackagePath = "github.com/jstemmer/go-junit-report";
 
   src = fetchFromGitHub {
     inherit rev;

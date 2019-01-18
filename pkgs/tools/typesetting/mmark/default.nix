@@ -5,7 +5,6 @@ buildGoPackage rec {
   version = "1.3.6";
   rev = "v${version}";
 
-  goPackagePath = "github.com/miekg/mmark";
 
   src = fetchFromGitHub {
     inherit rev;

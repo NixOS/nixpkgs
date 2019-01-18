@@ -5,7 +5,6 @@ buildGoPackage rec {
   version = "2017-07-08";
   rev = "8ca19a84d5281b1b15c7a48c21e5786943b47f1c";
 
-  goPackagePath = "github.com/linuxkit/linuxkit";
 
   src = fetchFromGitHub {
     owner = "linuxkit";

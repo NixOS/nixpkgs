@@ -4,7 +4,6 @@ buildGoPackage rec {
   name = "pcstat-unstable-${version}";
   version = "2017-05-28";
 
-  goPackagePath = "github.com/tobert/pcstat";
 
   src = fetchFromGitHub {
     rev    = "91a7346e5b462a61e876c0574cb1ba331a6a5ac5";

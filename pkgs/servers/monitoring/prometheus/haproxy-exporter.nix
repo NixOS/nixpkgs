@@ -5,7 +5,6 @@ buildGoPackage rec {
   version = "0.8.0";
   rev = "v${version}";
 
-  goPackagePath = "github.com/prometheus/haproxy_exporter";
 
   src = fetchFromGitHub {
     inherit rev;

@@ -15,7 +15,6 @@ buildGoPackage rec {
     -X main.version=${version}
   '' ];
 
-  goPackagePath = "github.com/influxdata/influxdb";
 
   excludedPackages = "test";
 

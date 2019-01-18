@@ -5,7 +5,6 @@ buildGoPackage rec {
   version = "0.7-pre";
   rev = "v${version}";
 
-  goPackagePath = "github.com/adammck/terraform-inventory";
 
   subPackages = [ "./" ];
 

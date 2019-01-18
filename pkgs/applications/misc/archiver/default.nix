@@ -7,7 +7,6 @@ buildGoPackage rec {
   name = "archiver-${version}";
   version = "3.0.0";
 
-  goPackagePath = "github.com/mholt/archiver";
 
   src = fetchFromGitHub {
     owner = "mholt";

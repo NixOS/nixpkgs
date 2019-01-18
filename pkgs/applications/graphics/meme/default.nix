@@ -6,7 +6,6 @@ buildGoPackage rec {
 
   owner = "nomad-software";
   repo = "meme";
-  goPackagePath = "github.com/${owner}/${repo}";
 
   src = fetchFromGitHub {
     inherit owner repo;

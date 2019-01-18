@@ -6,7 +6,6 @@ buildGoPackage rec {
   name = "stern-${version}";
   version = "1.10.0";
 
-  goPackagePath = "github.com/wercker/stern";
 
   src = fetchFromGitHub {
     owner = "wercker";

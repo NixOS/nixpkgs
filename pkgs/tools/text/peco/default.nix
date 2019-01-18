@@ -4,7 +4,6 @@ buildGoPackage rec {
   name = "peco-${version}";
   version = "0.5.3";
 
-  goPackagePath = "github.com/peco/peco";
   subPackages = [ "cmd/peco" ];
 
   src = fetchFromGitHub {

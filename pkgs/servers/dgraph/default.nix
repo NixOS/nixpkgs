@@ -4,7 +4,6 @@ buildGoPackage rec {
   name = "dgraph-${version}";
   version = "0.8.2";
 
-  goPackagePath = "github.com/dgraph-io/dgraph";
 
   src = fetchFromGitHub {
     owner = "dgraph-io";

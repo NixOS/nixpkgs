@@ -4,7 +4,6 @@ buildGoPackage rec {
   name = "coredns-${version}";
   version = "005";
 
-  goPackagePath = "github.com/miekg/coredns";
   subPackages = [ "." ];
 
   src = fetchFromGitHub {

@@ -12,7 +12,6 @@ let
 
   backend = buildGoPackage {
     name = "uchiwa-backend-${version}";
-    goPackagePath = "github.com/${owner}/${repo}";
     inherit src;
     postInstall = ''
       mkdir $out

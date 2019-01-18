@@ -4,7 +4,6 @@ buildGoPackage rec {
   name = "surfboard_exporter-${version}";
   version = "2.0.0";
 
-  goPackagePath = "github.com/ipstatic/surfboard_exporter";
 
   src = fetchFromGitHub {
     rev = version;

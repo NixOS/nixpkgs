@@ -3,7 +3,6 @@
 buildGoPackage rec {
   name = "easyjson-unstable-${version}";
   version = "2018-08-23";
-  goPackagePath = "github.com/mailru/easyjson";
   goDeps = ./deps.nix;
 
   src = fetchFromGitHub {

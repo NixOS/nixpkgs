@@ -5,7 +5,6 @@ buildGoPackage rec {
   version = "20180325-${stdenv.lib.strings.substring 0 7 rev}";
   rev = "a94b0a8b25e553f7333f7b84aeb89d9d18ec259b";
   
-  goPackagePath = "github.com/bitly/oauth2_proxy";
 
   src = fetchFromGitHub {
     inherit rev;

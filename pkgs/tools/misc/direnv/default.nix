@@ -3,7 +3,6 @@
 buildGoPackage rec {
   name = "direnv-${version}";
   version = "2.19.0";
-  goPackagePath = "github.com/direnv/direnv";
 
   src = fetchFromGitHub {
     owner = "direnv";

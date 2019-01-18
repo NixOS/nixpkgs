@@ -5,7 +5,6 @@ buildGoPackage rec {
   version = "0.5.0";
   rev = "v${version}";
 
-  goPackagePath = "github.com/AcalephStorage/consul-alerts";
 
   goDeps = ./deps.nix;
 

@@ -4,7 +4,6 @@ buildGoPackage rec {
   name = "marathonctl-unstable-${version}";
   version = "2017-03-06";
 
-  goPackagePath = "github.com/shoenig/marathonctl";
   subPackages = [ "." ];
   goDeps = ./deps.nix;
 

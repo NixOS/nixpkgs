@@ -4,7 +4,6 @@ buildGoPackage rec {
   name = "fsql-${version}";
   version = "0.3.1";
 
-  goPackagePath = "github.com/kshvmdn/fsql";
 
   src = fetchFromGitHub {
     owner = "kshvmdn";

@@ -4,7 +4,6 @@ buildGoPackage rec {
   name = "pgcenter-${version}";
   version = "0.5.0";
 
-  goPackagePath = "github.com/lesovsky/pgcenter";
 
   src = fetchFromGitHub {
     owner  = "lesovsky";

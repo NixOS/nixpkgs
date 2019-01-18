@@ -14,7 +14,6 @@ buildGoPackage rec {
   version = "3.7.2";
   rev = "r${version}";
 
-  goPackagePath = "github.com/mongodb/mongo-tools";
   subPackages = map (t: t + "/main") tools;
 
   src = fetchFromGitHub {

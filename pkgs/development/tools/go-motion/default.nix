@@ -8,7 +8,6 @@ buildGoPackage rec {
   version = "2018-04-09";
   rev = "218875ebe23806e7af82f3b5b14bb3355534f679";
 
-  goPackagePath = "github.com/fatih/motion";
   excludedPackages = ''testdata'';
 
   src = fetchFromGitHub {

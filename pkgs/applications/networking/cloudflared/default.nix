@@ -4,7 +4,6 @@ buildGoPackage rec {
   name    = "cloudflared-${version}";
   version = "2018.10.3";
 
-  goPackagePath = "github.com/cloudflare/cloudflared";
 
   src = fetchFromGitHub {
     owner  = "cloudflare";

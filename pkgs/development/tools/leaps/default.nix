@@ -4,7 +4,6 @@ buildGoPackage rec {
   name = "leaps-${version}";
   version = "0.9.0";
 
-  goPackagePath = "github.com/Jeffail/leaps";
 
   src = fetchFromGitHub {
     owner = "Jeffail";

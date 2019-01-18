@@ -7,7 +7,6 @@ buildGoPackage rec {
   name = "gosec-${version}";
   version = "1.2.0";
 
-  goPackagePath = "github.com/securego/gosec";
   excludedPackages = ''cmd/tlsconfig'';
 
   src = fetchFromGitHub {

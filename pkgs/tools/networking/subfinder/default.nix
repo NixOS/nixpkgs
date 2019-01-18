@@ -4,7 +4,6 @@ buildGoPackage rec {
   name = "subfinder-git-${version}";
   version = "2018-07-15";
 
-  goPackagePath = "github.com/subfinder/subfinder";
 
   src = fetchFromGitHub {
     owner = "subfinder";

@@ -4,7 +4,6 @@ buildGoPackage rec {
   name = "echoip-${version}";
   version = "unstable-2018-11-20";
 
-  goPackagePath = "github.com/mpolden/echoip";
 
   src = fetchFromGitHub {
     owner = "mpolden";

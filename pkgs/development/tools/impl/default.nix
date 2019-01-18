@@ -8,7 +8,6 @@ buildGoPackage rec {
   version = "2018-02-27";
   rev = "3d0f908298c49598b6aa84f101c69670e15d1d03";
 
-  goPackagePath = "github.com/josharian/impl";
 
   src = fetchFromGitHub {
     inherit rev;

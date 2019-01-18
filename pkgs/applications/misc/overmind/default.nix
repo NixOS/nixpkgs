@@ -3,7 +3,6 @@
 buildGoPackage rec {
   name = "overmind-${version}";
   version = "1.2.1";
-  goPackagePath = "github.com/DarthSim/overmind";
 
   nativeBuildInputs = [ makeWrapper ];
 

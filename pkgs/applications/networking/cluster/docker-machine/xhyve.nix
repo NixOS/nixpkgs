@@ -4,7 +4,6 @@ buildGoPackage rec {
   name = "docker-machine-xhyve-${version}";
   version = "0.3.3";
 
-  goPackagePath = "github.com/zchee/docker-machine-driver-xhyve";
   goDeps = ./xhyve-deps.nix;
 
   src = fetchFromGitHub {

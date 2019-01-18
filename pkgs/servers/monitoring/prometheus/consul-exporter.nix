@@ -4,7 +4,6 @@ buildGoPackage rec {
   name = "consul_exporter-${version}";
   version = "0.3.0";
 
-  goPackagePath = "github.com/prometheus/consul_exporter";
 
   src = fetchFromGitHub {
     owner = "prometheus";

@@ -24,7 +24,6 @@ buildGoPackage rec {
     rm -rf testing
   '';
 
-  goPackagePath = "github.com/etix/mirrorbits";
   goDeps = ./deps.nix;
 
   nativeBuildInputs = [ pkgconfig ];
