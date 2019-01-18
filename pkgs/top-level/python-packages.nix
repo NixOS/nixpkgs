@@ -325,8 +325,7 @@ in {
   exchangelib = callPackage ../development/python-modules/exchangelib { };
 
   dbus-python = callPackage ../development/python-modules/dbus {
-    inherit (pkgs) pkgconfig;
-    dbus = pkgs.dbus;
+    inherit (pkgs) dbus pkgconfig;
   };
 
   dftfit = callPackage ../development/python-modules/dftfit { };
@@ -365,7 +364,9 @@ in {
 
   fdint = callPackage ../development/python-modules/fdint { };
 
-  fuse = callPackage ../development/python-modules/fuse-python { fuse = pkgs.fuse; };
+  fuse = callPackage ../development/python-modules/fuse-python {
+    inherit (pkgs) fuse pkgconfig;
+  };
 
   genanki = callPackage ../development/python-modules/genanki { };
 
@@ -2996,6 +2997,7 @@ in {
   in callPackage path {
     stdenv = if stdenv.isDarwin then pkgs.clangStdenv else pkgs.stdenv;
     inherit (pkgs.darwin.apple_sdk.frameworks) Cocoa;
+    inherit (pkgs) pkgconfig;
   };
 
   matrix-client = callPackage ../development/python-modules/matrix-client { };
@@ -3139,7 +3141,7 @@ in {
   };
 
   pygraphviz = callPackage ../development/python-modules/pygraphviz {
-    graphviz = pkgs.graphviz; # not the python package
+    inherit (pkgs) graphviz pkgconfig; # not the python package
   };
 
   pymc3 = callPackage ../development/python-modules/pymc3 { };

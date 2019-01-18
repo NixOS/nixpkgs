@@ -35,13 +35,15 @@ buildPythonPackage rec {
 
   XDG_RUNTIME_DIR = "/tmp";
 
+  nativeBuildInputs = [ pkgconfig ];
+
   buildInputs = [ python which sphinx stdenv ]
     ++ stdenv.lib.optional enableGhostscript ghostscript
     ++ stdenv.lib.optional stdenv.isDarwin [ Cocoa ];
 
   propagatedBuildInputs =
     [ cycler dateutil nose numpy pyparsing tornado freetype kiwisolver
-      libpng pkgconfig mock pytz ]
+      libpng mock pytz ]
     ++ stdenv.lib.optional (pythonOlder "3.3") backports_functools_lru_cache
     ++ stdenv.lib.optional enableGtk2 pygtk
     ++ stdenv.lib.optionals enableGtk3 [ cairo pycairo gtk3 gobject-introspection pygobject3 ]
