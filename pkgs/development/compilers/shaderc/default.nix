@@ -27,6 +27,8 @@ in stdenv.mkDerivation rec {
   name = "shaderc-git-${version}";
   version = "2018-06-01";
 
+  outputs = [ "out" "lib" "bin" "dev" "static" ];
+
   src = fetchFromGitHub {
     owner = "google";
     repo = "shaderc";
@@ -41,7 +43,12 @@ in stdenv.mkDerivation rec {
   '';
 
   buildInputs = [ cmake python ];
-  enableParallelBuilding = true;
+
+  postInstall = ''
+    moveToOutput "lib/*.a" $static
+  '';
+
+  preConfigure = ''cmakeFlags="$cmakeFlags -DCMAKE_INSTALL_BINDIR=$bin/bin"'';
 
   cmakeFlags = [ "-DSHADERC_SKIP_TESTS=ON" ];
 
