@@ -1586,6 +1586,11 @@
     email = "eocallaghan@alterapraxis.com";
     name = "Edward O'Callaghan";
   };
+  fusion809 = {
+    email = "brentonhorne77@gmail.com";
+    github = "fusion809";
+    name = "Brenton Horne";
+  };
   fuuzetsu = {
     email = "fuuzetsu@fuuzetsu.co.uk";
     github = "fuuzetsu";
