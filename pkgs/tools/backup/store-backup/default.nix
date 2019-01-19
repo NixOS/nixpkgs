@@ -9,7 +9,7 @@
 
 # known impurity: test cases seem to bu using /tmp/storeBackup.lock ..
 
-let dummyMount = writeScriptBin "mount" "#!/bin/sh";
+let dummyMount = writeScriptBin "mount" "#!${stdenv.shell}";
 in
 
 stdenv.mkDerivation rec {

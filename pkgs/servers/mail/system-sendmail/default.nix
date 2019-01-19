@@ -1,7 +1,7 @@
 { stdenv, writeText }:
 
 let script = writeText "script" ''
-  #!/bin/sh
+  #!${stdenv.shell}
 
   if command -v sendmail > /dev/null 2>&1 && [ "$(command -v sendmail)" != "{{MYPATH}}" ]; then
     exec sendmail "$@"

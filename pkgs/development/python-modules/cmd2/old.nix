@@ -19,8 +19,8 @@ buildPythonPackage rec {
   postPatch = stdenv.lib.optional stdenv.isDarwin ''
     # Fake the impure dependencies pbpaste and pbcopy
     mkdir bin
-    echo '#/bin/sh' > bin/pbpaste
-    echo '#/bin/sh' > bin/pbcopy
+    echo '#${stdenv.shell}' > bin/pbpaste
+    echo '#${stdenv.shell}' > bin/pbcopy
     chmod +x bin/{pbcopy,pbpaste}
     export PATH=$(realpath bin):$PATH
   '';

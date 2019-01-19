@@ -22,7 +22,8 @@
   referencesByPopularity,
   writeScript,
   writeText,
-  closureInfo
+  closureInfo,
+  substituteAll
 }:
 
 # WARNING: this API is unstable and may be subject to backwards-incompatible changes in the future.
@@ -279,6 +280,12 @@ rec {
     # of room for extension
     maxLayers ? 24
   }:
+    let
+      storePathToLayer = substituteAll
+      { inherit (stdenv) shell;
+        src = ./store-path-to-layer.sh;
+      };
+    in
     runCommand "${name}-granular-docker-layers" {
       inherit maxLayers;
       paths = referencesByPopularity closure;
@@ -298,9 +305,9 @@ rec {
       # following head and tail call lines, double-check that your
       # code behaves properly when the number of layers equals:
       #      maxLayers-1, maxLayers, and maxLayers+1
-      head -n $((maxLayers - 1)) $paths | cat -n | xargs -P$NIX_BUILD_CORES -n2 ${./store-path-to-layer.sh}
+      head -n $((maxLayers - 1)) $paths | cat -n | xargs -P$NIX_BUILD_CORES -n2 ${storePathToLayer}
       if [ $(cat $paths | wc -l) -ge $maxLayers ]; then
-        tail -n+$maxLayers $paths | xargs ${./store-path-to-layer.sh} $maxLayers
+        tail -n+$maxLayers $paths | xargs ${storePathToLayer} $maxLayers
       fi
 
       echo "Finished building layer '$name'"

@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     mv $out/bin/zangband $out/bin/.zangband.real
-    echo '#! /bin/sh
+    echo '#! ${stdenv.shell}
       PATH="$PATH:${coreutils}/bin"
 
       ZANGBAND_PATH="$HOME/.zangband"

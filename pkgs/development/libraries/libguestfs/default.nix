@@ -30,8 +30,8 @@ stdenv.mkDerivation rec {
 
   prePatch = ''
     # build-time scripts
-    substituteInPlace run.in        --replace '#!/bin/bash' '#!/bin/sh'
-    substituteInPlace ocaml-link.sh --replace '#!/bin/bash' '#!/bin/sh'
+    substituteInPlace run.in        --replace '#!/bin/bash' '#!${stdenv.shell}'
+    substituteInPlace ocaml-link.sh --replace '#!/bin/bash' '#!${stdenv.shell}'
 
     # $(OCAMLLIB) is read-only "${ocamlPackages.ocaml}/lib/ocaml"
     substituteInPlace ocaml/Makefile.am            --replace '$(DESTDIR)$(OCAMLLIB)' '$(out)/lib/ocaml'

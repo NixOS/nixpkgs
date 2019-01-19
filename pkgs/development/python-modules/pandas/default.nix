@@ -96,8 +96,8 @@ in buildPythonPackage rec {
   #       Until then we disable the tests.
   + optionalString isDarwin ''
     # Fake the impure dependencies pbpaste and pbcopy
-    echo "#!/bin/sh" > pbcopy
-    echo "#!/bin/sh" > pbpaste
+    echo "#!${stdenv.shell}" > pbcopy
+    echo "#!${stdenv.shell}" > pbpaste
     chmod a+x pbcopy pbpaste
     export PATH=$(pwd):$PATH
   '' + ''
