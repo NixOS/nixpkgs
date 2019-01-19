@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, fetchpatch, pkgconfig, flex, bison, libxslt, autoconf, automake, autoreconfHook
-, graphviz, glib, libiconv, libintl, libtool, expat
+, graphviz, glib, libiconv, libintl, libtool, expat, substituteAll
 }:
 
 let
@@ -44,6 +44,11 @@ let
   in stdenv.mkDerivation rec {
     name = "vala-${version}";
     version = "${major}.${minor}";
+
+    setupHook = substituteAll {
+      src = ./setup-hook.sh;
+      apiVersion = major;
+    };
 
     src = fetchurl {
       url = "mirror://gnome/sources/vala/${major}/${name}.tar.xz";
