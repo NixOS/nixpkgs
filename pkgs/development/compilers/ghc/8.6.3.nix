@@ -78,12 +78,12 @@ let
 
 in
 stdenv.mkDerivation (rec {
-  version = "8.6.1";
+  version = "8.6.3";
   name = "${targetPrefix}ghc-${version}";
 
   src = fetchurl {
     url = "https://downloads.haskell.org/~ghc/${version}/ghc-${version}-src.tar.xz";
-    sha256 = "0dkh7idgrqr567fq94a0f5x3w0r4cm2ydn51nb5wfisw3rnw499c";
+    sha256 = "08vzq0dpg4a39bs61j6rq4z0n7jby5mc69h4m25xhd8rjyvkg7lz";
   };
 
   enableParallelBuilding = true;
@@ -167,9 +167,6 @@ stdenv.mkDerivation (rec {
   # Make sure we never relax`$PATH` and hooks support for compatability.
   strictDeps = true;
 
-  # Don’t add -liconv to LDFLAGS automatically so that GHC will add it itself.
-  dontAddExtraLibs = true;
-
   nativeBuildInputs = [
     perl autoconf automake m4 python3 sphinx
     ghc bootPkgs.alex bootPkgs.happy bootPkgs.hscolour
@@ -213,7 +210,7 @@ stdenv.mkDerivation (rec {
     inherit enableShared;
 
     # Our Cabal compiler name
-    haskellCompilerName = "ghc-8.6.1";
+    haskellCompilerName = "ghc-8.6.3";
   };
 
   meta = {

@@ -78,12 +78,12 @@ let
 
 in
 stdenv.mkDerivation (rec {
-  version = "8.6.1";
+  version = "8.6.2";
   name = "${targetPrefix}ghc-${version}";
 
   src = fetchurl {
     url = "https://downloads.haskell.org/~ghc/${version}/ghc-${version}-src.tar.xz";
-    sha256 = "0dkh7idgrqr567fq94a0f5x3w0r4cm2ydn51nb5wfisw3rnw499c";
+    sha256 = "1mbn3n2ynmpfpb7jfnhpzzli31qqxqyi8ws71blws3i846fq3ana";
   };
 
   enableParallelBuilding = true;
@@ -213,7 +213,7 @@ stdenv.mkDerivation (rec {
     inherit enableShared;
 
     # Our Cabal compiler name
-    haskellCompilerName = "ghc-8.6.1";
+    haskellCompilerName = "ghc-8.6.2";
   };
 
   meta = {
