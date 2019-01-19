@@ -725,7 +725,10 @@ self: super: {
 
   # The standard libraries are compiled separately
   idris = generateOptparseApplicativeCompletion "idris" (
-    doJailbreak (dontCheck super.idris)
+    doJailbreak (dontCheck (super.idris.override {
+      # Needed for versions <= 1.3.1 https://github.com/idris-lang/Idris-dev/pull/4610
+      megaparsec = self.megaparsec_6_5_0;
+    }))
   );
 
   # https://github.com/bos/math-functions/issues/25
