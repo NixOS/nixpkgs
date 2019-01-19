@@ -42,13 +42,15 @@ in stdenv.mkDerivation rec {
     ln -s ${spirv-headers} third_party/spirv-tools/external/spirv-headers
   '';
 
-  buildInputs = [ cmake python ];
+  nativeBuildInputs = [ cmake python ];
 
   postInstall = ''
     moveToOutput "lib/*.a" $static
   '';
 
   preConfigure = ''cmakeFlags="$cmakeFlags -DCMAKE_INSTALL_BINDIR=$bin/bin"'';
+
+  enableParallelBuilding = true;
 
   cmakeFlags = [ "-DSHADERC_SKIP_TESTS=ON" ];
 
