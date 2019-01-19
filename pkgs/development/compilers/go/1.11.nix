@@ -1,5 +1,6 @@
 { stdenv, fetchFromGitHub, tzdata, iana-etc, go_bootstrap, runCommand, writeScriptBin
 , perl, which, pkgconfig, patch, procps, pcre, cacert, llvm, Security, Foundation
+, mailcap
 , buildPackages, targetPackages }:
 
 let
@@ -55,6 +56,10 @@ stdenv.mkDerivation rec {
     # and thus it is not corrected by patchShebangs.
     substituteInPlace misc/cgo/testcarchive/carchive_test.go \
       --replace '#!/usr/bin/env bash' '#!${stdenv.shell}'
+
+    # Patch the mimetype database location which is missing on NixOS.
+    substituteInPlace src/mime/type_unix.go \
+      --replace '/etc/mime.types' '${mailcap}/etc/mime.types'
 
     # Disabling the 'os/http/net' tests (they want files not available in
     # chroot builds)
