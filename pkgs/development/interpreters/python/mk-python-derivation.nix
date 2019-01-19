@@ -72,14 +72,17 @@ let self = toPythonModule (python.stdenv.mkDerivation (builtins.removeAttrs attr
 
   name = namePrefix + name;
 
-  nativeBuildInputs = [ ensureNewerSourcesForZipFilesHook ]
-    ++ nativeBuildInputs;
-
-  buildInputs = [ wrapPython ]
-    ++ lib.optional (lib.hasSuffix "zip" (attrs.src.name or "")) unzip
+  nativeBuildInputs = [
+    python
+    wrapPython
+    ensureNewerSourcesForZipFilesHook
+    setuptools
 #     ++ lib.optional catchConflicts setuptools # If we no longer propagate setuptools
-    ++ buildInputs
-    ++ pythonPath;
+  ] ++ lib.optionals (lib.hasSuffix "zip" (attrs.src.name or "")) [
+    unzip
+  ] ++ nativeBuildInputs;
+
+  buildInputs = buildInputs ++ pythonPath;
 
   # Propagate python and setuptools. We should stop propagating setuptools.
   propagatedBuildInputs = propagatedBuildInputs ++ [ python setuptools ];

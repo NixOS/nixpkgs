@@ -11,10 +11,15 @@ buildPythonPackage rec {
 
   checkInputs = [ nose ];
 
-  propagatedBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
 
   checkPhase = ''
     nosetests
+  '';
+
+  patches = [ ./executable.patch ];
+  postPatch = ''
+    substituteInPlace pkgconfig/pkgconfig.py --replace 'PKG_CONFIG_EXE = "pkg-config"' 'PKG_CONFIG_EXE = "${pkgconfig}/bin/pkg-config"'
   '';
 
   meta = with lib; {

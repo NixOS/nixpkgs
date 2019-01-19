@@ -1,4 +1,4 @@
-{ stdenv, config, libGLSupported, fetchurl, pkgconfig, pruneLibtoolFiles
+{ stdenv, config, libGLSupported, fetchurl, pkgconfig
 , openglSupport ? libGLSupported, libGL
 , alsaSupport ? stdenv.isLinux, alsaLib
 , x11Support ? !stdenv.isCygwin, libX11, xorgproto, libICE, libXi, libXScrnSaver, libXcursor, libXinerama, libXext, libXxf86vm, libXrandr
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
   patches = [ ./find-headers.patch ];
 
-  nativeBuildInputs = [ pkgconfig pruneLibtoolFiles ];
+  nativeBuildInputs = [ pkgconfig ];
 
   propagatedBuildInputs = dlopenPropagatedBuildInputs;
 

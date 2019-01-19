@@ -20,11 +20,11 @@
 
 buildPythonPackage rec {
   pname = "chalice";
-  version = "1.6.1";
+  version = "1.6.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "783ba3c603b944ba32f0ee39f272dc192f2097cfc520692f4dcb718bebdf940e";
+    sha256 = "96c22f95ccc91ed3e79cc4a9a88bf27f95a13a2caf5a55137ab081d371258f0f";
   };
 
   checkInputs = [ watchdog pytest hypothesis mock ];
@@ -46,7 +46,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace 'pip>=9,<=18' 'pip' \
+      --replace 'pip>=9,<=18.1' 'pip' \
       --replace 'typing==3.6.4' 'typing' \
       --replace 'attrs==17.4.0' 'attrs' \
       --replace 'click>=6.6,<7.0' 'click'

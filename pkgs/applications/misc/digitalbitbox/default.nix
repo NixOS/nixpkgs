@@ -68,8 +68,6 @@ in stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    # TODO: remove libcap when pruneLibtoolFiles applies to pulseaudio.
-    libcap
     libevent
     libtool
     udev

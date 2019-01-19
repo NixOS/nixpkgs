@@ -17,8 +17,8 @@ buildPythonPackage rec {
     sha256 = "0dh7jm1d37p54pgc7cx4izz6khsd860a6hw64gx74c8fjfz36p8s";
   };
 
-  buildInputs = [ pytest setuptools_scm ];
-  checkInputs = [ django-configurations pytest_xdist six ];
+  nativeBuildInputs = [ pytest setuptools_scm ];
+  checkInputs = [ pytest django-configurations pytest_xdist six ];
   propagatedBuildInputs = [ django ];
 
   # Complicated. Requires Django setup.

@@ -14,10 +14,7 @@ buildPythonPackage rec {
     sha256 = "361f4c2fbb090ec2bc8e5e4151e21409a09ac13f364e3448247cc01f326d89b3";
   };
 
-  checkInputs = [ numpy ];
-  propagatedBuildInputs = [
-    nose
-  ];
+  checkInputs = [ numpy nose ];
 
   checkPhase = ''
     nosetests

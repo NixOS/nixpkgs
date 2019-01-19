@@ -1,5 +1,6 @@
 { stdenv
 , fetch
+, fetchpatch
 , cmake
 , python
 , libffi
@@ -14,8 +15,6 @@
 , debugVersion ? false
 , enableManpages ? false
 , enableSharedLibraries ? true
-# Mesa requires AMDGPU target
-, enableTargets ? [ stdenv.hostPlatform stdenv.targetPlatform "AMDGPU" ]
 , enablePFM ? !stdenv.isDarwin
 }:
 
@@ -28,9 +27,6 @@ let
   shortVersion = with stdenv.lib;
     concatStringsSep "." (take 1 (splitString "." release_version));
 
-  inherit
-    (import ../common.nix { inherit (stdenv) lib; })
-    llvmBackendList;
 in stdenv.mkDerivation (rec {
   name = "llvm-${version}";
 
@@ -50,6 +46,14 @@ in stdenv.mkDerivation (rec {
     ++ optional enablePFM libpfm; # exegesis
 
   propagatedBuildInputs = [ ncurses zlib ];
+
+  patches = [
+    # https://bugs.llvm.org/show_bug.cgi?id=39427
+    (fetchpatch {
+      url = "https://salsa.debian.org/pkg-llvm-team/llvm-toolchain/raw/5a7d283d4e00bc4822c7b0226e593c344c8f6050/debian/patches/pr39427-misscompile.diff";
+      sha256 = "03mpydsaw0xvcp7kb4sgjzcl5v22620r5z78kv3mz5wp7sn76fg5";
+    })
+  ];
 
   postPatch = optionalString stdenv.isDarwin ''
     substituteInPlace cmake/modules/AddLLVM.cmake \
@@ -88,7 +92,6 @@ in stdenv.mkDerivation (rec {
     "-DLLVM_ENABLE_RTTI=ON"
     "-DLLVM_HOST_TRIPLE=${stdenv.hostPlatform.config}"
     "-DLLVM_DEFAULT_TARGET_TRIPLE=${stdenv.targetPlatform.config}"
-    "-DLLVM_TARGETS_TO_BUILD=${llvmBackendList enableTargets}"
     "-DLLVM_EXPERIMENTAL_TARGETS_TO_BUILD=WebAssembly"
     "-DLLVM_ENABLE_DUMP=ON"
   ] ++ optionals enableSharedLibraries [
@@ -134,7 +137,7 @@ in stdenv.mkDerivation (rec {
     ln -s $lib/lib/libLLVM.dylib $lib/lib/libLLVM-${release_version}.dylib
   '';
 
-  doCheck = stdenv.isLinux && (!stdenv.isi686);
+  doCheck = stdenv.isLinux && (!stdenv.isx86_32);
 
   checkTarget = "check-all";
 

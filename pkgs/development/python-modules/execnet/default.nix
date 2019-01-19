@@ -15,7 +15,8 @@ buildPythonPackage rec {
     sha256 = "a7a84d5fa07a089186a329528f127c9d73b9de57f1a1131b82bb5320ee651f6a";
   };
 
-  buildInputs = [ pytest setuptools_scm ];
+  checkInputs = [ pytest  ];
+  nativeBuildInputs = [ setuptools_scm ];
   propagatedBuildInputs = [ apipkg ];
 
   # remove vbox tests

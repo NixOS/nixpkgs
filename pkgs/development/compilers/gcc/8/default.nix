@@ -277,7 +277,7 @@ stdenv.mkDerivation ({
     optional (!bootstrap) "--disable-bootstrap" ++
 
     # Platform-specific flags
-    optional (targetPlatform == hostPlatform && targetPlatform.isi686) "--with-arch=i686" ++
+    optional (targetPlatform == hostPlatform && targetPlatform.isx86_32) "--with-arch=${stdenv.hostPlatform.parsed.cpu.name}" ++
     optionals hostPlatform.isSunOS [
       "--enable-long-long" "--enable-libssp" "--enable-threads=posix" "--disable-nls" "--enable-__cxa_atexit"
       # On Illumos/Solaris GNU as is preferred
