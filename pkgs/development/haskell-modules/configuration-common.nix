@@ -720,6 +720,9 @@ self: super: {
     '';
   });
 
+  # A simple MonadFail patch would do too, but not doing the tests is easier
+  megaparsec_6_5_0 = dontCheck super.megaparsec_6_5_0;
+
   # The standard libraries are compiled separately
   idris = generateOptparseApplicativeCompletion "idris" (
     doJailbreak (dontCheck super.idris)
