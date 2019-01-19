@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   name = "go-ethereum-${version}";
-  version = "1.8.20";
+  version = "1.8.21";
   goPackagePath = "github.com/ethereum/go-ethereum";
 
   # Fix for usb-related segmentation faults on darwin
@@ -16,7 +16,7 @@ buildGoPackage rec {
     owner = "ethereum";
     repo = "go-ethereum";
     rev = "v${version}";
-    sha256 = "0m2q1nz6f39pyr2rk6vflkwi4ykganzwr7wndpwr9rliw0x8jgi0";
+    sha256 = "1p4qfxa90l26s9q4hddyb93gdf7vb0sb46z9n26ijiqlxdq3z7v2";
   };
 
   meta = with stdenv.lib; {
