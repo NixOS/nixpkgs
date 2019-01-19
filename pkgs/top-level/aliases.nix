@@ -340,6 +340,7 @@ mapAliases ({
   xlibs = xorg; # added 2015-09
   xpraGtk3 = xpra; # added 2018-09-13
   youtubeDL = youtube-dl;  # added 2014-10-26
+  zdfmediathk = mediathekview; # added 2019-01-19
 
   # TODO(ekleog): add ‘wasm’ alias to ‘ocamlPackages.wasm’ after 19.03
   # branch-off

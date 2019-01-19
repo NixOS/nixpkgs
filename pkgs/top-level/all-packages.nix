@@ -23079,8 +23079,6 @@ in
 
   zap = callPackage ../tools/networking/zap { };
 
-  zdfmediathk = callPackage ../applications/video/zdfmediathk { };
-
   zopfli = callPackage ../tools/compression/zopfli { };
 
   myEnvFun = callPackage ../misc/my-env {
