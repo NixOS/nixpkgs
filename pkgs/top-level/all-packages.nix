@@ -5417,9 +5417,7 @@ in
 
   sieve-connect = callPackage ../applications/networking/sieve-connect {};
 
-  sigal = callPackage ../applications/misc/sigal {
-    inherit (pythonPackages) buildPythonApplication fetchPypi;
-  };
+  sigal = callPackage ../applications/misc/sigal { };
 
   sigil = libsForQt5.callPackage ../applications/editors/sigil { };
 
