@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   name = "libaom-${version}";
-  version = "1.0.0.errata.1";
+  version = "1.0.0-errata1";
 
   src = fetchgit {
     url = "https://aomedia.googlesource.com/aom";
