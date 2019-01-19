@@ -2516,6 +2516,8 @@ in
     tinyxml2 = tinyxml-2;
   };
 
+  energyplus = callPackage ../applications/science/misc/energyplus { };
+
   enscript = callPackage ../tools/text/enscript { };
 
   entr = callPackage ../tools/misc/entr { };
