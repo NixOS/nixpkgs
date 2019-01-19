@@ -94,6 +94,10 @@ in
     '';
   };
 
+  digest-sha3 = attrs: {
+    hardeningDisable = [ "format" ];
+  };
+
   ethon = attrs: {
     dontBuild = false;
     postPatch = ''
