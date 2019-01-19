@@ -16,10 +16,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ python ];
 
-  # TODO: Cleanup
   patchPhase = ''
-    CA_PATH="$(echo '${cacert}/etc/ssl/certs/ca-bundle.crt' | sed 's/\//\\\//g')" # / -> \/
-    sed -i -E 's/urlopen\(url\)/urlopen(url, cafile="'$CA_PATH'")/' repo
+    substituteInPlace repo --replace \
+      'urllib.request.urlopen(url)' \
+      'urllib.request.urlopen(url, cafile="${cacert}/etc/ssl/certs/ca-bundle.crt")'
   '';
 
   installPhase = ''
