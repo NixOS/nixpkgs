@@ -18129,7 +18129,9 @@ in
 
   mediainfo-gui = callPackage ../applications/misc/mediainfo-gui { };
 
-  mediathekview = callPackage ../applications/video/mediathekview { };
+  # mediathekview needs JavaFX, which currently only is available inside OracleJRE
+  # we might be able to get rid of it, as soon as we have an OpenJRE with OpenJFX included
+  mediathekview = callPackage ../applications/video/mediathekview { jre = oraclejre; };
 
   meteo = callPackage ../applications/networking/weather/meteo { };
 
