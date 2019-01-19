@@ -57,5 +57,6 @@ in stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     inherit (src.meta) homepage;
     description = "A collection of tools, libraries and tests for shader compilation.";
+    license = [ licenses.asl20 ];
   };
 }
