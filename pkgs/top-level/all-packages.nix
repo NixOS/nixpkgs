@@ -18358,6 +18358,8 @@ in
     x11Support         = !stdenv.isDarwin;
     xineramaSupport    = !stdenv.isDarwin;
     xvSupport          = !stdenv.isDarwin;
+    # Use docutils from python3 to avoid python2 in the closure
+    inherit (python3Packages) docutils;
   };
 
   mpv-with-scripts = callPackage ../applications/video/mpv/wrapper.nix { };
