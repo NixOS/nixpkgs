@@ -19,6 +19,11 @@
   , libcdio          ? null
   , libcdio-paranoia ? null
 
+, vulkanSupport ? stdenv.isLinux
+  , shaderc ? null
+  , vulkan-headers ? null
+  , vulkan-loader ? null
+
 , alsaSupport        ? true,  alsaLib       ? null
 , bluraySupport      ? true,  libbluray     ? null
 , bs2bSupport        ? true,  libbs2b       ? null
@@ -163,6 +168,7 @@ in stdenv.mkDerivation rec {
     ++ optionals dvdnavSupport     [ libdvdnav libdvdnav.libdvdread ]
     ++ optionals waylandSupport    [ wayland wayland-protocols libxkbcommon ]
     ++ optionals x11Support        [ libX11 libXext libGLU_combined libXxf86vm libXrandr ]
+    ++ optionals vulkanSupport     [ shaderc vulkan-headers vulkan-loader ]
     ++ optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
       CoreFoundation Cocoa CoreAudio
     ]);
@@ -176,7 +182,7 @@ in stdenv.mkDerivation rec {
   '';
 
   # Ensure youtube-dl is available in $PATH for mpv
-  wrapperFlags = 
+  wrapperFlags =
   let
     getPath  = type : "${luasocket}/lib/lua/${lua.luaversion}/?.${type};" +
                       "${luasocket}/share/lua/${lua.luaversion}/?.${type}";
