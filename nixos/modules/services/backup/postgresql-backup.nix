@@ -6,11 +6,11 @@ let
 
   cfg = config.services.postgresqlBackup;
 
-  postgresqlBackupService = db :
+  postgresqlBackupService = db: dumpCmd:
     {
       enable = true;
 
-      description = "Backup of database ${db}";
+      description = "Backup of ${db} database(s)";
 
       requires = [ "postgresql.service" ];
 
@@ -26,7 +26,7 @@ let
           ${pkgs.coreutils}/bin/mv ${cfg.location}/${db}.sql.gz ${cfg.location}/${db}.prev.sql.gz
         fi
 
-        ${config.services.postgresql.package}/bin/pg_dump ${cfg.pgdumpOptions} ${db} | \
+        ${dumpCmd} | \
           ${pkgs.gzip}/bin/gzip -c > ${cfg.location}/${db}.sql.gz
       '';
 
@@ -42,9 +42,7 @@ let
 in {
 
   options = {
-
     services.postgresqlBackup = {
-
       enable = mkOption {
         default = false;
         description = ''
@@ -58,6 +56,19 @@ in {
           This option defines (see <literal>systemd.time</literal> for format) when the
           databases should be dumped.
           The default is to update at 01:15 (at night) every day.
+        '';
+      };
+
+      backupAll = mkOption {
+        default = cfg.databases == [];
+        defaultText = "services.postgresqlBackup.databases == []";
+        type = lib.types.bool;
+        description = ''
+          Backup all databases using pg_dumpall.
+          This option is mutual exclusive to
+          <literal>services.postgresqlBackup.databases</literal>.
+          The resulting backup dump will have the name all.sql.gz.
+          This option is the default if no databases are specified.
         '';
       };
 
@@ -79,18 +90,36 @@ in {
         type = types.string;
         default = "-Cbo";
         description = ''
-          Command line options for pg_dump.
+          Command line options for pg_dump. This options is not used
+          if <literal>config.services.postgresqlBackup.backupAll</literal> is enabled.
+          Note that config.services.postgresqlBackup.backupAll is also active,
+          when no databases where specified.
         '';
       };
     };
 
   };
 
-  config = mkIf config.services.postgresqlBackup.enable {
-
-    systemd.services = listToAttrs (map (db : {
+  config = mkMerge [
+    {
+      assertions = [{
+        assertion = cfg.backupAll -> cfg.databases == [];
+        message = "config.services.postgresqlBackup.backupAll cannot be used together with config.services.postgresqlBackup.databases";
+      }];
+    }
+    (mkIf (cfg.enable && cfg.backupAll) {
+      systemd.services.postgresqlBackup =
+        postgresqlBackupService "all" "${config.services.postgresql.package}/bin/pg_dumpall";
+    })
+    (mkIf (cfg.enable && !cfg.backupAll) {
+      systemd.services = listToAttrs (map (db:
+        let
+          cmd = "${config.services.postgresql.package}/bin/pg_dump ${cfg.pgdumpOptions} ${db}";
+        in {
           name = "postgresqlBackup-${db}";
-          value = postgresqlBackupService db; } ) cfg.databases);
-  };
+          value = postgresqlBackupService db cmd;
+        }) cfg.databases);
+    })
+  ];
 
 }
