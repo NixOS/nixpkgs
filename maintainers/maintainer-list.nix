@@ -341,6 +341,11 @@
     github = "apeyroux";
     name = "Alexandre Peyroux";
   };
+  ar1a = {
+    email = "aria@ar1as.space";
+    github = "ar1a";
+    name = "Aria Edmonds";
+  };
   arcadio = {
     email = "arc@well.ox.ac.uk";
     github = "arcadio";

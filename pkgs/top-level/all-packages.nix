@@ -5986,6 +5986,8 @@ in
 
   vampire = callPackage ../applications/science/logic/vampire {};
 
+  vdmfec = callPackage ../applications/backup/vdmfec {};
+
   vk-messenger = callPackage ../applications/networking/instant-messengers/vk-messenger {};
 
   volatility = callPackage ../tools/security/volatility { };
