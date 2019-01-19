@@ -1379,6 +1379,8 @@ in
 
   eschalot = callPackage ../tools/security/eschalot { };
 
+  esphome = callPackage ../servers/home-assistant/esphome.nix { };
+
   esptool = callPackage ../tools/misc/esptool { };
 
   esptool-ck = callPackage ../tools/misc/esptool-ck { };
@@ -12098,6 +12100,8 @@ in
     qtxmlpatterns = qt59.qtxmlpatterns;
   };
 
+  pyotherside = libsForQt5.callPackage ../development/libraries/pyotherside {};
+
   re2 = callPackage ../development/libraries/re2 { };
 
   qbs = libsForQt5.callPackage ../development/tools/build-managers/qbs { };
@@ -13117,7 +13121,7 @@ in
 
   yojimbo = callPackage ../development/libraries/yojimbo { };
 
-  yubioath-desktop = callPackage ../applications/misc/yubioath-desktop { };
+  yubioath-desktop = libsForQt5.callPackage ../applications/misc/yubioath-desktop { };
 
   yubico-piv-tool = callPackage ../tools/misc/yubico-piv-tool { };
 
@@ -15375,6 +15379,8 @@ in
 
   adapta-backgrounds = callPackage ../data/misc/adapta-backgrounds { };
 
+  agave = callPackage ../data/fonts/agave { };
+
   aileron = callPackage ../data/fonts/aileron { };
 
   andagii = callPackage ../data/fonts/andagii { };
@@ -15382,6 +15388,9 @@ in
   andika = callPackage ../data/fonts/andika { };
 
   android-udev-rules = callPackage ../os-specific/linux/android-udev-rules { };
+
+  ankacoder = callPackage ../data/fonts/ankacoder { };
+  ankacoder-condensed = callPackage ../data/fonts/ankacoder/condensed.nix { };
 
   anonymousPro = callPackage ../data/fonts/anonymous-pro { };
 
@@ -15418,6 +15427,8 @@ in
   carlito = callPackage ../data/fonts/carlito {};
 
   charis-sil = callPackage ../data/fonts/charis-sil { };
+
+  cherry = callPackage ../data/fonts/cherry { };
 
   comfortaa = callPackage ../data/fonts/comfortaa {};
 
@@ -15565,6 +15576,8 @@ in
 
   hanazono = callPackage ../data/fonts/hanazono { };
 
+  hermit = callPackage ../data/fonts/hermit { };
+
   hyperscrypt-font = callPackage ../data/fonts/hyperscrypt { };
 
   ia-writer-duospace = callPackage ../data/fonts/ia-writer-duospace { };
@@ -15640,6 +15653,8 @@ in
   # lohit-fonts.tamil-classical lohit-fonts.tamil lohit-fonts.telugu
   # lohit-fonts.kashmiri lohit-fonts.konkani lohit-fonts.maithili lohit-fonts.sindhi
   lohit-fonts = recurseIntoAttrs ( callPackages ../data/fonts/lohit-fonts { } );
+
+  luculent = callPackage ../data/fonts/luculent { };
 
   maia-icon-theme = callPackage ../data/icons/maia-icon-theme { };
 
@@ -19677,6 +19692,8 @@ in
 
   trayer = callPackage ../applications/window-managers/trayer { };
 
+  tdrop = callPackage ../applications/misc/tdrop { };
+
   tree = callPackage ../tools/system/tree {};
 
   treesheets = callPackage ../applications/office/treesheets { wxGTK = wxGTK31; };
@@ -23098,6 +23115,8 @@ in
   zncModules = recurseIntoAttrs (
     callPackage ../applications/networking/znc/modules.nix { }
   );
+
+  zoneminder = callPackage ../servers/zoneminder { };
 
   zsnes = pkgsi686Linux.callPackage ../misc/emulators/zsnes { };
 

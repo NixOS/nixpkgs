@@ -605,11 +605,11 @@ policy.
 -->
 
   <para>
-   In a case a contributor leaves definitively the Nix community, he should
+   In a case a contributor definitively leaves the Nix community, they should
    create an issue or post on
    <link
    xlink:href="https://discourse.nixos.org">Discourse</link> with
-   references of packages and modules he maintains so the maintainership can be
+   references of packages and modules they maintain so the maintainership can be
    taken over by other contributors.
   </para>
  </section>

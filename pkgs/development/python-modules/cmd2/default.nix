@@ -1,5 +1,5 @@
 { stdenv, fetchPypi, buildPythonPackage, pythonOlder, isPy3k
-, pyperclip, six, pyparsing, vim, wcwidth, colorama
+, pyperclip, six, pyparsing, vim, wcwidth, colorama, attrs
 , contextlib2 ? null, typing ? null, setuptools_scm
 , pytest, mock ? null, pytest-mock
 , which, glibcLocales
@@ -36,6 +36,7 @@ buildPythonPackage rec {
     six
     pyparsing
     wcwidth
+    attrs
   ]
   ++ stdenv.lib.optionals (pythonOlder "3.5") [contextlib2 typing]
   ;
