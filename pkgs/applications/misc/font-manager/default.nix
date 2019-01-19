@@ -1,11 +1,10 @@
-{ stdenv, fetchFromGitHub, automake, autoconf, libtool,
-  pkgconfig, file, libxml2, json-glib , sqlite, itstool,
-  librsvg, vala, gnome3, wrapGAppsHook, gobject-introspection,
-  which
+{ stdenv, fetchFromGitHub, meson, ninja, gettext, python3,
+  pkgconfig, libxml2, json-glib , sqlite, itstool, librsvg,
+  vala, gnome3, desktop-file-utils, wrapGAppsHook, gobject-introspection
 }:
 
 stdenv.mkDerivation rec {
-  name = "font-manager-${version}";
+  pname = "font-manager";
   version = "0.7.4.1";
 
   src = fetchFromGitHub {
@@ -17,10 +16,12 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     pkgconfig
-    automake autoconf libtool
-    file
-    which
+    meson
+    ninja
+    gettext
+    python3
     itstool
+    desktop-file-utils
     vala
     gnome3.yelp-tools
     wrapGAppsHook
@@ -37,16 +38,16 @@ stdenv.mkDerivation rec {
     gnome3.defaultIconTheme
   ];
 
-  enableParallelBuilding = true;
+  patches = [ ./correct-post-install.patch ];
 
-  preConfigure = ''
-    NOCONFIGURE=true ./autogen.sh
-    substituteInPlace configure --replace "/usr/bin/file" "${file}/bin/file"
-  '';
-
-  configureFlags = [
-    "--disable-pycompile"
+  mesonFlags = [
+    "-Ddisable_pycompile=true"
   ];
+
+  postPatch = ''
+    chmod +x meson_post_install.py
+    patchShebangs meson_post_install.py
+  '';
 
   meta = {
     homepage = https://fontmanager.github.io/;
