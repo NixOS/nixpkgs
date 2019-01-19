@@ -1,20 +1,22 @@
 { stdenv, fetchurl, pkgconfig, libxml2, gtk3, gnome3, intltool }:
 
 stdenv.mkDerivation rec {
-  name = "gdl-${version}";
+  pname = "gdl";
   version = "3.28.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gdl/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/gdl/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "1dipnzqpxl0yfwzl2lqdf6vb3174gb9f1d5jndkq8505q7n9ik2j";
   };
 
-  passthru = {
-    updateScript = gnome3.updateScript { packageName = "gdl"; attrPath = "gnome3.gdl"; };
-  };
+  nativeBuildInputs = [ pkgconfig intltool ];
+  buildInputs = [ libxml2 gtk3 ];
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ libxml2 gtk3 intltool ];
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = "gdl";
+    };
+  };
 
   meta = with stdenv.lib; {
     description = "Gnome docking library";

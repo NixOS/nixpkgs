@@ -9880,6 +9880,8 @@ in
 
   gcr = callPackage ../development/libraries/gcr { };
 
+  gdl = callPackage ../development/libraries/gdl { };
+
   gdome2 = callPackage ../development/libraries/gdome2 {
     inherit (gnome2) gtkdoc;
   };
