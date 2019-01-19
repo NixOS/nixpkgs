@@ -20039,6 +20039,8 @@ in
     lcms = lcms2;
   };
 
+  inkscape1 = callPackage ../applications/graphics/inkscape/1.0.nix { };
+
   inspectrum = libsForQt5.callPackage ../applications/radio/inspectrum { };
 
   ion3 = callPackage ../applications/window-managers/ion-3 {

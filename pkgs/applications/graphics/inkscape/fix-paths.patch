@@ -1,0 +1,17 @@
+diff --git a/src/extension/implementation/script.cpp b/src/extension/implementation/script.cpp
+index b3e4492de..48e509729 100644
+--- a/src/extension/implementation/script.cpp
++++ b/src/extension/implementation/script.cpp
+@@ -77,10 +77,10 @@ Script::interpreter_t const Script::interpreterTab[] = {
+         { "python", "python-interpreter", "pythonw" },
+ #elif defined __APPLE__
+         { "perl",   "perl-interpreter",   "perl"    },
+-        { "python", "python-interpreter", "python3" },
++        { "python", "python-interpreter", "@python@" },
+ #else
+         { "perl",   "perl-interpreter",   "perl"    },
+-        { "python", "python-interpreter", "python"  },
++        { "python", "python-interpreter", "@python@"  },
+ #endif
+         { "ruby",   "ruby-interpreter",   "ruby"    },
+         { "shell",  "shell-interpreter",  "sh"      },
