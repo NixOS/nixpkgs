@@ -93,7 +93,7 @@ let
 
       configureFlags = [
         "--with-config=${configFile}"
-        "--with-python=${python3}/bin/python3"
+        "--with-python=${python3.interpreter}"
       ] ++ optionals buildUser [
         "--with-dracutdir=$(out)/lib/dracut"
         "--with-udevdir=$(out)/lib/udev"
@@ -183,13 +183,12 @@ in {
     # this package should point to a version / git revision compatible with the latest kernel release
     version = "0.8.0-rc3";
 
-    rev = "9b626c126e78cdc36200b66c7cd1dc6a06cf400d";
     sha256 = "0wmkis0q2gbj7sgx3ipxngbgzjcf7ay353v3mglf2ay50q4da5i7";
     isUnstable = true;
 
     extraPatches = [
       (fetchpatch {
-        url = "https://github.com/Mic92/zfs/compare/${rev}...nixos-zfs-2018-08-13.patch";
+        url = "https://github.com/Mic92/zfs/commit/bc29b5783da0af2c80c85126a1831ce1d52bfb69.patch";
         sha256 = "1sdcr1w2jp3djpwlf1f91hrxxmc34q0jl388smdkxh5n5bpw5gzw";
       })
     ];
