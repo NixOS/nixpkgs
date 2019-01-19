@@ -1,6 +1,6 @@
 { stdenv, fetchurl, fetchFromGitHub, makeWrapper
 , docutils, perl, pkgconfig, python3, which, ffmpeg_4
-, freefont_ttf, freetype, libass, libpthreadstubs
+, freefont_ttf, freetype, libass, libpthreadstubs, mujs
 , lua, luasocket, libuchardet, libiconv ? null, darwin
 
 , waylandSupport ? false
@@ -139,7 +139,7 @@ in stdenv.mkDerivation rec {
 
   buildInputs = [
     ffmpeg_4 freetype libass libpthreadstubs
-    lua luasocket libuchardet
+    lua luasocket libuchardet mujs
   ] ++ optional alsaSupport        alsaLib
     ++ optional archiveSupport     libarchive
     ++ optional bluraySupport      libbluray
