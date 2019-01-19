@@ -46,7 +46,7 @@ default-package-overrides:
   # Newer versions don't work in LTS-12.x
   - alsa-mixer < 0.3
   - cassava-megaparsec < 2
-  # LTS Haskell 13.2
+  # LTS Haskell 13.3
   - abstract-deque ==0.3
   - abstract-deque-tests ==0.3
   - abstract-par ==0.3.3
@@ -368,7 +368,7 @@ default-package-overrides:
   - cayley-client ==0.4.8
   - cborg ==0.2.1.0
   - cborg-json ==0.2.1.0
-  - cereal ==0.5.7.0
+  - cereal ==0.5.8.0
   - cereal-conduit ==0.8.0
   - cereal-text ==0.1.0.2
   - cereal-time ==0.1.0.0
@@ -443,7 +443,7 @@ default-package-overrides:
   - concurrent-supply ==0.1.8
   - cond ==0.4.1.1
   - conduit ==1.3.1
-  - conduit-algorithms ==0.0.8.2
+  - conduit-algorithms ==0.0.9.0
   - conduit-combinators ==1.3.0
   - conduit-concurrent-map ==0.1.1
   - conduit-connection ==0.1.0.4
@@ -490,7 +490,7 @@ default-package-overrides:
   - crypto-cipher-tests ==0.0.11
   - crypto-cipher-types ==0.0.9
   - cryptocompare ==0.1.1
-  - crypto-enigma ==0.1.1.4
+  - crypto-enigma ==0.1.1.5
   - cryptohash ==0.11.9
   - cryptohash-cryptoapi ==0.1.4
   - cryptohash-md5 ==0.11.100.1
@@ -671,7 +671,7 @@ default-package-overrides:
   - eventful-sqlite ==0.2.0
   - eventful-test-helpers ==0.2.0
   - event-list ==0.1.2
-  - eventstore ==1.2.0
+  - eventstore ==1.2.1
   - every ==0.0.1
   - exact-combinatorics ==0.2.0.8
   - exact-pi ==0.5.0.1
@@ -788,7 +788,7 @@ default-package-overrides:
   - genvalidity-aeson ==0.2.0.2
   - genvalidity-bytestring ==0.3.0.1
   - genvalidity-containers ==0.5.1.1
-  - genvalidity-hspec ==0.6.2.1
+  - genvalidity-hspec ==0.6.2.2
   - genvalidity-hspec-aeson ==0.3.0.1
   - genvalidity-hspec-binary ==0.2.0.3
   - genvalidity-hspec-cereal ==0.2.0.3
@@ -831,7 +831,7 @@ default-package-overrides:
   - gingersnap ==0.3.1.0
   - gi-pango ==1.0.16
   - giphy-api ==0.6.0.1
-  - githash ==0.1.3.0
+  - githash ==0.1.3.1
   - github-release ==1.2.3
   - github-types ==0.2.1
   - github-webhooks ==0.10.0
@@ -880,7 +880,7 @@ default-package-overrides:
   - hamilton ==0.1.0.3
   - hamtsolo ==1.0.3
   - HandsomeSoup ==0.4.2
-  - hapistrano ==0.3.8.0
+  - hapistrano ==0.3.9.0
   - happy ==1.19.9
   - hashable ==1.2.7.0
   - hashable-time ==0.2.0.2
@@ -889,7 +889,7 @@ default-package-overrides:
   - hashtables ==1.2.3.1
   - haskeline ==0.7.4.3
   - haskell-gi ==0.21.5
-  - haskell-gi-base ==0.21.4
+  - haskell-gi-base ==0.21.5
   - haskell-gi-overloading ==1.0
   - haskell-lexer ==1.0.2
   - haskell-lsp ==0.8.0.1
@@ -923,6 +923,7 @@ default-package-overrides:
   - hedis ==0.10.10
   - here ==1.2.13
   - heredoc ==0.2.0.0
+  - heterocephalus ==1.0.5.3
   - hex ==0.1.2
   - hexml ==0.3.4
   - hexml-lens ==0.2.1
@@ -1075,7 +1076,7 @@ default-package-overrides:
   - hybrid-vectors ==0.2.2
   - hyperloglog ==0.4.2
   - hyphenation ==0.7.1
-  - hyraxAbif ==0.2.3.10
+  - hyraxAbif ==0.2.3.15
   - iconv ==0.4.1.3
   - identicon ==0.2.2
   - ieee754 ==0.8.0
@@ -1094,7 +1095,7 @@ default-package-overrides:
   - indexed-list-literals ==0.2.1.2
   - infer-license ==0.2.0
   - inflections ==0.4.0.4
-  - influxdb ==1.6.1
+  - influxdb ==1.6.1.1
   - ini ==0.3.6
   - inline-c ==0.7.0.1
   - inline-c-cpp ==0.3.0.1
@@ -1203,7 +1204,7 @@ default-package-overrides:
   - lens-labels ==0.3.0.1
   - lens-misc ==0.0.2.0
   - lens-properties ==4.11.1
-  - lens-regex ==0.1.0
+  - lens-regex ==0.1.1
   - lens-simple ==0.1.0.9
   - lens-typelevel ==0.1.1.0
   - lenz ==0.3.0.0
@@ -1275,14 +1276,14 @@ default-package-overrides:
   - mbox ==0.3.4
   - mbox-utility ==0.0.1
   - mbtiles ==0.6.0.0
-  - mbug ==1.3
+  - mbug ==1.3.2
   - mcmc-types ==1.0.3
   - median-stream ==0.7.0.0
   - megaparsec ==7.0.4
   - mega-sdist ==0.3.3.2
   - memory ==0.14.18
   - MemoTrie ==0.6.9
-  - mercury-api ==0.1.0.1
+  - mercury-api ==0.1.0.2
   - merkle-tree ==0.1.1
   - mersenne-random-pure64 ==0.2.2.0
   - metrics ==0.4.1.1
@@ -1611,12 +1612,12 @@ default-package-overrides:
   - protolude ==0.2.3
   - proxied ==0.3
   - psql-helpers ==0.1.0.0
-  - psqueues ==0.2.7.0
+  - psqueues ==0.2.7.1
   - pureMD5 ==2.1.3
   - purescript-bridge ==0.13.0.0
   - pure-zlib ==0.6.4
   - pushbullet-types ==0.4.1.0
-  - pusher-http-haskell ==1.5.1.6
+  - pusher-http-haskell ==1.5.1.7
   - qchas ==1.1.0.1
   - qm-interpolated-string ==0.3.0.0
   - qnap-decrypt ==0.3.3
@@ -1730,7 +1731,7 @@ default-package-overrides:
   - safe-foldable ==0.1.0.0
   - safeio ==0.0.5.0
   - SafeSemaphore ==0.10.1
-  - salak ==0.1.4
+  - salak ==0.1.6
   - saltine ==0.1.0.2
   - salve ==1.0.6
   - sample-frame ==0.0.3
@@ -1745,7 +1746,7 @@ default-package-overrides:
   - scanf ==0.1.0.0
   - scanner ==0.3
   - scientific ==0.3.6.2
-  - scotty ==0.11.2
+  - scotty ==0.11.3
   - scrypt ==0.5.0
   - sdl2 ==2.4.1.0
   - sdl2-gfx ==0.2
@@ -1819,7 +1820,7 @@ default-package-overrides:
   - shikensu ==0.3.11
   - shortcut-links ==0.4.2.1
   - should-not-typecheck ==2.1.0
-  - show-combinators ==0.1.0.0
+  - show-combinators ==0.1.1.0
   - show-prettyprint ==0.2.2
   - siggy-chardust ==1.0.0
   - signal ==0.1.0.4
@@ -1898,7 +1899,7 @@ default-package-overrides:
   - store ==0.5.0.1
   - store-core ==0.4.4
   - Strafunski-StrategyLib ==5.0.1.0
-  - stratosphere ==0.29.0
+  - stratosphere ==0.29.1
   - streaming ==0.2.2.0
   - streaming-attoparsec ==1.0.0
   - streaming-bytestring ==0.1.6
@@ -1920,6 +1921,7 @@ default-package-overrides:
   - string-transform ==1.1.0
   - strive ==5.0.7
   - structs ==0.1.1
+  - stylish-haskell ==0.9.2.1
   - summoner ==1.2.0
   - sum-type-boilerplate ==0.1.1
   - sundown ==0.6
@@ -1980,7 +1982,7 @@ default-package-overrides:
   - temporary-rc ==1.2.0.3
   - temporary-resourcet ==0.1.0.1
   - tensorflow-test ==0.1.0.0
-  - tensors ==0.1.1
+  - tensors ==0.1.2
   - termbox ==0.1.0
   - terminal-size ==0.3.2.1
   - test-framework ==0.8.2.0
@@ -2007,6 +2009,7 @@ default-package-overrides:
   - text-printer ==0.5
   - text-region ==0.3.1.0
   - text-short ==0.1.2
+  - text-show ==3.7.5
   - tfp ==1.0.1.1
   - tf-random ==0.5
   - th-abstraction ==0.2.10.0
@@ -2028,7 +2031,7 @@ default-package-overrides:
   - throttle-io-stream ==0.2.0.1
   - throwable-exceptions ==0.1.0.9
   - th-strict-compat ==0.1.0.1
-  - th-utilities ==0.2.0.1
+  - th-utilities ==0.2.1.0
   - thyme ==0.3.5.5
   - tile ==0.3.0.0
   - time-compat ==0.1.0.3
@@ -2200,7 +2203,7 @@ default-package-overrides:
   - warp-tls-uid ==0.2.0.5
   - wave ==0.1.5
   - wcwidth ==0.0.2
-  - web3 ==0.8.2.1
+  - web3 ==0.8.3.0
   - webdriver ==0.8.5
   - webex-teams-api ==0.2.0.0
   - webex-teams-conduit ==0.2.0.0
@@ -2265,6 +2268,7 @@ default-package-overrides:
   - xml-conduit-writer ==0.1.1.2
   - xmlgen ==0.6.2.2
   - xml-hamlet ==0.5.0
+  - xml-html-qq ==0.1.0.1
   - xml-indexed-cursor ==0.1.1.0
   - xml-isogen ==0.3.0
   - xml-lens ==0.1.6.3
@@ -2277,6 +2281,8 @@ default-package-overrides:
   - xmonad-extras ==0.15.1
   - xss-sanitize ==0.3.6
   - xxhash-ffi ==0.2.0.0
+  - yam ==0.5.6
+  - yam-datasource ==0.5.6
   - yaml ==0.11.0.0
   - yeshql ==4.1.0.1
   - yeshql-core ==4.1.0.2
@@ -2285,7 +2291,7 @@ default-package-overrides:
   - yesod-alerts ==0.1.2.0
   - yesod-auth ==1.6.5
   - yesod-auth-hashdb ==1.7.1
-  - yesod-auth-oauth2 ==0.6.0.0
+  - yesod-auth-oauth2 ==0.6.1.0
   - yesod-bin ==1.6.0.3
   - yesod-core ==1.6.9
   - yesod-csp ==0.2.4.0
@@ -2366,6 +2372,7 @@ extra-packages:
   - inline-c-cpp < 0.2                  # required on GHC 8.0.x
   - lens-labels == 0.1.*                # required for proto-lens-descriptors
   - mainland-pretty == 0.6.2.*          # required for tensorflow-opgen-0.1.0.0
+  - megaparsec < 7.0                    # required for idris <= 1.3.1: https://github.com/idris-lang/Idris-dev/pull/4610
   - mtl < 2.2                           # newer versions require transformers > 0.4.x, which we cannot provide in GHC 7.8.x
   - mtl-prelude < 2                     # required for to build postgrest on mtl 2.1.x platforms
   - network == 2.6.3.1                  # newer versions don't compile with GHC 7.4.x and below
