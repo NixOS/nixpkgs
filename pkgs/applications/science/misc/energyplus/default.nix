@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
 
-  name = "energyplus";
+  pname = "energyplus";
   version = "9.0.1";
 
   src = fetchFromGitHub {
