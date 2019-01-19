@@ -2,7 +2,7 @@
 
 # build-tools
 , bootPkgs
-, autoconf, automake, coreutils, fetchurl, fetchpatch, perl, python3, m4, sphinx
+, autoconf, automake, coreutils, fetchurl, fetchpatch, perl, python3, m4
 
 , libiconv ? null, ncurses
 
@@ -168,7 +168,7 @@ stdenv.mkDerivation (rec {
   strictDeps = true;
 
   nativeBuildInputs = [
-    perl autoconf automake m4 python3 sphinx
+    perl autoconf automake m4 python3
     ghc bootPkgs.alex bootPkgs.happy bootPkgs.hscolour
   ];
 
