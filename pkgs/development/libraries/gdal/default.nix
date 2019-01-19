@@ -51,6 +51,20 @@ stdenv.mkDerivation rec {
       #ifdef swap\
       #undef swap\
       #endif' ogr/ogrsf_frmts/mysql/ogr_mysql.h
+
+    # poppler 0.73.0 support
+    patch -lp2 <${
+      fetchpatch {
+        url = "https://github.com/OSGeo/gdal/commit/29f4dfbcac2de718043f862166cd639ab578b552.diff";
+        sha256 = "0xaxj0nj7j8prw1xrdwqs2in9iwyizqprpaibfbhjmsanyl2lfsx";
+      }
+    } || true
+    patch -p2 <${
+      fetchpatch {
+        url = "https://github.com/OSGeo/gdal/commit/19967e682738977e11e1d0336e0178882c39cad2.diff";
+        sha256 = "0jmdkyzlw0rcv4apcaki6pszcb1dca3lljy06sjh60yh795wlqd6";
+      }
+    }
   '';
 
   # - Unset CC and CXX as they confuse libtool.
