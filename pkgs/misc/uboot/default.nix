@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, fetchpatch, bc, bison, dtc, flex, openssl, python2, swig
+{ stdenv, lib, fetchurl, fetchpatch, bc, bison, dtc, flex, openssl, swig
 , armTrustedFirmwareAllwinner
 , buildPackages
 }:
