@@ -2,20 +2,16 @@
 
 stdenv.mkDerivation rec {
   name = "libaom-${version}";
-  version = "1.0.0";
+  version = "1.0.0-errata1";
 
   src = fetchgit {
     url = "https://aomedia.googlesource.com/aom";
     rev	= "v${version}";
-    sha256 = "07h2vhdiq7c3fqaz44rl4vja3dgryi6n7kwbwbj1rh485ski4j82";
+    sha256 = "090phh4jl9z6m2pwpfpwcjh6iyw0byngb2n112qxkg6a3gsaa62f";
   };
 
   nativeBuildInputs = [
     yasm perl cmake pkgconfig python3
-  ];
-
-  cmakeFlags = [
-    "-DBUILD_SHARED_LIBS=ON"
   ];
 
   preConfigure = ''
