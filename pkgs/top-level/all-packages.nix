@@ -2171,10 +2171,6 @@ in
     brotliSupport = true;
   };
 
-  curl_7_59 = callPackage ../tools/networking/curl/7_59.nix rec {
-    fetchurl = fetchurlBoot;
-  };
-
   curl = callPackage ../tools/networking/curl rec {
     fetchurl = fetchurlBoot;
   };
@@ -22467,7 +22463,6 @@ in
   inherit (callPackages ../tools/package-management/nix {
       storeDir = config.nix.storeDir or "/nix/store";
       stateDir = config.nix.stateDir or "/nix/var";
-      curl = curl_7_59;
       boehmgc = boehmgc.override { enableLargeConfig = true; };
       })
     nix
