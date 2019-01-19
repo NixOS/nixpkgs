@@ -56,13 +56,13 @@ stdenv.mkDerivation rec {
     patch -lp2 <${
       fetchpatch {
         url = "https://github.com/OSGeo/gdal/commit/29f4dfbcac2de718043f862166cd639ab578b552.diff";
-        sha256 = "0xaxj0nj7j8prw1xrdwqs2in9iwyizqprpaibfbhjmsanyl2lfsx";
+        sha256 = "1h2rsjjrgwqfgqzppmzv5jgjs1dbbg8pvfmay0j9y0618qp3r734";
       }
     } || true
     patch -p2 <${
       fetchpatch {
         url = "https://github.com/OSGeo/gdal/commit/19967e682738977e11e1d0336e0178882c39cad2.diff";
-        sha256 = "0jmdkyzlw0rcv4apcaki6pszcb1dca3lljy06sjh60yh795wlqd6";
+        sha256 = "12yqd77226i6xvzgqmxiac5ghdinixh8k2crg1r2gnhc0xlc3arj";
       }
     }
   '';
