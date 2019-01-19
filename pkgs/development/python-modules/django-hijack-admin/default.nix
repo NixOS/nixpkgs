@@ -17,13 +17,21 @@ buildPythonPackage rec {
 
   checkPhase = ''
     runHook preCheck
+
+    # we have to do a little bit of tinkering to convince the tests to run against the installed package, not the
+    # source directory
+    mkdir testbase
+    pushd testbase
+    mv ../runtests.py .
     ${python.interpreter} runtests.py hijack_admin
+    popd
+
     runHook postCheck
   '';
 
   meta = with stdenv.lib; {
     description = "Admin integration for django-hijack";
-    homepage = https://github.com/arteria/django-hijack;
+    homepage = https://github.com/arteria/django-hijack-admin;
     license = licenses.mit;
     maintainers = with maintainers; [ lsix ];
   };
