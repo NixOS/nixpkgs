@@ -62,3 +62,59 @@ postPatchMkspecs() {
 if [ -z "$dontPatchMkspecs" ]; then
     postPhases="${postPhases}${postPhases:+ }postPatchMkspecs"
 fi
+
+_Qt_sortless_uniq() {
+	# `uniq`, but keeps initial order.
+	# This is to remove risks of combinatorial explosion of plugin paths.
+	cat -n | sort -uk2 | sort -nk1 | cut -f2-
+}
+
+_QtGetPluginPaths() {
+	# Lists all plugin paths for current Qt for given buildInputs and propagatedBuildInputs
+	local i
+	local _i
+	local o
+	local inputs
+
+	# FIXME : this causes output path cycles...
+	# I am unsure if it is even needed, though.
+	## Outputs self's plugins paths
+	#for o in $outputs; do
+	#	o="${!o}/@qtPluginPrefix@"
+	#	if [ -e "$o" ]; then
+	#		echo "$o"
+	#	fi
+	#done
+
+	inputs="$(
+		for i in $buildInputs $propagatedBuildInputs; do
+			echo "$i"
+		done | uniq
+	)"
+
+	for i in $inputs; do
+		_i="$i/@qtPluginPrefix@"
+		if [ -e "$_i" ]; then
+			echo "$_i"
+		fi
+		_i="$i/nix-support/qt-plugin-paths"
+		if [ -e "$_i" ]; then
+			cat "$_i"
+		fi
+	done
+}
+
+postAddPluginPaths() {
+	# Dumps all plugins paths to a nix-support file inside all outputs.
+	local o
+
+	for o in $outputs; do
+		o="${!o}/nix-support"
+		mkdir -p "$o"
+		_QtGetPluginPaths | _Qt_sortless_uniq > $o/qt-plugin-paths
+	done
+}
+
+if [ -z "$dontAddPluginPaths" ]; then
+    postPhases="${postPhases}${postPhases:+ }postAddPluginPaths"
+fi

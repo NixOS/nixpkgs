@@ -1,0 +1,32 @@
+diff --git a/src/corelib/kernel/qcoreapplication.cpp b/src/corelib/kernel/qcoreapplication.cpp
+index 5ae3fd62e5..ec3fccfc76 100644
+--- a/src/corelib/kernel/qcoreapplication.cpp
++++ b/src/corelib/kernel/qcoreapplication.cpp
+@@ -2533,6 +2533,27 @@ QStringList QCoreApplication::libraryPaths()
+         QStringList *app_libpaths = new QStringList;
+         coreappdata()->app_libpaths.reset(app_libpaths);
+ 
++		{
++			// Start at the binary; this allows us to *always* start by stripping the last part.
++			QStringList components = applicationFilePath().split(QDir::separator());
++
++			// We don't care about /nix/store/nix-support, only /nix/store/*/nix-support
++			// This is why we're checking for more than 3 parts. It will bail out once /nix/xtore/*/nix-support/qt-plugin-paths has been tested.
++			while (components.length() > 3) {
++				components.removeLast();
++				const QString support_plugin_paths = QDir::cleanPath(QDir::separator() + components.join(QDir::separator()) + QStringLiteral("/nix-support/qt-plugin-paths"));
++				if (QFile::exists(support_plugin_paths)) {
++					QFile file(support_plugin_paths);
++					if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
++						QTextStream in(&file);
++						while (!in.atEnd()) {
++							app_libpaths->append(in.readLine());
++						}
++					}
++				}
++			}
++		}
++
+         // Add library paths derived from PATH
+         const QStringList paths = QFile::decodeName(qgetenv("PATH")).split(':');
+         const QString plugindir = QStringLiteral("../" NIXPKGS_QT_PLUGIN_PREFIX);

@@ -386,7 +386,13 @@ stdenv.mkDerivation {
           sed -i "$dev/lib/pkgconfig/Qt5Core.pc" \
               -e "/^host_bins=/ c host_bins=$dev/bin"
         ''
-    );
+      )
+    + ''
+        # Adds `qtbase-bin` as a basic dependency to *all* qtbase builds.
+        mkdir -p $dev/nix-support
+        echo "$bin/$qtPluginPrefix" >> $dev/nix-support/qt-plugin-paths
+      ''
+   ;
 
   setupHook = ../hooks/qtbase-setup-hook.sh;
 
