@@ -1,4 +1,8 @@
-{ stdenv, fetchurl, ocaml, findlib, pkgconfig, gtk2, libgnomecanvas, libglade, gtksourceview }:
+{ stdenv, fetchurl, ocaml, findlib, pkgconfig, gtk2, gtksourceview
+, gladeSupport ? !stdenv.isDarwin
+, libglade ? null
+, libgnomecanvas ? null
+}:
 
 let param =
   let check = stdenv.lib.versionAtLeast ocaml.version; in
@@ -22,7 +26,8 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ ocaml findlib gtk2 libgnomecanvas libglade gtksourceview ];
+  buildInputs = [ ocaml findlib gtk2 gtksourceview ]
+  ++ stdenv.lib.optionals gladeSupport [ libglade libgnomecanvas ];
 
   configureFlags = [ "--with-libdir=$(out)/lib/ocaml/${ocaml.version}/site-lib" ];
   buildFlags = "world";
