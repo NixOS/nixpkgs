@@ -5,14 +5,6 @@ with lib;
 let
   cfg = config.services.xserver.desktopManager.gnome3;
 
-  # Remove packages of ys from xs, based on their names
-  removePackagesByName = xs: ys:
-    let
-      pkgName = drv: (builtins.parseDrvName drv.name).name;
-      ysNames = map pkgName ys;
-    in
-      filter (x: !(builtins.elem (pkgName x) ysNames)) xs;
-
   # Prioritize nautilus by default when opening directories
   mimeAppsList = pkgs.writeTextFile {
     name = "gnome-mimeapps";
@@ -103,6 +95,7 @@ in {
     services.dleyna-server.enable = mkDefault true;
     services.gnome3.at-spi2-core.enable = true;
     services.gnome3.evolution-data-server.enable = true;
+    services.gnome3.file-roller.enable = mkDefault true;
     services.gnome3.gnome-disks.enable = mkDefault true;
     services.gnome3.gnome-documents.enable = mkDefault true;
     services.gnome3.gnome-keyring.enable = true;
@@ -167,7 +160,7 @@ in {
                                                 "${pkgs.gnome3.glib-networking.out}/lib/gio/modules"
                                                 "${pkgs.gnome3.gvfs}/lib/gio/modules" ];
     environment.systemPackages = pkgs.gnome3.corePackages ++ cfg.sessionPath
-      ++ (removePackagesByName pkgs.gnome3.optionalPackages config.environment.gnome3.excludePackages) ++ [
+      ++ (pkgs.gnome3.removePackagesByName pkgs.gnome3.optionalPackages config.environment.gnome3.excludePackages) ++ [
       pkgs.xdg-user-dirs # Update user dirs as described in http://freedesktop.org/wiki/Software/xdg-user-dirs/
     ];
 

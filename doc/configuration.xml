@@ -180,7 +180,11 @@
      code:
 <programlisting>
 {
-  allowUnfreePredicate = (pkg: builtins.elem (builtins.parseDrvName pkg.name).name [ "flashplayer" "vscode" ]);
+  allowUnfreePredicate = (pkg: builtins.elem
+    (builtins.parseDrvName pkg.name).name [
+      "flashplayer"
+      "vscode"
+    ]);
 }
 </programlisting>
     </para>
@@ -322,7 +326,18 @@
   packageOverrides = pkgs: with pkgs; {
     myPackages = pkgs.buildEnv {
       name = "my-packages";
-      paths = [ aspell bc coreutils gdb ffmpeg nixUnstable emscripten jq nox silver-searcher ];
+      paths = [
+        aspell
+        bc
+        coreutils
+        gdb
+        ffmpeg
+        nixUnstable
+        emscripten
+        jq
+        nox
+        silver-searcher
+      ];
     };
   };
 }
@@ -343,7 +358,18 @@
   packageOverrides = pkgs: with pkgs; {
     myPackages = pkgs.buildEnv {
       name = "my-packages";
-      paths = [ aspell bc coreutils gdb ffmpeg nixUnstable emscripten jq nox silver-searcher ];
+      paths = [
+        aspell
+        bc
+        coreutils
+        gdb
+        ffmpeg
+        nixUnstable
+        emscripten
+        jq
+        nox
+        silver-searcher
+      ];
       pathsToLink = [ "/share" "/bin" ];
     };
   };
@@ -378,7 +404,17 @@
   packageOverrides = pkgs: with pkgs; {
     myPackages = pkgs.buildEnv {
       name = "my-packages";
-      paths = [ aspell bc coreutils ffmpeg nixUnstable emscripten jq nox silver-searcher ];
+      paths = [
+        aspell
+        bc
+        coreutils
+        ffmpeg
+        nixUnstable
+        emscripten
+        jq
+        nox
+        silver-searcher
+      ];
       pathsToLink = [ "/share/man" "/share/doc" "/bin" ];
       extraOutputsToInstall = [ "man" "doc" ];
     };

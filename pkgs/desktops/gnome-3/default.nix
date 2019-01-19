@@ -3,6 +3,22 @@
 lib.makeScope pkgs.newScope (self: with self; {
   updateScript = callPackage ./update.nix { };
 
+  /* Remove packages of packagesToRemove from packages, based on their names
+
+     Type:
+       removePackagesByName :: [package] -> [package] -> [package]
+
+     Example:
+       removePackagesByName [ nautilus file-roller ] [ file-roller totem ]
+       => [ nautilus ]
+  */
+  removePackagesByName = packages: packagesToRemove:
+    let
+      pkgName = drv: (builtins.parseDrvName drv.name).name;
+      namesToRemove = map pkgName packagesToRemove;
+    in
+      lib.filter (x: !(builtins.elem (pkgName x) namesToRemove)) packages;
+
   maintainers = with pkgs.lib.maintainers; [ lethalman jtojnar hedning ];
 
   corePackages = with gnome3; [

@@ -3,13 +3,13 @@
 }:
 stdenv.mkDerivation rec {
   name = "bento4-${version}";
-  version = "1.5.1-627";
+  version = "1.5.1-628";
 
   src = fetchFromGitHub {
     owner = "axiomatic-systems";
     repo = "Bento4";
     rev = "v${version}";
-    sha256 = "1nczv7vqgjryzdn9vkxz93awd7zyj5kwiz8llbb25nnqnqgfq170";
+    sha256 = "1fv0k7f3ifwa0c0x22wblm6i8x9zbc13pg047a9i74n456p0mzp3";
   };
 
   patches = [ ./libap4.patch ];
