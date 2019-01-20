@@ -11,7 +11,11 @@ in stdenv.mkDerivation rec {
   url-version = stdenv.lib.replaceChars ["."] [""] version;
 
   src = fetchurl {
-    url = "http://spinroot.com/spin/Src/spin${url-version}.tar.gz";
+    # The homepage is behind CloudFlare anti-DDoS protection, which blocks cURL.
+    # Dropbox mirror from developers:
+    # https://www.dropbox.com/sh/fgzipzp4wpo3qc1/AADZPqS4aoR-pjNF6OQXRLQHa
+    # (note that this URL doesn't work aross versions and hash should come from official site)
+    url = "https://www.dropbox.com/sh/fgzipzp4wpo3qc1/AABtxFePMJmPxsxSvU5cpxh8a/spin${url-version}.tar.gz?raw=1";
     sha256 = "07b7wk3qyfnp4pgwicqd33l7i1krzyihx0cf9zkv81ywaklf5vll";
   };
 
