@@ -141,6 +141,8 @@ let
 
   lab = callPackage ./lab { };
 
+  overcommit = callPackage ./overcommit { };
+
   pre-commit = callPackage ./pre-commit { };
 
   pass-git-helper = python3Packages.callPackage ./pass-git-helper { };
