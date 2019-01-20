@@ -16986,6 +16986,8 @@ in
 
   fetchmail = callPackage ../applications/misc/fetchmail { };
 
+  fff = callPackage ../applications/misc/fff { };
+
   fig2dev = callPackage ../applications/graphics/fig2dev { };
 
   FIL-plugins = callPackage ../applications/audio/FIL-plugins { };
