@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   name = "intel-vaapi-driver-${version}";
-  inherit (libva) version;
+  version = "2.3.0"; # generally try to match libva version, but not required
 
   src = fetchFromGitHub {
     owner  = "intel";
     repo   = "intel-vaapi-driver";
     rev    = version;
-    sha256 = "15ag4al9h6b8f8sw1zpighyhsmr5qfqp1882q7r3gsh5g4cnj763";
+    sha256 = "0s6cz9grymll96s7n2rpzvb3b566a2n21nfp6b23r926db089kjd";
   };
 
   patchPhase = ''

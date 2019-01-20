@@ -35,11 +35,11 @@
  </para>
  <para>
   NixOS’s default <emphasis>display manager</emphasis> (the program that
-  provides a graphical login prompt and manages the X server) is SLiM. You can
+  provides a graphical login prompt and manages the X server) is LightDM. You can
   select an alternative one by picking one of the following lines:
 <programlisting>
 <xref linkend="opt-services.xserver.displayManager.sddm.enable"/> = true;
-<xref linkend="opt-services.xserver.displayManager.lightdm.enable"/> = true;
+<xref linkend="opt-services.xserver.displayManager.slim.enable"/> = true;
 </programlisting>
  </para>
  <para>

@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, fetchurl, writeScript
+{ stdenv, writeScript, fetchFromGitHub
 , libGL, libX11, libXext, python3, libXrandr, libXrender, libpulseaudio, libXcomposite
 , enableGlfw ? false, glfw }:
 
@@ -22,12 +22,13 @@ let
 in
   stdenv.mkDerivation rec {
     name = "glava-${version}";
-    version = "1.5.5";
+    version = "1.5.8";
 
-    src = fetchgit {
-      url = "https://github.com/wacossusca34/glava.git";
+    src = fetchFromGitHub {
+      owner = "wacossusca34";
+      repo = "glava";
       rev = "v${version}";
-      sha256 = "0mpbgllwz45wkax6pgvnh1pz2q4yvbzq2l8z8kff13wrsdvl8lh0";
+      sha256 = "0mps82qw2mhxx8069jvqz1v8n4x7ybrrjv92ij6cms8xi1y8v0fm";
     };
 
     buildInputs = [

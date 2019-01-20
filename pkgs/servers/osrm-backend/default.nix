@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "osrm-backend-${version}";
-  version = "5.18.0";
+  version = "5.21.0";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner  = "Project-OSRM";
     repo   = "osrm-backend";
-    sha256 = "0ffdw02rgjb4z7xi8fk97c0hl1i7z04csjh3yd18zsb19bk1mkva";
+    sha256 = "18v2lwx5iyn73b5bfh2r898cwps7m9pwym197dl8lg0jy88m129m";
   };
 
   nativeBuildInputs = [ cmake pkgconfig ];

@@ -24,6 +24,7 @@
 , libsndfile
 , libebur128
 , boost
+, dbus
 , fftwFloat
 , calf
 , zita-convolver
@@ -43,14 +44,14 @@ let
     zam-plugins # maximizer
   ];
 in stdenv.mkDerivation rec {
-  name = "pulseeffects-${version}";
-  version = "4.3.9";
+  pname = "pulseeffects";
+  version = "4.4.6";
 
   src = fetchFromGitHub {
     owner = "wwmm";
     repo = "pulseeffects";
     rev = "v${version}";
-    sha256 = "1vir05hy2n0nk0gaqbn680bx53ixcyi2y0hq4grgm73bbb1jzqq6";
+    sha256 = "0zvcj2qliz2rlcz59ag4ljrs78qb7kpyaph16qvi07ij7c5bm333";
   };
 
   nativeBuildInputs = [
@@ -80,6 +81,7 @@ in stdenv.mkDerivation rec {
     libsamplerate
     libsndfile
     boost
+    dbus
     fftwFloat
     zita-convolver
     hicolor-icon-theme
@@ -91,8 +93,6 @@ in stdenv.mkDerivation rec {
   '';
 
   preFixup = ''
-    addToSearchPath GST_PLUGIN_SYSTEM_PATH_1_0 $out/lib/gstreamer-1.0
-
     gappsWrapperArgs+=(
       --set LV2_PATH "${stdenv.lib.makeSearchPath "lib/lv2" lv2Plugins}"
       --set LADSPA_PATH "${stdenv.lib.makeSearchPath "lib/ladspa" ladspaPlugins}"

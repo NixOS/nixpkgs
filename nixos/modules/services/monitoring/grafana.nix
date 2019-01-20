@@ -169,8 +169,9 @@ in {
           Sets the maximum amount of time (in seconds) a connection may be reused.
           For MySQL this setting should be shorter than the `wait_timeout' variable.
         '';
-        default = 14400;
-        type = types.int;
+        default = "unlimited";
+        example = 14400;
+        type = types.either types.int (types.enum [ "unlimited" ]);
       };
     };
 

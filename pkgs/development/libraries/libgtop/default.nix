@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, glib, pkgconfig, perl, gettext, gobjectIntrospection, libtool, gnome3, gtk-doc }:
+{ stdenv, fetchurl, fetchpatch, glib, pkgconfig, perl, gettext, gobject-introspection, libtool, gnome3, gtk-doc }:
 let
   pname = "libgtop";
   version = "2.38.0";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   ];
 
   propagatedBuildInputs = [ glib ];
-  nativeBuildInputs = [ pkgconfig gnome3.gnome-common libtool gtk-doc perl gettext gobjectIntrospection ];
+  nativeBuildInputs = [ pkgconfig gnome3.gnome-common libtool gtk-doc perl gettext gobject-introspection ];
 
   preConfigure = ''
     ./autogen.sh

@@ -158,9 +158,9 @@ in runCommand
   ''
     mkdir -p $out/{bin,share/pixmaps}
 
-    # TODO: Rename preview -> beta (and add -stable suffix?):
     echo -n "$startScript" > $out/bin/${pname}
     chmod +x $out/bin/${pname}
+
     ln -s ${androidStudio}/bin/studio.png $out/share/pixmaps/${drvName}.png
     ln -s ${desktopItem}/share/applications $out/share/applications
   ''

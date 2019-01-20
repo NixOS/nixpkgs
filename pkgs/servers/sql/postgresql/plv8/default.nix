@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   name = "plv8-${version}";
-  version = "2.1.0";
+  version = "2.3.8";
 
   nativeBuildInputs = [ perl ];
   buildInputs = [ v8 postgresql ];
@@ -11,16 +11,20 @@ stdenv.mkDerivation rec {
     owner = "plv8";
     repo = "plv8";
     rev = "v${version}";
-    sha256 = "1sfpxz0zcbinn6822j12lkwgrw9kfacrs83ic968rm489rl9w241";
+    sha256 = "0hrmn1zzzdf52zwldg6axv57p0f3b279l9s8lbpijcv60fqrzx16";
   };
 
+  makeFlags = [ "--makefile=Makefile.shared" ];
+
   preConfigure = ''
-    substituteInPlace Makefile --replace '-lv8_libplatform' '-lv8_libplatform -lv8_libbase'
+    patchShebangs ./generate_upgrade.sh
   '';
+
+  buildPhase = "make -f Makefile.shared all";
 
   installPhase = ''
     mkdir -p $out/bin
-    install -D plv8.so                                         -t $out/lib
+    install -D plv8*.so                                        -t $out/lib
     install -D {plls,plcoffee,plv8}{--${version}.sql,.control} -t $out/share/extension
   '';
 

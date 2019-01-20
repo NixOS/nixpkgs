@@ -1,4 +1,4 @@
-{ config, lib, pkgs, pkgs_i686, ... }:
+{ config, lib, pkgs, ... }:
 
 with lib;
 
@@ -148,7 +148,7 @@ in
       [ "/run/opengl-driver/share" ] ++ optional cfg.driSupport32Bit "/run/opengl-driver-32/share";
 
     hardware.opengl.package = mkDefault (makePackage pkgs);
-    hardware.opengl.package32 = mkDefault (makePackage pkgs_i686);
+    hardware.opengl.package32 = mkDefault (makePackage pkgs.pkgsi686Linux);
 
     boot.extraModulePackages = optional (elem "virtualbox" videoDrivers) kernelPackages.virtualboxGuestAdditions;
   };

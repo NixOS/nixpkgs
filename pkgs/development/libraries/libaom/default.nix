@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, yasm, perl, cmake, pkgconfig, python3Packages }:
+{ stdenv, fetchgit, yasm, perl, cmake, pkgconfig, python3, writeText }:
 
 stdenv.mkDerivation rec {
   name = "libaom-${version}";
@@ -10,8 +10,23 @@ stdenv.mkDerivation rec {
     sha256 = "07h2vhdiq7c3fqaz44rl4vja3dgryi6n7kwbwbj1rh485ski4j82";
   };
 
-  buildInputs = [ perl yasm ];
-  nativeBuildInputs = [ cmake pkgconfig python3Packages.python ];
+  nativeBuildInputs = [
+    yasm perl cmake pkgconfig python3
+  ];
+
+  cmakeFlags = [
+    "-DBUILD_SHARED_LIBS=ON"
+  ];
+
+  preConfigure = ''
+    # build uses `git describe` to set the build version
+    cat > $NIX_BUILD_TOP/git << "EOF"
+    #!${stdenv.shell}
+    echo v${version}
+    EOF
+    chmod +x $NIX_BUILD_TOP/git
+    export PATH=$NIX_BUILD_TOP:$PATH
+  '';
 
   meta = with stdenv.lib; {
     description = "AV1 Bitstream and Decoding Library";

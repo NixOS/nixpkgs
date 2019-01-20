@@ -3,19 +3,22 @@
 
 stdenv.mkDerivation rec {
   name = "goxel-${version}";
-  version = "0.8.1";
+  version = "0.8.2";
 
   src = fetchFromGitHub {
     owner = "guillaumechereau";
     repo = "goxel";
     rev = "v${version}";
-    sha256 = "0g6jkihjmsx6lyfl301qrq26gwvq89sk7xkkba6vrpklfs2jafkb";
+    sha256 = "14rycn6sd3wp90c9ghpif1al3rv1fdgvhmpldmwap0pk790kfxs1";
   };
 
   patches = [ ./disable-imgui_ini.patch ];
 
   nativeBuildInputs = [ scons pkgconfig wrapGAppsHook ];
   buildInputs = [ glfw3 gtk3 libpng12 ];
+  NIX_LDFLAGS = [
+    "-lpthread"
+  ];
 
   buildPhase = ''
     make release

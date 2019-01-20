@@ -14,7 +14,7 @@ meta = with stdenv.lib; {
     GNU Hello is a program that prints "Hello, world!" when you run it.
     It is fully customizable.
   '';
-  homepage = http://www.gnu.org/software/hello/manual/;
+  homepage = https://www.gnu.org/software/hello/manual/;
   license = licenses.gpl3Plus;
   maintainers = [ maintainers.eelco ];
   platforms = platforms.all;
@@ -35,7 +35,7 @@ $ nix-env -qa hello --json
     "hello": {
         "meta": {
             "description": "A program that produces a familiar, friendly greeting",
-            "homepage": "http://www.gnu.org/software/hello/manual/",
+            "homepage": "https://www.gnu.org/software/hello/manual/",
             "license": {
                 "fullName": "GNU General Public License version 3 or later",
                 "shortName": "GPLv3+",
@@ -135,7 +135,7 @@ hello-2.3  A program that produces a familiar, friendly greeting
     <listitem>
      <para>
       The package’s homepage. Example:
-      <literal>http://www.gnu.org/software/hello/manual/</literal>
+      <literal>https://www.gnu.org/software/hello/manual/</literal>
      </para>
     </listitem>
    </varlistentry>
@@ -146,7 +146,7 @@ hello-2.3  A program that produces a familiar, friendly greeting
     <listitem>
      <para>
       The page where a link to the current version can be found. Example:
-      <literal>http://ftp.gnu.org/gnu/hello/</literal>
+      <literal>https://ftp.gnu.org/gnu/hello/</literal>
      </para>
     </listitem>
    </varlistentry>
@@ -247,6 +247,60 @@ meta.platforms = stdenv.lib.platforms.linux;
       Attribute Set <varname>stdenv.lib.platforms</varname> defines
       <link xlink:href="https://github.com/NixOS/nixpkgs/blob/master/lib/systems/doubles.nix">
       various common lists</link> of platforms types.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>
+     <varname>tests</varname>
+    </term>
+    <listitem>
+     <warning>
+      <para>
+       This attribute is special in that it is not actually under the
+       <literal>meta</literal> attribute set but rather under the
+       <literal>passthru</literal> attribute set. This is due to a current
+       limitation of Nix, and will change as soon as Nixpkgs will be able to
+       depend on a new enough version of Nix. See
+       <link xlink:href="https://github.com/NixOS/nix/issues/2532">the relevant
+       issue</link> for more details.
+      </para>
+     </warning>
+     <para>
+      An attribute set with as values tests. A test is a derivation, which
+      builds successfully when the test passes, and fails to build otherwise. A
+      derivation that is a test needs to have <literal>meta.timeout</literal>
+      defined.
+     </para>
+     <para>
+      The NixOS tests are available as <literal>nixosTests</literal> in
+      parameters of derivations. For instance, the OpenSMTPD derivation
+      includes lines similar to:
+<programlisting>
+{ /* ... */, nixosTests }:
+{
+  # ...
+  passthru.tests = {
+    basic-functionality-and-dovecot-integration = nixosTests.opensmtpd;
+  };
+}
+</programlisting>
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>
+     <varname>timeout</varname>
+    </term>
+    <listitem>
+     <para>
+      A timeout (in seconds) for building the derivation. If the derivation
+      takes longer than this time to build, it can fail due to breaking the
+      timeout. However, all computers do not have the same computing power,
+      hence some builders may decide to apply a multiplicative factor to this
+      value. When filling this value in, try to keep it approximately
+      consistent with other values already present in
+      <literal>nixpkgs</literal>.
      </para>
     </listitem>
    </varlistentry>

@@ -16,12 +16,12 @@ let
   src = if stdenv.hostPlatform.system == "x86_64-linux" then
     (if version == "10"    then fetchboot "10" "x86_64" "08085fsxc1qhqiv3yi38w8lrg3vm7s0m2yvnwr1c92v019806yq2"
     else if version == "8" then fetchboot "8"  "x86_64" "18zqx6jhm3lizn9hh6ryyqc9dz3i96pwaz8f6nxfllk70qi5gvks"
-    else throw "No bootstrap for version")
+    else throw "No bootstrap jdk for version ${version}")
   else if stdenv.hostPlatform.system == "i686-linux" then
     (if version == "10"    then fetchboot "10" "i686" "1blb9gyzp8gfyggxvggqgpcgfcyi00ndnnskipwgdm031qva94p7"
     else if version == "8" then fetchboot "8"  "i686" "1yx04xh8bqz7amg12d13rw5vwa008rav59mxjw1b9s6ynkvfgqq9"
     else throw "No bootstrap for version")
-  else throw "No bootstrap for system";
+  else throw "No bootstrap jdk for system ${stdenv.hostPlatform.system}";
 
   bootstrap = runCommand "openjdk-bootstrap" {
     passthru.home = "${bootstrap}/lib/openjdk";
@@ -35,14 +35,6 @@ let
       isELF "$elf" || continue
       patchelf --set-interpreter $(cat "${stdenv.cc}/nix-support/dynamic-linker") "$elf" || true
       patchelf --set-rpath "${stdenv.cc.libc}/lib:${stdenv.cc.cc.lib}/lib:${zlib}/lib:$LIBDIRS" "$elf" || true
-    done
-
-    # Temporarily, while NixOS's OpenJDK bootstrap tarball doesn't have PaX markings:
-    find "$out/bin" -type f -print0 | while IFS= read -r -d "" elf; do
-      isELF "$elf" || continue
-      paxmark m "$elf"
-      # On x86 for heap sizes over 700MB disable SEGMEXEC and PAGEEXEC as well.
-      ${stdenv.lib.optionalString stdenv.isi686 ''paxmark msp "$elf"''}
     done
   '';
 in bootstrap

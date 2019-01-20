@@ -1,9 +1,9 @@
 {stdenv, writeText, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-    name = "hex-registry";
+    pname = "hex-registry";
     rev = "11d7a24e9f53f52490ce255a6248e71128e73aa1";
-    version = "20180712.${rev}";
+    version = "unstable-2018-07-12";
 
     src = fetchFromGitHub {
         inherit rev;

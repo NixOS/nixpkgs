@@ -15,7 +15,7 @@ in stdenv.mkDerivation {
     # add pkgconfig file
     ./2.6.2-add-pkgconfig.patch
 
-    # http://sourceforge.net/tracker/index.php?func=detail&aid=3031828&group_id=13559&atid=313559
+    # https://sourceforge.net/tracker/index.php?func=detail&aid=3031828&group_id=13559&atid=313559
     ./2.6.2-entity.patch
 
     # Use CC, CXX, and LD from environment

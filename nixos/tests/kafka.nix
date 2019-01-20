@@ -1,5 +1,9 @@
-{ system ? builtins.currentSystem }:
-with import ../lib/testing.nix { inherit system; };
+{ system ? builtins.currentSystem,
+  config ? {},
+  pkgs ? import ../.. { inherit system config; }
+}:
+
+with import ../lib/testing.nix { inherit system pkgs; };
 with pkgs.lib;
 
 let
@@ -36,7 +40,7 @@ let
 
         networking.firewall.allowedTCPPorts = [ 9092 ];
         # i686 tests: qemu-system-i386 can simulate max 2047MB RAM (not 2048)
-        virtualisation.memorySize = 2047; 
+        virtualisation.memorySize = 2047;
       };
     };
 
@@ -66,4 +70,6 @@ in with pkgs; {
   kafka_0_11 = makeKafkaTest "kafka_0_11" apacheKafka_0_11;
   kafka_1_0  = makeKafkaTest "kafka_1_0"  apacheKafka_1_0;
   kafka_1_1  = makeKafkaTest "kafka_1_1"  apacheKafka_1_1;
+  kafka_2_0  = makeKafkaTest "kafka_2_0"  apacheKafka_2_0;
+  kafka_2_1  = makeKafkaTest "kafka_2_1"  apacheKafka_2_1;
 }

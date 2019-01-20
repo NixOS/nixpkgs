@@ -4,36 +4,29 @@
 , libxslt, gst_all_1 ? null
 , withPdfReader        ? true
 , withMediaPlayback    ? true
-, withWebEngineDefault ? true
 }:
 
 assert withMediaPlayback -> gst_all_1 != null;
 
 let
-  pdfjs = stdenv.mkDerivation rec {
-    name = "pdfjs-${version}";
+  pdfjs = let
     version = "1.10.100";
-
-    src = fetchzip {
-      url = "https://github.com/mozilla/pdf.js/releases/download/${version}/${name}-dist.zip";
-      sha256 = "04df4cf6i6chnggfjn6m1z9vb89f01a0l9fj5rk21yr9iirq9rkq";
-      stripRoot = false;
-    };
-
-    buildCommand = ''
-      mkdir $out
-      cp -r $src $out
-    '';
+  in
+  fetchzip rec {
+    name = "pdfjs-${version}";
+    url = "https://github.com/mozilla/pdf.js/releases/download/v${version}/${name}-dist.zip";
+    sha256 = "04df4cf6i6chnggfjn6m1z9vb89f01a0l9fj5rk21yr9iirq9rkq";
+    stripRoot = false;
   };
 
 in python3Packages.buildPythonApplication rec {
   pname = "qutebrowser";
-  version = "1.5.1";
+  version = "1.5.2";
 
   # the release tarballs are different from the git checkout!
   src = fetchurl {
     url = "https://github.com/qutebrowser/qutebrowser/releases/download/v${version}/${pname}-${version}.tar.gz";
-    sha256 = "1yn181gscj04ni58swk6cmggn047q29siqwgn66pvxhfdf0ny7fq";
+    sha256 = "0ki19mynq91aih3kxhipnay3jmn56s7p6rilws0gq0k98li6a4my";
   };
 
   # Needs tox
@@ -45,7 +38,7 @@ in python3Packages.buildPythonApplication rec {
   ] ++ lib.optionals withMediaPlayback (with gst_all_1; [
     gst-plugins-base gst-plugins-good
     gst-plugins-bad gst-plugins-ugly gst-libav
-  ]) ++ lib.optional (!withWebEngineDefault) python3Packages.qtwebkit-plugins;
+  ]);
 
   nativeBuildInputs = [
     makeWrapper wrapGAppsHook asciidoc
@@ -94,10 +87,6 @@ in python3Packages.buildPythonApplication rec {
     for i in $scripts; do
       patchPythonScript "$i"
     done
-  '';
-
-  postFixup = lib.optionalString (! withWebEngineDefault) ''
-    wrapProgram $out/bin/qutebrowser --add-flags "--backend webkit"
   '';
 
   meta = with stdenv.lib; {

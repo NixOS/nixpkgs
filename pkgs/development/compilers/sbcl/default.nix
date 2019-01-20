@@ -1,22 +1,37 @@
-{ stdenv, fetchurl, writeText, sbclBootstrap
+{ stdenv, fetchurl, fetchpatch, writeText, sbclBootstrap
 , sbclBootstrapHost ? "${sbclBootstrap}/bin/sbcl --disable-debugger --no-userinit --no-sysinit"
 , threadSupport ? (stdenv.isi686 || stdenv.isx86_64 || "aarch64-linux" == stdenv.hostPlatform.system)
   # Meant for sbcl used for creating binaries portable to non-NixOS via save-lisp-and-die.
   # Note that the created binaries still need `patchelf --set-interpreter ...`
   # to get rid of ${glibc} dependency.
 , purgeNixReferences ? false
+, texinfo
 }:
 
 stdenv.mkDerivation rec {
   name    = "sbcl-${version}";
-  version = "1.4.12";
+  version = "1.4.15";
 
   src = fetchurl {
     url    = "mirror://sourceforge/project/sbcl/sbcl/${version}/${name}-source.tar.bz2";
-    sha256 = "0maa4h5zdykq050hdqk5wd74dhl6k7br3qrhfd4f2387skk8ky7a";
+    sha256 = "0bipl4gsvpcifi6vkqm5636i3219mk1bl99px4xh5l1q2g7knv28";
   };
 
+  buildInputs = [texinfo];
+
+  patches = [
+    # 1.4.15 bug, run-program thread safety, remove for 1.4.16
+    (fetchpatch {
+      url = "https://github.com/sbcl/sbcl/commit/c80672bedb1e4bc16124d0d01d7e37f94dd17a5a.patch";
+      sha256 = "0pjm9yajwij59gdkqhid7sbgmb8z57cz8zrsikxg7yzfgr7sa7hy";
+    })
+  ];
+
   patchPhase = ''
+    for patch in ${toString patches}; do
+      patch -Np1 -i "$patch"
+    done
+
     echo '"${version}.nixos"' > version.lisp-expr
     echo "
     (lambda (features)
@@ -46,11 +61,6 @@ stdenv.mkDerivation rec {
       '/date defaulted-source/i(or (and (= 2208988801 (file-write-date defaulted-source-truename)) (= 2208988801 (file-write-date defaulted-fasl-truename)))'
 
     # Fix the tests
-    sed -e '/deftest pwent/inil' -i contrib/sb-posix/posix-tests.lisp
-    sed -e '/deftest grent/inil' -i contrib/sb-posix/posix-tests.lisp
-    sed -e '/deftest .*ent.non-existing/,+5d' -i contrib/sb-posix/posix-tests.lisp
-    sed -e '/deftest \(pw\|gr\)ent/,+3d' -i contrib/sb-posix/posix-tests.lisp
-
     sed -e '5,$d' -i contrib/sb-bsd-sockets/tests.lisp
     sed -e '5,$d' -i contrib/sb-simple-streams/*test*.lisp
 
@@ -83,6 +93,7 @@ stdenv.mkDerivation rec {
 
   buildPhase = ''
     sh make.sh --prefix=$out --xc-host="${sbclBootstrapHost}"
+    (cd doc/manual ; make info)
   '';
 
   installPhase = ''

@@ -4,13 +4,13 @@
 
 let
   pname = "gnome-usage";
-  version = "3.28.0";
+  version = "3.30.0";
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "0130bwinpkz307nalw6ndi5mk38k5g6jna4gbw2916d54df6a4nq";
+    sha256 = "0f1vccw916az8hzsqmx6f57jvl68s3sbd3qk4rpwn42ks1v7nmsh";
   };
 
   nativeBuildInputs = [ meson ninja pkgconfig vala gettext libxml2 desktop-file-utils wrapGAppsHook ];

@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, gnome3
-, gtk3, glib, gobjectIntrospection, libarchive
+, gtk3, glib, gobject-introspection, libarchive
 }:
 
 stdenv.mkDerivation rec {
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ gtk3 glib ];
-  propagatedBuildInputs = [ libarchive gobjectIntrospection ];
+  propagatedBuildInputs = [ libarchive gobject-introspection ];
 
   meta = with stdenv.lib; {
     platforms = platforms.linux;

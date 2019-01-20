@@ -15,6 +15,16 @@ buildPythonPackage rec {
 
   checkInputs = [ pytestrunner pytestcov pytest ];
 
+  # pytest 3.9.0 changed behavior of deprecated_call, see release notes
+  postPatch = ''
+    for x in tests/test_api_*py; do
+      substituteInPlace "$x" --replace AssertionError pytest.fail.Exception
+    done
+  '';
+
+  # https://github.com/jpadilla/pyjwt/issues/382
+  doCheck = false;
+
   meta = with lib; {
     description = "JSON Web Token implementation in Python";
     homepage = https://github.com/jpadilla/pyjwt;

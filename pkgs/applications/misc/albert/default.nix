@@ -1,24 +1,22 @@
 { mkDerivation, lib, fetchFromGitHub, makeWrapper, qtbase,
-  qtdeclarative, qtsvg, qtx11extras, muparser, cmake, python3 }:
+  qtdeclarative, qtsvg, qtx11extras, muparser, cmake, python3,
+  qtcharts }:
 
-let
-  pname = "albert";
-  version = "0.14.21";
-in
 mkDerivation rec {
-  name = "${pname}-${version}";
+  pname = "albert";
+  version = "0.15.0";
 
   src = fetchFromGitHub {
     owner  = "albertlauncher";
     repo   = "albert";
     rev    = "v${version}";
-    sha256 = "16nk9krn1mwr0bh57viig9hizqyp3slna0qg7s5a736nsfxy226w";
+    sha256 = "063z9yq6bsxcsqsw1n93ks5dzhzv6i252mjz1d5mxhxvgmqlfk0v";
     fetchSubmodules = true;
   };
 
   nativeBuildInputs = [ cmake makeWrapper ];
 
-  buildInputs = [ qtbase qtdeclarative qtsvg qtx11extras muparser python3 ];
+  buildInputs = [ qtbase qtdeclarative qtsvg qtx11extras muparser python3 qtcharts ];
 
   enableParallelBuilding = true;
 
@@ -48,7 +46,7 @@ mkDerivation rec {
     homepage    = https://albertlauncher.github.io/;
     description = "Desktop agnostic launcher";
     license     = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ericsagnes ];
+    maintainers = with maintainers; [ ericsagnes synthetica ];
     platforms   = platforms.linux;
   };
 }

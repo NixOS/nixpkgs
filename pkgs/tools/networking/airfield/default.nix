@@ -49,7 +49,7 @@ in stdenv.mkDerivation {
   installPhase = ''
     mkdir -p $out/bin
     cat >$out/bin/airfield <<EOF
-      #!${stdenv.shell}/bin/sh
+      #!${stdenv.shell}
       ${nodejs}/bin/node ${src}/airfield.js
     EOF
   '';

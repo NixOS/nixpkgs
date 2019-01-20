@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "pyramid_jinja2";
-  version = "2.5";
+  version = "2.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "93c86e3103b454301f4d66640191aba047f2ab85ba75647aa18667b7448396bd";
+    sha256 = "5c21081f65a5bec0b76957990c2b89ed41f4fd11257121387110cb722fd0e5eb";
   };
 
   buildInputs = [ webtest ];

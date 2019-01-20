@@ -1,11 +1,11 @@
 { stdenv, buildPackages, fetchurl, fetchpatch, pkgconfig, libuuid, gettext, texinfo, perl }:
 
 stdenv.mkDerivation rec {
-  name = "e2fsprogs-1.44.4";
+  name = "e2fsprogs-1.44.5";
 
   src = fetchurl {
     url = "mirror://sourceforge/e2fsprogs/${name}.tar.gz";
-    sha256 = "1cnwfmv9r7s73xhgghqspjq593pc4qghh80wjd0kjdgwy247cw6x";
+    sha256 = "1k6iwv2bz2a8mcd1gg9kb5jpry7pil5v2h2f9apxax7g4yp1y89f";
   };
 
   outputs = [ "bin" "dev" "out" "man" "info" ];
@@ -18,8 +18,8 @@ stdenv.mkDerivation rec {
   patches = if stdenv.hostPlatform.libc == "glibc" then null
     else [
       (fetchpatch {
-      url = "https://raw.githubusercontent.com/void-linux/void-packages/1f3b51493031cc0309009804475e3db572fc89ad/srcpkgs/e2fsprogs/patches/fix-glibcism.patch";
-      sha256 = "1q7y8nhsfwl9r1q7nhrlikazxxj97p93kgz5wh7723cshlji2vaa";
+      url = "https://raw.githubusercontent.com/void-linux/void-packages/9583597eb3e6e6b33f61dbc615d511ce030bc443/srcpkgs/e2fsprogs/patches/fix-glibcism.patch";
+      sha256 = "1fyml1iwrs412xn2w36ra28am3sq4klrrj60lnf7rysyw069nxk3";
       extraPrefix = "";
       })
     ];

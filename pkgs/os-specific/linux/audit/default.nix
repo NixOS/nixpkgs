@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
   '';
   meta = {
     description = "Audit Library";
-    homepage = http://people.redhat.com/sgrubb/audit/;
+    homepage = https://people.redhat.com/sgrubb/audit/;
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.linux;
     maintainers = with stdenv.lib.maintainers; [ fuuzetsu ];

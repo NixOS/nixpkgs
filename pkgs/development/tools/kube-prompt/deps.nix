@@ -14,8 +14,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/c-bata/go-prompt";
-      rev =  "c52492ff1b386e5c0ba5271b5eaad165fab09eca";
-      sha256 = "14k8anchf0rcpxfbb2acrajdqrfspscbkn47m4py1zh5rkk6b9p9";
+      rev =  "09daf6ae57865e436aab9ede6b66b490036e87de";
+      sha256 = "1s58y0i67x2yvi3iisdhj2qqrbl4kz0viy06caip8ykhxpvvkq30";
     };
   }
   {

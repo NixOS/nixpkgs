@@ -1,13 +1,14 @@
-{ stdenv, fetchgit, cmake, pkgconfig, libusb, fftwSinglePrec }:
+{ stdenv, fetchFromGitHub, cmake, pkgconfig, libusb, fftwSinglePrec }:
 
 stdenv.mkDerivation rec {
   name = "hackrf-${version}";
-  version = "2017.02.1";
+  version = "2018.01.1";
 
-  src = fetchgit {
-    url = "git://github.com/mossmann/hackrf";
-    rev = "refs/tags/v${version}";
-    sha256 = "16hd61icvzaciv7s9jpgm9c8q6m4mwvj97gxrb20sc65p5gjb7hv";
+  src = fetchFromGitHub {
+    owner = "mossmann";
+    repo = "hackrf";
+    rev = "v${version}";
+    sha256 = "0idh983xh6gndk9kdgx5nzz76x3mxb42b02c5xvdqahadsfx3b9w";
   };
 
   nativeBuildInputs = [ pkgconfig ];

@@ -15,6 +15,7 @@ in
   binutils-unwrapped = callPackage ../os-specific/darwin/binutils {
     inherit (darwin) cctools;
     inherit (pkgs) binutils-unwrapped;
+    inherit (pkgs.llvmPackages_5) llvm;
   };
 
   binutils = pkgs.wrapBintoolsWith {
@@ -66,7 +67,7 @@ in
 
   stubs = callPackages ../os-specific/darwin/stubs { };
 
-  trash = callPackage ../os-specific/darwin/trash { inherit (darwin.apple_sdk) frameworks; };
+  trash = darwin.callPackage ../os-specific/darwin/trash { };
 
   usr-include = callPackage ../os-specific/darwin/usr-include { };
 

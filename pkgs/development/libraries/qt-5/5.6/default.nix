@@ -46,13 +46,12 @@ let
   srcs = import ./srcs.nix { inherit fetchurl; inherit mirror; };
 
   patches = {
-    qtbase = [ ./qtbase.patch ];
+    qtbase = [ ./qtbase.patch ./qtbase-fixguicmake.patch ];
     qtdeclarative = [ ./qtdeclarative.patch ];
     qtscript = [ ./qtscript.patch ];
     qtserialport = [ ./qtserialport.patch ];
     qttools = [ ./qttools.patch ];
-    qtwebengine = [ ./qtwebengine-seccomp.patch ]
-      ++ optional stdenv.needsPax ./qtwebengine-paxmark-mksnapshot.patch;
+    qtwebengine = [ ./qtwebengine-seccomp.patch ];
     qtwebkit = [ ./qtwebkit.patch ];
   };
 

@@ -1,19 +1,19 @@
 { fetchurl, stdenv, pkgconfig, intltool, libxml2
 , glib, gtk3, pango, atk, gdk_pixbuf, shared-mime-info, itstool, gnome3
 , poppler, ghostscriptX, djvulibre, libspectre, libarchive, libsecret, wrapGAppsHook
-, librsvg, gobjectIntrospection, yelp-tools
+, librsvg, gobject-introspection, yelp-tools, gspell
 , recentListSize ? null # 5 is not enough, allow passing a different number
 , supportXPS ? false    # Open XML Paper Specification via libgxps
-, autoreconfHook
+, autoreconfHook, pruneLibtoolFiles
 }:
 
 stdenv.mkDerivation rec {
   name = "evince-${version}";
-  version = "3.28.2";
+  version = "3.30.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/evince/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "1qbk1x2c7iacmmfwjzh136v2sdacrkqn9d6bnqid7xn9hlnx4m89";
+    sha256 = "0k7jln6dpg4bpv61niicjzkzyq6fhb3yfld7pc8ck71c8pmvsnx9";
   };
 
   passthru = {
@@ -21,14 +21,14 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    pkgconfig gobjectIntrospection intltool itstool wrapGAppsHook yelp-tools autoreconfHook
+    pkgconfig gobject-introspection intltool itstool wrapGAppsHook yelp-tools autoreconfHook pruneLibtoolFiles
   ];
 
   buildInputs = [
     glib gtk3 pango atk gdk_pixbuf libxml2
     gnome3.gsettings-desktop-schemas
     poppler ghostscriptX djvulibre libspectre libarchive
-    libsecret librsvg gnome3.adwaita-icon-theme
+    libsecret librsvg gnome3.adwaita-icon-theme gspell
   ] ++ stdenv.lib.optional supportXPS gnome3.libgxps;
 
   configureFlags = [

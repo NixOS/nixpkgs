@@ -4,13 +4,13 @@
 
 let
   pname = "gnome-calendar";
-  version = "3.28.2";
+  version = "3.30.1";
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "0x6wxngf8fkwgbl6x7rzp0srrb43rm55klpb2vfjk2hahpbjvxyw";
+    sha256 = "1avi7a29y8d8kzwslp51nwy6s692alms7917454j0xpfc6hnw62s";
   };
 
   passthru = {
@@ -27,8 +27,8 @@ in stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    chmod +x meson_post_install.py # patchShebangs requires executable file
-    patchShebangs meson_post_install.py
+    chmod +x build-aux/meson/meson_post_install.py # patchShebangs requires executable file
+    patchShebangs build-aux/meson/meson_post_install.py
   '';
 
   meta = with stdenv.lib; {

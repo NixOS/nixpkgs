@@ -10,7 +10,6 @@ let
       hostBridge = "br0";
       config = {
         networking.firewall.enable = false;
-        networking.firewall.allowPing = true;
         networking.interfaces.eth0.ipv4.addresses = [
           { address = "192.168.1.122"; prefixLength = 24; }
         ];

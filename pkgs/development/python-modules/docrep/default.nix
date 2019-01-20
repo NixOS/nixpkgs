@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "docrep";
-  version = "0.2.3";
+  version = "0.2.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7d195b6dfcf4efe5cb65402b6c6f6d7e6db77ce255887fae32c9a8288a022659";
+    sha256 = "a67c34d3a44892d3e2a0af0ac55c02b949a37ced9d55c0d7ade76362ba6692d7";
   };
 
   checkInputs = [ pytest ];

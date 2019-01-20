@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   installPhase = let
 
     execWrapper = ''
-      #!/bin/sh
+      #!${stdenv.shell}
       exec ${jre}/bin/java -jar $out/share/java/swingsane/swingsane-${version}.jar "$@"
     '';
 

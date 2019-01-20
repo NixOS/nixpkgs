@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "kaptan";
-  version = "0.5.8";
+  version = "0.5.11";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1b8r86yyvdvyxd6f10mhkl6cr2jhxm80jjqr4zch96w9hs9rh5vq";
+    sha256 = "8403d6e48200c3f49cb6d6b3dcb5898aa5ab9d820831655bf9a2403e00cd4207";
   };
 
   propagatedBuildInputs = [ pyyaml ];

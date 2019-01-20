@@ -1,36 +1,41 @@
-{ stdenv, fetchpatch, fetchgit, autoconf, automake, gettext, libtool, readline, utillinux }:
+{ stdenv, buildPackages, fetchpatch, fetchgit, autoconf, automake, gettext, libtool, pkgconfig
+, icu, libuuid, readline
+}:
 
 let
   gentooPatch = name: sha256: fetchpatch {
-    url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/sys-fs/xfsprogs/files/${name}?id=f4055adc94e11d182033a71e32f97b357c034aff";
+    url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/sys-fs/xfsprogs/files/${name}?id=2517dd766cf84d251631f4324f7ec4bce912abb9";
     inherit sha256;
   };
 in
 
 stdenv.mkDerivation rec {
   name = "xfsprogs-${version}";
-  version = "4.14.0";
+  version = "4.19.0";
 
   src = fetchgit {
     url = "https://git.kernel.org/pub/scm/fs/xfs/xfsprogs-dev.git";
     rev = "v${version}";
-    sha256 = "19mg3avm188xz215hqbbh7251q27qwm7g1xr8ffrjwvzmdq55rxj";
+    sha256 = "18728hzfxr1bg4bdzqlxjs893ac1zwlfr7nmc2q4a1sxs0sphd1d";
   };
 
   outputs = [ "bin" "dev" "out" "doc" ];
 
-  nativeBuildInputs = [ autoconf automake libtool gettext ];
-  propagatedBuildInputs = [ utillinux ]; # Dev headers include <uuid/uuid.h>
-  buildInputs = [ readline ];
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
+  nativeBuildInputs = [
+    autoconf automake libtool gettext pkgconfig
+    libuuid # codegen tool uses libuuid
+  ];
+  buildInputs = [ readline icu ];
+  propagatedBuildInputs = [ libuuid ]; # Dev headers include <uuid/uuid.h>
 
   enableParallelBuilding = true;
 
   # Why is all this garbage needed? Why? Why?
   patches = [
-    (gentooPatch "xfsprogs-4.12.0-sharedlibs.patch" "1i081749x91jvlrw84l4a3r081vqcvn6myqhnqbnfcfhd64h12bq")
-    (gentooPatch "xfsprogs-4.7.0-libxcmd-link.patch" "1lvy1ajzml39a631a7jqficnzsd40bzkca7hkxv1ybiqyp8sf55s")
+    (gentooPatch "xfsprogs-4.15.0-sharedlibs.patch" "0bv2naxpiw7vcsg8p1v2i47wgfda91z1xy1kfwydbp4wmb4nbyyv")
+    (gentooPatch "xfsprogs-4.15.0-docdir.patch" "1srgdidvq2ka0rmfdwpqp92fapgh53w1h7rajm4nnby5vp2v8dfr")
     (gentooPatch "xfsprogs-4.9.0-underlinking.patch" "1r7l8jphspy14i43zbfnjrnyrdm4cpgyfchblascxylmans0gci7")
-    ./glibc-2.27.patch
   ];
 
   preConfigure = ''

@@ -4,18 +4,18 @@
 
 buildPythonPackage rec {
   pname = "gplaycli";
-  version = "3.21";
+  version = "3.25";
 
   src = fetchFromGitHub {
     owner = "matlink";
     repo = "gplaycli";
     rev = version;
-    sha256 = "1r5nzi9yzswam0866gypjcvv3f1rw13jwx9s49chp8byxy1dyrs2";
+    sha256 = "1rygx5cg4b1vwpkiaq6jcpbc1ly7cspslv3sy7x8n8ba61ryq6h4";
   };
 
- disabled = !isPy3k;
+  disabled = !isPy3k;
 
- propagatedBuildInputs = [ libffi pyasn1 clint ndg-httpsclient protobuf requests args gpapi pyaxmlparser ];
+  propagatedBuildInputs = [ libffi pyasn1 clint ndg-httpsclient protobuf requests args gpapi pyaxmlparser ];
 
   meta = with stdenv.lib; {
     homepage = https://github.com/matlink/gplaycli;

@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, python, pkgconfig, readline, libxslt
-, docbook_xsl, docbook_xml_dtd_42
+{ stdenv, fetchurl, python2, pkgconfig, readline, libxslt
+, docbook_xsl, docbook_xml_dtd_42, buildPackages
 }:
 
 stdenv.mkDerivation rec {
@@ -10,28 +10,32 @@ stdenv.mkDerivation rec {
     sha256 = "1ibcz466xwk1x6xvzlgzd5va4lyrjzm3rnjak29kkwk7cmhw4gva";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig python2 ];
   buildInputs = [
-    python readline libxslt docbook_xsl docbook_xml_dtd_42
+    readline libxslt docbook_xsl docbook_xml_dtd_42
   ];
 
   preConfigure = ''
-    sed -i 's,#!/usr/bin/env python,#!${python}/bin/python,g' buildtools/bin/waf
+    patchShebangs buildtools/bin/waf
   '';
 
   configureFlags = [
     "--bundled-libraries=NONE"
     "--builtin-libraries=replace"
+  ] ++ stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    "--cross-compile"
+    "--cross-execute=${stdenv.hostPlatform.emulator buildPackages}"
   ];
+  configurePlatforms = [ ];
 
   meta = with stdenv.lib; {
     description = "The trivial database";
-    longDescription =
-      '' TDB is a Trivial Database. In concept, it is very much like GDBM,
-         and BSD's DB except that it allows multiple simultaneous writers and
-         uses locking internally to keep writers from trampling on each
-         other.  TDB is also extremely small.
-      '';
+    longDescription = ''
+      TDB is a Trivial Database. In concept, it is very much like GDBM,
+      and BSD's DB except that it allows multiple simultaneous writers
+      and uses locking internally to keep writers from trampling on each
+      other. TDB is also extremely small.
+    '';
     homepage = https://tdb.samba.org/;
     license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ wkennington ];

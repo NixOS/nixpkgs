@@ -11,13 +11,6 @@ let
       inherit sha256;
     };
 
-    patches = stdenv.lib.optional (version == "1.4.7") [
-      # fix notmuch build, see https://notmuchmail.org/faq/#index12h2
-      # cannot fetchpatch this because base directory differs
-      # TODO: remove on next xapian update
-      ./fix-notmuch-tagging.patch
-    ];
-
     outputs = [ "out" "man" "doc" ];
 
     buildInputs = [ libuuid zlib ];
@@ -43,5 +36,5 @@ let
 in {
   # xapian-ruby needs 1.2.22 as of 2017-05-06
   xapian_1_2_22 = generic "1.2.22" "0zsji22n0s7cdnbgj0kpil05a6bgm5cfv0mvx12d8ydg7z58g6r6";
-  xapian_1_4 = generic "1.4.7" "1lxmlds3v5s1gng9nk1rvmln1zcksrw5ds509y0glylwch5qmw0k";
+  xapian_1_4 = generic "1.4.9" "1k7m7m9jld96k16ansfw2w3c354pvd8ibhnrb6dw012g06fw7sfd";
 }

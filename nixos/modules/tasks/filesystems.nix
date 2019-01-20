@@ -230,6 +230,8 @@ in
       let
         fsToSkipCheck = [ "none" "bindfs" "btrfs" "zfs" "tmpfs" "nfs" "vboxsf" "glusterfs" ];
         skipCheck = fs: fs.noCheck || fs.device == "none" || builtins.elem fs.fsType fsToSkipCheck;
+        # https://wiki.archlinux.org/index.php/fstab#Filepath_spaces
+        escape = string: builtins.replaceStrings [ " " ] [ "\\040" ] string;
       in ''
         # This is a generated file.  Do not edit!
         #
@@ -238,10 +240,10 @@ in
 
         # Filesystems.
         ${concatMapStrings (fs:
-            (if fs.device != null then fs.device
-             else if fs.label != null then "/dev/disk/by-label/${fs.label}"
+            (if fs.device != null then escape fs.device
+             else if fs.label != null then "/dev/disk/by-label/${escape fs.label}"
              else throw "No device specified for mount point ‘${fs.mountPoint}’.")
-            + " " + fs.mountPoint
+            + " " + escape fs.mountPoint
             + " " + fs.fsType
             + " " + builtins.concatStringsSep "," fs.options
             + " 0"

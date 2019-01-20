@@ -1,16 +1,18 @@
-{ stdenv, fetchurl, makeDesktopItem, makeWrapper, autoPatchelfHook
-, xorg, gtk2, gtk3 , gnome2, gnome3, nss, alsaLib, udev, libnotify, xdg_utils }:
+{ alsaLib, autoPatchelfHook, fetchurl, gtk3, libnotify
+, makeDesktopItem, makeWrapper, nss, stdenv, udev, xdg_utils
+, xorg
+}:
 
 with stdenv.lib;
 
 let
   bits = "x86_64";
 
-  version = "4.4.0";
+  version = "4.5.10";
 
   desktopItem = makeDesktopItem rec {
     name = "Wavebox";
-    exec = name;
+    exec = "wavebox";
     icon = "wavebox";
     desktopName = name;
     genericName = name;
@@ -23,7 +25,7 @@ in stdenv.mkDerivation rec {
   name = "wavebox-${version}";
   src = fetchurl {
     url = "https://github.com/wavebox/waveboxapp/releases/download/v${version}/${tarball}";
-    sha256 = "0g77clrxks1ivldq496bg14hv57hm0kjh4g1askxyck69yf8illn";
+    sha256 = "0863x3gyzzbm6qs26j821b4iy596cc2h7ppdj6hq5rgr7c01ac9k";
   };
 
   # don't remove runtime deps
@@ -32,9 +34,9 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoPatchelfHook makeWrapper ];
 
   buildInputs = with xorg; [
-    libXScrnSaver libXtst
+    libXdmcp libXScrnSaver libXtst
   ] ++ [
-    gtk3 nss gtk2 alsaLib gnome2.GConf
+    alsaLib gtk3 nss
   ];
 
   runtimeDependencies = [ udev.lib libnotify ];
@@ -50,7 +52,6 @@ in stdenv.mkDerivation rec {
   '';
 
   postFixup = ''
-    paxmark m $out/opt/wavebox/Wavebox
     makeWrapper $out/opt/wavebox/Wavebox $out/bin/wavebox \
       --prefix PATH : ${xdg_utils}/bin
   '';

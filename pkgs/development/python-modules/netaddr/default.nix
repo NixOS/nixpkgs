@@ -2,7 +2,8 @@
 , buildPythonPackage
 , fetchPypi
 , pytest
-, pkgs
+, fetchpatch
+, glibcLocales
 }:
 
 buildPythonPackage rec {
@@ -15,14 +16,17 @@ buildPythonPackage rec {
   };
 
   LC_ALL = "en_US.UTF-8";
-  buildInputs = [ pkgs.glibcLocales pytest ];
+  checkInputs = [ glibcLocales pytest ];
 
   checkPhase = ''
-    py.test netaddr/tests
+    # fails on python3.7: https://github.com/drkjam/netaddr/issues/182
+    py.test \
+      -k 'not test_ip_splitter_remove_prefix_larger_than_input_range' \
+      netaddr/tests
   '';
 
   patches = [
-    (pkgs.fetchpatch {
+    (fetchpatch {
       url = https://github.com/drkjam/netaddr/commit/2ab73f10be7069c9412e853d2d0caf29bd624012.patch;
       sha256 = "0s1cdn9v5alpviabhcjmzc0m2pnpq9dh2fnnk2x96dnry1pshg39";
     })

@@ -1,14 +1,14 @@
 # based on https://github.com/nim-lang/Nim/blob/v0.18.0/.travis.yml
 
-{ stdenv, lib, fetchurl, makeWrapper, nodejs-slim-8_x, openssl, pcre, readline, sqlite, boehmgc, sfml, tzdata, coreutils }:
+{ stdenv, lib, fetchurl, makeWrapper, nodejs-slim-10_x, openssl, pcre, readline, boehmgc, sfml, tzdata, coreutils }:
 
 stdenv.mkDerivation rec {
   name = "nim-${version}";
-  version = "0.18.0";
+  version = "0.19.0";
 
   src = fetchurl {
     url = "https://nim-lang.org/download/${name}.tar.xz";
-    sha256 = "45c74adb35f08dfa9add1112ae17330e5d902ebb4a36e7046caee8b79e6f3bd0";
+    sha256 = "0biwvw1gividp5lkf0daq1wp9v6ms4xy6dkf5zj0sn9w4m3n76d1";
   };
 
   doCheck = !stdenv.isDarwin;
@@ -19,7 +19,6 @@ stdenv.mkDerivation rec {
     "-lcrypto"
     "-lpcre"
     "-lreadline"
-    "-lsqlite3"
     "-lgc"
   ];
 
@@ -28,12 +27,21 @@ stdenv.mkDerivation rec {
   #    used for bootstrapping, but koch insists on moving the nim compiler around
   #    as part of building it, so it cannot be read-only
 
-  buildInputs = [
-    makeWrapper nodejs-slim-8_x tzdata coreutils
-    openssl pcre readline sqlite boehmgc sfml
+  nativeBuildInputs = [
+    makeWrapper nodejs-slim-10_x tzdata coreutils
   ];
 
+  buildInputs = [
+    openssl pcre readline boehmgc sfml
+  ];
+
+  phases = [ "unpackPhase" "patchPhase" "buildPhase" "installPhase" "checkPhase" ];
+
   buildPhase = ''
+    # use $CC to trigger the linker since calling ld in build.sh causes an error
+    LD=$CC
+    # build.sh wants to write to $HOME/.cache
+    HOME=$TMPDIR
     sh build.sh
     ./bin/nim c koch
     ./koch boot  -d:release \
@@ -51,33 +59,24 @@ stdenv.mkDerivation rec {
       --suffix PATH : ${lib.makeBinPath [ stdenv.cc ]}
   '';
 
-  postPatch =
+  patchPhase =
     let disableTest = ''sed -i '1i discard \"\"\"\n  disabled: true\n\"\"\"\n\n' '';
+        disableStdLibTest = ''sed -i -e '/^when isMainModule/,/^END$/{s/^/#/}' '';
         disableCompile = ''sed -i -e 's/^/#/' '';
     in ''
       substituteInPlace ./tests/async/tioselectors.nim --replace "/bin/sleep" "sleep"
       substituteInPlace ./tests/osproc/tworkingdir.nim --replace "/usr/bin" "${coreutils}/bin"
       substituteInPlace ./tests/stdlib/ttimes.nim --replace "/usr/share/zoneinfo" "${tzdata}/share/zoneinfo"
 
-      # disable supposedly broken tests
-      ${disableTest} ./tests/errmsgs/tproper_stacktrace2.nim
-      ${disableTest} ./tests/vm/trgba.nim
-
       # disable tests requiring network access (not available in the build container)
       ${disableTest} ./tests/stdlib/thttpclient.nim
-      ${disableTest} ./tests/cpp/tasync_cpp.nim
-      ${disableTest} ./tests/niminaction/Chapter7/Tweeter/src/tweeter.nim
-
-      # disable tests requiring un-downloadable dependencies (using nimble, which isn't available in the fetch phase)
-      ${disableCompile} ./tests/manyloc/keineschweine/keineschweine.nim
-      ${disableTest} ./tests/manyloc/keineschweine/keineschweine.nim
-      ${disableCompile} ./tests/manyloc/nake/nakefile.nim
-      ${disableTest} ./tests/manyloc/nake/nakefile.nim
-      ${disableCompile} ./tests/manyloc/named_argument_bug/main.nim
-      ${disableTest} ./tests/manyloc/named_argument_bug/main.nim
+    '' + lib.optionalString stdenv.isAarch64 ''
+      # disable test supposedly broken on aarch64
+      ${disableStdLibTest} ./lib/pure/stats.nim
     '';
 
   checkPhase = ''
+    PATH=$PATH:$out/bin
     ./koch tests
   '';
 

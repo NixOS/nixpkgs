@@ -7,7 +7,7 @@ with lib;
 
 let
 
-  requiredPackages =
+  requiredPackages = map lib.lowPrio
     [ config.nix.package
       pkgs.acl
       pkgs.attr
@@ -19,7 +19,9 @@ let
       pkgs.diffutils
       pkgs.findutils
       pkgs.gawk
-      pkgs.glibc # for ldd, getent
+      pkgs.stdenv.cc.libc
+      pkgs.getent
+      pkgs.getconf
       pkgs.gnugrep
       pkgs.gnupatch
       pkgs.gnused
@@ -133,10 +135,6 @@ in
       # outputs TODO: note that the tools will often not be linked by default
       postBuild =
         ''
-          if [ -x $out/bin/gtk-update-icon-cache -a -f $out/share/icons/hicolor/index.theme ]; then
-              $out/bin/gtk-update-icon-cache $out/share/icons/hicolor
-          fi
-
           if [ -x $out/bin/glib-compile-schemas -a -w $out/share/glib-2.0/schemas ]; then
               $out/bin/glib-compile-schemas $out/share/glib-2.0/schemas
           fi

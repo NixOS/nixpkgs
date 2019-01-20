@@ -22,6 +22,10 @@ stdenv.mkDerivation {
     "SVN_INCLUDE=${subversion.dev}/include/subversion-1"
   ];
 
+  NIX_LDFLAGS = [
+    "-lsvn_fs-1"
+  ];
+
   meta = with stdenv.lib; {
     homepage = https://github.com/svn-all-fast-export/svn2git;
     description = "A fast-import based converter for an svn repo to git repos";

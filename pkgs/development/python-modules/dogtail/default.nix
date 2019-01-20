@@ -5,7 +5,7 @@
 , pyatspi
 , pycairo
 , at-spi2-core
-, gobjectIntrospection
+, gobject-introspection
 , gtk3
 , gsettings-desktop-schemas
 , fetchurl
@@ -32,7 +32,7 @@ buildPythonPackage rec {
     ./nix-support.patch
   ];
 
-  nativeBuildInputs = [ gobjectIntrospection dbus xvfb_run ]; # for setup hooks
+  nativeBuildInputs = [ gobject-introspection dbus xvfb_run ]; # for setup hooks
   propagatedBuildInputs = [ at-spi2-core gtk3 pygobject3 pyatspi pycairo ];
 
   checkPhase = ''

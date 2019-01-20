@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, makeWrapper, which, cmake, perl, perlPackages,
+{ stdenv, lib, fetchFromGitHub, makeWrapper, which, cmake, perl, perlPackages,
   boost, tbb, wxGTK30, pkgconfig, gtk3, fetchurl, gtk2, libGLU,
   glew, eigen, curl, gtest, nlopt, pcre, xorg }:
 let
@@ -33,7 +33,7 @@ let
 in
 stdenv.mkDerivation rec {
   name = "slic3r-prusa-edition-${version}";
-  version = "1.41.1";
+  version = "1.41.2";
 
   enableParallelBuilding = true;
 
@@ -74,7 +74,6 @@ stdenv.mkDerivation rec {
     Moo
     NetDBus
     OpenGL
-    threads
     XMLSAX
   ]);
 
@@ -98,6 +97,10 @@ stdenv.mkDerivation rec {
     # seems to be the easiest way.
     sed -i "s|\''${PERL_VENDORARCH}|$out/lib/slic3r-prusa3d|g" xs/CMakeLists.txt
     sed -i "s|\''${PERL_VENDORLIB}|$out/lib/slic3r-prusa3d|g" xs/CMakeLists.txt
+  '' + lib.optionalString (lib.versionOlder "2.5" nlopt.version) ''
+    # Since version 2.5.0 of nlopt we need to link to libnlopt, as libnlopt_cxx
+    # now seems to be integrated into the main lib.
+    sed -i 's|nlopt_cxx|nlopt|g' xs/src/libnest2d/cmake_modules/FindNLopt.cmake
   '';
 
   postInstall = ''
@@ -114,7 +117,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "prusa3d";
     repo = "Slic3r";
-    sha256 = "0068wwsjwmnxql7653vy3labcyslzf17kr8xdr4lg2jplm022hvy";
+    sha256 = "046ircwc0wr586v7106ys557ypslmyq9p4qgi34ads1d6bgxhlyy";
     rev = "version_${version}";
   };
 

@@ -2,12 +2,12 @@
 
 buildPythonPackage rec {
   pname = "antlr4-python3-runtime";
-  version = "4.7.1";
+  version = "4.7.2";
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1lrzmagawmavyw1n1z0qarvs2jmbnbv0p89dah8g7klj8hnbf9hv";
+    sha256 = "02xm7ccsf51vh4xsnhlg6pvchm1x3ckgv9kwm222w5drizndr30n";
   };
 
   meta = {

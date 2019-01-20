@@ -1,7 +1,6 @@
 # This function provides generic bits to install a Python wheel.
 
 { python
-, bootstrapped-pip
 }:
 
 { buildInputs ? []
@@ -10,7 +9,7 @@
 , ... } @ attrs:
 
 attrs // {
-  buildInputs = buildInputs ++ [ bootstrapped-pip ];
+  buildInputs = buildInputs ++ [ python.pythonForBuild.pkgs.bootstrapped-pip ];
 
   configurePhase = attrs.configurePhase or ''
     runHook preConfigure
@@ -24,7 +23,7 @@ attrs // {
     export PYTHONPATH="$out/${python.sitePackages}:$PYTHONPATH"
 
     pushd dist
-    ${bootstrapped-pip}/bin/pip install *.whl --no-index --prefix=$out --no-cache ${toString installFlags} --build tmpbuild
+    ${python.pythonForBuild.pkgs.bootstrapped-pip}/bin/pip install *.whl --no-index --prefix=$out --no-cache ${toString installFlags} --build tmpbuild
     popd
 
     runHook postInstall

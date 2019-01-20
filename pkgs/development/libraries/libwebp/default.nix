@@ -27,11 +27,11 @@ in
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "libwebp-${version}";
-  version = "1.0.0";
+  version = "1.0.1";
 
   src = fetchurl {
     url = "http://downloads.webmproject.org/releases/webp/${name}.tar.gz";
-    sha256 = "0nr2hd4iv61fphdbx49g96a56jkmdm9n2qss7jpkg1pii11rq9c4";
+    sha256 = "08nr124aqlfpmdawpfizp56x93pvhr0v741fz78s1zyv49a4lx4c";
   };
 
   configureFlags = [

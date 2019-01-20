@@ -11,7 +11,6 @@ import ./make-test.nix ({ pkgs, lib, withFirewall, withConntrackHelpers ? false,
       lib.mkMerge [
         { virtualisation.vlans = [ 2 1 ];
           networking.firewall.enable = withFirewall;
-          networking.firewall.allowPing = true;
           networking.nat.internalIPs = [ "192.168.1.0/24" ];
           networking.nat.externalInterface = "eth1";
         }
@@ -33,7 +32,6 @@ import ./make-test.nix ({ pkgs, lib, withFirewall, withConntrackHelpers ? false,
           { pkgs, nodes, ... }:
           lib.mkMerge [
             { virtualisation.vlans = [ 1 ];
-              networking.firewall.allowPing = true;
               networking.defaultGateway =
                 (pkgs.lib.head nodes.router.config.networking.interfaces.eth2.ipv4.addresses).address;
             }

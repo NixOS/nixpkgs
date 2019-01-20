@@ -18,8 +18,8 @@
 ## optional libraries
 
 , alsaSupport ? stdenv.isLinux, alsaLib
-, pulseaudioSupport ? true, libpulseaudio
-, ffmpegSupport ? true, gstreamer, gst-plugins-base
+, pulseaudioSupport ? stdenv.isLinux, libpulseaudio
+, ffmpegSupport ? true
 , gtk3Support ? true, gtk2, gtk3, wrapGAppsHook
 , gssSupport ? true, kerberos
 
@@ -92,8 +92,8 @@ stdenv.mkDerivation rec {
     dbus dbus-glib pango freetype fontconfig xorg.libXi xorg.libXcursor
     xorg.libX11 xorg.libXrender xorg.libXft xorg.libXt file
     libnotify xorg.pixman yasm libGLU_combined
-    xorg.libXScrnSaver xorg.scrnsaverproto
-    xorg.libXext xorg.xextproto sqlite unzip makeWrapper
+    xorg.libXScrnSaver xorg.xorgproto
+    xorg.libXext sqlite unzip makeWrapper
     libevent libstartup_notification libvpx /* cairo */
     icu libpng jemalloc glib
   ]
@@ -101,7 +101,6 @@ stdenv.mkDerivation rec {
   ++ lib.optional (lib.versionOlder ffversion "61") hunspell
   ++ lib.optional  alsaSupport alsaLib
   ++ lib.optional  pulseaudioSupport libpulseaudio # only headers are needed
-  ++ lib.optionals ffmpegSupport [ gstreamer gst-plugins-base ]
   ++ lib.optional  gtk3Support gtk3
   ++ lib.optional  gssSupport kerberos
   ++ lib.optionals stdenv.isDarwin [ CoreMedia ExceptionHandling Kerberos
@@ -169,6 +168,10 @@ stdenv.mkDerivation rec {
     configureFlagsArray+=("--with-google-api-keyfile=$TMPDIR/ga")
   '' + lib.optionalString (lib.versionOlder ffversion "58") ''
     cd obj-*
+  ''
+  # AS=as in the environment causes build failure https://bugzilla.mozilla.org/show_bug.cgi?id=1497286
+  + lib.optionalString (lib.versionAtLeast ffversion "64") ''
+    unset AS
   '';
 
   configureFlags = [
@@ -190,14 +193,13 @@ stdenv.mkDerivation rec {
     "--disable-necko-wifi" # maybe we want to enable this at some point
     "--disable-updater"
     "--enable-jemalloc"
-    "--disable-maintenance-service"
     "--disable-gconf"
     "--enable-default-toolkit=${default-toolkit}"
   ]
+  ++ lib.optional (lib.versionOlder ffversion "64") "--disable-maintenance-service"
   ++ lib.optional (stdenv.isDarwin && lib.versionAtLeast ffversion "61") "--disable-xcode-checks"
   ++ lib.optional (lib.versionOlder ffversion "61") "--enable-system-hunspell"
-  ++ lib.optionals (lib.versionAtLeast ffversion "56" && !stdenv.hostPlatform.isi686) [
-    # on i686-linux: --with-libclang-path is not available in this configuration
+  ++ lib.optionals (lib.versionAtLeast ffversion "56") [
     "--with-libclang-path=${llvmPackages.libclang}/lib"
     "--with-clang-path=${llvmPackages.clang}/bin/clang"
   ]
@@ -222,7 +224,6 @@ stdenv.mkDerivation rec {
   ++ flag pulseaudioSupport "pulseaudio"
   ++ flag ffmpegSupport "ffmpeg"
   ++ flag gssSupport "negotiateauth"
-  ++ lib.optional (!ffmpegSupport) "--disable-gstreamer"
   ++ flag webrtcSupport "webrtc"
   ++ flag crashreporterSupport "crashreporter"
   ++ lib.optional drmSupport "--enable-eme=widevine"
@@ -262,20 +263,12 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
   doCheck = false; # "--disable-tests" above
 
-  preInstall = ''
-    # The following is needed for startup cache creation on grsecurity kernels.
-    paxmark m dist/bin/xpcshell
-  '';
-
   installPhase = if stdenv.isDarwin then ''
     mkdir -p $out/Applications
     cp -LR dist/Firefox.app $out/Applications
   '' else null;
 
   postInstall = lib.optionalString stdenv.isLinux ''
-    # For grsecurity kernels
-    paxmark m $out/lib/firefox*/{firefox,firefox-bin,plugin-container}
-
     # Remove SDK cruft. FIXME: move to a separate output?
     rm -rf $out/share/idl $out/include $out/lib/firefox-devel-*
 

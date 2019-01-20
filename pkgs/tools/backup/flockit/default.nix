@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     cp ./libflockit.so $out/lib
 
     (cat <<EOI
-    #!/bin/sh
+    #!${stdenv.shell}
     env LD_PRELOAD="$out/lib/libflockit.so" FLOCKIT_FILE_PREFIX=\$1 \''${@:2}
     EOI
     ) > $out/bin/flockit
