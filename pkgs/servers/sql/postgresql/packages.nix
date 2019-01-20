@@ -1,5 +1,12 @@
 self: super: {
 
+    postgis = super.callPackage ./ext/postgis.nix {
+        gdal = self.gdal.override {
+            postgresql = self.postgresql;
+            poppler = self.poppler_0_61;
+        };
+    };
+
     pg_repack = super.callPackage ./ext/pg_repack.nix { };
 
     pg_similarity = super.callPackage ./ext/pg_similarity.nix { };
