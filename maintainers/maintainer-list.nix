@@ -4331,6 +4331,11 @@
     github = "t184256";
     name = "Alexander Sosedkin";
   };
+  tadeokondrak = {
+    email = "me@tadeo.ca";
+    github = "tadeokondrak";
+    name = "Tadeo Kondrak";
+  };
   tadfisher = {
     email = "tadfisher@gmail.com";
     github = "tadfisher";
