@@ -6,8 +6,8 @@ let
       , glibc, zlib, readline, openssl, icu, systemd, libossp_uuid
       , pkgconfig, libxml2, tzdata
 
-      # for extensible postgreql.pkgs
-      , postgresqlPackages, newScope, this
+      # for postgreql.pkgs
+      , this, self, newScope, buildEnv
 
       # source specification
       , version, sha256, psqlSchema
@@ -104,17 +104,20 @@ let
 
     disallowedReferences = [ stdenv.cc ];
 
-    passthru = rec {
+    passthru = {
       inherit readline psqlSchema version;
-      pkgs = lib.mapAttrs (name: value:
-                if builtins.isAttrs value && builtins.hasAttr "override" value
-                  then value.override { postgresql = this; }
-                  else value)
-                postgresqlPackages;
-      callPackage = newScope (pkgs // { postgresql = this; });
-      withPackages = postgresqlPackages.withPackages this (builtins.removeAttrs pkgs [
-        "withPackages" "__unfix__" "extend"
-      ]);
+
+      pkgs = let
+        scope = { postgresql = this; };
+        newSelf = self // scope;
+        newSuper = { callPackage = newScope (scope // this.pkgs); };
+      in import ./packages.nix newSelf newSuper;
+
+      withPackages = postgresqlWithPackages {
+                       inherit makeWrapper buildEnv;
+                       postgresql = this;
+                     }
+                     this.pkgs;
     };
 
     meta = with lib; {
@@ -128,103 +131,68 @@ let
     };
   };
 
+  postgresqlWithPackages = { postgresql, makeWrapper, buildEnv }: pkgs: f: buildEnv {
+    name = "postgresql-and-plugins-${postgresql.version}";
+    paths = f pkgs ++ [
+        postgresql
+        postgresql.lib
+        postgresql.man   # in case user installs this into environment
+    ];
+    buildInputs = [ makeWrapper ];
+
+    # We include /bin to ensure the $out/bin directory is created, which is
+    # needed because we'll be removing the files from that directory in postBuild
+    # below. See #22653
+    pathsToLink = ["/" "/bin"];
+
+    postBuild = ''
+      mkdir -p $out/bin
+      rm $out/bin/{pg_config,postgres,pg_ctl}
+      cp --target-directory=$out/bin ${postgresql}/bin/{postgres,pg_config,pg_ctl}
+      wrapProgram $out/bin/postgres --set NIX_PGLIBDIR $out/lib
+    '';
+  };
+
 in self: super: {
 
-  postgresqlPackages = self.lib.makeExtensible (self_:
-    let this = self // self.postgresqlPackages // {
-      callPackage = self.newScope this;
-    };
-  in {
-    withPackages = postgresql: pkgs: f: self.buildEnv {
-      name = "postgresql-and-plugins-${postgresql.version}";
-      paths = f pkgs ++ [
-          postgresql
-          postgresql.lib
-          postgresql.man   # in case user installs this into environment
-      ];
-      buildInputs = [ self.makeWrapper ];
-
-      # We include /bin to ensure the $out/bin directory is created, which is
-      # needed because we'll be removing the files from that directory in postBuild
-      # below. See #22653
-      pathsToLink = ["/" "/bin"];
-
-      postBuild = ''
-        mkdir -p $out/bin
-        rm $out/bin/{pg_config,postgres,pg_ctl}
-        cp --target-directory=$out/bin ${postgresql}/bin/{postgres,pg_config,pg_ctl}
-        wrapProgram $out/bin/postgres --set NIX_PGLIBDIR $out/lib
-      '';
-    };
-
-    pg_repack = this.callPackage ./pg_repack { };
-
-    pg_similarity = this.callPackage ./pg_similarity { };
-
-    pgroonga = self.callPackage ./pgroonga { };
-
-    plv8 = this.callPackage ./plv8 {
-      v8 = this.callPackage ../../../development/libraries/v8/plv8_6_x.nix {
-        python = this.python2;
-      };
-    };
-
-    jdbc = this.callPackage ./pgjwt { };
-
-    pgjwt = this.callPackage ./pgjwt { };
-
-    cstore_fdw = this.callPackage ./cstore_fdw { };
-
-    pg_hll = this.callPackage ./pg_hll { };
-
-    pg_cron = this.callPackage ./pg_cron { };
-
-    pg_topn = this.callPackage ./topn { };
-
-    pgtap = this.callPackage ./pgtap { };
-
-    psqlodbc = this.callPackage ./psqlodbc { };
-
-    timescaledb = this.callPackage ./timescaledb { };
-
-    tsearch_extras = this.callPackage ./tsearch_extras { };
-  });
-
-  postgresql = self.postgresql_9_6;
-
-  postgresql_9_4 = self.callPackage generic {
+  postgresql_9_4 = super.callPackage generic {
     version = "9.4.20";
     psqlSchema = "9.4";
     sha256 = "0zzqjz5jrn624hzh04drpj6axh30a9k6bgawid6rwk45nbfxicgf";
     this = self.postgresql_9_4;
+    inherit self;
   };
 
-  postgresql_9_5 = self.callPackage generic {
+  postgresql_9_5 = super.callPackage generic {
     version = "9.5.15";
     psqlSchema = "9.5";
     sha256 = "0i2lylgmsmy2g1ixlvl112fryp7jmrd0i2brk8sxb7vzzpg3znnv";
     this = self.postgresql_9_5;
+    inherit self;
   };
 
-  postgresql_9_6 = self.callPackage generic {
+  postgresql_9_6 = super.callPackage generic {
     version = "9.6.11";
     psqlSchema = "9.6";
     sha256 = "0c55akrkzqd6p6a8hr0338wk246hl76r9j16p4zn3s51d7f0l99q";
     this = self.postgresql_9_6;
+    inherit self;
   };
 
-  postgresql_10 = self.callPackage generic {
+  postgresql_10 = super.callPackage generic {
     version = "10.6";
     psqlSchema = "10.0";
     sha256 = "0jv26y3f10svrjxzsgqxg956c86b664azyk2wppzpa5x11pjga38";
     this = self.postgresql_10;
+    inherit self;
   };
 
-  postgresql_11 = self.callPackage generic {
+  postgresql_11 = super.callPackage generic {
     version = "11.1";
     psqlSchema = "11.1";
     sha256 = "026v0sicsh7avzi45waf8shcbhivyxmi7qgn9fd1x0vl520mx0ch";
     this = self.postgresql_11;
+    inherit self;
   };
 
 }
