@@ -1,30 +1,30 @@
 self: super: {
 
-    pg_repack = super.callPackage ./pg_repack { };
+    pg_repack = super.callPackage ./ext/pg_repack.nix { };
 
-    pg_similarity = super.callPackage ./pg_similarity { };
+    pg_similarity = super.callPackage ./ext/pg_similarity.nix { };
 
-    pgroonga = super.callPackage ./pgroonga { };
+    pgroonga = super.callPackage ./ext/pgroonga.nix { };
 
-    plv8 = super.callPackage ./plv8 {
+    plv8 = super.callPackage ./ext/plv8.nix {
         v8 = super.callPackage ../../../development/libraries/v8/plv8_6_x.nix {
             python = self.python2;
         };
     };
 
-    pgjwt = super.callPackage ./pgjwt { };
+    pgjwt = super.callPackage ./ext/pgjwt.nix { };
 
-    cstore_fdw = super.callPackage ./cstore_fdw { };
+    cstore_fdw = super.callPackage ./ext/cstore_fdw.nix { };
 
-    pg_hll = super.callPackage ./pg_hll { };
+    pg_hll = super.callPackage ./ext/pg_hll.nix { };
 
-    pg_cron = super.callPackage ./pg_cron { };
+    pg_cron = super.callPackage ./ext/pg_cron.nix { };
 
-    pg_topn = super.callPackage ./topn { };
+    pg_topn = super.callPackage ./ext/pg_topn.nix { };
 
-    pgtap = super.callPackage ./pgtap { };
+    pgtap = super.callPackage ./ext/pgtap.nix { };
 
-    timescaledb = super.callPackage ./timescaledb { };
+    timescaledb = super.callPackage ./ext/timescaledb.nix { };
 
-    tsearch_extras = super.callPackage ./tsearch_extras { };
+    tsearch_extras = super.callPackage ./ext/tsearch_extras.nix { };
 }
