@@ -30,7 +30,7 @@
 { url = "https://github.com/modelica/ElectricalEnergyStorage.git"; rev = "096db4d2411f02e0e4e07823c09ea05437e778e6"; sha256="0yyl6ydd0mjrfwyciibc1g3zg8yz9gkglmmsv2i4yd3l00sxzm2a"; }
 { url = "https://github.com/christiankral/ElectroMechanicalDrives.git"; rev = "f41991f30765ee94faf1ebb317dd3b1e9b136d25"; sha256="00n1h4mpf06vm6np8xf6blldblwd3vyaa4164ci01fa55piwvksc"; }
 { url = "https://github.com/modelica-3rdparty/ExtendedPetriNets.git"; rev = "2f4eac0651c1ab0ed56b75ec61424e0ef15181d3"; sha256="0mzs0azrprs1qccjy8srv55i42nx1m251nmyix9s6q3z95hqz2pg"; }
-{ url = "https://github.com/modelica-3rdparty/ExternData.git"; rev = "486e62d5b558dc273c63803ace811af2655fd318"; sha256=""; }
+{ url = "https://github.com/modelica-3rdparty/ExternData.git"; rev = "refs/tags/v2.4.0"; sha256="01brz6gdx726fi31nvmyscv3ddaarg096cqx3vvmfikvvwjcj3vs"; }
 { url = "https://github.com/modelica/ExternalMedia.git"; rev = "159518edd538b64e28cd70983a9cc47730323cc4"; sha256="0qjd5fk65bln3s1jhs0cqcv54c22m6x2akbmxj09y4x0lkd1kgqn"; }
 { url = "https://github.com/modelica-3rdparty/ExternalMemoryLib.git"; rev = "6488d5815bda23c665123baa916789e283e16d2c"; sha256="06y1i5w690b3b9x23nzls8y67fl7yd7bn4xl5j0dmyi4qx33aqda"; }
 { url = "https://github.com/kdavies4/FCSys.git"; rev = "cb4b17f34313b9d8f2d4223d5365684b4dc1ab65"; sha256="0qxqjgd74zw8anvlx31w97m8vvn1mcwi7dfwpa29q9sbck8ghn6b"; }
@@ -56,7 +56,7 @@
 { url = "https://github.com/modelica-3rdparty/Modelica-MVEM.git"; rev = "57c7aa394d70bffe6106afb2703b92bc532a05d1"; sha256="1lhlf7gl3ahknp2wd8gdwy43lc9rszd1y3cgz1rlilvssj6s1819"; }
 { url = "https://github.com/modelica-3rdparty/ModelicaADS.git"; rev = "56eb724769bf9296c89fc91ea9274c6b477d76fa"; sha256="0cvbw8q78vj7yf3wznpna300qfz7gy4n3sq2z23qrfnb25f9wya6"; }
 { url = "https://github.com/modelica-deprecated/ModelicaAdditions.git"; rev = "568db43766186826b880f9d4bfafeff25cc2c4ab"; sha256="0k6gwpwm56dhfn6ylrxdb222d0pw6nd1aa4qxd9iissdivy4q169"; }
-{ url = "https://github.com/xogeny/ModelicaBook.git"; rev = "939da035afd1de28c7f27c3aa1312380455a79ba"; sha256=""; }
+{ url = "https://github.com/xogeny/ModelicaBook.git"; rev = "939da035afd1de28c7f27c3aa1312380455a79ba"; sha256="1nycs0yv431m0rlj6s1z49509gmcsapxm3mzd7x795sg109qrhxv"; }
 { url = "https://github.com/modelica-compliance/compliance.git"; rev = "5c13f92f061d2184167538e9c9d8d2efdd1423fa"; sha256="1ywlcddygbl9vwjs5rc1cn7gnimacymrqsqz0h1yayyans0jhmpi"; }
 { url = "https://github.com/modelica-3rdparty/ModelicaDEVS.git"; rev = "a987aa9552fbbe71b2ee2e8c28958f9d213087ae"; sha256="1yvj29cv0q9jz1s0hvymzzhhl9wf602svl7fv0dj40hpg08rsva6"; }
 { url = "https://github.com/modelica-3rdparty/ModelicaDFR.git"; rev = "37a441934d05330cf3d13e9ec551954d27eca84c"; sha256="13rpcs8cl9x15vi655150zmhmg1iaxpzvxrl3rqif46zpl5dhlj2"; }
@@ -105,7 +105,7 @@
 { url = "https://github.com/modelica-3rdparty/buildsyspro.git"; rev = "232d51c4fe28ce79cc12b58167ebaf98c2b74010"; sha256="08s0bjn11053qhxrb4amh765idy0whsbxwz6g9x7g1vb2imz0bwi"; }
 { url = "https://github.com/modelica-3rdparty/ipsl.git"; rev = "e0e3ea079a0398a3b0b094baaa3736350faa525b"; sha256="1w2iah8c5d8n01wmxydjk0rrcxh88g8yjy2zmv403azcccq7byzp"; }
 { url = "https://github.com/modelica-3rdparty/modelica-flight.git"; rev = "f3ae1c3ebe1b33921654a0e0d59d6e65f0bcfe84"; sha256="028qwk80lhspacxzgyn4mb3zqp9lhqgmmjbnz4y9x7h0dwxpa470"; }
-{ url = "https://github.com/modelica-3rdparty/msgpack-modelica.git"; rev = "594179d1625947e7da82e6f92a7cb61c6bb9859f"; sha256=""; }
+{ url = "https://github.com/modelica-3rdparty/msgpack-modelica.git"; rev = "594179d1625947e7da82e6f92a7cb61c6bb9859f"; sha256="0n9lq797aq6h4qnva29nfv1cvw9ib2xb57aff3jwnpzl6ip6gnls"; }
 { url = "https://github.com/modelica-3rdparty/netCDF-DataReader.git"; rev = "d08cc3471e85b4f50b04e2e41b1886825af83eaf"; sha256="1fnay1wy1cwmvaakxaqgsvgm6wq3phdijpmvkrs5icghgwjykc8w"; }
 { url = "https://github.com/joewa/open-bldc-modelica.git"; rev = "58a83b5b36f267613de4676c95163489b1ddc2e7"; sha256="0wf6dn64d2psv9b3xg5227vzpk109r3dqzi4m2wwhrilaxs3v004"; }
 { url = "https://github.com/modelica-3rdparty/openfdm.git"; rev = "382562b4b3a499472017977e52e62b6ac2f88baa"; sha256="1yzj9471fls0i3aij8clbsvw8nq6v4412bcl44xj51ai1qdzq4mh"; }
