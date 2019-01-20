@@ -24,7 +24,7 @@ in
     postPatch = ''
        sed -i "s,/usr/local,$out,g" \
        app/CMakeLists.txt app/app/app.cpp app/app/main.cpp
-       sed -i "s,python-py35,python36," CMakeLists.txt
+       sed -i "s,python3,${python3.executable}," CMakeLists.txt
     '';
 
     buildInputs = [
