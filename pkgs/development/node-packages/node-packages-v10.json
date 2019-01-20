@@ -102,6 +102,7 @@
 , "svgo"
 , "swagger"
 , "tern"
+, "textlint"
 , "three"
 , "tiddlywiki"
 , "triton"
