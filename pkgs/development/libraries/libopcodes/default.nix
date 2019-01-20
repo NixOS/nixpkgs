@@ -1,5 +1,5 @@
 { stdenv, buildPackages
-, autoreconfHook264, bison, binutils-unwrapped
+, autoreconfHook, bison, binutils-unwrapped
 , libiberty, libbfd
 }:
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   '';
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = [ autoreconfHook264 bison ];
+  nativeBuildInputs = [ autoreconfHook bison ];
   buildInputs = [ libiberty ];
   # dis-asm.h includes bfd.h
   propagatedBuildInputs = [ libbfd ];
