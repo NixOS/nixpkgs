@@ -3651,6 +3651,8 @@ in
   kalibrate-hackrf = callPackage ../tools/misc/kalibrate-hackrf { };
 
   kakoune = callPackage ../applications/editors/kakoune { };
+  
+  kak-lsp = callPackage ../tools/misc/kak-lsp { };
 
   kbdd = callPackage ../applications/window-managers/kbdd { };
 
