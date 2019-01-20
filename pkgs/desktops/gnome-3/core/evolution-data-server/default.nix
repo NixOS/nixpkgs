@@ -19,6 +19,7 @@ stdenv.mkDerivation rec {
       src = ./fix-paths.patch;
       inherit tzdata;
     })
+    ./hardcode-gsettings.patch
   ];
 
   nativeBuildInputs = [
@@ -40,6 +41,10 @@ stdenv.mkDerivation rec {
     "-DCMAKE_SKIP_BUILD_RPATH=OFF"
     "-DINCLUDE_INSTALL_DIR=${placeholder "dev"}/include"
   ];
+
+  postPatch = ''
+    substituteInPlace src/libedataserver/e-source-registry.c --subst-var-by ESD_GSETTINGS_PATH $out/share/gsettings-schemas/${name}/glib-2.0/schemas
+  '';
 
 
   passthru = {
