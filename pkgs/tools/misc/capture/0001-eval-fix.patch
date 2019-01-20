@@ -1,0 +1,10 @@
+diff --git a/src/capture.sh b/src/capture.sh
+index a32b018..82d1f15 100755
+--- a/src/capture.sh
++++ b/src/capture.sh
+@@ -103,4 +103,4 @@ capture () {
+ 
+ 
+ # remove this line if you want to source this file instead
+-eval " ${0##*/}" "$@"
++capture "$@"

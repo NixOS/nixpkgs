@@ -18724,6 +18724,10 @@ in
 
   packet = callPackage ../development/tools/packet { };
 
+  pb_cli = callPackage ../tools/misc/pb_cli {};
+
+  capture = callPackage ../tools/misc/capture {};
+
   pbrt = callPackage ../applications/graphics/pbrt { };
 
   pcsxr = callPackage ../misc/emulators/pcsxr {
