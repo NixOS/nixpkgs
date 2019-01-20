@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     boost libpng libX11 libnotify gtk2 doxygen makeWrapper glib minizip alure
   ];
 
-  patches = [ ./revert_58b423e.patch ]; # Allows springLobby to continue using system installed spring until #707 is fixed
+  patches = [ ./revert_58b423e.patch ./fix-certs.patch ]; # Allows springLobby to continue using system installed spring until #707 is fixed
 
   enableParallelBuilding = true;
 
