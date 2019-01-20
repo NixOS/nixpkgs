@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, libGLU_combined, freeglut, libX11, plib, openal, freealut, libXrandr, xproto,
+{ fetchurl, stdenv, libGLU_combined, freeglut, libX11, plib, openal, freealut, libXrandr, xorgproto,
 libXext, libSM, libICE, libXi, libXt, libXrender, libXxf86vm, openscenegraph, expat,
 libpng, zlib, bash, SDL2, enet, libjpeg, cmake, pkgconfig, libvorbis}:
 
@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig cmake ];
 
-  buildInputs = [ libpng libGLU_combined freeglut libX11 plib openal freealut libXrandr xproto
+  buildInputs = [ libpng libGLU_combined freeglut libX11 plib openal freealut libXrandr xorgproto
     libXext libSM libICE libXi libXt libXrender libXxf86vm zlib bash expat
     SDL2 enet libjpeg openscenegraph libvorbis ];
 

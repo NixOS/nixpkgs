@@ -20,7 +20,7 @@
 , jinja2
 , lcalc
 , lrcalc
-, libgap
+, gap
 , linbox
 , m4ri
 , m4rie
@@ -88,7 +88,7 @@ buildPythonPackage rec {
     glpk
     gsl
     lcalc
-    libgap
+    gap
     libmpc
     linbox
     lrcalc

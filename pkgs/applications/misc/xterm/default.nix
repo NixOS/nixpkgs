@@ -3,18 +3,18 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "xterm-341";
+  name = "xterm-342";
 
   src = fetchurl {
     urls = [
      "ftp://ftp.invisible-island.net/xterm/${name}.tgz"
      "https://invisible-mirror.net/archives/xterm/${name}.tgz"
    ];
-    sha256 = "0i6b6gpr5qzbgv3jfl86q8d47bgppxr5gq503ng1ll2x5gx7v833";
+    sha256 = "1y8ldzl4h1872fxvpvi2zwa9y3d34872vfdvfasap79lpn8208l0";
   };
 
   buildInputs =
-    [ xorg.libXaw xorg.xproto xorg.libXt xorg.libXext xorg.libX11 xorg.libSM xorg.libICE
+    [ xorg.libXaw xorg.xorgproto xorg.libXt xorg.libXext xorg.libX11 xorg.libSM xorg.libICE
       ncurses freetype fontconfig pkgconfig xorg.libXft xorg.luit makeWrapper
     ];
 

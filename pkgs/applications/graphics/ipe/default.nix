@@ -3,11 +3,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "ipe-7.2.7";
+  name = "ipe-7.2.9";
 
   src = fetchurl {
     url = "https://dl.bintray.com/otfried/generic/ipe/7.2/${name}-src.tar.gz";
-    sha256 = "08lzqhagvr8l69hxghyw9akf5dixbily7hj2gxhzzrp334k3yvfn";
+    sha256 = "1i0h0q32xvbb0d3y2ff76jxnaw05hjf2z5gzww886z8arxwar1xn";
   };
 
   # changes taken from Gentoo portage
@@ -37,8 +37,6 @@ stdenv.mkDerivation rec {
       wrapProgram "$prog" --prefix PATH : "${texlive}/bin"
     done
   '';
-
-  patches = [ ./xlocale.patch ];
 
   #TODO: make .desktop entry
 

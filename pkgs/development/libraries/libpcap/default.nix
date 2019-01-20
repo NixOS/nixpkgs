@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, flex, bison }:
+{ stdenv, fetchurl, fetchpatch, flex, bison }:
 
 stdenv.mkDerivation rec {
   name = "libpcap-1.9.0";
@@ -27,7 +27,14 @@ stdenv.mkDerivation rec {
     substituteInPlace configure --replace " -arch i386" ""
   '';
 
-  preInstall = ''mkdir -p $out/bin'';
+  patches = [
+    # https://github.com/the-tcpdump-group/libpcap/pull/735
+    (fetchpatch {
+      name = "add-missing-limits-h-include-pr735.patch";
+      url = https://github.com/the-tcpdump-group/libpcap/commit/aafa3512b7b742f5e66a5543e41974cc5e7eebfa.patch;
+      sha256 = "05zb4hx9g24gx07bi02rprk2rn7fdc1ss3249dv5x36qkasnfhvf";
+    })
+  ];
 
   meta = with stdenv.lib; {
     homepage = https://www.tcpdump.org;

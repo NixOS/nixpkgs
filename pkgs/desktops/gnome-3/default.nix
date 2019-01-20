@@ -3,6 +3,22 @@
 lib.makeScope pkgs.newScope (self: with self; {
   updateScript = callPackage ./update.nix { };
 
+  /* Remove packages of packagesToRemove from packages, based on their names
+
+     Type:
+       removePackagesByName :: [package] -> [package] -> [package]
+
+     Example:
+       removePackagesByName [ nautilus file-roller ] [ file-roller totem ]
+       => [ nautilus ]
+  */
+  removePackagesByName = packages: packagesToRemove:
+    let
+      pkgName = drv: (builtins.parseDrvName drv.name).name;
+      namesToRemove = map pkgName packagesToRemove;
+    in
+      lib.filter (x: !(builtins.elem (pkgName x) namesToRemove)) packages;
+
   maintainers = with pkgs.lib.maintainers; [ lethalman jtojnar hedning ];
 
   corePackages = with gnome3; [
@@ -19,7 +35,7 @@ lib.makeScope pkgs.newScope (self: with self; {
   optionalPackages = with gnome3; [ baobab eog epiphany evince
     gucharmap nautilus totem vino yelp gnome-bluetooth
     gnome-calculator gnome-contacts gnome-font-viewer gnome-screenshot
-    gnome-system-log gnome-system-monitor simple-scan
+    gnome-system-monitor simple-scan
     gnome-terminal gnome-user-docs evolution file-roller gedit
     gnome-clocks gnome-music gnome-tweaks gnome-photos
     nautilus-sendto dconf-editor vinagre gnome-weather gnome-logs
@@ -125,8 +141,6 @@ lib.makeScope pkgs.newScope (self: with self; {
   gnome-settings-daemon = callPackage ./core/gnome-settings-daemon { };
 
   gnome-software = callPackage ./core/gnome-software { };
-
-  gnome-system-log = callPackage ./core/gnome-system-log { };
 
   gnome-system-monitor = callPackage ./core/gnome-system-monitor { };
 
@@ -339,6 +353,8 @@ lib.makeScope pkgs.newScope (self: with self; {
   gpaste = callPackage ./misc/gpaste { };
 
   metacity = callPackage ./misc/metacity { };
+
+  nautilus-python = callPackage ./misc/nautilus-python { };
 
   pidgin-im-gnome-shell-extension = callPackage ./misc/pidgin { };
 

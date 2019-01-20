@@ -2,6 +2,8 @@
 , buildPythonPackage
 , fetchPypi
 , isPyPy
+, substituteAll
+, graphvizPkg
 , graphviz
 , mock
 }:
@@ -17,6 +19,13 @@ buildPythonPackage rec {
 
   # Tests fail with PyPy.
   disabled = isPyPy;
+
+  patches = [
+    (substituteAll {
+      src = ./hardcode-graphviz-path.patch;
+      graphviz = graphvizPkg;
+    })
+  ];
 
   propagatedBuildInputs = [ graphviz ];
 

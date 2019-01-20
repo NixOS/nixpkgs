@@ -55,6 +55,8 @@ buildPythonApplication rec {
     pyparsing zxcvbn-python future
     # Optional requirements
     deluge-client
+    # Plugins
+    transmissionrpc
   ] ++ lib.optional (pythonOlder "3.4") pathlib;
 
   meta = with lib; {

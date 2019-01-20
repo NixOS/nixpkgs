@@ -171,7 +171,7 @@ in
         ln -sf ${cfg.home}/{logs,work,temp,server.xml} /run/atlassian-jira
         ln -sf ${cfg.home} /run/atlassian-jira/home
 
-        chown -R ${cfg.user} ${cfg.home}
+        chown ${cfg.user} ${cfg.home}
 
         sed -e 's,port="8080",port="${toString cfg.listenPort}" address="${cfg.listenAddress}",' \
         '' + (lib.optionalString cfg.proxy.enable ''

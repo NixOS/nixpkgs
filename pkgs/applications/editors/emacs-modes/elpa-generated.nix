@@ -163,10 +163,10 @@
       elpaBuild {
         pname = "arbitools";
         ename = "arbitools";
-        version = "0.95";
+        version = "0.97";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/arbitools-0.95.el";
-          sha256 = "1v6i9d35xqag9a8j12n3xjircwzndjwgb84qm7rsgbns60v3ci8y";
+          url = "https://elpa.gnu.org/packages/arbitools-0.97.el";
+          sha256 = "0fx1z4mw3v42xzixsj80xw56pg00bch04galkjbxbqzm25nl4aha";
         };
         packageRequires = [ cl-lib ];
         meta = {
@@ -493,10 +493,10 @@
       elpaBuild {
         pname = "company-ebdb";
         ename = "company-ebdb";
-        version = "1";
+        version = "1.1";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/company-ebdb-1.el";
-          sha256 = "1awriwvjpf9k2r6hzawai5kxz28j40zk9fvpb946kd5yj0hxr9nc";
+          url = "https://elpa.gnu.org/packages/company-ebdb-1.1.el";
+          sha256 = "146qpiigz12zp1823ggxfrx090g0mxs7gz1ba7sa0iq6ibgzwwm9";
         };
         packageRequires = [ company ebdb ];
         meta = {
@@ -775,10 +775,10 @@
       elpaBuild {
         pname = "djvu";
         ename = "djvu";
-        version = "0.5";
+        version = "1.0.1";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/djvu-0.5.el";
-          sha256 = "1wpyv4ismfsz5hfaj75j3h3nni1mnk33czhw3rd45cf32a2zkqsj";
+          url = "https://elpa.gnu.org/packages/djvu-1.0.1.el";
+          sha256 = "1am4cm9csc5df3mbdby7j197j8yxv0x0maf6kfmn2ww1iwcyv8x6";
         };
         packageRequires = [];
         meta = {
@@ -920,10 +920,10 @@
       elpaBuild {
         pname = "el-search";
         ename = "el-search";
-        version = "1.8.7";
+        version = "1.8.8";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/el-search-1.8.7.tar";
-          sha256 = "0jlalcz8hppra2chmppd6b2g5dz8w6yscqylkx28pd7wy6aadx1r";
+          url = "https://elpa.gnu.org/packages/el-search-1.8.8.tar";
+          sha256 = "1yv91vzpxn29rr8rkrihcbf26pafnxj25j7g38rss9qigswjkpnk";
         };
         packageRequires = [ cl-print emacs stream ];
         meta = {
@@ -1267,10 +1267,10 @@
       elpaBuild {
         pname = "gpastel";
         ename = "gpastel";
-        version = "0.3.0";
+        version = "0.5.0";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/gpastel-0.3.0.el";
-          sha256 = "0426y55f7mbfbyjhl2bn0c2cn57jd4d8xvzri2pbqakff8ij470a";
+          url = "https://elpa.gnu.org/packages/gpastel-0.5.0.el";
+          sha256 = "1wky6047071vgyyw2m929nbwg4d9qqp1mjqwk7a5rs8hfr4xqxfw";
         };
         packageRequires = [ emacs ];
         meta = {
@@ -2013,10 +2013,10 @@
       elpaBuild {
         pname = "org";
         ename = "org";
-        version = "9.1.14";
+        version = "9.2";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/org-9.1.14.tar";
-          sha256 = "17vd9hig26rqv90l6y92hc2i0x29g44lsdsp0xd4m53s8r3zdikz";
+          url = "https://elpa.gnu.org/packages/org-9.2.tar";
+          sha256 = "14ydwh2r360fpi6v2g9rgf0zazy2ddq1pcdxvzn73h65glnnclz9";
         };
         packageRequires = [];
         meta = {

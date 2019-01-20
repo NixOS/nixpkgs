@@ -95,8 +95,9 @@
 , libxcbxfixesExtlib ? true # X11 grabbing mouse rendering
 , libxcbshapeExtlib ? true # X11 grabbing shape rendering
 , libXv ? null # Xlib support
+, libXext ? null # Xlib support
 , lzma ? null # xz-utils
-, nvenc ? false, nvidia-video-sdk ? null # NVIDIA NVENC support
+, nvenc ? false, nvidia-video-sdk ? null, nv-codec-headers ? null # NVIDIA NVENC support
 , callPackage # needed for NVENC to access external ffmpeg nvidia headers
 , openal ? null # OpenAL 1.1 capture support
 #, opencl ? null # OpenCL code
@@ -139,7 +140,7 @@
  *  Darwin frameworks
  */
 , Cocoa, CoreAudio, CoreServices, AVFoundation, MediaToolbox
-, VideoDecodeAcceleration, CF
+, VideoDecodeAcceleration, cf-private
 }:
 
 /* Maintainer notes:
@@ -176,8 +177,6 @@
 let
   inherit (stdenv) isCygwin isFreeBSD isLinux;
   inherit (stdenv.lib) optional optionals optionalString enableFeature;
-
-  nv-codec-headers = callPackage ./nv-codec-headers.nix { };
 in
 
 /*
@@ -232,11 +231,11 @@ assert nvenc -> nvidia-video-sdk != null && nonfreeLicensing;
 
 stdenv.mkDerivation rec {
   name = "ffmpeg-full-${version}";
-  version = "4.0.2";
+  version = "4.1";
 
   src = fetchurl {
     url = "https://www.ffmpeg.org/releases/ffmpeg-${version}.tar.xz";
-    sha256 = "15rgzcmdccy4flajs63gkz4n3k24wkkg50r13l1r83lrxg4hqp59";
+    sha256 = "150rrm549fy1x71c9whmyi5knyd9sliwvmcsm438bdgg4v8c93m3";
   };
 
   prePatch = ''
@@ -357,7 +356,7 @@ stdenv.mkDerivation rec {
     (enableFeature (libvorbis != null) "libvorbis")
     (enableFeature (libvpx != null) "libvpx")
     (enableFeature (libwebp != null) "libwebp")
-    (enableFeature (libX11 != null && libXv != null) "xlib")
+    (enableFeature (libX11 != null && libXv != null && libXext != null) "xlib")
     (enableFeature (libxcb != null) "libxcb")
     (enableFeature libxcbshmExtlib "libxcb-shm")
     (enableFeature libxcbxfixesExtlib "libxcb-xfixes")
@@ -410,7 +409,7 @@ stdenv.mkDerivation rec {
     bzip2 celt fontconfig freetype frei0r fribidi game-music-emu gnutls gsm
     libjack2 ladspaH lame libaom libass libbluray libbs2b libcaca libdc1394 libmodplug libmysofa
     libogg libopus libssh libtheora libvdpau libvorbis libvpx libwebp libX11
-    libxcb libXv lzma openal openjpeg libpulseaudio rtmpdump opencore-amr
+    libxcb libXv libXext lzma openal openjpeg libpulseaudio rtmpdump opencore-amr
     samba SDL2 soxr speex vid-stab vo-amrwbenc wavpack x264 x265 xavs xvidcore
     zeromq4 zlib
   ] ++ optional openglExtlib libGLU_combined
@@ -433,7 +432,7 @@ stdenv.mkDerivation rec {
     FILES+=($(ls $out/lib/*.dylib))
     for f in ''${FILES[@]}; do
       if [ ! -h "$f" ]; then
-        install_name_tool -change ${CF}/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation /System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation "$f"
+        install_name_tool -change ${cf-private}/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation /System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation "$f"
       fi
     done
   '';

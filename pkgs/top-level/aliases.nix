@@ -223,6 +223,7 @@ mapAliases ({
   perlXMLParser = perlPackages.XMLParser; # added 2018-10-12
   perlArchiveCpio = perlPackages.ArchiveCpio; # added 2018-10-12
   pgp-tools = signing-party; # added 2017-03-26
+  pg_tmp = ephemeralpg; # added 2018-01-16
   pidgin-with-plugins = pidgin; # added 2016-06
   pidginlatex = pidgin-latex; # added 2018-01-08
   pidginlatexSF = pidgin-latex; # added 2014-11-02
@@ -270,6 +271,7 @@ mapAliases ({
   saneBackends = sane-backends; # added 2016-01-02
   saneBackendsGit = sane-backends-git; # added 2016-01-02
   saneFrontends = sane-frontends; # added 2016-01-02
+  sapic = throw "deprecated 2019-1-19: sapic is bundled with 'tamarin-prover' now";
   scim = sc-im; # added 2016-01-22
   scollector = bosun; # added 2018-04-25
   shared_mime_info = shared-mime-info; # added 2018-02-25
@@ -340,6 +342,7 @@ mapAliases ({
   xlibs = xorg; # added 2015-09
   xpraGtk3 = xpra; # added 2018-09-13
   youtubeDL = youtube-dl;  # added 2014-10-26
+  zdfmediathk = mediathekview; # added 2019-01-19
 
   # TODO(ekleog): add ‘wasm’ alias to ‘ocamlPackages.wasm’ after 19.03
   # branch-off

@@ -113,6 +113,7 @@ jistr/vim-nerdtree-tabs
 jnurmine/zenburn
 jonbri/vim-colorstepper
 joonty/vim-xdebug
+jpalardy/vim-slime
 JuliaEditorSupport/deoplete-julia
 JuliaEditorSupport/julia-vim
 junegunn/fzf.vim
@@ -130,6 +131,7 @@ kana/vim-niceblock
 kana/vim-operator-replace
 kana/vim-operator-user
 kana/vim-tabpagecd
+kassio/neoterm
 kchmck/vim-coffee-script
 KeitaNakamura/neodark.vim
 keith/swift.vim

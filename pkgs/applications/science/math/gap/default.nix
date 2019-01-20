@@ -5,11 +5,60 @@
 , makeWrapper
 , m4
 , gmp
-# don't remove any packages -- results in a ~1.3G size increase
-# see https://github.com/NixOS/nixpkgs/pull/38754 for a discussion
-, keepAllPackages ? true
+# one of
+# - "minimal" (~400M):
+#     Install the bare minimum of packages required by gap to start.
+#     This is likely to break a lot of stuff. Do not expect upstream support with
+#     this configuration.
+# - "standard" (~700M):
+#     Install the "standard packages" which gap autoloads by default. These
+#     packages are effectively considered a part of gap.
+# - "full" (~1.7G):
+#     Install all available packages. This takes a lot of space.
+, packageSet ? "standard"
+# Kept for backwards compatibility. Overrides packageSet to "full".
+, keepAllPackages ? false
 }:
+let
+  # packages absolutely required for gap to start
+  # `*` represents the version where applicable
+  requiredPackages = [
+    "GAPDoc-*"
+    "primgrp-*"
+    "SmallGrp-*"
+    "transgrp"
+  ];
+  # packages autoloaded by default if available
+  autoloadedPackages = [
+    "atlasrep"
+    "autpgrp-*"
+    "alnuth-*"
+    "crisp-*"
+    "ctbllib"
+    "FactInt-*"
+    "fga"
+    "irredsol-*"
+    "laguna-*"
+    "polenta-*"
+    "polycyclic-*"
+    "resclasses-*"
+    "sophus-*"
+    "tomlib-*"
+  ];
+  standardPackages = requiredPackages ++ autoloadedPackages;
+  keepAll = keepAllPackages || (packageSet == "full");
+  packagesToKeep = requiredPackages ++ lib.optionals (packageSet == "standard") autoloadedPackages;
 
+  # Generate bash script that removes all packages from the `pkg` subdirectory
+  # that are not on the whitelist. The whitelist consists of strings expected by
+  # `find`'s `-name`.
+  removeNonWhitelistedPkgs = whitelist: ''
+    find pkg -type d -maxdepth 1 -mindepth 1 \
+  '' + (lib.concatStringsSep "\n" (map (str: "-not -name '${str}' \\") whitelist)) + ''
+    -exec echo "Removing package {}" \; \
+    -exec rm -r '{}' \;
+  '';
+in
 stdenv.mkDerivation rec {
   pname = "gap";
   # https://www.gap-system.org/Releases/
@@ -21,14 +70,8 @@ stdenv.mkDerivation rec {
   };
 
   # remove all non-essential packages (which take up a lot of space)
-  preConfigure = ''
+  preConfigure = lib.optionalString (!keepAll) (removeNonWhitelistedPkgs packagesToKeep) + ''
     patchShebangs .
-  '' + lib.optionalString (!keepAllPackages) ''
-    find pkg -type d -maxdepth 1 -mindepth 1 \
-       -not -name 'GAPDoc-*' \
-       -not -name 'autpgrp*' \
-       -exec echo "Removing package {}" \; \
-       -exec rm -r {} \;
   '';
 
   configureFlags = [ "--with-gmp=system" ];
@@ -107,7 +150,16 @@ stdenv.mkDerivation rec {
     popd
   '';
 
-  installPhase = ''
+  installTargets = [
+    "install-libgap"
+    "install-headers"
+  ];
+
+  # full `make install` is not yet implemented, just for libgap and headers
+  postInstall = ''
+    # Install config.h, which is not currently handled by `make install-headers`
+    cp gen/config.h "$out/include/gap"
+
     mkdir -p "$out/bin" "$out/share/gap/"
 
     mkdir -p "$out/share/gap"
@@ -129,6 +181,7 @@ stdenv.mkDerivation rec {
     [
       raskin
       chrisjefferson
+      timokau
     ];
     platforms = platforms.all;
     # keeping all packages increases the package size considerably, wchich

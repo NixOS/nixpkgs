@@ -112,7 +112,7 @@ stdenv.mkDerivation (rec {
     ++ stdenv.lib.optional stdenv.isDarwin ./backport-dylib-command-size-limit.patch
     ++ stdenv.lib.optional (targetPlatform.isAarch32 || targetPlatform.isAarch64) (fetchpatch {
       url = "https://git.haskell.org/ghc.git/patch/d8495549ba9d194815c2d0eaee6797fc7c00756a";
-      sha256 = "1czx12qcl088vjn7mqxvyja4b2ia2n09c28br8c777fd0xk069pm";
+      sha256 = "1yjcma507c609bcim4rnxq0gaj2dg4d001jklmbpbqpzqzxkn5sz";
     });
 
   postPatch = "patchShebangs .";

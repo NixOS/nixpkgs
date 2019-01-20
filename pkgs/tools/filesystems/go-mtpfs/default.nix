@@ -2,8 +2,8 @@
 
 buildGoPackage rec {
   name = "go-mtpfs-${version}";
-  version = "20150917-${stdenv.lib.strings.substring 0 7 rev}";
-  rev = "bc7c0f716e3b4ed5610069a55fc00828ebba890b";
+  version = "2018-02-09";
+  rev = "d6f8f3c05ce0ed31435057ec342268a0735863bb";
 
   goPackagePath = "github.com/hanwen/go-mtpfs";
 
@@ -13,7 +13,7 @@ buildGoPackage rec {
   src = fetchgit {
     inherit rev;
     url = "https://github.com/hanwen/go-mtpfs";
-    sha256 = "1jcqp9n8fd9psfsnhfj6w97yp0zmyxplsig8pyp2gqzh4lnb5fqm";
+    sha256 = "0a0d5dy92nzp1czh87hx3xfdcpa4jh14j0b64c025ha62s9a4gxk";
   };
 
   goDeps = ./deps.nix;

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libX11, xproto, libXt, libICE, libSM, libXext }:
+{ stdenv, fetchurl, libX11, xorgproto, libXt, libICE, libSM, libXext }:
 
 stdenv.mkDerivation rec {
   name = "xdaliclock-${version}";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   # on aarch64 doesn't find the files to patch and the aarch64 build fails!
   preConfigure = "cd X11";
 
-  buildInputs = [ libX11 xproto libXt libICE libSM libXext ];
+  buildInputs = [ libX11 xorgproto libXt libICE libSM libXext ];
 
   preInstall = ''
     mkdir -vp $out/bin $out/share/man/man1
