@@ -12658,6 +12658,8 @@ in
 
   srm = callPackage ../tools/security/srm { };
 
+  srt = callPackage ../development/libraries/srt { };
+
   srtp = callPackage ../development/libraries/srtp {
     libpcap = if stdenv.isLinux then libpcap else null;
   };
