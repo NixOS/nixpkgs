@@ -1,6 +1,6 @@
 {
-  url = "https://openmodelica.org/git-readonly/OpenModelica.git";
+  url = "https://github.com/OpenModelica/OpenModelica.git";
   fetchSubmodules = true;
-  rev = "8c5d48eb31a638d5220621b20377bfe6f9e9535e";
-  sha256 = "0i5cznkh4wwayjqms14f3phizqm493nrr1yjgs9747nfw7vnwsff";
+  rev = "v1.13.0";
+  sha256 = "00vbhvqm79pndx03g1azdsv12yraxnwa5j4sqy5w35bm448ahzjp";
 }
