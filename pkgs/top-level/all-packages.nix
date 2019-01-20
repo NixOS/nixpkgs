@@ -15715,6 +15715,8 @@ in
 
   nafees = callPackage ../data/fonts/nafees { };
 
+  nordic = callPackage ../data/themes/nordic { };
+
   nordic-polar = callPackage ../data/themes/nordic-polar { };
 
   inherit (callPackages ../data/fonts/noto-fonts {})
@@ -21332,8 +21334,6 @@ in
   gtk-engine-murrine = callPackage ../misc/themes/gtk2/gtk-engine-murrine { };
 
   gnome-themes-extra = gnome3.gnome-themes-extra;
-
-  nordic = callPackage ../misc/themes/nordic { };
 
   numix-gtk-theme = callPackage ../misc/themes/numix { };
 
