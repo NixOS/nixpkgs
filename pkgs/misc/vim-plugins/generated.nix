@@ -158,6 +158,17 @@ let
     };
   };
 
+  bufexplorer = buildVimPluginFrom2Nix {
+    pname = "bufexplorer";
+    version = "2018-12-10";
+    src = fetchFromGitHub {
+      owner = "jlanzarotta";
+      repo = "bufexplorer";
+      rev = "be69e397e502803db7d7f0a0e0491282ab2197a5";
+      sha256 = "0brhbkj34yxyq5gvjkqakq0m9zwa981rv6ksca07qhw3nzpxhlkd";
+    };
+  };
+
   calendar-vim = buildVimPluginFrom2Nix {
     pname = "calendar-vim";
     version = "2018-11-02";
