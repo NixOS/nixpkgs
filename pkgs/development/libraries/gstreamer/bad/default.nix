@@ -9,6 +9,7 @@
 , libwebp, xvidcore, gnutls, mjpegtools
 , libGLU_combined, libintl, libgme
 , openssl, x265, libxml2
+, srt
 }:
 
 assert faacSupport -> faac != null;
@@ -74,6 +75,7 @@ stdenv.mkDerivation rec {
     libwebp xvidcore gnutls libGLU_combined
     libgme openssl x265 libxml2
     libintl
+    srt
   ]
     ++ optional faacSupport faac
     ++ optional stdenv.isLinux wayland
