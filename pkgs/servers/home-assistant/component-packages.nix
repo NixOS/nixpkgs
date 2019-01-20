@@ -21,7 +21,6 @@
     "alarm_control_panel.egardia" = ps: with ps; [  ];
     "alarm_control_panel.elkm1" = ps: with ps; [  ];
     "alarm_control_panel.envisalink" = ps: with ps; [  ];
-    "alarm_control_panel.homekit_controller" = ps: with ps; [  ];
     "alarm_control_panel.homematicip_cloud" = ps: with ps; [  ];
     "alarm_control_panel.ialarm" = ps: with ps; [  ];
     "alarm_control_panel.ifttt" = ps: with ps; [ aiohttp-cors pyfttt ];
@@ -118,7 +117,7 @@
     "binary_sensor.iss" = ps: with ps; [  ];
     "binary_sensor.isy994" = ps: with ps; [  ];
     "binary_sensor.knx" = ps: with ps; [  ];
-    "binary_sensor.konnected" = ps: with ps; [ aiohttp-cors ];
+    "binary_sensor.konnected" = ps: with ps; [ aiohttp-cors netdisco ];
     "binary_sensor.linode" = ps: with ps; [ linode-api ];
     "binary_sensor.lupusec" = ps: with ps; [  ];
     "binary_sensor.maxcube" = ps: with ps; [  ];
@@ -420,10 +419,6 @@
     "emulated_hue" = ps: with ps; [ aiohttp-cors ];
     "emulated_hue.hue_api" = ps: with ps; [  ];
     "emulated_hue.upnp" = ps: with ps; [  ];
-    "emulated_roku" = ps: with ps; [  ];
-    "emulated_roku.binding" = ps: with ps; [  ];
-    "emulated_roku.config_flow" = ps: with ps; [  ];
-    "emulated_roku.const" = ps: with ps; [  ];
     "enocean" = ps: with ps; [  ];
     "envisalink" = ps: with ps; [  ];
     "esphome" = ps: with ps; [  ];
@@ -517,7 +512,6 @@
     "hue.config_flow" = ps: with ps; [  ];
     "hue.const" = ps: with ps; [  ];
     "hue.errors" = ps: with ps; [  ];
-    "hue.light" = ps: with ps; [ aiohue ];
     "hydrawise" = ps: with ps; [  ];
     "idteck_prox" = ps: with ps; [  ];
     "ifttt" = ps: with ps; [ aiohttp-cors pyfttt ];
@@ -556,7 +550,7 @@
     "keyboard_remote" = ps: with ps; [ evdev ];
     "kira" = ps: with ps; [  ];
     "knx" = ps: with ps; [  ];
-    "konnected" = ps: with ps; [ aiohttp-cors ];
+    "konnected" = ps: with ps; [ aiohttp-cors netdisco ];
     "lametric" = ps: with ps; [  ];
     "lcn" = ps: with ps; [  ];
     "lifx" = ps: with ps; [  ];
@@ -584,6 +578,7 @@
     "light.homematic" = ps: with ps; [ pyhomematic ];
     "light.homematicip_cloud" = ps: with ps; [  ];
     "light.homeworks" = ps: with ps; [  ];
+    "light.hue" = ps: with ps; [ aiohue ];
     "light.hyperion" = ps: with ps; [  ];
     "light.iglo" = ps: with ps; [  ];
     "light.ihc" = ps: with ps; [ defusedxml ];
@@ -718,6 +713,7 @@
     "media_player.mpchc" = ps: with ps; [  ];
     "media_player.mpd" = ps: with ps; [ mpd2 ];
     "media_player.nad" = ps: with ps; [  ];
+    "media_player.nadtcp" = ps: with ps; [  ];
     "media_player.onkyo" = ps: with ps; [ onkyo-eiscp ];
     "media_player.openhome" = ps: with ps; [  ];
     "media_player.panasonic_bluray" = ps: with ps; [  ];
@@ -1294,7 +1290,7 @@
     "switch.isy994" = ps: with ps; [  ];
     "switch.kankun" = ps: with ps; [  ];
     "switch.knx" = ps: with ps; [  ];
-    "switch.konnected" = ps: with ps; [ aiohttp-cors ];
+    "switch.konnected" = ps: with ps; [ aiohttp-cors netdisco ];
     "switch.lightwave" = ps: with ps; [  ];
     "switch.linode" = ps: with ps; [ linode-api ];
     "switch.litejet" = ps: with ps; [  ];
@@ -1462,7 +1458,6 @@
     "zabbix" = ps: with ps; [  ];
     "zeroconf" = ps: with ps; [ aiohttp-cors zeroconf ];
     "zha" = ps: with ps; [  ];
-    "zha.api" = ps: with ps; [  ];
     "zha.config_flow" = ps: with ps; [  ];
     "zha.const" = ps: with ps; [  ];
     "zha.entities" = ps: with ps; [  ];

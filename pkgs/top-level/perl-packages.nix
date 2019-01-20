@@ -64,7 +64,6 @@ let
       homepage    = http://betterthangrep.com/;
       license     = licenses.artistic2;
       maintainers = with maintainers; [ lovek323 ];
-      platforms   = platforms.unix;
     };
     # tests fails on nixos and hydra because of different purity issues
     doCheck = false;
@@ -107,10 +106,6 @@ let
       sha256 = "1kqn13wd0lfjrf6h19b9kgdqqwp7k2d9yfq5i0wvii0xi8jqh1lw";
     };
     propagatedBuildInputs = [ AlgorithmDiff ];
-    meta = {
-      maintainers = with maintainers; [ ];
-      platforms   = stdenv.lib.platforms.unix;
-    };
   };
 
   AlienBuild = buildPerlPackage {
@@ -342,8 +337,6 @@ let
       homepage = https://github.com/rjbs/App-Cmd;
       description = "Write command line apps with less suffering";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ ];
-      platforms = stdenv.lib.platforms.all;
     };
   };
 
@@ -381,7 +374,6 @@ let
       homepage = https://github.com/miyagawa/cpanminus;
       description = "Get, unpack, build and install modules from CPAN";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      platforms = stdenv.lib.platforms.all;
     };
   };
 
@@ -519,7 +511,6 @@ let
       description = "Module for manipulations of cpio archives";
       # See https://rt.cpan.org/Public/Bug/Display.html?id=43597#txn-569710
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      platforms = stdenv.lib.platforms.linux;
     };
   };
 
@@ -735,8 +726,6 @@ let
 
       homepage = http://www.aarontrevena.co.uk/opensource/autodia/;
       license = stdenv.lib.licenses.gpl2Plus;
-
-      maintainers = [ ];
     };
     buildInputs = [ DBI ];
   };
@@ -804,8 +793,6 @@ let
     meta = {
       description = "Wrap OP check callbacks";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ ];
-      platforms   = stdenv.lib.platforms.unix;
     };
   };
 
@@ -829,10 +816,6 @@ let
       sha256 = "09m96p8c0ipgz42li2ywdgy0vxb57mb5nf59j9gw7yzc3xkslv9w";
     };
     propagatedBuildInputs = [ CarpClan ];
-    meta = {
-      maintainers = with maintainers; [ ];
-      platforms   = stdenv.lib.platforms.unix;
-    };
   };
 
   BKeywords = buildPerlPackage rec {
@@ -989,10 +972,6 @@ let
       sha256 = "1aa2mjn5767b13063nnsrwcikrnbspby7j1c5q007bzaq0gcbcri";
     };
     propagatedBuildInputs = [ StringCRC32 ];
-    meta = {
-      maintainers = with maintainers; [ ];
-      platforms   = stdenv.lib.platforms.unix;
-    };
   };
 
   CacheMemcachedFast = buildPerlPackage {
@@ -1004,8 +983,6 @@ let
     meta = {
       description = "Perl client for B<memcached>, in C language";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ ];
-      platforms   = stdenv.lib.platforms.unix;
     };
   };
 
@@ -1017,10 +994,6 @@ let
     };
     propagatedBuildInputs = [ DBFile FileNFSLock HeapFibonacci IOString TimeDate ];
     doCheck = false; # can time out
-    meta = {
-      maintainers = with maintainers; [ ];
-      platforms   = stdenv.lib.platforms.unix;
-    };
   };
 
   CacheSimpleTimedExpiry = buildPerlPackage {
@@ -1088,10 +1061,6 @@ let
       sha256 = "14j3lk6fhfzda5d3d7z6f373ng3fzxazzwpjyziysrhic1v3b4mq";
     };
     propagatedBuildInputs = [ HTMLTiny LWP ];
-    meta = {
-      maintainers = with maintainers; [ ];
-      platforms   = stdenv.lib.platforms.unix;
-    };
   };
 
   CaptureTiny = buildPerlPackage rec {
@@ -1193,8 +1162,6 @@ let
     meta = {
       description = "HTTP Basic and Digest authentication";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ ];
-      platforms   = stdenv.lib.platforms.unix;
     };
   };
 
@@ -1218,7 +1185,6 @@ let
     meta = {
       description = "A storage class for Catalyst Authentication using DBIx::Class";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      platforms = stdenv.lib.platforms.linux;
     };
     buildInputs = [ TestWarn ];
   };
@@ -1277,7 +1243,6 @@ let
       homepage = http://dev.catalyst.perl.org/;
       description = "Catalyst Development Tools";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      platforms = stdenv.lib.platforms.all;
     };
   };
 
@@ -1317,7 +1282,6 @@ let
     meta = {
       description = "DBIx::Class::Schema Model Class";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      platforms = stdenv.lib.platforms.linux;
     };
   };
 
@@ -1333,7 +1297,6 @@ let
       homepage = http://dev.catalyst.perl.org/;
       description = "The Catalyst Framework Runtime";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      platforms = stdenv.lib.platforms.all;
     };
   };
 
@@ -1385,7 +1348,6 @@ let
     meta = {
       description = "Role based authorization for Catalyst based on Catalyst::Plugin::Authentication";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      platforms = stdenv.lib.platforms.linux;
     };
   };
 
@@ -1400,8 +1362,6 @@ let
     meta = {
       description = "Flexible caching support for Catalyst";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ ];
-      platforms   = stdenv.lib.platforms.unix;
     };
   };
 
@@ -1416,8 +1376,6 @@ let
     meta = {
       description = "HTTP/1.1 cache validators for Catalyst";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ ];
-      platforms   = stdenv.lib.platforms.unix;
     };
   };
 
@@ -1430,7 +1388,6 @@ let
     propagatedBuildInputs = [ CatalystPluginSession GDSecurityImage ];
     meta = {
       description = "Create and validate Captcha for Catalyst";
-      platforms = stdenv.lib.platforms.linux;
     };
   };
 
@@ -1515,9 +1472,6 @@ let
       sha256 = "1rvxbfnpf9x2pc2zgpazlcgdlr2dijmxgmcs0m5nazs0w6xikssb";
     };
     propagatedBuildInputs = [ CatalystPluginSession ];
-    meta = {
-      platforms = stdenv.lib.platforms.linux;
-    };
   };
 
   CatalystPluginSessionStoreFastMmap = buildPerlPackage rec {
@@ -1527,9 +1481,6 @@ let
       sha256 = "0x3j6zv3wr41jlwr6yb2jpmcx019ibyn11y8653ffnwhpzbpzsxs";
     };
     propagatedBuildInputs = [ CacheFastMmap CatalystPluginSession ];
-    meta = {
-      platforms = stdenv.lib.platforms.linux;
-    };
   };
 
   CatalystPluginSessionStoreFile = buildPerlPackage rec {
@@ -1555,7 +1506,6 @@ let
     meta = {
       description = "Display a stack trace on the debug screen";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      platforms = stdenv.lib.platforms.linux;
     };
   };
 
@@ -1609,7 +1559,6 @@ let
     buildInputs = [ CatalystRuntime TestLongString TestSimple13 TestWWWMechanize TestWWWMechanizeCatalyst TextCSV XMLSimple ];
     meta = {
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      platforms = stdenv.lib.platforms.linux;
     };
   };
 
@@ -1624,7 +1573,6 @@ let
     meta = {
       description = "JSON view for your data";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      platforms = stdenv.lib.platforms.linux;
     };
   };
 
@@ -1638,7 +1586,6 @@ let
     meta = {
       description = "Template View Class";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      platforms = stdenv.lib.platforms.linux;
     };
   };
 
@@ -1671,7 +1618,6 @@ let
     meta = {
       description = "Replace request base with value passed by HTTP proxy";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      platforms = stdenv.lib.platforms.linux;
     };
   };
 
@@ -1690,7 +1636,6 @@ let
     meta = {
       description = "Replace the development server with Starman";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      platforms = stdenv.lib.platforms.linux;
     };
   };
 
@@ -1703,7 +1648,6 @@ let
     meta = {
       description = "Get the CDDB info for an audio cd";
       license = stdenv.lib.licenses.artistic1;
-      platforms = stdenv.lib.platforms.linux;
       maintainers = [ maintainers.endgame ];
     };
   };
@@ -1768,8 +1712,6 @@ let
     };
     meta = {
       description = "Convert flat hash to nested data using TT2's dot convention";
-      maintainers = with maintainers; [ ];
-      platforms   = stdenv.lib.platforms.unix;
     };
     buildInputs = [ TestException ];
   };
@@ -2645,10 +2587,6 @@ let
       sha256 = "1s8gxfg4xqp543aqanv5lbp64vqqyw6ic4x3fm4imkk1h3amjb6d";
     };
     propagatedBuildInputs = [ SymbolUtil ];
-    meta = {
-      maintainers = with maintainers; [ ];
-      platforms   = stdenv.lib.platforms.unix;
-    };
   };
 
   curry = buildPerlPackage rec {
@@ -2963,8 +2901,6 @@ let
     meta = {
       description = "Get weak or strong random data from pluggable sources";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ ];
-      platforms   = stdenv.lib.platforms.unix;
     };
   };
 
@@ -3028,7 +2964,6 @@ let
     meta = with stdenv.lib; {
       description = "Perl wrapper around OpenSSL's AES library";
       license = with licenses; [ artistic1 gpl1Plus ];
-      platforms = platforms.unix;
     };
   };
 
@@ -3137,7 +3072,6 @@ let
     propagatedBuildInputs = [ URI ];
     meta = {
       description = "Compact many CSS files into one big file";
-      license = "unknown";
     };
   };
 
@@ -3204,8 +3138,6 @@ let
     meta = {
       description = "Polymorphic data cloning";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ ];
-      platforms   = stdenv.lib.platforms.unix;
     };
   };
 
@@ -3307,7 +3239,7 @@ let
     };
     meta = {
       description = "Hexadecimal Dumper";
-      maintainers = with stdenv.lib.maintainers; [ AndersonTorres ];
+      maintainers = with maintainers; [ AndersonTorres ];
     };
   };
 
@@ -3515,8 +3447,6 @@ let
     meta = {
       description = "Fast random UUID generator using the Mersenne Twister algorithm";
       license = stdenv.lib.licenses.asl20;
-      maintainers = with maintainers; [ ];
-      platforms   = stdenv.lib.platforms.unix;
     };
   };
 
@@ -3579,10 +3509,6 @@ let
     };
     propagatedBuildInputs = [ BitVector ];
     doCheck = false; # some of the checks rely on the year being <2015
-    meta = {
-      maintainers = with maintainers; [ ];
-      platforms   = stdenv.lib.platforms.unix;
-    };
   };
 
   DateExtract = buildPerlPackage {
@@ -3748,8 +3674,6 @@ let
     meta = {
       description = "Parses ISO8601 formats";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ ];
-      platforms   = stdenv.lib.platforms.unix;
     };
   };
 
@@ -3803,8 +3727,6 @@ let
     meta = {
       description = "Parse and format PostgreSQL dates and times";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ ];
-      platforms   = stdenv.lib.platforms.unix;
     };
     buildInputs = [ ModuleBuildTiny ];
   };
@@ -4083,7 +4005,6 @@ let
       homepage = http://dbi.perl.org/;
       description = "Database independent interface for Perl";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      platforms = stdenv.lib.platforms.all;
     };
   };
 
@@ -4193,8 +4114,6 @@ let
     meta = {
       description = "Fast, safe DBI connection and transaction management";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ ];
-      platforms = stdenv.lib.platforms.all;
     };
   };
 
@@ -4205,10 +4124,6 @@ let
       sha256 = "7a2a978fb6d9feaa3e4b109c71c963b26a008a2d130c5876ecf24c5a72338a1d";
     };
     propagatedBuildInputs = [ DBI ];
-    meta = {
-      description = "Unknown";
-      license = "unknown";
-    };
   };
 
   DBIxHTMLViewLATEST = buildPerlPackage {
@@ -4243,8 +4158,6 @@ let
     propagatedBuildInputs = [ DBI ];
     meta = {
       description = "Very complete easy-to-use OO interface to DBI";
-      maintainers = with maintainers; [ ];
-      platforms   = stdenv.lib.platforms.unix;
     };
   };
 
@@ -4267,8 +4180,6 @@ let
     };
     meta = {
       description = "Find memory cycles in objects";
-      maintainers = with maintainers; [ ];
-      platforms   = stdenv.lib.platforms.unix;
     };
   };
 
@@ -4366,10 +4277,6 @@ let
       sha256 = "01yrsdpn9ns9iwwc92bhjn2605b7ys7i3198gjb935lsllzgzw5f";
     };
     propagatedBuildInputs = [ ClassTiny SubExporter namespaceclean ];
-    meta = {
-      maintainers = with maintainers; [ ];
-      platforms   = stdenv.lib.platforms.unix;
-    };
     buildInputs = [ TestSimple13 TestWarnings ];
   };
 
@@ -4463,8 +4370,6 @@ let
     propagatedBuildInputs = [ LWP ];
     meta = {
       description = "Perl extension for getting MD5 sums for files and urls";
-      maintainers = with maintainers; [ ];
-      platforms   = stdenv.lib.platforms.unix;
     };
   };
 
@@ -4926,8 +4831,6 @@ let
     meta = {
       description = "Generate world unique message-ids";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ ];
-      platforms   = stdenv.lib.platforms.unix;
     };
   };
 
@@ -5190,10 +5093,6 @@ let
       url = mirror://cpan/authors/id/D/DS/DSB/Env-Path-0.19.tar.gz;
       sha256 = "1qhmj15a66h90pjl2dgnxsb9jj3b1r5mpvnr87cafcl8g69z0jr4";
     };
-    meta = {
-      maintainers = with maintainers; [ ];
-      platforms   = stdenv.lib.platforms.unix;
-    };
   };
 
   Error = buildPerlModule rec {
@@ -5240,7 +5139,6 @@ let
     meta = {
       description = "Lightweight exceptions";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ ];
     };
   };
 
@@ -5261,10 +5159,6 @@ let
     };
     buildInputs = [ TestAssert TestUnitLite ];
     propagatedBuildInputs = [ ExceptionBase constantboolean ];
-    meta = {
-      maintainers = with maintainers; [ ];
-      platforms   = stdenv.lib.platforms.unix;
-    };
   };
 
   ExceptionWarning = buildPerlModule {
@@ -5275,10 +5169,6 @@ let
     };
     buildInputs = [ TestAssert TestUnitLite ];
     propagatedBuildInputs = [ ExceptionBase ];
-    meta = {
-      maintainers = with maintainers; [ ];
-      platforms   = stdenv.lib.platforms.unix;
-    };
   };
 
   ExporterDeclare = buildPerlModule {
@@ -5293,8 +5183,6 @@ let
       homepage = http://open-exodus.net/projects/Exporter-Declare;
       description = "Exporting done right";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ ];
-      platforms   = stdenv.lib.platforms.unix;
     };
   };
 
@@ -5386,8 +5274,6 @@ let
     };
     meta = {
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ ];
-      platforms   = stdenv.lib.platforms.unix;
     };
   };
 
@@ -5541,10 +5427,6 @@ let
     };
     buildInputs = [ ExceptionWarning TestAssert TestUnitLite ];
     propagatedBuildInputs = [ ExceptionDied ];
-    meta = {
-      maintainers = with maintainers; [ ];
-      platforms   = stdenv.lib.platforms.unix;
-    };
   };
 
   FCGI = buildPerlPackage rec {
@@ -5577,7 +5459,6 @@ let
     };
     meta = {
       description = "A perl-based FastCGI process manager";
-      license = "unknown";
     };
   };
 
@@ -5604,8 +5485,6 @@ let
       homepage = http://open-exodus.net/projects/Fennec-Lite;
       description = "Minimalist Fennec, the commonly used bits";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ ];
-      platforms   = stdenv.lib.platforms.unix;
     };
   };
 
@@ -5918,10 +5797,6 @@ let
       url = mirror://cpan/authors/id/B/BB/BBB/File-NFSLock-1.29.tar.gz;
       sha256 = "0dzssj15faz9cn1w3xi7jwm64gyjyazapv4bkgglw5l1njcibm31";
     };
-    meta = {
-      maintainers = with maintainers; [ ];
-      platforms   = stdenv.lib.platforms.unix;
-    };
   };
 
   FilePath = buildPerlPackage rec {
@@ -5959,8 +5834,6 @@ let
     meta = {
       description = "Change directory temporarily for a limited scope";
       license = stdenv.lib.licenses.asl20;
-      maintainers = with maintainers; [ ];
-      platforms   = stdenv.lib.platforms.unix;
     };
   };
 
@@ -5995,8 +5868,6 @@ let
       homepage = https://github.com/ingydotnet/file-share-pm/tree;
       description = "Extend File::ShareDir to Local Libraries";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ ];
-      platforms   = stdenv.lib.platforms.unix;
     };
   };
 
@@ -6023,8 +5894,6 @@ let
     meta = {
       description = "Install shared files";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ ];
-      platforms   = stdenv.lib.platforms.unix;
     };
   };
 
@@ -6065,7 +5934,6 @@ let
     meta = {
       description = "Simple and Efficient Reading/Writing/Modifying of Complete Files";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      platforms = with stdenv.lib.platforms; linux ++ darwin;
     };
   };
 
@@ -6143,7 +6011,6 @@ let
     meta = {
       description = "File::Type uses magic numbers (typically at the start of a file) to determine the MIME type of that file.";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      platforms = with stdenv.lib.platforms; linux ++ darwin;
     };
   };
 
@@ -6243,7 +6110,6 @@ let
     meta = {
       description = "Extensions and convenience methods to manage background processes";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      platforms = stdenv.lib.platforms.linux;
     };
     propagatedBuildInputs = [ URI ];
   };
@@ -6498,10 +6364,6 @@ let
       sha256 = "af53f2d3f63297e046676eae14a76296afdd2910e09723b6b113708622b7989b";
     };
     buildInputs = [ pkgs.gnupg1orig ];
-    meta = {
-      platforms = stdenv.lib.platforms.linux;
-      maintainers = with maintainers; [ ];
-    };
   };
 
   GnuPGInterface = buildPerlPackage rec {
@@ -6582,7 +6444,6 @@ let
     meta = with stdenv.lib; {
       description = "Perl interface to the GraphViz graphing tool";
       license = licenses.artistic2;
-      maintainers = [ ];
     };
   };
 
@@ -6639,7 +6500,6 @@ let
       homepage = http://gtk2-perl.sourceforge.net/;
       description = "Perl interface to the 2.x series of the Gimp Toolkit library";
       license = stdenv.lib.licenses.lgpl21Plus;
-      platforms   = stdenv.lib.platforms.linux;
     };
   };
 
@@ -6720,10 +6580,6 @@ let
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/ML/MLEHMANN/${name}.tar.gz";
       sha256 = "34c4ddf91fc93d1090d86da14df706d175b1610c67372c01e12ce9555d4dd1dc";
-    };
-    meta = {
-      maintainers = with maintainers; [ ];
-      platforms   = stdenv.lib.platforms.unix;
     };
   };
 
@@ -6809,10 +6665,6 @@ let
       url = mirror://cpan/authors/id/E/ET/ETHER/Hash-Util-FieldHash-Compat-0.11.tar.gz;
       sha256 = "06vlygjyk7rkkw0di3252mma141w801qn3xk40aa2yskbfklcbk4";
     };
-    meta = {
-      maintainers = with maintainers; [ ];
-      platforms   = stdenv.lib.platforms.unix;
-    };
   };
 
   HeapFibonacci = buildPerlPackage {
@@ -6820,10 +6672,6 @@ let
     src = fetchurl {
       url = mirror://cpan/authors/id/J/JM/JMM/Heap-0.80.tar.gz;
       sha256 = "1plv2djbyhvkdcw2ic54rdqb745cwksxckgzvw7ssxiir7rjknnc";
-    };
-    meta = {
-      maintainers = with maintainers; [ ];
-      platforms   = stdenv.lib.platforms.unix;
     };
   };
 
@@ -6980,8 +6828,6 @@ let
     propagatedBuildInputs = [ CryptBlowfish CryptCBC DataClone DateTimeFormatStrptime EmailValid HTMLTree JSONMaybeXS MooseXGetopt MooseXTypesCommon MooseXTypesLoadableClass aliased ];
     meta = {
       description = "HTML forms using Moose";
-      maintainers = with maintainers; [ ];
-      platforms   = stdenv.lib.platforms.unix;
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -7072,10 +6918,6 @@ let
       sha256 = "1qbad8ayffpx7wj76ip05p6rh9p1lkir6qknpl76zy679ghlsp8s";
     };
     buildInputs = [ TestBase ];
-    meta = {
-      maintainers = with maintainers; [ ];
-      platforms   = stdenv.lib.platforms.unix;
-    };
   };
 
   HTMLScrubber = buildPerlPackage rec {
@@ -7174,8 +7016,6 @@ let
     meta = {
       description = "Add XPath support to HTML::TreeBuilder";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ ];
-      platforms   = stdenv.lib.platforms.unix;
     };
   };
 
@@ -7564,8 +7404,6 @@ let
       homepage = https://github.com/ingydotnet/io-all-pm/tree;
       description = "IO::All of it to Graham and Damian!";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ ];
-      platforms   = stdenv.lib.platforms.unix;
     };
   };
 
@@ -7603,7 +7441,6 @@ let
     meta = {
       description = "IO Interface to compressed data files/buffers";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      platforms = stdenv.lib.platforms.linux;
     };
     # Same as CompressRawZlib
     doCheck = false && !stdenv.isDarwin;
@@ -7783,8 +7620,6 @@ let
       homepage = https://github.com/rjbs/io-tiecombine;
       description = "Produce tied (and other) separate but combined variables";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ ];
-      platforms   = stdenv.lib.platforms.unix;
     };
   };
 
@@ -7832,7 +7667,6 @@ let
     meta = {
       description = "System() and background procs w/ piping, redirs, ptys (Unix, Win32)";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
     };
     propagatedBuildInputs = [ IOTty ];
     buildInputs = [ Readonly ];
@@ -7906,7 +7740,6 @@ let
       license = with licenses; [ gpl1Plus /* or */ artistic2 ];
 
       maintainers = [ maintainers.kiloreux ];
-      platforms = platforms.unix;
     };
   };
 
@@ -7977,8 +7810,6 @@ let
       '';
 
       license = stdenv.lib.licenses.artistic2;
-
-      maintainers = [ ];
     };
   };
 
@@ -8103,9 +7934,6 @@ let
       sha256 = "0118yrzagwlcfj5yldn3h23zzqs2rx282jlm068nf7fjlvy4m7s7";
     };
     propagatedBuildInputs = [ TypesSerialiser ];
-    meta = {
-      platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
-    };
     buildInputs = [ CanaryStability ];
   };
 
@@ -8165,10 +7993,6 @@ let
     src = fetchurl {
       url = mirror://cpan/authors/id/G/GU/GUIDO/libintl-perl-1.31.tar.gz;
       sha256 = "1afandrl44mq9c32r57xr489gkfswdgc97h8x86k98dz1byv3l6a";
-    };
-    meta = {
-      maintainers = with maintainers; [ ];
-      platforms   = stdenv.lib.platforms.unix;
     };
   };
 
@@ -8295,7 +8119,6 @@ let
     };
     meta = {
       description = "Convert English text to numbers";
-      license = "unknown";
     };
   };
 
@@ -8436,8 +8259,6 @@ let
     meta = {
       description = "Combines List::Util and List::MoreUtils in one bite-sized package";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ ];
-      platforms   = stdenv.lib.platforms.unix;
     };
   };
 
@@ -8511,10 +8332,6 @@ let
     src = fetchurl {
       url = mirror://cpan/authors/id/P/PE/PEVANS/List-UtilsBy-0.11.tar.gz;
       sha256 = "0nkpylkqccxanr8wc7j9wg6jdrizybjjd6p8q3jbh7f29cxz9pgs";
-    };
-    meta = {
-      maintainers = with maintainers; [ ];
-      platforms   = stdenv.lib.platforms.unix;
     };
   };
 
@@ -8599,9 +8416,6 @@ let
     propagatedBuildInputs = [ FileSlurp ];
     meta = {
       description = "Perl module for manipulating .po entries from GNU gettext";
-      license = "unknown";
-      platforms = stdenv.lib.platforms.linux;
-      maintainers = with maintainers; [ ];
     };
   };
 
@@ -8736,8 +8550,6 @@ let
     meta = {
       description = "Dispatches messages to one or more outputs";
       license = stdenv.lib.licenses.artistic2;
-      maintainers = with maintainers; [ ];
-      platforms   = stdenv.lib.platforms.unix;
     };
     buildInputs = [ IPCRun3 TestFatal TestNeeds ];
   };
@@ -8871,7 +8683,6 @@ let
     meta = with stdenv.lib; {
       description = "The World-Wide Web library for Perl";
       license = with licenses; [ artistic1 gpl1Plus ];
-      platforms = platforms.unix ++ platforms.windows;
     };
     buildInputs = [ TestFatal TestNeeds TestRequiresInternet ];
   };
@@ -8927,7 +8738,6 @@ let
     meta = {
       description = "Provide https support for LWP::UserAgent";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      platforms = with stdenv.lib.platforms; linux ++ darwin;
     };
     buildInputs = [ TestRequiresInternet ];
   };
@@ -8954,7 +8764,6 @@ let
     propagatedBuildInputs = [ LWP ];
     meta = {
       description = "A virtual browser that retries errors";
-      license = "unknown";
     };
   };
 
@@ -8965,10 +8774,6 @@ let
       sha256 = "0923ahl22c0gdzrihj7dqnrawia9hmcl462asf4ry8d5wd84z1i5";
     };
     propagatedBuildInputs = [ HookLexWrap LWP SafeIsa ];
-    meta = {
-      maintainers = with maintainers; [ ];
-      platforms   = stdenv.lib.platforms.unix;
-    };
     # Tests require network connectivity
     # https://rt.cpan.org/Public/Bug/Display.html?id=63966 is the bug upstream,
     # which doesn't look like it will get fixed anytime soon.
@@ -9305,8 +9110,6 @@ let
     meta = {
       description = "Perl interface to the ISAAC PRNG algorithm";
       license = with stdenv.lib.licenses; [ publicDomain mit artistic2 gpl3 ];
-      maintainers = with maintainers; [ ];
-      platforms   = stdenv.lib.platforms.unix;
     };
   };
 
@@ -9320,8 +9123,6 @@ let
     meta = {
       description = "Auto-seeded Mersenne Twister PRNGs";
       license = "unrestricted";
-      maintainers = with maintainers; [ ];
-      platforms   = stdenv.lib.platforms.unix;
     };
   };
 
@@ -9336,8 +9137,6 @@ let
     meta = {
       description = "Cryptographically-secure, cross-platform replacement for rand()";
       license = stdenv.lib.licenses.artistic2;
-      maintainers = with maintainers; [ ];
-      platforms   = stdenv.lib.platforms.unix;
     };
   };
 
@@ -9388,8 +9187,6 @@ let
     meta = {
       description = "Tools for creating Meta objects to track custom metrics";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ ];
-      platforms   = stdenv.lib.platforms.unix;
     };
   };
 
@@ -9403,8 +9200,6 @@ let
     meta = {
       description = "Basic method declarations with signatures, without source filters";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ ];
-      platforms   = stdenv.lib.platforms.unix;
     };
   };
 
@@ -9424,7 +9219,6 @@ let
       description = "A mail-to-HTML converter";
       maintainers = with maintainers; [ lovek323 ];
       license     = licenses.gpl2;
-      platforms   = platforms.unix;
     };
   };
 
@@ -9768,8 +9562,6 @@ let
     meta = {
       description = "Declare author-only dependencies";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ ];
-      platforms   = stdenv.lib.platforms.unix;
     };
   };
 
@@ -9783,8 +9575,6 @@ let
     meta = {
       description = "Designate tests only run by module authors";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ ];
-      platforms   = stdenv.lib.platforms.unix;
     };
   };
 
@@ -9927,10 +9717,6 @@ let
       sha256 = "0g7qs6vqg91xpwg1cdy91m3kh9m1zbkzyz1qsy453b572xdscf0d";
     };
     buildInputs = [ pkgs.unzip ];
-    meta = {
-      maintainers = with maintainers; [ ];
-      platforms   = stdenv.lib.platforms.unix;
-    };
   };
 
   ModuleVersionsReport = buildPerlPackage {
@@ -10060,7 +9846,6 @@ let
       description = "A postmodern object system for Perl 5";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
       maintainers = [ maintainers.eelco ];
-      platforms   = stdenv.lib.platforms.unix;
     };
   };
 
@@ -10195,8 +9980,6 @@ let
     meta = {
       description = "Abstract base classes for Moose";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ ];
-      platforms   = stdenv.lib.platforms.unix;
     };
   };
 
@@ -10222,8 +10005,6 @@ let
       homepage = https://github.com/moose/MooseX-App-Cmd;
       description = "Mashes up MooseX::Getopt and App::Cmd";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ ];
-      platforms = stdenv.lib.platforms.all;
     };
   };
 
@@ -10372,8 +10153,6 @@ let
     meta = {
       description = "Extend your attribute interfaces (deprecated)";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ ];
-      platforms   = stdenv.lib.platforms.unix;
     };
   };
 
@@ -10384,10 +10163,6 @@ let
       sha256 = "19wd74dihybnz1lbbsqn0clwxzb6y0aa0i25a8zhajz7p5fq5myb";
     };
     propagatedBuildInputs = [ DataVisitor HashUtilFieldHashCompat namespaceautoclean ];
-    meta = {
-      maintainers = with maintainers; [ ];
-      platforms   = stdenv.lib.platforms.unix;
-    };
     buildInputs = [ ModuleBuildTiny ];
   };
 
@@ -10403,7 +10178,6 @@ let
       homepage = https://github.com/moose/MooseX-ConfigFromFile;
       description = "An abstract Moose role for setting attributes from a configfile";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      platforms = stdenv.lib.platforms.all;
     };
   };
 
@@ -10463,8 +10237,6 @@ let
       homepage = https://github.com/pshangov/moosex-has-options;
       description = "Succinct options for Moose";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ ];
-      platforms   = stdenv.lib.platforms.unix;
     };
   };
 
@@ -10617,8 +10389,6 @@ let
       homepage = https://github.com/moose/MooseX-Runnable;
       description = "Tag a class as a runnable application";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ ];
-      platforms = stdenv.lib.platforms.all;
     };
   };
 
@@ -10648,10 +10418,6 @@ let
       sha256 = "0hb5s1chsgbx2nlb0f112mdh2v1zwww8f4i3gvfvcghx3grv5135";
     };
     buildInputs = [ ModuleBuildTiny TestFatal TestRequires TestWarnings ];
-    meta = {
-      maintainers = with maintainers; [ ];
-      platforms   = stdenv.lib.platforms.unix;
-    };
     propagatedBuildInputs = [ Moose ];
   };
 
@@ -10763,8 +10529,6 @@ let
     buildInputs = [ ModuleBuildTiny TestFatal ];
     propagatedBuildInputs = [ MooseXTypes ];
     meta = {
-      maintainers = with maintainers; [ ];
-      platforms   = stdenv.lib.platforms.unix;
       homepage = https://github.com/moose/MooseX-Types-LoadableClass;
       description = "ClassName type constraint with coercion to load the class";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
@@ -10797,8 +10561,6 @@ let
       homepage = https://github.com/karenetheridge/moosex-types-path-tiny;
       description = "Path::Tiny types and coercions for Moose";
       license = stdenv.lib.licenses.asl20;
-      maintainers = with maintainers; [ ];
-      platforms   = stdenv.lib.platforms.unix;
     };
   };
 
@@ -10826,8 +10588,6 @@ let
       homepage = https://github.com/dagolden/moosex-types-stringlike;
       description = "Moose type constraints for strings or string-like objects";
       license = stdenv.lib.licenses.asl20;
-      maintainers = with maintainers; [ ];
-      platforms   = stdenv.lib.platforms.unix;
     };
   };
 
@@ -10842,8 +10602,6 @@ let
     meta = {
       description = "MooseX::Types::Structured - Structured Type Constraints for Moose";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ ];
-      platforms   = stdenv.lib.platforms.unix;
     };
   };
 
@@ -10859,8 +10617,6 @@ let
       homepage = https://github.com/moose/MooseX-Types-URI;
       description = "URI related types and coercions for Moose";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ ];
-      platforms = stdenv.lib.platforms.all;
     };
   };
 
@@ -11015,8 +10771,6 @@ let
     propagatedBuildInputs = [ URI ];
     meta = {
       description = "Perl extension to create signatures for AWS requests";
-      maintainers = with maintainers; [ ];
-      platforms   = stdenv.lib.platforms.unix;
     };
   };
 
@@ -11078,8 +10832,6 @@ let
     meta = {
       description = "Manage Amazon S3 policies for HTTP POST forms";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ ];
-      platforms   = stdenv.lib.platforms.unix;
     };
   };
 
@@ -11095,8 +10847,6 @@ let
     meta = {
       description = "Advanced Message Queue Protocol (de)serialization and representation";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ ];
-      platforms   = stdenv.lib.platforms.unix;
     };
   };
 
@@ -11109,7 +10859,6 @@ let
     meta = {
       description = "Manipulate IPv4/IPv6 netblocks in CIDR notation";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      platforms = stdenv.lib.platforms.unix;
       maintainers = [ maintainers.bjornfor ];
     };
   };
@@ -11122,7 +10871,6 @@ let
     };
     meta = {
       description = "Perl extension for merging IPv4 or IPv6 CIDR addresses";
-      license = "unknown";
     };
   };
 
@@ -11138,8 +10886,6 @@ let
       homepage = https://github.com/metabrainz/CoverArtArchive;
       description = "Query the coverartarchive.org";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ ];
-      platforms   = stdenv.lib.platforms.unix;
     };
   };
 
@@ -11283,9 +11029,6 @@ let
       sha256 = "70835a926e1c5a8d0324c72fffee82eeb7ec6c141dee04fd446820b64f71c552";
     };
     propagatedBuildInputs = [ NetCIDRLite Socket6 ];
-    meta = {
-      license = "unknown";
-    };
   };
 
   NetPing = buildPerlPackage {
@@ -11497,6 +11240,14 @@ let
     };
   };
 
+  NumberBytesHuman = buildPerlPackage rec {
+    name = "Number-Bytes-Human-0.11";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/F/FE/FERREIRA/${name}.tar.gz";
+      sha256 = "0b3gprpbcrdwc2gqalpys5m2ngilh5injhww8y0gf3dln14rrisz";
+    };
+  };
+
   NumberCompare = buildPerlPackage rec {
     name = "Number-Compare-0.03";
     src = fetchurl {
@@ -11578,8 +11329,6 @@ let
     meta = {
       description = "Comprehensive inside-out object support module";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ ];
-      platforms   = stdenv.lib.platforms.unix;
     };
   };
 
@@ -11997,8 +11746,6 @@ let
     meta = {
       description = "File path utility";
       license = stdenv.lib.licenses.asl20;
-      maintainers = with maintainers; [ ];
-      platforms   = stdenv.lib.platforms.unix;
     };
     preConfigure =
       ''
@@ -12037,7 +11784,6 @@ let
       description = "Communicate with a smart card using PC/SC";
       license = stdenv.lib.licenses.gpl2Plus;
       maintainers = with maintainers; [ abbradar ];
-      platforms = stdenv.lib.platforms.linux;
     };
   };
 
@@ -12083,8 +11829,7 @@ let
       description = ''Collection of advanced command-line tools to perform a variety of MySQL and system tasks.'';
       homepage = http://www.percona.com/software/percona-toolkit;
       license = with stdenv.lib.licenses; [ gpl2 ];
-      platforms = stdenv.lib.platforms.linux;
-      maintainers = with stdenv.lib.maintainers; [ izorkin ];
+      maintainers = with maintainers; [ izorkin ];
     };
   };
 
@@ -12231,7 +11976,6 @@ let
     };
     meta = {
       description = "Simple flexible means of converting the output of PHP's serialize() into the equivalent Perl memory structure, and vice versa";
-      license = "unknown";
     };
   };
 
@@ -13094,7 +12838,6 @@ let
       homepage = https://github.com/PerlRedis/perl-redis;
       description = "Perl binding for Redis database";
       license = stdenv.lib.licenses.artistic2;
-      platforms   = stdenv.lib.platforms.unix;
     };
   };
 
@@ -13160,9 +12903,6 @@ let
       url = mirror://cpan/authors/id/S/SA/SALVA/Regexp-IPv6-0.03.tar.gz;
       sha256 = "d542d17d75ce93631de8ba2156da0e0b58a755c409cd4a0d27a3873a26712ce2";
     };
-    meta = {
-      license = "unknown";
-    };
   };
 
   RegexpParser = buildPerlPackage {
@@ -13202,8 +12942,6 @@ let
       homepage = http://jaldhar.github.com/REST-Utils;
       description = "Utility functions for REST applications";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ ];
-      platforms   = stdenv.lib.platforms.unix;
     };
   };
 
@@ -13282,10 +13020,6 @@ let
       sha256 = "1fcmp4qp7q3xr2mw7clqqwph45icbvgfs2n41gp9zamim2y39p49";
     };
     propagatedBuildInputs = [ locallib ];
-    meta = {
-      maintainers = with maintainers; [ ];
-      platforms   = stdenv.lib.platforms.unix;
-    };
     doCheck = false; /* creates files in HOME */
   };
 
@@ -13472,8 +13206,6 @@ let
     };
     meta = {
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ ];
-      platforms   = stdenv.lib.platforms.unix;
     };
   };
 
@@ -13532,8 +13264,6 @@ let
     meta = {
       description = "Perl's Web Services Toolkit";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ ];
-      platforms   = stdenv.lib.platforms.unix;
     };
     buildInputs = [ TestWarn XMLParserLite ];
   };
@@ -13698,9 +13428,6 @@ let
     };
     buildInputs = [ TestException ];
     propagatedBuildInputs = [ ClassAccessor ListMoreUtils RegexpCommon SQLTokenizer ];
-    meta = {
-      platforms = stdenv.lib.platforms.linux;
-    };
   };
 
   SQLTokenizer = buildPerlPackage rec {
@@ -13722,7 +13449,6 @@ let
     meta = {
       description = "SQL DDL transformations and more";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      platforms = stdenv.lib.platforms.linux;
     };
   };
 
@@ -13788,8 +13514,6 @@ let
     propagatedBuildInputs = [ NumberFormat ];
     meta = {
       license = "open_source";
-      maintainers = with maintainers; [ ];
-      platforms   = stdenv.lib.platforms.unix;
     };
   };
 
@@ -13889,15 +13613,11 @@ let
   };
 
   StringCRC32 = buildPerlPackage rec {
-      name = "String-CRC32-1.7";
-      src = fetchurl {
-        url = mirror://cpan/authors/id/L/LE/LEEJO/String-CRC32-1.7.tar.gz;
-        sha256 = "1j1bwbxcgxfbgw708rfrni3spwnnmnf717vq9s64nd63jmc4w5lg";
-      };
-      meta = {
-        maintainers = with maintainers; [ ];
-        platforms   = stdenv.lib.platforms.unix;
-      };
+    name = "String-CRC32-1.7";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/L/LE/LEEJO/String-CRC32-1.7.tar.gz;
+      sha256 = "1j1bwbxcgxfbgw708rfrni3spwnnmnf717vq9s64nd63jmc4w5lg";
+    };
   };
 
   StringErrf = buildPerlPackage {
@@ -13919,10 +13639,6 @@ let
     src = fetchurl {
         url = mirror://cpan/authors/id/E/EV/EVO/String-Escape-2010.002.tar.gz;
         sha256 = "12ls7f7847i4qcikkp3skwraqvjphjiv2zxfhl5d49326f5myr7x";
-    };
-    meta = {
-      maintainers = with maintainers; [ ];
-      platforms   = stdenv.lib.platforms.unix;
     };
   };
 
@@ -13989,9 +13705,6 @@ let
       sha256 = "0dfxhr6hxc2majkkrm0qbx3qcbykzpphbj2ms93dc86f7183c1p6";
     };
     meta = {
-      maintainers = with maintainers; [ ];
-      platforms   = stdenv.lib.platforms.unix;
-
       # http://cpansearch.perl.org/src/ROSCH/String-ShellQuote-1.04/README
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -14038,8 +13751,6 @@ let
     meta = {
       description = "Use TT to interpolate lexical variables";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ ];
-      platforms   = stdenv.lib.platforms.unix;
     };
   };
 
@@ -14086,7 +13797,6 @@ let
     meta = with stdenv.lib; {
       description = "A Perl module for stripping bits of non-deterministic information";
       license = licenses.gpl3;
-      platforms = platforms.all;
       maintainers = with maintainers; [ pSub ];
     };
   };
@@ -14283,10 +13993,6 @@ let
       url = mirror://cpan/authors/id/D/DE/DEXTER/Symbol-Util-0.0203.tar.gz;
       sha256 = "0cnwwrd5d6i80f33s7n2ak90rh4s53ss7q57wndrpkpr4bfn3djm";
     };
-    meta = {
-      maintainers = with maintainers; [ ];
-      platforms   = stdenv.lib.platforms.unix;
-    };
   };
 
   syntax = buildPerlPackage {
@@ -14315,6 +14021,19 @@ let
       homepage = https://github.com/frioux/Syntax-Keyword-Junction;
       description = "Perl6 style Junction operators in Perl5";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  SysMmap = buildPerlPackage rec {
+    name = "Sys-Mmap-0.19";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/SW/SWALTERS/${name}.tar.gz";
+      sha256 = "1yh0170xfw3z7n3lynffcb6axv7wi6zb46cx03crj1cvrhjmwa89";
+    };
+    meta = with stdenv.lib; {
+      description = "Use mmap to map in a file as a Perl variable";
+      maintainers = with maintainers; [ peterhoeg ];
+      license = with licenses; [ gpl2Plus ];
     };
   };
 
@@ -14347,9 +14066,6 @@ let
       sha256 = "1jv5n8jv48c1p8svjsigyxndv1ygsq8wgwj9c7ypx1vaf3rns679";
     };
     doCheck = false; # no `hostname' in stdenv
-    meta = {
-      platforms = stdenv.lib.platforms.linux;
-    };
   };
 
   SysSigAction = buildPerlPackage {
@@ -14386,9 +14102,6 @@ let
     };
     nativeBuildInputs = [ pkgs.pkgconfig ];
     buildInputs = [ pkgs.libvirt CPANChanges TestPod TestPodCoverage XMLXPath ];
-    meta = {
-      platforms = stdenv.lib.platforms.linux;
-    };
   };
 
   TAPParserSourceHandlerpgTAP = buildPerlModule rec {
@@ -14400,8 +14113,6 @@ let
     meta = {
       description = "Stream TAP from pgTAP test scripts";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      platforms = stdenv.lib.platforms.linux;
-      maintainers = with maintainers; [ ];
     };
   };
 
@@ -14490,10 +14201,6 @@ let
       sha256 = "1hq7jy6zg1iaslsyi05afz0i944y9jnv3nb4krkxjfmzwy5gw106";
     };
     propagatedBuildInputs = [ TemplateToolkit ];
-    meta = {
-      maintainers = with maintainers; [ ];
-      platforms   = stdenv.lib.platforms.unix;
-    };
   };
 
   TemplatePluginIOAll = buildPerlPackage {
@@ -14517,10 +14224,6 @@ let
       sha256 = "1mqqqs0dhfr6bp1305j9ns05q4pq1n3f561l6p8848k5ml3dh87a";
     };
     propagatedBuildInputs = [ TemplateToolkit ];
-    meta = {
-      maintainers = with maintainers; [ ];
-      platforms   = stdenv.lib.platforms.unix;
-    };
   };
 
   TemplatePluginJSONEscape = buildPerlPackage {
@@ -14530,10 +14233,6 @@ let
       sha256 = "051a8b1d3bc601d58fc51e246067d36450cfe970278a0456e8ab61940f13cd86";
     };
     propagatedBuildInputs = [ JSON TemplateToolkit ];
-    meta = {
-      maintainers = with maintainers; [ ];
-      platforms   = stdenv.lib.platforms.unix;
-    };
   };
 
   TemplateTimer = buildPerlPackage {
@@ -14768,9 +14467,6 @@ let
       sha256 = "e1ded85ae3d76b59c03b8697f4a6cb01ae31bd62a9354f5bb7d18f9e927b485f";
     };
     propagatedBuildInputs = [ TermVT102 ];
-    meta = {
-      license = "unknown";
-    };
   };
 
   TermAnimation = buildPerlPackage rec {
@@ -14835,10 +14531,6 @@ let
     };
     buildInputs = [ ClassInspector TestUnitLite ];
     propagatedBuildInputs = [ ExceptionBase constantboolean ];
-    meta = {
-      maintainers = with maintainers; [ ];
-      platforms   = stdenv.lib.platforms.unix;
-    };
   };
 
   TestAssertions = buildPerlPackage rec {
@@ -15067,8 +14759,6 @@ let
     meta = {
       description = "Check the correct line endings in your project";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ ];
-      platforms   = stdenv.lib.platforms.unix;
     };
   };
 
@@ -15091,8 +14781,6 @@ let
     meta = {
       description = "Add test failures if warnings are caught";
       license = stdenv.lib.licenses.asl20;
-      maintainers = with maintainers; [ ];
-      platforms   = stdenv.lib.platforms.unix;
     };
   };
 
@@ -15218,10 +14906,6 @@ let
       sha256 = "1cyp46w3q7dg89qkw31ik2h2a6mdx6pzdz2lmp8m0a61zjr8mh07";
     };
     propagatedBuildInputs = [ JSONAny ];
-    meta = {
-      maintainers = with maintainers; [ ];
-      platforms   = stdenv.lib.platforms.unix;
-    };
     buildInputs = [ TestDifferences ];
   };
 
@@ -15294,8 +14978,6 @@ let
     propagatedBuildInputs = [ DevelCycle PadWalker ];
     meta = {
       description = "Verifies code hasn't left circular references";
-      maintainers = with maintainers; [ ];
-      platforms = stdenv.lib.platforms.unix;
     };
   };
 
@@ -15310,8 +14992,6 @@ let
     meta = with stdenv.lib; {
       description = "Simulating other classes";
       license = licenses.lgpl2Plus;
-      maintainers = with maintainers; [ ];
-      platforms   = platforms.unix;
     };
   };
 
@@ -15336,10 +15016,6 @@ let
       sha256 = "0pggwrlqj6k44qayhbpjqkzry1r626iy2vf30zlf2jdhbjbvlycz";
     };
     propagatedBuildInputs = [ SUPER ];
-    meta = {
-      maintainers = with maintainers; [ ];
-      platforms   = stdenv.lib.platforms.unix;
-    };
     buildInputs = [ TestWarnings ];
   };
 
@@ -15453,8 +15129,6 @@ let
     meta = {
       description = "Check the presence of tabs in your project";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ ];
-      platforms   = stdenv.lib.platforms.unix;
     };
   };
 
@@ -15630,8 +15304,6 @@ let
       homepage = https://github.com/rjbs/Test-Routine;
       description = "Composable units of assertion";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ ];
-      platforms   = stdenv.lib.platforms.unix;
     };
   };
 
@@ -15840,8 +15512,6 @@ let
     meta = {
       description = "Write tests, not scripts that run them";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ ];
-      platforms   = stdenv.lib.platforms.unix;
     };
   };
 
@@ -15918,8 +15588,6 @@ let
     meta = {
       description = "Unit testing without external dependencies";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ ];
-      platforms   = stdenv.lib.platforms.unix;
     };
   };
 
@@ -15959,8 +15627,6 @@ let
     meta = {
       description = "Test fallback behaviour in absence of modules";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ ];
-      platforms   = stdenv.lib.platforms.unix;
     };
   };
 
@@ -16001,10 +15667,6 @@ let
       sha256 = "0bwwdk0iai5dlvvfpja971qpgvmf6yq67iag4z4szl9v5sra0xm5";
     };
     propagatedBuildInputs = [ WWWMechanizeCGI ];
-    meta = {
-      maintainers = with maintainers; [ ];
-      platforms   = stdenv.lib.platforms.unix;
-    };
     buildInputs = [ TestLongString TestWWWMechanize ];
   };
 
@@ -16029,10 +15691,6 @@ let
       sha256 = "1wy0488yg15kahfafnlmlhppxik7d0z00wxwj9fszrsq2h6crz6y";
     };
     propagatedBuildInputs = [ XMLLibXML ];
-    meta = {
-      maintainers = with maintainers; [ ];
-      platforms   = stdenv.lib.platforms.unix;
-    };
   };
 
   TestYAML = buildPerlPackage rec {
@@ -16279,8 +15937,6 @@ let
     meta = {
       description = "Micro template engine with Perl5 language";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ ];
-      platforms   = stdenv.lib.platforms.unix;
     };
   };
 
@@ -16413,7 +16069,6 @@ let
       homepage = http://www.shlomifish.org/open-source/projects/docmake/;
       description = "Organize Data in Tables";
       license = stdenv.lib.licenses.isc;
-      platforms = stdenv.lib.platforms.linux;
     };
   };
 
@@ -16430,10 +16085,6 @@ let
     src = fetchurl {
       url = mirror://cpan/authors/id/M/MS/MSCHOUT/Text-Template-1.53.tar.gz;
       sha256 = "ae221cbba2b27967a12bda3f531547e897eb38ae0a92c084607fd5a6a8085bc4";
-    };
-    meta = {
-      description = "Unknown";
-      license = "unknown";
     };
     buildInputs = [ TestMoreUTF8 TestWarnings ];
   };
@@ -16490,8 +16141,6 @@ let
     meta = {
       description = "Remove leading and/or trailing whitespace from strings";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ ];
-      platforms   = stdenv.lib.platforms.unix;
     };
   };
 
@@ -16503,10 +16152,6 @@ let
     };
     # https://rt.cpan.org/Public/Bug/Display.html?id=124815
     NIX_CFLAGS_COMPILE = [ "-DHAS_VPRINTF" ];
-    meta = {
-      maintainers = with maintainers; [ ];
-      platforms = stdenv.lib.platforms.linux;
-    };
   };
 
   TextUnidecode = buildPerlPackage rec {
@@ -16550,10 +16195,6 @@ let
       sha256 = "0cxbgx879bsskmnhjzamgsa5862ddixyx4yr77lafmwimnaxjg74";
     };
     propagatedBuildInputs = [ URI ];
-    meta = {
-      maintainers = with maintainers; [ ];
-      platforms   = stdenv.lib.platforms.unix;
-    };
   };
 
   TextWrapI18N = buildPerlPackage {
@@ -16794,7 +16435,6 @@ let
     doCheck = false;
     meta = {
       description = "Parse and format time values";
-      license = "unknown";
     };
   };
 
@@ -16956,9 +16596,6 @@ let
       url = mirror://cpan/authors/id/B/BR/BRADFITZ/Unicode-CheckUTF8-1.03.tar.gz;
       sha256 = "97f84daf033eb9b49cd8fe31db221fef035a5c2ee1d757f3122c88cf9762414c";
     };
-    meta = {
-      license = "unknown";
-    };
   };
 
   UnicodeLineBreak = buildPerlPackage rec {
@@ -17040,8 +16677,6 @@ let
     meta = {
       description = "Build a URI from a set of named parameters";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ ];
-      platforms   = stdenv.lib.platforms.unix;
     };
     buildInputs = [ TestFatal ];
   };
@@ -17255,10 +16890,6 @@ let
       substituteInPlace t/cgi-bin/script.cgi \
         --replace '#!/usr/bin/perl' '#!${perl}/bin/perl'
     '';
-    meta = {
-      maintainers = with maintainers; [ ];
-      platforms   = stdenv.lib.platforms.unix;
-    };
   };
 
   WWWRobotRules = buildPerlPackage {
@@ -17578,8 +17209,6 @@ let
     };
     meta = {
       description = "A re-usable XPath engine for DOM-like trees";
-      maintainers = with maintainers; [ ];
-      platforms   = stdenv.lib.platforms.unix;
     };
   };
 
@@ -17664,10 +17293,6 @@ let
       sha256 = "1xd00821y795fy2rag8aizb5wsbbzfxgmdf9qwpvdxn3pgpyzz85";
     };
     propagatedBuildInputs = [ XMLParser ];
-    meta = {
-      maintainers = with maintainers; [ ];
-      platforms   = stdenv.lib.platforms.unix;
-    };
   };
 
   XMLSimple = buildPerlPackage {

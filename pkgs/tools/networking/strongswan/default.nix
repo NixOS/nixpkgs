@@ -1,9 +1,10 @@
-{ stdenv, fetchurl
+{ stdenv, fetchurl, substituteAll
 , pkgconfig, autoreconfHook
 , gmp, python, iptables, ldns, unbound, openssl, pcsclite
 , openresolv
 , systemd, pam
 , curl
+, kmod
 , enableTNC            ? false, trousers, sqlite, libxml2
 , enableNetworkManager ? false, networkmanager
 , libpcap
@@ -40,6 +41,10 @@ stdenv.mkDerivation rec {
     ./ext_auth-path.patch
     ./firewall_defaults.patch
     ./updown-path.patch
+    (substituteAll {
+      src = ./modprobe-path.patch;
+      inherit kmod;
+    })
   ];
 
   postPatch = ''

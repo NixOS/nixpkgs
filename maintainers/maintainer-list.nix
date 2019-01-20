@@ -341,6 +341,11 @@
     github = "apeyroux";
     name = "Alexandre Peyroux";
   };
+  ar1a = {
+    email = "aria@ar1as.space";
+    github = "ar1a";
+    name = "Aria Edmonds";
+  };
   arcadio = {
     email = "arc@well.ox.ac.uk";
     github = "arcadio";
@@ -1585,6 +1590,11 @@
   funfunctor = {
     email = "eocallaghan@alterapraxis.com";
     name = "Edward O'Callaghan";
+  };
+  fusion809 = {
+    email = "brentonhorne77@gmail.com";
+    github = "fusion809";
+    name = "Brenton Horne";
   };
   fuuzetsu = {
     email = "fuuzetsu@fuuzetsu.co.uk";

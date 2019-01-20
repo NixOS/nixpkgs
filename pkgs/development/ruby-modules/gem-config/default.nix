@@ -94,6 +94,10 @@ in
     '';
   };
 
+  digest-sha3 = attrs: {
+    hardeningDisable = [ "format" ];
+  };
+
   ethon = attrs: {
     dontBuild = false;
     postPatch = ''
@@ -297,13 +301,16 @@ in
     buildInputs = [ rainbow_rake ];
   };
 
-  rbnacl = spec: {
-    postInstall = ''
-    sed -i $(cat $out/nix-support/gem-meta/install-path)/lib/rbnacl.rb -e "2a \
-    RBNACL_LIBSODIUM_GEM_LIB_PATH = '${libsodium.out}/lib/libsodium${stdenv.hostPlatform.extensions.sharedLibrary}'
-    "
-    '';
-  };
+  rbnacl = spec:
+    if lib.versionOlder spec.version "6.0.0" then {
+      postInstall = ''
+        sed -i $(cat $out/nix-support/gem-meta/install-path)/lib/rbnacl.rb -e "2a \
+        RBNACL_LIBSODIUM_GEM_LIB_PATH = '${libsodium.out}/lib/libsodium${stdenv.hostPlatform.extensions.sharedLibrary}'
+        "
+      '';
+    } else {
+      buildInputs = [ libsodium ];
+    };
 
   re2 = attrs: {
     buildInputs = [ re2 ];

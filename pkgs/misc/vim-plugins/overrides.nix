@@ -19,18 +19,21 @@
 self: super: {
 
   vim2nix = buildVimPluginFrom2Nix {
-    name = "vim2nix";
+    pname = "vim2nix";
+    version = "1.0";
     src = ./vim2nix;
     dependencies = with super; [ vim-addon-manager ];
   };
 
   fzfWrapper = buildVimPluginFrom2Nix {
-    name = fzf.name;
+    pname = "fzf";
+    version = fzf.version;
     src = fzf.src;
   };
 
   skim = buildVimPluginFrom2Nix {
-    name = skim.name;
+    pname = "skim";
+    version = skim.version;
     src = skim.vim;
   };
 
@@ -54,7 +57,8 @@ self: super: {
       '';
     };
   in buildVimPluginFrom2Nix {
-    name = "LanguageClient-neovim-2018-09-07";
+    pname = "LanguageClient-neovim";
+    version = "2018-09-07";
     src = LanguageClient-neovim-src;
 
     propogatedBuildInputs = [ LanguageClient-neovim-bin ];
@@ -67,7 +71,8 @@ self: super: {
 
   # do not auto-update this one, as the name clashes with vim-snippets
   vim-docbk-snippets = buildVimPluginFrom2Nix {
-    name = "vim-docbk-snippets-2017-11-02";
+    pname = "vim-docbk-snippets";
+    version = "2017-11-02";
     src = fetchgit {
       url = "https://github.com/jhradilek/vim-snippets";
       rev = "69cce66defdf131958f152ea7a7b26c21ca9d009";

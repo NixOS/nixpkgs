@@ -1,15 +1,21 @@
-{ stdenv, fetchurl, pkgconfig, intltool, gobject-introspection, wrapGAppsHook, gjs, glib, gtk3, gdk_pixbuf, gst_all_1, gnome3 }:
+{ stdenv, fetchurl, fetchpatch, pkgconfig, intltool, gobject-introspection, wrapGAppsHook, gjs, glib, gtk3, gdk_pixbuf, gst_all_1, gnome3 }:
 
-let
+stdenv.mkDerivation rec {
   pname = "gnome-sound-recorder";
-  version = "3.28.1";
-in stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+  version = "3.28.2";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "0y0srj1hvr1waa35p6dj1r1mlgcsscc0i99jni50ijp4zb36fjqy";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "1k63xr3d16qbzi88md913ndaf2mzwmhmi6hipj0123sm7nsz1p94";
   };
+
+  patches = [
+    # Fix crash when trying to play recordings
+    (fetchpatch {
+      url = https://gitlab.gnome.org/GNOME/gnome-sound-recorder/commit/2b311ef67909bc20d0e87f334fe37bf5c4e9f29f.patch;
+      sha256 = "0hqmk846bxma0p66cqp94zd02zc1if836ywjq3sv5dsfwnz7jv3f";
+    })
+  ];
 
   nativeBuildInputs = [ pkgconfig intltool gobject-introspection wrapGAppsHook ];
   buildInputs = [ gjs glib gtk3 gdk_pixbuf ] ++ (with gst_all_1; [ gstreamer.dev gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad ]);

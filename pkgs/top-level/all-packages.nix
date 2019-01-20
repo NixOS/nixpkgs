@@ -197,6 +197,7 @@ in
 
   fetchgit = callPackage ../build-support/fetchgit {
     git = buildPackages.gitMinimal;
+    cacert = buildPackages.cacert;
   };
 
   fetchgitPrivate = callPackage ../build-support/fetchgit/private.nix { };
@@ -1378,6 +1379,8 @@ in
 
   eschalot = callPackage ../tools/security/eschalot { };
 
+  esphome = callPackage ../servers/home-assistant/esphome.nix { };
+
   esptool = callPackage ../tools/misc/esptool { };
 
   esptool-ck = callPackage ../tools/misc/esptool-ck { };
@@ -2166,10 +2169,6 @@ in
     ldapSupport = true;
     gssSupport = true;
     brotliSupport = true;
-  };
-
-  curl_7_59 = callPackage ../tools/networking/curl/7_59.nix rec {
-    fetchurl = fetchurlBoot;
   };
 
   curl = callPackage ../tools/networking/curl rec {
@@ -3212,17 +3211,36 @@ in
 
   pgf_graphics = callPackage ../tools/graphics/pgf { };
 
-  pgjwt = callPackage ../servers/sql/postgresql/pgjwt {};
 
-  cstore_fdw = callPackage ../servers/sql/postgresql/cstore_fdw {};
+  # postgresql extensions
 
-  pg_hll = callPackage ../servers/sql/postgresql/pg_hll {};
+  cstore_fdw = callPackage ../servers/sql/postgresql/ext/cstore_fdw.nix {};
 
-  pg_cron = callPackage ../servers/sql/postgresql/pg_cron {};
+  pg_cron = callPackage ../servers/sql/postgresql/ext/pg_cron.nix {};
 
-  pgtap = callPackage ../servers/sql/postgresql/pgtap {};
+  pg_hll = callPackage ../servers/sql/postgresql/ext/pg_hll.nix {};
 
-  pg_topn = callPackage ../servers/sql/postgresql/topn {};
+  pgjwt = callPackage ../servers/sql/postgresql/ext/pgjwt.nix {};
+
+  pg_repack = callPackage ../servers/sql/postgresql/ext/pg_repack.nix {};
+
+  pgroonga = callPackage ../servers/sql/postgresql/ext/pgroonga.nix {};
+
+  plv8 = callPackage ../servers/sql/postgresql/ext/plv8.nix {
+    v8 = callPackage ../development/libraries/v8/plv8_6_x.nix {
+      inherit (python2Packages) python;
+    };
+  };
+
+  pg_similarity = callPackage ../servers/sql/postgresql/ext/pg_similarity.nix {};
+
+  pgtap = callPackage ../servers/sql/postgresql/ext/pgtap.nix {};
+
+  pg_topn = callPackage ../servers/sql/postgresql/ext/pg_topn.nix {};
+
+  timescaledb = callPackage ../servers/sql/postgresql/ext/timescaledb.nix {};
+
+  tsearch_extras = callPackage ../servers/sql/postgresql/ext/tsearch_extras.nix { };
 
   pigz = callPackage ../tools/compression/pigz { };
 
@@ -5418,9 +5436,7 @@ in
 
   sieve-connect = callPackage ../applications/networking/sieve-connect {};
 
-  sigal = callPackage ../applications/misc/sigal {
-    inherit (pythonPackages) buildPythonApplication fetchPypi;
-  };
+  sigal = callPackage ../applications/misc/sigal { };
 
   sigil = libsForQt5.callPackage ../applications/editors/sigil { };
 
@@ -5989,6 +6005,8 @@ in
 
   vampire = callPackage ../applications/science/logic/vampire {};
 
+  vdmfec = callPackage ../applications/backup/vdmfec {};
+
   vk-messenger = callPackage ../applications/networking/instant-messengers/vk-messenger {};
 
   volatility = callPackage ../tools/security/volatility { };
@@ -6523,6 +6541,11 @@ in
   any-nix-shell = callPackage ../shells/any-nix-shell { };
 
   bash = lowPrio (callPackage ../shells/bash/4.4.nix { });
+  bash_5 = lowPrio (callPackage ../shells/bash/5.0.nix { });
+  bashInteractive_5 = lowPrio (callPackage ../shells/bash/5.0.nix {
+    interactive = true;
+    withDocs = true;
+  });
 
   # WARNING: this attribute is used by nix-shell so it shouldn't be removed/renamed
   bashInteractive = callPackage ../shells/bash/4.4.nix {
@@ -7224,11 +7247,17 @@ in
 
   oraclejdk8distro = installjdk: pluginSupport:
     (if pluginSupport then appendToName "with-plugin" else x: x)
-      (callPackage ../development/compilers/oraclejdk/jdk8cpu-linux.nix { inherit installjdk pluginSupport; });
+      (callPackage ../development/compilers/oraclejdk/jdk8cpu-linux.nix {
+        inherit installjdk pluginSupport;
+        licenseAccepted = config.oraclejdk.accept_license or false;
+      });
 
   oraclejdk8psu_distro = installjdk: pluginSupport:
     (if pluginSupport then appendToName "with-plugin" else x: x)
-      (callPackage ../development/compilers/oraclejdk/jdk8psu-linux.nix { inherit installjdk pluginSupport; });
+      (callPackage ../development/compilers/oraclejdk/jdk8psu-linux.nix {
+        inherit installjdk pluginSupport;
+        licenseAccepted = config.oraclejdk.accept_license or false;
+      });
 
   javacard-devkit = pkgsi686Linux.callPackage ../development/compilers/javacard-devkit { };
 
@@ -8502,7 +8531,11 @@ in
   cpplint = callPackage ../development/tools/analysis/cpplint { };
 
   cquery = callPackage ../development/tools/misc/cquery {
-    llvmPackages = llvmPackages_7;
+    llvmPackages = llvmPackages_latest;
+  };
+
+  ccls = callPackage ../development/tools/misc/ccls {
+    llvmPackages = llvmPackages_latest;
   };
 
   credstash = with python3Packages; toPythonApplication credstash;
@@ -9734,7 +9767,7 @@ in
     vid-stab = if stdenv.isDarwin then null else vid-stab;
     x265 = if stdenv.isDarwin then null else x265;
     xavs = if stdenv.isDarwin then null else xavs;
-    inherit (darwin) CF;
+    inherit (darwin) cf-private;
     inherit (darwin.apple_sdk.frameworks)
       Cocoa CoreServices CoreAudio AVFoundation MediaToolbox
       VideoDecodeAcceleration;
@@ -10805,33 +10838,6 @@ in
   libfpx = callPackage ../development/libraries/libfpx { };
 
   libgadu = callPackage ../development/libraries/libgadu { };
-
-  gap-libgap-compatible = let
-    version = "4r8p6";
-    pkgVer = "2016_11_12-14_25";
-  in
-    (gap.override { keepAllPackages = false; }).overrideAttrs (oldAttrs: {
-      name = "libgap-${oldAttrs.pname}-${version}";
-      inherit version;
-      src = fetchurl {
-        url = "https://www.gap-system.org/pub/gap/gap48/tar.bz2/gap${version}_${pkgVer}.tar.bz2";
-        sha256 = "19n2p1mdg33s2x9rs51iak7rgndc1cwr56jyqnah0g1ydgg1yh6b";
-      };
-      patches = [
-        # don't install any packages by default (needed for interop with libgap, probably obsolete  with 4r10
-        (fetchpatch {
-          url = "https://git.sagemath.org/sage.git/plain/build/pkgs/gap/patches/nodefaultpackages.patch?id=07d6c37d18811e2b377a9689790a7c5e24da16ba";
-          sha256 = "1xwj766m3axrxbkyx13hy3q8s2wkqxy3m6mgpwq3c3n4vk3v416v";
-        })
-
-        #  fix infinite loop in writeandcheck() when writing an error message fails.
-        (fetchpatch {
-          url = "https://git.sagemath.org/sage.git/plain/build/pkgs/gap/patches/writeandcheck.patch?id=07d6c37d18811e2b377a9689790a7c5e24da16ba";
-          sha256 = "1r1511x4kc2i2mbdq1b61rb6p3misvkf1v5qy3z6fmn6vqwziaz1";
-        })
-      ];
-  });
-  libgap = callPackage ../development/libraries/libgap { };
 
   libgda = callPackage ../development/libraries/libgda { };
 
@@ -11991,18 +11997,6 @@ in
 
   pdf2xml = callPackage ../development/libraries/pdf2xml {} ;
 
-  pg_repack = callPackage ../servers/sql/postgresql/pg_repack {};
-
-  pg_similarity = callPackage ../servers/sql/postgresql/pg_similarity {};
-
-  pgroonga = callPackage ../servers/sql/postgresql/pgroonga {};
-
-  plv8 = callPackage ../servers/sql/postgresql/plv8 {
-    v8 = callPackage ../development/libraries/v8/plv8_6_x.nix {
-      inherit (python2Packages) python;
-    };
-  };
-
   phonon = callPackage ../development/libraries/phonon {};
 
   phonon-backend-gstreamer = callPackage ../development/libraries/phonon/backends/gstreamer.nix {};
@@ -12106,6 +12100,8 @@ in
     qtwebengine = qt59.qtwebengine;
     qtxmlpatterns = qt59.qtxmlpatterns;
   };
+
+  pyotherside = libsForQt5.callPackage ../development/libraries/pyotherside {};
 
   re2 = callPackage ../development/libraries/re2 { };
 
@@ -12383,6 +12379,8 @@ in
   readline63 = callPackage ../development/libraries/readline/6.3.nix { };
 
   readline70 = callPackage ../development/libraries/readline/7.0.nix { };
+
+  readline80 = callPackage ../development/libraries/readline/8.0.nix { };
 
   readosm = callPackage ../development/libraries/readosm { };
 
@@ -13124,7 +13122,7 @@ in
 
   yojimbo = callPackage ../development/libraries/yojimbo { };
 
-  yubioath-desktop = callPackage ../applications/misc/yubioath-desktop { };
+  yubioath-desktop = libsForQt5.callPackage ../applications/misc/yubioath-desktop { };
 
   yubico-piv-tool = callPackage ../tools/misc/yubico-piv-tool { };
 
@@ -13940,7 +13938,7 @@ in
     postgresql_10
     postgresql_11;
 
-  postgresql_jdbc = callPackage ../servers/sql/postgresql/jdbc { };
+  postgresql_jdbc = callPackage ../development/java-modules/postgresql_jdbc { };
 
   inherit (callPackage ../servers/monitoring/prometheus {
     buildGoPackage = buildGo110Package;
@@ -13980,7 +13978,7 @@ in
   prometheus-varnish-exporter = callPackage ../servers/monitoring/prometheus/varnish-exporter.nix { };
   prometheus-jmx-httpserver = callPackage ../servers/monitoring/prometheus/jmx-httpserver.nix {  };
 
-  psqlodbc = callPackage ../servers/sql/postgresql/psqlodbc { };
+  psqlodbc = callPackage ../development/libraries/psqlodbc { };
 
   pure-ftpd = callPackage ../servers/ftp/pure-ftpd { };
 
@@ -15382,6 +15380,8 @@ in
 
   adapta-backgrounds = callPackage ../data/misc/adapta-backgrounds { };
 
+  agave = callPackage ../data/fonts/agave { };
+
   aileron = callPackage ../data/fonts/aileron { };
 
   andagii = callPackage ../data/fonts/andagii { };
@@ -15389,6 +15389,9 @@ in
   andika = callPackage ../data/fonts/andika { };
 
   android-udev-rules = callPackage ../os-specific/linux/android-udev-rules { };
+
+  ankacoder = callPackage ../data/fonts/ankacoder { };
+  ankacoder-condensed = callPackage ../data/fonts/ankacoder/condensed.nix { };
 
   anonymousPro = callPackage ../data/fonts/anonymous-pro { };
 
@@ -15425,6 +15428,8 @@ in
   carlito = callPackage ../data/fonts/carlito {};
 
   charis-sil = callPackage ../data/fonts/charis-sil { };
+
+  cherry = callPackage ../data/fonts/cherry { };
 
   comfortaa = callPackage ../data/fonts/comfortaa {};
 
@@ -15572,6 +15577,8 @@ in
 
   hanazono = callPackage ../data/fonts/hanazono { };
 
+  hermit = callPackage ../data/fonts/hermit { };
+
   hyperscrypt-font = callPackage ../data/fonts/hyperscrypt { };
 
   ia-writer-duospace = callPackage ../data/fonts/ia-writer-duospace { };
@@ -15647,6 +15654,8 @@ in
   # lohit-fonts.tamil-classical lohit-fonts.tamil lohit-fonts.telugu
   # lohit-fonts.kashmiri lohit-fonts.konkani lohit-fonts.maithili lohit-fonts.sindhi
   lohit-fonts = recurseIntoAttrs ( callPackages ../data/fonts/lohit-fonts { } );
+
+  luculent = callPackage ../data/fonts/luculent { };
 
   maia-icon-theme = callPackage ../data/icons/maia-icon-theme { };
 
@@ -16035,7 +16044,7 @@ in
   androidStudioPackages = recurseIntoAttrs
     (callPackage ../applications/editors/android-studio { });
   android-studio = androidStudioPackages.stable;
-  android-studio-preview = androidStudioPackages.beta;
+  android-studio-preview = androidStudioPackages.preview;
 
   animbar = callPackage ../applications/graphics/animbar { };
 
@@ -18139,7 +18148,9 @@ in
 
   mediainfo-gui = callPackage ../applications/misc/mediainfo-gui { };
 
-  mediathekview = callPackage ../applications/video/mediathekview { };
+  # mediathekview needs JavaFX, which currently only is available inside OracleJRE
+  # we might be able to get rid of it, as soon as we have an OpenJRE with OpenJFX included
+  mediathekview = callPackage ../applications/video/mediathekview { jre = oraclejre; };
 
   meteo = callPackage ../applications/networking/weather/meteo { };
 
@@ -18350,6 +18361,8 @@ in
     x11Support         = !stdenv.isDarwin;
     xineramaSupport    = !stdenv.isDarwin;
     xvSupport          = !stdenv.isDarwin;
+    # Use docutils from python3 to avoid python2 in the closure
+    inherit (python3Packages) docutils;
   };
 
   mpv-with-scripts = callPackage ../applications/video/mpv/wrapper.nix { };
@@ -19606,8 +19619,6 @@ in
     fftw = fftwSinglePrec;
   };
 
-  timescaledb = callPackage ../servers/sql/postgresql/timescaledb {};
-
   timewarrior = callPackage ../applications/misc/timewarrior { };
 
   timidity = callPackage ../tools/misc/timidity { };
@@ -19683,6 +19694,8 @@ in
 
   trayer = callPackage ../applications/window-managers/trayer { };
 
+  tdrop = callPackage ../applications/misc/tdrop { };
+
   tree = callPackage ../tools/system/tree {};
 
   treesheets = callPackage ../applications/office/treesheets { wxGTK = wxGTK31; };
@@ -19690,8 +19703,6 @@ in
   tribler = callPackage ../applications/networking/p2p/tribler { };
 
   trojita = libsForQt5.callPackage ../applications/networking/mailreaders/trojita { };
-
-  tsearch_extras = callPackage ../servers/sql/postgresql/tsearch_extras { };
 
   tudu = callPackage ../applications/office/tudu { };
 
@@ -21386,6 +21397,8 @@ in
 
   jmol = callPackage ../applications/science/chemistry/jmol { };
 
+  marvin = callPackage ../applications/science/chemistry/marvin { };
+
   molden = callPackage ../applications/science/chemistry/molden { };
 
   octopus = callPackage ../applications/science/chemistry/octopus { openblas=openblasCompat; };
@@ -21989,7 +22002,9 @@ in
 
   gap = callPackage ../applications/science/math/gap { };
 
-  gap-minimal = lowPrio (gap.override { keepAllPackages = false; });
+  gap-minimal = lowPrio (gap.override { packageSet = "minimal"; });
+
+  gap-full = lowPrio (gap.override { packageSet = "full"; });
 
   geogebra = callPackage ../applications/science/math/geogebra { };
 
@@ -22453,7 +22468,6 @@ in
   inherit (callPackages ../tools/package-management/nix {
       storeDir = config.nix.storeDir or "/nix/store";
       stateDir = config.nix.stateDir or "/nix/var";
-      curl = curl_7_59;
       boehmgc = boehmgc.override { enableLargeConfig = true; };
       })
     nix
@@ -23089,8 +23103,6 @@ in
 
   zap = callPackage ../tools/networking/zap { };
 
-  zdfmediathk = callPackage ../applications/video/zdfmediathk { };
-
   zopfli = callPackage ../tools/compression/zopfli { };
 
   myEnvFun = callPackage ../misc/my-env {
@@ -23102,6 +23114,8 @@ in
   zncModules = recurseIntoAttrs (
     callPackage ../applications/networking/znc/modules.nix { }
   );
+
+  zoneminder = callPackage ../servers/zoneminder { };
 
   zsnes = pkgsi686Linux.callPackage ../misc/emulators/zsnes { };
 
