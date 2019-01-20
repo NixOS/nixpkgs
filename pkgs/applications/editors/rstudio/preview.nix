@@ -5,7 +5,7 @@
 }:
 
 let
-  rev = "f33fb2b2f1";
+  rev = "f79330d4";
   ginVer = "2.1.2";
   gwtVer = "2.8.1";
 in
