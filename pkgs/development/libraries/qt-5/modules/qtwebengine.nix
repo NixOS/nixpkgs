@@ -206,12 +206,13 @@ EOF
     Quartz
     Cocoa
 
-    cups
     openbsm
     libunwind
   ]);
 
   buildInputs = optionals stdenv.isDarwin (with darwin; [
+    cups
+
     # For sandbox.h include
     (runCommand "MacOS_SDK_sandbox.h" {} ''
       install -Dm444 "${lib.getDev darwin.apple_sdk.sdk}"/include/sandbox.h "$out"/include/sandbox.h
