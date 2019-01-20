@@ -21855,10 +21855,6 @@ in
 
   proverif = callPackage ../applications/science/logic/proverif { };
 
-  sapic = callPackage ../applications/science/logic/sapic {
-    inherit (ocaml-ng.ocamlPackages_4_05) ocaml;
-  };
-
   satallax = callPackage ../applications/science/logic/satallax {
     ocaml = ocaml-ng.ocamlPackages_4_01_0.ocaml;
   };

@@ -271,6 +271,7 @@ mapAliases ({
   saneBackends = sane-backends; # added 2016-01-02
   saneBackendsGit = sane-backends-git; # added 2016-01-02
   saneFrontends = sane-frontends; # added 2016-01-02
+  sapic = throw "deprecated 2019-1-19: sapic is bundled with 'tamarin-prover' now";
   scim = sc-im; # added 2016-01-22
   scollector = bosun; # added 2018-04-25
   shared_mime_info = shared-mime-info; # added 2018-02-25
