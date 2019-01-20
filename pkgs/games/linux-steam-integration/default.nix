@@ -2,16 +2,16 @@
   gcc_multi, libressl, gnome3, steam }:
 
 let
-  version = "0.7.2";
+  version = "0.7.3";
 
 in stdenv.mkDerivation rec {
   name = "linux-steam-integration-${version}";
 
   src = fetchFromGitHub {
-    owner = "solus-project";
+    owner = "clearlinux";
     repo = "linux-steam-integration";
     rev = "v${version}";
-    sha256 = "0yn71fvjqi63dxk04jsndb26pgipl0nla10sy94bi7q95pk3sdf6";
+    sha256 = "0brv3swx8h170ycxksb31sf5jvj85csfpx7gjlf6yrfz7jw2j6vp";
     fetchSubmodules = true;
   };
 
@@ -72,7 +72,7 @@ in stdenv.mkDerivation rec {
       various workarounds to get games working, and fixes long standing bugs in
       both games and the client
     '';
-    homepage = https://github.com/solus-project/linux-steam-integration;
+    homepage = https://github.com/clearlinux/linux-steam-integration;
     license = licenses.lgpl21;
     maintainers = [ maintainers.etu ];
     platforms = [ "x86_64-linux" ];
