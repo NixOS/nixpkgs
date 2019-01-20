@@ -411,11 +411,11 @@ let
 
   phpstan = pkgs.stdenv.mkDerivation rec {
     name = "phpstan-${version}";
-    version = "0.11";
+    version = "0.11.1";
 
     src = pkgs.fetchurl {
       url = "https://github.com/phpstan/phpstan/releases/download/${version}/phpstan.phar";
-      sha256 = "09p3cg5ii862p2l44fcv7hh400nsmxvwn1jjr929y21p01wsjhkp";
+      sha256 = "0iivfp9945gv6pqhp01720rlwzfd260hbfq31a3mmimly721mnsa";
     };
 
     phases = [ "installPhase" ];
