@@ -5195,6 +5195,8 @@ in {
 
   casttube = callPackage ../development/python-modules/casttube { };
 
+  aiorpcX = callPackage ../development/python-modules/aiorpcX { };
+
 });
 
 in fix' (extends overrides packages)
