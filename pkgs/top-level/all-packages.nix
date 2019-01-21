@@ -15405,6 +15405,8 @@ in
 
   aurulent-sans = callPackage ../data/fonts/aurulent-sans { };
 
+  b612  = callPackage ../data/fonts/b612 { };
+
   babelstone-han = callPackage ../data/fonts/babelstone-han { };
 
   baekmuk-ttf = callPackage ../data/fonts/baekmuk-ttf { };
