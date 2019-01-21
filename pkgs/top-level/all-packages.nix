@@ -20732,6 +20732,9 @@ in
   pythonmagick = callPackage ../applications/graphics/PythonMagick { };
 
   qbittorrent = libsForQt5.callPackage ../applications/networking/p2p/qbittorrent { };
+  qbittorrent-nox = qbittorrent.override {
+    guiSupport = false;
+  };
 
   qcomicbook = libsForQt5.callPackage ../applications/graphics/qcomicbook { };
 
