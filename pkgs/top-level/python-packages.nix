@@ -1342,6 +1342,8 @@ in {
 
   astor = callPackage ../development/python-modules/astor {};
 
+  asyncpg = callPackage ../development/python-modules/asyncpg { };
+
   asyncssh = callPackage ../development/python-modules/asyncssh { };
 
   python-fontconfig = callPackage ../development/python-modules/python-fontconfig { };
