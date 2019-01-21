@@ -17,7 +17,7 @@ stdenv.mkDerivation (rec {
   echo -e '\ninstall:\n\tcp $(FSMONITOR)$(EXEC_EXT) $(INSTALLDIR)' >> fsmonitor/linux/Makefile
   '';
 
-  makeFlags = "INSTALLDIR=$(out)/bin/" + (if enableX11 then " UISTYLE=gtk2" else "")
+  makeFlags = "INSTALLDIR=$(out)/bin/" + (if enableX11 then " UISTYLE=gtk2" else " UISTYLE=text")
     + (if ! ocaml.nativeCompilers then " NATIVE=false" else "");
 
   preInstall = "mkdir -p $out/bin";
