@@ -28,12 +28,12 @@ let
 
 in
 stdenv.mkDerivation rec {
-  name    = "musl-${version}";
-  version = "1.1.20";
+  pname = "musl";
+  version = "1.1.21";
 
   src = fetchurl {
-    url    = "https://www.musl-libc.org/releases/musl-${version}.tar.gz";
-    sha256 = "0q8dsjxl41dccscv9a0r78bs7jap57mn4mni5pwbbip6s1qqggj4";
+    url    = "https://www.musl-libc.org/releases/${pname}-${version}.tar.gz";
+    sha256 = "0i2z52zgc86af1n1gjiz43hgd85mxjgvgn345zsybja9dxpvchn7";
   };
 
   enableParallelBuilding = true;
@@ -56,29 +56,7 @@ stdenv.mkDerivation rec {
       url = https://raw.githubusercontent.com/openwrt/openwrt/87606e25afac6776d1bbc67ed284434ec5a832b4/toolchain/musl/patches/300-relative.patch;
       sha256 = "0hfadrycb60sm6hb6by4ycgaqc9sgrhh42k39v8xpmcvdzxrsq2n";
     })
-    # Upstream bugfix, see: https://git.musl-libc.org/cgit/musl/commit/?id=0db393d3a77bb9f300a356c6a5484fc2dddb161d
-    # Explicitly flagged for inclusion by distributions using musl
-    ./fix-file-locking-race.patch
-    # More specific error reporting
-    ./tty-more-precise-errors.patch
-    # Use execveat to impl fexecve when avail (useful for containers)
-    ./fexecve-execveat.patch
-    # improve behavior in few cases
-    ./0001-in-pthread_mutex_trylock-EBUSY-out-more-directly-whe.patch
-    ./0002-in-pthread_mutex_timedlock-avoid-repeatedly-reading-.patch
-    ./0003-fix-namespace-violation-for-c11-mutex-functions.patch
-    # Fix getaddrinfo usage encountered sometimes in containers
-    ./fix-getaddrinfo-regression-with-AI_ADDRCONFIG.patch
-    # name_to_handle_at
-    ./name-to-handle-at.patch
-    ./max-handle-sz-for-name-to-handle-at.patch
-    # stacksize bump (upstream)
-    ./stacksize-bump.patch
   ];
-  preConfigure = ''
-    configureFlagsArray+=("--syslibdir=$out/lib")
-  '';
-
   CFLAGS = [ "-fstack-protector-strong" ]
     ++ lib.optional stdenv.hostPlatform.isPower "-mlong-double-64";
 
@@ -87,6 +65,7 @@ stdenv.mkDerivation rec {
     "--enable-static"
     "--enable-debug"
     "--enable-wrapper=all"
+    "--syslibdir=${placeholder "out"}/lib"
   ];
 
   outputs = [ "out" "dev" ];
