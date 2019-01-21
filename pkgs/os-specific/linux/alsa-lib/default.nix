@@ -1,20 +1,15 @@
-{ stdenv, fetchurl, fetchpatch }:
+{ stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "alsa-lib-1.1.7";
+  name = "alsa-lib-1.1.8";
 
   src = fetchurl {
     url = "mirror://alsa/lib/${name}.tar.bz2";
-    sha256 = "02fw7dw202mjid49w9ki3dsfcyvid5fj488561bdzcm3haw00q4x";
+    sha256 = "1pxf0zkmps03l3zzd0fr828xhkg6a8hxljmbxzc2cyj2ls9kmp1w";
   };
 
   patches = [
     ./alsa-plugin-conf-multilib.patch
-    (fetchpatch { # pcm interval fix needed for some programs with broken audio, remove when bumping version
-      name = "pcm-interval-fix.patch";
-      url = "http://git.alsa-project.org/?p=alsa-lib.git;a=commitdiff_plain;h=b420056604f06117c967b65d43d01536c5ffcbc9";
-      sha256 = "1vjfslzsypd6w15zvvrpdk825hm5j0gz16gw7kj290pkbsdgd435";
-    })
   ];
 
   # Fix pcm.h file in order to prevent some compilation bugs
