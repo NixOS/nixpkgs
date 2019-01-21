@@ -14270,6 +14270,7 @@ in
     armTrustedFirmwareAllwinner
     armTrustedFirmwareQemu
     armTrustedFirmwareRK3328
+    armTrustedFirmwareRK3399
     ;
 
   microcodeAmd = callPackage ../os-specific/linux/microcode/amd.nix { };
@@ -15317,7 +15318,35 @@ in
   # Non-upstream U-Boots:
   ubootNanonote = callPackage ../misc/uboot/nanonote.nix { };
 
-  ubootRock64 = callPackage ../misc/uboot/rock64.nix { };
+  inherit (let
+    dtc = buildPackages.dtc.overrideAttrs (old: rec {
+      version = "1.4.5";
+      src = fetchgit {
+        url = "https://git.kernel.org/pub/scm/utils/dtc/dtc.git";
+        rev = "refs/tags/v${version}";
+        sha256 = "10y5pbkcj5gkijcgnlvrh6q2prpnvsgihb9asz3zfp66mcjwzsy3";
+      };
+    });
+    # Newer dtc versions are incompatible with U-Boot 2017.09
+    inherit (callPackage ../misc/uboot {
+      inherit dtc;
+      buildPackages = buildPackages // {
+        python2 = buildPackages.python2.override (old: {
+          packageOverrides = pySelf: pySuper: {
+            libfdt = pySelf.toPythonModule dtc;
+          };
+        });
+      };
+    }) buildUBoot;
+  in {
+    ubootRock64 = callPackage ../misc/uboot/rock64.nix {
+      inherit buildUBoot;
+    };
+
+    ubootRockPro64 = callPackage ../misc/uboot/rockpro64.nix {
+      inherit buildUBoot;
+    };
+  }) ubootRock64 ubootRockPro64;
 
   uclibc = callPackage ../os-specific/linux/uclibc { };
 
@@ -19127,6 +19156,8 @@ in
   ripser = callPackage ../applications/science/math/ripser { };
 
   rkt = callPackage ../applications/virtualization/rkt { };
+
+  rkdeveloptool = callPackage ../misc/rkdeveloptool { };
 
   rofi-unwrapped = callPackage ../applications/misc/rofi { };
   rofi = callPackage ../applications/misc/rofi/wrapper.nix { };
