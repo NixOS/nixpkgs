@@ -240,6 +240,8 @@ in {
 
   azure-storage-nspkg = callPackage ../development/python-modules/azure-storage-nspkg { };
 
+  azure-storage-common = callPackage ../development/python-modules/azure-storage-common { };
+
   azure-servicemanagement-legacy = callPackage ../development/python-modules/azure-servicemanagement-legacy { };
 
   backports_csv = callPackage ../development/python-modules/backports_csv {};
