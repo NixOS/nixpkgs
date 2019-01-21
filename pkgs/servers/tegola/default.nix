@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchgit }:
+{ stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   name = "tegola-${version}";
@@ -7,9 +7,10 @@ buildGoPackage rec {
 
   goPackagePath = "github.com/go-spatial/tegola";
 
-  src = fetchgit {
+  src = fetchFromGitHub {
+    owner = "go-spatial";
+    repo = "tegola";
     inherit rev;
-    url = "https://github.com/go-spatial/tegola";
     sha256 = "1f70vsrj3i1d0kg76a8s741nps71hrglgyyrz2xm6a8b31w833pi";
   };
 
@@ -20,7 +21,4 @@ buildGoPackage rec {
     platforms = platforms.unix;
     license = licenses.mit;
   };
-
 }
-
-
