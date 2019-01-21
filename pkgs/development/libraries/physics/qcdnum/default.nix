@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "QCDNUM-${version}";
-  version = "17-01-14";
+  version = "17-01-13";
 
   src = fetchurl {
     url = "http://www.nikhef.nl/user/h24/qcdnum-files/download/qcdnum${builtins.replaceStrings ["-"] [""] version}.tar.gz";
-    sha256 = "199s6kgmszxgjzd9214mpx3kyplq2q6987sii67s5xkg10ynyv31";
+    sha256 = "0568rjviwvjkfihq2ka7g91vmialr31ryn7c69iqf13rcv5vzcw7";
   };
 
   nativeBuildInputs = [ gfortran ];
