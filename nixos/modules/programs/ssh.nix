@@ -167,16 +167,16 @@ in
           The set of system-wide known SSH hosts.
         '';
         example = literalExample ''
-          [
-            {
+          {
+            myhost = {
               hostNames = [ "myhost" "myhost.mydomain.com" "10.10.1.4" ];
               publicKeyFile = ./pubkeys/myhost_ssh_host_dsa_key.pub;
-            }
-            {
+            };
+            myhost2 = {
               hostNames = [ "myhost2" ];
               publicKeyFile = ./pubkeys/myhost2_ssh_host_dsa_key.pub;
-            }
-          ]
+            };
+          }
         '';
       };
 
