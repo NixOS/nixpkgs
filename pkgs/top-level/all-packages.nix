@@ -10670,7 +10670,7 @@ in
   gsettings-qt = libsForQt5.callPackage ../development/libraries/gsettings-qt { };
 
   gst_all_1 = recurseIntoAttrs(callPackage ../development/libraries/gstreamer {
-    callPackage = newScope { libav = pkgs.ffmpeg; };
+    callPackage = newScope { libav = pkgs.ffmpeg_4; };
   });
 
   gstreamer = callPackage ../development/libraries/gstreamer/legacy/gstreamer { };
