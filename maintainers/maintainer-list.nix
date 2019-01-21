@@ -1963,6 +1963,15 @@
     email = "tkatchev@gmail.com";
     name = "Ivan Tkatchev";
   };
+  ivegotasthma = {
+    email = "ivegotasthma@protonmail.com";
+    github = "ivegotasthma";
+    name = "John Doe";
+    keys = [{
+      longkeyid = "rsa4096/09AC52AEA87817A4";
+      fingerprint = "4008 2A5B 56A4 79B9 83CB  95FD 09AC 52AE A878 17A4";
+    }];
+  };
   ixmatus = {
     email = "parnell@digitalmentat.com";
     github = "ixmatus";

@@ -262,6 +262,8 @@ in {
 
   boltons = callPackage ../development/python-modules/boltons { };
 
+  braintree = callPackage ../development/python-modules/braintree { };
+
   breathe = callPackage ../development/python-modules/breathe { };
 
   brotli = callPackage ../development/python-modules/brotli { };
@@ -2230,6 +2232,8 @@ in {
 
   django_contrib_comments = callPackage ../development/python-modules/django_contrib_comments { };
 
+  django-cors-headers = callPackage ../development/python-modules/django-cors-headers { };
+
   django-discover-runner = callPackage ../development/python-modules/django-discover-runner { };
 
   django_environ = callPackage ../development/python-modules/django_environ { };
@@ -2251,6 +2255,8 @@ in {
   django-picklefield = callPackage ../development/python-modules/django-picklefield { };
 
   django_polymorphic = callPackage ../development/python-modules/django-polymorphic { };
+
+  django-rest-auth = callPackage ../development/python-modules/django-rest-auth { };
 
   django-sampledatahelper = callPackage ../development/python-modules/django-sampledatahelper { };
 
@@ -2288,6 +2294,8 @@ in {
   django_modelcluster = callPackage ../development/python-modules/django_modelcluster { };
 
   djangorestframework = callPackage ../development/python-modules/djangorestframework { };
+
+  djangorestframework-jwt = callPackage ../development/python-modules/djangorestframework-jwt { };
 
   django-raster = callPackage ../development/python-modules/django-raster { };
 
