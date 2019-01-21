@@ -221,7 +221,7 @@
     "camera.xeoma" = ps: with ps; [  ];
     "camera.xiaomi" = ps: with ps; [ ha-ffmpeg ];
     "camera.yi" = ps: with ps; [ ha-ffmpeg ];
-    "camera.zoneminder" = ps: with ps; [  ];
+    "camera.zoneminder" = ps: with ps; [ zm-py ];
     "canary" = ps: with ps; [  ];
     "cast" = ps: with ps; [ PyChromecast ];
     "climate" = ps: with ps; [  ];
@@ -1222,7 +1222,7 @@
     "sensor.zestimate" = ps: with ps; [ xmltodict ];
     "sensor.zha" = ps: with ps; [  ];
     "sensor.zigbee" = ps: with ps; [  ];
-    "sensor.zoneminder" = ps: with ps; [  ];
+    "sensor.zoneminder" = ps: with ps; [ zm-py ];
     "sensor.zwave" = ps: with ps; [  ];
     "shell_command" = ps: with ps; [  ];
     "shiftr" = ps: with ps; [ paho-mqtt ];
@@ -1358,7 +1358,7 @@
     "switch.xiaomi_miio" = ps: with ps; [ construct ];
     "switch.zha" = ps: with ps; [  ];
     "switch.zigbee" = ps: with ps; [  ];
-    "switch.zoneminder" = ps: with ps; [  ];
+    "switch.zoneminder" = ps: with ps; [ zm-py ];
     "switch.zwave" = ps: with ps; [  ];
     "system_log" = ps: with ps; [ aiohttp-cors ];
     "tado" = ps: with ps; [  ];
@@ -1468,7 +1468,7 @@
     "zone.config_flow" = ps: with ps; [  ];
     "zone.const" = ps: with ps; [  ];
     "zone.zone" = ps: with ps; [  ];
-    "zoneminder" = ps: with ps; [  ];
+    "zoneminder" = ps: with ps; [ zm-py ];
     "zwave" = ps: with ps; [ homeassistant-pyozw pydispatcher ];
     "zwave.config_flow" = ps: with ps; [  ];
     "zwave.const" = ps: with ps; [  ];
