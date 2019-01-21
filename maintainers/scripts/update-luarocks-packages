@@ -1,11 +1,12 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p lua5_2.withPackages(ps:[ps.luarocks-nix]) nix-prefetch-scripts
+#!nix-shell -p nix-prefetch-scripts luarocks-nix -i bash
 
 # You'll likely want to use
 # ``
-# nixpkgs $ maintainers/scripts/update-luarocks-packages.sh > pkgs/top-level/lua-generated-packages.nix
+# nixpkgs $ maintainers/scripts/update-luarocks-packages.sh > pkgs/development/lua-modules/generated-packages.nix
 # ``
 # to update all libraries in that folder.
+# to debug, redirect stderr to stdout with 2>&1
 
 
 # stop the script upon C-C
@@ -13,7 +14,7 @@ set -eu -o pipefail
 
 if [ $# -lt 1 ]; then
     echo "Usage: $0 GENERATED_FILENAME"
-    echo "(most likely pkgs/top-level/lua-generated-packages.nix)"
+    echo "(most likely pkgs/development/lua-modules/generated-packages.nix)"
     exit 1
 fi
 
@@ -51,21 +52,20 @@ read -d '' -r HEADER <<EOM
 /* ${GENERATED_NIXFILE} is an auto-generated file -- DO NOT EDIT!
 Regenerate it with:
 nixpkgs$ ${0} ${GENERATED_NIXFILE}
+
+These packages are manually refined in lua-overrides.nix
 */
 {
 self
 , lua
-, buildLuaPackage
 , stdenv
 , fetchurl
-, luaAtLeast
-, luaOlder
-, isLua51
-, isLua52
+, pkgs
 , ...
 } @ args:
+self: super:
 with self;
-rec {
+{
 EOM
 
 read -d '' -r FOOTER <<'EOM'
@@ -83,9 +83,13 @@ function convert_pkg () {
 		server=" --server=$2"
 	fi
 
-    echo "looking at $pkg from server $server" >&2
-    drv=$(luarocks convert2nix $server "$pkg")
-    if [ $? -gt 0 ]; then
+    version="${3:-}"
+
+    set -x
+    echo "looking at $pkg (version $version) from server $server" >&2
+    cmd="luarocks nix $server $pkg $version"
+    drv="$($cmd)"
+    if [ $? -ne 0 ]; then
         echo "Failed to convert $pkg" >&2
         echo "$drv" >&2
     else
@@ -93,19 +97,24 @@ function convert_pkg () {
     fi
 }
 
-# list of packages
-source maintainers/scripts/lua_packages.sh
+# source maintainers/scripts/lua_packages.sh
 
 # params needed when called via callPackage
-echo "$HEADER" | tee $TMP_FILE
+echo "$HEADER" | tee "$TMP_FILE"
 
-if [ ! -z $PACKAGE ]; then
-    convert_pkg "$PACKAGE" "${pkg_list[$PACKAGE]}"
+if [ ! -z "$PACKAGE" ]; then
+    convert_pkg "$PACKAGE"
 else
-    for pkg_name in "${!pkg_list[@]}";
+    # list of packages with format
+    # name,server,version
+    while IFS=, read -r pkg_name server version
     do
-        convert_pkg $pkg_name "${pkg_list[$pkg_name]}"
-    done
+        if [ -z "$pkg_name" ]; then
+            echo "Skipping empty package name" >&2
+        fi
+        echo "PKG $pkg_name version $version from server $server" >&2
+        convert_pkg "$pkg_name" "$server" "$version"
+    done < maintainers/scripts/lua-packages.csv
 fi
 # close the set
 echo "$FOOTER" | tee -a "$TMP_FILE"

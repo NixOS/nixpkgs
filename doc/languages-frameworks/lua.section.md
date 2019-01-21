@@ -119,8 +119,8 @@ Luarocks2nix is a tool capable of generating nix derivations from a rockspec fil
    upload the file on luarocks.org.
 2. nix won't work with all packages. If the package lists `external_dependencies` in its rockspec file then it won't work.
 
-You can run `nix-shell -p luarocks-nix` and then `luarocks convert2nix
-PKG_NAME`. Once you have checked the package works without modifications, you can add it to `maintainers/scripts/update-luarocks-packages.sh`
+You can run `nix-shell -p luarocks-nix` and then `luarocks nix PKG_NAME`.
+Once you have checked the package works without modifications, you can add it to `maintainers/scripts/luarocks.sh`
 Nix rely on luarocks to install lua packages, basically it runs:
 `luarocks make --deps-mode=none --tree $out`
 

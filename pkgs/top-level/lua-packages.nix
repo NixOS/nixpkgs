@@ -29,7 +29,7 @@ let
   isLuaJIT = (builtins.parseDrvName lua.name).name == "luajit";
 
   # Check whether a derivation provides a lua module.
-  hasLuaModule = drv: drv? luaModule ;
+  hasLuaModule = drv: drv ? luaModule ;
 
   callPackage = pkgs.newScope self;
 
