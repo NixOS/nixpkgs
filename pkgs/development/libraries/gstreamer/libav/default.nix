@@ -10,7 +10,7 @@ assert withSystemLibav -> libav != null;
 
 stdenv.mkDerivation rec {
   name = "gst-libav-${version}";
-  version = "1.14.4";
+  version = "1.15.1";
 
   meta = {
     homepage = https://gstreamer.freedesktop.org;
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "${meta.homepage}/src/gst-libav/${name}.tar.xz";
-    sha256 = "1nk5g24z2xx5kaw5cg8dv8skdc516inahmkymcz8bxqxj28qbmyz";
+    sha256 = "0hq5y8zg6a3fliwip7k85hg6s6amsmbqgrjl6axzrr3y6akcvslk";
   };
 
   outputs = [ "out" "dev" ];
@@ -34,4 +34,10 @@ stdenv.mkDerivation rec {
     [ gst-plugins-base orc bzip2 ]
     ++ optional withSystemLibav libav
     ;
+
+  mesonFlags = [
+    # Enables all features, so that we know when new dependencies are necessary.
+    "-Dauto_features=enabled"
+  ];
+
 }
