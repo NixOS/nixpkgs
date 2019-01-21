@@ -1,4 +1,4 @@
-{ stdenv, symlinkJoin, fetchurl, fetchFromGitHub, boost, brotli, cmake, double-conversion, flatbuffers, gflags, glog, gtest, lz4, perl, python, rapidjson, snappy, thrift, which, zlib, zstd }:
+{ stdenv, symlinkJoin, fetchurl, fetchFromGitHub, autoconf, boost, brotli, cmake, double-conversion, flatbuffers, gflags, glog, gtest, lz4, perl, python, rapidjson, snappy, thrift, which, zlib, zstd }:
 
 let
   parquet-testing = fetchFromGitHub {
@@ -11,27 +11,21 @@ in
 
 stdenv.mkDerivation rec {
   name = "arrow-cpp-${version}";
-  version = "0.11.0";
+  version = "0.12.0";
 
   src = fetchurl {
     url = "mirror://apache/arrow/arrow-${version}/apache-arrow-${version}.tar.gz";
-    sha256 = "0pc5pqr0dbnx8s1ji102dhw9bbrsq3ml4ac3mmi2022yfyizlf0q";
+    sha256 = "163s4i2cywq95jgrxbaq48qwmww0ibkq61k1aad4w9z9vpjfgnil";
   };
 
   sourceRoot = "apache-arrow-${version}/cpp";
 
   patches = [
-    # fix ARROW-3467
-    ./double-conversion_cmake.patch
-
     # patch to fix python-test
     ./darwin.patch
-
-    # facebook/zstd#1385
-    ./zstd136.patch
     ];
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake autoconf /* for vendored jemalloc */ ];
   buildInputs = [ boost double-conversion glog python.pkgs.python python.pkgs.numpy ];
 
   preConfigure = ''
@@ -58,6 +52,7 @@ stdenv.mkDerivation rec {
   ZSTD_HOME = zstd;
 
   cmakeFlags = [
+    "-DARROW_BUILD_TESTS=ON"
     "-DARROW_PYTHON=ON"
     "-DARROW_PARQUET=ON"
   ];
