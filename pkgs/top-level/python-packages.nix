@@ -3834,9 +3834,6 @@ in {
 
   reportlab = callPackage ../development/python-modules/reportlab { };
 
-  requests2 = throw "requests2 has been deprecated. Use requests instead.";
-
-  # use requests, not requests_2
   requests = callPackage ../development/python-modules/requests { };
 
   requests_download = callPackage ../development/python-modules/requests_download { };
