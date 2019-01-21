@@ -11,13 +11,13 @@ buildPythonPackage rec {
     sha256 = "1qgybcpmm9xxrn39alcgdcpvwphgm1glkbnwx0ljpz4nd1jsnyrl";
   };
 
-  propagatedBuildInputs = [ nanomsg ];
+  buildInputs = [ nanomsg ];
 
   # Tests requires network connections
   doCheck = false;
 
   meta = with stdenv.lib; {
-    description = "Bindings for nanomsg.";
+    description = "Bindings for nanomsg";
     homepage = https://github.com/tonysimpson/nanomsg-python;
     license = licenses.mit;
     maintainers = with maintainers; [ bgamari ];
