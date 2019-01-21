@@ -242,6 +242,8 @@ in {
 
   azure-storage-common = callPackage ../development/python-modules/azure-storage-common { };
 
+  azure-storage-blob = callPackage ../development/python-modules/azure-storage-blob { };
+
   azure-servicemanagement-legacy = callPackage ../development/python-modules/azure-servicemanagement-legacy { };
 
   backports_csv = callPackage ../development/python-modules/backports_csv {};
