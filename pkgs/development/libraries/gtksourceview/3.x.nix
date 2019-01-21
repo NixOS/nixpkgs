@@ -36,7 +36,8 @@ in stdenv.mkDerivation rec {
 
   doCheck = stdenv.isLinux;
   checkPhase = ''
-    export NO_AT_BRIDGE=1
+    NO_AT_BRIDGE=1 \
+    XDG_DATA_DIRS="$XDG_DATA_DIRS:${shared-mime-info}/share" \
     xvfb-run -s '-screen 0 800x600x24' dbus-run-session \
       --config-file=${dbus.daemon}/share/dbus-1/session.conf \
       make check
