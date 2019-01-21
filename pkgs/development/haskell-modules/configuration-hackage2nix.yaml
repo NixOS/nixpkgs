@@ -8991,7 +8991,6 @@ dont-distribute-packages:
   stack-run:                                      [ i686-linux, x86_64-linux, x86_64-darwin ]
   stack-type:                                     [ i686-linux, x86_64-linux, x86_64-darwin ]
   stack2cabal:                                    [ i686-linux, x86_64-linux, x86_64-darwin ]
-  stack2nix:                                      [ i686-linux, x86_64-linux, x86_64-darwin ]
   stackage-build-plan:                            [ i686-linux, x86_64-linux, x86_64-darwin ]
   stackage-cabal:                                 [ i686-linux, x86_64-linux, x86_64-darwin ]
   stackage-cli:                                   [ i686-linux, x86_64-linux, x86_64-darwin ]
