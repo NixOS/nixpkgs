@@ -378,6 +378,8 @@ in {
 
   goocalendar = callPackage ../development/python-modules/goocalendar { };
 
+  grandalf = callPackage ../development/python-modules/grandalf { };
+
   gsd = callPackage ../development/python-modules/gsd { };
 
   gssapi = callPackage ../development/python-modules/gssapi { };
