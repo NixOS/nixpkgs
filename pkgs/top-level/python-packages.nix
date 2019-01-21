@@ -4096,6 +4096,12 @@ in {
 
   pgspecial = callPackage ../development/python-modules/pgspecial { };
 
+  pgpy = callPackage ../development/python-modules/pgpy {
+    cryptography = self.cryptography.override {
+      openssl = pkgs.openssl_1_1;
+    };
+  };
+
   pickleshare = callPackage ../development/python-modules/pickleshare { };
 
   piep = callPackage ../development/python-modules/piep { };
