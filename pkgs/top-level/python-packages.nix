@@ -4666,9 +4666,6 @@ in {
 
   power = callPackage ../development/python-modules/power { };
 
-  # added 2018-05-23, can be removed once 18.09 is branched off
-  udiskie = throw "pythonPackages.udiskie has been replaced by udiskie";
-
   pythonefl = callPackage ../development/python-modules/python-efl { };
 
   tlsh = callPackage ../development/python-modules/tlsh { };
