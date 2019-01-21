@@ -2507,15 +2507,6 @@ in {
   fusepy = callPackage ../development/python-modules/fusepy { };
 
   future = callPackage ../development/python-modules/future { };
-  future15 = self.future.overridePythonAttrs (old: rec {
-    name = "future-${version}";
-    version = "0.15.2";
-    src = fetchPypi {
-      pname = "future";
-      version = "0.15.2";
-      sha256 = "15wvcfzssc68xqnqi1dq4fhd0848hwi9jn42hxyvlqna40zijfrx";
-    };
-  });
 
   futures = callPackage ../development/python-modules/futures { };
 
