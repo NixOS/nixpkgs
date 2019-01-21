@@ -3357,8 +3357,6 @@ in {
 
   pandas = callPackage ../development/python-modules/pandas { };
 
-  pandas_0_17_1 = callPackage ../development/python-modules/pandas/0.17.1.nix { };
-
   xlrd = callPackage ../development/python-modules/xlrd { };
 
   bottleneck = callPackage ../development/python-modules/bottleneck { };
