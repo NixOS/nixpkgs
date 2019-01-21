@@ -1346,6 +1346,8 @@ in {
 
   asyncssh = callPackage ../development/python-modules/asyncssh { };
 
+  atpublic = callPackage ../development/python-modules/atpublic { };
+
   python-fontconfig = callPackage ../development/python-modules/python-fontconfig { };
 
   funcsigs = callPackage ../development/python-modules/funcsigs { };
