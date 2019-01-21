@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://linux.palemoon.org/datastore/release/palemoon-${version}.${arch}.tar.bz2";
-    sha256 = "f1a6a54238a658d645149736e21074c51a1c770ad0b084500b8489f807eb700d";
+    sha256 = "1s1mjsg0y8lzj6f8qxyakdz0xd2ip43pi0i2psk4fkvc7rjvpn0x";
   };
   outputs = [ "out" "orig" ];
   sourceRoot = ".";
