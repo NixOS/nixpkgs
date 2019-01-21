@@ -14,4 +14,5 @@
  <xi:include href="functions/fhs-environments.xml" />
  <xi:include href="functions/shell.xml" />
  <xi:include href="functions/dockertools.xml" />
+ <xi:include href="functions/prefer-remote-fetch.xml" />
 </chapter>
