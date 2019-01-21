@@ -1271,6 +1271,8 @@ in {
 
   aiorpcx = callPackage ../development/python-modules/aiorpcx { };
 
+  aiosmtpd = callPackage ../development/python-modules/aiosmtpd { };
+
   aiounifi = callPackage ../development/python-modules/aiounifi { };
 
   aiozeroconf = callPackage ../development/python-modules/aiozeroconf { };
