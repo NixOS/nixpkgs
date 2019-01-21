@@ -5887,6 +5887,8 @@ in
 
   tracefilesim = callPackage ../development/tools/analysis/garcosim/tracefilesim { };
 
+  transifex-client = python3.pkgs.callPackage ../tools/text/transifex-client { };
+
   translate-shell = callPackage ../applications/misc/translate-shell { };
 
   transporter = callPackage ../applications/networking/transporter { };
