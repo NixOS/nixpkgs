@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   name = "gst-vaapi-${version}";
-  version = "1.14.4";
+  version = "1.15.1";
 
   src = fetchurl {
     url = "${meta.homepage}/src/gstreamer-vaapi/gstreamer-vaapi-${version}.tar.xz";
-    sha256 = "18yha6119v7mwz47idv2vykzfssqfmh6hc824wqqsshwjvzdn66f";
+    sha256 = "1aazan6r6p5aabb671znjkh8kmpxkz68wvaickqwzb1bz0ijcivc";
   };
 
   outputs = [ "out" "dev" ];
@@ -26,6 +26,12 @@ stdenv.mkDerivation rec {
     export GST_PLUGIN_PATH_1_0=$out/lib/gstreamer-1.0
     mkdir -p $GST_PLUGIN_PATH_1_0
   '';
+
+  mesonFlags = [
+    # Enables all features, so that we know when new dependencies are necessary.
+    "-Dauto_features=enabled"
+    "-Dexamples=disabled" # requires many dependencies and probably not useful for our users
+  ];
 
   meta = {
     homepage = https://gstreamer.freedesktop.org;

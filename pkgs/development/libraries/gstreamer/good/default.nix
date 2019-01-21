@@ -10,6 +10,10 @@
 , libXext
 , libXfixes
 , ncurses
+, xorg
+, libgudev
+, wavpack
+, jack2
 }:
 
 assert gtkSupport -> gtk3 != null;
@@ -19,7 +23,7 @@ let
 in
 stdenv.mkDerivation rec {
   name = "gst-plugins-good-${version}";
-  version = "1.14.4";
+  version = "1.15.1";
 
   meta = with stdenv.lib; {
     description = "Gstreamer Good Plugins";
@@ -36,7 +40,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "${meta.homepage}/src/gst-plugins-good/${name}.tar.xz";
-    sha256 = "0y89qynb4b6fry3h43z1r99qslmi3m8xhlq0i5baq2nbc0r5b2sz";
+    sha256 = "15f6klr7wg6jlcyx0qspi13s8wmc9fij1bx1bbvy90a9a72v97rb";
   };
 
   outputs = [ "out" "dev" ];
@@ -58,10 +62,27 @@ stdenv.mkDerivation rec {
     libXext # present feature but undeclared in meson_options.txt, see https://gitlab.freedesktop.org/gstreamer/gst-plugins-good/issues/553
     libXfixes # present feature but undeclared in meson_options.txt, see https://gitlab.freedesktop.org/gstreamer/gst-plugins-good/issues/553
     ncurses
+    xorg.libXfixes # present feature but undeclared in meson_options.txt, see https://gitlab.freedesktop.org/gstreamer/gst-plugins-good/issues/553
+    xorg.libXdamage # present feature but undeclared in meson_options.txt, see https://gitlab.freedesktop.org/gstreamer/gst-plugins-good/issues/553
+    wavpack
   ]
   ++ optional gtkSupport gtk3 # for gtksink
   ++ optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Cocoa ]
-  ++ optionals stdenv.isLinux [ libv4l libpulseaudio libavc1394 libiec61883 ];
+  ++ optionals stdenv.isLinux [ libv4l libpulseaudio libavc1394 libiec61883 libgudev jack2 ];
+
+  mesonFlags = [
+    # Enables all features, so that we know when new dependencies are necessary.
+    "-Dauto_features=enabled"
+    "-Dexamples=disabled" # requires many dependencies and probably not useful for our users
+    "-Dqt5=disabled" # not clear as of writing how to correctly pass in the required qt5 deps
+  ]
+  ++ optional (!gtkSupport) "-Dgtk3=disabled"
+  ++ optionals (!stdenv.isLinux) [
+    "-Djack=disabled" # unclear whether Jack works on Darwin
+  ]
+  ++ optionals (!stdenv.isLinux) [
+    "-Dv4l2-gudev=disabled"
+  ];
 
   # fails 1 tests with "Unexpected critical/warning: g_object_set_is_valid_property: object class 'GstRtpStorage' has no property named ''"
   doCheck = false;

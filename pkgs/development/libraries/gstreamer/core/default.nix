@@ -2,12 +2,16 @@
 , pkgconfig, gettext, gobject-introspection
 , bison, flex, python3, glib, makeWrapper
 , libcap,libunwind, darwin
+, elfutils # for libdw
+, bash-completion
+, docbook_xsl, docbook_xml_dtd_412
+, gtk-doc
 , lib
 }:
 
 stdenv.mkDerivation rec {
   name = "gstreamer-${version}";
-  version = "1.14.4";
+  version = "1.15.1";
 
   meta = with lib ;{
     description = "Open source multimedia framework";
@@ -19,14 +23,10 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "${meta.homepage}/src/gstreamer/${name}.tar.xz";
-    sha256 = "1izzhnlsy83rgr4zl3jcl1sryxqbbigrrqw3j4x3nnphqnb6ckzr";
+    sha256 = "05ri9y37qkgvkb2xjywf32c3k9479b0af0m6cjigx04pgwsf42kq";
   };
 
   patches = [
-    (fetchpatch {
-        url = "https://bug794856.bugzilla-attachments.gnome.org/attachment.cgi?id=370411";
-        sha256 = "16plzzmkk906k4892zq68j3c9z8vdma5nxzlviq20jfv04ykhmk2";
-    })
     ./fix_pkgconfig_includedir.patch
   ];
 
@@ -35,12 +35,23 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     meson ninja pkgconfig gettext bison flex python3 makeWrapper gobject-introspection
+    bash-completion
+    gtk-doc
+    # Without these, enabling the 'gtk_doc' gives us `FAILED: meson-install`
+    docbook_xsl docbook_xml_dtd_412
   ];
+
   buildInputs =
-       lib.optionals stdenv.isLinux [ libcap libunwind ]
+       lib.optionals stdenv.isLinux [ libcap libunwind elfutils ]
     ++ lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.CoreServices;
 
   propagatedBuildInputs = [ glib ];
+
+  mesonFlags = [
+    # Enables all features, so that we know when new dependencies are necessary.
+    "-Dauto_features=enabled"
+    "-Dexamples=disabled" # requires many dependencies and probably not useful for our users
+  ];
 
   postInstall = ''
     for prog in "$dev/bin/"*; do
