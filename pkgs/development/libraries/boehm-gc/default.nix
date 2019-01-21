@@ -40,9 +40,6 @@ stdenv.mkDerivation rec {
 
   doCheck = true; # not cross;
 
-  # Don't run the native `strip' when cross-compiling.
-  dontStrip = stdenv.hostPlatform != stdenv.buildPlatform;
-
   enableParallelBuilding = true;
 
   meta = {
