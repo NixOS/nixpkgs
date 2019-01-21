@@ -97,7 +97,7 @@ with self; with pkgs;
   luv = super.luv.overrideAttrs(oa: {
     propagatedBuildInputs = oa.propagatedBuildInputs ++ [pkgs.libuv ];
     # deps/lua-compat-5.3/rockspecs/compat53-0.5-1.rockspec
-    rockspecFilename = "deps/lua-compat-5.3/rockspecs/compat53-scm-0.rockspec";
+    # rockspecFilename = "deps/lua-compat-5.3/rockspecs/compat53-scm-0.rockspec";
   });
 
   busted = super.busted.overrideAttrs(oa: {

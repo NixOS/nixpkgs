@@ -59,7 +59,8 @@ name ? "${attrs.pname}-${attrs.version}"
 # relative to srcRoot, path to the rockspec to use when using j
 , rockspecFilename ?  "../*.rockspec"
 
-, rockspecBased ? srcs != null
+, knownRockspec ? null
+# , rockspecBased ? srcs != null
 
 , ... } @ attrs:
 
@@ -91,8 +92,10 @@ let
   '';
 
   #
-  rockspecs = lib.filter (a: lib.hasSuffix ".rockspec" ) srcs;
-  rockspecFilename = if rockspecs == [] then null else builtins.head rockspecs;
+  # rockspecs = lib.filter (a: lib.hasSuffix ".rockspec" ) srcs;
+  # == []
+  # fetchedRockspec = if rockspecBased then builtins.head srcs else null;
+    # builtins.head rockspecs;
 
 in
 toLuaModule ( lua.stdenv.mkDerivation (
@@ -112,11 +115,14 @@ builtins.removeAttrs attrs ["disabled" "checkInputs"] // {
   # that works only for src.rock
   setSourceRoot= let
     name_only=(builtins.parseDrvName name).name;
-    in ''
+  in
+    # TODO define it differently depending if src.rock or rockspec based
+    lib.optionalString (knownRockspec == null)
+  ''
     # format is rockspec_basename/source_basename
     # rockspec can set it via spec.source.dir
     folder=$(find . -mindepth 2 -maxdepth 2 -type d -path '*${name_only}*/*'|head -n1)
-    sourceRoot=$folder
+    sourceRoot="$folder"
   '';
 
   configurePhase = ''
@@ -126,7 +132,13 @@ builtins.removeAttrs attrs ["disabled" "checkInputs"] // {
     ${luarocks_content}
     EOF
     export LUAROCKS_CONFIG=$PWD/${luarocks_config};
+  ''
+  + lib.optionalString (knownRockspec != null) ''
 
+    # prevent the following error
+    # Inconsistency between rockspec filename (42fm1b3d7iv6fcbhgm9674as3jh6y2sh-luv-1.22.0-1.rockspec) and its contents (luv-1.22.0-1.rockspec)
+    rockspecFilename="$TMP/$(stripHash ''${knownRockspec})"
+    cp ''${knownRockspec} $rockspecFilename
     runHook postConfigure
   '';
 
@@ -166,6 +178,7 @@ builtins.removeAttrs attrs ["disabled" "checkInputs"] // {
     # we force the use of the upper level since it is
     # the sole rockspec in that folder
     # maybe we could reestablish dependency checking via passing --rock-trees
+
     echo "ROCKSPEC $rockspecFilename"
     nix_warn "cwd: $PWD"
     $LUAROCKS make --deps-mode=none --tree $out ''${rockspecFilename}
