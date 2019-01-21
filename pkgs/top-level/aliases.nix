@@ -253,6 +253,7 @@ mapAliases ({
   pg_hll = postgresqlPackages.pg_hll;
   pg_cron = postgresqlPackages.pg_cron;
   pg_topn = postgresqlPackages.pg_topn;
+  postgis = postgresqlPackages.postgis;
   # end
   procps-ng = procps; # added 2018-06-08
   prometheus-statsd-bridge = prometheus-statsd-exporter;  # added 2017-08-27

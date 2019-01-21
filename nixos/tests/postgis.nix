@@ -24,5 +24,6 @@ import ./make-test.nix ({ pkgs, ...} : {
     $master->waitForUnit("postgresql");
     $master->sleep(10); # Hopefully this is long enough!!
     $master->succeed("sudo -u postgres psql -c 'CREATE EXTENSION postgis;'");
+    $master->succeed("sudo -u postgres psql -c 'CREATE EXTENSION postgis_topology;'");
   '';
 })
