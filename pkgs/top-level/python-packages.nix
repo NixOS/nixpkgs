@@ -262,6 +262,8 @@ in {
 
   boltons = callPackage ../development/python-modules/boltons { };
 
+  braintree = callPackage ../development/python-modules/braintree { };
+
   breathe = callPackage ../development/python-modules/breathe { };
 
   brotli = callPackage ../development/python-modules/brotli { };
