@@ -1738,16 +1738,6 @@ in {
 
   fudge = callPackage ../development/python-modules/fudge { };
 
-  fudge_9 = self.fudge.overridePythonAttrs (old: rec {
-     version = "0.9.6";
-
-     src = fetchPypi {
-      pname = "fudge";
-      inherit version;
-      sha256 = "34690c4692e8717f4d6a2ab7d841070c93c8d0ea0d2615b47064e291f750b1a0";
-    };
-  });
-
   funcparserlib = callPackage ../development/python-modules/funcparserlib { };
 
   fastcache = callPackage ../development/python-modules/fastcache { };
