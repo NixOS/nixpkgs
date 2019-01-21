@@ -912,6 +912,8 @@ in {
 
   aiorpcx = callPackage ../development/python-modules/aiorpcx { };
 
+  aiosmtpd = callPackage ../development/python-modules/aiosmtpd { };
+
   ajpy = callPackage ../development/python-modules/ajpy { };
 
   alabaster = callPackage ../development/python-modules/alabaster {};
