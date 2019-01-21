@@ -822,6 +822,8 @@ in {
 
   aiohttp-remotes = callPackage ../development/python-modules/aiohttp-remotes { };
 
+  aiohttp-socks = callPackage ../development/python-modules/aiohttp-socks { };
+
   aioprocessing = callPackage ../development/python-modules/aioprocessing { };
 
   ajpy = callPackage ../development/python-modules/ajpy { };
