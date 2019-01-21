@@ -14,14 +14,17 @@ in
 
 python3Packages.buildPythonApplication rec {
   name = "electrum-${version}";
-  version = "3.2.4";
+  version = "3.3.2";
 
   src = fetchurl {
     url = "https://download.electrum.org/${version}/Electrum-${version}.tar.gz";
-    sha256 = "0nwipn1alk3r54zpsv2bdwsqxw4f08bxnfmygnwakfkiaifmmhxg";
+    sha256 = "0vgfdhwvrrl6dr4rd4hhxr8304bxm00sh7fw4nalm4hf7gfsbcji";
   };
 
   propagatedBuildInputs = with python3Packages; [
+    aiorpcX
+    aiohttp
+    aiohttp-socks
     dnspython
     ecdsa
     jsonrpclib-pelix
