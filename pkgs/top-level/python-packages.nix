@@ -584,8 +584,6 @@ in {
 
   pygame = callPackage ../development/python-modules/pygame { };
 
-  pygame-git = callPackage ../development/python-modules/pygame/git.nix { };
-
   pygame_sdl2 = callPackage ../development/python-modules/pygame_sdl2 { };
 
   pygdbmi = callPackage ../development/python-modules/pygdbmi { };
