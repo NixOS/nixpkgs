@@ -19,6 +19,7 @@ let
     , vimAlias ? false
     , viAlias ? false
     , configure ? {}
+    , customAlias ? ""
   }:
   let
 
@@ -90,6 +91,8 @@ let
         ln -s $out/bin/nvim $out/bin/vim
       '' + optionalString viAlias ''
         ln -s $out/bin/nvim $out/bin/vi
+      '' + optionalString (customAlias != "") ''
+        ln -s $out/bin/nvim $out/bin/${customAlias}
       '' + optionalString (configure != {}) ''
         echo "Generating remote plugin manifest"
         export NVIM_RPLUGIN_MANIFEST=$out/rplugin.vim
