@@ -1,4 +1,4 @@
-{ stdenv, meson, ninja, gettext, fetchurl, evince, gjs
+{ stdenv, meson, ninja, gettext, fetchurl, fetchpatch, evince, gjs
 , pkgconfig, gtk3, glib, tracker, tracker-miners
 , itstool, libxslt, webkitgtk, libgdata
 , gnome-desktop, libzapojit, libgepub
@@ -29,6 +29,14 @@ stdenv.mkDerivation rec {
     libsoup webkitgtk gjs gobject-introspection
     tracker tracker-miners libgdata
     gnome-desktop libzapojit libgepub
+  ];
+
+  patches = [
+    # fix RPATH to libgd
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gnome-documents/commit/d18a92e0a940073ac766f609937539e4fc6cdbb7.patch";
+      sha256 = "0s3mk8vrl1gzk93yvgqbnz44i27qw1d9yvvmnck3fv23phrxkzk9";
+    })
   ];
 
   postPatch = ''

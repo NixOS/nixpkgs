@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "ant-theme";
-  version = "1.2.0";
+  version = "1.3.0";
 
   src = fetchurl {
     url = "https://github.com/EliverLara/Ant/releases/download/v${version}/Ant.tar";
-    sha256 = "15751pnb94g2wi6y932l3d7ksaz18402zbzp3l7ryy0lqwjnqvkj";
+    sha256 = "1r795v96ywzcb4dq08q2fdbmfia32g36cc512mhy41s8fb1a47dz";
   };
 
   propagatedUserEnvPkgs = [
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   outputHashAlgo = "sha256";
   outputHashMode = "recursive";
-  outputHash = "1fzy7bq5v9fzjpfxplvk0nwjgamcva83462gkz01lhr1mipb92h1";
+  outputHash = "1gpacrmi5y87shp39jgy78n0ca2xdpvbqfh0mgldlxx99ca9rvvy";
 
   meta = with stdenv.lib; {
     description = "A flat and light theme with a modern look";

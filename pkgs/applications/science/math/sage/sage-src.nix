@@ -46,6 +46,9 @@ stdenv.mkDerivation rec {
     # tests) are also run. That is necessary to test dochtml individually. See
     # https://trac.sagemath.org/ticket/26110 for an upstream discussion.
     ./patches/Only-test-py2-py3-optional-tests-when-all-of-sage-is.patch
+
+    # Fixes a potential race condition which can lead to transient doctest failures.
+    ./patches/fix-ecl-race.patch
   ];
 
   # Patches needed because of package updates. We could just pin the versions of

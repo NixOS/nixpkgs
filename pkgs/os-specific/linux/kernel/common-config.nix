@@ -688,6 +688,14 @@ let
       HOTPLUG_PCI_PCIE = yes; # PCI-Expresscard hotplug support
 
     } // optionalAttrs (stdenv.hostPlatform.system == "x86_64-linux" || stdenv.hostPlatform.system == "aarch64-linux") {
+      # Enable memory hotplug support
+      # Allows you to dynamically add & remove memory to a VM client running NixOS without requiring a reboot
+      ACPI_HOTPLUG_MEMORY = yes;
+      MEMORY_HOTPLUG = yes;
+      MEMORY_HOTREMOVE = yes;
+      MIGRATION = yes;
+      SPARSEMEM = yes;
+
       # Bump the maximum number of CPUs to support systems like EC2 x1.*
       # instances and Xeon Phi.
       NR_CPUS = "384";

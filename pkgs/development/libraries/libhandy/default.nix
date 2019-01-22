@@ -2,11 +2,12 @@
 , gtk-doc, docbook_xsl, docbook_xml_dtd_43
 , gtk3, gnome3
 , dbus, xvfb_run, libxml2
+, hicolor-icon-theme
 }:
 
 let
   pname = "libhandy";
-  version = "0.0.6";
+  version = "0.0.7";
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
@@ -18,7 +19,7 @@ in stdenv.mkDerivation rec {
     owner = "Librem5";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0gmqsxkpi288qjfdczfrbvjqyy9sbn3gligqwgqj27ask95zl1q5";
+    sha256 = "1k9v6q2dz9x8lfcyzmsksrkq6md7m9jdkjlfan7nqlcj3mqhd7m9";
   };
 
   nativeBuildInputs = [
@@ -26,10 +27,12 @@ in stdenv.mkDerivation rec {
     gtk-doc docbook_xsl docbook_xml_dtd_43
   ];
   buildInputs = [ gnome3.gnome-desktop gtk3 gnome3.glade libxml2 ];
-  checkInputs = [ dbus xvfb_run ];
+  checkInputs = [ dbus xvfb_run hicolor-icon-theme ];
 
   mesonFlags = [
     "-Dgtk_doc=true"
+    "-Dglade_catalog=enabled"
+    "-Dintrospection=enabled"
   ];
 
   PKG_CONFIG_GLADEUI_2_0_MODULEDIR = "${placeholder "glade"}/lib/glade/modules";

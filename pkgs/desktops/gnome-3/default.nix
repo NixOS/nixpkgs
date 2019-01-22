@@ -54,7 +54,7 @@ lib.makeScope pkgs.newScope (self: with self; {
   inherit (pkgs) atk glib gobject-introspection gspell webkitgtk gtk3 gtkmm3
     libgtop libgudev libhttpseverywhere librsvg libsecret gdk_pixbuf gtksourceview gtksourceviewmm gtksourceview4
     easytag meld orca rhythmbox shotwell gnome-usage
-    clutter clutter-gst clutter-gtk cogl gtk-vnc libdazzle libgda libgit2-glib libgxps libgdata libgepub libcroco libpeas libgee geocode-glib libgweather librest libzapojit libmediaart gfbgraph gexiv2 folks totem-pl-parser gcr gsound libgnomekbd vte vte_290 vte-ng gnome-menus;
+    clutter clutter-gst clutter-gtk cogl gtk-vnc libdazzle libgda libgit2-glib libgxps libgdata libgepub libcroco libpeas libgee geocode-glib libgweather librest libzapojit libmediaart gfbgraph gexiv2 folks totem-pl-parser gcr gsound libgnomekbd vte vte_290 vte-ng gnome-menus gdl;
 
   libsoup = pkgs.libsoup.override { gnomeSupport = true; };
   libchamplain = pkgs.libchamplain.override { libsoup = libsoup; };
@@ -288,8 +288,6 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   devhelp = callPackage ./devtools/devhelp { };
 
-  gdl = callPackage ./devtools/gdl { };
-
   gnome-devel-docs = callPackage ./devtools/gnome-devel-docs { };
 
   nemiver = callPackage ./devtools/nemiver { };
@@ -347,6 +345,8 @@ lib.makeScope pkgs.newScope (self: with self; {
   gnome-flashback = callPackage ./misc/gnome-flashback { };
 
   gnome-panel = callPackage ./misc/gnome-panel { };
+
+  gnome-screensaver = callPackage ./misc/gnome-screensaver { };
 
   gnome-tweaks = callPackage ./misc/gnome-tweaks { };
 
