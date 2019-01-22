@@ -7853,17 +7853,11 @@ in
   luaPackages = lua52Packages;
 
   # override instead ?
-  luajit_2_0 = callPackages ../development/interpreters/luajit {
+  luajit_2_0 = callPackage ../development/interpreters/luajit/2.0.nix {
     self = luajit_2_0;
-    version = "2.0.5";
-    isStable = true;
-    sha256 = "0yg9q4q6v028bgh85317ykc9whgxgysp76qzaqgq55y6jy11yjw7";
-    extraMeta = {
-      platforms = lib.filter (p: p != "aarch64-linux") meta.platforms;
-    };
   };
 
-  luajit_2_1 = callPackages ../development/interpreters/luajit {
+  luajit_2_1 = callPackage ../development/interpreters/luajit/2.1.nix {
     self = luajit_2_1;
     version = "2.1.0-beta3";
     isStable = false;

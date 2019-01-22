@@ -4,7 +4,6 @@
 , sha256
 , version
 , extraMeta ? {}
-, makeWrapper
 , lua-setup-hook
 , callPackage
 , self
