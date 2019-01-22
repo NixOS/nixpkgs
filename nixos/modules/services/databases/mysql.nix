@@ -249,6 +249,7 @@ in
 
         after = [ "network.target" ];
         wantedBy = [ "multi-user.target" ];
+        restartTriggers = [ config.environment.etc."my.cnf".source ];
 
         unitConfig.RequiresMountsFor = "${cfg.dataDir}";
 
