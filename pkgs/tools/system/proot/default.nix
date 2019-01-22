@@ -8,7 +8,7 @@
   src = fetchFromGitHub {
     inherit rev sha256;
     repo = "proot";
-    owner = "cedric-vincent";
+    owner = "proot-me";
   };
 
   buildInputs = [ talloc ];
@@ -35,7 +35,7 @@
     description = "User-space implementation of chroot, mount --bind and binfmt_misc";
     platforms = platforms.linux;
     license = licenses.gpl2;
-    maintainers = with maintainers; [ ianwookim makefu ];
+    maintainers = with maintainers; [ ianwookim makefu veprbl ];
   };
 })
 (if stdenv.isAarch64 then rec {
