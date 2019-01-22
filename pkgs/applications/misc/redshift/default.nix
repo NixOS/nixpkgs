@@ -9,6 +9,7 @@
 , withGeolocation ? true
 , withCoreLocation ? withGeolocation && stdenv.isDarwin, CoreLocation, Foundation, Cocoa
 , withGeoclue ? withGeolocation && stdenv.isLinux, geoclue
+, useSystemd ? true
 }:
 
 stdenv.mkDerivation rec {
@@ -44,7 +45,7 @@ stdenv.mkDerivation rec {
     "--enable-drm=${if withDrm then "yes" else "no"}"
     "--enable-quartz=${if withQuartz then "yes" else "no"}"
     "--enable-corelocation=${if withCoreLocation then "yes" else "no"}"
-  ];
+  ] ++ stdenv.lib.optional (stdenv.isLinux && useSystemd) "--with-systemduserunitdir=\${out}/lib/systemd/user";
 
   buildInputs = [
     gobject-introspection
