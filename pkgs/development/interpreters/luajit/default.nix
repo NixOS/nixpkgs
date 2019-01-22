@@ -57,9 +57,7 @@ stdenv.mkDerivation rec {
     ];
     setupHook = lua-setup-hook LuaPathSearchPaths LuaCPathSearchPaths;
 
-    passthru = let
-      luaPackages = callPackage ../../lua-modules {lua=self; overrides=packageOverrides;};
-    in rec {
+    passthru = rec {
       buildEnv = callPackage ../lua-5/wrapper.nix { lua = self;
       inherit (luaPackages) requiredLuaModules;
       };

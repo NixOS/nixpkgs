@@ -1,5 +1,5 @@
 { stdenv, fetchurl, readline, compat ? false
-, lua-setup-hook, callPackage
+, callPackage
 , self
 , packageOverrides ? (self: super: {})
 }:
