@@ -1,14 +1,18 @@
-{ stdenv, lib, fetchurl, hostPlatform
+{ stdenv, lib, fetchurl
 , name ? "luajit-${version}"
 , isStable
 , sha256
 , version
 , extraMeta ? {}
 , makeWrapper
-, lua-setup-hook, callPackage
+, lua-setup-hook
+, callPackage
 , self
-, luaPackages, packageOverrides ? (self: super: {})
+, packageOverrides ? (self: super: {})
 }:
+let
+  luaPackages = callPackage ../../lua-modules {lua=self; overrides=packageOverrides;};
+in
 stdenv.mkDerivation rec {
   inherit name version;
   pname = "luajit";
@@ -17,7 +21,7 @@ stdenv.mkDerivation rec {
     inherit sha256;
   };
 
-  majorVersion = "5.1";
+  luaversion = "5.1";
 
   patchPhase = ''
     substituteInPlace Makefile \
@@ -36,43 +40,41 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   installPhase   = ''
-    make install PREFIX="$out"
-    ( cd "$out/include"; ln -s luajit-*/* . )
-    ln -s "$out"/bin/luajit-* "$out"/bin/lua
-  ''
-    + stdenv.lib.optionalString (!isStable)
-      ''
-        ln -s "$out"/bin/luajit-* "$out"/bin/luajit
-      '';
+      make install PREFIX="$out"
+      ( cd "$out/include"; ln -s luajit-*/* . )
+      ln -s "$out"/bin/luajit-* "$out"/bin/lua
+    ''
+    + stdenv.lib.optionalString (!isStable) ''
+      ln -s "$out"/bin/luajit-* "$out"/bin/luajit
+    '';
 
-      LuaPathSearchPaths    = [
-        "lib/lua/${majorVersion}/?.lua" "share/lua/${majorVersion}/?.lua"
-        "share/lua/${majorVersion}/?/init.lua" "lib/lua/${majorVersion}/?/init.lua"
-        "share/${name}/?.lua"
-      ];
-      LuaCPathSearchPaths   = [
-        "lib/lua/${majorVersion}/?.so" "share/lua/${majorVersion}/?.so"
-      ];
-      setupHook = lua-setup-hook LuaPathSearchPaths LuaCPathSearchPaths;
+    LuaPathSearchPaths    = [
+      "lib/lua/${luaversion}/?.lua" "share/lua/${luaversion}/?.lua"
+      "share/lua/${luaversion}/?/init.lua" "lib/lua/${luaversion}/?/init.lua"
+      "share/${name}/?.lua"
+    ];
+    LuaCPathSearchPaths   = [
+      "lib/lua/${luaversion}/?.so" "share/lua/${luaversion}/?.so"
+    ];
+    setupHook = lua-setup-hook LuaPathSearchPaths LuaCPathSearchPaths;
 
-      passthru = let
-        luaPackages = callPackage ../../../top-level/lua-packages.nix {lua=self; overrides=packageOverrides;};
-      in rec {
-        # executable = "${libPrefix}m";
-        buildEnv = callPackage ../lua-5/wrapper.nix { lua = self;
-        inherit (luaPackages) requiredLuaModules;
-        };
-        withPackages = import ../lua-5/with-packages.nix { inherit buildEnv luaPackages;};
-        pkgs = luaPackages;
-        interpreter = "${self}/bin/lua";
+    passthru = let
+      luaPackages = callPackage ../../lua-modules {lua=self; overrides=packageOverrides;};
+    in rec {
+      buildEnv = callPackage ../lua-5/wrapper.nix { lua = self;
+      inherit (luaPackages) requiredLuaModules;
       };
+      withPackages = import ../lua-5/with-packages.nix { inherit buildEnv luaPackages;};
+      pkgs = luaPackages;
+      interpreter = "${self}/bin/lua";
+    };
 
   meta = with stdenv.lib; extraMeta // {
     description = "High-performance JIT compiler for Lua 5.1";
     homepage    = http://luajit.org;
     license     = licenses.mit;
     platforms   = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers ; [ thoughtpolice smironov vcunat andir ];
+    maintainers = with maintainers; [ thoughtpolice smironov vcunat andir ];
   };
 }
 
