@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
 
   # additional tests that check bazel’s functionality
   passthru.tests = {
-    python_bin_path = callPackage ./python-bin-path-test.nix {};
+    pythonBinPath = callPackage ./python-bin-path-test.nix {};
   };
 
   name = "bazel-${version}";
