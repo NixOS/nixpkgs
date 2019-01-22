@@ -143,8 +143,6 @@ in {
   acoustics = callPackage ../development/python-modules/acoustics { };
 
   py3to2 = callPackage ../development/python-modules/3to2 { };
-  # Left for backwards compatibility
-  "3to2" = self.py3to2;
 
   absl-py = callPackage ../development/python-modules/absl-py { };
 
