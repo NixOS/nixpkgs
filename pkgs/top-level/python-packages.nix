@@ -4071,6 +4071,8 @@ in {
 
   pep8 = callPackage ../development/python-modules/pep8 { };
 
+  pep8-naming = callPackage ../development/python-modules/pep8-naming { };
+
   pep257 = callPackage ../development/python-modules/pep257 { };
 
   percol = callPackage ../development/python-modules/percol { };
