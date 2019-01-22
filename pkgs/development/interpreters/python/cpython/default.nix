@@ -209,8 +209,8 @@ in with passthru; stdenv.mkDerivation {
     done
 
     # Further get rid of references. https://github.com/NixOS/nixpkgs/issues/51668
-    find $out/lib/python*/config-* -type f -print -exec nuke-refs '{}' +
-    find $out/lib -name '_sysconfigdata*.py*' -print -exec nuke-refs '{}' +
+    find $out/lib/python*/config-* -type f -print -exec nuke-refs -e $out '{}' +
+    find $out/lib -name '_sysconfigdata*.py*' -print -exec nuke-refs -e $out '{}' +
 
     # Determinism: rebuild all bytecode
     # We exclude lib2to3 because that's Python 2 code which fails
