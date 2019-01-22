@@ -1,6 +1,6 @@
 { stdenv, callPackage, lib, fetchurl, fetchpatch, runCommand, makeWrapper
 , jdk, zip, unzip, bash, writeCBin, coreutils
-, which, python, perl, gawk, gnused, gnugrep, findutils
+, which, python, perl, gawk, gnused, gnutar, gnugrep, gzip, findutils
 # Apple dependencies
 , cctools, clang, libcxx, CoreFoundation, CoreServices, Foundation
 # Allow to independently override the jdks used to build and run respectively
@@ -23,7 +23,8 @@ let
     for i in ${builtins.toString srcDeps}; do cp $i $out/$(stripHash $i); done
   '';
 
-  defaultShellPath = lib.makeBinPath [ bash coreutils findutils gawk gnugrep gnused which unzip ];
+  defaultShellPath = lib.makeBinPath
+    [ bash coreutils findutils gawk gnugrep gnutar gnused gzip which unzip ];
 
 in
 stdenv.mkDerivation rec {
