@@ -19,10 +19,8 @@ stdenv.mkDerivation rec {
   luaversion = "5.2";
   version = "${luaversion}.4";
 
-  # helper functions for dealing with LUA_PATH and LUA_CPATH
   LuaPathSearchPaths    = luaPackages.getLuaPath luaversion;
   LuaCPathSearchPaths   = luaPackages.getLuaCPath luaversion;
-
   setupHook = lua-setup-hook LuaPathSearchPaths LuaCPathSearchPaths;
 
   src = fetchurl {

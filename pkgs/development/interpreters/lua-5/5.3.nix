@@ -1,9 +1,11 @@
 { stdenv, fetchurl, readline, compat ? false
 , lua-setup-hook, callPackage
 , self
-, luaPackages, packageOverrides ? (self: super: {})
+, packageOverrides ? (self: super: {})
 }:
-
+let
+    luaPackages = callPackage ../../lua-modules {lua=self; overrides=packageOverrides;};
+in
 stdenv.mkDerivation rec {
   name = "lua-${version}";
   luaversion = "5.3";
@@ -13,6 +15,10 @@ stdenv.mkDerivation rec {
     url = "https://www.lua.org/ftp/${name}.tar.gz";
     sha256 = "0c2eed3f960446e1a3e4b9a1ca2f3ff893b6ce41942cf54d5dd59ab4b3b058ac";
   };
+
+  LuaPathSearchPaths    = luaPackages.getLuaPath luaversion;
+  LuaCPathSearchPaths   = luaPackages.getLuaCPath luaversion;
+  setupHook = luaPackages.lua-setup-hook LuaPathSearchPaths LuaCPathSearchPaths;
 
   buildInputs = [ readline ];
 
@@ -58,12 +64,10 @@ stdenv.mkDerivation rec {
     ln -s "$out/lib/pkgconfig/lua.pc" "$out/lib/pkgconfig/lua${luaversion}.pc"
   '';
 
-  passthru = let
-    luaPackages = callPackage ../../../top-level/lua-packages.nix {lua=self; overrides=packageOverrides;};
-  in rec {
-    # executable = "${libPrefix}m";
-    buildEnv = callPackage ./wrapper.nix { lua = self;
-    inherit (luaPackages) requiredLuaModules;
+  passthru = rec {
+    buildEnv = callPackage ./wrapper.nix {
+      lua = self;
+      inherit (luaPackages) requiredLuaModules;
     };
     withPackages = import ./with-packages.nix { inherit buildEnv luaPackages;};
     pkgs = luaPackages;

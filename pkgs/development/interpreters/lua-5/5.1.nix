@@ -22,7 +22,6 @@ stdenv.mkDerivation rec {
     sha256 = "2640fc56a795f29d28ef15e13c34a47e223960b0240e8cb0a82d9b0738695333";
   };
 
-  # helper functions for dealing with LUA_PATH and LUA_CPATH
   LuaPathSearchPaths    = luaPackages.getLuaPath luaversion;
   LuaCPathSearchPaths   = luaPackages.getLuaCPath luaversion;
   setupHook = luaPackages.lua-setup-hook LuaPathSearchPaths LuaCPathSearchPaths;

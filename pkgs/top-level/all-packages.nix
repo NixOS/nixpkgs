@@ -7825,29 +7825,22 @@ in
   ### LUA MODULES
   lua-setup-hook = callPackage ../development/interpreters/lua-5/setup-hook.nix { };
 
-  # don't add ./?.lua or if you do it change the checks
-  # else every folder is going to be added and generate
-  # "/bin/tar: Argument list too long'
   lua5_1 = callPackage ../development/interpreters/lua-5/5.1.nix {
     self = lua5_1;
   };
   lua5_2 = callPackage ../development/interpreters/lua-5/5.2.nix {
     self = lua5_2;
-    # inherit getLuaPath getLuaCPath;
   };
   lua5_2_compat = callPackage ../development/interpreters/lua-5/5.2.nix {
     compat = true;
     self = lua5_2;
-    # inherit getLuaPath getLuaCPath;
   };
   lua5_3 = callPackage ../development/interpreters/lua-5/5.3.nix {
     self = lua5_3;
-    # inherit getLuaPath getLuaCPath;
   };
   lua5_3_compat = callPackage ../development/interpreters/lua-5/5.3.nix {
     compat = true;
     self = lua5_3;
-    # inherit getLuaPath getLuaCPath;
   };
   lua5 = lua5_2_compat;
   lua = lua5;
