@@ -27,6 +27,8 @@ let
   isLua53 = lua.luaversion == "5.3";
   isLuaJIT = (builtins.parseDrvName lua.name).name == "luajit";
 
+  lua-setup-hook = callPackage ../development/interpreters/lua-5/setup-hook.nix { };
+
   # Check whether a derivation provides a lua module.
   hasLuaModule = drv: drv ? luaModule ;
 
@@ -77,7 +79,7 @@ with self; {
      "lib/lua/${majorVersion}/?.so" "share/lua/${majorVersion}/?.so" "share/lua/${majorVersion}/?/init.so"
   ];
 
-  inherit toLuaModule;
+  inherit toLuaModule lua-setup-hook;
   inherit requiredLuaModules luaOlder luaAtLeast
     isLua51 isLua52 isLuaJIT buildLuarocksPackage buildLuaPackage lua callPackage;
 

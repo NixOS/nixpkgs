@@ -1,7 +1,7 @@
 { stdenv, fetchurl, readline
 # compiles compatibility layer with lua5.1
 , compat ? false
-, lua-setup-hook, callPackage
+, callPackage
 , self
 , packageOverrides ? (self: super: {})
 }:
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   LuaPathSearchPaths    = luaPackages.getLuaPath luaversion;
   LuaCPathSearchPaths   = luaPackages.getLuaCPath luaversion;
-  setupHook = lua-setup-hook LuaPathSearchPaths LuaCPathSearchPaths;
+  setupHook = luaPackages.lua-setup-hook LuaPathSearchPaths LuaCPathSearchPaths;
 
   src = fetchurl {
     url = "https://www.lua.org/ftp/${name}.tar.gz";

@@ -4,7 +4,7 @@
 , packageOverrides ? (self: super: {})
 }:
 let
-    luaPackages = callPackage ../../lua-modules {lua=self; overrides=packageOverrides;};
+  luaPackages = callPackage ../../lua-modules {lua=self; overrides=packageOverrides;};
 in
 stdenv.mkDerivation rec {
   name = "lua-${version}";

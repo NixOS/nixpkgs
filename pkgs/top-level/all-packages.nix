@@ -7823,7 +7823,6 @@ in
   wabt = callPackage ../development/tools/wabt { };
 
   ### LUA MODULES
-  lua-setup-hook = callPackage ../development/interpreters/lua-5/setup-hook.nix { };
 
   lua5_1 = callPackage ../development/interpreters/lua-5/5.1.nix {
     self = lua5_1;
