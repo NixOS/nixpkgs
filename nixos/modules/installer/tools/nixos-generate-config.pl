@@ -449,7 +449,11 @@ EOF
                 if (-e $slave) {
                     my $dmName = read_file("/sys/class/block/$deviceName/dm/name");
                     chomp $dmName;
-                    $fileSystems .= "  boot.initrd.luks.devices.\"$dmName\".device = \"${\(findStableDevPath $slave)}\";\n\n";
+                    # Ensure to add an entry only once
+                    my $luksDevice = "  boot.initrd.luks.devices.\"$dmName\".device";
+                    if ($fileSystems !~ /^\Q$luksDevice\E/m) {
+                        $fileSystems .= "$luksDevice = \"${\(findStableDevPath $slave)}\";\n\n";
+                    }
                 }
             }
         }
