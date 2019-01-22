@@ -4183,6 +4183,10 @@
     email = "sebastien.maret@icloud.com";
     github = "smaret";
     name = "Sébastien Maret";
+    keys = [{
+      longkeyid = "rsa4096/0x86E30E5A0F5FC59C";
+      fingerprint = "4242 834C D401 86EF 8281  4093 86E3 0E5A 0F5F C59C";
+    }];
   };
   smironov = {
     email = "grrwlf@gmail.com";
