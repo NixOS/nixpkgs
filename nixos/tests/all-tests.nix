@@ -200,6 +200,7 @@ in
   syncthing-relay = handleTest ./syncthing-relay.nix {};
   systemd = handleTest ./systemd.nix {};
   taskserver = handleTest ./taskserver.nix {};
+  telegraf = handleTest ./telegraf.nix {};
   tomcat = handleTest ./tomcat.nix {};
   tor = handleTest ./tor.nix {};
   transmission = handleTest ./transmission.nix {};
