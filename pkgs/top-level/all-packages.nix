@@ -6144,6 +6144,8 @@ in
 
   srcml = callPackage ../applications/version-management/srcml { };
 
+  sourcehut = callPackage ../applications/version-management/sourcehut { };
+
   sshfs-fuse = callPackage ../tools/filesystems/sshfs-fuse { };
   sshfs = sshfs-fuse; # added 2017-08-14
 
