@@ -14,7 +14,6 @@
 , fetchgit
 , overrides ? (self: super: {})
 , lib
-, libiconv
 }:
 
 let
@@ -67,16 +66,9 @@ let
     inherit toLuaModule;
     inherit lua writeText;
   });
-  # TODO move that as python/haskell does
-  # generatedPackages = lib.optionalAttrs (builtins.pathExists path) (import path {
-  #     inherit self stdenv fetchurl requiredLuaModules luaOlder luaAtLeast
-  #     isLua51 isLua52 isLuaJIT buildLuaPackage lua;
-  # });
-
 in
 with self; {
 
-  # TODO add list of derivations
   getLuaPath = majorVersion: [
      "lib/lua/${majorVersion}/?.lua" "share/lua/${majorVersion}/?.lua"
     "share/lua/${majorVersion}/?/init.lua" "lib/lua/${majorVersion}/?/init.lua"
@@ -85,10 +77,9 @@ with self; {
      "lib/lua/${majorVersion}/?.so" "share/lua/${majorVersion}/?.so" "share/lua/${majorVersion}/?/init.so"
   ];
 
-
-    inherit toLuaModule;
-    inherit requiredLuaModules luaOlder luaAtLeast
-      isLua51 isLua52 isLuaJIT buildLuarocksPackage buildLuaPackage lua callPackage;
+  inherit toLuaModule;
+  inherit requiredLuaModules luaOlder luaAtLeast
+    isLua51 isLua52 isLuaJIT buildLuarocksPackage buildLuaPackage lua callPackage;
 
   wrapLua = callPackage ../development/interpreters/lua-5/wrap-lua.nix {
     inherit lua; inherit (pkgs) makeSetupHook makeWrapper;
@@ -1132,5 +1123,4 @@ with self; {
   };
 
 });
-# TODO self ?
 in packages
