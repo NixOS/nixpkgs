@@ -61,9 +61,7 @@ ld/
 
 (cherry picked from commit f7309df20c4e787041cedc4a6aced89c15259e54)
 ---
- bfd/ChangeLog                                 |  9 ++++++
  bfd/elfxx-x86.c                               | 25 ++++++++++++---
- ld/ChangeLog                                  | 32 +++++++++++++++++++
  ld/testsuite/ld-i386/i386.exp                 |  2 ++
  ld/testsuite/ld-i386/pr23486a.d               | 10 ++++++
  ld/testsuite/ld-i386/pr23486b.d               | 10 ++++++
@@ -102,25 +100,6 @@ ld/
  create mode 100644 ld/testsuite/ld-x86-64/pr23486b.d
  create mode 100644 ld/testsuite/ld-x86-64/pr23486b.s
 
-diff --git a/bfd/ChangeLog b/bfd/ChangeLog
-index 8d25c6992b..e184eb322a 100644
---- a/bfd/ChangeLog
-+++ b/bfd/ChangeLog
-@@ -1,3 +1,12 @@
-+2018-08-10  H.J. Lu  <hongjiu.lu@intel.com>
-+
-+	PR ld/23486
-+	* elfxx-x86.c (_bfd_x86_elf_merge_gnu_properties): Remove
-+	GNU_PROPERTY_X86_ISA_1_USED if an input file doesn't have it.
-+	(_bfd_x86_elf_link_setup_gnu_properties): Adding the
-+	GNU_PROPERTY_X86_ISA_1_NEEDED, instead of
-+	GNU_PROPERTY_X86_ISA_1_USED, property.
-+
- 2018-08-07  Alan Modra  <amodra@gmail.com>
- 
- 	* elf64-ppc.c (ppc64_elf_relocate_section): Don't skip first
-diff --git a/bfd/elfxx-x86.c b/bfd/elfxx-x86.c
-index 2e4ff88f1f..7ccfd25815 100644
 --- a/bfd/elfxx-x86.c
 +++ b/bfd/elfxx-x86.c
 @@ -2407,12 +2407,27 @@ _bfd_x86_elf_merge_gnu_properties (struct bfd_link_info *info,
@@ -181,46 +160,6 @@ index 2e4ff88f1f..7ccfd25815 100644
  					4);
  	  prop->u.number = GNU_PROPERTY_X86_ISA_1_486;
  	  prop->pr_kind = property_number;
-diff --git a/ld/ChangeLog b/ld/ChangeLog
-index ef694e8980..f62106b731 100644
---- a/ld/ChangeLog
-+++ b/ld/ChangeLog
-@@ -1,3 +1,35 @@
-+2018-08-10  H.J. Lu  <hongjiu.lu@intel.com>
-+
-+	PR ld/23486
-+	* testsuite/ld-i386/i386.exp: Run PR ld/23486 tests.
-+	* testsuite/ld-x86-64/x86-64.exp: Likewise.
-+	* testsuite/ld-i386/pr23486a.d: New file.
-+	* testsuite/ld-i386/pr23486b.d: Likewise.
-+	* testsuite/ld-x86-64/pr23486a-x32.d: Likewise.
-+	* testsuite/ld-x86-64/pr23486a.d: Likewise.
-+	* testsuite/ld-x86-64/pr23486a.s: Likewise.
-+	* testsuite/ld-x86-64/pr23486b-x32.d: Likewise.
-+	* testsuite/ld-x86-64/pr23486b.d: Likewise.
-+	* testsuite/ld-x86-64/pr23486b.s: Likewise.
-+	* testsuite/ld-i386/property-3.r: Remove "x86 ISA used".
-+	* testsuite/ld-i386/property-4.r: Likewise.
-+	* testsuite/ld-i386/property-5.r: Likewise.
-+	* testsuite/ld-i386/property-x86-ibt3a.d: Likewise.
-+	* testsuite/ld-i386/property-x86-ibt3b.d: Likewise.
-+	* testsuite/ld-i386/property-x86-shstk3a.d: Likewise.
-+	* testsuite/ld-i386/property-x86-shstk3b.d: Likewise.
-+	* testsuite/ld-x86-64/property-3.r: Likewise.
-+	* testsuite/ld-x86-64/property-4.r: Likewise.
-+	* testsuite/ld-x86-64/property-5.r: Likewise.
-+	* testsuite/ld-x86-64/property-x86-ibt3a-x32.d: Likewise.
-+	* testsuite/ld-x86-64/property-x86-ibt3a.d: Likewise.
-+	* testsuite/ld-x86-64/property-x86-ibt3b-x32.d: Likewise.
-+	* testsuite/ld-x86-64/property-x86-ibt3b.d: Likewise.
-+	* testsuite/ld-x86-64/property-x86-shstk3a-x32.d: Likewise.
-+	* testsuite/ld-x86-64/property-x86-shstk3a.d: Likewise.
-+	* testsuite/ld-x86-64/property-x86-shstk3b-x32.d: Likewise.
-+	* testsuite/ld-x86-64/property-x86-shstk3b.d: Likewise.
-+
- 2018-08-10  H.J. Lu  <hongjiu.lu@intel.com>
- 
- 	* testsuite/ld-x86-64/property-x86-3.s: Use ".p2align 2" to
 diff --git a/ld/testsuite/ld-i386/i386.exp b/ld/testsuite/ld-i386/i386.exp
 index 6d794fe653..78dad02579 100644
 --- a/ld/testsuite/ld-i386/i386.exp

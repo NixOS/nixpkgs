@@ -23,30 +23,13 @@ ld/
 
 (cherry picked from commit ab9e342807d132182892de1be1a92d6e91a5c1da)
 ---
- bfd/ChangeLog                     |  7 +++++++
  bfd/elfxx-x86.c                   | 28 ++++++++++++++++++++++------
- ld/ChangeLog                      |  7 +++++++
  ld/testsuite/ld-elf/dummy.s       |  1 +
  ld/testsuite/ld-elf/linux-x86.S   | 28 ++++++++++++++++++++++++++++
  ld/testsuite/ld-elf/linux-x86.exp |  2 +-
  6 files changed, 66 insertions(+), 7 deletions(-)
  create mode 100644 ld/testsuite/ld-elf/dummy.s
 
-diff --git a/bfd/ChangeLog b/bfd/ChangeLog
-index e184eb322a..7364bed2b5 100644
---- a/bfd/ChangeLog
-+++ b/bfd/ChangeLog
-@@ -1,3 +1,10 @@
-+2018-08-12  H.J. Lu  <hongjiu.lu@intel.com>
-+
-+	PR ld/23428
-+	* elfxx-x86.c (_bfd_x86_elf_link_setup_gnu_properties): Don't
-+	add X86_ISA_1_NEEDED property only if existing properties won't
-+	be removed.
-+
- 2018-08-10  H.J. Lu  <hongjiu.lu@intel.com>
- 
- 	PR ld/23486
 diff --git a/bfd/elfxx-x86.c b/bfd/elfxx-x86.c
 index 7ccfd25815..2d8f7b640b 100644
 --- a/bfd/elfxx-x86.c
@@ -93,21 +76,6 @@ index 7ccfd25815..2d8f7b640b 100644
  	}
  
        /* Create the GNU property note section if needed.  */
-diff --git a/ld/ChangeLog b/ld/ChangeLog
-index f62106b731..b814d6730d 100644
---- a/ld/ChangeLog
-+++ b/ld/ChangeLog
-@@ -1,3 +1,10 @@
-+2018-08-12  H.J. Lu  <hongjiu.lu@intel.com>
-+
-+	PR ld/23428
-+	* testsuite/ld-elf/dummy.s: New file.
-+	* testsuite/ld-elf/linux-x86.S: Add X86_FEATURE_1_AND property.
-+	* testsuite/ld-elf/linux-x86.exp: Add dummy.s to pr23428.
-+
- 2018-08-10  H.J. Lu  <hongjiu.lu@intel.com>
- 
- 	PR ld/23486
 diff --git a/ld/testsuite/ld-elf/dummy.s b/ld/testsuite/ld-elf/dummy.s
 new file mode 100644
 index 0000000000..403f98000d

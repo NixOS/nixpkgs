@@ -52,9 +52,7 @@ ld/
 
 (cherry picked from commit 241e64e3b42cd9eba514b8e0ad2ef39a337f10a5)
 ---
- bfd/ChangeLog                                |  8 +++
  bfd/elfxx-x86.c                              | 60 ++++++++++++++-----
- ld/ChangeLog                                 | 24 ++++++++
  ld/testsuite/ld-elf/linux-x86.S              | 63 ++++++++++++++++++++
  ld/testsuite/ld-elf/linux-x86.exp            | 46 ++++++++++++++
  ld/testsuite/ld-elf/pr23428.c                | 43 +++++++++++++
@@ -77,22 +75,6 @@ ld/
  create mode 100644 ld/testsuite/ld-elf/linux-x86.exp
  create mode 100644 ld/testsuite/ld-elf/pr23428.c
 
-diff --git a/bfd/ChangeLog b/bfd/ChangeLog
-index 1c1174aef8..d3831b7a65 100644
---- a/bfd/ChangeLog
-+++ b/bfd/ChangeLog
-@@ -1,3 +1,11 @@
-+2018-07-23  H.J. Lu  <hongjiu.lu@intel.com>
-+
-+	PR ld/23428
-+	* elfxx-x86.c (_bfd_x86_elf_link_setup_gnu_properties): If the
-+	separate code program header is needed, make sure that the first
-+	read-only PT_LOAD segment has no code by adding a
-+	GNU_PROPERTY_X86_ISA_1_USED note.
-+
- 2018-07-18  Nick Clifton  <nickc@redhat.com>
- 
- 	* development.sh: Set to true.
 diff --git a/bfd/elfxx-x86.c b/bfd/elfxx-x86.c
 index a2497aab86..2e4ff88f1f 100644
 --- a/bfd/elfxx-x86.c
@@ -187,38 +169,6 @@ index a2497aab86..2e4ff88f1f 100644
    htab->r_info = init_table->r_info;
    htab->r_sym = init_table->r_sym;
  
-diff --git a/ld/ChangeLog b/ld/ChangeLog
-index c07e442c84..cfadbd43a1 100644
---- a/ld/ChangeLog
-+++ b/ld/ChangeLog
-@@ -1,3 +1,27 @@
-+2018-07-23  H.J. Lu  <hongjiu.lu@intel.com>
-+
-+	PR ld/23428
-+	* testsuite/ld-elf/linux-x86.S: New file.
-+	* testsuite/ld-elf/linux-x86.exp: Likewise.
-+	* testsuite/ld-elf/pr23428.c: Likewise.
-+	* testsuite/ld-elf/sec64k.exp: Pass "-z noseparate-code" to ld
-+	for Linux/x86 targets.
-+	* testsuite/ld-i386/abs-iamcu.d: Likewise.
-+	* testsuite/ld-i386/abs.d: Likewise.
-+	* testsuite/ld-i386/pr12718.d: Likewise.
-+	* testsuite/ld-i386/pr12921.d: Likewise.
-+	* testsuite/ld-x86-64/abs-k1om.d: Likewise.
-+	* testsuite/ld-x86-64/abs-l1om.d: Likewise.
-+	* testsuite/ld-x86-64/abs.d: Likewise.
-+	* testsuite/ld-x86-64/pr12718.d: Likewise.
-+	* testsuite/ld-x86-64/pr12921.d: Likewise.
-+	* testsuite/ld-linkonce/zeroeh.ld: Discard .note.gnu.property
-+	section.
-+	* testsuite/ld-scripts/print-memory-usage.t: Likewise.
-+	* testsuite/ld-scripts/size-2.t: Likewise.
-+	* testsuite/lib/ld-lib.exp (run_ld_link_exec_tests): Use ld to
-+	create executable if language is "asm".
-+
- 2018-07-18  Nick Clifton  <nickc@redhat.com>
- 
- 	2.31.1 Release point.
 diff --git a/ld/testsuite/ld-elf/linux-x86.S b/ld/testsuite/ld-elf/linux-x86.S
 new file mode 100644
 index 0000000000..bdf40c6e01
