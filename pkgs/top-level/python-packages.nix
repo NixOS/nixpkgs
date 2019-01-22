@@ -1979,9 +1979,6 @@ in {
 
   pamela = callPackage ../development/python-modules/pamela { };
 
-  # These used to be here but were moved to all-packages, but I'll leave them around for a while.
-  pants = pkgs.pants;
-
   paperspace = callPackage ../development/python-modules/paperspace { };
 
   paperwork-backend = callPackage ../applications/office/paperwork/backend.nix { };
