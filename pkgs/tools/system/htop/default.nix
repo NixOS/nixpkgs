@@ -15,10 +15,6 @@ stdenv.mkDerivation rec {
     [ ncurses ] ++
     lib.optionals stdenv.isDarwin [ IOKit ];
 
-  prePatch = ''
-    patchShebangs scripts/MakeHeader.py
-  '';
-
   meta = with stdenv.lib; {
     description = "An interactive process viewer for Linux";
     homepage = https://hisham.hm/htop/;
