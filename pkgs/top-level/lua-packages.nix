@@ -27,8 +27,6 @@ let
   isLua53 = lua.luaversion == "5.3";
   isLuaJIT = (builtins.parseDrvName lua.name).name == "luajit";
 
-  lua-setup-hook = callPackage ../development/interpreters/lua-5/setup-hook.nix { };
-
   # Check whether a derivation provides a lua module.
   hasLuaModule = drv: drv ? luaModule ;
 
@@ -56,8 +54,6 @@ let
     else if stdenv.isSunOS then "solaris"
     else throw "unsupported platform";
 
-
-  #define build lua package function
   buildLuaPackage = callPackage ../development/lua-modules/generic {
     inherit lua writeText;
   };
@@ -71,6 +67,8 @@ let
 in
 with self; {
 
+  lua-setup-hook = callPackage ../development/interpreters/lua-5/setup-hook.nix { };
+
   getLuaPath = majorVersion: [
      "lib/lua/${majorVersion}/?.lua" "share/lua/${majorVersion}/?.lua"
     "share/lua/${majorVersion}/?/init.lua" "lib/lua/${majorVersion}/?/init.lua"
@@ -79,7 +77,7 @@ with self; {
      "lib/lua/${majorVersion}/?.so" "share/lua/${majorVersion}/?.so" "share/lua/${majorVersion}/?/init.so"
   ];
 
-  inherit toLuaModule lua-setup-hook;
+  inherit toLuaModule;
   inherit requiredLuaModules luaOlder luaAtLeast
     isLua51 isLua52 isLuaJIT buildLuarocksPackage buildLuaPackage lua callPackage;
 
