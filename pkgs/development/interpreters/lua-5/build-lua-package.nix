@@ -3,9 +3,7 @@
 , lua
 , stdenv
 , wrapLua
-, unzip
 , writeText
-# Whether the derivation provides a lua module or not.
 , toLuaModule
 }:
 
@@ -52,15 +50,16 @@ name ? "${attrs.pname}-${attrs.version}"
 
 # appended to luarocks generated config
 # in peculiar variables like { EVENT_INCDIR } can be useful to work around
-# luarocks limitations, ie, luarocks consider include/lib folders to be subfolders of the same package in external_deps_dirs
+# luarocks limitations, ie, luarocks consider include/lib folders to be
+# subfolders of the same package in external_deps_dirs
 # as explained in https://github.com/luarocks/luarocks/issues/766
 , extraConfig ? ""
 
 # relative to srcRoot, path to the rockspec to use when using j
 , rockspecFilename ?  "../*.rockspec"
 
+# set when derivation is generated from a rockspec
 , knownRockspec ? null
-# , rockspecBased ? srcs != null
 
 , ... } @ attrs:
 
@@ -91,12 +90,6 @@ let
     ${extraConfig}
   '';
 
-  #
-  # rockspecs = lib.filter (a: lib.hasSuffix ".rockspec" ) srcs;
-  # == []
-  # fetchedRockspec = if rockspecBased then builtins.head srcs else null;
-    # builtins.head rockspecs;
-
 in
 toLuaModule ( lua.stdenv.mkDerivation (
 builtins.removeAttrs attrs ["disabled" "checkInputs"] // {
@@ -116,7 +109,7 @@ builtins.removeAttrs attrs ["disabled" "checkInputs"] // {
   setSourceRoot= let
     name_only=(builtins.parseDrvName name).name;
   in
-    # TODO define it differently depending if src.rock or rockspec based
+    # defined differently depending if generated from rock or rockspec
     lib.optionalString (knownRockspec == null)
   ''
     # format is rockspec_basename/source_basename
@@ -163,7 +156,6 @@ builtins.removeAttrs attrs ["disabled" "checkInputs"] // {
 
   shellHook = attrs.shellHook or ''
     ${preShellHook}
-    echo "shellHook triggered"
     ${postShellHook}
   '';
 
@@ -179,8 +171,6 @@ builtins.removeAttrs attrs ["disabled" "checkInputs"] // {
     # the sole rockspec in that folder
     # maybe we could reestablish dependency checking via passing --rock-trees
 
-    echo "ROCKSPEC $rockspecFilename"
-    nix_warn "cwd: $PWD"
     $LUAROCKS make --deps-mode=none --tree $out ''${rockspecFilename}
 
     # to prevent collisions when creating environments

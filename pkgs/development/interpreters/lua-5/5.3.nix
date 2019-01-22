@@ -1,9 +1,6 @@
 { stdenv, fetchurl, readline, compat ? false
-, hostPlatform
-, makeWrapper
 , lua-setup-hook, callPackage
 , self
-, getLuaPath, getLuaCPath
 , luaPackages, packageOverrides ? (self: super: {})
 }:
 
