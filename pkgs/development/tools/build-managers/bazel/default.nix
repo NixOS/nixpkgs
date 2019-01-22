@@ -24,6 +24,33 @@ let
   '';
 
   defaultShellPath = lib.makeBinPath
+    # Keep this list conservative. For more exotic tools, prefer to use
+    # @rules_nixpkgs to pull in tools from the nix repository. Example:
+    #
+    # WORKSPACE:
+    #
+    #     nixpkgs_git_repository(
+    #         name = "nixpkgs",
+    #         revision = "def5124ec8367efdba95a99523dd06d918cb0ae8",
+    #     )
+    #
+    #     # This defines an external Bazel workspace.
+    #     nixpkgs_package(
+    #         name = "bison",
+    #         repositories = { "nixpkgs": "@nixpkgs//:default.nix" },
+    #     )
+    #
+    # some/BUILD.bazel:
+    #
+    #     genrule(
+    #        ...
+    #        cmd = "$(location @bison//:bin/bison) -other -args",
+    #        tools = [
+    #            ...
+    #            "@bison//:bin/bison",
+    #        ],
+    #     )
+    #
     [ bash coreutils findutils gawk gnugrep gnutar gnused gzip which unzip ];
 
 in
@@ -39,9 +66,14 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux ++ platforms.darwin;
   };
 
-  # additional tests that check bazel’s functionality
+  # Additional tests that check bazel’s functionality. Execute
+  #
+  #     nix-build . -A bazel.tests
+  #
+  # in the nixpkgs checkout root to exercise them locally.
   passthru.tests = {
     pythonBinPath = callPackage ./python-bin-path-test.nix {};
+    bashTools = callPackage ./bash-tools-test.nix {};
   };
 
   name = "bazel-${version}";
