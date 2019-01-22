@@ -9955,9 +9955,7 @@ in
     inherit (darwin.apple_sdk.frameworks) Cocoa Kernel;
   };
 
-  glibc = callPackage ../development/libraries/glibc {
-    installLocales = config.glibc.locales or false;
-  };
+  glibc = callPackage ../development/libraries/glibc { };
 
   # Provided by libc on Operating Systems that use the Extensible Linker Format.
   elf-header =
@@ -9968,13 +9966,11 @@ in
   elf-header-real = callPackage ../development/libraries/elf-header { };
 
   glibc_memusage = callPackage ../development/libraries/glibc {
-    installLocales = false;
     withGd = true;
   };
 
   # Being redundant to avoid cycles on boot. TODO: find a better way
   glibcCross = callPackage ../development/libraries/glibc {
-    installLocales = config.glibc.locales or false;
     stdenv = crossLibcStdenv;
   };
 

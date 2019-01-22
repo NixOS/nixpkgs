@@ -28,7 +28,6 @@
 { name
 , withLinuxHeaders ? false
 , profilingLibraries ? false
-, installLocales ? false
 , withGd ? false
 , meta
 , ...
@@ -44,7 +43,7 @@ assert withLinuxHeaders -> linuxHeaders != null;
 assert withGd -> gd != null && libpng != null;
 
 stdenv.mkDerivation ({
-  inherit version installLocales;
+  inherit version;
   linuxHeaders = if withLinuxHeaders then linuxHeaders else null;
 
   inherit (stdenv) is64bit;

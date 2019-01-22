@@ -1,6 +1,5 @@
 { stdenv, callPackage
 , withLinuxHeaders ? true
-, installLocales ? true
 , profilingLibraries ? false
 , withGd ? false
 }:
@@ -8,7 +7,7 @@
 callPackage ./common.nix { inherit stdenv; } {
     name = "glibc" + stdenv.lib.optionalString withGd "-gd";
 
-    inherit withLinuxHeaders profilingLibraries installLocales withGd;
+    inherit withLinuxHeaders profilingLibraries withGd;
 
     # Note:
     # Things you write here override, and do not add to,
