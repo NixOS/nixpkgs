@@ -21,11 +21,11 @@ assert (withQt5 -> qtbase != null && qtsvg != null && qtx11extras != null);
 
 stdenv.mkDerivation rec {
   name = "vlc-${version}";
-  version = "3.0.4";
+  version = "3.0.6";
 
   src = fetchurl {
     url = "http://get.videolan.org/vlc/${version}/${name}.tar.xz";
-    sha256 = "17jsq0zqpqyxw4ckvjba0hf6zk8ywc4wf8sy3z03hh3ij0vxpwq1";
+    sha256 = "1lvyyahv6g9zv7m5g5qinyrwmw47zdsd5ysimb862j7kw15nvh8q";
   };
 
   # VLC uses a *ton* of libraries for various pieces of functionality, many of
@@ -38,16 +38,17 @@ stdenv.mkDerivation rec {
     systemd gnutls avahi libcddb SDL SDL_image libmtp unzip taglib libarchive
     libkate libtiger libv4l samba liboggz libass libdvbpsi libva
     xorg.xlibsWrapper xorg.libXv xorg.libXvMC xorg.libXpm xorg.xcbutilkeysyms
-    libdc1394 libraw1394 libopus libebml libmatroska libvdpau libsamplerate live555
+    libdc1394 libraw1394 libopus libebml libmatroska libvdpau libsamplerate
     fluidsynth wayland wayland-protocols
-  ] ++ optionals withQt5    [ qtbase qtsvg qtx11extras ]
+  ] ++ optional (!stdenv.hostPlatform.isAarch64) live555
+    ++ optionals withQt5    [ qtbase qtsvg qtx11extras ]
     ++ optional jackSupport libjack2;
 
   nativeBuildInputs = [ autoreconfHook perl pkgconfig removeReferencesTo ];
 
   enableParallelBuilding = true;
 
-  LIVE555_PREFIX = live555;
+  LIVE555_PREFIX = if (!stdenv.hostPlatform.isAarch64) then live555 else null;
 
   # vlc depends on a c11-gcc wrapper script which we don't have so we need to
   # set the path to the compiler
@@ -67,7 +68,7 @@ stdenv.mkDerivation rec {
   postFixup = ''
     find $out/lib/vlc/plugins -exec touch -d @1 '{}' ';'
     $out/lib/vlc/vlc-cache-gen $out/vlc/plugins
-
+  '' + optionalString withQt5 ''
     remove-references-to -t "${qtbase.dev}" $out/lib/vlc/plugins/gui/libqt_plugin.so
   '';
 

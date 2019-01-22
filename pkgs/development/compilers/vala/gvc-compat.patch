@@ -1,0 +1,19 @@
+diff --git i/libvaladoc/Makefile.am w/libvaladoc/Makefile.am
+index 8dc398cf1..a5d8a45b4 100644
+--- i/libvaladoc/Makefile.am
++++ w/libvaladoc/Makefile.am
+@@ -176,9 +176,13 @@ endif
+ libvaladoc@PACKAGE_SUFFIX@_la_SOURCES = \
+ 	libvaladoc.vala.stamp \
+ 	$(libvaladoc_la_VALASOURCES:.vala=.c) \
+-	gvc-compat.c \
+ 	$(NULL)
+ 
++if ENABLE_GRAPHVIZ
++libvaladoc@PACKAGE_SUFFIX@_la_SOURCES += \
++	gvc-compat.c
++endif
++
+ valadoc@PACKAGE_SUFFIX@.vapi valadoc.h: libvaladoc.vala.stamp
+ libvaladoc.vala.stamp: $(libvaladoc_la_VALASOURCES)
+ 	$(VALA_V)$(VALAC) \

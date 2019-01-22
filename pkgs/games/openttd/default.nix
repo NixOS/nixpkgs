@@ -21,7 +21,7 @@ let
   };
 
   playmidi = writeScriptBin "playmidi" ''
-    #!/bin/sh
+    #!${stdenv.shell}
     trap "${procps}/bin/pkill fluidsynth" EXIT
     ${fluidsynth}/bin/fluidsynth -a ${audioDriver} -i ${soundfont-fluid}/share/soundfonts/FluidR3_GM2-2.sf2 $*
   '';

@@ -1,15 +1,21 @@
-{ stdenv, fetchurl, attr, keyutils }:
+{ stdenv, fetchurl
+, attr, keyutils, libaio, libapparmor, libbsd, libcap, libgcrypt, lksctp-tools, zlib
+}:
 
 stdenv.mkDerivation rec {
   name = "stress-ng-${version}";
-  version = "0.06.14";
+  version = "0.09.49";
 
   src = fetchurl {
-    sha256 = "06kycxfwkdrm2vs9xk8cb6c1mki29ymrrqwwxxqx4icnwvq135hv";
-    url = "http://kernel.ubuntu.com/~cking/tarballs/stress-ng/${name}.tar.gz";
+    url = "https://kernel.ubuntu.com/~cking/tarballs/stress-ng/${name}.tar.xz";
+    sha256 = "1ll2i7vgnwpfhvq963m2aqwffkrmjggnscpmwn8qbdh0a82lmq2x";
   };
 
-  buildInputs = [ attr keyutils ];
+  # All platforms inputs then Linux-only ones
+  buildInputs = [ libbsd libgcrypt zlib ]
+    ++ stdenv.lib.optionals stdenv.hostPlatform.isLinux [
+      attr keyutils libaio libapparmor libcap lksctp-tools
+    ];
 
   patchPhase = ''
     substituteInPlace Makefile --replace "/usr" ""
@@ -36,9 +42,10 @@ stdenv.mkDerivation rec {
       hardware issues such as thermal overruns as well as operating system
       bugs that only occur when a system is being thrashed hard.
     '';
-    homepage = http://kernel.ubuntu.com/~cking/stress-ng;
-    downloadPage = http://kernel.ubuntu.com/~cking/tarballs/stress-ng/;
+    homepage = https://kernel.ubuntu.com/~cking/stress-ng/;
+    downloadPage = https://kernel.ubuntu.com/~cking/tarballs/stress-ng/;
     license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    maintainers = with maintainers; [ c0bw3b ];
+    platforms = platforms.linux; # TODO: fix https://github.com/NixOS/nixpkgs/pull/50506#issuecomment-439635963
   };
 }

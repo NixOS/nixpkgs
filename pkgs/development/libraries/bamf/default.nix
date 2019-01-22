@@ -1,16 +1,17 @@
 { stdenv, autoconf, automake, libtool, gnome3, which, fetchgit, libgtop, libwnck3, glib, vala, pkgconfig
-, libstartup_notification, gobjectIntrospection, gtk-doc, docbook_xsl
+, libstartup_notification, gobject-introspection, gtk-doc, docbook_xsl
 , xorgserver, dbus, python2 }:
 
 stdenv.mkDerivation rec {
-  name = "bamf-2018-02-07";
+  name = "bamf-${version}";
+  version = "0.5.4";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchgit {
     url = https://git.launchpad.net/~unity-team/bamf;
-    rev = "0.5.3+18.04.20180207.2-0ubuntu1";
-    sha256 = "0hvbgzi0mzzzvcamd9mi1ykbk2l6zxffspyk5fpik8bij56nhzym";
+    rev = version;
+    sha256 = "1klvij1wyhdj5d8sr3b16pfixc1yk8ihglpjykg7zrr1f50jfgsz";
   };
 
   nativeBuildInputs = [
@@ -18,7 +19,7 @@ stdenv.mkDerivation rec {
     automake
     docbook_xsl
     gnome3.gnome-common
-    gobjectIntrospection
+    gobject-introspection
     gtk-doc
     libtool
     pkgconfig

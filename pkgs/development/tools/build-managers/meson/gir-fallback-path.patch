@@ -1,13 +1,16 @@
 --- a/mesonbuild/modules/gnome.py
 +++ b/mesonbuild/modules/gnome.py
-@@ -427,6 +427,10 @@
-         scan_command += ['--no-libtool', '--namespace=' + ns, '--nsversion=' + nsversion, '--warn-all',
-                          '--output', '@OUTPUT@']
+@@ -805,6 +805,13 @@
+         scan_command += self._scan_langs(state, [lc[0] for lc in langs_compilers])
+         scan_command += list(external_ldflags)
  
-+        fallback_libpath = girtarget.get_custom_install_dir()[0]
++        if len(set([girtarget.get_custom_install_dir()[0] for girtarget in girtargets])) > 1:
++            raise MesonException('generate_gir tries to build multiple libraries with different install_dir at once: {}'.format(','.join([str(girtarget) for girtarget in girtargets])))
++
++        fallback_libpath = girtargets[0].get_custom_install_dir()[0]
 +        if fallback_libpath is not None and isinstance(fallback_libpath, str) and len(fallback_libpath) > 0 and fallback_libpath[0] == "/":
 +            scan_command += ['--fallback-library-path=' + fallback_libpath]
 +
-         header = kwargs.pop('header', None)
-         if header:
-             if not isinstance(header, str):
+         scan_target = self._make_gir_target(state, girfile, scan_command, depends, kwargs)
+ 
+         typelib_output = '%s-%s.typelib' % (ns, nsversion)

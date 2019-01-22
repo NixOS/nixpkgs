@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, removeReferencesTo, which, go_1_9, go-bindata, makeWrapper, rsync, utillinux
+{ stdenv, lib, fetchFromGitHub, buildGoPackage, which, go-bindata, rsync, utillinux
 , coreutils, kerberos, clang
 , components ? [
   "cmd/oc"
@@ -9,18 +9,18 @@
 with lib;
 
 let
-  version = "3.10.0";
+  version = "3.11.0";
   ver = stdenv.lib.elemAt (stdenv.lib.splitString "." version);
   versionMajor = ver 0;
   versionMinor = ver 1;
   versionPatch = ver 2;
-  gitCommit = "dd10d17";
+  gitCommit = "0cbc58b";
   # version is in vendor/k8s.io/kubernetes/pkg/version/base.go
-  k8sversion = "v1.10.0";
-  k8sgitcommit = "b81c8f8";
+  k8sversion = "v1.11.1";
+  k8sgitcommit = "b1b2997";
   k8sgitMajor = "0";
   k8sgitMinor = "1";
-in stdenv.mkDerivation rec {
+in buildGoPackage rec {
   name = "openshift-origin-${version}";
   inherit version;
 
@@ -28,14 +28,14 @@ in stdenv.mkDerivation rec {
     owner = "openshift";
     repo = "origin";
     rev = "v${version}";
-    sha256 = "13aglz005jl48z17vnggkvr39l5h6jcqgkfyvkaz4c3jakms1hi9";
-};
+    sha256 = "06q4v2a1mm6c659ab0rzkqz6b66vx4avqfg0s9xckwhq420lzgka";
+  };
+
+  goPackagePath = "github.com/openshift/origin";
 
   # go > 1.10
-  # [FATAL] [14:44:02+0000] Please install Go version go1.9 or use PERMISSIVE_GO=y to bypass this check.
-  buildInputs = [ removeReferencesTo makeWrapper which go_1_9 rsync go-bindata kerberos clang ];
-
-  outputs = [ "out" ];
+  # [FATAL] [14:44:02+0000] Please install Go version go or use PERMISSIVE_GO=y to bypass this check.
+  buildInputs = [ which rsync go-bindata kerberos clang ];
 
   patchPhase = ''
     patchShebangs ./hack
@@ -54,6 +54,7 @@ in stdenv.mkDerivation rec {
   '';
 
   buildPhase = ''
+    cd go/src/${goPackagePath}
     # Openshift build require this variables to be set
     # unless there is a .git folder which is not the case with fetchFromGitHub
     echo "OS_GIT_VERSION=v${version}" >> os-version-defs
@@ -71,14 +72,10 @@ in stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    mkdir -p "$out/bin"
-    cp -a "_output/local/bin/$(go env GOOS)/$(go env GOARCH)/"* "$out/bin/"
-    install -D -t "$out/etc/bash_completion.d" contrib/completions/bash/*
-    install -D -t "$out/share/zsh/site-functions" contrib/completions/zsh/*
-  '';
-
-  preFixup = ''
-    find $out/bin -type f -exec remove-references-to -t ${go_1_9} '{}' +
+    mkdir -p $bin/bin
+    cp -a "_output/local/bin/$(go env GOOS)/$(go env GOARCH)/"* "$bin/bin/"
+    install -D -t "$bin/etc/bash_completion.d" contrib/completions/bash/*
+    install -D -t "$bin/share/zsh/site-functions" contrib/completions/zsh/*
   '';
 
   meta = with stdenv.lib; {

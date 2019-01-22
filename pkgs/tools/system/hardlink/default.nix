@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Consolidate duplicate files via hardlinks";
     homepage = https://pagure.io/hardlink;
-    repositories.git = http://src.fedoraproject.org/cgit/rpms/hardlink.git;
+    repositories.git = https://src.fedoraproject.org/cgit/rpms/hardlink.git;
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
   };

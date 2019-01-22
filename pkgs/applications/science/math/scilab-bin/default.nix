@@ -61,9 +61,40 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p "$out/opt/scilab-${ver}"
     cp -r . "$out/opt/scilab-${ver}/"
+
+    # Create bin/ dir
     mkdir "$out/bin"
-    ln -s "$out/opt/scilab-${ver}/bin/scilab" "$out/bin/scilab-${ver}"
-    ln -s "scilab-${ver}" "$out/bin/scilab-${majorVer}"
+
+    # Creating executable symlinks
+    ln -s "$out/opt/scilab-${ver}/bin/scilab" "$out/bin/scilab"
+    ln -s "$out/opt/scilab-${ver}/bin/scilab-cli" "$out/bin/scilab-cli"
+    ln -s "$out/opt/scilab-${ver}/bin/scilab-adv-cli" "$out/bin/scilab-adv-cli"
+
+    # Creating desktop config dir
+    mkdir -p "$out/share/applications"
+
+    # Moving desktop config files
+    mv $out/opt/scilab-${ver}/share/applications/*.desktop $out/share/applications
+
+    # Fixing Exec paths and launching each app with a terminal
+    sed -i -e "s|Exec=|Exec=$out/opt/scilab-${ver}/bin/|g" \
+           -e "s|Terminal=.*$|Terminal=true|g" $out/share/applications/*.desktop
+
+    # Moving icons to the appropriate locations
+    for path in $out/opt/scilab-${ver}/share/icons/hicolor/*/*/*
+    do
+      newpath=$(echo $path | sed 's|/opt/scilab-${ver}||g')
+      filename=$(echo $path | sed 's|.*/||g')
+      dir=$(echo $newpath | sed "s|$filename||g")
+      mkdir -p $dir
+      mv $path $newpath
+    done
+
+    # Removing emptied folders
+    rm -rf $out/opt/scilab-${ver}/share/{applications,icons}
+
+    # Moving other share/ folders
+    mv $out/opt/scilab-${ver}/share/{appdata,locale,mime} $out/share
   '';
 
   meta = {

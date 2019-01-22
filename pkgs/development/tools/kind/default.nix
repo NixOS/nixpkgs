@@ -4,14 +4,13 @@ with stdenv.lib;
 
 buildGoPackage rec {
   name = "kind-${version}";
-  version = "2018-10-03-${stdenv.lib.strings.substring 0 7 rev}";
-  rev = "2ae73f8ef93609991b0e47a67825390ceec95b3f";
+  version = "0.0.1";
 
   src = fetchFromGitHub {
-    rev = rev;
+    rev = "${version}";
     owner = "kubernetes-sigs";
     repo = "kind";
-    sha256 = "0bg3y35sc1c73z4rfq11x1jz340786q91ywm165ri7vx280ffjgh";
+    sha256 = "1jldj864ip8hrk3zhkjifr4gzgc8kxmxxwvklxglymhv8cxc179f";
   };
 
   goPackagePath = "sigs.k8s.io/kind";
@@ -20,7 +19,8 @@ buildGoPackage rec {
   meta = {
     description = "Kubernetes IN Docker - local clusters for testing Kubernetes";
     homepage = https://github.com/kubernetes-sigs/kind;
-    maintainers = with maintainers; [ offline ];
+    maintainers = with maintainers; [ offline rawkode ];
     license = stdenv.lib.licenses.asl20;
+    platforms = platforms.unix;
   };
 }

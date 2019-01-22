@@ -1,4 +1,5 @@
-{stdenv, fetchurl, libX11, imake, libXext, libXt}:
+{ stdenv, fetchurl, libX11, libXext, libXt, imake, gccmakedep}:
+
 stdenv.mkDerivation rec {
   name = "${pname}-${version}.${patchlevel}";
   pname = "xzoom";
@@ -16,12 +17,16 @@ stdenv.mkDerivation rec {
        sha256 = "0zhc06whbvaz987bzzzi2bz6h9jp6rv812qs7b71drivvd820qbh";
     })
   ];
-  buildInputs = [libX11 imake libXext libXt];
 
-  configurePhase = ''
-    xmkmf
-    makeFlags="$makeFlags PREFIX=$out BINDIR=$out/bin MANPATH=$out/share/man"
-  '';
+  nativeBuildInputs = [ imake gccmakedep ];
+  buildInputs = [ libX11 libXext libXt ];
+
+  makeFlags = [
+    "PREFIX=$(out)"
+    "BINDIR=$(out)/bin"
+    "MANPATH=$(out)/share/man"
+  ];
+  installTargets = "install install.man";
 
   meta = {
     inherit version;

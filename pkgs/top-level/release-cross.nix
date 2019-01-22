@@ -30,7 +30,7 @@ let
     buildPackages.gcc = nativePlatforms;
     coreutils = nativePlatforms;
     haskell.packages.ghcHEAD.hello = nativePlatforms;
-    haskell.packages.ghc822.hello = nativePlatforms;
+    haskell.packages.ghc844.hello = nativePlatforms;
   };
 
   linuxCommon = lib.recursiveUpdate gnuCommon {
@@ -146,6 +146,7 @@ in
   aarch64-embedded = mapTestOnCross lib.systems.examples.aarch64-embedded embedded;
   i686-embedded = mapTestOnCross lib.systems.examples.i686-embedded embedded;
   x86_64-embedded = mapTestOnCross lib.systems.examples.x86_64-embedded embedded;
+  alpha-embedded = mapTestOnCross lib.systems.examples.alpha-embedded embedded;
 
   /* Cross-built bootstrap tools for every supported platform */
   bootstrapTools = let

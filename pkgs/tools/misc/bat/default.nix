@@ -4,24 +4,21 @@
 
 rustPlatform.buildRustPackage rec {
   name    = "bat-${version}";
-  version = "0.8.0";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner  = "sharkdp";
     repo   = "bat";
     rev    = "v${version}";
-    sha256 = "1xvjw61q0qbnzj95g7g8xckcqha9jrf2172b5l7faj7i0jhmz2kx";
+    sha256 = "13c88h1m9flmx3x2h7xrnb1wy4vgdxsqahw8cqa0x61ay0019a7s";
     fetchSubmodules = true;
   };
 
-  cargoSha256 = "0xv769f2iqrgnbmb7ma9p3gbb2xpx2lhqc0kq5nizf8w8xdc5m11";
+  cargoSha256 = "1clng4rl7mq50z8d5ipmr9fapjj4qmpf4gmdnfl6vs35pq3wp9j4";
 
   nativeBuildInputs = [ cmake pkgconfig zlib ];
 
   buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security libiconv ];
-
-  # https://github.com/NixOS/nixpkgs/issues/49642
-  doCheck = !stdenv.isDarwin;
 
   postInstall = ''
     install -m 444 -Dt $out/share/man/man1 doc/bat.1

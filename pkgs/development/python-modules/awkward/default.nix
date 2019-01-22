@@ -1,23 +1,28 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , numpy
+, pytestrunner
+, pytest
+, h5py
 }:
 
 buildPythonPackage rec {
-  version = "0.3.0";
   pname = "awkward";
+  version = "0.5.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "fc3080c66987f2a03aa9ba0809e51227eb7aa34198da4b1ee4deb95356409693";
+    sha256 = "c6b84d2356c8b1af955054bbef088c61bf87f68e062e866fa8d9ea5cb871389f";
   };
 
+  buildInputs = [ pytestrunner h5py ];
+  checkInputs = [ pytest ];
   propagatedBuildInputs = [ numpy ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
+    description = "Manipulate jagged, chunky, and/or bitmasked arrays as easily as Numpy.";
     homepage = https://github.com/scikit-hep/awkward-array;
-    description = "Manipulate jagged, chunky, and/or bitmasked arrays as easily as Numpy";
     license = licenses.bsd3;
     maintainers = [ maintainers.costrouc ];
   };

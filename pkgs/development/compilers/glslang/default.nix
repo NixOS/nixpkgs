@@ -2,22 +2,14 @@
 
 stdenv.mkDerivation rec {
   name = "glslang-git-${version}";
-  version = "2018-07-27";
+  version = "2018-09-26";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "glslang";
-    rev = "e99a26810f65314183163c07664a40e05647c15f";
-    sha256 = "1w11z518xfbnf34xgzg1mp3xicpw2qmpcvaixlzw79s9ifqg5lqs";
+    rev = "91ac4290bcf2cb930b4fb0981f09c00c0b6797e1";
+    sha256 = "0q477pm0n495acnss16ddlf82a6i5l2dfmvc7r8yi0bgmgpzi4av";
   };
-
-  patches = [
-    # spirv-tools bump for vulkan sdk 1.1.82.1; remove on update
-    (fetchpatch {
-      url = "https://github.com/lenny-lunarg/glslang/commit/c7f4e818ac55f545289f87f8c37571b2eadcde86.patch";
-      sha256 = "197293alxjdpm3x1vd6pksdb1d9za42vlyn8yn2w786av0l7vf1k";
-    })
-  ];
 
   buildInputs = [ cmake bison jq ] ++ spirv-tools.buildInputs;
   enableParallelBuilding = true;

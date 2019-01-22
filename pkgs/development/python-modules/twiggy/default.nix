@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "Twiggy";
-  version = "0.4.5";
+  version = "0.4.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4e8f1894e5aee522db6cb245ccbfde3c5d1aa08d31330c7e3af783b0e66eec23";
+    sha256 = "44d8aa51110efaab0712b5ec2b015149ad4f28e28f729004aac45d0ad8e19be0";
   };
 
   doCheck = false;

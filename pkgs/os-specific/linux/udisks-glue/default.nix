@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, automake, autoconf, udisks1, dbus-glib, glib, confuse }:
+{ stdenv, fetchurl, pkgconfig, automake, autoconf, udisks1, dbus-glib, glib, libconfuse }:
 
 stdenv.mkDerivation {
   name = "udisks-glue-1.3.5";
@@ -9,7 +9,7 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ pkgconfig automake autoconf ];
-  buildInputs = [ udisks1 dbus-glib glib confuse ];
+  buildInputs = [ udisks1 dbus-glib glib libconfuse ];
 
   preConfigure = "sh autogen.sh";
 
@@ -18,6 +18,6 @@ stdenv.mkDerivation {
     description = "A tool to associate udisks events to user-defined actions";
     platforms = stdenv.lib.platforms.linux;
     maintainers = with stdenv.lib.maintainers; [pSub];
-    license = stdenv.lib.licenses.free;
+    license = stdenv.lib.licenses.bsd2;
   };
 }

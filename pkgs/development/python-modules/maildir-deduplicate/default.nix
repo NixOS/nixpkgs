@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "maildir-deduplicate";
-  version = "1.0.2";
+  version = "2.1.0";
   disabled = !isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1xy5z756alrjgpl9qx2gdx898rw1mryrqkwmipbh39mgrvkl3fz9";
+    sha256 = "263c7f2c85dafe06eaa15e8d7ab83817204f70a5f08cc25a607f3f01ed130b42";
   };
 
   propagatedBuildInputs = [ click ];

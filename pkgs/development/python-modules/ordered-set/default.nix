@@ -2,13 +2,13 @@
 
 buildPythonPackage rec {
   pname = "ordered-set";
-  version = "3.0.2";
+  version = "3.1";
 
   buildInputs = [ pytest pytestrunner ];
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7d292b866fa44f339ac6e624e3d338accfb415ce0a8431595d51990fbdf61d3b";
+    sha256 = "0slg1ys58dzxl96mws3sydzavdzqdk0s2nrc852dphd9kbm07dzr";
   };
 
   checkPhase = ''

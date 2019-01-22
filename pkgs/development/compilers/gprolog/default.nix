@@ -1,14 +1,14 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "gprolog-1.4.4";
+  name = "gprolog-1.4.5";
 
   src = fetchurl {
     urls = [
       "mirror://gnu/gprolog/${name}.tar.gz"
       "http://www.gprolog.org/${name}.tar.gz"
     ];
-    sha256 = "13miyas47bmijmadm68cbvb21n4s156gjafz7kfx9brk9djfkh0q";
+    sha256 = "0z4cc42n3k6i35b8mr816iwsvrpxshw6d7dgz6s2h1hy0l7g1p5z";
   };
 
   hardeningDisable = stdenv.lib.optional stdenv.isi686 "pic";
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = {
-    homepage = http://www.gnu.org/software/gprolog/;
+    homepage = https://www.gnu.org/software/gprolog/;
     description = "GNU Prolog, a free Prolog compiler with constraint solving over finite domains";
     license = stdenv.lib.licenses.lgpl3Plus;
 

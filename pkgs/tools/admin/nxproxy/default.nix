@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   name = "nxproxy-${version}";
-  version = "3.5.99.16";
+  version = "3.5.99.17-1";
 
   src = fetchurl {
-    sha256 = "1m3z9w3h6qpgk265xf030w7lcs181jgw2cdyzshb7l97mn1f7hh2";
+    sha256 = "18a7cvjnaf50lf1cc5axx9jmi8n9g75d2i5y4s6q9r3phpwyp918";
     url = "https://code.x2go.org/releases/source/nx-libs/nx-libs-${version}-lite.tar.gz";
   };
 

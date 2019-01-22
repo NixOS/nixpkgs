@@ -1,14 +1,14 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, bzip2, expat, glib, curl, libxml2, python2, rpm, openssl, sqlite, file, xz, pcre, bash-completion }:
+{ stdenv, fetchFromGitHub, cmake, pkgconfig, bzip2, expat, glib, curl, libxml2, python3, rpm, openssl, sqlite, file, xz, pcre, bash-completion }:
 
 stdenv.mkDerivation rec {
-  rev  = "0.11.0";
-  name = "createrepo_c-${rev}";
+  name = "createrepo_c-${version}";
+  version = "0.11.1";
 
   src = fetchFromGitHub {
-    inherit rev;
     owner  = "rpm-software-management";
     repo   = "createrepo_c";
-    sha256 = "1w9yynj8mxhw714gvgr0fibfks584b4y0n4vjckcf7y97cpdhjkn";
+    rev    = version;
+    sha256 = "0cmysc7gdd2czagl4drfh9gin6aa2847vgi30a3p0cfqvczf9cm6";
   };
 
   patches = [
@@ -20,12 +20,12 @@ stdenv.mkDerivation rec {
     substituteInPlace CMakeLists.txt \
       --replace '@BASHCOMP_DIR@' "$out/share/bash-completion/completions"
     substituteInPlace src/python/CMakeLists.txt \
-      --replace "@PYTHON_INSTALL_PATH@" "$out/${python2.sitePackages}"
+      --replace "@PYTHON_INSTALL_DIR@" "$out/${python3.sitePackages}"
   '';
 
   nativeBuildInputs = [ cmake pkgconfig ];
 
-  buildInputs = [ bzip2 expat glib curl libxml2 python2 rpm openssl sqlite file xz pcre bash-completion ];
+  buildInputs = [ bzip2 expat glib curl libxml2 python3 rpm openssl sqlite file xz pcre bash-completion ];
 
   meta = with stdenv.lib; {
     description = "C implementation of createrepo";

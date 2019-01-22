@@ -4,6 +4,7 @@ use strict;
 use Thread::Queue;
 use XML::Writer;
 use Encode qw(decode encode);
+use Time::HiRes qw(clock_gettime CLOCK_MONOTONIC);
 
 sub new {
     my ($class) = @_;
@@ -46,10 +47,12 @@ sub nest {
     print STDERR maybePrefix("$msg\n", $attrs);
     $self->{log}->startTag("nest");
     $self->{log}->dataElement("head", $msg, %{$attrs});
+    my $now = clock_gettime(CLOCK_MONOTONIC);
     $self->drainLogQueue();
     eval { &$coderef };
     my $res = $@;
     $self->drainLogQueue();
+    $self->log(sprintf("(%.2f seconds)", clock_gettime(CLOCK_MONOTONIC) - $now));
     $self->{log}->endTag("nest");
     die $@ if $@;
 }

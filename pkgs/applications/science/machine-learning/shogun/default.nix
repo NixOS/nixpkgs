@@ -2,9 +2,9 @@
 # data, compression
 , bzip2, curl, hdf5, json_c, lzma, lzo, protobuf, snappy
 # maths
-, blas, eigen, nlopt, lp_solve, colpack
+, openblasCompat, eigen, nlopt, lp_solve, colpack
 # libraries
-, libarchive, liblapack, libxml2
+, libarchive, libxml2
 # extra support
 , pythonSupport ? true, pythonPackages ? null
 , opencvSupport ? false, opencv ? null
@@ -41,8 +41,8 @@ stdenv.mkDerivation rec {
   CCACHE_DIR=".ccache";
 
   buildInputs = with lib; [
-      blas bzip2 ccache cmake colpack curl ctags eigen hdf5 json_c lp_solve lzma lzo
-      protobuf nlopt snappy swig (libarchive.dev) liblapack libxml2
+      openblasCompat bzip2 ccache cmake colpack curl ctags eigen hdf5 json_c lp_solve lzma lzo
+      protobuf nlopt snappy swig (libarchive.dev) libxml2
     ]
     ++ optionals (pythonSupport) (with pythonPackages; [ python ply numpy ])
     ++ optional  (opencvSupport) opencv;

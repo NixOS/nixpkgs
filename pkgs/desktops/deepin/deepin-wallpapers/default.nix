@@ -1,7 +1,8 @@
-{ stdenv, fetchFromGitHub, dde-api }:
+{ stdenv, fetchFromGitHub, dde-api, deepin }:
 
 stdenv.mkDerivation rec {
-  name = "deepin-wallpapers-${version}";
+  name = "${pname}-${version}";
+  pname = "deepin-wallpapers";
   version = "1.7.5";
 
   src = fetchFromGitHub {
@@ -30,6 +31,8 @@ stdenv.mkDerivation rec {
     ln -s $(echo -n $out/share/wallpapers/deepin/Hummingbird_by_Shu_Le.jpg | md5sum | cut -d " " -f 1).jpg \
       $out/var/cache/image-blur/$(echo -n $out/share/backgrounds/deepin/desktop.jpg | md5sum | cut -d " " -f 1).jpg
   '';
+
+  passthru.updateScript = deepin.updateScript { inherit name; };
 
   meta = with stdenv.lib; {
     description = "Wallpapers for Deepin Desktop Environment";

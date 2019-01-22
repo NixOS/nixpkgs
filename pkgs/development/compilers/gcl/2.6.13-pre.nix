@@ -1,6 +1,6 @@
 { stdenv, fetchgit, mpfr, m4, binutils, emacs, zlib, which
-, texinfo, libX11, xproto, inputproto, libXi, gmp, readline, strace
-, libXext, xextproto, libXt, libXaw, libXmu } :
+, texinfo, libX11, xorgproto, libXi, gmp, readline, strace
+, libXext, libXt, libXaw, libXmu } :
 
 assert stdenv ? cc ;
 assert stdenv.cc.isGNU ;
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   src = fetchgit {
     sha256 = "0vpxb6z5g9fjavrgx8gz8fsjvskfz64f63qibh5s00fvvndlwi88";
-    url = "http://git.savannah.gnu.org/r/gcl.git";
+    url = "https://git.savannah.gnu.org/r/gcl.git";
     rev = "refs/tags/Version_2_6_13pre50";
   };
 
@@ -27,8 +27,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     mpfr m4 binutils emacs gmp
-    libX11 xproto inputproto libXi
-    libXext xextproto libXt libXaw libXmu
+    libX11 xorgproto libXi
+    libXext libXt libXaw libXmu
     zlib which texinfo readline strace
   ];
 

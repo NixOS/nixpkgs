@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, gettext, python3Packages, perlPackages }:
+{ stdenv, fetchFromGitHub, gettext, python3Packages, perlPackages, deepin }:
 
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
@@ -35,6 +35,8 @@ stdenv.mkDerivation rec {
     wrapPythonProgramsIn "$out/lib/${pname}"
     wrapProgram $out/bin/deepin-desktop-ts-convert --set PERL5LIB $PERL5LIB
   '';
+
+  passthru.updateScript = deepin.updateScript { inherit name; };
 
   meta = with stdenv.lib; {
     description = "Deepin Internationalization utilities";

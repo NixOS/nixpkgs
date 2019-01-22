@@ -1,28 +1,42 @@
 { stdenv
 , buildPythonPackage
-, fetchurl
+, fetchPypi
+, pillow
+, psutil
 , pytest
 , numpy
+, isPy3k
+, futures
+, enum34
 }:
 
 buildPythonPackage rec {
   pname = "imageio";
-  version = "1.6";
+  version = "2.4.1";
 
-  src = fetchurl {
-    url = "https://github.com/imageio/imageio/archive/v${version}.tar.gz";
-    sha256 = "195snkk3fsbjqd5g1cfsd9alzs5q45gdbi2ka9ph4yxqb31ijrbv";
+  src = fetchPypi {
+    sha256 = "0jjiwf6wjipmykh33prjh448qv8mpgngfi77ndc7mym5r1xhgf0n";
+    inherit pname version;
   };
 
-  buildInputs = [ pytest ];
-  propagatedBuildInputs = [ numpy ];
+  checkInputs = [ pytest psutil ];
+  propagatedBuildInputs = [ numpy pillow ] ++ stdenv.lib.optionals (!isPy3k) [
+    futures
+    enum34
+  ];
 
   checkPhase = ''
+    export IMAGEIO_USERDIR="$TMP"
+    export IMAGEIO_NO_INTERNET="true"
+    export HOME="$(mktemp -d)"
     py.test
   '';
 
-  # Tries to write in /var/tmp/.imageio
-  doCheck = false;
+  # For some reason, importing imageio also imports xml on Nix, see
+  # https://github.com/imageio/imageio/issues/395
+  postPatch = ''
+    substituteInPlace tests/test_meta.py --replace '"urllib",' "\"urllib\",\"xml\""
+  '';
 
   meta = with stdenv.lib; {
     description = "Library for reading and writing a wide range of image, video, scientific, and volumetric data formats";

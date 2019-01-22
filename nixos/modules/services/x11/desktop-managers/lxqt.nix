@@ -3,15 +3,6 @@
 with lib;
 
 let
-
-  # Remove packages of ys from xs, based on their names
-  removePackagesByName = xs: ys:
-    let
-      pkgName = drv: (builtins.parseDrvName drv.name).name;
-      ysNames = map pkgName ys;
-    in
-      filter (x: !(builtins.elem (pkgName x) ysNames)) xs;
-
   xcfg = config.services.xserver;
   cfg = xcfg.desktopManager.lxqt;
 
@@ -60,7 +51,7 @@ in
     environment.systemPackages =
       pkgs.lxqt.preRequisitePackages ++
       pkgs.lxqt.corePackages ++
-      (removePackagesByName
+      (pkgs.gnome3.removePackagesByName
         pkgs.lxqt.optionalPackages
         config.environment.lxqt.excludePackages);
 

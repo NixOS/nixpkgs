@@ -17,6 +17,11 @@ buildPythonPackage rec {
 
   LC_ALL="en_US.UTF-8";
 
+  preCheck = ''
+    # Remove tests that rely on networking (breaks sandboxed builds)
+    rm test/test_submit.py
+  '';
+
   meta = with stdenv.lib; {
     homepage = http://alastair/python-musicbrainz-ngs;
     description = "Python bindings for musicbrainz NGS webservice";

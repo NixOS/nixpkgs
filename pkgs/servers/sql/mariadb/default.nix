@@ -233,7 +233,7 @@ galera = stdenv.mkDerivation rec {
 
   buildInputs = [ asio boost check openssl scons ];
 
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace SConstruct \
       --replace "boost_library_path = '''" "boost_library_path = '${boost}/lib'"
   '';
@@ -243,11 +243,9 @@ galera = stdenv.mkDerivation rec {
     export LIBPATH="${galeraLibs}/lib"
   '';
 
-  buildPhase = ''
-     scons -j$NIX_BUILD_CORES ssl=1 system_asio=1 strict_build_flags=0
-  '';
+  sconsFlags = "ssl=1 system_asio=1 strict_build_flags=0";
 
-  installPhase = ''
+  postInstall = ''
     # copied with modifications from scripts/packages/freebsd.sh
     GALERA_LICENSE_DIR="$share/licenses/${name}"
     install -d $out/{bin,lib/galera,share/doc/galera,$GALERA_LICENSE_DIR}

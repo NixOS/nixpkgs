@@ -1,22 +1,21 @@
 { stdenv, lib, fetchurl, fetchpatch, autoconf, automake, libtool, bison
-, libasr, libevent, zlib, libressl, db, pam
+, libasr, libevent, zlib, libressl, db, pam, nixosTests
 }:
 
 stdenv.mkDerivation rec {
   name = "opensmtpd-${version}";
-  version = "6.4.0p1";
+  version = "6.4.1p2";
 
   nativeBuildInputs = [ autoconf automake libtool bison ];
   buildInputs = [ libasr libevent zlib libressl db pam ];
 
   src = fetchurl {
     url = "https://www.opensmtpd.org/archives/${name}.tar.gz";
-    sha256 = "1qxxhnlsmpfh9v4azgl0634955r085gsic1c66jdll21bd5w2mq8";
+    sha256 = "0cppqlx4fk6l8rbim5symh2fm1kzshf421256g596j6c9f9q96xn";
   };
 
   patches = [
-    ./proc_path.diff
-    ./fix-build.diff # See https://github.com/OpenSMTPD/OpenSMTPD/pull/884
+    ./proc_path.diff # TODO: upstream to OpenSMTPD, see https://github.com/NixOS/nixpkgs/issues/54045
   ];
 
   # See https://github.com/OpenSMTPD/OpenSMTPD/issues/885 for the `sh bootstrap`
@@ -61,5 +60,8 @@ stdenv.mkDerivation rec {
     license = licenses.isc;
     platforms = platforms.linux;
     maintainers = with maintainers; [ rickynils obadz ekleog ];
+  };
+  passthru.tests = {
+    basic-functionality-and-dovecot-interaction = nixosTests.opensmtpd;
   };
 }

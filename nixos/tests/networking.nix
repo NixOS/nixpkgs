@@ -1,8 +1,10 @@
 { system ? builtins.currentSystem
+, config ? {}
+, pkgs ? import ../.. { inherit system config; }
 # bool: whether to use networkd in the tests
 , networkd }:
 
-with import ../lib/testing.nix { inherit system; };
+with import ../lib/testing.nix { inherit system pkgs; };
 with pkgs.lib;
 
 let

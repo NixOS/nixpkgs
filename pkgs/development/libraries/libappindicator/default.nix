@@ -5,7 +5,7 @@
 , glib, dbus-glib, gtkVersion ? "3"
 , gtk2 ? null, libindicator-gtk2 ? null, libdbusmenu-gtk2 ? null
 , gtk3 ? null, libindicator-gtk3 ? null, libdbusmenu-gtk3 ? null
-, python2Packages, gobjectIntrospection, vala
+, python2Packages, gobject-introspection, vala
 , monoSupport ? false, mono ? null, gtk-sharp-2_0 ? null
  }:
 
@@ -34,7 +34,7 @@ in stdenv.mkDerivation rec {
 
   buildInputs = [
     glib dbus-glib
-    python pygobject2 pygtk gobjectIntrospection vala
+    python pygobject2 pygtk gobject-introspection vala
   ] ++ (if gtkVersion == "2"
     then [ libindicator-gtk2 ] ++ optionals monoSupport [ mono gtk-sharp-2_0 ]
     else [ libindicator-gtk3 ]);

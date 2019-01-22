@@ -14,23 +14,24 @@ let
 
 
 in stdenv.mkDerivation rec {
-  version = "1.13.0";
+  version = "1.14.0";
   name = "mupdf-${version}";
 
   src = fetchurl {
     url = "https://mupdf.com/downloads/archive/${name}-source.tar.gz";
-    sha256 = "02faww5bnjw76k6igrjzwf0lnw4xd9ckc8d6ilc3c4gfrdi6j707";
+    sha256 = "093p7lv6pgyymagn28n58fs0np928r0i5p2az9cc4gwccwx4hhy4";
   };
 
-  patches = [
-    (fetchpatch {
-      name = "CVE-2018-10289.patch";
-      url = "https://bugs.ghostscript.com/attachment.cgi?id=15230";
-      sha256 = "0jmpacxd9930g6k57kda9jrcrbk75whdlv8xwmqg5jwn848qvy4q";
-    })
-  ]
+  patches =
     # Use shared libraries to decrease size
-    ++ stdenv.lib.optional (!stdenv.isDarwin) ./mupdf-1.13-shared_libs-1.patch
+    [( fetchpatch
+      {
+          name = "CVE-2018-18662";
+          url = "http://git.ghostscript.com/?p=mupdf.git;a=patch;h=164ddc22ee0d5b63a81d5148f44c37dd132a9356";
+          sha256 = "1jkzh20n3b854871h86cy5y7fvy0d5wyqy51b3fg6gj3a0jqpzzd";
+      }
+    )]
+    ++ stdenv.lib.optional (!stdenv.isDarwin) ./mupdf-1.14-shared_libs.patch
     ++ stdenv.lib.optional stdenv.isDarwin ./darwin.patch
   ;
 
@@ -38,7 +39,7 @@ in stdenv.mkDerivation rec {
     sed -i "s/__OPENJPEG__VERSION__/${openJpegVersion}/" source/fitz/load-jpx.c
   '';
 
-  makeFlags = [ "prefix=$(out)" ];
+  makeFlags = [ "prefix=$(out) USE_SYSTEM_LIBS=yes" ];
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ freetype harfbuzz openjpeg jbig2dec libjpeg freeglut libGLU ]
                 ++ lib.optionals enableX11 [ libX11 libXext libXi libXrandr ]

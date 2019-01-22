@@ -54,7 +54,7 @@ stdenv.mkDerivation {
     cp -r * "$out/opt/oilrush"
     mkdir -p "$out/bin"
     cat << EOF > "$out/bin/oilrush"
-    #! /bin/sh
+    #!${stdenv.shell}
     LD_LIBRARY_PATH=.:${makeLibraryPath [ openal ]}:\$LD_LIBRARY_PATH
     cd "$out/opt/oilrush"
     exec ./launcher_$arch.sh "\$@"

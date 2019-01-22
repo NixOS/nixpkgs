@@ -3,23 +3,30 @@
 , fetchPypi
 , setuptools
 , pyparsing
+, pytest
 }:
 
 buildPythonPackage rec {
   pname = "svgwrite";
-  version = "1.1.6";
+  version = "1.2.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1f018813072aa4d7e95e58f133acb3f68fa7de0a0d89ec9402cc38406a0ec5b8";
+    extension = "zip";
+    sha256 = "72ef66c9fe367989823cb237ab7f012ac809dd3ba76c1b5ebd9aa61580e2e75e";
   };
 
   buildInputs = [ setuptools ];
   propagatedBuildInputs = [ pyparsing ];
+  checkInputs = [ pytest ];
+
+  checkPhase = ''
+    pytest
+  '';
 
   meta = with stdenv.lib; {
     description = "A Python library to create SVG drawings";
-    homepage = https://bitbucket.org/mozman/svgwrite;
+    homepage = https://github.com/mozman/svgwrite;
     license = licenses.mit;
   };
 

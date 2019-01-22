@@ -25,6 +25,7 @@ rec {
     udevSupport = true;
     xineramaSupport = true;
     xmlSupport = true;
+    sdlSupport = true;
   };
 
   full = base.override {

@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "jhead-${version}";
-  version = "3.00";
+  version = "3.03";
 
   src = fetchurl {
     url = "http://www.sentex.net/~mwandel/jhead/${name}.tar.gz";
-    sha256 = "0pl9s9ssb2a9di82f3ypin2hd098ns8kzdsxw3i2y94f07d03k48";
+    sha256 = "1hn0yqcicq3qa20h1g313l1a671r8mccpb9gz0w1056r500lw6c2";
   };
 
   buildInputs = [ libjpeg ];

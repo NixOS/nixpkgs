@@ -36,8 +36,6 @@ stdenv.mkDerivation rec {
   postInstall = ''
     # Hm, apparently --disable-gtk-doc is ignored...
     rm -rf $out/share/gtk-doc
-
-    paxmark m $out/bin/gst-launch* $out/libexec/gstreamer-*/gst-plugin-scanner
   '';
 
   setupHook = ./setup-hook.sh;

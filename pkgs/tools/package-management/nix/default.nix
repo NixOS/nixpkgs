@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, fetchFromGitHub, fetchpatch, perl, curl, bzip2, sqlite, openssl ? null, xz
-, pkgconfig, boehmgc, perlPackages, libsodium, brotli, boost
+, pkgconfig, boehmgc, perlPackages, libsodium, brotli, boost, editline
 , autoreconfHook, autoconf-archive, bison, flex, libxml2, libxslt, docbook5, docbook_xsl_ns
 , busybox-sandbox-shell
 , storeDir ? "/nix/store"
@@ -30,7 +30,7 @@ let
 
     buildInputs = [ curl openssl sqlite xz bzip2 ]
       ++ lib.optional (stdenv.isLinux || stdenv.isDarwin) libsodium
-      ++ lib.optionals is20 [ brotli boost ]
+      ++ lib.optionals is20 [ brotli boost editline ]
       ++ lib.optional withLibseccomp libseccomp
       ++ lib.optional (withAWS && is20)
           ((aws-sdk-cpp.override {
@@ -51,10 +51,11 @@ let
     preConfigure =
       # Copy libboost_context so we don't get all of Boost in our closure.
       # https://github.com/NixOS/nixpkgs/issues/45462
-      lib.optionalString is20
-      ''
+      if is20 then ''
         mkdir -p $out/lib
         cp ${boost}/lib/libboost_context* $out/lib
+      '' else ''
+        configureFlagsArray+=(BDW_GC_LIBS="-lgc -lgccpp")
       '';
 
     configureFlags =
@@ -148,10 +149,10 @@ in rec {
   }) // { perl-bindings = nix1; };
 
   nixStable = (common rec {
-    name = "nix-2.1.3";
+    name = "nix-2.2";
     src = fetchurl {
       url = "http://nixos.org/releases/nix/${name}/${name}.tar.xz";
-      sha256 = "5d22dad058d5c800d65a115f919da22938c50dd6ba98c5e3a183172d149840a4";
+      sha256 = "63238d00d290b8a93925891fc9164439d3941e2ccc569bf7f7ca32f53c3ec0c7";
     };
   }) // { perl-bindings = perl-bindings {
     nix = nixStable;
@@ -160,12 +161,12 @@ in rec {
 
   nixUnstable = (lib.lowPrio (common rec {
     name = "nix-2.2${suffix}";
-    suffix = "pre6526_9f99d624";
+    suffix = "pre6600_85488a93";
     src = fetchFromGitHub {
       owner = "NixOS";
       repo = "nix";
-      rev = "9f99d62480cf7c58c0a110b180f2096b7d25adab";
-      sha256 = "0fkmx7gmgg0yij9kw52fkyvib88hj1jsj90vbpy13ccfwknh1044";
+      rev = "85488a93ec3b07210339f2b05aa93e970f9ac3be";
+      sha256 = "1n5dp7p2lzpnj7f834d25k020v16gnnsm56jz46y87v2x7b69ccm";
     };
     fromGit = true;
   })) // { perl-bindings = perl-bindings {

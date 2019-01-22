@@ -1,14 +1,14 @@
-{ stdenv, fetchFromGitHub, cmake, enableShared ? true }:
+{ stdenv, fetchFromGitHub, fetchpatch, cmake, enableShared ? true }:
 
 stdenv.mkDerivation rec {
-  version = "5.2.1";
+  version = "5.3.0";
   name = "fmt-${version}";
 
   src = fetchFromGitHub {
     owner = "fmtlib";
     repo = "fmt";
     rev = "${version}";
-    sha256 = "1cd8yq8va457iir1hlf17ksx11fx2hlb8i4jml8gj1875pizm0pk";
+    sha256 = "1hl9s69a5ql5nckc0ifh2fzlgsgv1wsn6yhqkpnrhasqkhj0hgv4";
   };
 
   outputs = [ "out" "dev" ];

@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin $out/share
     cp -a . $out/share/alchemy
     cat >> $out/bin/alchemy << EOF
-    #!/bin/sh
+    #!${stdenv.shell}
     cd $out/share/alchemy
     ${jre}/bin/java -jar Alchemy.jar "$@"
     EOF

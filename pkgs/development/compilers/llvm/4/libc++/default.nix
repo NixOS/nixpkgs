@@ -44,6 +44,11 @@ stdenv.mkDerivation rec {
 
   linkCxxAbi = stdenv.isLinux;
 
+  postInstall = ''
+    mv $out/lib/libc++.a $out/lib/libc++_static.a
+    cp ${./libc++.a} $out/lib/libc++.a
+  '';
+
   setupHooks = [
     ../../../../../build-support/setup-hooks/role.bash
     ./setup-hook.sh

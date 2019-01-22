@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "ModestMaps";
-  version = "1.4.6";
+  version = "1.4.7";
   disabled = !isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0vyi1m9q4pc34i6rq5agb4x3qicx5sjlbxwmxfk70k2l5mnbjca3";
+    sha256 = "698442a170f02923f8ea55f18526b56c17178162e44304f896a8a5fd65ab4457";
   };
 
   propagatedBuildInputs = [ pillow ];

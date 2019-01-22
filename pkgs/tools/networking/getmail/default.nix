@@ -2,11 +2,11 @@
 
 python2Packages.buildPythonApplication rec {
   pname = "getmail";
-  version = "5.7";
+  version = "5.8";
 
   src = fetchurl {
     url = "http://pyropus.ca/software/getmail/old-versions/${pname}-${version}.tar.gz";
-    sha256 = "1ygv78ihjyrh60657bl8pc17a5dqawdkfh32h8hrd4kwwxlsd5r4";
+    sha256 = "0vl4cc733pd9d21y4pr4jc1ly657d0akxj1bdh1xfjggx33l3541";
   };
 
   doCheck = false;

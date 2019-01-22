@@ -132,7 +132,7 @@
   </itemizedlist>
 
   <para>
-   The difference between an a package being unsupported on some system and
+   The difference between a package being unsupported on some system and
    being broken is admittedly a bit fuzzy. If a program
    <emphasis>ought</emphasis> to work on a certain platform, but doesn't, the
    platform should be included in <literal>meta.platforms</literal>, but marked
@@ -175,11 +175,16 @@
 </programlisting>
     </para>
     <para>
-     A more useful example, the following configuration allows only allows
-     flash player and visual studio code:
+     For a more useful example, try the following. This configuration
+     only allows unfree packages named flash player and visual studio
+     code:
 <programlisting>
 {
-  allowUnfreePredicate = (pkg: elem (builtins.parseDrvName pkg.name).name [ "flashplayer" "vscode" ]);
+  allowUnfreePredicate = (pkg: builtins.elem
+    (builtins.parseDrvName pkg.name).name [
+      "flashplayer"
+      "vscode"
+    ]);
 }
 </programlisting>
     </para>
@@ -286,8 +291,8 @@
 
   <para>
    You can define a function called <varname>packageOverrides</varname> in your
-   local <filename>~/.config/nixpkgs/config.nix</filename> to override nix
-   packages. It must be a function that takes pkgs as an argument and return
+   local <filename>~/.config/nixpkgs/config.nix</filename> to override Nix
+   packages. It must be a function that takes pkgs as an argument and returns a
    modified set of packages.
 <programlisting>
 {
@@ -321,7 +326,18 @@
   packageOverrides = pkgs: with pkgs; {
     myPackages = pkgs.buildEnv {
       name = "my-packages";
-      paths = [ aspell bc coreutils gdb ffmpeg nixUnstable emscripten jq nox silver-searcher ];
+      paths = [
+        aspell
+        bc
+        coreutils
+        gdb
+        ffmpeg
+        nixUnstable
+        emscripten
+        jq
+        nox
+        silver-searcher
+      ];
     };
   };
 }
@@ -342,7 +358,18 @@
   packageOverrides = pkgs: with pkgs; {
     myPackages = pkgs.buildEnv {
       name = "my-packages";
-      paths = [ aspell bc coreutils gdb ffmpeg nixUnstable emscripten jq nox silver-searcher ];
+      paths = [
+        aspell
+        bc
+        coreutils
+        gdb
+        ffmpeg
+        nixUnstable
+        emscripten
+        jq
+        nox
+        silver-searcher
+      ];
       pathsToLink = [ "/share" "/bin" ];
     };
   };
@@ -377,7 +404,17 @@
   packageOverrides = pkgs: with pkgs; {
     myPackages = pkgs.buildEnv {
       name = "my-packages";
-      paths = [ aspell bc coreutils ffmpeg nixUnstable emscripten jq nox silver-searcher ];
+      paths = [
+        aspell
+        bc
+        coreutils
+        ffmpeg
+        nixUnstable
+        emscripten
+        jq
+        nox
+        silver-searcher
+      ];
       pathsToLink = [ "/share/man" "/share/doc" "/bin" ];
       extraOutputsToInstall = [ "man" "doc" ];
     };

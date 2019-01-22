@@ -1,6 +1,6 @@
 { stdenv, fetchurl, bash-completion
 , glib, polkit, pkgconfig, gettext, gusb, lcms2, sqlite, systemd, dbus
-, gobjectIntrospection, argyllcms, meson, ninja, libxml2, vala_0_40
+, gobject-introspection, argyllcms, meson, ninja, libxml2, vala_0_40
 , libgudev, sane-backends, gnome3, makeWrapper }:
 
 stdenv.mkDerivation rec {
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     "-Denable-docs=false"
   ];
 
-  nativeBuildInputs = [ meson pkgconfig vala_0_40 ninja gettext libxml2 gobjectIntrospection makeWrapper ];
+  nativeBuildInputs = [ meson pkgconfig vala_0_40 ninja gettext libxml2 gobject-introspection makeWrapper ];
 
   buildInputs = [ glib polkit gusb lcms2 sqlite systemd dbus bash-completion argyllcms libgudev sane-backends ];
 

@@ -48,13 +48,13 @@ rec {
       else if system == "x86_64-cygwin" then pkgs_x86_64_cygwin
       else abort "unsupported system type: ${system}";
 
-  inherit (pkgsForCross null) pkgsFor;
+  pkgsFor = pkgsForCross null;
 
 
   # More poor man's memoisation
   pkgsForCross = let
     examplesByConfig = lib.flip lib.mapAttrs'
-      (builtins.removeAttrs lib.systems.examples [ "riscv" ])
+      lib.systems.examples
       (_: crossSystem: nameValuePair crossSystem.config {
         inherit crossSystem;
         pkgsFor = mkPkgsFor crossSystem;

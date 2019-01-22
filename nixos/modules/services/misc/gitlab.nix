@@ -552,10 +552,9 @@ in {
         gnupg
       ];
       preStart = ''
-        ${pkgs.openssl}/bin/openssl rand -hex 32 > ${cfg.statePath}/config/gitlab_shell_secret
-
         cp -rf ${cfg.packages.gitlab}/share/gitlab/db/* ${cfg.statePath}/db
-        cp -rf ${cfg.packages.gitlab}/share/gitlab/config.dist/* ${cfg.statePath}/config
+        rm -rf ${cfg.statePath}/config
+        mkdir ${cfg.statePath}/config
         if [ -e ${cfg.statePath}/lib ]; then
           rm ${cfg.statePath}/lib
         fi
@@ -565,10 +564,12 @@ in {
         [ -L /run/gitlab/log ] || ln -sf ${cfg.statePath}/log /run/gitlab/log
         [ -L /run/gitlab/tmp ] || ln -sf ${cfg.statePath}/tmp /run/gitlab/tmp
         [ -L /run/gitlab/uploads ] || ln -sf ${cfg.statePath}/uploads /run/gitlab/uploads
+        cp ${cfg.packages.gitlab}/share/gitlab/VERSION ${cfg.statePath}/VERSION
+        cp -rf ${cfg.packages.gitlab}/share/gitlab/config.dist/* ${cfg.statePath}/config
         ${optionalString cfg.smtp.enable ''
           ln -sf ${smtpSettings} ${cfg.statePath}/config/initializers/smtp_settings.rb
         ''}
-        cp ${cfg.packages.gitlab}/share/gitlab/VERSION ${cfg.statePath}/VERSION
+        ${pkgs.openssl}/bin/openssl rand -hex 32 > ${cfg.statePath}/config/gitlab_shell_secret
 
         # JSON is a subset of YAML
         ln -sf ${pkgs.writeText "gitlab.yml" (builtins.toJSON gitlabConfig)} ${cfg.statePath}/config/gitlab.yml
@@ -607,10 +608,6 @@ in {
             GITLAB_ROOT_PASSWORD='${cfg.initialRootPassword}' GITLAB_ROOT_EMAIL='${cfg.initialRootEmail}'
           touch "${cfg.statePath}/db-seeded"
         fi
-
-        # The gitlab:shell:setup regenerates the authorized_keys file so that
-        # the store path to the gitlab-shell in it gets updated
-        ${pkgs.sudo}/bin/sudo -u ${cfg.user} -H force=yes ${gitlab-rake}/bin/gitlab-rake gitlab:shell:setup
 
         # The gitlab:shell:create_hooks task seems broken for fixing links
         # so we instead delete all the hooks and create them anew

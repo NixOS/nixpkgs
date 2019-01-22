@@ -4,7 +4,7 @@
 }:
 
 buildPythonPackage rec {
-  name = "repocheck";
+  pname = "repocheck";
   version = "2015-08-05";
 
   src = fetchFromGitHub {

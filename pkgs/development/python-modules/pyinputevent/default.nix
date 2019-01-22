@@ -4,7 +4,7 @@
 }:
 
 buildPythonPackage rec {
-  name = "pyinputevent";
+  pname = "pyinputevent";
   version = "2016-10-18";
 
   src = fetchFromGitHub {

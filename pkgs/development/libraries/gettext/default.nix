@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
       GNU packages produce multi-lingual messages.
     '';
 
-    homepage = http://www.gnu.org/software/gettext/;
+    homepage = https://www.gnu.org/software/gettext/;
 
     maintainers = with maintainers; [ zimbatm vrthra ];
     license = licenses.gpl2Plus;

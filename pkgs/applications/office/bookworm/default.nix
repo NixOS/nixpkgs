@@ -1,30 +1,20 @@
 { stdenv, fetchFromGitHub, fetchpatch, vala_0_40, python3, python2, pkgconfig, libxml2, meson, ninja, gtk3, granite, gnome3
-, gobjectIntrospection, sqlite, poppler, poppler_utils, html2text, curl, gnugrep, coreutils, bash, unzip, unar, wrapGAppsHook }:
+, gobject-introspection, sqlite, poppler, poppler_utils, html2text, curl, gnugrep, coreutils, bash, unzip, unar, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "bookworm";
-  version = "4f7b118281667d22f1b3205edf0b775341fa49cb";
-
-  name = "${pname}-2018-10-21";
+  version = "unstable-2018-11-19";
 
   src = fetchFromGitHub {
     owner = "babluboy";
     repo = pname;
-    rev = version;
-    sha256 = "0bcyim87zk4b4xmgfs158lnds3y8jg7ppzw54kjpc9rh66fpn3b9";
+    rev = "4c3061784ff42151cac77d12bf2a28bf831fdfc5";
+    sha256 = "0yrqxa60xlvz249kx966z5krx8i7h17ac0hjgq9p8f0irzy5yp0n";
   };
-
-  # See: https://github.com/babluboy/bookworm/pull/220
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/worldofpeace/bookworm/commit/b2faf685c46b95d6a2d4ec3725e4e4122b61e99a.patch";
-      sha256 = "14az86cj5j65hngfflrp1rmnrkdrhg2a8pl7www3jgfwasxay975";
-    })
-  ];
 
   nativeBuildInputs = [
     bash
-    gobjectIntrospection
+    gobject-introspection
     libxml2
     meson
     ninja

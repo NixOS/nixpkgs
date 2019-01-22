@@ -1,5 +1,13 @@
 { stdenv, fetchFromGitHub, ocaml, findlib, dune, czmq, stdint }:
 
+if !stdenv.lib.versionAtLeast ocaml.version "4.03"
+then throw "zmq is not available for OCaml ${ocaml.version}"
+else
+
+let __dune = dune; in
+let dune = __dune.override { ocamlPackages = { inherit ocaml findlib; }; };
+in
+
 stdenv.mkDerivation rec {
   name = "ocaml${ocaml.version}-zmq-${version}";
   version = "20180726";

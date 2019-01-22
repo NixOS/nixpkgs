@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "hgsvn";
-  version = "0.3.11";
+  version = "0.3.15";
   disabled = isPy3k || isPyPy;
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "0yvhwdh8xx8rvaqd3pnnyb99hfa0zjdciadlc933p27hp9rf880p";
+    sha256 = "036270cc2803f7a7de3842e8c593849631b2293e647aa3444f68f1b1834d1fa1";
   };
 
   buildInputs = [ nose ];

@@ -1,6 +1,6 @@
 { stdenv, fetchurl, libgpgerror, gnupg, pkgconfig, glib, pth, libassuan
 , file, which, ncurses
-, autoreconfHook
+, autoreconfHook, fetchpatch
 , git
 , texinfo
 , qtbase ? null
@@ -30,6 +30,14 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ file pkgconfig gnupg autoreconfHook git texinfo ]
   ++ lib.optionals pythonSupport [ python swig2 which ncurses ];
+
+  patches = [
+    (fetchpatch {
+      name = "fix-key-expiry.patch";
+      url = "https://files.gnupg.net/file/data/fehgbjmataj5tc2pnfhj/PHID-FILE-aqck6l4elhw53tjanrie/file";
+      sha256 = "1h80m045gy7r0g7dzzlfpql6p065x88p274ij9jnf7d4lwwgrf1a";
+    })
+  ];
 
   postPatch =''
     substituteInPlace ./configure --replace /usr/bin/file ${file}/bin/file

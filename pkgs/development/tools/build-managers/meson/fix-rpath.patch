@@ -1,21 +1,21 @@
 --- a/mesonbuild/compilers/compilers.py
 +++ b/mesonbuild/compilers/compilers.py
-@@ -846,8 +848,10 @@
-             if paths != '':
-                 paths += ':'
-             paths += build_rpath
--        if len(paths) < len(install_rpath):
--            padding = 'X' * (len(install_rpath) - len(paths))
-+        store_paths = ':'.join(filter(lambda path: path.startswith('@storeDir@'), paths.split(':')))
-+        extra_space_needed = len(install_rpath + (':' if install_rpath and store_paths else '') + store_paths) - len(paths)
-+        if extra_space_needed > 0:
-+            padding = 'X' * extra_space_needed
-             if not paths:
-                 paths = padding
-             else:
+@@ -1202,8 +1202,10 @@
+             # In order to avoid relinking for RPATH removal, the binary needs to contain just
+             # enough space in the ELF header to hold the final installation RPATH.
+             paths = ':'.join(all_paths)
+-            if len(paths) < len(install_rpath):
+-                padding = 'X' * (len(install_rpath) - len(paths))
++            store_paths = ':'.join(filter(lambda path: path.startswith('@storeDir@'), all_paths))
++            extra_space_needed = len(install_rpath + (':' if install_rpath and store_paths else '') + store_paths) - len(paths)
++            if extra_space_needed > 0:
++                padding = 'X' * extra_space_needed
+                 if not paths:
+                     paths = padding
+                 else:
 --- a/mesonbuild/scripts/depfixer.py
 +++ b/mesonbuild/scripts/depfixer.py
-@@ -300,6 +300,14 @@
+@@ -303,6 +303,14 @@
              return
          self.bf.seek(rp_off)
          old_rpath = self.read_str()
@@ -30,3 +30,14 @@
          if len(old_rpath) < len(new_rpath):
              sys.exit("New rpath must not be longer than the old one.")
          # The linker does read-only string deduplication. If there is a
+@@ -316,6 +324,10 @@
+         if not new_rpath:
+             self.remove_rpath_entry(entrynum)
+         else:
++            # clean old rpath to avoid stale references
++            # (see https://github.com/NixOS/nixpkgs/pull/46020)
++            self.bf.seek(rp_off)
++            self.bf.write(b'\0'*len(old_rpath))
+             self.bf.seek(rp_off)
+             self.bf.write(new_rpath)
+             self.bf.write(b'\0')

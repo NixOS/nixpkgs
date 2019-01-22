@@ -9,37 +9,26 @@
 , coverage
 , certifi
 , urllib3
-, isPy3k
+, rednose
+, nose-randomly
+, six
+, mock
 }:
 
 buildPythonPackage rec {
   pname = "httpretty";
-  version = "0.8.10";
-  doCheck = false;
+  version = "0.9.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1nmdk6d89z14x3wg4yxywlxjdip16zc8bqnfb471z1365mr74jj7";
+    sha256 = "01b52d45077e702eda491f4fe75328d3468fd886aed5dcc530003e7b2b5939dc";
   };
 
-  buildInputs = [ tornado requests httplib2 sure nose coverage certifi ];
-  propagatedBuildInputs = [ urllib3 ];
-
-  postPatch = ''
-    sed -i -e 's/==.*$//' *requirements.txt
-    # XXX: Drop this after version 0.8.4 is released.
-    patch httpretty/core.py <<DIFF
-    ***************
-    *** 566 ****
-    !                 'content-length': len(self.body)
-    --- 566 ----
-    !                 'content-length': str(len(self.body))
-    DIFF
-
-    # Explicit encoding flag is required with python3, unless locale is set.
-    ${if !isPy3k then "" else
-      "patch -p0 -i ${./setup.py.patch}"}
-  '';
+  checkInputs = [ nose sure coverage mock rednose
+  # Following not declared in setup.py
+    nose-randomly requests tornado httplib2
+  ];
+  propagatedBuildInputs = [ six ];
 
   meta = with stdenv.lib; {
     homepage = "https://falcao.it/HTTPretty/";

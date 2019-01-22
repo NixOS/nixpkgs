@@ -7,9 +7,10 @@ with lib;
 
 makeSetupHook {
       deps = makeWrapper;
-      substitutions.libPrefix = python.libPrefix;
+      substitutions.sitePackages = python.sitePackages;
       substitutions.executable = python.interpreter;
-      substitutions.python = python;
+      substitutions.python = python.pythonForBuild;
+      substitutions.pythonHost = python;
       substitutions.magicalSedExpression = let
         # Looks weird? Of course, it's between single quoted shell strings.
         # NOTE: Order DOES matter here, so single character quotes need to be

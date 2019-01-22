@@ -22,5 +22,6 @@
  <xi:include href="networking.xml" />
  <xi:include href="linux-kernel.xml" />
  <xi:include href="../generated/modules.xml" xpointer="xpointer(//section[@id='modules']/*)" />
+ <xi:include href="profiles.xml" />
 <!-- Apache; libvirtd virtualisation -->
 </part>

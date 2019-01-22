@@ -1,8 +1,8 @@
-{ stdenv, git, openssl, autoconf, pkgs, makeStaticLibraries, version, SRC }:
+{ stdenv, git, openssl, autoconf, pkgs, makeStaticLibraries, version, src }:
 
 stdenv.mkDerivation rec {
   name    = "gambit-${version}";
-  src     = SRC;
+  inherit src;
 
   bootstrap = import ./bootstrap.nix ( pkgs );
 

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "websocket++-${version}";
-  version = "0.7.0";
+  version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = "zaphoyd";
     repo = "websocketpp";
     rev = version;
-    sha256 = "1i64sps52kvy8yffysjbmmbb109pi28kqai0qdxxz1dcj3xfckqd";
+    sha256 = "12ffczcrryh74c1xssww35ic6yiy2l2xgdd30lshiq9wnzl2brgy";
   };
 
   buildInputs = [ cmake ];

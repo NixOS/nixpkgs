@@ -36,12 +36,12 @@ stdenv.mkDerivation {
 
     mkdir -p $out/bin
     tee $out/bin/discrete_vga_poweroff << EOF
-    #!/bin/sh
+    #!${stdenv.shell}
 
     echo -n OFF > /proc/acpi/bbswitch
     EOF
     tee $out/bin/discrete_vga_poweron << EOF
-    #!/bin/sh
+    #!${stdenv.shell}
 
     echo -n ON > /proc/acpi/bbswitch
     EOF

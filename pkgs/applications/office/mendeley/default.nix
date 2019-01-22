@@ -112,7 +112,6 @@ stdenv.mkDerivation {
     patchelf --set-interpreter $interpreter \
              --set-rpath ${stdenv.lib.makeLibraryPath deps}:$out/lib \
              $out/bin/mendeleydesktop
-    paxmark m $out/bin/mendeleydesktop
 
     wrapProgram $out/bin/mendeleydesktop \
       --add-flags "--unix-distro-build" \
@@ -131,7 +130,7 @@ stdenv.mkDerivation {
   dontStrip = true;
   dontPatchElf = true;
 
-  updateScript = import ./update.nix { inherit writeScript; };
+  updateScript = import ./update.nix { inherit stdenv writeScript; };
 
   meta = with stdenv.lib; {
     homepage = http://www.mendeley.com;

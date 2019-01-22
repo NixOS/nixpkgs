@@ -46,7 +46,7 @@ let
   # in the same directory as slurm.conf
   etcSlurm = pkgs.symlinkJoin {
     name = "etc-slurm";
-    paths = [ configFile cgroupConfig plugStackConfig ];
+    paths = [ configFile cgroupConfig plugStackConfig ] ++ cfg.extraConfigPaths;
   };
 
 in
@@ -239,6 +239,17 @@ in
         '';
       };
 
+      extraConfigPaths = mkOption {
+        type = with types; listOf path;
+        default = [];
+        description = ''
+          Slurm expects config files for plugins in the same path
+          as <literal>slurm.conf</literal>. Add extra nix store
+          paths that should be merged into same directory as
+          <literal>slurm.conf</literal>.
+        '';
+      };
+
 
     };
 
@@ -303,6 +314,7 @@ in
 
       serviceConfig = {
         Type = "forking";
+        KillMode = "process";
         ExecStart = "${wrappedSlurm}/bin/slurmd";
         PIDFile = "/run/slurmd.pid";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";

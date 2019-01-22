@@ -10,6 +10,13 @@ let
   # Get a submodule without any embedded metadata:
   _filter = x: filterAttrs (k: v: k != "_module") x;
 
+  # a wrapper that verifies that the configuration is valid
+  promtoolCheck = what: name: file: pkgs.runCommand "${name}-${what}-checked"
+    { buildInputs = [ cfg.package ]; } ''
+    ln -s ${file} $out
+    promtool ${what} $out
+  '';
+
   # Pretty-print JSON to a file
   writePrettyJSON = name: x:
     pkgs.runCommand name { } ''
@@ -19,18 +26,19 @@ let
   # This becomes the main config file
   promConfig = {
     global = cfg.globalConfig;
-    rule_files = cfg.ruleFiles ++ [
+    rule_files = map (promtoolCheck "check-rules" "rules") (cfg.ruleFiles ++ [
       (pkgs.writeText "prometheus.rules" (concatStringsSep "\n" cfg.rules))
-    ];
+    ]);
     scrape_configs = cfg.scrapeConfigs;
   };
 
   generatedPrometheusYml = writePrettyJSON "prometheus.yml" promConfig;
 
-  prometheusYml =
-    if cfg.configText != null then
+  prometheusYml = let
+    yml =  if cfg.configText != null then
       pkgs.writeText "prometheus.yml" cfg.configText
-    else generatedPrometheusYml;
+      else generatedPrometheusYml;
+    in promtoolCheck "check-config" "prometheus.yml" yml;
 
   cmdlineArgs = cfg.extraFlags ++ [
     "-storage.local.path=${cfg.dataDir}/metrics"
@@ -317,7 +325,8 @@ let
   promTypes.relabel_config = types.submodule {
     options = {
       source_labels = mkOption {
-        type = types.listOf types.str;
+        type = with types; nullOr (listOf str);
+        default = null;
         description = ''
           The source labels select values from existing labels. Their content
           is concatenated using the configured separator and matched against
@@ -373,6 +382,15 @@ in {
         default = false;
         description = ''
           Enable the Prometheus monitoring daemon.
+        '';
+      };
+
+      package = mkOption {
+        type = types.package;
+        default = pkgs.prometheus;
+        defaultText = "pkgs.prometheus";
+        description = ''
+          The prometheus package that should be used.
         '';
       };
 
@@ -495,7 +513,7 @@ in {
       after    = [ "network.target" ];
       script = ''
         #!/bin/sh
-        exec ${pkgs.prometheus}/bin/prometheus \
+        exec ${cfg.package}/bin/prometheus \
           ${concatStringsSep " \\\n  " cmdlineArgs}
       '';
       serviceConfig = {

@@ -2,11 +2,13 @@
 
 stdenv.mkDerivation rec {
   name    = "minecraft-server-${version}";
-  version = "1.12.2";
+  version = "1.13.2";
 
   src  = fetchurl {
-    url    = "https://s3.amazonaws.com/Minecraft.Download/versions/${version}/minecraft_server.${version}.jar";
-    sha256 = "0zhnac6yvkdgdaag0gb0fgrkgizbwrpf7s76yqdiknfswrs947zy";
+    # Old url
+    # https://s3.amazonaws.com/Minecraft.Download/versions/${version}/minecraft_server.${version}.jar
+    url    = "https://launcher.mojang.com/v1/objects/3737db93722a9e39eeada7c27e7aca28b144ffa7/server.jar";
+    sha256 = "13h8dxrrgqa1g6sd7aaw26779hcsqsyjm7xm0sknifn54lnamlzz";
   };
 
   preferLocalBuild = true;
@@ -16,7 +18,7 @@ stdenv.mkDerivation rec {
     cp -v $src $out/lib/minecraft/server.jar
 
     cat > $out/bin/minecraft-server << EOF
-    #!/bin/sh
+    #!${stdenv.shell}
     exec ${jre}/bin/java \$@ -jar $out/lib/minecraft/server.jar nogui
     EOF
 

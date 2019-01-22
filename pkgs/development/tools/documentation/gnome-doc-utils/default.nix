@@ -10,7 +10,7 @@ python2Packages.buildPythonApplication {
     sha256 = "19n4x25ndzngaciiyd8dd6s2mf9gv6nv3wv27ggns2smm7zkj1nb";
   };
 
-  nativeBuildInputs = [ intltool pkgconfig ];
+  nativeBuildInputs = [ intltool pkgconfig libxslt.dev ];
   buildInputs = [ libxslt ];
 
   configureFlags = [ "--disable-scrollkeeper" ];

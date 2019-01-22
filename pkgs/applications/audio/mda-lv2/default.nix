@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fftwSinglePrec, lv2, pkgconfig, python }:
+{ stdenv, fetchurl, fftwSinglePrec, lv2, pkgconfig, python, wafHook }:
 
 stdenv.mkDerivation rec {
   name = "mda-lv2-${version}";
@@ -9,14 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "0hh40c5d2m0k5gb3vw031l6lqn59dg804an3mkmhkc7qv4gc6xm4";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig wafHook ];
   buildInputs = [ fftwSinglePrec lv2 python ];
-
-  configurePhase = "python waf configure --prefix=$out";
-
-  buildPhase = "python waf";
-
-  installPhase = "python waf install";
 
   meta = with stdenv.lib; {
     homepage = http://drobilla.net/software/mda-lv2/;

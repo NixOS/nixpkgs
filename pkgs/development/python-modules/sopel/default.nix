@@ -14,11 +14,11 @@
 
 buildPythonPackage rec {
   pname = "sopel";
-  version = "6.3.1";
+  version = "6.5.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1swvw7xw8n5anb8ah8jilk4vk1y30y62fkibfd9vm9fbk45d1q48";
+    sha256 = "4d8c1dc7e9cad73afc40d849484bc0f626aad6557951b1a0cff437af442ccb99";
   };
 
   buildInputs = [ pytest ];

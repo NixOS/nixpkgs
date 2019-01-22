@@ -129,6 +129,13 @@ rec {
   /* Returns the current nixpkgs release number as string. */
   release = lib.strings.fileContents ../.version;
 
+  /* Returns the current nixpkgs release code name.
+
+     On each release the first letter is bumped and a new animal is chosen
+     starting with that new letter.
+  */
+  codeName = "Koi";
+
   /* Returns the current nixpkgs version suffix as string. */
   versionSuffix =
     let suffixFile = ../.version-suffix;

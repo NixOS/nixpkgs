@@ -58,6 +58,7 @@ let
 
           passthru = {
             withPlugins = newplugins: withPlugins (x: newplugins x ++ actualPlugins);
+            full = withPlugins lib.attrValues;
 
             # Ouch
             overrideDerivation = f: (pluggable (terraform.overrideDerivation f)).withPlugins plugins;
@@ -86,40 +87,21 @@ let
 
   plugins = removeAttrs terraform-providers ["override" "overrideDerivation" "recurseForDerivations"];
 in rec {
-  terraform_0_8_5 = generic {
-    version = "0.8.5";
-    sha256 = "1cxwv3652fpsbm2zk1akw356cd7w7vhny1623ighgbz9ha8gvg09";
-  };
-
-  terraform_0_8 = generic {
-    version = "0.8.8";
-    sha256 = "0ibgpcpvz0bmn3cw60nzsabsrxrbmmym1hv7fx6zmjxiwd68w5gb";
-  };
-
-  terraform_0_9 = generic {
-    version = "0.9.11";
-    sha256 = "045zcpd4g9c52ynhgh3213p422ahds63mzhmd2iwcmj88g8i1w6x";
-    # checks are failing again
-    doCheck = false;
-  };
-
-  terraform_0_10 = pluggable (generic {
-    version = "0.10.8";
-    sha256 = "11hhij0hq99xhwlg5dx5nv7y074x79wkr8hr3wc6ln0kwdk5scdf";
-    patches = [ ./provider-path.patch ];
-    passthru = { inherit plugins; };
-  });
-
-  terraform_0_10-full = terraform_0_10.withPlugins lib.attrValues;
-
   terraform_0_11 = pluggable (generic {
-    version = "0.11.10";
-    sha256 = "08mapla89g106bvqr41zfd7l4ki55by6207qlxq9caiha54nx4nb";
+    version = "0.11.11";
+    sha256 = "1hsi5sibs0fk1620wzzxrc1gqjs6slqrjvlqcgvgg1yl22q9g7f5";
     patches = [ ./provider-path.patch ];
     passthru = { inherit plugins; };
   });
 
-  terraform_0_11-full = terraform_0_11.withPlugins lib.attrValues;
+  terraform_0_11-full = terraform_0_11.full;
+
+  terraform_0_12 = pluggable (generic {
+    version = "0.12.0-alpha4";
+    sha256 = "16cwqxxb19m91d7rx7awri1awz7d8cfnrv0rbql9rbg5qjyqxcp9";
+    patches = [ ./provider-path.patch ];
+    passthru = { inherit plugins; };
+  });
 
   # Tests that the plugins are being used. Terraform looks at the specific
   # file pattern and if the plugin is not found it will try to download it
