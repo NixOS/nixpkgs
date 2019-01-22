@@ -156,10 +156,8 @@ sub start {
         $ENV{USE_TMPDIR} = 1;
         $ENV{QEMU_OPTS} =
             ($self->{allowReboot} ? "" : "-no-reboot ") .
-            "-monitor unix:./monitor " .
-            "-chardev socket,id=shell,path=./shell -device virtio-serial -device virtconsole,chardev=shell " .
-            # socket backdoor, see "Debugging NixOS tests" section in NixOS manual
-            "-chardev socket,id=backdoor,path=./backdoor,server,nowait -device virtio-serial -device virtconsole,chardev=backdoor " .
+            "-monitor unix:./monitor -chardev socket,id=shell,path=./shell " .
+            "-device virtio-serial -device virtconsole,chardev=shell " .
             "-device virtio-rng-pci " .
             ($showGraphics ? "-serial stdio" : "-nographic") . " " . ($ENV{QEMU_OPTS} || "");
         chdir $self->{stateDir} or die;

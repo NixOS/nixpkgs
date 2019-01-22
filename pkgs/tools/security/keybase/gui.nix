@@ -3,16 +3,16 @@
 , libnotify, nspr, nss, pango, systemd, xorg, autoPatchelfHook, wrapGAppsHook }:
 
 let
-  versionSuffix = "20190104191034.69b3ee25b7";
+  versionSuffix = "20190115203650.eec94506e4";
 in
 
 stdenv.mkDerivation rec {
   name = "keybase-gui-${version}";
-  version = "2.13.0"; # Find latest version from https://prerelease.keybase.io/deb/dists/stable/main/binary-amd64/Packages
+  version = "2.13.1"; # Find latest version from https://prerelease.keybase.io/deb/dists/stable/main/binary-amd64/Packages
 
   src = fetchurl {
     url = "https://s3.amazonaws.com/prerelease.keybase.io/linux_binaries/deb/keybase_${version + "-" + versionSuffix}_amd64.deb";
-    sha256 = "5b188185dc6d594cd18876a2c955bb6481598c206f048cfd80ac2e7e8022241e";
+    sha256 = "01663jknr8s4sp51mclw9llhx07ww6yh22apawxikvpwmw9yg2qr";
   };
 
   nativeBuildInputs = [

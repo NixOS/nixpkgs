@@ -720,9 +720,15 @@ self: super: {
     '';
   });
 
+  # A simple MonadFail patch would do too, but not doing the tests is easier
+  megaparsec_6_5_0 = dontCheck super.megaparsec_6_5_0;
+
   # The standard libraries are compiled separately
   idris = generateOptparseApplicativeCompletion "idris" (
-    doJailbreak (dontCheck super.idris)
+    doJailbreak (dontCheck (super.idris.override {
+      # Needed for versions <= 1.3.1 https://github.com/idris-lang/Idris-dev/pull/4610
+      megaparsec = self.megaparsec_6_5_0;
+    }))
   );
 
   # https://github.com/bos/math-functions/issues/25
@@ -914,15 +920,6 @@ self: super: {
   # See https://github.com/haskell/haddock/issues/679
   language-puppet = dontHaddock super.language-puppet;
   filecache = overrideCabal super.filecache (drv: { doCheck = !pkgs.stdenv.isDarwin; });
-
-  # Missing FlexibleContexts in testsuite
-  # https://github.com/EduardSergeev/monad-memo/pull/4
-  monad-memo =
-    let patch = pkgs.fetchpatch
-          { url = https://github.com/EduardSergeev/monad-memo/pull/4.patch;
-            sha256 = "14mf9940arilg6v54w9bc4z567rfbmm7gknsklv965fr7jpinxxj";
-          };
-    in appendPatch super.monad-memo patch;
 
   # https://github.com/alphaHeavy/protobuf/issues/34
   protobuf = dontCheck super.protobuf;
