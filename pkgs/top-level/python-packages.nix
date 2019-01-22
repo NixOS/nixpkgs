@@ -3787,8 +3787,6 @@ in {
 
   pymongo = callPackage ../development/python-modules/pymongo {};
 
-  pymongo_2_9_1 = callPackage ../development/python-modules/pymongo/2_9_1.nix { };
-
   pyperclip = callPackage ../development/python-modules/pyperclip { };
 
   pysqlite = callPackage ../development/python-modules/pysqlite { };
