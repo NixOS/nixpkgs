@@ -2975,6 +2975,8 @@ in {
 
   flake8-import-order = callPackage ../development/python-modules/flake8-import-order { };
 
+  flake8-polyfill = callPackage ../development/python-modules/flake8-polyfill { };
+
   flaky = callPackage ../development/python-modules/flaky { };
 
   flask = callPackage ../development/python-modules/flask { };
