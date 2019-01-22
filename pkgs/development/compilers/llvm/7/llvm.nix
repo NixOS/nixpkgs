@@ -54,6 +54,15 @@ in stdenv.mkDerivation (rec {
       url = "https://github.com/llvm-mirror/llvm/commit/57567def148f387153a8149fb590bd39b1b006a1.patch";
       sha256 = "1w1xg5pxpc6cals1nf5j5k4p6qi8lcrpvn0paxc86m415i79xmcg";
     })
+    # backport, fix building rust crates with lto
+    (fetchpatch {
+      url = "https://github.com/llvm-mirror/llvm/commit/da1fb72bb305d6bc1f3899d541414146934bf80f.patch";
+      sha256 = "0p81gkhc1xhcx0hmnkwyhrn8x8l8fd24xgaj1whni29yga466dwc";
+    })
+    (fetchpatch {
+      url = "https://github.com/llvm-mirror/llvm/commit/cc1f2a595ead516812a6c50398f0f3480ebe031f.patch";
+      sha256 = "0k6k1p5yisgwx417a67s7sr9930rqh1n0zv5jvply8vjjy4b3kf8";
+    })
   ];
 
   postPatch = optionalString stdenv.isDarwin ''
