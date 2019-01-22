@@ -1,11 +1,11 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, pillow, argparse, pyres, nose
+{ stdenv, buildPythonPackage, fetchFromGitHub, pillow, pyres, nose
 , preggy, numpy, yanc, nose-focus, mock, opencv }:
 
 buildPythonPackage rec {
   pname = "remotecv";
   version = "2.2.2";
 
-  propagatedBuildInputs = [ pillow argparse pyres ];
+  propagatedBuildInputs = [ pillow pyres ];
 
   checkInputs = [ nose preggy numpy yanc nose-focus mock opencv ];
 

@@ -941,9 +941,6 @@ in {
 
   atomicwrites = callPackage ../development/python-modules/atomicwrites { };
 
-  # argparse is part of stdlib in 2.7 and 3.2+
-  argparse = null;
-
   astroid = if isPy3k then callPackage ../development/python-modules/astroid { }
             else callPackage ../development/python-modules/astroid/1.6.nix { };
 
