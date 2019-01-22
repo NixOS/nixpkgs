@@ -125,9 +125,11 @@ stdenv.mkDerivation rec {
 
     genericPatches = ''
       # Substitute python's stub shebang to plain python path. (see TODO add pr URL)
+      # See also `postFixup` where python is added to $out/nix-support
       substituteInPlace src/main/java/com/google/devtools/build/lib/bazel/rules/python/python_stub_template.txt\
           --replace "/usr/bin/env python" "${python}/bin/python" \
           --replace "NIX_STORE_PYTHON_PATH" "${python}/bin/python" \
+
       # substituteInPlace is rather slow, so prefilter the files with grep
       grep -rlZ /bin src/main/java/com/google/devtools | while IFS="" read -r -d "" path; do
         # If you add more replacements here, you must change the grep above!
@@ -262,7 +264,10 @@ stdenv.mkDerivation rec {
   # Save paths to hardcoded dependencies so Nix can detect them.
   postFixup = ''
     mkdir -p $out/nix-support
-    echo "${customBash} ${defaultShellPath}" > $out/nix-support/depends
+    echo "${customBash} ${defaultShellPath}" >> $out/nix-support/depends
+    # The templates get tar’d up into a .jar,
+    # so nix can’t detect python is needed in the runtime closure
+    echo "${python}" >> $out/nix-support/depends
   '';
 
   dontStrip = true;
