@@ -32,9 +32,11 @@ let
   commonConfiguration = configurationCommon { inherit pkgs; };
   # nixConfiguration = configurationNix { inherit pkgs haskellLib; };
 
-  generatedPackages = pkgs.callPackage ./generated-packages.nix { };
-  # generatedPackages = if (builtins.pathExists ./generated-packages.nix) then
-  #       pkgs.callPackage ./generated-packages.nix { } else (self: super: {});
+  # generatedPackages = pkgs.callPackage ./generated-packages.nix { };
+  # when the generation of the file fails, just remove it
+  generatedPackages = if (builtins.pathExists ./generated-packages.nix) then
+    pkgs.callPackage ./generated-packages.nix { }
+    else lib.warn "Missing lua generated-packages" (self: super: {});
 
   extensible-self = makeExtensible
     (extends overrides

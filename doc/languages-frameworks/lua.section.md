@@ -236,7 +236,9 @@ Now, `ps` is set to `lua_52Packages`, matching the version of the interpreter.
 ### Lua/nixpkgs ecosystem
 
 Lua packages can be generated with the tool after being added to the whitelist in
-maintainers/scripts/update-luarocks-packages.sh
+the CSV file <path>maintainers/scripts/lua-packages.csv</path>.
+pkg_name server version
+Then run <command>maintainers/scripts/update-luarocks-packages</command>
 
 Packages inside nixpkgs are written by hand.
 
@@ -248,7 +250,7 @@ Packages inside nixpkgs are written by hand.
 * support rockspecs
 * export/use version specific variables such as LUA_PATH_5_2/LUAROCKS_CONFIG_5_2
 * let luarocks check for dependencies via exporting the different rocktrees in temporary config
-* add luarocks supported_platforms support to luarocks2nix]]
+* add luarocks supported_platforms support to luarocks2nix
 
 ### Lua Contributing guidelines
 

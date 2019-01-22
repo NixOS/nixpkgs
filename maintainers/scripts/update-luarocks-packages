@@ -60,6 +60,7 @@ self
 , lua
 , stdenv
 , fetchurl
+, fetchgit
 , pkgs
 , ...
 } @ args:
