@@ -1,12 +1,9 @@
 { stdenv, fetchurl, readline
 # compiles compatibility layer with lua5.1
 , compat ? false
-, hostPlatform
-, makeWrapper
 , lua-setup-hook, callPackage
 , self
-# , getLuaPath, getLuaCPath
-, luaPackages, packageOverrides ? (self: super: {})
+, packageOverrides ? (self: super: {})
 }:
 
 let
@@ -39,9 +36,9 @@ stdenv.mkDerivation rec {
 
 
   passthru = rec {
-    # executable = "${libPrefix}m";
-    buildEnv = callPackage ./wrapper.nix { lua = self;
-    inherit (luaPackages) requiredLuaModules;
+    buildEnv = callPackage ./wrapper.nix {
+      lua = self;
+      inherit (luaPackages) requiredLuaModules;
     };
     withPackages = import ./with-packages.nix { inherit buildEnv luaPackages;};
     pkgs = luaPackages;

@@ -1,9 +1,6 @@
-{ stdenv, fetchurl, fetchpatch, readline
-, hostPlatform, makeWrapper
+{ stdenv, fetchurl, readline
 , self
-# , luaPackages
-# might be ignored ?
-, lua-setup-hook, callPackage
+, callPackage
 , packageOverrides ? (self: super: {})
 }:
 
@@ -28,7 +25,7 @@ stdenv.mkDerivation rec {
   # helper functions for dealing with LUA_PATH and LUA_CPATH
   LuaPathSearchPaths    = luaPackages.getLuaPath luaversion;
   LuaCPathSearchPaths   = luaPackages.getLuaCPath luaversion;
-  setupHook = lua-setup-hook LuaPathSearchPaths LuaCPathSearchPaths;
+  setupHook = luaPackages.lua-setup-hook LuaPathSearchPaths LuaCPathSearchPaths;
 
   buildInputs = [ readline ];
 
@@ -53,8 +50,9 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = rec {
-    buildEnv = callPackage ./wrapper.nix { lua=self;
-    inherit (luaPackages) requiredLuaModules;
+    buildEnv = callPackage ./wrapper.nix {
+      lua=self;
+      inherit (luaPackages) requiredLuaModules;
     };
     withPackages = import ./with-packages.nix { inherit buildEnv luaPackages;};
     pkgs = luaPackages;
