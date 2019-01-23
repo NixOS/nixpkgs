@@ -78,10 +78,10 @@ in {
       llvmPackages = pkgs.llvmPackages_6;
     };
     ghcHEAD = callPackage ../development/compilers/ghc/head.nix {
-      bootPkgs = packages.ghc822Binary;
+      bootPkgs = packages.ghc863Binary;
       inherit (buildPackages.python3Packages) sphinx;
-      buildLlvmPackages = buildPackages.llvmPackages_5;
-      llvmPackages = pkgs.llvmPackages_5;
+      buildLlvmPackages = buildPackages.llvmPackages_6;
+      llvmPackages = pkgs.llvmPackages_6;
     };
     ghcjs = compiler.ghcjs84;
     ghcjs82 = callPackage ../development/compilers/ghcjs-ng {
