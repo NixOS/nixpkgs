@@ -39,22 +39,6 @@ callPackage ./common.nix { inherit stdenv; } {
     #      limit rebuilds by only disabling pie w/musl
       ++ stdenv.lib.optional stdenv.hostPlatform.isMusl "pie";
 
-    # When building glibc from bootstrap-tools, we need libgcc_s at RPATH for
-    # any program we run, because the gcc will have been placed at a new
-    # store path than that determined when built (as a source for the
-    # bootstrap-tools tarball)
-    # Building from a proper gcc staying in the path where it was installed,
-    # libgcc_s will not be at {gcc}/lib, and gcc's libgcc will be found without
-    # any special hack.
-    preInstall = ''
-      if [ -f ${stdenv.cc.cc}/lib/libgcc_s.so.1 ]; then
-          mkdir -p $out/lib
-          cp ${stdenv.cc.cc}/lib/libgcc_s.so.1 $out/lib/libgcc_s.so.1
-          # the .so It used to be a symlink, but now it is a script
-          cp -a ${stdenv.cc.cc}/lib/libgcc_s.so $out/lib/libgcc_s.so
-      fi
-    '';
-
     postInstall = ''
       echo SUPPORTED-LOCALES=C.UTF-8/UTF-8 > ../glibc-2*/localedata/SUPPORTED
       make -j''${NIX_BUILD_CORES:-1} -l''${NIX_BUILD_CORES:-1} localedata/install-locales
