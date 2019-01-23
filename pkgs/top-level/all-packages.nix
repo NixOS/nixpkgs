@@ -22689,6 +22689,8 @@ in
 
   nix-top = callPackage ../tools/package-management/nix-top { };
 
+  nix-universal-prefetch = callPackage ../tools/package-management/nix-universal-prefetch { };
+
   nix-repl = throw (
     "nix-repl has been removed because it's not maintained anymore, " +
     (lib.optionalString (! lib.versionAtLeast "2" (lib.versions.major builtins.nixVersion))
