@@ -11,11 +11,15 @@ stdenv.mkDerivation {
   # tradcpp only comes with BSD-make Makefile; the patch adds configure support
   buildInputs = [ autoconf ];
   preConfigure = "autoconf";
-  patches = [ ./tradcpp-configure.patch ];
+  patches = [
+    ./tradcpp-configure.patch
+    ./aarch64.patch
+  ];
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A traditional (K&R-style) C macro preprocessor";
-    platforms = stdenv.lib.platforms.all;
+    platforms = platforms.all;
+    license = licenses.bsd2;
   };
 
 }

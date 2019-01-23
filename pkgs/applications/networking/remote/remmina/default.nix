@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitLab, cmake, pkgconfig, wrapGAppsHook
+{ stdenv, fetchFromGitLab, cmake, ninja, pkgconfig, wrapGAppsHook
 , glib, gtk3, gettext, libxkbfile, libX11
 , freerdp, libssh, libgcrypt, gnutls, makeDesktopItem
 , pcre, libdbusmenu-gtk3, libappindicator-gtk3
@@ -7,50 +7,31 @@
 , openssl, gsettings-desktop-schemas, json-glib
 # The themes here are soft dependencies; only icons are missing without them.
 , hicolor-icon-theme, adwaita-icon-theme
-, gnomeSupport ? true, libgnome-keyring
 }:
 
 with stdenv.lib;
 
-let
-
-  desktopItem = makeDesktopItem {
-    name = "remmina";
-    desktopName = "Remmina";
-    genericName = "Remmina Remote Desktop Client";
-    exec = "remmina";
-    icon = "remmina";
-    comment = "Connect to remote desktops";
-    categories = "GTK;GNOME;X-GNOME-NetworkSettings;Network;";
-  };
-
-in stdenv.mkDerivation rec {
-  name = "remmina-${version}";
-  version = "1.2.32";
+stdenv.mkDerivation rec {
+  pname = "remmina";
+  version = "1.2.32.1";
 
   src = fetchFromGitLab {
     owner  = "Remmina";
     repo   = "Remmina";
     rev    = "v${version}";
-    sha256 = "15szv1xs6drxq6qyksmxcfdz516ja4zm52r4yf6hwij3fgl8qdpw";
+    sha256 = "1b77gs68j5j4nlv69vl81d0kp2623ysvshq7495y6hq5wgi5l3gc";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ cmake ninja pkgconfig wrapGAppsHook ];
   buildInputs = [
-    cmake wrapGAppsHook gsettings-desktop-schemas
+    gsettings-desktop-schemas
     glib gtk3 gettext libxkbfile libX11
     freerdp libssh libgcrypt gnutls
     pcre libdbusmenu-gtk3 libappindicator-gtk3
     libvncserver libpthreadstubs libXdmcp libxkbcommon
     libsecret libsoup spice-protocol spice-gtk epoxy at-spi2-core
     openssl hicolor-icon-theme adwaita-icon-theme json-glib
-  ]
-  ++ optional gnomeSupport libgnome-keyring;
-
-  preConfigure = optionalString (!gnomeSupport) ''
-    substituteInPlace CMakeLists.txt \
-      --replace "add_subdirectory(remmina-plugins-gnome)" ""
-  '';
+  ];
 
   cmakeFlags = [
     "-DWITH_VTE=OFF"
@@ -68,13 +49,8 @@ in stdenv.mkDerivation rec {
     )
   '';
 
-  postInstall = ''
-    mkdir -pv $out/share/applications
-    cp ${desktopItem}/share/applications/* $out/share/applications
-  '';
-
   meta = {
-    license = stdenv.lib.licenses.gpl2;
+    license = licenses.gpl2;
     homepage = https://gitlab.com/Remmina/Remmina;
     description = "Remote desktop client written in GTK+";
     maintainers = with maintainers; [ melsigl ryantm ];

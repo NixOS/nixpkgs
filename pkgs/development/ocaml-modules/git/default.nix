@@ -1,11 +1,11 @@
-{ stdenv, fetchFromGitHub, ocaml, findlib, dune
+{ stdenv, fetchFromGitHub, buildDunePackage
 , astring, decompress, fmt, hex, logs, mstruct, ocaml_lwt, ocamlgraph, uri
 , alcotest, mtime, nocrypto
 }:
 
-stdenv.mkDerivation rec {
+buildDunePackage rec {
+  pname = "git";
 	version = "1.11.5";
-	name = "ocaml${ocaml.version}-git-${version}";
 
 	src = fetchFromGitHub {
 		owner = "mirage";
@@ -14,22 +14,14 @@ stdenv.mkDerivation rec {
 		sha256 = "0r1bxpxjjnl9hh8xbabsxl7svzvd19hfy73a2y1m4kljmw64dpfh";
 	};
 
-	buildInputs = [ ocaml findlib dune alcotest mtime nocrypto ];
-
+	buildInputs = [ alcotest mtime nocrypto ];
 	propagatedBuildInputs = [ astring decompress fmt hex logs mstruct ocaml_lwt ocamlgraph uri ];
-
-	buildPhase = "dune build -p git";
-
-	inherit (dune) installPhase;
-
 	doCheck = true;
-	checkPhase = "dune runtest -p git";
 
 	meta = {
 		description = "Git format and protocol in pure OCaml";
 		license = stdenv.lib.licenses.isc;
 		maintainers = [ stdenv.lib.maintainers.vbgl ];
 		inherit (src.meta) homepage;
-		inherit (ocaml.meta) platforms;
 	};
 }

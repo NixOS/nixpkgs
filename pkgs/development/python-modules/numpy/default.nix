@@ -16,12 +16,12 @@ let
   };
 in buildPythonPackage rec {
   pname = "numpy";
-  version = "1.15.3";
+  version = "1.16.0";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "1c0c80e74759fa4942298044274f2c11b08c86230b25b8b819e55e644f5ff2b6";
+    sha256 = "cb189bd98b2e7ac02df389b6212846ab20661f4bafe16b5a70a6f1728c1cc7cb";
   };
 
   disabled = isPyPy;
@@ -34,18 +34,6 @@ in buildPythonPackage rec {
     # patch to distutils.
     ./numpy-distutils-C++.patch
   ];
-
-  postPatch = lib.optionalString stdenv.hostPlatform.isMusl ''
-    # Use fenv.h
-    sed -i \
-      numpy/core/src/npymath/ieee754.c.src \
-      numpy/core/include/numpy/ufuncobject.h \
-      -e 's/__GLIBC__/__linux__/'
-    # Don't use various complex trig functions
-    substituteInPlace numpy/core/src/private/npy_config.h \
-      --replace '#if defined(__GLIBC__)' "#if 1" \
-      --replace '#if !__GLIBC_PREREQ(2, 18)' "#if 1"
-  '';
 
   preConfigure = ''
     sed -i 's/-faltivec//' numpy/distutils/system_info.py
@@ -70,8 +58,6 @@ in buildPythonPackage rec {
     blas = blas;
     inherit blasImplementation cfg;
   };
-
-  doCheck = blasImplementation != "mkl";
 
   # Disable two tests
   # - test_f2py: f2py isn't yet on path.

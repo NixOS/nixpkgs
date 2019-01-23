@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   name = "libnih-${version}";
 
   src = fetchurl {
-    url = "http://code.launchpad.net/libnih/1.0/${version}/+download/libnih-${version}.tar.gz";
+    url = "https://code.launchpad.net/libnih/1.0/${version}/+download/libnih-${version}.tar.gz";
     sha256 = "01glc6y7z1g726zwpvp2zm79pyb37ki729jkh45akh35fpgp4xc9";
   };
 

@@ -9,7 +9,10 @@ stdenv.mkDerivation {
     sha256 = "1igmxzcy0s25zcy9vmcw0kd13lh60r0b4qg8lnp1jic33f427pxf";
   };
 
-  meta = {
-    platforms = stdenv.lib.platforms.unix;
+  meta = with stdenv.lib; {
+    description = "Java-based solution for accessing, manipulating, and outputting XML data from Java code";
+    homepage = http://www.jdom.org;
+    platforms = platforms.unix;
+    license = licenses.bsdOriginal;
   };
 }

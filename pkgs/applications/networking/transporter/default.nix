@@ -9,7 +9,7 @@
 , gnome3
 , libxml2
 , gettext
-, gobjectIntrospection
+, gobject-introspection
 , appstream-glib
 , desktop-file-utils
 , magic-wormhole
@@ -32,7 +32,7 @@ in stdenv.mkDerivation rec {
     appstream-glib
     desktop-file-utils
     gettext
-    gobjectIntrospection # For setup hook
+    gobject-introspection # For setup hook
     libxml2
     meson
     ninja

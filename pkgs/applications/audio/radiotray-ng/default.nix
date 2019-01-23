@@ -80,7 +80,6 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   checkInputs = [ gtest ];
-  checkPhase = "ctest";
   # doCheck = stdenv.hostPlatform == stdenv.buildPlatform;
   doCheck = false; # fails to pick up supplied gtest, tries to download it instead
 

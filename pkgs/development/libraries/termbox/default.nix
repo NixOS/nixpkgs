@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, python3 }:
+{ stdenv, fetchFromGitHub, python3, wafHook, fetchpatch }:
 
 stdenv.mkDerivation rec {
   name = "termbox-${version}";
@@ -9,10 +9,18 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "08yqxzb8fny8806p7x8a6f3phhlbfqdd7dhkv25calswj7w1ssvs";
   };
-  nativeBuildInputs = [ python3 ];
-  configurePhase = "python3 ./waf configure --prefix=$out";
-  buildPhase = "python3 ./waf build";
-  installPhase = "python3 ./waf install --destdir=$out";
+
+  # patch which updates the `waf` version used to build
+  # to make the package buildable on Python 3.7
+  patches = [
+    (fetchpatch {
+      url = https://github.com/nsf/termbox/commit/6fe63ac3ad63dc2c3ac45b770541cc8b7a1d2db7.patch;
+      sha256 = "1s5747v51sdwvpsg6k9y1j60yn9f63qnylkgy8zrsifjzzd5fzl6";
+    })
+  ];
+
+  nativeBuildInputs = [ python3 wafHook ];
+
   meta = with stdenv.lib; {
     description = "Library for writing text-based user interfaces";
     license = licenses.mit;
@@ -21,4 +29,3 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ fgaz ];
   };
 }
-

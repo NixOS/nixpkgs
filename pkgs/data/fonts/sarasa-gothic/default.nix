@@ -1,23 +1,22 @@
 { stdenv, fetchurl, p7zip }:
 
-stdenv.mkDerivation rec {
+let
   version = "0.6.0";
+  sha256 = "08g3kzplp3v8kvni1vzl73fgh03xgfl8pwqyj7vwjihjdr1xfjyz";
+in fetchurl rec {
+  inherit sha256;
+
   name = "sarasa-gothic-${version}";
 
-  package = fetchurl {
-    url = "https://github.com/be5invis/Sarasa-Gothic/releases/download/v${version}/sarasa-gothic-ttf-${version}.7z";
-    sha256 = "00kyx03lpgycxaw0cyx96hhrx8gwkcmy3qs35q7r09y60vg5i0nv";
-  };
+  url = "https://github.com/be5invis/Sarasa-Gothic/releases/download/v${version}/sarasa-gothic-ttc-${version}.7z";
 
-  nativeBuildInputs = [ p7zip ];
+  recursiveHash = true;
+  downloadToTemp = true;
 
-  unpackPhase = ''
-    7z x $package
-  '';
-
-  installPhase = ''
-    mkdir -p $out/share/fonts/truetype
-    cp *.ttf $out/share/fonts/truetype
+  postFetch = ''
+    ${p7zip}/bin/7z x $downloadedFile
+    mkdir -p $out/share/fonts
+    install -m644 *.ttc $out/share/fonts/
   '';
 
   meta = with stdenv.lib; {
@@ -26,7 +25,5 @@ stdenv.mkDerivation rec {
     license = licenses.ofl;
     maintainers = [ maintainers.ChengCat ];
     platforms = platforms.all;
-    # large package, mainly i/o bound
-    hydraPlatforms = [];
   };
 }

@@ -2,6 +2,7 @@
 
 let
   inherit (pythonPackages) buildPythonApplication pyqt5 sip pyinotify;
+
 in buildPythonApplication rec {
   name = "git-cola-${version}";
   version = "3.2";

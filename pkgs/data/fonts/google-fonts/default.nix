@@ -37,9 +37,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     dest=$out/share/fonts/truetype
-    mkdir -p $dest
-    find . -name "*.ttf" -exec cp -v {} $dest \;
-    chmod -x $dest/*.ttf
+    find . -name '*.ttf' -exec install -m 444 -Dt $dest '{}' +
   '';
 
   meta = with stdenv.lib; {

@@ -3,15 +3,11 @@
 
 stdenv.mkDerivation rec {
   name = "adwaita-icon-theme-${version}";
-  version = "3.28.0";
+  version = "3.30.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/adwaita-icon-theme/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "0l114ildlb3lz3xymfxxi0wpr2x21rd3cg8slb8jyxynzwfqrbks";
-  };
-
-  passthru = {
-    updateScript = gnome3.updateScript { packageName = "adwaita-icon-theme"; attrPath = "gnome3.adwaita-icon-theme"; };
+    sha256 = "1kp1lis3dr16jmlgycz1b29jsr6ir8wmqj6laqwlhs663cmjlxbd";
   };
 
   # For convenience, we can specify adwaita-icon-theme only in packages
@@ -23,6 +19,13 @@ stdenv.mkDerivation rec {
 
   # remove a tree of dirs with no files within
   postInstall = '' rm -rf "$out/locale" '';
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = "adwaita-icon-theme";
+      attrPath = "gnome3.adwaita-icon-theme";
+    };
+  };
 
   meta = with stdenv.lib; {
     platforms = with platforms; linux ++ darwin;

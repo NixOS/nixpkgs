@@ -12,12 +12,12 @@ let
 
   # UHD seems to use three different version number styles: x.y.z, xxx_yyy_zzz
   # and xxx.yyy.zzz. Hrmpf... style keeps changing
-  version = "3.12.0.0";
+  version = "3.13.0.1";
 
   # Firmware images are downloaded (pre-built) from the respective release on Github
   uhdImagesSrc = fetchurl {
     url = "https://github.com/EttusResearch/uhd/releases/download/${uhdVer}/uhd-images_${version}.tar.xz";
-    sha256 = "1glf2qay4asajbl92fy432idqk0sj5h603najr8sgkbdyyyr933p";
+    sha256 = "0y9i93z188ch0hdlkvv0k9m0k7vns7rbxaqsnk35xnlqlxxgqdvj";
   };
 
 in stdenv.mkDerivation {
@@ -27,7 +27,7 @@ in stdenv.mkDerivation {
     owner = "EttusResearch";
     repo = "uhd";
     rev = "${uhdVer}";
-    sha256 = "0m7vw7dmvn7d01kkzphayzi0bk50m5v9a17rpnxhn0bqhw282ksv";
+    sha256 = "0si49qk96zhpanmcrzlr3igc5s1y30x4p0z973q60dx9fhqsbb6k";
   };
 
   enableParallelBuilding = true;

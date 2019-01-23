@@ -15,11 +15,11 @@
 
 buildPythonPackage rec {
   pname = "python-jenkins";
-  version = "0.4.14";
+  version = "1.3.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1n8ikvd9jf4dlki7nqlwjlsn8wpsx4x7wg4h3d6bkvyvhwwf8yqf";
+    sha256 = "b44b3c8e0dabed371a1a8a301cc8833c635625faf003fd68c176800c71a6597c";
   };
 
   patchPhase = ''

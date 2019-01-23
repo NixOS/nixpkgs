@@ -26,6 +26,8 @@ stdenv.mkDerivation {
       sed -e '/INSTALLED_CONFIGURATION_FILE/d' \
           -e 's|/lib/sendmail|$(TMPDIR)/sendmail|' \
           -i Makefile
+      substituteInPlace Makefile \
+        --replace '$(INSTALL) -s' '$(INSTALL) -s --strip-program $(STRIP)'
     '';
 
   installFlags = "etcdir=$(out)/etc";
@@ -33,6 +35,8 @@ stdenv.mkDerivation {
   installTargets = [ "install" "install-sendmail" ];
 
   buildInputs = stdenv.lib.optional tlsSupport openssl;
+
+  NIX_LDFLAGS = stdenv.lib.optional tlsSupport [ "-lcrypto" ];
 
   meta = with stdenv.lib; {
     platforms = platforms.linux;

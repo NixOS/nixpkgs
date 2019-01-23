@@ -1,17 +1,16 @@
-{ pythonPackages, fetchurl, lib,
+{ python3Packages, fetchurl, lib,
   yubikey-personalization, libu2f-host, libusb1 }:
 
-pythonPackages.buildPythonPackage rec {
-  name = "yubikey-manager-1.0.0";
+python3Packages.buildPythonPackage rec {
+  name = "yubikey-manager-2.0.0";
 
   srcs = fetchurl {
     url = "https://developers.yubico.com/yubikey-manager/Releases/${name}.tar.gz";
-    sha256 = "1qdb2b3mv4wafghnmv3sxw4fh7cjc06hnkdimfnwmqcjafzvbawd";
+    sha256 = "1x36pyg9g3by2pa11j6d73d79sdlb7qy98lwwn05f43fjm74qnz9";
   };
 
   propagatedBuildInputs =
-    with pythonPackages;
-    lib.optional (!pythonPackages.pythonAtLeast "3.4") enum34 ++ [
+    with python3Packages; [
       click
       cryptography
       pyscard
@@ -26,12 +25,13 @@ pythonPackages.buildPythonPackage rec {
     ];
 
   makeWrapperArgs = [
-    "--prefix LD_LIBRARY_PATH : ${libu2f-host}/lib:${libusb1}/lib:${yubikey-personalization}/lib"
+    "--prefix" "LD_LIBRARY_PATH" ":"
+    (lib.makeLibraryPath [ libu2f-host libusb1 yubikey-personalization ])
   ];
 
   postInstall = ''
-    mkdir -p $out/etc/bash_completion.d
-    _YKMAN_COMPLETE=source $out/bin/ykman > $out/etc/bash_completion.d/ykman.sh ||true
+    mkdir -p $out/share/bash-completion/completions
+    _YKMAN_COMPLETE=source $out/bin/ykman > $out/share/bash-completion/completions/ykman || :
   '';
 
   # See https://github.com/NixOS/nixpkgs/issues/29169
@@ -40,8 +40,9 @@ pythonPackages.buildPythonPackage rec {
   meta = with lib; {
     homepage = https://developers.yubico.com/yubikey-manager;
     description = "Command line tool for configuring any YubiKey over all USB transports.";
+
     license = licenses.bsd2;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ benley ];
+    maintainers = with maintainers; [ benley mic92 ];
   };
 }

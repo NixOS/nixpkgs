@@ -1,13 +1,13 @@
 { stdenv, fetchFromGitHub, jdk, ant, python2, python2Packages, watchman, bash, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "buck-unstable-${version}";
-  version = "2017-10-01";
+  name = "buck-${version}";
+  version = "2017.10.01.01";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "buck";
-    rev = "2025fd74327477728b524eafdd4619a0170a24ea";
+    rev = "v${version}";
     sha256 = "05nyyb6f0hv1h67zzvdq8297yl8zjhpbasx35lxnrsjz0m1h8ngw";
   };
 

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "z3-${version}";
-  version = "4.7.1";
+  version = "4.8.4";
 
   src = fetchFromGitHub {
     owner  = "Z3Prover";
     repo   = "z3";
-    rev    = "3b1b82bef05a1b5fd69ece79c80a95fb6d72a990";
-    sha256 = "1s850r6qifwl83zzgvrb5l0jigvmymzpv18ph71hg2bcpk7kjw3d";
+    rev    = name;
+    sha256 = "014igqm5vwswz0yhz0cdxsj3a6dh7i79hvhgc3jmmmz3z0xm1gyn";
   };
 
   buildInputs = [ python fixDarwinDylibNames ];
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     description = "A high-performance theorem prover and SMT solver";
     homepage    = "https://github.com/Z3Prover/z3";
     license     = stdenv.lib.licenses.mit;
-    platforms   = stdenv.lib.platforms.unix;
+    platforms   = stdenv.lib.platforms.x86_64;
     maintainers = [ stdenv.lib.maintainers.thoughtpolice ];
   };
 }

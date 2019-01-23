@@ -1,4 +1,4 @@
-{stdenv, fetchurl, scons, boost, ladspaH, pkgconfig }:
+{stdenv, fetchurl, sconsPackages, boost, ladspaH, pkgconfig }:
 
 stdenv.mkDerivation rec {
   version = "0.2-2";
@@ -9,8 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "16064vvl2w5lz4xi3lyjk4xx7fphwsxc14ajykvndiz170q32s6i";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ scons boost ladspaH ];
+  nativeBuildInputs = [ pkgconfig sconsPackages.scons_3_0_1 ];
+  buildInputs = [ boost ladspaH ];
 
   patchPhase = ''
     # remove TERM:
@@ -19,14 +19,6 @@ stdenv.mkDerivation rec {
     sed -i "s@ladspa.h@${ladspaH}/include/ladspa.h@g" filters.cpp
     sed -i "s@LADSPA_HINT_SAMPLE_RATE, 0, 0.5@LADSPA_HINT_SAMPLE_RATE, 0.0001, 0.5@g" filters.cpp
     sed -i "s/= check/= detail::filter_base<internal_type, checked>::check/" nova/source/dsp/filter.hpp
-  '';
-
-  buildPhase = ''
-    scons
-  '';
-
-  installPhase = ''
-    scons $sconsFlags "prefix=$out" install
   '';
 
   meta = with stdenv.lib; {

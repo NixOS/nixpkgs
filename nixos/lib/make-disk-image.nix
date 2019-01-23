@@ -84,7 +84,7 @@ let format' = format; in let
   # FIXME: merge with channel.nix / make-channel.nix.
   channelSources = pkgs.runCommand "nixos-${config.system.nixos.version}" {} ''
     mkdir -p $out
-    cp -prd ${nixpkgs} $out/nixos
+    cp -prd ${nixpkgs.outPath} $out/nixos
     chmod -R u+w $out/nixos
     if [ ! -e $out/nixos/nixpkgs ]; then
       ln -s . $out/nixos/nixpkgs

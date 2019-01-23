@@ -1,5 +1,5 @@
 { stdenv, lib, fetchFromGitHub
-, gcc-arm-embedded, libftdi
+, gcc-arm-embedded, binutils-arm-embedded, libftdi
 , python, pythonPackages
 }:
 
@@ -17,8 +17,11 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
+  nativeBuildInputs = [
+    gcc-arm-embedded binutils-arm-embedded
+  ];
+
   buildInputs = [
-    gcc-arm-embedded
     libftdi
     python
     pythonPackages.intelhex

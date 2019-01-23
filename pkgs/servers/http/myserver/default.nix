@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
       built-in features.  Share your files in minutes!
     '';
 
-    homepage = http://www.gnu.org/software/myserver/;
+    homepage = https://www.gnu.org/software/myserver/;
 
     license = lib.licenses.gpl3Plus;
 

@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "nose-cprof";
-  version = "0.1.4";
+  version = "0.2.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0ayy5mbjly9aa9dkgpz0l06flspnxmnj6wxdl6zr59byrrr8fqhw";
+    sha256 = "0178834759b63dc50388444d4ff8d1ae84e1ba110bb167419afee6bf4699b119";
   };
 
   buildInputs = [ nose ];

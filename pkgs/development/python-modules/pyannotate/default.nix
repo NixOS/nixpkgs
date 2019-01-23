@@ -9,12 +9,12 @@
 }:
 
 buildPythonPackage rec {
-  version = "1.0.6";
+  version = "1.0.7";
   pname = "pyannotate";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "dbdc2a26cbf45490a650e976ba45f99abe9ddbf0af5746307914e5ef419e325e";
+    sha256 = "54e6035a8601248992e17734034e6555842c6ea9863f90c15d14fe76a184be07";
   };
 
   checkInputs = [ pytest ];

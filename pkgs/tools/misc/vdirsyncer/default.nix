@@ -1,27 +1,28 @@
-{ stdenv, python3Packages, glibcLocales, rustPlatform, pkgconfig, openssl }:
+{ stdenv, python3Packages, fetchFromGitHub, fetchpatch, glibcLocales, rustPlatform, pkgconfig, openssl, Security }:
 
 # Packaging documentation at:
 # https://github.com/untitaker/vdirsyncer/blob/master/docs/packaging.rst
-let
-  pythonPackages = python3Packages;
-  version = "0.17.0a3";
+python3Packages.buildPythonApplication rec {
+  version = "unstable-2018-08-05";
   pname = "vdirsyncer";
-  name = pname + "-" + version;
-  src = pythonPackages.fetchPypi {
-    inherit pname version;
-    sha256 = "1n7izfa5x9mh0b4zp20gd8qxfcca5wpjh834bsbi5pk6zam5pfdy";
-  };
-  native = rustPlatform.buildRustPackage {
-    name = name + "-native";
-    inherit src;
-    sourceRoot = name + "/rust";
-    cargoSha256 = "08xq9q5fx37azzkqqgwcnds1yd8687gh26dsl3ivql5h13fa2w3q";
-    buildInputs = [ pkgconfig openssl ];
-  };
-in pythonPackages.buildPythonApplication rec {
-  inherit version pname src native;
+  name = "${pname}-${version}";
 
-  propagatedBuildInputs = with pythonPackages; [
+  src = fetchFromGitHub {
+    owner = "pimutils";
+    repo = pname;
+    rev = "ac45cf144b0ceb72cc2a9f454808688f3ac9ba4f";
+    sha256 = "0hqsjdpgvm7d34q5b2hzmrzfxk43ald1bx22mvgg559kw1ck54s9";
+  };
+
+  native = rustPlatform.buildRustPackage {
+    name = "${name}-native";
+    inherit src;
+    sourceRoot = "source/rust";
+    cargoSha256 = "02fxxw4vr6rpdbslrc9c1zhzs704bw7i40akrmh5cxl26rsffdgk";
+    buildInputs = [ pkgconfig openssl ] ++ stdenv.lib.optional stdenv.isDarwin Security;
+  };
+
+  propagatedBuildInputs = with python3Packages; [
     click click-log click-threading
     requests_toolbelt
     requests
@@ -31,11 +32,26 @@ in pythonPackages.buildPythonApplication rec {
     shippai
   ];
 
-  buildInputs = with pythonPackages; [ setuptools_scm ];
+  buildInputs = with python3Packages; [ setuptools_scm ];
 
-  checkInputs = with pythonPackages; [ hypothesis pytest pytest-localserver pytest-subtesthack ] ++ [ glibcLocales ];
+  checkInputs = with python3Packages; [ hypothesis pytest pytest-localserver pytest-subtesthack ] ++ [ glibcLocales ];
+
+  patches = [
+    # Fixes for hypothesis: https://github.com/pimutils/vdirsyncer/pull/779
+    (fetchpatch {
+      url = https://github.com/pimutils/vdirsyncer/commit/22ad88a6b18b0979c5d1f1d610c1d2f8f87f4b89.patch;
+      sha256 = "0dbzj6jlxhdidnm3i21a758z83sdiwzhpd45pbkhycfhgmqmhjpl";
+    })
+    (fetchpatch {
+      url = https://github.com/pimutils/vdirsyncer/commit/29417235321c249c65904bc7948b066ef5683aee.patch;
+      sha256 = "0zvr0y88gm3vprjcdzs4m151laa9qhkyi61rvrfdjmf42fwhbm80";
+    })
+  ];
 
   postPatch = ''
+    # for setuptools_scm:
+    echo 'Version: ${version}' >PKG-INFO
+
     sed -i 's/spec.add_external_build(cmd=cmd/spec.add_external_build(cmd="true"/g' setup.py
   '';
 
@@ -48,7 +64,7 @@ in pythonPackages.buildPythonApplication rec {
 
   checkPhase = ''
     rm -rf vdirsyncer
-    export PYTHONPATH=$out/${pythonPackages.python.sitePackages}:$PYTHONPATH
+    export PYTHONPATH=$out/${python3Packages.python.sitePackages}:$PYTHONPATH
     make DETERMINISTIC_TESTS=true test
   '';
 

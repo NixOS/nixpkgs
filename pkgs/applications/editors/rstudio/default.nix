@@ -1,12 +1,12 @@
 { stdenv, fetchurl, fetchFromGitHub, makeDesktopItem, cmake, boost
-, zlib, openssl, R, qtbase, qtwebkit, qtwebchannel, libuuid, hunspellDicts
-, unzip, ant, jdk, gnumake, makeWrapper, pandoc
+, zlib, openssl, R, qtbase, qtwebkit, qtwebchannel, qtxmlpatterns, libuuid
+, hunspellDicts, unzip, ant, jdk, gnumake, makeWrapper, pandoc
 }:
 
 let
   verMajor = "1";
   verMinor = "1";
-  verPatch = "456";
+  verPatch = "463";
   version = "${verMajor}.${verMinor}.${verPatch}";
   ginVer = "1.5";
   gwtVer = "2.7.0";
@@ -16,13 +16,14 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake unzip ant jdk makeWrapper pandoc ];
 
-  buildInputs = [ boost zlib openssl R qtbase qtwebkit qtwebchannel libuuid ];
+  buildInputs = [ boost zlib openssl R qtbase qtwebkit qtwebchannel
+                  qtxmlpatterns libuuid ];
 
   src = fetchFromGitHub {
     owner = "rstudio";
     repo = "rstudio";
     rev = "v${version}";
-    sha256 = "0hv07qrbjwapbjrkddasglsgk0x5j7qal468i5rv77krsp09s4fz";
+    sha256 = "014g984znsczzy1fyn9y1ly3rbsngryfs674lfgciz60mqnl8im6";
   };
 
   # Hack RStudio to only use the input R.

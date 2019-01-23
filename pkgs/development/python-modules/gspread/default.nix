@@ -4,12 +4,12 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.2.3";
+  version = "3.0.1";
   pname = "gspread";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "dba45ef9e652dcd8cf561ae65569bd6ecd18fcc77b991521490698fb2d847106";
+    sha256 = "1cc06b22c6a1b6726925defcd41c19ce6cd5ab939252e72759bdf0353e36f552";
   };
 
   meta = with stdenv.lib; {

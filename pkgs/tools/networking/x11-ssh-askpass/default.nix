@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, xlibsWrapper, imake }:
+{ stdenv, fetchurl, xlibsWrapper, imake, gccmakedep }:
 
 stdenv.mkDerivation {
   name = "x11-ssh-askpass-1.2.4.1";
@@ -10,16 +10,16 @@ stdenv.mkDerivation {
     sha256 = "620de3c32ae72185a2c9aeaec03af24242b9621964e38eb625afb6cdb30b8c88";
   };
 
-  nativeBuildInputs = [ imake ];
+  nativeBuildInputs = [ imake gccmakedep ];
   buildInputs = [ xlibsWrapper ];
 
   configureFlags = [
     "--with-app-defaults-dir=$out/etc/X11/app-defaults"
   ];
 
-  preBuild = ''
-    xmkmf
-    make includes
+  dontUseImakeConfigure = true;
+  postConfigure = ''
+    xmkmf -a
   '';
 
   installTargets = [ "install" "install.man" ];

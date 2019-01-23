@@ -4,6 +4,7 @@
 , mouseSupport ? false
 , unicode ? true
 , enableStatic ? stdenv.hostPlatform.useAndroidPrebuilt
+, enableShared ? !enableStatic
 , withCxx ? !stdenv.hostPlatform.useAndroidPrebuilt
 
 , gpm
@@ -12,26 +13,32 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "6.1";
+  # Note the revision needs to be adjusted.
+  version = "6.1-20190112";
   name = "ncurses-${version}" + lib.optionalString (abiVersion == "5") "-abi5-compat";
 
-  src = fetchurl {
-    url = "mirror://gnu/ncurses/ncurses-${version}.tar.gz";
-    sha256 = "05qdmbmrrn88ii9f66rkcmcyzp1kb1ymkx7g040lfkd1nkp7w1da";
+  # We cannot use fetchFromGitHub (which calls fetchzip)
+  # because we need to be able to use fetchurlBoot.
+  src = let
+    # Note the version needs to be adjusted.
+    rev = "acb4184f8f69fddd052a3daa8c8675f4bf8ce369";
+  in fetchurl {
+    url = "https://github.com/mirror/ncurses/archive/${rev}.tar.gz";
+    sha256 = "1z8v63cj2y7dxf4m1api8cvk0ns9frif9c60m2sxhibs06pjy4q0";
   };
 
-  # The patch st-0.7.patch needs to be removed, if ncurses is upgraded in the future.
-  # It is necessary for the 6.1 version of ncurses.
-  patches = [ ./st-0.7.patch ] ++ lib.optional (!stdenv.cc.isClang) ./clang.patch;
+  patches = lib.optional (!stdenv.cc.isClang) ./clang.patch;
 
   outputs = [ "out" "dev" "man" ];
   setOutputFlags = false; # some aren't supported
 
   configureFlags = [
-    "--with-shared"
+    (lib.withFeature enableShared "shared")
     "--without-debug"
     "--enable-pc-files"
     "--enable-symlinks"
+    "--with-manpage-format=normal"
+    "--disable-stripping"
   ] ++ lib.optional unicode "--enable-widec"
     ++ lib.optional (!withCxx) "--without-cxx"
     ++ lib.optional (abiVersion == "5") "--with-abi-version=5"
@@ -157,7 +164,7 @@ stdenv.mkDerivation rec {
       ported to OS/2 Warp!
     '';
 
-    homepage = http://www.gnu.org/software/ncurses/;
+    homepage = https://www.gnu.org/software/ncurses/;
 
     license = lib.licenses.mit;
     platforms = lib.platforms.all;

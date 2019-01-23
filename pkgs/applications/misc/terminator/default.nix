@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, python2, keybinder3, intltool, file, gtk3, gobjectIntrospection
-, libnotify, wrapGAppsHook, gnome3
+{ stdenv, fetchurl, python2, keybinder3, intltool, file, gtk3, gobject-introspection
+, libnotify, wrapGAppsHook, vte
 }:
 
 python2.pkgs.buildPythonApplication rec {
@@ -11,8 +11,8 @@ python2.pkgs.buildPythonApplication rec {
     sha256 = "95f76e3c0253956d19ceab2f8da709a496f1b9cf9b1c5b8d3cd0b6da3cc7be69";
   };
 
-  nativeBuildInputs = [ file intltool wrapGAppsHook gobjectIntrospection ];
-  buildInputs = [ gtk3 gnome3.vte libnotify keybinder3 ];
+  nativeBuildInputs = [ file intltool wrapGAppsHook gobject-introspection ];
+  buildInputs = [ gtk3 vte libnotify keybinder3 ];
   propagatedBuildInputs = with python2.pkgs; [ pygobject3 psutil pycairo ];
 
   postPatch = ''

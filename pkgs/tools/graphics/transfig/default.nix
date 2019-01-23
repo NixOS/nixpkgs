@@ -1,4 +1,4 @@
-{stdenv, fetchurl, zlib, libjpeg, libpng, imake}:
+{ stdenv, fetchurl, zlib, libjpeg, libpng, imake, gccmakedep }:
 
 stdenv.mkDerivation rec {
   name = "transfig-3.2.4";
@@ -7,7 +7,8 @@ stdenv.mkDerivation rec {
     sha256 = "0429snhp5acbz61pvblwlrwv8nxr6gf12p37f9xxwrkqv4ir7dd4";
   };
 
-  buildInputs = [zlib libjpeg libpng imake];
+  nativeBuildInputs = [ imake gccmakedep ];
+  buildInputs = [ zlib libjpeg libpng ];
 
   patches = [
     ./patch-fig2dev-dev-Imakefile
@@ -45,12 +46,7 @@ stdenv.mkDerivation rec {
     runHook postPatch
   '';
 
-  preBuild = ''
-    xmkmf
-    make Makefiles
-  '';
-
-  makeFlags = [ "CC=cc" ];
+  makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
 
   preInstall = ''
     mkdir -p $out

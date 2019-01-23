@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch, pkgconfig, intltool, gperf, libcap, kmod
+{ stdenv, lib, fetchFromGitHub, fetchpatch, fetchurl, pkgconfig, intltool, gperf, libcap, kmod
 , xz, pam, acl, libuuid, m4, utillinux, libffi
 , glib, kbd, libxslt, coreutils, libgcrypt, libgpgerror, libidn2, libapparmor
 , audit, lz4, bzip2, libmicrohttpd, pcre2
@@ -18,7 +18,7 @@ let
   pythonLxmlEnv = buildPackages.python3Packages.python.withPackages ( ps: with ps; [ python3Packages.lxml ]);
 
 in stdenv.mkDerivation rec {
-  version = "239";
+  version = "239.20190110";
   name = "systemd-${version}";
 
   # When updating, use https://github.com/systemd/systemd-stable tree, not the development one!
@@ -26,9 +26,25 @@ in stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "NixOS";
     repo = "systemd";
-    rev = "31859ddd35fc3fa82a583744caa836d356c31d7f";
-    sha256 = "1xci0491j95vdjgs397n618zii3sgwnvanirkblqqw6bcvcjvir1";
+    rev = "nixos-v${version}";
+    sha256 = "1m9mhv7b4kfa43z79106gpgxx51zlhvvfjrlmimdsvsiw72nzldj";
   };
+
+  prePatch = let
+      # Upstream's maintenance branches are still too intrusive:
+      # https://github.com/systemd/systemd-stable/tree/v239-stable
+      patches-deb = fetchurl {
+        # When the URL disappears, it typically means that Debian has new patches
+        # (probably security) and updating to new tarball will apply them as well.
+        name = "systemd-debian-patches.tar.xz";
+        url = mirror://debian/pool/main/s/systemd/systemd_239-12~bpo9+1.debian.tar.xz;
+        sha256 = "0v9f62gyfiw5icdrdlcvjcipsqrsm49w6n8bqp9nb8s2ih6rsfhg";
+      };
+      # Note that we skip debian-specific patches, i.e. ./debian/patches/debian/*
+    in ''
+      tar xf ${patches-deb}
+      patches="$patches $(cat debian/patches/series | grep -v '^debian/' | sed 's|^|debian/patches/|')"
+    '';
 
   outputs = [ "out" "lib" "man" "dev" ];
 

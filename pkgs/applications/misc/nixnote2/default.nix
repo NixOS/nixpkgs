@@ -30,8 +30,9 @@ mkDerivation rec {
     substituteInPlace nixnote.cpp --replace 'tidyProcess.start("tidy' 'tidyProcess.start("${html-tidy}/bin/tidy'
   '';
 
-  postInstal = ''
+  postInstall = ''
     cp images/windowIcon.png $out/share/pixmaps/nixnote2.png
+    cp theme.ini $out/share/nixnote2/theme.ini
   '';
 
   meta = with stdenv.lib; {

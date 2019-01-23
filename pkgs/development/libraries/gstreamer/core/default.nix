@@ -1,5 +1,5 @@
 { stdenv, fetchurl, fetchpatch, meson, ninja
-, pkgconfig, gettext, gobjectIntrospection
+, pkgconfig, gettext, gobject-introspection
 , bison, flex, python3, glib, makeWrapper
 , libcap,libunwind, darwin
 , lib
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   outputBin = "dev";
 
   nativeBuildInputs = [
-    meson ninja pkgconfig gettext bison flex python3 makeWrapper gobjectIntrospection
+    meson ninja pkgconfig gettext bison flex python3 makeWrapper gobject-introspection
   ];
   buildInputs =
        lib.optionals stdenv.isLinux [ libcap libunwind ]

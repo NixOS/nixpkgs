@@ -21,8 +21,6 @@ stdenv.mkDerivation {
 
   propagatedBuildInputs = [ uchar ];
 
-  unpackCmd = "tar xjf $src";
-
   buildPhase = "${topkg.buildPhase} --with-cmdliner false";
 
   inherit (topkg) installPhase;

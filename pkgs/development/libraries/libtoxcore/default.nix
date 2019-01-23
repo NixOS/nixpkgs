@@ -31,7 +31,6 @@ let
 
     doCheck = false; # hangs, tries to access the net?
     checkInputs = [ check ];
-    checkPhase = "ctest";
 
     meta = with stdenv.lib; {
       description = "P2P FOSS instant messaging application aimed to replace Skype";

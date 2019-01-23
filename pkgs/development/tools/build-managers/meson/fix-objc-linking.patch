@@ -1,0 +1,20 @@
+--- a/mesonbuild/environment.py
++++ b/mesonbuild/environment.py
+@@ -795,7 +795,7 @@
+                 compiler_type = self.get_gnu_compiler_type(defines)
+                 version = self.get_gnu_version_from_defines(defines)
+                 return GnuObjCCompiler(ccache + compiler, version, compiler_type, is_cross, exe_wrap, defines)
+-            if out.startswith('Apple LLVM'):
++            if out.startswith('Apple LLVM') or mesonlib.for_darwin(want_cross, self):
+                 return ClangObjCCompiler(ccache + compiler, version, CompilerType.CLANG_OSX, is_cross, exe_wrap)
+             if out.startswith('clang'):
+                 return ClangObjCCompiler(ccache + compiler, version, CompilerType.CLANG_STANDARD, is_cross, exe_wrap)
+@@ -822,7 +822,7 @@
+                 compiler_type = self.get_gnu_compiler_type(defines)
+                 version = self.get_gnu_version_from_defines(defines)
+                 return GnuObjCPPCompiler(ccache + compiler, version, compiler_type, is_cross, exe_wrap, defines)
+-            if out.startswith('Apple LLVM'):
++            if out.startswith('Apple LLVM') or mesonlib.for_darwin(want_cross, self):
+                 return ClangObjCPPCompiler(ccache + compiler, version, CompilerType.CLANG_OSX, is_cross, exe_wrap)
+             if out.startswith('clang'):
+                 return ClangObjCPPCompiler(ccache + compiler, version, CompilerType.CLANG_STANDARD, is_cross, exe_wrap)

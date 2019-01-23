@@ -4,6 +4,9 @@
 , perl
 , bison ? null
 , flex ? null
+, gmp ? null
+, libmpc ? null
+, mpfr ? null
 , stdenv
 
 , # The kernel source tarball.
@@ -89,7 +92,7 @@ let
     passAsFile = [ "kernelConfig" ];
 
     depsBuildBuild = [ buildPackages.stdenv.cc ];
-    nativeBuildInputs = [ perl ]
+    nativeBuildInputs = [ perl gmp libmpc mpfr ]
       ++ lib.optionals (stdenv.lib.versionAtLeast version "4.16") [ bison flex ];
 
     platformName = stdenv.hostPlatform.platform.name;
@@ -112,7 +115,10 @@ let
       export buildRoot="''${buildRoot:-build}"
 
       # Get a basic config file for later refinement with $generateConfig.
-      make HOSTCC=${buildPackages.stdenv.cc.targetPrefix}gcc -C . O="$buildRoot" $kernelBaseConfig ARCH=$kernelArch
+      make -C .  O="$buildRoot" $kernelBaseConfig \
+          ARCH=$kernelArch \
+          HOSTCC=${buildPackages.stdenv.cc.targetPrefix}gcc \
+          HOSTCXX=${buildPackages.stdenv.cc.targetPrefix}g++
 
       # Create the config file.
       echo "generating kernel configuration..."

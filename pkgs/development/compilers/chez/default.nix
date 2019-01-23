@@ -83,6 +83,7 @@ stdenv.mkDerivation rec {
     homepage    = https://cisco.github.io/ChezScheme/;
     license     = stdenv.lib.licenses.asl20;
     platforms   = stdenv.lib.platforms.unix;
+    badPlatforms = [ "aarch64-linux" ];
     maintainers = with stdenv.lib.maintainers; [ thoughtpolice ];
   };
 }

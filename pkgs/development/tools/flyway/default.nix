@@ -1,22 +1,23 @@
 { stdenv, fetchurl, jre_headless, makeWrapper }:
   let
-    version = "5.1.4";
+    version = "5.2.4";
   in
     stdenv.mkDerivation {
       name = "flyway-${version}";
       src = fetchurl {
-        url = "https://repo1.maven.org/maven2/org/flywaydb/flyway-commandline/5.1.4/flyway-commandline-${version}.tar.gz";
-        sha256 = "1raz125k55v6xa8gp6ylcjxz77r5364xqp9di46rayx3z2282f7q";
+        url = "https://repo1.maven.org/maven2/org/flywaydb/flyway-commandline/${version}/flyway-commandline-${version}.tar.gz";
+        sha256 = "16ia6nlvj4cgmdkn66bjg73h5vah82hpzk9mf0n5kmqnwcaa8hmc";
       };
-      buildInputs = [ makeWrapper ];
+      nativeBuildInputs = [ makeWrapper ];
       dontBuild = true;
       dontStrip = true;
       installPhase = ''
         mkdir -p $out/bin $out/share/flyway
-        cp -r sql jars lib drivers $out/share/flyway
+        cp -r sql jars drivers conf $out/share/flyway
+        cp -r lib/community $out/share/flyway/lib
         makeWrapper "${jre_headless}/bin/java" $out/bin/flyway \
           --add-flags "-Djava.security.egd=file:/dev/../dev/urandom" \
-          --add-flags "-cp '$out/share/flyway/lib/*:$out/share/flyway/drivers/*'" \
+          --add-flags "-classpath '$out/share/flyway/lib/*:$out/share/flyway/drivers/*'" \
           --add-flags "org.flywaydb.commandline.Main"
       '';
       meta = with stdenv.lib; {

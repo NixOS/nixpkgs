@@ -6,7 +6,11 @@
 } :
 
 let
+
   version = "0.7.0";
+  modulesVersion = with lib; versions.major version + "." + versions.minor version;
+  modulesPath = "lib/SoapySDR/modules" + modulesVersion;
+  extraPackagesSearchPath = lib.makeSearchPath modulesPath extraPackages;
 
 in stdenv.mkDerivation {
   name = "soapysdr-${version}";
@@ -18,8 +22,8 @@ in stdenv.mkDerivation {
     sha256 = "14fjwnfj7jz9ixvim2gy4f52y6s7d4xggzxn2ck7g4q35d879x13";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig ];
-  buildInputs = [ libusb ncurses numpy swig2 python ];
+  nativeBuildInputs = [ cmake makeWrapper pkgconfig ];
+  buildInputs = [ libusb ncurses numpy python swig2 ];
 
   cmakeFlags = [
     "-DCMAKE_BUILD_TYPE=Release"
@@ -31,11 +35,9 @@ in stdenv.mkDerivation {
     for i in ${toString extraPackages}; do
       ${lndir}/bin/lndir -silent $i $out
     done
-
     # Needed for at least the remote plugin server
-    for file in out/bin/*; do
-        ${makeWrapper}/bin/wrapProgram "$file" \
-            --prefix SOAPY_SDR_PLUGIN_PATH : ${lib.makeSearchPath "lib/SoapySDR/modules0.6" extraPackages}
+    for file in $out/bin/*; do
+        wrapProgram "$file" --prefix SOAPY_SDR_PLUGIN_PATH : ${extraPackagesSearchPath}
     done
   '';
 
@@ -47,4 +49,3 @@ in stdenv.mkDerivation {
     platforms = platforms.linux;
   };
 }
-

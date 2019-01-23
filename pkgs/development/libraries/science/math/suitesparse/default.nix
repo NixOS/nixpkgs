@@ -1,9 +1,10 @@
-{ stdenv, fetchurl, gfortran, openblas, cmake
+{ stdenv, fetchurl, gfortran, openblas, cmake, fixDarwinDylibNames
+, gnum4
 , enableCuda  ? false, cudatoolkit
 }:
 
 let
-  version = "5.3.0";
+  version = "5.4.0";
   name = "suitesparse-${version}";
 
   SHLIB_EXT = stdenv.hostPlatform.extensions.sharedLibrary;
@@ -13,7 +14,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://faculty.cse.tamu.edu/davis/SuiteSparse/SuiteSparse-${version}.tar.gz";
-    sha256 = "0gcn1xj3z87wpp26gxn11k8073bxv6jswfd8jmddlm64v09rgrlh";
+    sha256 = "1lfvjj787yqyhk25w7brlrkrl7dnnn5dq4ijxws3wrbcd4vd2k9p";
   };
 
   dontUseCmakeConfigure = true;
@@ -87,17 +88,45 @@ stdenv.mkDerivation rec {
     cp -r lib $out/
     cp -r include $out/
     cp -r share $out/
+    ''
+    + stdenv.lib.optionalString stdenv.isDarwin ''
+    # The fixDarwinDylibNames in nixpkgs can't seem to fix all the libraries.
+    # We manually fix them up here.
+    fixDarwinDylibNames() {
+        local flags=()
+        local old_id
 
+        for fn in "$@"; do
+            flags+=(-change "$PWD/lib/$(basename "$fn")" "$fn")
+        done
+
+        for fn in "$@"; do
+            if [ -L "$fn" ]; then continue; fi
+            echo "$fn: fixing dylib"
+            install_name_tool -id "$fn" "''${flags[@]}" "$fn"
+        done
+    }
+
+    fixDarwinDylibNames $(find "$out" -name "*.dylib")
+    ''
+    + stdenv.lib.optionalString (!stdenv.isDarwin) ''
     # Fix rpaths
     cd $out
     find -name \*.so\* -type f -exec \
       patchelf --set-rpath "$out/lib:${stdenv.lib.makeLibraryPath buildInputs}" {} \;
-
+    ''
+    +
+    ''
     runHook postInstall
-  '';
+    '';
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [ openblas gfortran.cc.lib ] ++ stdenv.lib.optionals enableCuda [cudatoolkit];
+  nativeBuildInputs = [
+    cmake
+    gnum4
+  ] ++ stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
+
+  buildInputs = [ openblas gfortran.cc.lib ]
+    ++ stdenv.lib.optional enableCuda cudatoolkit;
 
   meta = with stdenv.lib; {
     homepage = http://faculty.cse.tamu.edu/davis/suitesparse.html;

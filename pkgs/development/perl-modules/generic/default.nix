@@ -28,6 +28,7 @@ stdenv.mkDerivation (
     PERL_USE_UNSAFE_INC = "1";
 
     meta.homepage = "https://metacpan.org/release/${(builtins.parseDrvName name).name}";
+    meta.platforms = perl.meta.platforms;
   }
   attrs
   )

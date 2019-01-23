@@ -1,4 +1,4 @@
-{ stdenv, binutils , fetchurl, glibc }:
+{ stdenv, binutils , fetchurl, glibc, ncurses5 }:
 
 stdenv.mkDerivation rec {
   version = "0.0.28";
@@ -20,13 +20,14 @@ stdenv.mkDerivation rec {
     cd tools
     for exe in http_server \
                 kythe read_entries triples verifier \
-                write_entries write_tables; do
+                write_entries write_tables entrystream; do
       echo "Patching:" $exe
       patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" $exe
-      patchelf --set-rpath "${stdenv.cc.cc.lib}/lib64" $exe
+      patchelf --set-rpath "${stdenv.cc.cc.lib}/lib64:${ncurses5}/lib" $exe
     done
     cd ../
     cp -R ./ $out
+    ln -s $out/tools $out/bin
   '';
 
   meta = with stdenv.lib; {

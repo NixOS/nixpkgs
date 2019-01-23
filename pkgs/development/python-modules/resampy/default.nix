@@ -11,11 +11,11 @@
 
 buildPythonPackage rec {
   pname = "resampy";
-  version = "0.1.4";
+  version = "0.2.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "cf4f149d8699af70a1b4b0769fa16fab21835d936ea7ff25e98446aa49e743d4";
+    sha256 = "7f6912ca2b746eb9bcdc05c52fcef088f0b7ba1ca6ee0b2d0a359d18fc57f8f8";
   };
 
   checkInputs = [ pytest pytestcov ];

@@ -1,28 +1,27 @@
 { stdenv, fetchgit, perl, makeWrapper, makeDesktopItem
-, which, perlPackages
+, which, perlPackages, boost
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.2.9";
+  version = "1.3.0";
   name = "slic3r-${version}";
 
   src = fetchgit {
     url = "git://github.com/alexrj/Slic3r";
-    rev = "refs/tags/${version}";
-    sha256 = "1z8h11k29b7z49z5k8ikyfiijyycy1q3krlzi8hfd0vdybvymw21";
+    rev = version;
+    sha256 = "1pg4jxzb7f58ls5s8mygza8kqdap2c50kwlsdkf28bz1xi611zbi";
   };
 
-  patches = [
-    ./gcc6.patch
-  ];
-
-  buildInputs = with perlPackages; [ perl makeWrapper which
-    EncodeLocale MathClipper ExtUtilsXSpp threads
+  buildInputs =
+  [boost] ++
+  (with perlPackages; [ perl makeWrapper which
+    EncodeLocale MathClipper ExtUtilsXSpp
     MathConvexHullMonotoneChain MathGeometryVoronoi MathPlanePath Moo
     IOStringy ClassXSAccessor Wx GrowlGNTP NetDBus ImportInto XMLSAX
     ExtUtilsMakeMaker OpenGL WxGLCanvas ModuleBuild LWP
     ExtUtilsCppGuess ModuleBuildWithXSpp ExtUtilsTypemapsDefault
-  ];
+    DevelChecklib locallib
+  ]);
 
   desktopItem = makeDesktopItem {
     name = "slic3r";
@@ -33,6 +32,13 @@ stdenv.mkDerivation rec {
     genericName = "3D printer tool";
     categories = "Application;Development;";
   };
+
+  prePatch = ''
+    # In nix ioctls.h isn't available from the standard kernel-headers package
+    # on other distributions. As the copy in glibc seems to be identical to the
+    # one in the kernel, we use that one instead.
+    sed -i 's|"/usr/include/asm-generic/ioctls.h"|<asm-generic/ioctls.h>|g' xs/src/libslic3r/GCodeSender.cpp
+  '';
 
   buildPhase = ''
     export SLIC3R_NO_AUTO=true

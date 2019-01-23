@@ -3,7 +3,7 @@
 
 buildGoPackage rec {
   name = "gx-${version}";
-  version = "0.12.0";
+  version = "0.14.1";
   rev = "refs/tags/v${version}";
 
   goPackagePath = "github.com/whyrusleeping/gx";
@@ -11,7 +11,7 @@ buildGoPackage rec {
   src = fetchgit {
     inherit rev;
     url = "https://github.com/whyrusleeping/gx";
-    sha256 = "0pvf0j14xnzy01fxilja8xbki0i0g7h7y20jzw74ds5a7ywsdx8r";
+    sha256 = "0pfx2p59xdbmqzfbgaf8xvlnzh8m05hkg596glq5kvl8ib65i4ha";
   };
 
   goDeps = ./deps.nix;

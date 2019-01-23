@@ -13,8 +13,6 @@
 callPackage ./common.nix { inherit stdenv; } {
   name = "glibc-locales";
 
-  installLocales = true;
-
   builder = ./locales-builder.sh;
 
   outputs = [ "out" ];

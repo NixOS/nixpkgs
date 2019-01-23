@@ -15,11 +15,11 @@
 
 buildPythonPackage rec {
   pname = "wxPython";
-  version = "4.0.3";
+  version = "4.0.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8d0dfc0146c24749ce00d575e35cc2826372e809d5bc4a57bde6c89031b59e75";
+    sha256 = "0d9ef4260cb2f3e23ed9dcf6baa905ba585ac7d631613cddc299c4c83463ae29";
   };
 
   nativeBuildInputs = [

@@ -21,7 +21,6 @@ stdenv.mkDerivation rec {
 
   preBuild = ''
     makeFlagsArray=(
-      PERL5LIB="${perlPackages.Po4a}/lib/perl5"
       DCFLAGS='-O -inline -release -version=StdLoggerDisableTrace'
     )
   '';

@@ -6,13 +6,13 @@
 }:
 
 buildPythonPackage rec {
-  version = "2.1.1";
+  version = "2.2.0";
   pname = "simpleparse";
   disabled = isPy3k || isPyPy;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1n8msk71lpl3kv086xr2sv68ppgz6228575xfnbszc6p1mwr64rg";
+    sha256 = "18ccdc249bb550717af796af04a7d50aef523368901f64036a48eee5daca149d";
   };
 
   doCheck = false;  # weird error

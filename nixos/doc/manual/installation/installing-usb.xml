@@ -23,7 +23,7 @@ $ diskutil list
 [..]
 $ diskutil unmountDisk diskN
 Unmount of all volumes on diskN was successful
-$ sudo dd bs=1m if=nix.iso of=/dev/rdiskN
+$ sudo dd bs=1000000 if=nix.iso of=/dev/rdiskN
 </programlisting>
     Using the 'raw' <command>rdiskN</command> device instead of
     <command>diskN</command> completes in minutes instead of hours. After

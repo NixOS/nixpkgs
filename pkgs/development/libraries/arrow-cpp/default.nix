@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
   FLATBUFFERS_HOME = flatbuffers;
   GFLAGS_HOME = gflags;
   GLOG_HOME = glog;
-  GTEST_HOME = gtest;
+  GTEST_HOME = symlinkJoin { name="gtest-wrap"; paths = [ gtest gtest.dev ]; };
   LZ4_HOME = symlinkJoin { name="lz4-wrap"; paths = [ lz4 lz4.dev ]; };
   RAPIDJSON_HOME = rapidjson;
   SNAPPY_HOME = symlinkJoin { name="snappy-wrap"; paths = [ snappy snappy.dev ]; };

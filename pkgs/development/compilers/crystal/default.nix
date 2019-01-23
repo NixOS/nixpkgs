@@ -1,6 +1,6 @@
 { stdenv, lib, fetchFromGitHub, fetchurl, makeWrapper
 , gmp, openssl, readline, tzdata, libxml2, libyaml
-, boehmgc, libatomic_ops, pcre, libevent, libiconv, llvm, clang, which }:
+, boehmgc, libatomic_ops, pcre, libevent, libiconv, llvm, clang, which, zlib }:
 
 let
   binaryVersion = "0.26.0";
@@ -57,7 +57,7 @@ let
 
     buildInputs = [
       boehmgc libatomic_ops pcre libevent
-      llvm
+      llvm zlib openssl
     ] ++ stdenv.lib.optionals stdenv.isDarwin [
       libiconv
     ];

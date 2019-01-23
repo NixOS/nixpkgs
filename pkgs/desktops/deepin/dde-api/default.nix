@@ -1,11 +1,12 @@
 { stdenv, buildGoPackage, fetchFromGitHub, pkgconfig,
-go-gir-generator, glib, gtk3, poppler, librsvg, pulseaudio, alsaLib,
-libcanberra, gnome3, deepin-gettext-tools, go }:
+  deepin-gettext-tools, go-dbus-factory, go-gir-generator, go-lib,
+  alsaLib, glib, gtk3, libcanberra, libgudev, librsvg, poppler,
+  pulseaudio, go, deepin }:
 
 buildGoPackage rec {
   name = "${pname}-${version}";
   pname = "dde-api";
-  version = "3.1.30";
+  version = "3.5.0";
 
   goPackagePath = "pkg.deepin.io/dde/api";
 
@@ -13,29 +14,32 @@ buildGoPackage rec {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "0piw6ka2xcbd5vi7m33d1afdjbb7nycxvmai530ka6r2xjabrkir";
+    sha256 = "1g3s0i5wa6qyv00yksz4r4cy2vhiknq8v0yx7aribvwm3gxf7jw3";
   };
 
   goDeps = ./deps.nix;
 
   nativeBuildInputs = [
     pkgconfig
-    go-gir-generator
     deepin-gettext-tools
+    go-dbus-factory
+    go-gir-generator
+    go-lib
   ];
 
   buildInputs = [
+    alsaLib
     glib
     gtk3
-    poppler
-    librsvg
-    pulseaudio
-    alsaLib
     libcanberra
-    gnome3.libgudev
+    libgudev
+    librsvg
+    poppler
+    pulseaudio
   ];
 
   postPatch = ''
+    patchShebangs .
     sed -i -e "s|/var|$bin/var|" Makefile
   '';
 
@@ -49,6 +53,8 @@ buildGoPackage rec {
     mv $bin/share/gocode $out/share/go
     remove-references-to -t ${go} $bin/bin/* $bin/lib/deepin-api/*
   '';
+
+  passthru.updateScript = deepin.updateScript { inherit name; };
 
   meta = with stdenv.lib; {
     description = "Go-lang bindings for dde-daemon";

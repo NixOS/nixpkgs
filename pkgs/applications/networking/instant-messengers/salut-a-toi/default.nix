@@ -9,12 +9,11 @@ let
 
 in
   stdenv.mkDerivation rec {
-    name = "salut-a-toi-${version}";
+    pname = "salut-a-toi";
     version = "0.6.1";
-    pname = "sat-${version}";
 
     src = fetchurl {
-      url = "ftp://ftp.goffi.org/sat/${pname}.tar.bz2";
+      url = "ftp://ftp.goffi.org/sat/sat-${version}.tar.bz2";
       sha256 = "0kn9403n8fpzl0hsb9kkzicsmzq2fjl627l31yykbqzc4nsr780d";
     };
 

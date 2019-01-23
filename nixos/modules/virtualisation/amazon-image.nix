@@ -53,7 +53,7 @@ let cfg = config.ec2; in
     # Mount all formatted ephemeral disks and activate all swap devices.
     # We cannot do this with the ‘fileSystems’ and ‘swapDevices’ options
     # because the set of devices is dependent on the instance type
-    # (e.g. "m1.large" has one ephemeral filesystem and one swap device,
+    # (e.g. "m1.small" has one ephemeral filesystem and one swap device,
     # while "m1.large" has two ephemeral filesystems and no swap
     # devices).  Also, put /tmp and /var on /disk0, since it has a lot
     # more space than the root device.  Similarly, "move" /nix to /disk0

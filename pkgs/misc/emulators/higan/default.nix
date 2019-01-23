@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "An open-source, cycle-accurate Nintendo multi-system emulator";
     longDescription = ''
-      Higan (formerly bsnes) is a multi-system game console emulator.
+      higan (formerly bsnes) is a multi-system game console emulator.
       It currently supports the following systems:
         - Nintendo's Famicom, Super Famicom (with subsystems: 
           Super Game Boy, BS-X Satellaview, Sufami Turbo); 

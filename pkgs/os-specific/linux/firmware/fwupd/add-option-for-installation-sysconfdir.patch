@@ -1,0 +1,169 @@
+From 2fe9625cc6dec10531482a3947ef75009eb21489 Mon Sep 17 00:00:00 2001
+From: Jan Tojnar <jtojnar@gmail.com>
+Date: Tue, 30 Oct 2018 22:26:30 +0100
+Subject: [PATCH] build: Add option for installation sysconfdir
+
+On NixOS, sysconfdir is read-only by default, and packages are not supposed to
+install files there. Instead, NixOS has a concept of modules that declaratively
+describe the system configuration.
+
+We still want to install the config files and certificates to fwupd prefix,
+so that the modules can use them as they see fit, but at the same time, we
+cannot set sysconfdir=${prefix}/etc because the daemon needs to read the
+configuration from the directory created by the module.
+
+With autotools, we could easily solve this by passing a the sysconfdir inside
+prefix only to `make install`, but Meson does not support anything like that.
+Until we manage to convince Meson to support install flags, we need to create
+our own install flag.
+---
+ data/meson.build            | 4 ++--
+ data/pki/meson.build        | 8 ++++----
+ data/remotes.d/meson.build  | 6 +++---
+ meson.build                 | 6 ++++++
+ meson_options.txt           | 1 +
+ plugins/redfish/meson.build | 2 +-
+ plugins/uefi/meson.build    | 2 +-
+ 7 files changed, 18 insertions(+), 11 deletions(-)
+
+diff --git a/data/meson.build b/data/meson.build
+index 8dd2ac9ad..d4ad1cbc1 100644
+--- a/data/meson.build
++++ b/data/meson.build
+@@ -9,7 +9,7 @@ if get_option('tests') and get_option('daemon')
+ endif
+ 
+ install_data(['daemon.conf'],
+-  install_dir : join_paths(sysconfdir, 'fwupd')
++  install_dir : join_paths(sysconfdir_install, 'fwupd')
+ )
+ 
+ install_data(['org.freedesktop.fwupd.metainfo.xml'],
+@@ -17,7 +17,7 @@ install_data(['org.freedesktop.fwupd.metainfo.xml'],
+ )
+ 
+ install_data(['org.freedesktop.fwupd.conf'],
+-  install_dir : join_paths(sysconfdir, 'dbus-1', 'system.d')
++  install_dir : join_paths(sysconfdir_install, 'dbus-1', 'system.d')
+ )
+ 
+ install_data(['metadata.xml'],
+diff --git a/data/pki/meson.build b/data/pki/meson.build
+index eefcc9142..dc801fa18 100644
+--- a/data/pki/meson.build
++++ b/data/pki/meson.build
+@@ -4,14 +4,14 @@ if get_option('gpg')
+       'GPG-KEY-Linux-Foundation-Firmware',
+       'GPG-KEY-Linux-Vendor-Firmware-Service',
+     ],
+-    install_dir : join_paths(sysconfdir, 'pki', 'fwupd')
++    install_dir : join_paths(sysconfdir_install, 'pki', 'fwupd')
+   )
+ 
+   install_data([
+       'GPG-KEY-Linux-Foundation-Metadata',
+       'GPG-KEY-Linux-Vendor-Firmware-Service',
+     ],
+-    install_dir : join_paths(sysconfdir, 'pki', 'fwupd-metadata')
++    install_dir : join_paths(sysconfdir_install, 'pki', 'fwupd-metadata')
+   )
+ endif
+ 
+@@ -19,12 +19,12 @@ if get_option('pkcs7')
+   install_data([
+       'LVFS-CA.pem',
+     ],
+-    install_dir : join_paths(sysconfdir, 'pki', 'fwupd')
++    install_dir : join_paths(sysconfdir_install, 'pki', 'fwupd')
+   )
+   install_data([
+       'LVFS-CA.pem',
+     ],
+-    install_dir : join_paths(sysconfdir, 'pki', 'fwupd-metadata')
++    install_dir : join_paths(sysconfdir_install, 'pki', 'fwupd-metadata')
+   )
+ endif
+ 
+diff --git a/data/remotes.d/meson.build b/data/remotes.d/meson.build
+index 824291fc5..d0599a00a 100644
+--- a/data/remotes.d/meson.build
++++ b/data/remotes.d/meson.build
+@@ -3,7 +3,7 @@ if get_option('daemon') and get_option('lvfs')
+       'lvfs.conf',
+       'lvfs-testing.conf',
+     ],
+-    install_dir : join_paths(sysconfdir, 'fwupd', 'remotes.d')
++    install_dir : join_paths(sysconfdir_install, 'fwupd', 'remotes.d')
+   )
+   i18n.merge_file(
+     input: 'lvfs.metainfo.xml',
+@@ -37,12 +37,12 @@ configure_file(
+   output : 'fwupd.conf',
+   configuration : con2,
+   install: true,
+-  install_dir: join_paths(sysconfdir, 'fwupd', 'remotes.d'),
++  install_dir: join_paths(sysconfdir_install, 'fwupd', 'remotes.d'),
+ )
+ configure_file(
+   input : 'vendor.conf',
+   output : 'vendor.conf',
+   configuration : con2,
+   install: true,
+-  install_dir: join_paths(sysconfdir, 'fwupd', 'remotes.d'),
++  install_dir: join_paths(sysconfdir_install, 'fwupd', 'remotes.d'),
+ )
+diff --git a/meson.build b/meson.build
+index 737841f1a..23bd7a2e3 100644
+--- a/meson.build
++++ b/meson.build
+@@ -144,6 +144,12 @@ localstatedir = join_paths(prefix, get_option('localstatedir'))
+ mandir = join_paths(prefix, get_option('mandir'))
+ localedir = join_paths(prefix, get_option('localedir'))
+ 
++if get_option('sysconfdir_install') != ''
++  sysconfdir_install = join_paths(prefix, get_option('sysconfdir_install'))
++else
++  sysconfdir_install = sysconfdir
++endif
++
+ gio = dependency('gio-2.0', version : '>= 2.45.8')
+ if gio.version().version_compare ('>= 2.55.0')
+   conf.set('HAVE_GIO_2_55_0', '1')
+diff --git a/meson_options.txt b/meson_options.txt
+index 23ef8cdb8..db8f93b6c 100644
+--- a/meson_options.txt
++++ b/meson_options.txt
+@@ -17,6 +17,7 @@ option('plugin_uefi', type : 'boolean', value : true, description : 'enable UEFI
+ option('plugin_nvme', type : 'boolean', value : true, description : 'enable NVMe support')
+ option('systemd', type : 'boolean', value : true, description : 'enable systemd support')
+ option('systemdunitdir', type: 'string', value: '', description: 'Directory for systemd units')
++option('sysconfdir_install', type: 'string', value: '', description: 'sysconfdir to use during installation')
+ option('tests', type : 'boolean', value : true, description : 'enable tests')
+ option('udevdir', type: 'string', value: '', description: 'Directory for udev rules')
+ option('efi-cc', type : 'string', value : 'gcc', description : 'the compiler to use for EFI modules')
+diff --git a/plugins/redfish/meson.build b/plugins/redfish/meson.build
+index 288f614e4..90cfe6484 100644
+--- a/plugins/redfish/meson.build
++++ b/plugins/redfish/meson.build
+@@ -22,7 +22,7 @@ shared_module('fu_plugin_redfish',
+ )
+ 
+ install_data(['redfish.conf'],
+-  install_dir:  join_paths(sysconfdir, 'fwupd')
++  install_dir:  join_paths(sysconfdir_install, 'fwupd')
+ )
+ 
+ if get_option('tests')
+diff --git a/plugins/uefi/meson.build b/plugins/uefi/meson.build
+index c037e1b30..a0e8cd3e6 100644
+--- a/plugins/uefi/meson.build
++++ b/plugins/uefi/meson.build
+@@ -69,7 +69,7 @@ executable(
+ )
+ 
+ install_data(['uefi.conf'],
+-  install_dir:  join_paths(sysconfdir, 'fwupd')
++  install_dir:  join_paths(sysconfdir_install, 'fwupd')
+ )
+ 
+ if get_option('tests')

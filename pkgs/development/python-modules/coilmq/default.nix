@@ -1,5 +1,5 @@
 { stdenv, buildPythonPackage, fetchPypi
-, stompclient, pythondaemon, redis, pid, pytest, six, click, coverage
+, stompclient, python-daemon, redis, pid, pytest, six, click, coverage
 , sqlalchemy }:
 
 buildPythonPackage rec {
@@ -11,7 +11,7 @@ buildPythonPackage rec {
     sha256 = "4cbfeb5ed2459df14902c1380157be6267702b1271682924cd316ccad8a29d1d";
   };
 
-  propagatedBuildInputs = [ stompclient pythondaemon redis pid ];
+  propagatedBuildInputs = [ stompclient python-daemon redis pid ];
   buildInputs = [ pytest six click coverage sqlalchemy ];
 
   # The teste data is not included in the distribution

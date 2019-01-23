@@ -1,6 +1,6 @@
 {stdenv, fetchFromGitHub, pkgconfig, wrapGAppsHook, makeWrapper
 ,help2man, lua5, luafilesystem, luajit, sqlite
-,webkitgtk, gtk3, gst_all_1}:
+,webkitgtk, gtk3, gst_all_1, glib-networking}:
 
 let
   lualibs = [luafilesystem];
@@ -27,7 +27,8 @@ in stdenv.mkDerivation rec {
     gst_all_1.gstreamer gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-good gst_all_1.gst-plugins-bad gst_all_1.gst-plugins-ugly
     gst_all_1.gst-libav
-                ];
+    glib-networking # TLS support
+  ];
 
   postPatch =
     #Kind of ugly seds here. There must be a better solution.

@@ -22,7 +22,7 @@ import ./make-test.nix ({ pkgs, ...} : {
     $machine->waitUntilSucceeds("xmonad --restart");
     $machine->sleep(3);
     $machine->sendKeys("alt-shift-ret");
-    $machine->waitForWindow(qr/machine.*alice/);
+    $machine->waitForWindow(qr/alice.*machine/);
     $machine->sleep(1);
     $machine->screenshot("terminal");
   '';

@@ -1,6 +1,6 @@
 { stdenv, fetchurl, fetchFromGitHub, makeWrapper
 , docutils, perl, pkgconfig, python3, which, ffmpeg_4
-, freefont_ttf, freetype, libass, libpthreadstubs
+, freefont_ttf, freetype, libass, libpthreadstubs, mujs
 , lua, luasocket, libuchardet, libiconv ? null, darwin
 
 , waylandSupport ? false
@@ -18,6 +18,11 @@
 , cddaSupport ? false
   , libcdio          ? null
   , libcdio-paranoia ? null
+
+, vulkanSupport ? stdenv.isLinux
+  , shaderc ? null
+  , vulkan-headers ? null
+  , vulkan-loader ? null
 
 , alsaSupport        ? true,  alsaLib       ? null
 , bluraySupport      ? true,  libbluray     ? null
@@ -134,7 +139,7 @@ in stdenv.mkDerivation rec {
 
   buildInputs = [
     ffmpeg_4 freetype libass libpthreadstubs
-    lua luasocket libuchardet
+    lua luasocket libuchardet mujs
   ] ++ optional alsaSupport        alsaLib
     ++ optional archiveSupport     libarchive
     ++ optional bluraySupport      libbluray
@@ -163,6 +168,7 @@ in stdenv.mkDerivation rec {
     ++ optionals dvdnavSupport     [ libdvdnav libdvdnav.libdvdread ]
     ++ optionals waylandSupport    [ wayland wayland-protocols libxkbcommon ]
     ++ optionals x11Support        [ libX11 libXext libGLU_combined libXxf86vm libXrandr ]
+    ++ optionals vulkanSupport     [ shaderc vulkan-headers vulkan-loader ]
     ++ optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
       CoreFoundation Cocoa CoreAudio
     ]);
@@ -176,7 +182,7 @@ in stdenv.mkDerivation rec {
   '';
 
   # Ensure youtube-dl is available in $PATH for mpv
-  wrapperFlags = 
+  wrapperFlags =
   let
     getPath  = type : "${luasocket}/lib/lua/${lua.luaversion}/?.${type};" +
                       "${luasocket}/share/lua/${lua.luaversion}/?.${type}";

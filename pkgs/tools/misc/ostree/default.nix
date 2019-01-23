@@ -1,10 +1,10 @@
-{ stdenv, fetchFromGitHub, fetchpatch, pkgconfig, gtk-doc, gobjectIntrospection, gnome3
+{ stdenv, fetchFromGitHub, fetchpatch, pkgconfig, gtk-doc, gobject-introspection, gnome3
 , glib, systemd, xz, e2fsprogs, libsoup, gpgme, which, autoconf, automake, libtool, fuse, utillinuxMinimal, libselinux
 , libarchive, libcap, bzip2, yacc, libxslt, docbook_xsl, docbook_xml_dtd_42, python3
 }:
 
 let
-  version = "2018.8";
+  version = "2018.9";
 
   libglnx-src = fetchFromGitHub {
     owner = "GNOME";
@@ -28,7 +28,7 @@ in stdenv.mkDerivation {
     rev = "v${version}";
     owner = "ostreedev";
     repo = "ostree";
-    sha256 = "0i7b7hvlv8m44k39fr5389wskf810vda8s7ivy2whj1nan5951yx";
+    sha256 = "0a8gr4qqxcvz3fqv9w4dxy6iq0rq4kdzf08rzv8xg4gic3ldgyvj";
   };
 
   patches = [
@@ -46,7 +46,7 @@ in stdenv.mkDerivation {
   ];
 
   nativeBuildInputs = [
-    autoconf automake libtool pkgconfig gtk-doc gobjectIntrospection which yacc
+    autoconf automake libtool pkgconfig gtk-doc gobject-introspection which yacc
     libxslt docbook_xsl docbook_xml_dtd_42
   ];
 

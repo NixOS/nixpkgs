@@ -6,13 +6,13 @@
   <title>Darwin (macOS)</title>
 
   <para>
-   Some common issues when packaging software for darwin:
+   Some common issues when packaging software for Darwin:
   </para>
 
   <itemizedlist>
    <listitem>
     <para>
-     The darwin <literal>stdenv</literal> uses clang instead of gcc. When
+     The Darwin <literal>stdenv</literal> uses clang instead of gcc. When
      referring to the compiler <varname>$CC</varname> or <command>cc</command>
      will work in both cases. Some builds hardcode gcc/g++ in their build
      scripts, that can usually be fixed with using something like
@@ -31,7 +31,7 @@
    </listitem>
    <listitem>
     <para>
-     On darwin libraries are linked using absolute paths, libraries are
+     On Darwin, libraries are linked using absolute paths, libraries are
      resolved by their <literal>install_name</literal> at link time. Sometimes
      packages won't set this correctly causing the library lookups to fail at
      runtime. This can be fixed by adding extra linker flags or by running
@@ -96,8 +96,8 @@
     </programlisting>
     <para>
      The package <literal>xcbuild</literal> can be used to build projects that
-     really depend on Xcode, however projects that build some kind of graphical
-     interface won't work without using Xcode in an impure way.
+     really depend on Xcode. However, this replacement is not 100%
+     compatible with Xcode and can occasionally cause issues.
     </para>
    </listitem>
   </itemizedlist>

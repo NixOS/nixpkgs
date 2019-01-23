@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, qmake
 , coreutils, xdg_utils, bash
-, perl, makeWrapper, perlPackages }:
+, makeWrapper, perlPackages }:
 
 let
   version = "1.4";
@@ -16,7 +16,7 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ qmake makeWrapper ];
 
-  buildInputs = [ perl ];
+  buildInputs = [ perlPackages.perl ];
 
   preBuild = ''
     substituteInPlace scripts/scripts.pro \
@@ -48,7 +48,7 @@ in stdenv.mkDerivation rec {
 
   postInstall = ''
     wrapProgram $out/bin/qdirstat-cache-writer \
-      --set PERL5LIB "${stdenv.lib.makePerlPath [ perlPackages.URI ]}"
+      --set PERL5LIB "${perlPackages.makePerlPath [ perlPackages.URI ]}"
   '';
 
   meta = with stdenv.lib; {

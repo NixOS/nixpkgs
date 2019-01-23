@@ -1,4 +1,6 @@
-{ stdenv, fetchzip, fetchFromGitHub, ocamlPackages }:
+{ stdenv, fetchzip, fetchFromGitHub, ruby, dune, ocamlPackages
+, ipaexfont, junicode
+}:
 let
   lm = fetchzip {
     url = "http://www.gust.org.pl/projects/e-foundry/latin-modern/download/lm2.004otf.zip";
@@ -9,15 +11,31 @@ let
     url = "http://www.gust.org.pl/projects/e-foundry/lm-math/download/latinmodern-math-1959.zip";
     sha256 = "15l3lxjciyjmbh0q6jjvzz16ibk4ij79in9fs47qhrfr2wrddpvs";
   };
+  camlpdf = ocamlPackages.camlpdf.overrideAttrs (o: {
+    src = fetchFromGitHub {
+      owner = "gfngfn";
+      repo = "camlpdf";
+      rev = "v2.2.1+satysfi";
+      sha256 = "1s8v2i8nq52kz038bvc2n0spz68fpdq6kgxrabcs6zvml6n1frzy";
+    };
+  });
+  otfm = ocamlPackages.otfm.overrideAttrs (o: {
+    src = fetchFromGitHub {
+      owner = "gfngfn";
+      repo = "otfm";
+      rev = "v0.3.2+satysfi";
+      sha256 = "1h795pdi5qi2nwymsfvb53x56h9pqi9iiqbzw10mi6fazgd2dzhd";
+    };
+  });
 in
   stdenv.mkDerivation rec {
     name = "satysfi-${version}";
-    version = "2018-03-07";
+    version = "0.0.3";
     src = fetchFromGitHub {
       owner = "gfngfn";
       repo = "SATySFi";
-      rev = "a050ec0906d083682c630b0dea68887415b5f53d";
-      sha256 = "12bhl7s2kc02amr8rm71pihj203f2j15y5j0kz3swgsw0gqh81gv";
+      rev = "v${version}";
+      sha256 = "0qk284jhxnfb69s24j397a6155dhl4dcgamicin7sq04d0wj6c7f";
       fetchSubmodules = true;
     };
 
@@ -27,9 +45,16 @@ in
       $out/share/satysfi
     '';
 
-    buildInputs = with ocamlPackages; [ ocaml ocamlbuild findlib menhir
-      ppx_deriving uutf result core_kernel bitv batteries yojson camlimages ];
+    nativeBuildInputs = [ ruby dune ];
+
+    buildInputs = [ camlpdf otfm ] ++ (with ocamlPackages; [
+      ocaml findlib menhir
+      batteries camlimages core_kernel ppx_deriving uutf yojson
+    ]);
+
     installPhase = ''
+      cp -r ${ipaexfont}/share/fonts/opentype/* lib-satysfi/dist/fonts/
+      cp -r ${junicode}/share/fonts/junicode-ttf/* lib-satysfi/dist/fonts/
       cp -r ${lm}/* lib-satysfi/dist/fonts/
       cp -r ${lm-math}/otf/latinmodern-math.otf lib-satysfi/dist/fonts/
       make install PREFIX=$out LIBDIR=$out/share/satysfi

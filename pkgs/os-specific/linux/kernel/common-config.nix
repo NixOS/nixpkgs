@@ -88,9 +88,9 @@ let
     # Include the CFQ I/O scheduler in the kernel, rather than as a
     # module, so that the initrd gets a good I/O scheduler.
     scheduler = {
-      IOSCHED_CFQ = yes;
+      IOSCHED_CFQ = whenOlder "5.0" yes; # Removed in 5.0-RC1
       BLK_CGROUP  = yes; # required by CFQ"
-      IOSCHED_DEADLINE = yes;
+      IOSCHED_DEADLINE = whenOlder "5.0" yes; # Removed in 5.0-RC1
       MQ_IOSCHED_DEADLINE = whenAtLeast "4.11" yes;
       BFQ_GROUP_IOSCHED = whenAtLeast "4.12" yes;
       MQ_IOSCHED_KYBER = whenAtLeast "4.12" yes;
@@ -301,7 +301,7 @@ let
       NFS_V4_SECURITY_LABEL = yes;
 
       CIFS_XATTR        = yes;
-      CIFS_POSIX        = yes;
+      CIFS_POSIX        = option yes;
       CIFS_FSCACHE      = yes;
       CIFS_STATS        = whenOlder "4.19" yes;
       CIFS_WEAK_PW_HASH = yes;
@@ -320,6 +320,7 @@ let
       SQUASHFS_LZO                 = yes;
       SQUASHFS_XZ                  = yes;
       SQUASHFS_LZ4                 = yes;
+      SQUASHFS_ZSTD                = whenAtLeast "4.14" yes;
 
       # Native Language Support modules, needed by some filesystems
       NLS              = yes;
@@ -365,21 +366,24 @@ let
       # https://lwn.net/Articles/682582/
       # https://bugzilla.kernel.org/show_bug.cgi?id=12309#c655
       BLK_WBT    = yes;
-      BLK_WBT_SQ = yes;
+      BLK_WBT_SQ = whenOlder "5.0" yes; # Removed in 5.0-RC1
       BLK_WBT_MQ = yes;
     };
 
     container = {
-      NAMESPACES     = option yes; #  Required by 'unshare' used by 'nixos-install'
+      NAMESPACES     = yes; #  Required by 'unshare' used by 'nixos-install'
       RT_GROUP_SCHED = no;
-      CGROUP_DEVICE  = option yes;
+      CGROUP_DEVICE  = yes;
+      CGROUP_HUGETLB = yes;
+      CGROUP_PERF    = yes;
+      CGROUP_RDMA    = whenAtLeast "4.11" yes;
 
       MEMCG                    = yes;
       MEMCG_SWAP               = yes;
 
       DEVPTS_MULTIPLE_INSTANCES = whenOlder "4.7" yes;
       BLK_DEV_THROTTLING        = yes;
-      CFQ_GROUP_IOSCHED         = yes;
+      CFQ_GROUP_IOSCHED         = whenOlder "5.0" yes; # Removed in 5.0-RC1
       CGROUP_PIDS               = whenAtLeast "4.3" yes;
     };
 
@@ -463,7 +467,7 @@ let
       MEDIA_DIGITAL_TV_SUPPORT = yes;
       MEDIA_CAMERA_SUPPORT     = yes;
       MEDIA_RC_SUPPORT         = whenOlder "4.14" yes;
-			MEDIA_CONTROLLER         = yes;
+      MEDIA_CONTROLLER         = yes;
       MEDIA_PCI_SUPPORT        = yes;
       MEDIA_USB_SUPPORT        = yes;
       MEDIA_ANALOG_TV_SUPPORT  = yes;
@@ -638,6 +642,7 @@ let
       MEGARAID_NEWGEN       = yes;
 
       MLX4_EN_VXLAN = whenOlder "4.8" yes;
+      MLX5_CORE_EN       = option yes;
 
       MODVERSIONS        = whenOlder "4.9" yes;
       MOUSE_PS2_ELANTECH = yes; # Elantech PS/2 protocol extension
@@ -683,6 +688,14 @@ let
       HOTPLUG_PCI_PCIE = yes; # PCI-Expresscard hotplug support
 
     } // optionalAttrs (stdenv.hostPlatform.system == "x86_64-linux" || stdenv.hostPlatform.system == "aarch64-linux") {
+      # Enable memory hotplug support
+      # Allows you to dynamically add & remove memory to a VM client running NixOS without requiring a reboot
+      ACPI_HOTPLUG_MEMORY = yes;
+      MEMORY_HOTPLUG = yes;
+      MEMORY_HOTREMOVE = yes;
+      MIGRATION = yes;
+      SPARSEMEM = yes;
+
       # Bump the maximum number of CPUs to support systems like EC2 x1.*
       # instances and Xeon Phi.
       NR_CPUS = "384";

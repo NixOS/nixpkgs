@@ -22,14 +22,15 @@
 , pkgconfig , ncurses, xapian_1_2_22, gpgme, utillinux, fetchpatch, tzdata, icu, libffi
 , cmake, libssh2, openssl, mysql, darwin, git, perl, pcre, gecode_3, curl
 , msgpack, qt59, libsodium, snappy, libossp_uuid, lxc, libpcap, xorg, gtk2, buildRubyGem
-, cairo, re2, rake, gobjectIntrospection, gdk_pixbuf, zeromq, graphicsmagick, libcxx, file
+, cairo, re2, rake, gobject-introspection, gdk_pixbuf, zeromq, graphicsmagick, libcxx, file
+, libselinux ? null, libsepol ? null, libvirt
 }@args:
 
 let
   v8 = v8_3_16_14;
 
   rainbow_rake = buildRubyGem {
-    name = "rake";
+    pname = "rake";
     gemName = "rake";
     source.sha256 = "01j8fc9bqjnrsxbppncai05h43315vmz9fwg28qdsgcjw9ck1d7n";
     type = "gem";
@@ -91,6 +92,10 @@ in
       installPath=$(cat $out/nix-support/gem-meta/install-path)
       sed -i $installPath/lib/dep-selector-libgecode.rb -e 's@VENDORED_GECODE_DIR =.*@VENDORED_GECODE_DIR = "${gecode_3}"@'
     '';
+  };
+
+  digest-sha3 = attrs: {
+    hardeningDisable = [ "format" ];
   };
 
   ethon = attrs: {
@@ -156,7 +161,7 @@ in
 
   gio2 = attrs: {
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ gtk2 pcre gobjectIntrospection ];
+    buildInputs = [ gtk2 pcre gobject-introspection ] ++ lib.optionals stdenv.isLinux [ utillinux libselinux libsepol ];
   };
 
   gitlab-markup = attrs: { meta.priority = 1; };
@@ -167,7 +172,7 @@ in
   };
 
   gtk2 = attrs: {
-    nativeBuildInputs = [ pkgconfig ];
+    nativeBuildInputs = [ pkgconfig ] ++ lib.optionals stdenv.isLinux [ utillinux libselinux libsepol ];
     buildInputs = [ gtk2 pcre xorg.libpthreadstubs xorg.libXdmcp];
     # CFLAGS must be set for this gem to detect gdkkeysyms.h correctly
     CFLAGS = "-I${gtk2.dev}/include/gtk-2.0 -I/non-existent-path";
@@ -175,7 +180,7 @@ in
 
   gobject-introspection = attrs: {
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ gobjectIntrospection gtk2 pcre ];
+    buildInputs = [ gobject-introspection gtk2 pcre ];
   };
 
   grpc = attrs: {
@@ -189,6 +194,10 @@ in
     buildInputs =
       stdenv.lib.optionals stdenv.isDarwin
         [ darwin.apple_sdk.frameworks.CoreServices ];
+  };
+
+  iconv = attrs: {
+    buildFlags = lib.optional stdenv.isDarwin "--with-iconv-dir=${libiconv}";
   };
 
   # disable bundle install as it can't install anything in addition to what is
@@ -226,6 +235,12 @@ in
     '';
   };
 
+  metasploit-framework = attrs: {
+    preInstall = ''
+      export HOME=$TMPDIR
+    '';
+  };
+
   msgpack = attrs: {
     buildInputs = [ msgpack ];
   };
@@ -259,13 +274,6 @@ in
     ] ++ lib.optional stdenv.isDarwin "--with-iconv-dir=${libiconv}";
   };
 
-  oxidized = attrs: {
-    postInstall = ''
-      cd "$(cat "$out/nix-support/gem-meta/install-path")"
-      patch -p1 < ${../../../tools/admin/oxidized/temporary-x-series.patch}
-    '';
-  };
-
   pango = attrs: {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ gtk2 xorg.libXdmcp pcre xorg.libpthreadstubs ];
@@ -293,13 +301,16 @@ in
     buildInputs = [ rainbow_rake ];
   };
 
-  rbnacl = spec: {
-    postInstall = ''
-    sed -i $(cat $out/nix-support/gem-meta/install-path)/lib/rbnacl.rb -e "2a \
-    RBNACL_LIBSODIUM_GEM_LIB_PATH = '${libsodium.out}/lib/libsodium${stdenv.hostPlatform.extensions.sharedLibrary}'
-    "
-    '';
-  };
+  rbnacl = spec:
+    if lib.versionOlder spec.version "6.0.0" then {
+      postInstall = ''
+        sed -i $(cat $out/nix-support/gem-meta/install-path)/lib/rbnacl.rb -e "2a \
+        RBNACL_LIBSODIUM_GEM_LIB_PATH = '${libsodium.out}/lib/libsodium${stdenv.hostPlatform.extensions.sharedLibrary}'
+        "
+      '';
+    } else {
+      buildInputs = [ libsodium ];
+    };
 
   re2 = attrs: {
     buildInputs = [ re2 ];
@@ -308,6 +319,14 @@ in
   rmagick = attrs: {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ imagemagick which ];
+  };
+
+  ruby-libvirt = attrs: {
+    buildInputs = [ libvirt pkgconfig ];
+    buildFlags = [
+      "--with-libvirt-include=${libvirt}/include"
+      "--with-libvirt-lib=${libvirt}/lib"
+    ];
   };
 
   ruby-lxc = attrs: {
