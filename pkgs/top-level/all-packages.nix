@@ -9097,7 +9097,7 @@ in
   selendroid = callPackage ../development/tools/selenium/selendroid { };
 
   sconsPackages = callPackage ../development/tools/build-managers/scons { };
-  scons = sconsPackages.scons_3_0_3;
+  scons = sconsPackages.scons_latest;
 
   mill = callPackage ../development/tools/build-managers/mill { };
 
