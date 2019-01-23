@@ -7,13 +7,11 @@ import errno
 import subprocess
 import glob
 import tempfile
-import errno
 import warnings
 import ctypes
 libc = ctypes.CDLL("libc.so.6")
 import re
 import datetime
-import glob
 import os.path
 
 def copy_if_not_exists(source, dest):
@@ -46,7 +44,7 @@ def write_loader_conf(profile, generation):
             f.write("default nixos-%s-generation-%d\n" % (profile, generation))
         else:
             f.write("default nixos-generation-%d\n" % (generation))
-        if not @editor@:
+        if "@editor@" != "1":
             f.write("editor 0\n");
         f.write("console-mode @consoleMode@\n");
     os.rename("@efiSysMountPoint@/loader/loader.conf.tmp", "@efiSysMountPoint@/loader/loader.conf")
