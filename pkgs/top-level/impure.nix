@@ -72,6 +72,11 @@ in
         else overlays homeOverlaysDir
       else []
 
+  # An impurity in NixOS to pass on when invoking pkgs.nixos,
+  # pkgs.nixosTest, pkgs.nixosTests.
+, nixosExtraModules ? let e = builtins.getEnv "NIXOS_EXTRA_MODULE_PATH";
+                      in if e == "" then [] else [(import e)]
+
 , ...
 } @ args:
 
@@ -79,8 +84,12 @@ in
 # not be passed.
 assert args ? localSystem -> !(args ? system || args ? platform);
 
-import ./. (builtins.removeAttrs args [ "system" "platform" ] // {
-  inherit config overlays crossSystem;
+import ./. (builtins.removeAttrs args [ "system" "platform" "nixosExtraModules" ] // {
+  inherit overlays crossSystem;
+  config = config //
+    (if nixosExtraModules == [] then {} else {
+      nixosExtraModules = config.nixosExtraModules or [] ++ nixosExtraModules;
+    });
   # Fallback: Assume we are building packages on the current (build, in GNU
   # Autotools parlance) system.
   localSystem = (if args ? localSystem then {}

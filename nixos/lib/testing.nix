@@ -4,8 +4,10 @@
 , minimal ? false
   # Ignored
 , config ? null
-  # Modules to add to each VM
-, extraConfigurations ? [] }:
+, # NixOS configuration to add to the VMs
+  extraConfigurations ? let e = builtins.getEnv "NIXOS_EXTRA_MODULE_PATH";
+                        in if e == "" then [] else [(import e)]
+}:
 
 with import ./build-vms.nix { inherit system pkgs minimal extraConfigurations; };
 with pkgs;

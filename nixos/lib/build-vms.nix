@@ -6,7 +6,8 @@
   # Nixpkgs, for qemu, lib and more
 , pkgs
 , # NixOS configuration to add to the VMs
-  extraConfigurations ? []
+  extraConfigurations ? let e = builtins.getEnv "NIXOS_EXTRA_MODULE_PATH";
+                        in if e == "" then [] else [(import e)]
 }:
 
 with pkgs.lib;
@@ -37,9 +38,9 @@ rec {
           ../modules/testing/test-instrumentation.nix # !!! should only get added for automated test runs
           { key = "no-manual"; documentation.nixos.enable = false; }
           { key = "qemu"; system.build.qemu = qemu; }
-        ] ++ optional minimal ../modules/testing/minimal-kernel.nix
-          ++ extraConfigurations;
+        ] ++ optional minimal ../modules/testing/minimal-kernel.nix;
       extraArgs = { inherit nodes; };
+      extraModules = extraConfigurations;
     };
 
 
