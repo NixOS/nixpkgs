@@ -169,7 +169,6 @@ def write_secureboot_entry(profile, generation, machine_id):
 
         os.rename(entry_tmp, entry_file)
         os.unlink(tmp_path)
-        os.unlink(kernel_param_file)
 
 def sign_path(src, output):
     subprocess.check_call([
