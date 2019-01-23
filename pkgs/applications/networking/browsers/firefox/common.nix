@@ -10,7 +10,7 @@
 , hunspell, libevent, libstartup_notification, libvpx
 , icu, libpng, jemalloc, glib
 , autoconf213, which, gnused, cargo, rustc, llvmPackages
-, rust-cbindgen, rust-cbindgen_0_6_7, nodejs, rust_1_29
+, rust-cbindgen, rust-cbindgen_0_6_7, nodejs, rust_1_31
 , debugBuild ? false
 
 ### optionals
@@ -127,7 +127,7 @@ stdenv.mkDerivation (rec {
   nativeBuildInputs =
     [ autoconf213 which gnused pkgconfig perl python2 ]
     ++ (if (lib.versionAtLeast version "63") then [
-      nodejs rust_1_29.rustc rust_1_29.cargo
+      nodejs rust_1_31.rustc rust_1_31.cargo
     ] else [ cargo rustc ])
     ++ (if (lib.versionAtLeast version "64") then [
       rust-cbindgen_0_6_7
