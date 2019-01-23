@@ -29,11 +29,20 @@ let
     extraInputs =
       lib.optional (lib.any pkgNeedsPython splitBin.wrong) python
       ++ lib.optional (lib.any pkgNeedsRuby splitBin.wrong) ruby;
+
+    latexindentPerlPackages = with perlPackages;
+      lib.closePropagation [
+        FileHomeDir LogDispatch LogLog4perl UnicodeLineBreak YAMLTiny
+      ];
+    latexindentExtraPerl5Lib =
+      lib.makeSearchPath perlPackages.perl.libPrefix latexindentPerlPackages;
   };
 
   mkUniquePkgs = pkgs: fastUnique (a: b: a < b) # highlighting hack: >
     # here we deal with those dummy packages needed for hyphenation filtering
     (map (p: if lib.isDerivation p then p.outPath else "") pkgs);
+
+  inherit (perlPackages) perl;
 
 in buildEnv {
   name = "texlive-${extraName}-${bin.texliveYear}";
@@ -151,11 +160,16 @@ in buildEnv {
       # skip simple local symlinks; mktexfmt in particular
       echo "$target" | grep / > /dev/null || continue;
 
+      local EXTRA_PERL5LIB=
+      if [[ "$link" == *"latexindent"* ]]; then
+        EXTRA_PERL5LIB=":${pkgList.latexindentExtraPerl5Lib}"
+      fi
+
       echo -n "Wrapping '$link'"
       rm "$link"
       makeWrapper "$target" "$link" \
         --prefix PATH : "$out/bin:${perl}/bin" \
-        --prefix PERL5LIB : "$out/share/texmf/scripts/texlive"
+        --prefix PERL5LIB : "$out/share/texmf/scripts/texlive$EXTRA_PERL5LIB"
 
       # avoid using non-nix shebang in $target by calling interpreter
       if [[ "$(head -c 2 "$target")" = "#!" ]]; then
