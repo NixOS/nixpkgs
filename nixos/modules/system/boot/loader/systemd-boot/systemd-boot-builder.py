@@ -119,7 +119,7 @@ def write_secureboot_entry(profile, generation, machine_id):
     else:
         entry_file = "@efiSysMountPoint@/loader/entries/nixos-generation-%d.conf" % (generation)
         efi_file_relative = "EFI/nixos/nixos-generation-%d.efi" % (generation)
-        efi_file = "@efiSysMountPoint@/%s" % (efi_file_relative)
+    efi_file = "@efiSysMountPoint@/%s" % (efi_file_relative)
 
     with tempfile.TemporaryDirectory() as tmpdir:
         append_initrd_secrets = profile_path(profile, generation, "append-initrd-secrets")
