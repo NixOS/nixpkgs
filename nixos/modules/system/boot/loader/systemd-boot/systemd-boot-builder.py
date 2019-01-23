@@ -116,7 +116,6 @@ def write_secureboot_entry(profile, generation, machine_id):
     if profile:
         entry_file = "@efiSysMountPoint@/loader/entries/nixos-%s-generation-%d.conf" % (profile, generation)
         efi_file_relative = "EFI/nixos/nixos-%s-generation-%d.efi" % (profile, generation)
-        efi_file = "@efiSysMountPoint@/%s" % (efi_file_relative)
     else:
         entry_file = "@efiSysMountPoint@/loader/entries/nixos-generation-%d.conf" % (generation)
         efi_file_relative = "EFI/nixos/nixos-generation-%d.efi" % (generation)
