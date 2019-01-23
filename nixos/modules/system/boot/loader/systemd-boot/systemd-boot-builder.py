@@ -168,7 +168,6 @@ def write_secureboot_entry(profile, generation, machine_id):
                 fp.write("machine-id %s\n" % machine_id)
 
         os.rename(entry_tmp, entry_file)
-        os.unlink(tmp_path)
 
 def sign_path(src, output):
     subprocess.check_call([
