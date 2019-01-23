@@ -110,15 +110,13 @@ def write_entry(profile, generation, machine_id):
             f.write("machine-id %s\n" % machine_id)
     os.rename(tmp_path, entry_file)
 
-def write_secureboot_entry(profile, generation, machine_id):
+def sb_efi_file_name_relative(profile, generation):
     if profile:
-        entry_file = "@efiSysMountPoint@/loader/entries/nixos-%s-generation-%d.conf" % (profile, generation)
-        efi_file_relative = "EFI/nixos/nixos-%s-generation-%d.efi" % (profile, generation)
+        return "efi/nixos/nixos-%s-generation-%d.efi" % (profile, generation)
     else:
-        entry_file = "@efiSysMountPoint@/loader/entries/nixos-generation-%d.conf" % (generation)
-        efi_file_relative = "EFI/nixos/nixos-generation-%d.efi" % (generation)
-    efi_file = "@efiSysMountPoint@/%s" % (efi_file_relative)
+        return "efi/nixos/nixos-generation-%d.efi" % (generation)
 
+def make_signed_efi(profile, generation, efi_file):
     with tempfile.TemporaryDirectory() as tmpdir:
         append_initrd_secrets = profile_path(profile, generation, "append-initrd-secrets")
         if os.path.exists(append_initrd_secrets):
@@ -153,18 +151,34 @@ def write_secureboot_entry(profile, generation, machine_id):
         ])
         sign_path(tmp_path, efi_file)
 
-        entry_tmp = entry_file + ".tmp";
-        with open(entry_tmp, 'w') as fp:
-            fp.write(SECURE_BOOT_ENTRY.format(
-                profile=" [" + profile + "]" if profile else "",
-                generation=generation,
-                efi=efi_file_relative,
-                description=describe_generation(generation_dir)
-            ))
-            if machine_id is not None:
-                fp.write("machine-id %s\n" % machine_id)
 
-        os.rename(entry_tmp, entry_file)
+def write_secureboot_entry(profile, generation, machine_id):
+    if profile:
+        entry_file = "@efiSysMountPoint@/loader/entries/nixos-%s-generation-%d.conf" % (profile, generation)
+    else:
+        entry_file = "@efiSysMountPoint@/loader/entries/nixos-generation-%d.conf" % (generation)
+    efi_file_relative = sb_efi_file_name_relative(profile, generation)
+    efi_file = "@efiSysMountPoint@/%s" % (efi_file_relative)
+
+    try:
+        sbverify(efi_file)
+    except:
+        make_signed_efi(profile, generation, efi_file)
+
+    generation_dir = os.readlink(system_dir(profile, generation))
+
+    entry_tmp = entry_file + ".tmp";
+    with open(entry_tmp, 'w') as fp:
+        fp.write(SECURE_BOOT_ENTRY.format(
+            profile=" [" + profile + "]" if profile else "",
+            generation=generation,
+            efi=efi_file_relative,
+            description=describe_generation(generation_dir)
+        ))
+        if machine_id is not None:
+            fp.write("machine-id %s\n" % machine_id)
+
+    os.rename(entry_tmp, entry_file)
 
 def sign_path(src, output):
     with tempfile.TemporaryDirectory() as tmpdir:
@@ -181,15 +195,19 @@ def sign_path(src, output):
         # shutil.move over os.rename.
         shutil.move(f"{tmpdir}/signed", f"{output}.tmp")
         try:
-            subprocess.check_call([
-                "@sbsigntool@/bin/sbverify",
-                "--cert", "@signingCertificate@",
-                f"{output}.tmp",
-            ])
+            sbverify(f"{output}.tmp")
             os.rename(f"{output}.tmp", output)
         except:
             os.unlink(f"{output}.tmp")
             raise
+
+def sbverify(filename):
+    subprocess.check_call([
+        "@sbsigntool@/bin/sbverify",
+        "--cert", "@signingCertificate@",
+        filename,
+    ])
+
 
 def mkdir_p(path):
     try:
@@ -217,6 +235,8 @@ def remove_old_entries(gens):
     for gen in gens:
         known_paths.append(copy_from_profile(*gen, "kernel", True))
         known_paths.append(copy_from_profile(*gen, "initrd", True))
+        known_paths.append("@efiSysMountPoint@/%s" % sb_efi_file_name_relative(*gen))
+
     for path in glob.iglob("@efiSysMountPoint@/loader/entries/nixos*-generation-[1-9]*.conf"):
         try:
             if rex_profile.match(path):
