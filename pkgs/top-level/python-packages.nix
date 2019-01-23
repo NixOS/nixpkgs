@@ -174,6 +174,8 @@ in {
 
   asana = callPackage ../development/python-modules/asana { };
 
+  asciimatics = callPackage ../development/python-modules/asciimatics { };
+
   ase = callPackage ../development/python-modules/ase { };
 
   asn1crypto = callPackage ../development/python-modules/asn1crypto { };
