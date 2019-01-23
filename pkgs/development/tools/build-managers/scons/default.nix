@@ -9,6 +9,6 @@ in {
   };
   scons_latest = mkScons {
     version = "3.0.4";
-    sha256 = "1jzvcbn77ayibd7zhzs7vz316f34mxb8akfrxccjni6i09mpv96n";
+    sha256 = "06lv3pmdz5l23rx3kqsi1k712bdl36i942hgbjh209s94mpb7f72";
   };
 }
