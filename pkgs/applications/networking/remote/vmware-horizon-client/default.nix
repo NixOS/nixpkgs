@@ -13,7 +13,7 @@ let
     };
 
     vmwareBundleUnpacker = fetchurl {
-        url = https://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/eclass/vmware-bundle.eclass;
+        url = https://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/eclass/vmware-bundle.eclass?revision=1.2;
         sha256 = "d8794c22229afdeb698dae5908b7b2b3880e075b19be38e0b296bb28f4555163";
     };
 
