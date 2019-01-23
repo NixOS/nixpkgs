@@ -169,13 +169,29 @@ def write_secureboot_entry(profile, generation, machine_id):
         os.rename(entry_tmp, entry_file)
 
 def sign_path(src, output):
-    subprocess.check_call([
-        "@sbsigntool@/bin/sbsign",
-        "--key", "@signingKey@",
-        "--cert", "@signingCertificate@",
-        "--output", output,
-        src
-    ])
+    with tempfile.TemporaryDirectory() as tmpdir:
+        print(f"Signing {output}")
+        subprocess.check_call([
+            "@sbsigntool@/bin/sbsign",
+            "--key", "@signingKey@",
+            "--cert", "@signingCertificate@",
+            "--output", f"{tmpdir}/signed",
+            src
+        ])
+
+        # Very likely to move across filesystems, so use
+        # shutil.move over os.rename.
+        shutil.move(f"{tmpdir}/signed", f"{output}.tmp")
+        try:
+            subprocess.check_call([
+                "@sbsigntool@/bin/sbverify",
+                "--cert", "@signingCertificate@",
+                f"{output}.tmp",
+            ])
+            os.rename(f"{output}.tmp", output)
+        except:
+            os.unlink(f"{output}.tmp")
+            raise
 
 def mkdir_p(path):
     try:
