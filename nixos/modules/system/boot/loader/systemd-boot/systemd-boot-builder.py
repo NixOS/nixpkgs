@@ -136,7 +136,7 @@ def write_secureboot_entry(profile, generation, machine_id):
             initrd = profile_path(profile, generation, "initrd"),
 
         generation_dir = os.readlink(system_dir(profile, generation))
-        tmp_path = "%s.tmp" % (efi_file)
+        tmp_path = "%s/efistub" % (tmpdir)
 
         kernel_params = "systemConfig=%s init=%s/init " % (generation_dir, generation_dir)
         with open("%s/kernel-params" % (generation_dir)) as params_file:
