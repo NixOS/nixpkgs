@@ -122,54 +122,54 @@ def write_secureboot_entry(profile, generation, machine_id):
         efi_file_relative = "EFI/nixos/nixos-generation-%d.efi" % (generation)
         efi_file = "@efiSysMountPoint@/%s" % (efi_file_relative)
 
-    initrd = "%s.initrd.tmp" % (efi_file)
-    shutil.copyfile(
-        profile_path(profile, generation, "initrd"),
-        initrd
-    )
-
-    try:
+    with tempfile.TemporaryDirectory() as tmpdir:
         append_initrd_secrets = profile_path(profile, generation, "append-initrd-secrets")
-        subprocess.check_call([append_initrd_secrets, "@efiSysMountPoint@%s" % (initrd)])
-    except FileNotFoundError:
-        pass
+        if os.path.exists(append_initrd_secrets):
+            initrd = f"{tmpdir}/initrd"
+            shutil.copyfile(
+                profile_path(profile, generation, "initrd"),
+                initrd
+            )
 
-    generation_dir = os.readlink(system_dir(profile, generation))
-    tmp_path = "%s.tmp" % (efi_file)
+            subprocess.check_call([append_initrd_secrets, "@efiSysMountPoint@%s" % (initrd)])
+        else:
+            initrd = profile_path(profile, generation, "initrd"),
 
-    kernel_params = "systemConfig=%s init=%s/init " % (generation_dir, generation_dir)
-    with open("%s/kernel-params" % (generation_dir)) as params_file:
-        kernel_params = kernel_params + params_file.read()
-    kernel_param_file = "%s.kernel_params.tmp" % (efi_file)
-    with open(kernel_param_file, 'w') as f:
-        f.write(kernel_params)
+        generation_dir = os.readlink(system_dir(profile, generation))
+        tmp_path = "%s.tmp" % (efi_file)
 
-    subprocess.check_call([
-        "@binutils@/bin/objcopy",
-        "--add-section", ".osrel={}/etc/os-release".format(generation_dir), "--change-section-vma", ".osrel=0x20000",
-        "--add-section", ".cmdline={}".format(kernel_param_file),           "--change-section-vma", ".cmdline=0x30000",
-        "--add-section", ".linux={}/kernel".format(generation_dir),         "--change-section-vma", ".linux=0x40000",
-        "--add-section", ".initrd={}".format(initrd),                       "--change-section-vma", ".initrd=0x3000000",
-        "{}/sw/lib/systemd/boot/efi/linuxx64.efi.stub".format(generation_dir),
-        tmp_path
-    ])
-    sign_path(tmp_path, efi_file)
+        kernel_params = "systemConfig=%s init=%s/init " % (generation_dir, generation_dir)
+        with open("%s/kernel-params" % (generation_dir)) as params_file:
+            kernel_params = kernel_params + params_file.read()
+        kernel_param_file = "%s.kernel_params.tmp" % (efi_file)
+        with open(kernel_param_file, 'w') as f:
+            f.write(kernel_params)
 
-    entry_tmp = entry_file + ".tmp";
-    with open(entry_tmp, 'w') as fp:
-        fp.write(SECURE_BOOT_ENTRY.format(
-            profile=" [" + profile + "]" if profile else "",
-            generation=generation,
-            efi=efi_file_relative,
-            description=describe_generation(generation_dir)
-        ))
-        if machine_id is not None:
-            fp.write("machine-id %s\n" % machine_id)
+        subprocess.check_call([
+            "@binutils@/bin/objcopy",
+            "--add-section", ".osrel={}/etc/os-release".format(generation_dir), "--change-section-vma", ".osrel=0x20000",
+            "--add-section", ".cmdline={}".format(kernel_param_file),           "--change-section-vma", ".cmdline=0x30000",
+            "--add-section", ".linux={}/kernel".format(generation_dir),         "--change-section-vma", ".linux=0x40000",
+            "--add-section", ".initrd={}".format(initrd),                       "--change-section-vma", ".initrd=0x3000000",
+            "{}/sw/lib/systemd/boot/efi/linuxx64.efi.stub".format(generation_dir),
+            tmp_path
+        ])
+        sign_path(tmp_path, efi_file)
 
-    os.rename(entry_tmp, entry_file)
-    os.unlink(tmp_path)
-    os.unlink(kernel_param_file)
-    os.unlink(initrd)
+        entry_tmp = entry_file + ".tmp";
+        with open(entry_tmp, 'w') as fp:
+            fp.write(SECURE_BOOT_ENTRY.format(
+                profile=" [" + profile + "]" if profile else "",
+                generation=generation,
+                efi=efi_file_relative,
+                description=describe_generation(generation_dir)
+            ))
+            if machine_id is not None:
+                fp.write("machine-id %s\n" % machine_id)
+
+        os.rename(entry_tmp, entry_file)
+        os.unlink(tmp_path)
+        os.unlink(kernel_param_file)
 
 def sign_path(src, output):
     subprocess.check_call([
