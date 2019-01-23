@@ -141,7 +141,7 @@ def write_secureboot_entry(profile, generation, machine_id):
         kernel_params = "systemConfig=%s init=%s/init " % (generation_dir, generation_dir)
         with open("%s/kernel-params" % (generation_dir)) as params_file:
             kernel_params = kernel_params + params_file.read()
-        kernel_param_file = "%s.kernel_params.tmp" % (efi_file)
+        kernel_param_file = "%s/kernel_params" % tmpdir
         with open(kernel_param_file, 'w') as f:
             f.write(kernel_params)
 
