@@ -71,7 +71,8 @@ in {
 
     # The config is specified using a Nix attribute set,
     # but then converted from JSON to YAML
-    $hass->succeed("test -f ${configDir}/configuration.yaml");
+    $hass->succeed("test -L ${configDir}/configuration.yaml");
+    $hass->succeed("test -L ${configDir}/ui-lovelace.yaml");
 
     # Check that Home Assistant's web interface and API can be reached
     $hass->waitForOpenPort(8123);

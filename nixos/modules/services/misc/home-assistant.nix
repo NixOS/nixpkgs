@@ -6,12 +6,18 @@ let
   cfg = config.services.home-assistant;
 
   # cfg.config != null can be assumed here
-  configFile = pkgs.writeText "configuration.json"
+  configJSON = pkgs.writeText "configuration.json"
     (builtins.toJSON (if cfg.applyDefaultConfig then
     (recursiveUpdate defaultConfig cfg.config) else cfg.config));
+  configFile = pkgs.runCommand "configuration.yaml" { } ''
+    ${pkgs.remarshal}/bin/json2yaml -i ${configJSON} -o $out
+  '';
 
-  lovelaceConfigFile = pkgs.writeText "ui-lovelace.json"
+  lovelaceConfigJSON = pkgs.writeText "ui-lovelace.json"
     (builtins.toJSON cfg.lovelaceConfig);
+  lovelaceConfigFile = pkgs.runCommand "ui-lovelace.yaml" { } ''
+    ${pkgs.remarshal}/bin/json2yaml -i ${lovelaceConfigJSON} -o $out
+  '';
 
   availableComponents = pkgs.home-assistant.availableComponents;
 
@@ -175,15 +181,11 @@ in {
       description = "Home Assistant";
       after = [ "network.target" ];
       preStart = optionalString (cfg.config != null) ''
-        config="${cfg.configDir}/configuration.yaml"
-        rm -f $config
-        ${pkgs.remarshal}/bin/json2yaml -i ${configFile} -o $config
-        chmod 444 $config
+        rm -f "${cfg.configDir}/configuration.yaml"
+        ln -s ${configFile} "${cfg.configDir}/configuration.yaml"
       '' + optionalString (cfg.lovelaceConfig != null) ''
-        config="${cfg.configDir}/ui-lovelace.yaml"
-        rm -f $config
-        ${pkgs.remarshal}/bin/json2yaml -i ${lovelaceConfigFile} -o $config
-        chmod 444 $config
+        rm -f "${cfg.configDir}/ui-lovelace.yaml"
+        ln -s ${lovelaceConfigFile} "${cfg.configDir}/ui-lovelace.yaml"
       '';
       serviceConfig = {
         ExecStart = "${package}/bin/hass --config '${cfg.configDir}'";
