@@ -8,7 +8,10 @@ let
   # cfg.config != null can be assumed here
   configFile = pkgs.writeText "configuration.json"
     (builtins.toJSON (if cfg.applyDefaultConfig then
-    (lib.recursiveUpdate defaultConfig cfg.config) else cfg.config));
+    (recursiveUpdate defaultConfig cfg.config) else cfg.config));
+
+  lovelaceConfigFile = pkgs.writeText "ui-lovelace.json"
+    (builtins.toJSON cfg.lovelaceConfig);
 
   availableComponents = pkgs.home-assistant.availableComponents;
 
@@ -45,6 +48,8 @@ let
   defaultConfig = {
     homeassistant.time_zone = config.time.timeZone;
     http.server_port = (toString cfg.port);
+  } // optionalAttrs (cfg.lovelaceConfig != null) {
+    lovelace.mode = "yaml";
   };
 
 in {
@@ -99,6 +104,31 @@ in {
       '';
     };
 
+    lovelaceConfig = mkOption {
+      default = null;
+      type = with types; nullOr attrs;
+      # from https://www.home-assistant.io/lovelace/yaml-mode/
+      example = literalExample ''
+        {
+          title = "My Awesome Home";
+          views = [ {
+            title = "Example";
+            cards = [ {
+              type = "markdown";
+              title = "Lovelace";
+              content = "Welcome to your **Lovelace UI**.";
+            } ];
+          } ];
+        }
+      '';
+      description = ''
+        Your <filename>ui-lovelace.yaml</filename> as a Nix attribute set.
+        Setting this option will automatically add
+        <literal>lovelace.mode = "yaml";</literal> to your <option>config</option>.
+        Beware that setting this option will delete your previous <filename>ui-lovelace.yaml</filename>
+      '';
+    };
+
     package = mkOption {
       default = pkgs.home-assistant;
       defaultText = "pkgs.home-assistant";
@@ -144,10 +174,15 @@ in {
     systemd.services.home-assistant = {
       description = "Home Assistant";
       after = [ "network.target" ];
-      preStart = lib.optionalString (cfg.config != null) ''
-        config=${cfg.configDir}/configuration.yaml
+      preStart = optionalString (cfg.config != null) ''
+        config="${cfg.configDir}/configuration.yaml"
         rm -f $config
         ${pkgs.remarshal}/bin/json2yaml -i ${configFile} -o $config
+        chmod 444 $config
+      '' + optionalString (cfg.lovelaceConfig != null) ''
+        config="${cfg.configDir}/ui-lovelace.yaml"
+        rm -f $config
+        ${pkgs.remarshal}/bin/json2yaml -i ${lovelaceConfigFile} -o $config
         chmod 444 $config
       '';
       serviceConfig = {
