@@ -4394,6 +4394,10 @@
     email = "me@tadeo.ca";
     github = "tadeokondrak";
     name = "Tadeo Kondrak";
+    keys = [{
+      longkeyid = "ed25519/0xFBE607FCC49516D3";
+      fingerprint = "0F2B C0C7 E77C 5B42 AC5B  4C18 FBE6 07FC C495 16D3";
+    }];
   };
   tadfisher = {
     email = "tadfisher@gmail.com";
