@@ -1176,6 +1176,11 @@
     github = "dje4321";
     name = "Dje4321";
   };
+  dlifanov = {
+    email = "dmitriy.lifanov1@gmail.com";
+    github = "dlifanov";
+    name = "Dmitriy Lifanov";
+  };
   dmalikov = {
     email = "malikov.d.y@gmail.com";
     github = "dmalikov";

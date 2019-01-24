@@ -6,9 +6,15 @@ let
   cfg = config.services.grafana;
   opt = options.services.grafana;
 
+  dashboardJson = builtins.toJSON(builtins.fromJSON(cfg.dashboardPastedJson));
+  dashboardFile = pkgs.writeText "dashboard.json" dashboardJson;
+  dashboardConfig = pkgs.writeText "dashboard_conf.yml" cfg.dashboardConfigText;
+  datasourceConfig = pkgs.writeText "datasource_conf.yml" cfg.datasourceConfigText;
+
   envOptions = {
     PATHS_DATA = cfg.dataDir;
     PATHS_PLUGINS = "${cfg.dataDir}/plugins";
+    PATHS_PROVISIONING = "${cfg.dataDir}/provisioning";
     PATHS_LOGS = "${cfg.dataDir}/log";
 
     SERVER_PROTOCOL = cfg.protocol;
@@ -77,6 +83,64 @@ in {
       default = "localhost";
       type = types.str;
     };
+
+    datasourceConfigText = mkOption {
+      type = types.nullOr types.lines;
+      default = null;
+      description = ''
+        Datasource configuration as YAML text. If non-null, this option
+        defines the text that is written to datasource_conf.yml.
+        Avoid two apostrophes in a row inside YAML as empty value
+        or replace to double quote, because it interfere with Nix syntax!
+        Example:
+
+        datasources:
+          - name: Prometheus
+            type: prometheus
+            access: proxy
+            orgId: 1
+            url: http://localhost:9090
+            isDefault:
+            jsonData:
+              graphiteVersion: '1.1'
+            version: 1
+            editable: false
+      '';
+    };
+
+    dashboardPastedJson = mkOption {
+      type = types.nullOr types.lines;
+      default = null;
+      description = ''
+        Dashboard configuration as JSON text. If non-null, this option
+        defines the text that is written to dashboard.json.
+      '';
+    };
+
+    dashboardConfigText = mkOption {
+      type = types.nullOr types.lines;
+      default = null;
+      description = ''
+        Dashboard configuration as YAML text. If non-null, this option
+        defines the text that is written to dashboard_conf.yml.
+        Avoid two apostrophes in a row inside YAML as empty value
+        or replace to double quote, because it interfere with Nix syntax!
+        Example:
+
+        apiVersion: 1
+
+        providers:
+        - name: 'default'
+          orgId: 1
+          folder: ""
+          type: file
+          disableDeletion: false
+          updateIntervalSeconds: 10 #how often Grafana will scan for changed dashboards
+          options:
+            path: /var/lib/grafana/provisioning/dashboards
+      '';
+    };
+
 
     rootUrl = mkOption {
       description = "Full public facing url.";
@@ -366,10 +430,15 @@ in {
         User = "grafana";
       };
       preStart = ''
+        mkdir -p ${cfg.dataDir}/provisioning/{dashboards,datasources}
+        cat ${datasourceConfig} > ${cfg.dataDir}/provisioning/datasources/datasource_conf.yml
+        cat ${dashboardConfig} > ${cfg.dataDir}/provisioning/dashboards/dashboard_conf.yml
+        cat ${dashboardFile} > ${cfg.dataDir}/provisioning/dashboards/dashboard.json
         ln -fs ${cfg.package}/share/grafana/conf ${cfg.dataDir}
+        ln -fs ${cfg.package}/share/grafana/public ${cfg.dataDir}
         ln -fs ${cfg.package}/share/grafana/tools ${cfg.dataDir}
       '';
-    };
+  };
 
     users.users.grafana = {
       uid = config.ids.uids.grafana;
