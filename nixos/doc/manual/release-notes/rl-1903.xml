@@ -23,6 +23,38 @@
     The default Python 3 interpreter is now CPython 3.7 instead of CPython 3.6.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     Added the Pantheon desktop environment.
+     It can be enabled through <varname>services.xserver.desktopManager.pantheon.enable</varname>.
+    </para>
+    <note>
+     <para>
+      <varname>services.xserver.desktopManager.pantheon</varname> default enables lightdm
+      as a display manager and using Pantheon's greeter.
+     </para>
+     <para>
+      This is because of limitations with the screenlocking implementation, whereas the
+      screenlocker would be non-functional without it.
+     </para>
+     <para>
+      Because of that it is recommended to retain this precaution, however if you'd like to change this set:
+     </para>
+     <itemizedlist>
+      <listitem>
+       <para>
+        <option>services.xserver.displayManager.lightdm.enable</option>
+       </para>
+      </listitem>
+      <listitem>
+       <para>
+        <option>services.xserver.displayManager.lightdm.greeters.pantheon.enable</option>
+       </para>
+      </listitem>
+     </itemizedlist>
+     <para>to <literal>false</literal> and enable your preferred display manager.</para>
+    </note>
+   </listitem>
   </itemizedlist>
  </section>
 
