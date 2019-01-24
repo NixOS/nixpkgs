@@ -1345,6 +1345,15 @@ in
 
   duperemove = callPackage ../tools/filesystems/duperemove { };
 
+  dvc = callPackage ../applications/version-management/dvc { };
+
+  dvc-with-remotes = callPackage ../applications/version-management/dvc {
+    enableGoogle = true;
+    enableAWS = true;
+    enableAzure = true;
+    enableSSH = true;
+  };
+
   dylibbundler = callPackage ../tools/misc/dylibbundler { };
 
   dynamic-colors = callPackage ../tools/misc/dynamic-colors { };
