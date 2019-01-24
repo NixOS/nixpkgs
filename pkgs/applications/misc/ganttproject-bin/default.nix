@@ -3,10 +3,10 @@
 
 stdenv.mkDerivation rec {
   name = "ganttproject-bin-${version}";
-  version = "2.7.2";
+  version = "2.8.9";
 
-  src = let build = "r1954"; in fetchzip {
-    sha256 = "0l655w6n88j7klz56af8xkpiv1pwlkfl5x1d33sqv9dnyisyw2hc";
+  src = let build = "r2335"; in fetchzip {
+    sha256 = "1fmfrsy9z2nff0bxwj7xsfbwkb9y1dmssvy5wkmf9ngihyzj3w1k";
     url = "https://dl.ganttproject.biz/ganttproject-${version}/"
         + "ganttproject-${version}-${build}.zip";
   };
@@ -37,9 +37,6 @@ stdenv.mkDerivation rec {
       --set JAVA_HOME "${jre}"
     mv -v "$out/share/ganttproject/ganttproject" "$out/bin"
 
-    install -v -Dm644 \
-      plugins/net.sourceforge.ganttproject/data/resources/icons/ganttproject.png \
-      "$out/share/pixmaps/ganttproject.png"
     cp -rv "${desktopItem}/share/applications" "$out/share"
   '';
 
