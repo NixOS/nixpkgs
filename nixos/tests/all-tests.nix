@@ -178,6 +178,7 @@ in
   quagga = handleTest ./quagga.nix {};
   quake3 = handleTest ./quake3.nix {};
   rabbitmq = handleTest ./rabbitmq.nix {};
+  radarr = handleTest ./radarr.nix {};
   radicale = handleTest ./radicale.nix {};
   redmine = handleTest ./redmine.nix {};
   roundcube = handleTest ./roundcube.nix {};
