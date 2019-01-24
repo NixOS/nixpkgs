@@ -418,6 +418,8 @@ in {
 
   jwcrypto = callPackage ../development/python-modules/jwcrypto { };
 
+  kconfiglib = callPackage ../development/python-modules/kconfiglib { };
+
   lammps-cython = callPackage ../development/python-modules/lammps-cython {
     mpi = pkgs.openmpi;
   };
