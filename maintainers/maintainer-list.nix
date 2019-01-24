@@ -867,6 +867,11 @@
     github = "cko";
     name = "Christine Koppelt";
   };
+  clacke = {
+    email = "claes.wallin@greatsinodevelopment.com";
+    github = "clacke";
+    name = "Claes Wallin";
+  };
   cleverca22 = {
     email = "cleverca22@gmail.com";
     github = "cleverca22";
