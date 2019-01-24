@@ -2886,6 +2886,11 @@
     email = "joerg@thalheim.io";
     github = "mic92";
     name = "Jörg Thalheim";
+    keys = [{
+      # compare with https://keybase.io/Mic92
+      longkeyid = "rsa4096/0x003F2096411B5F92";
+      fingerprint = "3DEE 1C55 6E1C 3DC5 54F5  875A 003F 2096 411B 5F92";
+    }];
   };
   michaelpj = {
     email = "michaelpj@gmail.com";
