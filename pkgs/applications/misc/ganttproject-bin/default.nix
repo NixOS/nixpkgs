@@ -1,5 +1,6 @@
-{ stdenv, fetchzip, makeDesktopItem, makeWrapper
-, jre }:
+{ stdenv, lib, fetchzip, makeDesktopItem, makeWrapper
+, jre
+}:
 
 stdenv.mkDerivation rec {
   name = "ganttproject-bin-${version}";
@@ -28,13 +29,19 @@ stdenv.mkDerivation rec {
       categories = "Office;Application;";
     };
 
+    javaOptions = [
+      "-Dawt.useSystemAAFontSettings=on"
+    ];
+
   in ''
     mkdir -pv "$out/share/ganttproject"
     cp -rv *  "$out/share/ganttproject"
 
     mkdir -pv "$out/bin"
     wrapProgram "$out/share/ganttproject/ganttproject" \
-      --set JAVA_HOME "${jre}"
+      --set JAVA_HOME "${jre}" \
+      --set _JAVA_OPTIONS "${builtins.toString javaOptions}"
+
     mv -v "$out/share/ganttproject/ganttproject" "$out/bin"
 
     cp -rv "${desktopItem}/share/applications" "$out/share"
