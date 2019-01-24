@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, substituteAll, git, gitdb2, mock, nose, ddt }:
+{ lib, buildPythonPackage, fetchPypi, isPy27, substituteAll, git, gitdb2, mock, nose, ddt }:
 
 buildPythonPackage rec {
   version = "2.1.11";
@@ -16,8 +16,8 @@ buildPythonPackage rec {
     })
   ];
 
-  checkInputs = [ mock nose ddt ];
-  propagatedBuildInputs = [ gitdb2 ];
+  checkInputs = [ nose ] ++ lib.optional isPy27 mock;
+  propagatedBuildInputs = [ gitdb2 ddt ];
 
   # Tests require a git repo
   doCheck = false;
