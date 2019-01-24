@@ -11,12 +11,15 @@ stdenv.mkDerivation rec {
     sha256 = "1mpmxkzssgzqh9z263y8vk40dayw32kah66sb8ja7yw22rm7f4zf";
   };
 
-  buildInputs = [
-    cairo
-    libjpeg
+  nativeBuildInputs = [
     meson
     ninja
     pkgconfig
+  ];
+
+  buildInputs = [
+    cairo
+    libjpeg
     wayland
     wayland-protocols
   ];
