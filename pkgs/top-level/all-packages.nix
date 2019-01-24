@@ -1493,6 +1493,8 @@ in
     pythonPackages = python3Packages;
   };
 
+  grim = callPackage ../tools/graphics/grim { };
+
   gringo = callPackage ../tools/misc/gringo { };
 
   grobi = callPackage ../tools/X11/grobi { };
