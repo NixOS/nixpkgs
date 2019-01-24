@@ -2,12 +2,23 @@
 , buildPythonPackage
 , fetchPypi
 , python
+, pythonAtLeast
 , regex
 }:
 
 buildPythonPackage rec {
   pname = "pythonparser";
   version = "1.3";
+
+  # Under 3.7 a couple of tests fail with:
+  #   NotImplementedError: pythonparser.lexer.Lexer cannot lex Python (3, 7)
+  # Disable for Python 3.7 and above.
+
+  # According to https://github.com/m-labs/pythonparser/issues/20 3.6 support
+  # is incomplete, but it does build and test, and can be run under 3.6 to
+  # parse 3.5-compatible source.
+
+  disabled = pythonAtLeast "3.7";
 
   src = fetchPypi {
     inherit pname version;
