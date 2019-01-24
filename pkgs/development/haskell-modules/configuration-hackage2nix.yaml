@@ -5447,7 +5447,6 @@ dont-distribute-packages:
   hatex-guide:                                    [ i686-linux, x86_64-linux, x86_64-darwin ]
   HaTeX-meta:                                     [ i686-linux, x86_64-linux, x86_64-darwin ]
   HaTeX-qq:                                       [ i686-linux, x86_64-linux, x86_64-darwin ]
-  HaTeX:                                          [ i686-linux, x86_64-linux, x86_64-darwin ]
   hats:                                           [ i686-linux, x86_64-linux, x86_64-darwin ]
   hatt:                                           [ i686-linux, x86_64-linux, x86_64-darwin ]
   haven:                                          [ i686-linux, x86_64-linux, x86_64-darwin ]
