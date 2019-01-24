@@ -35,6 +35,12 @@ stdenv.mkDerivation rec {
     ln -s $out/bin/tclsh${release} $out/bin/tclsh
   '';
 
+  ${if stdenv.hostPlatform.libc == "glibc"
+    && stdenv.cc.isGNU then "NIX_LDFLAGS" else null
+   } = [
+    "-lgcc_s"
+  ];
+
   meta = with stdenv.lib; {
     description = "The Tcl scription language";
     homepage = http://www.tcl.tk/;
