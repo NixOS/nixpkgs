@@ -3604,6 +3604,14 @@
     email = "dev.primeos@gmail.com";
     github = "primeos";
     name = "Michael Weiss";
+    keys = [
+      { longkeyid = "ed25519/0x130826A6C2A389FD"; # Git only
+        fingerprint = "86A7 4A55 07D0 58D1 322E  37FD 1308 26A6 C2A3 89FD";
+      }
+      { longkeyid = "rsa3072/0xBCA9943DD1DF4C04"; # Email, etc.
+        fingerprint = "AF85 991C C950 49A2 4205  1933 BCA9 943D D1DF 4C04";
+      }
+    ];
   };
   Profpatsch = {
     email = "mail@profpatsch.de";
