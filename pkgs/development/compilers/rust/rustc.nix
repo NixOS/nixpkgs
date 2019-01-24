@@ -166,6 +166,8 @@ stdenv.mkDerivation {
   # https://github.com/rust-lang/rust/issues/30181
   # enableParallelBuilding = false;
 
+  requiredSystemFeatures = [ "big-parallel" ];
+
   meta = with stdenv.lib; {
     homepage = https://www.rust-lang.org/;
     description = "A safe, concurrent, practical language";
