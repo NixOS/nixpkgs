@@ -320,7 +320,7 @@ else
     escapeQuotes () { eval echo "$1"; }
     nixMap escapeQuotes "$names"
   else
-    echo 1>&2 "An error occurred while looking for attribute names. Are you sure that \`$option' exists?"
+    echo 1>&2 "An error occurred while looking for attribute names. Are you sure that '$option' exists?"
   fi
 fi
 
