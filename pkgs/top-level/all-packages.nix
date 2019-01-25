@@ -17959,7 +17959,7 @@ in
   librecad = callPackage ../applications/misc/librecad { };
 
   libreoffice = hiPrio libreoffice-still;
-  libreoffice-unwrapped = libreoffice.libreoffice;
+  libreoffice-unwrapped = libreoffice-still-unwrapped;
 
   libreoffice-args = {
     inherit (perlPackages) ArchiveZip IOCompress;
@@ -17981,20 +17981,26 @@ in
     };
   };
 
-  libreoffice-fresh = lowPrio (callPackage ../applications/office/libreoffice/wrapper.nix {
-    libreoffice = callPackage ../applications/office/libreoffice
-      (libreoffice-args // {
-      });
-  });
-  libreoffice-fresh-unwrapped = libreoffice-fresh.libreoffice;
+  libreoffice-fresh =
+    if stdenv.isDarwin
+    then libreoffice-fresh-unwrapped
+    else lowPrio (callPackage ../applications/office/libreoffice/wrapper.nix {
+      libreoffice = libreoffice-fresh-unwrapped;
+    });
+  libreoffice-fresh-unwrapped = callPackage ../applications/office/libreoffice
+    (libreoffice-args // {
+    });
 
-  libreoffice-still = lowPrio (callPackage ../applications/office/libreoffice/wrapper.nix {
-    libreoffice = callPackage ../applications/office/libreoffice/still.nix
-      (libreoffice-args // {
-          poppler = poppler_0_61;
-      });
-  });
-  libreoffice-still-unwrapped = libreoffice-still.libreoffice;
+  libreoffice-still =
+    if stdenv.isDarwin
+    then libreoffice-still-unwrapped
+    else lowPrio (callPackage ../applications/office/libreoffice/wrapper.nix {
+      libreoffice = libreoffice-still-unwrapped;
+    });
+  libreoffice-still-unwrapped = callPackage ../applications/office/libreoffice/still.nix
+    (libreoffice-args // {
+        poppler = poppler_0_61;
+    });
 
   libvmi = callPackage ../development/libraries/libvmi { };
 
