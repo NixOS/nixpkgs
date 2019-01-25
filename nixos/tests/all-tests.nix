@@ -107,6 +107,7 @@ in
   initrdNetwork = handleTest ./initrd-network.nix {};
   installer = handleTest ./installer.nix {};
   ipv6 = handleTest ./ipv6.nix {};
+  jackett = handleTest ./jackett.nix {};
   jenkins = handleTest ./jenkins.nix {};
   #kafka = handleTest ./kafka.nix {}; # broken since openjdk: 8u181 -> 8u192
   kerberos = handleTest ./kerberos/default.nix {};
@@ -120,6 +121,7 @@ in
   latestKernel.login = handleTest ./login.nix { latestKernel = true; };
   ldap = handleTest ./ldap.nix {};
   leaps = handleTest ./leaps.nix {};
+  lidarr = handleTest ./lidarr.nix {};
   #lightdm = handleTest ./lightdm.nix {};
   login = handleTest ./login.nix {};
   #logstash = handleTest ./logstash.nix {};
@@ -178,6 +180,7 @@ in
   quagga = handleTest ./quagga.nix {};
   quake3 = handleTest ./quake3.nix {};
   rabbitmq = handleTest ./rabbitmq.nix {};
+  radarr = handleTest ./radarr.nix {};
   radicale = handleTest ./radicale.nix {};
   redmine = handleTest ./redmine.nix {};
   roundcube = handleTest ./roundcube.nix {};
@@ -194,6 +197,7 @@ in
   smokeping = handleTest ./smokeping.nix {};
   snapper = handleTest ./snapper.nix {};
   solr = handleTest ./solr.nix {};
+  sonarr = handleTest ./sonarr.nix {};
   strongswan-swanctl = handleTest ./strongswan-swanctl.nix {};
   sudo = handleTest ./sudo.nix {};
   switchTest = handleTest ./switch-test.nix {};
