@@ -21,7 +21,7 @@
   - `github` is your GitHub handle (as it appears in the URL of your profile page, `https://github.com/<userhandle>`),
   - `keys` is a list of your PGP/GPG key IDs and fingerprints.
 
-  `handle == github` is strongly preffered whenever `github` is an acceptable attribute name and is short and convenient.
+  `handle == github` is strongly preferred whenever `github` is an acceptable attribute name and is short and convenient.
 
   Add PGP/GPG keys only if you actually use them to sign commits and/or mail.
 
