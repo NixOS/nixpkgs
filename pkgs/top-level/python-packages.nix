@@ -378,6 +378,8 @@ in {
 
   fuse = callPackage ../development/python-modules/fuse-python { fuse = pkgs.fuse; };
 
+  fuzzywuzzy = callPackage ../development/python-modules/fuzzywuzzy { };
+
   genanki = callPackage ../development/python-modules/genanki { };
 
   gidgethub = callPackage ../development/python-modules/gidgethub { };
