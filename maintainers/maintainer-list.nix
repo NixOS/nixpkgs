@@ -3685,6 +3685,10 @@
     email = "hi@alyssa.is";
     github = "alyssais";
     name = "Alyssa Ross";
+    keys = [{
+      longkeyid = "rsa4096/736CCDF9EF51BD97";
+      fingerprint = "7573 56D7 79BB B888 773E  415E 736C CDF9 EF51 BD97";
+    }];
   };
   ragge = {
     email = "r.dahlen@gmail.com";
