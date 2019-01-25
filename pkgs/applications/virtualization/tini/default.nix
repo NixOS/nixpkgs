@@ -18,7 +18,8 @@ stdenv.mkDerivation rec {
     "-DPR_GET_CHILD_SUBREAPER=37"
   ];
 
-  buildInputs = [ cmake glibc glibc.static ];
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ glibc glibc.static ];
 
   meta = with stdenv.lib; {
     description = "A tiny but valid init for containers";
