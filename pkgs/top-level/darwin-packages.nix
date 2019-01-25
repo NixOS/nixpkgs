@@ -27,7 +27,7 @@ in
   };
 
   cctools = callPackage ../os-specific/darwin/cctools/port.nix {
-    inherit (darwin) libobjc maloader;
+    inherit (darwin) libobjc maloader libtapi;
     stdenv = if stdenv.isDarwin then stdenv else pkgs.libcxxStdenv;
     libcxxabi = pkgs.libcxxabi;
   };
@@ -78,5 +78,7 @@ in
   # libdispatch-broken = callPackage ../os-specific/darwin/swift-corelibs/libdispatch.nix { inherit (darwin) apple_sdk_sierra xnu; };
 
   darling = callPackage ../os-specific/darwin/darling/default.nix { };
+
+  libtapi = callPackage ../os-specific/darwin/libtapi {};
 
 })

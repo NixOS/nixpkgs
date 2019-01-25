@@ -2,6 +2,7 @@
 , libcxxabi, libuuid, llvm
 , libobjc ? null, maloader ? null
 , enableDumpNormalizedLibArgs ? false
+, enableTapiSupport ? stdenv.hostPlatform != stdenv.targetPlatform, libtapi
 }:
 
 let
@@ -52,7 +53,8 @@ let
 
     nativeBuildInputs = [ autoconf automake libtool_2 autoreconfHook ];
     buildInputs = [ libuuid ]
-      ++ stdenv.lib.optionals stdenv.isDarwin [ libcxxabi libobjc ];
+      ++ stdenv.lib.optionals stdenv.isDarwin [ libcxxabi libobjc ]
+      ++ stdenv.lib.optional enableTapiSupport libtapi;
 
     patches = [
       ./ld-rpath-nonfinal.patch ./ld-ignore-rpath-link.patch
@@ -74,7 +76,11 @@ let
     # TODO(@Ericson2314): Always pass "--target" and always targetPrefix.
     configurePlatforms = [ "build" "host" ]
       ++ stdenv.lib.optional (stdenv.targetPlatform != stdenv.hostPlatform) "target";
-    configureFlags = [ "--disable-clang-as" ];
+    configureFlags = [ "--disable-clang-as" ]
+      ++ stdenv.lib.optionals enableTapiSupport [
+        "--enable-tapi-support"
+        "--with-libtapi=${libtapi}"
+      ];
 
     postPatch = ''
       sed -i -e 's/addStandardLibraryDirectories = true/addStandardLibraryDirectories = false/' cctools/ld64/src/ld/Options.cpp
