@@ -14138,6 +14138,8 @@ in
 
   slurm-spank-x11 = callPackage ../servers/computing/slurm-spank-x11 { };
 
+  slurp = callPackage ../tools/misc/slurp { };
+
   systemd-journal2gelf = callPackage ../tools/system/systemd-journal2gelf { };
 
   inherit (callPackages ../servers/http/tomcat { })
