@@ -27,6 +27,7 @@ stdenv.mkDerivation rec {
     sed -i -e 's#/usr/lib64/gnuefi#${gnu-efi}/lib/#g' Make.rules
     sed -i -e 's#$(DESTDIR)/usr#$(out)#g' Make.rules
     patchShebangs .
+    # bogus
   '';
 
   meta = with stdenv.lib; {
