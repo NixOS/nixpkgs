@@ -8930,7 +8930,7 @@ in
     ruby_2_5
     ruby_2_6;
 
-  ruby = ruby_2_5;
+  ruby = ruby_2_6;
 
   mruby = callPackage ../development/compilers/mruby { };
 
