@@ -6549,6 +6549,8 @@ in
 
   zxing = callPackage ../tools/graphics/zxing {};
 
+  zxing-cpp = callPackage ../tools/graphics/zxing-cpp {};
+
 
   ### SHELLS
 

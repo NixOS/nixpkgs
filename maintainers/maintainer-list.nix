@@ -5133,4 +5133,9 @@
     github = "mredaelli";
     name = "Massimo Redaelli";
   };
+  voobscout = {
+    email = "nixpkgs@njk.li";
+    github = "voobscout";
+    name = "Alex Lee";
+  };
 }
