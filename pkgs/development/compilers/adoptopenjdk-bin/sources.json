@@ -4,10 +4,10 @@
       "jdk": {
         "hotspot": {
           "aarch64": {
-            "build": "13",
-            "sha256": "b66121b9a0c2e7176373e670a499b9d55344bcb326f67140ad6d0dc24d13d3e2",
-            "url": "https://github.com/AdoptOpenJDK/openjdk11-binaries/releases/download/jdk-11.0.1%2B13/OpenJDK11U-jdk_aarch64_linux_hotspot_11.0.1_13.tar.gz",
-            "version": "11.0.1"
+            "build": "7",
+            "sha256": "95b14e954f96185d02afda1a3ab146011076a4d97b457c9333556bd5d9263c41",
+            "url": "https://github.com/AdoptOpenJDK/openjdk11-binaries/releases/download/jdk-11.0.2%2B7/OpenJDK11U-jdk_aarch64_linux_hotspot_11.0.2_7.tar.gz",
+            "version": "11.0.2"
           },
           "packageType": "jdk",
           "vmType": "hotspot",
@@ -32,10 +32,10 @@
       "jre": {
         "hotspot": {
           "aarch64": {
-            "build": "28",
-            "sha256": "6fd756bda392e3fddb48382460daae263c6fb5708683a691c8d30af2eb870bb8",
-            "url": "https://github.com/AdoptOpenJDK/openjdk11-binaries/releases/download/jdk-11%2B28/OpenJDK11-jre_aarch64_linux_hotspot_11_28.tar.gz",
-            "version": "11"
+            "build": "7",
+            "sha256": "b101c86948742a5a580f94596654ef7d200f629cfc1ffdded10fb6a0cbe34c34",
+            "url": "https://github.com/AdoptOpenJDK/openjdk11-binaries/releases/download/jdk-11.0.2%2B7/OpenJDK11U-jre_aarch64_linux_hotspot_11.0.2_7.tar.gz",
+            "version": "11.0.2"
           },
           "packageType": "jre",
           "vmType": "hotspot",
@@ -64,10 +64,10 @@
           "packageType": "jdk",
           "vmType": "hotspot",
           "x86_64": {
-            "build": "13",
-            "sha256": "e219e7e2d586ed09ae65f4ec390fca5d5f0c37a61b47677648610194daf1aaa7",
-            "url": "https://github.com/AdoptOpenJDK/openjdk11-binaries/releases/download/jdk-11.0.1%2B13/OpenJDK11U-jdk_x64_mac_hotspot_11.0.1_13.tar.gz",
-            "version": "11.0.1"
+            "build": "7",
+            "sha256": "c52dd6e34b5a0521e41715d4fe4fd7ba071a5fed7035e7348844e88b37480448",
+            "url": "https://github.com/AdoptOpenJDK/openjdk11-binaries/releases/download/jdk-11.0.2%2B7/OpenJDK11U-jdk_x64_mac_hotspot_11.0.2_7.tar.gz",
+            "version": "11.0.2"
           }
         },
         "openj9": {
@@ -86,10 +86,10 @@
           "packageType": "jre",
           "vmType": "hotspot",
           "x86_64": {
-            "build": "28",
-            "sha256": "ef4dbfe5aed6ab2278fcc14db6cc73abbaab56e95f6ebb023790a7ebc6d7f30c",
-            "url": "https://github.com/AdoptOpenJDK/openjdk11-binaries/releases/download/jdk-11%2B28/OpenJDK11-jre_x64_mac_hotspot_11_28.tar.gz",
-            "version": "11"
+            "build": "7",
+            "sha256": "53febef8465b4e901309e5b91172a3f91ea3052ba20822abccd1ccb8c37e83a2",
+            "url": "https://github.com/AdoptOpenJDK/openjdk11-binaries/releases/download/jdk-11.0.2%2B7/OpenJDK11U-jre_x64_mac_hotspot_11.0.2_7.tar.gz",
+            "version": "11.0.2"
           }
         }
       }
