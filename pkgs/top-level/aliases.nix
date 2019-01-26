@@ -240,6 +240,20 @@ mapAliases ({
   postgresql95 = postgresql_9_5;
   postgresql96 = postgresql_9_6;
   postgresql100 = throw "deprecated 2018-10-21: use postgresql_10 instead";
+  # postgresql plugins
+  pgjwt = postgresqlPackages.pgjwt;
+  pg_repack = postgresqlPackages.pg_repack;
+  pgroonga = postgresqlPackages.pgroonga;
+  pg_similarity = postgresqlPackages.pg_similarity;
+  pgtap = postgresqlPackages.pgtap;
+  plv8 = postgresqlPackages.plv8;
+  timescaledb = postgresqlPackages.timescaledb;
+  tsearch_extras = postgresqlPackages.tsearch_extras;
+  cstore_fdw = postgresqlPackages.cstore_fdw;
+  pg_hll = postgresqlPackages.pg_hll;
+  pg_cron = postgresqlPackages.pg_cron;
+  pg_topn = postgresqlPackages.pg_topn;
+  # end
   procps-ng = procps; # added 2018-06-08
   prometheus-statsd-bridge = prometheus-statsd-exporter;  # added 2017-08-27
   pulseaudioLight = pulseaudio; # added 2018-04-25
