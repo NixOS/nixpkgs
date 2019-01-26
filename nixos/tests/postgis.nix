@@ -6,7 +6,7 @@ import ./make-test.nix ({ pkgs, ...} : {
 
   nodes = {
     master =
-      { config, pkgs, ... }:
+      { pkgs, ... }:
 
       {
         services.postgresql = let mypg = pkgs.postgresql_11; in {
