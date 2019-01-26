@@ -20,9 +20,7 @@ in stdenv.mkDerivation {
 
   NIX_CFLAGS_COMPILE = "-Wno-error=unused-function";
 
-  preConfigure = ''
-    substituteInPlace src/tunnel.c --replace "/usr/sbin/pppd" "${ppp}/bin/pppd"
-  '';
+  configureFlags = [ "--with-pppd=${ppp}/bin/pppd" ];
 
   enableParallelBuilding = true;
 
