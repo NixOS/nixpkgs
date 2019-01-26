@@ -1,7 +1,7 @@
 { fetchurl, substituteAll, stdenv, meson, ninja, pkgconfig, gnome3, perl, gettext, glib, libnotify, lcms2, libXtst
 , libxkbfile, libpulseaudio, alsaLib, libcanberra-gtk3, upower, colord, libgweather, polkit
 , geoclue2, librsvg, xf86_input_wacom, udev, libgudev, libwacom, libxslt, libxml2, networkmanager
-, docbook_xsl, wrapGAppsHook, python3, ibus, xkeyboard_config, tzdata, nss }:
+, docbook_xsl, wrapGAppsHook, python3, ibus, xkeyboard_config, tzdata, nss, wrapperDir ? "/run/wrappers/bin" }:
 
 stdenv.mkDerivation rec {
   name = "gnome-settings-daemon-${version}";
@@ -31,6 +31,10 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     "-Dudev_dir=${placeholder "out"}/lib/udev"
   ];
+
+  preFixup = ''
+    gappsWrapperArgs+=(--set GSD_BACKLIGHT_HELPER "${wrapperDir}/gsd-backlight-helper")
+  '';
 
   postPatch = ''
     for f in gnome-settings-daemon/codegen.py plugins/power/gsd-power-constants-update.pl meson_post_install.py; do
