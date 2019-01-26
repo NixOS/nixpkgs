@@ -16264,6 +16264,11 @@ in
 
   bibletime = callPackage ../applications/misc/bibletime { };
 
+  bino3d = libsForQt5.callPackage ../applications/video/bino3d {
+    ffmpeg = ffmpeg_4;
+    glew = glew110;
+  };
+
   bitcoinarmory = callPackage ../applications/misc/bitcoinarmory { pythonPackages = python2Packages; };
 
   bitkeeper = callPackage ../applications/version-management/bitkeeper {
