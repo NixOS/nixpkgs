@@ -14340,7 +14340,7 @@ in
   cockroachdb = callPackage ../servers/sql/cockroachdb { };
 
   conky = callPackage ../os-specific/linux/conky ({
-    lua = lua5_1; # conky can use 5.2, but toluapp can not
+    lua = lua5_3_compat;
     libXNVCtrl = linuxPackages.nvidia_x11.settings.libXNVCtrl;
     pulseSupport = config.pulseaudio or false;
   } // config.conky or {});
