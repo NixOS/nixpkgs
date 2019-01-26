@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "elvish-${version}";
+  pname = "elvish";
   version = "0.12";
 
   goPackagePath = "github.com/elves/elvish";
@@ -21,8 +21,8 @@ buildGoPackage rec {
   meta = with stdenv.lib; {
     description = "A friendly and expressive command shell";
     longDescription = ''
-      Elvish is a friendly interactive shell and an expressive programming 
-      language. It runs on Linux, BSDs, macOS and Windows. Despite its pre-1.0 
+      Elvish is a friendly interactive shell and an expressive programming
+      language. It runs on Linux, BSDs, macOS and Windows. Despite its pre-1.0
       status, it is already suitable for most daily interactive use.
     '';
     homepage = https://elv.sh/;
