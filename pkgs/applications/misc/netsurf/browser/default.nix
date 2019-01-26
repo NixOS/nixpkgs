@@ -14,6 +14,7 @@
 , libnsgif
 , libnsutils
 , libutf8proc
+, wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
@@ -28,7 +29,12 @@ stdenv.mkDerivation rec {
     sha256 = "0hjm1h4m1i913y4mhkl7yqdifn8k70fwi58zdh6faypawzryc3m0";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [
+    pkgconfig
+  ] ++ stdenv.lib.optionals (uilib == "gtk") [
+    wrapGAppsHook
+  ];
+
   buildInputs = [ libpng openssl curl gtk2 check libxml2 libidn perl
     nettools perlPackages.HTMLParser libXcursor libXrandr makeWrapper SDL
     buildsystem
