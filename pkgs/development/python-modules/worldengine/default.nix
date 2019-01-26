@@ -7,7 +7,6 @@
 , pyplatec
 , protobuf
 , purepng
-, argparse
 , h5py
 , gdal
 }:
@@ -35,7 +34,7 @@ buildPythonPackage rec {
   '';
 
   buildInputs = [ nose ];
-  propagatedBuildInputs = [ noise numpy pyplatec protobuf purepng argparse h5py gdal ];
+  propagatedBuildInputs = [ noise numpy pyplatec protobuf purepng h5py gdal ];
 
   prePatch = ''
     substituteInPlace setup.py \

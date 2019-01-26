@@ -87,6 +87,9 @@ in
 
   # Passthru information, if any.
 , passthru ? {}
+  # Doing the download on a remote machine just duplicates network
+  # traffic, so don't do that by default
+, preferLocalBuild ? true
 }:
 
 assert sha512 != "" -> builtins.compareVersions "1.11" builtins.nixVersion <= 0;
@@ -135,9 +138,7 @@ stdenvNoCC.mkDerivation {
 
   nixpkgsVersion = lib.trivial.release;
 
-  # Doing the download on a remote machine just duplicates network
-  # traffic, so don't do that.
-  preferLocalBuild = true;
+  inherit preferLocalBuild;
 
   postHook = if netrcPhase == null then null else ''
     ${netrcPhase}

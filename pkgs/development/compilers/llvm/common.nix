@@ -12,6 +12,8 @@ rec {
       "ARM"
     else if platform.parsed.cpu.family == "mips" then
       "Mips"
+    else if platform.parsed.cpu.family == "power" then
+      "PowerPC"
     else
       throw "Unsupported system";
 

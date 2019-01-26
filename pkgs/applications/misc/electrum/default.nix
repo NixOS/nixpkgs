@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python3, python3Packages, zbar }:
+{ stdenv, fetchFromGitHub, python3, python3Packages, zbar, secp256k1 }:
 
 let
   qdarkstyle = python3Packages.buildPythonPackage rec {
@@ -13,15 +13,20 @@ let
 in
 
 python3Packages.buildPythonApplication rec {
-  name = "electrum-${version}";
-  version = "3.2.4";
+  pname = "electrum";
+  version = "3.3.2";
 
-  src = fetchurl {
-    url = "https://download.electrum.org/${version}/Electrum-${version}.tar.gz";
-    sha256 = "0nwipn1alk3r54zpsv2bdwsqxw4f08bxnfmygnwakfkiaifmmhxg";
+  src = fetchFromGitHub {
+    owner = "spesmilo";
+    repo = "electrum";
+    rev = version;
+    sha256 = "1jsn02azdydpq4plr2552s7ijyqgw6zqm2zx8skwsalgbwmhx12i";
   };
 
   propagatedBuildInputs = with python3Packages; [
+    aiorpcx
+    aiohttp
+    aiohttp-socks
     dnspython
     ecdsa
     jsonrpclib-pelix
@@ -36,7 +41,6 @@ python3Packages.buildPythonApplication rec {
     qrcode
     requests
     tlslite-ng
-    typing
 
     # plugins
     keepkey
@@ -53,6 +57,7 @@ python3Packages.buildPythonApplication rec {
     # Recording the creation timestamps introduces indeterminism to the build
     sed -i '/Created: .*/d' electrum/gui/qt/icons_rc.py
     sed -i "s|name = 'libzbar.*'|name='${zbar}/lib/libzbar.so'|" electrum/qrscanner.py
+    substituteInPlace ./electrum/ecc_fast.py --replace libsecp256k1.so.0 ${secp256k1}/lib/libsecp256k1.so.0
   '';
 
   postInstall = ''
@@ -65,10 +70,10 @@ python3Packages.buildPythonApplication rec {
       --replace "Exec=electrum %u" "Exec=$out/bin/electrum %u"
   '';
 
-  doCheck = false;
+  checkInputs = with python3Packages; [ pytest ];
 
-  doInstallCheck = true;
-  installCheckPhase = ''
+  checkPhase = ''
+    py.test electrum/tests
     $out/bin/electrum help >/dev/null
   '';
 

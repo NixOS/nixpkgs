@@ -408,6 +408,21 @@
        from nixpkgs due to the lack of maintainers.
      </para>
    </listitem>
+   <listitem>
+     <para>
+       It is possible now to uze ZRAM devices as general purpose ephemeral block devices,
+       not only as swap. Using more than 1 device as ZRAM swap is no longer recommended,
+       but is still possible by setting <literal>zramSwap.swapDevices</literal> explicitly.
+     </para>
+     <para>
+      Default algorithm for ZRAM swap was changed to <literal>zstd</literal>.
+     </para>
+     <para>
+      Changes to ZRAM algorithm are applied during <literal>nixos-rebuild switch</literal>,
+      so make sure you have enough swap space on disk to survive ZRAM device rebuild. Alternatively,
+      use <literal>nixos-rebuild boot; reboot</literal>.
+     </para>
+   </listitem>
   </itemizedlist>
  </section>
 </section>

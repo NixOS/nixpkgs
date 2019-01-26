@@ -297,11 +297,11 @@ let
 
   php-cs-fixer = pkgs.stdenv.mkDerivation rec {
     name = "php-cs-fixer-${version}";
-    version = "2.13.1";
+    version = "2.14.0";
 
     src = pkgs.fetchurl {
       url = "https://github.com/FriendsOfPHP/PHP-CS-Fixer/releases/download/v${version}/php-cs-fixer.phar";
-      sha256 = "0yy9q140jd63h9qz5jvplh7ls3j7y1hf25dkxk0h4mx9cbxdzkq4";
+      sha256 = "0ap5bhm1h2ldyzlch7bz5n3jj2bpm4wd6bzw51g414pk9vksswc1";
     };
 
     phases = [ "installPhase" ];
@@ -411,11 +411,11 @@ let
 
   phpstan = pkgs.stdenv.mkDerivation rec {
     name = "phpstan-${version}";
-    version = "0.11";
+    version = "0.11.1";
 
     src = pkgs.fetchurl {
       url = "https://github.com/phpstan/phpstan/releases/download/${version}/phpstan.phar";
-      sha256 = "09p3cg5ii862p2l44fcv7hh400nsmxvwn1jjr929y21p01wsjhkp";
+      sha256 = "0iivfp9945gv6pqhp01720rlwzfd260hbfq31a3mmimly721mnsa";
     };
 
     phases = [ "installPhase" ];

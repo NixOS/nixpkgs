@@ -22,13 +22,6 @@ rustPlatform.buildRustPackage rec {
 
   postInstall = ''
     install -m 444 -Dt $out/share/man/man1 doc/bat.1
-
-    install -Dm644 target/release/build/bat-*/out/_bat \
-      "$out/share/zsh/site-functions/_bat"
-    install -Dm644 target/release/build/bat-*/out/bat.bash \
-      "$out/share/bash-completions/completions/bat.bash"
-    install -Dm644 target/release/build/bat-*/out/bat.fish \
-      "$out/share/fish/vendor_completions.d/bat.fish"
   '';
 
   meta = with stdenv.lib; {

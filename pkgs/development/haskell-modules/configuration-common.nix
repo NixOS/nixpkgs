@@ -85,7 +85,7 @@ self: super: {
       name = "git-annex-${super.git-annex.version}-src";
       url = "git://git-annex.branchable.com/";
       rev = "refs/tags/" + super.git-annex.version;
-      sha256 = "0wczijw80pw31k6h3a65m76aq9i02aarr2zxl7k5m7p0l6rn82vd";
+      sha256 = "0vww2qf94a6dg46mynkgpk0lh3x12vvfby3flqymi4wfrx1fif1k";
     };
   }).override {
     dbus = if pkgs.stdenv.isLinux then self.dbus else null;
@@ -720,9 +720,15 @@ self: super: {
     '';
   });
 
+  # A simple MonadFail patch would do too, but not doing the tests is easier
+  megaparsec_6_5_0 = dontCheck super.megaparsec_6_5_0;
+
   # The standard libraries are compiled separately
   idris = generateOptparseApplicativeCompletion "idris" (
-    doJailbreak (dontCheck super.idris)
+    doJailbreak (dontCheck (super.idris.override {
+      # Needed for versions <= 1.3.1 https://github.com/idris-lang/Idris-dev/pull/4610
+      megaparsec = self.megaparsec_6_5_0;
+    }))
   );
 
   # https://github.com/bos/math-functions/issues/25

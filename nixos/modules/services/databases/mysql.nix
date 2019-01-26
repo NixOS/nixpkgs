@@ -274,7 +274,8 @@ in
         serviceConfig = {
           Type = if hasNotify then "notify" else "simple";
           RuntimeDirectory = "mysqld";
-          ExecStart = "${mysql}/bin/mysqld --defaults-file=/etc/my.cnf ${mysqldOptions}";
+          # The last two environment variables are used for starting Galera clusters
+          ExecStart = "${mysql}/bin/mysqld --defaults-file=/etc/my.cnf ${mysqldOptions} $_WSREP_NEW_CLUSTER $_WSREP_START_POSITION";
         };
 
         postStart = ''
@@ -362,7 +363,7 @@ in
             ${optionalString (cfg.ensureDatabases != []) ''
               (
               ${concatMapStrings (database: ''
-                echo "CREATE DATABASE IF NOT EXISTS ${database};"
+                echo "CREATE DATABASE IF NOT EXISTS \`${database}\`;"
               '') cfg.ensureDatabases}
               ) | ${mysql}/bin/mysql -u root -N
             ''}

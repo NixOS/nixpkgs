@@ -73,7 +73,7 @@ stdenv.mkDerivation rec {
     mkdir src/build
     cd src/build
 
-    gappsWrapperArgs+=("--prefix" "LD_LIBRARY_PATH" ":" $LD_LIBRARY_PATH)
+    gappsWrapperArgs+=("--prefix" "LD_LIBRARY_PATH" ":" ${LD_LIBRARY_PATH})
   '';
 
   shared = if stdenv.isDarwin then "dylib" else "shared";

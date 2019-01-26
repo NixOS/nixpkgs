@@ -100,6 +100,7 @@ stdenv.mkDerivation rec {
     maintainers = [];
     platforms = [ "x86_64-linux" ];
     # Application crashed with an unhandled SIGSEGV
-    broken = true;
+    # Not on all systems, though. Video driver problem?
+    broken = false;
   };
 }
