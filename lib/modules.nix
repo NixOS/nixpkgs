@@ -364,7 +364,6 @@ rec {
         values = defs''';
         inherit (defs'') highestPrio;
       };
-
     defsFinal = defsFinal'.values;
 
     # Type-check the remaining definitions, and merge them.
@@ -477,22 +476,8 @@ rec {
      optionSet to options of type submodule.  FIXME: remove
      eventually. */
   fixupOptionType = loc: opt:
-    let
-      options = opt.options or
-        (throw "Option `${showOption loc'}' has type optionSet but has no option attribute, in ${showFiles opt.declarations}.");
-      f = tp:
-        let optionSetIn = type: (tp.name == type) && (tp.functor.wrapped.name == "optionSet");
-        in
-        if tp.name == "option set" || tp.name == "submodule" then
-          throw "The option ${showOption loc} uses submodules without a wrapping type, in ${showFiles opt.declarations}."
-        else if optionSetIn "attrsOf" then types.attrsOf (types.submodule options)
-        else if optionSetIn "loaOf"   then types.loaOf   (types.submodule options)
-        else if optionSetIn "listOf"  then types.listOf  (types.submodule options)
-        else if optionSetIn "nullOr"  then types.nullOr  (types.submodule options)
-        else tp;
-    in
-      if opt.type.getSubModules or null == null
-      then opt // { type = f (opt.type or types.unspecified); }
+    if opt.type.getSubModules or null == null
+      then opt // { type = opt.type or types.unspecified; }
       else opt // { type = opt.type.substSubModules opt.options; options = []; };
 
 
