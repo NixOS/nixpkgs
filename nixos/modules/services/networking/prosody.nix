@@ -513,6 +513,7 @@ in
         RuntimeDirectory = [ "prosody" ];
         PIDFile = "/run/prosody/prosody.pid";
         ExecStart = "${cfg.package}/bin/prosodyctl start";
+        ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
       };
     };
 
