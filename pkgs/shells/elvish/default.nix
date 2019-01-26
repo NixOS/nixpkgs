@@ -13,7 +13,7 @@ buildGoPackage rec {
 
   src = fetchFromGitHub {
     owner = "elves";
-    repo = "elvish";
+    repo = pname;
     rev = "v${version}";
     sha256 = "1vvbgkpnrnb5aaak4ks45wl0cyp0vbry8bpxl6v2dpmq9x0bscpp";
   };
