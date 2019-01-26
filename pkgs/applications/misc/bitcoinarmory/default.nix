@@ -6,7 +6,6 @@
 let
 
   version = "0.96.1";
-  sitePackages = pythonPackages.python.sitePackages;
   inherit (pythonPackages) buildPythonApplication pyqt4 psutil twisted;
 
 in buildPythonApplication {

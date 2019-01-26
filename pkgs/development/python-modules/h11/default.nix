@@ -2,15 +2,18 @@
 
 buildPythonPackage rec {
   pname = "h11";
-  version = "0.7.0";
+  version = "0.8.1";
 
   src = fetchPypi {
     inherit pname version;
-    extension = "zip";
-    sha256 = "1n9hsm1n2qq32j3hh9wj93w738bwa5nqyzxjwvirz03gp8fbn3qw";
+    sha256 = "acca6a44cb52a32ab442b1779adf0875c443c689e9e028f8d831a3769f9c5208";
   };
 
-  buildInputs = [ pytest ];
+  checkInputs = [ pytest ];
+
+  checkPhase = ''
+    py.test
+  '';
 
   meta = with lib; {
     description = "Pure-Python, bring-your-own-I/O implementation of HTTP/1.1";

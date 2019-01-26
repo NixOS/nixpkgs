@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libmatchbox ];
 
   src = fetchurl {
-    url = "http://downloads.yoctoproject.org/releases/matchbox/matchbox-window-manager/${version}/matchbox-window-manager-${version}.tar.bz2";
+    url = "https://downloads.yoctoproject.org/releases/matchbox/matchbox-window-manager/${version}/matchbox-window-manager-${version}.tar.bz2";
     sha256 = "1zyfq438b466ygcz78nvsmnsc5bhg4wcfnpxb43kbkwpyx53m8l1";
   };
 

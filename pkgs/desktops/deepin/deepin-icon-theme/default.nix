@@ -1,39 +1,36 @@
-{ stdenv, fetchFromGitHub, gtk3, papirus-icon-theme }:
+{ stdenv, fetchFromGitHub, gtk3, papirus-icon-theme, deepin }:
 
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "deepin-icon-theme";
-  version = "15.12.52";
+  version = "15.12.64";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "141in9jlflmckd8rg4605dfks84p1p6b1zdbhbiwrg11xbl66f3l";
-    
-    # Get rid of case collision in file names, which is an issue in
-    # darwin where file names are case insensitive.
-    extraPostFetch = ''
-      rm "$out"/Sea/apps/scalable/TeXmacs.svg
-      rm "$out"/deepin/apps/48/TeXmacs.svg
-    ''; 
+    sha256 = "0z1yrp6yg2hb67azrbd9ac743jjh83vxdf2j0mmv2lfpd4fqw8qc";
   };
 
   nativeBuildInputs = [ gtk3 papirus-icon-theme ];
 
-  makeFlags = [ "PREFIX=$(out)" ];
+  postPatch = ''
+    patchShebangs .
 
-  postFixup = ''
-    for theme in $out/share/icons/*; do
-      gtk-update-icon-cache $theme
-    done
+    # install in $out
+    sed -i -e "s|/usr|$out|g" Makefile tools/hicolor.links
+
+    # keep icon-theme.cache
+    sed -i -e 's|\(-rm -f .*/icon-theme.cache\)|# \1|g' Makefile
   '';
 
+  passthru.updateScript = deepin.updateScript { inherit name; };
+
   meta = with stdenv.lib; {
-    description = "Deepin icon theme";
+    description = "Icons for the Deepin Desktop Environment";
     homepage = https://github.com/linuxdeepin/deepin-icon-theme;
     license = licenses.gpl3;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ romildo ];
   };
 }

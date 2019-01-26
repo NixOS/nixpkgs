@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, rustPlatform, cargo, libXinerama, libX11, pkgconfig }:
+{ stdenv, fetchFromGitHub, rustPlatform, libXinerama, libX11, pkgconfig }:
 
 rustPlatform.buildRustPackage rec {
   name = "wtftw-0.0pre20170921";

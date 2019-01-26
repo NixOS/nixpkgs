@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, pkgconfig, cmake
+{ stdenv, fetchFromGitHub, pkgconfig, cmake
 , eigen, opencv, ceres-solver, cgal, boost, vcg
 , gmp, mpfr, glog, google-gflags, libjpeg_turbo }:
 
@@ -24,10 +24,28 @@ stdenv.mkDerivation rec {
       "-DBUILD_STATIC_RUNTIME=ON"
       "-DINSTALL_BIN_DIR=$out/bin"
       "-DVCG_DIR=${vcg}"
+      "-DCGAL_ROOT=${cgal}/lib/cmake/CGAL"
       "-DCERES_DIR=${ceres-solver}/lib/cmake/Ceres/"
     )
   '';
+  
+  postFixup = ''
+    rp=$(patchelf --print-rpath $out/bin/DensifyPointCloud)
+    patchelf --set-rpath $rp:$out/lib/OpenMVS $out/bin/DensifyPointCloud
 
+    rp=$(patchelf --print-rpath $out/bin/InterfaceVisualSFM)
+    patchelf --set-rpath $rp:$out/lib/OpenMVS $out/bin/InterfaceVisualSFM
+
+    rp=$(patchelf --print-rpath $out/bin/ReconstructMesh)
+    patchelf --set-rpath $rp:$out/lib/OpenMVS $out/bin/ReconstructMesh
+
+    rp=$(patchelf --print-rpath $out/bin/RefineMesh)
+    patchelf --set-rpath $rp:$out/lib/OpenMVS $out/bin/RefineMesh
+
+    rp=$(patchelf --print-rpath $out/bin/TextureMesh)
+    patchelf --set-rpath $rp:$out/lib/OpenMVS $out/bin/TextureMesh
+  '';
+  
   cmakeDir = "./";
 
   dontUseCmakeBuildDir = true;

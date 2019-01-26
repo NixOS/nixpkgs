@@ -1,4 +1,4 @@
-{ buildOcaml, opam, js_build_tools, ocaml_oasis, fetchurl } :
+{ buildOcaml, opaline, js_build_tools, ocaml_oasis, fetchurl } :
 
 { name, version ? "113.33.03", buildInputs ? [],
   hash ? "",
@@ -14,7 +14,7 @@ buildOcaml (args // {
 
   hasSharedObjects = true;
 
-  buildInputs = [ ocaml_oasis js_build_tools opam ] ++ buildInputs;
+  buildInputs = [ ocaml_oasis js_build_tools opaline ] ++ buildInputs;
 
   dontAddPrefix = true;
 
@@ -22,14 +22,6 @@ buildOcaml (args // {
 
   buildPhase = "OCAML_TOPLEVEL_PATH=`ocamlfind query findlib`/.. make";
 
-  installPhase = ''
-    opam-installer -i --prefix $prefix --libdir `ocamlfind printconf destdir` --stubsdir `ocamlfind printconf destdir`/${name} ${name}.install
-    if [ -d $out/lib/${name} ]
-      then if [ "$(ls -A $out/lib/${name})" ]
-        then mv $out/lib/${name}/* `ocamlfind printconf destdir`/${name}
-      fi
-      rmdir $out/lib/${name}
-    fi
-  '';
+  installPhase = "opaline -prefix $prefix -libdir $OCAMLFIND_DESTDIR ${name}.install";
 
 })

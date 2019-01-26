@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python }:
+{ stdenv, python }:
 
 with python.pkgs;
 

@@ -1,6 +1,7 @@
 {stdenvNoCC, subversion, glibcLocales, sshSupport ? false, openssh ? null}:
-{url, rev ? "HEAD", md5 ? "", sha256 ? "",
- ignoreExternals ? false, ignoreKeywords ? false, name ? null}:
+{url, rev ? "HEAD", md5 ? "", sha256 ? ""
+, ignoreExternals ? false, ignoreKeywords ? false, name ? null
+, preferLocalBuild ? true }:
 
 let
   repoName = with stdenvNoCC.lib;
@@ -40,5 +41,5 @@ stdenvNoCC.mkDerivation {
   inherit url rev sshSupport openssh ignoreExternals ignoreKeywords;
 
   impureEnvVars = stdenvNoCC.lib.fetchers.proxyImpureEnvVars;
-  preferLocalBuild = true;
+  inherit preferLocalBuild;
 }

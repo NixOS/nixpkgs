@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "nasm-${version}";
-  version = "2.13.03";
+  version = "2.14.02";
 
   src = fetchurl {
-    url = "http://www.nasm.us/pub/nasm/releasebuilds/${version}/${name}.tar.bz2";
-    sha256 = "04bh736zfj3xy5ihh1whshpjxsisv7hqkz954clzdw6kg93qdv33";
+    url = "https://www.nasm.us/pub/nasm/releasebuilds/${version}/${name}.tar.bz2";
+    sha256 = "1g409sr1kj7v1089s9kv0i4azvddkcwcypnbakfryyi71b3jdz9l";
   };
 
   nativeBuildInputs = [ perl ];
@@ -18,9 +18,10 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://www.nasm.us/;
+    homepage = https://www.nasm.us/;
     description = "An 80x86 and x86-64 assembler designed for portability and modularity";
     platforms = platforms.unix;
     maintainers = with maintainers; [ pSub willibutz ];
+    license = licenses.bsd2;
   };
 }

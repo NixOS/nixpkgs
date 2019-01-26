@@ -51,6 +51,6 @@ stdenv.mkDerivation rec{
     homepage = http://www.bitcoin.org/;
     maintainers = with maintainers; [ AndersonTorres ];
     license = licenses.mit;
-    platforms = subtractLists [ "aarch64-linux" ] platforms.unix;
+    platforms = [ "x86_64-linux" ];
   };
 }

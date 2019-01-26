@@ -163,6 +163,7 @@ let
       name = "hunspell-dict-${shortName}-linguistico-${version}";
       readmeFile = dictFileName + "_README.txt";
       meta = with stdenv.lib; {
+        description = "Hunspell dictionary for ${shortDescription}";
         homepage = https://sourceforge.net/projects/linguistico/;
         license = licenses.gpl3;
         maintainers = with maintainers; [ renzo ];

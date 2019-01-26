@@ -1,4 +1,4 @@
-{ stdenv, lib, bundlerEnv, ruby }:
+{ lib, bundlerEnv, ruby }:
 
 bundlerEnv rec {
   name = "timetrap-${version}";

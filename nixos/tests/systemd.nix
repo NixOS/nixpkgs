@@ -46,12 +46,19 @@ import ./make-test.nix {
 
   testScript = ''
     $machine->waitForX;
+    # wait for user services
+    $machine->waitForUnit("default.target","alice");
 
     # Regression test for https://github.com/NixOS/nixpkgs/issues/35415
     subtest "configuration files are recognized by systemd", sub {
       $machine->succeed('test -e /system_conf_read');
       $machine->succeed('test -e /home/alice/user_conf_read');
       $machine->succeed('test -z $(ls -1 /var/log/journal)');
+    };
+
+    # Regression test for https://github.com/NixOS/nixpkgs/issues/50273
+    subtest "DynamicUser actually allocates a user", sub {
+        $machine->succeed('systemd-run --pty --property=Type=oneshot --property=DynamicUser=yes --property=User=iamatest whoami | grep iamatest');
     };
 
     # Regression test for https://github.com/NixOS/nixpkgs/issues/35268

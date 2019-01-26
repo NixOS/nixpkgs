@@ -1,4 +1,4 @@
-{ stdenv, callPackage, fetchurl, makeWrapper,
+{ stdenv, callPackage, fetchurl,
   guile_1_8, qt4, zlib, freetype, CoreFoundation, Cocoa, gettext, libiconv, ghostscript,
   tex ? null,
   aspell ? null,

@@ -10,12 +10,14 @@ stdenv.mkDerivation rec {
     sha256 = "0ilzzwn5vpvm65bnbyb9f5rxyxy3jmbafw9w0lgl5iad1ka36jjk";
   };
 
+  patches = [ ./gcc-O3.patch ];
+
   meta = with stdenv.lib; {
     homepage = http://www.phontron.com/kytea/;
     description = "General toolkit developed for analyzing text";
 
     longDescription = ''
-      A general toolkit developed for analyzing text, with a focus on Japanese, 
+      A general toolkit developed for analyzing text, with a focus on Japanese,
       Chinese and other languages requiring word or morpheme segmentation.
     '';
 

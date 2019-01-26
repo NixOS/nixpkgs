@@ -7,13 +7,13 @@ assert pythonSupport -> python != null && swig != null;
 
 stdenv.mkDerivation rec {
   name = "gnuradio-nacl-${version}";
-  version = "2015-11-05";
+  version = "2017-04-10";
 
   src = fetchFromGitHub {
     owner = "stwunsch";
     repo = "gr-nacl";
-    rev = "d6dd3c02dcda3f601979908b61b1595476f6bf95";
-    sha256 = "0q28lgkndcw9921hm6cw5ilxd83n65hjajwl78j50mh6yc3bim35";
+    rev = "15276bb0fcabf5fe4de4e58df3d579b5be0e9765";
+    sha256 = "018np0qlk61l7mlv3xxx5cj1rax8f1vqrsrch3higsl25yydbv7v";
   };
 
   nativeBuildInputs = [ pkgconfig ];

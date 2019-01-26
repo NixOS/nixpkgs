@@ -1,22 +1,18 @@
-{ stdenv, fetchurl, buildOcaml, time, autoconf, automake }:
+{ stdenv, fetchFromGitHub, buildDunePackage, ppx_tools_versioned, ounit }:
 
-buildOcaml rec {
-  name = "bitstring";
-  version = "2.1.1";
-  src = fetchurl {
-    url = http://github.com/xguerin/bitstring/archive/v2.1.1.tar.gz;
-    sha256 = "0vy8ibrxccii1jbsk5q6yh1kxjigqvi7lhhcmizvd5gfhf7mfyc8";
+buildDunePackage rec {
+  pname = "bitstring";
+  version = "3.0.0";
+
+  src = fetchFromGitHub {
+    owner = "xguerin";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "0r49qax7as48jgknzaq6p9rbpmrvnmlic713wzz5bj60j5h0396f";
   };
 
-  patches = [ ./camlp4-git.patch ./srcdir.patch ];
-
-  buildInputs = [time autoconf automake];
+  buildInputs = [ ppx_tools_versioned ounit ];
   doCheck = true;
-
-  createFindlibDestdir = true;
-  hasSharedObjects = true;
-
-  preConfigure = "./bootstrap";
 
   meta = with stdenv.lib; {
     description = "This library adds Erlang-style bitstrings and matching over bitstrings as a syntax extension and library for OCaml";

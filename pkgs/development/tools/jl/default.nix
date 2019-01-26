@@ -5,12 +5,12 @@
 }:
 mkDerivation rec {
   pname = "jl";
-  version = "0.0.4";
+  version = "0.0.5";
   src = fetchFromGitHub {
     owner = "chrisdone";
     repo = "jl";
     rev = "v${version}";
-    sha256 = "0wsdfj4m729q0kjpkn0ywpncdhvpvvprd4rh45vcg6kjw20krm3r";
+    sha256 = "1hlnwsl4cj0l4x8dxwda2fcnk789cwlphl9gv9cfrivl43mgkgar";
   };
   isLibrary = true;
   isExecutable = true;
@@ -25,4 +25,5 @@ mkDerivation rec {
   license = stdenv.lib.licenses.bsd3;
   description = "Functional sed for JSON";
   maintainers = with stdenv.lib.maintainers; [ fgaz ];
+  homepage = https://github.com/chrisdone/jl;
 }

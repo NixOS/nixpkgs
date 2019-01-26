@@ -4,7 +4,6 @@
 with stdenv.lib;
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "Flask-Testing";
   version = "0.7.1";
 

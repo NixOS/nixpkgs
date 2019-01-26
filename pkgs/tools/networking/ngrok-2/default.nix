@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   } else if stdenv.isDarwin then fetchurl {
     url = "https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-darwin-386.zip";
     sha256 = "0yfd250b55wcpgqd00rqfaa7a82f35fmybb31q5xwdbgc2i47pbh";
-  } else throw "platform ${stdenv.system} not supported!";
+  } else throw "platform ${stdenv.hostPlatform.system} not supported!";
 
   sourceRoot = ".";
 

@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   name = "zsh-autosuggestions-${version}";
-  version = "0.4.2";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "zsh-users";
     repo = "zsh-autosuggestions";
     rev = "v${version}";
-    sha256 = "1yvbhfaaqzhmjmwjh75i1p4mrqp3ksw74bp8lrll81c6zf8bmvig";
+    sha256 = "19qkg4b2flvnp2l0cbkl4qbrnl8d3lym2mmh1mx9nmjd7b81r3pf";
   };
 
   buildInputs = [ zsh ];

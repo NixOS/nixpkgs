@@ -1,5 +1,4 @@
-{ stdenv, lib, bundlerEnv, gpgme, ruby, ncurses, writeText, zlib, xapian
-, pkgconfig, which }:
+{ lib, bundlerEnv, ruby }:
 
 bundlerEnv {
   name = "sup-0.22.1";
@@ -16,7 +15,7 @@ bundlerEnv {
 
   meta = with lib; {
     description = "A curses threads-with-tags style email client";
-    homepage    = http://supmua.org;
+    homepage    = http://sup-heliotrope.github.io;
     license     = licenses.gpl2;
     maintainers = with maintainers; [ cstrahan lovek323 ];
     platforms   = platforms.unix;

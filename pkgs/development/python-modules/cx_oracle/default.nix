@@ -1,19 +1,22 @@
-{ stdenv, buildPythonPackage, fetchPypi, oracle-instantclient }:
+{ stdenv, buildPythonPackage, fetchPypi, odpic }:
 
 buildPythonPackage rec {
   pname = "cx_Oracle";
-  version = "6.2.1";
+  version = "7.0.0";
 
-  buildInputs = [
-    oracle-instantclient
-  ];
+  buildInputs = [ odpic ];
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "01970bc843b3c699a7fd98af19e0401fe69abfbd2acdf464e0bf2ae06ea372b9";
+    sha256 = "75ee5edccf385d8e8b1443058909fbf3477bb1db12ab7f367aafba8d993fc828";
   };
 
-  # Check need an Oracle database to run  
+  preConfigure = ''
+    export ODPIC_INC_DIR="${odpic}/include"
+    export ODPIC_LIB_DIR="${odpic}/lib"
+  '';
+
+  # Check need an Oracle database to run
   doCheck = false;
 
   meta = with stdenv.lib; {

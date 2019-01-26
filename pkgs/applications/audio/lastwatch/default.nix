@@ -1,8 +1,7 @@
 { stdenv, fetchgit, python2Packages }:
 
 python2Packages.buildPythonApplication rec {
-  name = "lastwatch-${version}";
-  namePrefix = "";
+  pname = "lastwatch";
   version = "0.4.1";
 
   src = fetchgit {

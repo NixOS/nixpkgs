@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, intltool, xfce4-panel, libxfce4util, gtk, libsoup
-, makeWrapper, glib-networking, exo, hicolor-icon-theme, wrapGAppsHook }:
+, glib-networking, exo, hicolor-icon-theme, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   p_name  = "xfce4-screenshooter";

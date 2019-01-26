@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, gnome3, gtk3, wrapGAppsHook, gjs, gobjectIntrospection
+{ stdenv, fetchurl, pkgconfig, gnome3, gtk3, wrapGAppsHook, gjs, gobject-introspection
 , libgweather, intltool, itstool, geoclue2, gnome-desktop }:
 
 stdenv.mkDerivation rec {
@@ -6,13 +6,13 @@ stdenv.mkDerivation rec {
   version = "3.26.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-weather/${gnome3.versionBranch version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/gnome-weather/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
     sha256 = "965cc0d1b4d4e53c06d494db96f0b124d232af5c0e731ca900edd10f77a74c78";
   };
 
   nativeBuildInputs = [ pkgconfig intltool itstool wrapGAppsHook ];
   buildInputs = [
-    gtk3 gjs gobjectIntrospection gnome-desktop
+    gtk3 gjs gobject-introspection gnome-desktop
     libgweather gnome3.defaultIconTheme geoclue2 gnome3.gsettings-desktop-schemas
   ];
 

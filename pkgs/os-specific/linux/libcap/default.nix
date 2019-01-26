@@ -1,17 +1,15 @@
-{ stdenv, buildPackages, fetchurl, attr, perl, pam ? null }:
-assert pam != null -> stdenv.isLinux;
+{ stdenv, buildPackages, fetchurl, attr, perl, pam }:
 
 stdenv.mkDerivation rec {
   name = "libcap-${version}";
-  version = "2.25";
+  version = "2.26";
 
   src = fetchurl {
     url = "mirror://kernel/linux/libs/security/linux-privs/libcap2/${name}.tar.xz";
-    sha256 = "0qjiqc5pknaal57453nxcbz3mn1r4hkyywam41wfcglq3v2qlg39";
+    sha256 = "12s5b8fp61jcn4qld8a7fakcz1han4a6l3b8cyl3n6r7hk2bfc5n";
   };
 
-  outputs = [ "out" "dev" "lib" "man" "doc" ]
-    ++ stdenv.lib.optional (pam != null) "pam";
+  outputs = [ "out" "dev" "lib" "man" "doc" "pam" ];
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ perl ];
@@ -22,7 +20,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [
     "lib=lib"
-    (stdenv.lib.optional (pam != null) "PAM_CAP=yes")
+    "PAM_CAP=yes"
     "BUILD_CC=$(CC_FOR_BUILD)"
     "CC:=$(CC)"
   ];
@@ -57,5 +55,6 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Library for working with POSIX capabilities";
     platforms = stdenv.lib.platforms.linux;
+    license = stdenv.lib.licenses.bsd3;
   };
 }

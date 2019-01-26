@@ -40,7 +40,7 @@ in
       target = "security/pam_mount.conf.xml";
       source =
         let
-          extraUserVolumes = filterAttrs (n: u: u.cryptHomeLuks != null) config.users.extraUsers;
+          extraUserVolumes = filterAttrs (n: u: u.cryptHomeLuks != null) config.users.users;
           userVolumeEntry = user: "<volume user=\"${user.name}\" path=\"${user.cryptHomeLuks}\" mountpoint=\"${user.home}\" />\n";
         in
          pkgs.writeText "pam_mount.conf.xml" ''

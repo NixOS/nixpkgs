@@ -6,7 +6,7 @@ import ./make-test.nix ({ pkgs, ... }: {
 
   nodes = {
     storage =
-      { config, pkgs, ... }:
+      { ... }:
       { services.nfs.server.enable = true;
         services.nfs.server.exports = ''
           /repos 192.168.1.0/255.255.255.0(rw,no_root_squash)
@@ -15,7 +15,7 @@ import ./make-test.nix ({ pkgs, ... }: {
       };
 
     webserver =
-      { config, pkgs, ... }:
+      { pkgs, ... }:
       { fileSystems = pkgs.lib.mkVMOverride
           [ { mountPoint = "/repos";
               device = "storage:/repos";
@@ -52,7 +52,7 @@ import ./make-test.nix ({ pkgs, ... }: {
       };
 
     client =
-      { config, pkgs, ... }:
+      { ... }:
       { imports = [ ./common/x11.nix ];
         services.xserver.desktopManager.plasma5.enable = true;
       };

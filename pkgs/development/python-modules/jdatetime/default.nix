@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "jdatetime";
-  version = "2.0.0";
+  version = "3.0.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7facd437d27365e217787e1013ecdc402aa77af7248e16128f6a753920000905";
+    sha256 = "21824ab1e29e9ccbca85e77562a090067882976880603c41af8d9c4cffc1d4fc";
   };
 
   propagatedBuildInputs = [ six ];

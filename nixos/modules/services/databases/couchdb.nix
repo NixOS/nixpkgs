@@ -198,13 +198,13 @@ in {
       };
     };
 
-    users.extraUsers.couchdb = {
+    users.users.couchdb = {
       description = "CouchDB Server user";
       group = "couchdb";
       uid = config.ids.uids.couchdb;
     };
 
-    users.extraGroups.couchdb.gid = config.ids.gids.couchdb;
+    users.groups.couchdb.gid = config.ids.gids.couchdb;
 
   };
 }

@@ -1,31 +1,36 @@
 { stdenv
 , fetch
-, fetchpatch
 , cmake
 , python
 , libffi
 , libbfd
 , libxml2
-, valgrind
 , ncurses
 , version
 , release_version
 , zlib
-, compiler-rt_src
-, libcxxabi
+, buildPackages
+, fetchpatch
 , debugVersion ? false
 , enableManpages ? false
+# Mesa requires AMDGPU target
+, enableTargets ? [ stdenv.hostPlatform stdenv.targetPlatform "AMDGPU" ]
 , enableSharedLibraries ? true
-, enableWasm ? true
-, darwin
 }:
 
 let
-  src = fetch "llvm" "0224xvfg6h40y5lrbnb9qaq3grmdc5rg00xq03s1wxjfbf8krx8z";
+  inherit (stdenv.lib) optional optionals optionalString;
+
+  src = fetch "llvm" "1qpls3vk85lydi5b4axl0809fv932qgsqgdgrk098567z4jc7mmn";
 
   # Used when creating a version-suffixed symlink of libLLVM.dylib
   shortVersion = with stdenv.lib;
     concatStringsSep "." (take 2 (splitString "." release_version));
+
+  inherit
+    (import ../common.nix { inherit (stdenv) lib; })
+    llvmBackendList;
+
 in stdenv.mkDerivation (rec {
   name = "llvm-${version}";
 
@@ -33,36 +38,33 @@ in stdenv.mkDerivation (rec {
     unpackFile ${src}
     mv llvm-${version}* llvm
     sourceRoot=$PWD/llvm
-    unpackFile ${compiler-rt_src}
-    mv compiler-rt-* $sourceRoot/projects/compiler-rt
   '';
 
   outputs = [ "out" "python" ]
-    ++ stdenv.lib.optional enableSharedLibraries "lib";
+    ++ optional enableSharedLibraries "lib";
 
   nativeBuildInputs = [ cmake python ]
-    ++ stdenv.lib.optional enableManpages python.pkgs.sphinx;
+    ++ optional enableManpages python.pkgs.sphinx;
 
-  buildInputs = [ libxml2 libffi ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ libcxxabi ];
+  buildInputs = [ libxml2 libffi ];
 
   propagatedBuildInputs = [ ncurses zlib ];
 
-  # TSAN requires XPC on Darwin, which we have no public/free source files for. We can depend on the Apple frameworks
-  # to get it, but they're unfree. Since LLVM is rather central to the stdenv, we patch out TSAN support so that Hydra
-  # can build this. If we didn't do it, basically the entire nixpkgs on Darwin would have an unfree dependency and we'd
-  # get no binary cache for the entire platform. If you really find yourself wanting the TSAN, make this controllable by
-  # a flag and turn the flag off during the stdenv build.
-  postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
-    substituteInPlace ./projects/compiler-rt/cmake/config-ix.cmake \
-      --replace 'set(COMPILER_RT_HAS_TSAN TRUE)' 'set(COMPILER_RT_HAS_TSAN FALSE)'
+  patches = [
+    # fixes tests, included in llvm_7
+    (fetchpatch {
+      url = "https://github.com/llvm-mirror/llvm/commit/737553be0c9c25c497b45a241689994f177d5a5d.patch";
+      sha256 = "0hnaxnkx7zy5yg98f1ggv8a9l0r6g19n6ygqsv26masrnlcbccli";
+    })
+  ];
 
+  postPatch = optionalString stdenv.isDarwin ''
     substituteInPlace cmake/modules/AddLLVM.cmake \
-      --replace 'set(_install_name_dir INSTALL_NAME_DIR "@rpath")' "set(_install_name_dir INSTALL_NAME_DIR "$lib/lib")" \
+      --replace 'set(_install_name_dir INSTALL_NAME_DIR "@rpath")' "set(_install_name_dir)" \
       --replace 'set(_install_rpath "@loader_path/../lib" ''${extra_libdir})' ""
   ''
   # Patch llvm-config to return correct library path based on --link-{shared,static}.
-  + stdenv.lib.optionalString (enableSharedLibraries) ''
+  + optionalString (enableSharedLibraries) ''
     substitute '${./llvm-outputs.patch}' ./llvm-outputs.patch --subst-var lib
     patch -p1 < ./llvm-outputs.patch
   '' + ''
@@ -70,15 +72,11 @@ in stdenv.mkDerivation (rec {
     substituteInPlace unittests/Support/CMakeLists.txt \
       --replace "Path.cpp" ""
     rm unittests/Support/Path.cpp
-
-    # Revert compiler-rt commit that makes codesign mandatory
-    patch -p1 -i ${./compiler-rt-codesign.patch} -d projects/compiler-rt
-  '' + stdenv.lib.optionalString stdenv.hostPlatform.isMusl ''
+  '' + optionalString stdenv.hostPlatform.isMusl ''
     patch -p1 -i ${../TLI-musl.patch}
     substituteInPlace unittests/Support/CMakeLists.txt \
       --replace "add_subdirectory(DynamicLibrary)" ""
     rm unittests/Support/DynamicLibrary/DynamicLibraryTest.cpp
-    patch -p1 -i ${./sanitizers-nongnu.patch} -d projects/compiler-rt
   '';
 
   # hacky fix: created binaries need to be run before installation
@@ -93,39 +91,31 @@ in stdenv.mkDerivation (rec {
     "-DLLVM_BUILD_TESTS=ON"
     "-DLLVM_ENABLE_FFI=ON"
     "-DLLVM_ENABLE_RTTI=ON"
-    "-DCOMPILER_RT_INCLUDE_TESTS=OFF" # FIXME: requires clang source code
-  ]
-  ++ stdenv.lib.optional enableSharedLibraries
+    "-DLLVM_HOST_TRIPLE=${stdenv.hostPlatform.config}"
+    "-DLLVM_DEFAULT_TARGET_TRIPLE=${stdenv.targetPlatform.config}"
+    "-DLLVM_TARGETS_TO_BUILD=${llvmBackendList enableTargets}"
+    "-DLLVM_EXPERIMENTAL_TARGETS_TO_BUILD=WebAssembly"
+    "-DLLVM_ENABLE_DUMP=ON"
+  ] ++ optionals enableSharedLibraries [
     "-DLLVM_LINK_LLVM_DYLIB=ON"
-  ++ stdenv.lib.optionals enableManpages [
+  ] ++ optionals enableManpages [
     "-DLLVM_BUILD_DOCS=ON"
     "-DLLVM_ENABLE_SPHINX=ON"
     "-DSPHINX_OUTPUT_MAN=ON"
     "-DSPHINX_OUTPUT_HTML=OFF"
     "-DSPHINX_WARNINGS_AS_ERRORS=OFF"
-  ]
-  ++ stdenv.lib.optional (!isDarwin)
+  ] ++ optionals (!isDarwin) [
     "-DLLVM_BINUTILS_INCDIR=${libbfd.dev}/include"
-  ++ stdenv.lib.optionals (isDarwin) [
+  ] ++ optionals (isDarwin) [
     "-DLLVM_ENABLE_LIBCXX=ON"
     "-DCAN_TARGET_i386=false"
-  ]
-  ++ stdenv.lib.optionals stdenv.hostPlatform.isMusl [
-    "-DLLVM_HOST_TRIPLE=${stdenv.hostPlatform.config}"
-    "-DLLVM_DEFAULT_TARGET_TRIPLE=${stdenv.targetPlatform.config}"
-    "-DTARGET_TRIPLE=${stdenv.targetPlatform.config}"
-  ] ++ stdenv.lib.optional enableWasm
-   "-DLLVM_EXPERIMENTAL_TARGETS_TO_BUILD=WebAssembly"
-  ;
+  ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    "-DCMAKE_CROSSCOMPILING=True"
+    "-DLLVM_TABLEGEN=${buildPackages.llvm_6}/bin/llvm-tblgen"
+  ];
 
   postBuild = ''
     rm -fR $out
-
-    paxmark m bin/{lli,llvm-rtdyld}
-    paxmark m unittests/ExecutionEngine/MCJIT/MCJITTests
-    paxmark m unittests/ExecutionEngine/Orc/OrcJITTests
-    paxmark m unittests/Support/SupportTests
-    paxmark m bin/lli-child-target
   '';
 
   preCheck = ''
@@ -136,13 +126,13 @@ in stdenv.mkDerivation (rec {
     mkdir -p $python/share
     mv $out/share/opt-viewer $python/share/opt-viewer
   ''
-  + stdenv.lib.optionalString enableSharedLibraries ''
+  + optionalString enableSharedLibraries ''
     moveToOutput "lib/libLLVM-*" "$lib"
     moveToOutput "lib/libLLVM${stdenv.hostPlatform.extensions.sharedLibrary}" "$lib"
     substituteInPlace "$out/lib/cmake/llvm/LLVMExports-${if debugVersion then "debug" else "release"}.cmake" \
       --replace "\''${_IMPORT_PREFIX}/lib/libLLVM-" "$lib/lib/libLLVM-"
   ''
-  + stdenv.lib.optionalString (stdenv.isDarwin && enableSharedLibraries) ''
+  + optionalString (stdenv.isDarwin && enableSharedLibraries) ''
     substituteInPlace "$out/lib/cmake/llvm/LLVMExports-${if debugVersion then "debug" else "release"}.cmake" \
       --replace "\''${_IMPORT_PREFIX}/lib/libLLVM.dylib" "$lib/lib/libLLVM.dylib"
     ln -s $lib/lib/libLLVM.dylib $lib/lib/libLLVM-${shortVersion}.dylib
@@ -161,7 +151,7 @@ in stdenv.mkDerivation (rec {
     description = "Collection of modular and reusable compiler and toolchain technologies";
     homepage    = http://llvm.org/;
     license     = stdenv.lib.licenses.ncsa;
-    maintainers = with stdenv.lib.maintainers; [ lovek323 raskin viric dtzWill ];
+    maintainers = with stdenv.lib.maintainers; [ lovek323 raskin dtzWill ];
     platforms   = stdenv.lib.platforms.all;
   };
 } // stdenv.lib.optionalAttrs enableManpages {

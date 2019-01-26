@@ -1,15 +1,13 @@
-{ stdenv, fetchurl, readline, compat ? false
-, hostPlatform
-}:
+{ stdenv, fetchurl, readline, compat ? false }:
 
 stdenv.mkDerivation rec {
   name = "lua-${version}";
   luaversion = "5.3";
-  version = "${luaversion}.4";
+  version = "${luaversion}.5";
 
   src = fetchurl {
     url = "https://www.lua.org/ftp/${name}.tar.gz";
-    sha256 = "0320a8dg3aci4hxla380dx1ifkw8gj4gbw5c4dz41g1kh98sm0gn";
+    sha256 = "0c2eed3f960446e1a3e4b9a1ca2f3ff893b6ce41942cf54d5dd59ab4b3b058ac";
   };
 
   buildInputs = [ readline ];
@@ -53,6 +51,7 @@ stdenv.mkDerivation rec {
     Libs: -L$out/lib -llua -lm
     Cflags: -I$out/include
     EOF
+    ln -s "$out/lib/pkgconfig/lua.pc" "$out/lib/pkgconfig/lua${luaversion}.pc"
   '';
 
   meta = {

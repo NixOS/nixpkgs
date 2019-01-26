@@ -1,6 +1,6 @@
 nvidia_x11: sha256:
 
-{ stdenv, lib, fetchurl, m4 }:
+{ stdenv, fetchurl, m4 }:
 
 stdenv.mkDerivation rec {
   name = "nvidia-persistenced-${nvidia_x11.version}";

@@ -1,9 +1,8 @@
-{ lib, fetchurl, cmake, buildPythonPackage, libxml2, libxslt, pysideApiextractor, pysideGeneratorrunner, python, sphinx, qt4, isPy3k, isPy35, isPy36 }:
+{ lib, fetchurl, cmake, buildPythonPackage, libxml2, libxslt, pysideApiextractor, pysideGeneratorrunner, python, sphinx, qt4, isPy3k, isPy35, isPy36, isPy37 }:
 
 # This derivation provides a Python module and should therefore be called via `python-packages.nix`.
 # Python 3.5 is not supported: https://github.com/PySide/Shiboken/issues/77
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "pyside-shiboken";
   version = "1.2.4";
 
@@ -26,7 +25,7 @@ buildPythonPackage rec {
   '';
 
   # gcc6 patch was also sent upstream: https://github.com/pyside/Shiboken/pull/86
-  patches = [ ./gcc6.patch ] ++ (lib.optional (isPy35 || isPy36) ./shiboken_py35.patch);
+  patches = [ ./gcc6.patch ] ++ (lib.optional (isPy35 || isPy36 || isPy37) ./shiboken_py35.patch);
 
   cmakeFlags = if isPy3k then "-DUSE_PYTHON3=TRUE" else null;
 

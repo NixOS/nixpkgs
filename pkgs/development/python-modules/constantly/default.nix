@@ -1,12 +1,11 @@
-{ stdenv, buildPythonPackage, fetchurl
+{ stdenv, buildPythonPackage, fetchPypi
 }:
 buildPythonPackage rec {
   pname = "constantly";
-  name = "${pname}-${version}";
   version = "15.1.0";
 
-  src = fetchurl {
-    url = "mirror://pypi/c/constantly/${name}.tar.gz";
+  src = fetchPypi {
+    inherit pname version;
     sha256 = "0dgwdla5kfpqz83hfril716inm41hgn9skxskvi77605jbmp4qsq";
   };
 

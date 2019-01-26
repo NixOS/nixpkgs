@@ -4,29 +4,25 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "0.4.7.1";
+  version = "0.4.8";
   name = "freeorion-${version}";
 
   src = fetchFromGitHub {
     owner  = "freeorion";
     repo   = "freeorion";
-    rev    = "v${version}";
-    sha256 = "1m05l3a6ilqd7p2g3aqjpq89grb571cg8n9bpgz0y3sxskcym6sp";
+    rev = "v${version}";
+    sha256 = "1lj1q2ljjgbbiqxb53wdrrcz0zxxr3vv9jqrhbzvfsss7q808jfw";
   };
 
-  buildInputs = [ boost SDL2 python2 freetype openal libogg libvorbis zlib libpng libtiff libjpeg libGLU_combined glew ];
+  buildInputs = [
+	(boost.override { enablePython = true; })
+    SDL2 python2 freetype openal libogg libvorbis zlib libpng libtiff libjpeg libGLU_combined glew ];
 
   nativeBuildInputs = [ cmake doxygen graphviz makeWrapper ];
 
   enableParallelBuilding = true;
 
   patches = [
-    # fix build with boost 1.66
-    (fetchpatch {
-      url = https://github.com/freeorion/freeorion/commit/c9b5b13fb81b1ed142dee0e843101c6b8832ca95.patch;
-      sha256 = "0agqhxk8462sgd230lmdzbrbrfd77zyy7a4g8hrf28zxza1nza94";
-    })
-    ./fix_rpaths.patch
   ];
 
   postInstall = ''
@@ -41,7 +37,8 @@ stdenv.mkDerivation rec {
     chmod +x $out/fixpaths/fix-paths
 
     wrapProgram $out/bin/freeorion \
-      --run $out/fixpaths/fix-paths
+      --run $out/fixpaths/fix-paths \
+      --prefix LD_LIBRARY_PATH : $out/lib/freeorion
   '';
 
   meta = with stdenv.lib; {
@@ -49,5 +46,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.freeorion.org;
     license = with licenses; [ gpl2 cc-by-sa-30 ];
     platforms = platforms.linux;
+    maintainers = with maintainers; [ tex ];
   };
 }

@@ -1,6 +1,5 @@
 { stdenv
 , fetchurl
-, gcc
 , removeReferencesTo
 , cpp ? false
 , gfortran ? null
@@ -17,11 +16,11 @@ assert !cpp || mpi == null;
 let inherit (stdenv.lib) optional optionals; in
 
 stdenv.mkDerivation rec {
-  version = "1.10.2";
+  version = "1.10.4";
   name = "hdf5-${version}";
   src = fetchurl {
     url = "https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.10/${name}/src/${name}.tar.bz2";
-    sha256 = "0wfb3w6dzi6zr2g1sdswqy9lxbp7yr4blvyi7k2xya7izmxmpb8w";
+    sha256 = "1pr85fa1sh2ky6ai2hs3f21lp252grl2cq3wbyi4rh7dm83gyrqj";
  };
 
   passthru = {
@@ -60,7 +59,7 @@ stdenv.mkDerivation rec {
       applications to evolve in their use of HDF5. The HDF5 Technology suite includes tools and
       applications for managing, manipulating, viewing, and analyzing data in the HDF5 format.
     '';
-    license = stdenv.lib.licenses.free; # BSD-like
+    license = stdenv.lib.licenses.bsd3; # Lawrence Berkeley National Labs BSD 3-Clause variant
     homepage = https://www.hdfgroup.org/HDF5/;
     platforms = stdenv.lib.platforms.unix;
     broken = (gfortran != null) && stdenv.isDarwin;

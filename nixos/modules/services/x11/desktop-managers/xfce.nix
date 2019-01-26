@@ -43,12 +43,6 @@ in
         default = true;
         description = "Enable the XFWM (default) window manager.";
       };
-
-      screenLock = mkOption {
-        type = types.enum [ "xscreensaver" "xlockmore" "slock" ];
-        default = "xlockmore";
-        description = "Application used by XFCE to lock the screen.";
-      };
     };
   };
 
@@ -64,9 +58,6 @@ in
       hicolor-icon-theme
       tango-icon-theme
       xfce4-icon-theme
-
-      desktop-file-utils
-      shared-mime-info
 
       # Needed by Xfce's xinitrc script
       # TODO: replace with command -v
@@ -92,7 +83,7 @@ in
       thunar-volman # TODO: drop
     ] ++ (if config.hardware.pulseaudio.enable
           then [ xfce4-mixer-pulse xfce4-volumed-pulse ]
-	  else [ xfce4-mixer xfce4-volumed ])
+          else [ xfce4-mixer xfce4-volumed ])
       # TODO: NetworkManager doesn't belong here
       ++ optionals config.networking.networkmanager.enable [ networkmanagerapplet ]
       ++ optionals config.powerManagement.enable [ xfce4-power-manager ]
@@ -106,15 +97,14 @@ in
     environment.pathsToLink = [
       "/share/xfce4"
       "/share/themes"
-      "/share/mime"
-      "/share/desktop-directories"
       "/share/gtksourceview-2.0"
     ];
 
     environment.variables = {
-      GDK_PIXBUF_MODULE_FILE = "${pkgs.librsvg.out}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache";
       GIO_EXTRA_MODULES = [ "${pkgs.xfce.gvfs}/lib/gio/modules" ];
     };
+
+    services.xserver.gdk-pixbuf.modulePackages = [ pkgs.librsvg ];
 
     services.xserver.desktopManager.session = [{
       name = "xfce";

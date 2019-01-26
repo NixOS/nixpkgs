@@ -1,39 +1,30 @@
-{ stdenv, fetchurl, lib, file
-, pkgconfig, autoconf
+{ stdenv, fetchbzr
+, pkgconfig, systemd, autoreconfHook
 , glib, dbus-glib, json-glib
 , gtk3, libindicator-gtk3, libdbusmenu-gtk3, libappindicator-gtk3 }:
 
-with lib;
-
 stdenv.mkDerivation rec {
-  name = "indicator-application-gtk3-${version}";
-  version = "${versionMajor}.${versionMinor}";
-  versionMajor = "12.10";
-  versionMinor = "0";
+  pname = "indicator-application";
+  version = "12.10.1";
 
-  src = fetchurl {
-    url = "${meta.homepage}/${versionMajor}/${version}/+download/indicator-application-${version}.tar.gz";
-    sha256 = "1z8ar0k47l4his7zvffbc2kn658nid51svqnfv0dms601w53gbpr";
+  name = "${pname}-gtk3-${version}";
+
+  src = fetchbzr {
+    url = "https://code.launchpad.net/~indicator-applet-developers/${pname}/trunk.17.04";
+    rev = "260";
+    sha256 = "1f0jdyqqb5g86zdpbcyn16x94yjigsfiv2kf73dvni5rp1vafbq1";
   };
 
-  nativeBuildInputs = [ pkgconfig autoconf ];
+  nativeBuildInputs = [ pkgconfig autoreconfHook ];
 
   buildInputs = [
-    glib dbus-glib json-glib
+    glib dbus-glib json-glib systemd
     gtk3 libindicator-gtk3 libdbusmenu-gtk3 libappindicator-gtk3
   ];
 
   postPatch = ''
-    substituteInPlace configure.ac \
-      --replace 'DBUSSERVICEDIR=`$PKG_CONFIG --variable=session_bus_services_dir dbus-1`' \
-                "DBUSSERVICEDIR=$out/share/dbus-1/services"
-    autoconf
-    for f in {configure,ltmain.sh,m4/libtool.m4}; do
-      substituteInPlace $f \
-        --replace /usr/bin/file ${file}/bin/file
-    done
-    substituteInPlace src/Makefile.in \
-      --replace 'applicationlibdir = $(INDICATORDIR)' "applicationlibdir = $out/lib"
+    substituteInPlace data/Makefile.am \
+      --replace "/etc/xdg/autostart" "$out/etc/xdg/autostart"
   '';
 
   configureFlags = [
@@ -47,7 +38,16 @@ stdenv.mkDerivation rec {
     "localstatedir=\${TMPDIR}"
   ];
 
-  meta = {
+  PKG_CONFIG_SYSTEMD_SYSTEMDUSERUNITDIR = "$(out)/lib/systemd/user";
+  PKG_CONFIG_INDICATOR3_0_4_INDICATORDIR = "$(out)/lib/indicators3/7/";
+
+  # Upstart is not used in NixOS
+  postFixup = ''
+    rm -rf $out/share/indicator-application/upstart
+    rm -rf $out/share/upstart
+  '';
+
+  meta = with stdenv.lib; {
     description = "Indicator to take menus from applications and place them in the panel";
     homepage = https://launchpad.net/indicator-application;
     license = licenses.gpl3;

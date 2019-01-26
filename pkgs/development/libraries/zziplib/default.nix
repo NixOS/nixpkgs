@@ -13,8 +13,6 @@ stdenv.mkDerivation rec {
     sed -i -e s,--export-dynamic,, configure
   '';
 
-  # TODO: still an issue: https://github.com/gdraheim/zziplib/issues/27
-
   buildInputs = [ docbook_xml_dtd_412 perl python2 zip xmlto zlib ];
 
   # tests are broken (https://github.com/gdraheim/zziplib/issues/20),

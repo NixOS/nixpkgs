@@ -11,7 +11,7 @@ let
   # (not via videoDrivers = ["vboxvideo"]).
   # It's likely to work again in some future update.
   xserverABI = let abi = xserverVListFunc 0 + xserverVListFunc 1;
-    in if abi == "119" then "118" else abi;
+    in if abi == "119" || abi == "120" then "118" else abi;
 in
 
 stdenv.mkDerivation {
@@ -19,7 +19,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://download.virtualbox.org/virtualbox/${version}/VBoxGuestAdditions_${version}.iso";
-    sha256 = "04q8d2dxhkkqbghqidcwv6mx57fqpp92smh7gnaxb7vqqskb9dl0";
+    sha256 = "e51e33500a265b5c2d7bb2d03d32208df880523dfcb1e2dde2c78a0e0daa0603";
   };
 
   KERN_DIR = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
@@ -36,7 +36,8 @@ stdenv.mkDerivation {
 
   NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types -Wno-error=implicit-function-declaration";
 
-  buildInputs = [ patchelf cdrkit makeWrapper dbus ] ++ kernel.moduleBuildDependencies;
+  nativeBuildInputs = [ patchelf makeWrapper ];
+  buildInputs = [ cdrkit dbus ] ++ kernel.moduleBuildDependencies;
 
   installPhase = ''
     mkdir -p $out
@@ -44,23 +45,23 @@ stdenv.mkDerivation {
   '';
 
   buildCommand = with xorg; ''
-    ${if stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux" then ''
+    ${if stdenv.hostPlatform.system == "i686-linux" || stdenv.hostPlatform.system == "x86_64-linux" then ''
         isoinfo -J -i $src -x /VBoxLinuxAdditions.run > ./VBoxLinuxAdditions.run
         chmod 755 ./VBoxLinuxAdditions.run
         ./VBoxLinuxAdditions.run --noexec --keep
       ''
-      else throw ("Architecture: "+stdenv.system+" not supported for VirtualBox guest additions")
+      else throw ("Architecture: "+stdenv.hostPlatform.system+" not supported for VirtualBox guest additions")
     }
 
     # Unpack files
     cd install
-    ${if stdenv.system == "i686-linux" then ''
+    ${if stdenv.hostPlatform.system == "i686-linux" then ''
         tar xfvj VBoxGuestAdditions-x86.tar.bz2
       ''
-      else if stdenv.system == "x86_64-linux" then ''
+      else if stdenv.hostPlatform.system == "x86_64-linux" then ''
         tar xfvj VBoxGuestAdditions-amd64.tar.bz2
       ''
-      else throw ("Architecture: "+stdenv.system+" not supported for VirtualBox guest additions")
+      else throw ("Architecture: "+stdenv.hostPlatform.system+" not supported for VirtualBox guest additions")
     }
 
     cd ../
@@ -81,13 +82,13 @@ stdenv.mkDerivation {
     # Change the interpreter for various binaries
     for i in sbin/VBoxService bin/{VBoxClient,VBoxControl} other/mount.vboxsf
     do
-        ${if stdenv.system == "i686-linux" then ''
+        ${if stdenv.hostPlatform.system == "i686-linux" then ''
           patchelf --set-interpreter ${stdenv.glibc.out}/lib/ld-linux.so.2 $i
         ''
-        else if stdenv.system == "x86_64-linux" then ''
+        else if stdenv.hostPlatform.system == "x86_64-linux" then ''
           patchelf --set-interpreter ${stdenv.glibc.out}/lib/ld-linux-x86-64.so.2 $i
         ''
-        else throw ("Architecture: "+stdenv.system+" not supported for VirtualBox guest additions")
+        else throw ("Architecture: "+stdenv.hostPlatform.system+" not supported for VirtualBox guest additions")
         }
         patchelf --set-rpath ${lib.makeLibraryPath [ stdenv.cc.cc dbus libX11 libXt libXext libXmu libXfixes libXrandr libXcursor ]} $i
     done

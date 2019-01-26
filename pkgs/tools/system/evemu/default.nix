@@ -1,5 +1,5 @@
 { stdenv, fetchgit, autoreconfHook, pkgconfig, pythonPackages
-, libevdev, linuxHeaders
+, libevdev
 }:
 
 stdenv.mkDerivation rec {

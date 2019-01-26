@@ -7,7 +7,6 @@
 buildPythonPackage rec {
   pname = "intelhex";
   version = "2.1";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

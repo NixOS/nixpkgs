@@ -41,7 +41,7 @@ in
   # fix-point made by Nixpkgs.
   overlays ? let
       isDir = path: pathExists (path + "/.");
-      pathOverlays = try <nixpkgs-overlays> "";
+      pathOverlays = try (toString <nixpkgs-overlays>) "";
       homeOverlaysFile = homeDir + "/.config/nixpkgs/overlays.nix";
       homeOverlaysDir = homeDir + "/.config/nixpkgs/overlays";
       overlays = path:
@@ -83,5 +83,6 @@ import ./. (builtins.removeAttrs args [ "system" "platform" ] // {
   inherit config overlays crossSystem;
   # Fallback: Assume we are building packages on the current (build, in GNU
   # Autotools parlance) system.
-  localSystem = { system = builtins.currentSystem; } // localSystem;
+  localSystem = (if args ? localSystem then {}
+                 else { system = builtins.currentSystem; }) // localSystem;
 })

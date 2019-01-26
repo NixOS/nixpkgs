@@ -103,12 +103,12 @@ in
   };
 
   config = mkIf cfg.enable {
-    users.extraUsers."${cfg.user}" = {
+    users.users."${cfg.user}" = {
       isSystemUser = true;
       group = cfg.group;
     };
 
-    users.extraGroups."${cfg.group}" = {};
+    users.groups."${cfg.group}" = {};
 
     systemd.services.atlassian-crowd = {
       description = "Atlassian Crowd";
@@ -126,12 +126,14 @@ in
       };
 
       preStart = ''
-        mkdir -p ${cfg.home}/{logs,work,database}
+        rm -rf ${cfg.home}/work
+        mkdir -p ${cfg.home}/{logs,database,work}
 
         mkdir -p /run/atlassian-crowd
-        ln -sf ${cfg.home}/{database,work,server.xml} /run/atlassian-crowd
+        ln -sf ${cfg.home}/{database,logs,work,server.xml} /run/atlassian-crowd
 
-        chown -R ${cfg.user} ${cfg.home}
+        chown ${cfg.user}:${cfg.group} ${cfg.home}
+        chown ${cfg.user}:${cfg.group} ${cfg.home}/{logs,database,work}
 
         sed -e 's,port="8095",port="${toString cfg.listenPort}" address="${cfg.listenAddress}",' \
         '' + (lib.optionalString cfg.proxy.enable ''

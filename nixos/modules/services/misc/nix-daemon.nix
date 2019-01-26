@@ -33,7 +33,7 @@ let
       sh = pkgs.runtimeShell;
       binshDeps = pkgs.writeReferencesToFile sh;
     in
-      pkgs.runCommand "nix.conf" { extraOptions = cfg.extraOptions; } ''
+      pkgs.runCommand "nix.conf" { extraOptions = cfg.extraOptions; } (''
         ${optionalString (!isNix20) ''
           extraPaths=$(for i in $(cat ${binshDeps}); do if test -d $i; then echo $i; fi; done)
         ''}
@@ -62,7 +62,15 @@ let
         ''}
         $extraOptions
         END
-      '';
+      '' + optionalString cfg.checkConfig (
+            if pkgs.stdenv.hostPlatform != pkgs.stdenv.buildPlatform then ''
+              echo "Ignore nix.checkConfig when cross-compiling"
+            '' else ''
+              echo "Checking that Nix can read nix.conf..."
+              ln -s $out ./nix.conf
+              NIX_CONF_DIR=$PWD ${cfg.package}/bin/nix show-config >/dev/null
+            '')
+      );
 
 in
 
@@ -84,7 +92,7 @@ in
       };
 
       maxJobs = mkOption {
-        type = types.int;
+        type = types.either types.int (types.enum ["auto"]);
         default = 1;
         example = 64;
         description = ''
@@ -109,11 +117,11 @@ in
 
       buildCores = mkOption {
         type = types.int;
-        default = 1;
+        default = 0;
         example = 64;
         description = ''
           This option defines the maximum number of concurrent tasks during
-          one build. It affects, e.g., -j option for make. The default is 1.
+          one build. It affects, e.g., -j option for make.
           The special value 0 means that the builder should use all
           available CPU cores in the system. Some builds may become
           non-deterministic with this option; use with care! Packages will
@@ -123,14 +131,16 @@ in
 
       useSandbox = mkOption {
         type = types.either types.bool (types.enum ["relaxed"]);
-        default = false;
+        default = true;
         description = "
           If set, Nix will perform builds in a sandboxed environment that it
-          will set up automatically for each build.  This prevents
-          impurities in builds by disallowing access to dependencies
-          outside of the Nix store. This isn't enabled by default for
-          performance. It doesn't affect derivation hashes, so changing
-          this option will not trigger a rebuild of packages.
+          will set up automatically for each build. This prevents impurities
+          in builds by disallowing access to dependencies outside of the Nix
+          store by using network and mount namespaces in a chroot environment.
+          This is enabled by default even though it has a possible performance
+          impact due to the initial setup time of a sandbox for each build. It
+          doesn't affect derivation hashes, so changing this option will not
+          trigger a rebuild of packages.
         ";
       };
 
@@ -338,7 +348,8 @@ in
       nixPath = mkOption {
         type = types.listOf types.str;
         default =
-          [ "nixpkgs=/nix/var/nix/profiles/per-user/root/channels/nixos/nixpkgs"
+          [
+            "nixpkgs=/nix/var/nix/profiles/per-user/root/channels/nixos"
             "nixos-config=/etc/nixos/configuration.nix"
             "/nix/var/nix/profiles/per-user/root/channels"
           ];
@@ -349,6 +360,13 @@ in
         '';
       };
 
+      checkConfig = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          If enabled (the default), checks that Nix can parse the generated nix.conf.
+        '';
+      };
     };
 
   };
@@ -385,8 +403,8 @@ in
     systemd.sockets.nix-daemon.wantedBy = [ "sockets.target" ];
 
     systemd.services.nix-daemon =
-      { path = [ nix pkgs.utillinux ]
-          ++ optionals cfg.distributedBuilds [ config.programs.ssh.package pkgs.gzip ]
+      { path = [ nix pkgs.utillinux config.programs.ssh.package ]
+          ++ optionals cfg.distributedBuilds [ pkgs.gzip ]
           ++ optionals (!isNix20) [ pkgs.openssl.bin ];
 
         environment = cfg.envVars
@@ -421,7 +439,7 @@ in
 
     # Set up the environment variables for running Nix.
     environment.sessionVariables = cfg.envVars //
-      { NIX_PATH = concatStringsSep ":" cfg.nixPath;
+      { NIX_PATH = cfg.nixPath;
       };
 
     environment.extraInit = optionalString (!isNix20)
@@ -431,11 +449,15 @@ in
         if [ "$USER" != root -o ! -w /nix/var/nix/db ]; then
             export NIX_REMOTE=daemon
         fi
+      '' + ''
+        if [ -e "$HOME/.nix-defexpr/channels" ]; then
+          export NIX_PATH="$HOME/.nix-defexpr/channels''${NIX_PATH:+:$NIX_PATH}"
+        fi
       '';
 
     nix.nrBuildUsers = mkDefault (lib.max 32 cfg.maxJobs);
 
-    users.extraUsers = nixbldUsers;
+    users.users = nixbldUsers;
 
     services.xserver.displayManager.hiddenUsers = map ({ name, ... }: name) nixbldUsers;
 

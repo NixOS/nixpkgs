@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
       based on Brouwer-realizability & meaning explanations.
       Inspired by Nuprl
     '';
-    homepage = http://www.jonprl.org/;
+    homepage = https://github.com/jonsterling/JonPRL;
     license = stdenv.lib.licenses.mit;
     maintainers = with stdenv.lib.maintainers; [ puffnfresh ];
     platforms = stdenv.lib.platforms.linux;

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, writeScript, unzip, jre }:
+{ stdenv, fetchurl, makeWrapper, unzip, jre }:
 
 let
   version = "1.9";

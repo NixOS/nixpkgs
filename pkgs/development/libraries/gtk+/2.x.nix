@@ -1,9 +1,10 @@
 { stdenv, fetchurl, pkgconfig, gettext, glib, atk, pango, cairo, perl, xorg
-, gdk_pixbuf, xlibsWrapper, gobjectIntrospection
+, gdk_pixbuf, xlibsWrapper, gobject-introspection
 , xineramaSupport ? stdenv.isLinux
 , cupsSupport ? true, cups ? null
-, gdktarget ? "x11"
+, gdktarget ? if stdenv.isDarwin then "quartz" else "x11"
 , AppKit, Cocoa
+, fetchpatch
 }:
 
 assert xineramaSupport -> xorg.libXinerama != null;
@@ -26,9 +27,15 @@ stdenv.mkDerivation rec {
 
   setupHook = ./setup-hook.sh;
 
-  nativeBuildInputs = [ setupHook perl pkgconfig gettext gobjectIntrospection ];
+  nativeBuildInputs = [ setupHook perl pkgconfig gettext gobject-introspection ];
 
-  patches = [ ./2.0-immodules.cache.patch ./gtk2-theme-paths.patch ];
+  patches = [
+    ./2.0-immodules.cache.patch
+    ./gtk2-theme-paths.patch
+  ] ++ optional stdenv.isDarwin (fetchpatch {
+    url = https://bug557780.bugzilla-attachments.gnome.org/attachment.cgi?id=306776;
+    sha256 = "0sp8f1r5c4j2nlnbqgv7s7nxa4cfwigvm033hvhb1ld652pjag4r";
+  });
 
   propagatedBuildInputs = with xorg;
     [ glib cairo pango gdk_pixbuf atk ]
@@ -48,6 +55,8 @@ stdenv.mkDerivation rec {
     "--disable-introspection"
     "--disable-visibility"
   ];
+
+  doCheck = false; # needs X11
 
   postInstall = ''
     moveToOutput share/gtk-2.0/demo "$devdoc"

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, zlib, glib, xorg, dbus, fontconfig,
+{ stdenv, fetchurl, zlib, glib, xorg, dbus, fontconfig, libGL,
   freetype, xkeyboard_config, makeDesktopItem, makeWrapper }:
 
 stdenv.mkDerivation rec {
@@ -41,6 +41,7 @@ stdenv.mkDerivation rec {
     dbus
     fontconfig
     freetype
+    libGL
   ];
 
   installPhase = ''

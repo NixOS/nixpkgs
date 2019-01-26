@@ -5,13 +5,14 @@
 
 buildPythonPackage rec {
   pname = "Fiona";
-  version = "1.7.11.post1";
-  name = "${pname}-${version}";
+  version = "1.8.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "35df044fa805e6b420450f5d4281fc0edf96e1da0545c31032045cd3cfad3abf";
+    sha256 = "4c6419b7ac29136708029f6a44b4ccd458735a4d241016c7b1bab41685c08d8f";
   };
+
+  CXXFLAGS = stdenv.lib.optionalString stdenv.cc.isClang "-std=c++11";
 
   buildInputs = [
     gdal

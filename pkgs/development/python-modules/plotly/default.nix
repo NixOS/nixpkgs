@@ -5,17 +5,17 @@
 , nbformat
 , pytz
 , requests
+, retrying
 , six
 }:
 
 buildPythonPackage rec {
   pname = "plotly";
-  version = "2.5.1";
-  name = "${pname}-${version}";
+  version = "3.4.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9dd816c36271cf81d82c854fba866c743cbd8cc71f1c95384195307def859a69";
+    sha256 = "5dc85bde91bc80fa05f0d89e9f3a8eaee735b2b404047266874e0ff9c104407f";
   };
 
   propagatedBuildInputs = [
@@ -23,6 +23,7 @@ buildPythonPackage rec {
     nbformat
     pytz
     requests
+    retrying
     six
   ];
 

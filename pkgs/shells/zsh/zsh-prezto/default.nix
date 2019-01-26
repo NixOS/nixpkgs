@@ -1,4 +1,4 @@
-{ stdenv, fetchpatch, fetchgit, fetchFromGitHub }:
+{ stdenv, fetchgit }:
 
 stdenv.mkDerivation rec {
   name = "zsh-prezto-2017-12-03";

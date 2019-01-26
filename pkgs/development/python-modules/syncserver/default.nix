@@ -1,5 +1,4 @@
-{ stdenv
-, buildPythonPackage
+{ buildPythonPackage
 , fetchgit
 , isPy27
 , unittest2
@@ -16,7 +15,7 @@
 }:
 
 buildPythonPackage rec {
-  name = "syncserver-${version}";
+  pname = "syncserver";
   version = "1.6.0";
   disabled = ! isPy27;
 
@@ -31,9 +30,4 @@ buildPythonPackage rec {
     cornice gunicorn pyramid requests simplejson sqlalchemy mozsvc tokenserver
     serversyncstorage configparser
   ];
-
-  meta = {
-    maintainers = [ ];
-    platforms = stdenv.lib.platforms.all;
-  };
 }

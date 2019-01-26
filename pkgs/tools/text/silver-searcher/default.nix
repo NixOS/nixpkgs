@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "silver-searcher-${version}";
-  version = "2.1.0";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "ggreer";
     repo = "the_silver_searcher";
     rev = "${version}";
-    sha256 = "0wcw4kyivb10m9b173183jrj46a0gisd35yqxi1mr9hw5l5dhkpa";
+    sha256 = "0cyazh7a66pgcabijd27xnk1alhsccywivv6yihw378dqxb22i1p";
   };
 
   patches = [ ./bash-completion.patch ];

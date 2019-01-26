@@ -38,9 +38,10 @@ stdenv.mkDerivation {
     install -Dm444 ProcessingDeviceKeysSimple.txt $out/share/${baseName}
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://forum.doom9.org/showthread.php?t=123311;
     description = "A library and program to retrieve decryption keys for HD discs";
-    platforms = stdenv.lib.platforms.linux;
+    platforms = platforms.linux;
+    license = licenses.publicDomain;
   };
 }

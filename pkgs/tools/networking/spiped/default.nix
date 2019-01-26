@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "1.5.0";
 
   src = fetchurl {
-    url    = "http://www.tarsnap.com/spiped/${name}.tgz";
+    url    = "https://www.tarsnap.com/spiped/${name}.tgz";
     sha256 = "1mxcbxifr3bnj6ga8lz88y4bhff016i6kjdzwbb3gzb2zcs4pxxj";
   };
 

@@ -1,29 +1,32 @@
-{ callPackage, fetchurl, coq }:
+{ stdenv, fetchFromGitHub, coq, ncurses, which
+, graphviz, mathcomp, withDoc ? false
+}:
 
-let param =
-  {
-    "8.5" =  {
-      version = "1.6.1";
-      url = https://github.com/math-comp/math-comp/archive/mathcomp-1.6.1.tar.gz;
-      sha256 = "1j9ylggjzrxz1i2hdl2yhsvmvy5z6l4rprwx7604401080p5sgjw";
-    };
+stdenv.mkDerivation rec {
+  name = "coq${coq.coq-version}-ssreflect-${version}";
 
-    "8.6" =  {
-      version = "1.6.4";
-      url = https://github.com/math-comp/math-comp/archive/mathcomp-1.6.4.tar.gz;
-      sha256 = "0qmjjb6jsxmmf4gpw10r30rmrvwqgzirvvgyy41mz2vhgwis8wn6";
-    };
+  inherit (mathcomp) src version meta;
 
-    "8.7" = {
-      version = "1.6.4";
-      url = https://github.com/math-comp/math-comp/archive/mathcomp-1.6.4.tar.gz;
-      sha256 = "0qmjjb6jsxmmf4gpw10r30rmrvwqgzirvvgyy41mz2vhgwis8wn6";
-    };
+  nativeBuildInputs = stdenv.lib.optionals withDoc [ graphviz ];
+  buildInputs = [ coq ncurses which ] ++ (with coq.ocamlPackages; [ ocaml findlib camlp5 ]);
 
-  }."${coq.coq-version}"
-; in
+  enableParallelBuilding = true;
 
-callPackage ./generic.nix {
-  name = "coq${coq.coq-version}-ssreflect-${param.version}";
-  src = fetchurl { inherit (param) url sha256; };
+  COQBIN = "${coq}/bin/";
+
+  preBuild = ''
+    patchShebangs etc/utils/ssrcoqdep || true
+    cd mathcomp/ssreflect
+  '';
+
+  installPhase = ''
+    make -f Makefile.coq COQLIB=$out/lib/coq/${coq.coq-version}/ install
+  '';
+
+  postInstall = stdenv.lib.optionalString withDoc ''
+    mkdir -p $out/share/doc/coq/${coq.coq-version}/user-contrib/mathcomp/ssreflect/
+    cp -r html $out/share/doc/coq/${coq.coq-version}/user-contrib/mathcomp/ssreflect/
+  '';
+
+  passthru.compatibleCoqVersions = mathcomp.compatibleCoqVersions;
 }

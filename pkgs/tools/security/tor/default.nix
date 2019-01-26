@@ -1,9 +1,8 @@
 { stdenv, fetchurl, pkgconfig, libevent, openssl, zlib, torsocks
-, libseccomp, systemd, libcap
+, libseccomp, systemd, libcap, lzma, zstd, scrypt
 
 # for update.nix
 , writeScript
-, runCommand
 , common-updater-scripts
 , bash
 , coreutils
@@ -15,19 +14,17 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "tor-0.3.2.10";
+  name = "tor-0.3.5.7";
 
   src = fetchurl {
     url = "https://dist.torproject.org/${name}.tar.gz";
-    sha256 = "1vnb2wkcmm8rnz0fqi3k7arl60mpycs8rjn8hvbgv56g3p1pgpv0";
+    sha256 = "17l31p58rsd30w4b6r4d8pbr84z3y7awahvjxbpmnlxc47y8f20v";
   };
 
   outputs = [ "out" "geoip" ];
 
-  enableParallelBuilding = true;
-
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ libevent openssl zlib ] ++
+  buildInputs = [ libevent openssl zlib lzma zstd scrypt ] ++
     stdenv.lib.optionals stdenv.isLinux [ libseccomp systemd libcap ];
 
   NIX_CFLAGS_LINK = stdenv.lib.optionalString stdenv.cc.isGNU "-lgcc_s";
@@ -38,19 +35,21 @@ stdenv.mkDerivation rec {
       --replace 'exec torsocks' 'exec ${torsocks}/bin/torsocks'
   '';
 
+  enableParallelBuilding = true;
+  enableParallelChecking = false; # 4 tests fail randomly
+
+  doCheck = true;
+
   postInstall = ''
     mkdir -p $geoip/share/tor
     mv $out/share/tor/geoip{,6} $geoip/share/tor
     rm -rf $out/share/tor
   '';
 
-  doCheck = true;
-
   passthru.updateScript = import ./update.nix {
     inherit (stdenv) lib;
     inherit
       writeScript
-      runCommand
       common-updater-scripts
       bash
       coreutils

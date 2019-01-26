@@ -242,9 +242,19 @@ sub terminateContainer {
     while ( kill 0, $leader ) { Time::HiRes::sleep(0.1) }
 }
 
+sub startContainer {
+    system("systemctl", "start", "container\@$containerName") == 0
+        or die "$0: failed to start container\n";
+}
+
 sub stopContainer {
     system("systemctl", "stop", "container\@$containerName") == 0
         or die "$0: failed to stop container\n";
+}
+
+sub restartContainer {
+    stopContainer;
+    startContainer;
 }
 
 # Run a command in the container.
@@ -285,9 +295,12 @@ if ($action eq "destroy") {
     unlink($confFile) or die;
 }
 
+elsif ($action eq "restart") {
+    restartContainer;
+}
+
 elsif ($action eq "start") {
-    system("systemctl", "start", "container\@$containerName") == 0
-        or die "$0: failed to start container\n";
+    startContainer;
 }
 
 elsif ($action eq "stop") {

@@ -11,7 +11,6 @@ let
 
   udev = config.systemd.package;
 
-  kernelPackages = config.boot.kernelPackages;
   modulesTree = config.system.modulesTree;
   firmware = config.hardware.firmware;
 
@@ -56,6 +55,12 @@ let
       left=("''${left[@]:3}")
       if [ -z ''${seen[$next]+x} ]; then
         seen[$next]=1
+
+        # Ignore the dynamic linker which for some reason appears as a DT_NEEDED of glibc but isn't in glibc's RPATH.
+        case "$next" in
+          ld*.so.?) continue;;
+        esac
+
         IFS=: read -ra paths <<< $rpath
         res=
         for path in "''${paths[@]}"; do
@@ -122,8 +127,8 @@ let
       copy_bin_and_libs ${pkgs.kmod}/bin/kmod
       ln -sf kmod $out/bin/modprobe
 
-      # Copy resize2fs if needed.
-      ${optionalString (any (fs: fs.autoResize) fileSystems) ''
+      # Copy resize2fs if any ext* filesystems are to be resized
+      ${optionalString (any (fs: fs.autoResize && (lib.hasPrefix "ext" fs.fsType)) fileSystems) ''
         # We need mke2fs in the initrd.
         copy_bin_and_libs ${pkgs.e2fsprogs}/sbin/resize2fs
       ''}
@@ -142,7 +147,7 @@ let
       ${config.boot.initrd.extraUtilsCommands}
 
       # Copy ld manually since it isn't detected correctly
-      cp -pv ${pkgs.glibc.out}/lib/ld*.so.? $out/lib
+      cp -pv ${pkgs.stdenv.cc.libc.out}/lib/ld*.so.? $out/lib
 
       # Copy all of the needed libraries
       find $out/bin $out/lib -type f | while read BIN; do
@@ -158,7 +163,7 @@ let
 
       # Strip binaries further than normal.
       chmod -R u+w $out
-      stripDirs "lib bin" "-s"
+      stripDirs "$STRIP" "lib bin" "-s"
 
       # Run patchelf to make the programs refer to the copied libraries.
       find $out/bin $out/lib -type f | while read i; do
@@ -174,7 +179,7 @@ let
         fi
       done
 
-      if [ -z "${toString pkgs.stdenv.isCross}" ]; then
+      if [ -z "${toString (pkgs.stdenv.hostPlatform != pkgs.stdenv.buildPlatform)}" ]; then
       # Make sure that the patchelf'ed binaries still work.
       echo "testing patched programs..."
       $out/bin/ash -c 'echo hello world' | grep "hello world"
@@ -242,6 +247,14 @@ let
     shell = "${extraUtils}/bin/ash";
 
     isExecutable = true;
+
+    postInstall = ''
+      echo checking syntax
+      # check both with bash
+      ${pkgs.buildPackages.bash}/bin/sh -n $target
+      # and with ash shell, just in case
+      ${pkgs.buildPackages.busybox}/bin/ash -n $target
+    '';
 
     inherit udevRules extraUtils modulesClosure;
 

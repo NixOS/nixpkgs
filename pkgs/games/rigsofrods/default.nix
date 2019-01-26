@@ -1,5 +1,5 @@
-{ fetchurl, fetchFromGitHub, stdenv, wxGTK30, freeimage, cmake, zziplib, libGLU_combined, boost,
-  pkgconfig, libuuid, openal, ogre, ois, curl, gtk2, pixman, mygui, unzip,
+{ fetchFromGitHub, stdenv, wxGTK30, freeimage, cmake, zziplib, libGLU_combined, boost,
+  pkgconfig, libuuid, openal, ogre, ois, curl, gtk2, mygui, unzip,
   angelscript, ogrepaged, mysocketw, libxcb
   }:
 
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     description = "3D simulator game where you can drive, fly and sail various vehicles";
     homepage = http://rigsofrods.sourceforge.net/;
     license = stdenv.lib.licenses.gpl3;
-    maintainers = with stdenv.lib.maintainers; [viric raskin];
+    maintainers = with stdenv.lib.maintainers; [raskin];
     platforms = stdenv.lib.platforms.linux;
     hydraPlatforms = [];
   };

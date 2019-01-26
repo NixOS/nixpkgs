@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, makeWrapper, ant, jdk, openjdk8, zulu8, git, xorg, udev }:
+{ stdenv, fetchgit, ant, jdk, openjdk8, zulu8, git, xorg, udev, libGL, libGLU }:
 
 let
   # workaround https://github.com/NixOS/nixpkgs/issues/37364
@@ -19,11 +19,17 @@ in
       name = "jogl-${version}";
 
       src = fetchgit {
-        url = http://jogamp.org/srv/scm/jogl.git;
+        url = git://jogamp.org/srv/scm/jogl.git;
         rev = "v${version}";
         sha256 = "0msi2gxiqm2yqwkmxqbh521xdrimw1fly20g890r357rcgj8fsn3";
         fetchSubmodules = true;
       };
+
+      postPatch = ''
+        find  .  -type f  -name '*.java' \
+          -exec sed -i 's@"libGL.so"@"${libGL}/lib/libGL.so"@'    {} \; \
+          -exec sed -i 's@"libGLU.so"@"${libGLU}/lib/libGLU.so"@' {} \;
+      '';
 
       buildInputs = [ jdk-without-symlinks ant git udev xorg.libX11 xorg.libXrandr xorg.libXcursor xorg.libXt xorg.libXxf86vm xorg.libXrender ];
 

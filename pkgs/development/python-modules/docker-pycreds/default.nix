@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "docker-pycreds";
-  version = "0.2.2";
+  version = "0.3.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c7ab85de2894baff6ee8f15160cbbfa2fd3a04e56f0372c5793d24060687b299";
+    sha256 = "8b0e956c8d206f832b06aa93a710ba2c3bcbacb5a314449c040b0b814355bbff";
   };
 
   # require docker-credential-helpers binaries

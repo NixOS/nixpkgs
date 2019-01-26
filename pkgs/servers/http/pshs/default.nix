@@ -15,13 +15,12 @@ stdenv.mkDerivation rec {
   buildInputs = [ libevent file qrencode miniupnpc ];
 
   # SSL requires libevent at 2.1 with ssl support
-  configureFlags = "--disable-ssl";
+  configureFlags = [ "--disable-ssl" ];
 
   meta = {
     description = "Pretty small HTTP server - a command-line tool to share files";
     homepage = https://github.com/mgorny/pshs;
     license = stdenv.lib.licenses.bsd3;
-    maintainers = [ stdenv.lib.maintainers.eduarrrd ];
     platforms = stdenv.lib.platforms.linux;
   };
 }

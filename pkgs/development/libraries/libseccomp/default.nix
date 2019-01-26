@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, getopt, makeWrapper }:
+{ stdenv, fetchurl, getopt, makeWrapper, utillinux }:
 
 stdenv.mkDerivation rec {
   name = "libseccomp-${version}";
@@ -16,6 +16,9 @@ stdenv.mkDerivation rec {
   patchPhase = ''
     patchShebangs .
   '';
+
+  checkInputs = [ utillinux ];
+  doCheck = false; # dependency cycle
 
   # Hack to ensure that patchelf --shrink-rpath get rids of a $TMPDIR reference.
   preFixup = "rm -rfv src";

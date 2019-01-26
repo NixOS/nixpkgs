@@ -65,7 +65,7 @@ let
 
       path = [ pkgs.iptables pkgs.iproute pkgs.nettools ];
 
-      serviceConfig.ExecStart = "@${openvpn}/sbin/openvpn openvpn --config ${configFile}";
+      serviceConfig.ExecStart = "@${openvpn}/sbin/openvpn openvpn --suppress-timestamps --config ${configFile}";
       serviceConfig.Restart = "always";
       serviceConfig.Type = "notify";
     };
@@ -131,6 +131,9 @@ in
               Configuration of this OpenVPN instance.  See
               <citerefentry><refentrytitle>openvpn</refentrytitle><manvolnum>8</manvolnum></citerefentry>
               for details.
+
+              To import an external config file, use the following definition:
+              <literal>config = "config /path/to/config.ovpn"</literal>
             '';
           };
 

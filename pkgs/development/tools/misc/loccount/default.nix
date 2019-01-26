@@ -1,4 +1,4 @@
-{ stdenv, lib, buildGoPackage, fetchFromGitLab }:
+{ stdenv, buildGoPackage, fetchFromGitLab }:
 buildGoPackage rec {
   name = "loccount-${version}";
   version = "1.2";

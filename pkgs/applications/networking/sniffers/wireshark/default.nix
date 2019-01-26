@@ -1,5 +1,5 @@
-{ stdenv, lib, fetchurl, pkgconfig, pcre, perl, flex, bison, gettext, libpcap, libnl, c-ares
-, gnutls, libgcrypt, libgpgerror, geoip, openssl, lua5, makeDesktopItem, python, libcap, glib
+{ stdenv, fetchurl, pkgconfig, pcre, perl, flex, bison, gettext, libpcap, libnl, c-ares
+, gnutls, libgcrypt, libgpgerror, geoip, openssl, lua5, python, libcap, glib
 , libssh, zlib, cmake, extra-cmake-modules, fetchpatch, makeWrapper
 , withGtk ? false, gtk3 ? null, librsvg ? null, gsettings-desktop-schemas ? null, wrapGAppsHook ? null
 , withQt ? false, qt5 ? null
@@ -12,15 +12,16 @@ assert withQt  -> !withGtk && qt5  != null;
 with stdenv.lib;
 
 let
-  version = "2.4.6";
+  version = "2.6.6";
   variant = if withGtk then "gtk" else if withQt then "qt" else "cli";
 
 in stdenv.mkDerivation {
   name = "wireshark-${variant}-${version}";
+  outputs = [ "out" "dev" ];
 
   src = fetchurl {
-    url = "http://www.wireshark.org/download/src/all-versions/wireshark-${version}.tar.xz";
-    sha256 = "1znmjg40pf81ks9lnm6ilx0cy32xan5g19gbqkkhj35whb95z5lf";
+    url = "https://www.wireshark.org/download/src/all-versions/wireshark-${version}.tar.xz";
+    sha256 = "0qz8a1ays63712pq1v7nnw7c57zlqkcifq7himfv5nsv0zm36ya8";
   };
 
   cmakeFlags = [
@@ -49,8 +50,15 @@ in stdenv.mkDerivation {
       name = "fix-timeout.patch";
       url = "https://code.wireshark.org/review/gitweb?p=wireshark.git;a=commitdiff_plain;h=8b5b843fcbc3e03e0fc45f3caf8cf5fc477e8613;hp=94af9724d140fd132896b650d10c4d060788e4f0";
       sha256 = "1g2dm7lwsnanwp68b9xr9swspx7hfj4v3z44sz3yrfmynygk8zlv";
-    })
-    ++ stdenv.lib.optional stdenv.isDarwin ./cmake.patch;
+    });
+
+  postPatch = ''
+    sed -i -e '1i cmake_policy(SET CMP0025 NEW)' CMakeLists.txt
+  '';
+
+  preBuild = ''
+    export LD_LIBRARY_PATH="$PWD/run"
+  '';
 
   postInstall = if stdenv.isDarwin then ''
     ${optionalString withQt ''
@@ -72,15 +80,32 @@ in stdenv.mkDerivation {
     ''}
     ${optionalString withQt ''
       install -Dm644 -t $out/share/applications ../wireshark.desktop
+      wrapProgram $out/bin/wireshark \
+        --set QT_PLUGIN_PATH ${qt5.qtbase.bin}/${qt5.qtbase.qtPluginPrefix}
     ''}
 
     substituteInPlace $out/share/applications/*.desktop \
       --replace "Exec=wireshark" "Exec=$out/bin/wireshark"
 
     install -Dm644 ../image/wsicon.svg $out/share/icons/wireshark.svg
+    mkdir $dev/include/{epan/{wmem,ftypes,dfilter},wsutil,wiretap} -pv
+
+    cp config.h $dev/include/
+    cp ../ws_*.h $dev/include
+    cp ../epan/*.h $dev/include/epan/
+    cp ../epan/wmem/*.h $dev/include/epan/wmem/
+    cp ../epan/ftypes/*.h $dev/include/epan/ftypes/
+    cp ../epan/dfilter/*.h $dev/include/epan/dfilter/
+    cp ../wsutil/*.h $dev/include/wsutil/
+    cp ../wiretap/*.h $dev/include/wiretap
   '';
 
   enableParallelBuilding = true;
+
+  shellHook = ''
+    # to be able to run the resulting binary
+    export WIRESHARK_RUN_FROM_BUILD_DIRECTORY=1
+  '';
 
   meta = with stdenv.lib; {
     homepage = https://www.wireshark.org/;

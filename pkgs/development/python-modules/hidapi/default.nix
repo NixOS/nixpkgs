@@ -1,7 +1,6 @@
 { stdenv, libusb1, udev, fetchPypi, buildPythonPackage, cython }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "hidapi";
   version = "0.7.99.post21";
 

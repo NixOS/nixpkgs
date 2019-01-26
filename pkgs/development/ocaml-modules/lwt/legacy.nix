@@ -6,6 +6,7 @@
 }:
 
 if !stdenv.lib.versionAtLeast ocaml.version "4"
+ || stdenv.lib.versionAtLeast ocaml.version "4.06"
 then throw "lwt is not available for OCaml ${ocaml.version}"
 else
 

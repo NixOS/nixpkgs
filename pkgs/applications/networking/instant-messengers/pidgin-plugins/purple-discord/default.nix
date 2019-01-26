@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, pidgin, json_glib }:
+{ stdenv, fetchFromGitHub, pkgconfig, pidgin, json-glib }:
 
 stdenv.mkDerivation rec {
   name = "purple-discord-${version}";
@@ -12,14 +12,10 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ pidgin json_glib ];
+  buildInputs = [ pidgin json-glib ];
 
-  makeFlags = [
-    "DESTDIR=$(out)"
-  ];
-
-  PKG_CONFIG_PURPLE_PLUGINDIR = "/lib/purple-2";
-  PKG_CONFIG_PURPLE_DATADIR = "/share";
+  PKG_CONFIG_PURPLE_PLUGINDIR = "${placeholder "out"}/lib/purple-2";
+  PKG_CONFIG_PURPLE_DATADIR = "${placeholder "out"}/share";
 
   meta = with stdenv.lib; {
     homepage = https://github.com/EionRobb/purple-discord;

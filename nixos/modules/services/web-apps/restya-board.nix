@@ -358,13 +358,13 @@ in
       '';
     };
 
-    users.extraUsers.restya-board = {
+    users.users.restya-board = {
       isSystemUser = true;
       createHome = false;
       home = runDir;
       group  = "restya-board";
     };
-    users.extraGroups.restya-board = {};
+    users.groups.restya-board = {};
 
     services.postgresql.enable = mkIf (isNull cfg.database.host) true;
 

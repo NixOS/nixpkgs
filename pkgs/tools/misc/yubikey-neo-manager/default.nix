@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, python27Packages
+{ stdenv, fetchurl, python27Packages
 , libykneomgr, yubikey-personalization, libu2f-host }:
 
 python27Packages.buildPythonPackage rec {

@@ -1,8 +1,8 @@
-{ stdenv, fetchFromGitHub, python3, gettext, gobjectIntrospection, wrapGAppsHook, glibcLocales
+{ stdenv, fetchFromGitHub, python3, gettext, gobject-introspection, wrapGAppsHook, glibcLocales
 , gtk3, keybinder3, libnotify, libutempter, vte }:
 
 let
-  version = "3.2.0";
+  version = "3.4.0";
 in python3.pkgs.buildPythonApplication rec {
   name = "guake-${version}";
   format = "other";
@@ -11,10 +11,10 @@ in python3.pkgs.buildPythonApplication rec {
     owner = "Guake";
     repo = "guake";
     rev = version;
-    sha256 = "1qghapg9sslj9fdrl2mnbi10lgqgqa36gdag74wn7as9wak4qc3d";
+    sha256 = "1j38z968ha8ij6wrgbwvr8ad930nvhybm9g7pf4s4zv6d3vln0vm";
   };
 
-  nativeBuildInputs = [ gettext gobjectIntrospection wrapGAppsHook python3.pkgs.pip glibcLocales ];
+  nativeBuildInputs = [ gettext gobject-introspection wrapGAppsHook python3.pkgs.pip glibcLocales ];
 
   buildInputs = [ gtk3 keybinder3 libnotify python3 vte ];
 
@@ -23,6 +23,12 @@ in python3.pkgs.buildPythonApplication rec {
   LC_ALL = "en_US.UTF-8"; # fixes weird encoding error, see https://github.com/NixOS/nixpkgs/pull/38642#issuecomment-379727699
 
   PBR_VERSION = version; # pbr needs either .git directory, sdist, or env var
+
+  postPatch = ''
+    # unnecessary /usr/bin/env in Makefile
+    # https://github.com/Guake/guake/pull/1285
+    substituteInPlace "Makefile" --replace "/usr/bin/env python3" "python3"
+  '';
 
   makeFlags = [
     "prefix=$(out)"

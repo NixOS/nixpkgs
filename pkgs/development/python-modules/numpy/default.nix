@@ -1,25 +1,41 @@
-{lib, fetchPypi, python, buildPythonPackage, isPy27, isPyPy, gfortran, nose, blas, hostPlatform }:
+{ stdenv, lib, fetchPypi, python, buildPythonPackage, isPyPy, gfortran, pytest, blas, writeTextFile }:
 
-buildPythonPackage rec {
+let
+  blasImplementation = lib.nameFromURL blas.name "-";
+  cfg = writeTextFile {
+    name = "site.cfg";
+    text = (lib.generators.toINI {} {
+      "${blasImplementation}" = {
+        include_dirs = "${blas}/include";
+        library_dirs = "${blas}/lib";
+      } // lib.optionalAttrs (blasImplementation == "mkl") {
+        mkl_libs = "mkl_rt";
+        lapack_libs = "";
+      };
+    });
+  };
+in buildPythonPackage rec {
   pname = "numpy";
-  version = "1.14.2";
+  version = "1.15.4";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "facc6f925c3099ac01a1f03758100772560a0b020fb9d70f210404be08006bcb";
+    sha256 = "3d734559db35aa3697dadcea492a423118c5c55d176da2f3be9c98d4803fc2a7";
   };
 
   disabled = isPyPy;
-  buildInputs = [ gfortran nose blas ];
+  nativeBuildInputs = [ gfortran pytest ];
+  buildInputs = [ blas ];
 
   patches = lib.optionals (python.hasDistutilsCxxPatch or false) [
-    # See cpython 2.7 patches.
-    # numpy.distutils is used by cython during it's check phase
+    # We patch cpython/distutils to fix https://bugs.python.org/issue1222585
+    # Patching of numpy.distutils is needed to prevent it from undoing the
+    # patch to distutils.
     ./numpy-distutils-C++.patch
   ];
 
-  postPatch = lib.optionalString hostPlatform.isMusl ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isMusl ''
     # Use fenv.h
     sed -i \
       numpy/core/src/npymath/ieee754.c.src \
@@ -37,12 +53,7 @@ buildPythonPackage rec {
   '';
 
   preBuild = ''
-    echo "Creating site.cfg file..."
-    cat << EOF > site.cfg
-    [openblas]
-    include_dirs = ${blas}/include
-    library_dirs = ${blas}/lib
-    EOF
+    ln -s ${cfg} site.cfg
   '';
 
   enableParallelBuilding = true;
@@ -55,12 +66,9 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  postInstall = ''
-    ln -s $out/bin/f2py* $out/bin/f2py
-  '';
-
   passthru = {
     blas = blas;
+    inherit blasImplementation cfg;
   };
 
   # Disable two tests

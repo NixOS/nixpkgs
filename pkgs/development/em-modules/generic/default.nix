@@ -22,8 +22,6 @@ pkgs.stdenv.mkDerivation (
     HOME=$TMPDIR
     runHook preConfigure
 
-    # probably requires autotools as dependency
-    ./autogen.sh
     emconfigure ./configure --prefix=$out
 
     runHook postConfigure

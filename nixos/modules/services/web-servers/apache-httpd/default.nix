@@ -98,11 +98,6 @@ let
   allSubservices = mainSubservices ++ concatMap subservicesFor mainCfg.virtualHosts;
 
 
-  # !!! should be in lib
-  writeTextInDir = name: text:
-    pkgs.runCommand name {inherit text;} "mkdir -p $out; echo -n \"$text\" > $out/$name";
-
-
   enableSSL = any (vhost: vhost.enableSSL) allHosts;
 
 
@@ -192,8 +187,8 @@ let
     SSLRandomSeed startup builtin
     SSLRandomSeed connect builtin
 
-    SSLProtocol All -SSLv2 -SSLv3
-    SSLCipherSuite HIGH:!aNULL:!MD5:!EXP
+    SSLProtocol ${mainCfg.sslProtocols}
+    SSLCipherSuite ${mainCfg.sslCiphers}
     SSLHonorCipherOrder on
   '';
 
@@ -635,6 +630,19 @@ in
         description =
           "Maximum number of httpd requests answered per httpd child (prefork), 0 means unlimited";
       };
+
+      sslCiphers = mkOption {
+        type = types.str;
+        default = "HIGH:!aNULL:!MD5:!EXP";
+        description = "Cipher Suite available for negotiation in SSL proxy handshake.";
+      };
+
+      sslProtocols = mkOption {
+        type = types.str;
+        default = "All -SSLv2 -SSLv3";
+        example = "All -SSLv2 -SSLv3 -TLSv1";
+        description = "Allowed SSL/TLS protocol versions.";
+      };
     }
 
     # Include the options shared between the main server and virtual hosts.
@@ -656,16 +664,16 @@ in
                      message = "SSL is enabled for httpd, but sslServerCert and/or sslServerKey haven't been specified."; }
                  ];
 
-    warnings = map (cfg: ''apache-httpd's port option is deprecated. Use listen = [{/*ip = "*"; */ port = ${toString cfg.port}";}]; instead'' ) (lib.filter (cfg: cfg.port != 0) allHosts);
+    warnings = map (cfg: ''apache-httpd's port option is deprecated. Use listen = [{/*ip = "*"; */ port = ${toString cfg.port};}]; instead'' ) (lib.filter (cfg: cfg.port != 0) allHosts);
 
-    users.extraUsers = optionalAttrs (mainCfg.user == "wwwrun") (singleton
+    users.users = optionalAttrs (mainCfg.user == "wwwrun") (singleton
       { name = "wwwrun";
         group = mainCfg.group;
         description = "Apache httpd user";
         uid = config.ids.uids.wwwrun;
       });
 
-    users.extraGroups = optionalAttrs (mainCfg.group == "wwwrun") (singleton
+    users.groups = optionalAttrs (mainCfg.group == "wwwrun") (singleton
       { name = "wwwrun";
         gid = config.ids.gids.wwwrun;
       });

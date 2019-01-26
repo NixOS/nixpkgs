@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, json_c, hidapi }:
 
 stdenv.mkDerivation rec {
-  name = "libu2f-host-1.1.5";
+  name = "libu2f-host-1.1.6";
 
   src = fetchurl {
     url = "https://developers.yubico.com/libu2f-host/Releases/${name}.tar.xz";
-    sha256 = "159slvjfq4bqslx5amjkk90xnkiv3x0yzvbi54pl2vnzbr1p2azk";
+    sha256 = "19xxwwqfzg3njfpxvhlyxd05wjwsdw3m4lpn7gk31cna6agbp82d";
   };
 
   nativeBuildInputs = [ pkgconfig ];

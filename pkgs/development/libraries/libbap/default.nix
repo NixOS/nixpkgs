@@ -20,10 +20,11 @@ stdenv.mkDerivation rec {
     mkdir -p $out/include
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = https://github.com/binaryanalysisplatform/bap-bindings;
     description = "A C library for interacting with BAP";
-    maintainers = [ stdenv.lib.maintainers.maurer ];
-    platforms = stdenv.lib.platforms.unix;
+    maintainers = [ maintainers.maurer ];
+    platforms = platforms.unix;
+    license = licenses.mit;
   };
 }

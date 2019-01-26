@@ -9,6 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "0xljwcpvd2knrjdfag5b257xqayplz55mqlszrqp0kpnphh5xnrl";
   };
 
+  configureFlags = stdenv.lib.optional stdenv.isDarwin "--disable-sdltest";
+
   buildInputs = [ SDL2 freetype libGL ]
     ++ stdenv.lib.optional stdenv.isDarwin darwin.libobjc;
 

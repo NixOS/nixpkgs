@@ -7,11 +7,11 @@ stdenv.mkDerivation rec {
 
   name = "wxSVG-${version}";
   srcName = "wxsvg-${version}";
-  version = "1.5.13";
+  version = "1.5.15";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/wxsvg/wxsvg/${version}/${srcName}.tar.bz2";
-    sha256 = "029a1rayp4c480x8ayng13rcjk1j98ar0z6ggijrznkn8kgx8j2j";
+    sha256 = "1f6fhkdmcfs8w7x08vhiqygss4qzcsimhd91h0j58zw25ky6rzqn";
   };
 
   nativeBuildInputs = [ pkgconfig ];

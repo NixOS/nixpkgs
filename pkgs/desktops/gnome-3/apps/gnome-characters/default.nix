@@ -1,13 +1,13 @@
-{ stdenv, fetchurl, meson, ninja, pkgconfig, gettext, gnome3, glib, gtk3, pango, wrapGAppsHook
-, gobjectIntrospection, gjs, gdk_pixbuf, librsvg, libunistring }:
+{ stdenv, fetchurl, meson, ninja, pkgconfig, gettext, gnome3, glib, gtk3, pango, wrapGAppsHook, python3
+, gobject-introspection, gjs, libunistring }:
 
 stdenv.mkDerivation rec {
   name = "gnome-characters-${version}";
-  version = "3.28.0";
+  version = "3.30.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-characters/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "14q92ysg7krawxlwv6ymgsxz2plk81wgfz6knlma7lm13jsczmf0";
+    url = "mirror://gnome/sources/gnome-characters/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    sha256 = "08cwz39iwgsyyb2wqhb8vfbmh1cwfkgfiy7adp08w7rwqi99x3dp";
   };
 
   postPatch = ''
@@ -22,11 +22,16 @@ stdenv.mkDerivation rec {
     };
   };
 
-  nativeBuildInputs = [ meson ninja pkgconfig gettext wrapGAppsHook gobjectIntrospection ];
-  buildInputs = [ glib gtk3 gjs pango gnome3.gsettings-desktop-schemas gnome3.defaultIconTheme libunistring ];
+  nativeBuildInputs = [ meson ninja pkgconfig gettext wrapGAppsHook python3 gobject-introspection ];
+  buildInputs = [
+    glib gtk3 gjs pango gnome3.gsettings-desktop-schemas
+    gnome3.defaultIconTheme libunistring
+    # typelib
+    gnome3.gnome-desktop
+  ];
 
   mesonFlags = [
-    "-Ddbus_service_dir=share/dbus-1/services"
+    "-Ddbus_service_dir=${placeholder "out"}/share/dbus-1/services"
   ];
 
   meta = with stdenv.lib; {

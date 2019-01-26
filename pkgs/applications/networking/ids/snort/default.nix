@@ -14,7 +14,12 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  configureFlags = "--disable-static-daq --enable-control-socket --with-daq-includes=${daq}/includes --with-daq-libraries=${daq}/lib"; 
+  configureFlags = [
+    "--disable-static-daq"
+    "--enable-control-socket"
+    "--with-daq-includes=${daq}/includes"
+    "--with-daq-libraries=${daq}/lib"
+  ]; 
 
   postInstall = ''
     wrapProgram $out/bin/snort --add-flags "--daq-dir ${daq}/lib/daq --dynamic-preprocessor-lib-dir $out/lib/snort_dynamicpreprocessor/ --dynamic-engine-lib-dir $out/lib/snort_dynamicengine"
@@ -22,7 +27,7 @@ stdenv.mkDerivation rec {
   
   meta = {
     description = "Network intrusion prevention and detection system (IDS/IPS)";
-    homepage = http://www.snort.org;
+    homepage = https://www.snort.org;
     maintainers = with stdenv.lib.maintainers; [ aycanirican ];
     license = stdenv.lib.licenses.gpl2;
     platforms = with stdenv.lib.platforms; linux;

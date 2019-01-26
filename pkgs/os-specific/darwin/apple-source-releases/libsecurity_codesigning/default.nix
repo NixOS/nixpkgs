@@ -25,7 +25,7 @@ appleDerivation {
     mkdir -p include/securityd_client
     cp Security-*/libsecurityd/lib/*.h include/securityd_client
     mkdir -p include/xpc
-    cp ${apple_sdk.sdk}/include/xpc/*.h include/xpc
+    cp ${apple_sdk.sdk.out}/include/xpc/*.h include/xpc
 
     sed -i '1i #define bool int' lib/security_codesigning.d
     dtrace -h -C -s lib/security_codesigning.d -o codesigning_dtrace.h

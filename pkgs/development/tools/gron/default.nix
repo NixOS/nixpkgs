@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   name = "gron-${version}";
-  version = "0.5.1";
+  version = "0.6.0";
 
   owner = "tomnomnom";
   repo = "gron";
@@ -11,7 +11,7 @@ buildGoPackage rec {
   src = fetchFromGitHub {
     inherit owner repo;
     rev = "v${version}";
-    sha256 = "1s688ynjddchviwbiggnfbw28s4wsff2941f4b1q1j7mfak7iym2";
+    sha256 = "05f3w4zr15wd7xk75l12y5kip4gnv719a2x9w2hy23q3pnss9wk0";
   };
 
   goDeps = ./deps.nix;

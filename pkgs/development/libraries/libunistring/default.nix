@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "libunistring-${version}";
-  version = "0.9.9";
+  version = "0.9.10";
 
   src = fetchurl {
     url = "mirror://gnu/libunistring/${name}.tar.gz";
-    sha256 = "0jm8pr469y7ybb90ll8k1585rciqm8ckzif0laipqhp5z440rsgm";
+    sha256 = "02v17za10mxnj095x4pvm80jxyqwk93kailfc2j8xa1r6crmnbm8";
   };
 
   outputs = [ "out" "dev" "info" "doc" ];
@@ -17,12 +17,24 @@ stdenv.mkDerivation rec {
     "--with-libiconv-prefix=${libiconv}"
   ];
 
-  doCheck = !stdenv.hostPlatform.isMusl;
+  doCheck = true;
 
-  enableParallelBuilding = true;
+  /* This seems to cause several random failures like these, which I assume
+     is because of bad or missing target dependencies in their build system:
+
+        ./unistdio/test-u16-vasnprintf2.sh: line 16: ./test-u16-vasnprintf1: No such file or directory
+        FAIL unistdio/test-u16-vasnprintf2.sh (exit status: 1)
+
+        FAIL: unistdio/test-u16-vasnprintf3.sh
+        ======================================
+
+        ./unistdio/test-u16-vasnprintf3.sh: line 16: ./test-u16-vasnprintf1: No such file or directory
+        FAIL unistdio/test-u16-vasnprintf3.sh (exit status: 1)
+  */
+  enableParallelBuilding = false;
 
   meta = {
-    homepage = http://www.gnu.org/software/libunistring/;
+    homepage = https://www.gnu.org/software/libunistring/;
 
     description = "Unicode string library";
 

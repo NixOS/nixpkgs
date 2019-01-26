@@ -1,14 +1,17 @@
-{ stdenv, fetchurl, cmake, zlib, c-ares, pkgconfig, openssl, protobuf, gflags }:
+{ stdenv, fetchFromGitHub, cmake, zlib, c-ares, pkgconfig, openssl, protobuf, gflags }:
 
 stdenv.mkDerivation rec {
-  version = "1.10.0";
+  version = "1.18.0";
   name = "grpc-${version}";
-  src = fetchurl {
-    url = "https://github.com/grpc/grpc/archive/v${version}.tar.gz";
-    sha256 = "0wngrb44bpryrvrnx5y1ncrhi2097qla929wqjwvs0razbk3v9rr";
+  src = fetchFromGitHub {
+    owner = "grpc";
+    repo = "grpc";
+    rev = "v${version}";
+    sha256 = "0pf8q1z3qhlljlj6h7isvqvsxhh4612z780xcbv1h9lj7cdpr77m";
   };
   nativeBuildInputs = [ cmake pkgconfig ];
   buildInputs = [ zlib c-ares c-ares.cmake-config openssl protobuf gflags ];
+
   cmakeFlags =
     [ "-DgRPC_ZLIB_PROVIDER=package"
       "-DgRPC_CARES_PROVIDER=package"
@@ -16,11 +19,21 @@ stdenv.mkDerivation rec {
       "-DgRPC_PROTOBUF_PROVIDER=package"
       "-DgRPC_GFLAGS_PROVIDER=package"
     ];
+
+  # CMake creates a build directory by default, this conflicts with the
+  # basel BUILD file on case-insensitive filesystems.
+  preConfigure = ''
+    rm -vf BUILD
+  '';
+
+  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.cc.isClang "-Wno-error=unknown-warning-option";
+
   enableParallelBuilds = true;
 
   meta = with stdenv.lib; {
     description = "The C based gRPC (C++, Python, Ruby, Objective-C, PHP, C#)";
     license = licenses.asl20;
+    maintainers = [ maintainers.lnl7 ];
     homepage = https://grpc.io/;
   };
 }

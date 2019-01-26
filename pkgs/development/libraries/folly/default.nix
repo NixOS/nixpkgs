@@ -1,26 +1,29 @@
-{ stdenv, fetchFromGitHub, fetchpatch, autoreconfHook, pkgconfig, boost, libevent
-, double-conversion, glog, google-gflags, python, libiberty, openssl }:
+{ stdenv, fetchFromGitHub, cmake, boost, libevent, double-conversion, glog
+, google-gflags, libiberty, openssl }:
 
 stdenv.mkDerivation rec {
   name = "folly-${version}";
-  version = "2018.03.26.00";
+  version = "2018.10.29.00";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "folly";
     rev = "v${version}";
-    sha256 = "137d9b9k2m02r8f2w31qj3gc18hpm5g51bcl60g6vzdqzwzizzyr";
+    sha256 = "0bbp4w8wbawh3ilgkl7rwvbqkdczpvfn92f9lcvxj8sili0nldab";
   };
 
-  nativeBuildInputs = [ autoreconfHook python pkgconfig ];
-  buildInputs = [ libiberty boost libevent double-conversion glog google-gflags openssl ];
+  nativeBuildInputs = [ cmake ];
 
-  postPatch = "cd folly";
-  preBuild = ''
-    patchShebangs build
-  '';
-
-  configureFlags = [ "--with-boost-libdir=${boost.out}/lib" ];
+  # See CMake/folly-deps.cmake in the Folly source tree.
+  buildInputs = [
+    boost
+    double-conversion
+    glog
+    google-gflags
+    libevent
+    libiberty
+    openssl
+  ];
 
   enableParallelBuilding = true;
 

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pythonPackages, qt4, pkgconfig, lndir, dbus_libs, makeWrapper }:
+{ stdenv, fetchurl, pythonPackages, qt4, pkgconfig, lndir, dbus, makeWrapper }:
 
 let
   pname = "PyQt-x11-gpl";
@@ -42,7 +42,7 @@ in buildPythonPackage {
   '';
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ makeWrapper qt4 lndir dbus_libs ];
+  buildInputs = [ makeWrapper qt4 lndir dbus ];
 
   propagatedBuildInputs = [ sip ];
 

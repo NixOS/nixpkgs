@@ -6,19 +6,24 @@
 }:
 buildPythonPackage rec {
   pname = "cymem";
-  version = "1.31.2";
+  version = "2.0.2";
   name = pname + "-" + version;
 
   src = fetchFromGitHub {
     owner = "explosion";
     repo = "cymem";
-    rev = "1.31.2";
-    sha256 = "0miznr4kbdzw8yik3m96jmrlmln4qv7z3i3qdp7wjqr51zpqfm1k";
+    rev = "v${version}";
+    sha256 = "109i67vwgql9za8mfvgbrd6rgraz4djkvpzb4gqvzl13214s6ava";
   };
 
   propagatedBuildInputs = [
    cython
   ];
+
+  prePatch = ''
+    substituteInPlace setup.py \
+      --replace "wheel>=0.32.0,<0.33.0" "wheel>=0.31.0"
+  '';
 
   checkPhase = ''
     cd cymem/tests

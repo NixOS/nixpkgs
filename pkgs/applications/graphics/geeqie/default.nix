@@ -49,6 +49,6 @@ stdenv.mkDerivation rec {
     homepage = http://geeqie.sourceforge.net;
 
     maintainers = with maintainers; [ jfrankenau pSub ];
-    platforms = platforms.gnu;
+    platforms = platforms.gnu ++ platforms.linux;
   };
 }

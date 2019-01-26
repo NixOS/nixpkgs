@@ -4,14 +4,12 @@
 
 buildPythonPackage rec {
   pname = "requests";
-  version = "2.18.4";
+  version = "2.20.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0zi3v9nsmv9j27d0c0m1dvqyvaxz53g8m0aa1h3qanxs4irkwi4w";
+    sha256 = "ea881206e59f41dbd0bd445437d792e43906703fff75ca8ff43ccdb11f33f263";
   };
-
-  outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [ pytest ];
   propagatedBuildInputs = [ urllib3 idna chardet certifi ];

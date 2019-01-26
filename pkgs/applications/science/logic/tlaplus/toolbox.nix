@@ -3,7 +3,7 @@
 }:
 
 let
-  version = "1.5.6";
+  version = "1.5.7";
   arch = "x86_64";
 
   desktopItem = makeDesktopItem rec {
@@ -24,7 +24,7 @@ in stdenv.mkDerivation {
   name = "tla-toolbox-${version}";
   src = fetchzip {
     url = "https://tla.msr-inria.inria.fr/tlatoolbox/products/TLAToolbox-${version}-linux.gtk.${arch}.zip";
-    sha256 = "1h63mcbrkf4jcg6qncpqffdi0x665z0wlfdq43d67p411xcqmbw9";
+    sha256 = "0lg9sizpw5mkcnwwvmgqigkizjyz2lf1wrg48h7mg7wcv3macy4q";
   };
 
   buildInputs = [ makeWrapper  ];
@@ -44,7 +44,7 @@ in stdenv.mkDerivation {
       --run "set -x; cd $out/toolbox" \
       --add-flags "-data ~/.tla-toolbox" \
       --prefix PATH : "${jre}/bin" \
-      --prefix LD_LIBRARY_PATH : "${swt}/lib:${gtk}/lib:${libXtst}/lib:${glib}/lib"
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ swt gtk libXtst glib ]}"
 
     echo -e "\nCreating TLA Toolbox icons..."
     pushd "$src"

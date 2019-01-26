@@ -1,30 +1,32 @@
-{ stdenv, fetchFromGitHub, fetchFromBitbucket
-, pkgconfig, tcl, readline, libffi, python3, bison, flex
+{ stdenv, fetchFromGitHub
+, pkgconfig, bison, flex
+, tcl, readline, libffi, python3
+, protobuf
 }:
 
 with builtins;
 
 stdenv.mkDerivation rec {
   name = "yosys-${version}";
-  version = "2018.03.21";
+  version = "2019.01.08";
 
   srcs = [
     (fetchFromGitHub {
       owner  = "yosyshq";
       repo   = "yosys";
-      rev    = "3f0070247590458c5ed28c5a7abfc3b9d1ec138b";
-      sha256 = "0rsnjk25asg7dkxcmim464rmxgvm7x7njmcp5nyl8y4iwn8i9p8v";
+      rev    = "2a2e0a4722ded7628b71f436b94a06aebd57bb62";
+      sha256 = "19wzh7yssk90s58l2f89m0q5bjjrjpkhvikf5zc0563wccvl712c";
       name   = "yosys";
     })
 
     # NOTE: the version of abc used here is synchronized with
     # the one in the yosys Makefile of the version above;
     # keep them the same for quality purposes.
-    (fetchFromBitbucket {
-      owner  = "alanmi";
+    (fetchFromGitHub {
+      owner  = "berkeley-abc";
       repo   = "abc";
-      rev    = "6e3c24b3308a";
-      sha256 = "1i4wv0si4fb6dpv2yrpkp588mdlfrnx2s02q2fgra5apdm54c53w";
+      rev    = "2ddc57d8760d94e86699be39a628178cff8154f8";
+      sha256 = "0da7nnnnl9cq2r7s301xgdc8nlr6hqmqpvd9zn4b58m125sp0scl";
       name   = "yosys-abc";
     })
   ];
@@ -32,7 +34,9 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ tcl readline libffi python3 bison flex ];
+  buildInputs = [ tcl readline libffi python3 bison flex protobuf ];
+
+  makeFlags = [ "ENABLE_PROTOBUF=1" ];
 
   patchPhase = ''
     substituteInPlace ../yosys-abc/Makefile \
@@ -49,6 +53,9 @@ stdenv.mkDerivation rec {
     make config-${if stdenv.cc.isClang or false then "clang" else "gcc"}
     echo 'ABCREV := default' >> Makefile.conf
     makeFlags="PREFIX=$out $makeFlags"
+
+    # we have to do this ourselves for some reason...
+    (cd misc && ${protobuf}/bin/protoc --cpp_out ../backends/protobuf/ ./yosys.proto)
   '';
 
   meta = {

@@ -9,15 +9,12 @@
 , enableOpenGL ? false, libGLU_combined  ? null
 
 # GUI toolkits
-, enableGTK ? true,  gtk2 ? null, gnome2 ? null, gnome3 ? null
+, enableGTK ? true,  gtk2 ? null, gnome2 ? null
 , enableSDL ? false
 , enableQt  ? false, qt4  ? null
 
 # media
 , enableFFmpeg    ? true,  ffmpeg_2 ? null
-, enableGstreamer ? false, gst-plugins-base ? null
-                         , gst-plugins-ugly ? null
-                         , gst-ffmpeg ? null
 
 # misc
 , enableJemalloc ? true, jemalloc  ? null
@@ -27,12 +24,11 @@
 
 with stdenv.lib;
 
-let 
+let
   available = x: x != null;
 
   sound =
-    if enableFFmpeg    then "ffmpeg" else
-    if enableGstreamer then "gst"    else "none";
+    if enableFFmpeg then "ffmpeg" else "none";
 
   renderers = []
     ++ optional enableAGG    "agg"
@@ -52,13 +48,12 @@ assert enableCairo  -> available cairo;
 assert enableOpenGL -> available libGLU_combined;
 
 # GUI toolkits
-assert enableGTK -> all available [ gtk2 gnome2.gtkglext gnome3.gconf ];
+assert enableGTK -> all available [ gtk2 gnome2.gtkglext gnome2.GConf ];
 assert enableSDL -> available SDL;
 assert enableQt  -> available qt4;
 
 # media libraries
 assert enableFFmpeg    -> available ffmpeg_2 ;
-assert enableGstreamer -> all available [ gst-plugins-base gst-plugins-ugly gst-ffmpeg ];
 
 # misc
 assert enableJemalloc -> available jemalloc;
@@ -96,8 +91,7 @@ stdenv.mkDerivation rec {
     ++ optional  enableJemalloc  jemalloc
     ++ optional  enableHwAccel   libGLU_combined
     ++ optionals enablePlugins   [ xulrunner npapi_sdk ]
-    ++ optionals enableGTK       [ gtk2 gnome2.gtkglext gnome3.gconf ]
-    ++ optionals enableGstreamer [ gst-plugins-base gst-plugins-ugly gst-ffmpeg ];
+    ++ optionals enableGTK       [ gtk2 gnome2.gtkglext gnome2.GConf ];
 
   configureFlags = with stdenv.lib; [
     "--with-boost-incl=${boost.dev}/include"

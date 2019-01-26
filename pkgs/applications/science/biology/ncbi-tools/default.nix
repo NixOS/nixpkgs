@@ -15,7 +15,12 @@ stdenv.mkDerivation rec {
     sha256 = "1b2v0dcdqn3bysgdkj57sxmd6s0hc9wpnxssviz399g6plhxggbr";
   };
 
-  configureFlags = "--without-debug --with-bin-release --with-dll --without-static";
+  configureFlags = [ 
+    "--without-debug"
+    "--with-bin-release"
+    "--with-dll"
+    "--without-static"
+  ];
   buildInputs = [ cpio ];
 
   meta = {

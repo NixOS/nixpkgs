@@ -1,7 +1,9 @@
-{ stdenv, appleDerivation, xcbuild, openssl, Librpcsvc, xnu, libpcap, developer_cmds }:
+{ stdenv, appleDerivation, xcbuildHook
+, openssl, Librpcsvc, xnu, libpcap, developer_cmds }:
 
 appleDerivation rec {
-  buildInputs = [ xcbuild openssl xnu Librpcsvc libpcap developer_cmds ];
+  nativeBuildInputs = [ xcbuildHook ];
+  buildInputs = [ openssl xnu Librpcsvc libpcap developer_cmds ];
 
   NIX_CFLAGS_COMPILE = " -I./unbound -I${xnu}/Library/Frameworks/System.framework/Headers/";
 
@@ -18,8 +20,11 @@ appleDerivation rec {
 
   # temporary install phase until xcodebuild has "install" support
   installPhase = ''
-    mkdir -p $out/bin/
-    install Products/Release/* $out/bin/
+    for f in Products/Release/*; do
+      if [ -f $f ]; then
+        install -D $f $out/bin/$(basename $f)
+      fi
+    done
 
     for n in 1 5; do
       mkdir -p $out/share/man/man$n

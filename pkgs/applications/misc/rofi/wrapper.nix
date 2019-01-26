@@ -1,14 +1,19 @@
-{ stdenv, rofi-unwrapped, makeWrapper, theme ? null, lib }:
+{ stdenv, rofi-unwrapped, makeWrapper, theme ? null }:
 
+if theme == null then rofi-unwrapped else
 stdenv.mkDerivation {
   name = "rofi-${rofi-unwrapped.version}";
   buildInputs = [ makeWrapper ];
   preferLocalBuild = true;
-  passthru = { unwrapped = rofi-unwrapped; };
+  passthru.unwrapped = rofi-unwrapped;
   buildCommand = ''
-    mkdir -p $out/bin
-    ln -s ${rofi-unwrapped}/bin/rofi $out/bin/rofi
-    ${lib.optionalString (theme != null) ''wrapProgram $out/bin/rofi --add-flags "-theme ${theme}"''}
+    mkdir $out
+    ln -s ${rofi-unwrapped}/* $out
+    rm $out/bin
+    mkdir $out/bin
+    ln -s ${rofi-unwrapped}/bin/* $out/bin
+    rm $out/bin/rofi
+    makeWrapper ${rofi-unwrapped}/bin/rofi $out/bin/rofi --add-flags "-theme ${theme}"
   '';
 
   meta = rofi-unwrapped.meta // {

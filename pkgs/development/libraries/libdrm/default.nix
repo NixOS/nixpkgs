@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, libpthreadstubs, libpciaccess, valgrind-light }:
 
 stdenv.mkDerivation rec {
-  name = "libdrm-2.4.91";
+  name = "libdrm-2.4.96";
 
   src = fetchurl {
-    url = "http://dri.freedesktop.org/libdrm/${name}.tar.bz2";
-    sha256 = "0068dn47c478vm1lyyhy02gilrpsma0xmcblhvs0dzqyrk80wjk3";
+    url = "https://dri.freedesktop.org/libdrm/${name}.tar.bz2";
+    sha256 = "14xkip83qgljjaahzq40qgl60j54q7k00la1hbf5kk5lgg7ilmhd";
   };
 
   outputs = [ "out" "dev" "bin" ];
@@ -16,15 +16,21 @@ stdenv.mkDerivation rec {
 
   patches = stdenv.lib.optional stdenv.isDarwin ./libdrm-apple.patch;
 
+  postPatch = ''
+    for a in */*-symbol-check ; do
+      patchShebangs $a
+    done
+  '';
+
   preConfigure = stdenv.lib.optionalString stdenv.isDarwin
     "echo : \\\${ac_cv_func_clock_gettime=\'yes\'} > config.cache";
 
   configureFlags = [ "--enable-install-test-programs" ]
-    ++ stdenv.lib.optionals (stdenv.isArm || stdenv.isAarch64)
+    ++ stdenv.lib.optionals (stdenv.isAarch32 || stdenv.isAarch64)
       [ "--enable-tegra-experimental-api" "--enable-etnaviv-experimental-api" ]
-    ++ stdenv.lib.optional stdenv.isDarwin "-C";
-
-  crossAttrs.configureFlags = configureFlags ++ [ "--disable-intel" ];
+    ++ stdenv.lib.optional stdenv.isDarwin "-C"
+    ++ stdenv.lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "--disable-intel"
+    ;
 
   meta = {
     homepage = https://dri.freedesktop.org/libdrm/;

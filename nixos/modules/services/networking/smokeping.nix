@@ -278,7 +278,7 @@ in
       "fping6".source = "${pkgs.fping}/bin/fping6";
     };
     environment.systemPackages = [ pkgs.fping ];
-    users.extraUsers = singleton {
+    users.users = singleton {
       name = cfg.user;
       isNormalUser = false;
       isSystemUser = true;

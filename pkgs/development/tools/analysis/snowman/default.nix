@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "snowman-${version}";
-  version = "2017-11-19";
+  version = "0.1.3";
 
   src = fetchFromGitHub {
     owner = "yegord";
     repo = "snowman";
-    rev = "d03c2d6ffbf262c0011584df59d6bd69c020e08e";
-    sha256 = "0bzqp3zc100dzvybf57bj4dvnybvds0lmn1w2xjb19wkzm9liskn";
+    rev = "v${version}";
+    sha256 = "1mrmhj2nddi0d47c266vsg5vbapbqbcpj5ld4v1qcwnnk6z2zn0j";
   };
 
   nativeBuildInputs = [ cmake ];

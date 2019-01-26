@@ -3,12 +3,12 @@
 stdenv.mkDerivation rec {
   name    = "${pname}-${version}";
   pname   = "c3d";
-  version = "1.1.0";
+  version = "2018-10-04";
 
   src = fetchgit {
     url = "https://git.code.sf.net/p/c3d/git";
-    rev = "3453f6133f0df831dcbb0d0cfbd8b26e121eb153";
-    sha256 = "1xgbk20w22jwvf7pa0n4lcbyx35fq56zzlslj0nvcclh6vx0b4z8";
+    rev = "351929a582b2ef68fb9902df0b11d38f44a0ccd0";
+    sha256 = "0mpv4yl6hdnxgvnwrmd182h64n3ppp30ldzm0jz6jglk0nvpzq9w";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -21,5 +21,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ bcdarwin ];
     platforms = platforms.unix;
     license = licenses.gpl2;
+    broken = true;
   };
 }

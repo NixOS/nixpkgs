@@ -120,7 +120,8 @@ stdenv.mkDerivation (rec {
   '';
 
   patches = [ ./0000-fix-ipxe-src.patch
-              ./0000-fix-install-python.patch ]
+              ./0000-fix-install-python.patch
+              ./acpica-utils-20180427.patch]
          ++ (config.patches or []);
 
   postPatch = ''
@@ -221,6 +222,8 @@ stdenv.mkDerivation (rec {
     done
   '';
 
+  enableParallelBuilding = true;
+
   # TODO(@oxij): Stop referencing args here
   meta = {
     homepage = http://www.xen.org/;
@@ -232,5 +235,6 @@ stdenv.mkDerivation (rec {
                     + withXenfiles (name: x: ''* ${name}: ${x.meta.description or "(No description)"}.'');
     platforms = [ "x86_64-linux" ];
     maintainers = with stdenv.lib.maintainers; [ eelco tstrobel oxij ];
+    license = stdenv.lib.licenses.gpl2;
   } // (config.meta or {});
 } // removeAttrs config [ "xenfiles" "buildInputs" "patches" "postPatch" "meta" ])

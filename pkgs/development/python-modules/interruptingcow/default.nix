@@ -2,7 +2,6 @@
 buildPythonPackage rec {
   pname = "interruptingcow";
   version = "0.8";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

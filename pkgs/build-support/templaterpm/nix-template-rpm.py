@@ -44,14 +44,14 @@ class SPECTemplate(object):
     self.key = self.getSelfKey()
 
     tmpDir = os.path.join(outputDir, self.rewriteName(self.spec.sourceHeader['name']))
-    if self.translateTable != None:
+    if self.translateTable is not None:
       self.relOutputDir = self.translateTable.path(self.key,tmpDir)
     else:
       self.relOutputDir = tmpDir
 
     self.final_output_dir = os.path.normpath( self.relOutputDir )
 
-    if self.repositoryDir != None:
+    if self.repositoryDir is not None:
       self.potential_repository_dir = os.path.normpath( os.path.join(self.repositoryDir,self.relOutputDir) )
 
 
@@ -59,7 +59,7 @@ class SPECTemplate(object):
   def rewriteCommands(self, string):
     string = string.replace('SPACER_DIR_FOR_REMOVAL/','')
     string = string.replace('SPACER_DIR_FOR_REMOVAL','')
-    string = '\n'.join(map(lambda line: ' '.join(map(lambda x: x.replace('SOURCE_DIR_SPACER/',('${./' if (self.buildRootInclude == None) else '${buildRoot}/usr/share/buildroot/SOURCES/'))+('}' if (self.buildRootInclude == None) else '') if x.startswith('SOURCE_DIR_SPACER/') else x, line.split(' '))), string.split('\n')))
+    string = '\n'.join(map(lambda line: ' '.join(map(lambda x: x.replace('SOURCE_DIR_SPACER/',('${./' if (self.buildRootInclude is None) else '${buildRoot}/usr/share/buildroot/SOURCES/'))+('}' if (self.buildRootInclude is None) else '') if x.startswith('SOURCE_DIR_SPACER/') else x, line.split(' '))), string.split('\n')))
     string = string.replace('\n','\n    ')
     string = string.rstrip()
     return string
@@ -82,7 +82,7 @@ class SPECTemplate(object):
     rewrite = lambda l: ''.join(camelcase(filterDoc(filterDevel(l))))
 
     def filterPackageGroup(target):
-      if target == None:
+      if target is None:
         return [ rewrite(x.split('-')) for x in inputs if (not x.split('-')[0] in self.packageGroups) or (len(x.split('-')) == 1) ]
       elif target in self.packageGroups:
         return [ target + '_' + rewrite(x.split('-')[1:]) for x in inputs if (x.split('-')[0] == target) and (len(x.split('-')) > 1)]
@@ -90,7 +90,7 @@ class SPECTemplate(object):
         raise Exception("Unknown target")
         return []
 
-    if target == None:
+    if target is None:
       packages = filterPackageGroup(None)
       packages.sort()
     elif target in self.packageGroups:
@@ -111,7 +111,7 @@ class SPECTemplate(object):
 
   def getBuildInputs(self,target=None):
     inputs = self.rewriteInputs(target,self.spec.sourceHeader['requires'])
-    if self.translateTable != None:
+    if self.translateTable is not None:
       return map(lambda x: self.translateTable.name(x), inputs)
     else:
       return inputs
@@ -125,7 +125,7 @@ class SPECTemplate(object):
     return key
 
   def getSelf(self):
-    if self.translateTable != None:
+    if self.translateTable is not None:
       return self.translateTable.name(self.key)
     else:
       return self.key
@@ -161,7 +161,7 @@ class SPECTemplate(object):
       facts["sha256"].append(sha256)
 
     patches = [source for (source, _, flag) in self.spec.sources if flag==2]
-    if self.buildRootInclude == None:
+    if self.buildRootInclude is None:
       facts["patches"] = map(lambda x: './'+x, patches)
     else:
       facts["patches"] = map(lambda x: '"${buildRoot}/usr/share/buildroot/SOURCES/'+x+'"', reversed(patches))
@@ -292,7 +292,7 @@ class SPECTemplate(object):
     if not os.path.exists(self.final_output_dir):
       os.makedirs(self.final_output_dir)
 
-    if self.inputDir != None:
+    if self.inputDir is not None:
       self.copySources(self.inputDir, self.final_output_dir)
       self.copyPatches(self.inputDir, self.final_output_dir)
 
@@ -334,19 +334,19 @@ class NixTemplate(object):
           url = re.match(r'^\s*url\s*=\s*"?(.*?)"?\s*;\s*$', line)
           sha256 = re.match(r'^\s*sha256\s*=\s*"(.*?)"\s*;\s*$', line)
           patches = re.match(r'^\s*patches\s*=\s*(\[.*?\])\s*;\s*$', line)
-          if name != None and self.original["name"] == None:
+          if name is not None and self.original["name"] is None:
               self.original["name"] = name.group(1)
               self.matchedLines[n] = "name"
-          if version != None and self.original["version"] == None:
+          if version is not None and self.original["version"] is None:
               self.original["version"] = version.group(1)
               self.matchedLines[n] = "version"
-          if url != None and self.original["url"] == None:
+          if url is not None and self.original["url"] is None:
               self.original["url"] = url.group(1)
               self.matchedLines[n] = "url"
-          if sha256 != None and self.original["sha256"] == None:
+          if sha256 is not None and self.original["sha256"] is None:
               self.original["sha256"] = sha256.group(1)
               self.matchedLines[n] = "sha256"
-          if patches != None and self.original["patches"] == None:
+          if patches is not None and self.original["patches"] is None:
               self.original["patches"] = patches.group(1)
               self.matchedLines[n] = "patches"
 
@@ -355,7 +355,7 @@ class NixTemplate(object):
     nixTemplateFile = open(os.path.normpath(self.nixfile),'r')
     nixOutFile = open(os.path.normpath(nixOut),'w')
     for (n,line) in enumerate(nixTemplateFile):
-      if self.matchedLines.has_key(n) and self.update[self.matchedLines[n]] != None:
+      if self.matchedLines.has_key(n) and self.update[self.matchedLines[n]] is not None:
         nixOutFile.write(line.replace(self.original[self.matchedLines[n]], self.update[self.matchedLines[n]], 1))
       else:
         nixOutFile.write(line)
@@ -383,14 +383,14 @@ class TranslationTable(object):
 
   def update(self, key, path, name=None):
     self.tablePath[key] = path
-    if name != None:
+    if name is not None:
       self.tableName[key] = name
 
   def readTable(self, tableFile):
     with file(tableFile, 'r') as infile:
       for line in infile:
         match = re.match(r'^(.+?)\s+(.+?)\s+(.+?)\s*$', line)
-        if match != None:
+        if match is not None:
           if not self.tablePath.has_key(match.group(1)):
             self.tablePath[match.group(1)] = match.group(2)
           if not self.tableName.has_key(match.group(1)):
@@ -449,7 +449,7 @@ if __name__ == "__main__":
     nameMap = {}
 
     newTable = TranslationTable()
-    if args.translate != None:
+    if args.translate is not None:
       table = TranslationTable()
       table.readTable(args.translate)
       newTable.readTable(args.translate)
@@ -461,7 +461,7 @@ if __name__ == "__main__":
         sys.stderr.write("INFO: generate nix file from: %s\n" % specPath)
 
         spec = SPECTemplate(specPath, args.output, args.inputSources, args.buildRoot, table, args.repository, allPackagesDir, args.maintainer)
-        if args.repository != None:
+        if args.repository is not None:
           if os.path.exists(os.path.join(spec.potential_repository_dir,'default.nix')):
             nixTemplate = NixTemplate(os.path.join(spec.potential_repository_dir,'default.nix'))
             nixTemplate.loadUpdate(spec.facts)
@@ -470,12 +470,12 @@ if __name__ == "__main__":
             nixTemplate.generateUpdated(os.path.join(spec.final_output_dir,'default.nix'))
           else:
             sys.stderr.write("WARNING: Repository does not contain template: %s\n" % os.path.join(spec.potential_repository_dir,'default.nix'))
-            if args.buildRoot == None:
+            if args.buildRoot is None:
               spec.generateCombined()
             else:
               buildRootContent[spec.key] = spec.generateSplit()
         else:
-          if args.buildRoot == None:
+          if args.buildRoot is None:
             spec.generateCombined()
           else:
             buildRootContent[spec.key] = spec.generateSplit()
@@ -486,7 +486,7 @@ if __name__ == "__main__":
       except Exception, e:
         sys.stderr.write("ERROR: %s failed with:\n%s\n%s\n" % (specPath,e.message,traceback.format_exc()))
 
-    if args.translateOut != None:
+    if args.translateOut is not None:
       if not os.path.exists(os.path.dirname(os.path.normpath(args.translateOut))):
         os.makedirs(os.path.dirname(os.path.normpath(args.translateOut)))
       newTable.writeTable(args.translateOut)
@@ -502,7 +502,7 @@ if __name__ == "__main__":
     allPackagesFile.write( '\n\n'.join(map(lambda x: x.callPackage(), map(lambda x: nameMap[x], sortedSpecs))) )
     allPackagesFile.close()
 
-    if args.buildRoot != None:
+    if args.buildRoot is not None:
       buildRootFilename = os.path.normpath( args.buildRoot )
       if not os.path.exists(os.path.dirname(buildRootFilename)):
         os.makedirs(os.path.dirname(buildRootFilename))

@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, ncurses, gettext
-, pkgconfig, cscope, python, ruby, tcl, perl, luajit
+, pkgconfig, python, ruby, tcl, perl, luajit
 , darwin
 }:
 

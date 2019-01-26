@@ -1,4 +1,4 @@
-{ stdenv, virtualbox, kernel, strace }:
+{ stdenv, virtualbox, kernel }:
 
 stdenv.mkDerivation {
   name = "virtualbox-modules-${virtualbox.version}-${kernel.version}";

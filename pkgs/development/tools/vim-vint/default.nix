@@ -1,16 +1,16 @@
-{ fetchFromGitHub, lib, python3Packages, stdenv }:
+{ fetchFromGitHub, lib, python3Packages }:
 
 with python3Packages;
 
 buildPythonApplication rec {
   name = "vim-vint-${version}";
-  version = "0.3.18";
+  version = "0.3.19";
 
   src = fetchFromGitHub {
     owner = "kuniwak";
     repo = "vint";
     rev = "v${version}";
-    sha256 = "0qrlimg385sxq4y6vqbanby31inaa1q47w9qcw5knwffbz96whrs";
+    sha256 = "0fb0vkmn5fv4mwk6riw08hb3vsh1pivvrfwm90b95yhksq4pfi12";
   };
 
   # For python 3.5 > version > 2.7 , a nested dependency (pythonPackages.hypothesis) fails.

@@ -1,6 +1,7 @@
 { stdenv, fetchFromGitHub, pkgconfig, autoreconfHook, openssl, db48, boost
 , zlib, miniupnpc, qt4, utillinux, protobuf, qrencode, curl, libevent
-, withGui }:
+, withGui
+, Foundation, ApplicationServices, AppKit }:
 
 with stdenv.lib;
 stdenv.mkDerivation rec{
@@ -18,12 +19,15 @@ stdenv.mkDerivation rec{
   nativeBuildInputs = [ pkgconfig autoreconfHook ];
   buildInputs = [ openssl db48 boost zlib libevent
                   miniupnpc utillinux protobuf curl ]
-                  ++ optionals withGui [ qt4 qrencode ];
+                  ++ optionals withGui [ qt4 qrencode ]
+                  ++ optionals stdenv.isDarwin [ Foundation ApplicationServices AppKit ];
 
   configureFlags = [
     "--with-boost-libdir=${boost.out}/lib"
     "--with-libcurl-headers=${curl.dev}/include"
   ] ++ optionals withGui [ "--with-gui=qt4" ];
+
+  enableParallelBuilding = true;
 
   meta = {
     description = "Peer-to-peer electronic cash system (XT client)";
@@ -36,11 +40,12 @@ stdenv.mkDerivation rec{
       Bitcoin XT is an implementation of a Bitcoin full node, based upon the
       source code of Bitcoin Core. It is built by taking the latest stable
       Core release, applying a series of patches, and then doing deterministic
-      builds so anyone can check the downloads correspond to the source code. 
+      builds so anyone can check the downloads correspond to the source code.
     '';
     homepage = https://bitcoinxt.software/;
     maintainers = with maintainers; [ jefdaj ];
     license = licenses.mit;
+    broken = stdenv.isDarwin;
     platforms = platforms.unix;
   };
 }

@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "1.19";
 
   src = fetchurl {
-    url = "http://dl.cihar.com/enca/${name}.tar.xz";
+    url = "https://dl.cihar.com/enca/${name}.tar.xz";
     sha256 = "1f78jmrggv3jymql8imm5m9yc8nqjw5l99mpwki2245l8357wj1s";
   };
 

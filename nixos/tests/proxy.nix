@@ -3,7 +3,7 @@ import ./make-test.nix ({ pkgs, ...} :
 let
 
   backend =
-    { config, pkgs, ... }:
+    { pkgs, ... }:
 
     { services.httpd.enable = true;
       services.httpd.adminAddr = "foo@example.org";
@@ -21,7 +21,7 @@ in
 
   nodes =
     { proxy =
-        { config, pkgs, nodes, ... }:
+        { nodes, ... }:
 
         { services.httpd.enable = true;
           services.httpd.adminAddr = "bar@example.org";
@@ -57,7 +57,7 @@ in
       backend1 = backend;
       backend2 = backend;
 
-      client = { config, pkgs, ... }: { };
+      client = { ... }: { };
     };
 
   testScript =

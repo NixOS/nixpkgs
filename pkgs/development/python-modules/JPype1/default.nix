@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k }:
+{ buildPythonPackage, fetchPypi, isPy3k, pytest }:
 
 buildPythonPackage rec {
   pname = "JPype1";
@@ -11,8 +11,10 @@ buildPythonPackage rec {
 
   patches = [ ./set-compiler-language.patch ];
 
-  # Test loader complains about non-test module on python3.
-  doCheck = !isPy3k;
+  checkInputs = [ pytest ];
+
+  # ImportError: Failed to import test module: test.testlucene
+  doCheck = false;
 
   meta = {
     homepage = "https://github.com/originell/jpype/";

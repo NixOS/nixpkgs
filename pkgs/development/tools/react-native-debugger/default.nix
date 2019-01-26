@@ -1,5 +1,5 @@
 { stdenv, fetchurl, unzip, cairo, xorg, gdk_pixbuf, fontconfig, pango, gnome2, atk, gtk2, glib
-, freetype, dbus, nss, nspr, alsaLib, cups, expat, libudev, makeDesktopItem
+, freetype, dbus, nss, nspr, alsaLib, cups, expat, udev, makeDesktopItem
 }:
 
 let
@@ -19,7 +19,7 @@ let
     alsaLib
     cups
     expat
-    libudev
+    udev
 
     gnome2.GConf
 
@@ -38,11 +38,11 @@ let
   ];
 in stdenv.mkDerivation rec {
   name = "react-native-debugger-${version}";
-  version = "0.7.18";
+  version = "0.8.1";
 
   src = fetchurl {
     url = "https://github.com/jhen0409/react-native-debugger/releases/download/v${version}/rn-debugger-linux-x64.zip";
-    sha256 = "186n438sy9wzrx2zdw4qq4hsz89wiy01bpfa6fdjisvxgz6r8sgw";
+    sha256 = "180rvcnr3xxg7nb5g4b45l9a67h2dx8ps0l05r6ph3f71kzh4dd9";
   };
 
   buildInputs = [ unzip ];

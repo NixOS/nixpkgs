@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, devicemapper, libgcrypt, libuuid, pkgconfig, popt
+{ stdenv, fetchurl, lvm2, libgcrypt, libuuid, pkgconfig, popt
 , enablePython ? true, python ? null
 }:
 
@@ -16,14 +16,14 @@ stdenv.mkDerivation rec {
                 ++ stdenv.lib.optional enablePython "--enable-python";
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ devicemapper libgcrypt libuuid popt ]
+  buildInputs = [ lvm2 libgcrypt libuuid popt ]
              ++ stdenv.lib.optional enablePython python;
 
   meta = {
     homepage = http://code.google.com/p/cryptsetup/;
     description = "LUKS for dm-crypt";
     license = stdenv.lib.licenses.gpl2;
-    maintainers = with stdenv.lib.maintainers; [ viric chaoflow ];
+    maintainers = with stdenv.lib.maintainers; [ chaoflow ];
     platforms = with stdenv.lib.platforms; linux;
   };
 }

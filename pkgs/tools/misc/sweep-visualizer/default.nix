@@ -24,10 +24,9 @@
     buildPhase = ":";
 
     installPhase = ''
-      mkdir -p $out/lib $out/bin $out/share/sweep-visualizer
+      mkdir -p $out/bin $out/share/sweep-visualizer
       mv usr/share/* $out/share
       mv opt/Sweep\ Visualizer\ BETA/* $out/share/sweep-visualizer/
-      mv $out/share/sweep-visualizer/*.so $out/lib/
       ln -s $out/share/sweep-visualizer/sweep_visualizer $out/bin/sweep_visualizer
     '';
 
@@ -40,12 +39,12 @@
       ];
       runtimeLibs = lib.makeLibraryPath [ libudev0-shim ];
     in ''
-      for lib in $out/lib/*.so; do
-        patchelf --set-rpath "$out/lib:${libPath}" $lib
+      for lib in $out/share/sweep-visualizer/*.so; do
+        patchelf --set-rpath "$out/share/sweep-visualizer:${libPath}" $lib
       done
       patchelf \
         --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-        --set-rpath "$out/lib:${libPath}" \
+        --set-rpath "$out/share/sweep-visualizer:${libPath}" \
         $out/share/sweep-visualizer/sweep_visualizer
       wrapProgram "$out/bin/sweep_visualizer" --prefix LD_LIBRARY_PATH : ${runtimeLibs}
     '';

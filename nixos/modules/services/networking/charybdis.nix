@@ -71,14 +71,14 @@ in
 
   config = mkIf cfg.enable (lib.mkMerge [
     {
-      users.extraUsers = singleton {
+      users.users = singleton {
         name = cfg.user;
         description = "Charybdis IRC daemon user";
         uid = config.ids.uids.ircd;
         group = cfg.group;
       };
 
-      users.extraGroups = singleton {
+      users.groups = singleton {
         name = cfg.group;
         gid = config.ids.gids.ircd;
       };
@@ -90,7 +90,7 @@ in
           BANDB_DBPATH = "${cfg.statedir}/ban.db";
         };
         serviceConfig = {
-          ExecStart   = "${charybdis}/bin/charybdis-ircd -foreground -logfile /dev/stdout -configfile ${configFile}";
+          ExecStart   = "${charybdis}/bin/charybdis -foreground -logfile /dev/stdout -configfile ${configFile}";
           Group = cfg.group;
           User = cfg.user;
           PermissionsStartOnly = true; # preStart needs to run with root permissions

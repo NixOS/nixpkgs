@@ -1,7 +1,5 @@
 { stdenv, fetchFromGitHub, fetchpatch, coreutils
-, python3, python3Packages, substituteAll }:
-
-assert stdenv.isLinux;
+, python3Packages, substituteAll }:
 
 python3Packages.buildPythonApplication rec {
   name = "trash-cli-${version}";
@@ -19,7 +17,8 @@ python3Packages.buildPythonApplication rec {
     (substituteAll {
       src = ./nix-paths.patch;
       df = "${coreutils}/bin/df";
-      libc = "${stdenv.cc.libc.out}/lib/libc.so.6";
+      libc = let ext = if stdenv.isDarwin then ".dylib" else ".so.6";
+             in "${stdenv.cc.libc}/lib/libc${ext}";
     })
 
     # Fix build on Python 3.6.
@@ -37,7 +36,7 @@ python3Packages.buildPythonApplication rec {
     homepage = https://github.com/andreafrancia/trash-cli;
     description = "Command line tool for the desktop trash can";
     maintainers = [ maintainers.rycee ];
-    platforms = platforms.all;
+    platforms = platforms.unix;
     license = licenses.gpl2;
   };
 }

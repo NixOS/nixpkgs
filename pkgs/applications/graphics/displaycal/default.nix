@@ -3,7 +3,8 @@
  , argyllcms, wxPython, numpy
  }:
 buildPythonPackage {
-  name = "displaycal-3.5.0.0";
+  pname = "displaycal";
+  version = "3.5.0.0";
 
   enableParallelBuilding = true;
 

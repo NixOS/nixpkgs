@@ -4,7 +4,6 @@ with lib;
 
 let
   cfg = config.services.nylas-mail;
-  defaultUser = "nylas-mail";
 in {
   ###### interface
   options = {

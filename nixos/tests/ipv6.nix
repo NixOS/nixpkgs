@@ -8,17 +8,17 @@ import ./make-test.nix ({ pkgs, ...} : {
   };
 
   nodes =
-    { client = { config, pkgs, ... }: { };
+    { client = { ... }: { };
 
       server =
-        { config, pkgs, ... }:
+        { ... }:
         { services.httpd.enable = true;
           services.httpd.adminAddr = "foo@example.org";
           networking.firewall.allowedTCPPorts = [ 80 ];
         };
 
       router =
-        { config, pkgs, ... }:
+        { ... }:
         { services.radvd.enable = true;
           services.radvd.config =
             ''

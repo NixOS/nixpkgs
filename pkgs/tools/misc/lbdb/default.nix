@@ -7,7 +7,7 @@
 }:
 
 let
-  version = "0.46";
+  version = "0.48";
 in
 with stdenv.lib;
 with perlPackages;
@@ -15,10 +15,10 @@ stdenv.mkDerivation {
   name = "lbdb-${version}";
   src = fetchurl {
     url = "http://www.spinnaker.de/lbdb/download/lbdb_${version}.tar.gz";
-    sha256 = "16fx02xk98k3friigq2lcgk535xagp3kfnmngni5kw61f7yj6gxi";
+    sha256 = "1j1ac0nnf6j5mwb6rh61ax9aidj4lvv2vrj5b1p71d4d1m3g180z";
   };
 
-  buildInputs = [ goobook makeWrapper perl ConvertASN1 NetLDAP AuthenSASL ]
+  buildInputs = [ goobook makeWrapper perl ConvertASN1 perlldap AuthenSASL ]
     ++ optional (!stdenv.isDarwin) finger_bsd
     ++ optional   (abook != null) abook
     ++ optional   (gnupg != null) gnupg
@@ -36,7 +36,7 @@ stdenv.mkDerivation {
   postFixup = "wrapProgram $out/lib/mutt_ldap_query --prefix PERL5LIB : "
     + "${AuthenSASL}/${perl.libPrefix}"
     + ":${ConvertASN1}/${perl.libPrefix}"
-    + ":${NetLDAP}/${perl.libPrefix}";
+    + ":${perlldap}/${perl.libPrefix}";
 
   meta = {
     homepage = http://www.spinnaker.de/lbdb/;

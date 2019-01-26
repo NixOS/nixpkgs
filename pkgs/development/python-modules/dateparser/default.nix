@@ -1,4 +1,4 @@
-{ lib, fetchPypi, buildPythonPackage, isPy3k
+{ lib, fetchPypi, buildPythonPackage
 , nose
 , parameterized
 , mock

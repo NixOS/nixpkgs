@@ -1,13 +1,13 @@
-{ mkXfceDerivation, automakeAddFlags, dbus_glib, exo, garcon, gtk3
+{ mkXfceDerivation, automakeAddFlags, exo, garcon, gtk3
 , libnotify ? null, libxfce4ui, libxfce4util, libxklavier ? null
 , upower ? null, xfconf, xf86inputlibinput ? null }:
 
 mkXfceDerivation rec {
   category = "xfce";
   pname = "xfce4-settings";
-  version = "4.13.1";
+  version = "4.13.4";
 
-  sha256 = "010vcgy3qiqykk174jhf50a8q3x4a5qq2lf6b0wcbyzv7aikydrw";
+  sha256 = "0qnnpvcs2hpfq3n4byjwq343p95i9xw96rq7ym4md4mahnk176dy";
 
   postPatch = ''
     automakeAddFlags xfce4-settings-editor/Makefile.am xfce4_settings_editor_CFLAGS DBUS_GLIB_CFLAGS
@@ -19,7 +19,6 @@ mkXfceDerivation rec {
   nativeBuildInputs = [ automakeAddFlags ];
 
   buildInputs = [
-    dbus_glib
     exo
     garcon
     gtk3

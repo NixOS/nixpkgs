@@ -1,17 +1,17 @@
-{ stdenv, fetchurl, cmake, qtscript, qtwebkit, gdal, proj, routino, quazip }:
+{ stdenv, fetchurl, cmake, qtscript, qtwebengine, gdal, proj, routino, quazip }:
 
 stdenv.mkDerivation rec {
   name = "qmapshack-${version}";
-  version = "1.10.0";
+  version = "1.12.1";
 
   src = fetchurl {
     url = "https://bitbucket.org/maproom/qmapshack/downloads/${name}.tar.gz";
-    sha256 = "10qk6c5myw5dhkbw7pcrx3900kiqhs32vy47xl2844nzb4fq2liw";
+    sha256 = "1d6n7xk0ksxb1fw43s5lb08vgxf6h93k3rb401cbka1inpyf2232";
   };
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ qtscript qtwebkit gdal proj routino quazip ];
+  buildInputs = [ qtscript qtwebengine gdal proj routino quazip ];
 
   cmakeFlags = [
     "-DROUTINO_XML_PATH=${routino}/share/routino"

@@ -1,5 +1,7 @@
-{ fetchurl, fetchpatch, stdenv, gnutls, glib, pkgconfig, check, libotr, python,
-enableLibPurple ? false, pidgin ? null }:
+{ fetchurl, stdenv, gnutls, glib, pkgconfig, check, libotr, python
+, enableLibPurple ? false, pidgin ? null
+, enablePam ? false, pam ? null
+}:
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
@@ -13,24 +15,25 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ] ++ optional doCheck check;
 
   buildInputs = [ gnutls glib libotr python ]
-    ++ optional enableLibPurple pidgin;
-
-  preConfigure = optionalString enableLibPurple
-    "export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:${pidgin}/lib/pkgconfig";
+    ++ optional enableLibPurple pidgin
+    ++ optional enablePam pam;
 
   configureFlags = [
-    "--gcov=1"
     "--otr=1"
     "--ssl=gnutls"
     "--pidfile=/var/lib/bitlbee/bitlbee.pid"
-  ]
-  ++ optional enableLibPurple "--purple=1";
+  ] ++ optional enableLibPurple "--purple=1"
+    ++ optional enablePam "--pam=1";
 
-  buildPhase = optionalString (!enableLibPurple) ''
-    make install-dev
-  '';
+  installTargets = [ "install" "install-dev" ];
 
   doCheck = !enableLibPurple; # Checks fail with libpurple for some reason
+  checkPhase = ''
+    # check flags set VERBOSE=y which breaks the build due overriding a command
+    make check
+  '';
+
+  enableParallelBuilding = true;
 
   meta = {
     description = "IRC instant messaging gateway";
@@ -50,6 +53,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
 
     maintainers = with maintainers; [ wkennington pSub ];
-    platforms = platforms.gnu;  # arbitrary choice
+    platforms = platforms.gnu ++ platforms.linux;  # arbitrary choice
   };
 }

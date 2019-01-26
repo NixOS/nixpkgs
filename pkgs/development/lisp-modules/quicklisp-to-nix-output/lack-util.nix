@@ -1,15 +1,15 @@
 args @ { fetchurl, ... }:
 rec {
   baseName = ''lack-util'';
-  version = ''lack-20180131-git'';
+  version = ''lack-20180831-git'';
 
   description = '''';
 
   deps = [ args."ironclad" args."nibbles" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/lack/2018-01-31/lack-20180131-git.tgz'';
-    sha256 = ''17ydk90rjxjijc2r6kcwkbhh0l4a83xvhrbp0bc8wzbpkh2plywl'';
+    url = ''http://beta.quicklisp.org/archive/lack/2018-08-31/lack-20180831-git.tgz'';
+    sha256 = ''0x4b3v5qvrik5c8nn4kpxygv78srqb306jcypkhpyc65ig81gr9n'';
   };
 
   packageName = "lack-util";
@@ -18,11 +18,11 @@ rec {
   overrides = x: x;
 }
 /* (SYSTEM lack-util DESCRIPTION NIL SHA256
-    17ydk90rjxjijc2r6kcwkbhh0l4a83xvhrbp0bc8wzbpkh2plywl URL
-    http://beta.quicklisp.org/archive/lack/2018-01-31/lack-20180131-git.tgz MD5
-    e1807a22a021ca27d8d1add9219091eb NAME lack-util FILENAME lack-util DEPS
+    0x4b3v5qvrik5c8nn4kpxygv78srqb306jcypkhpyc65ig81gr9n URL
+    http://beta.quicklisp.org/archive/lack/2018-08-31/lack-20180831-git.tgz MD5
+    fd57a7185997a1a5f37bbd9d6899118d NAME lack-util FILENAME lack-util DEPS
     ((NAME ironclad FILENAME ironclad) (NAME nibbles FILENAME nibbles))
-    DEPENDENCIES (ironclad nibbles) VERSION lack-20180131-git SIBLINGS
+    DEPENDENCIES (ironclad nibbles) VERSION lack-20180831-git SIBLINGS
     (lack-component lack-middleware-accesslog lack-middleware-auth-basic
      lack-middleware-backtrace lack-middleware-csrf lack-middleware-mount
      lack-middleware-session lack-middleware-static lack-request lack-response

@@ -1,17 +1,15 @@
-{ lib, buildPythonPackage, fetchurl, nose }:
+{ lib, buildPythonPackage, fetchPypi, nose }:
 
-let
+buildPythonPackage rec {
   pname = "zipstream";
   version = "1.1.4";
-in buildPythonPackage rec {
-  name = "${pname}-${version}";
 
-  src = fetchurl {
-    url = "mirror://pypi/z/${pname}/${name}.tar.gz";
+  src = fetchPypi {
+    inherit pname version;
     sha256 = "01im5anqdyggmwkigqcjg0qw2a5bnn84h33mfaqjjd69a28lpwif";
   };
 
-  buildInputs = [ nose ];
+  checkInputs = [ nose ];
 
   meta = {
     description = "A zip archive generator";

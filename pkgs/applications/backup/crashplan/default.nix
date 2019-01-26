@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, jre, cpio, gawk, gnugrep, gnused, procps, swt, gtk2, glib, libXtst }:
+{ stdenv, fetchurl, makeWrapper, jre, cpio, gawk, gnugrep, gnused, procps, gtk2, glib, libXtst }:
 
 stdenv.mkDerivation rec {
   version = "4.8.3";

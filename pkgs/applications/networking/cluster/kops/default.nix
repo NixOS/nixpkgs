@@ -1,8 +1,9 @@
-{ stdenv, lib, buildGoPackage, fetchFromGitHub, go-bindata  }:
+
+{ stdenv, buildGoPackage, fetchFromGitHub, go-bindata }:
 
 buildGoPackage rec {
   name = "kops-${version}";
-  version = "1.8.1";
+  version = "1.11.0";
 
   goPackagePath = "k8s.io/kops";
 
@@ -10,7 +11,7 @@ buildGoPackage rec {
     rev = version;
     owner = "kubernetes";
     repo = "kops";
-    sha256 = "12nyr0iw1xwp60apli3nlq2vyn4jk3qjrb404m2syx2mqbnn47my";
+    sha256 = "1z67jl66g79q6v5kjy9qxx2xp656ybv5hrc10h3wmzy0b0n30s4n";
   };
 
   buildInputs = [go-bindata];
@@ -24,8 +25,7 @@ buildGoPackage rec {
 
   preBuild = ''
     (cd go/src/k8s.io/kops
-     go-bindata -o upup/models/bindata.go -pkg models -prefix upup/models/ upup/models/...
-     go-bindata -o federation/model/bindata.go -pkg model -prefix federation/model federation/model/...)
+     go-bindata -o upup/models/bindata.go -pkg models -prefix upup/models/ upup/models/...)
   '';
 
   postInstall = ''

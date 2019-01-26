@@ -28,6 +28,9 @@ buildPythonPackage rec {
     py.test
   '';
 
+  # https://github.com/kevin1024/pytest-httpbin/pull/51
+  doCheck = false;
+
   meta = {
     description = "Easily test your HTTP library against a local copy of httpbin.org";
     homepage = https://github.com/kevin1024/pytest-httpbin;

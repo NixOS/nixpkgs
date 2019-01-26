@@ -1,5 +1,5 @@
-{ stdenv, fetchgit, libusb, libusb1, autoconf, automake, confuse, pkgconfig
-, gccCross ? null, crossPrefix
+{ stdenv, fetchgit, libusb, libusb1, autoconf, automake, libconfuse, pkgconfig
+, gccCross ? null
 }:
 
 let
@@ -18,17 +18,18 @@ stdenv.mkDerivation {
     sh autogen.sh
   '';
 
-  configureFlags = if gccCross != null then
-    "--enable-firmware CROSS_COMPILE=${crossPrefix}-"
-    else "";
+  configureFlags = stdenv.lib.optionals (gccCross != null) [
+    "--enable-firmware"
+    "CROSS_COMPILE=${gccCross.targetPrefix}"
+  ];
 
   hardeningDisable = [ "pic" "stackprotector" ];
 
   # Not to strip cross build binaries (this is for the gcc-cross-wrapper)
   dontCrossStrip = true;
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ libusb libusb1 autoconf automake confuse ] ++
+  nativeBuildInputs = [ autoconf automake pkgconfig ];
+  buildInputs = [ libusb libusb1 libconfuse ] ++
     stdenv.lib.optional (gccCross != null) gccCross;
 
   meta = {

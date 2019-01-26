@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, xz }:
+{ stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   name = "mkinitcpio-nfs-utils-0.3";

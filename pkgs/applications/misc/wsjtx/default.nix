@@ -1,15 +1,15 @@
 { stdenv, fetchurl, asciidoc, asciidoctor, autoconf, automake, cmake,
-  docbook_xsl, fftw, fftwFloat, gfortran, libtool, libpulseaudio, qtbase,
+  docbook_xsl, fftw, fftwFloat, gfortran, libtool, qtbase,
   qtmultimedia, qtserialport, texinfo, libusb1 }:
 
 stdenv.mkDerivation rec {
   name = "wsjtx-${version}";
-  version = "1.8.0";
+  version = "2.0.0";
 
-  # This is a composite source tarball containing both wsjtx and a hamlib fork
+  # This is a "superbuild" tarball containing both wsjtx and a hamlib fork
   src = fetchurl {
-    url = "http://physics.princeton.edu/pulsar/K1JT/wsjtx-${version}.tgz";
-    sha256 = "21603ad4d5f43cd9c79a6e8cf468bde88c554654012b2c6c1ef9144cfbf668ce";
+    url = "http://physics.princeton.edu/pulsar/k1jt/wsjtx-${version}.tgz";
+    sha256 = "66434f69f256742da1fe057ec51e4464cab2614f0bfb1a310c04a385b77bd014";
   };
 
   # Hamlib builds with autotools, wsjtx builds with cmake
@@ -20,7 +20,10 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [ fftw fftwFloat libusb1 qtbase qtmultimedia qtserialport ];
 
-  # Composite build has its own patch step after it extracts the inner archives
+  # Remove Git dependency from superbuild since sources are included
+  patches = [ ./super.patch ];
+
+  # Superbuild has its own patch step after it extracts the inner archives
   postPatch = "cp ${./wsjtx.patch} wsjtx.patch";
 
   meta = with stdenv.lib; {

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "pmd-${version}";
-  version = "6.2.0";
+  version = "6.10.0";
 
   buildInputs = [ unzip ];
 
   src = fetchurl {
     url = "mirror://sourceforge/pmd/pmd-bin-${version}.zip";
-    sha256 = "12j6m6lhp4xw27x0x8jcy0vlwbanjwks7w6zl56xihv6r8cm40fz";
+    sha256 = "1yzgin2lbhfswb07mm14wq8rn129kpfjidd8nv9pg77ywhnbwqmb";
   };
 
   installPhase = ''
@@ -16,10 +16,11 @@ stdenv.mkDerivation rec {
     cp -R * $out
   '';
 
-  meta = {
-    description = "Scans Java source code and looks for potential problems";
-    homepage = http://pmd.sourceforge.net/;
-    platforms = stdenv.lib.platforms.unix;
+  meta = with stdenv.lib; {
+    description = "An extensible cross-language static code analyzer";
+    homepage = https://pmd.github.io/;
+    platforms = platforms.unix;
+    license = with licenses; [ bsdOriginal asl20 ];
   };
 }
 

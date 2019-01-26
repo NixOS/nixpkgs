@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, pythonOlder
+{ lib, buildPythonPackage, fetchPypi, pythonOlder
 , typing, aiohttp
 }:
 

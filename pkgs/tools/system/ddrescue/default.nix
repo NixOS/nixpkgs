@@ -1,9 +1,6 @@
 { stdenv
 , fetchurl, lzip
-, hostPlatform, buildPlatform
 }:
-
-let inherit (stdenv.lib) optionals; in
 
 stdenv.mkDerivation rec {
   name = "ddrescue-1.23";
@@ -44,7 +41,7 @@ stdenv.mkDerivation rec {
          second and successive copies.
       '';
 
-    homepage = http://www.gnu.org/software/ddrescue/ddrescue.html;
+    homepage = https://www.gnu.org/software/ddrescue/ddrescue.html;
 
     license = licenses.gpl3Plus;
 

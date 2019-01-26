@@ -37,8 +37,10 @@ in
 
     preBuild = ''
       # The build process uses ./rebar. Link it to the nixpkgs rebar
-      rm -v rebar
+      rm -vf rebar
       ln -s ${rebar}/bin/rebar rebar
+
+      patchShebangs lib/elixir/generate_app.escript || true
 
       substituteInPlace Makefile \
         --replace "/usr/local" $out

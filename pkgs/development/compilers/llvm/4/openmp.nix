@@ -1,7 +1,6 @@
 { stdenv
 , fetch
 , cmake
-, zlib
 , llvm
 , perl
 , version

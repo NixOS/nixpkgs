@@ -1,12 +1,12 @@
-{ stdenv, lib, gnome2, fetchurl, pkgs, xorg, udev, makeWrapper, makeDesktopItem }:
+{ stdenv, lib, gnome2, fetchurl, pkgs, xorg, makeWrapper, makeDesktopItem }:
 
 stdenv.mkDerivation rec {
   name = "postman-${version}";
-  version = "5.5.2";
+  version = "6.7.1";
 
   src = fetchurl {
     url = "https://dl.pstmn.io/download/version/${version}/linux64";
-    sha1 = "68886197A8375E860AB880547838FEFC9E12FC64";
+    sha256 = "1x8jj0xs67wi0qj6x22h54crndml6fl8a128s57v058fyxji6brx";
     name = "${name}.tar.gz";
   };
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   desktopItem = makeDesktopItem {
     name = "postman";
     exec = "postman";
-    icon = "$out/share/postman/resources/app/assets/icon.png";
+    icon = "postman";
     comment = "API Development Environment";
     desktopName = "Postman";
     genericName = "Postman";
@@ -28,11 +28,17 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/share/postman
-    mkdir -p $out/share/applications
-    cp -R * $out/share/postman
+    cp -R app/* $out/share/postman
+
     mkdir -p $out/bin
     ln -s $out/share/postman/Postman $out/bin/postman
+
+    mkdir -p $out/share/applications
     ln -s ${desktopItem}/share/applications/* $out/share/applications/
+
+    iconDir=$out/share/icons/hicolor/128x128/apps
+    mkdir -p $iconDir
+    ln -s $out/share/postman/resources/app/assets/icon.png $iconDir/postman.png
   '';
 
   preFixup = let
@@ -44,7 +50,7 @@ stdenv.mkDerivation rec {
       pkgs.alsaLib
       pkgs.cairo
       pkgs.cups
-      pkgs.dbus_daemon.lib
+      pkgs.dbus.daemon.lib
       pkgs.expat
       pkgs.gdk_pixbuf
       pkgs.glib

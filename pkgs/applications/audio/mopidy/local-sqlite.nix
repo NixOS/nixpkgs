@@ -1,8 +1,7 @@
 { stdenv, fetchFromGitHub, pythonPackages, mopidy }:
 
 pythonPackages.buildPythonApplication rec {
-  name = "mopidy-local-sqlite-${version}";
-
+  pname = "mopidy-local-sqlite";
   version = "1.0.0";
 
   src = fetchFromGitHub {

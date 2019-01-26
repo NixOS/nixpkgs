@@ -7,7 +7,7 @@
 { # Args just for stdenvs' usage
   lib
   # Args to pass on to the pkgset builder, too
-, localSystem, crossSystem, config, overlays
+, localSystem, crossSystem, config, overlays, crossOverlays ? []
 } @ args:
 
 let
@@ -36,7 +36,7 @@ let
 
   # Select the appropriate stages for the platform `system'.
 in
-  if crossSystem != null then stagesCross
+  if crossSystem != localSystem || crossOverlays != [] then stagesCross
   else if config ? replaceStdenv then stagesCustom
   else { # switch
     "i686-linux" = stagesLinux;
@@ -47,6 +47,7 @@ in
     "aarch64-linux" = stagesLinux;
     "mipsel-linux" = stagesLinux;
     "powerpc-linux" = /* stagesLinux */ stagesNative;
+    "powerpc64le-linux" = stagesLinux;
     "x86_64-darwin" = stagesDarwin;
     "x86_64-solaris" = stagesNix;
     "i686-cygwin" = stagesNative;

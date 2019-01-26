@@ -12,11 +12,11 @@ stdenv.mkDerivation rec {
 
   CPP = "${stdenv.cc}/bin/gcc -E";
 
-  configureFlags = "
-    --enable-shared --disable-all-vads --with-readline=${readline.dev}
-    --disable-hslookup --disable-wbxml2 --without-iodbc
-    --enable-openssl=${openssl.dev}
-    ";
+  configureFlags = [
+    "--enable-shared" "--disable-all-vads" "--with-readline=${readline.dev}"
+    "--disable-hslookup" "--disable-wbxml2" "--without-iodbc"
+    "--enable-openssl=${openssl.dev}"
+  ];
 
   postInstall=''
     echo Moving documentation
@@ -31,6 +31,6 @@ stdenv.mkDerivation rec {
     homepage = http://virtuoso.openlinksw.com/dataspace/dav/wiki/Main/;
     #configure: The current version [...] can only be built on 64bit platforms
     platforms = [ "x86_64-linux" ];
-    maintainers = [ ];
+    license = licenses.gpl2;
   };
 }

@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   ];
   postPatch = ''
     cat >> local.h <<EOF
-    #define USG
+    ${stdenv.lib.optionalString (!stdenv.isDarwin) "#define USG"}
     #define TERMLIB "-lncurses"
     #define LANGUAGES "{american,MASTERDICTS=american.med,HASHFILES=americanmed.hash}"
     #define MASTERHASH "americanmed.hash"

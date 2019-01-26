@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "libnfs-${version}";
-  version = "2.0.0";
+  version = "3.0.0";
 
   src = fetchFromGitHub {
     owner = "sahlberg";
     repo = "libnfs";
     rev = "libnfs-${version}";
-    sha256 = "1xd1xb09jxwmx7hblv0f9gxv7i1glk3nbj2vyq50zpi158lnf2mb";
+    sha256 = "115p55y2cbs92z5lmcnjx1v29lwinpgq4sha9v1kq1vd8674h404";
   };
 
   nativeBuildInputs = [ autoreconfHook ];

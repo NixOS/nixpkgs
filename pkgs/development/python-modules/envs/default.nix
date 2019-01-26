@@ -1,16 +1,13 @@
-{ lib, buildPythonPackage, fetchFromGitHub
+{ lib, buildPythonPackage, fetchPypi
 , click, jinja2, terminaltables }:
 
 buildPythonPackage rec {
   pname = "envs";
-  version = "1.2.4";
+  version = "1.2.6";
 
-  # move to fetchPyPi when https://github.com/capless/envs/issues/8 is fixed
-  src = fetchFromGitHub {
-    owner  = "capless";
-    repo   = "envs";
-    rev    = "e1f6cbad7f20316fc44324d2c50826d57c2817a8";
-    sha256 = "0p88a79amj0jxll3ssq1dzg78y7zwgc8yqyr7cf53nv2i7kmpakv";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "5fe059d6df1ae01c422d32b10ec7f539baad0e7d339f4c8b2de4ad8cbb07c8ba";
   };
 
   checkInputs = [ click jinja2 terminaltables ];

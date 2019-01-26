@@ -13,8 +13,8 @@ stdenv.mkDerivation {
     assert url != null && sha256 != null;
     fetchurl { inherit url sha256; };
   shell = stdenv.shell;
-  arch = if stdenv.system == "x86_64-linux" then "x64"
-         else if stdenv.system == "i686-linux" then "x86"
+  arch = if stdenv.hostPlatform.system == "x86_64-linux" then "x64"
+         else if stdenv.hostPlatform.system == "i686-linux" then "x86"
          else "";
   unpackPhase = ''
     mkdir oilrush

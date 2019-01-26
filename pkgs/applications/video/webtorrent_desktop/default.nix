@@ -39,16 +39,16 @@
     ]);
   in stdenv.mkDerivation rec {
     name = "webtorrent-desktop-${version}";
-    version = "0.19.0";
+    version = "0.20.0";
 
     src =
-      if stdenv.system == "x86_64-linux" then
+      if stdenv.hostPlatform.system == "x86_64-linux" then
         fetchurl {
-          url = "https://github.com/webtorrent/webtorrent-desktop/releases/download/v0.19.0/webtorrent-desktop_${version}-1_amd64.deb";
-          sha256 = "0v4fgvf8qgxjwg5kz30pcxl71pi9rri0l3cy20pid07rdd6r4sgd";
+          url = "https://github.com/webtorrent/webtorrent-desktop/releases/download/v0.20.0/webtorrent-desktop_${version}-1_amd64.deb";
+          sha256 = "1kkrnbimiip5pn2nwpln35bbdda9gc3cgrjwphq4fqasbjf2781k";
         }
         else
-          throw "Webtorrent is not currently supported on ${stdenv.system}";
+          throw "Webtorrent is not currently supported on ${stdenv.hostPlatform.system}";
     phases = [ "unpackPhase" "installPhase" ];
     nativeBuildInputs = [ dpkg ];
     unpackPhase = "dpkg-deb -x $src .";
@@ -73,7 +73,7 @@
 
       # Fix the desktop link
       substituteInPlace $out/share/applications/webtorrent-desktop.desktop \
-        --replace /opt/webtorrent-desktop/WebTorrent $out/bin/WebTorrent
+        --replace /opt/webtorrent-desktop $out/bin
     '';
 
     meta = with stdenv.lib; {

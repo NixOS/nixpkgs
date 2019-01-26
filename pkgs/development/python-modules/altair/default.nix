@@ -1,27 +1,32 @@
-{ stdenv, buildPythonPackage, fetchPypi
-, pytest, glibcLocales, vega, pandas, ipython, traitlets }:
+{ stdenv, buildPythonPackage, fetchPypi, fetchpatch
+, pytest, jinja2, sphinx, vega_datasets, ipython, glibcLocales
+, entrypoints, jsonschema, numpy, pandas, six, toolz, typing
+, pythonOlder, recommonmark }:
 
 buildPythonPackage rec {
   pname = "altair";
-  version = "1.2.1";
+  version = "2.2.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c1303f77f1ba4d632f2958c83c0f457b2b969860b1ac9adfb872aefa1780baa7";
+    sha256 = "c158699026eb5a19f95c1ca742e2e82bc20c27013ef5785f10836283e2233f8a";
   };
 
-  postPatch = ''
-    sed -i "s/vega==/vega>=/g" setup.py
-  '';
+  checkInputs = [ pytest jinja2 sphinx vega_datasets ipython glibcLocales recommonmark ];
 
-  checkInputs = [ pytest glibcLocales ];
+  propagatedBuildInputs = [ entrypoints jsonschema numpy pandas six toolz ]
+    ++ stdenv.lib.optionals (pythonOlder "3.5") [ typing ];
+
+  # hack to prevent typing from being required for python > 3.5
+  postPatch = ''
+    substituteInPlace requirements.txt \
+       --replace "typing" ""
+  '';
 
   checkPhase = ''
     export LANG=en_US.UTF-8
     py.test altair --doctest-modules
   '';
-
-  propagatedBuildInputs = [ vega pandas ipython traitlets ];
 
   meta = with stdenv.lib; {
     description = "A declarative statistical visualization library for Python.";

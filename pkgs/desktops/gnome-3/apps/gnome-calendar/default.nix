@@ -1,16 +1,16 @@
-{ stdenv, fetchurl, meson, ninja, pkgconfig, wrapGAppsHook, libdazzle, libgweather, geoclue2, geocode-glib
+{ stdenv, fetchurl, meson, ninja, pkgconfig, wrapGAppsHook, libdazzle, libgweather, geoclue2, geocode-glib, python3
 , gettext, libxml2, gnome3, gtk, evolution-data-server, libsoup
 , glib, gnome-online-accounts, gsettings-desktop-schemas }:
 
 let
   pname = "gnome-calendar";
-  version = "3.28.1";
+  version = "3.30.1";
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "1jacznnjql5jgzvzcp5kh2k0cd0y41cri6qz2bsakpllf7adbrq6";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    sha256 = "1avi7a29y8d8kzwslp51nwy6s692alms7917454j0xpfc6hnw62s";
   };
 
   passthru = {
@@ -20,15 +20,15 @@ in stdenv.mkDerivation rec {
     };
   };
 
-  nativeBuildInputs = [ meson ninja pkgconfig gettext libxml2 wrapGAppsHook ];
+  nativeBuildInputs = [ meson ninja pkgconfig gettext libxml2 wrapGAppsHook python3 ];
   buildInputs = [
     gtk evolution-data-server libsoup glib gnome-online-accounts libdazzle libgweather geoclue2 geocode-glib
     gsettings-desktop-schemas gnome3.defaultIconTheme
   ];
 
   postPatch = ''
-    chmod +x meson_post_install.py # patchShebangs requires executable file
-    patchShebangs meson_post_install.py
+    chmod +x build-aux/meson/meson_post_install.py # patchShebangs requires executable file
+    patchShebangs build-aux/meson/meson_post_install.py
   '';
 
   meta = with stdenv.lib; {

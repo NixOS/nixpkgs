@@ -1,0 +1,33 @@
+--- a/setup.py
++++ b/setup.py
+@@ -1885,7 +1885,7 @@
+     if OSX:
+         pycairo = "py3cairo"
+     else:
+-        pycairo = "pycairo"
++        pycairo = "py3cairo"
+     cython_add(Extension("xpra.client.gtk3.cairo_workaround",
+                 ["xpra/client/gtk3/cairo_workaround.pyx"],
+                 **pkgconfig(pycairo)
+--- a/xpra/client/gtk3/cairo_workaround.pyx
++++ b/xpra/client/gtk3/cairo_workaround.pyx
+@@ -65,7 +65,7 @@
+     void cairo_surface_flush (cairo_surface_t *surface)
+     void cairo_surface_mark_dirty (cairo_surface_t *surface)
+ 
+-cdef extern from "pycairo/pycairo.h":
++cdef extern from "py3cairo.h":
+     ctypedef struct Pycairo_CAPI_t:
+         pass
+     ctypedef struct PycairoSurface:
+--- a/xpra/x11/bindings/keyboard_bindings.pyx
++++ b/xpra/x11/bindings/keyboard_bindings.pyx
+@@ -19,7 +19,7 @@
+ 
+ DEF PATH_MAX = 1024
+ DEF DFLT_XKB_RULES_FILE = "base"
+-DEF DFLT_XKB_CONFIG_ROOT = "/usr/share/X11/xkb"
++DEF DFLT_XKB_CONFIG_ROOT = "@xkeyboardconfig@/share/X11/xkb"
+ 
+ ###################################
+ # Headers, python magic

@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, glib, popt, zlib, libcanberra-gtk2
-, intltool, libbonobo, GConf, gnome_vfs, ORBit2, libtool, libogg
+, intltool, libbonobo, GConf, gnome_vfs, libtool, libogg
 }:
 
 stdenv.mkDerivation rec {

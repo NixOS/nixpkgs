@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ unzip makeWrapper ];
 
   src = fetchurl {
-    url = "http://s3.amazonaws.com/ec2-downloads/${name}.zip";
+    url = "https://s3.amazonaws.com/ec2-downloads/${name}.zip";
     sha256 = "17xj7xmdbcwdbzalhfs6yyiwa64978mk3li39l949qfjjgrxjias";
   };
 

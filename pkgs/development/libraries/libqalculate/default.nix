@@ -1,13 +1,15 @@
-{ stdenv, fetchurl, mpfr, libxml2, intltool, pkgconfig, doxygen,
+{ stdenv, fetchFromGitHub, mpfr, libxml2, intltool, pkgconfig, doxygen,
   autoreconfHook, readline, libiconv, icu, curl, gnuplot, gettext }:
 
 stdenv.mkDerivation rec {
   name = "libqalculate-${version}";
-  version = "2.3.0";
+  version = "2.8.2";
 
-  src = fetchurl {
-    url = "https://github.com/Qalculate/libqalculate/archive/v${version}.tar.gz";
-    sha256 = "1wrd9ajf00h1ja56r25vljjsgklg0qlzmziax7x26wjqkigc28iq";
+  src = fetchFromGitHub {
+    owner = "qalculate";
+    repo = "libqalculate";
+    rev = "v${version}";
+    sha256 = "10d3dcq8zprj1bnhq6gl9smpbv7fq0nx3jw9s3f8lkl3bavc34ca";
   };
 
   outputs = [ "out" "dev" "doc" ];
@@ -40,6 +42,7 @@ stdenv.mkDerivation rec {
     description = "An advanced calculator library";
     homepage = http://qalculate.github.io;
     maintainers = with maintainers; [ gebner ];
+    license = licenses.gpl2Plus;
     platforms = platforms.all;
   };
 }

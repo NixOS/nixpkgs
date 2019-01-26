@@ -1,13 +1,15 @@
 { stdenv, fetchurl, meson, ninja, pkgconfig, python
 , gst-plugins-base, orc, gettext
 , a52dec, libcdio, libdvdread
-, libmad, libmpeg2, x264, libintl
+, libmad, libmpeg2, x264, libintl, lib
+, darwin
 }:
 
 stdenv.mkDerivation rec {
-  name = "gst-plugins-ugly-1.14.0";
+  name = "gst-plugins-ugly-${version}";
+  version = "1.14.4";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Gstreamer Ugly Plugins";
     homepage    = "https://gstreamer.freedesktop.org";
     longDescription = ''
@@ -18,11 +20,12 @@ stdenv.mkDerivation rec {
     '';
     license     = licenses.lgpl2Plus;
     platforms   = platforms.unix;
+    maintainers = with maintainers; [ matthewbauer ];
   };
 
   src = fetchurl {
     url = "${meta.homepage}/src/gst-plugins-ugly/${name}.tar.xz";
-    sha256 = "1la2nny9hfw3rf3wvqggkg8ivn52qrqqs4n4mqz4ppm2r1gymf9z";
+    sha256 = "08vd1xgwmapnviah47zv5h2r02qdd20y4f07rvv5zhv6y4vxh0mc";
   };
 
   outputs = [ "out" "dev" ];
@@ -34,5 +37,8 @@ stdenv.mkDerivation rec {
     a52dec libcdio libdvdread
     libmad libmpeg2 x264
     libintl
-  ];
+  ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks;
+    [ IOKit CoreFoundation DiskArbitration ]);
+
+  NIX_LDFLAGS = [ "-lm" ];
 }

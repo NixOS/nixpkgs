@@ -1,5 +1,5 @@
 { buildPythonApplication, lib, fetchurl, gettext, wrapGAppsHook
-, python, gtk3, gobjectIntrospection
+, python, gtk3, gobject-introspection
 , nbxmpp, pyasn1, pygobject3, gnome3, dbus-python, pillow
 , xvfb_run, dbus
 , enableJingle ? true, farstream, gstreamer, gst-plugins-base, gst-libav, gst-plugins-ugly
@@ -17,11 +17,11 @@ with lib;
 buildPythonApplication rec {
   name = "gajim-${version}";
   majorVersion = "1.0";
-  version = "${majorVersion}.1";
+  version = "${majorVersion}.3";
 
   src = fetchurl {
     url = "https://gajim.org/downloads/${majorVersion}/gajim-${version}.tar.bz2";
-    sha256 = "16ynws10vhx6rhjjjmzw6iyb3hc19823xhx4gsb14hrc7l8vzd1c";
+    sha256 = "0ds4rqwfrpj89a489w6yih8gx5zi7qa4ffgld950fk7s0qxvcfnb";
   };
 
   postPatch = ''
@@ -30,7 +30,7 @@ buildPythonApplication rec {
   '';
 
   buildInputs = [
-    gobjectIntrospection gtk3 gnome3.defaultIconTheme
+    gobject-introspection gtk3 gnome3.defaultIconTheme
   ] ++ optionals enableJingle [ farstream gstreamer gst-plugins-base gst-libav gst-plugins-ugly ]
     ++ optional enableSecrets libsecret
     ++ optional enableSpelling gspell

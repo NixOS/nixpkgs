@@ -25,7 +25,7 @@ in
 {
   options = {
     services.mattermost = {
-      enable = mkEnableOption "Mattermost chat platform";
+      enable = mkEnableOption "Mattermost chat server";
 
       statePath = mkOption {
         type = types.str;
@@ -146,14 +146,14 @@ in
 
   config = mkMerge [
     (mkIf cfg.enable {
-      users.extraUsers = optionalAttrs (cfg.user == "mattermost") (singleton {
+      users.users = optionalAttrs (cfg.user == "mattermost") (singleton {
         name = "mattermost";
         group = cfg.group;
         uid = config.ids.uids.mattermost;
         home = cfg.statePath;
       });
 
-      users.extraGroups = optionalAttrs (cfg.group == "mattermost") (singleton {
+      users.groups = optionalAttrs (cfg.group == "mattermost") (singleton {
         name = "mattermost";
         gid = config.ids.gids.mattermost;
       });
@@ -167,7 +167,7 @@ in
       '';
 
       systemd.services.mattermost = {
-        description = "Mattermost chat platform service";
+        description = "Mattermost chat service";
         wantedBy = [ "multi-user.target" ];
         after = [ "network.target" "postgresql.service" ];
 
@@ -201,13 +201,13 @@ in
           PermissionsStartOnly = true;
           User = cfg.user;
           Group = cfg.group;
-          ExecStart = "${pkgs.mattermost}/bin/mattermost-platform";
+          ExecStart = "${pkgs.mattermost}/bin/mattermost";
           WorkingDirectory = "${cfg.statePath}";
-          JoinsNamespaceOf = mkIf cfg.localDatabaseCreate "postgresql.service";
           Restart = "always";
           RestartSec = "10";
           LimitNOFILE = "49152";
         };
+        unitConfig.JoinsNamespaceOf = mkIf cfg.localDatabaseCreate "postgresql.service";
       };
     })
     (mkIf cfg.matterircd.enable {

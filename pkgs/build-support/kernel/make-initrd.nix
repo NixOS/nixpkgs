@@ -13,14 +13,13 @@
 # argument.
 
 { stdenv, perl, cpio, contents, compressor, prepend, ubootTools
-, hostPlatform
 }:
 
 stdenv.mkDerivation rec {
   name = "initrd";
   builder = ./make-initrd.sh;
 
-  makeUInitrd = hostPlatform.platform.kernelTarget == "uImage";
+  makeUInitrd = stdenv.hostPlatform.platform.kernelTarget == "uImage";
 
   nativeBuildInputs = [ perl cpio ]
     ++ stdenv.lib.optional makeUInitrd ubootTools;

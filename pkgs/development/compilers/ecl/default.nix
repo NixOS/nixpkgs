@@ -4,6 +4,7 @@
 , noUnicode ? false
 , gcc
 , threadSupport ? true
+, useBoehmgc ? false, boehmgc
 }:
 let
   s = # Generated upstream information
@@ -20,6 +21,10 @@ let
   ];
   propagatedBuildInputs = [
     libffi gmp mpfr gcc
+    # replaces ecl's own gc which other packages can depend on, thus propagated
+  ] ++ stdenv.lib.optionals useBoehmgc [
+    # replaces ecl's own gc which other packages can depend on, thus propagated
+    boehmgc
   ];
 in
 stdenv.mkDerivation {
@@ -53,6 +58,7 @@ stdenv.mkDerivation {
   meta = {
     inherit (s) version;
     description = "Lisp implementation aiming to be small, fast and easy to embed";
+    homepage = https://common-lisp.net/project/ecl/;
     license = stdenv.lib.licenses.mit ;
     maintainers = [stdenv.lib.maintainers.raskin];
     platforms = stdenv.lib.platforms.linux;

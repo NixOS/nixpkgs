@@ -17,10 +17,11 @@ buildRustPackage rec {
 
   cargoBuildFlags = ["--features cli"];
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Ethereum function call encoding (ABI) utility";
     homepage = https://github.com/ethcore/ethabi/;
-    maintainers = [stdenv.lib.maintainers.dbrock];
+    maintainers = [ maintainers.dbrock ];
+    license = licenses.gpl3;
     inherit version;
   };
 }

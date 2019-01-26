@@ -11,10 +11,10 @@ stdenv.mkDerivation rec {
   buildInputs = [ libwpd zlib librevenge ];
   nativeBuildInputs = [ pkgconfig ];
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://libwpg.sourceforge.net;
     description = "C++ library to parse WPG";
-    maintainers = [ ];
-    platforms = stdenv.lib.platforms.all;
+    license = with licenses; [ lgpl21 mpl20 ];
+    platforms = platforms.all;
   };
 }

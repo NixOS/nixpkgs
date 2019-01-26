@@ -12,8 +12,9 @@ stdenv.mkDerivation {
 
   buildInputs = [ unzip
   ];
-  
-  meta = {
-    platforms = stdenv.lib.platforms.unix;
+
+  meta = with stdenv.lib; {
+    platforms = platforms.unix;
+    license = licenses.bsd3;
   };
 }

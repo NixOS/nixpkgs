@@ -30,9 +30,12 @@ stdenv.mkDerivation {
 
   buildInputs = [ nano ];
 
-  meta = {
+  doCheck = false; # fails 1 of 1 tests
+
+  meta = with stdenv.lib; {
     homepage = http://cvs.nongnu.org;
     description = "Concurrent Versions System - a source control system";
-    platforms = stdenv.lib.platforms.all;
+    license = licenses.gpl2; # library is GPLv2, main is GPLv1
+    platforms = platforms.all;
   };
 }

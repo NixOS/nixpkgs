@@ -16,6 +16,11 @@ stdenv.mkDerivation rec {
       sha256 = "0v21p59cb3z77ch1v6q5dcrd733h91f3m8ifnd7kkkr8gzn17d5x";
       name = "CVE-2017-14160";
     })
+    (fetchpatch {
+      url = "https://gitlab.xiph.org/xiph/vorbis/commit/112d3bd0aaa.diff";
+      sha256 = "1k77y3q36npy8mkkz40f6cb46l2ldrwyrd191m29s8rnbhnafdf7";
+      name = "CVE-2018-10392.patch";
+    })
   ];
 
   nativeBuildInputs = [ pkgconfig ];

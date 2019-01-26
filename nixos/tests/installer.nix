@@ -1,6 +1,9 @@
-{ system ? builtins.currentSystem }:
+{ system ? builtins.currentSystem,
+  config ? {},
+  pkgs ? import ../.. { inherit system config; }
+}:
 
-with import ../lib/testing.nix { inherit system; };
+with import ../lib/testing.nix { inherit system pkgs; };
 with pkgs.lib;
 
 let
@@ -43,7 +46,7 @@ let
           boot.loader.systemd-boot.enable = true;
         ''}
 
-        users.extraUsers.alice = {
+        users.users.alice = {
           isNormalUser = true;
           home = "/home/alice";
           description = "Alice Foobar";
@@ -51,12 +54,11 @@ let
 
         hardware.enableAllFirmware = lib.mkForce false;
 
+        services.udisks2.enable = lib.mkDefault false;
+
         ${replaceChars ["\n"] ["\n  "] extraConfig}
       }
     '';
-
-
-  channelContents = [ pkgs.rlwrap ];
 
 
   # The test script boots a NixOS VM, installs NixOS on an empty hard
@@ -204,7 +206,7 @@ let
 
         # The configuration of the machine used to run "nixos-install".
         machine =
-          { config, lib, pkgs, ... }:
+          { pkgs, ... }:
 
           { imports =
               [ ../modules/profiles/installation-device.nix
@@ -234,13 +236,17 @@ let
               [ sudo
                 libxml2.bin
                 libxslt.bin
+                desktop-file-utils
                 docbook5
-                docbook5_xsl
+                docbook_xsl_ns
                 unionfs-fuse
                 ntp
-                nixos-artwork.wallpapers.gnome-dark
+                nixos-artwork.wallpapers.simple-dark-gray-bottom
                 perlPackages.XMLLibXML
                 perlPackages.ListCompare
+                shared-mime-info
+                texinfo
+                xorg.lndir
 
                 # add curl so that rather than seeing the test attempt to download
                 # curl's tarball, we see what it's trying to download
@@ -248,6 +254,8 @@ let
               ]
               ++ optional (bootLoader == "grub" && grubVersion == 1) pkgs.grub
               ++ optionals (bootLoader == "grub" && grubVersion == 2) [ pkgs.grub2 pkgs.grub2_efi ];
+
+            services.udisks2.enable = mkDefault false;
 
             nix.binaryCaches = mkForce [ ];
             nix.extraOptions =
@@ -277,9 +285,9 @@ in {
     { createPartitions =
         ''
           $machine->succeed(
-              "parted --script /dev/vda mklabel msdos",
-              "parted --script /dev/vda -- mkpart primary linux-swap 1M 1024M",
-              "parted --script /dev/vda -- mkpart primary ext2 1024M -1s",
+              "flock /dev/vda parted --script /dev/vda -- mklabel msdos"
+              . " mkpart primary linux-swap 1M 1024M"
+              . " mkpart primary ext2 1024M -1s",
               "udevadm settle",
               "mkswap /dev/vda1 -L swap",
               "swapon -L swap",
@@ -294,11 +302,11 @@ in {
     { createPartitions =
         ''
           $machine->succeed(
-              "parted --script /dev/vda mklabel gpt",
-              "parted --script /dev/vda -- mkpart ESP fat32 1M 50MiB", # /boot
-              "parted --script /dev/vda -- set 1 boot on",
-              "parted --script /dev/vda -- mkpart primary linux-swap 50MiB 1024MiB",
-              "parted --script /dev/vda -- mkpart primary ext2 1024MiB -1MiB", # /
+              "flock /dev/vda parted --script /dev/vda -- mklabel gpt"
+              . " mkpart ESP fat32 1M 50MiB" # /boot
+              . " set 1 boot on"
+              . " mkpart primary linux-swap 50MiB 1024MiB"
+              . " mkpart primary ext2 1024MiB -1MiB", # /
               "udevadm settle",
               "mkswap /dev/vda2 -L swap",
               "swapon -L swap",
@@ -316,11 +324,11 @@ in {
     { createPartitions =
         ''
           $machine->succeed(
-              "parted --script /dev/vda mklabel gpt",
-              "parted --script /dev/vda -- mkpart ESP fat32 1M 50MiB", # /boot
-              "parted --script /dev/vda -- set 1 boot on",
-              "parted --script /dev/vda -- mkpart primary linux-swap 50MiB 1024MiB",
-              "parted --script /dev/vda -- mkpart primary ext2 1024MiB -1MiB", # /
+              "flock /dev/vda parted --script /dev/vda -- mklabel gpt"
+              . " mkpart ESP fat32 1M 50MiB" # /boot
+              . " set 1 boot on"
+              . " mkpart primary linux-swap 50MiB 1024MiB"
+              . " mkpart primary ext2 1024MiB -1MiB", # /
               "udevadm settle",
               "mkswap /dev/vda2 -L swap",
               "swapon -L swap",
@@ -340,10 +348,10 @@ in {
     { createPartitions =
         ''
           $machine->succeed(
-              "parted --script /dev/vda mklabel msdos",
-              "parted --script /dev/vda -- mkpart primary ext2 1M 50MB", # /boot
-              "parted --script /dev/vda -- mkpart primary linux-swap 50MB 1024M",
-              "parted --script /dev/vda -- mkpart primary ext2 1024M -1s", # /
+              "flock /dev/vda parted --script /dev/vda -- mklabel msdos"
+              . " mkpart primary ext2 1M 50MB" # /boot
+              . " mkpart primary linux-swap 50MB 1024M"
+              . " mkpart primary ext2 1024M -1s", # /
               "udevadm settle",
               "mkswap /dev/vda2 -L swap",
               "swapon -L swap",
@@ -361,10 +369,10 @@ in {
     { createPartitions =
         ''
           $machine->succeed(
-              "parted --script /dev/vda mklabel msdos",
-              "parted --script /dev/vda -- mkpart primary ext2 1M 50MB", # /boot
-              "parted --script /dev/vda -- mkpart primary linux-swap 50MB 1024M",
-              "parted --script /dev/vda -- mkpart primary ext2 1024M -1s", # /
+              "flock /dev/vda parted --script /dev/vda -- mklabel msdos"
+              . " mkpart primary ext2 1M 50MB" # /boot
+              . " mkpart primary linux-swap 50MB 1024M"
+              . " mkpart primary ext2 1024M -1s", # /
               "udevadm settle",
               "mkswap /dev/vda2 -L swap",
               "swapon -L swap",
@@ -397,9 +405,9 @@ in {
       createPartitions =
         ''
           $machine->succeed(
-              "parted --script /dev/vda mklabel msdos",
-              "parted --script /dev/vda -- mkpart primary linux-swap 1M 1024M",
-              "parted --script /dev/vda -- mkpart primary 1024M -1s",
+              "flock /dev/vda parted --script /dev/vda -- mklabel msdos"
+              . " mkpart primary linux-swap 1M 1024M"
+              . " mkpart primary 1024M -1s",
               "udevadm settle",
 
               "mkswap /dev/vda1 -L swap",
@@ -420,11 +428,11 @@ in {
     { createPartitions =
         ''
           $machine->succeed(
-              "parted --script /dev/vda mklabel msdos",
-              "parted --script /dev/vda -- mkpart primary 1M 2048M", # PV1
-              "parted --script /dev/vda -- set 1 lvm on",
-              "parted --script /dev/vda -- mkpart primary 2048M -1s", # PV2
-              "parted --script /dev/vda -- set 2 lvm on",
+              "flock /dev/vda parted --script /dev/vda -- mklabel msdos"
+              . " mkpart primary 1M 2048M" # PV1
+              . " set 1 lvm on"
+              . " mkpart primary 2048M -1s" # PV2
+              . " set 2 lvm on",
               "udevadm settle",
               "pvcreate /dev/vda1 /dev/vda2",
               "vgcreate MyVolGroup /dev/vda1 /dev/vda2",
@@ -442,10 +450,10 @@ in {
   luksroot = makeInstallerTest "luksroot"
     { createPartitions = ''
         $machine->succeed(
-          "parted --script /dev/vda mklabel msdos",
-          "parted --script /dev/vda -- mkpart primary ext2 1M 50MB", # /boot
-          "parted --script /dev/vda -- mkpart primary linux-swap 50M 1024M",
-          "parted --script /dev/vda -- mkpart primary 1024M -1s", # LUKS
+          "flock /dev/vda parted --script /dev/vda -- mklabel msdos"
+          . " mkpart primary ext2 1M 50MB" # /boot
+          . " mkpart primary linux-swap 50M 1024M"
+          . " mkpart primary 1024M -1s", # LUKS
           "udevadm settle",
           "mkswap /dev/vda2 -L swap",
           "swapon -L swap",
@@ -465,7 +473,7 @@ in {
       enableOCR = true;
       preBootCommands = ''
         $machine->start;
-        $machine->waitForText(qr/Enter passphrase/);
+        $machine->waitForText(qr/Passphrase for/);
         $machine->sendChars("supersecret\n");
       '';
     };
@@ -473,14 +481,14 @@ in {
   # Test whether opening encrypted filesystem with keyfile
   # Checks for regression of missing cryptsetup, when no luks device without
   # keyfile is configured
-  filesystemEncryptedWithKeyfile = makeInstallerTest "filesystemEncryptedWithKeyfile"
+  encryptedFSWithKeyfile = makeInstallerTest "encryptedFSWithKeyfile"
     { createPartitions = ''
        $machine->succeed(
-          "parted --script /dev/vda mklabel msdos",
-          "parted --script /dev/vda -- mkpart primary ext2 1M 50MB", # /boot
-          "parted --script /dev/vda -- mkpart primary linux-swap 50M 1024M",
-          "parted --script /dev/vda -- mkpart primary 1024M 1280M", # LUKS with keyfile
-          "parted --script /dev/vda -- mkpart primary 1280M -1s",
+          "flock /dev/vda parted --script /dev/vda -- mklabel msdos"
+          . " mkpart primary ext2 1M 50MB" # /boot
+          . " mkpart primary linux-swap 50M 1024M"
+          . " mkpart primary 1024M 1280M" # LUKS with keyfile
+          . " mkpart primary 1280M -1s",
           "udevadm settle",
           "mkswap /dev/vda2 -L swap",
           "swapon -L swap",
@@ -515,7 +523,7 @@ in {
     { createPartitions =
         ''
           $machine->succeed(
-              "parted --script /dev/vda --"
+              "flock /dev/vda parted --script /dev/vda --"
               . " mklabel msdos"
               . " mkpart primary ext2 1M 100MB" # /boot
               . " mkpart extended 100M -1s"
@@ -526,8 +534,10 @@ in {
               "udevadm settle",
               "ls -l /dev/vda* >&2",
               "cat /proc/partitions >&2",
+              "udevadm control --stop-exec-queue",
               "mdadm --create --force /dev/md0 --metadata 1.2 --level=raid1 --raid-devices=2 /dev/vda5 /dev/vda6",
               "mdadm --create --force /dev/md1 --metadata 1.2 --level=raid1 --raid-devices=2 /dev/vda7 /dev/vda8",
+              "udevadm control --start-exec-queue",
               "udevadm settle",
               "mkswap -f /dev/md1 -L swap",
               "swapon -L swap",
@@ -550,14 +560,15 @@ in {
     { createPartitions =
         ''
           $machine->succeed(
-              "parted --script /dev/sda mklabel msdos",
-              "parted --script /dev/sda -- mkpart primary linux-swap 1M 1024M",
-              "parted --script /dev/sda -- mkpart primary ext2 1024M -1s",
+              "flock /dev/sda parted --script /dev/sda -- mklabel msdos"
+              . " mkpart primary linux-swap 1M 1024M"
+              . " mkpart primary ext2 1024M -1s",
               "udevadm settle",
               "mkswap /dev/sda1 -L swap",
               "swapon -L swap",
               "mkfs.ext3 -L nixos /dev/sda2",
               "mount LABEL=nixos /mnt",
+              "mkdir -p /mnt/tmp",
           );
         '';
       grubVersion = 1;

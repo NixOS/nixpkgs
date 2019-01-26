@@ -22,6 +22,6 @@ stdenv.mkDerivation rec {
     description = "OpenStreetMap editor";
     homepage = http://merkaartor.be/;
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ viric ];
+    maintainers = with maintainers; [ ];
   };
 }

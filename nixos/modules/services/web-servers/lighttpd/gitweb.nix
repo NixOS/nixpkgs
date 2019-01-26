@@ -4,6 +4,9 @@ with lib;
 
 let
   cfg = config.services.gitweb;
+  package = pkgs.gitweb.override (optionalAttrs cfg.gitwebTheme {
+    gitwebTheme = true;
+  });
 
 in
 {
@@ -34,8 +37,8 @@ in
               "^/gitweb$" => "/gitweb/"
           )
           alias.url = (
-              "/gitweb/static/" => "${pkgs.git}/share/gitweb/static/",
-              "/gitweb/"        => "${pkgs.git}/share/gitweb/gitweb.cgi"
+              "/gitweb/static/" => "${package}/static/",
+              "/gitweb/"        => "${package}/gitweb.cgi"
           )
           setenv.add-environment = (
               "GITWEB_CONFIG" => "${cfg.gitwebConfigFile}",

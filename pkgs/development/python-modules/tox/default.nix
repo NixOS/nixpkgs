@@ -1,24 +1,33 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, py
-, virtualenv
+, packaging
 , pluggy
-, setuptools_scm
+, py
 , six
+, virtualenv
+, setuptools_scm
+, toml
+, filelock
 }:
 
 buildPythonPackage rec {
   pname = "tox";
-  version = "3.0.0";
+  version = "3.5.3";
 
   buildInputs = [ setuptools_scm ];
-  propagatedBuildInputs = [ py virtualenv pluggy six ];
+  propagatedBuildInputs = [ packaging pluggy py six virtualenv toml filelock ];
 
   doCheck = false;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "96efa09710a3daeeb845561ebbe1497641d9cef2ee0aea30db6969058b2bda2f";
+    sha256 = "513e32fdf2f9e2d583c2f248f47ba9886428c949f068ac54a0469cac55df5862";
+  };
+
+  meta = with lib; {
+    description = "Virtualenv-based automation of test activities";
+    homepage = https://tox.readthedocs.io/;
+    license = licenses.mit;
   };
 }

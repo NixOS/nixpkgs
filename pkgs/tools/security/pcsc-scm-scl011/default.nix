@@ -1,9 +1,9 @@
 { stdenv, fetchurl, unzip, libusb }:
 
 let
-  arch = if stdenv.system == "i686-linux" then "32"
-  else if stdenv.system == "x86_64-linux" then "64"
-  else throw "Unsupported system: ${stdenv.system}";
+  arch = if stdenv.hostPlatform.system == "i686-linux" then "32"
+  else if stdenv.hostPlatform.system == "x86_64-linux" then "64"
+  else throw "Unsupported system: ${stdenv.hostPlatform.system}";
 in
 stdenv.mkDerivation rec {
   name = "pcsc-scm-scl-${version}";
@@ -17,10 +17,9 @@ stdenv.mkDerivation rec {
   buildInputs = [ unzip ];
 
   unpackPhase = ''
-    echo ${stdenv.system}
     unzip $src
     tar xf "Linux Driver Ver${version}/sclgeneric_${version}_linux_${arch}bit.tar.gz"
-    cd sclgeneric_${version}_linux_${arch}bit; export sourceRoot=`pwd`
+    export sourceRoot=$(readlink -e sclgeneric_${version}_linux_${arch}bit)
   '';
 
   # Add support for SCL011 nPA (subsidized model for German eID)

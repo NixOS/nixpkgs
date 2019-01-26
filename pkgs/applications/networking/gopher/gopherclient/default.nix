@@ -40,5 +40,6 @@ buildGoPackage rec {
     license = licenses.mit;
     maintainers = with maintainers; [ orivej ];
     platforms = platforms.linux;
+    broken = true;
   };
 }

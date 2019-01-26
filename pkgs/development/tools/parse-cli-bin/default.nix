@@ -13,6 +13,7 @@ stdenv.mkDerivation rec {
     description = "Parse Command Line Interface";
     homepage    = "https://parse.com";
     platforms   = platforms.linux;
+    license     = licenses.bsd3;
   };
 
   phases = "installPhase";

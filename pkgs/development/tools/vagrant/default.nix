@@ -1,9 +1,11 @@
-{ lib, fetchurl, buildRubyGem, bundlerEnv, ruby, libarchive }:
+{ lib, fetchurl, buildRubyGem, bundlerEnv, ruby, libarchive, writeText, withLibvirt ? true}:
 
 let
-  version = "2.0.2";
+  # NOTE: bumping the version and updating the hash is insufficient;
+  # you must use bundix to generate a new gemset.nix in the Vagrant source.
+  version = "2.2.0";
   url = "https://github.com/hashicorp/vagrant/archive/v${version}.tar.gz";
-  sha256 = "1sjfwgy2y6q5s1drd8h8xgz2a0sv1l3kx9jilgc02hlcdz070iir";
+  sha256 = "1wa8l3j6hpy0m0snz7wvfcf0wsjikp22c2z29crpk10f7xl7c56b";
 
   deps = bundlerEnv rec {
     name = "${pname}-${version}";
@@ -11,8 +13,9 @@ let
     inherit version;
 
     inherit ruby;
-    gemdir = ./.;
-    gemset = lib.recursiveUpdate (import ./gemset.nix) {
+    gemfile = writeText "Gemfile" "";
+    lockfile = writeText "Gemfile.lock" "";
+    gemset = lib.recursiveUpdate (import ./gemset.nix) ({
       vagrant = {
         source = {
           type = "url";
@@ -20,7 +23,7 @@ let
         };
         inherit version;
       };
-    };
+    } // lib.optionalAttrs withLibvirt (import ./gemset_libvirt.nix));
   };
 
 in buildRubyGem rec {
@@ -34,7 +37,14 @@ in buildRubyGem rec {
 
   patches = [
     ./unofficial-installation-nowarn.patch
+    ./use-system-bundler-version.patch
+    ./0004-Support-system-installed-plugins.patch
   ];
+
+  postPatch = ''
+    substituteInPlace lib/vagrant/plugin/manager.rb --subst-var-by \
+      system_plugin_dir "$out/vagrant-plugins"
+  '';
 
   # PATH additions:
   #   - libarchive: Make `bsdtar` available for extracting downloaded boxes
@@ -42,6 +52,14 @@ in buildRubyGem rec {
     wrapProgram "$out/bin/vagrant" \
       --set GEM_PATH "${deps}/lib/ruby/gems/${ruby.version.libDir}" \
       --prefix PATH ':' "${lib.getBin libarchive}/bin"
+
+    mkdir -p "$out/vagrant-plugins/plugins.d"
+    echo '{}' > "$out/vagrant-plugins/plugins.json"
+  '' +
+  lib.optionalString withLibvirt ''
+    substitute ${./vagrant-libvirt.json.in} $out/vagrant-plugins/plugins.d/vagrant-libvirt.json \
+      --subst-var-by ruby_version ${ruby.version} \
+      --subst-var-by vagrant_version ${version}
   '';
 
   installCheckPhase = ''

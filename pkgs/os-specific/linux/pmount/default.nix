@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cryptsetup, dbus, dbus-glib, intltool, ntfs3g, utillinux
+{ stdenv, fetchurl, intltool, ntfs3g, utillinux
 , mediaDir ? "/media/"
 , lockDir ? "/var/lock/pmount"
 , whiteList ? "/etc/pmount.allow"
@@ -18,13 +18,14 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ intltool utillinux ];
 
-  configureFlags = ""
-  + " --with-media-dir=${mediaDir}"
-  + " --with-lock-dir=${lockDir}"
-  + " --with-whitelist=${whiteList}"
-  + " --with-mount-prog=${utillinux}/bin/mount"
-  + " --with-umount-prog=${utillinux}/bin/umount"
-  + " --with-mount-ntfs3g=${ntfs3g}/sbin/mount.ntfs-3g";
+  configureFlags = [
+    "--with-media-dir=${mediaDir}"
+    "--with-lock-dir=${lockDir}"
+    "--with-whitelist=${whiteList}"
+    "--with-mount-prog=${utillinux}/bin/mount"
+    "--with-umount-prog=${utillinux}/bin/umount"
+    "--with-mount-ntfs3g=${ntfs3g}/sbin/mount.ntfs-3g"
+  ];
 
   postConfigure = ''
     # etc/Mafile.am is hardcoded and it does not respect the --prefix option.
@@ -33,8 +34,10 @@ stdenv.mkDerivation rec {
     substituteInPlace ./src/Makefile --replace '-o root -g root -m 4755 ' '-m 755 '
   '';
 
+  doCheck = false; # fails 1 out of 1 tests with "Error: could not open fstab-type file: No such file or directory"
+
   meta = {
-    homepage = http://pmount.alioth.debian.org/;
+    homepage = https://bazaar.launchpad.net/~fourmond/pmount/main/files;
     description = "Mount removable devices as normal user";
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.linux;

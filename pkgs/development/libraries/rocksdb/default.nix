@@ -5,7 +5,6 @@
 
 # Optional Arguments
 , snappy ? null, google-gflags ? null, zlib ? null, bzip2 ? null, lz4 ? null
-, numactl ? null
 
 # Malloc implementation
 , jemalloc ? null, gperftools ? null
@@ -19,7 +18,7 @@ let
 in
 stdenv.mkDerivation rec {
   name = "rocksdb-${version}";
-  version = "5.10.3";
+  version = "5.11.3";
 
   outputs = [ "dev" "out" "static" "bin" ];
 
@@ -27,7 +26,7 @@ stdenv.mkDerivation rec {
     owner = "facebook";
     repo = "rocksdb";
     rev = "v${version}";
-    sha256 = "19d8i8map8qz639mhflmxc0w9gp78fvkq1l46y5s6b5imwh0w7xq";
+    sha256 = "15x2r7aib1xinwcchl32wghs8g96k4q5xgv6z97mxgp35475x01p";
   };
 
   nativeBuildInputs = [ which perl ];
@@ -78,7 +77,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    homepage = http://rocksdb.org;
+    homepage = https://rocksdb.org;
     description = "A library that provides an embeddable, persistent key-value store for fast storage";
     license = licenses.bsd3;
     platforms = platforms.x86_64;

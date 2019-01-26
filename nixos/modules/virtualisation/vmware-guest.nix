@@ -22,7 +22,7 @@ in
   config = mkIf cfg.enable {
     assertions = [ {
       assertion = pkgs.stdenv.isi686 || pkgs.stdenv.isx86_64;
-      message = "VMWare guest is not currently supported on ${pkgs.stdenv.system}";
+      message = "VMWare guest is not currently supported on ${pkgs.stdenv.hostPlatform.system}";
     } ];
 
     environment.systemPackages = [ open-vm-tools ];

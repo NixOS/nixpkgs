@@ -1,7 +1,6 @@
 { stdenv, fetchurl, patchelf, zlib, libmad, libpng12, libcaca, libGLU_combined, alsaLib, libpulseaudio
 , xorg }:
 
-assert stdenv.system == "x86_64-linux";
 let
 
   inherit (xorg) libXext libX11;
@@ -58,5 +57,3 @@ stdenv.mkDerivation rec {
     platforms = ["x86_64-linux"];
   };
 }
-
-

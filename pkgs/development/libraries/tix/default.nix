@@ -34,13 +34,13 @@ stdenv.mkDerivation rec {
       ln -s $i private_headers/generic;
     done;
     '';
-  configureFlags = ''
-      --with-tclinclude=${tcl}/include
-      --with-tclconfig=.
-      --with-tkinclude=${tk.dev}/include
-      --with-tkconfig=.
-      --libdir=''${prefix}/lib
-    '';
+  configureFlags = [
+    "--with-tclinclude=${tcl}/include"
+    "--with-tclconfig=."
+    "--with-tkinclude=${tk.dev}/include"
+    "--with-tkconfig=."
+    "--libdir=\${prefix}/lib"
+  ];
 
   meta = with stdenv.lib; {
     description = "A widget library for Tcl/Tk";

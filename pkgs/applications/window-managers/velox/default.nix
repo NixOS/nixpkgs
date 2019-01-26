@@ -47,7 +47,7 @@ in with self; stdenv.mkDerivation rec {
       --prefix PATH : "${stdenv.lib.makeBinPath [ dmenu-velox st-velox ]}"
   '';
 
-  enableParallelBuilding = true;
+  enableParallelBuilding = false; # https://hydra.nixos.org/build/79799608
 
   meta = {
     description = "velox window manager";

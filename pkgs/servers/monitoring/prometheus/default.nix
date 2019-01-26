@@ -19,7 +19,7 @@ let
 
         doCheck = true;
 
-        buildFlagsArray = let t = "${goPackagePath}/version"; in ''
+        buildFlagsArray = let t = "${goPackagePath}/vendor/github.com/prometheus/common/version"; in ''
           -ldflags=
              -X ${t}.Version=${version}
              -X ${t}.Revision=unknown
@@ -45,12 +45,12 @@ let
     } // attrs');
 in rec {
   prometheus_1 = generic {
-    version = "1.8.1";
-    sha256 = "07xvpjhhxc0r73qfmkvf94zhv19zv76privw6blg35k5nxcnj7j4";
+    version = "1.8.2";
+    sha256 = "088flpg3qgnj9afl9vbaa19v2s1d21yxy38nrlv5m7cxwy2pi5pv";
   };
 
   prometheus_2 = generic {
-    version = "2.2.1";
-    sha256 = "1zwxjmj8jh02i4y3i3zrkz7ml66zyhg3ad1npjzf3319mglsp7ch";
+    version = "2.6.0";
+    sha256 = "1d9zwzs280pw9zspqwp7xx3ji04lfg2v9l5qhrfy3y633ghcmpxz";
   };
 }

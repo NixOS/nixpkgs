@@ -1,103 +1,108 @@
 <refentry xmlns="http://docbook.org/ns/docbook"
           xmlns:xlink="http://www.w3.org/1999/xlink"
           xmlns:xi="http://www.w3.org/2001/XInclude">
-
-<refmeta>
-  <refentrytitle><command>nixos-option</command></refentrytitle>
-  <manvolnum>8</manvolnum>
+ <refmeta>
+  <refentrytitle><command>nixos-option</command>
+  </refentrytitle><manvolnum>8</manvolnum>
   <refmiscinfo class="source">NixOS</refmiscinfo>
-  <!-- <refmiscinfo class="version"><xi:include href="version.txt" parse="text"/></refmiscinfo> -->
-</refmeta>
-
-<refnamediv>
-  <refname><command>nixos-option</command></refname>
-  <refpurpose>inspect a NixOS configuration</refpurpose>
-</refnamediv>
-
-<refsynopsisdiv>
+<!-- <refmiscinfo class="version"><xi:include href="version.txt" parse="text"/></refmiscinfo> -->
+ </refmeta>
+ <refnamediv>
+  <refname><command>nixos-option</command>
+  </refname><refpurpose>inspect a NixOS configuration</refpurpose>
+ </refnamediv>
+ <refsynopsisdiv>
   <cmdsynopsis>
-    <command>nixos-option</command>
-    <arg>
-      <option>-I</option>
-      <replaceable>path</replaceable>
-    </arg>
-    <arg><option>--verbose</option></arg>
-    <arg><option>--xml</option></arg>
-    <arg choice="plain"><replaceable>option.name</replaceable></arg>
+   <command>nixos-option</command> 
+   <arg>
+    <option>-I</option> <replaceable>path</replaceable>
+   </arg>
+    
+   <arg>
+    <option>--verbose</option>
+   </arg>
+    
+   <arg>
+    <option>--xml</option>
+   </arg>
+    
+   <arg choice="plain">
+    <replaceable>option.name</replaceable>
+   </arg>
   </cmdsynopsis>
-</refsynopsisdiv>
-
-<refsection><title>Description</title>
-
-<para>This command evaluates the configuration specified in
-<filename>/etc/nixos/configuration.nix</filename> and returns the properties
-of the option name given as argument.</para>
-
-<para>When the option name is not an option, the command prints the list of
-attributes contained in the attribute set.</para>
-
-</refsection>
-
-<refsection><title>Options</title>
-
-<para>This command accepts the following options:</para>
-
-<variablelist>
-
-  <varlistentry>
-    <term><option>-I</option> <replaceable>path</replaceable></term>
+ </refsynopsisdiv>
+ <refsection>
+  <title>Description</title>
+  <para>
+   This command evaluates the configuration specified in
+   <filename>/etc/nixos/configuration.nix</filename> and returns the properties
+   of the option name given as argument.
+  </para>
+  <para>
+   When the option name is not an option, the command prints the list of
+   attributes contained in the attribute set.
+  </para>
+ </refsection>
+ <refsection>
+  <title>Options</title>
+  <para>
+   This command accepts the following options:
+  </para>
+  <variablelist>
+   <varlistentry>
+    <term>
+     <option>-I</option> <replaceable>path</replaceable>
+    </term>
     <listitem>
-      <para>
-        This option is passed to the underlying
-        <command>nix-instantiate</command> invocation.
-      </para>
+     <para>
+      This option is passed to the underlying
+      <command>nix-instantiate</command> invocation.
+     </para>
     </listitem>
-  </varlistentry>
-
-  <varlistentry>
-    <term><option>--verbose</option></term>
+   </varlistentry>
+   <varlistentry>
+    <term>
+     <option>--verbose</option>
+    </term>
     <listitem>
-      <para>
-        This option enables verbose mode, which currently is just
-        the Bash <command>set</command> <option>-x</option> debug mode.
-      </para>
+     <para>
+      This option enables verbose mode, which currently is just the Bash
+      <command>set</command> <option>-x</option> debug mode.
+     </para>
     </listitem>
-  </varlistentry>
-
-  <varlistentry>
-    <term><option>--xml</option></term>
+   </varlistentry>
+   <varlistentry>
+    <term>
+     <option>--xml</option>
+    </term>
     <listitem>
-      <para>
-        This option causes the output to be rendered as XML.
-      </para>
+     <para>
+      This option causes the output to be rendered as XML.
+     </para>
     </listitem>
-  </varlistentry>
-
-</variablelist>
-
-</refsection>
-
-<refsection><title>Environment</title>
-
-<variablelist>
-
-  <varlistentry>
-    <term><envar>NIXOS_CONFIG</envar></term>
+   </varlistentry>
+  </variablelist>
+ </refsection>
+ <refsection>
+  <title>Environment</title>
+  <variablelist>
+   <varlistentry>
+    <term>
+     <envar>NIXOS_CONFIG</envar>
+    </term>
     <listitem>
-      <para>Path to the main NixOS configuration module.  Defaults to
-      <filename>/etc/nixos/configuration.nix</filename>.</para>
+     <para>
+      Path to the main NixOS configuration module. Defaults to
+      <filename>/etc/nixos/configuration.nix</filename>.
+     </para>
     </listitem>
-  </varlistentry>
-
-</variablelist>
-
-</refsection>
-
-
-<refsection><title>Examples</title>
-
-<para>Investigate option values:
-
+   </varlistentry>
+  </variablelist>
+ </refsection>
+ <refsection>
+  <title>Examples</title>
+  <para>
+   Investigate option values:
 <screen>$ nixos-option boot.loader
 This attribute set contains:
 generationsDir
@@ -119,16 +124,14 @@ Declared by:
 
 Defined by:
   "/nix/var/nix/profiles/per-user/root/channels/nixos/nixpkgs/nixos/modules/system/boot/loader/grub/grub.nix"
-</screen></para>
-
-</refsection>
-
-<refsection><title>Bugs</title>
-
-<para>The author listed in the following section is wrong.  If there is any
-  other bug, please report to Nicolas Pierron.</para>
-
-</refsection>
-
-
+</screen>
+  </para>
+ </refsection>
+ <refsection>
+  <title>Bugs</title>
+  <para>
+   The author listed in the following section is wrong. If there is any other
+   bug, please report to Nicolas Pierron.
+  </para>
+ </refsection>
 </refentry>

@@ -1,7 +1,6 @@
 { stdenv, pythonPackages, fetchFromGitHub }:
 
 pythonPackages.buildPythonApplication rec {
-  name = "${pname}-${version}";
   pname = "dosage";
   version = "2018.04.08";
   PBR_VERSION = version;
@@ -23,6 +22,7 @@ pythonPackages.buildPythonApplication rec {
 
   meta = {
     description = "A comic strip downloader and archiver";
-    homepage = http://dosage.rocks/;
+    homepage = https://dosage.rocks/;
+    license = stdenv.lib.licenses.mit;
   };
 }

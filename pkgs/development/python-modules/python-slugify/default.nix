@@ -1,13 +1,12 @@
 { stdenv, fetchPypi, buildPythonPackage, unidecode, regex, isPy3k }:
 
 buildPythonPackage rec {
-    name = "${pname}-${version}";
     pname = "python-slugify";
-    version = "1.2.5";
+    version = "1.2.6";
 
     src = fetchPypi {
       inherit pname version;
-      sha256 = "5dbb360b882b2dabe0471a1a92f604504d83c2a73c71f2098d004ab62e695534";
+      sha256 = "7723daf30996db26573176bddcdf5fcb98f66dc70df05c9cb29f2c79b8193245";
     };
     doCheck = !isPy3k;
     # (only) on python3 unittest loader (loadTestsFromModule) fails

@@ -26,11 +26,12 @@ hash=${prefetch[0]}
 path=${prefetch[1]}
 
 echo "vivaldi: $vivaldi_version_old -> $vivaldi_version"
+echo "$path"
 (cd "$root" && update-source-version vivaldi "$vivaldi_version" "$hash")
 
 # Check vivaldi-ffmpeg-codecs version.
 chromium_version_old=$(version vivaldi-ffmpeg-codecs)
-chromium_version=$(bsdtar xOf "$path" data.tar.xz | bsdtar xOf - ./opt/vivaldi/vivaldi-bin | strings | grep -A2 -i '^chrome\/' | grep '^[0-9]\+\.[0-9]\+\.[1-9][0-9]\+\.[0-9]\+')
+chromium_version=$(bsdtar xOf "$path" data.tar.xz | bsdtar xOf - ./opt/vivaldi/vivaldi-bin | strings | grep '^[0-9]\{2,\}\.[0-9]\+\.[0-9]\{4,\}\+\.[0-9]\+$')
 
 if [[ "$chromium_version" != "$chromium_version_old" ]]; then
 	echo "vivaldi-ffmpeg-codecs: $chromium_version_old -> $chromium_version"

@@ -1,6 +1,6 @@
 { version, sha256 }:
 
-{ stdenv, fetchurl, fetchpatch, python2Packages }:
+{ stdenv, fetchurl, python2Packages }:
 
 let name = "scons";
 in python2Packages.buildPythonApplication {
@@ -13,6 +13,8 @@ in python2Packages.buildPythonApplication {
 
   # Fix a regression in 3.0.0 (causes build errors for some packages)
   patches = stdenv.lib.optional (version == "3.0.0") ./print-statements.patch;
+
+  setupHook = ./setup-hook.sh;
 
   meta = with stdenv.lib; {
     homepage = http://scons.org/;

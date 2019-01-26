@@ -1,5 +1,4 @@
 { stdenv, fetchFromGitHub
-, cacert
 , buildPythonPackage, python-jose, pyjwt }:
 
 buildPythonPackage rec {

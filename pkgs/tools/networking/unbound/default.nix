@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "unbound-${version}";
-  version = "1.7.0";
+  version = "1.8.3";
 
   src = fetchurl {
     url = "https://unbound.net/downloads/${name}.tar.gz";
-    sha256 = "18i6p6zqmbs9gj57mz3iwz828csaab26gb534b8wrn0kzdqr1pcl";
+    sha256 = "1k6fljr7k721vg2ivn5dfr0hs1kn8p1sm003glgd9ypd261jns9b";
   };
 
   outputs = [ "out" "lib" "man" ]; # "dev" would only split ~20 kB
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     # get rid of runtime dependencies on $dev outputs
   + ''substituteInPlace "$lib/lib/libunbound.la" ''
     + stdenv.lib.concatMapStrings
-      (pkg: " --replace '-L${pkg.dev}/lib' '-L${pkg.out}/lib' ")
+      (pkg: " --replace '-L${pkg.dev}/lib' '-L${pkg.out}/lib' --replace '-R${pkg.dev}/lib' '-R${pkg.out}/lib'")
       buildInputs;
 
   meta = with stdenv.lib; {

@@ -3,18 +3,18 @@
 with stdenv.lib;
 
 pythonPackages.buildPythonPackage rec {
-  name = "neovim-remote-${version}";
-  version = "v1.8.6";
+  pname = "neovim-remote";
+  version = "2.1.4";
   disabled = !pythonPackages.isPy3k;
 
   src = fetchFromGitHub {
     owner = "mhinz";
     repo = "neovim-remote";
-    rev = version;
-    sha256 = "0x01zpmxi37jr7j2az2bd8902h7zhkpg6kpvc8xmll9f7703zz2l";
+    rev = "v${version}";
+    sha256 = "1s438cbyyzgg96b6639wk1ny6d6p2ywcba41l3r027wzyl7wrn8v";
   };
 
-  propagatedBuildInputs = with pythonPackages; [ neovim psutil ];
+  propagatedBuildInputs = with pythonPackages; [ pynvim psutil ];
 
   meta = {
     description = "A tool that helps controlling nvim processes from a terminal";

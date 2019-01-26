@@ -1,7 +1,21 @@
-{ stdenv, makeWrapper, requireFile, unzip, openjdk }:
+{ stdenv, makeDesktopItem, makeWrapper, requireFile, unzip, jdk }:
 
-stdenv.mkDerivation rec {
+let
   version = "17.4.1.054.0712";
+
+  desktopItem = makeDesktopItem {
+    name = "sqldeveloper";
+    exec = "sqldeveloper";
+    icon = "sqldeveloper";
+    desktopName = "Oracle SQL Developer";
+    genericName = "Oracle SQL Developer";
+    comment = "Oracle's Oracle DB GUI client";
+    categories = "Application;Development;";
+  };
+in
+  stdenv.mkDerivation rec {
+
+  inherit version;
   name = "sqldeveloper-${version}";
 
   src = requireFile rec {
@@ -32,25 +46,23 @@ stdenv.mkDerivation rec {
 
         nix-prefetch-url --type sha256 file:///path/to/${name}
     '';
-    # obtained by `sha256sum sqldeveloper-${version}-no-jre.zip`
     sha256 = "7e92ca94d02489002db291c96f1d67f9b2501a8967ff3457103fcf60c1eb154a";
   };
 
   buildInputs = [ makeWrapper unzip ];
 
-  buildCommand = ''
-    mkdir -p $out/bin
-    echo  >$out/bin/sqldeveloper '#! ${stdenv.shell}'
-    echo >>$out/bin/sqldeveloper 'export JAVA_HOME=${openjdk}/lib/openjdk'
-    echo >>$out/bin/sqldeveloper 'export JDK_HOME=$JAVA_HOME'
-    echo >>$out/bin/sqldeveloper "cd $out/lib/${name}/sqldeveloper/bin"
-    echo >>$out/bin/sqldeveloper '${stdenv.shell} sqldeveloper "$@"'
-    chmod +x $out/bin/sqldeveloper
+  unpackCmd = "unzip $curSrc";
 
-    mkdir -p $out/lib/
-    cd $out
-    unzip ${src}
-    mv sqldeveloper $out/lib/${name}
+  installPhase = ''
+    mkdir -p $out/libexec $out/share/{applications,pixmaps}
+    mv * $out/libexec/
+
+    mv $out/libexec/icon.png $out/share/pixmaps/sqldeveloper.png
+    cp ${desktopItem}/share/applications/* $out/share/applications
+
+    makeWrapper $out/libexec/sqldeveloper/bin/sqldeveloper $out/bin/sqldeveloper \
+      --set JAVA_HOME ${jdk.home} \
+      --run "cd $out/libexec/sqldeveloper/bin"
   '';
 
   meta = with stdenv.lib; {
@@ -66,7 +78,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = http://www.oracle.com/technetwork/developer-tools/sql-developer/overview/;
     license = licenses.unfree;
-    maintainers = [ maintainers.ardumont ];
-    platforms = platforms.linux;
+    platforms = [ "x86_64-linux" "x86_64-darwin" ];
+    maintainers = with maintainers; [ ardumont flokli ];
   };
 }

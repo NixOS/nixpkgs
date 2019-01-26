@@ -1,4 +1,4 @@
-{lib, buildPythonPackage, fetchPypi, pytest, cram, bash, writeText}:
+{lib, buildPythonPackage, fetchPypi, pytest, cram, bash}:
 
 buildPythonPackage rec {
   version = "0.2.0";

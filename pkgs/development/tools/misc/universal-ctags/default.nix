@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "universal-ctags-${version}";
-  version = "2018-01-05";
+  version = "2018-07-23";
 
   src = fetchFromGitHub {
     owner = "universal-ctags";
     repo = "ctags";
-    rev = "c66bdfb4db99977c1bd0568e33e60853a48dca65";
-    sha256 = "0fdzhr0704cj84ym00plkl5l9w83haal6i6w70lx6f4968pcliyi";
+    rev = "3522685695ad3312cf4b19399e0c44f3395dd089";
+    sha256 = "1f67hy8c2yr9z4ydsqd7wg8iagzn01qjw2ccx6g8mngv3i3jz9mv";
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig pythonPackages.docutils ];

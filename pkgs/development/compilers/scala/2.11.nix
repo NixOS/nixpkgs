@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   name = "scala-2.11.12";
 
   src = fetchurl {
-    url = "http://www.scala-lang.org/files/archive/${name}.tgz";
+    url = "https://www.scala-lang.org/files/archive/${name}.tgz";
     sha256 = "1a4nc4qp9dm4rps47j92hlmxxqskv67qbdmjqc5zd94wd4rps7di";
   };
 
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
       Code sizes are typically reduced by a factor of two to three when
       compared to an equivalent Java application.
     '';
-    homepage = http://www.scala-lang.org/;
+    homepage = https://www.scala-lang.org/;
     license = stdenv.lib.licenses.bsd3;
     platforms = stdenv.lib.platforms.all;
     branch = "2.11";

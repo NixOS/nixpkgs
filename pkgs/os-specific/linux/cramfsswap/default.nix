@@ -10,7 +10,10 @@ stdenv.mkDerivation {
 
   buildInputs = [zlib];
 
-  meta = {
-    platforms = stdenv.lib.platforms.linux;
+  meta = with stdenv.lib; {
+    description = "swap endianess of a cram filesystem (cramfs)";
+    homepage = "https://packages.debian.org/sid/utils/cramfsswap";
+    license = licenses.gpl2;
+    platforms = platforms.linux;
   };
 }

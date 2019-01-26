@@ -2,29 +2,38 @@
 
 buildGoPackage rec {
   name = "cloudfoundry-cli-${version}";
-  version = "6.32.0";
+  version = "6.41.0";
 
   goPackagePath = "code.cloudfoundry.org/cli";
 
   subPackages = [ "." ];
 
   src = fetchFromGitHub {
+    owner = "cloudfoundry";
+    repo = "cli";
     rev = "v${version}";
-    owner = "cloudfoundry-attic";
-    repo = "cli-with-i18n";
-    sha256 = "16r8zvahn4b98krmyb8zq9370i6572dhz88bfxb3fnddcv6zy1ng";
+    sha256 = "1dkd0lfq55qpnxsrigffaqm2nlcxr0bm0jsl4rsjlmb8p2vgpx8b";
   };
 
-  outputs = [ "out" ];
+  makeTarget = let hps = stdenv.hostPlatform.system; in
+    if hps == "x86_64-darwin" then
+      "out/cf-cli_osx"
+    else if hps == "x86_64-linux" then
+      "out/cf-cli_linux_x86-64"
+    else if hps == "i686-linux" then
+      "out/cf-cli_linux_i686"
+    else
+      throw "make target for this platform unknown";
 
-  buildFlagsArray = ''
-    -ldflags= -X ${goPackagePath}/version.binaryVersion=${version}
+  buildPhase = ''
+    cd go/src/${goPackagePath}
+    CF_BUILD_DATE="1970-01-01" make $makeTarget
+    cp $makeTarget out/cf
   '';
 
   installPhase = ''
-    install -Dm555 go/bin/cli "$out/bin/cf"
-    remove-references-to -t ${go} "$out/bin/cf"
-    install -Dm444 -t "$out/share/bash-completion/completions/" "$src/ci/installers/completion/cf"
+    install -Dm555 out/cf "$bin/bin/cf"
+    install -Dm444 -t "$bin/share/bash-completion/completions/" "$src/ci/installers/completion/cf"
   '';
 
   meta = with stdenv.lib; {
@@ -32,5 +41,6 @@ buildGoPackage rec {
     homepage = https://github.com/cloudfoundry/cli;
     maintainers = with maintainers; [ ris ];
     license = licenses.asl20;
+    platforms = [ "i686-linux" "x86_64-linux" "x86_64-darwin" ];
   };
 }

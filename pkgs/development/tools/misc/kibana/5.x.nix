@@ -6,7 +6,7 @@ let
   archOverrides = {
     "i686" = "x86";
   };
-  info = splitString "-" stdenv.system;
+  info = splitString "-" stdenv.hostPlatform.system;
   arch = (elemAt info 0);
   elasticArch = archOverrides."${arch}" or arch;
   plat = elemAt info 1;
@@ -21,7 +21,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://artifacts.elastic.co/downloads/kibana/${name}-${plat}-${elasticArch}.tar.gz";
-    sha256 = shas."${stdenv.system}" or (throw "Unknown architecture");
+    sha256 = shas."${stdenv.hostPlatform.system}" or (throw "Unknown architecture");
   };
 
   buildInputs = [ makeWrapper ];

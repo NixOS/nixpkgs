@@ -1,12 +1,10 @@
 { fetchurl
-, fetchpatch
 , stdenv
 , perl
 , libxml2
 , postgresql
 , geos
 , proj
-, flex
 , gdal
 , json_c
 , pkgconfig
@@ -18,7 +16,7 @@
   ### NixOS - usage:
   ==================
 
-    services.postgresql.extraPlugins = [ (pkgs.postgis.override { postgresql = pkgs.postgresql95; }) ];
+    services.postgresql.extraPlugins = [ (pkgs.postgis.override { postgresql = pkgs.postgresql_9_5; }) ];
 
 
   ### important Postgis implementation details:
@@ -44,26 +42,15 @@
 
 
 let
-  version = "2.4.3";
-  sha256 = "1fg4pmla5m903m76ndjd8q5dkcykf67v1p4dcajmnr3bvg2p8lza";
+  version = "2.5.1";
+  sha256 = "14bsh4kflp4bxilypkpmhrpldknc9s9vgiax8yfhxbisyib704zv";
 in stdenv.mkDerivation rec {
   name = "postgis-${version}";
 
   src = fetchurl {
-    url = "http://download.osgeo.org/postgis/source/postgis-${builtins.toString version}.tar.gz";
+    url = "https://download.osgeo.org/postgis/source/postgis-${builtins.toString version}.tar.gz";
     inherit sha256;
   };
-
-  patches = [
-    (fetchpatch {
-      url = "https://trac.osgeo.org/postgis/changeset/16417?format=diff&new=16417";
-      name = "json-c-0.13.patch";
-      sha256 = "1hk2fh4nsvq76ksi7z4shlgj7fik6ac3sjsb0khsypsjfhz7ic8z";
-      stripLen = 3;
-      extraPrefix = "";
-      excludes = [ "NEWS" ];
-    })
-  ];
 
   # don't pass these vars to the builder
   removeAttrs = ["sql_comments" "sql_srcs"];

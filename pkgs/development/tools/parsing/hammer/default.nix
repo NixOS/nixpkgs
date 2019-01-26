@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, glib, pkgconfig, python, scons, pythonPackages }:
+{ stdenv, fetchgit, glib, pkgconfig, python, scons }:
 
 stdenv.mkDerivation rec {
   name = "hammer-${version}";
@@ -12,8 +12,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ glib python scons ];
-  buildPhase = "scons prefix=$out";
-  installPhase = "scons prefix=$out install";
 
   meta = with stdenv.lib; {
     description = "A bit-oriented parser combinator library";
@@ -28,5 +26,5 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/UpstandingHackers/hammer;
     license = licenses.gpl2;
     platforms = platforms.linux;
-    };
+  };
 }

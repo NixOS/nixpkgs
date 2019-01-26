@@ -56,7 +56,6 @@ let
   gtdialog_zip   = "gtdialog_1.3.zip";
   cdk_tgz        = "cdk-5.0-20150928.tgz";
   termkey_tgz    = "libtermkey-0.17.tar.gz";
-  bombay_zip     = "bombay.zip";
 
   scinterm_url   = "http://foicica.com/scinterm/download/" + scinterm_zip;
   tre_url        = "https://github.com/laurikari/tre/archive/" + tre_zip;
@@ -65,7 +64,7 @@ let
   gtdialog_url   = "http://foicica.com/gtdialog/download/" + gtdialog_zip;
   lspawn_url     = "http://foicica.com/lspawn/download/" + lspawn_zip;
 
-  scintilla_url  = "http://prdownloads.sourceforge.net/scintilla/" + scintilla_tgz;
+  scintilla_url  = "mirror://sourceforge/scintilla/" + scintilla_tgz;
   lua_url        = "http://www.lua.org/ftp/" + lua_tgz;
   lpeg_url       = "http://www.inf.puc-rio.br/~roberto/lpeg/" + lpeg_tgz;
   lfs_url        = "https://github.com/keplerproject/luafilesystem/archive/" + lfs_zip;

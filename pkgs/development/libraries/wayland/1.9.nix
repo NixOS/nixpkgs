@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, pkgconfig
-, libffi, docbook_xsl, doxygen, graphviz, libxslt, xmlto, libxml2
+, libffi, libxml2
 , expat ? null # Build wayland-scanner (currently cannot be disabled as of 1.7.0)
 }:
 
@@ -11,11 +11,11 @@ stdenv.mkDerivation rec {
   version = "1.9.0";
 
   src = fetchurl {
-    url = "http://wayland.freedesktop.org/releases/${name}.tar.xz";
+    url = "https://wayland.freedesktop.org/releases/${name}.tar.xz";
     sha256 = "1yhy62vkbq8j8c9zaa6yzvn75cd99kfa8n2zfdwl80x019r711ww";
   };
 
-  configureFlags = "--with-scanner --disable-documentation";
+  configureFlags = [ "--with-scanner" "--disable-documentation" ];
 
   nativeBuildInputs = [ pkgconfig ];
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Reference implementation of the wayland protocol";
-    homepage    = http://wayland.freedesktop.org/;
+    homepage    = https://wayland.freedesktop.org/;
     license     = lib.licenses.mit;
     platforms   = lib.platforms.linux;
     maintainers = with lib.maintainers; [ codyopel wkennington ];

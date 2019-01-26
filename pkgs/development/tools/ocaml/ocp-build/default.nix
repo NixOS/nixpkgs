@@ -1,11 +1,10 @@
-{ stdenv, fetchFromGitHub, ocaml, findlib, ncurses, buildOcaml }:
+{ stdenv, fetchFromGitHub, ocaml, findlib, ncurses }:
 let
   version = "1.99.19-beta";
 in
-buildOcaml {
+stdenv.mkDerivation rec {
 
-  name = "ocp-build";
-  inherit version;
+  name = "ocaml${ocaml.version}-ocp-build-${version}";
 
   src = fetchFromGitHub {
     owner = "OCamlPro";
@@ -14,7 +13,7 @@ buildOcaml {
     sha256 = "162k5l0cxyqanxlml5v8mqapdq5qbqc9m4b8wdjq7mf523b3h2zj";
   };
 
-  buildInputs = [ ocaml ];
+  buildInputs = [ ocaml findlib ];
   propagatedBuildInputs = [ ncurses ];
   preInstall = "mkdir -p $out/bin";
   preConfigure = ''

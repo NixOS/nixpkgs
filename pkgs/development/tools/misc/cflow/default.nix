@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ gettext ] ++
     # We don't have Emacs/GTK/etc. on {Dar,Cyg}win.
     stdenv.lib.optional
-      (! (stdenv.lib.lists.any (x: stdenv.system == x)
+      (! (stdenv.lib.lists.any (x: stdenv.hostPlatform.system == x)
               [ "i686-cygwin" ]))
       emacs;
 
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
 
     license = licenses.gpl3Plus;
 
-    homepage = http://www.gnu.org/software/cflow/;
+    homepage = https://www.gnu.org/software/cflow/;
 
     maintainers = [ maintainers.vrthra ];
 

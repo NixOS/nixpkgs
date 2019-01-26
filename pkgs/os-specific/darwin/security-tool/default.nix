@@ -1,4 +1,4 @@
-{ CoreServices, Foundation, PCSC, Security, GSS, Kerberos, makeWrapper, apple_sdk,
+{ Foundation, PCSC, Security, GSS, Kerberos, makeWrapper, apple_sdk,
 fetchurl, gnustep, libobjc, libsecurity_apple_csp, libsecurity_apple_cspdl,
 libsecurity_apple_file_dl, libsecurity_apple_x509_cl, libsecurity_apple_x509_tp,
 libsecurity_asn1, libsecurity_cdsa_client, libsecurity_cdsa_plugin,
@@ -15,16 +15,18 @@ stdenv.mkDerivation rec {
     sha256 = "0apcz4vy2z5645jhrs60wj3w27mncjjqv42h5lln36g6qs2n9113";
   };
 
+  disallowedRequisites = [ apple_sdk.sdk  ];
+
   patchPhase = ''
     # copied from libsecurity_generic
     cp -R ${osx_private_sdk}/include/SecurityPrivateHeaders Security
 
     substituteInPlace cmsutil.c --replace \
       '<CoreServices/../Frameworks/CarbonCore.framework/Headers/MacErrors.h>' \
-      '"${apple_sdk.sdk}/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/CarbonCore.framework/Versions/A/Headers/MacErrors.h"'
+      '"${apple_sdk.sdk.out}/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/CarbonCore.framework/Versions/A/Headers/MacErrors.h"'
     substituteInPlace createFVMaster.c --replace \
       '<CoreServices/../Frameworks/CarbonCore.framework/Headers/MacErrors.h>' \
-      '"${apple_sdk.sdk}/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/CarbonCore.framework/Versions/A/Headers/MacErrors.h"'
+      '"${apple_sdk.sdk.out}/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/CarbonCore.framework/Versions/A/Headers/MacErrors.h"'
   '';
 
   postUnpack = ''
@@ -34,7 +36,7 @@ stdenv.mkDerivation rec {
   '';
 
   preBuild = ''
-    makeFlagsArray=(-j''$NIX_BUILD_CORES)
+    makeFlagsArray=(-j$NIX_BUILD_CORES)
   '';
 
   NIX_LDFLAGS = "-no_dtrace_dof";
@@ -97,4 +99,3 @@ stdenv.mkDerivation rec {
     license = licenses.apsl20;
   };
 }
-

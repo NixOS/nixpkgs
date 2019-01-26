@@ -1,21 +1,24 @@
-{ stdenv, fetchurl, fetchpatch, libgpgerror, gnupg, pkgconfig, glib, pth, libassuan
-, file, which
-, autoreconfHook
+{ stdenv, fetchurl, libgpgerror, gnupg, pkgconfig, glib, pth, libassuan
+, file, which, ncurses
+, autoreconfHook, fetchpatch
 , git
-, texinfo5
+, texinfo
 , qtbase ? null
-, withPython ? false, swig2 ? null, python ? null
+, pythonSupport ? false, swig2 ? null, python ? null
 }:
 
-let inherit (stdenv) lib system; in
+let
+  inherit (stdenv) lib;
+  inherit (stdenv.hostPlatform) system;
+in
 
 stdenv.mkDerivation rec {
   name = "gpgme-${version}";
-  version = "1.10.0";
+  version = "1.12.0";
 
   src = fetchurl {
     url = "mirror://gnupg/gpgme/${name}.tar.bz2";
-    sha256 = "14q619lxbk64vz7lih5gjb928qm28jrnn1h3yhsrrff3jw8yv3qs";
+    sha256 = "1n4c1q2ls7sqx1vpr3p5n8vbjkw6kqp8jxqa28p0x9j36wf9bp5l";
   };
 
   outputs = [ "out" "dev" "info" ];
@@ -25,8 +28,16 @@ stdenv.mkDerivation rec {
     [ libgpgerror glib libassuan pth ]
     ++ lib.optional (qtbase != null) qtbase;
 
-  nativeBuildInputs = [ file pkgconfig gnupg autoreconfHook git texinfo5 ]
-  ++ lib.optionals withPython [ python swig2 which ];
+  nativeBuildInputs = [ file pkgconfig gnupg autoreconfHook git texinfo ]
+  ++ lib.optionals pythonSupport [ python swig2 which ncurses ];
+
+  patches = [
+    (fetchpatch {
+      name = "fix-key-expiry.patch";
+      url = "https://git.gnupg.org/cgi-bin/gitweb.cgi?p=gpgme.git;a=patch;h=66376f3e206a1aa791d712fb8577bb3490268f60";
+      sha256 = "0i777dzcbv4r568l8623ar6y6j44bv46bbxi751qa5mdcihpya02";
+    })
+  ];
 
   postPatch =''
     substituteInPlace ./configure --replace /usr/bin/file ${file}/bin/file
@@ -35,7 +46,7 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--enable-fixed-path=${gnupg}/bin"
     "--with-libgpg-error-prefix=${libgpgerror.dev}"
-  ] ++ lib.optional withPython "--enable-languages=python";
+  ] ++ lib.optional pythonSupport "--enable-languages=python";
 
   NIX_CFLAGS_COMPILE =
     # qgpgme uses Q_ASSERT which retains build inputs at runtime unless
@@ -43,6 +54,10 @@ stdenv.mkDerivation rec {
     lib.optional (qtbase != null) "-DQT_NO_DEBUG"
     # https://www.gnupg.org/documentation/manuals/gpgme/Largefile-Support-_0028LFS_0029.html
     ++ lib.optional (system == "i686-linux") "-D_FILE_OFFSET_BITS=64";
+
+  checkInputs = [ which ];
+
+  doCheck = true;
 
   meta = with stdenv.lib; {
     homepage = https://gnupg.org/software/gpgme/index.html;

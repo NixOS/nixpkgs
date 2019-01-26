@@ -3,11 +3,11 @@
 
 buildPythonPackage rec {
   pname = "jsonrpc-async";
-  version = "0.6";
+  version = "1.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0f1p3qv56jn4sdyp8gzf915nya6vr0rn2pbzld9x23y9jdjmibzw";
+    sha256 = "488ab3b63a96c246f7ded14b3458eb13a36e3e16eb4319aa56806476517c7433";
   };
 
   propagatedBuildInputs = [ aiohttp jsonrpc-base ];

@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "fcitx-anthy-${version}";
-  version = "0.2.2";
+  version = "0.2.3";
 
   src = fetchurl {
     url = "http://download.fcitx-im.org/fcitx-anthy/${name}.tar.xz";
-    sha256 = "0ayrzfx95670k86y19bzl6i6w98haaln3x8dxpb39a5dwgz59pf8";
+    sha256 = "01jx7wwq0mifqrzkswfglqhwkszbfcl4jinxgdgqx9kc6mb4k6zd";
   };
 
   nativeBuildInputs = [ pkgconfig ];

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, xkbcomp, xorgserver, getopt
+{ stdenv, fetchurl, makeWrapper, xorgserver, getopt
 , xauth, utillinux, which, fontsConf, gawk, coreutils }:
 let
   xvfb_run = fetchurl {
@@ -20,7 +20,8 @@ stdenv.mkDerivation {
       --prefix PATH : ${stdenv.lib.makeBinPath [ getopt xorgserver xauth which utillinux gawk coreutils ]}
   '';
 
-  meta = {
-    platforms = stdenv.lib.platforms.linux;
+  meta = with stdenv.lib; {
+    platforms = platforms.linux;
+    license = licenses.gpl2;
   };
 }

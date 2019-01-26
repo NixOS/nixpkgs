@@ -1,50 +1,44 @@
-{ pkgs, stdenv, lib, bundler, fetchurl, fetchFromGitHub, bundlerEnv, libiconv
-, ruby, tzdata, git, ps, dpkg, nettools
+{ stdenv, lib, fetchurl, fetchFromGitLab, bundlerEnv
+, ruby, tzdata, git, procps, nettools
+, gitlabEnterprise ? false
 }:
-
-/* When updating the Gemfile add `gem "activerecord-nulldb-adapter"`
-   to allow building the assets without a database */
 
 let
   rubyEnv = bundlerEnv {
     name = "gitlab-env-${version}";
     inherit ruby;
-    gemdir = ./.;
-    meta = with lib; {
-      homepage = http://www.gitlab.com/;
-      platforms = platforms.linux;
-      maintainers = with maintainers; [ fpletz globin ];
-      license = licenses.mit;
+    gemdir = ./rubyEnv- + "${if gitlabEnterprise then "ee" else "ce"}";
+    groups = [ "default" "unicorn" "ed25519" "metrics" ];
+  };
+
+  flavour = if gitlabEnterprise then "ee" else "ce";
+  data = (builtins.fromJSON (builtins.readFile ./data.json)).${flavour};
+
+  version = data.version;
+  sources = {
+    gitlab = fetchFromGitLab {
+      owner = data.owner;
+      repo = data.repo;
+      rev = data.rev;
+      sha256 = data.repo_hash;
+    };
+    gitlabDeb = fetchurl {
+      url = data.deb_url;
+      sha256 = data.deb_hash;
     };
   };
-
-  version = "10.5.6";
-
-  gitlabDeb = fetchurl {
-    url = "https://packages.gitlab.com/gitlab/gitlab-ce/packages/debian/jessie/gitlab-ce_${version}-ce.0_amd64.deb/download";
-    sha256 = "1kml7iz4q9g5gcfqqarivlnkmkmq9250wgm95yi4rgzynb5jndd0";
-  };
-
 in
 
 stdenv.mkDerivation rec {
-  name = "gitlab-${version}";
+  name = "gitlab${if gitlabEnterprise then "-ee" else ""}-${version}";
 
-  src = fetchFromGitHub {
-    owner = "gitlabhq";
-    repo = "gitlabhq";
-    rev = "v${version}";
-    sha256 = "059h63jn552fcir2dgsjv85zv1ihbyiwzws4h2j15mwj2cdpjkh0";
-  };
+  src = sources.gitlab;
 
   buildInputs = [
-    rubyEnv ruby bundler tzdata git ps dpkg nettools
+    rubyEnv rubyEnv.wrappedRuby rubyEnv.bundler tzdata git procps nettools
   ];
 
-  patches = [
-    ./remove-hardcoded-locations.patch
-    ./fix-36783.patch
-  ];
+  patches = [ ./remove-hardcoded-locations.patch ];
 
   postPatch = ''
     # For reasons I don't understand "bundle exec" ignores the
@@ -56,32 +50,23 @@ stdenv.mkDerivation rec {
     rm config/initializers/gitlab_shell_secret_token.rb
 
     substituteInPlace app/controllers/admin/background_jobs_controller.rb \
-        --replace "ps -U" "${ps}/bin/ps -U"
+        --replace "ps -U" "${procps}/bin/ps -U"
 
     sed -i '/ask_to_continue/d' lib/tasks/gitlab/two_factor.rake
-
-    # required for some gems:
-    cat > config/database.yml <<EOF
-      production:
-        adapter: <%= ENV["GITLAB_DATABASE_ADAPTER"] || sqlite %>
-        database: gitlab
-        host: <%= ENV["GITLAB_DATABASE_HOST"] || "127.0.0.1" %>
-        password: <%= ENV["GITLAB_DATABASE_PASSWORD"] || "blerg" %>
-        username: gitlab
-        encoding: utf8
-    EOF
+    sed -ri -e '/log_level/a config.logger = Logger.new(STDERR)' config/environments/production.rb
   '';
 
   buildPhase = ''
     mv config/gitlab.yml.example config/gitlab.yml
 
-    # work around unpacking deb containing binary with suid bit
-    ar p ${gitlabDeb} data.tar.gz | gunzip > gitlab-deb-data.tar
+    # Building this requires yarn, node &c, so we just get it from the deb
+    ar p ${sources.gitlabDeb} data.tar.gz | gunzip > gitlab-deb-data.tar
+    # Work around unpacking deb containing binary with suid bit
     tar -f gitlab-deb-data.tar --delete ./opt/gitlab/embedded/bin/ksu
     tar -xf gitlab-deb-data.tar
 
     mv -v opt/gitlab/embedded/service/gitlab-rails/public/assets public
-    rm -rf opt
+    rm -rf opt # only directory in data.tar.gz
 
     mv config/gitlab.yml config/gitlab.yml.example
     rm -f config/secrets.yml
@@ -105,6 +90,26 @@ stdenv.mkDerivation rec {
 
   passthru = {
     inherit rubyEnv;
-    inherit ruby;
+    ruby = rubyEnv.wrappedRuby;
+    GITALY_SERVER_VERSION = data.passthru.GITALY_SERVER_VERSION;
+    GITLAB_PAGES_VERSION = data.passthru.GITLAB_PAGES_VERSION;
+    GITLAB_SHELL_VERSION = data.passthru.GITLAB_SHELL_VERSION;
+    GITLAB_WORKHORSE_VERSION = data.passthru.GITLAB_WORKHORSE_VERSION;
   };
+
+  meta = with lib; {
+    homepage = http://www.gitlab.com/;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ fpletz globin krav ];
+  } // (if gitlabEnterprise then
+    {
+      license = licenses.unfreeRedistributable; # https://gitlab.com/gitlab-org/gitlab-ee/raw/master/LICENSE
+      description = "GitLab Enterprise Edition";
+    }
+  else
+    {
+      license = licenses.mit;
+      description = "GitLab Community Edition";
+      longDescription = "GitLab Community Edition (CE) is an open source end-to-end software development platform with built-in version control, issue tracking, code review, CI/CD, and more. Self-host GitLab CE on your own servers, in a container, or on a cloud provider.";
+    });
 }

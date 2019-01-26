@@ -1,13 +1,13 @@
-{ stdenv, fetchgit, cmake, pkgconfig, libusb1 }:
+{ stdenv, lib, fetchpatch, fetchgit, cmake, pkgconfig, libusb1 }:
 
 stdenv.mkDerivation rec {
   name = "rtl-sdr-${version}";
-  version = "0.5.3";
+  version = "0.6.0";
 
   src = fetchgit {
     url = "git://git.osmocom.org/rtl-sdr.git";
-    rev = "refs/tags/v${version}";
-    sha256 = "1dh52xcvxkjb3mj80wlm20grz8cqf5wipx2ksi91ascz12b5pym6";
+    rev = "refs/tags/${version}";
+    sha256 = "0lmvsnb4xw4hmz6zs0z5ilsah5hjz29g1s0050n59fllskqr3b8k";
   };
 
   nativeBuildInputs = [ pkgconfig ];

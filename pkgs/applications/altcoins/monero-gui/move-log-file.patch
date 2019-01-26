@@ -1,38 +1,27 @@
 diff --git a/main.cpp b/main.cpp
-index c03b160..a8ea263 100644
+index 79223c0..e80b317 100644
 --- a/main.cpp
 +++ b/main.cpp
-@@ -80,14 +80,16 @@ int main(int argc, char *argv[])
- //    qDebug() << "High DPI auto scaling - enabled";
- //#endif
- 
--    // Log settings
--    Monero::Wallet::init(argv[0], "monero-wallet-gui");
--//    qInstallMessageHandler(messageHandler);
--
-     MainApp app(argc, argv);
- 
-     qDebug() << "app startd";
- 
-+    // Log settings
-+    QString logfile =
-+      QStandardPaths::writableLocation(QStandardPaths::CacheLocation)
-+      + "/monero-wallet-gui.log";
-+    Monero::Wallet::init(argv[0], logfile.toUtf8().constData());
-+
-     app.setApplicationName("monero-core");
-     app.setOrganizationDomain("getmonero.org");
-     app.setOrganizationName("monero-project");
-diff --git a/src/libwalletqt/Wallet.cpp b/src/libwalletqt/Wallet.cpp
-index 74649ce..fe1efc6 100644
---- a/src/libwalletqt/Wallet.cpp
-+++ b/src/libwalletqt/Wallet.cpp
-@@ -729,7 +729,7 @@ QString Wallet::getWalletLogPath() const
- #ifdef Q_OS_MACOS
-     return QStandardPaths::standardLocations(QStandardPaths::HomeLocation).at(0) + "/Library/Logs/" + filename;
- #else
--    return QCoreApplication::applicationDirPath() + "/" + filename;
-+    return QStandardPaths::writableLocation(QStandardPaths::CacheLocation) + filename;
+@@ -115,6 +115,9 @@ int main(int argc, char *argv[])
+     QCommandLineOption logPathOption(QStringList() << "l" << "log-file",
+         QCoreApplication::translate("main", "Log to specified file"),
+         QCoreApplication::translate("main", "file"));
++    logPathOption.setDefaultValue(
++        QStandardPaths::writableLocation(QStandardPaths::CacheLocation)
++        + "/monero-wallet-gui.log");
+     parser.addOption(logPathOption);
+     parser.addHelpOption();
+     parser.process(app);
+diff --git a/Logger.cpp b/Logger.cpp
+index 660bafc..dae24d4 100644
+--- a/Logger.cpp
++++ b/Logger.cpp
+@@ -15,7 +15,7 @@ static const QString default_name = "monero-wallet-gui.log";
+ #elif defined(Q_OS_MAC)
+     static const QString osPath = QStandardPaths::standardLocations(QStandardPaths::HomeLocation).at(0) + "/Library/Logs";
+ #else // linux + bsd
+-    static const QString osPath = QStandardPaths::standardLocations(QStandardPaths::HomeLocation).at(0);
++    static const QString osPath = QStandardPaths::standardLocations(QStandardPaths::CacheLocation).at(0);
  #endif
- }
+ 
  

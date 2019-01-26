@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, gettext, gtk-doc, gobjectIntrospection, python2, gtk3, cairo, glib }:
+{ stdenv, fetchurl, pkgconfig, gettext, gtk-doc, gobject-introspection, python2, gtk3, cairo, glib }:
 
 let
   version = "2.0.4";
@@ -13,11 +13,13 @@ in stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig gettext gtk-doc python2 ];
-  buildInputs = [ gtk3 cairo glib ];
+  buildInputs = [ gtk3 cairo glib gobject-introspection ];
 
   configureFlags = [
     "--disable-python"
   ];
+  PKG_CONFIG_GOBJECT_INTROSPECTION_1_0_GIRDIR = "$(dev)/share/gir-1.0";
+  PKG_CONFIG_GOBJECT_INTROSPECTION_1_0_TYPELIBDIR = "$(out)/lib/girepository-1.0";
 
   meta = with stdenv.lib; {
     description = "Canvas widget for GTK+ based on the the Cairo 2D library";

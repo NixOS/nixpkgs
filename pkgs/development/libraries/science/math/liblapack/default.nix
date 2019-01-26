@@ -4,26 +4,21 @@
   gfortran,
   cmake,
   python2,
-  atlas ? null,
   shared ? false
 }:
 let
-  atlasMaybeShared = if atlas != null then atlas.override { inherit shared; }
-                     else null;
   usedLibExtension = if shared then ".so" else ".a";
-  inherit (stdenv.lib) optional optionals concatStringsSep;
-  inherit (builtins) hasAttr attrNames;
-  version = "3.4.1";
+  inherit (stdenv.lib) optional optionals;
+  version = "3.8.0";
 in
 
 stdenv.mkDerivation rec {
   name = "liblapack-${version}";
   src = fetchurl {
-    url = "http://www.netlib.org/lapack/lapack-${version}.tgz";
-    sha256 = "93b910f94f6091a2e71b59809c4db4a14655db527cfc5821ade2e8c8ab75380f";
+    url = "http://www.netlib.org/lapack/lapack-${version}.tar.gz";
+    sha256 = "1xmwi2mqmipvg950gb0rhgprcps8gy8sjm8ic9rgy2qjlv22rcny";
   };
 
-  propagatedBuildInputs = [ atlasMaybeShared ];
   buildInputs = [ gfortran cmake ];
   nativeBuildInputs = [ python2 ];
 
@@ -31,28 +26,11 @@ stdenv.mkDerivation rec {
     "-DUSE_OPTIMIZED_BLAS=ON"
     "-DCMAKE_Fortran_FLAGS=-fPIC"
   ]
-  ++ (optionals (atlas != null) [
-    "-DBLAS_ATLAS_f77blas_LIBRARY=${atlasMaybeShared}/lib/libf77blas${usedLibExtension}"
-    "-DBLAS_ATLAS_atlas_LIBRARY=${atlasMaybeShared}/lib/libatlas${usedLibExtension}"
-  ])
-  ++ (optional shared "-DBUILD_SHARED_LIBS=ON")
-  # If we're on darwin, CMake will automatically detect impure paths. This switch
-  # prevents that.
-  ++ (optional stdenv.isDarwin "-DCMAKE_OSX_SYSROOT:PATH=''")
-  ;
+  ++ (optional shared "-DBUILD_SHARED_LIBS=ON");
 
   doCheck = ! shared;
 
-  checkPhase = "
-    sed -i 's,^#!.*,#!${python2.interpreter},' lapack_testing.py
-    ctest
-  ";
-
   enableParallelBuilding = true;
-
-  passthru = {
-    blas = atlas;
-  };
 
   meta = with stdenv.lib; {
     inherit version;

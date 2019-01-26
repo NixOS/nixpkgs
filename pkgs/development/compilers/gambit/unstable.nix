@@ -1,11 +1,13 @@
-{ callPackage, fetchgit }:
+{ stdenv, callPackage, fetchFromGitHub }:
 
 callPackage ./build.nix {
-  version = "unstable-2018-03-26";
-  git-version = "4.8.9-8-g793679bd";
-  SRC = fetchgit {
-    url = "https://github.com/feeley/gambit.git";
-    rev = "793679bd57eb6275cb06e6570b05f4a78df61bf9";
-    sha256 = "0bippvmrc8vcaa6ka3mhzfgkagb6a1616g7nxk0i0wapxai5cngj";
+  version = "unstable-2018-11-19";
+# git-version = "4.9.1-8-g61c6cb50";
+  src = fetchFromGitHub {
+    owner = "feeley";
+    repo = "gambit";
+    rev = "61c6cb500f4756be1e52095d5ab4501752525a70";
+    sha256 = "1knpb40y1g09c6yqd2fsxm3bk56bl5xrrwfsd7nqa497x6ngm5pn";
   };
+  inherit stdenv;
 }

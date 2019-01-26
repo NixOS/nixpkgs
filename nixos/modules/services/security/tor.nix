@@ -39,7 +39,7 @@ let
     ''}
 
     ${optint "ControlPort" cfg.controlPort}
-    ${optionalString cfg.controlSocket.enable "ControlSocket ${torRunDirectory}/control GroupWritable RelaxDirModeCheck"}
+    ${optionalString cfg.controlSocket.enable "ControlPort unix:${torRunDirectory}/control GroupWritable RelaxDirModeCheck"}
   ''
   # Client connection config
   + optionalString cfg.client.enable ''
@@ -56,6 +56,11 @@ let
     AutomapHostsOnResolve 1
     AutomapHostsSuffixes ${concatStringsSep "," cfg.client.dns.automapHostsSuffixes}
     ''}
+  ''
+  # Explicitly disable the SOCKS server if the client is disabled.  In
+  # particular, this makes non-anonymous hidden services possible.
+  + optionalString (! cfg.client.enable) ''
+  SOCKSPort 0
   ''
   # Relay config
   + optionalString cfg.relay.enable ''
@@ -87,6 +92,7 @@ let
   # Hidden services
   + concatStrings (flip mapAttrsToList cfg.hiddenServices (n: v: ''
     HiddenServiceDir ${torDirectory}/onion/${v.name}
+    ${optionalString (v.version != null) "HiddenServiceVersion ${toString v.version}"}
     ${flip concatMapStrings v.map (p: ''
       HiddenServicePort ${toString p.port} ${p.destination}
     '')}
@@ -208,7 +214,7 @@ in
           enable = mkOption {
             type = types.bool;
             default = false;
-            description = "Whether to enable tor transaprent proxy";
+            description = "Whether to enable tor transparent proxy";
           };
 
           listenAddress = mkOption {
@@ -360,7 +366,7 @@ in
 
                 <important>
                   <para>
-                    WARNING: THE FOLLOWING PARAGRAPH IS NOT LEGAL ADVISE.
+                    WARNING: THE FOLLOWING PARAGRAPH IS NOT LEGAL ADVICE.
                     Consult with your lawer when in doubt.
                   </para>
 
@@ -578,7 +584,7 @@ in
             ];
           }
         '';
-        type = types.loaOf (types.submodule ({name, config, ...}: {
+        type = types.loaOf (types.submodule ({name, ...}: {
           options = {
 
              name = mkOption {
@@ -638,7 +644,7 @@ in
              authorizeClient = mkOption {
                default = null;
                description = "If configured, the hidden service is accessible for authorized clients only.";
-               type = types.nullOr (types.submodule ({config, ...}: {
+               type = types.nullOr (types.submodule ({...}: {
 
                  options = {
 
@@ -661,6 +667,12 @@ in
                    };
                  };
                }));
+             };
+
+             version = mkOption {
+               default = null;
+               description = "Rendezvous service descriptor version to publish for the hidden service. Currently, versions 2 and 3 are supported. (Default: 2)";
+               type = types.nullOr (types.enum [ 2 3 ]);
              };
           };
 
@@ -686,8 +698,8 @@ in
         always create a container/VM with a separate Tor daemon instance.
       '';
 
-    users.extraGroups.tor.gid = config.ids.gids.tor;
-    users.extraUsers.tor =
+    users.groups.tor.gid = config.ids.gids.tor;
+    users.users.tor =
       { description = "Tor Daemon User";
         createHome  = true;
         home        = torDirectory;
@@ -695,19 +707,38 @@ in
         uid         = config.ids.uids.tor;
       };
 
+    # We have to do this instead of using RuntimeDirectory option in
+    # the service below because systemd has no way to set owners of
+    # RuntimeDirectory and putting this into the service below
+    # requires that service to relax it's sandbox since this needs
+    # writable /run
+    systemd.services.tor-init =
+      { description = "Tor Daemon Init";
+        wantedBy = [ "tor.service" ];
+        after = [ "local-fs.target" ];
+        script = ''
+          install -m 0700 -o tor -g tor -d ${torDirectory} ${torDirectory}/onion
+          install -m 0750 -o tor -g tor -d ${torRunDirectory}
+        '';
+        serviceConfig = {
+          Type = "oneshot";
+          RemainAfterExit = true;
+        };
+      };
+
     systemd.services.tor =
       { description = "Tor Daemon";
         path = [ pkgs.tor ];
 
         wantedBy = [ "multi-user.target" ];
-        after    = [ "network.target" ];
+        after    = [ "tor-init.service" "network.target" ];
         restartTriggers = [ torRcFile ];
 
         serviceConfig =
           { Type         = "simple";
             # Translated from the upstream contrib/dist/tor.service.in
             ExecStartPre = "${pkgs.tor}/bin/tor -f ${torRcFile} --verify-config";
-            ExecStart    = "${pkgs.tor}/bin/tor -f ${torRcFile} --RunAsDaemon 0";
+            ExecStart    = "${pkgs.tor}/bin/tor -f ${torRcFile}";
             ExecReload   = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
             KillSignal   = "SIGINT";
             TimeoutSec   = 30;
@@ -715,20 +746,18 @@ in
             LimitNOFILE  = 32768;
 
             # Hardening
-            # Note: DevicePolicy is set to 'closed', although the
-            # minimal permissions are really:
-            #   DeviceAllow /dev/null rw
-            #   DeviceAllow /dev/urandom r
-            # .. but we can't specify DeviceAllow multiple times. 'closed'
-            # is close enough.
-            RuntimeDirectory        = "tor";
-            StateDirectory          = [ "tor" "tor/onion" ];
-            PrivateTmp              = "yes";
-            DevicePolicy            = "closed";
-            InaccessibleDirectories = "/home";
-            ReadOnlyDirectories     = "/";
-            ReadWriteDirectories    = [torDirectory torRunDirectory];
+            # this seems to unshare /run despite what systemd.exec(5) says
+            PrivateTmp              = mkIf (!cfg.controlSocket.enable) "yes";
+            PrivateDevices          = "yes";
+            ProtectHome             = "yes";
+            ProtectSystem           = "strict";
+            InaccessiblePaths       = "/home";
+            ReadOnlyPaths           = "/";
+            ReadWritePaths          = [ torDirectory torRunDirectory ];
             NoNewPrivileges         = "yes";
+
+            # tor.service.in has this in, but this line it fails to spawn a namespace when using hidden services
+            #CapabilityBoundingSet   = "CAP_SETUID CAP_SETGID CAP_NET_BIND_SERVICE";
           };
       };
 

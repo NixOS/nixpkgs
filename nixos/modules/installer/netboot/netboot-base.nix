@@ -1,7 +1,7 @@
 # This module contains the basic configuration for building netboot
 # images
 
-{ config, lib, pkgs, ... }:
+{ lib, ... }:
 
 with lib;
 
@@ -14,7 +14,4 @@ with lib;
       ../../profiles/base.nix
       ../../profiles/installation-device.nix
     ];
-
-  # Allow the user to log in as root without a password.
-  users.extraUsers.root.initialHashedPassword = "";
 }

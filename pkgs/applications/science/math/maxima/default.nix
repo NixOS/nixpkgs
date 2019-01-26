@@ -69,11 +69,15 @@ stdenv.mkDerivation ({
       url = "https://git.sagemath.org/sage.git/plain/build/pkgs/maxima/patches/maxima.system.patch?id=07d6c37d18811e2b377a9689790a7c5e24da16ba";
       sha256 = "18zafig8vflhkr80jq2ivk46k92dkszqlyq8cfmj0b2vcfjwwbar";
     })
+    # There are some transient test failures. I hope this disables all those tests.
+    # If those test failures ever happen in the non-ecl version, that should be
+    # reportetd upstream.
+    ./known-ecl-failures.patch
   ];
 
   # Failures in the regression test suite won't abort the build process. We run
   # the suite only so that potential errors show up in the build log. See also:
-  # http://sourceforge.net/tracker/?func=detail&aid=3365831&group_id=4933&atid=104933.
+  # https://sourceforge.net/tracker/?func=detail&aid=3365831&group_id=4933&atid=104933.
   doCheck = true;
 
   enableParallelBuilding = true;

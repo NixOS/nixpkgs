@@ -1,6 +1,7 @@
 # Generic builder.
 
 { lib
+, config
 , python
 , wrapPython
 , setuptools
@@ -9,6 +10,8 @@
 # Whether the derivation provides a Python module or not.
 , toPythonModule
 , namePrefix
+, writeScript
+, update-python-libraries
 }:
 
 { name ? "${attrs.pname}-${attrs.version}"
@@ -53,7 +56,7 @@
 
 , passthru ? {}
 
-, doCheck ? false
+, doCheck ? config.doCheckByDefault or false
 
 , ... } @ attrs:
 
@@ -63,7 +66,7 @@ if disabled
 then throw "${name} not supported for interpreter ${python.executable}"
 else
 
-toPythonModule (python.stdenv.mkDerivation (builtins.removeAttrs attrs [
+let self = toPythonModule (python.stdenv.mkDerivation (builtins.removeAttrs attrs [
     "disabled" "checkInputs" "doCheck" "doInstallCheck" "dontWrapPythonPrograms" "catchConflicts"
   ] // {
 
@@ -74,8 +77,7 @@ toPythonModule (python.stdenv.mkDerivation (builtins.removeAttrs attrs [
 
   buildInputs = [ wrapPython ]
     ++ lib.optional (lib.hasSuffix "zip" (attrs.src.name or "")) unzip
-    ++ lib.optionals doCheck checkInputs
-    ++ lib.optional catchConflicts setuptools # If we no longer propagate setuptools
+#     ++ lib.optional catchConflicts setuptools # If we no longer propagate setuptools
     ++ buildInputs
     ++ pythonPath;
 
@@ -85,6 +87,7 @@ toPythonModule (python.stdenv.mkDerivation (builtins.removeAttrs attrs [
   # Python packages don't have a checkPhase, only an installCheckPhase
   doCheck = false;
   doInstallCheck = doCheck;
+  installCheckInputs = checkInputs;
 
   postFixup = lib.optionalString (!dontWrapPythonPrograms) ''
     wrapPythonPrograms
@@ -97,12 +100,20 @@ toPythonModule (python.stdenv.mkDerivation (builtins.removeAttrs attrs [
     # Check if we have two packages with the same name in the closure and fail.
     # If this happens, something went wrong with the dependencies specs.
     # Intentionally kept in a subdirectory, see catch_conflicts/README.md.
-    ${python.interpreter} ${./catch_conflicts}/catch_conflicts.py
+    ${python.pythonForBuild.interpreter} ${./catch_conflicts}/catch_conflicts.py
   '' + attrs.postFixup or '''';
+
+  # Python packages built through cross-compilation are always for the host platform.
+  disallowedReferences = lib.optionals (python.stdenv.hostPlatform != python.stdenv.buildPlatform) [ python.pythonForBuild ];
 
   meta = {
     # default to python's platforms
     platforms = python.meta.platforms;
     isBuildPythonPackage = python.meta.platforms;
   } // meta;
-}))
+}));
+
+passthru.updateScript = let
+    filename = builtins.head (lib.splitString ":" self.meta.position);
+  in attrs.passthru.updateScript or [ update-python-libraries filename ];
+in lib.extendDerivation true passthru self

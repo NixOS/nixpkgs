@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, intltool, gtk, libxfce4util, libxfce4ui
 , libxfce4ui_gtk3, libwnck, exo, garcon, xfconf, libstartup_notification
-, makeWrapper, xfce4-mixer, hicolor-icon-theme
+, makeWrapper, xfce4-mixer, hicolor-icon-theme, tzdata
 , withGtk3 ? false, gtk3, gettext, glib-networking
 }:
 let
@@ -24,6 +24,9 @@ stdenv.mkDerivation rec {
     for f in $(find . -name \*.sh); do
       substituteInPlace $f --replace gettext ${gettext}/bin/gettext
     done
+    substituteInPlace plugins/clock/clock.c \
+       --replace "/usr/share/zoneinfo" "${tzdata}/share/zoneinfo" \
+       --replace "if (!g_file_test (filename, G_FILE_TEST_IS_SYMLINK))" ""
   '';
 
   outputs = [ "out" "dev" "devdoc" ];

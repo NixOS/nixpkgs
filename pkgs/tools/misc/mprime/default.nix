@@ -2,15 +2,15 @@
 
 let
   srcDir =
-    if stdenv.system == "x86_64-linux" then "linux64"
-    else if stdenv.system == "i686-linux" then "linux"
-    else if stdenv.system == "x86_64-darwin" then "macosx64"
+    if stdenv.hostPlatform.system == "x86_64-linux" then "linux64"
+    else if stdenv.hostPlatform.system == "i686-linux" then "linux"
+    else if stdenv.hostPlatform.system == "x86_64-darwin" then "macosx64"
     else throwSystem;
-  throwSystem = throw "Unsupported system: ${stdenv.system}";
+  throwSystem = throw "Unsupported system: ${stdenv.hostPlatform.system}";
   gwnum =
-    if stdenv.system == "x86_64-linux" then "make64"
-    else if stdenv.system == "i686-linux" then "makefile"
-    else if stdenv.system == "x86_64-darwin" then "makemac"
+    if stdenv.hostPlatform.system == "x86_64-linux" then "make64"
+    else if stdenv.hostPlatform.system == "i686-linux" then "makefile"
+    else if stdenv.hostPlatform.system == "x86_64-darwin" then "makemac"
     else throwSystem;
 in
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   version = "29.4b7";
 
   src = fetchurl {
-    url = "http://www.mersenne.org/ftp_root/gimps/p95v${lib.replaceStrings ["."] [""] version}.source.zip";
+    url = "https://www.mersenne.org/ftp_root/gimps/p95v${lib.replaceStrings ["."] [""] version}.source.zip";
     sha256 = "0idaqm46m4yis7vl014scx57lpccvjbnyy79gmj8caxghyajws0m";
   };
 

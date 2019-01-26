@@ -1,7 +1,6 @@
 { version
 , sha256
 , cargoSha256
-, patches
 }:
 
 { stdenv
@@ -10,22 +9,27 @@
 , pkgconfig
 , openssl
 , systemd
+, cmake
+, perl
 }:
 
 rustPlatform.buildRustPackage rec {
   name = "parity-${version}";
-  inherit cargoSha256 patches;
+  inherit cargoSha256;
 
   src = fetchFromGitHub {
     owner = "paritytech";
-    repo = "parity";
+    repo = "parity-ethereum";
     rev = "v${version}";
     inherit sha256;
   };
 
-  buildInputs = [ pkgconfig systemd.lib systemd.dev openssl openssl.dev ]; 
+  buildInputs = [
+    pkgconfig cmake perl
+    systemd.lib systemd.dev openssl openssl.dev
+  ];
 
-  # Some checks failed
+  # test result: FAILED. 80 passed; 12 failed; 0 ignored; 0 measured; 0 filtered out
   doCheck = false;
 
   meta = with stdenv.lib; {

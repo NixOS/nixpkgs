@@ -1,18 +1,18 @@
-{ stdenv, meson, ninja, gettext, fetchurl, evince, gjs
+{ stdenv, meson, ninja, gettext, fetchurl, fetchpatch, evince, gjs
 , pkgconfig, gtk3, glib, tracker, tracker-miners
-, itstool, libxslt, webkitgtk, libgdata, gnome-online-accounts
+, itstool, libxslt, webkitgtk, libgdata
 , gnome-desktop, libzapojit, libgepub
-, gnome3, librsvg, gdk_pixbuf, libsoup, docbook_xsl
-, gobjectIntrospection, json-glib, inkscape, poppler_utils
-, gmp, desktop-file-utils, wrapGAppsHook }:
+, gnome3, gdk_pixbuf, libsoup, docbook_xsl, docbook_xml_dtd_42
+, gobject-introspection, inkscape, poppler_utils
+, desktop-file-utils, wrapGAppsHook, python3 }:
 
 stdenv.mkDerivation rec {
   name = "gnome-documents-${version}";
-  version = "3.28.0";
+  version = "3.30.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-documents/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "174q59gk9j0083bvv8sd2k66xrd4lydy2rcqbwsbzsy22fbhwcha";
+    url = "mirror://gnome/sources/gnome-documents/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    sha256 = "0zchkjpc9algmxrpj0f9i2lc4h1yp8z0h76vn32xa9jr46x4lsh6";
   };
 
   doCheck = true;
@@ -20,15 +20,23 @@ stdenv.mkDerivation rec {
   mesonFlags = [ "-Dgetting-started=true" ];
 
   nativeBuildInputs = [
-    meson ninja pkgconfig gettext itstool libxslt desktop-file-utils docbook_xsl wrapGAppsHook
+    meson ninja pkgconfig gettext itstool libxslt desktop-file-utils docbook_xsl docbook_xml_dtd_42 wrapGAppsHook python3
     inkscape poppler_utils # building getting started
   ];
   buildInputs = [
     gtk3 glib gnome3.gsettings-desktop-schemas
     gdk_pixbuf gnome3.defaultIconTheme evince
-    libsoup webkitgtk gjs gobjectIntrospection
+    libsoup webkitgtk gjs gobject-introspection
     tracker tracker-miners libgdata
     gnome-desktop libzapojit libgepub
+  ];
+
+  patches = [
+    # fix RPATH to libgd
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gnome-documents/commit/d18a92e0a940073ac766f609937539e4fc6cdbb7.patch";
+      sha256 = "0s3mk8vrl1gzk93yvgqbnz44i27qw1d9yvvmnck3fv23phrxkzk9";
+    })
   ];
 
   postPatch = ''
@@ -37,7 +45,7 @@ stdenv.mkDerivation rec {
   '';
 
   preFixup = ''
-    substituteInPlace $out/bin/gnome-documents --replace gapplication "${glib.dev}/bin/gapplication"
+    substituteInPlace $out/bin/gnome-documents --replace gapplication "${glib.bin}/bin/gapplication"
   '';
 
   passthru = {

@@ -1,17 +1,14 @@
 { build-idris-package
 , fetchFromGitHub
-, prelude
 , effects
 , lib
-, idris
 , pkgs
 }:
-
 build-idris-package  {
   name = "glfw";
   version = "2016-12-05";
 
-  idrisDeps = [ prelude effects ];
+  idrisDeps = [ effects ];
 
   extraBuildInputs = [ pkgs.glfw ];
 
@@ -27,6 +24,5 @@ build-idris-package  {
     homepage = https://github.com/eckart/glfw-idris;
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.brainrape ];
-    inherit (idris.meta) platforms;
   };
 }

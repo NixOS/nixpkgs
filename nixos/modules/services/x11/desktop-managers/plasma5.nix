@@ -7,7 +7,7 @@ let
   xcfg = config.services.xserver;
   cfg = xcfg.desktopManager.plasma5;
 
-  inherit (pkgs) kdeApplications plasma5 libsForQt5 qt5 xorg;
+  inherit (pkgs) kdeApplications plasma5 libsForQt5 qt5;
 
 in
 
@@ -64,7 +64,7 @@ in
       };
 
       security.wrappers = {
-        kcheckpass.source = "${lib.getBin plasma5.plasma-workspace}/lib/libexec/kcheckpass";
+        kcheckpass.source = "${lib.getBin plasma5.kscreenlocker}/lib/libexec/kcheckpass";
         "start_kdeinit".source = "${lib.getBin pkgs.kinit}/lib/libexec/kf5/start_kdeinit";
         kwin_wayland = {
           source = "${lib.getBin plasma5.kwin}/bin/kwin_wayland";
@@ -81,6 +81,7 @@ in
           kconfig
           kconfigwidgets
           kcoreaddons
+          kdoctools
           kdbusaddons
           kdeclarative
           kded
@@ -174,17 +175,18 @@ in
         ++ lib.optional config.services.colord.enable colord-kde
         ++ lib.optionals config.services.samba.enable [ kdenetwork-filesharing pkgs.samba ];
 
-      environment.pathsToLink = [ "/share" ];
+      environment.pathsToLink = [ 
+        # FIXME: modules should link subdirs of `/share` rather than relying on this
+        "/share" 
+      ];
 
       environment.etc = singleton {
         source = xcfg.xkbDir;
         target = "X11/xkb";
       };
 
-      environment.variables = {
-        # Enable GTK applications to load SVG icons
-        GDK_PIXBUF_MODULE_FILE = "${pkgs.librsvg.out}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache";
-      };
+      # Enable GTK applications to load SVG icons
+      services.xserver.gdk-pixbuf.modulePackages = [ pkgs.librsvg ];
 
       fonts.fonts = with pkgs; [ noto-fonts hack-font ];
       fonts.fontconfig.defaultFonts = {
@@ -221,6 +223,8 @@ in
       security.pam.services.sddm.enableKwallet = true;
       security.pam.services.slim.enableKwallet = true;
 
+      # Update the start menu for each user that is currently logged in
+      system.userActivationScripts.plasmaSetup = "${pkgs.libsForQt5.kservice}/bin/kbuildsycoca5";
     })
   ];
 

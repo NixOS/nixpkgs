@@ -8,6 +8,11 @@ in {
 
   imports = [ ../../../modules/virtualisation/amazon-image.nix ];
 
+  # Required to provide good EBS experience,
+  # https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/nvme-ebs-volumes.html#timeout-nvme-ebs-volumes
+  # TODO change value to 4294967295 when kernel is updated to 4.15 or later
+  config.boot.kernelParams = [ "nvme_core.io_timeout=255" ];
+
   options.amazonImage = {
     name = mkOption {
       type = types.str;

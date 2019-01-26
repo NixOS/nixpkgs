@@ -1,6 +1,6 @@
-{ lib, fetchpatch, python }:
+{ lib, python3, git }:
 
-let newPython = python.override {
+let newPython = python3.override {
   packageOverrides = self: super: {
     distro = super.distro.overridePythonAttrs (oldAttrs: rec {
       version = "1.1.0";
@@ -10,47 +10,55 @@ let newPython = python.override {
       };
     });
     node-semver = super.node-semver.overridePythonAttrs (oldAttrs: rec {
-      version = "0.2.0";
+      version = "0.6.1";
       src = oldAttrs.src.override {
         inherit version;
-        sha256 = "1080pdxrvnkr8i7b7bk0dfx6cwrkkzzfaranl7207q6rdybzqay3";
+        sha256 = "1dv6mjsm67l1razcgmq66riqmsb36wns17mnipqr610v0z0zf5j0";
+      };
+    });
+    future = super.future.overridePythonAttrs (oldAttrs: rec {
+      version = "0.16.0";
+      src = oldAttrs.src.override {
+        inherit version;
+        sha256 = "1nzy1k4m9966sikp0qka7lirh8sqrsyainyf8rk97db7nwdfv773";
+      };
+    });
+    tqdm = super.tqdm.overridePythonAttrs (oldAttrs: rec {
+      version = "4.28.1";
+      src = oldAttrs.src.override {
+        inherit version;
+        sha256 = "1fyybgbmlr8ms32j7h76hz5g9xc6nf0644mwhc40a0s5k14makav";
       };
     });
   };
 };
 
 in newPython.pkgs.buildPythonApplication rec {
-  version = "1.1.1"; # remove patch below when updating
+  version = "1.11.2";
   pname = "conan";
 
   src = newPython.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "1k1r401bc9fgmhd5n5f29mjcn346r3zdrm7p28nwpr2r2p3fslrl";
+    sha256 = "0b4r9n6541jjp2lsdzc1nc6mk1a953w0d4ynjss3ns7pp89y4nd4";
   };
-
-  checkInputs = with newPython.pkgs; [
+  checkInputs = [
+    git
+  ] ++ (with newPython.pkgs; [
+    codecov
+    mock
+    node-semver
     nose
     parameterized
-    mock
     webtest
-    codecov
-  ];
+  ]);
 
   propagatedBuildInputs = with newPython.pkgs; [
-    requests fasteners pyyaml pyjwt colorama patch
-    bottle pluginbase six distro pylint node-semver
-    future pygments mccabe
+    colorama deprecation distro fasteners bottle
+    future node-semver patch pygments pluginbase
+    pyjwt pylint pyyaml requests six tqdm
   ];
 
-  patches = [
-    # already merged, remove with the next package update
-    (fetchpatch {
-      url = "https://github.com/conan-io/conan/commit/51cc4cbd51ac8f9b9efa2bf678a2d7810e273ff3.patch";
-      sha256 = "0d93g4hjpfk8z870imwdswkw5qba2h5zhfgwwijiqhr2pv7fl1y7";
-    })
-  ];
-
-  preCheck = ''
+  checkPhase = ''
     export HOME="$TMP/conan-home"
     mkdir -p "$HOME"
   '';
@@ -59,6 +67,7 @@ in newPython.pkgs.buildPythonApplication rec {
     homepage = https://conan.io;
     description = "Decentralized and portable C/C++ package manager";
     license = licenses.mit;
+    maintainers = with maintainers; [ HaoZeke ];
     platforms = platforms.linux;
   };
 }

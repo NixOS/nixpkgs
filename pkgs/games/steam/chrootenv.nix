@@ -3,6 +3,7 @@
 , withJava ? false
 , withPrimus ? false
 , extraPkgs ? pkgs: [ ] # extra packages to add to targetPkgs
+, extraProfile ? "" # string to append to profile
 , nativeOnly ? false
 , runtimeOnly ? false
 }:
@@ -22,6 +23,8 @@ let
       # Open URLs
       xdg_utils
       iana-etc
+      # Steam Play / Proton
+      python3
     ] ++ lib.optional withJava jdk
       ++ lib.optional withPrimus primus
       ++ extraPkgs pkgs;
@@ -177,8 +180,17 @@ in buildFHSUserEnv rec {
   '';
 
   profile = ''
+    # Workaround for issue #44254 (Steam cannot connect to friends network)
+    # https://github.com/NixOS/nixpkgs/issues/44254
+    if [ -z ''${TZ+x} ]; then
+      new_TZ="$(readlink -f /etc/localtime | grep -P -o '(?<=/zoneinfo/).*$')"
+      if [ $? -eq 0 ]; then
+        export TZ="$new_TZ"
+      fi
+    fi
+
     export STEAM_RUNTIME=${if nativeOnly then "0" else "/steamrt"}
-  '';
+  '' + extraProfile;
 
   runScript = writeScript "steam-wrapper.sh" ''
     #!${stdenv.shell}

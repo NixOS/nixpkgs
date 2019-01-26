@@ -1,4 +1,4 @@
-{ stdenv, fetch, cmake, libxml2, libedit, llvm, version, release_version, clang-tools-extra_src, python
+{ stdenv, fetch, cmake, libxml2, llvm, version, clang-tools-extra_src, python
 , fixDarwinDylibNames
 , enableManpages ? false
 }:
@@ -9,7 +9,7 @@ let
     name = "clang-${version}";
 
     unpackPhase = ''
-      unpackFile ${fetch "cfe" "0cnznvfyl3hgbg8gj58pmwf0pvd2sv5k3ccbivy6q6ggv7c6szg0"}
+      unpackFile ${fetch "cfe" "0rxn4rh7rrnsqbdgp4gzc8ishbkryhpl1kd3mpnxzpxxhla3y93w"}
       mv cfe-${version}* clang
       sourceRoot=$PWD/clang
       unpackFile ${clang-tools-extra_src}
@@ -19,7 +19,7 @@ let
     nativeBuildInputs = [ cmake python ]
       ++ stdenv.lib.optional enableManpages python.pkgs.sphinx;
 
-    buildInputs = [ libedit libxml2 llvm ]
+    buildInputs = [ libxml2 llvm ]
       ++ stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
     cmakeFlags = [
@@ -30,10 +30,7 @@ let
       "-DSPHINX_OUTPUT_MAN=ON"
       "-DSPHINX_OUTPUT_HTML=OFF"
       "-DSPHINX_WARNINGS_AS_ERRORS=OFF"
-    ]
-    # Maybe with compiler-rt this won't be needed?
-    ++ stdenv.lib.optional stdenv.isLinux "-DGCC_INSTALL_PREFIX=${gcc}"
-    ++ stdenv.lib.optional (stdenv.cc.libc != null) "-DC_INCLUDE_DIRS=${stdenv.cc.libc}/include";
+    ];
 
     patches = [ ./purity.patch ];
 
@@ -51,10 +48,11 @@ let
     outputs = [ "out" "lib" "python" ];
 
     # Clang expects to find LLVMgold in its own prefix
-    # Clang expects to find sanitizer libraries in its own prefix
     postInstall = ''
-      ln -sv ${llvm}/lib/LLVMgold.so $out/lib
-      ln -sv ${llvm}/lib/clang/${release_version}/lib $out/lib/clang/${release_version}/
+      if [ -e ${llvm}/lib/LLVMgold.so ]; then
+        ln -sv ${llvm}/lib/LLVMgold.so $out/lib
+      fi
+
       ln -sv $out/bin/clang $out/bin/cpp
 
       # Move libclang to 'lib' output
@@ -76,7 +74,7 @@ let
     passthru = {
       isClang = true;
       inherit llvm;
-    } // stdenv.lib.optionalAttrs stdenv.isLinux {
+    } // stdenv.lib.optionalAttrs stdenv.targetPlatform.isLinux {
       inherit gcc;
     };
 

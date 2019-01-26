@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ocaml, ocamlbuild, opam }:
+{ stdenv, fetchurl, ocaml, findlib, ocamlbuild, opaline }:
 
 stdenv.mkDerivation {
   name = "ocaml${ocaml.version}-uchar-0.0.2";
@@ -8,16 +8,9 @@ stdenv.mkDerivation {
     sha256 = "1w2saw7zanf9m9ffvz2lvcxvlm118pws2x1wym526xmydhqpyfa7";
   };
 
-  unpackCmd = "tar xjf $src";
-  buildInputs = [ ocaml ocamlbuild opam ];
+  buildInputs = [ ocaml ocamlbuild findlib opaline ];
   buildPhase = "ocaml pkg/build.ml native=true native-dynlink=true";
-  installPhase = ''
-    opam-installer --script --prefix=$out uchar.install > install.sh
-    sh install.sh
-    mkdir -p $out/lib/ocaml/${ocaml.version}/site-lib/
-    ln -s $out/lib/uchar $out/lib/ocaml/${ocaml.version}/site-lib/
-  '';
-
+  installPhase = "opaline -libdir $OCAMLFIND_DESTDIR";
 
   meta = {
     description = "Compatibility library for OCaml’s Uchar module";

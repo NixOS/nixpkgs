@@ -6,13 +6,13 @@ assert pythonSupport -> python != null && swig != null;
 
 stdenv.mkDerivation rec {
   name = "gnuradio-rds-${version}";
-  version = "2016-08-27";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "bastibl";
     repo = "gr-rds";
-    rev = "5246b75180808d47f321cb26f6c16d7c7a7af4fc";
-    sha256 = "008284ya464q4h4fd0zvcn6g7bym231p8fl3kdxncz9ks4zsbsxs";
+    rev = "v${version}";
+    sha256 = "0jkzchvw0ivcxsjhi1h0mf7k13araxf5m4wi5v9xdgqxvipjzqfy";
   };
 
   nativeBuildInputs = [ pkgconfig ];

@@ -1,5 +1,5 @@
 {stdenv, fetchurl, makeWrapper, flex, bison,
- asciidoc, docbook_xml_dtd_45, docbook_xml_xslt,
+ asciidoc, docbook_xml_dtd_45, docbook_xsl,
  libxml2, libxslt,
  python27, rcs, cvs, git,
  coreutils, rsync}:
@@ -21,7 +21,7 @@ mkDerivation rec {
   };
 
   buildInputs = [
-    flex bison asciidoc docbook_xml_dtd_45 docbook_xml_xslt libxml2 libxslt
+    flex bison asciidoc docbook_xml_dtd_45 docbook_xsl libxml2 libxslt
     python27 rcs cvs git makeWrapper
   ];
 
@@ -29,7 +29,7 @@ mkDerivation rec {
 
   preBuild = ''
     makeFlagsArray=(
-      XML_CATALOG_FILES="${docbook_xml_dtd_45}/xml/dtd/docbook/catalog.xml ${docbook_xml_xslt}/xml/xsl/docbook/catalog.xml"
+      XML_CATALOG_FILES="${docbook_xml_dtd_45}/xml/dtd/docbook/catalog.xml ${docbook_xsl}/xml/xsl/docbook/catalog.xml"
       LIBS=""
       prefix="$out"
     )

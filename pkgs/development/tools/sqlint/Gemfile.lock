@@ -1,0 +1,17 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    json (2.1.0)
+    pg_query (1.0.0)
+      json (>= 1.8, < 3)
+    sqlint (0.1.7)
+      pg_query (~> 0.13.5)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  sqlint
+
+BUNDLED WITH
+   1.14.6

@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchgit, cmake, llvmPackages, openssl, writeScript, apple_sdk, bash, emacs, pkgconfig }:
+{ stdenv, lib, fetchgit, cmake, llvmPackages, openssl, apple_sdk, emacs, pkgconfig }:
 
 stdenv.mkDerivation rec {
   name = "rtags-${version}";

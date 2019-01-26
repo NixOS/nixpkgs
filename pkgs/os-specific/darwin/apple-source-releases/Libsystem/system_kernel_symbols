@@ -57,8 +57,6 @@ ___ioctl
 ___iopolicysys
 ___kdebug_trace
 ___kdebug_trace64
-___kernelVersionNumber
-___kernelVersionString
 ___kill
 ___lchown
 ___libkernel_init

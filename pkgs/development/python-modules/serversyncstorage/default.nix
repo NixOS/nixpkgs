@@ -1,5 +1,4 @@
-{ stdenv
-, buildPythonPackage
+{ buildPythonPackage
 , fetchgit
 , isPy27
 , testfixtures
@@ -20,7 +19,7 @@
 }:
 
 buildPythonPackage rec {
-  name = "serversyncstorage-${version}";
+  pname = "serversyncstorage";
   version = "1.6.11";
   disabled = !isPy27;
 
@@ -30,7 +29,7 @@ buildPythonPackage rec {
     sha256 = "197gj2jfs2c6nzs20j37kqxwi91wabavxnfm4rqmrjwhgqjwhnm0";
   };
 
-  buildInputs = [ testfixtures unittest2 webtest ];
+  checkInputs = [ testfixtures unittest2 webtest ];
   propagatedBuildInputs = [
     pyramid sqlalchemy simplejson mozsvc cornice pyramid_hawkauth pymysql
     pymysqlsa umemcache WSGIProxy requests pybrowserid

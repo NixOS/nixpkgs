@@ -10,13 +10,13 @@ let
   };
 in stdenv.mkDerivation rec {
   name    = "godot-${version}";
-  version = "3.0.2";
+  version = "3.0.6";
 
   src = fetchFromGitHub {
     owner  = "godotengine";
     repo   = "godot";
     rev    = "${version}-stable";
-    sha256 = "1ca1zznb7qqn4vf2nfwb8nww5x0k8fc4lwjvgydr6nr2mn70xka4";
+    sha256 = "0g64h0x8dlv6aa9ggfcidk2mknkfl5li7z1phcav8aqp9srj8avf";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -33,28 +33,29 @@ in stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  buildPhase = ''
-    scons platform=x11 prefix=$out -j $NIX_BUILD_CORES \
-      ${lib.concatStringsSep " "
-          (lib.mapAttrsToList (k: v: "${k}=${builtins.toJSON v}") options)}
+  sconsFlags = "target=release_debug platform=x11";
+  preConfigure = ''
+    sconsFlags+=" ${lib.concatStringsSep " " (lib.mapAttrsToList (k: v: "${k}=${builtins.toJSON v}") options)}"
   '';
 
+  outputs = [ "out" "dev" "man" ];
+
   installPhase = ''
-    mkdir -p $out/bin
-    cp bin/godot.x11.tools.* $out/bin/godot
+    mkdir -p "$out/bin"
+    cp bin/godot.* $out/bin/godot
 
-    mkdir -p "$out/share/applications"
+    mkdir "$dev"
+    cp -r modules/gdnative/include $dev
+
+    mkdir -p "$man/share/man/man6"
+    cp misc/dist/linux/godot.6 "$man/share/man/man6/"
+
+    mkdir -p "$out"/share/{applications,icons/hicolor/scalable/apps}
     cp misc/dist/linux/godot.desktop "$out/share/applications/"
-    substituteInPlace "$out/share/applications/godot.desktop" \
-                      --replace "Exec=godot" \
-                      "Exec=$out/bin/godot"
-
-    mkdir -p "$out/share/icons/hicolor/scalable/apps/"
     cp icon.svg "$out/share/icons/hicolor/scalable/apps/godot.svg"
     cp icon.png "$out/share/icons/godot.png"
-
-    mkdir -p "$out/share/man/man6"
-    cp misc/dist/linux/godot.6 "$out/share/man/man6/"
+    substituteInPlace "$out/share/applications/godot.desktop" \
+      --replace "Exec=godot" "Exec=$out/bin/godot"
   '';
 
   meta = {

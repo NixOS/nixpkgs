@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   version = "0.1.45";
 
   src = fetchurl {
-    url = "http://perso.b2b2c.ca/~sarrazip/dev/${name}.tar.gz";
+    url = "https://perso.b2b2c.ca/~sarrazip/dev/${name}.tar.gz";
     sha256 = "180zyhdjspp7lk2291wsqs6bm7y27r7bd00447iimmjpx372s22c";
   };
 

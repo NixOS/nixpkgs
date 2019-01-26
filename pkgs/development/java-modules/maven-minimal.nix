@@ -6,7 +6,7 @@ with pkgs.javaPackages;
 let
   collections = import ./collections.nix { inherit pkgs; };
   fetchMaven = pkgs.callPackage ./m2install.nix { };
-  plugins = import ./mavenPlugins.nix { inherit stdenv pkgs maven; };
+  plugins = import ./mavenPlugins.nix { inherit pkgs; };
   poms = import ./poms.nix { inherit fetchMaven; };
 in rec {
   # Maven needs all of these to function

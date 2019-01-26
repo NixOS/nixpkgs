@@ -2,17 +2,33 @@
 
 buildGoPackage rec {
   name = "hcloud-${version}";
-  version = "1.4.0";
+  version = "1.11.0";
+  
   goPackagePath = "github.com/hetznercloud/cli";
 
   src = fetchFromGitHub {
     owner = "hetznercloud";
     repo = "cli";
     rev = "v${version}";
-    sha256 = "1mysw091ddi3abijvciyy73ff31vqq7zb37w30sp3vhm5vq38nn2";
+    sha256 = "0iknw14728l2mynrvb3fiqm7y893ppp22gbb3mppi6iy3as94f1f";
   };
 
-  buildFlagsArray = [ "-ldflags=" "-X github.com/hetznercloud/cli.Version=${version}" ];
+  goDeps = ./deps.nix;
+
+  buildFlagsArray = [ "-ldflags=" "-w -X github.com/hetznercloud/cli/cli.Version=${version}" ];
+
+  postInstall = ''
+    mkdir -p \
+      $bin/etc/bash_completion.d \
+      $bin/share/zsh/vendor-completions
+
+    # Add bash completions
+    $bin/bin/hcloud completion bash > "$bin/etc/bash_completion.d/hcloud"
+
+    # Add zsh completions
+    echo "#compdef hcloud" > "$bin/share/zsh/vendor-completions/_hcloud"
+    $bin/bin/hcloud completion zsh >> "$bin/share/zsh/vendor-completions/_hcloud"
+  '';
 
   meta = {
     description = "A command-line interface for Hetzner Cloud, a provider for cloud virtual private servers";

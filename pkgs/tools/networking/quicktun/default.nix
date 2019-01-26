@@ -27,5 +27,6 @@ stdenv.mkDerivation rec {
     homepage = http://wiki.ucis.nl/QuickTun;
     maintainers = [ maintainers.fpletz ];
     platforms = platforms.unix;
+    license = licenses.bsd2;
   };
 }

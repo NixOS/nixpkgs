@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, runCommand, buildEnv, vscode, which, writeScript
+{ stdenv, lib, runCommand, buildEnv, vscode, makeWrapper
 , vscodeExtensions ? [] }:
 
 /*
@@ -12,7 +12,7 @@
         # When the extension is already available in the default extensions set.
         vscodeExtensions = with vscode-extensions; [
           bbenoist.Nix
-        ]   
+        ]
 
         # Concise version from the vscode market place when not available in the default set.
         ++ vscode-utils.extensionsFromVscodeMarketplace [
@@ -26,11 +26,11 @@
       }
       ~~~
 
-      This expression should fetch 
+      This expression should fetch
        -  the *nix* vscode extension from whatever source defined in the
           default nixpkgs extensions set `vscodeExtensions`.
 
-       -  the *code-runner* vscode extension from the marketplace using the 
+       -  the *code-runner* vscode extension from the marketplace using the
           following url:
 
           ~~~
@@ -43,6 +43,7 @@
 
 let
 
+  inherit (vscode) executableName;
   wrappedPkgVersion = lib.getVersion vscode;
   wrappedPkgName = lib.removeSuffix "-${wrappedPkgVersion}" vscode.name;
 
@@ -51,32 +52,23 @@ let
     paths = vscodeExtensions;
   };
 
-  wrappedExeName = "code";
-  exeName = wrappedExeName;
-
-  wrapperExeFile = writeScript "${exeName}" ''
-    #!${stdenv.shell}
-    exec ${vscode}/bin/${wrappedExeName} \
-      --extensions-dir "${combinedExtensionsDrv}/share/${wrappedPkgName}/extensions" \
-      "$@"
-  '';
-
 in
 
 # When no extensions are requested, we simply redirect to the original
 # non-wrapped vscode executable.
 runCommand "${wrappedPkgName}-with-extensions-${wrappedPkgVersion}" {
-  buildInputs = [ vscode which ];
+  buildInputs = [ vscode makeWrapper ];
   dontPatchELF = true;
   dontStrip = true;
   meta = vscode.meta;
 } ''
   mkdir -p "$out/bin"
-  ${if [] == vscodeExtensions
-    then ''
-      ln -sT "${vscode}/bin/${wrappedExeName}" "$out/bin/${exeName}"
-    ''
-    else ''
-      ln -sT "${wrapperExeFile}" "$out/bin/${exeName}"
-    ''}
+  mkdir -p "$out/share/applications"
+  mkdir -p "$out/share/pixmaps"
+
+  ln -sT "${vscode}/share/pixmaps/code.png" "$out/share/pixmaps/code.png"
+  ln -sT "${vscode}/share/applications/${executableName}.desktop" "$out/share/applications/${executableName}.desktop"
+  makeWrapper "${vscode}/bin/${executableName}" "$out/bin/${executableName}" ${lib.optionalString (vscodeExtensions != []) ''
+    --add-flags "--extensions-dir ${combinedExtensionsDrv}/share/${wrappedPkgName}/extensions"
+  ''}
 ''

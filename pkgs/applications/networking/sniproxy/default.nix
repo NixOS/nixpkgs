@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "sniproxy-${version}";
-  version = "0.5.0";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "dlundquist";
     repo = "sniproxy";
     rev = version;
-    sha256 = "0nspisqdl0si5zpiiwkh9hhdy6h7lxw8l09rasflyawlmm680z1i";
+    sha256 = "0isgl2lyq8vz5kkxpgyh1sgjlb6sqqybakr64w2mfh29k5ls8xzm";
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];

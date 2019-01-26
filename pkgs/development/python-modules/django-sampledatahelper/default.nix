@@ -4,7 +4,6 @@
 
 buildPythonPackage rec {
   pname = "django-sampledatahelper";
-  name = "${pname}-${version}";
   version = "0.4.1";
 
   meta = {

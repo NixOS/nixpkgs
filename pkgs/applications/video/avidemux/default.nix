@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, fetchpatch, cmake, pkgconfig, lndir
+{ stdenv, lib, fetchurl, cmake, pkgconfig
 , zlib, gettext, libvdpau, libva, libXv, sqlite
 , yasm, freetype, fontconfig, fribidi
 , makeWrapper, libXext, libGLU, qttools, qtbase
@@ -25,21 +25,16 @@ assert !withQT -> default != "qt5";
 
 stdenv.mkDerivation rec {
   name = "avidemux-${version}";
-  version = "2.7.0";
+  version = "2.7.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/avidemux/avidemux/${version}/avidemux_${version}.tar.gz";
-    sha256 = "1bf4l9qwxq3smc1mx5pybydc742a4qqsk17z50j9550d9iwnn7gy";
+    sha256 = "15g9h791qbnmycabbbl7s2b3n3xpvygm88qrfk35g2cw6957ik9w";
   };
 
   patches = [
     ./dynamic_install_dir.patch
     ./bootstrap_logging.patch
-    # glibc 2.27 compat
-    (fetchpatch {
-      url = https://github.com/mean00/avidemux2/commit/afdd9c4b876d77a4974d3fa7d9f25caeffbdf13d.patch;
-      sha256 = "0mf8vpfdqybziqsfyvxwcdm3zsmnp64293icinhvfpq9xp5b6vn6";
-    })
   ];
 
   nativeBuildInputs = [ yasm cmake pkgconfig ];
@@ -58,7 +53,10 @@ stdenv.mkDerivation rec {
     ++ lib.optionals withQT [ qttools qtbase ]
     ++ lib.optional withVPX libvpx;
 
-  buildCommand = ''
+  buildCommand = let
+    qtVersion = "5.${stdenv.lib.versions.minor qtbase.version}";
+    wrapProgram = f: "wrapProgram ${f} --set ADM_ROOT_DIR $out --prefix LD_LIBRARY_PATH : ${libXext}/lib";
+  in ''
     unpackPhase
     cd "$sourceRoot"
     patchPhase
@@ -73,11 +71,13 @@ stdenv.mkDerivation rec {
     mkdir $out
     cp -R install/usr/* $out
 
-    for i in $out/bin/*; do
-      wrapProgram $i \
-        --set ADM_ROOT_DIR $out \
-        --prefix LD_LIBRARY_PATH ":" "${libXext}/lib"
-    done
+    ${wrapProgram "$out/bin/avidemux3_cli"}
+
+    ${stdenv.lib.optionalString withQT ''
+      ${wrapProgram "$out/bin/avidemux3_qt5"} --prefix QT_PLUGIN_PATH : ${qtbase}/lib/qt-${qtVersion}/plugins
+      ${wrapProgram "$out/bin/avidemux3_jobs_qt5"} --prefix QT_PLUGIN_PATH : ${qtbase}/lib/qt-${qtVersion}/plugins
+    ''}
+
     ln -s "$out/bin/avidemux3_${default}" "$out/bin/avidemux"
 
     fixupPhase
@@ -86,7 +86,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage = http://fixounet.free.fr/avidemux/;
     description = "Free video editor designed for simple video editing tasks";
-    maintainers = with maintainers; [ viric abbradar ma27 ];
+    maintainers = with maintainers; [ abbradar ma27 ];
     # "CPU not supported" errors on AArch64
     platforms = [ "i686-linux" "x86_64-linux" ];
     license = licenses.gpl2;

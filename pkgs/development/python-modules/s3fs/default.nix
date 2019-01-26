@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "s3fs";
-  version = "0.1.4";
+  version = "0.2.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f19b2e81cfcf6f2849fa8195c366c6e81d2378400bab0611f461c4e55d4f6bed";
+    sha256 = "1p14sm3lbkwz2fidiinmyfyxwkh58ymjb0c0bsv5i0zfv0fy87x3";
   };
 
   buildInputs = [ docutils ];
@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "S3FS builds on boto3 to provide a convenient Python filesystem interface for S3.";
-    homepage = http://github.com/dask/s3fs/;
+    homepage = https://github.com/dask/s3fs/;
     license = licenses.bsd3;
     maintainers = with maintainers; [ teh ];
   };

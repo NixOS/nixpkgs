@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   name = "ibus-libpinyin-${version}";
-  version = "1.9.3";
+  version = "1.10.0";
 
   src = fetchFromGitHub {
     owner  = "libpinyin";
     repo   = "ibus-libpinyin";
     rev    = version;
-    sha256 = "02rwddv1lxzk70946v3rjsx1p7hx1d9bnwb7cx406cbws73yb2r9";
+    sha256 = "0zkzz6ig74nws8phqxbsggnpf5g5f2hxi0mdyn2m3s4nm14q3ma6";
   };
 
   buildInputs = [ ibus glib sqlite libpinyin python3 gtk3 db ];

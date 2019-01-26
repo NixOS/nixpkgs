@@ -6,11 +6,11 @@
 let
 self = stdenv.mkDerivation rec {
   name = "mysql-${version}";
-  version = "5.5.58";
+  version = "5.5.62";
 
   src = fetchurl {
     url = "mirror://mysql/MySQL-5.5/${name}.tar.gz";
-    sha256 = "1f890376ld1qapl038sjh2ialdizys3sj96vfn4mqmb1ybx14scv";
+    sha256 = "1mwrzwk9ap09s430fpdkyhvx5j2syd3xj2hyfzvanjphq4xqbrxi";
   };
 
   patches = if stdenv.isCygwin then [
@@ -47,6 +47,8 @@ self = stdenv.mkDerivation rec {
     "-DINSTALL_MYSQLSHAREDIR=share/mysql"
     "-DINSTALL_DOCDIR=share/mysql/docs"
     "-DINSTALL_SHAREDIR=share/mysql"
+    "-DINSTALL_MYSQLTESTDIR="
+    "-DINSTALL_SQLBENCHDIR="
   ];
 
   NIX_CFLAGS_COMPILE = [ "-fpermissive" ]; # since gcc-7
@@ -57,8 +59,7 @@ self = stdenv.mkDerivation rec {
   '';
   postInstall = ''
     sed -i -e "s|basedir=\"\"|basedir=\"$out\"|" $out/bin/mysql_install_db
-    rm -r $out/mysql-test $out/sql-bench $out/data "$out"/lib/*.a
-    rm $out/share/man/man1/mysql-test-run.pl.1
+    rm -r $out/data "$out"/lib/*.a
   '';
 
   passthru = {
@@ -68,9 +69,15 @@ self = stdenv.mkDerivation rec {
     mysqlVersion = "5.5";
   };
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = https://www.mysql.com/;
     description = "The world's most popular open source database";
-    platforms = stdenv.lib.platforms.unix;
+    platforms = platforms.unix;
+    # See https://downloads.mysql.com/docs/licenses/mysqld-5.5-gpl-en.pdf
+    license = with licenses; [
+      artistic1 bsd0 bsd2 bsd3 bsdOriginal
+      gpl2 lgpl2 lgpl21 mit publicDomain  licenses.zlib
+    ];
+    broken = stdenv.isAarch64;
   };
 }; in self

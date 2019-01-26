@@ -6,10 +6,10 @@ import ./make-test.nix ({ pkgs, ...} : {
 
   nodes = {
     master =
-      { pkgs, config, ... }:
+      { pkgs, ... }:
 
       {
-        services.postgresql = let mypg = pkgs.postgresql100; in {
+        services.postgresql = let mypg = pkgs.postgresql_11; in {
             enable = true;
             package = mypg;
             extraPlugins = [ (pkgs.postgis.override { postgresql = mypg; }) ];

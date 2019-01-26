@@ -2,7 +2,7 @@
 , eigen
 , fetchurl
 , cmake
-, google-gflags ? null
+, google-gflags
 , glog
 , runTests ? false
 }:
@@ -20,18 +20,18 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ glog ]
-    ++ stdenv.lib.optional (google-gflags != null) google-gflags;
+  buildInputs = [ eigen glog ]
+    ++ stdenv.lib.optional runTests google-gflags;
 
-  inherit eigen;
+  # The Basel BUILD file conflicts with the cmake build directory on
+  # case-insensitive filesystems, eg. darwin.
+  preConfigure = ''
+    rm BUILD
+  '';
 
   doCheck = runTests;
 
   checkTarget = "test";
-
-  cmakeFlags = "
-    -DEIGEN_INCLUDE_DIR=${eigen}/include/eigen3
-  ";
 
   meta = with stdenv.lib; {
     description = "C++ library for modeling and solving large, complicated optimization problems";

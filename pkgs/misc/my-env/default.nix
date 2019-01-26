@@ -59,7 +59,7 @@
 
 { mkDerivation, substituteAll, pkgs }:
     { stdenv ? pkgs.stdenv, name, buildInputs ? []
-    , propagatedBuildInputs ? [], gcc ? stdenv.cc, cTags ? [], extraCmds ? ""
+    , propagatedBuildInputs ? [], gcc ? stdenv.cc, extraCmds ? ""
     , cleanupCmds ? "", shell ? "${pkgs.bashInteractive}/bin/bash --norc"}:
 
 mkDerivation {

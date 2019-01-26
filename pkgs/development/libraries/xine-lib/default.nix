@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, xorg, alsaLib, libGLU_combined, aalib
-, libvorbis, libtheora, speex, zlib, libdvdcss, perl, ffmpeg
+, libvorbis, libtheora, speex, zlib, perl, ffmpeg
 , flac, libcaca, libpulseaudio, libmng, libcdio, libv4l, vcdimager
 , libmpcdec
 }:
@@ -26,9 +26,10 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://www.xine-project.org/;
     description = "A high-performance, portable and reusable multimedia playback engine";
-    platforms = stdenv.lib.platforms.linux;
+    platforms = platforms.linux;
+    license = with licenses; [ gpl2 lgpl2 ];
   };
 }

@@ -137,7 +137,7 @@ in
   # Setting vesa, we don't get the nvidia driver, which can't work in arm.
   services.xserver.videoDrivers = [ "vesa" ];
 
-  services.nixosManual.enable = false;
+  documentation.nixos.enable = false;
 
   # Include the firmware for various wireless cards.
   networking.enableRalinkFirmware = true;

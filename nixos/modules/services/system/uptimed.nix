@@ -20,7 +20,7 @@ in
   };
 
   config = mkIf cfg.enable {
-    users.extraUsers.uptimed = {
+    users.users.uptimed = {
       description = "Uptimed daemon user";
       home        = stateDir;
       createHome  = true;

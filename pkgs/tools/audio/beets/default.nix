@@ -1,5 +1,6 @@
 { stdenv, fetchFromGitHub, writeScript, glibcLocales, diffPlugins
-, pythonPackages, imagemagick, gobjectIntrospection, gst_all_1
+, pythonPackages, imagemagick, gobject-introspection, gst_all_1
+, fetchpatch
 
 # Attributes needed for tests of the external plugins
 , callPackage, beets
@@ -17,6 +18,7 @@
 , enableLastfm         ? true
 , enableMpd            ? true
 , enableReplaygain     ? true, bs1770gain ? null
+, enableSonosUpdate    ? true
 , enableThumbnails     ? true
 , enableWeb            ? true
 
@@ -37,6 +39,7 @@ assert enableKeyfinder   -> keyfinder-cli != null;
 assert enableLastfm      -> pythonPackages.pylast         != null;
 assert enableMpd         -> pythonPackages.mpd2           != null;
 assert enableReplaygain  -> bs1770gain                    != null;
+assert enableSonosUpdate -> pythonPackages.soco           != null;
 assert enableThumbnails  -> pythonPackages.pyxdg          != null;
 assert enableWeb         -> pythonPackages.flask          != null;
 
@@ -59,6 +62,7 @@ let
     mpdstats = enableMpd;
     mpdupdate = enableMpd;
     replaygain = enableReplaygain;
+    sonosupdate = enableSonosUpdate;
     thumbnails = enableThumbnails;
     web = enableWeb;
   };
@@ -88,20 +92,22 @@ let
     doInstallCheck = false;
   });
 
+  pluginArgs = externalTestArgs // { inherit pythonPackages; };
+
   plugins = {
-    alternatives = callPackage ./alternatives-plugin.nix externalTestArgs;
-    copyartifacts = callPackage ./copyartifacts-plugin.nix externalTestArgs;
+    alternatives = callPackage ./alternatives-plugin.nix pluginArgs;
+    copyartifacts = callPackage ./copyartifacts-plugin.nix pluginArgs;
   };
 
 in pythonPackages.buildPythonApplication rec {
-  name = "beets-${version}";
-  version = "1.4.6";
+  pname = "beets";
+  version = "1.4.7";
 
   src = fetchFromGitHub {
     owner = "beetbox";
     repo = "beets";
     rev = "v${version}";
-    sha256 = "0m8macydkn1fp4ymig0rg7bzw77rrm454q763gxdpq2kg08yl5py";
+    sha256 = "17gfz0g7pqm6wha8zf63zpw07zgi787w1bjwdcxdh1l3z4m7jc9l";
   };
 
   propagatedBuildInputs = [
@@ -111,12 +117,11 @@ in pythonPackages.buildPythonApplication rec {
     pythonPackages.munkres
     pythonPackages.musicbrainzngs
     pythonPackages.mutagen
-    pythonPackages.pathlib
     pythonPackages.pyyaml
     pythonPackages.unidecode
     pythonPackages.gst-python
     pythonPackages.pygobject3
-    gobjectIntrospection
+    gobject-introspection
   ] ++ optional enableAcoustid      pythonPackages.pyacoustid
     ++ optional (enableFetchart
               || enableEmbyupdate
@@ -129,6 +134,7 @@ in pythonPackages.buildPythonApplication rec {
     ++ optional enableKeyfinder     keyfinder-cli
     ++ optional enableLastfm        pythonPackages.pylast
     ++ optional enableMpd           pythonPackages.mpd2
+    ++ optional enableSonosUpdate   pythonPackages.soco
     ++ optional enableThumbnails    pythonPackages.pyxdg
     ++ optional enableWeb           pythonPackages.flask
     ++ optional enableAlternatives  plugins.alternatives
@@ -150,6 +156,14 @@ in pythonPackages.buildPythonApplication rec {
   patches = [
     ./replaygain-default-bs1770gain.patch
     ./keyfinder-default-bin.patch
+
+    # Fix Python 3.7 compatibility
+    (fetchpatch {
+      url = "https://github.com/beetbox/beets/commit/"
+          + "15d44f02a391764da1ce1f239caef819f08beed8.patch";
+      sha256 = "12rjb4959nvnrm3fvvki7chxjkipa0cy8i0yi132xrcn8141dnpm";
+      excludes = [ "docs/changelog.rst" ];
+    })
   ];
 
   postPatch = ''
@@ -172,6 +186,11 @@ in pythonPackages.buildPythonApplication rec {
     ' beetsplug/replaygain.py
     sed -i -e 's/if has_program.*bs1770gain.*:/if True:/' \
       test/test_replaygain.py
+  '';
+
+  postInstall = ''
+    mkdir -p $out/share/zsh/site-functions
+    cp extra/_beet $out/share/zsh/site-functions/
   '';
 
   doCheck = true;
@@ -222,7 +241,7 @@ in pythonPackages.buildPythonApplication rec {
 
   meta = {
     description = "Music tagger and library organizer";
-    homepage = http://beets.radbox.org;
+    homepage = http://beets.io;
     license = licenses.mit;
     maintainers = with maintainers; [ aszlig domenkozar pjones ];
     platforms = platforms.linux;

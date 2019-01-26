@@ -1,9 +1,9 @@
 { fetchurl, fetchpatch, substituteAll, stdenv, meson, ninja, pkgconfig, gnome3, json-glib, libcroco, gettext, libsecret
 , python3Packages, libsoup, polkit, clutter, networkmanager, docbook_xsl , docbook_xsl_ns, at-spi2-core
 , libstartup_notification, telepathy-glib, telepathy-logger, libXtst, unzip, glibcLocales, shared-mime-info
-, libgweather, libcanberra-gtk3, librsvg, geoclue2, perl, docbook_xml_dtd_42
-, libpulseaudio, libical, nss, gobjectIntrospection, gstreamer, wrapGAppsHook
-, accountsservice, gdk_pixbuf, gdm, upower, ibus, networkmanagerapplet
+, libgweather, libcanberra-gtk3, librsvg, geoclue2, perl, docbook_xml_dtd_42, desktop-file-utils
+, libpulseaudio, libical, gobject-introspection, gstreamer, wrapGAppsHook, libxslt, gcr
+, accountsservice, gdk_pixbuf, gdm, upower, ibus, networkmanagerapplet, libgnomekbd
 , sassc, systemd, gst_all_1 }:
 
 # http://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/gnome-base/gnome-shell/gnome-shell-3.10.2.1.ebuild?revision=1.3&view=markup
@@ -13,21 +13,18 @@ let
 
 in stdenv.mkDerivation rec {
   name = "gnome-shell-${version}";
-  version = "3.28.0";
+  version = "3.30.2";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-shell/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "0kmsh305cfr3fg40rhwykqbl466lwcq9djda25kf29ib7h6w1pn7";
+    url = "mirror://gnome/sources/gnome-shell/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    sha256 = "0kacd4w9lc5finsvs170i7827qkxwd1ddj0g2giizwffpjdjqqr2";
   };
-
-  # Needed to find /etc/NetworkManager/VPN
-  mesonFlags = [ "--sysconfdir=/etc" ];
 
   LANG = "en_US.UTF-8";
 
   nativeBuildInputs = [
     meson ninja pkgconfig gettext docbook_xsl docbook_xsl_ns docbook_xml_dtd_42 perl wrapGAppsHook glibcLocales
-    sassc
+    sassc desktop-file-utils libxslt.bin
   ];
   buildInputs = with gnome3; [
     systemd caribou
@@ -40,7 +37,7 @@ in stdenv.mkDerivation rec {
     gnome3.gnome-clocks # schemas needed
     at-spi2-core upower ibus gnome-desktop telepathy-logger gnome3.gnome-settings-daemon
     gst_all_1.gst-plugins-good # recording
-    gobjectIntrospection
+    gobject-introspection
 
     # not declared at build time, but typelib is needed at runtime
     libgweather networkmanagerapplet
@@ -59,7 +56,7 @@ in stdenv.mkDerivation rec {
     })
     (substituteAll {
       src = ./fix-paths.patch;
-      inherit unzip;
+      inherit libgnomekbd unzip;
     })
   ];
 

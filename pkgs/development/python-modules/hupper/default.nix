@@ -1,15 +1,14 @@
-{ stdenv, buildPythonPackage, fetchPypi, python
+{ stdenv, buildPythonPackage, fetchPypi
 , pytest, pytestcov, watchdog, mock
 }:
 
 buildPythonPackage rec {
   pname = "hupper";
-  version = "1.1";
-  name = "${pname}-${version}";
+  version = "1.4.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e18037fa43fb4af7c00bd262ca6f5d7bcd22debd5d71e43b0fb1437f56e78035";
+    sha256 = "17dd6f59e7cd52166302b2a6a3112e03fb4612eaff9bb19cd0603cf67e03c5cf";
   };
 
   checkPhase = ''

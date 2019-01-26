@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, emacs, python }:
 
 stdenv.mkDerivation rec {
-  version = "0.8.1";
+  version = "0.8.4";
   name = "cask-${version}";
 
   src = fetchFromGitHub {
     owner = "cask";
     repo = "cask";
     rev = "v${version}";
-    sha256 = "1sl094adnchjvf189c3l1njawrj5ww1sv5vvjr9hb1ng2rw20z7b";
+    sha256 = "1p37lq8xpyq0rc7phxgsw3b73h8vf9rkpa5959rb5k46w6ps9686";
   };
 
   buildInputs = [ emacs python ];

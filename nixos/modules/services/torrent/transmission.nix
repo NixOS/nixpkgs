@@ -13,12 +13,6 @@ let
   settingsDir = "${homeDir}/.config/transmission-daemon";
   settingsFile = pkgs.writeText "settings.json" (builtins.toJSON fullSettings);
 
-  # Strings must be quoted, ints and bools must not (for settings.json).
-  toOption = x:
-    if isBool x then boolToString x
-    else if isInt x then toString x
-    else toString ''"${x}"'';
-
   # for users in group "transmission" to have access to torrents
   fullSettings = { umask = 2; download-dir = downloadDir; incomplete-dir = incompleteDir; } // cfg.settings;
 
@@ -113,8 +107,8 @@ in
     # It's useful to have transmission in path, e.g. for remote control
     environment.systemPackages = [ pkgs.transmission ];
 
-    users.extraGroups.transmission.gid = config.ids.gids.transmission;
-    users.extraUsers.transmission = {
+    users.groups.transmission.gid = config.ids.gids.transmission;
+    users.users.transmission = {
       group = "transmission";
       uid = config.ids.uids.transmission;
       description = "Transmission BitTorrent user";
@@ -148,6 +142,7 @@ in
           ${getLib pkgs.attr}/lib/libattr*.so*             mr,
           ${getLib pkgs.lz4}/lib/liblz4*.so*               mr,
           ${getLib pkgs.libkrb5}/lib/lib*.so*              mr,
+          ${getLib pkgs.keyutils}/lib/libkeyutils*.so*     mr,
 
           @{PROC}/sys/kernel/random/uuid   r,
           @{PROC}/sys/vm/overcommit_memory r,

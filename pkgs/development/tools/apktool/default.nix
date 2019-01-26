@@ -1,15 +1,15 @@
-{ stdenv, fetchurl, makeWrapper, jre, buildTools }:
+{ stdenv, fetchurl, makeWrapper, jre, build-tools }:
 
 stdenv.mkDerivation rec {
   name = "apktool-${version}";
-  version = "2.3.2";
+  version = "2.3.4";
 
   src = fetchurl {
     urls = [
       "https://bitbucket.org/iBotPeaches/apktool/downloads/apktool_${version}.jar"
       "https://github.com/iBotPeaches/Apktool/releases/download/v${version}/apktool_${version}.jar"
     ];
-    sha256 = "01sjrc3fwkpkr8b4w1i9amyiix02b29n0w2zcrw5sdj91n8vm3b4";
+    sha256 = "07fwp5sczyivdz37ag9fa258gr9jbz3k3395hp5db7cwizaip2vm";
   };
 
   phases = [ "installPhase" ];
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     mkdir -p "$out/bin"
     makeWrapper "${jre}/bin/java" "$out/bin/apktool" \
         --add-flags "-jar $out/libexec/apktool/apktool.jar" \
-        --prefix PATH : "${buildTools}/build-tools/25.0.1/"
+        --prefix PATH : "${builtins.head build-tools}/libexec/android-sdk/build-tools/28.0.3"
   '';
 
   meta = with stdenv.lib; {

@@ -218,7 +218,7 @@ in
         ) cfg.users);
     };
 
-    users.extraUsers.mosquitto = {
+    users.users.mosquitto = {
       description = "Mosquitto MQTT Broker Daemon owner";
       group = "mosquitto";
       uid = config.ids.uids.mosquitto;
@@ -226,7 +226,7 @@ in
       createHome = true;
     };
 
-    users.extraGroups.mosquitto.gid = config.ids.gids.mosquitto;
+    users.groups.mosquitto.gid = config.ids.gids.mosquitto;
 
   };
 }

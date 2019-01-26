@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "s3fs-fuse-${version}";
-  version = "1.83";
+  version = "1.84";
 
   src = fetchFromGitHub {
     owner  = "s3fs-fuse";
     repo   = "s3fs-fuse";
     rev    = "v${version}";
-    sha256 = "0rh0lkvjjy19lixqq07hjp4k9mhahmwc0pbp5cr3m59qbwwcprvx";
+    sha256 = "1iafzlrqrjyphd1p74q5xzhgacc4gzijq8f6mdkvikbdsibch871";
   };
 
   buildInputs = [ curl openssl libxml2 fuse ];

@@ -1,15 +1,10 @@
 { build-idris-package
 , fetchFromGitHub
-, prelude
-, base
 , lib
-, idris
 }:
 build-idris-package  {
   name = "hezarfen";
   version = "2018-02-03";
-
-  idrisDeps = [ prelude base ];
 
   src = fetchFromGitHub {
     owner = "joom";
@@ -23,6 +18,5 @@ build-idris-package  {
     homepage = https://github.com/joom/hezarfen;
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.brainrape ];
-    inherit (idris.meta) platforms;
   };
 }

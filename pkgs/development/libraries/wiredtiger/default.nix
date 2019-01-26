@@ -13,9 +13,8 @@ let
     + optionalString (val != null && cond != false) "=${val}";
   mkEnable = mkFlag "enable-" "disable-";
   mkWith = mkFlag "with-" "without-";
-  mkOther = mkFlag "" "" true;
 
-  shouldUsePkg = pkg: if pkg != null && pkg.meta.available then pkg else null;
+  shouldUsePkg = pkg: if pkg != null && stdenv.lib.any (stdenv.lib.meta.platformMatch stdenv.hostPlatform) pkg.meta.platforms then pkg else null;
 
   optLz4 = shouldUsePkg lz4;
   optSnappy = shouldUsePkg snappy;

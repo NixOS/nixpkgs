@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "rivet-${version}";
-  version = "2.6.0";
+  version = "2.6.2";
 
   src = fetchurl {
-    url = "http://www.hepforge.org/archive/rivet/Rivet-${version}.tar.bz2";
-    sha256 = "007rwal8wx2k9gs0r6kym6ix0siz0x9l55q9myq41siirpf2jcpv";
+    url = "https://www.hepforge.org/archive/rivet/Rivet-${version}.tar.bz2";
+    sha256 = "0yp3mllr2b4bhsmixjmmpl2n4x78bgw74a9xy2as4f10q3alkplx";
   };
 
   patches = [
@@ -28,6 +28,8 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ fastjet ghostscript gsl yoda ];
 
   preConfigure = ''
+    substituteInPlace analyses/Makefile.in \
+      --replace "!(tmp)" ""
     substituteInPlace bin/rivet-buildplugin.in \
       --replace '"which"' '"${which}/bin/which"' \
       --replace 'mycxx=' 'mycxx=${stdenv.cc}/bin/${if stdenv.cc.isClang or false then "clang++" else "g++"}  #' \

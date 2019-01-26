@@ -20,16 +20,14 @@
 , hypothesis
 }:
 
-let
-  version = "2.2.2";
-in assert version == cryptography_vectors.version; buildPythonPackage rec {
+buildPythonPackage rec {
   # also bump cryptography_vectors
   pname = "cryptography";
-  inherit version;
+  version = "2.3.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9fc295bf69130a342e7a19a39d7bbeb15c0bcaabc7382ec33ef3b2b7d18d2f63";
+    sha256 = "8d10113ca826a4c29d5b85b2c4e045ffa8bad74fb525ee0eceb1d38d4c70dfd6";
   };
 
   outputs = [ "out" "dev" ];
@@ -53,6 +51,10 @@ in assert version == cryptography_vectors.version; buildPythonPackage rec {
     hypothesis
   ];
 
+  checkPhase = ''
+    py.test --disable-pytest-warnings tests
+  '';
+
   # The test assumes that if we're on Sierra or higher, that we use `getentropy`, but for binary
   # compatibility with pre-Sierra for binary caches, we hide that symbol so the library doesn't
   # use it. This boils down to them checking compatibility with `getentropy` in two different places,
@@ -64,4 +66,18 @@ in assert version == cryptography_vectors.version; buildPythonPackage rec {
   # IOKit's dependencies are inconsistent between OSX versions, so this is the best we
   # can do until nix 1.11's release
   __impureHostDeps = [ "/usr/lib" ];
+
+  meta = with stdenv.lib; {
+    description = "A package which provides cryptographic recipes and primitives";
+    longDescription = ''
+      Cryptography includes both high level recipes and low level interfaces to
+      common cryptographic algorithms such as symmetric ciphers, message
+      digests, and key derivation functions.
+      Our goal is for it to be your "cryptographic standard library". It
+      supports Python 2.7, Python 3.4+, and PyPy 5.3+.
+    '';
+    homepage = https://github.com/pyca/cryptography;
+    license = with licenses; [ asl20 bsd3 psfl ];
+    maintainers = with maintainers; [ primeos ];
+  };
 }

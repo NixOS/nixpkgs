@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A Perl 6 implementation";
-    homepage    = "http://www.rakudo.org";
+    homepage    = https://www.rakudo.org;
     license     = licenses.artistic2;
     platforms   = platforms.unix;
     maintainers = with maintainers; [ thoughtpolice vrthra ];

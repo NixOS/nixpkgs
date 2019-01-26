@@ -40,9 +40,9 @@ in {
 
   config = mkIf cfg.enableHealth {
 
-    users.extraGroups.riemanntools.gid = config.ids.gids.riemanntools;
+    users.groups.riemanntools.gid = config.ids.gids.riemanntools;
 
-    users.extraUsers.riemanntools = {
+    users.users.riemanntools = {
       description = "riemann-tools daemon user";
       uid = config.ids.uids.riemanntools;
       group = "riemanntools";

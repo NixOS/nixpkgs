@@ -3,7 +3,7 @@
 }:
 
 buildPythonPackage rec {
-  name = "moinmoin";
+  pname = "moinmoin";
   version = "1.9.9";
 
   # SyntaxError in setup.py

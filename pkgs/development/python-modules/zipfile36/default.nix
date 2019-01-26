@@ -9,7 +9,6 @@
 buildPythonPackage rec {
   pname = "zipfile36";
   version = "0.1.3";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, writeText, perl, openssh, rsync, logger }:
+{ fetchurl, stdenv, perl, openssh, rsync, logger }:
 
 stdenv.mkDerivation rec {
   name = "rsnapshot-1.4.2";

@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   version = "2.9.1";
 
   src = fetchurl {
-    url = "http://ecasound.seul.org/download/ecasound-${version}.tar.gz";
+    url = "https://ecasound.seul.org/download/ecasound-${version}.tar.gz";
     sha256 = "1wyws3xc4f9pglrrqv6k9137sarv4asizqrxz8h0dn44rnzfiz1r";
   };
 

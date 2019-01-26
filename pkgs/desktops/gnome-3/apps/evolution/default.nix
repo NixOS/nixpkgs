@@ -5,13 +5,13 @@
 , libcanberra-gtk3, bogofilter, gst_all_1, procps, p11-kit, openldap }:
 
 let
-  version = "3.28.1";
+  version = "3.30.3";
 in stdenv.mkDerivation rec {
   name = "evolution-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/evolution/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "0sdv5lg2vlz5f4raymz9d8a5jq4j18vbqyigaip6508p3bjnfj8l";
+    url = "mirror://gnome/sources/evolution/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    sha256 = "1v0bqqwv34j8qamby7dwgnha50fpjs8mhlq0h6c35jxsqb2f3k66";
   };
 
   propagatedUserEnvPkgs = [ gnome3.evolution-data-server ];
@@ -38,14 +38,14 @@ in stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  checkPhase = "ctest";
-
   passthru = {
     updateScript = gnome3.updateScript {
       packageName = "evolution";
       attrPath = "gnome3.evolution";
     };
   };
+
+  PKG_CONFIG_LIBEDATASERVERUI_1_2_UIMODULEDIR = "${placeholder "out"}/lib/evolution-data-server/ui-modules";
 
   requiredSystemFeatures = [ "big-parallel" ];
 

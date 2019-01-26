@@ -1,7 +1,6 @@
 { stdenv
 , fetchFromGitHub
 , cmake
-, makeWrapper
 , pkgconfig
 , wrapGAppsHook
 , gsettings-desktop-schemas
@@ -18,12 +17,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "3.8.1";
+  version = "3.10.2";
   src = fetchFromGitHub {
     owner = "nomacs";
     repo = "nomacs";
     rev = version;
-    sha256 = "1irms980d7acdqrfn8isw55vgc4d9n26ff86887vk7xfvxs0ayla";
+    sha256 = "0v2gsdc8caswf2b5aa023d8kil1fqf4r9mlg15180h3c92f8jzvh";
   };
 
   name = "nomacs-${version}";

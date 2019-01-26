@@ -13,6 +13,7 @@ let
               inherit version;
               sha256 = "678c98275431fad324275dec63791e4a17558b40e5a110e20a82866139a85a5a";
             };
+            patches = [];
           });
 
           platformio = self.callPackage ./core.nix { };
@@ -20,6 +21,7 @@ let
       };
     in (with pkgs; [
       zlib
+      git
     ]) ++ (with python.pkgs; [
       python
       setuptools

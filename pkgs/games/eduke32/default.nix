@@ -15,7 +15,7 @@ in stdenv.mkDerivation rec {
   };
 
   buildInputs = [ flac gtk2 libvorbis libvpx libGLU_combined SDL2 SDL2_mixer ]
-    ++ stdenv.lib.optional (stdenv.system == "i686-linux") nasm;
+    ++ stdenv.lib.optional (stdenv.hostPlatform.system == "i686-linux") nasm;
   nativeBuildInputs = [ pkgconfig ];
 
   postPatch = ''

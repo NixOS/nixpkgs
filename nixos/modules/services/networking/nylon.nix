@@ -22,7 +22,7 @@ let
     Deny-IP=${concatStringsSep " " cfg.deniedIPRanges}
   '';
 
-  nylonOpts = { name, config, ... }: {
+  nylonOpts = { name, ... }: {
 
     options = {
 
@@ -151,7 +151,7 @@ in
 
   config = mkIf (length(enabledNylons) > 0) {
 
-    users.extraUsers.nylon = {
+    users.users.nylon = {
       group = "nylon";
       description = "Nylon SOCKS Proxy";
       home = homeDir;
@@ -159,7 +159,7 @@ in
       uid = config.ids.uids.nylon;
     };
 
-    users.extraGroups.nylon.gid = config.ids.gids.nylon;
+    users.groups.nylon.gid = config.ids.gids.nylon;
 
     systemd.services = fold (a: b: a // b) {} nylonUnits;
 

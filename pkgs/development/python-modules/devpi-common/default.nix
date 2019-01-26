@@ -1,13 +1,12 @@
-{ stdenv, pythonPackages }:
+{ lib, buildPythonPackage, fetchPypi, requests, py, pytest }:
 
-with pythonPackages;buildPythonPackage rec {
+buildPythonPackage rec {
   pname = "devpi-common";
-  version = "3.2.1";
-  name = "${pname}-${version}";
+  version = "3.3.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e9afa277a9b227d92335c49fab40be2e9bb112c0f4dda84906c14addb1ded2f7";
+    sha256 = "30833581d03e07d7574b2ff698d213c984777dd44dd47c45c54d31858c694c94";
   };
 
   propagatedBuildInputs = [ requests py ];
@@ -17,7 +16,7 @@ with pythonPackages;buildPythonPackage rec {
     py.test
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = https://github.com/devpi/devpi;
     description = "Utilities jointly used by devpi-server and devpi-client";
     license = licenses.mit;

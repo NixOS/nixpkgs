@@ -1,11 +1,15 @@
---- a/util/install_helper.sh	2018-04-01 01:05:19.613723599 +0200
-+++ b/util/install_helper.sh	2018-04-01 01:06:02.952845382 +0200
-@@ -11,22 +11,14 @@
- udevrulesdir="$3"
- prefix="${MESON_INSTALL_DESTDIR_PREFIX}"
+--- a/util/install_helper.sh	2018-08-31 21:22:34.580563286 +0200
++++ b/util/install_helper.sh	2018-08-31 21:30:54.837939149 +0200
+@@ -22,30 +22,11 @@
+     DESTDIR="${DESTDIR%/}"
+ fi
  
--chown root:root "${prefix}/${bindir}/fusermount3"
--chmod u+s "${prefix}/${bindir}/fusermount3"
+-chown root:root "${DESTDIR}${bindir}/fusermount3"
+-chmod u+s "${DESTDIR}${bindir}/fusermount3"
+-
+ install -D -m 644 "${MESON_SOURCE_ROOT}/util/fuse.conf" \
+ 	"${DESTDIR}${sysconfdir}/fuse.conf"
+ 
 -
 -if test ! -e "${DESTDIR}/dev/fuse"; then
 -    mkdir -p "${DESTDIR}/dev"
@@ -13,16 +17,18 @@
 -fi
 -
  install -D -m 644 "${MESON_SOURCE_ROOT}/util/udev.rules" \
--        "${DESTDIR}/${udevrulesdir}/99-fuse3.rules"
-+        "${prefix}/${udevrulesdir}/99-fuse3.rules"
+-        "${DESTDIR}${udevrulesdir}/99-fuse3.rules"
++        "${sysconfdir}/udev/rules.d/99-fuse3.rules"
  
  install -D -m 755 "${MESON_SOURCE_ROOT}/util/init_script" \
--        "${DESTDIR}/etc/init.d/fuse3"
-+        "${prefix}/etc/init.d/fuse3"
- 
- install -D -m 644 "${MESON_SOURCE_ROOT}/util/fuse.conf" \
--	"${DESTDIR}/etc/fuse.conf"
-+	"${prefix}/etc/fuse.conf"
-
- if test -x /usr/sbin/update-rc.d && test -z "${DESTDIR}"; then
-     /usr/sbin/update-rc.d fuse3 start 34 S . start 41 0 6 . || /bin/true
+         "${DESTDIR}${sysconfdir}/init.d/fuse3"
+-
+-
+-if test -x /usr/sbin/update-rc.d && test -z "${DESTDIR}"; then
+-    /usr/sbin/update-rc.d fuse3 start 34 S . start 41 0 6 . || /bin/true
+-else
+-    echo "== FURTHER ACTION REQUIRED =="
+-    echo "Make sure that your init system will start the ${sysconfdir}/init.d/fuse3 init script"
+-fi
+-
+-

@@ -1,4 +1,4 @@
-{ stdenv, appleDerivation, cctools, zlib }:
+{ appleDerivation, cctools, zlib }:
 
 appleDerivation {
   buildInputs = [ cctools zlib ];

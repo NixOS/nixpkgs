@@ -9,12 +9,12 @@ assert usePcre -> pcre != null;
 
 stdenv.mkDerivation rec {
   pname = "haproxy";
-  version = "1.8.4";
+  version = "1.9.1";
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "https://www.haproxy.org/download/${stdenv.lib.versions.majorMinor version}/src/${name}.tar.gz";
-    sha256 = "19l4i0p92ahm3vaw42gz3rmmidfivk36mvqyhir81h6ywyjb01g3";
+    sha256 = "1qf8q49njx9n3b1g10zz3kcqmhji8lqcklh7723671z3l4pk2imd";
   };
 
   buildInputs = [ openssl zlib ]
@@ -39,7 +39,8 @@ stdenv.mkDerivation rec {
     "USE_LUA=yes"
     "LUA_LIB=${lua5_3}/lib"
     "LUA_INC=${lua5_3}/include"
-  ] ++ stdenv.lib.optional stdenv.isDarwin "CC=cc";
+  ] ++ stdenv.lib.optional stdenv.isDarwin "CC=cc"
+    ++ stdenv.lib.optional stdenv.isLinux "USE_GETADDRINFO=1";
 
   meta = {
     description = "Reliable, high performance TCP/HTTP load balancer";
