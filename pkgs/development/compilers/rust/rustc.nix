@@ -20,6 +20,8 @@ let
 
   llvmShared = llvm.override { enableSharedLibraries = true; };
 
+  prefixedJemalloc = jemalloc.override { stripPrefix = false; };
+
   target = builtins.replaceStrings [" "] [","] (builtins.toString targets);
 in
 
