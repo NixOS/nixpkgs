@@ -8903,6 +8903,8 @@ in
 
   mbed-cli = callPackage ../development/tools/mbed-cli { };
 
+  mdl = callPackage ../development/tools/misc/mdl { };
+
   minify = callPackage ../development/web/minify { };
 
   minizinc = callPackage ../development/tools/minizinc { };
