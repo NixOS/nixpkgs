@@ -1,26 +1,37 @@
-{ stdenv, itstool, fetchurl, fetchpatch, gdk_pixbuf, adwaita-icon-theme
+{ stdenv, itstool, fetchurl, gdk_pixbuf, adwaita-icon-theme
 , telepathy-glib, gjs, meson, ninja, gettext, telepathy-idle, libxml2, desktop-file-utils
-, pkgconfig, gtk3, glib, libsecret, libsoup, gobjectIntrospection, appstream-glib
+, pkgconfig, gtk3, glib, libsecret, libsoup, gobject-introspection, appstream-glib
 , gnome3, wrapGAppsHook, telepathy-logger, gspell }:
 
-stdenv.mkDerivation rec {
-  inherit (import ./src.nix fetchurl) name src;
+let
+  pname = "polari";
+  version = "3.30.2";
+in stdenv.mkDerivation rec {
+  name = "${pname}-${version}";
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    sha256 = "02wxkdq5s5ami9wj9vpqhs6n8qxr299bpmvpvd89mn49x73lq2w2";
+  };
 
   propagatedUserEnvPkgs = [ telepathy-idle telepathy-logger ];
 
-  nativeBuildInputs = [ meson ninja pkgconfig itstool gettext wrapGAppsHook libxml2
-                        desktop-file-utils gobjectIntrospection appstream-glib ];
-  buildInputs = [ gtk3 glib adwaita-icon-theme gnome3.gsettings-desktop-schemas
-                  telepathy-glib telepathy-logger gjs gspell gdk_pixbuf libsecret libsoup ];
-
-  patches = [
-    (fetchpatch {
-      url = https://gitlab.gnome.org/jtojnar/polari/commit/a6733a6ad95eac1813e7b18e3d0018a22ee7a377.diff;
-      sha256 = "0f5ll49h5w0477lkh67kaa2j83z376z1jk7z3i2v7cq4d3hi5lf9";
-    })
+  nativeBuildInputs = [
+    meson ninja pkgconfig itstool gettext wrapGAppsHook libxml2
+    desktop-file-utils gobject-introspection appstream-glib
   ];
 
-  enableParallelBuilding = true;
+  buildInputs = [
+    gtk3 glib adwaita-icon-theme gnome3.gsettings-desktop-schemas
+    telepathy-glib telepathy-logger gjs gspell gdk_pixbuf libsecret libsoup
+  ];
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+      attrPath = "gnome3.${pname}";
+    };
+  };
 
   meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/Apps/Polari;

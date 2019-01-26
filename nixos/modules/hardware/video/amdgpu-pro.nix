@@ -1,6 +1,6 @@
 # This module provides the proprietary AMDGPU-PRO drivers.
 
-{ config, lib, pkgs, pkgs_i686, ... }:
+{ config, lib, pkgs, ... }:
 
 with lib;
 
@@ -11,9 +11,15 @@ let
   enabled = elem "amdgpu-pro" drivers;
 
   package = config.boot.kernelPackages.amdgpu-pro;
-  package32 = pkgs_i686.linuxPackages.amdgpu-pro.override { libsOnly = true; kernel = null; };
+  package32 = pkgs.pkgsi686Linux.linuxPackages.amdgpu-pro.override { libsOnly = true; kernel = null; };
 
   opengl = config.hardware.opengl;
+
+  kernel = pkgs.linux_4_9.override {
+    extraConfig = ''
+      KALLSYMS_ALL y
+    '';
+  };
 
 in
 
@@ -21,7 +27,7 @@ in
 
   config = mkIf enabled {
 
-    nixpkgs.config.xorg.abiCompat = "1.18";
+    nixpkgs.config.xorg.abiCompat = "1.19";
 
     services.xserver.drivers = singleton
       { name = "amdgpu"; modules = [ package ]; libPath = [ package ]; };
@@ -31,6 +37,9 @@ in
 
     boot.extraModulePackages = [ package ];
 
+    boot.kernelPackages =
+      pkgs.recurseIntoAttrs (pkgs.linuxPackagesFor kernel);
+
     boot.blacklistedKernelModules = [ "radeon" ];
 
     hardware.firmware = [ package ];
@@ -38,9 +47,14 @@ in
     system.activationScripts.setup-amdgpu-pro = ''
       mkdir -p /run/lib
       ln -sfn ${package}/lib ${package.libCompatDir}
+      ln -sfn ${package} /run/amdgpu-pro
     '' + optionalString opengl.driSupport32Bit ''
       ln -sfn ${package32}/lib ${package32.libCompatDir}
     '';
+
+    system.requiredKernelConfig = with config.lib.kernelConfig; [
+      (isYes "KALLSYMS_ALL")
+    ];
 
     environment.etc = {
       "amd/amdrc".source = package + "/etc/amd/amdrc";

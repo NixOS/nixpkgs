@@ -4,6 +4,10 @@ let
   pname = "dypgen";
 in
 
+if stdenv.lib.versionAtLeast ocaml.version "4.06"
+then throw "${pname} is not available for OCaml ${ocaml.version}"
+else
+
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   version = "20120619-1";

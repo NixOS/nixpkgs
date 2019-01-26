@@ -1,16 +1,18 @@
-{ stdenv, fetchurl, writeScript, pkgconfig, cmake, qtbase, qttools
+{ stdenv, fetchFromGitHub, pkgconfig, cmake, qtbase, qttools
 , seafile-shared, ccnet, makeWrapper
 , withShibboleth ? true, qtwebengine }:
 
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  version = "6.1.0";
+  version = "6.2.10";
   name = "seafile-client-${version}";
 
-  src = fetchurl {
-    url = "https://github.com/haiwen/seafile-client/archive/v${version}.tar.gz";
-    sha256 = "16rn6b9ayaccgwx8hs3yh1wb395pp8ffh8may8a8bpcc4gdry7bd";
+  src = fetchFromGitHub {
+    owner = "haiwen";
+    repo = "seafile-client";
+    rev = "v${version}";
+    sha256 = "15am8wwqgwqzhw1d2p190n9yljcnb0ck90j0grb5ksqj5n5hx5bi";
   };
 
   nativeBuildInputs = [ pkgconfig cmake makeWrapper ];
@@ -30,6 +32,6 @@ stdenv.mkDerivation rec {
     description = "Desktop client for Seafile, the Next-generation Open Source Cloud Storage";
     license = licenses.asl20;
     platforms = platforms.linux;
-    maintainers = [ maintainers.calrama ];
+    maintainers = with maintainers; [ ];
   };
 }

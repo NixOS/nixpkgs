@@ -1,33 +1,32 @@
 { stdenv, lib, fetchFromGitHub, which, sqlite, lua5_1, perl, zlib, pkgconfig, ncurses
-, dejavu_fonts, libpng, SDL2, SDL2_image, mesa, freetype, pngcrush, advancecomp
+, dejavu_fonts, libpng, SDL2, SDL2_image, libGLU_combined, freetype, pngcrush, advancecomp
 , tileMode ? false
 }:
 
 stdenv.mkDerivation rec {
   name = "crawl-${version}${lib.optionalString tileMode "-tiles"}";
-  version = "0.21.1";
+  version = "0.22.1";
 
   src = fetchFromGitHub {
     owner = "crawl-ref";
     repo = "crawl-ref";
     rev = version;
-    sha256 = "191pmd7vpp9qni5l13fb5s8g1axniah8a6hhi31gp0848c8n7hlh";
+    sha256 = "19yzl241glv2zazifgz59bw3jlh4hj59xx5w002hnh9rp1w15rnr";
   };
 
+  # Patch hard-coded paths in the makefile
   patches = [ ./crawl_purify.patch ];
 
   nativeBuildInputs = [ pkgconfig which perl pngcrush advancecomp ];
 
   # Still unstable with luajit
   buildInputs = [ lua5_1 zlib sqlite ncurses ]
-                ++ lib.optionals tileMode [ libpng SDL2 SDL2_image freetype mesa ];
+                ++ lib.optionals tileMode [ libpng SDL2 SDL2_image freetype libGLU_combined ];
 
   preBuild = ''
     cd crawl-ref/source
     echo "${version}" > util/release_ver
-    for i in util/*; do
-      patchShebangs $i
-    done
+    patchShebangs 'util'
     patchShebangs util/gen-mi-enum
     rm -rf contrib
   '';

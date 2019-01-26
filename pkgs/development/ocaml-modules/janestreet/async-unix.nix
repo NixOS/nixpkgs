@@ -1,4 +1,4 @@
-{stdenv, buildOcamlJane, fetchurl, async_kernel,
+{stdenv, buildOcamlJane, async_kernel,
  bin_prot, comparelib, core, fieldslib, herelib,
  pipebang, sexplib}:
 

@@ -22,6 +22,9 @@ stdenv.mkDerivation {
   prePatch = ''
     sed -e '/curl.types.h/d' -i *.{c,h,hpp,cpp}
   '';
+
+  patches = [ ./pointer_int_comparison.patch ];
+  patchFlags = [ "-p1" "--binary" ]; # patch has dos style eol
       
   meta = with stdenv.lib; {
     description = "Open Street Map viewer";

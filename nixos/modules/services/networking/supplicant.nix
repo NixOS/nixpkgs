@@ -183,7 +183,7 @@ in
 
       example = literalExample ''
         { "wlan0 wlan1" = {
-            configFile = "/etc/wpa_supplicant";
+            configFile.path = "/etc/wpa_supplicant.conf";
             userControlled.group = "network";
             extraConf = '''
               ap_scan=1

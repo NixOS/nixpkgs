@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, autoreconfHook, pkgconfig
+{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig
 , libdrm, libva
 }:
 
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     owner  = "01org";
     repo   = "libva-utils";
     rev    = version;
-    sha256 = "02n51cvp8bzzjk4fargwvgh7z71y8spg24hqgaawbp3p3ahh7xxi";
+    sha256 = "0k5v72prcq462x780j9vpqf4ckrpqf536z6say81wpna0l0qbd98";
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];

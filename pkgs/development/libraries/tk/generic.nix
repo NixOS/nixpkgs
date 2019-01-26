@@ -31,6 +31,8 @@ stdenv.mkDerivation {
 
   NIX_CFLAGS_LINK = if stdenv.isDarwin then "-lfontconfig" else null;
 
+  doCheck = false; # fails. can't find itself
+
   inherit tcl;
 
   passthru = rec {

@@ -3,11 +3,11 @@
 , withContrib ? true }:
 
 let
-  versionPkg = "0.3.7" ;
+  versionPkg = "0.3.12" ;
 
   contrib = fetchurl {
     url = "mirror://sourceforge/ats2-lang/ATS2-Postiats-contrib-${versionPkg}.tgz" ;
-    sha256 = "1w59ir9ij5bvvnxj6fb1rvzycfqa57i31wmpwawxbsb10bqwzyr6";
+    sha256 = "6e53e3070f50600373b857a73a76196adffcabc3c0d3173eaaf9a5f50f4596f4";
   };
 
   postInstallContrib = stdenv.lib.optionalString withContrib
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/ats2-lang/ATS2-Postiats-${version}.tgz";
-    sha256 = "19nxyi39fn42sp38kl14a6pvbxq9wr8y405wx0zz7mqb77r0m0h5";
+    sha256 = "63eb02b225a11752745e8f08691140ed764288ab4ceda3710670cde24835b0d8";
   };
 
   buildInputs = [ gmp ];
@@ -52,6 +52,6 @@ stdenv.mkDerivation rec {
     homepage    = "http://www.ats-lang.org";
     license     = licenses.gpl3Plus;
     platforms   = platforms.linux;
-    maintainers = with maintainers; [ thoughtpolice ttuegel ];
+    maintainers = with maintainers; [ thoughtpolice ttuegel bbarker ];
   };
 }

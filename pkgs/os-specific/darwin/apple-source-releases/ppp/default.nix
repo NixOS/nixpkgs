@@ -1,8 +1,7 @@
-{ stdenv, appleDerivation }:
+{ appleDerivation }:
 
 appleDerivation {
-  phases = [ "unpackPhase" "installPhase" "fixupPhase" ];
-
+  dontBuild = true;
   installPhase = ''
     mkdir -p $out/include/ppp
 

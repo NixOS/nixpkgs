@@ -1,32 +1,31 @@
 { stdenv, fetchurl, boost, libwpd, libwpg, pkgconfig, zlib, gperf
-, librevenge, libxml2, icu, perl
+, librevenge, libxml2, icu, perl, cppunit, doxygen
 }:
 
 stdenv.mkDerivation rec {
-  name = "libvisio-0.1.3";
+  name = "libvisio-${version}";
+  version = "0.1.6";
+
+  outputs = [ "out" "bin" "dev" "doc" ];
 
   src = fetchurl {
-    url = "http://dev-www.libreoffice.org/src/${name}.tar.bz2";
-    sha256 = "1blgdwxprqkasm2175imcvy647sqv6xyf3k09p0b1i7hlq889wvy";
+    url = "https://dev-www.libreoffice.org/src/libvisio/${name}.tar.xz";
+    sha256 = "1yahpfl13qk6178irv8jn5ppxdn7isafqisyqsdw0lqxcz9h447y";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig cppunit doxygen ];
   buildInputs = [ boost libwpd libwpg zlib gperf librevenge libxml2 icu perl ];
-
-  # Boost 1.59 compatability fix
-  # Attempt removing when updating
-  postPatch = ''
-    sed -i 's,^CPPFLAGS.*,\0 -DBOOST_ERROR_CODE_HEADER_ONLY -DBOOST_SYSTEM_NO_DEPRECATED,' src/lib/Makefile.in
-  '';
 
   configureFlags = [
     "--disable-werror"
-    "--disable-tests"
   ];
 
-  meta = {
+  doCheck = true;
+
+  meta = with stdenv.lib; {
     description = "A library providing ability to interpret and import visio diagrams into various applications";
-    homepage = http://www.freedesktop.org/wiki/Software/libvisio;
-    platforms = stdenv.lib.platforms.unix;
+    homepage = https://wiki.documentfoundation.org/DLP/Libraries/libvisio;
+    license = licenses.mpl20;
+    platforms = platforms.unix;
   };
 }

@@ -1,37 +1,33 @@
-{ lib, buildPythonPackage, fetchPypi,
-  pytest, requests, requests_oauthlib, six
+{ buildPythonPackage, pytest, requests, requests_oauthlib, six
+, fetchFromGitHub, responses, stdenv
 }:
 
 buildPythonPackage rec {
   pname = "asana";
-  version = "0.7.0";
-  name = "${pname}-${version}";
+  version = "0.7.1";
 
-  meta = {
-    description = "Python client library for Asana";
-    homepage = https://github.com/asana/python-asana;
-    license = lib.licenses.mit;
+  src = fetchFromGitHub {
+    owner = "asana";
+    repo = "python-asana";
+    rev = "v${version}";
+    sha256 = "0vmpy4j1n54gkkg0l8bhw0xf4yby5kqzxnsv07cjc2w38snj5vy1";
   };
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "a7ff4a78529257a5412e78cafd6b3025523364c0ab628d579f2771dd66b254bc";
-  };
-
-  checkInputs = [ pytest ];
+  checkInputs = [ pytest responses ];
   propagatedBuildInputs = [ requests requests_oauthlib six ];
 
-  patchPhase = ''
-    echo > requirements.txt
-    sed -i "s/requests~=2.9.1/requests >=2.9.1/" setup.py
-    sed -i "s/requests_oauthlib~=0.6.1/requests_oauthlib >=0.6.1/" setup.py
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "requests_oauthlib >= 0.8.0, == 0.8.*" "requests_oauthlib>=0.8.0<2.0"
   '';
-
-  # ERROR: file not found: tests
-  doCheck = false; 
 
   checkPhase = ''
     py.test tests
   '';
 
+  meta = with stdenv.lib; {
+    description = "Python client library for Asana";
+    homepage = https://github.com/asana/python-asana;
+    license = licenses.mit;
+  };
 }

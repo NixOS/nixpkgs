@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
     sha256 = "05xympbns32aalgcfcpxwfd7bvg343f16xpg6jv5s335ski3cjy2";
   };
 
+  patches = [ ./makefile.patch ];
+
   buildInputs = [ mcpp bzip2 expat openssl db5 ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ darwin.cctools libiconv Security ];
 

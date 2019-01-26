@@ -1,18 +1,19 @@
-{ stdenv, fetchurl, qt5, poppler_qt5, zlib, pkgconfig}:
+{ stdenv, fetchFromGitHub, qt5, poppler, zlib, pkgconfig}:
 
 stdenv.mkDerivation rec {
   pname = "texstudio";
-  version = "2.12.6";
+  version = "2.12.14";
   name = "${pname}-${version}";
-  altname="Texstudio";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/texstudio/${name}.tar.gz";
-    sha256 = "18rxd7ra5k2f7s4c296b3v3pqhxjmfix9xpy9i1g4jm87ygqrbnd";
+  src = fetchFromGitHub {
+    owner = "${pname}-org";
+    repo = pname;
+    rev = version;
+    sha256 = "08vfhkgzhh1227wcvr5wwpnw0072c80nf2crhmxwh3jgjfgi538f";
   };
 
   nativeBuildInputs = [ qt5.qmake pkgconfig ];
-  buildInputs = [ qt5.qtbase qt5.qtscript qt5.qtsvg poppler_qt5 zlib ];
+  buildInputs = [ qt5.qtbase qt5.qtscript qt5.qtsvg poppler zlib ];
 
   qmakeFlags = [ "NO_APPDATA=True" ];
 

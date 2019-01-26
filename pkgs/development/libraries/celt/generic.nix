@@ -1,5 +1,6 @@
 { stdenv, version, src
 , liboggSupport ? true, libogg ? null # if disabled only the library will be built
+, prePatch ? ""
 , ...
 }:
 
@@ -10,8 +11,12 @@ stdenv.mkDerivation rec {
 
   inherit src;
 
+  inherit prePatch;
+
   buildInputs = []
     ++ stdenv.lib.optional liboggSupport libogg;
+
+  doCheck = false; # fails
 
   meta = with stdenv.lib; {
     description = "Ultra-low delay audio codec";

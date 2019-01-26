@@ -36,5 +36,6 @@ stdenv.mkDerivation {
 
     platforms = stdenv.lib.platforms.unix;
     maintainers = [ stdenv.lib.maintainers.the-kenny ];
+    license = stdenv.lib.licenses.asl20;
   };
 }

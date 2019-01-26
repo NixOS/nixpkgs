@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig, intltool, file, wrapGAppsHook
-, openssl, curl, libevent, inotify-tools, systemd, zlib
+{ stdenv, fetchurl, pkgconfig, intltool, file, wrapGAppsHook
+, openssl, curl, libevent, inotify-tools, systemd, zlib, hicolor-icon-theme
 , enableGTK3 ? false, gtk3
 , enableSystemd ? stdenv.isLinux
 , enableDaemon ? true
@@ -10,11 +10,11 @@ let inherit (stdenv.lib) optional optionals optionalString; in
 
 stdenv.mkDerivation rec {
   name = "transmission-" + optionalString enableGTK3 "gtk-" + version;
-  version = "2.93";
+  version = "2.94";
 
   src = fetchurl {
-    url = "https://github.com/transmission/transmission-releases/raw/master/transmission-2.93.tar.xz";
-    sha256 = "8815920e0a4499bcdadbbe89a4115092dab42ce5199f71ff9a926cfd12b9b90b";
+    url = "https://github.com/transmission/transmission-releases/raw/master/transmission-2.94.tar.xz";
+    sha256 = "0zbbj7rlm6m7vb64x68a64cwmijhsrwx9l63hbwqs7zr9742qi1m";
   };
 
   nativeBuildInputs = [ pkgconfig ]
@@ -22,7 +22,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ intltool file openssl curl libevent zlib ]
     ++ optionals enableGTK3 [ gtk3 ]
     ++ optionals enableSystemd [ systemd ]
-    ++ optionals stdenv.isLinux [ inotify-tools ];
+    ++ optionals stdenv.isLinux [ inotify-tools ]
+    ++ optionals enableGTK3 [ hicolor-icon-theme ];
 
   postPatch = ''
     substituteInPlace ./configure \
@@ -38,10 +39,6 @@ stdenv.mkDerivation rec {
     ]
     ++ optional enableSystemd "--with-systemd-daemon"
     ++ optional enableGTK3 "--with-gtk";
-
-  preFixup = optionalString enableGTK3 ''
-    rm "$out/share/icons/hicolor/icon-theme.cache"
-  '';
 
   NIX_LDFLAGS = optionalString stdenv.isDarwin "-framework CoreFoundation";
 

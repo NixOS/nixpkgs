@@ -1,22 +1,23 @@
-{ stdenv, fetchurl, pkgconfig, autoreconfHook, openssl, db48, boost
-, zlib, miniupnpc, qt4, utillinux, protobuf, qrencode, libevent
-, withGui }:
+{ stdenv, fetchurl, pkgconfig, autoreconfHook, hexdump, openssl, db48
+, boost, zlib, miniupnpc, qt4, utillinux, protobuf, qrencode, libevent
+, AppKit
+, withGui ? !stdenv.isDarwin
+}:
 
 with stdenv.lib;
 stdenv.mkDerivation rec{
   name = "bit1" + (toString (optional (!withGui) "d")) + "-" + version;
-  version = "1.14.5";
+  version = "1.15.1";
 
   src = fetchurl {
     url = "https://github.com/btc1/bitcoin/archive/v${version}.tar.gz";
-    sha256 = "1az6bbblh3adgcs16r9cjz8jacg6sbwfpg8zzfzkbp9h9j85ass5";
+    sha256 = "0v0g2wb4nsnhddxzb63vj2bc1mgyj05vqm5imicjfz8prvgc0si8";
   };
 
-  nativeBuildInputs = [ pkgconfig autoreconfHook ];
-  buildInputs = [ openssl db48 boost zlib
-                  miniupnpc protobuf libevent]
-                  ++ optionals stdenv.isLinux [ utillinux ]
-                  ++ optionals withGui [ qt4 qrencode ];
+  nativeBuildInputs = [ pkgconfig autoreconfHook hexdump ];
+  buildInputs = [ openssl db48 boost zlib miniupnpc protobuf libevent ]
+    ++ optionals withGui [ qt4 qrencode ]
+    ++ optional stdenv.isDarwin AppKit;
 
   configureFlags = [ "--with-boost-libdir=${boost.out}/lib" ]
                      ++ optionals withGui [ "--with-gui=qt4" ];

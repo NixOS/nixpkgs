@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ocaml, ncurses, remind, camlp4 }:
+{ stdenv, fetchurl, ocamlPackages, ncurses, remind }:
 
 stdenv.mkDerivation rec {
   version = "1.4.6";
@@ -9,7 +9,13 @@ stdenv.mkDerivation rec {
     sha256 = "0zlrg602q781q8dij62lwdprpfliyy9j1rqfqcz8p2wgndpivddj";
   };
 
-  buildInputs = [ ocaml ncurses remind camlp4 ];
+  NIX_CFLAGS_COMPILE = [ "-DNCURSES_INTERNALS=1" ];
+
+  preConfigure = ''
+    substituteInPlace curses/curses.ml --replace 'pp gcc' "pp $CC"
+  '';
+
+  buildInputs = [ ocamlPackages.ocaml ncurses remind ocamlPackages.camlp4 ];
 
   preferLocalBuild = true;
 

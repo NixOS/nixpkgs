@@ -1,5 +1,5 @@
 { stdenv, fetchurl, imake, zlib, jdk, libX11, libXt, libXmu
-, libXaw, libXext, libXpm, openjpeg, openssl, tcl, tk, perl }:
+, libXaw, libXext, libXpm, openjpeg, openssl, tk, perl }:
 
 stdenv.mkDerivation rec {
   name = "ssvnc-${version}";
@@ -12,7 +12,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ imake zlib jdk libX11 libXt libXmu libXaw libXext libXpm openjpeg openssl ];
 
-  configurePhase = "makeFlags=PREFIX=$out";
+  dontUseImakeConfigure = true;
+
+  makeFlags = "PREFIX=$(out)";
 
   hardeningDisable = [ "format" ];
 

@@ -14,15 +14,11 @@ stdenv.mkDerivation rec {
 
   patches = [ ./fix-ppl-version.patch ];
 
-  configureFlags = "--with-ppl=${ppl}";
+  configureFlags = [ "--with-ppl=${ppl}" ];
 
   preAutoreconf = ''
     touch NEWS ChangeLog AUTHORS
   '';
-
-  crossAttrs = {
-    configureFlags = "--with-ppl=${ppl.crossDrv}";
-  };
 
   doCheck = true;
 
@@ -69,6 +65,6 @@ stdenv.mkDerivation rec {
        make[3]: *** [Box.lo] Error 1
 
     */
-    platforms = with stdenv.lib.platforms; allBut cygwin;
+    platforms = stdenv.lib.platforms.unix; # Once had cygwin problems
   };
 }

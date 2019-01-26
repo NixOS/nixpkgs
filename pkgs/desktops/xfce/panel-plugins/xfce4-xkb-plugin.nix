@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, intltool, libxfce4util, libxfce4ui, xfce4panel
+{ stdenv, fetchurl, pkgconfig, intltool, libxfce4util, libxfce4ui, xfce4-panel
 , garcon, gtk, libxklavier, librsvg, libwnck
 }:
 
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ intltool libxfce4util libxfce4ui xfce4panel garcon
+  buildInputs = [ intltool libxfce4util libxfce4ui xfce4-panel garcon
     gtk libxklavier librsvg libwnck  ];
 
   meta = {

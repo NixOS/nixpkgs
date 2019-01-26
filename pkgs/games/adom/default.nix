@@ -1,13 +1,12 @@
-{ stdenv, fetchurl, patchelf, zlib, libmad, libpng12, libcaca, mesa, alsaLib, libpulseaudio
+{ stdenv, fetchurl, patchelf, zlib, libmad, libpng12, libcaca, libGLU_combined, alsaLib, libpulseaudio
 , xorg }:
 
-assert stdenv.system == "x86_64-linux";
 let
 
   inherit (xorg) libXext libX11;
 
   lpath = "${stdenv.cc.cc.lib}/lib64:" + stdenv.lib.makeLibraryPath [
-      zlib libmad libpng12 libcaca libXext libX11 mesa alsaLib libpulseaudio];
+      zlib libmad libpng12 libcaca libXext libX11 libGLU_combined alsaLib libpulseaudio];
 
 in
 stdenv.mkDerivation rec {
@@ -58,5 +57,3 @@ stdenv.mkDerivation rec {
     platforms = ["x86_64-linux"];
   };
 }
-
-

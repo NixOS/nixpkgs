@@ -3,7 +3,7 @@
 
 buildGoPackage rec {
   name = "coyim-${version}";
-  version = "v0.3.7_1";
+  version = "0.3.7_1";
 
   goPackagePath = "github.com/twstrike/coyim";
 

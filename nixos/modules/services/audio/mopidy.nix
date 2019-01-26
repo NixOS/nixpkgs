@@ -93,7 +93,7 @@ in {
       };
     };
 
-    users.extraUsers.mopidy = {
+    users.users.mopidy = {
       inherit uid;
       group = "mopidy";
       extraGroups = [ "audio" ];
@@ -101,7 +101,7 @@ in {
       home = "${cfg.dataDir}";
     };
 
-    users.extraGroups.mopidy.gid = gid;
+    users.groups.mopidy.gid = gid;
 
   };
 

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libvdpau, mesa, libva, pkgconfig }:
+{ stdenv, fetchurl, libvdpau, libGLU_combined, libva, pkgconfig }:
 let
   libvdpau08patch = (fetchurl { url = "http://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/x11-libs/libva-vdpau-driver/files/libva-vdpau-driver-0.7.4-libvdpau-0.8.patch?revision=1.1";
                                 name = "libva-vdpau-driver-0.7.4-libvdpau-0.8.patch";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   name = "libva-vdpau-driver-0.7.4";
   
   src = fetchurl {
-    url = "http://www.freedesktop.org/software/vaapi/releases/libva-vdpau-driver/${name}.tar.bz2";
+    url = "https://www.freedesktop.org/software/vaapi/releases/libva-vdpau-driver/${name}.tar.bz2";
     sha256 = "1fcvgshzyc50yb8qqm6v6wn23ghimay23ci0p8sm8gxcy211jp0m";
   };
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
                         }) ];
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ libvdpau mesa libva ];
+  buildInputs = [ libvdpau libGLU_combined libva ];
 
   preConfigure = ''
     patch -p0 < ${libvdpau08patch}  # use -p0 instead of -p1

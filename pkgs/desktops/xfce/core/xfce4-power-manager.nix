@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, pkgconfig, intltool, glib, gtk, dbus-glib, upower, xfconf
-, libxfce4ui, libxfce4util, libnotify, xfce4panel, hicolor-icon-theme
+, libxfce4ui, libxfce4util, libnotify, xfce4-panel, hicolor-icon-theme
 , withGtk3 ? false, gtk3, libxfce4ui_gtk3, xfce4panel_gtk3 }:
 let
   p_name  = "xfce4-power-manager";
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     ] ++
     (if withGtk3
     then [ gtk3 libxfce4ui_gtk3 xfce4panel_gtk3 ]
-    else [ gtk  libxfce4ui      xfce4panel      ]);
+    else [ gtk  libxfce4ui      xfce4-panel      ]);
 
   postPatch = lib.optionalString withGtk3 ''
     substituteInPlace configure --replace gio-2.0 gio-unix-2.0

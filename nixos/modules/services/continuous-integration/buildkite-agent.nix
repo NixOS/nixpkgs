@@ -17,8 +17,8 @@ let
 
   hooksDir = let
     mkHookEntry = name: value: ''
-      cat > $out/${name} <<EOF
-      #! ${pkgs.stdenv.shell}
+      cat > $out/${name} <<'EOF'
+      #! ${pkgs.runtimeShell}
       set -e
       ${value}
       EOF
@@ -185,7 +185,7 @@ in
   };
 
   config = mkIf config.services.buildkite-agent.enable {
-    users.extraUsers.buildkite-agent =
+    users.users.buildkite-agent =
       { name = "buildkite-agent";
         home = cfg.dataDir;
         createHome = true;

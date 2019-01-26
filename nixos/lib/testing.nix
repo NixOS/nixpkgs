@@ -1,9 +1,20 @@
-{ system, minimal ? false, config ? {} }:
+{ system
+, pkgs ? import ../.. { inherit system config; }
+  # Use a minimal kernel?
+, minimal ? false
+  # Ignored
+, config ? null
+  # Modules to add to each VM
+, extraConfigurations ? [] }:
 
-with import ./build-vms.nix { inherit system minimal config; };
+with import ./build-vms.nix { inherit system pkgs minimal extraConfigurations; };
 with pkgs;
 
-rec {
+let
+  jquery-ui = callPackage ./testing/jquery-ui.nix { };
+  jquery = callPackage ./testing/jquery.nix { };
+
+in rec {
 
   inherit pkgs;
 
@@ -23,14 +34,14 @@ rec {
         cp ${./test-driver/test-driver.pl} $out/bin/nixos-test-driver
         chmod u+x $out/bin/nixos-test-driver
 
-        libDir=$out/lib/perl5/site_perl
+        libDir=$out/${perl.libPrefix}
         mkdir -p $libDir
         cp ${./test-driver/Machine.pm} $libDir/Machine.pm
         cp ${./test-driver/Logger.pm} $libDir/Logger.pm
 
         wrapProgram $out/bin/nixos-test-driver \
           --prefix PATH : "${lib.makeBinPath [ qemu_test vde2 netpbm coreutils ]}" \
-          --prefix PERL5LIB : "${with perlPackages; lib.makePerlPath [ TermReadLineGnu XMLWriter IOTty FileSlurp ]}:$out/lib/perl5/site_perl"
+          --prefix PERL5LIB : "${with perlPackages; makePerlPath [ TermReadLineGnu XMLWriter IOTty FileSlurp ]}:$out/${perl.libPrefix}"
       '';
   };
 
@@ -65,7 +76,7 @@ rec {
             mkdir -p $out/coverage-data
             mv $i $out/coverage-data/$(dirname $(dirname $i))
           done
-        ''; # */
+        '';
     };
 
 
@@ -105,7 +116,9 @@ rec {
 
       vms = map (m: m.config.system.build.vm) (lib.attrValues nodes);
 
-      ocrProg = tesseract_4.override { enableLanguages = [ "eng" ]; };
+      ocrProg = tesseract4.override { enableLanguages = [ "eng" ]; };
+
+      imagemagick_tiff = imagemagick_light.override { inherit libtiff; };
 
       # Generate onvenience wrappers for running the test driver
       # interactively with the specified network, and for starting the
@@ -124,7 +137,7 @@ rec {
           wrapProgram $out/bin/nixos-test-driver \
             --add-flags "''${vms[*]}" \
             ${lib.optionalString enableOCR
-              "--prefix PATH : '${ocrProg}/bin:${imagemagick}/bin'"} \
+              "--prefix PATH : '${ocrProg}/bin:${imagemagick_tiff}/bin'"} \
             --run "export testScript=\"\$(cat $out/test-script)\"" \
             --set VLANS '${toString vlans}'
           ln -s ${testDriver}/bin/nixos-test-driver $out/bin/nixos-run-vms
@@ -143,9 +156,23 @@ rec {
       test = passMeta (runTests driver);
       report = passMeta (releaseTools.gcovReport { coverageRuns = [ test ]; });
 
-    in (if makeCoverageReport then report else test) // { 
-      inherit nodes driver test; 
-    };
+      nodeNames = builtins.attrNames nodes;
+      invalidNodeNames = lib.filter
+        (node: builtins.match "^[A-z_][A-z0-9_]+$" node == null) nodeNames;
+
+    in
+      if lib.length invalidNodeNames > 0 then
+        throw ''
+          Cannot create machines out of (${lib.concatStringsSep ", " invalidNodeNames})!
+          All machines are referenced as perl variables in the testing framework which will break the
+          script when special characters are used.
+
+          Please stick to alphanumeric chars and underscores as separation.
+        ''
+      else
+        (if makeCoverageReport then report else test) // {
+          inherit nodes driver test;
+        };
 
   runInMachine =
     { drv
@@ -216,7 +243,7 @@ rec {
   runInMachineWithX = { require ? [], ... } @ args:
     let
       client =
-        { config, pkgs, ... }:
+        { ... }:
         {
           inherit require;
           virtualisation.memorySize = 1024;

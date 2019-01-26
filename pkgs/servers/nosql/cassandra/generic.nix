@@ -10,11 +10,13 @@ let
     gawk
     which
     jre
-  ] ++ stdenv.lib.optional stdenv.isLinux procps);
+    procps
+  ]);
 in
 
 stdenv.mkDerivation rec {
   name = "cassandra-${version}";
+  inherit version;
 
   src = fetchurl {
     inherit sha256;

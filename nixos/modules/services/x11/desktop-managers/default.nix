@@ -87,22 +87,22 @@ in
 
       default = mkOption {
         type = types.str;
-        default = "none";
-        example = "plasma5";
+        default = "";
+        example = "none";
         description = "Default desktop manager loaded if none have been chosen.";
         apply = defaultDM:
-          if defaultDM == "none" && cfg.session.list != [] then
+          if defaultDM == "" && cfg.session.list != [] then
             (head cfg.session.list).name
           else if any (w: w.name == defaultDM) cfg.session.list then
             defaultDM
           else
-            throw ''
-              Default desktop manager (${defaultDM}) not found.
-              Probably you want to change
-                services.xserver.desktopManager.default = "${defaultDM}";
-              to one of
+            builtins.trace ''
+              Default desktop manager (${defaultDM}) not found at evaluation time.
+              These are the known valid session names:
                 ${concatMapStringsSep "\n  " (w: "services.xserver.desktopManager.default = \"${w.name}\";") cfg.session.list}
-            '';
+              It's also possible the default can be found in one of these packages:
+                ${concatMapStringsSep "\n  " (p: p.name) config.services.xserver.displayManager.extraSessionFilePackages}
+            '' defaultDM;
       };
 
     };

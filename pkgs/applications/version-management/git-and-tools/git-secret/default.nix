@@ -1,7 +1,7 @@
-{ stdenv, lib, fetchFromGitHub, makeWrapper, git, gnupg }:
+{ stdenv, lib, fetchFromGitHub, makeWrapper, git, gnupg, gawk }:
 
 let
-  version = "0.2.2";
+  version = "0.2.5";
   repo = "git-secret";
 
 in stdenv.mkDerivation {
@@ -11,7 +11,7 @@ in stdenv.mkDerivation {
     inherit repo;
     owner = "sobolevn";
     rev = "v${version}";
-    sha256 = "0vn9jibp97z7kc828wka1k0d7a9wx4skd6cnqy60kagfc00l0bzh";
+    sha256 = "1caxdx1ps662vfa79f7l1bwgwgwf974ahzii0hzaqfnkxy45i520";
   };
 
   buildInputs = [ makeWrapper ];
@@ -20,7 +20,7 @@ in stdenv.mkDerivation {
     install -D git-secret $out/bin/git-secret
 
     wrapProgram $out/bin/git-secret \
-      --prefix PATH : "${lib.makeBinPath [ git gnupg ]}"
+      --prefix PATH : "${lib.makeBinPath [ git gnupg gawk ]}"
 
     mkdir $out/share
     cp -r man $out/share

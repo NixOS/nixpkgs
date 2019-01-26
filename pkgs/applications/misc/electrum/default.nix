@@ -1,24 +1,32 @@
-{ stdenv, fetchurl, python3, python3Packages, zbar, fetchpatch }:
+{ stdenv, fetchFromGitHub, python3, python3Packages, zbar, secp256k1 }:
+
+let
+  qdarkstyle = python3Packages.buildPythonPackage rec {
+    pname = "QDarkStyle";
+    version = "2.5.4";
+    src = python3Packages.fetchPypi {
+      inherit pname version;
+      sha256 = "1w715m1i5pycfqcpkrggpn0rs9cakx6cm5v8rggcxnf4p0i0kdiy";
+    };
+    doCheck = false; # no tests
+  };
+in
 
 python3Packages.buildPythonApplication rec {
-  name = "electrum-${version}";
-  version = "3.0.6";
+  pname = "electrum";
+  version = "3.3.2";
 
-  src = fetchurl {
-    url = "https://download.electrum.org/${version}/Electrum-${version}.tar.gz";
-    sha256 = "01dnqiazjl2avrmdiq68absjvcfv24446y759z2s9dwk8ywzjkrg";
+  src = fetchFromGitHub {
+    owner = "spesmilo";
+    repo = "electrum";
+    rev = version;
+    sha256 = "1jsn02azdydpq4plr2552s7ijyqgw6zqm2zx8skwsalgbwmhx12i";
   };
 
-  patches = [
-    # Trezor compat patch should be included in electrum > 3.0.6
-    (fetchpatch {
-      name = "trezor-compat.patch";
-      url = "https://patch-diff.githubusercontent.com/raw/spesmilo/electrum/pull/3621.patch";
-      sha256 = "1bk1r2ikhnvw1fpfh71y4za2lnskcbkv50k8ynjxi5slx2wrfpl0";
-    })
-  ];
-
   propagatedBuildInputs = with python3Packages; [
+    aiorpcx
+    aiohttp
+    aiohttp-socks
     dnspython
     ecdsa
     jsonrpclib-pelix
@@ -26,28 +34,30 @@ python3Packages.buildPythonApplication rec {
     pbkdf2
     protobuf
     pyaes
-    pycrypto
+    pycryptodomex
     pyqt5
     pysocks
+    qdarkstyle
     qrcode
     requests
-    tlslite
+    tlslite-ng
 
     # plugins
     keepkey
     trezor
+    btchip
 
     # TODO plugins
     # amodem
-    # btchip
   ];
 
   preBuild = ''
     sed -i 's,usr_share = .*,usr_share = "'$out'/share",g' setup.py
-    pyrcc5 icons.qrc -o gui/qt/icons_rc.py
+    pyrcc5 icons.qrc -o electrum/gui/qt/icons_rc.py
     # Recording the creation timestamps introduces indeterminism to the build
-    sed -i '/Created: .*/d' gui/qt/icons_rc.py
-    sed -i "s|name = 'libzbar.*'|name='${zbar}/lib/libzbar.so'|" lib/qrscanner.py
+    sed -i '/Created: .*/d' electrum/gui/qt/icons_rc.py
+    sed -i "s|name = 'libzbar.*'|name='${zbar}/lib/libzbar.so'|" electrum/qrscanner.py
+    substituteInPlace ./electrum/ecc_fast.py --replace libsecp256k1.so.0 ${secp256k1}/lib/libsecp256k1.so.0
   '';
 
   postInstall = ''
@@ -60,10 +70,10 @@ python3Packages.buildPythonApplication rec {
       --replace "Exec=electrum %u" "Exec=$out/bin/electrum %u"
   '';
 
-  doCheck = false;
+  checkInputs = with python3Packages; [ pytest ];
 
-  doInstallCheck = true;
-  installCheckPhase = ''
+  checkPhase = ''
+    py.test electrum/tests
     $out/bin/electrum help >/dev/null
   '';
 

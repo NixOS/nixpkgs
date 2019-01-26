@@ -2,6 +2,8 @@
 # We need the same Python as is used to build libxml2Python
 
 stdenv.mkDerivation rec {
+  # 2.0.3+ breaks the build of gnome3.gnome-desktop
+  # https://github.com/itstool/itstool/issues/17
   name = "itstool-2.0.2";
 
   src = fetchurl {

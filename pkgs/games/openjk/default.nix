@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, makeDesktopItem, makeWrapper, cmake, libjpeg, zlib, libpng, mesa_noglu, SDL2 }:
+{ stdenv, fetchFromGitHub, makeDesktopItem, makeWrapper, cmake, libjpeg, zlib, libpng, libGL, SDL2 }:
 
 let
   jamp = makeDesktopItem rec {
@@ -20,20 +20,20 @@ let
     categories = "Game;";
   };
 in stdenv.mkDerivation rec {
-  name = "OpenJK-2017-08-11";
+  name = "OpenJK-2018-09-17";
 
   src = fetchFromGitHub {
     owner = "JACoders";
     repo = "OpenJK";
-    rev = "a0828f06e0181c62e110f2f78d30acb5036b4113";
-    sha256 = "1wbb643z2nyhyirzzy3rz03wjqglwmsgnj7w5cl8167f9f9j9w0m";
+    rev = "cc4094c8fa989663eb8087b33d97bb2749295b9f";
+    sha256 = "1fzijlf4izpm6n92cwv951c10nb18pg5zhc5xx7pw3i4sy8h9nyk";
   };
 
   dontAddPrefix = true;
   enableParallelBuilding = true;
 
   nativeBuildInputs = [ makeWrapper cmake ];
-  buildInputs = [ libjpeg zlib libpng mesa_noglu SDL2 ];
+  buildInputs = [ libjpeg zlib libpng libGL SDL2 ];
 
   # move from $out/JediAcademy to $out/opt/JediAcademy
   preConfigure = ''

@@ -1,35 +1,36 @@
-{ stdenv, lib, makeWrapper, fetchgit, pkgconfig, ninja, ocaml, findlib, mupdf
-, lablgl, gtk3, openjpeg, jbig2dec, mujs, xsel, openssl, freetype, ncurses }:
+{ stdenv, lib, substituteAll, makeWrapper, fetchgit, ocaml, mupdf, libX11,
+libGLU_combined, freetype, xclip }:
 
-assert lib.versionAtLeast (lib.getVersion ocaml) "4.02";
+assert lib.versionAtLeast (lib.getVersion ocaml) "4.07";
 
-let ocamlVersion = (builtins.parseDrvName (ocaml.name)).version;
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   name = "llpp-${version}";
-  version = "26b";
+  version = "30";
 
   src = fetchgit {
     url = "git://repo.or.cz/llpp.git";
     rev = "v${version}";
-    sha256 = "1w8g1fp1c20sl34cx20plhnbghbsx2fwgp4vyhd1x0za29lw62nj";
+    sha256 = "0iilpzf12hs0zky58j55l4y5dvzv7fc53nsrg324n9vka92mppvd";
     fetchSubmodules = false;
   };
 
-  nativeBuildInputs = [ pkgconfig makeWrapper ninja ];
-  buildInputs = [ ocaml findlib mupdf gtk3 jbig2dec openjpeg mujs openssl freetype ncurses ];
+  patches = (substituteAll {
+    inherit version;
+    src = ./fix-build-bash.patch;
+  });
+
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ ocaml mupdf libX11 libGLU_combined freetype ];
 
   dontStrip = true;
 
   configurePhase = ''
-    sed -i -e 's+fz_set_use_document_css (state.ctx, usedoccss);+/* fz_set_use_document_css (state.ctx, usedoccss); */+' link.c
-    sed -i -e 's+ocamlc --version+ocamlc -version+' build.sh
-    sed -i -e 's+-I \$srcdir/mupdf/include -I \$srcdir/mupdf/thirdparty/freetype/include+-I ${freetype.dev}/include+' build.sh
-    sed -i -e 's+-lmupdf +-lfreetype -lz -lharfbuzz -ljbig2dec -lopenjp2 -ljpeg -lmupdf +' build.sh
-    sed -i -e 's+-L\$srcdir/mupdf/build/native ++' build.sh
+    mkdir -p build/mupdf/thirdparty
+    ln -s ${freetype.dev} build/mupdf/thirdparty/freetype
   '';
 
   buildPhase = ''
-    sh ./build.sh build
+    bash ./build.bash build
   '';
 
   installPhase = ''
@@ -37,14 +38,14 @@ in stdenv.mkDerivation rec {
     install build/llpp $out/bin
     wrapProgram $out/bin/llpp \
         --prefix CAML_LD_LIBRARY_PATH ":" "$out/lib" \
-        --prefix PATH ":" "${xsel}/bin"
+        --prefix PATH ":" "${xclip}/bin"
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://repo.or.cz/w/llpp.git;
+    homepage = https://repo.or.cz/w/llpp.git;
     description = "A MuPDF based PDF pager written in OCaml";
     platforms = platforms.linux;
-    maintainers = with maintainers; [ pSub ];
+    maintainers = with maintainers; [ pSub enzime ];
     license = licenses.gpl3;
   };
 }

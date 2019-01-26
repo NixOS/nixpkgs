@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, gcc, zlib, bzip2, lzma }:
+{ stdenv, fetchFromGitHub, zlib, bzip2, lzma }:
 
 stdenv.mkDerivation rec {
   name    = "freebayes-${version}";

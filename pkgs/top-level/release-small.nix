@@ -18,10 +18,9 @@ with import ./release-lib.nix { inherit supportedSystems; };
 
   aspell = all;
   at = linux;
-  atlas = linux;
   autoconf = all;
   automake = all;
-  avahi = allBut cygwin;  # Cygwin builds fail
+  avahi = unix; # Cygwin builds fail
   bash = all;
   bashInteractive = all;
   bc = all;
@@ -48,13 +47,12 @@ with import ./release-lib.nix { inherit supportedSystems; };
   gcj = linux;
   glibc = linux;
   glibcLocales = linux;
-  gnat = linux;
   gnugrep = all;
   gnum4 = all;
   gnumake = all;
   gnupatch = all;
   gnupg = linux;
-  gnuplot = allBut cygwin;
+  gnuplot = unix; # Cygwin builds fail
   gnused = all;
   gnutar = all;
   gnutls = linux;
@@ -110,7 +108,8 @@ with import ./release-lib.nix { inherit supportedSystems; };
   mpg321 = linux;
   mutt = linux;
   mysql = linux;
-  netcat = all;
+  # netcat broken on darwin
+  netcat = linux;
   nfs-utils = linux;
   nix = all;
   nixUnstable = all;
@@ -128,7 +127,7 @@ with import ./release-lib.nix { inherit supportedSystems; };
   pkgconfig = all;
   pmccabe = linux;
   procps = linux;
-  python = allBut cygwin;
+  python = unix; # Cygwin builds fail
   readline = all;
   rlwrap = all;
   rpm = linux;
@@ -138,9 +137,9 @@ with import ./release-lib.nix { inherit supportedSystems; };
   scrot = linux;
   sdparm = linux;
   sharutils = all;
-  sloccount = allBut cygwin;
+  sloccount = unix; # Cygwin builds fail
   smartmontools = all;
-  sqlite = allBut cygwin;
+  sqlite = unix; # Cygwin builds fail
   squid = linux;
   ssmtp = linux;
   stdenv = all;

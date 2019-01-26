@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, intltool, pkgconfig, fetchpatch, jansson
+{ stdenv, fetchurl, intltool, pkgconfig, jansson
 # deadbeef can use either gtk2 or gtk3
 , gtk2Support ? false, gtk2 ? null
 , gtk3Support ? true, gtk3 ? null, gsettings-desktop-schemas ? null, wrapGAppsHook ? null
@@ -93,7 +93,7 @@ stdenv.mkDerivation rec {
     description = "Ultimate Music Player for GNU/Linux";
     homepage = http://deadbeef.sourceforge.net/;
     license = licenses.gpl2;
-    platforms = platforms.linux;
+    platforms = [ "x86_64-linux" "i686-linux" ];
     maintainers = [ maintainers.abbradar ];
     repositories.git = "https://github.com/Alexey-Yakovenko/deadbeef";
   };

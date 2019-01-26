@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, libX11, imlib2
+{ stdenv, fetchFromGitHub, libX11, imlib2
 , enableXinerama ? true, libXinerama ? null
 }:
 

@@ -1,12 +1,13 @@
-{ buildPackages, runCommand, nettools, bc, bison, flex, perl, gmp, libmpc, mpfr, openssl
+{ buildPackages
 , ncurses
-, libelf
-, utillinux
-, writeTextFile, ubootTools
 , callPackage
-}:
-
-{ stdenv, buildPackages, perl, buildLinux
+, perl
+, bison ? null
+, flex ? null
+, gmp ? null
+, libmpc ? null
+, mpfr ? null
+, stdenv
 
 , # The kernel source tarball.
   src
@@ -14,8 +15,14 @@
 , # The kernel version.
   version
 
-, # Overrides to the kernel config.
+, # Allows overriding the default defconfig
+  defconfig ? null
+
+, # Legacy overrides to the intermediate kernel config, as string
   extraConfig ? ""
+
+, # kernel intermediate config overrides, as a set
+ structuredExtraConfig ? {}
 
 , # The version number used for the module directory
   modDirVersion ? version
@@ -31,12 +38,18 @@
   # symbolic name and `patch' is the actual patch.  The patch may
   # optionally be compressed with gzip or bzip2.
   kernelPatches ? []
-, ignoreConfigErrors ? hostPlatform.platform.name != "pc" ||
-                       hostPlatform != stdenv.buildPlatform
+, ignoreConfigErrors ? stdenv.hostPlatform.platform.name != "pc" ||
+                       stdenv.hostPlatform != stdenv.buildPlatform
 , extraMeta ? {}
-, hostPlatform
+
+# easy overrides to stdenv.hostPlatform.platform members
+, autoModules ? stdenv.hostPlatform.platform.kernelAutoModules
+, preferBuiltin ? stdenv.hostPlatform.platform.kernelPreferBuiltin or false
+, kernelArch ? stdenv.hostPlatform.platform.kernelArch
+
+, mkValueOverride ? null
 , ...
-} @ args:
+}:
 
 assert stdenv.isLinux;
 
@@ -50,12 +63,16 @@ let
     efiBootStub = true;
     needsCifsUtils = true;
     netfilterRPFilter = true;
+    grsecurity = false;
+    xen_dom0 = false;
+    ia32Emulation = true;
   } // features) kernelPatches;
 
-  config = import ./common-config.nix {
-    inherit stdenv version ;
+  intermediateNixConfig = import ./common-config.nix {
+    inherit stdenv version structuredExtraConfig mkValueOverride;
+
     # append extraConfig for backwards compatibility but also means the user can't override the kernelExtraConfig part
-    extraConfig = extraConfig + lib.optionalString (hostPlatform.platform ? kernelExtraConfig) hostPlatform.platform.kernelExtraConfig;
+    extraConfig = extraConfig + lib.optionalString (stdenv.hostPlatform.platform ? kernelExtraConfig) stdenv.hostPlatform.platform.kernelExtraConfig;
 
     features = kernelFeatures; # Ensure we know of all extra patches, etc.
   };
@@ -67,25 +84,23 @@ let
     in lib.concatStringsSep "\n" ([baseConfig] ++ configFromPatches);
 
   configfile = stdenv.mkDerivation {
-    inherit ignoreConfigErrors;
+    inherit ignoreConfigErrors autoModules preferBuiltin kernelArch;
     name = "linux-config-${version}";
 
     generateConfig = ./generate-config.pl;
 
-    kernelConfig = kernelConfigFun config;
+    kernelConfig = kernelConfigFun intermediateNixConfig;
+    passAsFile = [ "kernelConfig" ];
 
     depsBuildBuild = [ buildPackages.stdenv.cc ];
-    nativeBuildInputs = [ perl ]
+    nativeBuildInputs = [ perl gmp libmpc mpfr ]
       ++ lib.optionals (stdenv.lib.versionAtLeast version "4.16") [ bison flex ];
 
-    platformName = hostPlatform.platform.name;
+    platformName = stdenv.hostPlatform.platform.name;
     # e.g. "defconfig"
-    kernelBaseConfig = hostPlatform.platform.kernelBaseConfig;
+    kernelBaseConfig = if defconfig != null then defconfig else stdenv.hostPlatform.platform.kernelBaseConfig;
     # e.g. "bzImage"
-    kernelTarget = hostPlatform.platform.kernelTarget;
-    autoModules = hostPlatform.platform.kernelAutoModules;
-    preferBuiltin = hostPlatform.platform.kernelPreferBuiltin or false;
-    arch = hostPlatform.platform.kernelArch;
+    kernelTarget = stdenv.hostPlatform.platform.kernelTarget;
 
     prePatch = kernel.prePatch + ''
       # Patch kconfig to print "###" after every question so that
@@ -93,18 +108,23 @@ let
       sed -e '/fflush(stdout);/i\printf("###");' -i scripts/kconfig/conf.c
     '';
 
-    inherit (kernel) src patches preUnpack;
+    preUnpack = kernel.preUnpack or "";
+
+    inherit (kernel) src patches;
 
     buildPhase = ''
       export buildRoot="''${buildRoot:-build}"
 
       # Get a basic config file for later refinement with $generateConfig.
-      make HOSTCC=${buildPackages.stdenv.cc.targetPrefix}gcc -C . O="$buildRoot" $kernelBaseConfig ARCH=$arch
+      make -C .  O="$buildRoot" $kernelBaseConfig \
+          ARCH=$kernelArch \
+          HOSTCC=${buildPackages.stdenv.cc.targetPrefix}gcc \
+          HOSTCXX=${buildPackages.stdenv.cc.targetPrefix}g++
 
       # Create the config file.
       echo "generating kernel configuration..."
-      echo "$kernelConfig" > "$buildRoot/kernel-config"
-      DEBUG=1 ARCH=$arch KERNEL_CONFIG="$buildRoot/kernel-config" AUTO_MODULES=$autoModules \
+      ln -s "$kernelConfigPath" "$buildRoot/kernel-config"
+      DEBUG=1 ARCH=$kernelArch KERNEL_CONFIG="$buildRoot/kernel-config" AUTO_MODULES=$autoModules \
            PREFER_BUILTIN=$preferBuiltin BUILD_ROOT="$buildRoot" SRC=. perl -w $generateConfig
     '';
 
@@ -114,7 +134,7 @@ let
   };
 
   kernel = (callPackage ./manual-config.nix {}) {
-    inherit version modDirVersion src kernelPatches stdenv extraMeta configfile hostPlatform;
+    inherit version modDirVersion src kernelPatches stdenv extraMeta configfile;
 
     config = { CONFIG_MODULES = "y"; CONFIG_FW_LOADER = "m"; };
   };

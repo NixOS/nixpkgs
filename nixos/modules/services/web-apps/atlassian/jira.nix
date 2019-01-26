@@ -141,12 +141,12 @@ in
   };
 
   config = mkIf cfg.enable {
-    users.extraUsers."${cfg.user}" = {
+    users.users."${cfg.user}" = {
       isSystemUser = true;
       group = cfg.group;
     };
 
-    users.extraGroups."${cfg.group}" = {};
+    users.groups."${cfg.group}" = {};
 
     systemd.services.atlassian-jira = {
       description = "Atlassian JIRA";
@@ -155,7 +155,7 @@ in
       requires = [ "postgresql.service" ];
       after = [ "postgresql.service" ];
 
-      path = [ cfg.jrePackage ];
+      path = [ cfg.jrePackage pkgs.bash ];
 
       environment = {
         JIRA_USER = cfg.user;
@@ -171,7 +171,7 @@ in
         ln -sf ${cfg.home}/{logs,work,temp,server.xml} /run/atlassian-jira
         ln -sf ${cfg.home} /run/atlassian-jira/home
 
-        chown -R ${cfg.user} ${cfg.home}
+        chown ${cfg.user} ${cfg.home}
 
         sed -e 's,port="8080",port="${toString cfg.listenPort}" address="${cfg.listenAddress}",' \
         '' + (lib.optionalString cfg.proxy.enable ''

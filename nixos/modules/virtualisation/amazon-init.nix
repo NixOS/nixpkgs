@@ -2,7 +2,7 @@
 
 let
   script = ''
-    #!${pkgs.stdenv.shell} -eu
+    #!${pkgs.runtimeShell} -eu
 
     echo "attempting to fetch configuration from EC2 user data..."
 

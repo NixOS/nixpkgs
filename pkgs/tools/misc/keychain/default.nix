@@ -1,6 +1,5 @@
 { stdenv, fetchFromGitHub, makeWrapper, coreutils, openssh, gnupg
-, perl, procps, gnugrep, gawk, findutils, gnused
-, withProcps ? stdenv.isLinux }:
+, perl, procps, gnugrep, gawk, findutils, gnused }:
 
 stdenv.mkDerivation rec {
   name = "keychain-${version}";
@@ -27,7 +26,7 @@ stdenv.mkDerivation rec {
       --prefix PATH ":" "${gnused}/bin" \
       --prefix PATH ":" "${findutils}/bin" \
       --prefix PATH ":" "${gawk}/bin" \
-      ${if withProcps then ("--prefix PATH \":\" ${procps}/bin") else ""}
+      --prefix PATH ":" "${procps}/bin"
   '';
 
   meta = {

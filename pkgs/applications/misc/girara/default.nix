@@ -1,35 +1,18 @@
-{ stdenv, fetchurl, pkgconfig, gtk, gettext, ncurses, libiconv, libintlOrEmpty
-, withBuildColors ? true
+{ stdenv, fetchurl, meson, ninja, pkgconfig, glib, gtk, gettext, libiconv, libintl
 }:
-
-assert withBuildColors -> ncurses != null;
 
 stdenv.mkDerivation rec {
   name = "girara-${version}";
-  version = "0.2.8";
+  version = "0.3.2";
 
   src = fetchurl {
-    url    = "http://pwmt.org/projects/girara/download/${name}.tar.gz";
-    sha256 = "18wss3sak3djip090v2vdbvq1mvkwcspfswc87zbvv3magihan98";
+    url = "https://pwmt.org/projects/girara/download/${name}.tar.xz";
+    sha256 = "1kc6n1mxjxa7wvwnqy94qfg8l9jvx9qrvrr2kc7m4g0z20x3a00p";
   };
 
-  preConfigure = ''
-    substituteInPlace colors.mk \
-      --replace 'ifdef TPUT_AVAILABLE' 'ifneq ($(TPUT_AVAILABLE), 0)'
-  '';
-
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ gtk gettext libintlOrEmpty ]
-    ++ stdenv.lib.optional stdenv.isDarwin libiconv;
-
-  NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isDarwin "-lintl";
-
-  makeFlags = [
-    "PREFIX=$(out)"
-    (if withBuildColors
-      then "TPUT=${ncurses.out}/bin/tput"
-      else "TPUT_AVAILABLE=0")
-  ];
+  nativeBuildInputs = [ meson ninja pkgconfig gettext ];
+  buildInputs = [ libintl libiconv ];
+  propagatedBuildInputs = [ glib gtk ];
 
   meta = with stdenv.lib; {
     homepage = https://pwmt.org/projects/girara/;

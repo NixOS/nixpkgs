@@ -5,12 +5,13 @@ stdenv.mkDerivation rec {
   name = "pavucontrol-3.0";
 
   src = fetchurl {
-    url = "http://freedesktop.org/software/pulseaudio/pavucontrol/${name}.tar.xz";
+    url = "https://freedesktop.org/software/pulseaudio/pavucontrol/${name}.tar.xz";
     sha256 = "14486c6lmmirkhscbfygz114f6yzf97h35n3h3pdr27w4mdfmlmk";
   };
 
   preFixup = ''
     wrapProgram "$out/bin/pavucontrol" \
+     --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE" \
      --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS"
   '';
 

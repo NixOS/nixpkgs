@@ -6,9 +6,9 @@ stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchgit {
-    sha256 = "1fmd05r00wx4zc90lbi804jl7xwdl11jq2a1kp5lqimk3yyvfw4c";
-    url = "git://anonscm.debian.org/users/robert/datefudge.git";
+    url = "https://salsa.debian.org/debian/datefudge.git";
     rev = "fe27db47a0f250fb56164114fff8ae8d5af47ab6";
+    sha256 = "1fmd05r00wx4zc90lbi804jl7xwdl11jq2a1kp5lqimk3yyvfw4c";
   };
 
   patchPhase = ''

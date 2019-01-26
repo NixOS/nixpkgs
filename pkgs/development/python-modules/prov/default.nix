@@ -7,16 +7,22 @@
 , six
 , pydotplus
 , rdflib
+, pydot
+, glibcLocales
 }:
 
 buildPythonPackage rec {
   pname = "prov";
-  version = "1.5.2";
+  version = "1.5.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "640dc158d931403bc6c1a0ad80702caae71f810bac21f90ec605865c8444b7bb";
+    sha256 = "1a9h406laclxalmdny37m0yyw7y17n359akclbahimdggq853jd0";
   };
+
+  prePatch = ''
+    substituteInPlace setup.py --replace "six==1.10.0" "six>=1.10.0"
+  '';
 
   propagatedBuildInputs = [
     lxml
@@ -26,7 +32,15 @@ buildPythonPackage rec {
     pydotplus
     rdflib
   ];
-  doCheck = false; # takes ~60 mins
+
+  checkInputs = [
+    pydot
+    glibcLocales
+  ];
+
+  preCheck = ''
+    export LC_ALL="en_US.utf-8"
+  '';
 
   meta = with stdenv.lib; {
     description = "A Python library for W3C Provenance Data Model (PROV)";

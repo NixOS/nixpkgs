@@ -1,8 +1,13 @@
-{ stdenv, fetchurl, unzip
+{ stdenv, lib, fetchurl, unzip
 , qt4 ? null, qmake4Hook ? null
-, withQt5 ? false, qtbase ? null, qmake ? null
+, withQt5 ? false, qtbase ? null, qtmacextras ? null, qmake ? null
 }:
 
+# Fix Xcode 8 compilation problem
+let xcodePatch =
+  fetchurl { url = "https://raw.githubusercontent.com/Homebrew/formula-patches/a651d71/qscintilla2/xcode-8.patch";
+             sha256 = "1a88309fdfd421f4458550b710a562c622d72d6e6fdd697107e4a43161d69bc9"; };
+in
 stdenv.mkDerivation rec {
   pname = "qscintilla";
   version = "2.9.4";
@@ -14,29 +19,28 @@ stdenv.mkDerivation rec {
     sha256 = "04678skipydx68zf52vznsfmll2v9aahr66g50lcqbr6xsmgr1yi";
   };
 
-  buildInputs = if withQt5 then [ qtbase ] else [ qt4 ];
-  nativeBuildInputs = [ unzip ] ++ (if withQt5 then [ qmake ] else [ qmake4Hook ]);
+  buildInputs = [ (if withQt5 then qtbase else qt4) ]
+    ++ lib.optional (withQt5 && stdenv.isDarwin) qtmacextras;
+  nativeBuildInputs = [ unzip ]
+    ++ (if withQt5 then [ qmake ] else [ qmake4Hook ]);
+
+
+  patches = lib.optional (stdenv.isDarwin && withQt5) [ xcodePatch ];
 
   enableParallelBuilding = true;
 
   preConfigure = ''
     cd Qt4Qt5
-    ${if withQt5
-      then ''
-    sed -i -e "s,\$\$\\[QT_INSTALL_LIBS\\],$out/lib," \
-           -e "s,\$\$\\[QT_INSTALL_HEADERS\\],$out/include/," \
-           -e "s,\$\$\\[QT_INSTALL_TRANSLATIONS\\],$out/translations," \
-           -e "s,\$\$\\[QT_HOST_DATA\\]/mkspecs,$out/mkspecs," \
-           -e "s,\$\$\\[QT_INSTALL_DATA\\]/mkspecs,$out/mkspecs," \
-           -e "s,\$\$\\[QT_INSTALL_DATA\\],$out/share," \
-           qscintilla.pro
-    ''
-      else ''
-    sed -i -e "s,\$\$\\[QT_INSTALL_LIBS\\],$out/lib," \
-           -e "s,\$\$\\[QT_INSTALL_HEADERS\\],$out/include/," \
-           -e "s,\$\$\\[QT_INSTALL_TRANSLATIONS\\],$out/share/qt/translations," \
-           -e "s,\$\$\\[QT_INSTALL_DATA\\],$out/share/qt," \
-           qscintilla.pro
+    sed -i qscintilla.pro \
+      -e "s,\$\$\\[QT_INSTALL_LIBS\\],$out/lib," \
+      -e "s,\$\$\\[QT_INSTALL_HEADERS\\],$out/include/," \
+      -e "s,\$\$\\[QT_INSTALL_TRANSLATIONS\\],$out/translations," \
+    ${if withQt5 then ''
+      -e "s,\$\$\\[QT_HOST_DATA\\]/mkspecs,$out/mkspecs," \
+      -e "s,\$\$\\[QT_INSTALL_DATA\\]/mkspecs,$out/mkspecs," \
+      -e "s,\$\$\\[QT_INSTALL_DATA\\],$out/share,"
+    '' else ''
+      -e "s,\$\$\\[QT_INSTALL_DATA\\],$out/share/qt,"
     ''}
   '';
 

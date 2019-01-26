@@ -1,47 +1,37 @@
-{ stdenv, buildPackages
-, fetchurl, zlib
-, buildPlatform, hostPlatform, targetPlatform
+{ stdenv, lib, buildPackages
+, fetchurl, zlib, autoreconfHook264
+# Enabling all targets increases output size to a multiple.
+, withAllTargets ? false, libbfd, libopcodes
+, enableShared ? true
 , noSysDirs, gold ? true, bison ? null
 }:
 
 let
-  # Note to whoever is upgrading this: 2.29 is broken.
-  # ('nix-build pkgs/stdenv/linux/make-bootstrap-tools.nix -A test' segfaults on aarch64)
-  # Also glibc might need patching, see commit 733e20fee4a6700510f71fbe1a58ac23ea202f6a.
-  version = "2.28.1";
+  reuseLibs = enableShared && withAllTargets;
+
+  # Remove gold-symbol-visibility patch when updating, the proper fix
+  # is now upstream.
+  # https://sourceware.org/git/gitweb.cgi?p=binutils-gdb.git;a=commitdiff;h=330b90b5ffbbc20c5de6ae6c7f60c40fab2e7a4f;hp=99181ccac0fc7d82e7dabb05dc7466e91f1645d3
+  version = "2.30";
   basename = "binutils-${version}";
-  inherit (stdenv.lib) optional optionals optionalString;
   # The targetPrefix prepended to binary names to allow multiple binuntils on the
   # PATH to both be usable.
-  targetPrefix = optionalString (targetPlatform != hostPlatform) "${targetPlatform.config}-";
+  targetPrefix = lib.optionalString (stdenv.targetPlatform != stdenv.hostPlatform)
+                  "${stdenv.targetPlatform.config}-";
 in
 
 stdenv.mkDerivation rec {
   name = targetPrefix + basename;
 
-  src = fetchurl {
+  # HACK to ensure that we preserve source from bootstrap binutils to not rebuild LLVM
+  src = stdenv.__bootPackages.binutils-unwrapped.src or (fetchurl {
     url = "mirror://gnu/binutils/${basename}.tar.bz2";
-    sha256 = "1sj234nd05cdgga1r36zalvvdkvpfbr12g5mir2n8i1dwsdrj939";
-  };
+    sha256 = "028cklfqaab24glva1ks2aqa1zxa6w6xmc8q34zs1sb7h22dxspg";
+  });
 
   patches = [
-    # Turn on --enable-new-dtags by default to make the linker set
-    # RUNPATH instead of RPATH on binaries.  This is important because
-    # RUNPATH can be overriden using LD_LIBRARY_PATH at runtime.
-    ./new-dtags.patch
-
-    # Since binutils 2.22, DT_NEEDED flags aren't copied for dynamic outputs.
-    # That requires upstream changes for things to work. So we can patch it to
-    # get the old behaviour by now.
-    ./dtneeded.patch
-
     # Make binutils output deterministic by default.
     ./deterministic.patch
-
-    # Always add PaX flags section to ELF files.
-    # This is needed, for instance, so that running "ldd" on a binary that is
-    # PaX-marked to disable mprotect doesn't fail with permission denied.
-    ./pt-pax-flags.patch
 
     # Bfd looks in BINDIR/../lib for some plugins that don't
     # exist. This is pointless (since users can't install plugins
@@ -61,12 +51,24 @@ stdenv.mkDerivation rec {
     # override this behavior, forcing ld to search DT_RPATH even when
     # cross-compiling.
     ./always-search-rpath.patch
-  ];
+
+    # https://sourceware.org/bugzilla/show_bug.cgi?id=22868
+    ./gold-symbol-visibility.patch
+
+    # Version 2.30 introduced strict requirements on ELF relocations which cannot
+    # be satisfied on aarch64 platform. Add backported fix from bugzilla.
+    # https://sourceware.org/bugzilla/show_bug.cgi?id=22764
+    ./relax-R_AARCH64_ABS32-R_AARCH64_ABS16-absolute.patch
+  ] ++ lib.optional stdenv.targetPlatform.isiOS ./support-ios.patch;
 
   outputs = [ "out" "info" "man" ];
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = [ bison ];
+  nativeBuildInputs = [
+    bison
+  ] ++ lib.optionals stdenv.targetPlatform.isiOS [
+    autoreconfHook264
+  ];
   buildInputs = [ zlib ];
 
   inherit noSysDirs;
@@ -86,27 +88,43 @@ stdenv.mkDerivation rec {
 
   # As binutils takes part in the stdenv building, we don't want references
   # to the bootstrap-tools libgcc (as uses to happen on arm/mips)
-  NIX_CFLAGS_COMPILE = if hostPlatform.isDarwin
+  NIX_CFLAGS_COMPILE = if stdenv.hostPlatform.isDarwin
     then "-Wno-string-plus-int -Wno-deprecated-declarations"
     else "-static-libgcc";
 
-  # TODO(@Ericson2314): Always pass "--target" and always targetPrefix.
-  configurePlatforms =
-    # TODO(@Ericson2314): Figure out what's going wrong with Arm
-    if buildPlatform == hostPlatform && hostPlatform == targetPlatform && targetPlatform.isArm
-    then []
-    else [ "build" "host" ] ++ stdenv.lib.optional (targetPlatform != hostPlatform) "target";
+  hardeningDisable = [ "format" "pie" ];
 
-  configureFlags = [
-    "--enable-targets=all" "--enable-64-bit-bfd"
-    "--disable-install-libbfd"
-    "--disable-shared" "--enable-static"
+  # TODO(@Ericson2314): Always pass "--target" and always targetPrefix.
+  configurePlatforms = [ "build" "host" ] ++ lib.optional (stdenv.targetPlatform != stdenv.hostPlatform) "target";
+
+  configureFlags =
+    (if enableShared then [ "--enable-shared" "--disable-static" ]
+                     else [ "--disable-shared" "--enable-static" ])
+  ++ lib.optional withAllTargets "--enable-targets=all"
+  ++ [
+    "--enable-64-bit-bfd"
     "--with-system-zlib"
 
     "--enable-deterministic-archives"
     "--disable-werror"
     "--enable-fix-loongson2f-nop"
-  ] ++ optionals gold [ "--enable-gold" "--enable-plugins" ];
+
+    # Turn on --enable-new-dtags by default to make the linker set
+    # RUNPATH instead of RPATH on binaries.  This is important because
+    # RUNPATH can be overriden using LD_LIBRARY_PATH at runtime.
+    "--enable-new-dtags"
+  ] ++ lib.optionals gold [ "--enable-gold" "--enable-plugins" ];
+
+  doCheck = false; # fails
+
+  postFixup = lib.optionalString reuseLibs ''
+    rm "$out"/lib/lib{bfd,opcodes}-${version}.so
+    ln -s '${lib.getLib libbfd}/lib/libbfd-${version}.so' "$out/lib/"
+    ln -s '${lib.getLib libopcodes}/lib/libopcodes-${version}.so' "$out/lib/"
+  '';
+
+  # else fails with "./sanity.sh: line 36: $out/bin/size: not found"
+  doInstallCheck = stdenv.buildPlatform == stdenv.hostPlatform && stdenv.hostPlatform == stdenv.targetPlatform;
 
   enableParallelBuilding = true;
 
@@ -114,7 +132,7 @@ stdenv.mkDerivation rec {
     inherit targetPrefix version;
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tools for manipulating binaries (linker, assembler, etc.)";
     longDescription = ''
       The GNU Binutils are a collection of binary tools.  The main
@@ -122,7 +140,7 @@ stdenv.mkDerivation rec {
       They also include the BFD (Binary File Descriptor) library,
       `gprof', `nm', `strip', etc.
     '';
-    homepage = http://www.gnu.org/software/binutils/;
+    homepage = https://www.gnu.org/software/binutils/;
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ ericson2314 ];
     platforms = platforms.unix;

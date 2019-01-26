@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, elk5Version, makeWrapper, jre_headless, utillinux, getopt }:
+{ stdenv, fetchurl, elk5Version, makeWrapper, jre_headless, utillinux }:
 
 with stdenv.lib;
 
@@ -8,13 +8,12 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://artifacts.elastic.co/downloads/elasticsearch/${name}.tar.gz";
-    sha256 = "0wjjvzjbdgdv9qznk1b8dx63zgs7s6jnrrbrnd5dn27lhymxiwpl";
+    sha256 = "0sm99m4m4mmigj6ll22kyaw7zkp1s2i0mhzx15fzidnybdnlifb4";
   };
 
   patches = [ ./es-home-5.x.patch ./es-classpath-5.x.patch ];
 
-  buildInputs = [ makeWrapper jre_headless ] ++
-    (if (!stdenv.isDarwin) then [utillinux] else [getopt]);
+  buildInputs = [ makeWrapper jre_headless utillinux ];
 
   installPhase = ''
     mkdir -p $out
@@ -24,13 +23,13 @@ stdenv.mkDerivation rec {
 
     wrapProgram $out/bin/elasticsearch \
       --prefix ES_CLASSPATH : "$out/lib/*" \
-      ${if (!stdenv.isDarwin)
-        then ''--prefix PATH : "${utillinux}/bin/"''
-        else ''--prefix PATH : "${getopt}/bin"''} \
+      --prefix PATH : "${utillinux}/bin" \
       --set JAVA_HOME "${jre_headless}" \
       --set ES_JVM_OPTIONS "$out/config/jvm.options"
 
-    wrapProgram $out/bin/elasticsearch-plugin --set JAVA_HOME "${jre_headless}"
+    wrapProgram $out/bin/elasticsearch-plugin \
+      --prefix ES_CLASSPATH : "$out/lib/*" \
+      --set JAVA_HOME "${jre_headless}"
   '';
 
   meta = {

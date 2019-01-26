@@ -1,28 +1,20 @@
-{ stdenv, fetchurl, jre }:
+{ stdenv, makeWrapper, fetchurl, jre }:
 
 stdenv.mkDerivation rec {
   name = "cfr-${version}";
-  version = "0_101";
+  version = "0.138";
 
   src = fetchurl {
-    sha256 = "0zwl3whypdm2qrw3hwaqjnifkb4wcdn8fx9scrjkli54bhr6dqch";
     url = "http://www.benf.org/other/cfr/cfr_${version}.jar";
+    sha256 = "1v0agc3d26jvgxmskh2pl0sq0nr2czl7g0dckya4l6af4lxp9x7q";
   };
 
-  buildInputs = [ jre ];
+  buildInputs = [ makeWrapper ];
 
-  phases = [ "installPhase" ];
-
-  installPhase = ''
-    jar=$out/share/cfr/cfr_${version}.jar
-
-    install -Dm644 ${src} $jar
-
-    cat << EOF > cfr
-    #!${stdenv.shell}
-    exec ${jre}/bin/java -jar $jar "\''${@}"
-    EOF
-    install -Dm755 cfr $out/bin/cfr
+  buildCommand = ''
+    jar=$out/share/java/cfr_${version}.jar
+    install -Dm444 $src $jar
+    makeWrapper ${jre}/bin/java $out/bin/cfr --add-flags "-jar $jar"
   '';
 
   meta = with stdenv.lib; {

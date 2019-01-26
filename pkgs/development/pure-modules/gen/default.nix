@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl,
+{ stdenv, fetchurl,
   pkgconfig, pure, haskellPackages }:
 
 stdenv.mkDerivation rec {

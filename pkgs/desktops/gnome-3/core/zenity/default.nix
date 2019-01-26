@@ -1,8 +1,18 @@
-{ stdenv, fetchurl, pkgconfig, cairo, libxml2, libxslt, gnome3, pango
+{ stdenv, fetchurl, pkgconfig, libxml2, libxslt, gnome3
 , gnome-doc-utils, intltool, libX11, which, itstool, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
-  inherit (import ./src.nix fetchurl) name src;
+  name = "zenity-${version}";
+  version = "3.30.0";
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/zenity/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    sha256 = "1wipnp46pd238z9ck5rsckbaw7yla6c936fswq5w94k4c6bgcplr";
+  };
+
+  passthru = {
+    updateScript = gnome3.updateScript { packageName = "zenity"; attrPath = "gnome3.zenity"; };
+  };
 
   preBuild = ''
     mkdir -p $out/include

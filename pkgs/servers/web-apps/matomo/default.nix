@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "matomo-${version}";
-  version = "3.3.0";
+  version = "3.7.0";
 
   src = fetchurl {
     # TODO: As soon as the tarballs are renamed as well on future releases, this should be enabled again
     # url = "https://builds.matomo.org/${name}.tar.gz";
     url = "https://builds.matomo.org/piwik-${version}.tar.gz";
-    sha256 = "1ybzj3kk0x29nv8c6xnhir5d9dr0q0fl1vnm4i7zvhml73ryqk0f";
+    sha256 = "17ihsmwdfrx1c1v8cp5pc3swx3h0i0l9pjrc8jyww08kavfbfly6";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -19,6 +19,7 @@ stdenv.mkDerivation rec {
   #   unix socket authentication only works with localhost,
   #   but password-based SQL authentication works with both.
   # TODO: is upstream interested in this?
+  # -> discussion at https://github.com/matomo-org/matomo/issues/12646
   patches = [ ./make-localhost-default-database-host.patch ];
 
   # this bootstrap.php adds support for getting PIWIK_USER_PATH

@@ -23,8 +23,8 @@ index f1133555..3e61204a 100644
  
      def _setup_xcursor_binding(self):
          try:
--            xcursor = ffi.dlopen('libxcb-cursor.so')
-+            xcursor = ffi.dlopen('@xcb-cursor@/lib/libxcb-cursor.so')
+-            xcursor = ffi.dlopen('libxcb-cursor.so.0')
++            xcursor = ffi.dlopen('@xcb-cursor@/lib/libxcb-cursor.so.0')
          except OSError:
              logger.warning("xcb-cursor not found, fallback to font pointer")
              return False

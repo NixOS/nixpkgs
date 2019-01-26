@@ -3,28 +3,21 @@
 , fetchPypi
 , nose
 , decorator
-, isPy36
-, isPyPy
 }:
 
 buildPythonPackage rec {
   pname = "networkx";
-  version = "1.11";
-
-  # Currently broken on PyPy.
-  # https://github.com/networkx/networkx/pull/1361
-  disabled = isPyPy;
+  # upgrade may break sage, please test the sage build or ping @timokau on upgrade
+  version = "2.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1f74s56xb4ggixiq0vxyfxsfk8p20c7a099lpcf60izv1php03hd";
+    extension = "zip";
+    sha256 = "12swxb15299v9vqjsq4z8rgh5sdhvpx497xwnhpnb0gynrx6zra5";
   };
 
   checkInputs = [ nose ];
   propagatedBuildInputs = [ decorator ];
-
-  # 17 failures with 3.6 https://github.com/networkx/networkx/issues/2396#issuecomment-304437299
-  doCheck = !(isPy36);
 
   meta = {
     homepage = "https://networkx.github.io/";

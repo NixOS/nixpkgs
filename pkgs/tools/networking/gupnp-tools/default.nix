@@ -1,26 +1,35 @@
-{fetchurl, stdenv, gupnp, gssdp, pkgconfig, gtk3, libuuid, intltool, gupnp-av, gnome3, gnome2, makeWrapper}:
+{fetchurl, fetchpatch, stdenv, meson, ninja, gupnp, gssdp, pkgconfig, gtk3, libuuid, gettext, gupnp-av, gtksourceview4, gnome3, wrapGAppsHook}:
 
 stdenv.mkDerivation rec {
-  name = "gupnp-tools-${version}";
-  majorVersion = "0.8";
-  version = "${majorVersion}.13";
+  pname = "gupnp-tools";
+  version = "0.8.15";
+
   src = fetchurl {
-    url = "mirror://gnome/sources/gupnp-tools/${majorVersion}/gupnp-tools-${version}.tar.xz";
-    sha256 = "1vbr4iqi7nl7kq982agd3liw10gx67s95idd0pjy5h1jsnwyqgda";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "1awpqjs08cf6aimvzldnlnz5zmdyw8aq4k2rl5239j4zkfhg8vik";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [gupnp libuuid gssdp gtk3 intltool gupnp-av
-                 gnome2.gnome_icon_theme makeWrapper];
+  patches = [
+    (fetchpatch {
+      url = https://gitlab.gnome.org/GNOME/gupnp-tools/commit/2845d07b1584789a23a0e691ceff476e5d82ccb7.patch;
+      sha256 = "1a8bhsz41s27kbaxp9jbmbisabin6lz2ln87012syvi6f2s332hv";
+    })
+  ];
 
-  postInstall = ''
-    for program in gupnp-av-cp gupnp-universal-cp; do
-      wrapProgram "$out/bin/$program" \
-        --prefix XDG_DATA_DIRS : "${gtk3.out}/share:${gnome3.gnome-themes-standard}/share:${gnome2.gnome_icon_theme}/share:$out/share"
-    done
-  '';
+  nativeBuildInputs = [ meson ninja pkgconfig gettext wrapGAppsHook ];
+  buildInputs = [ gupnp libuuid gssdp gtk3 gupnp-av gtksourceview4 gnome3.defaultIconTheme ];
 
-  meta = {
-    platforms = stdenv.lib.platforms.linux;
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+    };
+  };
+
+  meta = with stdenv.lib; {
+    description = "Set of utilities and demos to work with UPnP";
+    homepage = https://wiki.gnome.org/Projects/GUPnP;
+    license = licenses.gpl2Plus;
+    maintainers = gnome3.maintainers;
+    platforms = platforms.linux;
   };
 }

@@ -19,6 +19,15 @@
     };
   }
   {
+    goPackagePath = "github.com/sahilm/fuzzy";
+    fetch = {
+      type = "git";
+      url = "https://github.com/sahilm/fuzzy";
+      rev = "a154b19bb758dcdd6ede58dc11ea53c2950527b2";
+      sha256 = "0jkw6474d5ik2fq2zznqxj4y3p42z47r7mbg856ln5wyara2sg0l";
+    };
+  }
+  {
     goPackagePath = "rsc.io/qr";
     fetch = {
       type = "git";

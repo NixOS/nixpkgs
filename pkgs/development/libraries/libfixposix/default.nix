@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name="libfixposix-${version}";
-  version="0.4.1";
+  version="0.4.3";
 
   src = fetchFromGitHub {
     owner = "sionescu";
     repo = "libfixposix";
     rev = "v${version}";
-    sha256 = "19wjb43mn16f4lin5a2dfi3ym2hy7kqibs0z631d205b16vxas15";
+    sha256 = "1x4q6yspi5g2s98vq4qszw4z3zjgk9l5zs8471w4d4cs6l97w08j";
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];

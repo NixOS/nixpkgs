@@ -13,7 +13,8 @@ stdenv.mkDerivation rec {
     description = "Build tool that builds code quickly and reliably";
     license = licenses.asl20;
     maintainers = with maintainers; [ cstrahan philandstuff ];
-    platforms = platforms.unix;
+    platforms = platforms.linux;
+    broken = true; # 2018-08-07
   };
 
   name = "bazel-${version}";
@@ -65,8 +66,9 @@ stdenv.mkDerivation rec {
   ];
 
   buildPhase = ''
+    export TMPDIR=/tmp/.bazel-$UID
     ./compile.sh
-    ./output/bazel --output_user_root=/tmp/.bazel build //scripts:bash_completion \
+    ./output/bazel --output_user_root=$TMPDIR/.bazel build //scripts:bash_completion \
       --spawn_strategy=standalone \
       --genrule_strategy=standalone
     cp bazel-bin/scripts/bazel-complete.bash output/

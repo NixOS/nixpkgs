@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = {
-    homepage = http://st.suckless.org/;
+    homepage = https://st.suckless.org/;
     license = licenses.mit;
     maintainers = with maintainers; [ ];
     platforms = with platforms; linux;

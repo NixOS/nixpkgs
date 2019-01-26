@@ -1,4 +1,4 @@
-{ stdenv, symlinkJoin, rxvt_unicode, makeWrapper, plugins }:
+{ symlinkJoin, rxvt_unicode, makeWrapper, plugins }:
 
 let
   rxvt_name = builtins.parseDrvName rxvt_unicode.name;

@@ -18,7 +18,8 @@ stdenv.mkDerivation rec {
 
   preInstall = '' mkdir -p $out/man/man8 $out/sbin '';
 
-  meta = {
-    platforms = stdenv.lib.platforms.linux;
+  meta = with stdenv.lib; {
+    platforms = platforms.linux;
+    license = licenses.bsdOriginal;
   };
 }

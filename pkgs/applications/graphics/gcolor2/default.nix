@@ -1,9 +1,9 @@
-{stdenv, fetchurl, gtk2, perl, perlXMLParser, pkgconfig } :
+{stdenv, fetchurl, gtk2, perlPackages, pkgconfig } :
 
 let version = "0.4"; in
 stdenv.mkDerivation {
   name = "gcolor2-${version}";
-  arch = if stdenv.system == "x86_64-linux" then "amd64" else "386";
+  arch = if stdenv.hostPlatform.system == "x86_64-linux" then "amd64" else "386";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/gcolor2/gcolor2/${version}/gcolor2-${version}.tar.bz2";
@@ -16,12 +16,13 @@ stdenv.mkDerivation {
   '';
 
   # from https://github.com/PhantomX/slackbuilds/tree/master/gcolor2/patches
-  patches = if stdenv.system == "x86_64-linux" then
+  patches = if stdenv.hostPlatform.system == "x86_64-linux" then
         [ ./gcolor2-amd64.patch ] else
         [ ];
 
   nativeBuildInputs = [ pkgconfig ];
-buildInputs = [ gtk2 perl perlXMLParser ];
+  buildInputs = [ gtk2 ]
+    ++ (with perlPackages; [ perl XMLParser ]);
 
   meta = {
     description = "Simple GTK+2 color selector";

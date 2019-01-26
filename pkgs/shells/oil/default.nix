@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, coreutils }:
+{ stdenv, lib, fetchurl }:
 let
   version = "0.3.0";
 in

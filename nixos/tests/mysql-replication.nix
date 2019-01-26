@@ -13,7 +13,7 @@ in
 
   nodes = {
     master =
-      { pkgs, config, ... }:
+      { pkgs, ... }:
 
       {
         services.mysql.enable = true;
@@ -27,7 +27,7 @@ in
       };
 
     slave1 =
-      { pkgs, config, nodes, ... }:
+      { pkgs, nodes, ... }:
 
       {
         services.mysql.enable = true;
@@ -40,7 +40,7 @@ in
       };
 
     slave2 =
-      { pkgs, config, nodes, ... }:
+      { pkgs, nodes, ... }:
 
       {
         services.mysql.enable = true;
@@ -57,18 +57,25 @@ in
     $master->start;
     $master->waitForUnit("mysql");
     $master->waitForOpenPort(3306);
+    # Wait for testdb to be fully populated (5 rows).
+    $master->waitUntilSucceeds("mysql -u root -D testdb -N -B -e 'select count(id) from tests' | grep -q 5");
+
     $slave1->start;
     $slave2->start;
     $slave1->waitForUnit("mysql");
     $slave1->waitForOpenPort(3306);
     $slave2->waitForUnit("mysql");
     $slave2->waitForOpenPort(3306);
-    $slave2->succeed("echo 'use testdb; select * from tests' | mysql -u root -N | grep 4");
+
+    # wait for replications to finish
+    $slave1->waitUntilSucceeds("mysql -u root -D testdb -N -B -e 'select count(id) from tests' | grep -q 5");
+    $slave2->waitUntilSucceeds("mysql -u root -D testdb -N -B -e 'select count(id) from tests' | grep -q 5");
+
     $slave2->succeed("systemctl stop mysql");
     $master->succeed("echo 'insert into testdb.tests values (123, 456);' | mysql -u root -N");
     $slave2->succeed("systemctl start mysql");
     $slave2->waitForUnit("mysql");
     $slave2->waitForOpenPort(3306);
-    $slave2->succeed("echo 'select * from testdb.tests where Id = 123;' | mysql -u root -N | grep 456");
+    $slave2->waitUntilSucceeds("echo 'select * from testdb.tests where Id = 123;' | mysql -u root -N | grep 456");
   '';
 })

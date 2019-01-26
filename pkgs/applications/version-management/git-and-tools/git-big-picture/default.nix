@@ -2,7 +2,7 @@
 
 python2Packages.buildPythonApplication rec {
   pname = "git-big-picture";
-  version = "0.9.0";
+  version = "0.10.1";
 
   name = "${pname}-${version}";
 
@@ -10,7 +10,7 @@ python2Packages.buildPythonApplication rec {
     owner = "esc";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1h283gzs4nx8lrarmr454zza52cilmnbdrqn1n33v3cn1rayl3c9";
+    sha256 = "0b0zdq7d7k7f6p3wwc799347fraphbr20rxd1ysnc4xi1cj4wpmi";
   };
 
   buildInputs = [ git graphviz ];
@@ -21,7 +21,7 @@ python2Packages.buildPythonApplication rec {
     '';
 
   meta = {
-    description = "Tool for visualization of Git repositories.";
+    description = "Tool for visualization of Git repositories";
     homepage = https://github.com/esc/git-big-picture;
     license = stdenv.lib.licenses.gpl3;
     platforms = stdenv.lib.platforms.linux;

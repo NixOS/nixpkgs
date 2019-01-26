@@ -7,13 +7,12 @@
 
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "transaction";
-  version = "2.1.2";
+  version = "2.4.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1mab0r3grmgz9d97y8pynhg0r34v0am35vpxyvh7ff5sgmg3dg5r";
+    sha256 = "17wz1y524ca07vr03yddy8dv0gbscs06dbdywmllxv5rc725jq3j";
   };
 
   propagatedBuildInputs = [ zope_interface mock ];

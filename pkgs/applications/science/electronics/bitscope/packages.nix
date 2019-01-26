@@ -1,15 +1,8 @@
-{ buildFHSUserEnv
-, callPackage
+{ callPackage
 , fetchurl
-, makeWrapper
-, stdenv
 }:
 
 let
-  wrapBinary = libPaths: binaryName: ''
-    wrapProgram "$out/bin/${binaryName}" \
-      --prefix LD_LIBRARY_PATH : "${stdenv.lib.makeLibraryPath libPaths}"
-  '';
   mkBitscope = callPackage (import ./common.nix) { };
 in {
   chart = let

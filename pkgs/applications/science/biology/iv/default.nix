@@ -5,7 +5,7 @@
 stdenv.mkDerivation rec
   { name = "iv-19";
     src = fetchurl
-      { url = "http://www.neuron.yale.edu/ftp/neuron/versions/v${neuron-version}/${name}.tar.gz";
+      { url = "https://www.neuron.yale.edu/ftp/neuron/versions/v${neuron-version}/${name}.tar.gz";
         sha256 = "07a3g8zzay4h0bls7fh89dd0phn7s34c2g15pij6dsnwpmjg06yx";
       };
     nativeBuildInputs = [ patchelf ];

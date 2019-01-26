@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     # Obtained from http://chatzilla.rdmsoft.com/xulrunner/.
-    url = "http://chatzilla.rdmsoft.com/xulrunner/download/${name}.en-US.xulapp";
+    url = "https://chatzilla.rdmsoft.com/xulrunner/download/${name}.en-US.xulapp";
     sha256 = "09asg7ixjrin46xd19ri71g4jdrgb1gg0pk0lwk0dlb1qjxyf1xy";
   };
 

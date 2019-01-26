@@ -25,10 +25,9 @@ with lib;
 
     # !!! Hack - attributes expected by other modules.
     environment.systemPackages = [ pkgs.grub2_efi ]
-      ++ (if pkgs.stdenv.system == "aarch64-linux"
+      ++ (if pkgs.stdenv.hostPlatform.system == "aarch64-linux"
           then []
           else [ pkgs.grub2 pkgs.syslinux ]);
-    system.boot.loader.kernelFile = pkgs.stdenv.platform.kernelTarget;
 
     fileSystems."/" =
       { fsType = "tmpfs";
@@ -67,7 +66,7 @@ with lib;
 
     # Create the squashfs image that contains the Nix store.
     system.build.squashfsStore = import ../../../lib/make-squashfs.nix {
-      inherit (pkgs) stdenv squashfsTools perl pathsFromGraph;
+      inherit (pkgs) stdenv squashfsTools closureInfo;
       storeContents = config.netboot.storeContents;
     };
 
@@ -86,7 +85,7 @@ with lib;
 
     system.build.netbootIpxeScript = pkgs.writeTextDir "netboot.ipxe" ''
       #!ipxe
-      kernel ${pkgs.stdenv.platform.kernelTarget} init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams}
+      kernel ${pkgs.stdenv.hostPlatform.platform.kernelTarget} init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams}
       initrd initrd
       boot
     '';

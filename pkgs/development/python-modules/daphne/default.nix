@@ -1,18 +1,31 @@
-{ stdenv, buildPythonPackage, fetchPypi,
-  asgiref, autobahn, twisted, hypothesis
+{ stdenv, buildPythonPackage, isPy3k, fetchFromGitHub
+, asgiref, autobahn, twisted, pytestrunner
+, hypothesis, pytest, pytest-asyncio
 }:
 buildPythonPackage rec {
   pname = "daphne";
-  name = "${pname}-${version}";
-  version = "2.0.3";
+  version = "2.2.4";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "bb2075ce35ca00f2e5440cc034dfebd5c00d346de62ea45f099db089b868c31f";
+  disabled = !isPy3k;
+
+  src = fetchFromGitHub {
+    owner = "django";
+    repo = pname;
+    rev = version;
+    sha256 = "0mpn2xbpx2r67bj5crfvxfwlznxlp7rcfbb2xly6ad3d0c7djkdi";
   };
 
-  buildInputs = [ hypothesis ];
+  nativeBuildInputs = [ pytestrunner ];
+
   propagatedBuildInputs = [ asgiref autobahn twisted ];
+
+  checkInputs = [ hypothesis pytest pytest-asyncio ];
+
+  doCheck = !stdenv.isDarwin; # most tests fail on darwin
+
+  checkPhase = ''
+    py.test
+  '';
 
   meta = with stdenv.lib; {
     description = "Django ASGI (HTTP/WebSocket) server";

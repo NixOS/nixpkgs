@@ -1,9 +1,8 @@
-{ lib, fetchPypi, isPy3k, buildPythonPackage, numpy, root }:
+{ lib, fetchPypi, isPy3k, buildPythonPackage, numpy, root, nose }:
 
 buildPythonPackage rec {
   pname = "root_numpy";
   version = "4.7.3";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
@@ -11,6 +10,11 @@ buildPythonPackage rec {
   };
 
   disabled = isPy3k; # blocked by #27649
+  checkInputs = [ nose ];
+  checkPhase = ''
+    python setup.py install_lib -d .
+    nosetests -s -v root_numpy
+  '';
 
   propagatedBuildInputs = [ numpy root ];
 

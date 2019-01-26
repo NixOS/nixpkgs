@@ -1,29 +1,33 @@
-{ stdenv, lib, libXcomposite, libgnome-keyring, makeWrapper, udev, curl, alsaLib
-, libXfixes, atk, gtk2, libXrender, pango, gnome2, cairo, freetype, fontconfig
-, libX11, libXi, libXext, libXcursor, glib, libXScrnSaver, libxkbfile, libXtst
+{ stdenv, libXcomposite, libgnome-keyring, makeWrapper, udev, curl, alsaLib
+, libXfixes, atk, gtk3, libXrender, pango, gnome2, cairo, freetype, fontconfig
+, libX11, libXi, libxcb, libXext, libXcursor, glib, libXScrnSaver, libxkbfile, libXtst
 , nss, nspr, cups, fetchurl, expat, gdk_pixbuf, libXdamage, libXrandr, dbus
-, dpkg, makeDesktopItem
+, dpkg, makeDesktopItem, openssl
 }:
 
 with stdenv.lib;
 
+let
+  curlWithGnuTls = curl.override { gnutlsSupport = true; sslSupport = false; };
+in
 stdenv.mkDerivation rec {
   name = "gitkraken-${version}";
-  version = "2.7.0";
+  version = "4.2.1";
 
   src = fetchurl {
-    url = "https://release.gitkraken.com/linux/v${version}.deb";
-    sha256 = "0088vdn47563f0v9zhk1vggn3c2cfg8rhmifc6nw4zbss49si5gp";
+    url = "https://release.axocdn.com/linux/GitKraken-v${version}.deb";
+    sha256 = "07f9h3276bs7m22vwpxrxmlwnq7l5inr2l67nmpiaz1569yabwsg";
   };
 
   libPath = makeLibraryPath [
     stdenv.cc.cc.lib
-    curl
+    curlWithGnuTls
     udev
     libX11
     libXext
     libXcursor
     libXi
+    libxcb
     glib
     libXScrnSaver
     libxkbfile
@@ -45,48 +49,53 @@ stdenv.mkDerivation rec {
     libXcomposite
     libXfixes
     libXrender
-    gtk2
+    gtk3
     gnome2.GConf
     libgnome-keyring
+    openssl
   ];
-
-  nativeBuildInputs = [ makeWrapper ];
-
-  dontBuild = true;
 
   desktopItem = makeDesktopItem {
     name = "gitkraken";
     exec = "gitkraken";
-    icon = "app";
+    icon = "gitkraken";
     desktopName = "GitKraken";
     genericName = "Git Client";
     categories = "Application;Development;";
     comment = "Graphical Git client from Axosoft";
   };
 
+  nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ dpkg ];
 
-  unpackPhase = "dpkg-deb -x $src .";
+  unpackCmd = ''
+    mkdir out
+    dpkg -x $curSrc out
+  '';
 
   installPhase = ''
-    mkdir -p "$out/opt/gitkraken"
-    cp -r usr/share/gitkraken/* "$out/opt/gitkraken"
-
-    mkdir -p "$out/share/applications"
-    cp $desktopItem/share/applications/* "$out/share/applications"
-
-    mkdir -p "$out/share/pixmaps"
-    cp usr/share/pixmaps/app.png "$out/share/pixmaps"
+    mkdir $out
+    pushd usr
+    pushd share
+    substituteInPlace applications/gitkraken.desktop \
+      --replace /usr/share/gitkraken $out/bin \
+      --replace Icon=app Icon=gitkraken
+    mv pixmaps/app.png pixmaps/gitkraken.png
+    popd
+    rm -rf bin/gitkraken share/lintian
+    cp -av share bin $out/
+    popd
+    ln -s $out/share/gitkraken/gitkraken $out/bin/gitkraken
   '';
 
   postFixup = ''
-    patchelf --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
-             --set-rpath "$libPath:$out/opt/gitkraken" "$out/opt/gitkraken/gitkraken"
-    wrapProgram $out/opt/gitkraken/gitkraken \
-      --prefix LD_PRELOAD : "${makeLibraryPath [ curl ]}/libcurl.so.4" \
-      --prefix LD_PRELOAD : "${makeLibraryPath [ libgnome-keyring ]}/libgnome-keyring.so.0"
-    mkdir "$out/bin"
-    ln -s "$out/opt/gitkraken/gitkraken" "$out/bin/gitkraken"
+    pushd $out/share/gitkraken
+    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" gitkraken
+
+    for file in $(find . -type f \( -name \*.node -o -name gitkraken -o -name \*.so\* \) ); do
+      patchelf --set-rpath ${libPath}:$out/share/gitkraken $file || true
+    done
+    popd
   '';
 
   meta = {

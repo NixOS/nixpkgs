@@ -12,7 +12,7 @@
 , libXext
 , python3
 , ocl-icd
-, mesa_noglu
+, libGL
 , makeWrapper
 , beignet
 }:
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     libXdmcp
     libXdamage
     ocl-icd
-    mesa_noglu
+    libGL
   ];
 
   nativeBuildInputs = [
@@ -107,5 +107,7 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ artuuge zimbatm ];
     platforms = platforms.linux;
+    # Requires libdrm_intel
+    badPlatforms = [ "aarch64-linux" ];
   };
 }

@@ -74,7 +74,7 @@ in
       };
     };
 
-    users.extraUsers = mkIf (cfg.user == "plexpy") {
+    users.users = mkIf (cfg.user == "plexpy") {
       plexpy = { group = cfg.group; uid = config.ids.uids.plexpy; };
     };
   };

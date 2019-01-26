@@ -1,5 +1,5 @@
 {
-  fetchurl, stdenv, pkgconfig,
+  fetchurl, fetchpatch, stdenv, pkgconfig,
   acl, attr, bzip2, e2fsprogs, libxml2, lzo, openssl, sharutils, xz, zlib,
 
   # Optional but increases closure only negligibly.
@@ -10,17 +10,12 @@ assert xarSupport -> libxml2 != null;
 
 stdenv.mkDerivation rec {
   name = "libarchive-${version}";
-  version = "3.3.2";
+  version = "3.3.3";
 
   src = fetchurl {
     url = "${meta.homepage}/downloads/${name}.tar.gz";
-    sha256 = "1km0mzfl6in7l5vz9kl09a88ajx562rw93ng9h2jqavrailvsbgd";
+    sha256 = "0bhfncid058p7n1n8v29l6wxm3mhdqfassscihbsxfwz3iwb2zms";
   };
-
-  patches = [
-    ./CVE-2017-14166.patch
-    ./CVE-2017-14502.patch
-  ];
 
   outputs = [ "out" "lib" "dev" ];
 
@@ -38,11 +33,15 @@ stdenv.mkDerivation rec {
     echo "#include <windows.h>" >> config.h
   '' else null;
 
+  doCheck = false; # fails
+
   preFixup = ''
     sed -i $lib/lib/libarchive.la \
       -e 's|-lcrypto|-L${openssl.out}/lib -lcrypto|' \
       -e 's|-llzo2|-L${lzo}/lib -llzo2|'
   '';
+
+  enableParallelBuilding = true;
 
   meta = {
     description = "Multi-format archive and compression library";

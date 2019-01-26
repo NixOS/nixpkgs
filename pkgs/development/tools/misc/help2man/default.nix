@@ -1,26 +1,33 @@
-{ stdenv, hostPlatform, fetchurl, perl, gettext, LocaleGettext, makeWrapper }:
+{ stdenv, fetchurl, perlPackages, gettext }:
 
 stdenv.mkDerivation rec {
-  name = "help2man-1.47.5";
+  name = "help2man-1.47.8";
 
   src = fetchurl {
     url = "mirror://gnu/help2man/${name}.tar.xz";
-    sha256 = "1cb14kp380jzk1yi4i7x9d8qplc8c5mgcbgycgs9ggpx34jhp9kw";
+    sha256 = "1p5830h88cx0zn0snwaj0vpph81xicpsirfwlxmcgjrlmn0nm3sj";
   };
 
-  nativeBuildInputs = [ makeWrapper gettext LocaleGettext ];
-  buildInputs = [ perl LocaleGettext ];
+  nativeBuildInputs = [ gettext perlPackages.LocaleGettext ];
+  buildInputs = [ perlPackages.perl perlPackages.LocaleGettext ];
 
   doCheck = false;                                # target `check' is missing
 
-  patches = if hostPlatform.isCygwin then [ ./1.40.4-cygwin-nls.patch ] else null;
+  patches = if stdenv.hostPlatform.isCygwin then [ ./1.40.4-cygwin-nls.patch ] else null;
 
-  postInstall =
-    '' wrapProgram "$out/bin/help2man" \
-         --prefix PERL5LIB : "$(echo ${LocaleGettext}/lib/perl*/site_perl)" \
-         ${stdenv.lib.optionalString hostPlatform.isCygwin "--prefix PATH : ${gettext}/bin"}
-    '';
-
+  # We don't use makeWrapper here because it uses substitutions our
+  # bootstrap shell can't handle.
+  postInstall = ''
+    mv $out/bin/help2man $out/bin/.help2man-wrapped
+    cat > $out/bin/help2man <<EOF
+    #! $SHELL -e
+    export PERL5LIB=\''${PERL5LIB:+:}${perlPackages.LocaleGettext}/${perlPackages.perl.libPrefix}
+    ${stdenv.lib.optionalString stdenv.hostPlatform.isCygwin
+        ''export PATH=\''${PATH:+:}${gettext}/bin''}
+    exec -a \$0 $out/bin/.help2man-wrapped "\$@"
+    EOF
+    chmod +x $out/bin/help2man
+  '';
 
   meta = with stdenv.lib; {
     description = "Generate man pages from `--help' output";
@@ -30,7 +37,7 @@ stdenv.mkDerivation rec {
          ‘--version’ output of other commands.
       '';
 
-    homepage = http://www.gnu.org/software/help2man/;
+    homepage = https://www.gnu.org/software/help2man/;
 
     license = licenses.gpl3Plus;
     platforms = platforms.all;

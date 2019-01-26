@@ -1,5 +1,4 @@
 { stdenv, fetchurl, libpng, static ? false
-, buildPlatform, hostPlatform
 }:
 
 # This package comes with its own copy of zlib, libpng and pngxtern
@@ -26,11 +25,11 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--with-system-zlib"
     "--with-system-libpng"
-  ] ++ stdenv.lib.optionals (hostPlatform != buildPlatform) [
+  ] ++ stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     #"-prefix=$out"
   ];
 
-  postInstall = if hostPlatform != buildPlatform && hostPlatform.isWindows then ''
+  postInstall = if stdenv.hostPlatform != stdenv.buildPlatform && stdenv.hostPlatform.isWindows then ''
     mv "$out"/bin/optipng{,.exe}
   '' else null;
 

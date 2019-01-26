@@ -1,23 +1,23 @@
-{ stdenv, python3, fetchFromGitHub }:
+{ stdenv, python3, fetchFromGitHub, fetchpatch }:
 
 with python3.pkgs; buildPythonApplication rec {
-  version = "3.6";
-  name = "buku-${version}";
+  version = "3.8";
+  pname = "buku";
 
   src = fetchFromGitHub {
     owner = "jarun";
     repo = "buku";
     rev = "v${version}";
-    sha256 = "1639sf200n9rxgkvvhlhnrjsb7vn42p1fl1rx562axh3vpr6j4c4";
+    sha256 = "0gv26c4rr1akcaiff1nrwil03sv7d58mfxr86pgsw6nwld67ns0r";
   };
 
-  nativeBuildInputs = [
+  checkInputs = [
     pytestcov
-    pytest-catchlog
     hypothesis
     pytest
     pylint
     flake8
+    pyyaml
   ];
 
   propagatedBuildInputs = [
@@ -25,6 +25,14 @@ with python3.pkgs; buildPythonApplication rec {
     beautifulsoup4
     requests
     urllib3
+    flask
+    flask-api
+    flask-bootstrap
+    flask-paginate
+    flask_wtf
+    arrow
+    werkzeug
+    click
   ];
 
   preCheck = ''
@@ -38,7 +46,7 @@ with python3.pkgs; buildPythonApplication rec {
       --replace "self.assertEqual(url, 'https://www.google.com')" ""
   '';
 
-  installPhase = ''
+  postInstall = ''
     make install PREFIX=$out
 
     mkdir -p $out/share/zsh/site-functions $out/share/bash-completion/completions $out/share/fish/vendor_completions.d
@@ -52,7 +60,7 @@ with python3.pkgs; buildPythonApplication rec {
     homepage = https://github.com/jarun/Buku;
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ matthiasbeyer infinisil ];
+    maintainers = with maintainers; [ infinisil ];
   };
 }
 

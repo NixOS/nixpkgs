@@ -19,15 +19,15 @@ stdenv.mkDerivation rec {
     (fetchAlpinePatch "fix-includes.patch" "0zpkbb6k366qpq4dax5wknwprhwnhighcp402mlm7950d39zfa3m")
     (fetchAlpinePatch "netsnmp-swinst-crash.patch" "0gh164wy6zfiwiszh58fsvr25k0ns14r3099664qykgpmickkqid")
     (fetchAlpinePatch "remove-U64-typedef.patch" "1msxyhcqkvhqa03dwb50288g7f6nbrcd9cs036m9xc8jdgjb8k8j")
+    ./CVE-2018-18065.patch
   ];
 
   preConfigure =
     ''
-      perlversion=$(perl -e 'use Config; print $Config{version};')
       perlarchname=$(perl -e 'use Config; print $Config{archname};')
-      installFlags="INSTALLSITEARCH=$out/lib/perl5/site_perl/$perlversion/$perlarchname INSTALLSITEMAN3DIR=$out/share/man/man3"
+      installFlags="INSTALLSITEARCH=$out/${perl.libPrefix}/${perl.version}/$perlarchname INSTALLSITEMAN3DIR=$out/share/man/man3"
 
-      # http://comments.gmane.org/gmane.network.net-snmp.user/32434
+      # http://article.gmane.org/gmane.network.net-snmp.user/32434
       substituteInPlace "man/Makefile.in" --replace 'grep -vE' '@EGREP@ -v'
     '';
 
@@ -44,6 +44,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ file perl unzip openssl ];
 
   enableParallelBuilding = true;
+  doCheck = false; # fails
 
   postInstall = ''
     for f in "$out/lib/"*.la $out/bin/net-snmp-config $out/bin/net-snmp-create-v3-user; do

@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ brotli ];
+  propagatedBuildInputs = [ brotli ];
 
   # without this binaries only get built if shared libs are disable
   patchPhase = ''
@@ -27,6 +27,6 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/google/woff2;
     license = licenses.mit;
     maintainers = [ maintainers.hrdinka ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

@@ -1,33 +1,14 @@
-{ stdenv, fetchFromGitHub, overrideCC, gcc5
+{ stdenv, fetchFromGitHub
 , makeWrapper, unzip, which
-, curl, tzdata, gdb, darwin
-, callPackage
-, bootstrapVersion ? false
-, version ? "2.078.2"
-, dmdSha256 ? "0x9q4aw4jl36dz7m5111y2sm8jdaj3zg36zhj6vqg1lqpdn3bhls"
-, druntimeSha256 ? "0nfqjcmwqc490bzi3582x1c3zigkf306g4nyd1cyd3vs8lfm6x66"
-, phobosSha256 ? "08ircpf4ilznz638kra272hz8fi5ccvw2cswj5hqckssl1lyqzs8"
+, curl, tzdata, gdb, darwin, git
+, callPackage, targetPackages, ldc
+, version ? "2.084.0"
+, dmdSha256 ? "1v61spdamncl8c1bzjc19b03p4jl0ih5zq9b7cqsy9ix7qaxmikf"
+, druntimeSha256 ? "0vp414j6s11l9s54v81np49mv60ywmd7nnk41idkbwrq0nz4sfrq"
+, phobosSha256 ? "1wp7z1x299b0w9ny1ah2wrfhrs05vc4bk51csgw9774l3dqcnv53"
 }:
 
 let
-
-  bootstrapDmd = if !bootstrapVersion then
-    # Versions 2.070.2 and up require a working dmd compiler to build so we just
-    # use the last dmd without any D code to bootstrap the actual build.
-    callPackage ./default.nix {
-      stdenv = if stdenv.hostPlatform.isDarwin then
-                 stdenv
-               else
-                 # Doesn't build with gcc6 on linux
-                 overrideCC stdenv gcc5;
-      bootstrapVersion = true;
-      version = "2.067.1";
-      dmdSha256 = "0fm29lg8axfmzdaj0y6vg70lhwb5d9rv4aavnvdd15xjschinlcz";
-      druntimeSha256 = "1n2qfw9kmnql0fk2nxikispqs7vh85nhvyyr00fk227n9lgnqf02";
-      phobosSha256 = "0fywgds9xvjcgnqxmpwr67p3wi2m535619pvj159cgwv5y0nr3p1";
-    }
-  else
-    "";
 
   dmdBuild = stdenv.mkDerivation rec {
     name = "dmdBuild-${version}";
@@ -61,96 +42,22 @@ let
 
     sourceRoot = ".";
 
+    # https://issues.dlang.org/show_bug.cgi?id=19553
+    hardeningDisable = [ "fortify" ];
+
     postUnpack = ''
         patchShebangs .
-
-        # Remove cppa test for now because it doesn't work.
-        rm dmd/test/runnable/cppa.d
-        rm dmd/test/runnable/extra-files/cppb.cpp
     '';
-
-    # Compile with PIC to prevent colliding modules with binutils 2.28.
-    # https://issues.dlang.org/show_bug.cgi?id=17375
-    usePIC = "-fPIC";
-    ROOT_HOME_DIR = "$(echo ~root)";
-
-    datetimePath = if bootstrapVersion then
-      "phobos/std/datetime.d"
-    else
-      "phobos/std/datetime/timezone.d";
-
-    phobosPatches = ''
-        substituteInPlace ${datetimePath} \
-            --replace "import core.time;" "import core.time;import std.path;"
-
-        substituteInPlace ${datetimePath} \
-            --replace "tzName == \"leapseconds\"" "baseName(tzName) == \"leapseconds\""
-
-        # Ugly hack to fix the hardcoded path to zoneinfo in the source file.
-        # https://issues.dlang.org/show_bug.cgi?id=15391
-        substituteInPlace ${datetimePath} \
-            --replace /usr/share/zoneinfo/ ${tzdata}/share/zoneinfo/
-
-        # Ugly hack so the dlopen call has a chance to succeed.
-        # https://issues.dlang.org/show_bug.cgi?id=15391
-        substituteInPlace phobos/std/net/curl.d \
-            --replace libcurl.so ${curl.out}/lib/libcurl.so
-
-        # phobos uses curl, so we need to patch the path to the lib.
-        substituteInPlace phobos/posix.mak \
-            --replace "-soname=libcurl.so.4" "-soname=${curl.out}/lib/libcurl.so.4"
-
-    ''
-
-    + stdenv.lib.optionalString (bootstrapVersion) ''
-        substituteInPlace ${datetimePath} \
-            --replace "import std.traits;" "import std.traits;import std.path;"
-
-        substituteInPlace ${datetimePath} \
-            --replace "tzName == \"+VERSION\"" "baseName(tzName) == \"leapseconds\" || tzName == \"+VERSION\""
-    ''
-
-    + stdenv.lib.optionalString stdenv.hostPlatform.isLinux ''
-        # See https://github.com/dlang/phobos/pull/5960
-        substituteInPlace phobos/std/path.d \
-            --replace "\"/root" "\"${ROOT_HOME_DIR}"
-    '';
-
-    dmdPath = if bootstrapVersion then
-      "dmd/src"
-    else
-      "dmd";
 
     postPatch = ''
-        # Use proper C++ compiler
-        substituteInPlace ${dmdPath}/posix.mak \
-            --replace g++ $CXX
-    ''
+        substituteInPlace dmd/test/compilable/extra-files/ddocYear.html \
+            --replace "2018" "__YEAR__"
 
-    + stdenv.lib.optionalString (!bootstrapVersion) ''
-        substituteInPlace druntime/test/common.mak \
-            --replace "DFLAGS:=" "DFLAGS:=${usePIC} "
-    ''
-
-    + phobosPatches
-
-    + stdenv.lib.optionalString (stdenv.hostPlatform.isLinux && bootstrapVersion) ''
-      substituteInPlace ${dmdPath}/root/port.c \
-        --replace "#include <bits/mathdef.h>" "#include <complex.h>"
-    ''
-
-    + stdenv.lib.optionalString stdenv.hostPlatform.isDarwin ''
-        substituteInPlace ${dmdPath}/posix.mak \
-            --replace MACOSX_DEPLOYMENT_TARGET MACOSX_DEPLOYMENT_TARGET_
-    ''
-
-    + stdenv.lib.optionalString (stdenv.hostPlatform.isDarwin && bootstrapVersion) ''
-	# Was not able to compile on darwin due to "__inline_isnanl"
-	# being undefined.
-	substituteInPlace ${dmdPath}/root/port.c --replace __inline_isnanl __inline_isnan
+        substituteInPlace dmd/test/runnable/test16096.sh \
+            --replace "{EXT}" "{EXE}"
     '';
 
-    nativeBuildInputs = [ bootstrapDmd makeWrapper unzip which gdb ]
+    nativeBuildInputs = [ ldc makeWrapper unzip which gdb git ]
 
     ++ stdenv.lib.optional stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [
       Foundation
@@ -164,33 +71,34 @@ let
     else
       stdenv.hostPlatform.parsed.kernel.name;
     top = "$(echo $NIX_BUILD_TOP)";
-    pathToDmd = if bootstrapVersion then
-      "${top}/dmd/src/dmd"
-    else
-      "${top}/dmd/generated/${osname}/release/${bits}/dmd";
+    pathToDmd = "${top}/dmd/generated/${osname}/release/${bits}/dmd";
 
     # Buid and install are based on http://wiki.dlang.org/Building_DMD
     buildPhase = ''
         cd dmd
-        make -j$NIX_BUILD_CORES -f posix.mak INSTALL_DIR=$out
+        make -j$NIX_BUILD_CORES -f posix.mak INSTALL_DIR=$out BUILD=release ENABLE_RELEASE=1 PIC=1 HOST_DMD=ldmd2
         cd ../druntime
-        make -j$NIX_BUILD_CORES -f posix.mak PIC=1 INSTALL_DIR=$out DMD=${pathToDmd}
+        make -j$NIX_BUILD_CORES -f posix.mak BUILD=release ENABLE_RELEASE=1 PIC=1 INSTALL_DIR=$out DMD=${pathToDmd}
         cd ../phobos
-        make -j$NIX_BUILD_CORES -f posix.mak PIC=1 INSTALL_DIR=$out DMD=${pathToDmd}
+        echo ${tzdata}/share/zoneinfo/ > TZDatabaseDirFile
+        echo ${curl.out}/lib/libcurl.so > LibcurlPathFile
+        make -j$NIX_BUILD_CORES -f posix.mak BUILD=release ENABLE_RELEASE=1 PIC=1 INSTALL_DIR=$out DMD=${pathToDmd} DFLAGS="-version=TZDatabaseDir -version=LibcurlPath -J$(pwd)"
         cd ..
     '';
 
-    doCheck = !bootstrapVersion;
+    # Disable tests on Darwin for now because of
+    # https://github.com/NixOS/nixpkgs/issues/41099
+    doCheck = true;
 
     checkPhase = ''
         cd dmd
-        make -j$NIX_BUILD_CORES -C test -f Makefile PIC=1 DMD=${pathToDmd} BUILD=release SHARED=0 SHELL=$SHELL
+        make -j$NIX_BUILD_CORES -C test -f Makefile PIC=1 CC=$CXX DMD=${pathToDmd} BUILD=release SHARED=0 SHELL=$SHELL
         cd ../druntime
         make -j$NIX_BUILD_CORES -f posix.mak unittest PIC=1 DMD=${pathToDmd} BUILD=release
         cd ..
     '';
-    
-    extension = if stdenv.hostPlatform.isDarwin then "a" else "{a,so}";
+
+    dontStrip = true;
 
     installPhase = ''
         cd dmd
@@ -210,19 +118,19 @@ let
 
         cd ../phobos
         mkdir $out/lib
-        cp generated/${osname}/release/${bits}/libphobos2.${extension} $out/lib
+        cp generated/${osname}/release/${bits}/libphobos2.* $out/lib
 
         cp -r std $out/include/d2
         cp -r etc $out/include/d2
 
         wrapProgram $out/bin/dmd \
-            --prefix PATH ":" "${stdenv.cc}/bin" \
-            --set-default CC "$CC"
+            --prefix PATH ":" "${targetPackages.stdenv.cc}/bin" \
+            --set-default CC "${targetPackages.stdenv.cc}/bin/cc"
 
         cd $out/bin
         tee dmd.conf << EOF
         [Environment]
-        DFLAGS=-I$out/include/d2 -L-L$out/lib ${stdenv.lib.optionalString (!stdenv.cc.isClang) "-L--export-dynamic"} -fPIC
+        DFLAGS=-I$out/include/d2 -L-L$out/lib ${stdenv.lib.optionalString (!targetPackages.stdenv.cc.isClang) "-L--export-dynamic"} -fPIC
         EOF
     '';
 
@@ -239,34 +147,40 @@ let
 
   # Need to test Phobos in a fixed-output derivation, otherwise the
   # network stuff in Phobos would fail if sandbox mode is enabled.
-  phobosUnittests = stdenv.mkDerivation rec {
-    name = "phobosUnittests-${version}";
-    version = dmdBuild.version;
+  #
+  # Disable tests on Darwin for now because of
+  # https://github.com/NixOS/nixpkgs/issues/41099
+  phobosUnittests = if !stdenv.hostPlatform.isDarwin then
+    stdenv.mkDerivation rec {
+      name = "phobosUnittests-${version}";
+      version = dmdBuild.version;
 
-    enableParallelBuilding = dmdBuild.enableParallelBuilding;
-    preferLocalBuild = true;
-    inputString = dmdBuild.outPath;
-    outputHashAlgo = "sha256";
-    outputHash = builtins.hashString "sha256" inputString;
+      enableParallelBuilding = dmdBuild.enableParallelBuilding;
+      preferLocalBuild = true;
+      inputString = dmdBuild.outPath;
+      outputHashAlgo = "sha256";
+      outputHash = builtins.hashString "sha256" inputString;
 
-    srcs = dmdBuild.srcs;
+      srcs = dmdBuild.srcs;
 
-    sourceRoot = ".";
+      sourceRoot = ".";
 
-    postPatch = dmdBuild.phobosPatches;
+      nativeBuildInputs = dmdBuild.nativeBuildInputs;
+      buildInputs = dmdBuild.buildInputs;
 
-    nativeBuildInputs = dmdBuild.nativeBuildInputs;
-    buildInputs = dmdBuild.buildInputs;
+      buildPhase = ''
+          cd phobos
+          echo ${tzdata}/share/zoneinfo/ > TZDatabaseDirFile
+          echo ${curl.out}/lib/libcurl.so > LibcurlPathFile
+          make -j$NIX_BUILD_CORES -f posix.mak unittest BUILD=release ENABLE_RELEASE=1 PIC=1 DMD=${dmdBuild}/bin/dmd DFLAGS="-version=TZDatabaseDir -version=LibcurlPath -J$(pwd)"
+      '';
 
-    buildPhase = ''
-        cd phobos
-        make -j$NIX_BUILD_CORES -f posix.mak unittest PIC=1 DMD=${dmdBuild}/bin/dmd BUILD=release
-    '';
-
-    installPhase = ''
-        echo -n $inputString > $out
-    '';
-  };
+      installPhase = ''
+          echo -n $inputString > $out
+      '';
+    }
+  else
+    "";
 
 in
 

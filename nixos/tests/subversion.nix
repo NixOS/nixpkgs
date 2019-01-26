@@ -39,7 +39,7 @@ in
 
   nodes =
     { webserver =
-        { config, pkgs, ... }:
+        { ... }:
 
         {
           services.httpd.enable = true;
@@ -55,7 +55,7 @@ in
         };
 
       client =
-        { config, pkgs, ... }:
+        { pkgs, ... }:
 
         {
           environment.systemPackages = [ pkgs.subversion ];

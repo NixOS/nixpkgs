@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libX11, gtk, pkgconfig, procps, makeWrapper, ... }:
+{ stdenv, fetchurl, gtk, pkgconfig, procps, makeWrapper, ... }:
 
 stdenv.mkDerivation rec {
   name = "xbindkeys-config-${version}";

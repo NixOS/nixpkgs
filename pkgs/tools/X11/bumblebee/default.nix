@@ -18,15 +18,14 @@
 
 { stdenv, lib, fetchurl, fetchpatch, pkgconfig, help2man, makeWrapper
 , glib, libbsd
-, libX11, libXext, xorgserver, xkbcomp, kmod, xf86videonouveau
-, nvidia_x11, virtualgl, libglvnd, primusLib
+, libX11, xorgserver, kmod, xf86videonouveau
+, nvidia_x11, virtualgl, libglvnd
 , automake111x, autoconf
 # The below should only be non-null in a x86_64 system. On a i686
 # system the above nvidia_x11 and virtualgl will be the i686 packages.
 # TODO: Confusing. Perhaps use "SubArch" instead of i686?
 , nvidia_x11_i686 ? null
 , libglvnd_i686 ? null
-, primusLib_i686 ? null
 , useDisplayDevice ? false
 , extraNvidiaDeviceOptions ? ""
 , extraNouveauDeviceOptions ? ""
@@ -36,11 +35,6 @@
 let
   version = "3.2.1";
 
-  primus = if useNvidia then primusLib else primusLib.override { nvidia_x11 = null; };
-  primus_i686 = if useNvidia then primusLib_i686 else primusLib_i686.override { nvidia_x11 = null; };
-
-  primusLibs = lib.makeLibraryPath ([primus] ++ lib.optional (primusLib_i686 != null) primus_i686);
-
   nvidia_x11s = [ nvidia_x11 ]
                 ++ lib.optional nvidia_x11.useGLVND libglvnd
                 ++ lib.optionals (nvidia_x11_i686 != null)
@@ -49,7 +43,6 @@ let
   nvidiaLibs = lib.makeLibraryPath nvidia_x11s;
 
   bbdPath = lib.makeBinPath [ kmod xorgserver ];
-  bbdLibs = lib.makeLibraryPath [ libX11 libXext ];
 
   xmodules = lib.concatStringsSep "," (map (x: "${x.out or x}/lib/xorg/modules") ([ xorgserver ] ++ lib.optional (!useNvidia) xf86videonouveau));
 
@@ -66,7 +59,7 @@ in stdenv.mkDerivation rec {
   name = "bumblebee-${version}";
 
   src = fetchurl {
-    url = "http://bumblebee-project.org/${name}.tar.gz";
+    url = "https://bumblebee-project.org/${name}.tar.gz";
     sha256 = "03p3gvx99lwlavznrpg9l7jnl1yfg2adcj8jcjj0gxp20wxp060h";
   };
 
@@ -133,8 +126,7 @@ in stdenv.mkDerivation rec {
 
   postInstall = ''
     wrapProgram "$out/sbin/bumblebeed" \
-      --prefix PATH : "${bbdPath}" \
-      --prefix LD_LIBRARY_PATH : "${bbdLibs}"
+      --prefix PATH : "${bbdPath}"
 
     wrapProgram "$out/bin/optirun" \
       --prefix PATH : "${virtualgl}/bin"

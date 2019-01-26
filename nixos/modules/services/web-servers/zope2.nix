@@ -6,7 +6,7 @@ let
 
   cfg = config.services.zope2;
 
-  zope2Opts = { name, config, ... }: {
+  zope2Opts = { name, ... }: {
     options = {
 
       name = mkOption {
@@ -103,7 +103,7 @@ in
 
   config = mkIf (cfg.instances != {}) {
 
-    users.extraUsers.zope2.uid = config.ids.uids.zope2;
+    users.users.zope2.uid = config.ids.uids.zope2;
 
     systemd.services =
       let

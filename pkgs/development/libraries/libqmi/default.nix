@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, glib, python, libgudev, libmbim }:
 
 stdenv.mkDerivation rec {
-  name = "libqmi-1.18.0";
+  name = "libqmi-1.20.2";
 
   src = fetchurl {
     url = "https://www.freedesktop.org/software/libqmi/${name}.tar.xz";
-    sha256 = "1v4cz3nsmh7nn3smhlhwzrb7yh6l1f270bwf40qacxayjdajr950";
+    sha256 = "0i6aw8jyxv84d5x8lj2g9lb8xxf1dyad8n3q0kw164pyig55jd67";
   };
 
   outputs = [ "out" "dev" "devdoc" ];

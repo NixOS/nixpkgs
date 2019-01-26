@@ -1,15 +1,26 @@
-{ stdenv, fetchurl, pkgconfig, libxml2, gnome3
-, gnome-doc-utils, intltool, which, libuuid, vala
-, desktop-file-utils, itstool, wrapGAppsHook, appdata-tools }:
+{ stdenv, fetchurl, pkgconfig, libxml2, gnome3, dconf, nautilus
+, gtk, gsettings-desktop-schemas, vte, intltool, which, libuuid, vala
+, desktop-file-utils, itstool, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
-  inherit (import ./src.nix fetchurl) name src;
+  name = "gnome-terminal-${version}";
+  version = "3.30.2";
 
-  buildInputs = [ gnome3.gtk gnome3.gsettings-desktop-schemas gnome3.vte appdata-tools
-                  gnome3.dconf itstool gnome3.nautilus ];
+  src = fetchurl {
+    url = "mirror://gnome/sources/gnome-terminal/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    sha256 = "0f2y76gs72sw5l5lkkkvxzsvvwm0sg83h7nl8lk5kz1v1rrc47vb";
+  };
 
-  nativeBuildInputs = [ pkgconfig intltool gnome-doc-utils which libuuid libxml2
-                        vala desktop-file-utils wrapGAppsHook ];
+  buildInputs = [
+    gtk gsettings-desktop-schemas vte libuuid dconf
+    # For extension
+    nautilus
+  ];
+
+  nativeBuildInputs = [
+    pkgconfig intltool itstool which libxml2
+    vala desktop-file-utils wrapGAppsHook
+  ];
 
   # Silly ./configure, it looks for dbus file from gnome-shell in the
   # installation tree of the package it is configuring.
@@ -18,15 +29,22 @@ stdenv.mkDerivation rec {
     substituteInPlace src/Makefile.in --replace '$(dbusinterfacedir)/org.gnome.ShellSearchProvider2.xml' "${gnome3.gnome-shell}/share/dbus-1/interfaces/org.gnome.ShellSearchProvider2.xml"
   '';
 
-  # FIXME: enable for gnome3
-  configureFlags = [ "--disable-migration" ];
+  configureFlags = [ "--disable-migration" ]; # TODO: remove this with 3.30
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = "gnome-terminal";
+      attrPath = "gnome3.gnome-terminal";
+    };
+  };
 
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "The GNOME Terminal Emulator";
-    homepage = https://wiki.gnome.org/Apps/Terminal/;
+    homepage = https://wiki.gnome.org/Apps/Terminal;
     platforms = platforms.linux;
+    license = licenses.gpl3Plus;
     maintainers = gnome3.maintainers;
   };
 }

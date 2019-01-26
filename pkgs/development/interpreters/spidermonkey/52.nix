@@ -1,61 +1,68 @@
-{ stdenv, fetchurl, autoconf213, pkgconfig, perl, python2, zip, which, readline, icu, zlib, nspr }:
+{ stdenv, fetchurl, fetchpatch, autoconf213, pkgconfig, perl, python2, zip, which, readline, icu, zlib, nspr }:
 
-stdenv.mkDerivation rec {
-  version = "52.2.1gnome1";
+let
+  version = "52.9.0";
+in stdenv.mkDerivation rec {
   name = "spidermonkey-${version}";
 
-  # the release notes point to some guys home directory, see
-  # https://developer.mozilla.org/en-US/docs/Mozilla/Projects/SpiderMonkey/Releases/38
-  # probably it would be more ideal to pull a particular tag/revision
-  # from the mercurial repo
   src = fetchurl {
-    url = "mirror://gnome/teams/releng/tarballs-needing-help/mozjs/mozjs-${version}.tar.gz";
-    sha256 = "1bxhz724s1ch1c0kdlzlg9ylhg1mk8kbhdgfkax53fyvn51pjs9i";
+    url = "mirror://mozilla/firefox/releases/${version}esr/source/firefox-${version}esr.source.tar.xz";
+    sha256 = "1mlx34fgh1kaqamrkl5isf0npch3mm6s4lz3jsjb7hakiijhj7f0";
   };
+
+  outputs = [ "out" "dev" ];
+  setOutputFlags = false; # Configure script only understands --includedir
 
   buildInputs = [ readline icu zlib nspr ];
   nativeBuildInputs = [ autoconf213 pkgconfig perl which python2 zip ];
 
-  postUnpack = "sourceRoot=\${sourceRoot}/js/src";
+  # Apparently this package fails to build correctly with modern compilers, which at least
+  # on ARMv6 causes polkit testsuite to break with an assertion failure in spidermonkey.
+  # These flags were stolen from:
+  # https://git.archlinux.org/svntogit/packages.git/tree/trunk/PKGBUILD?h=packages/js52
+  NIX_CFLAGS_COMPILE = "-fno-delete-null-pointer-checks -fno-strict-aliasing -fno-tree-vrp";
+
+  patches = [
+    # needed to build gnome3.gjs
+    (fetchpatch {
+      name = "mozjs52-disable-mozglue.patch";
+      url = https://git.archlinux.org/svntogit/packages.git/plain/trunk/mozjs52-disable-mozglue.patch?h=packages/js52&id=4279d2e18d9a44f6375f584911f63d13de7704be;
+      sha256 = "18wkss0agdyff107p5lfflk72qiz350xqw2yqc353alkx4fsfpz0";
+    })
+  ];
 
   preConfigure = ''
     export CXXFLAGS="-fpermissive"
     export LIBXUL_DIST=$out
     export PYTHON="${python2.interpreter}"
+    configureFlagsArray+=("--includedir=$dev/include")
+
+    cd js/src
+
+    autoconf
   '';
 
   configureFlags = [
-    "--enable-threadsafe"
     "--with-system-nspr"
     "--with-system-zlib"
     "--with-system-icu"
     "--with-intl-api"
     "--enable-readline"
-
-    # enabling these because they're wanted by 0ad. They may or may
-    # not be good defaults for other uses.
-    "--enable-gcgenerational"
     "--enable-shared-js"
-  ];
+  ] ++ stdenv.lib.optional stdenv.hostPlatform.isMusl "--disable-jemalloc";
 
-  # This addresses some build system bug. It's quite likely to be safe
-  # to re-enable parallel builds if the source revision changes.
   enableParallelBuilding = true;
 
-  postFixup = ''
-    # The headers are symlinks to a directory that doesn't get put
-    # into $out, so they end up broken. Fix that by just resolving the
-    # symlinks.
-    for i in $(find $out -type l); do
-      cp --remove-destination "$(readlink "$i")" "$i";
-    done
+  postInstall = ''
+    moveToOutput bin/js52-config "$dev"
+    # Nuke a static lib.
+    rm $out/lib/libjs_static.ajs
   '';
 
   meta = with stdenv.lib; {
     description = "Mozilla's JavaScript engine written in C/C++";
     homepage = https://developer.mozilla.org/en/SpiderMonkey;
-    # TODO: MPL/GPL/LGPL tri-license.
-
+    license = licenses.gpl2; # TODO: MPL/GPL/LGPL tri-license.
     maintainers = [ maintainers.abbradar ];
     platforms = platforms.linux;
   };

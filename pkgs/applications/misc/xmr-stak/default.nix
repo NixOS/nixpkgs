@@ -1,19 +1,24 @@
-{ stdenv, lib, fetchFromGitHub, cmake, libuv, libmicrohttpd, openssl
+{ stdenv, stdenvGcc6, lib
+, fetchFromGitHub, cmake, libmicrohttpd, openssl
 , opencl-headers, ocl-icd, hwloc, cudatoolkit
 , devDonationLevel ? "0.0"
 , cudaSupport ? false
-, openclSupport ? false
+, openclSupport ? true
 }:
 
-stdenv.mkDerivation rec {
+let
+  stdenv' = if cudaSupport then stdenvGcc6 else stdenv;
+in
+
+stdenv'.mkDerivation rec {
   name = "xmr-stak-${version}";
-  version = "2.2.0";
+  version = "2.7.1";
 
   src = fetchFromGitHub {
     owner = "fireice-uk";
     repo = "xmr-stak";
-    rev = "v${version}";
-    sha256 = "0n21y37d8khgfk9965mrhnh6y5ag7w0s6as1fmf76yx6vajvajsn";
+    rev = "${version}";
+    sha256 = "1mlli8sx1f3922ygnwakmi2h3swccz62njxbzxfzbi4hlmvsaz0y";
   };
 
   NIX_CFLAGS_COMPILE = "-O3";
@@ -35,6 +40,6 @@ stdenv.mkDerivation rec {
     description = "Unified All-in-one Monero miner";
     homepage = "https://github.com/fireice-uk/xmr-stak";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ fpletz ];
+    maintainers = with maintainers; [ fpletz bfortz ];
   };
 }

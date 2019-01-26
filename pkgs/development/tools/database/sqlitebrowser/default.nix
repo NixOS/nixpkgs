@@ -16,6 +16,10 @@ mkDerivation rec {
 
   nativeBuildInputs = [ cmake antlr qttools ];
 
+  NIX_LDFLAGS = [
+    "-lQt5PrintSupport"
+  ];
+
   enableParallelBuilding = true;
 
   # We have to patch out Test and PrintSupport to make this work with Qt 5.9
@@ -33,7 +37,7 @@ mkDerivation rec {
     description = "DB Browser for SQLite";
     homepage = http://sqlitebrowser.org/;
     license = licenses.gpl3;
-    maintainers = with maintainers; [ matthiasbeyer ];
+    maintainers = with maintainers; [ ma27 ];
     platforms = platforms.linux; # can only test on linux
   };
 }

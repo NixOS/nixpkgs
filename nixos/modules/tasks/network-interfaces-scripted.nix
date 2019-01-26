@@ -7,7 +7,6 @@ let
 
   cfg = config.networking;
   interfaces = attrValues cfg.interfaces;
-  hasVirtuals = any (i: i.virtual) interfaces;
 
   slaves = concatMap (i: i.interfaces) (attrValues cfg.bonds)
     ++ concatMap (i: i.interfaces) (attrValues cfg.bridges)
@@ -68,8 +67,7 @@ let
              (hasAttr dev cfg.macvlans) ||
              (hasAttr dev cfg.sits) ||
              (hasAttr dev cfg.vlans) ||
-             (hasAttr dev cfg.vswitches) ||
-             (hasAttr dev cfg.wlanInterfaces)
+             (hasAttr dev cfg.vswitches)
           then [ "${dev}-netdev.service" ]
           else optional (dev != null && dev != "lo" && !config.boot.isContainer) (subsystemDevice dev);
 
@@ -87,7 +85,8 @@ let
             after = [ "network-pre.target" "systemd-udevd.service" "systemd-sysctl.service" ];
             before = [ "network.target" "shutdown.target" ];
             wants = [ "network.target" ];
-            partOf = map (i: "network-addresses-${i.name}.service") interfaces;
+            # exclude bridges from the partOf relationship to fix container networking bug #47210
+            partOf = map (i: "network-addresses-${i.name}.service") (filter (i: !(hasAttr i.name cfg.bridges)) interfaces);
             conflicts = [ "shutdown.target" ];
             wantedBy = [ "multi-user.target" ] ++ optional hasDefaultGatewaySet "network-online.target";
 
@@ -192,7 +191,7 @@ let
                     if out=$(ip addr add "${cidr}" dev "${i.name}" 2>&1); then
                       echo "done"
                     elif ! echo "$out" | grep "File exists" >/dev/null 2>&1; then
-                      echo "failed"
+                      echo "'ip addr add "${cidr}" dev "${i.name}"' failed: $out"
                       exit 1
                     fi
                   ''
@@ -210,10 +209,10 @@ let
                   ''
                      echo "${cidr}" >> $state
                      echo -n "adding route ${cidr}... "
-                     if out=$(ip route add "${cidr}" ${options} ${via} dev "${i.name}" 2>&1); then
+                     if out=$(ip route add "${cidr}" ${options} ${via} dev "${i.name}" proto static 2>&1); then
                        echo "done"
                      elif ! echo "$out" | grep "File exists" >/dev/null 2>&1; then
-                       echo "failed"
+                       echo "'ip route add "${cidr}" ${options} ${via} dev "${i.name}"' failed: $out"
                        exit 1
                      fi
                   ''
@@ -287,6 +286,17 @@ let
               echo "${flip concatMapStrings v.interfaces (i: ''
                 ${i}
               '')}" > /run/${n}.interfaces
+
+              ${optionalString config.virtualisation.libvirtd.enable ''
+                  # Enslave dynamically added interfaces which may be lost on nixos-rebuild
+                  for uri in qemu:///system lxc:///; do
+                    for dom in $(${pkgs.libvirt}/bin/virsh -c $uri list --name); do
+                      ${pkgs.libvirt}/bin/virsh -c $uri dumpxml "$dom" | \
+                      ${pkgs.xmlstarlet}/bin/xmlstarlet sel -t -m "//domain/devices/interface[@type='bridge'][source/@bridge='${n}'][target/@dev]" -v "concat('ip link set ',target/@dev,' master ',source/@bridge,';')" | \
+                      ${pkgs.bash}/bin/bash
+                    done
+                  done
+                ''}
 
               # Enable stp on the interface
               ${optionalString v.rstp ''
@@ -464,7 +474,12 @@ let
               # Remove Dead Interfaces
               ip link show "${n}" >/dev/null 2>&1 && ip link delete "${n}"
               ip link add link "${v.interface}" name "${n}" type vlan id "${toString v.id}"
-              ip link set "${n}" up
+              
+              # We try to bring up the logical VLAN interface. If the master 
+              # interface the logical interface is dependent upon is not up yet we will 
+              # fail to immediately bring up the logical interface. The resulting logical
+              # interface will brought up later when the master interface is up.
+              ip link set "${n}" up || true
             '';
             postStop = ''
               ip link delete "${n}" || true

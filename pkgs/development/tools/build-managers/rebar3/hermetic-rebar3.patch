@@ -1,5 +1,5 @@
 diff --git a/bootstrap b/bootstrap
-index 7c56bab..16c1be5 100755
+index 5dedd713..864056c4 100755
 --- a/bootstrap
 +++ b/bootstrap
 @@ -101,7 +101,7 @@ extract(Binary) ->
@@ -12,9 +12,8 @@ index 7c56bab..16c1be5 100755
                         [{body_format, binary}],
                         rebar) of
 diff --git a/src/rebar_hermeticity.erl b/src/rebar_hermeticity.erl
-new file mode 100644
-index 0000000..8f6cc7d
---- /dev/null
+index e69de29b..8f6cc7d0 100644
+--- a/src/rebar_hermeticity.erl
 +++ b/src/rebar_hermeticity.erl
 @@ -0,0 +1,42 @@
 +%% -*- erlang-indent-level: 4;indent-tabs-mode: nil -*-
@@ -60,20 +59,20 @@ index 0000000..8f6cc7d
 +    ?ERROR("Request: ~p ~s", [Method, Url]),
 +    erlang:halt(1).
 diff --git a/src/rebar_pkg_resource.erl b/src/rebar_pkg_resource.erl
-index d588f24..9ac8ad4 100644
+index 2cf167ee..6080aaca 100644
 --- a/src/rebar_pkg_resource.erl
 +++ b/src/rebar_pkg_resource.erl
-@@ -109,7 +109,7 @@ make_vsn(_) ->
+@@ -127,7 +127,7 @@ make_vsn(_) ->
  request(Url, ETag) ->
-     HttpOptions = [{ssl, ssl_opts(Url)}, {relaxed, true} | rebar_utils:get_proxy_auth()],
- 
--    case httpc:request(get, {Url, [{"if-none-match", ETag} || ETag =/= false]++[{"User-Agent", rebar_utils:user_agent()}]},
-+    case rebar_hermeticity:request(get, {Url, [{"if-none-match", ETag} || ETag =/= false]++[{"User-Agent", rebar_utils:user_agent()}]},
-                        HttpOptions,
-                        [{body_format, binary}],
-                        rebar) of
+     HttpOptions = [{ssl, ssl_opts(Url)},
+                    {relaxed, true} | rebar_utils:get_proxy_auth()],
+-    case httpc:request(get, {Url, [{"if-none-match", "\"" ++ ETag ++ "\""}
++    case rebar_hermeticity:request(get, {Url, [{"if-none-match", "\"" ++ ETag ++ "\""}
+                                    || ETag =/= false] ++
+                              [{"User-Agent", rebar_utils:user_agent()}]},
+                        HttpOptions, [{body_format, binary}], rebar) of
 diff --git a/src/rebar_prv_update.erl b/src/rebar_prv_update.erl
-index a019c5a..697cbab 100644
+index 17446311..4d44d794 100644
 --- a/src/rebar_prv_update.erl
 +++ b/src/rebar_prv_update.erl
 @@ -38,6 +38,8 @@ init(State) ->
@@ -85,17 +84,17 @@ index a019c5a..697cbab 100644
  do(State) ->
      try
          case rebar_packages:registry_dir(State) of
-@@ -52,7 +54,7 @@ do(State) ->
-                 case rebar_utils:url_append_path(CDN, ?REMOTE_REGISTRY_FILE) of
+@@ -53,7 +55,7 @@ do(State) ->
                      {ok, Url} ->
+                         HttpOptions = [{relaxed, true} | rebar_utils:get_proxy_auth()],
                          ?DEBUG("Fetching registry from ~p", [Url]),
 -                        case httpc:request(get, {Url, [{"User-Agent", rebar_utils:user_agent()}]},
 +                        case rebar_hermeticity:request(get, {Url, [{"User-Agent", rebar_utils:user_agent()}]},
-                                            [], [{stream, TmpFile}, {sync, true}],
+                                            HttpOptions, [{stream, TmpFile}, {sync, true}],
                                             rebar) of
                              {ok, saved_to_file} ->
-@@ -76,6 +78,7 @@ do(State) ->
-             ?DEBUG("Error creating package index: ~p ~p", [C, erlang:get_stacktrace()]),
+@@ -77,6 +79,7 @@ do(State) ->
+             ?DEBUG("Error creating package index: ~p ~p", [C, S]),
              throw(?PRV_ERROR(package_index_write))
      end.
 +-endif.

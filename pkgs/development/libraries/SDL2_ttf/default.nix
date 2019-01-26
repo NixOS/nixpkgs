@@ -1,4 +1,4 @@
-{ stdenv, darwin, fetchurl, SDL2, freetype, mesa_noglu }:
+{ stdenv, darwin, fetchurl, SDL2, freetype, libGL }:
 
 stdenv.mkDerivation rec {
   name = "SDL2_ttf-${version}";
@@ -9,7 +9,9 @@ stdenv.mkDerivation rec {
     sha256 = "0xljwcpvd2knrjdfag5b257xqayplz55mqlszrqp0kpnphh5xnrl";
   };
 
-  buildInputs = [ SDL2 freetype mesa_noglu ]
+  configureFlags = stdenv.lib.optional stdenv.isDarwin "--disable-sdltest";
+
+  buildInputs = [ SDL2 freetype libGL ]
     ++ stdenv.lib.optional stdenv.isDarwin darwin.libobjc;
 
   meta = with stdenv.lib; {

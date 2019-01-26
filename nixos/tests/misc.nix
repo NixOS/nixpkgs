@@ -1,18 +1,20 @@
 # Miscellaneous small tests that don't warrant their own VM run.
 
-import ./make-test.nix ({ pkgs, ...} : {
+import ./make-test.nix ({ pkgs, ...} : rec {
   name = "misc";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ eelco chaoflow ];
   };
 
+  foo = pkgs.writeText "foo" "Hello World";
+
   machine =
-    { config, lib, pkgs, ... }:
+    { lib, ... }:
     with lib;
     { swapDevices = mkOverride 0
         [ { device = "/root/swapfile"; size = 128; } ];
       environment.variables.EDITOR = mkOverride 0 "emacs";
-      services.nixosManual.enable = mkOverride 0 true;
+      documentation.nixos.enable = mkOverride 0 true;
       systemd.tmpfiles.rules = [ "d /tmp 1777 root root 10d" ];
       fileSystems = mkVMOverride { "/tmp2" =
         { fsType = "tmpfs";
@@ -27,10 +29,17 @@ import ./make-test.nix ({ pkgs, ...} : {
       security.sudo = { enable = true; wheelNeedsPassword = false; };
       boot.kernel.sysctl."vm.swappiness" = 1;
       boot.kernelParams = [ "vsyscall=emulate" ];
+      system.extraDependencies = [ foo ];
     };
 
   testScript =
     ''
+      subtest "nix-db", sub {
+          my $json = $machine->succeed("nix path-info --json ${foo}");
+          $json =~ /"narHash":"sha256:0afw0d9j1hvwiz066z93jiddc33nxg6i6qyp26vnqyglpyfivlq5"/ or die "narHash not set";
+          $json =~ /"narSize":128/ or die "narSize not set";
+      };
+
       subtest "nixos-version", sub {
           $machine->succeed("[ `nixos-version | wc -w` = 2 ]");
       };
@@ -69,6 +78,8 @@ import ./make-test.nix ({ pkgs, ...} : {
 
       # Test whether we have a reboot record in wtmp.
       subtest "reboot-wtmp", sub {
+          $machine->shutdown;
+          $machine->waitForUnit('multi-user.target');
           $machine->succeed("last | grep reboot >&2");
       };
 
@@ -87,7 +98,7 @@ import ./make-test.nix ({ pkgs, ...} : {
       $machine->succeed("systemctl start systemd-udev-settle.service");
       subtest "udev-auto-load", sub {
           $machine->waitForUnit('systemd-udev-settle.service');
-          $machine->succeed('lsmod | grep psmouse');
+          $machine->succeed('lsmod | grep mousedev');
       };
 
       # Test whether systemd-tmpfiles-clean works.

@@ -1,10 +1,10 @@
-{ stdenv, fetchurl, patchelf, bash
+{ stdenv, patchelf, makeWrapper
 
 # Linked dynamic libraries.
 , glib, fontconfig, freetype, pango, cairo, libX11, libXi, atk, gconf, nss, nspr
 , libXcursor, libXext, libXfixes, libXrender, libXScrnSaver, libXcomposite, libxcb
 , alsaLib, libXdamage, libXtst, libXrandr, expat, cups
-, dbus_libs, gtk2, gtk3, gdk_pixbuf, gcc-unwrapped, at-spi2-atk
+, dbus, gtk2, gtk3, gdk_pixbuf, gcc-unwrapped, at-spi2-atk, at-spi2-core
 , kerberos
 
 # command line arguments which are always set e.g "--disable-gpu"
@@ -52,12 +52,12 @@ let
     glib fontconfig freetype pango cairo libX11 libXi atk gconf nss nspr
     libXcursor libXext libXfixes libXrender libXScrnSaver libXcomposite libxcb
     alsaLib libXdamage libXtst libXrandr expat cups
-    dbus_libs gdk_pixbuf gcc-unwrapped.lib
+    dbus gdk_pixbuf gcc-unwrapped.lib
     systemd
     libexif
     liberation_ttf curl utillinux xdg_utils wget
     flac harfbuzz icu libpng opusWithCustomModes snappy speechd
-    bzip2 libcap at-spi2-atk
+    bzip2 libcap at-spi2-atk at-spi2-core
     kerberos
   ] ++ optional pulseSupport libpulseaudio
     ++ [ gtk ];
@@ -71,9 +71,8 @@ in stdenv.mkDerivation rec {
 
   src = chromium.upstream-info.binary;
 
+  nativeBuildInputs = [ patchelf makeWrapper ];
   buildInputs = [
-    patchelf
-
     # needed for GSETTINGS_SCHEMAS_PATH
     gsettings-desktop-schemas glib gtk
 
@@ -120,14 +119,11 @@ in stdenv.mkDerivation rec {
       mv "$icon_file" "$logo_output_path/google-$appname.png"
     done
 
-    cat > $exe << EOF
-    #!${bash}/bin/sh
-    export LD_LIBRARY_PATH=$rpath\''${LD_LIBRARY_PATH:+:\$LD_LIBRARY_PATH}
-    export PATH=$binpath\''${PATH:+:\$PATH}
-    export XDG_DATA_DIRS=$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH\''${XDG_DATA_DIRS:+:}\$XDG_DATA_DIRS
-    $out/share/google/$appname/google-$appname ${commandLineArgs} "\$@"
-    EOF
-    chmod +x $exe
+    makeWrapper "$out/share/google/$appname/google-$appname" "$exe" \
+      --prefix LD_LIBRARY_PATH : "$rpath" \
+      --prefix PATH            : "$binpath" \
+      --prefix XDG_DATA_DIRS   : "$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH" \
+      --add-flags ${escapeShellArg commandLineArgs}
 
     for elf in $out/share/google/$appname/{chrome,chrome-sandbox,nacl_helper}; do
       patchelf --set-rpath $rpath $elf

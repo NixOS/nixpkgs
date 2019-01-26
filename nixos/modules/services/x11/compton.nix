@@ -238,6 +238,12 @@ in {
       description = "Compton composite manager";
       wantedBy = [ "graphical-session.target" ];
       partOf = [ "graphical-session.target" ];
+
+      # Temporarily fixes corrupt colours with Mesa 18
+      environment = mkIf (cfg.backend == "glx") {
+        allow_rgb10_configs = "false";
+      };
+
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/compton --config ${configFile}";
         RestartSec = 3;

@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Playstation 1 emulator";
-    homepage = http://pcsxr.codeplex.com/;
+    homepage = https://pcsxr.codeplex.com/;
     maintainers = with maintainers; [ rardiol ];
     license = licenses.gpl2Plus;
     platforms = platforms.all;

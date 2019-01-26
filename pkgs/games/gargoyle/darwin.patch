@@ -1,54 +1,64 @@
-diff --git a/Jamshared b/Jamshared
-index 13db835..fd42928 100644
---- a/Jamshared
-+++ b/Jamshared
-@@ -79,7 +79,7 @@ if $(OS) = MACOSX
- {
-     actions together SharedLink bind NEEDLIBS
-     {
--        $(LINK) -headerpad_max_install_names $(FRAMEWORKS) $(MAINARCH) $(ALTARCH) -dynamiclib $(SHRLINKFLAGS) -install_name @executable_path/$(<:D=) -o $(<) $(>) $(NEEDLIBS) $(SHRLINKLIBS)
-+        $(LINK) $(FRAMEWORKS) $(MAINARCH) $(ALTARCH) -dynamiclib $(SHRLINKFLAGS) -install_name @executable_path/$(<:D=) -o $(<) $(>) $(NEEDLIBS) $(SHRLINKLIBS)
+--- a/garglk/fontmac.m
++++ b/garglk/fontmac.m
+@@ -167,7 +167,7 @@ static void propfont(char *file, int style)
      }
  }
- else
-diff --git a/tads/Jamfile b/tads/Jamfile
-index 1f8829d..d8455eb 100644
---- a/tads/Jamfile
-+++ b/tads/Jamfile
-@@ -33,8 +33,8 @@ if $(OS) = LINUX || $(OS) = SOLARIS
  
- if $(OS) = MACOSX
+-static NSMutableArray<NSURL *> * gli_registered_fonts = nil;
++static NSMutableArray * gli_registered_fonts = nil;
+ static NSDistributedLock * gli_font_lock = nil;
+ 
+ void fontreplace(char *font, int type)
+@@ -181,7 +181,7 @@ void fontreplace(char *font, int type)
+     NSFontDescriptor * fontFamilyDescriptor =
+         [[NSFontDescriptor fontDescriptorWithFontAttributes: nil] fontDescriptorWithFamily: fontFamily];
+ 
+-    NSArray<NSFontDescriptor *> * fontMatches =
++    NSArray * fontMatches =
+         [fontFamilyDescriptor matchingFontDescriptorsWithMandatoryKeys: nil];
+ 
+     for (NSFontDescriptor * sysfont in fontMatches)
+@@ -259,7 +259,7 @@ void fontload(void)
+ 
+     // obtain a list of all files in the Fonts directory
+     NSString * fontFolder = [[NSString stringWithUTF8String: env] stringByAppendingPathComponent: @"Fonts"];
+-    NSArray<NSString *> * fontFiles = [[NSFileManager defaultManager] contentsOfDirectoryAtPath: fontFolder error: nil];
++    NSArray * fontFiles = [[NSFileManager defaultManager] contentsOfDirectoryAtPath: fontFolder error: nil];
+ 
+     // create a collection to hold the registered font URLs
+     gli_registered_fonts = [NSMutableArray new];
+--- a/garglk/launchmac.m
++++ b/garglk/launchmac.m
+@@ -556,7 +556,7 @@ static BOOL isTextbufferEvent(NSEvent * evt)
+                          <GargoyleApp, NSApplicationDelegate, NSWindowDelegate>
  {
--    SubDirCcFlags -headerpad_max_install_names $(MAINARCH) $(ALTARCH) ;
--    LINKFLAGS = -headerpad_max_install_names $(MAINARCH) $(ALTARCH) ;
-+    SubDirCcFlags $(MAINARCH) $(ALTARCH) ;
-+    LINKFLAGS = $(MAINARCH) $(ALTARCH) ;
+     BOOL openedFirstGame;
+-    NSMutableDictionary<NSNumber *, GargoyleWindow *> * windows;
++    NSMutableDictionary * windows;
+     NSConnection * link;
  }
+ - (BOOL) launchFile: (NSString *) file;
+--- a/garglk/ttsmac.m
++++ b/garglk/ttsmac.m
+@@ -30,7 +30,7 @@
+ #import "sysmac.h"
  
- SEARCH_SOURCE =
-diff --git a/tads/tads3/vmtz.cpp b/tads/tads3/vmtz.cpp
-index 5e193a1..dce46f7 100644
---- a/tads/tads3/vmtz.cpp
-+++ b/tads/tads3/vmtz.cpp
-@@ -1985,5 +1985,5 @@ void CVmTimeZone::query(vmtzquery *result, int32_t dayno, int32_t daytime,
-              *   up until that moment
-              */
--            result->set(tcur > 0 ? tcur - 1 : tcur);
-+            result->set(tcur != 0 ? tcur - 1 : tcur);
-            return;
-        }
-diff --git a/terps/Jamfile b/terps/Jamfile
-index b5f6d52..2d1ccdb 100644
---- a/terps/Jamfile
-+++ b/terps/Jamfile
-@@ -185,8 +185,8 @@ if $(MAKE_GEAS) = yes
+ // a queue of phrases to feed to the speech synthesizer
+-static NSMutableArray<NSString *> * phraseQueue = nil;
++static NSMutableArray * phraseQueue = nil;
+ static NSRange purgeRange;
  
-     if $(OS) = MACOSX
-     {
--        SubDirCcFlags -headerpad_max_install_names $(MAINARCH) $(ALTARCH) ;
--        LINKFLAGS = -headerpad_max_install_names $(MAINARCH) $(ALTARCH) ;
-+        SubDirCcFlags $(MAINARCH) $(ALTARCH) ;
-+        LINKFLAGS = $(MAINARCH) $(ALTARCH) ;
-     }
+ @interface SpeechDelegate : NSObject <NSSpeechSynthesizerDelegate>
+@@ -96,10 +96,10 @@ void gli_initialize_tts(void)
+             NSString * lang = [NSString stringWithCString: gli_conf_speak_language
+                                                  encoding: NSUTF8StringEncoding];
  
-     SUBDIRC++FLAGS = $(SUBDIRCCFLAGS) ;
+-            NSArray<NSString *> * voices = [NSSpeechSynthesizer availableVoices];
++            NSArray * voices = [NSSpeechSynthesizer availableVoices];
+             for (NSString * voice in voices)
+             {
+-                NSDictionary<NSString *, id> * attr = [NSSpeechSynthesizer attributesForVoice: voice];
++                NSDictionary * attr = [NSSpeechSynthesizer attributesForVoice: voice];
+                 if ([lang isEqualToString: [attr objectForKey: NSVoiceLocaleIdentifier]])
+                 {
+                     [synth setVoice: voice];

@@ -1,10 +1,9 @@
-{ fetchFromGitHub, stdenv, pythonPackages, gtk3, gobjectIntrospection, libnotify
+{ fetchFromGitHub, stdenv, pythonPackages, gtk3, gobject-introspection, libnotify
 , gst_all_1, wrapGAppsHook }:
 
 pythonPackages.buildPythonApplication rec {
   pname = "pithos";
   version = "1.1.2";
-  name = "${pname}-${version}";
 
   src = fetchFromGitHub {
     owner = pname;
@@ -28,7 +27,7 @@ pythonPackages.buildPythonApplication rec {
   buildInputs = [ wrapGAppsHook ];
 
   propagatedBuildInputs =
-    [ gtk3 gobjectIntrospection libnotify ] ++
+    [ gtk3 gobject-introspection libnotify ] ++
     (with gst_all_1; [ gstreamer gst-plugins-base gst-plugins-good gst-plugins-ugly gst-plugins-bad ]) ++
     (with pythonPackages; [ pygobject3 pylast ]);
 

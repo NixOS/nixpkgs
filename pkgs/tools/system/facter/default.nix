@@ -2,17 +2,16 @@
 
 stdenv.mkDerivation rec {
   name = "facter-${version}";
-  version = "3.9.3";
+  version = "3.12.2";
 
   src = fetchFromGitHub {
-    sha256 = "1qd0xsw49nbj22czddxk90di31gx43hacvnmh08gp3001a8g0qcj";
+    sha256 = "021z0r6m5nyi37045ycjpw0lawvw70w4pjl56cj1mwz99pq1qqns";
     rev = version;
     repo = "facter";
     owner = "puppetlabs";
   };
 
   CXXFLAGS = "-fpermissive";
-  NIX_CFLAGS_COMPILE = "-Wno-error";
   NIX_LDFLAGS = "-lblkid";
 
   cmakeFlags = [ "-DFACTER_RUBY=${ruby}/lib/libruby.so" ];

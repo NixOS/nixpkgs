@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libX11, zlib, xproto, mesa ? null, freeglut ? null }:
+{ stdenv, fetchurl, libX11, zlib, xorgproto, libGL ? null, freeglut ? null }:
 
 stdenv.mkDerivation rec {
   name = "construo-${version}";
@@ -9,8 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "1wmj527hbj1qv44cdsj6ahfjrnrjwg2dp8gdick8nd07vm062qxa";
   };
 
-  buildInputs = [ libX11 zlib xproto ]
-    ++ stdenv.lib.optional (mesa != null) mesa
+  buildInputs = [ libX11 zlib xorgproto ]
+    ++ stdenv.lib.optional (libGL != null) libGL
     ++ stdenv.lib.optional (freeglut != null) freeglut;
 
   preConfigure = ''
@@ -21,5 +21,6 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Masses and springs simulation game";
     homepage = http://fs.fsf.org/construo/;
+    license = stdenv.lib.licenses.gpl3;
   };
 }

@@ -1,41 +1,57 @@
-{ stdenv, callPackage, fetchurl, makeFontsConf }:
+{ stdenv, callPackage, makeFontsConf, gnome2 }:
+
 let
   mkStudio = opts: callPackage (import ./common.nix opts) {
     fontsConf = makeFontsConf {
       fontDirectories = [];
     };
+    inherit (gnome2) GConf gnome_vfs;
+  };
+  stableVersion = {
+    version = "3.3.0.20"; # "Android Studio 3.3"
+    build = "182.5199772";
+    sha256Hash = "0dracganibnkyapn2pk2qqnxpwmii57371ycri4nccaci9v9pcjw";
+  };
+  betaVersion = {
+    version = "3.4.0.11"; # "Android Studio 3.4 Beta 2"
+    build = "183.5240537";
+    sha256Hash = "0mv7ayqjkw97jzdifw1cdvjhnzygzkd2a9rc0h99fclhf2nii5yr";
+  };
+  latestVersion = { # canary & dev
+    version = "3.5.0.1"; # "Android Studio 3.5 Canary 2"
+    build = "183.5240547";
+    sha256Hash = "0z52ig9v2w9i6bqiqpdvgcr6g6sgl8p5317jamg72d5csm9hgfx3";
   };
 in rec {
-  # linux-bundle
-  stable = mkStudio {
+  # Old alias (TODO @primeos: Remove after 19.03 is branched off):
+  preview = throw ''
+    The attributes "android-studio-preview" and "androidStudioPackages.preview"
+    are now deprecated and will be removed soon, please use
+    "androidStudioPackages.beta" instead. This attribute corresponds to the
+    beta channel, if you want the latest release you can use
+    "androidStudioPackages.dev" or "androidStudioPackages.canary" instead
+    (currently, there is no difference between both channels).
+  '';
+
+  # Attributes are named by their corresponding release channels
+
+  stable = mkStudio (stableVersion // {
+    channel = "stable";
     pname = "android-studio";
-    version = "3.0.1.0"; # "Android Studio 3.0.1"
-    build = "171.4443003";
-    sha256Hash = "1krahlqr70nq3csqiinq2m4fgs68j11hd9gg2dx2nrpw5zni0wdd";
+  });
 
-    meta = with stdenv.lib; {
-      description = "The Official IDE for Android (stable version)";
-      longDescription = ''
-        Android Studio is the official IDE for Android app development, based on
-        IntelliJ IDEA.
-      '';
-      homepage = https://developer.android.com/studio/index.html;
-      license = licenses.asl20;
-      platforms = [ "x86_64-linux" ];
-      maintainers = with maintainers; [ primeos ];
-    };
-  };
+  beta = mkStudio (betaVersion // {
+    channel = "beta";
+    pname = "android-studio-beta";
+  });
 
-  # linux-beta-bundle
-  preview = mkStudio {
-    pname = "android-studio-preview";
-    version = "3.1.0.12"; # "Android Studio 3.1 Beta 4"
-    build = "173.4615496";
-    sha256Hash = "0rp0vg5hwv7kdrirydvnwznpfwibwwm2dxsbhbxfkyahph10ly72";
+  dev = mkStudio (latestVersion // {
+    channel = "dev";
+    pname = "android-studio-dev";
+  });
 
-    meta = stable.meta // {
-      description = "The Official IDE for Android (preview version)";
-      homepage = https://developer.android.com/studio/preview/index.html;
-    };
-  };
+  canary = mkStudio (latestVersion // {
+    channel = "canary";
+    pname = "android-studio-canary";
+  });
 }

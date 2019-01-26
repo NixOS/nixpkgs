@@ -1,6 +1,6 @@
 {
   enableXft ? true, libXft ? null, patches ? [], stdenv, lua, gettext, pkgconfig, xlibsWrapper, libXinerama, libXrandr, libX11,
-  xterm, xmessage, makeWrapper, lib, fetchFromGitHub, mandoc, which
+  xterm, xmessage, makeWrapper, fetchFromGitHub, mandoc, which
 }:
 
 assert enableXft -> libXft != null;

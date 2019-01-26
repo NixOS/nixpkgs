@@ -1,15 +1,15 @@
 { stdenv, buildPackages
-, fetchurl, autoreconfHook264, bison, binutils-raw
+, autoreconfHook264, bison, binutils-unwrapped
 , libiberty, libbfd
 }:
 
 stdenv.mkDerivation rec {
   name = "libopcodes-${version}";
-  inherit (binutils-raw.bintools) version src;
+  inherit (binutils-unwrapped) version src;
 
   outputs = [ "out" "dev" ];
 
-  patches = binutils-raw.bintools.patches ++ [
+  patches = binutils-unwrapped.patches ++ [
     ../../tools/misc/binutils/build-components-separately.patch
   ];
 
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A library from binutils for manipulating machine code";
-    homepage = http://www.gnu.org/software/binutils/;
+    homepage = https://www.gnu.org/software/binutils/;
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ ericson2314 ];
     platforms = platforms.unix;

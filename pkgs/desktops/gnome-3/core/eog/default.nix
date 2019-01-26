@@ -1,20 +1,51 @@
-{ fetchurl, stdenv, gettext, pkgconfig, itstool, libxml2, libjpeg, gnome3
-, shared-mime-info, wrapGAppsHook, librsvg, libexif, gobjectIntrospection }:
+{ fetchurl, stdenv, meson, ninja, gettext, itstool, pkgconfig, libxml2, libjpeg, libpeas, gnome3
+, gtk3, glib, gsettings-desktop-schemas, adwaita-icon-theme, gnome-desktop, lcms2, gdk_pixbuf, exempi
+, shared-mime-info, wrapGAppsHook, librsvg, libexif, gobject-introspection, python3 }:
 
-stdenv.mkDerivation rec {
-  inherit (import ./src.nix fetchurl) name src;
+let
+  pname = "eog";
+  version = "3.28.4";
+in stdenv.mkDerivation rec {
+  name = "${pname}-${version}";
 
-  nativeBuildInputs = [ pkgconfig gettext itstool wrapGAppsHook gobjectIntrospection ];
+  src = fetchurl {
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    sha256 = "1wrq3l3z0x6q0hnc1vqr2hnyb1b14qw6aqvc5dldfgbs0yys6p55";
+  };
 
-  buildInputs = with gnome3;
-    [ libxml2 libjpeg gtk glib libpeas librsvg
-      gsettings-desktop-schemas shared-mime-info adwaita-icon-theme
-      gnome-desktop libexif dconf ];
+  nativeBuildInputs = [ meson ninja pkgconfig gettext itstool wrapGAppsHook libxml2 gobject-introspection python3 ];
+
+  buildInputs = [
+    libjpeg gtk3 gdk_pixbuf glib libpeas librsvg lcms2 gnome-desktop libexif exempi
+    gsettings-desktop-schemas shared-mime-info adwaita-icon-theme
+  ];
+
+  postPatch = ''
+    chmod +x meson_post_install.py
+    patchShebangs meson_post_install.py
+  '';
+
+  preFixup = ''
+    gappsWrapperArgs+=(
+      # Thumbnailers
+      --prefix XDG_DATA_DIRS : "${gdk_pixbuf}/share"
+      --prefix XDG_DATA_DIRS : "${librsvg}/share"
+      --prefix XDG_DATA_DIRS : "${shared-mime-info}/share"
+    )
+  '';
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+      attrPath = "gnome3.${pname}";
+    };
+  };
 
   meta = with stdenv.lib; {
-    homepage = https://wiki.gnome.org/Apps/EyeOfGnome;
-    platforms = platforms.linux;
     description = "GNOME image viewer";
+    homepage = https://wiki.gnome.org/Apps/EyeOfGnome;
+    license = licenses.gpl2Plus;
     maintainers = gnome3.maintainers;
+    platforms = platforms.unix;
   };
 }

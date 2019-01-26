@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, pkgconfig, intltool, glib, itstool, libxml2, mate, gnome3, wrapGAppsHook }:
+{ stdenv, fetchurl, pkgconfig, intltool, glib, itstool, libxml2, mate, gnome3, gtk3, vte, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   name = "mate-terminal-${version}";
-  version = "1.20.0";
+  version = "1.20.2";
 
   src = fetchurl {
     url = "http://pub.mate-desktop.org/releases/${mate.getRelease version}/${name}.tar.xz";
-    sha256 = "03366hs7mxazn6m6y53ppkb1din4jywljg0lx8zw101qg6car0az";
+    sha256 = "0fqyi0az4ax1gyk5gymd7ssq2crdcd7slmqljc1b1pa283ql7p3q";
   };
 
   buildInputs = [
@@ -16,8 +16,8 @@ stdenv.mkDerivation rec {
 
      mate.mate-desktop
 
-     gnome3.vte
-     gnome3.gtk
+     vte
+     gtk3
      gnome3.dconf
   ];
 

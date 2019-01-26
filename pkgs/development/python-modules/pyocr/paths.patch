@@ -1,28 +1,28 @@
-diff --git a/src/pyocr/cuneiform.py b/src/pyocr/cuneiform.py
-index a461d92..1f2b914 100644
---- a/src/pyocr/cuneiform.py
-+++ b/src/pyocr/cuneiform.py
+Index: current/src/pyocr/cuneiform.py
+===================================================================
+--- current.orig/src/pyocr/cuneiform.py
++++ current/src/pyocr/cuneiform.py
 @@ -27,13 +27,9 @@ from . import error
  from . import util
  
  
 -# CHANGE THIS IF CUNEIFORM IS NOT IN YOUR PATH, OR IS NAMED DIFFERENTLY
 -CUNEIFORM_CMD = 'cuneiform'
-+CUNEIFORM_CMD = '@NIX_CUNEIFORM_CMD@'
++CUNEIFORM_CMD = '@cuneiform@/bin/cuneiform'
  
 -CUNEIFORM_DATA_POSSIBLE_PATHS = [
 -    "/usr/local/share/cuneiform",
 -    "/usr/share/cuneiform",
 -]
-+CUNEIFORM_DATA_POSSIBLE_PATHS = ['@NIX_CUNEIFORM_DATA@']
++CUNEIFORM_DATA_POSSIBLE_PATHS = ['@cuneiform@/share/cuneiform']
  
  LANGUAGES_LINE_PREFIX = "Supported languages: "
  LANGUAGES_SPLIT_RE = re.compile("[^a-z]")
-diff --git a/src/pyocr/libtesseract/tesseract_raw.py b/src/pyocr/libtesseract/tesseract_raw.py
-index b4e7bda..47505f7 100644
---- a/src/pyocr/libtesseract/tesseract_raw.py
-+++ b/src/pyocr/libtesseract/tesseract_raw.py
-@@ -1,55 +1,13 @@
+Index: current/src/pyocr/libtesseract/tesseract_raw.py
+===================================================================
+--- current.orig/src/pyocr/libtesseract/tesseract_raw.py
++++ current/src/pyocr/libtesseract/tesseract_raw.py
+@@ -1,52 +1,13 @@
  import ctypes
  import logging
  import os
@@ -56,7 +56,13 @@ index b4e7bda..47505f7 100644
 -        # Jflesch> Don't they have the equivalent of LD_LIBRARY_PATH on
 -        # Windows ?
 -        "../vs2010/DLL_Release/libtesseract302.dll",
+-        # prefer the most recent first
+-        "libtesseract305.dll",
+-        "libtesseract304.dll",
+-        "libtesseract303.dll",
 -        "libtesseract302.dll",
+-        "libtesseract400.dll",  # Tesseract 4 is still in alpha stage
+-        "libtesseract.dll",
 -        "C:\\Program Files (x86)\\Tesseract-OCR\\libtesseract-4.dll",
 -        "C:\\Program Files (x86)\\Tesseract-OCR\\libtesseract-3.dll",
 -    ]
@@ -66,27 +72,18 @@ index b4e7bda..47505f7 100644
 -        "libtesseract.so.3",
 -    ]
 -
--
--g_libtesseract = None
--
--for libname in libnames:
--    try:
--        g_libtesseract = ctypes.cdll.LoadLibrary(libname)
--        break
--    except OSError:
--        pass
-+g_libtesseract = ctypes.cdll.LoadLibrary('@NIX_LIBTESSERACT_PATH@')
++libnames = [ "@tesseract@/lib/libtesseract.so" ]
  
+ g_libtesseract = None
  
- class PageSegMode(object):
-@@ -326,12 +284,11 @@ def init(lang=None):
+@@ -346,12 +307,11 @@ def init(lang=None):
      try:
          if lang:
              lang = lang.encode("utf-8")
 -        prefix = None
 -        if TESSDATA_PREFIX:
 -            prefix = TESSDATA_PREFIX.encode("utf-8")
-+        prefix = os.getenv('TESSDATA_PREFIX', '@NIX_TESSDATA_PREFIX@')
++        prefix = os.getenv('TESSDATA_PREFIX', '@tesseract@/share/tessdata')
 +        os.environ['TESSDATA_PREFIX'] = prefix
          g_libtesseract.TessBaseAPIInit3(
              ctypes.c_void_p(handle),
@@ -95,17 +92,17 @@ index b4e7bda..47505f7 100644
              ctypes.c_char_p(lang)
          )
          g_libtesseract.TessBaseAPISetVariable(
-diff --git a/src/pyocr/tesseract.py b/src/pyocr/tesseract.py
-index c935881..7139ffe 100755
---- a/src/pyocr/tesseract.py
-+++ b/src/pyocr/tesseract.py
-@@ -31,8 +31,7 @@ from .builders import DigitBuilder  # backward compatibility
+Index: current/src/pyocr/tesseract.py
+===================================================================
+--- current.orig/src/pyocr/tesseract.py
++++ current/src/pyocr/tesseract.py
+@@ -31,8 +31,7 @@ from .builders import DigitBuilder  # ba
  from .error import TesseractError  # backward compatibility
  from .util import digits_only
  
 -# CHANGE THIS IF TESSERACT IS NOT IN YOUR PATH, OR IS NAMED DIFFERENTLY
 -TESSERACT_CMD = 'tesseract.exe' if os.name == 'nt' else 'tesseract'
-+TESSERACT_CMD = '@NIX_TESSERACT_CMD@'
++TESSERACT_CMD = '@tesseract@/bin/tesseract'
  
  TESSDATA_EXTENSION = ".traineddata"
  

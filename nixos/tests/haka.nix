@@ -8,7 +8,7 @@ import ./make-test.nix ({ pkgs, ...} : {
 
   nodes = {
     haka =
-      { config, pkgs, ... }:
+      { ... }:
         {
           services.haka.enable = true;
         };

@@ -1,24 +1,25 @@
-{ stdenv, fetchurl, pkgconfig, perl, glib, libintlOrEmpty, gobjectIntrospection }:
+{ stdenv, fetchurl, meson, ninja, gettext, pkgconfig, glib
+, fixDarwinDylibNames, gobject-introspection, gnome3
+}:
 
 let
-  ver_maj = "2.26";
-  ver_min = "1";
+  pname = "atk";
+  version = "2.30.0";
 in
+
 stdenv.mkDerivation rec {
-  name = "atk-${ver_maj}.${ver_min}";
+  name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/atk/${ver_maj}/${name}.tar.xz";
-    sha256 = "1jwpx8az0iifw176dc2hl4mmg6gvxzxdkd1qvg4ds7c5hdmzy07g";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    sha256 = "0yq25iisnf0rmlg2x5ghzqk9vhf2jramb2khxqghqakz47a90kfx";
   };
-
-  enableParallelBuilding = true;
 
   outputs = [ "out" "dev" ];
 
-  buildInputs = libintlOrEmpty;
+  buildInputs = stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
-  nativeBuildInputs = [ pkgconfig perl gobjectIntrospection ];
+  nativeBuildInputs = [ meson ninja pkgconfig gettext gobject-introspection ];
 
   propagatedBuildInputs = [
     # Required by atk.pc
@@ -26,6 +27,12 @@ stdenv.mkDerivation rec {
   ];
 
   doCheck = true;
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+    };
+  };
 
   meta = {
     description = "Accessibility toolkit";

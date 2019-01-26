@@ -3,11 +3,11 @@
 stdenv.mkDerivation rec {
   name =  packageName + "-" + version ;
   packageName = "aj-snapshot" ;
-  version = "0.9.7";
+  version = "0.9.8";
 
   src = fetchurl {
     url = "mirror://sourceforge/${packageName}/${name}.tar.bz2";
-    sha256 = "0yxccgp9qw2cyqv719wlbq8wfsr5ga8czvwa7bmb8dh5s11n3rn8";
+    sha256 = "0wilky1g2mb88v2z0520s7sw1dsn10iwanc8id5p6z1xsnhg7b6p";
   };
 
   doCheck = false;

@@ -1,34 +1,31 @@
-{ stdenv, binutils-raw, cctools
-, hostPlatform, targetPlatform
-}:
+{ stdenv, binutils-unwrapped, cctools, llvm }:
 
 # Make sure both underlying packages claim to have prepended their binaries
 # with the same targetPrefix.
-assert binutils-raw.targetPrefix == cctools.targetPrefix;
+assert binutils-unwrapped.targetPrefix == cctools.targetPrefix;
 
 let
-  inherit (binutils-raw) targetPrefix;
+  inherit (binutils-unwrapped) targetPrefix;
   cmds = [
-    "ar" "ranlib" "as" "dsymutil" "install_name_tool"
+    "ar" "ranlib" "as" "install_name_tool"
     "ld" "strip" "otool" "lipo" "nm" "strings" "size"
   ];
 in
 
-# TODO loop over targetPrefixed binaries too
+# TODO: loop over targetPrefixed binaries too
 stdenv.mkDerivation {
   name = "${targetPrefix}cctools-binutils-darwin";
   outputs = [ "out" "info" "man" ];
   buildCommand = ''
     mkdir -p $out/bin $out/include
 
-    ln -s ${binutils-raw.bintools.out}/bin/${targetPrefix}c++filt $out/bin/${targetPrefix}c++filt
+    ln -s ${binutils-unwrapped.out}/bin/${targetPrefix}c++filt $out/bin/${targetPrefix}c++filt
 
     # We specifically need:
     # - ld: binutils doesn't provide it on darwin
     # - as: as above
-    # - ar: the binutils one prodices .a files that the cctools ld doesn't like
+    # - ar: the binutils one produces .a files that the cctools ld doesn't like
     # - ranlib: for compatibility with ar
-    # - dsymutil: soon going away once it goes into LLVM (this one is fake anyway)
     # - otool: we use it for some of our name mangling
     # - install_name_tool: we use it to rewrite stuff in our bootstrap tools
     # - strip: the binutils one seems to break mach-o files
@@ -38,15 +35,17 @@ stdenv.mkDerivation {
       ln -sf "${cctools}/bin/$i" "$out/bin/$i"
     done
 
-    ln -s ${binutils-raw.bintools.out}/share $out/share
+    ln -s ${llvm}/bin/llvm-dsymutil $out/bin/dsymutil
+
+    ln -s ${binutils-unwrapped.out}/share $out/share
 
     ln -s ${cctools}/libexec $out/libexec
 
     mkdir -p "$info/nix-support" "$man/nix-support"
-    printWords ${binutils-raw.bintools.info} \
+    printWords ${binutils-unwrapped.info} \
       >> $info/nix-support/propagated-build-inputs
     # FIXME: cctools missing man pages
-    printWords ${binutils-raw.bintools.man} \
+    printWords ${binutils-unwrapped.man} \
       >> $man/nix-support/propagated-build-inputs
   '';
 

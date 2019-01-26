@@ -1,4 +1,4 @@
-{ stdenv, fetchsvn, mesa, SDL, SDL_image, SDL_mixer
+{ stdenv, fetchsvn, libGLU_combined, SDL, SDL_image, SDL_mixer
 , libpng, zlib, libjpeg, imagemagick, libX11
 }:
 
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    mesa SDL SDL_image SDL_mixer libpng zlib libjpeg imagemagick
+    libGLU_combined SDL SDL_image SDL_mixer libpng zlib libjpeg imagemagick
     libX11
   ];
 

@@ -2,29 +2,35 @@
 
 stdenv.mkDerivation rec {
   name = "leveldb-${version}";
-  version = "1.18";
+  version = "1.20";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "leveldb";
     rev = "v${version}";
-    sha256 = "1bnsii47vbyqnbah42qgq6pbmmcg4k3fynjnw7whqfv6lpdgmb8d";
+    sha256 = "01kxga1hv4wp94agx5vl3ybxfw5klqrdsrb6p6ywvnjmjxm8322y";
   };
 
   buildPhase = ''
-    make all leveldbutil libmemenv.a
+    make all
   '';
 
-  installPhase = "
+  installPhase = (stdenv.lib.optionalString stdenv.isDarwin ''
+    for file in out-shared/*.dylib*; do
+      install_name_tool -id $out/lib/$file $file
+    done
+  '') + # XXX consider removing above after transition to cmake in the next release
+  "
     mkdir -p $out/{bin,lib,include}
 
     cp -r include $out
     mkdir -p $out/include/leveldb/helpers
     cp helpers/memenv/memenv.h $out/include/leveldb/helpers
 
-    cp lib* $out/lib
+    cp out-shared/lib* $out/lib
+    cp out-static/lib* $out/lib
 
-    cp leveldbutil $out/bin
+    cp out-static/leveldbutil $out/bin
   ";
 
   meta = with stdenv.lib; {

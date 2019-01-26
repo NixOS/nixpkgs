@@ -1,10 +1,10 @@
 { stdenv, alsaLib, atk, cairo, cups, dbus, dpkg, expat, fontconfig, freetype
-, fetchurl, GConf, gdk_pixbuf, glib, gtk2, libpulseaudio, makeWrapper, nspr
+, fetchurl, GConf, gdk_pixbuf, glib, gtk2, gtk3, libpulseaudio, makeWrapper, nspr
 , nss, pango, udev, xorg
 }:
 
 let
-  version = "4.4.1";
+  version = "4.6.1";
 
   deps = [
     alsaLib
@@ -19,6 +19,7 @@ let
     gdk_pixbuf
     glib
     gtk2
+    gtk3
     libpulseaudio
     nspr
     nss
@@ -46,7 +47,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://github.com/MarshallOfSound/Google-Play-Music-Desktop-Player-UNOFFICIAL-/releases/download/v${version}/google-play-music-desktop-player_${version}_amd64.deb";
-    sha256 = "0jqgawgij6jxf3zy3glviqj6s34mq7d756syg2c7kk1gkqkwgdpw";
+    sha256 = "0dyn2fxhcri9d9nmcprszs6yg79gsr09bjfzzb1p10yjmi77cj2g";
   };
 
   dontBuild = true;

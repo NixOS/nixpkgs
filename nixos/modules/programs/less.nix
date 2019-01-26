@@ -6,7 +6,7 @@ let
 
   cfg = config.programs.less;
 
-  configFile = ''
+  configText = if (cfg.configFile != null) then (builtins.readFile cfg.configFile) else ''
     #command
     ${concatStringsSep "\n"
       (mapAttrsToList (command: action: "${command} ${action}") cfg.commands)
@@ -25,7 +25,7 @@ let
   '';
 
   lessKey = pkgs.runCommand "lesskey"
-            { src = pkgs.writeText "lessconfig" configFile; }
+            { src = pkgs.writeText "lessconfig" configText; }
             "${pkgs.less}/bin/lesskey -o $out $src";
 
 in
@@ -36,6 +36,19 @@ in
     programs.less = {
 
       enable = mkEnableOption "less";
+
+      configFile = mkOption {
+        type = types.nullOr types.path;
+        default = null;
+        example = literalExample "$${pkgs.my-configs}/lesskey";
+        description = ''
+          Path to lesskey configuration file.
+
+          <option>configFile</option> takes precedence over <option>commands</option>,
+          <option>clearDefaultCommands</option>, <option>lineEditingKeys</option>, and
+          <option>envVariables</option>.
+        '';
+      };
 
       commands = mkOption {
         type = types.attrsOf types.str;

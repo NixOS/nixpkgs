@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
       This nix expression requires that ${name} is already part of the store.
       Register yourself to NVIDIA Accelerated Computing Developer Program, retrieve the NCCL library
       at https://developer.nvidia.com/nccl, and run the following command in the download directory:
-      nix-prefetch-url file://${name}
+      nix-prefetch-url file://\$PWD/${name}
     '';
   };
 

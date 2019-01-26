@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
       with any type of text MUD.
     '';
     license = licenses.gpl2;
-    platforms = ncurses.meta.platforms;
+    platforms = platforms.linux;
     maintainers = [ maintainers.KibaFox ];
   };
 }

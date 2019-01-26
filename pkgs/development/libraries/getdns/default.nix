@@ -4,11 +4,11 @@
 stdenv.mkDerivation rec {
   pname = "getdns";
   name = "${pname}-${version}";
-  version = "1.3.0";
+  version = "1.5.0";
 
   src = fetchurl {
-    url = "https://getdnsapi.net/releases/${pname}-1-3-0/${pname}-${version}.tar.gz";
-    sha256 = "920fa2e07c72fd0e5854db1820fa777108009fc5cb702f9aa5155ef58b12adb1";
+    url = "https://getdnsapi.net/releases/${pname}-1-5-0/${pname}-${version}.tar.gz";
+    sha256 = "577182c3ace919ee70cee5629505581a10dc530bd53fe5c241603ea91c84fa84";
   };
 
   nativeBuildInputs = [ libtool m4 autoreconfHook automake file ];

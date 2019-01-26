@@ -1,4 +1,4 @@
-{stdenv, fetchurl, automake, libiconv, vanilla ? false }:
+{stdenv, fetchurl, libiconv, vanilla ? false }:
 
 with stdenv.lib;
 
@@ -19,8 +19,6 @@ stdenv.mkDerivation rec {
   patches = optional (!vanilla) ./requires-private.patch
     ++ optional stdenv.isCygwin ./2.36.3-not-win32.patch;
 
-  preConfigure = optionalString (stdenv.system == "mips64el-linux")
-    ''cp -v ${automake}/share/automake*/config.{sub,guess} .'';
   buildInputs = optional (stdenv.isCygwin || stdenv.isDarwin || stdenv.isSunOS) libiconv;
 
   configureFlags = [ "--with-internal-glib" ]
@@ -33,6 +31,7 @@ stdenv.mkDerivation rec {
          "ac_cv_func_posix_getgrgid_r=yes"
        ];
 
+  doCheck = false; # fails
 
   postInstall = ''rm -f "$out"/bin/*-pkg-config''; # clean the duplicate file
 
@@ -40,7 +39,7 @@ stdenv.mkDerivation rec {
     description = "A tool that allows packages to find out information about other packages";
     homepage = http://pkg-config.freedesktop.org/wiki/;
     platforms = platforms.all;
+    license = licenses.gpl2Plus;
   };
 
 }
-

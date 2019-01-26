@@ -1,26 +1,6 @@
-{ stdenv, fetchurl, fetchpatch, pkgs }:
-
-let
-
-  makeTuxonicePatch = { version, kernelVersion, sha256,
-    url ? "http://tuxonice.nigelcunningham.com.au/downloads/all/tuxonice-for-linux-${kernelVersion}-${version}.patch.bz2" }:
-    { name = "tuxonice-${kernelVersion}";
-      patch = stdenv.mkDerivation {
-        name = "tuxonice-${version}-for-${kernelVersion}.patch";
-        src = fetchurl {
-          inherit url sha256;
-        };
-        phases = [ "installPhase" ];
-        installPhase = ''
-          source $stdenv/setup
-          bunzip2 -c $src > $out
-        '';
-      };
-    };
-in
+{ fetchpatch }:
 
 rec {
-
   bridge_stp_helper =
     { name = "bridge-stp-helper";
       patch = ./bridge-stp-helper.patch;
@@ -29,21 +9,6 @@ rec {
   p9_fixes =
     { name = "p9-fixes";
       patch = ./p9-fixes.patch;
-    };
-
-  mips_fpureg_emu =
-    { name = "mips-fpureg-emulation";
-      patch = ./mips-fpureg-emulation.patch;
-    };
-
-  mips_fpu_sigill =
-    { name = "mips-fpu-sigill";
-      patch = ./mips-fpu-sigill.patch;
-    };
-
-  mips_ext3_n32 =
-    { name = "mips-ext3-n32";
-      patch = ./mips-ext3-n32.patch;
     };
 
   modinst_arg_list_too_long =
@@ -73,4 +38,42 @@ rec {
     };
   };
 
+  # https://github.com/NixOS/nixpkgs/issues/42755
+  xen-netfront_fix_mismatched_rtnl_unlock = rec {
+    name = "xen-netfront_fix_mismatched_rtnl_unlock";
+    patch = fetchpatch {
+      name = name + ".patch";
+      url = https://github.com/torvalds/linux/commit/cb257783c2927b73614b20f915a91ff78aa6f3e8.patch;
+      sha256 = "0xhblx2j8wi3kpnfpgjjwlcwdry97ji2aaq54r3zirk5g5p72zs8";
+    };
+  };
+
+  # https://github.com/NixOS/nixpkgs/issues/42755
+  xen-netfront_update_features_after_registering_netdev = rec {
+    name = "xen-netfront_update_features_after_registering_netdev";
+    patch = fetchpatch {
+      name = name + ".patch";
+      url = https://github.com/torvalds/linux/commit/45c8184c1bed1ca8a7f02918552063a00b909bf5.patch;
+      sha256 = "1l8xq02rd7vakxg52xm9g4zng0ald866rpgm8kjlh88mwwyjkrwv";
+    };
+  };
+
+  # Reverts a change related to the overlayfs overhaul in 4.19
+  # https://github.com/NixOS/nixpkgs/issues/48828#issuecomment-445208626
+  revert-vfs-dont-open-real = rec {
+    name = "revert-vfs-dont-open-real";
+    patch = fetchpatch {
+      name = name + ".patch";
+      url = https://github.com/samueldr/linux/commit/ee23fa215caaa8102f4ab411d39fcad5858147f2.patch;
+      sha256 = "0bp4jryihg1y2sl8zlj6w7vvnxj0kmb6xdy42hpvdv43kb6ngiaq";
+    };
+  };
+
+  raspberry_pi_wifi_fix = rec {
+    name = "raspberry-pi-wifi-fix";
+    patch = fetchpatch {
+      url = https://raw.githubusercontent.com/archlinuxarm/PKGBUILDs/730522ae76aa57b89fa317c5084613d3d50cf3b8/core/linux-aarch64/0005-mmc-sdhci-iproc-handle-mmc_of_parse-errors-during-pr.patch;
+      sha256 = "0gbfycky28vbdjgys1z71wl5q073dmbrkvbnr6693jsda3qhp6za";
+    };
+  };
 }

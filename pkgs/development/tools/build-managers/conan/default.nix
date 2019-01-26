@@ -1,32 +1,73 @@
-{ lib, buildPythonApplication, fetchPypi
-, requests, fasteners, pyyaml, pyjwt, colorama, patch
-, bottle, pluginbase, six, distro, pylint, node-semver
-, future, pygments, mccabe
-}:
+{ lib, python3, git }:
 
-buildPythonApplication rec {
-  version = "0.28.1";
+let newPython = python3.override {
+  packageOverrides = self: super: {
+    distro = super.distro.overridePythonAttrs (oldAttrs: rec {
+      version = "1.1.0";
+      src = oldAttrs.src.override {
+        inherit version;
+        sha256 = "1vn1db2akw98ybnpns92qi11v94hydwp130s8753k6ikby95883j";
+      };
+    });
+    node-semver = super.node-semver.overridePythonAttrs (oldAttrs: rec {
+      version = "0.6.1";
+      src = oldAttrs.src.override {
+        inherit version;
+        sha256 = "1dv6mjsm67l1razcgmq66riqmsb36wns17mnipqr610v0z0zf5j0";
+      };
+    });
+    future = super.future.overridePythonAttrs (oldAttrs: rec {
+      version = "0.16.0";
+      src = oldAttrs.src.override {
+        inherit version;
+        sha256 = "1nzy1k4m9966sikp0qka7lirh8sqrsyainyf8rk97db7nwdfv773";
+      };
+    });
+    tqdm = super.tqdm.overridePythonAttrs (oldAttrs: rec {
+      version = "4.28.1";
+      src = oldAttrs.src.override {
+        inherit version;
+        sha256 = "1fyybgbmlr8ms32j7h76hz5g9xc6nf0644mwhc40a0s5k14makav";
+      };
+    });
+  };
+};
+
+in newPython.pkgs.buildPythonApplication rec {
+  version = "1.11.2";
   pname = "conan";
 
-  src = fetchPypi {
+  src = newPython.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "0zf564iqh0099yd779f9fgk21qyp87d7cmgfj34hmncf8y3qh32a";
+    sha256 = "0b4r9n6541jjp2lsdzc1nc6mk1a953w0d4ynjss3ns7pp89y4nd4";
   };
+  checkInputs = [
+    git
+  ] ++ (with newPython.pkgs; [
+    codecov
+    mock
+    node-semver
+    nose
+    parameterized
+    webtest
+  ]);
 
-  propagatedBuildInputs = [
-    requests fasteners pyyaml pyjwt colorama patch
-    bottle pluginbase six distro pylint node-semver
-    future pygments mccabe
+  propagatedBuildInputs = with newPython.pkgs; [
+    colorama deprecation distro fasteners bottle
+    future node-semver patch pygments pluginbase
+    pyjwt pylint pyyaml requests six tqdm
   ];
 
-  # enable tests once all of these pythonPackages available:
-  # [ nose nose_parameterized mock webtest codecov ]
-  doCheck = false;
+  checkPhase = ''
+    export HOME="$TMP/conan-home"
+    mkdir -p "$HOME"
+  '';
 
   meta = with lib; {
     homepage = https://conan.io;
     description = "Decentralized and portable C/C++ package manager";
     license = licenses.mit;
+    maintainers = with maintainers; [ HaoZeke ];
     platforms = platforms.linux;
   };
 }

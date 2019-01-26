@@ -9,8 +9,6 @@ let
   baseDir = "/run/dovecot2";
   stateDir = "/var/lib/dovecot";
 
-  canCreateMailUserGroup = cfg.mailUser != null && cfg.mailGroup != null;
-
   dovecotConf = concatStrings [
     ''
       base_dir = ${baseDir}
@@ -25,11 +23,13 @@ let
       ssl_cert = <${cfg.sslServerCert}
       ssl_key = <${cfg.sslServerKey}
       ${optionalString (!(isNull cfg.sslCACert)) ("ssl_ca = <" + cfg.sslCACert)}
+      ssl_dh = <${config.security.dhparams.params.dovecot2.path}
       disable_plaintext_auth = yes
     '')
 
     ''
       default_internal_user = ${cfg.user}
+      default_internal_group = ${cfg.group}
       ${optionalString (cfg.mailUser != null) "mail_uid = ${cfg.mailUser}"}
       ${optionalString (cfg.mailGroup != null) "mail_gid = ${cfg.mailGroup}"}
 
@@ -110,7 +110,7 @@ let
       special_use = \${toString mailbox.specialUse}
   '' + "}";
 
-  mailboxes = { lib, pkgs, ... }: {
+  mailboxes = { ... }: {
     options = {
       name = mkOption {
         type = types.strMatching ''[^"]+'';
@@ -296,19 +296,22 @@ in
 
 
   config = mkIf cfg.enable {
-
     security.pam.services.dovecot2 = mkIf cfg.enablePAM {};
 
-    services.dovecot2.protocols =
+    security.dhparams = mkIf (! isNull cfg.sslServerCert) {
+      enable = true;
+      params.dovecot2 = {};
+    };
+   services.dovecot2.protocols =
      optional cfg.enableImap "imap"
      ++ optional cfg.enablePop3 "pop3"
      ++ optional cfg.enableLmtp "lmtp";
 
-    users.extraUsers = [
+    users.users = [
       { name = "dovenull";
         uid = config.ids.uids.dovenull2;
         description = "Dovecot user for untrusted logins";
-        group = cfg.group;
+        group = "dovenull";
       }
     ] ++ optional (cfg.user == "dovecot2")
          { name = "dovecot2";
@@ -323,12 +326,16 @@ in
            group = cfg.mailGroup;
          });
 
-    users.extraGroups = optional (cfg.group == "dovecot2")
+    users.groups = optional (cfg.group == "dovecot2")
       { name = "dovecot2";
         gid = config.ids.gids.dovecot2;
       }
     ++ optional (cfg.createMailUser && cfg.mailGroup != null)
       { name = cfg.mailGroup;
+      }
+    ++ singleton
+      { name = "dovenull";
+        gid = config.ids.gids.dovenull2;
       };
 
     environment.etc."dovecot/modules".source = modulesDir;

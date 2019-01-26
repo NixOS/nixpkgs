@@ -1,16 +1,20 @@
-{ fetchurl, stdenv }:
+{ fetchurl, stdenv, elf-header }:
 
 stdenv.mkDerivation rec {
   name = "paxctl-${version}";
   version = "0.9";
 
   src = fetchurl {
-    url = "http://pax.grsecurity.net/${name}.tar.gz";
+    url = "https://pax.grsecurity.net/${name}.tar.gz";
     sha256 = "0biw882fp1lmgs6kpxznp1v6758r7dg9x8iv5a06k0b82bcdsc53";
   };
 
+  buildInputs = [ elf-header ];
+
   preBuild = ''
-    sed "s|--owner 0 --group 0||g" -i Makefile
+    sed -i Makefile \
+      -e 's|--owner 0 --group 0||g' \
+      -e '/CC:=gcc/d'
   '';
 
   makeFlags = [
@@ -24,7 +28,7 @@ stdenv.mkDerivation rec {
     description = "A tool for controlling PaX flags on a per binary basis";
     homepage    = "https://pax.grsecurity.net";
     license     = licenses.gpl2;
-    platforms   = platforms.linux;
+    platforms   = platforms.all;
     maintainers = with maintainers; [ thoughtpolice ];
   };
 }

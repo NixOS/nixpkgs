@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   name = "sselp-${version}";
  
   src = fetchurl {
-    url = "http://dl.suckless.org/tools/${name}.tar.gz";
+    url = "https://dl.suckless.org/tools/${name}.tar.gz";
     sha256 = "08mqp00lrh1chdrbs18qr0xv63h866lkmfj87kfscwdm1vn9a3yd";
   };
  

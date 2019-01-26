@@ -1,15 +1,15 @@
-{ stdenv, fetchurl, autoreconfHook }:
+{ stdenv, fetchurl, fetchpatch, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   name = "libsass-${version}";
-  version = "3.4.9";
+  version = "3.5.5";
 
   src = fetchurl {
     url = "https://github.com/sass/libsass/archive/${version}.tar.gz";
-    sha256 = "0f4mj91zzdzah7fxkdg3dnrimk9ip7czl4g26f32zgifz1nrqgjs";
+    sha256 = "0w6v1xa00jvfyk4b29ir7dfkhiq72anz015gg580bi7x3n7saz28";
   };
 
-  patchPhase = ''
+  preConfigure = ''
     export LIBSASS_VERSION=${version}
   '';
 

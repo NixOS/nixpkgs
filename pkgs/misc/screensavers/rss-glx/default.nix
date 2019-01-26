@@ -1,4 +1,4 @@
-{stdenv, fetchurl, pkgconfig, xlibsWrapper, libXext, mesa, imagemagick, libtiff, bzip2}:
+{stdenv, fetchurl, pkgconfig, xlibsWrapper, libXext, libGLU_combined, imagemagick, libtiff, bzip2}:
 
 stdenv.mkDerivation rec {
   version = "0.9.1";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ mesa xlibsWrapper imagemagick libtiff bzip2 ];
+  buildInputs = [ libGLU_combined xlibsWrapper imagemagick libtiff bzip2 ];
 
   NIX_CFLAGS_COMPILE = "-I${imagemagick.dev}/include/ImageMagick";
   NIX_LDFLAGS= "-rpath ${libXext}/lib";

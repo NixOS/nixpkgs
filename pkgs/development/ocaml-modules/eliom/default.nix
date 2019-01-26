@@ -1,34 +1,46 @@
-{ stdenv, fetchurl, which, ocsigen_server, ocsigen_deriving, ocaml,
-  js_of_ocaml, react, lwt, calendar, cryptokit, tyxml,
-  ipaddr, ocamlnet, ssl, ocaml_pcre, ocaml_optcomp,
-  reactivedata, opam, ppx_tools, ppx_deriving, findlib
-, ocamlbuild
+{ stdenv, fetchurl, which, ocsigen_server, ocsigen_deriving, ocaml, camlp4,
+  lwt_react, cryptokit,
+  ipaddr, ocamlnet, lwt_ssl, ocaml_pcre,
+  opaline, ppx_tools, ppx_deriving, findlib
+, js_of_ocaml-ocamlbuild, js_of_ocaml-ppx, js_of_ocaml-ppx_deriving_json
+, js_of_ocaml-lwt
+, js_of_ocaml-tyxml
 }:
 
-assert stdenv.lib.versionAtLeast ocaml.version "4.02";
+assert stdenv.lib.versionAtLeast ocaml.version "4.03";
 
 stdenv.mkDerivation rec
 {
   pname = "eliom";
-  version = "6.2.0";
+  version = "6.3.0";
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "https://github.com/ocsigen/eliom/archive/${version}.tar.gz";
-    sha256 = "01c4l982ld6d1ndhb6f15ldb2li7mv0bs279d5gs99mpiwsapadx";
+    sha256 = "137hgdzv9fwkzf6xdksqy437lrf8xvrycf5jwc3z4cmpsigs6x7v";
   };
 
   patches = [ ./camlp4.patch ];
 
-  buildInputs = [ ocaml which findlib ocamlbuild ocaml_optcomp opam ppx_tools ];
+  buildInputs = [ ocaml which findlib js_of_ocaml-ocamlbuild js_of_ocaml-ppx_deriving_json opaline ppx_tools
+    ocsigen_deriving
+  ];
 
-  propagatedBuildInputs = [ lwt reactivedata tyxml ipaddr ocsigen_server ppx_deriving
-                            ocsigen_deriving js_of_ocaml
-                            calendar cryptokit ocamlnet react ssl ocaml_pcre ];
+  propagatedBuildInputs = [
+    camlp4
+    cryptokit
+    ipaddr
+    js_of_ocaml-lwt
+    js_of_ocaml-ppx
+    js_of_ocaml-tyxml
+    lwt_react
+    lwt_ssl
+    ocamlnet ocaml_pcre
+    ocsigen_server
+    ppx_deriving
+  ];
 
-  installPhase = "opam-installer -i --prefix=$out --libdir=$OCAMLFIND_DESTDIR";
-
-  createFindlibDestdir = true;
+  installPhase = "opaline -prefix $out -libdir $OCAMLFIND_DESTDIR";
 
   setupHook = [ ./setup-hook.sh ];
 

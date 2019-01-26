@@ -1,4 +1,5 @@
-{ stdenv, buildPackages, lib, fetchurl, autoreconfHook, pkgconfig, libxslt, xz }:
+{ stdenv, buildPackages, lib, fetchurl, autoreconfHook, pkgconfig
+, libxslt, xz, elf-header }:
 
 let
   systems = [ "/run/current-system/kernel-modules" "/run/booted-system/kernel-modules" "" ];
@@ -14,9 +15,7 @@ in stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig libxslt ];
-  buildInputs = [ xz ];
-  # HACK until BUG issue #21191 is addressed
-  crossAttrs.preUnpack = ''PATH="${buildPackages.xz}/bin''${PATH:+:}$PATH"'';
+  buildInputs = [ xz ] ++ lib.optional stdenv.isDarwin elf-header;
 
   configureFlags = [
     "--sysconfdir=/etc"
@@ -24,7 +23,8 @@ in stdenv.mkDerivation rec {
     "--with-modulesdirs=${modulesDirs}"
   ];
 
-  patches = [ ./module-dir.patch ];
+  patches = [ ./module-dir.patch ]
+    ++ lib.optional stdenv.isDarwin ./darwin.patch;
 
   postInstall = ''
     for prog in rmmod insmod lsmod modinfo modprobe depmod; do
@@ -35,9 +35,10 @@ in stdenv.mkDerivation rec {
     ln -s bin $out/sbin
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = https://www.kernel.org/pub/linux/utils/kernel/kmod/;
     description = "Tools for loading and managing Linux kernel modules";
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.lgpl21;
+    platforms = platforms.unix;
   };
 }

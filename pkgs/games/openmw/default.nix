@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, qt4, openscenegraph, mygui, bullet, ffmpeg, boost, cmake, SDL2, unshield, openal
-, giflib, libXt, pkgconfig }:
+, libXt, pkgconfig }:
 
 let
   openscenegraph_ = openscenegraph.overrideDerivation (self: {
@@ -18,7 +18,7 @@ in stdenv.mkDerivation rec {
     owner = "OpenMW";
     repo = "openmw";
     rev = name;
-    sha256 = "0lj8v81hk807dy0wcdhfp0iyn4l5yag53hx1a6xm44gh2dpyil43";
+    sha256 = "1nybxwp77qswjayf0g9xayp4x1xxq799681rhjlggch127r07ifi";
   };
 
   enableParallelBuilding = true;

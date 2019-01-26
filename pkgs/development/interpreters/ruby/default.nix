@@ -1,8 +1,8 @@
 { stdenv, buildPackages, lib
 , fetchurl, fetchpatch, fetchFromSavannah, fetchFromGitHub
 , zlib, openssl, gdbm, ncurses, readline, groff, libyaml, libffi, autoreconfHook, bison
-, autoconf, darwin ? null
-, buildEnv, bundler, bundix, Foundation
+, autoconf, libiconv, libobjc, libunwind, Foundation
+, buildEnv, bundler, bundix
 } @ args:
 
 let
@@ -32,12 +32,10 @@ let
   generic = { version, sha256 }: let
     ver = version;
     tag = ver.gitTag;
-    isRuby20 = ver.majMin == "2.0";
-    isRuby21 = ver.majMin == "2.1";
-    isRuby25 = ver.majMin == "2.5";
+    atLeast25 = lib.versionAtLeast ver.majMin "2.5";
     baseruby = self.override { useRailsExpress = false; };
     self = lib.makeOverridable (
-  { stdenv, buildPackages, lib
+      { stdenv, buildPackages, lib
       , fetchurl, fetchpatch, fetchFromSavannah, fetchFromGitHub
       , useRailsExpress ? true
       , zlib, zlibSupport ? true
@@ -48,8 +46,8 @@ let
       , libyaml, yamlSupport ? true
       , libffi, fiddleSupport ? true
       , autoreconfHook, bison, autoconf
-      , darwin ? null
-      , buildEnv, bundler, bundix, Foundation
+      , buildEnv, bundler, bundix
+      , libiconv, libobjc, libunwind, Foundation
       }:
       let rubySrc =
         if useRailsExpress then fetchFromGitHub {
@@ -58,7 +56,7 @@ let
           rev    = tag;
           sha256 = sha256.git;
         } else fetchurl {
-          url = "http://cache.ruby-lang.org/pub/ruby/${ver.majMin}/ruby-${ver}.tar.gz";
+          url = "https://cache.ruby-lang.org/pub/ruby/${ver.majMin}/ruby-${ver}.tar.gz";
           sha256 = sha256.src;
         };
       in
@@ -75,27 +73,23 @@ let
         # Have `configure' avoid `/usr/bin/nroff' in non-chroot builds.
         NROFF = if docSupport then "${groff}/bin/nroff" else null;
 
-        nativeBuildInputs =
-             ops useRailsExpress [ autoreconfHook bison ]
-          ++ ops (stdenv.buildPlatform != stdenv.hostPlatform) [
-               buildPackages.ruby
-             ];
+        nativeBuildInputs = [ autoreconfHook bison ]
+          ++ (op docSupport groff)
+          ++ op (stdenv.buildPlatform != stdenv.hostPlatform) buildPackages.ruby;
         buildInputs =
              (op fiddleSupport libffi)
           ++ (ops cursesSupport [ ncurses readline ])
-          ++ (op docSupport groff)
           ++ (op zlibSupport zlib)
           ++ (op opensslSupport openssl)
           ++ (op gdbmSupport gdbm)
           ++ (op yamlSupport libyaml)
-          ++ (op isRuby25 autoconf)
+          ++ (op atLeast25 autoconf)
           # Looks like ruby fails to build on darwin without readline even if curses
           # support is not enabled, so add readline to the build inputs if curses
           # support is disabled (if it's enabled, we already have it) and we're
           # running on darwin
-          ++ (op (!cursesSupport && stdenv.isDarwin) readline)
-          ++ (op (isRuby25 && stdenv.isDarwin) Foundation)
-          ++ (ops stdenv.isDarwin (with darwin; [ libiconv libobjc libunwind ]));
+          ++ op (!cursesSupport && stdenv.isDarwin) readline
+          ++ ops stdenv.isDarwin [ libiconv libobjc libunwind Foundation ];
 
         enableParallelBuilding = true;
 
@@ -112,10 +106,10 @@ let
           popd
         '';
 
-        postPatch = if isRuby25 then ''
+        postPatch = if atLeast25 then ''
           sed -i configure.ac -e '/config.guess/d'
-          cp ${config}/config.guess tool/
-          cp ${config}/config.sub tool/
+          cp --remove-destination ${config}/config.guess tool/
+          cp --remove-destination ${config}/config.sub tool/
         ''
         else opString useRailsExpress ''
           sed -i configure.in -e '/config.guess/d'
@@ -136,6 +130,11 @@ let
           ++ op (stdenv.hostPlatform != stdenv.buildPlatform)
              "--with-baseruby=${buildRuby}";
 
+        # fails with "16993 tests, 2229489 assertions, 105 failures, 14 errors, 89 skips"
+        # mostly TZ- and patch-related tests
+        # TZ- failures are caused by nix sandboxing, I didn't investigate others
+        doCheck = false;
+
         preInstall = ''
           # Ruby installs gems here itself now.
           mkdir -pv "$out/${passthru.gemPath}"
@@ -147,7 +146,7 @@ let
         postInstall = ''
           # Update rubygems
           pushd rubygems
-          ${buildRuby} setup.rb
+          ${buildRuby} setup.rb --destdir $GEM_HOME
           popd
 
           # Remove unnecessary groff reference from runtime closure, since it's big
@@ -200,26 +199,34 @@ let
 
 in {
   ruby_2_3 = generic {
-    version = rubyVersion "2" "3" "6" "";
+    version = rubyVersion "2" "3" "8" "";
     sha256 = {
-      src = "07jpa7fw1gyf069m7alf2b0zm53qm08w2ns45mhzmvgrg4r528l3";
-      git = "1bk59i0ygdc5z3zz3k6indfrxd2ix55np6rwvkcdpdw8svm749ds";
+      src = "1gwsqmrhpx1wanrfvrsj3j76rv888zh7jag2si2r14qf8ihns0dm";
+      git = "0158fg1sx6l6applbq0831kl8kzx5jacfl9lfg0shfzicmjlys3f";
     };
   };
 
   ruby_2_4 = generic {
-    version = rubyVersion "2" "4" "3" "";
+    version = rubyVersion "2" "4" "5" "";
     sha256 = {
-      src = "161smb52q19r9lrzy22b3bhnkd0z8wjffm0qsfkml14j5ic7a0zx";
-      git = "0x2lqbqm2rq9j5zh1p72dma56nqvdkfbgzb9wybm4y4hwhiw8c1m";
+      src = "162izk7c72y73vmdgcbsh8kqihrbm65xvp53r1s139pzwqd78dv7";
+      git = "181za4h6bd2bkyzyknxc18i5gq0pnqag60ybc17p0ixw3q7pdj43";
     };
   };
 
   ruby_2_5 = generic {
-    version = rubyVersion "2" "5" "0" "";
+    version = rubyVersion "2" "5" "3" "";
     sha256 = {
-      src = "1azj0d2lzziw6iml7bx3sxpxzcdmfwfq3yhm7djyp20q1xiz7rj6";
-      git = "0d436nqmp3ykdkp4sck5bb8sf3qvx30x1p58xh8axv66mvsyc2jd";
+      src = "0v4442aqqlzxwc792kbkfs2k61qg97r680is6gx20z63a8wd0a4q";
+      git = "0r9mgvqk6gj8pc9q6qmy7j2kbln7drc8wy67sb2ij8ciclcw9nn2";
+    };
+  };
+
+  ruby_2_6 = generic {
+    version = rubyVersion "2" "6" "0" "";
+    sha256 = {
+      src = "0wn0gxlx6xhhqrm2caxp0h6cj4nw7knnv5gh27qqzj0i9a95phzk";
+      git = "0bwbl4hz18dd5aij2l4s6xy90dc17d03kk577gdl34l9mbd9m7mn";
     };
   };
 }

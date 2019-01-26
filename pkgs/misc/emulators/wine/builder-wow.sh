@@ -26,7 +26,7 @@ buildPhase
 # checkPhase
 
 eval "$preInstall"
-cd $TMP/wine64 && make install
 cd $TMP/wine-wow && make install
+cd $TMP/wine64 && make install
 eval "$postInstall"
 fixupPhase

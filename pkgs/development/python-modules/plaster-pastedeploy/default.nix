@@ -1,16 +1,15 @@
-{ buildPythonPackage, fetchPypi, python
+{ buildPythonPackage, fetchPypi
 , plaster, PasteDeploy
 , pytest, pytestcov
 }:
 
 buildPythonPackage rec {
   pname = "plaster_pastedeploy";
-  version = "0.4.2";
-  name = "${pname}-${version}";
+  version = "0.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "2a401228c7cfbe38f728249e75af7a666f91c61d642cbb8fcb78a71df69d2754";
+    sha256 = "c231130cb86ae414084008fe1d1797db7e61dc5eaafb5e755de21387c27c6fae";
   };
 
   checkPhase = ''

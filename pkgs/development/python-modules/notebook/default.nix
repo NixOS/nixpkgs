@@ -1,4 +1,5 @@
-{ lib
+{ stdenv
+, lib
 , buildPythonPackage
 , fetchPypi
 , nose
@@ -19,36 +20,48 @@
 , requests
 , send2trash
 , pexpect
+, prometheus_client
 }:
 
 buildPythonPackage rec {
   pname = "notebook";
-  version = "5.4.0";
+  version = "5.7.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "dd431fad9bdd25aa9ff8265da096ef770475e21bf1d327982611a7de5cd904ca";
+    sha256 = "91705b109fc785198faed892489cddb233265564d5e2dad5e4f7974af05ee8dd";
   };
 
   LC_ALL = "en_US.utf8";
 
-  buildInputs = [ nose glibcLocales ]
+  checkInputs = [ nose glibcLocales ]
     ++ (if isPy3k then [ nose_warnings_filters ] else [ mock ]);
 
   propagatedBuildInputs = [
     jinja2 tornado ipython_genutils traitlets jupyter_core send2trash
     jupyter_client nbformat nbconvert ipykernel terminado requests pexpect
+    prometheus_client
   ];
 
   # disable warning_filters
   preCheck = lib.optionalString (!isPy3k) ''
     echo "" > setup.cfg
-    cat setup.cfg
   '';
+
+  postPatch = ''
+    # Remove selenium tests
+    rm -rf notebook/tests/selenium
+
+  '';
+
   checkPhase = ''
     runHook preCheck
     mkdir tmp
-    HOME=tmp nosetests -v
+    HOME=tmp nosetests -v ${if (stdenv.isDarwin) then ''
+      --exclude test_delete \
+      --exclude test_checkpoints_follow_file
+    ''
+    else ""}
   '';
 
   meta = {

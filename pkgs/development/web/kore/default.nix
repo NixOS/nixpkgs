@@ -20,6 +20,10 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
+  # added to fix build w/gcc7 and clang5
+  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.cc.isGNU "-Wno-error=pointer-compare"
+    + stdenv.lib.optionalString stdenv.cc.isClang " -Wno-error=unknown-warning-option";
+
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {

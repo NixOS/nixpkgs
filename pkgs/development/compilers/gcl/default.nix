@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, mpfr, m4, binutils, fetchcvs, emacs, zlib, which
-, texinfo, libX11, xproto, inputproto, libXi, gmp
-, libXext, xextproto, libXt, libXaw, libXmu } :
+{ stdenv, fetchurl, mpfr, m4, binutils, emacs, zlib, which
+, texinfo, libX11, xorgproto, libXi, gmp
+, libXext, libXt, libXaw, libXmu } :
 
 assert stdenv ? cc ;
 assert stdenv.cc.isGNU ;
@@ -23,8 +23,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     mpfr m4 binutils emacs gmp
-    libX11 xproto inputproto libXi
-    libXext xextproto libXt libXaw libXmu
+    libX11 xorgproto libXi
+    libXext libXt libXaw libXmu
     zlib which texinfo
   ];
 
@@ -36,9 +36,10 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = "-fgnu89-inline";
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "GNU Common Lisp compiler working via GCC";
-    maintainers = [ stdenv.lib.maintainers.raskin ];
-    platforms = stdenv.lib.platforms.linux;
+    maintainers = [ maintainers.raskin ];
+    license = licenses.gpl2;
+    platforms = platforms.linux;
   };
 }

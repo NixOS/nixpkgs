@@ -8,12 +8,12 @@ stdenv.mkDerivation rec {
   name = "libsigrok-${version}";
 
   src = fetchurl {
-    url = "http://sigrok.org/download/source/libsigrok/${name}.tar.gz";
+    url = "https://sigrok.org/download/source/libsigrok/${name}.tar.gz";
     inherit sha256;
   };
 
   firmware = fetchurl {
-    url = "http://sigrok.org/download/binary/sigrok-firmware-fx2lafw/sigrok-firmware-fx2lafw-bin-0.1.3.tar.gz";
+    url = "https://sigrok.org/download/binary/sigrok-firmware-fx2lafw/sigrok-firmware-fx2lafw-bin-0.1.3.tar.gz";
     sha256 = "1qr02ny97navqxr56xq1a227yzf6h09m8jlvc9bnjl0bsk6887bl";
   };
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Core library of the sigrok signal analysis software suite";
-    homepage = http://sigrok.org/;
+    homepage = https://sigrok.org/;
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.bjornfor ];

@@ -3,31 +3,21 @@
 
 python3Packages.buildPythonApplication rec {
   name = "sshuttle-${version}";
-  version = "0.78.3";
+  version = "0.78.4";
 
   src = fetchurl {
-    sha256 = "12xyq5h77b57cnkljdk8qyjxzys512b73019s20x6ck5brj1m8wa";
+    sha256 = "0pqk43kd7crqhg6qgnl8kapncwgw1xgaf02zarzypcw64kvdih9h";
     url = "mirror://pypi/s/sshuttle/${name}.tar.gz";
   };
 
-  patches = [
-    ./sudo.patch
-    (fetchpatch {
-      url = "https://github.com/sshuttle/sshuttle/commit/91aa6ff625f7c89a19e6f8702425cfead44a146f.patch";
-      sha256 = "0sqcc6kj53wlas2d3klbyilhns6vakzwbbp8y7j9wlmbnc530pks";
-    })
-  ];
+  patches = [ ./sudo.patch ];
 
-  nativeBuildInputs = [ makeWrapper pandoc python3Packages.setuptools_scm ];
+  nativeBuildInputs = [ makeWrapper python3Packages.setuptools_scm ] ++ stdenv.lib.optional (stdenv.hostPlatform.system != "i686-linux") pandoc;
   buildInputs =
-    [ coreutils openssh ] ++
-    stdenv.lib.optionals stdenv.isLinux [ iptables nettools procps ];
+    [ coreutils openssh procps nettools ]
+    ++ stdenv.lib.optionals stdenv.isLinux [ iptables ];
 
   checkInputs = with python3Packages; [ mock pytest pytestrunner ];
-
-  # Tests only run with Python 3. Server-side Python 2 still works if client
-  # uses Python 3, so it should be fine.
-  doCheck = true;
 
   postInstall = let
     mapPath = f: x: stdenv.lib.concatStringsSep ":" (map f x);
@@ -44,6 +34,7 @@ python3Packages.buildPythonApplication rec {
       target network (though it does require Python 2 at both ends).
       Works with Linux and Mac OS and supports DNS tunneling.
     '';
+    license = licenses.gpl2;
     maintainers = with maintainers; [ domenkozar ];
     platforms = platforms.unix;
   };

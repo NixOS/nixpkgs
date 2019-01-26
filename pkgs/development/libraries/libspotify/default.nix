@@ -2,26 +2,26 @@
 
 let
   version = "12.1.51";
-  isLinux = (stdenv.system == "x86_64-linux" || stdenv.system == "i686-linux");
+  isLinux = (stdenv.hostPlatform.system == "x86_64-linux" || stdenv.hostPlatform.system == "i686-linux");
 in
 
-if (stdenv.system != "x86_64-linux" && stdenv.system != "x86_64-darwin" && stdenv.system != "i686-linux")
+if (stdenv.hostPlatform.system != "x86_64-linux" && stdenv.hostPlatform.system != "x86_64-darwin" && stdenv.hostPlatform.system != "i686-linux")
 then throw "Check https://developer.spotify.com/technologies/libspotify/ for a tarball for your system and add it here"
 else stdenv.mkDerivation {
   name = "libspotify-${version}";
 
   src =
-    if stdenv.system == "x86_64-linux" then
+    if stdenv.hostPlatform.system == "x86_64-linux" then
       fetchurl {
         url    = "https://developer.spotify.com/download/libspotify/libspotify-${version}-Linux-x86_64-release.tar.gz";
         sha256 = "0n0h94i4xg46hfba95n3ypah93crwb80bhgsg00f6sms683lx8a3";
       }
-    else if stdenv.system == "x86_64-darwin" then
+    else if stdenv.hostPlatform.system == "x86_64-darwin" then
       fetchurl {
         url    = "https://developer.spotify.com/download/libspotify/libspotify-${version}-Darwin-universal.zip";
         sha256 = "1gcgrc8arim3hnszcc886lmcdb4iigc08abkaa02l6gng43ky1c0";
       }
-    else if stdenv.system == "i686-linux" then
+    else if stdenv.hostPlatform.system == "i686-linux" then
       fetchurl {
         url    = "https://developer.spotify.com/download/libspotify/libspotify-${version}-Linux-i686-release.tar.gz";
         sha256 = "1bjmn64gbr4p9irq426yap4ipq9rb84zsyhjjr7frmmw22xb86ll";
@@ -46,7 +46,7 @@ else stdenv.mkDerivation {
 
 
   # darwin-specific
-  buildInputs = stdenv.lib.optional (stdenv.system == "x86_64-darwin") unzip;
+  buildInputs = stdenv.lib.optional (stdenv.hostPlatform.system == "x86_64-darwin") unzip;
 
   # linux-specific
   installFlags = stdenv.lib.optionalString (isLinux)

@@ -2,21 +2,21 @@
 stdenv, fetchurl
 , fpc
 , gtk2, glib, pango, atk, gdk_pixbuf
-, libXi, inputproto, libX11, xproto, libXext, xextproto
+, libXi, xorgproto, libX11, libXext
 , makeWrapper
 }:
 let
   s =
   rec {
-    version = "1.8.0";
+    version = "1.8.4";
     versionSuffix = "";
     url = "mirror://sourceforge/lazarus/Lazarus%20Zip%20_%20GZip/Lazarus%20${version}/lazarus-${version}${versionSuffix}.tar.gz";
-    sha256 = "0i58ngrr1vjyazirfmz0cgikglc02z1m0gcrsfw9awpi3ax8h21j";
+    sha256 = "1s8hdip973fc1lynklddl0mvg2jd2lzkfk8hzb8jlchs6jn0362s";
     name = "lazarus-${version}";
   };
   buildInputs = [
-    fpc gtk2 glib libXi inputproto
-    libX11 xproto libXext xextproto pango atk
+    fpc gtk2 glib libXi xorgproto
+    libX11 libXext pango atk
     stdenv.cc makeWrapper gdk_pixbuf
   ];
 in

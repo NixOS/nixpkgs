@@ -57,32 +57,12 @@ in
   };
 
   config = mkIf cfg.enable {
-    # from miniupnpd/netfilter/iptables_init.sh
     networking.firewall.extraCommands = ''
-      iptables -t nat -N MINIUPNPD
-      iptables -t nat -A PREROUTING -i ${cfg.externalInterface} -j MINIUPNPD
-      iptables -t mangle -N MINIUPNPD
-      iptables -t mangle -A PREROUTING -i ${cfg.externalInterface} -j MINIUPNPD
-      iptables -t filter -N MINIUPNPD
-      iptables -t filter -A FORWARD -i ${cfg.externalInterface} ! -o ${cfg.externalInterface} -j MINIUPNPD
-      iptables -t nat -N MINIUPNPD-PCP-PEER
-      iptables -t nat -A POSTROUTING -o ${cfg.externalInterface} -j MINIUPNPD-PCP-PEER
+      ${pkgs.bash}/bin/bash -x ${pkgs.miniupnpd}/etc/miniupnpd/iptables_init.sh -i ${cfg.externalInterface}
     '';
 
-    # from miniupnpd/netfilter/iptables_removeall.sh
     networking.firewall.extraStopCommands = ''
-      iptables -t nat -F MINIUPNPD
-      iptables -t nat -D PREROUTING -i ${cfg.externalInterface} -j MINIUPNPD
-      iptables -t nat -X MINIUPNPD
-      iptables -t mangle -F MINIUPNPD
-      iptables -t mangle -D PREROUTING -i ${cfg.externalInterface} -j MINIUPNPD
-      iptables -t mangle -X MINIUPNPD
-      iptables -t filter -F MINIUPNPD
-      iptables -t filter -D FORWARD -i ${cfg.externalInterface} ! -o ${cfg.externalInterface} -j MINIUPNPD
-      iptables -t filter -X MINIUPNPD
-      iptables -t nat -F MINIUPNPD-PCP-PEER
-      iptables -t nat -D POSTROUTING -o ${cfg.externalInterface} -j MINIUPNPD-PCP-PEER
-      iptables -t nat -X MINIUPNPD-PCP-PEER
+      ${pkgs.bash}/bin/bash -x ${pkgs.miniupnpd}/etc/miniupnpd/iptables_removeall.sh -i ${cfg.externalInterface}
     '';
 
     systemd.services.miniupnpd = {

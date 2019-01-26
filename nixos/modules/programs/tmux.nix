@@ -1,7 +1,7 @@
 { config, pkgs, lib, ... }:
 
 let
-  inherit (lib) mkOption mkEnableOption mkIf mkMerge types;
+  inherit (lib) mkOption mkIf types;
 
   cfg = config.programs.tmux;
 

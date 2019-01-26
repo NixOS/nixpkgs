@@ -5,7 +5,7 @@
 
 let
 
-  version = "1.3.0-9b2ba62";
+  version = "1.3.1-ff75f26";
 
   rpath = stdenv.lib.makeLibraryPath
     [ libX11 zlib libSM libICE libXext freetype libXrender fontconfig libXft
@@ -19,7 +19,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://hubstaff-production.s3.amazonaws.com/downloads/HubstaffClient/Builds/Release/${version}/Hubstaff-${version}.sh";
-    sha256 = "1dxzyl3yxbfmbw1pv8k3vhqzbmyyf16zkgrhzsbm866nmbgnqk1s";
+    sha256 = "0jm5l34r6lkfkg8vsdfqbr0axngxznhagwcl9y184lnyji91fmdl";
   };
 
   nativeBuildInputs = [ unzip makeWrapper ];

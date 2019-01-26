@@ -26,8 +26,8 @@ existing packages here and modify it as necessary.
 
 {
   newScope,
-  stdenv, fetchurl, makeSetupHook, makeWrapper,
-  bison, cups ? null, harfbuzz, mesa, perl,
+  stdenv, fetchurl, makeSetupHook,
+  bison, cups ? null, harfbuzz, libGL, perl,
   gstreamer, gst-plugins-base,
 
   # options
@@ -46,13 +46,12 @@ let
   srcs = import ./srcs.nix { inherit fetchurl; inherit mirror; };
 
   patches = {
-    qtbase = [ ./qtbase.patch ];
+    qtbase = [ ./qtbase.patch ./qtbase-fixguicmake.patch ];
     qtdeclarative = [ ./qtdeclarative.patch ];
     qtscript = [ ./qtscript.patch ];
     qtserialport = [ ./qtserialport.patch ];
     qttools = [ ./qttools.patch ];
-    qtwebengine = [ ./qtwebengine-seccomp.patch ]
-      ++ optional stdenv.needsPax ./qtwebengine-paxmark-mksnapshot.patch;
+    qtwebengine = [ ./qtwebengine-seccomp.patch ];
     qtwebkit = [ ./qtwebkit.patch ];
   };
 
@@ -74,7 +73,7 @@ let
       inherit mkDerivation;
 
       qtbase = callPackage ../modules/qtbase.nix {
-        inherit bison cups harfbuzz mesa;
+        inherit bison cups harfbuzz libGL;
         inherit (srcs.qtbase) src version;
         patches = patches.qtbase;
         inherit developerBuild decryptSslTraffic;

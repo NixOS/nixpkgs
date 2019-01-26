@@ -18,6 +18,7 @@ stdenv.mkDerivation rec {
     homepage = https://sourceforge.net/projects/avarice/files/avarice/;
     maintainers = [ stdenv.lib.maintainers.smironov ];
     platforms = stdenv.lib.platforms.linux;
+    broken = true; # 2018-04-10
   };
 }
 

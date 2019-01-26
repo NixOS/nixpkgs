@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoreconfHook, mate, hicolor-icon-theme }:
+{ stdenv, fetchurl, autoreconfHook, gtk3, mate, hicolor-icon-theme }:
 
 stdenv.mkDerivation rec {
   name = "mate-icon-theme-faenza-${version}";
@@ -9,10 +9,16 @@ stdenv.mkDerivation rec {
     sha256 = "000vr9cnbl2qlysf2gyg1lsjirqdzmwrnh6d3hyrsfc0r2vh4wna";
   };
 
-  nativeBuildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [ autoreconfHook gtk3 ];
 
   buildInputs = [ mate.mate-icon-theme hicolor-icon-theme ];
-  
+
+  postInstall = ''
+    for theme in "$out"/share/icons/*; do
+      gtk-update-icon-cache "$theme"
+    done
+  '';
+
   meta = {
     description = "Faenza icon theme from MATE";
     homepage = http://mate-desktop.org;

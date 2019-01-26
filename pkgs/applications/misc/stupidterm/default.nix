@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, pkgconfig, vte, gtk }:
 
 stdenv.mkDerivation rec {
-  name = "stupidterm-2017-03-15";
+  name = "stupidterm-2018-09-25";
 
   nativeBuildInputs = [ pkgconfig ];
 
@@ -10,8 +10,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "esmil";
     repo = "stupidterm";
-    rev = "752316a783f52317ffd9f05d32e208dbcafc5ba6";
-    sha256 = "1d8fyhr9sgpxgkwzkyiws0kvhmqfwwyycvcr1qf2wjldiax222lv";
+    rev = "d1bc020797330df83d427e361d3620e346a4e792";
+    sha256 = "1yh2vhq3d0qbh0dh2h9yc7s9gkffgkb987vvwz2bdnvlskrjmmdj";
   };
 
   makeFlags = "PKGCONFIG=${pkgconfig}/bin/pkg-config binary=stupidterm";

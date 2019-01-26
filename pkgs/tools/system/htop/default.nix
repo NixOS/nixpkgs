@@ -3,11 +3,11 @@ IOKit, python }:
 
 stdenv.mkDerivation rec {
   name = "htop-${version}";
-  version = "2.1.0";
+  version = "2.2.0";
 
   src = fetchurl {
-    url = "http://hisham.hm/htop/releases/${version}/${name}.tar.gz";
-    sha256 = "0j07z0xm2gj1vzvbgh4323k4db9mr7drd7gw95mmpqi61ncvwq1j";
+    url = "https://hisham.hm/htop/releases/${version}/${name}.tar.gz";
+    sha256 = "0mrwpb3cpn3ai7ar33m31yklj64c3pp576vh1naqff6f21pq5mnr";
   };
 
   nativeBuildInputs = [ python ];

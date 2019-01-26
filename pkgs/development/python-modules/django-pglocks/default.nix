@@ -2,7 +2,6 @@
 
 buildPythonPackage rec {
   pname = "django-pglocks";
-  name = "${pname}-${version}";
   version = "1.0.2";
 
   meta = {

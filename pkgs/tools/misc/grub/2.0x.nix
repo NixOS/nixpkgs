@@ -1,5 +1,6 @@
-{ stdenv, fetchurl, fetchFromSavannah, autogen, flex, bison, python, autoconf, automake
-, gettext, ncurses, libusb, freetype, qemu, devicemapper, unifont
+{ stdenv, fetchurl, fetchpatch, flex, bison, python
+, gettext, ncurses, libusb, freetype, qemu, lvm2, unifont, pkgconfig
+, fuse # only needed for grub-mount
 , zfs ? null
 , efiSupport ? false
 , zfsSupport ? true
@@ -27,8 +28,8 @@ let
     "aarch64-linux".target = "arm64";
   };
 
-  canEfi = any (system: stdenv.system == system) (mapAttrsToList (name: _: name) efiSystemsBuild);
-  inPCSystems = any (system: stdenv.system == system) (mapAttrsToList (name: _: name) pcSystems);
+  canEfi = any (system: stdenv.hostPlatform.system == system) (mapAttrsToList (name: _: name) efiSystemsBuild);
+  inPCSystems = any (system: stdenv.hostPlatform.system == system) (mapAttrsToList (name: _: name) pcSystems);
 
   version = "2.02";
 
@@ -46,8 +47,8 @@ stdenv.mkDerivation rec {
     sha256 = "03vvdfhdmf16121v7xs8is2krwnv15wpkhkf16a4yf8nsfc3f2w1";
   };
 
-  nativeBuildInputs = [ bison flex python ];
-  buildInputs = [ ncurses libusb freetype gettext devicemapper ]
+  nativeBuildInputs = [ bison flex python pkgconfig ];
+  buildInputs = [ ncurses libusb freetype gettext lvm2 fuse ]
     ++ optional doCheck qemu
     ++ optional zfsSupport zfs;
 
@@ -81,25 +82,33 @@ stdenv.mkDerivation rec {
       unset CPP # setting CPP intereferes with dependency calculation
     '';
 
-  patches = [ ./fix-bash-completion.patch ];
+  patches = [
+    ./fix-bash-completion.patch
+    # This patch makes grub compatible with the XFS sparse inode
+    # feature introduced by xfsprogs-4.16.
+    # to be removed in grub-2.03
+    (fetchpatch {
+      url = https://git.savannah.gnu.org/cgit/grub.git/patch/?id=cda0a857dd7a27cd5d621747464bfe71e8727fff;
+      sha256 = "0k9qrkdxwdqk6sz05q9smqwjr6pvgc9adx1mlf0807g4im91xnm0";
+    })
+  ];
 
-  configureFlags = optional zfsSupport "--enable-libzfs"
-    ++ optionals efiSupport [ "--with-platform=efi" "--target=${efiSystemsBuild.${stdenv.system}.target}" "--program-prefix=" ]
-    ++ optionals xenSupport [ "--with-platform=xen" "--target=${efiSystemsBuild.${stdenv.system}.target}"];
+  configureFlags = [ "--enable-grub-mount" ] # dep of os-prober
+    ++ optional zfsSupport "--enable-libzfs"
+    ++ optionals efiSupport [ "--with-platform=efi" "--target=${efiSystemsBuild.${stdenv.hostPlatform.system}.target}" "--program-prefix=" ]
+    ++ optionals xenSupport [ "--with-platform=xen" "--target=${efiSystemsBuild.${stdenv.hostPlatform.system}.target}"];
 
   # save target that grub is compiled for
   grubTarget = if efiSupport
-               then "${efiSystemsInstall.${stdenv.system}.target}-efi"
+               then "${efiSystemsInstall.${stdenv.hostPlatform.system}.target}-efi"
                else if inPCSystems
-                    then "${pcSystems.${stdenv.system}.target}-pc"
+                    then "${pcSystems.${stdenv.hostPlatform.system}.target}-pc"
                     else "";
 
   doCheck = false;
   enableParallelBuilding = true;
 
   postInstall = ''
-    paxmark pms $out/sbin/grub-{probe,bios-setup}
-
     # Avoid a runtime reference to gcc
     sed -i $out/lib/grub/*/modinfo.sh -e "/grub_target_cppflags=/ s|'.*'|' '|"
   '';
@@ -119,10 +128,10 @@ stdenv.mkDerivation rec {
          operating system (e.g., GNU).
       '';
 
-    homepage = http://www.gnu.org/software/grub/;
+    homepage = https://www.gnu.org/software/grub/;
 
     license = licenses.gpl3Plus;
 
-    platforms = platforms.gnu;
+    platforms = platforms.gnu ++ platforms.linux;
   };
 })

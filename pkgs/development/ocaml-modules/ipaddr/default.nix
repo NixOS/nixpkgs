@@ -1,19 +1,15 @@
-{ stdenv, buildOcaml, fetchurl, ocamlbuild, findlib
-, jbuilder, sexplib, ppx_sexp_conv, ppx_deriving }:
+{ stdenv, fetchurl, buildDunePackage, sexplib, ppx_sexp_conv }:
 
-buildOcaml rec {
-  name = "ipaddr";
+buildDunePackage rec {
+  pname = "ipaddr";
   version = "2.8.0";
 
   src = fetchurl {
-    url = "https://github.com/mirage/ocaml-ipaddr/archive/${version}.tar.gz";
+    url = "https://github.com/mirage/ocaml-${pname}/archive/${version}.tar.gz";
     sha256 = "1amb1pbm9ybpxy6190qygpj6nmbzzs2r6vx4xh5r6v89szx9rfxw";
   };
 
-  buildInputs = [ findlib ocamlbuild jbuilder ppx_sexp_conv ];
-  propagatedBuildInputs = [ ppx_deriving sexplib ];
-
-  inherit (jbuilder) installPhase;
+  propagatedBuildInputs = [ ppx_sexp_conv sexplib ];
 
   meta = with stdenv.lib; {
     homepage = https://github.com/mirage/ocaml-ipaddr;

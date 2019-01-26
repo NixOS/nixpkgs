@@ -3,7 +3,6 @@
 buildPythonPackage rec {
     pname = "django_compressor";
     version = "2.2";
-    name = "${pname}-${version}";
 
     src = fetchPypi {
       inherit pname version;

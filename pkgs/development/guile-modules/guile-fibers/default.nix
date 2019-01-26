@@ -23,6 +23,6 @@ in stdenv.mkDerivation {
     homepage = https://github.com/wingo/fibers;
     license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ vyp ];
-    platforms = platforms.all;
+    platforms = platforms.linux;
   };
 }

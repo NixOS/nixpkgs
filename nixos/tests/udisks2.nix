@@ -16,7 +16,7 @@ in
   };
 
   machine =
-    { config, pkgs, ... }:
+    { ... }:
     { services.udisks2.enable = true;
       imports = [ ./common/user-account.nix ];
 
@@ -37,7 +37,8 @@ in
       $machine->fail("udisksctl info -b /dev/sda1");
 
       # Attach a USB stick and wait for it to show up.
-      $machine->sendMonitorCommand("usb_add disk:$stick");
+      $machine->sendMonitorCommand("drive_add 0 id=stick,if=none,file=$stick,format=raw");
+      $machine->sendMonitorCommand("device_add usb-storage,id=stick,drive=stick");
       $machine->waitUntilSucceeds("udisksctl info -b /dev/sda1");
       $machine->succeed("udisksctl info -b /dev/sda1 | grep 'IdLabel:.*USBSTICK'");
 
@@ -52,7 +53,7 @@ in
       $machine->fail("[ -d /run/media/alice/USBSTICK ]");
 
       # Remove the USB stick.
-      $machine->sendMonitorCommand("usb_del 0.3"); # FIXME
+      $machine->sendMonitorCommand("device_del stick");
       $machine->waitUntilFails("udisksctl info -b /dev/sda1");
       $machine->fail("[ -e /dev/sda ]");
     '';

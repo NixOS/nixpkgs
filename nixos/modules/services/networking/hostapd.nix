@@ -29,7 +29,7 @@ let
     ctrl_interface_group=${cfg.group}
 
     ${if cfg.wpa then ''
-      wpa=1
+      wpa=2
       wpa_passphrase=${cfg.wpaPassphrase}
       '' else ""}
 
@@ -151,20 +151,15 @@ in
 
   config = mkIf cfg.enable {
 
-    assertions = [
-      { assertion = (cfg.channel >= 1 && cfg.channel <= 13);
-        message = "channel must be between 1 and 13";
-      }];
-
     environment.systemPackages =  [ pkgs.hostapd ];
 
     systemd.services.hostapd =
       { description = "hostapd wireless AP";
 
         path = [ pkgs.hostapd ];
-        wantedBy = [ "network.target" ];
-
-        after = [ "${cfg.interface}-cfg.service" "nat.service" "bind.service" "dhcpd.service" "sys-subsystem-net-devices-${cfg.interface}.device" ];
+        after = [ "sys-subsystem-net-devices-${cfg.interface}.device" ];
+        bindsTo = [ "sys-subsystem-net-devices-${cfg.interface}.device" ];
+        requiredBy = [ "network-link-${cfg.interface}.service" ];
 
         serviceConfig =
           { ExecStart = "${pkgs.hostapd}/bin/hostapd ${configFile}";

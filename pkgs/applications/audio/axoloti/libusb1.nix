@@ -29,10 +29,10 @@ stdenv.mkDerivation rec {
     sed 's,-ludev,-L${systemd.lib}/lib -ludev,' -i $out/lib/libusb-1.0.la
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://www.libusb.info;
     description = "User-space USB library";
-    platforms = stdenv.lib.platforms.unix;
-    maintainers = [ ];
+    platforms = platforms.unix;
+    license = licenses.lgpl21;
   };
 }

@@ -1,13 +1,13 @@
-{ stdenv, fetchgit, fetchpatch, autoreconfHook, texinfo, ncurses, readline, zlib, lzo, openssl }:
+{ stdenv, fetchgit, autoreconfHook, texinfo, ncurses, readline, zlib, lzo, openssl }:
 
 stdenv.mkDerivation rec {
   name = "tinc-${version}";
-  version = "1.1pre15";
+  version = "1.1pre17";
 
   src = fetchgit {
     rev = "refs/tags/release-${version}";
     url = "git://tinc-vpn.org/tinc";
-    sha256 = "1msym63jpipvzb5dn8yn8yycrii43ncfq6xddxh2ifrakr48l6y5";
+    sha256 = "12abmx9qglchgn94a1qwgzldf2kaz77p8705ylpggzyncxv6bw2q";
   };
 
   outputs = [ "out" "man" "info" ];
@@ -21,10 +21,6 @@ stdenv.mkDerivation rec {
     echo "${version}" > configure-version
     echo "https://tinc-vpn.org/git/browse?p=tinc;a=log;h=refs/tags/release-${version}" > ChangeLog
     sed -i '/AC_INIT/s/m4_esyscmd_s.*/${version})/' configure.ac
-  '';
-
-  postInstall = ''
-    rm $out/bin/tinc-gui
   '';
 
   configureFlags = [

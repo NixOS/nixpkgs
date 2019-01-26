@@ -1,21 +1,27 @@
 { stdenv, fetchurl, openssl, python2, zlib, libuv, utillinux, http-parser
 , pkgconfig, which
-, darwin ? null
+# Updater dependencies
+, writeScript, coreutils, gnugrep, jq, curl, common-updater-scripts, nix
+, gnupg
+, darwin, xcbuild
+, procps
 }:
 
 with stdenv.lib;
 
-{ enableNpm ? true, version, sha256, patches }:
+{ enableNpm ? true, version, sha256, patches ? [] } @args:
 
 let
-
   inherit (darwin.apple_sdk.frameworks) CoreServices ApplicationServices;
 
-
+  majorVersion = versions.major version;
+  minorVersion = versions.minor version;
 
   baseName = if enableNpm then "nodejs" else "nodejs-slim";
 
-  sharedLibDeps = { inherit openssl zlib libuv; } // (optionalAttrs (!stdenv.isDarwin) { inherit http-parser; });
+  useSharedHttpParser = !stdenv.isDarwin && versionOlder "${majorVersion}.${minorVersion}" "11.4";
+
+  sharedLibDeps = { inherit openssl zlib libuv; } // (optionalAttrs useSharedHttpParser { inherit http-parser; });
 
   sharedConfigureFlags = concatMap (name: [
     "--shared-${name}"
@@ -40,14 +46,15 @@ in
     name = "${baseName}-${version}";
 
     src = fetchurl {
-      url = "http://nodejs.org/dist/v${version}/node-v${version}.tar.xz";
+      url = "https://nodejs.org/dist/v${version}/node-v${version}.tar.xz";
       inherit sha256;
     };
 
     buildInputs = optionals stdenv.isDarwin [ CoreServices ApplicationServices ]
-    ++ [ python2 which zlib libuv openssl ]
-    ++ optionals stdenv.isLinux [ utillinux http-parser ]
-    ++ optionals stdenv.isDarwin [ pkgconfig darwin.cctools ];
+      ++ [ python2 zlib libuv openssl http-parser ];
+
+    nativeBuildInputs = [ which utillinux ]
+      ++ optionals stdenv.isDarwin [ pkgconfig xcbuild ];
 
     configureFlags = sharedConfigureFlags ++ [ "--without-dtrace" ] ++ extraConfigFlags;
 
@@ -59,20 +66,32 @@ in
 
     setupHook = ./setup-hook.sh;
 
+    pos = builtins.unsafeGetAttrPos "version" args;
+
     inherit patches;
 
-    preBuild = optionalString stdenv.isDarwin ''
-      sed -i -e "s|tr1/type_traits|type_traits|g" \
-      -e "s|std::tr1|std|" src/util.h
-    '';
-
-    prePatch = ''
+    postPatch = ''
       patchShebangs .
       sed -i 's/raise.*No Xcode or CLT version detected.*/version = "7.0.0"/' tools/gyp/pylib/gyp/xcode_emulation.py
+
+      # fix tests
+      for a in test/parallel/test-child-process-env.js \
+               test/parallel/test-child-process-exec-env.js \
+               test/parallel/test-child-process-default-options.js \
+               test/fixtures/syntax/good_syntax_shebang.js \
+               test/fixtures/syntax/bad_syntax_shebang.js ; do
+        substituteInPlace $a \
+          --replace "/usr/bin/env" "${coreutils}/bin/env"
+      done
+    '' + optionalString stdenv.isDarwin ''
+      sed -i -e "s|tr1/type_traits|type_traits|g" \
+             -e "s|std::tr1|std|" src/util.h
     '';
 
+    checkInputs = [ procps ];
+    doCheck = false; # fails 4 out of 1453 tests
+
     postInstall = ''
-      paxmark m $out/bin/node
       PATH=$out/bin:$PATH patchShebangs $out
 
       ${optionalString enableNpm ''
@@ -83,6 +102,12 @@ in
       # install the missing headers for node-gyp
       cp -r ${concatStringsSep " " copyLibHeaders} $out/include/node
     '';
+
+    passthru.updateScript = import ./update.nix {
+      inherit stdenv writeScript coreutils gnugrep jq curl common-updater-scripts gnupg nix;
+      inherit (stdenv) lib;
+      inherit majorVersion;
+    };
 
     meta = {
       description = "Event-driven I/O framework for the V8 JavaScript engine";

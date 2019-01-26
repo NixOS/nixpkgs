@@ -7,7 +7,6 @@ let
   encDevs = filter (dev: dev.encrypted.enable) fileSystems;
   keyedEncDevs = filter (dev: dev.encrypted.keyFile != null) encDevs;
   keylessEncDevs = filter (dev: dev.encrypted.keyFile == null) encDevs;
-  isIn = needle: haystack: filter (p: p == needle) haystack != [];
   anyEncrypted =
     fold (j: v: v || j.encrypted.enable) false encDevs;
 

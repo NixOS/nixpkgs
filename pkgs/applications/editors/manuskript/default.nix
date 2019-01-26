@@ -1,14 +1,14 @@
 { stdenv, zlib, fetchFromGitHub, python3Packages }:
 
 python3Packages.buildPythonApplication rec {
-  name = "manuskript";
-  version = "0.3.0";
+  pname = "manuskript";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
-    repo = name;
+    repo = pname;
     owner = "olivierkes";
     rev = version;
-    sha256 = "0bqxc4a8kyi6xz1zs0dp85wxl9h4v8lzc6073bbcsn1zg4y59ys7";
+    sha256 = "0vqz02p3m9n4hk2jplnklr9s6niqdm5iykab6nblqdm4plb04c34";
   };
 
   propagatedBuildInputs = [
@@ -19,15 +19,15 @@ python3Packages.buildPythonApplication rec {
 
   patchPhase = ''
     substituteInPlace manuskript/ui/welcome.py \
-      --replace sample-projects $out/share/${name}/sample-projects
+      --replace sample-projects $out/share/${pname}/sample-projects
    '';
 
   buildPhase = '''';
 
   installPhase = ''
-    mkdir -p $out/share/${name}
+    mkdir -p $out/share/${pname}
     cp -av  bin/ i18n/ libs/ manuskript/ resources/ icons/ $out
-    cp -r sample-projects/ $out/share/${name}
+    cp -r sample-projects/ $out/share/${pname}
   '';
 
   doCheck = false;

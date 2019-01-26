@@ -1,4 +1,5 @@
 { writeScript
+, stdenv
 , lib
 , xidel
 , common-updater-scripts
@@ -9,9 +10,11 @@
 , attrPath
 , baseUrl ? "http://archive.mozilla.org/pub/firefox/releases/"
 , versionSuffix ? ""
+, versionKey ? "version"
 }:
 
 writeScript "update-${attrPath}" ''
+  #!${stdenv.shell}
   PATH=${lib.makeBinPath [ common-updater-scripts coreutils curl gnugrep gnused xidel ]}
 
   url=${baseUrl}
@@ -22,13 +25,11 @@ writeScript "update-${attrPath}" ''
   #  - removes trailing slash
   #  - sorts everything with semver in mind
   #  - picks up latest release
-  version=`xidel -q $url --extract "//a" | \
+  version=`xidel -s $url --extract "//a" | \
            grep "^[0-9.]*${versionSuffix}/$" | \
            sed s/[/]$// | \
            sort --version-sort | \
            tail -n 1`
 
-  shasum=`curl --silent $url$version/SHA512SUMS | grep 'source\.tar\.xz' | cut -d ' ' -f 1`
-
-  update-source-version ${attrPath} "$version" "$shasum"
+  update-source-version ${attrPath} "$version" "" "" ${versionKey}
 ''

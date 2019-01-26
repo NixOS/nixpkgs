@@ -4,7 +4,6 @@ with lib;
 
 let
   cfg = config.services.plex;
-  plex = pkgs.plex;
 in
 {
   options = {
@@ -146,7 +145,7 @@ in
         PLEX_MEDIA_SERVER_HOME="${cfg.package}/usr/lib/plexmediaserver";
         PLEX_MEDIA_SERVER_MAX_PLUGIN_PROCS="6";
         PLEX_MEDIA_SERVER_TMPDIR="/tmp";
-        LD_LIBRARY_PATH="${cfg.package}/usr/lib/plexmediaserver";
+        LD_LIBRARY_PATH="/run/opengl-driver/lib:${cfg.package}/usr/lib/plexmediaserver";
         LC_ALL="en_US.UTF-8";
         LANG="en_US.UTF-8";
       };
@@ -157,14 +156,14 @@ in
       allowedUDPPorts = [ 1900 5353 32410 32412 32413 32414 ];
     };
 
-    users.extraUsers = mkIf (cfg.user == "plex") {
+    users.users = mkIf (cfg.user == "plex") {
       plex = {
         group = cfg.group;
         uid = config.ids.uids.plex;
       };
     };
 
-    users.extraGroups = mkIf (cfg.group == "plex") {
+    users.groups = mkIf (cfg.group == "plex") {
       plex = {
         gid = config.ids.gids.plex;
       };

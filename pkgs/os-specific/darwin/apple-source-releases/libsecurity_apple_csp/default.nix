@@ -13,7 +13,7 @@ appleDerivation {
       lib/RawSigner.h lib/MD2Object.h lib/HMACSHA1.h lib/bfContext.h lib/rc4Context.h; do
       substituteInPlace ''$file --replace \
         '"CoreServices/../Frameworks/CarbonCore.framework/Headers/MacTypes.h"' \
-        '"${apple_sdk.sdk}/include/MacTypes.h"'
+        '"${stdenv.lib.getDev apple_sdk.sdk}/include/MacTypes.h"'
     done
 
     for file in lib/castContext.h lib/gladmanContext.h lib/desContext.h lib/rc4Context.h; do

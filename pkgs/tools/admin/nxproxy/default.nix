@@ -1,19 +1,20 @@
-{ stdenv, fetchurl, autoreconfHook, libxcomp }:
+{ stdenv, fetchurl, autoreconfHook, pkgconfig, libxcomp }:
 
 stdenv.mkDerivation rec {
   name = "nxproxy-${version}";
-  version = "3.5.0.32";
+  version = "3.5.99.17-1";
 
   src = fetchurl {
-    sha256 = "02n5bdc1jsq999agb4w6dmdj5l2wlln2lka84qz6rpswwc59zaxm";
-    url = "http://code.x2go.org/releases/source/nx-libs/nx-libs-${version}-lite.tar.gz";
+    sha256 = "18a7cvjnaf50lf1cc5axx9jmi8n9g75d2i5y4s6q9r3phpwyp918";
+    url = "https://code.x2go.org/releases/source/nx-libs/nx-libs-${version}-lite.tar.gz";
   };
 
   buildInputs = [ libxcomp ];
-  nativeBuildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
 
   preAutoreconf = ''
     cd nxproxy/
+    sed -i 's|-L\$(top_srcdir)/../nxcomp/src/.libs ||' src/Makefile.am
   '';
 
   makeFlags = [ "exec_prefix=$(out)" ];

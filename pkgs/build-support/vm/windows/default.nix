@@ -21,11 +21,6 @@ let
 
 in {
   runInWindowsVM = drv: let
-    newDrv = drv.override {
-      stdenv = drv.stdenv.override {
-        shell = "/bin/sh";
-      };
-    };
   in pkgs.lib.overrideDerivation drv (attrs: let
     bootstrap = bootstrapper attrs.windowsImage;
   in {

@@ -137,12 +137,12 @@ in
   };
 
   config = mkIf cfg.enable {
-    users.extraUsers."${cfg.user}" = {
+    users.users."${cfg.user}" = {
       isSystemUser = true;
       group = cfg.group;
     };
 
-    users.extraGroups."${cfg.group}" = {};
+    users.groups."${cfg.group}" = {};
 
     systemd.services.confluence = {
       description = "Atlassian Confluence";
@@ -166,7 +166,7 @@ in
         ln -sf ${cfg.home}/{logs,work,temp,server.xml} /run/confluence
         ln -sf ${cfg.home} /run/confluence/home
 
-        chown -R ${cfg.user} ${cfg.home}
+        chown ${cfg.user} ${cfg.home}
 
         sed -e 's,port="8090",port="${toString cfg.listenPort}" address="${cfg.listenAddress}",' \
         '' + (lib.optionalString cfg.proxy.enable ''

@@ -1,10 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, pkgconfig, intltool, wrapGAppsHook
-, python3Packages, gnome3, gtk3, gobjectIntrospection}:
+{ stdenv, fetchFromGitHub, pkgconfig, intltool, wrapGAppsHook
+, python3Packages, gnome3, gtk3, gobject-introspection}:
 
 let
-  inherit (python3Packages) buildPythonApplication python isPy3k dbus-python pygobject3 mpd2;
+  inherit (python3Packages) buildPythonApplication isPy3k dbus-python pygobject3 mpd2;
 in buildPythonApplication rec {
-  name = "sonata-${version}";
+  pname = "sonata";
   version = "1.7b1";
 
   src = fetchFromGitHub {
@@ -19,7 +19,7 @@ in buildPythonApplication rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
     intltool wrapGAppsHook
-    gnome3.gnome-themes-standard gnome3.defaultIconTheme
+    gnome3.defaultIconTheme
     gnome3.gsettings-desktop-schemas
   ];
 
@@ -28,10 +28,8 @@ in buildPythonApplication rec {
     sed -i '/localmpd/d' sonata/consts.py
   '';
 
-  propagatedUserEnvPkgs = [ gnome3.gnome-themes-standard ];
-
   propagatedBuildInputs = [
-    gobjectIntrospection gtk3 pygobject3
+    gobject-introspection gtk3 pygobject3
   ];
 
   # The optional tagpy dependency (for editing metadata) is not yet
@@ -63,7 +61,7 @@ in buildPythonApplication rec {
        - Commandline control
        - Available in 24 languages
     '';
-    homepage = http://www.nongnu.org/sonata/;
+    homepage = https://www.nongnu.org/sonata/;
     license = stdenv.lib.licenses.gpl3;
     platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.rvl ];

@@ -1,0 +1,16 @@
++++ build/SConstruct
+@@ -69,10 +69,10 @@
+         custom_tools = ['mingw']
+ 
+ env_base = Environment(tools=custom_tools)
+-if 'TERM' in os.environ:
+-    env_base['ENV']['TERM'] = os.environ['TERM']
+-env_base.AppendENVPath('PATH', os.getenv('PATH'))
+-env_base.AppendENVPath('PKG_CONFIG_PATH', os.getenv('PKG_CONFIG_PATH'))
++for k in ("TERM", "PATH", "PKG_CONFIG_PATH"):
++    if (k in os.environ):
++        env_base["ENV"][k] = os.environ[k]
++
+ env_base.global_defaults = global_defaults
+ env_base.android_maven_repos = []
+ env_base.android_flat_dirs = []

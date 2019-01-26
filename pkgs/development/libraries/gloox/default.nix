@@ -11,14 +11,14 @@ assert idnSupport -> libidn != null;
 with stdenv.lib;
 
 let
-  version = "1.0.20";
+  version = "1.0.21";
 in
 stdenv.mkDerivation rec {
   name = "gloox-${version}";
 
   src = fetchurl {
-    url = "http://camaya.net/download/gloox-${version}.tar.bz2";
-    sha256 = "1a6yhs42wcdm8az3983m3lx4d9296bw0amz5v3b4012g1xn0hhq2";
+    url = "https://camaya.net/download/gloox-${version}.tar.bz2";
+    sha256 = "1k57qgif1yii515m6jaqaibkdysfab6394bpawd2l67321f1a4rw";
   };
 
   buildInputs = [ ]

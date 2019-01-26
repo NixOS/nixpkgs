@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, ocaml, ncurses, writeText }:
+{ stdenv, fetchurl, ocaml, writeText }:
 
 let
   pname = "camlidl";

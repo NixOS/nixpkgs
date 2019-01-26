@@ -1,9 +1,10 @@
-{ version, sha256Hash, maintainers }:
+{ version, sha256Hash }:
 
 { stdenv, fetchFromGitHub, fetchpatch
 , fusePackages, utillinux, gettext
-, autoconf, automake, libtool
 , meson, ninja, pkgconfig
+, autoreconfHook
+, python3Packages, which
 }:
 
 let
@@ -18,6 +19,8 @@ in stdenv.mkDerivation rec {
     sha256 = sha256Hash;
   };
 
+  preAutoreconf = "touch config.rpath";
+
   patches =
     stdenv.lib.optional
       (!isFuse3 && stdenv.isAarch64)
@@ -27,11 +30,9 @@ in stdenv.mkDerivation rec {
       })
     ++ stdenv.lib.optional isFuse3 ./fuse3-install.patch;
 
-
   nativeBuildInputs = if isFuse3
     then [ meson ninja pkgconfig ]
-    else [ autoconf automake libtool ];
-  buildInputs = stdenv.lib.optional (!isFuse3) gettext;
+    else [ autoreconfHook gettext ];
 
   outputs = [ "out" ] ++ stdenv.lib.optional isFuse3 "common";
 
@@ -52,30 +53,35 @@ in stdenv.mkDerivation rec {
       # The configure phase will delete these files (temporary workaround for
       # ./fuse3-install_man.patch)
       install -D -m444 doc/fusermount3.1 $out/share/man/man1/fusermount3.1
-      install -D -m444 doc/mount.fuse.8 $out/share/man/man8/mount.fuse.8
+      install -D -m444 doc/mount.fuse3.8 $out/share/man/man8/mount.fuse3.8
     '' else ''
       sed -e 's@CONFIG_RPATH=/usr/share/gettext/config.rpath@CONFIG_RPATH=${gettext}/share/gettext/config.rpath@' -i makeconf.sh
       ./makeconf.sh
     '');
 
-  postFixup = "cd $out\n" + (if isFuse3 then ''
-    mv bin/mount.fuse3 bin/mount.fuse
+  checkInputs = [ which ] ++ (with python3Packages; [ python pytest ]);
 
-    install -D -m555 bin/mount.fuse $common/bin/mount.fuse
-    install -D -m444 etc/udev/rules.d/99-fuse.rules $common/etc/udev/rules.d/99-fuse.rules
-    install -D -m444 share/man/man8/mount.fuse.8.gz $common/share/man/man8/mount.fuse.8.gz
+  checkPhase = ''
+    python3 -m pytest test/
+  '';
+
+  doCheck = false; # v2: no tests, v3: all tests get skipped in a sandbox
+
+  postFixup = "cd $out\n" + (if isFuse3 then ''
+    install -D -m444 etc/fuse.conf $common/etc/fuse.conf
+    install -D -m444 etc/udev/rules.d/99-fuse3.rules $common/etc/udev/rules.d/99-fuse.rules
   '' else ''
-    cp ${fusePackages.fuse_3.common}/bin/mount.fuse bin/mount.fuse
+    cp ${fusePackages.fuse_3.common}/etc/fuse.conf etc/fuse.conf
     cp ${fusePackages.fuse_3.common}/etc/udev/rules.d/99-fuse.rules etc/udev/rules.d/99-fuse.rules
-    cp ${fusePackages.fuse_3.common}/share/man/man8/mount.fuse.8.gz share/man/man8/mount.fuse.8.gz
   '');
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with stdenv.lib; {
     inherit (src.meta) homepage;
     description = "Kernel module and library that allows filesystems to be implemented in user space";
-    platforms = stdenv.lib.platforms.linux;
-    inherit maintainers;
+    platforms = platforms.linux;
+    license = with licenses; [ gpl2 lgpl21 ];
+    maintainers = [ maintainers.primeos ];
   };
 }

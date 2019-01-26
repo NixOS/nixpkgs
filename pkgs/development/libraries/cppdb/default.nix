@@ -1,11 +1,11 @@
 { stdenv, fetchurl, cmake, sqlite, mysql, postgresql, unixODBC }:
 
 stdenv.mkDerivation rec {
-  name = "cppdb";
+  name = "cppdb-${version}";
   version = "0.3.1";
 
   src = fetchurl {
-      url = "mirror://sourceforge/cppcms/${name}-${version}.tar.bz2";
+      url = "mirror://sourceforge/cppcms/${name}.tar.bz2";
       sha256 = "0blr1casmxickic84dxzfmn3lm7wrsl4aa2abvpq93rdfddfy3nn";
   };
 

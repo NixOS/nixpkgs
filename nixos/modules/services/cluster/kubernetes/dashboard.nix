@@ -4,38 +4,60 @@ with lib;
 
 let
   cfg = config.services.kubernetes.addons.dashboard;
-
-  name = "gcr.io/google_containers/kubernetes-dashboard-amd64";
-	version = "v1.8.2";
-
-  image = pkgs.dockerTools.pullImage {
-    imageName = name;
-    imageTag = version;
-    sha256 = "11h0fz3wxp0f10fsyqaxjm7l2qg7xws50dv5iwlck5gb1fjmajad";
-  };
 in {
   options.services.kubernetes.addons.dashboard = {
     enable = mkEnableOption "kubernetes dashboard addon";
 
-    enableRBAC = mkOption {
-      description = "Whether to enable role based access control is enabled for kubernetes dashboard";
-      type = types.bool;
-      default = elem "RBAC" config.services.kubernetes.apiserver.authorizationMode;
+    rbac = mkOption {
+      description = "Role-based access control (RBAC) options";
+      default = {};
+      type = types.submodule {
+        options = {
+          enable = mkOption {
+            description = "Whether to enable role based access control is enabled for kubernetes dashboard";
+            type = types.bool;
+            default = elem "RBAC" config.services.kubernetes.apiserver.authorizationMode;
+          };
+
+          clusterAdmin = mkOption {
+            description = "Whether to assign cluster admin rights to the kubernetes dashboard";
+            type = types.bool;
+            default = false;
+          };
+        };
+      };
+    };
+
+    version = mkOption {
+      description = "Which version of the kubernetes dashboard to deploy";
+      type = types.str;
+      default = "v1.8.3";
+    };
+
+    image = mkOption {
+      description = "Docker image to seed for the kubernetes dashboard container.";
+      type = types.attrs;
+      default = {
+        imageName = "k8s.gcr.io/kubernetes-dashboard-amd64";
+        imageDigest = "sha256:dc4026c1b595435ef5527ca598e1e9c4343076926d7d62b365c44831395adbd0";
+        finalImageTag = cfg.version;
+        sha256 = "18ajcg0q1vignfjk2sm4xj4wzphfz8wah69ps8dklqfvv0164mc8";
+      };
     };
   };
 
   config = mkIf cfg.enable {
-    services.kubernetes.kubelet.seedDockerImages = [image];
+    services.kubernetes.kubelet.seedDockerImages = [(pkgs.dockerTools.pullImage cfg.image)];
 
     services.kubernetes.addonManager.addons = {
       kubernetes-dashboard-deployment = {
         kind = "Deployment";
-        apiVersion = "apps/v1beta1";
+        apiVersion = "apps/v1";
         metadata = {
           labels = {
             k8s-addon = "kubernetes-dashboard.addons.k8s.io";
             k8s-app = "kubernetes-dashboard";
-            version = version;
+            version = cfg.version;
             "kubernetes.io/cluster-service" = "true";
             "addonmanager.kubernetes.io/mode" = "Reconcile";
           };
@@ -51,45 +73,66 @@ in {
               labels = {
                 k8s-addon = "kubernetes-dashboard.addons.k8s.io";
                 k8s-app = "kubernetes-dashboard";
-                version = version;
+                version = cfg.version;
                 "kubernetes.io/cluster-service" = "true";
               };
               annotations = {
                 "scheduler.alpha.kubernetes.io/critical-pod" = "";
-                #"scheduler.alpha.kubernetes.io/tolerations" = ''[{"key":"CriticalAddonsOnly", "operator":"Exists"}]'';
               };
             };
             spec = {
+              priorityClassName = "system-cluster-critical";
               containers = [{
                 name = "kubernetes-dashboard";
-                image = "${name}:${version}";
+                image = with cfg.image; "${imageName}:${finalImageTag}";
                 ports = [{
-                  containerPort = 9090;
+                  containerPort = 8443;
                   protocol = "TCP";
                 }];
                 resources = {
                   limits = {
                     cpu = "100m";
-                    memory = "50Mi";
+                    memory = "300Mi";
                   };
                   requests = {
                     cpu = "100m";
-                    memory = "50Mi";
+                    memory = "100Mi";
                   };
                 };
+                args = ["--auto-generate-certificates"];
+                volumeMounts = [{
+                  name = "tmp-volume";
+                  mountPath = "/tmp";
+                } {
+                  name = "kubernetes-dashboard-certs";
+                  mountPath = "/certs";
+                }];
                 livenessProbe = {
                   httpGet = {
+                    scheme = "HTTPS";
                     path = "/";
-                    port = 9090;
+                    port = 8443;
                   };
                   initialDelaySeconds = 30;
                   timeoutSeconds = 30;
                 };
               }];
+              volumes = [{
+                name = "kubernetes-dashboard-certs";
+                secret = {
+                  secretName = "kubernetes-dashboard-certs";
+                };
+              } {
+                name = "tmp-volume";
+                emptyDir = {};
+              }];
               serviceAccountName = "kubernetes-dashboard";
               tolerations = [{
                 key = "node-role.kubernetes.io/master";
                 effect = "NoSchedule";
+              } {
+                key = "CriticalAddonsOnly";
+                operator = "Exists";
               }];
             };
           };
@@ -112,8 +155,8 @@ in {
         };
         spec = {
           ports = [{
-            port = 80;
-            targetPort = 9090;
+            port = 443;
+            targetPort = 8443;
           }];
           selector.k8s-app = "kubernetes-dashboard";
         };
@@ -126,35 +169,153 @@ in {
           labels = {
             k8s-app = "kubernetes-dashboard";
             k8s-addon = "kubernetes-dashboard.addons.k8s.io";
-						"addonmanager.kubernetes.io/mode" = "Reconcile";
+            "addonmanager.kubernetes.io/mode" = "Reconcile";
           };
           name = "kubernetes-dashboard";
           namespace = "kube-system";
         };
       };
-    } // (optionalAttrs cfg.enableRBAC {
-      kubernetes-dashboard-crb = {
-        apiVersion = "rbac.authorization.k8s.io/v1beta1";
-        kind = "ClusterRoleBinding";
+      kubernetes-dashboard-sec-certs = {
+        apiVersion = "v1";
+        kind = "Secret";
         metadata = {
-          name = "kubernetes-dashboard";
           labels = {
             k8s-app = "kubernetes-dashboard";
-            k8s-addon = "kubernetes-dashboard.addons.k8s.io";
-            "addonmanager.kubernetes.io/mode" = "Reconcile";
+            # Allows editing resource and makes sure it is created first.
+            "addonmanager.kubernetes.io/mode" = "EnsureExists";
           };
+          name = "kubernetes-dashboard-certs";
+          namespace = "kube-system";
         };
-        roleRef = {
-          apiGroup = "rbac.authorization.k8s.io";
-          kind = "ClusterRole";
-          name = "cluster-admin";
+        type = "Opaque";
+      };
+      kubernetes-dashboard-sec-kholder = {
+        apiVersion = "v1";
+        kind = "Secret";
+        metadata = {
+          labels = {
+            k8s-app = "kubernetes-dashboard";
+            # Allows editing resource and makes sure it is created first.
+            "addonmanager.kubernetes.io/mode" = "EnsureExists";
+          };
+          name = "kubernetes-dashboard-key-holder";
+          namespace = "kube-system";
         };
+        type = "Opaque";
+      };
+      kubernetes-dashboard-cm = {
+        apiVersion = "v1";
+        kind = "ConfigMap";
+        metadata = {
+          labels = {
+            k8s-app = "kubernetes-dashboard";
+            # Allows editing resource and makes sure it is created first.
+            "addonmanager.kubernetes.io/mode" = "EnsureExists";
+          };
+          name = "kubernetes-dashboard-settings";
+          namespace = "kube-system";
+        };
+      };
+    } // (optionalAttrs cfg.rbac.enable
+      (let
         subjects = [{
           kind = "ServiceAccount";
           name = "kubernetes-dashboard";
           namespace = "kube-system";
         }];
-      };
-    });
+        labels = {
+          k8s-app = "kubernetes-dashboard";
+          k8s-addon = "kubernetes-dashboard.addons.k8s.io";
+          "addonmanager.kubernetes.io/mode" = "Reconcile";
+        };
+      in
+        (if cfg.rbac.clusterAdmin then {
+          kubernetes-dashboard-crb = {
+            apiVersion = "rbac.authorization.k8s.io/v1";
+            kind = "ClusterRoleBinding";
+            metadata = {
+              name = "kubernetes-dashboard";
+              inherit labels;
+            };
+            roleRef = {
+              apiGroup = "rbac.authorization.k8s.io";
+              kind = "ClusterRole";
+              name = "cluster-admin";
+            };
+            inherit subjects;
+          };
+        }
+        else
+        {
+          # Upstream role- and rolebinding as per:
+          # https://raw.githubusercontent.com/kubernetes/dashboard/master/src/deploy/alternative/kubernetes-dashboard.yaml
+          kubernetes-dashboard-role = {
+            apiVersion = "rbac.authorization.k8s.io/v1";
+            kind = "Role";
+            metadata = {
+              name = "kubernetes-dashboard-minimal";
+              namespace = "kube-system";
+              inherit labels;
+            };
+            rules = [
+              # Allow Dashboard to create 'kubernetes-dashboard-key-holder' secret.
+              {
+                apiGroups = [""];
+                resources = ["secrets"];
+                verbs = ["create"];
+              }
+              # Allow Dashboard to create 'kubernetes-dashboard-settings' config map.
+              {
+                apiGroups = [""];
+                resources = ["configmaps"];
+                verbs = ["create"];
+              }
+              # Allow Dashboard to get, update and delete Dashboard exclusive secrets.
+              {
+                apiGroups = [""];
+                resources = ["secrets"];
+                resourceNames = ["kubernetes-dashboard-key-holder"];
+                verbs = ["get" "update" "delete"];
+              }
+              # Allow Dashboard to get and update 'kubernetes-dashboard-settings' config map.
+              {
+                apiGroups = [""];
+                resources = ["configmaps"];
+                resourceNames = ["kubernetes-dashboard-settings"];
+                verbs = ["get" "update"];
+              }
+              # Allow Dashboard to get metrics from heapster.
+              {
+                apiGroups = [""];
+                resources = ["services"];
+                resourceNames = ["heapster"];
+                verbs = ["proxy"];
+              }
+              {
+                apiGroups = [""];
+                resources = ["services/proxy"];
+                resourceNames = ["heapster" "http:heapster:" "https:heapster:"];
+                verbs = ["get"];
+              }
+            ];
+          };
+
+          kubernetes-dashboard-rb = {
+            apiVersion = "rbac.authorization.k8s.io/v1";
+            kind = "RoleBinding";
+            metadata = {
+              name = "kubernetes-dashboard-minimal";
+              namespace = "kube-system";
+              inherit labels;
+            };
+            roleRef = {
+              apiGroup = "rbac.authorization.k8s.io";
+              kind = "Role";
+              name = "kubernetes-dashboard-minimal";
+            };
+            inherit subjects;
+          };
+        })
+    ));
   };
 }

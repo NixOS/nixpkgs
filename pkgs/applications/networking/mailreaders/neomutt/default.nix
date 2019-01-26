@@ -1,6 +1,7 @@
 { stdenv, fetchFromGitHub, gettext, makeWrapper, tcl, which, writeScript
 , ncurses, perl , cyrus_sasl, gss, gpgme, kerberos, libidn, libxml2, notmuch, openssl
-, lmdb, libxslt, docbook_xsl, docbook_xml_dtd_42, mime-types }:
+, lmdb, libxslt, docbook_xsl, docbook_xml_dtd_42, mailcap
+}:
 
 let
   muttWrapper = writeScript "mutt" ''
@@ -15,20 +16,20 @@ let
   '';
 
 in stdenv.mkDerivation rec {
-  version = "20180223";
+  version = "20180716";
   name = "neomutt-${version}";
 
   src = fetchFromGitHub {
     owner  = "neomutt";
     repo   = "neomutt";
     rev    = "neomutt-${version}";
-    sha256 = "1q0zwm8p2mk85icrbq42z4235mpqfra38pigd064kharx54k36sb";
+    sha256 = "0im2kkahkr04q04irvcimfawxi531ld6wrsa92r2m7l10gmijkl8";
   };
 
   buildInputs = [
     cyrus_sasl gss gpgme kerberos libidn ncurses
     notmuch openssl perl lmdb
-    mime-types
+    mailcap
   ];
 
   nativeBuildInputs = [
@@ -47,13 +48,14 @@ in stdenv.mkDerivation rec {
         --replace http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd ${docbook_xml_dtd_42}/xml/dtd/docbook/docbookx.dtd
     done
 
+
     # allow neomutt to map attachments to their proper mime.types if specified wrongly
     # and use a far more comprehensive list than the one shipped with neomutt
     substituteInPlace sendlib.c \
-      --replace /etc/mime.types ${mime-types}/etc/mime.types
+      --replace /etc/mime.types ${mailcap}/etc/mime.types
 
     # The string conversion tests all fail with the first version of neomutt
-    # that has tests (20180223) so we disable them for now.
+    # that has tests (20180223) as well as 20180716 so we disable them for now.
     # I don't know if that is related to the tests or our build environment.
     # Try again with a later release.
     sed -i '/rfc2047/d' test/Makefile.autosetup test/main.c
@@ -79,7 +81,7 @@ in stdenv.mkDerivation rec {
 
   postInstall = ''
     cp ${muttWrapper} $out/bin/mutt
-    wrapProgram "$out/bin/neomutt" --prefix PATH : "$out/lib/neomutt"
+    wrapProgram "$out/bin/neomutt" --prefix PATH : "$out/libexec/neomutt"
   '';
 
   doCheck = true;

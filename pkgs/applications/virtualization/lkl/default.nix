@@ -1,12 +1,12 @@
-{ stdenv, fetchFromGitHub, bc, python, fuse, libarchive }:
+{ stdenv, fetchFromGitHub, bc, python, bison, flex, fuse, libarchive }:
 
 stdenv.mkDerivation rec {
-  name = "lkl-2017-11-10";
-  rev  = "52a6a643c7d1dd3031c0cbec75e1ac7a999f3d57";
+  name = "lkl-2018-08-22";
+  rev  = "5221c547af3d29582703f01049617a6bf9f6232a";
 
   outputs = [ "dev" "lib" "out" ];
 
-  nativeBuildInputs = [ bc python ];
+  nativeBuildInputs = [ bc bison flex python ];
 
   buildInputs = [ fuse libarchive ];
 
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     inherit rev;
     owner  = "lkl";
     repo   = "linux";
-    sha256 = "1i5ywrfxqpykjjalwh9g4rwd4s186cqk3j806d327a67xb2ivxnp";
+    sha256 = "1k2plyx40xaphm8zsk2dd1lyv6dhsp7kj6hfmdgiamvl80bjajqy";
   };
 
   # Fix a /usr/bin/env reference in here that breaks sandboxed builds
@@ -27,7 +27,8 @@ stdenv.mkDerivation rec {
     sed -i $out/bin/lkl-hijack.sh \
         -e "s,LD_LIBRARY_PATH=.*,LD_LIBRARY_PATH=$lib/lib,"
 
-    cp tools/lkl/{cptofs,cpfromfs,fs2tar,lklfuse} $out/bin
+    cp tools/lkl/{cptofs,fs2tar,lklfuse} $out/bin
+    ln -s cptofs $out/bin/cpfromfs
     cp -r tools/lkl/include $dev/
     cp tools/lkl/liblkl*.{a,so} $lib/lib
   '';

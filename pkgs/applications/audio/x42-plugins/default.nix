@@ -1,18 +1,18 @@
 { stdenv, fetchurl, pkgconfig
 , libltc, libsndfile, libsamplerate, ftgl, freefont_ttf, libjack2
-, mesa_glu, lv2, gtk2, cairo, pango, fftwFloat, zita-convolver }:
+, libGLU, lv2, gtk2, cairo, pango, fftwFloat, zita-convolver }:
 
 stdenv.mkDerivation rec {
-  version = "20170428";
+  version = "20181103";
   name = "x42-plugins-${version}";
 
   src = fetchurl {
-    url = "http://gareus.org/misc/x42-plugins/${name}.tar.xz";
-    sha256 = "0yi82rak2277x4nzzr5zwbsnha5pi61w975c8src2iwar2b6m0xg";
+    url = "https://gareus.org/misc/x42-plugins/${name}.tar.xz";
+    sha256 = "085d6qjj7nl22f0xamqdrnfxwi8zrfwgkwm1svm73bjkdv270438";
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ mesa_glu ftgl freefont_ttf libjack2 libltc libsndfile libsamplerate lv2 gtk2 cairo pango fftwFloat zita-convolver ];
+  buildInputs = [ libGLU ftgl freefont_ttf libjack2 libltc libsndfile libsamplerate lv2 gtk2 cairo pango fftwFloat zita-convolver ];
 
   # Don't remove this. The default fails with 'do not know how to unpack source archive'
   # every now and then on Hydra. No idea why.
@@ -34,6 +34,6 @@ stdenv.mkDerivation rec {
       homepage = https://github.com/x42/x42-plugins;
       maintainers = with maintainers; [ magnetophon ];
       license = licenses.gpl2;
-      platforms = platforms.linux;
+      platforms = [ "i686-linux" "x86_64-linux" ];
     };
 }

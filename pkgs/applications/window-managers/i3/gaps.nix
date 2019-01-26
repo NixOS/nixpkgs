@@ -1,17 +1,17 @@
 { fetchurl, stdenv, i3, autoreconfHook }:
 
-i3.overrideDerivation (super : rec {
+i3.overrideAttrs (oldAttrs : rec {
 
   name = "i3-gaps-${version}";
-  version = "4.14.1";
-  releaseDate = "2017-09-24";
+  version = "4.16";
+  releaseDate = "2018-03-13";
 
   src = fetchurl {
     url = "https://github.com/Airblader/i3/archive/${version}.tar.gz";
-    sha256 = "11fnkg4halplcnannfw3ishzwwbxbnjafmkxsim199jhlyjjd8j7";
+    sha256 = "16d215y9g27b75rifm1cgznxg73fmg5ksigi0gbj7pfd6x6bqcy9";
   };
 
-  nativeBuildInputs = super.nativeBuildInputs ++ [ autoreconfHook ];
+  nativeBuildInputs = oldAttrs.nativeBuildInputs ++ [ autoreconfHook ];
 
   postUnpack = ''
       echo -n "${version} (${releaseDate})" > ./i3-${version}/I3_VERSION
@@ -19,7 +19,6 @@ i3.overrideDerivation (super : rec {
 
   # fatal error: GENERATED_config_enums.h: No such file or directory
   enableParallelBuilding = false;
-}) // {
 
   meta = with stdenv.lib; {
     description = "A fork of the i3 tiling window manager with some additional features";
@@ -36,5 +35,4 @@ i3.overrideDerivation (super : rec {
       Configured via plain text file. Multi-monitor. UTF-8 clean.
     '';
   };
-
-}
+})

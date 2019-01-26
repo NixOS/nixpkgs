@@ -8,8 +8,8 @@ diff -ru -x '*~' emacs-25.3/src/Makefile.in emacs-25.3-new/src/Makefile.in
  ifeq ($(CANNOT_DUMP),yes)
  	ln -f temacs$(EXEEXT) $@
  else
--	LC_ALL=C $(RUN_TEMACS) -batch -l loadup dump
-+	env -i LC_ALL=C $(RUN_TEMACS) -batch -l loadup dump
+-	LC_ALL=C $(RUN_TEMACS) -batch $(BUILD_DETAILS) -l loadup dump
++	env -i LC_ALL=C $(RUN_TEMACS) -batch $(BUILD_DETAILS) -l loadup dump
    ifneq ($(PAXCTL_dumped),)
  	$(PAXCTL_dumped) $@
    endif

@@ -1,8 +1,18 @@
-{ stdenv, intltool, fetchurl, pkgconfig, bash
+{ stdenv, intltool, fetchurl, pkgconfig
 , itstool, libxml2, libxslt, gnome3 }:
 
 stdenv.mkDerivation rec {
-  inherit (import ./src.nix fetchurl) name src;
+  name = "yelp-xsl-${version}";
+  version = "3.30.1";
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/yelp-xsl/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    sha256 = "0ffgp3ymcc11r9sdndliwwngljcy1mfqpfxsdfbm8rlcjg2k3vzw";
+  };
+
+  passthru = {
+    updateScript = gnome3.updateScript { packageName = "yelp-xsl"; attrPath = "gnome3.yelp-xsl"; };
+  };
 
   doCheck = true;
 

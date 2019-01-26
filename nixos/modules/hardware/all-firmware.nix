@@ -38,7 +38,8 @@ in {
         firmwareLinuxNonfree
         intel2200BGFirmware
         rtl8192su-firmware
-      ] ++ optionals (versionOlder config.boot.kernelPackages.kernel.version "4.13") [
+      ] ++ optional (pkgs.stdenv.hostPlatform.isAarch32 || pkgs.stdenv.hostPlatform.isAarch64) raspberrypiWirelessFirmware
+        ++ optionals (versionOlder config.boot.kernelPackages.kernel.version "4.13") [
         rtl8723bs-firmware
       ];
     })

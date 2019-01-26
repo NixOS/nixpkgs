@@ -60,6 +60,7 @@ in {
   docbook_xsl_ns = common {
     pname = "docbook-xsl-ns";
     sha256 = "170ggf5dgjar65kkn5n33kvjr3pdinpj66nnxfx8b2avw0k91jin";
-  };
 
+    patches = [ ./docbook-xsl-ns-infinite.patch ];
+  };
 }

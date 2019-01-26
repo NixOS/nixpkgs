@@ -53,11 +53,11 @@ while [ "$#" -gt 0 ]; do
         repair=1
         extraBuildFlags+=("$i")
         ;;
-      --max-jobs|-j|--cores|-I)
+      --max-jobs|-j|--cores|-I|--builders)
         j="$1"; shift 1
         extraBuildFlags+=("$i" "$j")
         ;;
-      --show-trace|--no-build-hook|--keep-failed|-K|--keep-going|-k|--verbose|-v|-vv|-vvv|-vvvv|-vvvvv|--fallback|--repair|--no-build-output|-Q|-j*)
+      --show-trace|--keep-failed|-K|--keep-going|-k|--verbose|-v|-vv|-vvv|-vvvv|-vvvvv|--fallback|--repair|--no-build-output|-Q|-j*)
         extraBuildFlags+=("$i")
         ;;
       --option)
@@ -382,6 +382,6 @@ fi
 if [ "$action" = build-vm ]; then
     cat >&2 <<EOF
 
-Done.  The virtual machine can be started by running $(echo $pathToConfig/bin/run-*-vm).
+Done.  The virtual machine can be started by running $(echo $pathToConfig/bin/run-*-vm)
 EOF
 fi

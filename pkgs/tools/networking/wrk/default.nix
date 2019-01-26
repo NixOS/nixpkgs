@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "wrk-${version}";
-  version = "4.0.2";
+  version = "4.1.0";
 
   src = fetchFromGitHub {
     owner = "wg";
     repo = "wrk";
     rev = version;
-    sha256 = "1qg6w8xz4pr227h1gxrbm6ylhqvspk95hvq2f9iakni7s56pkh1w";
+    sha256 = "0dblb3qdg8mbgb8iiks0g420pza13npbr33b2xkc5dgv7kcwmvqj";
   };
 
   buildInputs = [ luajit openssl perl ];

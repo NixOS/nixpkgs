@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, yasm, bzip2, zlib, perl
+{ stdenv, fetchurl, pkgconfig, yasm, bzip2, zlib, perl, bash
 , mp3Support    ? true,   lame      ? null
 , speexSupport  ? true,   speex     ? null
 , theoraSupport ? true,   libtheora ? null
@@ -13,15 +13,14 @@
 , SDL # only for avplay in $bin, adds nontrivial closure to it
 , enableGPL ? true # ToDo: some additional default stuff may need GPL
 , enableUnfree ? faacSupport
-, hostPlatform
 }:
 
 assert faacSupport -> enableUnfree;
 
-let inherit (stdenv.lib) optional optionals hasPrefix; in
+let inherit (stdenv.lib) optional hasPrefix enableFeature; in
 
 /* ToDo:
-    - more deps, inspiration: http://packages.ubuntu.com/raring/libav-tools
+    - more deps, inspiration: https://packages.ubuntu.com/raring/libav-tools
     - maybe do some more splitting into outputs
 */
 
@@ -45,34 +44,44 @@ let
       ++ optional (vpxSupport && hasPrefix "0.8." version) ./vpxenc-0.8.17-libvpx-1.5.patch
       ;
 
-    preConfigure = "patchShebangs doc/texi2pod.pl";
+    postPatch = ''
+      patchShebangs .
+      # another shebang was hidden in a here document text
+      substituteInPlace ./configure --replace "#! /bin/sh" "#!${bash}/bin/sh"
+    '';
 
-    configureFlags =
-      assert stdenv.lib.all (x: x!=null) buildInputs;
-    [
+    configurePlatforms = [];
+    configureFlags = assert stdenv.lib.all (x: x!=null) buildInputs; [
+      "--arch=${stdenv.hostPlatform.parsed.cpu.name}"
+      "--target_os=${stdenv.hostPlatform.parsed.kernel.name}"
       #"--enable-postproc" # it's now a separate package in upstream
       "--disable-avserver" # upstream says it's in a bad state
       "--enable-avplay"
       "--enable-shared"
       "--enable-runtime-cpudetect"
       "--cc=cc"
-    ]
-      ++ optionals enableGPL [ "--enable-gpl" "--enable-swscale" ]
-      ++ optional mp3Support "--enable-libmp3lame"
-      ++ optional speexSupport "--enable-libspeex"
-      ++ optional theoraSupport "--enable-libtheora"
-      ++ optional vorbisSupport "--enable-libvorbis"
-      ++ optional vpxSupport "--enable-libvpx"
-      ++ optional x264Support "--enable-libx264"
-      ++ optional xvidSupport "--enable-libxvid"
-      ++ optional faacSupport "--enable-libfaac --enable-nonfree"
-      ++ optional vaapiSupport "--enable-vaapi"
-      ++ optional vdpauSupport "--enable-vdpau"
-      ++ optional freetypeSupport "--enable-libfreetype"
-      ;
+      (enableFeature enableGPL "gpl")
+      (enableFeature enableGPL "swscale")
+      (enableFeature mp3Support "libmp3lame")
+      (enableFeature mp3Support "libmp3lame")
+      (enableFeature speexSupport "libspeex")
+      (enableFeature theoraSupport "libtheora")
+      (enableFeature vorbisSupport "libvorbis")
+      (enableFeature vpxSupport "libvpx")
+      (enableFeature x264Support "libx264")
+      (enableFeature xvidSupport "libxvid")
+      (enableFeature faacSupport "libfaac")
+      (enableFeature faacSupport "nonfree")
+      (enableFeature vaapiSupport "vaapi")
+      (enableFeature vdpauSupport "vdpau")
+      (enableFeature freetypeSupport "libfreetype")
+    ] ++ optional (stdenv.hostPlatform != stdenv.buildPlatform) [
+      "--cross-prefix=${stdenv.cc.targetPrefix}"
+      "--enable-cross-compile"
+    ];
 
-  nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ lame yasm zlib bzip2 SDL ]
+  nativeBuildInputs = [ pkgconfig perl ];
+    buildInputs = [ lame yasm zlib bzip2 SDL bash ]
       ++ [ perl ] # for install-man target
       ++ optional mp3Support lame
       ++ optional speexSupport speex
@@ -95,6 +104,7 @@ let
     # alltools to build smaller tools, incl. aviocat, ismindex, qt-faststart, etc.
     buildFlags = "all alltools install-man";
 
+
     postInstall = ''
       moveToOutput bin "$bin"
       # alltools target compiles an executable in tools/ for every C
@@ -106,16 +116,6 @@ let
 
     doInstallCheck = false; # fails randomly
     installCheckTarget = "check"; # tests need to be run *after* installation
-
-    crossAttrs = {
-      configurePlatforms = [];
-      configureFlags = configureFlags ++ [
-        "--cross-prefix=${stdenv.cc.targetPrefix}"
-        "--enable-cross-compile"
-        "--target_os=linux"
-        "--arch=${hostPlatform.arch}"
-        ];
-    };
 
     passthru = { inherit vdpauSupport; };
 

@@ -21,21 +21,19 @@ let
 
 in
 
-assert stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux";
-
 stdenv.mkDerivation rec {
   pname = "saleae-logic";
   version = "1.2.10";
   name = "${pname}-${version}";
 
   src =
-    if stdenv.system == "i686-linux" then
+    if stdenv.hostPlatform.system == "i686-linux" then
       fetchurl {
         name = "saleae-logic-${version}-32bit.zip";
         url = "http://downloads.saleae.com/logic/${version}/Logic%20${version}%20(32-bit).zip";
         sha256 = "1dyrj07cgj2fvwi1sk97vady9ri8f8n7mxy9zyzmw9isngs7bmll";
       }
-    else if stdenv.system == "x86_64-linux" then
+    else if stdenv.hostPlatform.system == "x86_64-linux" then
       fetchurl {
         name = "saleae-logic-${version}-64bit.zip";
         url = "http://downloads.saleae.com/logic/${version}/Logic%20${version}%20(64-bit).zip";
@@ -93,7 +91,7 @@ stdenv.mkDerivation rec {
     description = "Software for Saleae logic analyzers";
     homepage = http://www.saleae.com/;
     license = licenses.unfree;
-    platforms = platforms.linux;
+    platforms = [ "x86_64-linux" "i686-linux" ];
     maintainers = [ maintainers.bjornfor ];
   };
 }

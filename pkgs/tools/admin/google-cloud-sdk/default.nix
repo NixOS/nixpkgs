@@ -17,27 +17,22 @@ let
 
   baseUrl = "https://dl.google.com/dl/cloudsdk/channels/rapid/downloads";
   sources = name: system: {
-    i686-linux = {
-      url = "${baseUrl}/${name}-linux-x86.tar.gz";
-      sha256 = "0fq8zw1a5c0mnmw6f7j9j80y6kq0f0v2wn1d7b8mfq8ih5x53a85";
-    };
-
     x86_64-darwin = {
       url = "${baseUrl}/${name}-darwin-x86_64.tar.gz";
-      sha256 = "1h4m70fk3hri4lgm9lh2pm0v196nc2r3hpf42h3xx5k7sqklsns2";
+      sha256 = "03ymvfhk8azyvdm6j4pbqx2fsh178kw81yqwkycbhmm6mnyc8yv1";
     };
 
     x86_64-linux = {
       url = "${baseUrl}/${name}-linux-x86_64.tar.gz";
-      sha256 = "1ynvllxzjr3y4qflw06njj7qqcf7539mbp06rs03i8hargsgbamx";
+      sha256 = "1pw4w3v81mp8alm6vxq10242xxwv8rfs59bjxrmy0pfkjgsr4x4v";
     };
   }.${system};
 
 in stdenv.mkDerivation rec {
   name = "google-cloud-sdk-${version}";
-  version = "184.0.0";
+  version = "222.0.0";
 
-  src = fetchurl (sources name stdenv.system);
+  src = fetchurl (sources name stdenv.hostPlatform.system);
 
   buildInputs = [ python makeWrapper ];
 
@@ -54,7 +49,7 @@ in stdenv.mkDerivation rec {
     cp ${./beta__init__.py} $out/google-cloud-sdk/lib/surface/beta/__init__.py
 
     # create wrappers with correct env
-    for program in gcloud bq gsutil git-credential-gcloud.sh; do
+    for program in gcloud bq gsutil git-credential-gcloud.sh docker-credential-gcloud; do
         programPath="$out/google-cloud-sdk/bin/$program"
         binaryPath="$out/bin/$program"
         wrapProgram "$programPath" \
@@ -64,7 +59,7 @@ in stdenv.mkDerivation rec {
         mkdir -p $out/bin
         ln -s $programPath $binaryPath
     done
-    
+
     # disable component updater and update check
     substituteInPlace $out/google-cloud-sdk/lib/googlecloudsdk/core/config.json \
       --replace "\"disable_updater\": false" "\"disable_updater\": true"
@@ -88,6 +83,6 @@ in stdenv.mkDerivation rec {
     license = licenses.free;
     homepage = "https://cloud.google.com/sdk/";
     maintainers = with maintainers; [ stephenmw zimbatm ];
-    platforms = [ "i686-linux" "x86_64-linux" "x86_64-darwin" ];
+    platforms = [ "x86_64-linux" "x86_64-darwin" ];
   };
 }

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchgit, fetchFromGitHub, fetchpatch, cmake
+{ lib, stdenv, fetchgit, fetchFromGitHub, cmake
 , openblas, opencv3, libzip, boost, protobuf, openmpi
 , onebitSGDSupport ? false
 , cudaSupport ? false, cudatoolkit, nvidia_x11

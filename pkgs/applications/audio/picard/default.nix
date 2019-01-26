@@ -1,27 +1,32 @@
-{ stdenv, python2Packages, fetchurl, gettext, chromaprint }:
+{ stdenv, python3Packages, fetchurl, gettext, chromaprint }:
 
 let
-  version = "1.4";
-  pythonPackages = python2Packages;
-in pythonPackages.buildPythonApplication {
-  name = "picard-${version}";
-  namePrefix = "";
+  pythonPackages = python3Packages;
+in pythonPackages.buildPythonApplication rec {
+  pname = "picard";
+  version = "2.1";
 
   src = fetchurl {
     url = "http://ftp.musicbrainz.org/pub/musicbrainz/picard/picard-${version}.tar.gz";
-    sha256 = "0gi7f1h7jcg7n18cx8iw38sd868viv3w377xmi7cq98f1g76d4h6";
+    sha256 = "054a37q5828q59jzml4npkyczsp891d89kawgsif9kwpi0dxa06c";
   };
 
   buildInputs = [ gettext ];
 
   propagatedBuildInputs = with pythonPackages; [
-    pyqt4
+    pyqt5
     mutagen
+    chromaprint
     discid
   ];
 
   installPhase = ''
     python setup.py install --prefix="$out"
+  '';
+
+  prePatch = ''
+    # Pesky unicode punctuation.
+    substituteInPlace setup.cfg --replace "‘" "'"
   '';
 
   doCheck = false;

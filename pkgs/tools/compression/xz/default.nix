@@ -1,16 +1,23 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, enableStatic ? false }:
 
 stdenv.mkDerivation rec {
-  name = "xz-5.2.3";
+  name = "xz-5.2.4";
 
   src = fetchurl {
     url = "https://tukaani.org/xz/${name}.tar.bz2";
-    sha256 = "1ha08wxcldgcl81021x5nhknr47s1p95ljfkka4sqah5w5ns377x";
+    sha256 = "1gxpayfagb4v7xfhs2w6h7k56c6hwwav1rk48bj8hggljlmgs4rk";
   };
 
   outputs = [ "bin" "dev" "out" "man" "doc" ];
 
+  configureFlags = stdenv.lib.optional enableStatic "--disable-shared";
+
   doCheck = true;
+
+  preCheck = ''
+    # Tests have a /bin/sh dependency...
+    patchShebangs tests
+  '';
 
   # In stdenv-linux, prevent a dependency on bootstrap-tools.
   preConfigure = "CONFIG_SHELL=/bin/sh";

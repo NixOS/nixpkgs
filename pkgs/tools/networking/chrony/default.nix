@@ -1,20 +1,24 @@
 { stdenv, fetchurl, pkgconfig, libcap, readline, texinfo, nss, nspr
-, libseccomp }:
+, libseccomp, pps-tools }:
 
 assert stdenv.isLinux -> libcap != null;
 
 stdenv.mkDerivation rec {
   name = "chrony-${version}";
 
-  version = "3.2";
+  version = "3.4";
 
   src = fetchurl {
-    url = "http://download.tuxfamily.org/chrony/${name}.tar.gz";
-    sha256 = "05j17i1zlg19v8jkzlp710kbdgnb4541zgkqxqzcwglcvlc6g7rj";
+    url = "https://download.tuxfamily.org/chrony/${name}.tar.gz";
+    sha256 = "17vb1sy79lsjif23v66mgn39lbgmxy59mf7mi9ffb9qh4ryf8xxg";
   };
 
+  postPatch = ''
+    patchShebangs test
+  '';
+
   buildInputs = [ readline texinfo nss nspr ]
-    ++ stdenv.lib.optionals stdenv.isLinux [ libcap libseccomp ];
+    ++ stdenv.lib.optionals stdenv.isLinux [ libcap libseccomp pps-tools ];
   nativeBuildInputs = [ pkgconfig ];
 
   hardeningEnable = [ "pie" ];

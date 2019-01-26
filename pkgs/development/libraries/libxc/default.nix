@@ -1,13 +1,13 @@
 { stdenv, fetchurl, gfortran, perl }:
 
 let
-  version = "3.0.1";
+  version = "4.2.3";
 
 in stdenv.mkDerivation {
   name = "libxc-${version}";
   src = fetchurl {
     url = "http://www.tddft.org/programs/octopus/down.php?file=libxc/${version}/libxc-${version}.tar.gz";
-    sha256 = "1xyac89yx03vm86rvk07ps1d39xss3amw46a1k53mv30mgr94rl3";
+    sha256 = "0mj26jga0nj76blf2rp9cmgf0v0yhsp7xrg92zgih7fjlydrxr02";
   };
 
   buildInputs = [ gfortran ];

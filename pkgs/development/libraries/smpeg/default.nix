@@ -1,4 +1,4 @@
-{ stdenv, fetchsvn, SDL, autoconf, automake, libtool, gtk2, m4, pkgconfig, mesa, makeWrapper }:
+{ stdenv, fetchsvn, SDL, autoconf, automake, libtool, gtk2, m4, pkgconfig, libGLU_combined, makeWrapper }:
 
 stdenv.mkDerivation rec {
   name = "smpeg-svn${version}";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  buildInputs = [ SDL gtk2 mesa ];
+  buildInputs = [ SDL gtk2 libGLU_combined ];
 
   nativeBuildInputs = [ autoconf automake libtool m4 pkgconfig makeWrapper ];
 
@@ -38,6 +38,8 @@ stdenv.mkDerivation rec {
       --prefix PATH ":" "${pkgconfig}/bin" \
       --prefix PKG_CONFIG_PATH ":" "${SDL.dev}/lib/pkgconfig"
   '';
+
+  NIX_LDFLAGS = [ "-lX11" ];
 
   meta = {
     homepage = http://icculus.org/smpeg/;

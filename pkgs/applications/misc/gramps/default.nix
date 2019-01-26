@@ -1,31 +1,36 @@
-{ stdenv, fetchFromGitHub, gtk3, pythonPackages, intltool,
-  pango, gsettings-desktop-schemas,
+{ stdenv, fetchFromGitHub, gtk3, pythonPackages, intltool, gnome3,
+  pango, gobject-introspection, wrapGAppsHook,
 # Optional packages:
- enableOSM ? true, osm-gps-map
+ enableOSM ? true, osm-gps-map,
+ enableGraphviz ? true, graphviz,
+ enableGhostscript ? true, ghostscript
  }:
 
 let
   inherit (pythonPackages) python buildPythonApplication;
 in buildPythonApplication rec {
-  version = "4.2.6";
+  version = "5.0.1";
   name = "gramps-${version}";
 
-  buildInputs = [ intltool gtk3 ] 
+  nativeBuildInputs = [ wrapGAppsHook ];
+  buildInputs = [ intltool gtk3 gobject-introspection pango gnome3.gexiv2 ] 
     # Map support
     ++ stdenv.lib.optional enableOSM osm-gps-map
+    # Graphviz support
+    ++ stdenv.lib.optional enableGraphviz graphviz
+    # Ghostscript support
+    ++ stdenv.lib.optional enableGhostscript ghostscript
+    
   ;
-
-  # Currently broken
-  doCheck = false;
 
   src = fetchFromGitHub {
     owner = "gramps-project";
     repo = "gramps";
     rev = "v${version}";
-    sha256 = "0k0bx6msc2kvkg0nwa9v2mp3qy7lmnxjd97n6a1zdzlq8yzw29f1";
+    sha256 = "1jz1fbjj6byndvir7qxzhd2ryirrd5h2kwndxpp53xdc05z1i8g7";
   };
 
-  pythonPath = with pythonPackages; [ bsddb3 PyICU pygobject3 pycairo ] ++ [ pango ];
+  pythonPath = with pythonPackages; [ bsddb3 PyICU pygobject3 pycairo ];
 
   # Same installPhase as in buildPythonApplication but without --old-and-unmanageble
   # install flag.
@@ -51,16 +56,10 @@ in buildPythonApplication rec {
     runHook postInstall
   '';
 
-  # gobjectIntrospection package, wrap accordingly
-  preFixup = ''
-    wrapProgram $out/bin/gramps \
-      --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH" \
-      --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH:$out/share"
-  '';
-
   meta = with stdenv.lib; {
     description = "Genealogy software";
-    homepage = http://gramps-project.org;
+    homepage = https://gramps-project.org;
     license = licenses.gpl2;
+    maintainers = with maintainers; [ joncojonathan ];
   };
 }

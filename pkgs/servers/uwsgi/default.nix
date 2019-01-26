@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, pkgconfig, jansson
+{ stdenv, lib, fetchurl, pkgconfig, jansson, pcre
 # plugins: list of strings, eg. [ "python2" "python3" ]
 , plugins
 , pam, withPAM ? false
@@ -7,7 +7,7 @@
 , ruby, php-embed, mysql
 }:
 
-let pythonPlugin = pkg : lib.nameValuePair "python${if pkg ? isPy2 then "2" else "3"}" {
+let pythonPlugin = pkg : lib.nameValuePair "python${if pkg.isPy2 then "2" else "3"}" {
                            interpreter = pkg.interpreter;
                            path = "plugins/python";
                            inputs = [ pkg ncurses ];
@@ -49,16 +49,16 @@ in
 
 stdenv.mkDerivation rec {
   name = "uwsgi-${version}";
-  version = "2.0.16";
+  version = "2.0.17.1";
 
   src = fetchurl {
-    url = "http://projects.unbit.it/downloads/${name}.tar.gz";
-    sha256 = "1x61vipgzhzb6flbbgl0hq96j9d330gh0kmwv8pwh6n57j7z84d9";
+    url = "https://projects.unbit.it/downloads/${name}.tar.gz";
+    sha256 = "0xxjb9dyivq5531birvxq2gnyxf2x5q7gz54440acra6qwsq4cfj";
   };
 
   nativeBuildInputs = [ python3 pkgconfig ];
 
-  buildInputs =  [ jansson ]
+  buildInputs =  [ jansson pcre ]
               ++ lib.optional withPAM pam
               ++ lib.optional withSystemd systemd
               ++ lib.concatMap (x: x.inputs) needed
@@ -89,10 +89,10 @@ stdenv.mkDerivation rec {
     ${lib.concatMapStringsSep "\n" (x: x.install or "") needed}
   '';
 
-  NIX_CFLAGS_LINK = [ "-lsystemd" ] ++ lib.concatMap (x: x.NIX_CFLAGS_LINK or []) needed;
+  NIX_CFLAGS_LINK = lib.optional withSystemd "-lsystemd" ++ lib.concatMap (x: x.NIX_CFLAGS_LINK or []) needed;
 
   meta = with stdenv.lib; {
-    homepage = http://uwsgi-docs.readthedocs.org/en/latest/;
+    homepage = https://uwsgi-docs.readthedocs.org/en/latest/;
     description = "A fast, self-healing and developer/sysadmin-friendly application container server coded in pure C";
     license = licenses.gpl2;
     maintainers = with maintainers; [ abbradar schneefux ];

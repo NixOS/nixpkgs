@@ -1,47 +1,38 @@
 { lib
 , buildPythonPackage
 , pythonOlder
-, isPy35
-, isPy36
 , fetchPypi
-, hypothesis
-, pytestcache
-, pytestcov
-, pytestflakes
-, pytestpep8
 , pytest
+, pytestcov
+, pytest-mock
+, hypothesis
 , glibcLocales
-, mock ? null
 , pathlib ? null
 }:
 
 buildPythonPackage rec {
   pname = "natsort";
-  version = "5.2.0";
+  version = "5.5.0";
 
-  buildInputs = [
-    hypothesis
-    pytestcache
-    pytestcov
-    pytestflakes
-    pytestpep8
+  checkInputs = [
     pytest
+    pytestcov
+    pytest-mock
+    hypothesis
     glibcLocales
   ]
   # pathlib was made part of standard library in 3.5:
-  ++ (lib.optionals (pythonOlder "3.4") [ pathlib ])
-  # based on testing-requirements.txt:
-  ++ (lib.optionals (pythonOlder "3.3") [ mock ]);
+  ++ (lib.optionals (pythonOlder "3.4") [ pathlib ]);
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c960082d2145b04723041c4b85092546560538e29664dd197a1344d5b090bc91";
+    sha256 = "e29031f37aa264145d6ad9acdab335479ce3636806fc7aa70b7675a2b2198d09";
   };
 
   # testing based on project's tox.ini
   checkPhase = ''
     pytest --doctest-modules natsort
-    pytest --flakes --pep8 --cov natsort --cov-report term-missing
+    pytest
   '';
 
   meta = {

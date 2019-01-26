@@ -215,11 +215,11 @@ in
     );
 
     users = mkIf cfg.daemon.enable {
-      extraGroups.nslcd = {
+      groups.nslcd = {
         gid = config.ids.gids.nslcd;
       };
 
-      extraUsers.nslcd = {
+      users.nslcd = {
         uid = config.ids.uids.nslcd;
         description = "nslcd user.";
         group = "nslcd";

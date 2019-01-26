@@ -1,12 +1,15 @@
-{ IOKit, appleDerivation, apple_sdk, libauto, libobjc, libsecurity_codesigning, sqlite, stdenv, osx_private_sdk }:
+{ IOKit, appleDerivation, apple_sdk, libauto, libobjc, sqlite, stdenv, osx_private_sdk }:
 appleDerivation {
   buildInputs = [
     libauto
     libobjc
     IOKit
+  ];
+  propagatedBuildInputs = [
     sqlite
     apple_sdk.frameworks.PCSC
   ];
+  NIX_LDFLAGS = "-framework PCSC";
   patchPhase = ''
     substituteInPlace lib/errors.h --replace \
       '<CoreServices/../Frameworks/CarbonCore.framework/Headers/MacTypes.h>' \

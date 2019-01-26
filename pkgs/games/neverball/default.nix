@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, SDL2, mesa_noglu, libpng, libjpeg, SDL2_ttf, libvorbis, gettext
+{ stdenv, fetchurl, SDL2, libGL, libpng, libjpeg, SDL2_ttf, libvorbis, gettext
 , physfs }:
 
 stdenv.mkDerivation rec {
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "184gm36c6p6vaa6gwrfzmfh86klhnb03pl40ahsjsvprlk667zkk";
   };
 
-  buildInputs = [ libpng SDL2 mesa_noglu libjpeg SDL2_ttf libvorbis gettext physfs ];
+  buildInputs = [ libpng SDL2 libGL libjpeg SDL2_ttf libvorbis gettext physfs ];
 
   dontPatchElf = true;
 

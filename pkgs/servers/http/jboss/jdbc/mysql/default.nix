@@ -1,4 +1,4 @@
-{ stdenv, jboss, mysql_jdbc }:
+{ stdenv, mysql_jdbc }:
 
 stdenv.mkDerivation {
   name = "jboss-mysql-jdbc";

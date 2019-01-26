@@ -1,64 +1,53 @@
-{ fetchurl, stdenv, python, bash }:
+{ stdenv, fetchFromGitHub, python, bash }:
 
-let
+stdenv.mkDerivation rec {
+  name = "autojump-${version}";
   version = "22.5.1";
-in
-  stdenv.mkDerivation rec {
-    name = "autojump-${version}";
 
-    src = fetchurl {
-      url = "http://github.com/joelthelion/autojump/archive/release-v${version}.tar.gz";
-      name = "autojump-${version}.tar.gz";
-      sha256 = "17z9j9936x0nizwrzf664bngh60x5qbvrrf1s5qdzd0f2gdanpvn";
-    };
+  src = fetchFromGitHub {
+    owner = "wting";
+    repo = "autojump";
+    rev = "release-v${version}";
+    sha256 = "1l1278g3k1qfrz41pkpjdhsabassb9si2d1bfbcmvbv5h3wmlqk9";
+  };
 
-    buildInputs = [ python bash ];
-    dontBuild = true;
+  buildInputs = [ python bash ];
+  dontBuild = true;
 
-    installPhase = ''
-      python ./install.py -d $out -p ""
-      chmod +x $out/etc/profile.d/*
+  installPhase = ''
+    python ./install.py -d "$out" -p "" -z "$out/share/zsh/site-functions/"
 
-      mkdir -p "$out/etc/bash_completion.d"
-      cp -v $out/share/autojump/autojump.bash "$out/etc/bash_completion.d"
+    chmod +x "$out/etc/profile.d/autojump.sh"
+    install -Dt "$out/share/bash-completion/completions/" -m444 "$out/share/autojump/autojump.bash"
+    install -Dt "$out/share/fish/vendor_conf.d/" -m444 "$out/share/autojump/autojump.fish"
+    install -Dt "$out/share/zsh/site-functions/" -m444 "$out/share/autojump/autojump.zsh"
+  '';
 
-      mkdir -p $out/share/fish/vendor_completions.d/
-      cp -v $out/share/autojump/autojump.fish "$out/share/fish/vendor_completions.d/autojump.fish"
+  meta = with stdenv.lib; {
+    description = "A `cd' command that learns";
+    longDescription = ''
+      One of the most used shell commands is “cd”.  A quick survey
+      among my friends revealed that between 10 and 20% of all
+      commands they type are actually cd commands! Unfortunately,
+      jumping from one part of your system to another with cd
+      requires to enter almost the full path, which isn’t very
+      practical and requires a lot of keystrokes.
 
-      cat <<SCRIPT > $out/bin/autojump-share
-      #!/bin/sh
-      # Run this script to find the autojump shared folder where all the shell
-      # integration scripts are living.
-      echo $out/share/autojump
-      SCRIPT
-      chmod +x $out/bin/autojump-share
+      Autojump is a faster way to navigate your filesystem.  It
+      works by maintaining a database of the directories you use the
+      most from the command line.  The jstat command shows you the
+      current contents of the database.  You need to work a little
+      bit before the database becomes usable.  Once your database
+      is reasonably complete, you can “jump” to a directory by
+      typing "j dirspec", where dirspec is a few characters of the
+      directory you want to jump to.  It will jump to the most used
+      directory whose name matches the pattern given in dirspec.
+
+      Autojump supports tab-completion.
     '';
-
-    meta = {
-      description = "A `cd' command that learns";
-      longDescription = ''
-        One of the most used shell commands is “cd”.  A quick survey
-        among my friends revealed that between 10 and 20% of all
-        commands they type are actually cd commands! Unfortunately,
-        jumping from one part of your system to another with cd
-        requires to enter almost the full path, which isn’t very
-        practical and requires a lot of keystrokes.
-
-        Autojump is a faster way to navigate your filesystem.  It
-        works by maintaining a database of the directories you use the
-        most from the command line.  The jstat command shows you the
-        current contents of the database.  You need to work a little
-        bit before the database becomes usable.  Once your database
-        is reasonably complete, you can “jump” to a directory by
-        typing "j dirspec", where dirspec is a few characters of the
-        directory you want to jump to.  It will jump to the most used
-        directory whose name matches the pattern given in dirspec.
-
-        Autojump supports tab-completion.
-      '';
-      homepage = http://wiki.github.com/joelthelion/autojump;
-      license = stdenv.lib.licenses.gpl3;
-      platforms = stdenv.lib.platforms.all;
-      maintainers = [ stdenv.lib.maintainers.domenkozar ];
-    };
-  }
+    homepage = http://wiki.github.com/wting/autojump;
+    license = licenses.gpl3;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ domenkozar yurrriq ];
+  };
+}

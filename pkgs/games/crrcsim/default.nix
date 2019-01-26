@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, mesa, SDL, SDL_mixer, plib, libjpeg }:
+{ stdenv, fetchurl, libGLU_combined, SDL, SDL_mixer, plib, libjpeg }:
 let
   version = "0.9.13";
 in
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    mesa SDL SDL_mixer plib libjpeg
+    libGLU_combined SDL SDL_mixer plib libjpeg
   ];
 
   patches = [

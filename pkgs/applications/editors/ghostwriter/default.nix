@@ -1,18 +1,18 @@
-{ stdenv, fetchFromGitHub, qmake, pkgconfig, qtwebkit, hunspell }:
+{ stdenv, fetchFromGitHub, qmake, pkgconfig, qttools, qtwebkit, hunspell }:
 
 stdenv.mkDerivation rec {
   pname = "ghostwriter";
-  version = "1.5.0";
+  version = "1.7.4";
   name = "${pname}-${version}";
 
   src = fetchFromGitHub {
     owner = "wereturtle";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0ixw2w2526836lwj4pc0vp7prp1gls7iq37v8m9ql1508b33b9pq";
+    sha256 = "1pqlr08z5syqcq5p282asxwzrrm7c1w94baxyb467swh8yp3fj5m";
   };
 
-  nativeBuildInputs = [ qmake pkgconfig ];
+  nativeBuildInputs = [ qmake pkgconfig qttools ];
 
   buildInputs = [ qtwebkit hunspell ];
 

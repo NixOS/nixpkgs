@@ -1,12 +1,20 @@
 {
   lolcat = {
-    dependencies = ["paint" "trollop"];
+    dependencies = ["manpages" "paint" "trollop"];
     source = {
       remotes = ["http://rubygems.org"];
-      sha256 = "1q031wq8wvp09llb39w0ql5k1zkblvkbmhlvrkc3ym832pibk06f";
+      sha256 = "05zm92ad0ws9fklpz1xk94hy95argwana01c6rr2xbx2q4mcil9m";
       type = "gem";
     };
-    version = "90.8.8";
+    version = "99.9.19";
+  };
+  manpages = {
+    source = {
+      remotes = ["http://rubygems.org"];
+      sha256 = "11p6ilnfda6af15ks3xiz2pr0hkvdvadnk1xm4ahqlf84dld3fnd";
+      type = "gem";
+    };
+    version = "0.6.1";
   };
   paint = {
     source = {
@@ -19,9 +27,9 @@
   trollop = {
     source = {
       remotes = ["http://rubygems.org"];
-      sha256 = "0415y63df86sqj43c0l82and65ia5h64if7n0znkbrmi6y0jwhl8";
+      sha256 = "1rzx9rkacpq58dsvbbzs4cpybls1v1h36xskkfs5q2askpdr00wq";
       type = "gem";
     };
-    version = "2.1.2";
+    version = "2.1.3";
   };
 }

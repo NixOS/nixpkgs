@@ -1,16 +1,18 @@
 { fetchurl, stdenv }:
 
  stdenv.mkDerivation {
-  name = "cfitsio-3.41";
+  name = "cfitsio-3.430";
 
   src = fetchurl {
-    url = "ftp://heasarc.gsfc.nasa.gov/software/fitsio/c/cfitsio3410.tar.gz";
-    sha256 = "0k3knn5hz1vhzzvm46xa1y6fnpliwkwgw76lnkf4amcnl5zaqmm5";
+    url = "ftp://heasarc.gsfc.nasa.gov/software/fitsio/c/cfitsio3430.tar.gz";
+    sha256 = "07fghxh5fl8nqk3q0dh8rvc83npnm0hisxzcj16a6r7gj5pmp40l";
   };
+
+  patches = [ ./darwin-curl-config.patch ./darwin-rpath-universal.patch ];
 
   # Shared-only build
   buildFlags = "shared";
-  patchPhase = '' sed -e '/^install:/s/libcfitsio.a //' -e 's@/bin/@@g' -i Makefile.in
+  postPatch = '' sed -e '/^install:/s/libcfitsio.a //' -e 's@/bin/@@g' -i Makefile.in
    '';
 
   meta = with stdenv.lib; {
@@ -27,6 +29,6 @@
       '';
     # Permissive BSD-style license.
     license = "permissive";
-    platforms = platforms.linux;
+    platforms = with platforms; linux ++ darwin;
   };
 }

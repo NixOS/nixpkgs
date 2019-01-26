@@ -1,4 +1,4 @@
-{ fetchgit, runCommand, makeWrapper, openssh, stdenv }: args: derivation ((fetchgit args).drvAttrs // {
+{ fetchgit, runCommand, makeWrapper, openssh }: args: derivation ((fetchgit args).drvAttrs // {
   SSH_AUTH_SOCK = if (builtins.tryEval <ssh-auth-sock>).success
     then builtins.toString <ssh-auth-sock>
     else null;

@@ -2,7 +2,6 @@
 , pkgconfig, doctest-ignore-unicode, mock, nose }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "pygraphviz";
   version = "1.3.1";
 
@@ -14,14 +13,24 @@ buildPythonPackage rec {
   buildInputs = [ doctest-ignore-unicode mock nose ];
   propagatedBuildInputs = [ graphviz pkgconfig ];
 
-  # the tests are currently failing:
-  # check status of pygraphviz/pygraphviz#129
+  patches = [
+    # pygraphviz depends on graphviz being in PATH. This patch always prepends
+    # graphviz to PATH.
+    ./graphviz-path.patch
+  ];
+  postPatch = ''
+    substituteInPlace pygraphviz/agraph.py --subst-var-by graphvizPath '${graphviz}/bin'
+  '';
+
+  # The tests are currently failing because of a bug in graphviz 2.40.1.
+  # Upstream does not want to skip the relevant tests:
+  # https://github.com/pygraphviz/pygraphviz/pull/129
   doCheck = false;
 
   meta = with stdenv.lib; {
     description = "Python interface to Graphviz graph drawing package";
     homepage = https://github.com/pygraphviz/pygraphviz;
     license = licenses.bsd3;
-    maintainers = with maintainers; [ matthiasbeyer ];
+    maintainers = with maintainers; [ ];
   };
 }

@@ -1,7 +1,5 @@
 {stdenv, fetchurl}:
 
-assert stdenv.system == "i686-linux";
-
 stdenv.mkDerivation {
   name = "folding-at-home-6.02";
 
@@ -22,7 +20,7 @@ stdenv.mkDerivation {
   # be considered a gcroot.
   installPhase = ''
     BINFILES="fah6 mpiexec";
-    for a in $BINFILES; do 
+    for a in $BINFILES; do
       patchelf --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) $a
     done
     mkdir -p $out/bin
@@ -33,5 +31,6 @@ stdenv.mkDerivation {
     homepage = http://folding.stanford.edu/;
     description = "Folding@home distributed computing client";
     license = stdenv.lib.licenses.unfree;
+    platforms = [ "i686-linux" ];
   };
 }

@@ -1,4 +1,4 @@
-{stdenv, fetchurl, SDL, mesa, zlib, libpng, libvorbis, libmikmod, SDL_sound } :
+{stdenv, fetchurl, SDL, libGLU_combined, zlib, libpng, libvorbis, libmikmod, SDL_sound } :
 
 stdenv.mkDerivation rec {
   name = "gltron-0.70";
@@ -10,14 +10,14 @@ stdenv.mkDerivation rec {
   patches = [ ./gentoo-prototypes.patch ];
 
   postPatch = ''
-     # Fix http://sourceforge.net/p/gltron/bugs/15
+     # Fix https://sourceforge.net/p/gltron/bugs/15
      sed -i /__USE_MISC/d lua/src/lib/liolib.c
   '';
 
   # The build fails, unless we disable the default -Wall -Werror
-  configureFlags = "--disable-warn";
+  configureFlags = [ "--disable-warn" ];
 
-  buildInputs = [ SDL mesa zlib libpng libvorbis libmikmod SDL_sound ];
+  buildInputs = [ SDL libGLU_combined zlib libpng libvorbis libmikmod SDL_sound ];
 
   meta = {
     homepage = http://www.gltron.org/;

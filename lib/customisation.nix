@@ -1,9 +1,4 @@
 { lib }:
-let
-
-  inherit (builtins) attrNames;
-
-in
 
 rec {
 
@@ -155,12 +150,6 @@ rec {
       outPath = assert condition; drv.outPath;
     };
 
-  /* Add attributes to each output of a derivation without changing
-     the derivation itself. */
-  addPassthru =
-    lib.warn "`addPassthru drv passthru` is deprecated, replace with `extendDerivation true passthru drv`"
-      (drv: passthru: extendDerivation true passthru drv);
-
   /* Strip a derivation of all non-essential attributes, returning
      only those needed by hydra-eval-jobs. Also strictly evaluate the
      result to ensure that there are no thunks kept alive to prevent
@@ -196,7 +185,7 @@ rec {
   /* Make a set of packages with a common scope. All packages called
      with the provided `callPackage' will be evaluated with the same
      arguments. Any package in the set may depend on any other. The
-     `overrideScope' function allows subsequent modification of the package
+     `overrideScope'` function allows subsequent modification of the package
      set in a consistent way, i.e. all packages in the set will be
      called with the overridden packages. The package sets may be
      hierarchical: the packages in the set are called with the scope
@@ -206,9 +195,10 @@ rec {
     let self = f self // {
           newScope = scope: newScope (self // scope);
           callPackage = self.newScope {};
-          overrideScope = g:
-            makeScope newScope
-            (self_: let super = f self_; in super // g super self_);
+          overrideScope = g: lib.warn
+            "`overrideScope` (from `lib.makeScope`) is deprecated. Do `overrideScope' (self: super: { … })` instead of `overrideScope (super: self: { … })`. All other overrides have the parameters in that order, including other definitions of `overrideScope`. This was the only definition violating the pattern."
+            (makeScope newScope (lib.fixedPoints.extends (lib.flip g) f));
+          overrideScope' = g: makeScope newScope (lib.fixedPoints.extends g f);
           packages = f;
         };
     in self;

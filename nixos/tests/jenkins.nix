@@ -12,22 +12,22 @@ import ./make-test.nix ({ pkgs, ...} : {
   nodes = {
 
     master =
-      { config, pkgs, ... }:
+      { ... }:
       { services.jenkins.enable = true;
 
         # should have no effect
         services.jenkinsSlave.enable = true;
 
-        users.extraUsers.jenkins.extraGroups = [ "users" ];
+        users.users.jenkins.extraGroups = [ "users" ];
 
         systemd.services.jenkins.serviceConfig.TimeoutStartSec = "6min";
       };
 
     slave =
-      { config, pkgs, ... }:
+      { ... }:
       { services.jenkinsSlave.enable = true;
 
-        users.extraUsers.jenkins.extraGroups = [ "users" ];
+        users.users.jenkins.extraGroups = [ "users" ];
       };
 
   };

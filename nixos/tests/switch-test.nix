@@ -7,10 +7,10 @@ import ./make-test.nix ({ pkgs, ...} : {
   };
 
   nodes = {
-    machine = { config, lib, pkgs, ... }: {
+    machine = { ... }: {
       users.mutableUsers = false;
     };
-    other = { config, lib, pkgs, ... }: {
+    other = { ... }: {
       users.mutableUsers = true;
     };
   };

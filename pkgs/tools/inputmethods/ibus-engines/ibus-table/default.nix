@@ -1,17 +1,17 @@
 { stdenv, fetchFromGitHub
 , autoreconfHook, docbook2x, pkgconfig
-, gtk3, dconf, gobjectIntrospection
+, gtk3, dconf, gobject-introspection
 , ibus, python3 }:
 
 stdenv.mkDerivation rec {
   name = "ibus-table-${version}";
-  version = "1.9.16";
+  version = "1.9.20";
 
   src = fetchFromGitHub {
     owner  = "kaio";
     repo   = "ibus-table";
     rev    = version;
-    sha256 = "1gkb6nsibk59kp404b394sg638jgah2a2b6ffq3gkacqg5j30wjb";
+    sha256 = "12rsbg8pfh567bd0n376qciclq5jr63h5gwcm54cs796bxls4w2j";
   };
 
   postPatch = ''
@@ -26,10 +26,11 @@ stdenv.mkDerivation rec {
         -e "/export IBUS_DATAROOTDIR=/ s/^.$//" \
         -e "/export IBUS_LOCALEDIR=/ s/^.$//" \
         -i "setup/ibus-setup-table.in"
+    substituteInPlace engine/tabcreatedb.py --replace '/usr/share/ibus-table' $out/share/ibus-table
   '';
 
   buildInputs = [
-    dconf gtk3 gobjectIntrospection ibus (python3.withPackages (pypkgs: with pypkgs; [ pygobject3 ]))
+    dconf gtk3 gobject-introspection ibus (python3.withPackages (pypkgs: with pypkgs; [ pygobject3 ]))
   ];
 
   nativeBuildInputs = [ autoreconfHook docbook2x pkgconfig python3.pkgs.wrapPython ];

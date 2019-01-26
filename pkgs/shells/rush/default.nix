@@ -8,7 +8,9 @@ stdenv.mkDerivation rec {
     sha256 = "1vxdb81ify4xcyygh86250pi50krb16dkj42i5ii4ns3araiwckz";
   };
 
-  patches = [ ./fix-format-security-error.patch ];
+  patches = [ ./fix-format-security-error.patch
+    ./intprops.patch
+  ];
 
   doCheck = true;
 
@@ -29,7 +31,7 @@ stdenv.mkDerivation rec {
          sftp-server or scp, that lack this ability.
       '';
 
-    homepage = http://www.gnu.org/software/rush/;
+    homepage = https://www.gnu.org/software/rush/;
     license = stdenv.lib.licenses.gpl3Plus;
 
     maintainers = [ stdenv.lib.maintainers.bjg ];

@@ -1,5 +1,4 @@
 { fetchurl, stdenv, ncurses
-, buildPlatform, hostPlatform
 }:
 
 stdenv.mkDerivation (rec {
@@ -46,7 +45,7 @@ stdenv.mkDerivation (rec {
       desire its capabilities.
     '';
 
-    homepage = http://savannah.gnu.org/projects/readline/;
+    homepage = https://savannah.gnu.org/projects/readline/;
 
     license = stdenv.lib.licenses.gpl3Plus;
 
@@ -59,6 +58,6 @@ stdenv.mkDerivation (rec {
 //
 
 # Don't run the native `strip' when cross-compiling.
-(if hostPlatform != buildPlatform
+(if stdenv.hostPlatform != stdenv.buildPlatform
  then { dontStrip = true; }
  else { }))

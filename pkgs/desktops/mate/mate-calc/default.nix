@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "mate-calc-${version}";
-  version = "1.20.0";
+  version = "1.20.3";
 
   src = fetchurl {
     url = "http://pub.mate-desktop.org/releases/${mate.getRelease version}/${name}.tar.xz";
-    sha256 = "03cma6b00chd4026pbnh5i0ckpl8b1l7i1ppvcmbfbx0s3vpbc73";
+    sha256 = "0nv0q2c93rv36dhid7vf0w0rb6zdwyqaibfsmc7flj00qgsn3r5a";
   };
 
   nativeBuildInputs = [
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     description = "Calculator for the MATE desktop";
     homepage = http://mate-desktop.org;
     license = [ licenses.gpl2Plus ];
-    platforms = platforms.unix;
+    platforms = platforms.linux;
     maintainers = [ maintainers.romildo ];
   };
 }

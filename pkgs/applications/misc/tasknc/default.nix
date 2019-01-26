@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, makeWrapper, perl, ncurses, taskwarrior }:
+{ stdenv, fetchFromGitHub, makeWrapper, perl, ncurses5, taskwarrior }:
 
 stdenv.mkDerivation rec {
   version = "2017-05-15";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     perl # For generating the man pages with pod2man
   ];
 
-  buildInputs = [ ncurses ];
+  buildInputs = [ ncurses5 ];
 
   hardeningDisable = [ "format" ];
 
@@ -36,7 +36,8 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage = https://github.com/lharding/tasknc;
     description = "A ncurses wrapper around taskwarrior";
-    maintainers = with maintainers; [ matthiasbeyer infinisil ];
+    maintainers = with maintainers; [ infinisil ];
     platforms = platforms.linux; # Cannot test others
+    license = licenses.mit;
   };
 }

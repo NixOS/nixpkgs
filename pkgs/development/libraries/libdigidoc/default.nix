@@ -2,22 +2,18 @@
 
 stdenv.mkDerivation rec {
 
-  version = "3.10.1.1212";
+  version = "3.10.4";
   name = "libdigidoc-${version}";
-  
+
   src = fetchurl {
-    url = "https://installer.id.ee/media/ubuntu/pool/main/libd/libdigidoc/libdigidoc_3.10.1.1212.orig.tar.xz";
-    sha256 = "ad5e0603aea2e02977f17318cc93a53c3a19a815e57b2347d97136d11c110807";
+    url = "https://github.com/open-eid/libdigidoc/releases/download/v${version}/libdigidoc-${version}.tar.gz";
+    sha256 = "0w5wsaj2a5wss1r9j39bfsrkp3xz0w3v1gnr190v6k7l74l453w1";
   };
 
-  unpackPhase = ''
-    mkdir src
-    tar xf $src -C src
-    cd src
-  '';
+  nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ cmake openssl pcsclite opensc libxml2 ];
-  
+  buildInputs = [ openssl pcsclite opensc libxml2 ];
+
   meta = with stdenv.lib; {
     description = "Library for creating DigiDoc signature files";
     homepage = http://www.id.ee/;

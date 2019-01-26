@@ -1,6 +1,6 @@
 { stdenv, fetchgit, coq, ssreflect }:
 
-let param =
+let params =
   {
     "8.5" = {
       version = "20171215";
@@ -20,8 +20,14 @@ let param =
       sha256 = "09dq1vvshhlhgjccrhqgbhnq2hrys15xryfszqq11rzpgvl2zgdv";
     };
 
-  }."${coq.coq-version}"
-; in
+    "8.8" = {
+      version = "20171215";
+      rev = "e2cf8b270c2efa3b56fab1ef6acc376c2c3de968";
+      sha256 = "09dq1vvshhlhgjccrhqgbhnq2hrys15xryfszqq11rzpgvl2zgdv";
+    };
+  };
+  param = params."${coq.coq-version}";
+in
 
 stdenv.mkDerivation rec {
 
@@ -32,7 +38,7 @@ stdenv.mkDerivation rec {
     inherit (param) rev sha256;
   };
 
-  buildInputs = [ coq.ocaml coq.camlp5 coq.findlib ];
+  buildInputs = with coq.ocamlPackages; [ ocaml camlp5 findlib ];
   propagatedBuildInputs = [ coq ssreflect ];
 
   enableParallelBuilding = false;
@@ -42,10 +48,13 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = git://github.com/jwiegley/coq-haskell.git;
+    homepage = https://github.com/jwiegley/coq-haskell;
     description = "A library for formalizing Haskell types and functions in Coq";
     maintainers = with maintainers; [ jwiegley ];
     platforms = coq.meta.platforms;
   };
 
+  passthru = {
+    compatibleCoqVersions = v: builtins.hasAttr v params;
+  };
 }

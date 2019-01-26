@@ -8,7 +8,7 @@ rec {
   deps = [ args."alexandria" args."babel" args."cffi" args."cffi-toolchain" args."trivial-features" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/cffi/2017-06-30/cffi_0.19.0.tgz'';
+    url = ''http://beta.quicklisp.org/archive/cffi/2018-02-28/cffi_0.19.0.tgz'';
     sha256 = ''12v3ha0qp3f9lq2h3d7y3mwdq216nsdfig0s3c4akw90rsbnydj9'';
   };
 
@@ -19,7 +19,7 @@ rec {
 }
 /* (SYSTEM cffi-grovel DESCRIPTION The CFFI Groveller SHA256
     12v3ha0qp3f9lq2h3d7y3mwdq216nsdfig0s3c4akw90rsbnydj9 URL
-    http://beta.quicklisp.org/archive/cffi/2017-06-30/cffi_0.19.0.tgz MD5
+    http://beta.quicklisp.org/archive/cffi/2018-02-28/cffi_0.19.0.tgz MD5
     7589b6437fec19fdabc65892536c3dc3 NAME cffi-grovel FILENAME cffi-grovel DEPS
     ((NAME alexandria FILENAME alexandria) (NAME babel FILENAME babel)
      (NAME cffi FILENAME cffi) (NAME cffi-toolchain FILENAME cffi-toolchain)

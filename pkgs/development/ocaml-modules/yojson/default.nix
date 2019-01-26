@@ -1,12 +1,12 @@
-{ stdenv, fetchzip, ocaml, findlib, jbuilder, cppo, easy-format, biniou }:
+{ stdenv, fetchzip, ocaml, findlib, dune, cppo, easy-format, biniou }:
 let
   pname = "yojson";
   param =
   if stdenv.lib.versionAtLeast ocaml.version "4.02" then {
-    version = "1.4.0";
-    sha256 = "0rzn4yihfi0psd2qmgrx5fvwpby87sqx4zws3ijf49f7wbpycccv";
-    buildInputs = [ jbuilder ];
-    extra = { inherit (jbuilder) installPhase; };
+    version = "1.4.1";
+    sha256 = "0nwsfkmqpyfab4rxq76q8ff7giyanghw08094jyrp275v99zdjr9";
+    buildInputs = [ dune ];
+    extra = { inherit (dune) installPhase; };
   } else {
     version = "1.2.3";
     sha256 = "10dvkndgwanvw4agbjln7kgb1n9s6lii7jw82kwxczl5rd1sgmvl";

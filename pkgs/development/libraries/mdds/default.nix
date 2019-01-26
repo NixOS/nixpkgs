@@ -1,12 +1,12 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, boost }:
 
 stdenv.mkDerivation rec {
-  version = "1.2.2";
+  version = "1.3.1";
   name = "mdds-${version}";
 
   src = fetchurl {
-    url = "http://kohei.us/files/mdds/src/mdds-${version}.tar.bz2";
-    sha256 = "17fcjhsq3bzqm7ba9sgp6my3y4226jnwai6q5jq3810i745p67hl";
+    url = "https://kohei.us/files/mdds/src/mdds-${version}.tar.bz2";
+    sha256 = "18g511z1lgfxrga2ld9yr95phmyfbd3ymbv4q5g5lyjn4ljcvf6w";
   };
 
   postInstall = ''
@@ -14,10 +14,13 @@ stdenv.mkDerivation rec {
    cp "$out/share/pkgconfig/"* "$out/lib/pkgconfig"
   '';
 
-  meta = {
+  checkInputs = [ boost ];
+
+  meta = with stdenv.lib; {
     inherit version;
     homepage = https://gitlab.com/mdds/mdds;
     description = "A collection of multi-dimensional data structure and indexing algorithm";
-    platforms = stdenv.lib.platforms.all;
+    platforms = platforms.all;
+    license = licenses.mit;
   };
 }

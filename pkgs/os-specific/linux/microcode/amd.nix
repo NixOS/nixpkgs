@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, firmwareLinuxNonfree, libarchive }:
+{ stdenv, firmwareLinuxNonfree, libarchive }:
 
 stdenv.mkDerivation rec {
   name = "amd-ucode-${firmwareLinuxNonfree.version}";

@@ -2,7 +2,17 @@
 , libsoup, json-glib, gmp, openssl, dleyna-server, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
-  inherit (import ./src.nix fetchurl) name src;
+  name = "gnome-online-miners-${version}";
+  version = "3.30.0";
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/gnome-online-miners/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    sha256 = "0pjamwwzn5wqgihyss357dyl2q70r0bngnqmwsqawchx5f9aja9c";
+  };
+
+  passthru = {
+    updateScript = gnome3.updateScript { packageName = "gnome-online-miners"; attrPath = "gnome3.gnome-online-miners"; };
+  };
 
   nativeBuildInputs = [ pkgconfig wrapGAppsHook ];
   buildInputs = [ glib gnome3.libgdata libxml2 libsoup gmp openssl

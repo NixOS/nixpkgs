@@ -1,6 +1,7 @@
 { stdenv, fetchurl, fetchpatch, pkgconfig, removeReferencesTo
 , zlib, libjpeg, libpng, libtiff, pam, dbus, systemd, acl, gmp, darwin
 , libusb ? null, gnutls ? null, avahi ? null, libpaper ? null
+, coreutils
 }:
 
 ### IMPORTANT: before updating cups, make sure the nixos/tests/printing.nix test
@@ -9,23 +10,25 @@
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "cups-${version}";
-  version = "2.2.6";
+
+  # After 2.2.6, CUPS requires headers only available in macOS 10.12+
+  version = if stdenv.isDarwin then "2.2.6" else "2.2.10";
 
   passthru = { inherit version; };
 
   src = fetchurl {
     url = "https://github.com/apple/cups/releases/download/v${version}/cups-${version}-source.tar.gz";
-    sha256 = "16qn41b84xz6khrr2pa2wdwlqxr29rrrkjfi618gbgdkq9w5ff20";
+    sha256 = if version == "2.2.6"
+             then "16qn41b84xz6khrr2pa2wdwlqxr29rrrkjfi618gbgdkq9w5ff20"
+             else "1fq52aw1mini3ld2czv5gg37wbbvh4n7yc7wzzxvbs3zpfrv5j3p";
   };
 
   outputs = [ "out" "lib" "dev" "man" ];
 
-  patches = [
-    (fetchpatch {
-      url = "https://git.archlinux.org/svntogit/packages.git/plain/trunk/cups-systemd-socket.patch?h=packages/cups";
-      sha256 = "1ddgdlg9s0l2ph6l8lx1m1lx6k50gyxqi3qiwr44ppq1rxs80ny5";
-    })
-  ];
+  postPatch = ''
+    substituteInPlace cups/testfile.c \
+      --replace 'cupsFileFind("cat", "/bin' 'cupsFileFind("cat", "${coreutils}/bin'
+  '';
 
   nativeBuildInputs = [ pkgconfig removeReferencesTo ];
 
@@ -40,7 +43,6 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--localstatedir=/var"
     "--sysconfdir=/etc"
-    "--with-rundir=/run"
     "--enable-raw-printing"
     "--enable-threads"
   ] ++ optionals stdenv.isLinux [
@@ -52,7 +54,9 @@ stdenv.mkDerivation rec {
     ++ optional (libpaper != null) "--enable-libpaper"
     ++ optional stdenv.isDarwin "--disable-launchd";
 
+  # AR has to be an absolute path
   preConfigure = ''
+    export AR="${getBin stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}ar"
     configureFlagsArray+=(
       # Put just lib/* and locale into $lib; this didn't work directly.
       # lib/cups is moved back to $out in postInstall.

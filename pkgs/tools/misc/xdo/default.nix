@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
    name = "xdo-${version}";
-   version = "0.5.6";
+   version = "0.5.7";
 
    src = fetchFromGitHub {
      owner = "baskerville";
      repo = "xdo";
      rev = version;
-     sha256 = "1i8xlsp36ji7cvyh66ajqsf59hxpwm0xvnn9laq7nbajcx3qqlnh";
+     sha256 = "1h3jrygcjjbavdbkpx2hscsf0yf97gk487lzjdlvymd7dxdv9hy9";
    };
 
    makeFlags = "PREFIX=$(out)";

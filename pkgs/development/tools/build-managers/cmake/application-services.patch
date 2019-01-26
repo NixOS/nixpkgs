@@ -1,0 +1,15 @@
+diff -ur cmake-3.12.1/Source/cmGlobalXCodeGenerator.cxx cmake-3.12.1-patched/Source/cmGlobalXCodeGenerator.cxx
+--- cmake-3.12.1/Source/cmGlobalXCodeGenerator.cxx	2018-08-09 21:14:08.000000000 +0900
++++ cmake-3.12.1-patched/Source/cmGlobalXCodeGenerator.cxx	2018-08-12 02:47:28.719691934 +0900
+@@ -35,11 +35,6 @@
+ 
+ struct cmLinkImplementation;
+ 
+-#if defined(CMAKE_BUILD_WITH_CMAKE) && defined(__APPLE__)
+-#  define HAVE_APPLICATION_SERVICES
+-#  include <ApplicationServices/ApplicationServices.h>
+-#endif
+-
+ #if defined(CMAKE_BUILD_WITH_CMAKE)
+ #  include "cmXMLParser.h"
+ 

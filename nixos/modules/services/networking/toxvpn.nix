@@ -1,4 +1,4 @@
-{ config, stdenv, pkgs, lib, ... }:
+{ config, pkgs, lib, ... }:
 
 with lib;
 
@@ -57,7 +57,7 @@ with lib;
 
     environment.systemPackages = [ pkgs.toxvpn ];
 
-    users.extraUsers = {
+    users.users = {
       toxvpn = {
         uid        = config.ids.uids.toxvpn;
         home       = "/var/lib/toxvpn";

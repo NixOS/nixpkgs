@@ -1,40 +1,43 @@
-{ stdenv, lib, pkgconfig, fetchurl, buildPythonApplication
-, autoreconfHook, wrapGAppsHook
+{ stdenv, pkgconfig, fetchurl, buildPythonApplication
+, autoreconfHook, wrapGAppsHook, gobject-introspection
 , intltool, yelp-tools, itstool, libxmlxx3
 , python, pygobject3, gtk3, gnome3, substituteAll
 , at-spi2-atk, at-spi2-core, pyatspi, dbus, dbus-python, pyxdg
-, xkbcomp, gsettings-desktop-schemas, liblouis
+, xkbcomp, procps, lsof, coreutils, gsettings-desktop-schemas
 , speechd, brltty, setproctitle, gst_all_1, gst-python
 }:
 
-with lib;
 let
-  version = "3.26.0";
-  majorVersion = builtins.concatStringsSep "." (take 2 (splitString "." version));
+  pname = "orca";
+  version = "3.30.1";
 in buildPythonApplication rec {
-  name = "orca-${version}";
+  name = "${pname}-${version}";
 
   format = "other";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/orca/${majorVersion}/${name}.tar.xz";
-    sha256 = "0xk5k9cbswymma60nrfj00dl97wypx59c107fb1hwi75gm0i07a7";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    sha256 = "1b9s69frjmghjm1p9a4rrvknl9m0qlwr7mr4lsxkvjnblhsnw0g7";
   };
 
   patches = [
     (substituteAll {
       src = ./fix-paths.patch;
+      cat = "${coreutils}/bin/cat";
+      lsof = "${lsof}/bin/lsof";
+      pgrep = "${procps}/bin/pgrep";
       xkbcomp = "${xkbcomp}/bin/xkbcomp";
     })
   ];
 
   nativeBuildInputs = [
     autoreconfHook wrapGAppsHook pkgconfig libxmlxx3
-    intltool yelp-tools itstool
+    intltool yelp-tools itstool gobject-introspection
   ];
 
   propagatedBuildInputs = [
-    pygobject3 pyatspi dbus-python pyxdg brltty liblouis speechd gst-python setproctitle
+    # TODO: re-add liblouis when it is fixed
+    pygobject3 pyatspi dbus-python pyxdg brltty speechd gst-python setproctitle
   ];
 
   buildInputs = [
@@ -47,7 +50,13 @@ in buildPythonApplication rec {
     intltoolize
   '';
 
-  meta = {
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+    };
+  };
+
+  meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/Projects/Orca;
     description = "Screen reader";
     longDescription = ''

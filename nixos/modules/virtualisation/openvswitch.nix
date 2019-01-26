@@ -51,9 +51,6 @@ in {
     # Where the communication sockets live
     runDir = "/var/run/openvswitch";
 
-    # Where the config database live (can't be in nix-store)
-    stateDir = "/var/db/openvswitch";
-
     # The path to the an initialized version of the database
     db = pkgs.stdenv.mkDerivation {
       name = "vswitch.db";
@@ -169,7 +166,7 @@ in {
         mkdir -p ${runDir}/ipsec/{etc/racoon,etc/init.d/,usr/sbin/}
         ln -fs ${pkgs.ipsecTools}/bin/setkey ${runDir}/ipsec/usr/sbin/setkey
         ln -fs ${pkgs.writeScript "racoon-restart" ''
-        #!${pkgs.stdenv.shell}
+        #!${pkgs.runtimeShell}
         /var/run/current-system/sw/bin/systemctl $1 racoon
         ''} ${runDir}/ipsec/etc/init.d/racoon
       '';

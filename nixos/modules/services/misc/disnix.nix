@@ -7,16 +7,6 @@ let
 
   cfg = config.services.disnix;
 
-  dysnomia = pkgs.dysnomia.override (origArgs: {
-    enableApacheWebApplication = config.services.httpd.enable;
-    enableAxis2WebService = config.services.tomcat.axis2.enable;
-    enableEjabberdDump = config.services.ejabberd.enable;
-    enableMySQLDatabase = config.services.mysql.enable;
-    enablePostgreSQLDatabase = config.services.postgresql.enable;
-    enableSubversionRepository = config.services.svnserve.enable;
-    enableTomcatWebApplication = config.services.tomcat.enable;
-    enableMongoDatabase = config.services.mongodb.enable;
-  });
 in
 
 {
@@ -32,11 +22,17 @@ in
         description = "Whether to enable Disnix";
       };
 
+      enableMultiUser = mkOption {
+        type = types.bool;
+        default = true;
+        description = "Whether to support multi-user mode by enabling the Disnix D-Bus service";
+      };
+
       useWebServiceInterface = mkOption {
         default = false;
         description = "Whether to enable the DisnixWebService interface running on Apache Tomcat";
       };
-      
+
       package = mkOption {
         type = types.path;
         description = "The Disnix package";
@@ -52,7 +48,7 @@ in
 
   config = mkIf cfg.enable {
     dysnomia.enable = true;
-    
+
     environment.systemPackages = [ pkgs.disnix ] ++ optional cfg.useWebServiceInterface pkgs.DisnixWebService;
 
     services.dbus.enable = true;
@@ -65,13 +61,13 @@ in
       ++ optional cfg.useWebServiceInterface "${pkgs.dbus_java}/share/java/dbus.jar";
     services.tomcat.webapps = optional cfg.useWebServiceInterface pkgs.DisnixWebService;
 
-    users.extraGroups = singleton
+    users.groups = singleton
       { name = "disnix";
         gid = config.ids.gids.disnix;
       };
 
     systemd.services = {
-      disnix = {
+      disnix = mkIf cfg.enableMultiUser {
         description = "Disnix server";
         wants = [ "dysnomia.target" ];
         wantedBy = [ "multi-user.target" ];
@@ -92,7 +88,7 @@ in
         }
         // (if config.environment.variables ? DYSNOMIA_CONTAINERS_PATH then { inherit (config.environment.variables) DYSNOMIA_CONTAINERS_PATH; } else {})
         // (if config.environment.variables ? DYSNOMIA_MODULES_PATH then { inherit (config.environment.variables) DYSNOMIA_MODULES_PATH; } else {});
-        
+
         serviceConfig.ExecStart = "${cfg.package}/bin/disnix-service";
       };
 

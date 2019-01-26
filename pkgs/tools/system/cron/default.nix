@@ -12,7 +12,7 @@ stdenv.mkDerivation {
   hardeningEnable = [ "pie" ];
 
   preBuild = ''
-    # do not set sticky bit in /nix/store 
+    # do not set sticky bit in /nix/store
     substituteInPlace Makefile --replace ' -o root' ' ' --replace 111 755 --replace 4755 0755
     # do not strip during install, broken on cross and we'll do ourselves as needed
     substituteInPlace Makefile --replace ' -s cron' ' cron'
@@ -36,8 +36,9 @@ stdenv.mkDerivation {
 
   preInstall = "mkdir -p $out/bin $out/sbin $out/share/man/man1 $out/share/man/man5 $out/share/man/man8";
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Daemon for running commands at specific times (Vixie Cron)";
-    platforms = with stdenv.lib.platforms; linux ++ darwin;
+    license = licenses.bsd0;
+    platforms = with platforms; linux ++ darwin;
   };
 }

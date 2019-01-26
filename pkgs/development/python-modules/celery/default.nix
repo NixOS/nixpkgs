@@ -1,25 +1,44 @@
-{ stdenv, buildPythonPackage, fetchPypi, iana-etc, libredirect,
+{ stdenv, buildPythonPackage, fetchPypi, fetchpatch, iana-etc, libredirect,
   pytest, case, kombu, billiard, pytz, anyjson, amqp, eventlet
-}: 
-buildPythonPackage rec {
+}:
+
+let
+
+  # Needed for celery
+  pytest_32 = pytest.overridePythonAttrs( oldAttrs: rec {
+    version = "3.2.5";
+    src = oldAttrs.src.override {
+      inherit version;
+      sha256 = "6d5bd4f7113b444c55a3bbb5c738a3dd80d43563d063fc42dcb0aaefbdd78b81";
+    };
+  });
+
+in buildPythonPackage rec {
   pname = "celery";
-  version = "4.1.0";
+  version = "4.2.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0dcb0s6kdcd3vc9pwvazngppkdbhwpmpjmghq6rifsld34q3gzvp";
+    sha256 = "0y66rz7z8dfcgs3s0qxmdddlaq57bzbgxgfz896nbp14grkv9nkp";
+  };
+
+  # Skip test_RedisBackend.test_timeouts_in_url_coerced
+  # See https://github.com/celery/celery/pull/4847
+  patches = fetchpatch {
+    url = https://github.com/celery/celery/commit/b2668607c909c61becd151905b4525190c19ff4a.patch;
+    sha256 = "11w0z2ycyh8kccj4y69zb7bxppiipcwwigg6jn1q9yrcsvz170jq";
   };
 
   # make /etc/protocols accessible to fix socket.getprotobyname('tcp') in sandbox
-  preCheck = ''
+  preCheck = stdenv.lib.optionalString stdenv.isLinux ''
     export NIX_REDIRECTS=/etc/protocols=${iana-etc}/etc/protocols \
       LD_PRELOAD=${libredirect}/lib/libredirect.so
   '';
-  postCheck = ''
+  postCheck = stdenv.lib.optionalString stdenv.isLinux ''
     unset NIX_REDIRECTS LD_PRELOAD
   '';
 
-  buildInputs = [ pytest case ];
+  checkInputs = [ pytest_32 case ];
   propagatedBuildInputs = [ kombu billiard pytz anyjson amqp eventlet ];
 
   meta = with stdenv.lib; {

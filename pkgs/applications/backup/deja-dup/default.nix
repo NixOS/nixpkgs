@@ -1,34 +1,36 @@
-{ stdenv, fetchurl, meson, ninja, pkgconfig, vala_0_38, gettext
-, gnome3, libnotify, intltool, itstool, glib, gtk3, libxml2
+{ stdenv, fetchFromGitLab, substituteAll, meson, ninja, pkgconfig, vala_0_40, gettext
+, gnome3, libnotify, itstool, glib, gtk3, libxml2
 , coreutils, libsecret, pcre, libxkbcommon, wrapGAppsHook
 , libpthreadstubs, libXdmcp, epoxy, at-spi2-core, dbus, libgpgerror
 , appstream-glib, desktop-file-utils, duplicity
 }:
 
 stdenv.mkDerivation rec {
-  name = "deja-dup-${version}";
-  version = "36.3";
+  pname = "deja-dup";
+  version = "38.3";
 
-  src = fetchurl {
-    url = "https://launchpad.net/deja-dup/36/${version}/+download/deja-dup-${version}.tar.xz";
-    sha256 = "08pwybzp7ynfcf0vqxfc3p8ir4gnzcv4v4cq5bwidbff9crklhrc";
+  src = fetchFromGitLab {
+    domain = "gitlab.gnome.org";
+    owner = "World";
+    repo = pname;
+    rev = version;
+    sha256 = "1bnvmdlm67k1b6115x75j3nl92x5yl4psq5pna2w6cg9npxdd3fa";
   };
 
   patches = [
-    ./fix-paths.patch
+    (substituteAll {
+      src = ./fix-paths.patch;
+      inherit coreutils;
+    })
+    ./hardcode-gsettings.patch
   ];
 
   postPatch = ''
-    substituteInPlace libdeja/tools/duplicity/DuplicityInstance.vala --replace \
-      "/bin/rm" \
-      "${coreutils}/bin/rm"
+    substituteInPlace deja-dup/nautilus/NautilusExtension.c --subst-var-by DEJA_DUP_GSETTINGS_PATH $out/share/gsettings-schemas/${pname}-${version}/glib-2.0/schemas
   '';
 
-  # couldn't find gio/gdesktopappinfo.h
-  NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
-
   nativeBuildInputs = [
-    meson ninja pkgconfig vala_0_38 gettext intltool itstool
+    meson ninja pkgconfig vala_0_40 gettext itstool
     appstream-glib desktop-file-utils libxml2 wrapGAppsHook
   ];
 
@@ -40,6 +42,8 @@ stdenv.mkDerivation rec {
 
   propagatedUserEnvPkgs = [ duplicity ];
 
+  PKG_CONFIG_LIBNAUTILUS_EXTENSION_EXTENSIONDIR = "${placeholder "out"}/lib/nautilus/extensions-3.0";
+
   postInstall = ''
     glib-compile-schemas $out/share/glib-2.0/schemas
   '';
@@ -47,11 +51,6 @@ stdenv.mkDerivation rec {
   postFixup = ''
     # Unwrap accidentally wrapped library
     mv $out/libexec/deja-dup/tools/.libduplicity.so-wrapped $out/libexec/deja-dup/tools/libduplicity.so
-
-    # Patched meson does not add internal libraries to rpath
-    for elf in "$out/bin/.deja-dup-wrapped" "$out/libexec/deja-dup/.deja-dup-monitor-wrapped" "$out/libexec/deja-dup/tools/libduplicity.so"; do
-      patchelf --set-rpath "$(patchelf --print-rpath "$elf"):$out/lib/deja-dup" "$elf"
-    done
   '';
 
   meta = with stdenv.lib; {
@@ -61,9 +60,9 @@ stdenv.mkDerivation rec {
       of backing up the Right Way (encrypted, off-site, and regular) \
       and uses duplicity as the backend.
     '';
-    homepage = https://launchpad.net/deja-dup;
-    license = with licenses; gpl3;
+    homepage = https://wiki.gnome.org/Apps/DejaDup;
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ jtojnar joncojonathan ];
-    platforms = with platforms; linux;
+    platforms = platforms.linux;
   };
 }

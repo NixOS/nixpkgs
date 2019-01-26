@@ -11,19 +11,30 @@ with stdenv.lib;
 }@args:
 
 let stackCmd = "stack --internal-re-exec-version=${stack.version}";
+
+    # Add all dependencies in buildInputs including propagated ones to
+    # STACK_IN_NIX_EXTRA_ARGS.
+    addStackArgsHook = ''
+for pkg in ''${pkgsHostHost[@]} ''${pkgsHostBuild[@]} ''${pkgsHostTarget[@]}
+do
+  [ -d "$pkg/lib" ] && \
+    export STACK_IN_NIX_EXTRA_ARGS+=" --extra-lib-dirs=$pkg/lib"
+  [ -d "$pkg/include" ] && \
+    export STACK_IN_NIX_EXTRA_ARGS+=" --extra-include-dirs=$pkg/include"
+done
+    '';
 in stdenv.mkDerivation (args // {
 
   buildInputs =
     buildInputs ++
-    optional stdenv.isLinux glibcLocales ++
+    optional (stdenv.hostPlatform.libc == "glibc") glibcLocales ++
     [ ghc pkgconfig stack ];
 
   STACK_PLATFORM_VARIANT="nix";
   STACK_IN_NIX_SHELL=1;
-  STACK_IN_NIX_EXTRA_ARGS =
-    concatMap (pkg: ["--extra-lib-dirs=${getLib pkg}/lib"
-                     "--extra-include-dirs=${getDev pkg}/include"]) buildInputs ++
-    extraArgs;
+  STACK_IN_NIX_EXTRA_ARGS = extraArgs;
+  shellHook = addStackArgsHook + args.shellHook or "";
+
 
   # XXX: workaround for https://ghc.haskell.org/trac/ghc/ticket/11042.
   LD_LIBRARY_PATH = makeLibraryPath (LD_LIBRARY_PATH ++ buildInputs);
@@ -39,6 +50,7 @@ in stdenv.mkDerivation (args // {
 
   configurePhase = args.configurePhase or ''
     export STACK_ROOT=$NIX_BUILD_TOP/.stack
+    ${addStackArgsHook}
   '';
 
   buildPhase = args.buildPhase or "${stackCmd} build";

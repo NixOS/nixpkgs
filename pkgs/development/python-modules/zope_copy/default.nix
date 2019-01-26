@@ -8,18 +8,21 @@
 
 
 buildPythonPackage rec {
-  pname = "zope_copy";
-  version = "4.0.2";
+  pname = "zope.copy";
+  version = "4.2";
 
   src = fetchPypi {
     inherit pname version;
-    extension = "zip";
-    sha256 = "eb2a95866df1377741876a3ee62d8600e80089e6246e1a235e86791b29534457";
+    sha256 = "47bb9d09ff06c600b446f220f47a742396598ac4828d738d3d85e6490629a71a";
   };
 
   propagatedBuildInputs = [ zope_interface ];
 
   checkInputs = [ zope_location zope_schema ];
+
+  checkPhase = ''
+    python -m unittest discover -s src/zope/copy
+  '';
 
   meta = {
     maintainers = with lib.maintainers; [ domenkozar ];

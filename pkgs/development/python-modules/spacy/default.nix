@@ -1,55 +1,57 @@
-{ stdenv
-, pkgs
+{ lib
 , buildPythonPackage
-, python
 , fetchPypi
-, fetchFromGitHub
+, pythonOlder
 , pytest
-, cython
-, cymem
 , preshed
-, pathlib2
+, ftfy
 , numpy
 , murmurhash
 , plac
-, six
 , ujson
 , dill
 , requests
-, ftfy
 , thinc
-, pip
 , regex
+, cymem
+, pathlib
+, msgpack-python
+, msgpack-numpy
 }:
 
 buildPythonPackage rec {
   pname = "spacy";
-  version = "1.8.2";
+  version = "2.0.18";
 
-  src = fetchFromGitHub {
-    owner = "explosion";
-    repo = "spaCy";
-    rev = "v${version}";
-    sha256 = "0v3bmmar31a6968y4wl0lmgnc3829l2mnwd8s959m4pqw1y1w648";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "0mybdms7c40jvk8ak180n65anjiyg4c8gkaqwkzicrd1mxq3ngqj";
   };
 
+  prePatch = ''
+    substituteInPlace setup.py \
+      --replace "regex==" "regex>=" \
+      --replace "plac<1.0.0,>=0.9.6" "plac>=0.9.6"
+  '';
+
   propagatedBuildInputs = [
-   cython
-   cymem
-   pathlib2
-   preshed
    numpy
    murmurhash
+   cymem
+   preshed
+   thinc
    plac
-   six
    ujson
    dill
    requests
    regex
    ftfy
-   thinc
-   pytest
-   pip
+   msgpack-python
+   msgpack-numpy
+  ] ++ lib.optional (pythonOlder "3.4") pathlib;
+
+  checkInputs = [
+    pytest
   ];
 
   doCheck = false;
@@ -57,7 +59,7 @@ buildPythonPackage rec {
   #   ${python.interpreter} -m pytest spacy/tests --vectors --models --slow
   # '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Industrial-strength Natural Language Processing (NLP) with Python and Cython";
     homepage = https://github.com/explosion/spaCy;
     license = licenses.mit;

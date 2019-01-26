@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoreconfHook, pkgconfig, gtk3 }:
+{ stdenv, fetchurl, autoreconfHook, pkgconfig, gtk3, hicolor-icon-theme }:
 
 stdenv.mkDerivation rec {
   name = "screen-message-${version}";
@@ -10,13 +10,13 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
-  buildInputs = [ gtk3 ];
+  buildInputs = [ gtk3 hicolor-icon-theme ];
 
   # screen-message installs its binary in $(prefix)/games per default
   makeFlags = [ "execgamesdir=$(out)/bin" ];
 
   meta = {
-    homepage = http://darcs.nomeata.de/cgi-bin/darcsweb.cgi?r=screen-message.debian;
+    homepage = "https://www.joachim-breitner.de/en/projects#screen-message";
     description = "Displays a short text fullscreen in an X11 window";
     license = stdenv.lib.licenses.gpl2Plus;
     maintainers = [ stdenv.lib.maintainers.fpletz ];

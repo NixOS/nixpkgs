@@ -2,14 +2,20 @@
 
 pythonPackages.buildPythonApplication rec {
   name = "hy-${version}";
-  version = "0.13.1";
+  version = "0.15.0";
 
   src = fetchurl {
     url = "mirror://pypi/h/hy/${name}.tar.gz";
-    sha256 = "1fjip998k336r26i1gpri18syvfjg7z46wng1n58dmc238wm53sx";
+    sha256 = "01vzaib1imr00j5d7f7xk44v800h06s3yv9inhlqm6f3b25ywpl1";
   };
 
-  propagatedBuildInputs = with pythonPackages; [ appdirs clint astor rply ];
+  propagatedBuildInputs = with pythonPackages; [
+    appdirs
+    astor
+    clint
+    funcparserlib
+    rply
+  ];
 
   meta = {
     description = "A LISP dialect embedded in Python";

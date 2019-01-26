@@ -1,6 +1,11 @@
-{ system ? builtins.currentSystem, debug ? false }:
+{ system ? builtins.currentSystem,
+  config ? {},
+  pkgs ? import ../.. { inherit system config; },
+  debug ? false,
+  enableUnfree ? false
+}:
 
-with import ../lib/testing.nix { inherit system; };
+with import ../lib/testing.nix { inherit system pkgs; };
 with pkgs.lib;
 
 let
@@ -42,6 +47,9 @@ let
       "boot.trace" "panic=1" "boot.panic_on_fail"
       "init=${pkgs.writeScript "mini-init.sh" miniInit}"
     ];
+
+    # XXX: Remove this once TSS location detection has been fixed in VirtualBox
+    boot.kernelPackages = pkgs.linuxPackages_4_9;
 
     fileSystems."/" = {
       device = "vboxshare";
@@ -290,6 +298,11 @@ let
     "--hostonlyadapter2 vboxnet0"
   ];
 
+  # The VirtualBox Oracle Extension Pack lets you use USB 3.0 (xHCI).
+  enableExtensionPackVMFlags = [
+    "--usbxhci on"
+  ];
+
   dhcpScript = pkgs: ''
     ${pkgs.dhcp}/bin/dhclient \
       -lf /run/dhcp.leases \
@@ -320,20 +333,26 @@ let
     headless.services.xserver.enable = false;
   };
 
-  mkVBoxTest = name: testScript: makeTest {
+  vboxVMsWithExtpack = mapAttrs createVM {
+    testExtensionPack.vmFlags = enableExtensionPackVMFlags;
+  };
+
+  mkVBoxTest = useExtensionPack: vms: name: testScript: makeTest {
     name = "virtualbox-${name}";
 
     machine = { lib, config, ... }: {
       imports = let
         mkVMConf = name: val: val.machine // { key = "${name}-config"; };
-        vmConfigs = mapAttrsToList mkVMConf vboxVMs;
+        vmConfigs = mapAttrsToList mkVMConf vms;
       in [ ./common/user-account.nix ./common/x11.nix ] ++ vmConfigs;
       virtualisation.memorySize = 2048;
       virtualisation.virtualbox.host.enable = true;
       services.xserver.displayManager.auto.user = "alice";
-      users.extraUsers.alice.extraGroups = let
+      users.users.alice.extraGroups = let
         inherit (config.virtualisation.virtualbox.host) enableHardening;
       in lib.mkIf enableHardening (lib.singleton "vboxusers");
+      virtualisation.virtualbox.host.enableExtensionPack = useExtensionPack;
+      nixpkgs.config.allowUnfree = useExtensionPack;
     };
 
     testScript = ''
@@ -350,7 +369,7 @@ let
         return join("\n", grep { $_ !~ /^UUID:/ } split(/\n/, $_[0]))."\n";
       }
 
-      ${concatStrings (mapAttrsToList (_: getAttr "testSubs") vboxVMs)}
+      ${concatStrings (mapAttrsToList (_: getAttr "testSubs") vms)}
 
       $machine->waitForX;
 
@@ -360,11 +379,31 @@ let
     '';
 
     meta = with pkgs.stdenv.lib.maintainers; {
-      maintainers = [ aszlig wkennington ];
+      maintainers = [ aszlig wkennington cdepillabout ];
     };
   };
 
-in mapAttrs mkVBoxTest {
+  unfreeTests = mapAttrs (mkVBoxTest true vboxVMsWithExtpack) {
+    enable-extension-pack = ''
+      createVM_testExtensionPack;
+      vbm("startvm testExtensionPack");
+      waitForStartup_testExtensionPack;
+      $machine->screenshot("cli_started");
+      waitForVMBoot_testExtensionPack;
+      $machine->screenshot("cli_booted");
+
+      $machine->nest("Checking for privilege escalation", sub {
+        $machine->fail("test -e '/root/VirtualBox VMs'");
+        $machine->fail("test -e '/root/.config/VirtualBox'");
+        $machine->succeed("test -e '/home/alice/VirtualBox VMs'");
+      });
+
+      shutdownVM_testExtensionPack;
+      destroyVM_testExtensionPack;
+    '';
+  };
+
+in mapAttrs (mkVBoxTest false vboxVMs) {
   simple-gui = ''
     createVM_simple;
     $machine->succeed(ru "VirtualBox &");
@@ -470,4 +509,4 @@ in mapAttrs mkVBoxTest {
     destroyVM_test1;
     destroyVM_test2;
   '';
-}
+} // (if enableUnfree then unfreeTests else {})

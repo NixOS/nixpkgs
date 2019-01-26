@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, perl, gettext, pkgconfig, libidn2, libiconv }:
 
 stdenv.mkDerivation rec {
-  version = "5.3.0";
+  version = "5.4.0";
   name = "whois-${version}";
 
   src = fetchFromGitHub {
     owner = "rfc1036";
     repo = "whois";
     rev = "v${version}";
-    sha256 = "01pfl1ap62hc27574sx1a4yaaf7hr2zkksspn5z97sgacl6h1rnf";
+    sha256 = "1n90qpy079x97a27zpckc0vnaqrdjsxgy0hsz0z8gbrc1sy30sdz";
   };
 
   nativeBuildInputs = [ perl gettext pkgconfig ];
@@ -18,8 +18,6 @@ stdenv.mkDerivation rec {
     for i in Makefile po/Makefile; do
       substituteInPlace $i --replace "prefix = /usr" "prefix = $out"
     done
-
-    substituteInPlace Makefile --replace "DEFS += HAVE_ICONV" "DEFS += HAVE_ICONV\nwhois_LDADD += -liconv"
   '';
 
   makeFlags = [ "HAVE_ICONV=1" ];
@@ -39,6 +37,6 @@ stdenv.mkDerivation rec {
     homepage = https://packages.qa.debian.org/w/whois.html;
     license = licenses.gpl2;
     maintainers = with maintainers; [ fpletz ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

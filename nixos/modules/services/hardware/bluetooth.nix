@@ -3,8 +3,8 @@
 with lib;
 
 let
-  bluez-bluetooth = pkgs.bluez;
   cfg = config.hardware.bluetooth;
+  bluez-bluetooth = cfg.package;
 
 in {
 
@@ -19,6 +19,21 @@ in {
         type    = types.bool;
         default = true;
         description = "Whether to power up the default Bluetooth controller on boot.";
+      };
+
+      package = mkOption {
+        type = types.package;
+        default = pkgs.bluez;
+        defaultText = "pkgs.bluez";
+        example = "pkgs.bluezFull";
+        description = ''
+          Which BlueZ package to use.
+
+          <note><para>
+            Use the <literal>pkgs.bluezFull</literal> package to enable all
+            bluez plugins.
+          </para></note>
+        '';
       };
 
       extraConfig = mkOption {

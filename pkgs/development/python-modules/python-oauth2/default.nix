@@ -1,16 +1,15 @@
 { lib
-, python
 , buildPythonPackage
 , fetchPypi
 }:
 
 buildPythonPackage rec {
   pname = "python-oauth2";
-  version = "1.0.1";
+  version = "1.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0a1d0qnlgm07wq9r9bbm5jqkqry73w34m87p0141bk76lg7bb0sm";
+    sha256 = "b24da812837c19183df1924e80a22ba0a1869582dea8b04a9ecd807b04dbc525";
   };
   # attempts to run mysql
   doCheck = false;

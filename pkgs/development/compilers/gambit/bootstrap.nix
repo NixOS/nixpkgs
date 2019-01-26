@@ -1,16 +1,16 @@
-{ stdenv, fetchurl, autoconf, ... }:
+{ stdenv, fetchurl, autoconf, git, ... }:
 
 stdenv.mkDerivation rec {
   name    = "gambit-bootstrap-${version}";
-  version = "4.8.8";
-  tarball_version = "v4_8_8";
+  version = "4.9.1";
+  tarball_version = "v4_9_1";
 
   src = fetchurl {
-    url    = "http://www.iro.umontreal.ca/~gambit/download/gambit/v4.8/source/gambit-${tarball_version}-devel.tgz";
-    sha256 = "075k2z04d6svxqf9paj3xvp0mm0xzy0vbma1y61s0lkywdim8xjz";
+    url    = "http://www.iro.umontreal.ca/~gambit/download/gambit/v4.9/source/gambit-${tarball_version}-devel.tgz";
+    sha256 = "10kzv568gimp9nzh5xw0h01vw50wi68z3awfp9ibqrpq2l0n7mw7";
   };
 
-  buildInputs = [ autoconf ];
+  buildInputs = [ autoconf git ];
 
   configurePhase = ''
     ./configure --prefix=$out
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     description = "Optimizing Scheme to C compiler, bootstrap step";
     homepage    = "http://gambitscheme.org";
     license     = stdenv.lib.licenses.lgpl2;
-    platforms   = stdenv.lib.platforms.linux;
+    platforms   = stdenv.lib.platforms.unix;
     maintainers = with stdenv.lib.maintainers; [ thoughtpolice raskin fare ];
   };
 }

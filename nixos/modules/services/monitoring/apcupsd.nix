@@ -38,7 +38,7 @@ let
   ];
 
   shellCmdsForEventScript = eventname: commands: ''
-    echo "#!${pkgs.stdenv.shell}" > "$out/${eventname}"
+    echo "#!${pkgs.runtimeShell}" > "$out/${eventname}"
     echo '${commands}' >> "$out/${eventname}"
     chmod a+x "$out/${eventname}"
   '';
@@ -180,7 +180,7 @@ in
       serviceConfig = {
         Type = "oneshot";
         ExecStart = "${pkgs.apcupsd}/bin/apcupsd --killpower -f ${configFile}";
-        TimeoutSec = 0;
+        TimeoutSec = "infinity";
         StandardOutput = "tty";
         RemainAfterExit = "yes";
       };
