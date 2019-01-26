@@ -4,7 +4,7 @@ deployAndroidPackage {
   name = "androidsdk";
   inherit os package;
   buildInputs = [ autoPatchelfHook makeWrapper ]
-    ++ lib.optional (os == "linux") [ pkgs.glibc pkgs.xlibs.libX11 pkgs.xlibs.libXrender pkgs.xlibs.libXext pkgs.fontconfig pkgs.freetype pkgs_i686.glibc pkgs_i686.xlibs.libX11 pkgs_i686.xlibs.libXrender pkgs_i686.xlibs.libXext pkgs_i686.fontconfig pkgs_i686.freetype pkgs_i686.zlib ];
+    ++ lib.optional (os == "linux") [ pkgs.glibc pkgs.xlibs.libX11 pkgs.xlibs.libXrender pkgs.xlibs.libXext pkgs.fontconfig pkgs.freetype pkgs_i686.glibc pkgs_i686.xlibs.libX11 pkgs_i686.xlibs.libXrender pkgs_i686.xlibs.libXext pkgs_i686.fontconfig.lib pkgs_i686.freetype pkgs_i686.zlib pkgs.fontconfig.lib ];
 
   patchInstructions = ''
     ${lib.optionalString (os == "linux") ''
