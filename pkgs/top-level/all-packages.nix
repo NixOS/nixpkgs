@@ -17735,6 +17735,10 @@ in
   swayidle = callPackage ../applications/window-managers/sway/idle.nix { };
   swaylock = callPackage ../applications/window-managers/sway/lock.nix { };
 
+  waybar = callPackage ../applications/misc/waybar {
+    pulseSupport = config.pulseaudio or false;
+  };
+
   velox = callPackage ../applications/window-managers/velox {
     stConf = config.st.conf or null;
     stPatches = config.st.patches or null;
