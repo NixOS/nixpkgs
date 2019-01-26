@@ -7060,6 +7060,10 @@ in
     inherit (darwin.apple_sdk.frameworks) Security Foundation;
   };
 
+  go_1_12 = callPackage ../development/compilers/go/1.12.nix {
+    inherit (darwin.apple_sdk.frameworks) Security Foundation;
+  };
+
   go = go_1_11;
 
   go-repo-root = callPackage ../development/tools/go-repo-root { };
