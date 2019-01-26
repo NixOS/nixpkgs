@@ -21,6 +21,5 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl2Plus;
     description = "Implementation of the rsync remote-delta algorithm";
     platforms = platforms.unix;
-    maintainers = with maintainers; [ wkennington ];
   };
 }

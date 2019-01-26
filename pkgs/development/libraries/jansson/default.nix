@@ -13,6 +13,5 @@ stdenv.mkDerivation rec {
     description = "C library for encoding, decoding and manipulating JSON data";
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = with maintainers; [ wkennington ];
   };
 }

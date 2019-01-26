@@ -25,6 +25,5 @@ stdenv.mkDerivation rec {
     homepage = http://netfilter.org/projects/nftables;
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ wkennington ];
   };
 }

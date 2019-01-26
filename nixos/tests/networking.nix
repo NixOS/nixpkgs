@@ -606,7 +606,4 @@ let
 
 in mapAttrs (const (attrs: makeTest (attrs // {
   name = "${attrs.name}-Networking-${if networkd then "Networkd" else "Scripted"}";
-  meta = with pkgs.stdenv.lib.maintainers; {
-    maintainers = [ wkennington ];
-  };
 }))) testCases

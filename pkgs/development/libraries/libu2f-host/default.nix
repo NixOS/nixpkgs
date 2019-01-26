@@ -22,6 +22,5 @@ stdenv.mkDerivation rec {
     description = "A C library and command-line tool that implements the host-side of the U2F protocol";
     license = licenses.bsd2;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ wkennington ];
   };
 }
