@@ -6,11 +6,11 @@ stdenv.mkDerivation rec {
 
   name = "netsurf-${libname}-${version}";
   libname = "libutf8proc";
-  version = "1.3.1";
+  version = "2.2.0-1";
 
   src = fetchurl {
     url = "http://download.netsurf-browser.org/libs/releases/${libname}-${version}-src.tar.gz";
-    sha256 = "0xf659y3c6ikjnip47r30wv796a34d71p6qhc4xjs64iqszm1sbq";
+    sha256 = "0hv5nxdj3505f7hkh4h15yn374igfmfpx95wbippx75xghd85km5";
   };
 
   nativeBuildInputs = [ pkgconfig ];
