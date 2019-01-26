@@ -16121,6 +16121,8 @@ in
 
   inherit (python3Packages) arelle;
 
+  argo = callPackage ../applications/networking/cluster/argo { };
+
   ario = callPackage ../applications/audio/ario { };
 
   arora = callPackage ../applications/networking/browsers/arora { };

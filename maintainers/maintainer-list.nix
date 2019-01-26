@@ -1764,6 +1764,11 @@
     github = "dguibert";
     name = "David Guibert";
   };
+  groodt = {
+    email = "groodt@gmail.com";
+    github = "groodt";
+    name = "Greg Roodt";
+  };
   guibou = {
     email = "guillaum.bouchard@gmail.com";
     github = "guibou";
