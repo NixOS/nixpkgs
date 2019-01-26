@@ -34,8 +34,8 @@ stdenv.mkDerivation rec {
   patches = [
     (fetchpatch {
       name = "fix-key-expiry.patch";
-      url = "https://files.gnupg.net/file/data/fehgbjmataj5tc2pnfhj/PHID-FILE-aqck6l4elhw53tjanrie/file";
-      sha256 = "1h80m045gy7r0g7dzzlfpql6p065x88p274ij9jnf7d4lwwgrf1a";
+      url = "https://git.gnupg.org/cgi-bin/gitweb.cgi?p=gpgme.git;a=patch;h=66376f3e206a1aa791d712fb8577bb3490268f60";
+      sha256 = "0i777dzcbv4r568l8623ar6y6j44bv46bbxi751qa5mdcihpya02";
     })
   ];
 

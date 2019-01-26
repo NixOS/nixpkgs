@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ sconsPackages.scons_3_0_1 ];
   buildInputs = [ lua ];
 
-  patches = [ ./environ-and-linux-is-kinda-posix.patch ];
+  patches = [ ./environ-and-linux-is-kinda-posix.patch ./headers.patch ];
 
   preConfigure = ''
     substituteInPlace config_posix.py \

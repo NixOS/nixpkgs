@@ -16,6 +16,8 @@ python3Packages.buildPythonApplication rec {
     sha256= "1ws6g8z1m1hfp8bv4msvbaa9f7948p687jmc8h69yib4jkv3qyax";
   };
 
+  LC_ALL = "en_US.UTF-8";
+
   checkInputs = with python3Packages; [ pytest ];
   propagatedBuildInputs = [ file ];
 

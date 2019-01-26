@@ -13,6 +13,9 @@ buildPythonPackage rec {
     sha256 = "9b8a245917e1bae131d3210c9ca7efbc066e60f32efa436e391c9803c3f4b61b";
   };
 
+  # tests assume the availability of a mysql/postgresql database
+  doCheck = false;
+
   propagatedBuildInputs = [ django ];
 
   meta = with stdenv.lib; {

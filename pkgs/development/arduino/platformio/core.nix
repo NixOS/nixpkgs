@@ -44,14 +44,14 @@ let
 
 in buildPythonApplication rec {
   pname = "platformio";
-  version = "3.6.2";
+  version = "3.6.4";
 
   # pypi tarballs don't contain tests - https://github.com/platformio/platformio-core/issues/1964
   src = fetchFromGitHub {
     owner = "platformio";
     repo = "platformio-core";
     rev = "v${version}";
-    sha256 = "1558adr73d7mgp0z92q9vzbgarddimadyk4467z8i3yp4g8k5irk";
+    sha256 = "1c1y099xvpdh35n8fln642psa4xsaaqly2i2jgkvhrb9yl77x5aj";
   };
 
   propagatedBuildInputs =  [

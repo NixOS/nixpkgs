@@ -43,6 +43,8 @@ let
     inherit lua;
   };
 
+  luarocks-nix = callPackage ../development/tools/misc/luarocks/luarocks-nix.nix { };
+
   basexx = buildLuaPackage rec {
     version = "0.4.0";
     name = "basexx-${version}";

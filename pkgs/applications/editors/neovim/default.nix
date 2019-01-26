@@ -20,6 +20,13 @@ let
       sha256 = "07ncvgp6xfhiwc6hd7qf7zk28n3yj47p26qj1ji29vqkwnk28y3s";
     };
 
+    patches = [
+      # introduce a system-wide rplugin.vim in addition to the user one
+      # necessary so that nix can handle `UpdateRemotePlugins` for the plugins
+      # it installs. See https://github.com/neovim/neovim/issues/9413.
+      ./system_rplugin_manifest.patch
+    ];
+
     enableParallelBuilding = true;
 
     buildInputs = [
@@ -45,6 +52,13 @@ let
     LUA_CPATH = stdenv.lib.concatStringsSep ";" (map luaPackages.getLuaCPath lualibs);
 
     lualibs = [ luaPackages.mpack luaPackages.lpeg luaPackages.luabitop ];
+
+    # nvim --version output retains compilation flags and references to build tools
+    postPatch = ''
+      substituteInPlace src/nvim/version.c --replace NVIM_VERSION_CFLAGS "";
+    '';
+    # check that the above patching actually works
+    disallowedReferences = [ stdenv.cc ];
 
     cmakeFlags = [
       "-DLUA_PRG=${luaPackages.lua}/bin/lua"
