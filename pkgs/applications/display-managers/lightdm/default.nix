@@ -79,6 +79,6 @@ stdenv.mkDerivation rec {
     description = "A cross-desktop display manager.";
     platforms = platforms.linux;
     license = licenses.gpl3;
-    maintainers = with maintainers; [ ocharles wkennington worldofpeace ];
+    maintainers = with maintainers; [ ocharles worldofpeace ];
   };
 }

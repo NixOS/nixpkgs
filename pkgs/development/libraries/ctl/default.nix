@@ -16,7 +16,6 @@ stdenv.mkDerivation {
     homepage = http://ampasctl.sourceforge.net;
     license = "A.M.P.A.S";
     platforms = platforms.all;
-    maintainers = with maintainers; [ wkennington ];
   };
 
   passthru.source = source;

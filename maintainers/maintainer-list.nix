@@ -4908,11 +4908,6 @@
     github = "wjlroe";
     name = "William Roe";
   };
-  wkennington = {
-    email = "william@wkennington.com";
-    github = "wkennington";
-    name = "William A. Kennington III";
-  };
   wmertens = {
     email = "Wout.Mertens@gmail.com";
     github = "wmertens";

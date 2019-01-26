@@ -31,6 +31,6 @@ stdenv.mkDerivation rec {
     description = "Fast, multi-threaded malloc() and nifty performance analysis tools";
     platforms = with platforms; linux ++ darwin;
     license = licenses.bsd3;
-    maintainers = with maintainers; [ vcunat wkennington ];
+    maintainers = with maintainers; [ vcunat ];
   };
 }

@@ -171,7 +171,7 @@ stdenv.mkDerivation {
   meta = with stdenv.lib; {
     homepage = https://www.rust-lang.org/;
     description = "A safe, concurrent, practical language";
-    maintainers = with maintainers; [ madjar cstrahan wizeman globin havvy wkennington ];
+    maintainers = with maintainers; [ madjar cstrahan wizeman globin havvy ];
     license = [ licenses.mit licenses.asl20 ];
     platforms = platforms.linux ++ platforms.darwin;
     broken = broken;

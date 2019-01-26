@@ -165,7 +165,7 @@ stdenv.mkDerivation {
     homepage = https://ceph.com/;
     description = "Distributed storage system";
     license = licenses.lgpl21;
-    maintainers = with maintainers; [ adev ak wkennington ];
+    maintainers = with maintainers; [ adev ak ];
     platforms = platforms.unix;
   };
 

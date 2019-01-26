@@ -50,6 +50,5 @@ stdenv.mkDerivation rec {
     description = "An Open Source implementation of the iCalendar protocols";
     license = licenses.mpl20;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ wkennington ];
   };
 }

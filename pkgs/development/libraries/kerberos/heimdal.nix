@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
 
   postUnpack = ''
     sed -i '/^DEFAULT_INCLUDES/ s,$, -I..,' source/cf/Makefile.am.common
-    sed -i -e 's/date/date --date="@$SOURCE_DATE_EPOCH"/' source/configure.ac 
+    sed -i -e 's/date/date --date="@$SOURCE_DATE_EPOCH"/' source/configure.ac
   '';
 
   preConfigure = ''
@@ -92,7 +92,6 @@ stdenv.mkDerivation rec {
     description = "An implementation of Kerberos 5 (and some more stuff)";
     license = licenses.bsd3;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ wkennington ];
   };
 
   passthru.implementation = "heimdal";

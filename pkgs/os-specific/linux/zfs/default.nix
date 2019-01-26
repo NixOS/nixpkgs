@@ -149,7 +149,7 @@ let
         homepage = http://zfsonlinux.org/;
         license = licenses.cddl;
         platforms = platforms.linux;
-        maintainers = with maintainers; [ jcumming wizeman wkennington fpletz globin ];
+        maintainers = with maintainers; [ jcumming wizeman fpletz globin ];
       };
     };
 in {

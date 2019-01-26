@@ -26,7 +26,6 @@ stdenv.mkDerivation rec {
       certificates, and create certificate requests, and other operations.
       A shared library and a command-line tool is included.
     '';
-    maintainers = with maintainers; [ wkennington ];
     license = licenses.bsd2;
     platforms = platforms.all;
   };
