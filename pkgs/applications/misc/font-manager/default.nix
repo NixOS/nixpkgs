@@ -1,25 +1,27 @@
-{ stdenv, fetchFromGitHub, automake, autoconf, libtool,
-  pkgconfig, file, intltool, libxml2, json-glib , sqlite, itstool,
-  librsvg, vala, gnome3, wrapGAppsHook, gobject-introspection
+{ stdenv, fetchFromGitHub, meson, ninja, gettext, python3,
+  pkgconfig, libxml2, json-glib , sqlite, itstool, librsvg,
+  vala, gnome3, desktop-file-utils, wrapGAppsHook, gobject-introspection
 }:
 
 stdenv.mkDerivation rec {
-  name = "font-manager-${version}";
-  version = "0.7.3.1";
+  pname = "font-manager";
+  version = "0.7.4.1";
 
   src = fetchFromGitHub {
     owner = "FontManager";
     repo = "master";
     rev = version;
-    sha256 = "0i65br0bk3r6x8wcl8jhc0v0agl0k6fy5g60ss1bnw4md7ldpgyi";
-    };
+    sha256 = "1zy419zzc95h4gxvl88acqjbwlnmwybj23rx3vkc62j3v3w4nlay";
+  };
 
   nativeBuildInputs = [
     pkgconfig
-    automake autoconf libtool
-    file
-    intltool
+    meson
+    ninja
+    gettext
+    python3
     itstool
+    desktop-file-utils
     vala
     gnome3.yelp-tools
     wrapGAppsHook
@@ -33,21 +35,19 @@ stdenv.mkDerivation rec {
     sqlite
     librsvg
     gnome3.gtk
-    gnome3.libgee
     gnome3.defaultIconTheme
   ];
 
-  enableParallelBuilding = true;
+  patches = [ ./correct-post-install.patch ];
 
-  preConfigure = ''
-    NOCONFIGURE=true ./autogen.sh
-    substituteInPlace configure --replace "/usr/bin/file" "${file}/bin/file"
-  '';
-
-  configureFlags = [
-    "--with-file-roller"
-    "--disable-pycompile"
+  mesonFlags = [
+    "-Ddisable_pycompile=true"
   ];
+
+  postPatch = ''
+    chmod +x meson_post_install.py
+    patchShebangs meson_post_install.py
+  '';
 
   meta = {
     homepage = https://fontmanager.github.io/;
