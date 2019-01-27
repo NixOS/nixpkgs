@@ -5,7 +5,7 @@ callPackage ./generic.nix (args // rec {
 
   src = fetchurl {
     url = "mirror://gnupg/gnutls/v3.6/gnutls-${version}.tar.xz";
-    sha256 = "19rcfgsfxb01cyz8jxmmgkjqc7y5s97amajzyknk1i1amywcm6mv"; # 3.6.6
+    sha256 = "19rcfgsfxb01cyz8jxmmgkjqc7y5s97amajzyknk1i1amywcm6mv";
   };
 
   # Skip some tests:
