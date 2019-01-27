@@ -6,15 +6,15 @@ with rustPlatform;
 
 buildRustPackage rec {
   name = "exa-${version}";
-  version = "0.8.0";
+  version = "2019-01-26";
 
-  cargoSha256 = "08zzn3a32xfjkmpawcjppn1mr26ws3iv40cckiz8ldz4qc8y9gdh";
+  cargoSha256 = "1kv4g31cl6x68nigxg38iixm4gjfj9x27zyjlfpaf5jx6lkwda44";
 
   src = fetchFromGitHub {
     owner = "ogham";
     repo = "exa";
-    rev = "v${version}";
-    sha256 = "0jy11a3xfnfnmyw1kjmv4ffavhijs8c940kw24vafklnacx5n88m";
+    rev = "058b4a57bdb1e25cbdacc0fbd1eefc09bc5f1e95";
+    sha256 = "17rj4cavmj3r75296p4m907wccd9gwl95488i62lddy5j1xxm927";
   };
 
   nativeBuildInputs = [ cmake pkgconfig perl ];
