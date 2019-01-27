@@ -36,7 +36,7 @@
 , libmypaint
 , gexiv2
 , harfbuzz
-, mypaint-brushes
+, mypaint-brushes1
 , libwebp
 , libheif
 , libgudev
@@ -102,7 +102,7 @@ in stdenv.mkDerivation rec {
     xorg.libXpm
     glib-networking
     libmypaint
-    mypaint-brushes
+    mypaint-brushes1
   ] ++ lib.optionals stdenv.isDarwin [
     AppKit
     Cocoa
