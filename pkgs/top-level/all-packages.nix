@@ -4952,6 +4952,8 @@ in
 
   paper-gtk-theme = callPackage ../misc/themes/paper { };
 
+  paperless = callPackage ../applications/office/paperless { };
+
   paperwork = callPackage ../applications/office/paperwork { };
 
   papertrail = callPackage ../tools/text/papertrail { };
