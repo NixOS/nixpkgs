@@ -1,20 +1,29 @@
-{ stdenv, buildPythonApplication, fetchFromGitHub, requests, dmenu }:
+{ stdenv, buildPythonApplication, fetchFromGitHub, substituteAll, requests, dmenu }:
 
 buildPythonApplication rec {
-  name = "dmensamenu-${version}";
-  version = "1.1.1";
-
-  propagatedBuildInputs = [
-    requests
-    dmenu
-  ];
+  pname = "dmensamenu";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "dotlambda";
     repo = "dmensamenu";
     rev = version;
-    sha256 = "0gc23k2zbv9zfc0v27y4spiva8cizxavpzd5pch5qbawh2lak6a3";
+    sha256 = "15c8g2vdban3dw3g979icypgpx52irpvv39indgk19adicgnzzqp";
   };
+
+  patches = [
+    (substituteAll {
+      src = ./dmenu-path.patch;
+      inherit dmenu;
+    })
+  ];
+
+  propagatedBuildInputs = [
+    requests
+  ];
+
+  # No tests implemented
+  doCheck = false;
 
   meta = with stdenv.lib; {
     homepage = https://github.com/dotlambda/dmensamenu;
