@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, meson, ninja, pkgconfig, gettext, gmime, libxml2, gobject-introspection, gnome3 }:
+{ stdenv, fetchurl, meson, ninja, pkgconfig, gettext, libxml2, gobject-introspection, gnome3 }:
 
 stdenv.mkDerivation rec {
   pname = "totem-pl-parser";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ meson ninja pkgconfig gettext gobject-introspection ];
-  buildInputs = [ gmime libxml2 ];
+  buildInputs = [ libxml2 ];
 
   meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/Apps/Videos;
