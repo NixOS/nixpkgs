@@ -4,13 +4,13 @@
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "dde-polkit-agent";
-  version = "0.2.1";
+  version = "0.2.4";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "1n3hys5hhhd99ycpx4im6ihy53vl9c28z7ls7smn117h3ca4c8wc";
+    sha256 = "1x7mv63g8412w1bq7fijsdzi8832qjb6gnr1nykcv7imzlycq9m6";
   };
 
   nativeBuildInputs = [
