@@ -306,7 +306,7 @@ buildStdenv.mkDerivation ({
   ++ flag gssSupport "negotiateauth"
   ++ flag webrtcSupport "webrtc"
   ++ flag crashreporterSupport "crashreporter"
-  ++ lib.optional drmSupport "--enable-eme=widevine"
+  ++ lib.optional (!drmSupport) "--disable-eme"
 
   ++ (if debugBuild then [ "--enable-debug" "--enable-profiling" ]
                     else [ "--disable-debug" "--enable-release"
