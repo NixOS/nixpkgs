@@ -2907,6 +2907,8 @@ in {
 
   django_appconf = callPackage ../development/python-modules/django_appconf { };
 
+  django-auth-ldap = callPackage ../development/python-modules/django-auth-ldap { };
+
   django_colorful = callPackage ../development/python-modules/django_colorful { };
 
   django-cache-url = callPackage ../development/python-modules/django-cache-url { };
