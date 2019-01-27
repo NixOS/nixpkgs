@@ -597,6 +597,8 @@ in
 
   asciinema = callPackage ../tools/misc/asciinema {};
 
+  asciiquarium = callPackage ../applications/misc/asciiquarium {};
+
   asymptote = callPackage ../tools/graphics/asymptote {
     texLive = texlive.combine { inherit (texlive) scheme-small epsf cm-super; };
     gsl = gsl_1;
