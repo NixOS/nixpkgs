@@ -2933,6 +2933,8 @@ in {
 
   django_extensions = callPackage ../development/python-modules/django-extensions { };
 
+  django-filter = callPackage ../development/python-modules/django-filter { };
+
   django-gravatar2 = callPackage ../development/python-modules/django-gravatar2 { };
 
   django_guardian = callPackage ../development/python-modules/django_guardian { };
