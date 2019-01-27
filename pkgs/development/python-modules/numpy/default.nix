@@ -1,7 +1,7 @@
 { stdenv, lib, fetchPypi, python, buildPythonPackage, isPyPy, gfortran, pytest, blas, writeTextFile }:
 
 let
-  blasImplementation = lib.nameFromURL blas.name "-";
+  blasImplementation = (builtins.parseDrvName blas.name).name;
   cfg = writeTextFile {
     name = "site.cfg";
     text = (lib.generators.toINI {} {

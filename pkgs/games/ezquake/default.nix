@@ -19,13 +19,9 @@ stdenv.mkDerivation rec {
     expat curl jansson libpng libjpeg libGLU_combined libXxf86vm pcre SDL2 vim
   ];
 
-  installPhase = with stdenv.lib; let
-    sys = last (splitString "-" stdenv.hostPlatform.system);
-    arch = head (splitString "-" stdenv.hostPlatform.system);
-  in ''
+  installPhase = ''
     mkdir -p $out/bin
-    find .
-    mv ezquake-${sys}-${arch} $out/bin/ezquake
+    mv ezquake-*-* $out/bin/ezquake
   '';
 
   enableParallelBuilding = true;

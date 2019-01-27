@@ -30,7 +30,7 @@ mkDerivation rec {
     ksysguard kwallet kwin plasma-framework plasma-workspace
   ];
 
-  patches = copyPathsToStore (lib.readPathsFromFile ./. ./series);
+  patches = [ ./hwclock-path.patch ./tzdir.patch ];
   postPatch = ''
     sed '1i#include <cmath>' -i kcms/touchpad/src/backends/x11/synapticstouchpad.cpp
   '';

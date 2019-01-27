@@ -11,7 +11,11 @@ mkDerivation {
     license = [ lib.licenses.lgpl21 ];
     maintainers = kdepimTeam;
   };
-  patches = copyPathsToStore (lib.readPathsFromFile ./. ./series);
+  patches = [
+    ./akonadi-paths.patch
+    ./akonadi-timestamps.patch
+    ./0001-Revert-Make-Akonadi-installation-properly-relocatabl.patch
+  ];
   nativeBuildInputs = [ extra-cmake-modules shared-mime-info ];
   buildInputs = [
     kcompletion kconfigwidgets kcrash kdbusaddons kdesignerplugin ki18n

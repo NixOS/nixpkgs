@@ -30,7 +30,10 @@ mkDerivation {
     libcap libdrm
   ];
   outputs = [ "bin" "dev" "out" ];
-  patches = copyPathsToStore (lib.readPathsFromFile ./. ./series);
+  patches = [
+    ./follow-symlinks.patch
+    ./no-setcap-install.patch ./xwayland.patch
+  ];
   CXXFLAGS = [
     ''-DNIXPKGS_XWAYLAND=\"${lib.getBin xwayland}/bin/Xwayland\"''
   ];

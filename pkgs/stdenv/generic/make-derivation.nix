@@ -42,6 +42,10 @@ rec {
     # Configure Phase
     , configureFlags ? []
     , cmakeFlags ? []
+    , mesonFlags ? []
+
+    , passAsFile ? []
+
     , # Target is not included by default because most programs don't care.
       # Including it then would cause needless mass rebuilds.
       #
@@ -244,6 +248,32 @@ rec {
           ++ lib.optional (stdenv.buildPlatform.uname.system != null) "-DCMAKE_HOST_SYSTEM_NAME=${stdenv.buildPlatform.uname.system}"
           ++ lib.optional (stdenv.buildPlatform.uname.processor != null) "-DCMAKE_HOST_SYSTEM_PROCESSOR=${stdenv.buildPlatform.uname.processor}"
           ++ lib.optional (stdenv.buildPlatform.uname.release != null) "-DCMAKE_HOST_SYSTEM_VERSION=${stdenv.buildPlatform.uname.release}";
+          mesonCrossFile = ''
+            [binaries]
+            c = '${stdenv.cc.targetPrefix or ""}cc'
+            cpp = '${stdenv.cc.targetPrefix or ""}c++'
+            ar = '${stdenv.cc.targetPrefix or ""}ar'
+            strip = '${stdenv.cc.targetPrefix or ""}strip'
+            pkgconfig = 'pkg-config'
+          '' + lib.concatStringsSep "\n" (map ({ section, platform }: ''
+            [${section}]
+            system = '${platform.parsed.kernel.name}'
+            cpu_family = '${platform.parsed.cpu.family}'
+            cpu = '${platform.parsed.cpu.name}'
+            endian = ${if platform.isLittleEndian then "'little'" else "'big'"}
+          '') [
+                { section = "build_machine";  platform = stdenv.buildPlatform;  }
+                { section = "host_machine";   platform = stdenv.hostPlatform;   }
+                { section = "target_machine"; platform = stdenv.targetPlatform; }
+              ]
+          );
+          passAsFile = (if passAsFile == null then []
+                        else passAsFile) ++ [ "mesonCrossFile" ];
+          mesonFlags =
+            (/**/ if lib.isString mesonFlags then [mesonFlags]
+             else if mesonFlags == null      then []
+             else                                 mesonFlags)
+            ++ [ "--cross-file=$mesonCrossFilePath" ];
         } // lib.optionalAttrs (attrs.enableParallelBuilding or false) {
           enableParallelChecking = attrs.enableParallelChecking or true;
         } // lib.optionalAttrs (hardeningDisable != [] || hardeningEnable != []) {

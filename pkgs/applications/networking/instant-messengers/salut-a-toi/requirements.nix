@@ -8,7 +8,7 @@ let
 
   xe = buildPythonPackage rec {
     url = "http://www.blarg.net/%7Esteveha/xe-0.7.4.tar.gz";
-    name = stdenv.lib.nameFromURL url ".tar";
+    name = "xe-0.7.4";
     src = fetchurl {
       inherit url;
       sha256 = "0v9878cl0y9cczdsr6xjy8v9l139lc23h4m5f86p4kpf2wlnpi42";
@@ -28,7 +28,7 @@ in {
   pyfeed = (buildPythonPackage rec {
     url = "http://www.blarg.net/%7Esteveha/pyfeed-0.7.4.tar.gz";
 
-    name = stdenv.lib.nameFromURL url ".tar";
+    name = "pyfeed-0.7.4";
 
     src = fetchurl {
       inherit url;
@@ -49,7 +49,7 @@ in {
 
   wokkel = buildPythonPackage (rec {
     url = "http://wokkel.ik.nu/releases/0.7.0/wokkel-0.7.0.tar.gz";
-    name = stdenv.lib.nameFromURL url ".tar";
+    name = "wokkel-0.7.0";
     src = fetchurl {
       inherit url;
       sha256 = "0rnshrzw8605x05mpd8ndrx3ri8h6cx713mp8sl4f04f4gcrz8ml";

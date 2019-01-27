@@ -6,8 +6,8 @@ let
   self = rec {
 
     getRelease = version:
-      pkgs.stdenv.lib.concatStringsSep "." (pkgs.stdenv.lib.take 2 (pkgs.stdenv.lib.splitString "." version));
-  
+      pkgs.stdenv.lib.concatStringsSep "." (pkgs.stdenv.lib.take 2 (pkgs.stdenv.lib.splitVersion version));
+
     atril = callPackage ./atril { };
     caja = callPackage ./caja { };
     caja-dropbox = callPackage ./caja-dropbox { };
@@ -90,7 +90,7 @@ let
       mozo
       pluma
     ];
-  
+
   };
 
 in self

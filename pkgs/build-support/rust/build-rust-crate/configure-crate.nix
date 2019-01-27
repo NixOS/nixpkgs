@@ -2,7 +2,7 @@
 { build, buildDependencies, colors, completeBuildDeps, completeDeps, crateAuthors, crateFeatures, crateName, crateVersion, extraLinkFlags, libName, libPath, release, target_os, verbose, workspace_member }:
 let version_ = lib.splitString "-" crateVersion;
     versionPre = if lib.tail version_ == [] then "" else builtins.elemAt version_ 1;
-    version = lib.splitString "." (lib.head version_);
+    version = lib.splitVersion (lib.head version_);
     rustcOpts = (if release then "-C opt-level=3" else "-C debuginfo=2");
     buildDeps = makeDeps buildDependencies;
     authors = lib.concatStringsSep ":" crateAuthors;
@@ -129,4 +129,3 @@ in ''
   fi
   runHook postConfigure
 ''
-

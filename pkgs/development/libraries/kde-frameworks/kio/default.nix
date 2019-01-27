@@ -20,5 +20,5 @@ mkDerivation {
     kbookmarks kcompletion kconfig kcoreaddons kitemviews kjobwidgets kservice
     kxmlgui qtbase solid
   ];
-  patches = (copyPathsToStore (lib.readPathsFromFile ./. ./series));
+  patches = [ ./kio-debug-module-loader.patch ./samba-search-path.patch ];
 }

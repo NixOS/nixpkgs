@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libcddb ncurses help2man ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ libiconv Carbon IOKit ];
 
-  doCheck = true;
+  doCheck = !stdenv.isDarwin;
 
   meta = with stdenv.lib; {
     description = "A library for OS-independent CD-ROM and CD image access";

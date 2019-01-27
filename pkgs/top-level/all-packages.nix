@@ -21148,7 +21148,9 @@ in
 
   xsokoban = callPackage ../games/xsokoban { };
 
-  inherit (callPackage ../games/quake2/yquake2 { })
+  inherit (callPackage ../games/quake2/yquake2 {
+    inherit (darwin.apple_sdk.frameworks) Cocoa OpenAL;
+  })
     yquake2
     yquake2-ctf
     yquake2-ground-zero

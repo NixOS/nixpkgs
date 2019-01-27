@@ -14,7 +14,7 @@ let
 
   php = mainCfg.phpPackage.override { apacheHttpd = httpd.dev; /* otherwise it only gets .out */ };
 
-  phpMajorVersion = head (splitString "." php.version);
+  phpMajorVersion = head (splitVersion php.version);
 
   mod_perl = pkgs.apacheHttpdPackages.mod_perl.override { apacheHttpd = httpd; };
 
