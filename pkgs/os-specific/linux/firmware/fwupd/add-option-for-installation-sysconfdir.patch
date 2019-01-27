@@ -17,7 +17,6 @@ prefix only to `make install`, but Meson does not support anything like that.
 Until we manage to convince Meson to support install flags, we need to create
 our own install flag.
 ---
- data/installed-tests/meson.build | 2 +-
  data/meson.build                 | 4 ++--
  data/pki/meson.build             | 8 ++++----
  data/remotes.d/meson.build       | 6 +++---
@@ -25,19 +24,8 @@ our own install flag.
  meson_options.txt                | 1 +
  plugins/redfish/meson.build      | 2 +-
  plugins/uefi/meson.build         | 2 +-
- 8 files changed, 19 insertions(+), 12 deletions(-)
+ 7 files changed, 18 insertions(+), 11 deletions(-)
 
-diff --git a/data/installed-tests/meson.build b/data/installed-tests/meson.build
-index eb33fa9f..b32ecb30 100644
---- a/data/installed-tests/meson.build
-+++ b/data/installed-tests/meson.build
-@@ -52,5 +52,5 @@ configure_file(
-   output : 'fwupd-tests.conf',
-   configuration : con2,
-   install: true,
--  install_dir: join_paths(sysconfdir, 'fwupd', 'remotes.d'),
-+  install_dir: join_paths(sysconfdir_install, 'fwupd', 'remotes.d'),
- )
 diff --git a/data/meson.build b/data/meson.build
 index 8dd2ac9a..d4ad1cbc 100644
 --- a/data/meson.build
