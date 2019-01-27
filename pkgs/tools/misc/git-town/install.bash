@@ -18,3 +18,5 @@ make build
 
 mkdir -p $out/bin
 install -m 0555 $GOPATH/bin/git-town $out/bin
+
+
