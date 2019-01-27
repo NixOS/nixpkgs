@@ -29,7 +29,7 @@ let
       homepage    = "https://www.libressl.org";
       license = with licenses; [ publicDomain bsdOriginal bsd0 bsd3 gpl3 isc ];
       platforms   = platforms.all;
-      maintainers = with maintainers; [ thoughtpolice wkennington fpletz globin ];
+      maintainers = with maintainers; [ thoughtpolice fpletz globin ];
     };
   };
 

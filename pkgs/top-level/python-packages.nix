@@ -143,8 +143,6 @@ in {
   acoustics = callPackage ../development/python-modules/acoustics { };
 
   py3to2 = callPackage ../development/python-modules/3to2 { };
-  # Left for backwards compatibility
-  "3to2" = self.py3to2;
 
   absl-py = callPackage ../development/python-modules/absl-py { };
 
@@ -175,6 +173,8 @@ in {
   argon2_cffi = callPackage ../development/python-modules/argon2_cffi { };
 
   asana = callPackage ../development/python-modules/asana { };
+
+  asciimatics = callPackage ../development/python-modules/asciimatics { };
 
   ase = callPackage ../development/python-modules/ase { };
 
@@ -380,6 +380,8 @@ in {
     inherit (pkgs) fuse pkgconfig;
   };
 
+  fuzzywuzzy = callPackage ../development/python-modules/fuzzywuzzy { };
+
   genanki = callPackage ../development/python-modules/genanki { };
 
   gidgethub = callPackage ../development/python-modules/gidgethub { };
@@ -439,6 +441,8 @@ in {
   };
 
   libmr = callPackage ../development/python-modules/libmr { };
+
+  limitlessled = callPackage ../development/python-modules/limitlessled { };
 
   lmtpd = callPackage ../development/python-modules/lmtpd { };
 
@@ -589,8 +593,6 @@ in {
   pyfttt = callPackage ../development/python-modules/pyfttt { };
 
   pygame = callPackage ../development/python-modules/pygame { };
-
-  pygame-git = callPackage ../development/python-modules/pygame/git.nix { };
 
   pygame_sdl2 = callPackage ../development/python-modules/pygame_sdl2 { };
 
@@ -857,7 +859,11 @@ in {
 
   aiohttp-remotes = callPackage ../development/python-modules/aiohttp-remotes { };
 
+  aiohttp-socks = callPackage ../development/python-modules/aiohttp-socks { };
+
   aioprocessing = callPackage ../development/python-modules/aioprocessing { };
+
+  aiorpcx = callPackage ../development/python-modules/aiorpcx { };
 
   ajpy = callPackage ../development/python-modules/ajpy { };
 
@@ -955,9 +961,6 @@ in {
   atomiclong = callPackage ../development/python-modules/atomiclong { };
 
   atomicwrites = callPackage ../development/python-modules/atomicwrites { };
-
-  # argparse is part of stdlib in 2.7 and 3.2+
-  argparse = null;
 
   astroid = if isPy3k then callPackage ../development/python-modules/astroid { }
             else callPackage ../development/python-modules/astroid/1.6.nix { };
@@ -1994,9 +1997,6 @@ in {
   oset = callPackage ../development/python-modules/oset { };
 
   pamela = callPackage ../development/python-modules/pamela { };
-
-  # These used to be here but were moved to all-packages, but I'll leave them around for a while.
-  pants = pkgs.pants;
 
   paperspace = callPackage ../development/python-modules/paperspace { };
 
@@ -3805,8 +3805,6 @@ in {
   pyserial = callPackage ../development/python-modules/pyserial {};
 
   pymongo = callPackage ../development/python-modules/pymongo {};
-
-  pymongo_2_9_1 = callPackage ../development/python-modules/pymongo/2_9_1.nix { };
 
   pyperclip = callPackage ../development/python-modules/pyperclip { };
 

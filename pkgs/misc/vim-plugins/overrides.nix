@@ -4,6 +4,7 @@
 , xkb-switch, fzf, skim
 , python3, boost, icu, ncurses
 , ycmd, rake
+, gobject-introspection, glib, wrapGAppsHook
 , substituteAll
 , languagetool
 , Cocoa, CoreFoundation, CoreServices
@@ -171,6 +172,35 @@ self: super: {
   ncm2-ultisnips = super.ncm2-ultisnips.overrideAttrs(old: {
     dependencies = with super; [ ultisnips ];
   });
+
+  sved = let
+    # we put the script in its own derivation to benefit the magic of wrapGAppsHook
+    svedbackend = stdenv.mkDerivation {
+      name = "svedbackend-${super.sved.name}";
+      inherit (super.sved) src;
+      nativeBuildInputs = [ wrapGAppsHook ];
+      buildInputs = [
+        gobject-introspection
+        glib
+        (python3.withPackages(ps: with ps; [ pygobject3 pynvim dbus-python ]))
+      ];
+      preferLocalBuild = true;
+      installPhase = ''
+        install -Dt $out/bin ftplugin/evinceSync.py
+      '';
+    };
+  in
+    super.sved.overrideAttrs(old: {
+      preferLocalBuild = true;
+      postPatch = ''
+        rm ftplugin/evinceSync.py
+        ln -s ${svedbackend}/bin/evinceSync.py ftplugin/evinceSync.py
+      '';
+      meta = {
+        description = "synctex support between vim/neovim and evince";
+      };
+    });
+
 
   vimshell-vim = super.vimshell-vim.overrideAttrs(old: {
     dependencies = with super; [ vimproc-vim ];

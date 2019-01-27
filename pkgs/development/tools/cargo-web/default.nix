@@ -1,21 +1,21 @@
-{ stdenv, fetchFromGitHub, openssl, pkgconfig, rustPlatform
+{ stdenv, fetchFromGitHub, openssl, perl, pkgconfig, rustPlatform
 , CoreServices, Security
 }:
 
 rustPlatform.buildRustPackage rec {
   name = "cargo-web-${version}";
-  version = "0.6.15";
+  version = "0.6.23";
 
   src = fetchFromGitHub {
     owner = "koute";
     repo = "cargo-web";
     rev = version;
-    sha256 = "076g7cd9v53vi8xvd4kfsiyzw1m2hhd1lwlwcv2dx2s5vlw4dxzh";
+    sha256 = "1qbi3z4x39il07xlhfvq5ckzjqrf0yf6p8qidf24fp92gb940zxr";
   };
 
-  cargoSha256 = "157av9zkirr00w9v11mh7yp8w36sy7rw6i80i5jmi0mgrdvcg5si";
+  cargoSha256 = "16wzgyn3k0yn70y0ciliyx1sjgppmkv9b4bn9p4x0qi6l0ah7fdp";
 
-  nativeBuildInputs = [ openssl pkgconfig ];
+  nativeBuildInputs = [ openssl perl pkgconfig ];
   buildInputs = stdenv.lib.optionals stdenv.isDarwin [ CoreServices Security ];
 
   meta = with stdenv.lib; {

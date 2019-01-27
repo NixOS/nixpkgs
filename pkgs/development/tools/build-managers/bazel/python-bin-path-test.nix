@@ -42,8 +42,10 @@ let
 
   testBazel = runLocal "bazel-test-builtin-rules" ''
     export HOME=$(mktemp -d)
-    cp -r ${workspaceDir}/* .
-    ${bazel}/bin/bazel --output_base=/tmp/bazel-tests/wd\
+    # Note https://github.com/bazelbuild/bazel/issues/5763#issuecomment-456374609
+    # about why to create a subdir for the workspace.
+    cp -r ${workspaceDir} wd && chmod u+w wd && cd wd
+    ${bazel}/bin/bazel \
       test \
         --test_output=errors \
         --host_javabase='@local_jdk//:jdk' \

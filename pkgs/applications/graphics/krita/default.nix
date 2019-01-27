@@ -8,13 +8,21 @@
 , python3
 }:
 
+let
+
+major = "4.1";
+minor = "7";
+patch = "101";
+
+in
+
 mkDerivation rec {
   name = "krita-${version}";
-  version = "4.1.5";
+  version = "${major}.${minor}.${patch}";
 
   src = fetchurl {
-    url = "https://download.kde.org/stable/krita/${version}/${name}.tar.gz";
-    sha256 = "1by8p8ifdp03f05bhg8ygdd1j036anfpjjnzbx63l2fbmy9k6q10";
+    url = "https://download.kde.org/stable/krita/${major}.${minor}/${name}.tar.gz";
+    sha256 = "0pvghb17vj3y19wa1n1zfg3yl5206ir3y45znrgdgdw076m5pjav";
   };
 
   nativeBuildInputs = [ cmake extra-cmake-modules ];

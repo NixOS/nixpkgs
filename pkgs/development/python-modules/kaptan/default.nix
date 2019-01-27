@@ -15,11 +15,13 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ pyyaml ];
 
+  # No tests in archive
+  doCheck = false;
+
   meta = with stdenv.lib; {
     description = "Configuration manager for python applications";
-    homepage = https://emre.github.io/kaptan/;
+    homepage = https://kaptan.readthedocs.io/;
     license = licenses.bsd3;
-    platforms = platforms.linux;
     maintainers = with maintainers; [ jgeerds ];
   };
 

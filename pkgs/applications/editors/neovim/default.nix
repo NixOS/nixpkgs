@@ -53,6 +53,13 @@ let
 
     lualibs = [ luaPackages.mpack luaPackages.lpeg luaPackages.luabitop ];
 
+    # nvim --version output retains compilation flags and references to build tools
+    postPatch = ''
+      substituteInPlace src/nvim/version.c --replace NVIM_VERSION_CFLAGS "";
+    '';
+    # check that the above patching actually works
+    disallowedReferences = [ stdenv.cc ];
+
     cmakeFlags = [
       "-DLUA_PRG=${luaPackages.lua}/bin/lua"
       "-DGPERF_PRG=${gperf}/bin/gperf"

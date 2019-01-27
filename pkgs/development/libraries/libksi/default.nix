@@ -23,6 +23,5 @@ stdenv.mkDerivation rec {
     description = "Keyless Signature Infrastructure API library";
     license = licenses.asl20;
     platforms = platforms.all;
-    maintainers = with maintainers; [ wkennington ];
   };
 }

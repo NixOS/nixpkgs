@@ -358,6 +358,10 @@ in
       '';
     } else {};
 
+  semian = attrs: {
+    buildInputs = [ openssl ];
+  };
+
   sequel_pg = attrs: {
     buildInputs = [ postgresql ];
   };

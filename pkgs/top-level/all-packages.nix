@@ -320,7 +320,7 @@ in
     ... # For hash agility
   }@args: fetchzip ({
     inherit name;
-    url = "https://${domain}/api/v4/projects/${lib.optionalString (group != null) "${group}%2F"}${owner}%2F${repo}/repository/archive.tar.gz?sha=${rev}";
+    url = "https://${domain}/api/v4/projects/${lib.optionalString (group != null) "${lib.replaceStrings ["."] ["%2E"] group}%2F"}${lib.replaceStrings ["."] ["%2E"] owner}%2F${lib.replaceStrings ["."] ["%2E"] repo}/repository/archive.tar.gz?sha=${rev}";
     meta.homepage = "https://${domain}/${lib.optionalString (group != null) "${group}/"}${owner}/${repo}/";
   } // removeAttrs args [ "domain" "owner" "group" "repo" "rev" ]) // { inherit rev; };
 
@@ -596,6 +596,8 @@ in
   ascii = callPackage ../tools/text/ascii { };
 
   asciinema = callPackage ../tools/misc/asciinema {};
+
+  asciiquarium = callPackage ../applications/misc/asciiquarium {};
 
   asymptote = callPackage ../tools/graphics/asymptote {
     texLive = texlive.combine { inherit (texlive) scheme-small epsf cm-super; };
@@ -1490,6 +1492,8 @@ in
   greg = callPackage ../applications/audio/greg {
     pythonPackages = python3Packages;
   };
+
+  grim = callPackage ../tools/graphics/grim { };
 
   gringo = callPackage ../tools/misc/gringo { };
 
@@ -3152,6 +3156,8 @@ in
   gx = callPackage ../tools/package-management/gx { };
   gx-go = callPackage ../tools/package-management/gx/go { };
 
+  efitools = callPackage ../tools/security/efitools { };
+
   sbsigntool = callPackage ../tools/security/sbsigntool { };
 
   gsmartcontrol = callPackage ../tools/misc/gsmartcontrol { };
@@ -3807,9 +3813,7 @@ in
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
 
-  medfile = callPackage ../development/libraries/medfile {
-    hdf5 = hdf5_1_8;
-  };
+  medfile = callPackage ../development/libraries/medfile { };
 
   memtester = callPackage ../tools/system/memtester { };
 
@@ -5738,7 +5742,7 @@ in
 
   ted = callPackage ../tools/typesetting/ted { };
 
-  teamviewer = libsForQt5.callPackage ../applications/networking/remote/teamviewer { };
+  teamviewer = libsForQt56.callPackage ../applications/networking/remote/teamviewer { };
 
   teleconsole = callPackage ../tools/misc/teleconsole { };
 
@@ -8897,6 +8901,8 @@ in
 
   mbed-cli = callPackage ../development/tools/mbed-cli { };
 
+  mdl = callPackage ../development/tools/misc/mdl { };
+
   minify = callPackage ../development/web/minify { };
 
   minizinc = callPackage ../development/tools/minizinc { };
@@ -9093,7 +9099,7 @@ in
   selendroid = callPackage ../development/tools/selenium/selendroid { };
 
   sconsPackages = callPackage ../development/tools/build-managers/scons { };
-  scons = sconsPackages.scons_3_0_3;
+  scons = sconsPackages.scons_latest;
 
   mill = callPackage ../development/tools/build-managers/mill { };
 
@@ -12079,8 +12085,6 @@ in
     buildPythonApplication click future six;
   };
 
-  postgis = callPackage ../development/libraries/postgis { };
-
   protobuf = protobuf3_6;
 
   protobuf3_6 = callPackage ../development/libraries/protobuf/3.6.nix { };
@@ -13940,14 +13944,15 @@ in
 
   timescaledb-parallel-copy = callPackage ../development/tools/database/timescaledb-parallel-copy { };
 
-  postgresql = postgresql_9_6;
-
-  inherit (callPackages ../servers/sql/postgresql { })
+  inherit (import ../servers/sql/postgresql pkgs super)
     postgresql_9_4
     postgresql_9_5
     postgresql_9_6
     postgresql_10
-    postgresql_11;
+    postgresql_11
+  ;
+  postgresql = postgresql_9_6.override { this = postgresql; };
+  postgresqlPackages = recurseIntoAttrs postgresql.pkgs;
 
   postgresql_jdbc = callPackage ../development/java-modules/postgresql_jdbc { };
 
@@ -14331,7 +14336,7 @@ in
   cockroachdb = callPackage ../servers/sql/cockroachdb { };
 
   conky = callPackage ../os-specific/linux/conky ({
-    lua = lua5_1; # conky can use 5.2, but toluapp can not
+    lua = lua5_3_compat;
     libXNVCtrl = linuxPackages.nvidia_x11.settings.libXNVCtrl;
     pulseSupport = config.pulseaudio or false;
   } // config.conky or {});
@@ -14861,6 +14866,7 @@ in
 
   # Hardened linux
   hardenedLinuxPackagesFor = kernel: linuxPackagesFor (kernel.override {
+    features.ia32Emulation = false;
     extraConfig = import ../os-specific/linux/kernel/hardened-config.nix {
       inherit stdenv;
       inherit (kernel) version;
@@ -16252,6 +16258,11 @@ in
   bevelbar = callPackage ../applications/window-managers/bevelbar { };
 
   bibletime = callPackage ../applications/misc/bibletime { };
+
+  bino3d = libsForQt5.callPackage ../applications/video/bino3d {
+    ffmpeg = ffmpeg_4;
+    glew = glew110;
+  };
 
   bitcoinarmory = callPackage ../applications/misc/bitcoinarmory { pythonPackages = python2Packages; };
 
@@ -18725,7 +18736,9 @@ in
 
   vivaldi-ffmpeg-codecs = callPackage ../applications/networking/browsers/vivaldi/ffmpeg-codecs.nix {};
 
-  openmpt123 = callPackage ../applications/audio/openmpt123 {};
+  openmpt123 = callPackage ../applications/audio/openmpt123 {
+    usePulseAudio = config.pulseaudio or false;
+  };
 
   opusfile = callPackage ../applications/audio/opusfile { };
 
@@ -18815,7 +18828,9 @@ in
 
   picard = callPackage ../applications/audio/picard { };
 
-  picocom = callPackage ../tools/misc/picocom { };
+  picocom = callPackage ../tools/misc/picocom {
+    inherit (darwin.apple_sdk.frameworks) IOKit;
+  };
 
   pidgin = callPackage ../applications/networking/instant-messengers/pidgin {
     openssl = if config.pidgin.openssl or true then openssl else null;
@@ -19551,6 +19566,7 @@ in
   syncthing-tray = callPackage ../applications/misc/syncthing-tray { };
 
   synergy = callPackage ../applications/misc/synergy {
+    inherit (darwin) cf-private;
     inherit (darwin.apple_sdk.frameworks) ApplicationServices Carbon Cocoa CoreServices ScreenSaver;
   };
 
@@ -21868,6 +21884,8 @@ in
   leo2 = callPackage ../applications/science/logic/leo2 {
      ocaml = ocaml-ng.ocamlPackages_4_01_0.ocaml;};
 
+  leo3-bin = callPackage ../applications/science/logic/leo3/binary.nix {};
+
   logisim = callPackage ../applications/science/logic/logisim {};
 
   ltl2ba = callPackage ../applications/science/logic/ltl2ba {};
@@ -21938,6 +21956,7 @@ in
   };
 
   z3 = callPackage ../applications/science/logic/z3 { python = python2; };
+  z3-tptp = callPackage ../applications/science/logic/z3/tptp.nix {};
 
   tlaplus = callPackage ../applications/science/logic/tlaplus {};
   tlaps = callPackage ../applications/science/logic/tlaplus/tlaps.nix {
@@ -22674,6 +22693,8 @@ in
   nix-template-rpm = callPackage ../build-support/templaterpm { inherit (pythonPackages) python toposort; };
 
   nix-top = callPackage ../tools/package-management/nix-top { };
+
+  nix-universal-prefetch = callPackage ../tools/package-management/nix-universal-prefetch { };
 
   nix-repl = throw (
     "nix-repl has been removed because it's not maintained anymore, " +

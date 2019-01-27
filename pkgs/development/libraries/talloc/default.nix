@@ -37,7 +37,6 @@ stdenv.mkDerivation rec {
     description = "Hierarchical pool based memory allocator with destructors";
     homepage = https://tdb.samba.org/;
     license = licenses.gpl3;
-    maintainers = with maintainers; [ wkennington ];
     platforms = platforms.all;
   };
 }

@@ -199,13 +199,13 @@ rec {
   # https://github.com/docker/docker-ce/tree/v${version}/components/engine/hack/dockerfile/install/*
 
   docker_18_09 = dockerGen rec {
-    version = "18.09.0";
-    rev = "4d60db472b2bde6931072ca6467f2667c2590dff"; # git commit
-    sha256 = "0py944f5k71c1cf6ci96vnqk43d5979w7r82cngaxk1g6za6k5yj";
-    runcRev = "69663f0bd4b60df09991c08812a60108003fa340";
-    runcSha256 = "1l37r97l3ra4ph069w190d05r0a43s76nn9jvvlkbwrip1cp6gyq";
-    containerdRev = "468a545b9edcd5932818eb9de8e72413e616e86e";
-    containerdSha256 = "1rp015cm5fw9kfarcmfhfkr1sh0iz7kvqls6f8nfhwrrz5armd5v";
+    version = "18.09.1";
+    rev = "4c52b901c6cb019f7552cd93055f9688c6538be4"; # git commit
+    sha256 = "0q2789afx07pkisgp9iqrbac5k7xca54w1an4mf5mw34xn8yc4xc";
+    runcRev = "96ec2177ae841256168fcf76954f7177af9446eb";
+    runcSha256 = "1qr9msx6vs37jr0rk3r8x2q51fsk50c78a3999kd0snjy9bxmfhd";
+    containerdRev = "9754871865f7fe2f4e74d43e2fc7ccd237edcbce";
+    containerdSha256 = "065snv0s3v3z0ghadlii4w78qnhchcbx2kfdrvm8fk8gb4pkx1ya";
     tiniRev = "fec3683b971d9c3ef73f284f176672c44b448662";
     tiniSha256 = "1h20i3wwlbd8x4jr2gz68hgklh0lb0jj7y5xk1wvr8y58fip1rdn";
   };

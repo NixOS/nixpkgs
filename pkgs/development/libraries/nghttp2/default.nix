@@ -50,6 +50,5 @@ stdenv.mkDerivation rec {
     description = "A C implementation of HTTP/2";
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = with maintainers; [ wkennington ];
   };
 }

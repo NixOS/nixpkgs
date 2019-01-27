@@ -34,6 +34,5 @@ stdenv.mkDerivation rec {
     description = "Artificial benchmark for identifying weaknesses in the memory subsystem";
     license = licenses.mit;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ wkennington ];
   };
 }

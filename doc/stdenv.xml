@@ -1279,7 +1279,9 @@ makeFlags = [ "PREFIX=$(out)" ];
        <command>make</command>. You must use this instead of
        <varname>makeFlags</varname> if the arguments contain spaces, e.g.
 <programlisting>
-makeFlagsArray=(CFLAGS="-O0 -g" LDFLAGS="-lfoo -lbar")
+preBuild = ''
+  makeFlagsArray+=(CFLAGS="-O0 -g" LDFLAGS="-lfoo -lbar")
+'';
 </programlisting>
        Note that shell arrays cannot be passed through environment variables,
        so you cannot set <varname>makeFlagsArray</varname> in a derivation
