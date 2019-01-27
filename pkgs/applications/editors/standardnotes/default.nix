@@ -1,4 +1,4 @@
-{ stdenv, appimage-run, fetchurl, runtimeShell }:
+{ stdenv, appimageTools, fetchurl }:
 
 let
   version = "3.0.6";
@@ -12,9 +12,7 @@ let
     "i386-linux" = "0czhlbacjks9x8y2w46nzlvk595psqhqw0vl0bvsq7sz768dk0ni";
     "x86_64-linux" = "0haji9h8rrm9yvqdv6i2y6xdd0yhsssjjj83hmf6cb868lwyigsf";
   }.${stdenv.hostPlatform.system};
-in
-
-stdenv.mkDerivation rec {
+in appimageTools.wrapType2 rec {
   name = "standardnotes-${version}";
 
   src = fetchurl {
@@ -22,17 +20,7 @@ stdenv.mkDerivation rec {
     inherit sha256;
   };
 
-  buildInputs = [ appimage-run ];
-
-  unpackPhase = ":";
-
-  installPhase = ''
-    mkdir -p $out/{bin,share}
-    cp $src $out/share/standardNotes.AppImage
-    echo "#!${runtimeShell}" > $out/bin/standardnotes
-    echo "${appimage-run}/bin/appimage-run $out/share/standardNotes.AppImage" >> $out/bin/standardnotes
-    chmod +x $out/bin/standardnotes $out/share/standardNotes.AppImage
-  '';
+  extraInstallCommands = "ln -s $out/bin/${name} $out/bin/standardnotes";
 
   meta = with stdenv.lib; {
     description = "A simple and private notes app";
