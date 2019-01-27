@@ -1,11 +1,11 @@
 { stdenv, fetchurl, glib, gtk2, pkgconfig, hamlib }:
 stdenv.mkDerivation rec {
   name = "xlog-${version}";
-  version = "2.0.15";
+  version = "2.0.17";
   
   src = fetchurl {
     url = "https://download.savannah.gnu.org/releases/xlog/${name}.tar.gz";
-    sha256 = "0an883wqw3zwpw8nqinm9cb17hp2xw9vf603k4l2345p61jqdw2j";
+    sha256 = "0vmn8518zk7qk1mbp1h8dm0f8fx0z0jvmy42c1n15il714lj7vsl";
   };
 
   buildInputs = [ glib pkgconfig gtk2 hamlib ];
