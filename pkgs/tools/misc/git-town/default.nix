@@ -1,18 +1,30 @@
-let 
-  sha_hash = (import ./sha.nix);
-  version = (import ./version.nix);
+{ stdenv, buildGoPackage, fetchFromGitHub }: 
+
+let
+  version = "7.2.0";
 in
+  buildGoPackage rec {
+    name = "git-town-${version}";
+    version = "7.2.0";
 
-{ stdenv, fetchurl, go}:
+    goPackagePath = "github.com/Originate/git-town";
 
-  stdenv.mkDerivation { 
-    name = "git-town-7.2.0";
-    builder = ./install.bash;
-    src = fetchurl {
-      url = https://github.com/Originate/git-town/archive/v7.2.0.tar.gz;
-      sha256 = sha_hash;
+    src = fetchFromGitHub {
+      owner = "Originate";
+      repo = "git-town";
+      rev = "v${version}";
+      sha256 = "0hr0c6iya34lanfhsg9kj03l4ajalcfxkbn4bgwh0749smhi6mrj";
     };
-    go = go;
-    version = version;
+
+    buildFlagsArray = ''
+    -ldflags=-X github.com/Originate/git-town/src/cmd.version=v${version} -X github.com/Originate/git-town/src/cmd.buildDate=nix
+    '';
+
+    meta = {
+      description = "Generic, high-level git support for git-flow workflows";
+      homepage = http://www.git-town.com/;
+      maintainers = [ "Originate" "allonsy" ];
+      license = stdenv.lib.licenses.mit;
+    };
   }
 
