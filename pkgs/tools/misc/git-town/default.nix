@@ -1,12 +1,17 @@
-let sha_hash = (import ./sha.nix); in
+let 
+  sha_hash = (import ./sha.nix);
+  version = (import ./version.nix);
+in
 
-{ stdenv, fetchurl, git }:
+{ stdenv, fetchurl, go}:
 
   stdenv.mkDerivation { 
     name = "git-town-7.2.0";
     builder = ./install.bash;
     src = fetchurl {
-      url = https://github.com/Originate/git-town/releases/download/v7.2.0/git-town-linux-amd64;
+      url = https://github.com/Originate/git-town/archive/v7.2.0.tar.gz;
       sha256 = sha_hash;
     };
+    go = go;
+    version = version;
   }
