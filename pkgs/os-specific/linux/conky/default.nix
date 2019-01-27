@@ -33,6 +33,7 @@
 , rssSupport          ? curlSupport
 , weatherMetarSupport ? curlSupport
 , weatherXoapSupport  ? curlSupport
+, journalSupport      ? true, systemd ? null
 , libxml2 ? null
 }:
 
@@ -61,6 +62,7 @@ assert curlSupport         -> curl != null;
 assert rssSupport          -> curlSupport && libxml2 != null;
 assert weatherMetarSupport -> curlSupport;
 assert weatherXoapSupport  -> curlSupport && libxml2 != null;
+assert journalSupport      -> systemd != null;
 
 with stdenv.lib;
 
@@ -103,6 +105,7 @@ stdenv.mkDerivation rec {
     ++ optional  weatherXoapSupport libxml2
     ++ optional  nvidiaSupport      libXNVCtrl
     ++ optional  pulseSupport       libpulseaudio
+    ++ optional  journalSupport     systemd
     ;
 
   cmakeFlags = []
@@ -123,6 +126,7 @@ stdenv.mkDerivation rec {
     ++ optional wirelessSupport     "-DBUILD_WLAN=ON"
     ++ optional nvidiaSupport       "-DBUILD_NVIDIA=ON"
     ++ optional pulseSupport        "-DBUILD_PULSEAUDIO=ON"
+    ++ optional journalSupport      "-DBUILD_JOURNAL=ON"
     ;
 
   # `make -f src/CMakeFiles/conky.dir/build.make src/CMakeFiles/conky.dir/conky.cc.o`:
