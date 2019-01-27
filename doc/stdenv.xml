@@ -2207,7 +2207,8 @@ addEnvHooks "$hostOffset" myBashFunction
        This setup hook moves any installed documentation to the
        <literal>/share</literal> subdirectory directory. This includes
        the man, doc and info directories. This is needed for legacy
-       programs that do not know use the share subdirectory.
+       programs that do not know how to use the
+       <literal>share</literal> subdirectory.
        </para>
      </listitem>
     </varlistentry>
@@ -2219,7 +2220,7 @@ addEnvHooks "$hostOffset" myBashFunction
        <para>
        This setup hook compresses any man pages that have been
        installed. The compression is done using the gzip program. This
-       helps to reduce installed size of packages.
+       helps to reduce the installed size of packages.
        </para>
      </listitem>
     </varlistentry>
@@ -2230,9 +2231,9 @@ addEnvHooks "$hostOffset" myBashFunction
      <listitem>
        <para>
        This runs the strip command on installed binaries and
-       libraries. This removed things like debug symbols when they are
-       not needed. This also helps to reduce installed size of
-       packages.
+       libraries. This removes unnecessary information like debug
+       symbols when they are not needed. This also helps to reduce the
+       installed size of packages.
        </para>
      </listitem>
     </varlistentry>
@@ -2244,10 +2245,11 @@ addEnvHooks "$hostOffset" myBashFunction
        <para>
        This setup hook patches installed scripts to use the full path
        to the shebang interpreter. A shebang interpreter is the first
-       commented line of a script telling the operating system
-       what to use to run this script. In Nix, we want an exact path
-       to that interpreter to be used. This often replcaes
-       <literal>/bin/sh</literal> with a path in the Nix store.
+       commented line of a script telling the operating system which
+       program will run the script (e.g <literal>#!/bin/bash</literal>). In
+       Nix, we want an exact path to that interpreter to be used. This
+       often replaces <literal>/bin/sh</literal> with a path in the
+       Nix store.
        </para>
      </listitem>
     </varlistentry>
@@ -2260,7 +2262,7 @@ addEnvHooks "$hostOffset" myBashFunction
        This verifies that no references are left from the install
        binaries to the directory used to build those binaries. This
        ensures that the binaries do not need things outside the Nix
-       store. This currently Linux only.
+       store. This is currently supported in Linux only.
        </para>
      </listitem>
     </varlistentry>
@@ -2425,9 +2427,9 @@ addEnvHooks "$hostOffset" myBashFunction
 
   <para>
    Here are some more packages that provide a setup hook. Since the
-   mechanism is modular, this probably isn't an exhaustive list. Then
-   again, since the mechanism is only to be used as a last resort, it
-   might be.
+   list of hooks is extensible, this is not an exhaustive list the
+   mechanism is only to be used as a last resort, it might cover most
+   uses.
    <variablelist>
     <varlistentry>
      <term>

@@ -6,8 +6,8 @@
 
  <para>
    When using Nix, you will frequently need to download source code
-   and other file from the internet. Nixpkgs comes with a few helper
-   functions that allow you to fetch fixed-output derivations in
+   and other files from the internet. Nixpkgs comes with a few helper
+   functions that allow you to fetch fixed-output derivations in a
    structured way.
  </para>
 
@@ -48,7 +48,11 @@ stdenv.mkDerivation {
 
  <para>
    <function>fetchpatch</function> works very similarly to
-   <function>fetchurl</function> with the same arguments expected.
+   <function>fetchurl</function> with the same arguments expected. It
+   expects patch files as a source and and performs normalization on
+   them before computing the checksum. For example it will remove
+   comments or other unstable parts that are sometimes added by
+   version control systems and can change over time.
  </para>
 
  <para>
@@ -80,6 +84,9 @@ stdenv.mkDerivation {
       <para>
        Used with Git. Expects <literal>url</literal> to a Git repo,
        <literal>rev</literal>, and <literal>sha256</literal>.
+       <literal>rev</literal> in this case can be full the git commit
+       id (SHA1 hash) or a tag name like
+       <literal>refs/tags/v1.0</literal>.
       </para>
      </listitem>
    </varlistentry>
@@ -141,9 +148,10 @@ stdenv.mkDerivation {
         GitHub HTML page as
         <literal>owner</literal>/<literal>repo</literal>.
         <literal>rev</literal> corresponds to the Git commit hash or
-        tag that will be downloaded from Git. Finally,
-        <literal>sha256</literal>. Again, other hash algorithms are
-        also available but <literal>sha256</literal> is currently
+        tag (e.g <literal>v1.0</literal>) that will be downloaded from
+        Git. Finally, <literal>sha256</literal> corresponds to the
+        hash of the extracted directory. Again, other hash algorithms
+        are also available but <literal>sha256</literal> is currently
         preferred.
       </para>
      </listitem>
