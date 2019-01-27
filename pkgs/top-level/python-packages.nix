@@ -582,6 +582,8 @@ in {
 
   pdfminer = callPackage ../development/python-modules/pdfminer_six { };
 
+  pdftotext = callPackage ../development/python-modules/pdftotext { };
+
   pdfx = callPackage ../development/python-modules/pdfx { };
 
   perf = callPackage ../development/python-modules/perf { };
