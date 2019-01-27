@@ -1,5 +1,5 @@
 { stdenv, fetchurl, alsaLib, bzip2, cairo, dpkg, freetype, gdk_pixbuf
-, glib, gtk2, gtk3, harfbuzz, jdk, lib, xorg
+, wrapGAppsHook, gtk2, gtk3, harfbuzz, jdk, lib, xorg
 , libbsd, libjack2, libpng, ffmpeg
 , libxkbcommon
 , makeWrapper, pixman, autoPatchelfHook
@@ -14,16 +14,15 @@ stdenv.mkDerivation rec {
     sha256 = "0n0fxh9gnmilwskjcayvjsjfcs3fz9hn00wh7b3gg0cv3qqhich8";
   };
 
-  nativeBuildInputs = [ dpkg makeWrapper autoPatchelfHook ];
+  nativeBuildInputs = [ dpkg makeWrapper autoPatchelfHook wrapGAppsHook ];
 
   unpackCmd = "mkdir root ; dpkg-deb -x $curSrc root";
 
   dontBuild    = true;
-  dontPatchELF = true;
-  dontStrip    = true;
+  dontWrapGApps = true; # we only want $gappsWrapperArgs here
 
   buildInputs = with xorg; [
-    alsaLib bzip2.out cairo freetype gdk_pixbuf glib gtk2 gtk3 harfbuzz libX11 libXau
+    alsaLib bzip2.out cairo freetype gdk_pixbuf gtk2 gtk3 harfbuzz libX11 libXau
     libXcursor libXdmcp libXext libXfixes libXrender libbsd libjack2 libpng libxcb
     libxkbfile pixman xcbutil xcbutilwm zlib
   ];
@@ -69,6 +68,7 @@ stdenv.mkDerivation rec {
     while IFS= read -r f ; do
       wrapProgram $f \
         --prefix PATH : "${binPath}" \
+        "''${gappsWrapperArgs[@]}" \
         --set LD_PRELOAD "${libxkbcommon.out}/lib/libxkbcommon.so" || true
     done
 
