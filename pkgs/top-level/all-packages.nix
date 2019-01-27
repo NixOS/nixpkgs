@@ -3221,37 +3221,6 @@ in
 
   pgf_graphics = callPackage ../tools/graphics/pgf { };
 
-
-  # postgresql extensions
-
-  cstore_fdw = callPackage ../servers/sql/postgresql/ext/cstore_fdw.nix {};
-
-  pg_cron = callPackage ../servers/sql/postgresql/ext/pg_cron.nix {};
-
-  pg_hll = callPackage ../servers/sql/postgresql/ext/pg_hll.nix {};
-
-  pgjwt = callPackage ../servers/sql/postgresql/ext/pgjwt.nix {};
-
-  pg_repack = callPackage ../servers/sql/postgresql/ext/pg_repack.nix {};
-
-  pgroonga = callPackage ../servers/sql/postgresql/ext/pgroonga.nix {};
-
-  plv8 = callPackage ../servers/sql/postgresql/ext/plv8.nix {
-    v8 = callPackage ../development/libraries/v8/plv8_6_x.nix {
-      inherit (python2Packages) python;
-    };
-  };
-
-  pg_similarity = callPackage ../servers/sql/postgresql/ext/pg_similarity.nix {};
-
-  pgtap = callPackage ../servers/sql/postgresql/ext/pgtap.nix {};
-
-  pg_topn = callPackage ../servers/sql/postgresql/ext/pg_topn.nix {};
-
-  timescaledb = callPackage ../servers/sql/postgresql/ext/timescaledb.nix {};
-
-  tsearch_extras = callPackage ../servers/sql/postgresql/ext/tsearch_extras.nix { };
-
   pigz = callPackage ../tools/compression/pigz { };
 
   pixz = callPackage ../tools/compression/pixz { };
