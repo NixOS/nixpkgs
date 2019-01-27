@@ -67,9 +67,10 @@
    <listitem>
      <para>
        This works just like <literal>runCommand</literal>. The only
-       difference is that it also provides a C compiler for your use.
-       To minimize your dependencies, you should only use this if you
-       are sure you will need a C compiler as part of running your command.
+       difference is that it also provides a C compiler in
+       <literal>buildCommand</literal>’s environment. To minimize your
+       dependencies, you should only use this if you are sure you will
+       need a C compiler as part of running your command.
     </para>
    </listitem>
   </varlistentry>
