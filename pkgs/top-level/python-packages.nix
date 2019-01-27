@@ -408,6 +408,8 @@ in {
 
   fdint = callPackage ../development/python-modules/fdint { };
 
+  filemagic = callPackage ../development/python-modules/filemagic { };
+
   fuse = callPackage ../development/python-modules/fuse-python {
     inherit (pkgs) fuse pkgconfig;
   };
