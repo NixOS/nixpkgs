@@ -4488,6 +4488,8 @@ in {
 
   pykickstart = callPackage ../development/python-modules/pykickstart { };
 
+  pymemoize = callPackage ../development/python-modules/pymemoize { };
+
   pyobjc = if stdenv.isDarwin
     then callPackage ../development/python-modules/pyobjc {}
     else throw "pyobjc can only be built on Mac OS";
