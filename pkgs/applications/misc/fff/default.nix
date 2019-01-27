@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, makeWrapper, xdg_utils, file, coreutils }:
 
 stdenv.mkDerivation rec {
-  name = "fff";
-  version = "1.5";
+  pname = "fff";
+  version = "1.7";
 
   src = fetchFromGitHub {
     owner = "dylanaraps";
-    repo = name;
+    repo = pname;
     rev = version;
-    sha256 = "0jvv9mwj0qw3rmg1f17wbvx9fl5kxzmkp6j1113l3a6w1na83js0";
+    sha256 = "0jhb68ba6ka94bn45h2caw58hn3lpbisr3ma0lcd66qa8jx7i9l1";
   };
 
   pathAdd = stdenv.lib.makeSearchPath "bin" [ xdg_utils file coreutils ];
