@@ -558,6 +558,10 @@ _addToEnv() {
             (( "$depHostOffset" <= "$depTargetOffset" )) || continue
             local hookRef="${hookVar}[$depTargetOffset - $depHostOffset]"
             if [[ -z "${strictDeps-}" ]]; then
+
+                # Keep track of which packages we have visited before.
+                local visitedPkgs=""
+
                 # Apply environment hooks to all packages during native
                 # compilation to ease the transition.
                 #
@@ -570,7 +574,11 @@ _addToEnv() {
                     ${pkgsHostTarget+"${pkgsHostTarget[@]}"} \
                     ${pkgsTargetTarget+"${pkgsTargetTarget[@]}"}
                 do
+                    if [[ "$visitedPkgs" = *"$pkg"* ]]; then
+                        continue
+                    fi
                     runHook "${!hookRef}" "$pkg"
+                    visitedPkgs+=" $pkg"
                 done
             else
                 local pkgsRef="${pkgsVar}[$depTargetOffset - $depHostOffset]"
