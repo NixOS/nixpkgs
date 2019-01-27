@@ -775,6 +775,8 @@ in {
 
   python-dbusmock = callPackage ../development/python-modules/python-dbusmock { };
 
+  python-dotenv = callPackage ../development/python-modules/python-dotenv { };
+
   python-engineio = callPackage ../development/python-modules/python-engineio { };
 
   python-hosts = callPackage ../development/python-modules/python-hosts { };
