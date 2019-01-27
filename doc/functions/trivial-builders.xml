@@ -1,0 +1,84 @@
+<section xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         xml:id="sec-trivial-builders">
+ <title>Trivial builders</title>
+
+ <para>
+   There are a couple of functions provide in Nixpkgs that help with
+   building derivations. The most important one,
+   <function>stdenv.mkDerivation</function>, has already been
+   documented above. These wrap
+   <function>stdenv.mkDerivation</function>, making it easier to use
+   in certain cases.
+ </para>
+
+ <variablelist>
+  <varlistentry>
+   <term>
+    <literal>runCommand</literal>
+   </term>
+   <listitem>
+     <para>
+       This takes three arguments, <literal>name</literal>,
+       <literal>env</literal>, and <literal>buildCommand</literal>.
+       <literal>name</literal> is just the name that Nix will use to
+       refer to the derivation. <literal>env</literal> is an attribute
+       set specifying environment variables that will be set for this
+       derivation. <literal>buildCommand</literal> specifies the
+       commands that will be run to create this derivation. Note that
+       you will need to create <literal>$out</literal> for Nix to
+       register the command as successful.
+    </para>
+   </listitem>
+  </varlistentry>
+  <varlistentry>
+   <term>
+    <literal>runCommandCC</literal>
+   </term>
+   <listitem>
+     <para>
+       This works just like <literal>runCommand</literal>. The only
+       difference is that it also provides a C compiler for your use.
+       To minimize your dependencies, you should only use this if you
+       are sure you will need a C compiler as part of running your command.
+    </para>
+   </listitem>
+  </varlistentry>
+  <varlistentry>
+   <term>
+    <literal>writeTextFile</literal>
+   </term>
+   <listitem>
+     <para>
+       This writes <literal>text</literal> to the Nix store. This is
+       useful for creating scripts from Nix expressions. This takes an
+       attribute set and expects two arguments,
+       <literal>name</literal> and <literal>text</literal>.
+       <literal>name</literal> corresponds to the name used in the Nix
+       store path. <literal>text</literal> will be the contents of the
+       file. You can also set <literal>executable</literal> to true to
+       make this file have the executable bit set.
+    </para>
+   </listitem>
+  </varlistentry>
+  <varlistentry>
+   <term>
+    <literal>symlinkJoin</literal>
+   </term>
+   <listitem>
+    <para>
+     This can be used to put many derivations into the same directory
+     structure. It works by creating a new derivation and adding
+     symlinks to each of the paths listed. It expects two arguments,
+     <literal>name</literal>, and <literal>paths</literal>.
+     <literal>name</literal> is the name used in the Nix store path
+     for the created derivation. <literal>paths</literal> is a list of
+     paths that will be symlinked. These paths can be to Nix store
+     derivations or any other directory.
+    </para>
+   </listitem>
+  </varlistentry>
+ </variablelist>
+
+</section>
