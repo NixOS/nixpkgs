@@ -2489,6 +2489,8 @@ in {
 
   django_pipeline = callPackage ../development/python-modules/django-pipeline { };
 
+  djangoql = callPackage ../development/python-modules/djangoql { };
+
   dj-database-url = callPackage ../development/python-modules/dj-database-url { };
 
   dj-email-url = callPackage ../development/python-modules/dj-email-url { };
