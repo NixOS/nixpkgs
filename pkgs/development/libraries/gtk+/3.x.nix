@@ -45,6 +45,11 @@ stdenv.mkDerivation rec {
       url = https://gitlab.gnome.org/GNOME/gtk/commit/e3a1593a0984cc0156ec1892a46af8f256a64878.patch;
       sha256 = "0akvp1r8xlzf5amk9gmk7b5sabr1wbmg3ak15rppsid7nf9f5dqf";
     })
+  ] ++ optionals stdenv.isDarwin [
+    # X11 module requires <gio/gdesktopappinfo.h> which is not installed on Darwin
+    # let’s drop that dependency in similar way to how other parts of the library do it
+    # e.g. https://gitlab.gnome.org/GNOME/gtk/blob/3.24.4/gtk/gtk-launch.c#L31-33
+    ./3.0-darwin-x11.patch
   ];
 
   buildInputs = [ libxkbcommon epoxy json-glib isocodes ]
