@@ -472,6 +472,8 @@ in {
 
   imutils = callPackage ../development/python-modules/imutils { };
 
+  inotify-simple = callPackage ../development/python-modules/inotify-simple { };
+
   intake = callPackage ../development/python-modules/intake { };
 
   intelhex = callPackage ../development/python-modules/intelhex { };
