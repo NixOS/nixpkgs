@@ -277,6 +277,14 @@ let
           List of labeled target groups for this job.
         '';
       };
+      ec2_sd_configs = mkOption {
+        type = types.listOf promTypes.ec2_sd_config;
+        default = [];
+        apply = x: map _filter x;
+        description = ''
+          List of EC2 service discovery configurations.
+        '';
+      };
       relabel_configs = mkOption {
         type = types.listOf promTypes.relabel_config;
         default = [];
@@ -301,6 +309,63 @@ let
         default = {};
         description = ''
           Labels assigned to all metrics scraped from the targets.
+        '';
+      };
+    };
+  };
+
+  promTypes.ec2_sd_config = types.submodule {
+    options = {
+      region = mkOption {
+        type = types.str;
+        description = ''
+          The AWS Region.
+        '';
+      };
+      access_key = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description = ''
+          The AWS API key id. If blank, the environment variable
+          `AWS_ACCESS_KEY_ID` is used.
+        '';
+      };
+      secret_key = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description = ''
+          The AWS API key secret. If blank, the environment variable
+          `AWS_SECRET_ACCESS_KEY` is used.
+        '';
+      };
+      profile = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description = ''
+          Named AWS profile used to connect to the API.
+        '';
+      };
+      role_arn = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description = ''
+          AWS Role ARN, an alternative to using AWS API keys.
+        '';
+      };
+      refresh_interval = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description = ''
+          Refresh interval to re-read the instance list.
+        '';
+      };
+      port = mkOption {
+        type = types.int;
+        default = 80;
+        description = ''
+          The port to scrape metrics from. If using the public IP
+          address, this must instead be specified in the relabeling
+          rule.
         '';
       };
     };
