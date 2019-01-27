@@ -185,7 +185,7 @@ in package-set { inherit pkgs stdenv callPackage; } self // {
       in self.callCabal2nix pkg (pkgs.fetchzip {
            url = "http://hackage.haskell.org/package/${pkgver}/${pkgver}.tar.gz";
            inherit sha256;
-         }) {};
+         });
 
     # Creates a Haskell package from a source package by calling cabal2nix on the source.
     callCabal2nixWithOptions = name: src: extraCabal2nixOptions: args:
