@@ -25,13 +25,13 @@ in
 
 stdenv.mkDerivation rec {
   name = "go-${version}";
-  version = "1.11.4";
+  version = "1.11.5";
 
   src = fetchFromGitHub {
     owner = "golang";
     repo = "go";
     rev = "go${version}";
-    sha256 = "036nc17hffy0gcfs9j64qzwpjry65znbm4klf2h0xn81dp8d6mxk";
+    sha256 = "0d45057rc0bngq0nja847cagxji42qmlywr68f0dkg51im8nyr9y";
   };
 
   GOCACHE = "off";
