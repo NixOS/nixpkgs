@@ -4,13 +4,13 @@
 stdenv.mkDerivation rec {
   pname = "stubby";
   name = "${pname}-${version}";
-  version = "0.2.4";
+  version = "0.2.5";
 
   src = fetchFromGitHub {
     owner = "getdnsapi";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1c0jqbxcrwc8kvpx7v0bmdladf20myyi2672r2r87m2q0jvsmgpr";
+    sha256 = "034y783dvh43v5ajxlgn4y9y7mdk1lwy87d7isaxpkigs1jqbrma";
   };
 
   nativeBuildInputs = [ libtool m4 libbsd libyaml autoreconfHook ];
