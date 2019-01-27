@@ -484,6 +484,8 @@ in {
     mpi = pkgs.openmpi;
   };
 
+  langdetect = callPackage ../development/python-modules/langdetect { };
+
   libmr = callPackage ../development/python-modules/libmr { };
 
   limitlessled = callPackage ../development/python-modules/limitlessled { };
