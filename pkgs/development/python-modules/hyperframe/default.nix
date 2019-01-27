@@ -1,11 +1,11 @@
 { stdenv, buildPythonPackage, fetchPypi }:
 buildPythonPackage rec {
   pname = "hyperframe";
-  version = "5.1.0";
+  version = "5.2.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "017vjbb1xjak1pxcvihhilzjnmpfvhapk7k88wp6lvdkkm9l8nd2";
+    sha256 = "07xlf44l1cw0ghxx46sbmkgzil8vqv8kxwy42ywikiy35izw3xd9";
   };
 
   meta = with stdenv.lib; {
