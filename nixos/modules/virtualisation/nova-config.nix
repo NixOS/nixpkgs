@@ -8,6 +8,7 @@ with lib;
     ../profiles/headless.nix
     # The Openstack Metadata service exposes data on an EC2 API also.
     ./ec2-data.nix
+    ./amazon-init.nix
   ];
 
   config = {
@@ -32,7 +33,7 @@ with lib;
       path = [ pkgs.wget ];
       description = "Fetch Metadata on startup";
       wantedBy = [ "multi-user.target" ];
-      before = [ "apply-ec2-data.service" ];
+      before = [ "apply-ec2-data.service" "amazon-init.service"];
       wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
       script =

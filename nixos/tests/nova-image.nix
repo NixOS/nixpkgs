@@ -19,12 +19,11 @@ let
       ];
     }).config.system.build.novaImage;
 
-in
-  makeEc2Test {
-    name         = "nova-ec2-metadata";
+in {
+  metadata = makeEc2Test {
+    name = "nova-ec2-metadata";
     inherit image;
-    sshPublicKey = snakeOilPublicKey; # That's right folks! My user's key is also the host key!
-
+    sshPublicKey = snakeOilPublicKey;
     userData = ''
       SSH_HOST_ED25519_KEY_PUB:${snakeOilPublicKey}
       SSH_HOST_ED25519_KEY:${replaceStrings ["\n"] ["|"] snakeOilPrivateKey}
@@ -57,4 +56,29 @@ in
       $machine->start;
       $machine->waitForFile("/etc/ec2-metadata/user-data");
     '';
-  }
+  };
+
+  userdata = makeEc2Test {
+    name = "nova-ec2-metadata";
+    inherit image;
+    sshPublicKey = snakeOilPublicKey;
+    userData = ''
+      { pkgs, ... }:
+      {
+        imports = [
+          <nixpkgs/nixos/modules/virtualisation/nova-config.nix>
+          <nixpkgs/nixos/modules/testing/test-instrumentation.nix>
+          <nixpkgs/nixos/modules/profiles/qemu-guest.nix>
+        ];
+        environment.etc.testFile = {
+          text = "whoa";
+        };
+      }
+    '';
+    script = ''
+      $machine->start;
+      $machine->waitForFile("/etc/testFile");
+      $machine->succeed("cat /etc/testFile | grep -q 'whoa'");
+    '';
+  };
+}
