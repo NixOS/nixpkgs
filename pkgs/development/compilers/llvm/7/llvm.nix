@@ -53,6 +53,15 @@ in stdenv.mkDerivation (rec {
       url = "https://salsa.debian.org/pkg-llvm-team/llvm-toolchain/raw/5a7d283d4e00bc4822c7b0226e593c344c8f6050/debian/patches/pr39427-misscompile.diff";
       sha256 = "03mpydsaw0xvcp7kb4sgjzcl5v22620r5z78kv3mz5wp7sn76fg5";
     })
+    # backport, fix building rust crates with lto
+    (fetchpatch {
+      url = "https://github.com/llvm-mirror/llvm/commit/da1fb72bb305d6bc1f3899d541414146934bf80f.patch";
+      sha256 = "0p81gkhc1xhcx0hmnkwyhrn8x8l8fd24xgaj1whni29yga466dwc";
+    })
+    (fetchpatch {
+      url = "https://github.com/llvm-mirror/llvm/commit/cc1f2a595ead516812a6c50398f0f3480ebe031f.patch";
+      sha256 = "0k6k1p5yisgwx417a67s7sr9930rqh1n0zv5jvply8vjjy4b3kf8";
+    })
   ];
 
   postPatch = optionalString stdenv.isDarwin ''
