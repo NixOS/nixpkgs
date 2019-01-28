@@ -3857,7 +3857,14 @@ in {
   # alias for an older package which did not support Python 3
   Quandl = callPackage ../development/python-modules/quandl { };
 
-  qscintilla = callPackage ../development/python-modules/qscintilla { };
+  qscintilla-qt4 = callPackage ../development/python-modules/qscintilla { };
+
+  qscintilla-qt5 = callPackage ../development/python-modules/qscintilla-qt5 {
+    qscintillaCpp = pkgs.libsForQt5.qscintilla;
+    lndir = pkgs.xorg.lndir;
+  };
+
+  qscintilla = self.qscintilla-qt4;
 
   qserve = callPackage ../development/python-modules/qserve { };
 
