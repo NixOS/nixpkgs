@@ -236,6 +236,11 @@
     email = "nix-commits@lists.science.uu.nl";
     name = "Nix Committers";
   };
+  allonsy = {
+    email = "linuxbash8@gmail.com";
+    name = "Alec Snyder";
+    github = "allonsy";
+  };
   alunduil = {
     email = "alunduil@gmail.com";
     github = "alunduil";
