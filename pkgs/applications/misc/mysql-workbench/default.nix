@@ -13,12 +13,12 @@ let
   inherit (python2.pkgs) paramiko pycairo pyodbc;
 in stdenv.mkDerivation rec {
   pname = "mysql-workbench";
-  version = "8.0.13";
+  version = "8.0.14";
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "http://dev.mysql.com/get/Downloads/MySQLGUITools/mysql-workbench-community-${version}-src.tar.gz";
-    sha256 = "1p4xy2a5cin1l06j4ixpgp1ynhjdj5gax4fjhznspch3c63jp9hj";
+    sha256 = "0mz615drx18h0frc6fq9nknqbpq7lr0xlsfmxd5irw2jz629lj76";
   };
 
   patches = [
