@@ -238,8 +238,8 @@
   };
   allonsy = {
     email = "linuxbash8@gmail.com";
-    name = "Alec Snyder";
     github = "allonsy";
+    name = "Alec Snyder";
   };
   alunduil = {
     email = "alunduil@gmail.com";
