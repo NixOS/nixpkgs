@@ -4523,6 +4523,8 @@ in
     inherit (gnome3) defaultIconTheme;
   };
 
+  openapi-generator-cli = callPackage ../tools/networking/openapi-generator-cli { };
+
   opencc = callPackage ../tools/text/opencc { };
 
   opencl-info = callPackage ../tools/system/opencl-info { };
