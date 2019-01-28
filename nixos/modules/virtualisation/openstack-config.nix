@@ -29,6 +29,9 @@ with lib;
       passwordAuthentication = mkDefault false;
     };
 
+    # Force getting the hostname from Openstack metadata.
+    networking.hostName = mkDefault "";
+
     systemd.services.openstack-init = {
       path = [ pkgs.wget ];
       description = "Fetch Metadata on startup";
