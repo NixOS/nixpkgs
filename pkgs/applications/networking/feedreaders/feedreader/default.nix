@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   patches = [
     # See: https://github.com/jangernert/FeedReader/pull/842
     (fetchpatch {
-      url = "https://github.com/worldofpeace/FeedReader/commit/22298dd6c14c3d3655bee531dfbdc87d558f50b1.patch";
+      url = "https://github.com/jangernert/FeedReader/commit/f4ce70932c4ddc91783309708402c7c42d627455.patch";
       sha256 = "076fpjn973xg2m35lc6z4h7g5x8nb08sghg94glsqa8wh1ig2311";
     })
   ];
