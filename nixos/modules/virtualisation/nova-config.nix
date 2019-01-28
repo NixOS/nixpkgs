@@ -1,4 +1,4 @@
-{ lib, ... }:
+{ pkgs, lib, ... }:
 
 with lib;
 
@@ -6,6 +6,8 @@ with lib;
   imports = [
     ../profiles/qemu-guest.nix
     ../profiles/headless.nix
+    # The Openstack Metadata service exposes data on an EC2 API also.
+    ./ec2-data.nix
   ];
 
   config = {
@@ -26,35 +28,41 @@ with lib;
       passwordAuthentication = mkDefault false;
     };
 
-    services.cloud-init.enable = true;
+    systemd.services.nova-init = {
+      path = [ pkgs.wget ];
+      description = "Fetch Metadata on startup";
+      wantedBy = [ "multi-user.target" ];
+      before = [ "apply-ec2-data.service" ];
+      wants = [ "network-online.target" ];
+      after = [ "network-online.target" ];
+      script =
+        ''
+          metaDir=/etc/ec2-metadata
+          mkdir -m 0755 -p "$metaDir"
 
-    # Put /tmp and /var on /ephemeral0, which has a lot more space.
-    # Unfortunately we can't do this with the `fileSystems' option
-    # because it has no support for creating the source of a bind
-    # mount.  Also, "move" /nix to /ephemeral0 by layering a unionfs-fuse
-    # mount on top of it so we have a lot more space for Nix operations.
+          echo "getting Openstack instance metadata (via EC2 API)..."
+          if ! [ -e "$metaDir/ami-manifest-path" ]; then
+            wget --retry-connrefused -O "$metaDir/ami-manifest-path" http://169.254.169.254/1.0/meta-data/ami-manifest-path
+          fi
 
-    /*
-    boot.initrd.postMountCommands =
-      ''
-        mkdir -m 1777 -p $targetRoot/ephemeral0/tmp
-        mkdir -m 1777 -p $targetRoot/tmp
-        mount --bind $targetRoot/ephemeral0/tmp $targetRoot/tmp
+          if ! [ -e "$metaDir/user-data" ]; then
+            wget --retry-connrefused -O "$metaDir/user-data" http://169.254.169.254/1.0/user-data && chmod 600 "$metaDir/user-data"
+          fi
 
-        mkdir -m 755 -p $targetRoot/ephemeral0/var
-        mkdir -m 755 -p $targetRoot/var
-        mount --bind $targetRoot/ephemeral0/var $targetRoot/var
+          if ! [ -e "$metaDir/hostname" ]; then
+            wget --retry-connrefused -O "$metaDir/hostname" http://169.254.169.254/1.0/meta-data/hostname
+          fi
 
-        mkdir -p /unionfs-chroot/ro-nix
-        mount --rbind $targetRoot/nix /unionfs-chroot/ro-nix
-
-        mkdir -p /unionfs-chroot/rw-nix
-        mkdir -m 755 -p $targetRoot/ephemeral0/nix
-        mount --rbind $targetRoot/ephemeral0/nix /unionfs-chroot/rw-nix
-        unionfs -o allow_other,cow,nonempty,chroot=/unionfs-chroot,max_files=32768 /rw-nix=RW:/ro-nix=RO $targetRoot/nix
-      '';
-
-      boot.initrd.supportedFilesystems = [ "unionfs-fuse" ];
-    */
+          if ! [ -e "$metaDir/public-keys-0-openssh-key" ]; then
+            wget --retry-connrefused -O "$metaDir/public-keys-0-openssh-key" http://169.254.169.254/1.0/meta-data/public-keys/0/openssh-key
+          fi
+        '';
+      restartIfChanged = false;
+      unitConfig.X-StopOnRemoval = false;
+      serviceConfig = {
+        Type = "oneshot";
+        RemainAfterExit = true;
+      };
+    };
   };
 }
