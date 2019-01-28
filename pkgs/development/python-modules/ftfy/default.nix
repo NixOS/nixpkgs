@@ -4,7 +4,7 @@
 , fetchPypi
 , html5lib
 , wcwidth
-, nose
+, pytest
 }:
 
 buildPythonPackage rec {
@@ -23,23 +23,23 @@ buildPythonPackage rec {
     sha256 = "1ci6xrj4g01a97nymxpv9nj820nlmgzc4ybaz9k46i6bnxzpax7s";
   };
 
-  propagatedBuildInputs = [ html5lib wcwidth ];
-
-  checkInputs = [
-    nose
+  propagatedBuildInputs = [
+    html5lib
+    wcwidth
   ];
 
+  checkInputs = [
+    pytest
+  ];
+
+  # We suffix PATH like this because the tests want the ftfy executable
   checkPhase = ''
-    nosetests -v tests
+    PATH=$out/bin:$PATH pytest
   '';
 
-  # Several tests fail with
-  # FileNotFoundError: [Errno 2] No such file or directory: 'ftfy'
-  doCheck = false;
-
   meta = with stdenv.lib; {
-    description = "Given Unicode text, make its representation consistent and possibly less broken.";
-    homepage = https://github.com/LuminosoInsight/python-ftfy/tree/master/tests;
+    description = "Given Unicode text, make its representation consistent and possibly less broken";
+    homepage = https://github.com/LuminosoInsight/python-ftfy;
     license = licenses.mit;
     maintainers = with maintainers; [ sdll aborsu ];
   };
