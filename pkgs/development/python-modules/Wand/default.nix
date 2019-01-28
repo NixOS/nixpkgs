@@ -28,7 +28,9 @@ in buildPythonPackage rec {
   inherit magick_wand_library imagemagick_library;
 
   postPatch = ''
-    substituteAllInPlace wand/api.py
+    substituteInPlace wand/api.py --replace \
+      "magick_home = os.environ.get('MAGICK_HOME')" \
+      "magick_home = '${imagemagick}'"
   '';
 
   # tests not included with pypi release
