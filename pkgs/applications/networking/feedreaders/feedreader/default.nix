@@ -5,7 +5,7 @@
 
 let
   pname = "FeedReader";
-  version = "2.6.1";
+  version = "2.6.2";
 in stdenv.mkDerivation {
   name = "${pname}-${version}";
 
@@ -13,7 +13,7 @@ in stdenv.mkDerivation {
     owner = "jangernert";
     repo = pname;
     rev = "v" + version;
-    sha256 = "01r00b2jrb12x46fvd207s5lkhc13kmzg0w1kqbdkwkwsrdzb0jy";
+    sha256 = "1x5milynfa27zyv2jkzyi7ikkszrvzki1hlzv8c2wvcmw60jqb8n";
   };
 
   nativeBuildInputs = [
