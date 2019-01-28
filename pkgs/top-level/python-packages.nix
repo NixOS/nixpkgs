@@ -158,6 +158,8 @@ in {
 
   alerta-server = callPackage ../development/python-modules/alerta-server { };
 
+  androguard = callPackage ../development/python-modules/androguard { };
+
   phonenumbers = callPackage ../development/python-modules/phonenumbers { };
 
   agate-excel = callPackage ../development/python-modules/agate-excel { };
