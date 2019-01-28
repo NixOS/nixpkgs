@@ -3694,6 +3694,16 @@
       fingerprint = "7573 56D7 79BB B888 773E  415E 736C CDF9 EF51 BD97";
     }];
   };
+  rafaelgg = {
+    email = "rafael.garcia.gallego@gmail.com";
+    github = "rafaelgg";
+    name = "Rafael García";
+  };
+  raquelgb = {
+    email = "raquel.garcia.bautista@gmail.com";
+    github = "raquelgb";
+    name = "Raquel García";
+  };
   ragge = {
     email = "r.dahlen@gmail.com";
     github = "ragnard";
