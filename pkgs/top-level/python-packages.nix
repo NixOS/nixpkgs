@@ -4164,9 +4164,7 @@ in {
 
   websockets = callPackage ../development/python-modules/websockets { };
 
-  Wand = callPackage ../development/python-modules/Wand {
-    imagemagick = pkgs.imagemagickBig;
-  };
+  Wand = callPackage ../development/python-modules/Wand { };
 
   wcwidth = callPackage ../development/python-modules/wcwidth { };
 
