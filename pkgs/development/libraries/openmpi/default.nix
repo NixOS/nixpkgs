@@ -1,5 +1,5 @@
 { stdenv, fetchurl, gfortran, perl, libnl, rdma-core, zlib
-, numactl
+, numactl, libevent, hwloc
 
 # Enable the Sun Grid Engine bindings
 , enableSGE ? false
@@ -24,7 +24,7 @@ in stdenv.mkDerivation rec {
   '';
 
   buildInputs = with stdenv; [ gfortran zlib ]
-    ++ lib.optionals isLinux [ libnl numactl ]
+    ++ lib.optionals isLinux [ libnl numactl libevent hwloc ]
     ++ lib.optional (isLinux || isFreeBSD) rdma-core;
 
   nativeBuildInputs = [ perl ];
