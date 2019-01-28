@@ -1,8 +1,5 @@
 { stdenv, buildGoPackage, fetchFromGitHub }: 
 
-let
-  version = "7.2.0";
-in
   buildGoPackage rec {
     name = "git-town-${version}";
     version = "7.2.0";
@@ -16,9 +13,7 @@ in
       sha256 = "0hr0c6iya34lanfhsg9kj03l4ajalcfxkbn4bgwh0749smhi6mrj";
     };
 
-    buildFlagsArray = ''
-    -ldflags=-X github.com/Originate/git-town/src/cmd.version=v${version} -X github.com/Originate/git-town/src/cmd.buildDate=nix
-    '';
+    buildFlagsArray = ["-ldflags=-X github.com/Originate/git-town/src/cmd.version=v${version} -X github.com/Originate/git-town/src/cmd.buildDate=nix"];
 
     meta = {
       description = "Generic, high-level git support for git-flow workflows";
