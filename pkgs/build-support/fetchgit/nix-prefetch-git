@@ -11,6 +11,7 @@ leaveDotGit=$NIX_PREFETCH_GIT_LEAVE_DOT_GIT
 fetchSubmodules=
 builder=
 branchName=$NIX_PREFETCH_GIT_BRANCH_NAME
+credential_helper="$NIX_PREFETCH_GIT_CREDENTIAL_HELPER"
 
 # ENV params
 out=${out:-}
@@ -100,6 +101,10 @@ init_remote(){
     git init
     git remote add origin "$url"
     ( [ -n "$http_proxy" ] && git config http.proxy "$http_proxy" ) || true
+
+    # on darwin, system git config sets credential.helper to osxkeychain, which pops up an annoying dialog "a keychain cannot be found to store $user"
+    [ -n "$credential_helper" ] && export GIT_CONFIG_NOSYSTEM=1 || true
+    ( [ -n "$credential_helper" ] && git config credential.helper "$credential_helper" ) || true
 }
 
 # Return the reference of an hash if it exists on the remote repository.
