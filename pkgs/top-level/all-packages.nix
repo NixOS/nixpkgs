@@ -33,7 +33,7 @@ in
   # just the plain stdenv.
   stdenv_32bit = lowPrio (if stdenv.hostPlatform.is32bit then stdenv else multiStdenv);
 
-  stdenvNoCC = stdenv.override { cc = null; };
+  stdenvNoCC = stdenv.override { cc = null; extraAttrs.noCC = true; };
 
   stdenvNoLibs = let
     bintools = stdenv.cc.bintools.override {
