@@ -1638,6 +1638,8 @@ in
 
   simg2img = callPackage ../tools/filesystems/simg2img { };
 
+  slurp = callPackage ../tools/graphics/slurp { };
+
   snipes = callPackage ../games/snipes { };
 
   socklog = callPackage ../tools/system/socklog { };
