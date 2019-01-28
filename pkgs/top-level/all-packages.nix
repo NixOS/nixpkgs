@@ -14760,6 +14760,7 @@ in
       inherit stdenv;
       inherit (kernel) version;
     };
+    kernelPatches = kernel.kernelPatches ++ [ kernelPatches.tag_hardened ];
   });
 
   linuxPackages_hardened = recurseIntoAttrs (hardenedLinuxPackagesFor pkgs.linux);
