@@ -82,7 +82,7 @@ qtModule {
 
     ''
     # TODO remove when new Apple SDK is in
-    + (if builtins.compareVersions qtCompatVersion "5.11" < 0 then ''
+    + (if lib.versionOlder qtCompatVersion "5.11" then ''
     substituteInPlace src/3rdparty/chromium/base/mac/foundation_util.mm \
       --replace "NSArray<NSString*>*" "NSArray*"
     substituteInPlace src/3rdparty/chromium/base/mac/sdk_forward_declarations.h \
