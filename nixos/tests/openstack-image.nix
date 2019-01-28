@@ -13,15 +13,15 @@ let
     (import ../lib/eval-config.nix {
       inherit system;
       modules = [
-        ../maintainers/scripts/openstack/nova-image.nix
+        ../maintainers/scripts/openstack/openstack-image.nix
         ../modules/testing/test-instrumentation.nix
         ../modules/profiles/qemu-guest.nix
       ];
-    }).config.system.build.novaImage;
+    }).config.system.build.openstackImage;
 
 in {
   metadata = makeEc2Test {
-    name = "nova-ec2-metadata";
+    name = "openstack-ec2-metadata";
     inherit image;
     sshPublicKey = snakeOilPublicKey;
     userData = ''
@@ -59,14 +59,14 @@ in {
   };
 
   userdata = makeEc2Test {
-    name = "nova-ec2-metadata";
+    name = "openstack-ec2-metadata";
     inherit image;
     sshPublicKey = snakeOilPublicKey;
     userData = ''
       { pkgs, ... }:
       {
         imports = [
-          <nixpkgs/nixos/modules/virtualisation/nova-config.nix>
+          <nixpkgs/nixos/modules/virtualisation/openstack-config.nix>
           <nixpkgs/nixos/modules/testing/test-instrumentation.nix>
           <nixpkgs/nixos/modules/profiles/qemu-guest.nix>
         ];

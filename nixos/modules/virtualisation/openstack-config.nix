@@ -29,7 +29,7 @@ with lib;
       passwordAuthentication = mkDefault false;
     };
 
-    systemd.services.nova-init = {
+    systemd.services.openstack-init = {
       path = [ pkgs.wget ];
       description = "Fetch Metadata on startup";
       wantedBy = [ "multi-user.target" ];
