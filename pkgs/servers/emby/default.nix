@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   name = "emby-${version}";
-  version = "3.5.3.0";
+  version = "4.0.1.0";
 
   # We are fetching a binary here, however, a source build is possible.
   # See -> https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=emby-server-git#n43
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   # See -> https://github.com/NixOS/nixpkgs/issues/29817
   src = fetchurl {
     url = "https://github.com/MediaBrowser/Emby.Releases/releases/download/${version}/embyserver-netcore_${version}.zip";
-    sha256 = "0311af3q813cx0ykbdk9vkmnyqi2l8rx66jnvdkw927q6invnnpj";
+    sha256 = "0kw2c6hwgs23j6wvmpyj7l9g2gqbjn390g7x1zq1pp1n78sqab67";
   };
 
   buildInputs = [
