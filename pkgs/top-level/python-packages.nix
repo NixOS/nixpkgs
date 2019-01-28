@@ -4330,6 +4330,8 @@ in {
 
   python-daemon = callPackage ../development/python-modules/python-daemon { };
 
+  python-vagrant = callPackage ../development/python-modules/python-vagrant { };
+
   sympy = callPackage ../development/python-modules/sympy { };
 
   pilkit = callPackage ../development/python-modules/pilkit { };
