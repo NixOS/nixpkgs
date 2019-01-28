@@ -52,6 +52,11 @@ buildPythonPackage rec {
     unidecode
   ];
 
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "'ftfy>=4.2.0,<5.0.0'," "'ftfy>=5.0.0',"
+  '';
+
   doCheck = false;  # tests want to download data files
 
   meta = with stdenv.lib; {
