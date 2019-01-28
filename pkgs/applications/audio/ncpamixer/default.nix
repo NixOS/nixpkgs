@@ -3,13 +3,13 @@
 stdenv.mkDerivation rec {
 
   name = "ncpamixer-${version}";
-  version = "1.2";
+  version = "1.3";
 
   src = fetchFromGitHub {
     owner = "fulhax";
     repo = "ncpamixer";
     rev = version;
-    sha256 = "01kvd0pg5yraymlln5xdzqj1r6adxfvvza84wxn2481kcxfral54";
+    sha256 = "02v8vsx26w3wrzkg61457diaxv1hyzsh103p53j80la9vglamdsh";
   };
 
   buildInputs = [ ncurses libpulseaudio ];
