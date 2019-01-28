@@ -18,7 +18,7 @@
     meta = {
       description = "Generic, high-level git support for git-flow workflows";
       homepage = http://www.git-town.com/;
-      maintainers = [ "Originate" "allonsy" ];
+      maintainers = [ stdenv.maintainers.allonsy ];
       license = stdenv.lib.licenses.mit;
     };
   }
