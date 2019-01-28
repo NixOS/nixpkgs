@@ -14,14 +14,14 @@ let
   });
 in stdenv.mkDerivation rec {
   name = "monkeysphere-${version}";
-  version = "0.42";
+  version = "0.43";
 
   # The patched OpenSSH binary MUST NOT be used (except in the check phase):
   disallowedRequisites = [ opensshUnsafe ];
 
   src = fetchurl {
     url = "http://archive.monkeysphere.info/debian/pool/monkeysphere/m/monkeysphere/monkeysphere_${version}.orig.tar.gz";
-    sha256 = "1haqgjxm8v2xnhc652lx79p2cqggb9gxgaf19w9l9akar2qmdjf1";
+    sha256 = "18i7qpvp5qb7mmd0z5rqai550rya9l3nbsq2hamwkl3smqsjdqc0";
   };
 
   patches = [ ./monkeysphere.patch ];
