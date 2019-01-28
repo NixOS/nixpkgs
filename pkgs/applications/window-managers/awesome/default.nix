@@ -5,17 +5,18 @@
 , which, dbus, nettools, git, asciidoc, doxygen
 , xmlto, docbook_xml_dtd_45, docbook_xsl, findXMLCatalogs
 , libxkbcommon, xcbutilxrm, hicolor-icon-theme
+, asciidoctor
 }:
 
 with luaPackages; stdenv.mkDerivation rec {
   name = "awesome-${version}";
-  version = "4.2";
+  version = "4.3";
 
   src = fetchFromGitHub {
     owner = "awesomewm";
     repo = "awesome";
     rev = "v${version}";
-    sha256 = "1pcgagcvm6rdky8p8dd810j3ywaz0ncyk5xgaykslaixzrq60kff";
+    sha256 = "1i7ajmgbsax4lzpgnmkyv35x8vxqi0j84a14k6zys4blx94m9yjf";
   };
 
   nativeBuildInputs = [
@@ -27,6 +28,7 @@ with luaPackages; stdenv.mkDerivation rec {
     pkgconfig
     xmlto docbook_xml_dtd_45
     docbook_xsl findXMLCatalogs
+    asciidoctor
   ];
 
   propagatedUserEnvPkgs = [ hicolor-icon-theme ];
