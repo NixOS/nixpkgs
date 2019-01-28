@@ -43,7 +43,7 @@ qtModule {
       ( cd src/3rdparty/chromium; patchShebangs . )
     ''
     # Patch Chromium build files
-    + optionalString (builtins.compareVersions qtCompatVersion "5.12" < 0) ''
+    + optionalString (lib.versionOlder qtCompatVersion "5.12") ''
       substituteInPlace ./src/3rdparty/chromium/build/common.gypi --replace /bin/echo ${coreutils}/bin/echo
       substituteInPlace ./src/3rdparty/chromium/v8/${if qt56 then "build" else "gypfiles"}/toolchain.gypi \
         --replace /bin/echo ${coreutils}/bin/echo
@@ -81,7 +81,7 @@ qtModule {
 
     ''
     # TODO remove when new Apple SDK is in
-    + (if builtins.compareVersions qtCompatVersion "5.11" < 0 then ''
+    + (if lib.versionOlder qtCompatVersion "5.11" then ''
     substituteInPlace src/3rdparty/chromium/base/mac/foundation_util.mm \
       --replace "NSArray<NSString*>*" "NSArray*"
     substituteInPlace src/3rdparty/chromium/base/mac/sdk_forward_declarations.h \
