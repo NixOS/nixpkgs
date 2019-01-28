@@ -16833,7 +16833,8 @@ in
       inherit (haskellPackages) ghc-mod structured-haskell-mode Agda hindent;
       inherit (pythonPackages) elpy;
       inherit
-        autoconf automake git libffi libpng pkgconfig poppler rtags w3m zlib;
+        autoconf automake git libffi libpng pkgconfig poppler rtags w3m zlib
+        substituteAll rustPlatform;
     };
   };
 
