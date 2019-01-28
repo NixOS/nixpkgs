@@ -11757,6 +11757,8 @@ in
 
   olm = callPackage ../development/libraries/olm { };
 
+  one_gadget = callPackage ../development/tools/misc/one_gadget { };
+
   oneko = callPackage ../applications/misc/oneko { };
 
   oniguruma = callPackage ../development/libraries/oniguruma { };
