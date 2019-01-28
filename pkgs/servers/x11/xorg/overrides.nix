@@ -1,7 +1,7 @@
 { abiCompat ? null,
   stdenv, makeWrapper, lib, fetchurl, fetchpatch, buildPackages,
 
-  automake, autoconf, libtool, intltool, mtdev, libevdev, libinput,
+  automake, autoconf, libiconv, libtool, intltool, mtdev, libevdev, libinput,
   freetype, tradcpp, fontconfig, meson, ninja,
   libGL, spice-protocol, zlib, libGLU, dbus, libunwind, libdrm,
   mesa_noglu, udev, bootstrap_cmds, bison, flex, clangStdenv, autoreconfHook,
@@ -143,10 +143,12 @@ self: super:
     outputs = [ "out" "dev" "devdoc" ];
   });
 
-  # See https://bugs.freedesktop.org/show_bug.cgi?id=47792
-  # Once the bug is fixed upstream, this can be removed.
   luit = super.luit.overrideAttrs (attrs: {
+    # See https://bugs.freedesktop.org/show_bug.cgi?id=47792
+    # Once the bug is fixed upstream, this can be removed.
     configureFlags = [ "--disable-selective-werror" ];
+
+    buildInputs = attrs.buildInputs ++ [libiconv];
   });
 
   libICE = super.libICE.overrideAttrs (attrs: {
