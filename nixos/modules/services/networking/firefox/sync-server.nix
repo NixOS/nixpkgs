@@ -13,7 +13,7 @@ let
     overrides = ${cfg.privateConfig}
 
     [server:main]
-    use = egg:Paste#http
+    use = egg:gunicorn
     host = ${cfg.listen.address}
     port = ${toString cfg.listen.port}
 
@@ -135,7 +135,7 @@ in
       wantedBy = [ "multi-user.target" ];
       path = [
         pkgs.coreutils
-        (pkgs.python.withPackages (ps: [ pkgs.syncserver ps.pasteScript ps.requests ]))
+        (pkgs.python.withPackages (ps: [ pkgs.syncserver ps.gunicorn ]))
       ];
 
       serviceConfig = {
@@ -168,8 +168,9 @@ in
           chown ${user}:${group} ${defaultDbLocation}
         fi
       '';
+
       script = ''
-        paster serve ${syncServerIni}
+        gunicorn --paste ${syncServerIni}
       '';
     };
 
