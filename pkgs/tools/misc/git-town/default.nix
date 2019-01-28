@@ -19,7 +19,7 @@
       description = "Generic, high-level git support for git-flow workflows";
       homepage = http://www.git-town.com/;
       maintainers = with maintainers; [ allonsy ];
-      license = stdenv.lib.licenses.mit;
+      license = licenses.mit;
     };
   }
 
