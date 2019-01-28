@@ -2389,8 +2389,6 @@ in {
 
   pyftpdlib = callPackage ../development/python-modules/pyftpdlib { };
 
-  fdroidserver = callPackage ../development/python-modules/fdroidserver { };
-
   filebrowser_safe = callPackage ../development/python-modules/filebrowser_safe { };
 
   pycodestyle = callPackage ../development/python-modules/pycodestyle { };
