@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   name = "dune-${version}";
-  version = "1.6.2";
+  version = "1.6.3";
   src = fetchurl {
     url = "https://github.com/ocaml/dune/releases/download/${version}/dune-${version}.tbz";
-    sha256 = "1k675mfywmsj4v4z2f5a4vqinl1jbzzb7v5k6rzyfgvxzd7gil40";
+    sha256 = "0dmf0wbfmgdy5plz1bjiisc2hjgblvxsnrqjmw2c8y45v1h23mdz";
   };
 
   buildInputs = with ocamlPackages; [ ocaml findlib ];
