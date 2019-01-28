@@ -12,7 +12,8 @@
 , pciutils
 , systemd
 , enableProprietaryCodecs ? true
-, gn, darwin, openbsm
+, gn
+, cups, darwin, openbsm, runCommand, xcbuild
 , ffmpeg ? null
 , lib, stdenv
 }:
@@ -26,7 +27,7 @@ qtModule {
   qtInputs = [ qtdeclarative qtquickcontrols qtlocation qtwebchannel ];
   nativeBuildInputs = [
     bison coreutils flex git gperf ninja pkgconfig python2 which gn
-  ];
+  ] ++ optional stdenv.isDarwin xcbuild;
   doCheck = true;
   outputs = [ "bin" "dev" "out" ];
 
@@ -42,7 +43,7 @@ qtModule {
       ( cd src/3rdparty/chromium; patchShebangs . )
     ''
     # Patch Chromium build files
-    + optionalString (builtins.compareVersions qtCompatVersion "5.12" < 0) ''
+    + optionalString (lib.versionOlder qtCompatVersion "5.12") ''
       substituteInPlace ./src/3rdparty/chromium/build/common.gypi --replace /bin/echo ${coreutils}/bin/echo
       substituteInPlace ./src/3rdparty/chromium/v8/${if qt56 then "build" else "gypfiles"}/toolchain.gypi \
         --replace /bin/echo ${coreutils}/bin/echo
@@ -65,33 +66,46 @@ qtModule {
       sed -i -e '/libpci_loader.*Load/s!"\(libpci\.so\)!"${pciutils}/lib/\1!' \
         src/3rdparty/chromium/gpu/config/gpu_info_collector_linux.cc
     ''
-    + optionalString stdenv.isDarwin ''
+    + optionalString stdenv.isDarwin (''
       # Remove annoying xcode check
       substituteInPlace mkspecs/features/platform.prf \
-        --replace "lessThan(QMAKE_XCODE_VERSION, 7.3)" false
+        --replace "lessThan(QMAKE_XCODE_VERSION, 7.3)" false \
+        --replace "/usr/bin/xcodebuild" "xcodebuild"
+
+      substituteInPlace src/3rdparty/chromium/build/mac_toolchain.py \
+        --replace "/usr/bin/xcode-select" "xcode-select"
+
       substituteInPlace src/core/config/mac_osx.pri \
         --replace /usr ${stdenv.cc} \
         --replace "isEmpty(QMAKE_MAC_SDK_VERSION)" false
 
-    # FIXME Needed with old Apple SDKs
-    # Abandon all hope ye who try to make sense of this.
+    ''
+    # TODO remove when new Apple SDK is in
+    + (if lib.versionOlder qtCompatVersion "5.11" then ''
     substituteInPlace src/3rdparty/chromium/base/mac/foundation_util.mm \
       --replace "NSArray<NSString*>*" "NSArray*"
     substituteInPlace src/3rdparty/chromium/base/mac/sdk_forward_declarations.h \
       --replace "NSDictionary<VNImageOption, id>*" "NSDictionary*" \
       --replace "NSArray<VNRequest*>*" "NSArray*" \
       --replace "typedef NSString* VNImageOption NS_STRING_ENUM" "typedef NSString* VNImageOption"
+    '' else ''
+    substituteInPlace src/3rdparty/chromium/third_party/webrtc/sdk/objc/Framework/Classes/Common/RTCFieldTrials.mm \
+      --replace "NSDictionary<NSString *, NSString *> *" "NSDictionary*"
+    substituteInPlace src/3rdparty/chromium/third_party/webrtc/sdk/objc/Framework/Headers/WebRTC/RTCFieldTrials.h \
+      --replace "NSDictionary<NSString *, NSString *> *" "NSDictionary*"
+    '')
+    + ''
 
     cat <<EOF > src/3rdparty/chromium/build/mac/find_sdk.py
 #!/usr/bin/env python
+print("${darwin.apple_sdk.sdk}")
 print("10.10.0")
-print("")
 EOF
 
     cat <<EOF > src/3rdparty/chromium/build/config/mac/sdk_info.py
 #!/usr/bin/env python
-print('xcode_version="9.1"')
-print('xcode_version_int=9')
+print('xcode_version="0910"')
+print('xcode_version_int=910')
 print('xcode_build="9B55"')
 print('machine_os_build="17E199"')
 print('sdk_path=""')
@@ -100,12 +114,32 @@ print('sdk_platform_path=""')
 print('sdk_build="17B41"')
 EOF
 
+    substituteInPlace src/3rdparty/chromium/third_party/crashpad/crashpad/util/BUILD.gn \
+      --replace '$sysroot/usr' "${darwin.xnu}"
+
     # Apple has some secret stuff they don't share with OpenBSM
     substituteInPlace src/3rdparty/chromium/base/mac/mach_port_broker.mm \
       --replace "audit_token_to_pid(msg.trailer.msgh_audit)" "msg.trailer.msgh_audit.val[5]"
-    '';
 
-  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-DMAC_OS_X_VERSION_MAX_ALLOWED=MAC_OS_X_VERSION_10_10 -DMAC_OS_X_VERSION_MIN_REQUIRED=MAC_OS_X_VERSION_10_10";
+    substituteInPlace src/3rdparty/chromium/sandbox/mac/BUILD.gn \
+      --replace 'libs = [ "sandbox" ]' 'libs = [ "/usr/lib/libsandbox.1.dylib" ]'
+    '');
+
+  NIX_CFLAGS_COMPILE =
+    lib.optionalString stdenv.isDarwin [
+      "-DMAC_OS_X_VERSION_MAX_ALLOWED=MAC_OS_X_VERSION_10_10"
+      "-DMAC_OS_X_VERSION_MIN_REQUIRED=MAC_OS_X_VERSION_10_10"
+
+      #
+      # Prevent errors like
+      # /nix/store/xxx-apple-framework-CoreData/Library/Frameworks/CoreData.framework/Headers/NSEntityDescription.h:51:7:
+      # error: pointer to non-const type 'id' with no explicit ownership
+      #     id** _kvcPropertyAccessors;
+      #
+      # TODO remove when new Apple SDK is in
+      #
+      "-fno-objc-arc"
+    ];
 
   preConfigure = ''
     export NINJAFLAGS=-j$NIX_BUILD_CORES
@@ -160,7 +194,10 @@ EOF
 
     # frameworks
     ApplicationServices
+    AVFoundation
     Foundation
+    ForceFeedback
+    GameController
     AppKit
     ImageCaptureCore
     CoreBluetooth
@@ -173,8 +210,28 @@ EOF
     libunwind
   ]);
 
+  buildInputs = optionals stdenv.isDarwin (with darwin; [
+    cups
+
+    # For sandbox.h include
+    (runCommand "MacOS_SDK_sandbox.h" {} ''
+      install -Dm444 "${lib.getDev darwin.apple_sdk.sdk}"/include/sandbox.h "$out"/include/sandbox.h
+    '')
+
+    # For:
+    # _NSDefaultRunLoopMode
+    # _OBJC_CLASS_$_NSDate
+    # _OBJC_CLASS_$_NSDictionary
+    # _OBJC_CLASS_$_NSRunLoop
+    # _OBJC_CLASS_$_NSURL
+    darwin.cf-private
+  ]);
+
+  __impureHostDeps = optional stdenv.isDarwin "/usr/lib/libsandbox.1.dylib";
+
   dontUseNinjaBuild = true;
   dontUseNinjaInstall = true;
+  dontUseXcbuild = true;
 
   postInstall = lib.optionalString stdenv.isLinux ''
     cat > $out/libexec/qt.conf <<EOF
