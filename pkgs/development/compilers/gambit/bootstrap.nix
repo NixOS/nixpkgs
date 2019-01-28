@@ -2,15 +2,15 @@
 
 stdenv.mkDerivation rec {
   name    = "gambit-bootstrap-${version}";
-  version = "4.9.1";
-  tarball_version = "v4_9_1";
+  version = "4.9.2";
+  tarball_version = "v4_9_2";
 
   src = fetchurl {
-    url    = "http://www.iro.umontreal.ca/~gambit/download/gambit/v4.9/source/gambit-${tarball_version}-devel.tgz";
-    sha256 = "10kzv568gimp9nzh5xw0h01vw50wi68z3awfp9ibqrpq2l0n7mw7";
+    url    = "http://www.iro.umontreal.ca/~gambit/download/gambit/v4.9/source/gambit-${tarball_version}.tgz";
+    sha256 = "1cpganh3jgjdw6qsapcbwxdbp1xwgx5gvdl4ymwf8p2c5k018dwy";
   };
 
-  buildInputs = [ autoconf git ];
+  buildInputs = [ autoconf ];
 
   configurePhase = ''
     ./configure --prefix=$out

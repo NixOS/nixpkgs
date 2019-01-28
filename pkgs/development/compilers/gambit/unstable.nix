@@ -1,13 +1,13 @@
 { stdenv, callPackage, fetchFromGitHub }:
 
 callPackage ./build.nix {
-  version = "unstable-2018-11-19";
-# git-version = "4.9.1-8-g61c6cb50";
+  version = "unstable-2019-01-18";
+# git-version = "4.9.2";
   src = fetchFromGitHub {
     owner = "feeley";
     repo = "gambit";
-    rev = "61c6cb500f4756be1e52095d5ab4501752525a70";
-    sha256 = "1knpb40y1g09c6yqd2fsxm3bk56bl5xrrwfsd7nqa497x6ngm5pn";
+    rev = "cf5688ecf35d85b9355c645f535c1e057b3064e7";
+    sha256 = "1xr7j4iws6hlrdbvlii4n98apr78k4adbnmy4ggzyik65bynh1kl";
   };
   inherit stdenv;
 }
