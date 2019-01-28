@@ -30,6 +30,8 @@ let
     audiences = ${removeSuffix "/" cfg.publicUrl}
   '';
 
+  user = "syncserver";
+  group = "syncserver";
 in
 
 {
@@ -126,10 +128,7 @@ in
 
   config = mkIf cfg.enable {
 
-    systemd.services.syncserver = let
-      user = "syncserver";
-      group = "syncserver";
-    in {
+    systemd.services.syncserver = {
       after = [ "network.target" ];
       description = "Firefox Sync Server";
       wantedBy = [ "multi-user.target" ];
@@ -174,11 +173,11 @@ in
       '';
     };
 
-    users.users.syncserver = {
-      group = "syncserver";
+    users.users.${user} = {
+      inherit group;
       isSystemUser = true;
     };
 
-    users.groups.syncserver = {};
+    users.groups.${group} = {};
   };
 }
