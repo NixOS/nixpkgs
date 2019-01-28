@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   name = "musescore-${version}";
-  version = "3.0";
+  version = "3.0.1";
 
   src = fetchFromGitHub {
     owner  = "musescore";
     repo   = "MuseScore";
     rev    = "v${version}";
-    sha256 = "0g8n8xpw5d6wh8bwbvy12sinl9i0ir009sr28i4izr28lr4x8v50";
+    sha256 = "085qwfv3fsgry1pnx531w83lnyvf7kbaklipdf8zqa9shi6d3x9i";
   };
 
   patches = [
