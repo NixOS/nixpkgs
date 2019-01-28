@@ -127,14 +127,16 @@ in
   config = mkIf cfg.enable {
 
     systemd.services.syncserver = let
-      syncServerEnv = pkgs.python.withPackages(ps: with ps; [ syncserver pasteScript requests ]);
       user = "syncserver";
       group = "syncserver";
     in {
       after = [ "network.target" ];
       description = "Firefox Sync Server";
       wantedBy = [ "multi-user.target" ];
-      path = [ pkgs.coreutils syncServerEnv ];
+      path = [
+        pkgs.coreutils
+        (pkgs.python.withPackages (ps: [ pkgs.syncserver ps.pasteScript ps.requests ]))
+      ];
 
       serviceConfig = {
         User = user;
@@ -166,7 +168,9 @@ in
           chown ${user}:${group} ${defaultDbLocation}
         fi
       '';
-      serviceConfig.ExecStart = "${syncServerEnv}/bin/paster serve ${syncServerIni}";
+      script = ''
+        paster serve ${syncServerIni}
+      '';
     };
 
     users.users.syncserver = {

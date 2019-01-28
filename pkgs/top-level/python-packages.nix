@@ -774,8 +774,6 @@ in {
 
   supervise_api = callPackage ../development/python-modules/supervise_api { };
 
-  syncserver = callPackage ../development/python-modules/syncserver {};
-
   tables = callPackage ../development/python-modules/tables {
     hdf5 = pkgs.hdf5.override { zlib = pkgs.zlib; };
   };
