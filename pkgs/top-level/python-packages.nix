@@ -1642,6 +1642,8 @@ in {
 
   docker = callPackage ../development/python-modules/docker {};
 
+  docker-py = disabledIf isPy27 (callPackage ../development/python-modules/docker-py {});
+
   dockerpty = callPackage ../development/python-modules/dockerpty {};
 
   docker_pycreds = callPackage ../development/python-modules/docker-pycreds {};
