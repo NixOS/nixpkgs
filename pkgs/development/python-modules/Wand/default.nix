@@ -22,6 +22,8 @@ buildPythonPackage rec {
   # tests not included with pypi release
   doCheck = false;
 
+  passthru.imagemagick = imagemagick7Big;
+
   meta = with stdenv.lib; {
     description = "Ctypes-based simple MagickWand API binding for Python";
     homepage = http://wand-py.org/;
