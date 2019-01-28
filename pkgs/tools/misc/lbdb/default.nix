@@ -7,7 +7,7 @@
 }:
 
 let
-  version = "0.48";
+  version = "0.48.1";
 in
 with stdenv.lib;
 with perlPackages;
@@ -15,7 +15,7 @@ stdenv.mkDerivation {
   name = "lbdb-${version}";
   src = fetchurl {
     url = "http://www.spinnaker.de/lbdb/download/lbdb_${version}.tar.gz";
-    sha256 = "1j1ac0nnf6j5mwb6rh61ax9aidj4lvv2vrj5b1p71d4d1m3g180z";
+    sha256 = "1gr5l2fr9qbdccga8bhsrpvz6jxigvfkdxrln9wyf2xpps5cdjxh";
   };
 
   buildInputs = [ goobook makeWrapper perl ConvertASN1 perlldap AuthenSASL ]
