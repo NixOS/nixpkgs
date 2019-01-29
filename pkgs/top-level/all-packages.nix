@@ -1619,6 +1619,8 @@ in
 
   roundcube = callPackage ../servers/roundcube { };
 
+  roundcubePlugins = callPackage ../servers/roundcube/plugins { };
+
   rsbep = callPackage ../tools/backup/rsbep { };
 
   rsyslog = callPackage ../tools/system/rsyslog {
