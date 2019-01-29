@@ -425,10 +425,16 @@ in
 
   tzinfo = attrs: lib.optionalAttrs (lib.versionAtLeast attrs.version "1.0") {
     dontBuild = false;
-    postPatch = ''
-      substituteInPlace lib/tzinfo/zoneinfo_data_source.rb \
-        --replace "/usr/share/zoneinfo" "${tzdata}/share/zoneinfo"
-    '';
+    postPatch =
+      let
+        path = if lib.versionAtLeast attrs.version "2.0"
+               then "lib/tzinfo/data_sources/zoneinfo_data_source.rb"
+               else "lib/tzinfo/zoneinfo_data_source.rb";
+      in
+        ''
+          substituteInPlace ${path} \
+            --replace "/usr/share/zoneinfo" "${tzdata}/share/zoneinfo"
+        '';
   };
 
   uuid4r = attrs: {
