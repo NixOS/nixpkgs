@@ -320,7 +320,7 @@ in
     ... # For hash agility
   }@args: fetchzip ({
     inherit name;
-    url = "https://${domain}/api/v4/projects/${lib.optionalString (group != null) "${group}%2F"}${owner}%2F${repo}/repository/archive.tar.gz?sha=${rev}";
+    url = "https://${domain}/api/v4/projects/${lib.optionalString (group != null) "${lib.replaceStrings ["."] ["%2E"] group}%2F"}${lib.replaceStrings ["."] ["%2E"] owner}%2F${lib.replaceStrings ["."] ["%2E"] repo}/repository/archive.tar.gz?sha=${rev}";
     meta.homepage = "https://${domain}/${lib.optionalString (group != null) "${group}/"}${owner}/${repo}/";
   } // removeAttrs args [ "domain" "owner" "group" "repo" "rev" ]) // { inherit rev; };
 
@@ -596,6 +596,8 @@ in
   ascii = callPackage ../tools/text/ascii { };
 
   asciinema = callPackage ../tools/misc/asciinema {};
+
+  asciiquarium = callPackage ../applications/misc/asciiquarium {};
 
   asymptote = callPackage ../tools/graphics/asymptote {
     texLive = texlive.combine { inherit (texlive) scheme-small epsf cm-super; };
@@ -1490,6 +1492,8 @@ in
   greg = callPackage ../applications/audio/greg {
     pythonPackages = python3Packages;
   };
+
+  grim = callPackage ../tools/graphics/grim { };
 
   gringo = callPackage ../tools/misc/gringo { };
 
@@ -3152,6 +3156,8 @@ in
   gx = callPackage ../tools/package-management/gx { };
   gx-go = callPackage ../tools/package-management/gx/go { };
 
+  efitools = callPackage ../tools/security/efitools { };
+
   sbsigntool = callPackage ../tools/security/sbsigntool { };
 
   gsmartcontrol = callPackage ../tools/misc/gsmartcontrol { };
@@ -3807,9 +3813,7 @@ in
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
 
-  medfile = callPackage ../development/libraries/medfile {
-    hdf5 = hdf5_1_8;
-  };
+  medfile = callPackage ../development/libraries/medfile { };
 
   memtester = callPackage ../tools/system/memtester { };
 
@@ -5738,7 +5742,7 @@ in
 
   ted = callPackage ../tools/typesetting/ted { };
 
-  teamviewer = libsForQt5.callPackage ../applications/networking/remote/teamviewer { };
+  teamviewer = libsForQt56.callPackage ../applications/networking/remote/teamviewer { };
 
   teleconsole = callPackage ../tools/misc/teleconsole { };
 
@@ -7336,51 +7340,67 @@ in
 
   llvmPackages = recurseIntoAttrs llvmPackages_5;
 
-  llvmPackages_35 = callPackage ../development/compilers/llvm/3.5 {
+  llvmPackages_35 = callPackage ../development/compilers/llvm/3.5 ({
     isl = isl_0_14;
-  };
+  } // stdenv.lib.optionalAttrs (stdenv.cc.isGNU && stdenv.hostPlatform.isi686) {
+    stdenv = overrideCC stdenv buildPackages.gcc6;
+  });
 
-  llvmPackages_37 = callPackage ../development/compilers/llvm/3.7 {
+  llvmPackages_37 = callPackage ../development/compilers/llvm/3.7 ({
     inherit (stdenvAdapters) overrideCC;
     buildLlvmTools = buildPackages.llvmPackages_37.tools;
     targetLlvmLibraries = targetPackages.llvmPackages_37.libraries;
-  };
+  } // stdenv.lib.optionalAttrs (stdenv.cc.isGNU && stdenv.hostPlatform.isi686) {
+    stdenv = overrideCC stdenv buildPackages.gcc6;
+  });
 
-  llvmPackages_38 = callPackage ../development/compilers/llvm/3.8 {
+  llvmPackages_38 = callPackage ../development/compilers/llvm/3.8 ({
     inherit (stdenvAdapters) overrideCC;
     buildLlvmTools = buildPackages.llvmPackages_38.tools;
     targetLlvmLibraries = targetPackages.llvmPackages_38.libraries;
-  };
+  } // stdenv.lib.optionalAttrs (stdenv.cc.isGNU && stdenv.hostPlatform.isi686) {
+    stdenv = overrideCC stdenv buildPackages.gcc6;
+  });
 
-  llvmPackages_39 = callPackage ../development/compilers/llvm/3.9 {
+  llvmPackages_39 = callPackage ../development/compilers/llvm/3.9 ({
     inherit (stdenvAdapters) overrideCC;
     buildLlvmTools = buildPackages.llvmPackages_39.tools;
     targetLlvmLibraries = targetPackages.llvmPackages_39.libraries;
-  };
+  } // stdenv.lib.optionalAttrs (stdenv.cc.isGNU && stdenv.hostPlatform.isi686) {
+    stdenv = overrideCC stdenv buildPackages.gcc6;
+  });
 
-  llvmPackages_4 = callPackage ../development/compilers/llvm/4 {
+  llvmPackages_4 = callPackage ../development/compilers/llvm/4 ({
     inherit (stdenvAdapters) overrideCC;
     buildLlvmTools = buildPackages.llvmPackages_4.tools;
     targetLlvmLibraries = targetPackages.llvmPackages_4.libraries;
-  };
+  } // stdenv.lib.optionalAttrs (stdenv.cc.isGNU && stdenv.hostPlatform.isi686) {
+    stdenv = overrideCC stdenv buildPackages.gcc6;
+  });
 
-  llvmPackages_5 = callPackage ../development/compilers/llvm/5 {
+  llvmPackages_5 = callPackage ../development/compilers/llvm/5 ({
     inherit (stdenvAdapters) overrideCC;
     buildLlvmTools = buildPackages.llvmPackages_5.tools;
     targetLlvmLibraries = targetPackages.llvmPackages_5.libraries;
-  };
+  } // stdenv.lib.optionalAttrs (stdenv.cc.isGNU && stdenv.hostPlatform.isi686) {
+    stdenv = overrideCC stdenv buildPackages.gcc6; # with gcc-7: undefined reference to `__divmoddi4'
+  });
 
-  llvmPackages_6 = callPackage ../development/compilers/llvm/6 {
+  llvmPackages_6 = callPackage ../development/compilers/llvm/6 ({
     inherit (stdenvAdapters) overrideCC;
     buildLlvmTools = buildPackages.llvmPackages_6.tools;
     targetLlvmLibraries = targetPackages.llvmPackages_6.libraries;
-  };
+  } // stdenv.lib.optionalAttrs (stdenv.cc.isGNU && stdenv.hostPlatform.isi686) {
+    stdenv = overrideCC stdenv buildPackages.gcc6; # with gcc-7: undefined reference to `__divmoddi4'
+  });
 
-  llvmPackages_7 = callPackage ../development/compilers/llvm/7 {
+  llvmPackages_7 = callPackage ../development/compilers/llvm/7 ({
     inherit (stdenvAdapters) overrideCC;
     buildLlvmTools = buildPackages.llvmPackages_7.tools;
     targetLlvmLibraries = targetPackages.llvmPackages_7.libraries;
-  };
+  } // stdenv.lib.optionalAttrs (stdenv.cc.isGNU && stdenv.hostPlatform.isi686) {
+    stdenv = overrideCC stdenv buildPackages.gcc6; # with gcc-7: undefined reference to `__divmoddi4'
+  });
 
   llvmPackages_latest = llvmPackages_7;
 
@@ -7499,10 +7519,12 @@ in
   };
 
   # For beta and nightly releases use the nixpkgs-mozilla overlay
-  rust = callPackage ../development/compilers/rust {
+  rust = callPackage ../development/compilers/rust ({
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
     llvm = llvm_7;
-  };
+  } // stdenv.lib.optionalAttrs (stdenv.cc.isGNU && stdenv.hostPlatform.isi686) {
+    stdenv = overrideCC stdenv gcc6; # with gcc-7: undefined reference to `__divmoddi4'
+  });
   inherit (rust) cargo rustc;
 
   buildRustCrate = callPackage ../build-support/rust/build-rust-crate { };
@@ -8131,9 +8153,11 @@ in
   spark_22 = callPackage ../applications/networking/cluster/spark { version = "2.2.1"; };
 
   spidermonkey_1_8_5 = callPackage ../development/interpreters/spidermonkey/1.8.5.nix { };
-  spidermonkey_38 = callPackage ../development/interpreters/spidermonkey/38.nix {
+  spidermonkey_38 = callPackage ../development/interpreters/spidermonkey/38.nix ({
     inherit (darwin) libobjc;
-  };
+  } // (stdenv.lib.optionalAttrs (stdenv.cc.isGNU && stdenv.hostPlatform.isi686) {
+      stdenv = overrideCC stdenv gcc6; # with gcc-7: undefined reference to `__divmoddi4'
+  }));
   spidermonkey_52 = callPackage ../development/interpreters/spidermonkey/52.nix { };
   spidermonkey_60 = callPackage ../development/interpreters/spidermonkey/60.nix { };
   spidermonkey = spidermonkey_38;
@@ -8877,6 +8901,8 @@ in
 
   mbed-cli = callPackage ../development/tools/mbed-cli { };
 
+  mdl = callPackage ../development/tools/misc/mdl { };
+
   minify = callPackage ../development/web/minify { };
 
   minizinc = callPackage ../development/tools/minizinc { };
@@ -9073,7 +9099,7 @@ in
   selendroid = callPackage ../development/tools/selenium/selendroid { };
 
   sconsPackages = callPackage ../development/tools/build-managers/scons { };
-  scons = sconsPackages.scons_3_0_3;
+  scons = sconsPackages.scons_latest;
 
   mill = callPackage ../development/tools/build-managers/mill { };
 
@@ -9148,7 +9174,9 @@ in
 
   swig1 = callPackage ../development/tools/misc/swig { };
   swig2 = callPackage ../development/tools/misc/swig/2.x.nix { };
-  swig3 = callPackage ../development/tools/misc/swig/3.x.nix { };
+  swig3 = callPackage ../development/tools/misc/swig/3.x.nix {
+    bison = bison2;
+  };
   swig = swig3;
   swigWithJava = swig;
 
@@ -10364,18 +10392,28 @@ in
 
   hyperscan = callPackage ../development/libraries/hyperscan { };
 
-  icu58 = callPackage (import ../development/libraries/icu/58.nix fetchurl) {
+  icu58 = callPackage (import ../development/libraries/icu/58.nix fetchurl) ({
     nativeBuildRoot = buildPackages.icu58.override { buildRootOnly = true; };
-  };
-  icu59 = callPackage ../development/libraries/icu/59.nix {
+  } //
+    (stdenv.lib.optionalAttrs (stdenv.cc.isGNU && stdenv.hostPlatform.isi686) {
+      stdenv = overrideCC stdenv gcc6; # with gcc-7: undefined reference to `__divmoddi4'
+    }));
+  icu59 = callPackage ../development/libraries/icu/59.nix ({
     nativeBuildRoot = buildPackages.icu59.override { buildRootOnly = true; };
-  };
-  icu60 = callPackage ../development/libraries/icu/60.nix {
+  } // (stdenv.lib.optionalAttrs (stdenv.cc.isGNU && stdenv.hostPlatform.isi686) {
+      stdenv = overrideCC stdenv gcc6; # with gcc-7: undefined reference to `__divmoddi4'
+    }));
+  icu60 = callPackage ../development/libraries/icu/60.nix ({
     nativeBuildRoot = buildPackages.icu60.override { buildRootOnly = true; };
-  };
-  icu63 = callPackage ../development/libraries/icu/63.nix {
+  } // (stdenv.lib.optionalAttrs (stdenv.cc.isGNU && stdenv.hostPlatform.isi686) {
+      stdenv = overrideCC stdenv gcc6; # with gcc-7: undefined reference to `__divmoddi4'
+    }));
+  icu63 = callPackage ../development/libraries/icu/63.nix ({
     nativeBuildRoot = buildPackages.icu63.override { buildRootOnly = true; };
-  };
+  } // (stdenv.lib.optionalAttrs (stdenv.cc.isGNU && stdenv.hostPlatform.isi686) {
+      stdenv = overrideCC stdenv gcc6; # with gcc-7: undefined reference to `__divmoddi4'
+    }));
+
   icu = icu59;
 
   id3lib = callPackage ../development/libraries/id3lib { };
@@ -12048,8 +12086,6 @@ in
     inherit (python3Packages)
     buildPythonApplication click future six;
   };
-
-  postgis = callPackage ../development/libraries/postgis { };
 
   protobuf = protobuf3_6;
 
@@ -13910,14 +13946,15 @@ in
 
   timescaledb-parallel-copy = callPackage ../development/tools/database/timescaledb-parallel-copy { };
 
-  postgresql = postgresql_9_6;
-
-  inherit (callPackages ../servers/sql/postgresql { })
+  inherit (import ../servers/sql/postgresql pkgs super)
     postgresql_9_4
     postgresql_9_5
     postgresql_9_6
     postgresql_10
-    postgresql_11;
+    postgresql_11
+  ;
+  postgresql = postgresql_9_6.override { this = postgresql; };
+  postgresqlPackages = recurseIntoAttrs postgresql.pkgs;
 
   postgresql_jdbc = callPackage ../development/java-modules/postgresql_jdbc { };
 
@@ -14247,7 +14284,7 @@ in
 
   iucode-tool = callPackage ../os-specific/linux/microcode/iucode-tool.nix { };
 
-  inherit (callPackages ../os-specific/linux/apparmor { python = python3; })
+  inherit (callPackages ../os-specific/linux/apparmor { python = python3; bison = bison2; })
     libapparmor apparmor-utils apparmor-bin-utils apparmor-parser apparmor-pam
     apparmor-profiles apparmor-kernel-patches;
 
@@ -14301,7 +14338,7 @@ in
   cockroachdb = callPackage ../servers/sql/cockroachdb { };
 
   conky = callPackage ../os-specific/linux/conky ({
-    lua = lua5_1; # conky can use 5.2, but toluapp can not
+    lua = lua5_3_compat;
     libXNVCtrl = linuxPackages.nvidia_x11.settings.libXNVCtrl;
     pulseSupport = config.pulseaudio or false;
   } // config.conky or {});
@@ -14831,6 +14868,7 @@ in
 
   # Hardened linux
   hardenedLinuxPackagesFor = kernel: linuxPackagesFor (kernel.override {
+    features.ia32Emulation = false;
     extraConfig = import ../os-specific/linux/kernel/hardened-config.nix {
       inherit stdenv;
       inherit (kernel) version;
@@ -16222,6 +16260,11 @@ in
   bevelbar = callPackage ../applications/window-managers/bevelbar { };
 
   bibletime = callPackage ../applications/misc/bibletime { };
+
+  bino3d = libsForQt5.callPackage ../applications/video/bino3d {
+    ffmpeg = ffmpeg_4;
+    glew = glew110;
+  };
 
   bitcoinarmory = callPackage ../applications/misc/bitcoinarmory { pythonPackages = python2Packages; };
 
@@ -18695,7 +18738,9 @@ in
 
   vivaldi-ffmpeg-codecs = callPackage ../applications/networking/browsers/vivaldi/ffmpeg-codecs.nix {};
 
-  openmpt123 = callPackage ../applications/audio/openmpt123 {};
+  openmpt123 = callPackage ../applications/audio/openmpt123 {
+    usePulseAudio = config.pulseaudio or false;
+  };
 
   opusfile = callPackage ../applications/audio/opusfile { };
 
@@ -18785,7 +18830,9 @@ in
 
   picard = callPackage ../applications/audio/picard { };
 
-  picocom = callPackage ../tools/misc/picocom { };
+  picocom = callPackage ../tools/misc/picocom {
+    inherit (darwin.apple_sdk.frameworks) IOKit;
+  };
 
   pidgin = callPackage ../applications/networking/instant-messengers/pidgin {
     openssl = if config.pidgin.openssl or true then openssl else null;
@@ -19521,6 +19568,7 @@ in
   syncthing-tray = callPackage ../applications/misc/syncthing-tray { };
 
   synergy = callPackage ../applications/misc/synergy {
+    inherit (darwin) cf-private;
     inherit (darwin.apple_sdk.frameworks) ApplicationServices Carbon Cocoa CoreServices ScreenSaver;
   };
 
@@ -21838,6 +21886,8 @@ in
   leo2 = callPackage ../applications/science/logic/leo2 {
      ocaml = ocaml-ng.ocamlPackages_4_01_0.ocaml;};
 
+  leo3-bin = callPackage ../applications/science/logic/leo3/binary.nix {};
+
   logisim = callPackage ../applications/science/logic/logisim {};
 
   ltl2ba = callPackage ../applications/science/logic/ltl2ba {};
@@ -21908,6 +21958,7 @@ in
   };
 
   z3 = callPackage ../applications/science/logic/z3 { python = python2; };
+  z3-tptp = callPackage ../applications/science/logic/z3/tptp.nix {};
 
   tlaplus = callPackage ../applications/science/logic/tlaplus {};
   tlaps = callPackage ../applications/science/logic/tlaplus/tlaps.nix {
@@ -22644,6 +22695,8 @@ in
   nix-template-rpm = callPackage ../build-support/templaterpm { inherit (pythonPackages) python toposort; };
 
   nix-top = callPackage ../tools/package-management/nix-top { };
+
+  nix-universal-prefetch = callPackage ../tools/package-management/nix-universal-prefetch { };
 
   nix-repl = throw (
     "nix-repl has been removed because it's not maintained anymore, " +

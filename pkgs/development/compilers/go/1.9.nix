@@ -22,13 +22,13 @@ in
 
 stdenv.mkDerivation rec {
   name = "go-${version}";
-  version = "1.9.5";
+  version = "1.9.7";
 
   src = fetchFromGitHub {
     owner = "golang";
     repo = "go";
     rev = "go${version}";
-    sha256 = "15dx1b71xv7b265gqk9nv02pirggpw7d83apikhrza2qkj64ydd0";
+    sha256 = "16bvpw0kkd2vv4d83m8xnbq3f1hfy642p7lfvk64h5h1663vpc2v";
   };
 
   # perl is used for testing go vet
@@ -178,7 +178,7 @@ stdenv.mkDerivation rec {
     homepage = http://golang.org/;
     description = "The Go Programming language";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ cstrahan orivej wkennington ];
+    maintainers = with maintainers; [ cstrahan orivej ];
     platforms = platforms.linux ++ platforms.darwin;
   };
 }

@@ -35,6 +35,5 @@ stdenv.mkDerivation rec {
     homepage = https://people.redhat.com/sgrubb/libcap-ng/;
     platforms = platforms.linux;
     license = licenses.lgpl21;
-    maintainers = with maintainers; [ wkennington ];
   };
 }

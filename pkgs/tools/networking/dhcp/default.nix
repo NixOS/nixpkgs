@@ -72,6 +72,5 @@ stdenv.mkDerivation rec {
     homepage = http://www.isc.org/products/DHCP/;
     license = licenses.isc;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ wkennington ];
   };
 }

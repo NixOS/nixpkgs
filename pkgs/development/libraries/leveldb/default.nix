@@ -38,6 +38,5 @@ stdenv.mkDerivation rec {
     description = "Fast and lightweight key/value database library by Google";
     license = licenses.bsd3;
     platforms = platforms.all;
-    maintainers = with maintainers; [ wkennington ];
   };
 }

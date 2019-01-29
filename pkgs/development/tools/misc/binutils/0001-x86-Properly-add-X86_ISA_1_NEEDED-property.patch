@@ -1,0 +1,137 @@
+From 28a27bdbb9500797e6767f80c8128b09112aeed5 Mon Sep 17 00:00:00 2001
+From: "H.J. Lu" <hjl.tools@gmail.com>
+Date: Sat, 11 Aug 2018 06:41:33 -0700
+Subject: [PATCH] x86: Properly add X86_ISA_1_NEEDED property
+
+Existing properties may be removed during property merging.  We avoid
+adding X86_ISA_1_NEEDED property only if existing properties won't be
+removed.
+
+bfd/
+
+	PR ld/23428
+	* elfxx-x86.c (_bfd_x86_elf_link_setup_gnu_properties): Don't
+	add X86_ISA_1_NEEDED property only if existing properties won't
+	be removed.
+
+ld/
+
+	PR ld/23428
+	* testsuite/ld-elf/dummy.s: New file.
+	* testsuite/ld-elf/linux-x86.S: Add X86_FEATURE_1_AND property.
+	* testsuite/ld-elf/linux-x86.exp: Add dummy.s to pr23428.
+
+(cherry picked from commit ab9e342807d132182892de1be1a92d6e91a5c1da)
+---
+ bfd/elfxx-x86.c                   | 28 ++++++++++++++++++++++------
+ ld/testsuite/ld-elf/dummy.s       |  1 +
+ ld/testsuite/ld-elf/linux-x86.S   | 28 ++++++++++++++++++++++++++++
+ ld/testsuite/ld-elf/linux-x86.exp |  2 +-
+ 6 files changed, 66 insertions(+), 7 deletions(-)
+ create mode 100644 ld/testsuite/ld-elf/dummy.s
+
+diff --git a/bfd/elfxx-x86.c b/bfd/elfxx-x86.c
+index 7ccfd25815..2d8f7b640b 100644
+--- a/bfd/elfxx-x86.c
++++ b/bfd/elfxx-x86.c
+@@ -2588,7 +2588,6 @@ _bfd_x86_elf_link_setup_gnu_properties
+ 	  prop->pr_kind = property_number;
+ 	}
+       else if (has_text
+-	       && elf_properties (ebfd) == NULL
+ 	       && elf_tdata (info->output_bfd)->o->build_id.sec == NULL
+ 	       && !htab->elf.dynamic_sections_created
+ 	       && !info->traditional_format
+@@ -2598,11 +2597,28 @@ _bfd_x86_elf_link_setup_gnu_properties
+ 	  /* If the separate code program header is needed, make sure
+ 	     that the first read-only PT_LOAD segment has no code by
+ 	     adding a GNU_PROPERTY_X86_ISA_1_NEEDED note.  */
+-	  prop = _bfd_elf_get_property (ebfd,
+-					GNU_PROPERTY_X86_ISA_1_NEEDED,
+-					4);
+-	  prop->u.number = GNU_PROPERTY_X86_ISA_1_486;
+-	  prop->pr_kind = property_number;
++	  elf_property_list *list;
++	  bfd_boolean need_property = TRUE;
++
++	  for (list = elf_properties (ebfd); list; list = list->next)
++	    switch (list->property.pr_type)
++	      {
++	      case GNU_PROPERTY_STACK_SIZE:
++	      case GNU_PROPERTY_NO_COPY_ON_PROTECTED:
++	      case GNU_PROPERTY_X86_ISA_1_NEEDED:
++		/* These properties won't be removed during merging.  */
++		need_property = FALSE;
++		break;
++	      }
++
++	  if (need_property)
++	    {
++	      prop = _bfd_elf_get_property (ebfd,
++					    GNU_PROPERTY_X86_ISA_1_NEEDED,
++					    4);
++	      prop->u.number = GNU_PROPERTY_X86_ISA_1_486;
++	      prop->pr_kind = property_number;
++	    }
+ 	}
+ 
+       /* Create the GNU property note section if needed.  */
+diff --git a/ld/testsuite/ld-elf/dummy.s b/ld/testsuite/ld-elf/dummy.s
+new file mode 100644
+index 0000000000..403f98000d
+--- /dev/null
++++ b/ld/testsuite/ld-elf/dummy.s
+@@ -0,0 +1 @@
++# Dummy
+diff --git a/ld/testsuite/ld-elf/linux-x86.S b/ld/testsuite/ld-elf/linux-x86.S
+index bdf40c6e01..d94abc1106 100644
+--- a/ld/testsuite/ld-elf/linux-x86.S
++++ b/ld/testsuite/ld-elf/linux-x86.S
+@@ -61,3 +61,31 @@ syscall:
+ 	ret			/* Return to caller.  */
+ 	.size syscall, .-syscall
+ 	.section .note.GNU-stack,"",@progbits
++
++	.section ".note.gnu.property", "a"
++#ifdef __LP64__
++	.p2align 3
++#else
++	.p2align 2
++#endif
++	.long 1f - 0f		/* name length */
++	.long 5f - 2f		/* data length */
++	.long 5			/* note type */
++0:	.asciz "GNU"		/* vendor name */
++1:
++#ifdef __LP64__
++	.p2align 3
++#else
++	.p2align 2
++#endif
++2:	.long 0xc0000002	/* pr_type.  */
++	.long 4f - 3f		/* pr_datasz.  */
++3:
++	.long 0x2
++4:
++#ifdef __LP64__
++	.p2align 3
++#else
++	.p2align 2
++#endif
++5:
+diff --git a/ld/testsuite/ld-elf/linux-x86.exp b/ld/testsuite/ld-elf/linux-x86.exp
+index 36217c6fb4..f6f5a80853 100644
+--- a/ld/testsuite/ld-elf/linux-x86.exp
++++ b/ld/testsuite/ld-elf/linux-x86.exp
+@@ -37,7 +37,7 @@ run_ld_link_exec_tests [list \
+ 	"Run PR ld/23428 test" \
+ 	"--no-dynamic-linker -z separate-code" \
+ 	"" \
+-	{ linux-x86.S pr23428.c } \
++	{ linux-x86.S pr23428.c dummy.s } \
+ 	"pr23428" \
+ 	"pass.out" \
+ 	"$NOPIE_CFLAGS -fno-asynchronous-unwind-tables" \
+-- 
+2.20.1
+

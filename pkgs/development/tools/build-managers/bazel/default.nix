@@ -1,6 +1,6 @@
 { stdenv, callPackage, lib, fetchurl, fetchpatch, runCommand, makeWrapper
 , jdk, zip, unzip, bash, writeCBin, coreutils
-, which, python, perl, gawk, gnused, gnugrep, findutils
+, which, python, perl, gawk, gnused, gnutar, gnugrep, gzip, findutils
 # Apple dependencies
 , cctools, clang, libcxx, CoreFoundation, CoreServices, Foundation
 # Allow to independently override the jdks used to build and run respectively
@@ -23,7 +23,35 @@ let
     for i in ${builtins.toString srcDeps}; do cp $i $out/$(stripHash $i); done
   '';
 
-  defaultShellPath = lib.makeBinPath [ bash coreutils findutils gawk gnugrep gnused which unzip ];
+  defaultShellPath = lib.makeBinPath
+    # Keep this list conservative. For more exotic tools, prefer to use
+    # @rules_nixpkgs to pull in tools from the nix repository. Example:
+    #
+    # WORKSPACE:
+    #
+    #     nixpkgs_git_repository(
+    #         name = "nixpkgs",
+    #         revision = "def5124ec8367efdba95a99523dd06d918cb0ae8",
+    #     )
+    #
+    #     # This defines an external Bazel workspace.
+    #     nixpkgs_package(
+    #         name = "bison",
+    #         repositories = { "nixpkgs": "@nixpkgs//:default.nix" },
+    #     )
+    #
+    # some/BUILD.bazel:
+    #
+    #     genrule(
+    #        ...
+    #        cmd = "$(location @bison//:bin/bison) -other -args",
+    #        tools = [
+    #            ...
+    #            "@bison//:bin/bison",
+    #        ],
+    #     )
+    #
+    [ bash coreutils findutils gawk gnugrep gnutar gnused gzip which unzip ];
 
 in
 stdenv.mkDerivation rec {
@@ -38,9 +66,14 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux ++ platforms.darwin;
   };
 
-  # additional tests that check bazel’s functionality
+  # Additional tests that check bazel’s functionality. Execute
+  #
+  #     nix-build . -A bazel.tests
+  #
+  # in the nixpkgs checkout root to exercise them locally.
   passthru.tests = {
-    python_bin_path = callPackage ./python-bin-path-test.nix {};
+    pythonBinPath = callPackage ./python-bin-path-test.nix {};
+    bashTools = callPackage ./bash-tools-test.nix {};
   };
 
   name = "bazel-${version}";
@@ -125,9 +158,11 @@ stdenv.mkDerivation rec {
 
     genericPatches = ''
       # Substitute python's stub shebang to plain python path. (see TODO add pr URL)
+      # See also `postFixup` where python is added to $out/nix-support
       substituteInPlace src/main/java/com/google/devtools/build/lib/bazel/rules/python/python_stub_template.txt\
           --replace "/usr/bin/env python" "${python}/bin/python" \
           --replace "NIX_STORE_PYTHON_PATH" "${python}/bin/python" \
+
       # substituteInPlace is rather slow, so prefilter the files with grep
       grep -rlZ /bin src/main/java/com/google/devtools | while IFS="" read -r -d "" path; do
         # If you add more replacements here, you must change the grep above!
@@ -262,7 +297,10 @@ stdenv.mkDerivation rec {
   # Save paths to hardcoded dependencies so Nix can detect them.
   postFixup = ''
     mkdir -p $out/nix-support
-    echo "${customBash} ${defaultShellPath}" > $out/nix-support/depends
+    echo "${customBash} ${defaultShellPath}" >> $out/nix-support/depends
+    # The templates get tar’d up into a .jar,
+    # so nix can’t detect python is needed in the runtime closure
+    echo "${python}" >> $out/nix-support/depends
   '';
 
   dontStrip = true;

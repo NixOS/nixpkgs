@@ -90,7 +90,7 @@ common = rec { # attributes common to both builds
     description = "An enhanced, drop-in replacement for MySQL";
     homepage    = https://mariadb.org/;
     license     = licenses.gpl2;
-    maintainers = with maintainers; [ thoughtpolice wkennington ];
+    maintainers = with maintainers; [ thoughtpolice ];
     platforms   = platforms.all;
   };
 };

@@ -70,6 +70,11 @@ nodePackages // {
 
   pnpm = nodePackages.pnpm.override {
     nativeBuildInputs = [ pkgs.makeWrapper ];
+
+    preRebuild = ''
+      sed 's/"link:/"file:/g' --in-place package.json
+    '';
+
     postInstall = let
       pnpmLibPath = stdenv.lib.makeBinPath [
         nodejs.passthru.python

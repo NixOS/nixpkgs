@@ -28,6 +28,5 @@ stdenv.mkDerivation rec {
     description = "A library for manipulating FlashPIX images";
     license = "Flashpix";
     platforms = platforms.all;
-    maintainers = with maintainers; [ wkennington ];
   };
 }

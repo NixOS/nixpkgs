@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, pbr, six, argparse }:
+{ stdenv, buildPythonPackage, fetchPypi, pbr, six }:
 
 buildPythonPackage rec {
   pname = "stevedore";
@@ -11,7 +11,7 @@ buildPythonPackage rec {
 
   doCheck = false;
 
-  propagatedBuildInputs = [ pbr six argparse ];
+  propagatedBuildInputs = [ pbr six ];
 
   meta = with stdenv.lib; {
     description = "Manage dynamic plugins for Python applications";

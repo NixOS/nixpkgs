@@ -47,7 +47,6 @@ stdenv.mkDerivation {
     homepage = http://www.fsij.org/pages/gnuk;
     description = "An implementation of USB cryptographic token for gpg";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ wkennington ];
     platforms = with platforms; linux;
   };
 }

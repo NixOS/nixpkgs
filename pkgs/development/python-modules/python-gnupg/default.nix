@@ -1,16 +1,13 @@
 { stdenv, buildPythonPackage, fetchPypi, gnupg1 }:
 
 buildPythonPackage rec {
-  name    = "${pname}-${version}";
   pname   = "python-gnupg";
-  version = "0.4.3";
+  version = "0.4.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "2d158dfc6b54927752b945ebe57e6a0c45da27747fa3b9ae66eccc0d2147ac0d";
+    sha256 = "45daf020b370bda13a1429c859fcdff0b766c0576844211446f9266cae97fb0e";
   };
-
-  propagatedBuildInputs = [ gnupg1 ];
 
   # Let's make the library default to our gpg binary
   patchPhase = ''

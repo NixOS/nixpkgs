@@ -16,6 +16,5 @@ stdenv.mkDerivation rec {
     description = "A reliable logging library";
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ wkennington ];
   };
 }
