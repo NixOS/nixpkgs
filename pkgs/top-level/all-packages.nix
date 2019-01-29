@@ -19195,6 +19195,8 @@ in
 
   slrn = callPackage ../applications/networking/newsreaders/slrn { };
 
+  slurp = callPackage ../tools/misc/slurp { };
+
   sniproxy = callPackage ../applications/networking/sniproxy { };
 
   sooperlooper = callPackage ../applications/audio/sooperlooper { };
