@@ -162,7 +162,7 @@ rec {
     fi
 
     # Set up automatic kernel module loading.
-    export MODULE_DIR=${linux}/lib/modules/
+    export MODULE_DIR=${kernel}/lib/modules/
     ${coreutils}/bin/cat <<EOF > /run/modprobe
     #! /bin/sh
     export MODULE_DIR=$MODULE_DIR
@@ -315,7 +315,7 @@ rec {
       name = "extract-file";
       buildInputs = [ utillinux ];
       buildCommand = ''
-        ln -s ${linux}/lib /lib
+        ln -s ${kernel}/lib /lib
         ${kmod}/bin/modprobe loop
         ${kmod}/bin/modprobe ext4
         ${kmod}/bin/modprobe hfs
@@ -340,7 +340,7 @@ rec {
       name = "extract-file-mtd";
       buildInputs = [ utillinux mtdutils ];
       buildCommand = ''
-        ln -s ${linux}/lib /lib
+        ln -s ${kernel}/lib /lib
         ${kmod}/bin/modprobe mtd
         ${kmod}/bin/modprobe mtdram total_size=131072
         ${kmod}/bin/modprobe mtdchar
