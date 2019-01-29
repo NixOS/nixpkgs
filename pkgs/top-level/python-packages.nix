@@ -4415,6 +4415,8 @@ in {
 
   taskw = callPackage ../development/python-modules/taskw { };
 
+  telethon = callPackage ../development/python-modules/telethon { };
+
   terminaltables = callPackage ../development/python-modules/terminaltables { };
 
   testpath = callPackage ../development/python-modules/testpath { };
