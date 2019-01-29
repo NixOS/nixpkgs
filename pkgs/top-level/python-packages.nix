@@ -5039,6 +5039,8 @@ in {
   zeitgeist = disabledIf isPy3k
     (toPythonModule (pkgs.zeitgeist.override{python2Packages=self;})).py;
 
+  zeroconf_19 = callPackage ../development/python-modules/zeroconf/0.19.1.nix { };
+
   zeroconf = callPackage ../development/python-modules/zeroconf { };
 
   zipfile36 = callPackage ../development/python-modules/zipfile36 { };

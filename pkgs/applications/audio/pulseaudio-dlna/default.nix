@@ -30,7 +30,7 @@ pythonPackages.buildPythonApplication rec {
 
   propagatedBuildInputs = with pythonPackages; [
     dbus-python docopt requests setproctitle protobuf psutil futures
-    chardet notify2 netifaces pyroute2 pygobject2 lxml zeroconf ]
+    chardet notify2 netifaces pyroute2 pygobject2 lxml zeroconf_19 ]
     ++ stdenv.lib.optional mp3Support lame
     ++ stdenv.lib.optional opusSupport opusTools
     ++ stdenv.lib.optional faacSupport faac
