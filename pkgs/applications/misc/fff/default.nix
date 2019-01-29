@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "fff";
-  version = "1.8";
+  version = "2.0";
 
   src = fetchFromGitHub {
     owner = "dylanaraps";
     repo = pname;
     rev = version;
-    sha256 = "1xwvycxyk34c5szhil5d1iby449fdahdgmpibn6raglkbkwfk7a1";
+    sha256 = "0pqxqg1gnl3kgqma5vb0wcy4n9xbm0dp7g7dxl60cwcyqvd4vm3i";
   };
 
   pathAdd = stdenv.lib.makeSearchPath "bin" [ xdg_utils file coreutils ];
