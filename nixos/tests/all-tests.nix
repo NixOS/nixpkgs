@@ -208,6 +208,7 @@ in
   upnp = handleTest ./upnp.nix {};
   vault = handleTest ./vault.nix {};
   virtualbox = handleTestOn ["x86_64-linux"] ./virtualbox.nix {};
+  wallabag = handleTestOn ["x86_64-linux"]  ./wallabag.nix {};
   wordpress = handleTest ./wordpress.nix {};
   xautolock = handleTest ./xautolock.nix {};
   xdg-desktop-portal = handleTest ./xdg-desktop-portal.nix {};
