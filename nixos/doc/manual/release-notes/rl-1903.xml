@@ -350,6 +350,14 @@
      See the <literal>fish</literal> <link xlink:href="https://github.com/fish-shell/fish-shell/releases/tag/3.0.0">release notes</link> for more information.
     </para>
    </listitem>
+  <listitem>
+    <para>
+      The ibus-table input method has had a change in config format, which
+      causes all previous settings to be lost. See
+      <link xlink:href="https://github.com/mike-fabian/ibus-table/commit/f9195f877c5212fef0dfa446acb328c45ba5852b">this commit message</link>
+      for details.
+    </para>
+  </listitem>
   </itemizedlist>
  </section>
 
