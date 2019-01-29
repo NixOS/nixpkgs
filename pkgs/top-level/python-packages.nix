@@ -3003,6 +3003,8 @@ in {
 
   matrix-client = callPackage ../development/python-modules/matrix-client { };
 
+  mautrix-appservice = callPackage ../development/python-modules/mautrix-appservice { };
+
   maya = callPackage ../development/python-modules/maya { };
 
   mccabe = callPackage ../development/python-modules/mccabe { };
