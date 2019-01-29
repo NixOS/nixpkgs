@@ -4417,6 +4417,8 @@ in {
 
   telethon = callPackage ../development/python-modules/telethon { };
 
+  telethon-session-sqlalchemy = callPackage ../development/python-modules/telethon-session-sqlalchemy { };
+
   terminaltables = callPackage ../development/python-modules/terminaltables { };
 
   testpath = callPackage ../development/python-modules/testpath { };
