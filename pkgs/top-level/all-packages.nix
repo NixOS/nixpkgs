@@ -23011,6 +23011,8 @@ in
 
   xinput_calibrator = callPackage ../tools/X11/xinput_calibrator { };
 
+  xlayoutdisplay = callPackage ../tools/X11/xlayoutdisplay { };
+
   xlog = callPackage ../applications/misc/xlog { };
 
   xmagnify = callPackage ../tools/X11/xmagnify { };
