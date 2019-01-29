@@ -1,5 +1,5 @@
-{ lib, stdenv, fetchurl, zlib, protobuf, ncurses, pkgconfig, IOTty
-, makeWrapper, perl, openssl, autoreconfHook, openssh, bash-completion
+{ lib, stdenv, fetchurl, zlib, protobuf, ncurses, pkgconfig
+, makeWrapper, perlPackages, openssl, autoreconfHook, openssh, bash-completion
 , libutempter ? null, withUtempter ? stdenv.isLinux }:
 
 stdenv.mkDerivation rec {
@@ -11,7 +11,9 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
-  buildInputs = [ protobuf ncurses zlib IOTty makeWrapper perl openssl bash-completion ] ++ lib.optional withUtempter libutempter;
+  buildInputs = [ protobuf ncurses zlib makeWrapper openssl bash-completion ]
+    ++ (with perlPackages; [ perl IOTty ])
+    ++ lib.optional withUtempter libutempter;
 
   patches = [ ./ssh_path.patch ./utempter_path.patch ];
   postPatch = ''
@@ -24,6 +26,8 @@ stdenv.mkDerivation rec {
   postInstall = ''
       wrapProgram $out/bin/mosh --prefix PERL5LIB : $PERL5LIB
   '';
+
+  CXXFLAGS = stdenv.lib.optionalString stdenv.cc.isClang "-std=c++11";
 
   meta = {
     homepage = https://mosh.org/;

@@ -19,6 +19,7 @@ let
         then pkgs.pkgsi686Linux.steamPackages.steam-runtime-wrapped
         else null;
     };
+    steamcmd = callPackage ./steamcmd.nix { };
   };
 
 in self

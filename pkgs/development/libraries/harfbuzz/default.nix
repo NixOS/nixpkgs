@@ -8,7 +8,7 @@
 }:
 
 let
-  version = "1.8.8";
+  version = "2.3.0";
   inherit (stdenv.lib) optional optionals optionalString;
 in
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://www.freedesktop.org/software/harfbuzz/release/harfbuzz-${version}.tar.bz2";
-    sha256 = "1ag3scnm1fcviqgx2p4858y433mr0ndqw6zccnccrqcr9mpcird8";
+    sha256 = "0r37z5cn04ig0q47y8c26gvadz15z9jj8c8q3r41j7d4anv4sc9v";
   };
 
   postPatch = ''
@@ -63,6 +63,7 @@ stdenv.mkDerivation {
     homepage = http://www.freedesktop.org/wiki/Software/HarfBuzz;
     downloadPage = "https://www.freedesktop.org/software/harfbuzz/release/";
     maintainers = [ maintainers.eelco ];
+    license = licenses.mit;
     platforms = with platforms; linux ++ darwin;
     inherit version;
     updateWalker = true;

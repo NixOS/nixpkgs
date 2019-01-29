@@ -8,7 +8,7 @@ let
   kernelBuildDir = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
 
 in stdenv.mkDerivation rec {
-  name = "openafs-${version}-${kernel.version}";
+  name = "openafs-${version}-${kernel.modDirVersion}";
   inherit version src;
 
   nativeBuildInputs = [ autoconf automake flex perl bison which ] ++ kernel.moduleBuildDependencies;
@@ -51,8 +51,8 @@ in stdenv.mkDerivation rec {
     license = licenses.ipl10;
     platforms = platforms.linux;
     maintainers = [ maintainers.z77z maintainers.spacefrogg ];
-    broken = versionOlder kernel.version "3.18" ||
-             versionAtLeast kernel.version "4.18";
+    broken = versionOlder kernel.version "3.18"
+             || stdenv.targetPlatform.isAarch64;
   };
 
 }

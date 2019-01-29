@@ -1,8 +1,5 @@
 { stdenv, fetchFromGitHub, tzdata, iana-etc, go_bootstrap, runCommand, writeScriptBin
-, perl, which, pkgconfig, patch, procps
-, pcre, cacert, llvm
-, Security, Foundation
-, makeWrapper, git, subversion, mercurial, bazaar }:
+, perl, which, pkgconfig, patch, procps, pcre, cacert, llvm, Security, Foundation }:
 
 let
 
@@ -25,19 +22,19 @@ in
 
 stdenv.mkDerivation rec {
   name = "go-${version}";
-  version = "1.10.3";
+  version = "1.10.8";
 
   src = fetchFromGitHub {
     owner = "golang";
     repo = "go";
     rev = "go${version}";
-    sha256 = "0i89298dgnmpmam3ifkm0ax266vvbq1yz7wfw8wwrcma0szrbrnb";
+    sha256 = "1yynv105wh8pwiq61v4yg5i50k13g3x634x60mhxhv4gj9cq06cx";
   };
 
   GOCACHE = "off";
 
   # perl is used for testing go vet
-  nativeBuildInputs = [ perl which pkgconfig patch makeWrapper procps ];
+  nativeBuildInputs = [ perl which pkgconfig patch procps ];
   buildInputs = [ cacert pcre ]
     ++ optionals stdenv.isLinux [ stdenv.cc.libc.out ]
     ++ optionals (stdenv.hostPlatform.libc == "glibc") [ stdenv.cc.libc.static ];
@@ -165,9 +162,6 @@ stdenv.mkDerivation rec {
   installPhase = ''
     cp -r . $GOROOT
     ( cd $GOROOT/src && ./all.bash )
-
-    # (https://github.com/golang/go/wiki/GoGetTools)
-    wrapProgram $out/share/go/bin/go --prefix PATH ":" "${stdenv.lib.makeBinPath [ git subversion mercurial bazaar ]}"
   '';
 
   preFixup = ''
@@ -180,7 +174,7 @@ stdenv.mkDerivation rec {
   disallowedReferences = [ go_bootstrap ];
 
   meta = with stdenv.lib; {
-    branch = "1.9";
+    branch = "1.10";
     homepage = http://golang.org/;
     description = "The Go Programming language";
     license = licenses.bsd3;

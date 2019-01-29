@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   name = "gzdoom-${version}";
-  version = "3.5.0";
+  version = "3.7.2";
 
   src = fetchFromGitHub {
     owner = "coelckers";
     repo = "gzdoom";
     rev = "g${version}";
-    sha256 = "04wdcm7jky8bm01ndx46q3pq7ma6npjwmp204gxidmdwjhn0bfyp";
+    sha256 = "1kjvjg218d2jk7mzlzihaa90fji4wm5zfix7ikm18wx83hcsgby3";
   };
 
   nativeBuildInputs = [ cmake makeWrapper ];
@@ -43,8 +43,7 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/coelckers/gzdoom;
     description = "A Doom source port based on ZDoom. It features an OpenGL renderer and lots of new features";
     license = licenses.gpl3;
-    platforms = platforms.linux;
+    platforms = ["x86_64-linux"];
     maintainers = with maintainers; [ lassulus ];
   };
 }
-

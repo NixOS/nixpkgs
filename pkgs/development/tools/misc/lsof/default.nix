@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   unpackPhase = "tar xvjf $src; cd lsof_*; tar xvf lsof_*.tar; sourceRoot=$( echo lsof_*/); ";
 
-  patches = stdenv.lib.optional stdenv.isDarwin ./darwin-dfile.patch;
+  patches = [ ./no-build-info.patch ] ++ stdenv.lib.optional stdenv.isDarwin ./darwin-dfile.patch;
 
   postPatch = stdenv.lib.optionalString stdenv.hostPlatform.isMusl ''
     substituteInPlace dialects/linux/dlsof.h --replace "defined(__UCLIBC__)" 1

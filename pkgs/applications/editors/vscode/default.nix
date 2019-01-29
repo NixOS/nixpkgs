@@ -1,9 +1,11 @@
 { stdenv, lib, fetchurl, unzip, atomEnv, makeDesktopItem,
-  gtk2, wrapGAppsHook, libXScrnSaver, libxkbfile, libsecret }:
+  gtk2, wrapGAppsHook, libXScrnSaver, libxkbfile, libsecret,
+  isInsiders ? false }:
 
 let
-  version = "1.26.1";
-  channel = "stable";
+  executableName = "code" + lib.optionalString isInsiders "-insiders";
+  longName = "Visual Studio Code" + lib.optionalString isInsiders " - Insiders";
+  shortName = "Code" + lib.optionalString isInsiders " - Insiders";
 
   plat = {
     "i686-linux" = "linux-ia32";
@@ -12,9 +14,9 @@ let
   }.${stdenv.hostPlatform.system};
 
   sha256 = {
-    "i686-linux" = "1g7kqbz6mrf8ngx2bnwpi9fifq5rjznxgsgwjb532z3nh92ypa8n";
-    "x86_64-linux" = "02yldycakn5zxj1ji4nmhdyazqlkjqpzdj3g8j501c3j28pgiwjy";
-    "x86_64-darwin" = "0pnsfkh20mj7pzqw7wlfd98jqc6a1mnsq1iira15n7fafqgj8zpl";
+    "i686-linux" = "1g73fay6fxlqhalkqq5m6rjbp68k9npk0rrxrkhdj8mw0cz74dpm";
+    "x86_64-linux" = "0mil8n5i2ajdyrgq862wq59ajy2122rvvn7m7mxq4ab92sk26rix";
+    "x86_64-darwin" = "07r52scs1sgafzxqal39r8vf9p9qqvwwx8f6z09gqcf6clr6k48q";
   }.${stdenv.hostPlatform.system};
 
   archive_fmt = if stdenv.hostPlatform.system == "x86_64-darwin" then "zip" else "tar.gz";
@@ -31,21 +33,54 @@ let
 in
   stdenv.mkDerivation rec {
     name = "vscode-${version}";
+    version = "1.30.2";
 
     src = fetchurl {
       name = "VSCode_${version}_${plat}.${archive_fmt}";
-      url = "https://vscode-update.azurewebsites.net/${version}/${plat}/${channel}";
+      url = "https://vscode-update.azurewebsites.net/${version}/${plat}/stable";
       inherit sha256;
     };
 
+    passthru = {
+      inherit executableName;
+    };
+
     desktopItem = makeDesktopItem {
-      name = "code";
-      exec = "code";
-      icon = "code";
-      comment = "Code editor redefined and optimized for building and debugging modern web and cloud applications";
-      desktopName = "Visual Studio Code";
+      name = executableName;
+      desktopName = longName;
+      comment = "Code Editing. Redefined.";
       genericName = "Text Editor";
-      categories = "GNOME;GTK;Utility;TextEditor;Development;";
+      exec = executableName;
+      icon = "@out@/share/pixmaps/code.png";
+      startupNotify = "true";
+      categories = "Utility;TextEditor;Development;IDE;";
+      mimeType = "text/plain;inode/directory;";
+      extraEntries = ''
+        StartupWMClass=${shortName}
+        Actions=new-empty-window;
+        Keywords=vscode;
+
+        [Desktop Action new-empty-window]
+        Name=New Empty Window
+        Exec=${executableName} --new-window %F
+        Icon=@out@/share/pixmaps/code.png
+      '';
+    };
+
+    urlHandlerDesktopItem = makeDesktopItem {
+      name = executableName + "-url-handler";
+      desktopName = longName + " - URL Handler";
+      comment = "Code Editing. Redefined.";
+      genericName = "Text Editor";
+      exec = executableName + " --open-url %U";
+      icon = "@out@/share/pixmaps/code.png";
+      startupNotify = "true";
+      categories = "Utility;TextEditor;Development;IDE;";
+      mimeType = "x-scheme-handler/vscode;";
+      extraEntries = ''
+        NoDisplay=true
+        Keywords=vscode;
+      '';
     };
 
     buildInputs = if stdenv.hostPlatform.system == "x86_64-darwin"
@@ -56,17 +91,20 @@ in
       if stdenv.hostPlatform.system == "x86_64-darwin" then ''
         mkdir -p $out/lib/vscode $out/bin
         cp -r ./* $out/lib/vscode
-        ln -s $out/lib/vscode/Contents/Resources/app/bin/code $out/bin
+        ln -s $out/lib/vscode/Contents/Resources/app/bin/${executableName} $out/bin
       '' else ''
         mkdir -p $out/lib/vscode $out/bin
         cp -r ./* $out/lib/vscode
 
-        substituteInPlace $out/lib/vscode/bin/code --replace '"$CLI" "$@"' '"$CLI" "--skip-getting-started" "$@"'
+        substituteInPlace $out/lib/vscode/bin/${executableName} --replace '"$CLI" "$@"' '"$CLI" "--skip-getting-started" "$@"'
 
-        ln -s $out/lib/vscode/bin/code $out/bin
+        ln -s $out/lib/vscode/bin/${executableName} $out/bin
 
         mkdir -p $out/share/applications
-        cp $desktopItem/share/applications/* $out/share/applications
+        substitute $desktopItem/share/applications/${executableName}.desktop $out/share/applications/${executableName}.desktop \
+          --subst-var out
+        substitute $urlHandlerDesktopItem/share/applications/${executableName}-url-handler.desktop $out/share/applications/${executableName}-url-handler.desktop \
+          --subst-var out
 
         mkdir -p $out/share/pixmaps
         cp $out/lib/vscode/resources/app/resources/linux/code.png $out/share/pixmaps/code.png
@@ -76,7 +114,7 @@ in
       patchelf \
         --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
         --set-rpath "${rpath}" \
-        $out/lib/vscode/code
+        $out/lib/vscode/${executableName}
 
       patchelf \
         --set-rpath "${rpath}" \

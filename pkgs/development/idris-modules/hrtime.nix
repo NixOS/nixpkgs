@@ -7,6 +7,7 @@ build-idris-package  {
   name = "hrtime";
   version = "2017-04-16";
 
+  ipkgName = "hrTime";
   idrisDeps = [ idrisscript ];
 
   src = fetchFromGitHub {

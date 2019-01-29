@@ -1,5 +1,5 @@
 { stdenv, fetchurl, fetchpatch, pkgconfig, libGL, glib, gdk_pixbuf, xorg, libintl
-, pangoSupport ? true, pango, cairo, gobjectIntrospection, wayland, gnome3
+, pangoSupport ? true, pango, cairo, gobject-introspection, wayland, gnome3
 , mesa_noglu
 , gstreamerSupport ? true, gst_all_1 }:
 
@@ -10,7 +10,7 @@ in stdenv.mkDerivation rec {
   version = "1.22.2";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
     sha256 = "03f0ha3qk7ca0nnkkcr1garrm1n1vvfqhkz9lwjm592fnv6ii9rr";
   };
 
@@ -31,6 +31,8 @@ in stdenv.mkDerivation rec {
     })
   ];
 
+  outputs = [ "out" "dev" ];
+
   nativeBuildInputs = [ pkgconfig libintl ];
 
   configureFlags = [
@@ -42,7 +44,7 @@ in stdenv.mkDerivation rec {
     ++ stdenv.lib.optionals (!stdenv.isDarwin) [ "--enable-gles1" "--enable-gles2" ];
 
   propagatedBuildInputs = with xorg; [
-      glib gdk_pixbuf gobjectIntrospection wayland mesa_noglu
+      glib gdk_pixbuf gobject-introspection wayland mesa_noglu
       libGL libXrandr libXfixes libXcomposite libXdamage
     ]
     ++ stdenv.lib.optionals gstreamerSupport [ gst_all_1.gstreamer
@@ -73,6 +75,7 @@ in stdenv.mkDerivation rec {
       render without stepping on each other's toes.
     '';
 
-    platforms = stdenv.lib.platforms.mesaPlatforms;
+    platforms = platforms.mesaPlatforms;
+    license = with licenses; [ mit bsd3 publicDomain sgi-b-20 ];
   };
 }

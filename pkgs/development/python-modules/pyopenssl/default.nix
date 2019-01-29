@@ -11,6 +11,41 @@
 , glibcLocales
 }:
 
+with stdenv.lib;
+
+
+let
+  # https://github.com/pyca/pyopenssl/issues/791
+  # These tests, we disable in the case that libressl is passed in as openssl.
+  failingLibresslTests = [
+    "test_op_no_compression"
+    "test_npn_advertise_error"
+    "test_npn_select_error"
+    "test_npn_client_fail"
+    "test_npn_success"
+    "test_use_certificate_chain_file_unicode"
+    "test_use_certificate_chain_file_bytes"
+    "test_add_extra_chain_cert"
+    "test_set_session_id_fail"
+    "test_verify_with_revoked"
+    "test_set_notAfter"
+    "test_set_notBefore"
+  ];
+
+  disabledTests = [
+    # https://github.com/pyca/pyopenssl/issues/692
+    # These tests, we disable always.
+    "test_set_default_verify_paths"
+    "test_fallback_default_verify_paths"
+  ] ++ (optionals (hasPrefix "libressl" openssl.meta.name) failingLibresslTests);
+
+  # Compose the final string expression, including the "-k" and the single quotes.
+  testExpression = optionalString (disabledTests != [])
+    "-k 'not ${concatStringsSep " and not " disabledTests}'";
+
+in
+
+
 buildPythonPackage rec {
   pname = "pyOpenSSL";
   version = "18.0.0";
@@ -22,16 +57,10 @@ buildPythonPackage rec {
 
   outputs = [ "out" "dev" ];
 
-  preCheck = ''
-    sed -i 's/test_set_default_verify_paths/noop/' tests/test_ssl.py
-    # https://github.com/pyca/pyopenssl/issues/692
-    sed -i 's/test_fallback_default_verify_paths/noop/' tests/test_ssl.py
-  '';
-
   checkPhase = ''
     runHook preCheck
     export LANG="en_US.UTF-8"
-    py.test
+    py.test tests ${testExpression}
     runHook postCheck
   '';
 

@@ -38,8 +38,7 @@ stdenv.mkDerivation rec {
       "-DCMAKE_CXX_FLAGS=-I${wxPython}/include/wx-3.0"
     ];
 
-  # https://www.mail-archive.com/kicad-developers@lists.launchpad.net/msg29840.html
-  nativeBuildInputs = [ (cmake.override {majorVersion = "3.10";}) doxygen  pkgconfig ];
+  nativeBuildInputs = [ cmake doxygen pkgconfig ];
   buildInputs = [
     libGLU_combined zlib libX11 wxGTK pcre libXdmcp gettext glew glm libpthreadstubs
     cairo curl openssl boost

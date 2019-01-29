@@ -62,11 +62,15 @@ let
         ''}
         $extraOptions
         END
-      '' + optionalString cfg.checkConfig ''
-        echo "Checking that Nix can read nix.conf..."
-        ln -s $out ./nix.conf
-        NIX_CONF_DIR=$PWD ${cfg.package}/bin/nix show-config >/dev/null
-      '');
+      '' + optionalString cfg.checkConfig (
+            if pkgs.stdenv.hostPlatform != pkgs.stdenv.buildPlatform then ''
+              echo "Ignore nix.checkConfig when cross-compiling"
+            '' else ''
+              echo "Checking that Nix can read nix.conf..."
+              ln -s $out ./nix.conf
+              NIX_CONF_DIR=$PWD ${cfg.package}/bin/nix show-config >/dev/null
+            '')
+      );
 
 in
 
@@ -113,11 +117,11 @@ in
 
       buildCores = mkOption {
         type = types.int;
-        default = 1;
+        default = 0;
         example = 64;
         description = ''
           This option defines the maximum number of concurrent tasks during
-          one build. It affects, e.g., -j option for make. The default is 1.
+          one build. It affects, e.g., -j option for make.
           The special value 0 means that the builder should use all
           available CPU cores in the system. Some builds may become
           non-deterministic with this option; use with care! Packages will
@@ -345,7 +349,6 @@ in
         type = types.listOf types.str;
         default =
           [
-            "$HOME/.nix-defexpr/channels"
             "nixpkgs=/nix/var/nix/profiles/per-user/root/channels/nixos"
             "nixos-config=/etc/nixos/configuration.nix"
             "/nix/var/nix/profiles/per-user/root/channels"
@@ -400,8 +403,8 @@ in
     systemd.sockets.nix-daemon.wantedBy = [ "sockets.target" ];
 
     systemd.services.nix-daemon =
-      { path = [ nix pkgs.utillinux ]
-          ++ optionals cfg.distributedBuilds [ config.programs.ssh.package pkgs.gzip ]
+      { path = [ nix pkgs.utillinux config.programs.ssh.package ]
+          ++ optionals cfg.distributedBuilds [ pkgs.gzip ]
           ++ optionals (!isNix20) [ pkgs.openssl.bin ];
 
         environment = cfg.envVars
@@ -436,7 +439,7 @@ in
 
     # Set up the environment variables for running Nix.
     environment.sessionVariables = cfg.envVars //
-      { NIX_PATH = concatStringsSep ":" cfg.nixPath;
+      { NIX_PATH = cfg.nixPath;
       };
 
     environment.extraInit = optionalString (!isNix20)
@@ -445,6 +448,10 @@ in
         # Nix daemon.
         if [ "$USER" != root -o ! -w /nix/var/nix/db ]; then
             export NIX_REMOTE=daemon
+        fi
+      '' + ''
+        if [ -e "$HOME/.nix-defexpr/channels" ]; then
+          export NIX_PATH="$HOME/.nix-defexpr/channels''${NIX_PATH:+:$NIX_PATH}"
         fi
       '';
 

@@ -12,26 +12,22 @@ let
     let
       pName = _p: (builtins.parseDrvName (_p.name)).name;
     in pName mysql == pName pkgs.mariadb;
+  isMysqlAtLeast57 =
+    let
+      pName = _p: (builtins.parseDrvName (_p.name)).name;
+    in (pName mysql == pName pkgs.mysql57)
+       && ((builtins.compareVersions mysql.version "5.7") >= 0);
 
   pidFile = "${cfg.pidDir}/mysqld.pid";
 
+  mysqldAndInstallOptions =
+    "--user=${cfg.user} --datadir=${cfg.dataDir} --basedir=${mysql}";
   mysqldOptions =
-    "--user=${cfg.user} --datadir=${cfg.dataDir} --basedir=${mysql} " +
-    "--pid-file=${pidFile}";
-
-  myCnf = pkgs.writeText "my.cnf"
-  ''
-    [mysqld]
-    port = ${toString cfg.port}
-    ${optionalString (cfg.bind != null) "bind-address = ${cfg.bind}" }
-    ${optionalString (cfg.replication.role == "master" || cfg.replication.role == "slave") "log-bin=mysql-bin"}
-    ${optionalString (cfg.replication.role == "master" || cfg.replication.role == "slave") "server-id = ${toString cfg.replication.serverId}"}
-    ${optionalString (cfg.ensureUsers != [])
-    ''
-      plugin-load-add = auth_socket.so
-    ''}
-    ${cfg.extraOptions}
-  '';
+    "${mysqldAndInstallOptions} --pid-file=${pidFile}";
+  # For MySQL 5.7+, --insecure creates the root user without password
+  # (earlier versions and MariaDB do this by default).
+  installOptions =
+    "${mysqldAndInstallOptions} ${lib.optionalString isMysqlAtLeast57 "--insecure"}";
 
 in
 
@@ -147,7 +143,7 @@ in
           option is changed. This means that users created and permissions assigned once through this option or
           otherwise have to be removed manually.
         '';
-        example = [
+        example = literalExample ''[
           {
             name = "nextcloud";
             ensurePermissions = {
@@ -160,7 +156,7 @@ in
               "*.*" = "SELECT, LOCK TABLES";
             };
           }
-        ];
+        ]'';
       };
 
       # FIXME: remove this option; it's a really bad idea.
@@ -231,6 +227,21 @@ in
 
     environment.systemPackages = [mysql];
 
+    environment.etc."my.cnf".text =
+    ''
+      [mysqld]
+      port = ${toString cfg.port}
+      datadir = ${cfg.dataDir}
+      ${optionalString (cfg.bind != null) "bind-address = ${cfg.bind}" }
+      ${optionalString (cfg.replication.role == "master" || cfg.replication.role == "slave") "log-bin=mysql-bin"}
+      ${optionalString (cfg.replication.role == "master" || cfg.replication.role == "slave") "server-id = ${toString cfg.replication.serverId}"}
+      ${optionalString (cfg.ensureUsers != [])
+      ''
+        plugin-load-add = auth_socket.so
+      ''}
+      ${cfg.extraOptions}
+    '';
+
     systemd.services.mysql = let
       hasNotify = (cfg.package == pkgs.mariadb);
     in {
@@ -238,6 +249,7 @@ in
 
         after = [ "network.target" ];
         wantedBy = [ "multi-user.target" ];
+        restartTriggers = [ config.environment.etc."my.cnf".source ];
 
         unitConfig.RequiresMountsFor = "${cfg.dataDir}";
 
@@ -252,7 +264,7 @@ in
             if ! test -e ${cfg.dataDir}/mysql; then
                 mkdir -m 0700 -p ${cfg.dataDir}
                 chown -R ${cfg.user} ${cfg.dataDir}
-                ${mysql}/bin/mysql_install_db ${mysqldOptions}
+                ${mysql}/bin/mysql_install_db --defaults-file=/etc/my.cnf ${installOptions}
                 touch /tmp/mysql_init
             fi
 
@@ -263,7 +275,8 @@ in
         serviceConfig = {
           Type = if hasNotify then "notify" else "simple";
           RuntimeDirectory = "mysqld";
-          ExecStart = "${mysql}/bin/mysqld --defaults-extra-file=${myCnf} ${mysqldOptions}";
+          # The last two environment variables are used for starting Galera clusters
+          ExecStart = "${mysql}/bin/mysqld --defaults-file=/etc/my.cnf ${mysqldOptions} $_WSREP_NEW_CLUSTER $_WSREP_START_POSITION";
         };
 
         postStart = ''
@@ -351,7 +364,7 @@ in
             ${optionalString (cfg.ensureDatabases != []) ''
               (
               ${concatMapStrings (database: ''
-                echo "CREATE DATABASE IF NOT EXISTS ${database};"
+                echo "CREATE DATABASE IF NOT EXISTS \`${database}\`;"
               '') cfg.ensureDatabases}
               ) | ${mysql}/bin/mysql -u root -N
             ''}

@@ -205,7 +205,7 @@ $ cat $(PRINT_PATH=1 nix-prefetch-url $i | tail -n 1) \
 
   <para>
    Nixpkgs provides a number of packages that will install Eclipse in its
-   various forms, these range from the bare-bones Eclipse Platform to the more
+   various forms. These range from the bare-bones Eclipse Platform to the more
    fully featured Eclipse SDK or Scala-IDE packages and multiple version are
    often available. It is possible to list available Eclipse packages by
    issuing the command:
@@ -307,23 +307,19 @@ packageOverrides = pkgs: {
 </screen>
   </para>
  </section>
+
  <section xml:id="sec-elm">
   <title>Elm</title>
 
   <para>
-   The Nix expressions for Elm reside in
-   <filename>pkgs/development/compilers/elm</filename>. They are generated
-   automatically by <command>update-elm.rb</command> script. One should specify
-   versions of Elm packages inside the script, clear the
-   <filename>packages</filename> directory and run the script from inside it.
-   <literal>elm-reactor</literal> is special because it also has Elm package
-   dependencies. The process is not automated very much for now -- you should
-   get the <literal>elm-reactor</literal> source tree (e.g. with
-   <command>nix-shell</command>) and run <command>elm2nix.rb</command> inside
-   it. Place the resulting <filename>package.nix</filename> file into
-   <filename>packages/elm-reactor-elm.nix</filename>.
+   To update Elm compiler, see <filename>nixpkgs/pkgs/development/compilers/elm/README.md</filename>.
+  </para>
+
+  <para>
+   To package Elm applications, <link xlink:href="https://github.com/hercules-ci/elm2nix#elm2nix">read about elm2nix</link>.
   </para>
  </section>
+
  <section xml:id="sec-shell-helpers">
   <title>Interactive shell helpers</title>
 
@@ -413,11 +409,9 @@ packageOverrides = pkgs: {
     in your <filename>/etc/nixos/configuration.nix</filename>. You'll also need
 <programlisting>hardware.pulseaudio.support32Bit = true;</programlisting>
     if you are using PulseAudio - this will enable 32bit ALSA apps integration.
-    To use the Steam controller, you need to add
-<programlisting>services.udev.extraRules = ''
-    SUBSYSTEM=="usb", ATTRS{idVendor}=="28de", MODE="0666"
-    KERNEL=="uinput", MODE="0660", GROUP="users", OPTIONS+="static_node=uinput"
-  '';</programlisting>
+    To use the Steam controller or other Steam supported controllers such as
+    the DualShock 4 or Nintendo Switch Pro, you need to add
+<programlisting>hardware.steam-hardware.enable = true;</programlisting>
     to your configuration.
    </para>
   </section>
@@ -643,15 +637,15 @@ cp ${myEmacsConfig} $out/share/emacs/site-lisp/default.el
     required dependencies manually - but it's tedious and there is always a
     possibility that an unwanted dependency will sneak in through some other
     package. To completely override such a package you can use
-    <varname>overrideScope</varname>.
+    <varname>overrideScope'</varname>.
    </para>
 
 <screen>
-overrides = super: self: rec {
+overrides = self: super: rec {
   haskell-mode = self.melpaPackages.haskell-mode;
   ...
 };
-((emacsPackagesNgGen emacs).overrideScope overrides).emacsWithPackages (p: with p; [
+((emacsPackagesNgGen emacs).overrideScope' overrides).emacsWithPackages (p: with p; [
   # here both these package will use haskell-mode of our own choice
   ghc-mod
   dante
@@ -671,8 +665,9 @@ overrides = super: self: rec {
     plugins = with availablePlugins; [ python perl ];
   }
 }</programlisting>
-    If the <literal>configure</literal> function returns an attrset without the <literal>plugins</literal>
-    attribute, <literal>availablePlugins</literal> will be used automatically.
+   If the <literal>configure</literal> function returns an attrset without the
+   <literal>plugins</literal> attribute, <literal>availablePlugins</literal>
+   will be used automatically.
   </para>
 
   <para>
@@ -682,10 +677,10 @@ overrides = super: self: rec {
   </para>
 
   <para>
-   The python plugin allows the addition of extra libraries. For instance, the
-   <literal>inotify.py</literal> script in weechat-scripts requires D-Bus or
-   libnotify, and the <literal>fish.py</literal> script requires pycrypto. To
-   use these scripts, use the <literal>python</literal> plugin's
+   The python and perl plugins allows the addition of extra libraries. For
+   instance, the <literal>inotify.py</literal> script in weechat-scripts
+   requires D-Bus or libnotify, and the <literal>fish.py</literal> script
+   requires pycrypto. To use these scripts, use the plugin's
    <literal>withPackages</literal> attribute:
 <programlisting>weechat.override { configure = {availablePlugins, ...}: {
     plugins = with availablePlugins; [
@@ -706,9 +701,11 @@ overrides = super: self: rec {
 }; }
 </programlisting>
   </para>
+
   <para>
-    WeeChat allows to set defaults on startup using the <literal>--run-command</literal>.
-    The <literal>configure</literal> method can be used to pass commands to the program:
+   WeeChat allows to set defaults on startup using the
+   <literal>--run-command</literal>. The <literal>configure</literal> method
+   can be used to pass commands to the program:
 <programlisting>weechat.override {
   configure = { availablePlugins, ... }: {
     init = ''
@@ -717,12 +714,14 @@ overrides = super: self: rec {
     '';
   };
 }</programlisting>
-    Further values can be added to the list of commands when running
-    <literal>weechat --run-command "your-commands"</literal>.
+   Further values can be added to the list of commands when running
+   <literal>weechat --run-command "your-commands"</literal>.
   </para>
+
   <para>
-    Additionally it's possible to specify scripts to be loaded when starting <literal>weechat</literal>.
-    These will be loaded before the commands from <literal>init</literal>:
+   Additionally it's possible to specify scripts to be loaded when starting
+   <literal>weechat</literal>. These will be loaded before the commands from
+   <literal>init</literal>:
 <programlisting>weechat.override {
   configure = { availablePlugins, ... }: {
     scripts = with pkgs.weechatScripts; [
@@ -734,11 +733,13 @@ overrides = super: self: rec {
   };
 }</programlisting>
   </para>
+
   <para>
-    In <literal>nixpkgs</literal> there's a subpackage which contains derivations for
-    WeeChat scripts. Such derivations expect a <literal>passthru.scripts</literal> attribute
-    which contains a list of all scripts inside the store path. Furthermore all scripts
-    have to live in <literal>$out/share</literal>. An exemplary derivation looks like this:
+   In <literal>nixpkgs</literal> there's a subpackage which contains
+   derivations for WeeChat scripts. Such derivations expect a
+   <literal>passthru.scripts</literal> attribute which contains a list of all
+   scripts inside the store path. Furthermore all scripts have to live in
+   <literal>$out/share</literal>. An exemplary derivation looks like this:
 <programlisting>{ stdenv, fetchurl }:
 
 stdenv.mkDerivation {
@@ -811,6 +812,77 @@ citrix_receiver.override {
   inherit extraCerts;
 }]]>
 </programlisting>
+   </para>
+  </section>
+ </section>
+ <section xml:id="sec-ibus-typing-booster">
+  <title>ibus-engines.typing-booster</title>
+
+  <para>
+   This package is an ibus-based completion method to speed up typing.
+  </para>
+
+  <section xml:id="sec-ibus-typing-booster-activate">
+   <title>Activating the engine</title>
+
+   <para>
+    IBus needs to be configured accordingly to activate
+    <literal>typing-booster</literal>. The configuration depends on the desktop
+    manager in use. For detailed instructions, please refer to the
+    <link xlink:href="https://mike-fabian.github.io/ibus-typing-booster/documentation.html">upstream
+    docs</link>.
+   </para>
+
+   <para>
+    On NixOS you need to explicitly enable <literal>ibus</literal> with given
+    engines before customizing your desktop to use
+    <literal>typing-booster</literal>. This can be achieved using the
+    <literal>ibus</literal> module:
+<programlisting>{ pkgs, ... }: {
+  i18n.inputMethod = {
+    enabled = "ibus";
+    ibus.engines = with pkgs.ibus-engines; [ typing-booster ];
+  };
+}</programlisting>
+   </para>
+  </section>
+
+  <section xml:id="sec-ibus-typing-booster-customize-hunspell">
+   <title>Using custom hunspell dictionaries</title>
+
+   <para>
+    The IBus engine is based on <literal>hunspell</literal> to support
+    completion in many languages. By default the dictionaries
+    <literal>de-de</literal>, <literal>en-us</literal>,
+    <literal>es-es</literal>, <literal>it-it</literal>,
+    <literal>sv-se</literal> and <literal>sv-fi</literal> are in use. To add
+    another dictionary, the package can be overridden like this:
+<programlisting>ibus-engines.typing-booster.override {
+  langs = [ "de-at" "en-gb" ];
+}</programlisting>
+   </para>
+
+   <para>
+    <emphasis>Note: each language passed to <literal>langs</literal> must be an
+    attribute name in <literal>pkgs.hunspellDicts</literal>.</emphasis>
+   </para>
+  </section>
+
+  <section xml:id="sec-ibus-typing-booster-emoji-picker">
+   <title>Built-in emoji picker</title>
+
+   <para>
+    The <literal>ibus-engines.typing-booster</literal> package contains a
+    program named <literal>emoji-picker</literal>. To display all emojis
+    correctly, a special font such as <literal>noto-fonts-emoji</literal> is
+    needed:
+   </para>
+
+   <para>
+    On NixOS it can be installed using the following expression:
+<programlisting>{ pkgs, ... }: {
+  fonts.fonts = with pkgs; [ noto-fonts-emoji ];
+}</programlisting>
    </para>
   </section>
  </section>

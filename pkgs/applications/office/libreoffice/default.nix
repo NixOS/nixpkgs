@@ -48,14 +48,14 @@ let
 
     translations = fetchSrc {
       name = "translations";
-      sha256 = "140i0q6nyi2l6nv2b3n7s7mggm2rb1ws3h9awa9y6m2iads54qm7";
+      sha256 = "1lgyns8zmwky1p78rvilnixqmicpfaal6x6286l4m7hv46pha181";
     };
 
     # TODO: dictionaries
 
     help = fetchSrc {
       name = "help";
-      sha256 = "0ayssl5ivhyzxi3gz3h4yhp8hq7ihig6n6iijbks5f1sm7dwridv";
+      sha256 = "0ia490xksnhh4m5fas6irr7qbnkaap7zs3fg8jbq4qrfjh81bcpm";
     };
 
   };
@@ -68,7 +68,10 @@ in stdenv.mkDerivation rec {
   # of rasqal/rasqal.h
   NIX_CFLAGS_COMPILE = [ "-I${librdf_rasqal}/include/rasqal" ];
 
-  patches = [ ./xdg-open-brief.patch ];
+  patches = [
+    ./xdg-open-brief.patch
+    ./poppler.patch
+  ];
 
   postUnpack = ''
     mkdir -v $sourceRoot/src

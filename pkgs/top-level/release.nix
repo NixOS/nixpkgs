@@ -8,7 +8,7 @@
 
    $ nix-build pkgs/top-level/release.nix -A coreutils.x86_64-linux
 */
-{ nixpkgs ? { outPath = (import ../../lib).cleanSource ../..; revCount = 1234; shortRev = "abcdef"; }
+{ nixpkgs ? { outPath = (import ../../lib).cleanSource ../..; revCount = 1234; shortRev = "abcdef"; revision = "0000000000000000000000000000000000000000"; }
 , officialRelease ? false
   # The platforms for which we build Nixpkgs.
 , supportedSystems ? [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" ]
@@ -32,7 +32,7 @@ let
 
       metrics = import ./metrics.nix { inherit pkgs nixpkgs; };
 
-      manual = import ../../doc;
+      manual = import ../../doc { inherit pkgs nixpkgs; };
       lib-tests = import ../../lib/tests/release.nix { inherit pkgs; };
 
       darwin-tested = if supportDarwin then pkgs.releaseTools.aggregate
@@ -51,6 +51,7 @@ let
               jobs.nix-info-tested.x86_64-darwin
               jobs.openssh.x86_64-darwin
               jobs.openssl.x86_64-darwin
+              jobs.pandoc.x86_64-darwin
               jobs.postgresql.x86_64-darwin
               jobs.python.x86_64-darwin
               jobs.python3.x86_64-darwin
@@ -64,9 +65,9 @@ let
               jobs.firefox-unwrapped.x86_64-darwin
               jobs.qt5.qtmultimedia.x86_64-darwin
               jobs.inkscape.x86_64-darwin
-              # jobs.gimp.x86_64-darwin
+              jobs.gimp.x86_64-darwin
               jobs.emacs.x86_64-darwin
-              # jobs.wireshark.x86_64-darwin
+              jobs.wireshark.x86_64-darwin
               jobs.transmission-gtk.x86_64-darwin
 
               # Tests
@@ -77,6 +78,7 @@ let
               jobs.tests.cc-wrapper-libcxx-39.x86_64-darwin
               jobs.tests.stdenv-inputs.x86_64-darwin
               jobs.tests.macOSSierraShared.x86_64-darwin
+              jobs.tests.patch-shebangs.x86_64-darwin
             ];
         } else null;
 
@@ -90,6 +92,7 @@ let
               jobs.lib-tests
               jobs.stdenv.x86_64-linux
               jobs.linux.x86_64-linux
+              jobs.pandoc.x86_64-linux
               jobs.python.x86_64-linux
               jobs.python3.x86_64-linux
               # Needed by travis-ci to test PRs
@@ -99,6 +102,7 @@ let
               jobs.nix-info-tested.x86_64-linux
               # Ensure that X11/GTK+ are in order.
               jobs.thunderbird.x86_64-linux
+              jobs.unar.x86_64-linux
 
               jobs.tests.cc-wrapper.x86_64-linux
               jobs.tests.cc-wrapper-gcc7.x86_64-linux
@@ -119,6 +123,7 @@ let
               jobs.tests.cc-multilib-gcc.x86_64-linux
               jobs.tests.cc-multilib-clang.x86_64-linux
               jobs.tests.stdenv-inputs.x86_64-linux
+              jobs.tests.patch-shebangs.x86_64-linux
             ]
             ++ lib.collect lib.isDerivation jobs.stdenvBootstrapTools
             ++ lib.optionals supportDarwin [
@@ -148,6 +153,7 @@ let
               jobs.tests.cc-wrapper-libcxx-6.x86_64-darwin
               jobs.tests.stdenv-inputs.x86_64-darwin
               jobs.tests.macOSSierraShared.x86_64-darwin
+              jobs.tests.patch-shebangs.x86_64-darwin
             ];
         };
 

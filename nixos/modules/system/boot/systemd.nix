@@ -193,7 +193,7 @@ let
     let mkScriptName =  s: "unit-script-" + (replaceChars [ "\\" "@" ] [ "-" "_" ] (shellEscape s) );
     in  pkgs.writeTextFile { name = mkScriptName name; executable = true; inherit text; };
 
-  unitConfig = { config, ... }: {
+  unitConfig = { config, options, ... }: {
     config = {
       unitConfig =
         optionalAttrs (config.requires != [])
@@ -219,7 +219,9 @@ let
         // optionalAttrs (config.documentation != []) {
           Documentation = toString config.documentation; }
         // optionalAttrs (config.onFailure != []) {
-          OnFailure = toString config.onFailure;
+          OnFailure = toString config.onFailure; }
+        // optionalAttrs (options.startLimitIntervalSec.isDefined) {
+          StartLimitIntervalSec = toString config.startLimitIntervalSec;
         };
     };
   };
@@ -387,7 +389,7 @@ let
 
   logindHandlerType = types.enum [
     "ignore" "poweroff" "reboot" "halt" "kexec" "suspend"
-    "hibernate" "hybrid-sleep" "lock"
+    "hibernate" "hybrid-sleep" "suspend-then-hibernate" "lock"
   ];
 
 in
@@ -587,13 +589,41 @@ in
       '';
     };
 
+    services.journald.forwardToSyslog = mkOption {
+      default = config.services.rsyslogd.enable || config.services.syslog-ng.enable;
+      defaultText = "config.services.rsyslogd.enable || config.services.syslog-ng.enable";
+      type = types.bool;
+      description = ''
+        Whether to forward log messages to syslog.
+      '';
+    };
+
     services.logind.extraConfig = mkOption {
       default = "";
       type = types.lines;
       example = "IdleAction=lock";
       description = ''
-        Extra config options for systemd-logind. See man logind.conf for
-        available options.
+        Extra config options for systemd-logind. See
+        <link xlink:href="https://www.freedesktop.org/software/systemd/man/logind.conf.html">
+        logind.conf(5)</link> for available options.
+      '';
+    };
+
+    services.logind.killUserProcesses = mkOption {
+      default = false;
+      type = types.bool;
+      description = ''
+        Specifies whether the processes of a user should be killed
+        when the user logs out.  If true, the scope unit corresponding
+        to the session and all processes inside that scope will be
+        terminated.  If false, the scope is "abandoned" (see
+        <link xlink:href="https://www.freedesktop.org/software/systemd/man/systemd.scope.html#">
+        systemd.scope(5)</link>), and processes are not killed.
+        </para>
+
+        <para>
+        See <link xlink:href="https://www.freedesktop.org/software/systemd/man/logind.conf.html#KillUserProcesses=">logind.conf(5)</link>
+        for more details.
       '';
     };
 
@@ -747,18 +777,22 @@ in
 
       "systemd/journald.conf".text = ''
         [Journal]
+        Storage=persistent
         RateLimitInterval=${config.services.journald.rateLimitInterval}
         RateLimitBurst=${toString config.services.journald.rateLimitBurst}
         ${optionalString (config.services.journald.console != "") ''
           ForwardToConsole=yes
           TTYPath=${config.services.journald.console}
         ''}
+        ${optionalString (config.services.journald.forwardToSyslog) ''
+          ForwardToSyslog=yes
+        ''}
         ${config.services.journald.extraConfig}
       '';
 
       "systemd/logind.conf".text = ''
         [Login]
-        KillUserProcesses=no
+        KillUserProcesses=${if config.services.logind.killUserProcesses then "yes" else "no"}
         HandleLidSwitch=${config.services.logind.lidSwitch}
         HandleLidSwitchDocked=${config.services.logind.lidSwitchDocked}
         ${config.services.logind.extraConfig}
@@ -782,19 +816,6 @@ in
     });
 
     services.dbus.enable = true;
-
-    system.activationScripts.systemd = stringAfter [ "groups" ]
-      ''
-        mkdir -m 0755 -p /var/lib/udev
-
-        if ! [ -e /etc/machine-id ]; then
-          ${systemd}/bin/systemd-machine-id-setup
-        fi
-
-        # Keep a persistent journal. Note that systemd-tmpfiles will
-        # set proper ownership/permissions.
-        mkdir -m 0700 -p /var/log/journal
-      '';
 
     users.users.systemd-network.uid = config.ids.uids.systemd-network;
     users.groups.systemd-network.gid = config.ids.gids.systemd-network;
@@ -879,6 +900,7 @@ in
     systemd.services.systemd-remount-fs.restartIfChanged = false;
     systemd.services.systemd-update-utmp.restartIfChanged = false;
     systemd.services.systemd-user-sessions.restartIfChanged = false; # Restart kills all active sessions.
+    systemd.services.systemd-udev-settle.restartIfChanged = false; # Causes long delays in nixos-rebuild
     # Restarting systemd-logind breaks X11
     # - upstream commit: https://cgit.freedesktop.org/xorg/xserver/commit/?id=dc48bd653c7e101
     # - systemd announcement: https://github.com/systemd/systemd/blob/22043e4317ecd2bc7834b48a6d364de76bb26d91/NEWS#L103-L112
@@ -886,6 +908,9 @@ in
     #systemd.services.systemd-logind.restartTriggers = [ config.environment.etc."systemd/logind.conf".source ];
     systemd.services.systemd-logind.restartIfChanged = false;
     systemd.services.systemd-logind.stopIfChanged = false;
+    # The user-runtime-dir@ service is managed by systemd-logind we should not touch it or else we break the users' sessions.
+    systemd.services."user-runtime-dir@".stopIfChanged = false;
+    systemd.services."user-runtime-dir@".restartIfChanged = false;
     systemd.services.systemd-journald.restartTriggers = [ config.environment.etc."systemd/journald.conf".source ];
     systemd.services.systemd-journald.stopIfChanged = false;
     systemd.targets.local-fs.unitConfig.X-StopOnReconfiguration = true;

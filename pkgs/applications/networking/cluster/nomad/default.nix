@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   name = "nomad-${version}";
-  version = "0.7.1";
+  version = "0.8.6";
   rev = "v${version}";
 
   goPackagePath = "github.com/hashicorp/nomad";
@@ -12,7 +12,7 @@ buildGoPackage rec {
     owner = "hashicorp";
     repo = "nomad";
     inherit rev;
-    sha256 = "0hn80dqzxkwvk1zjk6px725mb2i3c06smqfj0yyjz96vgf7qbqy2";
+    sha256 = "1786hbgby9q3p4x28xdc06v12n8qvxqwis70mr80axb6r4kd7yqw";
   };
 
   meta = with stdenv.lib; {

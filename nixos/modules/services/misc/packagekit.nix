@@ -6,11 +6,8 @@ let
 
   cfg = config.services.packagekit;
 
-  backend = "nix";
-
   packagekitConf = ''
 [Daemon]
-DefaultBackend=${backend}
 KeepCache=false
     '';
 

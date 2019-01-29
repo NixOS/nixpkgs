@@ -23,10 +23,10 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://software.es.net/iperf/; 
+    homepage = http://software.es.net/iperf/;
     description = "Tool to measure IP bandwidth using UDP or TCP";
     platforms = platforms.unix;
     license = "as-is";
-    maintainers = with maintainers; [ wkennington fpletz ];
+    maintainers = with maintainers; [ fpletz ];
   };
 }

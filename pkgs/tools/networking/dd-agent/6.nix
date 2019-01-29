@@ -1,26 +1,27 @@
-{ stdenv, fetchFromGitHub, buildGoPackage, makeWrapper, pythonPackages, pkgconfig }:
+{ stdenv, fetchFromGitHub, buildGoPackage, makeWrapper, pythonPackages, pkgconfig, systemd }:
 
 let
   # keep this in sync with github.com/DataDog/agent-payload dependency
-  payloadVersion = "4.7";
+  payloadVersion = "4.7.1";
 
 in buildGoPackage rec {
   name = "datadog-agent-${version}";
-  version = "6.1.4";
+  version = "6.9.0";
   owner   = "DataDog";
   repo    = "datadog-agent";
 
   src = fetchFromGitHub {
     inherit owner repo;
-    rev    = "a8ee76deb11fa334470d9b8f2356214999980894";
-    sha256 = "06grcwwbfvcw1k1d4nqrasrf76qkpik1gsw60zwafllfd9ffhl1v";
+    rev    = "${version}";
+    sha256 = "1ddzml9ip5nm5z6cmnsrqxlmcr8411qlyr05hky7yn1dacin9ifw";
   };
 
   subPackages = [
     "cmd/agent"
     "cmd/dogstatsd"
     "cmd/py-launcher"
-    "cmd/cluster-agent"
+    # Does not compile: go/src/github.com/DataDog/datadog-agent/cmd/cluster-agent/main.go:31:12: undefined: app.ClusterAgentCmd
+    #"cmd/cluster-agent"
   ];
   goDeps = ./deps.nix;
   goPackagePath = "github.com/${owner}/${repo}";
@@ -29,9 +30,11 @@ in buildGoPackage rec {
   python = pythonPackages.python;
 
   nativeBuildInputs = [ pkgconfig makeWrapper ];
+  buildInputs = [ systemd ];
   PKG_CONFIG_PATH = "${python}/lib/pkgconfig";
 
-  buildFlagsArray = let
+
+  preBuild = let
     ldFlags = stdenv.lib.concatStringsSep " " [
       "-X ${goPackagePath}/pkg/version.Commit=${src.rev}"
       "-X ${goPackagePath}/pkg/version.AgentVersion=${version}"
@@ -39,10 +42,9 @@ in buildGoPackage rec {
       "-X ${goPackagePath}/pkg/collector/py.pythonHome=${python}"
       "-r ${python}/lib"
     ];
-  in [
-    "-ldflags=${ldFlags}"
-  ];
-  buildFlags = "-tags cpython";
+  in ''
+    buildFlagsArray=( "-tags" "ec2 systemd cpython process log" "-ldflags" "${ldFlags}")
+  '';
 
   # DataDog use paths relative to the agent binary, so fix these.
   postPatch = ''
@@ -55,13 +57,14 @@ in buildGoPackage rec {
   # into standard paths.
   postInstall = ''
     mkdir -p $bin/${python.sitePackages} $bin/share/datadog-agent
-    cp -R $src/cmd/agent/dist/{conf.d,trace-agent.conf} $bin/share/datadog-agent
+    cp -R $src/cmd/agent/dist/conf.d $bin/share/datadog-agent
     cp -R $src/cmd/agent/dist/{checks,utils,config.py} $bin/${python.sitePackages}
 
     cp -R $src/pkg/status/dist/templates $bin/share/datadog-agent
 
     wrapProgram "$bin/bin/agent" \
-        --set PYTHONPATH "$bin/${python.sitePackages}"
+      --set PYTHONPATH "$bin/${python.sitePackages}" \
+      --prefix LD_LIBRARY_PATH : ${systemd.lib}/lib
   '';
 
   meta = with stdenv.lib; {

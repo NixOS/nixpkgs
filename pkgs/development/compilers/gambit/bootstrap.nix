@@ -1,13 +1,13 @@
-{ stdenv, fetchurl, autoconf, ... }:
+{ stdenv, fetchurl, autoconf, git, ... }:
 
 stdenv.mkDerivation rec {
   name    = "gambit-bootstrap-${version}";
-  version = "4.8.9";
-  tarball_version = "v4_8_9";
+  version = "4.9.2";
+  tarball_version = "v4_9_2";
 
   src = fetchurl {
-    url    = "http://www.iro.umontreal.ca/~gambit/download/gambit/v4.8/source/gambit-${tarball_version}-devel.tgz";
-    sha256 = "b7f86c794711792ca556ce41f8bc7043dffc395c01bb6d8d119bc2f454f89fbf";
+    url    = "http://www.iro.umontreal.ca/~gambit/download/gambit/v4.9/source/gambit-${tarball_version}.tgz";
+    sha256 = "1cpganh3jgjdw6qsapcbwxdbp1xwgx5gvdl4ymwf8p2c5k018dwy";
   };
 
   buildInputs = [ autoconf ];

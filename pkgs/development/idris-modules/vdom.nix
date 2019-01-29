@@ -6,6 +6,8 @@ build-idris-package  {
   name = "vdom";
   version = "0.6.0";
 
+  ipkgName = "idris-vdom";
+
   src = fetchFromGitHub {
     owner = "brandondyck";
     repo = "idris-vdom";

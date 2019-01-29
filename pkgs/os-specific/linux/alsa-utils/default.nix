@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "alsa-utils-${version}";
-  version = "1.1.6";
+  version = "1.1.8";
 
   src = fetchurl {
     url = "mirror://alsa/utils/${name}.tar.bz2";
-    sha256 = "0vnkyymgwj9rfdb11nvab30dnfrylmakdfildxl0y8mj836awp0m";
+    sha256 = "1kx45yhrxai3k595yyqs4wj0p2n5b0c9mf0k36ljjf1bj8lgb6zx";
   };
 
   patchPhase = ''

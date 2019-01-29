@@ -22,11 +22,11 @@ let
 in
 buildPythonPackage rec {
   pname = "pycuda";
-  version = "2018.1";
+  version = "2018.1.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7079f7738e83ee79ae26f0827ada29fe55921fec9760201199cc2bfb69446c92";
+    sha256 = "49d575fca3fd3c95467c3b0fb51967ad17d0c4cc18e078a6748309af4de36a8d";
   };
 
   preConfigure = ''

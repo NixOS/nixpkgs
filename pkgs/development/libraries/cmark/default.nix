@@ -13,9 +13,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
   doCheck = !stdenv.isDarwin;
-  checkPhase = ''
+  preCheck = ''
     export LD_LIBRARY_PATH=$(readlink -f ./src)
-    CTEST_OUTPUT_ON_FAILURE=1 make test
   '';
 
   meta = with stdenv.lib; {
@@ -23,5 +22,6 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/jgm/cmark;
     maintainers = [ maintainers.michelk ];
     platforms = platforms.unix;
+    license = licenses.bsd2;
   };
 }

@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     owner  = "01org";
     repo   = "libva-utils";
     rev    = version;
-    sha256 = "113wdmi4r0qligizj9zmd4a8ml1996x9g2zp2i4pmhb8frv9m8j2";
+    sha256 = "0k5v72prcq462x780j9vpqf4ckrpqf536z6say81wpna0l0qbd98";
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];

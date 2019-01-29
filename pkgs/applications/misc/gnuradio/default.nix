@@ -26,13 +26,13 @@
 
 stdenv.mkDerivation rec {
   name = "gnuradio-${version}";
-  version = "3.7.13.3";
+  version = "3.7.13.4";
 
   src = fetchFromGitHub {
     owner = "gnuradio";
     repo = "gnuradio";
     rev = "v${version}";
-    sha256 = "1qpa53axqavdv2ykby7rwh7xmhvv964xq1d7rcvbwkry7dngrbib";
+    sha256 = "0ybfn2zfr9lc1bi3c794l4bzpj8y6vas9c4rbcj4nqlx0zf3p8fn";
     fetchSubmodules = true;
   };
 
@@ -48,6 +48,10 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [
     Mako cheetah numpy scipy matplotlib pyqt4 pygtk wxPython pyopengl
+  ];
+
+  NIX_LDFLAGS = [
+    "-lpthread"
   ];
 
   enableParallelBuilding = true;

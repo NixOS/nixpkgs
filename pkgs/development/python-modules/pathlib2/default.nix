@@ -8,7 +8,7 @@
 , mock
 }:
 
-if !(pythonOlder "3.4") then null else buildPythonPackage rec {
+buildPythonPackage rec {
   pname = "pathlib2";
   version = "2.3.2";
 

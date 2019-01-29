@@ -17,6 +17,6 @@ stdenv.mkDerivation rec {
     description = "IPv6 Router Advertisement Daemon";
     platforms = platforms.linux;
     license = licenses.bsdOriginal;
-    maintainers = with maintainers; [ wkennington fpletz ];
+    maintainers = with maintainers; [ fpletz ];
   };
 }

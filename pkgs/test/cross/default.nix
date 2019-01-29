@@ -1,12 +1,11 @@
-{ pkgs, pkgsCross, lib }:
+{ pkgs, lib }:
 
 let
 
-  emulators = {
-    mingw32 = "WINEDEBUG=-all ${pkgs.winePackages.minimal}/bin/wine";
-    mingwW64 = "WINEDEBUG=-all ${pkgs.wineWowPackages.minimal}/bin/wine";
-    # TODO: add some qemu-based emulaltors here
-  };
+  testedSystems = lib.filterAttrs (name: value: let
+    platform = lib.systems.elaborate value;
+  in platform.isLinux || platform.isWindows
+  ) lib.systems.examples;
 
   getExecutable = pkgs: pkgFun: exec:
     "${pkgFun pkgs}${exec}${pkgs.hostPlatform.extensions.executable}";
@@ -17,6 +16,10 @@ let
   in pkgs.runCommand "test-${pkgName}-${crossPkgs.hostPlatform.config}" {
     nativeBuildInputs = [ pkgs.dos2unix ];
   } ''
+    # Just in case we are using wine, get rid of that annoying extra
+    # stuff.
+    export WINEDEBUG=-all
+
     HOME=$(pwd)
     mkdir -p $out
 
@@ -44,29 +47,29 @@ let
     fi
   '';
 
+  mapMultiPlatformTest = test: lib.mapAttrs (name: system: test rec {
+    crossPkgs = import pkgs.path {
+      localSystem = { inherit (pkgs.hostPlatform) config; };
+      crossSystem = system;
+    };
+
+    emulator = crossPkgs.hostPlatform.emulator pkgs;
+
+    # Apply some transformation on windows to get dlls in the right
+    # place. Unfortunately mingw doesn’t seem to be able to do linking
+    # properly.
+    platformFun = pkg: if crossPkgs.hostPlatform.isWindows then
+      pkgs.buildEnv {
+        name = "${pkg.name}-winlinks";
+        paths = [pkg] ++ pkg.buildInputs;
+      } else pkg;
+  }) testedSystems;
+
 in
 
-lib.mapAttrs (name: emulator: let
-  crossPkgs = pkgsCross.${name};
+lib.mapAttrs (_: mapMultiPlatformTest) {
 
-  # Apply some transformation on windows to get dlls in the right
-  # place. Unfortunately mingw doesn’t seem to be able to do linking
-  # properly.
-  platformFun = pkg: if crossPkgs.hostPlatform.isWindows then
-    pkgs.buildEnv {
-      name = "${pkg.name}-winlinks";
-      paths = [pkg] ++ pkg.buildInputs;
-    } else pkg;
-in {
-
-  hello = compareTest {
-    inherit emulator crossPkgs;
-    hostPkgs = pkgs;
-    exec = "/bin/hello";
-    pkgFun = pkgs: pkgs.hello;
-  };
-
-  file = compareTest {
+  file = {platformFun, crossPkgs, emulator}: compareTest {
     inherit emulator crossPkgs;
     hostPkgs = pkgs;
     exec = "/bin/file";
@@ -77,4 +80,11 @@ in {
     pkgFun = pkgs: platformFun pkgs.file;
   };
 
-}) emulators
+  hello = {platformFun, crossPkgs, emulator}: compareTest {
+    inherit emulator crossPkgs;
+    hostPkgs = pkgs;
+    exec = "/bin/hello";
+    pkgFun = pkgs: pkgs.hello;
+  };
+
+}

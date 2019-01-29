@@ -1,23 +1,23 @@
-{ stdenv, fetchurl, intltool, meson, ninja, pkgconfig, gobjectIntrospection, python2
+{ stdenv, fetchurl, fetchFromGitLab, intltool, meson, ninja, pkgconfig, gobject-introspection, python2
 , gtk-doc, docbook_xsl, docbook_xml_dtd_412, docbook_xml_dtd_43, glibcLocales
 , libxml2, upower, glib, wrapGAppsHook, vala, sqlite, libxslt, libstemmer
 , gnome3, icu, libuuid, networkmanager, libsoup, json-glib }:
 
 let
   pname = "tracker";
-  version = "2.1.4";
+  version = "2.1.6";
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "0xf58zld6pnfa8k7k70rv8ya8g7zqgahz6q4sapwxs6k97d2fgsx";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    sha256 = "143zapq50lggj3mpqg2y4rh1hgnkbn9vgvzpqxr7waiawsmx0awq";
   };
 
   nativeBuildInputs = [
-    meson ninja vala pkgconfig intltool libxslt wrapGAppsHook gobjectIntrospection
+    meson ninja vala pkgconfig intltool libxslt wrapGAppsHook gobject-introspection
     gtk-doc docbook_xsl docbook_xml_dtd_412 docbook_xml_dtd_43 glibcLocales
     python2 # for data-generators
   ];
@@ -30,17 +30,34 @@ in stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Ddbus_services=share/dbus-1/services"
+    "-Dsystemd_user_services=lib/systemd/user"
     # TODO: figure out wrapping unit tests, some of them fail on missing gsettings-desktop-schemas
     "-Dfunctional_tests=false"
+  ];
+
+  patches = [
+    # Always generate tracker-sparql.h in time
+    (fetchurl {
+      url = https://gitlab.gnome.org/GNOME/tracker/commit/3cbfaa5b374e615098e60eb4430f108b642ebe76.diff;
+      sha256 = "0smavzvsglpghggrcl8sjflki13nh7pr0jl2yv6ymbf5hr1c4dws";
+    })
   ];
 
   postPatch = ''
     patchShebangs utils/g-ir-merge/g-ir-merge
     patchShebangs utils/data-generators/cc/generate
+
+    # make .desktop Exec absolute
+    patch -p0 <<END_PATCH
+    +++ src/tracker-store/tracker-store.desktop.in.in
+    @@ -4 +4 @@
+    -Exec=gdbus call -e -d org.freedesktop.DBus -o /org/freedesktop/DBus -m org.freedesktop.DBus.StartServiceByName org.freedesktop.Tracker1 0
+    +Exec=${glib.dev}/bin/gdbus call -e -d org.freedesktop.DBus -o /org/freedesktop/DBus -m org.freedesktop.DBus.StartServiceByName org.freedesktop.Tracker1 0
+    END_PATCH
   '';
 
   postInstall = ''
-    ${glib.dev}/bin/glib-compile-schemas $out/share/glib-2.0/schemas
+    glib-compile-schemas "$out/share/glib-2.0/schemas"
   '';
 
   passthru = {

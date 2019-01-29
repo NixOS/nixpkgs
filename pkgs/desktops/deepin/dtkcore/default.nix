@@ -1,15 +1,15 @@
-{ stdenv, fetchFromGitHub, pkgconfig, qmake, gsettings-qt, pythonPackages }:
+{ stdenv, fetchFromGitHub, pkgconfig, qmake, gsettings-qt, pythonPackages, deepin }:
 
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "dtkcore";
-  version = "2.0.9";
+  version = "2.0.9.8";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "0jfl4w3sviy59rl41a5507dbhqhsxy7hqw3gf64a57gjlbdskmm1";
+    sha256 = "06jj5gpy2qbmc21nf0fnbvgw7nbjjgvzx7m2vg9byw5il8l4g22h";
   };
 
   nativeBuildInputs = [
@@ -41,6 +41,8 @@ stdenv.mkDerivation rec {
   '';
 
   enableParallelBuilding = true;
+
+  passthru.updateScript = deepin.updateScript { inherit name; };
 
   meta = with stdenv.lib; {
     description = "Deepin tool kit core modules";

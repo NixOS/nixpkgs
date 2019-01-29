@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ocaml, findlib, ocamlbuild, jbuilder
+{ stdenv, fetchurl, ocaml, findlib, ocamlbuild, dune
 , lambdaTerm, cppo, makeWrapper
 }:
 
@@ -16,11 +16,11 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ ocaml findlib ocamlbuild cppo jbuilder ];
+  buildInputs = [ ocaml findlib ocamlbuild cppo dune ];
 
   propagatedBuildInputs = [ lambdaTerm ];
 
-  inherit (jbuilder) installPhase;
+  inherit (dune) installPhase;
 
   postFixup =
    let

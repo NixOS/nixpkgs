@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ openssl nss nspr kerberos gmp zlib libpcap re2 gcc pythonPackages.wrapPython perl makeWrapper ];
   propagatedBuildInputs = (with pythonPackages; [ dpkt scapy lxml ]) ++ # For pcap2john.py
-                          (with perlPackages; [ DigestMD4 DigestMD5 DigestSHA1 GetoptLong # For pass_gen.pl
+                          (with perlPackages; [ DigestMD4 DigestSHA1 GetoptLong # For pass_gen.pl
                                                 perlldap ]); # For sha-dump.pl
                           # TODO: Get dependencies for radius2john.pl and lion2john-alt.pl
 

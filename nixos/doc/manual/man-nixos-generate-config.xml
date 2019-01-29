@@ -13,18 +13,18 @@
  </refnamediv>
  <refsynopsisdiv>
   <cmdsynopsis>
-   <command>nixos-generate-config</command> 
+   <command>nixos-generate-config</command>
    <arg>
     <option>--force</option>
    </arg>
-    
+
    <arg>
     <arg choice='plain'>
      <option>--root</option>
     </arg>
      <replaceable>root</replaceable>
    </arg>
-    
+
    <arg>
     <arg choice='plain'>
      <option>--dir</option>
@@ -167,7 +167,7 @@ $ nixos-generate-config --root /mnt
 
 {
   imports =
-    [ &lt;nixos/modules/installer/scan/not-detected.nix>
+    [ &lt;nixos/modules/installer/scan/not-detected.nix&gt;
     ];
 
   boot.initrd.availableKernelModules = [ "ehci_hcd" "ahci" ];

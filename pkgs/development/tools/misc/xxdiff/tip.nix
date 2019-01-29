@@ -1,7 +1,7 @@
 { stdenv, fetchFromBitbucket, qtbase, flex, bison, docutils }:
 
 stdenv.mkDerivation rec {
-  name = "xxdiff-4.0.1.20170623";
+  name = "xxdiff-5.0b1";
 
   src = fetchFromBitbucket {
     owner = "blais";

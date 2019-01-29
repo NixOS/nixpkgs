@@ -4,36 +4,29 @@
 , libxslt, gst_all_1 ? null
 , withPdfReader        ? true
 , withMediaPlayback    ? true
-, withWebEngineDefault ? true
 }:
 
 assert withMediaPlayback -> gst_all_1 != null;
 
 let
-  pdfjs = stdenv.mkDerivation rec {
-    name = "pdfjs-${version}";
+  pdfjs = let
     version = "1.10.100";
-
-    src = fetchzip {
-      url = "https://github.com/mozilla/pdf.js/releases/download/${version}/${name}-dist.zip";
-      sha256 = "04df4cf6i6chnggfjn6m1z9vb89f01a0l9fj5rk21yr9iirq9rkq";
-      stripRoot = false;
-    };
-
-    buildCommand = ''
-      mkdir $out
-      cp -r $src $out
-    '';
+  in
+  fetchzip rec {
+    name = "pdfjs-${version}";
+    url = "https://github.com/mozilla/pdf.js/releases/download/v${version}/${name}-dist.zip";
+    sha256 = "04df4cf6i6chnggfjn6m1z9vb89f01a0l9fj5rk21yr9iirq9rkq";
+    stripRoot = false;
   };
 
 in python3Packages.buildPythonApplication rec {
   pname = "qutebrowser";
-  version = "1.4.2";
+  version = "1.5.2";
 
   # the release tarballs are different from the git checkout!
   src = fetchurl {
     url = "https://github.com/qutebrowser/qutebrowser/releases/download/v${version}/${pname}-${version}.tar.gz";
-    sha256 = "1pnj47mllg1x34qakxs7s59x8mj262nfhdxgihsb2h2ywjq4fpgx";
+    sha256 = "0ki19mynq91aih3kxhipnay3jmn56s7p6rilws0gq0k98li6a4my";
   };
 
   # Needs tox
@@ -45,7 +38,7 @@ in python3Packages.buildPythonApplication rec {
   ] ++ lib.optionals withMediaPlayback (with gst_all_1; [
     gst-plugins-base gst-plugins-good
     gst-plugins-bad gst-plugins-ugly gst-libav
-  ]) ++ lib.optional (!withWebEngineDefault) python3Packages.qtwebkit-plugins;
+  ]);
 
   nativeBuildInputs = [
     makeWrapper wrapGAppsHook asciidoc
@@ -55,10 +48,13 @@ in python3Packages.buildPythonApplication rec {
   propagatedBuildInputs = with python3Packages; [
     pyyaml pyqt5 jinja2 pygments
     pypeg2 cssutils pyopengl attrs
+    # scripts and userscripts libs
+    tldextract beautifulsoup4
+    pyreadability pykeepass stem
   ];
 
   postPatch = ''
-    sed -i "s,/usr/share/qutebrowser,$out/share/qutebrowser,g" qutebrowser/utils/standarddir.py
+    sed -i "s,/usr/share/,$out/share/,g" qutebrowser/utils/standarddir.py
   '' + lib.optionalString withPdfReader ''
     sed -i "s,/usr/share/pdf.js,${pdfjs},g" qutebrowser/browser/pdfjs.py
   '';
@@ -81,26 +77,22 @@ in python3Packages.buildPythonApplication rec {
         "$out/share/icons/hicolor/scalable/apps/qutebrowser.svg"
 
     # Install scripts
-    sed -i "s,/usr/bin/qutebrowser,$out/bin/qutebrowser,g" scripts/open_url_in_instance.sh
-    install -Dm755 -t "$out/share/qutebrowser/scripts/" scripts/open_url_in_instance.sh
+    sed -i "s,/usr/bin/,$out/bin/,g" scripts/open_url_in_instance.sh
+    install -Dm755 -t "$out/share/qutebrowser/scripts/" $(find scripts -type f)
     install -Dm755 -t "$out/share/qutebrowser/userscripts/" misc/userscripts/*
 
-    # Install and patch python scripts
+    # Patch python scripts
     buildPythonPath "$out $propagatedBuildInputs"
-    for i in importer dictcli keytester utils; do
-      install -Dm755 -t "$out/share/qutebrowser/scripts/" scripts/$i.py
-      patchPythonScript "$out/share/qutebrowser/scripts/$i.py"
+    scripts=$(grep -rl python "$out"/share/qutebrowser/{user,}scripts/)
+    for i in $scripts; do
+      patchPythonScript "$i"
     done
   '';
 
-  postFixup = lib.optionalString (! withWebEngineDefault) ''
-    wrapProgram $out/bin/qutebrowser --add-flags "--backend webkit"
-  '';
-
-  meta = {
-    homepage = https://github.com/The-Compiler/qutebrowser;
+  meta = with stdenv.lib; {
+    homepage    = https://github.com/The-Compiler/qutebrowser;
     description = "Keyboard-focused browser with a minimal GUI";
-    license = stdenv.lib.licenses.gpl3Plus;
-    maintainers = [ stdenv.lib.maintainers.jagajaga ];
+    license     = licenses.gpl3Plus;
+    maintainers = with maintainers; [ jagajaga rnhmjoj ];
   };
 }

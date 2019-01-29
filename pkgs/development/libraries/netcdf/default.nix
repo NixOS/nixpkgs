@@ -43,5 +43,8 @@ in stdenv.mkDerivation rec {
   meta = {
       platforms = stdenv.lib.platforms.unix;
       homepage = https://www.unidata.ucar.edu/software/netcdf/;
+      license = {
+        url = https://www.unidata.ucar.edu/software/netcdf/docs/copyright.html;
+      };
   };
 }

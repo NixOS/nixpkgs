@@ -1,0 +1,41 @@
+--- a/src/dummy.h	2016-12-17 23:33:33.279533389 +0100
++++ b/src/dummy.h	2016-12-17 23:33:56.695739166 +0100
+@@ -69,7 +69,7 @@
+     int overlay_offset;
+     int videoKey;
+     int interlace;
+-    dummy_colors colors[256];
++    dummy_colors colors[1024];
+     pointer* FBBase;
+     Bool        (*CreateWindow)() ;     /* wrapped CreateWindow */
+     Bool prop;
+--- a/src/dummy_driver.c	2016-12-17 23:33:47.446657886 +0100
++++ b/src/dummy_driver.c	2016-12-17 23:33:56.696739175 +0100
+@@ -317,6 +317,7 @@
+ 	case 15:
+ 	case 16:
+ 	case 24:
++        case 30:
+ 	    break;
+ 	default:
+ 	    xf86DrvMsg(pScrn->scrnIndex, X_ERROR,
+@@ -331,8 +332,8 @@
+ 	pScrn->rgbBits = 8;
+ 
+     /* Get the depth24 pixmap format */
+-    if (pScrn->depth == 24 && pix24bpp == 0)
+-	pix24bpp = xf86GetBppFromDepth(pScrn, 24);
++    if (pScrn->depth >= 24 && pix24bpp == 0)
++	pix24bpp = xf86GetBppFromDepth(pScrn, pScrn->depth);
+ 
+     /*
+      * This must happen after pScrn->display has been set because
+@@ -623,7 +624,7 @@
+     if(!miCreateDefColormap(pScreen))
+ 	return FALSE;
+ 
+-    if (!xf86HandleColormaps(pScreen, 256, pScrn->rgbBits,
++    if (!xf86HandleColormaps(pScreen, 1024, pScrn->rgbBits,
+                          DUMMYLoadPalette, NULL, 
+                          CMAP_PALETTED_TRUECOLOR 
+ 			     | CMAP_RELOAD_ON_MODE_SWITCH))

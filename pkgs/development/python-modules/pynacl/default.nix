@@ -2,17 +2,14 @@
 
 buildPythonPackage rec {
   pname = "pynacl";
-  version = "1.2.1";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "pyca";
     repo = pname;
     rev = version;
-    sha256 = "0z9i1z4hjzmp23igyhvg131gikbrr947506lwfb3fayf0agwfv8f";
+    sha256 = "0ac00d5bfdmz1x428h2scq5b34llp61yhxradl94qjwz7ikqv052";
   };
-
-  # set timeout to unlimited, remove deadline from tests, see https://github.com/pyca/pynacl/issues/370
-  patches = [ ./pynacl-no-timeout-and-deadline.patch ];
 
   checkInputs = [ pytest hypothesis ];
   propagatedBuildInputs = [ libsodium cffi six ];
@@ -22,7 +19,7 @@ buildPythonPackage rec {
   checkPhase = ''
     py.test
   '';
-  
+
   meta = with stdenv.lib; {
     maintainers = with maintainers; [ va1entin ];
     description = "Python binding to the Networking and Cryptography (NaCl) library";

@@ -28,6 +28,5 @@ stdenv.mkDerivation rec {
     description = "A library and command line tool to personalize YubiKeys";
     license = licenses.bsd2;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ wkennington ];
   };
 }

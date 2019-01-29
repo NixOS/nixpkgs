@@ -157,9 +157,9 @@ in
       { description = "hostapd wireless AP";
 
         path = [ pkgs.hostapd ];
-        wantedBy = [ "network.target" ];
-
-        after = [ "${cfg.interface}-cfg.service" "nat.service" "bind.service" "dhcpd.service" "sys-subsystem-net-devices-${cfg.interface}.device" ];
+        after = [ "sys-subsystem-net-devices-${cfg.interface}.device" ];
+        bindsTo = [ "sys-subsystem-net-devices-${cfg.interface}.device" ];
+        requiredBy = [ "network-link-${cfg.interface}.service" ];
 
         serviceConfig =
           { ExecStart = "${pkgs.hostapd}/bin/hostapd ${configFile}";

@@ -13,6 +13,10 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "DESTDIR=$(out) PREFIX=" ];
 
+  postInstall = ''
+    install -D etc/git-extras-completion.zsh $out/share/zsh/site-functions/_git_extras
+  '';
+
   meta = with stdenv.lib; {
     homepage = https://github.com/tj/git-extras;
     description = "GIT utilities -- repo summary, repl, changelog population, author commit percentages and more";

@@ -252,7 +252,7 @@ in rec {
     ''; # */
 
   # Generate the NixOS manual.
-  manual = runCommand "nixos-manual"
+  manualHTML = runCommand "nixos-manual-html"
     { inherit sources;
       nativeBuildInputs = [ buildPackages.libxml2.bin buildPackages.libxslt.bin ];
       meta.description = "The NixOS manual in HTML format";
@@ -281,6 +281,11 @@ in rec {
       echo "doc manual $dst" >> $out/nix-support/hydra-build-products
     ''; # */
 
+  # Alias for backward compatibility. TODO(@oxij): remove eventually.
+  manual = manualHTML;
+
+  # Index page of the NixOS manual.
+  manualHTMLIndex = "${manualHTML}/share/doc/nixos/index.html";
 
   manualEpub = runCommand "nixos-manual-epub"
     { inherit sources;

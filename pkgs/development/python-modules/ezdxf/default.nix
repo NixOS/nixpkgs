@@ -1,14 +1,14 @@
 { stdenv, buildPythonPackage, fetchFromGitHub, pyparsing, pytest }:
 
 buildPythonPackage rec {
-  version = "0.8.1";
+  version = "0.8.8";
   pname = "ezdxf";
 
   src = fetchFromGitHub {
     owner = "mozman";
     repo = "ezdxf";
     rev = "v${version}";
-    sha256 = "1c20j96n3rsgzaakfjl0wnydaj2qr69gbnnjs6mfa1hz2fjqri22";
+    sha256 = "0ap6f6vy71s3y0a048r5ca98i7p8nc9l0mx3mngvvpvjij7j3fcf";
   };
 
   buildInputs = [ pytest ];

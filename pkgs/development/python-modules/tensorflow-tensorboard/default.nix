@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "tensorflow-tensorboard";
-  version = "1.9.0";
+  version = "1.11.0";
   format = "wheel";
 
   src = fetchPypi ({
@@ -22,10 +22,10 @@ buildPythonPackage rec {
     format = "wheel";
   } // (if isPy3k then {
     python = "py3";
-    sha256 = "42a04637a636e16054b065907c81396b83a9702948ecd14218f19dc5cf85de98";
+    sha256 = "1nkd37zq9mk0gc9x6d4x8whahbx2cn0wl94lir3g1pibdzx9hc4v";
   } else {
     python = "py2";
-    sha256 = "97661706fbe857c372405e0f5bd7c3db2197b5e70cec88f6924b726fde65c2c1";
+    sha256 = "1mkyb5gn952i4s7fmc9ay4yh74ysrqbiqna6dl1qmahjpbaavbf5";
   }));
 
   propagatedBuildInputs = [ numpy werkzeug protobuf markdown grpcio ] ++ lib.optional (!isPy3k) futures;

@@ -1,16 +1,16 @@
 { stdenv, fetchFromGitHub, autoreconfHook, pkgconfig
-, pcsclite, talloc, python2
+, pcsclite, talloc, python2, gnutls
 }:
 
 stdenv.mkDerivation rec {
   name = "libosmocore-${version}";
-  version = "0.9.6";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "osmocom";
     repo = "libosmocore";
-    rev = "3cc757df1822114bf446dc2d5f6a95da92321a25";
-    sha256 = "0dk7065qcy2kjra0p8q2124p73jcyvvzz3cmhid1kx5scyxmr017";
+    rev = version;
+    sha256 = "08xbj2calh1zkp79kxbq01vnh0y7nkgd4cgsivrzlyqahilbzvd9";
   };
 
   propagatedBuildInputs = [
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    pcsclite python2
+    pcsclite python2 gnutls
   ];
 
   enableParallelBuilding = true;
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     description = "libosmocore";
     homepage = https://github.com/osmocom/libosmocore;
     license = licenses.gpl2Plus;
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ mog ];
   };
 }

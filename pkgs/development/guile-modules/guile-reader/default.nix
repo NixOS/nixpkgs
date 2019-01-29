@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
        "token readers" of a standard Scheme readers. For example, it
        is used to implement Skribilo's R5RS-derived document syntax.
     '';
-    homepage = https://www.gnu.org/software/guile-reader;
+    homepage = https://www.nongnu.org/guile-reader/;
     license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.gnu;

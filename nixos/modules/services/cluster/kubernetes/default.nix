@@ -622,13 +622,6 @@ in {
         type = types.bool;
       };
 
-      # TODO: remove this deprecated flag
-      cadvisorPort = mkOption {
-        description = "Kubernetes kubelet local cadvisor port.";
-        default = 4194;
-        type = types.int;
-      };
-
       clusterDns = mkOption {
         description = "Use alternative DNS.";
         default = "10.1.0.1";
@@ -791,7 +784,7 @@ in {
     clusterCidr = mkOption {
       description = "Kubernetes controller manager and proxy CIDR Range for Pods in cluster.";
       default = "10.1.0.0/16";
-      type = types.str;
+      type = types.nullOr types.str;
     };
 
     flannel.enable = mkOption {
@@ -862,7 +855,6 @@ in {
             --hostname-override=${cfg.kubelet.hostname} \
             --allow-privileged=${boolToString cfg.kubelet.allowPrivileged} \
             --root-dir=${cfg.dataDir} \
-            --cadvisor_port=${toString cfg.kubelet.cadvisorPort} \
             ${optionalString (cfg.kubelet.clusterDns != "")
               "--cluster-dns=${cfg.kubelet.clusterDns}"} \
             ${optionalString (cfg.kubelet.clusterDomain != "")
@@ -1026,9 +1018,9 @@ in {
             ${if (cfg.controllerManager.rootCaFile!=null)
               then "--root-ca-file=${cfg.controllerManager.rootCaFile}"
               else "--root-ca-file=/var/run/kubernetes/apiserver.crt"} \
-            ${optionalString (cfg.clusterCidr!=null)
-              "--cluster-cidr=${cfg.clusterCidr}"} \
-            --allocate-node-cidrs=true \
+            ${if (cfg.clusterCidr!=null)
+              then "--cluster-cidr=${cfg.clusterCidr} --allocate-node-cidrs=true"
+              else "--allocate-node-cidrs=false"} \
             ${optionalString (cfg.controllerManager.featureGates != [])
               "--feature-gates=${concatMapStringsSep "," (feature: "${feature}=true") cfg.controllerManager.featureGates}"} \
             ${optionalString cfg.verbose "--v=6"} \

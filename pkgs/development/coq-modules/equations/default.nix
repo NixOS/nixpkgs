@@ -20,7 +20,7 @@ let
       sha256 = "0dd7zd5j2sv5cw3mfwg33ss2vcj634q3qykakc41sv7f3rfgqfnn";
     };
   };
-  param = params."${coq.coq-version}";
+  param = params."${coq.coq-version}" or params."8.8";
 in
 
 stdenv.mkDerivation rec {
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     sha256 = "${param.sha256}";
   };
 
-  buildInputs = [ coq.ocaml coq.camlp5 coq.findlib coq ];
+  buildInputs = with coq.ocamlPackages; [ ocaml camlp5 findlib coq ];
 
   preBuild = "coq_makefile -f _CoqProject -o Makefile";
 

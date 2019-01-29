@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   name = "atlassian-crowd-${version}";
-  version = "3.1.2";
+  version = "3.3.3";
 
   src = fetchurl {
     url = "https://www.atlassian.com/software/crowd/downloads/binary/${name}.tar.gz";
-    sha256 = "0pnl0zl38827ckgxh4y1mnq3lr7bvd7v3ysdxxv3nfr5zya4xgki";
+    sha256 = "1mdjxr4p56rlsgnv78bfnlwmniv8hv3hdxnfvqzsmvv88s3z7c66";
   };
 
   phases = [ "unpackPhase" "buildPhase" "installPhase" "fixupPhase" ];
@@ -16,7 +16,8 @@ stdenv.mkDerivation rec {
     mv apache-tomcat/conf/server.xml apache-tomcat/conf/server.xml.dist
     ln -s /run/atlassian-crowd/server.xml apache-tomcat/conf/server.xml
 
-    rm -rf apache-tomcat/work
+    rm -rf apache-tomcat/{logs,work}
+    ln -s /run/atlassian-crowd/logs apache-tomcat/logs
     ln -s /run/atlassian-crowd/work apache-tomcat/work
 
     ln -s /run/atlassian-crowd/database database

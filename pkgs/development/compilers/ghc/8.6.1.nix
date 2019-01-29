@@ -1,8 +1,8 @@
 { stdenv, targetPackages
 
 # build-tools
-, bootPkgs, alex, happy, hscolour
-, autoconf, automake, coreutils, fetchurl, perl, python3, m4
+, bootPkgs
+, autoconf, automake, coreutils, fetchurl, fetchpatch, perl, python3, m4, sphinx
 
 , libiconv ? null, ncurses
 
@@ -14,7 +14,7 @@
 
 , # If enabled, GHC will be built with the GPL-free but slower integer-simple
   # library instead of the faster but GPLed integer-gmp library.
-  enableIntegerSimple ? !(gmp.meta.available or false), gmp
+  enableIntegerSimple ? !(stdenv.lib.any (stdenv.lib.meta.platformMatch stdenv.hostPlatform) gmp.meta.platforms), gmp
 
 , # If enabled, use -fPIC when compiling static libs.
   enableRelocatedStaticLibs ? stdenv.targetPlatform != stdenv.hostPlatform
@@ -78,17 +78,23 @@ let
 
 in
 stdenv.mkDerivation (rec {
-  version = "8.6.0.20180810";
+  version = "8.6.1";
   name = "${targetPrefix}ghc-${version}";
 
   src = fetchurl {
-    url = "https://downloads.haskell.org/~ghc/8.6.1-beta1/ghc-${version}-src.tar.xz";
-    sha256 = "0b3nyjs4lsh67lfw7wh7r7kkf4g2xiypdxd77aycmwd3pdxj09yw";
+    url = "https://downloads.haskell.org/~ghc/${version}/ghc-${version}-src.tar.xz";
+    sha256 = "0dkh7idgrqr567fq94a0f5x3w0r4cm2ydn51nb5wfisw3rnw499c";
   };
 
   enableParallelBuilding = true;
 
   outputs = [ "out" "doc" ];
+
+  patches = [(fetchpatch rec { # https://phabricator.haskell.org/D5123
+    url = "http://tarballs.nixos.org/sha256/${sha256}";
+    name = "D5123.diff";
+    sha256 = "0nhqwdamf2y4gbwqxcgjxs0kqx23w9gv5kj0zv6450dq19rji82n";
+  })];
 
   postPatch = "patchShebangs .";
 
@@ -161,15 +167,18 @@ stdenv.mkDerivation (rec {
   # Make sure we never relax`$PATH` and hooks support for compatability.
   strictDeps = true;
 
+  # Don’t add -liconv to LDFLAGS automatically so that GHC will add it itself.
+  dontAddExtraLibs = true;
+
   nativeBuildInputs = [
-    perl autoconf automake m4 python3
-    ghc alex happy hscolour
+    perl autoconf automake m4 python3 sphinx
+    ghc bootPkgs.alex bootPkgs.happy bootPkgs.hscolour
   ];
 
   # For building runtime libs
   depsBuildTarget = toolsForTarget;
 
-  buildInputs = libDeps hostPlatform;
+  buildInputs = [ perl ] ++ (libDeps hostPlatform);
 
   propagatedBuildInputs = [ targetPackages.stdenv.cc ]
     ++ stdenv.lib.optional useLLVM llvmPackages.llvm;
@@ -183,14 +192,9 @@ stdenv.mkDerivation (rec {
 
   checkTarget = "test";
 
-  hardeningDisable = [ "format" ];
+  hardeningDisable = [ "format" ] ++ stdenv.lib.optional stdenv.targetPlatform.isMusl "pie";
 
   postInstall = ''
-    for bin in "$out"/lib/${name}/bin/*; do
-      isELF "$bin" || continue
-      paxmark m "$bin"
-    done
-
     # Install the bash completion file.
     install -D -m 444 utils/completion/ghc.bash $out/share/bash-completion/completions/${targetPrefix}ghc
 
@@ -209,7 +213,7 @@ stdenv.mkDerivation (rec {
     inherit enableShared;
 
     # Our Cabal compiler name
-    haskellCompilerName = "ghc-8.4.3";
+    haskellCompilerName = "ghc-8.6.1";
   };
 
   meta = {

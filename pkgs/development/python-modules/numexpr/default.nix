@@ -14,6 +14,12 @@ buildPythonPackage rec {
     sha256 = "ee8bc7201aa2f1962c67d27c326a11eef9df887d7b87b1278a1d4e722bf44375";
   };
 
+  # Remove existing site.cfg, use the one we built for numpy.
+  preBuild = ''
+    rm site.cfg
+    ln -s ${numpy.cfg} site.cfg
+  '';
+
   propagatedBuildInputs = [ numpy ];
 
   # Run the test suite.

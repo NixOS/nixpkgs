@@ -1,14 +1,14 @@
-{ stdenv, fetchgit, libxml2, libxslt, docbook-xsl, docbook_xml_dtd_44, perl, IPCRun, TimeDate, TimeDuration, makeWrapper, darwin }:
+{ stdenv, fetchgit, libxml2, libxslt, docbook-xsl, docbook_xml_dtd_44, perlPackages, makeWrapper, darwin }:
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "moreutils-${version}";
-  version = "0.62";
+  version = "0.63";
 
   src = fetchgit {
     url = "git://git.joeyh.name/moreutils";
     rev = "refs/tags/${version}";
-    sha256 = "0sk7rgqsqbdwr69mh7y4v9lv4v0nfmsrqgvbpy2gvy82snhfzar2";
+    sha256 = "17sszmcdck4w01hgcq7vd25p2iw3yzvjwx1yf20jg85gzs1dplrd";
   };
 
   preBuild = ''
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libxml2 libxslt docbook-xsl docbook_xml_dtd_44 makeWrapper ]
     ++ optional stdenv.isDarwin darwin.cctools;
 
-  propagatedBuildInputs = [ perl IPCRun TimeDate TimeDuration ];
+  propagatedBuildInputs = with perlPackages; [ perl IPCRun TimeDate TimeDuration ];
 
   buildFlags = "CC=cc";
   installFlags = "PREFIX=$(out)";

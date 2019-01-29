@@ -1,13 +1,13 @@
 { stdenv, lib, fetchFromGitHub, autoconf, automake, libtool, makeWrapper
-, pkgconfig, cmake, gnumake, yasm, python2
+, pkgconfig, cmake, gnumake, yasm, python2Packages
 , libgcrypt, libgpgerror, libunistring
 , boost, avahi, lame, autoreconfHook
 , gettext, pcre-cpp, yajl, fribidi, which
 , openssl, gperf, tinyxml2, taglib, libssh, swig, jre
-, libX11, xproto, inputproto, libxml2
-, libXt, libXmu, libXext, xextproto
-, libXinerama, libXrandr, randrproto
-, libXtst, libXfixes, fixesproto, systemd
+, libX11, xorgproto, libxml2
+, libXt, libXmu, libXext
+, libXinerama, libXrandr
+, libXtst, libXfixes, systemd
 , alsaLib, libGLU_combined, glew, fontconfig, freetype, ftgl
 , libjpeg, jasper, libpng, libtiff
 , libmpeg2, libsamplerate, libmad
@@ -119,12 +119,12 @@ in stdenv.mkDerivation rec {
 
     buildInputs = [
       gnutls libidn libtasn1 nasm p11-kit
-      libxml2 yasm python2
+      libxml2 yasm python2Packages.python
       boost libmicrohttpd
       gettext pcre-cpp yajl fribidi libva libdrm
       openssl gperf tinyxml2 taglib libssh swig jre
-      libX11 xproto inputproto libXt libXmu libXext xextproto
-      libXinerama libXrandr randrproto libXtst libXfixes fixesproto
+      libX11 xorgproto libXt libXmu libXext
+      libXinerama libXrandr libXtst libXfixes
       alsaLib libGLU_combined glew fontconfig freetype ftgl
       libjpeg jasper libpng libtiff wayland
       libmpeg2 libsamplerate libmad
@@ -187,7 +187,7 @@ in stdenv.mkDerivation rec {
     postInstall = ''
       for p in $(ls $out/bin/) ; do
         wrapProgram $out/bin/$p \
-          --prefix PATH            ":" "${lib.makeBinPath [ python2 glxinfo xdpyinfo ]}" \
+          --prefix PATH            ":" "${lib.makeBinPath [ python2Packages.python glxinfo xdpyinfo ]}" \
           --prefix LD_LIBRARY_PATH ":" "${lib.makeLibraryPath
               ([ curl systemd libmad libvdpau libcec libcec_platform rtmpdump libass ] ++ lib.optional nfsSupport libnfs)}"
       done
@@ -199,6 +199,10 @@ in stdenv.mkDerivation rec {
     doInstallCheck = true;
 
     installCheckPhase = "$out/bin/kodi --version";
+
+    passthru = {
+      pythonPackages = python2Packages;
+    };
 
     meta = with stdenv.lib; {
       description = "Media center";

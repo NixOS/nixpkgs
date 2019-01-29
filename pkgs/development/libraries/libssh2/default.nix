@@ -13,10 +13,11 @@ stdenv.mkDerivation rec {
   buildInputs = [ openssl zlib ]
     ++ stdenv.lib.optional stdenv.hostPlatform.isMinGW windows.mingw_w64;
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A client-side C library implementing the SSH2 protocol";
     homepage = https://www.libssh2.org;
-    platforms = stdenv.lib.platforms.all;
+    platforms = platforms.all;
+    license = licenses.bsd3;
     maintainers = [ ];
   };
 }

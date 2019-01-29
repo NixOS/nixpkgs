@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, glib, dbus, libgcrypt, pkgconfig, intltool, gobjectIntrospection, gnome3 }:
+{ stdenv, fetchurl, glib, dbus, libgcrypt, pkgconfig, intltool, gobject-introspection, gnome3 }:
 
 let
   pname = "libgnome-keyring";
@@ -8,13 +8,13 @@ stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
     sha256 = "c4c178fbb05f72acc484d22ddb0568f7532c409b0a13e06513ff54b91e947783";
   };
 
   outputs = [ "out" "dev" ];
 
-  propagatedBuildInputs = [ glib gobjectIntrospection dbus libgcrypt ];
+  propagatedBuildInputs = [ glib gobject-introspection dbus libgcrypt ];
   nativeBuildInputs = [ pkgconfig intltool ];
 
   passthru = {

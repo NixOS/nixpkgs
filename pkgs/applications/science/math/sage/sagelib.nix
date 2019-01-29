@@ -20,7 +20,7 @@
 , jinja2
 , lcalc
 , lrcalc
-, libgap
+, gap
 , linbox
 , m4ri
 , m4rie
@@ -44,19 +44,24 @@
 , singular
 , pip
 , jupyter_core
+, libhomfly
+, libbraiding
 }:
+
+# This is the core sage python package. Everything else is just wrappers gluing
+# stuff together. It is not very useful on its own though, since it will not
+# find many of its dependencies without `sage-env`, will not be tested without
+# `sage-tests` and will not have html docs without `sagedoc`.
 
 buildPythonPackage rec {
   format = "other";
-  version = sage-src.version;
-  pname = "sagelib";
-
+  version = src.version;
+  name = "sagelib-${version}";
   src = sage-src;
 
   nativeBuildInputs = [
     iml
     perl
-    openblasCompat
     jupyter_core
   ];
 
@@ -83,7 +88,7 @@ buildPythonPackage rec {
     glpk
     gsl
     lcalc
-    libgap
+    gap
     libmpc
     linbox
     lrcalc
@@ -104,6 +109,8 @@ buildPythonPackage rec {
     pip
     cython
     cysignals
+    libhomfly
+    libbraiding
   ];
 
   buildPhase = ''

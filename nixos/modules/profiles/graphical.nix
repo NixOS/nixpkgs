@@ -7,9 +7,12 @@
   services.xserver = {
     enable = true;
     displayManager.sddm.enable = true;
-    desktopManager.plasma5.enable = true;
+    desktopManager.plasma5 = {
+      enable = true;
+      enableQt4Support = false;
+    };
     libinput.enable = true; # for touchpad support on many laptops
   };
 
-  environment.systemPackages = [ pkgs.glxinfo ];
+  environment.systemPackages = [ pkgs.glxinfo pkgs.firefox ];
 }

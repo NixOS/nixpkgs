@@ -1,5 +1,5 @@
-{ stdenv, fetchFromGitHub, python3Packages, glfw, libunistring, harfbuzz,
-  fontconfig, pkgconfig, ncurses, imagemagick, xsel,
+{ stdenv, substituteAll, fetchFromGitHub, python3Packages, glfw, libunistring,
+  harfbuzz, fontconfig, pkgconfig, ncurses, imagemagick, xsel,
   libstartup_notification, libX11, libXrandr, libXinerama, libXcursor,
   libxkbcommon, libXi, libXext, wayland-protocols, wayland,
   which, dbus
@@ -7,7 +7,7 @@
 
 with python3Packages;
 buildPythonApplication rec {
-  version = "0.12.0";
+  version = "0.13.3";
   name = "kitty-${version}";
   format = "other";
 
@@ -15,7 +15,7 @@ buildPythonApplication rec {
     owner = "kovidgoyal";
     repo = "kitty";
     rev = "v${version}";
-    sha256 = "1n2pi9pc903inls1fvz257q7wpif76rj394qkgq7pixpisijdyjm";
+    sha256 = "1y0vd75j8g61jdj8miml79w5ri3pqli5rv9iq6zdrxvzfa4b2rmb";
   };
 
   buildInputs = [
@@ -28,14 +28,12 @@ buildPythonApplication rec {
 
   outputs = [ "out" "terminfo" ];
 
-  postPatch = ''
-    substituteInPlace kitty/utils.py \
-      --replace "find_library('startup-notification-1')" "'${libstartup_notification}/lib/libstartup-notification-1.so'"
-
-    substituteInPlace docs/Makefile \
-      --replace 'python3 .. +launch $(shell which sphinx-build)' \
-                'PYTHONPATH=$PYTHONPATH:.. HOME=$TMPDIR/nowhere $(shell which sphinx-build)'
-    '';
+  patches = [
+    (substituteAll {
+      src = ./fix-paths.patch;
+      libstartup_notification = "${libstartup_notification}/lib/libstartup-notification-1.so";
+    })
+  ];
 
   buildPhase = ''
     python3 setup.py linux-package

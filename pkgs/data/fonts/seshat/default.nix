@@ -18,7 +18,7 @@ fetchzip rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = "http://dotcolon.net/font/{pname}/";
+    homepage = "http://dotcolon.net/font/${pname}/";
     description = "Roman body font designed for main text by Sora Sagano";
     longDescription = ''
       Seshat is a Roman body font designed for the main text. By

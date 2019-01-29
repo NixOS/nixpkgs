@@ -84,18 +84,17 @@ nixpkgs.config.packageOverrides = pkgs:
     allowImportFromDerivation = true;
   };
   ]]></screen>
-
-You can edit the config with this snippet (by default <command>make menuconfig</command> won't work
-  out of the box on nixos):
-  <screen><![CDATA[
+   You can edit the config with this snippet (by default <command>make
+   menuconfig</command> won't work out of the box on nixos):
+<screen><![CDATA[
       nix-shell -E 'with import <nixpkgs> {}; kernelToOverride.overrideAttrs (o: {nativeBuildInputs=o.nativeBuildInputs ++ [ pkgconfig ncurses ];})'
   ]]></screen>
-
-
-  or you can let nixpkgs generate the configuration.
-  Nixpkgs generates it via answering the interactive kernel utility <command>make config</command>.
-  The answers depend on parameters passed to <filename>pkgs/os-specific/linux/kernel/generic.nix</filename>
-  (which you can influence by overriding <literal>extraConfig, autoModules, modDirVersion, preferBuiltin, extraConfig</literal>).
+   or you can let nixpkgs generate the configuration. Nixpkgs generates it via
+   answering the interactive kernel utility <command>make config</command>. The
+   answers depend on parameters passed to
+   <filename>pkgs/os-specific/linux/kernel/generic.nix</filename> (which you
+   can influence by overriding <literal>extraConfig, autoModules,
+   modDirVersion, preferBuiltin, extraConfig</literal>).
 <screen><![CDATA[
 
   mptcp93.override ({

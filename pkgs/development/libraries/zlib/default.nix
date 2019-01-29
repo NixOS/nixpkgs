@@ -1,9 +1,10 @@
 { stdenv
 , fetchurl
-, static ? false
+, static ? true
+, shared ? true
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (rec {
   name = "zlib-${version}";
   version = "1.2.11";
 
@@ -24,13 +25,15 @@ stdenv.mkDerivation rec {
       --replace 'ARFLAGS="-o"' 'ARFLAGS="-r"'
   '';
 
-  outputs = [ "out" "dev" "static" ];
+  outputs = [ "out" "dev" ]
+    ++ stdenv.lib.optional (shared && static) "static";
   setOutputFlags = false;
   outputDoc = "dev"; # single tiny man3 page
 
-  configureFlags = stdenv.lib.optional (!static) "--shared";
+  configureFlags = stdenv.lib.optional shared "--shared"
+                   ++ stdenv.lib.optional (static && !shared) "--static";
 
-  postInstall = ''
+  postInstall = stdenv.lib.optionalString (shared && static) ''
     moveToOutput lib/libz.a "$static"
   ''
     # jww (2015-01-06): Sometimes this library install as a .so, even on
@@ -38,7 +41,7 @@ stdenv.mkDerivation rec {
     # what causes this difference.
   + stdenv.lib.optionalString stdenv.hostPlatform.isDarwin ''
     for file in $out/lib/*.so* $out/lib/*.dylib* ; do
-      install_name_tool -id "$file" $file
+      ${stdenv.cc.bintools.targetPrefix}install_name_tool -id "$file" $file
     done
   ''
     # Non-typical naming confuses libtool which then refuses to use zlib's DLL
@@ -64,7 +67,7 @@ stdenv.mkDerivation rec {
     "PREFIX=${stdenv.cc.targetPrefix}"
   ] ++ stdenv.lib.optionals (stdenv.hostPlatform.libc == "msvcrt") [
     "-f" "win32/Makefile.gcc"
-  ] ++ stdenv.lib.optionals (!static) [
+  ] ++ stdenv.lib.optionals shared [
     "SHARED_MODE=1"
   ];
 
@@ -78,4 +81,10 @@ stdenv.mkDerivation rec {
     license = licenses.zlib;
     platforms = platforms.all;
   };
-}
+} // stdenv.lib.optionalAttrs (stdenv.hostPlatform != stdenv.buildPlatform) {
+  preConfigure = ''
+    export CHOST=${stdenv.hostPlatform.config}
+  '';
+} // stdenv.lib.optionalAttrs (stdenv.hostPlatform.libc == "msvcrt") {
+  configurePhase = ":";
+})

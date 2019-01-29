@@ -152,6 +152,14 @@ ln -sfn /run/booted-system /nix/var/nix/gcroots/booted-system
 @shell@ @postBootCommands@
 
 
+# Ensure systemd doesn't try to populate /etc, by forcing its first-boot
+# heuristic off. It doesn't matter what's in /etc/machine-id for this purpose,
+# and systemd will immediately fill in the file when it starts, so just
+# creating it is enough. This `: >>` pattern avoids forking and avoids changing
+# the mtime if the file already exists.
+: >> /etc/machine-id
+
+
 # Reset the logging file descriptors.
 exec 1>&$logOutFd 2>&$logErrFd
 exec {logOutFd}>&- {logErrFd}>&-

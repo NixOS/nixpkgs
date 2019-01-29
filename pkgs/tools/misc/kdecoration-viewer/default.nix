@@ -2,13 +2,13 @@
 , cmake, extra-cmake-modules, qtquickcontrols, kconfigwidgets, kdeclarative, kdecoration }:
 
 stdenv.mkDerivation rec {
-  name = "kdecoration-viewer-2015-08-20";
+  name = "kdecoration-viewer-2018-07-24";
 
   src = fetchFromGitHub {
     owner = "KDE";
     repo = "kdecoration-viewer";
-    rev = "d7174acee01475fbdb71cfd48ca49d487a141701";
-    sha256 = "1cc4xxv72a82p1w9r76090xba7g069r41bi4zx32k4gz3vyl1am6";
+    rev = "6e50b39c651bbf92fd7e7116d43bf57288254288";
+    sha256 = "01v6i081vx0mydqvnj05xli86m52v6bxxc3z1zlyyap9cfhag7lj";
   };
 
   nativeBuildInputs = [ cmake extra-cmake-modules ];

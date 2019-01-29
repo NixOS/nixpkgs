@@ -1,5 +1,5 @@
 { stdenv, fetchurl, fftwFloat, gtk2, ladspaPlugins, libjack2, liblo, libxml2
-, makeWrapper, pkgconfig, perl, perlXMLParser
+, makeWrapper, pkgconfig, perlPackages
 }:
 
 stdenv.mkDerivation {
@@ -11,11 +11,9 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [
-    fftwFloat gtk2 ladspaPlugins libjack2 liblo libxml2 perl
-    perlXMLParser makeWrapper
-  ];
-  
+  buildInputs = [ fftwFloat gtk2 ladspaPlugins libjack2 liblo libxml2 makeWrapper ]
+    ++ (with perlPackages; [ perl XMLParser ]);
+
   postInstall = ''
     wrapProgram $out/bin/jamin --set LADSPA_PATH ${ladspaPlugins}/lib/ladspa
   '';

@@ -31,6 +31,5 @@ stdenv.mkDerivation rec {
     description = "A middleware that works between postgresql servers and postgresql clients";
     license = licenses.free;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ wkennington ];
   };
 }

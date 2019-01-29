@@ -1,4 +1,18 @@
-{ stdenv, fetchFromGitHub, pythonPackages, makeWrapper, gdb }:
+{ stdenv
+, fetchFromGitHub
+, makeWrapper
+, gdb
+, future
+, isort
+, psutil
+, pycparser
+, pyelftools
+, python-ptrace
+, ROPGadget
+, six
+, unicorn
+, pygments
+, }:
 
 stdenv.mkDerivation rec {
   name = "pwndbg-${version}";
@@ -13,7 +27,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  propagatedBuildInputs = with pythonPackages; [
+  propagatedBuildInputs = [
     future
     isort
     psutil
@@ -24,7 +38,6 @@ stdenv.mkDerivation rec {
     six
     unicorn
     pygments
-    enum34
   ];
 
   installPhase = ''

@@ -53,8 +53,6 @@ in
         chmod 0700 ${cfg.password}
         mkdir -p /var/lib/munge -m 0711
         chown -R munge:munge /var/lib/munge
-        mkdir -p /var/log/munge -m 0700
-        chown -R munge:munge /var/log/munge
         mkdir -p /run/munge -m 0755
         chown -R munge:munge /run/munge
       '';

@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, qt4, qmake4Hook, libpulseaudio }:
 let
-  version = "1.1.5";
+  version = "1.1.7";
 in
 stdenv.mkDerivation {
   name = "multimon-ng-${version}";
@@ -9,7 +9,7 @@ stdenv.mkDerivation {
     owner = "EliasOenal";
     repo = "multimon-ng";
     rev = "${version}";
-    sha256 = "00h884hn5afrx5i52xmngpsv3204hgb7xpw9my3lm8sajmfrjj1g";
+    sha256 = "11wfk8jw86z44y0ji4jr4s8ig3zwxp6g9h3sl81pvk6l3ipqqbgi";
   };
 
   buildInputs = [ qt4 libpulseaudio ];

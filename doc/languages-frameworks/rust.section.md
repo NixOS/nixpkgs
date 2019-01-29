@@ -64,9 +64,6 @@ When the `Cargo.lock`, provided by upstream, is not in sync with the
 added in `cargoPatches` will also be prepended to the patches in `patches` at
 build-time.
 
-To install crates with nix there is also an experimental project called
-[nixcrates](https://github.com/fractalide/nixcrates).
-
 ## Compiling Rust crates using Nix instead of Cargo
 
 ### Simple operation
@@ -306,11 +303,15 @@ with import <nixpkgs> {};
 
 stdenv.mkDerivation {
   name = "rust-env";
-  buildInputs = [
+  nativeBuildInputs = [
     rustc cargo
 
-    # Example Additional Dependencies
-    pkgconfig openssl
+    # Example Build-time Additional Dependencies
+    pkgconfig
+  ];
+  buildInputs = [
+    # Example Run-time Additional Dependencies
+    openssl
   ];
 
   # Set Environment Variables

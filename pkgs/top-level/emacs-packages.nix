@@ -73,27 +73,13 @@ let
 
   pdf-tools = melpaBuild rec {
     pname = "pdf-tools";
-    version = "0.80";
+    version = "0.90";
     src = fetchFromGitHub {
       owner = "politza";
       repo = "pdf-tools";
       rev = "v${version}";
-      sha256 = "1i4647vax5na73basc5dz4lh9kprir00fh8ps4i0l1y3ippnjs2s";
+      sha256 = "0iv2g5kd14zk3r5dzdw7b7hk4b5w7qpbilcqkja46jgxbb6xnpl9";
     };
-    patches = [
-      (fetchpatch {
-        url = https://github.com/politza/pdf-tools/commit/6505a0e817495b85897c9380161034ae611ddd90.patch;
-        sha256 = "122ycbja8ckaysp58xqfcv11sgpbcp78pll5mywf9hgr0qap9jsy";
-      })
-      (fetchpatch {
-        url = https://github.com/politza/pdf-tools/commit/ded6341b0e3ad97e8b14f68c1796ba66dc155fd1.patch;
-        sha256 = "0hd2v4c6xq2jzg2m6s5kzs0fldgygf1pnfqd11v6x4w05zvxn6a2";
-      })
-      (fetchpatch {
-        url = https://github.com/politza/pdf-tools/commit/50a5297b82e26cfd52f6c00645ddc1057099d6a7.patch;
-        sha256 = "107rqzldg06h8k3pmdinkl78dr4xycm570sp2an4ihjmpmph0z39";
-      })
-    ];
     nativeBuildInputs = [ external.pkgconfig ];
     buildInputs = with external; [ autoconf automake libpng zlib poppler ];
     preBuild = "make server/epdfinfo";
@@ -178,7 +164,7 @@ let
       for file in elpy.el elpy-pkg.el; do
         substituteInPlace $file \
             --replace "company \"0.8.2\"" "company \"${company.version}\"" \
-            --replace "find-file-in-project \"3.3\"" "find-file-in-project \"${find-file-in-project.version}\"" \
+            --replace "find-file-in-project \"3.3\"" "find-file-in-project \"${(melpaPackages self).find-file-in-project.version}\"" \
             --replace "highlight-indentation \"0.5.0\"" "highlight-indentation \"${highlight-indentation.version}\"" \
             --replace "pyvenv \"1.3\"" "pyvenv \"${pyvenv.version}\"" \
             --replace "yasnippet \"0.8.0\"" "yasnippet \"${yasnippet.version}\""
@@ -225,31 +211,6 @@ let
 
   ess-R-object-popup =
     callPackage ../applications/editors/emacs-modes/ess-R-object-popup { };
-
-  find-file-in-project = melpaBuild rec {
-    pname = "find-file-in-project";
-    version = "3.5";
-    src = fetchFromGitHub {
-      owner  = "technomancy";
-      repo   = pname;
-      rev    = "53a8d8174f915d9dcf5ac6954b1c0cae61266177";
-      sha256 = "0wky8vqg08iw34prbz04bqmhfhj82y93swb8zkz6la2vf9da0gmd";
-    };
-    recipe = writeText "recipe" ''
-      (find-file-in-project
-       :repo "technomancy/find-file-in-project"
-       :fetcher github)
-    '';
-    meta = {
-      description = "Quick access to project files in Emacs";
-      longDescription = ''
-        Find files in a project quickly.
-        This program provides a couple methods for quickly finding any file in a
-        given project. It depends on GNU find.
-      '';
-      license = gpl3Plus;
-    };
-  };
 
   filesets-plus = callPackage ../applications/editors/emacs-modes/filesets-plus { };
 
@@ -385,28 +346,6 @@ let
   thingatpt-plus = callPackage ../applications/editors/emacs-modes/thingatpt-plus { };
 
   tramp = callPackage ../applications/editors/emacs-modes/tramp { };
-
-  weechat = melpaBuild rec {
-    pname   = "weechat.el";
-    version = "0.2.2";
-    src = fetchFromGitHub {
-      owner  = "the-kenny";
-      repo   = pname;
-      rev    = version;
-      sha256 = "0f90m2s40jish4wjwfpmbgw024r7n2l5b9q9wr6rd3vdcwks3mcl";
-    };
-    postPatch = lib.optionalString (!stdenv.isLinux) ''
-      rm weechat-sauron.el weechat-secrets.el
-    '';
-    packageRequires = [ s ];
-    recipe = writeText "recipe" ''
-      (weechat :repo "the-kenny/weechat" :fetcher github)
-    '';
-    meta = {
-      description = "A weechat IRC client frontend for Emacs";
-      license = gpl3Plus;
-    };
-  };
 
   yaoddmuse = callPackage ../applications/editors/emacs-modes/yaoddmuse { };
 

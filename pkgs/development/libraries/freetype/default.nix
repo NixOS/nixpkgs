@@ -1,4 +1,5 @@
 { stdenv, fetchurl
+, buildPackages
 , pkgconfig, which, makeWrapper
 , zlib, bzip2, libpng, gnumake, glib
 
@@ -50,6 +51,9 @@ in stdenv.mkDerivation rec {
 
   configureFlags = [ "--disable-static" "--bindir=$(dev)/bin" ];
 
+  # native compiler to generate building tool
+  CC_BUILD = "${buildPackages.stdenv.cc}/bin/cc";
+
   # The asm for armel is written with the 'asm' keyword.
   CFLAGS = optionalString stdenv.isAarch32 "-std=gnu99";
 
@@ -58,6 +62,9 @@ in stdenv.mkDerivation rec {
   doCheck = true;
 
   postInstall = glib.flattenInclude + ''
+    substituteInPlace $dev/bin/freetype-config \
+      --replace ${buildPackages.pkgconfig} ${pkgconfig}
+
     wrapProgram "$dev/bin/freetype-config" \
       --set PKG_CONFIG_PATH "$PKG_CONFIG_PATH:$dev/lib/pkgconfig"
   '';

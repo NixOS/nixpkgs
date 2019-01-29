@@ -39,9 +39,5 @@ appleDerivation {
       --replace 'return mLoginDLDbIdentifier;' 'return mLoginDLDbIdentifier; }' \
       --replace '_xpc_runtime_is_app_sandboxed()' 'false'
       # hope that doesn't hurt anything
-
-    substituteInPlace lib/KCEventNotifier.h --replace \
-      'CoreFoundation/CFNotificationCenter.h' \
-      '${apple_sdk.sdk.out}/Library/Frameworks/CoreFoundation.framework/Versions/A/Headers/CFNotificationCenter.h'
   '';
 }

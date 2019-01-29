@@ -7,6 +7,7 @@ stdenv.mkDerivation rec {
   };
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ libX11 libXtst qt4 ];
+  NIX_LDFLAGS = [ "-lX11" ];
   patchPhase = ''
     cd src
     substituteInPlace config --replace /bin/bash /bin/sh

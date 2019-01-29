@@ -14,11 +14,11 @@ let
 
 in stdenv.mkDerivation rec {
   name = "charles-${version}";
-  version = "4.2.6";
+  version = "4.2.7";
 
   src = fetchurl {
     url = "https://www.charlesproxy.com/assets/release/${version}/charles-proxy-${version}.tar.gz";
-    sha256 = "1hjfimyr9nnbbxadwni02d2xl64ybarh42l1g6hlslq5qwl8ywzb";
+    sha256 = "1nycw3wpbfwj4ijjaq5k0f4xipj8j605fs0yjzgl66gmv7r583rd";
   };
 
   buildInputs = [ makeWrapper ];

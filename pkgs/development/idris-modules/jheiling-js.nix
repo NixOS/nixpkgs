@@ -8,6 +8,7 @@ build-idris-package  {
   name = "jheiling-js";
   version = "2016-03-09";
 
+  ipkgName = "js";
   idrisDeps = [ contrib jheiling-extras ];
 
   src = fetchFromGitHub {

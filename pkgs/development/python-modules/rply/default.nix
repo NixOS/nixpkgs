@@ -2,13 +2,13 @@
 
 buildPythonPackage rec {
   pname = "rply";
-  version = "0.7.5";
+  version = "0.7.6";
 
   src = fetchFromGitHub {
     owner = "alex";
     repo = "rply";
     rev = "v${version}";
-    sha256 = "0v05gdy5dval30wvz96lywvz2jyf000dp0pnrd1lwdx3cyywq659";
+    sha256 = "0a9r81kaibgr26psss02rn2nc6bf84a8q9nsywkm1xcswy8xrmcx";
   };
 
   buildInputs = [ appdirs ];

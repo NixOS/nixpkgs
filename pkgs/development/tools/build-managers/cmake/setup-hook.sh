@@ -15,6 +15,11 @@ fixCmakeFiles() {
 cmakeConfigurePhase() {
     runHook preConfigure
 
+    export CTEST_OUTPUT_ON_FAILURE=1
+    if [ -n "${enableParallelChecking-1}" ]; then
+        export CTEST_PARALLEL_LEVEL=$NIX_BUILD_CORES
+    fi
+
     if [ -z "$dontFixCmake" ]; then
         fixCmakeFiles .
     fi

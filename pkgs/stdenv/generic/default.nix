@@ -130,9 +130,6 @@ let
       # The derivation's `system` is `buildPlatform.system`.
       inherit (buildPlatform) system;
 
-      # Whether we should run paxctl to pax-mark binaries.
-      needsPax = isLinux;
-
       inherit (import ./make-derivation.nix {
         inherit lib config stdenv;
       }) mkDerivation;

@@ -1,20 +1,20 @@
-{ stdenv, lib, fetchFromGitHub, cmake, libuv, libmicrohttpd
+{ stdenv, lib, fetchFromGitHub, cmake, libuv, libmicrohttpd, openssl
 , donateLevel ? 0
 }:
 
 stdenv.mkDerivation rec {
   name = "xmrig-${version}";
-  version = "2.6.4";
+  version = "2.10.0";
 
   src = fetchFromGitHub {
     owner = "xmrig";
     repo = "xmrig";
     rev = "v${version}";
-    sha256 = "1c68qg7433chri6q1yhyggy4mbq2vnn3p2fxs8gqmgij9vpqn3m2";
+    sha256 = "10nqwxj8j2ciw2h178g2z5lrzv48xsi2a4v6s0ha93hfbjzvag5a";
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ libuv libmicrohttpd ];
+  buildInputs = [ libuv libmicrohttpd openssl ];
 
   postPatch = ''
     substituteInPlace src/donate.h --replace "kDonateLevel = 5;" "kDonateLevel = ${toString donateLevel};"

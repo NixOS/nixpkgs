@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   name = "tmsu-${version}";
-  version = "0.7.0";
+  version = "0.7.4";
 
   go-sqlite3 = fetchgit {
     url = "git://github.com/mattn/go-sqlite3";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     owner = "oniony";
     repo = "tmsu";
     rev = "v${version}";
-    sha256 = "0vccxb8mlr7wf92xawnqpvzwlw2xs3b962hjn09dnd6yxqscql64";
+    sha256 = "1g9gxlll2g4qkqbrshq3888sy1lgw6p5dvcrl5qyh6w73yimi1cq";
   };
 
   buildInputs = [ go fuse ];
@@ -38,6 +38,7 @@ stdenv.mkDerivation rec {
     patchShebangs tests/.
 
     export GOPATH=$PWD
+    export GOCACHE=$TMPDIR/go-cache
   '';
 
   installPhase = ''

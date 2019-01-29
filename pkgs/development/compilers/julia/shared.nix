@@ -5,7 +5,7 @@
 }:
 { stdenv, fetchurl, fetchzip
 # build tools
-, gfortran, m4, makeWrapper, patchelf, perl, which, python2, paxctl
+, gfortran, m4, makeWrapper, patchelf, perl, which, python2
 , llvm, cmake
 # libjulia dependencies
 , libunwind, readline, utf8proc, zlib
@@ -95,7 +95,7 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./0001.1-use-system-utf8proc.patch
-  ] ++ stdenv.lib.optional stdenv.needsPax ./0004-hardened.patch;
+  ];
 
   postPatch = ''
     patchShebangs . contrib
@@ -104,6 +104,7 @@ stdenv.mkDerivation rec {
       touch test/$i.jl
     done
     rm stdlib/Sockets/test/runtests.jl && touch stdlib/Sockets/test/runtests.jl
+    rm stdlib/Distributed/test/runtests.jl && touch stdlib/Distributed/test/runtests.jl
     sed -e 's/Invalid Content-Type:/invalid Content-Type:/g' -i ./stdlib/LibGit2/test/libgit2.jl
     sed -e 's/Failed to resolve /failed to resolve /g' -i ./stdlib/LibGit2/test/libgit2.jl
   '';
@@ -116,8 +117,7 @@ stdenv.mkDerivation rec {
   ++ stdenv.lib.optionals stdenv.isDarwin [CoreServices ApplicationServices]
   ;
 
-  nativeBuildInputs = [ curl gfortran m4 makeWrapper patchelf perl python2 which ]
-    ++ stdenv.lib.optional stdenv.needsPax paxctl;
+  nativeBuildInputs = [ curl gfortran m4 makeWrapper patchelf perl python2 which ];
 
   makeFlags =
     let

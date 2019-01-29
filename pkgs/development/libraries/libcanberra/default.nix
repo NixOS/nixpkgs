@@ -1,6 +1,7 @@
 { stdenv, lib, fetchurl, fetchpatch, pkgconfig, libtool
 , gtk ? null
 , libpulseaudio, gst_all_1, libvorbis, libcap
+, CoreServices
 , withAlsa ? stdenv.isLinux, alsaLib }:
 
 stdenv.mkDerivation rec {
@@ -15,6 +16,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libpulseaudio libvorbis gtk
   ] ++ (with gst_all_1; [ gstreamer gst-plugins-base ])
+    ++ lib.optional stdenv.isDarwin CoreServices
     ++ lib.optional stdenv.isLinux libcap
     ++ lib.optional withAlsa alsaLib;
 

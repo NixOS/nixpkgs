@@ -5,13 +5,13 @@
 
 buildPythonPackage rec {
   pname = "praw";
-  version = "5.4.0";
+  version = "6.0.0";
 
   src = fetchFromGitHub {
     owner = "praw-dev";
     repo = "praw";
     rev = "v${version}";
-    sha256 = "13vbh2r952ai2m6sc79psfwaj5fc8cssdg2pqpizg2mwd0l1s6lb";
+    sha256 = "0y6nyz8vf98gl1qfmnznv3dbvlbzdl6mz99vk673nyfn3hbs451i";
   };
 
   postPatch = ''

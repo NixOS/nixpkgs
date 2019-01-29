@@ -6,13 +6,13 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "epoxy-${version}";
-  version = "1.5.1";
+  version = "1.5.2";
 
   src = fetchFromGitHub {
     owner = "anholt";
     repo = "libepoxy";
     rev = "${version}";
-    sha256 = "1811agxr7g9wd832np8sw152j468kg3qydmfkc564v54ncfcgaci";
+    sha256 = "0frs42s7d3ff2wlw0jns6vb3myx2bhz9m5nkzbnfyn436s2qqls3";
   };
 
   outputs = [ "out" "dev" ];

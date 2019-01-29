@@ -1,5 +1,5 @@
 { stdenv, makeDesktopItem, makeWrapper, patchelf, p7zip
-, coreutils, gnugrep, which, git, unzip, libsecret
+, coreutils, gnugrep, which, git, unzip, libsecret, libnotify
 }:
 
 { name, product, version, src, wmClass, jdk, meta }:
@@ -26,7 +26,7 @@ with stdenv; lib.makeOverridable mkDerivation rec {
     '';
   };
 
-  buildInputs = [ makeWrapper patchelf p7zip unzip ];
+  nativeBuildInputs = [ makeWrapper patchelf p7zip unzip ];
 
   patchPhase = ''
       get_file_size() {
@@ -67,6 +67,7 @@ with stdenv; lib.makeOverridable mkDerivation rec {
       --prefix LD_LIBRARY_PATH : "${stdenv.lib.makeLibraryPath [
         # Some internals want libstdc++.so.6
         stdenv.cc.cc.lib libsecret
+        libnotify
       ]}" \
       --set JDK_HOME "$jdk" \
       --set ${hiName}_JDK "$jdk" \

@@ -1,8 +1,8 @@
-{ stdenv, buildPerlPackage, fetchgit, perl, openssl, perlPackages, gettext, python34Packages
+{ stdenv, fetchgit, perl, openssl, perlPackages, gettext, python3Packages
 # TODO: Remove extra dependencies once it is clear that they are NOT needed somewhere.
 , extraDependencies1 ? false, extraDependencies2 ? false, extraDependencies3 ? false }:
 
-buildPerlPackage {
+perlPackages.buildPerlPackage {
   name = "openxpki-git20150807";
 
   src = fetchgit {
@@ -11,7 +11,7 @@ buildPerlPackage {
     sha256 = "05bmhani2c7ays488xv3hx5xbxb612bnwq5rdjwmsj51xpaz454p";
   };
 
-  buildInputs = [ perl openssl gettext python34Packages.sphinx ];
+  buildInputs = [ perl openssl gettext python3Packages.sphinx ];
   propagatedBuildInputs = with perlPackages;
     [ # dependencies from Makefile.PL
       libintl_perl ConfigVersioned LWP ClassAccessorChained IOSocketSSL ClassStd
@@ -20,34 +20,34 @@ buildPerlPackage {
       IPCShareLite JSON LogLog4perl LWPProtocolConnect LWPProtocolHttps MailRFC822Address
       Moose NetAddrIP NetDNS NetIP perlldap NetHTTP NetServer NetSSLeay ParamsValidate PathClass
       ProcProcessTable ProcSafeExec RegexpCommon SOAPLite Switch SysSigAction TemplateToolkit
-      TestPod TestPodCoverage TextCSV_XS TimeHiRes Workflow XMLFilterXInclude XMLParser
+      TestPod TestPodCoverage TextCSV_XS Workflow XMLFilterXInclude XMLParser
       XMLSAX XMLSAXWriter XMLSimple XMLValidatorSchema ]
     ++ stdenv.lib.optionals extraDependencies1
     [ # dependencies from parsing through core/server
-      ClassAccessor Carp PathTools DataDumper DateTime DateTimeFormatStrptime DBI DigestMD5
-      Encode ExceptionClass Exporter FilePath FileTemp Filter GetoptLong HTMLParser
-      ScalarListUtils MathBigInt Memoize libnet PodUsage RTClientREST Socket
-      Storable XSLoader ]
+      ClassAccessor PathTools DataDumper DateTime DateTimeFormatStrptime DBI
+      Encode ExceptionClass FilePath FileTemp Filter GetoptLong HTMLParser
+      ScalarListUtils MathBigInt Memoize libnet RTClientREST
+      Storable ]
     ++ stdenv.lib.optionals extraDependencies2
     [ # dependencies taken from Debian
-      MooseXTypesPathClass DataStreamBulk MooseXStrictConstructor NamespaceAutoclean GitPurePerl
+      MooseXTypesPathClass DataStreamBulk MooseXStrictConstructor GitPurePerl
       ConfigGitLike DevelStackTrace TreeDAGNode ClassObservable ClassFactory TimeDate ConfigAny
       CGIFast ClassISA YAML YAMLLibYAML AuthenSASL TextCSV FileFindRulePerl IODigest ]
     ++ stdenv.lib.optionals extraDependencies3
     [ # dependencies taken from https://metacpan.org/pod/release/ALECH/Bundle-OpenXPKI-0.06/lib/Bundle/OpenXPKI.pm
-      AttributeHandlers AttributeParamsValidate AutoLoader BC CGI CPAN CacheCache ClassClassgenclassgen
+      AttributeParamsValidate BC CGI CPAN CacheCache ClassClassgenclassgen
       ClassContainer ClassDataInheritable ClassSingleton ConvertASN1 DBDSQLite DBIxHTMLViewLATEST
-      DBFile DataPage DataSpreadPagination DateTimeLocale DateTimeTimeZone DevelPPPort DevelSelfStubber
-      DevelSymdump DigestSHA1 Env Error ExtUtilsCommand ExtUtilsConstant ExtUtilsInstall
-      ExtUtilsMakeMaker FileCheckTree FilterSimple GoferTransporthttp HTMLMason HTMLTagset
-      HTTPServerSimpleMason I18NCollate IO IPCSysV LocaleCodes LocaleMaketext LogDispatch MathBigRat
-      MathComplex MathRound ModuleBuild ModuleBuildDeprecated NetPing PerlIOviaQuotedPrint PodChecker
-      PodCoverage PodEscapes PodLaTeX PodParser PodPerldoc PodPlainer PodSimple Safe SearchDict SelfLoader
-      SubUplevel SysSyslog TemplatePluginAutoformat TermANSIColor TermCap TermReadKey Test TestException
-      TestHTTPServerSimple TestHarness TestHarnessStraps TextAbbrev TextBalanced TextIconv TextSoundex
-      TextTabsWrap ThreadQueue ThreadSemaphore TieFile TieRefHash TimeLocal URI UnicodeCollate
-      UnicodeNormalize WWWMechanize Want XMLFilterBufferText XMLNamespaceSupport autodie base bignum if_
-      lib libapreq2 libnet podlators threads threadsshared version ];
+      DBFile DataPage DataSpreadPagination DateTimeLocale DateTimeTimeZone DevelPPPort
+      DevelSymdump DigestSHA1 Env Error ExtUtilsConstant ExtUtilsInstall
+      ExtUtilsMakeMaker FileCheckTree GoferTransporthttp HTMLMason HTMLTagset
+      HTTPServerSimpleMason IO IPCSysV LocaleCodes LogDispatch MathBigRat
+      MathRound ModuleBuild ModuleBuildDeprecated NetPing PodChecker
+      PodCoverage PodLaTeX PodParser PodPerldoc PodPlainer PodSimple
+      SubUplevel SysSyslog TemplatePluginAutoformat TermReadKey TestException
+      TestHTTPServerSimple TestHarnessStraps TextBalanced TextIconv TextSoundex
+      ThreadQueue TieFile TieRefHash TimeLocal URI
+      UnicodeNormalize WWWMechanize Want XMLFilterBufferText XMLNamespaceSupport bignum
+      libapreq2 libnet podlators threadsshared version ];
 
   preConfigure = ''
     substituteInPlace core/server/Makefile.PL \

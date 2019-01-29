@@ -10,7 +10,14 @@ stdenv.mkDerivation rec {
     sha256 = "178nn4dl7wbcw499czikirnkniwnx36argdnqgz4ik9i6zvwkm6y";
   };
 
-  patches = [ ./memory-leak.patch ./no-install-statedir.patch ];
+  patches = [
+    ./memory-leak.patch
+    ./no-install-statedir.patch
+
+    # Prevent tests from failing on old kernels (2.6x)
+    # getdtablesize reports incorrect values if getrlimit() fails
+    ./disable-getdtablesize-test.patch
+  ];
 
   buildInputs = [ coreutils ]; # bin/updatedb script needs to call sort
 
@@ -33,7 +40,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = {
-    homepage = http://www.gnu.org/software/findutils/;
+    homepage = https://www.gnu.org/software/findutils/;
     description = "GNU Find Utilities, the basic directory searching utilities of the GNU operating system";
 
     longDescription = ''

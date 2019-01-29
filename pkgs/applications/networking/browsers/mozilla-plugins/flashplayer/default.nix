@@ -33,6 +33,7 @@
 , libXxf86vm
 , libdrm
 , libffi
+, libglvnd
 , libpng
 , libvdpau
 , libxcb
@@ -73,25 +74,25 @@ let
 in
 stdenv.mkDerivation rec {
   name = "flashplayer-${version}";
-  version = "30.0.0.154";
+  version = "32.0.0.114";
 
   src = fetchurl {
     url =
       if debug then
-        "https://fpdownload.macromedia.com/pub/flashplayer/updaters/30/flash_player_npapi_linux_debug.${arch}.tar.gz"
+        "https://fpdownload.macromedia.com/pub/flashplayer/updaters/32/flash_player_npapi_linux_debug.${arch}.tar.gz"
       else
         "https://fpdownload.adobe.com/get/flashplayer/pdc/${version}/flash_player_npapi_linux.${arch}.tar.gz";
     sha256 =
       if debug then
         if arch == "x86_64" then
-          "04hfh0vn1n70gdpfydq0sj94d6rkbk80h4pmy3rsfvhg0x540wx8"
+          "199dd2fkjfcavfzfd2d38y21155yxvj9yl838i8y63v9i5j5nhfj"
         else
-          "073327sszbvkglh5b18axmwv40sy2vyacdhcd1fx82qskv44sfda"
+          "1b7g92ywwxrzfdj8acqx2r8k19y84ci2nhwwghjc7276q95gpzj8"
       else
         if arch == "x86_64" then
-          "03ypgzy88ck5rn1q971v0km9yw3p10ly1zkxh239v6nx0hs35w84"
+          "17nzchmacyqnb184d23caz52w7sy5sr7d081iwc46wic0px78m3m"
         else
-          "0rld7i659ccp4gvcvdkqkc1lajvlss5d4qndzf9aqiksvdknv62x";
+          "16slvhyqq0i7rlh2s5kpy78whkh57r129kva14wradx9yv8bqr7h";
   };
 
   nativeBuildInputs = [ unzip ];
@@ -132,8 +133,8 @@ stdenv.mkDerivation rec {
       alsaLib atk bzip2 cairo curl expat fontconfig freetype gdk_pixbuf glib
       glibc graphite2 gtk2 harfbuzz libICE libSM libX11 libXau libXcomposite
       libXcursor libXdamage libXdmcp libXext libXfixes libXi libXinerama
-      libXrandr libXrender libXt libXxf86vm libdrm libffi libpng libvdpau
-      libxcb libxshmfence nspr nss pango pcre pixman zlib
+      libXrandr libXrender libXt libXxf86vm libdrm libffi libglvnd libpng
+      libvdpau libxcb libxshmfence nspr nss pango pcre pixman zlib
     ];
 
   meta = {

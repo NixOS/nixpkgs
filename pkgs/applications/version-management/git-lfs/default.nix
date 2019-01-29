@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   name = "git-lfs-${version}";
-  version = "2.4.2";
+  version = "2.5.2";
 
   goPackagePath = "github.com/git-lfs/git-lfs";
 
@@ -10,7 +10,7 @@ buildGoPackage rec {
     rev = "v${version}";
     owner = "git-lfs";
     repo = "git-lfs";
-    sha256 = "0ww1jh45nlm74vbi4n6cdxi35bzgjlqmz3q8h9igdwfhkf79kd5c";
+    sha256 = "1y9l35j59d422v9hsbi117anm5d0177nspiy9r2zbjz3ygd9a4ck";
   };
 
   preBuild = ''
@@ -20,7 +20,7 @@ buildGoPackage rec {
   '';
 
   postInstall = ''
-    rm -v $bin/bin/{man,script,genmakefile}
+    rm -v $bin/bin/{man,script,cmd}
   '';
 
   meta = with stdenv.lib; {

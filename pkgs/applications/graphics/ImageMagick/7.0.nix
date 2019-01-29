@@ -13,8 +13,8 @@ let
     else throw "ImageMagick is not supported on this platform.";
 
   cfg = {
-    version = "7.0.8-6";
-    sha256 = "1v7m1g9a7fqc8nravvv3dy54nzd3ip75hcnkdrpb5wbiz9pqgzi3";
+    version = "7.0.8-22";
+    sha256 = "1ivljgf192xh7pq1apdic923pvcb3aq74mx8d4hi65hhc9748gv7";
     patches = [];
   };
 in
@@ -84,6 +84,6 @@ stdenv.mkDerivation rec {
     description = "A software suite to create, edit, compose, or convert bitmap images";
     platforms = platforms.linux ++ platforms.darwin;
     license = licenses.asl20;
-    maintainers = with maintainers; [ the-kenny wkennington ];
+    maintainers = with maintainers; [ the-kenny ];
   };
 }

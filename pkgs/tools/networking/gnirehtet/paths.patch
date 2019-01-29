@@ -1,7 +1,7 @@
-diff --git a/relay-rust/src/main.rs b/relay-rust/src/main.rs
-index 4f1be53..96d2e78 100644
---- a/relay-rust/src/main.rs
-+++ b/relay-rust/src/main.rs
+Index: gnirehtet/relay-rust/src/main.rs
+===================================================================
+--- gnirehtet.orig/relay-rust/src/main.rs
++++ gnirehtet/relay-rust/src/main.rs
 @@ -299,7 +299,7 @@ impl Command for RelayCommand {
  
  fn cmd_install(serial: Option<&String>) -> Result<(), CommandExecutionError> {
@@ -11,7 +11,7 @@ index 4f1be53..96d2e78 100644
  }
  
  fn cmd_uninstall(serial: Option<&String>) -> Result<(), CommandExecutionError> {
-@@ -467,8 +467,8 @@ fn exec_adb<S: Into<String>>(
+@@ -464,8 +464,8 @@ fn exec_adb<S: Into<String>>(
      args: Vec<S>,
  ) -> Result<(), CommandExecutionError> {
      let adb_args = create_adb_args(serial, args);
@@ -22,7 +22,7 @@ index 4f1be53..96d2e78 100644
          Ok(exit_status) => {
              if exit_status.success() {
                  Ok(())
-@@ -490,8 +490,8 @@ fn must_install_client(serial: Option<&String>) -> Result<bool, CommandExecution
+@@ -487,8 +487,8 @@ fn must_install_client(serial: Option<&S
          serial,
          vec!["shell", "dumpsys", "package", "com.genymobile.gnirehtet"],
      );
@@ -33,3 +33,16 @@ index 4f1be53..96d2e78 100644
          Ok(output) => {
              if output.status.success() {
                  // the "regex" crate makes the binary far bigger, so just parse the versionCode
+Index: gnirehtet/relay-rust/src/adb_monitor.rs
+===================================================================
+--- gnirehtet.orig/relay-rust/src/adb_monitor.rs
++++ gnirehtet/relay-rust/src/adb_monitor.rs
+@@ -206,7 +206,7 @@ impl AdbMonitor {
+
+     fn start_adb_daemon() -> bool {
+         info!(target: TAG, "Restarting adb daemon");
+-        match process::Command::new("adb")
++        match process::Command::new("@adb@")
+             .args(&["start-server"])
+             .status() {
+             Ok(exit_status) => {

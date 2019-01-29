@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   name = "zita-resampler-${version}";
-  version = "1.6.0";
+  version = "1.6.2";
   src = fetchurl {
     url = "http://kokkinizita.linuxaudio.org/linuxaudio/downloads/${name}.tar.bz2";
-    sha256 = "1w48lp99jn4wh687cvbnbnjgaraqzkb4bgir16cp504x55v8v20h";
+    sha256 = "1my5k2dh2dkvjp6xjnf9qy6i7s28z13kw1n9pwa4a2cpwbzawfr3";
   };
 
   makeFlags = [
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   ];
 
   patchPhase = ''
-    cd libs
+    cd source
     sed -e "s@ldconfig@@" -i Makefile
   '';
 

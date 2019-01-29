@@ -1,12 +1,13 @@
-{ stdenv, fetchgit }:
+{ stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation {
-  name = "qboot-pre-release";
+  name = "qboot-20170330";
 
-  src = fetchgit {
-    url = "https://github.com/yangchengwork/qboot";
-    rev = "b2bdaf4c878ef34f309c8c79613fabd1b9c4bf75";
-    sha256 = "00f24125733d24713880e430f409d6ded416286d209c9fabb45541311b01cf8d";
+  src = fetchFromGitHub {
+    owner = "bonzini";
+    repo = "qboot";
+    rev = "ac9488f26528394856b94bda0797f5bd9c69a26a";
+    sha256 = "0l83nbjndin1cbcimkqkiqr5df8d76cnhyk26rd3aygb2bf7cspy";
   };
 
   installPhase = ''

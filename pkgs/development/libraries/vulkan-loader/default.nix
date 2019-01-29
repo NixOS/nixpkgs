@@ -1,6 +1,10 @@
-{ stdenv, fetchFromGitHub, cmake, python3, vulkan-headers, pkgconfig,
-  xlibsWrapper, libxcb, libXrandr, libXext, wayland, libGL_driver }:
-let version = "1.1.82.0"; in
+{ stdenv, fetchFromGitHub, cmake, python3, vulkan-headers, pkgconfig
+, xlibsWrapper, libxcb, libXrandr, libXext, wayland, libGL_driver }:
+
+let
+  version = "1.1.85";
+in
+
 assert version == vulkan-headers.version;
 stdenv.mkDerivation rec {
   name = "vulkan-loader-${version}";
@@ -9,8 +13,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "Vulkan-Loader";
-    rev = "sdk-${version}";
-    sha256 = "16i4s1adfh822ahj3ywp279lv6szwd2sn2q5pmvpg2kk6mbh410d";
+    rev = "b02f64293680c484e1d7ff6ecb88f89277c0dc8c";
+    sha256 = "1n4vjyxlmi2ygx34srwbvalc5gz95gcsrmdw0k10353xja755gmj";
   };
 
   nativeBuildInputs = [ pkgconfig ];

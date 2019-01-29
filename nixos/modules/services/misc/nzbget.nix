@@ -16,6 +16,20 @@ in {
         description = "The NZBGet package to use";
       };
 
+      dataDir = mkOption {
+        type = types.str;
+        default = "/var/lib/nzbget";
+        description = "The directory where NZBGet stores its configuration files.";
+      };
+
+      openFirewall = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Open ports in the firewall for the NZBGet web interface
+        '';
+      };
+
       user = mkOption {
         type = types.str;
         default = "nzbget";
@@ -40,7 +54,8 @@ in {
         p7zip
       ];
       preStart = ''
-        datadir=/var/lib/nzbget
+        datadir=${cfg.dataDir}
+        configfile=${cfg.dataDir}/nzbget.conf
         cfgtemplate=${cfg.package}/share/nzbget/nzbget.conf
         test -d $datadir || {
           echo "Creating nzbget data directory in $datadir"
@@ -60,7 +75,7 @@ in {
       '';
 
       script = ''
-        configfile=/var/lib/nzbget/nzbget.conf
+        configfile=${cfg.dataDir}/nzbget.conf
         args="--daemon --configfile $configfile"
         # The script in preStart (above) copies nzbget's config template to datadir on first run, containing paths that point to the nzbget derivation installed at the time. 
         # These paths break when nzbget is upgraded & the original derivation is garbage collected. If such broken paths are found in the config file, override them to point to 
@@ -84,6 +99,10 @@ in {
         PermissionsStartOnly = "true";
         Restart = "on-failure";
       };
+    };
+
+    networking.firewall = mkIf cfg.openFirewall {
+      allowedTCPPorts = [ 8989 ];
     };
 
     users.users = mkIf (cfg.user == "nzbget") {

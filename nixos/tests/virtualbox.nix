@@ -1,6 +1,11 @@
-{ system ? builtins.currentSystem, debug ? false, enableUnfree ? false }:
+{ system ? builtins.currentSystem,
+  config ? {},
+  pkgs ? import ../.. { inherit system config; },
+  debug ? false,
+  enableUnfree ? false
+}:
 
-with import ../lib/testing.nix { inherit system; };
+with import ../lib/testing.nix { inherit system pkgs; };
 with pkgs.lib;
 
 let
@@ -374,7 +379,7 @@ let
     '';
 
     meta = with pkgs.stdenv.lib.maintainers; {
-      maintainers = [ aszlig wkennington cdepillabout ];
+      maintainers = [ aszlig cdepillabout ];
     };
   };
 

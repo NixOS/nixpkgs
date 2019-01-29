@@ -1,9 +1,9 @@
 { stdenv, fetchzip}:
 
 fetchzip {
-  name = "powerline-fonts-2017-05-25";
+  name = "powerline-fonts-2018-11-11";
 
-  url = https://github.com/powerline/fonts/archive/fe396ef6f6b9b315f30af7d7229ff21f67a66e12.zip;
+  url = https://github.com/powerline/fonts/archive/e80e3eba9091dac0655a0a77472e10f53e754bb0.zip;
 
   postFetch = ''
     mkdir -p $out/share/fonts/opentype
@@ -22,7 +22,7 @@ fetchzip {
     unzip -j $downloadedFile '*/PSF/*.psf.gz' -d $out/share/fonts/psf
   '';
 
-  sha256 = "07yjbwri7nnnnynps86sz0dlivwqw7gfw045v63q969nab9dw388";
+  sha256 = "0irifak86gn7hawzgxcy53s22y215mxc2kjncv37h7q44jsqdqww";
 
   meta = with stdenv.lib; {
     homepage = https://github.com/powerline/fonts;

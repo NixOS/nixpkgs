@@ -19,6 +19,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = https://math.nist.gov/tnt/;
     description = "Template Numerical Toolkit: C++ headers for array and matrices";
+    license = stdenv.lib.licenses.publicDomain;
     platforms = stdenv.lib.platforms.unix;
   };
 }

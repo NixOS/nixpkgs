@@ -14,8 +14,8 @@ in
              keys = [ snakeOilPublicKey ];
              protocol = "ssh-ng";
            };
-         server.nix.package = pkgs.nixUnstable;
-         client.nix.package = pkgs.nixUnstable;
+         server.nix.package = pkgs.nix;
+         client.nix.package = pkgs.nix;
        };
      testScript = ''
        startAll;

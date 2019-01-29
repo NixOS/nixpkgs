@@ -15,4 +15,10 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [ readline mysql.connector-c postgresql sqlite ];
+
+  meta = with stdenv.lib; {
+    description = "Extremely lightweight but extensible database access library written in C";
+    license = licenses.lgpl21;
+    platforms = platforms.all;
+  };
 }

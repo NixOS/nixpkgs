@@ -2,7 +2,7 @@
 , eigen
 , fetchurl
 , cmake
-, google-gflags ? null
+, google-gflags
 , glog
 , runTests ? false
 }:
@@ -21,7 +21,13 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ eigen glog ]
-    ++ stdenv.lib.optional (google-gflags != null) google-gflags;
+    ++ stdenv.lib.optional runTests google-gflags;
+
+  # The Basel BUILD file conflicts with the cmake build directory on
+  # case-insensitive filesystems, eg. darwin.
+  preConfigure = ''
+    rm BUILD
+  '';
 
   doCheck = runTests;
 

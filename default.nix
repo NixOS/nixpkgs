@@ -18,7 +18,7 @@ if ! builtins ? nixVersion || builtins.compareVersions requiredVersion builtins.
 
     For more information, please see the NixOS release notes at
     https://nixos.org/nixos/manual or locally at
-    ${toString ./doc/manual/release-notes}.
+    ${toString ./nixos/doc/manual/release-notes}.
 
     If you need further help, see https://nixos.org/nixos/support.html
   ''

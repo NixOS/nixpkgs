@@ -1,7 +1,7 @@
 args @ { fetchurl, ... }:
 rec {
   baseName = ''flexi-streams'';
-  version = ''20180328-git'';
+  version = ''20180711-git'';
 
   parasites = [ "flexi-streams-test" ];
 
@@ -10,8 +10,8 @@ rec {
   deps = [ args."trivial-gray-streams" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/flexi-streams/2018-03-28/flexi-streams-20180328-git.tgz'';
-    sha256 = ''0hdmzihii3wv6769dfkkw15avpgifizdd7lxdlgjk7h0h8v7yw11'';
+    url = ''http://beta.quicklisp.org/archive/flexi-streams/2018-07-11/flexi-streams-20180711-git.tgz'';
+    sha256 = ''1g7a5fbl84zx3139kvvgwq6d8bnbpbvq9mr5yj4jzfa6pjfjwgz2'';
   };
 
   packageName = "flexi-streams";
@@ -20,10 +20,10 @@ rec {
   overrides = x: x;
 }
 /* (SYSTEM flexi-streams DESCRIPTION Flexible bivalent streams for Common Lisp
-    SHA256 0hdmzihii3wv6769dfkkw15avpgifizdd7lxdlgjk7h0h8v7yw11 URL
-    http://beta.quicklisp.org/archive/flexi-streams/2018-03-28/flexi-streams-20180328-git.tgz
-    MD5 af40ae10a0aab65eccfe161a32e1033b NAME flexi-streams FILENAME
+    SHA256 1g7a5fbl84zx3139kvvgwq6d8bnbpbvq9mr5yj4jzfa6pjfjwgz2 URL
+    http://beta.quicklisp.org/archive/flexi-streams/2018-07-11/flexi-streams-20180711-git.tgz
+    MD5 1e5bc255540dcbd71f9cba56573cfb4c NAME flexi-streams FILENAME
     flexi-streams DEPS
     ((NAME trivial-gray-streams FILENAME trivial-gray-streams)) DEPENDENCIES
-    (trivial-gray-streams) VERSION 20180328-git SIBLINGS NIL PARASITES
+    (trivial-gray-streams) VERSION 20180711-git SIBLINGS NIL PARASITES
     (flexi-streams-test)) */

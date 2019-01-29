@@ -1,3 +1,8 @@
-cabal2nix https://github.com/elm/compiler --revision  32059a289d27e303fa1665e9ada0a52eb688f302 > packages/elm.nix
-cabal2nix --no-check cabal://indents-0.3.3 > packages/indents.nix
-cabal2nix --no-haddock --no-check --jailbreak --revision refs/tags/0.8.0 http://github.com/avh4/elm-format > packages/elm-format.nix
+#!/usr/bin/env nix-shell
+#!nix-shell -p cabal2nix elm2nix -i bash ../../..
+
+cabal2nix https://github.com/elm/compiler --revision d5cbc41aac23da463236bbc250933d037da4055a > packages/elm.nix
+elm2nix snapshot > versions.dat
+pushd "$(nix-build -A elmPackages.elm.src --no-out-link ../../../..)/ui/browser"
+  elm2nix convert > $OLDPWD/packages/elm-srcs.nix
+popd

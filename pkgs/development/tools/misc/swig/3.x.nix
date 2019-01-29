@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoconf, automake, libtool, bison, pcre }:
+{ stdenv, fetchFromGitHub, autoconf, automake, libtool, bison, pcre, buildPackages }:
 
 stdenv.mkDerivation rec {
   name = "swig-${version}";
@@ -11,6 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "1wyffskbkzj5zyhjnnpip80xzsjcr3p0q5486z3wdwabnysnhn8n";
   };
 
+  PCRE_CONFIG = "${pcre.dev}/bin/pcre-config";
   nativeBuildInputs = [ autoconf automake libtool bison ];
   buildInputs = [ pcre ];
 
@@ -31,6 +32,5 @@ stdenv.mkDerivation rec {
     # Different types of licenses available: http://www.swig.org/Release/LICENSE .
     license = licenses.gpl3Plus;
     platforms = with platforms; linux ++ darwin;
-    maintainers = with maintainers; [ wkennington ];
   };
 }

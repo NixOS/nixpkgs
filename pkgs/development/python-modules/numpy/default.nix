@@ -1,17 +1,32 @@
-{ stdenv, lib, fetchPypi, python, buildPythonPackage, isPyPy, gfortran, pytest, blas }:
+{ stdenv, lib, fetchPypi, python, buildPythonPackage, isPyPy, gfortran, pytest, blas, writeTextFile }:
 
-buildPythonPackage rec {
+let
+  blasImplementation = lib.nameFromURL blas.name "-";
+  cfg = writeTextFile {
+    name = "site.cfg";
+    text = (lib.generators.toINI {} {
+      "${blasImplementation}" = {
+        include_dirs = "${blas}/include";
+        library_dirs = "${blas}/lib";
+      } // lib.optionalAttrs (blasImplementation == "mkl") {
+        mkl_libs = "mkl_rt";
+        lapack_libs = "";
+      };
+    });
+  };
+in buildPythonPackage rec {
   pname = "numpy";
-  version = "1.15.1";
+  version = "1.15.4";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "7b9e37f194f8bcdca8e9e6af92e2cbad79e360542effc2dd6b98d63955d8d8a3";
+    sha256 = "3d734559db35aa3697dadcea492a423118c5c55d176da2f3be9c98d4803fc2a7";
   };
 
   disabled = isPyPy;
-  buildInputs = [ gfortran pytest blas ];
+  nativeBuildInputs = [ gfortran pytest ];
+  buildInputs = [ blas ];
 
   patches = lib.optionals (python.hasDistutilsCxxPatch or false) [
     # We patch cpython/distutils to fix https://bugs.python.org/issue1222585
@@ -38,12 +53,7 @@ buildPythonPackage rec {
   '';
 
   preBuild = ''
-    echo "Creating site.cfg file..."
-    cat << EOF > site.cfg
-    [openblas]
-    include_dirs = ${blas}/include
-    library_dirs = ${blas}/lib
-    EOF
+    ln -s ${cfg} site.cfg
   '';
 
   enableParallelBuilding = true;
@@ -58,6 +68,7 @@ buildPythonPackage rec {
 
   passthru = {
     blas = blas;
+    inherit blasImplementation cfg;
   };
 
   # Disable two tests

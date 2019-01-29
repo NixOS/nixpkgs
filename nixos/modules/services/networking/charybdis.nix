@@ -90,7 +90,7 @@ in
           BANDB_DBPATH = "${cfg.statedir}/ban.db";
         };
         serviceConfig = {
-          ExecStart   = "${charybdis}/bin/charybdis-ircd -foreground -logfile /dev/stdout -configfile ${configFile}";
+          ExecStart   = "${charybdis}/bin/charybdis -foreground -logfile /dev/stdout -configfile ${configFile}";
           Group = cfg.group;
           User = cfg.user;
           PermissionsStartOnly = true; # preStart needs to run with root permissions

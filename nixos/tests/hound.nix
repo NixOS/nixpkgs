@@ -52,7 +52,7 @@ import ./make-test.nix ({ pkgs, ... } : {
        $machine->waitForUnit("network.target");
        $machine->waitForUnit("hound.service");
        $machine->waitForOpenPort(6080);
-       $machine->succeed('curl http://127.0.0.1:6080/api/v1/search\?stats\=fosho\&repos\=\*\&rng=%3A20\&q\=hi\&files\=\&i=nope | grep "Filename" | grep "hello"');
+       $machine->waitUntilSucceeds('curl http://127.0.0.1:6080/api/v1/search\?stats\=fosho\&repos\=\*\&rng=%3A20\&q\=hi\&files\=\&i=nope | grep "Filename" | grep "hello"');
 
     '';
 })

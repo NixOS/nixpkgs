@@ -9,8 +9,10 @@ debug:
 
 .PHONY: format
 format:
-	find . -iname '*.xml' -type f -print0 | xargs -0 -I{} -n1 \
-		xmlformat --config-file "$$XMLFORMAT_CONFIG" -i {}
+	find . -iname '*.xml' -type f | while read f; do \
+		echo $$f ;\
+		xmlformat --config-file "$$XMLFORMAT_CONFIG" -i $$f ;\
+	done
 
 .PHONY: fix-misc-xml
 fix-misc-xml:
@@ -19,7 +21,7 @@ fix-misc-xml:
 
 .PHONY: clean
 clean:
-	rm -f ${MD_TARGETS} .version manual-full.xml
+	rm -f ${MD_TARGETS} .version manual-full.xml functions/library/locations.xml
 	rm -rf ./out/ ./highlightjs
 
 .PHONY: validate
@@ -69,12 +71,16 @@ highlightjs:
 	cp -r "$$HIGHLIGHTJS/loader.js" highlightjs/
 
 
-manual-full.xml: ${MD_TARGETS} .version *.xml
+manual-full.xml: ${MD_TARGETS} .version functions/library/locations.xml *.xml **/*.xml **/**/*.xml
 	xmllint --nonet --xinclude --noxincludenode manual.xml --output manual-full.xml
 
 .version:
 	nix-instantiate --eval \
 		-E '(import ../lib).version' > .version
+
+functions/library/locations.xml:
+	nix-build ./lib-function-locations.nix \
+		--out-link ./functions/library/locations.xml
 
 %.section.xml: %.section.md
 	pandoc $^ -w docbook+smart \

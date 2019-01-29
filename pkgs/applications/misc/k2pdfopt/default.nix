@@ -28,6 +28,7 @@ stdenv.mkDerivation rec {
   let
     mupdf_modded = mupdf.overrideAttrs (attrs: {
       name = "mupdf-1.10a";
+      version = "1.10a";
       src = fetchurl {
         url = "https://mupdf.com/downloads/archive/mupdf-1.10a-source.tar.gz";
         sha256 = "0dm8wcs8i29aibzkqkrn8kcnk4q0kd1v66pg48h5c3qqp4v1zk5a";
@@ -74,19 +75,21 @@ stdenv.mkDerivation rec {
         cp ${src}/leptonica_mod/* src/
       '';
     });
-    tesseract_modded = tesseract.overrideAttrs (attrs: {
-      prePatch = ''
-        cp ${src}/tesseract_mod/{ambigs.cpp,ccutil.h,ccutil.cpp} ccutil/
-        cp ${src}/tesseract_mod/dawg.cpp api/
-        cp ${src}/tesseract_mod/{imagedata.cpp,tessdatamanager.cpp} ccstruct/
-        cp ${src}/tesseract_mod/openclwrapper.h opencl/
-        cp ${src}/tesseract_mod/{tessedit.cpp,thresholder.cpp} ccmain/
-        cp ${src}/tesseract_mod/tess_lang_mod_edge.h cube/
-        cp ${src}/tesseract_mod/tesscapi.cpp api/
-        cp ${src}/include_mod/{tesseract.h,leptonica.h} api/
-      '';
-      patches = [ ./tesseract.patch ];
-    });
+    tesseract_modded = tesseract.override {
+      tesseractBase = tesseract.tesseractBase.overrideAttrs (_: {
+        prePatch = ''
+          cp ${src}/tesseract_mod/{ambigs.cpp,ccutil.h,ccutil.cpp} ccutil/
+          cp ${src}/tesseract_mod/dawg.cpp api/
+          cp ${src}/tesseract_mod/{imagedata.cpp,tessdatamanager.cpp} ccstruct/
+          cp ${src}/tesseract_mod/openclwrapper.h opencl/
+          cp ${src}/tesseract_mod/{tessedit.cpp,thresholder.cpp} ccmain/
+          cp ${src}/tesseract_mod/tess_lang_mod_edge.h cube/
+          cp ${src}/tesseract_mod/tesscapi.cpp api/
+          cp ${src}/include_mod/{tesseract.h,leptonica.h} api/
+        '';
+        patches = [ ./tesseract.patch ];
+      });
+    };
   in
     [ zlib libpng ] ++
     optional enableGSL gsl ++
@@ -100,6 +103,10 @@ stdenv.mkDerivation rec {
   dontUseCmakeBuildDir = true;
 
   cmakeFlags = [ "-DCMAKE_C_FLAGS=-I${src}/include_mod" ];
+
+  NIX_LDFLAGS = [
+    "-lpthread"
+  ];
 
   installPhase = ''
     install -D -m 755 k2pdfopt $out/bin/k2pdfopt

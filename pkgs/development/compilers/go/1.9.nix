@@ -1,8 +1,5 @@
 { stdenv, fetchFromGitHub, tzdata, iana-etc, go_bootstrap, runCommand, writeScriptBin
-, perl, which, pkgconfig, patch, procps
-, pcre, cacert, llvm
-, Security, Foundation
-, makeWrapper, git, subversion, mercurial, bazaar }:
+, perl, which, pkgconfig, patch, procps, pcre, cacert, llvm, Security, Foundation }:
 
 let
 
@@ -35,7 +32,7 @@ stdenv.mkDerivation rec {
   };
 
   # perl is used for testing go vet
-  nativeBuildInputs = [ perl which pkgconfig patch makeWrapper procps ];
+  nativeBuildInputs = [ perl which pkgconfig patch procps ];
   buildInputs = [ cacert pcre ]
     ++ optionals stdenv.isLinux [ stdenv.cc.libc.out ]
     ++ optionals (stdenv.hostPlatform.libc == "glibc") [ stdenv.cc.libc.static ];
@@ -165,9 +162,6 @@ stdenv.mkDerivation rec {
   installPhase = ''
     cp -r . $GOROOT
     ( cd $GOROOT/src && ./all.bash )
-
-    # (https://github.com/golang/go/wiki/GoGetTools)
-    wrapProgram $out/share/go/bin/go --prefix PATH ":" "${stdenv.lib.makeBinPath [ git subversion mercurial bazaar ]}"
   '';
 
   preFixup = ''
@@ -180,11 +174,12 @@ stdenv.mkDerivation rec {
   disallowedReferences = [ go_bootstrap ];
 
   meta = with stdenv.lib; {
+    knownVulnerabilities = [ "CVE-2019-6486" ];
     branch = "1.9";
     homepage = http://golang.org/;
     description = "The Go Programming language";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ cstrahan orivej wkennington ];
+    maintainers = with maintainers; [ cstrahan orivej ];
     platforms = platforms.linux ++ platforms.darwin;
   };
 }

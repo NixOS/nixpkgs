@@ -8,27 +8,32 @@
 # Should use buildPythonPackage here somehow
 stdenv.mkDerivation rec {
   pname = "setuptools";
-  version = "40.2.0";
+  version = "40.6.2";
   name = "${python.libPrefix}-${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "47881d54ede4da9c15273bac65f9340f8929d4f0213193fa7894be384f2dcfa6";
+    sha256 = "86bb4d8e1b0fabad1f4642b64c335b673e53e7a381de03c9a89fe678152c4c64";
   };
 
-  nativeBuildInputs = [ unzip wrapPython ];
-  buildInputs = [ python ];
+  nativeBuildInputs = [ unzip wrapPython python.pythonForBuild ];
   doCheck = false;  # requires pytest
   installPhase = ''
       dst=$out/${python.sitePackages}
       mkdir -p $dst
       export PYTHONPATH="$dst:$PYTHONPATH"
-      ${python.interpreter} setup.py install --prefix=$out
+      ${python.pythonForBuild.interpreter} setup.py install --prefix=$out
       wrapPythonPrograms
   '';
 
   pythonPath = [];
+
+  dontPatchShebangs = true;
+
+  # Python packages built through cross-compilation are always for the host platform.
+  disallowedReferences = stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [ python.pythonForBuild ];
+
 
   meta = with stdenv.lib; {
     description = "Utilities to facilitate the installation of Python packages";

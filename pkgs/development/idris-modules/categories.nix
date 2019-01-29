@@ -6,11 +6,10 @@ build-idris-package  {
   name = "categories";
   version = "2018-07-02";
 
-  # https://github.com/danilkolikov/categories/pull/5
   src = fetchFromGitHub {
-    owner = "infinisil";
+    owner = "danilkolikov";
     repo = "categories";
-    rev = "9722d62297e5025431e91b271ab09c5d14867236";
+    rev = "a1e0ac0f0da2e336a7d3900051892ff7ed504c35";
     sha256 = "1bbmm8zif5d5wckdaddw6q3c39w6ms1cxrlrmkdn7bik88dawff2";
   };
 

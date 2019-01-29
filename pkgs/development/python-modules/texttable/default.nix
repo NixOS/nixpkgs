@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "texttable";
-  version = "1.4.0";
+  version = "1.6.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "95e8cfe85f8395a7eacdfbc8f09d885b9ef3a6ac6ead0364ea721de1127aa36b";
+    sha256 = "1z3xbijvhh86adg0jk5iv1jvga7cg25q1w12icb3snr5jim9sjv2";
   };
 
   meta = {

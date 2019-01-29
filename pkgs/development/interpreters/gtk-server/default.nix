@@ -14,6 +14,10 @@ stdenv.mkDerivation rec {
 
   configureOptions = [ "--with-gtk2" ];
 
+  NIX_LDFLAGS = [
+    "-ldl"
+  ];
+
   meta = {
     description = "gtk-server for interpreted GUI programming";
     homepage = http://www.gtk-server.org/;

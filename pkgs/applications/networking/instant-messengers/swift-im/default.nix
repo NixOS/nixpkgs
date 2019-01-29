@@ -3,9 +3,7 @@
 , lua, miniupnpc, openssl, qtbase, qtmultimedia, qtsvg, qtwebkit, qtx11extras, zlib
 }:
 
-let
-  _scons = "scons -j$NIX_BUILD_CORES";
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   name = "swift-im-${version}";
   version = "4.0.2";
 
@@ -30,14 +28,12 @@ in stdenv.mkDerivation rec {
     "-I${miniupnpc}/include/miniupnpc"
     "-I${qtwebkit.dev}/include/QtWebKit"
     "-I${qtwebkit.dev}/include/QtWebKitWidgets"
+    "-fpermissive"
   ];
 
-  buildPhase = ''
-    ${_scons} Swift
-  '';
-
-  installPhase = ''
-    ${_scons} SWIFT_INSTALLDIR=$out $out
+  preInstall = ''
+    installTargets="$out"
+    installFlags+=" SWIFT_INSTALLDIR=$out"
   '';
 
   meta = with stdenv.lib; {

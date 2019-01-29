@@ -15,7 +15,7 @@ stdenv.mkDerivation {
     }
     else throw "platform ${stdenv.hostPlatform.system} not supported.";
 
-  buildInputs = [ patchelf boehmgc gnused makeWrapper ];
+  nativeBuildInputs = [ patchelf boehmgc gnused makeWrapper ];
 
   buildCommand = ''
     mkdir -p "$out"

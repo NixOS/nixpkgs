@@ -50,7 +50,7 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = "If enabled, start the Murmur Service.";
+        description = "If enabled, start the Murmur Mumble server.";
       };
 
       autobanAttempts = mkOption {

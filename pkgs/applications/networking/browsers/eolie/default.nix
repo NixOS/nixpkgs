@@ -1,53 +1,66 @@
-{ stdenv, fetchgit, meson, ninja, pkgconfig, wrapGAppsHook
-, desktop-file-utils, gobjectIntrospection, python36Packages
-, gnome3, gst_all_1, gtkspell3, hunspell }:
+{ stdenv, fetchgit, meson, ninja, pkgconfig
+, python3, gtk3, libsecret, gst_all_1, webkitgtk
+, glib-networking, gtkspell3, hunspell, desktop-file-utils
+, gobject-introspection, wrapGAppsHook }:
 
-stdenv.mkDerivation rec {
-  name = "eolie-${version}";
-  version = "0.9.35";
+python3.pkgs.buildPythonApplication rec {
+  pname = "eolie";
+  version = "0.9.45";
+
+  format = "other";
+  doCheck = false;
 
   src = fetchgit {
     url = "https://gitlab.gnome.org/World/eolie";
     rev = "refs/tags/${version}";
     fetchSubmodules = true;
-    sha256 = "0x3p1fgx1fhrnr7vkkpnl34401r6k6xg2mrjff7ncb1k57q522k7";
+    sha256 = "0x6f2qqqxpjf28mqxs4jlrz2z8wa9nvb9h24nf8qwmzavjjbraqg";
   };
 
-  nativeBuildInputs = with python36Packages; [
+  nativeBuildInputs = [
     desktop-file-utils
-    gobjectIntrospection
+    gobject-introspection
     meson
     ninja
     pkgconfig
     wrapGAppsHook
-    wrapPython
   ];
 
-  buildInputs = [ gtkspell3 hunspell python36Packages.pygobject3 ] ++ (with gnome3; [
-    glib glib-networking gsettings-desktop-schemas gtk3 webkitgtk libsecret
-  ]) ++ (with gst_all_1; [
-    gst-libav gst-plugins-base gst-plugins-ugly gstreamer
-  ]);
+  buildInputs = with gst_all_1; [
+    glib-networking
+    gst-libav
+    gst-plugins-base
+    gst-plugins-ugly
+    gstreamer
+    gtk3
+    gtkspell3
+    hunspell
+    libsecret
+    webkitgtk
+  ];
 
-  pythonPath = with python36Packages; [
+  propagatedBuildInputs = with python3.pkgs; [
     beautifulsoup4
     pycairo
     pygobject3
     python-dateutil
   ];
 
-  postFixup = "wrapPythonPrograms";
-
   postPatch = ''
-    chmod +x meson_post_install.py # patchShebangs requires executable file
+    chmod +x meson_post_install.py
     patchShebangs meson_post_install.py
+  '';
+
+  preFixup = ''
+    buildPythonPath "$out $propagatedBuildInputs"
+    patchPythonScript "$out/libexec/eolie-sp"
   '';
 
   meta = with stdenv.lib; {
     description = "A new GNOME web browser";
-    homepage    = https://wiki.gnome.org/Apps/Eolie;
-    license     = licenses.gpl3Plus;
+    homepage = https://wiki.gnome.org/Apps/Eolie;
+    license  = licenses.gpl3Plus;
     maintainers = with maintainers; [ samdroid-apps worldofpeace ];
-    platforms   = platforms.linux;
+    platforms = platforms.linux;
   };
 }
