@@ -9174,7 +9174,9 @@ in
 
   swig1 = callPackage ../development/tools/misc/swig { };
   swig2 = callPackage ../development/tools/misc/swig/2.x.nix { };
-  swig3 = callPackage ../development/tools/misc/swig/3.x.nix { };
+  swig3 = callPackage ../development/tools/misc/swig/3.x.nix {
+    bison = bison2;
+  };
   swig = swig3;
   swigWithJava = swig;
 
@@ -14282,7 +14284,7 @@ in
 
   iucode-tool = callPackage ../os-specific/linux/microcode/iucode-tool.nix { };
 
-  inherit (callPackages ../os-specific/linux/apparmor { python = python3; })
+  inherit (callPackages ../os-specific/linux/apparmor { python = python3; bison = bison2; })
     libapparmor apparmor-utils apparmor-bin-utils apparmor-parser apparmor-pam
     apparmor-profiles apparmor-kernel-patches;
 
