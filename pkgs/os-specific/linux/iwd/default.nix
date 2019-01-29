@@ -33,9 +33,9 @@ in stdenv.mkDerivation rec {
   ];
 
   configureFlags = [
-    "--with-dbus-datadir=$(out)/etc/"
-    "--with-dbus-busdir=$(out)/usr/share/dbus-1/system-services/"
-    "--with-systemd-unitdir=$(out)/lib/systemd/system/"
+    "--with-dbus-datadir=${placeholder "out"}/etc/"
+    "--with-dbus-busdir=${placeholder "out"}/share/dbus-1/system-services/"
+    "--with-systemd-unitdir=${placeholder "out"}/lib/systemd/system/"
     "--localstatedir=/var/"
     "--enable-wired"
   ];
@@ -57,9 +57,9 @@ in stdenv.mkDerivation rec {
   '';
 
   postFixup = ''
-    substituteInPlace $out/usr/share/dbus-1/system-services/net.connman.ead.service \
+    substituteInPlace $out/share/dbus-1/system-services/net.connman.ead.service \
                       --replace /bin/false ${coreutils}/bin/false
-    substituteInPlace $out/usr/share/dbus-1/system-services/net.connman.iwd.service \
+    substituteInPlace $out/share/dbus-1/system-services/net.connman.iwd.service \
                       --replace /bin/false ${coreutils}/bin/false
   '';
 
