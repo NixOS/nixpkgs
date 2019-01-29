@@ -1090,10 +1090,6 @@ self: super: {
   cabal2nix = generateOptparseApplicativeCompletion "cabal2nix" super.cabal2nix;
   stack = generateOptparseApplicativeCompletion "stack" super.stack;
 
-  # https://github.com/pikajude/stylish-cabal/issues/11
-  stylish-cabal = super.stylish-cabal.override { hspec = self.hspec_2_4_8; hspec-core = self.hspec-core_2_4_8; };
-  hspec_2_4_8 = super.hspec_2_4_8.override { hspec-core = self.hspec-core_2_4_8; hspec-discover = self.hspec-discover_2_4_8; };
-
   # musl fixes
   # dontCheck: use of non-standard strptime "%s" which musl doesn't support; only used in test
   unix-time = if pkgs.stdenv.hostPlatform.isMusl then dontCheck super.unix-time else super.unix-time;
