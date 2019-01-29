@@ -1,7 +1,6 @@
 { stdenv, fetchFromGitHub, luaPackages, cairo, librsvg, cmake, imagemagick, pkgconfig, gdk_pixbuf
 , xorg, libstartup_notification, libxdg_basedir, libpthreadstubs
-, xcb-util-cursor, makeWrapper, pango, gobject-introspection, unclutter
-, compton, procps, iproute, coreutils, curl, alsaUtils, findutils, xterm
+, xcb-util-cursor, makeWrapper, pango, gobject-introspection
 , which, dbus, nettools, git, asciidoc, doxygen
 , xmlto, docbook_xml_dtd_45, docbook_xsl, findXMLCatalogs
 , libxkbcommon, xcbutilxrm, hicolor-icon-theme
@@ -45,7 +44,7 @@ with luaPackages; stdenv.mkDerivation rec {
 
   GI_TYPELIB_PATH = "${pango.out}/lib/girepository-1.0";
   LUA_CPATH = "${lgi}/lib/lua/${lua.luaversion}/?.so";
-  LUA_PATH  = "${lgi}/share/lua/${lua.luaversion}/?.lua;${lgi}/share/lua/${lua.luaversion}/lgi/?.lua";
+  LUA_PATH  = "?.lua;${lgi}/share/lua/${lua.luaversion}/?.lua;${lgi}/share/lua/${lua.luaversion}/lgi/?.lua";
 
   postInstall = ''
     wrapProgram $out/bin/awesome \
@@ -53,7 +52,8 @@ with luaPackages; stdenv.mkDerivation rec {
       --add-flags '--search ${lgi}/lib/lua/${lua.luaversion}' \
       --add-flags '--search ${lgi}/share/lua/${lua.luaversion}' \
       --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH" \
-      --prefix PATH : "${stdenv.lib.makeBinPath [ compton unclutter procps iproute coreutils curl alsaUtils findutils xterm ]}"
+      --prefix LUA_PATH ';'  "${lgi}/share/lua/${lua.luaversion}/?.lua;${lgi}/share/lua/${lua.luaversion}/lgi/?.lua" \
+      --prefix LUA_CPATH ';' "${lgi}/lib/lua/${lua.luaversion}/?.so"
 
     wrapProgram $out/bin/awesome-client \
       --prefix PATH : "${which}/bin"
