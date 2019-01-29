@@ -55,8 +55,7 @@ with import ../../lib/qemu-flags.nix { inherit pkgs; };
     systemd.services."serial-getty@hvc0".enable = false;
 
     # Only use a serial console, no TTY.
-    # hvc1: socket backdoor, see "Debugging NixOS tests" section in NixOS manual
-    virtualisation.qemu.consoles = [ "hvc1" qemuSerialDevice ];
+    virtualisation.qemu.consoles = [ qemuSerialDevice ];
 
     boot.initrd.preDeviceCommands =
       ''

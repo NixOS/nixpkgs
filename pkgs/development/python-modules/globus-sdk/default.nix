@@ -10,11 +10,11 @@
 
 buildPythonPackage rec {
   pname = "globus-sdk";
-  version = "1.5.0";
+  version = "1.6.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f3ee8294c11f0d1a4430ae7534236c6a6837312f1b4056adbb183a3af663d2be";
+    sha256 = "aae6142ec8136d835f0f5c48824a65df5eb964863e155a5d90ce7ee8b84b0f8a";
   };
 
   checkPhase = ''

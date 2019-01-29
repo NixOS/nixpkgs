@@ -11,8 +11,9 @@ stdenv.mkDerivation rec {
     sha256 = "0griqc675yylf9rvadlfsabz41qy5f5idya30p5rv6ysiakxya64";
   };
 
-  buildInputs = [ coq.ocaml coq.camlp5 python27 ];
-  propagatedBuildInputs = [ coq ];
+  buildInputs = [ coq python27 ] ++ (with coq.ocamlPackages; [ ocaml camlp5 ]);
+
+  prePatch = "patchShebangs etc/coq-scripts";
 
   doCheck = false;
 

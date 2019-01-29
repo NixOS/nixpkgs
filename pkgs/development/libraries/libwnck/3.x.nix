@@ -1,14 +1,14 @@
-{stdenv, fetchurl, pkgconfig, libX11, gtk3, intltool, gobjectIntrospection, gnome3}:
+{stdenv, fetchurl, pkgconfig, libX11, gtk3, intltool, gobject-introspection, gnome3}:
 
 let
   pname = "libwnck";
-  version = "3.24.1";
+  version = "3.30.0";
 in stdenv.mkDerivation rec{
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "010zk9zvydggxqnxfml3scml5yxmpjy90irpqcayrzw26lldr9mg";
+    sha256 = "0f9lvhm3w25046dqq8xyg7nzggxpmdriwrb661nng05a8qk0svdc";
   };
 
   outputs = [ "out" "dev" "devdoc" ];
@@ -16,7 +16,7 @@ in stdenv.mkDerivation rec{
 
   configureFlags = [ "--enable-introspection" ];
 
-  nativeBuildInputs = [ pkgconfig intltool gobjectIntrospection ];
+  nativeBuildInputs = [ pkgconfig intltool gobject-introspection ];
   propagatedBuildInputs = [ libX11 gtk3 ];
 
   PKG_CONFIG_GOBJECT_INTROSPECTION_1_0_GIRDIR = "${placeholder "dev"}/share/gir-1.0";

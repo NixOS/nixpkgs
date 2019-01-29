@@ -166,7 +166,7 @@ in
         if [ -w $out/share/info ]; then
           shopt -s nullglob
           for i in $out/share/info/*.info $out/share/info/*.info.gz; do
-              ${pkgs.texinfo}/bin/install-info $i $out/share/info/dir
+              ${pkgs.buildPackages.texinfo}/bin/install-info $i $out/share/info/dir
           done
         fi
       '';

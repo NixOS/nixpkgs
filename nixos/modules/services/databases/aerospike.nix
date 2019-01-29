@@ -43,6 +43,7 @@ in
 
       package = mkOption {
         default = pkgs.aerospike;
+        defaultText = "pkgs.aerospike";
         type = types.package;
         description = "Which Aerospike derivation to use";
       };

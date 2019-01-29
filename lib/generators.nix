@@ -143,6 +143,7 @@ rec {
   }@args: v: with builtins;
     let     isPath   = v: typeOf v == "path";
     in if   isInt      v then toString v
+    else if isFloat    v then "~${toString v}"
     else if isString   v then ''"${libStr.escape [''"''] v}"''
     else if true  ==   v then "true"
     else if false ==   v then "false"

@@ -245,18 +245,22 @@ rec {
      on hackage. This can be used as a test for the source distribution,
      assuming the build fails when packaging mistakes are in the cabal file.
    */
-  buildFromSdist = pkg: lib.overrideDerivation pkg (drv: {
-    unpackPhase = let src = sdistTarball pkg; tarname = "${pkg.pname}-${pkg.version}"; in ''
-      echo "Source tarball is at ${src}/${tarname}.tar.gz"
-      tar xf ${src}/${tarname}.tar.gz
-      cd ${pkg.pname}-*
-    '';
+  buildFromSdist = pkg: overrideCabal pkg (drv: {
+    src = "${sdistTarball pkg}/${pkg.pname}-${pkg.version}.tar.gz";
+
+    # Revising and jailbreaking the cabal file has been handled in sdistTarball
+    revision = null;
+    editedCabalFile = null;
+    jailbreak = false;
   });
 
   /* Build the package in a strict way to uncover potential problems.
      This includes buildFromSdist and failOnAllWarnings.
    */
   buildStrictly = pkg: buildFromSdist (failOnAllWarnings pkg);
+
+  /* Disable core optimizations, significantly speeds up build time */
+  disableOptimization = pkg: appendConfigureFlag pkg "--disable-optimization";
 
   /* Turn on most of the compiler warnings and fail the build if any
      of them occur. */
@@ -353,4 +357,62 @@ rec {
 
       in
         builtins.listToAttrs (map toKeyVal haskellPaths);
+
+  addOptparseApplicativeCompletionScripts = exeName: pkg:
+    builtins.trace "addOptparseApplicativeCompletionScripts is deprecated in favor of generateOptparseApplicativeCompletion. Please change ${pkg.name} to use the latter or its plural form."
+    (generateOptparseApplicativeCompletion exeName pkg);
+
+  /*
+    Modify a Haskell package to add shell completion scripts for the
+    given executable produced by it. These completion scripts will be
+    picked up automatically if the resulting derivation is installed,
+    e.g. by `nix-env -i`.
+
+    Invocation:
+      generateOptparseApplicativeCompletions command pkg
+
+
+      command: name of an executable
+          pkg: Haskell package that builds the executables
+  */
+  generateOptparseApplicativeCompletion = exeName: pkg: overrideCabal pkg (drv: {
+    postInstall = (drv.postInstall or "") + ''
+      bashCompDir="$out/share/bash-completion/completions"
+      zshCompDir="$out/share/zsh/vendor-completions"
+      fishCompDir="$out/share/fish/vendor_completions.d"
+      mkdir -p "$bashCompDir" "$zshCompDir" "$fishCompDir"
+      "$out/bin/${exeName}" --bash-completion-script "$out/bin/${exeName}" >"$bashCompDir/${exeName}"
+      "$out/bin/${exeName}" --zsh-completion-script "$out/bin/${exeName}" >"$zshCompDir/_${exeName}"
+      "$out/bin/${exeName}" --fish-completion-script "$out/bin/${exeName}" >"$fishCompDir/${exeName}.fish"
+
+      # Sanity check
+      grep -F ${exeName} <$bashCompDir/${exeName} >/dev/null || {
+        echo 'Could not find ${exeName} in completion script.'
+        exit 1
+      }
+    '';
+  });
+
+  /*
+    Modify a Haskell package to add shell completion scripts for the
+    given executables produced by it. These completion scripts will be
+    picked up automatically if the resulting derivation is installed,
+    e.g. by `nix-env -i`.
+
+    Invocation:
+      generateOptparseApplicativeCompletions commands pkg
+
+
+     commands: name of an executable
+          pkg: Haskell package that builds the executables
+  */
+  generateOptparseApplicativeCompletions = commands: pkg:
+    pkgs.lib.foldr generateOptparseApplicativeCompletion pkg commands;
+
+  # Don't fail at configure time if there are multiple versions of the
+  # same package in the (recursive) dependencies of the package being
+  # built. Will delay failures, if any, to compile time.
+  allowInconsistentDependencies = drv: overrideCabal drv (drv: {
+    allowInconsistentDependencies = true;
+  });
 }

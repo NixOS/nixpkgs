@@ -1,4 +1,4 @@
-{ cairo, cmake, fetchgit, libXdmcp, libpthreadstubs, libxcb, pcre, pkgconfig
+{ cairo, cmake, fetchFromGitHub, libXdmcp, libpthreadstubs, libxcb, pcre, pkgconfig
 , python2, stdenv, xcbproto, xcbutil, xcbutilcursor, xcbutilimage
 , xcbutilrenderutil, xcbutilwm, xcbutilxrm, makeWrapper
 
@@ -26,15 +26,17 @@ assert i3GapsSupport -> ! i3Support     && jsoncpp != null && i3-gaps != null;
 
 stdenv.mkDerivation rec {
     name = "polybar-${version}";
-    version = "3.2.1";
-    src = fetchgit {
-      url = "https://github.com/jaagr/polybar";
+    version = "3.3.0";
+    src = fetchFromGitHub {
+      owner = "jaagr";
+      repo = "polybar";
       rev = version;
-      sha256 = "1z45swj2l0h8x8li7prl963cgl6zm3birsswpij8qwcmjaj5l8vz";
+      sha256 = "18hrsbq62na2i4rlwbs2ih7v9shnayg76nw14i6az28wpf8kx4rr";
+      fetchSubmodules = true;
     };
 
     meta = with stdenv.lib; {
-      description = "A fast and easy-to-use tool for creatin status bars.";
+      description = "A fast and easy-to-use tool for creating status bars";
       longDescription = ''
         Polybar aims to help users build beautiful and highly customizable
         status bars for their desktop environment, without the need of
@@ -64,10 +66,15 @@ stdenv.mkDerivation rec {
       (if i3Support || i3GapsSupport then makeWrapper else null)
     ];
 
-    fixupPhase = if (i3Support || i3GapsSupport) then ''
-    wrapProgram $out/bin/polybar \
-      --prefix PATH : "${if i3Support then i3 else i3-gaps}/bin"
-  '' else null;
+    postConfigure = ''
+      substituteInPlace ../include/settings.hpp --replace \
+        "${stdenv.cc}" "${stdenv.cc.name}"
+    '';
+
+    postInstall = if (i3Support || i3GapsSupport) then ''
+      wrapProgram $out/bin/polybar \
+        --prefix PATH : "${if i3Support then i3 else i3-gaps}/bin"
+    '' else "";
 
     nativeBuildInputs = [
       cmake pkgconfig

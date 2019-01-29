@@ -51,10 +51,6 @@ stdenv.mkDerivation rec {
   ''
   ;
 
-  postFixup = ''
-    paxmark m $bin/bin/terra
-  '';
-
   buildInputs = with llvmPackages; [ lua llvm clang-unwrapped ncurses ];
 
   meta = with stdenv.lib; {

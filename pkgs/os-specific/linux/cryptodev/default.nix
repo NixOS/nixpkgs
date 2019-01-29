@@ -7,7 +7,6 @@ stdenv.mkDerivation rec {
   src = fetchurl {
     urls = [
       "http://nwl.cc/pub/cryptodev-linux/${pname}.tar.gz"
-      "http://download.gna.org/cryptodev-linux/${pname}.tar.gz"
     ];
     sha256 = "0l3r8s71vkd0s2h01r7fhqnc3j8cqw4msibrdxvps9hfnd4hnk4z";
   };
@@ -20,7 +19,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Device that allows access to Linux kernel cryptographic drivers";
-    homepage = http://home.gna.org/cryptodev-linux/;
+    homepage = http://cryptodev-linux.org/;
     license = stdenv.lib.licenses.gpl2Plus;
     platforms = stdenv.lib.platforms.linux;
     broken = !stdenv.lib.versionOlder kernel.version "4.13";

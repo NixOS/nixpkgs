@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, elk6Version, buildGoPackage, libpcap }:
+{ stdenv, fetchFromGitHub, elk6Version, buildGoPackage, libpcap, systemd }:
 
 let beat = package : extraArgs : buildGoPackage (rec {
       name = "${package}-${version}";
@@ -8,7 +8,7 @@ let beat = package : extraArgs : buildGoPackage (rec {
         owner = "elastic";
         repo = "beats";
         rev = "v${version}";
-        sha256 = "0ymg6y6v0mdhs1rs11fn33xdp3r6v85563z0f4p7s22j1kd3nd6r";
+        sha256 = "1qnrq9bhk7csgcxycb8c7975lq0p7cxw29i6sji777zv4hn7442m";
       };
 
       goPackagePath = "github.com/elastic/beats";
@@ -38,5 +38,12 @@ in {
       your application processes, parse on the fly protocols like HTTP, MySQL,
       PostgreSQL, Redis or Thrift and correlate the messages into transactions.
     '';
+  };
+  journalbeat6  = beat "journalbeat" {
+    meta.description = ''
+      Journalbeat is an open source data collector to read and forward
+      journal entries from Linuxes with systemd.
+    '';
+    buildInputs = [ systemd.dev ];
   };
 }

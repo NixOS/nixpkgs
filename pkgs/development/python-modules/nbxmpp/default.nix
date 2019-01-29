@@ -2,7 +2,7 @@
 
 let
   pname = "nbxmpp";
-  version = "0.6.6";
+  version = "0.6.8";
   name = "${pname}-${version}";
 in buildPythonPackage rec {
   inherit pname version;
@@ -11,7 +11,7 @@ in buildPythonPackage rec {
     name = "${name}.tar.bz2";
     url = "https://dev.gajim.org/gajim/python-nbxmpp/repository/archive.tar.bz2?"
         + "ref=${name}";
-    sha256 = "10n7z613p00q15dplsvdrz11s9yq26jy2qack6nd8k7fivfhlcmz";
+    sha256 = "09zrqz01j45kvayfscd66avkrnn237lbjg9li5hjhyw92h6hkkc4";
   };
 
   propagatedBuildInputs = [ pyopenssl ];

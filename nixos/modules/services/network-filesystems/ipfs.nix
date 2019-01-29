@@ -74,7 +74,7 @@ in {
 
     services.ipfs = {
 
-      enable = mkEnableOption "Interplanetary File System";
+      enable = mkEnableOption "Interplanetary File System (WARNING: may cause severe network degredation)";
 
       user = mkOption {
         type = types.str;

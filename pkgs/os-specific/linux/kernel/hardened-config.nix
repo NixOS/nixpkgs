@@ -28,9 +28,9 @@ ${optionalString (stdenv.hostPlatform.platform.kernelArch == "x86_64") ''
   # Reduce attack surface by disabling various emulations
   IA32_EMULATION n
   X86_X32 n
-  ${optionalString (versionOlder version "4.17") ''
-    MODIFY_LDT_SYSCALL? n
-  ''}
+  # Note: this config depends on EXPERT y and so will not take effect, hence
+  # it is left "optional" for now.
+  MODIFY_LDT_SYSCALL? n
 
   VMAP_STACK y # Catch kernel stack overflows
 
@@ -52,18 +52,23 @@ ${optionalString (versionOlder version "4.11") ''
   DEBUG_SET_MODULE_RONX y
 ''}
 
-# Mark LSM hooks read-only after init.  Conflicts with SECURITY_SELINUX_DISABLE
-# (disabling SELinux at runtime); hence, SELinux can only be disabled at boot
-# via the selinux=0 boot parameter.
+# Mark LSM hooks read-only after init.  SECURITY_WRITABLE_HOOKS n
+# conflicts with SECURITY_SELINUX_DISABLE y; disabling the latter
+# implicitly marks LSM hooks read-only after init.
+#
+# SELinux can only be disabled at boot via selinux=0
+#
+# We set SECURITY_WRITABLE_HOOKS n primarily for documentation purposes; the
+# config builder fails to detect that it has indeed been unset.
 ${optionalString (versionAtLeast version "4.12") ''
   SECURITY_SELINUX_DISABLE n
-''}
-
-${optionalString ((versionAtLeast version "4.12") && (versionOlder version "4.17")) ''
-  SECURITY_WRITABLE_HOOKS n
+  SECURITY_WRITABLE_HOOKS? n
 ''}
 
 DEBUG_WX y # boot-time warning on RWX mappings
+${optionalString (versionAtLeast version "4.11") ''
+  STRICT_KERNEL_RWX y
+''}
 
 # Stricter /dev/mem
 STRICT_DEVMEM? y
@@ -84,7 +89,7 @@ ${optionalString (versionAtLeast version "4.13") ''
 # Perform usercopy bounds checking.
 HARDENED_USERCOPY y
 ${optionalString (versionAtLeast version "4.16") ''
-  HARDENED_USERCOPY_FALLBACK n
+  HARDENED_USERCOPY_FALLBACK n  # for full whitelist enforcement
 ''}
 
 # Randomize allocator freelists.
@@ -93,6 +98,9 @@ SLAB_FREELIST_RANDOM y
 ${optionalString (versionAtLeast version "4.14") ''
   SLAB_FREELIST_HARDENED y
 ''}
+
+# Allow enabling slub/slab free poisoning with slub_debug=P
+SLUB_DEBUG y
 
 # Wipe higher-level memory allocations on free() with page_poison=1
 PAGE_POISONING y
@@ -103,17 +111,23 @@ PAGE_POISONING_ZERO y
 PANIC_ON_OOPS y
 PANIC_TIMEOUT -1
 
-${optionalString (versionOlder version "4.18") ''
-  GCC_PLUGINS y # Enable gcc plugin options
-  # Gather additional entropy at boot time for systems that may not have appropriate entropy sources.
-  GCC_PLUGIN_LATENT_ENTROPY y
+GCC_PLUGINS y # Enable gcc plugin options
+# Gather additional entropy at boot time for systems that may not have appropriate entropy sources.
+GCC_PLUGIN_LATENT_ENTROPY y
 
-  ${optionalString (versionAtLeast version "4.11") ''
-    GCC_PLUGIN_STRUCTLEAK y # A port of the PaX structleak plugin
-  ''}
-  ${optionalString (versionAtLeast version "4.14") ''
-    GCC_PLUGIN_STRUCTLEAK_BYREF_ALL y # Also cover structs passed by address
-  ''}
+${optionalString (versionAtLeast version "4.11") ''
+  GCC_PLUGIN_STRUCTLEAK y # A port of the PaX structleak plugin
+''}
+${optionalString (versionAtLeast version "4.14") ''
+  GCC_PLUGIN_STRUCTLEAK_BYREF_ALL y # Also cover structs passed by address
+''}
+${optionalString (versionAtLeast version "4.20") ''
+  GCC_PLUGIN_STACKLEAK y # A port of the PaX stackleak plugin
+''}
+
+${optionalString (versionAtLeast version "4.13") ''
+  GCC_PLUGIN_RANDSTRUCT y # A port of the PaX randstruct plugin
+  GCC_PLUGIN_RANDSTRUCT_PERFORMANCE y
 ''}
 
 # Disable various dangerous settings

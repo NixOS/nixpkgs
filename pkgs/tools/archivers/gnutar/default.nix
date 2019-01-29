@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
   doInstallCheck = false; # fails
 
   meta = {
-    homepage = http://www.gnu.org/software/tar/;
+    homepage = https://www.gnu.org/software/tar/;
     description = "GNU implementation of the `tar' archiver";
 
     longDescription = ''

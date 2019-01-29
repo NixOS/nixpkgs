@@ -1,0 +1,55 @@
+--- a/cmake/OpenJPEGConfig.cmake.in
++++ b/cmake/OpenJPEGConfig.cmake.in
+@@ -32,7 +32,7 @@
+   set(INC_DIR "@CMAKE_INSTALL_PREFIX@/@OPENJPEG_INSTALL_INCLUDE_DIR@")
+   file(RELATIVE_PATH PKG_TO_INC_RPATH "${PKG_DIR}" "${INC_DIR}")
+ 
+-  get_filename_component(OPENJPEG_INCLUDE_DIRS "${SELF_DIR}/${PKG_TO_INC_RPATH}" ABSOLUTE)
++  get_filename_component(OPENJPEG_INCLUDE_DIRS "@OPENJPEG_INSTALL_INCLUDE_DIR@" ABSOLUTE)
+ 
+ else()
+   if(EXISTS ${SELF_DIR}/OpenJPEGExports.cmake)
+--- a/src/lib/openjp2/libopenjp2.pc.cmake.in
++++ b/src/lib/openjp2/libopenjp2.pc.cmake.in
+@@ -3,7 +3,7 @@
+ mandir=${prefix}/@OPENJPEG_INSTALL_MAN_DIR@
+ docdir=${prefix}/@OPENJPEG_INSTALL_DOC_DIR@
+ libdir=${prefix}/@OPENJPEG_INSTALL_LIB_DIR@
+-includedir=${prefix}/@OPENJPEG_INSTALL_INCLUDE_DIR@
++includedir=@OPENJPEG_INSTALL_INCLUDE_DIR@
+ 
+ Name: openjp2
+ Description: JPEG2000 library (Part 1 and 2)
+--- a/src/lib/openjp3d/libopenjp3d.pc.cmake.in
++++ b/src/lib/openjp3d/libopenjp3d.pc.cmake.in
+@@ -3,7 +3,7 @@
+ mandir=${prefix}/@OPENJPEG_INSTALL_MAN_DIR@
+ docdir=${prefix}/@OPENJPEG_INSTALL_DOC_DIR@
+ libdir=${prefix}/@OPENJPEG_INSTALL_LIB_DIR@
+-includedir=${prefix}/@OPENJPEG_INSTALL_INCLUDE_DIR@
++includedir=@OPENJPEG_INSTALL_INCLUDE_DIR@
+ 
+ Name: openjp3d
+ Description: JPEG2000 Extensions for three-dimensional data (Part 10)
+--- a/src/lib/openjpip/libopenjpip.pc.cmake.in
++++ b/src/lib/openjpip/libopenjpip.pc.cmake.in
+@@ -3,7 +3,7 @@
+ mandir=${prefix}/@OPENJPEG_INSTALL_MAN_DIR@
+ docdir=${prefix}/@OPENJPEG_INSTALL_DOC_DIR@
+ libdir=${prefix}/@OPENJPEG_INSTALL_LIB_DIR@
+-includedir=${prefix}/@OPENJPEG_INSTALL_INCLUDE_DIR@
++includedir=@OPENJPEG_INSTALL_INCLUDE_DIR@
+ 
+ Name: openjpip
+ Description: JPEG2000 Interactivity tools, APIs and protocols (Part 9)
+--- a/src/lib/openjpwl/libopenjpwl.pc.cmake.in
++++ b/src/lib/openjpwl/libopenjpwl.pc.cmake.in
+@@ -3,7 +3,7 @@
+ mandir=${prefix}/@OPENJPEG_INSTALL_MAN_DIR@
+ docdir=${prefix}/@OPENJPEG_INSTALL_DOC_DIR@
+ libdir=${prefix}/@OPENJPEG_INSTALL_LIB_DIR@
+-includedir=${prefix}/@OPENJPEG_INSTALL_INCLUDE_DIR@
++includedir=@OPENJPEG_INSTALL_INCLUDE_DIR@
+ 
+ Name: openjpwl
+ Description: JPEG2000 Wireless library (Part 11)

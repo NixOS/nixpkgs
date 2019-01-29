@@ -169,6 +169,9 @@ rec {
         # s32 = sign 32 4294967296;
       };
 
+    # Alias of u16 for a port number
+    port = ints.u16;
+
     float = mkOptionType rec {
         name = "float";
         description = "floating point number";
@@ -194,7 +197,10 @@ rec {
     # separator between the values).
     separatedString = sep: mkOptionType rec {
       name = "separatedString";
-      description = "string";
+      description = if sep == ""
+        then "Concatenated string" # for types.string.
+        else "strings concatenated with ${builtins.toJSON sep}"
+      ;
       check = isString;
       merge = loc: defs: concatStringsSep sep (getValues defs);
       functor = (defaultFunctor name) // {

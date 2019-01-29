@@ -4,8 +4,8 @@ let
   hts-nim = fetchFromGitHub {
     owner = "brentp";
     repo = "hts-nim";
-    rev = "9cd83e30522ab64cd71eb8209be4154aa5579ce1";
-    sha256 = "10g408idy14667varq1syf06rrbpk63i3ib7i5dh1md4ib19av6f";
+    rev = "v0.2.5";
+    sha256 = "1fma99rjqxgg9dihkd10hm1jjp5amsk5wsxnvq1lk4mcsjix5xqb";
   };
 
   docopt = fetchFromGitHub {
@@ -28,7 +28,10 @@ in stdenv.mkDerivation rec {
 
   buildInputs = [ nim ];
 
-  buildPhase = "nim -p:${hts-nim}/src -p:${docopt}/src c -d:release mosdepth.nim";
+  buildPhase = ''
+    HOME=$TMPDIR
+    nim -p:${hts-nim}/src -p:${docopt}/src c --nilseqs:on -d:release mosdepth.nim
+  '';
   installPhase = "install -Dt $out/bin mosdepth";
   fixupPhase = "patchelf --set-rpath ${stdenv.lib.makeLibraryPath [ stdenv.cc.cc htslib pcre ]} $out/bin/mosdepth";
 

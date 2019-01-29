@@ -202,7 +202,7 @@ let
         };
 
         script = ''
-          modprobe wireguard
+          ${optionalString (!config.boot.isContainer) "modprobe wireguard"}
 
           ${values.preSetup}
 

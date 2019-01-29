@@ -29,10 +29,10 @@
 , python
 , git
 , lib
-, ghcVersion ? "ghc802"
+, haskellPackages
 }:
 
-haskell.packages.${ghcVersion}.callPackage
+haskellPackages.callPackage
   ({ mkDerivation, base, HUnit, parsec, process, QuickCheck, stdenv }:
    mkDerivation rec {
      pname = "zsh-git-prompt";

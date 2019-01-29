@@ -38,10 +38,9 @@ def get_radare2_rev() -> str:
 
 def get_cutter_version() -> str:
     version_expr = """
-(with import <nixpkgs> {}; (builtins.parseDrvName (qt5.callPackage ./cutter.nix {}).name).version)
+(with import <nixpkgs> {}; (builtins.parseDrvName (qt5.callPackage <radare2/cutter.nix> {}).name).version)
 """
-    with SCRIPT_DIR:
-        return sh("nix", "eval", "--raw", version_expr.strip())
+    return sh("nix", "eval", "--raw", version_expr.strip(), "-I", "radare2={0}".format(SCRIPT_DIR))
 
 
 def get_r2_cutter_rev() -> str:
@@ -109,7 +108,7 @@ def main() -> None:
             "https://github.com/radare/radare2",
             ".",
         )
-        nix_file = str(Path(__file__).parent.joinpath("default.nix"))
+        nix_file = str(SCRIPT_DIR.joinpath("default.nix"))
 
         radare2_info = get_repo_info(dirname, radare2_rev)
 

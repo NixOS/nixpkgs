@@ -15,6 +15,13 @@ stdenv.mkDerivation rec {
       url = "https://github.com/taglib/taglib/commit/eb9ded1206f18.patch";
       sha256 = "1bvpxsvmlpi3by7myzss9kkpdkv405612n8ff68mw1ambj8h1m90";
     })
+
+    (fetchpatch {
+      # https://github.com/taglib/taglib/pull/869
+      name = "CVE-2018-11439.patch";
+      url = "https://github.com/taglib/taglib/commit/272648ccfcccae30e002ccf34a22e075dd477278.patch";
+      sha256 = "0p397qq4anvcm0p8xs68mxa8hg6dl07chg260lc6k2929m34xv72";
+    })
   ];
 
   nativeBuildInputs = [ cmake ];

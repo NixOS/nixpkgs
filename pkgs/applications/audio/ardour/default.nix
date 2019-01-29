@@ -4,7 +4,8 @@
 , librdf_raptor, librdf_rasqal, libsamplerate, libsigcxx, libsndfile
 , libusb, libuuid, libxml2, libxslt, lilv, lv2, makeWrapper
 , perl, pkgconfig, python2, rubberband, serd, sord, sratom
-, taglib, vampSDK, dbus, fftw, pango, suil, libarchive }:
+, taglib, vampSDK, dbus, fftw, pango, suil, libarchive
+, wafHook }:
 
 let
 
@@ -29,6 +30,7 @@ stdenv.mkDerivation rec {
     sha256 = "0mla5lm51ryikc2rrk53max2m7a5ds6i1ai921l2h95wrha45nkr";
   };
 
+  nativeBuildInputs = [ wafHook ];
   buildInputs =
     [ alsaLib aubio boost cairomm curl doxygen dbus fftw fftwSinglePrec flac
       glibmm graphviz gtkmm2 libjack2 libgnomecanvas libgnomecanvasmm liblo
@@ -47,13 +49,13 @@ stdenv.mkDerivation rec {
     patchShebangs ./tools/
   '';
 
-  configurePhase = "${python2.interpreter} waf configure --optimize --docs --with-backends=jack,alsa,dummy --prefix=$out";
+  configureFlags = [
+    "--optimize"
+    "--docs"
+    "--with-backends=jack,alsa,dummy"
+  ];
 
-  buildPhase = "${python2.interpreter} waf";
-
-  installPhase = ''
-    ${python2.interpreter} waf install
-
+  postInstall = ''
     # Install desktop file
     mkdir -p "$out/share/applications"
     cat > "$out/share/applications/ardour.desktop" << EOF

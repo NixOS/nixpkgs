@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, crystal, shards, which }:
 
 stdenv.mkDerivation rec {
-  name = "scry";
+  pname = "scry";
   # 0.7.1 doesn't work with crystal > 0.25
   version = "0.7.1.20180919";
 

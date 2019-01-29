@@ -25,15 +25,16 @@ stdenv.mkDerivation (
 
     # current directory (".") is removed from @INC in Perl 5.26 but many old libs rely on it
     # https://metacpan.org/pod/release/XSAWYERX/perl-5.26.0/pod/perldelta.pod#Removal-of-the-current-directory-%28%22.%22%29-from-@INC
-    PERL_USE_UNSAFE_INC = lib.optionalString (lib.versionAtLeast (lib.getVersion perl) "5.26") "1";
+    PERL_USE_UNSAFE_INC = "1";
 
     meta.homepage = "https://metacpan.org/release/${(builtins.parseDrvName name).name}";
+    meta.platforms = perl.meta.platforms;
   }
   attrs
   )
   //
   {
-    name = "perl${lib.getVersion perl}-${name}";
+    name = "perl${perl.version}-${name}";
     builder = ./builder.sh;
     nativeBuildInputs = nativeBuildInputs ++ [ (perl.dev or perl) ];
     inherit perl;

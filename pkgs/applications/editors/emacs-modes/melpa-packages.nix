@@ -89,6 +89,12 @@ self:
       # Expects bash to be at /bin/bash
       flycheck-rtags = markBroken super.flycheck-rtags;
 
+      forge = super.forge.overrideAttrs (attrs: {
+        # searches for Git at build time
+        nativeBuildInputs =
+          (attrs.nativeBuildInputs or []) ++ [ external.git ];
+      });
+
       # build timeout
       graphene = markBroken super.graphene;
 
@@ -162,6 +168,12 @@ self:
       });
 
       magit-todos = super.magit-todos.overrideAttrs (attrs: {
+        # searches for Git at build time
+        nativeBuildInputs =
+          (attrs.nativeBuildInputs or []) ++ [ external.git ];
+      });
+
+      magit-filenotify = super.magit-filenotify.overrideAttrs (attrs: {
         # searches for Git at build time
         nativeBuildInputs =
           (attrs.nativeBuildInputs or []) ++ [ external.git ];

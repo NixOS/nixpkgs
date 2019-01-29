@@ -1,9 +1,5 @@
-{ stdenv, cacert, git, rust, cargo-vendor, python3 }:
-let
-  fetchcargo = import ./fetchcargo.nix {
-    inherit stdenv cacert git rust cargo-vendor python3;
-  };
-in
+{ stdenv, cacert, git, cargo, rustc, cargo-vendor, fetchcargo, python3 }:
+
 { name, cargoSha256 ? "unset"
 , src ? null
 , srcs ? null
@@ -45,7 +41,7 @@ in stdenv.mkDerivation (args // {
 
   patchRegistryDeps = ./patch-registry-deps;
 
-  buildInputs = [ cacert git rust.cargo rust.rustc ] ++ buildInputs;
+  buildInputs = [ cacert git cargo rustc ] ++ buildInputs;
 
   patches = cargoPatches ++ patches;
 
@@ -91,8 +87,10 @@ in stdenv.mkDerivation (args // {
 
   installPhase = args.installPhase or ''
     runHook preInstall
-    mkdir -p $out/bin
-    find target/release -maxdepth 1 -executable -type f -exec cp "{}" $out/bin \;
+    mkdir -p $out/bin $out/lib
+    find target/release -maxdepth 1 -type f -executable ! \( -regex ".*\.\(so.[0-9.]+\|so\|a\|dylib\)" \) -print0 | xargs -r -0 cp -t $out/bin
+    find target/release -maxdepth 1 -regex ".*\.\(so.[0-9.]+\|so\|a\|dylib\)" -print0 | xargs -r -0 cp -t $out/lib
+    rmdir --ignore-fail-on-non-empty $out/lib $out/bin
     runHook postInstall
   '';
 

@@ -1,7 +1,7 @@
-{ stdenv, buildPerlPackage, fetchurl, fetchpatch, makeWrapper
-, perl, perlPackages, flac, faad2, sox, lame, monkeysAudio, wavpack }:
+{ stdenv, fetchurl, fetchpatch, makeWrapper
+, perlPackages, flac, faad2, sox, lame, monkeysAudio, wavpack }:
 
-buildPerlPackage rec {
+perlPackages.buildPerlPackage rec {
   name = "slimserver-${version}";
   version = "7.9.1";
 
@@ -12,7 +12,7 @@ buildPerlPackage rec {
 
   buildInputs = [
     makeWrapper
-    perl
+    perlPackages.perl
     perlPackages.AnyEvent
     perlPackages.AudioScan
     perlPackages.CarpClan
@@ -77,9 +77,9 @@ buildPerlPackage rec {
 
   buildPhase = ''
     mv lib tmp
-    mkdir -p lib/perl5/site_perl
-    mv CPAN_used/* lib/perl5/site_perl
-    cp -rf tmp/* lib/perl5/site_perl
+    mkdir -p ${perlPackages.perl.libPrefix}
+    mv CPAN_used/* ${perlPackages.perl.libPrefix}
+    cp -rf tmp/* ${perlPackages.perl.libPrefix}
   '';
 
   doCheck = false;

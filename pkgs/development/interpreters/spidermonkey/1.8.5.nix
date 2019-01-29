@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
   # so the failure of that test does not matter much.
   configureFlags = [ "--enable-threadsafe" "--with-system-nspr" ] ++
     stdenv.lib.optionals (stdenv.hostPlatform.system == "armv5tel-linux") [
-        "--with-cpu-arch=armv5t" 
+        "--with-cpu-arch=armv5t"
         "--disable-tracejit" ];
 
   # hack around a make problem, see https://github.com/NixOS/nixpkgs/issues/1279#issuecomment-29547393
@@ -59,9 +59,6 @@ stdenv.mkDerivation rec {
 
   preCheck = ''
     rm jit-test/tests/sunspider/check-date-format-tofte.js    # https://bugzil.la/600522
-
-    paxmark mr shell/js
-    paxmark mr jsapi-tests/jsapi-tests
   '';
 
   meta = with stdenv.lib; {

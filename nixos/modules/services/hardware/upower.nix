@@ -56,6 +56,32 @@ in
           { Type = "dbus";
             BusName = "org.freedesktop.UPower";
             ExecStart = "@${cfg.package}/libexec/upowerd upowerd";
+            Restart = "on-failure";
+            # Upstream lockdown:
+            # Filesystem lockdown
+            ProtectSystem = "strict";
+            # Needed by keyboard backlight support
+            ProtectKernelTunables = false;
+            ProtectControlGroups = true;
+            ReadWritePaths = "/var/lib/upower";
+            ProtectHome = true;
+            PrivateTmp = true;
+
+            # Network
+            # PrivateNetwork=true would block udev's netlink socket
+            RestrictAddressFamilies = "AF_UNIX AF_NETLINK";
+
+            # Execute Mappings
+            MemoryDenyWriteExecute = true;
+
+            # Modules
+            ProtectKernelModules = true;
+
+            # Real-time
+            RestrictRealtime = true;
+
+            # Privilege escalation
+            NoNewPrivileges = true;
           };
       };
 

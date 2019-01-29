@@ -85,7 +85,8 @@ let
             after = [ "network-pre.target" "systemd-udevd.service" "systemd-sysctl.service" ];
             before = [ "network.target" "shutdown.target" ];
             wants = [ "network.target" ];
-            partOf = map (i: "network-addresses-${i.name}.service") interfaces;
+            # exclude bridges from the partOf relationship to fix container networking bug #47210
+            partOf = map (i: "network-addresses-${i.name}.service") (filter (i: !(hasAttr i.name cfg.bridges)) interfaces);
             conflicts = [ "shutdown.target" ];
             wantedBy = [ "multi-user.target" ] ++ optional hasDefaultGatewaySet "network-online.target";
 

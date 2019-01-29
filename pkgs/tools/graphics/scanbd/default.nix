@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
       scanbuttond project. 
     '';
     homepage = http://scanbd.sourceforge.net/;
-    downloadPage = http://sourceforge.net/projects/scanbd/;
+    downloadPage = https://sourceforge.net/projects/scanbd/;
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
   };

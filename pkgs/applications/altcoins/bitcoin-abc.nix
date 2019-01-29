@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, autoreconfHook, openssl, db48, boost
+{ stdenv, fetchFromGitHub, pkgconfig, autoreconfHook, openssl, db53, boost
 , zlib, miniupnpc, qtbase ? null , qttools ? null, utillinux, protobuf, qrencode, libevent
 , withGui }:
 
@@ -7,19 +7,19 @@ with stdenv.lib;
 stdenv.mkDerivation rec {
 
   name = "bitcoin" + (toString (optional (!withGui) "d")) + "-abc-" + version;
-  version = "0.17.1";
+  version = "0.18.2";
 
   src = fetchFromGitHub {
     owner = "bitcoin-ABC";
     repo = "bitcoin-abc";
     rev = "v${version}";
-    sha256 = "1kq9n3s9vhkmfaizsyi2cb91ibi06gb6wx0hkcb9hg3nrrvcka3y";
+    sha256 = "1ha219xnd61qicf7r3j0wbfrifh7blwp3lyk3ycgdn381q1qln29";
   };
 
   patches = [ ./fix-bitcoin-qt-build.patch ];
 
   nativeBuildInputs = [ pkgconfig autoreconfHook ];
-  buildInputs = [ openssl db48 boost zlib
+  buildInputs = [ openssl db53 boost zlib
                   miniupnpc utillinux protobuf libevent ]
                   ++ optionals withGui [ qtbase qttools qrencode ];
 

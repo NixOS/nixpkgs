@@ -8,6 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "07anqypf7c719x9y683qz65cxllmzlgmlab2hlahrqcj4bq2k99c";
   };
 
+  outputs = [ "out" "dev" ];
+
   postPatch = ''
     sed '1i#include <stdint.h>' -i src/xdr_sizeof.c
   '' + stdenv.lib.optionalString stdenv.hostPlatform.isMusl ''
@@ -16,6 +18,7 @@ stdenv.mkDerivation rec {
                 '#if defined __APPLE_CC__ || defined __FreeBSD__ || !defined __GLIBC__'
   '';
 
+  KRB5_CONFIG = "${libkrb5.dev}/bin/krb5-config";
   nativeBuildInputs = [ autoreconfHook ];
   propagatedBuildInputs = [ libkrb5 ];
 

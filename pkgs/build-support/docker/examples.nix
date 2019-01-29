@@ -155,6 +155,35 @@ rec {
   layered-image = pkgs.dockerTools.buildLayeredImage {
     name = "layered-image";
     tag = "latest";
+    extraCommands = ''echo "(extraCommand)" > extraCommands'';
     config.Cmd = [ "${pkgs.hello}/bin/hello" ];
+    contents = [ pkgs.hello pkgs.bash pkgs.coreutils ];
+  };
+
+  # 11. Create an image on top of a layered image
+  layered-on-top = pkgs.dockerTools.buildImage {
+    name = "layered-on-top";
+    tag = "latest";
+    fromImage = layered-image;
+    extraCommands = ''
+      mkdir ./example-output
+      chmod 777 ./example-output
+    '';
+    config = {
+      Env = [ "PATH=${pkgs.coreutils}/bin/" ];
+      WorkingDir = "/example-output";
+      Cmd = [
+        "${pkgs.bash}/bin/bash" "-c" "echo hello > foo; cat foo"
+      ];
+    };
+  };
+
+  # 12. example of running something as root on top of a parent image
+  # Regression test related to PR #52109
+  runAsRootParentImage = buildImage {
+    name = "runAsRootParentImage";
+    tag = "latest";
+    runAsRoot = "touch /example-file";
+    fromImage = bash;
   };
 }

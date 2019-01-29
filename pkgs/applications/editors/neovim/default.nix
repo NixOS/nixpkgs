@@ -11,14 +11,21 @@ let
 
   neovim = stdenv.mkDerivation rec {
     name = "neovim-unwrapped-${version}";
-    version = "0.3.1";
+    version = "0.3.4";
 
     src = fetchFromGitHub {
       owner = "neovim";
       repo = "neovim";
       rev = "v${version}";
-      sha256 = "19jy9nr2ffscli6wsysqkdvqvh7sgkkwhzkw3yypfrvg4pj9rl56";
+      sha256 = "07ncvgp6xfhiwc6hd7qf7zk28n3yj47p26qj1ji29vqkwnk28y3s";
     };
+
+    patches = [
+      # introduce a system-wide rplugin.vim in addition to the user one
+      # necessary so that nix can handle `UpdateRemotePlugins` for the plugins
+      # it installs. See https://github.com/neovim/neovim/issues/9413.
+      ./system_rplugin_manifest.patch
+    ];
 
     enableParallelBuilding = true;
 
@@ -45,6 +52,13 @@ let
     LUA_CPATH = stdenv.lib.concatStringsSep ";" (map luaPackages.getLuaCPath lualibs);
 
     lualibs = [ luaPackages.mpack luaPackages.lpeg luaPackages.luabitop ];
+
+    # nvim --version output retains compilation flags and references to build tools
+    postPatch = ''
+      substituteInPlace src/nvim/version.c --replace NVIM_VERSION_CFLAGS "";
+    '';
+    # check that the above patching actually works
+    disallowedReferences = [ stdenv.cc ];
 
     cmakeFlags = [
       "-DLUA_PRG=${luaPackages.lua}/bin/lua"
@@ -86,6 +100,9 @@ let
       license = with licenses; [ asl20 vim ];
       maintainers = with maintainers; [ manveru garbas rvolosatovs ];
       platforms   = platforms.unix;
+      # `lua: bad light userdata pointer`
+      # https://nix-cache.s3.amazonaws.com/log/9ahcb52905d9d417zsskjpc331iailpq-neovim-unwrapped-0.2.2.drv
+      broken = stdenv.isAarch64;
     };
   };
 

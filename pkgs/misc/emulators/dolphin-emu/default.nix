@@ -37,9 +37,9 @@ stdenv.mkDerivation rec {
                   wxGTK30 soundtouch miniupnpc mbedtls curl lzo sfml ];
 
   meta = {
-    homepage = http://dolphin-emu.org/;
-    description = "Gamecube/Wii/Triforce emulator for x86_64 and ARM";
-    license = stdenv.lib.licenses.gpl2;
+    homepage = https://dolphin-emu.org/;
+    description = "Gamecube/Wii/Triforce emulator for x86_64 and ARMv8";
+    license = stdenv.lib.licenses.gpl2Plus;
     maintainers = with stdenv.lib.maintainers; [ MP2E ];
     # x86_32 is an unsupported platform.
     # Enable generic build if you really want a JIT-less binary.

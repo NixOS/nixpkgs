@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, pkgconfig
+{ stdenv, fetchurl, cmake, pkgconfig, alsaLib
 , libjack2, libsndfile, fftw, curl, gcc
 , libXt, qtbase, qttools, qtwebkit, readline
 , useSCEL ? false, emacs
@@ -28,12 +28,13 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     gcc libjack2 libsndfile fftw curl libXt qtbase qtwebkit readline ]
+      ++ optional (!stdenv.isDarwin) alsaLib
       ++ optional useSCEL emacs;
 
   meta = {
     description = "Programming language for real time audio synthesis";
     homepage = http://supercollider.sourceforge.net/;
     license = stdenv.lib.licenses.gpl3Plus;
-    platforms = stdenv.lib.platforms.linux;
+    platforms = [ "x686-linux" "x86_64-linux" ];
   };
 }

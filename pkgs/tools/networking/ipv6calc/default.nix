@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   name = "ipv6calc-${version}";
-  version = "1.0.0";
+  version = "1.1.0";
 
   src = fetchurl {
     url = "ftp://ftp.deepspace6.net/pub/ds6/sources/ipv6calc/${name}.tar.gz";
-    sha256 = "1gcl8mqjdn5j1rcnv2gz2j0i8ayx747hwzjyiazl6j43c5g4bc3l";
+    sha256 = "1q74ikg780v5hllbq08wdfvxr2lf0fc7i41hclqrh1ajc6dqybbq";
   };
 
   buildInputs = [ geoip geolite-legacy getopt ip2location-c openssl ];

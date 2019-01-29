@@ -8,9 +8,10 @@ stdenv.mkDerivation rec {
     sha256 = "1j6sjwkyhqvsgyw938bxxfwkzzi1mahk66g5342lv6j89jfvrz8k";
   };
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "An N-Gram-Based Text Categorization library primarily intended for language guessing";
     homepage = https://wiki.documentfoundation.org/Libexttextcat;
-    platforms = stdenv.lib.platforms.all;
+    platforms = platforms.all;
+    license = licenses.bsd3;
   };
 }

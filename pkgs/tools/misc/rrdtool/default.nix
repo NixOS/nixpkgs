@@ -24,8 +24,8 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     # for munin and rrdtool support
-    mkdir -p $out/lib/perl5/site_perl/
-    mv $out/lib/perl/5* $out/lib/perl5/site_perl/
+    mkdir -p $out/${perl.libPrefix}
+    mv $out/lib/perl/5* $out/${perl.libPrefix}
   '';
 
   meta = with stdenv.lib; {

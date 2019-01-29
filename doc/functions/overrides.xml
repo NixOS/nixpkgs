@@ -6,8 +6,14 @@
 
  <para>
   Sometimes one wants to override parts of <literal>nixpkgs</literal>, e.g.
-  derivation attributes, the results of derivations or even the whole package
-  set.
+  derivation attributes, the results of derivations.
+ </para>
+
+ <para>
+  These functions are used to make changes to packages, returning only single
+  packages. <link xlink:href="#chap-overlays">Overlays</link>, on the other
+  hand, can be used to combine the overridden packages across the entire
+  package set of Nixpkgs.
  </para>
 
  <section xml:id="sec-pkg-override">
@@ -25,6 +31,9 @@
   <para>
    Example usages:
 <programlisting>pkgs.foo.override { arg1 = val1; arg2 = val2; ... }</programlisting>
+<!-- TODO: move below programlisting to a new section about extending and overlays
+           and reference it
+  -->
 <programlisting>
 import pkgs.path { overlays = [ (self: super: {
   foo = super.foo.override { barSupport = true ; };
@@ -86,11 +95,11 @@ helloWithDebug = pkgs.hello.overrideAttrs (oldAttrs: rec {
     in this case, as it overrides only the attributes of the final derivation.
     It is for this reason that <varname>overrideAttrs</varname> should be
     preferred in (almost) all cases to <varname>overrideDerivation</varname>,
-    i.e. to allow using <varname>sdenv.mkDerivation</varname> to process input
+    i.e. to allow using <varname>stdenv.mkDerivation</varname> to process input
     arguments, as well as the fact that it is easier to use (you can use the
     same attribute names you see in your Nix code, instead of the ones
     generated (e.g. <varname>buildInputs</varname> vs
-    <varname>nativeBuildInputs</varname>, and involves less typing.
+    <varname>nativeBuildInputs</varname>), and it involves less typing).
    </para>
   </note>
  </section>

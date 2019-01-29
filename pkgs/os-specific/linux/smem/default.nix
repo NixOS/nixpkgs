@@ -1,31 +1,26 @@
 { lib, stdenv, fetchurl, python }:
 
 stdenv.mkDerivation rec {
-  name = "smem-1.4";
+  name = "smem-${version}";
+  version = "1.5";
 
   src = fetchurl {
-    url = "https://www.selenic.com/smem/download/${name}.tar.gz";
-    sha256 = "1v31vy23s7szl6vdrllq9zbg58bp36jf5xy3fikjfg6gyiwgia9f";
+    url = "https://selenic.com/repo/smem/archive/${version}.tar.bz2";
+    sha256 = "19ibv1byxf2b68186ysrgrhy5shkc5mc69abark1h18yigp3j34m";
   };
 
   buildInputs = [ python ];
 
-  buildPhase =
-    ''
-      gcc -O2 smemcap.c -o smemcap
-    '';
+  makeFlags = [ "smemcap" ];
 
   installPhase =
     ''
-      mkdir -p $out/bin
-      cp smem smemcap $out/bin/
-
-      mkdir -p $out/share/man/man8
-      cp smem.8 $out/share/man/man8/
+      install -Dm555 -t $out/bin/ smem smemcap
+      install -Dm444 -t $out/share/man/man8/ smem.8
     '';
 
   meta = {
-    homepage = http://www.selenic.com/smem/;
+    homepage = https://www.selenic.com/smem/;
     description = "A memory usage reporting tool that takes shared memory into account";
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.eelco ];

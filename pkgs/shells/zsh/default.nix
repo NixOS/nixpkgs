@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ncurses, pcre }:
+{ stdenv, fetchurl, ncurses, pcre, fetchpatch }:
 
 let
   version = "5.6.2";
@@ -18,6 +18,15 @@ stdenv.mkDerivation {
     sha256 = "17iffliqcj4hv91g0bd2sxsyfcz51mfyh97sp2iyrs2p0mndc2x5";
   };
 
+  patches = [
+    (fetchpatch {
+      name = "search-xdg-data-dirs.patch";
+      url = https://github.com/zsh-users/zsh/commit/624219e0e4cbfdfb286e707bd2853f2d7b6a4a7d.patch;
+      sha256 = "0i0g7dc0px57vpklm1f4w20vyc92nv15y09r5clvib2kjkxjy2cf";
+      excludes = [ "ChangeLog" ];
+    })
+  ];
+
   buildInputs = [ ncurses pcre ];
 
   configureFlags = [
@@ -25,10 +34,8 @@ stdenv.mkDerivation {
     "--enable-multibyte"
     "--with-tcsetpgrp"
     "--enable-pcre"
+    "--enable-zprofile=${placeholder "out"}/etc/zprofile"
   ];
-  preConfigure = ''
-    configureFlagsArray+=(--enable-zprofile=$out/etc/zprofile)
-  '';
 
   # the zsh/zpty module is not available on hydra
   # so skip groups Y Z

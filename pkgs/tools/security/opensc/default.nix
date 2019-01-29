@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   name = "opensc-${version}";
-  version = "0.18.0";
+  version = "0.19.0";
 
   src = fetchFromGitHub {
     owner = "OpenSC";
     repo = "OpenSC";
     rev = version;
-    sha256 = "1shwx1rkmnygk2dp0q8pbvnxcg96bn570vch9yq34gs42ryskihf";
+    sha256 = "10575gb9l38cskq7swyjp0907wlziyxg4ppq33ndz319dsx69d87";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -37,6 +37,7 @@ stdenv.mkDerivation rec {
 
   installFlags = [
     "sysconfdir=$(out)/etc"
+    "completiondir=$(out)/etc"
   ];
 
   meta = with stdenv.lib; {

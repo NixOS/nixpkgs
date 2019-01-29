@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, vscode-utils, jq, mono46, clang-tools, writeScript
+{ stdenv, fetchzip, vscode-utils, jq, mono, clang-tools, writeScript
 , gdbUseFixed ? true, gdb # The gdb default setting will be fixed to specified. Use version from `PATH` otherwise.
 }:
 
@@ -34,8 +34,9 @@ let
     name = "cpptools-language-component-binaries";
 
     src = fetchzip {
-      url = https://download.visualstudio.microsoft.com/download/pr/11991016/8a81aa8f89aac452956b0e4c68e6620b/Bin_Linux.zip;
-      sha256 = "0ma59fxfldbgh6ijlvfbs3hnl4g0cnw5gs6286zdrp065n763sv4";
+      # Follow https://go.microsoft.com/fwlink/?linkid=2037608
+      url = "https://download.visualstudio.microsoft.com/download/pr/97ed3eeb-b31e-421c-92dc-4f3a98af301e/069a1e6ab1b4b017853a7e9e08067744/bin_linux.zip";
+      sha256 = "19flm4vcrg89x0b20bd0g45apabzfqgvcpjddnmyk312jc242gmb";
     };
 
     patchPhase = ''
@@ -59,7 +60,7 @@ let
           export PATH=''${PATH}''${PATH:+:}${gdb}/bin
         ''
         else ""}
-    ${mono46}/bin/mono $BIN_DIR/bin/OpenDebugAD7.exe $*
+    ${mono}/bin/mono $BIN_DIR/bin/OpenDebugAD7.exe $*
   '';
 in
 
@@ -67,8 +68,8 @@ vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = {
     name = "cpptools";
     publisher = "ms-vscode";
-    version = "0.19.0";
-    sha256 = "1x97mz859bzr4gxy6cnqgd8qmvnrjn9zdxh457slsxsk4wqcfmgj";
+    version = "0.20.1";
+    sha256 = "1gmnkrn26n57vx2nm5hhalkkl2irak38m2lklgja0bi10jb6y08l";
   };
 
   buildInputs = [
@@ -81,7 +82,7 @@ vscode-utils.buildVscodeMarketplaceExtension {
     # 1. Add activation events so that the extension is functional. This listing is empty when unpacking the extension but is filled at runtime.
     # 2. Patch `packages.json` so that nix's *gdb* is used as default value for `miDebuggerPath`.
     cat ./package_ori.json | \
-      jq --slurpfile actEvts ${./package-activation-events-0-16-1.json} '(.activationEvents) = $actEvts[0]' | \
+      jq --slurpfile actEvts ${./package-activation-events.json} '(.activationEvents) = $actEvts[0]' | \
       jq '(.contributes.debuggers[].configurationAttributes | .attach , .launch | .properties.miDebuggerPath | select(. != null) | select(.default == "/usr/bin/gdb") | .default) = "${gdbDefaultsTo}"' > \
       ./package.json
 

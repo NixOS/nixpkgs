@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub
-, gcc-arm-embedded, python2
+, gcc-arm-embedded, binutils-arm-embedded, python2
 , skipTargets ? [
   # These targets do not build, for the reasons listed, along with the last version checked.
   # Probably all of the issues with these targets need to be addressed upstream.
@@ -24,14 +24,17 @@ in stdenv.mkDerivation rec {
     sha256 = "1wyp23p876xbfi9z6gm4xn1nwss3myvrjjjq9pd3s0vf5gkclkg5";
   };
 
-  buildInputs = [
-    gcc-arm-embedded
+  nativeBuildInputs = [
+    gcc-arm-embedded binutils-arm-embedded
     python2
   ];
 
   postPatch = ''
     sed -ri "s/REVISION.*=.*git log.*/REVISION = ${builtins.substring 0 10 src.rev}/" Makefile # Simulate abbrev'd rev.
     sed -ri "s/binary hex/hex/" Makefile # No need for anything besides .hex
+
+    substitutateInPlace Makefile \
+      --replace "--specs=nano.specs" ""
   '';
 
   enableParallelBuilding = true;
@@ -58,7 +61,6 @@ in stdenv.mkDerivation rec {
     homepage = https://github.com/betaflight/betaflight;
     license = licenses.gpl3;
     maintainers = with maintainers; [ elitak ];
-    platforms = [ "i686-linux" "x86_64-linux" ];
   };
 
 }

@@ -4,7 +4,7 @@
 #   by default
 # - full: contains base plus modules in withModules
 { stdenv, fetchhg, libsigsegv, gettext, ncurses, readline, libX11
-, libXau, libXt, pcre, zlib, libXpm, xproto, libXext, xextproto
+, libXau, libXt, pcre, zlib, libXpm, xorgproto, libXext
 , libffi, libffcall, automake
 , coreutils
 # build options
@@ -20,7 +20,7 @@
 }:
 
 assert x11Support -> (libX11 != null && libXau != null && libXt != null
-  && libXpm != null && xproto != null && libXext != null && xextproto != null);
+  && libXpm != null && xorgproto != null && libXext != null);
 
 stdenv.mkDerivation rec {
   v = "2.50pre20171114";
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
   ++ stdenv.lib.optional (ffcallAvailable && (libffi != null)) libffi
   ++ stdenv.lib.optional ffcallAvailable libffcall
   ++ stdenv.lib.optionals x11Support [
-    libX11 libXau libXt libXpm xproto libXext xextproto
+    libX11 libXau libXt libXpm xorgproto libXext
   ];
 
   # First, replace port 9090 (rather low, can be used)

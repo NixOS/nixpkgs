@@ -1,24 +1,21 @@
-{ stdenv, fetchFromGitHub, ocaml, findlib, dune, cppo }:
+{ stdenv, fetchFromGitHub, buildDunePackage, cppo }:
 
-stdenv.mkDerivation rec {
+buildDunePackage rec {
+  pname = "camomile";
 	version = "1.0.1";
-	name = "ocaml${ocaml.version}-camomile-${version}";
 
 	src = fetchFromGitHub {
 		owner = "yoriyuki";
-		repo = "camomile";
-		rev = "${version}";
+		repo = pname;
+		rev = version;
 		sha256 = "1pfxr9kzkpd5bsdqrpxasfxkawwkg4cpx3m1h6203sxi7qv1z3fn";
 	};
 
-	buildInputs = [ ocaml findlib dune cppo ];
+	buildInputs = [ cppo ];
 
 	configurePhase = "ocaml configure.ml --share $out/share/camomile";
 
-	inherit (dune) installPhase;
-
 	meta = {
-		inherit (ocaml.meta) platforms;
 		inherit (src.meta) homepage;
 		maintainers = [ stdenv.lib.maintainers.vbgl ];
 		license = stdenv.lib.licenses.lgpl21;

@@ -1,5 +1,6 @@
 { stdenv
 , buildPythonPackage
+, isPy3k
 , fetchPypi
 , html5lib
 , wcwidth
@@ -9,16 +10,17 @@
 buildPythonPackage rec {
   pname = "ftfy";
 
-  version = "4.4.3";
+  version = "5.5.0";
   # ftfy v5 only supports python3. Since at the moment the only
   # packages that use ftfy are spacy and textacy which both support
   # python 2 and 3, they have pinned ftfy to the v4 branch.
   # I propose to stick to v4 until another package requires v5.
   # At that point we can make a ftfy_v4 package.
+  disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "152xdb56rhs1q4r0ck1n557sbphw7zq18r75a7kkd159ckdnc01w";
+    sha256 = "525ea45a871f52ddb170e66b01f35f1b3022995016c81efa305e628937b85443";
   };
 
   propagatedBuildInputs = [ html5lib wcwidth ];

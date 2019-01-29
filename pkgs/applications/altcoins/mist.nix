@@ -2,7 +2,7 @@
 
 let
   version = "0.11.1";
-  name = "mist";
+  pname = "mist";
 
   throwSystem = throw "Unsupported system: ${stdenv.hostPlatform.system}";
 
@@ -26,7 +26,7 @@ let
   };
 
   mist = stdenv.lib.appendToName "unwrapped" (stdenv.mkDerivation {
-    inherit name version meta;
+    inherit pname version meta;
 
     src = {
       i686-linux = fetchurl {

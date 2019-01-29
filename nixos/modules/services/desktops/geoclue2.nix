@@ -61,6 +61,8 @@ in
         wantedBy = [ "default.target" ];
       };
     };
+
+    environment.etc."geoclue/geoclue.conf".source = "${package}/etc/geoclue/geoclue.conf";
   };
 
 }

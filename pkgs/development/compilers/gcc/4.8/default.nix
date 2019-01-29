@@ -16,8 +16,8 @@
 , zip ? null, unzip ? null, pkgconfig ? null
 , gtk2 ? null, libart_lgpl ? null
 , libX11 ? null, libXt ? null, libSM ? null, libICE ? null, libXtst ? null
-, libXrender ? null, xproto ? null, renderproto ? null, xextproto ? null
-, libXrandr ? null, libXi ? null, inputproto ? null, randrproto ? null
+, libXrender ? null, xorgproto ? null
+, libXrandr ? null, libXi ? null
 , x11Support ? langJava
 , enableMultilib ? false
 , enablePlugin ? stdenv.hostPlatform == stdenv.buildPlatform # Whether to support user-supplied plug-ins
@@ -52,12 +52,9 @@ with builtins;
 
 let version = "4.8.5";
 
-    enableParallelBuilding = true;
-
     inherit (stdenv) buildPlatform hostPlatform targetPlatform;
 
-    patches = [ ]
-      ++ optional enableParallelBuilding ../parallel-bconfig.patch
+    patches = [ ../parallel-bconfig.patch ]
       ++ optional (targetPlatform != hostPlatform) ../libstdc++-target.patch
       ++ optional noSysDirs ../no-sys-dirs.patch
       ++ optional langFortran ../gfortran-driving.patch
@@ -92,7 +89,7 @@ let version = "4.8.5";
 
     xlibs = [
       libX11 libXt libSM libICE libXtst libXrender libXrandr libXi
-      xproto renderproto xextproto inputproto randrproto
+      xorgproto
     ];
 
     javaAwtGtk = langJava && x11Support;
@@ -130,7 +127,7 @@ let version = "4.8.5";
         "--disable-libmpx" # requires libc
       ] else [
         (if crossDarwin then "--with-sysroot=${getLib libcCross}/share/sysroot"
-         else                "--with-headers=${getDev libcCross}/include")
+         else                "--with-headers=${getDev libcCross}${libcCross.incdir or "/include"}")
         "--enable-__cxa_atexit"
         "--enable-long-long"
       ] ++
@@ -148,10 +145,15 @@ let version = "4.8.5";
             # In uclibc cases, libgomp needs an additional '-ldl'
             # and as I don't know how to pass it, I disable libgomp.
             "--disable-libgomp"
-          ] ++ [
-          "--enable-threads=posix"
-          "--enable-nls"
-          "--disable-decimal-float" # No final libdecnumber (it may work only in 386)
+          ]
+          ++ optional (targetPlatform.libc == "newlib") "--with-newlib"
+          ++ optional (targetPlatform.libc == "avrlibc") "--with-avrlibc"
+          ++ [
+            "--enable-threads=${if targetPlatform.isUnix then "posix"
+                                else if targetPlatform.isWindows then "win32"
+                                else "single"}"
+            "--enable-nls"
+            "--disable-decimal-float" # No final libdecnumber (it may work only in 386)
         ]));
     stageNameAddon = if crossStageStatic then "-stage-static" else "-stage-final";
     crossNameAddon = if targetPlatform != hostPlatform then "${targetPlatform.config}${stageNameAddon}-" else "";
@@ -175,7 +177,7 @@ stdenv.mkDerivation ({
 
   inherit patches;
 
-  hardeningDisable = [ "format" ];
+  hardeningDisable = [ "format" "pie" ];
 
   outputs = [ "out" "lib" "man" "info" ];
   setOutputFlags = false;
@@ -209,19 +211,26 @@ stdenv.mkDerivation ({
     ++ (optional (perl != null) perl)
     ++ (optional javaAwtGtk pkgconfig);
 
-  buildInputs = [ gmp mpfr libmpc libelf ]
-    ++ (optional (cloog != null) cloog)
+  # For building runtime libs
+  depsBuildTarget =
+    if hostPlatform == buildPlatform then [
+      targetPackages.stdenv.cc.bintools # newly-built gcc will be used
+    ] else assert targetPlatform == hostPlatform; [ # build != host == target
+      stdenv.cc
+    ];
+
+  buildInputs = [
+    gmp mpfr libmpc libelf
+    targetPackages.stdenv.cc.bintools # For linking code at run-time
+  ] ++ (optional (cloog != null) cloog)
     ++ (optional (isl != null) isl)
     ++ (optional (zlib != null) zlib)
     ++ (optionals langJava [ boehmgc zip unzip ])
     ++ (optionals javaAwtGtk ([ gtk2 libart_lgpl ] ++ xlibs))
-    ++ (optionals (targetPlatform != hostPlatform) [targetPackages.stdenv.cc.bintools])
-
     # The builder relies on GNU sed (for instance, Darwin's `sed' fails with
     # "-i may not be used with stdin"), and `stdenvNative' doesn't provide it.
     ++ (optional hostPlatform.isDarwin gnused)
     ;
-
 
   preConfigure = stdenv.lib.optionalString (hostPlatform.isSunOS && hostPlatform.is64bit) ''
     export NIX_LDFLAGS=`echo $NIX_LDFLAGS | sed -e s~$prefix/lib~$prefix/lib/amd64~g`
@@ -270,7 +279,7 @@ stdenv.mkDerivation ({
       }"
     ] ++
 
-    (if enableMultilib
+    (if (enableMultilib || targetPlatform.isAvr)
       then ["--enable-multilib" "--disable-libquadmath"]
       else ["--disable-multilib"]) ++
     optional (!enableShared) "--disable-shared" ++
@@ -326,7 +335,7 @@ stdenv.mkDerivation ({
     then "install-strip"
     else "install";
 
-  # http://gcc.gnu.org/install/specific.html#x86-64-x-solaris210
+  # https://gcc.gnu.org/install/specific.html#x86-64-x-solaris210
   ${if hostPlatform.system == "x86_64-solaris" then "CC" else null} = "gcc -m64";
 
   # Setting $CPATH and $LIBRARY_PATH to make sure both `gcc' and `xgcc' find the
@@ -354,26 +363,26 @@ stdenv.mkDerivation ({
     ++ optional (zlib != null) zlib
     ++ optional langJava boehmgc
     ++ optionals javaAwtGtk xlibs
-    ++ optionals javaAwtGtk [ gmp mpfr ])
-  );
+    ++ optionals javaAwtGtk [ gmp mpfr ]
+  ));
 
   EXTRA_TARGET_FLAGS = optionals
     (targetPlatform != hostPlatform && libcCross != null)
     ([
-      "-idirafter ${libcCross.dev}/include"
+      "-idirafter ${getDev libcCross}${libcCross.incdir or "/include"}"
     ] ++ optionals (! crossStageStatic) [
-      "-B${libcCross.out}/lib"
+      "-B${libcCross.out}${libcCross.libdir or "/lib"}"
     ]);
 
   EXTRA_TARGET_LDFLAGS = optionals
     (targetPlatform != hostPlatform && libcCross != null)
     ([
-      "-Wl,-L${libcCross.out}/lib"
+      "-Wl,-L${libcCross.out}${libcCross.libdir or "/lib"}"
     ] ++ (if crossStageStatic then [
-        "-B${libcCross.out}/lib"
+        "-B${libcCross.out}${libcCross.libdir or "/lib"}"
       ] else [
-        "-Wl,-rpath,${libcCross.out}/lib"
-        "-Wl,-rpath-link,${libcCross.out}/lib"
+        "-Wl,-rpath,${libcCross.out}${libcCross.libdir or "/lib"}"
+        "-Wl,-rpath-link,${libcCross.out}${libcCross.libdir or "/lib"}"
     ]));
 
   passthru = {
@@ -382,12 +391,13 @@ stdenv.mkDerivation ({
     hardeningUnsupportedFlags = [ "stackprotector" ];
   };
 
-  inherit enableParallelBuilding enableMultilib;
+  enableParallelBuilding = true;
+  inherit enableMultilib;
 
   inherit (stdenv) is64bit;
 
   meta = {
-    homepage = http://gcc.gnu.org/;
+    homepage = https://gcc.gnu.org/;
     license = stdenv.lib.licenses.gpl3Plus;  # runtime support libraries are typically LGPLv3+
     description = "GNU Compiler Collection, version ${version}"
       + (if stripped then "" else " (with debugging info)");

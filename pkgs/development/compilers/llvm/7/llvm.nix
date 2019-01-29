@@ -10,19 +10,27 @@
 , version
 , release_version
 , zlib
+, buildPackages
 , debugVersion ? false
 , enableManpages ? false
 , enableSharedLibraries ? true
-, enableWasm ? true
+# Mesa requires AMDGPU target
+, enableTargets ? [ stdenv.hostPlatform stdenv.targetPlatform "AMDGPU" ]
 , enablePFM ? !stdenv.isDarwin
 }:
 
 let
-  src = fetch "llvm" "08p27wv1pr9ql2zc3f3qkkymci46q7myvh8r5ijippnbwr2gihcb";
+  inherit (stdenv.lib) optional optionals optionalString;
+
+  src = fetch "llvm" "16s196wqzdw4pmri15hadzqgdi926zln3an2viwyq0kini6zr3d3";
 
   # Used when creating a version-suffixed symlink of libLLVM.dylib
   shortVersion = with stdenv.lib;
     concatStringsSep "." (take 1 (splitString "." release_version));
+
+  inherit
+    (import ../common.nix { inherit (stdenv) lib; })
+    llvmBackendList;
 in stdenv.mkDerivation (rec {
   name = "llvm-${version}";
 
@@ -33,23 +41,23 @@ in stdenv.mkDerivation (rec {
   '';
 
   outputs = [ "out" "python" ]
-    ++ stdenv.lib.optional enableSharedLibraries "lib";
+    ++ optional enableSharedLibraries "lib";
 
   nativeBuildInputs = [ cmake python ]
-    ++ stdenv.lib.optional enableManpages python.pkgs.sphinx;
+    ++ optional enableManpages python.pkgs.sphinx;
 
   buildInputs = [ libxml2 libffi ]
-    ++ stdenv.lib.optional enablePFM libpfm; # exegesis
+    ++ optional enablePFM libpfm; # exegesis
 
   propagatedBuildInputs = [ ncurses zlib ];
 
-  postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
+  postPatch = optionalString stdenv.isDarwin ''
     substituteInPlace cmake/modules/AddLLVM.cmake \
-      --replace 'set(_install_name_dir INSTALL_NAME_DIR "@rpath")' "set(_install_name_dir INSTALL_NAME_DIR "$lib/lib")" \
+      --replace 'set(_install_name_dir INSTALL_NAME_DIR "@rpath")' "set(_install_name_dir)" \
       --replace 'set(_install_rpath "@loader_path/../lib" ''${extra_libdir})' ""
   ''
   # Patch llvm-config to return correct library path based on --link-{shared,static}.
-  + stdenv.lib.optionalString (enableSharedLibraries) ''
+  + optionalString (enableSharedLibraries) ''
     substitute '${./llvm-outputs.patch}' ./llvm-outputs.patch --subst-var lib
     patch -p1 < ./llvm-outputs.patch
   '' + ''
@@ -57,7 +65,7 @@ in stdenv.mkDerivation (rec {
     substituteInPlace unittests/Support/CMakeLists.txt \
       --replace "Path.cpp" ""
     rm unittests/Support/Path.cpp
-  '' + stdenv.lib.optionalString stdenv.hostPlatform.isMusl ''
+  '' + optionalString stdenv.hostPlatform.isMusl ''
     patch -p1 -i ${../TLI-musl.patch}
     substituteInPlace unittests/Support/CMakeLists.txt \
       --replace "add_subdirectory(DynamicLibrary)" ""
@@ -78,40 +86,31 @@ in stdenv.mkDerivation (rec {
     "-DLLVM_BUILD_TESTS=ON"
     "-DLLVM_ENABLE_FFI=ON"
     "-DLLVM_ENABLE_RTTI=ON"
-
     "-DLLVM_HOST_TRIPLE=${stdenv.hostPlatform.config}"
-    "-DLLVM_DEFAULT_TARGET_TRIPLE=${stdenv.hostPlatform.config}"
-    "-DTARGET_TRIPLE=${stdenv.hostPlatform.config}"
-
+    "-DLLVM_DEFAULT_TARGET_TRIPLE=${stdenv.targetPlatform.config}"
+    "-DLLVM_TARGETS_TO_BUILD=${llvmBackendList enableTargets}"
+    "-DLLVM_EXPERIMENTAL_TARGETS_TO_BUILD=WebAssembly"
     "-DLLVM_ENABLE_DUMP=ON"
-  ]
-  ++ stdenv.lib.optional enableSharedLibraries
+  ] ++ optionals enableSharedLibraries [
     "-DLLVM_LINK_LLVM_DYLIB=ON"
-  ++ stdenv.lib.optionals enableManpages [
+  ] ++ optionals enableManpages [
     "-DLLVM_BUILD_DOCS=ON"
     "-DLLVM_ENABLE_SPHINX=ON"
     "-DSPHINX_OUTPUT_MAN=ON"
     "-DSPHINX_OUTPUT_HTML=OFF"
     "-DSPHINX_WARNINGS_AS_ERRORS=OFF"
-  ]
-  ++ stdenv.lib.optional (!isDarwin)
+  ] ++ optionals (!isDarwin) [
     "-DLLVM_BINUTILS_INCDIR=${libbfd.dev}/include"
-  ++ stdenv.lib.optionals (isDarwin) [
+  ] ++ optionals (isDarwin) [
     "-DLLVM_ENABLE_LIBCXX=ON"
     "-DCAN_TARGET_i386=false"
-  ]
-  ++ stdenv.lib.optional enableWasm
-   "-DLLVM_EXPERIMENTAL_TARGETS_TO_BUILD=WebAssembly"
-  ;
+  ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    "-DCMAKE_CROSSCOMPILING=True"
+    "-DLLVM_TABLEGEN=${buildPackages.llvm_7}/bin/llvm-tblgen"
+  ];
 
   postBuild = ''
     rm -fR $out
-
-    paxmark m bin/{lli,llvm-rtdyld}
-    paxmark m unittests/ExecutionEngine/MCJIT/MCJITTests
-    paxmark m unittests/ExecutionEngine/Orc/OrcJITTests
-    paxmark m unittests/Support/SupportTests
-    paxmark m bin/lli-child-target
   '';
 
   preCheck = ''
@@ -122,13 +121,13 @@ in stdenv.mkDerivation (rec {
     mkdir -p $python/share
     mv $out/share/opt-viewer $python/share/opt-viewer
   ''
-  + stdenv.lib.optionalString enableSharedLibraries ''
+  + optionalString enableSharedLibraries ''
     moveToOutput "lib/libLLVM-*" "$lib"
     moveToOutput "lib/libLLVM${stdenv.hostPlatform.extensions.sharedLibrary}" "$lib"
     substituteInPlace "$out/lib/cmake/llvm/LLVMExports-${if debugVersion then "debug" else "release"}.cmake" \
       --replace "\''${_IMPORT_PREFIX}/lib/libLLVM-" "$lib/lib/libLLVM-"
   ''
-  + stdenv.lib.optionalString (stdenv.isDarwin && enableSharedLibraries) ''
+  + optionalString (stdenv.isDarwin && enableSharedLibraries) ''
     substituteInPlace "$out/lib/cmake/llvm/LLVMExports-${if debugVersion then "debug" else "release"}.cmake" \
       --replace "\''${_IMPORT_PREFIX}/lib/libLLVM.dylib" "$lib/lib/libLLVM.dylib"
     ln -s $lib/lib/libLLVM.dylib $lib/lib/libLLVM-${shortVersion}.dylib

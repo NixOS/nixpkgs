@@ -1,6 +1,6 @@
-{ stdenv, lib, fetchurl, fetchpatch, runCommand, makeWrapper
+{ stdenv, callPackage, lib, fetchurl, fetchpatch, runCommand, makeWrapper
 , jdk, zip, unzip, bash, writeCBin, coreutils
-, which, python, perl, gnused, gnugrep, findutils
+, which, python, perl, gawk, gnused, gnugrep, findutils
 # Apple dependencies
 , cctools, clang, libcxx, CoreFoundation, CoreServices, Foundation
 # Allow to independently override the jdks used to build and run respectively
@@ -13,8 +13,8 @@
 let
   srcDeps = lib.singleton (
     fetchurl {
-      url = "https://github.com/google/desugar_jdk_libs/archive/f5e6d80c6b4ec6b0a46603f72b015d45cf3c11cd.zip";
-      sha256 = "c80f3f3d442d8a6ca7adc83f90ecd638c3864087fdd6787ffac070b6f1cc8f9b";
+      url = "https://github.com/google/desugar_jdk_libs/archive/915f566d1dc23bc5a8975320cd2ff71be108eb9c.zip";
+      sha256 = "0b926df7yxyyyiwm9cmdijy6kplf0sghm23sf163zh8wrk87wfi7";
     }
   );
 
@@ -23,12 +23,12 @@ let
     for i in ${builtins.toString srcDeps}; do cp $i $out/$(stripHash $i); done
   '';
 
-  defaultShellPath = lib.makeBinPath [ bash coreutils findutils gnugrep gnused which ];
+  defaultShellPath = lib.makeBinPath [ bash coreutils findutils gawk gnugrep gnused which unzip ];
 
 in
 stdenv.mkDerivation rec {
 
-  version = "0.17.1";
+  version = "0.21.0";
 
   meta = with lib; {
     homepage = "https://github.com/bazelbuild/bazel/";
@@ -38,23 +38,23 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux ++ platforms.darwin;
   };
 
+  # additional tests that check bazel’s functionality
+  passthru.tests = {
+    pythonBinPath = callPackage ./python-bin-path-test.nix {};
+  };
+
   name = "bazel-${version}";
 
   src = fetchurl {
     url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel-${version}-dist.zip";
-    sha256 = "081z40vsxvw6ndiinik4pn09gxmv140k6l9zv93dgjr86qf2ir13";
+    sha256 = "1d3x0f1hzaiqq00pd65bks7v8kbv57m13jsing7y0y9id0g87jvc";
   };
 
   sourceRoot = ".";
 
-  patches =
-    lib.optional enableNixHacks ./nix-hacks.patch
-    # patch perl out of the bash completions
-    # should land in 0.18
-    ++ [(fetchpatch {
-           url = "https://github.com/bazelbuild/bazel/commit/27be70979b54d7510bf401d9581fb4075737ef34.patch";
-           sha256 = "04rip46lnibrsdyzjpi29wf444b49cbwb1xjcbrr3kdqsdj4d8h5";
-       })];
+  patches = [
+    ./python-stub-path-fix.patch
+  ] ++ lib.optional enableNixHacks ./nix-hacks.patch;
 
   # Bazel expects several utils to be available in Bash even without PATH. Hence this hack.
 
@@ -84,6 +84,7 @@ stdenv.mkDerivation rec {
   '';
 
   postPatch = let
+
     darwinPatches = ''
       # Disable Bazel's Xcode toolchain detection which would configure compilers
       # and linkers from Xcode instead of from PATH
@@ -121,26 +122,51 @@ stdenv.mkDerivation rec {
         sed -i -e "s,/usr/bin/install_name_tool,${cctools}/bin/install_name_tool,g" $wrapper
       done
     '';
+
     genericPatches = ''
-      find src/main/java/com/google/devtools -type f -print0 | while IFS="" read -r -d "" path; do
+      # Substitute python's stub shebang to plain python path. (see TODO add pr URL)
+      # See also `postFixup` where python is added to $out/nix-support
+      substituteInPlace src/main/java/com/google/devtools/build/lib/bazel/rules/python/python_stub_template.txt\
+          --replace "/usr/bin/env python" "${python}/bin/python" \
+          --replace "NIX_STORE_PYTHON_PATH" "${python}/bin/python" \
+
+      # substituteInPlace is rather slow, so prefilter the files with grep
+      grep -rlZ /bin src/main/java/com/google/devtools | while IFS="" read -r -d "" path; do
+        # If you add more replacements here, you must change the grep above!
+        # Only files containing /bin are taken into account.
         substituteInPlace "$path" \
           --replace /bin/bash ${customBash}/bin/bash \
-          --replace /usr/bin/env ${coreutils}/bin/env
+          --replace /usr/bin/env ${coreutils}/bin/env \
+          --replace /bin/true ${coreutils}/bin/true
       done
+
       # Fixup scripts that generate scripts. Not fixed up by patchShebangs below.
       substituteInPlace scripts/bootstrap/compile.sh \
           --replace /bin/sh ${customBash}/bin/bash
 
-      echo "build --experimental_distdir=${distDir}" >> .bazelrc
-      echo "fetch --experimental_distdir=${distDir}" >> .bazelrc
-      echo "build --copt=\"$(echo $NIX_CFLAGS_COMPILE | sed -e 's/ /" --copt=\"/g')\"" >> .bazelrc
-      echo "build --host_copt=\"$(echo $NIX_CFLAGS_COMPILE | sed -e 's/ /" --host_copt=\"/g')\"" >> .bazelrc
-      echo "build --linkopt=\"-Wl,$(echo $NIX_LDFLAGS | sed -e 's/ /" --linkopt=\"-Wl,/g')\"" >> .bazelrc
-      echo "build --host_linkopt=\"-Wl,$(echo $NIX_LDFLAGS | sed -e 's/ /" --host_linkopt=\"-Wl,/g')\"" >> .bazelrc
-      sed -i -e "362 a --copt=\"$(echo $NIX_CFLAGS_COMPILE | sed -e 's/ /" --copt=\"/g')\" \\\\" scripts/bootstrap/compile.sh
-      sed -i -e "362 a --host_copt=\"$(echo $NIX_CFLAGS_COMPILE | sed -e 's/ /" --host_copt=\"/g')\" \\\\" scripts/bootstrap/compile.sh
-      sed -i -e "362 a --linkopt=\"-Wl,$(echo $NIX_LDFLAGS | sed -e 's/ /" --linkopt=\"-Wl,/g')\" \\\\" scripts/bootstrap/compile.sh
-      sed -i -e "362 a --host_linkopt=\"-Wl,$(echo $NIX_LDFLAGS | sed -e 's/ /" --host_linkopt=\"-Wl,/g')\" \\\\" scripts/bootstrap/compile.sh
+      # We only build with JDK8 for now, since JDK11 does not compile bazel
+      substituteInPlace tools/jdk/default_java_toolchain.bzl \
+        --replace '"jvm_opts": JDK9_JVM_OPTS' \
+                  '"jvm_opts": JDK8_JVM_OPTS'
+
+      # add nix environment vars to .bazelrc
+      cat >> .bazelrc <<EOF
+      build --experimental_distdir=${distDir}
+      fetch --experimental_distdir=${distDir}
+      build --copt="$(echo $NIX_CFLAGS_COMPILE | sed -e 's/ /" --copt="/g')"
+      build --host_copt="$(echo $NIX_CFLAGS_COMPILE | sed -e 's/ /" --host_copt="/g')"
+      build --linkopt="-Wl,$(echo $NIX_LDFLAGS | sed -e 's/ /" --linkopt="-Wl,/g')"
+      build --host_linkopt="-Wl,$(echo $NIX_LDFLAGS | sed -e 's/ /" --host_linkopt="-Wl,/g')"
+      build --host_javabase='@local_jdk//:jdk'
+      EOF
+
+      # add the same environment vars to compile.sh
+      sed -e "/\$command \\\\$/a --copt=\"$(echo $NIX_CFLAGS_COMPILE | sed -e 's/ /" --copt=\"/g')\" \\\\" \
+          -e "/\$command \\\\$/a --host_copt=\"$(echo $NIX_CFLAGS_COMPILE | sed -e 's/ /" --host_copt=\"/g')\" \\\\" \
+          -e "/\$command \\\\$/a --linkopt=\"-Wl,$(echo $NIX_LDFLAGS | sed -e 's/ /" --linkopt=\"-Wl,/g')\" \\\\" \
+          -e "/\$command \\\\$/a --host_linkopt=\"-Wl,$(echo $NIX_LDFLAGS | sed -e 's/ /" --host_linkopt=\"-Wl,/g')\" \\\\" \
+          -e "/\$command \\\\$/a --host_javabase='@local_jdk//:jdk' \\\\" \
+          -i scripts/bootstrap/compile.sh
 
       # --experimental_strict_action_env (which will soon become the
       # default, see bazelbuild/bazel#2574) hardcodes the default
@@ -164,6 +190,8 @@ stdenv.mkDerivation rec {
     buildJdk
   ];
 
+  # when a command can’t be found in a bazel build, you might also
+  # need to add it to `defaultShellPath`.
   nativeBuildInputs = [
     zip
     python
@@ -186,29 +214,60 @@ stdenv.mkDerivation rec {
         --prepend=scripts/bazel-complete-template.bash
   '';
 
-  # Build the CPP and Java examples to verify that Bazel works.
-
-  doCheck = true;
-  checkPhase = ''
-    export TEST_TMPDIR=$(pwd)
-    ./output/bazel test --test_output=errors \
-        examples/cpp:hello-success_test \
-        examples/java-native/src/test/java/com/example/myproject:hello
-  '';
-
   installPhase = ''
     mkdir -p $out/bin
-    mv output/bazel $out/bin
-    wrapProgram "$out/bin/bazel" --set JAVA_HOME "${runJdk}"
+
+    # official wrapper scripts that searches for $WORKSPACE_ROOT/tools/bazel
+    # if it can’t find something in tools, it calls $out/bin/bazel-real
+    cp scripts/packages/bazel.sh $out/bin/bazel
+    mv output/bazel $out/bin/bazel-real
+
+    wrapProgram "$out/bin/bazel" --add-flags --server_javabase="${runJdk}"
+
+    # shell completion files
     mkdir -p $out/share/bash-completion/completions $out/share/zsh/site-functions
     mv output/bazel-complete.bash $out/share/bash-completion/completions/bazel
     cp scripts/zsh_completion/_bazel $out/share/zsh/site-functions/
   '';
 
+  doInstallCheck = true;
+  installCheckPhase = ''
+    export TEST_TMPDIR=$(pwd)
+
+    hello_test () {
+      $out/bin/bazel test --test_output=errors \
+        examples/cpp:hello-success_test \
+        examples/java-native/src/test/java/com/example/myproject:hello
+    }
+
+    # test whether $WORKSPACE_ROOT/tools/bazel works
+
+    mkdir -p tools
+    cat > tools/bazel <<"EOF"
+    #!${stdenv.shell} -e
+    exit 1
+    EOF
+    chmod +x tools/bazel
+
+    # first call should fail if tools/bazel is used
+    ! hello_test
+
+    cat > tools/bazel <<"EOF"
+    #!${stdenv.shell} -e
+    exec "$BAZEL_REAL" "$@"
+    EOF
+
+    # second call succeeds because it defers to $out/bin/bazel-real
+    hello_test
+  '';
+
   # Save paths to hardcoded dependencies so Nix can detect them.
   postFixup = ''
     mkdir -p $out/nix-support
-    echo "${customBash} ${defaultShellPath}" > $out/nix-support/depends
+    echo "${customBash} ${defaultShellPath}" >> $out/nix-support/depends
+    # The templates get tar’d up into a .jar,
+    # so nix can’t detect python is needed in the runtime closure
+    echo "${python}" >> $out/nix-support/depends
   '';
 
   dontStrip = true;

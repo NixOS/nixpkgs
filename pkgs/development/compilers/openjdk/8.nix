@@ -21,42 +21,41 @@ let
     else
       throw "openjdk requires i686-linux or x86_64 linux";
 
-  update = "181";
-  build = "13";
+  update = "202";
+  build = "ga";
   baseurl = "http://hg.openjdk.java.net/jdk8u/jdk8u";
-  repover = "jdk8u${update}-b${build}";
-  paxflags = if stdenv.isi686 then "msp" else "m";
+  repover = "jdk8u${update}-${build}";
   jdk8 = fetchurl {
              url = "${baseurl}/archive/${repover}.tar.gz";
-             sha256 = "0rlbf3v55d45fl9gigawghd0vs0cr3k48zj48qlv3k9yxg1knq9a";
+             sha256 = "0asx7qkhmrlfmhrljck5gb3yp4v0aa8k35y4xfcph41x0m0mvrdb";
           };
   langtools = fetchurl {
              url = "${baseurl}/langtools/archive/${repover}.tar.gz";
-             sha256 = "1sk5f45ndxj8ch9pqfwmis5hnb09an7nvz3n1wyd5la42jprmwaf";
+             sha256 = "07q6l3slmi5fgwjnsk6bd8miv8glmw15w5f6yyvp8nlp2d54l33n";
           };
   hotspot = fetchurl {
              url = "${baseurl}/hotspot/archive/${repover}.tar.gz";
-             sha256 = "0pvx5hwmx61sbyi02pngfbky219raqqjw2xjms01nz18mzr77c84";
+             sha256 = "01k4pwhn3nmkzdhdj1v58dgir4iwsj9mm2ml1541z31s53g037cq";
           };
   corba = fetchurl {
              url = "${baseurl}/corba/archive/${repover}.tar.gz";
-             sha256 = "1b0r3fjv9q85j74lgzr2vv4z5gl13bb46zvh36mfks6j74z7ki1z";
+             sha256 = "0v39kl2iiyh74p3cp6bjhshkwxpgbffza9abzjgp7cpdfhcc73p0";
           };
   jdk = fetchurl {
              url = "${baseurl}/jdk/archive/${repover}.tar.gz";
-             sha256 = "1a5gm4w4f79wj0ciwcv8l8m4ha8hjs2r62bvj0vls2kwr5c8znn4";
+             sha256 = "0z1cy6aq09j25jyryj47rms15h5175p2h23fg5pv035zapf8nb1b";
           };
   jaxws = fetchurl {
              url = "${baseurl}/jaxws/archive/${repover}.tar.gz";
-             sha256 = "1f92s3mpbqxzgh5pazqm8pn5swqkmdrkm7mnmga2kgshzlknh6pm";
+             sha256 = "0y0mk4sra9d29kgx842m5y4bz9gczc9ypkajv6m5igjv7sizzsv7";
           };
   jaxp = fetchurl {
              url = "${baseurl}/jaxp/archive/${repover}.tar.gz";
-             sha256 = "0fwdqr031yyyjrpsk9fwp4y1vlfmdr1rdzgk44gyypwjdap7a11d";
+             sha256 = "07ssrjhffkdncxxhsbid21hlg51y7js3x7sb4g474vmmi3qj6vmb";
           };
   nashorn = fetchurl {
              url = "${baseurl}/nashorn/archive/${repover}.tar.gz";
-             sha256 = "0j5f98pa6746m1xq4842qq5d1ql5x8wvcrjmjk433slgma9hf8pj";
+             sha256 = "0r0b8ra0ibzbdpxz6nv6i2zrzh2j5sxgprpnl6gf4d9h0i29ickj";
           };
   openjdk8 = stdenv.mkDerivation {
     name = "openjdk-8u${update}b${build}";
@@ -175,14 +174,6 @@ let
       # https://youtrack.jetbrains.com/issue/IDEA-147272
       rm -rf $out/lib/openjdk/jre/lib/cmm
       ln -s {$jre,$out}/lib/openjdk/jre/lib/cmm
-
-      # Set PaX markings
-      exes=$(file $out/lib/openjdk/bin/* $jre/lib/openjdk/jre/bin/* 2> /dev/null | grep -E 'ELF.*(executable|shared object)' | sed -e 's/: .*$//')
-      echo "to mark: *$exes*"
-      for file in $exes; do
-        echo "marking *$file*"
-        paxmark ${paxflags} "$file"
-      done
 
       # Remove duplicate binaries.
       for i in $(cd $out/lib/openjdk/bin && echo *); do

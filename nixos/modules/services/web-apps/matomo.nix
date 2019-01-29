@@ -34,6 +34,13 @@ in {
         '';
       };
 
+      package = mkOption {
+        type = types.package;
+        description = "Matomo package to use";
+        default = pkgs.matomo;
+        defaultText = "pkgs.matomo";
+      };
+
       webServerUser = mkOption {
         type = types.nullOr types.str;
         default = null;
@@ -124,7 +131,7 @@ in {
       # the update part of the script can only work if the database is already up and running
       requires = [ databaseService ];
       after = [ databaseService ];
-      path = [ pkgs.matomo ];
+      path = [ cfg.package ];
       serviceConfig = {
         Type = "oneshot";
         User = user;
@@ -151,7 +158,7 @@ in {
             # Use User-Private Group scheme to protect matomo data, but allow administration / backup via matomo group
             # Copy config folder
             chmod g+s "${dataDir}"
-            cp -r "${pkgs.matomo}/config" "${dataDir}/"
+            cp -r "${cfg.package}/config" "${dataDir}/"
             chmod -R u+rwX,g+rwX,o-rwx "${dataDir}"
 
             # check whether user setup has already been done
@@ -164,7 +171,7 @@ in {
 
     systemd.services.${phpExecutionUnit} = {
       # stop phpfpm on package upgrade, do database upgrade via matomo_setup_update, and then restart
-      restartTriggers = [ pkgs.matomo ];
+      restartTriggers = [ cfg.package ];
       # stop config.ini.php from getting written with read permission for others
       serviceConfig.UMask = "0007";
     };
@@ -195,7 +202,7 @@ in {
       "${user}.${fqdn}" = mkMerge [ cfg.nginx {
         # don't allow to override the root easily, as it will almost certainly break matomo.
         # disadvantage: not shown as default in docs.
-        root = mkForce "${pkgs.matomo}/share";
+        root = mkForce "${cfg.package}/share";
 
         # define locations here instead of as the submodule option's default
         # so that they can easily be extended with additional locations if required

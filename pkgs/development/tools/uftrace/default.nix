@@ -1,14 +1,14 @@
-{stdenv, fetchFromGitHub }:
+{stdenv, fetchFromGitHub}:
 
 stdenv.mkDerivation rec {
   name = "uftrace-${version}";
-  version = "0.9";
+  version = "0.9.1";
 
   src = fetchFromGitHub {
     owner = "namhyung";
     repo = "uftrace";
-    rev = "f0fed0b24a9727ffed04673b62f66baad21a1f99";
-    sha256 = "0rn2xwd87qy5ihn5zq9pwq8cs1vfmcqqz0wl70wskkgp2ccsd9x8";
+    rev = "v${version}";
+    sha256 = "1jb4dp6crvfzxzmi5iflc7p13b7p2v1djyj6smbf9ns4wr515y6b";
   };
 
   postUnpack = ''
@@ -23,4 +23,3 @@ stdenv.mkDerivation rec {
     maintainers = [stdenv.lib.maintainers.nthorne];
   };
 }
-

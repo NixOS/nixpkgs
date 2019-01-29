@@ -5,7 +5,7 @@
 , qtbase, qtmultimedia
 , libjson, libgpgerror
 , libX11, libxcb, libXau, libXdmcp, freetype, libbsd
-, pythonPackages, squashfsTools, desktop_file_utils
+, pythonPackages, squashfsTools, desktop-file-utils
 }:
 
 with stdenv.lib;
@@ -31,7 +31,7 @@ in stdenv.mkDerivation rec {
 
   dontBuild = true;
 
-  buildInputs = [ pythonPackages.binwalk squashfsTools desktop_file_utils ];
+  buildInputs = [ pythonPackages.binwalk squashfsTools desktop-file-utils ];
 
   # avoid usage of appimage's runner option --appimage-extract 
   unpackCmd = ''

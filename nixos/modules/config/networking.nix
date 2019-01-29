@@ -16,6 +16,13 @@ let
   resolvconfOptions = cfg.resolvconfOptions
     ++ optional cfg.dnsSingleRequest "single-request"
     ++ optional cfg.dnsExtensionMechanism "edns0";
+
+
+  localhostMapped4 = cfg.hosts ? "127.0.0.1" && elem "localhost" cfg.hosts."127.0.0.1";
+  localhostMapped6 = cfg.hosts ? "::1"       && elem "localhost" cfg.hosts."::1";
+
+  localhostMultiple = any (elem "localhost") (attrValues (removeAttrs cfg.hosts [ "127.0.0.1" "::1" ]));
+
 in
 
 {
@@ -23,8 +30,7 @@ in
   options = {
 
     networking.hosts = lib.mkOption {
-      type = types.attrsOf ( types.listOf types.str );
-      default = {};
+      type = types.attrsOf (types.listOf types.str);
       example = literalExample ''
         {
           "127.0.0.1" = [ "foo.bar.baz" ];
@@ -192,6 +198,29 @@ in
 
   config = {
 
+    assertions = [{
+      assertion = localhostMapped4;
+      message = ''`networking.hosts` doesn't map "127.0.0.1" to "localhost"'';
+    } {
+      assertion = !cfg.enableIPv6 || localhostMapped6;
+      message = ''`networking.hosts` doesn't map "::1" to "localhost"'';
+    } {
+      assertion = !localhostMultiple;
+      message = ''
+        `networking.hosts` maps "localhost" to something other than "127.0.0.1"
+        or "::1". This will break some applications. Please use
+        `networking.extraHosts` if you really want to add such a mapping.
+      '';
+    }];
+
+    networking.hosts = {
+      "127.0.0.1" = [ "localhost" ];
+    } // optionalAttrs (cfg.hostName != "") {
+      "127.0.1.1" = [ cfg.hostName ];
+    } // optionalAttrs cfg.enableIPv6 {
+      "::1" = [ "localhost" ];
+    };
+
     environment.etc =
       { # /etc/services: TCP/UDP port assignments.
         "services".source = pkgs.iana-etc + "/etc/services";
@@ -199,29 +228,14 @@ in
         # /etc/protocols: IP protocol numbers.
         "protocols".source  = pkgs.iana-etc + "/etc/protocols";
 
-        # /etc/rpc: RPC program numbers.
-        "rpc".source = pkgs.glibc.out + "/etc/rpc";
-
         # /etc/hosts: Hostname-to-IP mappings.
-        "hosts".text =
-          let oneToString = set : ip : ip + " " + concatStringsSep " " ( getAttr ip set );
-              allToString = set : concatMapStringsSep "\n" ( oneToString set ) ( attrNames set );
-              userLocalHosts = optionalString
-                ( builtins.hasAttr "127.0.0.1" cfg.hosts )
-                ( concatStringsSep " " ( remove "localhost" cfg.hosts."127.0.0.1" ));
-              userLocalHosts6 = optionalString
-                ( builtins.hasAttr "::1" cfg.hosts )
-                ( concatStringsSep " " ( remove "localhost" cfg.hosts."::1" ));
-              otherHosts = allToString ( removeAttrs cfg.hosts [ "127.0.0.1" "::1" ]);
-          in
-          ''
-            127.0.0.1 ${userLocalHosts} localhost
-            ${optionalString cfg.enableIPv6 ''
-              ::1 ${userLocalHosts6} localhost
-            ''}
-            ${otherHosts}
-            ${cfg.extraHosts}
-          '';
+        "hosts".text = let
+          oneToString = set: ip: ip + " " + concatStringsSep " " set.${ip};
+          allToString = set: concatMapStringsSep "\n" (oneToString set) (attrNames set);
+        in ''
+          ${allToString cfg.hosts}
+          ${cfg.extraHosts}
+        '';
 
         # /etc/host.conf: resolver configuration file
         "host.conf".text = cfg.hostConf;
@@ -233,6 +247,10 @@ in
               # a collision with an apparently unrelated environment
               # variable with the same name exported by dhcpcd.
               interface_order='lo lo[0-9]*'
+            '' + optionalString config.services.nscd.enable ''
+              # Invalidate the nscd cache whenever resolv.conf is
+              # regenerated.
+              libc_restart='${pkgs.systemd}/bin/systemctl try-restart --no-block nscd.service 2> /dev/null'
             '' + optionalString (length resolvconfOptions > 0) ''
               # Options as described in resolv.conf(5)
               resolv_conf_options='${concatStringsSep " " resolvconfOptions}'
@@ -246,11 +264,14 @@ in
             '';
 
       } // optionalAttrs config.services.resolved.enable {
-        # symlink the static version of resolv.conf as recommended by upstream:
+        # symlink the dynamic stub resolver of resolv.conf as recommended by upstream:
         # https://www.freedesktop.org/software/systemd/man/systemd-resolved.html#/etc/resolv.conf
-        "resolv.conf".source = "${pkgs.systemd}/lib/systemd/resolv.conf";
+        "resolv.conf".source = "/run/systemd/resolve/stub-resolv.conf";
       } // optionalAttrs (config.services.resolved.enable && dnsmasqResolve) {
         "dnsmasq-resolv.conf".source = "/run/systemd/resolve/resolv.conf";
+      } // optionalAttrs (pkgs.stdenv.hostPlatform.libc == "glibc") {
+        # /etc/rpc: RPC program numbers.
+        "rpc".source = pkgs.glibc.out + "/etc/rpc";
       };
 
       networking.proxy.envVars =
@@ -296,4 +317,4 @@ in
 
   };
 
-  }
+}

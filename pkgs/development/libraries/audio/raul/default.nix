@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, boost, gtk2, pkgconfig, python }:
+{ stdenv, fetchgit, boost, gtk2, pkgconfig, python, wafHook }:
 
 stdenv.mkDerivation rec {
   name = "raul-unstable-${rev}";
@@ -10,14 +10,8 @@ stdenv.mkDerivation rec {
     sha256 = "04fajrass3ymr72flx5js5vxc601ccrmx8ny8scp0rw7j0igyjdr";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig wafHook ];
   buildInputs = [ boost gtk2 python ];
-
-  configurePhase = "${python.interpreter} waf configure --prefix=$out";
-
-  buildPhase = "${python.interpreter} waf";
-
-  installPhase = "${python.interpreter} waf install";
 
   meta = with stdenv.lib; {
     description = "A C++ utility library primarily aimed at audio/musical applications";

@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, python3Packages }:
 
 python3Packages.buildPythonApplication rec {
-  version = "0.19.0";
+  version = "0.20.0";
   name    = "toot-${version}";
 
   src = fetchFromGitHub {
     owner  = "ihabunek";
     repo   = "toot";
     rev    = "${version}";
-    sha256 = "1z0r6yqi522d5jbpd0w3prd33l067jb1jhfnxf6hkzhnx1wddjsa";
+    sha256 = "0s5i6fjip5kvvyb59yndi2rhgn962lr0g9b0pi5w2aqnv1mwjbfh";
   };
 
   checkInputs = with python3Packages; [ pytest ];

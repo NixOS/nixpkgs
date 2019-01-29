@@ -12,9 +12,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
 
-  meta = {
+  meta = with stdenv.lib; {
+    description = "Library for downloading (streaming) media files using the mmst and mmsh protocols";
     homepage = http://libmms.sourceforge.net;
-    maintainers = [ ];
-    platforms = stdenv.lib.platforms.all;
+    platforms = platforms.all;
+    license = licenses.lgpl21;
   };
 }

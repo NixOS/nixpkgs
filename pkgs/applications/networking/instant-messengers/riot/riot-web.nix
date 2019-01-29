@@ -3,11 +3,11 @@
 let configFile = writeText "riot-config.json" conf; in
 stdenv.mkDerivation rec {
   name= "riot-web-${version}";
-  version = "0.16.2";
+  version = "0.17.8";
 
   src = fetchurl {
     url = "https://github.com/vector-im/riot-web/releases/download/v${version}/riot-v${version}.tar.gz";
-    sha256 = "14k8hsz2i1nd126jprvi45spdxawk4c8nb3flkrg7rmjdp5sski2";
+    sha256 = "0610h307q0zlyd0l7afrb8jv1r9gy9gc07zkjn33jpycwmpbwxbz";
   };
 
   installPhase = ''

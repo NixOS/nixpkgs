@@ -12,7 +12,7 @@ let
 
   localConfig = {
     global = {
-      "plugins directory" = "${wrappedPlugins}/libexec/netdata/plugins.d ${pkgs.netdata}/libexec/netdata/plugins.d";
+      "plugins directory" = "${pkgs.netdata}/libexec/netdata/plugins.d ${wrappedPlugins}/libexec/netdata/plugins.d";
     };
     web = {
       "web files owner" = "root";
@@ -53,6 +53,31 @@ in {
         '';
       };
 
+      python = {
+        enable = mkOption {
+          type = types.bool;
+          default = true;
+          description = ''
+            Whether to enable python-based plugins
+          '';
+        };
+        extraPackages = mkOption {
+          default = ps: [];
+          defaultText = "ps: []";
+          example = literalExample ''
+            ps: [
+              ps.psycopg2
+              ps.docker
+              ps.dnspython
+            ]
+          '';
+          description = ''
+            Extra python packages available at runtime
+            to enable additional python plugins.
+          '';
+        };
+      };
+
       config = mkOption {
         type = types.attrsOf types.attrs;
         default = {};
@@ -74,21 +99,27 @@ in {
           message = "Cannot specify both config and configText";
         }
       ];
+
+    systemd.tmpfiles.rules = [
+      "d /var/cache/netdata 0755 ${cfg.user} ${cfg.group} -"
+      "Z /var/cache/netdata - ${cfg.user} ${cfg.group} -"
+      "d /var/log/netdata 0755 ${cfg.user} ${cfg.group} -"
+      "Z /var/log/netdata - ${cfg.user} ${cfg.group} -"
+      "d /var/lib/netdata 0755 ${cfg.user} ${cfg.group} -"
+      "Z /var/lib/netdata - ${cfg.user} ${cfg.group} -"
+      "d /etc/netdata 0755 ${cfg.user} ${cfg.group} -"
+      "Z /etc/netdata - ${cfg.user} ${cfg.group} -"
+    ];
     systemd.services.netdata = {
-      path = with pkgs; [ gawk curl ];
       description = "Real time performance monitoring";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
-      preStart = concatStringsSep "\n" (map (dir: ''
-        mkdir -vp ${dir}
-        chmod 750 ${dir}
-        chown -R ${cfg.user}:${cfg.group} ${dir}
-        '') [ "/var/cache/netdata"
-              "/var/log/netdata"
-              "/var/lib/netdata" ]);
+      path = (with pkgs; [ gawk curl ]) ++ lib.optional cfg.python.enable
+        (pkgs.python3.withPackages cfg.python.extraPackages);
       serviceConfig = {
         User = cfg.user;
         Group = cfg.group;
+        Environment="PYTHONPATH=${pkgs.netdata}/libexec/netdata/python.d/python_modules";
         PermissionsStartOnly = true;
         ExecStart = "${pkgs.netdata}/bin/netdata -D -c ${configFile}";
         TimeoutStopSec = 60;
@@ -96,7 +127,7 @@ in {
     };
 
     security.wrappers."apps.plugin" = {
-      source = "${pkgs.netdata}/libexec/netdata/plugins.d/apps.plugin";
+      source = "${pkgs.netdata}/libexec/netdata/plugins.d/apps.plugin.org";
       capabilities = "cap_dac_read_search,cap_sys_ptrace+ep";
       owner = cfg.user;
       group = cfg.group;

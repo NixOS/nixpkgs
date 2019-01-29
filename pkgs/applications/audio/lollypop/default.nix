@@ -1,11 +1,11 @@
 { stdenv, fetchgit, meson, ninja, pkgconfig
 , python3, gtk3, gst_all_1, libsecret, libsoup
-, appstream-glib, desktop-file-utils, gnome3
-, gobjectIntrospection, wrapGAppsHook }:
+, appstream-glib, desktop-file-utils, totem-pl-parser
+, gobject-introspection, wrapGAppsHook }:
 
 python3.pkgs.buildPythonApplication rec  {
-  version = "0.9.601";
-  name = "lollypop-${version}";
+  pname = "lollypop";
+  version = "0.9.914";
 
   format = "other";
   doCheck = false;
@@ -14,13 +14,13 @@ python3.pkgs.buildPythonApplication rec  {
     url = "https://gitlab.gnome.org/World/lollypop";
     rev = "refs/tags/${version}";
     fetchSubmodules = true;
-    sha256 = "029hyylwjsbwkw1v75nbkkmrncgz30y2qwdysmpz0xyb5q7x6zbj";
+    sha256 = "0nkwic6mq4fs467c696m5w0wqrii5rzvf2il6vkw861my1bl9wzj";
   };
 
-  nativeBuildInputs = with python3.pkgs; [
+  nativeBuildInputs = [
     appstream-glib
     desktop-file-utils
-    gobjectIntrospection
+    gobject-introspection
     meson
     ninja
     pkgconfig
@@ -28,7 +28,6 @@ python3.pkgs.buildPythonApplication rec  {
   ];
 
   buildInputs = with gst_all_1; [
-    gnome3.totem-pl-parser
     gst-libav
     gst-plugins-bad
     gst-plugins-base
@@ -38,9 +37,10 @@ python3.pkgs.buildPythonApplication rec  {
     gtk3
     libsecret
     libsoup
+    totem-pl-parser
   ];
 
-  pythonPath = with python3.pkgs; [
+  propagatedBuildInputs = with python3.pkgs; [
     beautifulsoup4
     gst-python
     pillow
@@ -56,15 +56,15 @@ python3.pkgs.buildPythonApplication rec  {
   '';
 
   preFixup = ''
-    buildPythonPath "$out/libexec/lollypop-sp $pythonPath"
+    buildPythonPath "$out $propagatedBuildInputs"
     patchPythonScript "$out/libexec/lollypop-sp"
   '';
 
   meta = with stdenv.lib; {
     description = "A modern music player for GNOME";
-    homepage    = https://wiki.gnome.org/Apps/Lollypop;
-    license     = licenses.gpl3Plus;
+    homepage = https://wiki.gnome.org/Apps/Lollypop;
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ worldofpeace ];
-    platforms   = platforms.linux;
+    platforms = platforms.linux;
   };
 }

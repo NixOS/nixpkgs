@@ -3,11 +3,11 @@
 # TODO: Look at the hardcoded paths to kernel, modules etc.
 stdenv.mkDerivation rec {
   name = "elfutils-${version}";
-  version = "0.173";
+  version = "0.175";
 
   src = fetchurl {
     url = "https://sourceware.org/elfutils/ftp/${version}/${name}.tar.bz2";
-    sha256 = "1zq0l12k64hrbjmdjc4llrad96c25i427hpma1id9nk87w9qqvdp";
+    sha256 = "0nx6nzbk0rw3pxbzxsfvrjjh37hibzd2gjz5bb8wccpf85ar5vzp";
   };
 
   patches = [ ./debug-info-from-env.patch ];

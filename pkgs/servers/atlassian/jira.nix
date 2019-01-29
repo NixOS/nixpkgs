@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   name = "atlassian-jira-${version}";
-  version = "7.12.1";
+  version = "7.13.0";
 
   src = fetchurl {
     url = "https://downloads.atlassian.com/software/jira/downloads/atlassian-jira-software-${version}.tar.gz";
-    sha256 = "0qk72dq53kk40m8rz7i3r45cgrka2s1682b8d3kzdmmhclnzbaym";
+    sha256 = "1dra5h8lgqwzhs95br8x34c5pcrkgrkmpyhiq9vbayf1aarjxfnq";
   };
 
   phases = [ "unpackPhase" "buildPhase" "installPhase" "fixupPhase" ];

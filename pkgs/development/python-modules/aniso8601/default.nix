@@ -1,9 +1,9 @@
 { stdenv, buildPythonPackage, fetchPypi
-, dateutil }:
+, dateutil, mock, isPy3k }:
 
 buildPythonPackage rec {
   pname = "aniso8601";
-  version = "3.0.2";
+  version = "4.1.0";
 
   meta = with stdenv.lib; {
     description = "Parses ISO 8601 strings.";
@@ -13,8 +13,10 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ dateutil ];
 
+  checkInputs = stdenv.lib.optional (!isPy3k) mock;
+
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7849749cf00ae0680ad2bdfe4419c7a662bef19c03691a19e008c8b9a5267802";
+    sha256 = "1x49k287ky1spv3msc9fwmc7ydyw6rlcr14nslgcmpjfn3pgzh03";
   };
 }

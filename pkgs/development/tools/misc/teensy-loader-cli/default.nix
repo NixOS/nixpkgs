@@ -10,7 +10,7 @@ stdenv.mkDerivation {
     sha256 = "1a663bv3lvm7bsf2wcaj2c0vpmniak7w5hwix5qgz608bvm2v781";
   };
 
-  buildInputs = [ unzip libusb ];
+  buildInputs = [ libusb ];
 
   installPhase = ''
     install -Dm755 teensy_loader_cli $out/bin/teensy-loader-cli
@@ -21,6 +21,6 @@ stdenv.mkDerivation {
     description = "Firmware uploader for the Teensy microcontroller boards";
     homepage = https://www.pjrc.com/teensy/;
     maintainers = with maintainers; [ the-kenny ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

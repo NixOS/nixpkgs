@@ -71,6 +71,9 @@ in ''
   export CARGO_PKG_VERSION_MAJOR=${builtins.elemAt version 0}
   export CARGO_PKG_VERSION_MINOR=${builtins.elemAt version 1}
   export CARGO_PKG_VERSION_PATCH=${builtins.elemAt version 2}
+  export NUM_JOBS=1
+  export RUSTC="rustc"
+  export RUSTDOC="rustdoc"
   if [[ -n "${versionPre}" ]]; then
     export CARGO_PKG_VERSION_PRE="${versionPre}"
   fi

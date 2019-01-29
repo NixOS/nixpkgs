@@ -22,8 +22,8 @@ stdenv.mkDerivation rec {
 
   # `libxml2' provides `xmllint', needed at build-time and run-time.
   # `libxslt' provides `xsltproc', used by `xmlto' at run-time.
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ libxml2 libxslt docbook_xml_dtd_45 docbook_xsl getopt ];
+  nativeBuildInputs = [ makeWrapper getopt ];
+  buildInputs = [ libxml2 libxslt docbook_xml_dtd_45 docbook_xsl ];
 
   postInstall = ''
     wrapProgram "$out/bin/xmlto" \

@@ -49,8 +49,7 @@ in stdenv.mkDerivation {
   ++ kernel.moduleBuildDependencies;
 
    postInstall = ''
-    xz $out/lib/modules/${kernel.modDirVersion}/kernel/drivers/media/dvb-core/dvb-core.ko
-    xz $out/lib/modules/${kernel.modDirVersion}/kernel/drivers/media/v4l2-core/videodev.ko
+    find $out/lib/modules/${kernel.modDirVersion} -name "*.ko" -exec xz {} \;
   '';
 
   meta = with lib; {

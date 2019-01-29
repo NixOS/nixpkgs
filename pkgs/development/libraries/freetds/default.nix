@@ -1,6 +1,6 @@
 { stdenv, fetchurl, autoreconfHook, pkgconfig
 , openssl
-, odbcSupport ? false, unixODBC ? null }:
+, odbcSupport ? true, unixODBC ? null }:
 
 assert odbcSupport -> unixODBC != null;
 
@@ -8,11 +8,11 @@ assert odbcSupport -> unixODBC != null;
 
 stdenv.mkDerivation rec {
   name = "freetds-${version}";
-  version = "1.00.94";
+  version = "1.00.110";
 
   src = fetchurl {
     url    = "http://www.freetds.org/files/stable/${name}.tar.bz2";
-    sha256 = "1r03ns0jp2sbbivys5bks376vbdqbnx8v764kjh74gpbajjmkksz";
+    sha256 = "1zxgvc9ikw34fsbkn9by7hwqz0p6m3f178zmj2s0qqpi84qq1vw2";
   };
 
   buildInputs = [

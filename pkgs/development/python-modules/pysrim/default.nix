@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "pysrim";
-  version = "0.5.8";
+  version = "0.5.10";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "6c297b4ea6f037946c72e94ddd9a7624cf2fd97c488acbee9409001c970754f1";
+    sha256 = "ada088f73f7e1a3bf085206e81e0f83ed89c1d0b23a789ecd0ba0a250724aee8";
   };
 
   buildInputs = [ pytestrunner ];

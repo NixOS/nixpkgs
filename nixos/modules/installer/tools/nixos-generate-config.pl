@@ -314,14 +314,16 @@ push @attrs, "services.xserver.videoDrivers = [ \"$videoDriver\" ];" if $videoDr
 
 # Generate the swapDevices option from the currently activated swap
 # devices.
-my @swaps = read_file("/proc/swaps");
-shift @swaps;
+my @swaps = read_file("/proc/swaps", err_mode => 'carp');
 my @swapDevices;
-foreach my $swap (@swaps) {
-    $swap =~ /^(\S+)\s/;
-    next unless -e $1;
-    my $dev = findStableDevPath $1;
-    push @swapDevices, "{ device = \"$dev\"; }";
+if (@swaps) {
+    shift @swaps;
+    foreach my $swap (@swaps) {
+        $swap =~ /^(\S+)\s/;
+        next unless -e $1;
+        my $dev = findStableDevPath $1;
+        push @swapDevices, "{ device = \"$dev\"; }";
+    }
 }
 
 
@@ -447,7 +449,11 @@ EOF
                 if (-e $slave) {
                     my $dmName = read_file("/sys/class/block/$deviceName/dm/name");
                     chomp $dmName;
-                    $fileSystems .= "  boot.initrd.luks.devices.\"$dmName\".device = \"${\(findStableDevPath $slave)}\";\n\n";
+                    # Ensure to add an entry only once
+                    my $luksDevice = "  boot.initrd.luks.devices.\"$dmName\".device";
+                    if ($fileSystems !~ /^\Q$luksDevice\E/m) {
+                        $fileSystems .= "$luksDevice = \"${\(findStableDevPath $slave)}\";\n\n";
+                    }
                 }
             }
         }

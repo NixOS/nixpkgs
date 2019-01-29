@@ -6,9 +6,9 @@
 let
   plexPass = throw "Plex pass has been removed at upstream's request; please unset nixpkgs.config.plex.pass";
   plexpkg = if enablePlexPass then plexPass else {
-    version = "1.13.8.5395";
-    vsnHash = "10d48da0d";
-    sha256 = "0lpsh87kcrqwi2qqkj1ccb86hif535yb45hhc41c0ixsfxbqk5cw";
+    version = "1.14.1.5488";
+    vsnHash = "cc260c476";
+    sha256 = "8ee806f35ccedcecd0cab028bbe1f7e2ac7de24292b715978d3165c4712f5c40";
   };
 
 in stdenv.mkDerivation rec {
@@ -37,6 +37,7 @@ in stdenv.mkDerivation rec {
     # Now we need to patch up the executables and libraries to work on Nix.
     # Side note: PLEASE don't put spaces in your binary names. This is stupid.
     for bin in "Plex Media Server"              \
+               "Plex Commercial Skipper"        \
                "Plex DLNA Server"               \
                "Plex Media Scanner"             \
                "Plex Relay"                     \

@@ -15,8 +15,6 @@ stdenv.mkDerivation rec {
   cmakeFlags = []
     ++ stdenv.lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
                            "-DMSGPACK_BUILD_EXAMPLES=OFF"
-    ++ stdenv.lib.optional (stdenv.hostPlatform.libc == "msvcrt")
-                           "-DCMAKE_SYSTEM_NAME=Windows"
     ;
 
   meta = with stdenv.lib; {

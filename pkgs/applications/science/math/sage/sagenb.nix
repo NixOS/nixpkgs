@@ -1,4 +1,3 @@
-# Has a cyclic dependency with sage (not expressed here) and is not useful outside of sage
 { stdenv
 , fetchpatch
 , python
@@ -12,6 +11,10 @@
 , flask-autoindex
 , flask-babel
 }:
+
+# Has a cyclic dependency with sage (not expressed here) and is not useful outside of sage.
+# Deprecated, hopefully soon to be removed. See
+# https://trac.sagemath.org/ticket/25837
 
 buildPythonPackage rec {
   pname = "sagenb";
@@ -52,6 +55,7 @@ buildPythonPackage rec {
 
   # let sagenb use mathjax
   postInstall = ''
-    ln -s ${mathjax}/lib/node_modules/mathjax "$out/${python.sitePackages}/mathjax"
+    mkdir -p "$out/${python.sitePackages}/sagenb/data"
+    ln -s ${mathjax}/lib/node_modules/mathjax "$out/${python.sitePackages}/sagenb/data/mathjax"
   '';
 }

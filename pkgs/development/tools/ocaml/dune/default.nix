@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   name = "dune-${version}";
-  version = "1.3.0";
+  version = "1.6.2";
   src = fetchurl {
     url = "https://github.com/ocaml/dune/releases/download/${version}/dune-${version}.tbz";
-    sha256 = "15bzakiclipsyjgcfrj83xdpwwww3aaijyw01bn5cx96cmcqyjad";
+    sha256 = "1k675mfywmsj4v4z2f5a4vqinl1jbzzb7v5k6rzyfgvxzd7gil40";
   };
 
   buildInputs = with ocamlPackages; [ ocaml findlib ];
@@ -14,10 +14,14 @@ stdenv.mkDerivation rec {
 
   dontAddPrefix = true;
 
-  installPhase = "${opaline}/bin/opaline -prefix $out -libdir $OCAMLFIND_DESTDIR";
+  installPhase = ''
+    runHook preInstall
+    ${opaline}/bin/opaline -prefix $out -libdir $OCAMLFIND_DESTDIR
+    runHook postInstall
+  '';
 
   meta = {
-    homepage = "https://github.com/ocaml/dune";
+    homepage = https://github.com/ocaml/dune;
     description = "A composable build system";
     maintainers = [ stdenv.lib.maintainers.vbgl ];
     license = stdenv.lib.licenses.mit;

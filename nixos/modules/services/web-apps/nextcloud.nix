@@ -70,7 +70,15 @@ in {
       '';
     };
 
-    nginx.enable = mkEnableOption "nginx vhost management";
+    nginx.enable = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Whether to enable nginx virtual host management.
+        Further nginx configuration can be done by adapting <literal>services.nginx.virtualHosts.&lt;name&gt;</literal>.
+        See <xref linkend="opt-services.nginx.virtualHosts"/> for further information.
+      '';
+    };
 
     webfinger = mkOption {
       type = types.bool;
@@ -114,6 +122,21 @@ in {
       '';
     };
 
+    poolConfig = mkOption {
+      type = types.lines;
+      default = ''
+        pm = dynamic
+        pm.max_children = 32
+        pm.start_servers = 2
+        pm.min_spare_servers = 2
+        pm.max_spare_servers = 4
+        pm.max_requests = 500
+      '';
+      description = ''
+        Options for nextcloud's PHP pool. See the documentation on <literal>php-fpm.conf</literal> for details on configuration directives.
+      '';
+    };
+
     config = {
       dbtype = mkOption {
         type = types.enum [ "sqlite" "pgsql" "mysql" ];
@@ -148,7 +171,12 @@ in {
       dbhost = mkOption {
         type = types.nullOr types.str;
         default = "localhost";
-        description = "Database host.";
+        description = ''
+          Database host.
+
+          Note: for using Unix authentication with PostgreSQL, this should be
+          set to <literal>/tmp</literal>.
+        '';
       };
       dbport = mkOption {
         type = with types; nullOr (either int str);
@@ -169,7 +197,7 @@ in {
         type = types.nullOr types.str;
         default = null;
         description = ''
-          Database password.  Use <literal>adminpassFile</literal> to avoid this
+          Admin password.  Use <literal>adminpassFile</literal> to avoid this
           being world-readable in the <literal>/nix/store</literal>.
         '';
       };
@@ -339,11 +367,7 @@ in {
             listen.group = nginx
             user = nextcloud
             group = nginx
-            pm = dynamic
-            pm.max_children = 32
-            pm.start_servers = 2
-            pm.min_spare_servers = 2
-            pm.max_spare_servers = 4
+            ${cfg.poolConfig}
             env[NEXTCLOUD_CONFIG_DIR] = ${cfg.home}/config
             env[PATH] = /run/wrappers/bin:/nix/var/nix/profiles/default/bin:/run/current-system/sw/bin:/usr/bin:/bin
             ${phpAdminValues}
@@ -460,4 +484,6 @@ in {
       };
     })
   ]);
+
+  meta.doc = ./nextcloud.xml;
 }

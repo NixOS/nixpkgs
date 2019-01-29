@@ -187,8 +187,8 @@ let
     SSLRandomSeed startup builtin
     SSLRandomSeed connect builtin
 
-    SSLProtocol All -SSLv2 -SSLv3
-    SSLCipherSuite HIGH:!aNULL:!MD5:!EXP
+    SSLProtocol ${mainCfg.sslProtocols}
+    SSLCipherSuite ${mainCfg.sslCiphers}
     SSLHonorCipherOrder on
   '';
 
@@ -629,6 +629,19 @@ in
         example = 500;
         description =
           "Maximum number of httpd requests answered per httpd child (prefork), 0 means unlimited";
+      };
+
+      sslCiphers = mkOption {
+        type = types.str;
+        default = "HIGH:!aNULL:!MD5:!EXP";
+        description = "Cipher Suite available for negotiation in SSL proxy handshake.";
+      };
+
+      sslProtocols = mkOption {
+        type = types.str;
+        default = "All -SSLv2 -SSLv3";
+        example = "All -SSLv2 -SSLv3 -TLSv1";
+        description = "Allowed SSL/TLS protocol versions.";
       };
     }
 

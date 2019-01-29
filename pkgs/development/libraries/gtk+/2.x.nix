@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, gettext, glib, atk, pango, cairo, perl, xorg
-, gdk_pixbuf, xlibsWrapper, gobjectIntrospection
+, gdk_pixbuf, xlibsWrapper, gobject-introspection
 , xineramaSupport ? stdenv.isLinux
 , cupsSupport ? true, cups ? null
 , gdktarget ? if stdenv.isDarwin then "quartz" else "x11"
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   setupHook = ./setup-hook.sh;
 
-  nativeBuildInputs = [ setupHook perl pkgconfig gettext gobjectIntrospection ];
+  nativeBuildInputs = [ setupHook perl pkgconfig gettext gobject-introspection ];
 
   patches = [
     ./2.0-immodules.cache.patch
