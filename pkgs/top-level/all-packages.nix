@@ -13742,6 +13742,8 @@ in
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  nginx-sso = callPackage ../servers/nginx-sso { };
+
   percona-server56 = callPackage ../servers/sql/percona/5.6.x.nix { };
   percona-server = percona-server56;
 
