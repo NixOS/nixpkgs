@@ -927,15 +927,6 @@ self: super: {
   # https://github.com/bos/text-icu/issues/32
   text-icu = dontCheck super.text-icu;
 
-  # https://github.com/haskell/cabal/issues/4969
-  # haddock-api = (super.haddock-api.overrideScope (self: super: {
-  #   haddock-library = self.haddock-library_1_6_0;
-  # })).override { hspec = self.hspec_2_4_8; };
-
-  # Jailbreak "unix-compat >=0.1.2 && <0.5".
-  # Jailbreak "graphviz >=2999.18.1 && <2999.20".
-  darcs = overrideCabal super.darcs (drv: { preConfigure = "sed -i -e 's/unix-compat .*,/unix-compat,/' -e 's/fgl .*,/fgl,/' -e 's/graphviz .*,/graphviz,/' darcs.cabal"; });
-
   # aarch64 and armv7l fixes.
   happy = if (pkgs.stdenv.hostPlatform.isAarch32 || pkgs.stdenv.hostPlatform.isAarch64) then dontCheck super.happy else super.happy; # Similar to https://ghc.haskell.org/trac/ghc/ticket/13062
   hashable = if (pkgs.stdenv.hostPlatform.isAarch32 || pkgs.stdenv.hostPlatform.isAarch64) then dontCheck super.hashable else super.hashable; # https://github.com/tibbe/hashable/issues/95
