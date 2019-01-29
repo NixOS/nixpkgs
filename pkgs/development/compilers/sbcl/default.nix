@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, writeText, sbclBootstrap
+{ stdenv, fetchurl, writeText, sbclBootstrap
 , sbclBootstrapHost ? "${sbclBootstrap}/bin/sbcl --disable-debugger --no-userinit --no-sysinit"
 , threadSupport ? (stdenv.isi686 || stdenv.isx86_64 || "aarch64-linux" == stdenv.hostPlatform.system)
   # Meant for sbcl used for creating binaries portable to non-NixOS via save-lisp-and-die.
@@ -10,28 +10,16 @@
 
 stdenv.mkDerivation rec {
   name    = "sbcl-${version}";
-  version = "1.4.15";
+  version = "1.4.16";
 
   src = fetchurl {
     url    = "mirror://sourceforge/project/sbcl/sbcl/${version}/${name}-source.tar.bz2";
-    sha256 = "0bipl4gsvpcifi6vkqm5636i3219mk1bl99px4xh5l1q2g7knv28";
+    sha256 = "1myg4wkxnbfn5nz38xy62r1jhjy07x3h0b04vg858n41chdsv4wd";
   };
 
   buildInputs = [texinfo];
 
-  patches = [
-    # 1.4.15 bug, run-program thread safety, remove for 1.4.16
-    (fetchpatch {
-      url = "https://github.com/sbcl/sbcl/commit/c80672bedb1e4bc16124d0d01d7e37f94dd17a5a.patch";
-      sha256 = "0pjm9yajwij59gdkqhid7sbgmb8z57cz8zrsikxg7yzfgr7sa7hy";
-    })
-  ];
-
   patchPhase = ''
-    for patch in ${toString patches}; do
-      patch -Np1 -i "$patch"
-    done
-
     echo '"${version}.nixos"' > version.lisp-expr
     echo "
     (lambda (features)
