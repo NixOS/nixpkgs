@@ -19,8 +19,9 @@ buildPythonPackage rec {
   PYARROW_CMAKE_OPTIONS = [
     "-DCMAKE_INSTALL_RPATH=${ARROW_HOME}/lib"
 
-    # for some reason cmake won't set -std=c++11 for clang
-    "-DPYARROW_CXXFLAGS=-std=c++11"
+    # This doesn't use setup hook to call cmake so we need to workaround #54606
+    # ourselves
+    "-DCMAKE_POLICY_DEFAULT_CMP0025=NEW"
   ];
 
   preCheck = ''
