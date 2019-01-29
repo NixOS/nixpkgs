@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   name = "mate-control-center-${version}";
-  version = "1.21.0";
+  version = "1.20.4";
 
   src = fetchurl {
     url = "http://pub.mate-desktop.org/releases/${mate.getRelease version}/${name}.tar.xz";
-    sha256 = "0m40jr1midh5fzk3k97sydihlqfqjvzxlgmkx8w2j30a09h7230w";
+    sha256 = "1rjxndikj0w516nlvyzcss31l9qjwkzvns7ygasnjbl02bgml9a4";
   };
 
   nativeBuildInputs = [
