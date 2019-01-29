@@ -5851,6 +5851,8 @@ in
   twitterBootstrap3 = callPackage ../development/web/twitter-bootstrap {};
   twitterBootstrap = twitterBootstrap3;
 
+  txr = callPackage ../tools/misc/txr { stdenv = clangStdenv; };
+
   txt2man = callPackage ../tools/misc/txt2man { };
 
   txt2tags = callPackage ../tools/text/txt2tags { };
