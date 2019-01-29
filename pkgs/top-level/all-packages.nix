@@ -3803,6 +3803,8 @@ in
 
   matrix-synapse = callPackage ../servers/matrix-synapse { };
 
+  mautrix-telegram = callPackage ../servers/mautrix-telegram { };
+
   mdbook = callPackage ../tools/text/mdbook {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
