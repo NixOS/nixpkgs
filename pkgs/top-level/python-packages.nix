@@ -1752,6 +1752,8 @@ in {
 
   functools32 = callPackage ../development/python-modules/functools32 { };
 
+  future-fstrings = callPackage ../development/python-modules/future-fstrings { };
+
   gateone = callPackage ../development/python-modules/gateone { };
 
   # TODO: Remove after 19.03 is branched off:
