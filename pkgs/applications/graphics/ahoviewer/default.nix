@@ -8,13 +8,13 @@ assert useUnrar -> unrar != null;
 
 stdenv.mkDerivation rec {
   name = "ahoviewer-${version}";
-  version = "1.6.4";
+  version = "1.6.5";
 
   src = fetchFromGitHub {
     owner = "ahodesuka";
     repo = "ahoviewer";
     rev = version;
-    sha256 = "144jmk8w7dnmqy4w81b3kzama7i97chx16pgax2facn72a92921q";
+    sha256 = "1avdl4qcpznvf3s2id5qi1vnzy4wgh6vxpnrz777a1s4iydxpcd8";
   };
 
   enableParallelBuilding = true;
