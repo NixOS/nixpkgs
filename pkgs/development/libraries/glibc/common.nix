@@ -105,6 +105,9 @@ stdenv.mkDerivation ({
       # nscd needs libgcc, and we don't want it dynamically linked
       # because we don't want it to depend on bootstrap-tools libs.
       echo "LDFLAGS-nscd += -static-libgcc" >> nscd/Makefile
+
+      # bison 3.3 is too strict
+      sed 's/^BISONFLAGS = --yacc /BISONFLAGS = --yacc -Wno-error=yacc /g' -i intl/Makefile
     '';
 
   configureFlags =
