@@ -24,7 +24,7 @@
 
   <para>
    This function is analogous to the <command>docker build</command> command,
-   in that can used to build a Docker-compatible repository tarball containing
+   in that it can be used to build a Docker-compatible repository tarball containing
    a single image with one or multiple layers. As such, the result is suitable
    for being loaded in Docker with <command>docker load</command>.
   </para>
@@ -190,11 +190,11 @@ buildImage {
     By default <function>buildImage</function> will use a static date of one
     second past the UNIX Epoch. This allows <function>buildImage</function> to
     produce binary reproducible images. When listing images with
-    <command>docker list images</command>, the newly created images will be
+    <command>docker images</command>, the newly created images will be
     listed like this:
    </para>
 <screen><![CDATA[
-$ docker image list
+$ docker images
 REPOSITORY   TAG      IMAGE ID       CREATED        SIZE
 hello        latest   08c791c7846e   48 years ago   25.2MB
 ]]></screen>
@@ -217,7 +217,7 @@ pkgs.dockerTools.buildImage {
     and now the Docker CLI will display a reasonable date and sort the images
     as expected:
 <screen><![CDATA[
-$ docker image list
+$ docker images
 REPOSITORY   TAG      IMAGE ID       CREATED              SIZE
 hello        latest   de2bf4786de6   About a minute ago   25.2MB
 ]]></screen>
@@ -402,7 +402,7 @@ pkgs.dockerTools.buildLayeredImage {
 
   <para>
    This function is analogous to the <command>docker pull</command> command, in
-   that can be used to pull a Docker image from a Docker registry. By default
+   that it can be used to pull a Docker image from a Docker registry. By default
    <link xlink:href="https://hub.docker.com/">Docker Hub</link> is used to pull
    images.
   </para>
@@ -484,7 +484,7 @@ sha256:20d9485b25ecfd89204e843a962c1bd70e9cc6858d65d7f5fadc340246e2116b
 
   <para>
    This function is analogous to the <command>docker export</command> command,
-   in that can used to flatten a Docker image that contains multiple layers. It
+   in that it can be used to flatten a Docker image that contains multiple layers. It
    is in fact the result of the merge of all the layers of the image. As such,
    the result is suitable for being imported in Docker with <command>docker
    import</command>.
@@ -557,7 +557,7 @@ buildImage {
 
   <para>
    Creating base files like <literal>/etc/passwd</literal> or
-   <literal>/etc/login.defs</literal> are necessary for shadow-utils to
+   <literal>/etc/login.defs</literal> is necessary for shadow-utils to
    manipulate users and groups.
   </para>
  </section>
