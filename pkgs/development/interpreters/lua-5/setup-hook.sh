@@ -11,18 +11,15 @@ nix_debug() {
 }
 
 addToLuaSearchPathWithCustomDelimiter() {
-    # local delimiter="$1"
     local varName="$1"
-    local pattern="$2"
-    # delete longest match starting from
-    local topDir="${pattern%%\?*}"
+    local absPattern="$2"
+    # delete longest match starting from the lua placeholder '?'
+    local topDir="${absPattern%%\?*}"
 
     # export only if the folder exists else LUA_PATH grows too big
     if  [ ! -d "$topDir" ]; then return; fi
-    # check for duplicate
-    if [[ $LUA_PATH = *"$pattern"* ]]; then return; fi
 
-    export "${varName}=${!varName:+${!varName};}${pattern}"
+    export "${varName}=${!varName:+${!varName};}${absPattern}"
 }
 
 addToLuaPath() {
