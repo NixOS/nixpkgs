@@ -66,14 +66,14 @@ rec {
 
   firefox-esr-60 = common rec {
     pname = "firefox-esr";
-    ffversion = "60.4.0esr";
+    ffversion = "60.5.0esr";
     src = fetchurl {
       url = "mirror://mozilla/firefox/releases/${ffversion}/source/firefox-${ffversion}.source.tar.xz";
-      sha512 = "3a2r2xyxqw86ihzbmzmxmj8wh3ay4mrjqrnyn73yl6ry19m1pjqbmy1fxnsmxnykfn35a1w18gmbj26kpn1yy7hif37cvy05wmza6c1";
+      sha512 = "3n7l146gdjwhi0iq85awc0yykvi4x5m91mcylxa5mrq911bv6xgn2i92nzhgnhdilqap5218778vgvnalikzsh67irrncx1hy5f6iyx";
     };
 
     patches = nixpkgsPatches ++ [
-      ./no-buildconfig.patch
+      ./no-buildconfig-ffx65.patch
 
       # this one is actually an omnipresent bug
       # https://bugzilla.mozilla.org/show_bug.cgi?id=1444519
