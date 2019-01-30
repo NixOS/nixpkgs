@@ -1,0 +1,120 @@
+#!/usr/bin/env nix-shell
+#!nix-shell -p nix-prefetch-scripts luarocks-nix -i bash
+
+# You'll likely want to use
+# ``
+# nixpkgs $ maintainers/scripts/update-luarocks-packages pkgs/development/lua-modules/generated-packages.nix
+# ``
+# to update all libraries in that folder.
+# to debug, redirect stderr to stdout with 2>&1
+
+
+# stop the script upon C-C
+set -eu -o pipefail
+
+if [ $# -lt 1 ]; then
+    echo "Usage: $0 GENERATED_FILENAME"
+    echo "(most likely pkgs/development/lua-modules/generated-packages.nix)"
+    exit 1
+fi
+
+GENERATED_NIXFILE="$1"
+PACKAGE=""
+# we have to use a temp file else
+TMP_FILE="$(mktemp)"
+
+exit_trap()
+{
+  local lc="$BASH_COMMAND" rc=$?
+  test $rc -eq 0 || echo "*** error $rc: $lc"
+}
+
+trap exit_trap EXIT
+
+
+# -p <PKG> package
+while getopts "p:" opt; do
+  case $opt in
+    p)
+      echo "Generating nix derivation for $OPTARG !" >&2
+      PACKAGE="$OPTARG"
+      ;;
+    \?)
+      echo "Invalid option: -$OPTARG" >&2
+      ;;
+  esac
+done
+
+# read returns a non-zero return code when it reaches EOF
+# so disable the checks just for the 2 read
+set +e
+read -d '' -r HEADER <<EOM
+/* ${GENERATED_NIXFILE} is an auto-generated file -- DO NOT EDIT!
+Regenerate it with:
+nixpkgs$ ${0} ${GENERATED_NIXFILE}
+
+These packages are manually refined in lua-overrides.nix
+*/
+{
+self
+, lua
+, stdenv
+, fetchurl
+, fetchgit
+, pkgs
+, ...
+} @ args:
+self: super:
+with self;
+{
+EOM
+
+read -d '' -r FOOTER <<'EOM'
+}
+/* GENERATED */
+EOM
+
+set -e
+
+
+function convert_pkg () {
+    pkg="$1"
+	server=""
+	if [ ! -z "$2" ]; then
+		server=" --server=$2"
+	fi
+
+    version="${3:-}"
+
+    echo "looking at $pkg (version $version) from server $server" >&2
+    cmd="luarocks nix $server $pkg $version"
+    drv="$($cmd)"
+    if [ $? -ne 0 ]; then
+        echo "Failed to convert $pkg" >&2
+        echo "$drv" >&2
+    else
+        echo "$drv" | tee -a "$TMP_FILE"
+    fi
+}
+
+# params needed when called via callPackage
+echo "$HEADER" | tee "$TMP_FILE"
+
+if [ ! -z "$PACKAGE" ]; then
+    convert_pkg "$PACKAGE"
+else
+    # list of packages with format
+    # name,server,version
+    while IFS=, read -r pkg_name server version
+    do
+        if [ -z "$pkg_name" ]; then
+            echo "Skipping empty package name" >&2
+        fi
+        echo "PKG $pkg_name version $version from server $server" >&2
+        convert_pkg "$pkg_name" "$server" "$version"
+    done < maintainers/scripts/luarocks-packages.csv
+fi
+# close the set
+echo "$FOOTER" | tee -a "$TMP_FILE"
+
+cp "$TMP_FILE" "$GENERATED_NIXFILE"
