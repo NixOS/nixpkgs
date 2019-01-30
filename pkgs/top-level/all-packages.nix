@@ -19810,7 +19810,7 @@ in
   wrapNeovim = callPackage ../applications/editors/neovim/wrapper.nix { };
 
   neovim-unwrapped = callPackage ../applications/editors/neovim {
-    luaPackages = luajitPackages;
+    lua = luajit;
   };
 
   neovim = wrapNeovim neovim-unwrapped { };
