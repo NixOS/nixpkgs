@@ -89,10 +89,9 @@ let
       libxdg_basedir
     ];
 
-    postPatch = ''
-      substituteInPlace meson.build \
-        --replace "run_command('git', 'describe')" \
-                  "run_command('echo', 'v${version}')"
+    preBuild = ''
+      git() { echo "v${version}"; }
+      export -f git
     '';
 
     NIX_CFLAGS_COMPILE = [ "-fno-strict-aliasing" ];
