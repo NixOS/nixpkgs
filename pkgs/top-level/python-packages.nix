@@ -1301,6 +1301,8 @@ in {
 
   cmdline = callPackage ../development/python-modules/cmdline { };
 
+  coconut = callPackage ../development/python-modules/coconut {};
+
   codecov = callPackage ../development/python-modules/codecov {};
 
   cogapp = callPackage ../development/python-modules/cogapp {};
@@ -1428,6 +1430,9 @@ in {
   pkginfo = callPackage ../development/python-modules/pkginfo { };
 
   pretend = callPackage ../development/python-modules/pretend { };
+
+  prompt-toolkit = callPackage ../development/python-modules/prompt-toolkit {};
+
 
   detox = callPackage ../development/python-modules/detox { };
 
