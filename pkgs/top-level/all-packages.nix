@@ -14049,6 +14049,8 @@ in
 
   systemd-journal2gelf = callPackage ../tools/system/systemd-journal2gelf { };
 
+  syncserver = callPackage ../servers/syncserver { };
+
   inherit (callPackages ../servers/http/tomcat { })
     tomcat7
     tomcat8
