@@ -274,6 +274,8 @@ in {
 
   braintree = callPackage ../development/python-modules/braintree { };
 
+  django-sesame = callPackage ../development/python-modules/django-sesame { };
+
   breathe = callPackage ../development/python-modules/breathe { };
 
   brotli = callPackage ../development/python-modules/brotli { };
