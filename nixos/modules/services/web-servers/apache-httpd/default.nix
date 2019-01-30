@@ -720,6 +720,8 @@ in
             ''}
             mkdir -m 0700 -p ${mainCfg.logDir}
 
+            ${httpd}/bin/httpd -f ${httpdConf} -t
+
             # Get rid of old semaphores.  These tend to accumulate across
             # server restarts, eventually preventing it from restarting
             # successfully.
