@@ -111,6 +111,7 @@ let
       /* qtwinextras = not packaged */
       qtx11extras = callPackage ../modules/qtx11extras.nix {};
       qtxmlpatterns = callPackage ../modules/qtxmlpatterns.nix {};
+      qtvirtualkeyboard = callPackage ../modules/qtvirtualkeyboard.nix {};
 
       env = callPackage ../qt-env.nix {};
       full = env "qt-full-${qtbase.version}" [
