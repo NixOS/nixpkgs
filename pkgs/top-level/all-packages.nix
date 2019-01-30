@@ -3737,6 +3737,8 @@ in
   jupyter = callPackage ../applications/editors/jupyter { };
 
   jupyter-kernel = callPackage ../applications/editors/jupyter/kernel.nix { };
+  
+  just-start = python3Packages.callPackage ../applications/misc/just-start { };
 
   jwhois = callPackage ../tools/networking/jwhois { };
 
