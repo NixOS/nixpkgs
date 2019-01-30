@@ -18314,7 +18314,7 @@ in
     };
 
   mpv = callPackage ../applications/video/mpv rec {
-    inherit (luaPackages) luasocket;
+    inherit lua;
     waylandSupport     = stdenv.isLinux;
     alsaSupport        = !stdenv.isDarwin;
     pulseSupport       = !stdenv.isDarwin;
