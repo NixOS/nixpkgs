@@ -1818,7 +1818,9 @@ in
 
   burp = callPackage ../tools/backup/burp { };
 
-  buku = callPackage ../applications/misc/buku { };
+  buku = callPackage ../applications/misc/buku {
+    python3 = python36; # due to #52766
+  };
 
   byzanz = callPackage ../applications/video/byzanz {};
 
