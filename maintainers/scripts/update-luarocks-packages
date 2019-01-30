@@ -47,8 +47,7 @@ done
 
 # read returns a non-zero return code when it reaches EOF
 # so disable the checks just for the 2 read
-set +e
-read -d '' -r HEADER <<EOM
+HEADER="
 /* ${GENERATED_NIXFILE} is an auto-generated file -- DO NOT EDIT!
 Regenerate it with:
 nixpkgs$ ${0} ${GENERATED_NIXFILE}
@@ -67,14 +66,12 @@ self
 self: super:
 with self;
 {
-EOM
+"
 
-read -d '' -r FOOTER <<'EOM'
+FOOTER="
 }
 /* GENERATED */
-EOM
-
-set -e
+"
 
 
 function convert_pkg () {

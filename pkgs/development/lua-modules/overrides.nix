@@ -42,12 +42,12 @@ with super;
     disabled = !isLua51;
   });
   luaexpat = super.luaexpat.override({
-    buildInputs = [ expat.dev ];
+    buildInputs = [ pkgs.expat.dev ];
     disabled = isLuaJIT;
   });
   luaevent = super.luaevent.override({
     buildInputs = with pkgs; [ libevent.dev libevent ];
-    extraConfig=''
+    extraConfig = with pkgs; ''
       variables={
         EVENT_INCDIR="${libevent.dev}/include";
         EVENT_LIBDIR="${libevent}/lib";
@@ -66,7 +66,7 @@ with super;
   });
   cjson = lua-cjson;
   luadbi = super.luadbi.override({
-    buildInputs = [ mysql.connector-c postgresql sqlite ];
+    buildInputs = with pkgs; [ mysql.connector-c postgresql sqlite ];
   });
   luasec = super.luasec.override({
     extraConfig = with pkgs; ''
