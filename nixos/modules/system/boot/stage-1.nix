@@ -525,16 +525,18 @@ in
       };
 
     fileSystems = mkOption {
-      options.neededForBoot = mkOption {
-        default = false;
-        type = types.bool;
-        description = ''
-          If set, this file system will be mounted in the initial
-          ramdisk.  By default, this applies to the root file system
-          and to the file system containing
-          <filename>/nix/store</filename>.
-        '';
-      };
+      type = with lib.types; loaOf (submodule {
+        options.neededForBoot = mkOption {
+          default = false;
+          type = types.bool;
+          description = ''
+            If set, this file system will be mounted in the initial
+            ramdisk.  By default, this applies to the root file system
+            and to the file system containing
+            <filename>/nix/store</filename>.
+          '';
+        };
+      });
     };
 
   };

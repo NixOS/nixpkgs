@@ -13,5 +13,5 @@ with lib;
 
   documentation.enable = mkDefault false;
 
-  services.nixosManual.enable = mkDefault false;
+  documentation.nixos.enable = mkDefault false;
 }
