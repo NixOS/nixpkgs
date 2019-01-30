@@ -1,9 +1,7 @@
 { stdenv, fetchurl, pkgconfig, atk, cairo, glib, gtk3, pango, vala_0_40
 , libxml2, perl, intltool, gettext, gnome3, gobject-introspection, dbus, xvfb_run, shared-mime-info }:
 
-let
-  checkInputs = [ xvfb_run dbus ];
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   name = "gtksourceview-${version}";
   version = "3.24.9";
 
@@ -21,8 +19,9 @@ in stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ pkgconfig intltool perl gobject-introspection vala_0_40 ]
-    ++ stdenv.lib.optionals doCheck checkInputs;
+  nativeBuildInputs = [ pkgconfig intltool perl gobject-introspection vala_0_40 ];
+
+  checkInputs = [ xvfb_run dbus ];
 
   buildInputs = [ atk cairo glib pango libxml2 gettext ];
 
