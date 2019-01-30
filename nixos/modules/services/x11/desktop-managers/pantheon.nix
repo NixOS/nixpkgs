@@ -114,6 +114,7 @@ in
     services.geoclue2.enableDemoAgent = false;
     services.gnome3.at-spi2-core.enable = true;
     services.gnome3.evolution-data-server.enable = true;
+    services.gnome3.file-roller.enable = true;
     # TODO: gnome-keyring's xdg autostarts will still be in the environment (from elementary-session-settings) if disabled forcefully
     services.gnome3.gnome-keyring.enable = true;
     services.gnome3.gvfs.enable = true;
@@ -158,7 +159,6 @@ in
         dconf
         epiphany
         evince
-        file-roller
         geary
         gnome-bluetooth
         gnome-font-viewer
