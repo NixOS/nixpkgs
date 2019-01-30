@@ -10,7 +10,7 @@
 , hunspell, libevent, libstartup_notification, libvpx
 , icu, libpng, jemalloc, glib
 , autoconf213, which, gnused, cargo, rustc, llvmPackages
-, rust-cbindgen, rust-cbindgen_0_6_7, nodejs, rust_1_29
+, rust-cbindgen, rust-cbindgen_0_6_7, nodejs, rust_1_31
 , debugBuild ? false
 
 ### optionals
@@ -86,6 +86,11 @@ stdenv.mkDerivation (rec {
 
   inherit src patches meta;
 
+  # Ignore trivial whitespace changes in patches, this fixes compatibility of
+  # ./env_var_for_system_dir.patch with Firefox >=65 without having to track
+  # two patches.
+  patchFlags = [ "-p1" "-l" ];
+
   buildInputs = [
     gtk2 perl zip libIDL libjpeg zlib bzip2
     dbus dbus-glib pango freetype fontconfig xorg.libXi xorg.libXcursor
@@ -127,7 +132,7 @@ stdenv.mkDerivation (rec {
   nativeBuildInputs =
     [ autoconf213 which gnused pkgconfig perl python2 ]
     ++ (if (lib.versionAtLeast version "63") then [
-      nodejs rust_1_29.rustc rust_1_29.cargo
+      nodejs rust_1_31.rustc rust_1_31.cargo
     ] else [ cargo rustc ])
     ++ (if (lib.versionAtLeast version "64") then [
       rust-cbindgen_0_6_7

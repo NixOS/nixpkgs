@@ -149,6 +149,9 @@ stdenv.mkDerivation (rec {
   # Make sure we never relax`$PATH` and hooks support for compatability.
   strictDeps = true;
 
+  # Don’t add -liconv to LDFLAGS automatically so that GHC will add it itself.
+  dontAddExtraLibs = true;
+
   nativeBuildInputs = [
     perl autoconf automake m4 python3
     ghc bootPkgs.alex bootPkgs.happy bootPkgs.hscolour
