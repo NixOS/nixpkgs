@@ -11,6 +11,7 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
+    (bogus change)
     mkdir -p $out/
     cp -R . $out/
     ${lib.optionalString (conf != null) "ln -s ${configFile} $out/config.json"}
@@ -22,6 +23,5 @@ stdenv.mkDerivation rec {
     maintainers = with stdenv.lib.maintainers; [ bachp ];
     license = stdenv.lib.licenses.asl20;
     platforms = stdenv.lib.platforms.all;
-    hydraPlatforms = [];
   };
 }
