@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-bluetooth";
-  version = "2.2.0";
+  version = "2.2.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "1aynzns0xw629drv9qvci37ba0fzyd5x9y8kwjqr527rnk0qiyca";
+    sha256 = "13jm2idjsgqkvdz1dxgl2wwx7bsqahppf6cnpl0pmz167wahg5zp";
   };
 
   passthru = {
