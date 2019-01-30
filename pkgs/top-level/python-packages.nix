@@ -1431,9 +1431,6 @@ in {
 
   pretend = callPackage ../development/python-modules/pretend { };
 
-  prompt-toolkit = callPackage ../development/python-modules/prompt-toolkit {};
-
-
   detox = callPackage ../development/python-modules/detox { };
 
   pbkdf2 = callPackage ../development/python-modules/pbkdf2 { };
