@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "scdoc-${version}";
-  version = "1.8.0";
+  version = "1.8.1";
 
   src = fetchurl {
     url = "https://git.sr.ht/~sircmpwn/scdoc/archive/${version}.tar.gz";
-    sha256 = "11693c01bn2cxmxra9r3nkacl908na4k42h2j4dv5j7zc8081994";
+    sha256 = "1f3qrnbjr9ikbdvpsyx726nyiz4f7ka38rimy9fvbl7kmi62w1v7";
   };
 
   postPatch = ''
