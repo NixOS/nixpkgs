@@ -68,7 +68,7 @@ rec {
   # We need to sum layer.tar, not a directory, hence tarsum instead of nix-hash.
   # And we cannot untar it, because then we cannot preserve permissions ecc.
   tarsum = runCommand "tarsum" {
-    buildInputs = [ go ];
+    nativeBuildInputs = [ go ];
   } ''
     mkdir tarsum
     cd tarsum
@@ -157,7 +157,7 @@ rec {
         };
         inherit fromImage fromImageName fromImageTag;
 
-        buildInputs = [ utillinux e2fsprogs jshon rsync jq ];
+        nativeBuildInputs = [ utillinux e2fsprogs jshon rsync jq ];
       } ''
       rm -rf $out
 
@@ -282,7 +282,7 @@ rec {
     runCommand "${name}-granular-docker-layers" {
       inherit maxLayers;
       paths = referencesByPopularity closure;
-      buildInputs = [ jshon rsync tarsum ];
+      nativeBuildInputs = [ jshon rsync tarsum ];
       enableParallelBuilding = true;
     }
     ''
@@ -320,7 +320,7 @@ rec {
     uid ? 0, gid ? 0,
   }:
     runCommand "${name}-customisation-layer" {
-      buildInputs = [ jshon rsync tarsum ];
+      nativeBuildInputs = [ jshon rsync tarsum ];
       inherit extraCommands;
     }
     ''
@@ -365,7 +365,7 @@ rec {
   }:
     runCommand "docker-layer-${name}" {
       inherit baseJson contents extraCommands;
-      buildInputs = [ jshon rsync tarsum ];
+      nativeBuildInputs = [ jshon rsync tarsum ];
     }
     ''
       mkdir layer
@@ -520,7 +520,7 @@ rec {
             os = "linux";
           });
           impure = runCommand "${baseName}-standard-dynamic-date.json"
-            { buildInputs = [ jq ]; }
+            { nativeBuildInputs = [ jq ]; }
             ''
                jq ".created = \"$(TZ=utc date --iso-8601="seconds")\"" ${pure} > $out
             '';
@@ -541,7 +541,7 @@ rec {
           inherit uid gid extraCommands;
         };
       result = runCommand "docker-image-${baseName}.tar.gz" {
-        buildInputs = [ jshon pigz coreutils findutils jq ];
+        nativeBuildInputs = [ jshon pigz coreutils findutils jq ];
         # Image name and tag must be lowercase
         imageName = lib.toLower name;
         baseJson = configJson;
@@ -638,7 +638,7 @@ rec {
             os = "linux";
           });
           impure = runCommand "${baseName}-config.json"
-            { buildInputs = [ jq ]; }
+            { nativeBuildInputs = [ jq ]; }
             ''
                jq ".created = \"$(TZ=utc date --iso-8601="seconds")\"" ${pure} > $out
             '';
@@ -656,7 +656,7 @@ rec {
                   extraCommands;
         };
       result = runCommand "docker-image-${baseName}.tar.gz" {
-        buildInputs = [ jshon pigz coreutils findutils jq ];
+        nativeBuildInputs = [ jshon pigz coreutils findutils jq ];
         # Image name and tag must be lowercase
         imageName = lib.toLower name;
         imageTag = if tag == null then "" else lib.toLower tag;
