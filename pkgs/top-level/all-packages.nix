@@ -507,6 +507,8 @@ in
     withGui = false;
   };
 
+  arduino-mk = callPackage ../development/arduino/arduino-mk {};
+
   apitrace = libsForQt5.callPackage ../applications/graphics/apitrace {};
 
   arguments = callPackage ../development/libraries/arguments { };
