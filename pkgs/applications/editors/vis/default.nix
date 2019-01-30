@@ -1,10 +1,13 @@
 { stdenv, fetchFromGitHub, pkgconfig, makeWrapper, makeDesktopItem
-, ncurses, libtermkey, lpeg, lua
+, ncurses, libtermkey, lua
 , acl ? null, libselinux ? null
 }:
 
+let
+  luaEnv = lua.withPackages(ps: [ps.lpeg]);
+in
 stdenv.mkDerivation rec {
-  name = "vis-${version}";
+  pname = "vis";
   version  = "0.5";
 
   src = fetchFromGitHub {
@@ -19,8 +22,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     ncurses
     libtermkey
-    lua
-    lpeg
+    luaEnv
   ] ++ stdenv.lib.optionals stdenv.isLinux [
     acl
     libselinux
@@ -30,16 +32,12 @@ stdenv.mkDerivation rec {
     patchShebangs ./configure
   '';
 
-  LUA_CPATH="${lpeg}/lib/lua/${lua.luaversion}/?.so;";
-  LUA_PATH="${lpeg}/share/lua/${lua.luaversion}/?.lua";
 
   postInstall = ''
     mkdir -p "$out/share/applications"
     cp $desktopItem/share/applications/* $out/share/applications
     echo wrapping $out/bin/vis with runtime environment
     wrapProgram $out/bin/vis \
-      --prefix LUA_CPATH ';' "${lpeg}/lib/lua/${lua.luaversion}/?.so" \
-      --prefix LUA_PATH ';' "${lpeg}/share/lua/${lua.luaversion}/?.lua" \
       --prefix VIS_PATH : "\$HOME/.config:$out/share/vis"
   '';
 
