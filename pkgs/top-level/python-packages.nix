@@ -370,6 +370,8 @@ in {
 
   fastpbkdf2 = callPackage ../development/python-modules/fastpbkdf2 {  };
 
+  favicon = callPackage ../development/python-modules/favicon {  };
+
   fido2 = callPackage ../development/python-modules/fido2 {  };
 
   filterpy = callPackage ../development/python-modules/filterpy { };
