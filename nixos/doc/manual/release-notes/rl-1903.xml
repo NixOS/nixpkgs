@@ -331,16 +331,28 @@
    <para>
      The <literal>pam_unix</literal> account module is now loaded with its
      control field set to <literal>required</literal> instead of
-     <literal>sufficient</literal>, so that later pam account modules that
+     <literal>sufficient</literal>, so that later PAM account modules that
      might do more extensive checks are being executed.
      Previously, the whole account module verification was exited prematurely
      in case a nss module provided the account name to
      <literal>pam_unix</literal>.
      The LDAP and SSSD NixOS modules already add their NSS modules when
-     enabled. In case your setup breaks due to some later pam account module
+     enabled. In case your setup breaks due to some later PAM account module
      previosuly shadowed, or failing NSS lookups, please file a bug. You can
      get back the old behaviour by manually setting
      <literal><![CDATA[security.pam.services.<name?>.text]]></literal>.
+   </para>
+  </listitem>
+  <listitem>
+   <para>
+     The <literal>pam_unix</literal> password module is now loaded with its
+     control field set to <literal>sufficient</literal> instead of
+     <literal>required</literal>, so that password managed only
+     by later PAM password modules are being executed.
+     Previously, for example, changing an LDAP account's password through PAM
+     was not possible: the whole password module verification
+     was exited prematurely by <literal>pam_unix</literal>,
+     preventing <literal>pam_ldap</literal> to manage the password as it should.
    </para>
   </listitem>
    <listitem>

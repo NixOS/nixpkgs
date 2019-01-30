@@ -370,7 +370,7 @@ let
           auth required pam_deny.so
 
           # Password management.
-          password requisite pam_unix.so nullok sha512
+          password sufficient pam_unix.so nullok sha512
           ${optionalString config.security.pam.enableEcryptfs
               "password optional ${pkgs.ecryptfs}/lib/security/pam_ecryptfs.so"}
           ${optionalString cfg.pamMount
