@@ -48,6 +48,16 @@ stdenv.mkDerivation rec {
     rm -rf $out/libexec/lib/jre
     ln -s ${jdk.home}/jre $out/libexec/lib/jre
 
+    mkdir -p $out/bin
+    ln -s $out/libexec/bitwig-studio $out/bin/bitwig-studio
+
+    cp -r usr/share $out/share
+    substitute usr/share/applications/bitwig-studio.desktop \
+      $out/share/applications/bitwig-studio.desktop \
+      --replace /usr/bin/bitwig-studio $out/bin/bitwig-studio
+  '';
+
+  postFixup = ''
     # Bitwig’s `libx11-windowing-system.so` has several problems:
     #
     #   • has some old version of libxkbcommon linked statically (ಠ_ಠ),
@@ -71,14 +81,6 @@ stdenv.mkDerivation rec {
         "''${gappsWrapperArgs[@]}" \
         --set LD_PRELOAD "${libxkbcommon.out}/lib/libxkbcommon.so" || true
     done
-
-    mkdir -p $out/bin
-    ln -s $out/libexec/bitwig-studio $out/bin/bitwig-studio
-
-    cp -r usr/share $out/share
-    substitute usr/share/applications/bitwig-studio.desktop \
-      $out/share/applications/bitwig-studio.desktop \
-      --replace /usr/bin/bitwig-studio $out/bin/bitwig-studio
   '';
 
   meta = with stdenv.lib; {
