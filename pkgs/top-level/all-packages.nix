@@ -1821,7 +1821,8 @@ in
   };
   ceph-dev = ceph;
 
-  certmgr = callPackage ../tools/security/certmgr { };
+  inherit (callPackages ../tools/security/certmgr { })
+    certmgr certmgr-selfsigned;
 
   cfdg = callPackage ../tools/graphics/cfdg { };
 
