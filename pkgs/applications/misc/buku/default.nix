@@ -1,14 +1,14 @@
 { stdenv, python3, fetchFromGitHub, fetchpatch }:
 
 with python3.pkgs; buildPythonApplication rec {
-  version = "3.8";
+  version = "4.1";
   pname = "buku";
 
   src = fetchFromGitHub {
     owner = "jarun";
     repo = "buku";
     rev = "v${version}";
-    sha256 = "0gv26c4rr1akcaiff1nrwil03sv7d58mfxr86pgsw6nwld67ns0r";
+    sha256 = "166l1fmpqn4hys4l0ssc4yd590mmav1w62vm9l5ijhjhmlnrzfax";
   };
 
   checkInputs = [
@@ -33,7 +33,16 @@ with python3.pkgs; buildPythonApplication rec {
     arrow
     werkzeug
     click
+    html5lib
+    vcrpy
   ];
+
+  postPatch = ''
+    # Jailbreak problematic dependencies
+    sed -i \
+      -e "s,'PyYAML.*','PyYAML',g" \
+      setup.py
+  '';
 
   preCheck = ''
     # Fixes two tests for wrong encoding
