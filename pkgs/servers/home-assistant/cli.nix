@@ -3,11 +3,11 @@
 
 python36.pkgs.buildPythonApplication rec {
   pname = "homeassistant-cli";
-  version = "0.4.2";
+  version = "0.4.4";
 
   src = python36.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "e0b05af9e49baf88a44f1b36c3446a106223016dceefd5f9910e204af5901f44";
+    sha256 = "ad3722062ffb7b4fa730f61991b831dbf083e4e079c560993a023ce4bb11c55d";
   };
 
   postPatch = ''
