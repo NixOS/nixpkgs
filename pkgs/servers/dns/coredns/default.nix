@@ -2,16 +2,15 @@
 
 buildGoPackage rec {
   name = "coredns-${version}";
-  version = "005";
+  version = "1.3.1";
 
-  goPackagePath = "github.com/miekg/coredns";
-  subPackages = [ "." ];
+  goPackagePath = "github.com/coredns/coredns";
 
   src = fetchFromGitHub {
-    owner = "miekg";
+    owner = "coredns";
     repo = "coredns";
     rev = "v${version}";
-    sha256 = "15q8l4apspaw1xbbb9j1d8s2cc5zrgycan6iq597ga9m0vyf7wiw";
+    sha256 = "0aflm0c3qcjcq4dy7yx9f5xlvdm4k0b2awsp3qvbfgyp74by0584";
   };
 
   goDeps = ./deps.nix;
