@@ -27,6 +27,6 @@ buildPythonPackage rec {
     homepage = "http://coconut-lang.org";
     license = "Apache-2.0";
     description = "Simple, elegant, Pythonic functional programming.";
-    maintainers = with lib.maintainers; [ bbarker ];
+    maintainers = with stdenv.lib.maintainers; [ bbarker ];
   };
 }

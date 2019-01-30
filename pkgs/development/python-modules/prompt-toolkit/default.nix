@@ -23,6 +23,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/jonathanslenders/python-prompt-toolkit";
     license = "BSD-3-Clause";
     description = "Library for building powerful interactive command lines in Python";
-    maintainers = with lib.maintainers; [ bbarker ];
+    maintainers = with stdenv.lib.maintainers; [ bbarker ];
   };
 }
