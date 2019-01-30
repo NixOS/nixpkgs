@@ -9,6 +9,7 @@ stdenv.mkDerivation rec {
   };
 
   hardeningDisable = [ "format" ];
+  configureFlags = [ "--enable-fastsampling" ];
 
   meta = with stdenv.lib; {
     homepage = https://sourceforge.net/projects/iperf/;
