@@ -1350,6 +1350,8 @@ in
 
   fd = callPackage ../tools/misc/fd { };
 
+  fdroidserver = python3Packages.callPackage ../development/tools/fdroidserver { };
+
   filebench = callPackage ../tools/misc/filebench { };
 
   fileshelter = callPackage ../servers/web-apps/fileshelter { };

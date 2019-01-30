@@ -158,6 +158,8 @@ in {
 
   alerta-server = callPackage ../development/python-modules/alerta-server { };
 
+  androguard = callPackage ../development/python-modules/androguard { };
+
   phonenumbers = callPackage ../development/python-modules/phonenumbers { };
 
   agate-excel = callPackage ../development/python-modules/agate-excel { };
@@ -1642,6 +1644,8 @@ in {
 
   docker = callPackage ../development/python-modules/docker {};
 
+  docker-py = disabledIf isPy27 (callPackage ../development/python-modules/docker-py {});
+
   dockerpty = callPackage ../development/python-modules/dockerpty {};
 
   docker_pycreds = callPackage ../development/python-modules/docker-pycreds {};
@@ -2384,8 +2388,6 @@ in {
   pyfribidi = callPackage ../development/python-modules/pyfribidi { };
 
   pyftpdlib = callPackage ../development/python-modules/pyftpdlib { };
-
-  fdroidserver = callPackage ../development/python-modules/fdroidserver { };
 
   filebrowser_safe = callPackage ../development/python-modules/filebrowser_safe { };
 
@@ -4327,6 +4329,8 @@ in {
     in if isPy3k then py3 else py2;
 
   python-daemon = callPackage ../development/python-modules/python-daemon { };
+
+  python-vagrant = callPackage ../development/python-modules/python-vagrant { };
 
   sympy = callPackage ../development/python-modules/sympy { };
 
