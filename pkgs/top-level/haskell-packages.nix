@@ -39,6 +39,11 @@ let
   # Use this rather than `rec { ... }` below for sake of overlays.
   inherit (pkgs.haskell) compiler packages;
 
+  # make sure we build cross compiler as technically stage3 compiler. That is
+  # we build them with the same version they are instead of the bootstrap compiler.
+  # For regular builds we'll use the bootstrap version.
+  mkBootPkgs = ver: boot: if pkgs.stdenv.hostPlatform != pkgs.stdenv.targetPlatform then buildPackages.haskell.packages.${ver} else packages.${boot};
+
 in {
   lib = haskellLib;
 
@@ -53,44 +58,62 @@ in {
       llvmPackages = pkgs.llvmPackages_35;
     };
     ghc802 = callPackage ../development/compilers/ghc/8.0.2.nix {
-      bootPkgs = packages.ghc7103Binary;
+      bootPkgs = mkBootPkgs "ghc802" "ghc7103Binary";
       inherit (buildPackages.python27Packages) sphinx;
       buildLlvmPackages = buildPackages.llvmPackages_37;
       llvmPackages = pkgs.llvmPackages_37;
     };
     ghc822 = callPackage ../development/compilers/ghc/8.2.2.nix {
-      bootPkgs = packages.ghc821Binary;
+      bootPkgs = mkBootPkgs "ghc822" "ghc821Binary";
       inherit (buildPackages.python3Packages) sphinx;
       buildLlvmPackages = buildPackages.llvmPackages_39;
       llvmPackages = pkgs.llvmPackages_39;
     };
     ghc843 = callPackage ../development/compilers/ghc/8.4.3.nix {
-      bootPkgs = packages.ghc821Binary;
+      bootPkgs = mkBootPkgs "ghc843" "ghc821Binary";
       buildLlvmPackages = buildPackages.llvmPackages_5;
       llvmPackages = pkgs.llvmPackages_5;
     };
     ghc844 = callPackage ../development/compilers/ghc/8.4.4.nix {
-      bootPkgs = packages.ghc821Binary;
+      bootPkgs = mkBootPkgs "ghc844" "ghc821Binary";
       buildLlvmPackages = buildPackages.llvmPackages_5;
       llvmPackages = pkgs.llvmPackages_5;
     };
     ghc861 = callPackage ../development/compilers/ghc/8.6.1.nix {
-      bootPkgs = packages.ghc822;
+      bootPkgs = mkBootPkgs "ghc861" "ghc822";
       buildLlvmPackages = buildPackages.llvmPackages_6;
       llvmPackages = pkgs.llvmPackages_6;
     };
     ghc862 = callPackage ../development/compilers/ghc/8.6.2.nix {
-      bootPkgs = packages.ghc822;
+      bootPkgs = mkBootPkgs "ghc862" "ghc822";
       buildLlvmPackages = buildPackages.llvmPackages_6;
       llvmPackages = pkgs.llvmPackages_6;
     };
-    ghc863 = callPackage ../development/compilers/ghc/8.6.3.nix {
-      bootPkgs = packages.ghc822;
+    ghc863 = builtins.trace ''
+
+      !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+      ************************************ WARNING ***********************************
+      !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+               You are using GHC 8.6.3.  This version is known to
+               be busted on windows!  See GHC issue #16057.  Make
+               sure you revert commit
+                 ghc:ed86e3b531322f74d2c2d00d7ff8662b08fabde6
+               before using GHC 8.6.3 in any form on windows.
+
+               --
+               https://ghc.haskell.org/trac/ghc/ticket/16057
+
+      !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+      ************************************ WARNING ***********************************
+      !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+      '' callPackage ../development/compilers/ghc/8.6.3.nix {
+      bootPkgs = mkBootPkgs "ghc863" "ghc822";
       buildLlvmPackages = buildPackages.llvmPackages_6;
       llvmPackages = pkgs.llvmPackages_6;
     };
     ghcHEAD = callPackage ../development/compilers/ghc/head.nix {
-      bootPkgs = packages.ghc821Binary;
+      bootPkgs = mkBootPkgs "ghcHEAD" "ghc821Binary";
       buildLlvmPackages = buildPackages.llvmPackages_5;
       llvmPackages = pkgs.llvmPackages_5;
     };
