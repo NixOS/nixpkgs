@@ -75,6 +75,7 @@ rec {
 
     # Packages built with default Erlang version.
     erlang = packagesWith interpreters.erlang;
+    erlang_nox = packagesWith interpreters.erlang_nox;
     erlangR18 = packagesWith interpreters.erlangR18;
     erlangR19 = packagesWith interpreters.erlangR19;
     erlangR20 = packagesWith interpreters.erlangR20;
