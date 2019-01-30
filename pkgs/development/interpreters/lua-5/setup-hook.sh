@@ -11,24 +11,18 @@ nix_debug() {
 }
 
 addToLuaSearchPathWithCustomDelimiter() {
-    local delimiter="$1"
-    local varName="$2"
-    local pattern="$3"
-    # delete longest match starting from '?'
+    # local delimiter="$1"
+    local varName="$1"
+    local pattern="$2"
+    # delete longest match starting from
     local topDir="${pattern%%\?*}"
 
     # export only if the folder exists else LUA_PATH grows too big
-    if  [ -d "$topDir" ]; then
-        export "${varName}=${!varName:+${!varName}${delimiter}}${pattern}"
-    fi
-}
+    if  [ ! -d "$topDir" ]; then return; fi
+    # check for duplicate
+    if [[ $LUA_PATH = *"$pattern"* ]]; then return; fi
 
-addToLuaSearchPath() {
-    addToLuaSearchPathWithCustomDelimiter ";" "$@"
-}
-
-startLuaEnvHook() {
-    addToLuaPath "$1"
+    export "${varName}=${!varName:+${!varName};}${pattern}"
 }
 
 addToLuaPath() {
@@ -41,16 +35,16 @@ addToLuaPath() {
     cd "$dir"
     for pattern in @luapathsearchpaths@;
     do
-        addToLuaSearchPath LUA_PATH "$PWD/$pattern"
+        addToLuaSearchPathWithCustomDelimiter LUA_PATH "$PWD/$pattern"
     done
 
     # LUA_CPATH
     for pattern in @luacpathsearchpaths@;
     do
-        addToLuaSearchPath LUA_CPATH "$PWD/$pattern"
+        addToLuaSearchPathWithCustomDelimiter LUA_CPATH "$PWD/$pattern"
     done
     cd -
 }
 
-addEnvHooks "$hostOffset" startLuaEnvHook
+addEnvHooks "$hostOffset" addToLuaPath
 
