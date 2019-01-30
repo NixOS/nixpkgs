@@ -40,7 +40,7 @@ addToLuaPath() {
     do
         addToLuaSearchPathWithCustomDelimiter LUA_CPATH "$PWD/$pattern"
     done
-    cd -
+    cd - >/dev/null
 }
 
 addEnvHooks "$hostOffset" addToLuaPath
