@@ -7750,28 +7750,43 @@ in
   wabt = callPackage ../development/tools/wabt { };
 
   ### LUA MODULES
-
-  lua5_1 = callPackage ../development/interpreters/lua-5/5.1.nix { };
-  lua5_2 = callPackage ../development/interpreters/lua-5/5.2.nix { };
+  lua5_1 = callPackage ../development/interpreters/lua-5/5.1.nix {
+    self = lua5_1;
+  };
+  lua5_2 = callPackage ../development/interpreters/lua-5/5.2.nix {
+    self = lua5_2;
+  };
   lua5_2_compat = callPackage ../development/interpreters/lua-5/5.2.nix {
     compat = true;
+    self = lua5_2_compat;
   };
-  lua5_3 = callPackage ../development/interpreters/lua-5/5.3.nix { };
+  lua5_3 = callPackage ../development/interpreters/lua-5/5.3.nix {
+    self = lua5_3;
+  };
   lua5_3_compat = callPackage ../development/interpreters/lua-5/5.3.nix {
     compat = true;
+    self = lua5_3_compat;
   };
   lua5 = lua5_2_compat;
   lua = lua5;
 
-  lua51Packages = recurseIntoAttrs (callPackage ./lua-packages.nix { lua = lua5_1; });
-  lua52Packages = recurseIntoAttrs (callPackage ./lua-packages.nix { lua = lua5_2; });
-  lua53Packages = recurseIntoAttrs (callPackage ./lua-packages.nix { lua = lua5_3; });
-  luajitPackages = recurseIntoAttrs (callPackage ./lua-packages.nix { lua = luajit; });
+  lua51Packages = recurseIntoAttrs lua5_1.pkgs;
+  lua52Packages = recurseIntoAttrs lua5_2.pkgs;
+  lua53Packages = recurseIntoAttrs lua5_3.pkgs;
+  luajitPackages = recurseIntoAttrs luajit.pkgs;
 
   luaPackages = lua52Packages;
 
-  inherit (callPackages ../development/interpreters/luajit {})
-    luajit luajit_2_0 luajit_2_1;
+  # override instead ?
+  luajit_2_0 = callPackage ../development/interpreters/luajit/2.0.nix {
+    self = luajit_2_0;
+  };
+
+  luajit_2_1 = callPackage ../development/interpreters/luajit/2.1.nix {
+    self = luajit_2_1;
+  };
+
+  luajit = luajit_2_1;
 
   luarocks = luaPackages.luarocks;
   luarocks-nix = luaPackages.luarocks-nix;
