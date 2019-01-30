@@ -1,11 +1,11 @@
 { stdenv, fetchFromGitHub, pantheon, meson, ninja, pkgconfig, vala, desktop-file-utils
 , gtk3, glib, libaccounts-glib, libexif, libgee, geocode-glib, gexiv2,libgphoto2
-, granite, gst_all_1, libgudev, json-glib, libraw, librest, libsoup, sqlite
+, granite, gst_all_1, libgudev, json-glib, libraw, librest, libsoup, sqlite, python3
 , scour, webkitgtk, libwebp, appstream, libunity, wrapGAppsHook, gobject-introspection, elementary-icon-theme }:
 
 stdenv.mkDerivation rec {
   pname = "photos";
-  version = "2.6.1";
+  version = "2.6.2";
 
   name = "elementary-${pname}-${version}";
 
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "063h6jr0p8v46w8bppsss1zlphx21xqwylh57qbyd5xi71z4gl1v";
+    sha256 = "166a1jb85n67z6ffm5i0xzap407rv0r511lzh0gidkap1qy6pnmi";
   };
 
   passthru = {
@@ -30,6 +30,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkgconfig
+    python3
     vala
     wrapGAppsHook
   ];
@@ -65,9 +66,9 @@ stdenv.mkDerivation rec {
     "-Dplugins=false"
   ];
 
-  # This should be provided by a post_install.py script - See -> https://github.com/elementary/photos/pull/433
-  postInstall = ''
-    ${glib.dev}/bin/glib-compile-schemas $out/share/glib-2.0/schemas
+  postPatch = ''
+    chmod +x meson/post_install.py
+    patchShebangs meson/post_install.py
   '';
 
   meta =  with stdenv.lib; {
