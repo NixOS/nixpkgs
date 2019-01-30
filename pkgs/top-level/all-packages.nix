@@ -10311,9 +10311,14 @@ in
     else if stdenv.targetPlatform.useiOSPrebuilt then targetPackages.darwin.iosSdkPkgs.libraries or darwin.iosSdkPkgs.libraries
     else if name == "libSystem" then targetPackages.darwin.xcode
     else if name == "nblibc" then targetPackages.netbsdCross.libc
-    else throw "Unknown libc";
+    else if name == "wasilibc" then targetPackages.wasilibc
+    else throw "Unknown libc ${name}";
 
   libcCross = assert stdenv.targetPlatform != stdenv.buildPlatform; libcCrossChooser stdenv.targetPlatform.libc;
+
+  wasilibc = callPackages ../development/libraries/wasilibc {
+    stdenv = crossLibcStdenv;
+  };
 
   # Only supported on Linux, using glibc
   glibcLocales = if stdenv.hostPlatform.libc == "glibc" then callPackage ../development/libraries/glibc/locales.nix { } else null;

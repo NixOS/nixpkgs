@@ -30,6 +30,7 @@ rec {
       libc =
         /**/ if final.isDarwin              then "libSystem"
         else if final.isMinGW               then "msvcrt"
+        else if final.isWasi                then "wasilibc"
         else if final.isMusl                then "musl"
         else if final.isUClibc              then "uclibc"
         else if final.isAndroid             then "bionic"
@@ -62,7 +63,7 @@ rec {
           "netbsd" = "NetBSD";
           "freebsd" = "FreeBSD";
           "openbsd" = "OpenBSD";
-          "wasm" = "Wasm";
+          "wasi" = "Wasi";
         }.${final.parsed.kernel.name} or null;
 
          # uname -p

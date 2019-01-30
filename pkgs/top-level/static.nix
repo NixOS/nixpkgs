@@ -148,4 +148,16 @@ in {
     };
   };
 
+  llvmPackages_8 = super.llvmPackages_8 // {
+    libraries = super.llvmPackages_8.libraries // rec {
+      libcxxabi = super.llvmPackages_8.libraries.libcxxabi.override {
+        enableShared = false;
+      };
+      libcxx = super.llvmPackages_8.libraries.libcxx.override {
+        enableShared = false;
+        inherit libcxxabi;
+      };
+    };
+  };
+
 }

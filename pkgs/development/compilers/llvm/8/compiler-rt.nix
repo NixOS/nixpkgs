@@ -60,7 +60,11 @@ stdenv.mkDerivation rec {
     ln -s $out/lib/*/clang_rt.crtend-*.o $out/lib/crtend.o
     ln -s $out/lib/*/clang_rt.crtbegin_shared-*.o $out/lib/crtbeginS.o
     ln -s $out/lib/*/clang_rt.crtend_shared-*.o $out/lib/crtendS.o
+  '' + stdenv.lib.optionalString stdenv.hostPlatform.isWasm ''
+    ln -s $out/lib/*/* $out/lib
   '';
+
+  NIX_LDFLAGS = stdenv.lib.optionalString stdenv.hostPlatform.isWasm "--allow-undefined --no-entry";
 
   enableParallelBuilding = true;
 }

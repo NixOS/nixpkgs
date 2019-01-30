@@ -37,7 +37,8 @@ in lib.init bootStages ++ [
   # Run Packages
   (buildPackages: {
     inherit config;
-    overlays = overlays ++ crossOverlays;
+    overlays = overlays ++ crossOverlays
+      ++ (if crossSystem.isWasm then [(import ../../top-level/static.nix)] else []);
     selfBuild = false;
     stdenv = buildPackages.stdenv.override (old: rec {
       buildPlatform = localSystem;

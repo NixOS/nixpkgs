@@ -226,6 +226,7 @@ rec {
     elf = {};
     macho = {};
     pe = {};
+    wasm = {};
 
     unknown = {};
   };
@@ -268,6 +269,7 @@ rec {
     none    = { execFormat = unknown; families = { }; };
     openbsd = { execFormat = elf;     families = { inherit bsd; }; };
     solaris = { execFormat = elf;     families = { }; };
+    wasi    = { execFormat = wasm;    families = { }; };
     windows = { execFormat = pe;      families = { }; };
   } // { # aliases
     # 'darwin' is the kernel for all of them. We choose macOS by default.
@@ -376,6 +378,8 @@ rec {
         then { cpu = elemAt l 0;                      kernel = elemAt l 1; abi = elemAt l 2; }
       else if (elemAt l 2 == "mingw32") # autotools breaks on -gnu for window
         then { cpu = elemAt l 0; vendor = elemAt l 1; kernel = "windows";                    }
+      else if (elemAt l 2 == "wasi")
+        then { cpu = elemAt l 0; vendor = elemAt l 1; kernel = "wasi";                       }
       else if hasPrefix "netbsd" (elemAt l 2)
         then { cpu = elemAt l 0; vendor = elemAt l 1;    kernel = elemAt l 2;                }
       else if (elem (elemAt l 2) ["eabi" "eabihf" "elf"])
