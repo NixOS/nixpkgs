@@ -12,6 +12,7 @@
 , utillinux, alsaLib
 , bison, gperf
 , glib, gtk2, gtk3, dbus-glib
+, glibc
 , libXScrnSaver, libXcursor, libXtst, libGLU_combined
 , protobuf, speechd, libXdamage, cups
 , ffmpeg, libxslt, libxml2, at-spi2-core
@@ -162,6 +163,17 @@ let
         --replace \
           'return sandbox_binary;' \
           'return base::FilePath(GetDevelSandboxPath());'
+
+      substituteInPlace services/audio/audio_sandbox_hook_linux.cc \
+        --replace \
+          '/usr/share/alsa/' \
+          '${alsaLib}/share/alsa/' \
+        --replace \
+          '/usr/lib/x86_64-linux-gnu/gconv/' \
+          '${glibc}/lib/gconv/' \
+        --replace \
+          '/usr/share/locale/' \
+          '${glibc}/share/locale/'
 
       sed -i -e 's@"\(#!\)\?.*xdg-@"\1${xdg_utils}/bin/xdg-@' \
         chrome/browser/shell_integration_linux.cc
