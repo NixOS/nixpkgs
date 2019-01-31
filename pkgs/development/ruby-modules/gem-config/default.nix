@@ -23,7 +23,7 @@
 , cmake, libssh2, openssl, mysql, darwin, git, perl, pcre, gecode_3, curl
 , msgpack, qt59, libsodium, snappy, libossp_uuid, lxc, libpcap, xorg, gtk2, buildRubyGem
 , cairo, re2, rake, gobject-introspection, gdk_pixbuf, zeromq, czmq, graphicsmagick, libcxx
-, file, libvirt
+, file, libvirt, glib, vips
 , libselinux ? null, libsepol ? null
 }@args:
 
@@ -346,6 +346,22 @@ in
       "--with-ldflags=-L${ncurses.out}/lib"
     ];
   };
+
+  ruby-vips = attrs: {
+    postInstall = ''
+      cd "$(cat $out/nix-support/gem-meta/install-path)"
+
+      substituteInPlace lib/vips.rb \
+        --replace "glib-2.0" "${glib.out}/lib/libglib-2.0${stdenv.hostPlatform.extensions.sharedLibrary}"
+
+      substituteInPlace lib/vips.rb \
+        --replace "gobject-2.0" "${glib.out}/lib/libgobject-2.0${stdenv.hostPlatform.extensions.sharedLibrary}"
+
+      substituteInPlace lib/vips.rb \
+        --replace "vips_libname = 'vips'" "vips_libname = '${vips}/lib/libvips${stdenv.hostPlatform.extensions.sharedLibrary}'"
+    '';
+  };
+
   rugged = attrs: {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ cmake openssl libssh2 zlib ];
