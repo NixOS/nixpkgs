@@ -151,7 +151,7 @@ let
 
 
   loggingConf = (if mainCfg.logFormat != "none" then ''
-    ErrorLog ${mainCfg.logDir}/error_log
+    ErrorLog ${mainCfg.logDir}/error.log
 
     LogLevel notice
 
@@ -160,7 +160,7 @@ let
     LogFormat "%{Referer}i -> %U" referer
     LogFormat "%{User-agent}i" agent
 
-    CustomLog ${mainCfg.logDir}/access_log ${mainCfg.logFormat}
+    CustomLog ${mainCfg.logDir}/access.log ${mainCfg.logFormat}
   '' else ''
     ErrorLog /dev/null
   '');
@@ -261,8 +261,8 @@ let
     '' else ""}
 
     ${if !isMainServer && mainCfg.logPerVirtualHost then ''
-      ErrorLog ${mainCfg.logDir}/error_log-${cfg.hostName}
-      CustomLog ${mainCfg.logDir}/access_log-${cfg.hostName} ${cfg.logFormat}
+      ErrorLog ${mainCfg.logDir}/error-${cfg.hostName}.log
+      CustomLog ${mainCfg.logDir}/access-${cfg.hostName}.log ${cfg.logFormat}
     '' else ""}
 
     ${optionalString (robotsTxt != "") ''
