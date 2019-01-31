@@ -1614,6 +1614,8 @@ in {
 
   approvaltests = callPackage ../development/python-modules/approvaltests { };
 
+  apptools = callPackage ../development/python-modules/apptools {};
+
   apsw = callPackage ../development/python-modules/apsw {};
 
   astor = callPackage ../development/python-modules/astor {};
