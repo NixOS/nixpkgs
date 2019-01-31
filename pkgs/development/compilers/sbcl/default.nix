@@ -68,7 +68,8 @@ stdenv.mkDerivation rec {
     else
       # Fix software version retrieval
       ''
-        sed -e "s@/bin/uname@$(command -v uname)@g" -i src/code/*-os.lisp
+        sed -e "s@/bin/uname@$(command -v uname)@g" -i src/code/*-os.lisp \
+          src/code/run-program.lisp
       ''
     );
 
