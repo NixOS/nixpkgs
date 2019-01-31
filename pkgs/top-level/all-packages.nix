@@ -8898,6 +8898,8 @@ in
 
   omniorb = callPackage ../development/tools/omniorb { };
 
+  oldschool-runescape = callPackage ../games/oldschool-runescape { jre = jdk11; };
+
   opengrok = callPackage ../development/tools/misc/opengrok { };
 
   openocd = callPackage ../development/tools/misc/openocd { };
