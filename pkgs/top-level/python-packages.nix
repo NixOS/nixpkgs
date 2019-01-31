@@ -1773,6 +1773,8 @@ in {
 
   functools32 = callPackage ../development/python-modules/functools32 { };
 
+  future-fstrings = callPackage ../development/python-modules/future-fstrings { };
+
   gateone = callPackage ../development/python-modules/gateone { };
 
   # TODO: Remove after 19.03 is branched off:
@@ -3013,6 +3015,8 @@ in {
   };
 
   matrix-client = callPackage ../development/python-modules/matrix-client { };
+
+  mautrix-appservice = callPackage ../development/python-modules/mautrix-appservice { };
 
   maya = callPackage ../development/python-modules/maya { };
 
@@ -4426,6 +4430,10 @@ in {
   freezegun = callPackage ../development/python-modules/freezegun { };
 
   taskw = callPackage ../development/python-modules/taskw { };
+
+  telethon = callPackage ../development/python-modules/telethon { };
+
+  telethon-session-sqlalchemy = callPackage ../development/python-modules/telethon-session-sqlalchemy { };
 
   terminaltables = callPackage ../development/python-modules/terminaltables { };
 
