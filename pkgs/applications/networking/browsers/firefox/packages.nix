@@ -218,9 +218,9 @@ in rec {
         Or just use `tor-browser-bundle` package that packs this
         `tor-browser` back into a sanely-built bundle.
       '';
-      homepage = https://www.torproject.org/projects/torbrowser.html;
-      platforms = lib.platforms.linux;
-      license = lib.licenses.bsd3;
+      homepage = "https://www.torproject.org/projects/torbrowser.html";
+      platforms = lib.platforms.unix;
+      license = with lib.licenses; [ mpl20 bsd3 ];
     };
   });
 
