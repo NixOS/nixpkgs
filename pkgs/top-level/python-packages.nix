@@ -788,6 +788,8 @@ in {
     hdf5 = pkgs.hdf5.override { zlib = pkgs.zlib; };
   };
 
+  tableaudocumentapi = callPackage ../development/python-modules/tableaudocumentapi { };
+
   trueskill = callPackage ../development/python-modules/trueskill { };
 
   trustme = callPackage ../development/python-modules/trustme {};
