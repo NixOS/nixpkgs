@@ -49,7 +49,6 @@ in stdenv.mkDerivation {
       files = concatStringsSep " " [
         "*.pcm"
         "*.png"
-        "ZXMPPROOT.cer"
         "ZoomLauncher"
         "config-dump.sh"
         "timezones"
