@@ -8825,6 +8825,8 @@ in
 
   lit = callPackage ../development/tools/misc/lit { };
 
+  litecli = callPackage ../development/tools/database/litecli {};
+
   lsof = callPackage ../development/tools/misc/lsof { };
 
   ltrace = callPackage ../development/tools/misc/ltrace { };
