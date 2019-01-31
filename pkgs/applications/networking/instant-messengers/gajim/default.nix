@@ -1,27 +1,30 @@
-{ buildPythonApplication, lib, fetchurl, gettext, wrapGAppsHook
-, python, gtk3, gobject-introspection
-, nbxmpp, pyasn1, pygobject3, gnome3, dbus-python, pillow
+{ lib, fetchurl, gettext, wrapGAppsHook
+
+# Native dependencies
+, python3, gtk3, gobject-introspection, defaultIconTheme
+
+# Test dependencies
 , xvfb_run, dbus
+
+# Optional dependencies
 , enableJingle ? true, farstream, gstreamer, gst-plugins-base, gst-libav, gst-plugins-ugly
-, enableE2E ? true, pycrypto, python-gnupg
+, enableE2E ? true
 , enableSecrets ? true, libsecret
 , enableRST ? true, docutils
 , enableSpelling ? true, gspell
 , enableUPnP ? true, gupnp-igd
-, enableOmemoPluginDependencies ? true, python-axolotl, qrcode
-, extraPythonPackages ? pkgs: [], pythonPackages
+, enableOmemoPluginDependencies ? true
+, extraPythonPackages ? ps: []
 }:
 
-with lib;
-
-buildPythonApplication rec {
-  name = "gajim-${version}";
-  majorVersion = "1.0";
-  version = "${majorVersion}.3";
+python3.pkgs.buildPythonApplication rec {
+  pname = "gajim";
+  majorVersion = "1.1";
+  version = "${majorVersion}.2";
 
   src = fetchurl {
     url = "https://gajim.org/downloads/${majorVersion}/gajim-${version}.tar.bz2";
-    sha256 = "0ds4rqwfrpj89a489w6yih8gx5zi7qa4ffgld950fk7s0qxvcfnb";
+    sha256 = "1lx03cgi58z54xb7mhs6bc715lc00w5mpysf9n3q8zgn759fm0rj";
   };
 
   postPatch = ''
@@ -30,38 +33,38 @@ buildPythonApplication rec {
   '';
 
   buildInputs = [
-    gobject-introspection gtk3 gnome3.defaultIconTheme
-  ] ++ optionals enableJingle [ farstream gstreamer gst-plugins-base gst-libav gst-plugins-ugly ]
-    ++ optional enableSecrets libsecret
-    ++ optional enableSpelling gspell
-    ++ optional enableUPnP gupnp-igd;
+    gobject-introspection gtk3 defaultIconTheme
+  ] ++ lib.optionals enableJingle [ farstream gstreamer gst-plugins-base gst-libav gst-plugins-ugly ]
+    ++ lib.optional enableSecrets libsecret
+    ++ lib.optional enableSpelling gspell
+    ++ lib.optional enableUPnP gupnp-igd;
 
   nativeBuildInputs = [
     gettext wrapGAppsHook
   ];
 
-  propagatedBuildInputs = [
-    nbxmpp pyasn1 pygobject3 dbus-python pillow
-  ] ++ optionals enableE2E [ pycrypto python-gnupg ]
-    ++ optional enableRST docutils
-    ++ optionals enableOmemoPluginDependencies [ python-axolotl qrcode ]
-    ++ extraPythonPackages pythonPackages;
+  propagatedBuildInputs = with python3.pkgs; [
+    nbxmpp pyasn1 pygobject3 dbus-python pillow cssutils precis-i18n keyring
+  ] ++ lib.optionals enableE2E [ pycrypto python-gnupg ]
+    ++ lib.optional enableRST docutils
+    ++ lib.optionals enableOmemoPluginDependencies [ python-axolotl qrcode ]
+    ++ extraPythonPackages python3.pkgs;
 
   checkInputs = [ xvfb_run dbus.daemon ];
 
   checkPhase = ''
     xvfb-run dbus-run-session \
       --config-file=${dbus.daemon}/share/dbus-1/session.conf \
-      ${python.interpreter} test/runtests.py
+      ${python3.interpreter} setup.py test
   '';
 
   meta = {
     homepage = http://gajim.org/;
     description = "Jabber client written in PyGTK";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ raskin aszlig abbradar ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ raskin aszlig abbradar ];
     downloadPage = "http://gajim.org/downloads.php";
     updateWalker = true;
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

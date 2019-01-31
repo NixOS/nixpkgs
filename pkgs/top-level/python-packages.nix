@@ -3469,6 +3469,8 @@ in {
     name = "${python.libPrefix}-${pkgs.kmsxx.name}";
   });
 
+  precis-i18n = callPackage ../development/python-modules/precis-i18n { };
+
   pvlib = callPackage ../development/python-modules/pvlib { };
 
   pybase64 = callPackage ../development/python-modules/pybase64 { };
