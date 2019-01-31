@@ -5151,4 +5151,9 @@
     github = "mredaelli";
     name = "Massimo Redaelli";
   };
+  shmish111 = {
+    email = "shmish111@gmail.com";
+    github = "shmish111";
+    name = "David Smith";
+  };
 }

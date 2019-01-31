@@ -23289,4 +23289,6 @@ in
   newlibCross = callPackage ../development/misc/newlib {
     stdenv = crossLibcStdenv;
   };
+
+  bazel-remote = callPackage ../servers/bazel-remote {};
 }
