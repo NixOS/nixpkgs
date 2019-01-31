@@ -5837,6 +5837,8 @@ in {
 
   tracing = callPackage ../development/python-modules/tracing { };
 
+  traitsui = callPackage ../development/python-modules/traitsui { };
+
   translationstring = callPackage ../development/python-modules/translationstring { };
 
   ttystatus = callPackage ../development/python-modules/ttystatus { };
