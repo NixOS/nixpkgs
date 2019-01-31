@@ -1,14 +1,16 @@
-{ stdenv, python3Packages, fetchurl, gettext, chromaprint }:
+{ stdenv, python3Packages, fetchFromGitHub, gettext, chromaprint }:
 
 let
   pythonPackages = python3Packages;
 in pythonPackages.buildPythonApplication rec {
   pname = "picard";
-  version = "2.1";
+  version = "2.1.0";
 
-  src = fetchurl {
-    url = "http://ftp.musicbrainz.org/pub/musicbrainz/picard/picard-${version}.tar.gz";
-    sha256 = "054a37q5828q59jzml4npkyczsp891d89kawgsif9kwpi0dxa06c";
+  src = fetchFromGitHub {
+    owner = "metabrainz";
+    repo = pname;
+    rev = "release-${version}";
+    sha256 = "0wc1dfbl1mvah3qas336x5alkgwapg24vfca6c3ka2alwl7mnv1d";
   };
 
   buildInputs = [ gettext ];
