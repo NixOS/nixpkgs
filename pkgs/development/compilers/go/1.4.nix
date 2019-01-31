@@ -1,4 +1,4 @@
-C{ stdenv, lib, fetchurl, fetchpatch, tzdata, iana-etc, libcCross
+{ stdenv, lib, fetchurl, fetchpatch, tzdata, iana-etc, libcCross
 , pkgconfig
 , pcre
 , Security }:
