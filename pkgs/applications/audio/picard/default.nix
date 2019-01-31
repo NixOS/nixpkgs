@@ -31,8 +31,6 @@ in pythonPackages.buildPythonApplication rec {
     substituteInPlace setup.cfg --replace "‘" "'"
   '';
 
-  doCheck = false;
-
   meta = with stdenv.lib; {
     homepage = http://musicbrainz.org/doc/MusicBrainz_Picard;
     description = "The official MusicBrainz tagger";
