@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
     sha256 = "1xajhxad43izq9f7sbww1hlg42nayijy8xnp21kgpk09c6sw4wjf";
   };
 
+  separateDebugInfo = true;
+
   configureFlags = [
     "--disable-documentation"
   ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
