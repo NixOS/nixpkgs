@@ -88,13 +88,20 @@ let
   browserVersion = if isIceCatLike then icversion
                    else if isTorBrowserLike then tbversion
                    else ffversion;
+
+  browserPatches = [
+    ./env_var_for_system_dir.patch
+  ] ++ patches;
+
 in
 
 stdenv.mkDerivation rec {
   name = "${pname}-unwrapped-${version}";
   version = browserVersion;
 
-  inherit src unpackPhase patches meta;
+  inherit src unpackPhase meta;
+
+  patches = browserPatches;
 
   # Ignore trivial whitespace changes in patches, this fixes compatibility of
   # ./env_var_for_system_dir.patch with Firefox >=65 without having to track

@@ -4,10 +4,6 @@ let
 
   common = opts: callPackage (import ./common.nix opts) {};
 
-  nixpkgsPatches = [
-    ./env_var_for_system_dir.patch
-  ];
-
 in
 
 rec {
@@ -20,7 +16,7 @@ rec {
       sha512 = "39bx76whgf53rkfqqy8gfhd44wikh89zpnqr930v4grqg3v0pfr8mbvp7xzjjlf5r7bski0wxibn9vyyy273fp99zyj1w2m5ihh9aqh";
     };
 
-    patches = nixpkgsPatches ++ [
+    patches = [
       ./no-buildconfig-ffx65.patch
     ];
 
@@ -52,7 +48,7 @@ rec {
       sha512 = "bfca42668ca78a12a9fb56368f4aae5334b1f7a71966fbba4c32b9c5e6597aac79a6e340ac3966779d2d5563eb47c054ab33cc40bfb7306172138ccbd3adb2b9";
     };
 
-    patches = nixpkgsPatches ++ [
+    patches = [
       # this one is actually an omnipresent bug
       # https://bugzilla.mozilla.org/show_bug.cgi?id=1444519
       ./fix-pa-context-connect-retval.patch
@@ -77,7 +73,7 @@ rec {
       sha512 = "3n7l146gdjwhi0iq85awc0yykvi4x5m91mcylxa5mrq911bv6xgn2i92nzhgnhdilqap5218778vgvnalikzsh67irrncx1hy5f6iyx";
     };
 
-    patches = nixpkgsPatches ++ [
+    patches = [
       ./no-buildconfig-ffx65.patch
 
       # this one is actually an omnipresent bug
@@ -146,7 +142,7 @@ in rec {
       sha256 = "0icnl64nxcyf7dprpdpygxhabsvyhps8c3ixysj9bcdlj9q34ib1";
     };
 
-    patches = nixpkgsPatches ++ [
+    patches = [
       ./no-buildconfig.patch
     ];
   };
@@ -161,7 +157,7 @@ in rec {
       sha256 = "09fn54glqg1aa93hnz5zdcy07cps09dbni2b4200azh6nang630a";
     };
 
-    patches = nixpkgsPatches ++ [
+    patches = [
       # this one is actually an omnipresent bug
       # https://bugzilla.mozilla.org/show_bug.cgi?id=1444519
       ./fix-pa-context-connect-retval.patch
@@ -186,8 +182,6 @@ in rec {
       # set times for xpi archives
       find . -exec touch -d'2010-01-01 00:00' {} \;
     '';
-
-    patches = nixpkgsPatches;
 
     meta = (args.meta or {}) // {
       description = "A web browser built from TorBrowser source tree";
