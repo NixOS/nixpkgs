@@ -226,6 +226,8 @@ in {
 
   azure-common = callPackage ../development/python-modules/azure-common { };
 
+  azure-keyvault = callPackage ../development/python-modules/azure-keyvault { };
+
   azure-mgmt-common = callPackage ../development/python-modules/azure-mgmt-common { };
 
   azure-mgmt-compute = callPackage ../development/python-modules/azure-mgmt-compute { };
@@ -3107,6 +3109,10 @@ in {
       substituteInPlace setup.py --replace "TRANSITIONAL = False" "TRANSITIONAL = True"
     '';
   };
+
+  msrest = callPackage ../development/python-modules/msrest {};
+
+  msrestazure = callPackage ../development/python-modules/msrestazure {};
 
   msrplib = callPackage ../development/python-modules/msrplib { };
 
