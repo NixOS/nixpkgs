@@ -25,6 +25,20 @@ in
       description = "Hostname to use for the nginx vhost";
     };
 
+    package = mkOption {
+      type = types.package;
+      default = pkgs.roundcube;
+
+      example = literalExample ''
+        roundcube.withPlugins (plugins: [ plugins.persistent_login ])
+      '';
+
+      description = ''
+        The package which contains roundcube's sources. Can be overriden to create
+        an environment which contains roundcube and third-party plugins.
+      '';
+    };
+
     database = {
       username = mkOption {
         type = types.str;
@@ -86,7 +100,7 @@ in
           forceSSL = mkDefault true;
           enableACME = mkDefault true;
           locations."/" = {
-            root = pkgs.roundcube;
+            root = cfg.package;
             index = "index.php";
             extraConfig = ''
               location ~* \.php$ {
@@ -140,12 +154,12 @@ in
             ${pkgs.sudo}/bin/sudo -u ${pgSuperUser} psql postgres -c "create database ${cfg.database.dbname} with owner ${cfg.database.username}";
           fi
           PGPASSWORD=${cfg.database.password} ${pkgs.postgresql}/bin/psql -U ${cfg.database.username} \
-            -f ${pkgs.roundcube}/SQL/postgres.initial.sql \
+            -f ${cfg.package}/SQL/postgres.initial.sql \
             -h ${cfg.database.host} ${cfg.database.dbname}
           touch /var/lib/roundcube/db-created
         fi
 
-        ${pkgs.php}/bin/php ${pkgs.roundcube}/bin/update.sh
+        ${pkgs.php}/bin/php ${cfg.package}/bin/update.sh
       '';
       serviceConfig.Type = "oneshot";
     };
