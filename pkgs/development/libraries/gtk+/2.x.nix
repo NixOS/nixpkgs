@@ -32,10 +32,13 @@ stdenv.mkDerivation rec {
   patches = [
     ./2.0-immodules.cache.patch
     ./gtk2-theme-paths.patch
-  ] ++ optional stdenv.isDarwin (fetchpatch {
-    url = https://bug557780.bugzilla-attachments.gnome.org/attachment.cgi?id=306776;
-    sha256 = "0sp8f1r5c4j2nlnbqgv7s7nxa4cfwigvm033hvhb1ld652pjag4r";
-  });
+  ] ++ optionals stdenv.isDarwin [
+    (fetchpatch {
+      url = https://bug557780.bugzilla-attachments.gnome.org/attachment.cgi?id=306776;
+      sha256 = "0sp8f1r5c4j2nlnbqgv7s7nxa4cfwigvm033hvhb1ld652pjag4r";
+    })
+    ./2.0-darwin-x11.patch
+  ];
 
   propagatedBuildInputs = with xorg;
     [ glib cairo pango gdk_pixbuf atk ]

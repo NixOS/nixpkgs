@@ -39,6 +39,6 @@ stdenv.mkDerivation rec {
     homepage="http://www.tinc-vpn.org/";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ wkennington fpletz lassulus ];
+    maintainers = with maintainers; [ fpletz lassulus ];
   };
 }

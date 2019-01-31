@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     homepage = https://www.gnu.org/software/gss/;
     description = "Generic Security Service";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ bjg wkennington ];
+    maintainers = with maintainers; [ bjg ];
     platforms = platforms.all;
   };
 }

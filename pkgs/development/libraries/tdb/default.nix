@@ -38,7 +38,6 @@ stdenv.mkDerivation rec {
     '';
     homepage = https://tdb.samba.org/;
     license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ wkennington ];
     platforms = platforms.all;
   };
 }

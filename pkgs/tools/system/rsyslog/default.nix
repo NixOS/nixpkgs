@@ -110,6 +110,5 @@ stdenv.mkDerivation rec {
     description = "Enhanced syslog implementation";
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ wkennington ];
   };
 }

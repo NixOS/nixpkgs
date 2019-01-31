@@ -7,7 +7,7 @@ with import ../lib/testing.nix { inherit system pkgs; };
 with pkgs.lib;
 
 let
-  postgresql-versions = pkgs.callPackages ../../pkgs/servers/sql/postgresql { };
+  postgresql-versions = import ../../pkgs/servers/sql/postgresql pkgs pkgs;
   test-sql = pkgs.writeText "postgresql-test" ''
     CREATE EXTENSION pgcrypto; -- just to check if lib loading works
     CREATE TABLE sth (
@@ -29,8 +29,8 @@ let
 
     machine = {...}:
       {
-        services.postgresql.package = postgresql-package;
         services.postgresql.enable = true;
+        services.postgresql.package = postgresql-package;
 
         services.postgresqlBackup.enable = true;
         services.postgresqlBackup.databases = optional (!backup-all) "postgres";

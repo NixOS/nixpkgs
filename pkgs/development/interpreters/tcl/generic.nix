@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     homepage = http://www.tcl.tk/;
     license = licenses.tcltk;
     platforms = platforms.all;
-    maintainers = with maintainers; [ wkennington vrthra ];
+    maintainers = with maintainers; [ vrthra ];
   };
 
   passthru = rec {

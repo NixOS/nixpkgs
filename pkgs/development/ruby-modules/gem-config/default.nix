@@ -22,8 +22,9 @@
 , pkgconfig , ncurses, xapian_1_2_22, gpgme, utillinux, fetchpatch, tzdata, icu, libffi
 , cmake, libssh2, openssl, mysql, darwin, git, perl, pcre, gecode_3, curl
 , msgpack, qt59, libsodium, snappy, libossp_uuid, lxc, libpcap, xorg, gtk2, buildRubyGem
-, cairo, re2, rake, gobject-introspection, gdk_pixbuf, zeromq, graphicsmagick, libcxx, file
-, libselinux ? null, libsepol ? null, libvirt
+, cairo, re2, rake, gobject-introspection, gdk_pixbuf, zeromq, czmq, graphicsmagick, libcxx
+, file, libvirt
+, libselinux ? null, libsepol ? null
 }@args:
 
 let
@@ -301,6 +302,11 @@ in
     buildInputs = [ rainbow_rake ];
   };
 
+  rbczmq = { ... }: {
+    buildInputs = [ zeromq czmq ];
+    buildFlags = [ "--with-system-libs" ];
+  };
+
   rbnacl = spec:
     if lib.versionOlder spec.version "6.0.0" then {
       postInstall = ''
@@ -357,6 +363,10 @@ in
         sed -i -e "s/-arch i386//" Rakefile ext/scrypt/Rakefile
       '';
     } else {};
+
+  semian = attrs: {
+    buildInputs = [ openssl ];
+  };
 
   sequel_pg = attrs: {
     buildInputs = [ postgresql ];
@@ -415,10 +425,16 @@ in
 
   tzinfo = attrs: lib.optionalAttrs (lib.versionAtLeast attrs.version "1.0") {
     dontBuild = false;
-    postPatch = ''
-      substituteInPlace lib/tzinfo/zoneinfo_data_source.rb \
-        --replace "/usr/share/zoneinfo" "${tzdata}/share/zoneinfo"
-    '';
+    postPatch =
+      let
+        path = if lib.versionAtLeast attrs.version "2.0"
+               then "lib/tzinfo/data_sources/zoneinfo_data_source.rb"
+               else "lib/tzinfo/zoneinfo_data_source.rb";
+      in
+        ''
+          substituteInPlace ${path} \
+            --replace "/usr/share/zoneinfo" "${tzdata}/share/zoneinfo"
+        '';
   };
 
   uuid4r = attrs: {

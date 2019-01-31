@@ -84,6 +84,6 @@ stdenv.mkDerivation rec {
     description = "A software suite to create, edit, compose, or convert bitmap images";
     platforms = platforms.linux ++ platforms.darwin;
     license = licenses.asl20;
-    maintainers = with maintainers; [ the-kenny wkennington ];
+    maintainers = with maintainers; [ the-kenny ];
   };
 }

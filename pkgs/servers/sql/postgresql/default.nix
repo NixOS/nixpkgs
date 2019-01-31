@@ -1,14 +1,22 @@
-{ lib, stdenv, glibc, fetchurl, zlib, readline, libossp_uuid, openssl, libxml2, makeWrapper, tzdata, systemd, icu, pkgconfig }:
-
 let
 
-  common = { version, sha256, psqlSchema }:
+  generic =
+      # dependencies
+      { stdenv, lib, fetchurl, makeWrapper
+      , glibc, zlib, readline, openssl, icu, systemd, libossp_uuid
+      , pkgconfig, libxml2, tzdata
+
+      # for postgreql.pkgs
+      , this, self, newScope, buildEnv
+
+      # source specification
+      , version, sha256, psqlSchema
+    }:
   let
     atLeast = lib.versionAtLeast version;
-
-    # Build with ICU by default on versions that support it
     icuEnabled = atLeast "10";
-  in stdenv.mkDerivation (rec {
+
+  in stdenv.mkDerivation rec {
     name = "postgresql-${version}";
     inherit version;
 
@@ -97,50 +105,94 @@ let
     disallowedReferences = [ stdenv.cc ];
 
     passthru = {
-      inherit readline psqlSchema;
+      inherit readline psqlSchema version;
+
+      pkgs = let
+        scope = { postgresql = this; };
+        newSelf = self // scope;
+        newSuper = { callPackage = newScope (scope // this.pkgs); };
+      in import ./packages.nix newSelf newSuper;
+
+      withPackages = postgresqlWithPackages {
+                       inherit makeWrapper buildEnv;
+                       postgresql = this;
+                     }
+                     this.pkgs;
     };
 
     meta = with lib; {
       homepage    = https://www.postgresql.org;
       description = "A powerful, open source object-relational database system";
       license     = licenses.postgresql;
-      maintainers = with maintainers; [ ocharles thoughtpolice ];
+      maintainers = with maintainers; [ ocharles thoughtpolice danbst ];
       platforms   = platforms.unix;
       knownVulnerabilities = optional (!atLeast "9.4")
         "PostgreSQL versions older than 9.4 are not maintained anymore!";
     };
-  });
+  };
 
-in {
+  postgresqlWithPackages = { postgresql, makeWrapper, buildEnv }: pkgs: f: buildEnv {
+    name = "postgresql-and-plugins-${postgresql.version}";
+    paths = f pkgs ++ [
+        postgresql
+        postgresql.lib
+        postgresql.man   # in case user installs this into environment
+    ];
+    buildInputs = [ makeWrapper ];
 
-  postgresql_9_4 = common {
+    # We include /bin to ensure the $out/bin directory is created, which is
+    # needed because we'll be removing the files from that directory in postBuild
+    # below. See #22653
+    pathsToLink = ["/" "/bin"];
+
+    postBuild = ''
+      mkdir -p $out/bin
+      rm $out/bin/{pg_config,postgres,pg_ctl}
+      cp --target-directory=$out/bin ${postgresql}/bin/{postgres,pg_config,pg_ctl}
+      wrapProgram $out/bin/postgres --set NIX_PGLIBDIR $out/lib
+    '';
+  };
+
+in self: super: {
+
+  postgresql_9_4 = super.callPackage generic {
     version = "9.4.20";
     psqlSchema = "9.4";
     sha256 = "0zzqjz5jrn624hzh04drpj6axh30a9k6bgawid6rwk45nbfxicgf";
+    this = self.postgresql_9_4;
+    inherit self;
   };
 
-  postgresql_9_5 = common {
+  postgresql_9_5 = super.callPackage generic {
     version = "9.5.15";
     psqlSchema = "9.5";
     sha256 = "0i2lylgmsmy2g1ixlvl112fryp7jmrd0i2brk8sxb7vzzpg3znnv";
+    this = self.postgresql_9_5;
+    inherit self;
   };
 
-  postgresql_9_6 = common {
+  postgresql_9_6 = super.callPackage generic {
     version = "9.6.11";
     psqlSchema = "9.6";
     sha256 = "0c55akrkzqd6p6a8hr0338wk246hl76r9j16p4zn3s51d7f0l99q";
+    this = self.postgresql_9_6;
+    inherit self;
   };
 
-  postgresql_10 = common {
+  postgresql_10 = super.callPackage generic {
     version = "10.6";
     psqlSchema = "10.0";
     sha256 = "0jv26y3f10svrjxzsgqxg956c86b664azyk2wppzpa5x11pjga38";
+    this = self.postgresql_10;
+    inherit self;
   };
 
-  postgresql_11 = common {
+  postgresql_11 = super.callPackage generic {
     version = "11.1";
     psqlSchema = "11.1";
     sha256 = "026v0sicsh7avzi45waf8shcbhivyxmi7qgn9fd1x0vl520mx0ch";
+    this = self.postgresql_11;
+    inherit self;
   };
 
 }

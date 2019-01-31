@@ -4,6 +4,8 @@
 
 let
   executableName = "code" + lib.optionalString isInsiders "-insiders";
+  longName = "Visual Studio Code" + lib.optionalString isInsiders " - Insiders";
+  shortName = "Code" + lib.optionalString isInsiders " - Insiders";
 
   plat = {
     "i686-linux" = "linux-ia32";
@@ -45,12 +47,40 @@ in
 
     desktopItem = makeDesktopItem {
       name = executableName;
+      desktopName = longName;
+      comment = "Code Editing. Redefined.";
+      genericName = "Text Editor";
       exec = executableName;
       icon = "@out@/share/pixmaps/code.png";
-      comment = "Code editor redefined and optimized for building and debugging modern web and cloud applications";
-      desktopName = "Visual Studio Code" + lib.optionalString isInsiders " Insiders";
+      startupNotify = "true";
+      categories = "Utility;TextEditor;Development;IDE;";
+      mimeType = "text/plain;inode/directory;";
+      extraEntries = ''
+        StartupWMClass=${shortName}
+        Actions=new-empty-window;
+        Keywords=vscode;
+
+        [Desktop Action new-empty-window]
+        Name=New Empty Window
+        Exec=${executableName} --new-window %F
+        Icon=@out@/share/pixmaps/code.png
+      '';
+    };
+
+    urlHandlerDesktopItem = makeDesktopItem {
+      name = executableName + "-url-handler";
+      desktopName = longName + " - URL Handler";
+      comment = "Code Editing. Redefined.";
       genericName = "Text Editor";
-      categories = "GNOME;GTK;Utility;TextEditor;Development;";
+      exec = executableName + " --open-url %U";
+      icon = "@out@/share/pixmaps/code.png";
+      startupNotify = "true";
+      categories = "Utility;TextEditor;Development;IDE;";
+      mimeType = "x-scheme-handler/vscode;";
+      extraEntries = ''
+        NoDisplay=true
+        Keywords=vscode;
+      '';
     };
 
     buildInputs = if stdenv.hostPlatform.system == "x86_64-darwin"
@@ -72,6 +102,8 @@ in
 
         mkdir -p $out/share/applications
         substitute $desktopItem/share/applications/${executableName}.desktop $out/share/applications/${executableName}.desktop \
+          --subst-var out
+        substitute $urlHandlerDesktopItem/share/applications/${executableName}-url-handler.desktop $out/share/applications/${executableName}-url-handler.desktop \
           --subst-var out
 
         mkdir -p $out/share/pixmaps

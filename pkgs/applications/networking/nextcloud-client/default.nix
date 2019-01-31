@@ -44,7 +44,8 @@ stdenv.mkDerivation rec {
     $out/share/applications/nextcloud.desktop
 
     wrapProgram "$out/bin/nextcloud" \
-      --prefix LD_LIBRARY_PATH : ${stdenv.lib.makeLibraryPath [ libsecret ]}
+      --prefix LD_LIBRARY_PATH : ${stdenv.lib.makeLibraryPath [ libsecret ]} \
+      --prefix QT_PLUGIN_PATH : ${qtbase}/${qtbase.qtPluginPrefix}
   '';
 
   meta = with stdenv.lib; {

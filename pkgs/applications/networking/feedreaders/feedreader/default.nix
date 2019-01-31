@@ -1,20 +1,26 @@
-{ stdenv, fetchFromGitHub, meson, ninja, pkgconfig, vala_0_40, gettext, python3
+{ stdenv, fetchFromGitHub, fetchpatch, meson, ninja, pkgconfig, vala_0_40, gettext, python3
 , appstream-glib, desktop-file-utils, glibcLocales, wrapGAppsHook
 , curl, glib, gnome3, gst_all_1, json-glib, libnotify, libsecret, sqlite, gumbo
 }:
 
-let
-  pname = "FeedReader";
-  version = "2.6.1";
-in stdenv.mkDerivation {
-  name = "${pname}-${version}";
+stdenv.mkDerivation rec {
+  pname = "feedreader";
+  version = "2.6.2";
 
   src = fetchFromGitHub {
     owner = "jangernert";
     repo = pname;
-    rev = "v" + version;
-    sha256 = "01r00b2jrb12x46fvd207s5lkhc13kmzg0w1kqbdkwkwsrdzb0jy";
+    rev = "v${version}";
+    sha256 = "1x5milynfa27zyv2jkzyi7ikkszrvzki1hlzv8c2wvcmw60jqb8n";
   };
+
+  patches = [
+    # See: https://github.com/jangernert/FeedReader/pull/842
+    (fetchpatch {
+      url = "https://github.com/jangernert/FeedReader/commit/f4ce70932c4ddc91783309708402c7c42d627455.patch";
+      sha256 = "076fpjn973xg2m35lc6z4h7g5x8nb08sghg94glsqa8wh1ig2311";
+    })
+  ];
 
   nativeBuildInputs = [
     meson ninja pkgconfig vala_0_40 gettext appstream-glib desktop-file-utils
@@ -30,9 +36,6 @@ in stdenv.mkDerivation {
     gstreamer gst-plugins-base gst-plugins-good
   ]);
 
-  # TODO: fix https://github.com/NixOS/nixpkgs/issues/39547
-  LIBRARY_PATH = stdenv.lib.makeLibraryPath [ curl ];
-
   # vcs_tag function fails with UnicodeDecodeError
   LC_ALL = "en_US.UTF-8";
 
@@ -41,7 +44,7 @@ in stdenv.mkDerivation {
   '';
 
   meta = with stdenv.lib; {
-    description = "A modern desktop application designed to complement existing web-based RSS accounts.";
+    description = "A modern desktop application designed to complement existing web-based RSS accounts";
     homepage = https://jangernert.github.io/FeedReader/;
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ edwtjo ];

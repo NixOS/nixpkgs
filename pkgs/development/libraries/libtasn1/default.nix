@@ -24,7 +24,6 @@ stdenv.mkDerivation rec {
       portable, and only require an ANSI C89 platform.
     '';
     license = licenses.lgpl2Plus;
-    maintainers = with maintainers; [ wkennington ];
     platforms = platforms.all;
   };
 }

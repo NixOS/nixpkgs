@@ -87,6 +87,11 @@ stdenv.mkDerivation rec {
 
   inherit src unpackPhase patches meta;
 
+  # Ignore trivial whitespace changes in patches, this fixes compatibility of
+  # ./env_var_for_system_dir.patch with Firefox >=65 without having to track
+  # two patches.
+  patchFlags = [ "-p1" "-l" ];
+
   buildInputs = [
     gtk2 perl zip libIDL libjpeg zlib bzip2
     dbus dbus-glib pango freetype fontconfig xorg.libXi xorg.libXcursor

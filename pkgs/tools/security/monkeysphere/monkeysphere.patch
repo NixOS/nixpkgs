@@ -28,5 +28,17 @@ diff --git a/src/share/keytrans b/src/share/keytrans
  
  # keytrans: this is an RSA key translation utility; it is capable of
  # transforming RSA keys (both public keys and secret keys) between
+diff --git a/tests/basic b/tests/basic
+--- a/tests/basic
++++ b/tests/basic
+@@ -343,7 +340,7 @@ if [ "$MONKEYSPHERE_TEST_USE_ED25519" = true ]; then
+     echo "### generating ed25519 key for testuser..."
+     # from the imported secret key
+     USER_FPR=8A4B353B4CBA6F30625498BAE00B5EEEBA79B482
+-    gpg --quick-add-key "$USER_FPR" ed25519 auth 2d
++    gpg --no-tty --quick-add-key "$USER_FPR" ed25519 auth 2d
+ else
+     echo "### generating standard monkeysphere key for testuser..."
+     monkeysphere gen-subkey
 -- 
 2.16.3

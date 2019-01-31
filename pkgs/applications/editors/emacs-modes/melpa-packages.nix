@@ -213,6 +213,13 @@ self:
       # upstream issue: missing file header
       qiita = markBroken super.qiita;
 
+      racer = super.racer.overrideAttrs (attrs: {
+        postPatch = attrs.postPatch or "" + ''
+          substituteInPlace racer.el \
+            --replace /usr/local/src/rust/src ${external.rustPlatform.rustcSrc}
+        '';
+      });
+
       # upstream issue: missing file footer
       seoul256-theme = markBroken super.seoul256-theme;
 

@@ -118,7 +118,6 @@ mapAliases ({
   googleAuthenticator = google-authenticator; # added 2016-10-16
   grantlee5 = libsForQt5.grantlee;  # added 2015-12-19
   gsettings_desktop_schemas = gsettings-desktop-schemas; # added 2018-02-25
-  gst_ffmpeg = gst-ffmpeg;  # added 2017-02
   gst_plugins_bad = gst-plugins-bad;  # added 2017-02
   gst_plugins_base = gst-plugins-base;  # added 2017-02
   gst_plugins_good = gst-plugins-good;  # added 2017-02
@@ -240,6 +239,21 @@ mapAliases ({
   postgresql95 = postgresql_9_5;
   postgresql96 = postgresql_9_6;
   postgresql100 = throw "deprecated 2018-10-21: use postgresql_10 instead";
+  # postgresql plugins
+  pgjwt = postgresqlPackages.pgjwt;
+  pg_repack = postgresqlPackages.pg_repack;
+  pgroonga = postgresqlPackages.pgroonga;
+  pg_similarity = postgresqlPackages.pg_similarity;
+  pgtap = postgresqlPackages.pgtap;
+  plv8 = postgresqlPackages.plv8;
+  timescaledb = postgresqlPackages.timescaledb;
+  tsearch_extras = postgresqlPackages.tsearch_extras;
+  cstore_fdw = postgresqlPackages.cstore_fdw;
+  pg_hll = postgresqlPackages.pg_hll;
+  pg_cron = postgresqlPackages.pg_cron;
+  pg_topn = postgresqlPackages.pg_topn;
+  postgis = postgresqlPackages.postgis;
+  # end
   procps-ng = procps; # added 2018-06-08
   prometheus-statsd-bridge = prometheus-statsd-exporter;  # added 2017-08-27
   pulseaudioLight = pulseaudio; # added 2018-04-25

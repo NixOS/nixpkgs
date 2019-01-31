@@ -75,6 +75,6 @@ stdenv.mkDerivation rec {
     homepage = http://jackaudio.org;
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ goibhniu wkennington ];
+    maintainers = with maintainers; [ goibhniu ];
   };
 }

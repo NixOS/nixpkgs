@@ -180,9 +180,7 @@ rec {
            "__impureHostDeps" "__propagatedImpureHostDeps"
            "sandboxProfile" "propagatedSandboxProfile"])
         // {
-          # A hack to make `nix-env -qa` and `nix search` ignore broken packages.
-          # TODO(@oxij): remove this assert when something like NixOS/nix#1771 gets merged into nix.
-          name = assert validity.handled; computedName + lib.optionalString
+          name = computedName + lib.optionalString
             # Fixed-output derivations like source tarballs shouldn't get a host
             # suffix. But we have some weird ones with run-time deps that are
             # just used for their side-affects. Those might as well since the

@@ -18,6 +18,5 @@ stdenv.mkDerivation rec {
     description = "Minimalistic C client for Redis >= 1.2";
     license = licenses.bsd3;
     platforms = platforms.all;
-    maintainers = with maintainers; [ wkennington ];
   };
 }

@@ -113,7 +113,7 @@ stdenv.mkDerivation {
 
     platforms = (platforms.unix ++ platforms.windows);
     badPlatforms = stdenv.lib.optional (versionOlder version "1.59") "aarch64-linux";
-    maintainers = with maintainers; [ peti wkennington ];
+    maintainers = with maintainers; [ peti ];
   };
 
   preConfigure = ''

@@ -1,11 +1,11 @@
 { stdenv, fetchurl, ncurses, pcre, fetchpatch }:
 
 let
-  version = "5.6.2";
+  version = "5.7";
 
   documentation = fetchurl {
     url = "mirror://sourceforge/zsh/zsh-${version}-doc.tar.xz";
-    sha256 = "05014rg6hkwiv1p56iij8wn2rghmwjxs5qsj3d3xigbwaikk55wq";
+    sha256 = "0pgisyi82pg5mycx1k7vfx9hwzl6zq00r5s9v91lg4gqisvlvagh";
   };
 
 in
@@ -15,14 +15,14 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "mirror://sourceforge/zsh/zsh-${version}.tar.xz";
-    sha256 = "17iffliqcj4hv91g0bd2sxsyfcz51mfyh97sp2iyrs2p0mndc2x5";
+    sha256 = "04ynid3ggvy6i5c26bk52mq6x5vyrdwgryid9hggmnb1nf8b41vq";
   };
 
   patches = [
     (fetchpatch {
-      name = "search-xdg-data-dirs.patch";
-      url = https://github.com/zsh-users/zsh/commit/624219e0e4cbfdfb286e707bd2853f2d7b6a4a7d.patch;
-      sha256 = "0i0g7dc0px57vpklm1f4w20vyc92nv15y09r5clvib2kjkxjy2cf";
+      name = "vcs_info.patch";
+      url = "https://git.archlinux.org/svntogit/packages.git/plain/trunk/vcs_info.patch?h=packages/zsh&id=1b7537ff5343819b3110a76bbdd2a1bf9ef80c4a";
+      sha256 = "0rc63cdc0qzhmj2dp5jnmxgyl5c47w857s8379fq36z8g0bi3rwq";
       excludes = [ "ChangeLog" ];
     })
   ];
