@@ -52,6 +52,38 @@ rec {
                              else self.callHackage;
       in generateExprs name src {}) overrides;
 
+  # : Map Name Args -> HaskellPackageOverrideSet
+  #
+  # Args is the type of arguments accepted by genericCallCabal2nix,
+  # except that pname is defaulted to the attrname. The resulting
+  # package override set will use genericCallCabal2nix to set packages
+  # based on the Hackage or src details you provide.
+  #
+  # Example:
+  #
+  #     haskellPackages.extend(genericSourceOverrides {
+  #       # Gets foo from Hackage, using your sha256 for the tarball.
+  #       foo.version = "0.1.0.0";
+  #       foo.sha256 = "...";
+  #
+  #       # Gets bar from Hackage, using all-cabal-hashes for sha256 and the cabal file.
+  #       bar.version = "0.1.0.0";
+  #
+  #       # Gets foobar from Hackage, using all-cabal-hashes for the
+  #       # sha256, but the specified revision for the cabal file.
+  #       foobar.version = "0.1.0.0";
+  #       foobar.revision = "2";
+  #       foobar.revisionSha256 = "...";
+  #
+  #       # Builds baz from a custom source.
+  #       baz.src = fetchFromGitHub { ... };
+  #     })
+  genericSourceOverrides =
+    overrides: self: super:
+      lib.mapAttrs
+        (pname: settings: self.genericCallCabal2nix ({ inherit pname; } // settings) {})
+        overrides;
+
   /* doCoverage modifies a haskell package to enable the generation
      and installation of a coverage report.
 

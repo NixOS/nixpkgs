@@ -136,18 +136,6 @@ let
       '';
   };
 
-  all-cabal-hashes-component = name: version: pkgs.runCommand "all-cabal-hashes-component-${name}-${version}" {} ''
-    tar --wildcards -xzvf ${all-cabal-hashes} \*/${name}/${version}/${name}.{json,cabal}
-    mkdir -p $out
-    mv */${name}/${version}/${name}.{json,cabal} $out
-  '';
-
-  hackage2nix = name: version: let component = all-cabal-hashes-component name version; in self.haskellSrc2nix {
-    name   = "${name}-${version}";
-    sha256 = ''$(sed -e 's/.*"SHA256":"//' -e 's/".*$//' "${component}/${name}.json")'';
-    src    = "${component}/${name}.cabal";
-  };
-
   # Adds a nix file as an input to the haskell derivation it
   # produces. This is useful for callHackage / callCabal2nix to
   # prevent the generated default.nix from being garbage collected
@@ -168,42 +156,16 @@ let
       };
     });
 
+  cabal2nixGenerators = callPackage ./cabal2nix-generators.nix { inherit all-cabal-hashes self overrideCabal; };
+
 in package-set { inherit pkgs stdenv callPackage; } self // {
 
-    inherit mkDerivation callPackage haskellSrc2nix hackage2nix buildHaskellPackages;
+    inherit mkDerivation callPackage haskellSrc2nix buildHaskellPackages;
 
     inherit (haskellLib) packageSourceOverrides;
 
-    callHackage = name: version: callPackageKeepDeriver (self.hackage2nix name version);
-
-    # This function does not depend on all-cabal-hashes and therefore will work
-    # for any version that has been released on hackage as opposed to only
-    # versions released before whatever version of all-cabal-hashes you happen
-    # to be currently using.
-    callHackageDirect = {pkg, ver, sha256}@args:
-      let pkgver = "${pkg}-${ver}";
-      in self.callCabal2nix pkg (pkgs.fetchzip {
-           url = "http://hackage.haskell.org/package/${pkgver}/${pkgver}.tar.gz";
-           inherit sha256;
-         });
-
-    # Creates a Haskell package from a source package by calling cabal2nix on the source.
-    callCabal2nixWithOptions = name: src: extraCabal2nixOptions: args:
-      let
-        filter = path: type:
-                   pkgs.lib.hasSuffix "${name}.cabal" path ||
-                   baseNameOf path == "package.yaml";
-        expr = self.haskellSrc2nix {
-          inherit name extraCabal2nixOptions;
-          src = if pkgs.lib.canCleanSource src
-                  then pkgs.lib.cleanSourceWith { inherit src filter; }
-                else src;
-        };
-      in overrideCabal (callPackageKeepDeriver expr args) (orig: {
-           inherit src;
-         });
-
-    callCabal2nix = name: src: args: self.callCabal2nixWithOptions name src "" args;
+    inherit (cabal2nixGenerators) genericHackage2nix hackage2nix genericCallCabal2nix
+      callHackageDirect callHackage callCabal2nixWithOptions callCabal2nix;
 
     # : { root : Path
     #   , name : Defaulted String
