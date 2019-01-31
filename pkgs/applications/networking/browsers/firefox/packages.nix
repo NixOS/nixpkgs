@@ -39,6 +39,11 @@ rec {
     };
   };
 
+  # Do not remove. This is the last version of Firefox that supports
+  # the old plugins. While this package is unsafe to use for browsing
+  # the web, there are many old useful plugins targeting offline
+  # activities (e.g. ebook readers, syncronous translation, etc) that
+  # will probably never be ported to WebExtensions API.
   firefox-esr-52 = common rec {
     pname = "firefox-esr";
     ffversion = "52.9.0esr";
@@ -146,6 +151,7 @@ in rec {
     ];
   };
 
+  # Similarly to firefox-esr-52 above.
   icecat-52 = iccommon rec {
     ffversion = "52.6.0";
     icversion = "${ffversion}-gnu1";
