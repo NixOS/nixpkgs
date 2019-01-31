@@ -13,6 +13,12 @@ python3Packages.buildPythonApplication rec {
     sha256 = "0s5a6r5q09144cc5169snwis5i2jrh3z2g4mw9wi2fsjxyhgpwq5";
   };
 
+  # fixes tests https://github.com/dbcli/litecli/pull/53
+  postPatch = ''
+    substituteInPlace litecli/main.py \
+      --replace 'except FileNotFoundError:' 'except (FileNotFoundError, OSError):'
+  '';
+
   propagatedBuildInputs = with python3Packages; [
     cli-helpers
     click
@@ -22,8 +28,16 @@ python3Packages.buildPythonApplication rec {
     sqlparse
   ];
 
-  #Checks are failing due to missing TTY, which won't exist.
-  doCheck = false;
+  checkInputs = with python3Packages; [
+    pytest
+    mock
+  ];
+
+  preCheck = ''
+    export XDG_CONFIG_HOME=$TMP
+    # add missing file
+    echo "litecli is awesome!" > tests/test.txt
+  '';
 
   meta = with lib; {
     description = "Command-line interface for SQLite";
