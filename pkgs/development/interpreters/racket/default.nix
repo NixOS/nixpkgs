@@ -4,6 +4,8 @@
 , gtk3
 , libedit, libffi
 , libiconv
+, libGL
+, libGLU
 , libjpeg
 , libpng, libtool, mpfr, openssl, pango, poppler
 , readline, sqlite
@@ -27,6 +29,8 @@ let
     gtk3
     gsettings-desktop-schemas
     libedit
+    libGL
+    libGLU
     libjpeg
     libpng
     mpfr
