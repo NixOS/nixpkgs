@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "font-manager";
-  version = "0.7.4.1";
+  version = "0.7.4.2";
 
   src = fetchFromGitHub {
     owner = "FontManager";
     repo = "master";
     rev = version;
-    sha256 = "1zy419zzc95h4gxvl88acqjbwlnmwybj23rx3vkc62j3v3w4nlay";
+    sha256 = "15814czap0qg2h9nkcn9fg4i4xxa1lgw1vi6h3hi242qfwc7fh3i";
   };
 
   nativeBuildInputs = [
@@ -47,6 +47,10 @@ stdenv.mkDerivation rec {
   postPatch = ''
     chmod +x meson_post_install.py
     patchShebangs meson_post_install.py
+  '';
+
+  postInstall = ''
+    rm $out/share/applications/mimeinfo.cache
   '';
 
   meta = {
