@@ -5,7 +5,7 @@ rec {
 
   description = ''Tool for building up an xml dom of an excel spreadsheet nicely.'';
 
-  deps = [ args."alexandria" args."babel" args."buildnode" args."cl-interpol" args."cl-ppcre" args."cl-unicode" args."closer-mop" args."closure-common" args."closure-html" args."collectors" args."cxml" args."cxml-dom" args."cxml-klacks" args."cxml-test" args."cxml-xml" args."flexi-streams" args."iterate" args."named-readtables" args."puri" args."split-sequence" args."swank" args."symbol-munger" args."trivial-features" args."trivial-gray-streams" ];
+  deps = [ args."alexandria" args."babel" args."buildnode" args."cl-interpol" args."cl-ppcre" args."cl-unicode" args."closer-mop" args."closure-common" args."closure-html" args."collectors" args."cxml" args."flexi-streams" args."iterate" args."named-readtables" args."puri" args."split-sequence" args."swank" args."symbol-munger" args."trivial-features" args."trivial-gray-streams" ];
 
   src = fetchurl {
     url = ''http://beta.quicklisp.org/archive/buildnode/2017-04-03/buildnode-20170403-git.tgz'';
@@ -31,8 +31,6 @@ rec {
      (NAME closure-common FILENAME closure-common)
      (NAME closure-html FILENAME closure-html)
      (NAME collectors FILENAME collectors) (NAME cxml FILENAME cxml)
-     (NAME cxml-dom FILENAME cxml-dom) (NAME cxml-klacks FILENAME cxml-klacks)
-     (NAME cxml-test FILENAME cxml-test) (NAME cxml-xml FILENAME cxml-xml)
      (NAME flexi-streams FILENAME flexi-streams)
      (NAME iterate FILENAME iterate)
      (NAME named-readtables FILENAME named-readtables)
@@ -42,9 +40,9 @@ rec {
      (NAME trivial-gray-streams FILENAME trivial-gray-streams))
     DEPENDENCIES
     (alexandria babel buildnode cl-interpol cl-ppcre cl-unicode closer-mop
-     closure-common closure-html collectors cxml cxml-dom cxml-klacks cxml-test
-     cxml-xml flexi-streams iterate named-readtables puri split-sequence swank
-     symbol-munger trivial-features trivial-gray-streams)
+     closure-common closure-html collectors cxml flexi-streams iterate
+     named-readtables puri split-sequence swank symbol-munger trivial-features
+     trivial-gray-streams)
     VERSION buildnode-20170403-git SIBLINGS
     (buildnode-excel buildnode-html5 buildnode-kml buildnode-xul buildnode)
     PARASITES NIL) */
