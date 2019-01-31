@@ -400,6 +400,8 @@ in {
 
   grandalf = callPackage ../development/python-modules/grandalf { };
 
+  gprof2dot = callPackage ../development/python-modules/gprof2dot { };
+
   gsd = callPackage ../development/python-modules/gsd { };
 
   gssapi = callPackage ../development/python-modules/gssapi { };
