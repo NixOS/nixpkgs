@@ -2402,6 +2402,8 @@ in {
 
   entrypoints = callPackage ../development/python-modules/entrypoints { };
 
+  envisage = callPackage ../development/python-modules/envisage { };
+
   enzyme = callPackage ../development/python-modules/enzyme {};
 
   escapism = callPackage ../development/python-modules/escapism { };
