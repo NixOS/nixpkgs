@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, fetchpatch, tzdata, iana-etc, libcCross
+C{ stdenv, lib, fetchurl, fetchpatch, tzdata, iana-etc, libcCross
 , pkgconfig
 , pcre
 , Security }:
@@ -139,6 +139,7 @@ stdenv.mkDerivation rec {
   # The go build actually checks for CC=*/clang and does something different, so we don't
   # just want the generic `cc` here.
   CC = if stdenv.isDarwin then "clang" else "cc";
+  AR = "${stdenv.cc.targetPrefix}ar";
 
   installPhase = ''
     mkdir -p "$out/bin"
