@@ -5,15 +5,12 @@
 
 let
   arch = if stdenv.hostPlatform.system == "x86_64-linux" then "x64"
-    else if stdenv.hostPlatform.system == "i686-linux" then "x86"
     else throw "Spideroak client for: ${stdenv.hostPlatform.system} not supported!";
 
   interpreter = if stdenv.hostPlatform.system == "x86_64-linux" then "ld-linux-x86-64.so.2"
-    else if stdenv.hostPlatform.system == "i686-linux" then "ld-linux.so.2"
     else throw "Spideroak client for: ${stdenv.hostPlatform.system} not supported!";
 
-  sha256 = if stdenv.hostPlatform.system == "x86_64-linux" then "a88e5a8fe4a565ac500668bd53cf5784752d7c9253304ddce39ee7b01d078533"
-    else if stdenv.hostPlatform.system == "i686-linux" then "668f3b83a974a3877d16c8743c233a427ea0a44ab84b7f9aec19a2995db66c16"
+  sha256 = if stdenv.hostPlatform.system == "x86_64-linux" then "a54f2fd298a673602e9583b8f65d165b3e14b0645a27049e4a269074a00f5793"
     else throw "Spideroak client for: ${stdenv.hostPlatform.system} not supported!";
 
   ldpath = stdenv.lib.makeLibraryPath [
@@ -21,7 +18,7 @@ let
     libX11 libXext libXrender zlib
   ];
 
-  version = "7.1.0";
+  version = "7.3.0";
 
 in stdenv.mkDerivation {
   name = "spideroak-${version}";
