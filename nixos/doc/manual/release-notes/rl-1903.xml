@@ -432,6 +432,12 @@
    </listitem>
    <listitem>
      <para>
+       The httpd service now saves log files with a .log file extension by default for
+       easier integration with the logrotate service.
+     </para>
+   </listitem>
+   <listitem>
+     <para>
        The owncloud server packages and httpd subservice module were removed
        from nixpkgs due to the lack of maintainers.
      </para>
