@@ -17,11 +17,13 @@ in {
   config = mkIf cfg.enable {
       environment.systemPackages = [ singularity ];
       security.wrappers.singularity-suid.source = "${singularity}/libexec/singularity/bin/starter-suid.orig";
-      systemd.tmpfiles.rules = [ "d /var/singularity/mnt/session 0770 root root -"
-                                 "d /var/singularity/mnt/final 0770 root root -"
-                                 "d /var/singularity/mnt/overlay 0770 root root -"
-                                 "d /var/singularity/mnt/container 0770 root root -"
-                                 "d /var/singularity/mnt/source 0770 root root -"];
+      systemd.tmpfiles.rules = [
+        "d /var/singularity/mnt/session 0770 root root -"
+        "d /var/singularity/mnt/final 0770 root root -"
+        "d /var/singularity/mnt/overlay 0770 root root -"
+        "d /var/singularity/mnt/container 0770 root root -"
+        "d /var/singularity/mnt/source 0770 root root -"
+      ];
   };
 
 }
