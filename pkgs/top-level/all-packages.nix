@@ -7221,6 +7221,12 @@ in
     inherit (darwin.apple_sdk.frameworks) CoreServices ApplicationServices;
   };
 
+  julia_11 = callPackage ../development/compilers/julia/1.1.nix {
+    gmp = gmp6;
+    openblas = openblasCompat;
+    inherit (darwin.apple_sdk.frameworks) CoreServices ApplicationServices;
+  };
+
   julia_1 = julia_10;
   julia = julia_1;
 
