@@ -73,10 +73,10 @@ let
     features = kernelFeatures; # Ensure we know of all extra patches, etc.
   };
 
-  # extra config in legacy string format
-  extraConfig = extraConfig + lib.optionalString (stdenv.hostPlatform.platform ? kernelExtraConfig) stdenv.hostPlatform.platform.kernelExtraConfig;
-
-  intermediateNixConfig = configfile.moduleStructuredConfig.intermediateNixConfig;
+  intermediateNixConfig = configfile.moduleStructuredConfig.intermediateNixConfig
+    # extra config in legacy string format
+    + extraConfig
+    + lib.optionalString (stdenv.hostPlatform.platform ? kernelExtraConfig) stdenv.hostPlatform.platform.kernelExtraConfig;
 
   structuredConfigFromPatches =
         map ({extraStructuredConfig ? {}, ...}: {settings=extraStructuredConfig;}) kernelPatches;
