@@ -4143,6 +4143,8 @@ in {
 
   maya = callPackage ../development/python-modules/maya { };
 
+  mayavi = callPackage ../development/python-modules/mayavi { };
+
   mccabe = callPackage ../development/python-modules/mccabe { };
 
   mechanize = callPackage ../development/python-modules/mechanize { };
