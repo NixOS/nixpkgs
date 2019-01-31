@@ -1879,6 +1879,8 @@ in {
 
   ipfsapi = callPackage ../development/python-modules/ipfsapi { };
 
+  isbnlib = callPackage ../development/python-modules/isbnlib { };
+
   itsdangerous = callPackage ../development/python-modules/itsdangerous { };
 
   iniparse = callPackage ../development/python-modules/iniparse { };
