@@ -6671,6 +6671,11 @@ in {
 
   visitor = callPackage ../development/python-modules/visitor { };
 
+  vtk = toPythonModule (pkgs.vtk.override {
+    inherit (self) python;
+    enablePython = true;
+  });
+
   whitenoise = callPackage ../development/python-modules/whitenoise { };
 
   XlsxWriter = callPackage ../development/python-modules/XlsxWriter { };
