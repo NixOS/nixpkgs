@@ -16,6 +16,7 @@
 , enableSharedLibraries ? true
 # Mesa requires AMDGPU target
 , enableTargets ? [ stdenv.hostPlatform stdenv.targetPlatform "AMDGPU" ]
+, enableExperimentalTargets ? [ "WebAssembly" ]
 , enablePFM ? !stdenv.isDarwin
 }:
 
@@ -89,7 +90,7 @@ in stdenv.mkDerivation (rec {
     "-DLLVM_HOST_TRIPLE=${stdenv.hostPlatform.config}"
     "-DLLVM_DEFAULT_TARGET_TRIPLE=${stdenv.targetPlatform.config}"
     "-DLLVM_TARGETS_TO_BUILD=${llvmBackendList enableTargets}"
-    "-DLLVM_EXPERIMENTAL_TARGETS_TO_BUILD=WebAssembly"
+    "-DLLVM_EXPERIMENTAL_TARGETS_TO_BUILD=${llvmBackendList enableExperimentalTargets}"
     "-DLLVM_ENABLE_DUMP=ON"
   ] ++ optionals enableSharedLibraries [
     "-DLLVM_LINK_LLVM_DYLIB=ON"
