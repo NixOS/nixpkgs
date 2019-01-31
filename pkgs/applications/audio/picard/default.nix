@@ -4,13 +4,13 @@ let
   pythonPackages = python3Packages;
 in pythonPackages.buildPythonApplication rec {
   pname = "picard";
-  version = "2.1.0";
+  version = "2.1.2";
 
   src = fetchFromGitHub {
     owner = "metabrainz";
     repo = pname;
     rev = "release-${version}";
-    sha256 = "0wc1dfbl1mvah3qas336x5alkgwapg24vfca6c3ka2alwl7mnv1d";
+    sha256 = "1p2bvfzby0nk1vh04yfmsvjcldgkj6m6s1hcv9v13hc8q1cbdfk5";
   };
 
   buildInputs = [ gettext ];
