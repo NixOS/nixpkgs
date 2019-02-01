@@ -19598,9 +19598,7 @@ in
   thonny = callPackage ../applications/editors/thonny { };
 
   thunderbird = callPackage ../applications/networking/mailreaders/thunderbird {
-    inherit (gnome2) libIDL;
     libpng = libpng_apng;
-    enableGTK3 = true;
   };
 
   thunderbolt = callPackage ../os-specific/linux/thunderbolt {};
