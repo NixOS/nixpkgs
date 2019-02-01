@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ openssl zlib libuv ];
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake openssl ]; # Needed natively for test key generation
   cmakeFlags = [ "-DLWS_WITH_PLUGINS=ON" ];
 
   meta = {
