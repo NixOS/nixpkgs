@@ -2276,6 +2276,8 @@ in {
 
   django-sr = callPackage ../development/python-modules/django-sr { };
 
+  django-storages = callPackage ../development/python-modules/django-storages { };
+
   django_tagging = callPackage ../development/python-modules/django_tagging { };
 
   django_tagging_0_4_3 = if
