@@ -320,5 +320,6 @@ stdenv.mkDerivation {
     { description =
         stdenv.lib.attrByPath ["meta" "description"] "System C compiler" cc_
         + " (wrapper script)";
+      priority = 10;
   };
 }
