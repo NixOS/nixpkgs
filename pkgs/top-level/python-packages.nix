@@ -1064,6 +1064,8 @@ in {
 
   bumps = callPackage ../development/python-modules/bumps {};
 
+  bumpversion = callPackage ../development/python-modules/bumpversion {};
+
   cached-property = callPackage ../development/python-modules/cached-property { };
 
   caffe = pkgs.caffe.override {
