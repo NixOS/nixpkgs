@@ -101,5 +101,6 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl3;
     maintainers = with maintainers; [ kkallio henrytill vrthra ];
     platforms = [ "x86_64-darwin" "x86_64-linux" ];
+    broken = stdenv.isDarwin; # No support yet for setting FFI lookup path
   };
 }
