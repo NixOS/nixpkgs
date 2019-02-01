@@ -104,7 +104,5 @@ in stdenv.mkDerivation {
     inherit passthru;
 
     meta.platforms = passthru.bootPkgs.ghc.meta.platforms;
-    meta.hydraPlatforms = [];
-    meta.broken = true;  # does not compile: https://hydra.nixos.org/build/88052615
-
+    meta.maintainers = [lib.maintainers.elvishjerricco];
   }
