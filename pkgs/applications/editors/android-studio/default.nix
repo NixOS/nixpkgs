@@ -13,9 +13,9 @@ let
     sha256Hash = "0dracganibnkyapn2pk2qqnxpwmii57371ycri4nccaci9v9pcjw";
   };
   betaVersion = {
-    version = "3.4.0.11"; # "Android Studio 3.4 Beta 2"
-    build = "183.5240537";
-    sha256Hash = "0mv7ayqjkw97jzdifw1cdvjhnzygzkd2a9rc0h99fclhf2nii5yr";
+    version = "3.4.0.12"; # "Android Studio 3.4 Beta 3"
+    build = "183.5256591";
+    sha256Hash = "1yab2sgabgk3wa3wrzv9z1dc2k7x0079v0mlwrp32jwx8r9byvcw";
   };
   latestVersion = { # canary & dev
     version = "3.5.0.1"; # "Android Studio 3.5 Canary 2"
