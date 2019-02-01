@@ -1,6 +1,6 @@
 { stdenv, lib, fetchFromGitHub, makeWrapper, which, cmake, perl, perlPackages,
   boost, tbb, wxGTK30, pkgconfig, gtk3, fetchurl, gtk2, libGLU,
-  glew, eigen, curl, gtest, nlopt, pcre, xorg }:
+  glew, eigen, curl, gtest, nlopt, pcre, xorg, makeDesktopItem }:
 let
   AlienWxWidgets = perlPackages.buildPerlPackage rec {
     name = "Alien-wxWidgets-0.69";
@@ -112,6 +112,12 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin/var
     cp -r ../resources/icons/* $out/bin/var/
     cp -r ../resources $out/bin/
+
+
+    mkdir -p "$out/share/pixmaps/"
+    ln -s "$out/bin/var/Slic3r.png" "$out/share/pixmaps/slic3r-prusa.png"
+    mkdir -p "$out/share/applications"
+    cp "$desktopItem"/share/applications/* "$out/share/applications/"
   '';
 
   src = fetchFromGitHub {
@@ -119,6 +125,16 @@ stdenv.mkDerivation rec {
     repo = "Slic3r";
     sha256 = "046ircwc0wr586v7106ys557ypslmyq9p4qgi34ads1d6bgxhlyy";
     rev = "version_${version}";
+  };
+
+  desktopItem = makeDesktopItem {
+    name = "slic3r-Prusa-Edition";
+    exec = "slic3r-prusa3d";
+    icon = "slic3r-prusa";
+    comment = "G-code generator for 3D printers";
+    desktopName = "Slic3r Prusa Edition";
+    genericName = "3D printer tool";
+    categories = "Application;Development;";
   };
 
   meta = with stdenv.lib; {

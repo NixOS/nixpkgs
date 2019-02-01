@@ -1,8 +1,8 @@
-{ stdenv, buildGo19Package, fetchFromGitHub, curl, libgit2_0_27, ncurses, pkgconfig, readline }:
+{ stdenv, buildGoPackage, fetchFromGitHub, curl, libgit2_0_27, ncurses, pkgconfig, readline }:
 let
   version = "0.3.1";
 in
-buildGo19Package {
+buildGoPackage {
   name = "grv-${version}";
 
   buildInputs = [ ncurses readline curl libgit2_0_27 ];

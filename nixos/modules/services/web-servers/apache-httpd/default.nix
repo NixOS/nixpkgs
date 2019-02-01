@@ -151,7 +151,7 @@ let
 
 
   loggingConf = (if mainCfg.logFormat != "none" then ''
-    ErrorLog ${mainCfg.logDir}/error_log
+    ErrorLog ${mainCfg.logDir}/error.log
 
     LogLevel notice
 
@@ -160,7 +160,7 @@ let
     LogFormat "%{Referer}i -> %U" referer
     LogFormat "%{User-agent}i" agent
 
-    CustomLog ${mainCfg.logDir}/access_log ${mainCfg.logFormat}
+    CustomLog ${mainCfg.logDir}/access.log ${mainCfg.logFormat}
   '' else ''
     ErrorLog /dev/null
   '');
@@ -187,8 +187,8 @@ let
     SSLRandomSeed startup builtin
     SSLRandomSeed connect builtin
 
-    SSLProtocol All -SSLv2 -SSLv3
-    SSLCipherSuite HIGH:!aNULL:!MD5:!EXP
+    SSLProtocol ${mainCfg.sslProtocols}
+    SSLCipherSuite ${mainCfg.sslCiphers}
     SSLHonorCipherOrder on
   '';
 
@@ -261,8 +261,8 @@ let
     '' else ""}
 
     ${if !isMainServer && mainCfg.logPerVirtualHost then ''
-      ErrorLog ${mainCfg.logDir}/error_log-${cfg.hostName}
-      CustomLog ${mainCfg.logDir}/access_log-${cfg.hostName} ${cfg.logFormat}
+      ErrorLog ${mainCfg.logDir}/error-${cfg.hostName}.log
+      CustomLog ${mainCfg.logDir}/access-${cfg.hostName}.log ${cfg.logFormat}
     '' else ""}
 
     ${optionalString (robotsTxt != "") ''
@@ -629,6 +629,19 @@ in
         example = 500;
         description =
           "Maximum number of httpd requests answered per httpd child (prefork), 0 means unlimited";
+      };
+
+      sslCiphers = mkOption {
+        type = types.str;
+        default = "HIGH:!aNULL:!MD5:!EXP";
+        description = "Cipher Suite available for negotiation in SSL proxy handshake.";
+      };
+
+      sslProtocols = mkOption {
+        type = types.str;
+        default = "All -SSLv2 -SSLv3";
+        example = "All -SSLv2 -SSLv3 -TLSv1";
+        description = "Allowed SSL/TLS protocol versions.";
       };
     }
 

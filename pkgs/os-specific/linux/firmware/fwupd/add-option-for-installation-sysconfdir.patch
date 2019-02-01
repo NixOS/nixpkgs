@@ -1,4 +1,4 @@
-From 2fe9625cc6dec10531482a3947ef75009eb21489 Mon Sep 17 00:00:00 2001
+From 44887227f7f617cbf84713ec45685cb4999039ff Mon Sep 17 00:00:00 2001
 From: Jan Tojnar <jtojnar@gmail.com>
 Date: Tue, 30 Oct 2018 22:26:30 +0100
 Subject: [PATCH] build: Add option for installation sysconfdir
@@ -17,17 +17,17 @@ prefix only to `make install`, but Meson does not support anything like that.
 Until we manage to convince Meson to support install flags, we need to create
 our own install flag.
 ---
- data/meson.build            | 4 ++--
- data/pki/meson.build        | 8 ++++----
- data/remotes.d/meson.build  | 6 +++---
- meson.build                 | 6 ++++++
- meson_options.txt           | 1 +
- plugins/redfish/meson.build | 2 +-
- plugins/uefi/meson.build    | 2 +-
+ data/meson.build                 | 4 ++--
+ data/pki/meson.build             | 8 ++++----
+ data/remotes.d/meson.build       | 6 +++---
+ meson.build                      | 6 ++++++
+ meson_options.txt                | 1 +
+ plugins/redfish/meson.build      | 2 +-
+ plugins/uefi/meson.build         | 2 +-
  7 files changed, 18 insertions(+), 11 deletions(-)
 
 diff --git a/data/meson.build b/data/meson.build
-index 8dd2ac9ad..d4ad1cbc1 100644
+index 8dd2ac9a..d4ad1cbc 100644
 --- a/data/meson.build
 +++ b/data/meson.build
 @@ -9,7 +9,7 @@ if get_option('tests') and get_option('daemon')
@@ -49,7 +49,7 @@ index 8dd2ac9ad..d4ad1cbc1 100644
  
  install_data(['metadata.xml'],
 diff --git a/data/pki/meson.build b/data/pki/meson.build
-index eefcc9142..dc801fa18 100644
+index eefcc914..dc801fa1 100644
 --- a/data/pki/meson.build
 +++ b/data/pki/meson.build
 @@ -4,14 +4,14 @@ if get_option('gpg')
@@ -85,7 +85,7 @@ index eefcc9142..dc801fa18 100644
  endif
  
 diff --git a/data/remotes.d/meson.build b/data/remotes.d/meson.build
-index 824291fc5..d0599a00a 100644
+index 824291fc..d0599a00 100644
 --- a/data/remotes.d/meson.build
 +++ b/data/remotes.d/meson.build
 @@ -3,7 +3,7 @@ if get_option('daemon') and get_option('lvfs')
@@ -113,10 +113,10 @@ index 824291fc5..d0599a00a 100644
 +  install_dir: join_paths(sysconfdir_install, 'fwupd', 'remotes.d'),
  )
 diff --git a/meson.build b/meson.build
-index 737841f1a..23bd7a2e3 100644
+index b6df98b3..d672ee37 100644
 --- a/meson.build
 +++ b/meson.build
-@@ -144,6 +144,12 @@ localstatedir = join_paths(prefix, get_option('localstatedir'))
+@@ -145,6 +145,12 @@ localstatedir = join_paths(prefix, get_option('localstatedir'))
  mandir = join_paths(prefix, get_option('mandir'))
  localedir = join_paths(prefix, get_option('localedir'))
  
@@ -130,7 +130,7 @@ index 737841f1a..23bd7a2e3 100644
  if gio.version().version_compare ('>= 2.55.0')
    conf.set('HAVE_GIO_2_55_0', '1')
 diff --git a/meson_options.txt b/meson_options.txt
-index 23ef8cdb8..db8f93b6c 100644
+index 23ef8cdb..db8f93b6 100644
 --- a/meson_options.txt
 +++ b/meson_options.txt
 @@ -17,6 +17,7 @@ option('plugin_uefi', type : 'boolean', value : true, description : 'enable UEFI
@@ -142,10 +142,10 @@ index 23ef8cdb8..db8f93b6c 100644
  option('udevdir', type: 'string', value: '', description: 'Directory for udev rules')
  option('efi-cc', type : 'string', value : 'gcc', description : 'the compiler to use for EFI modules')
 diff --git a/plugins/redfish/meson.build b/plugins/redfish/meson.build
-index 288f614e4..90cfe6484 100644
+index ef07bd81..d2c7e259 100644
 --- a/plugins/redfish/meson.build
 +++ b/plugins/redfish/meson.build
-@@ -22,7 +22,7 @@ shared_module('fu_plugin_redfish',
+@@ -25,7 +25,7 @@ shared_module('fu_plugin_redfish',
  )
  
  install_data(['redfish.conf'],
@@ -155,10 +155,10 @@ index 288f614e4..90cfe6484 100644
  
  if get_option('tests')
 diff --git a/plugins/uefi/meson.build b/plugins/uefi/meson.build
-index c037e1b30..a0e8cd3e6 100644
+index 09ebdf82..02fc0661 100644
 --- a/plugins/uefi/meson.build
 +++ b/plugins/uefi/meson.build
-@@ -69,7 +69,7 @@ executable(
+@@ -73,7 +73,7 @@ executable(
  )
  
  install_data(['uefi.conf'],
@@ -167,3 +167,5 @@ index c037e1b30..a0e8cd3e6 100644
  )
  
  if get_option('tests')
+-- 
+2.19.1

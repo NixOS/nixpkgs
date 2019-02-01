@@ -1,22 +1,20 @@
-{ stdenv, lib, buildGoPackage, fetchFromGitHub, cf-private
+{ stdenv, lib, buildGoPackage, fetchurl, cf-private
 , AVFoundation, AudioToolbox, ImageIO, CoreMedia
 , Foundation, CoreGraphics, MediaToolbox
 }:
 
 buildGoPackage rec {
   name = "keybase-${version}";
-  version = "2.11.0";
+  version = "2.13.1";
 
   goPackagePath = "github.com/keybase/client";
   subPackages = [ "go/keybase" ];
 
   dontRenameImports = true;
 
-  src = fetchFromGitHub {
-    owner  = "keybase";
-    repo   = "client";
-    rev    = "v${version}";
-    sha256 = "1mj78cs6j0f1f86c71j4gdphas75j3rfaqygpy87dc40kc2yj0gd";
+  src = fetchurl {
+    url = "https://github.com/keybase/client/archive/v${version}.tar.gz";
+    sha256 = "0avq87y7cs3jipl444ssz1zd5jygpks20hls0fkqxxaikkpdsy4v";
   };
 
   buildInputs = lib.optionals stdenv.isDarwin [

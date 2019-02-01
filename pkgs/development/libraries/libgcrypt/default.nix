@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     description = "General-purpose cryptographic library";
     license = licenses.lgpl2Plus;
     platforms = platforms.all;
-    maintainers = [ maintainers.wkennington maintainers.vrthra ];
+    maintainers = with maintainers; [ vrthra ];
     repositories.git = git://git.gnupg.org/libgcrypt.git;
   };
 }

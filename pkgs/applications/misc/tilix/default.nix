@@ -1,16 +1,16 @@
 { stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, dmd, gnome3, dbus
 , gsettings-desktop-schemas, desktop-file-utils, gettext, gtkd, libsecret
-, perlPackages, wrapGAppsHook, xdg_utils }:
+, glib, perlPackages, wrapGAppsHook, xdg_utils }:
 
 stdenv.mkDerivation rec {
-  name = "tilix-${version}";
-  version = "1.8.5";
+  pname = "tilix";
+  version = "1.8.9";
 
   src = fetchFromGitHub {
     owner = "gnunn1";
     repo = "tilix";
-    rev = "${version}";
-    sha256 = "1ixhkssz0xn3x75n2iw6gd3hka6bgmgwfgbvblbjhhx8gcpbw3s7";
+    rev = version;
+    sha256 = "1l1ib3g01mxiywbwjxc2522qgjy3ymjzy8bxl42k0hprpp95rw9d";
   };
 
   nativeBuildInputs = [
@@ -25,22 +25,20 @@ stdenv.mkDerivation rec {
     )
   '';
 
-  postInstall = with gnome3; ''
+  postInstall = ''
     ${glib.dev}/bin/glib-compile-schemas $out/share/glib-2.0/schemas
-
-    wrapProgram $out/bin/tilix \
-      --prefix LD_LIBRARY_PATH ":" "${libsecret}/lib"
   '';
 
-
   preFixup = ''
+    gappsWrapperArgs+=(--prefix LD_LIBRARY_PATH ":" "${libsecret}/lib")
+
     substituteInPlace $out/share/applications/com.gexperts.Tilix.desktop \
       --replace "Exec=tilix" "Exec=$out/bin/tilix"
     sed -i '/^DBusActivatable=/d' $out/share/applications/com.gexperts.Tilix.desktop
   '';
 
   meta = with stdenv.lib; {
-    description = "Tiling terminal emulator following the Gnome Human Interface Guidelines.";
+    description = "Tiling terminal emulator following the Gnome Human Interface Guidelines";
     homepage = https://gnunn1.github.io/tilix-web;
     license = licenses.mpl20;
     maintainers = with maintainers; [ midchildan ];

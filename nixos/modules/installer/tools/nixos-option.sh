@@ -314,13 +314,13 @@ else
   # echo 1>&2 "Warning: This value is not an option."
 
   result=$(evalCfg "")
-  if names=$(attrNames "$result" 2> /dev/null); then
+  if [ ! -z "$result" ]; then
+    names=$(attrNames "$result" 2> /dev/null)
     echo 1>&2 "This attribute set contains:"
     escapeQuotes () { eval echo "$1"; }
     nixMap escapeQuotes "$names"
   else
-    echo 1>&2 "An error occurred while looking for attribute names."
-    echo $result
+    echo 1>&2 "An error occurred while looking for attribute names. Are you sure that '$option' exists?"
   fi
 fi
 

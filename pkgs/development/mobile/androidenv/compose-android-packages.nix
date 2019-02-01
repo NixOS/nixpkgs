@@ -20,20 +20,13 @@
 , includeExtras ? []
 }:
 
-if !licenseAccepted then throw ''
-    You must accept the Android Software Development Kit License Agreement at
-    https://developer.android.com/studio/terms
-    by setting nixpkgs config option 'android_sdk.accept_license = true;'
-  ''
-else assert licenseAccepted;
-
 let
   inherit (pkgs) stdenv fetchurl makeWrapper unzip;
 
   # Determine the Android os identifier from Nix's system identifier
   os = if stdenv.system == "x86_64-linux" then "linux"
     else if stdenv.system == "x86_64-darwin" then "macosx"
-    else "No tarballs found for system architecture: ${stdenv.system}";
+    else throw "No tarballs found for system architecture: ${stdenv.system}";
 
   # Generated Nix packages
   packages = import ./generated/packages.nix {
@@ -196,7 +189,11 @@ rec {
   # This derivation deploys the tools package and symlinks all the desired
   # plugins that we want to use.
 
-  androidsdk = import ./tools.nix {
+  androidsdk = if !licenseAccepted then throw ''
+    You must accept the Android Software Development Kit License Agreement at
+    https://developer.android.com/studio/terms
+    by setting nixpkgs config option 'android_sdk.accept_license = true;'
+  '' else import ./tools.nix {
     inherit deployAndroidPackage requireFile packages toolsVersion autoPatchelfHook makeWrapper os pkgs pkgs_i686;
     inherit (stdenv) lib;
 

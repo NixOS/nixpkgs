@@ -38,21 +38,15 @@ def generate_sources(release, assets):
         type_map = out.setdefault(asset["os"], {})
         impl_map = type_map.setdefault(asset["binary_type"], {})
         arch_map = impl_map.setdefault(asset["openjdk_impl"], {
-            "version": version,
-            "build": build,
             "packageType": asset["binary_type"],
             "vmType": asset["openjdk_impl"],
         })
 
-        if arch_map["version"] != version or arch_map["build"] != build:
-            print("error: architectures have different latest versions ({}+{} vs {}+{})".format(
-                arch_map["version"], arch_map["build"], version, build
-            ), file=sys.stderr)
-            sys.exit(1)
-
         arch_map[arch_to_nixos[asset["architecture"]]] = {
             "url": asset["binary_link"],
             "sha256": get_sha256(asset["checksum_link"]),
+            "version": version,
+            "build": build,
         }
 
     return out

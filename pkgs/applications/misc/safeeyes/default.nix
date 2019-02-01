@@ -6,12 +6,12 @@ let inherit (python3Packages) python buildPythonApplication fetchPypi;
 in buildPythonApplication rec {
   name = "${pname}-${version}";
   pname = "safeeyes";
-  version = "2.0.6";
+  version = "2.0.8";
   namePrefix = "";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0s14pxicgq33srvhf6bvfq48wv3z4rlsmzkccz4ky9vh3gfx7zka";
+    sha256 = "08acrf9sngjjmplszjxzfq3af9xg4xscga94q0lkck2l1kqckc2l";
   };
 
   buildInputs = [

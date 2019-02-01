@@ -4,13 +4,13 @@
 stdenv.mkDerivation rec {
   name = "${product}-${version}";
   product = "pdfpc";
-  version = "4.3.0";
+  version = "4.3.1_0";
 
   src = fetchFromGitHub {
     repo = "pdfpc";
     owner = "pdfpc";
     rev = "v${version}";
-    sha256 = "1ild2p2lv89yj74fbbdsg3jb8dxpzdamsw0l0xs5h20fd2lsrwcd";
+    sha256 = "04bvgpdy3l030jd1f87a94lz4lky29skpak3k0bzazsajwpywprd";
   };
 
   nativeBuildInputs = [

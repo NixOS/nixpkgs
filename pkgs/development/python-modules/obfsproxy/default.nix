@@ -2,7 +2,6 @@
 , buildPythonPackage
 , fetchgit
 , pyptlib
-, argparse
 , twisted
 , pycrypto
 , pyyaml
@@ -23,7 +22,7 @@ buildPythonPackage rec {
     substituteInPlace setup.py --replace "argparse" ""
   '';
 
-  propagatedBuildInputs = [ pyptlib argparse twisted pycrypto pyyaml ];
+  propagatedBuildInputs = [ pyptlib twisted pycrypto pyyaml ];
 
   # No tests in archive
   doCheck = false;

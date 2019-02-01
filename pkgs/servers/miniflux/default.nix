@@ -1,21 +1,18 @@
-{ stdenv
-, buildGoPackage
-, fetchFromGitHub
-}:
+{ stdenv , buildGoPackage , fetchFromGitHub }:
 
 buildGoPackage rec {
   pname = "miniflux";
-  version = "2.0.13";
+  version = "2.0.14";
 
   goPackagePath = "miniflux.app";
 
   src = fetchFromGitHub {
     owner = "miniflux";
     repo = "miniflux";
-    rev = "refs/tags/${version}";
-    sha256 = "16c9jszrz3153kr0xyj7na09hpqvnjsrmsbic7qkp5a9aa839b9s";
+    rev = version;
+    sha256 = "1wd52zk7i07k0b5rlwqd4qszq42shdb4ss8871jqlf9zlbq85a0v";
   };
-    
+
   goDeps = ./deps.nix;
 
   doCheck = true;
@@ -32,7 +29,7 @@ buildGoPackage rec {
     description = "Minimalist and opinionated feed reader";
     homepage = https://miniflux.app/;
     license = licenses.asl20;
-    maintainers = with maintainers; [ benpye ];
+    maintainers = with maintainers; [ rvolosatovs benpye ];
   };
 }
 

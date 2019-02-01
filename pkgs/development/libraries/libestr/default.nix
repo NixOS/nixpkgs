@@ -13,6 +13,5 @@ stdenv.mkDerivation rec {
     description = "Some essentials for string handling";
     license = licenses.lgpl21;
     platforms = platforms.all;
-    maintainers = with maintainers; [ wkennington ];
   };
 }

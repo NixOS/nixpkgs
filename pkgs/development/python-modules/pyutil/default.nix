@@ -5,7 +5,6 @@
 , setuptoolsTrial
 , simplejson
 , zbase32
-, argparse
 , twisted
 , isPyPy
 }:
@@ -20,7 +19,7 @@ buildPythonPackage rec {
   };
 
   buildInputs = [ setuptoolsDarcs setuptoolsTrial ] ++ (if doCheck then [ simplejson ] else []);
-  propagatedBuildInputs = [ argparse twisted ];
+  propagatedBuildInputs = [ twisted ];
 
   # Tests fail because they try to write new code into the twisted
   # package, apparently some kind of plugin.

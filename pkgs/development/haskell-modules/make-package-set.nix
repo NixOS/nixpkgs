@@ -176,6 +176,17 @@ in package-set { inherit pkgs stdenv callPackage; } self // {
 
     callHackage = name: version: callPackageKeepDeriver (self.hackage2nix name version);
 
+    # This function does not depend on all-cabal-hashes and therefore will work
+    # for any version that has been released on hackage as opposed to only
+    # versions released before whatever version of all-cabal-hashes you happen
+    # to be currently using.
+    callHackageDirect = {pkg, ver, sha256}@args:
+      let pkgver = "${pkg}-${ver}";
+      in self.callCabal2nix pkg (pkgs.fetchzip {
+           url = "http://hackage.haskell.org/package/${pkgver}/${pkgver}.tar.gz";
+           inherit sha256;
+         });
+
     # Creates a Haskell package from a source package by calling cabal2nix on the source.
     callCabal2nixWithOptions = name: src: extraCabal2nixOptions: args:
       let

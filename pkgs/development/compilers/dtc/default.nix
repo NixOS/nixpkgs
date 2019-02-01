@@ -1,7 +1,7 @@
 { stdenv, fetchgit, fetchpatch, flex, bison, pkgconfig, python2, swig, which }:
 
 stdenv.mkDerivation rec {
-  name = "dtc-${version}";
+  pname = "dtc";
   version = "1.4.7";
 
   src = fetchgit {

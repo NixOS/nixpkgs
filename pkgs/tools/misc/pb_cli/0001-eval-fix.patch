@@ -1,0 +1,10 @@
+diff --git a/src/pb.sh b/src/pb.sh
+index be1e472..eb9e6f9 100755
+--- a/src/pb.sh
++++ b/src/pb.sh
+@@ -61,4 +61,4 @@ pb () {
+   esac
+ }
+
+-eval " ${0##*/}" "$@"
++pb "$@"

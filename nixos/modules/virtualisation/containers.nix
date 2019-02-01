@@ -36,7 +36,7 @@ let
         #! ${pkgs.runtimeShell} -e
 
         # Initialise the container side of the veth pair.
-        if [ -n "$HOST_ADDRESS" ] || [ -n "$LOCAL_ADDRESS" ]; then
+        if [ -n "$HOST_ADDRESS" ] || [ -n "$LOCAL_ADDRESS" ] || [ -n "$HOST_BRIDGE" ]; then
 
           ip link set host0 name eth0
           ip link set dev eth0 up
@@ -90,18 +90,20 @@ let
 
       if [ -n "$HOST_ADDRESS" ] || [ -n "$LOCAL_ADDRESS" ]; then
         extraFlags+=" --network-veth"
-        if [ -n "$HOST_BRIDGE" ]; then
-          extraFlags+=" --network-bridge=$HOST_BRIDGE"
-        fi
-        if [ -n "$HOST_PORT" ]; then
-          OIFS=$IFS
-          IFS=","
-          for i in $HOST_PORT
-          do
-              extraFlags+=" --port=$i"
-          done
-          IFS=$OIFS
-        fi
+      fi
+
+      if [ -n "$HOST_PORT" ]; then
+        OIFS=$IFS
+        IFS=","
+        for i in $HOST_PORT
+        do
+            extraFlags+=" --port=$i"
+        done
+        IFS=$OIFS
+      fi
+
+      if [ -n "$HOST_BRIDGE" ]; then
+        extraFlags+=" --network-bridge=$HOST_BRIDGE"
       fi
 
       extraFlags+=" ${concatStringsSep " " (mapAttrsToList nspawnExtraVethArgs cfg.extraVeths)}"
