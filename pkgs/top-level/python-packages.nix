@@ -4023,6 +4023,10 @@ in {
 
   snuggs = callPackage ../development/python-modules/snuggs { };
 
+  social-auth-app-django = callPackage ../development/python-modules/social-auth-app-django { };
+
+  social-auth-core = callPackage ../development/python-modules/social-auth-core { };
+
   spake2 = callPackage ../development/python-modules/spake2 { };
 
   sphfile = callPackage ../development/python-modules/sphfile { };
