@@ -1,4 +1,4 @@
-{ fetchFromGitHub, stdenv, cmake, openssl, zlib, libuv }:
+{ fetchFromGitHub, stdenv, lib, cmake, openssl, zlib, libuv }:
 
 stdenv.mkDerivation rec {
   name = "libwebsockets-${version}";
@@ -12,8 +12,10 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ openssl zlib libuv ];
-  nativeBuildInputs = [ cmake openssl ]; # Needed natively for test key generation
-  cmakeFlags = [ "-DLWS_WITH_PLUGINS=ON" ];
+  nativeBuildInputs = [ cmake ];
+  cmakeFlags = [ "-DLWS_WITH_PLUGINS=ON" ] ++
+               lib.optional (stdenv.hostPlatform.config != stdenv.buildPlatform.config)
+                 "-DLWS_WITHOUT_TEST_SERVER=ON";
 
   meta = {
     description = "Light, portable C library for websockets";
