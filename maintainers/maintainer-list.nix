@@ -68,6 +68,11 @@
     github = "abbradar";
     name = "Nikolay Amiantov";
   };
+  abhi18av = {
+    email = "abhi18av@gmail.com";
+    github = "abhi18av";
+    name = "Abhinav Sharma";
+  };
   abigailbuccaneer = {
     email = "abigailbuccaneer@gmail.com";
     github = "abigailbuccaneer";
