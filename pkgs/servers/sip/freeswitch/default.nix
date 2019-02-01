@@ -1,6 +1,9 @@
-{ fetchurl, stdenv, ncurses, curl, pkgconfig, gnutls, readline
+{ fetchurl, stdenv, lib, ncurses, curl, pkgconfig, gnutls, readline
 , openssl, perl, sqlite, libjpeg, speex, pcre
 , ldns, libedit, yasm, which, lua, libopus, libsndfile
+
+, postgresql
+, enablePostgres ? true
 
 , SystemConfiguration
 }:
@@ -23,11 +26,15 @@ stdenv.mkDerivation rec {
     openssl ncurses curl gnutls readline perl libjpeg
     sqlite pcre speex ldns libedit yasm which lua libopus
     libsndfile
-  ] ++ stdenv.lib.optionals stdenv.isDarwin [ SystemConfiguration ];
+  ]
+  ++ lib.optionals enablePostgres [ postgresql ]
+  ++ lib.optionals stdenv.isDarwin [ SystemConfiguration ];
 
   NIX_CFLAGS_COMPILE = "-Wno-error";
 
   hardeningDisable = [ "format" ];
+
+  configureFlags = lib.optionals enablePostgres [ "--enable-core-pgsql-support" ];
 
   meta = {
     description = "Cross-Platform Scalable FREE Multi-Protocol Soft Switch";
