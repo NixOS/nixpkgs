@@ -892,6 +892,11 @@
     github = "cko";
     name = "Christine Koppelt";
   };
+  clacke = {
+    email = "claes.wallin@greatsinodevelopment.com";
+    github = "clacke";
+    name = "Claes Wallin";
+  };
   cleverca22 = {
     email = "cleverca22@gmail.com";
     github = "cleverca22";
@@ -1767,6 +1772,11 @@
     email = "david.guibert@gmail.com";
     github = "dguibert";
     name = "David Guibert";
+  };
+  groodt = {
+    email = "groodt@gmail.com";
+    github = "groodt";
+    name = "Greg Roodt";
   };
   guibou = {
     email = "guillaum.bouchard@gmail.com";
@@ -3660,6 +3670,11 @@
     email = "iuns@outlook.fr";
     github = "PsyanticY";
     name = "Psyanticy";
+  };
+  ptival = {
+    email = "valentin.robert.42@gmail.com";
+    github = "Ptival";
+    name = "Valentin Robert";
   };
   puffnfresh = {
     email = "brian@brianmckenna.org";

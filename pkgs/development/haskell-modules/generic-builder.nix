@@ -391,7 +391,7 @@ stdenv.mkDerivation ({
         rmdir "$packageConfFile"
       fi
       for packageConfFile in "$packageConfDir/"*; do
-        local pkgId=$( ${gnused}/bin/sed -n -e 's|^id: ||p' $packageConfFile )
+        local pkgId=$( ${gnused}/bin/sed -n -e 's|^id:[ ]\+||p' $packageConfFile )
         mv $packageConfFile $packageConfDir/$pkgId.conf
       done
 

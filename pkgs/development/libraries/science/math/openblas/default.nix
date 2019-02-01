@@ -4,6 +4,9 @@
 # (for compatibility with reference BLAS).
 , blas64 ? null
 , buildPackages
+# Select a specific optimization target (other than the default)
+# See https://github.com/xianyi/OpenBLAS/blob/develop/TargetList.txt
+, target ? null
 }:
 
 with stdenv.lib;
@@ -11,39 +14,41 @@ with stdenv.lib;
 let blas64_ = blas64; in
 
 let
+  setTarget = x: if target == null then x else target;
+
   # To add support for a new platform, add an element to this set.
   configs = {
     armv6l-linux = {
       BINARY = 32;
-      TARGET = "ARMV6";
+      TARGET = setTarget "ARMV6";
       DYNAMIC_ARCH = false;
       USE_OPENMP = true;
     };
 
     armv7l-linux = {
       BINARY = 32;
-      TARGET = "ARMV7";
+      TARGET = setTarget "ARMV7";
       DYNAMIC_ARCH = false;
       USE_OPENMP = true;
     };
 
     aarch64-linux = {
       BINARY = 64;
-      TARGET = "ARMV8";
+      TARGET = setTarget "ARMV8";
       DYNAMIC_ARCH = true;
       USE_OPENMP = true;
     };
 
     i686-linux = {
       BINARY = 32;
-      TARGET = "P2";
+      TARGET = setTarget "P2";
       DYNAMIC_ARCH = true;
       USE_OPENMP = true;
     };
 
     x86_64-darwin = {
       BINARY = 64;
-      TARGET = "ATHLON";
+      TARGET = setTarget "ATHLON";
       DYNAMIC_ARCH = true;
       USE_OPENMP = false;
       MACOSX_DEPLOYMENT_TARGET = "10.7";
@@ -51,7 +56,7 @@ let
 
     x86_64-linux = {
       BINARY = 64;
-      TARGET = "ATHLON";
+      TARGET = setTarget "ATHLON";
       DYNAMIC_ARCH = true;
       USE_OPENMP = true;
     };

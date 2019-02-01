@@ -553,4 +553,7 @@ self: super: builtins.intersectAttrs super {
   # Avoid infitite recursion with yaya.
   yaya-hedgehog = super.yaya-hedgehog.override { yaya = dontCheck self.yaya; };
 
+  # Avoid infitite recursion with tonatona.
+  tonaparser = dontCheck super.tonaparser;
+
 }

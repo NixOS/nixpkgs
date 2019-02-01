@@ -184,4 +184,5 @@ in
 
   };
 
+  meta.maintainers = with lib.maintainers; [ erictapen ];
 }

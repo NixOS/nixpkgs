@@ -1,11 +1,18 @@
+##
+## Caveat: a copy of configuration-ghc-8.6.x.nix with minor changes:
+##
+##  1. "8.7" strings
+##  2. llvm 6
+##  3. disabled library update: parallel
+##
 { pkgs, haskellLib }:
 
 with haskellLib;
 
 self: super: {
 
-  # This compiler version needs llvm 5.x.
-  llvmPackages = pkgs.llvmPackages_5;
+  # This compiler version needs llvm 6.x.
+  llvmPackages = pkgs.llvmPackages_6;
 
   # Disable GHC 8.7.x core libraries.
   array = null;
@@ -20,12 +27,15 @@ self: super: {
   ghc-boot = null;
   ghc-boot-th = null;
   ghc-compact = null;
-  ghc-prim = null;
+  ghc-heap = null;
   ghci = null;
+  ghc-prim = null;
   haskeline = null;
   hpc = null;
   integer-gmp = null;
+  libiserv = null;
   mtl = null;
+  parallel = null;
   parsec = null;
   pretty = null;
   process = null;
@@ -39,60 +49,37 @@ self: super: {
   unix = null;
   xhtml = null;
 
-  # jailbreak-cabal can use the native Cabal library.
-  jailbreak-cabal = super.jailbreak-cabal.override { Cabal = null; };
+  # https://github.com/tibbe/unordered-containers/issues/214
+  unordered-containers = dontCheck super.unordered-containers;
 
-  # haddock: No input file(s).
-  nats = dontHaddock super.nats;
-  bytestring-builder = dontHaddock super.bytestring-builder;
+  # Test suite does not compile.
+  cereal = dontCheck super.cereal;
+  data-clist = doJailbreak super.data-clist;  # won't cope with QuickCheck 2.12.x
+  dates = doJailbreak super.dates; # base >=4.9 && <4.12
+  Diff = dontCheck super.Diff;
+  HaTeX = doJailbreak super.HaTeX; # containers >=0.4 && <0.6 is too tight; https://github.com/Daniel-Diaz/HaTeX/issues/126
+  hpc-coveralls = doJailbreak super.hpc-coveralls; # https://github.com/guillaume-nargeot/hpc-coveralls/issues/82
+  http-api-data = doJailbreak super.http-api-data;
+  persistent-sqlite = dontCheck super.persistent-sqlite;
+  psqueues = dontCheck super.psqueues;    # won't cope with QuickCheck 2.12.x
+  system-fileio = dontCheck super.system-fileio;  # avoid dependency on broken "patience"
+  unicode-transforms = dontCheck super.unicode-transforms;
+  wl-pprint-extras = doJailbreak super.wl-pprint-extras; # containers >=0.4 && <0.6 is too tight; https://github.com/ekmett/wl-pprint-extras/issues/17
+  RSA = dontCheck super.RSA; # https://github.com/GaloisInc/RSA/issues/14
+  monad-par = dontCheck super.monad-par;  # https://github.com/simonmar/monad-par/issues/66
+  github = dontCheck super.github; # hspec upper bound exceeded; https://github.com/phadej/github/pull/341
+  binary-orphans = dontCheck super.binary-orphans; # tasty upper bound exceeded; https://github.com/phadej/binary-orphans/commit/8ce857226595dd520236ff4c51fa1a45d8387b33
 
-  # We have time 1.5
-  aeson = disableCabalFlag super.aeson "old-locale";
+  # https://github.com/jgm/skylighting/issues/55
+  skylighting-core = dontCheck super.skylighting-core;
 
-  # Setup: At least the following dependencies are missing: base <4.8
-  hspec-expectations = overrideCabal super.hspec-expectations (drv: {
-    postPatch = "sed -i -e 's|base < 4.8|base|' hspec-expectations.cabal";
-  });
-  utf8-string = overrideCabal super.utf8-string (drv: {
-    postPatch = "sed -i -e 's|base >= 4.3 && < 4.10|base|' utf8-string.cabal";
-  });
+  # Break out of "yaml >=0.10.4.0 && <0.11": https://github.com/commercialhaskell/stack/issues/4485
+  stack = doJailbreak super.stack;
 
-  # bos/attoparsec#92
-  attoparsec = dontCheck super.attoparsec;
+  # Fix build with ghc 8.6.x.
+  git-annex = appendPatch super.git-annex ./patches/git-annex-fix-ghc-8.6.x-build.patch;
 
-  # test suite hangs silently for at least 10 minutes
-  split = dontCheck super.split;
-
-  # Test suite fails with some (seemingly harmless) error.
-  # https://code.google.com/p/scrapyourboilerplate/issues/detail?id=24
-  syb = dontCheck super.syb;
-
-  # Test suite has stricter version bounds
-  retry = dontCheck super.retry;
-
-  # Test suite fails with time >= 1.5
-  http-date = dontCheck super.http-date;
-
-  # Version 1.19.5 fails its test suite.
-  happy = dontCheck super.happy;
-
-  # Workaround for a workaround, see comment for "ghcjs" flag.
-  jsaddle = let jsaddle' = disableCabalFlag super.jsaddle "ghcjs";
-            in addBuildDepends jsaddle' [ self.glib self.gtk3 self.webkitgtk3
-                                          self.webkitgtk3-javascriptcore ];
-
-  # The compat library is empty in the presence of mtl 2.2.x.
-  mtl-compat = dontHaddock super.mtl-compat;
-
-  # Won't work with LLVM 3.5.
-  llvm-general = markBrokenVersion "3.4.5.3" super.llvm-general;
-
-  # A bunch of jailbreaks due to 'base' bump
-  old-time = doJailbreak super.old-time;
-  old-locale = doJailbreak super.old-locale;
-  primitive = doJailbreak super.primitive;
-  test-framework = doJailbreak super.test-framework;
-  atomic-primops = doJailbreak (appendPatch super.atomic-primops ./patches/atomic-primops-Cabal-1.25.patch);
-  hashable = doJailbreak super.hashable;
+  # https://github.com/pikajude/stylish-cabal/issues/11
+  stylish-cabal = markBrokenVersion "0.4.1.0" super.stylish-cabal;
 
 }

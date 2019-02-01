@@ -2,14 +2,14 @@
 
 with python2.pkgs; buildPythonApplication rec {
   pname = "isso";
-  version = "0.11.1";
+  version = "0.12.2";
 
   # no tests on PyPI
   src = fetchFromGitHub {
     owner = "posativ";
     repo = pname;
     rev = version;
-    sha256 = "0545vh0sb5i4cz9c0qgch77smpwgav3rhl1dxk9ij6rx4igjk03j";
+    sha256 = "18v8lzwgl5hcbnawy50lfp3wnlc0rjhrnw9ja9260awkx7jra9ba";
   };
 
   propagatedBuildInputs = [

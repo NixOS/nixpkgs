@@ -118,7 +118,6 @@ mapAliases ({
   googleAuthenticator = google-authenticator; # added 2016-10-16
   grantlee5 = libsForQt5.grantlee;  # added 2015-12-19
   gsettings_desktop_schemas = gsettings-desktop-schemas; # added 2018-02-25
-  gst_ffmpeg = gst-ffmpeg;  # added 2017-02
   gst_plugins_bad = gst-plugins-bad;  # added 2017-02
   gst_plugins_base = gst-plugins-base;  # added 2017-02
   gst_plugins_good = gst-plugins-good;  # added 2017-02

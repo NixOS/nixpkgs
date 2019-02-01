@@ -71,4 +71,9 @@ self: super: {
     yaml = self.yaml_0_11_0_0;
   };
 
+  # https://github.com/pikajude/stylish-cabal/issues/11
+  stylish-cabal = generateOptparseApplicativeCompletion "stylish-cabal" (super.stylish-cabal.overrideScope (self: super: {
+    haddock-library = dontHaddock (dontCheck self.haddock-library_1_5_0_1);
+  }));
+
 }

@@ -153,6 +153,7 @@ in
   nfs4 = handleTest ./nfs.nix { version = 4; };
   nghttpx = handleTest ./nghttpx.nix {};
   nginx = handleTest ./nginx.nix {};
+  nginx-sso = handleTest ./nginx-sso.nix {};
   nix-ssh-serve = handleTest ./nix-ssh-serve.nix {};
   novacomd = handleTestOn ["x86_64-linux"] ./novacomd.nix {};
   nsd = handleTest ./nsd.nix {};
@@ -162,6 +163,7 @@ in
   osquery = handleTest ./osquery.nix {};
   ostree = handleTest ./ostree.nix {};
   pam-oath-login = handleTest ./pam-oath-login.nix {};
+  pam-u2f = handleTest ./pam-u2f.nix {};
   pantheon = handleTest ./pantheon.nix {};
   peerflix = handleTest ./peerflix.nix {};
   pgjwt = handleTest ./pgjwt.nix {};

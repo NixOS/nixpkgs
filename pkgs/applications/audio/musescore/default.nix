@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, cmake, pkgconfig
+{ stdenv, lib, fetchzip, cmake, pkgconfig
 , alsaLib, freetype, libjack2, lame, libogg, libpulseaudio, libsndfile, libvorbis
 , portaudio, portmidi, qtbase, qtdeclarative, qtscript, qtsvg, qttools
 , qtwebengine, qtxmlpatterns
@@ -6,13 +6,12 @@
 
 stdenv.mkDerivation rec {
   name = "musescore-${version}";
-  version = "3.0";
+  version = "3.0.1";
 
-  src = fetchFromGitHub {
-    owner  = "musescore";
-    repo   = "MuseScore";
-    rev    = "v${version}";
-    sha256 = "0g8n8xpw5d6wh8bwbvy12sinl9i0ir009sr28i4izr28lr4x8v50";
+  src = fetchzip {
+    url = "https://download.musescore.com/releases/MuseScore-${version}/MuseScore-${version}.zip";
+    sha256 = "1l9djxq5hdfqiya2jwcag7qq4dhmb9qcv68y27dlza19imrnim80";
+    stripRoot = false;
   };
 
   patches = [

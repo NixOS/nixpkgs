@@ -635,9 +635,10 @@ $bootLoaderConfig
   # services.xserver.desktopManager.plasma5.enable = true;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
-  # users.users.guest = {
+  # users.users.jane = {
   #   isNormalUser = true;
   #   uid = 1000;
+  #   extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
   # };
 
   # This value determines the NixOS release with which your system is to be
