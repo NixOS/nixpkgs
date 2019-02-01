@@ -2282,6 +2282,8 @@ in {
 
   django-sites = callPackage ../development/python-modules/django-sites { };
 
+  django-sql-explorer = callPackage ../development/python-modules/django-sql-explorer { };
+
   django-sr = callPackage ../development/python-modules/django-sr { };
 
   django_tagging = callPackage ../development/python-modules/django_tagging { };
