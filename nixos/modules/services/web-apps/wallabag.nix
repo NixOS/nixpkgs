@@ -118,6 +118,8 @@ in {
         '';
       };
 
+      locations."/assets".root = "${cfg.dataDir}/web";
+
       locations."~ ^/app\\.php(/|$)" = {
         extraConfig = ''
           fastcgi_pass unix:${phpfpmSocketName};
