@@ -17,12 +17,14 @@
 # Mesa requires AMDGPU target
 , enableTargets ? [ stdenv.hostPlatform stdenv.targetPlatform "AMDGPU" ]
 , enablePFM ? !stdenv.isDarwin
+, enablePolly ? false
 }:
 
 let
   inherit (stdenv.lib) optional optionals optionalString;
 
   src = fetch "llvm" "16s196wqzdw4pmri15hadzqgdi926zln3an2viwyq0kini6zr3d3";
+  polly_src = fetch "polly" "0wgvayfilgb530bq51l7szxfb13l24nnrmyji2f6ncq95a24dw8v";
 
   # Used when creating a version-suffixed symlink of libLLVM.dylib
   shortVersion = with stdenv.lib;
@@ -38,6 +40,9 @@ in stdenv.mkDerivation (rec {
     unpackFile ${src}
     mv llvm-${version}* llvm
     sourceRoot=$PWD/llvm
+  '' + optionalString enablePolly ''
+    unpackFile ${polly_src}
+    mv polly-* $sourceRoot/tools/polly
   '';
 
   outputs = [ "out" "python" ]
