@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, pantheon, pkgconfig, meson, ninja, vala, python3
 , desktop-file-utils, gtk3, granite, libgee, clutter-gst, clutter-gtk, gst_all_1
-, gobject-introspection, elementary-icon-theme, wrapGAppsHook,  gst-ffmpeg }:
+, gobject-introspection, elementary-icon-theme, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "videos";
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     clutter-gtk
     elementary-icon-theme
     granite
-    gst-ffmpeg
+    #gst-ffmpeg #FIXME?
     gst-libav
     gst-plugins-bad
     gst-plugins-base
