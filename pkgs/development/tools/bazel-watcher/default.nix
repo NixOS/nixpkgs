@@ -29,9 +29,6 @@ buildBazelPackage rec {
 
       # tell rules_go to use the Go binary found in the PATH
       sed -e 's:go_register_toolchains():go_register_toolchains(go_version = "host"):g' -i WORKSPACE
-
-      # tell rules_go to invoke GIT with custom CAINFO path
-      export GIT_SSL_CAINFO="${cacert}/etc/ssl/certs/ca-bundle.crt"
     '';
 
     preInstall = ''
