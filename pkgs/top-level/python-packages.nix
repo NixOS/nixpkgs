@@ -2276,6 +2276,8 @@ in {
 
   django_polymorphic = callPackage ../development/python-modules/django-polymorphic { };
 
+  django-proxy = callPackage ../development/python-modules/django-proxy { };
+
   django-rest-auth = callPackage ../development/python-modules/django-rest-auth { };
 
   django-sampledatahelper = callPackage ../development/python-modules/django-sampledatahelper { };
