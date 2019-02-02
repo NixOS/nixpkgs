@@ -10,14 +10,14 @@
 assert glSupport -> libGL != null;
 
 let
-  version = "1.16.0";
+  version = "1.17.2";
   inherit (stdenv.lib) optional optionals;
 in stdenv.mkDerivation rec {
   name = "cairo-${version}";
 
   src = fetchurl {
     url = "https://cairographics.org/${if stdenv.lib.mod (builtins.fromJSON (stdenv.lib.versions.minor version)) 2 == 0 then "releases" else "snapshots"}/${name}.tar.xz";
-    sha256 = "0c930mk5xr2bshbdljv005j3j8zr47gqmkry3q6qgvqky6rjjysy";
+    sha256 = "1pq1i10fkcijbcjzg8589bd6wx5s555nyrhw20ms4irabrjx8w3b";
   };
 
   outputs = [ "out" "dev" "devdoc" ];
