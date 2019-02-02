@@ -91,6 +91,20 @@ stdenv.mkDerivation rec {
       rev = "cd62d45bcef93fb4f7ed62609a46135e6de07051";
       sha256 = "08l2b9w0rn1zrha6188j72f7737xs126gkgmydjd31baa6367np2";
     })
+
+    # https://trac.sagemath.org/ticket/26949
+    (fetchpatch {
+      name = "sphinx-1.8.3-dependency.patch";
+      url = "https://git.sagemath.org/sage.git/patch?id=d305eda0fedc73fdbe0447b5d6d2b520b8d112c4";
+      sha256 = "1x3q5j8lq35vlj893gj5gq9fhzs60szm9r9rx6ri79yiy9apabph";
+    })
+    # https://trac.sagemath.org/ticket/26451
+    (fetchpatch {
+      name = "sphinx-1.8.3.patch";
+      url = "https://git.sagemath.org/sage.git/patch?id2=0cb494282d7b4cea50aba7f4d100e7932a4c00b1&id=62b989d5ee1d9646db85ea56053cd22e9ffde5ab";
+      sha256 = "1n5c61mvhalcr2wbp66wzsynwwk59aakvx3xqa5zw9nlkx3rd0h1";
+    })
+
   ];
 
   patches = nixPatches ++ packageUpgradePatches;
