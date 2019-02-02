@@ -13855,6 +13855,8 @@ in
 
   cbfstool = callPackage ../applications/virtualization/cbfstool { };
 
+  ifdtool = callPackage ../tools/misc/ifdtool { };
+
   nvramtool = callPackage ../tools/misc/nvramtool { };
 
   vmfs-tools = callPackage ../tools/filesystems/vmfs-tools { };

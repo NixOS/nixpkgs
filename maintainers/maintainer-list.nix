@@ -3485,6 +3485,11 @@
     github = "pesterhazy";
     name = "Paulus Esterhazy";
   };
+  petabyteboy = {
+    email = "me@pbb.lc";
+    github = "petabyteboy";
+    name = "Milan Pässler";
+  };
   peterhoeg = {
     email = "peter@hoeg.com";
     github = "peterhoeg";
