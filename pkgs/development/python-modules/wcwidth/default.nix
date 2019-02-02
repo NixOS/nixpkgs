@@ -1,4 +1,4 @@
-{ lib, fetchPypi, buildPythonPackage }:
+{ lib, fetchPypi, buildPythonPackage, pytest }:
 
 buildPythonPackage rec {
   pname = "wcwidth";
@@ -9,8 +9,11 @@ buildPythonPackage rec {
     sha256 = "0pn6dflzm609m4r3i8ik5ni9ijjbb5fa3vg1n7hn6vkd49r77wrx";
   };
 
-  # Checks fail due to missing tox.ini file:
-  doCheck = false;
+  checkInputs = [ pytest ];
+
+  checkPhase = ''
+    pytest
+  '';
 
   meta = with lib; {
     description = "Measures number of Terminal column cells of wide-character codes";
