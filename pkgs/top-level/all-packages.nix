@@ -6,25 +6,11 @@
  * Hint: ### starts category names.
  */
 { lib, noSysDirs, config}:
-res: pkgs: super:
+pkgs:
 
 with pkgs;
 
-let
-  self =
-    builtins.trace ''
-        It seems that you are using a patched Nixpkgs that references the self
-        variable in pkgs/top-level/all-packages.nix. This variable was incorrectly
-        named, so its usage needs attention. Please use pkgs for packages or super
-        for functions.
-      ''
-      res; # Do *NOT* use res in your fork. It will be removed.
-
-  # TODO: turn self into an error
-
-in
 {
-
   # Allow callPackage to fill in the pkgs argument
   inherit pkgs;
 
@@ -16218,7 +16204,7 @@ in
   };
   bitwig-studio2 =  callPackage ../applications/audio/bitwig-studio/bitwig-studio2.nix {
     inherit (gnome3) zenity;
-    inherit (res) bitwig-studio1;
+    inherit (pkgs) bitwig-studio1;
   };
   bitwig-studio = bitwig-studio2;
 
@@ -22528,7 +22514,7 @@ in
      parameter set to the right value for your deployment target.
   */
   nixos = configuration:
-    (import (res.path + "/nixos/lib/eval-config.nix") {
+    (import (pkgs.path + "/nixos/lib/eval-config.nix") {
       inherit (pkgs.stdenv.hostPlatform) system;
       modules = [(
                   { lib, ... }: {
