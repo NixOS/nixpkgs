@@ -10,7 +10,15 @@ let
     desktopName = "Trilium Notes";
     categories = "Office";
   };
+
+in stdenv.mkDerivation rec {
+  name = "trilium-${version}";
   version = "0.28.3";
+
+  src = fetchurl {
+    url = "https://github.com/zadam/trilium/releases/download/v${version}/trilium-linux-x64-${version}.tar.xz";
+    sha256 = "0bg7fzb0drw6692hcskiwwd4d9s9547cqp3m1s4qj0y7ca3wrx8r";
+  };
 
   # Fetch from source repo, no longer included in release.
   # (they did special-case icon.png but we want the scalable svg)
@@ -20,14 +28,6 @@ let
     sha256 = "1rgj7pza20yndfp8n12k93jyprym02hqah36fkk2b3if3kcmwnfg";
   };
 
-in stdenv.mkDerivation rec {
-  name = "trilium-${version}";
-  inherit version;
-
-  src = fetchurl {
-    url = "https://github.com/zadam/trilium/releases/download/v${version}/trilium-linux-x64-${version}.tar.xz";
-    sha256 = "0bg7fzb0drw6692hcskiwwd4d9s9547cqp3m1s4qj0y7ca3wrx8r";
-  };
 
   nativeBuildInputs = [
     autoPatchelfHook
