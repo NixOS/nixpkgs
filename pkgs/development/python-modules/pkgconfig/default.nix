@@ -11,10 +11,7 @@ buildPythonPackage rec {
 
   checkInputs = [ nose ];
 
-  # Apparently many our expressions get pythonPackages.pkgconfig and expect
-  # to have the pkg-config executable on $PATH
-  # For some reason, propagatedNativeBuildInputs don't seem enough.
-  propagatedBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
 
   checkPhase = ''
     nosetests
