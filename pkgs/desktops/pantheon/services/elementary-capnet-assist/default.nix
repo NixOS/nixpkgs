@@ -3,7 +3,7 @@
 
 stdenv.mkDerivation rec {
   pname = "capnet-assist";
-  version = "2.2.2";
+  version = "2.2.3";
 
   name = "elementary-${pname}-${version}";
 
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "138fxijnnp0gqzj7h0p9r4crpafas1kmvb3r9bb76mmygbdixkgh";
+    sha256 = "15cnwimkmmsb4rwvgm8bizcsn1krsj6k3qc88izn79is75y6wwji";
   };
 
   passthru = {
