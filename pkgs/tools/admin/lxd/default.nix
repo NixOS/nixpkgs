@@ -30,7 +30,7 @@ buildGoPackage rec {
     # binaries from test/
     rm $bin/bin/{deps,macaroon-identity}
 
-    wrapProgram $bin/bin/lxd --prefix PATH ":" ${stdenv.lib.makeBinPath [
+    wrapProgram $bin/bin/lxd --prefix PATH : /bin/:${stdenv.lib.makeBinPath [
       acl rsync gnutar xz btrfs-progs gzip dnsmasq squashfsTools iproute iptables ebtables
       (writeShellScriptBin "apparmor_parser" ''
         exec '${apparmor-parser}/bin/apparmor_parser' -I '${apparmor-profiles}/etc/apparmor.d' "$@"
