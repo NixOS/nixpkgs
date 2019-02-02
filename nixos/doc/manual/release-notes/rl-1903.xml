@@ -432,6 +432,11 @@
    </listitem>
    <listitem>
      <para>
+       The astah-community package was removed from nixpkgs due to it being discontinued and the downloads not being available anymore.
+     </para>
+   </listitem>
+   <listitem>
+     <para>
        The httpd service now saves log files with a .log file extension by default for
        easier integration with the logrotate service.
      </para>
