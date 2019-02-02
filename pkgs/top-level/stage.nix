@@ -89,10 +89,7 @@ let
   splice = self: super: import ./splice.nix lib self (buildPackages != null);
 
   allPackages = self: super:
-    let res = import ./all-packages.nix
-      { inherit lib noSysDirs config; }
-      res self super;
-    in res;
+    import ./all-packages.nix { inherit lib noSysDirs config; } self;
 
   aliases = self: super: lib.optionalAttrs (config.allowAliases or true) (import ./aliases.nix lib self super);
 
