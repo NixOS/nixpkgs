@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   name = "urbit-${version}";
-  version = "0.6.0";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "urbit";
     repo = "urbit";
-    rev = "urbit-${version}";
-    sha256 = "158mz6c6y5z1b6piid8hvrl5mcqh8q1ny185gz51jayia51azmgs";
+    rev = "v${version}";
+    sha256 = "1p0x5vdxibwygzxgfg94r1y1vib3hbsm6n6mdw2fsqlb3s5vrbx8";
     fetchSubmodules = true;
   };
 
