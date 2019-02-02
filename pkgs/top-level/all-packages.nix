@@ -14556,7 +14556,6 @@ in
     kernelPatches =
       [ kernelPatches.bridge_stp_helper
         kernelPatches.modinst_arg_list_too_long
-        kernelPatches.revert-vfs-dont-open-real
       ];
   };
 
@@ -14564,7 +14563,7 @@ in
     kernelPatches =
       [ kernelPatches.bridge_stp_helper
         kernelPatches.modinst_arg_list_too_long
-        kernelPatches.revert-vfs-dont-open-real
+        kernelPatches.raspberry_pi_wifi_fix
       ];
   };
 
