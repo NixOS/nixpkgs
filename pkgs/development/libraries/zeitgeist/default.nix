@@ -5,22 +5,22 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.0.1";
-  name = "zeitgeist-${version}";
+  pname = "zeitgeist";
+  version = "1.0.2";
 
   outputs = [ "out" "lib" "dev" "man" ] ++ stdenv.lib.optional pythonSupport "py";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
-    owner = "zeitgeist";
-    repo = "zeitgeist";
+    owner = pname;
+    repo = pname;
     rev = "v${version}";
-    sha256 = "1lgqcqr5h9ba751b7ajp7h2w1bb5qza2w3k1f95j3ab15p7q0q44";
+    sha256 = "0ig3d3j1n0ghaxsgfww6g2hhcdwx8cljwwfmp9jk1nrvkxd6rnmv";
   };
 
   preConfigure = "NOCONFIGURE=1 ./autogen.sh";
 
-  configureFlags = [ "--with-session-bus-services-dir=$(out)/share/dbus-1/services" ];
+  configureFlags = [ "--with-session-bus-services-dir=${placeholder ''out''}/share/dbus-1/services" ];
 
   nativeBuildInputs = [
     autoconf automake libtool pkgconfig gettext gobject-introspection vala python2Packages.python
@@ -42,8 +42,8 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A service which logs the users's activities and events";
-    homepage = http://zeitgeist.freedesktop.org/;
-    maintainers = with maintainers; [ lethalman ];
+    homepage = https://zeitgeist.freedesktop.org/;
+    maintainers = with maintainers; [ lethalman worldofpeace ];
     license = licenses.gpl2;
     platforms = platforms.linux;
   };
