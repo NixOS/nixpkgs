@@ -1766,6 +1766,8 @@ in {
 
   fb-re2 = callPackage ../development/python-modules/fb-re2 { };
 
+  filetype = callPackage ../development/python-modules/filetype { };
+
   flexmock = callPackage ../development/python-modules/flexmock { };
 
   flit = callPackage ../development/python-modules/flit { };
@@ -1900,6 +1902,8 @@ in {
   imaplib2 = callPackage ../development/python-modules/imaplib2 { };
 
   ipfsapi = callPackage ../development/python-modules/ipfsapi { };
+
+  isbnlib = callPackage ../development/python-modules/isbnlib { };
 
   itsdangerous = callPackage ../development/python-modules/itsdangerous { };
 

@@ -68,6 +68,11 @@
     github = "abbradar";
     name = "Nikolay Amiantov";
   };
+  abhi18av = {
+    email = "abhi18av@gmail.com";
+    github = "abhi18av";
+    name = "Abhinav Sharma";
+  };
   abigailbuccaneer = {
     email = "abigailbuccaneer@gmail.com";
     github = "abigailbuccaneer";
@@ -4677,7 +4682,7 @@
     name = "Thomas Tuegel";
   };
   tv = {
-    email = "tv@shackspace.de";
+    email = "tv@krebsco.de";
     github = "4z3";
     name = "Tomislav Viljetić";
   };

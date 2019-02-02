@@ -76,4 +76,7 @@ self: super: {
     haddock-library = dontHaddock (dontCheck self.haddock-library_1_5_0_1);
   }));
 
+  # cabal2nix doesn't list this because of a conditional on the GHC version.
+  aeson = addBuildDepend super.aeson self.contravariant;
+
 }

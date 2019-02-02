@@ -15,5 +15,6 @@ racket.overrideAttrs (oldAttrs: rec {
       and the pkg library are still bundled.
     '';
     platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" ];
+    broken = false; # Minimal build does not require working FFI
   };
 })

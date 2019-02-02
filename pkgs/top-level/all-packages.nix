@@ -2728,7 +2728,9 @@ in
   frostwire = callPackage ../applications/networking/p2p/frostwire { };
   frostwire-bin = callPackage ../applications/networking/p2p/frostwire/frostwire-bin.nix { };
 
-  ftgl = callPackage ../development/libraries/ftgl { };
+  ftgl = callPackage ../development/libraries/ftgl {
+    inherit (darwin.apple_sdk.frameworks) OpenGL;
+  };
 
   ftop = callPackage ../os-specific/linux/ftop { };
 
@@ -15729,7 +15731,7 @@ in
 
   papirus-icon-theme = callPackage ../data/icons/papirus-icon-theme { };
 
-  papis = python3Packages.callPackage ../tools/misc/papis { };
+  papis = callPackage ../tools/misc/papis { };
 
   pecita = callPackage ../data/fonts/pecita {};
 
