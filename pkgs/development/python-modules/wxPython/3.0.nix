@@ -33,7 +33,8 @@ buildPythonPackage rec {
 
   hardeningDisable = [ "format" ];
 
-  propagatedBuildInputs = [ pkgconfig ]
+  nativeBuildInputs = [ pkgconfig ];
+  propagatedBuildInputs = [ ]
     ++ (lib.optional openglSupport pyopengl)
     ++ (lib.optionals (!stdenv.isDarwin) [ wxGTK (wxGTK.gtk) libX11 ])
     ++ (lib.optionals stdenv.isDarwin [ wxmac darwin.apple_sdk.frameworks.Cocoa ])
@@ -59,8 +60,6 @@ buildPythonPackage rec {
         ("appsvc",     None)
       ]}'
   '';
-
-  NIX_LDFLAGS = lib.optionalString (!stdenv.isDarwin) "-lX11 -lgdk-x11-2.0";
 
   buildPhase = "";
 

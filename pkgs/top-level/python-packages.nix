@@ -4228,6 +4228,7 @@ in {
 
   wxPython30 = callPackage ../development/python-modules/wxPython/3.0.nix {
     wxGTK = pkgs.wxGTK30;
+    inherit (pkgs) pkgconfig;
   };
 
   xml2rfc = callPackage ../development/python-modules/xml2rfc { };
