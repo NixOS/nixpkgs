@@ -623,7 +623,9 @@ in {
     libglade = null;
   };
 
-  pygtksourceview = callPackage ../development/python-modules/pygtksourceview { };
+  pygtksourceview = callPackage ../development/python-modules/pygtksourceview {
+    inherit (pkgs) pkgconfig;
+  };
 
   pyGtkGlade = self.pygtk.override {
     libglade = pkgs.gnome2.libglade;
@@ -987,7 +989,9 @@ in {
 
   autopep8 = callPackage ../development/python-modules/autopep8 { };
 
-  av = callPackage ../development/python-modules/av { };
+  av = callPackage ../development/python-modules/av {
+    inherit (pkgs) pkgconfig;
+  };
 
   avro = callPackage ../development/python-modules/avro {};
 
@@ -1185,7 +1189,9 @@ in {
 
   blaze = callPackage ../development/python-modules/blaze { };
 
-  html5-parser = callPackage ../development/python-modules/html5-parser {};
+  html5-parser = callPackage ../development/python-modules/html5-parser {
+    inherit (pkgs) pkgconfig;
+  };
 
   httpserver = callPackage ../development/python-modules/httpserver {};
 
@@ -1934,7 +1940,7 @@ in {
   latexcodec = callPackage ../development/python-modules/latexcodec {};
 
   libsexy = callPackage ../development/python-modules/libsexy {
-    libsexy = pkgs.libsexy;
+    inherit (pkgs) libsexy pkgconfig;
   };
 
   libsoundtouch = callPackage ../development/python-modules/libsoundtouch { };
@@ -3682,7 +3688,9 @@ in {
 
   pyshp = callPackage ../development/python-modules/pyshp { };
 
-  pysmbc = callPackage ../development/python-modules/pysmbc { };
+  pysmbc = callPackage ../development/python-modules/pysmbc {
+    inherit (pkgs) pkgconfig;
+  };
 
   pyspread = callPackage ../development/python-modules/pyspread { };
 
@@ -3837,6 +3845,7 @@ in {
   pythonnet = callPackage ../development/python-modules/pythonnet {
     # `mono >= 4.6` required to prevent crashes encountered with earlier versions.
     mono = pkgs.mono4;
+    inherit (pkgs) pkgconfig;
   };
 
   pytz = callPackage ../development/python-modules/pytz { };
@@ -4695,7 +4704,7 @@ in {
   Logbook = callPackage ../development/python-modules/Logbook { };
 
   libversion = callPackage ../development/python-modules/libversion {
-    inherit (pkgs) libversion;
+    inherit (pkgs) libversion pkgconfig;
   };
 
   libvirt = callPackage ../development/python-modules/libvirt {
@@ -4718,7 +4727,9 @@ in {
 
   power = callPackage ../development/python-modules/power { };
 
-  pythonefl = callPackage ../development/python-modules/python-efl { };
+  pythonefl = callPackage ../development/python-modules/python-efl {
+    inherit (pkgs) pkgconfig;
+  };
 
   tlsh = callPackage ../development/python-modules/tlsh { };
 
