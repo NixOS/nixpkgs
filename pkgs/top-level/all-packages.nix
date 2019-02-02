@@ -14556,7 +14556,6 @@ in
     kernelPatches =
       [ kernelPatches.bridge_stp_helper
         kernelPatches.modinst_arg_list_too_long
-        kernelPatches.revert-vfs-dont-open-real
       ];
   };
 
@@ -14564,7 +14563,7 @@ in
     kernelPatches =
       [ kernelPatches.bridge_stp_helper
         kernelPatches.modinst_arg_list_too_long
-        kernelPatches.revert-vfs-dont-open-real
+        kernelPatches.raspberry_pi_wifi_fix
       ];
   };
 
@@ -14743,7 +14742,7 @@ in
   });
 
   # The current default kernel / kernel modules.
-  linuxPackages = linuxPackages_4_19;
+  linuxPackages = linuxPackages_4_14;
   linux = linuxPackages.kernel;
 
   # Update this when adding the newest kernel major version!
