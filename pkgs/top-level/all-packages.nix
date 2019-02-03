@@ -18865,12 +18865,9 @@ in
   # And I don't want to rewrite all rules
   procmail = callPackage ../applications/misc/procmail { };
 
-  profanity = callPackage ../applications/networking/instant-messengers/profanity {
-    notifySupport   = config.profanity.notifySupport   or true;
-    traySupport     = config.profanity.traySupport     or true;
-    autoAwaySupport = config.profanity.autoAwaySupport or true;
+  profanity = callPackage ../applications/networking/instant-messengers/profanity ({
     python = python3;
-  };
+  } // (config.profanity or {}));
 
   protonmail-bridge = libsForQt5.callPackage ../applications/networking/protonmail-bridge { };
 
