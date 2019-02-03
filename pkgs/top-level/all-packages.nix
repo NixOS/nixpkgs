@@ -21536,9 +21536,7 @@ in
 
   ### SCIENCE/MACHINE LEARNING
 
-  sc2-headless = callPackage ../applications/science/machine-learning/sc2-headless {
-    licenseAccepted = (config.sc2-headless.accept_license or false);
-  };
+  sc2-headless = callPackage ../applications/science/machine-learning/sc2-headless { };
 
   ### SCIENCE/MATH
 
