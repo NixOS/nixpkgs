@@ -1,6 +1,6 @@
-{ pkgs ? import <nixpkgs> {}
+{ config, pkgs ? import <nixpkgs> {}
 , pkgs_i686 ? import <nixpkgs> { system = "i686-linux"; }
-, licenseAccepted ? false
+, licenseAccepted ? config.android_sdk.accept_license or false
 }:
 
 rec {
