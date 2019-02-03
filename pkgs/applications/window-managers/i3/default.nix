@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   name = "i3-${version}";
-  version = "4.16";
+  version = "4.16.1";
 
   src = fetchurl {
     url = "https://i3wm.org/downloads/${name}.tar.bz2";
-    sha256 = "1d2mnryn7m9c6d69awd7lwzadliapd0ahi5n8d0ppqy533ssaq6c";
+    sha256 = "0xl56y196vxv001gvx35xwfr25zah8m3xwizp9ycdgdc0rfc4rdb";
   };
 
   nativeBuildInputs = [ which pkgconfig makeWrapper ];
