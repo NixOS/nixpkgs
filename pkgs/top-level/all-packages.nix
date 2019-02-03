@@ -822,9 +822,7 @@ in
 
   autorandr = callPackage ../tools/misc/autorandr {};
 
-  avahi = callPackage ../development/libraries/avahi {
-    qt4Support = config.avahi.qt4Support or false;
-  };
+  avahi = callPackage ../development/libraries/avahi (config.avahi or {});
 
   avro-c = callPackage ../development/libraries/avro-c { };
 
