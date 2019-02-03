@@ -21004,11 +21004,7 @@ in
 
   steamPackages = callPackage ../games/steam { };
 
-  steam = steamPackages.steam-chrootenv.override {
-    # DEPRECATED
-    withJava = config.steam.java or false;
-    withPrimus = config.steam.primus or false;
-  };
+  steam = steamPackages.steam-chrootenv;
 
   steam-run = steam.run;
   steam-run-native = (steam.override {

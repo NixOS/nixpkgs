@@ -1,11 +1,13 @@
-{ stdenv, lib, writeScript, buildFHSUserEnv, steam, glxinfo-i686
+{ config, stdenv, lib, writeScript, buildFHSUserEnv, steam, glxinfo-i686
 , steam-runtime-wrapped, steam-runtime-wrapped-i686 ? null
-, withJava ? false
-, withPrimus ? false
 , extraPkgs ? pkgs: [ ] # extra packages to add to targetPkgs
 , extraProfile ? "" # string to append to profile
 , nativeOnly ? false
 , runtimeOnly ? false
+
+# DEPRECATED
+, withJava ? config.steam.java or false
+, withPrimus ? config.steam.primus or false
 }:
 
 let
