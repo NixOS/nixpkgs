@@ -6,6 +6,7 @@ let
 
   dmcfg = config.services.xserver.displayManager;
   ldmcfg = dmcfg.lightdm;
+  xcfg = config.services.xserver;
   cfg = ldmcfg.greeters.gtk;
 
   inherit (pkgs) writeText;
@@ -47,6 +48,7 @@ let
     background = ${ldmcfg.background}
     ${optionalString (cfg.clock-format != null) "clock-format = ${cfg.clock-format}"}
     ${optionalString (cfg.indicators != null) "indicators = ${concatStringsSep ";" cfg.indicators}"}
+    ${optionalString (xcfg.dpi != null) "xft-dpi=${toString xcfg.dpi}"}
     ${cfg.extraConfig}
     '';
 
