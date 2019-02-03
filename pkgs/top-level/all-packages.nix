@@ -11866,7 +11866,6 @@ in
   openssl-chacha = callPackage ../development/libraries/openssl/chacha.nix { };
 
   opensubdiv = callPackage ../development/libraries/opensubdiv {
-    cudaSupport = config.cudaSupport or false;
     cmake = cmake_2_8;
   };
 
