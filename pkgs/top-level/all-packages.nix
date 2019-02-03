@@ -16295,18 +16295,7 @@ in
 
   bookworm = callPackage ../applications/office/bookworm { };
 
-  chromium = callPackage ../applications/networking/browsers/chromium ({
-    channel = "stable";
-    pulseSupport = config.pulseaudio or true;
-    enablePepperFlash = config.chromium.enablePepperFlash or false;
-    enableWideVine = config.chromium.enableWideVine or false;
-  } // (if stdenv.isAarch64 then {
-          stdenv = gcc8Stdenv;
-        } else {
-          llvmPackages = llvmPackages_7;
-          stdenv = llvmPackages_7.stdenv;
-        })
-   );
+  chromium = callPackage ../applications/networking/browsers/chromium (config.chromium or {});
 
   chronos = callPackage ../applications/networking/cluster/chronos { };
 
