@@ -6,7 +6,7 @@
 
 let
   pname = "wlroots";
-  version = "0.2";
+  version = "0.3";
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
@@ -14,13 +14,8 @@ in stdenv.mkDerivation rec {
     owner = "swaywm";
     repo = "wlroots";
     rev = version;
-    sha256 = "0gfxawjlb736xl90zfv3n6zzf5n1cacgzflqi1zq1wn7wd3j6ppv";
+    sha256 = "1iz5lxpiba1lcmkz3hz56r8j6ra3535zgckazqshi4c364nx94zs";
   };
-
-  postPatch = ''
-    substituteInPlace meson.build \
-      --replace "version: '0.1.0'" "version: '${version}.0'"
-  '';
 
   # $out for the library, $bin for rootston, and $examples for the example
   # programs (in examples) AND rootston
@@ -38,6 +33,11 @@ in stdenv.mkDerivation rec {
     "-Dlibcap=enabled" "-Dlogind=enabled" "-Dxwayland=enabled" "-Dx11-backend=enabled"
     "-Dxcb-icccm=enabled" "-Dxcb-errors=enabled"
   ];
+
+  postPatch = ''
+    # It happens from time to time that the version wasn't updated:
+    sed -iE "s/version: '[0-9]\.[0-9]\.[0-9]'/version: '${version}.0'/" meson.build
+  '';
 
   postInstall = ''
     # Install rootston (the reference compositor) to $bin and $examples
