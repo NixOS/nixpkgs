@@ -1,10 +1,10 @@
-{ stdenv, lib, fetchurl, boost, cmake, ffmpeg, gettext, glew
+{ config, stdenv, lib, fetchurl, boost, cmake, ffmpeg, gettext, glew
 , ilmbase, libXi, libX11, libXext, libXrender
 , libjpeg, libpng, libsamplerate, libsndfile
 , libtiff, libGLU_combined, openal, opencolorio, openexr, openimageio, openjpeg_1, pythonPackages
 , zlib, fftw, opensubdiv, freetype, jemalloc, ocl-icd
 , jackaudioSupport ? false, libjack2
-, cudaSupport ? false, cudatoolkit
+, cudaSupport ? config.cudaSupport or false, cudatoolkit
 , colladaSupport ? true, opencollada
 , enableNumpy ? false, makeWrapper
 }:
