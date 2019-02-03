@@ -4181,9 +4181,7 @@ in
 
   mitmproxy = callPackage ../tools/networking/mitmproxy { };
 
-  mjpegtools = callPackage ../tools/video/mjpegtools {
-    withMinimal = true;
-  };
+  mjpegtools = callPackage ../tools/video/mjpegtools { };
 
   mjpegtoolsFull = mjpegtools.override {
     withMinimal = false;
