@@ -20362,9 +20362,7 @@ in
     boost = boost160;
   };
 
-  zathura = callPackage ../applications/misc/zathura {
-    useMupdf = config.zathura.useMupdf or true;
-  };
+  zathura = callPackage ../applications/misc/zathura { };
 
   zeroc_ice = callPackage ../development/libraries/zeroc-ice {
     inherit (darwin.apple_sdk.frameworks) Security;
