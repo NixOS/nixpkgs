@@ -16386,7 +16386,6 @@ in
   claws-mail = callPackage ../applications/networking/mailreaders/claws-mail {
     inherit (gnome3) gsettings-desktop-schemas;
     inherit (xorg) libSM;
-    enableNetworkManager = config.networking.networkmanager.enable or false;
   };
 
   clfswm = callPackage ../applications/window-managers/clfswm { };

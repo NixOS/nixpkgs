@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, wrapGAppsHook, autoreconfHook
+{ config, fetchurl, stdenv, wrapGAppsHook, autoreconfHook
 , curl, dbus, dbus-glib, enchant, gtk2, gnutls, gnupg, gpgme, hicolor-icon-theme
 , libarchive, libcanberra-gtk2, libetpan, libnotify, libsoup, libxml2, networkmanager
 , openldap, perl, pkgconfig, poppler, python, shared-mime-info, webkitgtk24x-gtk2
@@ -10,7 +10,7 @@
 #         gdata requires libgdata
 #         geolocation requires libchamplain
 , enableLdap ? false
-, enableNetworkManager ? false
+, enableNetworkManager ? config.networking.networkmanager.enable or false
 , enablePgp ? true
 , enablePluginArchive ? false
 , enablePluginFancy ? false
