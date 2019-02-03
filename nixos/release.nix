@@ -117,7 +117,7 @@ let
         postBuild = ''
           mkdir -p $out/nix-support
           echo "file ${kernelTarget} ${build.kernel}/${kernelTarget}" >> $out/nix-support/hydra-build-products
-          echo "file initrd ${build.netbootRamdisk}/initrd" >> $out/nix-support/hydra-build-products
+          echo "file initrd ${build.initialRamdisk}/initrd" >> $out/nix-support/hydra-build-products
           echo "file ipxe ${build.netbootIpxeScript}/netboot.ipxe" >> $out/nix-support/hydra-build-products
         '';
         preferLocalBuild = true;
