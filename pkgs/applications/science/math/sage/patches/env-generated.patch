@@ -1,0 +1,13 @@
+diff --git a/src/sage/env.py b/src/sage/env.py
+index a91aac4fe6..1993b5b9c7 100644
+--- a/src/sage/env.py
++++ b/src/sage/env.py
+@@ -28,6 +28,8 @@ variables::
+ 
+ from __future__ import absolute_import
+ 
++exec(open('env_generated.py'))
++
+ import sage
+ import glob
+ import os
