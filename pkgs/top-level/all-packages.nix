@@ -21902,9 +21902,7 @@ in
     sbcl = null;
   };
 
-  mxnet = callPackage ../applications/science/math/mxnet rec {
-    cudaSupport = config.cudaSupport or false;
-    cudnnSupport = cudaSupport;
+  mxnet = callPackage ../applications/science/math/mxnet {
     inherit (linuxPackages) nvidia_x11;
   };
 
