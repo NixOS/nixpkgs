@@ -12400,6 +12400,8 @@ in
 
   SDL2_ttf = callPackage ../development/libraries/SDL2_ttf { };
 
+  sdnotify-wrapper = skawarePackages.sdnotify-wrapper;
+
   sblim-sfcc = callPackage ../development/libraries/sblim-sfcc {};
 
   selinux-sandbox = callPackage ../os-specific/linux/selinux-sandbox { };
@@ -12458,7 +12460,7 @@ in
 
     nsss = callPackage ../development/libraries/nsss { };
     utmps = callPackage ../development/libraries/utmps { };
-
+    sdnotify-wrapper = callPackage ../os-specific/linux/sdnotify-wrapper { };
   };
 
   skydive = callPackage ../tools/networking/skydive { };
