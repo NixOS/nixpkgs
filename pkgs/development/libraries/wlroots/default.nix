@@ -40,14 +40,21 @@ in stdenv.mkDerivation rec {
   '';
 
   postInstall = ''
-    # Install rootston (the reference compositor) to $bin and $examples
+    # Copy the library to $bin and $examples
+    for output in "$bin" "$examples"; do
+      mkdir -p $output/lib
+      cp -P libwlroots* $output/lib/
+    done
+  '';
+
+  postFixup = ''
+    # Install rootston (the reference compositor) to $bin and $examples (this
+    # has to be done after the fixup phase to prevent broken binaries):
     for output in "$bin" "$examples"; do
       mkdir -p $output/bin
       cp rootston/rootston $output/bin/
-      mkdir $output/lib
-      cp libwlroots* $output/lib/
       patchelf \
-        --set-rpath "$output/lib:${stdenv.lib.makeLibraryPath buildInputs}" \
+        --set-rpath "$(patchelf --print-rpath $output/bin/rootston | sed s,$out,$output,g)" \
         $output/bin/rootston
       mkdir $output/etc
       cp ../rootston/rootston.ini.example $output/etc/rootston.ini
@@ -59,10 +66,10 @@ in stdenv.mkDerivation rec {
     mkdir -p $examples/bin
     cd ./examples
     for binary in $(find . -executable -type f -printf '%P\n' | grep -vE '\.so'); do
-      patchelf \
-        --set-rpath "$examples/lib:${stdenv.lib.makeLibraryPath buildInputs}" \
-        "$binary"
       cp "$binary" "$examples/bin/wlroots-$binary"
+      patchelf \
+        --set-rpath "$(patchelf --print-rpath $output/bin/rootston | sed s,$out,$examples,g)" \
+        "$examples/bin/wlroots-$binary"
     done
   '';
 
