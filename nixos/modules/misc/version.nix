@@ -36,14 +36,14 @@ in
     nixos.revision = mkOption {
       internal = true;
       type = types.str;
-      default = lib.trivial.revisionWithDefault "master";
+      default = trivial.revisionWithDefault "master";
       description = "The Git revision from which this NixOS configuration was built.";
     };
 
     nixos.codeName = mkOption {
       readOnly = true;
       type = types.str;
-      default = lib.trivial.codeName;
+      default = trivial.codeName;
       description = "The NixOS release code name (e.g. <literal>Emu</literal>).";
     };
 
