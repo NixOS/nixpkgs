@@ -73,7 +73,7 @@ in let
   # whatever arguments it doesn't explicitly provide. This way,
   # `all-packages.nix` doesn't know more than it needs too.
   #
-  # It's OK that `args` doesn't include default arguemtns from this file:
+  # It's OK that `args` doesn't include default arguments from this file:
   # they'll be deterministically inferred. In fact we must *not* include them,
   # because it's important that if some parameter which affects the default is
   # substituted with a different argument, the default is re-inferred.
