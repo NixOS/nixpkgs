@@ -17,7 +17,8 @@
 , installjdk ? true
 , pluginSupport ? true
 , installjce ? false
-, licenseAccepted ? false
+, config
+, licenseAccepted ? config.oraclejdk.accept_license or false
 , glib
 , libxml2
 , libav_0_8
