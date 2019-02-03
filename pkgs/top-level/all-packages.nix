@@ -16030,9 +16030,7 @@ in
 
   agedu = callPackage ../tools/misc/agedu { };
 
-  ahoviewer = callPackage ../applications/graphics/ahoviewer {
-    useUnrar = config.ahoviewer.useUnrar or false;
-  };
+  ahoviewer = callPackage ../applications/graphics/ahoviewer { };
 
   airwave = callPackage ../applications/audio/airwave { };
 
