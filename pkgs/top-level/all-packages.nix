@@ -3066,10 +3066,9 @@ in
 
   grpcurl = callPackage ../tools/networking/grpcurl { };
 
-  grub = pkgsi686Linux.callPackage ../tools/misc/grub {
-    buggyBiosCDSupport = config.grub.buggyBiosCDSupport or true;
+  grub = pkgsi686Linux.callPackage ../tools/misc/grub ({
     stdenv = overrideCC stdenv pkgsi686Linux.gcc6;
-  };
+  } // (config.grub or {}));
 
   trustedGrub = pkgsi686Linux.callPackage ../tools/misc/grub/trusted.nix { };
 
