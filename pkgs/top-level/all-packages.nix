@@ -19395,9 +19395,7 @@ in
     };
   };
 
-  libspotify = callPackage ../development/libraries/libspotify {
-    apiKey = config.libspotify.apiKey or null;
-  };
+  libspotify = callPackage ../development/libraries/libspotify (config.libspotify or {});
 
   sourcetrail = callPackage ../development/tools/sourcetrail { };
 
