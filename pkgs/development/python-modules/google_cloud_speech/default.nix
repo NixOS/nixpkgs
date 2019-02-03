@@ -3,11 +3,11 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-speech";
-  version = "0.36.2";
+  version = "0.36.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "afe0d69e5db64bd58bc5fd9d16aad90c1507556bf317fdeadcfc8ccbdaa1659a";
+    sha256 = "3d77da6086c01375908c8b800808ff83748a34b98313f885bd86df95448304fc";
   };
 
   propagatedBuildInputs = [ google_api_core ];
