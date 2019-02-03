@@ -19,6 +19,6 @@ buildGoPackage rec {
     homepage = https://coredns.io;
     description = "A DNS server that runs middleware";
     license = licenses.asl20;
-    maintainers = [ maintainers.rushmorem maintainers.rtreffer ];
+    maintainers = [ maintainers.rushmorem maintainers.rtreffer maintainers.deltaevo ];
   };
 }
