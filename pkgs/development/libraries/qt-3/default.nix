@@ -6,7 +6,8 @@
 , cursorSupport ? true, libXcursor ? null
 , threadSupport ? true
 , mysqlSupport ? false, mysql ? null
-, openglSupport ? false, libGLU_combined ? null, libXmu ? null
+, libGLSupported
+, openglSupport ? libGLSupported, libGLU_combined ? null, libXmu ? null
 , xlibsWrapper, xorgproto, zlib, libjpeg, libpng, which
 }:
 

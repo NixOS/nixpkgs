@@ -12099,7 +12099,6 @@ in
   qolibri = libsForQt5.callPackage ../applications/misc/qolibri { };
 
   qt3 = callPackage ../development/libraries/qt-3 {
-    openglSupport = libGLSupported;
     libpng = libpng12;
   };
 
