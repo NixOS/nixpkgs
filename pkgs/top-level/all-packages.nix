@@ -11890,9 +11890,7 @@ in
 
   pangoxsl = callPackage ../development/libraries/pangoxsl { };
 
-  pcaudiolib = callPackage ../development/libraries/pcaudiolib {
-    pulseaudioSupport = config.pulseaudio or true;
-  };
+  pcaudiolib = callPackage ../development/libraries/pcaudiolib { };
 
   pcg_c = callPackage ../development/libraries/pcg-c { };
 
