@@ -38,7 +38,6 @@ stdenv.mkDerivation rec {
     clutter-gtk
     elementary-icon-theme
     granite
-    #gst-ffmpeg #FIXME?
     gst-libav
     gst-plugins-bad
     gst-plugins-base
