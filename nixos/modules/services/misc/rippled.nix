@@ -175,7 +175,7 @@ let
 
       onlineDelete = mkOption {
         description = "Enable automatic purging of older ledger information.";
-        type = types.addCheck (types.nullOr types.int) (v: v > 256);
+        type = types.nullOr (types.addCheck types.int (v: v > 256));
         default = cfg.ledgerHistory;
       };
 
