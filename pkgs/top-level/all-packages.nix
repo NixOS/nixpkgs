@@ -5557,9 +5557,7 @@ in
 
   stress-ng = callPackage ../tools/system/stress-ng { };
 
-  stoken = callPackage ../tools/security/stoken {
-    withGTK3 = config.stoken.withGTK3 or true;
-  };
+  stoken = callPackage ../tools/security/stoken (config.stoken or {});
 
   storeBackup = callPackage ../tools/backup/store-backup { };
 
