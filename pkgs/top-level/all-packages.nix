@@ -19411,16 +19411,7 @@ in
 
   sublime3-dev = sublime3Packages.sublime3-dev;
 
-  inherit (callPackages ../applications/version-management/subversion {
-      bdbSupport = true;
-      httpServer = false;
-      httpSupport = true;
-      pythonBindings = false;
-      perlBindings = false;
-      javahlBindings = false;
-      saslSupport = false;
-      sasl = cyrus_sasl;
-    })
+  inherit (callPackages ../applications/version-management/subversion { sasl = cyrus_sasl; })
     subversion18 subversion19 subversion_1_10 subversion_1_11;
 
   subversion = subversion_1_11;
