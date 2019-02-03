@@ -2006,7 +2006,6 @@ in
 
   ibus-with-plugins = callPackage ../tools/inputmethods/ibus/wrapper.nix {
     inherit (gnome3) dconf;
-    plugins = [ ];
   };
 
   interception-tools = callPackage ../tools/inputmethods/interception-tools { };
