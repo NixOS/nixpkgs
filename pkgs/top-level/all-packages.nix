@@ -22638,15 +22638,7 @@ in
 
   disnix = callPackage ../tools/package-management/disnix { };
 
-  dysnomia = callPackage ../tools/package-management/disnix/dysnomia {
-    enableApacheWebApplication = config.disnix.enableApacheWebApplication or false;
-    enableAxis2WebService = config.disnix.enableAxis2WebService or false;
-    enableEjabberdDump = config.disnix.enableEjabberdDump or false;
-    enableMySQLDatabase = config.disnix.enableMySQLDatabase or false;
-    enablePostgreSQLDatabase = config.disnix.enablePostgreSQLDatabase or false;
-    enableSubversionRepository = config.disnix.enableSubversionRepository or false;
-    enableTomcatWebApplication = config.disnix.enableTomcatWebApplication or false;
-  };
+  dysnomia = callPackage ../tools/package-management/disnix/dysnomia (config.disnix or {});
 
   disnixos = callPackage ../tools/package-management/disnix/disnixos { };
 
