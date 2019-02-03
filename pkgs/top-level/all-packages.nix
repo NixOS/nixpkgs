@@ -967,10 +967,8 @@ in
 
   brigand = callPackage ../development/libraries/brigand { };
 
-  brltty = callPackage ../tools/misc/brltty {
-    alsaSupport = (!stdenv.isDarwin);
-    systemdSupport = stdenv.isLinux;
-  };
+  brltty = callPackage ../tools/misc/brltty { };
+
   bro = callPackage ../applications/networking/ids/bro { };
 
   bruteforce-luks = callPackage ../tools/security/bruteforce-luks { };
