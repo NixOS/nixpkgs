@@ -21862,12 +21862,9 @@ in
     opencv3 = opencv3WithoutCuda; # Used only for image loading.
   });
 
-  cntk = callPackage ../applications/science/math/cntk rec {
-    cudaSupport = pkgs.config.cudaSupport or false;
-    cudnnSupport = cudaSupport;
+  cntk = callPackage ../applications/science/math/cntk {
     inherit (linuxPackages) nvidia_x11;
-    # Used only for image loading.
-    opencv3 = opencv3WithoutCuda;
+    opencv3 = opencv3WithoutCuda; # Used only for image loading.
   };
 
   ecm = callPackage ../applications/science/math/ecm { };
