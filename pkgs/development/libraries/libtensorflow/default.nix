@@ -1,7 +1,7 @@
-{ stdenv
+{ config, stdenv
 , fetchurl
 , patchelf
-, cudaSupport ? false, symlinkJoin, cudatoolkit, cudnn, nvidia_x11
+, cudaSupport ? config.cudaSupport or false, symlinkJoin, cudatoolkit, cudnn, nvidia_x11
 }:
 with stdenv.lib;
 let
