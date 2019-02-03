@@ -1,4 +1,4 @@
-{stdenvNoCC, subversion, glibcLocales, sshSupport ? false, openssh ? null}:
+{stdenvNoCC, subversion, glibcLocales, sshSupport ? true, openssh ? null}:
 {url, rev ? "HEAD", md5 ? "", sha256 ? ""
 , ignoreExternals ? false, ignoreKeywords ? false, name ? null
 , preferLocalBuild ? true }:

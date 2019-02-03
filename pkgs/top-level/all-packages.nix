@@ -226,9 +226,7 @@ in
 
   fetchs3 = callPackage ../build-support/fetchs3 { };
 
-  fetchsvn = callPackage ../build-support/fetchsvn {
-    sshSupport = true;
-  };
+  fetchsvn = callPackage ../build-support/fetchsvn { };
 
   fetchsvnrevision = import ../build-support/fetchsvnrevision runCommand subversion;
 
