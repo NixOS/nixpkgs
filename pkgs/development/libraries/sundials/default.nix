@@ -3,18 +3,17 @@
 stdenv.mkDerivation rec {
 
   pname = "sundials";
-  version = "4.0.1";
-  name = "${pname}-${version}";
+  version = "4.0.2";
 
   src = fetchurl {
     url = "https://computation.llnl.gov/projects/${pname}/download/${pname}-${version}.tar.gz";
-    sha256 = "1m5f2glxmgc6imjr0yqqp448r8q3kvsfp8dxxn83k00fcb40kr19";
+    sha256 = "0xfk0icsi63yi1dby4rn02ppwkzfykciw6q03bk454gdia9xcmk6";
   };
 
   preConfigure = ''
     export cmakeFlags="-DCMAKE_INSTALL_PREFIX=$out -DEXAMPLES_INSTALL_PATH=$out/share/examples $cmakeFlags"
   '';
-  
+
   nativeBuildInputs = [ cmake ];
   buildInputs = [ python ];
 
