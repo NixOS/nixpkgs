@@ -14326,8 +14326,7 @@ in
 
   conky = callPackage ../os-specific/linux/conky ({
     lua = lua5_3_compat;
-    libXNVCtrl = linuxPackages.nvidia_x11.settings.libXNVCtrl;
-    pulseSupport = config.pulseaudio or false;
+    inherit (linuxPackages.nvidia_x11.settings) libXNVCtrl;
   } // config.conky or {});
 
   conntrack-tools = callPackage ../os-specific/linux/conntrack-tools { };
