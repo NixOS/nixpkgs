@@ -1762,9 +1762,7 @@ in
     inherit (python27Packages) pillow;
   };
 
-  blueman = callPackage ../tools/bluetooth/blueman {
-    withPulseAudio = config.pulseaudio or true;
-  };
+  blueman = callPackage ../tools/bluetooth/blueman { };
 
   bmrsa = callPackage ../tools/security/bmrsa/11.nix { };
 
