@@ -20151,18 +20151,15 @@ in
   };
 
   xmonad_log_applet = callPackage ../applications/window-managers/xmonad/log-applet {
-    desktopSupport = "gnomeflashback";
     inherit (xfce) libxfce4util xfce4-panel;
   };
 
   xmonad_log_applet_mate = xmonad_log_applet.override {
     desktopSupport = "mate";
-    inherit (xfce) libxfce4util xfce4-panel;
   };
 
   xmonad_log_applet_xfce = xmonad_log_applet.override {
     desktopSupport = "xfce4";
-    inherit (xfce) libxfce4util xfce4-panel;
   };
 
   xmpp-client = callPackage ../applications/networking/instant-messengers/xmpp-client { };
