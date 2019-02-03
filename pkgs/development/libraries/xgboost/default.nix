@@ -1,5 +1,5 @@
-{ stdenv, lib, fetchgit, cmake
-, cudaSupport ? false, cudatoolkit
+{ config, stdenv, lib, fetchgit, cmake
+, cudaSupport ? config.cudaSupport or false, cudatoolkit
 , ncclSupport ? false, nccl
 , llvmPackages
 }:

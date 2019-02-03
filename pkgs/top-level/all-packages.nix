@@ -12993,9 +12993,7 @@ in
 
   xalanc = callPackage ../development/libraries/xalanc {};
 
-  xgboost = callPackage ../development/libraries/xgboost {
-    cudaSupport = config.cudaSupport or false;
-  };
+  xgboost = callPackage ../development/libraries/xgboost { };
 
   xgeometry-select = callPackage ../tools/X11/xgeometry-select { };
 
