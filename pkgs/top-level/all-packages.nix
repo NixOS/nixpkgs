@@ -20851,9 +20851,7 @@ in
 
   racer = callPackage ../games/racer { };
 
-  residualvm = callPackage ../games/residualvm {
-    openglSupport = libGLSupported;
-  };
+  residualvm = callPackage ../games/residualvm { };
 
   rftg = callPackage ../games/rftg { };
 
