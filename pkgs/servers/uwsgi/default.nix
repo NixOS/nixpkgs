@@ -1,8 +1,8 @@
 { stdenv, lib, fetchurl, pkgconfig, jansson, pcre
 # plugins: list of strings, eg. [ "python2" "python3" ]
-, plugins
-, pam, withPAM ? false
-, systemd, withSystemd ? false
+, plugins ? []
+, pam, withPAM ? stdenv.isLinux
+, systemd, withSystemd ? stdenv.isLinux
 , python2, python3, ncurses
 , ruby, php-embed, mysql
 }:

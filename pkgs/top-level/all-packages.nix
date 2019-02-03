@@ -5916,11 +5916,7 @@ in
 
   usync = callPackage ../applications/misc/usync { };
 
-  uwsgi = callPackage ../servers/uwsgi {
-    plugins = [];
-    withPAM = stdenv.isLinux;
-    withSystemd = stdenv.isLinux;
-  };
+  uwsgi = callPackage ../servers/uwsgi { };
 
   vacuum = callPackage ../applications/networking/instant-messengers/vacuum {};
 
