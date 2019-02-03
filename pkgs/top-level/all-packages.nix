@@ -18128,7 +18128,6 @@ in
 
   mercurial = callPackage ../applications/version-management/mercurial {
     inherit (darwin.apple_sdk.frameworks) ApplicationServices;
-    guiSupport = false; # use mercurialFull to get hgk GUI
   };
 
   mercurialFull = appendToName "full" (pkgs.mercurial.override { guiSupport = true; });
