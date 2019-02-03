@@ -22780,15 +22780,9 @@ in
   samsung-unified-linux-driver_4_01_17 = callPackage ../misc/cups/drivers/samsung/4.01.17.nix { };
   samsung-unified-linux-driver = res.samsung-unified-linux-driver_4_01_17;
 
-  sane-backends = callPackage ../applications/graphics/sane/backends {
-    gt68xxFirmware = config.sane.gt68xxFirmware or null;
-    snapscanFirmware = config.sane.snapscanFirmware or null;
-  };
+  sane-backends = callPackage ../applications/graphics/sane/backends (config.sane or {});
 
-  sane-backends-git = callPackage ../applications/graphics/sane/backends/git.nix {
-    gt68xxFirmware = config.sane.gt68xxFirmware or null;
-    snapscanFirmware = config.sane.snapscanFirmware or null;
-  };
+  sane-backends-git = callPackage ../applications/graphics/sane/backends/git.nix (config.sane or {});
 
   brlaser = callPackage ../misc/cups/drivers/brlaser { };
 
