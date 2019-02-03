@@ -121,7 +121,7 @@ rec {
       auto = builtins.intersectAttrs (lib.functionArgs f) autoArgs;
       origArgs = auto // args;
       pkgs = f origArgs;
-      mkAttrOverridable = name: pkg: makeOverridable (newArgs: (f newArgs).${name}) origArgs;
+      mkAttrOverridable = name: _: makeOverridable (newArgs: (f newArgs).${name}) origArgs;
     in lib.mapAttrs mkAttrOverridable pkgs;
 
 
