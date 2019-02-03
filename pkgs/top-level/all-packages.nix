@@ -13734,13 +13734,11 @@ in
     bluetoothSupport = true;
     remoteControlSupport = true;
     zeroconfSupport = true;
-    inherit (darwin.apple_sdk.frameworks) CoreServices AudioUnit Cocoa;
   };
 
   # libpulse implementations
   libpulseaudio-vanilla = pulseaudio.override {
     libOnly = true;
-    inherit (darwin.apple_sdk.frameworks) CoreServices AudioUnit Cocoa;
   };
 
   apulse = callPackage ../misc/apulse { };
