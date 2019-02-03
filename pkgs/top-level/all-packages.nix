@@ -230,9 +230,7 @@ in
 
   fetchsvnrevision = import ../build-support/fetchsvnrevision runCommand subversion;
 
-  fetchsvnssh = callPackage ../build-support/fetchsvnssh {
-    sshSupport = true;
-  };
+  fetchsvnssh = callPackage ../build-support/fetchsvnssh { };
 
   fetchhg = callPackage ../build-support/fetchhg { };
 
