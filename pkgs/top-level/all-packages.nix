@@ -406,15 +406,9 @@ in
 
   aefs = callPackage ../tools/filesystems/aefs { };
 
-  aegisub = callPackage ../applications/video/aegisub {
+  aegisub = callPackage ../applications/video/aegisub ({
     wxGTK = wxGTK30;
-    spellcheckSupport = config.aegisub.spellcheckSupport or true;
-    automationSupport = config.aegisub.automationSupport or true;
-    openalSupport     = config.aegisub.openalSupport or false;
-    alsaSupport       = config.aegisub.alsaSupport or true;
-    pulseaudioSupport = config.aegisub.pulseaudioSupport or true;
-    portaudioSupport  = config.aegisub.portaudioSupport or false;
-  };
+  } // (config.aegisub or {}));
 
   aerospike = callPackage ../servers/nosql/aerospike { };
 
