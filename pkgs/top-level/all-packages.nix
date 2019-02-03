@@ -10895,7 +10895,6 @@ in
 
   libgpod = callPackage ../development/libraries/libgpod {
     inherit (pkgs.pythonPackages) mutagen;
-    monoSupport = false;
   };
 
   libgssglue = callPackage ../development/libraries/libgssglue { };
