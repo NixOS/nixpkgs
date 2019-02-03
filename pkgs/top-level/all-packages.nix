@@ -8945,11 +8945,13 @@ in
 
   pkgconf = callPackage ../development/tools/misc/pkgconf {};
 
-  pkgconfig = callPackage ../development/tools/misc/pkgconfig {
+  pkg-config = callPackage ../development/tools/misc/pkg-config {
     fetchurl = fetchurlBoot;
   };
+  pkgconfig = pkg-config; # added 2018-02-02
 
-  pkgconfigUpstream = lowPrio (pkgconfig.override { vanilla = true; });
+  pkg-configUpstream = lowPrio (pkg-config.override { vanilla = true; });
+  pkgconfigUpstream = pkg-configUpstream; # added 2018-02-02
 
   postiats-utilities = callPackage ../development/tools/postiats-utilities {};
 
