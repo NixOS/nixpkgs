@@ -110,6 +110,17 @@ in {
       '';
     };
 
+    configWritable = mkOption {
+      default = false;
+      type = types.bool;
+      description = ''
+        Whether to make <filename>configuration.yaml</filename> writable.
+        This only has an effect if <option>config</option> is set.
+        This will allow you to edit it from Home Assistant's web interface.
+        However, bear in mind that it will be overwritten at every start of the service.
+      '';
+    };
+
     lovelaceConfig = mkOption {
       default = null;
       type = with types; nullOr attrs;
@@ -132,6 +143,17 @@ in {
         Setting this option will automatically add
         <literal>lovelace.mode = "yaml";</literal> to your <option>config</option>.
         Beware that setting this option will delete your previous <filename>ui-lovelace.yaml</filename>
+      '';
+    };
+
+    lovelaceConfigWritable = mkOption {
+      default = false;
+      type = types.bool;
+      description = ''
+        Whether to make <filename>ui-lovelace.yaml</filename> writable.
+        This only has an effect if <option>lovelaceConfig</option> is set.
+        This will allow you to edit it from Home Assistant's web interface.
+        However, bear in mind that it will be overwritten at every start of the service.
       '';
     };
 
@@ -180,13 +202,17 @@ in {
     systemd.services.home-assistant = {
       description = "Home Assistant";
       after = [ "network.target" ];
-      preStart = optionalString (cfg.config != null) ''
+      preStart = optionalString (cfg.config != null) (if cfg.configWritable then ''
+        cp --no-preserve=mode ${configFile} "${cfg.configDir}/configuration.yaml"
+      '' else ''
         rm -f "${cfg.configDir}/configuration.yaml"
         ln -s ${configFile} "${cfg.configDir}/configuration.yaml"
-      '' + optionalString (cfg.lovelaceConfig != null) ''
+      '') + optionalString (cfg.lovelaceConfig != null) (if cfg.lovelaceConfigWritable then ''
+        cp --no-preserve=mode ${lovelaceConfigFile} "${cfg.configDir}/ui-lovelace.yaml"
+      '' else ''
         rm -f "${cfg.configDir}/ui-lovelace.yaml"
         ln -s ${lovelaceConfigFile} "${cfg.configDir}/ui-lovelace.yaml"
-      '';
+      '');
       serviceConfig = {
         ExecStart = "${package}/bin/hass --config '${cfg.configDir}'";
         User = "hass";

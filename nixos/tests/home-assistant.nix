@@ -61,6 +61,7 @@ in {
               } ];
             } ];
           };
+          lovelaceConfigWritable = true;
         };
       };
   };
@@ -70,9 +71,10 @@ in {
     $hass->waitForUnit("home-assistant.service");
 
     # The config is specified using a Nix attribute set,
-    # but then converted from JSON to YAML
+    # converted from JSON to YAML, and linked to the config dir
     $hass->succeed("test -L ${configDir}/configuration.yaml");
-    $hass->succeed("test -L ${configDir}/ui-lovelace.yaml");
+    # The lovelace config is copied because lovelaceConfigWritable = true
+    $hass->succeed("test -f ${configDir}/ui-lovelace.yaml");
 
     # Check that Home Assistant's web interface and API can be reached
     $hass->waitForOpenPort(8123);
