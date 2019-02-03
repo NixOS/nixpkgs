@@ -5551,9 +5551,7 @@ in
 
   sslmate = callPackage ../development/tools/sslmate { };
 
-  ssmtp = callPackage ../tools/networking/ssmtp {
-    tlsSupport = true;
-  };
+  ssmtp = callPackage ../tools/networking/ssmtp { };
 
   ssocr = callPackage ../applications/misc/ssocr { };
 
