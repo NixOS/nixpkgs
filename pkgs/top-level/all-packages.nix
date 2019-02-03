@@ -16920,9 +16920,7 @@ in
 
   etherape = callPackage ../applications/networking/sniffers/etherape { };
 
-  evilvte = callPackage ../applications/misc/evilvte {
-    configH = config.evilvte.config or "";
-  };
+  evilvte = callPackage ../applications/misc/evilvte (config.evilvte or {});
 
   evopedia = callPackage ../applications/misc/evopedia { };
 
