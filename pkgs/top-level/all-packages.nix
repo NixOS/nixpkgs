@@ -6197,12 +6197,7 @@ in
 
   uptimed = callPackage ../tools/system/uptimed { };
 
-  urjtag = callPackage ../tools/misc/urjtag {
-    svfSupport = true;
-    bsdlSupport = true;
-    staplSupport = true;
-    jedecSupport = true;
-  };
+  urjtag = callPackage ../tools/misc/urjtag { };
 
   urlwatch = callPackage ../tools/networking/urlwatch { };
 
