@@ -21850,20 +21850,16 @@ in
 
   ### SCIENCE / MATH
 
-  caffe = callPackage ../applications/science/math/caffe rec {
-    cudaSupport = config.caffe.cudaSupport or config.cudaSupport or false;
-    cudnnSupport = cudaSupport;
-    # Used only for image loading.
-    opencv3 = opencv3WithoutCuda;
+  caffe = callPackage ../applications/science/math/caffe ({
+    opencv3 = opencv3WithoutCuda; # Used only for image loading.
     inherit (darwin.apple_sdk.frameworks) Accelerate CoreGraphics CoreVideo;
-  };
+  } // (config.caffe or {}));
 
   caffe2 = callPackage ../development/libraries/science/math/caffe2 (rec {
     inherit (python36Packages) python future six numpy pydot;
     protobuf = protobuf3_1;
     python-protobuf = python36Packages.protobuf.override { inherit protobuf; };
-    # Used only for image loading.
-    opencv3 = opencv3WithoutCuda;
+    opencv3 = opencv3WithoutCuda; # Used only for image loading.
   });
 
   cntk = callPackage ../applications/science/math/cntk rec {
