@@ -1156,7 +1156,7 @@ in
 
   coprthr = callPackage ../development/libraries/coprthr { };
 
-  cplex = callPackage ../applications/science/math/cplex { releasePath = config.cplex.releasePath or null; };
+  cplex = callPackage ../applications/science/math/cplex (config.cplex or {});
 
   cpulimit = callPackage ../tools/misc/cpulimit { };
 
