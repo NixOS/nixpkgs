@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   name = "hub-${version}";
-  version = "2.7.0";
+  version = "2.8.4";
 
   goPackagePath = "github.com/github/hub";
 
@@ -10,7 +10,7 @@ buildGoPackage rec {
     owner = "github";
     repo = "hub";
     rev = "v${version}";
-    sha256 = "1p90m1xp3jahs5y0lp0qfmfa7wqn7gxyygn7x45a6cbf2zzlb86l";
+    sha256 = "0fn87ngisbpl40r8jmpaa9c4bhx06mqrn80zsv597kvrm3vd4gki";
   };
 
   nativeBuildInputs = [ groff ronn utillinux ];
