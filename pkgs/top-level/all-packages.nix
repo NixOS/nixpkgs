@@ -22347,10 +22347,7 @@ in
 
   gensgs = pkgsi686Linux.callPackage ../misc/emulators/gens-gs { };
 
-  ghostscript = callPackage ../misc/ghostscript rec {
-    cupsSupport = config.ghostscript.cups or (!stdenv.isDarwin);
-    x11Support = cupsSupport; # with CUPS, X11 only adds very little
-  };
+  ghostscript = callPackage ../misc/ghostscript { };
 
   ghostscriptX = appendToName "with-X" (ghostscript.override {
     cupsSupport = true;
