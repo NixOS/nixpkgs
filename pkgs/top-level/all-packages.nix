@@ -10118,11 +10118,7 @@ in
 
   pixman = callPackage ../development/libraries/pixman { };
 
-  cairo = callPackage ../development/libraries/cairo {
-    glSupport = config.cairo.gl or (stdenv.isLinux &&
-      !stdenv.isAarch32 && !stdenv.isMips);
-  };
-
+  cairo = callPackage ../development/libraries/cairo { };
 
   cairomm = callPackage ../development/libraries/cairomm { };
 

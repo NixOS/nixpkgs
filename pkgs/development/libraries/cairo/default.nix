@@ -1,8 +1,10 @@
-{ stdenv, fetchurl, pkgconfig, libiconv
+{ config, stdenv, fetchurl, pkgconfig, libiconv
 , libintl, expat, zlib, libpng, pixman, fontconfig, freetype, xorg
 , gobjectSupport ? true, glib
 , xcbSupport ? true # no longer experimental since 1.12
-, glSupport ? true, libGL ? null # libGLU_combined is no longer a big dependency
+, libGLSupported
+, glSupport ? config.cairo.gl or (libGLSupported && stdenv.isLinux && !stdenv.isAarch32 && !stdenv.isMips)
+, libGL ? null # libGLU_combined is no longer a big dependency
 , pdfSupport ? true
 , darwin
 }:
