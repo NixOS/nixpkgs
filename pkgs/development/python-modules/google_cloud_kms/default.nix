@@ -5,6 +5,7 @@
 , grpc_google_iam_v1
 , google_api_core
 , pytest
+, mock
 }:
 
 buildPythonPackage rec {
@@ -16,7 +17,7 @@ buildPythonPackage rec {
     sha256 = "3e9d9e07af8651826db5997ca0f11f02401cef42eb822d416a19df05b17c5a45";
   };
 
-  checkInputs = [ pytest ];
+  checkInputs = [ pytest mock ];
   propagatedBuildInputs = [ enum34 grpc_google_iam_v1 google_api_core ];
 
   checkPhase = ''

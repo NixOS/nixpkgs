@@ -4,6 +4,7 @@
 , enum34
 , google_api_core
 , pytest
+, mock
 }:
 
 buildPythonPackage rec {
@@ -15,7 +16,7 @@ buildPythonPackage rec {
     sha256 = "e4742b98e2d69ca21864e3218805a9db7e04e06f0672f2385cf6b5361ee35605";
   };
 
-  checkInputs = [ pytest ];
+  checkInputs = [ pytest mock ];
   propagatedBuildInputs = [ enum34 google_api_core ];
 
   checkPhase = ''

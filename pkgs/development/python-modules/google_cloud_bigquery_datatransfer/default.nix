@@ -3,6 +3,7 @@
 , fetchPypi
 , google_api_core
 , pytest
+, mock
 }:
 
 buildPythonPackage rec {
@@ -14,7 +15,7 @@ buildPythonPackage rec {
     sha256 = "02bf1a508ffbc730904fd8a5e7d7c33946f0aa539127c1b1e235dfdedd7bc9a5";
   };
 
-  checkInputs = [ pytest ];
+  checkInputs = [ pytest mock ];
   propagatedBuildInputs = [ google_api_core ];
 
   checkPhase = ''
