@@ -15848,6 +15848,8 @@ with pkgs;
   source-han-serif-simplified-chinese = sourceHanSerifPackages.simplified-chinese;
   source-han-serif-traditional-chinese = sourceHanSerifPackages.traditional-chinese;
 
+  sudo-font = callPackage ../data/fonts/sudo { };
+
   inherit (callPackages ../data/fonts/tai-languages { }) tai-ahom;
 
   tango-icon-theme = callPackage ../data/icons/tango-icon-theme {
