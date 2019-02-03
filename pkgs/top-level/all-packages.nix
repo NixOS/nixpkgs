@@ -19108,11 +19108,7 @@ in
   rxvt = callPackage ../applications/misc/rxvt { };
 
   # urxvt
-  rxvt_unicode = callPackage ../applications/misc/rxvt_unicode {
-    perlSupport = true;
-    gdkPixbufSupport = true;
-    unicode3Support = true;
-  };
+  rxvt_unicode = callPackage ../applications/misc/rxvt_unicode { };
 
   rxvt_unicode-with-plugins = callPackage ../applications/misc/rxvt_unicode/wrapper.nix {
     plugins = [
