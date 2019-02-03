@@ -18932,12 +18932,7 @@ in
   quantomatic = callPackage ../applications/science/physics/quantomatic { };
 
   quassel = libsForQt5.callPackage ../applications/networking/irc/quassel {
-    monolithic = true;
-    daemon = false;
-    client = false;
-    withKDE = true;
-    dconf = gnome3.dconf;
-    tag = "-kf5";
+    inherit (gnome3) dconf;
   };
 
   quasselClient = quassel.override {
@@ -18949,8 +18944,8 @@ in
   quasselDaemon = quassel.override {
     monolithic = false;
     daemon = true;
-    tag = "-daemon-qt5";
     withKDE = false;
+    tag = "-daemon-qt5";
   };
 
   quirc = callPackage ../tools/graphics/quirc {};
