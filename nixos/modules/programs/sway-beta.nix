@@ -60,10 +60,11 @@ in {
     extraPackages = mkOption {
       type = with types; listOf package;
       default = with pkgs; [
+        swaylock swayidle
         xwayland rxvt_unicode dmenu
       ];
       defaultText = literalExample ''
-        with pkgs; [ xwayland rxvt_unicode dmenu ];
+        with pkgs; [ swaylock swayidle xwayland rxvt_unicode dmenu ];
       '';
       example = literalExample ''
         with pkgs; [
