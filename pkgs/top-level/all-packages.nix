@@ -18382,19 +18382,8 @@ in
       # !!! should depend on MPlayer
     };
 
-  mpv = callPackage ../applications/video/mpv rec {
+  mpv = callPackage ../applications/video/mpv {
     inherit lua;
-    waylandSupport     = stdenv.isLinux;
-    alsaSupport        = !stdenv.isDarwin;
-    pulseSupport       = !stdenv.isDarwin;
-    rubberbandSupport  = !stdenv.isDarwin;
-    dvdreadSupport     = !stdenv.isDarwin;
-    dvdnavSupport      = !stdenv.isDarwin;
-    drmSupport         = !stdenv.isDarwin;
-    vaapiSupport       = !stdenv.isDarwin;
-    x11Support         = !stdenv.isDarwin;
-    xineramaSupport    = !stdenv.isDarwin;
-    xvSupport          = !stdenv.isDarwin;
   };
 
   mpv-with-scripts = callPackage ../applications/video/mpv/wrapper.nix { };
