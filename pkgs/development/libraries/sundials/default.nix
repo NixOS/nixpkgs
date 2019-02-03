@@ -4,7 +4,6 @@ stdenv.mkDerivation rec {
 
   pname = "sundials";
   version = "4.0.2";
-  name = "${pname}-${version}";
 
   src = fetchurl {
     url = "https://computation.llnl.gov/projects/${pname}/download/${pname}-${version}.tar.gz";
@@ -14,7 +13,7 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     export cmakeFlags="-DCMAKE_INSTALL_PREFIX=$out -DEXAMPLES_INSTALL_PATH=$out/share/examples $cmakeFlags"
   '';
-  
+
   nativeBuildInputs = [ cmake ];
   buildInputs = [ python ];
 
