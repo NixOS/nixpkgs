@@ -500,10 +500,7 @@ in
 
   arduino = arduino-core.override { withGui = true; };
 
-  arduino-core = callPackage ../development/arduino/arduino-core {
-    jdk = jdk;
-    withGui = false;
-  };
+  arduino-core = callPackage ../development/arduino/arduino-core { };
 
   apitrace = libsForQt5.callPackage ../applications/graphics/apitrace {};
 
