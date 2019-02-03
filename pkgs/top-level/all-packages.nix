@@ -16053,8 +16053,6 @@ with pkgs;
   aseprite = callPackage ../applications/editors/aseprite { };
   aseprite-unfree = aseprite.override { unfree = true; };
 
-  astah-community = callPackage ../applications/graphics/astah-community { };
-
   astroid = callPackage ../applications/networking/mailreaders/astroid { };
 
   audacious = callPackage ../applications/audio/audacious { };
