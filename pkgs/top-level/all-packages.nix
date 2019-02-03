@@ -6,11 +6,25 @@
  * Hint: ### starts category names.
  */
 { lib, noSysDirs, config}:
-pkgs:
+res: pkgs: super:
 
 with pkgs;
 
+let
+  self =
+    builtins.trace ''
+        It seems that you are using a patched Nixpkgs that references the self
+        variable in pkgs/top-level/all-packages.nix. This variable was incorrectly
+        named, so its usage needs attention. Please use pkgs for packages or super
+        for functions.
+      ''
+      res; # Do *NOT* use res in your fork. It will be removed.
+
+  # TODO: turn self into an error
+
+in
 {
+
   # Allow callPackage to fill in the pkgs argument
   inherit pkgs;
 
