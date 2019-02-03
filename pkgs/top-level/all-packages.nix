@@ -19896,9 +19896,7 @@ in
 
   vym = qt5.callPackage ../applications/misc/vym { };
 
-  w3m = callPackage ../applications/networking/browsers/w3m {
-    graphicsSupport = !stdenv.isDarwin;
-  };
+  w3m = callPackage ../applications/networking/browsers/w3m { };
 
   # Should always be the version with the most features
   w3m-full = w3m;
