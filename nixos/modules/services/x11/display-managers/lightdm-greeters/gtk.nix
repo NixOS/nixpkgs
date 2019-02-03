@@ -13,6 +13,7 @@ let
 
   theme = cfg.theme.package;
   icons = cfg.iconTheme.package;
+  cursors = cfg.cursorTheme.package;
 
   # The default greeter provided with this expression is the GTK greeter.
   # Again, we need a few things in the environment for the greeter to run with
@@ -29,7 +30,8 @@ let
         --set GTK_EXE_PREFIX "${theme}" \
         --set GTK_DATA_PREFIX "${theme}" \
         --set XDG_DATA_DIRS "${theme}/share:${icons}/share" \
-        --set XDG_CONFIG_HOME "${theme}/share"
+        --set XDG_CONFIG_HOME "${theme}/share" \
+        --set XCURSOR_PATH "${cursors}/share/icons"
 
       cat - > $out/lightdm-gtk-greeter.desktop << EOF
       [Desktop Entry]
@@ -45,6 +47,8 @@ let
     [greeter]
     theme-name = ${cfg.theme.name}
     icon-theme-name = ${cfg.iconTheme.name}
+    cursor-theme-name = ${cfg.cursorTheme.name}
+    cursor-theme-size = ${toString cfg.cursorTheme.size}
     background = ${ldmcfg.background}
     ${optionalString (cfg.clock-format != null) "clock-format = ${cfg.clock-format}"}
     ${optionalString (cfg.indicators != null) "indicators = ${concatStringsSep ";" cfg.indicators}"}
@@ -106,6 +110,33 @@ in
           '';
         };
 
+      };
+
+      cursorTheme = {
+
+        package = mkOption {
+          default = pkgs.gnome3.defaultIconTheme;
+          defaultText = "pkgs.gnome3.defaultIconTheme";
+          description = ''
+            The package path that contains the cursor theme given in the name option.
+          '';
+        };
+
+        name = mkOption {
+          type = types.str;
+          default = "Adwaita";
+          description = ''
+            Name of the cursor theme to use for the lightdm-gtk-greeter.
+          '';
+        };
+
+        size = mkOption {
+          type = types.int;
+          default = 16;
+          description = ''
+            Size of the cursor theme to use for the lightdm-gtk-greeter.
+          '';
+        };
       };
 
       clock-format = mkOption {
