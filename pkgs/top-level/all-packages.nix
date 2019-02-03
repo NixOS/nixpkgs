@@ -6905,9 +6905,7 @@ in
     inherit (gnome2) libart_lgpl;
   });
 
-  gnu-smalltalk = callPackage ../development/compilers/gnu-smalltalk {
-    emacsSupport = config.emacsSupport or false;
-  };
+  gnu-smalltalk = callPackage ../development/compilers/gnu-smalltalk { };
 
   gccgo = gccgo6;
   gccgo6 = wrapCC (gcc6.cc.override {
