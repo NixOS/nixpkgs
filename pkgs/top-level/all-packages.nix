@@ -11773,6 +11773,9 @@ in
 
   ntrack = callPackage ../development/libraries/ntrack { };
 
+  nuspell = callPackage ../development/libraries/nuspell { };
+  nuspellWithDicts = dicts: callPackage ../development/libraries/nuspell/wrapper.nix { inherit dicts; };
+
   nv-codec-headers = callPackage ../development/libraries/nv-codec-headers { };
 
   nvidia-texture-tools = callPackage ../development/libraries/nvidia-texture-tools { };
@@ -23304,4 +23307,5 @@ in
   newlibCross = callPackage ../development/misc/newlib {
     stdenv = crossLibcStdenv;
   };
+
 }
