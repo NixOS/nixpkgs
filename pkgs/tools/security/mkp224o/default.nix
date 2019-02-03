@@ -16,10 +16,10 @@ stdenv.mkDerivation rec {
       # compile few variants with different implementation of crypto
       # the fastest depends on a particular cpu
       variants = [
-        { suffix = "ref10";         configureFlags = ["--enable-ref10       "]; }
-        { suffix = "donna";         configureFlags = ["--enable-donna       "]; }
+        { suffix = "ref10";         configureFlags = ["--enable-ref10"]; }
+        { suffix = "donna";         configureFlags = ["--enable-donna"]; }
       ] ++ lib.optionals (stdenv.isi686 || stdenv.isx86_64) [
-        { suffix = "donna-sse2";    configureFlags = ["--enable-donna-sse2  "]; }
+        { suffix = "donna-sse2";    configureFlags = ["--enable-donna-sse2"]; }
       ] ++ lib.optionals stdenv.isx86_64 [
         { suffix = "amd64-51-30k";  configureFlags = ["--enable-amd64-51-30k"]; }
         { suffix = "amd64-64-20k";  configureFlags = ["--enable-amd64-64-24k"]; }
