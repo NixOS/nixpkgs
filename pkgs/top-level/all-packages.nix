@@ -21969,13 +21969,7 @@ in
 
   singular = callPackage ../applications/science/math/singular { };
 
-  scilab = callPackage ../applications/science/math/scilab {
-    withXaw3d = false;
-    withTk = true;
-    withGtk = false;
-    withOCaml = true;
-    withX = true;
-  };
+  scilab = callPackage ../applications/science/math/scilab { };
 
   scilab-bin = callPackage ../applications/science/math/scilab-bin {};
 
