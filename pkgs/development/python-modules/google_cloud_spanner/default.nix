@@ -11,11 +11,11 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-spanner";
-  version = "1.6.1";
+  version = "1.7.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "28e56bd8aefa0837e59ba67974f446efda45e7691aea176d78b4ca1d2217dd86";
+    sha256 = "422a1bd5bded723151faeb4d1b1711f5776d2cc23d5c192cf53634eaf55c74aa";
   };
 
   checkInputs = [ pytest mock ];
