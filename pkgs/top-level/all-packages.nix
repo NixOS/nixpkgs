@@ -19627,14 +19627,11 @@ in
 
   toggldesktop = libsForQt5.callPackage ../applications/misc/toggldesktop { };
 
-  tomahawk = callPackage ../applications/audio/tomahawk {
+  tomahawk = callPackage ../applications/audio/tomahawk ({
     taglib = taglib_1_9;
-    enableXMPP      = config.tomahawk.enableXMPP      or true;
-    enableKDE       = config.tomahawk.enableKDE       or false;
-    enableTelepathy = config.tomahawk.enableTelepathy or false;
     quazip = quazip_qt4;
     boost = boost155;
-  };
+  } // (config.tomahawk or {}));
 
   topydo = callPackage ../applications/misc/topydo {};
 
