@@ -88,7 +88,10 @@ let
 
     enableParallelBuilding = !crossCompiling;
 
-    preConfigure = optionalString (!crossCompiling) ''
+    preConfigure = ''
+        substituteInPlace ./Configure --replace '`LC_ALL=C; LANGUAGE=C; export LC_ALL; export LANGUAGE; $date 2>&1`' 'Thu Jan  1 00:00:01 UTC 1970'
+        substituteInPlace ./Configure --replace '$uname -a' '$uname --kernel-name --machine --operating-system'
+      '' + optionalString (!crossCompiling) ''
         configureFlags="$configureFlags -Dprefix=$out -Dman1dir=$out/share/man/man1 -Dman3dir=$out/share/man/man3"
       '' + optionalString (stdenv.isAarch32 || stdenv.isMips) ''
         configureFlagsArray=(-Dldflags="-lm -lrt")
