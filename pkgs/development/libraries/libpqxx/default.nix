@@ -1,14 +1,14 @@
 { lib, stdenv, fetchFromGitHub, postgresql, doxygen, xmlto, python2, gnused }:
 
 stdenv.mkDerivation rec {
-  name = "libpqxx-${version}";
-  version = "6.2.5";
+  pname = "libpqxx";
+  version = "6.3.0";
 
   src = fetchFromGitHub {
     owner = "jtv";
-    repo = "libpqxx";
+    repo = pname;
     rev = version;
-    sha256 = "15x9xlj2v66w81j90cb438qkrrcqaq4dqrvhllwyqfz4lprqnhh9";
+    sha256 = "1vw7vc5g5lmbjfkqrh7nvci6yy47vjp9iwb9c6qld97r79d7jkvy";
   };
 
   nativeBuildInputs = [ gnused python2 ];
