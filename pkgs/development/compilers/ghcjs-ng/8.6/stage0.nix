@@ -20,7 +20,7 @@
     }:
     mkDerivation {
       pname = "ghcjs";
-      version = "8.2.0.1";
+      version = "8.6.0.1";
       src = configuredSrc + /.;
       isLibrary = true;
       isExecutable = true;
@@ -60,17 +60,17 @@
 
   ghc-api-ghcjs = callPackage
     ({ mkDerivation, array, base, binary, bytestring, containers
-    , deepseq, directory, filepath, ghc-boot, ghc-boot-th, ghci-ghcjs
-    , hoopl, hpc, process, stdenv, template-haskell-ghcjs, terminfo
-    , time, transformers, unix
+    , deepseq, directory, filepath, ghc-boot, ghc-boot-th, ghc-heap
+    , ghci-ghcjs, hpc, process, stdenv, template-haskell-ghcjs
+    , terminfo, time, transformers, unix
     }:
     mkDerivation {
       pname = "ghc-api-ghcjs";
-      version = "8.2.2";
+      version = "8.6.2";
       src = configuredSrc + /lib/ghc-api-ghcjs;
       libraryHaskellDepends = [
         array base binary bytestring containers deepseq directory filepath
-        ghc-boot ghc-boot-th ghci-ghcjs hoopl hpc process
+        ghc-boot ghc-boot-th ghc-heap ghci-ghcjs hpc process
         template-haskell-ghcjs terminfo time transformers unix
       ];
       homepage = "http://www.haskell.org/ghc/";
@@ -80,16 +80,16 @@
 
   ghci-ghcjs = callPackage
     ({ mkDerivation, array, base, binary, bytestring, containers
-    , deepseq, filepath, ghc-boot, ghc-boot-th, stdenv
+    , deepseq, filepath, ghc-boot, ghc-boot-th, ghc-heap, stdenv
     , template-haskell-ghcjs, transformers, unix
     }:
     mkDerivation {
       pname = "ghci-ghcjs";
-      version = "8.2.2";
+      version = "8.6.1";
       src = configuredSrc + /lib/ghci-ghcjs;
       libraryHaskellDepends = [
         array base binary bytestring containers deepseq filepath ghc-boot
-        ghc-boot-th template-haskell-ghcjs transformers unix
+        ghc-boot-th ghc-heap template-haskell-ghcjs transformers unix
       ];
       description = "The library supporting GHC's interactive interpreter (customized for GHCJS)";
       license = stdenv.lib.licenses.bsd3;
@@ -119,7 +119,7 @@
     }:
     mkDerivation {
       pname = "haddock-api-ghcjs";
-      version = "2.18.1";
+      version = "2.20.0";
       src = configuredSrc + /lib/haddock-api-ghcjs;
       enableSeparateDataOutput = true;
       libraryHaskellDepends = [
@@ -128,25 +128,33 @@
         xhtml
       ];
       testHaskellDepends = [
-        base containers ghc-api-ghcjs hspec QuickCheck
+        array base bytestring Cabal containers deepseq directory filepath
+        ghc-api-ghcjs ghc-boot ghc-paths haddock-library-ghcjs hspec
+        QuickCheck transformers xhtml
       ];
       testToolDepends = [ hspec-discover ];
       homepage = "http://www.haskell.org/haddock/";
-      description = "A documentation-generation tool for Haskell libraries (customized for GHCJS)";
+      description = "A documentation-generation tool for Haskell libraries";
       license = stdenv.lib.licenses.bsd3;
     }) {};
 
   haddock-library-ghcjs = callPackage
-    ({ mkDerivation, base, base-compat, bytestring, deepseq, hspec
-    , hspec-discover, QuickCheck, stdenv, transformers
+    ({ mkDerivation, base, base-compat, bytestring, containers, deepseq
+    , directory, filepath, haddock-library, hspec, hspec-discover
+    , optparse-applicative, parsec, QuickCheck, stdenv, text
+    , transformers, tree-diff
     }:
     mkDerivation {
       pname = "haddock-library-ghcjs";
-      version = "1.4.4";
+      version = "1.6.0";
       src = configuredSrc + /lib/haddock-library-ghcjs;
-      libraryHaskellDepends = [ base bytestring deepseq transformers ];
+      libraryHaskellDepends = [
+        base bytestring containers parsec text transformers
+      ];
       testHaskellDepends = [
-        base base-compat bytestring deepseq hspec QuickCheck transformers
+        base base-compat bytestring containers deepseq directory filepath
+        haddock-library hspec optparse-applicative parsec QuickCheck text
+        transformers tree-diff
       ];
       testToolDepends = [ hspec-discover ];
       homepage = "http://www.haskell.org/haddock/";
@@ -158,7 +166,7 @@
     ({ mkDerivation, base, ghc-boot-th, pretty, stdenv }:
     mkDerivation {
       pname = "template-haskell-ghcjs";
-      version = "2.12.0.0";
+      version = "2.14.0.0";
       src = configuredSrc + /lib/template-haskell-ghcjs;
       libraryHaskellDepends = [ base ghc-boot-th pretty ];
       description = "Support library for Template Haskell (customized for GHCJS)";

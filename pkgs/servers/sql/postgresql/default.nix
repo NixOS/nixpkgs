@@ -153,9 +153,9 @@ let
     '';
   };
 
-in self: super: {
+in self: {
 
-  postgresql_9_4 = super.callPackage generic {
+  postgresql_9_4 = self.callPackage generic {
     version = "9.4.20";
     psqlSchema = "9.4";
     sha256 = "0zzqjz5jrn624hzh04drpj6axh30a9k6bgawid6rwk45nbfxicgf";
@@ -163,7 +163,7 @@ in self: super: {
     inherit self;
   };
 
-  postgresql_9_5 = super.callPackage generic {
+  postgresql_9_5 = self.callPackage generic {
     version = "9.5.15";
     psqlSchema = "9.5";
     sha256 = "0i2lylgmsmy2g1ixlvl112fryp7jmrd0i2brk8sxb7vzzpg3znnv";
@@ -171,7 +171,7 @@ in self: super: {
     inherit self;
   };
 
-  postgresql_9_6 = super.callPackage generic {
+  postgresql_9_6 = self.callPackage generic {
     version = "9.6.11";
     psqlSchema = "9.6";
     sha256 = "0c55akrkzqd6p6a8hr0338wk246hl76r9j16p4zn3s51d7f0l99q";
@@ -179,7 +179,7 @@ in self: super: {
     inherit self;
   };
 
-  postgresql_10 = super.callPackage generic {
+  postgresql_10 = self.callPackage generic {
     version = "10.6";
     psqlSchema = "10.0";
     sha256 = "0jv26y3f10svrjxzsgqxg956c86b664azyk2wppzpa5x11pjga38";
@@ -187,7 +187,7 @@ in self: super: {
     inherit self;
   };
 
-  postgresql_11 = super.callPackage generic {
+  postgresql_11 = self.callPackage generic {
     version = "11.1";
     psqlSchema = "11.1";
     sha256 = "026v0sicsh7avzi45waf8shcbhivyxmi7qgn9fd1x0vl520mx0ch";

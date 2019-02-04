@@ -68,6 +68,11 @@
     github = "abbradar";
     name = "Nikolay Amiantov";
   };
+  abhi18av = {
+    email = "abhi18av@gmail.com";
+    github = "abhi18av";
+    name = "Abhinav Sharma";
+  };
   abigailbuccaneer = {
     email = "abigailbuccaneer@gmail.com";
     github = "abigailbuccaneer";
@@ -1494,6 +1499,11 @@
     email = "nix@monoid.al";
     github = "expipiplus1";
     name = "Joe Hermaszewski";
+  };
+  eyjhb = {
+    email = "eyjhbb@gmail.com";
+    github = "eyJhb";
+    name = "eyJhb";
   };
   f--t = {
     email = "git@f-t.me";
@@ -3480,6 +3490,11 @@
     github = "pesterhazy";
     name = "Paulus Esterhazy";
   };
+  petabyteboy = {
+    email = "me@pbb.lc";
+    github = "petabyteboy";
+    name = "Milan Pässler";
+  };
   peterhoeg = {
     email = "peter@hoeg.com";
     github = "peterhoeg";
@@ -4677,7 +4692,7 @@
     name = "Thomas Tuegel";
   };
   tv = {
-    email = "tv@shackspace.de";
+    email = "tv@krebsco.de";
     github = "4z3";
     name = "Tomislav Viljetić";
   };
@@ -5150,5 +5165,10 @@
     email = "massimo@typish.io";
     github = "mredaelli";
     name = "Massimo Redaelli";
+  };
+  shmish111 = {
+    email = "shmish111@gmail.com";
+    github = "shmish111";
+    name = "David Smith";
   };
 }

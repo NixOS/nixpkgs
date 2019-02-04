@@ -56,6 +56,12 @@ let
     else if stdenv.isSunOS then "solaris"
     else throw "unsupported platform";
 
+  buildLuaApplication = args: buildLuarocksPackage ({namePrefix="";} // args );
+
+  buildLuarocksPackage = with pkgs.lib; makeOverridable( callPackage ../development/interpreters/lua-5/build-lua-package.nix {
+    inherit toLuaModule;
+    inherit lua writeText;
+  });
 in
 with self; {
 
@@ -79,8 +85,14 @@ with self; {
 
 
   inherit toLuaModule lua-setup-hook;
+  inherit buildLuarocksPackage buildLuaApplication;
   inherit requiredLuaModules luaOlder luaAtLeast
     isLua51 isLua52 isLuaJIT lua callPackage;
+
+  # wraps programs in $out/bin with valid LUA_PATH/LUA_CPATH
+  wrapLua = callPackage ../development/interpreters/lua-5/wrap-lua.nix {
+    inherit lua; inherit (pkgs) makeSetupHook makeWrapper;
+  };
 
   luarocks = callPackage ../development/tools/misc/luarocks {
     inherit lua;

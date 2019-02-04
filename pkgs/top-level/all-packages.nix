@@ -507,6 +507,8 @@ in
     withGui = false;
   };
 
+  arduino-mk = callPackage ../development/arduino/arduino-mk {};
+
   apitrace = libsForQt5.callPackage ../applications/graphics/apitrace {};
 
   arguments = callPackage ../development/libraries/arguments { };
@@ -2728,7 +2730,9 @@ in
   frostwire = callPackage ../applications/networking/p2p/frostwire { };
   frostwire-bin = callPackage ../applications/networking/p2p/frostwire/frostwire-bin.nix { };
 
-  ftgl = callPackage ../development/libraries/ftgl { };
+  ftgl = callPackage ../development/libraries/ftgl {
+    inherit (darwin.apple_sdk.frameworks) OpenGL;
+  };
 
   ftop = callPackage ../os-specific/linux/ftop { };
 
@@ -7060,10 +7064,6 @@ in
       inherit (darwin.apple_sdk.frameworks) Security;
     };
 
-  go_1_9 = callPackage ../development/compilers/go/1.9.nix {
-    inherit (darwin.apple_sdk.frameworks) Security Foundation;
-  };
-
   go_1_10 = callPackage ../development/compilers/go/1.10.nix {
     inherit (darwin.apple_sdk.frameworks) Security Foundation;
   };
@@ -8949,11 +8949,13 @@ in
 
   pkgconf = callPackage ../development/tools/misc/pkgconf {};
 
-  pkgconfig = callPackage ../development/tools/misc/pkgconfig {
+  pkg-config = callPackage ../development/tools/misc/pkg-config {
     fetchurl = fetchurlBoot;
   };
+  pkgconfig = pkg-config; # added 2018-02-02
 
-  pkgconfigUpstream = lowPrio (pkgconfig.override { vanilla = true; });
+  pkg-configUpstream = lowPrio (pkg-config.override { vanilla = true; });
+  pkgconfigUpstream = pkg-configUpstream; # added 2018-02-02
 
   postiats-utilities = callPackage ../development/tools/postiats-utilities {};
 
@@ -11777,6 +11779,9 @@ in
 
   ntrack = callPackage ../development/libraries/ntrack { };
 
+  nuspell = callPackage ../development/libraries/nuspell { };
+  nuspellWithDicts = dicts: callPackage ../development/libraries/nuspell/wrapper.nix { inherit dicts; };
+
   nv-codec-headers = callPackage ../development/libraries/nv-codec-headers { };
 
   nvidia-texture-tools = callPackage ../development/libraries/nvidia-texture-tools { };
@@ -12011,6 +12016,8 @@ in
 
   portmidi = callPackage ../development/libraries/portmidi {};
 
+  primesieve = callPackage ../development/libraries/science/math/primesieve { };
+
   prison = callPackage ../development/libraries/prison { };
 
   proj = callPackage ../development/libraries/proj { };
@@ -12101,7 +12108,7 @@ in
   qt56 = recurseIntoAttrs (makeOverridable
     (import ../development/libraries/qt-5/5.6) {
       inherit newScope;
-      inherit stdenv fetchurl makeSetupHook;
+      inherit stdenv fetchurl fetchpatch makeSetupHook;
       bison = bison2; # error: too few arguments to function 'int yylex(...
       inherit cups;
       harfbuzz = harfbuzzFull;
@@ -12115,7 +12122,7 @@ in
   qt59 = recurseIntoAttrs (makeOverridable
     (import ../development/libraries/qt-5/5.9) {
       inherit newScope;
-      inherit stdenv fetchurl makeSetupHook;
+      inherit stdenv fetchurl fetchpatch makeSetupHook;
       bison = bison2; # error: too few arguments to function 'int yylex(...
       inherit cups;
       harfbuzz = harfbuzzFull;
@@ -13236,9 +13243,6 @@ in
 
   ### DEVELOPMENT / GO MODULES
 
-  buildGo19Package = callPackage ../development/go-modules/generic {
-    go = buildPackages.go_1_9;
-  };
   buildGo110Package = callPackage ../development/go-modules/generic {
     go = buildPackages.go_1_10;
   };
@@ -13862,6 +13866,8 @@ in
 
   cbfstool = callPackage ../applications/virtualization/cbfstool { };
 
+  ifdtool = callPackage ../tools/misc/ifdtool { };
+
   nvramtool = callPackage ../tools/misc/nvramtool { };
 
   vmfs-tools = callPackage ../tools/filesystems/vmfs-tools { };
@@ -13877,7 +13883,7 @@ in
 
   timescaledb-parallel-copy = callPackage ../development/tools/database/timescaledb-parallel-copy { };
 
-  inherit (import ../servers/sql/postgresql pkgs super)
+  inherit (import ../servers/sql/postgresql pkgs)
     postgresql_9_4
     postgresql_9_5
     postgresql_9_6
@@ -14563,7 +14569,6 @@ in
     kernelPatches =
       [ kernelPatches.bridge_stp_helper
         kernelPatches.modinst_arg_list_too_long
-        kernelPatches.revert-vfs-dont-open-real
       ];
   };
 
@@ -14571,7 +14576,6 @@ in
     kernelPatches =
       [ kernelPatches.bridge_stp_helper
         kernelPatches.modinst_arg_list_too_long
-        kernelPatches.revert-vfs-dont-open-real
       ];
   };
 
@@ -14750,7 +14754,7 @@ in
   });
 
   # The current default kernel / kernel modules.
-  linuxPackages = linuxPackages_4_19;
+  linuxPackages = linuxPackages_4_14;
   linux = linuxPackages.kernel;
 
   # Update this when adding the newest kernel major version!
@@ -15716,6 +15720,8 @@ in
 
   numix-cursor-theme = callPackage ../data/icons/numix-cursor-theme { };
 
+  office-code-pro = callPackage ../data/fonts/office-code-pro { };
+
   oldstandard = callPackage ../data/fonts/oldstandard { };
 
   oldsindhi = callPackage ../data/fonts/oldsindhi { };
@@ -15736,7 +15742,7 @@ in
 
   papirus-icon-theme = callPackage ../data/icons/papirus-icon-theme { };
 
-  papis = python3Packages.callPackage ../tools/misc/papis { };
+  papis = callPackage ../tools/misc/papis { };
 
   pecita = callPackage ../data/fonts/pecita {};
 
@@ -15868,6 +15874,8 @@ in
   source-han-serif-korean = sourceHanSerifPackages.korean;
   source-han-serif-simplified-chinese = sourceHanSerifPackages.simplified-chinese;
   source-han-serif-traditional-chinese = sourceHanSerifPackages.traditional-chinese;
+
+  sudo-font = callPackage ../data/fonts/sudo { };
 
   inherit (callPackages ../data/fonts/tai-languages { }) tai-ahom;
 
@@ -16074,8 +16082,6 @@ in
   aseprite = callPackage ../applications/editors/aseprite { };
   aseprite-unfree = aseprite.override { unfree = true; };
 
-  astah-community = callPackage ../applications/graphics/astah-community { };
-
   astroid = callPackage ../applications/networking/mailreaders/astroid { };
 
   audacious = callPackage ../applications/audio/audacious { };
@@ -16225,7 +16231,7 @@ in
   };
   bitwig-studio2 =  callPackage ../applications/audio/bitwig-studio/bitwig-studio2.nix {
     inherit (gnome3) zenity;
-    inherit (res) bitwig-studio1;
+    inherit (pkgs) bitwig-studio1;
   };
   bitwig-studio = bitwig-studio2;
 
@@ -17644,6 +17650,8 @@ in
 
   i3lock-pixeled = callPackage ../misc/screensavers/i3lock-pixeled { };
 
+  betterlockscreen = callPackage ../misc/screensavers/betterlockscreen { };
+
   i3minator = callPackage ../tools/misc/i3minator { };
 
   i3pystatus = callPackage ../applications/window-managers/i3/pystatus.nix { };
@@ -17859,7 +17867,7 @@ in
   kdevelop-pg-qt = libsForQt5.callPackage ../applications/editors/kdevelop5/kdevelop-pg-qt.nix {};
 
   kdevelop = libsForQt5.callPackage ../applications/editors/kdevelop5/kdevelop.nix {
-    llvmPackages = llvmPackages_38;
+    llvmPackages = llvmPackages_7;
   };
 
   keepnote = callPackage ../applications/office/keepnote { };
@@ -22535,7 +22543,7 @@ in
      parameter set to the right value for your deployment target.
   */
   nixos = configuration:
-    (import (res.path + "/nixos/lib/eval-config.nix") {
+    (import (pkgs.path + "/nixos/lib/eval-config.nix") {
       inherit (pkgs.stdenv.hostPlatform) system;
       modules = [(
                   { lib, ... }: {
@@ -23309,4 +23317,5 @@ in
   newlibCross = callPackage ../development/misc/newlib {
     stdenv = crossLibcStdenv;
   };
+
 }
