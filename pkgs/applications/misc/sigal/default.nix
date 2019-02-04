@@ -1,12 +1,12 @@
 { lib, python3Packages, ffmpeg }:
 
 python3Packages.buildPythonApplication rec {
-  version = "1.4.1";
+  version = "2.0";
   pname   = "sigal";
 
   src = python3Packages.fetchPypi {
     inherit version pname;
-    sha256 = "1fg32ii26j3xpq3cryi212lx9z33qnicm1cszwv1wfpg6sr2rr61";
+    sha256 = "0ff8hpihbd30xjy155ksfpypjskilqg4zmyavgvpri8jaf1qpv89";
   };
 
   checkInputs = with python3Packages; [ pytest ];
