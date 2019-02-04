@@ -54,8 +54,6 @@ done
 
 GENERATED_NIXFILE="$1"
 
-# read returns a non-zero return code when it reaches EOF
-# so disable the checks just for the 2 read
 HEADER="
 /* ${GENERATED_NIXFILE} is an auto-generated file -- DO NOT EDIT!
 Regenerate it with:
