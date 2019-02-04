@@ -1,17 +1,30 @@
-{ stdenv, fetchurl, pkgconfig, xorg, libGL_driver }:
+{ stdenv, fetchurl, pkgconfig, xorg, libGL_driver
+, fetchFromGitLab, autoreconfHook
+}:
 
 stdenv.mkDerivation rec {
   name = "libvdpau-${version}";
-  version = "1.1.1";
+  version = "1.1.1.p1";
 
+  src = fetchFromGitLab {
+    domain = "gitlab.freedesktop.org";
+    owner = "vdpau";
+    repo = "libvdpau";
+    # The only "more substatial" change atop 1.1.1 is
+    # https://gitlab.freedesktop.org/vdpau/libvdpau/commit/53eeb07f
+    rev = "52a6ea26";
+    sha256 = "02bz5w789vyzrfs3hvl698faa8ayy8ads7j6l418dalhfwz3q550";
+  };
+  /*
   src = fetchurl {
     url = "https://people.freedesktop.org/~aplattner/vdpau/${name}.tar.bz2";
-    sha256 = "857a01932609225b9a3a5bf222b85e39b55c08787d0ad427dbd9ec033d58d736";
+    sha256 = "857a01932609225b9a3a5bf222b85e39b55c08787d0ad427dbd9ec033d58d736"; # 1.1.1
   };
+  */
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig autoreconfHook ];
   buildInputs = with xorg; [ xorgproto libXext ];
 
   propagatedBuildInputs = [ xorg.libX11 ];
