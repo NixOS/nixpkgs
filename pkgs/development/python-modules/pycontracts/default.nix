@@ -3,11 +3,11 @@
 
 buildPythonPackage rec {
   pname = "PyContracts";
-  version = "1.8.7";
+  version = "1.8.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1b65jkbk9bcl10s49w9frsjcarfzi8gp22a40cz7zxry8b8yvcf0";
+    sha256 = "0njcssvjj2aisb52xp9jmfps43iqg3fw4grj524i911p34yln2va";
   };
 
   buildInputs = [ nose ];
