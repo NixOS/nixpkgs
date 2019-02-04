@@ -12,14 +12,14 @@ let
           type = types.str;
           description = "Docker image to run.";
         };
-        args = mkOption {
+        cmd = mkOption {
           type =  with types; listOf string;
           default = [];
-          description = "Args to pass to the image.";
+          description = "Commandline arguments to pass to the image's entrypoint.";
         };
         entrypoint = mkOption {
           type = types.nullOr types.string;
-          description = "Overwrite the default ENTRYPOINT of the image.";
+          description = "Overwrite the default entrypoint of the image.";
           default = null;
         };
         volumes = mkOption {
@@ -57,7 +57,7 @@ let
           container.image
         ]
       );
-      scriptArgs = lib.escapeShellArgs container.args;
+      scriptArgs = lib.escapeShellArgs container.cmd;
       preStop = "${pkgs.docker}/bin/docker stop ${containerName}";
       reload = "${pkgs.docker}/bin/docker restart ${containerName}";
       serviceConfig = {
@@ -78,7 +78,11 @@ in {
   };
 
   config = {
+
     systemd.services = lib.mapAttrs' (n: v: lib.nameValuePair "docker-${n}" (mkService n v)) cfg;
+
+    virtualisation.docker.enable = true;
+
   };
 
 }
