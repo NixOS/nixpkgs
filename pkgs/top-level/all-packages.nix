@@ -12014,6 +12014,8 @@ in
 
   portmidi = callPackage ../development/libraries/portmidi {};
 
+  primesieve = callPackage ../development/libraries/science/math/primesieve { };
+
   prison = callPackage ../development/libraries/prison { };
 
   proj = callPackage ../development/libraries/proj { };
