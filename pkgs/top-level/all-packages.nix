@@ -14245,7 +14245,10 @@ in
 
   bluez5 = callPackage ../os-specific/linux/bluez { };
 
-  pulseaudio-modules-bt = callPackage ../applications/audio/pulseaudio-modules-bt { };
+  pulseaudio-modules-bt = callPackage ../applications/audio/pulseaudio-modules-bt {
+    # pulseaudio-modules-bt is most likely to be used with pulseaudioFull
+    pulseaudio = pulseaudioFull;
+  };
 
   bluez = bluez5;
 
