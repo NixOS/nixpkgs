@@ -476,6 +476,13 @@
      </para>
     </note>
    </listitem>
+   <listitem>
+      <para>
+        New installs of NixOS will default to the Redmine 4.x series unless otherwise specified in
+        <literal>services.redmine.package</literal> while existing installs of NixOS will default to
+        the Redmine 3.x series.
+      </para>
+   </listitem>
   </itemizedlist>
  </section>
 </section>
