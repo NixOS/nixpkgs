@@ -23312,4 +23312,6 @@ in
     stdenv = crossLibcStdenv;
   };
 
+  bazel-remote = callPackage ../servers/bazel-remote {};
+
 }
