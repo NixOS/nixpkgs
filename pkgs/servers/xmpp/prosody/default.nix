@@ -25,7 +25,7 @@ let
 in
 
 stdenv.mkDerivation rec {
-  version = "0.11.2";
+  version = "0.11.2"; # also update communityModules
   name = "prosody-${version}";
 
   src = fetchurl {
@@ -33,10 +33,13 @@ stdenv.mkDerivation rec {
     sha256 = "0ca8ivqb4hxqka08pwnaqi1bqxrdl8zw47g6z7nw9q5r57fgc4c9";
   };
 
+  # A note to all those merging automated updates: Please also update this
+  # attribute as some modules might not be compatible with a newer prosody
+  # version.
   communityModules = fetchhg {
     url = "https://hg.prosody.im/prosody-modules";
-    rev = "150a7bd59043";
-    sha256 = "0nfx3lngcy88nd81gb7v4kh3nz1bzsm67bxgpd2lprk54diqcrz1";
+    rev = "b54e98d5c4a1";
+    sha256 = "0bzn92j48krb2zhp9gn5bbn5sg0qv15j5lpxfszwqdln3lpmrvzg";
   };
 
   buildInputs = [ lua5 makeWrapper libidn openssl ]
