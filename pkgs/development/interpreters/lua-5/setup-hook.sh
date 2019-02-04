@@ -1,7 +1,7 @@
 # set -e
 
 nix_print() {
-    if (( "${NIX_DEBUG:-0}" >= $1 )); then
+    if [ ${NIX_DEBUG:-0} -ge $1 ]; then
         echo "$2"
     fi
 }
@@ -32,13 +32,13 @@ addToLuaPath() {
     cd "$dir"
     for pattern in @luapathsearchpaths@;
     do
-        addToLuaSearchPathWithCustomDelimiter LUA_PATH "$PWD/$pattern"
+        addToLuaSearchPathWithCustomDelimiter NIX_LUA_PATH "$PWD/$pattern"
     done
 
     # LUA_CPATH
     for pattern in @luacpathsearchpaths@;
     do
-        addToLuaSearchPathWithCustomDelimiter LUA_CPATH "$PWD/$pattern"
+        addToLuaSearchPathWithCustomDelimiter NIX_LUA_CPATH "$PWD/$pattern"
     done
     cd - >/dev/null
 }
