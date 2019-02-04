@@ -3,7 +3,7 @@
 
 stdenv.mkDerivation rec {
   pname = "notejot";
-  version = "1.5.3";
+  version = "1.5.4";
 
   name = "${pname}-${version}";
 
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     owner = "lainsce";
     repo = pname;
     rev = version;
-    sha256 = "1n41sg9a38p9qp8pz3lx9rnb8kc069vkbwf963zzpzs2745h6s9v";
+    sha256 = "1lv4s2mqddi6lz414kqpp4vcwnkjibc0k2xhnczaa1wf3azlxjgf";
   };
 
   nativeBuildInputs = [
