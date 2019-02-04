@@ -4,6 +4,8 @@
 # libffi is used in darwin stdenv
 # we cannot run checks within it
 , doCheck ? !stdenv.isDarwin, dejagnu
+, enableStatic ? false
+, enableShared ? !enableStatic
 }:
 
 stdenv.mkDerivation rec {
@@ -49,7 +51,9 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--with-gcc-arch=generic" # no detection of -march= or -mtune=
     "--enable-pax_emutramp"
-  ];
+  ]
+  ++ stdenv.lib.optional enableStatic "--enable-static"
+  ++ stdenv.lib.optional (!enableShared) "--disable-shared";
 
   preCheck = ''
     # The tests use -O0 which is not compatible with -D_FORTIFY_SOURCE.

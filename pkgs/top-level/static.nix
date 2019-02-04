@@ -143,6 +143,10 @@ in {
     enableShared = false;
     enableStatic = true;
   };
+  libffi = super.libffi.override {
+    enableStatic = true;
+    enableShared = false;
+  };
 
   darwin = super.darwin // {
     libiconv = super.darwin.libiconv.override {
