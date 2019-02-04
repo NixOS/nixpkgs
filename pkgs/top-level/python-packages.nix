@@ -532,6 +532,8 @@ in {
 
   perf = callPackage ../development/python-modules/perf { };
 
+  petsc4py = callPackage ../development/python-modules/petsc4py { };
+
   phonopy = callPackage ../development/python-modules/phonopy { };
 
   pims = callPackage ../development/python-modules/pims { };
