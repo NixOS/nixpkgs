@@ -30,6 +30,13 @@ let
     ${cfg.extraConfig}
   '';
 
+  additionalEnvironment = pkgs.writeText "additional_environment.rb" ''
+    config.logger = Logger.new("${cfg.stateDir}/log/production.log", 14, 1048576)
+    config.logger.level = Logger::INFO
+
+    ${cfg.extraEnv}
+  '';
+
   unpackTheme = unpack "theme";
   unpackPlugin = unpack "plugin";
   unpack = id: (name: source:
@@ -100,6 +107,19 @@ in
             smtp_settings:
               address: mail.example.com
               port: 25
+        '';
+      };
+
+      extraEnv = mkOption {
+        type = types.lines;
+        default = "";
+        description = ''
+          Extra configuration in additional_environment.rb.
+
+          See https://svn.redmine.org/redmine/trunk/config/additional_environment.rb.example
+        '';
+        example = literalExample ''
+          config.logger.level = Logger::DEBUG
         '';
       };
 
@@ -248,6 +268,9 @@ in
 
         # link in the application configuration
         ln -fs ${configurationYml} "${cfg.stateDir}/config/configuration.yml"
+
+        # link in the additional environment configuration
+        ln -fs ${additionalEnvironment} "${cfg.stateDir}/config/additional_environment.rb"
 
 
         # link in all user specified themes
