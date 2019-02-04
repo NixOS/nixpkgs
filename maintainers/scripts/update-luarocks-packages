@@ -13,37 +13,46 @@
 set -eu -o pipefail
 
 if [ $# -lt 1 ]; then
-    echo "Usage: $0 GENERATED_FILENAME"
-    echo "(most likely pkgs/development/lua-modules/generated-packages.nix)"
+	print_help
     exit 1
 fi
 
-GENERATED_NIXFILE="$1"
-PACKAGE=""
-# we have to use a temp file else
+CSV_FILE="maintainers/scripts/luarocks-packages.csv"
 TMP_FILE="$(mktemp)"
 
 exit_trap()
 {
   local lc="$BASH_COMMAND" rc=$?
-  test $rc -eq 0 || echo "*** error $rc: $lc"
+  test $rc -eq 0 || echo -e "*** error $rc: $lc.\nGenerated temporary file in $TMP_FILE" >&2
 }
-
 trap exit_trap EXIT
 
+print_help() {
+    echo "Usage: $0 <GENERATED_FILE>"
+    echo "(most likely pkgs/development/lua-modules/generated-packages.nix)"
+	echo ""
+	echo " -c <CSV_FILE> to set the list of luarocks package to generate"
+	exit 1
+}
 
-# -p <PKG> package
-while getopts "p:" opt; do
+
+while getopts ":hc:" opt; do
   case $opt in
-    p)
-      echo "Generating nix derivation for $OPTARG !" >&2
-      PACKAGE="$OPTARG"
+    h)
+      print_help
+      ;;
+    c)
+      echo "Loading package list from $OPTARG !" >&2
+      CSV_FILE="$OPTARG"
       ;;
     \?)
       echo "Invalid option: -$OPTARG" >&2
       ;;
   esac
+  shift $((OPTIND-1))
 done
+
+GENERATED_NIXFILE="$1"
 
 # read returns a non-zero return code when it reaches EOF
 # so disable the checks just for the 2 read
@@ -54,15 +63,7 @@ nixpkgs$ ${0} ${GENERATED_NIXFILE}
 
 These packages are manually refined in lua-overrides.nix
 */
-{
-self
-, lua
-, stdenv
-, fetchurl
-, fetchgit
-, pkgs
-, ...
-} @ args:
+{ self, lua, stdenv, fetchurl, fetchgit, pkgs, ... } @ args:
 self: super:
 with self;
 {
@@ -83,7 +84,7 @@ function convert_pkg () {
 
     version="${3:-}"
 
-    echo "looking at $pkg (version $version) from server $server" >&2
+    echo "looking at $pkg (version $version) from server [$server]" >&2
     cmd="luarocks nix $server $pkg $version"
     drv="$($cmd)"
     if [ $? -ne 0 ]; then
@@ -97,20 +98,16 @@ function convert_pkg () {
 # params needed when called via callPackage
 echo "$HEADER" | tee "$TMP_FILE"
 
-if [ ! -z "$PACKAGE" ]; then
-    convert_pkg "$PACKAGE"
-else
-    # list of packages with format
-    # name,server,version
-    while IFS=, read -r pkg_name server version
-    do
-        if [ -z "$pkg_name" ]; then
-            echo "Skipping empty package name" >&2
-        fi
-        echo "PKG $pkg_name version $version from server $server" >&2
-        convert_pkg "$pkg_name" "$server" "$version"
-    done < maintainers/scripts/luarocks-packages.csv
-fi
+# list of packages with format
+# name,server,version
+while IFS=, read -r pkg_name server version
+do
+	if [ -z "$pkg_name" ]; then
+		echo "Skipping empty package name" >&2
+	fi
+	convert_pkg "$pkg_name" "$server" "$version"
+done < "$CSV_FILE"
+
 # close the set
 echo "$FOOTER" | tee -a "$TMP_FILE"
 
