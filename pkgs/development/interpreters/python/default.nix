@@ -30,7 +30,7 @@ with pkgs;
         isPy2 = lib.strings.substring 0 1 pythonVersion == "2";
         isPy3 = lib.strings.substring 0 1 pythonVersion == "3";
         isPy3k = isPy3;
-        isPyPy = interpreter == "pypy";
+        isPyPy = lib.hasInfix "pypy" interpreter;
 
         buildEnv = callPackage ./wrapper.nix { python = self; inherit (pythonPackages) requiredPythonModules; };
         withPackages = import ./with-packages.nix { inherit buildEnv pythonPackages;};
