@@ -21675,7 +21675,10 @@ in
 
   rubiks = callPackage ../development/libraries/science/math/rubiks { };
 
-  petsc = callPackage ../development/libraries/science/math/petsc { };
+  petsc = callPackage ../development/libraries/science/math/petsc {
+    blas = openblas;
+    hdf5 = hdf5-mpi;
+  };
 
   parmetis = callPackage ../development/libraries/science/math/parmetis {
     mpi = openmpi;
