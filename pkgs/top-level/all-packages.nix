@@ -7493,6 +7493,11 @@ in
         inherit installjdk pluginSupport;
       });
 
+  corretto8 = callPackage ../development/compilers/openjdk/corretto.nix {
+    bootjdk = bootjdk.override { version = "8"; };
+    inherit (gnome2) GConf gnome_vfs;
+  };
+
   javacard-devkit = pkgsi686Linux.callPackage ../development/compilers/javacard-devkit { };
 
   jikes = callPackage ../development/compilers/jikes { };
