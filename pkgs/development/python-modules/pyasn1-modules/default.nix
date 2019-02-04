@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "pyasn1-modules";
   version = "0.2.4";
-  disabled = isPyPy;
 
   src = fetchPypi {
     inherit pname version;
