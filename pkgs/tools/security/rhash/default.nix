@@ -18,6 +18,8 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+  checkTarget = "test-full";
+
   installTargets = [ "install" "install-lib-shared" "install-lib-so-link" "install-lib-headers" ];
 
   meta = with stdenv.lib; {
