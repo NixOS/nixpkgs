@@ -3,26 +3,16 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "ipe-7.2.9";
+  name = "ipe-7.2.10";
 
   src = fetchurl {
     url = "https://dl.bintray.com/otfried/generic/ipe/7.2/${name}-src.tar.gz";
-    sha256 = "1i0h0q32xvbb0d3y2ff76jxnaw05hjf2z5gzww886z8arxwar1xn";
+    sha256 = "0rm31kvyg30452bz12yi49bkhdmi4bjdx6zann5cdlbi0pvmx7xh";
   };
 
-  # changes taken from Gentoo portage
-  preConfigure = ''
-    cd src
-    sed -i \
-      -e 's/fpic/fPIC/' \
-      -e 's/moc-qt4/moc/' \
-      config.mak || die
-    sed -i -e 's/install -s/install/' common.mak || die
-  '';
+  sourceRoot = "${name}/src";
 
-  NIX_CFLAGS_COMPILE = [ "-std=c++11" ]; # build with Qt 5.7
-
-  IPEPREFIX="$$out";
+  IPEPREFIX="${placeholder "out"}";
   URWFONTDIR="${texlive}/texmf-dist/fonts/type1/urw/";
   LUA_PACKAGE = "lua";
 
@@ -37,6 +27,8 @@ stdenv.mkDerivation rec {
       wrapProgram "$prog" --prefix PATH : "${texlive}/bin"
     done
   '';
+
+  enableParallelBuilding = true;
 
   #TODO: make .desktop entry
 
