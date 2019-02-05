@@ -90,6 +90,26 @@ inspect = buildLuarocksPackage {
     };
   };
 };
+lpeg_patterns = buildLuarocksPackage {
+  pname = "lpeg_patterns";
+  version = "0.5-0";
+
+  src =  fetchurl {
+      url    = https://luarocks.org/lpeg_patterns-0.5-0.src.rock;
+      sha256 = "0mlw4nayrsdxrh98i26avz5i4170a9brciybw88kks496ra36v8f";
+   };
+  
+  propagatedBuildInputs = [lua lpeg  ];
+  buildType="builtin";
+
+  meta = {
+    homepage = "https://github.com/daurnimator/lpeg_patterns/archive/v0.5.zip";
+    description="a collection of LPEG patterns";
+    license = {
+      fullName = "MIT";
+    };
+  };
+};
 lrexlib-gnu = buildLuarocksPackage {
   pname = "lrexlib-gnu";
   version = "2.9.0-1";

@@ -915,32 +915,6 @@ with self; {
     };
   };
 
-  lpeg_patterns = buildLuaPackage rec {
-    version = "0.5";
-    name = "lpeg_patterns-${version}";
-
-    src = fetchFromGitHub {
-      owner = "daurnimator";
-      repo = "lpeg_patterns";
-      rev = "v${version}";
-      sha256 = "1s3c179a64r45ffkawv9dnxw4mzwkzj00nr9z2gs5haajgpjivw6";
-    };
-
-    buildPhase = ":";
-    installPhase = ''
-      mkdir -p "$out/lib/lua/${lua.luaversion}"
-      mv lpeg_patterns "$out/lib/lua/${lua.luaversion}/"
-    '';
-
-    meta = with stdenv.lib; {
-      description = "A collection of LPEG patterns";
-      homepage = "https://github.com/daurnimator/lpeg_patterns";
-      license = licenses.mit;
-      maintainers = with maintainers; [ vcunat ];
-      inherit (lpeg.meta) platforms;
-    };
-  };
-
   cjson = buildLuaPackage rec {
     name = "cjson-${version}";
     version = "2.1.0";
