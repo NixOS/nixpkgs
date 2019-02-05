@@ -10,22 +10,21 @@ let srcs = {
         sha256 = "62f188a9f1b7ab0e757eb0bc6540d9c0026d75edc7acc1c3cdf7438871d0a94f";
       };
     };
+    version = "2.6.2";
 in
 stdenv.mkDerivation {
-  name = "fortune-mod-2.6.2";
+  name = "fortune-mod-${version}";
 
   src = srcs.fortune;
 
-  sourceRoot = "fortune-mod-fortune-mod-2.6.2/fortune-mod";
+  sourceRoot = "fortune-mod-fortune-mod-${version}/fortune-mod";
 
-  buildInputs = [ cmake recode perl ];
+  nativeBuildInputs = [ cmake perl ];
+
+  buildInputs = [ recode ];
 
   preConfigure = ''
     cp ${srcs.shlomifCommon} cmake/Shlomif_Common.cmake
-  '';
-
-  configureScript = ''
-    cmake -DCMAKE_INSTALL_PREFIX=$out .
   '';
 
   preBuild = ''
@@ -33,7 +32,8 @@ stdenv.mkDerivation {
   '';
 
   postInstall = ''
-    cp $out/games/fortune $out/bin/fortune
+    mv $out/games/fortune $out/bin/fortune
+    rm -r $out/games
   '';
 
   meta = with stdenv.lib; {
