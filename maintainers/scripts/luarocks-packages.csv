@@ -20,6 +20,7 @@ luaevent,
 luacheck
 lua-zlib,
 luaffi,,http://luarocks.org/dev,
+luaexpat,
 luuid,
 penlight,
 say,
