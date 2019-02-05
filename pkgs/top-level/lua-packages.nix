@@ -871,43 +871,6 @@ with self; {
     };
   };
 
-  lgi = toLuaModule(stdenv.mkDerivation rec {
-    name = "lgi-${version}";
-    version = "0.9.2";
-
-    src = fetchFromGitHub {
-      owner = "pavouk";
-      repo = "lgi";
-      rev = version;
-      sha256 = "03rbydnj411xpjvwsyvhwy4plm96481d7jax544mvk7apd8sd5jj";
-    };
-
-    nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ glib gobject-introspection lua ];
-
-    makeFlags = [ "LUA_VERSION=${lua.luaversion}" ];
-
-    preBuild = ''
-      sed -i "s|/usr/local|$out|" lgi/Makefile
-    '';
-
-    patches = [
-        (fetchpatch {
-            name = "lgi-find-cairo-through-typelib.patch";
-            url = "https://github.com/psychon/lgi/commit/46a163d9925e7877faf8a4f73996a20d7cf9202a.patch";
-            sha256 = "0gfvvbri9kyzhvq3bvdbj2l6mwvlz040dk4mrd5m9gz79f7w109c";
-        })
-    ];
-
-    meta = with stdenv.lib; {
-      description = "GObject-introspection based dynamic Lua binding to GObject based libraries";
-      homepage    = https://github.com/pavouk/lgi;
-      license     = licenses.mit;
-      maintainers = with maintainers; [ lovek323 rasendubi ];
-      platforms   = platforms.unix;
-    };
-  });
-
   mpack = buildLuaPackage rec {
     name = "mpack-${version}";
     version = "1.0.7";
