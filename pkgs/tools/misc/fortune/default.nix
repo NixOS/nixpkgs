@@ -2,7 +2,7 @@
 
 let srcs = {
       fortune = fetchurl {
-        url = https://github.com/shlomif/fortune-mod/archive/fortune-mod-2.6.2.tar.gz;
+        url = "https://github.com/shlomif/fortune-mod/archive/fortune-mod-${version}.tar.gz";
         sha256 = "89223bb649ea62b030527f181539182d6a17a1a43b0cc499a52732b839f7b691";
       };
       shlomifCommon = fetchurl {
@@ -25,10 +25,6 @@ stdenv.mkDerivation {
 
   preConfigure = ''
     cp ${srcs.shlomifCommon} cmake/Shlomif_Common.cmake
-  '';
-
-  preBuild = ''
-    makeFlagsArray=("CC=$CC" "REGEXDEFS=-DHAVE_REGEX_H -DPOSIX_REGEX" "LDFLAGS=")
   '';
 
   postInstall = ''
