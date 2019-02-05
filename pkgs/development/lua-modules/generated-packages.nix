@@ -70,6 +70,52 @@ basexx = buildLuarocksPackage {
     };
   };
 };
+busted = buildLuarocksPackage {
+  pname = "busted";
+  version = "2.0.rc13-0";
+
+  knownRockspec = ( fetchurl {
+      url    = https://luarocks.org/busted-2.0.rc13-0.rockspec;
+      sha256 = "0hrvhg1324q5ra6cpjh1y3by6lrzs0ljah4jl48l8xlgw1z9z1q5";
+   }).outPath;
+
+   src =  fetchurl {
+      url    = https://github.com/Olivine-Labs/busted/archive/v2.0.rc13-0.tar.gz;
+      sha256 = "0m72bldn1r6j94ahcfmpaq1mmysrshf9qi9fjas7hpal0jp8ivvl";
+   };
+
+  disabled = ( luaOlder "5.1");
+  propagatedBuildInputs = [lua lua_cliargs luafilesystem luasystem dkjson say luassert lua-term penlight mediator_lua  ];
+  buildType="builtin";
+
+  meta = {
+    homepage = "http://olivinelabs.com/busted/";
+    description="Elegant Lua unit testing.";
+    license = {
+      fullName = "MIT <http://opensource.org/licenses/MIT>";
+    };
+  };
+};
+coxpcall = buildLuarocksPackage {
+  pname = "coxpcall";
+  version = "1.17.0-1";
+
+  src =  fetchurl {
+      url    = https://luarocks.org/manifests/hisham/coxpcall-1.17.0-1.src.rock;
+      sha256 = "0n1jmda4g7x06458596bamhzhcsly6x0p31yp6q3jz4j11zv1zhi";
+   };
+
+
+  buildType="builtin";
+
+  meta = {
+    homepage = "http://keplerproject.github.io/coxpcall";
+    description="Coroutine safe xpcall and pcall";
+    license = {
+      fullName = "MIT/X11";
+    };
+  };
+};
 cqueues = buildLuarocksPackage {
   pname = "cqueues";
   version = "20171014.52-0";
@@ -724,32 +770,6 @@ nvim-client = buildLuarocksPackage {
     };
   };
 };
-busted = buildLuarocksPackage {
-  pname = "busted";
-  version = "2.0.rc13-0";
-
-  knownRockspec = ( fetchurl {
-      url    = https://luarocks.org/busted-2.0.rc13-0.rockspec;
-      sha256 = "0hrvhg1324q5ra6cpjh1y3by6lrzs0ljah4jl48l8xlgw1z9z1q5";
-   }).outPath;
-
-   src =  fetchurl {
-      url    = https://github.com/Olivine-Labs/busted/archive/v2.0.rc13-0.tar.gz;
-      sha256 = "0m72bldn1r6j94ahcfmpaq1mmysrshf9qi9fjas7hpal0jp8ivvl";
-   };
-
-  disabled = ( luaOlder "5.1");
-  propagatedBuildInputs = [lua lua_cliargs luafilesystem luasystem dkjson say luassert lua-term penlight mediator_lua  ];
-  buildType="builtin";
-
-  meta = {
-    homepage = "http://olivinelabs.com/busted/";
-    description="Elegant Lua unit testing.";
-    license = {
-      fullName = "MIT <http://opensource.org/licenses/MIT>";
-    };
-  };
-};
 luassert = buildLuarocksPackage {
   pname = "luassert";
   version = "1.7.11-0";
@@ -773,26 +793,6 @@ luassert = buildLuarocksPackage {
     description="Lua Assertions Extension";
     license = {
       fullName = "MIT <http://opensource.org/licenses/MIT>";
-    };
-  };
-};
-coxpcall = buildLuarocksPackage {
-  pname = "coxpcall";
-  version = "1.17.0-1";
-
-  src =  fetchurl {
-      url    = https://luarocks.org/manifests/hisham/coxpcall-1.17.0-1.src.rock;
-      sha256 = "0n1jmda4g7x06458596bamhzhcsly6x0p31yp6q3jz4j11zv1zhi";
-   };
-
-
-  buildType="builtin";
-
-  meta = {
-    homepage = "http://keplerproject.github.io/coxpcall";
-    description="Coroutine safe xpcall and pcall";
-    license = {
-      fullName = "MIT/X11";
     };
   };
 };

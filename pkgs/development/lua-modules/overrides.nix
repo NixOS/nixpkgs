@@ -5,6 +5,13 @@ with super;
   ##########################################3
   #### manual fixes for generated packages
   ##########################################3
+
+  busted = super.busted.overrideAttrs(oa: {
+    postInstall = ''
+      install -D completions/zsh/_busted $out/share/zsh/site-functions/_busted
+    '';
+  });
+
   cqueues = super.cqueues.override({
     nativeBuildInputs = [ pkgs.gnum4 ];
     buildInputs = [ pkgs.openssl ];
@@ -80,11 +87,5 @@ with super;
 
   luv = super.luv.overrideAttrs(oa: {
     propagatedBuildInputs = oa.propagatedBuildInputs ++ [ pkgs.libuv ];
-  });
-
-  busted = super.busted.overrideAttrs(oa: {
-    postInstall = ''
-      install -D completions/zsh/_busted $out/share/zsh/site-functions/_busted
-    '';
   });
  }
