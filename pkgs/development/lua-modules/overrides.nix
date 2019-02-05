@@ -52,6 +52,11 @@ with super;
   lua-iconv = super.lua-iconv.override({
     buildInputs = [ pkgs.libiconv ];
   });
+  luazlib=lua-zlib;
+  lua-zlib = super.lua-zlib.override({
+    buildInputs = [ pkgs.zlib.dev ];
+    disabled=luaOlder "5.1" || luaAtLeast "5.4";
+  });
   luv = super.luv.overrideAttrs(oa: {
     propagatedBuildInputs = oa.propagatedBuildInputs ++ [ pkgs.libuv ];
   });

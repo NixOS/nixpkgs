@@ -386,6 +386,26 @@ lua-term = buildLuarocksPackage {
     };
   };
 };
+lua-zlib = buildLuarocksPackage {
+  pname = "lua-zlib";
+  version = "1.2-0";
+
+  src =  fetchurl {
+      url    = https://luarocks.org/lua-zlib-1.2-0.src.rock;
+      sha256 = "0qa0vnx45nxdj6fqag6fr627zsnd2bmrr9bdbm8jv6lcnyi6nhs2";
+   };
+  disabled = ( luaOlder "5.1");
+  propagatedBuildInputs = [lua  ];
+  buildType="builtin";
+
+  meta = {
+    homepage = "https://github.com/brimworks/lua-zlib";
+    description="Simple streaming interface to zlib for Lua.";
+    license = {
+      fullName = "MIT";
+    };
+  };
+};
 luaffi = buildLuarocksPackage {
   pname = "luaffi";
   version = "scm-1";
