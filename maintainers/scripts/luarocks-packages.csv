@@ -2,6 +2,7 @@ ansicolors,
 argparse,
 dkjson
 inspect
+lpeg_patterns
 lrexlib-gnu,
 lrexlib-posix,
 ltermbox,
