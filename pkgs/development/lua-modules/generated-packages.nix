@@ -50,6 +50,26 @@ argparse = buildLuarocksPackage {
     };
   };
 };
+basexx = buildLuarocksPackage {
+  pname = "basexx";
+  version = "0.4.0-1";
+
+  src =  fetchurl {
+      url    = https://luarocks.org/basexx-0.4.0-1.src.rock;
+      sha256 = "1px8yrxg1qkk3kzdqj3siry742jdv4ysp2dmicxi15mkynqpjlzz";
+   };
+  disabled = ( luaOlder "5.1");
+  propagatedBuildInputs = [lua  ];
+  buildType="builtin";
+
+  meta = {
+    homepage = "https://github.com/aiq/basexx";
+    description="A base2, base16, base32, base64 and base85 library for Lua";
+    license = {
+      fullName = "MIT";
+    };
+  };
+};
 dkjson = buildLuarocksPackage {
   pname = "dkjson";
   version = "2.5-2";

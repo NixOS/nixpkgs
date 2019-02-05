@@ -1,5 +1,6 @@
 ansicolors,
 argparse,
+basexx,
 dkjson
 fifo
 inspect

@@ -100,32 +100,6 @@ with self; {
 
   luarocks-nix = callPackage ../development/tools/misc/luarocks/luarocks-nix.nix { };
 
-  basexx = buildLuaPackage rec {
-    version = "0.4.0";
-    name = "basexx-${version}";
-
-    src = fetchFromGitHub {
-      owner = "aiq";
-      repo = "basexx";
-      rev = "v${version}";
-      sha256 = "12y0ng9bp5b98iax35pnp0kc0mb42spv1cbywvfq6amik6l0ya7g";
-    };
-
-    buildPhase = ":";
-    installPhase = ''
-      install -Dt "$out/lib/lua/${lua.luaversion}/" \
-        lib/basexx.lua
-    '';
-
-    meta = with stdenv.lib; {
-      description = "Lua library for base2, base16, base32, base64, base85";
-      homepage = "https://github.com/aiq/basexx";
-      license = licenses.mit;
-      maintainers = with maintainers; [ vcunat ];
-      platforms = platforms.all;
-    };
-  };
-
   bit32 = buildLuaPackage rec {
     version = "5.3.0";
     name = "bit32-${version}";
