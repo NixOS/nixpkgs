@@ -11,6 +11,7 @@ lpty
 lrexlib-gnu,
 lrexlib-posix,
 ltermbox,
+lua-cjson,
 lua-cmsgpack,
 lua_cliargs,
 lua-term,

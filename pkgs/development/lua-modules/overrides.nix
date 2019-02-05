@@ -33,6 +33,10 @@ with super;
   ltermbox = super.ltermbox.override( {
     disabled = !isLua51 || isLuaJIT;
   });
+  lua-cjson = super.lua-cjson.override({
+    disabled = isLuaJIT;
+  });
+  cjson = lua-cjson;
 
   lua-cmsgpack = super.lua-cmsgpack.override({
     # TODO this should work with luajit once we fix luajit headers ?
