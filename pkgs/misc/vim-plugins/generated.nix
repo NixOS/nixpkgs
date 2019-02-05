@@ -494,12 +494,12 @@ let
 
   deoplete-nvim = buildVimPluginFrom2Nix {
     pname = "deoplete-nvim";
-    version = "2019-02-03";
+    version = "2019-02-04";
     src = fetchFromGitHub {
       owner = "Shougo";
       repo = "deoplete.nvim";
-      rev = "1d577d43feae8eae88176c7909e7891297acc8de";
-      sha256 = "1hbwz2mkxzq213bpgvrnpf784f193s9bk479nhysrv6704dpqb4v";
+      rev = "fee9301bfa8d52efc38d314b17bf89c39c22015d";
+      sha256 = "0vcjziqzibrg3q8qnwv9jadhzcghha86jvkdmc581harw707qy76";
     };
   };
 
@@ -2086,8 +2086,8 @@ let
     src = fetchFromGitHub {
       owner = "vim-airline";
       repo = "vim-airline";
-      rev = "40786883051429053d22ad0da4e04b52e900aaba";
-      sha256 = "09igzw2wg2m55bq9l343wgxdgjmhjg62sz3fr2wjgmr5ji4kpkn4";
+      rev = "999c40fcf34643ed5de0c638b80ef79c2bbe40c1";
+      sha256 = "0fm9i97f8n4igbpjlc4h27rwjcia8ai56rhdzqbl558h1br80hr6";
     };
   };
 
@@ -3236,6 +3236,17 @@ let
     };
   };
 
+  vim-prettier = buildVimPluginFrom2Nix {
+    pname = "vim-prettier";
+    version = "2019-01-15";
+    src = fetchFromGitHub {
+      owner = "prettier";
+      repo = "vim-prettier";
+      rev = "491922d557a94b6436ff7737f024c1f2006f6f3f";
+      sha256 = "10df8mq6kd11mqp5iisw3z9hv2armaj9zdl8d5c469sjljf4mh01";
+    };
+  };
+
   vim-prettyprint = buildVimPluginFrom2Nix {
     pname = "vim-prettyprint";
     version = "2016-07-16";
@@ -3854,12 +3865,12 @@ let
 
   vimtex = buildVimPluginFrom2Nix {
     pname = "vimtex";
-    version = "2019-02-01";
+    version = "2019-02-04";
     src = fetchFromGitHub {
       owner = "lervag";
       repo = "vimtex";
-      rev = "97b02bb024b23501302f50c068e89b058faace6b";
-      sha256 = "1yd6xl7a2gbazgr6fs9n00b9msz1w7szl42h0pn80nmgp0pmjmcp";
+      rev = "02b5586c0d34364bae79e4e34cb445a2b3b9a3a4";
+      sha256 = "1jqk3n6cnyy50cjh60bgmw19i1lr05kqpkbm1913px9b9klavjfh";
     };
   };
 

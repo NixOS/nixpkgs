@@ -29,8 +29,8 @@ Chiel92/vim-autoformat
 chikatoike/concealedyank.vim
 chikatoike/sourcemap.vim
 chrisbra/CheckAttach
-chrisbra/Recover.vim
 chrisbra/csv.vim
+chrisbra/Recover.vim
 chrisgeo/sparkup
 chriskempson/base16-vim
 christoomey/vim-sort-motion
@@ -229,6 +229,7 @@ plasticboy/vim-markdown
 posva/vim-vue
 powerman/vim-plugin-AnsiEsc
 PProvost/vim-ps1
+prettier/vim-prettier
 python-mode/python-mode
 Quramy/tsuquyomi
 racer-rust/vim-racer
