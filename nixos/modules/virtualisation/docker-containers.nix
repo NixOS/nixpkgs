@@ -96,15 +96,15 @@ let
       };
     };
 
-  mkService = name: container:
-    let containerName = "nixos-${name}"; in {
-      wantedBy = [ "multi-user.target" ];
-      after = [ "docker.service" "docker.socket" ];
-      requires = [ "docker.service" "docker.socket" ];
-      script = concatStringsSep " \\\n  " ([
-        "exec ${pkgs.docker}/bin/docker run"
+  mkService = name: container: {
+    wantedBy = [ "multi-user.target" ];
+    after = [ "docker.service" "docker.socket" ];
+    requires = [ "docker.service" "docker.socket" ];
+    serviceConfig = {
+      ExecStart = concatStringsSep " \\\n  " ([
+        "${pkgs.docker}/bin/docker run"
         "--rm"
-        "--name=${containerName}"
+        "--name=%n"
         "--log-driver=${container.log-driver}"
       ] ++ optional (! isNull container.entrypoint)
         "--entrypoint=${escapeShellArg container.entrypoint}"
@@ -113,21 +113,19 @@ let
         ++ optional (! isNull container.user) "-u ${escapeShellArg container.user}"
         ++ (map (v: "-v ${escapeShellArg v}") container.volumes)
         ++ optional (! isNull container.workdir) "-w ${escapeShellArg container.workdir}"
-        # I know escapeShellArgs exists; this results in prettier output
         ++ map escapeShellArg container.extraDockerOptions
         ++ [container.image]
+        ++ map escapeShellArg container.cmd
       );
-      scriptArgs = escapeShellArgs container.cmd;
-      preStop = "${pkgs.docker}/bin/docker stop ${containerName}";
-      reload = "${pkgs.docker}/bin/docker restart ${containerName}";
-      serviceConfig = {
-        ExecStartPre = "-${pkgs.docker}/bin/docker rm -f ${containerName}";
-        ExecStopPost = "-${pkgs.docker}/bin/docker rm -f ${containerName}";
-        TimeoutStartSec = 0;
-        TimeoutStopSec = 120;
-        Restart = "always";
-      };
+      ExecStartPre = "-${pkgs.docker}/bin/docker rm -f %n";
+      ExecStop = "${pkgs.docker}/bin/docker stop %n";
+      ExecStopPost = "-${pkgs.docker}/bin/docker rm -f %n";
+      ExecReload = "${pkgs.docker}/bin/docker restart %n";
+      TimeoutStartSec = 0;
+      TimeoutStopSec = 120;
+      Restart = "always";
     };
+  };
 
 in {
 
