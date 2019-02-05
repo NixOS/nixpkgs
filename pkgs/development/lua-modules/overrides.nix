@@ -56,6 +56,9 @@ with super;
     '';
     disabled= luaOlder "5.1" || luaAtLeast "5.4" || isLuaJIT;
   });
+  lua-iconv = super.lua-iconv.override({
+    buildInputs = [ pkgs.libiconv ];
+  });
   luv = super.luv.overrideAttrs(oa: {
     propagatedBuildInputs = oa.propagatedBuildInputs ++ [ pkgs.libuv ];
   });

@@ -384,32 +384,6 @@ with self; {
     };
   };
 
-  lua-iconv = buildLuaPackage rec {
-    name = "lua-iconv-${version}";
-    version = "7";
-
-    src = fetchFromGitHub {
-      owner = "ittner";
-      repo = "lua-iconv";
-      rev = name;
-      sha256 = "0rd76966qlxfp8ypkyrbif76nxnm1acclqwfs45wz3972jsk654i";
-    };
-
-    preBuild = ''
-      makeFlagsArray=(
-        INSTALL_PATH="$out/lib/lua/${lua.luaversion}"
-      );
-    '';
-
-    meta = with stdenv.lib; {
-      description = "Lua bindings for POSIX iconv";
-      homepage = "https://ittner.github.io/lua-iconv/";
-      license = licenses.mit;
-      maintainers = with maintainers; [ richardipsum ];
-      platforms = platforms.unix;
-    };
-  };
-
   luasec = buildLuaPackage rec {
     name = "sec-0.6";
 

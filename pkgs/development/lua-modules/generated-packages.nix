@@ -320,6 +320,26 @@ lua_cliargs = buildLuarocksPackage {
     };
   };
 };
+lua-iconv = buildLuarocksPackage {
+  pname = "lua-iconv";
+  version = "7-3";
+
+  src =  fetchurl {
+      url    = https://luarocks.org/lua-iconv-7-3.src.rock;
+      sha256 = "03xibhcqwihyjhxnzv367q4bfmzmffxl49lmjsq77g0prw8v0q83";
+   };
+  disabled = ( luaOlder "5.1");
+  propagatedBuildInputs = [lua  ];
+  buildType="builtin";
+
+  meta = {
+    homepage = "http://ittner.github.com/lua-iconv/";
+    description="Lua binding to the iconv";
+    license = {
+      fullName = "MIT/X11";
+    };
+  };
+};
 lua-term = buildLuarocksPackage {
   pname = "lua-term";
   version = "0.7-1";
