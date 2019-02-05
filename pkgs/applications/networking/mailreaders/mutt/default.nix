@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   };
 
   patches = optional smimeSupport (fetchpatch {
-    url = "https://salsa.debian.org/mutt-team/mutt/raw/debian/1.11.2-2/debian/patches/misc/smime.rc.patch";
+    url = "https://salsa.debian.org/mutt-team/mutt/raw/debian/1.11.3-2/debian/patches/misc/smime.rc.patch";
     sha256 = "1rl27qqwl4nw321ll5jcvfmkmz4fkvcsh5vihjcrhzzyf6vz8wmj";
   });
 
