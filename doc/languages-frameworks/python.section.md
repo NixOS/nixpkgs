@@ -1000,16 +1000,17 @@ Create this `default.nix` file, together with a `requirements.txt` and simply ex
 
 ```nix
 with import <nixpkgs> {};
-with pkgs.python27Packages;
+let
+  python = python3;
 
-stdenv.mkDerivation {
-  name = "impurePythonEnv";
+in mkShell {
   buildInputs = [
     # these packages are required for virtualenv and pip to work:
     #
-    python27Full
-    python27Packages.virtualenv
-    python27Packages.pip
+    python
+    python.pkgs.virtualenv
+    python.pkgs.pip
+    glibcLocales # for 'nix-shell --pure'
     # the following packages are related to the dependencies of your python
     # project.
     # In this particular example the python modules listed in the
@@ -1017,27 +1018,33 @@ stdenv.mkDerivation {
     # in order to compile any binary extensions they may require.
     #
     taglib
+    libffi
     openssl
     git
     libxml2
     libxslt
     libzip
     stdenv
-    zlib ];
-  src = null;
+    zlib
+  ];
   shellHook = ''
-  # set SOURCE_DATE_EPOCH so that we can use python wheels
-  SOURCE_DATE_EPOCH=$(date +%s)
-  virtualenv --no-setuptools venv
-  export PATH=$PWD/venv/bin:$PATH
-  pip install -r requirements.txt
+    DIR="${builtins.toPath ./.}"
+    VENV_DIR="$DIR/venv"
+    SOURCE_DATE_EPOCH=$(date +%s) # required for python wheels
+
+    virtualenv --no-setuptools "$VENV_DIR"
+
+    export PYTHONPATH="$VENV_DIR/${python.sitePackages}:$PYTHONPATH"
+    export PATH="$VENV_DIR/bin:$PATH"
+
+    pip install -r "$DIR/requirements.txt"
   '';
 }
 ```
 
 Note that the `pip install` is an imperative action. So every time `nix-shell`
 is executed it will attempt to download the python modules listed in
-requirements.txt. However these will be cached locally within the `virtualenv`
+requirements.txt. However these will be cached locally within the `venv`
 folder and not downloaded again.
 
 ### How to override a Python package from `configuration.nix`?
