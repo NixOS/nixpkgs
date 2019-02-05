@@ -456,6 +456,26 @@ luadbi = buildLuarocksPackage {
     };
   };
 };
+luaexpat = buildLuarocksPackage {
+  pname = "luaexpat";
+  version = "1.3.3-1";
+
+  src =  fetchurl {
+      url    = https://luarocks.org/luaexpat-1.3.3-1.src.rock;
+      sha256 = "0ahpfnby9qqgj22bajmrqvqq70nx19388lmjm9chljfzszy0hndm";
+   };
+  disabled = ( luaOlder "5.0");
+  propagatedBuildInputs = [lua  ];
+  buildType="builtin";
+
+  meta = {
+    homepage = "http://www.keplerproject.org/luaexpat/";
+    description="XML Expat parsing";
+    license = {
+      fullName = "MIT/X11";
+    };
+  };
+};
 luaffi = buildLuarocksPackage {
   pname = "luaffi";
   version = "scm-1";

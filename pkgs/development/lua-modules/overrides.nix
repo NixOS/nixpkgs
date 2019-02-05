@@ -60,6 +60,12 @@ with super;
   luadbi = super.luadbi.override({
     buildInputs = with pkgs; [ mysql.connector-c postgresql sqlite ];
   });
+
+  luaexpat = super.luaexpat.override({
+    buildInputs = [ pkgs.expat.dev ];
+    disabled=isLuaJIT || isLua53;
+  });
+
   luv = super.luv.overrideAttrs(oa: {
     propagatedBuildInputs = oa.propagatedBuildInputs ++ [ pkgs.libuv ];
   });

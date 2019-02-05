@@ -296,40 +296,6 @@ with self; {
     };
   };
 
-  luaexpat = buildLuaPackage rec {
-    version = "1.3.0";
-    name = "expat-${version}";
-
-    src = fetchurl {
-      url = "https://matthewwild.co.uk/projects/luaexpat/luaexpat-${version}.tar.gz";
-      sha256 = "1hvxqngn0wf5642i5p3vcyhg3pmp102k63s9ry4jqyyqc1wkjq6h";
-    };
-
-    buildInputs = [ expat ];
-
-    preConfigure = stdenv.lib.optionalString stdenv.isDarwin ''
-      substituteInPlace Makefile \
-      --replace '-shared' '-bundle -undefined dynamic_lookup -all_load'
-    '';
-
-    preBuild = ''
-      makeFlagsArray=(
-        LUA_LDIR="$out/share/lua/${lua.luaversion}"
-        LUA_INC="-I${lua}/include" LUA_CDIR="$out/lib/lua/${lua.luaversion}"
-        EXPAT_INC="-I${expat.dev}/include");
-    '';
-
-    disabled = isLua53 || isLuaJIT;
-
-    meta = with stdenv.lib; {
-      description = "SAX XML parser based on the Expat library";
-      homepage = "http://matthewwild.co.uk/projects/luaexpat";
-      license = licenses.mit;
-      maintainers = with maintainers; [ flosse ];
-      platforms = platforms.unix;
-    };
-  };
-
   luafilesystem = buildLuaPackage rec {
     version = "1.7.0";
     name = "filesystem-${version}";
