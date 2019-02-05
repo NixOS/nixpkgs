@@ -190,6 +190,26 @@ lpeg_patterns = buildLuarocksPackage {
     };
   };
 };
+lpty = buildLuarocksPackage {
+  pname = "lpty";
+  version = "1.2.2-1";
+
+  src =  fetchurl {
+      url    = https://luarocks.org/lpty-1.2.2-1.src.rock;
+      sha256 = "1vxvsjgjfirl6ranz6k4q4y2dnxqh72bndbk400if22x8lqbkxzm";
+   };
+  disabled = ( luaOlder "5.1");
+  propagatedBuildInputs = [lua  ];
+  buildType="make";
+
+  meta = {
+    homepage = "http://www.tset.de/lpty/";
+    description="A simple facility for lua to control other programs via PTYs.";
+    license = {
+      fullName = "MIT";
+    };
+  };
+};
 lrexlib-gnu = buildLuarocksPackage {
   pname = "lrexlib-gnu";
   version = "2.9.0-1";
