@@ -19,7 +19,7 @@ let
           type =  with types; listOf str;
           default = [];
           description = "Commandline arguments to pass to the image's entrypoint.";
-          literalExample = ''
+          example = literalExample ''
             ["--port=9000"]
           '';
         };
@@ -35,7 +35,7 @@ let
           type = with types; attrsOf str;
           default = {};
           description = "Environment variables to set for this container.";
-          literalExample = ''
+          example = literalExample ''
             {
               DATABASE_HOST = "db.example.com";
               DATABASE_PORT = "3306";
@@ -55,8 +55,8 @@ let
             logs</command> command.
 
             For more details and a full list of logging drivers, refer to the
-            <a href="https://docs.docker.com/engine/reference/run/#logging-drivers---log-driver">
-            Docker engine documentation</a>
+            <link xlink:href="https://docs.docker.com/engine/reference/run/#logging-drivers---log-driver">
+            Docker engine documentation</link>
           '';
         };
 
@@ -64,7 +64,7 @@ let
           type = with types; attrsOf str;
           default = {};
           description = "Network ports to forward from the host to this container.";
-          literalExample = ''
+          example = literalExample ''
             {
               # "port_on_host" = "port_in_container"
               "8080" = "9000/tcp";
@@ -83,9 +83,6 @@ let
         };
 
         volumes = mkOption {
-          # Note: these are "src:dst" lists so it's possible for `src`
-          # to refer to a /nix/store path, and for `dst` to include
-          # mount options.
           type = with types; listOf str;
           default = [];
           description = ''
@@ -96,10 +93,10 @@ let
             <literal>/nix/store</literal> paths, which would difficult with an
             attribute set.  There are also a variety of mount options available
             as a third field; please refer to the
-            <a href="https://docs.docker.com/engine/reference/run/#volume-shared-filesystems">
-            docker engine documentation</a> for details.
+            <link xlink:href="https://docs.docker.com/engine/reference/run/#volume-shared-filesystems">
+            docker engine documentation</link> for details.
           '';
-          literalExample = ''
+          example = literalExample ''
             [
               "volume_name:/path/inside/container"
               "/path/on/host:/path/inside/container"
@@ -118,7 +115,7 @@ let
           type = with types; listOf str;
           default = [];
           description = "Extra options for <command>docker run</command>.";
-          literalExample = ''
+          example = literalExample ''
             ["--network=host"]
           '';
         };
