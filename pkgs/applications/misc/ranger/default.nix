@@ -19,7 +19,8 @@ python3Packages.buildPythonApplication rec {
   LC_ALL = "en_US.UTF-8";
 
   checkInputs = with python3Packages; [ pytest ];
-  propagatedBuildInputs = [ file ];
+  propagatedBuildInputs = [ file ]
+    ++ lib.optional (imagePreviewSupport) [ python3Packages.pillow ];
 
   checkPhase = ''
     py.test tests
