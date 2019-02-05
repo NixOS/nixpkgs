@@ -236,36 +236,6 @@ with self; {
     };
   };
 
-  luacheck = buildLuaPackage rec {
-    pname = "luacheck";
-    version = "0.20.0";
-    name = "${pname}-${version}";
-
-    src = fetchFromGitHub {
-      owner = "mpeterv";
-      repo = "luacheck";
-      rev = "${version}";
-      sha256 = "0ahfkmqcjhlb7r99bswy1sly6d7p4pyw5f4x4fxnxzjhbq0c5qcs";
-    };
-
-    propagatedBuildInputs = [ lua ];
-
-    # No Makefile.
-    dontBuild = true;
-
-    installPhase = ''
-      ${lua}/bin/lua install.lua $out
-    '';
-
-    meta = with stdenv.lib; {
-      description = "A tool for linting and static analysis of Lua code";
-      homepage = https://github.com/mpeterv/luacheck;
-      license = licenses.mit;
-      maintainers = with maintainers; [ vyp ];
-      platforms = platforms.unix;
-    };
-  };
-
   luacyrussasl = buildLuaPackage rec {
     version = "1.1.0";
     name = "lua-cyrussasl-${version}";

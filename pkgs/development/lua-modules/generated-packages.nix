@@ -346,6 +346,26 @@ luaevent = buildLuarocksPackage {
     };
   };
 };
+luacheck = buildLuarocksPackage {
+  pname = "luacheck";
+  version = "0.23.0-1";
+
+  src =  fetchurl {
+      url    = https://luarocks.org/luacheck-0.23.0-1.src.rock;
+      sha256 = "0akj61c7k1na2mggsckvfn9a3ljfp4agnmr9gp3mac4vin99a1cl";
+   };
+  disabled = ( luaOlder "5.1") || ( luaAtLeast "5.4");
+  propagatedBuildInputs = [lua argparse luafilesystem  ];
+  buildType="builtin";
+
+  meta = {
+    homepage = "https://github.com/mpeterv/luacheck";
+    description="A static analyzer and a linter for Lua";
+    license = {
+      fullName = "MIT";
+    };
+  };
+};
 luaffi = buildLuarocksPackage {
   pname = "luaffi";
   version = "scm-1";
