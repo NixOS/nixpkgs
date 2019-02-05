@@ -216,32 +216,6 @@ with self; {
     };
   };
 
-  fifo = buildLuaPackage rec {
-    version = "0.2";
-    name = "fifo-${version}";
-
-    src = fetchFromGitHub {
-      owner = "daurnimator";
-      repo = "fifo.lua";
-      rev = version;
-      sha256 = "1800k7h5hxsvm05bjdr65djjml678lwb0661cll78z1ys2037nzn";
-    };
-
-    buildPhase = ":";
-    installPhase = ''
-      mkdir -p "$out/lib/lua/${lua.luaversion}"
-      mv fifo.lua "$out/lib/lua/${lua.luaversion}/"
-    '';
-
-    meta = with stdenv.lib; {
-      description = "A lua library/'class' that implements a FIFO";
-      homepage = "https://github.com/daurnimator/fifo.lua";
-      license = licenses.mit;
-      maintainers = with maintainers; [ vcunat ];
-      platforms = platforms.all;
-    };
-  };
-
   luabitop = buildLuaPackage rec {
     version = "1.0.2";
     name = "bitop-${version}";

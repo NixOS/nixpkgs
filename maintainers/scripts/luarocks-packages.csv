@@ -1,6 +1,7 @@
 ansicolors,
 argparse,
 dkjson
+fifo
 inspect
 lpeg_patterns
 lrexlib-gnu,
