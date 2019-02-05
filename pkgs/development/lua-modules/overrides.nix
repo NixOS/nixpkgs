@@ -57,6 +57,9 @@ with super;
     buildInputs = [ pkgs.zlib.dev ];
     disabled=luaOlder "5.1" || luaAtLeast "5.4";
   });
+  luadbi = super.luadbi.override({
+    buildInputs = with pkgs; [ mysql.connector-c postgresql sqlite ];
+  });
   luv = super.luv.overrideAttrs(oa: {
     propagatedBuildInputs = oa.propagatedBuildInputs ++ [ pkgs.libuv ];
   });

@@ -18,6 +18,7 @@ lua-iconv,
 lua-term,
 lua-zlib,
 luacheck
+luadbi
 luaffi,http://luarocks.org/dev,
 luuid,
 penlight,

@@ -426,6 +426,36 @@ luacheck = buildLuarocksPackage {
     };
   };
 };
+luadbi = buildLuarocksPackage {
+  pname = "luadbi";
+  version = "0.7-1";
+
+  knownRockspec = ( fetchurl {
+      url    = https://luarocks.org/luadbi-0.7-1.rockspec;
+      sha256 = "0mx4jpxs969gd4b0bwakf81lqzzwhxwlnp77ii5kn7rjlmwp0jz1";
+   }).outPath;
+
+   src =  fetchgit ( removeAttrs (builtins.fromJSON ''{
+  "url": "git://github.com/mwild1/luadbi",
+  "rev": "73a234c4689e4f87b7520276b6159cc7f6cfd6e0",
+  "date": "2019-01-14T09:39:17+00:00",
+  "sha256": "167ivwmczhp98bxzpz3wdxcfj6vi0a10gpi7rdfjs2rbfwkzqvjh",
+  "fetchSubmodules": true
+}
+ '') ["date"]) ;
+
+  disabled = ( luaOlder "5.1") || ( luaAtLeast "5.4");
+  propagatedBuildInputs = [lua  ];
+  buildType="builtin";
+
+  meta = {
+    homepage = "https://github.com/mwild1/luadbi";
+    description="Database abstraction layer";
+    license = {
+      fullName = "MIT/X11";
+    };
+  };
+};
 luaffi = buildLuarocksPackage {
   pname = "luaffi";
   version = "scm-1";
