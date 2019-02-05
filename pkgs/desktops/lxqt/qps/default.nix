@@ -1,20 +1,20 @@
-{ stdenv, fetchFromGitHub, cmake, qt5 }:
+{ stdenv, fetchFromGitHub, cmake, qtbase, qtx11extras, qttools,
+  lxqt-build-tools }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "qps";
-  version = "1.10.18";
+  version = "1.10.19";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "1cq5z4w2n119z2bq0njn508g5582jljdx2n38cv5b3cf35k91a49";
+    sha256 = "1vyi1vw4z5j2sp9yhhv91wl2sbg4fh0djqslg1ssc7fww2ka6dx3";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake lxqt-build-tools ];
 
-  buildInputs = [ qt5.qtbase qt5.qtx11extras qt5.qttools ];
+  buildInputs = [ qtbase qtx11extras qttools ];
 
   meta = with stdenv.lib; {
     description = "The Qt process manager";
