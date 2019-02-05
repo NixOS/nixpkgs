@@ -61,14 +61,59 @@ let
         };
 
         ports = mkOption {
-          type = with types; attrsOf str;
-          default = {};
-          description = "Network ports to forward from the host to this container.";
+          type = with types; listOf str;
+          default = [];
+          description = ''
+            Network ports to publish from the container to the outer host.
+            </para>
+            <para>
+            Valid formats:
+            </para>
+            <itemizedlist>
+              <listitem>
+                <para>
+                  <literal>&lt;ip&gt;:&lt;hostPort&gt;:&lt;containerPort&gt;</literal>
+                </para>
+              </listitem>
+              <listitem>
+                <para>
+                  <literal>&lt;ip&gt;::&lt;containerPort&gt;</literal>
+                </para>
+              </listitem>
+              <listitem>
+                <para>
+                  <literal>&lt;hostPort&gt;:&lt;containerPort&gt;</literal>
+                </para>
+              </listitem>
+              <listitem>
+                <para>
+                  <literal>&lt;containerPort&gt;</literal>
+                </para>
+              </listitem>
+            </itemizedlist>
+            <para>
+            Both <literal>hostPort</literal> and
+            <literal>containerPort</literal> can be specified as a range of
+            ports.  When specifying ranges for both, the number of container
+            ports in the range must match the number of host ports in the
+            range.  Example: <literal>1234-1236:1234-1236/tcp</literal>
+            </para>
+            <para>
+            When specifying a range for <literal>hostPort</literal> only, the
+            <literal>containerPort</literal> must <emphasis>not</emphasis> be a
+            range.  In this case, the container port is published somewhere
+            within the specified <literal>hostPort</literal> range.  Example:
+            <literal>1234-1236:1234/tcp</literal>
+            </para>
+            <para>
+            Refer to the
+            <link xlink:href="https://docs.docker.com/engine/reference/run/#expose-incoming-ports">
+            Docker engine documentation</link> for full details.
+          '';
           example = literalExample ''
-            {
-              # "port_on_host" = "port_in_container"
-              "8080" = "9000/tcp";
-            }
+            [
+              "8080:9000"
+            ]
           '';
         };
 
@@ -135,9 +180,9 @@ let
       ] ++ optional (! isNull container.entrypoint)
         "--entrypoint=${escapeShellArg container.entrypoint}"
         ++ (mapAttrsToList (k: v: "-e ${escapeShellArg k}=${escapeShellArg v}") container.environment)
-        ++ (mapAttrsToList (k: v: "-p ${escapeShellArg k}:${escapeShellArg v}") container.ports)
+        ++ map (p: "-p ${escapeShellArg p}") container.ports
         ++ optional (! isNull container.user) "-u ${escapeShellArg container.user}"
-        ++ (map (v: "-v ${escapeShellArg v}") container.volumes)
+        ++ map (v: "-v ${escapeShellArg v}") container.volumes
         ++ optional (! isNull container.workdir) "-w ${escapeShellArg container.workdir}"
         ++ map escapeShellArg container.extraDockerOptions
         ++ [container.image]
