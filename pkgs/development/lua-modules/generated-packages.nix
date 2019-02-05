@@ -346,6 +346,36 @@ luaevent = buildLuarocksPackage {
     };
   };
 };
+luabitop = buildLuarocksPackage {
+  pname = "luabitop";
+  version = "1.0.2-3";
+
+  knownRockspec = ( fetchurl {
+      url    = https://luarocks.org/luabitop-1.0.2-3.rockspec;
+      sha256 = "07y2h11hbxmby7kyhy3mda64w83p4a6p7y7rzrjqgc0r56yjxhcc";
+   }).outPath;
+
+   src =  fetchgit ( removeAttrs (builtins.fromJSON ''{
+  "url": "git://github.com/LuaDist/luabitop.git",
+  "rev": "81bb23b0e737805442033535de8e6d204d0e5381",
+  "date": "2013-02-18T16:36:42+01:00",
+  "sha256": "0lsc556hlkddjbmcdbg7wc2g55bfy743p8ywdzl8x7kk847r043q",
+  "fetchSubmodules": true
+}
+ '') ["date"]) ;
+
+  disabled = ( luaOlder "5.1") || ( luaAtLeast "5.3");
+  propagatedBuildInputs = [lua  ];
+  buildType="builtin";
+
+  meta = {
+    homepage = "http://bitop.luajit.org/";
+    description="Lua Bit Operations Module";
+    license = {
+      fullName = "MIT/X license";
+    };
+  };
+};
 luacheck = buildLuarocksPackage {
   pname = "luacheck";
   version = "0.23.0-1";
