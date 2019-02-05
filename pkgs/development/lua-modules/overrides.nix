@@ -18,6 +18,17 @@ with super;
       '';
   });
 
+  lgi = super.lgi.overrideAttrs(oa: {
+    nativeBuildInputs = [ pkgs.pkgconfig ];
+    buildInputs = with pkgs; oa.buildInputs ++ [ glib gobjectIntrospection];
+    patches = [
+        (pkgs.fetchpatch {
+            name = "lgi-find-cairo-through-typelib.patch";
+            url = "https://github.com/psychon/lgi/commit/46a163d9925e7877faf8a4f73996a20d7cf9202a.patch";
+            sha256 = "0gfvvbri9kyzhvq3bvdbj2l6mwvlz040dk4mrd5m9gz79f7w109c";
+        })
+    ];
+  });
 
   ltermbox = super.ltermbox.override( {
     disabled = !isLua51 || isLuaJIT;

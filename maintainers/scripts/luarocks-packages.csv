@@ -5,6 +5,7 @@ cqueues
 dkjson
 fifo
 inspect
+lgi
 lpeg_patterns
 lrexlib-gnu,
 lrexlib-posix,

@@ -150,6 +150,26 @@ inspect = buildLuarocksPackage {
     };
   };
 };
+lgi = buildLuarocksPackage {
+  pname = "lgi";
+  version = "0.9.2-1";
+
+  src =  fetchurl {
+      url    = https://luarocks.org/lgi-0.9.2-1.src.rock;
+      sha256 = "07ajc5pdavp785mdyy82n0w6d592n96g95cvq025d6i0bcm2cypa";
+   };
+  disabled = ( luaOlder "5.1");
+  propagatedBuildInputs = [lua  ];
+  buildType="make";
+
+  meta = {
+    homepage = "http://github.com/pavouk/lgi";
+    description="Lua bindings to GObject libraries";
+    license = {
+      fullName = "MIT/X11";
+    };
+  };
+};
 lpeg_patterns = buildLuarocksPackage {
   pname = "lpeg_patterns";
   version = "0.5-0";
