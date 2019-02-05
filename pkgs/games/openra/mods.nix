@@ -1,4 +1,4 @@
-{ buildOpenRAMod, fetchFromGitHub, abbrevCommit, extraPostFetch }:
+{ buildOpenRAMod, fetchFromGitHub, abbrevCommit, postFetch }:
 
 let
   unsafeBuildOpenRAMod = attrs: name: (buildOpenRAMod attrs name).overrideAttrs (_: {
@@ -25,7 +25,7 @@ in {
         rev = "b8a7dd52ff893ed8225726d4ed4e14ecad748404";
         sha256 = "0dyk861qagibx8ldshz7d2nrki9q550f6f0wy8pvayvf1gv1dbxj";
         name = "engine";
-        inherit extraPostFetch;
+        inherit postFetch;
       };
     };
   };
@@ -50,7 +50,7 @@ in {
         rev = version;
         sha256 = "0p0izykjnz7pz02g2khp7msqa00jhjsrzk9y0g29dirmdv75qa4r";
         name = "engine";
-        inherit extraPostFetch;
+        inherit postFetch;
       };
     };
     assetsError = ''
@@ -78,7 +78,7 @@ in {
         rev = "e08b75c2add30439228ea3dd61d6be60d1800329";
         sha256 = "125vf962p69ajrh5pxgfwsi0ksczqwvlw5kn2fvffiwvh8d5in23";
         name = "engine";
-        inherit extraPostFetch;
+        inherit postFetch;
       };
     };
   };
@@ -102,7 +102,7 @@ in {
         rev = version;
         sha256 = "1x6byz37s8qcpqj902zvkvbv95rv2mv2kj35c12gbpyc92xkqkq0";
         name = "generals-alpha-engine";
-        inherit extraPostFetch;
+        inherit postFetch;
       };
     };
   };
@@ -126,7 +126,7 @@ in {
         rev = "4e8eab4ca00d1910203c8a103dfd2c002714daa8";
         sha256 = "1yyqparf93x8yzy1f46gsymgkj5jls25v2yc7ighr3f7mi3igdvq";
         name = "engine";
-        inherit extraPostFetch;
+        inherit postFetch;
       };
     };
   } name).overrideAttrs (origAttrs: {
@@ -155,7 +155,7 @@ in {
         rev = "52109c0910f479753704c46fb19e8afaab353c83";
         sha256 = "0ga3855j6bc7h81q03cw6laiaiz12915zg8aqah1idvxbzicfy7l";
         name = "engine";
-        inherit extraPostFetch;
+        inherit postFetch;
       };
     };
   };
@@ -179,7 +179,7 @@ in {
         rev = version;
         sha256 = "1pgi3zaq9fwwdq6yh19bwxscslqgabjxkvl9bcn1a5agy4bfbqk5";
         name = "engine";
-        inherit extraPostFetch;
+        inherit postFetch;
       };
     };
     assetsError = ''
@@ -207,7 +207,7 @@ in {
         rev = version;
         sha256 = "0ps9x379plrrj1hnj4fpr26lc46mzgxknv5imxi0bmrh5y4781ql";
         name = "engine";
-        inherit extraPostFetch;
+        inherit postFetch;
       };
     };
   };
@@ -232,7 +232,7 @@ in {
         rev = "f3873ae242803051285994d77eb26f4b951594b5";
         sha256 = "02rv29wja0p5d083pd087daz7x7pp5b9ym7sci2fhg3mrnaqgwkp";
         name = "engine";
-        inherit extraPostFetch;
+        inherit postFetch;
       };
     };
     assetsError = ''
@@ -261,7 +261,7 @@ in {
         rev = "d3545c0b751aea2105748eddaab5919313e35314";
         sha256 = "1jsldl6vnf3r9dzppdm4z7kqbrzkidda5k74wc809i8c4jjnq9rq";
         name = "engine";
-        inherit extraPostFetch;
+        inherit postFetch;
       };
     };
   };
@@ -285,7 +285,7 @@ in {
         rev = "6de92de8d982094a766eab97a92225c240d85493";
         sha256 = "0ps9x379plrrj1hnj4fpr26lc46mzgxknv5imxi0bmrh5y4781ql";
         name = "engine";
-        inherit extraPostFetch;
+        inherit postFetch;
       };
     };
   };
@@ -309,7 +309,7 @@ in {
         rev = version;
         sha256 = "1p5hgxxvxlz8480vj0qkmnxjh7zj3hahk312m0zljxfdb40652w1";
         name = "engine";
-        inherit extraPostFetch;
+        inherit postFetch;
       };
     };
   };
@@ -333,7 +333,7 @@ in {
         rev = version;
         sha256 = "1pgi3zaq9fwwdq6yh19bwxscslqgabjxkvl9bcn1a5agy4bfbqk5";
         name = "engine";
-        inherit extraPostFetch;
+        inherit postFetch;
       };
     };
     assetsError = ''

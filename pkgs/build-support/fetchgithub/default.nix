@@ -3,15 +3,14 @@
 { owner, repo, rev, name ? "source"
 , fetchSubmodules ? false, private ? false
 , githubBase ? "github.com", varPrefix ? null
+, postFetch ? "", gitPostFetch ? "", zipPostFetch ? null, zipExtraPostFetch ? ""
 , ... # For hash agility
 }@args: assert private -> !fetchSubmodules;
 let
   baseUrl = "https://${githubBase}/${owner}/${repo}";
-  passthruAttrs = removeAttrs args [ "owner" "repo" "rev" "fetchSubmodules" "private" "githubBase" "varPrefix" ];
+  passthruAttrs = removeAttrs args [ "owner" "repo" "rev" "fetchSubmodules" "private" "githubBase" "varPrefix"
+    "postFetch" "extraPostFetch" "gitPostFetch" "zipPostFetch" "zipExtraPostFetch" ];
   varBase = "NIX${if varPrefix == null then "" else "_${varPrefix}"}_GITHUB_PRIVATE_";
-  # We prefer fetchzip in cases we don't need submodules as the hash
-  # is more stable in that case.
-  fetcher = if fetchSubmodules then fetchgit else fetchzip;
   privateAttrs = lib.optionalAttrs private {
     netrcPhase = ''
       if [ -z "''$${varBase}USERNAME" -o -z "''$${varBase}PASSWORD" ]; then
@@ -26,8 +25,22 @@ let
     '';
     netrcImpureEnvVars = [ "${varBase}USERNAME" "${varBase}PASSWORD" ];
   };
-  fetcherArgs = (if fetchSubmodules
-    then { inherit rev fetchSubmodules; url = "${baseUrl}.git"; }
-    else ({ url = "${baseUrl}/archive/${rev}.tar.gz"; } // privateAttrs)
-  ) // passthruAttrs // { inherit name; };
+  # We prefer fetchzip in cases we don't need submodules as the hash
+  # is more stable in that case.
+  inherit (if fetchSubmodules then {
+    fetcher = fetchgit;
+    fetcherAttrs = {
+      inherit rev fetchSubmodules;
+      url = "${baseUrl}.git";
+      postFetch = postFetch + "\n" + gitPostFetch;
+    };
+  } else {
+    fetcher = fetchzip;
+    fetcherAttrs = {
+      url = "${baseUrl}/archive/${rev}.tar.gz";
+      ${if zipPostFetch != null then "postFetch" else null} = zipPostFetch;
+      extraPostFetch = postFetch + "\n" + zipExtraPostFetch;
+    } // privateAttrs;
+  }) fetcher fetcherAttrs;
+  fetcherArgs = fetcherAttrs // passthruAttrs // { inherit name; };
 in fetcher fetcherArgs // { meta.homepage = baseUrl; inherit rev; }
