@@ -3155,7 +3155,10 @@ in
 
   gptfdisk = callPackage ../tools/system/gptfdisk { };
 
-  grafx2 = callPackage ../applications/graphics/grafx2 {};
+  grafx2 = callPackage ../applications/graphics/grafx2 {
+    lua = lua5_2;
+    inherit (xorg) libX11;
+  };
 
   grails = callPackage ../development/web/grails { jdk = null; };
 
@@ -5155,6 +5158,11 @@ in
 
   pywal = with python3Packages; toPythonApplication pywal;
 
+  recoil = callPackage ../development/libraries/recoil {
+    cito = cito-git;
+    inherit (perlPackages) XMLDOM;
+  };
+
   remarshal = callPackage ../development/tools/remarshal { };
 
   rig = callPackage ../tools/misc/rig { };
@@ -6770,6 +6778,9 @@ in
   bigloo = callPackage ../development/compilers/bigloo { };
 
   binaryen = callPackage ../development/compilers/binaryen { };
+
+  cito = callPackage ../development/compilers/cito/0.4.nix { };
+  cito-git = callPackage ../development/compilers/cito/git.nix { };
 
   colm = callPackage ../development/compilers/colm { };
 
