@@ -295,37 +295,6 @@ with self; {
     };
   };
 
-  luaevent = buildLuaPackage rec {
-    version = "0.4.4";
-    name = "luaevent-${version}";
-
-    src = fetchFromGitHub {
-      owner = "harningt";
-      repo = "luaevent";
-      rev = "v${version}";
-      sha256 = "1krzxr0jkv3gmhpckp02byhdd9s5dd0hpyqc8irc8i79dd8x0p53";
-    };
-
-    preBuild = ''
-      makeFlagsArray=(
-        INSTALL_DIR_LUA="$out/share/lua/${lua.luaversion}"
-        INSTALL_DIR_BIN="$out/lib/lua/${lua.luaversion}"
-        LUA_INC_DIR="${lua}/include"
-      );
-    '';
-
-    buildInputs = [ libevent ];
-
-    propagatedBuildInputs = [ luasocket ];
-
-    meta = with stdenv.lib; {
-      homepage = http://luaforge.net/projects/luaevent/;
-      description = "Binding of libevent to Lua";
-      license = licenses.mit;
-      maintainers = with maintainers; [ koral ];
-    };
-  };
-
   luaexpat = buildLuaPackage rec {
     version = "1.3.0";
     name = "expat-${version}";
