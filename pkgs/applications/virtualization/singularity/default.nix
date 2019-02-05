@@ -28,6 +28,8 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     sed -i 's/-static//g' src/Makefile.am
     patchShebangs .
+    substituteInPlace libexec/bootstrap-scripts/deffile-sections.sh \
+      --replace /bin/cp ${coreutils}/bin/cp
   '';
 
   configureFlags = [ "--localstatedir=/var" ];
