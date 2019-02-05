@@ -46,6 +46,19 @@ with super;
   lua-iconv = super.lua-iconv.override({
     buildInputs = [ pkgs.libiconv ];
   });
+
+  # alias to retain backwards compability
+  luazlib = self.lua-zlib;
+  lua-zlib = super.lua-zlib.override({
+    rockspecFilename = "lua-zlib-1.2-0.rockspec";
+    buildInputs = [ pkgs.zlib.dev ];
+    disabled = luaOlder "5.1" || luaAtLeast "5.4";
+    extraConfig = ''
+      variables={
+        ZLIB_INCDIR="${pkgs.zlib.dev}/include"
+      }
+    '';
+  });
   luv = super.luv.overrideAttrs(oa: {
     propagatedBuildInputs = oa.propagatedBuildInputs ++ [ pkgs.libuv ];
   });

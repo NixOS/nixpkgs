@@ -18,6 +18,7 @@ lua-term,
 luabitop,
 luaevent,
 luacheck
+lua-zlib,
 luaffi,,http://luarocks.org/dev,
 luuid,
 penlight,
