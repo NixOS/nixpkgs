@@ -17,6 +17,7 @@ lua_cliargs,
 lua-iconv,
 lua-term,
 lua-zlib,
+luabitop,
 luacheck
 luadbi
 luaevent,

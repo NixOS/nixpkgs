@@ -167,43 +167,6 @@ with self; {
     };
   };
 
-  luabitop = buildLuaPackage rec {
-    version = "1.0.2";
-    name = "bitop-${version}";
-
-    src = fetchurl {
-      url = "http://bitop.luajit.org/download/LuaBitOp-${version}.tar.gz";
-      sha256 = "16fffbrgfcw40kskh2bn9q7m3gajffwd2f35rafynlnd7llwj1qj";
-    };
-
-    buildFlags = stdenv.lib.optionalString stdenv.isDarwin "macosx";
-
-    disabled = isLua53;
-
-    postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
-      substituteInPlace Makefile --replace 10.4 10.5
-    '';
-
-    preBuild = ''
-      makeFlagsArray=(
-        ${stdenv.lib.optionalString stdenv.cc.isClang "CC=$CC"}
-        INCLUDES="-I${lua}/include"
-        LUA="${lua}/bin/lua");
-    '';
-
-    installPhase = ''
-      mkdir -p $out/lib/lua/${lua.luaversion}
-      install -p bit.so $out/lib/lua/${lua.luaversion}
-    '';
-
-    meta = with stdenv.lib; {
-      description = "C extension module for Lua which adds bitwise operations on numbers";
-      homepage = "http://bitop.luajit.org";
-      license = licenses.mit;
-      maintainers = with maintainers; [ ];
-    };
-  };
-
   http = buildLuaPackage rec {
     version = "0.2";
     name = "http-${version}";
