@@ -384,34 +384,6 @@ with self; {
     };
   };
 
-  lpty = buildLuaPackage rec {
-    version = "1.2.1";
-    name = "lpty-${version}";
-
-    src = fetchurl {
-      url = "http://www.tset.de/downloads/lpty-${version}-1.tar.gz";
-      sha256 = "0rgvbpymcgdkzdwfag607xfscs9xyqxg0dj0qr5fv906mi183gs6";
-    };
-
-    preBuild = ''
-      makeFlagsArray=(
-        INST_LIBDIR="$out/lib/lua/${lua.luaversion}"
-        INST_LUADIR="$out/share/lua/${lua.luaversion}"
-        LUA_BINDIR="${lua}/bin"
-        LUA_INCDIR="-I${lua}/include"
-        LUA_LIBDIR="-L${lua}/lib"
-        );
-    '';
-
-    meta = with stdenv.lib; {
-      description = "PTY control for Lua";
-      homepage = "http://www.tset.de/lpty";
-      license = licenses.mit;
-      maintainers = with maintainers; [ vyp ];
-      platforms = platforms.linux;
-    };
-  };
-
   lua-iconv = buildLuaPackage rec {
     name = "lua-iconv-${version}";
     version = "7";
