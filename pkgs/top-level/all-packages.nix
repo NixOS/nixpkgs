@@ -17016,6 +17016,8 @@ in
 
   focuswriter = libsForQt5.callPackage ../applications/editors/focuswriter { };
 
+  fondo = callPackage ../applications/graphics/fondo { };
+
   font-manager = callPackage ../applications/misc/font-manager { };
 
   foo-yc20 = callPackage ../applications/audio/foo-yc20 { };
