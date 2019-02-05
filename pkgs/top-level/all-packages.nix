@@ -20807,6 +20807,8 @@ in
 
   gambatte = callPackage ../games/gambatte { };
 
+  gamehub = callPackage ../games/gamehub { };
+
   garden-of-coloured-lights = callPackage ../games/garden-of-coloured-lights { allegro = allegro4; };
 
   gargoyle = callPackage ../games/gargoyle {
