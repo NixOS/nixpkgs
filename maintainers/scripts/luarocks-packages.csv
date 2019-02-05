@@ -19,6 +19,7 @@ lua-term,
 lua-zlib,
 luacheck
 luadbi
+luaevent,
 luaexpat,
 luaffi,http://luarocks.org/dev,
 luuid,

@@ -456,6 +456,26 @@ luadbi = buildLuarocksPackage {
     };
   };
 };
+luaevent = buildLuarocksPackage {
+  pname = "luaevent";
+  version = "0.4.6-1";
+
+  src =  fetchurl {
+      url    = https://luarocks.org/luaevent-0.4.6-1.src.rock;
+      sha256 = "0chq09nawiz00lxd6pkdqcb8v426gdifjw6js3ql0lx5vqdkb6dz";
+   };
+  disabled = ( luaOlder "5.1");
+  propagatedBuildInputs = [lua  ];
+  buildType="builtin";
+
+  meta = {
+    homepage = "https://github.com/harningt/luaevent";
+    description="libevent binding for Lua";
+    license = {
+      fullName = "MIT";
+    };
+  };
+};
 luaexpat = buildLuarocksPackage {
   pname = "luaexpat";
   version = "1.3.3-1";
