@@ -972,7 +972,7 @@ with self; {
     };
   };
 
-  lgi = stdenv.mkDerivation rec {
+  lgi = toLuaModule(stdenv.mkDerivation rec {
     name = "lgi-${version}";
     version = "0.9.2";
 
@@ -1007,7 +1007,7 @@ with self; {
       maintainers = with maintainers; [ lovek323 rasendubi ];
       platforms   = platforms.unix;
     };
-  };
+  });
 
   mpack = buildLuaPackage rec {
     name = "mpack-${version}";
