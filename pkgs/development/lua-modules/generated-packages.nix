@@ -70,6 +70,26 @@ dkjson = buildLuarocksPackage {
     };
   };
 };
+inspect = buildLuarocksPackage {
+  pname = "inspect";
+  version = "3.1.1-0";
+
+  src =  fetchurl {
+      url    = https://luarocks.org/inspect-3.1.1-0.src.rock;
+      sha256 = "0k4g9ahql83l4r2bykfs6sacf9l1wdpisav2i0z55fyfcdv387za";
+   };
+  disabled = ( luaOlder "5.1");
+  propagatedBuildInputs = [lua  ];
+  buildType="builtin";
+
+  meta = {
+    homepage = "https://github.com/kikito/inspect.lua";
+    description="Lua table visualizer, ideal for debugging";
+    license = {
+      fullName = "MIT <http://opensource.org/licenses/MIT>";
+    };
+  };
+};
 lrexlib-gnu = buildLuarocksPackage {
   pname = "lrexlib-gnu";
   version = "2.9.0-1";

@@ -972,7 +972,7 @@ with self; {
     };
   };
 
-  lgi = stdenv.mkDerivation rec {
+  lgi = toLuaModule(stdenv.mkDerivation rec {
     name = "lgi-${version}";
     version = "0.9.2";
 
@@ -1007,7 +1007,7 @@ with self; {
       maintainers = with maintainers; [ lovek323 rasendubi ];
       platforms   = platforms.unix;
     };
-  };
+  });
 
   mpack = buildLuaPackage rec {
     name = "mpack-${version}";
@@ -1105,7 +1105,7 @@ with self; {
     };
   };
 
-  vicious = stdenv.mkDerivation rec {
+  vicious = toLuaModule(stdenv.mkDerivation rec {
     name = "vicious-${version}";
     version = "2.3.1";
 
@@ -1131,7 +1131,7 @@ with self; {
       maintainers = with maintainers; [ makefu mic92 ];
       platforms   = platforms.linux;
     };
-  };
+  });
 
 });
 in (lib.extends overrides packages)

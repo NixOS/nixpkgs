@@ -18354,7 +18354,7 @@ in
     };
 
   mpv = callPackage ../applications/video/mpv rec {
-    inherit (luaPackages) luasocket;
+    inherit lua;
     waylandSupport     = stdenv.isLinux;
     alsaSupport        = !stdenv.isDarwin;
     pulseSupport       = !stdenv.isDarwin;
@@ -19816,7 +19816,7 @@ in
   wrapNeovim = callPackage ../applications/editors/neovim/wrapper.nix { };
 
   neovim-unwrapped = callPackage ../applications/editors/neovim {
-    luaPackages = luajitPackages;
+    lua = luajit;
   };
 
   neovim = wrapNeovim neovim-unwrapped { };
