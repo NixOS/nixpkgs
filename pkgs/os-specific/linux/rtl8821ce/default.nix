@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     description = "Realtek rtl8821ce driver";
     homepage = "https://github.com/tomaspinho/rtl8821ce";
     license = licenses.gpl2;
-    platform = platforms.linux;
+    platforms = platforms.linux;
     maintainers = [ maintainers.hhm ];
   };
 }
