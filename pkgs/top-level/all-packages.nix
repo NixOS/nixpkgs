@@ -14542,6 +14542,8 @@ in
 
   tidyp = callPackage ../development/libraries/tidyp { };
 
+  tinycdb = callPackage ../development/libraries/tinycdb { };
+
   tinyxml = tinyxml2;
 
   tinyxml2 = callPackage ../development/libraries/tinyxml/2.6.2.nix { };
