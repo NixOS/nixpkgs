@@ -1105,7 +1105,7 @@ with self; {
     };
   };
 
-  vicious = stdenv.mkDerivation rec {
+  vicious = toLuaModule(stdenv.mkDerivation rec {
     name = "vicious-${version}";
     version = "2.3.1";
 
@@ -1131,7 +1131,7 @@ with self; {
       maintainers = with maintainers; [ makefu mic92 ];
       platforms   = platforms.linux;
     };
-  };
+  });
 
 });
 in (lib.extends overrides packages)
