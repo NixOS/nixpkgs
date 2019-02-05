@@ -19,32 +19,44 @@ let
           type =  with types; listOf str;
           default = [];
           description = "Commandline arguments to pass to the image's entrypoint.";
+          literalExample = ''
+            ["--port=9000"]
+          '';
         };
 
         entrypoint = mkOption {
           type = with types; nullOr str;
           description = "Overwrite the default entrypoint of the image.";
           default = null;
+          example = "/bin/my-app";
         };
 
         environment = mkOption {
           type = with types; attrsOf str;
           default = {};
           description = "Environment variables to set for this container.";
-          example = {
-            DATABASE_HOST = "db.example.com";
-            DATABASE_PORT = "3306";
-          };
+          literalExample = ''
+            {
+              DATABASE_HOST = "db.example.com";
+              DATABASE_PORT = "3306";
+            }
+        '';
         };
 
         log-driver = mkOption {
           type = types.str;
           default = "none";
           description = ''
-            Logging driver for the container.  The default of "none" means that
-            the container's logs will be handled as part of the systemd unit.
-            Setting this to "journald" will result in duplicate logging, but
-            the container's logs will be visible to the `docker logs` command.
+            Logging driver for the container.  The default of
+            <literal>"none"</literal> means that the container's logs will be
+            handled as part of the systemd unit.  Setting this to
+            <literal>"journald"</literal> will result in duplicate logging, but
+            the container's logs will be visible to the <command>docker
+            logs</command> command.
+
+            For more details and a full list of logging drivers, refer to the
+            <a href="https://docs.docker.com/engine/reference/run/#logging-drivers---log-driver">
+            Docker engine documentation</a>
           '';
         };
 
@@ -52,9 +64,12 @@ let
           type = with types; attrsOf str;
           default = {};
           description = "Network ports to forward from the host to this container.";
-          example = {
-            "8080" = "9000/tcp";
-          };
+          literalExample = ''
+            {
+              # "port_on_host" = "port_in_container"
+              "8080" = "9000/tcp";
+            }
+          '';
         };
 
         user = mkOption {
@@ -73,11 +88,23 @@ let
           # mount options.
           type = with types; listOf str;
           default = [];
-          description = "List of volumes to attach to this container.";
-          example = [
-            "volume_name:/path/inside/container"
-            "/path/on/host:/path/inside/container"
-          ];
+          description = ''
+            List of volumes to attach to this container.
+
+            Note that this is a list of <literal>"src:dst"</literal> strings to
+            allow for <literal>src</literal> to refer to
+            <literal>/nix/store</literal> paths, which would difficult with an
+            attribute set.  There are also a variety of mount options available
+            as a third field; please refer to the
+            <a href="https://docs.docker.com/engine/reference/run/#volume-shared-filesystems">
+            docker engine documentation</a> for details.
+          '';
+          literalExample = ''
+            [
+              "volume_name:/path/inside/container"
+              "/path/on/host:/path/inside/container"
+            ]
+          '';
         };
 
         workdir = mkOption {
@@ -90,8 +117,10 @@ let
         extraDockerOptions = mkOption {
           type = with types; listOf str;
           default = [];
-          description = "Extra options for `docker run`.";
-          example = ["--network=host"];
+          description = "Extra options for <command>docker run</command>.";
+          literalExample = ''
+            ["--network=host"]
+          '';
         };
       };
     };
