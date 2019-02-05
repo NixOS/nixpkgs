@@ -1,6 +1,7 @@
 ansicolors,
 argparse,
 dkjson
+inspect
 lrexlib-gnu,
 lrexlib-posix,
 ltermbox,
