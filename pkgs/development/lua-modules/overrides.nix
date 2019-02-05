@@ -49,6 +49,9 @@ with super;
   lrexlib-gnu = super.lrexlib-gnu.override({
     buildInputs = [ pkgs.gnulib ];
   });
+  lua-iconv = super.lua-iconv.override({
+    buildInputs = [ pkgs.libiconv ];
+  });
   luv = super.luv.overrideAttrs(oa: {
     propagatedBuildInputs = oa.propagatedBuildInputs ++ [ pkgs.libuv ];
   });
