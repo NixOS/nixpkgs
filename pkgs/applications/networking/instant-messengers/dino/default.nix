@@ -11,16 +11,17 @@
 , gpgme
 , pcre
 , qrencode
+, icu
  }:
 
 stdenv.mkDerivation rec {
-  name = "dino-unstable-2018-11-29";
+  name = "dino-unstable-2019-02-05";
 
   src = fetchFromGitHub {
     owner = "dino";
     repo = "dino";
-    rev = "680d28360c781ff29e810821801cfaba0493c526";
-    sha256 = "1w08xc842p2nggdxf0dwqw8izhwsrqah10w3s0v1i7dp33yhycln";
+    rev = "864196d2acef3db047160b9da5803805067276c3";
+    sha256 = "10nyq9marclzbkxisackp402gimgs7gb0llgjm922c593c5h39cq";
     fetchSubmodules = true;
   };
 
@@ -55,6 +56,7 @@ stdenv.mkDerivation rec {
     at-spi2-core
     dbus
     gettext
+    icu
   ];
 
   enableParallelBuilding = true;
