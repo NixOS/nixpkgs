@@ -35,14 +35,15 @@ stdenv.mkDerivation rec {
     export OMP_NUM_THREADS=1
 
     export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:`pwd`/lib
+  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+    export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH:`pwd`/lib
   '';
 
   meta = with stdenv.lib; {
     homepage = http://www.netlib.org/scalapack/;
     description = "Library of high-performance linear algebra routines for parallel distributed memory machines";
     license = licenses.bsd3;
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
     maintainers = [ maintainers.costrouc ];
   };
-
 }
