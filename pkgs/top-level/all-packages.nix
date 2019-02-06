@@ -1579,6 +1579,8 @@ in
 
   pyCA = python3Packages.callPackage ../applications/video/pyca {};
 
+  pyznap = python3Packages.callPackage ../tools/backup/pyznap {};
+
   scour = with python3Packages; toPythonApplication scour;
 
   s2png = callPackage ../tools/graphics/s2png { };

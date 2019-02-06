@@ -3773,6 +3773,11 @@
     github = "rbasso";
     name = "Rafael Basso";
   };
+  rbrewer = {
+    email = "rwb123@gmail.com";
+    github = "rbrewer123";
+    name = "Rob Brewer";
+  };
   rdnetto = {
     email = "rdnetto@gmail.com";
     github = "rdnetto";
