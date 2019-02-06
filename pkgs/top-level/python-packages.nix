@@ -4738,6 +4738,8 @@ in {
 
   pymacaroons-pynacl = callPackage ../development/python-modules/pymacaroons-pynacl { };
 
+  pymacaroons = callPackage ../development/python-modules/pymacaroons { };
+
   pynacl = callPackage ../development/python-modules/pynacl { };
 
   service-identity = callPackage ../development/python-modules/service_identity { };
