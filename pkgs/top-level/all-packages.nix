@@ -10328,6 +10328,8 @@ in
 
   hyperscan = callPackage ../development/libraries/hyperscan { };
 
+  hypre = callPackage ../development/libraries/science/math/hypre { };
+
   icu58 = callPackage (import ../development/libraries/icu/58.nix fetchurl) ({
     nativeBuildRoot = buildPackages.icu58.override { buildRootOnly = true; };
   } //
