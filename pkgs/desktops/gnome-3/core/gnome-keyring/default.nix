@@ -31,7 +31,11 @@ stdenv.mkDerivation rec {
     patchShebangs build
   '';
 
-  doCheck = !stdenv.isi686; # https://github.com/NixOS/nixpkgs/issues/51121
+  # Tends to fail non-deterministically.
+  # - https://github.com/NixOS/nixpkgs/issues/55293
+  # - https://github.com/NixOS/nixpkgs/issues/51121
+  doCheck = false;
+
   # In 3.20.1, tests do not support Python 3
   checkInputs = [ dbus python2 ];
 
