@@ -156,6 +156,7 @@ in
       environment.systemPackages = [ pkgs.man-db ];
       environment.pathsToLink = [ "/share/man" ];
       environment.extraOutputsToInstall = [ "man" ] ++ optional cfg.dev.enable "devman";
+      environment.etc."man.conf".source = "${pkgs.man-db}/etc/man_db.conf";
     })
 
     (mkIf cfg.info.enable {
