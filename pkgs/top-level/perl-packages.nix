@@ -3938,6 +3938,19 @@ let
     };
   };
 
+  DevelRefcount = buildPerlModule {
+    name = "Devel-Refcount-0.10";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/P/PE/PEVANS/Devel-Refcount-0.10.tar.gz;
+      sha256 = "0jnaraqkigyinhwz4nqk1ndq7ssjizr98nd1dd183a6icdlx8m5n";
+    };
+    buildInputs = [ TestFatal ];
+    meta = {
+      description = "obtain the REFCNT value of a referent";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   DevelPPPort = buildPerlPackage rec {
     name = "Devel-PPPort-3.43";
     src = fetchurl {
@@ -9259,6 +9272,20 @@ let
     meta = {
       description = "Fast XS implementation of MaxMind DB reader";
       license = with stdenv.lib.licenses; [ artistic2 ];
+    };
+  };
+
+  MaxMindDBWriter = buildPerlModule {
+    name = "MaxMind-DB-Writer-0.300003";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/M/MA/MAXMIND/MaxMind-DB-Writer-0.300003.tar.gz;
+      sha256 = "0gpbrlmxjl45k0wg5v9ghw415hd0fns9fk8ncxzlfyjzjsxgalxs";
+    };
+    propagatedBuildInputs = [ DigestSHA1 MaxMindDBReader MooseXParamsValidate MooseXStrictConstructor NetWorks SerealDecoder SerealEncoder ];
+    buildInputs = [ DevelRefcount JSON TestBits TestDeep TestFatal TestHexDifferences TestRequires TestWarnings ];
+    meta = {
+      description = "Create MaxMind DB database files";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
 
