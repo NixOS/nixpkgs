@@ -8,8 +8,8 @@ stdenv.mkDerivation rec {
   version = "0.22.1";
 
   src = fetchFromGitHub {
-    owner = "crawl-ref";
-    repo = "crawl-ref";
+    owner = "crawl";
+    repo = "crawl";
     rev = version;
     sha256 = "19yzl241glv2zazifgz59bw3jlh4hj59xx5w002hnh9rp1w15rnr";
   };
