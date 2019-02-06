@@ -1,4 +1,4 @@
-{ stdenv, fetchPypi, fetchpatch, python, buildPythonPackage, mpi, openssh }:
+{ stdenv, fetchPypi, fetchpatch, python, buildPythonPackage, cython, mpi, openssh }:
 
 buildPythonPackage rec {
   pname = "mpi4py";
@@ -46,14 +46,18 @@ buildPythonPackage rec {
     export OMPI_MCA_rmaps_base_oversubscribe=yes
   '';
 
-  setupPyBuildFlags = ["--mpicc=${mpi}/bin/mpicc"];
+  # The "build_src --force" flag is used to re-build the package's cython code.
+  # This prevents issues when using multiple cython-based packages
+  # together (for example, mpi4py and petsc4py) due to code that has been
+  # generated with incompatible cython versions.
+  setupPyBuildFlags = [ "--mpicc=${mpi}/bin/mpicc" "build_src --force" ];
 
-  buildInputs = [ mpi openssh ];
+  buildInputs = [ cython mpi openssh ];
 
   meta = {
     description =
       "Python bindings for the Message Passing Interface standard";
-    homepage = http://code.google.com/p/mpi4py/;
+    homepage = https://bitbucket.org/mpi4py/mpi4py/;
     license = stdenv.lib.licenses.bsd3;
   };
 }
