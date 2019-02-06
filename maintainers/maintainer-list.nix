@@ -2050,6 +2050,11 @@
     github = "jammerful";
     name = "jammerful";
   };
+  jamtrott = {
+    email = "james@simula.no";
+    github = "jamtrott";
+    name = "James D. Trotter";
+  };
   jansol = {
     email = "jan.solanti@paivola.fi";
     github = "jansol";
