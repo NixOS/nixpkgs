@@ -45,9 +45,10 @@ stdenv.mkDerivation rec {
     description = "Open-source, single-player, role-playing roguelike game";
     homepage = http://crawl.develz.org/;
     longDescription = ''
-      Open-source, single-player, role-playing roguelike game of exploration and
-      treasure-hunting in dungeons filled with dangerous and unfriendly monsters
-      in a quest to rescue the mystifyingly fabulous Orb of Zot.
+      Dungeon Crawl: Stone Soup, an open-source, single-player, role-playing
+      roguelike game of exploration and treasure-hunting in dungeons filled
+      with dangerous and unfriendly monsters in a quest to rescue the
+      mystifyingly fabulous Orb of Zot.
     '';
     platforms = platforms.linux;
     license = with licenses; [ gpl2Plus bsd2 bsd3 mit licenses.zlib cc0 ];
