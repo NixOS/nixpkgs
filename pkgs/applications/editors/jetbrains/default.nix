@@ -367,15 +367,15 @@ in
 
   ruby-mine = buildRubyMine rec {
     name = "ruby-mine-${version}";
-    version = "2018.2.6"; /* updated by script */
+    version = "2018.3.3"; /* updated by script */
     description = "The Most Intelligent Ruby and Rails IDE";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/ruby/RubyMine-${version}.tar.gz";
-      sha256 = "0xbmj7d1ccq2qf1jsvch1zxdrypkvzxdfkr431c8fnabh993yxx1"; /* updated by script */
+      sha256 = "1zjcdsr91y07dhqmhqy2yq6c0rhsxg2m52fz14hhmphddlwvhzny"; /* updated by script */
     };
     wmClass = "jetbrains-rubymine";
-    update-channel = "RubyMine 2018.2";
+    update-channel = "RubyMine RELEASE";
   };
 
   webstorm = buildWebStorm rec {
