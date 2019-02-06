@@ -2,6 +2,12 @@
 
 with lib;
 
+let
+  metadataFetcher = import ./ec2-metadata-fetcher.nix {
+    targetRoot = "/";
+    wgetExtraOptions = "--retry-connrefused";
+  };
+in
 {
   imports = [
     ../profiles/qemu-guest.nix
@@ -39,28 +45,7 @@ with lib;
       before = [ "apply-ec2-data.service" "amazon-init.service"];
       wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
-      script =
-        ''
-          metaDir=/etc/ec2-metadata
-          mkdir -m 0755 -p "$metaDir"
-
-          echo "getting Openstack instance metadata (via EC2 API)..."
-          if ! [ -e "$metaDir/ami-manifest-path" ]; then
-            wget --retry-connrefused -O "$metaDir/ami-manifest-path" http://169.254.169.254/1.0/meta-data/ami-manifest-path
-          fi
-
-          if ! [ -e "$metaDir/user-data" ]; then
-            wget --retry-connrefused -O "$metaDir/user-data" http://169.254.169.254/1.0/user-data && chmod 600 "$metaDir/user-data"
-          fi
-
-          if ! [ -e "$metaDir/hostname" ]; then
-            wget --retry-connrefused -O "$metaDir/hostname" http://169.254.169.254/1.0/meta-data/hostname
-          fi
-
-          if ! [ -e "$metaDir/public-keys-0-openssh-key" ]; then
-            wget --retry-connrefused -O "$metaDir/public-keys-0-openssh-key" http://169.254.169.254/1.0/meta-data/public-keys/0/openssh-key
-          fi
-        '';
+      script = metadataFetcher;
       restartIfChanged = false;
       unitConfig.X-StopOnRemoval = false;
       serviceConfig = {
