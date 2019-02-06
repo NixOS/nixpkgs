@@ -491,6 +491,13 @@
      the Redmine 3.x series.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     The <link linkend="opt-services.grafana.enable">Grafana module</link> now supports declarative
+     <link xlink:href="http://docs.grafana.org/administration/provisioning/">datasource and dashboard</link>
+     provisioning.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 </section>
