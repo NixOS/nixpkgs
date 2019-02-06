@@ -1,7 +1,7 @@
 { stdenv, fetchurl, fetchFromGitHub, makeWrapper
 , docutils, perl, pkgconfig, python3, which, ffmpeg_4
 , freefont_ttf, freetype, libass, libpthreadstubs, mujs
-, lua, luasocket, libuchardet, libiconv ? null, darwin
+, lua, libuchardet, libiconv ? null, darwin
 
 , waylandSupport ? false
   , wayland           ? null
@@ -92,6 +92,8 @@ let
              "http://www.freehackers.org/~tnagy/release/waf-${wafVersion}" ];
     sha256 = "0j7sbn3w6bgslvwwh5v9527w3gi2sd08kskrgxamx693y0b0i3ia";
   };
+  luaEnv = lua.withPackages(ps: with ps; [ luasocket]);
+
 in stdenv.mkDerivation rec {
   name = "mpv-${version}";
   version = "0.29.1";
@@ -139,7 +141,7 @@ in stdenv.mkDerivation rec {
 
   buildInputs = [
     ffmpeg_4 freetype libass libpthreadstubs
-    lua luasocket libuchardet mujs
+    luaEnv libuchardet mujs
   ] ++ optional alsaSupport        alsaLib
     ++ optional archiveSupport     libarchive
     ++ optional bluraySupport      libbluray
@@ -183,16 +185,9 @@ in stdenv.mkDerivation rec {
 
   # Ensure youtube-dl is available in $PATH for mpv
   wrapperFlags =
-  let
-    getPath  = type : "${luasocket}/lib/lua/${lua.luaversion}/?.${type};" +
-                      "${luasocket}/share/lua/${lua.luaversion}/?.${type}";
-    luaPath  = getPath "lua";
-    luaCPath = getPath "so";
-  in
-  ''
-      --prefix LUA_PATH : "${luaPath}" \
-      --prefix LUA_CPATH : "${luaCPath}" \
-  '' + optionalString youtubeSupport ''
+
+    ''--prefix PATH : "${luaEnv}/bin" \''
+  + optionalString youtubeSupport ''
       --prefix PATH : "${youtube-dl}/bin" \
   '' + optionalString vapoursynthSupport ''
       --prefix PYTHONPATH : "${vapoursynth}/lib/${python3.libPrefix}/site-packages:$PYTHONPATH"

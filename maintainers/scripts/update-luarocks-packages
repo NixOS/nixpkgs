@@ -1,0 +1,112 @@
+#!/usr/bin/env nix-shell
+#!nix-shell -p nix-prefetch-scripts luarocks-nix -i bash
+
+# You'll likely want to use
+# ``
+# nixpkgs $ maintainers/scripts/update-luarocks-packages pkgs/development/lua-modules/generated-packages.nix
+# ``
+# to update all libraries in that folder.
+# to debug, redirect stderr to stdout with 2>&1
+
+
+# stop the script upon C-C
+set -eu -o pipefail
+
+if [ $# -lt 1 ]; then
+	print_help
+    exit 1
+fi
+
+CSV_FILE="maintainers/scripts/luarocks-packages.csv"
+TMP_FILE="$(mktemp)"
+
+exit_trap()
+{
+  local lc="$BASH_COMMAND" rc=$?
+  test $rc -eq 0 || echo -e "*** error $rc: $lc.\nGenerated temporary file in $TMP_FILE" >&2
+}
+trap exit_trap EXIT
+
+print_help() {
+    echo "Usage: $0 <GENERATED_FILE>"
+    echo "(most likely pkgs/development/lua-modules/generated-packages.nix)"
+	echo ""
+	echo " -c <CSV_FILE> to set the list of luarocks package to generate"
+	exit 1
+}
+
+
+while getopts ":hc:" opt; do
+  case $opt in
+    h)
+      print_help
+      ;;
+    c)
+      echo "Loading package list from $OPTARG !" >&2
+      CSV_FILE="$OPTARG"
+      ;;
+    \?)
+      echo "Invalid option: -$OPTARG" >&2
+      ;;
+  esac
+  shift $((OPTIND-1))
+done
+
+GENERATED_NIXFILE="$1"
+
+HEADER="
+/* ${GENERATED_NIXFILE} is an auto-generated file -- DO NOT EDIT!
+Regenerate it with:
+nixpkgs$ ${0} ${GENERATED_NIXFILE}
+
+These packages are manually refined in lua-overrides.nix
+*/
+{ self, lua, stdenv, fetchurl, fetchgit, pkgs, ... } @ args:
+self: super:
+with self;
+{
+"
+
+FOOTER="
+}
+/* GENERATED */
+"
+
+
+function convert_pkg () {
+    pkg="$1"
+	server=""
+	if [ ! -z "$2" ]; then
+		server=" --server=$2"
+	fi
+
+    version="${3:-}"
+
+    echo "looking at $pkg (version $version) from server [$server]" >&2
+    cmd="luarocks nix $server $pkg $version"
+    drv="$($cmd)"
+    if [ $? -ne 0 ]; then
+        echo "Failed to convert $pkg" >&2
+        echo "$drv" >&2
+    else
+        echo "$drv" | tee -a "$TMP_FILE"
+    fi
+}
+
+# params needed when called via callPackage
+echo "$HEADER" | tee "$TMP_FILE"
+
+# list of packages with format
+# name,server,version
+while IFS=, read -r pkg_name server version
+do
+	if [ -z "$pkg_name" ]; then
+		echo "Skipping empty package name" >&2
+	fi
+	convert_pkg "$pkg_name" "$server" "$version"
+done < "$CSV_FILE"
+
+# close the set
+echo "$FOOTER" | tee -a "$TMP_FILE"
+
+cp "$TMP_FILE" "$GENERATED_NIXFILE"

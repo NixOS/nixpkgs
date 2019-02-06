@@ -1,4 +1,4 @@
-{ stdenv, python }:
+{ stdenv, python, fetchpatch }:
 
 with python.pkgs;
 
@@ -9,6 +9,12 @@ buildPythonApplication rec {
   src = fetchPypi {
     inherit pname version;
     sha256 = "5b9af8338a0f8b95a8133b66ef106553823813ac171c0aefa3f3f2dbeb4d7f88";
+  };
+
+  # allow newer click version
+  patches = fetchpatch {
+    url = "${meta.homepage}/commit/5b0d3ef1775756ca15b6d83fba1fb751846b5427.patch";
+    sha256 = "1551knh2f7yarqzcpip16ijmbx8kzdna8cihxlxx49ww55f5sg67";
   };
 
   propagatedBuildInputs = [

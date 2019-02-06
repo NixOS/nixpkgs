@@ -3,19 +3,19 @@
 
 stdenv.mkDerivation rec {
   pname = "bcachefs-tools";
-  version = "2019-01-13";
+  version = "2019-01-23";
 
   src = fetchgit {
     url = "https://evilpiepirate.org/git/bcachefs-tools.git";
-    rev = "47bd483d27ec13418978b24ec5951661d564ba35";
-    sha256 = "0h0mi68f8hxjplh0f8yw9h1ax9y6cz9c9hlvl95nqhs352lkdrfj";
+    rev = "35fca2f044d375b1590f499cfd34bef38ca0f8f1";
+    sha256 = "1mmpwksszdi4n7zv3fm7qnmfk94m56d65lfw30553bnfm3yaz3k7";
   };
 
   enableParallelBuilding = true;
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ attr libuuid libscrypt libsodium keyutils liburcu zlib libaio zstd lz4 ];
   installFlags = [ "PREFIX=${placeholder "out"}" ];
-  
+
   preInstall = ''
     substituteInPlace Makefile \
       --replace "INITRAMFS_DIR=/etc/initramfs-tools" \

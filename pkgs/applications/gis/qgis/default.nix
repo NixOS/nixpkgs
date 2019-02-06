@@ -5,7 +5,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "qgis-2.18.22";
+  name = "qgis-2.18.28";
 
   buildInputs = [ gdal qt4 flex openssl bison proj geos xlibsWrapper sqlite gsl qwt qscintilla
     fcgi libspatialindex libspatialite postgresql qjson qca2 txt2tags pkgconfig
@@ -35,14 +35,15 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://qgis.org/downloads/${name}.tar.bz2";
-    sha256 = "00b3a2hfn3i7bdx7x96vz2nj0976vpkhid4ss7n8c33fdvw3k82a";
+    sha256 = "18pijqls1isd2bpg0mkrw07jqvdfaiwwb9mvz7p2xrgqcjx7dxsq";
   };
 
   patches = [
-    # https://github.com/qgis/QGIS/pull/7765
+    # already merged upstream in QGIS-3.*, but needs to be backported to QGIS-2
     (fetchpatch {
-      url = "https://github.com/qgis/QGIS/commit/6b61ef361a77f057dc29eb07463007bd9012b253.patch";
-      sha256 = "1xibcahm18n7nxff1xvwwzjf505hvhiw5dk12is7aclv49h0rdf7";
+      url = "https://patch-diff.githubusercontent.com/raw/qgis/QGIS/pull/7263.patch";
+      name = "Ensure_qgis.db_is_writable_when_copied_from_RO_source";
+      sha256 = "19wr2kz0x8x6p2n0ylzd4lqrdmbkxyxr0zpwf2vl9hdp92rdjxbv";
     })
   ];
 

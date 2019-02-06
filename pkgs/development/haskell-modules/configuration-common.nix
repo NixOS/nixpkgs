@@ -1189,6 +1189,7 @@ self: super: {
 
   # Jailbreak tasty < 1.2: https://github.com/phadej/tdigest/issues/30
   tdigest = doJailbreak super.tdigest; # until tdigest > 0.2.1
+  these = doJailbreak super.these; # until these >= 0.7.6
 
   # These patches contain fixes for 8.6 that should be safe for
   # earlier versions, but we need the relaxed version bounds in GHC
@@ -1199,4 +1200,11 @@ self: super: {
   beam-migrate = appendPatch super.beam-migrate ./patches/beam-migrate-fix-ghc-8.6.x-build.patch;
   beam-postgres = appendPatch super.beam-postgres ./patches/beam-postgres-fix-ghc-8.6.x-build.patch;
   beam-sqlite = appendPatch super.beam-sqlite ./patches/beam-sqlite-fix-ghc-8.6.x-build.patch;
+
+  # https://github.com/sighingnow/computations/pull/1
+  primesieve = appendPatch super.primesieve (pkgs.fetchpatch {
+    url = "https://github.com/sighingnow/computations/commit/1f96788367c879b999afe733e2fe28d919d17702.patch";
+    sha256 = "0lrcmcrxp9imj9rfaq7mb0fn9mxms4gq4sz95n4san3dpd0qmj9x";
+    stripLen = 1;
+    });
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super

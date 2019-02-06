@@ -19,7 +19,7 @@
 
 stdenv.mkDerivation rec {
   name = "singularity-${version}";
-  version = "2.6.0";
+  version = "2.6.1";
 
   enableParallelBuilding = true;
 
@@ -28,6 +28,8 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     sed -i 's/-static//g' src/Makefile.am
     patchShebangs .
+    substituteInPlace libexec/bootstrap-scripts/deffile-sections.sh \
+      --replace /bin/cp ${coreutils}/bin/cp
   '';
 
   configureFlags = [ "--localstatedir=/var" ];
@@ -47,7 +49,7 @@ stdenv.mkDerivation rec {
     owner = "singularityware";
     repo = "singularity";
     rev = version;
-    sha256 = "0bi7acgppbkfbra8r29s1ldq02lazdww0z2h1rfvv8spr8dzzi94";
+    sha256 = "0q8qq9l3s6mv74km9h8gsn5mpd0m98dhmx8vph1jp6wnrr4xyfqf";
   };
 
   nativeBuildInputs = [ autoreconfHook makeWrapper ];

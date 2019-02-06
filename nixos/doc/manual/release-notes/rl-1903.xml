@@ -432,6 +432,11 @@
    </listitem>
    <listitem>
      <para>
+       The astah-community package was removed from nixpkgs due to it being discontinued and the downloads not being available anymore.
+     </para>
+   </listitem>
+   <listitem>
+     <para>
        The httpd service now saves log files with a .log file extension by default for
        easier integration with the logrotate service.
      </para>
@@ -470,6 +475,21 @@
       device-volume with the volume of the loudest application.
      </para>
     </note>
+   </listitem>
+   <listitem>
+    <para>
+     The <link xlink:href="https://github.com/DanielAdolfsson/ndppd"><literal>ndppd</literal></link> module
+     now supports <link linkend="opt-services.ndppd.enable">all config options</link> provided by the current
+     upstream version as service options. Additionally the <literal>ndppd</literal> package doesn't contain
+     the systemd unit configuration from upstream anymore, the unit is completely configured by the NixOS module now.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     New installs of NixOS will default to the Redmine 4.x series unless otherwise specified in
+     <literal>services.redmine.package</literal> while existing installs of NixOS will default to
+     the Redmine 3.x series.
+    </para>
    </listitem>
   </itemizedlist>
  </section>
