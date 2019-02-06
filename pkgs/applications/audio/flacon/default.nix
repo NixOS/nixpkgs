@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   name = "flacon-${version}";
-  version = "5.0.0";
+  version = "5.1.0";
 
   src = fetchFromGitHub {
     owner = "flacon";
     repo = "flacon";
     rev = "v${version}";
-    sha256 = "0pglqm2z7mp5igqmfnmvrgjhfbfrj8q5jvd0a0g2dzv3rqwfw4vc";
+    sha256 = "18m077z1hqjg10chy5rgajd9q1wnrcxhiidivgjcdchc9q5d4b08";
   };
 
   nativeBuildInputs = [ cmake pkgconfig makeWrapper ];
