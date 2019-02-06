@@ -11704,6 +11704,10 @@ in
 
   mueval = callPackage ../development/tools/haskell/mueval { };
 
+  mumps = callPackage ../development/libraries/science/math/mumps {
+    blas = openblas;
+  };
+
   muparser = callPackage ../development/libraries/muparser { };
 
   mygpoclient = pythonPackages.mygpoclient;
