@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   name = "gnome-robots-${version}";
-  version = "3.22.3";
+  version = "3.31.3";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-robots/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "0dzcjd7rdmlzgr6rmljhrbccwif8wj0cr1xcrrj7malj33098wwk";
+    sha256 = "1s9snyp1ga4sj2ajbspgx2b8d1icgb1xgjhx2cxxk1ls56db0cfb";
   };
 
   passthru = {
