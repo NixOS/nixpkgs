@@ -1,10 +1,11 @@
-{ stdenv, fetchFromGitHub, python27Packages, lib, geoip }:
+{ stdenv, fetchFromGitHub, python27Packages, geoip }:
 
 with stdenv.lib;
 
 python27Packages.buildPythonApplication rec {
   pname = "nicotine-plus";
   version = "1.4.1";
+
   src = fetchFromGitHub {
     owner = "Nicotine-Plus";
     repo = "nicotine-plus";
