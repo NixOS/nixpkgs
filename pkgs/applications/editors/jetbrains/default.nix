@@ -250,15 +250,15 @@ in
 
   clion = buildClion rec {
     name = "clion-${version}";
-    version = "2018.3.3"; /* updated by script */
+    version = "2018.3.4"; /* updated by script */
     description  = "C/C++ IDE. New. Intelligent. Cross-platform";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/cpp/CLion-${version}.tar.gz";
-      sha256 = "1pffxq69ihdc55lsy2q56vlanpgyks0g82n40b29j4m66flmxbkl"; /* updated by script */
+      sha256 = "1zglpw9vc3ybdmwymi0c2m6anhcmx9jcqi69gnn06n9f4x1v6gwn"; /* updated by script */
     };
     wmClass = "jetbrains-clion";
-    update-channel = "CLion Release"; # channel's id as in http://www.jetbrains.com/updates/updates.xml
+    update-channel = "CLion RELEASE"; # channel's id as in http://www.jetbrains.com/updates/updates.xml
   };
 
   datagrip = buildDataGrip rec {
