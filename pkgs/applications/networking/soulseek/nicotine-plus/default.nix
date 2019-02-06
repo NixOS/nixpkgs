@@ -1,13 +1,6 @@
-{ stdenv, fetchFromGitHub, python27Packages, lib
-, geoip
-# Nicotine+ supports a country code blocker. This requires a (GPL'ed) library called GeoIP.
-, enableGeoIP ? true
-}:
-
-assert enableGeoIP -> python27Packages.GeoIP != null;
+{ stdenv, fetchFromGitHub, python27Packages, lib, geoip }:
 
 with stdenv.lib;
-with lists;
 
 python27Packages.buildPythonApplication rec {
   pname = "nicotine-plus";
@@ -24,10 +17,8 @@ python27Packages.buildPythonApplication rec {
     miniupnpc
     mutagen
     notify
-    ] ++ optional enableGeoIP
-     (GeoIP.overrideAttrs (_: {
-       propagatedBuildInputs = [geoip];
-     }));
+    (GeoIP.override { inherit geoip; })
+  ];
 
   # Insert real docs directory.
   # os.getcwd() is not needed
