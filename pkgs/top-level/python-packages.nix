@@ -5273,6 +5273,8 @@ in {
 
   qiskit = callPackage ../development/python-modules/qiskit { };
 
+  qiskit-aer = callPackage ../development/python-modules/qiskit-aer { };
+
   qasm2image = callPackage ../development/python-modules/qasm2image { };
 
   simpy = callPackage ../development/python-modules/simpy { };
