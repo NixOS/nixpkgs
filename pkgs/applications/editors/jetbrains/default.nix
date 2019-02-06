@@ -302,15 +302,15 @@ in
 
   idea-ultimate = buildIdea rec {
     name = "idea-ultimate-${version}";
-    version = "2018.3.3"; /* updated by script */
+    version = "2018.3.4"; /* updated by script */
     description = "Integrated Development Environment (IDE) by Jetbrains, requires paid license";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/idea/ideaIU-${version}-no-jdk.tar.gz";
-      sha256 = "1dj39hs63xba2jfk3sd2yiq7vk7758axrc5549krfd1aaawl4sl8"; /* updated by script */
+      sha256 = "0s3r3h1zcwkfqhsfb224fgy62fdhnd4gjgk2h6pyhq1frnh3x5bg"; /* updated by script */
     };
     wmClass = "jetbrains-idea";
-    update-channel = "IntelliJ IDEA Release";
+    update-channel = "IntelliJ IDEA RELEASE";
   };
 
   phpstorm = buildPhpStorm rec {
