@@ -9130,6 +9130,31 @@ let
     propagatedBuildInputs = [ ClassAccessor ParamsValidate ];
   };
 
+  MathInt128 = buildPerlPackage {
+    name = "Math-Int128-0.22";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/S/SA/SALVA/Math-Int128-0.22.tar.gz;
+      sha256 = "1g0ra7ldv4fz3kqqg45dlrfavi2abfmlhf0py5ank1jk2x0clc56";
+    };
+    propagatedBuildInputs = [ MathInt64 ];
+    meta = {
+      description = "Manipulate 128 bits integers in Perl";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  MathInt64 = buildPerlPackage {
+    name = "Math-Int64-0.54";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/S/SA/SALVA/Math-Int64-0.54.tar.gz;
+      sha256 = "0lfkc0cry65lnsi28gjyz2kvdkanbhhpc0pyrswsczj3k3k53z6w";
+    };
+    meta = {
+      description = "Manipulate 64 bits integers in Perl";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   MathPlanePath = buildPerlPackage rec {
     name = "Math-PlanePath-126";
     src = fetchurl {
@@ -9219,6 +9244,20 @@ let
     buildInputs = [ PathClass TestBits TestFatal TestNumberDelta TestRequires ];
     meta = {
       description = "Read MaxMind DB files and look up IP addresses";
+      license = with stdenv.lib.licenses; [ artistic2 ];
+    };
+  };
+
+  MaxMindDBReaderXS = buildPerlModule {
+    name = "MaxMind-DB-Reader-XS-1.000007";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/M/MA/MAXMIND/MaxMind-DB-Reader-XS-1.000007.tar.gz;
+      sha256 = "1wg1x1pqamapfhn6rbffqipncgs15k99q34agdamv76i6782ny8r";
+    };
+    propagatedBuildInputs = [ MathInt128 MaxMindDBReader ];
+    buildInputs = [ NetWorks PathClass TestFatal TestNumberDelta TestRequires ];
+    meta = {
+      description = "Fast XS implementation of MaxMind DB reader";
       license = with stdenv.lib.licenses; [ artistic2 ];
     };
   };
@@ -11303,6 +11342,20 @@ let
     meta = {
       homepage = https://github.com/semifor/Net-Twitter-Lite;
       description = "A perl interface to the Twitter API";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  NetWorks = buildPerlPackage {
+    name = "Net-Works-0.22";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/M/MA/MAXMIND/Net-Works-0.22.tar.gz;
+      sha256 = "1zz91vn1kdxljnlwllf4dzdsm4v6pja5694vf8l4w66azcyv5j8a";
+    };
+    propagatedBuildInputs = [ ListAllUtils MathInt128 Moo namespaceautoclean ];
+    buildInputs = [ TestFatal ];
+    meta = {
+      description = "Sane APIs for IP addresses and networks";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
