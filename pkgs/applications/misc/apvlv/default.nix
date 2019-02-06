@@ -43,6 +43,12 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  # poppler 0.73.0 moved functionality from gtypes.h into gfile.h
+  postPatch = ''
+    grep -rlF '#include "goo/gtypes.h"' | xargs sed -i 's|#include "goo/gtypes.h"|#include "goo/gfile.h"|g'
+    grep -rlF '#include <goo/gtypes.h>' | xargs sed -i 's|#include <goo/gtypes.h>|#include <goo/gfile.h>|g'
+  '';
+
   installPhase = ''
     # binary
     mkdir -p $out/bin
