@@ -23,29 +23,24 @@ let
 
 in buildPythonApplication rec {
   pname = "matrix-synapse";
-  version = "0.34.1.1";
+  version = "0.99.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "13jmbcabll3gk0b6yqwfwpc7aymqhpv6iririzskhm4pgbjcp3yk";
+    sha256 = "1xsp60172zvgyjgpjmzz90rj1din8d65ffg73nzid4nd875p45kh";
   };
-
-  patches = [
-    ./matrix-synapse.patch
-  ];
 
   propagatedBuildInputs = [
     bcrypt
     bleach
     canonicaljson
     daemonize
-    dateutil
     frozendict
     jinja2
     jsonschema
     lxml
     matrix-synapse-ldap3
-    msgpack-python
+    msgpack
     netaddr
     phonenumbers
     pillow
@@ -59,8 +54,7 @@ in buildPythonApplication rec {
     psutil
     psycopg2
     pyasn1
-    pydenticon
-    pymacaroons-pynacl
+    pymacaroons
     pynacl
     pyopenssl
     pysaml2
