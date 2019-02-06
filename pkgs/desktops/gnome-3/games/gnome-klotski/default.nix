@@ -3,13 +3,13 @@
 
 let
   pname = "gnome-klotski";
-  version = "3.22.3";
+  version = "3.31.3";
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "0prc0s28pdflgzyvk1g0yfx982q2grivmz3858nwpqmbkha81r7f";
+    sha256 = "1kh6sbcczc60bxxnd10g4vz8cz0gcziq04pqcxsi816fy1jiixq4";
   };
 
   nativeBuildInputs = [ pkgconfig vala wrapGAppsHook intltool itstool libxml2 appstream-glib desktop-file-utils ];
