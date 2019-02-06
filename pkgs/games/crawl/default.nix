@@ -1,6 +1,6 @@
 { stdenv, lib, fetchFromGitHub, which, sqlite, lua5_1, perl, zlib, pkgconfig, ncurses
-, dejavu_fonts, libpng, SDL2, SDL2_image, libGLU_combined, freetype, pngcrush, advancecomp
-, tileMode ? false
+, dejavu_fonts, libpng, SDL2, SDL2_image, SDL2_mixer, libGLU_combined, freetype, pngcrush, advancecomp
+, tileMode ? false, enableSound ? tileMode
 }:
 
 stdenv.mkDerivation rec {
@@ -21,7 +21,8 @@ stdenv.mkDerivation rec {
 
   # Still unstable with luajit
   buildInputs = [ lua5_1 zlib sqlite ncurses ]
-                ++ lib.optionals tileMode [ libpng SDL2 SDL2_image freetype libGLU_combined ];
+                ++ lib.optionals tileMode [ libpng SDL2 SDL2_image freetype libGLU_combined ]
+                ++ lib.optional enableSound SDL2_mixer;
 
   preBuild = ''
     cd crawl-ref/source
@@ -35,7 +36,8 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "prefix=$(out)" "FORCE_CC=cc" "FORCE_CXX=c++" "HOSTCXX=c++"
                 "SAVEDIR=~/.crawl" "sqlite=${sqlite.dev}"
-              ] ++ lib.optional tileMode "TILES=y";
+              ] ++ lib.optional tileMode "TILES=y"
+                ++ lib.optional enableSound "SOUND=y";
 
   postInstall = lib.optionalString tileMode "mv $out/bin/crawl $out/bin/crawl-tiles";
 
