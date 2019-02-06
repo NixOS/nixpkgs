@@ -6,24 +6,21 @@ let
 
 cfg = config.services.aws-xray-daemon;
 
-configFile = pkgs.writeText "xray.yaml" cfg.configs;
+configFile = pkgs.writeText "xray.yaml" cfg.config;
 
 in
 {
   options.services.aws-xray-daemon = {
-    enable = mkOption {
-      description = "Whether to enable aws-xray-daemon service";
-      default = false;
-      type = types.bool;
-    };
+    enable = mkEnableOption "Whether to enable aws-xray-daemon service";
 
     package = mkOption {
       description = "Which aws-xray-daemon package to use";
       default = pkgs.aws-xray-daemon;
+      defaultText = "pkgs.aws-xray-daemon";
       type = types.package;
     };
 
-    configs = mkOption {
+    config = mkOption {
       description = "Aws xray configurations json or yaml formatted.";
       default = "Version: 2";
       type = types.str;
@@ -31,19 +28,14 @@ in
   };
 
   config = mkIf cfg.enable {
-    environment.systemPackages = [ cfg.package ];
     systemd.services.aws-xray-daemon = {
       description = "aws xray daemon service";
       wantedBy = [ "multi-user.target" ];
       after = [ "networking.target" ];
       serviceConfig = {
+          DynamicUser = true;
           ExecStart = "${cfg.package.bin}/bin/daemon --config ${configFile}";
-          User = "xray";
       };
-    };
-
-    users.users.xray = {
-      description = "xray user";
     };
   };
 }
