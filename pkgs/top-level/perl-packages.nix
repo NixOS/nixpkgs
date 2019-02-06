@@ -3266,6 +3266,19 @@ let
     };
   };
 
+  DataIEEE754 = buildPerlPackage {
+    name = "Data-IEEE754-0.02";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/M/MA/MAXMIND/Data-IEEE754-0.02.tar.gz;
+      sha256 = "07b73dlxd0qmxgkkrpa2xr61y18v3adlf1qgnl9k90kj8q9spx66";
+    };
+    buildInputs = [ TestBits ];
+    meta = {
+      description = "Pack and unpack big-endian IEEE754 floats and doubles";
+      license = with stdenv.lib.licenses; [ artistic2 ];
+    };
+  };
+
   DataInteger = buildPerlModule rec {
     name = "Data-Integer-0.006";
     src = fetchurl {
@@ -3330,6 +3343,19 @@ let
     meta = {
       homepage = https://github.com/mattp-/Data-Perl;
       description = "Base classes wrapping fundamental Perl data types";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  DataPrinter = buildPerlPackage {
+    name = "Data-Printer-0.40";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/G/GA/GARU/Data-Printer-0.40.tar.gz;
+      sha256 = "0njjh8zp5afc4602jrnmg89icj7gfsil6i955ypcqxc2gl830sb0";
+    };
+    propagatedBuildInputs = [ ClonePP FileHomeDir PackageStash SortNaturally ];
+    meta = {
+      description = "colored pretty-print of Perl data structures and objects";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -6213,6 +6239,20 @@ let
     };
     makeMakerFlags = "LIBS=-L${pkgs.geoip}/lib INC=-I${pkgs.geoip}/include";
     doCheck = false; # seems to access the network
+  };
+
+  GeoIP2 = buildPerlPackage {
+    name = "GeoIP2-2.006001";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/M/MA/MAXMIND/GeoIP2-2.006001.tar.gz;
+      sha256 = "05pb8bj2dkfcn8z56f8dcs76x65xcn05fywm7vifmfh39qgkmm62";
+    };
+    propagatedBuildInputs = [ JSONMaybeXS LWPProtocolHttps MaxMindDBReader ParamsValidate Throwable ];
+    buildInputs = [ PathClass TestFatal TestNumberDelta ];
+    meta = {
+      description = "Perl API for MaxMind's GeoIP2 web services and databases";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
   };
 
   GetoptArgvFile = buildPerlPackage rec {
@@ -9153,6 +9193,33 @@ let
     src = fetchurl {
       url = mirror://cpan/authors/id/A/AS/ASPINELLI/Math-VecStat-0.08.tar.gz;
       sha256 = "03bdcl9pn2bc9b50c50nhnr7m9wafylnb3v21zlch98h9c78x6j0";
+    };
+  };
+
+  MaxMindDBCommon = buildPerlPackage {
+    name = "MaxMind-DB-Common-0.040001";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/M/MA/MAXMIND/MaxMind-DB-Common-0.040001.tar.gz;
+      sha256 = "1mqvnabskhyvi2f10f602gisfk39ws51ky55lixd0033sd5xzikb";
+    };
+    propagatedBuildInputs = [ DataDumperConcise DateTime ListAllUtils MooXStrictConstructor ];
+    meta = {
+      description = "Code shared by the MaxMind DB reader and writer modules";
+      license = with stdenv.lib.licenses; [ artistic2 ];
+    };
+  };
+
+  MaxMindDBReader = buildPerlPackage {
+    name = "MaxMind-DB-Reader-1.000013";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/M/MA/MAXMIND/MaxMind-DB-Reader-1.000013.tar.gz;
+      sha256 = "0w7dmfhpibazrh75bdr7vmpji83fzldsy0zjvhg3cwadr4f35kmq";
+    };
+    propagatedBuildInputs = [ DataIEEE754 DataPrinter DataValidateIP MaxMindDBCommon ];
+    buildInputs = [ PathClass TestBits TestFatal TestNumberDelta TestRequires ];
+    meta = {
+      description = "Read MaxMind DB files and look up IP addresses";
+      license = with stdenv.lib.licenses; [ artistic2 ];
     };
   };
 
@@ -14565,6 +14632,20 @@ let
     };
     propagatedBuildInputs = [ Spiffy ];
     buildInputs = [ AlgorithmDiff TextDiff ];
+  };
+
+  TestBits = buildPerlPackage {
+    name = "Test-Bits-0.02";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/D/DR/DROLSKY/Test-Bits-0.02.tar.gz;
+      sha256 = "1hqbvqlkj3k9ys4zq3f1fl1y6crni8r0ynan673f49rs91b6z0m9";
+    };
+    propagatedBuildInputs = [ ListAllUtils ];
+    buildInputs = [ TestFatal ];
+    meta = {
+      description = "Provides a bits_is() subroutine for testing binary data";
+      license = with stdenv.lib.licenses; [ artistic2 ];
+    };
   };
 
   TestCheckDeps = buildPerlPackage rec {
