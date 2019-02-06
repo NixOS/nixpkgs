@@ -12582,6 +12582,8 @@ in
 
   soundtouch = callPackage ../development/libraries/soundtouch {};
 
+  spai = callPackage ../development/libraries/science/math/spai { };
+
   spandsp = callPackage ../development/libraries/spandsp {};
 
   spaceship-prompt = callPackage ../shells/zsh/spaceship-prompt {};
