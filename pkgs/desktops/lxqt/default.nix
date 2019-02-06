@@ -18,7 +18,6 @@ let
     lxqt-admin = callPackage ./lxqt-admin { };
     lxqt-config = callPackage ./lxqt-config { };
     lxqt-globalkeys = callPackage ./lxqt-globalkeys { };
-    lxqt-l10n = callPackage ./lxqt-l10n { };
     lxqt-notificationd = callPackage ./lxqt-notificationd { };
     lxqt-openssh-askpass = callPackage ./lxqt-openssh-askpass { };
     lxqt-policykit = callPackage ./lxqt-policykit { };
@@ -70,7 +69,6 @@ let
       lxqt-admin
       lxqt-config
       lxqt-globalkeys
-      lxqt-l10n
       lxqt-notificationd
       lxqt-openssh-askpass
       lxqt-policykit
