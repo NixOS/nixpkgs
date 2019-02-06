@@ -592,7 +592,7 @@
     "light.lifx" = ps: with ps; [  ];
     "light.lifx_legacy" = ps: with ps; [  ];
     "light.lightwave" = ps: with ps; [  ];
-    "light.limitlessled" = ps: with ps; [  ];
+    "light.limitlessled" = ps: with ps; [ limitlessled ];
     "light.litejet" = ps: with ps; [  ];
     "light.lutron" = ps: with ps; [  ];
     "light.lutron_caseta" = ps: with ps; [  ];
@@ -799,7 +799,7 @@
     "notify.clicksend_tts" = ps: with ps; [  ];
     "notify.command_line" = ps: with ps; [  ];
     "notify.demo" = ps: with ps; [  ];
-    "notify.discord" = ps: with ps; [  ];
+    "notify.discord" = ps: with ps; [ discordpy ];
     "notify.ecobee" = ps: with ps; [  ];
     "notify.facebook" = ps: with ps; [  ];
     "notify.file" = ps: with ps; [  ];
