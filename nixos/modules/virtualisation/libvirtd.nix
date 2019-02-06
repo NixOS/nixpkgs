@@ -260,5 +260,7 @@ in {
       serviceConfig.ExecStart = "@${pkgs.libvirt}/sbin/virtlockd virtlockd";
       restartIfChanged = false;
     };
+
+    networking.networkdUnmanagedInterfaces = "virbr* vnet*";
   };
 }
