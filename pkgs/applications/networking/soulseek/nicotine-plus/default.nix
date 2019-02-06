@@ -1,16 +1,13 @@
 { stdenv, fetchFromGitHub, python27Packages, lib
-, geoip ? null
-, geolite-legacy ? null
-
+, geoip
 # Nicotine+ supports a country code blocker. This requires a (GPL'ed) library called GeoIP.
 , enableGeoIP ? true
 }:
 
 assert enableGeoIP -> python27Packages.GeoIP != null;
-assert enableGeoIP -> geoip                  != null;
-assert enableGeoIP -> geolite-legacy         != null;
 
 with stdenv.lib;
+with lists;
 
 python27Packages.buildPythonApplication rec {
   pname = "nicotine-plus";
@@ -27,18 +24,16 @@ python27Packages.buildPythonApplication rec {
     miniupnpc
     mutagen
     notify
-  ] ++ lib.lists.optional enableGeoIP
+    ] ++ optional enableGeoIP
      (GeoIP.overrideAttrs (_: {
-       propagatedBuildInputs = lib.lists.singleton
-         (geoip.override  (_: {
-           geoipDatabase = geolite-legacy;
-         }));
+       propagatedBuildInputs = [geoip];
      }));
 
   # Insert real docs directory.
   # os.getcwd() is not needed
-  patchPhase = ''
-    sed -e 's|paths.append(os.getcwd())|paths.append("'"$out"/doc'")|' -i ./pynicotine/gtkgui/frame.py
+  postPatch = ''
+    substituteInPlace ./pynicotine/gtkgui/frame.py \
+      --replace "paths.append(os.getcwd())" "paths.append('"$out"/doc')"
   '';
 
   postFixup = ''
