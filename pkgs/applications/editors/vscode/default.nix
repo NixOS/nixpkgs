@@ -18,16 +18,16 @@ let
   }.${system};
 
   sha256 = {
-    "i686-linux" = "1g73fay6fxlqhalkqq5m6rjbp68k9npk0rrxrkhdj8mw0cz74dpm";
-    "x86_64-linux" = "0mil8n5i2ajdyrgq862wq59ajy2122rvvn7m7mxq4ab92sk26rix";
-    "x86_64-darwin" = "07r52scs1sgafzxqal39r8vf9p9qqvwwx8f6z09gqcf6clr6k48q";
-  }.${stdenv.hostPlatform.system};
+    "i686-linux" = "09mgvff27iljj9z7h0xxmr6152hcxh7qqxl3i7wdc55ra1rsjq1n";
+    "x86_64-linux" = "1gvlvg3cjsscx6khy5gxd4wnb069kska00qdfwcq4kn7x1z04xnz";
+    "x86_64-darwin" = "1mf9nyjnxgmzai7rfd1rkwk0wvil0ripg3mh8icg4mld2jjz8rsy";
+  }.${system};
 
   archive_fmt = if system == "x86_64-darwin" then "zip" else "tar.gz";
 in
   stdenv.mkDerivation rec {
     name = "vscode-${version}";
-    version = "1.30.2";
+    version = "1.31.0";
 
     src = fetchurl {
       name = "VSCode_${version}_${plat}.${archive_fmt}";
@@ -129,6 +129,7 @@ in
       homepage = http://code.visualstudio.com/;
       downloadPage = https://code.visualstudio.com/Updates;
       license = licenses.unfree;
+      maintainers = with maintainers; [ eadwu ];
       platforms = [ "i686-linux" "x86_64-linux" "x86_64-darwin" ];
     };
   }
