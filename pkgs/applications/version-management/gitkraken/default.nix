@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ dpkg ];
+  buildInputs = [ dpkg gtk3];
 
   unpackCmd = ''
     mkdir out
@@ -85,7 +85,9 @@ stdenv.mkDerivation rec {
     rm -rf bin/gitkraken share/lintian
     cp -av share bin $out/
     popd
-    ln -s $out/share/gitkraken/gitkraken $out/bin/gitkraken
+
+    makeWrapper $out/share/gitkraken/gitkraken $out/bin/gitkraken \
+      --prefix XDG_DATA_DIRS : $GSETTINGS_SCHEMAS_PATH
   '';
 
   postFixup = ''
