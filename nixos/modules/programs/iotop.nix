@@ -9,7 +9,6 @@ in {
     programs.iotop.enable = mkEnableOption "iotop + setcap wrapper";
   };
   config = mkIf cfg.enable {
-    environment.systemPackages = [ pkgs.iotop ];
     security.wrappers.iotop = {
       source = "${pkgs.iotop}/bin/iotop";
       capabilities = "cap_net_admin+p";
