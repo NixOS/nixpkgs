@@ -275,6 +275,10 @@ in
     ] ++ lib.optional stdenv.isDarwin "--with-iconv-dir=${libiconv}";
   };
 
+  ovirt-engine-sdk = attrs: {
+    buildInputs = [ curl libxml2 ];
+  };
+
   pango = attrs: {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ gtk2 xorg.libXdmcp pcre xorg.libpthreadstubs ];
