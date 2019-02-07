@@ -43,6 +43,7 @@ python3Packages.buildPythonApplication rec {
     ] ++ lib.optionals enableBloat [
       apktool cbfstool colord fpc ghc ghostscriptX giflib gnupg1 gnumeric imagemagick
       llvm jdk mono openssh pdftk poppler_utils tcpdump unoconv
+      python3Packages.guestfs
     ];
 
   doCheck = false; # Calls 'mknod' in squashfs tests, which needs root
