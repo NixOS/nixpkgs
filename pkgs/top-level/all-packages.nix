@@ -9170,6 +9170,8 @@ in
     inherit (darwin.apple_sdk.frameworks) CoreFoundation;
   };
 
+  ugtrain = callPackage ../development/tools/misc/ugtrain { };
+
   uhd = callPackage ../development/tools/misc/uhd { };
 
   uisp = callPackage ../development/tools/misc/uisp { };
