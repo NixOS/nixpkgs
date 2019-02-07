@@ -1,5 +1,8 @@
 # This is a test to show that mkAliasOptionModule sets the priority correctly
 # for aliased options.
+#
+# This test shows that an alias with a low priority is able to be overridden
+# with a non-aliased option.
 
 { config, lib, ... }:
 
