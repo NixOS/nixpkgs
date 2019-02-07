@@ -5862,6 +5862,8 @@ in
 
   toxvpn = callPackage ../tools/networking/toxvpn { };
 
+  toybox = callPackage ../tools/misc/toybox { };
+
   tpmmanager = callPackage ../applications/misc/tpmmanager { };
 
   tpm-quote-tools = callPackage ../tools/security/tpm-quote-tools { };
