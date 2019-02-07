@@ -686,6 +686,9 @@ in
       ''
         ; Needed for PHP's mail() function.
         sendmail_path = sendmail -t -i
+
+        ; Don't advertise PHP
+        expose_php = off
       '' + optionalString (!isNull config.time.timeZone) ''
 
         ; Apparently PHP doesn't use $TZ.
