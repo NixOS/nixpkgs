@@ -19,9 +19,11 @@
 , tornado
 , zict
 , pyyaml
-, pythonOlder
+, isPy3k
 , futures
 , singledispatch
+, mpi4py
+, bokeh
 }:
 
 buildPythonPackage rec {
@@ -37,9 +39,8 @@ buildPythonPackage rec {
   checkInputs = [ pytest pytest-repeat pytest-faulthandler pytest-timeout mock joblib ];
   propagatedBuildInputs = [
       click cloudpickle dask msgpack psutil six
-      sortedcontainers tblib toolz tornado zict pyyaml
-  ] ++ lib.optional (pythonOlder "3.2") [ futures ]
-    ++ lib.optional (pythonOlder "3.4") [ singledispatch ];
+      sortedcontainers tblib toolz tornado zict pyyaml mpi4py bokeh
+  ] ++ lib.optionals (!isPy3k) [ futures singledispatch ];
 
   # tests take about 10-15 minutes
   # ignore 5 cli tests out of 1000 total tests that fail due to subprocesses
