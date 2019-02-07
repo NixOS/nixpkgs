@@ -4,7 +4,7 @@
 }:
 
 let
-  buildUBoot = { version ? "2018.09"
+  buildUBoot = { version ? "2019.01"
             , filesToInstall
             , installDir ? "$out"
             , defconfig
@@ -20,7 +20,7 @@ let
 
     src = fetchurl {
       url = "ftp://ftp.denx.de/pub/u-boot/u-boot-${version}.tar.bz2";
-      sha256 = "0s122kyz1svvs2yjzj4j9qravl3ra4vn0fjqgski7rlczqyg56w3";
+      sha256 = "08hwsmh5xsb1gcxsv8gvx00bai938dm5y3889n8jif3a8rd7xgah";
     };
 
     patches = [
