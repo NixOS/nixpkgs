@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  enableParallelBuilding = true;
+  enableParallelBuilding = false;
 
   patchPhase = ''
     cp -fv ${fakegit}/bin/checkout-git.sh libraries/checkout-git.sh

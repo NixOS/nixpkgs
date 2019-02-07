@@ -56,7 +56,8 @@
 { url = "https://github.com/modelica-3rdparty/Modelica-MVEM.git"; rev = "57c7aa394d70bffe6106afb2703b92bc532a05d1"; sha256="1lhlf7gl3ahknp2wd8gdwy43lc9rszd1y3cgz1rlilvssj6s1819"; }
 { url = "https://github.com/modelica-3rdparty/ModelicaADS.git"; rev = "56eb724769bf9296c89fc91ea9274c6b477d76fa"; sha256="0cvbw8q78vj7yf3wznpna300qfz7gy4n3sq2z23qrfnb25f9wya6"; }
 { url = "https://github.com/modelica-deprecated/ModelicaAdditions.git"; rev = "568db43766186826b880f9d4bfafeff25cc2c4ab"; sha256="0k6gwpwm56dhfn6ylrxdb222d0pw6nd1aa4qxd9iissdivy4q169"; }
-{ url = "https://github.com/xogeny/ModelicaBook.git"; rev = "939da035afd1de28c7f27c3aa1312380455a79ba"; sha256="1nycs0yv431m0rlj6s1z49509gmcsapxm3mzd7x795sg109qrhxv"; }
+# ERROR: fatal: Could not read from remote repository. Because of git@github.com?
+#{ url = "https://github.com/xogeny/ModelicaBook.git"; rev = "939da035afd1de28c7f27c3aa1312380455a79ba"; sha256="1nycs0yv431m0rlj6s1z49509gmcsapxm3mzd7x795sg109qrhxv"; }
 { url = "https://github.com/modelica-compliance/compliance.git"; rev = "5c13f92f061d2184167538e9c9d8d2efdd1423fa"; sha256="1ywlcddygbl9vwjs5rc1cn7gnimacymrqsqz0h1yayyans0jhmpi"; }
 { url = "https://github.com/modelica-3rdparty/ModelicaDEVS.git"; rev = "a987aa9552fbbe71b2ee2e8c28958f9d213087ae"; sha256="1yvj29cv0q9jz1s0hvymzzhhl9wf602svl7fv0dj40hpg08rsva6"; }
 { url = "https://github.com/modelica-3rdparty/ModelicaDFR.git"; rev = "37a441934d05330cf3d13e9ec551954d27eca84c"; sha256="13rpcs8cl9x15vi655150zmhmg1iaxpzvxrl3rqif46zpl5dhlj2"; }
@@ -105,7 +106,8 @@
 { url = "https://github.com/modelica-3rdparty/buildsyspro.git"; rev = "232d51c4fe28ce79cc12b58167ebaf98c2b74010"; sha256="08s0bjn11053qhxrb4amh765idy0whsbxwz6g9x7g1vb2imz0bwi"; }
 { url = "https://github.com/modelica-3rdparty/ipsl.git"; rev = "e0e3ea079a0398a3b0b094baaa3736350faa525b"; sha256="1w2iah8c5d8n01wmxydjk0rrcxh88g8yjy2zmv403azcccq7byzp"; }
 { url = "https://github.com/modelica-3rdparty/modelica-flight.git"; rev = "f3ae1c3ebe1b33921654a0e0d59d6e65f0bcfe84"; sha256="028qwk80lhspacxzgyn4mb3zqp9lhqgmmjbnz4y9x7h0dwxpa470"; }
-{ url = "https://github.com/modelica-3rdparty/msgpack-modelica.git"; rev = "594179d1625947e7da82e6f92a7cb61c6bb9859f"; sha256="0n9lq797aq6h4qnva29nfv1cvw9ib2xb57aff3jwnpzl6ip6gnls"; }
+# ERROR: https://github.com/modelica-3rdparty/msgpack-modelica/issues/35
+# { url = "https://github.com/modelica-3rdparty/msgpack-modelica.git"; rev = "594179d1625947e7da82e6f92a7cb61c6bb9859f"; sha256="0n9lq797aq6h4qnva29nfv1cvw9ib2xb57aff3jwnpzl6ip6gnls"; }
 { url = "https://github.com/modelica-3rdparty/netCDF-DataReader.git"; rev = "d08cc3471e85b4f50b04e2e41b1886825af83eaf"; sha256="1fnay1wy1cwmvaakxaqgsvgm6wq3phdijpmvkrs5icghgwjykc8w"; }
 { url = "https://github.com/joewa/open-bldc-modelica.git"; rev = "58a83b5b36f267613de4676c95163489b1ddc2e7"; sha256="0wf6dn64d2psv9b3xg5227vzpk109r3dqzi4m2wwhrilaxs3v004"; }
 { url = "https://github.com/modelica-3rdparty/openfdm.git"; rev = "382562b4b3a499472017977e52e62b6ac2f88baa"; sha256="1yzj9471fls0i3aij8clbsvw8nq6v4412bcl44xj51ai1qdzq4mh"; }
