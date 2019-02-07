@@ -166,7 +166,7 @@ let
       if [ -z "$enableParallelBuilding" ]; then
           export NIX_BUILD_CORES=1
       fi
-      for pkg in getGoDirs ""; do
+      for pkg in $(getGoDirs ""); do
         buildGoDir install "$pkg"
       done
     '' + lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
@@ -188,7 +188,7 @@ let
     checkPhase = args.checkPhase or ''
       runHook preCheck
 
-      for pkg in getGoDirs test; do
+      for pkg in $(getGoDirs test); do
         buildGoDir test "$pkg"
       done
 
