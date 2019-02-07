@@ -22474,6 +22474,8 @@ in
 
   kops = callPackage ../applications/networking/cluster/kops { };
 
+  lguf-brightness = callPackage ../misc/lguf-brightness { };
+
   lilypond = callPackage ../misc/lilypond { guile = guile_1_8; };
   lilypond-unstable = callPackage ../misc/lilypond/unstable.nix { };
   lilypond-with-fonts = callPackage ../misc/lilypond/with-fonts.nix {
