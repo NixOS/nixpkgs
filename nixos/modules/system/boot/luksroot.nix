@@ -50,6 +50,7 @@ let
         return 0
     }
 
+    ${optionalString luks.yubikeySupport ''
     wait_yubikey() {
         local secs="''${1:-10}"
 
@@ -76,6 +77,7 @@ let
         fi
         return 0
     }
+    ''}
   '';
 
   preCommands = ''
@@ -179,7 +181,7 @@ let
         ''}
     }
 
-    ${if luks.yubikeySupport && (yubikey != null) then ''
+    ${optionalString (luks.yubikeySupport && (yubikey != null)) ''
     # Yubikey
     rbtohex() {
         ( od -An -vtx1 | tr -d ' \n' )
@@ -283,7 +285,10 @@ let
             open_normally
         fi
     }
+    ''}
 
+
+    ${if luks.yubikeySupport && (yubikey != null) then ''
     open_yubikey
     '' else ''
     open_normally
