@@ -406,6 +406,8 @@ in {
 
   gssapi = callPackage ../development/python-modules/gssapi { };
 
+  guestfs = callPackage ../development/python-modules/guestfs { };
+
   h5py = callPackage ../development/python-modules/h5py {
     hdf5 = pkgs.hdf5;
   };
