@@ -299,7 +299,7 @@ in {
   cdecimal = callPackage ../development/python-modules/cdecimal { };
 
   cfn-flip = callPackage ../development/python-modules/cfn-flip { };
- 
+
   chalice = callPackage ../development/python-modules/chalice { };
 
   cleo = callPackage ../development/python-modules/cleo { };
@@ -1573,6 +1573,8 @@ in {
   dask-jobqueue = callPackage ../development/python-modules/dask-jobqueue { };
 
   dask-ml = callPackage ../development/python-modules/dask-ml { };
+
+  dask-mpi = callPackage ../development/python-modules/dask-mpi { };
 
   dask-xgboost = callPackage ../development/python-modules/dask-xgboost { };
 
