@@ -4176,6 +4176,11 @@
     github = "shlevy";
     name = "Shea Levy";
   };
+  shou = {
+    email = "x+g@shou.io";
+    github = "Shou";
+    name = "Benedict Aas";
+  };
   siddharthist = {
     email = "langston.barrett@gmail.com";
     github = "siddharthist";
