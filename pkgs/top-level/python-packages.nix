@@ -1611,6 +1611,8 @@ in {
 
   dask-ml = callPackage ../development/python-modules/dask-ml { };
 
+  dask-mpi = callPackage ../development/python-modules/dask-mpi { };
+
   dask-xgboost = callPackage ../development/python-modules/dask-xgboost { };
 
   datrie = callPackage ../development/python-modules/datrie { };
