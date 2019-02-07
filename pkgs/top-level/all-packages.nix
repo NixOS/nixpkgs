@@ -22152,6 +22152,8 @@ in
     inherit (darwin.apple_sdk.frameworks) Cocoa OpenGL;
   });
 
+  rink = callPackage ../applications/science/misc/rink { };
+
   simgrid = callPackage ../applications/science/misc/simgrid { };
 
   spyder = callPackage ../applications/science/spyder { };
