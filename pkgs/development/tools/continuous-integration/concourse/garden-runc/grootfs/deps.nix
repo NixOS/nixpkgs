@@ -77,7 +77,7 @@
       type = "git";
       url = "https://github.com/cloudfoundry/sonde-go";
       rev = "b33733203bb4";
-      sha256 = "1p1rw3h0pqf408kaknm0mi0xn7wzqi399mfwj419vz8n8wjy7nq1";
+      sha256 = "0bdc33rch278vc0b54mrm4nhh725xjk4c4ckx2hybxg5ljl7i5h4";
     };
   }
 
