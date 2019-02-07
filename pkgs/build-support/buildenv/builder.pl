@@ -84,6 +84,10 @@ sub checkCollision {
 sub findFiles {
     my ($relName, $target, $baseName, $ignoreCollisions, $checkCollisionContents, $priority) = @_;
 
+    if (-f $target) {
+        die "Path $target is a file and can't be merged into an environment using pkgs.buildEnv!";
+    }
+
     # Urgh, hacky...
     return if
         $relName eq "/propagated-build-inputs" ||
