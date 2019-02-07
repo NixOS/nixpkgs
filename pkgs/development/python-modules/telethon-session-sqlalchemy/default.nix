@@ -1,8 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, sqlalchemy, telethon }:
+{ lib, buildPythonPackage, fetchPypi, isPy3k, sqlalchemy }:
 
 buildPythonPackage rec {
   pname = "telethon-session-sqlalchemy";
   version = "0.2.5";
+
+  disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
