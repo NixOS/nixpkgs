@@ -4034,6 +4034,8 @@ in {
 
   simplegeneric = callPackage ../development/python-modules/simplegeneric { };
 
+  shodan = callPackage ../development/python-modules/shodan { };
+
   should-dsl = callPackage ../development/python-modules/should-dsl { };
 
   simplejson = callPackage ../development/python-modules/simplejson { };
