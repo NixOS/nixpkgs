@@ -37,9 +37,7 @@ let
       subPackages = packages;
       goDeps = ./deps.nix;
       nativeBuildInputs = [ go-packr ];
-      inherit src;
-
-      inherit passthru;
+      inherit src passthru preBuild;
 
       # TODO: Get Worker version
       #-X github.com/concourse/atc/atccmd.WorkerVersion=${worker_version}
