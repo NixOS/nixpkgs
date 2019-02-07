@@ -4742,7 +4742,7 @@ in {
 
   pygccxml = callPackage ../development/python-modules/pygccxml {};
 
-  pymacaroons-pynacl = callPackage ../development/python-modules/pymacaroons-pynacl { };
+  pymacaroons = callPackage ../development/python-modules/pymacaroons { };
 
   pynacl = callPackage ../development/python-modules/pynacl { };
 
