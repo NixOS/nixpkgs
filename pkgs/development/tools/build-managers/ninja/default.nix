@@ -14,6 +14,7 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
+    # Make builds reproducible by generating the same IDs from the same inputs.
     (fetchpatch {
       name = "consistent-doc-ids";
       url = "https://github.com/ninja-build/ninja/commit/9aa947471fcfc607bec6d92a1a6eed5c692edbaf.patch";
