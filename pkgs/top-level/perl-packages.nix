@@ -9267,7 +9267,7 @@ let
       url = mirror://cpan/authors/id/M/MA/MAXMIND/MaxMind-DB-Reader-XS-1.000007.tar.gz;
       sha256 = "1wg1x1pqamapfhn6rbffqipncgs15k99q34agdamv76i6782ny8r";
     };
-    propagatedBuildInputs = [ MathInt128 MaxMindDBReader ];
+    propagatedBuildInputs = [ MathInt128 MaxMindDBReader pkgs.libmaxminddb ];
     buildInputs = [ NetWorks PathClass TestFatal TestNumberDelta TestRequires ];
     meta = {
       description = "Fast XS implementation of MaxMind DB reader";
@@ -9283,6 +9283,7 @@ let
     };
     propagatedBuildInputs = [ DigestSHA1 MaxMindDBReader MooseXParamsValidate MooseXStrictConstructor NetWorks SerealDecoder SerealEncoder ];
     buildInputs = [ DevelRefcount JSON TestBits TestDeep TestFatal TestHexDifferences TestRequires TestWarnings ];
+    hardeningDisable = [ "format" ];
     meta = {
       description = "Create MaxMind DB database files";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
