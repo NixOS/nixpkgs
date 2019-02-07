@@ -1436,6 +1436,8 @@ in
 
   gosu = callPackage ../tools/misc/gosu { };
 
+  gping = callPackage ../tools/networking/gping { };
+
   greg = callPackage ../applications/audio/greg {
     pythonPackages = python3Packages;
   };
