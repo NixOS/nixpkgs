@@ -3788,6 +3788,11 @@
     github = "peti";
     name = "Peter Simons";
   };
+  petrkr = {
+    email = "petrkr@petrkr.net";
+    github = "petrkr";
+    name = "Petr Kracik";
+  };
   philandstuff = {
     email = "philip.g.potter@gmail.com";
     github = "philandstuff";
