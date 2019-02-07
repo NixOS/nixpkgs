@@ -376,6 +376,8 @@ let
     Include ${httpd}/conf/extra/httpd-multilang-errordoc.conf
     Include ${httpd}/conf/extra/httpd-languages.conf
 
+    TraceEnable off
+
     ${if enableSSL then sslConf else ""}
 
     # Fascist default - deny access to everything.
