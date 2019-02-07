@@ -1,11 +1,11 @@
-Index: wsjtx/CMakeLists.txt
-===================================================================
---- wsjtx/CMakeLists.txt	(revision 8382)
-+++ wsjtx/CMakeLists.txt	(working copy)
-@@ -866,6 +866,7 @@
- find_package (Qt5Widgets 5 REQUIRED)
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 3e7e816b..e7dbb14a 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -860,6 +860,7 @@ find_package (Qt5Widgets 5 REQUIRED)
  find_package (Qt5Multimedia 5 REQUIRED)
  find_package (Qt5PrintSupport 5 REQUIRED)
+ find_package (Qt5Sql 5 REQUIRED)
 +find_package (Qt5SerialPort 5 REQUIRED)
  
  if (WIN32)

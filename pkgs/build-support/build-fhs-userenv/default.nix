@@ -28,7 +28,7 @@ in runCommand name {
   passthru = passthru // {
     env = runCommand "${name}-shell-env" {
       shellHook = ''
-        exec ${chrootenv} ${init "bash"} "$(pwd)"
+        exec ${chrootenv} ${init runScript} "$(pwd)"
       '';
     } ''
       echo >&2 ""

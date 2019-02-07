@@ -154,6 +154,23 @@ let
         };
       };
     };
+
+    # Fully static packages.
+    # Currently uses Musl on Linux (couldn’t get static glibc to work).
+    pkgsStatic = nixpkgsFun ({
+      crossOverlays = [ (import ./static.nix) ];
+    } // lib.optionalAttrs stdenv.hostPlatform.isLinux {
+      crossSystem = {
+        parsed = stdenv.hostPlatform.parsed // {
+          abi = {
+            "gnu" = lib.systems.parse.abis.musl;
+            "gnueabi" = lib.systems.parse.abis.musleabi;
+            "gnueabihf" = lib.systems.parse.abis.musleabihf;
+          }.${stdenv.hostPlatform.parsed.abi.name}
+            or lib.systems.parse.abis.musl;
+        };
+      };
+    });
   };
 
   # The complete chain of package set builders, applied from top to bottom.

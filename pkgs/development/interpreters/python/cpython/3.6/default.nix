@@ -26,7 +26,7 @@ with stdenv.lib;
 
 let
   majorVersion = "3.6";
-  minorVersion = "7";
+  minorVersion = "8";
   minorVersionSuffix = "";
   version = "${majorVersion}.${minorVersion}${minorVersionSuffix}";
   libPrefix = "python${majorVersion}";
@@ -51,7 +51,7 @@ in stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://www.python.org/ftp/python/${majorVersion}.${minorVersion}/Python-${version}.tar.xz";
-    sha256 = "0zgp8nvz3rkiz5cxd42vgpah4rvw3kmg9qz9lfq36rfnm40i9zc1";
+    sha256 = "14qi6n5gpcjnwy165wi9hkfcmbadc95ny6bxxldknxwmx50n4i1m";
   };
 
   NIX_LDFLAGS = optionalString stdenv.isLinux "-lgcc_s";
@@ -69,12 +69,6 @@ in stdenv.mkDerivation {
 
   patches = [
     ./no-ldconfig.patch
-  ] ++ optionals stdenv.isDarwin [
-    # Fix for https://bugs.python.org/issue24658
-    (fetchpatch {
-      url = "https://bugs.python.org/file45178/issue24658-3-3.6.diff";
-      sha256 = "1x060hs80nl34mcl2ji2i7l4shxkmxwgq8h8lcmav8rjqqz1nb4a";
-    })
   ] ++ optionals (x11Support && stdenv.isDarwin) [
     ./use-correct-tcl-tk-on-darwin.patch
   ] ++ optionals hasDistutilsCxxPatch [
@@ -83,8 +77,8 @@ in stdenv.mkDerivation {
     # only works for GCC and Apple Clang. This makes distutils to call C++
     # compiler when needed.
     (fetchpatch {
-      url = "https://bugs.python.org/file47669/python-3.8-distutils-C++.patch";
-      sha256 = "0s801d7ww9yrk6ys053jvdhl0wicbznx08idy36f1nrrxsghb3ii";
+      url = "https://bugs.python.org/file48016/python-3.x-distutils-C++.patch";
+      sha256 = "1h18lnpx539h5lfxyk379dxwr8m2raigcjixkf133l4xy3f4bzi2";
     })
   ];
 

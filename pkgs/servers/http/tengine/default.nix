@@ -10,12 +10,12 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  version = "2.2.2";
+  version = "2.2.3";
   name = "tengine-${version}";
 
   src = fetchurl {
-    url = "https://github.com/alibaba/tengine/archive/${name}.tar.gz";
-    sha256 = "1vq73wsldvj7rc61ag85pvnaacrrq9rs0pfqv71z5iyvb5r3bxc2";
+    url = "https://github.com/alibaba/tengine/archive/${version}.tar.gz";
+    sha256 = "0x12mfs0q7lihpl335ad222a1a2sdkqzj5q8zbybzr20frixjs42";
   };
 
   buildInputs =

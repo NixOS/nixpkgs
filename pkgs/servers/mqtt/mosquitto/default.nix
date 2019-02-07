@@ -3,23 +3,14 @@
 
 stdenv.mkDerivation rec {
   name = "mosquitto-${version}";
-  version = "1.5.3";
+  version = "1.5.4";
 
   src = fetchFromGitHub {
     owner  = "eclipse";
     repo   = "mosquitto";
     rev    = "v${version}";
-    sha256 = "0bknmnvssix7c1cps6mzjjnw9zxdlyfsy6ksqx4zfglcw41p8gnz";
+    sha256 = "0pb38y6m682xqrkzhp41mj54x5ic43761xzschgnw055mzksbgk2";
   };
-
-  patches = [
-    # https://github.com/eclipse/mosquitto/issues/983
-    (fetchpatch {
-      url    = "https://github.com/eclipse/mosquitto/commit/7f1419e4de981f5cc38aa3a9684369b1de27ba46.patch";
-      sha256 = "05npr0h79mbaxzjyhdw78hi9gs1cwydf2fv67bqxm81jzj2yhx2s";
-      name   = "fix_threading_on_cmake.patch";
-    })
-  ];
 
   postPatch = ''
     substituteInPlace man/manpage.xsl \

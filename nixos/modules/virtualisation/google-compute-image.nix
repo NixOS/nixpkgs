@@ -18,7 +18,7 @@ in
       rm $out/disk.raw
       popd
     '';
-    configFile = <nixpkgs/nixos/modules/virtualisation/google-compute-config.nix>;
+    configFile = ./google-compute-config.nix;
     format = "raw";
     inherit diskSize;
     inherit config lib pkgs;

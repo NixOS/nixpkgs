@@ -180,6 +180,7 @@ stdenv.mkDerivation rec {
   disallowedReferences = [ go_bootstrap ];
 
   meta = with stdenv.lib; {
+    knownVulnerabilities = [ "CVE-2019-6486" ];
     branch = "1.9";
     homepage = http://golang.org/;
     description = "The Go Programming language";

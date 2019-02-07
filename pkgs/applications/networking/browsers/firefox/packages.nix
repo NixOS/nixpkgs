@@ -20,14 +20,14 @@ rec {
 
   firefox = common rec {
     pname = "firefox";
-    version = "63.0.3";
+    version = "65.0";
     src = fetchurl {
       url = "mirror://mozilla/firefox/releases/${version}/source/firefox-${version}.source.tar.xz";
-      sha512 = "319bdkvk1r53i8l9ilz9ffllp2yxn02glhjsf26bqchw0c4ym8y6d62j1g7s55lddzqka3kcsmzba0k8wna1aw3pydf7v84nyhaw1bc";
+      sha512 = "39bx76whgf53rkfqqy8gfhd44wikh89zpnqr930v4grqg3v0pfr8mbvp7xzjjlf5r7bski0wxibn9vyyy273fp99zyj1w2m5ihh9aqh";
     };
 
     patches = nixpkgsPatches ++ [
-      ./no-buildconfig.patch
+      ./no-buildconfig-ffx65.patch
     ];
 
     extraNativeBuildInputs = [ python3 ];
@@ -70,14 +70,14 @@ rec {
 
   firefox-esr-60 = common rec {
     pname = "firefox-esr";
-    version = "60.3.0esr";
+    version = "60.5.0esr";
     src = fetchurl {
       url = "mirror://mozilla/firefox/releases/${version}/source/firefox-${version}.source.tar.xz";
-      sha512 = "7ded25a38835fbd73a58085e24ad83308afee1784a3bf853d75093c1500ad46988f5865c106abdae938cfbd1fb10746cc1795ece7994fd7eba8a002158cf1bcd";
+      sha512 = "3n7l146gdjwhi0iq85awc0yykvi4x5m91mcylxa5mrq911bv6xgn2i92nzhgnhdilqap5218778vgvnalikzsh67irrncx1hy5f6iyx";
     };
 
     patches = nixpkgsPatches ++ [
-      ./no-buildconfig.patch
+      ./no-buildconfig-ffx65.patch
 
       # this one is actually an omnipresent bug
       # https://bugzilla.mozilla.org/show_bug.cgi?id=1444519

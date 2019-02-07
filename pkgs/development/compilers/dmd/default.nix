@@ -121,8 +121,6 @@ let
         cd ..
     '';
 
-    extension = if stdenv.hostPlatform.isDarwin then "a" else "{a,so}";
-    
     dontStrip = true;
 
     installPhase = ''
@@ -143,7 +141,7 @@ let
 
         cd ../phobos
         mkdir $out/lib
-        cp generated/${osname}/release/${bits}/libphobos2.${extension} $out/lib
+        cp generated/${osname}/release/${bits}/libphobos2.* $out/lib
 
         cp -r std $out/include/d2
         cp -r etc $out/include/d2

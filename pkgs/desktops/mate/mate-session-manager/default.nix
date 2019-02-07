@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   name = "mate-session-manager-${version}";
-  version = "1.20.1";
+  version = "1.20.2";
 
   src = fetchurl {
     url = "http://pub.mate-desktop.org/releases/${mate.getRelease version}/${name}.tar.xz";
-    sha256 = "0gdxa46ps0fxspri08kpp99vzx06faw6x30k6vbjg5m7x1xfq7i5";
+    sha256 = "05qq07b568qf6zyy459wajhfpbx1wfrinw3hsbky7abdjfn529dy";
   };
 
   nativeBuildInputs = [

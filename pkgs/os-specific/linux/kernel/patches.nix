@@ -58,4 +58,8 @@ rec {
     };
   };
 
+  raspberry_pi_wifi_fix = rec {
+    name = "raspberry-pi-wifi-fix";
+    patch = ./raspberry-pi-wifi-fix.patch;
+  };
 }

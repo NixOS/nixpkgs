@@ -20,6 +20,8 @@ let
 
   llvmShared = llvm.override { enableSharedLibraries = true; };
 
+  prefixedJemalloc = jemalloc.override { stripPrefix = false; };
+
   target = builtins.replaceStrings [" "] [","] (builtins.toString targets);
 in
 
@@ -165,6 +167,8 @@ stdenv.mkDerivation {
   # https://github.com/NixOS/nixpkgs/pull/21742#issuecomment-272305764
   # https://github.com/rust-lang/rust/issues/30181
   # enableParallelBuilding = false;
+
+  requiredSystemFeatures = [ "big-parallel" ];
 
   meta = with stdenv.lib; {
     homepage = https://www.rust-lang.org/;

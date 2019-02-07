@@ -356,6 +356,7 @@ self: super: {
   optional = dontCheck super.optional;
   orgmode-parse = dontCheck super.orgmode-parse;
   os-release = dontCheck super.os-release;
+  pandoc-crossref = dontCheck super.pandoc-crossref;  # (most likely change when no longer 0.3.2.1) https://github.com/lierdakil/pandoc-crossref/issues/199
   persistent-redis = dontCheck super.persistent-redis;
   pipes-extra = dontCheck super.pipes-extra;
   pipes-websockets = dontCheck super.pipes-websockets;
@@ -735,7 +736,7 @@ self: super: {
           rev = "v${ver}";
           sha256 = "0kqglih3rv12nmkzxvalhfaaafk4b2irvv9x5xmc48i1ns71y23l";
         }}/doc";
-        buildInputs = with pkgs.pythonPackages; [ sphinx recommonmark sphinx_rtd_theme ];
+        nativeBuildInputs = with pkgs.buildPackages.pythonPackages; [ sphinx recommonmark sphinx_rtd_theme ];
         makeFlags = "html";
         installPhase = ''
           mv _build/html $out

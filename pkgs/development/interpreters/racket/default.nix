@@ -6,6 +6,7 @@
 , disableDocs ? false
 , CoreFoundation
 , gsettings-desktop-schemas
+, wrapGAppsHook
 }:
 
 let
@@ -55,7 +56,9 @@ stdenv.mkDerivation rec {
     (stdenv.lib.optionalString stdenv.isDarwin "-framework CoreFoundation")
   ];
 
-  buildInputs = [ fontconfig libffi libtool makeWrapper sqlite gsettings-desktop-schemas gtk3 ]
+  nativeBuildInputs = [ wrapGAppsHook ];
+
+  buildInputs = [ fontconfig libffi libtool sqlite gsettings-desktop-schemas gtk3 ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ CoreFoundation ];
 
   preConfigure = ''
@@ -65,6 +68,8 @@ stdenv.mkDerivation rec {
     done
     mkdir src/build
     cd src/build
+
+    gappsWrapperArgs+=("--prefix" "LD_LIBRARY_PATH" ":" $LD_LIBRARY_PATH)
   '';
 
   shared = if stdenv.isDarwin then "dylib" else "shared";
@@ -76,13 +81,6 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = false;
 
-  postInstall = ''
-    for p in $(ls $out/bin/) ; do
-      wrapProgram $out/bin/$p \
-        --prefix LD_LIBRARY_PATH ":" "${LD_LIBRARY_PATH}" \
-        --prefix XDG_DATA_DIRS ":" "$GSETTINGS_SCHEMAS_PATH";
-    done
-  '';
 
   meta = with stdenv.lib; {
     description = "A programmable programming language";

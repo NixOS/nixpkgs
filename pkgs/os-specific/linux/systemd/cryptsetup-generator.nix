@@ -14,12 +14,13 @@ systemd.overrideAttrs (p: {
   # As ninja install is not used here, the rpath needs to be manually fixed.
   # Otherwise the resulting binary doesn't properly link against systemd-shared.so
   postFixup = ''
-    sharedLib=libsystemd-shared-${p.version}.so
     for prog in `find $out -type f -executable`; do
-      (patchelf --print-needed $prog | grep $sharedLib > /dev/null) && (
+      (patchelf --print-needed $prog | grep 'libsystemd-shared-.*\.so' > /dev/null) && (
         patchelf --set-rpath `patchelf --print-rpath $prog`:"$out/lib/systemd" $prog
       ) || true
     done
+    # test it's OK
+    "$out"/lib/systemd/systemd-cryptsetup
   '';
 
   installPhase = ''

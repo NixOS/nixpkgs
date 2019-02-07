@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   name = "sbt-${version}";
-  version = "1.2.7";
+  version = "1.2.8";
 
   src = fetchurl {
     urls = [
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
       "https://github.com/sbt/sbt/releases/download/v${version}/sbt-${version}.tgz"
       "https://cocl.us/sbt-${version}.tgz"
     ];
-    sha256 = "10g7a1j2knbqmnbpvfhy1rqdg2pflmasz879ax59pv3mvgccn996";
+    sha256 = "0n7yghnb1q3lyjpv721znvslk5lwib7y84mxwz66yv8p84jj3fcv";
   };
 
   patchPhase = ''

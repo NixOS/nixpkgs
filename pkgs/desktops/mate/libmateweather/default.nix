@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "libmateweather-${version}";
-  version = "1.21.0";
+  version = "1.20.2";
 
   src = fetchurl {
     url = "http://pub.mate-desktop.org/releases/${mate.getRelease version}/${name}.tar.xz";
-    sha256 = "1vj2pgry6wdscdcpwwagqlsjf8rkh4id67iw7d9qk1pfbhb2sznl";
+    sha256 = "1ksp1xn13m94sjnnrx2dyv7hlbgjbnbahwdyaq35r2419b366hxv";
   };
 
   nativeBuildInputs = [ pkgconfig intltool ];
