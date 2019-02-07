@@ -298,6 +298,8 @@ in {
 
   cdecimal = callPackage ../development/python-modules/cdecimal { };
 
+  cfn-flip = callPackage ../development/python-modules/cfn-flip { };
+ 
   chalice = callPackage ../development/python-modules/chalice { };
 
   cleo = callPackage ../development/python-modules/cleo { };
