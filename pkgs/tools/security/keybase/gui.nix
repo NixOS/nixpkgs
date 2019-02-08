@@ -1,5 +1,5 @@
 { stdenv, fetchurl, alsaLib, atk, cairo, cups, udev, hicolor-icon-theme
-, dbus, expat, fontconfig, freetype, gdk_pixbuf, glib, gnome2, gtk3, gnome3
+, dbus, expat, fontconfig, freetype, gdk_pixbuf, glib, gtk3, gnome3
 , libnotify, nspr, nss, pango, systemd, xorg, autoPatchelfHook, wrapGAppsHook }:
 
 let
@@ -31,7 +31,6 @@ stdenv.mkDerivation rec {
     freetype
     gdk_pixbuf
     glib
-    gnome2.GConf
     gnome3.gsettings-desktop-schemas
     gtk3
     libnotify
