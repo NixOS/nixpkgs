@@ -261,7 +261,7 @@ rec {
    * linkFarm "hello" [ { name = "hello"; path = pkgs.hello; } ];
    *
    */
-  linkFarm = name: entries: runCommand name { preferLocalBuild = true; }
+  linkFarm = name: entries: runCommand name { preferLocalBuild = true; allowSubstitutes = false; }
     ''mkdir -p $out
       cd $out
       ${lib.concatMapStrings (x: ''
