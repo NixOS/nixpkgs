@@ -1310,6 +1310,11 @@
     github = "edef1c";
     name = "edef";
   };
+  embr = {
+    email = "hi@liclac.eu";
+    github = "liclac";
+    name = "embr";
+  };
   ederoyd46 = {
     email = "matt@ederoyd.co.uk";
     github = "ederoyd46";
