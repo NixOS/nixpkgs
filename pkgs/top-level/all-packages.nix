@@ -22204,6 +22204,8 @@ in
 
   hepmc = callPackage ../development/libraries/physics/hepmc { };
 
+  hepmc3 = callPackage ../development/libraries/physics/hepmc3 { };
+
   herwig = callPackage ../development/libraries/physics/herwig { };
 
   lhapdf = callPackage ../development/libraries/physics/lhapdf { };
