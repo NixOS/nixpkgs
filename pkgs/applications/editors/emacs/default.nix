@@ -42,6 +42,7 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./clean-env.patch
+    ./tramp-detect-wrapped-gvfsd.patch
   ];
 
   postPatch = lib.optionalString srcRepo ''
