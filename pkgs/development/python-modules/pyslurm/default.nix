@@ -11,6 +11,13 @@ buildPythonPackage rec {
     sha256 = "1rymx106xa99wd4n44s7jw0w41spg39y1ji4fgn01yk7wjfrdrwg";
   };
 
+  patches = [
+    # pyslurm fails the build if the version is not within some hardcoded
+    # interval.  Because most often than not there is no real compatibility
+    # issue we are opting to disable the check.
+    ./remove_version_check.patch
+  ];
+
   buildInputs = [ cython slurm ];
   setupPyBuildFlags = [ "--slurm-lib=${slurm}/lib" "--slurm-inc=${slurm.dev}/include" ];
 

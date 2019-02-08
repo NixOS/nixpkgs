@@ -1,0 +1,15 @@
+diff  a/setup.py b/setup.py
+--- a/setup.py
++++ b/setup.py
+@@ -273,10 +273,9 @@ def build():
+     if (int(SLURM_INC_VER,16) < int(__min_slurm_hex_version__,16)) or \
+         (int(SLURM_INC_VER,16) > int(__max_slurm_hex_version__,16)):
+ 
+-        fatal("Build - Incorrect slurm version detected, require Slurm-%s to slurm-%s" % (
++        warn("Build - Incorrect slurm version detected, require Slurm-%s to slurm-%s" % (
+             inc_vers2str(__min_slurm_hex_version__), inc_vers2str(__max_slurm_hex_version__)
+         ))
+-        sys.exit(-1)
+ 
+     # Test for libslurm in lib64 and then lib
+     SLURM_LIB = check_libPath(SLURM_LIB)
