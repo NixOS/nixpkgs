@@ -1,9 +1,10 @@
-{ lib, bundlerEnv, ruby }:
+{ lib, bundlerApp }:
 
-bundlerEnv {
-  inherit ruby;
+bundlerApp {
   pname = "overcommit";
   gemdir = ./.;
+
+  exes = [ "overcommit" ];
 
   meta = with lib; {
     description = "A fully configurable and extendable Git hook manager";

@@ -301,6 +301,36 @@ in
     '';
   };
 
+  overcommit = { gemName, version, ... }: {
+    # Overcommit installs Ruby scripts that require the overcommit gem
+    # when run. To accomodate this, we replace the scripts in the
+    # overcommit source's template directory with wrappers that set the
+    # appropriate RubyGems environment variables to allow the scripts to
+    # locate overcommit and its dependencies.
+    #
+    # Additionally, the overcommit scripts rely on the value of $0.
+    # In Ruby, $0 is the script being run, rather than the value of
+    # argv[0] given to the interpreter, so makeWrapper can't be used,
+    # even with --argv0. Instead, we have to use a custom wrapper,
+    # written in Ruby, that loads the code into the wrapper script,
+    # rather than execing into the wrapped hook as normal.
+    preFixup = ''
+      hooksDir="$GEM_HOME/gems/${gemName}-${version}/template-dir/hooks"
+      for hook in $(find "$hooksDir" -type f -executable); do
+          hidden="$(dirname "$hook")/.$(basename "$hook")-wrapped"
+          mv "$hook" "$hidden"
+          cat >"$hook" <<EOF
+      #! $(command -v ruby) --disable-gems
+      ENV["GEM_PATH"] = %q{$GEM_PATH}
+      ENV["GEM_HOME"] = %q{$GEM_HOME}
+      require "rubygems"
+      load %q{$hidden}
+      EOF
+          chmod +x "$hook"
+      done
+    '';
+  };
+
   ovirt-engine-sdk = attrs: {
     buildInputs = [ curl libxml2 ];
   };
