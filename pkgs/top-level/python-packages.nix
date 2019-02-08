@@ -5073,6 +5073,8 @@ in {
 
   yowsup = callPackage ../development/python-modules/yowsup { };
 
+  yubico-client = callPackage ../development/python-modules/yubico-client { };
+
   wptserve = callPackage ../development/python-modules/wptserve { };
 
   yenc = callPackage ../development/python-modules/yenc { };
