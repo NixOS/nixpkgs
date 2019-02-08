@@ -19,6 +19,10 @@ let
       ];
     }).config.system.build.openstackImage;
 
+  sshKeys = import ./ssh-keys.nix pkgs;
+  snakeOilPrivateKey = sshKeys.snakeOilPrivateKey.text;
+  snakeOilPublicKey = sshKeys.snakeOilPublicKey;
+
 in {
   metadata = makeEc2Test {
     name = "openstack-ec2-metadata";

@@ -41,6 +41,10 @@ let
       ];
     }).config.system.build.amazonImage;
 
+  sshKeys = import ./ssh-keys.nix pkgs;
+  snakeOilPrivateKey = sshKeys.snakeOilPrivateKey.text;
+  snakeOilPublicKey = sshKeys.snakeOilPublicKey;
+
 in {
   boot-ec2-nixops = makeEc2Test {
     name         = "nixops-userdata";

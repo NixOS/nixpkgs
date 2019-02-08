@@ -46,16 +46,4 @@ with pkgs.lib;
           ${script}
         '';
     };
-
-  snakeOilPrivateKey = ''
-    -----BEGIN OPENSSH PRIVATE KEY-----
-    b3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAAAMwAAAAtzc2gtZW
-    QyNTUxOQAAACDEPmwZv5dDPrMUaq0dDP+6eBTTe+QNrz14KBEIdhHd1QAAAJDufJ4S7nye
-    EgAAAAtzc2gtZWQyNTUxOQAAACDEPmwZv5dDPrMUaq0dDP+6eBTTe+QNrz14KBEIdhHd1Q
-    AAAECgwbDlYATM5/jypuptb0GF/+zWZcJfoVIFBG3LQeRyGsQ+bBm/l0M+sxRqrR0M/7p4
-    FNN75A2vPXgoEQh2Ed3VAAAADEVDMiB0ZXN0IGtleQE=
-    -----END OPENSSH PRIVATE KEY-----
-  '';
-
-  snakeOilPublicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMQ+bBm/l0M+sxRqrR0M/7p4FNN75A2vPXgoEQh2Ed3V EC2 test key";
 }
