@@ -113,6 +113,7 @@
   ./programs/nm-applet.nix
   ./programs/npm.nix
   ./programs/oblogout.nix
+  ./programs/php.nix
   ./programs/plotinus.nix
   ./programs/qt5ct.nix
   ./programs/screen.nix
