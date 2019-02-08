@@ -55,6 +55,7 @@ stdenv.mkDerivation rec {
     gnome3.gtksourceviewmm
     cairomm
     json-glib
+    gnome3.defaultIconTheme
   ];
 
   # interface type can be where <type> is either gtk, qt5, qt4
