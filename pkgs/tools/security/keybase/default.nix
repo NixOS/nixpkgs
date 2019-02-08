@@ -5,7 +5,7 @@
 
 buildGoPackage rec {
   name = "keybase-${version}";
-  version = "2.13.1";
+  version = "3.0.0";
 
   goPackagePath = "github.com/keybase/client";
   subPackages = [ "go/keybase" ];
@@ -14,7 +14,7 @@ buildGoPackage rec {
 
   src = fetchurl {
     url = "https://github.com/keybase/client/archive/v${version}.tar.gz";
-    sha256 = "0avq87y7cs3jipl444ssz1zd5jygpks20hls0fkqxxaikkpdsy4v";
+    sha256 = "1mxzihgd3qfahlmnfrpbg2kbixbjmkajrl964kaxmihrkx0fylvf";
   };
 
   buildInputs = lib.optionals stdenv.isDarwin [
