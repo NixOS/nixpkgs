@@ -14,6 +14,7 @@ buildGoPackage rec {
     sha256 = "1c1y0n1yxcaxvhlsj7b0wvhi934b5g0s1mi46hh5amb9j3dhgq1c";
   };
 
+  subPackages = ["."];
   goDeps = ./deps.nix;
 
   meta = {
