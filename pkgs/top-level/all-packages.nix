@@ -21499,6 +21499,8 @@ in
 
   bftools = callPackage ../applications/science/biology/bftools { };
 
+  cmtk = callPackage ../applications/science/biology/cmtk { }; 
+
   conglomerate = callPackage ../applications/science/biology/conglomerate { };
 
   dcm2niix = callPackage ../applications/science/biology/dcm2niix { };
