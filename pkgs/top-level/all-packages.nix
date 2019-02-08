@@ -629,6 +629,8 @@ in
 
   bunny = callPackage ../tools/package-management/bunny { };
 
+  chezmoi = callPackage ../tools/misc/chezmoi { };
+
   clair = callPackage ../tools/admin/clair { };
 
   cloud-sql-proxy = callPackage ../tools/misc/cloud-sql-proxy { };
