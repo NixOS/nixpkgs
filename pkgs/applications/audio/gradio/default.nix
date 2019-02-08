@@ -4,7 +4,6 @@
 , desktop-file-utils
 , glib
 , gtk3
-, intltool
 , libsoup
 , json-glib
 , wrapGAppsHook
@@ -15,11 +14,10 @@
 , gst_all_1
 , gst_plugins ? with gst_all_1; [ gst-plugins-good gst-plugins-ugly ]
 }:
-let
-  version = "7.2";
 
-in stdenv.mkDerivation rec {
-  name = "gradio-${version}";
+stdenv.mkDerivation rec {
+  pname = "gradio";
+  version = "7.2";
 
   src = fetchFromGitHub {
     owner = "haecker-felix";
@@ -37,11 +35,11 @@ in stdenv.mkDerivation rec {
 
     python3
   ];
+
   buildInputs = [
     sqlite
 
     glib
-    intltool
     libsoup
     json-glib
 
@@ -51,11 +49,10 @@ in stdenv.mkDerivation rec {
 
     wrapGAppsHook
     desktop-file-utils
-    gsettings-desktop-schemas
   ] ++ gst_plugins;
 
-  enableParallelBuilding = true;
   postInstall = ''
+    # Running only needed commands from disabled in patchPhase meson_post_install.sh
     glib-compile-schemas "$out"/share/glib-2.0/schemas
   '';
 
