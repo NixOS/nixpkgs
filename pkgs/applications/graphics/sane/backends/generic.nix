@@ -24,7 +24,8 @@ stdenv.mkDerivation {
     ++ stdenv.lib.optional (libusb1 != null) "--enable-libusb_1_0"
     ;
 
-  buildInputs = [ avahi libusb1 libv4l net_snmp libpng ];
+  buildInputs = [ avahi libusb1 net_snmp libpng ]
+    ++ stdenv.lib.optional (!stdenv.isDarwin) libv4l;
   nativeBuildInputs = [ gettext pkgconfig ];
   enableParallelBuilding = true;
 
@@ -72,6 +73,6 @@ stdenv.mkDerivation {
     license = licenses.gpl2Plus;
 
     maintainers = with maintainers; [ peti ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

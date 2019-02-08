@@ -1,4 +1,6 @@
-{ stdenv, fetchurl, fetchpatch, autoconf213, pkgconfig, perl, python2, zip, which, readline, icu, zlib, nspr }:
+{ stdenv, lib, fetchurl, fetchpatch, darwin
+, autoconf213, pkgconfig, perl, python2, zip, which, readline, icu, zlib, nspr
+}:
 
 let
   version = "52.9.0";
@@ -13,7 +15,8 @@ in stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ];
   setOutputFlags = false; # Configure script only understands --includedir
 
-  buildInputs = [ readline icu zlib nspr ];
+  buildInputs = [ readline icu zlib nspr ]
+    ++ lib.optional stdenv.isDarwin darwin.libobjc;
   nativeBuildInputs = [ autoconf213 pkgconfig perl which python2 zip ];
 
   # Apparently this package fails to build correctly with modern compilers, which at least
@@ -30,6 +33,10 @@ in stdenv.mkDerivation rec {
       sha256 = "18wkss0agdyff107p5lfflk72qiz350xqw2yqc353alkx4fsfpz0";
     })
   ];
+
+  postPatch = lib.optionalString stdenv.isDarwin ''
+    substituteInPlace js/src/jsmath.cpp --replace 'defined(HAVE___SINCOS)' 0
+  '';
 
   preConfigure = ''
     export CXXFLAGS="-fpermissive"
@@ -49,7 +56,7 @@ in stdenv.mkDerivation rec {
     "--with-intl-api"
     "--enable-readline"
     "--enable-shared-js"
-  ] ++ stdenv.lib.optional stdenv.hostPlatform.isMusl "--disable-jemalloc";
+  ] ++ lib.optional stdenv.hostPlatform.isMusl "--disable-jemalloc";
 
   enableParallelBuilding = true;
 
@@ -64,6 +71,6 @@ in stdenv.mkDerivation rec {
     homepage = https://developer.mozilla.org/en/SpiderMonkey;
     license = licenses.gpl2; # TODO: MPL/GPL/LGPL tri-license.
     maintainers = [ maintainers.abbradar ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

@@ -66,8 +66,11 @@ stdenv.mkDerivation rec {
     homepage = https://developer.mozilla.org/en/SpiderMonkey;
     # TODO: MPL/GPL/LGPL tri-license.
     maintainers = [ maintainers.goibhniu ];
-    platforms = platforms.linux;
     broken = stdenv.isAarch64; # 2018-08-21, broken since 2017-03-08
+
+    # Can't build on Darwin due to
+    # https://bugzilla.mozilla.org/show_bug.cgi?id=287248
+    platforms = platforms.linux;
   };
 }
 
