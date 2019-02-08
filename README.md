@@ -31,6 +31,7 @@ imports = [
 | [Apple MacBook Pro 10,1][]        | `<nixos-hardware/apple/macbook-pro/10-1>`    |
 | Apple MacBook Pro 12,1            | `<nixos-hardware/apple/macbook-pro/12-1>`    |
 | BeagleBoard PocketBeagle          | `<nixos-hardware/beagleboard/pocketbeagle>`  |
+| [Dell XPS 13 9380][]              | `<nixos-hardware/dell/xps/13-9380>`          |
 | [Dell XPS 13 9370][]              | `<nixos-hardware/dell/xps/13-9370>`          |
 | [Dell XPS 15 9550][]              | `<nixos-hardware/dell/xps/15-9550>`          |
 | [Inverse Path USB armory][]       | `<nixos-hardware/inversepath/usbarmory>`     |
@@ -59,6 +60,7 @@ imports = [
 
 [Acer Aspire 4810T]: acer/aspire/4810t
 [Apple MacBook Pro 10,1]: apple/macbook-pro/10-1
+[Dell XPS 13 9380]: dell/xps/13-9380
 [Dell XPS 13 9370]: dell/xps/13-9370
 [Dell XPS 15 9550]: dell/xps/15-9550
 [Inverse Path USB armory]: inversepath/usbarmory
