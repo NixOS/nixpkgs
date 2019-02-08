@@ -4,7 +4,7 @@
       version="5.0"
       xml:id="ch-configuration">
  <title>Configuration</title>
- <partintro>
+ <partintro xml:id="ch-configuration-intro">
   <para>
    This chapter describes how to configure various aspects of a NixOS machine
    through the configuration file

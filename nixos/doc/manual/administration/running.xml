@@ -4,7 +4,7 @@
       version="5.0"
       xml:id="ch-running">
  <title>Administration</title>
- <partintro>
+ <partintro xml:id="ch-running-intro">
   <para>
    This chapter describes various aspects of managing a running NixOS system,
    such as how to use the <command>systemd</command> service manager.
