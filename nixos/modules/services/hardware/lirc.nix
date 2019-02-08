@@ -19,29 +19,12 @@ in {
           [lircd]
           nodaemon = False
         '';
-        default = ''
-          [lircd]
-          nodaemon        = False
-          driver          = default
-          device          = /dev/lirc0
-          output          = /run/lirc/lircd
-          pidfile         = /run/lirc/lircd.pid
-          plugindir       = ${pkgs.lirc}/lib/lirc/plugins
-          permission      = 666
-          allow-simulate  = No
-          repeat-max      = 600
-
-          [lircmd]
-          uinput          = False
-          nodaemon        = False
-        '';
         description = "LIRC default options descriped in man:lircd(8) (<filename>lirc_options.conf</filename>)";
       };
 
       configs = mkOption {
         type = types.listOf types.lines;
         description = "Configurations for lircd to load, see man:lircd.conf(5) for details (<filename>lircd.conf</filename>)";
-        default = [];
       };
 
       extraArguments = mkOption {
