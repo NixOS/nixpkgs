@@ -4150,6 +4150,8 @@ in
   megacli = callPackage ../tools/misc/megacli { };
 
   megatools = callPackage ../tools/networking/megatools { };
+  
+  megasync = callPackage ../applications/misc/megasync { };
 
   memo = callPackage ../applications/misc/memo { };
 
