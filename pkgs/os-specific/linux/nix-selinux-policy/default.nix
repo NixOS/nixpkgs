@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Nix Store SELinux Policy";
-    license = licenses.gpl3Plus;
+    license = licenses.mit;
     platforms = platforms.linux;
     maintainers = [ maintainers.e-user ];
   };
