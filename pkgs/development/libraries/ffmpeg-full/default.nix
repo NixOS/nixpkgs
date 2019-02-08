@@ -228,7 +228,7 @@ assert libxcbxfixesExtlib -> libxcb != null;
 assert libxcbshapeExtlib -> libxcb != null;
 assert openglExtlib -> libGLU_combined != null;
 assert opensslExtlib -> gnutls == null && openssl != null && nonfreeLicensing;
-assert nvenc -> nvidia-video-sdk != null && nonfreeLicensing;
+assert nvenc -> nvidia-video-sdk != null;
 
 stdenv.mkDerivation rec {
   name = "ffmpeg-full-${version}";
