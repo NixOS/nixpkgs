@@ -8596,6 +8596,8 @@ in
       binutils = binutils;
     };
 
+  dive = callPackage ../development/tools/dive { };
+
   doclifter = callPackage ../development/tools/misc/doclifter { };
 
   docutils = with python3Packages; toPythonApplication docutils;
