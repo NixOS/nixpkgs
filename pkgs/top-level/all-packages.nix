@@ -2504,6 +2504,8 @@ in
 
   exa = callPackage ../tools/misc/exa { };
 
+  excelCompare = callPackage ../tools/text/excelCompare { };
+
   exempi = callPackage ../development/libraries/exempi {
     stdenv = if stdenv.isi686 then overrideCC stdenv gcc6 else stdenv;
   };
