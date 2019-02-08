@@ -690,6 +690,8 @@ in
 
   git-fire = callPackage ../tools/misc/git-fire { };
 
+  git-town = callPackage ../tools/misc/git-town { };
+
   github-changelog-generator = callPackage ../development/tools/github-changelog-generator { };
 
   gitless = callPackage ../applications/version-management/gitless { };
