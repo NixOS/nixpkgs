@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "paste";
-  version = "3.0.5";
+  version = "3.0.6";
 
   src = fetchPypi {
     pname = "Paste";
     inherit version;
-    sha256 = "1bb2068807ce3592d313ce9b1a25a7ac842a504e7e3b005027193d17a043d1a8";
+    sha256 = "14lbi9asn5agsdf7r97prkjpz7amgmp529lbvfhf0nv881xczah6";
   };
 
   propagatedBuildInputs = [ six ];

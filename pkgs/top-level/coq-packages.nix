@@ -17,6 +17,7 @@ let
       Cheerios = callPackage ../development/coq-modules/Cheerios {};
       CoLoR = callPackage ../development/coq-modules/CoLoR {};
       coq-ext-lib = callPackage ../development/coq-modules/coq-ext-lib {};
+      coq-extensible-records = callPackage ../development/coq-modules/coq-extensible-records {};
       coq-haskell = callPackage ../development/coq-modules/coq-haskell { };
       coqprime = callPackage ../development/coq-modules/coqprime {};
       coquelicot = callPackage ../development/coq-modules/coquelicot {};
@@ -88,7 +89,7 @@ in rec {
     version = "8.8.2";
   };
   coq_8_9 = callPackage ../applications/science/logic/coq {
-    version = "8.9+beta1";
+    version = "8.9.0";
   };
 
   coqPackages_8_5 = mkCoqPackages coq_8_5;

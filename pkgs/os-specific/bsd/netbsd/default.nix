@@ -548,6 +548,12 @@ let
     NIX_CFLAGS_COMPILE = "-DYESSTR=__YESSTR -DNOSTR=__NOSTR";
   };
 
+  column = netBSDDerivation {
+    path = "usr.bin/column";
+    version = "8.0";
+    sha256 = "0r6b0hjn5ls3j3sv6chibs44fs32yyk2cg8kh70kb4cwajs4ifyl";
+  };
+
   };
 
 in nbPackages

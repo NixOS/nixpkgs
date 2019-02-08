@@ -1,4 +1,8 @@
-{ stdenv, fetchurl, readline }:
+{ stdenv, fetchurl, readline
+, self
+, callPackage
+, packageOverrides ? (self: super: {})
+}:
 
 let
   dsoPatch = fetchurl {
@@ -6,6 +10,7 @@ let
     sha256 = "11fcyb4q55p4p7kdb8yp85xlw8imy14kzamp2khvcyxss4vw8ipw";
     name = "lua-arch.patch";
   };
+  luaPackages = callPackage ../../lua-modules {lua=self; overrides=packageOverrides;};
 in
 stdenv.mkDerivation rec {
   name = "lua-${version}";
@@ -16,6 +21,10 @@ stdenv.mkDerivation rec {
     url = "https://www.lua.org/ftp/${name}.tar.gz";
     sha256 = "2640fc56a795f29d28ef15e13c34a47e223960b0240e8cb0a82d9b0738695333";
   };
+
+  LuaPathSearchPaths    = luaPackages.getLuaPathList luaversion;
+  LuaCPathSearchPaths   = luaPackages.getLuaCPathList luaversion;
+  setupHook = luaPackages.lua-setup-hook LuaPathSearchPaths LuaCPathSearchPaths;
 
   buildInputs = [ readline ];
 
@@ -39,6 +48,16 @@ stdenv.mkDerivation rec {
     rmdir $out/{share,lib}/lua/5.1 $out/{share,lib}/lua
   '';
 
+  passthru = rec {
+    buildEnv = callPackage ./wrapper.nix {
+      lua=self;
+      inherit (luaPackages) requiredLuaModules;
+    };
+    withPackages = import ./with-packages.nix { inherit buildEnv luaPackages;};
+    pkgs = luaPackages;
+    interpreter = "${self}/bin/lua";
+  };
+
   meta = {
     homepage = http://www.lua.org;
     description = "Powerful, fast, lightweight, embeddable scripting language";
@@ -51,6 +70,7 @@ stdenv.mkDerivation rec {
       for configuration, scripting, and rapid prototyping.
     '';
     license = stdenv.lib.licenses.mit;
+    platforms = with stdenv.lib.platforms; linux ++ darwin;
     hydraPlatforms = stdenv.lib.platforms.linux;
   };
 }

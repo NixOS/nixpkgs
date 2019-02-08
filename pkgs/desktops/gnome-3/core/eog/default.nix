@@ -25,6 +25,15 @@ in stdenv.mkDerivation rec {
     patchShebangs meson_post_install.py
   '';
 
+  preFixup = ''
+    gappsWrapperArgs+=(
+      # Thumbnailers
+      --prefix XDG_DATA_DIRS : "${gdk_pixbuf}/share"
+      --prefix XDG_DATA_DIRS : "${librsvg}/share"
+      --prefix XDG_DATA_DIRS : "${shared-mime-info}/share"
+    )
+  '';
+
   passthru = {
     updateScript = gnome3.updateScript {
       packageName = pname;

@@ -3,6 +3,10 @@
 # pointer width, but some expect to use 32-bit integers always
 # (for compatibility with reference BLAS).
 , blas64 ? null
+
+# Select a specifc optimization target (other than the default)
+# See https://github.com/xianyi/OpenBLAS/blob/develop/TargetList.txt
+, target ? null
 }:
 
 with stdenv.lib;
@@ -10,11 +14,13 @@ with stdenv.lib;
 let blas64_ = blas64; in
 
 let
+  setTarget = x: if target == null then x else target;
+
   # To add support for a new platform, add an element to this set.
   configs = {
     armv6l-linux = {
       BINARY = "32";
-      TARGET = "ARMV6";
+      TARGET = setTarget "ARMV6";
       DYNAMIC_ARCH = "0";
       CC = "gcc";
       USE_OPENMP = "1";
@@ -22,7 +28,7 @@ let
 
     armv7l-linux = {
       BINARY = "32";
-      TARGET = "ARMV7";
+      TARGET = setTarget "ARMV7";
       DYNAMIC_ARCH = "0";
       CC = "gcc";
       USE_OPENMP = "1";
@@ -30,7 +36,7 @@ let
 
     aarch64-linux = {
       BINARY = "64";
-      TARGET = "ARMV8";
+      TARGET = setTarget "ARMV8";
       DYNAMIC_ARCH = "1";
       CC = "gcc";
       USE_OPENMP = "1";
@@ -38,7 +44,7 @@ let
 
     i686-linux = {
       BINARY = "32";
-      TARGET = "P2";
+      TARGET = setTarget "P2";
       DYNAMIC_ARCH = "1";
       CC = "gcc";
       USE_OPENMP = "1";
@@ -46,7 +52,7 @@ let
 
     x86_64-darwin = {
       BINARY = "64";
-      TARGET = "ATHLON";
+      TARGET = setTarget "ATHLON";
       DYNAMIC_ARCH = "1";
       # Note that clang is available through the stdenv on OSX and
       # thus is not an explicit dependency.
@@ -57,7 +63,7 @@ let
 
     x86_64-linux = {
       BINARY = "64";
-      TARGET = "ATHLON";
+      TARGET = setTarget "ATHLON";
       DYNAMIC_ARCH = "1";
       CC = "gcc";
       USE_OPENMP = "1";

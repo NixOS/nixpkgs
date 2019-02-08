@@ -1,6 +1,6 @@
 { lib, buildGoPackage, fetchFromGitHub, ... }:
 
-let version = "0.6.0"; in
+let version = "0.9.1"; in
 
 buildGoPackage {
   name = "kubecfg-${version}";
@@ -9,7 +9,7 @@ buildGoPackage {
     owner = "ksonnet";
     repo = "kubecfg";
     rev = "v${version}";
-    sha256 = "12kv1p707kdxjx5l8rcikd1gjwp5xjxdmmyvlpnvyagrphgrwpsf";
+    sha256 = "010k33arxa4spaq923iazsisxgsaj8c7w4z250y9yrch8xxd74bi";
   };
 
   goPackagePath = "github.com/ksonnet/kubecfg";

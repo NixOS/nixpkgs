@@ -118,7 +118,6 @@ mapAliases ({
   googleAuthenticator = google-authenticator; # added 2016-10-16
   grantlee5 = libsForQt5.grantlee;  # added 2015-12-19
   gsettings_desktop_schemas = gsettings-desktop-schemas; # added 2018-02-25
-  gst_ffmpeg = gst-ffmpeg;  # added 2017-02
   gst_plugins_bad = gst-plugins-bad;  # added 2017-02
   gst_plugins_base = gst-plugins-base;  # added 2017-02
   gst_plugins_good = gst-plugins-good;  # added 2017-02
@@ -223,6 +222,7 @@ mapAliases ({
   perlXMLParser = perlPackages.XMLParser; # added 2018-10-12
   perlArchiveCpio = perlPackages.ArchiveCpio; # added 2018-10-12
   pgp-tools = signing-party; # added 2017-03-26
+  pg_tmp = ephemeralpg; # added 2018-01-16
   pidgin-with-plugins = pidgin; # added 2016-06
   pidginlatex = pidgin-latex; # added 2018-01-08
   pidginlatexSF = pidgin-latex; # added 2014-11-02
@@ -239,6 +239,21 @@ mapAliases ({
   postgresql95 = postgresql_9_5;
   postgresql96 = postgresql_9_6;
   postgresql100 = throw "deprecated 2018-10-21: use postgresql_10 instead";
+  # postgresql plugins
+  pgjwt = postgresqlPackages.pgjwt;
+  pg_repack = postgresqlPackages.pg_repack;
+  pgroonga = postgresqlPackages.pgroonga;
+  pg_similarity = postgresqlPackages.pg_similarity;
+  pgtap = postgresqlPackages.pgtap;
+  plv8 = postgresqlPackages.plv8;
+  timescaledb = postgresqlPackages.timescaledb;
+  tsearch_extras = postgresqlPackages.tsearch_extras;
+  cstore_fdw = postgresqlPackages.cstore_fdw;
+  pg_hll = postgresqlPackages.pg_hll;
+  pg_cron = postgresqlPackages.pg_cron;
+  pg_topn = postgresqlPackages.pg_topn;
+  postgis = postgresqlPackages.postgis;
+  # end
   procps-ng = procps; # added 2018-06-08
   prometheus-statsd-bridge = prometheus-statsd-exporter;  # added 2017-08-27
   pulseaudioLight = pulseaudio; # added 2018-04-25
@@ -270,6 +285,7 @@ mapAliases ({
   saneBackends = sane-backends; # added 2016-01-02
   saneBackendsGit = sane-backends-git; # added 2016-01-02
   saneFrontends = sane-frontends; # added 2016-01-02
+  sapic = throw "deprecated 2019-1-19: sapic is bundled with 'tamarin-prover' now";
   scim = sc-im; # added 2016-01-22
   scollector = bosun; # added 2018-04-25
   shared_mime_info = shared-mime-info; # added 2018-02-25
@@ -340,6 +356,7 @@ mapAliases ({
   xlibs = xorg; # added 2015-09
   xpraGtk3 = xpra; # added 2018-09-13
   youtubeDL = youtube-dl;  # added 2014-10-26
+  zdfmediathk = mediathekview; # added 2019-01-19
 
   # TODO(ekleog): add ‘wasm’ alias to ‘ocamlPackages.wasm’ after 19.03
   # branch-off

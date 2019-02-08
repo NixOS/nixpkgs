@@ -16,8 +16,8 @@
 , zip ? null, unzip ? null, pkgconfig ? null
 , gtk2 ? null, libart_lgpl ? null
 , libX11 ? null, libXt ? null, libSM ? null, libICE ? null, libXtst ? null
-, libXrender ? null, xproto ? null, renderproto ? null, xextproto ? null
-, libXrandr ? null, libXi ? null, inputproto ? null, randrproto ? null
+, libXrender ? null, xorgproto ? null
+, libXrandr ? null, libXi ? null
 , x11Support ? langJava
 , enableMultilib ? false
 , enablePlugin ? stdenv.hostPlatform == stdenv.buildPlatform # Whether to support user-supplied plug-ins
@@ -78,7 +78,7 @@ let version = "6.5.0";
 
     xlibs = [
       libX11 libXt libSM libICE libXtst libXrender libXrandr libXi
-      xproto renderproto xextproto inputproto randrproto
+      xorgproto
     ];
 
     javaAwtGtk = langJava && x11Support;

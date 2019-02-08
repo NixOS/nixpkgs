@@ -35,11 +35,21 @@ stdenv.mkDerivation rec {
       url = "https://bug757142.bugzilla-attachments.gnome.org/attachment.cgi?id=344123";
       sha256 = "0g6fhqcv8spfy3mfmxpyji93k8d4p4q4fz1v9a1c1cgcwkz41d7p";
     })
-    # https://gitlab.gnome.org/GNOME/gtk/issues/1521
+    # 3.24.2: https://gitlab.gnome.org/GNOME/gtk/issues/1521
     (fetchpatch {
       url = https://gitlab.gnome.org/GNOME/gtk/commit/2905fc861acda3d134a198e56ef2f6c962ad3061.patch;
       sha256 = "0y8ljny59kgdhrcfpimi2r082bax60d5kflw1qj9k1mnzjcvjjwl";
     })
+    # 3.24.2: https://gitlab.gnome.org/GNOME/gtk/issues/1523
+    (fetchpatch {
+      url = https://gitlab.gnome.org/GNOME/gtk/commit/e3a1593a0984cc0156ec1892a46af8f256a64878.patch;
+      sha256 = "0akvp1r8xlzf5amk9gmk7b5sabr1wbmg3ak15rppsid7nf9f5dqf";
+    })
+  ] ++ optionals stdenv.isDarwin [
+    # X11 module requires <gio/gdesktopappinfo.h> which is not installed on Darwin
+    # let’s drop that dependency in similar way to how other parts of the library do it
+    # e.g. https://gitlab.gnome.org/GNOME/gtk/blob/3.24.4/gtk/gtk-launch.c#L31-33
+    ./3.0-darwin-x11.patch
   ];
 
   buildInputs = [ libxkbcommon epoxy json-glib isocodes ]

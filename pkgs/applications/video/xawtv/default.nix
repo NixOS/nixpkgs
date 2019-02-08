@@ -1,5 +1,5 @@
-{stdenv, fetchurl, ncurses, libjpeg, libX11, libXt, alsaLib, aalib, libXft, xproto, libv4l
-, libFS, fontsproto, libXaw, libXpm, libXext, libSM, libICE, perl, xextproto, linux}:
+{stdenv, fetchurl, ncurses, libjpeg, libX11, libXt, alsaLib, aalib, libXft, xorgproto, libv4l
+, libFS, libXaw, libXpm, libXext, libSM, libICE, perl, linux}:
 
 stdenv.mkDerivation rec {
   name = "xawtv-3.105";
@@ -18,8 +18,8 @@ stdenv.mkDerivation rec {
 
   makeFlags = "SUID_ROOT= DESTDIR=\$(out) PREFIX=";
 
-  buildInputs = [ncurses libjpeg libX11 libXt libXft xproto libFS perl alsaLib aalib
-                 fontsproto libXaw libXpm libXext libSM libICE xextproto libv4l];
+  buildInputs = [ncurses libjpeg libX11 libXt libXft xorgproto libFS perl alsaLib aalib
+                 libXaw libXpm libXext libSM libICE libv4l];
 
   meta = {
     description = "TV application for Linux with apps and tools such as a teletext browser";

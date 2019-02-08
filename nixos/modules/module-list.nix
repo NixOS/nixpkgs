@@ -101,6 +101,7 @@
   ./programs/gnupg.nix
   ./programs/gphoto2.nix
   ./programs/iftop.nix
+  ./programs/iotop.nix
   ./programs/java.nix
   ./programs/kbdlight.nix
   ./programs/less.nix
@@ -248,6 +249,7 @@
   ./services/desktops/gnome3/at-spi2-core.nix
   ./services/desktops/gnome3/chrome-gnome-shell.nix
   ./services/desktops/gnome3/evolution-data-server.nix
+  ./services/desktops/gnome3/file-roller.nix
   ./services/desktops/gnome3/gnome-disks.nix
   ./services/desktops/gnome3/gnome-documents.nix
   ./services/desktops/gnome3/gnome-keyring.nix
@@ -432,6 +434,7 @@
   ./services/misc/uhub.nix
   ./services/misc/weechat.nix
   ./services/misc/xmr-stak.nix
+  ./services/misc/zoneminder.nix
   ./services/misc/zookeeper.nix
   ./services/monitoring/alerta.nix
   ./services/monitoring/apcupsd.nix
@@ -679,6 +682,7 @@
   ./services/security/hologram-server.nix
   ./services/security/hologram-agent.nix
   ./services/security/munge.nix
+  ./services/security/nginx-sso.nix
   ./services/security/oauth2_proxy.nix
   ./services/security/oauth2_proxy_nginx.nix
   ./services/security/physlock.nix

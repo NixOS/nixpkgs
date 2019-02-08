@@ -21,6 +21,11 @@
 , vlc
 , mbedtls
 
+, scriptingSupport ? true
+, luajit
+, swig
+, python3
+
 , alsaSupport ? false
 , alsaLib
 , pulseaudioSupport ? false
@@ -68,6 +73,7 @@ in stdenv.mkDerivation rec {
                   makeWrapper
                   mbedtls
                 ]
+                ++ optional scriptingSupport [ luajit swig python3 ]
                 ++ optional alsaSupport alsaLib
                 ++ optional pulseaudioSupport libpulseaudio;
 

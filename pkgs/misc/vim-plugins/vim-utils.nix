@@ -486,4 +486,12 @@ rec {
       });
     vimrcConfig.vam.pluginDictionaries = [ { names = [ "vim-trailing-whitespace" ]; } ];
   };
+
+  # system remote plugin manifest should be generated, deoplete should be usable
+  # without the user having to do `UpdateRemotePlugins`. To test, launch neovim
+  # and do `:call deoplete#enable()`. It will print an error if the remote
+  # plugin is not registered.
+  test_nvim_with_remote_plugin = neovim.override {
+    configure.pathogen.pluginNames = with vimPlugins; [ deoplete-nvim ];
+  };
 }

@@ -2,9 +2,9 @@
 
 let
 
-  major = "2018";
-  minor = "11";
-  patch = "16";
+  major = "2019";
+  minor = "01";
+  patch = "19";
 
   version = "${major}.${minor}.${patch}";
 
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     owner = "daid";
     repo = "EmptyEpsilon";
     rev = "EE-${version}";
-    sha256 = "0848rxa9xwbz573b5r5qc5bpcf6pipis4gkkszfgkj1zmdhyib6b";
+    sha256 = "082v27w3n4jdm4a5884607rwsw4s00cnpqmh7bsdg9q3l29jpygn";
   };
 
   nativeBuildInputs = [ cmake ];

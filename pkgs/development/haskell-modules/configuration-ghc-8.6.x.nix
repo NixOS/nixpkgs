@@ -47,13 +47,16 @@ self: super: {
   # Test suite does not compile.
   cereal = dontCheck super.cereal;
   data-clist = doJailbreak super.data-clist;  # won't cope with QuickCheck 2.12.x
+  dates = doJailbreak super.dates; # base >=4.9 && <4.12
   Diff = dontCheck super.Diff;
+  HaTeX = doJailbreak super.HaTeX; # containers >=0.4 && <0.6 is too tight; https://github.com/Daniel-Diaz/HaTeX/issues/126
   hpc-coveralls = doJailbreak super.hpc-coveralls; # https://github.com/guillaume-nargeot/hpc-coveralls/issues/82
   http-api-data = doJailbreak super.http-api-data;
   persistent-sqlite = dontCheck super.persistent-sqlite;
   psqueues = dontCheck super.psqueues;    # won't cope with QuickCheck 2.12.x
   system-fileio = dontCheck super.system-fileio;  # avoid dependency on broken "patience"
   unicode-transforms = dontCheck super.unicode-transforms;
+  wl-pprint-extras = doJailbreak super.wl-pprint-extras; # containers >=0.4 && <0.6 is too tight; https://github.com/ekmett/wl-pprint-extras/issues/17
   RSA = dontCheck super.RSA; # https://github.com/GaloisInc/RSA/issues/14
   monad-par = dontCheck super.monad-par;  # https://github.com/simonmar/monad-par/issues/66
   github = dontCheck super.github; # hspec upper bound exceeded; https://github.com/phadej/github/pull/341
@@ -65,7 +68,7 @@ self: super: {
   # Break out of "yaml >=0.10.4.0 && <0.11": https://github.com/commercialhaskell/stack/issues/4485
   stack = doJailbreak super.stack;
 
-  # Fix build with ghc 8.6.x.
-  git-annex = appendPatch super.git-annex ./patches/git-annex-fix-ghc-8.6.x-build.patch;
+  # https://github.com/pikajude/stylish-cabal/issues/11
+  stylish-cabal = markBrokenVersion "0.4.1.0" super.stylish-cabal;
 
 }

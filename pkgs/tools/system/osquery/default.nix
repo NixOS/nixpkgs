@@ -39,6 +39,10 @@ stdenv.mkDerivation rec {
     pkgconfig cmake pythonPackages.python pythonPackages.jinja2 doxygen fpm
   ];
 
+  NIX_LDFLAGS = [
+    "-lcrypto"
+  ];
+
   buildInputs = let
     gflags' = google-gflags.overrideAttrs (old: {
       cmakeFlags = stdenv.lib.filter (f: isNull (builtins.match ".*STATIC.*" f)) old.cmakeFlags;

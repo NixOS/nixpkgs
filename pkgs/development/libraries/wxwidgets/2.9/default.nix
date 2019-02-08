@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, gtk2, libXinerama, libSM, libXxf86vm, xf86vidmodeproto
+{ stdenv, fetchurl, pkgconfig, gtk2, libXinerama, libSM, libXxf86vm, xorgproto
 , gstreamer, gst-plugins-base, GConf, setfile
 , withMesa ? true, libGLU ? null, libGL ? null
 , compat24 ? false, compat26 ? true, unicode ? true
@@ -29,7 +29,7 @@ stdenv.mkDerivation {
   ];
 
   buildInputs =
-    [ gtk2 libXinerama libSM libXxf86vm xf86vidmodeproto gstreamer
+    [ gtk2 libXinerama libSM libXxf86vm xorgproto gstreamer
       gst-plugins-base GConf ]
     ++ optional withMesa libGLU
     ++ optionals stdenv.isDarwin [ setfile Carbon Cocoa Kernel QuickTime ];

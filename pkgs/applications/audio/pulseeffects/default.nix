@@ -31,6 +31,7 @@
 , zam-plugins
 , rubberband
 , mda_lv2
+, lsp-plugins
 , hicolor-icon-theme
 }:
 
@@ -38,6 +39,7 @@ let
   lv2Plugins = [
     calf # limiter, compressor exciter, bass enhancer and others
     mda_lv2 # loudness
+    lsp-plugins # delay
   ];
   ladspaPlugins = [
     rubberband # pitch shifting
@@ -45,13 +47,13 @@ let
   ];
 in stdenv.mkDerivation rec {
   pname = "pulseeffects";
-  version = "4.4.5";
+  version = "4.4.7";
 
   src = fetchFromGitHub {
     owner = "wwmm";
     repo = "pulseeffects";
     rev = "v${version}";
-    sha256 = "1dcly8rzbfnfqrl7biicbixdqgqazrwa4x8l3m3r8f4bf3sqpmhd";
+    sha256 = "14sxwy3mayzn9k5hy58mjzhxaj4wqxvs257xaj03mwvm48k7c7ia";
   };
 
   nativeBuildInputs = [

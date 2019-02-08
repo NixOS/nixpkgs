@@ -1,22 +1,15 @@
 { stdenv, fetchFromGitHub, fetchpatch, cmake, enableShared ? true }:
 
 stdenv.mkDerivation rec {
-  version = "5.2.1";
+  version = "5.3.0";
   name = "fmt-${version}";
 
   src = fetchFromGitHub {
     owner = "fmtlib";
     repo = "fmt";
     rev = "${version}";
-    sha256 = "1cd8yq8va457iir1hlf17ksx11fx2hlb8i4jml8gj1875pizm0pk";
+    sha256 = "1hl9s69a5ql5nckc0ifh2fzlgsgv1wsn6yhqkpnrhasqkhj0hgv4";
   };
-
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/fmtlib/fmt/commit/9d0c9c4bb145a286f725cd38c90331eee7addc7f.patch";
-      sha256 = "1gy93mb1s1mq746kxj4c564k2mppqp5khqdfa6im88rv29cvrl4y";
-    })
-  ];
 
   outputs = [ "out" "dev" ];
 

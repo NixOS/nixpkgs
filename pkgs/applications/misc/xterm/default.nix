@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs =
-    [ xorg.libXaw xorg.xproto xorg.libXt xorg.libXext xorg.libX11 xorg.libSM xorg.libICE
+    [ xorg.libXaw xorg.xorgproto xorg.libXt xorg.libXext xorg.libX11 xorg.libSM xorg.libICE
       ncurses freetype fontconfig pkgconfig xorg.libXft xorg.luit makeWrapper
     ];
 

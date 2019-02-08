@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, makeWrapper, jre, gawk }:
+{ stdenv, fetchurl, makeWrapper, jre_headless, gawk }:
 
 stdenv.mkDerivation rec {
   name = "nexus-${version}";
-  version = "3.14.0-04";
+  version = "3.15.0-01";
 
   src = fetchurl {
     url = "https://sonatype-download.global.ssl.fastly.net/nexus/3/nexus-${version}-unix.tar.gz";
-    sha256 = "1ql707672xhybmfajjmli9w0wcf1f26skq8i5kqirms2364wg35f";
+    sha256 = "0akizdljcjl1nh25k01wxvp5wp4i2jphsj0hh5rqbd0fk1pjivkv";
   };
 
   sourceRoot = name;
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     rm -fv $out/bin/nexus.bat
 
     wrapProgram $out/bin/nexus \
-      --set JAVA_HOME ${jre} \
+      --set JAVA_HOME ${jre_headless} \
       --set ALTERNATIVE_NAME "nexus" \
       --prefix PATH "${stdenv.lib.makeBinPath [ gawk ]}"
 

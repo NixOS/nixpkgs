@@ -4,7 +4,6 @@ let inherit (lib.lists) fold;
     inherit (lib.attrsets) recursiveUpdate;
 in
 rec {
-
 # aho-corasick-0.6.8
 
   crates.aho_corasick."0.6.8" = deps: { features?(features_.aho_corasick."0.6.8" deps {}) }: buildRustCrate {
@@ -1457,6 +1456,38 @@ rec {
 
 
 # end
+# serde-1.0.84
+
+  crates.serde."1.0.84" = deps: { features?(features_.serde."1.0.84" deps {}) }: buildRustCrate {
+    crateName = "serde";
+    version = "1.0.84";
+    authors = [ "Erick Tryzelaar <erick.tryzelaar@gmail.com>" "David Tolnay <dtolnay@gmail.com>" ];
+    sha256 = "1x40cvvkbkz592jflwbfbxhim3wxdqp9dy0qxjw13ra7q57b29gy";
+    build = "build.rs";
+    dependencies = mapFeatures features ([
+]);
+    features = mkFeatures (features."serde"."1.0.84" or {});
+  };
+  features_.serde."1.0.84" = deps: f: updateFeatures f (rec {
+    serde = fold recursiveUpdate {} [
+      { "1.0.84".default = (f.serde."1.0.84".default or true); }
+      { "1.0.84".serde_derive =
+        (f.serde."1.0.84".serde_derive or false) ||
+        (f.serde."1.0.84".derive or false) ||
+        (serde."1.0.84"."derive" or false); }
+      { "1.0.84".std =
+        (f.serde."1.0.84".std or false) ||
+        (f.serde."1.0.84".default or false) ||
+        (serde."1.0.84"."default" or false); }
+      { "1.0.84".unstable =
+        (f.serde."1.0.84".unstable or false) ||
+        (f.serde."1.0.84".alloc or false) ||
+        (serde."1.0.84"."alloc" or false); }
+    ];
+  }) [];
+
+
+# end
 # serde_derive-1.0.80
 
   crates.serde_derive."1.0.80" = deps: { features?(features_.serde_derive."1.0.80" deps {}) }: buildRustCrate {
@@ -1745,6 +1776,26 @@ rec {
 
 
 # end
+# toml-0.4.10
+
+  crates.toml."0.4.10" = deps: { features?(features_.toml."0.4.10" deps {}) }: buildRustCrate {
+    crateName = "toml";
+    version = "0.4.10";
+    authors = [ "Alex Crichton <alex@alexcrichton.com>" ];
+    sha256 = "0fs4kxl86w3kmgwcgcv23nk79zagayz1spg281r83w0ywf88d6f1";
+    dependencies = mapFeatures features ([
+      (crates."serde"."${deps."toml"."0.4.10"."serde"}" deps)
+    ]);
+  };
+  features_.toml."0.4.10" = deps: f: updateFeatures f (rec {
+    serde."${deps.toml."0.4.10".serde}".default = true;
+    toml."0.4.10".default = (f.toml."0.4.10".default or true);
+  }) [
+    (features_.serde."${deps."toml"."0.4.10"."serde"}" deps)
+  ];
+
+
+# end
 # toml-0.4.8
 
   crates.toml."0.4.8" = deps: { features?(features_.toml."0.4.8" deps {}) }: buildRustCrate {
@@ -1761,6 +1812,26 @@ rec {
     toml."0.4.8".default = (f.toml."0.4.8".default or true);
   }) [
     (features_.serde."${deps."toml"."0.4.8"."serde"}" deps)
+  ];
+
+
+# end
+# toml2nix-0.1.1
+
+  crates.toml2nix."0.1.1" = deps: { features?(features_.toml2nix."0.1.1" deps {}) }: buildRustCrate {
+    crateName = "toml2nix";
+    version = "0.1.1";
+    authors = [ "Pierre-Étienne Meunier <pierre-etienne.meunier@inria.fr>" ];
+    sha256 = "167qyylp0s76h7r0n99as3jwry5mrn5q1wxh2sdwh51d5qnnw6b2";
+    dependencies = mapFeatures features ([
+      (crates."toml"."${deps."toml2nix"."0.1.1"."toml"}" deps)
+    ]);
+  };
+  features_.toml2nix."0.1.1" = deps: f: updateFeatures f (rec {
+    toml."${deps.toml2nix."0.1.1".toml}".default = true;
+    toml2nix."0.1.1".default = (f.toml2nix."0.1.1".default or true);
+  }) [
+    (features_.toml."${deps."toml2nix"."0.1.1"."toml"}" deps)
   ];
 
 

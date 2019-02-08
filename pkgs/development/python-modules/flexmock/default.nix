@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "flexmock";
-  version = "0.10.2";
+  version = "0.10.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "fe95c8727f4db73dc8f2f7b4548bffe7992440a965fefd60da291abda5352c2b";
+    sha256 = "031c624pdqm7cc0xh4yz5k69gqxn2bbrjz13s17684q5shn0ik21";
   };
 
   checkInputs = [ pytest ];

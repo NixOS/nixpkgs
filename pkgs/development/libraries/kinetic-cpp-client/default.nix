@@ -54,6 +54,5 @@ stdenv.mkDerivation rec {
     description = "Code for producing C and C++ kinetic clients";
     license = licenses.lgpl21;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ wkennington ];
   };
 }

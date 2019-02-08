@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, xproto, libxcb
+{ stdenv, fetchFromGitHub, pkgconfig, xorgproto, libxcb
 , autoreconfHook, json-glib, gtk-doc, which
 , gobject-introspection
 }:
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook which pkgconfig ];
 
-  buildInputs = [ libxcb json-glib gtk-doc xproto gobject-introspection ];
+  buildInputs = [ libxcb json-glib gtk-doc xorgproto gobject-introspection ];
 
 
   preAutoreconf = ''

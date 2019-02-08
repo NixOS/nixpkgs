@@ -1,24 +1,37 @@
-{ lib, python3 }:
+# dateparser tests fail on pyton37: https://github.com/NixOS/nixpkgs/issues/52766
+{ lib, python36, glibcLocales }:
 
-python3.pkgs.buildPythonApplication rec {
+python36.pkgs.buildPythonApplication rec {
   pname = "homeassistant-cli";
-  version = "0.3.0";
+  version = "0.4.4";
 
-  src = python3.pkgs.fetchPypi {
+  src = python36.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "42d7cb008801d7a448b62aed1fc46dd450ee67397bf16faabb02f691417db4b2";
+    sha256 = "ad3722062ffb7b4fa730f61991b831dbf083e4e079c560993a023ce4bb11c55d";
   };
 
   postPatch = ''
     # Ignore pinned versions
-    sed -i "s/'\(.*\)==.*'/'\1'/g" setup.py
+    sed -i "s/'\(.*\)\(==\|>=\).*'/'\1'/g" setup.py
   '';
 
-  propagatedBuildInputs = with python3.pkgs; [
-    requests pyyaml netdisco click click-log tabulate idna jsonpath_rw jinja2
+  nativeBuildInputs = [
+    glibcLocales
   ];
 
-  checkInputs = with python3.pkgs; [
+  propagatedBuildInputs = with python36.pkgs; [
+    requests pyyaml netdisco click click-log tabulate idna jsonpath_rw jinja2 dateparser
+  ];
+
+  LC_ALL = "en_US.UTF-8";
+
+  postInstall = ''
+    mkdir -p "$out/share/bash-completion/completions" "$out/share/zsh/site-functions"
+    $out/bin/hass-cli completion bash > "$out/share/bash-completion/completions/hass-cli"
+    $out/bin/hass-cli completion zsh > "$out/share/zsh/site-functions/_hass-cli"
+  '';
+
+  checkInputs = with python36.pkgs; [
     pytest requests-mock
   ];
 

@@ -57,23 +57,4 @@ rec {
       sha256 = "1l8xq02rd7vakxg52xm9g4zng0ald866rpgm8kjlh88mwwyjkrwv";
     };
   };
-
-  # Reverts a change related to the overlayfs overhaul in 4.19
-  # https://github.com/NixOS/nixpkgs/issues/48828#issuecomment-445208626
-  revert-vfs-dont-open-real = rec {
-    name = "revert-vfs-dont-open-real";
-    patch = fetchpatch {
-      name = name + ".patch";
-      url = https://github.com/samueldr/linux/commit/ee23fa215caaa8102f4ab411d39fcad5858147f2.patch;
-      sha256 = "0bp4jryihg1y2sl8zlj6w7vvnxj0kmb6xdy42hpvdv43kb6ngiaq";
-    };
-  };
-
-  raspberry_pi_wifi_fix = rec {
-    name = "raspberry-pi-wifi-fix";
-    patch = fetchpatch {
-      url = https://raw.githubusercontent.com/archlinuxarm/PKGBUILDs/730522ae76aa57b89fa317c5084613d3d50cf3b8/core/linux-aarch64/0005-mmc-sdhci-iproc-handle-mmc_of_parse-errors-during-pr.patch;
-      sha256 = "0gbfycky28vbdjgys1z71wl5q073dmbrkvbnr6693jsda3qhp6za";
-    };
-  };
 }

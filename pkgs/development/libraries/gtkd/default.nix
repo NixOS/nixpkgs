@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   name = "gtkd-${version}";
-  version = "3.8.4";
+  version = "3.8.5";
 
   src = fetchzip {
     url = "https://gtkd.org/Downloads/sources/GtkD-${version}.zip";
-    sha256 = "0q2kf1jwr89i8ajjzyf3b4bbla33djvnwrvljq17y206q7qknfyz";
+    sha256 = "12n2njsaplra7x15nqwrj2hrf8a27pfjj2mck4mkzxv03qk6mqky";
     stripRoot = false;
   };
 

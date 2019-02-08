@@ -104,4 +104,5 @@ in stdenv.mkDerivation {
     inherit passthru;
 
     meta.platforms = passthru.bootPkgs.ghc.meta.platforms;
+    meta.maintainers = [lib.maintainers.elvishjerricco];
   }

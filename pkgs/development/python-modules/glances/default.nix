@@ -6,14 +6,14 @@
 
 buildPythonPackage rec {
   name = "glances-${version}";
-  version = "3.0.2";
+  version = "3.1.0";
   disabled = isPyPy;
 
   src = fetchFromGitHub {
     owner = "nicolargo";
     repo = "glances";
     rev = "v${version}";
-    sha256 = "1jkjblfk4gbr00j7lny7ajiizzqnp0p1yhzfi14074gwk38z0q14";
+    sha256 = "0zjpp017i8b8bijdaj85rya7rmdqh4g8vkb42q14q2sw6agxz3zi";
   };
 
   patches = lib.optional doCheck ./skip-failing-tests.patch;

@@ -4,16 +4,16 @@ podofo, poppler, poppler_data, python2, harfbuzz, qtimageformats, qttools }:
 
 let
   pythonEnv = python2.withPackages(ps: [ps.tkinter ps.pillow]);
-  revision = "22730";
+  revision = "22806";
 in 
 stdenv.mkDerivation rec {
   name = "scribus-unstable-${version}";
-  version = "2018-10-13";
+  version = "2019-01-16";
 
   src = fetchsvn {
     url = "svn://scribus.net/trunk/Scribus";
     rev = revision;
-    sha256 = "1nlg4qva0fach8fi07r1pakjjlijishpwzlgpnxyaz7r31yjaw63";
+    sha256 = "16xpsbp6kca78jf48n6zdmyjras38xr11paan839hgy4ik83ncn0";
   };
 
   enableParallelBuilding = true;

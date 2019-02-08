@@ -27,6 +27,5 @@ stdenv.mkDerivation rec {
     description = "CMS and X.509 access library";
     platforms = platforms.all;
     license = licenses.lgpl3;
-    maintainers = with maintainers; [ wkennington ];
   };
 }

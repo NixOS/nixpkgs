@@ -3,7 +3,7 @@
 { stdenv, python36, fetchFromGitHub }:
 
 let
-  python = python36.override {
+  python = if stable then python36.override {
     packageOverrides = self: super: {
       async-timeout = super.async-timeout.overridePythonAttrs (oldAttrs: rec {
         version = "2.0.1";
@@ -31,7 +31,7 @@ let
           ++ stdenv.lib.optional (pythonOlder "3.5") typing;
       });
     };
-  };
+  } else python36;
 
 in python.pkgs.buildPythonPackage {
   pname = "gns3-server";
@@ -48,7 +48,7 @@ in python.pkgs.buildPythonPackage {
     aiohttp-cors yarl aiohttp multidict
     jinja2 psutil zipstream raven jsonschema typing
     (python.pkgs.callPackage ../../../development/python-modules/prompt_toolkit/1.nix {})
-  ];
+  ] ++ stdenv.lib.optional (!stable) python.pkgs.distro;
 
   # Requires network access
   doCheck = false;

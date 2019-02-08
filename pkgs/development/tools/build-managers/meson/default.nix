@@ -44,6 +44,13 @@ python3Packages.buildPythonApplication rec {
       src = ./fix-rpath.patch;
       inherit (builtins) storeDir;
     })
+  ] ++ lib.optionals stdenv.isDarwin [
+    # We use custom Clang, which makes Meson think *not Apple*, while still
+    # relying on system linker. When it detects standard Clang, Meson will
+    # pass it `-Wl,-O1` flag but optimizations are not recognized by
+    # Mac linker.
+    # https://github.com/mesonbuild/meson/issues/4784
+    ./fix-objc-linking.patch
   ];
 
   setupHook = ./setup-hook.sh;

@@ -18,11 +18,11 @@ let inherit (stdenv.lib) optional; in
 
 stdenv.mkDerivation rec {
   name = "nghttp2-${version}";
-  version = "1.35.0";
+  version = "1.35.1";
 
   src = fetchurl {
     url = "https://github.com/nghttp2/nghttp2/releases/download/v${version}/nghttp2-${version}.tar.bz2";
-    sha256 = "0nfdagjb0apgvms28kr9m8k93di5fv6ww9i1jwpd83y0p4vf5zvh";
+    sha256 = "020k9xkca386yfs47zypb4x83f4l6vqpf8qw1xrhmrd29x4wxvam";
   };
 
   outputs = [ "bin" "out" "dev" "lib" ];
@@ -50,6 +50,5 @@ stdenv.mkDerivation rec {
     description = "A C implementation of HTTP/2";
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = with maintainers; [ wkennington ];
   };
 }

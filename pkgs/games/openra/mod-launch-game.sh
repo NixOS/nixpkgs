@@ -21,5 +21,5 @@ mono --debug OpenRA.Game.exe Game.Mod=@name@ Engine.LaunchPath="@out@/bin/openra
 
 # Show a crash dialog if something went wrong
 if [ $? -ne 0 -a $? -ne 1 ]; then
-  show_error "OpenRA - @title@ has encountered a fatal error.\nPlease refer to the crash logs for more information.\n\nLog files are located in ~/.openra/Logs"
+  show_error $'OpenRA - @title@ has encountered a fatal error.\nPlease refer to the crash logs for more information.\n\nLog files are located in ~/.openra/Logs'
 fi

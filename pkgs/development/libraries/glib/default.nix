@@ -8,6 +8,7 @@
 , doCheck ? stdenv.config.doCheckByDefault or false
 , coreutils, dbus, libxml2, tzdata
 , desktop-file-utils, shared-mime-info
+, darwin
 }:
 
 with stdenv.lib;
@@ -44,6 +45,7 @@ let
     ln -sr -t "''${!outputInclude}/include/" "''${!outputInclude}"/lib/*/include/* 2>/dev/null || true
   '';
 
+  binPrograms = optional (!stdenv.isDarwin) "gapplication" ++ [ "gdbus" "gio" "gsettings" ];
   version = "2.58.2";
 in
 
@@ -83,7 +85,12 @@ stdenv.mkDerivation rec {
   ] ++ optionals stdenv.isLinux [
     libselinux
     utillinuxMinimal # for libmount
-  ];
+  ] ++ optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+    AppKit Carbon Cocoa CoreFoundation CoreServices Foundation
+    # Needed for CFURLCreateFromFSRef, etc. which have deen deprecated
+    # since 10.9 and are not part of swift-corelibs CoreFoundation.
+    darwin.cf-private
+  ]);
 
   nativeBuildInputs = [
     meson ninja pkgconfig perl python3 gettext gtk-doc docbook_xsl docbook_xml_dtd_45 glibcLocales
@@ -121,15 +128,17 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     mkdir -p $bin/bin
-    for app in gapplication gdbus gio gsettings; do
+    for app in ${concatStringsSep " " binPrograms}; do
       mv "$dev/bin/$app" "$bin/bin"
     done
 
+  '' + optionalString (!stdenv.isDarwin) ''
     # Add gio-launch-desktop to $out so we can refer to it from $dev
     mkdir $out/bin
     mv "$dev/bin/gio-launch-desktop" "$out/bin/"
     ln -s "$out/bin/gio-launch-desktop" "$bin/bin/"
 
+  '' + ''
     moveToOutput "share/glib-2.0" "$dev"
     substituteInPlace "$dev/bin/gdbus-codegen" --replace "$out" "$dev"
     sed -i "$dev/bin/glib-gettextize" -e "s|^gettext_dir=.*|gettext_dir=$dev/share/glib-2.0/gettext|"

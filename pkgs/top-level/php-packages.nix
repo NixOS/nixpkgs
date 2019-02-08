@@ -297,11 +297,11 @@ let
 
   php-cs-fixer = pkgs.stdenv.mkDerivation rec {
     name = "php-cs-fixer-${version}";
-    version = "2.13.1";
+    version = "2.14.0";
 
     src = pkgs.fetchurl {
       url = "https://github.com/FriendsOfPHP/PHP-CS-Fixer/releases/download/v${version}/php-cs-fixer.phar";
-      sha256 = "0yy9q140jd63h9qz5jvplh7ls3j7y1hf25dkxk0h4mx9cbxdzkq4";
+      sha256 = "0ap5bhm1h2ldyzlch7bz5n3jj2bpm4wd6bzw51g414pk9vksswc1";
     };
 
     phases = [ "installPhase" ];
@@ -406,6 +406,40 @@ let
       license = licenses.bsd3;
       homepage = https://squizlabs.github.io/PHP_CodeSniffer/;
       maintainers = with maintainers; [ cmcdragonkai etu ];
+    };
+  };
+
+  phpstan = pkgs.stdenv.mkDerivation rec {
+    name = "phpstan-${version}";
+    version = "0.11.1";
+
+    src = pkgs.fetchurl {
+      url = "https://github.com/phpstan/phpstan/releases/download/${version}/phpstan.phar";
+      sha256 = "0iivfp9945gv6pqhp01720rlwzfd260hbfq31a3mmimly721mnsa";
+    };
+
+    phases = [ "installPhase" ];
+    nativeBuildInputs = [ pkgs.makeWrapper ];
+
+    installPhase = ''
+      mkdir -p $out/bin
+      install -D $src $out/libexec/phpstan/phpstan.phar
+      makeWrapper ${php}/bin/php $out/bin/phpstan \
+        --add-flags "$out/libexec/phpstan/phpstan.phar"
+    '';
+
+    meta = with pkgs.lib; {
+      description = "PHP Static Analysis Tool";
+      longDescription = ''
+        PHPStan focuses on finding errors in your code without actually running
+        it. It catches whole classes of bugs even before you write tests for the
+        code. It moves PHP closer to compiled languages in the sense that the
+        correctness of each line of the code can be checked before you run the
+        actual line.
+      '';
+      license = licenses.mit;
+      homepage = https://github.com/phpstan/phpstan;
+      maintainers = with maintainers; [ etu ];
     };
   };
 

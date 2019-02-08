@@ -57,6 +57,5 @@ stdenv.mkDerivation rec {
     homepage = http://net-snmp.sourceforge.net/;
     license = licenses.bsd3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ wkennington ];
   };
 }

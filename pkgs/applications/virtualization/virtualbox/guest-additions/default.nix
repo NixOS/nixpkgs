@@ -11,7 +11,7 @@ let
   # (not via videoDrivers = ["vboxvideo"]).
   # It's likely to work again in some future update.
   xserverABI = let abi = xserverVListFunc 0 + xserverVListFunc 1;
-    in if abi == "119" then "118" else abi;
+    in if abi == "119" || abi == "120" then "118" else abi;
 in
 
 stdenv.mkDerivation {

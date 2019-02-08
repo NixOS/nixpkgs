@@ -50,6 +50,18 @@ in {
               }
             ];
           };
+          lovelaceConfig = {
+            title = "My Awesome Home";
+            views = [ {
+              title = "Example";
+              cards = [ {
+                type = "markdown";
+                title = "Lovelace";
+                content = "Welcome to your **Lovelace UI**.";
+              } ];
+            } ];
+          };
+          lovelaceConfigWritable = true;
         };
       };
   };
@@ -59,8 +71,10 @@ in {
     $hass->waitForUnit("home-assistant.service");
 
     # The config is specified using a Nix attribute set,
-    # but then converted from JSON to YAML
-    $hass->succeed("test -f ${configDir}/configuration.yaml");
+    # converted from JSON to YAML, and linked to the config dir
+    $hass->succeed("test -L ${configDir}/configuration.yaml");
+    # The lovelace config is copied because lovelaceConfigWritable = true
+    $hass->succeed("test -f ${configDir}/ui-lovelace.yaml");
 
     # Check that Home Assistant's web interface and API can be reached
     $hass->waitForOpenPort(8123);
@@ -73,7 +87,7 @@ in {
     $hass->succeed("curl http://localhost:8123/api/states/binary_sensor.mqtt_binary_sensor -H 'x-ha-access: ${apiPassword}' | grep -qF '\"state\": \"on\"'");
 
     # Toggle a binary sensor using hass-cli
-    $hass->succeed("${hassCli} entity get binary_sensor.mqtt_binary_sensor | grep -qF '\"state\": \"on\"'");
+    $hass->succeed("${hassCli} --output json entity get binary_sensor.mqtt_binary_sensor | grep -qF '\"state\": \"on\"'");
     $hass->succeed("${hassCli} entity edit binary_sensor.mqtt_binary_sensor --json='{\"state\": \"off\"}'");
     $hass->succeed("curl http://localhost:8123/api/states/binary_sensor.mqtt_binary_sensor -H 'x-ha-access: ${apiPassword}' | grep -qF '\"state\": \"off\"'");
 

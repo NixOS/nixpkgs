@@ -5,18 +5,28 @@ let
 in
 buildPythonApplication rec {
   pname = "fava";
-  version = "1.7";
+  version = "1.9";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c4eba4203bddaa7bc9d54971d2afeeebab0bc80ce89be1375a41a07c4e82b62f";
+    sha256 = "115r99l6xfliafgkpcf0mndqrvijix5mflg2i56s7xwqr3ch8z9k";
   };
 
   doCheck = false;
 
   propagatedBuildInputs = with python3.pkgs;
-    [ flask dateutil pygments wheel markdown2 flaskbabel tornado
-      click beancount ];
+    [ 
+      Babel
+      cheroot
+      flaskbabel
+      flask
+      jinja2
+      beancount
+      click
+      markdown2
+      ply
+      simplejson
+    ];
 
   meta = {
     homepage = https://beancount.github.io/fava;

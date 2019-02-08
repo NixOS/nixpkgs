@@ -94,7 +94,7 @@ let
       callPackageWith callPackagesWith extendDerivation hydraJob
       makeScope;
     inherit (meta) addMetaAttrs dontDistribute setName updateName
-      appendToName mapDerivationAttrset lowPrio lowPrioSet hiPrio
+      appendToName mapDerivationAttrset setPrio lowPrio lowPrioSet hiPrio
       hiPrioSet;
     inherit (sources) pathType pathIsDirectory cleanSourceFilter
       cleanSource sourceByRegex sourceFilesBySuffices
@@ -109,7 +109,7 @@ let
       mkFixStrictness mkOrder mkBefore mkAfter mkAliasDefinitions
       mkAliasAndWrapDefinitions fixMergeModules mkRemovedOptionModule
       mkRenamedOptionModule mkMergedOptionModule mkChangedOptionModule
-      mkAliasOptionModule doRename filterModules;
+      mkAliasOptionModule mkAliasOptionModuleWithPriority doRename filterModules;
     inherit (options) isOption mkEnableOption mkSinkUndeclaredOptions
       mergeDefaultOption mergeOneOption mergeEqualOption getValues
       getFiles optionAttrSetToDocList optionAttrSetToDocList'

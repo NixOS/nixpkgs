@@ -76,11 +76,11 @@ let rpath = lib.makeLibraryPath [
 
 in stdenv.mkDerivation rec {
     pname = "brave";
-    version = "0.58.18";
+    version = "0.59.34";
 
     src = fetchurl {
         url = "https://github.com/brave/brave-browser/releases/download/v${version}/brave-browser_${version}_amd64.deb";
-        sha256 = "0xybcgsxjmd8bxi4x4midzw71s23j8icpspqf5sadskhldvshzr3";
+        sha256 = "1i14y01387q0h12w6h780v9d98qygmx0w0vbygy4w9x9aj5nnask";
     };
 
     dontConfigure = true;

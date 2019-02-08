@@ -9,8 +9,10 @@ debug:
 
 .PHONY: format
 format:
-	find . -iname '*.xml' -type f -print0 | xargs -0 -I{} -n1 \
-		xmlformat --config-file "$$XMLFORMAT_CONFIG" -i {}
+	find . -iname '*.xml' -type f | while read f; do \
+		echo $$f ;\
+		xmlformat --config-file "$$XMLFORMAT_CONFIG" -i $$f ;\
+	done
 
 .PHONY: fix-misc-xml
 fix-misc-xml:

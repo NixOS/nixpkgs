@@ -32,6 +32,5 @@ stdenv.mkDerivation rec {
     homepage = http://www.openexr.com/;
     license = licenses.bsd3;
     platforms = platforms.all;
-    maintainers = with maintainers; [ wkennington ];
   };
 }

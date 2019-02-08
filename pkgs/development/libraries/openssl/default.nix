@@ -134,7 +134,13 @@ in {
   openssl_1_1 = common {
     version = "1.1.1a";
     sha256 = "0hcz7znzznbibpy3iyyhvlqrq44y88plxwdj32wjzgbwic7i687w";
-    patches = [ ./1.1/nix-ssl-cert-file.patch ];
+    patches = [
+      ./1.1/nix-ssl-cert-file.patch
+
+      (if stdenv.hostPlatform.isDarwin
+       then ./1.1/use-etc-ssl-certs-darwin.patch
+       else ./1.1/use-etc-ssl-certs.patch)
+    ];
     withDocs = true;
   };
 

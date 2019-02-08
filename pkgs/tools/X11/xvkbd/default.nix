@@ -1,5 +1,5 @@
 { stdenv, fetchurl, imake, libXt, libXaw, libXtst
-, libXi, libXpm, xextproto, gccmakedep, Xaw3d }:
+, libXi, libXpm, xorgproto, gccmakedep, Xaw3d }:
 
 stdenv.mkDerivation rec {
   name = "xvkbd-${version}";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ imake gccmakedep ];
-  buildInputs = [ libXt libXaw libXtst xextproto libXi Xaw3d libXpm ];
+  buildInputs = [ libXt libXaw libXtst xorgproto libXi Xaw3d libXpm ];
   installTargets = [ "install" "install.man" ];
   makeFlags = [
     "BINDIR=$(out)/bin"

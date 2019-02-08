@@ -46,6 +46,14 @@ in stdenv.mkDerivation rec {
   postPatch = ''
     patchShebangs utils/g-ir-merge/g-ir-merge
     patchShebangs utils/data-generators/cc/generate
+
+    # make .desktop Exec absolute
+    patch -p0 <<END_PATCH
+    +++ src/tracker-store/tracker-store.desktop.in.in
+    @@ -4 +4 @@
+    -Exec=gdbus call -e -d org.freedesktop.DBus -o /org/freedesktop/DBus -m org.freedesktop.DBus.StartServiceByName org.freedesktop.Tracker1 0
+    +Exec=${glib.dev}/bin/gdbus call -e -d org.freedesktop.DBus -o /org/freedesktop/DBus -m org.freedesktop.DBus.StartServiceByName org.freedesktop.Tracker1 0
+    END_PATCH
   '';
 
   postInstall = ''

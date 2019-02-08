@@ -1,4 +1,4 @@
-{stdenv, fetchgit, xproto, libX11, libXft, customConfig ? null, patches ? [] }:
+{stdenv, fetchgit, xorgproto, libX11, libXft, customConfig ? null, patches ? [] }:
 
 with stdenv.lib;
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     cp ${builtins.toFile "config.h" customConfig} ./config.h
   '';
 
-  buildInputs = [ xproto libX11 libXft ];
+  buildInputs = [ xorgproto libX11 libXft ];
 
   makeFlags = [
     "PREFIX=$(out)"

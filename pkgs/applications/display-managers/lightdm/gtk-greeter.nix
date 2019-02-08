@@ -46,6 +46,6 @@ stdenv.mkDerivation rec {
     homepage = https://launchpad.net/lightdm-gtk-greeter;
     platforms = platforms.linux;
     license = licenses.gpl3;
-    maintainers = with maintainers; [ ocharles wkennington ];
+    maintainers = with maintainers; [ ocharles ];
   };
 }

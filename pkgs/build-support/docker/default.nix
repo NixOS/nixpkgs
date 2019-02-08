@@ -544,14 +544,19 @@ rec {
         buildInputs = [ jshon pigz coreutils findutils jq ];
         # Image name and tag must be lowercase
         imageName = lib.toLower name;
-        imageTag = if tag == null then "" else lib.toLower tag;
         baseJson = configJson;
+        passthru.imageTag =
+          if tag == null
+          then lib.head (lib.splitString "-" (lib.last (lib.splitString "/" result)))
+          else lib.toLower tag;
       } ''
-        ${lib.optionalString (tag == null) ''
+        ${if (tag == null) then ''
           outName="$(basename "$out")"
           outHash=$(echo "$outName" | cut -d - -f 1)
 
           imageTag=$outHash
+        '' else ''
+          imageTag="${tag}"
         ''}
 
         find ${bulkLayers} -mindepth 1 -maxdepth 1 | sort -t/ -k5 -n > layer-list

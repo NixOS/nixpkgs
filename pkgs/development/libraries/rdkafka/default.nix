@@ -25,6 +25,6 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/edenhill/librdkafka;
     license = licenses.bsd2;
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ boothead wkennington ];
+    maintainers = with maintainers; [ boothead ];
   };
 }

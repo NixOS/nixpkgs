@@ -8,7 +8,7 @@
   src = fetchFromGitHub {
     inherit rev sha256;
     repo = "proot";
-    owner = "cedric-vincent";
+    owner = "proot-me";
   };
 
   buildInputs = [ talloc ];
@@ -35,7 +35,7 @@
     description = "User-space implementation of chroot, mount --bind and binfmt_misc";
     platforms = platforms.linux;
     license = licenses.gpl2;
-    maintainers = with maintainers; [ ianwookim makefu ];
+    maintainers = with maintainers; [ ianwookim makefu veprbl ];
   };
 })
 (if stdenv.isAarch64 then rec {
@@ -49,8 +49,8 @@
     })
   ];
 } else {
-  version = "5.1.0.20171015";
-  sha256 = "0jam87msh5jx8vpb19n6xwxw1xlig5amdcqif7gn2rc8nhswpxif";
-  rev = "0bf2ee17daafeeadfed079cec97fe1ac781e696a";
+  version = "5.1.0.20181214";
+  sha256 = "07g1gfyjq7rypjdwxw495sk8k1y2i3y3nsm1rh9kgx3z47z28aah";
+  rev = "11972c0dab34e088c55c16a94d26c399ca7a26d8";
   patches = [];
 })

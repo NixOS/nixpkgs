@@ -2,18 +2,18 @@
 
 buildPythonPackage rec {
   pname = "astral";
-  version = "1.7.1";
+  version = "1.9.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "01raz1c29v08f05l395v1hxllad35m5ld1jj51knb53c0396y248";
+    sha256 = "179f72a086cee96487e60514bab81e821966953fc2e2f7091500d3d2c314e38b";
   };
 
   propagatedBuildInputs = [ pytz requests ];
 
   checkInputs = [ pytest ];
   checkPhase = ''
-    # https://github.com/sffjunkie/astral/pull/13
+    # https://github.com/sffjunkie/astral/pull/26
     touch src/test/.api_key
     py.test -m "not webtest"
   '';

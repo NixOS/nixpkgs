@@ -2,20 +2,12 @@
 , tcl-8_5, darwin }:
 
 stdenv.mkDerivation rec {
-  name = "rrdtool-1.7.0";
+  name = "rrdtool-1.7.1";
 
   src = fetchurl {
     url = "https://oss.oetiker.ch/rrdtool/pub/${name}.tar.gz";
-    sha256 = "0ssjqpa0dwwzbylc0drmlbq922qcw8crffc0rpr805xr6n4k8zgr";
+    sha256 = "1bhsg119j94xwykp2sbp01hhxcg78gzblfn7j98slrv9va77g6wq";
   };
-
-  patches = [
-    # fix regression https://github.com/oetiker/rrdtool-1.x/issues/794
-    (fetchpatch {
-      url = "https://github.com/oetiker/rrdtool-1.x/compare/0f28f99...f1edd12.patch";
-      sha256 = "10g56zy0rdjpv3kvvmf6vvaysmla05wi8byy3l0xrz2x8m02ylqq";
-    })
-  ];
 
   nativeBuildInputs = [ pkgconfig ];
 

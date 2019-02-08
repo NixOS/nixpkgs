@@ -17,6 +17,6 @@ stdenv.mkDerivation rec {
     homepage = http://netfilter.org/projects/libnftnl;
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ wkennington fpletz ];
+    maintainers = with maintainers; [ fpletz ];
   };
 }

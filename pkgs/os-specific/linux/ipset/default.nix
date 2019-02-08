@@ -18,6 +18,5 @@ stdenv.mkDerivation rec {
     description = "Administration tool for IP sets";
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ wkennington ];
   };
 }

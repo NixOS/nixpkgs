@@ -9,14 +9,14 @@
 # all get the same sources with the same patches applied.
 
 stdenv.mkDerivation rec {
-  version = "8.5";
+  version = "8.6";
   name = "sage-src-${version}";
 
   src = fetchFromGitHub {
     owner = "sagemath";
     repo = "sage";
     rev = version;
-    sha256 = "08mb9626phsls2phdzqxsnp2df5pn5qr72m0mm4nncby26pwn19c";
+    sha256 = "1vs3pbgbqpg0qnwr018bqsdmm7crgjp310cx8zwh7za3mv1cw5j3";
   };
 
   # Patches needed because of particularities of nix or the way this is packaged.
@@ -47,7 +47,8 @@ stdenv.mkDerivation rec {
     # https://trac.sagemath.org/ticket/26110 for an upstream discussion.
     ./patches/Only-test-py2-py3-optional-tests-when-all-of-sage-is.patch
 
-    ./patches/dont-test-guess-gaproot.patch
+    # Fixes a potential race condition which can lead to transient doctest failures.
+    ./patches/fix-ecl-race.patch
   ];
 
   # Patches needed because of package updates. We could just pin the versions of
@@ -60,12 +61,13 @@ stdenv.mkDerivation rec {
     # Fetch a diff between `base` and `rev` on sage's git server.
     # Used to fetch trac tickets by setting the `base` to the last release and the
     # `rev` to the last commit of the ticket.
-    fetchSageDiff = { base, rev, ...}@args: (
+    fetchSageDiff = { base, rev, name ? "sage-diff-${base}-${rev}.patch", ...}@args: (
       fetchpatch ({
-        url = "https://git.sagemath.org/sage.git/patch?id2=${base}&id=${rev}";
+        inherit name;
+        url = "https://git.sagemath.org/sage.git/rawdiff?id2=${base}&id=${rev}";
         # We don't care about sage's own build system (which builds all its dependencies).
         # Exclude build system changes to avoid conflicts.
-        excludes = [ "build/*" ];
+        excludes = [ "/build/*" ];
       } // builtins.removeAttrs args [ "rev" "base" ])
     );
   in [
@@ -82,19 +84,12 @@ stdenv.mkDerivation rec {
     # https://trac.sagemath.org/ticket/26315
     ./patches/giac-1.5.0.patch
 
-    # https://trac.sagemath.org/ticket/26326
-    # needs to be split because there is a merge commit in between
+    # https://trac.sagemath.org/ticket/26442
     (fetchSageDiff {
-      name = "networkx-2.2-1.patch";
-      base = "8.4";
-      rev = "68f5ad068184745b38ba6716bf967c8c956c52c5";
-      sha256 = "112b5ywdqgyzgvql2jj5ss8la9i8rgnrzs8vigsfzg4shrcgh9p6";
-    })
-    (fetchSageDiff {
-      name = "networkx-2.2-2.patch";
-      base = "626485bbe5f33bf143d6dfba4de9c242f757f59b~1";
-      rev = "db10d327ade93711da735a599a67580524e6f7b4";
-      sha256 = "09v87id25fa5r9snfn4mv79syhc77jxfawj5aizmdpwdmpgxjk1f";
+      name = "cypari2-2.0.3.patch";
+      base = "8.6.rc1";
+      rev = "cd62d45bcef93fb4f7ed62609a46135e6de07051";
+      sha256 = "08l2b9w0rn1zrha6188j72f7737xs126gkgmydjd31baa6367np2";
     })
   ];
 

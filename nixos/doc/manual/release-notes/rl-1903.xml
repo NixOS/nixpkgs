@@ -331,16 +331,28 @@
    <para>
      The <literal>pam_unix</literal> account module is now loaded with its
      control field set to <literal>required</literal> instead of
-     <literal>sufficient</literal>, so that later pam account modules that
+     <literal>sufficient</literal>, so that later PAM account modules that
      might do more extensive checks are being executed.
      Previously, the whole account module verification was exited prematurely
      in case a nss module provided the account name to
      <literal>pam_unix</literal>.
      The LDAP and SSSD NixOS modules already add their NSS modules when
-     enabled. In case your setup breaks due to some later pam account module
+     enabled. In case your setup breaks due to some later PAM account module
      previosuly shadowed, or failing NSS lookups, please file a bug. You can
      get back the old behaviour by manually setting
      <literal><![CDATA[security.pam.services.<name?>.text]]></literal>.
+   </para>
+  </listitem>
+  <listitem>
+   <para>
+     The <literal>pam_unix</literal> password module is now loaded with its
+     control field set to <literal>sufficient</literal> instead of
+     <literal>required</literal>, so that password managed only
+     by later PAM password modules are being executed.
+     Previously, for example, changing an LDAP account's password through PAM
+     was not possible: the whole password module verification
+     was exited prematurely by <literal>pam_unix</literal>,
+     preventing <literal>pam_ldap</literal> to manage the password as it should.
    </para>
   </listitem>
    <listitem>
@@ -348,6 +360,39 @@
      <literal>fish</literal> has been upgraded to 3.0.
      It comes with a number of improvements and backwards incompatible changes.
      See the <literal>fish</literal> <link xlink:href="https://github.com/fish-shell/fish-shell/releases/tag/3.0.0">release notes</link> for more information.
+    </para>
+   </listitem>
+  <listitem>
+    <para>
+      The ibus-table input method has had a change in config format, which
+      causes all previous settings to be lost. See
+      <link xlink:href="https://github.com/mike-fabian/ibus-table/commit/f9195f877c5212fef0dfa446acb328c45ba5852b">this commit message</link>
+      for details.
+    </para>
+  </listitem>
+  <listitem>
+   <para>
+    Support for NixOS module system type <literal>types.optionSet</literal> and
+    <literal>lib.mkOption</literal> argument <literal>options</literal> is removed.
+    Use <literal>types.submodule</literal> instead.
+    (<link xlink:href="https://github.com/NixOS/nixpkgs/pull/54637">#54637</link>)
+   </para>
+  </listitem>
+  <listitem>
+   <para>
+    <literal>matrix-synapse</literal> has been updated to version 0.99. It will
+    <link xlink:href="https://github.com/matrix-org/synapse/pull/4509">no longer generate a self-signed certificate on first launch</link>
+    and will be <link xlink:href="https://matrix.org/blog/2019/02/05/synapse-0-99-0/">the last version to accept self-signed certificates</link>.
+    As such, it is now recommended to use a proper certificate verified by a
+    root CA (for example Let's Encrypt).
+   </para>
+  </listitem>
+   <listitem>
+    <para>
+     <literal>mailutils</literal> now works by default when
+     <literal>sendmail</literal> is not in a setuid wrapper. As a consequence,
+     the <literal>sendmailPath</literal> argument, having lost its main use, has
+     been removed.
     </para>
    </listitem>
   </itemizedlist>
@@ -404,9 +449,71 @@
    </listitem>
    <listitem>
      <para>
+       The astah-community package was removed from nixpkgs due to it being discontinued and the downloads not being available anymore.
+     </para>
+   </listitem>
+   <listitem>
+     <para>
+       The httpd service now saves log files with a .log file extension by default for
+       easier integration with the logrotate service.
+     </para>
+   </listitem>
+   <listitem>
+     <para>
        The owncloud server packages and httpd subservice module were removed
        from nixpkgs due to the lack of maintainers.
      </para>
+   </listitem>
+   <listitem>
+     <para>
+       It is possible now to uze ZRAM devices as general purpose ephemeral block devices,
+       not only as swap. Using more than 1 device as ZRAM swap is no longer recommended,
+       but is still possible by setting <literal>zramSwap.swapDevices</literal> explicitly.
+     </para>
+     <para>
+      Default algorithm for ZRAM swap was changed to <literal>zstd</literal>.
+     </para>
+     <para>
+      Changes to ZRAM algorithm are applied during <literal>nixos-rebuild switch</literal>,
+      so make sure you have enough swap space on disk to survive ZRAM device rebuild. Alternatively,
+      use <literal>nixos-rebuild boot; reboot</literal>.
+     </para>
+   </listitem>
+   <listitem>
+    <para>
+      Flat volumes are now disabled by default in <literal>hardware.pulseaudio</literal>.
+      This has been done to prevent applications, which are unaware of this feature, setting
+      their volumes to 100% on startup causing harm to your audio hardware and potentially your ears.
+    </para>
+    <note>
+     <para>
+      With this change application specific volumes are relative to the master volume which can be
+      adjusted independently, whereas before they were absolute; meaning that in effect, it scaled the
+      device-volume with the volume of the loudest application.
+     </para>
+    </note>
+   </listitem>
+   <listitem>
+    <para>
+     The <link xlink:href="https://github.com/DanielAdolfsson/ndppd"><literal>ndppd</literal></link> module
+     now supports <link linkend="opt-services.ndppd.enable">all config options</link> provided by the current
+     upstream version as service options. Additionally the <literal>ndppd</literal> package doesn't contain
+     the systemd unit configuration from upstream anymore, the unit is completely configured by the NixOS module now.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     New installs of NixOS will default to the Redmine 4.x series unless otherwise specified in
+     <literal>services.redmine.package</literal> while existing installs of NixOS will default to
+     the Redmine 3.x series.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     The <link linkend="opt-services.grafana.enable">Grafana module</link> now supports declarative
+     <link xlink:href="http://docs.grafana.org/administration/provisioning/">datasource and dashboard</link>
+     provisioning.
+    </para>
    </listitem>
   </itemizedlist>
  </section>

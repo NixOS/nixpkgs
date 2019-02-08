@@ -200,7 +200,7 @@ let
       name = "installer-" + name;
       meta = with pkgs.stdenv.lib.maintainers; {
         # put global maintainers here, individuals go into makeInstallerTest fkt call
-        maintainers = [ wkennington ] ++ (meta.maintainers or []);
+        maintainers = (meta.maintainers or []);
       };
       nodes = {
 

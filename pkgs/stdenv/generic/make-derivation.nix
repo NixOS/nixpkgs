@@ -12,7 +12,7 @@ rec {
   # * https://nixos.org/nix/manual/#ssec-derivation
   #   Explanation about derivations in general
   mkDerivation =
-    { name ? ""
+    {
 
     # These types of dependencies are all exhaustively documented in
     # the "Specifying Dependencies" section of the "Standard
@@ -21,7 +21,7 @@ rec {
     # TODO(@Ericson2314): Stop using legacy dep attribute names
 
     #                           host offset -> target offset
-    , depsBuildBuild              ? [] # -1 -> -1
+      depsBuildBuild              ? [] # -1 -> -1
     , depsBuildBuildPropagated    ? [] # -1 -> -1
     , nativeBuildInputs           ? [] # -1 ->  0  N.B. Legacy name
     , propagatedNativeBuildInputs ? [] # -1 ->  0  N.B. Legacy name
@@ -81,8 +81,6 @@ rec {
     , ... } @ attrs:
 
     let
-      computedName = if name != "" then name else "${attrs.pname}-${attrs.version}";
-
       # TODO(@oxij, @Ericson2314): This is here to keep the old semantics, remove when
       # no package has `doCheck = true`.
       doCheck' = doCheck && stdenv.hostPlatform == stdenv.buildPlatform;
@@ -96,7 +94,7 @@ rec {
                                       ++ depsHostHost ++ depsHostHostPropagated
                                       ++ buildInputs ++ propagatedBuildInputs
                                       ++ depsTargetTarget ++ depsTargetTargetPropagated) == 0;
-      dontAddHostSuffix = attrs ? outputHash && !noNonNativeDeps || stdenv.cc == null;
+      dontAddHostSuffix = attrs ? outputHash && !noNonNativeDeps || (stdenv.noCC or false);
       supportedHardeningFlags = [ "fortify" "stackprotector" "pie" "pic" "strictoverflow" "format" "relro" "bindnow" ];
       defaultHardeningFlags = if stdenv.hostPlatform.isMusl
                               then supportedHardeningFlags
@@ -179,17 +177,15 @@ rec {
            "checkInputs" "installCheckInputs"
            "__impureHostDeps" "__propagatedImpureHostDeps"
            "sandboxProfile" "propagatedSandboxProfile"])
-        // {
-          # A hack to make `nix-env -qa` and `nix search` ignore broken packages.
-          # TODO(@oxij): remove this assert when something like NixOS/nix#1771 gets merged into nix.
-          name = assert validity.handled; computedName + lib.optionalString
-            # Fixed-output derivations like source tarballs shouldn't get a host
-            # suffix. But we have some weird ones with run-time deps that are
-            # just used for their side-affects. Those might as well since the
-            # hash can't be the same. See #32986.
-            (stdenv.hostPlatform != stdenv.buildPlatform && !dontAddHostSuffix)
-            ("-" + stdenv.hostPlatform.config);
-
+        // (lib.optionalAttrs (!(attrs ? name) && attrs ? pname && attrs ? version)) {
+          name = "${attrs.pname}-${attrs.version}";
+        } // (lib.optionalAttrs (stdenv.hostPlatform != stdenv.buildPlatform && !dontAddHostSuffix && (attrs ? name || (attrs ? pname && attrs ? version)))) {
+          # Fixed-output derivations like source tarballs shouldn't get a host
+          # suffix. But we have some weird ones with run-time deps that are
+          # just used for their side-affects. Those might as well since the
+          # hash can't be the same. See #32986.
+          name = "${attrs.name or "${attrs.pname}-${attrs.version}"}-${stdenv.hostPlatform.config}";
+        } // {
           builder = attrs.realBuilder or stdenv.shell;
           args = attrs.args or ["-e" (attrs.builder or ./default-builder.sh)];
           inherit stdenv;
@@ -278,7 +274,7 @@ rec {
       meta = {
           # `name` above includes cross-compilation cruft (and is under assert),
           # lets have a clean always accessible version here.
-          name = computedName;
+          name = attrs.name or "${attrs.pname}-${attrs.version}";
 
           # If the packager hasn't specified `outputsToInstall`, choose a default,
           # which is the name of `p.bin or p.out or p`;
@@ -289,7 +285,8 @@ rec {
           outputsToInstall =
             let
               hasOutput = out: builtins.elem out outputs;
-            in [( lib.findFirst hasOutput null (["bin" "out"] ++ outputs) )];
+            in [( lib.findFirst hasOutput null (["bin" "out"] ++ outputs) )]
+              ++ lib.optional (hasOutput "man") "man";
         }
         // attrs.meta or {}
         # Fill `meta.position` to identify the source location of the package.

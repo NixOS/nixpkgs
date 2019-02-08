@@ -1,0 +1,119 @@
+diff --git a/esphomeyaml/__main__.py b/esphomeyaml/__main__.py
+index 26f42c1..529d2e0 100644
+--- a/esphomeyaml/__main__.py
++++ b/esphomeyaml/__main__.py
+@@ -167,13 +167,10 @@ def compile_program(args, config):
+ 
+ 
+ def upload_using_esptool(config, port):
+-    import esptool
+-
+     path = os.path.join(CORE.build_path, '.pioenvs', CORE.name, 'firmware.bin')
+-    cmd = ['esptool.py', '--before', 'default_reset', '--after', 'hard_reset',
++    cmd = ['@esptool@/bin/esptool.py', '--before', 'default_reset', '--after', 'hard_reset',
+            '--chip', 'esp8266', '--port', port, 'write_flash', '0x0', path]
+-    # pylint: disable=protected-access
+-    return run_external_command(esptool._main, *cmd)
++    return run_external_command(*cmd)
+ 
+ 
+ def upload_program(config, args, host):
+diff --git a/esphomeyaml/platformio_api.py b/esphomeyaml/platformio_api.py
+index df29491..f991701 100644
+--- a/esphomeyaml/platformio_api.py
++++ b/esphomeyaml/platformio_api.py
+@@ -13,12 +13,9 @@ _LOGGER = logging.getLogger(__name__)
+ 
+ 
+ def run_platformio_cli(*args, **kwargs):
+-    import platformio.__main__
+-
+     os.environ["PLATFORMIO_FORCE_COLOR"] = "true"
+-    cmd = ['platformio'] + list(args)
+-    return run_external_command(platformio.__main__.main,
+-                                *cmd, **kwargs)
++    cmd = ['@platformio@/bin/platformio'] + list(args)
++    return run_external_command(*cmd, **kwargs)
+ 
+ 
+ def run_platformio_cli_run(config, verbose, *args, **kwargs):
+diff --git a/esphomeyaml/util.py b/esphomeyaml/util.py
+index eebb4b7..9e9e58f 100644
+--- a/esphomeyaml/util.py
++++ b/esphomeyaml/util.py
+@@ -4,6 +4,7 @@ import io
+ import logging
+ import re
+ import sys
++import subprocess
+ 
+ _LOGGER = logging.getLogger(__name__)
+ 
+@@ -79,42 +80,25 @@ class RedirectText(object):
+         return True
+ 
+ 
+-def run_external_command(func, *cmd, **kwargs):
+-    def mock_exit(return_code):
+-        raise SystemExit(return_code)
+-
+-    orig_argv = sys.argv
+-    orig_exit = sys.exit  # mock sys.exit
++def run_external_command(*cmd, **kwargs):
+     full_cmd = u' '.join(shlex_quote(x) for x in cmd)
+     _LOGGER.info(u"Running:  %s", full_cmd)
+ 
+-    orig_stdout = sys.stdout
+-    sys.stdout = RedirectText(sys.stdout)
+-    orig_stderr = sys.stderr
+-    sys.stderr = RedirectText(sys.stderr)
+-
+     capture_stdout = kwargs.get('capture_stdout', False)
+     if capture_stdout:
+-        cap_stdout = sys.stdout = io.BytesIO()
++        cap_stdout = io.BytesIO()
++    else:
++        cap_stdout = sys.stdout
+ 
+     try:
+-        sys.argv = list(cmd)
+-        sys.exit = mock_exit
+-        return func() or 0
+-    except KeyboardInterrupt:
+-        return 1
+-    except SystemExit as err:
+-        return err.args[0]
++        completed_process = subprocess.run(cmd,
++                                           stdout=RedirectText(cap_stdout),
++                                           stderr=RedirectText(sys.stderr))
++        return completed_process.returncode
+     except Exception as err:  # pylint: disable=broad-except
+         _LOGGER.error(u"Running command failed: %s", err)
+         _LOGGER.error(u"Please try running %s locally.", full_cmd)
+     finally:
+-        sys.argv = orig_argv
+-        sys.exit = orig_exit
+-
+-        sys.stdout = orig_stdout
+-        sys.stderr = orig_stderr
+-
+         if capture_stdout:
+             # pylint: disable=lost-exception
+             return cap_stdout.getvalue()
+diff --git a/setup.py b/setup.py
+index 78a5378..8ce80de 100755
+--- a/setup.py
++++ b/setup.py
+@@ -23,12 +23,10 @@ DOWNLOAD_URL = '{}/archive/{}.zip'.format(GITHUB_URL, const.__version__)
+ 
+ REQUIRES = [
+     'voluptuous>=0.11.1',
+-    'platformio>=3.5.3',
+     'pyyaml>=3.12',
+     'paho-mqtt>=1.3.1',
+     'colorlog>=3.1.2',
+     'tornado>=5.0.0',
+-    'esptool>=2.3.1',
+     'typing>=3.0.0',
+     'protobuf>=3.4',
+     'tzlocal>=1.4',

@@ -7,7 +7,6 @@
 , isPy3k
 , numpy
 , llvmlite
-, argparse
 , funcsigs
 , singledispatch
 , libcxx
@@ -24,7 +23,7 @@ buildPythonPackage rec {
 
   NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isDarwin "-I${libcxx}/include/c++/v1";
 
-  propagatedBuildInputs = [numpy llvmlite argparse] ++ stdenv.lib.optional (!isPy3k) funcsigs ++ stdenv.lib.optional (isPy27 || isPy33) singledispatch;
+  propagatedBuildInputs = [numpy llvmlite] ++ stdenv.lib.optional (!isPy3k) funcsigs ++ stdenv.lib.optional (isPy27 || isPy33) singledispatch;
 
   # Copy test script into $out and run the test suite.
   checkPhase = ''

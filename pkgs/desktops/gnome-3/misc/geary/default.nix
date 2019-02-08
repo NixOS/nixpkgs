@@ -30,6 +30,12 @@ stdenv.mkDerivation rec {
       url = https://gitlab.gnome.org/GNOME/geary/commit/e091f24b00ec421e1aadd5e360d1550e658ad5ef.patch;
       sha256 = "0d5hc4h9c1hnn2sk18nkpmzdvwm3h746n2zj8n22ax9rj6lxl38l";
     })
+    # Fix build with vala 0.40.12
+    # See: https://gitlab.gnome.org/GNOME/vala/blob/0.40.12/NEWS#L22
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/geary/commit/088cb2c0aa35ad4b54ea5a0a2edaf0ff96c64b45.patch";
+      sha256 = "0cnjmbd3snm8ggmprqa32f7i3w86gs3ylab9p5ffj921dcpvvlb2";
+    })
   ];
 
   nativeBuildInputs = [ vala_0_40 intltool pkgconfig wrapGAppsHook cmake ninja desktop-file-utils gnome-doc-utils gobject-introspection ];

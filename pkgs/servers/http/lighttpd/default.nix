@@ -24,6 +24,8 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     patchShebangs tests
+    # Linux sandbox has an empty hostname and not /etc/hosts, which fails some tests
+    sed -ire '/[$]self->{HOSTNAME} *=/i     if(length($name)==0) { $name = "127.0.0.1" }' tests/LightyTest.pm
   '';
 
   nativeBuildInputs = [ pkgconfig ];

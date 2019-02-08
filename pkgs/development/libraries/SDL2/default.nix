@@ -1,7 +1,7 @@
 { stdenv, config, libGLSupported, fetchurl, pkgconfig, pruneLibtoolFiles
 , openglSupport ? libGLSupported, libGL
 , alsaSupport ? stdenv.isLinux, alsaLib
-, x11Support ? !stdenv.isCygwin, libX11, xproto, libICE, libXi, libXScrnSaver, libXcursor, libXinerama, libXext, libXxf86vm, libXrandr
+, x11Support ? !stdenv.isCygwin, libX11, xorgproto, libICE, libXi, libXScrnSaver, libXcursor, libXinerama, libXext, libXxf86vm, libXrandr
 , waylandSupport ? stdenv.isLinux, wayland, wayland-protocols, libxkbcommon
 , dbusSupport ? stdenv.isLinux, dbus
 , udevSupport ? false, udev
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     # Propagated for #include <GLES/gl.h> in SDL_opengles.h.
     ++ optional openglSupport libGL
     # Propagated for #include <X11/Xlib.h> and <X11/Xatom.h> in SDL_syswm.h.
-    ++ optionals x11Support [ libX11 xproto ];
+    ++ optionals x11Support [ libX11 xorgproto ];
 
   dlopenBuildInputs = [ ]
     ++ optional  alsaSupport alsaLib

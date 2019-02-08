@@ -1279,7 +1279,9 @@ makeFlags = [ "PREFIX=$(out)" ];
        <command>make</command>. You must use this instead of
        <varname>makeFlags</varname> if the arguments contain spaces, e.g.
 <programlisting>
-makeFlagsArray=(CFLAGS="-O0 -g" LDFLAGS="-lfoo -lbar")
+preBuild = ''
+  makeFlagsArray+=(CFLAGS="-O0 -g" LDFLAGS="-lfoo -lbar")
+'';
 </programlisting>
        Note that shell arrays cannot be passed through environment variables,
        so you cannot set <varname>makeFlagsArray</varname> in a derivation
@@ -2190,10 +2192,130 @@ addEnvHooks "$hostOffset" myBashFunction
   </para>
 
   <para>
-   Here are some packages that provide a setup hook. Since the mechanism is
-   modular, this probably isn't an exhaustive list. Then again, since the
-   mechanism is only to be used as a last resort, it might be.
-   <variablelist>
+    First, let’s cover some setup hooks that are part of Nixpkgs
+    default stdenv. This means that they are run for every package
+    built using <function>stdenv.mkDerivation</function>. Some of
+    these are platform specific, so they may run on Linux but not
+    Darwin or vice-versa.
+    <variablelist>
+    <varlistentry>
+     <term>
+      <literal>move-docs.sh</literal>
+     </term>
+     <listitem>
+       <para>
+       This setup hook moves any installed documentation to the
+       <literal>/share</literal> subdirectory directory. This includes
+       the man, doc and info directories. This is needed for legacy
+       programs that do not know how to use the
+       <literal>share</literal> subdirectory.
+       </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term>
+      <literal>compress-man-pages.sh</literal>
+     </term>
+     <listitem>
+       <para>
+       This setup hook compresses any man pages that have been
+       installed. The compression is done using the gzip program. This
+       helps to reduce the installed size of packages.
+       </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term>
+      <literal>strip.sh</literal>
+     </term>
+     <listitem>
+       <para>
+       This runs the strip command on installed binaries and
+       libraries. This removes unnecessary information like debug
+       symbols when they are not needed. This also helps to reduce the
+       installed size of packages.
+       </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term>
+      <literal>patch-shebangs.sh</literal>
+     </term>
+     <listitem>
+       <para>
+       This setup hook patches installed scripts to use the full path
+       to the shebang interpreter. A shebang interpreter is the first
+       commented line of a script telling the operating system which
+       program will run the script (e.g <literal>#!/bin/bash</literal>). In
+       Nix, we want an exact path to that interpreter to be used. This
+       often replaces <literal>/bin/sh</literal> with a path in the
+       Nix store.
+       </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term>
+      <literal>audit-tmpdir.sh</literal>
+     </term>
+     <listitem>
+       <para>
+       This verifies that no references are left from the install
+       binaries to the directory used to build those binaries. This
+       ensures that the binaries do not need things outside the Nix
+       store. This is currently supported in Linux only.
+       </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term>
+      <literal>multiple-outputs.sh</literal>
+     </term>
+     <listitem>
+       <para>
+       This setup hook adds configure flags that tell packages to
+       install files into any one of the proper outputs listed in
+       <literal>outputs</literal>. This behavior can be turned off by setting
+       <literal>setOutputFlags</literal> to false in the derivation
+       environment. See <xref linkend="chap-multiple-output"/> for
+       more information.
+       </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term>
+      <literal>move-sbin.sh</literal>
+     </term>
+     <listitem>
+       <para>
+       This setup hook moves any binaries installed in the sbin
+       subdirectory into bin. In addition, a link is provided from
+       sbin to bin for compatibility.
+       </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term>
+      <literal>move-lib64.sh</literal>
+     </term>
+     <listitem>
+       <para>
+       This setup hook moves any libraries installed in the lib64
+       subdirectory into lib. In addition, a link is provided from
+       lib64 to lib for compatibility.
+       </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term>
+      <literal>set-source-date-epoch-to-latest.sh</literal>
+     </term>
+     <listitem>
+       <para>
+       This sets <literal>SOURCE_DATE_EPOCH</literal> to the
+       modification time of the most recent file.
+       </para>
+     </listitem>
+    </varlistentry>
     <varlistentry>
      <term>
       Bintools Wrapper
@@ -2300,6 +2422,15 @@ addEnvHooks "$hostOffset" myBashFunction
       </para>
      </listitem>
     </varlistentry>
+    </variablelist>
+  </para>
+
+  <para>
+   Here are some more packages that provide a setup hook. Since the
+   list of hooks is extensible, this is not an exhaustive list the
+   mechanism is only to be used as a last resort, it might cover most
+   uses.
+   <variablelist>
     <varlistentry>
      <term>
       Perl

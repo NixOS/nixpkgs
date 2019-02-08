@@ -193,7 +193,7 @@ let
     let mkScriptName =  s: "unit-script-" + (replaceChars [ "\\" "@" ] [ "-" "_" ] (shellEscape s) );
     in  pkgs.writeTextFile { name = mkScriptName name; executable = true; inherit text; };
 
-  unitConfig = { config, ... }: {
+  unitConfig = { config, options, ... }: {
     config = {
       unitConfig =
         optionalAttrs (config.requires != [])
@@ -219,7 +219,9 @@ let
         // optionalAttrs (config.documentation != []) {
           Documentation = toString config.documentation; }
         // optionalAttrs (config.onFailure != []) {
-          OnFailure = toString config.onFailure;
+          OnFailure = toString config.onFailure; }
+        // optionalAttrs (options.startLimitIntervalSec.isDefined) {
+          StartLimitIntervalSec = toString config.startLimitIntervalSec;
         };
     };
   };

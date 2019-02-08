@@ -3,14 +3,13 @@
 
 stdenv.mkDerivation rec {
   name = "ledger-${version}";
-  version = "3.1.1";
+  version = "3.1.2";
 
   src = fetchFromGitHub {
     owner  = "ledger";
     repo   = "ledger";
-    rev    = "v${version}";
-    sha256 = "1j4p7djkmdmd858hylrsc3inamh9z0vkfl98s9wiqfmrzw51pmxp";
-    fetchSubmodules = true;
+    rev    = version;
+    sha256 = "0hwnipj2m9p95hhyv6kyq54m27g14r58gnsy2my883kxhpcyb2vc";
   };
 
   buildInputs = [
@@ -30,13 +29,6 @@ stdenv.mkDerivation rec {
 
   postBuild = ''
     make doc
-  '';
-
-  # Skip byte-compiling of emacs-lisp files because this is currently
-  # broken in ledger...
-  postInstall = ''
-    mkdir -p $out/share/emacs/site-lisp/
-    cp -v "$src/lisp/"*.el $out/share/emacs/site-lisp/
   '';
 
   meta = with stdenv.lib; {

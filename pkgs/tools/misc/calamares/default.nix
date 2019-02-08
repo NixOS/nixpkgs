@@ -24,8 +24,8 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = false;
 
   cmakeFlags = [
-    "-DPYTHON_LIBRARY=${python}/lib/libpython${python.majorVersion}m.so"
-    "-DPYTHON_INCLUDE_DIR=${python}/include/python${python.majorVersion}m"
+    "-DPYTHON_LIBRARY=${python}/lib/lib${python.libPrefix}.so"
+    "-DPYTHON_INCLUDE_DIR=${python}/include/${python.libPrefix}"
     "-DCMAKE_VERBOSE_MAKEFILE=True"
     "-DCMAKE_BUILD_TYPE=Release"
     "-DWITH_PYTHONQT:BOOL=ON"

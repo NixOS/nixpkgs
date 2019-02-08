@@ -77,18 +77,22 @@
   Shared folders can be given a name and a path in the host system in the
   VirtualBox settings (Machine / Settings / Shared Folders, then click on the
   "Add" icon). Add the following to the
-  <literal>/etc/nixos/configuration.nix</literal> to auto-mount them:
+  <literal>/etc/nixos/configuration.nix</literal> to auto-mount them. If you 
+   do not add <literal>"nofail"</literal>, the system will no boot properly. 
+   The same goes for disabling <literal>rngd</literal> which is normally used 
+   to get randomness but this does not work in virtual machines.
  </para>
 
 <programlisting>
 { config, pkgs, ...} :
 {
+  security.rngd.enable = false; // otherwise vm will not boot
   ...
 
   fileSystems."/virtualboxshare" = {
     fsType = "vboxsf";
     device = "nameofthesharedfolder";
-    options = [ "rw" ];
+    options = [ "rw" "nofail" ];
   };
 }
 </programlisting>

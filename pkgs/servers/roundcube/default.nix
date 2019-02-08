@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchzip }:
+{ lib, stdenv, fetchzip, buildEnv, roundcube, roundcubePlugins }:
 let
   version = "1.3.8";
 in
@@ -13,6 +13,11 @@ fetchzip rec {
     rm -rf $out/installer
   '';
 
+  passthru.withPlugins = f: buildEnv {
+    name = "${roundcube.name}-with-plugins";
+    paths = (f roundcubePlugins) ++ [ roundcube ];
+  };
+
   meta = {
     description = "Open Source Webmail Software";
     maintainers = with stdenv.lib.maintainers; [ vskilet ];
@@ -20,4 +25,3 @@ fetchzip rec {
     platforms = stdenv.lib.platforms.all;
   };
 }
-

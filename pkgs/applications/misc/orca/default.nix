@@ -9,7 +9,7 @@
 
 let
   pname = "orca";
-  version = "3.30.1";
+  version = "3.30.2";
 in buildPythonApplication rec {
   name = "${pname}-${version}";
 
@@ -17,7 +17,7 @@ in buildPythonApplication rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "1b9s69frjmghjm1p9a4rrvknl9m0qlwr7mr4lsxkvjnblhsnw0g7";
+    sha256 = "17asibc46i5gr2fw04jvvdi85zzmxwlnhyq7r6cr3m5prrdr8a53";
   };
 
   patches = [
