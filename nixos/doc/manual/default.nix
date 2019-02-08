@@ -268,7 +268,10 @@ in rec {
         --stringparam id.warnings "1" \
         --nonet --output $dst/ \
         ${docbook_xsl_ns}/xml/xsl/docbook/xhtml/chunktoc.xsl \
-        ${manual-combined}/manual-combined.xml
+        ${manual-combined}/manual-combined.xml \
+        |& tee xsltproc.out
+      grep "^ID recommended on" xsltproc.out &>/dev/null && echo "error: some IDs are missing" && false
+      rm xsltproc.out
 
       mkdir -p $dst/images/callouts
       cp ${docbook_xsl_ns}/xml/xsl/docbook/images/callouts/*.svg $dst/images/callouts/
