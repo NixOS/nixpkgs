@@ -3252,6 +3252,8 @@ in {
 
   notebook = callPackage ../development/python-modules/notebook { };
 
+  notedown = callPackage ../development/python-modules/notedown { };
+
   notify = callPackage ../development/python-modules/notify { };
 
   notify2 = callPackage ../development/python-modules/notify2 {};
