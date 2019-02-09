@@ -17790,7 +17790,7 @@ in
     poppler = poppler_0_61;
   };
 
-  inspectrum = libsForQt5.callPackage ../applications/misc/inspectrum { };
+  inspectrum = libsForQt5.callPackage ../applications/radio/inspectrum { };
 
   ion3 = callPackage ../applications/window-managers/ion-3 {
     lua = lua5_1;
