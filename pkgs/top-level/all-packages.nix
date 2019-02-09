@@ -3587,7 +3587,7 @@ in
 
   kalibrate-rtl = callPackage ../tools/misc/kalibrate-rtl { };
 
-  kalibrate-hackrf = callPackage ../tools/misc/kalibrate-hackrf { };
+  kalibrate-hackrf = callPackage ../applications/radio/kalibrate-hackrf { };
 
   kakoune = callPackage ../applications/editors/kakoune { };
 
