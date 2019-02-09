@@ -35,6 +35,7 @@ let
         inherit flint ecl arb;
         inherit sage-src pynac singular;
         linbox = pkgs.linbox.override { withSage = true; };
+        pkg-config = pkgs.pkgconfig; # not to confuse with pythonPackages.pkgconfig
       };
     };
   };
