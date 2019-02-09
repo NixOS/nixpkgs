@@ -200,7 +200,12 @@ in rec {
       python2 = self.python;
 
       ninja = super.ninja.override { buildDocs = false; };
-      darwin = super.darwin // { cctools = super.darwin.cctools.override { llvm = null; }; };
+      darwin = super.darwin // {
+        cctools = super.darwin.cctools.override {
+          llvm = null;
+          enableTapiSupport = false;
+        };
+      };
     };
   in with prevStage; stageFun 1 prevStage {
     extraPreHook = "export NIX_CFLAGS_COMPILE+=\" -F${bootstrapTools}/Library/Frameworks\"";
@@ -326,6 +331,7 @@ in rec {
       darwin = super.darwin // rec {
         inherit (darwin) dyld Libsystem libiconv locale;
 
+        cctools = super.darwin.cctools.override { enableTapiSupport = false; };
         libxml2-nopython = super.libxml2.override { pythonSupport = false; };
         CF = super.darwin.CF.override {
           libxml2 = libxml2-nopython;
