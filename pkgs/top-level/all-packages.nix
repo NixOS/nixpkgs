@@ -17072,7 +17072,7 @@ in
 
   gksu = callPackage ../applications/misc/gksu { };
 
-  gnss-sdr = callPackage ../applications/misc/gnss-sdr { boost=boost166; };
+  gnss-sdr = callPackage ../applications/radio/gnss-sdr { boost=boost166; };
 
   gnuradio = callPackage ../applications/radio/gnuradio {
     inherit (python2Packages) cheetah lxml Mako matplotlib numpy python pyopengl pyqt4 scipy wxPython pygtk;
