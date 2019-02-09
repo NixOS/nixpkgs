@@ -1,6 +1,16 @@
 { stdenv, autoconf, automake, libtool, gnome3, which, fetchgit, libgtop, libwnck3, glib, vala, pkgconfig
 , libstartup_notification, gobject-introspection, gtk-doc, docbook_xsl
-, xorgserver, dbus, python2 }:
+, xorgserver, dbus, python2, perl, substituteAll }:
+
+let
+
+  update-bamf-index = substituteAll {
+    src = ./update-bamf-index.pl;
+    inherit perl;
+    isExecutable = true;
+  };
+
+in
 
 stdenv.mkDerivation rec {
   name = "bamf-${version}";
@@ -39,6 +49,8 @@ stdenv.mkDerivation rec {
     libstartup_notification
     libwnck3
   ];
+
+  passthru.update-index = update-bamf-index;
 
   # Fix hard-coded path
   # https://bugs.launchpad.net/bamf/+bug/1780557
