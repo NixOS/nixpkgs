@@ -18413,7 +18413,7 @@ in
 
   multimarkdown = callPackage ../tools/typesetting/multimarkdown { };
 
-  multimon-ng = callPackage ../applications/misc/multimon-ng { };
+  multimon-ng = callPackage ../applications/radio/multimon-ng { };
 
   inherit (callPackages ../applications/networking/mumble {
       avahi = avahi.override {
