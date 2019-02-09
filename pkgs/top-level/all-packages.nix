@@ -12560,11 +12560,11 @@ in
 
   soapyhackrf = callPackage ../applications/radio/soapyhackrf { };
 
-  soapysdr = callPackage ../applications/misc/soapysdr { inherit (python3Packages) python numpy; };
+  soapysdr = callPackage ../applications/radio/soapysdr { inherit (python3Packages) python numpy; };
 
   soapyremote = callPackage ../applications/radio/soapyremote { };
 
-  soapysdr-with-plugins = callPackage ../applications/misc/soapysdr {
+  soapysdr-with-plugins = callPackage ../applications/radio/soapysdr {
     inherit (python3Packages) python numpy;
     extraPackages = [
       limesuite
