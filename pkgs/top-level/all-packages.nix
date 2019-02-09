@@ -17020,7 +17020,7 @@ in
   flink = callPackage ../applications/networking/cluster/flink { };
   flink_1_5 = flink.override { version = "1.5"; };
 
-  fllog = callPackage ../applications/misc/fllog { };
+  fllog = callPackage ../applications/radio/fllog { };
 
   flmsg = callPackage ../applications/misc/flmsg { };
 
