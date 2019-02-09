@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "An authentication handler for using Kerberos with Python Requests.";
-    homepage    = "https://github.com/requests/requests-kerberos";
+    homepage    = https://github.com/requests/requests-kerberos;
     license     = licenses.isc;
     maintainers = with maintainers; [ catern ];
   };
