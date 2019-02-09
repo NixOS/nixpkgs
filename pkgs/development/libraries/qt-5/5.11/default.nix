@@ -51,29 +51,17 @@ let
   patches = {
     qtbase = [
       ./qtbase.patch
-      ./qtbase-darwin.patch
-      ./qtbase-revert-no-macos10.10.patch
       ./qtbase-fixguicmake.patch
-    ] ++ optionals stdenv.isDarwin [
-      ./qtbase-darwin-nseventtype.patch
-      ./qtbase-darwin-revert-69221.patch
     ];
     qtdeclarative = [ ./qtdeclarative.patch ];
     qtscript = [ ./qtscript.patch ];
     qtserialport = [ ./qtserialport.patch ];
     qttools = [ ./qttools.patch ];
-    qtwebengine = [ ./qtwebengine-no-build-skip.patch ]
-      ++ optional stdenv.cc.isClang ./qtwebengine-clang-fix.patch
-      ++ optionals stdenv.isDarwin [
-        ./qtwebengine-darwin-no-platform-check.patch
-        ./qtwebengine-darwin-sdk-10.10.patch
-        ./qtwebengine-darwin-old-sdk.patch
-      ];
-    qtwebkit = [ ./qtwebkit.patch ]
-      ++ optionals stdenv.isDarwin [
-        ./qtwebkit-darwin-no-readline.patch
-        ./qtwebkit-darwin-no-qos-classes.patch
-      ];
+    qtwebengine = [
+      ./qtwebengine-no-build-skip.patch
+      ./qtwebengine-darwin-no-platform-check.patch
+    ];
+    qtwebkit = [ ./qtwebkit.patch ];
   };
 
   mkDerivation =
