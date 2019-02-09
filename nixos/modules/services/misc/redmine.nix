@@ -30,6 +30,13 @@ let
     ${cfg.extraConfig}
   '';
 
+  additionalEnvironment = pkgs.writeText "additional_environment.rb" ''
+    config.logger = Logger.new("${cfg.stateDir}/log/production.log", 14, 1048576)
+    config.logger.level = Logger::INFO
+
+    ${cfg.extraEnv}
+  '';
+
   unpackTheme = unpack "theme";
   unpackPlugin = unpack "plugin";
   unpack = id: (name: source:
@@ -54,12 +61,20 @@ in
         description = "Enable the Redmine service.";
       };
 
+      # default to the 4.x series not forcing major version upgrade of those on the 3.x series
       package = mkOption {
         type = types.package;
-        default = pkgs.redmine;
+        default = if versionAtLeast config.system.stateVersion "19.03"
+          then pkgs.redmine_4
+          else pkgs.redmine
+        ;
         defaultText = "pkgs.redmine";
-        description = "Which Redmine package to use.";
-        example = "pkgs.redmine.override { ruby = pkgs.ruby_2_3; }";
+        description = ''
+          Which Redmine package to use. This defaults to version 3.x if
+          <literal>system.stateVersion &lt; 19.03</literal> and version 4.x
+          otherwise.
+        '';
+        example = "pkgs.redmine_4.override { ruby = pkgs.ruby_2_4; }";
       };
 
       user = mkOption {
@@ -100,6 +115,19 @@ in
             smtp_settings:
               address: mail.example.com
               port: 25
+        '';
+      };
+
+      extraEnv = mkOption {
+        type = types.lines;
+        default = "";
+        description = ''
+          Extra configuration in additional_environment.rb.
+
+          See https://svn.redmine.org/redmine/trunk/config/additional_environment.rb.example
+        '';
+        example = literalExample ''
+          config.logger.level = Logger::DEBUG
         '';
       };
 
@@ -248,6 +276,9 @@ in
 
         # link in the application configuration
         ln -fs ${configurationYml} "${cfg.stateDir}/config/configuration.yml"
+
+        # link in the additional environment configuration
+        ln -fs ${additionalEnvironment} "${cfg.stateDir}/config/additional_environment.rb"
 
 
         # link in all user specified themes

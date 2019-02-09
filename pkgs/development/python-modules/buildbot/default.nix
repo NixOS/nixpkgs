@@ -1,8 +1,8 @@
 { stdenv, lib, buildPythonPackage, fetchPypi, makeWrapper, isPy3k,
   python, twisted, jinja2, zope_interface, future, sqlalchemy,
-  sqlalchemy_migrate, dateutil, txaio, autobahn, pyjwt, treq, txrequests,
-  txgithub, pyjade, boto3, moto, mock, python-lz4, setuptoolsTrial, isort, pylint,
-  flake8, buildbot-worker, buildbot-pkg, glibcLocales }:
+  sqlalchemy_migrate, dateutil, txaio, autobahn, pyjwt, pyyaml, treq,
+  txrequests, txgithub, pyjade, boto3, moto, mock, python-lz4, setuptoolsTrial,
+  isort, pylint, flake8, buildbot-worker, buildbot-pkg, glibcLocales }:
 
 let
   withPlugins = plugins: buildPythonPackage {
@@ -24,11 +24,11 @@ let
 
   package = buildPythonPackage rec {
     pname = "buildbot";
-    version = "1.5.0";
+    version = "1.8.1";
 
     src = fetchPypi {
       inherit pname version;
-      sha256 = "d02a717222bcdc98205624c7d6b0b2ae24653170f2971946f26bf8cadea4fd52";
+      sha256 = "1zadmyrlk7p9h1akmbzwa7p90s7jwsxvdx4xn9i54dnda450m3a7";
     };
 
     propagatedBuildInputs = [
@@ -43,6 +43,7 @@ let
       txaio
       autobahn
       pyjwt
+      pyyaml
 
       # tls
       twisted.extras.tls
@@ -71,13 +72,16 @@ let
       ./skip_test_linux_distro.patch
     ];
 
-    LC_ALL = "en_US.UTF-8";
+    postPatch = ''
+      substituteInPlace buildbot/scripts/logwatcher.py --replace '/usr/bin/tail' "$(type -P tail)"
+    '';
 
     # TimeoutErrors on slow machines -> aarch64
     doCheck = !stdenv.isAarch64;
 
-    postPatch = ''
-      substituteInPlace buildbot/scripts/logwatcher.py --replace '/usr/bin/tail' "$(type -P tail)"
+    preCheck = ''
+      export LC_ALL="en_US.UTF-8"
+      export PATH="$out/bin:$PATH"
     '';
 
     passthru = {

@@ -964,6 +964,40 @@ rec {
       packages = commonDebPackages ++ [ "diffutils" "libc-bin" ];
     };
 
+    ubuntu1804i386 = {
+      name = "ubuntu-18.04-bionic-i386";
+      fullName = "Ubuntu 18.04 Bionic (i386)";
+      packagesLists =
+        [ (fetchurl {
+            url = mirror://ubuntu/dists/bionic/main/binary-i386/Packages.xz;
+            sha256 = "0f0v4131kwf7m7f8j3288rlqdxk1k3vqy74b7fcfd6jz9j8d840i";
+          })
+          (fetchurl {
+            url = mirror://ubuntu/dists/bionic/universe/binary-i386/Packages.xz;
+            sha256 = "1v75c0dqr0wp0dqd4hnci92qqs4hll8frqdbpswadgxm5chn91bw";
+          })
+        ];
+      urlPrefix = mirror://ubuntu;
+      packages = commonDebPackages ++ [ "diffutils" "libc-bin" ];
+    };
+
+    ubuntu1804x86_64 = {
+      name = "ubuntu-18.04-bionic-amd64";
+      fullName = "Ubuntu 18.04 Bionic (amd64)";
+      packagesLists =
+        [ (fetchurl {
+            url = mirror://ubuntu/dists/bionic/main/binary-amd64/Packages.xz;
+            sha256 = "1ls81bjyvmfz6i919kszl7xks1ibrh1xqhsk6698ackndkm0wp39";
+          })
+          (fetchurl {
+            url = mirror://ubuntu/dists/bionic/universe/binary-amd64/Packages.xz;
+            sha256 = "1832nqpn4ap95b3sj870xqayrza9in4kih9jkmjax27pq6x15v1r";
+          })
+        ];
+      urlPrefix = mirror://ubuntu;
+      packages = commonDebPackages ++ [ "diffutils" "libc-bin" ];
+    };
+
     debian8i386 = {
       name = "debian-8.11-jessie-i386";
       fullName = "Debian 8.11 Jessie (i386)";

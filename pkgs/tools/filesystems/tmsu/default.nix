@@ -44,11 +44,11 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out/bin
     mkdir -p $out/sbin
-    mkdir -p $out/share/man
+    mkdir -p $out/share/man/man1
     mkdir -p $out/share/zsh/site-functions
     make install INSTALL_DIR=$out/bin \
                  MOUNT_INSTALL_DIR=$out/sbin \
-                 MAN_INSTALL_DIR=$out/share/man \
+                 MAN_INSTALL_DIR=$out/share/man/man1 \
                  ZSH_COMP_INSTALL_DIR=$out/share/zsh/site-functions
   '';
 

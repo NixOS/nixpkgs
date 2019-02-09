@@ -2,12 +2,12 @@
 , pyserial, pygtk }:
 
 stdenv.mkDerivation rec {
-  name = "chirp-daily-${version}";
-  version = "20181018";
+  pname = "chirp-daily";
+  version = "20190201";
 
   src = fetchurl {
-    url = "https://trac.chirp.danplanet.com/chirp_daily/daily-${version}/${name}.tar.gz";
-    sha256 = "0jd7xi6q09b3djn1k7pj1sbqvw24kn7dcp9r6abvxily4pc1xhdr";
+    url = "https://trac.chirp.danplanet.com/chirp_daily/daily-${version}/${pname}-${version}.tar.gz";
+    sha256 = "1ag3qzdq39zhpagviq9gpwk4y3h11z0j40nccsnhlq8h8bxpvwlf";
   };
 
   nativeBuildInputs = [ makeWrapper ];

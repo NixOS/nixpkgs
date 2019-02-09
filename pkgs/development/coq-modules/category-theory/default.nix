@@ -18,7 +18,7 @@ let
     "8.7" = v20180709;
     "8.8" = v20181016;
   };
-  param = params."${coq.coq-version}" or params."8.8";
+  param = params."${coq.coq-version}";
 in
 
 stdenv.mkDerivation rec {

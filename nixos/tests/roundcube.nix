@@ -10,6 +10,8 @@ import ./make-test.nix ({ pkgs, ...} : {
         enable = true;
         hostName = "roundcube";
         database.password = "notproduction";
+        package = pkgs.roundcube.withPlugins (plugins: [ plugins.persistent_login ]);
+        plugins = [ "persistent_login" ];
       };
       services.nginx.virtualHosts.roundcube = {
         forceSSL = false;
@@ -23,6 +25,6 @@ import ./make-test.nix ({ pkgs, ...} : {
     $roundcube->waitForUnit("postgresql.service");
     $roundcube->waitForUnit("phpfpm-roundcube.service");
     $roundcube->waitForUnit("nginx.service");
-    $roundcube->succeed("curl -sSfL http://roundcube/");
+    $roundcube->succeed("curl -sSfL http://roundcube/ | grep 'Keep me logged in'");
   '';
 })

@@ -1,12 +1,12 @@
 { stdenv, buildPythonPackage, fetchPypi, python, pytest, glibcLocales }:
 
 buildPythonPackage rec {
-  version = "3.5.6";
+  version = "3.5.7";
   pname = "pyfakefs";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "efe9c318b2a37ae498a555889684c30ccb6a1b06bd391cb3baf0eb5ba68e9062";
+    sha256 = "8969435f8e7ca10f60c22096b02b15ad3af143de7d3bb4d73507b812bcdd8e37";
   };
 
   postPatch = ''

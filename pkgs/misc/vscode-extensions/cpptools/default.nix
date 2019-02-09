@@ -68,8 +68,8 @@ vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = {
     name = "cpptools";
     publisher = "ms-vscode";
-    version = "0.20.1";
-    sha256 = "1gmnkrn26n57vx2nm5hhalkkl2irak38m2lklgja0bi10jb6y08l";
+    version = "0.21.0";
+    sha256 = "0zq81xfj4hyz01kcw131fmql1mfs9yrjzcmw8i0yha0hymrgwngv";
   };
 
   buildInputs = [

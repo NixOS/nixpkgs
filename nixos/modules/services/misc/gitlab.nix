@@ -497,7 +497,12 @@ in {
     systemd.services.gitaly = {
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
-      path = with pkgs; [ gitAndTools.git cfg.packages.gitaly.rubyEnv cfg.packages.gitaly.rubyEnv.wrappedRuby ];
+      path = with pkgs; [
+        openssh
+        gitAndTools.git
+        cfg.packages.gitaly.rubyEnv
+        cfg.packages.gitaly.rubyEnv.wrappedRuby
+      ];
       serviceConfig = {
         Type = "simple";
         User = cfg.user;

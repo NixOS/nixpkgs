@@ -68,6 +68,11 @@
     github = "abbradar";
     name = "Nikolay Amiantov";
   };
+  abhi18av = {
+    email = "abhi18av@gmail.com";
+    github = "abhi18av";
+    name = "Abhinav Sharma";
+  };
   abigailbuccaneer = {
     email = "abigailbuccaneer@gmail.com";
     github = "abigailbuccaneer";
@@ -235,6 +240,11 @@
   all = {
     email = "nix-commits@lists.science.uu.nl";
     name = "Nix Committers";
+  };
+  allonsy = {
+    email = "linuxbash8@gmail.com";
+    github = "allonsy";
+    name = "Alec Snyder";
   };
   alunduil = {
     email = "alunduil@gmail.com";
@@ -1270,6 +1280,11 @@
     github = "eadwu";
     name = "Edmund Wu";
   };
+  eamsden = {
+    email = "edward@blackriversoft.com";
+    github = "eamsden";
+    name = "Edward Amsden";
+  };
   earldouglas = {
     email = "james@earldouglas.com";
     github = "earldouglas";
@@ -1294,6 +1309,11 @@
     email = "edef@edef.eu";
     github = "edef1c";
     name = "edef";
+  };
+  embr = {
+    email = "hi@liclac.eu";
+    github = "liclac";
+    name = "embr";
   };
   ederoyd46 = {
     email = "matt@ederoyd.co.uk";
@@ -1494,6 +1514,11 @@
     email = "nix@monoid.al";
     github = "expipiplus1";
     name = "Joe Hermaszewski";
+  };
+  eyjhb = {
+    email = "eyjhbb@gmail.com";
+    github = "eyJhb";
+    name = "eyJhb";
   };
   f--t = {
     email = "git@f-t.me";
@@ -3480,6 +3505,11 @@
     github = "pesterhazy";
     name = "Paulus Esterhazy";
   };
+  petabyteboy = {
+    email = "me@pbb.lc";
+    github = "petabyteboy";
+    name = "Milan Pässler";
+  };
   peterhoeg = {
     email = "peter@hoeg.com";
     github = "peterhoeg";
@@ -4156,6 +4186,11 @@
     github = "shlevy";
     name = "Shea Levy";
   };
+  shou = {
+    email = "x+g@shou.io";
+    github = "Shou";
+    name = "Benedict Aas";
+  };
   siddharthist = {
     email = "langston.barrett@gmail.com";
     github = "siddharthist";
@@ -4677,7 +4712,7 @@
     name = "Thomas Tuegel";
   };
   tv = {
-    email = "tv@shackspace.de";
+    email = "tv@krebsco.de";
     github = "4z3";
     name = "Tomislav Viljetić";
   };
@@ -5150,5 +5185,10 @@
     email = "massimo@typish.io";
     github = "mredaelli";
     name = "Massimo Redaelli";
+  };
+  shmish111 = {
+    email = "shmish111@gmail.com";
+    github = "shmish111";
+    name = "David Smith";
   };
 }

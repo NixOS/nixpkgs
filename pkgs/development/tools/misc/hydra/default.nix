@@ -1,12 +1,16 @@
 { stdenv, nix, perlPackages, buildEnv, releaseTools, fetchFromGitHub
 , makeWrapper, autoconf, automake, libtool, unzip, pkgconfig, sqlite, libpqxx
 , gitAndTools, mercurial, darcs, subversion, bazaar, openssl, bzip2, libxslt
-, guile, perl, postgresql, nukeReferences, git, boehmgc
+, guile, perl, postgresql, nukeReferences, git, boehmgc, nlohmann_json
 , docbook_xsl, openssh, gnused, coreutils, findutils, gzip, lzma, gnutar
 , rpm, dpkg, cdrkit, pixz, lib, fetchpatch, boost, autoreconfHook
 }:
 
 with stdenv;
+
+if lib.versions.major nix.version == "1"
+  then throw "This Hydra version doesn't support Nix 1.x"
+else
 
 let
   isGreaterNix20 = with lib.versions;
@@ -34,8 +38,8 @@ let
         CatalystViewDownload
         CatalystViewJSON
         CatalystViewTT
-        CatalystXRoleApplicator
         CatalystXScriptServerStarman
+        CatalystXRoleApplicator
         CryptRandPasswd
         DBDPg
         DBDSQLite
@@ -71,15 +75,15 @@ let
   };
 in releaseTools.nixBuild rec {
   name = "hydra-${version}";
-  version = "2018-08-07";
+  version = "2019-02-01";
 
   inherit stdenv;
 
   src = fetchFromGitHub {
     owner = "NixOS";
     repo = "hydra";
-    rev = "4dca8fe14d3f782bdf927f37efce722acefffff3";
-    sha256 = "1yas4psmvfp7lhcp81ia2sy93b78j9hiw9a6n3q2m1a616hwpm25";
+    rev = "8b5948f4cf12424c04df67a6eb136c9846fb2cfd";
+    sha256 = "0ldk3li394vykl9c4v9bs8pir05pmad24s0rx9bzqgz569zfj2iv";
   };
 
   buildInputs =
@@ -88,6 +92,7 @@ in releaseTools.nixBuild rec {
       guile # optional, for Guile + Guix support
       perlDeps perl nix
       postgresql # for running the tests
+      nlohmann_json
     ] ++ lib.optionals isGreaterNix20 [ boost ];
 
   hydraPath = lib.makeBinPath (

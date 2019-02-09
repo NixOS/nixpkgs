@@ -33,6 +33,9 @@ let
       iris = callPackage ../development/coq-modules/iris {};
       math-classes = callPackage ../development/coq-modules/math-classes { };
       mathcomp = callPackage ../development/coq-modules/mathcomp { };
+      mathcomp-analysis = callPackage ../development/coq-modules/mathcomp-analysis { };
+      mathcomp-bigenough = callPackage ../development/coq-modules/mathcomp-bigenough { };
+      mathcomp-finmap = callPackage ../development/coq-modules/mathcomp-finmap { };
       metalib = callPackage ../development/coq-modules/metalib { };
       multinomials = callPackage ../development/coq-modules/multinomials {};
       paco = callPackage ../development/coq-modules/paco {};

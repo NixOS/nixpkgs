@@ -1,11 +1,11 @@
 { stdenv, fetchurl, glib, gtk2, pkgconfig, hamlib }:
 stdenv.mkDerivation rec {
-  name = "xlog-${version}";
-  version = "2.0.15";
-  
+  pname = "xlog";
+  version = "2.0.17";
+
   src = fetchurl {
-    url = "https://download.savannah.gnu.org/releases/xlog/${name}.tar.gz";
-    sha256 = "0an883wqw3zwpw8nqinm9cb17hp2xw9vf603k4l2345p61jqdw2j";
+    url = "https://download.savannah.gnu.org/releases/xlog/${pname}-${version}.tar.gz";
+    sha256 = "0vmn8518zk7qk1mbp1h8dm0f8fx0z0jvmy42c1n15il714lj7vsl";
   };
 
   buildInputs = [ glib pkgconfig gtk2 hamlib ];
@@ -18,12 +18,11 @@ stdenv.mkDerivation rec {
          and EDI (ARRL VHF/UHF contest format) and can import twlog, editest and OH1AA logbook files.
          Xlog is able to do DXCC lookups and will display country information, CQ and ITU zone,
          location in latitude and longitude and distance and heading in kilometers or miles,
-         both for short and long path. 
+         both for short and long path.
       '';
     homepage = https://www.nongnu.org/xlog;
     maintainers = [ maintainers.mafo ];
     license = licenses.gpl3;
     platforms = platforms.unix;
   };
-
 }

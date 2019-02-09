@@ -45,6 +45,12 @@ buildPythonApplication rec {
     cp -r linux-package/{bin,share,lib} $out
     wrapProgram "$out/bin/kitty" --prefix PATH : "$out/bin:${stdenv.lib.makeBinPath [ imagemagick xsel ]}"
     runHook postInstall
+
+    # ZSH completions need to be invoked with `source`:
+    # https://github.com/kovidgoyal/kitty/blob/8ceb941051b89b7c50850778634f0b6137aa5e6e/docs/index.rst#zsh
+    mkdir -p "$out/share/"{bash-completion/completions,fish/vendor_completions.d,zsh/site-functions}
+    "$out/bin/kitty" + complete setup fish > "$out/share/fish/vendor_completions.d/kitty.fish"
+    "$out/bin/kitty" + complete setup bash > "$out/share/bash-completion/completions/kitty.bash"
   '';
 
   postInstall = ''

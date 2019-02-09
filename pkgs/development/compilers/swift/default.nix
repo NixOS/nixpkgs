@@ -34,7 +34,7 @@
 }:
 
 let
-  v_base = "4.2.1";
+  v_base = "4.2.2";
   version = "${v_base}-RELEASE";
   version_friendly = "${v_base}";
 
@@ -84,7 +84,7 @@ let
     };
     foundation = fetch {
       repo = "swift-corelibs-foundation";
-      sha256 = "1bfnkj8s3v327cy0czkngz0ryzmz7amjzkkxbsg2zyrhf9a9f0f7";
+      sha256 = "1ki9vc723r13zgm6bcmif43aypavb2hz299gbhp93qkndz8hqkx5";
     };
     libdispatch = fetch {
       repo = "swift-corelibs-libdispatch";
@@ -93,7 +93,7 @@ let
     };
     swift = fetch {
       repo = "swift";
-      sha256 = "0y277wi0m6zp1yph9s14mmc65m21q5fm6lgzkn2rkrbaz25fdzak";
+      sha256 = "1hwi6hi9ss1kj1s65v5q8v8d872c0914qfy1018xijd029lwq694";
     };
   };
 

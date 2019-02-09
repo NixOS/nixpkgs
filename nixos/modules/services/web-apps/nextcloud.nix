@@ -426,7 +426,7 @@ in {
               "~ ^/(?:index|remote|public|cron|core/ajax/update|status|ocs/v[12]|updater/.+|ocs-provider/.+)\\.php(?:$|/)" = {
                 priority = 500;
                 extraConfig = ''
-                  include ${pkgs.nginxMainline}/conf/fastcgi.conf;
+                  include ${config.services.nginx.package}/conf/fastcgi.conf;
                   fastcgi_split_path_info ^(.+\.php)(/.*)$;
                   fastcgi_param PATH_INFO $fastcgi_path_info;
                   fastcgi_param HTTPS ${if cfg.https then "on" else "off"};

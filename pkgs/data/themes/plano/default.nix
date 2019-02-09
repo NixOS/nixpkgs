@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, gdk_pixbuf, gtk_engines, gtk-engine-murrine }:
 
 stdenv.mkDerivation rec {
-  name = "plano-theme-${version}";
-  version = "3.30-2";
+  pname = "plano-theme";
+  version = "3.30-3";
 
   src = fetchFromGitHub {
     owner = "lassekongo83";
-    repo = "plano-theme";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "06yagpb0dpb8nzh3lvs607rzg6y5l6skl4mjcmbxayapsqka45hj";
+    sha256 = "1rb9whr5r2pj6fmwa9g0vdrfki3dqldnx85mpyq07jvxkipcdq6g";
   };
 
   buildInputs = [ gdk_pixbuf gtk_engines ];

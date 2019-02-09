@@ -1,17 +1,16 @@
-{ stdenv, fetchFromGitHub, postgresql, protobufc }:
+{ stdenv, fetchFromGitHub, postgresql }:
 
 stdenv.mkDerivation rec {
   name = "pg_topn-${version}";
-  version = "2.2.0";
+  version = "2.2.2";
 
-  nativeBuildInputs = [ protobufc ];
   buildInputs = [ postgresql ];
 
   src = fetchFromGitHub {
     owner  = "citusdata";
     repo   = "postgresql-topn";
     rev    = "refs/tags/v${version}";
-    sha256 = "1i5fn517mdvzfhlcj7fh4z0iniynanshcn7kzhsq19sgci0g31fr";
+    sha256 = "1bh28nrxj06vc2cvlsxlwrwad5ff3lfj3kr5cnnggwjk2dhwbbjm";
   };
 
   installPhase = ''
@@ -24,7 +23,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Efficient querying of 'top values' for PostgreSQL";
-    homepage    = https://www.citusdata.com/;
+    homepage    = https://github.com/citusdata/postgresql-topn;
     maintainers = with maintainers; [ thoughtpolice ];
     platforms   = platforms.linux;
     license     = licenses.agpl3;

@@ -1,0 +1,7 @@
+diff --git a/dist/autoconf-version b/dist/autoconf-version
+index 264f2ce..5e1b8b0 100644
+--- a/dist/autoconf-version
++++ b/dist/autoconf-version
+@@ -1 +1 @@
+-2.68
++2.69

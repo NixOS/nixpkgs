@@ -101,6 +101,7 @@
   ./programs/gnupg.nix
   ./programs/gphoto2.nix
   ./programs/iftop.nix
+  ./programs/iotop.nix
   ./programs/java.nix
   ./programs/kbdlight.nix
   ./programs/less.nix
