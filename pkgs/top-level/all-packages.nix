@@ -452,7 +452,7 @@ in
 
   airsonic = callPackage ../servers/misc/airsonic { };
 
-  airspy = callPackage ../applications/misc/airspy { };
+  airspy = callPackage ../applications/radio/airspy { };
 
   airtame = callPackage ../applications/misc/airtame { };
 
