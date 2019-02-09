@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoPatchelfHook, atomEnv, makeWrapper, makeDesktopItem }:
+{ stdenv, fetchurl, autoPatchelfHook, atomEnv, makeWrapper, makeDesktopItem, gtk3, wrapGAppsHook }:
 
 let
   description = "Trilium Notes is a hierarchical note taking application with focus on building large personal knowledge bases.";
@@ -32,9 +32,10 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoPatchelfHook
     makeWrapper
+    wrapGAppsHook
   ];
 
-  buildInputs = atomEnv.packages;
+  buildInputs = [ atomEnv.packages gtk3 ];
 
   installPhase = ''
     mkdir -p $out/bin
@@ -48,10 +49,9 @@ in stdenv.mkDerivation rec {
     cp ${desktopItem}/share/applications/* $out/share/applications
   '';
 
-
-  # This "shouldn't" be needed, remove when possible :)
+  # LD_LIBRARY_PATH "shouldn't" be needed, remove when possible :)
   preFixup = ''
-    wrapProgram $out/bin/trilium --prefix LD_LIBRARY_PATH : "${atomEnv.libPath}"
+    gappsWrapperArgs+=(--prefix LD_LIBRARY_PATH : ${atomEnv.libPath})
   '';
 
   dontStrip = true;
