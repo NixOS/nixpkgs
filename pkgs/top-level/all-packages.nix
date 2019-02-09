@@ -17549,7 +17549,7 @@ in
 
   gxplugins-lv2 = callPackage ../applications/audio/gxplugins-lv2 { };
 
-  hackrf = callPackage ../applications/misc/hackrf { };
+  hackrf = callPackage ../applications/radio/hackrf { };
 
   hakuneko = callPackage ../tools/misc/hakuneko { };
 
