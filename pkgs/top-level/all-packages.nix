@@ -17074,30 +17074,30 @@ in
 
   gnss-sdr = callPackage ../applications/misc/gnss-sdr { boost=boost166; };
 
-  gnuradio = callPackage ../applications/misc/gnuradio {
+  gnuradio = callPackage ../applications/radio/gnuradio {
     inherit (python2Packages) cheetah lxml Mako matplotlib numpy python pyopengl pyqt4 scipy wxPython pygtk;
     inherit (darwin.apple_sdk.frameworks) CoreAudio;
     fftw = fftwFloat;
     qwt = qwt6_qt4;
   };
 
-  gnuradio-with-packages = callPackage ../applications/misc/gnuradio/wrapper.nix {
+  gnuradio-with-packages = callPackage ../applications/radio/gnuradio/wrapper.nix {
     inherit (python2Packages) python;
     extraPackages = [ gnuradio-nacl gnuradio-osmosdr gnuradio-ais gnuradio-rds ]
       ++ lib.optionals stdenv.isLinux [ gnuradio-gsm gnuradio-limesdr ];
   };
 
-  gnuradio-nacl = callPackage ../applications/misc/gnuradio/nacl.nix { };
+  gnuradio-nacl = callPackage ../applications/radio/gnuradio/nacl.nix { };
 
-  gnuradio-gsm = callPackage ../applications/misc/gnuradio/gsm.nix { };
+  gnuradio-gsm = callPackage ../applications/radio/gnuradio/gsm.nix { };
 
-  gnuradio-ais = callPackage ../applications/misc/gnuradio/ais.nix { };
+  gnuradio-ais = callPackage ../applications/radio/gnuradio/ais.nix { };
 
-  gnuradio-limesdr = callPackage ../applications/misc/gnuradio/limesdr.nix { };
+  gnuradio-limesdr = callPackage ../applications/radio/gnuradio/limesdr.nix { };
 
-  gnuradio-rds = callPackage ../applications/misc/gnuradio/rds.nix { };
+  gnuradio-rds = callPackage ../applications/radio/gnuradio/rds.nix { };
 
-  gnuradio-osmosdr = callPackage ../applications/misc/gnuradio/osmosdr.nix { };
+  gnuradio-osmosdr = callPackage ../applications/radio/gnuradio/osmosdr.nix { };
 
   goldendict = libsForQt5.callPackage ../applications/misc/goldendict { };
 
