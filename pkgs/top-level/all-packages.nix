@@ -19181,7 +19181,7 @@ in
   };
   rrsync = callPackage ../applications/networking/sync/rsync/rrsync.nix {};
 
-  rtl_433 = callPackage ../applications/misc/rtl_433 { };
+  rtl_433 = callPackage ../applications/radio/rtl_433 { };
 
   rtl-sdr = callPackage ../applications/radio/rtl-sdr { };
 
