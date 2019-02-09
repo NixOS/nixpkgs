@@ -49,10 +49,6 @@ stdenv.mkDerivation rec {
     patchShebangs meson_post_install.py
   '';
 
-  postInstall = ''
-    rm $out/share/applications/mimeinfo.cache
-  '';
-
   meta = {
     homepage = https://fontmanager.github.io/;
     description = "Simple font management for GTK+ desktop environments";

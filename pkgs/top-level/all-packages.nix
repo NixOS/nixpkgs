@@ -629,6 +629,8 @@ in
 
   bunny = callPackage ../tools/package-management/bunny { };
 
+  chezmoi = callPackage ../tools/misc/chezmoi { };
+
   clair = callPackage ../tools/admin/clair { };
 
   cloud-sql-proxy = callPackage ../tools/misc/cloud-sql-proxy { };
@@ -687,6 +689,8 @@ in
   };
 
   git-fire = callPackage ../tools/misc/git-fire { };
+
+  git-town = callPackage ../tools/misc/git-town { };
 
   github-changelog-generator = callPackage ../development/tools/github-changelog-generator { };
 
@@ -1088,6 +1092,8 @@ in
 
   catclock = callPackage ../applications/misc/catclock { };
 
+  cardpeek = callPackage ../applications/misc/cardpeek { };
+
   cde = callPackage ../tools/package-management/cde { };
 
   cdemu-daemon = callPackage ../misc/emulators/cdemu/daemon.nix { };
@@ -1436,6 +1442,8 @@ in
 
   gosu = callPackage ../tools/misc/gosu { };
 
+  gping = callPackage ../tools/networking/gping { };
+
   greg = callPackage ../applications/audio/greg {
     pythonPackages = python3Packages;
   };
@@ -1614,6 +1622,8 @@ in
   };
 
   roundcube = callPackage ../servers/roundcube { };
+
+  roundcubePlugins = callPackage ../servers/roundcube/plugins { };
 
   rsbep = callPackage ../tools/backup/rsbep { };
 
@@ -2391,6 +2401,8 @@ in
   mcrcon = callPackage ../tools/networking/mcrcon {};
 
   s-tar = callPackage ../tools/archivers/s-tar {};
+
+  sonota = callPackage ../tools/misc/sonota { };
 
   tealdeer = callPackage ../tools/misc/tealdeer { };
 
@@ -4539,6 +4551,8 @@ in
     inherit (gnome3) defaultIconTheme;
   };
 
+  openapi-generator-cli = callPackage ../tools/networking/openapi-generator-cli { };
+
   opencc = callPackage ../tools/text/opencc { };
 
   opencl-info = callPackage ../tools/system/opencl-info { };
@@ -5375,6 +5389,8 @@ in
   sigal = callPackage ../applications/misc/sigal { };
 
   sigil = libsForQt5.callPackage ../applications/editors/sigil { };
+
+  signal-cli = callPackage ../applications/networking/instant-messengers/signal-cli { };
 
   signal-desktop = callPackage ../applications/networking/instant-messengers/signal-desktop { };
 
@@ -7489,6 +7505,7 @@ in
 
   pyo3-pack = callPackage ../development/tools/rust/pyo3-pack { };
   rainicorn = callPackage ../development/tools/rust/rainicorn { };
+  rls = callPackage ../development/tools/rust/rls { };
   rustfmt = callPackage ../development/tools/rust/rustfmt { };
   rustracer = callPackage ../development/tools/rust/racer { };
   rustracerd = callPackage ../development/tools/rust/racerd { };
@@ -8576,6 +8593,8 @@ in
       gccRaw = gcc.cc;
       binutils = binutils;
     };
+
+  dive = callPackage ../development/tools/dive { };
 
   doclifter = callPackage ../development/tools/misc/doclifter { };
 
@@ -12074,6 +12093,8 @@ in
   qjson = callPackage ../development/libraries/qjson { };
 
   qoauth = callPackage ../development/libraries/qoauth { };
+
+  qolibri = libsForQt5.callPackage ../applications/misc/qolibri { };
 
   qt3 = callPackage ../development/libraries/qt-3 {
     openglSupport = libGLSupported;
@@ -17417,6 +17438,8 @@ in
     inherit (darwin) IOKit;
   };
 
+  glowing-bear = callPackage ../applications/networking/irc/glowing-bear { };
+
   gmtk = callPackage ../development/libraries/gmtk { };
 
   gmu = callPackage ../applications/audio/gmu { };
@@ -17705,6 +17728,7 @@ in
     freetype = null;
     ghostscript = null;
     libjpeg = null;
+    djvulibre = null;
     lcms2 = null;
     openexr = null;
     libpng = null;
@@ -17734,6 +17758,7 @@ in
     freetype = null;
     ghostscript = null;
     libjpeg = null;
+    djvulibre = null;
     lcms2 = null;
     openexr = null;
     libpng = null;
@@ -18439,6 +18464,10 @@ in
   neomutt = callPackage ../applications/networking/mailreaders/neomutt { };
 
   natron = callPackage ../applications/video/natron { };
+
+  nicotine-plus = callPackage ../applications/networking/soulseek/nicotine-plus {
+    geoip = geoipWithDatabase;
+  };
 
   notion = callPackage ../applications/window-managers/notion { };
 
@@ -20331,6 +20360,8 @@ in
     inherit (gnome2) libglade;
   };
 
+  xsuspender = callPackage ../applications/misc/xsuspender {  };
+
   xss-lock = callPackage ../misc/screensavers/xss-lock { };
 
   xloadimage = callPackage ../tools/X11/xloadimage { };
@@ -21478,6 +21509,8 @@ in
 
   bftools = callPackage ../applications/science/biology/bftools { };
 
+  cmtk = callPackage ../applications/science/biology/cmtk { }; 
+
   conglomerate = callPackage ../applications/science/biology/conglomerate { };
 
   dcm2niix = callPackage ../applications/science/biology/dcm2niix { };
@@ -22141,6 +22174,8 @@ in
     inherit (darwin.apple_sdk.frameworks) Cocoa OpenGL;
   });
 
+  rink = callPackage ../applications/science/misc/rink { };
+
   simgrid = callPackage ../applications/science/misc/simgrid { };
 
   spyder = callPackage ../applications/science/spyder { };
@@ -22181,6 +22216,8 @@ in
   g4py = callPackage ../development/libraries/physics/geant4/g4py { };
 
   hepmc = callPackage ../development/libraries/physics/hepmc { };
+
+  hepmc3 = callPackage ../development/libraries/physics/hepmc3 { };
 
   herwig = callPackage ../development/libraries/physics/herwig { };
 
@@ -22460,6 +22497,8 @@ in
   kontemplate = callPackage ../applications/networking/cluster/kontemplate { };
 
   kops = callPackage ../applications/networking/cluster/kops { };
+
+  lguf-brightness = callPackage ../misc/lguf-brightness { };
 
   lilypond = callPackage ../misc/lilypond { guile = guile_1_8; };
   lilypond-unstable = callPackage ../misc/lilypond/unstable.nix { };

@@ -63,19 +63,19 @@ in {
       done
 
     '' + lib.optionalString (stdenv.isLinux) ''
-      mkdir -p $out/lib/systemd/{system,user}
+      mkdir -p $bin/lib/systemd/{system,user}
 
       substitute etc/linux-systemd/system/syncthing-resume.service \
-                 $out/lib/systemd/system/syncthing-resume.service \
+                 $bin/lib/systemd/system/syncthing-resume.service \
                  --replace /usr/bin/pkill ${procps}/bin/pkill
 
       substitute etc/linux-systemd/system/syncthing@.service \
-                 $out/lib/systemd/system/syncthing@.service \
-                 --replace /usr/bin/syncthing $out/bin/syncthing
+                 $bin/lib/systemd/system/syncthing@.service \
+                 --replace /usr/bin/syncthing $bin/bin/syncthing
 
       substitute etc/linux-systemd/user/syncthing.service \
-                 $out/lib/systemd/user/syncthing.service \
-                 --replace /usr/bin/syncthing $out/bin/syncthing
+                 $bin/lib/systemd/user/syncthing.service \
+                 --replace /usr/bin/syncthing $bin/bin/syncthing
     '';
   };
 
@@ -99,7 +99,7 @@ in {
 
       substitute cmd/strelaysrv/etc/linux-systemd/strelaysrv.service \
                  $out/lib/systemd/system/strelaysrv.service \
-                 --replace /usr/bin/strelaysrv $out/bin/strelaysrv
+                 --replace /usr/bin/strelaysrv $bin/bin/strelaysrv
     '';
   };
 }

@@ -122,7 +122,7 @@ in {
 
     systemd.packages = [ pkgs.syncthing ];
 
-    users = mkIf (cfg.user == defaultUser) {
+    users = mkIf (cfg.systemService && cfg.user == defaultUser) {
       users."${defaultUser}" =
         { group = cfg.group;
           home  = cfg.dataDir;

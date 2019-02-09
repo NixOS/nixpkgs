@@ -1,15 +1,16 @@
-{ stdenv, fetchurl, tcl, tk, libX11, zlib, makeWrapper }:
+{ stdenv, fetchurl, tcl, tk, libX11, zlib, makeWrapper, makeDesktopItem }:
 
 stdenv.mkDerivation rec {
   name = "scid-vs-pc-${version}";
-  version = "4.18.1";
+  version = "4.19";
 
   src = fetchurl {
-    url = "mirror://sourceforge/scidvspc/scid_vs_pc-4.18.1.tgz";
-    sha256 = "01nd88g3wh3avz1yk9fka9zf20ij8dlnpwzz8gnx78i5b06cp459";
+    url = "mirror://sourceforge/scidvspc/scid_vs_pc-${version}.tgz";
+    sha256 = "1k2cgs6bjyrmxy5x6x1chmrxfmm224p3r9r9mpc37kridk4hshqs";
   };
 
-  buildInputs = [ tcl tk libX11 zlib makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ tcl tk libX11 zlib ];
 
   prePatch = ''
     sed -i -e '/^ *set headerPath *{/a ${tcl}/include ${tk}/include' \
@@ -42,23 +43,33 @@ stdenv.mkDerivation rec {
   dontPatchShebangs = true;
 
   postFixup = ''
-    for cmd in sc_addmove sc_eco sc_epgn scidpgn \
-               sc_import sc_spell sc_tree spliteco
-    do
-      sed -i -e '1c#!'"$out"'/bin/tcscid' "$out/bin/$cmd"
-    done
-
+    sed -i -e '1c#!'"$out"'/bin/tcscid' "$out/bin/scidpgn"
     sed -i -e '1c#!${tk}/bin/wish' "$out/bin/sc_remote"
     sed -i -e '1c#!'"$out"'/bin/tkscid' "$out/bin/scid"
 
-    for cmd in $out/bin/*
-    do
+    for cmd in $out/bin/* ; do
       wrapProgram "$cmd" \
         --set TCLLIBPATH "${tcl}/${tcl.libdir}" \
         --set TK_LIBRARY "${tk}/lib/${tk.libPrefix}"
     done
   '';
 
+  postInstall = ''
+    mkdir -p $out/share/applications
+    cp $desktopItem/share/applications/* $out/share/applications/
+
+    install -D icons/scid.png "$out"/share/icons/hicolor/128x128/apps/scid.png
+  '';
+
+  desktopItem = makeDesktopItem {
+    name = "scid-vs-pc";
+    desktopName = "Scid vs. PC";
+    genericName = "Chess Database";
+    comment = meta.description;
+    icon = "scid";
+    exec = "scid";
+    categories = "Game;BoardGame;";
+  };
 
   meta = with stdenv.lib; {
     description = "Chess database with play and training functionality";

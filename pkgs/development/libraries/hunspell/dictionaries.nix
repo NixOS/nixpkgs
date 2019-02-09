@@ -250,6 +250,35 @@ let
       };
     };
 
+  mkDictFromLibreOffice =
+    { shortName
+    , shortDescription
+    , dictFileName
+    , license
+    , readmeFile ? "README_${dictFileName}.txt"
+    , sourceRoot ? dictFileName }:
+    mkDict rec {
+      name = "hunspell-dict-${shortName}-libreoffice-${version}";
+      version = "6.2.0.3";
+      inherit dictFileName readmeFile;
+      src = fetchFromGitHub {
+        owner = "LibreOffice";
+        repo = "dictionaries";
+        rev = "libreoffice-${version}";
+        sha256 = "0rw9ahhynia5wsgyd67lrhinqqn1s1rizgiykb3palbyk0lv72xj";
+      };
+      buildPhase = ''
+        cp -a ${sourceRoot}/* .
+      '';
+      meta = with stdenv.lib; {
+        homepage = https://wiki.documentfoundation.org/Development/Dictionaries;
+        description = "Hunspell dictionary for ${shortDescription} from LibreOffice";
+        license = license;
+        maintainers = with maintainers; [ vlaci ];
+        platforms = platforms.all;
+      };
+    };
+
 in {
 
   /* ENGLISH */
@@ -508,6 +537,15 @@ in {
         sha256 = "0lw193jr7ldvln5x5z9p21rz1by46h0say9whfcw2kxs9vprd5b3";
       })
     ];
+  };
+
+  /* HUNGARIAN */
+
+  hu-hu = mkDictFromLibreOffice {
+    shortName = "hu-hu";
+    dictFileName = "hu_HU";
+    shortDescription = "Hungarian (Hungary)";
+    license = with stdenv.lib.licenses; [ mpl20 lgpl3 ];
   };
 
   /* SWEDISH */

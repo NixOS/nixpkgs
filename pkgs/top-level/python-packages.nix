@@ -298,6 +298,8 @@ in {
 
   cdecimal = callPackage ../development/python-modules/cdecimal { };
 
+  cfn-flip = callPackage ../development/python-modules/cfn-flip { };
+ 
   chalice = callPackage ../development/python-modules/chalice { };
 
   cleo = callPackage ../development/python-modules/cleo { };
@@ -407,6 +409,8 @@ in {
   gsd = callPackage ../development/python-modules/gsd { };
 
   gssapi = callPackage ../development/python-modules/gssapi { };
+
+  guestfs = callPackage ../development/python-modules/guestfs { };
 
   h5py = callPackage ../development/python-modules/h5py {
     hdf5 = pkgs.hdf5;
@@ -789,6 +793,8 @@ in {
   slicerator = callPackage ../development/python-modules/slicerator { };
 
   slither-analyzer = callPackage ../development/python-modules/slither-analyzer { };
+
+  sly = callPackage ../development/python-modules/sly { };
 
   snapcast = callPackage ../development/python-modules/snapcast { };
 
@@ -4059,6 +4065,8 @@ in {
 
   simplegeneric = callPackage ../development/python-modules/simplegeneric { };
 
+  shodan = callPackage ../development/python-modules/shodan { };
+
   should-dsl = callPackage ../development/python-modules/should-dsl { };
 
   simplejson = callPackage ../development/python-modules/simplejson { };
@@ -4766,7 +4774,7 @@ in {
 
   pygccxml = callPackage ../development/python-modules/pygccxml {};
 
-  pymacaroons-pynacl = callPackage ../development/python-modules/pymacaroons-pynacl { };
+  pymacaroons = callPackage ../development/python-modules/pymacaroons { };
 
   pynacl = callPackage ../development/python-modules/pynacl { };
 
@@ -5094,6 +5102,8 @@ in {
   XlsxWriter = callPackage ../development/python-modules/XlsxWriter { };
 
   yowsup = callPackage ../development/python-modules/yowsup { };
+
+  yubico-client = callPackage ../development/python-modules/yubico-client { };
 
   wptserve = callPackage ../development/python-modules/wptserve { };
 

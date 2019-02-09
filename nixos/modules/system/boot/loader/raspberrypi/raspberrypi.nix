@@ -33,7 +33,7 @@ let
       avoid_warnings=1
     '' + optional isAarch64 ''
       # Boot in 64-bit mode.
-      arm_control=0x200
+      arm_64bit=1
     '' + (if cfg.uboot.enable then ''
       kernel=u-boot-rpi.bin
     '' else ''

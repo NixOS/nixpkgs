@@ -3,7 +3,7 @@
 
 buildPythonApplication rec {
   pname = "transifex-client";
-  version = "0.13.5";
+  version = "0.13.6";
 
   propagatedBuildInputs = [
     urllib3 requests python-slugify
@@ -11,7 +11,7 @@ buildPythonApplication rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "00igk35nyzqp1slj7lbhiv4lc42k87ix43ipx2zcrsjf6xxv6l7v";
+    sha256 = "0y6pprlmkmi7wfqr3k70sb913qa70p3i90q5mravrai7cr32y1w8";
   };
 
   prePatch = ''

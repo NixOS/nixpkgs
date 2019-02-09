@@ -15,16 +15,28 @@ python36.pkgs.buildPythonApplication rec {
     sed -i "s/'\(.*\)\(==\|>=\).*'/'\1'/g" setup.py
   '';
 
+  nativeBuildInputs = [
+    glibcLocales
+  ];
+
   propagatedBuildInputs = with python36.pkgs; [
     requests pyyaml netdisco click click-log tabulate idna jsonpath_rw jinja2 dateparser
   ];
 
+  LC_ALL = "en_US.UTF-8";
+
+  postInstall = ''
+    mkdir -p "$out/share/bash-completion/completions" "$out/share/zsh/site-functions"
+    $out/bin/hass-cli completion bash > "$out/share/bash-completion/completions/hass-cli"
+    $out/bin/hass-cli completion zsh > "$out/share/zsh/site-functions/_hass-cli"
+  '';
+
   checkInputs = with python36.pkgs; [
-    pytest requests-mock glibcLocales
+    pytest requests-mock
   ];
 
   checkPhase = ''
-    LC_ALL=en_US.UTF-8 pytest
+    pytest
   '';
 
   meta = with lib; {
