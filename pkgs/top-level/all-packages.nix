@@ -17026,7 +17026,7 @@ in
 
   flrig = callPackage ../applications/radio/flrig { };
 
-  flwrap = callPackage ../applications/misc/flwrap { };
+  flwrap = callPackage ../applications/radio/flwrap { };
 
   fluidsynth = callPackage ../applications/audio/fluidsynth {
      inherit (darwin.apple_sdk.frameworks) AudioUnit CoreAudio CoreMIDI CoreServices;
