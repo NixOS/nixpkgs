@@ -3992,7 +3992,7 @@ in
 
   lidarr = callPackage ../servers/lidarr { };
 
-  limesuite = callPackage ../applications/misc/limesuite { };
+  limesuite = callPackage ../applications/radio/limesuite { };
 
   limesurvey = callPackage ../servers/limesurvey { };
 
