@@ -12556,7 +12556,7 @@ in
 
   soapyairspy = callPackage ../applications/radio/soapyairspy { };
 
-  soapybladerf = callPackage ../applications/misc/soapybladerf { };
+  soapybladerf = callPackage ../applications/radio/soapybladerf { };
 
   soapyhackrf = callPackage ../applications/misc/soapyhackrf { };
 
