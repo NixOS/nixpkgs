@@ -16847,6 +16847,7 @@ let
     meta = {
       description = "A Perl module to deal with time periods";
       license = stdenv.lib.licenses.gpl1;
+      maintainers = [ maintainers.winpat ];
     };
   };
 

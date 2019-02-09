@@ -57,5 +57,6 @@ stdenv.mkDerivation rec {
     homepage = http://dirvish.org/;
     license = stdenv.lib.licenses.osl2;
     platforms = platforms.linux;
+    maintainers = [ maintainers.winpat ];
   };
 }

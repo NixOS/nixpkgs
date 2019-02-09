@@ -4703,6 +4703,11 @@
     email = "windenntw@gmail.com";
     name = "Antonio Vargas Gonzalez";
   };
+  winpat = {
+    email = "patrickwinter@posteo.ch";
+    github = "winpat";
+    name = "Patrick Winter";
+  };
   wizeman = {
     email = "rcorreia@wizy.org";
     github = "wizeman";
