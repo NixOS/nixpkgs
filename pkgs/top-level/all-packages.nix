@@ -18225,7 +18225,7 @@ in
 
   minicom = callPackage ../tools/misc/minicom { };
 
-  minimodem = callPackage ../applications/audio/minimodem { };
+  minimodem = callPackage ../applications/radio/minimodem { };
 
   minidjvu = callPackage ../applications/graphics/minidjvu { };
 
