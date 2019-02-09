@@ -46,10 +46,6 @@ in stdenv.mkDerivation rec {
     "-Dsystemdunitdir=lib/systemd/system"
   ];
 
-  postInstall = ''
-    rm $out/share/applications/mimeinfo.cache
-  '';
-
   passthru = {
     updateScript = gnome3.updateScript {
       packageName = pname;
