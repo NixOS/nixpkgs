@@ -12554,7 +12554,7 @@ in
 
   snappy = callPackage ../development/libraries/snappy { };
 
-  soapyairspy = callPackage ../applications/misc/soapyairspy { };
+  soapyairspy = callPackage ../applications/radio/soapyairspy { };
 
   soapybladerf = callPackage ../applications/misc/soapybladerf { };
 
