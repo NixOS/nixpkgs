@@ -4806,6 +4806,11 @@
     github = "vbmithr";
     name = "Vincent Bernardoff";
   };
+  vcanadi = {
+    email = "vito.canadi@gmail.com";
+    github = "vcanadi";
+    name = "Vitomir Čanadi";
+  };
   vcunat = {
     email = "vcunat@gmail.com";
     github = "vcunat";
