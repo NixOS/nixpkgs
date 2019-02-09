@@ -12558,7 +12558,7 @@ in
 
   soapybladerf = callPackage ../applications/radio/soapybladerf { };
 
-  soapyhackrf = callPackage ../applications/misc/soapyhackrf { };
+  soapyhackrf = callPackage ../applications/radio/soapyhackrf { };
 
   soapysdr = callPackage ../applications/misc/soapysdr { inherit (python3Packages) python numpy; };
 
