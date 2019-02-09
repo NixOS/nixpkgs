@@ -1,5 +1,5 @@
 { stdenv, lib, buildPackages
-, fetchurl, zlib, autoreconfHook
+, fetchurl, zlib, autoreconfHook264
 # Enabling all targets increases output size to a multiple.
 , withAllTargets ? false, libbfd, libopcodes
 , enableShared ? true
@@ -9,10 +9,7 @@
 let
   reuseLibs = enableShared && withAllTargets;
 
-  # Remove gold-symbol-visibility patch when updating, the proper fix
-  # is now upstream.
-  # https://sourceware.org/git/gitweb.cgi?p=binutils-gdb.git;a=commitdiff;h=330b90b5ffbbc20c5de6ae6c7f60c40fab2e7a4f;hp=99181ccac0fc7d82e7dabb05dc7466e91f1645d3
-  version = "2.31.1";
+  version = "2.32";
   basename = "binutils-${version}";
   # The targetPrefix prepended to binary names to allow multiple binuntils on the
   # PATH to both be usable.
@@ -26,7 +23,7 @@ stdenv.mkDerivation rec {
   # HACK to ensure that we preserve source from bootstrap binutils to not rebuild LLVM
   src = stdenv.__bootPackages.binutils-unwrapped.src or (fetchurl {
     url = "mirror://gnu/binutils/${basename}.tar.bz2";
-    sha256 = "1l34hn1zkmhr1wcrgf0d4z7r3najxnw3cx2y2fk7v55zjlk3ik7z";
+    sha256 = "0b8767nyal1bc4cyzg5h9iis8kpkln1i3wkamig75cifj1fb2f6y";
   });
 
   patches = [
@@ -51,15 +48,6 @@ stdenv.mkDerivation rec {
     # override this behavior, forcing ld to search DT_RPATH even when
     # cross-compiling.
     ./always-search-rpath.patch
-
-    # https://sourceware.org/bugzilla/show_bug.cgi?id=22868
-    ./gold-symbol-visibility.patch
-
-    # https://sourceware.org/bugzilla/show_bug.cgi?id=23428
-    # un-break features so linking against musl doesn't produce crash-only binaries
-    ./0001-x86-Add-a-GNU_PROPERTY_X86_ISA_1_USED-note-if-needed.patch
-    ./0001-x86-Properly-merge-GNU_PROPERTY_X86_ISA_1_USED.patch
-    ./0001-x86-Properly-add-X86_ISA_1_NEEDED-property.patch
   ] ++ lib.optional stdenv.targetPlatform.isiOS ./support-ios.patch;
 
   outputs = [ "out" "info" "man" ];
@@ -68,7 +56,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     bison
   ] ++ lib.optionals stdenv.targetPlatform.isiOS [
-    autoreconfHook
+    autoreconfHook264
   ];
   buildInputs = [ zlib ];
 
