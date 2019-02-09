@@ -4902,6 +4902,8 @@ in {
 
   pandocfilters = callPackage ../development/python-modules/pandocfilters { };
 
+  pandoc-attributes = callPackage ../development/python-modules/pandoc-attributes { };
+
   htmltreediff = callPackage ../development/python-modules/htmltreediff { };
 
   repeated_test = callPackage ../development/python-modules/repeated_test { };
