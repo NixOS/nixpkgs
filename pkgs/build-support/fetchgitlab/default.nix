@@ -3,8 +3,11 @@
 # gitlab example
 { owner, repo, rev, domain ? "gitlab.com", name ? "source", group ? null
 , ... # For hash agility
-}@args: fetchzip ({
+}@args: fetchzip (
+let
+  repo-url = "https://${domain}/${lib.optionalString (group != null) "${group}/"}${owner}/${repo}/";
+in {
   inherit name;
-  url = "https://${domain}/api/v4/projects/${lib.optionalString (group != null) "${lib.replaceStrings ["."] ["%2E"] group}%2F"}${lib.replaceStrings ["."] ["%2E"] owner}%2F${lib.replaceStrings ["."] ["%2E"] repo}/repository/archive.tar.gz?sha=${rev}";
-  meta.homepage = "https://${domain}/${lib.optionalString (group != null) "${group}/"}${owner}/${repo}/";
+  url = "${repo-url}-/archive/${rev}/${repo}.${rev}.tar.gz";
+  meta.homepage = repo-url;
 } // removeAttrs args [ "domain" "owner" "group" "repo" "rev" ]) // { inherit rev; }
