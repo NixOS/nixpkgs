@@ -12395,7 +12395,7 @@ in
 
   lvtk = callPackage ../development/libraries/audio/lvtk { };
 
-  qradiolink = callPackage ../applications/misc/qradiolink { };
+  qradiolink = callPackage ../applications/radio/qradiolink { };
 
   qrupdate = callPackage ../development/libraries/qrupdate { };
 
