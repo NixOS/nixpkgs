@@ -17024,7 +17024,7 @@ in
 
   flmsg = callPackage ../applications/misc/flmsg { };
 
-  flrig = callPackage ../applications/misc/flrig { };
+  flrig = callPackage ../applications/radio/flrig { };
 
   flwrap = callPackage ../applications/misc/flwrap { };
 
