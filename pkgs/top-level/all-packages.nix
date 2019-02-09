@@ -17176,7 +17176,7 @@ in
 
   wavrsocvt = callPackage ../applications/misc/audio/wavrsocvt { };
 
-  welle-io = libsForQt5.callPackage ../applications/misc/welle-io { };
+  welle-io = libsForQt5.callPackage ../applications/radio/welle-io { };
 
   wireshark = callPackage ../applications/networking/sniffers/wireshark {
     withQt = true;
