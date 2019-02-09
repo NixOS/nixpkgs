@@ -17015,7 +17015,7 @@ in
 
   flexget = callPackage ../applications/networking/flexget { };
 
-  fldigi = callPackage ../applications/audio/fldigi { };
+  fldigi = callPackage ../applications/radio/fldigi { };
 
   flink = callPackage ../applications/networking/cluster/flink { };
   flink_1_5 = flink.override { version = "1.5"; };
