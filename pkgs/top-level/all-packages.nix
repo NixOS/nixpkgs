@@ -9183,7 +9183,7 @@ in
     inherit (darwin.apple_sdk.frameworks) CoreFoundation;
   };
 
-  uhd = callPackage ../development/tools/misc/uhd { };
+  uhd = callPackage ../applications/radio/uhd { };
 
   uisp = callPackage ../development/tools/misc/uisp { };
 
