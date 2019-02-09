@@ -12577,7 +12577,7 @@ in
     ];
   };
 
-  soapyrtlsdr = callPackage ../applications/misc/soapyrtlsdr { };
+  soapyrtlsdr = callPackage ../applications/radio/soapyrtlsdr { };
 
   soapyuhd = callPackage ../applications/misc/soapyuhd { };
 
