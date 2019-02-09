@@ -105,7 +105,7 @@ patchShebangsAuto () {
         # Dev output will end up being run on the build platform. An
         # example case of this is sdl2-config. Otherwise, we can just
         # use the runtime path (--host).
-        if [ "$output" != out ] && [ "$output" = "${!outputDev}" ]; then
+        if [ "$output" != out ] && [ "$output" = "$outputDev" ]; then
             patchShebangs --build "$prefix"
         else
             patchShebangs --host "$prefix"
