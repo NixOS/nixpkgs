@@ -12562,7 +12562,7 @@ in
 
   soapysdr = callPackage ../applications/misc/soapysdr { inherit (python3Packages) python numpy; };
 
-  soapyremote = callPackage ../applications/misc/soapyremote { };
+  soapyremote = callPackage ../applications/radio/soapyremote { };
 
   soapysdr-with-plugins = callPackage ../applications/misc/soapysdr {
     inherit (python3Packages) python numpy;
