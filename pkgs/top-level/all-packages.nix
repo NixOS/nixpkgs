@@ -20157,7 +20157,7 @@ in
       );
   };
 
-  wsjtx = qt5.callPackage ../applications/misc/wsjtx { };
+  wsjtx = qt5.callPackage ../applications/radio/wsjtx { };
 
   wtftw = callPackage ../applications/window-managers/wtftw {};
 
