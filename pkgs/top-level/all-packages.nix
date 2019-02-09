@@ -23124,7 +23124,7 @@ in
 
   xlayoutdisplay = callPackage ../tools/X11/xlayoutdisplay { };
 
-  xlog = callPackage ../applications/misc/xlog { };
+  xlog = callPackage ../applications/radio/xlog { };
 
   xmagnify = callPackage ../tools/X11/xmagnify { };
 
