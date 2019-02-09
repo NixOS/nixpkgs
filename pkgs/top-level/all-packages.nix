@@ -3585,7 +3585,7 @@ in
 
   kazam = callPackage ../applications/video/kazam { };
 
-  kalibrate-rtl = callPackage ../tools/misc/kalibrate-rtl { };
+  kalibrate-rtl = callPackage ../applications/radio/kalibrate-rtl { };
 
   kalibrate-hackrf = callPackage ../applications/radio/kalibrate-hackrf { };
 
