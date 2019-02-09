@@ -490,6 +490,8 @@ in {
 
   matchpy = callPackage ../development/python-modules/matchpy { };
 
+  mkdocs-exclude = callPackage ../development/python-modules/mkdocs-exclude { };
+
   monty = callPackage ../development/python-modules/monty { };
 
   mininet-python = (toPythonModule (pkgs.mininet.override{ inherit python; })).py;
