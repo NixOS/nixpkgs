@@ -17022,7 +17022,7 @@ in
 
   fllog = callPackage ../applications/radio/fllog { };
 
-  flmsg = callPackage ../applications/misc/flmsg { };
+  flmsg = callPackage ../applications/radio/flmsg { };
 
   flrig = callPackage ../applications/radio/flrig { };
 
