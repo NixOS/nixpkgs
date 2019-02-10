@@ -4311,11 +4311,10 @@ in
   nbd = callPackage ../tools/networking/nbd { };
   xnbd = callPackage ../tools/networking/xnbd { };
 
-  inherit (callPackages ../development/libraries/science/math/nccl { })
-    nccl_cudatoolkit_8
-    nccl_cudatoolkit_9;
-
-  nccl = nccl_cudatoolkit_9;
+  nccl = callPackage ../development/libraries/science/math/nccl { };
+  nccl_cudatoolkit_9_0 = nccl.override { cudatoolkit = cudatoolkit_9_0; };
+  nccl_cudatoolkit_9 = nccl.override { cudatoolkit = cudatoolkit_9; };
+  nccl_cudatoolkit_10 = nccl.override { cudatoolkit = cudatoolkit_10; };
 
   ndjbdns = callPackage ../tools/networking/ndjbdns { };
 
