@@ -1962,6 +1962,11 @@
     github = "ikervagyok";
     name = "Balázs Lengyel";
   };
+  ilikeavocadoes = {
+    email = "ilikeavocadoes@hush.com";
+    github = "ilikeavocadoes";
+    name = "Lassi Haasio";
+  };
   illegalprime = {
     email = "themichaeleden@gmail.com";
     github = "illegalprime";
