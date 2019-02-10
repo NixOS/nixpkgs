@@ -9,11 +9,11 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-monitoring";
-  version = "0.30.1";
+  version = "0.31.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "6b26d659360306d51b9fb88c5b1eb77bf49967a37b6348ae9568c083e466274d";
+    sha256 = "ac0a7657a11459894abf35d3e35e804df0fb81ef35bc18f80199d4ce02440c2d";
   };
 
   checkInputs = [ pytest mock ];

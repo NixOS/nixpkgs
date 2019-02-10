@@ -4,6 +4,7 @@
 , enum34
 , google_api_core
 , pytest
+, mock
 }:
 
 buildPythonPackage rec {
@@ -15,7 +16,7 @@ buildPythonPackage rec {
     sha256 = "449fd11699f9ae23ec2ccf1b06681bb90b4c1788f82fbbf1ce1c1d2e77833eb1";
   };
 
-  checkInputs = [ pytest ];
+  checkInputs = [ pytest mock ];
   propagatedBuildInputs = [ enum34 google_api_core ];
 
   # requires old version of google-api-core (override)
