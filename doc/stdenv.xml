@@ -1358,10 +1358,14 @@ preBuild = ''
        but if <varname>doCheck</varname> is set to true, the check phase is
        usually executed. Thus you should set
 <programlisting>doCheck = true;</programlisting>
-       in the derivation to enable checks. The exception is cross compilation.
-       Cross compiled builds never run tests, no matter how
-       <varname>doCheck</varname> is set, as the newly-built program won't run
-       on the platform used to build it.
+       in the derivation to enable checks.
+      </para>
+      <para>
+       Take a note for special cases. Cross compiled builds never run tests,
+       because cross compiled result won't run on the build platform. And so
+       they ignore <varname>doCheck</varname>.
+       <function>buildPython*</function> functions by default set
+       <varname>doCheck</varname> to true.
       </para>
      </listitem>
     </varlistentry>
