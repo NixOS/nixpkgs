@@ -4668,7 +4668,7 @@
     name = "Thomas Bereknyei";
   };
   tomsmeets = {
-    email = "tom@tsmeets.nl";
+    email = "tom.tsmeets@gmail.com";
     github = "tomsmeets";
     name = "Tom Smeets";
   };
