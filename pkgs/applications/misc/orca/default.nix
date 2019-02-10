@@ -7,16 +7,14 @@
 , speechd, brltty, setproctitle, gst_all_1, gst-python
 }:
 
-let
+buildPythonApplication rec {
   pname = "orca";
   version = "3.30.2";
-in buildPythonApplication rec {
-  name = "${pname}-${version}";
 
   format = "other";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "17asibc46i5gr2fw04jvvdi85zzmxwlnhyq7r6cr3m5prrdr8a53";
   };
 

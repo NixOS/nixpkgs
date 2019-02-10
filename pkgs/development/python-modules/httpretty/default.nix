@@ -11,6 +11,8 @@
 , urllib3
 , rednose
 , nose-randomly
+, six
+, mock
 }:
 
 buildPythonPackage rec {
@@ -22,8 +24,11 @@ buildPythonPackage rec {
     sha256 = "01b52d45077e702eda491f4fe75328d3468fd886aed5dcc530003e7b2b5939dc";
   };
 
-  checkInputs = [ tornado requests httplib2 sure nose nose-randomly rednose coverage certifi ];
-  propagatedBuildInputs = [ urllib3 ];
+  checkInputs = [ nose sure coverage mock rednose
+  # Following not declared in setup.py
+    nose-randomly requests tornado httplib2
+  ];
+  propagatedBuildInputs = [ six ];
 
   meta = with stdenv.lib; {
     homepage = "https://falcao.it/HTTPretty/";

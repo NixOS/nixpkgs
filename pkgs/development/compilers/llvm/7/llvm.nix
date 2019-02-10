@@ -1,5 +1,6 @@
 { stdenv
 , fetch
+, fetchpatch
 , cmake
 , python
 , libffi
@@ -14,8 +15,6 @@
 , debugVersion ? false
 , enableManpages ? false
 , enableSharedLibraries ? true
-# Mesa requires AMDGPU target
-, enableTargets ? [ stdenv.hostPlatform stdenv.targetPlatform "AMDGPU" ]
 , enablePFM ? !stdenv.isDarwin
 }:
 
@@ -28,9 +27,6 @@ let
   shortVersion = with stdenv.lib;
     concatStringsSep "." (take 1 (splitString "." release_version));
 
-  inherit
-    (import ../common.nix { inherit (stdenv) lib; })
-    llvmBackendList;
 in stdenv.mkDerivation (rec {
   name = "llvm-${version}";
 
@@ -50,6 +46,24 @@ in stdenv.mkDerivation (rec {
     ++ optional enablePFM libpfm; # exegesis
 
   propagatedBuildInputs = [ ncurses zlib ];
+
+  patches = [
+    # https://bugs.llvm.org/show_bug.cgi?id=39427
+    # https://github.com/NixOS/nixpkgs/issues/54370
+    (fetchpatch {
+      url = "https://github.com/llvm-mirror/llvm/commit/57567def148f387153a8149fb590bd39b1b006a1.patch";
+      sha256 = "1w1xg5pxpc6cals1nf5j5k4p6qi8lcrpvn0paxc86m415i79xmcg";
+    })
+    # backport, fix building rust crates with lto
+    (fetchpatch {
+      url = "https://github.com/llvm-mirror/llvm/commit/da1fb72bb305d6bc1f3899d541414146934bf80f.patch";
+      sha256 = "0p81gkhc1xhcx0hmnkwyhrn8x8l8fd24xgaj1whni29yga466dwc";
+    })
+    (fetchpatch {
+      url = "https://github.com/llvm-mirror/llvm/commit/cc1f2a595ead516812a6c50398f0f3480ebe031f.patch";
+      sha256 = "0k6k1p5yisgwx417a67s7sr9930rqh1n0zv5jvply8vjjy4b3kf8";
+    })
+  ];
 
   postPatch = optionalString stdenv.isDarwin ''
     substituteInPlace cmake/modules/AddLLVM.cmake \
@@ -88,7 +102,6 @@ in stdenv.mkDerivation (rec {
     "-DLLVM_ENABLE_RTTI=ON"
     "-DLLVM_HOST_TRIPLE=${stdenv.hostPlatform.config}"
     "-DLLVM_DEFAULT_TARGET_TRIPLE=${stdenv.targetPlatform.config}"
-    "-DLLVM_TARGETS_TO_BUILD=${llvmBackendList enableTargets}"
     "-DLLVM_EXPERIMENTAL_TARGETS_TO_BUILD=WebAssembly"
     "-DLLVM_ENABLE_DUMP=ON"
   ] ++ optionals enableSharedLibraries [
@@ -134,7 +147,7 @@ in stdenv.mkDerivation (rec {
     ln -s $lib/lib/libLLVM.dylib $lib/lib/libLLVM-${release_version}.dylib
   '';
 
-  doCheck = stdenv.isLinux && (!stdenv.isi686);
+  doCheck = stdenv.isLinux && (!stdenv.isx86_32);
 
   checkTarget = "check-all";
 

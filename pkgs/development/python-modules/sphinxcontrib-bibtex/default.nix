@@ -8,7 +8,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0af7651hfjh4hv97xns4vpf8n3kqy7ghyjlkfda5wxw56hxgp6hn";
+    sha256 = "169afb3a3485775e5473934a0fdff1780e8bdcdd44db7ed286044a074331c729";
   };
 
   propagatedBuildInputs = [ oset pybtex pybtex-docutils sphinx ];

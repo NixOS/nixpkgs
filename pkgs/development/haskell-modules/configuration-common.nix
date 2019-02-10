@@ -747,6 +747,10 @@ self: super: {
           rev = "v${ver}";
           sha256 = "0kqglih3rv12nmkzxvalhfaaafk4b2irvv9x5xmc48i1ns71y23l";
         }}/doc";
+        # Needed after sphinx 1.7.9 -> 1.8.3
+        postPatch = ''
+          substituteInPlace conf.py --replace "'.md': CommonMarkParser," ""
+        '';
         nativeBuildInputs = with pkgs.buildPackages.pythonPackages; [ sphinx recommonmark sphinx_rtd_theme ];
         makeFlags = "html";
         installPhase = ''

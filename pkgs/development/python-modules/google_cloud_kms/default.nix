@@ -5,18 +5,19 @@
 , grpc_google_iam_v1
 , google_api_core
 , pytest
+, mock
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-kms";
-  version = "0.2.0";
+  version = "0.2.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "add648f9185a8724f8632b3a006ee0af4847a5ab4ca085954ff1d00a8cd2d54c";
+    sha256 = "3e9d9e07af8651826db5997ca0f11f02401cef42eb822d416a19df05b17c5a45";
   };
 
-  checkInputs = [ pytest ];
+  checkInputs = [ pytest mock ];
   propagatedBuildInputs = [ enum34 grpc_google_iam_v1 google_api_core ];
 
   checkPhase = ''

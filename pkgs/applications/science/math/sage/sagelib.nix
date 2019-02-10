@@ -30,6 +30,7 @@
 , numpy
 , pari
 , pkgconfig
+, pkg-config
 , planarity
 , ppl
 , pynac
@@ -63,6 +64,7 @@ buildPythonPackage rec {
     iml
     perl
     jupyter_core
+    pkg-config
   ];
 
   buildInputs = [

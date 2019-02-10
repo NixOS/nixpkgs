@@ -68,7 +68,7 @@ buildPythonPackage rec {
   # for one example, but I've also seen ContextTests.test_set_verify_callback_exception fail.
   doCheck = !stdenv.isDarwin;
 
-  buildInputs = [ openssl ];
+  nativeBuildInputs = [ openssl ];
   propagatedBuildInputs = [ cryptography pyasn1 idna ];
 
   checkInputs = [ pytest pretend flaky glibcLocales ];

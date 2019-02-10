@@ -13,16 +13,14 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ pytest fuse attr which ];
+  buildInputs = [ fuse ];
+  checkInputs = [ pytest attr which ];
 
   propagatedBuildInputs = [ contextlib2 ];
 
   checkPhase = ''
-    py.test
+    py.test -k "not test_listdir"
   '';
-
-  # FileNotFoundError: [Errno 2] No such file or directory: '/usr/bin'
-  doCheck = false;
 
   meta = with stdenv.lib; {
     description = "Python bindings for the low-level FUSE API";

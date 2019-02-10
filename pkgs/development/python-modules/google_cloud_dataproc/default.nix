@@ -3,18 +3,19 @@
 , fetchPypi
 , google_api_core
 , pytest
+, mock
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-dataproc";
-  version = "0.2.0";
+  version = "0.3.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "531dbd3e5862df5e67751efdcd89f00d0ded35f3a87a18fd3245e1c365080720";
+    sha256 = "3acbb1bd9e25fd233ae321c137a58306d5d0ef262e3cbe825c511c8ef55b33a2";
   };
 
-  checkInputs = [ pytest ];
+  checkInputs = [ pytest mock ];
   propagatedBuildInputs = [ google_api_core ];
 
   checkPhase = ''
