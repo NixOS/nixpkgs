@@ -1,8 +1,8 @@
 { stdenv, libXcomposite, libgnome-keyring, makeWrapper, udev, curl, alsaLib
-, libXfixes, atk, gtk3, libXrender, pango, gnome2, cairo, freetype, fontconfig
+, libXfixes, atk, gtk3, libXrender, pango, gnome2, gnome3, cairo, freetype, fontconfig
 , libX11, libXi, libxcb, libXext, libXcursor, glib, libXScrnSaver, libxkbfile, libXtst
 , nss, nspr, cups, fetchurl, expat, gdk_pixbuf, libXdamage, libXrandr, dbus
-, dpkg, makeDesktopItem, openssl
+, dpkg, makeDesktopItem, openssl, wrapGAppsHook, hicolor-icon-theme
 }:
 
 with stdenv.lib;
@@ -65,8 +65,8 @@ stdenv.mkDerivation rec {
     comment = "Graphical Git client from Axosoft";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ dpkg gtk3];
+  nativeBuildInputs = [ makeWrapper wrapGAppsHook ];
+  buildInputs = [ dpkg gtk3 gnome3.defaultIconTheme hicolor-icon-theme ];
 
   unpackCmd = ''
     mkdir out
@@ -86,11 +86,13 @@ stdenv.mkDerivation rec {
     cp -av share bin $out/
     popd
 
-    makeWrapper $out/share/gitkraken/gitkraken $out/bin/gitkraken \
-      --prefix XDG_DATA_DIRS : $GSETTINGS_SCHEMAS_PATH
+    ln -s $out/share/gitkraken/gitkraken $out/bin/gitkraken
+    # makeWrapper $out/share/gitkraken/gitkraken $out/bin/gitkraken \
+    #   --prefix XDG_DATA_DIRS : $GSETTINGS_SCHEMAS_PATH
   '';
 
   postFixup = ''
+    wrapGAppsHook
     pushd $out/share/gitkraken
     patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" gitkraken
 
