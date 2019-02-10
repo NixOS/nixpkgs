@@ -29,7 +29,10 @@
   networks are set, it will default to using a configuration file at
   <literal>/etc/wpa_supplicant.conf</literal>. You should edit this file
   yourself to define wireless networks, WPA keys and so on (see
-  wpa_supplicant.conf(5)).
+  <citerefentry>
+    <refentrytitle>wpa_supplicant.conf</refentrytitle>
+    <manvolnum>5</manvolnum>
+  </citerefentry>).
  </para>
 
  <para>
