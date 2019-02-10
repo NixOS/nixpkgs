@@ -34,7 +34,14 @@ let
       define('DB_HOST', '${optionalString (cfg.database.host != null) cfg.database.host}');
       define('DB_USER', '${cfg.database.user}');
       define('DB_NAME', '${cfg.database.name}');
-      define('DB_PASS', '${optionalString (cfg.database.password != null) (escape ["'" "\\"] cfg.database.password)}');
+      define('DB_PASS', ${
+        if (cfg.database.password != null) then
+          "'${(escape ["'" "\\"] cfg.database.password)}'"
+        else if (cfg.database.passwordFile != null) then
+          "file_get_contents('${cfg.database.passwordFile}')"
+        else
+          ""
+      });
       define('DB_PORT', '${toString dbPort}');
 
       define('AUTH_AUTO_CREATE', ${boolToString cfg.auth.autoCreate});
@@ -161,6 +168,14 @@ let
         };
 
         password = mkOption {
+          type = types.nullOr types.str;
+          default = null;
+          description = ''
+            The database user's password.
+          '';
+        };
+
+        passwordFile = mkOption {
           type = types.nullOr types.str;
           default = null;
           description = ''
@@ -479,21 +494,30 @@ let
 
   config = mkIf cfg.enable {
 
-    services.phpfpm.poolConfigs = mkIf (cfg.pool == "${poolName}") {
-      "${poolName}" = ''
-        listen = "${phpfpmSocketName}";
-        listen.owner = nginx
-        listen.group = nginx
-        listen.mode = 0600
-        user = ${cfg.user}
-        pm = dynamic
-        pm.max_children = 75
-        pm.start_servers = 10
-        pm.min_spare_servers = 5
-        pm.max_spare_servers = 20
-        pm.max_requests = 500
-        catch_workers_output = 1
-      '';
+    assertions = [
+      {
+        assertion = cfg.database.password != null -> cfg.database.passwordFile == null;
+        message = "Cannot set both password and passwordFile";
+      }
+    ];
+
+    services.phpfpm.pools = mkIf (cfg.pool == "${poolName}") {
+      "${poolName}" = {
+        listen = "/var/run/phpfpm/${poolName}.sock";
+        extraConfig = ''
+          listen.owner = nginx
+          listen.group = nginx
+          listen.mode = 0600
+          user = ${cfg.user}
+          pm = dynamic
+          pm.max_children = 75
+          pm.start_servers = 10
+          pm.min_spare_servers = 5
+          pm.max_spare_servers = 20
+          pm.max_requests = 500
+          catch_workers_output = 1
+        '';
+      };
     };
 
     # NOTE: No configuration is done if not using virtual host
@@ -510,7 +534,7 @@ let
           locations."~ \.php$" = {
             extraConfig = ''
               fastcgi_split_path_info ^(.+\.php)(/.+)$;
-              fastcgi_pass unix:${phpfpmSocketName};
+              fastcgi_pass unix:${config.services.phpfpm.pools.${cfg.pool}.listen};
               fastcgi_index index.php;
             '';
           };
@@ -528,6 +552,7 @@ let
           callSql = e:
               if cfg.database.type == "pgsql" then ''
                   ${optionalString (cfg.database.password != null) "PGPASSWORD=${cfg.database.password}"} \
+                  ${optionalString (cfg.database.passwordFile != null) "PGPASSWORD=$(cat ${cfg.database.passwordFile}"}) \
                   ${pkgs.sudo}/bin/sudo -u ${cfg.user} ${config.services.postgresql.package}/bin/psql \
                     -U ${cfg.database.user} \
                     ${optionalString (cfg.database.host != null) "-h ${cfg.database.host} --port ${toString dbPort}"} \

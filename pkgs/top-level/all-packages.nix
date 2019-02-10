@@ -14113,6 +14113,7 @@ in
 
   tt-rss = callPackage ../servers/tt-rss { };
   tt-rss-plugin-tumblr-gdpr = callPackage ../servers/tt-rss/plugin-tumblr-gdpr { };
+  tt-rss-plugin-auth-ldap = callPackage ../servers/tt-rss/plugin-auth-ldap { };
   tt-rss-theme-feedly = callPackage ../servers/tt-rss/theme-feedly { };
 
   searx = callPackage ../servers/web-apps/searx { };
