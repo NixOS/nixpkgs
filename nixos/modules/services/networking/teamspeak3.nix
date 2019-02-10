@@ -41,8 +41,9 @@ in
       };
 
       voiceIP = mkOption {
-        type = types.str;
-        default = "0.0.0.0";
+        type = types.nullOr types.str;
+        default = null;
+        example = "0.0.0.0";
         description = ''
           IP on which the server instance will listen for incoming voice connections. Defaults to any IP.
         '';
@@ -57,8 +58,9 @@ in
       };
 
       fileTransferIP = mkOption {
-        type = types.str;
-        default = "0.0.0.0";
+        type = types.nullOr types.str;
+        default = null;
+        example = "0.0.0.0";
         description = ''
           IP on which the server instance will listen for incoming file transfer connections. Defaults to any IP.
         '';
@@ -73,8 +75,9 @@ in
       };
 
       queryIP = mkOption {
-        type = types.str;
-        default = "0.0.0.0";
+        type = types.nullOr types.str;
+        default = null;
+        example = "0.0.0.0";
         description = ''
           IP on which the server instance will listen for incoming ServerQuery connections. Defaults to any IP.
         '';
@@ -122,9 +125,12 @@ in
         ExecStart = ''
           ${ts3}/bin/ts3server \
             dbsqlpath=${ts3}/lib/teamspeak/sql/ logpath=${cfg.logPath} \
-            voice_ip=${cfg.voiceIP} default_voice_port=${toString cfg.defaultVoicePort} \
-            filetransfer_ip=${cfg.fileTransferIP} filetransfer_port=${toString cfg.fileTransferPort} \
-            query_ip=${cfg.queryIP} query_port=${toString cfg.queryPort} license_accepted=1
+            ${optionalString (cfg.voiceIP != null) "voice_ip=${cfg.voiceIP}"} \
+            default_voice_port=${toString cfg.defaultVoicePort} \
+            ${optionalString (cfg.fileTransferIP != null) "filetransfer_ip=${cfg.fileTransferIP}"} \
+            filetransfer_port=${toString cfg.fileTransferPort} \
+            ${optionalString (cfg.queryIP != null) "query_ip=${cfg.queryIP}"} \
+            query_port=${toString cfg.queryPort} license_accepted=1
         '';
         WorkingDirectory = cfg.dataDir;
         User = user;
