@@ -1,15 +1,14 @@
 { stdenv, fetchFromGitHub, autoreconfHook, which, sassc, glib, libxml2, gdk_pixbuf, librsvg, gtk-engine-murrine }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "greybird";
-  version = "3.22.9";
+  version = "3.22.10";
 
   src = fetchFromGitHub {
     owner = "shimmerproject";
-    repo = "${pname}";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "0mixs47v0jvqpmfsv0k0d0l24y4w35krah8mgnwamr0b8spmazz3";
+    sha256 = "1g1mnzxqwlbymq8npd2j294f8dzf9fw9nicd4pajmscg2vk71da9";
   };
 
   nativeBuildInputs = [

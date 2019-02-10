@@ -15592,6 +15592,8 @@ in
 
   go-font = callPackage ../data/fonts/go-font { };
 
+  greybird = callPackage ../data/themes/greybird { };
+
   gyre-fonts = callPackage ../data/fonts/gyre {};
 
   hack-font = callPackage ../data/fonts/hack { };
@@ -22452,8 +22454,6 @@ in
     gcc-arm-embedded = pkgsCross.arm-embedded.buildPackages.gcc;
     binutils-arm-embedded = pkgsCross.arm-embedded.buildPackages.binutils;
   };
-
-  greybird = callPackage ../misc/themes/greybird { };
 
   guetzli = callPackage ../applications/graphics/guetzli { };
 
