@@ -19684,6 +19684,8 @@ in
 
   tla = callPackage ../applications/version-management/arch { };
 
+  tlf = callPackage ../applications/radio/tlf { };
+
   tlp = callPackage ../tools/misc/tlp {
     inherit (linuxPackages) x86_energy_perf_policy;
   };
