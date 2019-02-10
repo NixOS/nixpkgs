@@ -570,6 +570,8 @@ in {
 
   pyaxmlparser = callPackage ../development/python-modules/pyaxmlparser { };
 
+  pybind11 = callPackage ../development/python-modules/pybind11 { };
+
   pycairo = callPackage ../development/python-modules/pycairo { };
 
   pycangjie = disabledIf (!isPy3k) (callPackage ../development/python-modules/pycangjie { });
