@@ -22713,6 +22713,8 @@ in
 
   nix-update-source = callPackage ../tools/package-management/nix-update-source {};
 
+  nix-script = callPackage ../tools/nix/nix-script {};
+
   nix-template-rpm = callPackage ../build-support/templaterpm { inherit (pythonPackages) python toposort; };
 
   nix-top = callPackage ../tools/package-management/nix-top { };
