@@ -1,6 +1,6 @@
 { stdenv, lib, buildGoPackage, fetchurl, cf-private
 , AVFoundation, AudioToolbox, ImageIO, CoreMedia
-, Foundation, CoreGraphics, MediaToolbox
+, Foundation, CoreGraphics, MediaToolbox, kbfs
 }:
 
 buildGoPackage rec {
@@ -23,6 +23,11 @@ buildGoPackage rec {
     cf-private
   ];
   buildFlags = [ "-tags production" ];
+
+  postInstall = lib.optionalString stdenv.isLinux ''
+    ln -s ${kbfs}/bin/kbfsfuse           $bin/bin/kbfsfuse
+    ln -s ${kbfs}/bin/git-remote-keybase $bin/bin/git-remote-keybase
+  '';
 
   meta = with stdenv.lib; {
     homepage = https://www.keybase.io/;
