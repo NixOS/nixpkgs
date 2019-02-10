@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch, gfortran, perl, which, config, coreutils
+{ stdenv, fetchFromGitHub, fetchpatch, gfortran, perl, which, config
 # Most packages depending on openblas expect integer width to match
 # pointer width, but some expect to use 32-bit integers always
 # (for compatibility with reference BLAS).
@@ -102,24 +102,18 @@ stdenv.mkDerivation rec {
     "relro" "bindnow"
   ];
 
-  nativeBuildInputs = [
-    perl
-    which
-    buildPackages.gfortran
-    buildPackages.stdenv.cc
-  ] ++ optionals stdenv.isDarwin [
-    coreutils
-  ];
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
+  nativeBuildInputs = [ perl which gfortran ];
 
   makeFlags = mapAttrsToList (var: val: "${var}=${toString val}") (config // {
     FC = "${stdenv.cc.targetPrefix}gfortran";
-    CC = "${stdenv.cc.targetPrefix}cc";
+    CC = "${stdenv.cc.targetPrefix}${if stdenv.cc.isClang then "clang" else "cc"}";
     PREFIX = placeholder "out";
     NUM_THREADS = 64;
     INTERFACE64 = blas64;
     NO_STATIC = true;
     CROSS = stdenv.hostPlatform != stdenv.buildPlatform;
-    HOSTCC = "${buildPackages.stdenv.cc.targetPrefix}cc";
+    HOSTCC = "cc";
     NO_BINARY_MODE = stdenv.hostPlatform != stdenv.buildPlatform;
   });
 
