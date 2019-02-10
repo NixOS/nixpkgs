@@ -451,6 +451,11 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
     fullName = "libpng License";
   };
 
+  libpng2 = {
+    fullName = "libpng License v2"; # 1.6.36+
+    url = "http://www.libpng.org/pub/png/src/libpng-LICENSE.txt";
+  };
+
   libtiff = spdx {
     spdxId = "libtiff";
     fullName = "libtiff License";

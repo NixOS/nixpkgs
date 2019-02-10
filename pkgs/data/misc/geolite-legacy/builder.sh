@@ -1,5 +1,3 @@
-#!/bin/sh -e
-
 source "$stdenv/setup"
 
 mkdir -p $out/share/GeoIP

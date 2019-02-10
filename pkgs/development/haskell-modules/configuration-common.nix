@@ -1190,6 +1190,12 @@ self: super: {
   # Jailbreak tasty < 1.2: https://github.com/phadej/tdigest/issues/30
   tdigest = doJailbreak super.tdigest; # until tdigest > 0.2.1
   these = doJailbreak super.these; # until these >= 0.7.6
+  insert-ordered-containers = appendPatch super.insert-ordered-containers ./patches/insert-ordered-containers-fix-test.patch;
+
+  uri-bytestring = appendPatch super.uri-bytestring (pkgs.fetchpatch {
+    url = "https://github.com/Soostone/uri-bytestring/commit/e5c5602a97160a6a6304a24947e33e47c9155460.patch";
+    sha256 = "1qwy8bj6vywhp0075dza8j90zrzsm3144qz3c703s9c4n6pg3gw4";
+    });
 
   # These patches contain fixes for 8.6 that should be safe for
   # earlier versions, but we need the relaxed version bounds in GHC
@@ -1207,4 +1213,13 @@ self: super: {
     sha256 = "0lrcmcrxp9imj9rfaq7mb0fn9mxms4gq4sz95n4san3dpd0qmj9x";
     stripLen = 1;
     });
+
+  # Fix for base >= 4.11
+  scat = overrideCabal super.scat (drv: {
+    patches = [(pkgs.fetchpatch {
+      url    = "https://github.com/redelmann/scat/pull/6.diff";
+      sha256 = "07nj2p0kg05livhgp1hkkdph0j0a6lb216f8x348qjasy0lzbfhl";
+    })];
+  });
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super

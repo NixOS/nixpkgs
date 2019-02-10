@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     mv $out/share/retrofe/example/retrofe $out/bin/
 
     cat > $out/bin/retrofe-init << EOF
-    #!/bin/sh
+    #!${stdenv.shell}
 
     echo "This will install retrofe's example files into this directory"
     echo "Example files location: $out/share/retrofe/example/"

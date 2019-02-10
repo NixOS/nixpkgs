@@ -53,7 +53,7 @@ let
   # If you are changing this, please update the description in applyDefaultConfig
   defaultConfig = {
     homeassistant.time_zone = config.time.timeZone;
-    http.server_port = (toString cfg.port);
+    http.server_port = cfg.port;
   } // optionalAttrs (cfg.lovelaceConfig != null) {
     lovelace.mode = "yaml";
   };

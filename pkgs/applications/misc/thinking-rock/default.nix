@@ -24,7 +24,7 @@ stdenv.mkDerivation {
     mkdir -p $out/{nix-support/tr-files,bin}
     cp -r . $out/nix-support/tr-files
     cat >> $out/bin/thinkingrock << EOF
-    #!/bin/sh
+    #!${stdenv.shell}
     exec $out/nix-support/tr-files/bin/tr "$@"
     EOF
     chmod +x $out/bin/thinkingrock

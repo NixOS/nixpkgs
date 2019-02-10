@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     cp ./bin/telegram-cli $out/bin/telegram-wo-key
     cp ./tg-server.pub $out/
     cat > $out/bin/telegram-cli <<EOF
-    #!${bash}/bin/sh
+    #!${stdenv.shell}
     $out/bin/telegram-wo-key -k $out/tg-server.pub "\$@"
     EOF
     chmod +x $out/bin/telegram-cli

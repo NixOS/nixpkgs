@@ -86,14 +86,14 @@ stdenv.mkDerivation (rec {
 
     # Fake git: just print what it wants and die
     cat > fake-bin/wget << EOF
-    #!/bin/sh -e
+    #!${stdenv.shell} -e
     echo ===== FAKE WGET: Not fetching \$*
     [ -e \$3 ]
     EOF
 
     # Fake git: just print what it wants and die
     cat > fake-bin/git << EOF
-    #!/bin/sh
+    #!${stdenv.shell}
     echo ===== FAKE GIT: Not cloning \$*
     [ -e \$3 ]
     EOF
@@ -109,7 +109,7 @@ stdenv.mkDerivation (rec {
     # (prefetched stuff has lots of files)
     find . -type f | xargs sed -i 's@/usr/bin/\(python\|perl\)@/usr/bin/env \1@g'
     find . -type f -not -path "./tools/hotplug/Linux/xendomains.in" \
-      | xargs sed -i 's@/bin/bash@/bin/sh@g'
+      | xargs sed -i 's@/bin/bash@${stdenv.shell}@g'
 
     # Get prefetched stuff
     ${withXenfiles (name: x: ''

@@ -4,14 +4,13 @@
 , libxml2
 , pkgconfig
 , glib
-, granite
 , gtk3
 , gnome3
 , meson
 , ninja
 , gobject-introspection
 , gsettings-desktop-schemas
-, vala_0_40
+, pantheon
 , wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
@@ -26,22 +25,23 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    pkgconfig
-    meson
-    ninja
+    pantheon.vala
     gettext
     gobject-introspection
     libxml2
-    vala_0_40 # should be `elementary.vala` when elementary attribute set is merged
+    meson
+    ninja
+    pkgconfig
     wrapGAppsHook
   ];
+
   buildInputs = [
+    pantheon.elementary-icon-theme
+    pantheon.granite
     glib
-    granite
-    gtk3
-    gnome3.defaultIconTheme
     gnome3.libgee
     gsettings-desktop-schemas
+    gtk3
   ];
 
   postInstall = ''

@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     ln -s $out/opt/cmdstan/bin/stanc $out/bin/stanc
     ln -s $out/opt/cmdstan/bin/stansummary $out/bin/stansummary
     cat > $out/bin/stan <<EOF
-    #!/bin/sh
+    #!${stdenv.shell}
     make -C $out/opt/cmdstan "\$(realpath "\$1")"
     EOF
     chmod a+x $out/bin/stan
