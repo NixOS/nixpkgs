@@ -321,7 +321,9 @@ let
             in concatMapStrings (n:
               let s = optionalString (env."${n}" != null)
                 "Environment=${builtins.toJSON "${n}=${env.${n}}"}\n";
-              in if stringLength s >= 2048 then throw "The value of the environment variable ‘${n}’ in systemd service ‘${name}.service’ is too long." else s) (attrNames env)}
+              # systemd max line length is now 1MiB
+              # https://github.com/systemd/systemd/commit/e6dde451a51dc5aaa7f4d98d39b8fe735f73d2af
+              in if stringLength s >= 1048576 then throw "The value of the environment variable ‘${n}’ in systemd service ‘${name}.service’ is too long." else s) (attrNames env)}
           ${if def.reloadIfChanged then ''
             X-ReloadIfChanged=true
           '' else if !def.restartIfChanged then ''
