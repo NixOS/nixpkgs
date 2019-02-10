@@ -19727,7 +19727,7 @@ in
 
   toxiproxy = callPackage ../development/tools/toxiproxy { };
 
-  tqsl = callPackage ../applications/misc/tqsl { };
+  tqsl = callPackage ../applications/radio/tqsl { };
 
   transcode = callPackage ../applications/audio/transcode { };
 
