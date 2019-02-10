@@ -7,11 +7,13 @@
 let
   executableName = "code" + lib.optionalString isInsiders "-insiders";
 
+  inherit (stdenv.hostPlatform) system;
+
   plat = {
     "i686-linux" = "linux-ia32";
     "x86_64-linux" = "linux-x64";
     "x86_64-darwin" = "darwin";
-  }.${stdenv.hostPlatform.system};
+  }.${system};
 
   sha256 = {
     "i686-linux" = "1g73fay6fxlqhalkqq5m6rjbp68k9npk0rrxrkhdj8mw0cz74dpm";
@@ -19,7 +21,7 @@ let
     "x86_64-darwin" = "07r52scs1sgafzxqal39r8vf9p9qqvwwx8f6z09gqcf6clr6k48q";
   }.${stdenv.hostPlatform.system};
 
-  archive_fmt = if stdenv.hostPlatform.system == "x86_64-darwin" then "zip" else "tar.gz";
+  archive_fmt = if system == "x86_64-darwin" then "zip" else "tar.gz";
 in
   stdenv.mkDerivation rec {
     name = "vscode-${version}";
@@ -52,8 +54,11 @@ in
 
     nativeBuildInputs = lib.optional (!stdenv.isDarwin) autoPatchelfHook;
 
+    dontBuild = true;
+    dontConfigure = true;
+
     installPhase =
-      if stdenv.hostPlatform.system == "x86_64-darwin" then ''
+      if system == "x86_64-darwin" then ''
         mkdir -p $out/lib/vscode $out/bin
         cp -r ./* $out/lib/vscode
         ln -s $out/lib/vscode/Contents/Resources/app/bin/${executableName} $out/bin
@@ -73,11 +78,8 @@ in
         cp $out/lib/vscode/resources/app/resources/linux/code.png $out/share/pixmaps/code.png
       '';
 
-    postFixup = lib.optionalString (stdenv.hostPlatform.system == "i686-linux" || stdenv.hostPlatform.system == "x86_64-linux") ''
-      wrapProgram $out/lib/vscode/${executableName} \
-        --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ systemd fontconfig ]}
-
-      ln -s ${lib.makeLibraryPath [libsecret]}/libsecret-1.so.0 $out/lib/vscode/libsecret-1.so.0
+    preFixup = lib.optionalString (system == "i686-linux" || system == "x86_64-linux") ''
+      gappsWrapperArgs+=(--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ systemd fontconfig ]})
     '';
 
     meta = with stdenv.lib; {
