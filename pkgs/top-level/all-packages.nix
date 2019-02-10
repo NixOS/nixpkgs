@@ -441,6 +441,8 @@ in
     stdenv = clangStdenv;
   };
 
+  libdislocator = callPackage ../tools/security/afl/libdislocator.nix { };
+
   afpfs-ng = callPackage ../tools/filesystems/afpfs-ng { };
 
   agrep = callPackage ../tools/text/agrep { };
