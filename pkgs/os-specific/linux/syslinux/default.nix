@@ -65,6 +65,7 @@ stdenv.mkDerivation rec {
     homepage = http://www.syslinux.org/;
     description = "A lightweight bootloader";
     license = licenses.gpl2;
+    maintainers = [ maintainers.samueldr ];
     platforms = [ "i686-linux" "x86_64-linux" ];
   };
 }
