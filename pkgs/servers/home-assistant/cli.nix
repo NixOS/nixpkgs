@@ -3,11 +3,11 @@
 
 python36.pkgs.buildPythonApplication rec {
   pname = "homeassistant-cli";
-  version = "0.4.4";
+  version = "0.5.0";
 
   src = python36.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "ad3722062ffb7b4fa730f61991b831dbf083e4e079c560993a023ce4bb11c55d";
+    sha256 = "4ad137d336508ab74840a34b3cc488ad884cc75285f5d7842544df1c3adacf8d";
   };
 
   postPatch = ''
@@ -20,7 +20,7 @@ python36.pkgs.buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = with python36.pkgs; [
-    requests pyyaml netdisco click click-log tabulate idna jsonpath_rw jinja2 dateparser
+    requests netdisco click click-log tabulate jsonpath_rw jinja2 dateparser regex ruamel_yaml aiohttp
   ];
 
   LC_ALL = "en_US.UTF-8";
