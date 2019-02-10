@@ -578,7 +578,9 @@ in {
     inherit (pkgs) pkgconfig;
   };
 
-  pycangjie = disabledIf (!isPy3k) (callPackage ../development/python-modules/pycangjie { });
+  pycangjie = disabledIf (!isPy3k) (callPackage ../development/python-modules/pycangjie {
+    inherit (pkgs) pkgconfig;
+  });
 
   pycrc = callPackage ../development/python-modules/pycrc { };
 
@@ -2070,6 +2072,7 @@ in {
   poppler-qt5 = callPackage ../development/python-modules/poppler-qt5 {
     inherit (pkgs.qt5) qtbase;
     inherit (pkgs.libsForQt5) poppler;
+    inherit (pkgs) pkgconfig;
   };
 
   poyo = callPackage ../development/python-modules/poyo { };
@@ -2512,7 +2515,9 @@ in {
 
   wtforms = callPackage ../development/python-modules/wtforms { };
 
-  graph-tool = callPackage ../development/python-modules/graph-tool/2.x.x.nix { };
+  graph-tool = callPackage ../development/python-modules/graph-tool/2.x.x.nix {
+    inherit (pkgs) pkgconfig;
+  };
 
   grappelli_safe = callPackage ../development/python-modules/grappelli_safe { };
 
@@ -2923,7 +2928,9 @@ in {
 
   python-oauth2 = callPackage ../development/python-modules/python-oauth2 { };
 
-  python_openzwave = callPackage ../development/python-modules/python_openzwave { };
+  python_openzwave = callPackage ../development/python-modules/python_openzwave {
+    inherit (pkgs) pkgconfig;
+  };
 
   python-Levenshtein = callPackage ../development/python-modules/python-levenshtein { };
 
@@ -3501,6 +3508,7 @@ in {
 
   kmsxx = (callPackage ../development/libraries/kmsxx {
     inherit (pkgs.kmsxx) stdenv;
+    inherit (pkgs) pkgconfig;
   }).overrideAttrs (oldAttrs: {
     name = "${python.libPrefix}-${pkgs.kmsxx.name}";
   });
@@ -4214,7 +4222,9 @@ in {
 
   vega_datasets = callPackage ../development/python-modules/vega_datasets { };
 
-  virtkey = callPackage ../development/python-modules/virtkey { };
+  virtkey = callPackage ../development/python-modules/virtkey {
+    inherit (pkgs) pkgconfig;
+  };
 
   virtual-display = callPackage ../development/python-modules/virtual-display { };
 
@@ -4844,7 +4854,9 @@ in {
 
   dot2tex = callPackage ../development/python-modules/dot2tex { };
 
-  poezio = callPackage ../applications/networking/instant-messengers/poezio { };
+  poezio = callPackage ../applications/networking/instant-messengers/poezio {
+    inherit (pkgs) pkgconfig;
+  };
 
   potr = callPackage ../development/python-modules/potr {};
 
