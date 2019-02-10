@@ -132,13 +132,13 @@
   </itemizedlist>
 
   <para>
-   The difference between a package being unsupported on some system and
-   being broken is admittedly a bit fuzzy. If a program
-   <emphasis>ought</emphasis> to work on a certain platform, but doesn't, the
-   platform should be included in <literal>meta.platforms</literal>, but marked
-   as broken with e.g. <literal>meta.broken =
-   !hostPlatform.isWindows</literal>. Of course, this begs the question of what
-   "ought" means exactly. That is left to the package maintainer.
+   The difference between a package being unsupported on some system and being
+   broken is admittedly a bit fuzzy. If a program <emphasis>ought</emphasis> to
+   work on a certain platform, but doesn't, the platform should be included in
+   <literal>meta.platforms</literal>, but marked as broken with e.g.
+   <literal>meta.broken = !hostPlatform.isWindows</literal>. Of course, this
+   begs the question of what "ought" means exactly. That is left to the package
+   maintainer.
   </para>
  </section>
  <section xml:id="sec-allow-unfree">
@@ -175,9 +175,8 @@
 </programlisting>
     </para>
     <para>
-     For a more useful example, try the following. This configuration
-     only allows unfree packages named flash player and visual studio
-     code:
+     For a more useful example, try the following. This configuration only
+     allows unfree packages named flash player and visual studio code:
 <programlisting>
 {
   allowUnfreePredicate = (pkg: builtins.elem

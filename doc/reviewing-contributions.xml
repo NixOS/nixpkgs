@@ -24,11 +24,13 @@
  <para>
   The high change rate of Nixpkgs makes any pull request that remains open for
   too long subject to conflicts that will require extra work from the submitter
-  or the merger. Reviewing pull requests in a timely manner and being responsive
-  to the comments is the key to avoid this issue. GitHub provides sort filters
-  that can be used to see the <link
+  or the merger. Reviewing pull requests in a timely manner and being
+  responsive to the comments is the key to avoid this issue. GitHub provides
+  sort filters that can be used to see the
+  <link
   xlink:href="https://github.com/NixOS/nixpkgs/pulls?q=is%3Apr+is%3Aopen+sort%3Aupdated-desc">most
-  recently</link> and the <link
+  recently</link> and the
+  <link
   xlink:href="https://github.com/NixOS/nixpkgs/pulls?q=is%3Apr+is%3Aopen+sort%3Aupdated-asc">least
   recently</link> updated pull requests. We highly encourage looking at
   <link xlink:href="https://github.com/NixOS/nixpkgs/pulls?q=is%3Apr+is%3Aopen+review%3Anone+status%3Asuccess+-label%3A%222.status%3A+work-in-progress%22+no%3Aproject+no%3Aassignee+no%3Amilestone">
@@ -609,8 +611,8 @@ policy.
    create an issue or post on
    <link
    xlink:href="https://discourse.nixos.org">Discourse</link> with
-   references of packages and modules they maintain so the maintainership can be
-   taken over by other contributors.
+   references of packages and modules they maintain so the maintainership can
+   be taken over by other contributors.
   </para>
  </section>
 </chapter>

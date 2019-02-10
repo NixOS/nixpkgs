@@ -307,19 +307,20 @@ packageOverrides = pkgs: {
 </screen>
   </para>
  </section>
-
  <section xml:id="sec-elm">
   <title>Elm</title>
 
   <para>
-   To update Elm compiler, see <filename>nixpkgs/pkgs/development/compilers/elm/README.md</filename>.
+   To update Elm compiler, see
+   <filename>nixpkgs/pkgs/development/compilers/elm/README.md</filename>.
   </para>
 
   <para>
-   To package Elm applications, <link xlink:href="https://github.com/hercules-ci/elm2nix#elm2nix">read about elm2nix</link>.
+   To package Elm applications,
+   <link xlink:href="https://github.com/hercules-ci/elm2nix#elm2nix">read about
+   elm2nix</link>.
   </para>
  </section>
-
  <section xml:id="sec-shell-helpers">
   <title>Interactive shell helpers</title>
 
