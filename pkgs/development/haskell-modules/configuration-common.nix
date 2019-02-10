@@ -1147,11 +1147,8 @@ self: super: {
     };
   };
 
-  # https://github.com/kcsongor/generic-lens/pull/60
-  generic-lens = appendPatch super.generic-lens (pkgs.fetchpatch {
-    url = https://github.com/kcsongor/generic-lens/commit/d9af1ec22785d6c21e928beb88fc3885c6f05bed.patch;
-    sha256 = "0ljwcha9l52gs5bghxq3gbzxfqmfz3hxxcg9arjsjw8f7kw946xq";
-  });
+  # https://github.com/kcsongor/generic-lens/pull/65
+  generic-lens = dontCheck super.generic-lens;
 
   xmonad-extras = doJailbreak super.xmonad-extras;
 
