@@ -1871,6 +1871,8 @@ in
 
   cdi2iso = callPackage ../tools/cd-dvd/cdi2iso { };
 
+  cdimgtools = callPackage ../tools/cd-dvd/cdimgtools { };
+
   cdrdao = callPackage ../tools/cd-dvd/cdrdao { };
 
   cdrkit = callPackage ../tools/cd-dvd/cdrkit { };
