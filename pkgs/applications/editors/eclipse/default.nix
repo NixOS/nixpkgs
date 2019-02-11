@@ -11,7 +11,14 @@ assert stdenv ? glibc;
 # http://download.eclipse.org/eclipse/downloads/ is the main place to
 # find the downloads needed for new versions
 
-rec {
+let
+  platform_major = "4";
+  platform_minor = "10";
+  year = "2018";
+  month = "12";
+  timestamp = "201812060815";
+
+in rec {
 
   buildEclipse = import ./build-eclipse.nix {
     inherit stdenv makeDesktopItem freetype fontconfig libX11 libXrender zlib
@@ -22,55 +29,37 @@ rec {
   ### Eclipse CPP
 
   eclipse-cpp = buildEclipse {
-    name = "eclipse-cpp-4.7.0";
+    name = "eclipse-cpp-${platform_major}.${platform_minor}";
     description = "Eclipse IDE for C/C++ Developers, Oxygen release";
     src =
-      if stdenv.hostPlatform.system == "x86_64-linux" then
-        fetchurl {
-          url = https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/technology/epp/downloads/release/oxygen/R/eclipse-cpp-oxygen-R-linux-gtk-x86_64.tar.gz;
-          sha512 = "813c791e739d7d0e2ab242a5bacadca135bbeee20ef97aa830353cd90f63fa6e9c89cfcc6aadf635c742befe035bd6e3f15103013f63c419f6144e86ebde3ed1";
-        }
-      else if stdenv.hostPlatform.system == "i686-linux" then
-        fetchurl {
-          url = https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/technology/epp/downloads/release/oxygen/R/eclipse-cpp-oxygen-R-linux-gtk.tar.gz;
-          sha512 = "2b50f4a00306a89cda1aaaa606e62285cacbf93464a9dd3f3319dca3e2c578b802e685de6f78e5e617d269e21271188effe73d41f491a6de946e28795d82db8a";
-        }
-      else throw "Unsupported system: ${stdenv.hostPlatform.system}";
+      fetchurl {
+        url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/technology/epp/downloads/release/${year}-${month}/R/eclipse-cpp-${year}-${month}-R-linux-gtk-x86_64.tar.gz";
+        sha512 = "1f5yr7cydz4iw8c14yn713d44f1g1wkiqiwmb4ikdfx4l70rc5xxsdxv9b4mhm89b02cqnxdh9p5hivkssmnzg0km3ab5bx9mvzgzx7";
+      };
   };
 
   ### Eclipse Modeling
 
   eclipse-modeling = buildEclipse {
-    name = "eclipse-modeling-4.7";
+    name = "eclipse-modeling-${platform_major}.${platform_minor}";
     description = "Eclipse Modeling Tools";
     src =
-      if stdenv.hostPlatform.system == "x86_64-linux" then
-        fetchurl {
-          url = https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/technology/epp/downloads/release/oxygen/R/eclipse-modeling-oxygen-R-linux-gtk-x86_64.tar.gz;
-          sha512 = "3b9a7ad4b5d6b77fbdd64e8d323e0adb6c2904763ad042b374b4d87cef8607408cb407e395870fc755d58c0c800e20818adcf456ebe193d76cede16c5fe12271";
-        }
-      else
-        fetchurl {
-          url = https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/technology/epp/downloads/release/oxygen/R/eclipse-modeling-oxygen-R-linux-gtk.tar.gz;
-          sha512 = "b8597c1dec117e69c72a5e1a53e09b1f81a7c9de86ed7e71a9d007664603202df301745f186ded02b2e76410345863e80a2ba40867d6848e5375601289999206";
-        };
+      fetchurl {
+        url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/technology/epp/downloads/release/${year}-${month}/R/eclipse-modeling-${year}-${month}-R-linux-gtk-x86_64.tar.gz";
+        sha512 = "18psh1lgqg21dmndyc0yr6rz7piqyk861j9mlhgv9xaq8nz11fb6lil594sk64yyv0qbgi98vp03f1p06zvhgs37k9rjkfjmzl7n97k";
+      };
   };
 
   ### Eclipse Platform
 
   eclipse-platform = buildEclipse {
-    name = "eclipse-platform-4.9";
-    description = "Eclipse Platform 2018-09";
-    sources = {
-      "x86_64-linux" = fetchurl {
-        url = https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops4/R-4.9-201809060745/eclipse-platform-4.9-linux-gtk-x86_64.tar.gz;
-          sha512 = "875714bb411145c917fccedf2f7c4fd2757640b2debf4a18f775604233abd6f0da893b350cc03da44413d7ec6fae3f773ef08634e632058e4b705e6cda2893eb";
-        };
-      "i686-linux" = fetchurl {
-          url = https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops4/R-4.9-201809060745/eclipse-platform-4.9-linux-gtk.tar.gz;
-          sha512 = "758bc0de30fa5c4b76b343ea0325611d87b6928ef5002244f2f1ba2a9fa937de89b2a94ce2c8d33d79344fd574d6e8a72c5d127fe416d785f48600e9e85fce86";
-        };
-    };
+    name = "eclipse-platform-${platform_major}.${platform_minor}";
+    description = "Eclipse Platform ${year}-${month}";
+    src =
+      fetchurl {
+        url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops${platform_major}/R-${platform_major}.${platform_minor}-${timestamp}/eclipse-platform-${platform_major}.${platform_minor}-linux-gtk-x86_64.tar.gz";
+        sha512 = "2zdvbjk05a00lbcad9v30rcr93j03d2pycdhpwrvrakr8z4yrxs6svamq9s294ry1w3lw04pgsnqklw6zjx6iil1kp51f374lkfpxn7";
+      };
   };
 
   ### Eclipse Scala SDK
@@ -94,37 +83,25 @@ rec {
   ### Eclipse SDK
 
   eclipse-sdk = buildEclipse {
-    name = "eclipse-sdk-4.9";
-    description = "Eclipse 2018-09 Classic";
-    sources = {
-      "x86_64-linux" = fetchurl {
-          url = https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops4/R-4.9-201809060745/eclipse-SDK-4.9-linux-gtk-x86_64.tar.gz;
-          sha512 = "5e74a0411f56b3973b7c6d8c3727392297d55ad458a814b4cc3f2f6a57dbeebc64852d1a6a958db5c3b08c620093bfb5bcc0d2c6a400f5594b82c2ef5d5fa9fb";
-        };
-      "i686-linux" = fetchurl {
-          url = https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops4/R-4.9-201809060745/eclipse-SDK-4.9-linux-gtk.tar.gz;
-          sha512 = "b1861bd99c8e43f1d04247226584246aa7844af5e2da820fe98a51018dbe8ff4c25dbb9fa655f56e103f95c0696f40a65dcce13430c63aa080f786738e70eb8b";
-        };
-    };
+    name = "eclipse-sdk-${platform_major}.${platform_minor}";
+    description = "Eclipse ${year}-${month} Classic";
+    src =
+      fetchurl {
+        url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops${platform_major}/R-${platform_major}.${platform_minor}-${timestamp}/eclipse-SDK-${platform_major}.${platform_minor}-linux-gtk-x86_64.tar.gz";
+        sha512 = "1kq14vhzcngfhl8kjs722rshny81gxv6wcgln46x7lnpg2274sb9dprhns62fpq97l0355cmg8mnny6fsd1nqibrw09xq932v86cfm8";
+      };
   };
 
   ### Eclipse Java
 
   eclipse-java = buildEclipse {
-    name = "eclipse-java-4.9.0";
+    name = "eclipse-java-${platform_major}.${platform_minor}";
     description = "Eclipse IDE for Java Developers";
     src =
-      if stdenv.system == "x86_64-linux" then
-        fetchurl {
-          url = http://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/technology/epp/downloads/release/2018-09/R/eclipse-java-2018-09-linux-gtk-x86_64.tar.gz;
-          sha512 = "9dac5d040cdabf779de3996de87290e352130c7e860c1d0a98772f41da828ad45f90748b68e0a8a4f8d1ebbbbe5fdfe6401b7d871b93af34103d4a81a041c6a5";
-        }
-      else if stdenv.system == "i686-linux" then
-        fetchurl {
-          url = http://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/technology/epp/downloads/release/2018-09/R/eclipse-java-2018-09-linux-gtk.tar.gz;
-          sha512 = "24208e95b972e848d6b65ed8108d9e81584cf051397f2f43fb6269f5a625b8d7552ad77c7980a1a5653c87f06776e2926fd85607aae44e44657b4f6cc9b3e2e3";
-        }
-      else throw "Unsupported system: ${stdenv.system}";
+      fetchurl {
+        url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/technology/epp/downloads/release/${year}-${month}/R/eclipse-java-${year}-${month}-R-linux-gtk-x86_64.tar.gz";
+        sha512 = "2xd5q7kg3aly7jnz2fijn06ljmnnd7ggwwzmndfhqwfzxpyjg1lnlln76pcd6chx7gnwdrl7khg0fs566ddabfjv17c46dj5fpw9y6j";
+      };
   };
 
   ### Environments
