@@ -1,12 +1,89 @@
+let
+
+# the default list from v1.8.5, except with applications/mod_signalwire also disabled
+defaultModules = mods: with mods; [
+  applications.commands
+  applications.conference
+  applications.db
+  applications.dptools
+  applications.enum
+  applications.esf
+  applications.expr
+  applications.fifo
+  applications.fsv
+  applications.hash
+  applications.httapi
+  applications.sms
+  applications.spandsp
+  applications.valet_parking
+  applications.voicemail
+
+  applications.curl
+
+  codecs.amr
+  codecs.b64
+  codecs.g723_1
+  codecs.g729
+  codecs.h26x
+  codecs.opus
+
+  dialplans.asterisk
+  dialplans.xml
+
+  endpoints.loopback
+  endpoints.rtc
+  endpoints.skinny
+  endpoints.sofia
+  endpoints.verto
+
+  event_handlers.cdr_csv
+  event_handlers.cdr_sqlite
+  event_handlers.event_socket
+
+  formats.local_stream
+  formats.native_file
+  formats.png
+  formats.sndfile
+  formats.tone_stream
+
+  languages.lua
+
+  loggers.console
+  loggers.logfile
+  loggers.syslog
+
+  say.en
+
+  xml_int.cdr
+  xml_int.rpc
+  xml_int.scgi
+];
+
+in
+
 { fetchurl, stdenv, lib, ncurses, curl, pkgconfig, gnutls, readline
 , openssl, perl, sqlite, libjpeg, speex, pcre
 , ldns, libedit, yasm, which, lua, libopus, libsndfile
 
+, modules ? defaultModules
 , postgresql
 , enablePostgres ? true
 
 , SystemConfiguration
 }:
+
+let
+
+availableModules = import ./modules.nix { inherit curl lua libopus; };
+
+enabledModules = modules availableModules;
+
+modulesConf = let
+  lst = builtins.map (mod: mod.path) enabledModules;
+  str = lib.strings.concatStringsSep "\n" lst;
+  in builtins.toFile "modules.conf" str;
+
+in
 
 stdenv.mkDerivation rec {
   name = "freeswitch-1.6.20";
@@ -27,6 +104,7 @@ stdenv.mkDerivation rec {
     sqlite pcre speex ldns libedit yasm which lua libopus
     libsndfile
   ]
+  ++ lib.unique (lib.concatMap (mod: mod.inputs) enabledModules)
   ++ lib.optionals enablePostgres [ postgresql ]
   ++ lib.optionals stdenv.isDarwin [ SystemConfiguration ];
 
@@ -35,6 +113,10 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "format" ];
 
   configureFlags = lib.optionals enablePostgres [ "--enable-core-pgsql-support" ];
+
+  preConfigure = ''
+    cp "${modulesConf}" modules.conf
+  '';
 
   meta = {
     description = "Cross-Platform Scalable FREE Multi-Protocol Soft Switch";
