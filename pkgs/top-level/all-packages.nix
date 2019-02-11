@@ -13099,6 +13099,10 @@ in
 
   yubikey-manager = callPackage ../tools/misc/yubikey-manager { };
 
+  yubikey-manager-qt = libsForQt5.callPackage ../tools/misc/yubikey-manager-qt {
+    pythonPackages = python3Packages;
+  };
+
   yubikey-neo-manager = callPackage ../tools/misc/yubikey-neo-manager { };
 
   yubikey-personalization = callPackage ../tools/misc/yubikey-personalization {
