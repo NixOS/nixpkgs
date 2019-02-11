@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchPypi, python, buildPythonPackage, isPyPy, gfortran, pytest, blas, writeTextFile }:
+{ stdenv, lib, fetchPypi, python, buildPythonPackage, gfortran, pytest, blas, writeTextFile }:
 
 let
   blasImplementation = lib.nameFromURL blas.name "-";
@@ -24,7 +24,6 @@ in buildPythonPackage rec {
     sha256 = "1c4inssky16p6ab63n1gass6dik1dzxrp3y7kmxbdq6xg4w2wsbc";
   };
 
-  disabled = isPyPy;
   nativeBuildInputs = [ gfortran pytest ];
   buildInputs = [ blas ];
 
