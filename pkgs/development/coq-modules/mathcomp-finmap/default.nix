@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ coq ];
   propagatedBuildInputs = [ mathcomp ];
 
-  installFlags = "COQLIB=$(out)/lib/coq/${coq.coq-version}/";
+  installFlags = "-f Makefile.coq COQLIB=$(out)/lib/coq/${coq.coq-version}/";
 
   meta = {
     description = "A finset and finmap library";
@@ -24,6 +24,6 @@ stdenv.mkDerivation rec {
   };
 
   passthru = {
-    compatibleCoqVersions = v: builtins.elem v [ "8.6" "8.7" "8.8" ];
+    compatibleCoqVersions = v: builtins.elem v [ "8.6" "8.7" "8.8" "8.9" ];
   };
 }
