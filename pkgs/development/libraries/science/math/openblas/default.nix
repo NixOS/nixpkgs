@@ -102,8 +102,12 @@ stdenv.mkDerivation rec {
     "relro" "bindnow"
   ];
 
-  depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = [ perl which gfortran ];
+  nativeBuildInputs = [
+    perl
+    which
+    buildPackages.gfortran
+    buildPackages.stdenv.cc
+  ];
 
   makeFlags = mapAttrsToList (var: val: "${var}=${toString val}") (config // {
     FC = "${stdenv.cc.targetPrefix}gfortran";
