@@ -37,8 +37,7 @@ import ./make-test.nix ({ pkgs, lib, ...} : {
       };
       services.ndppd = {
         enable = true;
-        interface = "eth1";
-        network = "fd42::/112";
+        proxies."eth1".rules."fd42::/112" = {};
       };
       containers.client = {
         autoStart = true;
