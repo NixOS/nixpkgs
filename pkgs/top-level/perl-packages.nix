@@ -3256,6 +3256,18 @@ let
     };
   };
 
+  DataHexdumper = buildPerlPackage rec {
+    name = "Data-Hexdumper-3.0001";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/D/DC/DCANTRELL/${name}.tar.gz";
+      sha256 = "f9243cbe8affed5045fe4df505726a7a7289471e30c51ac065b3ed6ce0d1a604";
+    };
+    meta = {
+      description = "Make binary data human-readable";
+      license = with stdenv.lib.licenses; [ artistic1 gpl2 ];
+    };
+  };
+
   DataHierarchy = buildPerlPackage {
     name = "Data-Hierarchy-0.34";
     src = fetchurl {
