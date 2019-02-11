@@ -19,24 +19,116 @@ in
       '';
     };
 
+    package = mkOption {
+      type = types.package;
+      default = pkgs.roundcube;
+      example = literalExample ''
+        roundcube.withPlugins (plugins: [ plugins.persistent_login ])
+      '';
+      description = ''
+        The package which contains roundcube's sources. Can be overriden to create
+        an environment which contains roundcube and third-party plugins.
+      '';
+    };
+
     hostName = mkOption {
       type = types.str;
       example = "webmail.example.com";
       description = "Hostname to use for the nginx vhost";
     };
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.roundcube;
+    productName = mkOption {
+      type = types.str;
+      default = "Roundcube Webmail";
+      description = "Name your service. This is displayed on the login screen and in the window title";
+    };
 
-      example = literalExample ''
-        roundcube.withPlugins (plugins: [ plugins.persistent_login ])
-      '';
+    imap = {
+      server = mkOption {
+        type = types.str;
+        default = "tls://%n";
+        description = ''
+          The IMAP host chosen to perform the log-in.
+          Leave blank to show a textbox at login, give a list of hosts to display a pulldown menu or set one host as string.
+          To use SSL/TLS connection, enter hostname with prefix ssl:// or tls://
+          Supported replacement variables:
+            %n - hostname ($_SERVER['SERVER_NAME'])
+            %t - hostname without the first part
+            %d - domain (http hostname $_SERVER['HTTP_HOST'] without the first part)
+            %s - domain name after the '@' from e-mail address provided at login screen
+          For example %n = mail.domain.tld, %t = domain.tld
+          WARNING: After hostname change update of mail_host column in users table is required to match old user data records with the new host.
+        '';
+      };
+      port = mkOption {
+        type = types.int;
+        default = 143;
+        description = "TCP port used for IMAP connections";
+      };
+      userDomain = mkOption {
+        type = types.str;
+        default = "%d";
+        description = ''
+          Automatically add this domain to user names for login
+          Only for IMAP servers that require full e-mail addresses for login
+          Specify an array with 'host' => 'domain' values to support multiple hosts
+          Supported replacement variables:
+            %h - user's IMAP hostname
+            %n - hostname ($_SERVER['SERVER_NAME'])
+            %t - hostname without the first part
+            %d - domain (http hostname $_SERVER['HTTP_HOST'] without the first part)
+            %z - IMAP domain (IMAP hostname without the first part)
+          For example %n = mail.domain.tld, %t = domain.tld
+        '';
+      };
+      authType = mkOption {
+        type = types.enum [ "DIGEST-MD5" "CRAM-MD5" "LOGIN" "PLAIN" "IMAP" "null" ];
+        default = "null";
+        description = ''
+          IMAP authentication method (DIGEST-MD5, CRAM-MD5, LOGIN, PLAIN or null).
+          Use 'IMAP' to authenticate with IMAP LOGIN command.
+          By default the most secure method (from supported) will be selected.
+        '';
+      };
+    };
 
-      description = ''
-        The package which contains roundcube's sources. Can be overriden to create
-        an environment which contains roundcube and third-party plugins.
-      '';
+    smtp = {
+      server = mkOption {
+        type = types.str;
+        default = "tls://%n";
+        example = "localhost";
+        description = ''
+          SMTP server host (for sending mails).
+          Enter hostname with prefix tls:// to use STARTTLS, or use prefix ssl:// to use the deprecated SSL over SMTP (aka SMTPS)
+          Supported replacement variables:
+            %h - user's IMAP hostname
+            %n - hostname ($_SERVER['SERVER_NAME'])
+            %t - hostname without the first part
+            %d - domain (http hostname $_SERVER['HTTP_HOST'] without the first part)
+            %z - IMAP domain (IMAP hostname without the first part)
+          For example %n = mail.domain.tld, %t = domain.tld
+        '';
+      };
+      port = mkOption {
+        type = types.int;
+        default = 587;
+        description = "SMTP port (use 587 for STARTTLS or 465 for the deprecated SSL over SMTP (aka SMTPS))";
+      };
+      user = mkOption {
+        type = types.str;
+        default = "%u";
+        description = "SMTP username (if required) if you use %u as the username Roundcube will use the current username for login";
+      };
+      password = mkOption {
+        type = types.str;
+        default = "%p";
+        description = "SMTP password (if required) if you use %p as the password Roundcube will use the current user's password for login";
+      };
+      authType = mkOption {
+        type = types.enum [ "DIGEST-MD5" "CRAM-MD5" "LOGIN" "PLAIN" "null" ];
+        default = "null";
+        description = "SMTP AUTH type (DIGEST-MD5, CRAM-MD5, LOGIN, PLAIN or empty to use best server supported one)";
+      };
     };
 
     database = {
@@ -64,6 +156,28 @@ in
         default = "roundcube";
         description = "Name of the postgresql database";
       };
+      dbprefix = mkOption {
+        type = types.str;
+        default = "rc";
+        description = "Name of the prefix for table";
+      };
+    };
+
+    maxMessageSize = mkOption {
+      type = types.str;
+      default = "25M";
+      description = ''
+        Message size limit. Note that SMTP server(s) may use a different value. This limit is verified when user attaches files to a composed message.
+        Size in bytes (possible unit suffix: K, M, G)
+      '';
+    };
+
+    cipherMethod = mkOption {
+      type = types.str;
+      default = "AES-256-CBC";
+      description = ''
+        Encryption algorithm. You can use any method supported by openssl.
+      '';
     };
 
     plugins = mkOption {
@@ -77,7 +191,7 @@ in
     extraConfig = mkOption {
       type = types.lines;
       default = "";
-      description = "Extra configuration for roundcube webmail instance";
+      description = "Extra configuration for Roundcube Webmail instance";
     };
   };
 
@@ -86,10 +200,39 @@ in
       <?php
 
       $config = array();
+      // ----------------------------------
+      // SQL DATABASE
+      // ----------------------------------
+      $config['db_prefix'] = '${cfg.database.dbprefix}';
       $config['db_dsnw'] = 'pgsql://${cfg.database.username}:${cfg.database.password}@${cfg.database.host}/${cfg.database.dbname}';
+
+      // ----------------------------------
+      // IMAP
+      // ----------------------------------
+      $config['default_host'] = '${cfg.imap.server}';
+      $config['default_port'] = ${toString cfg.imap.port};
+      $config['imap_auth_type'] = '${cfg.imap.authType}';
+      $config['username_domain'] = '${cfg.imap.userDomain}';
+
+      // ----------------------------------
+      // SMTP
+      // ----------------------------------
+      $config['smtp_server'] = '${cfg.smtp.server}';
+      $config['smtp_port'] = ${toString cfg.smtp.port};
+      $config['smtp_user'] = '${cfg.smtp.user}';
+      $config['smtp_pass'] = '${cfg.smtp.password}';
+      $config['smtp_auth_type'] = '${cfg.smtp.authType}';
+
+      // ----------------------------------
+      // SYSTEM
+      // ----------------------------------
+      $config['enable_installer'] = false;
+      $config['product_name'] = '${cfg.productName}';
+      $config['cipher_method'] = '${cfg.cipherMethod}';
       $config['log_driver'] = 'syslog';
-      $config['max_message_size'] = '25M';
+      $config['max_message_size'] = '${cfg.maxMessageSize}';
       $config['plugins'] = [${concatMapStringsSep "," (p: "'${p}'") cfg.plugins}];
+
       ${cfg.extraConfig}
     '';
 
