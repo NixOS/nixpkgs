@@ -6,6 +6,7 @@
 # some packages need to be compiled with cmake
 , cmake
 }:
+
 let
   s = # Generated upstream information
   rec {
@@ -20,18 +21,20 @@ let
     lua curl makeWrapper which unzip
   ];
 in
+
 stdenv.mkDerivation {
   inherit (s) name version;
   inherit buildInputs;
   src = fetchurl {
     inherit (s) url sha256;
   };
+  patches = [ ./darwin.patch ];
   preConfigure = ''
     lua -e "" || {
         luajit -e "" && {
-	    export LUA_SUFFIX=jit
-	    configureFlags="$configureFlags --lua-suffix=$LUA_SUFFIX"
-	}
+            export LUA_SUFFIX=jit
+            configureFlags="$configureFlags --lua-suffix=$LUA_SUFFIX"
+        }
     }
     lua_inc="$(echo "${lua}/include"/*/)"
     if test -n "$lua_inc"; then
@@ -42,13 +45,12 @@ stdenv.mkDerivation {
     sed -e "1s@.*@#! ${lua}/bin/lua$LUA_SUFFIX@" -i "$out"/bin/*
     for i in "$out"/bin/*; do
         test -L "$i" || {
-	    wrapProgram "$i" \
-	      --suffix LUA_PATH ";" "$(echo "$out"/share/lua/*/)?.lua" \
-	      --suffix LUA_PATH ";" "$(echo "$out"/share/lua/*/)?/init.lua" \
-	      --suffix LUA_CPATH ";" "$(echo "$out"/lib/lua/*/)?.so" \
-	      --suffix LUA_CPATH ";" "$(echo "$out"/share/lua/*/)?/init.lua"
-
-	}
+            wrapProgram "$i" \
+              --suffix LUA_PATH ";" "$(echo "$out"/share/lua/*/)?.lua" \
+              --suffix LUA_PATH ";" "$(echo "$out"/share/lua/*/)?/init.lua" \
+              --suffix LUA_CPATH ";" "$(echo "$out"/lib/lua/*/)?.so" \
+              --suffix LUA_CPATH ";" "$(echo "$out"/share/lua/*/)?/init.lua"
+        }
     done
   '';
 
