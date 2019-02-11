@@ -7114,6 +7114,8 @@ in
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  sonar-scanner-bin = callPackage ../tools/security/sonar-scanner-bin { };
+
   solr = callPackage ../servers/search/solr { };
   solr_7 = solr;
   solr_8 = solr;
