@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, cmake, soapysdr, avahi }:
 
 let
-  version = "0.5.0";
+  version = "0.5.1";
 
 in stdenv.mkDerivation {
   name = "soapyremote-${version}";
@@ -10,7 +10,7 @@ in stdenv.mkDerivation {
     owner = "pothosware";
     repo = "SoapyRemote";
     rev = "soapy-remote-${version}";
-    sha256 = "1lyjhf934zap61ky7rbk46bp8s8sjk8sgdyszhryfyf571jv9b2i";
+    sha256 = "1qlpjg8mh564q26mni8g6bb8w9nj7hgcq86278fszxpwpnk3jsvk";
   };
 
   nativeBuildInputs = [ cmake ];
