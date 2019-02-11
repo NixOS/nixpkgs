@@ -105,6 +105,12 @@ stdenv.mkDerivation rec {
       sha256 = "1n5c61mvhalcr2wbp66wzsynwwk59aakvx3xqa5zw9nlkx3rd0h1";
     })
 
+    # https://trac.sagemath.org/ticket/27061
+    (fetchpatch {
+      name = "numpy-1.16-inline-fortran.patch";
+      url = "https://git.sagemath.org/sage.git/patch?id=a05b6b038e1571ab15464e98f76d1927c0c3fd12";
+      sha256 = "05yq97pq84xi60wb1p9skrad5h5x770gq98ll4frr7hvvmlwsf58";
+    })
   ];
 
   patches = nixPatches ++ packageUpgradePatches;
