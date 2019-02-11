@@ -515,6 +515,15 @@
      provisioning.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     The <literal>intel</literal> driver has been removed from the default list of
+     <link linkend="opt-services.xserver.videoDrivers">X.org video drivers</link>.
+     The <literal>modesetting</literal> driver should take over automatically,
+     it is better maintained upstream and has less problems with advanced features.
+     Some performance regressions on some GPU models might happen.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 </section>
