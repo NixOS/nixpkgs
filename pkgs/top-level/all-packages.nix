@@ -16004,6 +16004,8 @@ in
 
   zilla-slab = callPackage ../data/fonts/zilla-slab { };
 
+  zuki-themes = callPackage ../data/themes/zuki { };
+
 
   ### APPLICATIONS
 
@@ -23274,8 +23276,6 @@ in
   wtf = callPackage ../applications/misc/wtf { };
 
   zk-shell = callPackage ../applications/misc/zk-shell { };
-
-  zuki-themes = callPackage ../misc/themes/zuki { };
 
   tora = libsForQt5.callPackage ../development/tools/tora {};
 
