@@ -63,7 +63,7 @@ in
 
 { fetchurl, stdenv, lib, ncurses, curl, pkgconfig, gnutls, readline
 , openssl, perl, sqlite, libjpeg, speex, pcre
-, ldns, libedit, yasm, which, lua, libopus, libsndfile
+, ldns, libedit, yasm, which, lua, libopus, libsndfile, libtiff
 
 , modules ? defaultModules
 , postgresql
@@ -86,11 +86,11 @@ modulesConf = let
 in
 
 stdenv.mkDerivation rec {
-  name = "freeswitch-1.6.20";
+  name = "freeswitch-1.8.5";
 
   src = fetchurl {
     url = "https://files.freeswitch.org/freeswitch-releases/${name}.tar.bz2";
-    sha256 = "0hqz68abs5x5vzf1mndcvdi35nrhmnklzdrnrk8dyvzvz67hp2ah";
+    sha256 = "00xdrx84pw2v5pw1r5gfbb77nmvlfj275pmd48yfrc9g8c91j1sr";
   };
   postPatch = ''
     patchShebangs     libs/libvpx/build/make/rtcd.pl
@@ -100,9 +100,9 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    openssl ncurses curl gnutls readline perl libjpeg
-    sqlite pcre speex ldns libedit yasm which lua libopus
-    libsndfile
+    openssl ncurses gnutls readline perl libjpeg
+    sqlite pcre speex ldns libedit yasm which
+    libsndfile libtiff
   ]
   ++ lib.unique (lib.concatMap (mod: mod.inputs) enabledModules)
   ++ lib.optionals enablePostgres [ postgresql ]
