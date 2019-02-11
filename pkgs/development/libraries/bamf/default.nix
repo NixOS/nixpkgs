@@ -52,6 +52,11 @@ stdenv.mkDerivation rec {
 
   passthru.update-index = update-bamf-index;
 
+  patches = [
+    # Hardcode path to index as it will never be it XDG_DATA_DIRS
+    ./bamf-index.patch
+  ];
+
   # Fix hard-coded path
   # https://bugs.launchpad.net/bamf/+bug/1780557
   postPatch = ''
