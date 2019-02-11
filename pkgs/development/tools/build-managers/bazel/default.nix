@@ -256,7 +256,12 @@ stdenv.mkDerivation rec {
     cp scripts/packages/bazel.sh $out/bin/bazel
     mv output/bazel $out/bin/bazel-real
 
-    wrapProgram "$out/bin/bazel" --add-flags --server_javabase="${runJdk}"
+    # Wrap bazel and set BAZEL_USE_CPP_ONLY_TOOLCHAIN=1 which is necessary on
+    # Darwin to disable Bazel's Xcode toolchain detection which would configure
+    # compilers and linkers from Xcode instead of from PATH. This flag is no-op
+    # on Linux machines.
+    wrapProgram "$out/bin/bazel" --add-flags --server_javabase="${runJdk}" \
+      --set BAZEL_USE_CPP_ONLY_TOOLCHAIN 1
 
     # shell completion files
     mkdir -p $out/share/bash-completion/completions $out/share/zsh/site-functions
