@@ -38,15 +38,14 @@ lib.makeOverridable
 
 , # Additional inputs. Handy e.g. if using makeWrapper in `postBuild`.
   buildInputs ? []
-
-, passthru ? {}
-, meta ? {}
-}:
+  # all remaining arguments are passed to runCommand { ... }
+, ...
+}@args:
 
 runCommand name
-  rec {
-    inherit manifest ignoreCollisions checkCollisionContents passthru
-            meta pathsToLink extraPrefix postBuild buildInputs;
+  (rec {
+    # inherit manifest ignoreCollisions checkCollisionContents passthru
+    #         meta pathsToLink extraPrefix postBuild buildInputs;
     pkgs = builtins.toJSON (map (drv: {
       paths =
         # First add the usual output(s): respect if user has chosen explicitly,
@@ -65,7 +64,7 @@ runCommand name
     preferLocalBuild = true;
     # XXX: The size is somewhat arbitrary
     passAsFile = if builtins.stringLength pkgs >= 128*1024 then [ "pkgs" ] else null;
-  }
+  } // removeAttrs args [ "paths" "pathsToLink" "extraOutputsToInstall" "name" ])
   ''
     ${buildPackages.perl}/bin/perl -w ${./builder.pl}
     eval "$postBuild"
