@@ -19,8 +19,7 @@ stdenv.mkDerivation rec {
   #   rules manually.
   # * Propagate libusb-1.0 dependency in pkg-config file.
   postInstall = stdenv.lib.optionalString stdenv.isLinux ''
-    mkdir -p "$out/etc/udev/rules.d/"
-    cp ../rtl-sdr.rules "$out/etc/udev/rules.d/99-rtl-sdr.rules"
+    install -Dm=644 ../rtl-sdr.rules $out/lib/udev/rules.d/99-rtl-sdr.rules
 
     pcfile="$out"/lib/pkgconfig/librtlsdr.pc
     grep -q "Requires:" "$pcfile" && { echo "Upstream has added 'Requires:' in $(basename "$pcfile"); update nix expression."; exit 1; }
