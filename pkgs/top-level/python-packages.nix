@@ -3123,6 +3123,8 @@ in {
 
   mockito = callPackage ../development/python-modules/mockito { };
 
+  moderngl = callPackage ../development/python-modules/moderngl { };
+
   modestmaps = callPackage ../development/python-modules/modestmaps { };
 
   # Needed here because moinmoin is loaded as a Python library.
