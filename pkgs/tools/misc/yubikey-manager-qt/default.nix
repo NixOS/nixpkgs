@@ -1,6 +1,7 @@
 { stdenv
 , fetchurl
 , makeWrapper
+, pcsclite
 , pyotherside
 , pythonPackages
 , python3
@@ -10,22 +11,21 @@
 , yubikey-personalization
 }:
 
-with import <nixpkgs> {};
+with stdenv;
 
 let
   qmlPath = qmlLib: "${qmlLib}/${qt5.qtbase.qtQmlPrefix}";
 
-  qml2ImportPath = lib.concatMapStringsSep ";" qmlPath [
+  qml2ImportPath = lib.concatMapStringsSep ":" qmlPath [
     qt5.qtbase.bin qt5.qtdeclarative.bin pyotherside qt5.qtquickcontrols qt5.qtquickcontrols2.bin qt5.qtgraphicaleffects
   ];
 
 in stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "yubikey-manager-qt";
   version = "1.1.0";
 
   src = fetchurl {
-    url = "https://developers.yubico.com/yubikey-manager-qt/Releases/yubikey-manager-qt-${version}.tar.gz";
+    url = "https://developers.yubico.com/yubikey-manager-qt/Releases/${pname}-${version}.tar.gz";
     sha256 = "8049a233a8cca07543d745a9f619c0fc3afb324f5d0030b93f037b34ac1c5e66";
   };
 
@@ -37,12 +37,7 @@ in stdenv.mkDerivation rec {
     substituteInPlace ykman-gui/deployment.pri --replace '/usr/bin' "$out/bin"
   '';
 
-  buildInputs = [ pythonPackages.python stdenv qt5.qtbase qt5.qtgraphicaleffects qt5.qtquickcontrols qt5.qtquickcontrols2 pyotherside ];
-
-  buildPhase = ''
-    qmake
-    make
-  '';
+  buildInputs = [ pythonPackages.python qt5.qtbase qt5.qtgraphicaleffects qt5.qtquickcontrols qt5.qtquickcontrols2 pyotherside ];
 
   enableParallelBuilding = true;
 
@@ -71,11 +66,10 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     inherit version;
-    description = ''Cross-platform application for configuring any YubiKey over all USB interfaces.'';
+    description = "Cross-platform application for configuring any YubiKey over all USB interfaces.";
     homepage = https://developers.yubico.com/yubikey-manager-qt/;
     license = licenses.bsd2;
     maintainers = [ maintainers.cbley ];
     platforms = platforms.linux;
-    homepage = "https://github.com/Yubico";
   };
 }
