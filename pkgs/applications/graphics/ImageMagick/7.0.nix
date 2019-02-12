@@ -84,6 +84,7 @@ stdenv.mkDerivation rec {
     description = "A software suite to create, edit, compose, or convert bitmap images";
     platforms = platforms.linux ++ platforms.darwin;
     license = licenses.asl20;
+    broken = ghostscript != null; # https://github.com/NixOS/nixpkgs/issues/55118
     maintainers = with maintainers; [ the-kenny ];
   };
 }
