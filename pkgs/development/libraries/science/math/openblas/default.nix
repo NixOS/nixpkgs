@@ -74,6 +74,14 @@ let
     if blas64_ != null
       then blas64_
       else hasPrefix "x86_64" stdenv.hostPlatform.system;
+  # Convert flag values to format OpenBLAS's build expects.
+  # `toString` is almost what we need other than bools,
+  # which we need to map {true -> 1, false -> 0}
+  # (`toString` produces empty string `""` for false instead of `0`)
+  mkMakeFlagValue = val:
+    if !builtins.isBool val then toString val
+    else if val then "1" else "0";
+  mkMakeFlagsFromConfig = mapAttrsToList (var: val: "${var}=${mkMakeFlagValue val}");
 in
 stdenv.mkDerivation rec {
   name = "openblas-${version}";
@@ -109,7 +117,7 @@ stdenv.mkDerivation rec {
     buildPackages.stdenv.cc
   ];
 
-  makeFlags = mapAttrsToList (var: val: "${var}=${toString val}") (config // {
+  makeFlags = mkMakeFlagsFromConfig (config // {
     FC = "${stdenv.cc.targetPrefix}gfortran";
     CC = "${stdenv.cc.targetPrefix}${if stdenv.cc.isClang then "clang" else "cc"}";
     PREFIX = placeholder "out";
