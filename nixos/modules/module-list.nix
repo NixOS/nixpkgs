@@ -136,6 +136,7 @@
   ./programs/vim.nix
   ./programs/wavemon.nix
   ./programs/way-cooler.nix
+  ./programs/waybar.nix
   ./programs/wireshark.nix
   ./programs/xfs_quota.nix
   ./programs/xonsh.nix
