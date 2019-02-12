@@ -305,7 +305,7 @@ in
         ''}
 
         ${optionalString top.flannel.enable ''
-          while [ ! -f ${cfg.certs.flannelEtcdClient.cert} ]; do sleep 1; done
+          while [ ! -f ${cfg.certs.flannelClient.cert} ]; do sleep 1; done
           echo "Restarting flannel..." >&1
           systemctl restart flannel
         ''}
@@ -313,22 +313,35 @@ in
         echo "Node joined succesfully"
       '')];
 
+      # isolate etcd on loopback at the master node
+      # easyCerts doesn't support multimaster clusters anyway atm.
       services.etcd = with cfg.certs.etcd; {
+        listenClientUrls = ["https://127.0.0.1:2379"];
+        listenPeerUrls = ["https://127.0.0.1:2380"];
+        advertiseClientUrls = ["https://etcd.local:2379"];
+        initialCluster = ["${top.masterAddress}=https://etcd.local:2380"];
+        initialAdvertisePeerUrls = ["https://etcd.local:2380"];
         certFile = mkDefault cert;
         keyFile = mkDefault key;
         trustedCaFile = mkDefault caCert;
       };
+      networking.extraHosts = mkIf (config.services.etcd.enable) ''
+        127.0.0.1 etcd.${top.addons.dns.clusterDomain} etcd.local
+      '';
 
-      services.flannel.etcd = with cfg.certs.flannelEtcdClient; {
-        certFile = mkDefault cert;
-        keyFile = mkDefault key;
-        caFile = mkDefault caCert;
+      services.flannel = with cfg.certs.flannelClient; {
+        kubeconfig = top.lib.mkKubeConfig "flannel" {
+          server = top.apiserverAddress;
+          certFile = cert;
+          keyFile = key;
+        };
       };
 
       services.kubernetes = {
 
         apiserver = mkIf top.apiserver.enable (with cfg.certs.apiServer; {
           etcd = with cfg.certs.apiserverEtcdClient; {
+            servers = ["https://etcd.local:2379"];
             certFile = mkDefault cert;
             keyFile = mkDefault key;
             caFile = mkDefault caCert;

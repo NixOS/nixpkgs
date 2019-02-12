@@ -411,6 +411,7 @@ in
           name = "etcd";
           CN = top.masterAddress;
           hosts = [
+                    "etcd.local"
                     "etcd.${top.addons.dns.clusterDomain}"
                     top.masterAddress
                     cfg.advertiseAddress

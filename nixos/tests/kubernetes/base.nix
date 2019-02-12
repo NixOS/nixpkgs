@@ -65,7 +65,6 @@ let
             }
             (optionalAttrs (any (role: role == "master") machine.roles) {
               networking.firewall.allowedTCPPorts = [
-                2379 2380  # etcd
                 443 # kubernetes apiserver
               ];
             })

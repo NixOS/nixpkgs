@@ -6,6 +6,9 @@ let
   top = config.services.kubernetes;
   cfg = top.flannel;
 
+  # we want flannel to use kubernetes itself as configuration backend, not direct etcd
+  storageBackend = "kubernetes";
+
   # needed for flannel to pass options to docker
   mkDockerOpts = pkgs.runCommand "mk-docker-opts" {
     buildInputs = [ pkgs.makeWrapper ];
@@ -29,6 +32,8 @@ in
 
       enable = mkDefault true;
       network = mkDefault top.clusterCidr;
+      inherit storageBackend;
+      nodeName = config.services.kubernetes.kubelet.hostname;
     };
 
     services.kubernetes.kubelet = {
@@ -69,11 +74,52 @@ in
     };
 
     services.kubernetes.pki.certs = {
-      flannelEtcdClient = top.lib.mkCert {
-        name = "flannel-etcd-client";
-        CN = "flannel-etcd-client";
+      flannelClient = top.lib.mkCert {
+        name = "flannel-client";
+        CN = "flannel-client";
         action = "systemctl restart flannel.service";
       };
+    };
+
+    # give flannel som kubernetes rbac permissions if applicable
+    services.kubernetes.addonManager.bootstrapAddons = mkIf ((storageBackend == "kubernetes") && (elem "RBAC" top.apiserver.authorizationMode)) {
+
+      flannel-cr = {
+        apiVersion = "rbac.authorization.k8s.io/v1beta1";
+        kind = "ClusterRole";
+        metadata = { name = "flannel"; };
+        rules = [{
+          apiGroups = [ "" ];
+          resources = [ "pods" ];
+          verbs = [ "get" ];
+        }
+        {
+          apiGroups = [ "" ];
+          resources = [ "nodes" ];
+          verbs = [ "list" "watch" ];
+        }
+        {
+          apiGroups = [ "" ];
+          resources = [ "nodes/status" ];
+          verbs = [ "patch" ];
+        }];
+      };
+
+      flannel-crb = {
+        apiVersion = "rbac.authorization.k8s.io/v1beta1";
+        kind = "ClusterRoleBinding";
+        metadata = { name = "flannel"; };
+        roleRef = {
+          apiGroup = "rbac.authorization.k8s.io";
+          kind = "ClusterRole";
+          name = "flannel";
+        };
+        subjects = [{
+          kind = "User";
+          name = "flannel-client";
+        }];
+      };
+
     };
   };
 }
