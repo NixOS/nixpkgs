@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi
+{ stdenv, lib, isPyPy, buildPythonPackage, fetchPypi
 , pytest_3, cmdline, pytestcov, coverage, setuptools-git, mock, pathpy, execnet
 , contextlib2, termcolor }:
 
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   nativeBuildInputs = [ pytest_3 ];
 
   checkPhase = ''
-    py.test
+    py.test ${lib.optionalString isPyPy "-k'not (test_run or test_run_integration)'"}
   '';
 
   meta = with stdenv.lib; {
