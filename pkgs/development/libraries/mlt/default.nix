@@ -15,16 +15,19 @@ stdenv.mkDerivation rec {
     sha256 = "0pzm3mjbbdl2rkbswgyfkx552xlxh2qrwzsi2a4dicfr92rfgq6w";
   };
 
+  nativeBuildInputs = [ pkgconfig makeWrapper ];
   buildInputs = [
     SDL ffmpeg frei0r libjack2 libdv libsamplerate libvorbis libxml2
-    makeWrapper movit pkgconfig sox
+    movit sox
     gtk2
   ];
 
   # Mostly taken from:
   # http://www.kdenlive.org/user-manual/downloading-and-installing-kdenlive/installing-source/installing-mlt-rendering-engine
   configureFlags = [
-    "--avformat-swscale" "--enable-gpl" "--enable-gpl" "--enable-gpl3"
+    "--enable-gpl"
+    "--enable-gpl3"
+    "--avformat-swscale"
     "--enable-opengl"
   ];
 
