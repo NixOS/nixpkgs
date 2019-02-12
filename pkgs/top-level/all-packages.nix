@@ -19047,7 +19047,7 @@ in
 
   qtpfsgui = callPackage ../applications/graphics/qtpfsgui { };
 
-  qtractor = callPackage ../applications/audio/qtractor { };
+  qtractor = libsForQt5.callPackage ../applications/audio/qtractor { };
 
   qtscrobbler = callPackage ../applications/audio/qtscrobbler { };
 
