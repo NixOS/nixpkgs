@@ -48,21 +48,14 @@ in {
       ];
       preStart = ''
         cfgtemplate=${cfg.package}/share/nzbget/nzbget.conf
-        if [ ! -d ${dataDir} ]; then
-          echo "Creating nzbget data directory in ${dataDir}"
-          mkdir -p ${dataDir}
-        fi
         if [ ! -f ${cfg.configFile} ]; then
           echo "${cfg.configFile} not found. Copying default config $cfgtemplate to ${cfg.configFile}"
-          cp $cfgtemplate ${cfg.configFile}
-          echo "Setting ${cfg.configFile} permissions to 0700 (needs to be written and contains plaintext credentials)"
-          chmod 0700 ${cfg.configFile}
+          install -m 0700 $cfgtemplate ${cfg.configFile}
           echo "Setting temporary \$MAINDIR variable in default config required in order to allow nzbget to complete initial start"
           echo "Remember to change this to a proper value once NZBGet startup has been completed"
           sed -i -e 's/MainDir=.*/MainDir=\/tmp/g' ${cfg.configFile}
         fi
-        echo "Ensuring proper ownership of ${dataDir} (${cfg.user}:${cfg.group})."
-        chown -R ${cfg.user}:${cfg.group} ${dataDir}
+        echo "DONE"
       '';
 
       script = ''
@@ -83,6 +76,8 @@ in {
       '';
 
       serviceConfig = {
+        StateDirectory = dataDir;
+        StateDirectoryMode = "0700";
         Type = "forking";
         User = cfg.user;
         Group = cfg.group;
