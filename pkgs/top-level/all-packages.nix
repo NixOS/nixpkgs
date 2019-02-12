@@ -11693,7 +11693,7 @@ in
     withGUI = false;
   };
 
-  mlt = callPackage ../development/libraries/mlt {};
+  mlt = libsForQt5.mlt; # 2019-02-12
 
   mono-addins = callPackage ../development/libraries/mono-addins { };
 
@@ -12271,9 +12271,7 @@ in
 
     kpmcore = callPackage ../development/libraries/kpmcore { };
 
-    mlt = callPackage ../development/libraries/mlt/qt-5.nix {
-      ffmpeg = ffmpeg_2;
-    };
+    mlt = callPackage ../development/libraries/mlt { };
 
     openbr = callPackage ../development/libraries/openbr { };
 
@@ -18536,7 +18534,7 @@ in
   scudcloud = callPackage ../applications/networking/instant-messengers/scudcloud { };
 
   shotcut = libsForQt5.callPackage ../applications/video/shotcut {
-    libmlt = mlt;
+    libmlt = mlt; # XXX: which mlt?
   };
 
   shogun = callPackage ../applications/science/machine-learning/shogun { };
