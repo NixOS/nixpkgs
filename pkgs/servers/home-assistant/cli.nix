@@ -1,11 +1,10 @@
-# dateparser tests fail on pyton37: https://github.com/NixOS/nixpkgs/issues/52766
-{ lib, python36, glibcLocales }:
+{ lib, python3, glibcLocales }:
 
-python36.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "homeassistant-cli";
   version = "0.5.0";
 
-  src = python36.pkgs.fetchPypi {
+  src = python3.pkgs.fetchPypi {
     inherit pname version;
     sha256 = "4ad137d336508ab74840a34b3cc488ad884cc75285f5d7842544df1c3adacf8d";
   };
@@ -19,7 +18,7 @@ python36.pkgs.buildPythonApplication rec {
     glibcLocales
   ];
 
-  propagatedBuildInputs = with python36.pkgs; [
+  propagatedBuildInputs = with python3.pkgs; [
     requests netdisco click click-log tabulate jsonpath_rw jinja2 dateparser regex ruamel_yaml aiohttp
   ];
 
@@ -31,7 +30,7 @@ python36.pkgs.buildPythonApplication rec {
     $out/bin/hass-cli completion zsh > "$out/share/zsh/site-functions/_hass-cli"
   '';
 
-  checkInputs = with python36.pkgs; [
+  checkInputs = with python3.pkgs; [
     pytest requests-mock
   ];
 
