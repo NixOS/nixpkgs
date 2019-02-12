@@ -14,12 +14,12 @@ if !licenseAccepted then throw ''
 else assert licenseAccepted;
 let maps = callPackage ./maps.nix {};
 in stdenv.mkDerivation rec {
-  version = "3.17";
+  version = "4.7.1";
   name = "sc2-headless-${version}";
 
   src = fetchurl {
     url = "https://blzdistsc2-a.akamaihd.net/Linux/SC2.${version}.zip";
-    sha256 = "1biyxpf7n95hali1pw30h91rhzrj6sbwrx6s52d00mlnwdhmf2v0";
+    sha256 = "0q1ry9bd3dm8y4hvh57yfq7s05hl2k2sxi2wsl6h0r3w690v1kdd";
   };
 
   unpackCmd = ''
