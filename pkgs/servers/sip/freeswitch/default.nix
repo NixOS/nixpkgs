@@ -118,6 +118,11 @@ stdenv.mkDerivation rec {
     cp "${modulesConf}" modules.conf
   '';
 
+  postInstall = ''
+    # helper for compiling modules... not generally useful; also pulls in perl dependency
+    rm "$out"/bin/fsxs
+  '';
+
   meta = {
     description = "Cross-Platform Scalable FREE Multi-Protocol Soft Switch";
     homepage = https://freeswitch.org/;
