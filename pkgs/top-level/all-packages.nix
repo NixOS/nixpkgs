@@ -16006,6 +16006,8 @@ in
 
   xorg-rgb = callPackage ../data/misc/xorg-rgb {};
 
+  yanone-kaffeesatz = callPackage ../data/fonts/yanone-kaffeesatz {};
+
   zafiro-icons = callPackage ../data/icons/zafiro-icons { };
 
   zeal = libsForQt5.callPackage ../data/documentation/zeal { };
