@@ -9,12 +9,12 @@ index 69d30705..52e91028 100644
 -background=${CMAKE_INSTALL_PREFIX}/${WALLPAPER_INSTALL_DIR}/Next/contents/images/3200x2000.png
 +background=${NIXPKGS_WALLPAPER_INSTALL_DIR}/Next/contents/images/3200x2000.png
 diff --git a/startkde/CMakeLists.txt b/startkde/CMakeLists.txt
-index cb75aeca..247db953 100644
+index 6a1a2121..f03fd349 100644
 --- a/startkde/CMakeLists.txt
 +++ b/startkde/CMakeLists.txt
-@@ -3,11 +3,6 @@ add_subdirectory(kstartupconfig)
- add_subdirectory(ksyncdbusenv)
+@@ -4,11 +4,6 @@ add_subdirectory(ksyncdbusenv)
  add_subdirectory(waitforname)
+ add_subdirectory(kcheckrunning)
  
 -#FIXME: reconsider, looks fishy
 -if(NOT CMAKE_INSTALL_PREFIX STREQUAL "/usr")
@@ -36,7 +36,7 @@ index 493218ea..d507aa55 100644
 +    return system( NIXPKGS_KDOSTARTUPCONFIG5 );
      }
 diff --git a/startkde/startkde.cmake b/startkde/startkde.cmake
-index 714a9bf1..9733c612 100644
+index b68f0c68..a18efd96 100644
 --- a/startkde/startkde.cmake
 +++ b/startkde/startkde.cmake
 @@ -1,22 +1,31 @@
@@ -81,7 +81,7 @@ index 714a9bf1..9733c612 100644
  fi
  
  # Boot sequence:
-@@ -33,61 +42,133 @@ fi
+@@ -33,62 +42,134 @@ fi
  #
  # * Then ksmserver is started which takes control of the rest of the startup sequence
  
@@ -176,6 +176,7 @@ index 714a9bf1..9733c612 100644
 -ksplashrc KSplash Theme Breeze
 +ksplashrc KSplash Theme org.kde.breeze.desktop
  ksplashrc KSplash Engine KSplashQML
+ kdeglobals KScreen ScaleFactor ''
  kdeglobals KScreen ScreenScaleFactors ''
  kcmfonts General forceFontDPI 0
 +kcmfonts General dontChangeAASettings true
@@ -244,7 +245,7 @@ index 714a9bf1..9733c612 100644
  
  #Do not sync any of this section with the wayland versions as there scale factors are
  #sent properly over wl_output
-@@ -99,26 +180,33 @@ fi
+@@ -104,26 +185,33 @@ fi
  #otherwise apps that manually opt in for high DPI get auto scaled by the developer AND manually scaled by us
  export QT_AUTO_SCREEN_SCALE_FACTOR=0
  
@@ -291,7 +292,7 @@ index 714a9bf1..9733c612 100644
  Xft.dpi: $kcmfonts_general_forcefontdpi
  EOF
  fi
-@@ -127,11 +215,11 @@ dl=$DESKTOP_LOCKED
+@@ -132,11 +220,11 @@ dl=$DESKTOP_LOCKED
  unset DESKTOP_LOCKED # Don't want it in the environment
  
  ksplash_pid=
@@ -305,7 +306,7 @@ index 714a9bf1..9733c612 100644
        ;;
      None)
        ;;
-@@ -140,69 +228,6 @@ if test -z "$dl"; then
+@@ -145,27 +233,6 @@ if test -z "$dl"; then
    esac
  fi
  
@@ -330,52 +331,10 @@ index 714a9bf1..9733c612 100644
 -  done
 -done
 -
--# Activate the kde font directories.
--#
--# There are 4 directories that may be used for supplying fonts for KDE.
--#
--# There are two system directories. These belong to the administrator.
--# There are two user directories, where the user may add her own fonts.
--#
--# The 'override' versions are for fonts that should come first in the list,
--# i.e. if you have a font in your 'override' directory, it will be used in
--# preference to any other.
--#
--# The preference order looks like this:
--# user override, system override, X, user, system
--#
--# Where X is the original font database that was set up before this script
--# runs.
--
--usr_odir=$HOME/.fonts/kde-override
--usr_fdir=$HOME/.fonts
--
--if test -n "$KDEDIRS"; then
--  kdedirs_first=`echo "$KDEDIRS"|sed -e 's/:.*//'`
--  sys_odir=$kdedirs_first/share/fonts/override
--  sys_fdir=$kdedirs_first/share/fonts
--else
--  sys_odir=$KDEDIR/share/fonts/override
--  sys_fdir=$KDEDIR/share/fonts
--fi
--
--# We run mkfontdir on the user's font dirs (if we have permission) to pick
--# up any new fonts they may have installed. If mkfontdir fails, we still
--# add the user's dirs to the font path, as they might simply have been made
--# read-only by the administrator, for whatever reason.
--
--test -d "$sys_odir" && xset +fp "$sys_odir"
--test -d "$usr_odir" && (mkfontdir "$usr_odir" ; xset +fp "$usr_odir")
--test -d "$usr_fdir" && (mkfontdir "$usr_fdir" ; xset fp+ "$usr_fdir")
--test -d "$sys_fdir" && xset fp+ "$sys_fdir"
--
--# Ask X11 to rebuild its font list.
--xset fp rehash
--
  # Set a left cursor instead of the standard X11 "X" cursor, since I've heard
  # from some users that they're confused and don't know what to do. This is
  # especially necessary on slow machines, where starting KDE takes one or two
-@@ -257,44 +282,65 @@ export XDG_DATA_DIRS
+@@ -221,44 +288,65 @@ export XDG_DATA_DIRS
  #
  KDE_FULL_SESSION=true
  export KDE_FULL_SESSION
@@ -454,7 +413,7 @@ index 714a9bf1..9733c612 100644
  
  # finally, give the session control to the session manager
  # see kdebase/ksmserver for the description of the rest of the startup sequence
-@@ -306,12 +352,16 @@ qdbus org.kde.KSplash /KSplash org.kde.KSplash.setStage kinit &
+@@ -270,12 +358,16 @@ qdbus org.kde.KSplash /KSplash org.kde.KSplash.setStage kinit &
  # We only check for 255 which means that the ksmserver process could not be
  # started, any problems thereafter, e.g. ksmserver failing to initialize,
  # will remain undetected.
@@ -474,7 +433,7 @@ index 714a9bf1..9733c612 100644
  if test $? -eq 255; then
    # Startup error
    echo 'startkde: Could not start ksmserver. Check your installation.'  1>&2
-@@ -322,36 +372,36 @@ fi
+@@ -286,36 +378,36 @@ fi
  #Anything after here is logout
  #It is not called after shutdown/restart
  
@@ -525,7 +484,7 @@ index 714a9bf1..9733c612 100644
  
  echo 'startkde: Done.'  1>&2
 diff --git a/startkde/startplasma.cmake b/startkde/startplasma.cmake
-index de98541c..39c0b521 100644
+index 1fe41c59..39c0b521 100644
 --- a/startkde/startplasma.cmake
 +++ b/startkde/startplasma.cmake
 @@ -1,6 +1,6 @@
@@ -573,62 +532,14 @@ index de98541c..39c0b521 100644
        ;;
      None)
        ;;
-@@ -50,48 +48,6 @@ fi
- #In wayland we want Plasma to use Qt's scaling
- export PLASMA_USE_QT_SCALING=1
- 
--# Activate the kde font directories.
--#
--# There are 4 directories that may be used for supplying fonts for KDE.
--#
--# There are two system directories. These belong to the administrator.
--# There are two user directories, where the user may add her own fonts.
--#
--# The 'override' versions are for fonts that should come first in the list,
--# i.e. if you have a font in your 'override' directory, it will be used in
--# preference to any other.
--#
--# The preference order looks like this:
--# user override, system override, X, user, system
--#
--# Where X is the original font database that was set up before this script
--# runs.
--
--usr_odir=$HOME/.fonts/kde-override
--usr_fdir=$HOME/.fonts
--
--if test -n "$KDEDIRS"; then
--  kdedirs_first=`echo "$KDEDIRS"|sed -e 's/:.*//'`
--  sys_odir=$kdedirs_first/share/fonts/override
--  sys_fdir=$kdedirs_first/share/fonts
--else
--  sys_odir=$KDEDIR/share/fonts/override
--  sys_fdir=$KDEDIR/share/fonts
--fi
--
--# We run mkfontdir on the user's font dirs (if we have permission) to pick
--# up any new fonts they may have installed. If mkfontdir fails, we still
--# add the user's dirs to the font path, as they might simply have been made
--# read-only by the administrator, for whatever reason.
--
--test -d "$sys_odir" && xset +fp "$sys_odir"
--test -d "$usr_odir" && (mkfontdir "$usr_odir" ; xset +fp "$usr_odir")
--test -d "$usr_fdir" && (mkfontdir "$usr_fdir" ; xset fp+ "$usr_fdir")
--test -d "$sys_fdir" && xset fp+ "$sys_fdir"
--
--# Ask X11 to rebuild its font list.
--xset fp rehash
--
- # Set a left cursor instead of the standard X11 "X" cursor, since I've heard
- # from some users that they're confused and don't know what to do. This is
- # especially necessary on slow machines, where starting KDE takes one or two
-@@ -100,22 +56,13 @@ xset fp rehash
+@@ -58,23 +56,13 @@ export PLASMA_USE_QT_SCALING=1
  # If the user has overwritten fonts, the cursor font may be different now
  # so don't move this up.
  #
 -xsetroot -cursor_name left_ptr
 -
 -# Get Ghostscript to look into user's KDE fonts dir for additional Fontmap
+-usr_fdir=$HOME/.fonts
 -if test -n "$GS_LIB" ; then
 -    GS_LIB=$usr_fdir:$GS_LIB
 -    export GS_LIB
@@ -648,7 +559,7 @@ index de98541c..39c0b521 100644
  
  # At this point all environment variables are set, let's send it to the DBus session server to update the activation environment
  if which dbus-update-activation-environment >/dev/null 2>/dev/null ; then
-@@ -131,16 +78,15 @@ fi
+@@ -90,16 +78,15 @@ fi
  
  # We set LD_BIND_NOW to increase the efficiency of kdeinit.
  # kdeinit unsets this variable before loading applications.
@@ -667,7 +578,7 @@ index de98541c..39c0b521 100644
  
  # finally, give the session control to the session manager
  # see kdebase/ksmserver for the description of the rest of the startup sequence
-@@ -166,19 +112,19 @@ fi
+@@ -125,19 +112,19 @@ fi
  #Anything after here is logout
  #It is not called after shutdown/restart
  
@@ -695,7 +606,7 @@ index de98541c..39c0b521 100644
              done
              break
          fi
-@@ -187,15 +133,17 @@ fi
+@@ -146,15 +133,17 @@ fi
  
  echo 'startplasma: Shutting down...'  1>&2
  # just in case
@@ -718,7 +629,7 @@ index de98541c..39c0b521 100644
  
  echo 'startplasma: Done.'  1>&2
 diff --git a/startkde/startplasmacompositor.cmake b/startkde/startplasmacompositor.cmake
-index dd9e304d..12132f9e 100644
+index dcb473a4..48dbf465 100644
 --- a/startkde/startplasmacompositor.cmake
 +++ b/startkde/startplasmacompositor.cmake
 @@ -1,118 +1,165 @@
@@ -922,18 +833,18 @@ index dd9e304d..12132f9e 100644
  #otherwise apps that manually opt in for high DPI get auto scaled by the developer AND scaled by the wl_output
  export QT_AUTO_SCREEN_SCALE_FACTOR=0
  
--# XCursor mouse theme needs to be applied here to work even for kded or ksmserver
--if test -n "$kcminputrc_mouse_cursortheme" -o -n "$kcminputrc_mouse_cursorsize" ; then
--    @EXPORT_XCURSOR_PATH@
 +XCURSOR_PATH=~/.icons
 +IFS=":" read -r -a xdgDirs <<< "$XDG_DATA_DIRS"
 +for xdgDir in "${xdgDirs[@]}"; do
 +    XCURSOR_PATH="$XCURSOR_PATH:$xdgDir/icons"
 +done
 +export XCURSOR_PATH
- 
++
+ # XCursor mouse theme needs to be applied here to work even for kded or ksmserver
+-if test -n "$kcminputrc_mouse_cursortheme" -o -n "$kcminputrc_mouse_cursorsize" ; then
+-    @EXPORT_XCURSOR_PATH@
+-
 -    # TODO: is kapplymousetheme a core app?
-+# XCursor mouse theme needs to be applied here to work even for kded or ksmserver
 +if [ -n "$kcminputrc_mouse_cursortheme" -o -n "$kcminputrc_mouse_cursorsize" ]; then
      #kapplymousetheme "$kcminputrc_mouse_cursortheme" "$kcminputrc_mouse_cursorsize"
 -    if test $? -eq 10; then
@@ -1018,7 +929,7 @@ index dd9e304d..12132f9e 100644
      : # ok
  else
      echo 'startplasmacompositor: Could not start D-Bus. Can you call qdbus?'  1>&2
-@@ -212,26 +228,47 @@ export KDE_FULL_SESSION
+@@ -212,7 +228,7 @@ export KDE_FULL_SESSION
  KDE_SESSION_VERSION=5
  export KDE_SESSION_VERSION
  
@@ -1027,7 +938,9 @@ index dd9e304d..12132f9e 100644
  export KDE_SESSION_UID
  
  XDG_CURRENT_DESKTOP=KDE
- export XDG_CURRENT_DESKTOP
+@@ -221,20 +237,41 @@ export XDG_CURRENT_DESKTOP
+ XDG_SESSION_TYPE=wayland
+ export XDG_SESSION_TYPE
  
 +# Source scripts found in <config locations>/plasma-workspace/env/*.sh
 +# (where <config locations> correspond to the system and user's configuration
