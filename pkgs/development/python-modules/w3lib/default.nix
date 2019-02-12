@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "w3lib";
-  version = "1.17.0";
+  version = "1.20.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0vshh300ay5wn5hwl9qcb32m71pz5s6miy0if56vm4nggy159inq";
+    sha256 = "1mqwlc1cr15jxr3gr8pqqh5gf0gppm2kcvdi8vid6y8wmq9bjkg5";
   };
 
   buildInputs = [ six pytest ];

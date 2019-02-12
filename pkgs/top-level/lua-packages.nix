@@ -7,15 +7,47 @@
 
 { fetchurl, stdenv, lua, callPackage, unzip, zziplib, pkgconfig
 , pcre, oniguruma, gnulib, tre, glibc, sqlite, openssl, expat
-, glib, gobjectIntrospection, libevent, zlib, autoreconfHook, gnum4
+, glib, gobject-introspection, libevent, zlib, autoreconfHook, gnum4
 , mysql, postgresql, cyrus_sasl
 , fetchFromGitHub, libmpack, which, fetchpatch, writeText
+, pkgs
+, fetchgit
+, overrides ? (self: super: {})
+, lib
 }:
 
 let
-  isLua52 = lua.luaversion == "5.2";
+  packages = ( self:
+
+let
+  luaAtLeast = lib.versionAtLeast lua.luaversion;
+  luaOlder = lib.versionOlder lua.luaversion;
+  isLua51 = (lib.versions.majorMinor lua.version) == "5.1";
+  isLua52 = (lib.versions.majorMinor lua.version) == "5.2";
   isLua53 = lua.luaversion == "5.3";
   isLuaJIT = (builtins.parseDrvName lua.name).name == "luajit";
+
+  lua-setup-hook = callPackage ../development/interpreters/lua-5/setup-hook.nix { };
+
+  # Check whether a derivation provides a lua module.
+  hasLuaModule = drv: drv ? luaModule ;
+
+  callPackage = pkgs.newScope self;
+
+  requiredLuaModules = drvs: with stdenv.lib; let
+    modules =  filter hasLuaModule drvs;
+  in unique ([lua] ++ modules ++ concatLists (catAttrs "requiredLuaModules" modules));
+
+  # Convert derivation to a lua module.
+  toLuaModule = drv:
+    drv.overrideAttrs( oldAttrs: {
+      # Use passthru in order to prevent rebuilds when possible.
+      passthru = (oldAttrs.passthru or {})// {
+        luaModule = lua;
+        requiredLuaModules = requiredLuaModules drv.propagatedBuildInputs;
+      };
+    });
+
 
   platformString =
     if stdenv.isDarwin then "macosx"
@@ -24,10 +56,22 @@ let
     else if stdenv.isSunOS then "solaris"
     else throw "unsupported platform";
 
-  self = _self;
-  _self = with self; {
-  inherit lua;
-  inherit (stdenv.lib) maintainers;
+  buildLuaApplication = args: buildLuarocksPackage ({namePrefix="";} // args );
+
+  buildLuarocksPackage = with pkgs.lib; makeOverridable( callPackage ../development/interpreters/lua-5/build-lua-package.nix {
+    inherit toLuaModule;
+    inherit lua writeText;
+  });
+in
+with self; {
+
+  getLuaPathList = majorVersion: [
+     "lib/lua/${majorVersion}/?.lua" "share/lua/${majorVersion}/?.lua"
+    "share/lua/${majorVersion}/?/init.lua" "lib/lua/${majorVersion}/?/init.lua"
+  ];
+  getLuaCPathList = majorVersion: [
+     "lib/lua/${majorVersion}/?.so" "share/lua/${majorVersion}/?.so" "share/lua/${majorVersion}/?/init.so"
+  ];
 
   # helper functions for dealing with LUA_PATH and LUA_CPATH
   getPath       = lib : type : "${lib}/lib/lua/${lua.luaversion}/?.${type};${lib}/share/lua/${lua.luaversion}/?.${type}";
@@ -39,9 +83,22 @@ let
     inherit lua writeText;
   };
 
+
+  inherit toLuaModule lua-setup-hook;
+  inherit buildLuarocksPackage buildLuaApplication;
+  inherit requiredLuaModules luaOlder luaAtLeast
+    isLua51 isLua52 isLuaJIT lua callPackage;
+
+  # wraps programs in $out/bin with valid LUA_PATH/LUA_CPATH
+  wrapLua = callPackage ../development/interpreters/lua-5/wrap-lua.nix {
+    inherit lua; inherit (pkgs) makeSetupHook makeWrapper;
+  };
+
   luarocks = callPackage ../development/tools/misc/luarocks {
     inherit lua;
   };
+
+  luarocks-nix = callPackage ../development/tools/misc/luarocks/luarocks-nix.nix { };
 
   basexx = buildLuaPackage rec {
     version = "0.4.0";
@@ -380,18 +437,18 @@ let
 
   luadbi = buildLuaPackage rec {
     name = "luadbi-${version}";
-    version = "0.6";
+    version = "0.7.1";
 
     src = fetchFromGitHub {
       owner = "mwild1";
       repo = "luadbi";
       rev = "v${version}";
-      sha256 = "1cpl84pl75wqd9zph3w4srd5lxij359p8xmmf7xpdbxz67695vah";
+      sha256 = "01i8018zb7w2bhaqglm7cnvbiirgd95b9d07irgz3sci91p08cwp";
     };
 
     MYSQL_INC="-I${mysql.connector-c}/include/mysql";
 
-    buildInputs = [ mysql postgresql sqlite ];
+    buildInputs = [ mysql.client mysql.connector-c postgresql sqlite ];
 
     preConfigure = stdenv.lib.optionalString stdenv.isDarwin ''
       substituteInPlace Makefile \
@@ -596,7 +653,7 @@ let
     };
 
     patchPhase = stdenv.lib.optionalString stdenv.isDarwin ''
-      substituteInPlace src/makefile --replace gcc cc \
+      substituteInPlace src/makefile \
         --replace 10.3 10.5
     '';
 
@@ -604,6 +661,8 @@ let
       makeFlagsArray=(
         LUAV=${lua.luaversion}
         PLAT=${platformString}
+        CC=''${CC}
+        LD=''${CC}
         prefix=$out
       );
     '';
@@ -913,7 +972,7 @@ let
     };
   };
 
-  lgi = stdenv.mkDerivation rec {
+  lgi = toLuaModule(stdenv.mkDerivation rec {
     name = "lgi-${version}";
     version = "0.9.2";
 
@@ -925,7 +984,7 @@ let
     };
 
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ glib gobjectIntrospection lua ];
+    buildInputs = [ glib gobject-introspection lua ];
 
     makeFlags = [ "LUA_VERSION=${lua.luaversion}" ];
 
@@ -948,7 +1007,7 @@ let
       maintainers = with maintainers; [ lovek323 rasendubi ];
       platforms   = platforms.unix;
     };
-  };
+  });
 
   mpack = buildLuaPackage rec {
     name = "mpack-${version}";
@@ -1046,7 +1105,7 @@ let
     };
   };
 
-  vicious = stdenv.mkDerivation rec {
+  vicious = toLuaModule(stdenv.mkDerivation rec {
     name = "vicious-${version}";
     version = "2.3.1";
 
@@ -1072,6 +1131,7 @@ let
       maintainers = with maintainers; [ makefu mic92 ];
       platforms   = platforms.linux;
     };
-  };
+  });
 
-}; in self
+});
+in (lib.extends overrides packages)

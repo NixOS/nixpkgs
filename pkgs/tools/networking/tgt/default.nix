@@ -15,9 +15,14 @@ in stdenv.mkDerivation rec {
 
   buildInputs = [ libxslt systemd libaio docbook_xsl ];
 
-  DESTDIR = "$(out)";
-  PREFIX = "/";
-  SD_NOTIFY="1";
+  makeFlags = [
+    "PREFIX=${placeholder "out"}"
+    "SD_NOTIFY=1"
+  ];
+
+  installFlags = [
+    "sysconfdir=${placeholder "out"}/etc"
+  ];
 
   preConfigure = ''
     sed -i 's|/usr/bin/||' doc/Makefile

@@ -20,6 +20,6 @@ stdenv.mkDerivation rec {
     homepage = https://gitlab.com/tim241/bunny;
     license = licenses.gpl3;
     platforms = platforms.all;
-    maintainers = with maintainers; [ countingsort ];
+    maintainers = with maintainers; [ buffet ];
   };
 }

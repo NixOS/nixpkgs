@@ -56,7 +56,8 @@ in
         is acquired using DHCP.
 
         You should add the module(s) required for your network card to
-        boot.initrd.availableKernelModules. lspci -v -s &lt;ethernet controller&gt;
+        boot.initrd.availableKernelModules.
+        <literal>lspci -v | grep -iA8 'network\|ethernet'</literal>
         will tell you which.
       '';
     };

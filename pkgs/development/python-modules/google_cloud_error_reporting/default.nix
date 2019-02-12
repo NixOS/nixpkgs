@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-error-reporting";
-  version = "0.30.0";
+  version = "0.30.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "768a5c3ed7a96b60f051717c1138e561493ab0ef4dd4acbcf9e2b1cc2d09e06a";
+    sha256 = "29d04cb6cc2053468addb78351b841df00cb56066e89b6aec0970cb003dd2fab";
   };
 
   checkInputs = [ pytest mock ];

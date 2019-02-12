@@ -1,5 +1,5 @@
 {fetchFromGitHub , stdenv, python3, gtk3, libwnck3,
- gobjectIntrospection, wrapGAppsHook }:
+ gobject-introspection, wrapGAppsHook }:
 
 stdenv.mkDerivation  rec {
   name = "clipster-${version}";
@@ -14,7 +14,7 @@ stdenv.mkDerivation  rec {
 
   pythonEnv = python3.withPackages(ps: with ps; [ pygobject3 ]);
 
-  buildInputs =  [ pythonEnv gtk3 libwnck3 gobjectIntrospection wrapGAppsHook ];
+  buildInputs =  [ pythonEnv gtk3 libwnck3 gobject-introspection wrapGAppsHook ];
 
   installPhase = ''
     sed -i 's/python/python3/g' clipster

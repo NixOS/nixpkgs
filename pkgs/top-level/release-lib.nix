@@ -54,7 +54,7 @@ rec {
   # More poor man's memoisation
   pkgsForCross = let
     examplesByConfig = lib.flip lib.mapAttrs'
-      (builtins.removeAttrs lib.systems.examples [ "riscv" ])
+      lib.systems.examples
       (_: crossSystem: nameValuePair crossSystem.config {
         inherit crossSystem;
         pkgsFor = mkPkgsFor crossSystem;

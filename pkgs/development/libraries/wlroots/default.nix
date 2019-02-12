@@ -2,25 +2,11 @@
 , wayland, libGL, wayland-protocols, libinput, libxkbcommon, pixman
 , xcbutilwm, libX11, libcap, xcbutilimage, xcbutilerrors, mesa_noglu
 , libpng, ffmpeg_4
-, python3Packages # TODO: Temporary
 }:
 
 let
   pname = "wlroots";
-  version = "0.1";
-  meson480 = meson.overrideAttrs (oldAttrs: rec {
-    name = pname + "-" + version;
-    pname = "meson";
-    version = "0.48.0";
-
-    src = python3Packages.fetchPypi {
-      inherit pname version;
-      sha256 = "0qawsm6px1vca3babnqwn0hmkzsxy4w0gi345apd2qk3v0cv7ipc";
-    };
-    patches = builtins.filter # Remove gir-fallback-path.patch
-      (str: !(stdenv.lib.hasSuffix "gir-fallback-path.patch" str))
-      oldAttrs.patches;
-  });
+  version = "0.3";
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
@@ -28,19 +14,14 @@ in stdenv.mkDerivation rec {
     owner = "swaywm";
     repo = "wlroots";
     rev = version;
-    sha256 = "0xfipgg2qh2xcf3a1pzx8pyh1aqpb9rijdyi0as4s6fhgy4w269c";
+    sha256 = "1iz5lxpiba1lcmkz3hz56r8j6ra3535zgckazqshi4c364nx94zs";
   };
-
-  patches = [ (fetchpatch { # TODO: Only required for version 0.1
-    url = https://github.com/swaywm/wlroots/commit/be6210cf8216c08a91e085dac0ec11d0e34fb217.patch;
-    sha256 = "0njv7mr4ark603w79cxcsln29galh87vpzsx2dzkrl1x5x4i6cj5";
-  }) ];
 
   # $out for the library, $bin for rootston, and $examples for the example
   # programs (in examples) AND rootston
   outputs = [ "out" "bin" "examples" ];
 
-  nativeBuildInputs = [ meson480 ninja pkgconfig ];
+  nativeBuildInputs = [ meson ninja pkgconfig ];
 
   buildInputs = [
     wayland libGL wayland-protocols libinput libxkbcommon pixman
@@ -50,18 +31,30 @@ in stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Dlibcap=enabled" "-Dlogind=enabled" "-Dxwayland=enabled" "-Dx11-backend=enabled"
-    "-Dxcb-icccm=enabled" "-Dxcb-xkb=enabled" "-Dxcb-errors=enabled"
+    "-Dxcb-icccm=enabled" "-Dxcb-errors=enabled"
   ];
 
+  postPatch = ''
+    # It happens from time to time that the version wasn't updated:
+    sed -iE "s/version: '[0-9]\.[0-9]\.[0-9]'/version: '${version}.0'/" meson.build
+  '';
+
   postInstall = ''
-    # Install rootston (the reference compositor) to $bin and $examples
+    # Copy the library to $bin and $examples
+    for output in "$bin" "$examples"; do
+      mkdir -p $output/lib
+      cp -P libwlroots* $output/lib/
+    done
+  '';
+
+  postFixup = ''
+    # Install rootston (the reference compositor) to $bin and $examples (this
+    # has to be done after the fixup phase to prevent broken binaries):
     for output in "$bin" "$examples"; do
       mkdir -p $output/bin
       cp rootston/rootston $output/bin/
-      mkdir $output/lib
-      cp libwlroots* $output/lib/
       patchelf \
-        --set-rpath "$output/lib:${stdenv.lib.makeLibraryPath buildInputs}" \
+        --set-rpath "$(patchelf --print-rpath $output/bin/rootston | sed s,$out,$output,g)" \
         $output/bin/rootston
       mkdir $output/etc
       cp ../rootston/rootston.ini.example $output/etc/rootston.ini
@@ -73,10 +66,10 @@ in stdenv.mkDerivation rec {
     mkdir -p $examples/bin
     cd ./examples
     for binary in $(find . -executable -type f -printf '%P\n' | grep -vE '\.so'); do
-      patchelf \
-        --set-rpath "$examples/lib:${stdenv.lib.makeLibraryPath buildInputs}" \
-        "$binary"
       cp "$binary" "$examples/bin/wlroots-$binary"
+      patchelf \
+        --set-rpath "$(patchelf --print-rpath $output/bin/rootston | sed s,$out,$examples,g)" \
+        "$examples/bin/wlroots-$binary"
     done
   '';
 

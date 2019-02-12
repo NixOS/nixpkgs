@@ -1,0 +1,206 @@
+<section xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         xml:id="sec-pkgs-fetchers">
+ <title>Fetcher functions</title>
+
+ <para>
+   When using Nix, you will frequently need to download source code
+   and other files from the internet. Nixpkgs comes with a few helper
+   functions that allow you to fetch fixed-output derivations in a
+   structured way.
+ </para>
+
+ <para>
+   The two fetcher primitives are <function>fetchurl</function> and
+   <function>fetchzip</function>. Both of these have two required
+   arguments, a URL and a hash. The hash is typically
+   <literal>sha256</literal>, although many more hash algorithms are
+   supported. Nixpkgs contributors are currently recommended to use
+   <literal>sha256</literal>. This hash will be used by Nix to
+   identify your source. A typical usage of fetchurl is provided
+   below.
+ </para>
+
+ <programlisting><![CDATA[
+{ stdenv, fetchurl }:
+
+stdenv.mkDerivation {
+  name = "hello";
+  src = fetchurl {
+    url = "http://www.example.org/hello.tar.gz";
+    sha256 = "1111111111111111111111111111111111111111111111111111";
+  };
+}
+]]></programlisting>
+
+ <para>
+   The main difference between <function>fetchurl</function> and
+   <function>fetchzip</function> is in how they store the contents.
+   <function>fetchurl</function> will store the unaltered contents of
+   the URL within the Nix store. <function>fetchzip</function> on the
+   other hand will decompress the archive for you, making files and
+   directories directly accessible in the future.
+   <function>fetchzip</function> can only be used with archives.
+   Despite the name, <function>fetchzip</function> is not limited to
+   .zip files and can also be used with any tarball.
+ </para>
+
+ <para>
+   <function>fetchpatch</function> works very similarly to
+   <function>fetchurl</function> with the same arguments expected. It
+   expects patch files as a source and and performs normalization on
+   them before computing the checksum. For example it will remove
+   comments or other unstable parts that are sometimes added by
+   version control systems and can change over time.
+ </para>
+
+ <para>
+   Other fetcher functions allow you to add source code directly from
+   a VCS such as subversion or git. These are mostly straightforward
+   names based on the name of the command used with the VCS system.
+   Because they give you a working repository, they act most like
+   <function>fetchzip</function>.
+ </para>
+
+ <variablelist>
+   <varlistentry>
+     <term>
+      <literal>fetchsvn</literal>
+     </term>
+     <listitem>
+      <para>
+       Used with Subversion. Expects <literal>url</literal> to a
+       Subversion directory, <literal>rev</literal>, and
+       <literal>sha256</literal>.
+      </para>
+     </listitem>
+   </varlistentry>
+   <varlistentry>
+     <term>
+      <literal>fetchgit</literal>
+     </term>
+     <listitem>
+      <para>
+       Used with Git. Expects <literal>url</literal> to a Git repo,
+       <literal>rev</literal>, and <literal>sha256</literal>.
+       <literal>rev</literal> in this case can be full the git commit
+       id (SHA1 hash) or a tag name like
+       <literal>refs/tags/v1.0</literal>.
+      </para>
+     </listitem>
+   </varlistentry>
+   <varlistentry>
+     <term>
+      <literal>fetchfossil</literal>
+     </term>
+     <listitem>
+      <para>
+       Used with Fossil. Expects <literal>url</literal> to a Fossil
+       archive, <literal>rev</literal>, and <literal>sha256</literal>.
+      </para>
+     </listitem>
+   </varlistentry>
+   <varlistentry>
+     <term>
+      <literal>fetchcvs</literal>
+     </term>
+     <listitem>
+      <para>
+       Used with CVS. Expects <literal>cvsRoot</literal>,
+       <literal>tag</literal>, and <literal>sha256</literal>.
+      </para>
+     </listitem>
+   </varlistentry>
+   <varlistentry>
+     <term>
+      <literal>fetchhg</literal>
+     </term>
+     <listitem>
+      <para>
+       Used with Mercurial. Expects <literal>url</literal>,
+       <literal>rev</literal>, and <literal>sha256</literal>.
+      </para>
+     </listitem>
+   </varlistentry>
+ </variablelist>
+
+ <para>
+   A number of fetcher functions wrap part of
+   <function>fetchurl</function> and <function>fetchzip</function>.
+   They are mainly convenience functions intended for commonly used
+   destinations of source code in Nixpkgs. These wrapper fetchers are
+   listed below.
+ </para>
+
+ <variablelist>
+   <varlistentry>
+     <term>
+      <literal>fetchFromGitHub</literal>
+     </term>
+     <listitem>
+      <para>
+        <function>fetchFromGitHub</function> expects four arguments.
+        <literal>owner</literal> is a string corresponding to the
+        GitHub user or organization that controls this repository.
+        <literal>repo</literal> corresponds to the name of the
+        software repository. These are located at the top of every
+        GitHub HTML page as
+        <literal>owner</literal>/<literal>repo</literal>.
+        <literal>rev</literal> corresponds to the Git commit hash or
+        tag (e.g <literal>v1.0</literal>) that will be downloaded from
+        Git. Finally, <literal>sha256</literal> corresponds to the
+        hash of the extracted directory. Again, other hash algorithms
+        are also available but <literal>sha256</literal> is currently
+        preferred.
+      </para>
+     </listitem>
+   </varlistentry>
+   <varlistentry>
+     <term>
+      <literal>fetchFromGitLab</literal>
+     </term>
+     <listitem>
+      <para>
+       This is used with GitLab repositories. The arguments expected
+       are very similar to fetchFromGitHub above.
+      </para>
+     </listitem>
+   </varlistentry>
+   <varlistentry>
+     <term>
+      <literal>fetchFromBitbucket</literal>
+     </term>
+     <listitem>
+      <para>
+       This is used with BitBucket repositories. The arguments expected
+       are very similar to fetchFromGitHub above.
+      </para>
+     </listitem>
+   </varlistentry>
+   <varlistentry>
+     <term>
+      <literal>fetchFromSavannah</literal>
+     </term>
+     <listitem>
+      <para>
+       This is used with Savannah repositories. The arguments expected
+       are very similar to fetchFromGitHub above.
+      </para>
+     </listitem>
+   </varlistentry>
+   <varlistentry>
+     <term>
+      <literal>fetchFromRepoOrCz</literal>
+     </term>
+     <listitem>
+      <para>
+       This is used with repo.or.cz repositories. The arguments
+       expected are very similar to fetchFromGitHub above.
+      </para>
+     </listitem>
+   </varlistentry>
+ </variablelist>
+
+
+</section>

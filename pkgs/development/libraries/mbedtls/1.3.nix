@@ -29,6 +29,6 @@ stdenv.mkDerivation rec {
     description = "Portable cryptographic and SSL/TLS library, aka polarssl";
     license = licenses.gpl3;
     platforms = platforms.all;
-    maintainers = with maintainers; [ wkennington fpletz ];
+    maintainers = with maintainers; [ fpletz ];
   };
 }

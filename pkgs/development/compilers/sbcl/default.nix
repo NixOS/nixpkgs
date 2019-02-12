@@ -10,11 +10,11 @@
 
 stdenv.mkDerivation rec {
   name    = "sbcl-${version}";
-  version = "1.4.13";
+  version = "1.4.16";
 
   src = fetchurl {
     url    = "mirror://sourceforge/project/sbcl/sbcl/${version}/${name}-source.tar.bz2";
-    sha256 = "120rnnz8367lk7ljqlf8xidm4b0d738xqsib4kq0q5ms5r7fzgvm";
+    sha256 = "1myg4wkxnbfn5nz38xy62r1jhjy07x3h0b04vg858n41chdsv4wd";
   };
 
   buildInputs = [texinfo];
@@ -68,7 +68,8 @@ stdenv.mkDerivation rec {
     else
       # Fix software version retrieval
       ''
-        sed -e "s@/bin/uname@$(command -v uname)@g" -i src/code/*-os.lisp
+        sed -e "s@/bin/uname@$(command -v uname)@g" -i src/code/*-os.lisp \
+          src/code/run-program.lisp
       ''
     );
 

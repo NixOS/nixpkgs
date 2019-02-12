@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, gobjectIntrospection, vala, gtk-doc, docbook_xsl, docbook_xml_dtd_412, libsoup, gtk3, glib }:
+{ stdenv, fetchurl, pkgconfig, gobject-introspection, vala, gtk-doc, docbook_xsl, docbook_xml_dtd_412, libsoup, gtk3, glib }:
 
 stdenv.mkDerivation rec {
   name = "gssdp-${version}";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "1p1m2m3ndzr2whipqw4vfb6s6ia0g7rnzzc4pnq8b8g1qw4prqd1";
   };
 
-  nativeBuildInputs = [ pkgconfig gobjectIntrospection vala gtk-doc docbook_xsl docbook_xml_dtd_412 ];
+  nativeBuildInputs = [ pkgconfig gobject-introspection vala gtk-doc docbook_xsl docbook_xml_dtd_412 ];
   buildInputs = [ libsoup gtk3 ];
   propagatedBuildInputs = [ glib ];
 

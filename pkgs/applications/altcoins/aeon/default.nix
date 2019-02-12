@@ -4,7 +4,7 @@
 }:
 
 let
-  version = "0.12.6.0";
+  version = "0.12.8.0";
 in
 stdenv.mkDerivation {
   name = "aeon-${version}";
@@ -14,7 +14,7 @@ stdenv.mkDerivation {
     repo = "aeon";
     rev = "v${version}-aeon";
     fetchSubmodules = true;
-    sha256 = "19r1snqwixccl27jwv6i0s86qck036pdlhyhl891bbiyvi55h14n";
+    sha256 = "1qmlz820mjs0b60d7i90lxcwwxmsdy6swq67v6n8mbb79zmcx8ii";
   };
 
   nativeBuildInputs = [ cmake pkgconfig git doxygen graphviz ];

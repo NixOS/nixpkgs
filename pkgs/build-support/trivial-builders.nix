@@ -258,15 +258,17 @@ rec {
    * Example:
    *
    * # Symlinks hello path in store to current $out/hello
-   * linkFarm "hello" entries = [ { name = "hello"; path = pkgs.hello; } ];
+   * linkFarm "hello" [ { name = "hello"; path = pkgs.hello; } ];
    *
    */
-  linkFarm = name: entries: runCommand name { preferLocalBuild = true; }
-    ("mkdir -p $out; cd $out; \n" +
-      (lib.concatMapStrings (x: ''
-        mkdir -p "$(dirname '${x.name}')"
-        ln -s '${x.path}' '${x.name}'
-      '') entries));
+  linkFarm = name: entries: runCommand name { preferLocalBuild = true; allowSubstitutes = false; }
+    ''mkdir -p $out
+      cd $out
+      ${lib.concatMapStrings (x: ''
+          mkdir -p "$(dirname ${lib.escapeShellArg x.name})"
+          ln -s ${lib.escapeShellArg x.path} ${lib.escapeShellArg x.name}
+      '') entries}
+    '';
 
 
   /* Print an error message if the file with the specified name and

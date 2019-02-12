@@ -25,16 +25,27 @@ stdenv.mkDerivation rec {
 
   patches = optional stdenv.hostPlatform.isCygwin ./coreutils-8.23-4.cygwin.patch;
 
-  # The test tends to fail on btrfs and maybe other unusual filesystems.
   postPatch = ''
+    # The test tends to fail on btrfs and maybe other unusual filesystems.
     sed '2i echo Skipping dd sparse test && exit 0' -i ./tests/dd/sparse.sh
     sed '2i echo Skipping cp sparse test && exit 0' -i ./tests/cp/sparse.sh
     sed '2i echo Skipping rm deep-2 test && exit 0' -i ./tests/rm/deep-2.sh
     sed '2i echo Skipping du long-from-unreadable test && exit 0' -i ./tests/du/long-from-unreadable.sh
+
+    # sandbox does not allow setgid
     sed '2i echo Skipping chmod setgid test && exit 0' -i ./tests/chmod/setgid.sh
-    sed '2i print "Skipping env -S test";  exit 0;' -i ./tests/misc/env-S.pl
     substituteInPlace ./tests/install/install-C.sh \
       --replace 'mode3=2755' 'mode3=1755'
+
+    sed '2i print "Skipping env -S test";  exit 0;' -i ./tests/misc/env-S.pl
+
+    # these tests fail in the unprivileged nix sandbox (without nix-daemon) as we break posix assumptions
+    for f in ./tests/chgrp/{basic.sh,recurse.sh,default-no-deref.sh,no-x.sh,posix-H.sh}; do
+      sed '2i echo Skipping chgrp && exit 0' -i "$f"
+    done
+    for f in gnulib-tests/{test-chown.c,test-fchownat.c,test-lchown.c}; do
+      echo "int main() { return 0; }" > "$f"
+    done
   '';
 
   outputs = [ "out" "info" ];
@@ -63,8 +74,8 @@ stdenv.mkDerivation rec {
     ++ optional (stdenv.hostPlatform != stdenv.buildPlatform && stdenv.hostPlatform.libc != "glibc") libiconv;
 
   # The tests are known broken on Cygwin
-  # (http://thread.gmane.org/gmane.comp.gnu.core-utils.bugs/19025),
-  # Darwin (http://thread.gmane.org/gmane.comp.gnu.core-utils.bugs/19351),
+  # (http://article.gmane.org/gmane.comp.gnu.core-utils.bugs/19025),
+  # Darwin (http://article.gmane.org/gmane.comp.gnu.core-utils.bugs/19351),
   # and {Open,Free}BSD.
   # With non-standard storeDir: https://github.com/NixOS/nix/issues/512
   doCheck = stdenv.hostPlatform == stdenv.buildPlatform
@@ -97,7 +108,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = http://www.gnu.org/software/coreutils/;
+    homepage = https://www.gnu.org/software/coreutils/;
     description = "The basic file, shell and text manipulation utilities of the GNU operating system";
 
     longDescription = ''
@@ -109,7 +120,7 @@ stdenv.mkDerivation rec {
 
     license = licenses.gpl3Plus;
 
-    platforms = platforms.unix;
+    platforms = platforms.unix ++ platforms.windows;
 
     maintainers = [ maintainers.eelco ];
   };

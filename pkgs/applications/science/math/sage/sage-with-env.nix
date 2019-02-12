@@ -6,8 +6,7 @@
 , pkg-config
 , three
 , singular
-, libgap
-, gap-libgap-compatible
+, gap
 , giac
 , maxima-ecl
 , pari
@@ -35,8 +34,7 @@ let
     three
     pynac
     giac
-    libgap
-    gap-libgap-compatible
+    gap
     pari
     gmp
     gfan

@@ -1,0 +1,123 @@
+diff --git a/Makefile.am b/Makefile.am
+index 194e111..0a095b5 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -80,8 +80,7 @@ EXTRA_DIST += libkmod/README \
+ 	libkmod/COPYING testsuite/COPYING tools/COPYING COPYING
+ 
+ libkmod_libkmod_la_LDFLAGS = $(AM_LDFLAGS) \
+-	-version-info $(LIBKMOD_CURRENT):$(LIBKMOD_REVISION):$(LIBKMOD_AGE) \
+-	-Wl,--version-script=$(top_srcdir)/libkmod/libkmod.sym
++	-version-info $(LIBKMOD_CURRENT):$(LIBKMOD_REVISION):$(LIBKMOD_AGE)
+ libkmod_libkmod_la_DEPENDENCIES = \
+ 	shared/libshared.la \
+ 	${top_srcdir}/libkmod/libkmod.sym
+@@ -91,8 +90,7 @@ libkmod_libkmod_la_LIBADD = \
+ 
+ noinst_LTLIBRARIES += libkmod/libkmod-internal.la
+ libkmod_libkmod_internal_la_SOURCES = $(libkmod_libkmod_la_SOURCES)
+-libkmod_libkmod_internal_la_LDFLAGS = $(AM_LDFLAGS) \
+-	-Wl,--version-script=$(top_srcdir)/libkmod/libkmod.sym
++libkmod_libkmod_internal_la_LDFLAGS = $(AM_LDFLAGS)
+ libkmod_libkmod_internal_la_DEPENDENCIES  = $(libkmod_libkmod_la_DEPENDENCIES)
+ libkmod_libkmod_internal_la_LIBADD = $(libkmod_libkmod_la_LIBADD)
+ 
+diff --git a/libkmod/libkmod-module.c b/libkmod/libkmod-module.c
+index 889f264..6f0a285 100644
+--- a/libkmod/libkmod-module.c
++++ b/libkmod/libkmod-module.c
+@@ -787,7 +787,11 @@ KMOD_EXPORT int kmod_module_remove_module(struct kmod_module *mod,
+ 	flags &= KMOD_REMOVE_FORCE;
+ 	flags |= KMOD_REMOVE_NOWAIT;
+ 
++#if defined(__linux__)
+ 	err = delete_module(mod->name, flags);
++#else
++	err = -1;
++#endif
+ 	if (err != 0) {
+ 		err = -errno;
+ 		ERR(mod->ctx, "could not remove '%s': %m\n", mod->name);
+@@ -879,7 +883,11 @@ KMOD_EXPORT int kmod_module_insert_module(struct kmod_module *mod,
+ 	}
+ 	size = kmod_file_get_size(mod->file);
+ 
++#if defined(__linux__)
+ 	err = init_module(mem, size, args);
++#else
++	err = -1;
++#endif
+ init_finished:
+ 	if (err < 0) {
+ 		err = -errno;
+diff --git a/libkmod/libkmod-signature.c b/libkmod/libkmod-signature.c
+index 429ffbd..17a3b9c 100644
+--- a/libkmod/libkmod-signature.c
++++ b/libkmod/libkmod-signature.c
+@@ -17,7 +17,10 @@
+  * License along with this library; if not, see <http://www.gnu.org/licenses/>.
+  */
+ 
++#if defined(__linux__)
+ #include <endian.h>
++#endif
++
+ #include <inttypes.h>
+ #include <stdio.h>
+ #include <stdlib.h>
+diff --git a/shared/macro.h b/shared/macro.h
+index 4fc5405..b5a2702 100644
+--- a/shared/macro.h
++++ b/shared/macro.h
+@@ -71,3 +71,7 @@
+ #endif
+ 
+ #define UNIQ __COUNTER__
++
++ #if !defined(__linux__)
++#define program_invocation_short_name getprogname()
++#endif
+diff --git a/shared/missing.h b/shared/missing.h
+index 4c0d136..ad8ec0f 100644
+--- a/shared/missing.h
++++ b/shared/missing.h
+@@ -45,6 +45,9 @@ static inline int finit_module(int fd, const char *uargs, int flags)
+ #endif
+ 
+ #if !HAVE_DECL_BE32TOH
++
++#if defined(__linux__)
++
+ #include <endian.h>
+ #include <byteswap.h>
+ #if __BYTE_ORDER == __LITTLE_ENDIAN
+@@ -52,4 +55,16 @@ static inline int finit_module(int fd, const char *uargs, int flags)
+ #else
+ #define be32toh(x) (x)
+ #endif
++
++#elif defined(__APPLE__)
++
++#include <libkern/OSByteOrder.h>
++#define be32toh(x) OSSwapBigToHostInt32(x)
++
++#else
++
++#error No be32toh known for platform
++
++#endif
++
+ #endif
+diff --git a/shared/util.c b/shared/util.c
+index fd2028d..ecb0141 100644
+--- a/shared/util.c
++++ b/shared/util.c
+@@ -367,7 +367,7 @@ char *path_make_absolute_cwd(const char *p)
+ 	if (path_is_absolute(p))
+ 		return strdup(p);
+ 
+-	cwd = get_current_dir_name();
++	cwd = getcwd(NULL, 0);
+ 	if (!cwd)
+ 		return NULL;
+ 

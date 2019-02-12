@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "toposort";
-  version = "1.1";
+  version = "1.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1izmirbwmd9xrk7rq83p486cvnsslfa5ljvl7rijj1r64zkcnf3a";
+    sha256 = "dba5ae845296e3bf37b042c640870ffebcdeb8cd4df45adaa01d8c5476c557dd";
   };
 
   meta = with stdenv.lib; {

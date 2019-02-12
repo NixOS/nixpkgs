@@ -11,7 +11,7 @@
 , testsSupport ? false
 , jdk ? null
 # Inherit generics
-, branch, version, revision, sha256, patches ? [], ...
+, branch, version, revision, sha256, patches ? [], extraFlags ? [], ...
 }:
 
 assert jpipServerSupport -> jpipLibSupport && curl != null && fcgi != null;
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     (mkFlag jp3dSupport "BUILD_JP3D")
     (mkFlag thirdPartySupport "BUILD_THIRDPARTY")
     (mkFlag testsSupport "BUILD_TESTING")
-  ];
+  ] ++ extraFlags;
 
   nativeBuildInputs = [ cmake pkgconfig ];
 

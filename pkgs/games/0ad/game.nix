@@ -1,7 +1,7 @@
 { stdenv, lib, perl, fetchurl, python2
 , pkgconfig, spidermonkey_38, boost, icu, libxml2, libpng, libsodium
 , libjpeg, zlib, curl, libogg, libvorbis, enet, miniupnpc
-, openal, libGLU_combined, xproto, libX11, libXcursor, nspr, SDL2
+, openal, libGLU_combined, xorgproto, libX11, libXcursor, nspr, SDL2
 , gloox, nvidia-texture-tools
 , withEditor ? true, wxGTK ? null
 }:
@@ -10,11 +10,11 @@ assert withEditor -> wxGTK != null;
 
 stdenv.mkDerivation rec {
   name = "0ad-${version}";
-  version = "0.0.23";
+  version = "0.0.23b";
 
   src = fetchurl {
     url = "http://releases.wildfiregames.com/0ad-${version}-alpha-unix-build.tar.xz";
-    sha256 = "0qz1sg4n5y766qwgi63drrrx6k17kk0rcnn9a4a9crllk2vf78fg";
+    sha256 = "0draa53xg69i5qhqym85658m45xhwkbiimaldj4sr3703rjgggq1";
   };
 
   nativeBuildInputs = [ python2 perl pkgconfig ];
@@ -22,22 +22,26 @@ stdenv.mkDerivation rec {
   buildInputs = [
     spidermonkey_38 boost icu libxml2 libpng libjpeg
     zlib curl libogg libvorbis enet miniupnpc openal
-    libGLU_combined xproto libX11 libXcursor nspr SDL2 gloox
+    libGLU_combined xorgproto libX11 libXcursor nspr SDL2 gloox
     nvidia-texture-tools libsodium
   ] ++ lib.optional withEditor wxGTK;
 
   NIX_CFLAGS_COMPILE = [
-    "-I${xproto}/include/X11"
+    "-I${xorgproto}/include/X11"
     "-I${libX11.dev}/include/X11"
     "-I${libXcursor.dev}/include/X11"
     "-I${SDL2}/include/SDL2"
   ];
 
-  patches = [ ./rootdir_env.patch ];
-
-  postPatch = ''
-    sed -i 's/MOZJS_MINOR_VERSION/false \&\& MOZJS_MINOR_VERSION/' source/scriptinterface/ScriptTypes.h
-  '';
+  patches = [
+    ./rootdir_env.patch
+    # Fixes build with spidermonkey-38.8.0, includes the minor version check:
+    # https://src.fedoraproject.org/rpms/0ad/c/26dc1657f6e3c0ad9f1180ca38cd79b933ef0c8b
+    (fetchurl {
+      url = https://src.fedoraproject.org/rpms/0ad/raw/26dc1657f6e3c0ad9f1180ca38cd79b933ef0c8b/f/0ad-mozjs-incompatible.patch;
+      sha256 = "1rzpaalcrzihsgvlk3nqd87n2kxjldlwvb3qp5fcd5ffzr6k90wa";
+    })
+  ];
 
   configurePhase = ''
     # Delete shipped libraries which we don't need.

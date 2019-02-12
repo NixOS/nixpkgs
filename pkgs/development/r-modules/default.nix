@@ -463,9 +463,7 @@ let
     "BCA"
     "BEQI2"
     "betapart"
-    "betaper"
     "BiodiversityR"
-    "BioGeoBEARS"
     "bio_infer"
     "bipartite"
     "biplotbootGUI"
@@ -482,7 +480,6 @@ let
     "DALY"
     "dave"
     "Deducer"
-    "DeducerExtras"
     "DeducerPlugInExample"
     "DeducerPlugInScaling"
     "DeducerSpatial"
@@ -546,7 +543,6 @@ let
     "likeLTD"
     "logmult"
     "LS2Wstat"
-    "MAR1"
     "MareyMap"
     "memgene"
     "MergeGUI"
@@ -579,7 +575,6 @@ let
     "phylotools"
     "picante"
     "PKgraph"
-    "playwith"
     "plotSEMM"
     "plsRbeta"
     "plsRglm"
@@ -635,7 +630,6 @@ let
     "RHRV"
     "rich"
     "rioja"
-    "ripa"
     "RNCEP"
     "RQDA"
     "RSDA"
@@ -948,6 +942,18 @@ let
 
     rlang = old.rlang.overrideDerivation (attrs: {
       preConfigure = "patchShebangs configure";
+    });
+
+    littler = old.littler.overrideAttrs (attrs: with pkgs; {
+      buildInputs = [ pcre lzma zlib bzip2 icu which ] ++ attrs.buildInputs;
+      postInstall = ''
+        install -d $out/bin $out/share/man/man1
+        ln -s ../library/littler/bin/r $out/bin/r
+        ln -s ../library/littler/bin/r $out/bin/lr
+        ln -s ../../../library/littler/man-page/r.1 $out/share/man/man1
+        # these won't run without special provisions, so better remove them
+        rm -r $out/library/littler/script-tests
+      '';
     });
 
   };

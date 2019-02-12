@@ -1,12 +1,12 @@
 { stdenv, fetchurl, utillinux}:
 
 stdenv.mkDerivation rec {
-  version = "6.33";
+  version = "6.34";
   name = "profile-sync-daemon-${version}";
 
   src = fetchurl {
     url = "http://github.com/graysky2/profile-sync-daemon/archive/v${version}.tar.gz";
-    sha256 = "0dzs51xbszzmcg82n2dil6nljj4gn0aw9rqjmhyi4a5frc8g6xmb";
+    sha256 = "0v6yzgfwv3mhf1q2fp6abrvr15p9b1c1gahj3mdh5b4bfcsg3n5a";
   };
 
   installPhase = ''

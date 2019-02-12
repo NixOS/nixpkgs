@@ -6,7 +6,7 @@ let
     version="0.12";
     name="${baseName}-${version}";
     hash="1b14zcwlvnxhjxr3ymyzg0mg4sbijkinzpxm641s859jxcgylmll";
-    url="http://download.savannah.gnu.org/releases/mi2ly/mi2ly.0.12.tar.bz2";
+    url="https://download.savannah.gnu.org/releases/mi2ly/mi2ly.0.12.tar.bz2";
     sha256="1b14zcwlvnxhjxr3ymyzg0mg4sbijkinzpxm641s859jxcgylmll";
   };
   buildInputs = [

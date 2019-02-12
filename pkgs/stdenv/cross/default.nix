@@ -1,11 +1,14 @@
 { lib
-, localSystem, crossSystem, config, overlays
+, localSystem, crossSystem, config, overlays, crossOverlays ? []
 }:
 
 let
   bootStages = import ../. {
     inherit lib localSystem overlays;
-    crossSystem = null;
+
+    crossSystem = localSystem;
+    crossOverlays = [];
+
     # Ignore custom stdenvs when cross compiling for compatability
     config = builtins.removeAttrs config [ "replaceStdenv" ];
   };
@@ -33,7 +36,8 @@ in lib.init bootStages ++ [
 
   # Run Packages
   (buildPackages: {
-    inherit config overlays;
+    inherit config;
+    overlays = overlays ++ crossOverlays;
     selfBuild = false;
     stdenv = buildPackages.stdenv.override (old: rec {
       buildPlatform = localSystem;
@@ -48,14 +52,14 @@ in lib.init bootStages ++ [
 
       cc = if crossSystem.useiOSPrebuilt or false
              then buildPackages.darwin.iosSdkPkgs.clang
-           else if crossSystem.useAndroidPrebuilt
-             then buildPackages.androidenv."androidndkPkgs_${crossSystem.ndkVer}".gcc
+           else if crossSystem.useAndroidPrebuilt or false
+             then buildPackages."androidndkPkgs_${crossSystem.ndkVer}".gcc
            else buildPackages.gcc;
 
       extraNativeBuildInputs = old.extraNativeBuildInputs
         ++ lib.optionals
              (hostPlatform.isLinux && !buildPlatform.isLinux)
-             [ buildPackages.patchelf buildPackages.paxctl ]
+             [ buildPackages.patchelf ]
         ++ lib.optional
              (let f = p: !p.isx86 || p.libc == "musl"; in f hostPlatform && !(f buildPlatform))
              buildPackages.updateAutotoolsGnuConfigScriptsHook

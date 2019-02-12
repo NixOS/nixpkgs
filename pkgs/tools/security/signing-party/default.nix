@@ -1,28 +1,25 @@
 { stdenv, fetchurl, autoconf, automake, makeWrapper
-, python, perl, perlPackages
+, python3, perl, perlPackages
 , libmd, gnupg1, which, getopt, libpaper, nettools, qprint
 , sendmailPath ? "/run/wrappers/bin/sendmail" }:
 
 let
   # All runtime dependencies from the CPAN graph:
   # https://widgets.stratopan.com/wheel?q=GnuPG-Interface-0.52&runtime=1&fs=1
-  # TODO: XSLoader seems optional
   GnuPGInterfaceRuntimeDependencies = with perlPackages; [
     strictures ClassMethodModifiers DataPerl DevelGlobalDestruction ExporterTiny
     GnuPGInterface ListMoreUtils ModuleRuntime Moo MooXHandlesVia MooXlate
-    RoleTiny SubExporterProgressive SubQuote TypeTiny XSLoader
+    RoleTiny SubExporterProgressive SubQuote TypeTiny
   ];
 in stdenv.mkDerivation rec {
   pname = "signing-party";
-  version = "2.7";
+  version = "2.8";
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://debian/pool/main/s/${pname}/${pname}_${version}.orig.tar.gz";
-    sha256 = "0znklgvxn7k7p6q7r8chcj86zmzildjamr3qlqfxkj5m7yziqr21";
+    sha256 = "1dfry04gsa8kv7a2kr4p7a4b616sql41hsyff4pmfvrhiv2fz39z";
   };
-
-  sourceRoot = ".";
 
   # TODO: Get this patch upstream...
   patches = [ ./gpgwrap_makefile.patch ];
@@ -45,7 +42,7 @@ in stdenv.mkDerivation rec {
   # Perl is required for it's pod2man.
   # Python and Perl are required for patching the script interpreter paths.
   nativeBuildInputs = [ autoconf automake makeWrapper ];
-  buildInputs = [ python perl perlPackages.GnuPGInterface libmd gnupg1 ];
+  buildInputs = [ python3 perl perlPackages.GnuPGInterface libmd gnupg1 ];
 
   postInstall = ''
     # Install all tools which aren't handled by 'make install'.
@@ -122,14 +119,14 @@ in stdenv.mkDerivation rec {
     # scripts)
 
     wrapProgram $out/bin/caff --set PERL5LIB \
-      ${with perlPackages; stdenv.lib.makePerlPath ([
+      ${with perlPackages; makePerlPath ([
         TextTemplate MIMETools MailTools TimeDate NetIDNEncode ]
         ++ GnuPGInterfaceRuntimeDependencies)} \
       --prefix PATH ":" \
       "${stdenv.lib.makeBinPath [ nettools gnupg1 ]}"
 
     wrapProgram $out/bin/gpg-key2latex --set PERL5LIB \
-      ${stdenv.lib.makePerlPath GnuPGInterfaceRuntimeDependencies} \
+      ${perlPackages.makePerlPath GnuPGInterfaceRuntimeDependencies} \
       --prefix PATH ":" \
       "${stdenv.lib.makeBinPath [ gnupg1 libpaper ]}"
 
@@ -140,7 +137,7 @@ in stdenv.mkDerivation rec {
       "${stdenv.lib.makeBinPath [ gnupg1 qprint ]}"
 
     wrapProgram $out/bin/gpgdir --set PERL5LIB \
-      ${with perlPackages; stdenv.lib.makePerlPath ([
+      ${with perlPackages; makePerlPath ([
         TermReadKey ]
         ++ GnuPGInterfaceRuntimeDependencies)} \
       --prefix PATH ":" \
@@ -155,7 +152,7 @@ in stdenv.mkDerivation rec {
 #    wrapProgram $out/bin/gpgparticipants-prefill
 
     wrapProgram $out/bin/gpgsigs --set PERL5LIB \
-      ${stdenv.lib.makePerlPath GnuPGInterfaceRuntimeDependencies} \
+      ${perlPackages.makePerlPath GnuPGInterfaceRuntimeDependencies} \
       --prefix PATH ":" \
       "${stdenv.lib.makeBinPath [ gnupg1 ]}"
 
@@ -171,12 +168,12 @@ in stdenv.mkDerivation rec {
       "${stdenv.lib.makeBinPath [ gnupg1 ]}"
 
     wrapProgram $out/bin/pgp-clean --set PERL5LIB \
-      ${stdenv.lib.makePerlPath GnuPGInterfaceRuntimeDependencies} \
+      ${perlPackages.makePerlPath GnuPGInterfaceRuntimeDependencies} \
       --prefix PATH ":" \
       "${stdenv.lib.makeBinPath [ gnupg1 ]}"
 
     wrapProgram $out/bin/pgp-fixkey --set PERL5LIB \
-      ${stdenv.lib.makePerlPath GnuPGInterfaceRuntimeDependencies} \
+      ${perlPackages.makePerlPath GnuPGInterfaceRuntimeDependencies} \
       --prefix PATH ":" \
       "${stdenv.lib.makeBinPath [ gnupg1 ]}"
 
@@ -189,11 +186,11 @@ in stdenv.mkDerivation rec {
 #    wrapProgram $out/bin/sig2dot
 
     wrapProgram $out/bin/springgraph --set PERL5LIB \
-      ${with perlPackages; stdenv.lib.makePerlPath [ GD ]}
+      ${with perlPackages; makePerlPath [ GD ]}
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://pgp-tools.alioth.debian.org/;
+    homepage = https://salsa.debian.org/signing-party-team/signing-party;
     description = "A collection of several projects relating to OpenPGP";
     longDescription = ''
       This is a collection of several projects relating to OpenPGP.

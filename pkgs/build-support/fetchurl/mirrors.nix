@@ -70,13 +70,15 @@ rec {
     ftp://ftp.funet.fi/pub/mirrors/ftp.kernel.org/pub/
   ];
 
-  # Mirrors of ftp://ftp.kde.org/pub/kde/.
+  # Mirrors from https://download.kde.org/extra/download-mirrors.html
   kde = [
-    "http://download.kde.org/download.php?url="
-    http://ftp.gwdg.de/pub/x11/kde/
-    ftp://ftp.heanet.ie/mirrors/ftp.kde.org/
+    "https://download.kde.org/download.php?url="
+    https://ftp.gwdg.de/pub/linux/kde/
+    https://mirrors.ocf.berkeley.edu/kde/
+    http://mirrors.mit.edu/kde/
+    https://mirrors.ustc.edu.cn/kde/
+    http://ftp.funet.fi/pub/mirrors/ftp.kde.org/pub/kde/
     ftp://ftp.kde.org/pub/kde/
-    ftp://ftp.funet.fi/pub/mirrors/ftp.kde.org/pub/kde/
   ];
 
   # Gentoo files.
@@ -157,12 +159,8 @@ rec {
 
   # CPAN mirrors.
   cpan = [
-    https://ftp.gwdg.de/pub/languages/perl/CPAN/
-    https://download.xs4all.nl/mirror/CPAN/
     https://cpan.metacpan.org/
     https://cpan.perl.org/
-    http://ftp.tuwien.ac.at/pub/CPAN/
-    http://ftp.funet.fi/pub/CPAN/
     http://backpan.perl.org/  # for old releases
   ];
 
@@ -259,9 +257,8 @@ rec {
 
   # X.org.
   xorg = [
-    http://xorg.freedesktop.org/releases/
-    http://ftp.gwdg.de/pub/x11/x.org/pub/
-    http://ftp.x.org/pub/ # often incomplete (e.g. files missing from X.org 7.4)
+    https://xorg.freedesktop.org/releases/
+    https://ftp.x.org/archive/
   ];
 
   # Apache mirrors (see http://www.apache.org/mirrors/).

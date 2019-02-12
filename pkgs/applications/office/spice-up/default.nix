@@ -6,7 +6,7 @@
 , gtk3
 , granite
 , gnome3
-, gobjectIntrospection
+, gobject-introspection
 , json-glib
 , cmake
 , ninja
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     ninja
     gettext
     libxml2
-    gobjectIntrospection # For setup hook
+    gobject-introspection # For setup hook
   ];
   buildInputs = [
     gnome3.defaultIconTheme # should be `elementary.defaultIconTheme`when elementary attribute set is merged

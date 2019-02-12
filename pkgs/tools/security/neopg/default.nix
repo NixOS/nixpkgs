@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   name = "neopg-${version}";
-  version = "0.0.5";
+  version = "0.0.4";
 
   src = fetchFromGitHub {
     owner = "das-labor";
     repo = "neopg";
     rev = "v${version}";
-    sha256 = "1ky3pwg6w8kyaa9iksfx6rryva87mbj1h3yi2mrzp2h7jhrfffpp";
+    sha256 = "0hhkl326ff6f76k8pwggpzmivbm13fz497nlyy6ybn5bmi9xfblm";
     fetchSubmodules = true;
   };
 

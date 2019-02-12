@@ -1,20 +1,19 @@
-{ stdenv, fetchurl, cups, libssh, libXpm, nxproxy, openldap, openssh,
-makeWrapper, qtbase, qtsvg, qtx11extras, qttools, phonon }:
+{ stdenv, fetchgit, cups, libssh, libXpm, nxproxy, openldap, openssh
+, makeWrapper, qtbase, qtsvg, qtx11extras, qttools, phonon, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  name = "x2goclient-${version}";
-  version = "4.1.2.1";
+  pname = "x2goclient";
+  version = "unstable-2018-11-30";
 
-  src = fetchurl {
-    url = "https://code.x2go.org/releases/source/x2goclient/${name}.tar.gz";
-    sha256 = "1bzjzz2m9bqqndnk1p9p522cfapsqgkb0wllvqj9d4ir18grh60w";
+  src = fetchgit {
+   url = "git://code.x2go.org/x2goclient.git";
+   rev = "659655675f11ffd361ab9fb48fa77a01a1536fe8";
+   sha256 = "05gfs11m259bchy3k0ihqpwg9wf8lp94rbca5dzla9fjzrb7pyy4";
   };
 
   buildInputs = [ cups libssh libXpm nxproxy openldap openssh
-                  qtbase qtsvg qtx11extras qttools phonon ];
+                  qtbase qtsvg qtx11extras qttools phonon pkgconfig ];
   nativeBuildInputs = [ makeWrapper ];
-
-  patches = [ ./qt511.patch ];
 
   postPatch = ''
      substituteInPlace Makefile \

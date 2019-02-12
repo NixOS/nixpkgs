@@ -11,7 +11,7 @@ let
 
   userOptions = {
 
-    openssh.authorizedKeys = {
+    options.openssh.authorizedKeys = {
       keys = mkOption {
         type = types.listOf types.str;
         default = [];
@@ -320,7 +320,7 @@ in
     };
 
     users.users = mkOption {
-      options = [ userOptions ];
+      type = with types; loaOf (submodule userOptions);
     };
 
   };
@@ -351,6 +351,10 @@ in
             stopIfChanged = false;
             path = [ cfgc.package pkgs.gawk ];
             environment.LD_LIBRARY_PATH = nssModulesPath;
+
+            restartTriggers = optionals (!cfg.startWhenNeeded) [
+              config.environment.etc."ssh/sshd_config".source
+            ];
 
             preStart =
               ''
@@ -387,6 +391,7 @@ in
                 Restart = "always";
                 Type = "simple";
               });
+
           };
       in
 

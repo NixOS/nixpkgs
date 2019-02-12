@@ -6,21 +6,30 @@ let
   # refer to
   # https://github.com/way-cooler/way-cooler.github.io/blob/master/way-cooler-release-i3-default.sh
   # for version numbers
+  cratesIO = callPackage ./crates-io.nix {};
+
   fakegit = writeShellScriptBin "git" ''
     echo ""
   '';
-  way-cooler = (((callPackage ./way-cooler.nix {}).way_cooler { builtin-lua = true; }).override {
+  # https://nest.pijul.com/pmeunier/carnix/discussions/22
+  version = "0.8.1";
+  deps = (callPackage ./way-cooler.nix {}).deps;
+  way_cooler_ = f: cratesIO.crates.way_cooler."${version}" deps {
+    features = cratesIO.features_.way_cooler."${version}" deps {
+      "way_cooler"."${version}" = f;
+    };
+  };
+  way-cooler = ((way_cooler_ { builtin-lua = true; }).override {
     crateOverrides = defaultCrateOverrides // {
 
     way-cooler = attrs: { buildInputs = [ wlc cairo libxkbcommon fakegit gdk_pixbuf wayland ]; };
   };}).overrideAttrs (oldAttrs: rec {
-    nativeBuildInputs = [ makeWrapper ];
-
     postBuild = ''
       mkdir -p $out/etc
       cp -r config $out/etc/way-cooler
     '';
   });
+
   wc-bg = ((callPackage ./wc-bg.nix {}).wc_bg {}).overrideAttrs (oldAttrs: rec {
     nativeBuildInputs = [ makeWrapper ];
 
@@ -29,8 +38,9 @@ let
         --prefix LD_LIBRARY_PATH : "${stdenv.lib.makeLibraryPath [ wayland ]}"
     '';
   });
-  wc-grab = ((callPackage ./wc-grab.nix {}).wc_grab {}).overrideAttrs (oldAttrs: rec {
-  });
+
+  wc-grab = (callPackage ./wc-grab.nix {}).wc_grab {};
+
   wc-lock = (((callPackage ./wc-lock.nix {}).wc_lock {}).override {
     crateOverrides = defaultCrateOverrides // {
 
@@ -43,6 +53,7 @@ let
         --prefix LD_LIBRARY_PATH : "${stdenv.lib.makeLibraryPath [ libxkbcommon wayland ]}"
     '';
   });
+
   # https://github.com/way-cooler/way-cooler/issues/446
   wc-bar-bare = stdenv.mkDerivation {
     name = "wc-bar-bare-2017-12-05";
@@ -75,7 +86,7 @@ let
     ${wc-bar-bare}/bin/bar.py $SELECTED $BACKGROUND $SELECTED_OTHER_WORKSPACE 2> /tmp/bar_debug.txt | ${lemonbar}/bin/lemonbar -B $BACKGROUND -F "#FFF" -n "lemonbar" -p -d
   '';
 in symlinkJoin rec {
-  version = "0.8.0";
+  inherit version;
   name = "way-cooler-with-extensions-${version}";
   paths = [ way-cooler wc-bg wc-grab wc-lock wc-bar ];
 
@@ -94,6 +105,7 @@ in symlinkJoin rec {
     homepage = http://way-cooler.org/;
     license = with licenses; [ mit ];
     maintainers = [ maintainers.miltador ];
+    broken = stdenv.hostPlatform.isAarch64; # fails to build wc-bg (on aarch64)
     platforms = platforms.all;
   };
 }

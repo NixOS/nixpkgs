@@ -1,12 +1,12 @@
 { stdenv, fetchurl, autoreconfHook, pkgconfig, zlib, libuuid, libossp_uuid, CoreFoundation, IOKit }:
 
 stdenv.mkDerivation rec{
-  version = "1.11.0";
+  version = "1.11.1";
   name = "netdata-${version}";
 
   src = fetchurl {
     url = "https://github.com/netdata/netdata/releases/download/v${version}/netdata-v${version}.tar.gz";
-    sha256 = "17b14w34jif6bviw3s81imbazkvvafwxff7d5zjy6wicq88q8b64";
+    sha256 = "0djph4586cc14vavj6za6k255lscf3b415dx8k45q3nsc2hb4l01";
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];

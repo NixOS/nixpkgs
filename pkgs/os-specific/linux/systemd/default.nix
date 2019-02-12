@@ -18,7 +18,7 @@ let
   pythonLxmlEnv = buildPackages.python3Packages.python.withPackages ( ps: with ps; [ python3Packages.lxml ]);
 
 in stdenv.mkDerivation rec {
-  version = "239";
+  version = "239.20190110";
   name = "systemd-${version}";
 
   # When updating, use https://github.com/systemd/systemd-stable tree, not the development one!
@@ -26,8 +26,8 @@ in stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "NixOS";
     repo = "systemd";
-    rev = "31859ddd35fc3fa82a583744caa836d356c31d7f";
-    sha256 = "1xci0491j95vdjgs397n618zii3sgwnvanirkblqqw6bcvcjvir1";
+    rev = "nixos-v${version}";
+    sha256 = "1m9mhv7b4kfa43z79106gpgxx51zlhvvfjrlmimdsvsiw72nzldj";
   };
 
   prePatch = let
@@ -37,8 +37,8 @@ in stdenv.mkDerivation rec {
         # When the URL disappears, it typically means that Debian has new patches
         # (probably security) and updating to new tarball will apply them as well.
         name = "systemd-debian-patches.tar.xz";
-        url = mirror://debian/pool/main/s/systemd/systemd_239-11~bpo9+1.debian.tar.xz;
-        sha256 = "136f6p4jbi4z94mf4g099dfcacwka8jwhza0wxxw2q5l5q3xiysh";
+        url = mirror://debian/pool/main/s/systemd/systemd_239-12~bpo9+1.debian.tar.xz;
+        sha256 = "0v9f62gyfiw5icdrdlcvjcipsqrsm49w6n8bqp9nb8s2ih6rsfhg";
       };
       # Note that we skip debian-specific patches, i.e. ./debian/patches/debian/*
     in ''

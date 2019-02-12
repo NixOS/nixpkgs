@@ -4,6 +4,10 @@
 { lib, config, hostPlatform, meta }:
 
 let
+  # If we're in hydra, we can dispense with the more verbose error
+  # messages and make problems easier to spot.
+  inHydra = config.inHydra or false;
+
   # See discussion at https://github.com/NixOS/nixpkgs/pull/25304#issuecomment-298385426
   # for why this defaults to false, but I (@copumpkin) want to default it to true soon.
   shouldCheckMeta = config.checkMeta or false;
@@ -141,10 +145,12 @@ let
 
   handleEvalIssue = attrs: { reason , errormsg ? "" }:
     let
-      msg = ''
-        Package ‘${attrs.name or "«name-missing»"}’ in ${pos_str} ${errormsg}, refusing to evaluate.
+      msg = if inHydra
+        then "Failed to evaluate ${attrs.name or "«name-missing»"}: «${reason}»: ${errormsg}"
+        else ''
+          Package ‘${attrs.name or "«name-missing»"}’ in ${pos_str} ${errormsg}, refusing to evaluate.
 
-      '' + (builtins.getAttr reason remediation) attrs;
+        '' + (builtins.getAttr reason remediation) attrs;
 
       handler = if config ? "handleEvalIssue"
         then config.handleEvalIssue reason

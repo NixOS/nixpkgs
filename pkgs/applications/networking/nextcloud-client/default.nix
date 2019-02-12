@@ -1,19 +1,28 @@
 { stdenv, fetchgit, cmake, pkgconfig, qtbase, qtwebkit, qtkeychain, qttools, sqlite
-, inotify-tools, makeWrapper, libgnome-keyring, openssl_1_1, pcre, qtwebengine
+, inotify-tools, makeWrapper, openssl_1_1, pcre, qtwebengine, libsecret, fetchpatch
 }:
 
 stdenv.mkDerivation rec {
   name = "nextcloud-client-${version}";
-  version = "2.5.0";
+  version = "2.5.1";
 
   src = fetchgit {
     url = "git://github.com/nextcloud/desktop.git";
     rev = "refs/tags/v${version}";
-    sha256 = "1wz5bz4nmni0qxzcvgmpg9ywrfixzvdd7ixgqmdm4d8g6dm8pk9k";
+    sha256 = "0r6jj3vbmwh7ipv83c8w1b25pbfq3mzrjgcijdw2gwfxwx9pfq7d";
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ pkgconfig cmake ];
+  # Patch contained in next (>2.5.1) release
+  patches = [
+    (fetchpatch {
+     name = "fix-qt-5.12-build";
+     url = "https://github.com/nextcloud/desktop/commit/071709ab5e3366e867dd0b0ea931aa7d6f80f528.patch";
+     sha256 = "14k635jwm8hz6i22lz88jj2db8v5czwa3zg0667i4hwhkqqmy61n";
+     })
+  ];
+
+  nativeBuildInputs = [ pkgconfig cmake makeWrapper ];
 
   buildInputs = [ qtbase qtwebkit qtkeychain qttools qtwebengine sqlite openssl_1_1.out pcre inotify-tools ];
 
@@ -32,7 +41,11 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     sed -i 's/\(Icon.*\)=nextcloud/\1=Nextcloud/g' \
-      $out/share/applications/nextcloud.desktop
+    $out/share/applications/nextcloud.desktop
+
+    wrapProgram "$out/bin/nextcloud" \
+      --prefix LD_LIBRARY_PATH : ${stdenv.lib.makeLibraryPath [ libsecret ]} \
+      --prefix QT_PLUGIN_PATH : ${qtbase}/${qtbase.qtPluginPrefix}
   '';
 
   meta = with stdenv.lib; {

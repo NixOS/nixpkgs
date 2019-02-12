@@ -1,36 +1,38 @@
-{ stdenv, python36Packages, fetchFromGitHub, pywal, feh, libxslt, imagemagick,
-  gobjectIntrospection, gtk3, wrapGAppsHook, gnome3 }:
+{ stdenv, python3Packages, fetchFromGitHub, feh, libxslt,
+  gobject-introspection, gtk3, wrapGAppsHook, gnome3 }:
 
-python36Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "wpgtk";
-  version = "5.7.4";
+  version = "5.8.7";
 
   src = fetchFromGitHub {
     owner = "deviantfero";
     repo = "wpgtk";
     rev = "${version}";
-    sha256 = "0c0kmc18lbr7nk3hh44hai9z06lfsgwxnjdv02hpjwrxg40zh726";
+    sha256 = "1pwchmipswk5sld1l5p8mdiicb848glnh7r3s5x9qvijp5s57c5i";
   };
-
-  pythonPath = [
-    python36Packages.pygobject3
-    python36Packages.pillow
-    pywal
-    imagemagick
-  ];
 
   buildInputs = [
     wrapGAppsHook
     gtk3
-    gobjectIntrospection
+    gobject-introspection
     gnome3.adwaita-icon-theme
     libxslt
+  ];
+
+  propagatedBuildInputs = with python3Packages; [
+    pygobject3
+    pillow
+    pywal
   ];
 
   # The $HOME variable must be set to build the package. A "permission denied" error will occur otherwise
   preBuild = ''
       export HOME=$(pwd)
   '';
+
+  # No test exist
+  doCheck = false;
 
   meta = with stdenv.lib; {
     description = "Template based wallpaper/colorscheme generator and manager";

@@ -25,12 +25,12 @@ stdenv.mkDerivation ({
     runHook postInstall
   '';
 
-  meta.platform = ocaml.meta.platform;
-
 } // args // {
 
   name = "ocaml${ocaml.version}-${pname}-${version}";
 
   buildInputs = [ ocaml dune findlib ] ++ buildInputs;
+
+  meta = (args.meta or {}) // { platforms = args.meta.platforms or ocaml.meta.platforms; };
 
 })

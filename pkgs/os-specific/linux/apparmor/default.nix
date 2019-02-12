@@ -8,6 +8,7 @@
 , swig
 , ncurses
 , pam
+, libnotify
 , buildPackages
 }:
 
@@ -37,11 +38,6 @@ let
   '';
 
   patches = stdenv.lib.optionals stdenv.hostPlatform.isMusl [
-    (fetchpatch {
-      url = "https://git.alpinelinux.org/cgit/aports/plain/testing/apparmor/0002-Provide-missing-secure_getenv-and-scandirat-function.patch?id=74b8427cc21f04e32030d047ae92caa618105b53";
-      name = "0002-Provide-missing-secure_getenv-and-scandirat-function.patch";
-      sha256 = "0pj1bzifghxwxlc39j8hyy17dkjr9fk64kkj94ayymyprz4i4nac";
-    })
     (fetchpatch {
       url = "https://git.alpinelinux.org/cgit/aports/plain/testing/apparmor/0003-Added-missing-typedef-definitions-on-parser.patch?id=74b8427cc21f04e32030d047ae92caa618105b53";
       name = "0003-Added-missing-typedef-definitions-on-parser.patch";
@@ -84,6 +80,8 @@ let
     dontDisableStatic = true;
 
     prePatch = prePatchCommon + ''
+      substituteInPlace ./libraries/libapparmor/swig/perl/Makefile.am --replace install_vendor install_site
+      substituteInPlace ./libraries/libapparmor/swig/perl/Makefile.in --replace install_vendor install_site
       substituteInPlace ./libraries/libapparmor/src/Makefile.am --replace "/usr/include/netinet/in.h" "${stdenv.cc.libc.dev}/include/netinet/in.h"
       substituteInPlace ./libraries/libapparmor/src/Makefile.in --replace "/usr/include/netinet/in.h" "${stdenv.cc.libc.dev}/include/netinet/in.h"
     '';
@@ -132,9 +130,10 @@ let
         wrapProgram $out/bin/$prog --prefix PYTHONPATH : "$out/lib/${python.libPrefix}/site-packages:$PYTHONPATH"
       done
 
-      for prog in aa-notify ; do
-        wrapProgram $out/bin/$prog --prefix PERL5LIB : "${libapparmor}/lib/perl5:$PERL5LIB"
-      done
+      substituteInPlace $out/bin/aa-notify --replace /usr/bin/notify-send ${libnotify}/bin/notify-send
+      # aa-notify checks its name and does not work named ".aa-notify-wrapped"
+      mv $out/bin/aa-notify $out/bin/aa-notify-wrapped
+      makeWrapper ${perl}/bin/perl $out/bin/aa-notify --set PERL5LIB ${libapparmor}/${perl.libPrefix} --add-flags $out/bin/aa-notify-wrapped
     '';
 
     inherit doCheck;

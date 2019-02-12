@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
       applications.
     '';
 
-    homepage = http://www.gnu.org/software/libiconv/;
+    homepage = https://www.gnu.org/software/libiconv/;
     license = lib.licenses.lgpl2Plus;
 
     maintainers = [ ];

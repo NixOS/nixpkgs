@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "Flask-JWT-Extended";
-  version = "3.13.1";
+  version = "3.14.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "10qz3ljr2kpd93al2km6iijxp23z33kvvwd0y5bc840f86b4mra8";
+    sha256 = "133s9js7j1b2m6vv56a2xd9in0rmx5zrdp4r005qwbvr5qxld39s";
   };
 
   propagatedBuildInputs = [ flask pyjwt werkzeug ];

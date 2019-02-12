@@ -12,10 +12,10 @@ stdenv.mkDerivation rec {
     sha256 = "1pg4jxzb7f58ls5s8mygza8kqdap2c50kwlsdkf28bz1xi611zbi";
   };
 
-  buildInputs = 
-  [boost] ++ 
+  buildInputs =
+  [boost] ++
   (with perlPackages; [ perl makeWrapper which
-    EncodeLocale MathClipper ExtUtilsXSpp threads
+    EncodeLocale MathClipper ExtUtilsXSpp
     MathConvexHullMonotoneChain MathGeometryVoronoi MathPlanePath Moo
     IOStringy ClassXSAccessor Wx GrowlGNTP NetDBus ImportInto XMLSAX
     ExtUtilsMakeMaker OpenGL WxGLCanvas ModuleBuild LWP

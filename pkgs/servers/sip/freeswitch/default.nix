@@ -1,6 +1,12 @@
-{ fetchurl, stdenv, ncurses, curl, pkgconfig, gnutls, readline
+{ fetchurl, stdenv, lib, ncurses, curl, pkgconfig, gnutls, readline
 , openssl, perl, sqlite, libjpeg, speex, pcre
-, ldns, libedit, yasm, which, lua, libopus, libsndfile }:
+, ldns, libedit, yasm, which, lua, libopus, libsndfile
+
+, postgresql
+, enablePostgres ? true
+
+, SystemConfiguration
+}:
 
 stdenv.mkDerivation rec {
   name = "freeswitch-1.6.20";
@@ -20,17 +26,21 @@ stdenv.mkDerivation rec {
     openssl ncurses curl gnutls readline perl libjpeg
     sqlite pcre speex ldns libedit yasm which lua libopus
     libsndfile
-  ];
+  ]
+  ++ lib.optionals enablePostgres [ postgresql ]
+  ++ lib.optionals stdenv.isDarwin [ SystemConfiguration ];
 
   NIX_CFLAGS_COMPILE = "-Wno-error";
 
   hardeningDisable = [ "format" ];
+
+  configureFlags = lib.optionals enablePostgres [ "--enable-core-pgsql-support" ];
 
   meta = {
     description = "Cross-Platform Scalable FREE Multi-Protocol Soft Switch";
     homepage = https://freeswitch.org/;
     license = stdenv.lib.licenses.mpl11;
     maintainers = with stdenv.lib.maintainers; [ ];
-    platforms = with stdenv.lib.platforms; linux;
+    platforms = with stdenv.lib.platforms; unix;
   };
 }

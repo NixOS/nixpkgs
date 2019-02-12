@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, autoconf, automake, gettext, intltool
-, libtool, pkgconfig, wrapGAppsHook, wrapPython, gobjectIntrospection
+, libtool, pkgconfig, wrapGAppsHook, wrapPython, gobject-introspection
 , gtk3, python, pygobject3, hicolor-icon-theme, pyxdg
 
 , withQuartz ? stdenv.isDarwin, ApplicationServices
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    gobjectIntrospection
+    gobject-introspection
     gtk3
     python
     hicolor-icon-theme

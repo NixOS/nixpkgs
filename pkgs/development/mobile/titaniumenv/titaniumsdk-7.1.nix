@@ -35,7 +35,7 @@ let
     sha256 = "11nwdb9y84cghcx319nsjjf9m035s4s1184zrhzpvaxq2wvqhbhx";
   };
 
-  # Put the download plugins in a fake Maven repository
+  # Put the downloaded plugins in a fake Maven repository
   fakeMavenRepo = stdenv.mkDerivation {
     name = "fake-maven-repo";
     buildCommand = ''
@@ -54,15 +54,15 @@ let
 in
 stdenv.mkDerivation {
   name = "mobilesdk-7.1.0.GA";
-  src = if (stdenv.hostPlatform.system == "i686-linux" || stdenv.hostPlatform.system == "x86_64-linux") then fetchurl {
+  src = if (stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux") then fetchurl {
     url = http://builds.appcelerator.com/mobile/7_1_X/mobilesdk-7.1.0.v20180314133955-linux.zip;
     sha256 = "18b3jnr65sdn5wj191bcl48gvhyklxmighxakv4vrz1fb59kyvqn";
   }
-  else if stdenv.hostPlatform.system == "x86_64-darwin" then fetchurl {
+  else if stdenv.system == "x86_64-darwin" then fetchurl {
     url = http://builds.appcelerator.com/mobile/7_1_X/mobilesdk-7.1.0.v20180314133955-osx.zip;
     sha256 = "1f62616biwsw1fqxz2sq7lpa6bsfjazffliplyf5dpnh298cnc1m";
   }
-  else throw "Platform: ${stdenv.hostPlatform.system} not supported!";
+  else throw "Platform: ${stdenv.system} not supported!";
 
   buildInputs = [ unzip makeWrapper ];
 
@@ -89,11 +89,11 @@ stdenv.mkDerivation {
 
     # Patch some executables
 
-    ${if stdenv.hostPlatform.system == "i686-linux" then
+    ${if stdenv.system == "i686-linux" then
       ''
         patchelf --set-interpreter ${stdenv.cc.libc}/lib/ld-linux.so.2 android/titanium_prep.linux32
       ''
-      else if stdenv.hostPlatform.system == "x86_64-linux" then
+      else if stdenv.system == "x86_64-linux" then
       ''
         patchelf --set-interpreter ${stdenv.cc.libc}/lib/ld-linux-x86-64.so.2 android/titanium_prep.linux64
       ''

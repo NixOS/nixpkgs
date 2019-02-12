@@ -1,5 +1,5 @@
 { stdenv, fetchurl, meson, ninja, pkgconfig
-, gst-plugins-base, gettext, gobjectIntrospection
+, gst-plugins-base, gettext, gobject-introspection
 }:
 
 stdenv.mkDerivation rec {
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ meson ninja gettext gobjectIntrospection pkgconfig ];
+  nativeBuildInputs = [ meson ninja gettext gobject-introspection pkgconfig ];
 
   buildInputs = [ gst-plugins-base ];
 }

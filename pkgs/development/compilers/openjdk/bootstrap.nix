@@ -36,13 +36,5 @@ let
       patchelf --set-interpreter $(cat "${stdenv.cc}/nix-support/dynamic-linker") "$elf" || true
       patchelf --set-rpath "${stdenv.cc.libc}/lib:${stdenv.cc.cc.lib}/lib:${zlib}/lib:$LIBDIRS" "$elf" || true
     done
-
-    # Temporarily, while NixOS's OpenJDK bootstrap tarball doesn't have PaX markings:
-    find "$out/bin" -type f -print0 | while IFS= read -r -d "" elf; do
-      isELF "$elf" || continue
-      paxmark m "$elf"
-      # On x86 for heap sizes over 700MB disable SEGMEXEC and PAGEEXEC as well.
-      ${stdenv.lib.optionalString stdenv.isi686 ''paxmark msp "$elf"''}
-    done
   '';
 in bootstrap

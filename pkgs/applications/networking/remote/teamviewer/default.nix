@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   name = "teamviewer-${version}";
-  version = "13.1.3026";
+  version = "14.1.3399";
 
   src = fetchurl {
-    url = "https://dl.tvcdn.de/download/linux/version_13x/teamviewer_${version}_amd64.deb";
-    sha256 = "14zaa1xjdfmgbbq40is5mllqcd9zan03sblkzajswd5gps7crsik";
+    url = "https://dl.tvcdn.de/download/linux/version_14x/teamviewer_${version}_amd64.deb";
+    sha256 = "166ndijis2i3afz3l6nsnrdhs56v33w5cnjd0m7giqj0fbq43ws5";
   };
 
   unpackPhase = ''

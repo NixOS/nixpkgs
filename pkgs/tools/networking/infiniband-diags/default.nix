@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     ./autogen.sh
   '';
 
-  configureFlags = [ "--with-perl-installdir=\${out}/lib/perl5/site_perl" "--sbindir=\${out}/bin" ];
+  configureFlags = [ "--with-perl-installdir=\${out}/${perl.libPrefix}" "--sbindir=\${out}/bin" ];
 
   postInstall = ''
     rmdir $out/var/run $out/var
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   postFixup = ''
     for pls in $out/bin/{ibfindnodesusing.pl,ibidsverify.pl}; do
       echo "wrapping $pls"
-      wrapProgram $pls --prefix PERL5LIB : "$out/lib/perl5/site_perl"
+      wrapProgram $pls --prefix PERL5LIB : "$out/${perl.libPrefix}"
     done
   '';
 

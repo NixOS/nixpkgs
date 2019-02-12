@@ -3,13 +3,13 @@
 stdenv.mkDerivation rec {
 
   name = "coq${coq.coq-version}-math-classes-${version}";
-  version = "1.0.7";
+  version = "8.8.1";
 
   src = fetchFromGitHub {
-    owner = "math-classes";
+    owner = "coq-community";
     repo = "math-classes";
     rev = version;
-    sha256 = "0wgnczacvkb2pc3vjbni9bwjijfyd5jcdnyyjg8185hkf9zzabgi";
+    sha256 = "05vlrrwnlfhd7l3xwn4zwpnkwvziw84zpd9775c6ffb83z48ri1r";
   };
 
   buildInputs = [ coq bignums ];

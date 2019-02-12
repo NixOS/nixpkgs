@@ -1,39 +1,38 @@
 { stdenv
 , python
 , buildPythonPackage
-, fetchFromGitHub
+, fetchPypi
 , pytest
 , python-utils
 , sphinx
-, coverage
-, execnet
 , flake8
 , pytestpep8
 , pytestflakes
 , pytestcov
 , pytestcache
-, pep8
 , pytestrunner
+, freezegun
 }:
 
 buildPythonPackage rec {
   pname = "progressbar2";
-  version = "3.12.0";
+  version = "3.39.2";
 
-  # Use source from GitHub, PyPI is missing tests
-  # https://github.com/WoLpH/python-progressbar/issues/151
-  src = fetchFromGitHub {
-    owner = "WoLpH";
-    repo = "python-progressbar";
-    rev = "v${version}";
-    sha256 = "1gk45sh8cd0kkyvzcvx95z6nlblmyx0x189mjfv3vfa43cr1mb0f";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "6eb5135b987caca4212d2c7abc2923d4ad5ba18bb34ccbe7044b3628f52efc2c";
   };
+
+  postPatch = ''
+    rm -r tests/__pycache__
+    rm tests/*.pyc
+  '';
 
   propagatedBuildInputs = [ python-utils ];
   nativeBuildInputs = [ pytestrunner ];
   checkInputs = [
-    pytest sphinx coverage execnet flake8 pytestpep8 pytestflakes pytestcov
-    pytestcache pep8
+    pytest sphinx flake8 pytestpep8 pytestflakes pytestcov
+    pytestcache freezegun
   ];
   # ignore tests on the nix wrapped setup.py and don't flake .eggs directory
   checkPhase = ''

@@ -12,11 +12,11 @@ let
 in
 stdenv.mkDerivation rec {
   name = "sssd-${version}";
-  version = "1.16.2";
+  version = "1.16.3";
 
   src = fetchurl {
     url = "https://fedorahosted.org/released/sssd/${name}.tar.gz";
-    sha256 = "032ppk57qs1lnvz7pb7lw9ldwm9i1yagh9fzgqgn6na3bg61ynzy";
+    sha256 = "1i2fq37w0k71xwqcq1i4l3nglmwybc4694xbrccrih33qsh1fpgf";
   };
 
   patches = [

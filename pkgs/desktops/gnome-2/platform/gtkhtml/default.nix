@@ -15,4 +15,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ gtk intltool GConf enchant isocodes gnome_icon_theme ];
+
+  NIX_LDFLAGS = [ "-lgthread-2.0" ];
 }

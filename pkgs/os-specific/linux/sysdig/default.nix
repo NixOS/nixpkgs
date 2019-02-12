@@ -5,13 +5,13 @@
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "sysdig-${version}";
-  version = "0.24.1";
+  version = "0.24.2";
 
   src = fetchFromGitHub {
     owner = "draios";
     repo = "sysdig";
     rev = version;
-    sha256 = "04y6cqi2j0qpr5bgxyn6zz9f33v5v4lmkcl21c3sg5hmpjwibg3w";
+    sha256 = "16gz6gcp0zfhrqldw9cms38w0x5h3qhlx64dayqgsqbkw914b31a";
   };
 
   nativeBuildInputs = [ cmake perl ];
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
     license = with licenses; [ asl20 gpl2 mit ];
     maintainers = [maintainers.raskin];
     platforms = ["x86_64-linux"] ++ platforms.darwin;
-    broken = kernel != null && (versionOlder kernel.version "4.14" || versionAtLeast kernel.version "4.20");
+    broken = kernel != null && versionOlder kernel.version "4.14";
     homepage = "https://sysdig.com/opensource/";
     downloadPage = "https://github.com/draios/sysdig/releases";
   };

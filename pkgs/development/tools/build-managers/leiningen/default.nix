@@ -3,18 +3,18 @@
 
 stdenv.mkDerivation rec {
   pname = "leiningen";
-  version = "2.8.1";
+  version = "2.8.3";
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "https://raw.github.com/technomancy/leiningen/${version}/bin/lein-pkg";
-    sha256 = "0wk4m7m66xxx7i3nis08mc8qna7acgcmpim562vdyyrpbxdhj24i";
+    sha256 = "1jbrm4vdvwskbi9sxvn6i7h2ih9c3nfld63nx58nblghvlcb9vwx";
   };
 
   jarsrc = fetchurl {
     # NOTE: This is actually a .jar, Github has issues
     url = "https://github.com/technomancy/leiningen/releases/download/${version}/${name}-standalone.zip";
-    sha256 = "0n3wkb0a9g25r1xq93lskay2lw210qymz2qakjnl5vr5zz3vnjgw";
+    sha256 = "07kb7d84llp24l959gndnfmislnnvgpsxghmgfdy8chy7g4sy2kz";
   };
 
   JARNAME = "${name}-standalone.jar";
@@ -24,11 +24,14 @@ stdenv.mkDerivation rec {
   buildInputs = [ makeWrapper ];
   propagatedBuildInputs = [ jdk ];
 
+  # the jar is not in share/java, because it's a standalone jar and should
+  # never be picked up by set-java-classpath.sh
+
   installPhase = ''
-    mkdir -p $out/bin $out/share/java
+    mkdir -p $out/bin $out/share
 
     cp -v $src $out/bin/lein
-    cp -v $jarsrc $out/share/java/$JARNAME
+    cp -v $jarsrc $out/share/$JARNAME
   '';
 
   fixupPhase = ''
@@ -36,7 +39,7 @@ stdenv.mkDerivation rec {
     patchShebangs $out/bin/lein
 
     substituteInPlace $out/bin/lein \
-      --replace 'LEIN_JAR=/usr/share/java/leiningen-$LEIN_VERSION-standalone.jar' "LEIN_JAR=$out/share/java/$JARNAME"
+      --replace 'LEIN_JAR=/usr/share/java/leiningen-$LEIN_VERSION-standalone.jar' "LEIN_JAR=$out/share/$JARNAME"
 
     wrapProgram $out/bin/lein \
       --prefix PATH ":" "${stdenv.lib.makeBinPath [ rlwrap coreutils ]}" \

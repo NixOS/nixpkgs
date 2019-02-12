@@ -24,6 +24,16 @@ rec {
   # for a concrete example.
   fix' = f: let x = f x // { __unfix__ = f; }; in x;
 
+  # Return the fixpoint that `f` converges to when called recursively, starting
+  # with the input `x`.
+  #
+  #     nix-repl> converge (x: x / 2) 16
+  #     0
+  converge = f: x:
+    if (f x) == x
+    then x
+    else converge f (f x);
+
   # Modify the contents of an explicitly recursive attribute set in a way that
   # honors `self`-references. This is accomplished with a function
   #

@@ -9,8 +9,6 @@ stdenv.mkDerivation rec {
     sha256 = "0lk8knip4xk6qzksdkn7085mmgm4ixfczdyyjw656c193y3rgnvc";
   };
 
-  configureFlags = stdenv.lib.optionals stdenv.hostPlatform.isWindows [ "--disable-shared" "--enable-static" ];
-
   meta = with stdenv.lib; {
     description = "A C library for asynchronous DNS requests";
     homepage = https://c-ares.haxx.se;

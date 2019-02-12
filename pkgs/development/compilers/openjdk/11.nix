@@ -21,7 +21,6 @@ let
   update = ".0.1";
   build = "13";
   repover = "jdk-${major}${update}+${build}";
-  paxflags = if stdenv.isi686 then "msp" else "m";
 
   openjdk = stdenv.mkDerivation {
     name = "openjdk-${major}${update}-b${build}";
@@ -67,8 +66,8 @@ let
         # See https://www.mail-archive.com/openembedded-devel@lists.openembedded.org/msg49006.html
         "--with-extra-cflags=-Wno-error=deprecated-declarations -Wno-error=format-contains-nul -Wno-error=unused-result"
     ''
-    + lib.optionalString (architecture == "amd64") "\"--with-jvm-features=zgc\""
-    + lib.optionalString minimal "\"--enable-headless-only\""
+    + lib.optionalString (architecture == "amd64") " \"--with-jvm-features=zgc\""
+    + lib.optionalString minimal " \"--enable-headless-only\""
     + ");"
     # https://bugzilla.redhat.com/show_bug.cgi?id=1306558
     # https://github.com/JetBrains/jdk8u/commit/eaa5e0711a43d64874111254d74893fa299d5716
@@ -105,14 +104,6 @@ let
       ${lib.optionalString minimal ''
         rm $out/lib/openjdk/lib/{libjsound,libfontmanager}.so
       ''}
-
-      # Set PaX markings
-      exes=$(file $out/lib/openjdk/bin/* 2> /dev/null | grep -E 'ELF.*(executable|shared object)' | sed -e 's/: .*$//')
-      echo "to mark: *$exes*"
-      for file in $exes; do
-        echo "marking *$file*"
-        paxmark ${paxflags} "$file"
-      done
 
       ln -s $out/lib/openjdk/bin $out/bin
     '';

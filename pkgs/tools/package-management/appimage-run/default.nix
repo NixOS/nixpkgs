@@ -66,6 +66,7 @@ buildFHSUserEnv {
     dbus-glib
     libav
     atk
+    at-spi2-atk
     libudev0-shim
     networkmanager098
 

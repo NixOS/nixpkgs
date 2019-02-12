@@ -1,5 +1,6 @@
 { stdenv, fetchFromGitHub, autoconf, bison, flex, libtool, pkgconfig, which
-, libnl, protobuf, protobufc }:
+, libnl, protobuf, protobufc, shadow
+}:
 
 stdenv.mkDerivation rec {
   name = "nsjail-${version}";
@@ -12,6 +13,12 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
     sha256          = "0cgycj0cz74plmz4asxryqprg6mkzpmnxzqbfsp1wwackinxq5fq";
   };
+
+  postPatch = ''
+    substituteInPlace user.cc \
+      --replace "/usr/bin/newgidmap" "${shadow}/bin/newgidmap" \
+      --replace "/usr/bin/newuidmap" "${shadow}/bin/newuidmap"
+  '';
 
   nativeBuildInputs = [ autoconf bison flex libtool pkgconfig which ];
   buildInputs = [ libnl protobuf protobufc ];

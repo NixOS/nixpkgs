@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub
 , vala, cmake, ninja, wrapGAppsHook, pkgconfig, gettext
-, gobjectIntrospection, gnome3, glib, gdk_pixbuf, gtk3, glib-networking
+, gobject-introspection, gnome3, glib, gdk_pixbuf, gtk3, glib-networking
 , xorg, libXdmcp, libxkbcommon
 , libnotify, libsoup
 , libgcrypt
@@ -11,16 +11,17 @@
 , gpgme
 , pcre
 , qrencode
+, icu
  }:
 
 stdenv.mkDerivation rec {
-  name = "dino-unstable-2018-11-27";
+  name = "dino-unstable-2019-02-06";
 
   src = fetchFromGitHub {
     owner = "dino";
     repo = "dino";
-    rev = "141db9e40a3a81cfa3ad3587dc47f69c541d0fde";
-    sha256 = "006r1x7drlz39jjxlfdnxgrnambw9amhl9jcgf6p1dx71h1x8221";
+    rev = "864196d2acef3db047160b9da5803805067276c3";
+    sha256 = "10nyq9marclzbkxisackp402gimgs7gb0llgjm922c593c5h39cq";
     fetchSubmodules = true;
   };
 
@@ -30,11 +31,12 @@ stdenv.mkDerivation rec {
     ninja
     pkgconfig
     wrapGAppsHook
+    gettext
   ];
 
   buildInputs = [
     qrencode
-    gobjectIntrospection
+    gobject-introspection
     glib-networking
     glib
     gnome3.libgee
@@ -54,8 +56,10 @@ stdenv.mkDerivation rec {
     epoxy
     at-spi2-core
     dbus
-    gettext
+    icu
   ];
+
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "Modern Jabber/XMPP Client using GTK+/Vala";

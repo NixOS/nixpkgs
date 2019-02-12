@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     homepage = http://www.openfst.org/twiki/bin/view/FST/WebHome;
     license = stdenv.lib.licenses.asl20;
     maintainers = [ stdenv.lib.maintainers.dfordivam ];
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.unix;
   };
 }
 

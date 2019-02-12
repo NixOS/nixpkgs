@@ -22,7 +22,7 @@
 }:
 
 let
-  version = "4.2.12";
+  version = "4.3.4";
 
   binpath = stdenv.lib.makeBinPath
     [ cabextract
@@ -55,7 +55,7 @@ in stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://www.playonlinux.com/script_files/PlayOnLinux/${version}/PlayOnLinux_${version}.tar.gz";
-    sha256 = "03k8v9dknc5hfrfzqw1nkpifz7wkixv3mvjl1vnp4fx8rj2xrjrq";
+    sha256 = "019dvb55zqrhlbx73p6913807ql866rm0j011ix5mkk2g79dzhqp";
   };
 
   nativeBuildInputs = [ makeWrapper ];

@@ -25,6 +25,7 @@ buildPythonPackage rec {
 
   preConfigure = ''
     chmod +x ./deps/pjsip/configure ./deps/pjsip/aconfigure
+    export LD=$CC
   '';
 
   nativeBuildInputs = [ pkgs.pkgconfig ];

@@ -37,7 +37,7 @@ in stdenv.mkDerivation {
       modules into a coherent library.  Think "a down-scaled, limited-scope CPAN
       for Guile".
     '';
-    homepage = "http://www.nongnu.org/guile-lib/";
+    homepage = "https://www.nongnu.org/guile-lib/";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ vyp ];
     platforms = platforms.gnu ++ platforms.linux;

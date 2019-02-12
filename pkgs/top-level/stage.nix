@@ -91,7 +91,7 @@ let
   allPackages = self: super:
     let res = import ./all-packages.nix
       { inherit lib noSysDirs config; }
-      res self;
+      res self super;
     in res;
 
   aliases = self: super: lib.optionalAttrs (config.allowAliases or true) (import ./aliases.nix lib self super);
@@ -174,6 +174,22 @@ let
     # Prefer appendOverlays if used repeatedly.
     extend = f: self.appendOverlays [f];
 
+    # Fully static packages.
+    # Currently uses Musl on Linux (couldn’t get static glibc to work).
+    pkgsStatic = nixpkgsFun ({
+      crossOverlays = [ (import ./static.nix) ];
+    } // lib.optionalAttrs stdenv.hostPlatform.isLinux {
+      crossSystem = {
+        parsed = stdenv.hostPlatform.parsed // {
+          abi = {
+            "gnu" = lib.systems.parse.abis.musl;
+            "gnueabi" = lib.systems.parse.abis.musleabi;
+            "gnueabihf" = lib.systems.parse.abis.musleabihf;
+          }.${stdenv.hostPlatform.parsed.abi.name}
+            or lib.systems.parse.abis.musl;
+        };
+      };
+    });
   };
 
   # The complete chain of package set builders, applied from top to bottom.

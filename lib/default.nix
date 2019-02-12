@@ -61,10 +61,10 @@ let
       boolToString mergeAttrs flip mapNullable inNixShell min max
       importJSON warn info nixpkgsVersion version mod compare
       splitByAndCompare functionArgs setFunctionArgs isFunction;
-    inherit (fixedPoints) fix fix' extends composeExtensions
+    inherit (fixedPoints) fix fix' converge extends composeExtensions
       makeExtensible makeExtensibleWithCustomName;
     inherit (attrsets) attrByPath hasAttrByPath setAttrByPath
-      getAttrFromPath attrVals attrValues catAttrs filterAttrs
+      getAttrFromPath attrVals attrValues getAttrs catAttrs filterAttrs
       filterAttrsRecursive foldAttrs collect nameValuePair mapAttrs
       mapAttrs' mapAttrsToList mapAttrsRecursive mapAttrsRecursiveCond
       genAttrs isDerivation toDerivation optionalAttrs
@@ -80,7 +80,7 @@ let
     inherit (strings) concatStrings concatMapStrings concatImapStrings
       intersperse concatStringsSep concatMapStringsSep
       concatImapStringsSep makeSearchPath makeSearchPathOutput
-      makeLibraryPath makeBinPath makePerlPath makeFullPerlPath optionalString
+      makeLibraryPath makeBinPath optionalString
       hasPrefix hasSuffix stringToCharacters stringAsChars escape
       escapeShellArg escapeShellArgs replaceChars lowerChars
       upperChars toLower toUpper addContextFrom splitString
@@ -94,7 +94,7 @@ let
       callPackageWith callPackagesWith extendDerivation hydraJob
       makeScope;
     inherit (meta) addMetaAttrs dontDistribute setName updateName
-      appendToName mapDerivationAttrset lowPrio lowPrioSet hiPrio
+      appendToName mapDerivationAttrset setPrio lowPrio lowPrioSet hiPrio
       hiPrioSet;
     inherit (sources) pathType pathIsDirectory cleanSourceFilter
       cleanSource sourceByRegex sourceFilesBySuffices
@@ -109,7 +109,7 @@ let
       mkFixStrictness mkOrder mkBefore mkAfter mkAliasDefinitions
       mkAliasAndWrapDefinitions fixMergeModules mkRemovedOptionModule
       mkRenamedOptionModule mkMergedOptionModule mkChangedOptionModule
-      mkAliasOptionModule doRename filterModules;
+      mkAliasOptionModule mkAliasOptionModuleWithPriority doRename filterModules;
     inherit (options) isOption mkEnableOption mkSinkUndeclaredOptions
       mergeDefaultOption mergeOneOption mergeEqualOption getValues
       getFiles optionAttrSetToDocList optionAttrSetToDocList'
@@ -125,14 +125,14 @@ let
       traceShowValMarked showVal traceCall traceCall2 traceCall3
       traceValIfNot runTests testAllTrue traceCallXml attrNamesToStr;
     inherit (misc) maybeEnv defaultMergeArg defaultMerge foldArgs
-      defaultOverridableDelayableArgs composedArgsAndFun
       maybeAttrNullable maybeAttr ifEnable checkFlag getValue
       checkReqs uniqList uniqListExt condConcat lazyGenericClosure
       innerModifySumArgs modifySumArgs innerClosePropagation
       closePropagation mapAttrsFlatten nvs setAttr setAttrMerge
       mergeAttrsWithFunc mergeAttrsConcatenateValues
       mergeAttrsNoOverride mergeAttrByFunc mergeAttrsByFuncDefaults
-      mergeAttrsByFuncDefaultsClean mergeAttrBy prepareDerivationArgs
-      nixType imap overridableDelayableArgs;
+      mergeAttrsByFuncDefaultsClean mergeAttrBy
+      fakeSha256 fakeSha512
+      nixType imap;
   });
 in lib

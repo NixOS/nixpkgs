@@ -10,11 +10,11 @@
 
 buildPythonPackage rec {
   pname = "python-etcd";
-  version = "0.4.3";
+  version = "0.4.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "cf53262b3890d185fe637eed15fe39c8d7a8261864ddcd7037b22c961456d7fc";
+    sha256 = "f1b5ebb825a3e8190494f5ce1509fde9069f2754838ed90402a8c11e1f52b8cb";
   };
 
   buildInputs = [ nose mock pyopenssl ];

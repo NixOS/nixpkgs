@@ -24,11 +24,11 @@ let
   gcc = if stdenv.cc.isGNU then stdenv.cc.cc else stdenv.cc.cc.gcc;
 in stdenv.mkDerivation rec {
   name = "thunderbird-${version}";
-  version = "60.3.1";
+  version = "60.5.0";
 
   src = fetchurl {
     url = "mirror://mozilla/thunderbird/releases/${version}/source/thunderbird-${version}.source.tar.xz";
-    sha512 = "266m4kwxiwh1zi60z4gcs54k4w903aximafngmmqaa5nkxnsxh6sp62j1mazdh52g40pzdy9sqb8zkcjsm7dp937kpcl2lvw778lanm";
+    sha512 = "39biv0yk08l4kkfrsiqgsdsvpa7ih992jmakjnf2wqzrnbk4pfsrck6bnl038bihs1v25ia8c2vs25sm4wzbxzjr0z82fn31qysv2xi";
   };
 
   # from firefox, but without sound libraries
@@ -37,8 +37,8 @@ in stdenv.mkDerivation rec {
       dbus dbus-glib pango freetype fontconfig xorg.libXi
       xorg.libX11 xorg.libXrender xorg.libXft xorg.libXt file
       nspr nss libnotify xorg.pixman yasm libGLU_combined
-      xorg.libXScrnSaver xorg.scrnsaverproto
-      xorg.libXext xorg.xextproto sqlite unzip
+      xorg.libXScrnSaver xorg.xorgproto
+      xorg.libXext sqlite unzip
       hunspell libevent libstartup_notification /* cairo */
       icu libpng jemalloc
     ]
@@ -49,7 +49,7 @@ in stdenv.mkDerivation rec {
 
   patches = [
     # Remove buildconfig.html to prevent a dependency on clang etc.
-    ../../browsers/firefox/no-buildconfig.patch
+    ./no-buildconfig.patch
   ];
 
   configureFlags =
@@ -100,7 +100,7 @@ in stdenv.mkDerivation rec {
     ''
       cxxLib=$( echo -n ${gcc}/include/c++/* )
       archLib=$cxxLib/$( ${gcc}/bin/gcc -dumpmachine )
-  
+
       test -f layout/style/ServoBindings.toml && sed -i -e '/"-DRUST_BINDGEN"/ a , "-cxx-isystem", "'$cxxLib'", "-isystem", "'$archLib'"' layout/style/ServoBindings.toml
 
       configureScript="$(realpath ./configure)"
@@ -108,18 +108,9 @@ in stdenv.mkDerivation rec {
       cd ../objdir
     '';
 
-  preInstall =
-    ''
-      # The following is needed for startup cache creation on grsecurity kernels.
-      paxmark m ../objdir/dist/bin/xpcshell
-    '';
-
   dontWrapGApps = true; # we do it ourselves
   postInstall =
     ''
-      # For grsecurity kernels
-      paxmark m $out/lib/thunderbird/thunderbird
-
       # TODO: Move to a dev output?
       rm -rf $out/include $out/lib/thunderbird-devel-* $out/share/idl
 
@@ -202,6 +193,6 @@ in stdenv.mkDerivation rec {
   passthru.updateScript = import ./../../browsers/firefox/update.nix {
     attrPath = "thunderbird";
     baseUrl = "http://archive.mozilla.org/pub/thunderbird/releases/";
-    inherit writeScript lib common-updater-scripts xidel coreutils gnused gnugrep curl;
+    inherit stdenv writeScript lib common-updater-scripts xidel coreutils gnused gnugrep curl;
   };
 }

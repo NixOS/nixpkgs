@@ -10,14 +10,18 @@
 
 buildPythonPackage rec {
   pname = "fake-factory";
-  version = "0.6.0";
+  version = "9999.9.9";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "09sgk0kylsshs64a1xsz3qr187sbnqrbf4z8k3dgsy32lsgyffv2";
+    sha256 = "f5bd18deb22ad8cb4402513c025877bc6b50de58902d686b6b21ba8981dce260";
   };
 
   propagatedBuildInputs = [ six dateutil ipaddress mock ];
+
+  # fake-factory is depreciated and single test will always fail
+  doCheck = false;
+
   checkPhase = ''
     ${python.interpreter} -m unittest faker.tests
   '';

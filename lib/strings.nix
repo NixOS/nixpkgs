@@ -162,26 +162,6 @@ rec {
   */
   makeBinPath = makeSearchPathOutput "bin" "bin";
 
-
-  /* Construct a perl search path (such as $PERL5LIB)
-
-     Example:
-       pkgs = import <nixpkgs> { }
-       makePerlPath [ pkgs.perlPackages.libnet ]
-       => "/nix/store/n0m1fk9c960d8wlrs62sncnadygqqc6y-perl-Net-SMTP-1.25/lib/perl5/site_perl"
-  */
-  # FIXME(zimbatm): this should be moved in perl-specific code
-  makePerlPath = makeSearchPathOutput "lib" "lib/perl5/site_perl";
-
-  /* Construct a perl search path recursively including all dependencies (such as $PERL5LIB)
-
-     Example:
-       pkgs = import <nixpkgs> { }
-       makeFullPerlPath [ pkgs.perlPackages.CGI ]
-       => "/nix/store/fddivfrdc1xql02h9q500fpnqy12c74n-perl-CGI-4.38/lib/perl5/site_perl:/nix/store/8hsvdalmsxqkjg0c5ifigpf31vc4vsy2-perl-HTML-Parser-3.72/lib/perl5/site_perl:/nix/store/zhc7wh0xl8hz3y3f71nhlw1559iyvzld-perl-HTML-Tagset-3.20/lib/perl5/site_perl"
-  */
-  makeFullPerlPath = deps: makePerlPath (lib.misc.closePropagation deps);
-
   /* Depending on the boolean `cond', return either the given string
      or the empty string. Useful to concatenate against a bigger string.
 
@@ -235,6 +215,26 @@ rec {
       lenSuffix = stringLength suffix;
     in lenContent >= lenSuffix &&
        substring (lenContent - lenSuffix) lenContent content == suffix;
+
+  /* Determine whether a string contains the given infix
+
+    Type: hasInfix :: string -> string -> bool
+
+    Example:
+      hasInfix "bc" "abcd"
+      => true
+      hasInfix "ab" "abcd"
+      => true
+      hasInfix "cd" "abcd"
+      => true
+      hasInfix "foo" "abcd"
+      => false
+  */
+  hasInfix = infix: content:
+    let
+      drop = x: substring 1 (stringLength x) x;
+    in hasPrefix infix content
+      || content != "" && hasInfix infix (drop content);
 
   /* Convert a string to a list of characters (i.e. singleton strings).
      This allows you to, e.g., map a function over each character.  However,

@@ -105,8 +105,6 @@ stdenv.mkDerivation rec {
           --replace-needed libtinfo.so libtinfo.so.5 \
           --interpreter ${glibcDynLinker} {} \;
 
-      paxmark m ./ghc-${version}/ghc/stage2/build/tmp/ghc-stage2
-
       sed -i "s|/usr/bin/perl|perl\x00        |" ghc-${version}/ghc/stage2/build/tmp/ghc-stage2
       sed -i "s|/usr/bin/gcc|gcc\x00        |" ghc-${version}/ghc/stage2/build/tmp/ghc-stage2
     '';

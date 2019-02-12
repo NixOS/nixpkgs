@@ -497,7 +497,12 @@ in {
     systemd.services.gitaly = {
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
-      path = with pkgs; [ gitAndTools.git cfg.packages.gitaly.rubyEnv cfg.packages.gitaly.rubyEnv.wrappedRuby ];
+      path = with pkgs; [
+        openssh
+        gitAndTools.git
+        cfg.packages.gitaly.rubyEnv
+        cfg.packages.gitaly.rubyEnv.wrappedRuby
+      ];
       serviceConfig = {
         Type = "simple";
         User = cfg.user;
@@ -608,10 +613,6 @@ in {
             GITLAB_ROOT_PASSWORD='${cfg.initialRootPassword}' GITLAB_ROOT_EMAIL='${cfg.initialRootEmail}'
           touch "${cfg.statePath}/db-seeded"
         fi
-
-        # The gitlab:shell:setup regenerates the authorized_keys file so that
-        # the store path to the gitlab-shell in it gets updated
-        ${pkgs.sudo}/bin/sudo -u ${cfg.user} -H force=yes ${gitlab-rake}/bin/gitlab-rake gitlab:shell:setup
 
         # The gitlab:shell:create_hooks task seems broken for fixing links
         # so we instead delete all the hooks and create them anew

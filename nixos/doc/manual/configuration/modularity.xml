@@ -113,12 +113,10 @@ $ nixos-option <xref linkend="opt-boot.kernelModules"/>
 [ "tun" "ipv6" "loop" <replaceable>...</replaceable> ]
 </screen>
   Interactive exploration of the configuration is possible using
-  <command
-xlink:href="https://github.com/edolstra/nix-repl">nix-repl</command>,
-  a read-eval-print loop for Nix expressions. It’s not installed by default;
-  run <literal>nix-env -i nix-repl</literal> to get it. A typical use:
+  <command>nix repl</command>, a read-eval-print loop for Nix expressions.
+  A typical use:
 <screen>
-$ nix-repl '&lt;nixpkgs/nixos>'
+$ nix repl '&lt;nixpkgs/nixos>'
 
 nix-repl> config.<xref linkend="opt-networking.hostName"/>
 "mandark"

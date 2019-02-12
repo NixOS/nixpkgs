@@ -15,9 +15,7 @@ import ./make-test.nix ({ pkgs, ...} : {
            munin-node = {
              enable = true;
              # disable a failing plugin to prevent irrelevant error message, see #23049
-             extraConfig = ''
-               ignore_file ^apc_nis$
-             '';
+             disabledPlugins = [ "apc_nis" ];
            };
            munin-cron = {
             enable = true;

@@ -11,7 +11,7 @@ let
 in
 
 { stdenv, fetchurl, ncurses, buildEnv
-, libX11, xproto, useX11 ? safeX11 stdenv
+, libX11, xorgproto, useX11 ? safeX11 stdenv
 , flambdaSupport ? false
 }:
 
@@ -24,11 +24,13 @@ let
    name = "ocaml${optionalString flambdaSupport "+flambda"}-${version}";
 in
 
-stdenv.mkDerivation (args // rec {
-
-  x11env = buildEnv { name = "x11env"; paths = [libX11 xproto]; };
+let
+  x11env = buildEnv { name = "x11env"; paths = [libX11 xorgproto]; };
   x11lib = x11env + "/lib";
   x11inc = x11env + "/include";
+in
+
+stdenv.mkDerivation (args // rec {
 
   inherit name;
   inherit version;
@@ -46,7 +48,7 @@ stdenv.mkDerivation (args // rec {
 
   buildFlags = "world" + optionalString useNativeCompilers " bootstrap world.opt";
   buildInputs = optional (!stdenv.lib.versionAtLeast version "4.07") ncurses
-    ++ optionals useX11 [ libX11 xproto ];
+    ++ optionals useX11 [ libX11 xorgproto ];
   installTargets = "install" + optionalString useNativeCompilers " installopt";
   preConfigure = optionalString (!stdenv.lib.versionAtLeast version "4.04") ''
     CAT=$(type -tp cat)

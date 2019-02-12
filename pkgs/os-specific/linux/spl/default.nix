@@ -51,6 +51,6 @@ stdenv.mkDerivation rec {
     homepage = http://zfsonlinux.org/;
     platforms = platforms.linux;
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ jcumming wizeman wkennington fpletz globin ];
+    maintainers = with maintainers; [ jcumming wizeman fpletz globin ];
   };
 }

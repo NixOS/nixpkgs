@@ -7,11 +7,11 @@
 
 let
   rustPlatform = recurseIntoAttrs (makeRustPlatform (callPackage ./bootstrap.nix {}));
-  version = "1.30.0";
-  cargoVersion = "1.30.0";
+  version = "1.31.0";
+  cargoVersion = "1.31.0";
   src = fetchurl {
     url = "https://static.rust-lang.org/dist/rustc-${version}-src.tar.gz";
-    sha256 = "1vh8q5i273xyjvpipqisny11iz0xfgz30cgjr7068nx5rhzsh2yd";
+    sha256 = "01pg2619bwjnhjbphryrbkwaz0lw8cfffm4xlz35znzipb04vmcs";
   };
 in rec {
   rustc = callPackage ./rustc.nix {
@@ -29,7 +29,7 @@ in rec {
       ./patches/disable-test-inherit-env.patch
     ];
 
-    forceBundledLLVM = true;
+    withBundledLLVM = false;
 
     configureFlags = [ "--release-channel=stable" ];
 

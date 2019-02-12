@@ -12,11 +12,11 @@ inherit (stdenv.lib) optional concatStringsSep;
 
 unwrapped = stdenv.mkDerivation rec {
   name = "knot-resolver-${version}";
-  version = "3.1.0";
+  version = "3.2.1";
 
   src = fetchurl {
     url = "https://secure.nic.cz/files/knot-resolver/${name}.tar.xz";
-    sha256 = "8f3deba4695784a666cde317bc6af80ecf42ce1047b01f4b9c582fdc021c7492";
+    sha256 = "d1396888ec3a63f19dccdf2b7dbcb0d16a5d8642766824b47f4c21be90ce362b";
   };
 
   outputs = [ "out" "dev" ];

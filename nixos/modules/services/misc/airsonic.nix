@@ -25,6 +25,14 @@ in {
         '';
       };
 
+      virtualHost = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description = ''
+          Name of the nginx virtualhost to use and setup. If null, do not setup any virtualhost.
+        '';
+      };
+
       listenAddress = mkOption {
         type = types.string;
         default = "127.0.0.1";
@@ -116,6 +124,8 @@ in {
           -Dserver.port=${toString cfg.port} \
           -Dairsonic.contextPath=${cfg.contextPath} \
           -Djava.awt.headless=true \
+          ${optionalString (cfg.virtualHost != null)
+            "-Dserver.use-forward-headers=true"} \
           ${toString cfg.jvmOptions} \
           -verbose:gc \
           -jar ${pkgs.airsonic}/webapps/airsonic.war
@@ -123,6 +133,13 @@ in {
         Restart = "always";
         User = "airsonic";
         UMask = "0022";
+      };
+    };
+
+    services.nginx = mkIf (cfg.virtualHost != null) {
+      enable = true;
+      virtualHosts."${cfg.virtualHost}" = {
+        locations."${cfg.contextPath}".proxyPass = "http://${cfg.listenAddress}:${toString cfg.port}";
       };
     };
 

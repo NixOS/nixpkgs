@@ -3,7 +3,7 @@
 , wrapGAppsHook, xorgserver, getopt, xauth, utillinux, which
 , ffmpeg, x264, libvpx, libwebp
 , libfakeXinerama
-, gst_all_1, pulseaudio, gobjectIntrospection
+, gst_all_1, pulseaudio, gobject-introspection
 , pam }:
 
 with lib;
@@ -28,14 +28,13 @@ in buildPythonApplication rec {
     })
   ];
 
-  nativeBuildInputs = [ pkgconfig gobjectIntrospection wrapGAppsHook ];
-  buildInputs = [
+  nativeBuildInputs = [ pkgconfig gobject-introspection wrapGAppsHook ];
+  buildInputs = with xorg; [
+    libX11 xorgproto libXrender libXi
+    libXtst libXfixes libXcomposite libXdamage
+    libXrandr libxkbfile
+    ] ++ [
     cython
-
-    xorg.libX11 xorg.renderproto xorg.libXrender xorg.libXi xorg.inputproto xorg.kbproto
-    xorg.randrproto xorg.damageproto xorg.compositeproto xorg.xextproto xorg.recordproto
-    xorg.xproto xorg.fixesproto xorg.libXtst xorg.libXfixes xorg.libXcomposite xorg.libXdamage
-    xorg.libXrandr xorg.libxkbfile
 
     pango cairo gdk_pixbuf atk gtk3 glib
 

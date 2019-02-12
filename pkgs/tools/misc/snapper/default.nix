@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   name = "snapper-${version}";
-  version = "0.8.0";
+  version = "0.8.2";
 
   src = fetchFromGitHub {
     owner = "openSUSE";
     repo = "snapper";
     rev = "v${version}";
-    sha256 = "1blllmkwh13pnf3hxi1p2az5i77arbm2661n0rd0569s6kf5brb7";
+    sha256 = "0f3xvvmyln7rjvv4w0zsd4b4d1mzcdx0xrgcscqj2v18xgwwcc4p";
   };
 
   nativeBuildInputs = [
@@ -62,6 +62,6 @@ stdenv.mkDerivation rec {
     homepage = http://snapper.io;
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ tstrobel ];
+    maintainers = with maintainers; [ tstrobel markuskowa ];
   };
 }

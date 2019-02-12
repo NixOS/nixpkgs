@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "evernote";
-  version = "1.25.0";
+  version = "1.25.3";
   disabled = ! isPy27; #some dependencies do not work with py3
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1lwlg6fpi3530245jzham1400a5b855bm4sbdyck229h9kg1v02d";
+    sha256 = "796847e0b7517e729041c5187fa1665c3f6fc0491cb4d71fb95a62c4f22e64eb";
   };
 
    propagatedBuildInputs = [ oauth2 ];

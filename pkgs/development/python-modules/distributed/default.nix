@@ -19,27 +19,28 @@
 , tornado
 , zict
 , pyyaml
-, pythonOlder
+, isPy3k
 , futures
 , singledispatch
+, mpi4py
+, bokeh
 }:
 
 buildPythonPackage rec {
   pname = "distributed";
-  version = "1.24.1";
+  version = "1.25.3";
 
   # get full repository need conftest.py to run tests
   src = fetchPypi {
     inherit pname version;
-    sha256 = "13qch8wgjzx9zadaxasym3bp3a74bg5snhnbznpggssv3hyshca7";
+    sha256 = "0bvjlw74n0l4rgzhm876f66f7y6j09744i5h3iwlng2jwzyw97gs";
   };
 
   checkInputs = [ pytest pytest-repeat pytest-faulthandler pytest-timeout mock joblib ];
   propagatedBuildInputs = [
       click cloudpickle dask msgpack psutil six
-      sortedcontainers tblib toolz tornado zict pyyaml
-  ] ++ lib.optional (pythonOlder "3.2") [ futures ]
-    ++ lib.optional (pythonOlder "3.4") [ singledispatch ];
+      sortedcontainers tblib toolz tornado zict pyyaml mpi4py bokeh
+  ] ++ lib.optionals (!isPy3k) [ futures singledispatch ];
 
   # tests take about 10-15 minutes
   # ignore 5 cli tests out of 1000 total tests that fail due to subprocesses

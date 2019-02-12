@@ -1,16 +1,16 @@
-{ stdenv, fetchFromGitHub, makeWrapper, which, coreutils, rrdtool, perl, perlPackages
+{ stdenv, fetchFromGitHub, makeWrapper, which, coreutils, rrdtool, perlPackages
 , python, ruby, jre, nettools, bc
 }:
 
 stdenv.mkDerivation rec {
-  version = "2.0.37";
+  version = "2.0.43";
   name = "munin-${version}";
 
   src = fetchFromGitHub {
     owner = "munin-monitoring";
     repo = "munin";
     rev = version;
-    sha256 = "10niyzckx90dwdr4d7vj07d1qjy3nk7xzp30nqnlxzbaww7n5v78";
+    sha256 = "1ydhf9hcb3n5h0ss5f1zf9yz4r4njqxazlz931ixvx5gyhj9gq5l";
   };
 
   buildInputs = [
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     coreutils
     rrdtool
     nettools
-    perl
+    perlPackages.perl
     perlPackages.ModuleBuild
     perlPackages.HTMLTemplate
     perlPackages.NetCIDR
@@ -36,7 +36,6 @@ stdenv.mkDerivation rec {
     perlPackages.NetSNMP
     perlPackages.NetServer
     perlPackages.ListMoreUtils
-    perlPackages.TimeHiRes
     perlPackages.LWP
     perlPackages.DBDPg
     python
@@ -60,8 +59,8 @@ stdenv.mkDerivation rec {
   doCheck = false;
 
   checkPhase = ''
-   export PERL5LIB="$PERL5LIB:${rrdtool}/lib/perl5/site_perl"
-   LC_ALL=C make -j1 test 
+   export PERL5LIB="$PERL5LIB:${rrdtool}/${perlPackages.perl.libPrefix}"
+   LC_ALL=C make -j1 test
   '';
 
   patches = [
@@ -76,6 +75,7 @@ stdenv.mkDerivation rec {
   ];
 
   preBuild = ''
+    echo "${version}" > RELEASE
     substituteInPlace "Makefile" \
       --replace "/bin/pwd" "pwd" \
       --replace "HTMLOld.3pm" "HTMLOld.3"
@@ -95,8 +95,8 @@ stdenv.mkDerivation rec {
   makeFlags = ''
     PREFIX=$(out)
     DESTDIR=$(out)
-    PERLLIB=$(out)/lib/perl5/site_perl
-    PERL=${perl}/bin/perl
+    PERLLIB=$(out)/${perlPackages.perl.libPrefix}
+    PERL=${perlPackages.perl}/bin/perl
     PYTHON=${python}/bin/python
     RUBY=${ruby}/bin/ruby
     JAVARUN=${jre}/bin/java
@@ -118,10 +118,10 @@ stdenv.mkDerivation rec {
             *.jar) continue;;
         esac
         wrapProgram "$file" \
-          --set PERL5LIB "$out/lib/perl5/site_perl:${with perlPackages; stdenv.lib.makePerlPath [
+          --set PERL5LIB "$out/${perlPackages.perl.libPrefix}:${with perlPackages; makePerlPath [
                 LogLog4perl IOSocketInet6 Socket6 URI DBFile DateManip
                 HTMLTemplate FileCopyRecursive FCGI NetCIDR NetSNMP NetServer
-                ListMoreUtils TimeHiRes DBDPg LWP rrdtool
+                ListMoreUtils DBDPg LWP rrdtool
                 ]}"
     done
   '';

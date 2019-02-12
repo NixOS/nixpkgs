@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, gtk-doc, libxslt, docbook_xsl
-, docbook_xml_dtd_43, python3, gobjectIntrospection, glib, udev, kmod, parted, libyaml
+, docbook_xml_dtd_43, python3, gobject-introspection, glib, udev, kmod, parted, libyaml
 , cryptsetup, lvm2, dmraid, utillinux, libbytesize, libndctl, nss, volume_key
 }:
 
@@ -22,7 +22,7 @@ in stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [
-    autoreconfHook pkgconfig gtk-doc libxslt docbook_xsl docbook_xml_dtd_43 python3 gobjectIntrospection
+    autoreconfHook pkgconfig gtk-doc libxslt docbook_xsl docbook_xml_dtd_43 python3 gobject-introspection
   ];
 
   buildInputs = [

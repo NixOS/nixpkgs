@@ -13,7 +13,7 @@ let
     overrides = ${cfg.privateConfig}
 
     [server:main]
-    use = egg:Paste#http
+    use = egg:gunicorn
     host = ${cfg.listen.address}
     port = ${toString cfg.listen.port}
 
@@ -30,6 +30,8 @@ let
     audiences = ${removeSuffix "/" cfg.publicUrl}
   '';
 
+  user = "syncserver";
+  group = "syncserver";
 in
 
 {
@@ -126,15 +128,14 @@ in
 
   config = mkIf cfg.enable {
 
-    systemd.services.syncserver = let
-      syncServerEnv = pkgs.python.withPackages(ps: with ps; [ syncserver pasteScript requests ]);
-      user = "syncserver";
-      group = "syncserver";
-    in {
+    systemd.services.syncserver = {
       after = [ "network.target" ];
       description = "Firefox Sync Server";
       wantedBy = [ "multi-user.target" ];
-      path = [ pkgs.coreutils syncServerEnv ];
+      path = [
+        pkgs.coreutils
+        (pkgs.python.withPackages (ps: [ pkgs.syncserver ps.gunicorn ]))
+      ];
 
       serviceConfig = {
         User = user;
@@ -166,14 +167,17 @@ in
           chown ${user}:${group} ${defaultDbLocation}
         fi
       '';
-      serviceConfig.ExecStart = "${syncServerEnv}/bin/paster serve ${syncServerIni}";
+
+      script = ''
+        gunicorn --paste ${syncServerIni}
+      '';
     };
 
-    users.users.syncserver = {
-      group = "syncserver";
+    users.users.${user} = {
+      inherit group;
       isSystemUser = true;
     };
 
-    users.groups.syncserver = {};
+    users.groups.${group} = {};
   };
 }

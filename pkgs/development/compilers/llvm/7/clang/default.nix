@@ -9,7 +9,7 @@ let
     name = "clang-${version}";
 
     unpackPhase = ''
-      unpackFile ${fetch "cfe" "0mdsbgj3p7mayhzm8hclzl3i46r2lwa8fr1cz399f9km3iqi40jm"}
+      unpackFile ${fetch "cfe" "067lwggnbg0w1dfrps790r5l6k8n5zwhlsw7zb6zvmfpwpfn4nx4"}
       mv cfe-${version}* clang
       sourceRoot=$PWD/clang
       unpackFile ${clang-tools-extra_src}
@@ -43,6 +43,9 @@ let
       sed -i '1s,^,find_package(Sphinx REQUIRED)\n,' docs/CMakeLists.txt
     '' + stdenv.lib.optionalString stdenv.hostPlatform.isMusl ''
       sed -i -e 's/lgcc_s/lgcc_eh/' lib/Driver/ToolChains/*.cpp
+    '' + stdenv.lib.optionalString stdenv.hostPlatform.isDarwin ''
+      substituteInPlace tools/extra/clangd/CMakeLists.txt \
+        --replace "NOT HAVE_CXX_ATOMICS64_WITHOUT_LIB" FALSE
     '';
 
     outputs = [ "out" "lib" "python" ];

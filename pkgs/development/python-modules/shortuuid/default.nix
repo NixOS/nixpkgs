@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "shortuuid";
-  version = "0.4.3";
+  version = "0.5.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4606dbb19124d98109c00e2cafae2df8117aec02115623e18fb2abe3f766d293";
+    sha256 = "d08fd398f40f8baf87e15eef8355e92fa541bca4eb8465fefab7ee22f92711b9";
   };
 
   buildInputs = [pep8];

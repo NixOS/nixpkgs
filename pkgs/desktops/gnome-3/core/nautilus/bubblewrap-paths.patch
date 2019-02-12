@@ -1,0 +1,19 @@
+---   a/src/gnome-desktop/gnome-desktop-thumbnail-script.c
++++   a/src/gnome-desktop/gnome-desktop-thumbnail-script.c
+@@ -514,14 +514,10 @@ add_bwrap (GPtrArray   *array,
+   g_return_val_if_fail (script->s_infile != NULL, FALSE);
+ 
+   add_args (array,
+-	    "bwrap",
+-	    "--ro-bind", "/usr", "/usr",
+-	    "--ro-bind", "/lib", "/lib",
+-	    "--ro-bind", "/lib64", "/lib64",
++      "@bubblewrap_bin@",
++      "--ro-bind", "@storeDir@", "@storeDir@",
+ 	    "--proc", "/proc",
+ 	    "--dev", "/dev",
+-	    "--symlink", "usr/bin", "/bin",
+-	    "--symlink", "usr/sbin", "/sbin",
+ 	    "--chdir", "/",
+ 	    "--setenv", "GIO_USE_VFS", "local",
+ 	    "--unshare-all",

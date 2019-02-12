@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, apfel, applgrid, lhapdf, root }:
+{ stdenv, fetchFromGitHub, autoreconfHook, apfel, applgrid, lhapdf, root5 }:
 
 stdenv.mkDerivation rec {
   name = "apfelgrid-${version}";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ apfel applgrid lhapdf root ];
+  buildInputs = [ apfel applgrid lhapdf root5 ];
 
   enableParallelBuilding = true;
 

@@ -8,12 +8,12 @@
 assert stdenv.hostPlatform.system != "powerpc-linux";
 
 stdenv.mkDerivation rec {
-  ver = "1.24.3";
+  ver = "1.24.5";
   name = "recoll-${ver}";
 
   src = fetchurl {
     url = "https://www.lesbonscomptes.com/recoll/${name}.tar.gz";
-    sha256 = "1lnabbivqas46blabsnxhlhdyih8k7s1paszv491mz8cvmhjjmgi";
+    sha256 = "10m3a0ghnyipjcxapszlr8adyy2yaaxx4vgrkxrfmz13814z89cv";
   };
 
   configureFlags = [ "--enable-recollq" ]

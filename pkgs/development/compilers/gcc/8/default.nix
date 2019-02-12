@@ -143,7 +143,7 @@ stdenv.mkDerivation ({
 
   libc_dev = stdenv.cc.libc_dev;
 
-  hardeningDisable = [ "format" ] ++ stdenv.lib.optional stdenv.targetPlatform.isMusl "pie";
+  hardeningDisable = [ "format" "pie" ];
 
   # This should kill all the stdinc frameworks that gcc and friends like to
   # insert into default search paths.
@@ -277,7 +277,7 @@ stdenv.mkDerivation ({
     optional (!bootstrap) "--disable-bootstrap" ++
 
     # Platform-specific flags
-    optional (targetPlatform == hostPlatform && targetPlatform.isi686) "--with-arch=i686" ++
+    optional (targetPlatform == hostPlatform && targetPlatform.isx86_32) "--with-arch=${stdenv.hostPlatform.parsed.cpu.name}" ++
     optionals hostPlatform.isSunOS [
       "--enable-long-long" "--enable-libssp" "--enable-threads=posix" "--disable-nls" "--enable-__cxa_atexit"
       # On Illumos/Solaris GNU as is preferred
@@ -304,7 +304,7 @@ stdenv.mkDerivation ({
     then "install-strip"
     else "install";
 
-  # http://gcc.gnu.org/install/specific.html#x86-64-x-solaris210
+  # https://gcc.gnu.org/install/specific.html#x86-64-x-solaris210
   ${if hostPlatform.system == "x86_64-solaris" then "CC" else null} = "gcc -m64";
 
   # Setting $CPATH and $LIBRARY_PATH to make sure both `gcc' and `xgcc' find the
@@ -345,7 +345,7 @@ stdenv.mkDerivation ({
   inherit (stdenv) is64bit;
 
   meta = {
-    homepage = http://gcc.gnu.org/;
+    homepage = https://gcc.gnu.org/;
     license = stdenv.lib.licenses.gpl3Plus;  # runtime support libraries are typically LGPLv3+
     description = "GNU Compiler Collection, version ${version}"
       + (if stripped then "" else " (with debugging info)");

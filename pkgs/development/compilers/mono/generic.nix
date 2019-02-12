@@ -1,19 +1,10 @@
-{ stdenv, fetchurl, bison, pkgconfig, glib, gettext, perl, libgdiplus, libX11
-, callPackage, ncurses, zlib
-, cacert, Foundation, libobjc, python
-
-, version, sha256
-, withLLVM ? false
-, enableParallelBuilding ? true
-, meta ? {}
-}:
+{ stdenv, fetchurl, bison, pkgconfig, glib, gettext, perl, libgdiplus, libX11, callPackage, ncurses, zlib, withLLVM ? false, cacert, Foundation, libobjc, python, version, sha256, autoconf, libtool, automake, cmake, which, enableParallelBuilding ? true }:
 
 let
   llvm     = callPackage ./llvm.nix { };
-  name = "mono-${version}";
 in
-stdenv.mkDerivation {
-  inherit name;
+stdenv.mkDerivation rec {
+  name = "mono-${version}";
 
   src = fetchurl {
     inherit sha256;
@@ -21,7 +12,7 @@ stdenv.mkDerivation {
   };
 
   buildInputs =
-    [ bison pkgconfig glib gettext perl libgdiplus libX11 ncurses zlib python
+    [ bison pkgconfig glib gettext perl libgdiplus libX11 ncurses zlib python autoconf libtool automake cmake which
     ]
     ++ (stdenv.lib.optionals stdenv.isDarwin [ Foundation libobjc ]);
 
@@ -32,8 +23,6 @@ stdenv.mkDerivation {
   # To overcome the bug https://bugzilla.novell.com/show_bug.cgi?id=644723
   dontDisableStatic = true;
 
-  # In fact I think this line does not help at all to what I
-  # wanted to achieve: have mono to find libgdiplus automatically
   configureFlags = [
     "--x-includes=${libX11.dev}/include"
     "--x-libraries=${libX11.out}/lib"
@@ -41,9 +30,13 @@ stdenv.mkDerivation {
   ]
   ++ stdenv.lib.optionals withLLVM [
     "--enable-llvm"
-    "--enable-llvmloaded"
     "--with-llvm=${llvm}"
   ];
+
+  configurePhase = ''
+    patchShebangs ./
+    ./autogen.sh --prefix $out $configureFlags
+  '';
 
   # Attempt to fix this error when running "mcs --version":
   # The file /nix/store/xxx-mono-2.4.2.1/lib/mscorlib.dll is an invalid CIL image
@@ -57,19 +50,18 @@ stdenv.mkDerivation {
   # LLVM path to point into the Mono LLVM build, since it's private anyway.
   preBuild = ''
     makeFlagsArray=(INSTALL=`type -tp install`)
-    patchShebangs ./
     substituteInPlace mcs/class/corlib/System/Environment.cs --replace /usr/share "$out/share"
   '' + stdenv.lib.optionalString withLLVM ''
     substituteInPlace mono/mini/aot-compiler.c --replace "llvm_path = g_strdup (\"\")" "llvm_path = g_strdup (\"${llvm}/bin/\")"
   '';
 
-  # Fix mono DLLMap so it can find libX11 and gdiplus to run winforms apps
+  # Fix mono DLLMap so it can find libX11 to run winforms apps
+  # libgdiplus is correctly handled by the --with-libgdiplus configure flag
   # Other items in the DLLMap may need to be pointed to their store locations, I don't think this is exhaustive
   # http://www.mono-project.com/Config_DllMap
   postBuild = ''
     find . -name 'config' -type f | xargs \
-    sed -i -e "s@libX11.so.6@${libX11.out}/lib/libX11.so.6@g" \
-           -e "s@/.*libgdiplus.so@${libgdiplus}/lib/libgdiplus.so@g" \
+    sed -i -e "s@libX11.so.6@${libX11.out}/lib/libX11.so.6@g"
   '';
 
   # Without this, any Mono application attempting to open an SSL connection will throw with
@@ -87,11 +79,11 @@ stdenv.mkDerivation {
 
   inherit enableParallelBuilding;
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://mono-project.com/;
     description = "Cross platform, open source .NET development framework";
-    platforms = stdenv.lib.platforms.x86;
-    maintainers = with stdenv.lib.maintainers; [ thoughtpolice obadz vrthra ];
-    license = stdenv.lib.licenses.free; # Combination of LGPL/X11/GPL ?
-  } // meta;
+    platforms = with platforms; darwin ++ linux;
+    maintainers = with maintainers; [ thoughtpolice obadz vrthra ];
+    license = licenses.free; # Combination of LGPL/X11/GPL ?
+  };
 }

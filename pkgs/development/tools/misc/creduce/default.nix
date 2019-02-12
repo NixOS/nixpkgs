@@ -2,7 +2,7 @@
 , llvm, clang-unwrapped
 , flex
 , zlib
-, perl, ExporterLite, FileWhich, GetoptTabular, RegexpCommon, TermReadKey
+, perlPackages
 , utillinux
 }:
 
@@ -22,8 +22,7 @@ stdenv.mkDerivation rec {
     # Actual deps:
     llvm clang-unwrapped
     flex zlib
-    perl ExporterLite FileWhich GetoptTabular RegexpCommon TermReadKey
-  ];
+  ] ++ (with perlPackages; [ perl ExporterLite FileWhich GetoptTabular RegexpCommon TermReadKey ]);
 
   # On Linux, c-reduce's preferred way to reason about
   # the cpu architecture/topology is to use 'lscpu',

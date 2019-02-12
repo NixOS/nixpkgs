@@ -31,14 +31,23 @@ rec {
 
   # Return a modified stdenv that tries to build statically linked
   # binaries.
-  makeStaticBinaries = stdenv: stdenv //
-    { mkDerivation = args: stdenv.mkDerivation (args // {
-        NIX_CFLAGS_LINK = "-static";
+  makeStaticBinaries = stdenv:
+    let stdenv' = if stdenv.hostPlatform.libc != "glibc" then stdenv else
+      stdenv.override (prev: {
+          extraBuildInputs = prev.extraBuildInputs or [] ++ [
+              stdenv.glibc.static
+            ];
+        });
+    in stdenv' //
+    { mkDerivation = args:
+      if stdenv'.hostPlatform.isDarwin
+      then throw "Cannot build fully static binaries on Darwin/macOS"
+      else stdenv'.mkDerivation (args // {
+        NIX_CFLAGS_LINK = toString (args.NIX_CFLAGS_LINK or "") + " -static";
         configureFlags = (args.configureFlags or []) ++ [
             "--disable-shared" # brrr...
           ];
       });
-      isStatic = true;
     };
 
 

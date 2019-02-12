@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitLab, vala, python3, pkgconfig, meson, ninja, granite, gtk3
 , gnome3, json-glib, libsoup, clutter, clutter-gtk, libchamplain, webkitgtk
-, libappindicator, desktop-file-utils, appstream, gobjectIntrospection, wrapGAppsHook }:
+, libappindicator, desktop-file-utils, appstream, gobject-introspection, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "meteo";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     appstream
     desktop-file-utils
-    gobjectIntrospection
+    gobject-introspection
     meson
     ninja
     pkgconfig

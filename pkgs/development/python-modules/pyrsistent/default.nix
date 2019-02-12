@@ -4,23 +4,24 @@
 , six
 , pytest
 , hypothesis
+, pytestrunner
 }:
 
 buildPythonPackage rec {
   pname = "pyrsistent";
-  version = "0.11.12";
+  version = "0.14.9";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0jgyhkkq36wn36rymn4jiyqh2vdslmradq4a2mjkxfbk2cz6wpi5";
+    sha256 = "0xwaqjjn665wd1rllqzndmlc8yzfw2wxakpfwlh6ir6kgbajff2s";
   };
 
   propagatedBuildInputs = [ six ];
-  buildInputs = [ pytest hypothesis ];
 
-  checkPhase = ''
-    py.test
-  '';
+  checkInputs = [ pytestrunner pytest hypothesis ];
+
+  # pytestrunner is only needed to run tests
+  patches = [ ./no-setup-requires-pytestrunner.patch ];
 
   meta = with stdenv.lib; {
     homepage = https://github.com/tobgu/pyrsistent/;

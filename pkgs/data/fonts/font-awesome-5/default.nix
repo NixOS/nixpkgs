@@ -1,7 +1,7 @@
 { stdenv, fetchzip }:
 
 let
-  version = "5.5.0";
+  version = "5.6.3";
 in fetchzip rec {
   name = "font-awesome-${version}";
 
@@ -9,12 +9,10 @@ in fetchzip rec {
 
   postFetch = ''
     mkdir -p $out/share/fonts
-    unzip -j $downloadedFile "Font-Awesome-${version}/use-on-desktop/Font Awesome 5 Brands-Regular-400.otf" -d $out/share/fonts/opentype
-    unzip -j $downloadedFile "Font-Awesome-${version}/use-on-desktop/Font Awesome 5 Free-Regular-400.otf" -d $out/share/fonts/opentype
-    unzip -j $downloadedFile "Font-Awesome-${version}/use-on-desktop/Font Awesome 5 Free-Solid-900.otf" -d $out/share/fonts/opentype
+    unzip -j $downloadedFile "Font-Awesome-${version}/otfs/*.otf" -d $out/share/fonts/opentype
   '';
 
-  sha256 = "1drjc40glfqhwmfn3s4gz8hz1x0ncrwdr9n1i25m1l7pvsk26f5f";
+  sha256 = "0y3zar7hyx5pj8rpyk2kz3sx6zgrfif2ka2h4rg0b8h8qbja0al6";
 
   meta = with stdenv.lib; {
     description = "Font Awesome - OTF font";

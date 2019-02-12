@@ -1,6 +1,7 @@
 { stdenv
 , fetchPypi
 , buildPythonPackage
+, python
 , zope_testrunner
 , transaction
 , six
@@ -15,20 +16,17 @@
 
 buildPythonPackage rec {
     pname = "ZODB";
-    version = "5.4.0";
+    version = "5.5.1";
 
     src = fetchPypi {
       inherit pname version;
-      sha256 = "0b306042f4f0d558a477d65c34b0dd6e7604c6e583f55dfda52befa2fa13e076";
+      sha256 = "20155942fa326e89ad8544225bafd74237af332ce9d7c7105a22318fe8269666";
     };
 
-    patches = [
-      ./ZODB-5.3.0-fix-tests.patch # still needeed with 5.4.0
-      # Upstream patch to fix tests with persistent 4.4,
-      # cannot fetchpatch because only one hunk of the upstream commit applies.
-      # TODO remove on next release
-      ./fix-tests-with-persistent-4.4.patch
-    ];
+    # remove broken test
+    postPatch = ''
+      rm -vf src/ZODB/tests/testdocumentation.py
+    '';
 
     propagatedBuildInputs = [
       transaction
@@ -45,6 +43,10 @@ buildPythonPackage rec {
       manuel
       zope_testrunner
     ];
+
+    checkPhase = ''
+      ${python.interpreter} -m zope.testrunner --test-path=src []
+    '';
 
     meta = with stdenv.lib; {
       description = "Zope Object Database: object database and persistence";

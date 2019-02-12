@@ -3,7 +3,7 @@
 stdenv.mkDerivation {
   name = "libc++abi-${version}";
 
-  src = fetch "libcxxabi" "0pr4xfx61r5mwmvhg4j9pb6df6vvha1gyf6rwkm14x9rzxcwficv";
+  src = fetch "libcxxabi" "1n6yx0949l9bprh75dffchahn8wplkm79ffk4f2ap9vw2lx90s41";
 
   nativeBuildInputs = [ cmake ];
   buildInputs = stdenv.lib.optional (!stdenv.isDarwin && !stdenv.isFreeBSD) libunwind;
@@ -33,6 +33,7 @@ stdenv.mkDerivation {
     ''
     else ''
       install -d -m 755 $out/include $out/lib
+      install -m 644 lib/libc++abi.a $out/lib
       install -m 644 lib/libc++abi.so.1.0 $out/lib
       install -m 644 ../include/cxxabi.h $out/include
       ln -s libc++abi.so.1.0 $out/lib/libc++abi.so

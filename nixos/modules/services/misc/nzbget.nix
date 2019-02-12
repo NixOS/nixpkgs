@@ -17,6 +17,20 @@ in {
         description = "The NZBGet package to use";
       };
 
+      dataDir = mkOption {
+        type = types.str;
+        default = "/var/lib/nzbget";
+        description = "The directory where NZBGet stores its configuration files.";
+      };
+
+      openFirewall = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Open ports in the firewall for the NZBGet web interface
+        '';
+      };
+
       user = mkOption {
         type = types.str;
         default = "nzbget";
@@ -84,6 +98,10 @@ in {
         PermissionsStartOnly = "true";
         Restart = "on-failure";
       };
+    };
+
+    networking.firewall = mkIf cfg.openFirewall {
+      allowedTCPPorts = [ 8989 ];
     };
 
     users.users = mkIf (cfg.user == "nzbget") {

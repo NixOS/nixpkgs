@@ -6,8 +6,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/PuerkitoBio/goquery";
-      rev = "v1.4.1";
-      sha256 = "11010z9ask21r0dskvm2pbh3z8951bnpcqg8aqa213if4h34gaa2";
+      rev = "v1.5.0";
+      sha256 = "1fqf4rs66wy02nxz6w4mvs2qawf2j8srz17i294v64y8gvxisp56";
     };
   }
 
@@ -18,6 +18,36 @@
       url = "https://github.com/andybalholm/cascadia";
       rev = "v1.0.0";
       sha256 = "09j8cavbhqqdxjqrkwbc40g8p0i49zf3184rpjm5p2rjbprcghcc";
+    };
+  }
+
+  {
+    goPackagePath = "github.com/cheekybits/is";
+    fetch = {
+      type = "git";
+      url = "https://github.com/cheekybits/is";
+      rev = "68e9c0620927";
+      sha256 = "1mkbyzhwq3rby832ikq00nxv3jnckxsm3949wkxd8ya9js2jmg4d";
+    };
+  }
+
+  {
+    goPackagePath = "github.com/dustin/go-humanize";
+    fetch = {
+      type = "git";
+      url = "https://github.com/dustin/go-humanize";
+      rev = "v1.0.0";
+      sha256 = "1kqf1kavdyvjk7f8kx62pnm7fbypn9z1vbf8v2qdh3y7z7a0cbl3";
+    };
+  }
+
+  {
+    goPackagePath = "github.com/fsnotify/fsnotify";
+    fetch = {
+      type = "git";
+      url = "https://github.com/fsnotify/fsnotify";
+      rev = "v1.4.7";
+      sha256 = "07va9crci0ijlivbb7q57d2rz9h27zgn2fsm60spjsqpdbvyrx4g";
     };
   }
 
@@ -62,22 +92,52 @@
   }
 
   {
-    goPackagePath = "github.com/tdewolff/minify";
+    goPackagePath = "github.com/matryer/try";
     fetch = {
       type = "git";
-      url = "https://github.com/tdewolff/minify";
-      rev = "v2.3.5";
-      sha256 = "0x67kgjhc6mfzjhr4xmw0j3qapzhkgwwahvv5b44rb449ml2qx5m";
+      url = "https://github.com/matryer/try";
+      rev = "9ac251b645a2";
+      sha256 = "19fnqmpl3p54vmxgm1hmqvdc87brqx754wf3cdhq1bj04fcbb5h9";
     };
   }
 
   {
-    goPackagePath = "github.com/tdewolff/parse";
+    goPackagePath = "github.com/spf13/pflag";
+    fetch = {
+      type = "git";
+      url = "https://github.com/spf13/pflag";
+      rev = "v1.0.3";
+      sha256 = "1cj3cjm7d3zk0mf1xdybh0jywkbbw7a6yr3y22x9sis31scprswd";
+    };
+  }
+
+  {
+    goPackagePath = "github.com/tdewolff/minify/v2";
+    fetch = {
+      type = "git";
+      url = "https://github.com/tdewolff/minify";
+      rev = "v2.3.8";
+      sha256 = "1f179di7nlmybmgmm7sadqi60zwfizlbbj0ws5k8gcswkwwr7zzx";
+    };
+  }
+
+  {
+    goPackagePath = "github.com/tdewolff/parse/v2";
     fetch = {
       type = "git";
       url = "https://github.com/tdewolff/parse";
-      rev = "v2.3.3";
-      sha256 = "190y2jykp8qyp6y58ky1v1fvmaqjnrsr1ksbqrrspf1gpjy69i94";
+      rev = "v2.3.5";
+      sha256 = "05w859s31dx6525wrjryby601z9c0xpncilznk6shgqygpxda6cz";
+    };
+  }
+
+  {
+    goPackagePath = "github.com/tdewolff/test";
+    fetch = {
+      type = "git";
+      url = "https://github.com/tdewolff/test";
+      rev = "v1.0.0";
+      sha256 = "10vyp4bhanzg3yl9k8zqfdrxpsmx8yc53xv4lqxfymd7jjyqgssj";
     };
   }
 
@@ -86,8 +146,8 @@
     fetch = {
       type = "git";
       url = "https://go.googlesource.com/crypto";
-      rev = "614d502a4dac";
-      sha256 = "1rcyvsl8b8pk7h8lwl0fpiflrx8zs121wi5490ln0qnvkk8d4bwy";
+      rev = "505ab145d0a9";
+      sha256 = "1vbsvcvmjz6c00p5vf8ls533p52fx2y3gy6v4k5qrdlzl4wf0i5s";
     };
   }
 
@@ -96,8 +156,8 @@
     fetch = {
       type = "git";
       url = "https://go.googlesource.com/net";
-      rev = "8a410e7b638d";
-      sha256 = "0hp0l8f6fir5gmgrjq0mhh5ikc0rlrm72774228800kfwqjrxxny";
+      rev = "610586996380";
+      sha256 = "1sqwmvf70rq1j65lv5jzyiy7gd53l37dxlnjf2xj6p2i4fcwkk4z";
     };
   }
 
@@ -106,8 +166,8 @@
     fetch = {
       type = "git";
       url = "https://go.googlesource.com/oauth2";
-      rev = "d2e6202438be";
-      sha256 = "0wbn75fd10485nb93bm4kqldqifdim5xqy4v7r5sdvimvf3fyhn7";
+      rev = "d668ce993890";
+      sha256 = "17m8d02fazil0dwvk33vpwvsb91asgbmmpqy05751csrfqhhdqna";
     };
   }
 
@@ -126,8 +186,8 @@
     fetch = {
       type = "git";
       url = "https://go.googlesource.com/sys";
-      rev = "4910a1d54f87";
-      sha256 = "0p2pp6mny34gjcvylx3ddzdaxn7hv008hppsr11w1bvyzj7s27by";
+      rev = "ad97f365e150";
+      sha256 = "0s0wymq1zv5ffrnngnzk9qk83sscq3wazm17rrqb96brs2r047mk";
     };
   }
 

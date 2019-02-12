@@ -37,7 +37,7 @@ let
     name = "nixos-generate-config";
     src = ./nixos-generate-config.pl;
     path = [ pkgs.btrfs-progs ];
-    perl = "${pkgs.perl}/bin/perl -I${pkgs.perlPackages.FileSlurp}/lib/perl5/site_perl";
+    perl = "${pkgs.perl}/bin/perl -I${pkgs.perlPackages.FileSlurp}/${pkgs.perl.libPrefix}";
     inherit (config.system.nixos) release;
   };
 

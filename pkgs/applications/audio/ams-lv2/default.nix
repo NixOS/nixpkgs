@@ -21,5 +21,7 @@ stdenv.mkDerivation  rec {
     license = licenses.gpl3;
     maintainers = [ maintainers.goibhniu ];
     platforms = platforms.linux;
+    # Build uses `-msse` and `-mfpmath=sse`
+    badPlatforms = [ "aarch64-linux" ];
   };
 }

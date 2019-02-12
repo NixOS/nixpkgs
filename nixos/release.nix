@@ -157,7 +157,7 @@ in rec {
 
   # A variant with a more recent (but possibly less stable) kernel
   # that might support more hardware.
-  iso_minimal_new_kernel = forMatchingSystems [ "x86_64-linux" ] (system: makeIso {
+  iso_minimal_new_kernel = forMatchingSystems [ "x86_64-linux" "aarch64-linux" ] (system: makeIso {
     module = ./modules/installer/cd-dvd/installation-cd-minimal-new-kernel.nix;
     type = "minimal-new-kernel";
     inherit system;
@@ -169,6 +169,14 @@ in rec {
         armv7l-linux = ./modules/installer/cd-dvd/sd-image-armv7l-multiplatform.nix;
         aarch64-linux = ./modules/installer/cd-dvd/sd-image-aarch64.nix;
       }.${system};
+    inherit system;
+  });
+
+  sd_image_new_kernel = forMatchingSystems [ "aarch64-linux" ] (system: makeSdImage {
+    module = {
+        aarch64-linux = ./modules/installer/cd-dvd/sd-image-aarch64-new-kernel.nix;
+      }.${system};
+    type = "minimal-new-kernel";
     inherit system;
   });
 
@@ -273,7 +281,7 @@ in rec {
       { services.httpd.enable = true;
         services.httpd.adminAddr = "foo@example.org";
         services.postgresql.enable = true;
-        services.postgresql.package = pkgs.postgresql_9_3;
+        services.postgresql.package = pkgs.postgresql;
         environment.systemPackages = [ pkgs.php ];
       });
   };

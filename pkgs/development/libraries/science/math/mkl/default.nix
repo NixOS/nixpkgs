@@ -1,21 +1,8 @@
 { stdenvNoCC, writeText, fetchurl, rpmextract, undmg }:
 /*
-  Some (but not all) mkl functions require openmp, but Intel does not add these
-  to SO_NEEDED and instructs users to put openmp on their LD_LIBRARY_PATH. If
-  you are using mkl and your library/application is using some of the functions
-  that require openmp, add a setupHook like this to your package:
-
-  setupHook = writeText "setup-hook.sh" ''
-    addOpenmp() {
-        addToSearchPath LD_LIBRARY_PATH ${openmp}/lib
-    }
-    addEnvHooks "$targetOffset" addOpenmp
-  '';
-
-  We do not add the setup hook here, because avoiding it allows this large
-  package to be a fixed-output derivation with better cache efficiency.
- */
-
+  For details on using mkl as a blas provider for python packages such as numpy,
+  numexpr, scipy, etc., see the Python section of the NixPkgs manual.
+*/
 stdenvNoCC.mkDerivation rec {
   name = "mkl-${version}";
   version = "${date}.${rel}";
@@ -43,16 +30,23 @@ stdenvNoCC.mkDerivation rec {
   '' else ''
     rpmextract rpm/intel-mkl-common-c-${date}-${rel}-${date}-${rel}.noarch.rpm
     rpmextract rpm/intel-mkl-core-rt-${date}-${rel}-${date}-${rel}.x86_64.rpm
+    rpmextract rpm/intel-openmp-19.0.0-${rel}-19.0.0-${rel}.x86_64.rpm
   '';
 
   installPhase = if stdenvNoCC.isDarwin then ''
       mkdir -p $out/lib
+
       cp -r compilers_and_libraries_${version}/mac/mkl/include $out/
-      cp -r compilers_and_libraries_${version}/mac/mkl/lib/* $out/lib/
+
       cp -r compilers_and_libraries_${version}/licensing/mkl/en/license.txt $out/lib/
+      cp -r compilers_and_libraries_${version}/mac/compiler/lib/* $out/lib/
+      cp -r compilers_and_libraries_${version}/mac/mkl/lib/* $out/lib/
   '' else ''
       mkdir -p $out/lib
+
       cp -r opt/intel/compilers_and_libraries_${version}/linux/mkl/include $out/
+
+      cp -r opt/intel/compilers_and_libraries_${version}/linux/compiler/lib/intel64_lin/* $out/lib/
       cp -r opt/intel/compilers_and_libraries_${version}/linux/mkl/lib/intel64_lin/* $out/lib/
       cp license.txt $out/lib/
   '';
@@ -66,8 +60,8 @@ stdenvNoCC.mkDerivation rec {
   outputHashAlgo = "sha256";
   outputHashMode = "recursive";
   outputHash = if stdenvNoCC.isDarwin
-    then "1224dln7n8px1rk8biiggf77wjhxh8mzw0hd8zlyjm8i6j8w7i12"
-    else "0d8ai0wi8drp071acqkm1wv6vyg12010y843y56zzi1pql81xqvx";
+    then "00d49ls9vcjan1ngq2wx2q4p6lnm05zwh67hsmj7bnq43ykrfibw"
+    else "1amagcaan0hk3x9v7gg03gkw02n066v4kmjb32yyzsy5rfrivb1a";
 
   meta = with stdenvNoCC.lib; {
     description = "Intel Math Kernel Library";
@@ -78,7 +72,7 @@ stdenvNoCC.mkDerivation rec {
       threading models.
     '';
     homepage = https://software.intel.com/en-us/mkl;
-    license = [ licenses.issl licenses.unfreeRedistributable ];
+    license = licenses.issl;
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
     maintainers = [ maintainers.bhipple ];
   };

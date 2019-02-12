@@ -555,12 +555,12 @@ rec {
 
   spotbugs = buildEclipseUpdateSite rec {
     name = "spotbugs-${version}";
-    version = "3.1.9";
+    version = "3.1.11";
 
     src = fetchzip {
       stripRoot = false;
       url = "https://github.com/spotbugs/spotbugs/releases/download/${version}/eclipsePlugin.zip";
-      sha256 = "0m68jbyaiz0rm4qq3nnwnvgndzv2c6ay6i29kh0p0vdbanggq3xz";
+      sha256 = "0aanqwx3gy1arpbkqd846381hiy6272lzwhfjl94x8jhfykpqqbj";
     };
 
     meta = with stdenv.lib; {

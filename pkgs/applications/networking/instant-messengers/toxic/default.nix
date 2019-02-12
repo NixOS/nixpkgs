@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, libsodium, ncurses, curl
 , libtoxcore, openal, libvpx, freealut, libconfig, pkgconfig, libopus
-, libqrencode, gdk_pixbuf, libnotify }:
+, qrencode, gdk_pixbuf, libnotify }:
 
 stdenv.mkDerivation rec {
   name = "toxic-${version}";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libtoxcore libsodium ncurses curl gdk_pixbuf libnotify
   ] ++ stdenv.lib.optionals (!stdenv.isAarch32) [
-    openal libopus libvpx freealut libqrencode
+    openal libopus libvpx freealut qrencode
   ];
   nativeBuildInputs = [ pkgconfig libconfig ];
 

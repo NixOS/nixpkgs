@@ -33,11 +33,17 @@ installPhase() {
     # since version 391, 32bit libraries are bundled in the 32/ sub-directory
     if [ "$i686bundled" = "1" ]; then
         mkdir -p "$lib32/lib"
-        cp -prd 32/*.so.* 32/tls "$lib32/lib/"
+        cp -prd 32/*.so.* "$lib32/lib/"
+        if [ -d 32/tls ]; then
+            cp -prd 32/tls "$lib32/lib/"
+        fi
     fi
 
     mkdir -p "$out/lib"
-    cp -prd *.so.* tls "$out/lib/"
+    cp -prd *.so.* "$out/lib/"
+    if [ -d tls ]; then
+        cp -prd tls "$out/lib/"
+    fi
 
     for i in $lib32 $out; do
         rm -f $i/lib/lib{glx,nvidia-wfb}.so.* # handled separately

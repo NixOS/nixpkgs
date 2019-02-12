@@ -1,4 +1,4 @@
-{ lib, pkgs, fetchFromGitHub, python3Packages, nix-prefetch-scripts }:
+{ stdenv, lib, pkgs, fetchFromGitHub, python3Packages, nix-prefetch-scripts }:
 python3Packages.buildPythonApplication rec {
   version = "0.6.3";
   name = "nix-update-source-${version}";
@@ -28,6 +28,7 @@ python3Packages.buildPythonApplication rec {
         overrideSrc = drv: lib.overrideDerivation drv (orig: { inherit src; });
       };
     updateScript = ''
+      #!${stdenv.shell}
       set -e
       echo
       cd ${toString ./.}

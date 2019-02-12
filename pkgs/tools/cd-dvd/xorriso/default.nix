@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
     license = licenses.gpl3Plus;
 
-    homepage = http://www.gnu.org/software/xorriso/;
+    homepage = https://www.gnu.org/software/xorriso/;
 
     maintainers = [ maintainers.vrthra ];
     platforms = platforms.unix;

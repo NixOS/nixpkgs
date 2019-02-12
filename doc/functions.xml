@@ -11,7 +11,10 @@
  <xi:include href="functions/overrides.xml" />
  <xi:include href="functions/generators.xml" />
  <xi:include href="functions/debug.xml" />
+ <xi:include href="functions/fetchers.xml" />
+ <xi:include href="functions/trivial-builders.xml" />
  <xi:include href="functions/fhs-environments.xml" />
  <xi:include href="functions/shell.xml" />
  <xi:include href="functions/dockertools.xml" />
+ <xi:include href="functions/prefer-remote-fetch.xml" />
 </chapter>

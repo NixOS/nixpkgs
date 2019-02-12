@@ -45,6 +45,7 @@ stdenv.mkDerivation ((lib.optionalAttrs (! isNull buildScript) {
   ++ lib.optional xineramaSupport        pkgs.xorg.libXinerama
   ++ lib.optional udevSupport            pkgs.udev
   ++ lib.optional vulkanSupport          pkgs.vulkan-loader
+  ++ lib.optional sdlSupport             pkgs.SDL2
   ++ lib.optionals gstreamerSupport      (with pkgs.gst_all_1; [ gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad gst-plugins-ugly gst-libav ])
   ++ lib.optionals gtkSupport    [ pkgs.gtk3 pkgs.glib ]
   ++ lib.optionals openclSupport [ pkgs.opencl-headers pkgs.ocl-icd ]
@@ -58,7 +59,7 @@ stdenv.mkDerivation ((lib.optionalAttrs (! isNull buildScript) {
   ++ lib.optionals stdenv.isLinux  (with pkgs.xorg; [
      libXi libXcursor libXrandr libXrender libXxf86vm libXcomposite libXext
   ])
-  ++ [ pkgs.xorg.libX11 ]));
+  ++ [ pkgs.xorg.libX11 pkgs.perl ]));
 
   # Wine locates a lot of libraries dynamically through dlopen().  Add
   # them to the RPATH so that the user doesn't have to set them in

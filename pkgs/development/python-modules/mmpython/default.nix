@@ -10,7 +10,7 @@ buildPythonPackage rec {
   pname = "mmpython";
 
   src = fetchurl {
-    url = http://sourceforge.net/projects/mmpython/files/latest/download;
+    url = https://sourceforge.net/projects/mmpython/files/latest/download;
     sha256 = "1b7qfad3shgakj37gcj1b9h78j1hxlz6wp9k7h76pb4sq4bfyihy";
     name = "${pname}-${version}.tar.gz";
   };

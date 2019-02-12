@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "pyhepmc";
-  version = "0.5.0";
+  version = "1.0.1";
   disabled = isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1rbi8gqgclfvaibv9kzhfis11gw101x8amc93qf9y08ny4jfyr1d";
+    sha256 = "1210fd7e20d4abc1d9166147a9f7645a2a58b655fe030ad54ab3ea0d0c6e0834";
   };
 
   patches = [

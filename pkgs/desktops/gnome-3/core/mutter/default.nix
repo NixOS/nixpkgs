@@ -1,33 +1,25 @@
-{ fetchurl, stdenv, pkgconfig, gnome3, intltool, gobjectIntrospection, upower, cairo
+{ fetchurl, stdenv, pkgconfig, gnome3, intltool, gobject-introspection, upower, cairo
 , pango, cogl, clutter, libstartup_notification, zenity, libcanberra-gtk3
 , libtool, makeWrapper, xkeyboard_config, libxkbfile, libxkbcommon, libXtst, libinput
-, pipewire, libgudev, libwacom, xwayland, autoreconfHook, fetchpatch }:
+, pipewire, libgudev, libwacom, xwayland, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   name = "mutter-${version}";
-  version = "3.28.3";
+  version = "3.30.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/mutter/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "0vq3rmq20d6b1mi6sf67wkzqys6hw5j7n7fd4hndcp19d5i26149";
+    sha256 = "0qr3w480p31nbiad49213rj9rk6p9fl82a68pzznpz36p30dq96z";
   };
 
   passthru = {
     updateScript = gnome3.updateScript { packageName = "mutter"; attrPath = "gnome3.mutter"; };
   };
 
-  patches = [
-    # https://gitlab.gnome.org/GNOME/mutter/merge_requests/172
-    (fetchpatch {
-      url = https://gitlab.gnome.org/GNOME/mutter/commit/62660bbd.patch;
-      sha256 = "1qq8vxlqnyrqh94dc0dh1aj1dsbyw6bwv3x46q5vsscbbxbiv9wk";
-    })
-  ];
-
   configureFlags = [
     "--with-x"
     "--disable-static"
-    # "--enable-remote-desktop"
+    "--enable-remote-desktop"
     "--enable-shape"
     "--enable-sm"
     "--enable-startup-notification"
@@ -45,7 +37,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook pkgconfig intltool libtool makeWrapper ];
 
   buildInputs = with gnome3; [
-    glib gobjectIntrospection gtk gsettings-desktop-schemas upower
+    glib gobject-introspection gtk gsettings-desktop-schemas upower
     gnome-desktop cairo pango cogl clutter zenity libstartup_notification
     gnome3.geocode-glib libinput libgudev libwacom
     libcanberra-gtk3 zenity xkeyboard_config libxkbfile

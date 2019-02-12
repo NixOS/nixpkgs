@@ -51,6 +51,7 @@ let
               jobs.nix-info-tested.x86_64-darwin
               jobs.openssh.x86_64-darwin
               jobs.openssl.x86_64-darwin
+              jobs.pandoc.x86_64-darwin
               jobs.postgresql.x86_64-darwin
               jobs.python.x86_64-darwin
               jobs.python3.x86_64-darwin
@@ -64,7 +65,7 @@ let
               jobs.firefox-unwrapped.x86_64-darwin
               jobs.qt5.qtmultimedia.x86_64-darwin
               jobs.inkscape.x86_64-darwin
-              # jobs.gimp.x86_64-darwin
+              jobs.gimp.x86_64-darwin
               jobs.emacs.x86_64-darwin
               jobs.wireshark.x86_64-darwin
               jobs.transmission-gtk.x86_64-darwin
@@ -91,6 +92,7 @@ let
               jobs.lib-tests
               jobs.stdenv.x86_64-linux
               jobs.linux.x86_64-linux
+              jobs.pandoc.x86_64-linux
               jobs.python.x86_64-linux
               jobs.python3.x86_64-linux
               # Needed by travis-ci to test PRs
@@ -100,6 +102,7 @@ let
               jobs.nix-info-tested.x86_64-linux
               # Ensure that X11/GTK+ are in order.
               jobs.thunderbird.x86_64-linux
+              jobs.unar.x86_64-linux
 
               jobs.tests.cc-wrapper.x86_64-linux
               jobs.tests.cc-wrapper-gcc7.x86_64-linux

@@ -1,4 +1,4 @@
-{stdenv, fetchurl, gnome3, automake, autoconf, which, libtool, pkgconfig, graphviz, glib, gobjectIntrospection, expat}:
+{stdenv, fetchurl, gnome3, automake, autoconf, which, libtool, pkgconfig, graphviz, glib, gobject-introspection, expat}:
 stdenv.mkDerivation rec {
   version = "0.36.1";
   name = "valadoc-${version}";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "07501k2j9c016bd7rfr6xzaxdplq7j9sd18b5ixbqdbipvn6whnv";
   };
 
-  nativeBuildInputs = [ automake autoconf which gnome3.vala libtool pkgconfig gobjectIntrospection ];
+  nativeBuildInputs = [ automake autoconf which gnome3.vala libtool pkgconfig gobject-introspection ];
   buildInputs = [ graphviz glib gnome3.libgee expat ];
 
   passthru = {

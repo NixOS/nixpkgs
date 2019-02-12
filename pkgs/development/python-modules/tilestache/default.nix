@@ -12,12 +12,12 @@
 
 buildPythonPackage rec {
   pname = "tilestache";
-  version = "1.50.1";
+  version = "1.51.13";
   disabled = !isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1z1j35pz77lhhjdn69sq5rmz62b5m444507d8zjnp0in5xqaj6rj";
+    sha256 = "11e15dd85501345bcfeb18dce5b1c8fb74ac8d867df2520afe0eefe1edd85f27";
   };
 
   propagatedBuildInputs = [ modestmaps pillow pycairo python-mapnik simplejson werkzeug ];

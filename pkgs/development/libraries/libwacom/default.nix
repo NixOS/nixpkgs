@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "libwacom-${version}";
-  version = "0.31";
+  version = "0.32";
 
   src = fetchFromGitHub {
     owner = "linuxwacom";
     repo = "libwacom";
     rev = "libwacom-${version}";
-    sha256 = "0qjd4bn2abwzic34cm0sw3srx02spszbsvfdbzbpn2cb62b5gjmw";
+    sha256 = "15fz2z2h2awh2l08cv663s1zk4z8bmvvivwnnfvx2q8lkqgfkr7f";
   };
 
   nativeBuildInputs = [ pkgconfig autoreconfHook ];

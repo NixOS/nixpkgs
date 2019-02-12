@@ -3,7 +3,12 @@
 , sage-with-env
 , makeWrapper
 , files ? null # "null" means run all tests
-, longTests ? true # run tests marked as "long time"
+, longTests ? true # run tests marked as "long time" (roughly doubles runtime)
+# Run as many tests as possible in approximately n seconds. This will give each
+# file to test a "time budget" and stop tests if it is exceeded. 300 is the
+# upstream default value.
+# https://trac.sagemath.org/ticket/25270 for details.
+, timeLimit ? null
 }:
 
 # for a quick test of some source files:
@@ -14,6 +19,7 @@ let
   runAllTests = files == null;
   testArgs = if runAllTests then "--all" else testFileList;
   patienceSpecifier = if longTests then "--long" else "";
+  timeSpecifier = if timeLimit == null then "" else "--short ${toString timeLimit}";
   relpathToArg = relpath: lib.escapeShellArg "${src}/${relpath}"; # paths need to be absolute
   testFileList = lib.concatStringsSep " " (map relpathToArg files);
 in
@@ -45,7 +51,7 @@ stdenv.mkDerivation rec {
     export HOME="$TMPDIR/sage-home"
     mkdir -p "$HOME"
 
-    # "--long" tests are in the order of 1h, without "--long" its 1/2h
-    "sage" -t --timeout=0 --nthreads "$NIX_BUILD_CORES" --optional=sage ${patienceSpecifier} ${testArgs}
+    echo "Running sage tests with arguments ${timeSpecifier} ${patienceSpecifier} ${testArgs}"
+    "sage" -t --nthreads "$NIX_BUILD_CORES" --optional=sage ${timeSpecifier} ${patienceSpecifier} ${testArgs}
   '';
 }

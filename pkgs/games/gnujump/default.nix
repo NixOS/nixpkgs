@@ -9,8 +9,12 @@ stdenv.mkDerivation rec {
   };
   buildInputs = [ SDL SDL_image SDL_mixer ];
 
+  NIX_LDFLAGS = [
+    "-lm"
+  ];
+
   meta = with stdenv.lib; {
-    homepage = "https://jump.gnu.sinusoid.es/";
+    homepage = https://jump.gnu.sinusoid.es/index.php?title=Main_Page;
     description = "A clone of the simple yet addictive game Xjump";
     longDescription = ''
       The goal in this game is to jump to the next floor trying not to fall

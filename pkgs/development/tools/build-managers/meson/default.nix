@@ -1,12 +1,12 @@
-{ lib, python3Packages, stdenv, writeTextDir, substituteAll, targetPackages, fetchpatch }:
+{ lib, python3Packages, stdenv, writeTextDir, substituteAll, targetPackages }:
 
 python3Packages.buildPythonApplication rec {
-  version = "0.46.1";
+  version = "0.49.0";
   pname = "meson";
 
   src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256 = "1jdxs2mkniy1hpdjc4b4jb95axsjp6j5fzphmm6d4gqmqyykjvqc";
+    sha256 = "0895igla1qav8k250z2qv03a0fg491wzzkfpbk50wwq848vmbkd0";
   };
 
   postFixup = ''
@@ -16,6 +16,9 @@ python3Packages.buildPythonApplication rec {
       mv ".$i-wrapped" "$i"
     done
     popd
+
+    # Do not propagate Python
+    rm $out/nix-support/propagated-build-inputs
   '';
 
   patches = [
@@ -41,12 +44,13 @@ python3Packages.buildPythonApplication rec {
       src = ./fix-rpath.patch;
       inherit (builtins) storeDir;
     })
-
-    # Support Python 3.7. This is part of 0.47 and 0.48.1.
-    (fetchpatch {
-      url = https://github.com/mesonbuild/meson/commit/a87496addd9160300837aa50193f4798c6f1d251.patch;
-      sha256 = "1jfn9dgib5bc8frcd65cxn3fzhp19bpbjadxjkqzbjk1v4hdbl88";
-    })
+  ] ++ lib.optionals stdenv.isDarwin [
+    # We use custom Clang, which makes Meson think *not Apple*, while still
+    # relying on system linker. When it detects standard Clang, Meson will
+    # pass it `-Wl,-O1` flag but optimizations are not recognized by
+    # Mac linker.
+    # https://github.com/mesonbuild/meson/issues/4784
+    ./fix-objc-linking.patch
   ];
 
   setupHook = ./setup-hook.sh;

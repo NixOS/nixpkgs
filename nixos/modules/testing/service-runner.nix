@@ -6,7 +6,7 @@ let
 
   makeScript = name: service: pkgs.writeScript "${name}-runner"
     ''
-      #! ${pkgs.perl}/bin/perl -w -I${pkgs.perlPackages.FileSlurp}/lib/perl5/site_perl
+      #! ${pkgs.perl}/bin/perl -w -I${pkgs.perlPackages.FileSlurp}/${pkgs.perl.libPrefix}
 
       use File::Slurp;
 
@@ -92,23 +92,24 @@ let
       exit($mainRes & 127 ? 255 : $mainRes << 8);
     '';
 
+  opts = { config, name, ... }: {
+    options.runner = mkOption {
+    internal = true;
+    description = ''
+        A script that runs the service outside of systemd,
+        useful for testing or for using NixOS services outside
+        of NixOS.
+    '';
+    };
+    config.runner = makeScript name config;
+  };
+
 in
 
 {
   options = {
     systemd.services = mkOption {
-      options =
-        { config, name, ... }:
-        { options.runner = mkOption {
-            internal = true;
-            description = ''
-              A script that runs the service outside of systemd,
-              useful for testing or for using NixOS services outside
-              of NixOS.
-            '';
-          };
-          config.runner = makeScript name config;
-        };
+      type = with types; attrsOf (submodule opts);
     };
   };
 }

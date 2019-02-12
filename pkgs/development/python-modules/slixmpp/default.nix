@@ -1,22 +1,30 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder, fetchurl, aiodns, pyasn1, pyasn1-modules, gnupg }:
+{ lib, buildPythonPackage, fetchPypi, isPy3k, substituteAll, aiodns, pyasn1, pyasn1-modules, aiohttp, gnupg, nose }:
 
 buildPythonPackage rec {
   pname = "slixmpp";
-  version = "1.4.0";
+  version = "1.4.2";
 
-  disabled = pythonOlder "3.4";
+  disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "155qxx4xlkkjb4hphc09nsi2mi4xi3m2akg0z7064kj3nbzkwjn2";
+    sha256 = "0rqpmscxjznxyz3dyxpc56gib319k01vl837r8g8w57dinz4y863";
   };
 
-  patchPhase = ''
-    substituteInPlace slixmpp/thirdparty/gnupg.py \
-      --replace "gpgbinary='gpg'" "gpgbinary='${gnupg}/bin/gpg'"
-  '';
+  patches = [
+    (substituteAll {
+      src = ./hardcode-gnupg-path.patch;
+      inherit gnupg;
+    })
+  ];
 
-  propagatedBuildInputs = [ aiodns pyasn1 pyasn1-modules gnupg ];
+  propagatedBuildInputs = [ aiodns pyasn1 pyasn1-modules aiohttp ];
+
+  checkInputs = [ nose ];
+
+  checkPhase = ''
+    nosetests --where=tests --exclude=live -i slixtest.py
+  '';
 
   meta = {
     description = "Elegant Python library for XMPP";

@@ -2,16 +2,16 @@
 
 buildGoPackage rec {
   name = "systrayhelper-${version}";
-  version = "0.0.3";
-  rev = "0953942245566bf358ba937af840947100380e15";
+  version = "0.0.4";
+  rev = "ded1f2ed4d30f6ca2c89a13db0bd3046c6d6d0f9";
 
   goPackagePath = "github.com/ssbc/systrayhelper";
 
   src = fetchFromGitHub {
-    inherit rev;
+    rev = "v${version}";
     owner = "ssbc";
     repo = "systrayhelper";
-    sha256 = "12xmzcw94in4m1hl4hbfdsbvkkaqrljgb67b95m1qwkkjak3q9g6";
+    sha256 = "1iq643brha5q6w2v1hz5l3d1z0pqzqr43gpwih4cnx3m5br0wg2k";
   };
 
   goDeps = ./deps.nix;

@@ -1,13 +1,9 @@
 #! /usr/bin/env perl
 
-# Typical command to generate the list of tarballs:
-
-# export i="mirror://xorg/X11R7.7/src/everything/"; cat $(PRINT_PATH=1 nix-prefetch-url $i | tail -n 1) | perl -e 'while (<>) { if (/(href|HREF)="([^"]*.bz2)"/) { print "$ENV{'i'}$2\n"; }; }' | sort > tarballs-7.7.list
-# manually update extra.list
-# then run: cat tarballs-7.7.list extra.list old.list | perl ./generate-expr-from-tarballs.pl
-# tarballs-x.y.list is generated + changes for individual packages
-# extra.list are packages not contained in the tarballs
-# old.list are packages that used to be part of the tarballs
+# Usage:
+#
+# manually update tarballs.list
+# then run: cat tarballs.list | perl ./generate-expr-from-tarballs.pl
 
 
 use strict;
@@ -23,6 +19,7 @@ my %pkgURLs;
 my %pkgHashes;
 my %pkgNames;
 my %pkgRequires;
+my %pkgNativeRequires;
 
 my %pcMap;
 
@@ -40,9 +37,9 @@ $pcMap{"libudev"} = "udev";
 $pcMap{"gl"} = "libGL";
 $pcMap{"gbm"} = "mesa_noglu";
 $pcMap{"\$PIXMAN"} = "pixman";
-$pcMap{"\$RENDERPROTO"} = "renderproto";
-$pcMap{"\$DRI3PROTO"} = "dri3proto";
-$pcMap{"\$DRI2PROTO"} = "dri2proto";
+$pcMap{"\$RENDERPROTO"} = "xorgproto";
+$pcMap{"\$DRI3PROTO"} = "xorgproto";
+$pcMap{"\$DRI2PROTO"} = "xorgproto";
 
 
 my $downloadCache = "./download-cache";
@@ -65,7 +62,7 @@ while (<>) {
       #next unless $pkg eq "xcbutil";
     }
 
-    $tarball =~ /\/([^\/]*)\.tar\.(bz2|gz|xz)$/;
+    $tarball =~ /\/([^\/]*)\.(tar\.(bz2|gz|xz)|tgz)$/;
     my $pkgName = $1;
 
     print "  $pkg $pkgName\n";
@@ -106,6 +103,7 @@ while (<>) {
     my $provides = `find $pkgDir -name "*.pc.in"`;
     my @provides2 = split '\n', $provides;
     my @requires = ();
+    my @nativeRequires = ();
 
     foreach my $pcFile (@provides2) {
         my $pc = $pcFile;
@@ -163,7 +161,7 @@ while (<>) {
     }
 
     if ($file =~ /AM_PATH_PYTHON/) {
-        push @requires, "python";
+        push @nativeRequires, "python";
     }
 
     if ($file =~ /AC_PATH_PROG\(FCCACHE/) {
@@ -227,10 +225,12 @@ while (<>) {
     process \@requires, $1 while $file =~ /XORG_DRIVER_CHECK_EXT\([^,]*,([^\)]*)\)/g;
 
     push @requires, "libxslt" if $pkg =~ /libxcb/;
-    push @requires, "gperf", "m4", "xproto" if $pkg =~ /xcbutil/;
+    push @requires, "gperf", "m4", "xorgproto" if $pkg =~ /xcbutil/;
 
     print "REQUIRES $pkg => @requires\n";
+    print "NATIVE_REQUIRES $pkg => @nativeRequires\n";
     $pkgRequires{$pkg} = \@requires;
+    $pkgNativeRequires{$pkg} = \@nativeRequires;
 
     print "done\n";
 }
@@ -255,6 +255,20 @@ EOF
 foreach my $pkg (sort (keys %pkgURLs)) {
     print "$pkg\n";
 
+    my %nativeRequires = ();
+    my @nativeBuildInputs;
+    foreach my $req (sort @{$pkgNativeRequires{$pkg}}) {
+        if (defined $pcMap{$req}) {
+            # Some packages have .pc that depends on itself.
+            next if $pcMap{$req} eq $pkg;
+            if (!defined $nativeRequires{$pcMap{$req}}) {
+                push @nativeBuildInputs, $pcMap{$req};
+                $nativeRequires{$pcMap{$req}} = 1;
+            }
+        } else {
+            print "  NOT FOUND: $req\n";
+        }
+    }
     my %requires = ();
     my @buildInputs;
     foreach my $req (sort @{$pkgRequires{$pkg}}) {
@@ -270,9 +284,11 @@ foreach my $pkg (sort (keys %pkgURLs)) {
         }
     }
 
+    my $nativeBuildInputsStr = join "", map { $_ . " " } @nativeBuildInputs;
     my $buildInputsStr = join "", map { $_ . " " } @buildInputs;
 
     my @arguments = @buildInputs;
+    push @arguments, @nativeBuildInputs;
     unshift @arguments, "stdenv", "pkgconfig", "fetchurl";
     my $argumentsStr = join ", ", @arguments;
 
@@ -290,7 +306,7 @@ foreach my $pkg (sort (keys %pkgURLs)) {
       sha256 = "$pkgHashes{$pkg}";
     };
     hardeningDisable = [ "bindnow" "relro" ];
-    nativeBuildInputs = [ pkgconfig ];
+    nativeBuildInputs = [ pkgconfig $nativeBuildInputsStr];
     buildInputs = [ $buildInputsStr];$extraAttrsStr
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};

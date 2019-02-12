@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "repeated_test";
-  version = "0.1a3";
+  version = "1.0.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "062syp7kl2g0x6qx3z8zb5sdycpi7qcpxp9iml2v8dqzqnij9bpg";
+    sha256 = "65107444a4945668ab7be6d1a3e1814cee9b2cfc577e7c70381700b11b809d27";
   };
 
   buildInputs = [ unittest2 ];

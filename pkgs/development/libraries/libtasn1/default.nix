@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = with stdenv.lib; {
-    homepage = http://www.gnu.org/software/libtasn1/;
+    homepage = https://www.gnu.org/software/libtasn1/;
     description = "An ASN.1 library";
     longDescription = ''
       Libtasn1 is the ASN.1 library used by GnuTLS, GNU Shishi and some
@@ -24,7 +24,6 @@ stdenv.mkDerivation rec {
       portable, and only require an ANSI C89 platform.
     '';
     license = licenses.lgpl2Plus;
-    maintainers = with maintainers; [ wkennington ];
     platforms = platforms.all;
   };
 }

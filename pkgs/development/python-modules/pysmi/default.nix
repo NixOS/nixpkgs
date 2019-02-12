@@ -5,12 +5,12 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.0.7";
+  version = "0.3.3";
   pname = "pysmi";
 
  src = fetchPypi {
     inherit pname version;
-    sha256 = "05h1lv2a687b9qjc399w6728ildx7majbn338a0c4k3gw6wnv7wr";
+    sha256 = "0bzhmi4691rf306n4y82js52532h3fp1sy6phvh6hnms6nww4daf";
   };
 
   propagatedBuildInputs = [ ply ];

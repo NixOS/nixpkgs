@@ -2,7 +2,7 @@
 , python2Packages
 , pkgconfig
 , librsvg
-, gobjectIntrospection
+, gobject-introspection
 , atk
 , gtk3
 , gtkspell3
@@ -19,7 +19,7 @@ python2Packages.buildPythonApplication rec {
     inherit pname version;
     sha256 = "43759d22b061a7a392a534d19a045fafd442ce98a0e390ee830127367dcaf4b4";
   };
-  nativeBuildInputs = [ pkgconfig gobjectIntrospection ];
+  nativeBuildInputs = [ pkgconfig gobject-introspection ];
   propagatedBuildInputs = with python2Packages; [
     chardet
     dateutil

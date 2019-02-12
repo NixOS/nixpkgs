@@ -671,6 +671,43 @@ passthru = {
      </para>
     </listitem>
    </varlistentry>
+   <varlistentry>
+    <term>
+     <varname>passthru.updateScript</varname>
+    </term>
+    <listitem>
+     <para>
+      A script to be run by <filename>maintainers/scripts/update.nix</filename> when
+      the package is matched. It needs to be an executable file, either on the file
+      system:
+<programlisting>
+passthru.updateScript = ./update.sh;
+</programlisting>
+      or inside the expression itself:
+<programlisting>
+passthru.updateScript = writeScript "update-zoom-us" ''
+  #!/usr/bin/env nix-shell
+  #!nix-shell -i bash -p curl pcre common-updater-scripts
+
+  set -eu -o pipefail
+
+  version="$(curl -sI https://zoom.us/client/latest/zoom_x86_64.tar.xz | grep -Fi 'Location:' | pcregrep -o1 '/(([0-9]\.?)+)/')"
+  update-source-version zoom-us "$version"
+'';
+</programlisting>
+      The attribute can also contain a list, a script followed by arguments to be passed to it:
+<programlisting>
+passthru.updateScript = [ ../../update.sh pname "--requested-release=unstable" ];
+</programlisting>
+      Note that the update scripts will be run in parallel by default; you should avoid running <command>git commit</command> or any other commands that cannot handle that.
+     </para>
+
+     <para>
+      For information about how to run the updates, execute
+      <cmdsynopsis><command>nix-shell</command> <arg>maintainers/scripts/update.nix</arg></cmdsynopsis>.
+     </para>
+    </listitem>
+   </varlistentry>
   </variablelist>
  </section>
  <section xml:id="sec-stdenv-phases">
@@ -1242,7 +1279,9 @@ makeFlags = [ "PREFIX=$(out)" ];
        <command>make</command>. You must use this instead of
        <varname>makeFlags</varname> if the arguments contain spaces, e.g.
 <programlisting>
-makeFlagsArray=(CFLAGS="-O0 -g" LDFLAGS="-lfoo -lbar")
+preBuild = ''
+  makeFlagsArray+=(CFLAGS="-O0 -g" LDFLAGS="-lfoo -lbar")
+'';
 </programlisting>
        Note that shell arrays cannot be passed through environment variables,
        so you cannot set <varname>makeFlagsArray</varname> in a derivation
@@ -1627,6 +1666,18 @@ installTargets = "install-bin install-doc";</programlisting>
     </varlistentry>
     <varlistentry>
      <term>
+      <varname>dontPruneLibtoolFiles</varname>
+     </term>
+     <listitem>
+      <para>
+       If set, libtool <literal>.la</literal> files associated with shared
+       libraries won't have their <literal>dependency_libs</literal> field
+       cleared.
+      </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term>
       <varname>forceShare</varname>
      </term>
      <listitem>
@@ -1761,7 +1812,7 @@ set debug-file-directory ~/.nix-profile/lib/debug
      <listitem>
       <para>
        A list of dependencies used by the phase. This gets included in
-       <varname>buildInputs</varname> when <varname>doInstallCheck</varname> is
+       <varname>nativeBuildInputs</varname> when <varname>doInstallCheck</varname> is
        set.
       </para>
      </listitem>
@@ -2153,10 +2204,130 @@ addEnvHooks "$hostOffset" myBashFunction
   </para>
 
   <para>
-   Here are some packages that provide a setup hook. Since the mechanism is
-   modular, this probably isn't an exhaustive list. Then again, since the
-   mechanism is only to be used as a last resort, it might be.
-   <variablelist>
+    First, let’s cover some setup hooks that are part of Nixpkgs
+    default stdenv. This means that they are run for every package
+    built using <function>stdenv.mkDerivation</function>. Some of
+    these are platform specific, so they may run on Linux but not
+    Darwin or vice-versa.
+    <variablelist>
+    <varlistentry>
+     <term>
+      <literal>move-docs.sh</literal>
+     </term>
+     <listitem>
+       <para>
+       This setup hook moves any installed documentation to the
+       <literal>/share</literal> subdirectory directory. This includes
+       the man, doc and info directories. This is needed for legacy
+       programs that do not know how to use the
+       <literal>share</literal> subdirectory.
+       </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term>
+      <literal>compress-man-pages.sh</literal>
+     </term>
+     <listitem>
+       <para>
+       This setup hook compresses any man pages that have been
+       installed. The compression is done using the gzip program. This
+       helps to reduce the installed size of packages.
+       </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term>
+      <literal>strip.sh</literal>
+     </term>
+     <listitem>
+       <para>
+       This runs the strip command on installed binaries and
+       libraries. This removes unnecessary information like debug
+       symbols when they are not needed. This also helps to reduce the
+       installed size of packages.
+       </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term>
+      <literal>patch-shebangs.sh</literal>
+     </term>
+     <listitem>
+       <para>
+       This setup hook patches installed scripts to use the full path
+       to the shebang interpreter. A shebang interpreter is the first
+       commented line of a script telling the operating system which
+       program will run the script (e.g <literal>#!/bin/bash</literal>). In
+       Nix, we want an exact path to that interpreter to be used. This
+       often replaces <literal>/bin/sh</literal> with a path in the
+       Nix store.
+       </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term>
+      <literal>audit-tmpdir.sh</literal>
+     </term>
+     <listitem>
+       <para>
+       This verifies that no references are left from the install
+       binaries to the directory used to build those binaries. This
+       ensures that the binaries do not need things outside the Nix
+       store. This is currently supported in Linux only.
+       </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term>
+      <literal>multiple-outputs.sh</literal>
+     </term>
+     <listitem>
+       <para>
+       This setup hook adds configure flags that tell packages to
+       install files into any one of the proper outputs listed in
+       <literal>outputs</literal>. This behavior can be turned off by setting
+       <literal>setOutputFlags</literal> to false in the derivation
+       environment. See <xref linkend="chap-multiple-output"/> for
+       more information.
+       </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term>
+      <literal>move-sbin.sh</literal>
+     </term>
+     <listitem>
+       <para>
+       This setup hook moves any binaries installed in the sbin
+       subdirectory into bin. In addition, a link is provided from
+       sbin to bin for compatibility.
+       </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term>
+      <literal>move-lib64.sh</literal>
+     </term>
+     <listitem>
+       <para>
+       This setup hook moves any libraries installed in the lib64
+       subdirectory into lib. In addition, a link is provided from
+       lib64 to lib for compatibility.
+       </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term>
+      <literal>set-source-date-epoch-to-latest.sh</literal>
+     </term>
+     <listitem>
+       <para>
+       This sets <literal>SOURCE_DATE_EPOCH</literal> to the
+       modification time of the most recent file.
+       </para>
+     </listitem>
+    </varlistentry>
     <varlistentry>
      <term>
       Bintools Wrapper
@@ -2263,6 +2434,15 @@ addEnvHooks "$hostOffset" myBashFunction
       </para>
      </listitem>
     </varlistentry>
+    </variablelist>
+  </para>
+
+  <para>
+   Here are some more packages that provide a setup hook. Since the
+   list of hooks is extensible, this is not an exhaustive list the
+   mechanism is only to be used as a last resort, it might cover most
+   uses.
+   <variablelist>
     <varlistentry>
      <term>
       Perl
@@ -2398,30 +2578,6 @@ addEnvHooks "$hostOffset" myBashFunction
     </varlistentry>
     <varlistentry>
      <term>
-      paxctl
-     </term>
-     <listitem>
-      <para>
-       Defines the <varname>paxmark</varname> helper for setting per-executable
-       PaX flags on Linux (where it is available by default; on all other
-       platforms, <varname>paxmark</varname> is a no-op). For example, to
-       disable secure memory protections on the executable
-       <replaceable>foo</replaceable>
-<programlisting>
-      postFixup = ''
-        paxmark m $out/bin/<replaceable>foo</replaceable>
-      '';
-    </programlisting>
-       The <literal>m</literal> flag is the most common flag and is typically
-       required for applications that employ JIT compilation or otherwise need
-       to execute code generated at run-time. Disabling PaX protections should
-       be considered a last resort: if possible, problematic features should be
-       disabled or patched to work with PaX.
-      </para>
-     </listitem>
-    </varlistentry>
-    <varlistentry>
-     <term>
       autoPatchelfHook
      </term>
      <listitem>
@@ -2463,17 +2619,17 @@ addEnvHooks "$hostOffset" myBashFunction
      <listitem>
       <para>
        This hook will make a build pause instead of stopping when a failure
-       happen. It prevents nix to cleanup the build environment immediatly and
+       happens. It prevents nix from cleaning up the build environment immediately and
        allows the user to attach to a build environment using the
-       <command>cntr</command> command. On build error it will print the
-       instruction that are neccessary for <command>cntr</command>. Installing
+       <command>cntr</command> command. Upon build error it will print
+       instructions on how to use <command>cntr</command>. Installing
        cntr and running the command will provide shell access to the build
        sandbox of failed build. At <filename>/var/lib/cntr</filename> the
-       sandbox filesystem is mounted. All commands and files of the system are
+       sandboxed filesystem is mounted. All commands and files of the system are
        still accessible within the shell. To execute commands from the sandbox
        use the cntr exec subcommand. Note that <command>cntr</command> also
        needs to be executed on the machine that is doing the build, which might
-       be not the case when remote builders are enabled.
+       not be the case when remote builders are enabled.
        <command>cntr</command> is only supported on Linux-based platforms. To
        use it first add <literal>cntr</literal> to your
        <literal>environment.systemPackages</literal> on NixOS or alternatively to
@@ -2486,6 +2642,23 @@ addEnvHooks "$hostOffset" myBashFunction
        When a build failure happens there will be an instruction printed that
        shows how to attach with <literal>cntr</literal> to the build sandbox.
       </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term>
+      libiconv, libintl
+     </term>
+     <listitem>
+       <para>
+	 A few libraries automatically add to
+	 <literal>NIX_LDFLAGS</literal> their library, making their
+	 symbols automatically available to the linker. This includes
+	 libiconv and libintl (gettext). This is done to provide
+	 compatibility between GNU Linux, where libiconv and libintl
+	 are bundled in, and other systems where that might not be the
+	 case. Sometimes, this behavior is not desired. To disable
+	 this behavior, set <literal>dontAddExtraLibs</literal>.
+       </para>
      </listitem>
     </varlistentry>
     <varlistentry>

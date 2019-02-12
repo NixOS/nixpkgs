@@ -3,17 +3,17 @@
 let
   ell = fetchgit {
      url = https://git.kernel.org/pub/scm/libs/ell/ell.git;
-     rev = "0.14";
-     sha256 = "13jlmdk47pscmfs3c12awfwr3m6ka4fh6fyr9cl1bmqdpwqmmmk6";
+     rev = "0.17";
+     sha256 = "0yk1qmvpy61qp82bb0w55n062jqzlkzbz0b1v5k763j98czz9rvz";
   };
 in stdenv.mkDerivation rec {
   name = "iwd-${version}";
-  version = "0.11";
+  version = "0.14";
 
   src = fetchgit {
     url = https://git.kernel.org/pub/scm/network/wireless/iwd.git;
     rev = version;
-    sha256 = "0q79rdj3h16xdf0g2jdsvb2141z36z89vgzq0qn31pxzhgxdgf7j";
+    sha256 = "08ijlnwvj1w354gbv3hdnm3l4iy24qzq4bq5a9z0wynysasw09lv";
   };
 
   nativeBuildInputs = [
@@ -32,14 +32,12 @@ in stdenv.mkDerivation rec {
     python3Packages.pygobject3
   ];
 
-  # Enable when it works again
-  enableParallelBuilding = false;
-
   configureFlags = [
-    "--with-dbus-datadir=$(out)/etc/"
-    "--with-dbus-busdir=$(out)/usr/share/dbus-1/system-services/"
-    "--with-systemd-unitdir=$(out)/lib/systemd/system/"
+    "--with-dbus-datadir=${placeholder "out"}/etc/"
+    "--with-dbus-busdir=${placeholder "out"}/share/dbus-1/system-services/"
+    "--with-systemd-unitdir=${placeholder "out"}/lib/systemd/system/"
     "--localstatedir=/var/"
+    "--enable-wired"
   ];
 
   postUnpack = ''
@@ -59,7 +57,9 @@ in stdenv.mkDerivation rec {
   '';
 
   postFixup = ''
-    substituteInPlace $out/usr/share/dbus-1/system-services/net.connman.iwd.service \
+    substituteInPlace $out/share/dbus-1/system-services/net.connman.ead.service \
+                      --replace /bin/false ${coreutils}/bin/false
+    substituteInPlace $out/share/dbus-1/system-services/net.connman.iwd.service \
                       --replace /bin/false ${coreutils}/bin/false
   '';
 

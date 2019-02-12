@@ -16,6 +16,5 @@ stdenv.mkDerivation rec {
     homepage = http://www.bluez.org/;
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ wkennington ];
   };
 }

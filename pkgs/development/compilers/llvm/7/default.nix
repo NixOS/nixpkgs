@@ -5,7 +5,7 @@
 }:
 
 let
-  release_version = "7.0.0";
+  release_version = "7.0.1";
   version = release_version; # differentiating these is important for rc's
 
   fetch = name: sha256: fetchurl {
@@ -13,7 +13,7 @@ let
     inherit sha256;
   };
 
-  clang-tools-extra_src = fetch "clang-tools-extra" "1glxl7bnr4k3j16s8xy8r9cl0llyg524f50591g1ig23ij65lz4k";
+  clang-tools-extra_src = fetch "clang-tools-extra" "1v9vc7id1761qm7mywlknsp810232iwyz8rd4y5km4h7pg9cg4sc";
 
   tools = stdenv.lib.makeExtensible (tools: let
     callPackage = newScope (tools // { inherit stdenv cmake libxml2 python isl release_version version fetch; });

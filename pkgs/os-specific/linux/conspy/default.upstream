@@ -1,4 +1,4 @@
-url http://sourceforge.net/projects/conspy/files/
+url https://sourceforge.net/projects/conspy/files/
 version_link 'conspy-[-0-9.]+/$'
 version_link '[-0-9.]+[.]tar[.][a-z0-9]+/download$'
 SF_redirect

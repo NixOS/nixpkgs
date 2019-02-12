@@ -4,13 +4,13 @@
 
 let
   pname = "sound-juicer";
-  version = "3.16.1";
+  version = "3.24.0";
 in stdenv.mkDerivation rec{
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "0mx6n901vb97hsv0cwaafjffj75s1kcp8jsqay90dy3099849dyz";
+    sha256 = "19qg4xv0f9rkq34lragkmhii1llxsa87llbl28i759b0ks4f6sny";
   };
 
   nativeBuildInputs = [ pkgconfig intltool itstool libxml2 wrapGAppsHook ];

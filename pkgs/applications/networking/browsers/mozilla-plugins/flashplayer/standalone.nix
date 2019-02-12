@@ -50,19 +50,19 @@
 
 stdenv.mkDerivation rec {
   name = "flashplayer-standalone-${version}";
-  version = "31.0.0.153";
+  version = "32.0.0.114";
 
   src = fetchurl {
     url =
       if debug then
-        "https://fpdownload.macromedia.com/pub/flashplayer/updaters/31/flash_player_sa_linux_debug.x86_64.tar.gz"
+        "https://fpdownload.macromedia.com/pub/flashplayer/updaters/32/flash_player_sa_linux_debug.x86_64.tar.gz"
       else
-        "https://fpdownload.macromedia.com/pub/flashplayer/updaters/31/flash_player_sa_linux.x86_64.tar.gz";
+        "https://fpdownload.macromedia.com/pub/flashplayer/updaters/32/flash_player_sa_linux.x86_64.tar.gz";
     sha256 =
       if debug then
-        "1k78nwrz5zbsj5jvn340n2y4dz1zxrcb7f7955d8dra15w0zax1k"
+        "0wlzqdnl8lhbc428gcahld842bhia4aygy1k5vyyg27fwmskxhy7"
       else
-        "0ajg3p4c36xzvvjl2hpbzn2g3xwjgf2xy6x4478aq7fxfgb0vf6s";
+        "01a1dwrgw7lc098vp4ifkf5bj2qvv0pmdyibjhzzrx3387d1pd2l";
   };
 
   nativeBuildInputs = [ unzip ];
@@ -99,5 +99,8 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.unfree;
     maintainers = [];
     platforms = [ "x86_64-linux" ];
+    # Application crashed with an unhandled SIGSEGV
+    # Not on all systems, though. Video driver problem?
+    broken = false;
   };
 }

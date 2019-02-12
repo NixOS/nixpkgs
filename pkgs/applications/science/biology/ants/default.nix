@@ -21,8 +21,6 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  checkPhase = "ctest";
-
   postInstall = ''
     for file in $out/bin/*; do
       wrapProgram $file --set ANTSPATH "$out/bin"

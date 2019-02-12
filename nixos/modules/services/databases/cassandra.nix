@@ -34,11 +34,13 @@ let
     { name = "cassandra-etc";
       cassandraYaml = builtins.toJSON cassandraConfigWithAddresses;
       cassandraEnvPkg = "${cfg.package}/conf/cassandra-env.sh";
+      cassandraLogbackConfig = pkgs.writeText "logback.xml" cfg.logbackConfig;
       buildCommand = ''
         mkdir -p "$out"
 
         echo "$cassandraYaml" > "$out/cassandra.yaml"
         ln -s "$cassandraEnvPkg" "$out/cassandra-env.sh"
+        ln -s "$cassandraLogbackConfig" "$out/logback.xml"
       '';
     };
 in {
@@ -139,7 +141,27 @@ in {
         correspond to a single address, IP aliasing is not supported.
       '';
     };
+    logbackConfig = mkOption {
+      type = types.lines;
+      default = ''
+        <configuration scan="false">
+          <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+            <encoder>
+              <pattern>%-5level %date{HH:mm:ss,SSS} %msg%n</pattern>
+            </encoder>
+          </appender>
 
+          <root level="INFO">
+            <appender-ref ref="STDOUT" />
+          </root>
+
+          <logger name="com.thinkaurelius.thrift" level="ERROR"/>
+        </configuration>
+      '';
+      description = ''
+        XML logback configuration for cassandra
+      '';
+    };
     extraConfig = mkOption {
       type = types.attrs;
       default = {};

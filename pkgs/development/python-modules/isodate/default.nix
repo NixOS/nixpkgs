@@ -3,19 +3,19 @@
 , fetchPypi
 , isPy3k
 , python
+, six
 }:
 
 buildPythonPackage rec {
   pname = "isodate";
-  version = "0.5.4";
+  version = "0.6.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "42105c41d037246dc1987e36d96f3752ffd5c0c24834dd12e4fdbe1e79544e31";
+    sha256 = "2e364a3d5759479cdb2d37cce6b9376ea504db2ff90252a2e5b7cc89cc9ff2d8";
   };
 
-  # Judging from SyntaxError
-  doCheck = !(isPy3k);
+  propagatedBuildInputs = [ six ];
 
   checkPhase = ''
     ${python.interpreter} -m unittest discover -s src/isodate/tests

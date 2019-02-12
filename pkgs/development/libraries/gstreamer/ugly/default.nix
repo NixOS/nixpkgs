@@ -39,4 +39,6 @@ stdenv.mkDerivation rec {
     libintl
   ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks;
     [ IOKit CoreFoundation DiskArbitration ]);
+
+  NIX_LDFLAGS = [ "-lm" ];
 }

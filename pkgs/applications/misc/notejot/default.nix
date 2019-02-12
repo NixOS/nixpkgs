@@ -1,9 +1,9 @@
 { stdenv, fetchFromGitHub, vala_0_40, pkgconfig, meson, ninja, python3, granite
-, gtk3, gnome3, gtksourceview, json-glib, gobjectIntrospection, wrapGAppsHook }:
+, gtk3, gnome3, gtksourceview, json-glib, gobject-introspection, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "notejot";
-  version = "1.4.7";
+  version = "1.5.4";
 
   name = "${pname}-${version}";
 
@@ -11,11 +11,11 @@ stdenv.mkDerivation rec {
     owner = "lainsce";
     repo = pname;
     rev = version;
-    sha256 = "0mjig4y2rb6v2dyzya44mfz0dxgp5wnjs3kdavf9ha2jzjjr5xyb";
+    sha256 = "1lv4s2mqddi6lz414kqpp4vcwnkjibc0k2xhnczaa1wf3azlxjgf";
   };
 
   nativeBuildInputs = [
-    gobjectIntrospection
+    gobject-introspection
     meson
     ninja
     pkgconfig

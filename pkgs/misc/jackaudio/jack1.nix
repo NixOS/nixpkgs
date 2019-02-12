@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     url = "http://jackaudio.org/downloads/jack-audio-connection-kit-${version}.tar.gz";
     sha256 = "0i6l25dmfk2ji2lrakqq9icnwjxklgcjzzk65dmsff91z2zva5rm";
   };
-  
+
   configureFlags = [
     (stdenv.lib.enableFeature (optLibffado != null) "firewire")
   ];
@@ -29,12 +29,11 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ optAlsaLib optDb optLibffado optCelt ];
   propagatedBuildInputs = [ optLibuuid ];
-  
+
   meta = with stdenv.lib; {
     description = "JACK audio connection kit";
     homepage = http://jackaudio.org;
     license = "GPL";
     platforms = platforms.unix;
-    maintainers = with maintainers; [ wkennington ];
   };
 }

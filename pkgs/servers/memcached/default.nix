@@ -9,6 +9,10 @@ stdenv.mkDerivation rec {
     sha256 = "0aav15f0lh8k4i62aza2bdv4s8vv65j38pz2zc4v45snd3arfby0";
   };
 
+  configureFlags = [
+     "ac_cv_c_endian=${if stdenv.hostPlatform.isBigEndian then "big" else "little"}"
+  ];
+
   buildInputs = [cyrus_sasl libevent];
 
   hardeningEnable = [ "pie" ];

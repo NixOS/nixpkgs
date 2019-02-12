@@ -3,22 +3,26 @@
 , fetchPypi
 , setuptoolsDarcs
 , pyutil
-, argparse
 , isPyPy
 }:
 
 buildPythonPackage rec {
   pname = "zfec";
-  version = "1.4.24";
+  version = "1.5.3";
   disabled = isPyPy;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1ks94zlpy7n8sb8380gf90gx85qy0p9073wi1wngg6mccxp9xsg3";
+    sha256 = "b41bd4b0af9c6b3a78bd6734e1e4511475944164375e6241b53df518a366922b";
   };
 
   buildInputs = [ setuptoolsDarcs ];
-  propagatedBuildInputs = [ pyutil argparse ];
+  propagatedBuildInputs = [ pyutil ];
+
+  # argparse is in the stdlib but zfec doesn't know that.
+  postPatch = ''
+    sed -i -e '/argparse/d' setup.py
+  '';
 
   meta = with stdenv.lib; {
     homepage = http://allmydata.org/trac/zfec;

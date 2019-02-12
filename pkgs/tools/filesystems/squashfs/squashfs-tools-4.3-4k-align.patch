@@ -27,11 +27,12 @@ index 8b1376f..683973d 100644
  int use_regex = FALSE;
  int nopad = FALSE;
  int exit_on_error = FALSE;
+ static off_t squashfs_start_offset = 0;
 +int do_4k_align = FALSE;
 +#define ALIGN_UP(bytes, size) (bytes = (bytes + size - 1) & ~(size - 1))
- 
+
  long long global_uid = -1, global_gid = -1;
- 
+
 @@ -1513,6 +1515,9 @@ void unlock_fragments()
  	 * queue at this time.
  	 */
@@ -40,7 +41,7 @@ index 8b1376f..683973d 100644
 +		if(do_4k_align)
 +			ALIGN_UP(bytes, 4096);
  		write_buffer = queue_get(locked_fragment);
- 		frg = write_buffer->block;	
+ 		frg = write_buffer->block;
  		size = SQUASHFS_COMPRESSED_SIZE_BLOCK(fragment_table[frg].size);
 @@ -2420,6 +2420,9 @@
  	compressed_size = SQUASHFS_COMPRESSED_SIZE_BLOCK(c_byte);
@@ -55,18 +56,18 @@ index 8b1376f..683973d 100644
 @@ -2761,6 +2769,10 @@ int write_file_blocks(squashfs_inode *inode, struct dir_ent *dir_ent,
  	long long sparse = 0;
  	struct file_buffer *fragment_buffer = NULL;
- 
+
 +	// 4k align the start of each file.
 +	if(do_4k_align)
 +		ALIGN_UP(bytes, 4096);
 +
  	if(pre_duplicate(read_size))
  		return write_file_blocks_dup(inode, dir_ent, read_buffer, dup);
- 
+
 @@ -4692,6 +4704,7 @@ void write_filesystem_tables(struct squashfs_super_block *sBlk, int nopad)
  		"compressed", no_fragments ? "no" : noF ? "uncompressed" :
  		"compressed", no_xattrs ? "no" : noX ? "uncompressed" :
- 		"compressed");
+ 		"compressed", noI || noId ? "uncompressed" : "compressed");
 +	printf("\t4k %saligned\n", do_4k_align ? "" : "un");
  	printf("\tduplicates are %sremoved\n", duplicate_checking ? "" :
  		"not ");
@@ -88,5 +89,5 @@ index 8b1376f..683973d 100644
  			ERROR("\nFilesystem filter options:\n");
  			ERROR("-p <pseudo-definition>\tAdd pseudo file "
  				"definition\n");
--- 
+--
 2.14.1.480.gb18f417b89-goog (previously; hand-patched by charles-dyfis-net)

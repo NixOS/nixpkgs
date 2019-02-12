@@ -1,14 +1,12 @@
 { stdenv, fetchFromGitLab, pkgconfig, meson, ninja, glib, glib-networking
-, sqlite, gobjectIntrospection, vala, gtk-doc, libsecret, docbook_xsl
+, sqlite, gobject-introspection, vala, gtk-doc, libsecret, docbook_xsl
 , docbook_xml_dtd_43, docbook_xml_dtd_45, glibcLocales, makeWrapper
 , symlinkJoin, gsignondPlugins, plugins }:
 
 let
 unwrapped = stdenv.mkDerivation rec {
   pname = "gsignond";
-  version = "39022c86ddb5062a10fb0503ad9d81a8e532d527";
-
-  name = "${pname}-2018-10-04";
+  version = "1.2.0";
 
   outputs = [ "out" "dev" "devdoc" ];
 
@@ -16,7 +14,7 @@ unwrapped = stdenv.mkDerivation rec {
     owner = "accounts-sso";
     repo = pname;
     rev = version;
-    sha256 = "1gw8vbj3j6wxqy759z97arm8lnqhmraw9s2frv3ar6crnfhlidff";
+    sha256 = "17cpil3lpijgyj2z5c41vhb7fpk17038k5ggyw9p6049jrlf423m";
   };
 
   nativeBuildInputs = [
@@ -24,7 +22,7 @@ unwrapped = stdenv.mkDerivation rec {
     docbook_xml_dtd_45
     docbook_xsl
     glibcLocales
-    gobjectIntrospection
+    gobject-introspection
     gtk-doc
     meson
     ninja

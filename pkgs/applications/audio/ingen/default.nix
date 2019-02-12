@@ -31,7 +31,7 @@ stdenv.mkDerivation  rec {
     for program in ingenams ingenish
     do
       wrapProgram $out/bin/$program \
-        --prefix PYTHONPATH : $out/lib/python${python.majorVersion}/site-packages:$PYTHONPATH
+        --prefix PYTHONPATH : $out/${python.sitePackages}:$PYTHONPATH
     done
   '';
 

@@ -6,6 +6,7 @@
 , intltool
 , libsoup
 , gnome3
+, totem-pl-parser
 , tdb
 , json-glib
 , itstool
@@ -48,7 +49,7 @@ in stdenv.mkDerivation rec {
 
     gtk3
     gnome3.libpeas
-    gnome3.totem-pl-parser
+    totem-pl-parser
     gnome3.defaultIconTheme
 
     gst_all_1.gstreamer

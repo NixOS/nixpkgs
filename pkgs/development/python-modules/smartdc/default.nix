@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "smartdc";
-  version = "0.1.12";
+  version = "0.2.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "36206f4fddecae080c66faf756712537e650936b879abb23a8c428731d2415fe";
+    sha256 = "6ffd866fb98386324e189e24d4f7532f66c1b20eece35ca1a6cb4b2a2639fc85";
   };
 
   propagatedBuildInputs = [ requests http_signature ];

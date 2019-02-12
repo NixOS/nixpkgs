@@ -4,7 +4,7 @@ buildPythonPackage rec {
   pname = "distro";
   version = "1.3.0";
 
-  buildInputs = [ pytest pytestcov tox];
+  checkInputs = [ pytest pytestcov tox];
 
   checkPhase = ''
     touch tox.ini

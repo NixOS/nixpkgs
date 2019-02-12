@@ -5,13 +5,13 @@
 
 buildPythonPackage rec {
   pname = "ptest";
-  version =  "1.5.3";
+  version =  "1.7.4";
 
   src = fetchFromGitHub {
     owner = "KarlGong";
     repo = pname;
     rev = version + "-release";
-    sha256 = "1r50lm6n59jzdwpp53n0c0hp3aj1jxn304bk5gh830226gsaf2hn";
+    sha256 = "0v1zpfjagjlvdmgv6d502nmb7s996wadvpzg93i651s64rrlwq4s";
   };
 
   meta = with stdenv.lib; {

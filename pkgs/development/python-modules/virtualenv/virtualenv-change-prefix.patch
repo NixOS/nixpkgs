@@ -13,39 +13,42 @@ it will only add the path to the python used when building
 available.
 
 
-diff --git a/virtualenv.py b/virtualenv.py
-index d3e76a7..cb307fa 100755
---- a/virtualenv.py
-+++ b/virtualenv.py
-@@ -1051,17 +1051,7 @@ def path_locations(home_dir):
+diff --git a/src/virtualenv.py b/src/virtualenv.py
+index 4b57cde..afda73f 100755
+--- a/src/virtualenv.py
++++ b/src/virtualenv.py
+@@ -1071,20 +1071,7 @@ def path_locations(home_dir, dry_run=False):
  
  
  def change_prefix(filename, dst_prefix):
 -    prefixes = [sys.prefix]
 -
 -    if is_darwin:
--        prefixes.extend((
--            os.path.join("/Library/Python", sys.version[:3], "site-packages"),
--            os.path.join(sys.prefix, "Extras", "lib", "python"),
--            os.path.join("~", "Library", "Python", sys.version[:3], "site-packages"),
--            # Python 2.6 no-frameworks
--            os.path.join("~", ".local", "lib","python", sys.version[:3], "site-packages"),
--            # System Python 2.7 on OSX Mountain Lion
--            os.path.join("~", "Library", "Python", sys.version[:3], "lib", "python", "site-packages")))
+-        prefixes.extend(
+-            (
+-                os.path.join("/Library/Python", sys.version[:3], "site-packages"),
+-                os.path.join(sys.prefix, "Extras", "lib", "python"),
+-                os.path.join("~", "Library", "Python", sys.version[:3], "site-packages"),
+-                # Python 2.6 no-frameworks
+-                os.path.join("~", ".local", "lib", "python", sys.version[:3], "site-packages"),
+-                # System Python 2.7 on OSX Mountain Lion
+-                os.path.join("~", "Library", "Python", sys.version[:3], "lib", "python", "site-packages"),
+-            )
+-        )
 +    prefixes = ["/nix/store", sys.prefix]
  
-     if hasattr(sys, 'real_prefix'):
+     if hasattr(sys, "real_prefix"):
          prefixes.append(sys.real_prefix)
-@@ -1078,6 +1068,8 @@ def change_prefix(filename, dst_prefix):
-             if src_prefix != os.sep: # sys.prefix == "/"
+@@ -1107,6 +1094,8 @@ def change_prefix(filename, dst_prefix):
+             if src_prefix != os.sep:  # sys.prefix == "/"
                  assert relpath[0] == os.sep
                  relpath = relpath[1:]
 +                if src_prefix == "/nix/store":
 +                    relpath = "/".join(relpath.split("/")[1:])
              return join(dst_prefix, relpath)
-     assert False, "Filename %s does not start with any of these prefixes: %s" % \
-         (filename, prefixes)
-@@ -1190,6 +1182,11 @@ def install_python(home_dir, lib_dir, inc_dir, bin_dir, site_packages, clear, sy
+     assert False, "Filename {} does not start with any of these prefixes: {}".format(filename, prefixes)
+ 
+@@ -1233,6 +1222,11 @@ def install_python(home_dir, lib_dir, inc_dir, bin_dir, site_packages, clear, sy
      site_filename_dst = change_prefix(site_filename, home_dir)
      site_dir = os.path.dirname(site_filename_dst)
      writefile(site_filename_dst, SITE_PY)
@@ -54,6 +57,6 @@ index d3e76a7..cb307fa 100755
 +        join(site_dir, 'sitecustomize.py',),
 +        "import sys; sys.path.append('%s')" % wrapper_path
 +    )
-     writefile(join(site_dir, 'orig-prefix.txt'), prefix)
-     site_packages_filename = join(site_dir, 'no-global-site-packages.txt')
+     writefile(join(site_dir, "orig-prefix.txt"), prefix)
+     site_packages_filename = join(site_dir, "no-global-site-packages.txt")
      if not site_packages:

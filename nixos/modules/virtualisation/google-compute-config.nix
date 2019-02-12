@@ -65,33 +65,7 @@ in
   # GC has 1460 MTU
   networking.interfaces.eth0.mtu = 1460;
 
-  # allow the google-accounts-daemon to manage users
-  users.mutableUsers = true;
-  # and allow users to sudo without password
-  security.sudo.enable = true;
-  security.sudo.extraConfig = ''
-  %google-sudoers ALL=(ALL:ALL) NOPASSWD:ALL
-  '';
-
-  # NOTE: google-accounts tries to write to /etc/sudoers.d but the folder doesn't exist
-  # FIXME: not such file or directory on dynamic SSH provisioning
-  systemd.services.google-accounts-daemon = {
-    description = "Google Compute Engine Accounts Daemon";
-    # This daemon creates dynamic users
-    enable = config.users.mutableUsers;
-    after = [
-      "network.target"
-      "google-instance-setup.service"
-      "google-network-setup.service"
-    ];
-    requires = ["network.target"];
-    wantedBy = ["multi-user.target"];
-    path = with pkgs; [ shadow ];
-    serviceConfig = {
-      Type = "simple";
-      ExecStart = "${gce}/bin/google_accounts_daemon --debug";
-    };
-  };
+  security.googleOsLogin.enable = true;
 
   systemd.services.google-clock-skew-daemon = {
     description = "Google Compute Engine Clock Skew Daemon";

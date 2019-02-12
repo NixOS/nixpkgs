@@ -1,5 +1,5 @@
 { stdenv, autoconf, automake, libtool, gnome3, which, fetchgit, libgtop, libwnck3, glib, vala, pkgconfig
-, libstartup_notification, gobjectIntrospection, gtk-doc, docbook_xsl
+, libstartup_notification, gobject-introspection, gtk-doc, docbook_xsl
 , xorgserver, dbus, python2 }:
 
 stdenv.mkDerivation rec {
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     automake
     docbook_xsl
     gnome3.gnome-common
-    gobjectIntrospection
+    gobject-introspection
     gtk-doc
     libtool
     pkgconfig

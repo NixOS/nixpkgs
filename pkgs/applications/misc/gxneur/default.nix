@@ -8,6 +8,8 @@ stdenv.mkDerivation {
     sha256 = "0avmhdcj0hpr55fc0iih8fjykmdhn34c8mwdnqvl8jh4nhxxchxr";
   };
 
+  NIX_CFLAGS_COMPILE = "-Wno-deprecated-declarations";
+
   nativeBuildInputs = [ pkgconfig intltool ];
   buildInputs = [
     xorg.libX11 glib gtk2 xorg.libXpm xorg.libXt xorg.libXext xneur

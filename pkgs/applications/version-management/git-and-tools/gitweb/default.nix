@@ -24,7 +24,7 @@ in stdenv.mkDerivation {
           $out/gitweb.cgi
       # Give access to CGI.pm and friends (was removed from perl core in 5.22)
       for p in ${stdenv.lib.concatStringsSep " " gitwebPerlLibs}; do
-          sed -i -e "/use CGI /i use lib \"$p/lib/perl5/site_perl\";" \
+          sed -i -e "/use CGI /i use lib \"$p/${perlPackages.perl.libPrefix}\";" \
               "$out/gitweb.cgi"
       done
 

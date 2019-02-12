@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub
   , qt4, qmake4Hook, openssl
-  , xproto, libX11, libXScrnSaver, scrnsaverproto
+  , xorgproto, libX11, libXScrnSaver
   , xz, zlib
 }:
 stdenv.mkDerivation rec {
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    qt4 openssl xproto libX11 libXScrnSaver scrnsaverproto xz zlib
+    qt4 openssl xorgproto libX11 libXScrnSaver xz zlib
   ];
 
   # hack: needed to fix build issues in

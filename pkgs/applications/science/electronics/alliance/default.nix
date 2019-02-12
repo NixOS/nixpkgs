@@ -1,5 +1,5 @@
 { stdenv, fetchurl
-, xproto, motif, libX11, libXt, libXpm, bison
+, xorgproto, motif, libX11, libXt, libXpm, bison
 , flex, automake, autoconf, libtool
 }:
 
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
 
   nativeBuildInputs = [ libtool automake autoconf flex ];
-  buildInputs = [ xproto motif xproto libX11 libXt libXpm bison ];
+  buildInputs = [ xorgproto motif libX11 libXt libXpm bison ];
 
   sourceRoot = "alliance/src/";
 

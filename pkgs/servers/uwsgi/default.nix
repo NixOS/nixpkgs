@@ -7,7 +7,7 @@
 , ruby, php-embed, mysql
 }:
 
-let pythonPlugin = pkg : lib.nameValuePair "python${if pkg ? isPy2 then "2" else "3"}" {
+let pythonPlugin = pkg : lib.nameValuePair "python${if pkg.isPy2 then "2" else "3"}" {
                            interpreter = pkg.interpreter;
                            path = "plugins/python";
                            inputs = [ pkg ncurses ];
@@ -89,7 +89,7 @@ stdenv.mkDerivation rec {
     ${lib.concatMapStringsSep "\n" (x: x.install or "") needed}
   '';
 
-  NIX_CFLAGS_LINK = [ "-lsystemd" ] ++ lib.concatMap (x: x.NIX_CFLAGS_LINK or []) needed;
+  NIX_CFLAGS_LINK = lib.optional withSystemd "-lsystemd" ++ lib.concatMap (x: x.NIX_CFLAGS_LINK or []) needed;
 
   meta = with stdenv.lib; {
     homepage = https://uwsgi-docs.readthedocs.org/en/latest/;

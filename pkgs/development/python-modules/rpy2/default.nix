@@ -27,7 +27,7 @@ buildPythonPackage rec {
     version = if isPy27 then
       "2.8.6" # python2 support dropped in 2.9.x
     else
-      "2.9.4";
+      "2.9.5";
     pname = "rpy2";
     disabled = isPyPy;
     src = fetchPypi {
@@ -35,7 +35,7 @@ buildPythonPackage rec {
       sha256 = if isPy27 then
         "162zki5c1apgv6qbafi7n66y4hgpgp43xag7q75qb6kv99ri6k80" # 2.8.x
       else
-        "0bl1d2qhavmlrvalir9hmkjh74w21vzkvc2sg3cbb162s10zfmxy"; # 2.9.x
+        "1nrj8pgyxrwrfdrxzb4j3z1adjwjx1mr8d1n5cmrz4nhlzy8w7xr"; # 2.9.x
     };
     buildInputs = [
       readline

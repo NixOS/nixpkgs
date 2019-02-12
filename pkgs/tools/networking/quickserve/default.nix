@@ -12,7 +12,7 @@ let
   };
   wrappedPython = python3.withPackages (_: [ threaded_servers ]);
 in stdenv.mkDerivation {
-  name = "quickserve";
+  pname = "quickserve";
   version = "2018";
 
   unpackPhase = ":";

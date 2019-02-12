@@ -12,7 +12,7 @@ let
     ${concatMapStringsSep "\n" (server: "server " + server) cfg.servers}
 
     ${optionalString
-      cfg.initstepslew.enabled
+      (cfg.initstepslew.enabled && (cfg.servers != []))
       "initstepslew ${toString cfg.initstepslew.threshold} ${concatStringsSep " " cfg.initstepslew.servers}"
     }
 
@@ -113,6 +113,7 @@ in
           chown chrony:chrony ${stateDir} ${keyFile}
         '';
 
+        unitConfig.ConditionCapability = "CAP_SYS_TIME";
         serviceConfig =
           { Type = "forking";
             ExecStart = "${pkgs.chrony}/bin/chronyd ${chronyFlags}";
@@ -121,8 +122,8 @@ in
             ProtectSystem = "full";
             PrivateTmp = "yes";
 
-            ConditionCapability = "CAP_SYS_TIME";
           };
+
       };
   };
 }

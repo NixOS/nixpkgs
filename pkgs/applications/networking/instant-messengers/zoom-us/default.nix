@@ -13,11 +13,11 @@ assert pulseaudioSupport -> libpulseaudio != null;
 let
   inherit (stdenv.lib) concatStringsSep makeBinPath optional;
 
-  version = "2.4.129780.0915";
+  version = "2.7.162522.0121";
   srcs = {
     x86_64-linux = fetchurl {
       url = "https://zoom.us/client/${version}/zoom_x86_64.tar.xz";
-      sha256 = "0s4014ymc92rwpagcwjhmwwfz0vq35wiq2nhh6nlxcrr6jl4wd78";
+      sha256 = "01i4g4kmawk3mclifh4bwcqpdnbvrz0sz49b6l33n0k5ysky20r1";
     };
   };
 
@@ -41,15 +41,11 @@ in stdenv.mkDerivation {
 
   runtimeDependencies = optional pulseaudioSupport libpulseaudio;
 
-  # Don't remove runtimeDependencies from RPATH via patchelf --shrink-rpath
-  dontPatchELF = true;
-
   installPhase =
     let
       files = concatStringsSep " " [
         "*.pcm"
         "*.png"
-        "ZXMPPROOT.cer"
         "ZoomLauncher"
         "config-dump.sh"
         "timezones"

@@ -38,6 +38,8 @@ let
 
   git-fame = callPackage ./git-fame {};
 
+  gita = callPackage ./gita {};
+
   # The full-featured Git.
   gitFull = gitBase.override {
     svnSupport = true;
@@ -104,6 +106,8 @@ let
 
   git-sync = callPackage ./git-sync { };
 
+  git-test = callPackage ./git-test { };
+
   git2cl = callPackage ./git2cl { };
 
   gitFastExport = callPackage ./fast-export { };
@@ -119,6 +123,8 @@ let
   };
 
   hubUnstable = throw "use gitAndTools.hub instead";
+
+  lab = callPackage ./lab { };
 
   pre-commit = callPackage ./pre-commit { };
 

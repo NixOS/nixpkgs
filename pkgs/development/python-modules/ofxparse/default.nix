@@ -3,18 +3,19 @@
 , fetchPypi
 , six
 , beautifulsoup4
+, lxml
 }:
 
 buildPythonPackage rec {
   pname = "ofxparse";
-  version = "0.14";
+  version = "0.20";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d8c486126a94d912442d040121db44fbc4a646ea70fa935df33b5b4dbfbbe42a";
+    sha256 = "0zn3grc6xhgzcc81qc3dxkkwk731cjjqqhb46smw12lk09cdnigb";
   };
 
-  propagatedBuildInputs = [ six beautifulsoup4 ];
+  propagatedBuildInputs = [ six beautifulsoup4 lxml ];
 
   meta = with stdenv.lib; {
     homepage = "http://sites.google.com/site/ofxparse";

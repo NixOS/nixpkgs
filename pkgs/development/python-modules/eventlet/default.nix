@@ -1,31 +1,31 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
-, nose
-, httplib2
-, pyopenssl
+, pythonOlder
+, dnspython
+, enum34
 , greenlet
-, enum-compat
-, isPyPy
+, monotonic
+, six
+, nose
 }:
 
 buildPythonPackage rec {
   pname = "eventlet";
-  version = "0.20.0";
+  version = "0.24.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "15bq5ybbigxnp5xwkps53zyhlg15lmcnq3ny2dppj0r0bylcs5rf";
+    sha256 = "d9d31a3c8dbcedbcce5859a919956d934685b17323fc80e1077cb344a2ffa68d";
   };
 
-  buildInputs = [ nose httplib2 pyopenssl ];
+  checkInputs = [ nose ];
 
   doCheck = false;  # too much transient errors to bother
 
-  propagatedBuildInputs = [ enum-compat ]
-    ++ stdenv.lib.optionals (!isPyPy) [ greenlet ];
+  propagatedBuildInputs = [ dnspython greenlet monotonic six ] ++ lib.optional (pythonOlder "3.4") enum34;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = https://pypi.python.org/pypi/eventlet/;
     description = "A concurrent networking library for Python";
   };

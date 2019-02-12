@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   name = "btrfs-progs-${version}";
-  version = "4.19";
+  version = "4.20.1";
 
   src = fetchurl {
     url = "mirror://kernel/linux/kernel/people/kdave/btrfs-progs/btrfs-progs-v${version}.tar.xz";
-    sha256 = "0jd3bsg3117ysr82n03w33sqw1g9z1ciixcxrwgp90yghvjzp4fm";
+    sha256 = "1kagxh10qf1n38zbpya2ghjiybxnag36h9xyqb26fy6iy4gmsbsn";
   };
 
   nativeBuildInputs = [
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     description = "Utilities for the btrfs filesystem";
     homepage = https://btrfs.wiki.kernel.org/;
     license = licenses.gpl2;
-    maintainers = with maintainers; [ raskin wkennington ];
+    maintainers = with maintainers; [ raskin ];
     platforms = platforms.linux;
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, gobjectIntrospection, vala, gtk-doc, docbook_xsl, docbook_xml_dtd_412, gupnp, gst_all_1 }:
+{ stdenv, fetchurl, pkgconfig, gobject-introspection, vala, gtk-doc, docbook_xsl, docbook_xml_dtd_412, gupnp, gst_all_1 }:
 
 stdenv.mkDerivation rec {
   name = "gupnp-dlna-${version}";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0spzd2saax7w776p5laixdam6d7smyynr9qszhbmq7f14y13cghj";
   };
 
-  nativeBuildInputs = [ pkgconfig gobjectIntrospection vala gtk-doc docbook_xsl docbook_xml_dtd_412 ];
+  nativeBuildInputs = [ pkgconfig gobject-introspection vala gtk-doc docbook_xsl docbook_xml_dtd_412 ];
   buildInputs = [ gupnp gst_all_1.gst-plugins-base ];
 
   configureFlags = [

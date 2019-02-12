@@ -31,7 +31,7 @@ buildPythonPackage rec {
     description = "Jupyter Qt console";
     homepage = http://jupyter.org/;
     license = lib.licenses.bsd3;
-    platforms = lib.platforms.linux; # fails on Darwin
+    platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ fridh ];
   };
 }
