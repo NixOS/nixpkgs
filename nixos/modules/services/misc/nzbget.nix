@@ -69,7 +69,6 @@ in {
           echo "Remember to change this to a proper value once NZBGet startup has been completed"
           sed -i -e 's/MainDir=.*/MainDir=\/tmp/g' ${cfg.configFile}
         fi
-        echo "DONE"
       '';
 
       script = ''
