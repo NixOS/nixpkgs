@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     # set compiled-in DATA_DIR so resources can be found
     substituteInPlace src/engine/shared/storage.cpp \
       --replace '#define DATA_DIR "data"' \
-                '#define DATA_DIR "${placeholder "out"}/share/teeworlds/data"'
+                "#define DATA_DIR \"$out/share/teeworlds/data\""
   '';
 
   nativeBuildInputs = [ cmake pkgconfig ];
