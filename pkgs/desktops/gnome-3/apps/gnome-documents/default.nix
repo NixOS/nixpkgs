@@ -7,17 +7,20 @@
 , desktop-file-utils, wrapGAppsHook, python3 }:
 
 stdenv.mkDerivation rec {
-  name = "gnome-documents-${version}";
+  pname = "gnome-documents";
   version = "3.30.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-documents/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/gnome-documents/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "1z8gkfi2wyyd3bbv73rcdzi1gzaaaskabyscmbj51prayiw106b6";
   };
 
   doCheck = true;
 
-  mesonFlags = [ "-Dgetting-started=true" ];
+  mesonFlags = [
+    "-Dgetting_started=true"
+    "-Dno_network=true"
+  ];
 
   nativeBuildInputs = [
     meson ninja pkgconfig gettext itstool libxslt desktop-file-utils docbook_xsl docbook_xml_dtd_42 wrapGAppsHook python3
@@ -29,6 +32,11 @@ stdenv.mkDerivation rec {
     libsoup webkitgtk gjs gobject-introspection
     tracker tracker-miners libgdata
     gnome-desktop libzapojit libgepub
+  ];
+
+  # Don't try to keep git submodules in sync for build
+  patches = [
+    ./no-network-option.patch
   ];
 
   postPatch = ''
