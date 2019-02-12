@@ -1,59 +1,39 @@
 { stdenv, lib, makeWrapper
-, vimUtils
+, vimUtils, writeText
 , bundlerEnv, ruby
 , nodejs
 , nodePackages
 , pythonPackages
 , python3Packages
+, haskellPackages
 }:
 with stdenv.lib;
 
 neovim:
 
 let
-  wrapper = {
-      withPython ? true,  extraPythonPackages ? (_: []) /* the function you would have passed to python.withPackages */
-    , withPython3 ? true,  extraPython3Packages ? (_: []) /* the function you would have passed to python.withPackages */
-    , withNodeJs? false
-    , withRuby ? true
-    , vimAlias ? false
-    , viAlias ? false
-    , configure ? {}
-  }:
+
+  wrapper = structuredConfigure:
   let
 
-  rubyEnv = bundlerEnv {
-    name = "neovim-ruby-env";
-    gemdir = ./ruby_provider;
-    postBuild = ''
-      ln -sf ${ruby}/bin/* $out/bin
-    '';
-  };
+    module = import ./module.nix;
 
-  /* for compatibility with passing extraPythonPackages as a list; added 2018-07-11 */
-  compatFun = funOrList: (if builtins.isList funOrList then
-    (_: lib.warn "passing a list as extraPythonPackages to the neovim wrapper is deprecated, pass a function as to python.withPackages instead" funOrList)
-    else funOrList);
-  extraPythonPackagesFun = compatFun extraPythonPackages;
-  extraPython3PackagesFun = compatFun extraPython3Packages;
+    # Generate init.vim configuration
+    cfg =  (lib.evalModules {
+      specialArgs = {
+        inherit vimUtils python3Packages bundlerEnv ruby pythonPackages haskellPackages;
+        inherit nodePackages;
+      };
+      modules = [
+        module
+        { customRC = structuredConfigure.configure.customRC or "";}
+        structuredConfigure
+      ];
+    }).config;
 
-  requiredPlugins = vimUtils.requiredPlugins configure;
-  getDeps = attrname: map (plugin: plugin.${attrname} or (_:[]));
+    binPath = makeBinPath (optionals cfg.withRuby [cfg.rubyEnv] ++ optionals cfg.withNodeJs [nodejs]);
 
-  pluginPythonPackages = getDeps "pythonDependencies" requiredPlugins;
-  pythonEnv = pythonPackages.python.withPackages(ps:
-        [ ps.pynvim ]
-        ++ (extraPythonPackagesFun ps)
-        ++ (concatMap (f: f ps) pluginPythonPackages));
-
-  pluginPython3Packages = getDeps "python3Dependencies" requiredPlugins;
-  python3Env = python3Packages.python.withPackages (ps:
-        [ ps.pynvim ]
-        ++ (extraPython3PackagesFun ps)
-        ++ (concatMap (f: f ps) pluginPython3Packages));
-
-  binPath = makeBinPath (optionals withRuby [rubyEnv] ++ optionals withNodeJs [nodejs]);
-
+    neovimrcFile = writeText "init.vim" cfg.neovimRC;
   in
   stdenv.mkDerivation {
       name = "neovim-${stdenv.lib.getVersion neovim}";
@@ -65,13 +45,8 @@ let
         fi
 
         makeWrapper "$(readlink -v --canonicalize-existing "${bin}")" \
-          "$out/bin/nvim" --add-flags " \
-        --cmd \"${if withNodeJs then "let g:node_host_prog='${nodePackages.neovim}/bin/neovim-node-host'" else "let g:loaded_node_provider=1"}\" \
-        --cmd \"${if withPython then "let g:python_host_prog='$out/bin/nvim-python'" else "let g:loaded_python_provider = 1"}\" \
-        --cmd \"${if withPython3 then "let g:python3_host_prog='$out/bin/nvim-python3'" else "let g:loaded_python3_provider = 1"}\" \
-        --cmd \"${if withRuby then "let g:ruby_host_prog='$out/bin/nvim-ruby'" else "let g:loaded_ruby_provider=1"}\" " \
-        --suffix PATH : ${binPath} \
-        ${optionalString withRuby '' --set GEM_HOME ${rubyEnv}/${rubyEnv.ruby.gemPath}'' }
+          "$out/bin/nvim"         --suffix PATH : ${binPath} \
+        ${optionalString cfg.withRuby '' --set GEM_HOME ${cfg.rubyEnv}/${cfg.rubyEnv.ruby.gemPath}'' }
       ''
       + optionalString (!stdenv.isDarwin) ''
         # copy and patch the original neovim.desktop file
@@ -80,17 +55,17 @@ let
           --replace 'TryExec=nvim' "TryExec=$out/bin/nvim" \
           --replace 'Name=Neovim' 'Name=WrappedNeovim'
       ''
-      + optionalString withPython ''
-        makeWrapper ${pythonEnv}/bin/python $out/bin/nvim-python --unset PYTHONPATH
-      '' + optionalString withPython3 ''
-        makeWrapper ${python3Env}/bin/python3 $out/bin/nvim-python3 --unset PYTHONPATH
-      '' + optionalString withRuby ''
-        ln -s ${rubyEnv}/bin/neovim-ruby-host $out/bin/nvim-ruby
-      '' + optionalString vimAlias ''
+      + optionalString cfg.withPython ''
+        makeWrapper ${cfg.pythonEnv}/bin/python $out/bin/nvim-python --unset PYTHONPATH
+      '' + optionalString cfg.withPython3 ''
+        makeWrapper ${cfg.python3Env}/bin/python3 $out/bin/nvim-python3 --unset PYTHONPATH
+      '' + optionalString cfg.withRuby ''
+        ln -s ${cfg.rubyEnv}/bin/neovim-ruby-host $out/bin/nvim-ruby
+      '' + optionalString cfg.vimAlias ''
         ln -s $out/bin/nvim $out/bin/vim
-      '' + optionalString viAlias ''
+      '' + optionalString cfg.viAlias ''
         ln -s $out/bin/nvim $out/bin/vi
-      '' + optionalString (configure != {}) ''
+      '' + optionalString (cfg.updateRemotePlugins) ''
         echo "Generating remote plugin manifest"
         export NVIM_RPLUGIN_MANIFEST=$out/rplugin.vim
         # Launch neovim with a vimrc file containing only the generated plugin
@@ -99,7 +74,7 @@ let
         # Only display the log on error since it will contain a few normally
         # irrelevant messages.
         if ! $out/bin/nvim \
-          -u ${vimUtils.vimrcFile (configure // { customRC = ""; })} \
+          -u ${neovimrcFile} \
           -i NONE -n \
           -E -V1rplugins.log -s \
           +UpdateRemotePlugins +quit! > outfile 2>&1; then
@@ -113,7 +88,7 @@ let
         # https://github.com/neovim/neovim/issues/9413
         wrapProgram $out/bin/nvim \
           --set NVIM_SYSTEM_RPLUGIN_MANIFEST $out/rplugin.vim \
-          --add-flags "-u ${vimUtils.vimrcFile configure}"
+          --add-flags "--cmd \"source ${neovimrcFile}\""
       '';
 
     preferLocalBuild = true;
