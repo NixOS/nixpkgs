@@ -1,9 +1,9 @@
 { lib, stdenv, fetchFromGitHub, cmake, curl, openssl, zlib
+, CoreAudio, AudioToolbox
 , # Allow building a limited set of APIs, e.g. ["s3" "ec2"].
   apis ? ["*"]
 , # Whether to enable AWS' custom memory management.
   customMemoryManagement ? true
-, darwin
 }:
 
 let
@@ -34,10 +34,10 @@ in stdenv.mkDerivation rec {
     ++ lib.optionals (stdenv.isDarwin &&
                         ((builtins.elem "text-to-speech" apis) ||
                          (builtins.elem "*" apis)))
-         (with darwin.apple_sdk.frameworks; [ CoreAudio AudioToolbox ]);
+         [ CoreAudio AudioToolbox ];
 
   cmakeFlags =
-    lib.optional (!customMemoryManagement) "-DCUSTOM_MEMORY_MANAGEMENT=0"
+       lib.optional (!customMemoryManagement) "-DCUSTOM_MEMORY_MANAGEMENT=0"
     ++ lib.optional (stdenv.buildPlatform != stdenv.hostPlatform) "-DENABLE_TESTING=OFF"
     ++ lib.optional (apis != ["*"])
       "-DBUILD_ONLY=${lib.concatStringsSep ";" apis}";
@@ -59,6 +59,8 @@ in stdenv.mkDerivation rec {
     '';
 
   NIX_CFLAGS_COMPILE = [ "-Wno-error=noexcept-type" ];
+
+  __darwinAllowLocalNetworking = true;
 
   meta = {
     description = "A C++ interface for Amazon Web Services";

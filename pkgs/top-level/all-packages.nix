@@ -9369,7 +9369,9 @@ in
     inherit (darwin.apple_sdk.frameworks) AudioUnit CoreServices;
   };
 
-  aws-sdk-cpp = callPackage ../development/libraries/aws-sdk-cpp { };
+  aws-sdk-cpp = callPackage ../development/libraries/aws-sdk-cpp {
+    inherit (darwin.apple_sdk.frameworks) CoreAudio AudioToolbox;
+  };
 
   babl = callPackage ../development/libraries/babl { };
 
@@ -21533,7 +21535,7 @@ in
 
   bftools = callPackage ../applications/science/biology/bftools { };
 
-  cmtk = callPackage ../applications/science/biology/cmtk { }; 
+  cmtk = callPackage ../applications/science/biology/cmtk { };
 
   conglomerate = callPackage ../applications/science/biology/conglomerate { };
 
