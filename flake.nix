@@ -6,7 +6,7 @@
   description = "A collection of packages for the Nix package manager";
 
   provides = flakes:
-    let pkgs = import ./. {}; in
+    let pkgs = import ./. { system = "x86_64-linux"; }; in
     {
       lib = import ./lib;
 
