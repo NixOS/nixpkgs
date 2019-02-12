@@ -1,5 +1,5 @@
 { stdenv, fetchgit, cmake, pkgconfig, qtbase, qtwebkit, qtkeychain, qttools, sqlite
-, inotify-tools, makeWrapper, libgnome-keyring, openssl_1_1_0, pcre, qtwebengine
+, inotify-tools, makeWrapper, libgnome-keyring, openssl_1_1_0, pcre, qtwebengine, fetchpatch
 }:
 
 stdenv.mkDerivation rec {
@@ -12,6 +12,15 @@ stdenv.mkDerivation rec {
     sha256 = "0r6jj3vbmwh7ipv83c8w1b25pbfq3mzrjgcijdw2gwfxwx9pfq7d";
     fetchSubmodules = true;
   };
+
+  # Patches contained in next (>2.5.1) release
+  patches = [
+    (fetchpatch {
+      name = "fix-qtwebengine-crash";
+      url = "https://patch-diff.githubusercontent.com/raw/nextcloud/desktop/pull/959.patch";
+      sha256 = "00qx976az2rb1gwl1rxapm8gqj42yzqp8k2fasn3h7b30lnxdyr0";
+    })
+  ];
 
   nativeBuildInputs = [ pkgconfig cmake makeWrapper ];
 
