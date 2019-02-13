@@ -23,8 +23,6 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [ openssl libsodium lzma ]
     ++ (stdenv.lib.optional stdenv.isDarwin Security);
 
-  broken = stdenv.isDarwin;
-
   configurePhase = ''
     export LIBCLANG_PATH="${llvmPackages.libclang}/lib"
   '';
@@ -35,5 +33,6 @@ rustPlatform.buildRustPackage rec {
     license = licenses.mpl20;
     maintainers = with maintainers; [ dywedir ];
     platforms = platforms.all;
+    broken = stdenv.isDarwin;
   };
 }
