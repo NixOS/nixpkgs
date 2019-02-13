@@ -87,6 +87,15 @@ in {
       type = types.str;
     };
 
+    nodeName = mkOption {
+      description = ''
+        Needed when running with Kubernetes as backend as this cannot be auto-detected";
+      '';
+      type = types.nullOr types.str;
+      default = with config.networking; (hostName + optionalString (!isNull domain) ".${domain}");
+      example = "node1.example.com";
+    };
+
     storageBackend = mkOption {
       description = "Determines where flannel stores its configuration at runtime";
       type = types.enum ["etcd" "kubernetes"];
@@ -150,6 +159,7 @@ in {
       } // optionalAttrs (cfg.storageBackend == "kubernetes") {
         FLANNELD_KUBE_SUBNET_MGR = "true";
         FLANNELD_KUBECONFIG_FILE = cfg.kubeconfig;
+        NODE_NAME = cfg.nodeName;
       };
       preStart = mkIf (cfg.storageBackend == "etcd") ''
         echo "setting network configuration"
