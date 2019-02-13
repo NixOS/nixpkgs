@@ -2597,7 +2597,9 @@ in
 
   fcitx-configtool = callPackage ../tools/inputmethods/fcitx/fcitx-configtool.nix { };
 
-  fcppt = callPackage ../development/libraries/fcppt { };
+  fcppt = callPackage ../development/libraries/fcppt {
+    stdenv = gcc8Stdenv;
+  };
 
   fcrackzip = callPackage ../tools/security/fcrackzip { };
 
