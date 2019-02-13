@@ -187,8 +187,8 @@ in with builtins; {
   };
 
   foundationdb60 = makeFdb rec {
-    version = "6.0.15";
+    version = "6.0.18";
     branch  = "release-6.0";
-    sha256  = "1z8104nj1qn738bs1zjiq1mdn8dnj4vksb3fh503mf3ygl54mjbw";
+    sha256  = "0q1mscailad0z7zf1nypv4g7gx3damfp45nf8nzyq47nsw5gz69p";
   };
 }
