@@ -994,6 +994,8 @@ in
   };
   bro = callPackage ../applications/networking/ids/bro { };
 
+  broot = callPackage ../tools/misc/broot { };
+
   bruteforce-luks = callPackage ../tools/security/bruteforce-luks { };
 
   breakpointHook = assert stdenv.isLinux;
