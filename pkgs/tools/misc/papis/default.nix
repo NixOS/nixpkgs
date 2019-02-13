@@ -1,8 +1,8 @@
 { lib, fetchFromGitHub, fetchpatch
-, python36, xdg_utils
+, python3, xdg_utils
 }:
 
-python36.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "papis";
   version = "0.7.5";
 
@@ -20,7 +20,7 @@ python36.pkgs.buildPythonApplication rec {
     sha256 = "0cmagfdaaml1pxhnxggifpb47z5g1p231qywnvnqpd3dm93382w1";
   };
 
-  propagatedBuildInputs = with python36.pkgs; [
+  propagatedBuildInputs = with python3.pkgs; [
     click requests filetype pyparsing configparser
     arxiv2bib pyyaml chardet beautifulsoup4 prompt_toolkit
     bibtexparser python-slugify pyparser pylibgen
@@ -33,7 +33,7 @@ python36.pkgs.buildPythonApplication rec {
     install -Dt "$out/etc/bash_completion.d" scripts/shell_completion/build/bash/papis
   '';
 
-  checkInputs = (with python36.pkgs; [
+  checkInputs = (with python3.pkgs; [
     pytest
   ]) ++ [
     xdg_utils

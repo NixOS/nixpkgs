@@ -574,6 +574,8 @@ in {
 
   pyaxmlparser = callPackage ../development/python-modules/pyaxmlparser { };
 
+  pybind11 = callPackage ../development/python-modules/pybind11 { };
+
   pycairo = callPackage ../development/python-modules/pycairo {
     inherit (pkgs) pkgconfig;
   };
@@ -2260,10 +2262,6 @@ in {
     gdal = self.gdal;
   };
 
-  django_2_0 = callPackage ../development/python-modules/django/2_0.nix {
-    gdal = self.gdal;
-  };
-
   django_2_1 = callPackage ../development/python-modules/django/2_1.nix {
     gdal = self.gdal;
   };
@@ -3124,6 +3122,8 @@ in {
   mock-open = callPackage ../development/python-modules/mock-open { };
 
   mockito = callPackage ../development/python-modules/mockito { };
+
+  moderngl = callPackage ../development/python-modules/moderngl { };
 
   modestmaps = callPackage ../development/python-modules/modestmaps { };
 

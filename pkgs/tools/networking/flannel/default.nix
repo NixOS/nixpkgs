@@ -4,7 +4,7 @@ with lib;
 
 buildGoPackage rec {
   name = "flannel-${version}";
-  version = "0.6.2";
+  version = "0.11.0";
   rev = "v${version}";
 
   goPackagePath = "github.com/coreos/flannel";
@@ -15,14 +15,14 @@ buildGoPackage rec {
     inherit rev;
     owner = "coreos";
     repo = "flannel";
-    sha256 = "03l0zyv9ajda70zw7jgwlmilw26h849jbb9f4slbycphhvbmpvb9";
+    sha256 = "0akxlrrsm2w51g0qd7dnsdy0hdajx98sdhxw4iknjr2kn7j3gph9";
   };
 
   meta = {
     description = "Network fabric for containers, designed for Kubernetes";
     license = licenses.asl20;
     homepage = https://github.com/coreos/flannel;
-    maintainers = with maintainers; [offline];
+    maintainers = with maintainers; [johanot offline];
     platforms = with platforms; linux;
   };
 }
