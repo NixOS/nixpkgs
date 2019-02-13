@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake }:
+{ stdenv, fetchFromGitHub, cmake, fetchpatch, staticOnly ? false }:
 
 # ?TODO: there's also python lib in there
 
@@ -15,7 +15,13 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  cmakeFlags = [];
+  patches = stdenv.lib.optional staticOnly (fetchpatch {
+    url = "https://github.com/google/brotli/pull/655/commits/7289e5a378ba13801996a84d89d8fe95c3fc4c11.patch";
+    sha256 = "1bghbdvj24jrvb0sqfdif9vwg7wx6pn8dvl6flkrcjkhpj0gi0jg";
+  });
+
+  cmakeFlags = []
+    ++ stdenv.lib.optional staticOnly "-DBUILD_SHARED_LIBS=OFF";
 
   outputs = [ "out" "dev" "lib" ];
 

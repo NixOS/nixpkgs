@@ -153,7 +153,7 @@ in {
   };
 
   brotli = super.brotli.override {
-    stdenv = super.stdenv;
+    staticOnly = true;
   };
 
   curl = super.curl.override {
