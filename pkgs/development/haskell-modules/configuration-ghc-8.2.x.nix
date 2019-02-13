@@ -1,4 +1,4 @@
-{ pkgs, haskellLib }:
+{ pkgs, haskellLib, stdenv }:
 
 with haskellLib;
 
@@ -44,9 +44,35 @@ self: super: {
   text = self.text_1_2_3_1;
 
   # Make sure we can still build Cabal 1.x.
-  Cabal_1_24_2_0 = overrideCabal super.Cabal_1_24_2_0 (drv: {
-    prePatch = "sed -i -e 's/process.*< 1.5,/process,/g' Cabal.cabal";
-  });
+  Cabal_1_24_2_0 = self.callPackage
+    ({ mkDerivation, array, base, base-compat, base-orphans, binary
+     , bytestring, containers, deepseq, Diff, directory, filepath
+     , integer-logarithms, mtl, optparse-applicative, parsec, pretty
+     , process, QuickCheck, tagged, tar, tasty, tasty-golden
+     , tasty-hunit, tasty-quickcheck, text, time, transformers
+     , tree-diff, unix
+     }:
+     mkDerivation {
+       pname = "Cabal";
+       version = "1.24.2.0";
+       sha256 = "b7d0eb8e3503fbca460c0a6ca5c88352cecfe1b69e0bbc79827872134ed86340";
+       setupHaskellDepends = [ mtl parsec ];
+       libraryHaskellDepends = [
+         array base binary bytestring containers deepseq directory filepath
+         mtl parsec pretty process text time transformers unix
+       ];
+       testHaskellDepends = [
+         array base base-compat base-orphans bytestring containers deepseq
+         Diff directory filepath integer-logarithms optparse-applicative
+         pretty process QuickCheck tagged tar tasty tasty-golden tasty-hunit
+         tasty-quickcheck text tree-diff
+       ];
+       doCheck = false;
+       description = "A framework for packaging Haskell software";
+       license = stdenv.lib.licenses.bsd3;
+       hydraPlatforms = stdenv.lib.platforms.none;
+       prePatch = "sed -i -e 's/process.*< 1.5,/process,/g' Cabal.cabal && sed -i -e 's/time.*< 1.8/time/g' Cabal.cabal";
+     }) {};
 
   # Build with the latest Cabal version, which works best albeit not perfectly.
   jailbreak-cabal = super.jailbreak-cabal.override { Cabal = self.Cabal_2_2_0_1; };
@@ -90,7 +116,24 @@ self: super: {
   cabal2nix = super.cabal2nix.overrideScope (self: super: { Cabal = self.Cabal_2_2_0_1; });
   cabal2spec = super.cabal2spec.overrideScope (self: super: { Cabal = self.Cabal_2_2_0_1; });
   distribution-nixpkgs = super.distribution-nixpkgs.overrideScope (self: super: { Cabal = self.Cabal_2_2_0_1; });
-  hackage-db_2_0_1 = super.hackage-db_2_0_1.overrideScope (self: super: { Cabal = self.Cabal_2_2_0_1; });
+  hackage-db_2_0_1 = (self.callPackage
+    ({ mkDerivation, aeson, base, bytestring, Cabal, containers
+     , directory, filepath, tar, time, utf8-string
+     }:
+     mkDerivation {
+       pname = "hackage-db";
+       version = "2.0.1";
+       sha256 = "13ggj72i8dxwh3qwznnqxbr00nvsbapyyhzx5zybfacddnpw3aph";
+       isLibrary = true;
+       isExecutable = true;
+       libraryHaskellDepends = [
+         aeson base bytestring Cabal containers directory filepath tar time
+         utf8-string
+       ];
+       description = "Access Hackage's package database via Data.Map";
+       license = stdenv.lib.licenses.bsd3;
+       maintainers = with stdenv.lib.maintainers; [ peti ];
+     }) {}).overrideScope (self: super: { Cabal = self.Cabal_2_2_0_1; });
   stack = super.stack.overrideScope (self: super: { Cabal = self.Cabal_2_2_0_1; });
 
   # GHC 8.2 doesn't have semigroups included by default

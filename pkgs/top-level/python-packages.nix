@@ -4103,8 +4103,6 @@ in {
 
   sphinx = callPackage ../development/python-modules/sphinx { };
 
-  sphinx_1_7_9 = callPackage ../development/python-modules/sphinx/1_7_9.nix { };
-
   sphinx-argparse = callPackage ../development/python-modules/sphinx-argparse { };
 
   sphinxcontrib-websupport = callPackage ../development/python-modules/sphinxcontrib-websupport { };

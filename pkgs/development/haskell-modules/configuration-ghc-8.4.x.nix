@@ -1,4 +1,4 @@
-{ pkgs, haskellLib }:
+{ pkgs, haskellLib, stdenv }:
 
 with haskellLib;
 
@@ -65,12 +65,45 @@ self: super: {
   stack = (doJailbreak super.stack).override {
     Cabal = self.Cabal_2_4_1_0;
     hpack = self.hpack_0_31_1.override { Cabal = self.Cabal_2_4_1_0; };
-    yaml = self.yaml_0_11_0_0;
     hackage-security = self.hackage-security.override { Cabal = self.Cabal_2_4_1_0; };
   };
-  hpack_0_31_1 = super.hpack_0_31_1.override {
-    yaml = self.yaml_0_11_0_0;
-  };
+  hpack_0_31_1 = self.callPackage
+    ({ mkDerivation, aeson, base, bifunctors, bytestring, Cabal
+     , containers, cryptonite, deepseq, directory, filepath, Glob, hspec
+     , hspec-discover, http-client, http-client-tls, http-types, HUnit
+     , infer-license, interpolate, mockery, pretty, QuickCheck
+     , scientific, template-haskell, temporary, text, transformers
+     , unordered-containers, vector, yaml
+     }:
+     mkDerivation {
+       pname = "hpack";
+       version = "0.31.1";
+       sha256 = "0fipbmmj4x588z7vh635mizhym9krydfxr49bgaf7xir4fsb4fmc";
+       isLibrary = true;
+       isExecutable = true;
+       libraryHaskellDepends = [
+         aeson base bifunctors bytestring Cabal containers cryptonite
+         deepseq directory filepath Glob http-client http-client-tls
+         http-types infer-license pretty scientific text transformers
+         unordered-containers vector yaml
+       ];
+       executableHaskellDepends = [
+         aeson base bifunctors bytestring Cabal containers cryptonite
+         deepseq directory filepath Glob http-client http-client-tls
+         http-types infer-license pretty scientific text transformers
+         unordered-containers vector yaml
+       ];
+       testHaskellDepends = [
+         aeson base bifunctors bytestring Cabal containers cryptonite
+         deepseq directory filepath Glob hspec http-client http-client-tls
+         http-types HUnit infer-license interpolate mockery pretty
+         QuickCheck scientific template-haskell temporary text transformers
+         unordered-containers vector yaml
+       ];
+       testToolDepends = [ hspec-discover ];
+       description = "A modern format for Haskell packages";
+       license = stdenv.lib.licenses.mit;
+     }) {};
 
   # https://github.com/pikajude/stylish-cabal/issues/11
   stylish-cabal = generateOptparseApplicativeCompletion "stylish-cabal" (super.stylish-cabal.overrideScope (self: super: {
