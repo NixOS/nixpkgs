@@ -160,4 +160,7 @@ in {
     gssSupport = false;
   };
 
+  nix = (super.nix.override { withAWS = false; }).overrideAttrs (o: {
+    NIX_LDFLAGS = "-lssl -lbrotlicommon -lssh2 -lz -lnghttp2 -lcrypto -latomic";
+  });
 }

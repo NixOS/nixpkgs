@@ -1,0 +1,55 @@
+diff --git a/Makefile.config.in b/Makefile.config.in
+index b01a4afb..59730b64 100644
+--- a/Makefile.config.in
++++ b/Makefile.config.in
+@@ -1,4 +1,6 @@
++AR = @AR@
+ BDW_GC_LIBS = @BDW_GC_LIBS@
++BUILD_SHARED_LIBS = @BUILD_SHARED_LIBS@
+ CC = @CC@
+ CFLAGS = @CFLAGS@
+ CXX = @CXX@
+diff --git a/configure.ac b/configure.ac
+index 5a252667..410b2097 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -64,6 +64,7 @@ AC_PROG_CXX
+ AC_PROG_CPP
+ AX_CXX_COMPILE_STDCXX_14
+ 
++AC_CHECK_TOOL([AR], [ar])
+ 
+ # Use 64-bit file system calls so that we can support files > 2 GiB.
+ AC_SYS_LARGEFILE
+@@ -267,6 +268,15 @@ AC_ARG_WITH(sandbox-shell, AC_HELP_STRING([--with-sandbox-shell=PATH],
+   sandbox_shell=$withval)
+ AC_SUBST(sandbox_shell)
+ 
++AC_ARG_ENABLE(shared, AC_HELP_STRING([--enable-shared],
++  [Build shared libraries for Nix [default=yes]]),
++  shared=$enableval, shared=yes)
++if test "$shared" = yes; then
++  AC_SUBST(BUILD_SHARED_LIBS, 1, [Whether to build shared libraries.])
++else
++  AC_SUBST(BUILD_SHARED_LIBS, 0, [Whether to build shared libraries.])
++fi
++
+ 
+ # Expand all variables in config.status.
+ test "$prefix" = NONE && prefix=$ac_default_prefix
+diff --git a/mk/libraries.mk b/mk/libraries.mk
+index 14c95fa9..28173629 100644
+--- a/mk/libraries.mk
++++ b/mk/libraries.mk
+@@ -125,9 +125,9 @@ define build-library
+     $(1)_PATH := $$(_d)/$$($(1)_NAME).a
+ 
+     $$($(1)_PATH): $$($(1)_OBJS) | $$(_d)/
+-	$(trace-ar) ar crs $$@ $$?
++	$(trace-ar) $(AR) crs $$@ $$?
+ 
+-    $(1)_LDFLAGS_USE += $$($(1)_PATH) $$($(1)_LDFLAGS)
++    $(1)_LDFLAGS_USE += -Wl,--whole-archive $$($(1)_PATH) -Wl,--no-whole-archive $$($(1)_LDFLAGS)
+ 
+     $(1)_INSTALL_PATH := $$(libdir)/$$($(1)_NAME).a
+ 
