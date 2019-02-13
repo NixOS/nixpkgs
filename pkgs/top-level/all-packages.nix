@@ -19154,7 +19154,9 @@ in
 
   rdesktop = callPackage ../applications/networking/remote/rdesktop { };
 
-  rdedup = callPackage ../tools/backup/rdedup { };
+  rdedup = callPackage ../tools/backup/rdedup {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   rdup = callPackage ../tools/backup/rdup { };
 
