@@ -178,6 +178,8 @@ in {
 
   ansicolor = callPackage ../development/python-modules/ansicolor { };
 
+  aplpy = callPackage ../development/python-modules/aplpy { };
+
   argon2_cffi = callPackage ../development/python-modules/argon2_cffi { };
 
   asana = callPackage ../development/python-modules/asana { };
