@@ -798,6 +798,8 @@ in {
 
   relatorio = callPackage ../development/python-modules/relatorio { };
 
+  reproject = callPackage ../development/python-modules/reproject { };
+
   remotecv = callPackage ../development/python-modules/remotecv { };
 
   pyzufall = callPackage ../development/python-modules/pyzufall { };
