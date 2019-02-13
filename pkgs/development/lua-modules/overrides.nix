@@ -45,6 +45,20 @@ with super;
   lrexlib-gnu = super.lrexlib-gnu.override({
     buildInputs = [ pkgs.gnulib ];
   });
+  luaevent = super.luaevent.override({
+    buildInputs = with pkgs; [ libevent.dev libevent ];
+    propagatedBuildInputs = [ luasocket ];
+    extraConfig = ''
+      variables={
+        EVENT_INCDIR="${pkgs.libevent.dev}/include";
+        EVENT_LIBDIR="${pkgs.libevent}/lib";
+      }
+    '';
+    disabled= luaOlder "5.1" || luaAtLeast "5.4" || isLuaJIT;
+  });
+  lua-iconv = super.lua-iconv.override({
+    buildInputs = [ pkgs.libiconv ];
+  });
   luv = super.luv.overrideAttrs(oa: {
     propagatedBuildInputs = oa.propagatedBuildInputs ++ [ pkgs.libuv ];
   });
