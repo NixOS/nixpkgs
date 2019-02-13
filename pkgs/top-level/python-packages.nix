@@ -194,6 +194,8 @@ in {
 
   astropy = callPackage ../development/python-modules/astropy { };
 
+  astropy-helpers = callPackage ../development/python-modules/astropy-helpers { };
+
   astroquery = callPackage ../development/python-modules/astroquery { };
 
   asttokens = callPackage ../development/python-modules/asttokens { };
