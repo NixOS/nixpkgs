@@ -33,7 +33,7 @@ rec {
     '';
   };
 
-  wrapAppImage = { name, src, extraPkgs }: buildFHSUserEnv (defaultFhsEnvArgs // {
+  wrapAppImage = args@{ name, src, extraPkgs, ... }: buildFHSUserEnv (defaultFhsEnvArgs // {
     inherit name;
 
     targetPkgs = pkgs: defaultFhsEnvArgs.targetPkgs pkgs ++ extraPkgs pkgs;
@@ -46,17 +46,17 @@ rec {
       cd $APPDIR
       exec ./AppRun "$@"
     '';
-  });
+  } // (builtins.removeAttrs args [ "name" "src" "extraPkgs" ]));
 
-  wrapType1 = args@{ name, src, extraPkgs ? pkgs: [] }: wrapAppImage {
+  wrapType1 = args@{ name, src, extraPkgs ? pkgs: [], ... }: wrapAppImage (args // {
     inherit name extraPkgs;
     src = extractType1 { inherit name src; };
-  };
+  });
 
-  wrapType2 = args@{ name, src, extraPkgs ? pkgs: [] }: wrapAppImage {
+  wrapType2 = args@{ name, src, extraPkgs ? pkgs: [], ... }: wrapAppImage (args // {
     inherit name extraPkgs;
     src = extractType2 { inherit name src; };
-  };
+  });
 
   defaultFhsEnvArgs = {
     name = "appimage-env";
