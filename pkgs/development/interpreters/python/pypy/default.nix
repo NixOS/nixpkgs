@@ -108,6 +108,9 @@ in with passthru; stdenv.mkDerivation rec {
       "test_pathlib"
       # disable tarfile because it assumes gid 0 exists
       "test_tarfile"
+      # disable __all__ because of spurious imp/importlib warning and
+      # warning-to-error test policy
+      "test___all__"
     ];
   in ''
     export TERMINFO="${ncurses.out}/share/terminfo/";
