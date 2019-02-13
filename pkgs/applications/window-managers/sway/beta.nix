@@ -10,14 +10,18 @@
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "sway";
-  version = "1.0-rc1";
+  version = "1.0-rc2";
 
   src = fetchFromGitHub {
     owner = "swaywm";
     repo = "sway";
     rev = version;
-    sha256 = "1zigx2yz0i91iz2r2l6csq33hscaybmaq1p19jgxrazms7z213mz";
+    sha256 = "052if3nagmwg5zh79nhrq75fbc9v2x950lcs1mal52p801qiv8f1";
   };
+
+  postPatch = ''
+    sed -iE "s/version: '1.0',/version: '${version}',/" meson.build
+  '';
 
   nativeBuildInputs = [
     pkgconfig meson ninja
@@ -32,8 +36,8 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   mesonFlags = [
-    "-Dsway-version=${version}" "-Dxwayland=enabled" "-Dgdk-pixbuf=enabled"
-    "-Dman-pages=enabled" "-Dtray=enabled"
+    "-Dxwayland=enabled" "-Dgdk-pixbuf=enabled" "-Dman-pages=enabled"
+    "-Dtray=enabled"
   ];
 
   meta = with stdenv.lib; {

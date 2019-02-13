@@ -3,7 +3,7 @@
 } :
 
 let
-  version = "0.3.4";
+  version = "0.3.5";
 
 in stdenv.mkDerivation {
   name = "soapyuhd-${version}";
@@ -12,7 +12,7 @@ in stdenv.mkDerivation {
     owner = "pothosware";
     repo = "SoapyUHD";
     rev = "soapy-uhd-${version}";
-    sha256 = "1da7cjcvfdqhgznm7x14s1h7lwz5lan1b48akw445ah1vxwvh4hl";
+    sha256 = "07cr4zk42d0l5g03wm7dzl5lmqr104hmzp1fdjqa1z7xq4v9c9b1";
   };
 
   nativeBuildInputs = [ cmake pkgconfig ];

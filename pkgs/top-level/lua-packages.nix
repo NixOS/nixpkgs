@@ -100,32 +100,6 @@ with self; {
 
   luarocks-nix = callPackage ../development/tools/misc/luarocks/luarocks-nix.nix { };
 
-  basexx = buildLuaPackage rec {
-    version = "0.4.0";
-    name = "basexx-${version}";
-
-    src = fetchFromGitHub {
-      owner = "aiq";
-      repo = "basexx";
-      rev = "v${version}";
-      sha256 = "12y0ng9bp5b98iax35pnp0kc0mb42spv1cbywvfq6amik6l0ya7g";
-    };
-
-    buildPhase = ":";
-    installPhase = ''
-      install -Dt "$out/lib/lua/${lua.luaversion}/" \
-        lib/basexx.lua
-    '';
-
-    meta = with stdenv.lib; {
-      description = "Lua library for base2, base16, base32, base64, base85";
-      homepage = "https://github.com/aiq/basexx";
-      license = licenses.mit;
-      maintainers = with maintainers; [ vcunat ];
-      platforms = platforms.all;
-    };
-  };
-
   bit32 = buildLuaPackage rec {
     version = "5.3.0";
     name = "bit32-${version}";
@@ -187,55 +161,6 @@ with self; {
     meta = with stdenv.lib; {
       description = "Compatibility module providing Lua-5.3-style APIs for Lua 5.2 and 5.1";
       homepage = "https://github.com/keplerproject/lua-compat-5.3";
-      license = licenses.mit;
-      maintainers = with maintainers; [ vcunat ];
-      platforms = platforms.all;
-    };
-  };
-
-  cqueues = buildLuaPackage rec {
-    name = "cqueues-${version}";
-    version = "20171014";
-
-    src = fetchurl {
-      url = "https://www.25thandclement.com/~william/projects/releases/${name}.tgz";
-      sha256 = "1dabhpn6r0hlln8vx9hxm34pfcm46qzgpb2apmziwg5z51fi4ksb";
-    };
-
-    preConfigure = ''export prefix=$out'';
-
-    nativeBuildInputs = [ gnum4 ];
-    buildInputs = [ openssl ];
-
-    meta = with stdenv.lib; {
-      description = "A type of event loop for Lua";
-      homepage = "https://www.25thandclement.com/~william/projects/cqueues.html";
-      license = licenses.mit;
-      maintainers = with maintainers; [ vcunat ];
-      platforms = platforms.unix;
-    };
-  };
-
-  fifo = buildLuaPackage rec {
-    version = "0.2";
-    name = "fifo-${version}";
-
-    src = fetchFromGitHub {
-      owner = "daurnimator";
-      repo = "fifo.lua";
-      rev = version;
-      sha256 = "1800k7h5hxsvm05bjdr65djjml678lwb0661cll78z1ys2037nzn";
-    };
-
-    buildPhase = ":";
-    installPhase = ''
-      mkdir -p "$out/lib/lua/${lua.luaversion}"
-      mv fifo.lua "$out/lib/lua/${lua.luaversion}/"
-    '';
-
-    meta = with stdenv.lib; {
-      description = "A lua library/'class' that implements a FIFO";
-      homepage = "https://github.com/daurnimator/fifo.lua";
       license = licenses.mit;
       maintainers = with maintainers; [ vcunat ];
       platforms = platforms.all;
@@ -915,32 +840,6 @@ with self; {
     };
   };
 
-  lpeg_patterns = buildLuaPackage rec {
-    version = "0.5";
-    name = "lpeg_patterns-${version}";
-
-    src = fetchFromGitHub {
-      owner = "daurnimator";
-      repo = "lpeg_patterns";
-      rev = "v${version}";
-      sha256 = "1s3c179a64r45ffkawv9dnxw4mzwkzj00nr9z2gs5haajgpjivw6";
-    };
-
-    buildPhase = ":";
-    installPhase = ''
-      mkdir -p "$out/lib/lua/${lua.luaversion}"
-      mv lpeg_patterns "$out/lib/lua/${lua.luaversion}/"
-    '';
-
-    meta = with stdenv.lib; {
-      description = "A collection of LPEG patterns";
-      homepage = "https://github.com/daurnimator/lpeg_patterns";
-      license = licenses.mit;
-      maintainers = with maintainers; [ vcunat ];
-      inherit (lpeg.meta) platforms;
-    };
-  };
-
   cjson = buildLuaPackage rec {
     name = "cjson-${version}";
     version = "2.1.0";
@@ -971,43 +870,6 @@ with self; {
       maintainers = with maintainers; [ vyp ];
     };
   };
-
-  lgi = toLuaModule(stdenv.mkDerivation rec {
-    name = "lgi-${version}";
-    version = "0.9.2";
-
-    src = fetchFromGitHub {
-      owner = "pavouk";
-      repo = "lgi";
-      rev = version;
-      sha256 = "03rbydnj411xpjvwsyvhwy4plm96481d7jax544mvk7apd8sd5jj";
-    };
-
-    nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ glib gobject-introspection lua ];
-
-    makeFlags = [ "LUA_VERSION=${lua.luaversion}" ];
-
-    preBuild = ''
-      sed -i "s|/usr/local|$out|" lgi/Makefile
-    '';
-
-    patches = [
-        (fetchpatch {
-            name = "lgi-find-cairo-through-typelib.patch";
-            url = "https://github.com/psychon/lgi/commit/46a163d9925e7877faf8a4f73996a20d7cf9202a.patch";
-            sha256 = "0gfvvbri9kyzhvq3bvdbj2l6mwvlz040dk4mrd5m9gz79f7w109c";
-        })
-    ];
-
-    meta = with stdenv.lib; {
-      description = "GObject-introspection based dynamic Lua binding to GObject based libraries";
-      homepage    = https://github.com/pavouk/lgi;
-      license     = licenses.mit;
-      maintainers = with maintainers; [ lovek323 rasendubi ];
-      platforms   = platforms.unix;
-    };
-  });
 
   mpack = buildLuaPackage rec {
     name = "mpack-${version}";

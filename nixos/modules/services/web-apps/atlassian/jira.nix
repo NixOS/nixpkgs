@@ -6,7 +6,7 @@ let
 
   cfg = config.services.jira;
 
-  pkg = pkgs.atlassian-jira.override (optionalAttrs cfg.sso.enable {
+  pkg = cfg.package.override (optionalAttrs cfg.sso.enable {
     enableSSO = cfg.sso.enable;
     crowdProperties = ''
       application.name                        ${cfg.sso.applicationName}
@@ -129,6 +129,13 @@ in
             performance of Crowd's integration.
           '';
         };
+      };
+
+      package = mkOption {
+        type = types.package;
+        default = pkgs.atlassian-jira;
+        defaultText = "pkgs.atlassian-jira";
+        description = "Atlassian JIRA package to use.";
       };
 
       jrePackage = mkOption {

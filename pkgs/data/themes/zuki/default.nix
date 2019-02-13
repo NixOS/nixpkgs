@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, gdk_pixbuf, librsvg, gtk-engine-murrine }:
 
 stdenv.mkDerivation rec {
-  name = "zuki-themes-${version}";
-  version = "3.28-3";
+  pname = "zuki-themes";
+  version = "3.30-1";
 
   src = fetchFromGitHub {
     owner = "lassekongo83";
-    repo = "zuki-themes";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "0sgp41fpd8lyyb0v82y41v3hmb0ayv3zqqrv0m3ln0dzkr7ym9g7";
+    sha256 = "0d7i0jhjiarqnwkc1k505bw8r9bvbwk3x8yzqmc3vnwcd7mr3m9x";
   };
 
   buildInputs = [ gdk_pixbuf librsvg ];

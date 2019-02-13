@@ -19,7 +19,7 @@ lib.makeScope pkgs.newScope (self: with self; {
     in
       lib.filter (x: !(builtins.elem (pkgName x) namesToRemove)) packages;
 
-  maintainers = with pkgs.lib.maintainers; [ lethalman jtojnar hedning ];
+  maintainers = with pkgs.lib.maintainers; [ lethalman jtojnar hedning worldofpeace ];
 
   corePackages = with gnome3; [
     pkgs.desktop-file-utils

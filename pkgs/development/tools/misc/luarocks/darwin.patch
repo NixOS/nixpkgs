@@ -1,0 +1,27 @@
+diff --git a/src/luarocks/cfg.lua b/src/luarocks/cfg.lua
+index 55cd4c9..060a6f1 100644
+--- a/src/luarocks/cfg.lua
++++ b/src/luarocks/cfg.lua
+@@ -587,9 +587,9 @@ if cfg.platforms.macosx then
+    defaults.external_lib_extension = "dylib"
+    defaults.arch = "macosx-"..cfg.target_cpu
+    defaults.variables.LIBFLAG = "-bundle -undefined dynamic_lookup -all_load"
+-   defaults.variables.STAT = "/usr/bin/stat"
++   defaults.variables.STAT = "stat"
+    defaults.variables.STATFLAG = "-f '%A'"
+-   local version = io.popen("sw_vers -productVersion"):read("*l")
++   local version = "10.10"
+    version = tonumber(version and version:match("^[^.]+%.([^.]+)")) or 3
+    if version >= 10 then
+       version = 8
+@@ -598,8 +598,8 @@ if cfg.platforms.macosx then
+    else
+       defaults.gcc_rpath = false
+    end
+-   defaults.variables.CC = "env MACOSX_DEPLOYMENT_TARGET=10."..version.." gcc"
+-   defaults.variables.LD = "env MACOSX_DEPLOYMENT_TARGET=10."..version.." gcc"
++   defaults.variables.CC = "env MACOSX_DEPLOYMENT_TARGET=10."..version.." clang"
++   defaults.variables.LD = "env MACOSX_DEPLOYMENT_TARGET=10."..version.." clang"
+    defaults.web_browser = "open"
+ end
+ 
