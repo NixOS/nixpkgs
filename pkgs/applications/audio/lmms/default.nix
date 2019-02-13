@@ -1,17 +1,17 @@
 { stdenv, fetchFromGitHub, cmake, pkgconfig, alsaLib ? null, fftwFloat, fltk13
-, fluidsynth ? null, lame ? null, libgig ? null, libjack2 ? null, libpulseaudio ? null
+, fluidsynth_1 ? null, lame ? null, libgig ? null, libjack2 ? null, libpulseaudio ? null
 , libsamplerate, libsoundio ? null, libsndfile, libvorbis ? null, portaudio ? null
 , qtbase, qtx11extras, qttools, SDL ? null }:
 
 stdenv.mkDerivation rec {
   name = "lmms-${version}";
-  version = "1.2.0-rc6";
+  version = "1.2.0-rc7";
 
   src = fetchFromGitHub {
     owner = "LMMS";
     repo = "lmms";
     rev = "v${version}";
-    sha256 = "1pqir5srfrknfd8nmbz565ymq18ffw8d8k9pbmzggaxvlcr12b25";
+    sha256 = "1hshzf2sbdfw37y9rz1ksgvn81kp2n23dp74lsaasc2n7wzjwdis";
     fetchSubmodules = true;
   };
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     alsaLib
     fftwFloat
     fltk13
-    fluidsynth
+    fluidsynth_1
     lame
     libgig
     libjack2

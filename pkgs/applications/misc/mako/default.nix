@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   name = "mako-${version}";
-  version = "1.1";
+  version = "1.2";
 
   src = fetchFromGitHub {
     owner = "emersion";
     repo = "mako";
     rev = "v${version}";
-    sha256 = "18krsyp9g6f689024dn1mq8dyj4yg8c3kcy5s88q1gm8py6c4493";
+    sha256 = "112b7s5bkvwlgsm2kng2vh8mn6wr3a6c7n1arl9adxlghdym449h";
   };
 
   nativeBuildInputs = [ meson ninja pkgconfig scdoc ];

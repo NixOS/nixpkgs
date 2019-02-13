@@ -3,7 +3,7 @@
 with pkgs;
 
 runCommand "nixpkgs-metrics"
-  { buildInputs = [ nix time ];
+  { nativeBuildInputs = with pkgs.lib; map getBin [ nix time jq ];
     requiredSystemFeatures = [ "benchmark" ];
   }
   ''
@@ -19,23 +19,26 @@ runCommand "nixpkgs-metrics"
       shift
 
       echo "running $@"
-      NIX_SHOW_STATS=1 time "$@" 2>&1 > /dev/null | tee stats
+      NIX_SHOW_STATS=1 time -o stats-time "$@" 2>stats-nix
+      sed '/^warning:/d' -i stats-nix
 
-      cat stats
+      cat stats-nix; echo; cat stats-time; echo
 
-      x=$(sed -e 's/.*time elapsed: \([0-9\.]\+\).*/\1/ ; t ; d' stats)
+      x=$(jq '.cpuTime' < stats-nix)
       [[ -n $x ]] || exit 1
       echo "$name.time $x s" >> $out/nix-support/hydra-metrics
 
-      x=$(sed -e 's/.* \([0-9]\+\)maxresident.*/\1/ ; t ; d' stats)
+      x=$(sed -e 's/.* \([0-9]\+\)maxresident.*/\1/ ; t ; d' < stats-time)
       [[ -n $x ]] || exit 1
       echo "$name.maxresident $x KiB" >> $out/nix-support/hydra-metrics
 
-      x=$(sed -e 's/.*total allocations: \([0-9]\+\) bytes.*/\1/ ; t ; d' stats)
+      # nix-2.2 also outputs .symbols.bytes but that wasn't summed originally
+      # https://github.com/NixOS/nix/pull/2392/files#diff-8e6ba8c21672fc1a5f6f606e1e101c74L1762
+      x=$(jq '[.envs,.list,.values,.sets] | map(.bytes) | add' < stats-nix)
       [[ -n $x ]] || exit 1
       echo "$name.allocations $x B" >> $out/nix-support/hydra-metrics
 
-      x=$(sed -e 's/.*values allocated count: \([0-9]\+\).*/\1/ ; t ; d' stats)
+      x=$(jq '.values.number' < stats-nix)
       [[ -n $x ]] || exit 1
       echo "$name.values $x" >> $out/nix-support/hydra-metrics
     }
@@ -49,7 +52,12 @@ runCommand "nixpkgs-metrics"
     run nix-env.qa nix-env -f ${nixpkgs} -qa
     run nix-env.qaDrv nix-env -f ${nixpkgs} -qa --drv-path --meta --xml
 
-    export GC_INITIAL_HEAP_SIZE=128k
+    num=$(nix-env -f ${nixpkgs} -qa | wc -l)
+    echo "nix-env.qaCount $num" >> $out/nix-support/hydra-metrics
+
+    # TODO: this has been ignored for some time
+    # GC Warning: Bad initial heap size 128k - ignoring it.
+    #export GC_INITIAL_HEAP_SIZE=128k
     run nix-env.qaAggressive nix-env -f ${nixpkgs} -qa
     run nix-env.qaDrvAggressive nix-env -f ${nixpkgs} -qa --drv-path --meta --xml
 

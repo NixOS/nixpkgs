@@ -11,20 +11,18 @@ stdenv.mkDerivation rec {
     sha256 = "1n1gb8ldgqv3vs565yhk1w4jfvrviczp94r8wqlkv5q6ab43c8w9";
   };
 
-  makeFlags = [ "MODE=0755" "PREFIX=" "DESTDIR=$(out)" ];
-  installTargets = [ "install" "install_udev_rules" ];
+  makeFlags = [ "PREFIX=" "DESTDIR=$(out)" ];
 
   postPatch = ''
     substituteInPlace 90-brightnessctl.rules --replace /bin/ ${coreutils}/bin/
-    substituteInPlace 90-brightnessctl.rules --replace %k '*'
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = "https://github.com/Hummer12007/brightnessctl";
-    maintainers = [ stdenv.lib.maintainers.Dje4321 ];
-    license = stdenv.lib.licenses.mit;
     description = "This program allows you read and control device brightness";
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.mit;
+    maintainers = with maintainers; [ megheaiulian ];
+    platforms = platforms.linux;
   };
 
 }

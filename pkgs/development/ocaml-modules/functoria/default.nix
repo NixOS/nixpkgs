@@ -13,8 +13,6 @@ stdenv.mkDerivation rec {
 		sha256 = "019rl4rir4lwgjyqj2wq3ylw4daih1kxxgbc6ld6kzcq66mwr747";
 	};
 
-	unpackCmd = "tar xjf $src";
-
 	buildInputs = [ ocaml findlib ocamlbuild topkg ];
 	propagatedBuildInputs = [ bos cmdliner ocamlgraph ];
 

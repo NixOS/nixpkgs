@@ -1,5 +1,5 @@
 { stdenv, fetchgit, autoreconfHook, pkgconfig, gtk-doc, xkeyboard_config, libxml2, xorg, docbook_xsl
-, glib, isocodes, gobjectIntrospection }:
+, glib, isocodes, gobject-introspection }:
 
 let
   version = "5.4";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook pkgconfig gtk-doc docbook_xsl ];
 
-  buildInputs = [ gobjectIntrospection ];
+  buildInputs = [ gobject-introspection ];
 
   preAutoreconf = ''
     export NOCONFIGURE=1

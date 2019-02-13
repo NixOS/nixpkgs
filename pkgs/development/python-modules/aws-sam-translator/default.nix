@@ -10,11 +10,11 @@
 
 buildPythonPackage rec {
   pname = "aws-sam-translator";
-  version = "1.6.1";
+  version = "1.9.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "23160f717bd65de810fa538b7c145eae4384d10adb460e375d148de7f283bd10";
+    sha256 = "1334795a85077cd5741822149260f90104fb2a01699171c9e9567c0db76ed74d";
   };
 
   # Tests are not included in the PyPI package

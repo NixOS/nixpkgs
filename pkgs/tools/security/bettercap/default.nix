@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   name = "bettercap-${version}";
-  version = "2.4";
+  version = "2.11";
 
   goPackagePath = "github.com/bettercap/bettercap";
 
@@ -10,10 +10,11 @@ buildGoPackage rec {
     owner = "bettercap";
     repo = "bettercap";
     rev = "v${version}";
-    sha256 = "1k1ank8z9sr3vxm86dfcrn1y3qa3gfwyb2z0fvkvi38gc88pfljb";
+    sha256 = "08hd7hk0jllfhdiky1f5pfsvl1x0bkgv1p4z9qvsksdg9a7qjznw";
   };
 
-  buildInputs = [libpcap libnfnetlink libnetfilter_queue pkgconfig];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libpcap libnfnetlink libnetfilter_queue ];
 
   goDeps = ./deps.nix;
 

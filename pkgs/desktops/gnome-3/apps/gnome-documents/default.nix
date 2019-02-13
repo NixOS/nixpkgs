@@ -1,18 +1,18 @@
-{ stdenv, meson, ninja, gettext, fetchurl, evince, gjs
+{ stdenv, meson, ninja, gettext, fetchurl, fetchpatch, evince, gjs
 , pkgconfig, gtk3, glib, tracker, tracker-miners
 , itstool, libxslt, webkitgtk, libgdata
 , gnome-desktop, libzapojit, libgepub
 , gnome3, gdk_pixbuf, libsoup, docbook_xsl, docbook_xml_dtd_42
-, gobjectIntrospection, inkscape, poppler_utils
+, gobject-introspection, inkscape, poppler_utils
 , desktop-file-utils, wrapGAppsHook, python3 }:
 
 stdenv.mkDerivation rec {
   name = "gnome-documents-${version}";
-  version = "3.28.2";
+  version = "3.30.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-documents/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "0aannnq39gjg6jnjm4kr8fqigg5npjvd8dyxw7k4hy4ny0ffxwjq";
+    sha256 = "0zchkjpc9algmxrpj0f9i2lc4h1yp8z0h76vn32xa9jr46x4lsh6";
   };
 
   doCheck = true;
@@ -26,9 +26,17 @@ stdenv.mkDerivation rec {
   buildInputs = [
     gtk3 glib gnome3.gsettings-desktop-schemas
     gdk_pixbuf gnome3.defaultIconTheme evince
-    libsoup webkitgtk gjs gobjectIntrospection
+    libsoup webkitgtk gjs gobject-introspection
     tracker tracker-miners libgdata
     gnome-desktop libzapojit libgepub
+  ];
+
+  patches = [
+    # fix RPATH to libgd
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gnome-documents/commit/d18a92e0a940073ac766f609937539e4fc6cdbb7.patch";
+      sha256 = "0s3mk8vrl1gzk93yvgqbnz44i27qw1d9yvvmnck3fv23phrxkzk9";
+    })
   ];
 
   postPatch = ''

@@ -1,22 +1,22 @@
 { stdenv, fetchFromGitHub, makeWrapper, python3Packages, perl, zip
-, rtmpdump }:
+, rtmpdump, gitMinimal }:
 
 let
-  inherit (python3Packages) python nose pycrypto requests mock;
+  inherit (python3Packages) python nose pycrypto pyyaml requests mock;
 in stdenv.mkDerivation rec {
   name = "svtplay-dl-${version}";
-  version = "1.9.11";
+  version = "2.1";
 
   src = fetchFromGitHub {
     owner = "spaam";
     repo = "svtplay-dl";
     rev = version;
-    sha256 = "14p2362rzyblma9321z4zrcbzfs9m269ry6sz44ly0bv5fik7gdy";
+    sha256 = "1cnc32gbhs955391hs1x1jpjsl3b6pqy7ysdydmp9q1i2rw105ln";
   };
 
-  pythonPaths = [ pycrypto requests ];
+  pythonPaths = [ pycrypto pyyaml requests ];
   buildInputs = [ python perl nose mock rtmpdump makeWrapper ] ++ pythonPaths;
-  nativeBuildInputs = [ zip ];
+  nativeBuildInputs = [ gitMinimal zip ];
 
   postPatch = ''
     substituteInPlace lib/svtplay_dl/fetcher/rtmp.py \

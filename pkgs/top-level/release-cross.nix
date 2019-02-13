@@ -30,7 +30,7 @@ let
     buildPackages.gcc = nativePlatforms;
     coreutils = nativePlatforms;
     haskell.packages.ghcHEAD.hello = nativePlatforms;
-    haskell.packages.ghc822.hello = nativePlatforms;
+    haskell.packages.ghc844.hello = nativePlatforms;
   };
 
   linuxCommon = lib.recursiveUpdate gnuCommon {
@@ -87,11 +87,11 @@ in
     # good idea lest there be some irrelevant pass-through debug attrs that
     # cause false negatives.
     testEqualOne = path: system: let
-      f = path: attrs: builtins.toString (lib.getAttrFromPath path (allPackages attrs));
+      f = path: crossSystem: system: builtins.toString (lib.getAttrFromPath path (pkgsForCross crossSystem system));
     in assertTrue (
-        f path { inherit system; }
+        f path null system
         ==
-        f (["buildPackages"] ++ path) { inherit system crossSystem; }
+        f (["buildPackages"] ++ path) crossSystem system
       );
 
     testEqual = path: systems: forMatchingSystems systems (testEqualOne path);
@@ -142,7 +142,7 @@ in
 
   avr = mapTestOnCross lib.systems.examples.avr embedded;
   arm-embedded = mapTestOnCross lib.systems.examples.arm-embedded embedded;
-  powerpc-embedded = mapTestOnCross lib.systems.examples.powerpc-embedded embedded;
+  powerpc-embedded = mapTestOnCross lib.systems.examples.ppc-embedded embedded;
   aarch64-embedded = mapTestOnCross lib.systems.examples.aarch64-embedded embedded;
   i686-embedded = mapTestOnCross lib.systems.examples.i686-embedded embedded;
   x86_64-embedded = mapTestOnCross lib.systems.examples.x86_64-embedded embedded;
@@ -153,7 +153,7 @@ in
     tools = import ../stdenv/linux/make-bootstrap-tools-cross.nix { system = "x86_64-linux"; };
     maintainers = [ lib.maintainers.dezgeg ];
     mkBootstrapToolsJob = drv:
-      assert lib.elem drv.system (supportedSystems ++ [ "aarch64-linux" ]);
+      assert lib.elem drv.system supportedSystems;
       hydraJob' (lib.addMetaAttrs { inherit maintainers; } drv);
   in lib.mapAttrsRecursiveCond (as: !lib.isDerivation as) (name: mkBootstrapToolsJob) tools;
 }

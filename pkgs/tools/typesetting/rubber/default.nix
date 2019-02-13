@@ -1,12 +1,12 @@
-{ fetchurl, stdenv, python2Packages, texinfo }:
+{ fetchurl, stdenv, python3Packages, texinfo }:
 
-python2Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   name = "rubber-${version}";
-  version = "1.4";
+  version = "1.5.1";
 
   src = fetchurl {
     url = "https://launchpad.net/rubber/trunk/${version}/+download/${name}.tar.gz";
-    sha256 = "1d7hq19vpb3l31grldbxg8lx1qdd18f5f3gqw96q0lhf58agcjl2";
+    sha256 = "178dmrp0mza5gqjiqgk6dqs0c10s0c517pk6k9pjbam86vf47a1p";
   };
 
   propagatedBuildInputs = [ texinfo ];
@@ -20,7 +20,7 @@ python2Packages.buildPythonApplication rec {
   # the check scripts forces python2. If we need to use python3 at some point, we should use
   # the correct python
   checkPhase = ''
-    sed -i 's|python=python2|python=${python2Packages.python.interpreter}|' tests/run.sh
+    sed -i 's|python=python3|python=${python3Packages.python.interpreter}|' tests/run.sh
     cd tests && ${stdenv.shell} run.sh
   '';
 

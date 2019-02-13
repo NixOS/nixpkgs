@@ -3,11 +3,11 @@ let
   s = # Generated upstream information
   rec {
     baseName="firejail";
-    version="0.9.56";
+    version="0.9.58";
     name="${baseName}-${version}";
-    hash="0b9ig0a91i19sfm94a6yl510pm4dlidmani3fsnb7vh0qy3l9121";
-    url="https://vorboss.dl.sourceforge.net/project/firejail/firejail/firejail-0.9.56.tar.xz";
-    sha256="0b9ig0a91i19sfm94a6yl510pm4dlidmani3fsnb7vh0qy3l9121";
+    hash="0yxzcy2nxzkyl759mb9fzmynfkz9spzpb0n29rxn8kalw9ccnvrg";
+    url="https://vorboss.dl.sourceforge.net/project/firejail/firejail/firejail-0.9.58.tar.xz";
+    sha256="0yxzcy2nxzkyl759mb9fzmynfkz9spzpb0n29rxn8kalw9ccnvrg";
   };
   buildInputs = [
     which
@@ -43,7 +43,9 @@ stdenv.mkDerivation {
     sed -E -e 's@^include (.*)(/firejail/.*.local)$@include /etc\2@g' -i $out/etc/firejail/*.profile
   '';
 
-  enableParallelBuilding = true;
+  # At high parallelism, the build sometimes fails with:
+  # bash: src/fsec-optimize/fsec-optimize: No such file or directory
+  enableParallelBuilding = false;
 
   meta = {
     inherit (s) version;
@@ -52,6 +54,6 @@ stdenv.mkDerivation {
     maintainers = [stdenv.lib.maintainers.raskin];
     platforms = stdenv.lib.platforms.linux;
     homepage = https://l3net.wordpress.com/projects/firejail/;
-    downloadPage = "http://sourceforge.net/projects/firejail/files/firejail/";
+    downloadPage = "https://sourceforge.net/projects/firejail/files/firejail/";
   };
 }

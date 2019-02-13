@@ -1,6 +1,9 @@
-{ system ? builtins.currentSystem }:
+{ system ? builtins.currentSystem,
+  config ? {},
+  pkgs ? import ../.. { inherit system config; }
+}:
 
-with import ../lib/testing.nix { inherit system; };
+with import ../lib/testing.nix { inherit system pkgs; };
 with pkgs.lib;
 
 let
@@ -197,7 +200,7 @@ let
       name = "installer-" + name;
       meta = with pkgs.stdenv.lib.maintainers; {
         # put global maintainers here, individuals go into makeInstallerTest fkt call
-        maintainers = [ wkennington ] ++ (meta.maintainers or []);
+        maintainers = (meta.maintainers or []);
       };
       nodes = {
 
@@ -478,7 +481,7 @@ in {
   # Test whether opening encrypted filesystem with keyfile
   # Checks for regression of missing cryptsetup, when no luks device without
   # keyfile is configured
-  filesystemEncryptedWithKeyfile = makeInstallerTest "filesystemEncryptedWithKeyfile"
+  encryptedFSWithKeyfile = makeInstallerTest "encryptedFSWithKeyfile"
     { createPartitions = ''
        $machine->succeed(
           "flock /dev/vda parted --script /dev/vda -- mklabel msdos"

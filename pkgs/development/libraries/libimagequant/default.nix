@@ -3,7 +3,7 @@
 with stdenv;
 
 let
-  version = "2.12.1";
+  version = "2.12.2";
 in
   mkDerivation {
     name = "libimagequant-${version}";
@@ -11,7 +11,7 @@ in
       owner = "ImageOptim";
       repo = "libimagequant";
       rev = "${version}";
-      sha256 = "0r7zgsnhqci2rjilh9bzw43miwp669k6b7q16hdjzrq4nr0xpvbl";
+      sha256 = "1k61ifcjbp2lcrwqidflj99inkyhpbrw0hl1nzq1rjp5dnw2y5lw";
     };
 
     preConfigure = ''

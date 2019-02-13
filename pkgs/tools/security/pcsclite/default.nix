@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   name = "pcsclite-${version}";
-  version = "1.8.23";
+  version = "1.8.24";
 
   outputs = [ "bin" "out" "dev" "doc" "man" ];
 
   src = fetchurl {
     url = "https://pcsclite.apdu.fr/files/pcsc-lite-${version}.tar.bz2";
-    sha256 = "1jc9ws5ra6v3plwraqixin0w0wfxj64drahrbkyrrwzghqjjc9ss";
+    sha256 = "0s3mv6csbi9303vvis0hilm71xsmi6cqkbh2kiipdisydbx6865q";
   };
 
   patches = [ ./no-dropdir-literals.patch ];
@@ -43,7 +43,6 @@ stdenv.mkDerivation rec {
     description = "Middleware to access a smart card using SCard API (PC/SC)";
     homepage = https://pcsclite.apdu.fr/;
     license = licenses.bsd3;
-    maintainers = with maintainers; [ wkennington ];
     platforms = with platforms; unix;
   };
 }

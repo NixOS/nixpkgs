@@ -3,13 +3,13 @@
 stdenv.mkDerivation rec {
 
   name = "ivan-${version}";
-  version = "054";
+  version = "055";
 
   src = fetchFromGitHub {
     owner = "Attnam";
     repo = "ivan";
     rev = "v${version}";
-    sha256 = "0ayhp9qvxsi5dsgjvy43i3lpdis883g1xn2b8l5xkwxcqfnvsfmq";
+    sha256 = "10qrwzwfzqs7f663x1cbbhisz60axcl51glxq33zaxl0jwnmma2p";
   };
 
   nativeBuildInputs = [ cmake pkgconfig ];
@@ -18,11 +18,8 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = ["all"];
 
-  # To store bone and high score files in ~/.ivan of the current user
-  patches = [./new.patch];
-
   # Enable wizard mode
-  cmakeFlags = ["-DCMAKE_CXX_FLAGS=-DWIZARD" "-DFORCE_HOME_AS_STATE_DIR=ON"];
+  cmakeFlags = ["-DCMAKE_CXX_FLAGS=-DWIZARD"];
 
   # Help CMake find SDL_mixer.h
   NIX_CFLAGS_COMPILE = "-I${SDL2_mixer}/include/SDL2";

@@ -1,4 +1,5 @@
-{ name
+{ stdenv
+, name
 , channel
 , writeScript
 , xidel
@@ -17,6 +18,7 @@ let
     channel != "release";
 
 in writeScript "update-${name}" ''
+  #!${stdenv.shell}
   PATH=${coreutils}/bin:${gnused}/bin:${gnugrep}/bin:${xidel}/bin:${curl}/bin:${gnupg}/bin
   set -eux
   pushd ${basePath}

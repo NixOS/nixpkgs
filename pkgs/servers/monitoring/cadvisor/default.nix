@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "cadvisor-${version}";
-  version = "0.31.0";
+  version = "0.32.0";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "cadvisor";
     rev = "v${version}";
-    sha256 = "0dnn2vgjbbb82kvbmgrfq0hqwfk0jh5gc3xrcfqwvvq673yf4f2m";
+    sha256 = "1li2qgfi4lfa2i1m7ykjxy1xm9hlq42fgdkb2wh2db9chyg5r4qp";
   };
 
   nativeBuildInputs = [ go ];

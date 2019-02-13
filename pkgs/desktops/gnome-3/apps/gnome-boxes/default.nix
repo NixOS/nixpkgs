@@ -1,5 +1,5 @@
 { stdenv, fetchurl, meson, ninja, wrapGAppsHook, pkgconfig, gettext, itstool, libvirt-glib
-, glib, gobjectIntrospection, libxml2, gtk3, gtk-vnc, libvirt, spice-gtk, python3
+, glib, gobject-introspection, libxml2, gtk3, gtk-vnc, freerdp, libvirt, spice-gtk, python3
 , spice-protocol, libsoup, libosinfo, systemd, tracker, tracker-miners, vala
 , libcap, yajl, gmp, gdbm, cyrus_sasl, gnome3, librsvg, desktop-file-utils
 , mtools, cdrkit, libcdio, libusb, libarchive, acl, libgudev, qemu, libsecret
@@ -9,26 +9,26 @@
 # TODO: ovirt (optional)
 
 let
-  version = "3.28.5";
+  version = "3.30.3";
 in stdenv.mkDerivation rec {
   name = "gnome-boxes-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-boxes/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "1z1qimspx1nw7l79rardxcx2bydj9nmk60vsdb611xzlqa3hkppm";
+    sha256 = "0a9ljwhkanszzyzl0bhad8vmzk7v4wafl9b1zn09pf57znyymf3s";
   };
 
   doCheck = true;
 
   nativeBuildInputs = [
-    meson ninja vala pkgconfig gettext itstool wrapGAppsHook gobjectIntrospection desktop-file-utils python3
+    meson ninja vala pkgconfig gettext itstool wrapGAppsHook gobject-introspection desktop-file-utils python3
   ];
 
   # Required for USB redirection PolicyKit rules file
   propagatedUserEnvPkgs = [ spice-gtk ];
 
   buildInputs = [
-    libvirt-glib glib gtk3 gtk-vnc libxml2
+    libvirt-glib glib gtk3 gtk-vnc freerdp libxml2
     libvirt spice-gtk spice-protocol libsoup json-glib webkitgtk libosinfo systemd
     tracker tracker-miners libcap yajl gmp gdbm cyrus_sasl libusb libarchive
     gnome3.defaultIconTheme librsvg acl libgudev libsecret
@@ -57,7 +57,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Simple GNOME 3 application to access remote or virtual systems";
-    homepage = https://wiki.gnome.org/action/show/Apps/Boxes;
+    homepage = https://wiki.gnome.org/Apps/Boxes;
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ bjornfor ];

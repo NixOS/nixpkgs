@@ -6,14 +6,14 @@
 
 buildPythonPackage rec {
   pname = "exchangelib";
-  version = "1.11.4";
+  version = "1.12.0";
 
   # tests are not present in the PyPI version
   src = fetchFromGitHub {
     owner = "ecederstrand";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1fpbnjnmqm62vll3m2ys1naikch70kqm26hz86f1cl0r2l2afbab";
+    sha256 = "003c4flgsz6my64qm3mf9cb3wfxw0480aj9glf9wdz7xkwaq2l43";
   };
 
   # one test is failing due to it trying to send a request to example.com

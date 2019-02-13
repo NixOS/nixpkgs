@@ -1,0 +1,55 @@
+--- a/data/meson.build
++++ b/data/meson.build
+@@ -7,7 +7,7 @@
+         conf.set('demo_agent', '')
+     endif
+ 
+-    conf_dir = join_paths(get_option('sysconfdir'), 'geoclue')
++    conf_dir = join_paths(sysconfdir_install, 'geoclue')
+     configure_file(output: 'geoclue.conf',
+                    input: 'geoclue.conf.in',
+                    configuration: conf,
+@@ -26,7 +26,7 @@
+     # DBus Service policy file
+     dbus_service_dir = get_option('dbus-sys-dir')
+     if dbus_service_dir  == ''
+-        dbus_service_dir = join_paths(get_option('sysconfdir'), 'dbus-1', 'system.d')
++        dbus_service_dir = join_paths(sysconfdir_install, 'dbus-1', 'system.d')
+     endif
+     configure_file(output: 'org.freedesktop.GeoClue2.conf',
+                    input: 'org.freedesktop.GeoClue2.conf.in',
+--- a/demo/meson.build
++++ b/demo/meson.build
+@@ -56,8 +56,7 @@
+                                    install_dir: desktop_dir)
+ 
+     # Also install in the autostart directory.
+-    autostart_dir = join_paths(get_option('prefix'),
+-                               get_option('sysconfdir'),
++    autostart_dir = join_paths(sysconfdir_install,
+                                'xdg', 'autostart')
+     meson.add_install_script('install-file.py',
+                              desktop_file.full_path(),
+--- a/meson.build
++++ b/meson.build
+@@ -22,6 +22,11 @@
+ datadir = join_paths(get_option('prefix'), get_option('datadir'))
+ conf.set_quoted('LOCALEDIR', datadir + '/locale')
+ conf.set_quoted('SYSCONFDIR', get_option('sysconfdir'))
++if get_option('sysconfdir_install') != ''
++  sysconfdir_install = join_paths(get_option('prefix'), get_option('sysconfdir_install'))
++else
++  sysconfdir_install = get_option('sysconfdir')
++endif
+ 
+ configure_file(output: 'config.h', configuration : conf)
+ configinc = include_directories('.')
+--- a/meson_options.txt
++++ b/meson_options.txt
+@@ -34,3 +34,6 @@
+ option('dbus-srv-user',
+        type: 'string', value: 'root',
+        description: 'The user (existing) as which the service will run')
++option('sysconfdir_install',
++       type: 'string', value: '',
++       description: 'sysconfdir to use during installation')

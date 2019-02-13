@@ -1,6 +1,4 @@
-{ stdenv, fetchurl, perl, perlPackages, HTMLParser, NetDNS, NetAddrIP, DBFile
-, HTTPDate, MailDKIM, LWP, IOSocketSSL, makeWrapper, gnupg1
-}:
+{ stdenv, fetchurl, perlPackages, makeWrapper, gnupg1 }:
 
 perlPackages.buildPerlPackage rec {
   name = "SpamAssassin-3.4.1";
@@ -13,12 +11,12 @@ perlPackages.buildPerlPackage rec {
   # https://bz.apache.org/SpamAssassin/show_bug.cgi?id=7434
   patches = [ ./sa-update_add--siteconfigpath.patch ];
 
-  buildInputs = with perlPackages; [ makeWrapper HTMLParser NetDNS NetAddrIP DBFile HTTPDate MailDKIM
-    LWP IOSocketSSL DBI EncodeDetect IPCountry NetIdent Razor2ClientAgent MailSPF NetDNSResolverProgrammable ];
+  buildInputs = [ makeWrapper ] ++ (with perlPackages; [ HTMLParser NetDNS NetAddrIP DBFile HTTPDate MailDKIM
+    LWP IOSocketSSL DBI EncodeDetect IPCountry NetIdent Razor2ClientAgent MailSPF NetDNSResolverProgrammable ]);
 
   # Enabling 'taint' mode is desirable, but that flag disables support
   # for the PERL5LIB environment variable. Needs further investigation.
-  makeFlags = "PERL_BIN=${perl}/bin/perl PERL_TAINT=no";
+  makeFlags = "PERL_BIN=${perlPackages.perl}/bin/perl PERL_TAINT=no";
 
   makeMakerFlags = "CONFDIR=/homeless/shelter LOCALSTATEDIR=/var/lib/spamassassin";
 

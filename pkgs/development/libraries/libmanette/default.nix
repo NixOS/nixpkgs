@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ninja, meson, pkgconfig, vala, gobjectIntrospection
+{ stdenv, fetchurl, ninja, meson, pkgconfig, vala, gobject-introspection
 , glib, libgudev, libevdev, gnome3 }:
 
 let
@@ -15,7 +15,7 @@ stdenv.mkDerivation {
     sha256 = "14vqz30p4693yy3yxs0gj858x25sl2kawib1g9lj8g5frgl0hd82";
   };
 
-  nativeBuildInputs = [ meson ninja pkgconfig vala gobjectIntrospection ];
+  nativeBuildInputs = [ meson ninja pkgconfig vala gobject-introspection ];
   buildInputs = [ glib libgudev libevdev ];
 
   doCheck = true;

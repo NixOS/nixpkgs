@@ -1,11 +1,11 @@
 { stdenv, fetchurl, fetchpatch, meson, ninja
 , pkgconfig, python, gst-plugins-base, libxml2
-, flex, perl, gettext, gobjectIntrospection
+, flex, perl, gettext, gobject-introspection
 }:
 
 stdenv.mkDerivation rec {
   name = "gstreamer-editing-services-${version}";
-  version = "1.14.2";
+  version = "1.14.4";
 
   meta = with stdenv.lib; {
     description = "Library for creation of audio/video non-linear editors";
@@ -16,12 +16,12 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "${meta.homepage}/src/gstreamer-editing-services/${name}.tar.xz";
-    sha256 = "0d0zqvgxp51mmffz5vvscsdzqqw9mjsv6bnk6ivg2dxnkv8q1ch5";
+    sha256 = "0pxk65jib3mqszjkyvlzklwia4kbdj6j2b6jw1d502b06mdx5lak";
   };
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ meson ninja pkgconfig gettext gobjectIntrospection python flex perl ];
+  nativeBuildInputs = [ meson ninja pkgconfig gettext gobject-introspection python flex perl ];
 
   propagatedBuildInputs = [ gst-plugins-base libxml2 ];
 
@@ -32,4 +32,8 @@ stdenv.mkDerivation rec {
     })
     ./fix_pkgconfig_includedir.patch
   ];
+
+  postPatch = ''
+    sed -i -r -e 's/p(bad|good) = .*/p\1 = pbase/' tests/check/meson.build
+  '';
 }

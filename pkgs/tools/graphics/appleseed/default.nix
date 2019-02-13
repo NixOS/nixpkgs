@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, cmake, boost165, pkgconfig, guile,
-eigen3_3, libpng, python, libGLU, qt4, openexr, openimageio,
+eigen, libpng, python, libGLU, qt4, openexr, openimageio,
 opencolorio, xercesc, ilmbase, osl, seexpr
 }:
 
@@ -19,7 +19,7 @@ in stdenv.mkDerivation rec {
     sha256 = "0m7zvfkdjfn48zzaxh2wa1bsaj4l876a05bzgmjlfq5dz3202anr";
   };
   buildInputs = [
-    cmake pkgconfig boost_static guile eigen3_3 libpng python
+    cmake pkgconfig boost_static guile eigen libpng python
     libGLU qt4 openexr openimageio opencolorio xercesc
     osl seexpr
   ];

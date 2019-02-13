@@ -10,17 +10,19 @@
 , ensureNewerSourcesForZipFilesHook
 , toPythonModule
 , namePrefix
-, bootstrapped-pip
 , flit
+, writeScript
+, update-python-libraries
 }:
 
 let
-  setuptools-specific = import ./build-python-package-setuptools.nix { inherit lib python bootstrapped-pip; };
+  setuptools-specific = import ./build-python-package-setuptools.nix { inherit lib python; };
   flit-specific = import ./build-python-package-flit.nix { inherit python flit; };
   wheel-specific = import ./build-python-package-wheel.nix { };
-  common = import ./build-python-package-common.nix { inherit python bootstrapped-pip; };
+  common = import ./build-python-package-common.nix { inherit python; };
   mkPythonDerivation = import ./mk-python-derivation.nix {
-    inherit lib config python wrapPython setuptools unzip ensureNewerSourcesForZipFilesHook toPythonModule namePrefix;
+    inherit lib config python wrapPython setuptools unzip ensureNewerSourcesForZipFilesHook;
+    inherit toPythonModule namePrefix writeScript update-python-libraries;
   };
 in
 

@@ -1,29 +1,32 @@
 { stdenv, buildPythonPackage, fetchPypi, fetchpatch
 , pytest, jinja2, sphinx, vega_datasets, ipython, glibcLocales
-, entrypoints, jsonschema, numpy, pandas, six, toolz, typing }:
+, entrypoints, jsonschema, numpy, pandas, six, toolz, typing
+, pythonOlder, recommonmark }:
 
 buildPythonPackage rec {
   pname = "altair";
-  version = "2.1.0";
+  version = "2.2.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e8b222588dde98ec614e6808357fde7fa321118db44cc909df2bf30158d931c0";
+    sha256 = "c158699026eb5a19f95c1ca742e2e82bc20c27013ef5785f10836283e2233f8a";
   };
 
-  patches = fetchpatch {
-    url = https://github.com/altair-viz/altair/commit/bfca8aecce9593c48aa5834e3f8f841deb58391c.patch;
-    sha256 = "01izc5d8c6ry3mh0k0hfasb6jc4720g75yw2qdlp9ja8mnjsp4k3";
-  };
+  checkInputs = [ pytest jinja2 sphinx vega_datasets ipython glibcLocales recommonmark ];
 
-  checkInputs = [ pytest jinja2 sphinx vega_datasets ipython glibcLocales ];
+  propagatedBuildInputs = [ entrypoints jsonschema numpy pandas six toolz ]
+    ++ stdenv.lib.optionals (pythonOlder "3.5") [ typing ];
+
+  # hack to prevent typing from being required for python > 3.5
+  postPatch = ''
+    substituteInPlace requirements.txt \
+       --replace "typing" ""
+  '';
 
   checkPhase = ''
     export LANG=en_US.UTF-8
     py.test altair --doctest-modules
   '';
-
-  propagatedBuildInputs = [ entrypoints jsonschema numpy pandas six toolz typing ];
 
   meta = with stdenv.lib; {
     description = "A declarative statistical visualization library for Python.";

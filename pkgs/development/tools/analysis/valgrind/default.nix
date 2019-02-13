@@ -1,20 +1,25 @@
-{ stdenv, fetchurl, perl, gdb, llvm, cctools, xnu, bootstrap_cmds }:
+{ stdenv, fetchurl, perl, gdb, llvm, cctools, xnu, bootstrap_cmds, autoreconfHook }:
 
 stdenv.mkDerivation rec {
-  name = "valgrind-3.13.0";
+  name = "valgrind-3.14.0";
 
   src = fetchurl {
     url = "https://sourceware.org/pub/valgrind/${name}.tar.bz2";
-    sha256 = "0fqc3684grrbxwsic1rc5ryxzxmigzjx9p5vf3lxa37h0gpq0rnp";
+    sha256 = "19ds42jwd89zrsjb94g7gizkkzipn8xik3xykrpcqxylxyzi2z03";
   };
+
+  # autoreconfHook is needed to pick up patching of Makefile.am
+  # Remove when the patch no longer applies.
+  patches = [ ./coregrind-makefile-race.patch ];
+  # Perl is needed for `cg_annotate'.
+  nativeBuildInputs = [ autoreconfHook perl ];
 
   outputs = [ "out" "dev" "man" "doc" ];
 
   hardeningDisable = [ "stackprotector" ];
 
-  # Perl is needed for `cg_annotate'.
   # GDB is needed to provide a sane default for `--db-command'.
-  buildInputs = [ perl gdb ]  ++ stdenv.lib.optionals (stdenv.isDarwin) [ bootstrap_cmds xnu ];
+  buildInputs = [ gdb ]  ++ stdenv.lib.optionals (stdenv.isDarwin) [ bootstrap_cmds xnu ];
 
   enableParallelBuilding = true;
   separateDebugInfo = stdenv.isLinux;
@@ -26,12 +31,8 @@ stdenv.mkDerivation rec {
     in ''
       echo "Don't derive our xnu version using uname -r."
       substituteInPlace configure --replace "uname -r" "echo ${OSRELEASE}"
-    ''
-  );
 
-  postPatch = stdenv.lib.optionalString (stdenv.isDarwin)
-    # Apple's GCC doesn't recognize `-arch' (as of version 4.2.1, build 5666).
-    ''
+      # Apple's GCC doesn't recognize `-arch' (as of version 4.2.1, build 5666).
       echo "getting rid of the \`-arch' GCC option..."
       find -name Makefile\* -exec \
         sed -i {} -e's/DARWIN\(.*\)-arch [^ ]\+/DARWIN\1/g' \;
@@ -55,7 +56,10 @@ stdenv.mkDerivation rec {
       echo "substitute hardcoded /usr/bin/ld with ${cctools}/bin/ld"
       substituteInPlace coregrind/link_tool_exe_darwin.in \
         --replace /usr/bin/ld ${cctools}/bin/ld
-    '';
+    '');
+
+  # To prevent rebuild on linux when moving darwin's postPatch fixes to preConfigure
+  postPatch = "";
 
   configureFlags =
     stdenv.lib.optional (stdenv.hostPlatform.system == "x86_64-linux" || stdenv.hostPlatform.system == "x86_64-darwin") "--enable-only64bit";
@@ -69,8 +73,6 @@ stdenv.mkDerivation rec {
         --replace 'obj:/usr/X11R6/lib' 'obj:*/lib' \
         --replace 'obj:/usr/lib' 'obj:*/lib'
     done
-
-    paxmark m $out/lib/valgrind/*-*-linux
   '';
 
   meta = {

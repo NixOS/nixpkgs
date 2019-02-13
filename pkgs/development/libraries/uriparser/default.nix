@@ -1,18 +1,20 @@
-{ stdenv, fetchurl, gtest, pkgconfig, doxygen, graphviz }:
+{ lib, stdenv, fetchurl, gtest, pkgconfig, doxygen, graphviz }:
 
 stdenv.mkDerivation rec {
   name = "uriparser-${version}";
-  version = "0.9.0";
+  version = "0.9.1";
 
   # Release tarball differs from source tarball
   src = fetchurl {
     url = "https://github.com/uriparser/uriparser/releases/download/${name}/${name}.tar.bz2";
-    sha256 = "0b2yagxzhq9ghpszci6a9xlqg0yl7vq9j5r8dwbar3nszqsfnrzc";
+    sha256 = "1gisi7h8hd6mswbiaaa3s25bnb77xf37pzrmjy63rcdpwcyqy93m";
   };
 
-  nativeBuildInputs = [ pkgconfig gtest doxygen graphviz ];
+  nativeBuildInputs = [ pkgconfig doxygen graphviz ];
+  buildInputs = lib.optional doCheck gtest;
+  configureFlags = lib.optional (!doCheck) "--disable-tests";
 
-  doCheck = true;
+  doCheck = stdenv.targetPlatform.system == stdenv.hostPlatform.system;
 
   meta = with stdenv.lib; {
     homepage = https://uriparser.github.io/;

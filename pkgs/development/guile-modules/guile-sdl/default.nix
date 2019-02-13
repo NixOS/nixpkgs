@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Guile bindings for SDL";
-    homepage = "http://gnu.org/s/guile-sdl";
+    homepage = "https://www.gnu.org/software/guile-sdl/";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ vyp ];
     platforms = platforms.linux;

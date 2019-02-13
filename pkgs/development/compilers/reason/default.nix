@@ -21,12 +21,9 @@ stdenv.mkDerivation rec {
 
   buildFlags = [ "build" ]; # do not "make tests" before reason lib is installed
 
-  installPhase = ''
-    for p in reason rtop
-    do
-      ${dune.installPhase} $p.install
-    done
+  inherit (dune) installPhase;
 
+  postInstall = ''
     wrapProgram $out/bin/rtop \
       --prefix PATH : "${utop}/bin" \
       --set OCAMLPATH $out/lib/ocaml/${ocaml.version}/site-lib:$OCAMLPATH

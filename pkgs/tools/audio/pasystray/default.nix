@@ -1,37 +1,25 @@
-{ stdenv, fetchFromGitHub, autoconf, automake, makeWrapper, pkgconfig
+{ stdenv, fetchFromGitHub, pkgconfig, autoreconfHook, wrapGAppsHook
 , gnome3, avahi, gtk3, libappindicator-gtk3, libnotify, libpulseaudio
 , xlibsWrapper
 }:
 
 stdenv.mkDerivation rec {
   name = "pasystray-${version}";
-  version = "0.7.0";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "christophgysin";
     repo = "pasystray";
     rev = name;
-    sha256 = "0cc9hjyw4gr4ip4lw74pzb1l9sxs3ffhf0xn0m1fhmyfbjyixwkh";
+    sha256 = "0xx1bm9kimgq11a359ikabdndqg5q54pn1d1dyyjnrj0s41168fk";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig autoreconfHook wrapGAppsHook ];
   buildInputs = [
-    autoconf automake makeWrapper
     gnome3.defaultIconTheme
     avahi gtk3 libappindicator-gtk3 libnotify libpulseaudio xlibsWrapper
+    gnome3.gsettings-desktop-schemas
   ];
-
-  preConfigure = ''
-    aclocal
-    autoconf
-    autoheader
-    automake --add-missing
-  '';
-
-  preFixup = ''
-    wrapProgram "$out/bin/pasystray" \
-      --prefix XDG_DATA_DIRS : "${gnome3.defaultIconTheme}/share:$GSETTINGS_SCHEMAS_PATH"
-  '';
 
   meta = with stdenv.lib; {
     description = "PulseAudio system tray";

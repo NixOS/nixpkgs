@@ -1,35 +1,46 @@
-{ stdenv, fetchurl, vala, intltool, pkgconfig, gtk3, glib
-, json-glib, wrapGAppsHook, libpeas, bash, gobjectIntrospection
+{ stdenv, fetchurl, fetchpatch, vala, intltool, pkgconfig, gtk3, glib
+, json-glib, wrapGAppsHook, libpeas, bash, gobject-introspection
 , gnome3, gtkspell3, shared-mime-info, libgee, libgit2-glib, libsecret
+, meson, ninja, python3
  }:
 
 let
   pname = "gitg";
-  version = "3.26.0";
+  version = "3.30.1";
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "26730d437d6a30d6e341b9e8da99d2134dce4b96022c195609f45062f82b54d5";
+    sha256 = "1fz8q1aiql6k740savdjh0vzbyhcflgf94cfdhvzcrrvm929n2ss";
   };
 
-  preCheck = ''
-    substituteInPlace tests/libgitg/test-commit.c --replace "/bin/bash" "${bash}/bin/bash"
+  patches = [
+    (fetchpatch {
+      url = https://gitlab.gnome.org/GNOME/gitg/commit/42bceea265f53fe7fd4a41037b936deed975fc6c.patch;
+      sha256 = "1xq245rsi1bi66lswk33pdiazfaagxf77836ds5q73900rx4r7fw";
+    })
+  ];
+
+  postPatch = ''
+    chmod +x meson_post_install.py
+    patchShebangs meson_post_install.py
+    sed -i '/gtk-update-icon-cache/s/^/#/' meson_post_install.py
+
+    substituteInPlace tests/libgitg/test-commit.vala --replace "/bin/bash" "${bash}/bin/bash"
   '';
+
   doCheck = true;
 
   enableParallelBuilding = true;
 
-  makeFlags = "INTROSPECTION_GIRDIR=$(out)/share/gir-1.0/ INTROSPECTION_TYPELIBDIR=$(out)/lib/girepository-1.0";
-
   buildInputs = [
     gtk3 glib json-glib libgee libpeas gnome3.libsoup
     libgit2-glib gtkspell3 gnome3.gtksourceview gnome3.gsettings-desktop-schemas
-    libsecret gobjectIntrospection gnome3.adwaita-icon-theme
+    libsecret gobject-introspection gnome3.adwaita-icon-theme
   ];
 
-  nativeBuildInputs = [ vala wrapGAppsHook intltool pkgconfig ];
+  nativeBuildInputs = [ meson ninja python3 vala wrapGAppsHook intltool pkgconfig ];
 
   preFixup = ''
     gappsWrapperArgs+=(

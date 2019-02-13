@@ -15,8 +15,6 @@ stdenv.mkDerivation rec {
     sha256 = "06wvd57c8khpq0c2hvm15zng269zvabsw1lcaqphqdcckl67nsxr";
   };
 
-  unpackCmd = "tar -xjf $curSrc";
-
   buildInputs = [ ocaml findlib ocamlbuild topkg ];
 
   propagatedBuildInputs = [ faraday ];
@@ -31,4 +29,3 @@ stdenv.mkDerivation rec {
     inherit (ocaml.meta) platforms;
   };
 }
-

@@ -1,4 +1,4 @@
-{ config, lib, pkgs, pkgs_i686, ... }:
+{ config, lib, pkgs, ... }:
 
 with pkgs;
 with lib;
@@ -19,7 +19,7 @@ let
 
   # Forces 32bit pulseaudio and alsaPlugins to be built/supported for apps
   # using 32bit alsa on 64bit linux.
-  enable32BitAlsaPlugins = cfg.support32Bit && stdenv.isx86_64 && (pkgs_i686.alsaLib != null && pkgs_i686.libpulseaudio != null);
+  enable32BitAlsaPlugins = cfg.support32Bit && stdenv.isx86_64 && (pkgs.pkgsi686Linux.alsaLib != null && pkgs.pkgsi686Linux.libpulseaudio != null);
 
 
   myConfigFile =
@@ -63,7 +63,7 @@ let
     pcm_type.pulse {
       libs.native = ${pkgs.alsaPlugins}/lib/alsa-lib/libasound_module_pcm_pulse.so ;
       ${lib.optionalString enable32BitAlsaPlugins
-     "libs.32Bit = ${pkgs_i686.alsaPlugins}/lib/alsa-lib/libasound_module_pcm_pulse.so ;"}
+     "libs.32Bit = ${pkgs.pkgsi686Linux.alsaPlugins}/lib/alsa-lib/libasound_module_pcm_pulse.so ;"}
     }
     pcm.!default {
       type pulse
@@ -72,7 +72,7 @@ let
     ctl_type.pulse {
       libs.native = ${pkgs.alsaPlugins}/lib/alsa-lib/libasound_module_ctl_pulse.so ;
       ${lib.optionalString enable32BitAlsaPlugins
-     "libs.32Bit = ${pkgs_i686.alsaPlugins}/lib/alsa-lib/libasound_module_ctl_pulse.so ;"}
+     "libs.32Bit = ${pkgs.pkgsi686Linux.alsaPlugins}/lib/alsa-lib/libasound_module_ctl_pulse.so ;"}
     }
     ctl.!default {
       type pulse
@@ -180,7 +180,7 @@ in {
           type = types.attrsOf types.unspecified;
           default = {};
           description = ''Config of the pulse daemon. See <literal>man pulse-daemon.conf</literal>.'';
-          example = literalExample ''{ flat-volumes = "no"; }'';
+          example = literalExample ''{ realtime-scheduling = "yes"; }'';
         };
       };
 
@@ -241,6 +241,9 @@ in {
         { target = "libao.conf";
           source = writeText "libao.conf" "default_driver=pulse"; }
       ];
+
+      # Disable flat volumes to enable relative ones
+      hardware.pulseaudio.daemon.config.flat-volumes = mkDefault "no";
 
       # Allow PulseAudio to get realtime priority using rtkit.
       security.rtkit.enable = true;

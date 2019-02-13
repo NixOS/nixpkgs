@@ -1,19 +1,20 @@
 { stdenv, fetchFromGitHub, autoreconfHook, makeWrapper
-, coreutils, dosfstools, findutils, gawk, gnugrep, grub2_light, ncurses, ntfs3g, parted, utillinux, wget
+, coreutils, dosfstools, findutils, gawk, gnugrep, grub2_light, ncurses, ntfs3g, parted, p7zip, utillinux, wget
 , wxGTK30 }:
 
 stdenv.mkDerivation rec {
-  version = "3.2.10";
+  version = "3.2.12";
   name = "woeusb-${version}";
 
   src = fetchFromGitHub {
     owner = "slacka";
     repo = "WoeUSB";
     rev = "v${version}";
-    sha256 = "0jzgwh9xv92yns5yi5zpl49zbp3csh6m6iclgq070awpjpsqlqi0";
+    sha256 = "14arz0g95favbl5vsngxm3xznva223x67a9as5n2mpf5bbkd9zx5";
   };
 
-  buildInputs = [ wxGTK30 autoreconfHook makeWrapper ];
+  nativeBuildInputs = [ autoreconfHook makeWrapper ];
+  buildInputs = [ wxGTK30 ];
 
   postPatch = ''
     # Emulate version smudge filter (see .gitattributes, .gitconfig).
@@ -36,7 +37,7 @@ stdenv.mkDerivation rec {
     # should be patched with a less useless default PATH, but for now
     # we add everything we need manually.
     wrapProgram "$out/bin/woeusb" \
-      --set PATH '${stdenv.lib.makeBinPath [ coreutils dosfstools findutils gawk gnugrep grub2_light ncurses ntfs3g parted utillinux wget ]}'
+      --set PATH '${stdenv.lib.makeBinPath [ coreutils dosfstools findutils gawk gnugrep grub2_light ncurses ntfs3g parted utillinux wget p7zip ]}'
   '';
 
   doInstallCheck = true;

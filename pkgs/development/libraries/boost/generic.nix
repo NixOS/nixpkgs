@@ -111,8 +111,9 @@ stdenv.mkDerivation {
     description = "Collection of C++ libraries";
     license = stdenv.lib.licenses.boost;
 
-    platforms = (if versionOlder version "1.59" then remove "aarch64-linux" else id) (platforms.unix ++ platforms.windows);
-    maintainers = with maintainers; [ peti wkennington ];
+    platforms = (platforms.unix ++ platforms.windows);
+    badPlatforms = stdenv.lib.optional (versionOlder version "1.59") "aarch64-linux";
+    maintainers = with maintainers; [ peti ];
   };
 
   preConfigure = ''

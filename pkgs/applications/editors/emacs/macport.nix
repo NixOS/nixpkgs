@@ -1,12 +1,12 @@
 { stdenv, fetchurl, ncurses, pkgconfig, texinfo, libxml2, gnutls, gettext, autoconf, automake
-, AppKit, Carbon, Cocoa, IOKit, OSAKit, Quartz, QuartzCore, WebKit
+, cf-private, AppKit, Carbon, Cocoa, IOKit, OSAKit, Quartz, QuartzCore, WebKit
 , ImageCaptureCore, GSS, ImageIO # These may be optional
 }:
 
 stdenv.mkDerivation rec {
   emacsVersion = "26.1";
   emacsName = "emacs-${emacsVersion}";
-  macportVersion = "7.2";
+  macportVersion = "7.4";
   name = "emacs-mac-${emacsVersion}-${macportVersion}";
 
   src = fetchurl {
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   macportSrc = fetchurl {
     url = "ftp://ftp.math.s.chiba-u.ac.jp/emacs/${emacsName}-mac-${macportVersion}.tar.gz";
-    sha256 = "0j4dcjv7kh84d6lzzxdzambk6ybbdr2j7r63nkbivssjv29z7zag";
+    sha256 = "1xl3rfqw1f3jil20xf6iy0f1hdk9adj8rnv7xhcjq4pymj4w8ka6";
   };
 
   hiresSrc = fetchurl {
@@ -33,6 +33,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ ncurses libxml2 gnutls texinfo gettext
     AppKit Carbon Cocoa IOKit OSAKit Quartz QuartzCore WebKit
     ImageCaptureCore GSS ImageIO   # may be optional
+    # Needed for CFNotificationCenterAddObserver symbols.
+    cf-private
   ];
 
   postUnpack = ''
@@ -74,7 +76,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "The extensible, customizable text editor";
-    homepage    = http://www.gnu.org/software/emacs/;
+    homepage    = https://www.gnu.org/software/emacs/;
     license     = licenses.gpl3Plus;
     maintainers = with maintainers; [ jwiegley matthewbauer ];
     platforms   = platforms.darwin;

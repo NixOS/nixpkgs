@@ -2,7 +2,7 @@
 , pkgconfig, intltool, autoreconfHook
 , file, expat, libdrm, xorg, wayland, wayland-protocols, openssl
 , llvmPackages, libffi, libomxil-bellagio, libva-minimal
-, libelf, libvdpau, valgrind-light, python2
+, libelf, libvdpau, valgrind-light, python2, python2Packages
 , libglvnd
 , enableRadv ? true
 , galliumDrivers ? null
@@ -25,20 +25,20 @@
 
 with stdenv.lib;
 
-if ! lists.elem stdenv.hostPlatform.system platforms.mesaPlatforms then
+if ! elem stdenv.hostPlatform.system platforms.mesaPlatforms then
   throw "unsupported platform for Mesa"
 else
 
 let
   defaultGalliumDrivers =
-    optionals (builtins.elem "drm" eglPlatforms)
+    optionals (elem "drm" eglPlatforms)
     (if stdenv.isAarch32
     then ["virgl" "nouveau" "freedreno" "vc4" "etnaviv" "imx"]
     else if stdenv.isAarch64
     then ["virgl" "nouveau" "vc4" ]
     else ["virgl" "svga" "i915" "r300" "r600" "radeonsi" "nouveau"]);
   defaultDriDrivers =
-    optionals (builtins.elem "drm" eglPlatforms)
+    optionals (elem "drm" eglPlatforms)
     (if (stdenv.isAarch32 || stdenv.isAarch64)
     then ["nouveau"]
     else ["i915" "i965" "nouveau" "radeon" "r200"]);
@@ -67,7 +67,7 @@ let
 in
 
 let
-  version = "18.2.2";
+  version = "18.3.1";
   branch  = head (splitString "." version);
 in
 
@@ -81,7 +81,7 @@ let self = stdenv.mkDerivation {
       "ftp://ftp.freedesktop.org/pub/mesa/older-versions/${branch}.x/${version}/mesa-${version}.tar.xz"
       "https://mesa.freedesktop.org/archive/mesa-${version}.tar.xz"
     ];
-    sha256 = "1i3ky3d210vi3f5hlr9la1kspdyv093npndxsbzdklw95aqq5fn3";
+    sha256 = "0qyw9dj2p9n91qzc4ylck2an7ibssjvzi2bjcpv2ajk851yq47sv";
   };
 
   prePatch = "patchShebangs .";
@@ -134,22 +134,23 @@ let self = stdenv.mkDerivation {
     "--disable-opencl"
   ];
 
-  nativeBuildInputs = [ autoreconfHook intltool pkgconfig file ];
+  nativeBuildInputs = [
+    autoreconfHook intltool pkgconfig file
+    python2 python2Packages.Mako
+  ];
 
-  propagatedBuildInputs = with xorg;
-    [ libXdamage libXxf86vm ]
-    ++ optional stdenv.isLinux libdrm
+  propagatedBuildInputs = with xorg; [
+    libXdamage libXxf86vm
+  ] ++ optional stdenv.isLinux libdrm
     ++ optionals stdenv.isDarwin [ OpenGL Xplugin ];
 
   buildInputs = with xorg; [
-    expat llvmPackages.llvm libglvnd
-    glproto dri2proto dri3proto presentproto
+    expat llvmPackages.llvm libglvnd xorgproto
     libX11 libXext libxcb libXt libXfixes libxshmfence libXrandr
     libffi libvdpau libelf libXvMC
-    libpthreadstubs openssl/*or another sha1 provider*/
-    valgrind-light python2 python2.pkgs.Mako
-  ] ++ lib.optionals stdenv.isLinux [ wayland wayland-protocols
-                                      libomxil-bellagio libva-minimal ];
+    libpthreadstubs openssl /*or another sha1 provider*/
+  ] ++ lib.optionals (elem "wayland" eglPlatforms) [ wayland wayland-protocols ]
+    ++ lib.optionals stdenv.isLinux [ valgrind-light libomxil-bellagio libva-minimal ];
 
   enableParallelBuilding = true;
   doCheck = false;
@@ -161,7 +162,10 @@ let self = stdenv.mkDerivation {
   ];
 
   # TODO: probably not all .la files are completely fixed, but it shouldn't matter;
-  postInstall = optionalString (galliumDrivers != []) ''
+  postInstall = ''
+    # Some installs don't have any drivers so this directory is never created.
+    mkdir -p $drivers
+  '' + optionalString (galliumDrivers != []) ''
     # move gallium-related stuff to $drivers, so $out doesn't depend on LLVM
     mv -t "$drivers/lib/"    \
       $out/lib/libXvMC*      \

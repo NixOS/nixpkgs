@@ -20,8 +20,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "tmux";
     repo = "tmux";
-    rev = version;
-    sha256 = "0n8sjddy00xgh1rvvw968hh72pyslg1gahmzajfc4b3xax87drpi";
+    rev = "01918cb0170e07288d3aec624516e6470bf5b7fc";
+    sha256 = "1fy87wvxn7r7jzqapvjisc1iizic3kxqk2lv83giqmw1y4g3s7rl";
   };
 
   postPatch = ''

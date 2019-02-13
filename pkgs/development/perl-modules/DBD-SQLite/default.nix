@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, buildPerlPackage, DBI, sqlite }:
+{ stdenv, fetchurl, buildPerlPackage, perl, DBI, sqlite }:
 
 buildPerlPackage rec {
   name = "DBD-SQLite-1.58";
@@ -20,7 +20,7 @@ buildPerlPackage rec {
 
   postInstall = ''
     # Get rid of a pointless copy of the SQLite sources.
-    rm -rf $out/lib/perl5/site_perl/*/*/auto/share
+    rm -rf $out/${perl.libPrefix}/*/*/auto/share
   '';
 
   meta = with stdenv.lib; {

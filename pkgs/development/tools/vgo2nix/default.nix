@@ -9,7 +9,7 @@
 
 buildGoPackage rec {
   name = "vgo2nix-${version}";
-  version = "unstable-2018-10-14";
+  version = "unstable-2019-02-01";
   goPackagePath = "github.com/adisbladis/vgo2nix";
 
   nativeBuildInputs = [ makeWrapper ];
@@ -17,8 +17,8 @@ buildGoPackage rec {
   src = fetchFromGitHub {
     owner = "adisbladis";
     repo = "vgo2nix";
-    rev = "a36137a2b9675f5e9b7e0a7840bc9fe9f2414d4e";
-    sha256 = "1658hr1535v8w3s41q0bcgk8hmisjn8gcw7i3n2d2igszn1dp0q4";
+    rev = "8213e1ffe9e59b1f92df15a995eafd96b66da472";
+    sha256 = "1djwsw7zbprz4czaqsimpwccmmnk8wn38ksj7dis8xdvqrfy7h0g";
   };
 
   goDeps = ./deps.nix;

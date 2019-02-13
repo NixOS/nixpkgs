@@ -1,37 +1,38 @@
-{ lib, buildOcaml, fetchurl, ocaml }:
+{ stdenv, lib, fetchurl, fetchpatch, fetchFromGitHub, ocaml, findlib }:
 
-if lib.versionAtLeast ocaml.version "4.06"
-then throw "FrontC is not available for OCaml ${ocaml.version}"
-else
+let
+  meta_file = fetchurl {
+    url = https://raw.githubusercontent.com/ocaml/opam-repository/3c191ae9356ca7b3b628f2707cfcb863db42480f/packages/FrontC/FrontC.3.4.1/files/META;
+    sha256 = "0s2wsinycldk8y5p09xd0hsgbhckhy7bkghzl63bph6mwv64kq2d";
+  };
+in
 
-buildOcaml rec {
-  name = "FrontC";
-  version = "3.4";
+stdenv.mkDerivation rec {
+  name = "ocaml${ocaml.version}-FrontC-${version}";
+  version = "3.4.1";
 
-  src = fetchurl {
-    url = "http://www.irit.fr/recherches/ARCHI/MARCH/frontc/Frontc-${version}.tgz";
-    sha256 = "16dz153s92dgbw1rrfwbhscy73did87kfmjwyh3qpvs748h1sc4g";
+  src = fetchFromGitHub {
+    owner = "BinaryAnalysisPlatform";
+    repo = "FrontC";
+    rev = "V_3_4_1";
+    sha256 = "1dq5nks0c9gsbr1m8k39m1bniawr5hqcy1r8x5px7naa95ch06ak";
   };
 
+  buildInputs = [ ocaml findlib ];
+
   meta = with lib; {
-    homepage = https://www.irit.fr/recherches/ARCHI/MARCH/rubrique.php3?id_rubrique=61;
+    inherit (src.meta) homepage;
+    inherit (ocaml.meta) platforms;
     description = "C Parsing Library";
     license = licenses.lgpl21;
     maintainers = [ maintainers.maurer ];
   };
 
-  meta_file = fetchurl {
-    url = https://raw.githubusercontent.com/ocaml/opam-repository/0f0e610f6499bdf0151e4170411b4f05e4d076d4/packages/FrontC/FrontC.3.4/files/META;
-    sha256 = "1flhvwr01crn7d094kby0418s1m4198np85ymjp3b4maz0n7m2mx";
-  };
-
-  opam_patch = fetchurl {
-    url = https://raw.githubusercontent.com/ocaml/opam-repository/0f0e610f6499bdf0151e4170411b4f05e4d076d4/packages/FrontC/FrontC.3.4/files/opam.patch;
-    sha256 = "0xf83ixx0mf3mznwpwp2mjflii0njdzikhhfxpnms7vhnnmlfzy5";
-  };
-
-  patches = [ opam_patch ];
-  patchFlags = "-p4";
+  patches = [ (fetchpatch {
+      url = https://raw.githubusercontent.com/ocaml/opam-repository/3c191ae9356ca7b3b628f2707cfcb863db42480f/packages/FrontC/FrontC.3.4.1/files/opam.patch;
+      sha256 = "0v4f6740jbj1kxg1y03dzfa3x3gsrhv06wpzdj30gl4ki5fvj4hs";
+    })
+  ];
 
   makeFlags = "PREFIX=$(out) OCAML_SITE=$(OCAMLFIND_DESTDIR)";
 

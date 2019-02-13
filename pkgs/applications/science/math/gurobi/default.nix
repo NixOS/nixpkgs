@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "gurobi-${version}";
-  version = "8.0.1";
+  version = "8.1.0";
 
   src = with stdenv.lib; fetchurl {
     url = "http://packages.gurobi.com/${versions.majorMinor version}/gurobi${version}_linux64.tar.gz";
-    sha256 = "0y3lb0mngnyn7ql4s2n8qxnr1d2xcjdpdhpdjdxc4sc8f2w2ih18";
+    sha256 = "1yjqbzqnq4jjkjm616d36bgd3rmqr0a1ii17n0prpdjzmdlq63dz";
   };
 
   sourceRoot = "gurobi${builtins.replaceStrings ["."] [""] version}/linux64";
@@ -33,9 +33,15 @@ stdenv.mkDerivation rec {
     cp include/gurobi*.h $out/include/
 
     mkdir -p $out/lib
+    cp lib/*.jar $out/lib/
+    cp lib/libGurobiJni*.so $out/lib/
     cp lib/libgurobi*.so* $out/lib/
     cp lib/libgurobi*.a $out/lib/
     cp src/build/*.a $out/lib/
+
+    mkdir -p $out/share/java
+    ln -s $out/lib/gurobi.jar $out/share/java/
+    ln -s $out/lib/gurobi-javadoc.jar $out/share/java/
   '';
 
   meta = with stdenv.lib; {

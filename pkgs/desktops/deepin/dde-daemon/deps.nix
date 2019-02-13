@@ -41,8 +41,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/linuxdeepin/go-x11-client";
-      rev = "8f12fd35ff10b391f0321aa41b94db6acd951ea3";
-      sha256 = "1axxzzhbiwvi76d19bix3zm5wv3qmlq0wgji9mwjbmkb4bvp0v3d";
+      rev = "03541136501cab4910ad8852fe749ef8e18907ca";
+      sha256 = "1iiw8qclpklim81hz1sdjp2ajw0ljvjz19n9jly86nbw6m8x4gkp";
     };
   }
   {
@@ -68,8 +68,8 @@
     fetch = {
       type = "git";
       url = "https://go.googlesource.com/image";
-      rev = "991ec62608f3c0da01d400756917825d1e2fd528";
-      sha256 = "0jipi9czjczi6hlqb5kchgml8r6h6qyb4gqrb0nnb63m25510019";
+      rev = "69cc3646b96e61de0b417f4815b86c36e65783ee";
+      sha256 = "0nkywb3r0qvwkmykpswnf0svxi463ycn293y5jjididzxv9qxdp9";
     };
   }
   {
@@ -77,8 +77,8 @@
     fetch = {
       type = "git";
       url = "https://go.googlesource.com/net";
-      rev = "04a2e542c03f1d053ab3e4d6e5abcd4b66e2be8e";
-      sha256 = "040i9f6ymj4z25957h20id9kfmlrcp35y4sfd99hngw9li50ihql";
+      rev = "c44066c5c816ec500d459a2a324a753f78531ae0";
+      sha256 = "0mgww74bl15d0jvsh4f3qr1ckjzb8icb8hn0mgs5ppa0b2fgpc4f";
     };
   }
   {
@@ -86,8 +86,8 @@
     fetch = {
       type = "git";
       url = "https://go.googlesource.com/text";
-      rev = "4d1c5fb19474adfe9562c9847ba425e7da817e81";
-      sha256 = "1y4rf9cmjyf8r56khr1sz0chbq1v0ynaj63i2z1mq6k6h6ww45da";
+      rev = "6f44c5a2ea40ee3593d98cdcc905cc1fdaa660e2";
+      sha256 = "00mwzxly5isgf0glz7k3k2dkyqkjfc4z55qxajx4lgcp3h8xn9xj";
     };
   }
   {
@@ -97,6 +97,15 @@
       url = "https://gopkg.in/alecthomas/kingpin.v2";
       rev = "947dcec5ba9c011838740e680966fd7087a71d0d";
       sha256 = "0mndnv3hdngr3bxp7yxfd47cas4prv98sqw534mx7vp38gd88n5r";
+    };
+  }
+  {
+    goPackagePath = "pkg.deepin.io/lib";
+    fetch = {
+      type = "git";
+      url = "https://github.com/linuxdeepin/go-lib.git";
+      rev = "b199d0dc96e979398ea3985334ccf9c20236d1a7";
+      sha256 = "0g84v1adnnyqc1mv45n3wlvnivkm1fi8ywszzgwx8irl3iddfvxv";
     };
   }
 ]

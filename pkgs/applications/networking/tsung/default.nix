@@ -1,7 +1,7 @@
 { fetchurl, stdenv, lib, makeWrapper,
   erlang,
   python2, python2Packages,
-  perl, perlPackages,
+  perlPackages,
   gnuplot }:
 
 stdenv.mkDerivation rec {
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [
     erlang
     gnuplot
-    perl
+    perlPackages.perl
     perlPackages.TemplateToolkit
     python2
     python2Packages.matplotlib
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     # Add Template Toolkit and gnuplot to tsung_stats.pl
     wrapProgram $out/bin/tsung_stats.pl \
         --prefix PATH : ${lib.makeBinPath [ gnuplot ]} \
-        --set PERL5LIB "${lib.makePerlPath [ perlPackages.TemplateToolkit ]}"
+        --set PERL5LIB "${perlPackages.makePerlPath [ perlPackages.TemplateToolkit ]}"
   '';
 
   meta = with stdenv.lib; {

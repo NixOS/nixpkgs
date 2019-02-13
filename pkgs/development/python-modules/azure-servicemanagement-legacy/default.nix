@@ -7,13 +7,13 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.20.1";
+  version = "0.20.6";
   pname = "azure-servicemanagement-legacy";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "17dwrp99sx5x9cm4vldkaxhki9gbd6dlafa0lpr2n92xhh2838zs";
+    sha256 = "c883ff8fa3d4f4cb7b9344e8cb7d92a9feca2aa5efd596237aeea89e5c10981d";
   };
 
   propagatedBuildInputs = [ azure-common requests ];

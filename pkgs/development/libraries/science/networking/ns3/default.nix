@@ -1,6 +1,7 @@
 { stdenv
 , fetchFromGitHub
 , python
+, wafHook
 
 # for binding generation
 , castxml ? null
@@ -50,6 +51,7 @@ stdenv.mkDerivation rec {
     sha256 = "17kzfjpgw2mvyx1c9bxccnvw67jpk09fxmcnlkqx9xisk10qnhng";
   };
 
+  nativeBuildInputs = [ wafHook ];
   # ncurses is a hidden dependency of waf when checking python
   buildInputs = lib.optionals generateBindings [ castxml ncurses ]
     ++ stdenv.lib.optional enableDoxygen [ doxygen graphviz imagemagick ]
@@ -58,11 +60,8 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ gcc6 pythonEnv ];
 
   postPatch = ''
-    patchShebangs ./waf
     patchShebangs doc/ns3_html_theme/get_version.sh
   '';
-
-  configureScript = "${python.interpreter} ./waf configure";
 
   configureFlags = with stdenv.lib; [
       "--enable-modules=${stdenv.lib.concatStringsSep "," modules}"
@@ -74,12 +73,9 @@ stdenv.mkDerivation rec {
   ++ optional doCheck " --enable-tests "
   ;
 
-  postBuild = with stdenv.lib; let flags = concatStringsSep ";" (
-      optional enableDoxygen "./waf doxygen"
-      ++ optional withManual "./waf sphinx"
-    );
-    in "${flags}"
-  ;
+  buildTargets = "build"
+    + lib.optionalString enableDoxygen " doxygen"
+    + lib.optionalString withManual "sphinx";
 
   doCheck = true;
 

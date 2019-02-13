@@ -21,6 +21,10 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig intltool ];
   buildInputs = [ gtk3 librsvg pango atk gtk2 gdk_pixbuf gnome3.defaultIconTheme ];
 
+  postFixup = ''
+    gtk-update-icon-cache "$out"/share/icons/HighContrast
+  '';
+
   meta = with stdenv.lib; {
     platforms = platforms.linux;
     maintainers = gnome3.maintainers;

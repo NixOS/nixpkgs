@@ -5,10 +5,18 @@ with lib;
 let
   cfg = config.services.prometheus.alertmanager;
   mkConfigFile = pkgs.writeText "alertmanager.yml" (builtins.toJSON cfg.configuration);
-  alertmanagerYml =
-    if cfg.configText != null then
-      pkgs.writeText "alertmanager.yml" cfg.configText
-    else mkConfigFile;
+
+  checkedConfig = file: pkgs.runCommand "checked-config" { buildInputs = [ cfg.package ]; } ''
+    ln -s ${file} $out
+    amtool check-config $out
+  '';
+
+  alertmanagerYml = let
+    yml = if cfg.configText != null then
+        pkgs.writeText "alertmanager.yml" cfg.configText
+        else mkConfigFile;
+    in checkedConfig yml;
+
   cmdlineArgs = cfg.extraFlags ++ [
     "--config.file ${alertmanagerYml}"
     "--web.listen-address ${cfg.listenAddress}:${toString cfg.port}"
@@ -22,6 +30,15 @@ in {
   options = {
     services.prometheus.alertmanager = {
       enable = mkEnableOption "Prometheus Alertmanager";
+
+      package = mkOption {
+        type = types.package;
+        default = pkgs.prometheus-alertmanager;
+        defaultText = "pkgs.alertmanager";
+        description = ''
+          Package that should be used for alertmanager.
+        '';
+      };
 
       user = mkOption {
         type = types.str;
@@ -40,8 +57,8 @@ in {
       };
 
       configuration = mkOption {
-        type = types.attrs;
-        default = {};
+        type = types.nullOr types.attrs;
+        default = null;
         description = ''
           Alertmanager configuration as nix attribute set.
         '';
@@ -119,26 +136,34 @@ in {
     };
   };
 
-
-  config = mkIf cfg.enable {
-    networking.firewall.allowedTCPPorts = optional cfg.openFirewall cfg.port;
-
-    systemd.services.alertmanager = {
-      wantedBy = [ "multi-user.target" ];
-      after    = [ "network.target" ];
-      script = ''
-        ${pkgs.prometheus-alertmanager.bin}/bin/alertmanager \
-          ${concatStringsSep " \\\n  " cmdlineArgs}
-      '';
-
-      serviceConfig = {
-        User = cfg.user;
-        Group = cfg.group;
-        Restart  = "always";
-        PrivateTmp = true;
-        WorkingDirectory = "/tmp";
-        ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
+  config = mkMerge [
+    (mkIf cfg.enable {
+      assertions = singleton {
+        assertion = cfg.configuration != null || cfg.configText != null;
+        message = "Can not enable alertmanager without a configuration. "
+         + "Set either the `configuration` or `configText` attribute.";
       };
-    };
-  };
+    })
+    (mkIf cfg.enable {
+      networking.firewall.allowedTCPPorts = optional cfg.openFirewall cfg.port;
+
+      systemd.services.alertmanager = {
+        wantedBy = [ "multi-user.target" ];
+        after    = [ "network.target" ];
+        script = ''
+          ${cfg.package}/bin/alertmanager \
+            ${concatStringsSep " \\\n  " cmdlineArgs}
+        '';
+
+        serviceConfig = {
+          User = cfg.user;
+          Group = cfg.group;
+          Restart  = "always";
+          PrivateTmp = true;
+          WorkingDirectory = "/tmp";
+          ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
+        };
+      };
+    })
+  ];
 }

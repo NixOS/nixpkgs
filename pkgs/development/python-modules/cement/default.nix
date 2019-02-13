@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "cement";
-  version = "3.0.0";
+  version = "3.0.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e50e1033d61d18b36787a60d52cad0d3fe20780e7e2f78f0204bde32000645f9";
+    sha256 = "8c692493c9d97b07e4a2c0770223fa5ee12a3110cfcb246d7d26fffe22edd22e";
   };
 
   # Disable test tests since they depend on a memcached server running on

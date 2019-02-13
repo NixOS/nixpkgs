@@ -3,23 +3,23 @@
 stdenv.mkDerivation rec {
 
   pname = "sundials";
-  version = "3.2.1";
-  name = "${pname}-${version}";
+  version = "4.0.2";
 
   src = fetchurl {
-  url = "https://computation.llnl.gov/projects/${pname}/download/${pname}-${version}.tar.gz";
-  sha256 = "0238r1qnwqz13wcjzfsbcfi8rfnlxcjjmxq2vpf2qf5jgablvna7";
+    url = "https://computation.llnl.gov/projects/${pname}/download/${pname}-${version}.tar.gz";
+    sha256 = "0xfk0icsi63yi1dby4rn02ppwkzfykciw6q03bk454gdia9xcmk6";
   };
 
   preConfigure = ''
     export cmakeFlags="-DCMAKE_INSTALL_PREFIX=$out -DEXAMPLES_INSTALL_PATH=$out/share/examples $cmakeFlags"
   '';
-  
-  buildInputs = [ cmake python ];
+
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ python ];
 
   meta = with stdenv.lib; {
     description = "Suite of nonlinear differential/algebraic equation solvers";
-    homepage    = https://computation.llnl.gov/casc/sundials/main.html;
+    homepage    = https://computation.llnl.gov/projects/sundials;
     platforms   = platforms.all;
     maintainers = [ maintainers.idontgetoutmuch ];
     license     = licenses.bsd3;

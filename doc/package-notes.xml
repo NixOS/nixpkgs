@@ -205,7 +205,7 @@ $ cat $(PRINT_PATH=1 nix-prefetch-url $i | tail -n 1) \
 
   <para>
    Nixpkgs provides a number of packages that will install Eclipse in its
-   various forms, these range from the bare-bones Eclipse Platform to the more
+   various forms. These range from the bare-bones Eclipse Platform to the more
    fully featured Eclipse SDK or Scala-IDE packages and multiple version are
    often available. It is possible to list available Eclipse packages by
    issuing the command:
@@ -307,23 +307,19 @@ packageOverrides = pkgs: {
 </screen>
   </para>
  </section>
+
  <section xml:id="sec-elm">
   <title>Elm</title>
 
   <para>
-   The Nix expressions for Elm reside in
-   <filename>pkgs/development/compilers/elm</filename>. They are generated
-   automatically by <command>update-elm.rb</command> script. One should specify
-   versions of Elm packages inside the script, clear the
-   <filename>packages</filename> directory and run the script from inside it.
-   <literal>elm-reactor</literal> is special because it also has Elm package
-   dependencies. The process is not automated very much for now -- you should
-   get the <literal>elm-reactor</literal> source tree (e.g. with
-   <command>nix-shell</command>) and run <command>elm2nix.rb</command> inside
-   it. Place the resulting <filename>package.nix</filename> file into
-   <filename>packages/elm-reactor-elm.nix</filename>.
+   To update Elm compiler, see <filename>nixpkgs/pkgs/development/compilers/elm/README.md</filename>.
+  </para>
+
+  <para>
+   To package Elm applications, <link xlink:href="https://github.com/hercules-ci/elm2nix#elm2nix">read about elm2nix</link>.
   </para>
  </section>
+
  <section xml:id="sec-shell-helpers">
   <title>Interactive shell helpers</title>
 

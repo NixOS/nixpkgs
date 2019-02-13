@@ -1,15 +1,15 @@
 { stdenv, fetchurl, pkgconfig, atk, cairo, glib, gtk3, pango, vala_0_40
-, libxml2, perl, gettext, gnome3, gobjectIntrospection, dbus, xvfb_run, shared-mime-info }:
+, libxml2, perl, gettext, gnome3, gobject-introspection, dbus, xvfb_run, shared-mime-info }:
 
 let
   checkInputs = [ xvfb_run dbus ];
 in stdenv.mkDerivation rec {
   name = "gtksourceview-${version}";
-  version = "4.0.0";
+  version = "4.0.3";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gtksourceview/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "0amkspjsvxr3rjznmnwjwsgw030hayf6bw49ya4nligslwl7lp3f";
+    sha256 = "0wwxgw43dmmaz07lzdzpladir26l2bly3lnf2ks6pna152wafm9x";
   };
 
   propagatedBuildInputs = [
@@ -21,7 +21,7 @@ in stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ pkgconfig gettext perl gobjectIntrospection vala_0_40 ]
+  nativeBuildInputs = [ pkgconfig gettext perl gobject-introspection vala_0_40 ]
     ++ stdenv.lib.optionals doCheck checkInputs;
 
   buildInputs = [ atk cairo glib pango libxml2 ];
@@ -41,7 +41,7 @@ in stdenv.mkDerivation rec {
   passthru = {
     updateScript = gnome3.updateScript {
       packageName = "gtksourceview";
-      attrPath = "gnome3.gtksourceview";
+      attrPath = "gtksourceview4";
     };
   };
 

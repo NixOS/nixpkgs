@@ -2,17 +2,25 @@
 , fetchFromGitHub
 , fetchpatch
 }:
+
+# This file is responsible for fetching the sage source and adding necessary patches.
+# It does not actually build anything, it just copies the patched sources to $out.
+# This is done because multiple derivations rely on these sources and they should
+# all get the same sources with the same patches applied.
+
 stdenv.mkDerivation rec {
-  version = "8.4";
+  version = "8.6";
   name = "sage-src-${version}";
 
   src = fetchFromGitHub {
     owner = "sagemath";
     repo = "sage";
     rev = version;
-    sha256 = "0gips1hagiz9m7s21bg5as8hrrm2x5k47h1bsq0pc46iplfwmv2d";
+    sha256 = "1vs3pbgbqpg0qnwr018bqsdmm7crgjp310cx8zwh7za3mv1cw5j3";
   };
 
+  # Patches needed because of particularities of nix or the way this is packaged.
+  # The goal is to upstream all of them and get rid of this list.
   nixPatches = [
     # https://trac.sagemath.org/ticket/25358
     (fetchpatch {
@@ -31,45 +39,81 @@ stdenv.mkDerivation rec {
     # Revert the commit that made the sphinx build fork even in the single thread
     # case. For some yet unknown reason, that breaks the docbuild on nix and archlinux.
     # See https://groups.google.com/forum/#!msg/sage-packaging/VU4h8IWGFLA/mrmCMocYBwAJ.
+    # https://trac.sagemath.org/ticket/26608
     ./patches/revert-sphinx-always-fork.patch
 
     # Make sure py2/py3 tests are only run when their expected context (all "sage"
     # tests) are also run. That is necessary to test dochtml individually. See
     # https://trac.sagemath.org/ticket/26110 for an upstream discussion.
     ./patches/Only-test-py2-py3-optional-tests-when-all-of-sage-is.patch
+
+    # Fixes a potential race condition which can lead to transient doctest failures.
+    ./patches/fix-ecl-race.patch
   ];
 
-  packageUpgradePatches = [
+  # Patches needed because of package updates. We could just pin the versions of
+  # dependencies, but that would lead to rebuilds, confusion and the burdons of
+  # maintaining multiple versions of dependencies. Instead we try to make sage
+  # compatible with never dependency versions when possible. All these changes
+  # should come from or be proposed to upstream. This list will probably never
+  # be empty since dependencies update all the time.
+  packageUpgradePatches = let
+    # Fetch a diff between `base` and `rev` on sage's git server.
+    # Used to fetch trac tickets by setting the `base` to the last release and the
+    # `rev` to the last commit of the ticket.
+    fetchSageDiff = { base, rev, name ? "sage-diff-${base}-${rev}.patch", ...}@args: (
+      fetchpatch ({
+        inherit name;
+        url = "https://git.sagemath.org/sage.git/rawdiff?id2=${base}&id=${rev}";
+        # We don't care about sage's own build system (which builds all its dependencies).
+        # Exclude build system changes to avoid conflicts.
+        excludes = [ "/build/*" ];
+      } // builtins.removeAttrs args [ "rev" "base" ])
+    );
+  in [
     # New glpk version has new warnings, filter those out until upstream sage has found a solution
+    # Should be fixed with glpk > 4.65.
     # https://trac.sagemath.org/ticket/24824
-    ./patches/pari-stackwarn.patch # not actually necessary since tha pari upgrade, but necessary for the glpk patch to apply
+    ./patches/pari-stackwarn.patch # not actually necessary since the pari upgrade, but necessary for the glpk patch to apply
     (fetchpatch {
       url = "https://salsa.debian.org/science-team/sagemath/raw/58bbba93a807ca2933ca317501d093a1bb4b84db/debian/patches/dt-version-glpk-4.65-ignore-warnings.patch";
       sha256 = "0b9293v73wb4x13wv5zwyjgclc01zn16msccfzzi6znswklgvddp";
       stripLen = 1;
     })
 
-    # https://trac.sagemath.org/ticket/25260
-    ./patches/numpy-1.15.1.patch
+    # https://trac.sagemath.org/ticket/26315
+    ./patches/giac-1.5.0.patch
 
-    # ntl upgrade
-    (fetchpatch {
-      name = "lcalc-c++11.patch";
-      url = "https://git.archlinux.org/svntogit/community.git/plain/trunk/sagemath-lcalc-c++11.patch?h=packages/sagemath&id=0e31ae526ab7c6b5c0bfacb3f8b1c4fd490035aa";
-      sha256 = "0p5wnvbx65i7cp0bjyaqgp4rly8xgnk12pqwaq3dqby0j2bk6ijb";
+    # https://trac.sagemath.org/ticket/26442
+    (fetchSageDiff {
+      name = "cypari2-2.0.3.patch";
+      base = "8.6.rc1";
+      rev = "cd62d45bcef93fb4f7ed62609a46135e6de07051";
+      sha256 = "08l2b9w0rn1zrha6188j72f7737xs126gkgmydjd31baa6367np2";
     })
 
-    # https://trac.sagemath.org/ticket/26360
+    # https://trac.sagemath.org/ticket/26949
     (fetchpatch {
-      name = "arb-2.15.1.patch";
-      url = "https://git.sagemath.org/sage.git/patch/?id=30cc778d46579bd0c7537ed33e8d7a4f40fd5c31";
-      sha256 = "13vc2q799dh745sm59xjjabllfj0sfjzcacf8k59kwj04x755d30";
+      name = "sphinx-1.8.3-dependency.patch";
+      url = "https://git.sagemath.org/sage.git/patch?id=d305eda0fedc73fdbe0447b5d6d2b520b8d112c4";
+      sha256 = "1x3q5j8lq35vlj893gj5gq9fhzs60szm9r9rx6ri79yiy9apabph";
+    })
+    # https://trac.sagemath.org/ticket/26451
+    (fetchpatch {
+      name = "sphinx-1.8.3.patch";
+      url = "https://git.sagemath.org/sage.git/patch?id2=0cb494282d7b4cea50aba7f4d100e7932a4c00b1&id=62b989d5ee1d9646db85ea56053cd22e9ffde5ab";
+      sha256 = "1n5c61mvhalcr2wbp66wzsynwwk59aakvx3xqa5zw9nlkx3rd0h1";
+    })
+
+    # https://trac.sagemath.org/ticket/27061
+    (fetchpatch {
+      name = "numpy-1.16-inline-fortran.patch";
+      url = "https://git.sagemath.org/sage.git/patch?id=a05b6b038e1571ab15464e98f76d1927c0c3fd12";
+      sha256 = "05yq97pq84xi60wb1p9skrad5h5x770gq98ll4frr7hvvmlwsf58";
     })
   ];
 
-  patches = nixPatches ++ packageUpgradePatches ++ [
-    ./patches/known-padics-bug.patch
-  ];
+  patches = nixPatches ++ packageUpgradePatches;
 
   postPatch = ''
     # make sure shebangs etc are fixed, but sage-python23 still works

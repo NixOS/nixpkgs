@@ -32,35 +32,26 @@
     fetch = {
       type = "git";
       url = "https://github.com/disintegration/imaging";
-      rev = "32df9565b4e0c1460f1915d53f6ff198d9a41af2";
-      sha256 = "1nkmaav375fv4610g8i9bam33pv4aa4fy2n4nypprhc7vq0svwkm";
+      rev = "9458da53d1e65e098d48467a4317c403327e4424";
+      sha256 = "1b0ma9if8s892qfx5b1vjinxn00ah9vsyxijs8knkilrhf5vqcx4";
     };
   }
   {
-    goPackagePath = "github.com/kr/pretty";
+    goPackagePath = "github.com/fogleman/gg";
     fetch = {
       type = "git";
-      url = "https://github.com/kr/pretty";
-      rev = "73f6ac0b30a98e433b289500d779f50c1a6f0712";
-      sha256 = "18m4pwg2abd0j9cn5v3k2ksk9ig4vlwxmlw9rrglanziv9l967qp";
+      url = "https://github.com/fogleman/gg";
+      rev = "0e0ff3ade7039063fe954cc1b45fad6cd4ac80db";
+      sha256 = "06gvsngfwizdxin90nldix5503fqgnwqmqvxzrz0xg5hfazwfra5";
     };
   }
   {
-    goPackagePath = "github.com/kr/text";
+    goPackagePath = "github.com/golang/freetype";
     fetch = {
       type = "git";
-      url = "https://github.com/kr/text";
-      rev = "e2ffdb16a802fe2bb95e2e35ff34f0e53aeef34f";
-      sha256 = "1gm5bsl01apvc84bw06hasawyqm4q84vx1pm32wr9jnd7a8vjgj1";
-    };
-  }
-  {
-    goPackagePath = "github.com/linuxdeepin/go-dbus-factory";
-    fetch = {
-      type = "git";
-      url = "https://github.com/linuxdeepin/go-dbus-factory";
-      rev = "2a30fc6fb47b70b8879855df8e29c8f581c419aa";
-      sha256 = "0b0j47n3bb5fd04p01jla6k9vz2ck8l8512ga0xsn78177yb2z0w";
+      url = "https://github.com/golang/freetype";
+      rev = "e2365dfdc4a05e4b8299a783240d4a7d5a65d4e4";
+      sha256 = "194w3djc6fv1rgcjqds085b9fq074panc5vw582bcb8dbfzsrqxc";
     };
   }
   {
@@ -68,8 +59,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/linuxdeepin/go-x11-client";
-      rev = "8f12fd35ff10b391f0321aa41b94db6acd951ea3";
-      sha256 = "1axxzzhbiwvi76d19bix3zm5wv3qmlq0wgji9mwjbmkb4bvp0v3d";
+      rev = "03541136501cab4910ad8852fe749ef8e18907ca";
+      sha256 = "1iiw8qclpklim81hz1sdjp2ajw0ljvjz19n9jly86nbw6m8x4gkp";
     };
   }
   {
@@ -86,8 +77,8 @@
     fetch = {
       type = "git";
       url = "https://go.googlesource.com/image";
-      rev = "991ec62608f3c0da01d400756917825d1e2fd528";
-      sha256 = "0jipi9czjczi6hlqb5kchgml8r6h6qyb4gqrb0nnb63m25510019";
+      rev = "69cc3646b96e61de0b417f4815b86c36e65783ee";
+      sha256 = "0nkywb3r0qvwkmykpswnf0svxi463ycn293y5jjididzxv9qxdp9";
     };
   }
   {
@@ -95,8 +86,8 @@
     fetch = {
       type = "git";
       url = "https://go.googlesource.com/net";
-      rev = "146acd28ed5894421fb5aac80ca93bc1b1f46f87";
-      sha256 = "0d177474z85nvxz8ch6y9wjqz288844wwx8q9za3x2njnk4jbgxj";
+      rev = "c44066c5c816ec500d459a2a324a753f78531ae0";
+      sha256 = "0mgww74bl15d0jvsh4f3qr1ckjzb8icb8hn0mgs5ppa0b2fgpc4f";
     };
   }
   {
@@ -106,24 +97,6 @@
       url = "https://gopkg.in/alecthomas/kingpin.v2";
       rev = "947dcec5ba9c011838740e680966fd7087a71d0d";
       sha256 = "0mndnv3hdngr3bxp7yxfd47cas4prv98sqw534mx7vp38gd88n5r";
-    };
-  }
-  {
-    goPackagePath = "gopkg.in/check.v1";
-    fetch = {
-      type = "git";
-      url = "https://gopkg.in/check.v1";
-      rev = "788fd78401277ebd861206a03c884797c6ec5541";
-      sha256 = "0v3bim0j375z81zrpr5qv42knqs0y2qv2vkjiqi5axvb78slki1a";
-    };
-  }
-  {
-    goPackagePath = "pkg.deepin.io/lib";
-    fetch = {
-      type = "git";
-      url = "https://github.com/linuxdeepin/go-lib.git";
-      rev = "f09dcc32fc5a36b53ff7760e5a06e7f8f97b81f9";
-      sha256 = "1z4iw7h6lknm9jrna2c73icg1a1mxvzrqdhgjvaiww89mql1jzb4";
     };
   }
 ]

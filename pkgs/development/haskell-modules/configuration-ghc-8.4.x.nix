@@ -62,13 +62,21 @@ self: super: {
   # that have it as an actual library dependency. The explicit overrides are
   # more verbose but friendlier for Hydra.
   stack = (doJailbreak super.stack).override {
-    Cabal = self.Cabal_2_4_0_1;
-    hpack = self.hpack_0_31_0.override { Cabal = self.Cabal_2_4_0_1; };
+    Cabal = self.Cabal_2_4_1_0;
+    hpack = self.hpack_0_31_1.override { Cabal = self.Cabal_2_4_1_0; };
     yaml = self.yaml_0_11_0_0;
-    hackage-security = self.hackage-security.override { Cabal = self.Cabal_2_4_0_1; };
+    hackage-security = self.hackage-security.override { Cabal = self.Cabal_2_4_1_0; };
   };
-  hpack_0_31_0 = super.hpack_0_31_0.override {
+  hpack_0_31_1 = super.hpack_0_31_1.override {
     yaml = self.yaml_0_11_0_0;
   };
+
+  # https://github.com/pikajude/stylish-cabal/issues/11
+  stylish-cabal = generateOptparseApplicativeCompletion "stylish-cabal" (super.stylish-cabal.overrideScope (self: super: {
+    haddock-library = dontHaddock (dontCheck self.haddock-library_1_5_0_1);
+  }));
+
+  # cabal2nix doesn't list this because of a conditional on the GHC version.
+  aeson = addBuildDepend super.aeson self.contravariant;
 
 }

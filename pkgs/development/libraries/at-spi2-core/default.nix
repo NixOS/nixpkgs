@@ -4,7 +4,7 @@
 , meson
 , ninja
 , pkgconfig
-, gobjectIntrospection
+, gobject-introspection
 
 , dbus
 , glib
@@ -19,16 +19,16 @@
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "at-spi2-core";
-  version = "2.28.0";
+  version = "2.30.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "11qwdxxx4jm0zj04xydlwah41axiz276dckkiql3rr0wn5x4i8j2";
+    sha256 = "0azvgdmmivfz1fki25mz582gmwvfpajcnqhlq7s53nhr7lwzax81";
   };
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ meson ninja pkgconfig gobjectIntrospection ]
+  nativeBuildInputs = [ meson ninja pkgconfig gobject-introspection ]
     # Fixup rpaths because of meson, remove with meson-0.47
     ++ stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
   buildInputs = [ dbus glib libX11 libXtst libXi ];

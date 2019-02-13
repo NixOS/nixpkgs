@@ -8,7 +8,7 @@
 , desktop-file-utils
 , gtk3
 , gst_all_1
-, gobjectIntrospection
+, gobject-introspection
 , python3Packages
 , file
 , cairo
@@ -21,14 +21,14 @@ python3Packages.buildPythonApplication rec {
 
   format = "other"; # no setup.py
 
-  name = "cozy-${version}";
-  version = "0.6.3";
+  pname = "cozy";
+  version = "0.6.7";
 
   src = fetchFromGitHub {
     owner = "geigi";
-    repo = "cozy";
+    repo = pname;
     rev = version;
-    sha256 = "0xs6vzvmx0nvybpjqlrngggv2x8b2ky073slh760iirs1p0dclbc";
+    sha256 = "0f8dyqj6111czn8spgsnic1fqs3kimjwl1b19mw55fa924b9bhsa";
   };
 
   nativeBuildInputs = [
@@ -36,7 +36,7 @@ python3Packages.buildPythonApplication rec {
     wrapGAppsHook
     appstream-glib
     desktop-file-utils
-    gobjectIntrospection
+    gobject-introspection
   ];
 
   buildInputs = [
@@ -66,18 +66,12 @@ python3Packages.buildPythonApplication rec {
     substituteInPlace cozy/magic/magic.py --replace "ctypes.util.find_library('magic')" "'${file}/lib/libmagic${stdenv.hostPlatform.extensions.sharedLibrary}'"
   '';
 
-  checkPhase = ''
-    ninja test
-  '';
-
   postInstall = ''
     ln -s $out/bin/com.github.geigi.cozy $out/bin/cozy
   '';
 
   meta = with stdenv.lib; {
-    description = ''
-       A modern audio book player for Linux using GTK+ 3
-    '';
+    description = "A modern audio book player for Linux using GTK+ 3";
     homepage = https://cozy.geigi.de/;
     maintainers = [ maintainers.makefu ];
     license = licenses.gpl3;

@@ -1,22 +1,12 @@
 { stdenv, fetchurl, fetchpatch, pkgconfig, cmake, zlib, openssl, libsodium }:
 
 stdenv.mkDerivation rec {
-  name = "libssh-0.7.6";
+  name = "libssh-0.8.5";
 
   src = fetchurl {
-    url = "https://www.libssh.org/files/0.7/libssh-0.7.6.tar.xz";
-    sha256 = "14hhdpn2hflywsi9d5bz2pfjxqkyi07znjij89cpakr7b4w7sq0x";
+    url = "https://www.libssh.org/files/0.8/${name}.tar.xz";
+    sha256 = "0dd3nmd20jw4z116qbz3wbffxbzrczi6mcxw0rmqzj0g4hqw9lh7";
   };
-
-  patches = [
-    # Fix mysql-workbench compilation
-    # https://bugs.mysql.com/bug.php?id=91923
-    (fetchpatch {
-      name = "include-fix-segfault-in-getissuebanner-add-missing-wrappers-in-libsshpp.patch";
-      url = https://git.libssh.org/projects/libssh.git/patch/?id=5ea81166bf885d0fd5d4bb232fc22633f5aaf3c4;
-      sha256 = "12q818l3nasqrfrsghxdvjcyya1bfcg0idvsf8xwm5zj7criln0a";
-    })
-  ];
 
   postPatch = ''
     # Fix headers to use libsodium instead of NaCl

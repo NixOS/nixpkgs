@@ -31,7 +31,6 @@ let
 
     doCheck = false; # hangs, tries to access the net?
     checkInputs = [ check ];
-    checkPhase = "ctest";
 
     meta = with stdenv.lib; {
       description = "P2P FOSS instant messaging application aimed to replace Skype";
@@ -49,7 +48,7 @@ in rec {
   };
 
   libtoxcore_0_2 = generic {
-    version = "0.2.8";
-    sha256 = "0xgnraysz25fbws5zwjk92mwnl8k1yih701qam8kgm3rxh50kyhm";
+    version = "0.2.9";
+    sha256 = "0aljr9hqybla6p61af6fdkv0x8gph7c2wacqqa9hq2z9w0p4fs5j";
   };
 }

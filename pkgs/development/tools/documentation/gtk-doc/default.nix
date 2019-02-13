@@ -1,15 +1,15 @@
-{ stdenv, fetchurl, autoreconfHook, pkgconfig, perl, python, libxml2Python, libxslt, which
+{ stdenv, fetchurl, autoreconfHook, pkgconfig, perl, python3, libxml2Python, libxslt, which
 , docbook_xml_dtd_43, docbook_xsl, gnome-doc-utils, gettext, itstool
 , withDblatex ? false, dblatex
 }:
 
 stdenv.mkDerivation rec {
   name = "gtk-doc-${version}";
-  version = "1.28";
+  version = "1.29";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gtk-doc/${version}/${name}.tar.xz";
-    sha256 = "05apmwibkmn1icx05l8aw241lhymcx01zvk5i499cb150bijj7li";
+    sha256 = "1cc6yl8l275qn3zpjl6f0s4fwmkczngjr9hhsdv74mln4h08wmql";
   };
 
   patches = [
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs =
-    [ pkgconfig perl python libxml2Python libxslt docbook_xml_dtd_43 docbook_xsl
+    [ pkgconfig perl python3 libxml2Python libxslt docbook_xml_dtd_43 docbook_xsl
       gnome-doc-utils gettext which itstool
     ] ++ stdenv.lib.optional withDblatex dblatex;
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   # Make six available for binaries, python.withPackages creates a wrapper
   # but scripts are not allowed in shebangs so we link it into sys.path.
   postInstall = ''
-    ln -s ${python.pkgs.six}/${python.sitePackages}/* $out/share/gtk-doc/python/
+    ln -s ${python3.pkgs.six}/${python3.sitePackages}/* $out/share/gtk-doc/python/
   '';
 
   doCheck = false; # requires a lot of stuff

@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, python2Packages, intltool, file
+{ stdenv, fetchurl, python3Packages, intltool, file
 , wrapGAppsHook, gtk-vnc, vte, avahi, dconf
-, gobjectIntrospection, libvirt-glib, system-libvirt
+, gobject-introspection, libvirt-glib, system-libvirt
 , gsettings-desktop-schemas, glib, libosinfo, gnome3, gtk3
 , spiceSupport ? true, spice-gtk ? null
 , cpio, e2fsprogs, findutils, gzip
@@ -8,19 +8,19 @@
 
 with stdenv.lib;
 
-python2Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   name = "virt-manager-${version}";
-  version = "1.5.1";
+  version = "2.0.0";
   namePrefix = "";
 
   src = fetchurl {
     url = "http://virt-manager.org/download/sources/virt-manager/${name}.tar.gz";
-    sha256 = "1ardmd4sxdmd57y7qpka44gf09c1yq2g0xs074d3k1h925crv27f";
+    sha256 = "1b48xbrx99mfiv80c60k3ydzkpcpbq57c8h8dl0gnffmnzbs8vzb";
   };
 
   nativeBuildInputs = [
     wrapGAppsHook intltool file
-    gobjectIntrospection # for setup hook populating GI_TYPELIB_PATH
+    gobject-introspection # for setup hook populating GI_TYPELIB_PATH
   ];
 
   buildInputs =
@@ -28,9 +28,9 @@ python2Packages.buildPythonApplication rec {
       gsettings-desktop-schemas libosinfo gtk3
     ] ++ optional spiceSupport spice-gtk;
 
-  propagatedBuildInputs = with python2Packages;
+  propagatedBuildInputs = with python3Packages;
     [
-      pygobject3 ipaddr libvirt libxml2 requests
+      pygobject3 ipaddress libvirt libxml2 requests
     ];
 
   patchPhase = ''
@@ -39,7 +39,7 @@ python2Packages.buildPythonApplication rec {
   '';
 
   postConfigure = ''
-    ${python2Packages.python.interpreter} setup.py configure --prefix=$out
+    ${python3Packages.python.interpreter} setup.py configure --prefix=$out
   '';
 
   postInstall = ''

@@ -7,13 +7,13 @@ with stdenv.lib;
 
 buildGoPackage rec {
   name = "gitea-${version}";
-  version = "1.5.2";
+  version = "1.7.1";
 
   src = fetchFromGitHub {
     owner = "go-gitea";
     repo = "gitea";
     rev = "v${version}";
-    sha256 = "168pbndlh7c148p8wzkd39kd7idiba9zw7v0alp9zqcqzzayaydj";
+    sha256 = "1r13l7h4146729lwif45bkzn36sgg6an0qbhgvj8w3zp035c00k3";
     # Required to generate the same checksum on MacOS due to unicode encoding differences
     # More information: https://github.com/NixOS/nixpkgs/pull/48128
     extraPostFetch = ''
@@ -33,7 +33,12 @@ buildGoPackage rec {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  buildFlags = optionalString sqliteSupport "-tags sqlite";
+  buildFlags = optional sqliteSupport "-tags sqlite";
+  buildFlagsArray = ''
+    -ldflags=
+      -X=main.Version=${version}
+      ${optionalString sqliteSupport "-X=main.Tags=sqlite"}
+  '';
 
   outputs = [ "bin" "out" "data" ];
 

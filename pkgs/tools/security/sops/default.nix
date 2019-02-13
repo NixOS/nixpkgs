@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   name = "sops-${version}";
-  version = "3.1.0";
+  version = "3.2.0";
 
   goPackagePath = "go.mozilla.org/sops";
 
@@ -10,7 +10,7 @@ buildGoPackage rec {
     rev = version;
     owner = "mozilla";
     repo = "sops";
-    sha256 = "02s85affgs2991p4akff68myx4h7m3jcly6xihv9g2knml7ixrkj";
+    sha256 = "0lzwql3f4n70gmw1d0vnsg7hd0ma6ys0a4x54g3jk10nrn2f7wxl";
   };
 
   meta = with stdenv.lib; {

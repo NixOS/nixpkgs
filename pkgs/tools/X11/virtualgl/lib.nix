@@ -19,12 +19,6 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  postPatch = ''
-    # script calls exec, which fails with plain sh
-    substituteInPlace ./server/vglrun.in \
-      --replace '#!/bin/sh' '#!/usr/bin/env bash'
-  '';
-
   meta = with stdenv.lib; {
     homepage = http://www.virtualgl.org/;
     description = "X11 GL rendering in a remote computer with full 3D hw acceleration";

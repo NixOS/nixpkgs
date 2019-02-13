@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "qmapshack-${version}";
-  version = "1.12.0";
+  version = "1.12.1";
 
   src = fetchurl {
     url = "https://bitbucket.org/maproom/qmapshack/downloads/${name}.tar.gz";
-    sha256 = "0d5p60kq9pa2hfql4nr8p42n88lr42jrsryrsllvaj45b8b6kvih";
+    sha256 = "1d6n7xk0ksxb1fw43s5lb08vgxf6h93k3rb401cbka1inpyf2232";
   };
 
   nativeBuildInputs = [ cmake ];

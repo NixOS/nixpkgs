@@ -4,14 +4,6 @@ with lib;
 
 let
 
-  # Remove packages of ys from xs, based on their names
-  removePackagesByName = xs: ys:
-    let
-      pkgName = drv: (builtins.parseDrvName drv.name).name;
-      ysNames = map pkgName ys;
-    in
-      filter (x: !(builtins.elem (pkgName x) ysNames)) xs;
-
   addToXDGDirs = p: ''
     if [ -d "${p}/share/gsettings-schemas/${p.name}" ]; then
       export XDG_DATA_DIRS=$XDG_DATA_DIRS''${XDG_DATA_DIRS:+:}${p}/share/gsettings-schemas/${p.name}
@@ -96,7 +88,7 @@ in
 
     environment.systemPackages =
       pkgs.mate.basePackages ++
-      (removePackagesByName
+      (pkgs.gnome3.removePackagesByName
         pkgs.mate.extraPackages
         config.environment.mate.excludePackages);
 

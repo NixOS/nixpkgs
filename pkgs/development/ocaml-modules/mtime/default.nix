@@ -23,8 +23,6 @@ stdenv.mkDerivation {
     inherit (param) sha256;
   };
 
-  unpackCmd = "tar xjf $src";
-
   buildInputs = [ ocaml findlib ocamlbuild topkg ]
   ++ stdenv.lib.optional jsooSupport js_of_ocaml;
 

@@ -28,8 +28,7 @@ with lib;
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig.Type = "forking";
-      script = "${pkgs.oidentd}/sbin/oidentd -u oidentd -g nogroup" +
-          optionalString config.networking.enableIPv6 " -a ::";
+      script = "${pkgs.oidentd}/sbin/oidentd -u oidentd -g nogroup";
     };
 
     users.users.oidentd = {

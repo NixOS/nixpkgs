@@ -1,29 +1,32 @@
 { fetchurl, stdenv, squashfsTools, xorg, alsaLib, makeWrapper, openssl, freetype
 , glib, pango, cairo, atk, gdk_pixbuf, gtk2, cups, nspr, nss, libpng
-, libgcrypt, systemd, fontconfig, dbus, expat, ffmpeg_0_10, curl, zlib, gnome3 }:
+, libgcrypt, systemd, fontconfig, dbus, expat, ffmpeg, curl, zlib, gnome3
+, at-spi2-atk
+}:
 
 let
   # TO UPDATE: just execute the ./update.sh script (won't do anything if there is no update)
   # "rev" decides what is actually being downloaded
-  version = "1.0.83.316.ge96b6e67-5";
+  version = "1.0.96.181.gf6bc1b6b-12";
   # To get the latest stable revision:
   # curl -H 'X-Ubuntu-Series: 16' 'https://api.snapcraft.io/api/v1/snaps/details/spotify?channel=stable' | jq '.download_url,.version,.last_updated'
   # To get general information:
   # curl -H 'Snap-Device-Series: 16' 'https://api.snapcraft.io/v2/snaps/info/spotify' | jq '.'
   # More examples of api usage:
   # https://github.com/canonical-websites/snapcraft.io/blob/master/webapp/publisher/snaps/views.py
-  rev = "17";
+  rev = "30";
 
 
   deps = [
     alsaLib
     atk
+    at-spi2-atk
     cairo
     cups
     curl
     dbus
     expat
-    ffmpeg_0_10
+    ffmpeg
     fontconfig
     freetype
     gdk_pixbuf
@@ -65,7 +68,7 @@ stdenv.mkDerivation {
   # https://community.spotify.com/t5/Desktop-Linux/Redistribute-Spotify-on-Linux-Distributions/td-p/1695334
   src = fetchurl {
     url = "https://api.snapcraft.io/api/v1/snaps/download/pOBIoZ2LrCB3rDohMxoYGnbN14EHOgD7_${rev}.snap";
-    sha512 = "19bbr4142shsl4qrikf48vq7kyrd4k4jbsada13qxicxps46a9bx51vjm2hkijqv739c1gdkgzwx7llyk95z26lhrz53shm2n5ij8xi";
+    sha512 = "859730fbc80067f0828f7e13eee9a21b13b749f897a50e17c2da4ee672785cfd79e1af6336e609529d105e040dc40f61b6189524783ac93d49f991c4ea8b3c56";
   };
 
   buildInputs = [ squashfsTools makeWrapper ];
@@ -114,6 +117,9 @@ stdenv.mkDerivation {
       ln -s ${openssl.out}/lib/libcrypto.so $libdir/libcrypto.so.1.0.0
       ln -s ${nspr.out}/lib/libnspr4.so $libdir/libnspr4.so
       ln -s ${nspr.out}/lib/libplc4.so $libdir/libplc4.so
+
+      ln -s ${ffmpeg.out}/lib/libavcodec.so.56 $libdir/libavcodec-ffmpeg.so.56
+      ln -s ${ffmpeg.out}/lib/libavformat.so.56 $libdir/libavformat-ffmpeg.so.56
 
       rpath="$out/share/spotify:$libdir"
 

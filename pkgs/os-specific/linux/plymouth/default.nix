@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   name = "plymouth-${version}";
-  version = "0.9.3";
+  version = "0.9.4";
 
   src = fetchurl {
     url = "https://www.freedesktop.org/software/plymouth/releases/${name}.tar.xz";
-    sha256 = "0x2a9s5jdvfcrdnwbdhm5x4ck3zimmcpghnqvhl65byfj25d13cz";
+    sha256 = "0l8kg7b2vfxgz9gnrn0v2w4jvysj2cirp0nxads5sy05397pl6aa";
   };
 
   nativeBuildInputs = [

@@ -1,30 +1,42 @@
-{ fetchurl, stdenv, cmake, pkgconfig, makeWrapper, python, alsaLib
-, libX11, libGLU, SDL, lua5, zlib, freetype, wavpack
+{ fetchFromGitHub, fetchurl, stdenv, bam, pkgconfig, makeWrapper, python, alsaLib
+, libX11, libGLU, SDL2, lua5_3, zlib, freetype, wavpack
 }:
 
 stdenv.mkDerivation rec {
-  name = "teeworlds-0.6.5";
+  name = "teeworlds-0.7.2";
 
-  src = fetchurl {
-    url = "https://downloads.teeworlds.com/teeworlds-0.6.5-src.tar.gz";
-    sha256 = "07llxjc47d1gd9jqj3vf08cmw26ha6189mwcix1khwa3frfbilqb";
+  src = fetchFromGitHub {
+    owner = "teeworlds";
+    repo = "teeworlds";
+    rev = "0.7.2";
+    sha256 = "15l988qcsqgb6rjais0qd5sd2rjanm2708jmzvkariqzz0d6pb93";
   };
 
   postPatch = ''
-    # we always want to use system libs instead of these
-    rm -r other/{freetype,sdl}/{include,mac,windows}
-
     # set compiled-in DATA_DIR so resources can be found
     substituteInPlace src/engine/shared/storage.cpp \
       --replace '#define DATA_DIR "data"' \
                 '#define DATA_DIR "${placeholder "out"}/share/teeworlds/data"'
   '';
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ bam pkgconfig ];
 
+  configurePhase = ''
+    bam config
+  '';
+
+  buildPhase = ''
+    bam conf=release
+  '';
+
+  installPhase = ''
+    mkdir -p $out/bin $out/share/teeworlds
+    cp build/x86_64/release/teeworlds{,_srv} $out/bin
+    cp -r build/x86_64/release/data $out/share/teeworlds
+  '';
 
   buildInputs = [
-    python alsaLib libX11 libGLU SDL lua5 zlib freetype wavpack
+    python alsaLib libX11 libGLU SDL2 lua5_3 zlib freetype wavpack
   ];
 
   postInstall = ''
@@ -45,6 +57,6 @@ stdenv.mkDerivation rec {
     homepage = https://teeworlds.com/;
     license = "BSD-style, see `license.txt'";
     maintainers = with stdenv.lib.maintainers; [ astsmtl ];
-    platforms = with stdenv.lib.platforms; linux;
+    platforms = ["x86_64-linux" "i686-linux"];
   };
 }

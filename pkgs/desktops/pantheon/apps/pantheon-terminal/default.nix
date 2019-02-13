@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl, cmake, vala_0_38, pkgconfig, glib, gtk3, granite, gnome3, libnotify, gettext, wrapGAppsHook, gobjectIntrospection }:
+{ stdenv, fetchurl, perl, cmake, vala_0_38, pkgconfig, glib, gtk3, granite, gnome3, vte_290, libnotify, gettext, wrapGAppsHook, gobject-introspection }:
 
 stdenv.mkDerivation rec {
   majorVersion = "0.4";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     perl cmake vala_0_38 pkgconfig wrapGAppsHook
     # For setup hook
-    gobjectIntrospection
+    gobject-introspection
   ];
   buildInputs = with gnome3; [
     glib gtk3 granite libnotify gettext vte_290 libgee

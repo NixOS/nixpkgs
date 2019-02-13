@@ -6,11 +6,11 @@ with stdenv.lib;
 stdenv.mkDerivation rec {
 
   name = "moe-${version}";
-  version = "1.9";
+  version = "1.10";
 
   src = fetchurl {
     url = "mirror://gnu/moe/${name}.tar.lz";
-    sha256 = "1wsfzy0iia0c89wnx1ilzw54wqcmlp2nz8mkpvc393z0zagrx48q";
+    sha256 = "0fymywdiy9xqppcmvgs7mf7d3gfrky3jp5jkxs2l3v93asml9zcc";
   };
 
   prePatch = ''
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
       completion, directory browser, duplicate removal from prompt histories,
       delimiter matching, text conversion from/to UTF-8, romanization, etc.
     '';
-    homepage = http://www.gnu.org/software/moe/;
+    homepage = https://www.gnu.org/software/moe/;
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.unix;

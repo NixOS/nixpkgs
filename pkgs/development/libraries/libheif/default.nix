@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, pruneLibtoolFiles, libde265, x265, libpng, libjpeg }:
+{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, libde265, x265, libpng, libjpeg }:
 
 stdenv.mkDerivation rec {
   version = "1.3.2";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0hk8mzig2kp5f94j4jwqxzjrm7ffk16ffvxl92rf0afsh6vgnz7w";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig pruneLibtoolFiles ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
   buildInputs = [ libde265 x265 libpng libjpeg ];
 
   enableParallelBuilding = true;

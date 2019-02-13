@@ -23,11 +23,11 @@ in
 
 buildPythonPackage rec {
   pname = "selenium";
-  version = "3.14.1";
+  version = "3.141.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ab192cd046164c40fabcf44b47c66c8b12495142f4a69dcc55ea6eeef096e614";
+    sha256 = "039hf9knvl4s3hp21bzwsp1g5ri9gxsh504dp48lc6nr1av35byy";
   };
 
   buildInputs = [xorg.libX11];

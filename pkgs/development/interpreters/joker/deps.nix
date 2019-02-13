@@ -9,6 +9,15 @@
     };
   }
   {
+    goPackagePath = "github.com/pkg/profile";
+    fetch = {
+      type = "git";
+      url = "https://github.com/pkg/profile";
+      rev = "5b67d428864e92711fcbd2f8629456121a56d91f";
+      sha256 = "0blqmvgqvdbqmh3fp9pfdxc9w1qfshrr0zy9whj0sn372bw64qnr";
+    };
+  }
+  {
     goPackagePath = "gopkg.in/yaml.v2";
     fetch = {
       type = "git";

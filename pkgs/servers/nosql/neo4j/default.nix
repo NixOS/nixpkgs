@@ -4,21 +4,22 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "neo4j-${version}";
-  version = "3.4.9";
+  version = "3.5.2";
 
   src = fetchurl {
     url = "https://neo4j.com/artifact.php?name=neo4j-community-${version}-unix.tar.gz";
-    sha256 = "0kg0dr42qi8cwg3i1hcgczd4psh97s54q5zd8z2wn1fqf4m2h597";
+    sha256 = "0i36vgs6b24bdhckgkhw23g59x1f2zg6h07c73jv55sdmxmcdpn1";
   };
 
   buildInputs = [ makeWrapper jre8 which gawk ];
+
 
   installPhase = ''
     mkdir -p "$out/share/neo4j"
     cp -R * "$out/share/neo4j"
 
     mkdir -p "$out/bin"
-    for NEO4J_SCRIPT in neo4j neo4j-admin neo4j-import neo4j-shell cypher-shell
+    for NEO4J_SCRIPT in neo4j neo4j-admin neo4j-import cypher-shell
     do
         makeWrapper "$out/share/neo4j/bin/$NEO4J_SCRIPT" \
             "$out/bin/$NEO4J_SCRIPT" \

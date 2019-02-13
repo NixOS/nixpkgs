@@ -146,11 +146,11 @@ in rec {
   };
 
   en = buildDict rec {
-    shortName = "en-2016.06.26-0";
+    shortName = "en-2018.04.16-0";
     fullName = "English";
     src = fetchurl {
       url = "mirror://gnu/aspell/dict/en/aspell6-${shortName}.tar.bz2";
-      sha256 = "1clzsfq2cbgp6wvfr2qwfsd2nziipml5m5vqm45r748wczlxihv1";
+      sha256 = "0bxxdzkk9g27plg22y9qzsx9cfjw3aa29w5bmzs561qc9gkp247i";
     };
   };
 

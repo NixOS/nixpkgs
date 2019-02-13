@@ -191,10 +191,9 @@ in {
         options = {
 
           paths = mkOption {
-            type = with types; either path (nonEmptyListOf path);
+            type = with types; coercedTo str lib.singleton (listOf str);
             description = "Path(s) to back up.";
             example = "/home/user";
-            apply = x: if isList x then x else [ x ];
           };
 
           repo = mkOption {

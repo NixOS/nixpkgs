@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "equilux-theme-${version}";
-  version = "20180927";
+  version = "20181029";
 
   src = fetchFromGitHub {
     owner = "ddnexus";
     repo = "equilux-theme";
     rev = "equilux-v${version}";
-    sha256 = "1j7ykygmwv3dmzqdc9byir86sjz6ykhv9bv1pll1bjvvnaalyzgk";
+    sha256 = "0lv2yyxhnmnkwxp576wnb01id4fp734b5z5n0l67sg5z7vc2h8fc";
   };
 
   nativeBuildInputs = [ gnome3.glib libxml2 bc ];

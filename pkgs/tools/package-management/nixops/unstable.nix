@@ -5,9 +5,9 @@
 # Then copy the URL to the tarball.
 
 callPackage ./generic.nix (rec {
-  version = "1.6.1pre2622_f10999a";
+  version = "1.6.1pre2728_8ed39f9";
   src = fetchurl {
-    url = "https://hydra.nixos.org/build/73716350/download/2/nixops-${version}.tar.bz2";
-    sha256 = "08886b6vxhjc3cp0ikxp920zap7wp6r92763fp785rvxrmb00rbd";
+    url = "https://hydra.nixos.org/build/88329589/download/2/nixops-${version}.tar.bz2";
+    sha256 = "1ppnhqmsbiijm6r77h86abv3fjny5iq35yvj207s520kjwzaj7kc";
   };
 })

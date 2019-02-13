@@ -1,5 +1,5 @@
 { lib, buildPythonPackage, fetchPypi, isPy3k
-, wrapGAppsHook, gobjectIntrospection, pygobject3, graphviz, gnome3 }:
+, wrapGAppsHook, gobject-introspection, pygobject3, graphviz, gnome3 }:
 
 buildPythonPackage rec {
   pname = "xdot";
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   disabled = !isPy3k;
 
   nativeBuildInputs = [ wrapGAppsHook ];
-  propagatedBuildInputs = [ gobjectIntrospection pygobject3 graphviz gnome3.gtk ];
+  propagatedBuildInputs = [ gobject-introspection pygobject3 graphviz gnome3.gtk ];
 
   meta = with lib; {
     description = "xdot.py is an interactive viewer for graphs written in Graphviz's dot";

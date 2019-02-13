@@ -1,6 +1,6 @@
 { stdenv, fetchurl, cmake, pcre, pkgconfig, python2
 , libX11, libXpm, libXft, libXext, libGLU_combined, zlib, libxml2, lzma, gsl_1
-, Cocoa, OpenGL, noSplash ? false }:
+, Cocoa, OpenGL, cf-private, noSplash ? false }:
 
 stdenv.mkDerivation rec {
   name = "root-${version}";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ cmake pcre python2 zlib libxml2 lzma gsl_1 ]
     ++ stdenv.lib.optionals (!stdenv.isDarwin) [ libX11 libXpm libXft libXext libGLU_combined ]
-    ++ stdenv.lib.optionals (stdenv.isDarwin) [ Cocoa OpenGL ]
+    ++ stdenv.lib.optionals (stdenv.isDarwin) [ Cocoa OpenGL cf-private ]
     ;
 
   patches = [
@@ -73,5 +73,8 @@ stdenv.mkDerivation rec {
     description = "A data analysis framework";
     platforms = platforms.unix;
     maintainers = with maintainers; [ veprbl ];
+    # needs to be adapted to work with modern glibc
+    # it works on darwin by impurely picking up system's libc headers
+    broken = stdenv.isLinux;
   };
 }

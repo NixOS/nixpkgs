@@ -28,12 +28,14 @@ cl-fuse
 cl-fuse-meta-fs
 cl-html-parse
 cl-html5-parser
+cl-jpeg
 cl-json
 cl-l10n
 cl-libuv
 cl-mysql
 closer-mop
 closure-html
+cl-pdf
 cl-ppcre
 cl-ppcre-template
 cl-ppcre-unicode
@@ -50,6 +52,7 @@ cl-syntax-annot
 cl-syntax-anonfun
 cl-syntax-markup
 cl-test-more
+cl-typesetting
 cl-unicode
 cl-unification
 cl-utilities

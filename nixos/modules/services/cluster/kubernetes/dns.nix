@@ -3,8 +3,13 @@
 with lib;
 
 let
-  version = "1.14.10";
+  version = "1.2.5";
   cfg = config.services.kubernetes.addons.dns;
+  ports = {
+    dns = 10053;
+    health = 10054;
+    metrics = 10055;
+  };
 in {
   options.services.kubernetes.addons.dns = {
     enable = mkEnableOption "kubernetes dns addon";
@@ -27,49 +32,130 @@ in {
       type = types.str;
     };
 
-    kube-dns = mkOption {
-      description = "Docker image to seed for the kube-dns main container.";
-      type = types.attrs;
-      default = {
-        imageName = "k8s.gcr.io/k8s-dns-kube-dns-amd64";
-        imageDigest = "sha256:b99fc3eee2a9f052f7eb4cc00f15eb12fc405fa41019baa2d6b79847ae7284a8";
-        finalImageTag = version;
-        sha256 = "0x583znk9smqn0fix7ld8sm5jgaxhqhx3fq97b1wkqm7iwhvl3pj";
-      };
+    replicas = mkOption {
+      description = "Number of DNS pod replicas to deploy in the cluster.";
+      default = 2;
+      type = types.int;
     };
 
-    dnsmasq-nanny = mkOption {
-      description = "Docker image to seed for the kube-dns dnsmasq container.";
+    coredns = mkOption {
+      description = "Docker image to seed for the CoreDNS container.";
       type = types.attrs;
       default = {
-        imageName = "k8s.gcr.io/k8s-dns-dnsmasq-nanny-amd64";
-        imageDigest = "sha256:bbb2a290a568125b3b996028958eb773f33b5b87a6b37bf38a28f8b62dddb3c8";
+        imageName = "coredns/coredns";
+        imageDigest = "sha256:33c8da20b887ae12433ec5c40bfddefbbfa233d5ce11fb067122e68af30291d6";
         finalImageTag = version;
-        sha256 = "1fihml7s2mfwgac51cbqpylkwbivc8nyhgi4vb820s83zvl8a6y1";
-      };
-    };
-
-    sidecar = mkOption {
-      description = "Docker image to seed for the kube-dns sidecar container.";
-      type = types.attrs;
-      default = {
-        imageName = "k8s.gcr.io/k8s-dns-sidecar-amd64";
-        imageDigest = "sha256:4f1ab957f87b94a5ec1edc26fae50da2175461f00afecf68940c4aa079bd08a4";
-        finalImageTag = version;
-        sha256 = "08l1bv5jgrhvjzpqpbinrkgvv52snc4fzyd8ya9v18ns2klyz7m0";
+        sha256 = "13q19rgwapv27xcs664dw502254yw4zw63insf6g2danidv2mg6i";
       };
     };
   };
 
   config = mkIf cfg.enable {
-    services.kubernetes.kubelet.seedDockerImages = with pkgs.dockerTools; [
-      (pullImage cfg.kube-dns)
-      (pullImage cfg.dnsmasq-nanny)
-      (pullImage cfg.sidecar)
-    ];
+    services.kubernetes.kubelet.seedDockerImages =
+      singleton (pkgs.dockerTools.pullImage cfg.coredns);
 
     services.kubernetes.addonManager.addons = {
-      kubedns-deployment = {
+      coredns-sa = {
+        apiVersion = "v1";
+        kind = "ServiceAccount";
+        metadata = {
+          labels = {
+            "addonmanager.kubernetes.io/mode" = "Reconcile";
+            "k8s-app" = "kube-dns";
+            "kubernetes.io/cluster-service" = "true";
+          };
+          name = "coredns";
+          namespace = "kube-system";
+        };
+      };
+
+      coredns-cr = {
+        apiVersion = "rbac.authorization.k8s.io/v1beta1";
+        kind = "ClusterRole";
+        metadata = {
+          labels = {
+            "addonmanager.kubernetes.io/mode" = "Reconcile";
+            "k8s-app" = "kube-dns";
+            "kubernetes.io/cluster-service" = "true";
+            "kubernetes.io/bootstrapping" = "rbac-defaults";
+          };
+          name = "system:coredns";
+        };
+        rules = [
+          {
+            apiGroups = [ "" ];
+            resources = [ "endpoints" "services" "pods" "namespaces" ];
+            verbs = [ "list" "watch" ];
+          }
+          {
+            apiGroups = [ "" ];
+            resources = [ "nodes" ];
+            verbs = [ "get" ];
+          }
+        ];
+      };
+
+      coredns-crb = {
+        apiVersion = "rbac.authorization.k8s.io/v1beta1";
+        kind = "ClusterRoleBinding";
+        metadata = {
+          annotations = {
+            "rbac.authorization.kubernetes.io/autoupdate" = "true";
+          };
+          labels = {
+            "addonmanager.kubernetes.io/mode" = "Reconcile";
+            "k8s-app" = "kube-dns";
+            "kubernetes.io/cluster-service" = "true";
+            "kubernetes.io/bootstrapping" = "rbac-defaults";
+          };
+          name = "system:coredns";
+        };
+        roleRef = {
+          apiGroup = "rbac.authorization.k8s.io";
+          kind = "ClusterRole";
+          name = "system:coredns";
+        };
+        subjects = [
+          {
+            kind = "ServiceAccount";
+            name = "coredns";
+            namespace = "kube-system";
+          }
+        ];
+      };
+
+      coredns-cm = {
+        apiVersion = "v1";
+        kind = "ConfigMap";
+        metadata = {
+          labels = {
+            "addonmanager.kubernetes.io/mode" = "Reconcile";
+            "k8s-app" = "kube-dns";
+            "kubernetes.io/cluster-service" = "true";
+          };
+          name = "coredns";
+          namespace = "kube-system";
+        };
+        data = {
+          Corefile = ".:${toString ports.dns} {
+            errors
+            health :${toString ports.health}
+            kubernetes ${cfg.clusterDomain} in-addr.arpa ip6.arpa {
+              pods insecure
+              upstream
+              fallthrough in-addr.arpa ip6.arpa
+            }
+            prometheus :${toString ports.metrics}
+            proxy . /etc/resolv.conf
+            cache 30
+            loop
+            reload
+            loadbalance
+          }";
+        };
+      };
+
+      coredns-deploy = {
         apiVersion = "extensions/v1beta1";
         kind = "Deployment";
         metadata = {
@@ -77,182 +163,96 @@ in {
             "addonmanager.kubernetes.io/mode" = "Reconcile";
             "k8s-app" = "kube-dns";
             "kubernetes.io/cluster-service" = "true";
+            "kubernetes.io/name" = "CoreDNS";
           };
-          name = "kube-dns";
+          name = "coredns";
           namespace = "kube-system";
         };
         spec = {
-          selector.matchLabels."k8s-app" = "kube-dns";
+          replicas = cfg.replicas;
+          selector = {
+            matchLabels = { k8s-app = "kube-dns"; };
+          };
           strategy = {
-            rollingUpdate = {
-              maxSurge = "10%";
-              maxUnavailable = 0;
-            };
+            rollingUpdate = { maxUnavailable = 1; };
+            type = "RollingUpdate";
           };
           template = {
             metadata = {
-              annotations."scheduler.alpha.kubernetes.io/critical-pod" = "";
-              labels.k8s-app = "kube-dns";
+              labels = {
+                k8s-app = "kube-dns";
+              };
             };
             spec = {
-              priorityClassName = "system-cluster-critical";
               containers = [
                 {
-                  name = "kubedns";
-                  image = with cfg.kube-dns; "${imageName}:${finalImageTag}";
+                  args = [ "-conf" "/etc/coredns/Corefile" ];
+                  image = with cfg.coredns; "${imageName}:${finalImageTag}";
+                  imagePullPolicy = "Never";
+                  livenessProbe = {
+                    failureThreshold = 5;
+                    httpGet = {
+                      path = "/health";
+                      port = ports.health;
+                      scheme = "HTTP";
+                    };
+                    initialDelaySeconds = 60;
+                    successThreshold = 1;
+                    timeoutSeconds = 5;
+                  };
+                  name = "coredns";
+                  ports = [
+                    {
+                      containerPort = ports.dns;
+                      name = "dns";
+                      protocol = "UDP";
+                    }
+                    {
+                      containerPort = ports.dns;
+                      name = "dns-tcp";
+                      protocol = "TCP";
+                    }
+                    {
+                      containerPort = ports.metrics;
+                      name = "metrics";
+                      protocol = "TCP";
+                    }
+                  ];
                   resources = {
-                    limits.memory = "170Mi";
+                    limits = {
+                      memory = "170Mi";
+                    };
                     requests = {
                       cpu = "100m";
                       memory = "70Mi";
                     };
                   };
-                  livenessProbe = {
-                    failureThreshold = 5;
-                    httpGet = {
-                      path = "/healthcheck/kubedns";
-                      port = 10054;
-                      scheme = "HTTP";
+                  securityContext = {
+                    allowPrivilegeEscalation = false;
+                    capabilities = {
+                      drop = [ "all" ];
                     };
-                    initialDelaySeconds = 60;
-                    successThreshold = 1;
-                    timeoutSeconds = 5;
-                  };
-                  readinessProbe = {
-                    httpGet = {
-                      path = "/readiness";
-                      port = 8081;
-                      scheme = "HTTP";
-                    };
-                    initialDelaySeconds = 3;
-                    timeoutSeconds = 5;
-                  };
-                  args = [
-                    "--domain=${cfg.clusterDomain}"
-                    "--dns-port=10053"
-                    "--config-dir=/kube-dns-config"
-                    "--v=2"
-                  ];
-                  env = [
-                    {
-                      name = "PROMETHEUS_PORT";
-                      value = "10055";
-                    }
-                  ];
-                  ports = [
-                    {
-                      containerPort = 10053;
-                      name = "dns-local";
-                      protocol = "UDP";
-                    }
-                    {
-                      containerPort = 10053;
-                      name = "dns-tcp-local";
-                      protocol = "TCP";
-                    }
-                    {
-                      containerPort = 10055;
-                      name = "metrics";
-                      protocol = "TCP";
-                    }
-                  ];
-                  volumeMounts = [
-                    {
-                      mountPath = "/kube-dns-config";
-                      name = "kube-dns-config";
-                    }
-                  ];
-                }
-                {
-                  name = "dnsmasq";
-                  image = with cfg.dnsmasq-nanny; "${imageName}:${finalImageTag}";
-                  livenessProbe = {
-                    httpGet = {
-                      path = "/healthcheck/dnsmasq";
-                      port = 10054;
-                      scheme = "HTTP";
-                    };
-                    initialDelaySeconds = 60;
-                    timeoutSeconds = 5;
-                    successThreshold = 1;
-                    failureThreshold = 5;
-                  };
-                  args = [
-                    "-v=2"
-                    "-logtostderr"
-                    "-configDir=/etc/k8s/dns/dnsmasq-nanny"
-                    "-restartDnsmasq=true"
-                    "--"
-                    "-k"
-                    "--cache-size=1000"
-                    "--log-facility=-"
-                    "--server=/${cfg.clusterDomain}/127.0.0.1#10053"
-                    "--server=/in-addr.arpa/127.0.0.1#10053"
-                    "--server=/ip6.arpa/127.0.0.1#10053"
-                  ];
-                  ports = [
-                    {
-                      containerPort = 53;
-                      name = "dns";
-                      protocol = "UDP";
-                    }
-                    {
-                      containerPort = 53;
-                      name = "dns-tcp";
-                      protocol = "TCP";
-                    }
-                  ];
-                  resources = {
-                    requests = {
-                      cpu = "150m";
-                      memory = "20Mi";
-                    };
+                    readOnlyRootFilesystem = true;
                   };
                   volumeMounts = [
                     {
-                      mountPath = "/etc/k8s/dns/dnsmasq-nanny";
-                      name = "kube-dns-config";
+                      mountPath = "/etc/coredns";
+                      name = "config-volume";
+                      readOnly = true;
                     }
                   ];
-                }
-                {
-                  name = "sidecar";
-                  image = with cfg.sidecar; "${imageName}:${finalImageTag}";
-                  livenessProbe = {
-                    httpGet = {
-                      path = "/metrics";
-                      port = 10054;
-                      scheme = "HTTP";
-                    };
-                    initialDelaySeconds = 60;
-                    timeoutSeconds = 5;
-                    successThreshold = 1;
-                    failureThreshold = 5;
-                  };
-                  args = [
-                    "--v=2"
-                    "--logtostderr"
-                    "--probe=kubedns,127.0.0.1:10053,kubernetes.default.svc.${cfg.clusterDomain},5,A"
-                    "--probe=dnsmasq,127.0.0.1:53,kubernetes.default.svc.${cfg.clusterDomain},5,A"
-                  ];
-                  ports = [
-                    {
-                      containerPort = 10054;
-                      name = "metrics";
-                      protocol = "TCP";
-                    }
-                  ];
-                  resources = {
-                    requests = {
-                      cpu = "10m";
-                      memory = "20Mi";
-                    };
-                  };
                 }
               ];
               dnsPolicy = "Default";
-              serviceAccountName = "kube-dns";
+              nodeSelector = {
+                "beta.kubernetes.io/os" = "linux";
+              };
+              serviceAccountName = "coredns";
               tolerations = [
+                {
+                  effect = "NoSchedule";
+                  key = "node-role.kubernetes.io/master";
+                }
                 {
                   key = "CriticalAddonsOnly";
                   operator = "Exists";
@@ -261,10 +261,15 @@ in {
               volumes = [
                 {
                   configMap = {
-                    name = "kube-dns";
-                    optional = true;
+                    items = [
+                      {
+                        key = "Corefile";
+                        path = "Corefile";
+                      }
+                    ];
+                    name = "coredns";
                   };
-                  name = "kube-dns-config";
+                  name = "config-volume";
                 }
               ];
             };
@@ -272,51 +277,40 @@ in {
         };
       };
 
-      kubedns-svc = {
+      coredns-svc = {
         apiVersion = "v1";
         kind = "Service";
         metadata = {
+          annotations = {
+            "prometheus.io/port" = toString ports.metrics;
+            "prometheus.io/scrape" = "true";
+          };
           labels = {
             "addonmanager.kubernetes.io/mode" = "Reconcile";
             "k8s-app" = "kube-dns";
             "kubernetes.io/cluster-service" = "true";
-            "kubernetes.io/name" = "KubeDNS";
+            "kubernetes.io/name" = "CoreDNS";
           };
           name = "kube-dns";
-          namespace  = "kube-system";
+          namespace = "kube-system";
         };
         spec = {
           clusterIP = cfg.clusterIp;
           ports = [
-            {name = "dns"; port = 53; protocol = "UDP";}
-            {name = "dns-tcp"; port = 53; protocol = "TCP";}
+            {
+              name = "dns";
+              port = 53;
+              targetPort = ports.dns;
+              protocol = "UDP";
+            }
+            {
+              name = "dns-tcp";
+              port = 53;
+              targetPort = ports.dns;
+              protocol = "TCP";
+            }
           ];
-          selector.k8s-app = "kube-dns";
-        };
-      };
-
-      kubedns-sa = {
-        apiVersion = "v1";
-        kind = "ServiceAccount";
-        metadata = {
-          name = "kube-dns";
-          namespace = "kube-system";
-          labels = {
-            "kubernetes.io/cluster-service" = "true";
-            "addonmanager.kubernetes.io/mode" = "Reconcile";
-          };
-        };
-      };
-
-      kubedns-cm = {
-        apiVersion = "v1";
-        kind = "ConfigMap";
-        metadata = {
-          name = "kube-dns";
-          namespace = "kube-system";
-          labels = {
-            "addonmanager.kubernetes.io/mode" = "EnsureExists";
-          };
+          selector = { k8s-app = "kube-dns"; };
         };
       };
     };

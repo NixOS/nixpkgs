@@ -15,7 +15,7 @@ let
 
       nativeBuildInputs = [ cmake ];
 
-      # cmakeFlags = [ "-DSPDLOG_BUILD_EXAMPLES=ON" ];
+      cmakeFlags = [ "-DSPDLOG_BUILD_EXAMPLES=OFF" ];
 
       outputs = [ "out" "doc" ];
 
@@ -35,12 +35,12 @@ let
 in
 {
   spdlog_1 = generic {
-    version = "1.1.0";
-    sha256 = "0yckz5w02v8193jhxihk9v4i8f6jafyg2a33amql0iclhk17da8f";
+    version = "1.2.1";
+    sha256 = "0gdj8arfz4r9419zbcxk9y9nv47qr7kyjjzw9m3ijgmn2pmxk88n";
   };
 
   spdlog_0 = generic {
-    version = "0.14.0";
-    sha256 = "13730429gwlabi432ilpnja3sfvy0nn2719vnhhmii34xcdyc57q";
+    version = "0.17.0";
+    sha256 = "112kfh4fbpm5cvrmgbgz4d8s802db91mhyjpg7cwhlywffnzkwr9";
   };
 }

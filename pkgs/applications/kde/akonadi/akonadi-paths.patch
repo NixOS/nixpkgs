@@ -1,8 +1,8 @@
 diff --git a/src/akonadicontrol/agentmanager.cpp b/src/akonadicontrol/agentmanager.cpp
-index 2e9f1acf4..ecc80afdc 100644
+index d85c1a79b..8df02710c 100644
 --- a/src/akonadicontrol/agentmanager.cpp
 +++ b/src/akonadicontrol/agentmanager.cpp
-@@ -84,12 +84,12 @@ AgentManager::AgentManager(bool verbose, QObject *parent)
+@@ -78,12 +78,12 @@ AgentManager::AgentManager(bool verbose, QObject *parent)
      mStorageController = new Akonadi::ProcessControl;
      mStorageController->setShutdownTimeout(15 * 1000);   // the server needs more time for shutdown if we are using an internal mysqld
      connect(mStorageController, &Akonadi::ProcessControl::unableToStart, this, &AgentManager::serverFailure);
@@ -15,8 +15,8 @@ index 2e9f1acf4..ecc80afdc 100644
 -        mAgentServer->start(QStringLiteral("akonadi_agent_server"), serviceArgs, Akonadi::ProcessControl::RestartOnCrash);
 +        mAgentServer->start(QLatin1String(NIX_OUT "/bin/akonadi_agent_server"), serviceArgs, Akonadi::ProcessControl::RestartOnCrash);
      }
+ }
  
- #ifndef QT_NO_DEBUG
 diff --git a/src/akonadicontrol/agentprocessinstance.cpp b/src/akonadicontrol/agentprocessinstance.cpp
 index be1cc4afb..6d0c1d7e5 100644
 --- a/src/akonadicontrol/agentprocessinstance.cpp
@@ -31,7 +31,7 @@ index be1cc4afb..6d0c1d7e5 100644
      }
      return true;
 diff --git a/src/server/storage/dbconfigmysql.cpp b/src/server/storage/dbconfigmysql.cpp
-index a32e86602..48ea4e52e 100644
+index 8b057b459..3fa4548ad 100644
 --- a/src/server/storage/dbconfigmysql.cpp
 +++ b/src/server/storage/dbconfigmysql.cpp
 @@ -63,7 +63,6 @@ bool DbConfigMysql::init(QSettings &settings)
@@ -121,7 +121,7 @@ index a32e86602..48ea4e52e 100644
      const QString actualConfig = StandardDirs::saveDir("data") + QLatin1String("/mysql.conf");
      if (globalConfig.isEmpty()) {
 diff --git a/src/server/storage/dbconfigpostgresql.cpp b/src/server/storage/dbconfigpostgresql.cpp
-index 60e6272f2..ad7cefbfe 100644
+index 6b50ae50e..f94a8c5eb 100644
 --- a/src/server/storage/dbconfigpostgresql.cpp
 +++ b/src/server/storage/dbconfigpostgresql.cpp
 @@ -58,7 +58,6 @@ bool DbConfigPostgresql::init(QSettings &settings)
@@ -132,7 +132,7 @@ index 60e6272f2..ad7cefbfe 100644
      QString defaultInitDbPath;
      QString defaultPgData;
  
-@@ -70,34 +69,7 @@ bool DbConfigPostgresql::init(QSettings &settings)
+@@ -70,35 +69,7 @@ bool DbConfigPostgresql::init(QSettings &settings)
  
      mInternalServer = settings.value(QStringLiteral("QPSQL/StartServer"), defaultInternalServer).toBool();
      if (mInternalServer) {
@@ -144,7 +144,8 @@ index 60e6272f2..ad7cefbfe 100644
 -            postgresSearchPath << QStringLiteral(POSTGRES_PATH);
 -        }
 -#endif
--        postgresSearchPath << QStringLiteral("/usr/sbin")
+-        postgresSearchPath << QStringLiteral("/usr/bin")
+-                           << QStringLiteral("/usr/sbin")
 -                           << QStringLiteral("/usr/local/sbin");
 -        // Locale all versions in /usr/lib/postgresql (i.e. /usr/lib/postgresql/X.Y) in reversed
 -        // sorted order, so we search from the newest one to the oldest.
@@ -168,7 +169,7 @@ index 60e6272f2..ad7cefbfe 100644
          defaultHostName = Utils::preferredSocketDirectory(StandardDirs::saveDir("data", QStringLiteral("db_misc")));
          defaultPgData = StandardDirs::saveDir("data", QStringLiteral("db_data"));
      }
-@@ -117,10 +89,7 @@ bool DbConfigPostgresql::init(QSettings &settings)
+@@ -118,10 +89,7 @@ bool DbConfigPostgresql::init(QSettings &settings)
      mUserName = settings.value(QStringLiteral("User")).toString();
      mPassword = settings.value(QStringLiteral("Password")).toString();
      mConnectionOptions = settings.value(QStringLiteral("Options"), defaultOptions).toString();
@@ -180,7 +181,7 @@ index 60e6272f2..ad7cefbfe 100644
      qCDebug(AKONADISERVER_LOG) << "Found pg_ctl:" << mServerPath;
      mInitDbPath = settings.value(QStringLiteral("InitDbPath"), defaultInitDbPath).toString();
      if (mInternalServer && mInitDbPath.isEmpty()) {
-@@ -141,7 +110,6 @@ bool DbConfigPostgresql::init(QSettings &settings)
+@@ -142,7 +110,6 @@ bool DbConfigPostgresql::init(QSettings &settings)
          settings.setValue(QStringLiteral("Port"), mHostPort);
      }
      settings.setValue(QStringLiteral("Options"), mConnectionOptions);

@@ -1,5 +1,5 @@
 { lib, stdenv, makeWrapper, fetchurl, requireFile, perl, ncurses, expat, python27, zlib
-, gcc48, gcc49, gcc5, gcc6
+, gcc48, gcc49, gcc5, gcc6, gcc7
 , xorg, gtk2, glib, fontconfig, freetype, unixODBC, alsaLib, glibc
 }:
 
@@ -112,6 +112,10 @@ let
         # Set compiler for NVCC.
         wrapProgram $out/bin/nvcc \
           --prefix PATH : ${gcc}/bin
+
+        # nvprof do not find any program to profile if LD_LIBRARY_PATH is not set
+        wrapProgram $out/bin/nvprof \
+          --prefix LD_LIBRARY_PATH : $out/lib
       '' + lib.optionalString (lib.versionOlder version "8.0") ''
         # Hack to fix building against recent Glibc/GCC.
         echo "NIX_CFLAGS_COMPILE+=' -D_FORCE_INLINES'" >> $out/nix-support/setup-hook
@@ -229,7 +233,7 @@ in rec {
         sha256 = "1kx6l4yzsamk6q1f4vllcpywhbfr2j5wfl4h5zx8v6dgfpsjm2lw";
       })
     ];
-    gcc = gcc6;
+    gcc = gcc7;
   };
 
   cudatoolkit_9 = cudatoolkit_9_2;
@@ -239,7 +243,7 @@ in rec {
     url = "https://developer.nvidia.com/compute/cuda/10.0/Prod/local_installers/cuda_10.0.130_410.48_linux";
     sha256 = "16p3bv1lwmyqpxil8r951h385sy9asc578afrc7lssa68c71ydcj";
 
-    gcc = gcc6;
+    gcc = gcc7;
   };
 
   cudatoolkit_10 = cudatoolkit_10_0;

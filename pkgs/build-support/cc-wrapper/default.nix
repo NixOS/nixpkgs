@@ -263,9 +263,8 @@ stdenv.mkDerivation {
       ## Man page and info support
       ##
 
-      mkdir -p $man/nix-support $info/nix-support
-      printWords ${cc.man or ""}  > $man/nix-support/propagated-user-env-packages
-      printWords ${cc.info or ""}  > $info/nix-support/propagated-user-env-packages
+      ln -s ${cc.man} $man
+      ln -s ${cc.info} $info
     ''
 
     + ''
@@ -321,5 +320,6 @@ stdenv.mkDerivation {
     { description =
         stdenv.lib.attrByPath ["meta" "description"] "System C compiler" cc_
         + " (wrapper script)";
+      priority = 10;
   };
 }

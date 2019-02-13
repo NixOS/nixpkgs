@@ -1,17 +1,19 @@
-{ stdenv, lib, fetchFromGitHub, go }:
+{ stdenv, lib, fetchFromGitHub, go, removeReferencesTo }:
 
 stdenv.mkDerivation rec {
   name = "cni-plugins-${version}";
-  version = "0.7.3";
+  version = "0.7.4";
 
   src = fetchFromGitHub {
     owner = "containernetworking";
     repo = "plugins";
     rev = "v${version}";
-    sha256 = "1saaszzxy4x3jkqd9ac6cphmzfim7x84h28c9i7az46px40blzm1";
+    sha256 = "1sywllwnr6lc812sgkqjdd3y10r82shl88dlnwgnbgzs738q2vp2";
   };
 
-  buildInputs = [ go ];
+  buildInputs = [ removeReferencesTo go ];
+
+  GOCACHE = "off";
 
   buildPhase = ''
     patchShebangs build.sh
@@ -21,6 +23,10 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out/bin
     mv bin/* $out/bin
+  '';
+
+  preFixup = ''
+    find $out/bin -type f -exec remove-references-to -t ${go} '{}' +
   '';
 
   meta = with lib; {

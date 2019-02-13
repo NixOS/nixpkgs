@@ -1,4 +1,6 @@
-{ stdenv, fetchFromGitHub, valgrind }:
+{ stdenv, fetchFromGitHub, valgrind
+, enableStatic ? false, enableShared ? true
+}:
 
 stdenv.mkDerivation rec {
   name = "lz4-${version}";
@@ -17,12 +19,23 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  makeFlags = [ "PREFIX=$(out)" "INCLUDEDIR=$(dev)/include" ];
+  makeFlags = [
+    "PREFIX=$(out)"
+    "INCLUDEDIR=$(dev)/include"
+    # TODO do this instead
+    #"BUILD_STATIC=${if enableStatic then "yes" else "no"}"
+    #"BUILD_SHARED=${if enableShared then "yes" else "no"}"
+  ]
+    # TODO delete and do above
+    ++ stdenv.lib.optional (enableStatic) "BUILD_STATIC=yes"
+    ++ stdenv.lib.optional (!enableShared) "BUILD_SHARED=no"
+    ;
 
   doCheck = false; # tests take a very long time
   checkTarget = "test";
 
-  postInstall = "rm $out/lib/*.a";
+  # TODO remove
+  postInstall = stdenv.lib.optionalString (!enableStatic) "rm $out/lib/*.a";
 
   meta = with stdenv.lib; {
     description = "Extremely fast compression algorithm";

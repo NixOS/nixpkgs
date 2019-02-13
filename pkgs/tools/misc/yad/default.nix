@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   name = "yad-0.40.0";
 
   src = fetchurl {
-    url = "http://sourceforge.net/projects/yad-dialog/files/${name}.tar.xz";
+    url = "mirror://sourceforge/yad-dialog/files/${name}.tar.xz";
     sha256 = "1x0fsv8nfkm8lchdawnf3zw79jaqbnvhv87sk5r8g86knv8vgl62";
   };
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = http://yad-dialog.sourceforge.net/;
+    homepage = https://sourceforge.net/projects/yad-dialog/;
     description = "GUI dialog tool for shell scripts";
     longDescription = ''
       Yad (yet another dialog) is a GUI dialog tool for shell scripts. It is a

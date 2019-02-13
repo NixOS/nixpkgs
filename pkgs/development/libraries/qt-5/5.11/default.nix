@@ -20,6 +20,7 @@ top-level attribute to `top-level/all-packages.nix`.
   stdenv, fetchurl, fetchFromGitHub, makeSetupHook,
   bison, cups ? null, harfbuzz, libGL, perl,
   gstreamer, gst-plugins-base, gtk3, dconf,
+  cf-private,
 
   # options
   developerBuild ? false,
@@ -33,7 +34,7 @@ let
 
   qtCompatVersion = "5.11";
 
-  mirror = "http://download.qt.io";
+  mirror = "https://download.qt.io";
   srcs = import ./srcs.nix { inherit fetchurl; inherit mirror; } // {
     # Community port of the now unmaintained upstream qtwebkit.
     qtwebkit = {
@@ -52,14 +53,18 @@ let
       ./qtbase.patch
       ./qtbase-darwin.patch
       ./qtbase-revert-no-macos10.10.patch
+      ./qtbase-fixguicmake.patch
     ] ++ optionals stdenv.isDarwin [
       ./qtbase-darwin-nseventtype.patch
+      ./qtbase-darwin-revert-69221.patch
     ];
     qtdeclarative = [ ./qtdeclarative.patch ];
     qtscript = [ ./qtscript.patch ];
     qtserialport = [ ./qtserialport.patch ];
     qttools = [ ./qttools.patch ];
-    qtwebengine = optional stdenv.needsPax ./qtwebengine-paxmark-mksnapshot.patch;
+    qtwebengine =
+         optional stdenv.cc.isClang ./qtwebengine-clang-fix.patch
+      ++ optional stdenv.isDarwin ./qtwebengine-darwin-sdk-10.10.patch;
     qtwebkit = [ ./qtwebkit.patch ];
   };
 
@@ -95,7 +100,9 @@ let
       qtgraphicaleffects = callPackage ../modules/qtgraphicaleffects.nix {};
       qtimageformats = callPackage ../modules/qtimageformats.nix {};
       qtlocation = callPackage ../modules/qtlocation.nix {};
-      qtmacextras = callPackage ../modules/qtmacextras.nix {};
+      qtmacextras = callPackage ../modules/qtmacextras.nix {
+        inherit cf-private;
+      };
       qtmultimedia = callPackage ../modules/qtmultimedia.nix {
         inherit gstreamer gst-plugins-base;
       };
@@ -113,6 +120,7 @@ let
       qtwayland = callPackage ../modules/qtwayland.nix {};
       qtwebchannel = callPackage ../modules/qtwebchannel.nix {};
       qtwebengine = callPackage ../modules/qtwebengine.nix {};
+      qtwebglplugin = callPackage ../modules/qtwebglplugin.nix {};
       qtwebkit = callPackage ../modules/qtwebkit.nix {};
       qtwebsockets = callPackage ../modules/qtwebsockets.nix {};
       qtx11extras = callPackage ../modules/qtx11extras.nix {};

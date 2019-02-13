@@ -12,7 +12,4 @@ self: super: {
 
   # https://github.com/channable/vaultenv/issues/1
   vaultenv = self.callPackage ../tools/haskell/vaultenv { };
-
-  # https://github.com/diku-dk/futhark/issues/614
-  futhark = self.callPackage ../compilers/futhark { };
 }

@@ -1,24 +1,30 @@
 { stdenv, python3, pkgconfig, which, libtool, autoconf, automake,
-  autogen, sqlite, gmp, zlib, fetchFromGitHub }:
+  autogen, sqlite, gmp, zlib, fetchzip }:
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "clightning-${version}";
-  version = "0.6.1";
+  version = "0.6.3";
 
-  src = fetchFromGitHub {
-    fetchSubmodules = true;
-    owner = "ElementsProject";
-    repo = "lightning";
-    rev = "v${version}";
-    sha256 = "0qx30i1c97ic4ii8bm0sk9dh76nfg4ihl9381gxjj14i4jr1q8y4";
+  src = fetchzip {
+    #
+    # NOTE 0.6.3 release zip was bugged, this zip is a fix provided by the team
+    # https://github.com/ElementsProject/lightning/issues/2254#issuecomment-453791475
+    #
+    # replace url with:
+    #   https://github.com/ElementsProject/lightning/releases/download/v${version}/clightning-v${version}.zip
+    # for future relases
+    #
+    url = "https://github.com/ElementsProject/lightning/files/2752675/clightning-v0.6.3.zip";
+    sha256 = "0k5pwimwn69pcakiq4a7qnjyf4i8w1jlacwrjazm1sfivr6nfiv6";
   };
 
   enableParallelBuilding = true;
 
-  buildInputs = [ which sqlite gmp zlib autoconf libtool automake autogen python3 pkgconfig ];
+  nativeBuildInputs = [ autoconf autogen automake libtool pkgconfig which ];
+  buildInputs = [ sqlite gmp zlib python3 ];
 
-  makeFlags = [ "prefix=$(out)" ];
+  makeFlags = [ "prefix=$(out) VERSION=v${version}" ];
 
   configurePhase = ''
     ./configure --prefix=$out --disable-developer --disable-valgrind

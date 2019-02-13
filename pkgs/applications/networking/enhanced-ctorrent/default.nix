@@ -1,8 +1,8 @@
 { stdenv, fetchurl, fetchpatch }:
 
 stdenv.mkDerivation rec {
-  version = "dnh3.3.2";
-  name = "enhanced-ctorrent";
+  version = "3.3.2";
+  pname = "enhanced-ctorrent-dhn";
 
   src = fetchurl {
     url = "http://www.rahul.net/dholmes/ctorrent/ctorrent-dnh3.3.2.tar.gz";

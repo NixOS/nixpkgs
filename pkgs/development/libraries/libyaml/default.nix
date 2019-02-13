@@ -31,6 +31,5 @@ stdenv.mkDerivation {
     description = "A YAML 1.1 parser and emitter written in C";
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = with maintainers; [ wkennington ];
   };
 }

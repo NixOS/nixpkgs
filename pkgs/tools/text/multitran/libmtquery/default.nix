@@ -9,6 +9,10 @@ stdenv.mkDerivation {
 
   buildInputs = [ libmtsupport libfacet libbtree multitrandata ];
 
+  NIX_LDFLAGS = [
+    "-lbtree"
+  ];
+
   patchPhase = ''
     sed -i -e 's@\$(DESTDIR)/usr@'$out'@' \
       -e 's@/usr/include/mt/support@${libmtsupport}/include/mt/support@' \

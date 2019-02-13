@@ -31,10 +31,26 @@ in
         '';
       };
 
+      purifyOnStart = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          On startup, the `baseDir` directory is populated with various files,
+          subdirectories and symlinks. If this option is enabled, these items
+          (except for the `logs` and `work` subdirectories) are first removed.
+          This prevents interference from remainders of an old configuration
+          (libraries, webapps, etc.), so it's recommended to enable this option.
+        '';
+      };
+
       baseDir = mkOption {
         type = lib.types.path;
         default = "/var/tomcat";
-        description = "Location where Tomcat stores configuration files, webapplications and logfiles";
+        description = ''
+          Location where Tomcat stores configuration files, web applications
+          and logfiles. Note that it is partially cleared on each service startup
+          if `purifyOnStart` is enabled.
+        '';
       };
 
       logDirs = mkOption {
@@ -197,6 +213,15 @@ in
       after = [ "network.target" ];
 
       preStart = ''
+        ${lib.optionalString cfg.purifyOnStart ''
+          # Delete most directories/symlinks we create from the existing base directory,
+          # to get rid of remainders of an old configuration.
+          # The list of directories to delete is taken from the "mkdir" command below,
+          # excluding "logs" (because logs are valuable) and "work" (because normally
+          # session files are there), and additionally including "bin".
+          rm -rf ${cfg.baseDir}/{conf,virtualhosts,temp,lib,shared/lib,webapps,bin}
+        ''}
+
         # Create the base directory
         mkdir -p \
           ${cfg.baseDir}/{conf,virtualhosts,logs,temp,lib,shared/lib,webapps,work}

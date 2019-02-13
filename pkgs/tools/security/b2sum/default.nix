@@ -23,6 +23,7 @@ stdenv.mkDerivation rec {
     homepage = "https://blake2.net";
     license = with licenses; [ asl20 cc0 openssl ];
     maintainers = with maintainers; [ kirelagin ];
-    platforms = platforms.all;
+    # "This code requires at least SSE2."
+    platforms = with platforms; [ "x86_64-linux" "i686-linux" ] ++ darwin;
   };
 }

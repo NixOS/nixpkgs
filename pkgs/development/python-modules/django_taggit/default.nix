@@ -6,12 +6,12 @@
 
 buildPythonPackage rec {
   pname = "django-taggit";
-  version = "0.17.0";
+  version = "0.23.0";
   disabled = pythonOlder "2.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1xy4mm1y6z6bpakw907859wz7fiw7jfm586dj89w0ggdqlb0767b";
+    sha256 = "a21cbe7e0879f1364eef1c88a2eda89d593bf000ebf51c3f00423c6927075dce";
   };
 
   doCheck = false;

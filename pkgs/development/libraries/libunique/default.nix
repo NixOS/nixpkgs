@@ -7,6 +7,8 @@ stdenv.mkDerivation rec {
     sha256 = "1fsgvmncd9caw552lyfg8swmsd6bh4ijjsph69bwacwfxwf09j75";
   };
 
+  NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
+
   # patches from Gentoo portage
   patches = [
     ./1.1.6-compiler-warnings.patch

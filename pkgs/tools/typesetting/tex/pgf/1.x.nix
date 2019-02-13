@@ -15,8 +15,9 @@ stdenv.mkDerivation {
     cp -prd * $out/share/texmf-nix
   ";
 
-  meta = {
+  meta = with stdenv.lib; {
     branch = "1";
-    platforms = stdenv.lib.platforms.unix;
+    platforms = platforms.unix;
+    license = licenses.gpl2;
   };
 }

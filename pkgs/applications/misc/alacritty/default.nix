@@ -18,6 +18,7 @@
   libGL,
   xclip,
   # Darwin Frameworks
+  cf-private,
   AppKit,
   CoreFoundation,
   CoreGraphics,
@@ -40,27 +41,18 @@ let
     libGL
     libXi
   ];
-  darwinFrameworks = [
-    AppKit
-    CoreFoundation
-    CoreGraphics
-    CoreServices
-    CoreText
-    Foundation
-    OpenGL
-  ];
 in buildRustPackage rec {
-  name = "alacritty-unstable-${version}";
-  version = "0.2.1";
+  name = "alacritty-${version}";
+  version = "0.2.9";
 
   src = fetchFromGitHub {
     owner = "jwilm";
     repo = "alacritty";
     rev = "v${version}";
-    sha256 = "1402axwjz70gg6ylhhm82f1rl6xvxkr1qy0jx3r4r32vzfap1l67";
+    sha256 = "01wzkpbz6jjmpmnkqswilnn069ir3cx3jvd3j7zsvqdxqpwncz39";
   };
 
-  cargoSha256 = "0slcyn77svj0686g1vk7kgndzirpkba9jwwybgsdl755r53dswk0";
+  cargoSha256 = "0h9wczgpjh52lhrqg0r2dkrh5svmyvrvh4yj7p0nz45skgrnl8w9";
 
   nativeBuildInputs = [
     cmake
@@ -71,9 +63,13 @@ in buildRustPackage rec {
   ];
 
   buildInputs = rpathLibs
-             ++ lib.optionals stdenv.isDarwin darwinFrameworks;
+    ++ lib.optionals stdenv.isDarwin [
+      AppKit CoreFoundation CoreGraphics CoreServices CoreText Foundation OpenGL
+      # Needed for CFURLResourceIsReachable symbols.
+      cf-private
+    ];
 
- outputs = [ "out" "terminfo" ];
+  outputs = [ "out" "terminfo" ];
 
   postPatch = ''
     substituteInPlace copypasta/src/x11.rs \

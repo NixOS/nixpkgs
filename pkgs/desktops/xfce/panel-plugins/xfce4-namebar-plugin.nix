@@ -1,4 +1,5 @@
-{ stdenv, pkgconfig, fetchFromGitHub, python2, vala, gtk2, libwnck, libxfce4util, xfce4-panel }:
+{ stdenv, pkgconfig, fetchFromGitHub, python2, vala_0_40
+, gtk2, libwnck, libxfce4util, xfce4-panel, wafHook }:
 
 stdenv.mkDerivation rec {
   ver = "0.3.1";
@@ -12,19 +13,13 @@ stdenv.mkDerivation rec {
     sha256 = "1sl4qmjywfvv53ch7hyfysjfd91zl38y7gdw2y3k69vkzd3h18ad";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ python2 vala gtk2 libwnck libxfce4util xfce4-panel ];
+  nativeBuildInputs = [ pkgconfig wafHook ];
+  buildInputs = [ python2 vala_0_40 gtk2 libwnck libxfce4util xfce4-panel ];
 
   postPatch = ''
     substituteInPlace src/preferences.vala --replace 'Environment.get_system_data_dirs()' "{ \"$out/share\" }"
     substituteInPlace src/namebar.vala     --replace 'Environment.get_system_data_dirs()' "{ \"$out/share\" }"
   '';
-
-  configurePhase = "python waf configure --prefix=$out";
-
-  buildPhase = "python waf build";
-
-  installPhase = "python waf install";
 
   meta = with stdenv.lib; {
     homepage = https://github.com/TiZ-EX1/xfce4-namebar-plugin;

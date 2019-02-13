@@ -247,6 +247,10 @@ in
               # a collision with an apparently unrelated environment
               # variable with the same name exported by dhcpcd.
               interface_order='lo lo[0-9]*'
+            '' + optionalString config.services.nscd.enable ''
+              # Invalidate the nscd cache whenever resolv.conf is
+              # regenerated.
+              libc_restart='${pkgs.systemd}/bin/systemctl try-restart --no-block nscd.service 2> /dev/null'
             '' + optionalString (length resolvconfOptions > 0) ''
               # Options as described in resolv.conf(5)
               resolv_conf_options='${concatStringsSep " " resolvconfOptions}'
@@ -260,9 +264,9 @@ in
             '';
 
       } // optionalAttrs config.services.resolved.enable {
-        # symlink the static version of resolv.conf as recommended by upstream:
+        # symlink the dynamic stub resolver of resolv.conf as recommended by upstream:
         # https://www.freedesktop.org/software/systemd/man/systemd-resolved.html#/etc/resolv.conf
-        "resolv.conf".source = "${pkgs.systemd}/lib/systemd/resolv.conf";
+        "resolv.conf".source = "/run/systemd/resolve/stub-resolv.conf";
       } // optionalAttrs (config.services.resolved.enable && dnsmasqResolve) {
         "dnsmasq-resolv.conf".source = "/run/systemd/resolve/resolv.conf";
       } // optionalAttrs (pkgs.stdenv.hostPlatform.libc == "glibc") {

@@ -1,12 +1,12 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  version = "4.8.6";
+  version = "4.8.6.1";
   name = "debianutils-${version}";
 
   src = fetchurl {
     url = "mirror://debian/pool/main/d/debianutils/debianutils_${version}.tar.xz";
-    sha256 = "0wrz8ak4896f5i8wirijr9hdvc43xzxpg2gjs0snmpys8iqh82fv";
+    sha256 = "1vamrgzsfdb2183xgj1qmfzh710iqj2dlbdsl92n3ckqfa51x7q9";
   };
 
   meta = {

@@ -1,15 +1,16 @@
 { stdenv, fetchurl, lib, darwin }:
 
 # Based on https://projects.archlinux.org/svntogit/packages.git/tree/trunk/PKGBUILD
-let
-  version = "2018.02.28";
-in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "live555-${version}";
+  version = "2018.12.14";
 
   src = fetchurl { # the upstream doesn't provide a stable URL
-    url = "mirror://sourceforge/slackbuildsdirectlinks/live.${version}.tar.gz";
-    sha256 = "0zi47asv1qmb09g321m02q684i3c90vci0mgkdh1mlmx2rbg1d1d";
+    urls = [
+      "mirror://sourceforge/slackbuildsdirectlinks/live.${version}.tar.gz"
+      "https://download.videolan.org/contrib/live555/live.${version}.tar.gz"
+    ];
+    sha256 = "0irafygp23m2xmjv06qgs1sccymbwqvn51wggk0c60lnj1v1zhwd";
   };
 
   postPatch = ''
@@ -23,28 +24,39 @@ stdenv.mkDerivation {
   '';
 
   configurePhase = ''
+    runHook preConfigure
+
     ./genMakefiles ${{
       x86_64-darwin = "macosx";
       i686-linux = "linux";
       x86_64-linux = "linux-64bit";
       aarch64-linux = "linux-64bit";
     }.${stdenv.hostPlatform.system}}
+
+    runHook postConfigure
   '';
 
   installPhase = ''
+    runHook preInstall
+
     for dir in BasicUsageEnvironment groupsock liveMedia UsageEnvironment; do
       install -dm755 $out/{bin,lib,include/$dir}
       install -m644 $dir/*.a "$out/lib"
       install -m644 $dir/include/*.h* "$out/include/$dir"
     done
+
+    runHook postInstall
   '';
 
   nativeBuildInputs = lib.optional stdenv.isDarwin darwin.cctools;
+
+  enableParallelBuilding = true;
 
   meta = with lib; {
     description = "Set of C++ libraries for multimedia streaming, using open standard protocols (RTP/RTCP, RTSP, SIP)";
     homepage = http://www.live555.com/liveMedia/;
     license = licenses.lgpl21Plus;
     platforms = platforms.unix;
+    broken = stdenv.hostPlatform.isAarch64;
   };
 }

@@ -4,7 +4,7 @@
 , graphicsSupport ? true, imlib2 ? null
 , x11Support ? graphicsSupport, libX11 ? null
 , mouseSupport ? !stdenv.isDarwin, gpm-ncurses ? null
-, perl, man, pkgconfig
+, perl, man, pkgconfig, buildPackages, w3m
 }:
 
 assert sslSupport -> openssl != null;
@@ -14,14 +14,24 @@ assert mouseSupport -> gpm-ncurses != null;
 
 with stdenv.lib;
 
-stdenv.mkDerivation rec {
-  name = "w3m-0.5.3+git20161120";
+let
+  mktable = buildPackages.stdenv.mkDerivation rec {
+    name = "w3m-mktable";
+    inherit (w3m) src;
+    nativeBuildInputs = [ pkgconfig boehmgc ];
+    makeFlags = [ "mktable" ];
+    installPhase = ''
+      install -D mktable $out/bin/mktable
+    '';
+  };
+in stdenv.mkDerivation rec {
+  name = "w3m-0.5.3+git20180125";
 
   src = fetchFromGitHub {
     owner = "tats";
     repo = "w3m";
-    rev = "v0.5.3+git20161120";
-    sha256 = "06n5a9jdyihkd4xdjmyci32dpqp1k2l5awia5g9ng0bn256bacdc";
+    rev = "v0.5.3+git20180125";
+    sha256 = "0dafdfx1yhrvhbqzslkcapj09dvf64m2jadz3wl2icni0k4msq90";
   };
 
   NIX_LDFLAGS = optionalString stdenv.isSunOS "-lsocket -lnsl";
@@ -30,6 +40,8 @@ stdenv.mkDerivation rec {
   # the correct paths.
   PERL = "${perl}/bin/perl";
   MAN = "${man}/bin/man";
+
+  makeFlags = [ "AR=${stdenv.cc.bintools.targetPrefix}ar" ];
 
   patches = [
     ./RAND_egd.libressl.patch
@@ -40,8 +52,14 @@ stdenv.mkDerivation rec {
     })
   ] ++ optional (graphicsSupport && !x11Support) [ ./no-x11.patch ];
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ ncurses boehmgc gettext zlib ]
+  postPatch = optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+    ln -s ${mktable}/bin/mktable mktable
+    # stop make from recompiling mktable
+    sed -ie 's!mktable.*:.*!mktable:!' Makefile.in
+  '';
+
+  nativeBuildInputs = [ pkgconfig gettext ];
+  buildInputs = [ ncurses boehmgc zlib ]
     ++ optional sslSupport openssl
     ++ optional mouseSupport gpm-ncurses
     ++ optional graphicsSupport imlib2

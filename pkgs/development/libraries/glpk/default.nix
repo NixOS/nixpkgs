@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
          programming language and organized in the form of a library.
       '';
 
-    homepage = http://www.gnu.org/software/glpk/;
+    homepage = https://www.gnu.org/software/glpk/;
     license = stdenv.lib.licenses.gpl3Plus;
 
     maintainers = with stdenv.lib.maintainers; [ bjg timokau ];

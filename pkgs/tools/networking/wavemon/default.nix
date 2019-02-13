@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, ncurses, libnl, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  version = "0.8.2";
+  version = "0.9.0";
   baseName = "wavemon";
   name = "${baseName}-${version}";
 
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     owner = "uoaerg";
     repo = "wavemon";
     rev = "v${version}";
-    sha256 = "0rqpp7rhl9rlwnihsapaiy62v33h45fm3d0ia2nhdjw7fwkwcqvs";
+    sha256 = "07cid0h3mcyr74nnrzzf8k5n1p9a4y3wij43jbiaqmkpxilcc1i6";
   };
 
   meta = with stdenv.lib; {

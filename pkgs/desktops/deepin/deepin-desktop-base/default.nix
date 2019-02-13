@@ -1,15 +1,15 @@
-{ stdenv, fetchFromGitHub, deepin-wallpapers }:
+{ stdenv, fetchFromGitHub, deepin-wallpapers, deepin }:
 
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "deepin-desktop-base";
-  version = "2018.7.23";
+  version = "2018.10.29";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "1n1bjkvhgq138jcg3zkwg55r41056x91mh191mirlpvpic574ydc";
+    sha256 = "0l2zb7rpag2q36lqsgvirhjgmj7w243nsi1rywkypf2xm7g2v235";
   };
 
   buildInputs = [ deepin-wallpapers ];
@@ -34,6 +34,8 @@ stdenv.mkDerivation rec {
     # Make a symlink for deepin-version
     ln -s ../lib/deepin/desktop-version $out/etc/deepin-version
   '';
+
+  passthru.updateScript = deepin.updateScript { inherit name; };
 
   meta = with stdenv.lib; {
     description = "Base assets and definitions for Deepin Desktop Environment";

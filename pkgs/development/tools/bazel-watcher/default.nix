@@ -4,30 +4,22 @@
 , fetchpatch
 , git
 , go
+, python
 , stdenv
 }:
 
 buildBazelPackage rec {
   name = "bazel-watcher-${version}";
-  version = "0.5.0";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "bazelbuild";
     repo = "bazel-watcher";
     rev = "v${version}";
-    sha256 = "1sis723hwax4dg0c28x20yj0hjli66q1ykcvjirgy57znz4iwlq9";
+    sha256 = "0yphks1qlp3xcbq5mg95lxrhl3q8pza5g3f9i2j6y7dsfz0s0l4v";
   };
 
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/bazelbuild/bazel-watcher/commit/4d5928eee3dd5843a1b55136d914b78fef7f25d0.patch";
-      sha256 = "0gxzcdqgifrmvznfy0p5nd11b39n2pwxcvpmhc6hxf85mwlxz7dg";
-    })
-
-    ./update-gazelle-fix-ssl.patch
-  ];
-
-  nativeBuildInputs = [ go git ];
+  nativeBuildInputs = [ go git python ];
 
   bazelTarget = "//ibazel";
 
@@ -52,9 +44,15 @@ buildBazelPackage rec {
       # a different sha256 for the fetch phase.
       rm -rf $bazelOut/external/{go_sdk,\@go_sdk.marker}
       sed -e '/^FILE:@go_sdk.*/d' -i $bazelOut/external/\@*.marker
+
+      # Remove the gazelle tools, they contain go binaries that are built
+      # non-deterministically. As long as the gazelle version matches the tools
+      # should be equivalent.
+      rm -rf $bazelOut/external/{bazel_gazelle_go_repository_tools,\@bazel_gazelle_go_repository_tools.marker}
+      sed -e '/^FILE:@bazel_gazelle_go_repository_tools.*/d' -i $bazelOut/external/\@*.marker
     '';
 
-    sha256 = "1iyjvibvlwg980p7nizr6x5v31dyp4a344f0xn839x393583k59d";
+    sha256 = "14k1cpw4h78c2gk294xzq9a9nv09yabdrahbzgin8xizbgdxn1q8";
   };
 
   buildAttrs = {

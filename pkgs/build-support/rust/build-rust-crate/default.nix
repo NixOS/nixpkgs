@@ -75,6 +75,7 @@ let crate = crate_ // (lib.attrByPath [ crate_.crateName ] (attr: {}) crateOverr
     ];
     extraDerivationAttrs = lib.filterAttrs (n: v: ! lib.elem n processedAttrs) crate;
     buildInputs_ = buildInputs;
+    extraRustcOpts_ = extraRustcOpts;
 in
 stdenv.mkDerivation (rec {
 
@@ -141,7 +142,7 @@ stdenv.mkDerivation (rec {
               extraLinkFlags
               crateAuthors verbose colors target_os;
     };
-    extraRustcOpts = if crate ? extraRustcOpts then crate.extraRustcOpts else [];
+    extraRustcOpts = (if crate ? extraRustcOpts then crate.extraRustcOpts else []) ++ extraRustcOpts_;
     buildPhase = buildCrate {
       inherit crateName dependencies
               crateFeatures libName release libPath crateType

@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "rdfind-${version}";
-  version = "1.3.5";
+  version = "1.4.1";
 
   src = fetchurl {
     url = "https://rdfind.pauldreik.se/${name}.tar.gz";
-    sha256 = "0i63f2lwwkiq5m8shi3wwi59i1s25r6dx6flsgqxs1jvlcg0lvn3";
+    sha256 = "132y3wwgnbpdx6f90q0yahd3nkr4cjzcy815ilc8p97b4vn17iih";
   };
 
   buildInputs = [ nettle ];

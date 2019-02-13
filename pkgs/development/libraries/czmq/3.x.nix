@@ -22,6 +22,5 @@ stdenv.mkDerivation rec {
     description = "High-level C Binding for ZeroMQ";
     license = licenses.mpl20;
     platforms = platforms.all;
-    maintainers = with maintainers; [ wkennington ];
   };
 }

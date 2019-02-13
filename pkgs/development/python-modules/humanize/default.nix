@@ -22,7 +22,7 @@ buildPythonPackage rec {
     homepage = https://github.com/jmoiron/humanize;
     license = licenses.mit;
     maintainers = with maintainers; [ ];
-    platforms = platforms.linux; # can only test on linux
+    platforms = platforms.unix;
   };
 
 }

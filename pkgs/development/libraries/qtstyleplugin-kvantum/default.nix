@@ -1,20 +1,20 @@
 { stdenv, fetchFromGitHub, qmake, qtbase, qtsvg, qtx11extras, libX11, libXext, qttools }:
 
 stdenv.mkDerivation rec {
-  name = "qtstyleplugin-kvantum-${version}";
-  version = "0.10.6";
+  pname = "qtstyleplugin-kvantum";
+  version = "0.10.8";
 
   src = fetchFromGitHub {
     owner = "tsujan";
     repo = "Kvantum";
-    rev = "a6daa1a6df3c5d4abc7ea39ef7028ddea2addbf6";
-    sha256 = "1zns4x95h0ydiwx8yw0bmyg4lc2sy7annmdrg66sx753x3177zxp";
+    rev = "V${version}";
+    sha256 = "0w4iqpkagrwvhahdl280ni06b7x1i621n3z740g84ysp2n3dv09l";
   };
 
   nativeBuildInputs = [ qmake qttools ];
   buildInputs = [ qtbase qtsvg qtx11extras libX11 libXext  ];
 
-  postUnpack = "sourceRoot=\${sourceRoot}/Kvantum";
+  sourceRoot = "source/Kvantum";
 
   postPatch = ''
     # Fix plugin dir

@@ -2,20 +2,14 @@
 
 stdenv.mkDerivation rec {
   name = "fastjet-${version}";
-  version = "3.3.1";
+  version = "3.3.2";
 
   src = fetchurl {
     url = "http://fastjet.fr/repo/fastjet-${version}.tar.gz";
-    sha256 = "0lvchyh9q2p8lb10isazw0wbwzs24yg7gxyhpj9xpvz5hydyvgvn";
+    sha256 = "1hk3k7dyik640dzg21filpywc2dl862nl2hbpg384hf5pw9syn9z";
   };
 
   buildInputs = [ python2 ];
-
-  postPatch = ''
-    substituteInPlace plugins/SISCone/SISConeBasePlugin.cc \
-      --replace 'structure_of<UserScaleBase::StructureType>()' \
-                'structure_of<UserScaleBase>()'
-  '';
 
   configureFlags = [
     "--enable-allcxxplugins"

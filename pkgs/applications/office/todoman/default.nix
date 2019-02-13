@@ -5,12 +5,12 @@ let
 in
 buildPythonApplication rec {
   pname = "todoman";
-  version = "3.4.1";
+  version = "3.5.0";
   name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1rvid1rklvgvsf6xmxd91j2fi46v4fzn5z6zbs5yn0wpb0k605r5";
+    sha256 = "051qjdpwif06x7qspnb4pfwdhb8nnmz99yqcp4kla5hv0n3jh0w9";
   };
 
     LOCALE_ARCHIVE = stdenv.lib.optionalString stdenv.isLinux
@@ -28,13 +28,6 @@ buildPythonApplication rec {
 
   makeWrapperArgs = [ "--set LOCALE_ARCHIVE ${glibcLocales}/lib/locale/locale-archive"
                       "--set CHARSET en_us.UTF-8" ];
-
-  patches = [
-   (fetchpatch {
-     url = "https://github.com/pimutils/todoman/commit/3e191111b72df9ec91a773befefa291799374422.patch";
-     sha256 = "12mskbp0d8p2lllkxm3m9wyy2hsbnz2qs297civsc3ly2l5bcrag";
-    })
-  ];
 
   preCheck = ''
     # Remove one failing test that only checks whether the command line works

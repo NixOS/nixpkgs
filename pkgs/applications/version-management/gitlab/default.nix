@@ -11,32 +11,22 @@ let
     groups = [ "default" "unicorn" "ed25519" "metrics" ];
   };
 
-  version = "11.4.3";
+  flavour = if gitlabEnterprise then "ee" else "ce";
+  data = (builtins.fromJSON (builtins.readFile ./data.json)).${flavour};
 
-  sources = if gitlabEnterprise then {
-    gitlabDeb = fetchurl {
-      url = "https://packages.gitlab.com/gitlab/gitlab-ee/packages/debian/stretch/gitlab-ee_${version}-ee.0_amd64.deb/download.deb";
-      sha256 = "1cw75qj508z6n00rqgqjzdm2013kyb7c57cypmq0m08nc6f3jspz";
-    };
+  version = data.version;
+  sources = {
     gitlab = fetchFromGitLab {
-      owner = "gitlab-org";
-      repo = "gitlab-ee";
-      rev = "v${version}-ee";
-      sha256 = "1vqc77whpbsifbm9vgcmpxnw13v8jz1s9q04i8jfv99c59fjlids";
+      owner = data.owner;
+      repo = data.repo;
+      rev = data.rev;
+      sha256 = data.repo_hash;
     };
-  } else {
     gitlabDeb = fetchurl {
-      url = "https://packages.gitlab.com/gitlab/gitlab-ce/packages/debian/stretch/gitlab-ce_${version}-ce.0_amd64.deb/download.deb";
-      sha256 = "0vk03k42pp92h520wnynl9czcigjhj9m7y68z1x0gwqr9m61r7zm";
-    };
-    gitlab = fetchFromGitLab {
-      owner = "gitlab-org";
-      repo = "gitlab-ce";
-      rev = "v${version}";
-      sha256 = "1zvjz2gv2vwqqjz52zcvi0ap3d8rdbpgsqk9wv80hqq4v37a5gfx";
+      url = data.deb_url;
+      sha256 = data.deb_hash;
     };
   };
-
 in
 
 stdenv.mkDerivation rec {
@@ -63,17 +53,7 @@ stdenv.mkDerivation rec {
         --replace "ps -U" "${procps}/bin/ps -U"
 
     sed -i '/ask_to_continue/d' lib/tasks/gitlab/two_factor.rake
-
-    # required for some gems:
-    cat > config/database.yml <<EOF
-      production:
-        adapter: <%= ENV["GITLAB_DATABASE_ADAPTER"] || sqlite %>
-        database: gitlab
-        host: <%= ENV["GITLAB_DATABASE_HOST"] || "127.0.0.1" %>
-        password: <%= ENV["GITLAB_DATABASE_PASSWORD"] || "blerg" %>
-        username: gitlab
-        encoding: utf8
-    EOF
+    sed -ri -e '/log_level/a config.logger = Logger.new(STDERR)' config/environments/production.rb
   '';
 
   buildPhase = ''
@@ -111,6 +91,10 @@ stdenv.mkDerivation rec {
   passthru = {
     inherit rubyEnv;
     ruby = rubyEnv.wrappedRuby;
+    GITALY_SERVER_VERSION = data.passthru.GITALY_SERVER_VERSION;
+    GITLAB_PAGES_VERSION = data.passthru.GITLAB_PAGES_VERSION;
+    GITLAB_SHELL_VERSION = data.passthru.GITLAB_SHELL_VERSION;
+    GITLAB_WORKHORSE_VERSION = data.passthru.GITLAB_WORKHORSE_VERSION;
   };
 
   meta = with lib; {

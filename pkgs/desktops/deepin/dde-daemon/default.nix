@@ -2,12 +2,12 @@
   dbus-factory, go-dbus-factory, go-gir-generator, go-lib,
   deepin-gettext-tools, dde-api, alsaLib, glib, gtk3, libinput, libnl,
   librsvg, linux-pam, networkmanager, pulseaudio, xorg, gnome3,
-  python3Packages, hicolor-icon-theme, go }:
+  python3Packages, hicolor-icon-theme, go, deepin }:
 
 buildGoPackage rec {
   name = "${pname}-${version}";
   pname = "dde-daemon";
-  version = "3.2.24.7";
+  version = "3.6.0";
 
   goPackagePath = "pkg.deepin.io/dde/daemon";
 
@@ -15,7 +15,7 @@ buildGoPackage rec {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "17dvhqrw0dqy3d0wd9ailb18y2rg7575g3ffy0d5rg9m3y65y1y6";
+    sha256 = "0gn2zp34wg79lvzdfla6yb4gs3f9ll83kj765zvig1wpx51nq1aj";
   };
 
   patches = [
@@ -79,6 +79,8 @@ buildGoPackage rec {
     make install PREFIX="$out" -C go/src/${goPackagePath}
     remove-references-to -t ${go} $out/lib/deepin-daemon/*
   '';
+
+  passthru.updateScript = deepin.updateScript { inherit name; };
 
   meta = with stdenv.lib; {
     description = "Daemon for handling Deepin Desktop Environment session settings";

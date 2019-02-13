@@ -1,8 +1,10 @@
 { system ? builtins.currentSystem
+, config ? {}
+, pkgs ? import ../.. { inherit system config; }
 # bool: whether to use networkd in the tests
 , networkd }:
 
-with import ../lib/testing.nix { inherit system; };
+with import ../lib/testing.nix { inherit system pkgs; };
 with pkgs.lib;
 
 let
@@ -604,7 +606,4 @@ let
 
 in mapAttrs (const (attrs: makeTest (attrs // {
   name = "${attrs.name}-Networking-${if networkd then "Networkd" else "Scripted"}";
-  meta = with pkgs.stdenv.lib.maintainers; {
-    maintainers = [ wkennington ];
-  };
 }))) testCases

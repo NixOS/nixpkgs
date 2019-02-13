@@ -26,6 +26,12 @@ let
     substituteInPlace $out/sesman.ini \
       --replace LogFile=xrdp-sesman.log LogFile=/dev/null \
       --replace EnableSyslog=1 EnableSyslog=0
+
+    # Ensure that clipboard works for non-ASCII characters
+    sed -i -e '/.*SessionVariables.*/ a\
+    LANG=${config.i18n.defaultLocale}\
+    LOCALE_ARCHIVE=${config.i18n.glibcLocales}/lib/locale/locale-archive
+    ' $out/sesman.ini
   '';
 in
 {

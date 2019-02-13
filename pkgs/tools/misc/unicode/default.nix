@@ -2,18 +2,18 @@
 
 python3Packages.buildPythonApplication rec {
   name = "unicode-${version}";
-  version = "2.5";
+  version = "2.6";
 
   src = fetchFromGitHub {
     owner = "garabik";
     repo = "unicode";
     rev = "v${version}";
-    sha256 = "0vg1zshlzgdva8gzw6fya28fc4jhypjkj743x3q0yabx6934k0g2";
+    sha256 = "17hh4nwl5njsh7lnff583j2axn6rfvfbiqwp72n7vcsgkiszw4kg";
   };
 
   ucdtxt = fetchurl {
-    url = http://www.unicode.org/Public/10.0.0/ucd/UnicodeData.txt;
-    sha256 = "1cfak1j753zcrbgixwgppyxhm4w8vda8vxhqymi7n5ljfi6kwhjj";
+    url = http://www.unicode.org/Public/11.0.0/ucd/UnicodeData.txt;
+    sha256 = "16b0jzvvzarnlxdvs2izd5ia0ipbd87md143dc6lv6xpdqcs75s9";
   };
 
   postFixup = ''

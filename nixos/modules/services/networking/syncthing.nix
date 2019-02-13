@@ -63,8 +63,20 @@ in {
         type = types.path;
         default = "/var/lib/syncthing";
         description = ''
+          Path where synced directories will exist.
+        '';
+      };
+
+      configDir = mkOption {
+        type = types.path;
+        description = ''
           Path where the settings and keys will exist.
         '';
+        default =
+          let
+            nixos = config.system.stateVersion;
+            cond  = versionAtLeast nixos "19.03";
+          in cfg.dataDir + (optionalString cond "/.config/syncthing");
       };
 
       openDefaultPorts = mkOption {
@@ -110,7 +122,7 @@ in {
 
     systemd.packages = [ pkgs.syncthing ];
 
-    users = mkIf (cfg.user == defaultUser) {
+    users = mkIf (cfg.systemService && cfg.user == defaultUser) {
       users."${defaultUser}" =
         { group = cfg.group;
           home  = cfg.dataDir;
@@ -144,7 +156,7 @@ in {
             ${cfg.package}/bin/syncthing \
               -no-browser \
               -gui-address=${cfg.guiAddress} \
-              -home=${cfg.dataDir}
+              -home=${cfg.configDir}
           '';
         };
       };

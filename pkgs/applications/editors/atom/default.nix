@@ -3,14 +3,14 @@
 let
   versions = {
     atom = {
-      version = "1.32.0";
-      sha256 = "0dha8zi4gshxj993ns7ybi7q86pfqwzsasrk3a7b5xrdqbrcm5md";
+      version = "1.33.0";
+      sha256 = "0f6m6zwgz94m3q11ipyiliap3s5a3zlrg3ldjwkqnxjl6gwlxc2r";
     };
 
     atom-beta = {
-      version = "1.33.0";
+      version = "1.34.0";
       beta = 0;
-      sha256 = "1x4s12zvfd2gjy7mimndbhs6x9k37jq4dyy6r1mzhwfysix74val";
+      sha256 = "1xnrr4z55sj46hqr0il26sfs6s3knv60m340cw3rzzic271b3ifw";
     };
   };
 
@@ -44,8 +44,7 @@ let
     buildCommand = ''
       mkdir -p $out/usr/
       ar p $src data.tar.xz | tar -C $out -xJ ./usr
-      substituteInPlace $out/usr/share/applications/${pname}.desktop \
-        --replace /usr/share/${pname} $out/bin
+      sed -i -e "s|Exec=.*$|Exec=$out/bin/${pname}|" $out/usr/share/applications/${pname}.desktop
       mv $out/usr/* $out/
       rm -r $out/share/lintian
       rm -r $out/usr/
@@ -71,16 +70,13 @@ let
       ln -s ${pkgs.git}/bin/git $dugite/git/libexec/git-core/git
 
       find $share -name "*.node" -exec patchelf --set-rpath "${atomEnv.libPath}:$share" {} \;
-
-      paxmark m $share/atom
-      paxmark m $share/resources/app/apm/bin/node
     '';
 
     meta = with stdenv.lib; {
       description = "A hackable text editor for the 21st Century";
       homepage = https://atom.io/;
       license = licenses.mit;
-      maintainers = with maintainers; [ offline nequissimus synthetica ysndr ];
+      maintainers = with maintainers; [ offline nequissimus ysndr ];
       platforms = platforms.x86_64;
     };
   };

@@ -131,6 +131,15 @@
     };
   };
 
+  ngx_aws_auth = {
+    src = fetchFromGitHub {
+      owner = "anomalizer";
+      repo = "ngx_aws_auth";
+      rev = "2.1.1";
+      sha256 = "10z67g40w7wpd13fwxyknkbg3p6hn61i4v8xw6lh27br29v1y6h9";
+    };
+  };
+
   opentracing = {
     src =
       let src' = fetchFromGitHub {
@@ -226,7 +235,7 @@
       rev = "7778f0125974befbc83751d0e1cadb2dcea57601";
       sha256 = "1x5hm6r0dkm02ffny8kjd7mmq8przyd9amg2qvy5700x6lb63pbs";
     };
-  }; 
+  };
 
   statsd = {
     src = fetchFromGitHub {

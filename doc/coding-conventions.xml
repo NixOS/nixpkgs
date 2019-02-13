@@ -56,25 +56,30 @@ foo { arg = ...; }
      or list elements should be aligned:
 <programlisting>
 # A long list.
-list =
-  [ elem1
-    elem2
-    elem3
-  ];
+list = [
+  elem1
+  elem2
+  elem3
+];
 
 # A long attribute set.
-attrs =
-  { attr1 = short_expr;
-    attr2 =
-      if true then big_expr else big_expr;
-  };
-
-# Alternatively:
 attrs = {
   attr1 = short_expr;
   attr2 =
     if true then big_expr else big_expr;
 };
+
+# Combined
+listOfAttrs = [
+  {
+    attr1 = 3;
+    attr2 = "fff";
+  }
+  {
+    attr1 = 5;
+    attr2 = "ggg";
+  }
+];
 </programlisting>
     </para>
    </listitem>
@@ -192,6 +197,23 @@ args.stdenv.mkDerivation (args // {
   <title>Package naming</title>
 
   <para>
+    The key words
+    <emphasis>must</emphasis>,
+    <emphasis>must not</emphasis>,
+    <emphasis>required</emphasis>,
+    <emphasis>shall</emphasis>,
+    <emphasis>shall not</emphasis>,
+    <emphasis>should</emphasis>,
+    <emphasis>should not</emphasis>,
+    <emphasis>recommended</emphasis>,
+    <emphasis>may</emphasis>,
+    and <emphasis>optional</emphasis> in this section
+    are to be interpreted as described in
+    <link xlink:href="https://tools.ietf.org/html/rfc2119">RFC 2119</link>.
+    Only <emphasis>emphasized</emphasis> words are to be interpreted in this way.
+  </para>
+
+  <para>
    In Nixpkgs, there are generally three different names associated with a
    package:
    <itemizedlist>
@@ -231,14 +253,15 @@ args.stdenv.mkDerivation (args // {
    <itemizedlist>
     <listitem>
      <para>
-      Generally, try to stick to the upstream package name.
+       The <literal>name</literal> attribute <emphasis>should</emphasis>
+       be identical to the upstream package name.
      </para>
     </listitem>
     <listitem>
      <para>
-      Don’t use uppercase letters in the <literal>name</literal> attribute
-      — e.g., <literal>"mplayer-1.0rc2"</literal> instead of
-      <literal>"MPlayer-1.0rc2"</literal>.
+       The <literal>name</literal> attribute <emphasis>must not</emphasis>
+       contain uppercase letters — e.g., <literal>"mplayer-1.0rc2"</literal>
+       instead of <literal>"MPlayer-1.0rc2"</literal>.
      </para>
     </listitem>
     <listitem>
@@ -252,14 +275,14 @@ args.stdenv.mkDerivation (args // {
      <para>
       If a package is not a release but a commit from a repository, then the
       version part of the name <emphasis>must</emphasis> be the date of that
-      (fetched) commit. The date must be in <literal>"YYYY-MM-DD"</literal>
+      (fetched) commit. The date <emphasis>must</emphasis> be in <literal>"YYYY-MM-DD"</literal>
       format. Also append <literal>"unstable"</literal> to the name - e.g.,
       <literal>"pkgname-unstable-2014-09-23"</literal>.
      </para>
     </listitem>
     <listitem>
      <para>
-      Dashes in the package name should be preserved in new variable names,
+      Dashes in the package name <emphasis>should</emphasis> be preserved in new variable names,
       rather than converted to underscores or camel cased — e.g.,
       <varname>http-parser</varname> instead of <varname>http_parser</varname>
       or <varname>httpParser</varname>. The hyphenated style is preferred in
@@ -268,7 +291,7 @@ args.stdenv.mkDerivation (args // {
     </listitem>
     <listitem>
      <para>
-      If there are multiple versions of a package, this should be reflected in
+      If there are multiple versions of a package, this <emphasis>should</emphasis> be reflected in
       the variable names in <filename>all-packages.nix</filename>, e.g.
       <varname>json-c-0-9</varname> and <varname>json-c-0-11</varname>. If
       there is an obvious “default” version, make an attribute like
@@ -791,7 +814,7 @@ args.stdenv.mkDerivation (args // {
 
   <para>
    There are multiple ways to fetch a package source in nixpkgs. The general
-   guideline is that you should package sources with a high degree of
+   guideline is that you should package reproducible sources with a high degree of
    availability. Right now there is only one fetcher which has mirroring
    support and that is <literal>fetchurl</literal>. Note that you should also
    prefer protocols which have a corresponding proxy environment variable.
@@ -852,6 +875,123 @@ src = fetchFromGitHub {
     </listitem>
    </itemizedlist>
   </para>
+ </section>
+ <section xml:id="sec-source-hashes">
+  <title>Obtaining source hash</title>
+
+  <para>
+   Preferred source hash type is sha256. There are several ways to get it.
+  </para>
+
+  <orderedlist>
+   <listitem>
+    <para>
+     Prefetch URL (with <literal>nix-prefetch-<replaceable>XXX</replaceable>
+     <replaceable>URL</replaceable></literal>, where
+     <replaceable>XXX</replaceable> is one of <literal>url</literal>,
+     <literal>git</literal>, <literal>hg</literal>, <literal>cvs</literal>,
+     <literal>bzr</literal>, <literal>svn</literal>). Hash is printed to
+     stdout.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     Prefetch by package source (with <literal>nix-prefetch-url
+     '&lt;nixpkgs&gt;' -A <replaceable>PACKAGE</replaceable>.src</literal>,
+     where <replaceable>PACKAGE</replaceable> is package attribute name). Hash
+     is printed to stdout.
+    </para>
+    <para>
+     This works well when you've upgraded existing package version and want to
+     find out new hash, but is useless if package can't be accessed by
+     attribute or package has multiple sources (<literal>.srcs</literal>,
+     architecture-dependent sources, etc).
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     Upstream provided hash: use it when upstream provides
+     <literal>sha256</literal> or <literal>sha512</literal> (when upstream
+     provides <literal>md5</literal>, don't use it, compute
+     <literal>sha256</literal> instead).
+    </para>
+    <para>
+     A little nuance is that <literal>nix-prefetch-*</literal> tools produce
+     hash encoded with <literal>base32</literal>, but upstream usually provides
+     hexadecimal (<literal>base16</literal>) encoding. Fetchers understand both
+     formats. Nixpkgs does not standardize on any one format.
+    </para>
+    <para>
+     You can convert between formats with nix-hash, for example:
+<screen>
+$ nix-hash --type sha256 --to-base32 <replaceable>HASH</replaceable>
+</screen>
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     Extracting hash from local source tarball can be done with
+     <literal>sha256sum</literal>. Use <literal>nix-prefetch-url
+     file:///path/to/tarball </literal> if you want base32 hash.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     Fake hash: set fake hash in package expression, perform build and extract
+     correct hash from error Nix prints.
+    </para>
+    <para>
+     For package updates it is enough to change one symbol to make hash fake.
+     For new packages, you can use <literal>lib.fakeSha256</literal>,
+     <literal>lib.fakeSha512</literal> or any other fake hash.
+    </para>
+    <para>
+     This is last resort method when reconstructing source URL is non-trivial
+     and <literal>nix-prefetch-url -A</literal> isn't applicable (for example,
+     <link xlink:href="https://github.com/NixOS/nixpkgs/blob/d2ab091dd308b99e4912b805a5eb088dd536adb9/pkgs/applications/video/kodi/default.nix#L73">
+     one of <literal>kodi</literal> dependencies</link>). The easiest way then
+     would be replace hash with a fake one and rebuild. Nix build will fail and
+     error message will contain desired hash.
+    </para>
+    <warning><para>This method has security problems. Check below for details.</para></warning>
+   </listitem>
+  </orderedlist>
+
+  <section xml:id="sec-source-hashes-security">
+   <title>Obtaining hashes securely</title>
+   <para>
+    Let's say Man-in-the-Middle (MITM) sits close to your network. Then instead of fetching
+    source you can fetch malware, and instead of source hash you get hash of malware. Here are
+    security considerations for this scenario:
+   </para>
+   <itemizedlist>
+    <listitem>
+     <para>
+      <literal>http://</literal> URLs are not secure to prefetch hash from;
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      hashes from upstream (in method 3) should be obtained via secure protocol;
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      <literal>https://</literal> URLs are secure in methods 1, 2, 3;
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      <literal>https://</literal> URLs are not secure in method 5. When obtaining hashes
+      with fake hash method, TLS checks are disabled. So
+      refetch source hash from several different networks to exclude MITM scenario.
+      Alternatively, use fake hash method to make Nix error, but instead of extracting
+      hash from error, extract <literal>https://</literal> URL and prefetch it
+      with method 1.
+     </para>
+    </listitem>
+   </itemizedlist>
+  </section>
  </section>
  <section xml:id="sec-patches">
   <title>Patches</title>

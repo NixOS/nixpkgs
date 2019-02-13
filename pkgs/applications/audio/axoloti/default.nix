@@ -40,15 +40,6 @@ stdenv.mkDerivation rec {
     substituteInPlace "chibios/os/various/shell.c" \
       --replace "#ifdef __DATE__" "#if 0"
 
-    # Hardcode full path to compiler tools
-    for f in "firmware/Makefile.patch" \
-             "firmware/Makefile" \
-             "firmware/flasher/Makefile" \
-             "firmware/mounter/Makefile"; do
-      substituteInPlace "$f" \
-        --replace "arm-none-eabi-" "${gcc-arm-embedded}/bin/arm-none-eabi-"
-    done
-
     # Hardcode path to "make"
     for f in "firmware/compile_firmware_linux.sh" \
              "firmware/compile_patch_linux.sh"; do

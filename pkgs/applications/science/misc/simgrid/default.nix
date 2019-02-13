@@ -18,13 +18,13 @@ in
 
 stdenv.mkDerivation rec {
   name = "simgrid-${version}";
-  version = "3.20";
+  version = "3.21";
 
   src = fetchFromGitHub {
     owner = "simgrid";
     repo = "simgrid";
-    rev = "v${version}";
-    sha256 = "0xb20qhvsah2dz2hvn850i3w9a5ghsbcx8vka2ap6xsdkxf593gy";
+    rev = "v${replaceChars ["."] ["_"] version}";
+    sha256 = "1v0dwlww2wl56ms8lvg5zwffzbmz3sjzpkqc73f714mrc9g02bxs";
   };
 
   nativeBuildInputs = [ cmake perl python3 boost valgrind ]
@@ -107,6 +107,6 @@ stdenv.mkDerivation rec {
     homepage = http://simgrid.gforge.inria.fr/;
     license = licenses.lgpl2Plus;
     maintainers = with maintainers; [ mickours ];
-    platforms = platforms.x86_64;
+    platforms = ["x86_64-linux"];
   };
 }

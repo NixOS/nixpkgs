@@ -1,16 +1,16 @@
 { stdenv, fetchurl, python3Packages
-, file, intltool, gobjectIntrospection, libgudev
+, file, intltool, gobject-introspection, libgudev
 , udisks, glib, gnome3, gst_all_1, libnotify
 , exiv2, exiftool, qt5, gdk_pixbuf
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "rapid-photo-downloader";
-  version = "0.9.12";
+  version = "0.9.13";
 
   src = fetchurl {
     url = "https://launchpad.net/rapid/pyqt/${version}/+download/${pname}-${version}.tar.gz";
-    sha256 = "0nzahps7hs120xv2r55k293kialf83nx44x3jg85yh349rpqrii8";
+    sha256 = "1517w18sxil1gwd78jjbbixcd1b0sp05imnnd5h5lr8wl3f0szj0";
   };
 
   # Disable version check and fix install tests
@@ -23,7 +23,7 @@ python3Packages.buildPythonApplication rec {
       --replace "import problemnotification" "import raphodo.problemnotification"
   '';
 
-  nativeBuildInputs = [ file intltool gobjectIntrospection ];
+  nativeBuildInputs = [ file intltool gobject-introspection ];
 
   buildInputs = [
     libgudev

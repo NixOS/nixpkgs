@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   name = "glabels-${version}";
-  version = "3.4.0";
+  version = "3.4.1";
 
   src = fetchurl {
-    url = "https://ftp.gnome.org/pub/GNOME/sources/glabels/3.4/glabels-3.4.0.tar.xz";
-    sha256 = "04345crf5yrhq6rlrymz630rxnm8yw41vx04hb6xn2nkjn9hf3nl";
+    url = "mirror://gnome/sources/glabels/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    sha256 = "0f2rki8i27pkd9r0gz03cdl1g4vnmvp0j49nhxqn275vi8lmgr0q";
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig makeWrapper intltool ];
@@ -25,11 +25,11 @@ stdenv.mkDerivation rec {
       --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Create labels and business cards";
-    homepage = http://glabels.org/;
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.unix;
-    maintainers = [ stdenv.lib.maintainers.nico202 ];
+    homepage = https://glabels.org/;
+    license = with licenses; [ gpl3Plus lgpl3Plus ];
+    platforms = platforms.unix;
+    maintainers = [ maintainers.nico202 ];
   };
 }

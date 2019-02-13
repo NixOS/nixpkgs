@@ -11,7 +11,6 @@
   pkgs,
   pigz,
   nix,
-  perl,
   runCommand,
   rsync,
   shadow,
@@ -23,6 +22,7 @@
   referencesByPopularity,
   writeScript,
   writeText,
+  closureInfo
 }:
 
 # WARNING: this API is unstable and may be subject to backwards-incompatible changes in the future.
@@ -157,7 +157,7 @@ rec {
         };
         inherit fromImage fromImageName fromImageTag;
 
-        buildInputs = [ utillinux e2fsprogs jshon rsync ];
+        buildInputs = [ utillinux e2fsprogs jshon rsync jq ];
       } ''
       rm -rf $out
 
@@ -188,22 +188,27 @@ rec {
         # Use the name and tag to get the parent ID field.
         parentID=$(jshon -e $fromImageName -e $fromImageTag -u \
                    < image/repositories)
+
+        cat ./image/manifest.json  | jq -r '.[0].Layers | .[]' > layer-list
+      else
+        touch layer-list
       fi
 
       # Unpack all of the parent layers into the image.
       lowerdir=""
-      while [[ -n "$parentID" ]]; do
-        echo "Unpacking layer $parentID"
-        mkdir -p image/$parentID/layer
-        tar -C image/$parentID/layer -xpf image/$parentID/layer.tar
-        rm image/$parentID/layer.tar
+      extractionID=0
+      for layerTar in $(cat layer-list); do
+        echo "Unpacking layer $layerTar"
+        extractionID=$((extractionID + 1))
 
-        find image/$parentID/layer -name ".wh.*" -exec bash -c 'name="$(basename {}|sed "s/^.wh.//")"; mknod "$(dirname {})/$name" c 0 0; rm {}' \;
+        mkdir -p image/$extractionID/layer
+        tar -C image/$extractionID/layer -xpf image/$layerTar
+        rm image/$layerTar
+
+        find image/$extractionID/layer -name ".wh.*" -exec bash -c 'name="$(basename {}|sed "s/^.wh.//")"; mknod "$(dirname {})/$name" c 0 0; rm {}' \;
 
         # Get the next lower directory and continue the loop.
-        lowerdir=$lowerdir''${lowerdir:+:}image/$parentID/layer
-        parentID=$(cat image/$parentID/json \
-                  | (jshon -e parent -u 2>/dev/null || true))
+        lowerdir=$lowerdir''${lowerdir:+:}image/$extractionID/layer
       done
 
       mkdir work
@@ -261,19 +266,6 @@ rec {
       ${text}
     '';
 
-  nixRegistration = contents: runCommand "nix-registration" {
-    buildInputs = [ nix perl ];
-    # For obtaining the closure of `contents'.
-    exportReferencesGraph =
-      let contentsList = if builtins.isList contents then contents else [ contents ];
-      in map (x: [("closure-" + baseNameOf x) x]) contentsList;
-    }
-    ''
-      mkdir $out
-      printRegistration=1 perl ${pkgs.pathsFromGraph} closure-* > $out/db.dump
-      perl ${pkgs.pathsFromGraph} closure-* > $out/storePaths
-    '';
-
   # Create $maxLayers worth of Docker Layers, one layer per store path
   # unless there are more paths than $maxLayers. In that case, create
   # $maxLayers-1 for the most popular layers, and smush the remainaing
@@ -324,13 +316,20 @@ rec {
     # Files to add to the layer.
     contents,
     baseJson,
+    extraCommands,
     uid ? 0, gid ? 0,
   }:
     runCommand "${name}-customisation-layer" {
       buildInputs = [ jshon rsync tarsum ];
+      inherit extraCommands;
     }
     ''
       cp -r ${contents}/ ./layer
+
+      if [[ -n $extraCommands ]]; then
+        chmod ug+w layer
+        (cd layer; eval "$extraCommands")
+      fi
 
       # Tar up the layer and throw it into 'layer.tar'.
       echo "Packing layer..."
@@ -502,6 +501,8 @@ rec {
     # Time of creation of the image. Passing "now" will make the
     # created date be the time of building.
     created ? "1970-01-01T00:00:01Z",
+    # Optional bash script to run on the files prior to fixturizing the layer.
+    extraCommands ? "", uid ? 0, gid ? 0,
     # Docker's lowest maximum layer limit is 42-layers for an old
     # version of the AUFS graph driver. We pick 24 to ensure there is
     # plenty of room for extension. I believe the actual maximum is
@@ -509,8 +510,6 @@ rec {
     maxLayers ? 24
   }:
     let
-      uid = 0;
-      gid = 0;
       baseName = baseNameOf name;
       contentsEnv = symlinkJoin { name = "bulk-layers"; paths = (if builtins.isList contents then contents else [ contents ]); };
 
@@ -539,20 +538,25 @@ rec {
           name = baseName;
           contents = contentsEnv;
           baseJson = configJson;
-          inherit uid gid;
+          inherit uid gid extraCommands;
         };
       result = runCommand "docker-image-${baseName}.tar.gz" {
         buildInputs = [ jshon pigz coreutils findutils jq ];
         # Image name and tag must be lowercase
         imageName = lib.toLower name;
-        imageTag = if tag == null then "" else lib.toLower tag;
         baseJson = configJson;
+        passthru.imageTag =
+          if tag == null
+          then lib.head (lib.splitString "-" (lib.last (lib.splitString "/" result)))
+          else lib.toLower tag;
       } ''
-        ${lib.optionalString (tag == null) ''
+        ${if (tag == null) then ''
           outName="$(basename "$out")"
           outHash=$(echo "$outName" | cut -d - -f 1)
 
           imageTag=$outHash
+        '' else ''
+          imageTag="${tag}"
         ''}
 
         find ${bulkLayers} -mindepth 1 -maxdepth 1 | sort -t/ -k5 -n > layer-list
@@ -686,6 +690,9 @@ rec {
         if [[ -n "$fromImage" ]]; then
           echo "Unpacking base image..."
           tar -C image -xpf "$fromImage"
+
+          cat ./image/manifest.json  | jq -r '.[0].Layers | .[]' > layer-list
+
           # Do not import the base image configuration and manifest
           chmod a+w image image/*.json
           rm -f image/*.json
@@ -703,6 +710,8 @@ rec {
           for l in image/*/layer.tar; do
             ls_tar $l >> baseFiles
           done
+        else
+          touch layer-list
         fi
 
         chmod -R ug+rw image
@@ -755,17 +764,23 @@ rec {
         # Use the temp folder we've been working on to create a new image.
         mv temp image/$layerID
 
+        # Add the new layer ID to the beginning of the layer list
+        (
+          # originally this used `sed -i "1i$layerID" layer-list`, but
+          # would fail if layer-list was completely empty.
+          echo "$layerID/layer.tar"
+          cat layer-list
+        ) | ${pkgs.moreutils}/bin/sponge layer-list
+
         # Create image json and image manifest
         imageJson=$(cat ${baseJson} | jq ". + {\"rootfs\": {\"diff_ids\": [], \"type\": \"layers\"}}")
         manifestJson=$(jq -n "[{\"RepoTags\":[\"$imageName:$imageTag\"]}]")
-        currentID=$layerID
-        while [[ -n "$currentID" ]]; do
-          layerChecksum=$(sha256sum image/$currentID/layer.tar | cut -d ' ' -f1)
+
+        for layerTar in $(cat ./layer-list); do
+          layerChecksum=$(sha256sum image/$layerTar | cut -d ' ' -f1)
           imageJson=$(echo "$imageJson" | jq ".history |= [{\"created\": \"$(jq -r .created ${baseJson})\"}] + .")
           imageJson=$(echo "$imageJson" | jq ".rootfs.diff_ids |= [\"sha256:$layerChecksum\"] + .")
-          manifestJson=$(echo "$manifestJson" | jq ".[0].Layers |= [\"$currentID/layer.tar\"] + .")
-
-          currentID=$(cat image/$currentID/json | (jshon -e parent -u 2>/dev/null || true))
+          manifestJson=$(echo "$manifestJson" | jq ".[0].Layers |= [\"$layerTar\"] + .")
         done
 
         imageJsonChecksum=$(echo "$imageJson" | sha256sum | cut -d ' ' -f1)
@@ -795,29 +810,19 @@ rec {
   # the container.
   # Be careful since this doesn't work well with multilayer.
   buildImageWithNixDb = args@{ contents ? null, extraCommands ? "", ... }:
-    buildImage (args // {
+    let contentsList = if builtins.isList contents then contents else [ contents ];
+    in buildImage (args // {
       extraCommands = ''
         echo "Generating the nix database..."
         echo "Warning: only the database of the deepest Nix layer is loaded."
         echo "         If you want to use nix commands in the container, it would"
         echo "         be better to only have one layer that contains a nix store."
-        # This requires Nix 1.12 or higher
-        export NIX_REMOTE=local?root=$PWD
-        ${nix}/bin/nix-store --load-db < ${nixRegistration contents}/db.dump
 
-        # We fill the store in order to run the 'verify' command that
-        # generates hash and size of output paths.
-        # Note when Nix 1.12 is be the stable one, the database dump
-        # generated by the exportReferencesGraph function will
-        # contains sha and size. See
-        # https://github.com/NixOS/nix/commit/c2b0d8749f7e77afc1c4b3e8dd36b7ee9720af4a
-        storePaths=$(cat ${nixRegistration contents}/storePaths)
-        echo "Copying everything to /nix/store (will take a while)..."
-        cp -prd $storePaths nix/store/
-        ${nix}/bin/nix-store --verify --check-contents
+        export NIX_REMOTE=local?root=$PWD
+        ${nix}/bin/nix-store --load-db < ${closureInfo {rootPaths = contentsList;}}/registration
 
         mkdir -p nix/var/nix/gcroots/docker/
-        for i in ${lib.concatStringsSep " " contents}; do
+        for i in ${lib.concatStringsSep " " contentsList}; do
           ln -s $i nix/var/nix/gcroots/docker/$(basename $i)
         done;
       '' + extraCommands;

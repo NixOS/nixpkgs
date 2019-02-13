@@ -1,5 +1,5 @@
 { stdenv, fetchurl, intltool, pkgconfig
-, anthy, ibus, glib, gobjectIntrospection, gtk3, python3
+, anthy, ibus, glib, gobject-introspection, gtk3, python3
 }:
 
 stdenv.mkDerivation rec {
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--with-anthy-zipcode=${anthy}/share/anthy/zipcode.t" ];
 
   buildInputs = [
-    anthy glib gobjectIntrospection gtk3 ibus (python3.withPackages (ps: [ps.pygobject3]))
+    anthy glib gobject-introspection gtk3 ibus (python3.withPackages (ps: [ps.pygobject3]))
   ];
 
   nativeBuildInputs = [ intltool pkgconfig python3.pkgs.wrapPython ];

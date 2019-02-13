@@ -5,6 +5,7 @@
 , pkgconfig
 , ffmpeg_4
 , patchelf
+, fdk_aac
 , libtool
 , cmake
 , bluez
@@ -22,13 +23,13 @@ let
 
 in stdenv.mkDerivation rec {
   name = "pulseaudio-modules-bt-${version}";
-  version = "unstable-2018-10-16";
+  version = "unstable-2019-01-05";
 
   src = fetchFromGitHub {
     owner = "EHfive";
     repo = "pulseaudio-modules-bt";
-    rev = "552c2b48c0cc7dd44d0746b261f7c7d5559e8e30";
-    sha256 = "052jb1hjx1in7bafx4zpn78s7r6f2y7djriwi36dzqy9wmalmyjy";
+    rev = "4b0cde160c96f40d860fef267a6ded49ae045be0";
+    sha256 = "15jw5nf2dhqqdwzyh2x5kdkrq7f3qn140gw6gmspcai9kplhk24w";
     fetchSubmodules = true;
   };
 
@@ -45,6 +46,7 @@ in stdenv.mkDerivation rec {
   buildInputs = [
     pulseaudio
     ffmpeg_4
+    fdk_aac
     libtool
     bluez
     dbus
@@ -72,7 +74,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     homepage = https://github.com/EHfive/pulseaudio-modules-bt;
-    description = "SBC, Sony LDAC codec (A2DP Audio) support for Pulseaudio";
+    description = "LDAC, aptX, aptX HD, AAC codecs (A2DP Audio) support for Linux PulseAudio";
     platforms = platforms.linux;
     license = licenses.mit;
     maintainers = with maintainers; [ adisbladis ];
