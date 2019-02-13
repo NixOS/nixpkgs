@@ -6,7 +6,7 @@ let
 
   cfg = config.services.crowd;
 
-  pkg = pkgs.atlassian-crowd.override {
+  pkg = cfg.package.override {
     home = cfg.home;
     port = cfg.listenPort;
     openidPassword = cfg.openidPassword;
@@ -91,6 +91,13 @@ in
           default = true;
           description = "Whether the connections to the proxy should be considered secure.";
         };
+      };
+
+      package = mkOption {
+        type = types.package;
+        default = pkgs.atlassian-crowd;
+        defaultText = "pkgs.atlassian-crowd";
+        description = "Atlassian Crowd package to use.";
       };
 
       jrePackage = mkOption {
