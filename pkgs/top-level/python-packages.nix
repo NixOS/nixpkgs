@@ -4160,6 +4160,15 @@ in {
 
   sphinx = callPackage ../development/python-modules/sphinx { };
 
+  sphinx_1_7_9 = (callPackage ../development/python-modules/sphinx { })
+    .overridePythonAttrs (oldAttrs: rec {
+      version = "1.7.9";
+      src = oldAttrs.src.override {
+        inherit version;
+        sha256 = "217a7705adcb573da5bbe1e0f5cab4fa0bd89fd9342c9159121746f593c2d5a4";
+      };
+    });
+
   sphinx-argparse = callPackage ../development/python-modules/sphinx-argparse { };
 
   sphinxcontrib-websupport = callPackage ../development/python-modules/sphinxcontrib-websupport { };
