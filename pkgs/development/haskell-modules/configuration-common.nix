@@ -1223,4 +1223,8 @@ self: super: {
     })];
   });
 
+  # Use latest pandoc despite what LTS says.
+  pandoc = self.pandoc_2_6;
+  pandoc-citeproc = self.pandoc-citeproc_0_16_0_2;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
