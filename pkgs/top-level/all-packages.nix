@@ -11925,6 +11925,8 @@ in
 
   ortp = callPackage ../development/libraries/ortp { };
 
+  openhmd = callPackage ../development/libraries/openhmd { };
+
   openrct2 = callPackage ../games/openrct2 { };
 
   osm-gps-map = callPackage ../development/libraries/osm-gps-map { };
