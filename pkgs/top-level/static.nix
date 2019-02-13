@@ -114,6 +114,10 @@ in {
   boost = super.boost.override {
     enableStatic = true;
     enableShared = false;
+
+    # Don’t use new stdenv for boost because it doesn’t like the
+    # --disable-shared flag
+    stdenv = super.stdenv;
   };
   gmp = super.gmp.override {
     withStatic = true;
@@ -146,6 +150,14 @@ in {
       enableShared = false;
       enableStatic = true;
     };
+  };
+
+  brotli = super.brotli.override {
+    stdenv = super.stdenv;
+  };
+
+  curl = super.curl.override {
+    gssSupport = false;
   };
 
 }
