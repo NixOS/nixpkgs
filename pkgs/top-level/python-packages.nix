@@ -299,7 +299,7 @@ in {
   cdecimal = callPackage ../development/python-modules/cdecimal { };
 
   cfn-flip = callPackage ../development/python-modules/cfn-flip { };
- 
+
   chalice = callPackage ../development/python-modules/chalice { };
 
   cleo = callPackage ../development/python-modules/cleo { };
@@ -4102,6 +4102,8 @@ in {
   spark_parser = callPackage ../development/python-modules/spark_parser { };
 
   sphinx = callPackage ../development/python-modules/sphinx { };
+
+  sphinx_1_7_9 = callPackage ../development/python-modules/sphinx/1_7_9.nix { };
 
   sphinx-argparse = callPackage ../development/python-modules/sphinx-argparse { };
 
