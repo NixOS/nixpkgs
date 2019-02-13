@@ -1,0 +1,16 @@
+diff --git a/include/uapi/linux/binfmts.h b/include/uapi/linux/binfmts.h
+index 4abad03..667179b 100644
+--- a/include/uapi/linux/binfmts.h
++++ b/include/uapi/linux/binfmts.h
+@@ -16,6 +16,7 @@ struct pt_regs;
+ #define MAX_ARG_STRINGS 0x7FFFFFFF
+ 
+ /* sizeof(linux_binprm->buf) */
+-#define BINPRM_BUF_SIZE 128
++/* 1024 bytes ought to be enough for anyone */
++#define BINPRM_BUF_SIZE 1024
+ 
+ #endif /* _UAPI_LINUX_BINFMTS_H */
+-- 
+2.21.0-rc0
+
