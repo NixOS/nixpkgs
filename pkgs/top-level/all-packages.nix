@@ -13988,7 +13988,7 @@ in
   };
 
   rippled = callPackage ../servers/rippled {
-    boost = boost159;
+    boost = boost167;
   };
 
   s6 = skawarePackages.s6;
