@@ -1566,6 +1566,8 @@ in {
 
   pytest-server-fixtures = callPackage ../development/python-modules/pytest-server-fixtures { };
 
+  pytest-services = callPackage ../development/python-modules/pytest-services { };
+
   pytest-shutil = callPackage ../development/python-modules/pytest-shutil { };
 
   pytestcov = callPackage ../development/python-modules/pytest-cov { };
