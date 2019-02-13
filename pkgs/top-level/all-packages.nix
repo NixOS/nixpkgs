@@ -1568,6 +1568,8 @@ in
 
   nwipe = callPackage ../tools/security/nwipe { };
 
+  nx-libs = callPackage ../tools/X11/nx-libs { };
+
   nyx = callPackage ../tools/networking/nyx { };
 
   onboard = callPackage ../applications/misc/onboard { };
@@ -4517,7 +4519,11 @@ in
 
   nylon = callPackage ../tools/networking/nylon { };
 
-  nxproxy = callPackage ../tools/admin/nxproxy { };
+  nxproxy = throw ''
+    nxproxy has been replaced by nx-libs which builds both nxagent and nxproxy.
+    This is because the nx-libs upstream repository can not build nxagent
+    without also building nxproxy. See nixpkgs#55723
+  '';
 
   nzbget = callPackage ../tools/networking/nzbget { };
 
@@ -23136,6 +23142,8 @@ in
   };
 
   x11idle = callPackage ../tools/misc/x11idle {};
+
+  x11docker = callPackage ../applications/virtualization/x11docker { };
 
   x2x = callPackage ../tools/X11/x2x { };
 
