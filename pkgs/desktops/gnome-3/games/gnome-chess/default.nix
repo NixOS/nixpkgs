@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ meson ninja vala pkgconfig gettext itstool libxml2 python3 wrapGAppsHook gobject-introspection ];
-  buildInputs = [ glib gtk3 librsvg gnome3.defaultIconTheme ];
+  buildInputs = [ glib gtk3 librsvg gnome3.adwaita-icon-theme ];
 
   postPatch = ''
     chmod +x meson_post_install.py

@@ -1,5 +1,6 @@
 { stdenv, fetchFromGitHub, fetchpatch, meson, ninja, pkgconfig, vala_0_40, gettext, python3
 , appstream-glib, desktop-file-utils, glibcLocales, wrapGAppsHook
+, gtk3, libgee, libpeas, librest, webkitgtk, gsettings-desktop-schemas
 , curl, glib, gnome3, gst_all_1, json-glib, libnotify, libsecret, sqlite, gumbo
 }:
 
@@ -29,10 +30,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     curl glib json-glib libnotify libsecret sqlite gumbo
-  ] ++ (with gnome3; [
-    gtk libgee libpeas libsoup rest webkitgtk gnome-online-accounts
+    gtk3 libgee libpeas gnome3.libsoup librest webkitgtk gnome3.gnome-online-accounts
     gsettings-desktop-schemas
-  ]) ++ (with gst_all_1; [
+  ] ++ (with gst_all_1; [
     gstreamer gst-plugins-base gst-plugins-good
   ]);
 

@@ -4,6 +4,8 @@
 , gtk3
 , pantheon
 , gnome3
+, gtksourceview
+, libgee
 , cmake
 , libqalculate
 , gobject-introspection
@@ -35,8 +37,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     pantheon.elementary-icon-theme
-    gnome3.gtksourceview
-    gnome3.libgee
+    gtksourceview
+    libgee
     gnome3.libsoup
     pantheon.granite
     gtk3

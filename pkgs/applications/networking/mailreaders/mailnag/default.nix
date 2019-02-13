@@ -21,7 +21,7 @@ in pythonPackages.buildPythonApplication rec {
     gettext gtk3 gdk_pixbuf libnotify gst_all_1.gstreamer
     gst_all_1.gst-plugins-base gst_all_1.gst-plugins-good
     gst_all_1.gst-plugins-bad
-    gnome3.defaultIconTheme
+    gnome3.adwaita-icon-theme
   ] ++ stdenv.lib.optional withGnomeKeyring libgnome-keyring3;
 
   nativeBuildInputs = [

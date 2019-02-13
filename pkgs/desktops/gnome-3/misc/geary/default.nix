@@ -1,7 +1,8 @@
 { stdenv, fetchurl, intltool, pkgconfig, gtk3, vala_0_40, enchant
 , wrapGAppsHook, gdk_pixbuf, cmake, ninja, desktop-file-utils
 , libnotify, libcanberra-gtk3, libsecret, gmime, isocodes
-, gobject-introspection, libpthreadstubs, sqlite, gcr
+, gobject-introspection, libpthreadstubs, sqlite, gcr, libgee
+, gsettings-desktop-schemas, adwaita-icon-theme
 , gnome3, librsvg, gnome-doc-utils, webkitgtk, fetchpatch }:
 
 let
@@ -40,9 +41,9 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ vala_0_40 intltool pkgconfig wrapGAppsHook cmake ninja desktop-file-utils gnome-doc-utils gobject-introspection ];
   buildInputs = [
-    gtk3 enchant webkitgtk libnotify libcanberra-gtk3 gnome3.libgee libsecret gmime sqlite
-    libpthreadstubs gnome3.gsettings-desktop-schemas gcr isocodes
-    gdk_pixbuf librsvg gnome3.defaultIconTheme
+    gtk3 enchant webkitgtk libnotify libcanberra-gtk3 libgee libsecret gmime sqlite
+    libpthreadstubs gsettings-desktop-schemas gcr isocodes
+    gdk_pixbuf librsvg adwaita-icon-theme
   ];
 
   cmakeFlags = [

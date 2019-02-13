@@ -19,7 +19,7 @@ in stdenv.mkDerivation rec {
   ];
   buildInputs = [
     gtk3 glib gnome3.gsettings-desktop-schemas
-    gdk_pixbuf gnome3.defaultIconTheme
+    gdk_pixbuf gnome3.adwaita-icon-theme
     libnotify gnome3.gnome-shell python3Packages.pygobject3
     libsoup gnome3.gnome-settings-daemon gnome3.nautilus
     gnome3.mutter gnome3.gnome-desktop gobject-introspection

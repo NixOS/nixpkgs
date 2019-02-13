@@ -50,7 +50,7 @@ in stdenv.mkDerivation rec {
     gtk3
     gnome3.libpeas
     totem-pl-parser
-    gnome3.defaultIconTheme
+    gnome3.adwaita-icon-theme
 
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base

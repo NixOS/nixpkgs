@@ -9,7 +9,7 @@
 , libX11
 , libXtst
 , wrapGAppsHook
-, defaultIconTheme
+, gnome3
 , hicolor-icon-theme
 }:
 buildPythonApplication rec {
@@ -39,7 +39,7 @@ buildPythonApplication rec {
   ];
 
   buildInputs = [
-    defaultIconTheme
+    gnome3.adwaita-icon-theme
     hicolor-icon-theme
   ];
 

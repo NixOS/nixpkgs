@@ -1,5 +1,5 @@
 { stdenv, fetchurl, substituteAll, openvpn, intltool, libxml2, pkgconfig, file, networkmanager, libsecret
-, withGnome ? true, gnome3, kmod }:
+, gtk3, withGnome ? true, gnome3, kmod }:
 
 let
   pname = "NetworkManager-openvpn";
@@ -20,7 +20,7 @@ in stdenv.mkDerivation rec {
   ];
 
   buildInputs = [ openvpn networkmanager ]
-    ++ stdenv.lib.optionals withGnome [ gnome3.gtk libsecret gnome3.networkmanagerapplet ];
+    ++ stdenv.lib.optionals withGnome [ gtk3 libsecret gnome3.networkmanagerapplet ];
 
   nativeBuildInputs = [ intltool pkgconfig file libxml2 ];
 
