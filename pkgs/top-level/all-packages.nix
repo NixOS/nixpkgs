@@ -13611,6 +13611,8 @@ in
 
   hydron = callPackage ../servers/hydron { };
 
+  icingaweb2 = callPackage ../servers/icingaweb2 { };
+
   ircdHybrid = callPackage ../servers/irc/ircd-hybrid { };
 
   jboss = callPackage ../servers/http/jboss { };
