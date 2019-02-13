@@ -1,27 +1,38 @@
-{ stdenv, fetchurl, pkgconfig, ocaml, findlib, gtk3, gtkspell3, gtksourceview }:
+{ stdenv,lib, fetchFromGitHub, pkgconfig, ocaml, findlib, dune, gtk3, cairo2 }:
 
-if !stdenv.lib.versionAtLeast ocaml.version "4.05"
+if !lib.versionAtLeast ocaml.version "4.05"
 then throw "lablgtk3 is not available for OCaml ${ocaml.version}"
 else
 
+# This package uses the dune.configurator library
+# It thus needs said library to be compiled with this OCaml compiler
+let __dune = dune; in
+let dune = __dune.override { ocamlPackages = { inherit ocaml findlib; }; }; in
+
 stdenv.mkDerivation rec {
-  version = "3.0.beta3";
-  name = "ocaml${ocaml.version}-lablgtk3-${version}";
-  src = fetchurl {
-    url = https://forge.ocamlcore.org/frs/download.php/1775/lablgtk-3.0.beta3.tar.gz;
-    sha256 = "174mwwdz1s91a6ycbas7nc0g87c2l6zqv68zi5ab33yb76l46a6w";
+  version = "3.0.beta4";
+  pname = "lablgtk3";
+  name = "ocaml${ocaml.version}-${pname}-${version}";
+
+  src = fetchFromGitHub {
+    owner = "garrigue";
+    repo = "lablgtk";
+    rev = version;
+    sha256 = "1lppb7k4xb1a35i7klm9mz98hw8l2f8s7rivgzysi1sviqy1ds5d";
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ ocaml findlib gtk3 gtkspell3 gtksourceview ];
+  buildInputs = [ ocaml findlib dune gtk3 ];
+  propagatedBuildInputs = [ cairo2 ];
 
-  buildFlags = "world";
+  buildPhase = "dune build -p ${pname}";
+  inherit (dune) installPhase;
 
   meta = {
     description = "OCaml interface to gtk+-3";
     homepage = "http://lablgtk.forge.ocamlcore.org/";
-    license = stdenv.lib.licenses.lgpl21;
-    maintainers = [ stdenv.lib.maintainers.vbgl ];
+    license = lib.licenses.lgpl21;
+    maintainers = [ lib.maintainers.vbgl ];
     inherit (ocaml.meta) platforms;
   };
 }
