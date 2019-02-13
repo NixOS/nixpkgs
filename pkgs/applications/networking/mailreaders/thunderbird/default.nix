@@ -24,11 +24,11 @@ let
   gcc = if stdenv.cc.isGNU then stdenv.cc.cc else stdenv.cc.cc.gcc;
 in stdenv.mkDerivation rec {
   name = "thunderbird-${version}";
-  version = "60.3.3";
+  version = "60.5.0";
 
   src = fetchurl {
     url = "mirror://mozilla/thunderbird/releases/${version}/source/thunderbird-${version}.source.tar.xz";
-    sha512 = "04m6mgm4nfnq3nfkv0d1al5b7bw95kfcjpyd7aschqi6wnn21g8qacx42ynj89i5l9vc1jx8nz0wy266sy6x5iv9q585c6l6j9gvkrh";
+    sha512 = "39biv0yk08l4kkfrsiqgsdsvpa7ih992jmakjnf2wqzrnbk4pfsrck6bnl038bihs1v25ia8c2vs25sm4wzbxzjr0z82fn31qysv2xi";
   };
 
   # from firefox, but without sound libraries
@@ -49,7 +49,7 @@ in stdenv.mkDerivation rec {
 
   patches = [
     # Remove buildconfig.html to prevent a dependency on clang etc.
-    ../../browsers/firefox/no-buildconfig.patch
+    ./no-buildconfig.patch
   ];
 
   configureFlags =
@@ -100,7 +100,7 @@ in stdenv.mkDerivation rec {
     ''
       cxxLib=$( echo -n ${gcc}/include/c++/* )
       archLib=$cxxLib/$( ${gcc}/bin/gcc -dumpmachine )
-  
+
       test -f layout/style/ServoBindings.toml && sed -i -e '/"-DRUST_BINDGEN"/ a , "-cxx-isystem", "'$cxxLib'", "-isystem", "'$archLib'"' layout/style/ServoBindings.toml
 
       configureScript="$(realpath ./configure)"

@@ -129,8 +129,7 @@ with pkgs;
 
   digitalbitbox = libsForQt5.callPackage ../applications/misc/digitalbitbox { };
 
-  # go 1.9 pin until https://github.com/moby/moby/pull/35739
-  dockerTools = callPackage ../build-support/docker { go = go_1_9; };
+  dockerTools = callPackage ../build-support/docker { };
 
   docker_compose = pythonPackages.docker_compose;
 
@@ -4457,7 +4456,7 @@ with pkgs;
 
   opae = callPackage ../development/libraries/opae { };
 
-  opentracing-cpp = callPackages ../development/libraries/opentracing-cpp { };
+  opentracing-cpp = callPackage ../development/libraries/opentracing-cpp { };
 
   openvswitch = callPackage ../os-specific/linux/openvswitch { };
 
@@ -6980,7 +6979,14 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreServices ApplicationServices;
   };
 
-  julia = julia_06;
+  julia_11 = callPackage ../development/compilers/julia/1.1.nix {
+    gmp = gmp6;
+    openblas = openblasCompat;
+    inherit (darwin.apple_sdk.frameworks) CoreServices ApplicationServices;
+  };
+
+  julia_1 = julia_10;
+  julia = julia_1;
 
   jwasm =  callPackage ../development/compilers/jwasm { };
 
@@ -14119,7 +14125,6 @@ with pkgs;
         # when adding a new linux version
         # kernelPatches.cpu-cgroup-v2."4.11"
         kernelPatches.modinst_arg_list_too_long
-        kernelPatches.raspberry_pi_wifi_fix
       ];
   };
 

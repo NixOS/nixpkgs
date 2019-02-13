@@ -176,7 +176,7 @@ in {
       type = types.attrs;
       default = {
         init_config = {};
-        instances = [ { use-mount = "no"; } ];
+        instances = [ { use_mount = "false"; } ];
       };
     };
 

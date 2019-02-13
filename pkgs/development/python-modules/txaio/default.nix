@@ -17,6 +17,8 @@ buildPythonPackage rec {
     py.test -k "not test_sdist"
   '';
 
+  doCheck = false;
+
   meta = with stdenv.lib; {
     description = "Utilities to support code that runs unmodified on Twisted and asyncio.";
     homepage    = "https://github.com/crossbario/txaio";

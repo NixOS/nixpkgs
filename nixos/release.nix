@@ -357,6 +357,7 @@ in rec {
   tests.nat.firewall = callTest tests/nat.nix { withFirewall = true; };
   tests.nat.firewall-conntrack = callTest tests/nat.nix { withFirewall = true; withConntrackHelpers = true; };
   tests.nat.standalone = callTest tests/nat.nix { withFirewall = false; };
+  tests.ndppd = callTest tests/ndppd.nix { };
   tests.netdata = callTest tests/netdata.nix { };
   tests.networking.networkd = callSubTests tests/networking.nix { networkd = true; };
   tests.networking.scripted = callSubTests tests/networking.nix { networkd = false; };

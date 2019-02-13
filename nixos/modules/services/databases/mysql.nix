@@ -361,7 +361,7 @@ in
             ${optionalString (cfg.ensureDatabases != []) ''
               (
               ${concatMapStrings (database: ''
-                echo "CREATE DATABASE IF NOT EXISTS ${database};"
+                echo "CREATE DATABASE IF NOT EXISTS \`${database}\`;"
               '') cfg.ensureDatabases}
               ) | ${mysql}/bin/mysql -u root -N
             ''}
