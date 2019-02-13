@@ -17399,10 +17399,12 @@ with pkgs;
   libreoffice-unwrapped =callPackage ../applications/office/libreoffice
   (libreoffice-args // {
   });
-  libreoffice-still-unwrapped =callPackage ../applications/office/libreoffice/still.nix
-  (libreoffice-args // {
-      poppler = poppler_0_61;
-  });
+  # vulnerable and EOL; Fresh has already become Still anyway
+  #libreoffice-still-unwrapped =callPackage ../applications/office/libreoffice/still.nix
+  #(libreoffice-args // {
+  #    poppler = poppler_0_61;
+  #});
+  libreoffice-still-unwrapped = libreoffice-unwrapped;
 
   libreoffice-fresh = lowPrio (callPackage ../applications/office/libreoffice/wrapper.nix {
     libreoffice = libreoffice-unwrapped;
