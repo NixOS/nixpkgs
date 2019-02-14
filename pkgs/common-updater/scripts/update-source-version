@@ -96,7 +96,7 @@ fi
 if [ -z "$newHash" ]; then
     nix-build --no-out-link -A "$attr.src" 2>"$attr.fetchlog" >/dev/null || true
     # FIXME: use nix-build --hash here once https://github.com/NixOS/nix/issues/1172 is fixed
-    newHash=$(egrep -v "killing process|dependencies couldn't be built" "$attr.fetchlog" | tail -n2 | sed "s~output path .* has .* hash ‘\(.*\)’ when .* was expected\|fixed-output derivation produced path '.*' with .* hash '\(.*\)' instead of the expected hash '.*'~\1\2~" | head -n1)
+    newHash=$(egrep -v "killing process|dependencies couldn't be built|wanted: " "$attr.fetchlog" | tail -n2 | sed "s~output path .* has .* hash ‘\(.*\)’ when .* was expected\|fixed-output derivation produced path '.*' with .* hash '\(.*\)' instead of the expected hash '.*'\|  got:    .*:\(.*\)~\1\2\3~" | head -n1)
 fi
 
 if [ -z "$newHash" ]; then
