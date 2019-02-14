@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     vala pkgconfig wrapGAppsHook itstool gettext appstream-glib libxml2
     meson ninja python3
   ];
-  buildInputs = [ gtk3 gnome3.defaultIconTheme gdk_pixbuf librsvg clutter clutter-gtk ];
+  buildInputs = [ gtk3 gnome3.adwaita-icon-theme gdk_pixbuf librsvg clutter clutter-gtk ];
 
   passthru = {
     updateScript = gnome3.updateScript {

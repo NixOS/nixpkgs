@@ -24,7 +24,7 @@ python3Packages.buildPythonApplication rec {
   ];
 
   buildInputs =
-    [ libvirt-glib vte dconf gtk-vnc gnome3.defaultIconTheme avahi
+    [ libvirt-glib vte dconf gtk-vnc gnome3.adwaita-icon-theme avahi
       gsettings-desktop-schemas libosinfo gtk3
     ] ++ optional spiceSupport spice-gtk;
 

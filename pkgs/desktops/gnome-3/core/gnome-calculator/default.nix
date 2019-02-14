@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     gtk3 glib libxml2 gtksourceview3 mpfr gmp
-    gnome3.defaultIconTheme
+    gnome3.adwaita-icon-theme
     gnome3.gsettings-desktop-schemas libsoup libmpc
   ];
 

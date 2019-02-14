@@ -1,6 +1,6 @@
 { stdenv, fetchurl, substituteAll, pkgconfig, glib, itstool, libxml2, xorg
 , accountsservice, libX11, gnome3, systemd, autoreconfHook
-, gtk, libcanberra-gtk3, pam, libtool, gobject-introspection, plymouth
+, gtk3, libcanberra-gtk3, pam, libtool, gobject-introspection, plymouth
 , librsvg, coreutils, xwayland, fetchpatch }:
 
 stdenv.mkDerivation rec {
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig libxml2 itstool autoreconfHook libtool gnome3.dconf ];
   buildInputs = [
     glib accountsservice systemd
-    gobject-introspection libX11 gtk
+    gobject-introspection libX11 gtk3
     libcanberra-gtk3 pam plymouth librsvg
   ];
 

@@ -31,7 +31,7 @@
 , libgnome
 , libgnomeui
 , libnotify
-, defaultIconTheme
+, gnome3
 , libGLU_combined
 , nspr
 , nss
@@ -141,7 +141,7 @@ stdenv.mkDerivation {
 
   inherit gtk3;
 
-  buildInputs = [ wrapGAppsHook gtk3 defaultIconTheme ];
+  buildInputs = [ wrapGAppsHook gtk3 gnome3.adwaita-icon-theme ];
 
   # "strip" after "patchelf" may break binaries.
   # See: https://github.com/NixOS/patchelf/issues/10
