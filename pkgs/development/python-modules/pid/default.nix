@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "pid";
-  version = "2.2.1";
+  version = "2.2.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "636cb4743a6e6fb1d89efcfd772e6deb5a058590f3531703595d776507098d7b";
+    sha256 = "daa52ff1aa4f3e21cee0df5d8862be5db96dde6e5abf7613964a626a78eca5f8";
   };
 
   buildInputs = [ nose ];
