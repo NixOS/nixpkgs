@@ -2,12 +2,12 @@
 
 buildPythonPackage rec {
   pname = "billiard";
-  version = "3.5.0.5";
+  version = "3.6.0.0";
   disabled = isPyPy;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "03msmapj3s5zgqk87d646mafz7a01h5bm2wijalgpi0s80ks5na2";
+    sha256 = "756bf323f250db8bf88462cd042c992ba60d8f5e07fc5636c24ba7d6f4261d84";
   };
 
   buildInputs = [ pytest case ];
