@@ -1,8 +1,8 @@
-{ lib, buildPythonPackage, fetchPypi, pytest, case, pytz, amqp }:
+{ lib, buildPythonPackage, fetchPypi, pytest, case, pytz, Pyro4, amqp }:
 
 buildPythonPackage rec {
-    pname = "kombu";
-    version = "4.3.0";
+  pname = "kombu";
+  version = "4.3.0";
 
   src = fetchPypi {
     inherit pname version;
@@ -13,7 +13,7 @@ buildPythonPackage rec {
     substituteInPlace requirements/test.txt --replace "pytest-sugar" ""
   '';
 
-  checkInputs = [ pytest case pytz ];
+  checkInputs = [ pytest case pytz Pyro4 ];
 
   propagatedBuildInputs = [ amqp ];
 
