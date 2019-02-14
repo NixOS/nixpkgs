@@ -16,11 +16,11 @@ buildPythonPackage rec {
 
   name = "${pname}-${version}";
   pname = "Pyro4";
-  version = "4.74";
+  version = "4.75";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "89ed7b12c162e5124f322f992f9506c44f5e1a379926cf01ee73ef810d3bf75f";
+    sha256 = "3897c0254046d4cb412a4d1a8f2f9c2c1c1ae643a24db07d0abdb51acdb8d7b5";
   };
 
   propagatedBuildInputs = [
