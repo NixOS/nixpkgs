@@ -18499,6 +18499,8 @@ in
 
   shogun = callPackage ../applications/science/machine-learning/shogun { };
 
+  slirp4netns = callPackages ../tools/networking/slirp4netns/default.nix { };
+
   smplayer = libsForQt5.callPackage ../applications/video/smplayer { };
 
   smtube = libsForQt5.callPackage ../applications/video/smtube {};
