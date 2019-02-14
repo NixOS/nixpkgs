@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "mozinfo";
-  version = "0.10";
+  version = "1.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "dcd53a1b1793340418e1ae42bf300e3e56d8f12047972378c6f9318b220b1023";
+    sha256 = "50c0ec524b21260749a103db8e8405716e4027b580a18cea1574d2424789bbe2";
   };
 
   disabled = isPy3k;
