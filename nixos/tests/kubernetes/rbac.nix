@@ -96,7 +96,7 @@ let
     test = ''
       $machine1->waitUntilSucceeds("kubectl get node machine1.my.zyx | grep -w Ready");
 
-      $machine1->execute("docker load < ${kubectlImage}");
+      $machine1->waitUntilSucceeds("docker load < ${kubectlImage}");
 
       $machine1->waitUntilSucceeds("kubectl apply -f ${roServiceAccount}");
       $machine1->waitUntilSucceeds("kubectl apply -f ${roRole}");
@@ -119,7 +119,7 @@ let
 
       $machine1->waitUntilSucceeds("kubectl get node machine2.my.zyx | grep -w Ready");
 
-      $machine2->execute("docker load < ${kubectlImage}");
+      $machine2->waitUntilSucceeds("docker load < ${kubectlImage}");
 
       $machine1->waitUntilSucceeds("kubectl apply -f ${roServiceAccount}");
       $machine1->waitUntilSucceeds("kubectl apply -f ${roRole}");

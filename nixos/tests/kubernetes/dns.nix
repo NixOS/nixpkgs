@@ -78,10 +78,10 @@ let
     test = ''
       # prepare machine1 for test
       $machine1->waitUntilSucceeds("kubectl get node machine1.${domain} | grep -w Ready");
-      $machine1->execute("docker load < ${redisImage}");
+      $machine1->waitUntilSucceeds("docker load < ${redisImage}");
       $machine1->waitUntilSucceeds("kubectl create -f ${redisPod}");
       $machine1->waitUntilSucceeds("kubectl create -f ${redisService}");
-      $machine1->execute("docker load < ${probeImage}");
+      $machine1->waitUntilSucceeds("docker load < ${probeImage}");
       $machine1->waitUntilSucceeds("kubectl create -f ${probePod}");
 
       # check if pods are running
@@ -105,10 +105,10 @@ let
 
       # prepare machines for test
       $machine1->waitUntilSucceeds("kubectl get node machine2.${domain} | grep -w Ready");
-      $machine2->execute("docker load < ${redisImage}");
+      $machine2->waitUntilSucceeds("docker load < ${redisImage}");
       $machine1->waitUntilSucceeds("kubectl create -f ${redisPod}");
       $machine1->waitUntilSucceeds("kubectl create -f ${redisService}");
-      $machine2->execute("docker load < ${probeImage}");
+      $machine2->waitUntilSucceeds("docker load < ${probeImage}");
       $machine1->waitUntilSucceeds("kubectl create -f ${probePod}");
 
       # check if pods are running
