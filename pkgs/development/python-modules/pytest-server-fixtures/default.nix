@@ -4,11 +4,11 @@
 
 buildPythonPackage rec {
   pname = "pytest-server-fixtures";
-  version = "1.3.1";
+  version = "1.6.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "902607675ce2ee09bdc72381b4470f79504fc131afdc15174e49a84d031760df";
+    sha256 = "cf4a6aff42f620fe556c175e8f493f086c9690a492059cf23521a10d3ac5db1a";
   };
 
   buildInputs = [ pytest ];
