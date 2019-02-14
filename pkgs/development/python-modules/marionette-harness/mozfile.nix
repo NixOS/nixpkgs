@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "mozfile";
-  version = "1.2";
+  version = "2.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0mz941np62mg0zncy74d8fbq9fafsxjsxlwdsydl92badhrhzc6k";
+    sha256 = "22a43f3bc320c3bda27e54b293c23a51660f4a00ec6959ab70ca6136d702f578";
   };
 
   propagatedBuildInputs = [ ];
