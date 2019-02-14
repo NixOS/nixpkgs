@@ -5030,7 +5030,9 @@ in {
 
   inflect = callPackage ../development/python-modules/inflect { };
 
-  more-itertools = callPackage ../development/python-modules/more-itertools { };
+  more-itertools = if isPy27 then
+    callPackage ../development/python-modules/more-itertools/2.7.nix { }
+  else callPackage ../development/python-modules/more-itertools { };
 
   jaraco_functools = callPackage ../development/python-modules/jaraco_functools { };
 
