@@ -1,5 +1,5 @@
 { stdenv, fetchurl, meson, ninja, pkgconfig, glib, gobject-introspection, cairo
-, libarchive, freetype, libjpeg, libtiff, gnome3
+, libarchive, freetype, libjpeg, libtiff, gnome3, lcms2
 }:
 
 stdenv.mkDerivation rec {
@@ -12,12 +12,11 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ meson ninja pkgconfig gobject-introspection ];
-  buildInputs = [ glib cairo freetype libjpeg libtiff ];
+  buildInputs = [ glib cairo freetype libjpeg libtiff lcms2 ];
   propagatedBuildInputs = [ libarchive ];
 
   mesonFlags = [
     "-Denable-test=false"
-    "-Dwith-liblcms2=false"
   ];
 
   passthru = {
