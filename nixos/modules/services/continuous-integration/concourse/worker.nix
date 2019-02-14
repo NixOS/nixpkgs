@@ -2,6 +2,9 @@
 with lib;
 let
   cfg = config.services.concourse-worker;
+  garden-runc = pkgs.garden-runc.override {
+    extractDir = cfg.asset-dir;
+  };
 in
 {
   options = {
@@ -146,16 +149,30 @@ in
           Specifies the extra environment variables supplied to `concourse web` invocation.
         '';
       };
+
+      garden-bin = mkOption {
+        default = "${garden-runc}/bin/gdn";
+        type = with types; attrsOf str;
+        example = [ "/bin/gdn" ];
+        description = ''
+          Specifies the `gdn` executable location.
+        '';
+      };
+
+      resource-types = mkOption {
+        default = "${pkgs.concourse.resourceDir}";
+        type = with types; attrsOf str;
+        example = "/tmp/assets";
+        description = ''
+          Specifies a directory containing the default set of `concourse` resource types.
+        '';
+      };
     };
   };
 
   #### implementation
   config =
   let
-    garden-runc = pkgs.garden-runc.override {
-      extractDir = cfg.asset-dir;
-    };
-
     tryEvalListArg = name: value:
       if isList value then
         concatMap (value: [ "--${name}" value ]) value
@@ -190,11 +207,9 @@ in
           "tsa-public-key"
           "tsa-worker-private-key"
           "work-dir"
-        ]
-      ++ [
-        "--garden-bin" "${garden-runc}/bin/gdn"
-        "--resource-types" "${pkgs.concourse.resourceDir}"
-      ];
+          "garden-bin"
+          "resource-types"
+        ];
 
     args = concatStringsSep " " (map escapeShellArgs [regularArgs extraArgs extraFlags]);
   in
