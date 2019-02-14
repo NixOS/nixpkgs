@@ -13,6 +13,11 @@ let
       ${concatStringsSep "\n" config.boot.kernelModules}
     '';
 
+  requiredKernelConfigFromPackages = pkgs:
+  let
+    requiredKernelConfigs = map (x: x.meta.requiredKernelConfig or []) pkgs;
+  in
+  foldr (a: b: a ++ b) [] requiredKernelConfigs;
 in
 
 {
@@ -298,7 +303,7 @@ in
       # !!! Should this really be needed?
       (isYes "MODULES")
       (isYes "BINFMT_ELF")
-    ];
+    ] ++ requiredKernelConfigFromPackages config.environment.systemPackages;
 
     # nixpkgs kernels are assumed to have all required features
     assertions = if config.boot.kernelPackages.kernel ? features then [] else

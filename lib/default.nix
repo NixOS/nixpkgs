@@ -52,6 +52,9 @@ let
     # back-compat aliases
     platforms = systems.forMeta;
 
+    # kernel
+    kernel = callLibs ./kernel.nix;
+
     inherit (builtins) add addErrorContext attrNames concatLists
       deepSeq elem elemAt filter genericClosure genList getAttr
       hasAttr head isAttrs isBool isInt isList isString length
