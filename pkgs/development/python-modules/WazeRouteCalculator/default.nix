@@ -3,11 +3,11 @@
 
 buildPythonPackage rec {
   pname = "WazeRouteCalculator";
-  version = "0.6";
+  version = "0.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0zmnw4198a2kvqvsz1i4a3aa20r4afp2lai6fxbpq1ppv120h857";
+    sha256 = "ff6fe5524e18ea150e49cec69acd700275b52a31204a4eea1b11831637a3c0f3";
   };
 
   propagatedBuildInputs = [ requests ];
