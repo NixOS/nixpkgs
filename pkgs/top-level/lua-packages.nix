@@ -290,36 +290,6 @@ with self; {
     };
   };
 
-  luafilesystem = buildLuaPackage rec {
-    version = "1.7.0";
-    name = "filesystem-${version}";
-
-    src = fetchFromGitHub {
-      owner = "keplerproject";
-      repo = "luafilesystem";
-      rev = "v${stdenv.lib.replaceChars ["."] ["_"] version}";
-      sha256 = "0fibrasshlgpa71m9wkpjxwmylnxpcf06rpqbaa0qwvqh94nhwby";
-    };
-
-    preConfigure = ''
-      substituteInPlace config --replace "CC= gcc" "";
-    ''
-    + stdenv.lib.optionalString stdenv.isDarwin ''
-      substituteInPlace config \
-      --replace 'LIB_OPTION= -shared' '###' \
-      --replace '#LIB_OPTION= -bundle' 'LIB_OPTION= -bundle'
-      substituteInPlace Makefile --replace '10.3' '10.5'
-    '';
-
-    meta = with stdenv.lib; {
-      description = "Lua library complementing filesystem-related functions";
-      homepage = "https://github.com/keplerproject/luafilesystem";
-      license = licenses.mit;
-      maintainers = with maintainers; [ flosse ];
-      platforms = platforms.unix;
-    };
-  };
-
   luaossl = buildLuaPackage rec {
     name = "luaossl-${version}";
     version = "20170903";

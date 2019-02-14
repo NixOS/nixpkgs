@@ -476,6 +476,26 @@ luaffi = buildLuarocksPackage {
     };
   };
 };
+luafilesystem = buildLuarocksPackage {
+  pname = "luafilesystem";
+  version = "1.7.0-2";
+
+  src =  fetchurl {
+      url    = https://luarocks.org/luafilesystem-1.7.0-2.src.rock;
+      sha256 = "0xhmd08zklsgpnpjr9rjipah35fbs8jd4v4va36xd8bpwlvx9rk5";
+   };
+  disabled = ( luaOlder "5.1");
+  propagatedBuildInputs = [lua  ];
+  buildType="builtin";
+
+  meta = {
+    homepage = "git://github.com/keplerproject/luafilesystem";
+    description="File System Library for the Lua Programming Language";
+    license = {
+      fullName = "MIT/X11";
+    };
+  };
+};
 luuid = buildLuarocksPackage {
   pname = "luuid";
   version = "20120509-2";

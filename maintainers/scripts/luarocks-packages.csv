@@ -27,6 +27,7 @@ say,
 std__debug,std._debug,
 std_normalize,std.normalize,
 luv,
+luafilesystem,
 luasystem,
 mediator_lua,,http://luarocks.org/manifests/teto
 mpack,,http://luarocks.org/manifests/teto
