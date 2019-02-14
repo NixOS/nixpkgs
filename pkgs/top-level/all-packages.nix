@@ -173,7 +173,7 @@ in
 
   dump1090 = callPackage ../applications/misc/dump1090 { };
 
-  ebook2cw = callPackage ../applications/misc/ebook2cw { };
+  ebook2cw = callPackage ../applications/radio/ebook2cw { };
 
   etBook = callPackage ../data/fonts/et-book { };
 
