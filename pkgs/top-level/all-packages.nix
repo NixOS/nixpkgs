@@ -20849,7 +20849,7 @@ in
 
   openjk = callPackage ../games/openjk { };
 
-  openmw = callPackage ../games/openmw { };
+  openmw = callPackage ../games/openmw { qtbase = qt5.qtbase; };
 
   openmw-tes3mp = libsForQt5.callPackage ../games/openmw/tes3mp.nix { };
 
