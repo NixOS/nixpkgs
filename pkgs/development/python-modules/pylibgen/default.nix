@@ -1,6 +1,7 @@
-{ buildPythonPackage, python, lib, fetchPypi
+{ buildPythonPackage, lib, fetchPypi
 , isPy3k
 , requests
+, pytest
 }:
 
 buildPythonPackage rec {
@@ -16,8 +17,10 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ requests ];
 
-  # It's not using unittest
-  checkPhase = "${python.interpreter} tests/test_pylibgen.py -c 'test_api_endpoints()'";
+  checkInputs = [ pytest ];
+
+  # no tests in PyPI tarball
+  doCheck = false;
 
   meta = {
     description = "Python interface to Library Genesis";
