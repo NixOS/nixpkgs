@@ -4453,6 +4453,8 @@ in {
 
   sorl_thumbnail = callPackage ../development/python-modules/sorl_thumbnail { };
 
+  soupsieve = callPackage ../development/python-modules/soupsieve { };
+
   sphinx_rtd_theme = callPackage ../development/python-modules/sphinx_rtd_theme { };
 
   sphinxcontrib-blockdiag = callPackage ../development/python-modules/sphinxcontrib-blockdiag { };
