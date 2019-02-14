@@ -18948,7 +18948,7 @@ in
   qdirstat = libsForQt5.callPackage ../applications/misc/qdirstat {};
 
   qemu = callPackage ../applications/virtualization/qemu {
-    inherit (darwin.apple_sdk.frameworks) CoreServices Cocoa;
+    inherit (darwin.apple_sdk.frameworks) CoreServices Cocoa Hypervisor;
     inherit (darwin.stubs) rez setfile;
   };
 
