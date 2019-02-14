@@ -8,9 +8,9 @@ let
     };
 
     atom-beta = {
-      version = "1.34.0";
+      version = "1.35.0";
       beta = 0;
-      sha256 = "1xnrr4z55sj46hqr0il26sfs6s3knv60m340cw3rzzic271b3ifw";
+      sha256 = "0gm5k573dq1hhnyw3719f5k1c6rsz872mhzg8q53n89y0g2r5xmw";
     };
   };
 
