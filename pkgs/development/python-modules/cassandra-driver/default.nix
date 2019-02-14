@@ -20,11 +20,11 @@
 
 buildPythonPackage rec {
   pname = "cassandra-driver";
-  version = "3.15.1";
+  version = "3.16.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1xcirbvlj00id8269akhk8gy2sv0mlnbgy3nagi32648jwsrcadg";
+    sha256 = "42bcb167a90da6604081872ef609a327a63273842da81120fc462de031155abe";
   };
 
   buildInputs = [ pkgs.libev cython ];
