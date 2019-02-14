@@ -382,8 +382,10 @@ in
             | xargs -I{} ${pkgs.znapzend}/bin/znapzendzetup delete "{}"
         '' + concatStringsSep "\n" (mapAttrsToList (dataset: config: ''
           echo Importing znapzend zetup ${config} for dataset ${dataset}
-          ${pkgs.znapzend}/bin/znapzendzetup import --write ${dataset} ${config}
-        '') files);
+          ${pkgs.znapzend}/bin/znapzendzetup import --write ${dataset} ${config} &
+        '') files) + ''
+          wait
+        '';
 
         serviceConfig = {
           ExecStart = let
