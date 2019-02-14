@@ -37,9 +37,8 @@ in buildPythonPackage rec {
 
   checkInputs = [ pytest glibcLocales moto ];
 
-  buildInputs = [] ++ optional isDarwin libcxx;
+  buildInputs = [ cython ] ++ optional isDarwin libcxx;
   propagatedBuildInputs = [
-    cython
     dateutil
     scipy
     numexpr
