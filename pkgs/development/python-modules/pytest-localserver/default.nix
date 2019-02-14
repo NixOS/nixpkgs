@@ -17,10 +17,10 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ werkzeug ];
-  buildInputs = [ pytest six requests ];
+  checkInputs = [ pytest six requests ];
 
   checkPhase = ''
-    py.test
+    pytest
   '';
 
   meta = {
