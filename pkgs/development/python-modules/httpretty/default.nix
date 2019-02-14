@@ -30,6 +30,8 @@ buildPythonPackage rec {
   ];
   propagatedBuildInputs = [ six ];
 
+  __darwinAllowLocalNetworking = true;
+
   meta = with stdenv.lib; {
     homepage = "https://falcao.it/HTTPretty/";
     description = "HTTP client request mocking tool";
