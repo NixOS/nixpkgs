@@ -16,6 +16,7 @@
 , lxml
 , html5lib
 , beautifulsoup4
+, hypothesis
 , openpyxl
 , tables
 , xlwt
@@ -35,7 +36,7 @@ in buildPythonPackage rec {
     sha256 = "435821cb2501eabbcee7e83614bd710940dc0cf28b5afbc4bdb816c31cec71af";
   };
 
-  checkInputs = [ pytest glibcLocales moto ];
+  checkInputs = [ pytest glibcLocales moto hypothesis ];
 
   nativeBuildInputs = [ cython ];
   buildInputs = optional isDarwin libcxx;
