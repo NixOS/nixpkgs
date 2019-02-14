@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "astral";
-  version = "1.9.2";
+  version = "1.10.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "179f72a086cee96487e60514bab81e821966953fc2e2f7091500d3d2c314e38b";
+    sha256 = "d2a67243c4503131c856cafb1b1276de52a86e5b8a1d507b7e08bee51cb67bf1";
   };
 
   propagatedBuildInputs = [ pytz requests ];
