@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "pytest-forked";
-  version = "0.2";
+  version = "1.0.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e4500cd0509ec4a26535f7d4112a8cc0f17d3a41c29ffd4eab479d2a55b30805";
+    sha256 = "260d03fbd38d5ce41a657759e8d19bc7c8cfa6d0dcfa36c0bc9742d33bc30742";
   };
 
   buildInputs = [ pytest setuptools_scm ];
