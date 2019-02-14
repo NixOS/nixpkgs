@@ -1,4 +1,4 @@
-{ stdenv, fetchPypi, buildPythonPackage, nose, six, glibcLocales, isPy3k }:
+{ stdenv, fetchPypi, buildPythonPackage, nose, mock, glibcLocales, isPy3k }:
 
 buildPythonPackage rec {
   pname = "parameterized";
@@ -12,8 +12,7 @@ buildPythonPackage rec {
   # Tests require some python3-isms but code works without.
   doCheck = isPy3k;
 
-  checkInputs = [ nose glibcLocales ];
-  propagatedBuildInputs = [ six ];
+  checkInputs = [ nose mock glibcLocales ];
 
   checkPhase = ''
     LC_ALL="en_US.UTF-8" nosetests -v
