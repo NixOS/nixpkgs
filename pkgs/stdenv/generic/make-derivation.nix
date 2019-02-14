@@ -86,7 +86,7 @@ rec {
       doCheck' = doCheck && stdenv.hostPlatform == stdenv.buildPlatform;
       doInstallCheck' = doInstallCheck && stdenv.hostPlatform == stdenv.buildPlatform;
 
-      separateDebugInfo' = separateDebugInfo && stdenv.hostPlatform.isLinux;
+      separateDebugInfo' = separateDebugInfo && stdenv.hostPlatform.isLinux && !(stdenv.hostPlatform.useLLVM or false);
       outputs' = outputs ++ lib.optional separateDebugInfo' "debug";
 
       fixedOutputDrv = attrs ? outputHash;

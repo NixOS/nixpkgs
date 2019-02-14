@@ -26,13 +26,19 @@ let
     # We need to remove whitespace, unfortunately
     # Windows programs use \r but Unix programs use \n
 
+    echo Running native-built program natively
+
     # find expected value natively
     ${getExecutable hostPkgs pkgFun exec} ${args'} \
       | dos2unix > $out/expected
 
+    echo Running cross-built program in emulator
+
     # run emulator to get actual value
     ${emulator} ${getExecutable crossPkgs pkgFun exec} ${args'} \
       | dos2unix > $out/actual
+
+    echo Comparing results...
 
     if [ "$(cat $out/actual)" != "$(cat $out/expected)" ]; then
       echo "${pkgName} did not output expected value:"
