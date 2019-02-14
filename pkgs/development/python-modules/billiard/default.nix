@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPyPy, pytest, case }:
+{ stdenv, buildPythonPackage, fetchPypi, isPyPy, pytest, case, psutil }:
 
 buildPythonPackage rec {
   pname = "billiard";
@@ -10,7 +10,7 @@ buildPythonPackage rec {
     sha256 = "756bf323f250db8bf88462cd042c992ba60d8f5e07fc5636c24ba7d6f4261d84";
   };
 
-  buildInputs = [ pytest case ];
+  checkInputs = [ pytest case psutil ];
 
   meta = with stdenv.lib; {
     homepage = https://github.com/celery/billiard;
