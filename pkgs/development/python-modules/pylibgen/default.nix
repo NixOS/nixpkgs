@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "pylibgen";
-  version = "1.3.1";
+  version = "2.0.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1rviqi3rf62b43cabdy8c2cdznjv034mp0qrfrzvkih4jlkhyfrh";
+    sha256 = "3c2a82b47cb7225dcf4ecea27081b0185ae4d195499140cdbb9597d914e1ae9e";
   };
 
   disabled = !isPy3k;
