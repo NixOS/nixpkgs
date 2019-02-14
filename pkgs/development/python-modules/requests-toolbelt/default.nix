@@ -30,5 +30,6 @@ buildPythonPackage rec {
     description = "A toolbelt of useful classes and functions to be used with python-requests";
     homepage = http://toolbelt.rtfd.org;
     maintainers = with lib.maintainers; [ jgeerds ];
+    license = lib.licenses.asl20;
   };
 }
