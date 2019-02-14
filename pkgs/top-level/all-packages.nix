@@ -9345,6 +9345,8 @@ in
 
   aws-c-common = callPackage ../development/libraries/aws-c-common { };
 
+  aws-checksums = callPackage ../development/libraries/aws-checksums { };
+
   aws-sdk-cpp = callPackage ../development/libraries/aws-sdk-cpp {
     inherit (darwin.apple_sdk.frameworks) CoreAudio AudioToolbox;
   };
