@@ -87,7 +87,7 @@ with self; {
   inherit toLuaModule lua-setup-hook;
   inherit buildLuarocksPackage buildLuaApplication;
   inherit requiredLuaModules luaOlder luaAtLeast
-    isLua51 isLua52 isLuaJIT lua callPackage;
+    isLua51 isLua52 isLua53 isLuaJIT lua callPackage;
 
   # wraps programs in $out/bin with valid LUA_PATH/LUA_CPATH
   wrapLua = callPackage ../development/interpreters/lua-5/wrap-lua.nix {
