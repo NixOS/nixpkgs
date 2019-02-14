@@ -4,11 +4,11 @@
 
 buildPythonPackage rec {
   pname = "alerta";
-  version = "6.3.1";
+  version = "6.5.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "08l366g0arpd23bm7bzk0hpmfd3z6brb8p24rjwkb3gvafhk7cz9";
+    sha256 = "f9f0f8f800798fae83c05dd52dc2f06bd77fb318c784c4b44e3acfba81338881";
   };
 
   buildInputs = [ six click requests pytz tabulate ];
