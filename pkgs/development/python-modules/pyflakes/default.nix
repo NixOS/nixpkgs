@@ -9,10 +9,7 @@ buildPythonPackage rec {
     sha256 = "5e8c00e30c464c99e0b501dc160b13a14af7f27d4dffb529c556e30a159e231d";
   };
 
-  buildInputs = [ unittest2 ];
-
-  # https://github.com/PyCQA/pyflakes/issues/386
-  doCheck = false;
+  checkInputs = [ unittest2 ];
 
   meta = with stdenv.lib; {
     homepage = https://launchpad.net/pyflakes;
