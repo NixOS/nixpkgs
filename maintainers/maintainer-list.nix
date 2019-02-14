@@ -1535,6 +1535,11 @@
     github = "flokli";
     name = "Florian Klink";
   };
+  FlorianFranzen = {
+    email = "Florian.Franzen@gmail.com";
+    github = "FlorianFranzen";
+    name = "Florian Franzen";
+  };
   florianjacob = {
     email = "projects+nixos@florianjacob.de";
     github = "florianjacob";
