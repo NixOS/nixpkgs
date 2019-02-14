@@ -13995,6 +13995,12 @@ in
     boost = boost167;
   };
 
+  rippled-validator-keys-tool = callPackage ../servers/rippled/validator-keys-tool.nix {
+    boost = boost167.override {
+      enableStatic = true;
+    };
+  };
+
   s6 = skawarePackages.s6;
 
   s6-rc = skawarePackages.s6-rc;
