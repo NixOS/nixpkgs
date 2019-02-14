@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "mozversion";
-  version = "1.5";
+  version = "2.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e9b11e4a46bf7a4a11469ea4589c75f3ba50b34b7801e7edf1a09147af8bf70f";
+    sha256 = "65f41d7dc14002f83d8f147c82ca34f7213ad07065d250939daaeeb3787dc0fa";
   };
 
   propagatedBuildInputs = [ mozlog mozdevice ];
