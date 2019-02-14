@@ -14562,55 +14562,61 @@ in
   };
 
   linux_4_9 = callPackage ../os-specific/linux/kernel/linux-4.9.nix {
-    kernelPatches =
-      [ kernelPatches.bridge_stp_helper
-        kernelPatches.cpu-cgroup-v2."4.9"
-        kernelPatches.modinst_arg_list_too_long
-      ];
+    kernelPatches = [
+      kernelPatches.bridge_stp_helper
+      kernelPatches.cpu-cgroup-v2."4.9"
+      kernelPatches.modinst_arg_list_too_long
+    ];
   };
 
   linux_4_14 = callPackage ../os-specific/linux/kernel/linux-4.14.nix {
-    kernelPatches =
-      [ kernelPatches.bridge_stp_helper
-        # See pkgs/os-specific/linux/kernel/cpu-cgroup-v2-patches/README.md
-        # when adding a new linux version
-        kernelPatches.cpu-cgroup-v2."4.11"
-        kernelPatches.modinst_arg_list_too_long
-      ];
+    kernelPatches = [
+      kernelPatches.bridge_stp_helper
+      # See pkgs/os-specific/linux/kernel/cpu-cgroup-v2-patches/README.md
+      # when adding a new linux version
+      kernelPatches.cpu-cgroup-v2."4.11"
+      kernelPatches.modinst_arg_list_too_long
+      kernelPatches.interpreter-trunc
+    ];
   };
 
   linux_4_19 = callPackage ../os-specific/linux/kernel/linux-4.19.nix {
-    kernelPatches =
-      [ kernelPatches.bridge_stp_helper
-        kernelPatches.modinst_arg_list_too_long
-      ];
+    kernelPatches = [
+      kernelPatches.bridge_stp_helper
+      kernelPatches.modinst_arg_list_too_long
+      kernelPatches.interpreter-trunc
+    ];
   };
 
   linux_4_20 = callPackage ../os-specific/linux/kernel/linux-4.20.nix {
-    kernelPatches =
-      [ kernelPatches.bridge_stp_helper
-        kernelPatches.modinst_arg_list_too_long
-      ];
+    kernelPatches = [
+      kernelPatches.bridge_stp_helper
+      kernelPatches.modinst_arg_list_too_long
+      kernelPatches.interpreter-trunc
+    ];
   };
 
   linux_testing = callPackage ../os-specific/linux/kernel/linux-testing.nix {
     kernelPatches = [
       kernelPatches.bridge_stp_helper
       kernelPatches.modinst_arg_list_too_long
+      kernelPatches.interpreter-trunc
     ];
   };
 
   linux_testing_bcachefs = callPackage ../os-specific/linux/kernel/linux-testing-bcachefs.nix {
-    kernelPatches =
-      [ kernelPatches.bridge_stp_helper
-        kernelPatches.modinst_arg_list_too_long
-      ];
+    kernelPatches = [
+      kernelPatches.bridge_stp_helper
+      kernelPatches.modinst_arg_list_too_long
+      kernelPatches.interpreter-trunc
+    ];
   };
 
   linux_hardkernel_4_14 = callPackage ../os-specific/linux/kernel/linux-hardkernel-4.14.nix {
     kernelPatches = [
       kernelPatches.bridge_stp_helper
       kernelPatches.modinst_arg_list_too_long
+      kernelPatches.interpreter-trunc
     ];
   };
 
