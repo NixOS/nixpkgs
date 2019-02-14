@@ -4,7 +4,7 @@ i3.overrideAttrs (oldAttrs : rec {
 
   name = "i3-gaps-${version}";
   version = "4.16.1";
-  releaseDate = "2018-03-13";
+  releaseDate = "2019-01-27";
 
   src = fetchurl {
     url = "https://github.com/Airblader/i3/archive/${version}.tar.gz";
