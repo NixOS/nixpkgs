@@ -11,11 +11,11 @@
 
 buildPythonPackage rec {
   pname = "jupyter_console";
-  version = "5.2.0";
+  version = "6.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "545dedd3aaaa355148093c5609f0229aeb121b4852995c2accfa64fe3e0e55cd";
+    sha256 = "308ce876354924fb6c540b41d5d6d08acfc946984bf0c97777c1ddcb42e0b2f5";
   };
 
   checkInputs = [ nose ];
