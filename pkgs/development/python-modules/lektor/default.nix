@@ -1,6 +1,6 @@
 { stdenv
 , buildPythonPackage
-, fetchgit
+, fetchFromGitHub
 , click
 , watchdog
 , exifread
@@ -19,9 +19,10 @@ buildPythonPackage rec {
   pname = "lektor";
   version = "2.3";
 
-  src = fetchgit {
-    url = "https://github.com/lektor/lektor";
-    rev = "refs/tags/${version}";
+  src = fetchFromGitHub {
+    owner = "lektor";
+    repo = "lektor";
+    rev = "${version}";
     sha256 = "1n0ylh1sbpvi9li3g6a7j7m28njfibn10y6s2gayjxwm6fpphqxy";
   };
 
