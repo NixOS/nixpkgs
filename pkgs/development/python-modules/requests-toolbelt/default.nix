@@ -20,7 +20,10 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ requests ];
 
   checkPhase = ''
-    py.test tests
+    # disabled tests access the network
+    py.test tests -k "not test_no_content_length_header \
+                  and not test_read_file \
+                  and not test_reads_file_from_url_wrapper"
   '';
 
   meta = {
