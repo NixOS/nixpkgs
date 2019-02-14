@@ -18961,6 +18961,8 @@ in
 
   qjackctl = libsForQt5.callPackage ../applications/audio/qjackctl { };
 
+  qjournalctl = libsForQt5.callPackage ../applications/misc/qjournalctl { };
+
   qmapshack = libsForQt5.callPackage ../applications/misc/qmapshack { };
 
   qmediathekview = libsForQt5.callPackage ../applications/video/qmediathekview { };
