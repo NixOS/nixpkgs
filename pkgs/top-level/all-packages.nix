@@ -19685,7 +19685,8 @@ in
 
   toxiproxy = callPackage ../development/tools/toxiproxy { };
 
-  tqsl = callPackage ../applications/misc/tqsl { };
+  tqsl = callPackage ../applications/radio/tqsl { };
+  trustedqsl = tqsl; # Alias added 2019-02-10
 
   transcode = callPackage ../applications/audio/transcode { };
 
