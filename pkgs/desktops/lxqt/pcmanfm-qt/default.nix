@@ -1,34 +1,32 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, lxqt-build-tools, qt5, libfm-qt, menu-cache, lxmenu-data }:
+{ stdenv, fetchFromGitHub, cmake, pkgconfig, lxqt, qtbase, qttools,
+  qtx11extras, libfm-qt, menu-cache, lxmenu-data }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "pcmanfm-qt";
-  version = "0.13.0";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "0xnhdxx45fmbi5dqic3j2f7yq01s0xysimafj5zqs0a29zw3i4m0";
+    sha256 = "0hf4qyn12mpr6rrla9mf6ka5gb4y36amk7d14ayr7yka1r16p8lz";
   };
 
   nativeBuildInputs = [
     cmake
     pkgconfig
-    lxqt-build-tools
+    lxqt.lxqt-build-tools
   ];
 
   buildInputs = [
-    qt5.qtbase
-    qt5.qttools
-    qt5.qtx11extras
+    qtbase
+    qttools
+    qtx11extras
     libfm-qt
     libfm-qt
     menu-cache
     lxmenu-data
   ];
-
-  cmakeFlags = [ "-DPULL_TRANSLATIONS=NO" ];
 
   postPatch = ''
     for dir in autostart config; do

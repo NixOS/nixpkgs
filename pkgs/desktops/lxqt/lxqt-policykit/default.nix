@@ -5,15 +5,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "lxqt-policykit";
-  version = "0.13.0";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "1m9v4hl1hyd8rmlh6z2zy6287qfnavsm9khl526jf8f7bjgpifvd";
+    sha256 = "05k39819nsdyg2pp1vk6g2hdpxqp78h6bhb0hp5rclf9ap5fpvvc";
   };
 
   nativeBuildInputs = [
@@ -34,11 +33,12 @@ stdenv.mkDerivation rec {
     pcre
   ];
 
-  cmakeFlags = [ "-DPULL_TRANSLATIONS=NO" ];
-
   postPatch = ''
     substituteInPlace autostart/CMakeLists.txt \
       --replace "DESTINATION \"\''${LXQT_ETC_XDG_DIR}" "DESTINATION \"etc/xdg"
+
+    substituteInPlace CMakeLists.txt \
+      --replace "\''${LXQT_TRANSLATIONS_DIR}" "''${out}/share/lxqt/translations"
   '';
 
   meta = with stdenv.lib; {
