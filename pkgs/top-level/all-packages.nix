@@ -1726,6 +1726,8 @@ in
 
   bats = callPackage ../development/interpreters/bats { };
 
+  bbe = callPackage ../tools/misc/bbe { };
+
   bdsync = callPackage ../tools/backup/bdsync { };
 
   beanstalkd = callPackage ../servers/beanstalkd { };
