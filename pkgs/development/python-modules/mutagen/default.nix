@@ -10,11 +10,11 @@
 
 buildPythonPackage rec {
   pname = "mutagen";
-  version = "1.41.1";
+  version = "1.42.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "2ea9c900a05fa7f5f4c5bd9fc1475d7d576532e13b2f79b694452b997ff67200";
+    sha256 = "bb61e2456f59a9a4a259fbc08def6d01ba45a42da8eeaa97d00633b0ec5de71c";
   };
 
   checkInputs = [
