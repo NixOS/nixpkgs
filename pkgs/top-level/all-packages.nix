@@ -12837,6 +12837,8 @@ in
 
   totem-pl-parser = callPackage ../development/libraries/totem-pl-parser { };
 
+  tpm2-tss = callPackage ../development/libraries/tpm2-tss { };
+
   tremor = callPackage ../development/libraries/tremor { };
 
   twolame = callPackage ../development/libraries/twolame { };
