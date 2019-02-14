@@ -9,7 +9,7 @@ pythonPackages.buildPythonApplication rec {
     sha256 = "15c32976sgb5clixngi6z1fk5h02v1kn1a89h8rkbkvyhfnjgg8m";
   };
 
-  buildInputs = [ ronn ];
+  nativeBuildInputs = [ ronn ];
 
   checkInputs = with pythonPackages; [
     freezegun
