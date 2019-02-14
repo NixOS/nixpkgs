@@ -9,11 +9,11 @@
 
 buildPythonPackage rec {
   pname = "entrypoints";
-  version = "0.2.3";
+  version = "0.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d2d587dde06f99545fb13a383d2cd336a8ff1f359c5839ce3a64c917d10c029f";
+    sha256 = "c70dd71abe5a8c85e55e12c19bd91ccfeec11a6e99044204511f9ed547d48451";
   };
 
   checkInputs = [ pytest ];
