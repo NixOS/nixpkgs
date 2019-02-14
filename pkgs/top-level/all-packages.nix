@@ -9345,6 +9345,8 @@ in
 
   aws-c-common = callPackage ../development/libraries/aws-c-common { };
 
+  aws-c-event-stream = callPackage ../development/libraries/aws-c-event-stream { };
+
   aws-checksums = callPackage ../development/libraries/aws-checksums { };
 
   aws-sdk-cpp = callPackage ../development/libraries/aws-sdk-cpp {
