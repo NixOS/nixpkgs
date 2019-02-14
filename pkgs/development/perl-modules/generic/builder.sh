@@ -3,30 +3,30 @@ source $stdenv/setup
 PERL5LIB="$PERL5LIB${PERL5LIB:+:}$out/lib/perl5/site_perl"
 
 perlFlags=
+perl_includes=
 for i in $(IFS=:; echo $PERL5LIB); do
     perlFlags="$perlFlags -I$i"
+    perl_includes+="${perl_includes:+, }'$i'"
 done
 
 oldPreConfigure="$preConfigure"
 preConfigure() {
-
     eval "$oldPreConfigure"
-
-    find . | while read fn; do
-        if test -f "$fn"; then
-            first=$(dd if="$fn" count=2 bs=1 2> /dev/null)
-            if test "$first" = "#!"; then
-                echo "patching $fn..."
-                sed -i "$fn" -e "s|^#\!\(.*[ /]perl.*\)$|#\!\1$perlFlags|"
-            fi
-        fi
-    done
 
     perl Makefile.PL PREFIX=$out INSTALLDIRS=site $makeMakerFlags PERL=$(type -P perl) FULLPERL=\"$perl/bin/perl\"
 }
 
-
 postFixup() {
+    find $out | while read fn; do
+        if test -f "$fn"; then
+            first=$(dd if="$fn" count=2 bs=1 2> /dev/null)
+            if test "$first" = "#!"; then
+                echo "patching $fn..."
+                sed -i "$fn" -e "s|^#\!\(.*[ /]perl.*\)$|#\!\1\nuse lib $perl_includes;|"
+            fi
+        fi
+    done
+
     # If a user installs a Perl package, she probably also wants its
     # dependencies in the user environment (since Perl modules don't
     # have something like an RPATH, so the only way to find the
