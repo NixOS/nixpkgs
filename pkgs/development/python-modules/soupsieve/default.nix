@@ -3,6 +3,8 @@
 , fetchPypi
 , pytest
 , beautifulsoup4
+, isPy3k
+, backports_functools_lru_cache
 }:
 
 buildPythonPackage rec {
@@ -19,6 +21,8 @@ buildPythonPackage rec {
   '';
 
   checkInputs = [ pytest beautifulsoup4 ];
+
+  propagatedBuildInputs = lib.optional (!isPy3k) backports_functools_lru_cache;
 
   # Circular test dependency on beautifulsoup4
   doCheck = false;
