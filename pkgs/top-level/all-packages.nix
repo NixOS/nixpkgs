@@ -5439,6 +5439,8 @@ in
 
   slimrat = callPackage ../tools/networking/slimrat { };
 
+  slirp4netns = callPackage ../tools/networking/slirp4netns/default.nix { };
+
   slsnif = callPackage ../tools/misc/slsnif { };
 
   slstatus = callPackage ../applications/misc/slstatus {
@@ -18498,8 +18500,6 @@ in
   };
 
   shogun = callPackage ../applications/science/machine-learning/shogun { };
-
-  slirp4netns = callPackages ../tools/networking/slirp4netns/default.nix { };
 
   smplayer = libsForQt5.callPackage ../applications/video/smplayer { };
 
