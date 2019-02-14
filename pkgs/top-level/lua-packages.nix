@@ -167,43 +167,6 @@ with self; {
     };
   };
 
-  luabitop = buildLuaPackage rec {
-    version = "1.0.2";
-    name = "bitop-${version}";
-
-    src = fetchurl {
-      url = "http://bitop.luajit.org/download/LuaBitOp-${version}.tar.gz";
-      sha256 = "16fffbrgfcw40kskh2bn9q7m3gajffwd2f35rafynlnd7llwj1qj";
-    };
-
-    buildFlags = stdenv.lib.optionalString stdenv.isDarwin "macosx";
-
-    disabled = isLua53;
-
-    postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
-      substituteInPlace Makefile --replace 10.4 10.5
-    '';
-
-    preBuild = ''
-      makeFlagsArray=(
-        ${stdenv.lib.optionalString stdenv.cc.isClang "CC=$CC"}
-        INCLUDES="-I${lua}/include"
-        LUA="${lua}/bin/lua");
-    '';
-
-    installPhase = ''
-      mkdir -p $out/lib/lua/${lua.luaversion}
-      install -p bit.so $out/lib/lua/${lua.luaversion}
-    '';
-
-    meta = with stdenv.lib; {
-      description = "C extension module for Lua which adds bitwise operations on numbers";
-      homepage = "http://bitop.luajit.org";
-      license = licenses.mit;
-      maintainers = with maintainers; [ ];
-    };
-  };
-
   http = buildLuaPackage rec {
     version = "0.2";
     name = "http-${version}";
@@ -236,36 +199,6 @@ with self; {
     };
   };
 
-  luacheck = buildLuaPackage rec {
-    pname = "luacheck";
-    version = "0.20.0";
-    name = "${pname}-${version}";
-
-    src = fetchFromGitHub {
-      owner = "mpeterv";
-      repo = "luacheck";
-      rev = "${version}";
-      sha256 = "0ahfkmqcjhlb7r99bswy1sly6d7p4pyw5f4x4fxnxzjhbq0c5qcs";
-    };
-
-    propagatedBuildInputs = [ lua ];
-
-    # No Makefile.
-    dontBuild = true;
-
-    installPhase = ''
-      ${lua}/bin/lua install.lua $out
-    '';
-
-    meta = with stdenv.lib; {
-      description = "A tool for linting and static analysis of Lua code";
-      homepage = https://github.com/mpeterv/luacheck;
-      license = licenses.mit;
-      maintainers = with maintainers; [ vyp ];
-      platforms = platforms.unix;
-    };
-  };
-
   luacyrussasl = buildLuaPackage rec {
     version = "1.1.0";
     name = "lua-cyrussasl-${version}";
@@ -292,37 +225,6 @@ with self; {
       homepage = "https://github.com/JorjBauer/lua-cyrussasl";
       description = "Cyrus SASL library for Lua 5.1+";
       license = licenses.bsd3;
-    };
-  };
-
-  luaevent = buildLuaPackage rec {
-    version = "0.4.4";
-    name = "luaevent-${version}";
-
-    src = fetchFromGitHub {
-      owner = "harningt";
-      repo = "luaevent";
-      rev = "v${version}";
-      sha256 = "1krzxr0jkv3gmhpckp02byhdd9s5dd0hpyqc8irc8i79dd8x0p53";
-    };
-
-    preBuild = ''
-      makeFlagsArray=(
-        INSTALL_DIR_LUA="$out/share/lua/${lua.luaversion}"
-        INSTALL_DIR_BIN="$out/lib/lua/${lua.luaversion}"
-        LUA_INC_DIR="${lua}/include"
-      );
-    '';
-
-    buildInputs = [ libevent ];
-
-    propagatedBuildInputs = [ luasocket ];
-
-    meta = with stdenv.lib; {
-      homepage = http://luaforge.net/projects/luaevent/;
-      description = "Binding of libevent to Lua";
-      license = licenses.mit;
-      maintainers = with maintainers; [ koral ];
     };
   };
 
@@ -478,60 +380,6 @@ with self; {
       homepage = "https://github.com/luaposix/luaposix";
       license = licenses.mit;
       maintainers = with maintainers; [ vyp lblasc ];
-      platforms = platforms.unix;
-    };
-  };
-
-  lpty = buildLuaPackage rec {
-    version = "1.2.1";
-    name = "lpty-${version}";
-
-    src = fetchurl {
-      url = "http://www.tset.de/downloads/lpty-${version}-1.tar.gz";
-      sha256 = "0rgvbpymcgdkzdwfag607xfscs9xyqxg0dj0qr5fv906mi183gs6";
-    };
-
-    preBuild = ''
-      makeFlagsArray=(
-        INST_LIBDIR="$out/lib/lua/${lua.luaversion}"
-        INST_LUADIR="$out/share/lua/${lua.luaversion}"
-        LUA_BINDIR="${lua}/bin"
-        LUA_INCDIR="-I${lua}/include"
-        LUA_LIBDIR="-L${lua}/lib"
-        );
-    '';
-
-    meta = with stdenv.lib; {
-      description = "PTY control for Lua";
-      homepage = "http://www.tset.de/lpty";
-      license = licenses.mit;
-      maintainers = with maintainers; [ vyp ];
-      platforms = platforms.linux;
-    };
-  };
-
-  lua-iconv = buildLuaPackage rec {
-    name = "lua-iconv-${version}";
-    version = "7";
-
-    src = fetchFromGitHub {
-      owner = "ittner";
-      repo = "lua-iconv";
-      rev = name;
-      sha256 = "0rd76966qlxfp8ypkyrbif76nxnm1acclqwfs45wz3972jsk654i";
-    };
-
-    preBuild = ''
-      makeFlagsArray=(
-        INSTALL_PATH="$out/lib/lua/${lua.luaversion}"
-      );
-    '';
-
-    meta = with stdenv.lib; {
-      description = "Lua bindings for POSIX iconv";
-      homepage = "https://ittner.github.io/lua-iconv/";
-      license = licenses.mit;
-      maintainers = with maintainers; [ richardipsum ];
       platforms = platforms.unix;
     };
   };

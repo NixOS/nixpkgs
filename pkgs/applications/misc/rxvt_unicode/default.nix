@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, makeDesktopItem, perlSupport, libX11, libXt, libXft,
+{ stdenv, fetchurl, makeDesktopItem, perlSupport ? true, libX11, libXt, libXft,
   ncurses, perl, fontconfig, freetype, pkgconfig, libXrender,
-  gdkPixbufSupport, gdk_pixbuf, unicode3Support }:
+  gdkPixbufSupport ? true, gdk_pixbuf, unicode3Support ? true }:
 
 let
   pname = "rxvt-unicode";

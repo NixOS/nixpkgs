@@ -1,22 +1,17 @@
 { stdenv, fetchsvn, lame, libvorbis }:
 
 stdenv.mkDerivation rec {
-
-  name = "ebook2cw-${version}";
+  pname = "ebook2cw";
   version = "0.8.2";
 
   src = fetchsvn {
-    url = "svn://svn.fkurz.net/ebook2cw/tags/${name}";
+    url = "svn://svn.fkurz.net/ebook2cw/tags/${pname}-${version}";
     sha256 = "1mvp3nz3k76v757792n9b7fcm5jm3jcwarl1k7cila9fi0c2rsiw";
   };
 
   buildInputs = [ lame libvorbis ];
 
   patches = [ ./configfile.patch ];
-
-  postPatch = ''
-    substituteInPlace Makefile --replace gcc cc
-  '';
 
   makeFlags = [ "DESTDIR=$(out)" ];
 
@@ -27,5 +22,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.all;
     maintainers = with maintainers; [ earldouglas ];
   };
-
 }

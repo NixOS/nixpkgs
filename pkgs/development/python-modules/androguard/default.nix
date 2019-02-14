@@ -2,12 +2,12 @@
   asn1crypto, click, pydot, ipython, pyqt5, pyperclip }:
 
 buildPythonPackage rec {
-  version = "3.3.3";
+  version = "3.3.4";
   pname = "androguard";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1zlmn3byh2whg7k2xmcd7yy43lcawhryjnzcxr9bhn54709b6iyd";
+    sha256 = "1hinfbvha7f1py1jnvxih7lx0p4z2nyaiq9bvg8v3bykwrd9jff2";
   };
 
   propagatedBuildInputs = [
