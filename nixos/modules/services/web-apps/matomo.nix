@@ -49,12 +49,11 @@ in {
         type = types.nullOr types.str;
         default = null;
         example = "lighttpd";
-        # TODO: piwik.php might get renamed to matomo.php in future releases
         description = ''
           Name of the web server user that forwards requests to the ${phpSocket} fastcgi socket for Matomo if the nginx
           option is not used. Either this option or the nginx option is mandatory.
           If you want to use another webserver than nginx, you need to set this to that server's user
-          and pass fastcgi requests to `index.php` and `piwik.php` to this socket.
+          and pass fastcgi requests to `index.php`, `matomo.php` and `piwik.php` (legacy name) to this socket.
         '';
       };
 
@@ -265,8 +264,11 @@ in {
         locations."= /index.php".extraConfig = ''
           fastcgi_pass unix:${phpSocket};
         '';
-        # TODO: might get renamed to matomo.php in future versions
-        # allow piwik.php for tracking
+        # allow matomo.php for tracking
+        locations."= /matomo.php".extraConfig = ''
+          fastcgi_pass unix:${phpSocket};
+        '';
+        # allow piwik.php for tracking (deprecated name)
         locations."= /piwik.php".extraConfig = ''
           fastcgi_pass unix:${phpSocket};
         '';
@@ -287,8 +289,11 @@ in {
         locations."= /robots.txt".extraConfig = ''
           return 200 "User-agent: *\nDisallow: /\n";
         '';
-        # TODO: might get renamed to matomo.js in future versions
-        # let browsers cache piwik.js
+        # let browsers cache matomo.js
+        locations."= /matomo.js".extraConfig = ''
+          expires 1M;
+        '';
+        # let browsers cache piwik.js (deprecated name)
         locations."= /piwik.js".extraConfig = ''
           expires 1M;
         '';
