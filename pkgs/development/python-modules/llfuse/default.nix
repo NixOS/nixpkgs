@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Python bindings for the low-level FUSE API";
-    homepage = https://code.google.com/p/python-llfuse/;
+    homepage = https://github.com/python-llfuse/python-llfuse;
     license = licenses.lgpl2Plus;
     platforms = platforms.unix;
     maintainers = with maintainers; [ bjornfor ];
