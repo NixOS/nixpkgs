@@ -1,5 +1,5 @@
 { stdenv, buildPythonPackage, fetchPypi
-, fftw, fftwFloat, fftwLongDouble, numpy, scipy }:
+, fftw, fftwFloat, fftwLongDouble, numpy, scipy, cython, dask }:
 
 buildPythonPackage rec {
   version = "0.11.1";
@@ -12,7 +12,7 @@ buildPythonPackage rec {
 
   buildInputs = [ fftw fftwFloat fftwLongDouble];
 
-  propagatedBuildInputs = [ numpy scipy ];
+  propagatedBuildInputs = [ numpy scipy cython dask ];
 
   # Tests cannot import pyfftw. pyfftw works fine though.
   doCheck = false;
