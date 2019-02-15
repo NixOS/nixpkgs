@@ -2136,7 +2136,9 @@ in {
 
   python-axolotl-curve25519 = callPackage ../development/python-modules/python-axolotl-curve25519 { };
 
-  pythonix = toPythonModule (callPackage ../development/python-modules/pythonix { });
+  pythonix = callPackage ../development/python-modules/pythonix {
+    inherit (pkgs) pkgconfig;
+  };
 
   pyramid = callPackage ../development/python-modules/pyramid { };
 
