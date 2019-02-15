@@ -1,5 +1,5 @@
 { stdenv, buildPythonPackage, fetchPypi
-, pytest, cmdline, pytestcov, coverage, setuptools-git, mock, pathpy, execnet
+, pytest_3, cmdline, pytestcov, coverage, setuptools-git, mock, pathpy, execnet
 , contextlib2, termcolor }:
 
 buildPythonPackage rec {
@@ -11,8 +11,9 @@ buildPythonPackage rec {
     sha256 = "efe615b7709637ec8828abebee7fc2ad033ae0f1fc54145f769a8b5e8cc3b4ca";
   };
 
-  buildInputs = [ cmdline pytest ];
+  checkInputs = [ cmdline pytest_3 ];
   propagatedBuildInputs = [ pytestcov coverage setuptools-git mock pathpy execnet contextlib2 termcolor ];
+  nativeBuildInputs = [ pytest_3 ];
 
   checkPhase = ''
     py.test

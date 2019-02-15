@@ -1,5 +1,5 @@
 { stdenv, buildPythonPackage, fetchPypi
-, pytest, pytestcov, mock, cmdline, pytest-fixture-config, pytest-shutil }:
+, pytest_3, pytestcov, mock, cmdline, pytest-fixture-config, pytest-shutil }:
 
 buildPythonPackage rec {
   pname = "pytest-virtualenv";
@@ -10,9 +10,11 @@ buildPythonPackage rec {
     sha256 = "d281725d10848773cb2b495d1255dd0a42fc9179e34a274c22e1c35837721f19";
   };
 
-  buildInputs = [ pytest pytestcov mock cmdline ];
+  checkInputs = [ pytest_3 pytestcov mock cmdline ];
   propagatedBuildInputs = [ pytest-fixture-config pytest-shutil ];
   checkPhase = '' py.test tests/unit '';
+
+  nativeBuildInputs = [ pytest_3 ];
 
   meta = with stdenv.lib; {
     description = "Create a Python virtual environment in your test that cleans up on teardown. The fixture has utility methods to install packages and list what’s installed.";
