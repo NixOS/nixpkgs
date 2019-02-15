@@ -272,10 +272,7 @@ in package-set { inherit pkgs stdenv callPackage; } self // {
     #     bash$ nix-shell --run "cabal new-build all"
     shellFor = { packages, withHoogle ? false, ... } @ args:
       let
-        nullSrc = p: overrideCabal p (_: { src = null; });
-
-        # Make sure we *never* accidentally suck in src.
-        selected = map nullSrc (packages self);
+        selected = packages self;
 
         packageInputs = map getBuildInputs selected;
 
@@ -287,8 +284,7 @@ in package-set { inherit pkgs stdenv callPackage; } self // {
         # because cabal will end up ignoring that built version, assuming
         # new-style commands.
         haskellInputs = pkgs.lib.filter
-          # nullSrc in case a dep is one of the selected packages.
-          (input: pkgs.lib.all (p: (nullSrc input).outPath != p.outPath) selected)
+          (input: pkgs.lib.all (p: input.outPath != p.outPath) selected)
           (pkgs.lib.concatMap (p: p.haskellBuildInputs) packageInputs);
         systemInputs = pkgs.lib.concatMap (p: p.systemBuildInputs) packageInputs;
 
