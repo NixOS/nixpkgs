@@ -47,7 +47,7 @@
   </para>
  </section>
 
- <section>
+ <section xml:id="module-services-matomo-archive-processing">
   <title>Archive Processing</title>
   <para>
    This module comes with the systemd service <literal>matomo-archive-processing.service</literal>
