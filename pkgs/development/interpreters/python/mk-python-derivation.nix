@@ -90,6 +90,8 @@ let self = toPythonModule (python.stdenv.mkDerivation (builtins.removeAttrs attr
   # Enabled to detect some (native)BuildInputs mistakes
   strictDeps = true;
 
+  LANG = "C.UTF-8";
+
   # Python packages don't have a checkPhase, only an installCheckPhase
   doCheck = false;
   doInstallCheck = doCheck;

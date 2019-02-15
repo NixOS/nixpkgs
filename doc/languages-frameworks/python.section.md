@@ -881,7 +881,6 @@ example of such a situation is when `py.test` is used.
     '';
   }
   ```
-- Unicode issues can typically be fixed by including `glibcLocales` in `buildInputs` and exporting `LC_ALL=en_US.utf-8`.
 - Tests that attempt to access `$HOME` can be fixed by using the following work-around before running tests (e.g. `preCheck`): `export HOME=$(mktemp -d)`
 
 ## FAQ
