@@ -7,11 +7,11 @@
 
 mkDerivation rec {
   name = "skrooge-${version}";
-  version = "2.17.0";
+  version = "2.18.0";
 
   src = fetchurl {
     url = "http://download.kde.org/stable/skrooge/${name}.tar.xz";
-    sha256 = "0v83bcabchsz5fs0iv5i75ps01sga48hq4cx29dajcq3kf9xgwhr";
+    sha256 = "00zk152clnmq8rjjnrxmd7lfflf2pnzljaw73bjjsb6r6vkxywa6";
   };
 
   nativeBuildInputs = [
