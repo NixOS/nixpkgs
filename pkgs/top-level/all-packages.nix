@@ -14568,6 +14568,7 @@ in
       [ kernelPatches.bridge_stp_helper
         kernelPatches.cpu-cgroup-v2."4.9"
         kernelPatches.modinst_arg_list_too_long
+        kernelPatches.interpreter-trunc
       ];
   };
 
