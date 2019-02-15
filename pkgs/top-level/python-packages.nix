@@ -4585,6 +4585,8 @@ in {
 
   wsgiproxy2 = callPackage ../development/python-modules/wsgiproxy2 { };
 
+  wurlitzer = callPackage ../development/python-modules/wurlitzer { };
+
   xcaplib = callPackage ../development/python-modules/xcaplib { };
 
   xlib = callPackage ../development/python-modules/xlib { };
