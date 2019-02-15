@@ -1,4 +1,4 @@
-{ buildPythonPackage, fetchPypi, h11, enum34 }:
+{ buildPythonPackage, fetchPypi, h11, enum34, pytest }:
 
 buildPythonPackage rec {
   pname = "wsproto";
@@ -10,5 +10,11 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ h11 enum34 ];
+
+  checkInputs = [ pytest ];
+
+  checkPhase = ''
+    py.test
+  '';
 
 }
