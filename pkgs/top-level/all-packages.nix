@@ -4209,6 +4209,8 @@ in
 
   mkcue = callPackage ../tools/cd-dvd/mkcue { };
 
+  mkp224o = callPackage ../tools/security/mkp224o { };
+
   mkpasswd = hiPrio (callPackage ../tools/security/mkpasswd { });
 
   mkrand = callPackage ../tools/security/mkrand { };
