@@ -4,11 +4,10 @@ buildPythonPackage rec {
   pname = "distro";
   version = "1.4.0";
 
-  checkInputs = [ pytest pytestcov tox];
+  checkInputs = [ pytest pytestcov ];
 
   checkPhase = ''
-    touch tox.ini
-    tox
+    py.test
   '';
 
   src = fetchPypi {
@@ -21,5 +20,7 @@ buildPythonPackage rec {
     description = "Linux Distribution - a Linux OS platform information API.";
     license = licenses.asl20;
     maintainers = with maintainers; [ nand0p ];
+    # Many failing tests
+    broken = true;
   };
 }
