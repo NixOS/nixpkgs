@@ -786,6 +786,8 @@ in {
 
   shellingham = callPackage ../development/python-modules/shellingham {};
 
+  shutilwhich = callPackage ../development/python-modules/shutilwhich {};
+
   simpleeval = callPackage ../development/python-modules/simpleeval { };
 
   singledispatch = callPackage ../development/python-modules/singledispatch { };
