@@ -70,7 +70,7 @@ in buildPythonApplication rec {
   checkInputs = [ mock ];
 
   checkPhase = ''
-    PYTHONPATH=".:$PYTHONPATH" trial tests
+    PYTHONPATH=".:$PYTHONPATH" ${python3.interpreter} -m twisted.trial tests
   '';
 
   meta = with stdenv.lib; {

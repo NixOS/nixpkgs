@@ -18,9 +18,9 @@ pythonPackages.buildPythonApplication rec {
     sha256 = "1a85rcg561792kdyv744cgzw7mmpmgv6d6li1sijfdpqa1ninf8g";
   };
 
-  nativeBuildInputs = [ wafHook ];
+  nativeBuildInputs = [ wafHook intltool ];
   buildInputs = [
-    docbook2x libxslt gnome-doc-utils intltool dbus-glib hicolor-icon-theme
+    docbook2x libxslt gnome-doc-utils dbus-glib hicolor-icon-theme
   ];
 
   propagatedBuildInputs = with pythonPackages; [ pygobject2 pygtk pyxdg gnome_python dbus-python ];

@@ -1,5 +1,5 @@
 { stdenv, buildPythonPackage, fetchPypi
-, setuptools-git, pytest }:
+, setuptools-git, pytest_3 }:
 
 buildPythonPackage rec {
   pname = "pytest-fixture-config";
@@ -12,7 +12,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools-git ];
 
-  buildInputs = [ pytest ];
+  buildInputs = [ pytest_3 ];
 
   doCheck = false;
 

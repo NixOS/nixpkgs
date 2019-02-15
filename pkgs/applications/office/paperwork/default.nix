@@ -6,7 +6,7 @@
 
 python3Packages.buildPythonApplication rec {
   inherit (python3Packages.paperwork-backend) version src;
-  name = "paperwork-${version}";
+  pname = "paperwork";
 
   sourceRoot = "source/paperwork-gtk";
 
@@ -46,7 +46,7 @@ python3Packages.buildPythonApplication rec {
     paths = lib.collect lib.isDerivation aspellDicts;
   }}/lib/aspell";
 
-  checkInputs = [ xvfb_run dbus.daemon ];
+  checkInputs = [ xvfb_run dbus.daemon ] ++ (with python3Packages; [ paperwork-backend ]);
   buildInputs = [
     gnome3.adwaita-icon-theme hicolor-icon-theme libnotify librsvg
   ];

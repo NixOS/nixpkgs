@@ -13,7 +13,7 @@ in pythonPackages.buildPythonApplication rec {
     sha256 = "1p2bvfzby0nk1vh04yfmsvjcldgkj6m6s1hcv9v13hc8q1cbdfk5";
   };
 
-  buildInputs = [ gettext ];
+  nativeBuildInputs = [ gettext ];
 
   propagatedBuildInputs = with pythonPackages; [
     pyqt5
