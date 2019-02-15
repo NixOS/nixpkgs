@@ -7,7 +7,6 @@ buildGoPackage rec {
   rev = "ce7e5ee2c30cc5856fea01fe423cf167f2a2d0c3";
 
   goPackagePath = "sigs.k8s.io/kustomize";
-  goDeps = ./deps.nix;
 
   buildFlagsArray = let t = "${goPackagePath}/pkg/commands/misc"; in ''
     -ldflags=
