@@ -6,18 +6,23 @@
 , pythonPackages
 , python3
 , qmake
-, qt5
+, qtbase
+, qtgraphicaleffects
+, qtquickcontrols
+, qtquickcontrols2
+, qtdeclarative
+, qtsvg
 , yubikey-manager
 , yubikey-personalization
 }:
 
-with stdenv;
-
 let
-  qmlPath = qmlLib: "${qmlLib}/${qt5.qtbase.qtQmlPrefix}";
+  qmlPath = qmlLib: "${qmlLib}/${qtbase.qtQmlPrefix}";
+
+  inherit (stdenv) lib;
 
   qml2ImportPath = lib.concatMapStringsSep ":" qmlPath [
-    qt5.qtbase.bin qt5.qtdeclarative.bin pyotherside qt5.qtquickcontrols qt5.qtquickcontrols2.bin qt5.qtgraphicaleffects
+    qtbase.bin qtdeclarative.bin pyotherside qtquickcontrols qtquickcontrols2.bin qtgraphicaleffects
   ];
 
 in stdenv.mkDerivation rec {
@@ -37,7 +42,7 @@ in stdenv.mkDerivation rec {
     substituteInPlace ykman-gui/deployment.pri --replace '/usr/bin' "$out/bin"
   '';
 
-  buildInputs = [ pythonPackages.python qt5.qtbase qt5.qtgraphicaleffects qt5.qtquickcontrols qt5.qtquickcontrols2 pyotherside ];
+  buildInputs = [ pythonPackages.python qtbase qtgraphicaleffects qtquickcontrols qtquickcontrols2 pyotherside ];
 
   enableParallelBuilding = true;
 
@@ -50,11 +55,9 @@ in stdenv.mkDerivation rec {
 
     wrapProgram $out/bin/ykman-gui \
       --prefix PYTHONPATH : "$program_PYTHONPATH" \
-      --prefix LD_PRELOAD : "${yubikey-personalization}/lib/libykpers-1.so" \
-      --prefix LD_LIBRARY_PATH : "${stdenv.lib.getLib pcsclite}/lib:${yubikey-personalization}/lib" \
       --set QML2_IMPORT_PATH "${qml2ImportPath}" \
-      --set QT_QPA_PLATFORM_PLUGIN_PATH ${qt5.qtbase.bin}/lib/qt-*/plugins/platforms \
-      --prefix QT_PLUGIN_PATH : "${qt5.qtsvg.bin}/${qt5.qtbase.qtPluginPrefix}"
+      --set QT_QPA_PLATFORM_PLUGIN_PATH ${qtbase.bin}/lib/qt-*/plugins/platforms \
+      --prefix QT_PLUGIN_PATH : "${qtsvg.bin}/${qtbase.qtPluginPrefix}"
 
       mkdir -p $out/share/applications
       cp resources/ykman-gui.desktop $out/share/applications/ykman-gui.desktop
@@ -64,7 +67,7 @@ in stdenv.mkDerivation rec {
         --replace 'Exec=ykman-gui' "Exec=$out/bin/ykman-gui" \
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     inherit version;
     description = "Cross-platform application for configuring any YubiKey over all USB interfaces.";
     homepage = https://developers.yubico.com/yubikey-manager-qt/;
