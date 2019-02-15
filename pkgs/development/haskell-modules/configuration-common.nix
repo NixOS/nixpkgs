@@ -1224,7 +1224,11 @@ self: super: {
   });
 
   # Use latest pandoc despite what LTS says.
-  pandoc = self.pandoc_2_6;
+  # Test suite fails in both 2.5 and 2.6: https://github.com/jgm/pandoc/issues/5309.
+  pandoc = dontCheck super.pandoc_2_6;
   pandoc-citeproc = self.pandoc-citeproc_0_16_0_2;
+
+  # https://github.com/qfpl/tasty-hedgehog/issues/24
+  tasty-hedgehog = dontCheck super.tasty-hedgehog;
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
