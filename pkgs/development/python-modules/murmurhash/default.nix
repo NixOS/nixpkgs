@@ -13,6 +13,10 @@ buildPythonPackage rec {
     sha256 = "02wbyjixvzd6l1mljpm1ci7x835zhk3nqxgy7kvbi4jimvairs9q";
   };
 
+  postPatch = ''
+    substituteInPlace setup.py --replace "'wheel>=0.32.0,<0.33.0'" ""
+  '';
+
   buildInputs = [
    cython
   ];
