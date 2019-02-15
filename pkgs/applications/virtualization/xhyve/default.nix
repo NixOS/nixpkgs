@@ -1,15 +1,15 @@
-{ stdenv, lib, fetchurl, Hypervisor, vmnet, xpc, libobjc }:
+{ stdenv, lib, fetchurl, Hypervisor, vmnet, xpc, libobjc, zlib }:
 
 stdenv.mkDerivation rec {
   name    = "xhyve-${version}";
-  version = "1f1dbe305";
+  version = "20190124";
 
   src = fetchurl {
-    url    = "https://github.com/mist64/xhyve/archive/1f1dbe3059904f885e4ab2b3328f4bb350ea5c37.tar.gz";
-    sha256 = "0hfix8yr90szlv2yyqb2rlq5qsrxyam8kg52sly0adja0cpwfjvx";
+    url    = "https://github.com/machyve/xhyve/archive/1dd9a5165848c7ed56dafc41932c553ea56a12af.tar.gz";
+    sha256 = "18zd74pd0azf43csbqb14srbyclfgx28dpgm8ygjmbcazbnipc1k";
   };
 
-  buildInputs = [ Hypervisor vmnet xpc libobjc ];
+  buildInputs = [ Hypervisor vmnet xpc libobjc zlib ];
 
   # Don't use git to determine version
   prePatch = ''
