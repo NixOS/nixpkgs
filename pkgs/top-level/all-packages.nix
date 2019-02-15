@@ -413,15 +413,9 @@ in
 
   aefs = callPackage ../tools/filesystems/aefs { };
 
-  aegisub = callPackage ../applications/video/aegisub {
+  aegisub = callPackage ../applications/video/aegisub ({
     wxGTK = wxGTK30;
-    spellcheckSupport = config.aegisub.spellcheckSupport or true;
-    automationSupport = config.aegisub.automationSupport or true;
-    openalSupport     = config.aegisub.openalSupport or false;
-    alsaSupport       = config.aegisub.alsaSupport or true;
-    pulseaudioSupport = config.aegisub.pulseaudioSupport or true;
-    portaudioSupport  = config.aegisub.portaudioSupport or false;
-  };
+  } // (config.aegisub or {}));
 
   aerospike = callPackage ../servers/nosql/aerospike { };
 
@@ -988,10 +982,8 @@ in
 
   brigand = callPackage ../development/libraries/brigand { };
 
-  brltty = callPackage ../tools/misc/brltty {
-    alsaSupport = (!stdenv.isDarwin);
-    systemdSupport = stdenv.isLinux;
-  };
+  brltty = callPackage ../tools/misc/brltty { };
+
   bro = callPackage ../applications/networking/ids/bro { };
 
   broot = callPackage ../tools/misc/broot { };
@@ -11950,9 +11942,7 @@ in
 
   pangoxsl = callPackage ../development/libraries/pangoxsl { };
 
-  pcaudiolib = callPackage ../development/libraries/pcaudiolib {
-    pulseaudioSupport = config.pulseaudio or true;
-  };
+  pcaudiolib = callPackage ../development/libraries/pcaudiolib { };
 
   pcg_c = callPackage ../development/libraries/pcg-c { };
 
@@ -16294,7 +16284,6 @@ in
   bombono = callPackage ../applications/video/bombono {};
 
   bomi = libsForQt5.callPackage ../applications/video/bomi {
-    pulseSupport = config.pulseaudio or true;
     ffmpeg = ffmpeg_2;
   };
 
@@ -16383,18 +16372,7 @@ in
 
   bookworm = callPackage ../applications/office/bookworm { };
 
-  chromium = callPackage ../applications/networking/browsers/chromium ({
-    channel = "stable";
-    pulseSupport = config.pulseaudio or true;
-    enablePepperFlash = config.chromium.enablePepperFlash or false;
-    enableWideVine = config.chromium.enableWideVine or false;
-  } // (if stdenv.isAarch64 then {
-          stdenv = gcc8Stdenv;
-        } else {
-          llvmPackages = llvmPackages_7;
-          stdenv = llvmPackages_7.stdenv;
-        })
-   );
+  chromium = callPackage ../applications/networking/browsers/chromium (config.chromium or {});
 
   chronos = callPackage ../applications/networking/cluster/chronos { };
 
@@ -16434,8 +16412,6 @@ in
     inherit (darwin.apple_sdk.frameworks) CoreAudio;
     libjack = libjack2;
     ffmpeg = ffmpeg_2;
-
-    pulseaudioSupport = config.pulseaudio or false;
   };
 
   cmusfm = callPackage ../applications/audio/cmusfm { };
@@ -16544,9 +16520,7 @@ in
 
   ddgr = callPackage ../applications/misc/ddgr { };
 
-  deadbeef = callPackage ../applications/audio/deadbeef {
-    pulseSupport = config.pulseaudio or true;
-  };
+  deadbeef = callPackage ../applications/audio/deadbeef { };
 
   deadbeefPlugins = {
     headerbar-gtk3 = callPackage ../applications/audio/deadbeef/plugins/headerbar-gtk3.nix { };
@@ -18233,9 +18207,7 @@ in
 
   minitube = libsForQt5.callPackage ../applications/video/minitube { };
 
-  mimic = callPackage ../applications/audio/mimic {
-    pulseaudioSupport = config.pulseaudio or false;
-  };
+  mimic = callPackage ../applications/audio/mimic { };
 
   mimms = callPackage ../applications/audio/mimms {};
 
@@ -18367,7 +18339,6 @@ in
   mpc-qt = libsForQt5.callPackage ../applications/video/mpc-qt { };
 
   mplayer = callPackage ../applications/video/mplayer ({
-    pulseSupport = config.pulseaudio or false;
     libdvdnav = libdvdnav_4_2_1;
   } // (config.mplayer or {}));
 
@@ -19854,7 +19825,6 @@ in
   virtualbox = callPackage ../applications/virtualization/virtualbox {
     stdenv = stdenv_32bit;
     inherit (gnome2) libIDL;
-    pulseSupport = config.pulseaudio or true;
   };
 
   virtualboxHardened = lowPrio (virtualbox.override {
