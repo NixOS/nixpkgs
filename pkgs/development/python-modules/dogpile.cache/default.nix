@@ -1,5 +1,5 @@
 { stdenv, buildPythonPackage, fetchPypi
-, pytest, pytestcov, mock, Mako
+, pytest, pytestcov, mock, Mako, decorator
 }:
 
 buildPythonPackage rec {
@@ -19,12 +19,13 @@ buildPythonPackage rec {
     rm tests/cache/test_memcached_backend.py
   '';
 
-  buildInputs = [ pytest pytestcov mock Mako ];
+  checkInputs = [ pytest pytestcov mock Mako ];
+
+  propagatedBuildInputs = [ decorator ];
 
   meta = with stdenv.lib; {
     description = "A caching front-end based on the Dogpile lock";
     homepage = https://bitbucket.org/zzzeek/dogpile.cache;
-    platforms = platforms.unix;
     license = licenses.bsd3;
   };
 }
