@@ -776,7 +776,7 @@ rec {
         imageJson=$(cat ${baseJson} | jq ". + {\"rootfs\": {\"diff_ids\": [], \"type\": \"layers\"}}")
         manifestJson=$(jq -n "[{\"RepoTags\":[\"$imageName:$imageTag\"]}]")
 
-        for layerTar in $(cat ./layer-list); do
+        for layerTar in $(tac ./layer-list); do
           layerChecksum=$(sha256sum image/$layerTar | cut -d ' ' -f1)
           imageJson=$(echo "$imageJson" | jq ".history |= [{\"created\": \"$(jq -r .created ${baseJson})\"}] + .")
           imageJson=$(echo "$imageJson" | jq ".rootfs.diff_ids |= [\"sha256:$layerChecksum\"] + .")
