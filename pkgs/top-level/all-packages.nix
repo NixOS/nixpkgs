@@ -4691,6 +4691,8 @@ in
     '';
   });
 
+  pantable = python3Packages.callPackage ../tools/text/pantable { };
+
   pamtester = callPackage ../tools/security/pamtester { };
 
   paper-gtk-theme = callPackage ../misc/themes/paper { };
