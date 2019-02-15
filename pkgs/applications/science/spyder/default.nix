@@ -23,7 +23,7 @@ let
     meta = {
       description = "Jupyter kernels for Spyder's console";
       homepage = https://github.com/spyder-ide/spyder-kernels;
-      license = lib.licenses.mit;
+      license = stdenv.lib.licenses.mit;
     };
   };
 
