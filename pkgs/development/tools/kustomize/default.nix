@@ -9,11 +9,11 @@ buildGoPackage rec {
   goPackagePath = "sigs.k8s.io/kustomize";
   goDeps = ./deps.nix;
 
-  buildFlagsArray = let t = "${goPackagePath}/pkg/commands"; in ''
+  buildFlagsArray = let t = "${goPackagePath}/pkg/commands/misc"; in ''
     -ldflags=
       -s -X ${t}.kustomizeVersion=${version}
          -X ${t}.gitCommit=${rev}
-         -X ${t}.buildDate=unknow
+         -X ${t}.buildDate=unknown
   '';
 
   src = fetchFromGitHub {
