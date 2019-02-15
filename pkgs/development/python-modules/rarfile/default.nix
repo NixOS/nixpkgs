@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, pytest, nose, libarchive, glibcLocales
+{ stdenv, buildPythonPackage, fetchFromGitHub, pytest, nose, libarchive
 # unrar is non-free software
 , useUnrar ? false, unrar
 }:
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     rev = "rarfile_3_0";
     sha256 = "07yliz6p1bxzhipnrgz133gl8laic35gl4rqfay7f1vc384ch7sn";
   };
-  buildInputs = [ pytest nose glibcLocales ];
+  buildInputs = [ pytest nose  ];
 
   prePatch = ''
     substituteInPlace rarfile.py \
@@ -30,7 +30,6 @@ buildPythonPackage rec {
    '';
   # the tests only work with the standard unrar package
   doCheck = useUnrar;
-  LC_ALL = "en_US.UTF-8";
   checkPhase = ''
     py.test test -k "not test_printdir"
   '';

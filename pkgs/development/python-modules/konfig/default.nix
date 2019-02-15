@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchFromGitHub, isPy3k, writeText, configparser, six, pytest, glibcLocales }:
+{ lib, buildPythonPackage, fetchFromGitHub, isPy3k, writeText, configparser, six, pytest }:
 
 buildPythonPackage rec {
   pname = "konfig";
@@ -34,7 +34,7 @@ buildPythonPackage rec {
            classifiers=classifiers,
   '') ];
 
-  checkInputs = [ pytest glibcLocales ];
+  checkInputs = [ pytest  ];
 
   checkPhase = ''
     LC_ALL=en_US.utf8 pytest -v konfig/tests

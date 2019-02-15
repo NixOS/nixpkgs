@@ -1,4 +1,4 @@
-{ stdenv, fetchPypi, buildPythonPackage, nose, mock, glibcLocales, isPy3k }:
+{ stdenv, fetchPypi, buildPythonPackage, nose, mock, isPy3k }:
 
 buildPythonPackage rec {
   pname = "parameterized";
@@ -12,10 +12,9 @@ buildPythonPackage rec {
   # Tests require some python3-isms but code works without.
   doCheck = isPy3k;
 
-  checkInputs = [ nose mock glibcLocales ];
+  checkInputs = [ nose mock  ];
 
   checkPhase = ''
-    LC_ALL="en_US.UTF-8" nosetests -v
   '';
 
   meta = with stdenv.lib; {

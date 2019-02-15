@@ -1,5 +1,5 @@
 { stdenv, buildPythonPackage, fetchPypi, python
-, gfortran, glibcLocales
+, gfortran
 , numpy, scipy, pytest, pillow
 }:
 
@@ -14,11 +14,10 @@ buildPythonPackage rec {
     sha256 = "1ri9kx0yrn85h6ivkaja35afbyhimxn8lsairgns2wi5xv3wfnxw";
   };
 
-  buildInputs = [ pillow gfortran glibcLocales ];
+  buildInputs = [ pillow gfortran  ];
   propagatedBuildInputs = [ numpy scipy numpy.blas ];
   checkInputs = [ pytest ];
 
-  LC_ALL="en_US.UTF-8";
 
   doCheck = !stdenv.isAarch64;
   # Skip test_feature_importance_regression - does web fetch

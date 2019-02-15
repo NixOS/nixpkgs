@@ -1,7 +1,7 @@
 { stdenv, buildPythonPackage, pythonOlder
 , pyperclip, six, pyparsing, vim
 , contextlib2 ? null, subprocess32 ? null
-, pytest, mock, which, fetchFromGitHub, glibcLocales
+, pytest, mock, which, fetchFromGitHub
 }:
 buildPythonPackage rec {
   pname = "cmd2";
@@ -14,7 +14,6 @@ buildPythonPackage rec {
     sha256 = "0nw2b7n7zg51bc3glxw0l9fn91mwjnjshklhmxhyvjbsg7khf64z";
   };
 
-  LC_ALL="en_US.UTF-8";
 
   postPatch = stdenv.lib.optional stdenv.isDarwin ''
     # Fake the impure dependencies pbpaste and pbcopy
@@ -25,7 +24,7 @@ buildPythonPackage rec {
     export PATH=$(realpath bin):$PATH
   '';
 
-  checkInputs= [ pytest mock which vim glibcLocales ];
+  checkInputs= [ pytest mock which vim  ];
   checkPhase = ''
     # test_path_completion_user_expansion might be fixed in the next release
     py.test -k 'not test_path_completion_user_expansion'

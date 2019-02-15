@@ -7,7 +7,7 @@
 , makeFontsConf
 , freefont_ttf
 , pytest
-, glibcLocales
+
 , cairo
 , cffi
 , withXcffib ? false, xcffib
@@ -24,7 +24,6 @@ buildPythonPackage rec {
     sha256 = "9ca49d9bb0a52bd6a8263de137b4818e0889f3cd8d933165fb122669924ae3b9";
   };
 
-  LC_ALL = "en_US.UTF-8";
 
   # checkPhase require at least one 'normal' font and one 'monospace',
   # otherwise glyph tests fails
@@ -32,7 +31,7 @@ buildPythonPackage rec {
     fontDirectories = [ freefont_ttf ];
   };
 
-  checkInputs = [ pytest glibcLocales ];
+  checkInputs = [ pytest  ];
   propagatedBuildInputs = [ cairo cffi ] ++ lib.optional withXcffib xcffib;
 
   checkPhase = ''

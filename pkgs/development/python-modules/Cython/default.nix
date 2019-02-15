@@ -3,7 +3,7 @@
 , buildPythonPackage
 , fetchPypi
 , python
-, glibcLocales
+
 , pkgconfig
 , gdb
 , numpy
@@ -39,8 +39,7 @@ in buildPythonPackage rec {
   checkInputs = [
     numpy ncurses
   ];
-  buildInputs = [ glibcLocales gdb ];
-  LC_ALL = "en_US.UTF-8";
+  buildInputs = [  gdb ];
 
   checkPhase = ''
     export HOME="$NIX_BUILD_TOP"

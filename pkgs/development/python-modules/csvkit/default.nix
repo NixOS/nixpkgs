@@ -1,7 +1,7 @@
 { lib, fetchPypi, buildPythonPackage, isPy3k
 , agate, agate-excel, agate-dbf, agate-sql, six
 , ordereddict, simplejson
-, glibcLocales, nose, mock, unittest2
+, nose, mock, unittest2
 }:
 
 buildPythonPackage rec {
@@ -20,13 +20,12 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    glibcLocales nose
+     nose
   ] ++ lib.optionals (!isPy3k) [
     mock unittest2
   ];
 
   checkPhase = ''
-    LC_ALL="en_US.UTF-8" nosetests -e test_csvsql
   '';
 
   meta = with lib; {

@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, python, coverage, lsof, glibcLocales }:
+{ stdenv, buildPythonPackage, fetchPypi, python, coverage, lsof }:
 
 buildPythonPackage rec {
   pname = "sh";
@@ -17,11 +17,10 @@ buildPythonPackage rec {
     sed -i 's#/usr/bin/env python#${python.interpreter}#' test.py
   '';
 
-  checkInputs = [ coverage lsof glibcLocales ];
+  checkInputs = [ coverage lsof  ];
 
   # A test needs the HOME directory to be different from $TMPDIR.
   preCheck = ''
-    export LC_ALL="en_US.UTF-8"
     HOME=$(mktemp -d)
   '';
 

@@ -3,7 +3,7 @@
 , buildPythonPackage
 , fetchPypi
 , pytest
-, glibcLocales
+
 }:
 
 buildPythonPackage rec {
@@ -15,9 +15,8 @@ buildPythonPackage rec {
     sha256 = "5c395dcabdbbde2e5178ef3f89b568a3066454a6ddc223b76473dac22f89b4f7";
   };
 
-  LC_ALL = "en_US.utf-8";
 
-  nativeBuildInputs = [ glibcLocales ];
+  nativeBuildInputs = [  ];
 
   checkInputs = [ pytest ];
 

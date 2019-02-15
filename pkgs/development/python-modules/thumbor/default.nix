@@ -42,7 +42,7 @@ buildPythonPackage rec {
     cairosvg1
     raven
     pkgs.redis
-    pkgs.glibcLocales
+    
   ];
 
   propagatedBuildInputs = [
@@ -70,7 +70,6 @@ buildPythonPackage rec {
   checkPhase = ''
     redis-server --port 6668 --requirepass hey_you &
     rm -r thumbor
-    export LC_ALL="en_US.UTF-8"
     nosetests -v --with-yanc -s tests/
   '';
 

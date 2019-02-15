@@ -4,7 +4,7 @@
 , pytest
 , simplejson
 , mock
-, glibcLocales
+
 , html5lib
 , pythonOlder
 , enum34
@@ -32,10 +32,9 @@ buildPythonPackage rec {
     inherit version;
     sha256 = "c4cb17ba44acffae3d3209646b6baec1e215cad3065e852c68cc569d4df1b9f8";
   };
-  LC_ALL = "en_US.UTF-8";
 
   checkInputs = [ pytest ];
-  buildInputs = [ simplejson mock glibcLocales html5lib ] ++ lib.optional (pythonOlder "3.4") enum34;
+  buildInputs = [ simplejson mock  html5lib ] ++ lib.optional (pythonOlder "3.4") enum34;
   # Disable two tests that require network access.
   checkPhase = ''
     cd tests; ${python.interpreter} run.py --ignore py35 -k 'not test_defaults and not test_anchors_ignored'

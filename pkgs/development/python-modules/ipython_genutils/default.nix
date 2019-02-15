@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , nose
-, glibcLocales
+
 }:
 
 buildPythonPackage rec {
@@ -14,10 +14,9 @@ buildPythonPackage rec {
     sha256 = "eb2e116e75ecef9d4d228fdc66af54269afa26ab4463042e33785b887c628ba8";
   };
 
-  checkInputs = [ nose glibcLocales ];
+  checkInputs = [ nose  ];
 
   checkPhase = ''
-    LC_ALL="en_US.UTF-8" nosetests -v ipython_genutils/tests
   '';
 
   meta = {

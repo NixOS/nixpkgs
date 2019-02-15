@@ -4,7 +4,7 @@
 , fetchPypi
 , pythonOlder
 # Build dependencies
-, glibcLocales
+
 # Test dependencies
 , nose
 , pygments
@@ -33,7 +33,7 @@ buildPythonPackage rec {
     substituteInPlace setup.py --replace "'gnureadline'" " "
   '';
 
-  buildInputs = [ glibcLocales ];
+  buildInputs = [  ];
 
   checkInputs = [ nose pygments ];
 
@@ -48,7 +48,6 @@ buildPythonPackage rec {
     backcall
   ] ++ lib.optionals stdenv.isDarwin [appnope];
 
-  LC_ALL="en_US.UTF-8";
 
   doCheck = false; # Circular dependency with ipykernel
 

@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, webencodings, pytestrunner, pytestcov, pytest-flake8, pytest-isort, glibcLocales }:
+{ lib, buildPythonPackage, fetchPypi, webencodings, pytestrunner, pytestcov, pytest-flake8, pytest-isort }:
 
 buildPythonPackage rec {
   pname = "tinycss2";
@@ -11,9 +11,8 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ webencodings ];
 
-  checkInputs = [ pytestrunner pytestcov pytest-flake8 pytest-isort glibcLocales ];
+  checkInputs = [ pytestrunner pytestcov pytest-flake8 pytest-isort  ];
 
-  LC_ALL = "en_US.UTF-8";
 
   meta = with lib; {
     description = "Low-level CSS parser for Python";

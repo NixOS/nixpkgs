@@ -1,4 +1,4 @@
-{ buildPythonPackage, lib, fetchFromGitHub, glibcLocales
+{ buildPythonPackage, lib, fetchFromGitHub
 , pytest, pytest-mock, gentools
 , typing, singledispatch, pythonOlder
 }:
@@ -17,8 +17,7 @@ buildPythonPackage rec {
 
   # Prevent unicode decoding error in setup.py
   # while reading README.rst and HISTORY.rst
-  buildInputs = [ glibcLocales ];
-  LC_ALL = "en_US.UTF-8";
+  buildInputs = [  ];
 
   propagatedBuildInputs =
     lib.optionals (pythonOlder "3.4") [ singledispatch ] ++

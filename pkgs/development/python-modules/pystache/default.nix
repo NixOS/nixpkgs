@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, python, fetchPypi, isPy3k, glibcLocales }:
+{ stdenv, buildPythonPackage, python, fetchPypi, isPy3k }:
 
 buildPythonPackage rec {
   pname = "pystache-${version}";
@@ -9,9 +9,8 @@ buildPythonPackage rec {
     sha256 = "f7bbc265fb957b4d6c7c042b336563179444ab313fb93a719759111eabd3b85a";
   };
 
-  LC_ALL = "en_US.UTF-8";
 
-  buildInputs = [ glibcLocales ];
+  buildInputs = [  ];
 
   checkPhase = ''
     ${python.interpreter} -m unittest discover

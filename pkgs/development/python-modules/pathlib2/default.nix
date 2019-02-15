@@ -4,7 +4,7 @@
 , six
 , pythonOlder
 , scandir
-, glibcLocales
+
 , mock
 }:
 
@@ -18,10 +18,9 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ six ] ++ lib.optional (pythonOlder "3.5") scandir;
-  checkInputs = [ glibcLocales ] ++ lib.optional (pythonOlder "3.3") mock;
+  checkInputs = [  ] ++ lib.optional (pythonOlder "3.3") mock;
 
   preCheck = ''
-    export LC_ALL="en_US.UTF-8"
   '';
 
   meta = {

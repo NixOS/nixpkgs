@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, numpy, future, spglib, glibcLocales }:
+{ stdenv, buildPythonPackage, fetchPypi, numpy, future, spglib }:
 
 buildPythonPackage rec {
   pname = "seekpath";
@@ -9,11 +9,10 @@ buildPythonPackage rec {
     sha256 = "b61dadba82acc0838402981b7944155adc092b114ca81f53f61b1d498a512e3a";
   };  
 
-  LC_ALL = "en_US.utf-8";
 
   propagatedBuildInputs = [ numpy spglib future ];
 
-  nativeBuildInputs = [ glibcLocales ];
+  nativeBuildInputs = [  ];
 
   meta = with stdenv.lib; {
     description = "A module to obtain and visualize band paths in the Brillouin zone of crystal structures.";

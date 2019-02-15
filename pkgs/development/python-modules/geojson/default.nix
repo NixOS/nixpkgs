@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, glibcLocales }:
+{ lib, buildPythonPackage, fetchPypi }:
 
 buildPythonPackage rec {
   pname = "geojson";
@@ -11,8 +11,7 @@ buildPythonPackage rec {
     sha256 = "12k4g993qqgrhq2mgy5k8rhm5a2s2hbn769rs5fwbc5lwv4bbgxj";
   };
 
-  LC_ALL = "en_US.UTF-8";
-  checkInputs = [ glibcLocales ];
+  checkInputs = [  ];
 
   meta = {
     homepage = https://github.com/frewsxcv/python-geojson;

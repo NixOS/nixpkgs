@@ -1,5 +1,5 @@
 { stdenv, buildPythonPackage, fetchFromGitHub
-, click, pytest, glibcLocales
+, click, pytest
 }:
 
 buildPythonPackage rec {
@@ -17,10 +17,9 @@ buildPythonPackage rec {
     click
   ];
 
-  checkInputs = [ pytest glibcLocales ];
+  checkInputs = [ pytest  ];
 
   checkPhase = ''
-    LC_ALL=en_US.utf-8 pytest tests
   '';
 
   meta = with stdenv.lib; {

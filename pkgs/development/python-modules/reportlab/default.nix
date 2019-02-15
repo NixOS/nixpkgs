@@ -2,7 +2,7 @@
 , fetchPypi
 , freetype
 , pillow
-, glibcLocales
+
 , python
 , isPyPy
 }:
@@ -18,7 +18,7 @@ in buildPythonPackage rec {
     sha256 = "6116e750f98018febc08dfee6df20446cf954adbcfa378d2c703d56c8864aff3";
   };
 
-  checkInputs = [ glibcLocales ];
+  checkInputs = [  ];
 
   buildInputs = [ ft pillow ];
 
@@ -33,7 +33,6 @@ in buildPythonPackage rec {
 
   checkPhase = ''
     cd tests
-    LC_ALL="en_US.UTF-8" ${python.interpreter} runAll.py
   '';
 
   # See https://bitbucket.org/pypy/compatibility/wiki/reportlab%20toolkit

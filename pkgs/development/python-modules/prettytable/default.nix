@@ -1,7 +1,7 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi
-, glibcLocales
+
 }:
 
 buildPythonPackage rec {
@@ -13,10 +13,9 @@ buildPythonPackage rec {
     sha256 = "1ndckiniasacfqcdafzs04plskrcigk7vxprr2y34jmpkpf60m1d";
   };
 
-  buildInputs = [ glibcLocales ];
+  buildInputs = [  ];
 
   preCheck = ''
-    export LANG="en_US.UTF-8"
   '';
 
   meta = with stdenv.lib; {

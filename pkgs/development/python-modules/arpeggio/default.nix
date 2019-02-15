@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, glibcLocales
+
 }:
 
 buildPythonPackage rec {
@@ -14,8 +14,7 @@ buildPythonPackage rec {
   };
 
   # Shall not be needed for next release
-  LC_ALL = "en_US.UTF-8";
-  buildInputs = [ glibcLocales ];
+  buildInputs = [  ];
 
   meta = {
     description = "Packrat parser interpreter";

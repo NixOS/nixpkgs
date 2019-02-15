@@ -26,9 +26,8 @@ buildPythonPackage rec {
 
   checkInputs = [
     pkgs.faad2 pkgs.flac pkgs.vorbis-tools pkgs.liboggz
-    pkgs.glibcLocales pycodestyle pyflakes pytest hypothesis
+     pycodestyle pyflakes pytest hypothesis
   ];
-  LC_ALL = "en_US.UTF-8";
 
   meta = with lib; {
     description = "Python multimedia tagging library";

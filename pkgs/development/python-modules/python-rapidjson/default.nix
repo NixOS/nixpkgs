@@ -4,7 +4,7 @@
 , pythonOlder
 , pytest
 , pytz
-, glibcLocales
+
 }:
 
 buildPythonPackage rec {
@@ -17,8 +17,7 @@ buildPythonPackage rec {
     sha256 = "d9c1411b25600ea65bb534ad75bf4ab6efd9627abd86872f0e5453ff42220d06";
   };
 
-  LC_ALL="en_US.utf-8";
-  buildInputs = [ glibcLocales ];
+  buildInputs = [  ];
 
   # buildInputs = [ ];
   checkInputs = [ pytest pytz ];

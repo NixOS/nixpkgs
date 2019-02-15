@@ -2,7 +2,7 @@
 , six, typing
 , django, shortuuid, python-dateutil, pytest
 , pytest-django, pytestcov, mock, vobject
-, werkzeug, glibcLocales
+, werkzeug
 }:
 
 buildPythonPackage rec {
@@ -25,10 +25,9 @@ buildPythonPackage rec {
   checkInputs = [
     django shortuuid python-dateutil pytest
     pytest-django pytestcov mock vobject
-    werkzeug glibcLocales
+    werkzeug 
   ];
 
-  LC_ALL = "en_US.UTF-8";
 
   meta = with lib; {
     description = "A collection of custom extensions for the Django Framework";

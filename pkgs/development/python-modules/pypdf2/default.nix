@@ -1,7 +1,7 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi
-, glibcLocales
+
 , python
 , isPy3k
 }:
@@ -15,8 +15,7 @@ buildPythonPackage rec {
     sha256 = "11a3aqljg4sawjijkvzhs3irpw0y67zivqpbjpm065ha5wpr13z2";
   };
 
-  LC_ALL = "en_US.UTF-8";
-  buildInputs = [ glibcLocales ];
+  buildInputs = [  ];
 
   checkPhase = ''
     ${python.interpreter} -m unittest discover -s Tests

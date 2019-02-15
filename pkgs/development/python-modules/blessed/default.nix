@@ -1,5 +1,5 @@
 { stdenv, buildPythonPackage, fetchPypi, six, wcwidth, pytest, mock
-, glibcLocales }:
+ }:
 
 buildPythonPackage rec {
   pname = "blessed";
@@ -10,10 +10,9 @@ buildPythonPackage rec {
     sha256 = "777b0b6b5ce51f3832e498c22bc6a093b6b5f99148c7cbf866d26e2dec51ef21";
   };
 
-  checkInputs = [ pytest mock glibcLocales ];
+  checkInputs = [ pytest mock  ];
 
   checkPhase = ''
-    LANG=en_US.utf-8 py.test blessed/tests
   '';
 
   propagatedBuildInputs = [ wcwidth six ];

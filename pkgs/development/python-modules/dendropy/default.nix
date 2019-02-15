@@ -19,11 +19,10 @@ buildPythonPackage rec {
 
   preCheck = ''
     # Needed for unicode python tests
-    export LC_ALL="en_US.UTF-8"
     cd tests  # to find the 'support' module
   '';
 
-  checkInputs = [ pytest pkgs.glibcLocales ];
+  checkInputs = [ pytest  ];
 
   checkPhase = ''
     pytest -k 'not test_dataio_nexml_reader_tree_list and not test_pscores_with'

@@ -1,5 +1,5 @@
 { stdenv, fetchurl, buildPythonPackage, pip, pytest, click, six, first
-, setuptools_scm, git, glibcLocales, mock }:
+, setuptools_scm, git, mock }:
 
 buildPythonPackage rec {
   pname = "pip-tools";
@@ -11,8 +11,7 @@ buildPythonPackage rec {
     sha256 = "100496b15463155f4da3df04c2ca0068677e1ee74d346ebade2d85eef4de8cda";
   };
 
-  LC_ALL = "en_US.UTF-8";
-  checkInputs = [ pytest git glibcLocales mock ];
+  checkInputs = [ pytest git  mock ];
   propagatedBuildInputs = [ pip click six first setuptools_scm ];
 
   disabledTests = stdenv.lib.concatMapStringsSep " and " (s: "not " + s) [

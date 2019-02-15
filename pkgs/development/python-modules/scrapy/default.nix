@@ -1,11 +1,11 @@
-{ stdenv, buildPythonPackage, fetchPypi, glibcLocales, mock, pytest, botocore,
+{ stdenv, buildPythonPackage, fetchPypi, mock, pytest, botocore,
   testfixtures, pillow, six, twisted, w3lib, lxml, queuelib, pyopenssl,
   service-identity, parsel, pydispatcher, cssselect, lib }:
 buildPythonPackage rec {
   version = "1.6.0";
   pname = "Scrapy";
 
-  checkInputs = [ glibcLocales mock pytest botocore testfixtures pillow ];
+  checkInputs = [  mock pytest botocore testfixtures pillow ];
   propagatedBuildInputs = [
     six twisted w3lib lxml cssselect queuelib pyopenssl service-identity parsel pydispatcher
   ];
@@ -18,7 +18,6 @@ buildPythonPackage rec {
     ./permissions-fix.patch
   ];
 
-  LC_ALL="en_US.UTF-8";
 
   # Disable doctest plugin—enabled in the shipped pytest.ini—because it causes pytest to hang
   # Ignore proxy tests because requires mitmproxy

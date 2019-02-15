@@ -29,7 +29,7 @@
 # other dependencies
 , which
 , bash
-, glibcLocales
+
 , callPackage
 }:
 
@@ -82,7 +82,7 @@ buildPythonPackage rec {
 
   checkInputs = [
     codecov
-    glibcLocales
+    
     mock
     pytest
     pytest-forked
@@ -92,7 +92,6 @@ buildPythonPackage rec {
   ];
 
   checkPhase = ''
-    LC_ALL="en_US.UTF-8" pytest -v --doctest-modules nipype
   '';
 
   # See: https://github.com/nipy/nipype/issues/2839

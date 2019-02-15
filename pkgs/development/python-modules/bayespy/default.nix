@@ -1,5 +1,5 @@
 { stdenv, buildPythonPackage, fetchPypi, pythonOlder
-, pytest, glibcLocales
+, pytest
 , numpy, scipy, matplotlib, h5py }:
 
 buildPythonPackage rec {
@@ -15,11 +15,10 @@ buildPythonPackage rec {
     sha256 = "86c453d827b8d6c3574ec306f6fadfc5028614e1cd46676841336e6787a7496a";
   };
 
-  checkInputs = [ pytest glibcLocales ];
+  checkInputs = [ pytest  ];
   propagatedBuildInputs = [ numpy scipy matplotlib h5py ];
 
   checkPhase = ''
-    LC_ALL=en_US.utf-8 pytest -k 'not test_message_to_parents'
   '';
 
   meta = with stdenv.lib; {

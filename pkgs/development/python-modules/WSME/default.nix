@@ -1,7 +1,7 @@
 { lib, buildPythonPackage, fetchPypi, isPy3k
 , pbr, six, simplegeneric, netaddr, pytz, webob
 , cornice, nose, webtest, pecan, transaction, cherrypy, sphinx
-, flask, flask-restful, suds-jurko, glibcLocales }:
+, flask, flask-restful, suds-jurko }:
 
 buildPythonPackage rec {
   pname = "WSME";
@@ -38,7 +38,7 @@ buildPythonPackage rec {
 
   checkInputs = [
     cornice nose webtest pecan transaction cherrypy sphinx
-    flask flask-restful suds-jurko glibcLocales
+    flask flask-restful suds-jurko 
   ];
 
   meta = with lib; {

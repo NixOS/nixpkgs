@@ -3,7 +3,7 @@
 , fetchPypi
 , nose
 , coverage
-, glibcLocales
+
 , flake8
 , stdenv
 }:
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     sha256 = "e22977e3ebe961f72362f6ddfb9197cc531c9737aaf5f607ef09740c849ecd05";
   };
 
-  buildInputs = [ nose coverage glibcLocales flake8 ];
+  buildInputs = [ nose coverage  flake8 ];
 
   postPatch = ''
     # Remove performance testing.
@@ -25,7 +25,6 @@ buildPythonPackage rec {
     rm tqdm/tests/tests_perf.py
   '';
 
-  LC_ALL="en_US.UTF-8";
 
 #   doCheck = !stdenv.isDarwin;
   # Test suite is too big and slow.

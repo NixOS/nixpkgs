@@ -1,4 +1,4 @@
-{ stdenv, pythonOlder, buildPythonPackage, fetchPypi, six, glibcLocales, pytest }:
+{ stdenv, pythonOlder, buildPythonPackage, fetchPypi, six, pytest }:
 
 buildPythonPackage rec {
   pname = "hcs_utils";
@@ -10,14 +10,13 @@ buildPythonPackage rec {
     sha256 = "04xq69hrys8lf9kp8pva0c4aphjjfw412km7c32ydkwq0i59rhp2";
   };
 
-  LC_ALL="en_US.UTF-8";
 
   checkPhase = ''
     # root does not has /root as home in sandbox
     py.test -k 'not test_expand' hcs_utils/test
   '';
 
-  buildInputs = [ six glibcLocales ];
+  buildInputs = [ six  ];
   checkInputs = [ pytest ];
 
   disabled = pythonOlder "3.4";

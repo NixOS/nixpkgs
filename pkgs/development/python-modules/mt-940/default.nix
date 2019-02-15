@@ -1,5 +1,5 @@
 { buildPythonPackage, stdenv, pyyaml, pytest, enum34
-, pytestpep8, pytestflakes, fetchFromGitHub, isPy3k, lib, glibcLocales
+, pytestpep8, pytestflakes, fetchFromGitHub, isPy3k, lib
 }:
 
 buildPythonPackage rec {
@@ -21,9 +21,8 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = lib.optional (!isPy3k) enum34;
 
-  LC_ALL="en_US.UTF-8";
 
-  checkInputs = [ pyyaml pytestpep8 pytestflakes pytest glibcLocales ];
+  checkInputs = [ pyyaml pytestpep8 pytestflakes pytest  ];
 
   checkPhase = ''
     py.test

@@ -7,7 +7,7 @@
 , nbformat
 , pytest
 , six
-, glibcLocales
+
 , matplotlib
 , sympy
 , pytestcov
@@ -22,9 +22,8 @@ buildPythonPackage rec {
     sha256 = "3f18b87af4e94ccd073263dd58cd3eebabe9f5e4d6ab535b39d3af64811c7eda";
   };
 
-  LC_ALL = "en_US.UTF-8";
 
-  buildInputs = [ glibcLocales ];
+  buildInputs = [  ];
   checkInputs = [ matplotlib sympy pytestcov ];
   propagatedBuildInputs = [ coverage ipykernel jupyter_client nbformat pytest six ];
 

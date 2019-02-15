@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , fetchpatch
-, glibcLocales
+
 , mpmath
 }:
 
@@ -15,7 +15,7 @@ buildPythonPackage rec {
     sha256 = "0m0vhyv15zszn19mk5xq3py4iijjbr7f3fpy1s57b8q7c9arncg1";
   };
 
-  checkInputs = [ glibcLocales ];
+  checkInputs = [  ];
 
   propagatedBuildInputs = [ mpmath ];
 
@@ -31,7 +31,6 @@ buildPythonPackage rec {
   ];
 
   preCheck = ''
-    export LANG="en_US.UTF-8"
   '';
 
   meta = {

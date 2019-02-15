@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, simplejson, pytest, glibcLocales }:
+{ lib, buildPythonPackage, fetchPypi, simplejson, pytest }:
 
 buildPythonPackage rec {
   pname = "uritemplate";
@@ -11,10 +11,9 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ simplejson ];
 
-  checkInputs = [ pytest glibcLocales ];
+  checkInputs = [ pytest  ];
 
   checkPhase = ''
-    LC_ALL=en_US.UTF-8 py.test
   '';
 
   meta = with lib; {

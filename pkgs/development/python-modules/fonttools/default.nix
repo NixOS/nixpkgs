@@ -3,7 +3,7 @@
 , numpy
 , pytest
 , pytestrunner
-, glibcLocales
+
 }:
 
 buildPythonPackage rec {
@@ -23,11 +23,10 @@ buildPythonPackage rec {
   checkInputs = [
     pytest
     pytestrunner
-    glibcLocales
+    
   ];
 
   preCheck = ''
-    export LC_ALL="en_US.UTF-8"
   '';
 
   meta = {

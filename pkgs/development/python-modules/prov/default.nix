@@ -8,7 +8,7 @@
 , pydotplus
 , rdflib
 , pydot
-, glibcLocales
+
 }:
 
 buildPythonPackage rec {
@@ -35,11 +35,10 @@ buildPythonPackage rec {
 
   checkInputs = [
     pydot
-    glibcLocales
+    
   ];
 
   preCheck = ''
-    export LC_ALL="en_US.utf-8"
   '';
 
   meta = with stdenv.lib; {

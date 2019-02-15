@@ -1,5 +1,5 @@
 { lib, buildPythonPackage, fetchPypi
-, pytest, pytestrunner, pytestcov, mock, glibcLocales, lxml, boto3, requests, click, configparser }:
+, pytest, pytestrunner, pytestcov, mock, lxml, boto3, requests, click, configparser }:
 
 buildPythonPackage rec {
   version = "1.12.3";
@@ -18,10 +18,9 @@ buildPythonPackage rec {
   # Test suite writes files to $HOME/.aws/, or /homeless-shelter if unset
   HOME = ".";
 
-  # Required for python3 tests, along with glibcLocales
-  LC_ALL = "en_US.UTF-8";
+  # Required for python3 tests, along with 
 
-  checkInputs = [ glibcLocales pytest pytestrunner pytestcov mock ];
+  checkInputs = [  pytest pytestrunner pytestcov mock ];
   propagatedBuildInputs = [ lxml boto3 requests click configparser ];
 
   meta = {

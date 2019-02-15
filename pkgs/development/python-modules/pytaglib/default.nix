@@ -4,7 +4,7 @@
 , taglib
 , cython
 , pytest
-, glibcLocales
+
 }:
 
 buildPythonPackage rec {
@@ -18,10 +18,9 @@ buildPythonPackage rec {
 
   buildInputs = [ taglib cython ];
 
-  checkInputs = [ pytest glibcLocales ];
+  checkInputs = [ pytest  ];
 
   checkPhase = ''
-    LC_ALL=en_US.utf-8 pytest .
   '';
 
   meta = {

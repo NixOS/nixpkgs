@@ -1,7 +1,7 @@
 { lib, fetchFromGitHub, buildPythonPackage, isPy3k
 , six, pytimeparse, parsedatetime, Babel
 , isodate, python-slugify, leather
-, glibcLocales, nose, lxml, cssselect, unittest2 }:
+, nose, lxml, cssselect, unittest2 }:
 
 buildPythonPackage rec {
   pname = "agate";
@@ -21,11 +21,10 @@ buildPythonPackage rec {
     isodate python-slugify leather
   ];
 
-  checkInputs = [ glibcLocales nose lxml cssselect ]
+  checkInputs = [  nose lxml cssselect ]
     ++ lib.optional (!isPy3k) unittest2;
 
   checkPhase = ''
-    LC_ALL="en_US.UTF-8" nosetests tests
   '';
 
   meta = with lib; {

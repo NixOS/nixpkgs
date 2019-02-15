@@ -41,7 +41,6 @@ in buildPythonPackage rec {
 
   checkPhase = ''
     # 3 out of 5 SignalHandlingTests need network access
-    LANG=en_US.UTF-8 pytest -k "not SignalHandlingTests and not test_4_Autoreload"
   '';
 
   meta = with lib; {

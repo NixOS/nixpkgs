@@ -1,7 +1,7 @@
 { buildPythonPackage
 , lib
 , fetchPypi
-, glibcLocales
+
 , python
 }:
 
@@ -14,9 +14,8 @@ buildPythonPackage rec {
     sha256 = "7ff18ae3721fa75571f9329c08f7c0120416a6ae36194bd8674f65b3b78d0702";
   };
 
-  LC_ALL="en_US.UTF-8";
 
-  buildInputs = [ glibcLocales ];
+  buildInputs = [  ];
 
   checkPhase = ''
     ${python.interpreter} -m unittest discover

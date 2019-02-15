@@ -4,7 +4,7 @@
 , fetchPypi
 , fetchpatch
 # Build dependencies
-, glibcLocales
+
 # Test dependencies
 , nose
 , pygments
@@ -37,7 +37,7 @@ buildPythonPackage rec {
     substituteInPlace setup.py --replace "'gnureadline'" " "
   '';
 
-  buildInputs = [ glibcLocales ];
+  buildInputs = [  ];
 
   checkInputs = [ nose pygments testpath ] ++ lib.optional isPy27 mock;
 
@@ -46,7 +46,6 @@ buildPythonPackage rec {
     simplegeneric traitlets requests pathlib2 pexpect
   ] ++ lib.optionals stdenv.isDarwin [ appnope ];
 
-  LC_ALL="en_US.UTF-8";
 
   doCheck = false; # Circular dependency with ipykernel
 

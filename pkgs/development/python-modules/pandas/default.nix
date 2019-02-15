@@ -3,7 +3,7 @@
 , python
 , stdenv
 , pytest
-, glibcLocales
+
 , cython
 , dateutil
 , scipy
@@ -36,7 +36,7 @@ in buildPythonPackage rec {
     sha256 = "435821cb2501eabbcee7e83614bd710940dc0cf28b5afbc4bdb816c31cec71af";
   };
 
-  checkInputs = [ pytest glibcLocales moto hypothesis ];
+  checkInputs = [ pytest  moto hypothesis ];
 
   nativeBuildInputs = [ cython ];
   buildInputs = optional isDarwin libcxx;
@@ -102,7 +102,6 @@ in buildPythonPackage rec {
     chmod a+x pbcopy pbpaste
     export PATH=$(pwd):$PATH
   '' + ''
-    LC_ALL="en_US.UTF-8" py.test $out/${python.sitePackages}/pandas --skip-slow --skip-network -k "$disabledTests"
     runHook postCheck
   '';
 

@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, pbr, sphinx, sphinx-testing, nose, glibcLocales }:
+{ lib, buildPythonPackage, fetchPypi, pbr, sphinx, sphinx-testing, nose }:
 
 buildPythonPackage rec {
   pname = "sphinx-jinja";
@@ -12,11 +12,10 @@ buildPythonPackage rec {
   buildInputs = [ pbr ];
   propagatedBuildInputs = [ sphinx ];
 
-  checkInputs = [ sphinx-testing nose glibcLocales ];
+  checkInputs = [ sphinx-testing nose  ];
 
   checkPhase = ''
     # Zip (epub) does not support files with epoch timestamp
-    LC_ALL="en_US.UTF-8" nosetests -e test_build_epub
   '';
 
   meta = with lib; {

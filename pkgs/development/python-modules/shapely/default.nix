@@ -1,5 +1,5 @@
 { stdenv, buildPythonPackage, fetchPypi
-, geos, glibcLocales, pytest, cython
+, geos, pytest, cython
 , numpy
 }:
 
@@ -12,14 +12,13 @@ buildPythonPackage rec {
     sha256 = "c4b87bb61fc3de59fc1f85e71a79b0c709dc68364d9584473697aad4aa13240f";
   };
 
-  buildInputs = [ geos glibcLocales cython ];
+  buildInputs = [ geos  cython ];
 
   checkInputs = [ pytest ];
 
   propagatedBuildInputs = [ numpy ];
 
   preConfigure = ''
-    export LANG="en_US.UTF-8";
   '';
 
   patchPhase = let

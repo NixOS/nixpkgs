@@ -2,7 +2,7 @@
 , nose
 , parameterized
 , mock
-, glibcLocales
+
 , six
 , jdatetime
 , dateutil
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     sha256 = "42d51be54e74a8e80a4d76d1fa6e4edd997098fce24ad2d94a2eab5ef247193e";
   };
 
-  checkInputs = [ nose mock parameterized six glibcLocales ];
+  checkInputs = [ nose mock parameterized six  ];
   preCheck =''
     # skip because of missing convertdate module, which is an extra requirement
     rm tests/test_jalali.py

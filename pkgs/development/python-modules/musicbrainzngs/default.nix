@@ -13,9 +13,8 @@ buildPythonPackage rec {
     sha256 = "1dddarpjawryll2wss65xq3v9q8ln8dan7984l5dxzqx88d2dvr8";
   };
 
-  buildInputs = [ pkgs.glibcLocales ];
+  buildInputs = [  ];
 
-  LC_ALL="en_US.UTF-8";
 
   preCheck = ''
     # Remove tests that rely on networking (breaks sandboxed builds)

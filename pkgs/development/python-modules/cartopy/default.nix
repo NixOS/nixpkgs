@@ -1,6 +1,6 @@
 { buildPythonPackage, lib, fetchPypi
 , pytest, filelock, mock, pep8
-, cython, isPy37, glibcLocales
+, cython, isPy37
 , six, pyshp, shapely, geos, proj, numpy
 , gdal, pillow, matplotlib, pyepsg, pykdtree, scipy, owslib, fiona
 }:
@@ -25,8 +25,7 @@ buildPythonPackage rec {
       -k "not test_nightshade_image"
   '';
 
-  buildInputs = [ cython glibcLocales ];
-  LC_ALL = "en_US.UTF-8";
+  buildInputs = [ cython  ];
 
   propagatedBuildInputs = [
     # required

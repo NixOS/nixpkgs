@@ -13,7 +13,6 @@ buildPythonPackage rec {
   doCheck = false;
 
   preConfigure = ''
-    export LC_ALL=C.UTF-8
   '';
 
   meta = with stdenv.lib; {

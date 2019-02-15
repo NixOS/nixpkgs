@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , pytest
-, glibcLocales
+
 , ipython_genutils
 , traitlets
 , testpath
@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   LC_ALL="en_US.utf8";
 
-  checkInputs = [ pytest glibcLocales ];
+  checkInputs = [ pytest  ];
   propagatedBuildInputs = [ ipython_genutils traitlets testpath jsonschema jupyter_core ];
 
   preCheck = ''

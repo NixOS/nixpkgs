@@ -6,7 +6,7 @@
 , pytestcov
 , pytest-mock
 , hypothesis
-, glibcLocales
+
 , pathlib ? null
 }:
 
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     pytestcov
     pytest-mock
     hypothesis
-    glibcLocales
+    
   ]
   # pathlib was made part of standard library in 3.5:
   ++ (lib.optionals (pythonOlder "3.4") [ pathlib ]);

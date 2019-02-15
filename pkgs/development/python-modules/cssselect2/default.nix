@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, tinycss2, pytestrunner, pytestcov, pytest-flake8, pytest-isort, glibcLocales }:
+{ lib, buildPythonPackage, fetchPypi, tinycss2, pytestrunner, pytestcov, pytest-flake8, pytest-isort }:
 
 buildPythonPackage rec {
   pname = "cssselect2";
@@ -11,9 +11,8 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ tinycss2 ];
 
-  checkInputs = [ pytestrunner pytestcov pytest-flake8 pytest-isort glibcLocales ];
+  checkInputs = [ pytestrunner pytestcov pytest-flake8 pytest-isort  ];
 
-  LC_ALL = "en_US.UTF-8";
 
   meta = with lib; {
     description = "CSS selectors for Python ElementTree";

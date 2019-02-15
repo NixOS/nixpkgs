@@ -20,13 +20,12 @@ buildPythonPackage rec {
     sha256 = "1an5lkkqk1zha47198p42ji3m94xmzx1a03dn7866m87n4r4q8h5";
   };
 
-  LC_ALL="en_US.UTF-8";
 
   checkPhase = ''
     ${python.interpreter} test_clint.py
   '';
 
-  buildInputs = [ mock nose nose_progressive pkgs.glibcLocales ];
+  buildInputs = [ mock nose nose_progressive  ];
   propagatedBuildInputs = [ pillow blessings args ];
 
   meta = with stdenv.lib; {

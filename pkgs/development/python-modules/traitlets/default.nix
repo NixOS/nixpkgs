@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, glibcLocales
+
 , pytest
 , mock
 , ipython_genutils
@@ -20,11 +20,10 @@ buildPythonPackage rec {
     sha256 = "9c4bd2d267b7153df9152698efb1050a5d84982d3384a37b2c1f7723ba3e7835";
   };
 
-  checkInputs = [ glibcLocales pytest mock ];
+  checkInputs = [  pytest mock ];
   propagatedBuildInputs = [ ipython_genutils decorator six ] ++ lib.optional (pythonOlder "3.4") enum34;
 
   checkPhase = ''
-    LC_ALL="en_US.UTF-8" py.test
   '';
 
 #   doCheck = false;

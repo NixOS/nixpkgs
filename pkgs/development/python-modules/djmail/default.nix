@@ -1,5 +1,5 @@
 { lib, buildPythonPackage, fetchPypi
-, glibcLocales
+
 , celery, django, psycopg2
 }:
 
@@ -18,9 +18,8 @@ buildPythonPackage rec {
     sha256 = "87d2a8b4bdf67ae9b312e127ccc873a53116cf297ec786460d782ce82eaa76b5";
   };
 
-  nativeBuildInputs = [ glibcLocales ];
+  nativeBuildInputs = [  ];
 
-  LC_ALL = "en_US.UTF-8";
 
   propagatedBuildInputs = [ celery django psycopg2 ];
 

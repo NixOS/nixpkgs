@@ -38,7 +38,6 @@ buildPythonPackage rec {
 
   preCheck = ''
     # necessary on darwin to pass the testsuite
-    export LANG=en_US.UTF-8
   '';
 
   propagatedBuildInputs = [ cairosvg tinycss cssselect ]

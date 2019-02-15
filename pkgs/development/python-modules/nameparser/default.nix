@@ -1,7 +1,7 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi
-, glibcLocales
+
 }:
 
 buildPythonPackage rec {
@@ -13,8 +13,7 @@ buildPythonPackage rec {
     sha256 = "0w1m8qva2d7xfqrdxsnh1cncr3ank2205i5rz44hawjh2frzmik2";
   };
 
-  LC_ALL="en_US.UTF-8";
-  buildInputs = [ glibcLocales ];
+  buildInputs = [  ];
 
   meta = with stdenv.lib; {
     description = "A simple Python module for parsing human names into their individual components";

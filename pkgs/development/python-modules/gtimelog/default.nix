@@ -15,9 +15,8 @@ buildPythonPackage rec {
     sha256 = "0qk8fv8cszzqpdi3wl9vvkym1jil502ycn6sic4jrxckw5s9jsfj";
   };
 
-  buildInputs = [ pkgs.glibcLocales ];
+  buildInputs = [  ];
 
-  LC_ALL="en_US.UTF-8";
 
   # TODO: AppIndicator
   propagatedBuildInputs = [ pkgs.gobject-introspection pygobject3 pkgs.makeWrapper pkgs.gtk3 ];

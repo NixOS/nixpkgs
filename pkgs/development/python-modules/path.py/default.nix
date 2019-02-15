@@ -4,7 +4,7 @@
 , setuptools_scm
 , pytest
 , pytest-flake8
-, glibcLocales
+
 , packaging
 , isPy27
 , backports_os
@@ -20,14 +20,13 @@ buildPythonPackage rec {
     sha256 = "b6687a532a735a2d79a13e92bdb31cb0971abe936ea0fa78bcb47faf4372b3cb";
   };
 
-  checkInputs = [ pytest pytest-flake8 glibcLocales packaging ];
+  checkInputs = [ pytest pytest-flake8  packaging ];
   buildInputs = [ setuptools_scm ];
   propagatedBuildInputs = [
     importlib-metadata
   ] ++ lib.optional isPy27 backports_os
   ;
 
-  LC_ALL = "en_US.UTF-8";
 
   meta = {
     description = "A module wrapper for os.path";

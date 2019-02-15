@@ -1,6 +1,6 @@
 { stdenv, buildBazelPackage, lib, fetchFromGitHub, fetchpatch, symlinkJoin
 , buildPythonPackage, isPy3k, pythonOlder, pythonAtLeast
-, which, swig, binutils, glibcLocales
+, which, swig, binutils
 , python, jemalloc, openmpi
 , numpy, six, protobuf, tensorflow-tensorboard, backports_weakref, mock, enum34, absl-py
 , cudaSupport ? false, nvidia_x11 ? null, cudatoolkit ? null, cudnn ? null
@@ -57,7 +57,7 @@ let
 
     nativeBuildInputs = [ swig which ];
 
-    buildInputs = [ python jemalloc openmpi glibcLocales numpy ]
+    buildInputs = [ python jemalloc openmpi  numpy ]
       ++ lib.optionals cudaSupport [ cudatoolkit cudnn nvidia_x11 ];
 
     preConfigure = ''

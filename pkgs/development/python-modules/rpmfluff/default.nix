@@ -1,7 +1,7 @@
 { stdenv
 , buildPythonPackage
 , fetchurl
-, glibcLocales
+
 }:
 
 buildPythonPackage rec {
@@ -13,8 +13,7 @@ buildPythonPackage rec {
     sha256 = "0bhh8mv2kddhv3fiswg3zdl91d7vh93b33jlh1dmyz63z94rm88l";
   };
 
-  LC_ALL="en_US.utf-8";
-  buildInputs = [ glibcLocales ];
+  buildInputs = [  ];
 
   meta = with stdenv.lib; {
     description = "lightweight way of building RPMs, and sabotaging them";

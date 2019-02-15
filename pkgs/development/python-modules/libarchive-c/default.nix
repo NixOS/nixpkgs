@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , pytest
-, glibcLocales
+
 , libarchive
 , mock
 }:
@@ -16,9 +16,8 @@ buildPythonPackage rec {
     sha256 = "06d44d5b9520bdac93048c72b7ed66d11a6626da16d2086f9aad079674d8e061";
   };
 
-  checkInputs = [ mock pytest glibcLocales ];
+  checkInputs = [ mock pytest  ];
 
-  LC_ALL="en_US.UTF-8";
 
   postPatch = ''
     substituteInPlace libarchive/ffi.py --replace \

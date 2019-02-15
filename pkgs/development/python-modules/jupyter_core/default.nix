@@ -3,7 +3,7 @@
 , fetchPypi
 , ipython
 , traitlets
-, glibcLocales
+
 , mock
 , pytest
 }:
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     sha256 = "ba70754aa680300306c699790128f6fbd8c306ee5927976cbe48adacf240c0b7";
   };
 
-  checkInputs = [ pytest mock glibcLocales ];
+  checkInputs = [ pytest mock  ];
   propagatedBuildInputs = [ ipython traitlets ];
 
   patches = [ ./tests_respect_pythonpath.patch ];

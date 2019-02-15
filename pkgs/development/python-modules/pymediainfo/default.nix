@@ -1,7 +1,7 @@
 { stdenv, fetchPypi, buildPythonPackage
 , libmediainfo
 , setuptools_scm
-, pytest, glibcLocales }:
+, pytest }:
 
 buildPythonPackage rec {
   pname = "pymediainfo";
@@ -31,10 +31,9 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools_scm ];
 
-  checkInputs = [ glibcLocales pytest ];
+  checkInputs = [  pytest ];
 
   checkPhase = ''
-    export LC_ALL=en_US.UTF-8
     py.test -k 'not test_parse_url' tests
   '';
 

@@ -1,5 +1,5 @@
 { stdenv, buildPythonPackage, fetchPypi, isPy3k
-, glibcLocales, pytest }:
+, pytest }:
 
 buildPythonPackage rec {
   pname = "ephem";
@@ -11,10 +11,9 @@ buildPythonPackage rec {
   };
 
   patchFlags = "-p0";
-  checkInputs = [ pytest glibcLocales ];
+  checkInputs = [ pytest  ];
   # JPLTest uses assets not distributed in package
   checkPhase = ''
-    LC_ALL="en_US.UTF-8" py.test --pyargs ephem.tests -k "not JPLTest"
   '';
 
   # Unfortunately, the tests are broken for Python 3 in 3.7.6.0. They have been

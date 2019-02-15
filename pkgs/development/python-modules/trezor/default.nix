@@ -26,7 +26,6 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ typing-extensions protobuf hidapi ecdsa mnemonic requests pyblake2 click construct libusb1 rlp ];
 
   # build requires UTF-8 locale
-  LANG = "en_US.UTF-8";
 
   checkInputs = [
     pytest

@@ -3,7 +3,7 @@
 , fetchPypi
 , pytest
 , fetchpatch
-, glibcLocales
+
 }:
 
 buildPythonPackage rec {
@@ -15,8 +15,7 @@ buildPythonPackage rec {
     sha256 = "38aeec7cdd035081d3a4c306394b19d677623bf76fa0913f6695127c7753aefd";
   };
 
-  LC_ALL = "en_US.UTF-8";
-  checkInputs = [ glibcLocales pytest ];
+  checkInputs = [  pytest ];
 
   checkPhase = ''
     # fails on python3.7: https://github.com/drkjam/netaddr/issues/182

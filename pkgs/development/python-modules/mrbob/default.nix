@@ -1,4 +1,4 @@
-{ buildPythonPackage, stdenv, glibcLocales, mock, nose, isPy3k, jinja2, six
+{ buildPythonPackage, stdenv, mock, nose, isPy3k, jinja2, six
 , fetchPypi
 }:
 
@@ -13,9 +13,8 @@ buildPythonPackage rec {
 
   disabled = isPy3k;
 
-  checkInputs = [ nose glibcLocales mock ];
+  checkInputs = [ nose  mock ];
   checkPhase = ''
-    LC_ALL="en_US.UTF-8" nosetests
   '';
 
   propagatedBuildInputs = [ jinja2 six ];

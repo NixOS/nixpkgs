@@ -4,7 +4,7 @@
 , fetchPypi
 , fetchpatch
 , doit
-, glibcLocales
+
 , pytest
 , pytestcov
 , mock
@@ -42,7 +42,7 @@ buildPythonPackage rec {
   # other hand doesn't support Python 3.3). So, just disable Python 2.
   disabled = !isPy3k;
 
-  checkInputs = [ pytest pytestcov mock glibcLocales freezegun ];
+  checkInputs = [ pytest pytestcov mock  freezegun ];
 
   propagatedBuildInputs = [
     pygments pillow dateutil docutils Mako unidecode lxml Yapsy PyRSS2Gen
@@ -61,7 +61,6 @@ buildPythonPackage rec {
   };
 
   checkPhase = ''
-    LANG="en_US.UTF-8" LC_ALL="en_US.UTF-8" py.test .
   '';
 
   meta = {

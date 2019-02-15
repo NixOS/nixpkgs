@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, pytest, glibcLocales, tox, pytestcov, parso }:
+{ stdenv, buildPythonPackage, fetchPypi, pytest, tox, pytestcov, parso }:
 
 buildPythonPackage rec {
   pname = "jedi";
@@ -13,12 +13,11 @@ buildPythonPackage rec {
     substituteInPlace requirements.txt --replace "parso==0.1.0" "parso"
   '';
 
-  checkInputs = [ pytest glibcLocales tox pytestcov ];
+  checkInputs = [ pytest  tox pytestcov ];
 
   propagatedBuildInputs = [ parso ];
 
   checkPhase = ''
-    LC_ALL="en_US.UTF-8" py.test test
   '';
 
   # tox required for tests: https://github.com/davidhalter/jedi/issues/808

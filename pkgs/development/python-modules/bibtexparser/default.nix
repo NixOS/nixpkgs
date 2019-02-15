@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage, fetchFromGitHub
 , future, pyparsing
-, glibcLocales, nose, unittest2
+, nose, unittest2
 }:
 
 buildPythonPackage rec {
@@ -18,10 +18,9 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ future pyparsing ];
 
-  checkInputs = [ nose unittest2 glibcLocales ];
+  checkInputs = [ nose unittest2  ];
 
   checkPhase = ''
-    LC_ALL="en_US.UTF-8" nosetests
   '';
 
   meta = {

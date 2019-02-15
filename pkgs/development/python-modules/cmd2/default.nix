@@ -2,7 +2,7 @@
 , pyperclip, six, pyparsing, vim, wcwidth, colorama, attrs
 , contextlib2 ? null, typing ? null, setuptools_scm
 , pytest, mock ? null, pytest-mock
-, which, glibcLocales
+, which
 }:
 buildPythonPackage rec {
   pname = "cmd2";
@@ -13,7 +13,6 @@ buildPythonPackage rec {
     sha256 = "22c3461af56769e74225e3aeecab0e98ef86ab8d9b4ded29ba84722449fe7608";
   };
 
-  LC_ALL="en_US.UTF-8";
 
   postPatch = stdenv.lib.optional stdenv.isDarwin ''
     # Fake the impure dependencies pbpaste and pbcopy
@@ -45,7 +44,7 @@ buildPythonPackage rec {
   doCheck = !stdenv.isDarwin;
   # pytest-cov
   # argcomplete  will generate errors
-  checkInputs= [ pytest mock which vim glibcLocales pytest-mock ]
+  checkInputs= [ pytest mock which vim  pytest-mock ]
         ++ stdenv.lib.optional (pythonOlder "3.6") [ mock ];
   checkPhase = ''
     # test_path_completion_user_expansion might be fixed in the next release

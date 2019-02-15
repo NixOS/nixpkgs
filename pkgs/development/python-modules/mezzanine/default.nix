@@ -39,7 +39,6 @@ buildPythonPackage rec {
     sed -i 's/==/>=/' setup.py
   '';
 
-  LC_ALL="en_US.UTF-8";
 
   meta = with stdenv.lib; {
     description = ''

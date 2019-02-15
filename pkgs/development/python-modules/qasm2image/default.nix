@@ -36,7 +36,6 @@ buildPythonPackage rec {
     ${python.interpreter} tests/launch_tests.py
   '';
 
-  LC_ALL="en_US.UTF-8";
 
   meta = {
     description = "A Python module to visualise quantum circuit";

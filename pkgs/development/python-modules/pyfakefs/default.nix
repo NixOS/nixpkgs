@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, python, pytest, glibcLocales }:
+{ stdenv, buildPythonPackage, fetchPypi, python, pytest }:
 
 buildPythonPackage rec {
   version = "3.5.7";
@@ -24,10 +24,9 @@ buildPythonPackage rec {
       --replace "test_rename_dir_to_existing_dir" "notest_rename_dir_to_existing_dir"
   '');
 
-  checkInputs = [ pytest glibcLocales ];
+  checkInputs = [ pytest  ];
 
   checkPhase = ''
-    export LC_ALL=en_US.UTF-8
     ${python.interpreter} -m pyfakefs.tests.all_tests
     ${python.interpreter} -m pyfakefs.tests.all_tests_without_extra_packages
     ${python.interpreter} -m pytest pyfakefs/tests/pytest/pytest_plugin_test.py

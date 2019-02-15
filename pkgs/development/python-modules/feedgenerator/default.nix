@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, glibcLocales, fetchPypi, six, pytz }:
+{ stdenv, buildPythonPackage, fetchPypi, six, pytz }:
 
 buildPythonPackage rec {
   pname = "feedgenerator";
@@ -9,9 +9,8 @@ buildPythonPackage rec {
     sha256 = "01mirwkm7xfx539hmvj7g9da1j51gw5lsx74dr0glizskjm5vq2s";
   };
 
-  buildInputs = [ glibcLocales ];
+  buildInputs = [  ];
 
-  LC_ALL="en_US.UTF-8";
 
   propagatedBuildInputs = [ six pytz ];
 

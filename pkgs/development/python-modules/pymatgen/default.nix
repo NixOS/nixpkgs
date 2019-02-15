@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, glibcLocales, numpy, pydispatcher, sympy, requests, monty, ruamel_yaml, six, scipy, tabulate, enum34, matplotlib, palettable, spglib, pandas, networkx }:
+{ stdenv, buildPythonPackage, fetchPypi, numpy, pydispatcher, sympy, requests, monty, ruamel_yaml, six, scipy, tabulate, enum34, matplotlib, palettable, spglib, pandas, networkx }:
 
 buildPythonPackage rec {
   pname = "pymatgen";
@@ -9,7 +9,7 @@ buildPythonPackage rec {
     sha256 = "0932024a8703236dce861bcadd9568455baa8c70c0f7a1fc52d8ca4b52342091";
   };
 
-  nativeBuildInputs = [ glibcLocales ];
+  nativeBuildInputs = [  ];
   propagatedBuildInputs = [ numpy pydispatcher sympy requests monty ruamel_yaml six scipy tabulate enum34 matplotlib palettable spglib pandas networkx ];
 
   # No tests in pypi tarball.

@@ -1,4 +1,4 @@
-{ buildPythonPackage, lib, fetchPypi, glibcLocales, isPy3k, contextvars
+{ buildPythonPackage, lib, fetchPypi, isPy3k, contextvars
 , pythonOlder
 }:
 
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   # > TypeError: 'encoding' is an invalid keyword argument for this function
   disabled = !isPy3k;
 
-  buildInputs = [ glibcLocales ];
+  buildInputs = [  ];
 
   propagatedBuildInputs = lib.optionals (pythonOlder "3.7") [ contextvars ];
 

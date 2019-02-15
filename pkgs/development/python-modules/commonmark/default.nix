@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k, glibcLocales, future }:
+{ lib, buildPythonPackage, fetchPypi, isPy3k, future }:
 
 buildPythonPackage rec {
   pname = "commonmark";
@@ -10,13 +10,12 @@ buildPythonPackage rec {
   };
 
   preCheck = ''
-    export LC_ALL="en_US.UTF-8"
   '';
 
   # UnicodeEncodeError on Python 2
   doCheck = isPy3k;
 
-  checkInputs = [  glibcLocales ];
+  checkInputs = [   ];
   propagatedBuildInputs = [ future ];
 
   meta = with lib; {

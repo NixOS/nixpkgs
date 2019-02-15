@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, python, pythonOlder, glibcLocales, fetchFromGitHub, ipaddress, six, simplejson }:
+{ lib, buildPythonPackage, python, pythonOlder, fetchFromGitHub, ipaddress, six, simplejson }:
 
 buildPythonPackage rec {
   pname = "mail-parser";
@@ -12,7 +12,6 @@ buildPythonPackage rec {
     sha256 = "0nxilshq4gwpicdklja9p275yf8l5kr1lk620c3cx9w4qai4cmbv";
   };
 
-  LC_ALL = "en_US.utf-8";
 
   # ipaddress is part of the standard library of Python 3.3+
   prePatch = lib.optionalString (!pythonOlder "3.3") ''
@@ -20,7 +19,7 @@ buildPythonPackage rec {
       --replace "ipaddress" ""
   '';
 
-  nativeBuildInputs = [ glibcLocales ];
+  nativeBuildInputs = [  ];
   propagatedBuildInputs = [ simplejson six ] ++ lib.optional (pythonOlder "3.3") ipaddress;
 
   # Taken from .travis.yml

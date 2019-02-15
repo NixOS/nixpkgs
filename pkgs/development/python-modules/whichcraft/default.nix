@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, pytest, glibcLocales }:
+{ lib, buildPythonPackage, fetchPypi, pytest }:
 
 buildPythonPackage rec {
   pname = "whichcraft";
@@ -9,8 +9,7 @@ buildPythonPackage rec {
     sha256 = "fecddd531f237ffc5db8b215409afb18fa30300699064cca4817521b4fc81815";
   };
 
-  LC_ALL="en_US.utf-8";
-  buildInputs = [ glibcLocales ];
+  buildInputs = [  ];
 
   checkInputs = [ pytest ];
 

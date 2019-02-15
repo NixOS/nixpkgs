@@ -21,7 +21,6 @@ buildPythonPackage rec {
     })
   ];
 
-  LC_ALL="en_US.UTF-8";
 
   propagatedBuildInputs = [ cairocffi cssselect2 defusedxml pillow tinycss2 ];
 

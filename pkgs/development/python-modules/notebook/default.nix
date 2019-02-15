@@ -4,7 +4,7 @@
 , fetchPypi
 , nose
 , nose_warnings_filters
-, glibcLocales
+
 , isPy3k
 , mock
 , jinja2
@@ -34,7 +34,7 @@ buildPythonPackage rec {
 
   LC_ALL = "en_US.utf8";
 
-  checkInputs = [ nose glibcLocales ]
+  checkInputs = [ nose  ]
     ++ (if isPy3k then [ nose_warnings_filters ] else [ mock ]);
 
   propagatedBuildInputs = [

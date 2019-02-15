@@ -8,7 +8,7 @@
 , pytest
 , pretend
 , flaky
-, glibcLocales
+
 }:
 
 with stdenv.lib;
@@ -59,7 +59,6 @@ buildPythonPackage rec {
 
   checkPhase = ''
     runHook preCheck
-    export LANG="en_US.UTF-8"
     py.test tests ${testExpression}
     runHook postCheck
   '';
@@ -71,5 +70,5 @@ buildPythonPackage rec {
   nativeBuildInputs = [ openssl ];
   propagatedBuildInputs = [ cryptography pyasn1 idna ];
 
-  checkInputs = [ pytest pretend flaky glibcLocales ];
+  checkInputs = [ pytest pretend flaky  ];
 }

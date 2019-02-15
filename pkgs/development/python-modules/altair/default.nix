@@ -1,5 +1,5 @@
 { stdenv, buildPythonPackage, fetchPypi, fetchpatch
-, pytest, jinja2, sphinx, vega_datasets, ipython, glibcLocales
+, pytest, jinja2, sphinx, vega_datasets, ipython
 , entrypoints, jsonschema, numpy, pandas, six, toolz, typing
 , pythonOlder, recommonmark }:
 
@@ -12,7 +12,7 @@ buildPythonPackage rec {
     sha256 = "9f4bc7cd132c0005deb6b36c7041ee213a69bbdfcd8c0b1a9f1ae8c1fba733f6";
   };
 
-  checkInputs = [ pytest jinja2 sphinx vega_datasets ipython glibcLocales recommonmark ];
+  checkInputs = [ pytest jinja2 sphinx vega_datasets ipython  recommonmark ];
 
   propagatedBuildInputs = [ entrypoints jsonschema numpy pandas six toolz ]
     ++ stdenv.lib.optionals (pythonOlder "3.5") [ typing ];
@@ -24,7 +24,6 @@ buildPythonPackage rec {
   '';
 
   checkPhase = ''
-    export LANG=en_US.UTF-8
     py.test altair --doctest-modules
   '';
 
