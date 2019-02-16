@@ -793,6 +793,11 @@
     github = "caugner";
     name = "Claas Augner";
   };
+  cbley = {
+    email = "claudio.bley@gmail.com";
+    github = "avdv";
+    name = "Claudio Bley";
+  };
   cdepillabout = {
     email = "cdep.illabout@gmail.com";
     github = "cdepillabout";
@@ -1564,6 +1569,11 @@
     email = "flokli@flokli.de";
     github = "flokli";
     name = "Florian Klink";
+  };
+  FlorianFranzen = {
+    email = "Florian.Franzen@gmail.com";
+    github = "FlorianFranzen";
+    name = "Florian Franzen";
   };
   florianjacob = {
     email = "projects+nixos@florianjacob.de";
@@ -3227,6 +3237,11 @@
     email = "tim@nequissimus.com";
     github = "nequissimus";
     name = "Tim Steinbach";
+  };
+  netixx = {
+    email = "dev.espinetfrancois@gmail.com";
+    github = "netixx";
+    name = "François Espinet";
   };
   nikitavoloboev = {
     email = "nikita.voloboev@gmail.com";

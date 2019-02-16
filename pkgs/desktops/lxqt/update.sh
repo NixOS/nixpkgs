@@ -7,7 +7,7 @@ cd "$(dirname "${BASH_SOURCE[0]}")"
 root=../../..
 export NIXPKGS_ALLOW_UNFREE=1
 
-lxqt_version=0.13.0
+lxqt_version=0.14.0
 lxqtrepo=https://downloads.lxqt.org/${lxqt_version}.html
 
 version() {
@@ -28,7 +28,7 @@ update_lxqt() {
                  local pfile=$(EDITOR=echo nix edit -f. lxqt.$pname 2>/dev/null)
                  update-source-version lxqt.$pname "$pversion"
                  git add $pfile
-                 git commit -m "$pname: $pversionold -> $pversion"
+                 git commit -m "lxqt.$pname: $pversionold -> $pversion"
                 )
             fi
             echo

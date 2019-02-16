@@ -1,0 +1,44 @@
+From cb5b020a8d38f77209d0472a0fea755299a8ec78 Mon Sep 17 00:00:00 2001
+From: Linus Torvalds <torvalds@linux-foundation.org>
+Date: Thu, 14 Feb 2019 15:02:18 -0800
+Subject: Revert "exec: load_script: don't blindly truncate shebang string"
+
+This reverts commit 8099b047ecc431518b9bb6bdbba3549bbecdc343.
+
+It turns out that people do actually depend on the shebang string being
+truncated, and on the fact that an interpreter (like perl) will often
+just re-interpret it entirely to get the full argument list.
+
+Reported-by: Samuel Dionne-Riel <samuel@dionne-riel.com>
+Acked-by: Kees Cook <keescook@chromium.org>
+Cc: Oleg Nesterov <oleg@redhat.com>
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+---
+ fs/binfmt_script.c | 10 +++-------
+ 1 file changed, 3 insertions(+), 7 deletions(-)
+
+diff --git a/fs/binfmt_script.c b/fs/binfmt_script.c
+index d0078cbb718b..7cde3f46ad26 100644
+--- a/fs/binfmt_script.c
++++ b/fs/binfmt_script.c
+@@ -42,14 +42,10 @@ static int load_script(struct linux_binprm *bprm)
+ 	fput(bprm->file);
+ 	bprm->file = NULL;
+ 
+-	for (cp = bprm->buf+2;; cp++) {
+-		if (cp >= bprm->buf + BINPRM_BUF_SIZE)
+-			return -ENOEXEC;
+-		if (!*cp || (*cp == '\n'))
+-			break;
+-	}
++	bprm->buf[BINPRM_BUF_SIZE - 1] = '\0';
++	if ((cp = strchr(bprm->buf, '\n')) == NULL)
++		cp = bprm->buf+BINPRM_BUF_SIZE-1;
+ 	*cp = '\0';
+-
+ 	while (cp > bprm->buf) {
+ 		cp--;
+ 		if ((*cp == ' ') || (*cp == '\t'))
+-- 
+cgit 1.2-0.3.lf.el7
+

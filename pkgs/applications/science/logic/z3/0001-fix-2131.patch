@@ -1,0 +1,66 @@
+From c5df6ce96e068eceb77019e48634721c6a5bb607 Mon Sep 17 00:00:00 2001
+From: Nikolaj Bjorner <nbjorner@microsoft.com>
+Date: Sun, 10 Feb 2019 10:07:24 -0800
+Subject: [PATCH 1/1] fix #2131
+
+Signed-off-by: Nikolaj Bjorner <nbjorner@microsoft.com>
+---
+ src/api/python/README.txt    | 10 +++-------
+ src/api/python/setup.py      |  2 +-
+ src/ast/recfun_decl_plugin.h |  2 +-
+ 3 files changed, 5 insertions(+), 9 deletions(-)
+
+diff --git a/src/api/python/README.txt b/src/api/python/README.txt
+index 9312b1119..561b8dedc 100644
+--- a/src/api/python/README.txt
++++ b/src/api/python/README.txt
+@@ -1,8 +1,4 @@
+-You can learn more about Z3Py at:
+-http://rise4fun.com/Z3Py/tutorial/guide
+-
+-On Windows, you must build Z3 before using Z3Py.
+-To build Z3, you should executed the following command
++On Windows, to build Z3, you should executed the following command
+ in the Z3 root directory at the Visual Studio Command Prompt
+ 
+        msbuild /p:configuration=external
+@@ -12,8 +8,8 @@ If you are using a 64-bit Python interpreter, you should use
+        msbuild /p:configuration=external /p:platform=x64
+ 
+ 
+-On Linux and macOS, you must install Z3Py, before trying example.py.
+-To install Z3Py on Linux and macOS, you should execute the following
++On Linux and macOS, you must install python bindings, before trying example.py.
++To install python on Linux and macOS, you should execute the following
+ command in the Z3 root directory
+ 
+         sudo make install-z3py
+diff --git a/src/api/python/setup.py b/src/api/python/setup.py
+index 2a750fee6..063680e2b 100644
+--- a/src/api/python/setup.py
++++ b/src/api/python/setup.py
+@@ -178,7 +178,7 @@ setup(
+     name='z3-solver',
+     version=_z3_version(),
+     description='an efficient SMT solver library',
+-    long_description='Z3 is a theorem prover from Microsoft Research with support for bitvectors, booleans, arrays, floating point numbers, strings, and other data types.\n\nFor documentation, please read http://z3prover.github.io/api/html/z3.html\n\nIn the event of technical difficulties related to configuration, compiliation, or installation, please submit issues to https://github.com/angr/angr-z3',
++    long_description='Z3 is a theorem prover from Microsoft Research with support for bitvectors, booleans, arrays, floating point numbers, strings, and other data types.\n\nFor documentation, please read http://z3prover.github.io/api/html/z3.html\n\nIn the event of technical difficulties related to configuration, compilation, or installation, please submit issues to https://github.com/angr/angr-z3',
+     author="The Z3 Theorem Prover Project",
+     maintainer="Audrey Dutcher",
+     maintainer_email="audrey@rhelmot.io",
+diff --git a/src/ast/recfun_decl_plugin.h b/src/ast/recfun_decl_plugin.h
+index 0247335e8..b294cdfce 100644
+--- a/src/ast/recfun_decl_plugin.h
++++ b/src/ast/recfun_decl_plugin.h
+@@ -56,7 +56,7 @@ namespace recfun {
+         friend class def;
+         func_decl_ref       m_pred; //<! predicate used for this case
+         expr_ref_vector     m_guards; //<! conjunction that is equivalent to this case
+-        expr_ref            m_rhs; //<! if guard is true, `f(t1…tn) = rhs` holds
++        expr_ref            m_rhs; //<! if guard is true, `f(t1...tn) = rhs` holds
+         def *               m_def; //<! definition this is a part of
+         bool                m_immediate; //<! does `rhs` contain no defined_fun/case_pred?
+ 
+-- 
+2.19.2
+

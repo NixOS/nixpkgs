@@ -168,6 +168,10 @@ in {
 
   aioimaplib = callPackage ../development/python-modules/aioimaplib { };
 
+  aiolifx = callPackage ../development/python-modules/aiolifx { };
+
+  aiolifx-effects = callPackage ../development/python-modules/aiolifx-effects { };
+
   aioamqp = callPackage ../development/python-modules/aioamqp { };
 
   ansicolor = callPackage ../development/python-modules/ansicolor { };
@@ -4056,6 +4060,8 @@ in {
   };
 
   scikit-bio = callPackage ../development/python-modules/scikit-bio { };
+
+  scikit-build = callPackage ../development/python-modules/scikit-build { };
 
   scp = callPackage ../development/python-modules/scp {};
 
