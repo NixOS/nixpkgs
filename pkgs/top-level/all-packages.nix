@@ -1552,6 +1552,8 @@ in
 
   nwipe = callPackage ../tools/security/nwipe { };
 
+  nx-libs = callPackage ../tools/X11/nx-libs { };
+
   nyx = callPackage ../tools/networking/nyx { };
 
   onboard = callPackage ../applications/misc/onboard { };
@@ -4498,8 +4500,6 @@ in
   nwdiag = with python3Packages; toPythonApplication nwdiag;
 
   nylon = callPackage ../tools/networking/nylon { };
-
-  nxproxy = callPackage ../tools/admin/nxproxy { };
 
   nzbget = callPackage ../tools/networking/nzbget { };
 
@@ -23020,6 +23020,8 @@ in
   };
 
   x11idle = callPackage ../tools/misc/x11idle {};
+
+  x11docker = callPackage ../applications/virtualization/x11docker { };
 
   x2x = callPackage ../tools/X11/x2x { };
 
