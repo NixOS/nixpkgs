@@ -7768,15 +7768,15 @@ let
 
   ImageExifTool = buildPerlPackage rec {
     name = "Image-ExifTool-${version}";
-    version = "11.01";
+    version = "11.11";
 
     src = fetchurl {
       url = "https://www.sno.phy.queensu.ca/~phil/exiftool/${name}.tar.gz";
-      sha256 = "175w34n73mypdpbaqj2vgqsfp59yvfrn8k7zmx4cawnp895bypvh";
+      sha256 = "1szg1k82nz88pp5n7lg71ja7q3hh5i5f9bcbb7m482dwrmsywkp6";
     };
 
     meta = with stdenv.lib; {
-      description = "ExifTool, a tool to read, write and edit EXIF meta information";
+      description = "A tool to read, write and edit EXIF meta information";
       homepage = https://www.sno.phy.queensu.ca/~phil/exiftool/;
 
       longDescription = ''
@@ -7785,10 +7785,10 @@ let
         image, audio and video files.  ExifTool supports many different types
         of metadata including EXIF, GPS, IPTC, XMP, JFIF, GeoTIFF, ICC
         Profile, Photoshop IRB, FlashPix, AFCP and ID3, as well as the maker
-        notes of many digital cameras by Canon, Casio, FujiFilm, HP,
-        JVC/Victor, Kodak, Leaf, Minolta/Konica-Minolta, Nikon,
-        Olympus/Epson, Panasonic/Leica, Pentax/Asahi, Ricoh, Sanyo,
-        Sigma/Foveon and Sony.
+        notes of many digital cameras by Canon, Casio, DJI, FLIR, FujiFilm, HP,
+        JVC/Victor, Kodak, Leaf, Minolta/Konica-Minolta, Motorola, Nikon,
+        Nintendo, Olympus/Epson, Panasonic/Leica, Pentax/Asahi, Phase One,
+        Reconyx, Ricoh, Samsung, Sanyo, Sigma/Foveon and Sony.
       '';
 
       license = with licenses; [ gpl1Plus /* or */ artistic2 ];
