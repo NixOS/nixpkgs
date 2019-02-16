@@ -245,6 +245,7 @@ stdenv.mkDerivation rec {
     scripts/generate_bash_completion.sh \
         --bazel=./output/bazel \
         --output=output/bazel-complete.bash \
+        --prepend=scripts/bazel-complete-header.bash \
         --prepend=scripts/bazel-complete-template.bash
   '';
 
