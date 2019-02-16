@@ -1447,6 +1447,8 @@ in
 
   grobi = callPackage ../tools/X11/grobi { };
 
+  gscan2pdf = callPackage ../applications/graphics/gscan2pdf { };
+
   gti = callPackage ../tools/misc/gti { };
 
   hdate = callPackage ../applications/misc/hdate { };
