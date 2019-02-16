@@ -3658,6 +3658,8 @@ in
 
   kytea = callPackage ../tools/text/kytea { };
 
+  k6 = callPackage ../development/tools/k6 { };
+
   ldc = callPackage ../development/compilers/ldc { };
 
   lbreakout2 = callPackage ../games/lbreakout2 { };
