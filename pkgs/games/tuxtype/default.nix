@@ -1,15 +1,17 @@
-{ stdenv, fetchurl, pkgconfig, librsvg, SDL, SDL_image, SDL_mixer, SDL_ttf }:
+{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, librsvg, libxml2, SDL, SDL_image, SDL_mixer, SDL_net, SDL_ttf, t4kcommon }:
 
 stdenv.mkDerivation rec {
   version = "1.8.3";
-  name = "tuxtype-${version}";
+  pname = "tuxtype";
 
-  src = fetchurl {
-    url = "https://github.com/tux4kids/tuxtype/archive/upstream/${version}.tar.gz";
-    sha256 = "0cv935ir14cd2c8bgsxxpi6id04f61170gslakmwhxn6r3pbw0lp";
+  src = fetchFromGitHub {
+    owner = "tux4kids";
+    repo = "tuxtype";
+    rev = "upstream/${version}";
+    sha256 = "1i33rhi9gpzfml4hd73s18h6p2s8zcr26va2vwf2pqqd9fhdwpsg";
   };
 
-  patchPhase = ''
+  postPatch = ''
     patchShebangs data/scripts/sed-linux.sh
     patchShebangs data/themes/asturian/scripts/sed-linux.sh
     patchShebangs data/themes/greek/scripts/sed-linux.sh
@@ -19,13 +21,15 @@ stdenv.mkDerivation rec {
       --replace "\$(MKDIR_P) -m 2755 " "\$(MKDIR_P) -m 755 " \
       --replace "chown root:games \$(DESTDIR)\$(pkglocalstatedir)/words" " "
 
-    substituteInPlace Makefile.in \
-      --replace "\$(MKDIR_P) -m 2755 " "\$(MKDIR_P) -m 755 " \
-      --replace "chown root:games \$(DESTDIR)\$(pkglocalstatedir)/words" " "
+    # required until the following has been merged:
+    # https://salsa.debian.org/tux4kids-pkg-team/tuxtype/merge_requests/1
+    substituteInPlace configure.ac \
+      --replace 'CFLAGS="$CFLAGS $SDL_IMAGE"' 'CFLAGS="$CFLAGS $SDL_IMAGE_CFLAGS"' \
+      --replace 'PKG_CHECK_MODULES([SDL_ttf],' 'PKG_CHECK_MODULES([SDL_TTF],'
   '';
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ librsvg SDL SDL_image SDL_mixer SDL_ttf ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  buildInputs = [ librsvg libxml2 SDL SDL_image SDL_mixer SDL_net SDL_ttf t4kcommon ];
 
   configureFlags = [ "--without-sdlpango" ];
 
