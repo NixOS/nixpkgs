@@ -4519,12 +4519,6 @@ in
 
   nylon = callPackage ../tools/networking/nylon { };
 
-  nxproxy = throw ''
-    nxproxy has been replaced by nx-libs which builds both nxagent and nxproxy.
-    This is because the nx-libs upstream repository can not build nxagent
-    without also building nxproxy. See nixpkgs#55723
-  '';
-
   nzbget = callPackage ../tools/networking/nzbget { };
 
   oathToolkit = callPackage ../tools/security/oath-toolkit { inherit (gnome2) gtkdoc;  };

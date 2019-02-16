@@ -20,8 +20,8 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   postPatch = ''
-    find . -type f -executable -exec sed -i 's|^#!/bin/bash$|#!${bash}/bin/bash|g' {} \;
-    find . -type f -name Makefile -exec sed -i 's|^\(SHELL:=\)/bin/bash$|\1${bash}/bin/bash|g' {} \;
+    patchShebangs .
+    find . -type f -name Makefile -exec sed -i 's|^\(SHELL:=\)/bin/bash$|\1${stdenv.shell}|g' {} \;
     ln -s libNX_X11.so.6.3.0
   '';
 
