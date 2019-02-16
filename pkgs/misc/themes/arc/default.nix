@@ -1,12 +1,8 @@
 { stdenv, fetchFromGitHub, sassc, autoreconfHook, pkgconfig, gtk3, gnome3
 , gtk-engine-murrine, optipng, inkscape }:
 
-let
-  pname = "arc-theme";
-in
-
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+  pname = "arc-theme";
   version = "20190213";
 
   src = fetchFromGitHub {
