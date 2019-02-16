@@ -7,13 +7,13 @@ in
 
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
-  version = "20181022";
+  version = "20190213";
 
   src = fetchFromGitHub {
     owner  = "NicoHood";
     repo   = pname;
     rev    = version;
-    sha256 = "08951dk1irfadwpr3p323a4fprmxg53rk2r2niwq3v62ryhi3663";
+    sha256 = "1qalf61xh6a8yz2a98z3ih0w9ky12v3wc61gdczbfnyfasgzc254";
   };
 
   nativeBuildInputs = [
