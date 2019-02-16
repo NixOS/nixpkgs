@@ -1,7 +1,7 @@
-From 698e34dd6e8d98a1818ae00d3313b69a86340771 Mon Sep 17 00:00:00 2001
+From 61e0d02c054367007e156c9ac3a084dbd6de8278 Mon Sep 17 00:00:00 2001
 From: Fabio Valentini <decathorpe@gmail.com>
-Date: Mon, 17 Dec 2018 14:58:14 +0100
-Subject: DateTime: include "clock-format" gsettings key here
+Date: Fri, 15 Feb 2019 13:53:11 +0100
+Subject: [PATCH] DateTime: include "clock-format" gsettings key here
 
 ---
  data/io.elementary.granite.gschema.xml | 15 +++++++++++++++
@@ -45,12 +45,12 @@ index 0000000..96cc3b1
 +    install_dir: schema_dir
 +)
 diff --git a/lib/DateTime.vala b/lib/DateTime.vala
-index aea2ec6..3d81191 100644
+index 2069e1f..5e9075d 100644
 --- a/lib/DateTime.vala
 +++ b/lib/DateTime.vala
 @@ -104,13 +104,13 @@ namespace Granite.DateTime {
      }
- 
+
      /**
 -     * Gets the //clock-format// key from //org.gnome.desktop.interface// schema
 +     * Gets the //clock-format// key from //io.elementary.granite// schema
@@ -65,22 +65,22 @@ index aea2ec6..3d81191 100644
          return (format.contains ("12h"));
      }
 diff --git a/meson.build b/meson.build
-index 8b98eeb..f0abcdf 100644
+index 8c886be..5f95055 100644
 --- a/meson.build
 +++ b/meson.build
-@@ -4,6 +4,8 @@ project(
-     version: '5.2.2'
+@@ -5,6 +5,8 @@ project(
+     version: '5.2.3'
  )
- 
+
 +rdnn = 'io.elementary.' + meson.project_name()
 +
  if meson.get_compiler('vala').version().version_compare('<0.40.0')
      error('vala compiler version 0.40.0 or newer is required.')
  endif
-@@ -52,10 +54,18 @@ icons_dir = join_paths(
+@@ -53,10 +55,18 @@ icons_dir = join_paths(
      'hicolor'
  )
- 
+
 +schema_dir = join_paths(
 +    get_option('prefix'),
 +    get_option('datadir'),
@@ -90,40 +90,40 @@ index 8b98eeb..f0abcdf 100644
 +
  pkgconfig = import('pkgconfig')
  i18n = import('i18n')
- 
+
  subdir('lib')
 +subdir('data')
  subdir('demo')
  subdir('icons')
  subdir('po')
-@@ -68,5 +78,6 @@ endif
+@@ -69,5 +79,6 @@ endif
  meson.add_install_script(
      join_paths(meson.current_source_dir(), 'meson', 'post_install.py'),
      '--iconsdir', icons_dir,
 +    '--schemadir', schema_dir,
  )
- 
+
 diff --git a/meson/post_install.py b/meson/post_install.py
 index 1864515..5313f96 100755
 --- a/meson/post_install.py
 +++ b/meson/post_install.py
 @@ -6,11 +6,16 @@ import subprocess
- 
+
  parser = argparse.ArgumentParser()
  parser.add_argument("--iconsdir", action="store", required=True)
 +parser.add_argument("--schemadir", action="store", required=True)
  args = vars(parser.parse_args())
- 
+
  icons_dir = args["iconsdir"]
 +schema_dir = args["schemadir"]
- 
+
  if not os.environ.get('DESTDIR'):
      print('Compiling icon cache ...')
      subprocess.run(['gtk-update-icon-cache', icons_dir])
- 
+
 +    print('Compiling GSettings schemas ...')
 +    subprocess.run(['glib-compile-schemas', schema_dir])
 +
--- 
+--
 2.20.1
 
