@@ -48,9 +48,9 @@ let
     configurePhase = ''
       runHook preConfigure
       rm -rf _build
-      mkdir _build
+      mkdir _checkouts
       for dep in ${toString beamDeps}; do
-          ln -s $dep _build/
+          ln -s $dep _checkouts/
       done
       runHook postConfigure
     '';
