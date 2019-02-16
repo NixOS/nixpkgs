@@ -21048,6 +21048,8 @@ in
 
   synthv1 = callPackage ../applications/audio/synthv1 { };
 
+  t4kcommon = callPackage ../games/t4kcommon { };
+
   tcl2048 = callPackage ../games/tcl2048 { };
 
   the-powder-toy = callPackage ../games/the-powder-toy {
@@ -21081,6 +21083,8 @@ in
   tremulous = callPackage ../games/tremulous { };
 
   tuxpaint = callPackage ../games/tuxpaint { };
+
+  tuxtype = callPackage ../games/tuxtype { };
 
   speed_dreams = callPackage ../games/speed-dreams {
     # Torcs wants to make shared libraries linked with plib libraries (it provides static).
