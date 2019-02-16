@@ -1,5 +1,5 @@
 { mkDerivation, lib, fetchurl,
-  cmake, extra-cmake-modules, qtwebkit, qtwebengine, qtscript, grantlee,
+  cmake, extra-cmake-modules, qtwebengine, qtscript, grantlee,
   kxmlgui, kwallet, kparts, kdoctools, kjobwidgets, kdesignerplugin,
   kiconthemes, knewstuff, sqlcipher, qca-qt5, kactivities, karchive,
   kguiaddons, knotifyconfig, krunner, kwindowsystem, libofx, shared-mime-info
@@ -19,7 +19,7 @@ mkDerivation rec {
   ];
 
   buildInputs = [
-    qtwebkit qtwebengine qtscript grantlee kxmlgui kwallet kparts
+    qtwebengine qtscript grantlee kxmlgui kwallet kparts
     kjobwidgets kdesignerplugin kiconthemes knewstuff sqlcipher qca-qt5
     kactivities karchive kguiaddons knotifyconfig krunner kwindowsystem libofx
   ];
