@@ -2172,6 +2172,22 @@ let
     };
   };
 
+  ClassStdFast = buildPerlModule rec {
+    name = "${pname}-${version}";
+    pname = "Class-Std-Fast";
+    version = "0.0.8";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/A/AC/ACID/${pname}-v${version}.tar.gz";
+      sha256 = "1057rz95jsr66gam472i4zdv04v7bmzph3m3jwq1hwx3qrikgm0v";
+    };
+    propagatedBuildInputs = [ ClassStd ];
+    checkInputs = [ TestPod TestPodCoverage ];
+    meta = with stdenv.lib; {
+      description = "Faster but less secure than Class::Std";
+      license = with licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   ClassUnload = buildPerlPackage rec {
     name = "Class-Unload-0.11";
     src = fetchurl {
