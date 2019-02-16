@@ -1,15 +1,25 @@
-{ stdenv, fetchurl, cmake }:
+{ stdenv, fetchFromGitHub, cmakeCurses, libyamlcpp, libatasmart, pkgconfig }:
 
 stdenv.mkDerivation rec {
   name = "thinkfan-${version}";
-  version = "0.9.3";
+  version = "1.0.1";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/thinkfan/thinkfan-${version}.tar.gz";
-    sha256 = "0nz4c48f0i0dljpk5y33c188dnnwg8gz82s4grfl8l64jr4n675n";
+  src = fetchFromGitHub {
+    owner = "vmatare";
+    repo = "thinkfan";
+    rev = "${version}";
+    sha256 = "1983p8aryfgpyhflh5r5xz27y136a4vvm7plgrg44q4aicqbcp8j";
   };
 
-  nativeBuildInputs = [ cmake ];
+  configureFlags = [
+    "-DCMAKE_INSTALL_DOCDIR==share/doc/${name}"
+    "-DUSE_NVML=OFF"
+    "-DUSE_ATASMART=ON"
+    "-DUSE_YAML=ON"
+  ];
+
+  nativeBuildInputs = [ cmakeCurses pkgconfig ];
+  buildInputs = [ libyamlcpp libatasmart ];
 
   installPhase = ''
     install -Dm755 {.,$out/bin}/thinkfan
@@ -22,7 +32,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     license = stdenv.lib.licenses.gpl3;
-    homepage = http://thinkfan.sourceforge.net/;
+    homepage = https://github.com/vmatare/thinkfan;
     maintainers = with stdenv.lib.maintainers; [ domenkozar ];
     platforms = stdenv.lib.platforms.linux;
   };
