@@ -8,15 +8,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "lxqt-panel";
-  version = "0.13.0";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "056khr3smyrdi26zpclwv1qrmk0zxr9cnk65ad9c0xavzk6ya3xz";
+    sha256 = "0jr7ylf6d35m0ckn884arjk4armknnw8iyph00gcphn5bqycbn8l";
   };
 
   nativeBuildInputs = [
@@ -50,8 +49,6 @@ stdenv.mkDerivation rec {
     libXdamage
   ];
 
-  cmakeFlags = [ "-DPULL_TRANSLATIONS=NO" ];
-
   postPatch = ''
     for dir in  autostart menu; do
       substituteInPlace $dir/CMakeLists.txt \
@@ -59,6 +56,11 @@ stdenv.mkDerivation rec {
     done
     substituteInPlace panel/CMakeLists.txt \
       --replace "DESTINATION \''${LXQT_ETC_XDG_DIR}" "DESTINATION etc/xdg"
+
+    for f in cmake/BuildPlugin.cmake panel/CMakeLists.txt; do
+      substituteInPlace $f \
+        --replace "\''${LXQT_TRANSLATIONS_DIR}" "''${out}/share/lxqt/translations"
+    done
   '';
 
   meta = with stdenv.lib; {

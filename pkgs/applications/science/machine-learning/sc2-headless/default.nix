@@ -33,7 +33,8 @@ in stdenv.mkDerivation rec {
     cp -r . "$out"
     rm -r $out/Libs
 
-    cp -r "${maps.minigames}"/* "$out"/Maps/
+    cp -r "${maps.minigames}"/* "${maps.melee}"/* "${maps.ladder2017season1}"/* "${maps.ladder2017season2}"/* "${maps.ladder2017season3}"/* \
+      "${maps.ladder2017season4}"/*  "${maps.ladder2018season1}"/* "${maps.ladder2018season2}"/* "$out"/Maps/
   '';
 
   preFixup = ''

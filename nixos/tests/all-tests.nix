@@ -73,6 +73,7 @@ in
   ferm = handleTest ./ferm.nix {};
   firefox = handleTest ./firefox.nix {};
   firewall = handleTest ./firewall.nix {};
+  flannel = handleTestOn ["x86_64-linux"] ./flannel.nix {};
   flatpak = handleTest ./flatpak.nix {};
   fsck = handleTest ./fsck.nix {};
   fwupd = handleTestOn ["x86_64-linux"] ./fwupd.nix {}; # libsmbios is unsupported on aarch64

@@ -352,9 +352,9 @@ you want them to come from. Add the following to `configuration.nix`.
 
 ```nix
 services.hoogle = {
-enable = true;
-packages = (hpkgs: with hpkgs; [text cryptonite]);
-haskellPackages = pkgs.haskellPackages;
+  enable = true;
+  packages = (hpkgs: with hpkgs; [text cryptonite]);
+  haskellPackages = pkgs.haskellPackages;
 };
 ```
 

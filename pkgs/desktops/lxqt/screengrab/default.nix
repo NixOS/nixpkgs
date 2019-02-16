@@ -1,17 +1,21 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, qtbase, qttools, qtx11extras, qtsvg, kwindowsystem, libqtxdg, xorg }:
+{ stdenv, fetchFromGitHub, cmake, pkgconfig, qtbase, qttools, qtx11extras, qtsvg, kwindowsystem, libqtxdg, xorg, autoPatchelfHook }:
 
 stdenv.mkDerivation rec {
-  name = "screengrab-${version}";
-  version = "1.98";
+  pname = "screengrab";
+  version = "1.100";
 
   src = fetchFromGitHub {
     owner = "lxqt";
-    repo = "screengrab";
+    repo = pname;
     rev = version;
-    sha256 = "1y3r29220z6y457cajpad3pjnr883smbvh0kai8hc5hh4k4kxs6v";
+    sha256 = "1iqrmf581x9ab6zzjxm2509gg6fkn7hwril4v0aki7n7dgxw1c4g";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [
+    cmake
+    pkgconfig
+    autoPatchelfHook # fix libuploader.so and libextedit.so not found
+  ];
 
   buildInputs = [
     qtbase

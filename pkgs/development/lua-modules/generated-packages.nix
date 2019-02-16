@@ -190,6 +190,26 @@ lpeg_patterns = buildLuarocksPackage {
     };
   };
 };
+lpty = buildLuarocksPackage {
+  pname = "lpty";
+  version = "1.2.2-1";
+
+  src =  fetchurl {
+      url    = https://luarocks.org/lpty-1.2.2-1.src.rock;
+      sha256 = "1vxvsjgjfirl6ranz6k4q4y2dnxqh72bndbk400if22x8lqbkxzm";
+   };
+  disabled = ( luaOlder "5.1");
+  propagatedBuildInputs = [lua  ];
+  buildType="make";
+
+  meta = {
+    homepage = "http://www.tset.de/lpty/";
+    description="A simple facility for lua to control other programs via PTYs.";
+    license = {
+      fullName = "MIT";
+    };
+  };
+};
 lrexlib-gnu = buildLuarocksPackage {
   pname = "lrexlib-gnu";
   version = "2.9.0-1";
@@ -300,6 +320,26 @@ lua_cliargs = buildLuarocksPackage {
     };
   };
 };
+lua-iconv = buildLuarocksPackage {
+  pname = "lua-iconv";
+  version = "7-3";
+
+  src =  fetchurl {
+      url    = https://luarocks.org/lua-iconv-7-3.src.rock;
+      sha256 = "03xibhcqwihyjhxnzv367q4bfmzmffxl49lmjsq77g0prw8v0q83";
+   };
+  disabled = ( luaOlder "5.1");
+  propagatedBuildInputs = [lua  ];
+  buildType="builtin";
+
+  meta = {
+    homepage = "http://ittner.github.com/lua-iconv/";
+    description="Lua binding to the iconv";
+    license = {
+      fullName = "MIT/X11";
+    };
+  };
+};
 lua-term = buildLuarocksPackage {
   pname = "lua-term";
   version = "0.7-1";
@@ -323,6 +363,76 @@ lua-term = buildLuarocksPackage {
     description="Terminal functions for Lua";
     license = {
       fullName = "MIT/X11";
+    };
+  };
+};
+luaevent = buildLuarocksPackage {
+  pname = "luaevent";
+  version = "0.4.6-1";
+
+  src =  fetchurl {
+      url    = https://luarocks.org/luaevent-0.4.6-1.src.rock;
+      sha256 = "0chq09nawiz00lxd6pkdqcb8v426gdifjw6js3ql0lx5vqdkb6dz";
+   };
+  disabled = ( luaOlder "5.1");
+  propagatedBuildInputs = [lua  ];
+  buildType="builtin";
+
+  meta = {
+    homepage = "https://github.com/harningt/luaevent";
+    description="libevent binding for Lua";
+    license = {
+      fullName = "MIT";
+    };
+  };
+};
+luabitop = buildLuarocksPackage {
+  pname = "luabitop";
+  version = "1.0.2-3";
+
+  knownRockspec = ( fetchurl {
+      url    = https://luarocks.org/luabitop-1.0.2-3.rockspec;
+      sha256 = "07y2h11hbxmby7kyhy3mda64w83p4a6p7y7rzrjqgc0r56yjxhcc";
+   }).outPath;
+
+   src =  fetchgit ( removeAttrs (builtins.fromJSON ''{
+  "url": "git://github.com/LuaDist/luabitop.git",
+  "rev": "81bb23b0e737805442033535de8e6d204d0e5381",
+  "date": "2013-02-18T16:36:42+01:00",
+  "sha256": "0lsc556hlkddjbmcdbg7wc2g55bfy743p8ywdzl8x7kk847r043q",
+  "fetchSubmodules": true
+}
+ '') ["date"]) ;
+
+  disabled = ( luaOlder "5.1") || ( luaAtLeast "5.3");
+  propagatedBuildInputs = [lua  ];
+  buildType="builtin";
+
+  meta = {
+    homepage = "http://bitop.luajit.org/";
+    description="Lua Bit Operations Module";
+    license = {
+      fullName = "MIT/X license";
+    };
+  };
+};
+luacheck = buildLuarocksPackage {
+  pname = "luacheck";
+  version = "0.23.0-1";
+
+  src =  fetchurl {
+      url    = https://luarocks.org/luacheck-0.23.0-1.src.rock;
+      sha256 = "0akj61c7k1na2mggsckvfn9a3ljfp4agnmr9gp3mac4vin99a1cl";
+   };
+  disabled = ( luaOlder "5.1") || ( luaAtLeast "5.4");
+  propagatedBuildInputs = [lua argparse luafilesystem  ];
+  buildType="builtin";
+
+  meta = {
+    homepage = "https://github.com/mpeterv/luacheck";
+    description="A static analyzer and a linter for Lua";
+    license = {
+      fullName = "MIT";
     };
   };
 };

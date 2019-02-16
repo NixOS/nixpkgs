@@ -1,20 +1,19 @@
-{ stdenv, fetchFromGitHub, cmake, lxqt }:
+{ stdenv, fetchFromGitHub, cmake, lxqt-build-tools }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "lxqt-themes";
-  version = "0.13.0";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "026hbblxdbq48n9691b1z1xiak99khsk3wf09vn4iaj5zi7dwhw5";
+    sha256 = "09dkcgnf3lmfly8v90p6wjlj5rin83pbailvvpx2jr8a48a8zb9f";
   };
 
   nativeBuildInputs = [
     cmake
-    lxqt.lxqt-build-tools
+    lxqt-build-tools
   ];
 
   postPatch = ''

@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
     pname = "PyOgg";
-    version = "0.6.2a1";
+    version = "0.6.6a1";
 
     src = fetchPypi {
       inherit pname version;
-      sha256 = "1mjh5zx7mfy246lya1qc42j4q4pz6v5zbd8blnfib9ncswcb1v6l";
+      sha256 = "1ihzgl8p0rc3yjsp27zdrrs2r4qar5yf5l4v8wg0lilvan78h0rs";
     };
 
     buildInputs = [ libvorbis flac libogg libopus ];
