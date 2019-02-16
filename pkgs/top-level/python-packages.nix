@@ -1542,7 +1542,7 @@ in {
 
   pytest-flake8 = callPackage ../development/python-modules/pytest-flake8 { };
 
-  pytestflakes = callPackage ../development/python-modules/pytest-flakes { };
+  pytest-flakes = callPackage ../development/python-modules/pytest-flakes { };
 
   pytest-isort = callPackage ../development/python-modules/pytest-isort { };
 
