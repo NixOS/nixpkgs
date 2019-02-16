@@ -18,7 +18,7 @@ buildGoPackage  rec {
   meta = with stdenv.lib; {
     homepage = https://k6.io/;
     description = "A modern load testing tool, using Go and JavaScript";
-    license = licenses.agpl3;
+    license = licenses.agpl3Plus;
     maintainers = with maintainers; [ offline ];
   };
 }
