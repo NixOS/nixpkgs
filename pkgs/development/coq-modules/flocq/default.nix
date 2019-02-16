@@ -2,9 +2,9 @@
 
 let params =
   if stdenv.lib.versionAtLeast coq.coq-version "8.7" then {
-    version = "3.0.0";
-    uid = "37477";
-    sha256 = "1h05ji5cmyqyv2i1l83xgkm7vfvcnl8r1dzvbp5yncm1jr9kf6nn";
+    version = "3.1.0";
+    uid = "37901";
+    sha256 = "02szrgz9m0ac51la1lqpiv6i2g0zbgx9gz5rp0q1g00ajldyna5c";
   } else {
     version = "2.6.1";
     uid = "37454";
@@ -46,6 +46,6 @@ stdenv.mkDerivation rec {
   };
 
   passthru = {
-    compatibleCoqVersions = v: builtins.elem v [ "8.5" "8.6" "8.7" "8.8" ];
+    compatibleCoqVersions = v: builtins.elem v [ "8.5" "8.6" "8.7" "8.8" "8.9" ];
   };
 }

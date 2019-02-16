@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, runCommand, ncurses, pkgconfig
+{ config, stdenv, fetchFromGitHub, runCommand, ncurses, pkgconfig
 , libiconv, CoreAudio
 
 , alsaSupport ? stdenv.isLinux, alsaLib ? null
@@ -7,7 +7,7 @@
 , jackSupport ? false, libjack ? null
 , samplerateSupport ? jackSupport, libsamplerate ? null
 , ossSupport ? false, alsaOss ? null
-, pulseaudioSupport ? false, libpulseaudio ? null
+, pulseaudioSupport ? config.pulseaudio or false, libpulseaudio ? null
 
 # TODO: add these
 #, artsSupport

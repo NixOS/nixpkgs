@@ -793,6 +793,11 @@
     github = "caugner";
     name = "Claas Augner";
   };
+  cbley = {
+    email = "claudio.bley@gmail.com";
+    github = "avdv";
+    name = "Claudio Bley";
+  };
   cdepillabout = {
     email = "cdep.illabout@gmail.com";
     github = "cdepillabout";
@@ -3227,6 +3232,11 @@
     email = "tim@nequissimus.com";
     github = "nequissimus";
     name = "Tim Steinbach";
+  };
+  netixx = {
+    email = "dev.espinetfrancois@gmail.com";
+    github = "netixx";
+    name = "François Espinet";
   };
   nikitavoloboev = {
     email = "nikita.voloboev@gmail.com";

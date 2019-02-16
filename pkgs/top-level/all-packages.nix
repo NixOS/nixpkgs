@@ -413,15 +413,9 @@ in
 
   aefs = callPackage ../tools/filesystems/aefs { };
 
-  aegisub = callPackage ../applications/video/aegisub {
+  aegisub = callPackage ../applications/video/aegisub ({
     wxGTK = wxGTK30;
-    spellcheckSupport = config.aegisub.spellcheckSupport or true;
-    automationSupport = config.aegisub.automationSupport or true;
-    openalSupport     = config.aegisub.openalSupport or false;
-    alsaSupport       = config.aegisub.alsaSupport or true;
-    pulseaudioSupport = config.aegisub.pulseaudioSupport or true;
-    portaudioSupport  = config.aegisub.portaudioSupport or false;
-  };
+  } // (config.aegisub or {}));
 
   aerospike = callPackage ../servers/nosql/aerospike { };
 
@@ -988,11 +982,11 @@ in
 
   brigand = callPackage ../development/libraries/brigand { };
 
-  brltty = callPackage ../tools/misc/brltty {
-    alsaSupport = (!stdenv.isDarwin);
-    systemdSupport = stdenv.isLinux;
-  };
+  brltty = callPackage ../tools/misc/brltty { };
+
   bro = callPackage ../applications/networking/ids/bro { };
+
+  broot = callPackage ../tools/misc/broot { };
 
   bruteforce-luks = callPackage ../tools/security/bruteforce-luks { };
 
@@ -1558,6 +1552,8 @@ in
 
   nwipe = callPackage ../tools/security/nwipe { };
 
+  nx-libs = callPackage ../tools/X11/nx-libs { };
+
   nyx = callPackage ../tools/networking/nyx { };
 
   onboard = callPackage ../applications/misc/onboard { };
@@ -1725,6 +1721,8 @@ in
   bareos = callPackage ../tools/backup/bareos { };
 
   bats = callPackage ../development/interpreters/bats { };
+
+  bbe = callPackage ../tools/misc/bbe { };
 
   bdsync = callPackage ../tools/backup/bdsync { };
 
@@ -4207,6 +4205,8 @@ in
 
   mkcue = callPackage ../tools/cd-dvd/mkcue { };
 
+  mkp224o = callPackage ../tools/security/mkp224o { };
+
   mkpasswd = hiPrio (callPackage ../tools/security/mkpasswd { });
 
   mkrand = callPackage ../tools/security/mkrand { };
@@ -4500,8 +4500,6 @@ in
   nwdiag = with python3Packages; toPythonApplication nwdiag;
 
   nylon = callPackage ../tools/networking/nylon { };
-
-  nxproxy = callPackage ../tools/admin/nxproxy { };
 
   nzbget = callPackage ../tools/networking/nzbget { };
 
@@ -11944,9 +11942,7 @@ in
 
   pangoxsl = callPackage ../development/libraries/pangoxsl { };
 
-  pcaudiolib = callPackage ../development/libraries/pcaudiolib {
-    pulseaudioSupport = config.pulseaudio or true;
-  };
+  pcaudiolib = callPackage ../development/libraries/pcaudiolib { };
 
   pcg_c = callPackage ../development/libraries/pcg-c { };
 
@@ -13099,6 +13095,10 @@ in
 
   yubikey-manager = callPackage ../tools/misc/yubikey-manager { };
 
+  yubikey-manager-qt = libsForQt5.callPackage ../tools/misc/yubikey-manager-qt {
+    pythonPackages = python3Packages;
+  };
+
   yubikey-neo-manager = callPackage ../tools/misc/yubikey-neo-manager { };
 
   yubikey-personalization = callPackage ../tools/misc/yubikey-personalization {
@@ -13988,7 +13988,7 @@ in
   };
 
   rippled = callPackage ../servers/rippled {
-    boost = boost159;
+    boost = boost167;
   };
 
   s6 = skawarePackages.s6;
@@ -14597,6 +14597,7 @@ in
     kernelPatches = [
       kernelPatches.bridge_stp_helper
       kernelPatches.modinst_arg_list_too_long
+      kernelPatches.interpreter-trunc
     ];
   };
 
@@ -16282,7 +16283,6 @@ in
   bombono = callPackage ../applications/video/bombono {};
 
   bomi = libsForQt5.callPackage ../applications/video/bomi {
-    pulseSupport = config.pulseaudio or true;
     ffmpeg = ffmpeg_2;
   };
 
@@ -16371,18 +16371,7 @@ in
 
   bookworm = callPackage ../applications/office/bookworm { };
 
-  chromium = callPackage ../applications/networking/browsers/chromium ({
-    channel = "stable";
-    pulseSupport = config.pulseaudio or true;
-    enablePepperFlash = config.chromium.enablePepperFlash or false;
-    enableWideVine = config.chromium.enableWideVine or false;
-  } // (if stdenv.isAarch64 then {
-          stdenv = gcc8Stdenv;
-        } else {
-          llvmPackages = llvmPackages_7;
-          stdenv = llvmPackages_7.stdenv;
-        })
-   );
+  chromium = callPackage ../applications/networking/browsers/chromium (config.chromium or {});
 
   chronos = callPackage ../applications/networking/cluster/chronos { };
 
@@ -16422,8 +16411,6 @@ in
     inherit (darwin.apple_sdk.frameworks) CoreAudio;
     libjack = libjack2;
     ffmpeg = ffmpeg_2;
-
-    pulseaudioSupport = config.pulseaudio or false;
   };
 
   cmusfm = callPackage ../applications/audio/cmusfm { };
@@ -16532,9 +16519,7 @@ in
 
   ddgr = callPackage ../applications/misc/ddgr { };
 
-  deadbeef = callPackage ../applications/audio/deadbeef {
-    pulseSupport = config.pulseaudio or true;
-  };
+  deadbeef = callPackage ../applications/audio/deadbeef { };
 
   deadbeefPlugins = {
     headerbar-gtk3 = callPackage ../applications/audio/deadbeef/plugins/headerbar-gtk3.nix { };
@@ -18221,9 +18206,7 @@ in
 
   minitube = libsForQt5.callPackage ../applications/video/minitube { };
 
-  mimic = callPackage ../applications/audio/mimic {
-    pulseaudioSupport = config.pulseaudio or false;
-  };
+  mimic = callPackage ../applications/audio/mimic { };
 
   mimms = callPackage ../applications/audio/mimms {};
 
@@ -18355,7 +18338,6 @@ in
   mpc-qt = libsForQt5.callPackage ../applications/video/mpc-qt { };
 
   mplayer = callPackage ../applications/video/mplayer ({
-    pulseSupport = config.pulseaudio or false;
     libdvdnav = libdvdnav_4_2_1;
   } // (config.mplayer or {}));
 
@@ -18948,7 +18930,7 @@ in
   qdirstat = libsForQt5.callPackage ../applications/misc/qdirstat {};
 
   qemu = callPackage ../applications/virtualization/qemu {
-    inherit (darwin.apple_sdk.frameworks) CoreServices Cocoa;
+    inherit (darwin.apple_sdk.frameworks) CoreServices Cocoa Hypervisor;
     inherit (darwin.stubs) rez setfile;
   };
 
@@ -19842,7 +19824,6 @@ in
   virtualbox = callPackage ../applications/virtualization/virtualbox {
     stdenv = stdenv_32bit;
     inherit (gnome2) libIDL;
-    pulseSupport = config.pulseaudio or true;
   };
 
   virtualboxHardened = lowPrio (virtualbox.override {
@@ -23039,6 +23020,8 @@ in
   };
 
   x11idle = callPackage ../tools/misc/x11idle {};
+
+  x11docker = callPackage ../applications/virtualization/x11docker { };
 
   x2x = callPackage ../tools/X11/x2x { };
 

@@ -168,6 +168,10 @@ in {
 
   aioimaplib = callPackage ../development/python-modules/aioimaplib { };
 
+  aiolifx = callPackage ../development/python-modules/aiolifx { };
+
+  aiolifx-effects = callPackage ../development/python-modules/aiolifx-effects { };
+
   aioamqp = callPackage ../development/python-modules/aioamqp { };
 
   ansicolor = callPackage ../development/python-modules/ansicolor { };

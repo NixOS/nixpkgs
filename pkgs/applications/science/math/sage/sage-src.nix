@@ -64,10 +64,10 @@ stdenv.mkDerivation rec {
     fetchSageDiff = { base, rev, name ? "sage-diff-${base}-${rev}.patch", ...}@args: (
       fetchpatch ({
         inherit name;
-        url = "https://git.sagemath.org/sage.git/rawdiff?id2=${base}&id=${rev}";
+        url = "https://git.sagemath.org/sage.git/patch?id2=${base}&id=${rev}";
         # We don't care about sage's own build system (which builds all its dependencies).
         # Exclude build system changes to avoid conflicts.
-        excludes = [ "/build/*" ];
+        excludes = [ "build/*" ];
       } // builtins.removeAttrs args [ "rev" "base" ])
     );
   in [
