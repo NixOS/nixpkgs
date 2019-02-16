@@ -18,16 +18,15 @@ let
     else "amd64";
 
   major = "11";
-  update = ".0.1";
-  build = "13";
-  repover = "jdk-${major}${update}+${build}";
+  update = ".0.2";
+  repover = "jdk-${major}${update}-ga";
 
   openjdk = stdenv.mkDerivation {
-    name = "openjdk-${major}${update}-b${build}";
+    name = "openjdk-${major}${update}-ga";
 
     src = fetchurl {
       url = "http://hg.openjdk.java.net/jdk-updates/jdk${major}u/archive/${repover}.tar.gz";
-      sha256 = "1ri3fv67rvs9xxhc3ynklbprhxbdsgpwafbw6wqj950xy5crgysm";
+      sha256 = "0xcb0i6j3qrihmq4klx2lkwhd6xmk4xxcvk1dkc5z15vvh937l8b";
     };
 
     nativeBuildInputs = [ pkgconfig ];
@@ -53,9 +52,6 @@ let
 
       configureFlagsArray=(
         "--with-boot-jdk=${bootjdk.home}"
-        "--with-update-version=${major}${update}"
-        "--with-build-number=${build}"
-        "--with-milestone=fcs"
         "--enable-unlimited-crypto"
         "--disable-debug-symbols"
         "--with-zlib=system"
