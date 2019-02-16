@@ -203,7 +203,7 @@ in {
   options.docker-containers = mkOption {
     default = {};
     type = types.attrsOf (types.submodule dockerContainer);
-    description = "Docker containers to run.";
+    description = "Docker containers to run as systemd services.";
   };
 
   config = {

@@ -24,6 +24,6 @@ import ./make-test.nix ({ pkgs, lib, ... }: {
     startAll;
     $docker->waitForUnit("docker-nginx.service");
     $docker->waitForOpenPort(8181);
-    $docker->succeed("curl http://localhost:8181|grep Hello");
+    $docker->waitUntilSucceeds("curl http://localhost:8181|grep Hello");
   '';
 })
