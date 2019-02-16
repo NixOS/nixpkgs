@@ -1,0 +1,48 @@
+diff --git a/Cargo.lock b/Cargo.lock
+index 3b44f66..71c7b2c 100644
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -1672,7 +1672,7 @@ dependencies = [
+ [[package]]
+ name = "rust-crypto"
+ version = "0.2.36"
+-source = "git+https://github.com/awmath/rust-crypto.git?branch=avx2#394c247254dbe2ac5d44483232cf335d10cf0260"
++source = "registry+https://github.com/rust-lang/crates.io-index"
+ dependencies = [
+  "gcc 0.3.55 (registry+https://github.com/rust-lang/crates.io-index)",
+  "libc 0.2.48 (registry+https://github.com/rust-lang/crates.io-index)",
+@@ -1681,12 +1681,6 @@ dependencies = [
+  "time 0.1.42 (registry+https://github.com/rust-lang/crates.io-index)",
+ ]
+ 
+-[[package]]
+-name = "rust-crypto"
+-version = "0.2.36"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-replace = "rust-crypto 0.2.36 (git+https://github.com/awmath/rust-crypto.git?branch=avx2)"
+-
+ [[package]]
+ name = "rust-ini"
+ version = "0.10.3"
+@@ -2780,7 +2774,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
+ "checksum reqwest 0.9.9 (registry+https://github.com/rust-lang/crates.io-index)" = "09d6e187a58d923ee132fcda141c94e716bcfe301c2ea2bef5c81536e0085376"
+ "checksum rpassword 0.3.1 (registry+https://github.com/rust-lang/crates.io-index)" = "ec4bdede957362ec6fdd550f7e79c6d14cad2bc26b2d062786234c6ee0cb27bb"
+ "checksum rspotify 0.2.5 (registry+https://github.com/rust-lang/crates.io-index)" = "dee05e47d9aed6b35d9666d80c6b0d4d7ca6253e7a88464410a85dba1a8cd63d"
+-"checksum rust-crypto 0.2.36 (git+https://github.com/awmath/rust-crypto.git?branch=avx2)" = "<none>"
+ "checksum rust-crypto 0.2.36 (registry+https://github.com/rust-lang/crates.io-index)" = "f76d05d3993fd5f4af9434e8e436db163a12a9d40e1a58a726f27a01dfd12a2a"
+ "checksum rust-ini 0.10.3 (registry+https://github.com/rust-lang/crates.io-index)" = "8a654c5bda722c699be6b0fe4c0d90de218928da5b724c3e467fc48865c37263"
+ "checksum rustc-demangle 0.1.13 (registry+https://github.com/rust-lang/crates.io-index)" = "adacaae16d02b6ec37fdc7acfcddf365978de76d1983d3ee22afc260e1ca9619"
+diff --git a/Cargo.toml b/Cargo.toml
+index b10b164..9d6eccf 100644
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -24,9 +24,6 @@ rspotify = "0.2.5"
+ chrono = "0.4"
+ alsa = { version = "0.2", optional = true }
+ 
+-[replace]
+-"rust-crypto:0.2.36" = { git = "https://github.com/awmath/rust-crypto.git", branch = "avx2" }
+-
+ [dependencies.librespot]
+ git = "https://github.com/librespot-org/librespot.git"
+ default-features = false
