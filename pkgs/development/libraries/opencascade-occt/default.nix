@@ -24,7 +24,8 @@ in stdenv.mkDerivation {
     sha256 = "0nc9k1nqpj0n99pr7qkva79irmqhh007dffwghiyzs031zhd7i6w";
   };
 
-  buildInputs = [ cmake tcl tk vtk mesa_glu libXext libXmu libXi doxygen ];
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ tcl tk vtk mesa_glu libXext libXmu libXi doxygen ];
 
   enableParallelBuilding = true;
 
