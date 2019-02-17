@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, substituteAll, autoreconfHook, pkgconfig, libusb1, hwdata }:
+{ stdenv, fetchurl, substituteAll, autoreconfHook, pkgconfig, libusb1, hwdata , python3 }:
 
 stdenv.mkDerivation rec {
   name = "usbutils-010";
@@ -16,7 +16,12 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
-  buildInputs = [ libusb1 ];
+  buildInputs = [ libusb1 python3 ];
+
+  outputs = [ "out" "man" "python" ];
+  postInstall = ''
+    moveToOutput "bin/lsusb.py" "$python"
+  '';
 
   meta = with stdenv.lib; {
     homepage = http://www.linux-usb.org/;
