@@ -13596,6 +13596,7 @@ in
 
   icingaweb2 = callPackage ../servers/icingaweb2 { };
   icingaweb2Modules = {
+    module-audit = callPackage ../servers/icingaweb2/module-audit { };
     theme-april = callPackage ../servers/icingaweb2/theme-april { };
     theme-lsd = callPackage ../servers/icingaweb2/theme-lsd { };
     theme-particles = callPackage ../servers/icingaweb2/theme-particles { };
