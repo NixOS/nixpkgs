@@ -12,9 +12,9 @@ in
       enable = mkEnableOption "spotifyd, a Spotify playing daemon";
 
       dataDir = mkOption {
-        default = "/var/lib/spotifyd";
-        type = types.path;
-        description = "The directory where spotifyd stores its state.";
+        default = "spotifyd";
+        type = types.str;
+        description = "The directory where spotifyd stores its state, relative to /var/lib/.";
       };
 
       config = mkOption {
@@ -33,24 +33,14 @@ in
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" "sound.target" ];
       description = "spotifyd, a Spotify playing daemon";
-      preStart = ''mkdir -p "${cfg.dataDir}" && chown -R spotifyd:spotifyd "${cfg.dataDir}"'';
       serviceConfig = {
         ExecStart = "${pkgs.spotifyd}/bin/spotifyd --no-daemon --config ${spotifydConf}";
         Restart = "always";
         RestartSec = 12;
-        User = "spotifyd";
+        DynamicUser = true;
+        StateDirectory = "${cfg.dataDir}";
+        Environment = "HOME=/var/lib/${cfg.dataDir}";
       };
-    };
-
-    users = {
-      users.spotifyd = {
-        description = "spotifyd user";
-        group = "spotifyd";
-        extraGroups = [ "audio" ];
-        home = cfg.dataDir;
-      };
-
-      groups.spotifyd = {};
     };
   };
 }
