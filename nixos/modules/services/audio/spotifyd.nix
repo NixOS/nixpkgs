@@ -21,6 +21,10 @@ in
       config = mkOption {
         default = "";
         type = types.lines;
+        description = ''
+          Configuration for Spotifyd. For syntax and directives, see
+          https://github.com/Spotifyd/spotifyd#Configuration.
+        '';
       };
     };
   };
