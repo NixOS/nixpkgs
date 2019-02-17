@@ -1,5 +1,5 @@
 { stdenv, buildPythonPackage, fetchPypi, makeWrapper
-, six, click, requests, pytz, tabulate
+, six, click, requests, pytz, tabulate, pythonOlder
 }:
 
 buildPythonPackage rec {
@@ -11,13 +11,15 @@ buildPythonPackage rec {
     sha256 = "f9f0f8f800798fae83c05dd52dc2f06bd77fb318c784c4b44e3acfba81338881";
   };
 
-  buildInputs = [ six click requests pytz tabulate ];
+  propagatedBuildInputs = [ six click requests pytz tabulate ];
 
   doCheck = false;
 
   postInstall = ''
     wrapProgram $out/bin/alerta --prefix PYTHONPATH : "$PYTHONPATH"
   '';
+
+  disabled = pythonOlder "3.5";
 
   meta = with stdenv.lib; {
     homepage = https://alerta.io;
