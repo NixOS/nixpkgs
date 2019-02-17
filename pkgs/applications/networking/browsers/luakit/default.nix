@@ -1,15 +1,10 @@
 { stdenv, fetchFromGitHub, pkgconfig, wrapGAppsHook
-, help2man, lua5, luafilesystem, luajit, sqlite
+, help2man, luajit, sqlite
 , webkitgtk, gtk3, gst_all_1, glib-networking
 }:
 
 let
-  lualibs = [luafilesystem];
-  getPath       = lib : type : "${lib}/lib/lua/${lua5.luaversion}/?.${type};${lib}/share/lua/${lua5.luaversion}/?.${type}";
-  getLuaPath    = lib : getPath lib "lua";
-  getLuaCPath   = lib : getPath lib "so";
-  luaPath       = stdenv.lib.concatStringsSep ";" (map getLuaPath lualibs);
-  luaCPath      = stdenv.lib.concatStringsSep ";" (map getLuaCPath lualibs);
+  luaEnv = luajit.withPackages(ps: [ps.luafilesystem]);
 
 in stdenv.mkDerivation rec {
   pname = "luakit";
@@ -27,7 +22,7 @@ in stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    webkitgtk lua5 luafilesystem luajit sqlite gtk3
+    webkitgtk luaEnv sqlite gtk3
     gst_all_1.gstreamer gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-good gst_all_1.gst-plugins-bad gst_all_1.gst-plugins-ugly
     gst_all_1.gst-libav
@@ -58,6 +53,10 @@ in stdenv.mkDerivation rec {
       --set LUA_CPATH '${luaCPath};'
     )
   '';
+    # make DEVELOPMENT_PATHS=0 INSTALLDIR=$out PREFIX=$out XDGPREFIX=$out/etc/xdg USE_GTK3=1 install
+    # wrapProgram $out/bin/luakit                                         \
+    #   --prefix XDG_CONFIG_DIRS : "$out/etc/xdg"                         \
+    #   --prefix LUA_PATH ';' '${luaKitPath}'
 
   meta = with stdenv.lib; {
     description = "Fast, small, webkit based browser framework extensible in Lua";

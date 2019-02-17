@@ -18571,10 +18571,7 @@ in
     flavour = "git";
   };
 
-  luakit = callPackage ../applications/networking/browsers/luakit {
-    inherit (lua51Packages) luafilesystem;
-    lua5 = lua5_1;
-  };
+  luakit = callPackage ../applications/networking/browsers/luakit { };
 
   looking-glass-client = callPackage ../applications/virtualization/looking-glass-client { };
 
