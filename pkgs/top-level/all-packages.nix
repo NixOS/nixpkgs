@@ -13595,6 +13595,13 @@ in
   hydron = callPackage ../servers/hydron { };
 
   icingaweb2 = callPackage ../servers/icingaweb2 { };
+  icingaweb2Modules = {
+    theme-april = callPackage ../servers/icingaweb2/theme-april { };
+    theme-lsd = callPackage ../servers/icingaweb2/theme-lsd { };
+    theme-particles = callPackage ../servers/icingaweb2/theme-particles { };
+    theme-snow = callPackage ../servers/icingaweb2/theme-snow { };
+    theme-spring = callPackage ../servers/icingaweb2/theme-spring { };
+  };
 
   ircdHybrid = callPackage ../servers/irc/ircd-hybrid { };
 
