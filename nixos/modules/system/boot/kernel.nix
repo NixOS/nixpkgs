@@ -13,6 +13,9 @@ let
       ${concatStringsSep "\n" config.boot.kernelModules}
     '';
 
+  # genAssertion = item:
+  # toStruc
+
   requiredKernelConfigFromPackages = pkgs:
   let
     requiredKernelConfigs = map (x: x.meta.requiredKernelConfig or []) pkgs;
@@ -66,25 +69,24 @@ in
     };
 
     boot.enforceRequiredConfig = mkOption {
-      type = types.listOf types.attrs;
-      default = [];
-      example = literalExample "[ pkgs.kernelPatches.ubuntu_fan_4_4 ]";
+      type = types.bool;
+      default = false;
       description = ''
-        '';
+        Switch on to build kernel configuration so that it (allegedly) satisfies
+        requiredKernelConfig.
+      '';
     };
 
     boot.kernelConfig = mkOption {
-      # for now use str but in the end should use kernelItem
-      type = types.attrsOf types.str;
-      default = {};
+      # for now use attrs but in the end should use kernelItem
+      type = types.listOf types.attrs;
+      default = [];
       # example = literalExample "[ pkgs.kernelPatches.ubuntu_fan_4_4 ]";
       description = ''
         Declarative kernel configuration.
-        Also set by requiredKernelConfig when enforceRequiredConfig is set.
+        Completed by requiredKernelConfig when enforceRequiredConfig is set.
         '';
     };
-
-
 
     boot.kernelPatches = mkOption {
       type = types.listOf types.attrs;
@@ -289,18 +291,21 @@ in
         assertion = config: config.isYes option;
         message = "CONFIG_${option} is not yes!";
         configLine = "CONFIG_${option}=y";
+        structured = { option = kernel.yes; };
       };
 
       isNo = option: {
         assertion = config: config.isNo option;
         message = "CONFIG_${option} is not no!";
         configLine = "CONFIG_${option}=n";
+        structured = { option = kernel.no; };
       };
 
       isModule = option: {
         assertion = config: config.isModule option;
         message = "CONFIG_${option} is not built as a module!";
         configLine = "CONFIG_${option}=m";
+        structured = { option = kernel.module; };
       };
 
       ### Usually you will just want to use these two
@@ -309,6 +314,7 @@ in
         assertion = config: config.isEnabled option;
         message = "CONFIG_${option} is not enabled!";
         configLine = "CONFIG_${option}=y";
+        structured = { option = kernel.enable; };
       };
 
       # True if no or omitted
@@ -316,11 +322,14 @@ in
         assertion = config: config.isDisabled option;
         message = "CONFIG_${option} is not disabled!";
         configLine = "CONFIG_${option}=n";
+        structured = { option = kernel.no; };
       };
     };
 
 
-    boot.kernelConfig = mkIf config.boot.enforceRequiredConfig config.system.requiredKernelConfig;
+    boot.kernelConfig = mkIf config.boot.enforceRequiredConfig (
+      map (attrs: attrs.structured) config.system.requiredKernelConfig
+      );
 
     # The config options that all modules can depend upon
     system.requiredKernelConfig = with config.lib.kernelConfig; [
