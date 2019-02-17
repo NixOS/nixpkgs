@@ -650,6 +650,18 @@ in
       '';
     };
 
+    services.logind.lidSwitchExternalPower = mkOption {
+      default = config.services.logind.lidSwitch;
+      example = "ignore";
+      type = logindHandlerType;
+
+      description = ''
+        Specifies what to do when the laptop lid is closed and the system is
+        on external power. By default use the same action as specified in
+        services.logind.lidSwitch.
+      '';
+    };
+
     systemd.user.extraConfig = mkOption {
       default = "";
       type = types.lines;
@@ -797,6 +809,7 @@ in
         KillUserProcesses=${if config.services.logind.killUserProcesses then "yes" else "no"}
         HandleLidSwitch=${config.services.logind.lidSwitch}
         HandleLidSwitchDocked=${config.services.logind.lidSwitchDocked}
+        HandleLidSwitchExternalPower=${config.services.logind.lidSwitchExternalPower}
         ${config.services.logind.extraConfig}
       '';
 
