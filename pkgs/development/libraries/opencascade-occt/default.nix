@@ -17,7 +17,7 @@ let version = "7.3.0";
 
 in stdenv.mkDerivation {
 
-  name = "opencascade-${version}${patch}";
+  name = "opencascade-occt-${version}";
 
   src = fetchurl {
     name = "occt-${commit}.tar.gz";
