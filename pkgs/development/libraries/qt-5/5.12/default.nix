@@ -60,6 +60,7 @@ let
     qtdeclarative = [ ./qtdeclarative.patch ];
     qtscript = [ ./qtscript.patch ];
     qtserialport = [ ./qtserialport.patch ];
+    qtwebengine = [ ./qtwebengine-no-build-skip.patch ];
     qtwebkit = [ ./qtwebkit.patch ];
   };
 
