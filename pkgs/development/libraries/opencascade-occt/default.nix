@@ -12,7 +12,7 @@
 }:
 
 let version = "7.3.0p2";
-    commit = "V7_3_0p2";
+    commit = "V${builtins.replaceStrings ["."] ["_"] version}";
 
 in stdenv.mkDerivation {
 
