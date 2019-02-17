@@ -2,7 +2,7 @@
   - source: ../../../../../doc/languages-frameworks/texlive.xml
   - current html: http://nixos.org/nixpkgs/manual/#sec-language-texlive
 */
-{ stdenv, lib, fetchurl, runCommand, writeText, buildEnv
+{ stdenv, lib, fetchurl, runCommand, writeText, writeScript, buildEnv
 , callPackage, ghostscriptX, harfbuzz, poppler_min
 , makeWrapper, python, ruby, perl
 , useFixedHashes ? true
@@ -24,7 +24,7 @@ let
 
   # function for creating a working environment from a set of TL packages
   combine = import ./combine.nix {
-    inherit bin combinePkgs buildEnv fastUnique lib makeWrapper writeText
+    inherit bin combinePkgs buildEnv fastUnique lib makeWrapper writeText writeScript
       stdenv python ruby perl;
     ghostscript = ghostscriptX; # could be without X, probably, but we use X above
   };

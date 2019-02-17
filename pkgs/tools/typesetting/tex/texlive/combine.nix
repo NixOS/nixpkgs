@@ -24,11 +24,37 @@ let
     # extra interpreters needed for shebangs, based on 2015 schemes "medium" and "tetex"
     # (omitted tk needed in pname == "epspdf", bin/epspdftk)
     pkgNeedsPython = pkg: pkg.tlType == "run" && lib.elem pkg.pname
-      [ "de-macro" "pythontex" "dviasm" "texliveonfly" ];
+      [ "de-macro" "pygmentex" "pythontex" "dviasm" "texliveonfly" ];
     pkgNeedsRuby = pkg: pkg.tlType == "run" && pkg.pname == "match-parens";
+    # extra Python modules
+    extraPythonModules.pygmentex = with python.pkgs; [ pygments chardet ];
+    extraPythonModules.pythontex = with python.pkgs; [ pygments ];
     extraInputs =
       lib.optional (lib.any pkgNeedsPython splitBin.wrong) python
       ++ lib.optional (lib.any pkgNeedsRuby splitBin.wrong) ruby;
+
+    extraPythonInputs =
+      lib.unique (lib.concatMap (pkg: extraPythonModules.${pkg.pname} or [])
+                                splitBin.wrong);
+
+    pythonPathScript = writeScript "python-path" ''
+      #! ${stdenv.shell}
+      # find the python path needed by a python script
+      target="$1"
+      dir="$(dirname $target)"
+      package="$(basename $dir)"
+      declare -A my_map
+      ${lib.concatStringsSep "\n"
+        (map
+          (pkg:
+            "my_map[" + pkg.pname + "]=" +
+            lib.concatStringsSep ":" (
+              lib.optional (pkgNeedsPython pkg) "$dir" ++
+              lib.optionals (lib.hasAttr pkg.pname extraPythonModules)
+                            (map (p: p + "/" + python.sitePackages) extraPythonModules.${pkg.pname})))
+          splitBin.wrong)}
+      echo ''${my_map[$package]}
+    '';
   };
 
   mkUniquePkgs = pkgs: fastUnique (a: b: a < b) # highlighting hack: >
@@ -43,7 +69,9 @@ in buildEnv {
   ignoreCollisions = false;
   paths = pkgList.nonbin;
 
-  buildInputs = [ makeWrapper ] ++ pkgList.extraInputs;
+  buildInputs = [ makeWrapper python.pkgs.wrapPython ]
+                ++ pkgList.extraInputs
+                ++ pkgList.extraPythonInputs;
 
   postBuild = ''
     cd "$out"
@@ -153,9 +181,13 @@ in buildEnv {
 
       echo -n "Wrapping '$link'"
       rm "$link"
+
+      local EXTRA_PYTHONPATH="$(${pkgList.pythonPathScript} $target)"
+
       makeWrapper "$target" "$link" \
         --prefix PATH : "$out/bin:${perl}/bin" \
-        --prefix PERL5LIB : "$out/share/texmf/scripts/texlive"
+        --prefix PERL5LIB : "$out/share/texmf/scripts/texlive" \
+        --prefix PYTHONPATH : "$EXTRA_PYTHONPATH"
 
       # avoid using non-nix shebang in $target by calling interpreter
       if [[ "$(head -c 2 "$target")" = "#!" ]]; then
