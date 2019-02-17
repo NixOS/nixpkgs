@@ -136,13 +136,13 @@ stdenv.mkDerivation (rec {
         (crate.type or ["lib"]);
     colors = lib.attrByPath [ "colors" ] "always" crate;
     extraLinkFlags = builtins.concatStringsSep " " (crate.extraLinkFlags or []);
+    extraRustcOpts = (if crate ? extraRustcOpts then crate.extraRustcOpts else []) ++ extraRustcOpts_;
     configurePhase = configureCrate {
       inherit crateName buildDependencies completeDeps completeBuildDeps
               crateFeatures libName build workspace_member release libPath crateVersion
-              extraLinkFlags
+              extraLinkFlags extraRustcOpts
               crateAuthors verbose colors target_os;
     };
-    extraRustcOpts = (if crate ? extraRustcOpts then crate.extraRustcOpts else []) ++ extraRustcOpts_;
     buildPhase = buildCrate {
       inherit crateName dependencies
               crateFeatures libName release libPath crateType
