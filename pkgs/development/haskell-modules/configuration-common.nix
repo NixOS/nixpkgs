@@ -151,6 +151,10 @@ self: super: {
   # dontCheck due to https://github.com/haskell/vector/issues/138
   vector = dontCheck (if pkgs.stdenv.isi686 then appendConfigureFlag super.vector "--ghc-options=-msse2" else super.vector);
 
+  conduit-extra = if pkgs.stdenv.isDarwin
+    then super.conduit-extra.overrideAttrs (drv: { __darwinAllowLocalNetworking = true; })
+    else super.conduit-extra;
+
   # Fix Darwin build.
   halive = if pkgs.stdenv.isDarwin
     then addBuildDepend super.halive pkgs.darwin.apple_sdk.frameworks.AppKit
