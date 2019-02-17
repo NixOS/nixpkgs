@@ -19536,7 +19536,7 @@ in
 
   tambura = callPackage ../applications/audio/tambura { };
 
-  teamspeak_client = libsForQt5.callPackage ../applications/networking/instant-messengers/teamspeak/client.nix { };
+  teamspeak_client = libsForQt511.callPackage ../applications/networking/instant-messengers/teamspeak/client.nix { };
   teamspeak_server = callPackage ../applications/networking/instant-messengers/teamspeak/server.nix { };
 
   taskell = callPackage ../applications/misc/taskell { };
