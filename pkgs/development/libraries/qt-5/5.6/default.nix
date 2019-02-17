@@ -26,7 +26,7 @@ existing packages here and modify it as necessary.
 
 {
   newScope,
-  stdenv, fetchurl, makeSetupHook,
+  stdenv, fetchurl, fetchpatch, makeSetupHook,
   bison, cups ? null, harfbuzz, libGL, perl,
   gstreamer, gst-plugins-base,
 
@@ -46,13 +46,62 @@ let
   srcs = import ./srcs.nix { inherit fetchurl; inherit mirror; };
 
   patches = {
-    qtbase = [ ./qtbase.patch ./qtbase-fixguicmake.patch ];
+    qtbase = [
+      ./qtbase.patch
+      ./qtbase-fixguicmake.patch
+      (fetchpatch {
+        name = "CVE-2018-15518.patch";
+        url = "https://codereview.qt-project.org/gitweb?p=qt/qtbase.git;a=patch;h=28a6e642af2ccb454dd019f551c2908753f76f08";
+        sha256 = "0nyssg7d0br7qgzp481f1w8b4p1bj2ggv9iyfrm1mng5v9fypdd7";
+      })
+      (fetchpatch {
+        name = "CVE-2018-19873.patch";
+        url = "https://codereview.qt-project.org/gitweb?p=qt/qtbase.git;a=patch;h=c9b9f663d7243988bcb5fee9180ea9cb3a321a86";
+        sha256 = "1q01cafy92c1j8cgrv4sk133mi3d48x8kbg3glbnnbijpc4k6di5";
+      })
+      (fetchpatch {
+        name = "CVE-2018-19870.patch";
+        url = "http://code.qt.io/cgit/qt/qtbase.git/patch/?id=ac0a910756f91726e03c0e6a89d213bdb4f48fec";
+        sha256 = "00qb9yqwvwnp202am3lqirkjxln1cj8v4wvmlyqya6hna176lj2l";
+      })
+    ];
     qtdeclarative = [ ./qtdeclarative.patch ];
     qtscript = [ ./qtscript.patch ];
     qtserialport = [ ./qtserialport.patch ];
     qttools = [ ./qttools.patch ];
     qtwebengine = [ ./qtwebengine-seccomp.patch ];
     qtwebkit = [ ./qtwebkit.patch ];
+    qtvirtualkeyboard = [
+      (fetchpatch {
+        name = "CVE-2018-19865-A.patch";
+        url = "https://codereview.qt-project.org/gitweb?p=qt/qtvirtualkeyboard.git;a=patch;h=c02115db1de1f3aba81e109043766d600f886522";
+        sha256 = "0ncnyl8f3ypi1kcb9z2i8j33snix111h28njrx8rb49ny01ap8x2";
+      })
+      (fetchpatch {
+        name = "CVE-2018-19865-B.patch";
+        url = "https://codereview.qt-project.org/gitweb?p=qt/qtvirtualkeyboard.git;a=patch;h=01fc537adc74d5e102c8cc93384cdf5cb08b4442";
+        sha256 = "19z8kxqf2lpjqr8189ingrpadch4niviw3p5v93zgx24v7950q27";
+      })
+      (fetchpatch {
+        name = "CVE-2018-19865-C.patch";
+        url = "https://codereview.qt-project.org/gitweb?p=qt/qtvirtualkeyboard.git;a=patch;h=993a21ba03534b172d5354405cc9d50a2a822e24";
+        sha256 = "1bipqxr9bvy8z402pv9kj2w1yzcsj1v03l09pg5jyg1xh6jbgiky";
+      })
+    ];
+    qtimageformats = [
+      (fetchpatch {
+        name = "CVE-2018-19871.patch";
+        url = "https://codereview.qt-project.org/gitweb?p=qt/qtimageformats.git;a=patch;h=9299ab07df61c56b70e047f1fe5f06b6ff541aa3";
+        sha256 = "0fd3mxdlc0s405j02bc0g72fvdfvpi31a837xfwf40m5j4jbyndr";
+      })
+    ];
+    qtsvg = [
+      (fetchpatch {
+        name = "CVE-2018-19869.patch";
+        url = "http://code.qt.io/cgit/qt/qtsvg.git/patch/?id=c5f1dd14098d1cc2cb52448fb44f53966d331443";
+        sha256 = "1kgyfsxw2f0qv5fx9y7wysjsvqikam0qc7wzhklf0406zz6rhxbl";
+      })
+    ];
   };
 
   mkDerivation =
@@ -110,6 +159,7 @@ let
       /* qtwinextras = not packaged */
       qtx11extras = callPackage ../modules/qtx11extras.nix {};
       qtxmlpatterns = callPackage ../modules/qtxmlpatterns.nix {};
+      qtvirtualkeyboard = callPackage ../modules/qtvirtualkeyboard.nix {};
 
       env = callPackage ../qt-env.nix {};
       full = env "qt-full-${qtbase.version}" [

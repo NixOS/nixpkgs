@@ -58,6 +58,7 @@ rec {
           "netbsd" = "NetBSD";
           "freebsd" = "FreeBSD";
           "openbsd" = "OpenBSD";
+          "wasm" = "Wasm";
         }.${final.parsed.kernel.name} or null;
 
          # uname -p

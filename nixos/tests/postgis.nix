@@ -12,7 +12,9 @@ import ./make-test.nix ({ pkgs, ...} : {
         services.postgresql = let mypg = pkgs.postgresql_11; in {
             enable = true;
             package = mypg;
-            extraPlugins = [ (pkgs.postgis.override { postgresql = mypg; }) ];
+            extraPlugins = with mypg.pkgs; [
+              postgis
+            ];
         };
       };
   };
@@ -22,5 +24,6 @@ import ./make-test.nix ({ pkgs, ...} : {
     $master->waitForUnit("postgresql");
     $master->sleep(10); # Hopefully this is long enough!!
     $master->succeed("sudo -u postgres psql -c 'CREATE EXTENSION postgis;'");
+    $master->succeed("sudo -u postgres psql -c 'CREATE EXTENSION postgis_topology;'");
   '';
 })

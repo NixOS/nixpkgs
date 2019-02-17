@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, graphviz
+{ stdenv, buildPythonPackage, fetchPypi, substituteAll, graphviz
 , pkgconfig, doctest-ignore-unicode, mock, nose }:
 
 buildPythonPackage rec {
@@ -10,17 +10,18 @@ buildPythonPackage rec {
     sha256 = "7c294cbc9d88946be671cc0d8602aac176d8c56695c0a7d871eadea75a958408";
   };
 
-  buildInputs = [ doctest-ignore-unicode mock nose ];
-  propagatedBuildInputs = [ graphviz pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ graphviz ];
+  checkInputs = [ doctest-ignore-unicode mock nose ];
 
   patches = [
     # pygraphviz depends on graphviz being in PATH. This patch always prepends
     # graphviz to PATH.
-    ./graphviz-path.patch
+    (substituteAll {
+      src = ./graphviz-path.patch;
+      inherit graphviz;
+    })
   ];
-  postPatch = ''
-    substituteInPlace pygraphviz/agraph.py --subst-var-by graphvizPath '${graphviz}/bin'
-  '';
 
   # The tests are currently failing because of a bug in graphviz 2.40.1.
   # Upstream does not want to skip the relevant tests:

@@ -1,11 +1,11 @@
 { stdenv, fetchFromGitHub
 , makeWrapper, unzip, which
-, curl, tzdata, gdb, darwin
+, curl, tzdata, gdb, darwin, git
 , callPackage, targetPackages, ldc
-, version ? "2.083.1"
-, dmdSha256 ? "0b52yq7slgbrawb22kib9bk2x9xjiy6axwz1317fck5axl093d90"
-, druntimeSha256 ? "1hm9p59ih21yv8x7cqjhkyy94677q4f8wk9fs9i1rybx8x19njyn"
-, phobosSha256 ? "1zmz0f1wj0dgxy2cy63ljjc1sl2sgb7ij8bamlxw9nxrchwi3l43"
+, version ? "2.084.0"
+, dmdSha256 ? "1v61spdamncl8c1bzjc19b03p4jl0ih5zq9b7cqsy9ix7qaxmikf"
+, druntimeSha256 ? "0vp414j6s11l9s54v81np49mv60ywmd7nnk41idkbwrq0nz4sfrq"
+, phobosSha256 ? "1wp7z1x299b0w9ny1ah2wrfhrs05vc4bk51csgw9774l3dqcnv53"
 }:
 
 let
@@ -42,50 +42,22 @@ let
 
     sourceRoot = ".";
 
+    # https://issues.dlang.org/show_bug.cgi?id=19553
+    hardeningDisable = [ "fortify" ];
+
     postUnpack = ''
         patchShebangs .
-
-        # Remove cppa test for now because it doesn't work.
-        rm dmd/test/runnable/cppa.d
-        rm dmd/test/runnable/extra-files/cppb.cpp
-    ''
-
-    + stdenv.lib.optionalString (stdenv.hostPlatform.isDarwin) ''
-        rm dmd/test/runnable/test16096.sh
-    '';
-
-    # Compile with PIC to prevent colliding modules with binutils 2.28.
-    # https://issues.dlang.org/show_bug.cgi?id=17375
-    usePIC = "-fPIC";
-
-    phobosPatches = ''
-        # Ugly hack so the dlopen call has a chance to succeed.
-        # https://issues.dlang.org/show_bug.cgi?id=15391
-        substituteInPlace phobos/std/net/curl.d \
-            --replace libcurl.so ${curl.out}/lib/libcurl.so
-
-        # phobos uses curl, so we need to patch the path to the lib.
-        substituteInPlace phobos/posix.mak \
-            --replace "-soname=libcurl.so.4" "-soname=${curl.out}/lib/libcurl.so.4"
-
     '';
 
     postPatch = ''
-        substituteInPlace druntime/test/common.mak \
-            --replace "DFLAGS:=" "DFLAGS:=${usePIC} "
+        substituteInPlace dmd/test/compilable/extra-files/ddocYear.html \
+            --replace "2018" "__YEAR__"
 
-        substituteInPlace dmd/src/posix.mak \
-            --replace "DFLAGS :=" "DFLAGS += -link-defaultlib-shared=false"
-    ''
-
-    + phobosPatches
-
-    + stdenv.lib.optionalString stdenv.hostPlatform.isDarwin ''
-        substituteInPlace dmd/posix.mak \
-            --replace MACOSX_DEPLOYMENT_TARGET MACOSX_DEPLOYMENT_TARGET_
+        substituteInPlace dmd/test/runnable/test16096.sh \
+            --replace "{EXT}" "{EXE}"
     '';
 
-    nativeBuildInputs = [ ldc makeWrapper unzip which gdb ]
+    nativeBuildInputs = [ ldc makeWrapper unzip which gdb git ]
 
     ++ stdenv.lib.optional stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [
       Foundation
@@ -109,7 +81,8 @@ let
         make -j$NIX_BUILD_CORES -f posix.mak BUILD=release ENABLE_RELEASE=1 PIC=1 INSTALL_DIR=$out DMD=${pathToDmd}
         cd ../phobos
         echo ${tzdata}/share/zoneinfo/ > TZDatabaseDirFile
-        make -j$NIX_BUILD_CORES -f posix.mak BUILD=release ENABLE_RELEASE=1 PIC=1 INSTALL_DIR=$out DMD=${pathToDmd} DFLAGS="-version=TZDatabaseDir -J$(pwd)"
+        echo ${curl.out}/lib/libcurl.so > LibcurlPathFile
+        make -j$NIX_BUILD_CORES -f posix.mak BUILD=release ENABLE_RELEASE=1 PIC=1 INSTALL_DIR=$out DMD=${pathToDmd} DFLAGS="-version=TZDatabaseDir -version=LibcurlPath -J$(pwd)"
         cd ..
     '';
 
@@ -119,14 +92,12 @@ let
 
     checkPhase = ''
         cd dmd
-        make -j$NIX_BUILD_CORES -C test -f Makefile PIC=1 DMD=${pathToDmd} BUILD=release SHARED=0 SHELL=$SHELL
+        make -j$NIX_BUILD_CORES -C test -f Makefile PIC=1 CC=$CXX DMD=${pathToDmd} BUILD=release SHARED=0 SHELL=$SHELL
         cd ../druntime
         make -j$NIX_BUILD_CORES -f posix.mak unittest PIC=1 DMD=${pathToDmd} BUILD=release
         cd ..
     '';
 
-    extension = if stdenv.hostPlatform.isDarwin then "a" else "{a,so}";
-    
     dontStrip = true;
 
     installPhase = ''
@@ -147,7 +118,7 @@ let
 
         cd ../phobos
         mkdir $out/lib
-        cp generated/${osname}/release/${bits}/libphobos2.${extension} $out/lib
+        cp generated/${osname}/release/${bits}/libphobos2.* $out/lib
 
         cp -r std $out/include/d2
         cp -r etc $out/include/d2
@@ -194,15 +165,14 @@ let
 
       sourceRoot = ".";
 
-      postPatch = dmdBuild.phobosPatches;
-
       nativeBuildInputs = dmdBuild.nativeBuildInputs;
       buildInputs = dmdBuild.buildInputs;
 
       buildPhase = ''
           cd phobos
           echo ${tzdata}/share/zoneinfo/ > TZDatabaseDirFile
-          make -j$NIX_BUILD_CORES -f posix.mak unittest BUILD=release ENABLE_RELEASE=1 PIC=1 DMD=${dmdBuild}/bin/dmd DFLAGS="-version=TZDatabaseDir -J$(pwd)"
+          echo ${curl.out}/lib/libcurl.so > LibcurlPathFile
+          make -j$NIX_BUILD_CORES -f posix.mak unittest BUILD=release ENABLE_RELEASE=1 PIC=1 DMD=${dmdBuild}/bin/dmd DFLAGS="-version=TZDatabaseDir -version=LibcurlPath -J$(pwd)"
       '';
 
       installPhase = ''

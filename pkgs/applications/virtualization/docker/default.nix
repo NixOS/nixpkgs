@@ -28,7 +28,7 @@ rec {
       patches = [];
     });
 
-    docker-containerd = (containerd.override { inherit go; }).overrideAttrs (oldAttrs: rec {
+    docker-containerd = containerd.overrideAttrs (oldAttrs: rec {
       name = "docker-containerd-${version}";
       inherit version;
       src = fetchFromGitHub {
@@ -39,8 +39,6 @@ rec {
       };
 
       hardeningDisable = [ "fortify" ];
-
-      buildInputs = [ removeReferencesTo go btrfs-progs ];
     });
 
     docker-tini = tini.overrideAttrs  (oldAttrs: rec {
@@ -201,13 +199,13 @@ rec {
   # https://github.com/docker/docker-ce/tree/v${version}/components/engine/hack/dockerfile/install/*
 
   docker_18_09 = dockerGen rec {
-    version = "18.09.0";
-    rev = "4d60db472b2bde6931072ca6467f2667c2590dff"; # git commit
-    sha256 = "0py944f5k71c1cf6ci96vnqk43d5979w7r82cngaxk1g6za6k5yj";
-    runcRev = "69663f0bd4b60df09991c08812a60108003fa340";
-    runcSha256 = "1l37r97l3ra4ph069w190d05r0a43s76nn9jvvlkbwrip1cp6gyq";
-    containerdRev = "468a545b9edcd5932818eb9de8e72413e616e86e";
-    containerdSha256 = "1rp015cm5fw9kfarcmfhfkr1sh0iz7kvqls6f8nfhwrrz5armd5v";
+    version = "18.09.2";
+    rev = "62479626f213818ba5b4565105a05277308587d5"; # git commit
+    sha256 = "05kvpy1c4g661xfds6dfzb8r5q76ndblxjykfj06had18pv0xxd4";
+    runcRev = "09c8266bf2fcf9519a651b04ae54c967b9ab86ec";
+    runcSha256 = "08h45vs1f25byapqzy6x42r86m232z166v6z81gc2a3id8v0nzia";
+    containerdRev = "9754871865f7fe2f4e74d43e2fc7ccd237edcbce";
+    containerdSha256 = "065snv0s3v3z0ghadlii4w78qnhchcbx2kfdrvm8fk8gb4pkx1ya";
     tiniRev = "fec3683b971d9c3ef73f284f176672c44b448662";
     tiniSha256 = "1h20i3wwlbd8x4jr2gz68hgklh0lb0jj7y5xk1wvr8y58fip1rdn";
   };

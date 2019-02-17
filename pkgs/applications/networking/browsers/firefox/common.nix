@@ -1,6 +1,7 @@
 { pname, ffversion, meta, updateScript ? null
 , src, unpackPhase ? null, patches ? []
 , extraNativeBuildInputs ? [], extraConfigureFlags ? [], extraMakeFlags ? []
+, isIceCatLike ? false, icversion ? null
 , isTorBrowserLike ? false, tbversion ? null }:
 
 { lib, stdenv, pkgconfig, pango, perl, python2, zip, libIDL
@@ -21,11 +22,12 @@
 , pulseaudioSupport ? stdenv.isLinux, libpulseaudio
 , ffmpegSupport ? true
 , gtk3Support ? true, gtk2, gtk3, wrapGAppsHook
+, waylandSupport ? true, libxkbcommon
 , gssSupport ? true, kerberos
 
 ## privacy-related options
 
-, privacySupport ? isTorBrowserLike
+, privacySupport ? isTorBrowserLike || isIceCatLike
 
 # WARNING: NEVER set any of the options below to `true` by default.
 # Set to `privacySupport` or `false`.
@@ -73,27 +75,47 @@ let
   flag = tf: x: [(if tf then "--enable-${x}" else "--disable-${x}")];
 
   default-toolkit = if stdenv.isDarwin then "cairo-cocoa"
-                    else "cairo-gtk${if gtk3Support then "3" else "2"}";
+                    else "cairo-gtk${if gtk3Support then "3${lib.optionalString waylandSupport "-wayland"}" else "2"}";
+
+  binaryName = if isIceCatLike then "icecat" else "firefox";
+  binaryNameCapitalized = lib.toUpper (lib.substring 0 1 binaryName) + lib.substring 1 (-1) binaryName;
+
+  browserName = if stdenv.isDarwin then binaryNameCapitalized else binaryName;
 
   execdir = if stdenv.isDarwin
-            then "/Applications/${browserName}.app/Contents/MacOS"
+            then "/Applications/${binaryNameCapitalized}.app/Contents/MacOS"
             else "/bin";
-  browserName = if stdenv.isDarwin then "Firefox" else "firefox";
+
+  browserVersion = if isIceCatLike then icversion
+                   else if isTorBrowserLike then tbversion
+                   else ffversion;
+
+  browserPatches = [
+    ./env_var_for_system_dir.patch
+  ] ++ patches;
+
 in
 
 stdenv.mkDerivation rec {
   name = "${pname}-unwrapped-${version}";
-  version = if !isTorBrowserLike then ffversion else tbversion;
+  version = browserVersion;
 
-  inherit src unpackPhase patches meta;
+  inherit src unpackPhase meta;
+
+  patches = browserPatches;
+
+  # Ignore trivial whitespace changes in patches, this fixes compatibility of
+  # ./env_var_for_system_dir.patch with Firefox >=65 without having to track
+  # two patches.
+  patchFlags = [ "-p1" "-l" ];
 
   buildInputs = [
     gtk2 perl zip libIDL libjpeg zlib bzip2
     dbus dbus-glib pango freetype fontconfig xorg.libXi xorg.libXcursor
     xorg.libX11 xorg.libXrender xorg.libXft xorg.libXt file
     libnotify xorg.pixman yasm libGLU_combined
-    xorg.libXScrnSaver xorg.scrnsaverproto
-    xorg.libXext xorg.xextproto sqlite unzip makeWrapper
+    xorg.libXScrnSaver xorg.xorgproto
+    xorg.libXext sqlite unzip makeWrapper
     libevent libstartup_notification libvpx /* cairo */
     icu libpng jemalloc glib
   ]
@@ -103,6 +125,7 @@ stdenv.mkDerivation rec {
   ++ lib.optional  pulseaudioSupport libpulseaudio # only headers are needed
   ++ lib.optional  gtk3Support gtk3
   ++ lib.optional  gssSupport kerberos
+  ++ lib.optional  waylandSupport libxkbcommon
   ++ lib.optionals stdenv.isDarwin [ CoreMedia ExceptionHandling Kerberos
                                      AVFoundation MediaToolbox CoreLocation
                                      Foundation libobjc AddressBook cups ];
@@ -265,22 +288,22 @@ stdenv.mkDerivation rec {
 
   installPhase = if stdenv.isDarwin then ''
     mkdir -p $out/Applications
-    cp -LR dist/Firefox.app $out/Applications
+    cp -LR dist/${binaryNameCapitalized}.app $out/Applications
   '' else null;
 
   postInstall = lib.optionalString stdenv.isLinux ''
     # Remove SDK cruft. FIXME: move to a separate output?
-    rm -rf $out/share/idl $out/include $out/lib/firefox-devel-*
+    rm -rf $out/share/idl $out/include $out/lib/${binaryName}-devel-*
 
     # Needed to find Mozilla runtime
-    gappsWrapperArgs+=(--argv0 "$out/bin/.firefox-wrapped")
+    gappsWrapperArgs+=(--argv0 "$out/bin/.${binaryName}-wrapped")
   '';
 
   postFixup = lib.optionalString stdenv.isLinux ''
     # Fix notifications. LibXUL uses dlopen for this, unfortunately; see #18712.
     patchelf --set-rpath "${lib.getLib libnotify
-      }/lib:$(patchelf --print-rpath "$out"/lib/firefox*/libxul.so)" \
-        "$out"/lib/firefox*/libxul.so
+      }/lib:$(patchelf --print-rpath "$out"/lib/${binaryName}*/libxul.so)" \
+        "$out"/lib/${binaryName}*/libxul.so
   '';
 
   doInstallCheck = true;
@@ -292,6 +315,7 @@ stdenv.mkDerivation rec {
   passthru = {
     inherit version updateScript;
     isFirefox3Like = true;
+    inherit isIceCatLike;
     inherit isTorBrowserLike;
     gtk = gtk2;
     inherit nspr;

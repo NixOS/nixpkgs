@@ -33,6 +33,8 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "DESTDIR=$(out)" ];
 
+  NIX_LDFLAGS = [ "-lX11" ];
+
   postInstall =
     ''
       mkdir -p $out/share/exult/music

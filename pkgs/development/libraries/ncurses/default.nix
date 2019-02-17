@@ -165,7 +165,6 @@ stdenv.mkDerivation rec {
 
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
-    maintainers = [ lib.maintainers.wkennington ];
   };
 
   passthru = {

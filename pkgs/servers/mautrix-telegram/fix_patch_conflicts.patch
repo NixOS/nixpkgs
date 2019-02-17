@@ -1,0 +1,27 @@
+diff --git a/mautrix_telegram/abstract_user.py b/mautrix_telegram/abstract_user.py
+index 11273f8..aadaf5d 100644
+--- a/mautrix_telegram/abstract_user.py
++++ b/mautrix_telegram/abstract_user.py
+@@ -21,14 +21,14 @@ import logging
+ import platform
+ 
+ from sqlalchemy import orm
+-from telethon.tl.types import Channel, ChannelForbidden, Chat, ChatForbidden, Message, \
+-    MessageActionChannelMigrateFrom, MessageService, PeerUser, TypeUpdate, \
+-    UpdateChannelPinnedMessage, UpdateChatAdmins, UpdateChatParticipantAdmin, \
+-    UpdateChatParticipants, UpdateChatUserTyping, UpdateDeleteChannelMessages, \
+-    UpdateDeleteMessages, UpdateEditChannelMessage, UpdateEditMessage, UpdateNewChannelMessage, \
+-    UpdateNewMessage, UpdateReadHistoryOutbox, UpdateShortChatMessage, UpdateShortMessage, \
+-    UpdateUserName, UpdateUserPhoto, UpdateUserStatus, UpdateUserTyping, User, UserStatusOffline, \
+-    UserStatusOnline
++from telethon.tl.patched import MessageService, Message
++from telethon.tl.types import (
++    Channel, ChannelForbidden, Chat, ChatForbidden, MessageActionChannelMigrateFrom, PeerUser,
++    TypeUpdate, UpdateChannelPinnedMessage, UpdateChatAdmins, UpdateChatParticipantAdmin,
++    UpdateChatParticipants, UpdateChatUserTyping, UpdateDeleteChannelMessages, UpdateDeleteMessages,
++    UpdateEditChannelMessage, UpdateEditMessage, UpdateNewChannelMessage, UpdateNewMessage,
++    UpdateReadHistoryOutbox, UpdateShortChatMessage, UpdateShortMessage, UpdateUserName,
++    UpdateUserPhoto, UpdateUserStatus, UpdateUserTyping, User, UserStatusOffline, UserStatusOnline)
+ 
+ from mautrix_appservice import MatrixRequestError, AppService
+ from alchemysession import AlchemySessionContainer

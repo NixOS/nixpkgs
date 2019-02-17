@@ -72,14 +72,17 @@ let self = toPythonModule (python.stdenv.mkDerivation (builtins.removeAttrs attr
 
   name = namePrefix + name;
 
-  nativeBuildInputs = [ ensureNewerSourcesForZipFilesHook ]
-    ++ nativeBuildInputs;
+  nativeBuildInputs = [
+    python
+    wrapPython
+    ensureNewerSourcesForZipFilesHook
+    setuptools
+#     ++ lib.optional catchConflicts setuptools # If we no longer propagate setuptools
+  ] ++ lib.optionals (lib.hasSuffix "zip" (attrs.src.name or "")) [
+    unzip
+  ] ++ nativeBuildInputs;
 
-  buildInputs = [ wrapPython ]
-    ++ lib.optional (lib.hasSuffix "zip" (attrs.src.name or "")) unzip
-    ++ lib.optional catchConflicts setuptools # If we no longer propagate setuptools
-    ++ buildInputs
-    ++ pythonPath;
+  buildInputs = buildInputs ++ pythonPath;
 
   # Propagate python and setuptools. We should stop propagating setuptools.
   propagatedBuildInputs = propagatedBuildInputs ++ [ python setuptools ];
@@ -100,8 +103,11 @@ let self = toPythonModule (python.stdenv.mkDerivation (builtins.removeAttrs attr
     # Check if we have two packages with the same name in the closure and fail.
     # If this happens, something went wrong with the dependencies specs.
     # Intentionally kept in a subdirectory, see catch_conflicts/README.md.
-    ${python.interpreter} ${./catch_conflicts}/catch_conflicts.py
+    ${python.pythonForBuild.interpreter} ${./catch_conflicts}/catch_conflicts.py
   '' + attrs.postFixup or '''';
+
+  # Python packages built through cross-compilation are always for the host platform.
+  disallowedReferences = lib.optionals (python.stdenv.hostPlatform != python.stdenv.buildPlatform) [ python.pythonForBuild ];
 
   meta = {
     # default to python's platforms

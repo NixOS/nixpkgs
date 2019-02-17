@@ -4,8 +4,8 @@
 # then stops downstream builds (mariadb in particular) from detecting it. This
 # option should remove the prefix and give us a working jemalloc.
 # Causes segfaults with some software (ex. rustc), but defaults to true for backward
-# compatibility. Ignored on non OSX.
-, stripPrefix ? true
+# compatibility.
+, stripPrefix ? stdenv.hostPlatform.isDarwin
 , disableInitExecTls ? false
 }:
 
@@ -22,8 +22,8 @@ stdenv.mkDerivation rec {
 
   # see the comment on stripPrefix
   configureFlags = []
-    ++ optional (stdenv.isDarwin && stripPrefix) [ "--with-jemalloc-prefix=" ]
-    ++ optional disableInitExecTls [ "--disable-initial-exec-tls" ]
+    ++ optional stripPrefix "--with-jemalloc-prefix="
+    ++ optional disableInitExecTls "--disable-initial-exec-tls"
   ;
 
   doCheck = true;
@@ -39,6 +39,5 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.bsd2;
     platforms = platforms.all;
-    maintainers = with maintainers; [ wkennington ];
   };
 }

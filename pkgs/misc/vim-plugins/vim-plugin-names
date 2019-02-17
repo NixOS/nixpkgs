@@ -110,6 +110,7 @@ jgdavey/tslime.vim
 jhradilek/vim-docbk
 jiangmiao/auto-pairs
 jistr/vim-nerdtree-tabs
+jlanzarotta/bufexplorer
 jnurmine/zenburn
 jonbri/vim-colorstepper
 joonty/vim-xdebug
@@ -221,6 +222,7 @@ osyo-manga/vim-watchdogs
 pangloss/vim-javascript
 parsonsmatt/intero-neovim
 pearofducks/ansible-vim
+peder2tm/sved
 peterhoeg/vim-qml
 phanviet/vim-monokai-pro
 plasticboy/vim-markdown

@@ -1,5 +1,5 @@
 { stdenv, fetchgit, cmake, pkgconfig, qtbase, qtwebkit, qtkeychain, qttools, sqlite
-, inotify-tools, makeWrapper, openssl_1_1, pcre, qtwebengine, libsecret
+, inotify-tools, makeWrapper, openssl_1_1, pcre, qtwebengine, libsecret, fetchpatch
 }:
 
 stdenv.mkDerivation rec {
@@ -12,6 +12,20 @@ stdenv.mkDerivation rec {
     sha256 = "0r6jj3vbmwh7ipv83c8w1b25pbfq3mzrjgcijdw2gwfxwx9pfq7d";
     fetchSubmodules = true;
   };
+
+  # Patches contained in next (>2.5.1) release
+  patches = [
+    (fetchpatch {
+     name = "fix-qt-5.12-build";
+     url = "https://github.com/nextcloud/desktop/commit/071709ab5e3366e867dd0b0ea931aa7d6f80f528.patch";
+     sha256 = "14k635jwm8hz6i22lz88jj2db8v5czwa3zg0667i4hwhkqqmy61n";
+     })
+     (fetchpatch {
+       name = "fix-qtwebengine-crash";
+       url = "https://patch-diff.githubusercontent.com/raw/nextcloud/desktop/pull/959.patch";
+       sha256 = "00qx976az2rb1gwl1rxapm8gqj42yzqp8k2fasn3h7b30lnxdyr0";
+     })
+  ];
 
   nativeBuildInputs = [ pkgconfig cmake makeWrapper ];
 
@@ -35,7 +49,8 @@ stdenv.mkDerivation rec {
     $out/share/applications/nextcloud.desktop
 
     wrapProgram "$out/bin/nextcloud" \
-      --prefix LD_LIBRARY_PATH : ${stdenv.lib.makeLibraryPath [ libsecret ]}
+      --prefix LD_LIBRARY_PATH : ${stdenv.lib.makeLibraryPath [ libsecret ]} \
+      --prefix QT_PLUGIN_PATH : ${qtbase}/${qtbase.qtPluginPrefix}
   '';
 
   meta = with stdenv.lib; {

@@ -37,6 +37,5 @@ stdenv.mkDerivation rec {
     license = licenses.bsd3;
     description = "OpenBSD NTP daemon (Debian port)";
     platforms = platforms.all;
-    maintainers = with maintainers; [ wkennington ];
   };
 }

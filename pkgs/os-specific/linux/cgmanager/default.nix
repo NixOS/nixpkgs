@@ -22,6 +22,5 @@ stdenv.mkDerivation rec {
     description = "A central privileged daemon that manages all your cgroups";
     license = licenses.lgpl21;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ wkennington ];
   };
 }

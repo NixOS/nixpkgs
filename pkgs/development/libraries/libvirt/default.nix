@@ -7,6 +7,7 @@
 , curl, libiconv, gmp, zfs, parted, bridge-utils, dmidecode
 , enableXen ? false, xen ? null
 , enableIscsi ? false, openiscsi
+, enableCeph ? false, ceph
 }:
 
 with stdenv.lib;
@@ -45,6 +46,8 @@ in stdenv.mkDerivation rec {
     xen
   ] ++ optionals enableIscsi [
     openiscsi
+  ] ++ optionals enableCeph [
+    ceph
   ] ++ optionals stdenv.isDarwin [
     libiconv gmp
   ];
@@ -85,6 +88,8 @@ in stdenv.mkDerivation rec {
     "--with-storage-zfs"
   ] ++ optionals enableIscsi [
     "--with-storage-iscsi"
+  ] ++ optionals enableCeph [
+    "--with-storage-rbd"
   ] ++ optionals stdenv.isDarwin [
     "--with-init-script=none"
   ];

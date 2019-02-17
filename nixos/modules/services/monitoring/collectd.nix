@@ -88,6 +88,8 @@ in {
         ExecStart = "${cfg.package}/sbin/collectd -C ${conf} -f";
         User = cfg.user;
         PermissionsStartOnly = true;
+        Restart = "on-failure";
+        RestartSec = 3;
       };
 
       preStart = ''

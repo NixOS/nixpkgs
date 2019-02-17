@@ -10,12 +10,44 @@
 , glib, gobject-introspection, libevent, zlib, autoreconfHook, gnum4
 , mysql, postgresql, cyrus_sasl
 , fetchFromGitHub, libmpack, which, fetchpatch, writeText
+, pkgs
+, fetchgit
+, overrides ? (self: super: {})
+, lib
 }:
 
 let
-  isLua52 = lua.luaversion == "5.2";
+  packages = ( self:
+
+let
+  luaAtLeast = lib.versionAtLeast lua.luaversion;
+  luaOlder = lib.versionOlder lua.luaversion;
+  isLua51 = (lib.versions.majorMinor lua.version) == "5.1";
+  isLua52 = (lib.versions.majorMinor lua.version) == "5.2";
   isLua53 = lua.luaversion == "5.3";
   isLuaJIT = (builtins.parseDrvName lua.name).name == "luajit";
+
+  lua-setup-hook = callPackage ../development/interpreters/lua-5/setup-hook.nix { };
+
+  # Check whether a derivation provides a lua module.
+  hasLuaModule = drv: drv ? luaModule ;
+
+  callPackage = pkgs.newScope self;
+
+  requiredLuaModules = drvs: with stdenv.lib; let
+    modules =  filter hasLuaModule drvs;
+  in unique ([lua] ++ modules ++ concatLists (catAttrs "requiredLuaModules" modules));
+
+  # Convert derivation to a lua module.
+  toLuaModule = drv:
+    drv.overrideAttrs( oldAttrs: {
+      # Use passthru in order to prevent rebuilds when possible.
+      passthru = (oldAttrs.passthru or {})// {
+        luaModule = lua;
+        requiredLuaModules = requiredLuaModules drv.propagatedBuildInputs;
+      };
+    });
+
 
   platformString =
     if stdenv.isDarwin then "macosx"
@@ -24,10 +56,22 @@ let
     else if stdenv.isSunOS then "solaris"
     else throw "unsupported platform";
 
-  self = _self;
-  _self = with self; {
-  inherit lua;
-  inherit (stdenv.lib) maintainers;
+  buildLuaApplication = args: buildLuarocksPackage ({namePrefix="";} // args );
+
+  buildLuarocksPackage = with pkgs.lib; makeOverridable( callPackage ../development/interpreters/lua-5/build-lua-package.nix {
+    inherit toLuaModule;
+    inherit lua writeText;
+  });
+in
+with self; {
+
+  getLuaPathList = majorVersion: [
+     "lib/lua/${majorVersion}/?.lua" "share/lua/${majorVersion}/?.lua"
+    "share/lua/${majorVersion}/?/init.lua" "lib/lua/${majorVersion}/?/init.lua"
+  ];
+  getLuaCPathList = majorVersion: [
+     "lib/lua/${majorVersion}/?.so" "share/lua/${majorVersion}/?.so" "share/lua/${majorVersion}/?/init.so"
+  ];
 
   # helper functions for dealing with LUA_PATH and LUA_CPATH
   getPath       = lib : type : "${lib}/lib/lua/${lua.luaversion}/?.${type};${lib}/share/lua/${lua.luaversion}/?.${type}";
@@ -39,35 +83,22 @@ let
     inherit lua writeText;
   };
 
+
+  inherit toLuaModule lua-setup-hook;
+  inherit buildLuarocksPackage buildLuaApplication;
+  inherit requiredLuaModules luaOlder luaAtLeast
+    isLua51 isLua52 isLuaJIT lua callPackage;
+
+  # wraps programs in $out/bin with valid LUA_PATH/LUA_CPATH
+  wrapLua = callPackage ../development/interpreters/lua-5/wrap-lua.nix {
+    inherit lua; inherit (pkgs) makeSetupHook makeWrapper;
+  };
+
   luarocks = callPackage ../development/tools/misc/luarocks {
     inherit lua;
   };
 
-  basexx = buildLuaPackage rec {
-    version = "0.4.0";
-    name = "basexx-${version}";
-
-    src = fetchFromGitHub {
-      owner = "aiq";
-      repo = "basexx";
-      rev = "v${version}";
-      sha256 = "12y0ng9bp5b98iax35pnp0kc0mb42spv1cbywvfq6amik6l0ya7g";
-    };
-
-    buildPhase = ":";
-    installPhase = ''
-      install -Dt "$out/lib/lua/${lua.luaversion}/" \
-        lib/basexx.lua
-    '';
-
-    meta = with stdenv.lib; {
-      description = "Lua library for base2, base16, base32, base64, base85";
-      homepage = "https://github.com/aiq/basexx";
-      license = licenses.mit;
-      maintainers = with maintainers; [ vcunat ];
-      platforms = platforms.all;
-    };
-  };
+  luarocks-nix = callPackage ../development/tools/misc/luarocks/luarocks-nix.nix { };
 
   bit32 = buildLuaPackage rec {
     version = "5.3.0";
@@ -136,92 +167,6 @@ let
     };
   };
 
-  cqueues = buildLuaPackage rec {
-    name = "cqueues-${version}";
-    version = "20171014";
-
-    src = fetchurl {
-      url = "https://www.25thandclement.com/~william/projects/releases/${name}.tgz";
-      sha256 = "1dabhpn6r0hlln8vx9hxm34pfcm46qzgpb2apmziwg5z51fi4ksb";
-    };
-
-    preConfigure = ''export prefix=$out'';
-
-    nativeBuildInputs = [ gnum4 ];
-    buildInputs = [ openssl ];
-
-    meta = with stdenv.lib; {
-      description = "A type of event loop for Lua";
-      homepage = "https://www.25thandclement.com/~william/projects/cqueues.html";
-      license = licenses.mit;
-      maintainers = with maintainers; [ vcunat ];
-      platforms = platforms.unix;
-    };
-  };
-
-  fifo = buildLuaPackage rec {
-    version = "0.2";
-    name = "fifo-${version}";
-
-    src = fetchFromGitHub {
-      owner = "daurnimator";
-      repo = "fifo.lua";
-      rev = version;
-      sha256 = "1800k7h5hxsvm05bjdr65djjml678lwb0661cll78z1ys2037nzn";
-    };
-
-    buildPhase = ":";
-    installPhase = ''
-      mkdir -p "$out/lib/lua/${lua.luaversion}"
-      mv fifo.lua "$out/lib/lua/${lua.luaversion}/"
-    '';
-
-    meta = with stdenv.lib; {
-      description = "A lua library/'class' that implements a FIFO";
-      homepage = "https://github.com/daurnimator/fifo.lua";
-      license = licenses.mit;
-      maintainers = with maintainers; [ vcunat ];
-      platforms = platforms.all;
-    };
-  };
-
-  luabitop = buildLuaPackage rec {
-    version = "1.0.2";
-    name = "bitop-${version}";
-
-    src = fetchurl {
-      url = "http://bitop.luajit.org/download/LuaBitOp-${version}.tar.gz";
-      sha256 = "16fffbrgfcw40kskh2bn9q7m3gajffwd2f35rafynlnd7llwj1qj";
-    };
-
-    buildFlags = stdenv.lib.optionalString stdenv.isDarwin "macosx";
-
-    disabled = isLua53;
-
-    postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
-      substituteInPlace Makefile --replace 10.4 10.5
-    '';
-
-    preBuild = ''
-      makeFlagsArray=(
-        ${stdenv.lib.optionalString stdenv.cc.isClang "CC=$CC"}
-        INCLUDES="-I${lua}/include"
-        LUA="${lua}/bin/lua");
-    '';
-
-    installPhase = ''
-      mkdir -p $out/lib/lua/${lua.luaversion}
-      install -p bit.so $out/lib/lua/${lua.luaversion}
-    '';
-
-    meta = with stdenv.lib; {
-      description = "C extension module for Lua which adds bitwise operations on numbers";
-      homepage = "http://bitop.luajit.org";
-      license = licenses.mit;
-      maintainers = with maintainers; [ ];
-    };
-  };
-
   http = buildLuaPackage rec {
     version = "0.2";
     name = "http-${version}";
@@ -254,36 +199,6 @@ let
     };
   };
 
-  luacheck = buildLuaPackage rec {
-    pname = "luacheck";
-    version = "0.20.0";
-    name = "${pname}-${version}";
-
-    src = fetchFromGitHub {
-      owner = "mpeterv";
-      repo = "luacheck";
-      rev = "${version}";
-      sha256 = "0ahfkmqcjhlb7r99bswy1sly6d7p4pyw5f4x4fxnxzjhbq0c5qcs";
-    };
-
-    propagatedBuildInputs = [ lua ];
-
-    # No Makefile.
-    dontBuild = true;
-
-    installPhase = ''
-      ${lua}/bin/lua install.lua $out
-    '';
-
-    meta = with stdenv.lib; {
-      description = "A tool for linting and static analysis of Lua code";
-      homepage = https://github.com/mpeterv/luacheck;
-      license = licenses.mit;
-      maintainers = with maintainers; [ vyp ];
-      platforms = platforms.unix;
-    };
-  };
-
   luacyrussasl = buildLuaPackage rec {
     version = "1.1.0";
     name = "lua-cyrussasl-${version}";
@@ -310,37 +225,6 @@ let
       homepage = "https://github.com/JorjBauer/lua-cyrussasl";
       description = "Cyrus SASL library for Lua 5.1+";
       license = licenses.bsd3;
-    };
-  };
-
-  luaevent = buildLuaPackage rec {
-    version = "0.4.4";
-    name = "luaevent-${version}";
-
-    src = fetchFromGitHub {
-      owner = "harningt";
-      repo = "luaevent";
-      rev = "v${version}";
-      sha256 = "1krzxr0jkv3gmhpckp02byhdd9s5dd0hpyqc8irc8i79dd8x0p53";
-    };
-
-    preBuild = ''
-      makeFlagsArray=(
-        INSTALL_DIR_LUA="$out/share/lua/${lua.luaversion}"
-        INSTALL_DIR_BIN="$out/lib/lua/${lua.luaversion}"
-        LUA_INC_DIR="${lua}/include"
-      );
-    '';
-
-    buildInputs = [ libevent ];
-
-    propagatedBuildInputs = [ luasocket ];
-
-    meta = with stdenv.lib; {
-      homepage = http://luaforge.net/projects/luaevent/;
-      description = "Binding of libevent to Lua";
-      license = licenses.mit;
-      maintainers = with maintainers; [ koral ];
     };
   };
 
@@ -496,60 +380,6 @@ let
       homepage = "https://github.com/luaposix/luaposix";
       license = licenses.mit;
       maintainers = with maintainers; [ vyp lblasc ];
-      platforms = platforms.unix;
-    };
-  };
-
-  lpty = buildLuaPackage rec {
-    version = "1.2.1";
-    name = "lpty-${version}";
-
-    src = fetchurl {
-      url = "http://www.tset.de/downloads/lpty-${version}-1.tar.gz";
-      sha256 = "0rgvbpymcgdkzdwfag607xfscs9xyqxg0dj0qr5fv906mi183gs6";
-    };
-
-    preBuild = ''
-      makeFlagsArray=(
-        INST_LIBDIR="$out/lib/lua/${lua.luaversion}"
-        INST_LUADIR="$out/share/lua/${lua.luaversion}"
-        LUA_BINDIR="${lua}/bin"
-        LUA_INCDIR="-I${lua}/include"
-        LUA_LIBDIR="-L${lua}/lib"
-        );
-    '';
-
-    meta = with stdenv.lib; {
-      description = "PTY control for Lua";
-      homepage = "http://www.tset.de/lpty";
-      license = licenses.mit;
-      maintainers = with maintainers; [ vyp ];
-      platforms = platforms.linux;
-    };
-  };
-
-  lua-iconv = buildLuaPackage rec {
-    name = "lua-iconv-${version}";
-    version = "7";
-
-    src = fetchFromGitHub {
-      owner = "ittner";
-      repo = "lua-iconv";
-      rev = name;
-      sha256 = "0rd76966qlxfp8ypkyrbif76nxnm1acclqwfs45wz3972jsk654i";
-    };
-
-    preBuild = ''
-      makeFlagsArray=(
-        INSTALL_PATH="$out/lib/lua/${lua.luaversion}"
-      );
-    '';
-
-    meta = with stdenv.lib; {
-      description = "Lua bindings for POSIX iconv";
-      homepage = "https://ittner.github.io/lua-iconv/";
-      license = licenses.mit;
-      maintainers = with maintainers; [ richardipsum ];
       platforms = platforms.unix;
     };
   };
@@ -858,32 +688,6 @@ let
     };
   };
 
-  lpeg_patterns = buildLuaPackage rec {
-    version = "0.5";
-    name = "lpeg_patterns-${version}";
-
-    src = fetchFromGitHub {
-      owner = "daurnimator";
-      repo = "lpeg_patterns";
-      rev = "v${version}";
-      sha256 = "1s3c179a64r45ffkawv9dnxw4mzwkzj00nr9z2gs5haajgpjivw6";
-    };
-
-    buildPhase = ":";
-    installPhase = ''
-      mkdir -p "$out/lib/lua/${lua.luaversion}"
-      mv lpeg_patterns "$out/lib/lua/${lua.luaversion}/"
-    '';
-
-    meta = with stdenv.lib; {
-      description = "A collection of LPEG patterns";
-      homepage = "https://github.com/daurnimator/lpeg_patterns";
-      license = licenses.mit;
-      maintainers = with maintainers; [ vcunat ];
-      inherit (lpeg.meta) platforms;
-    };
-  };
-
   cjson = buildLuaPackage rec {
     name = "cjson-${version}";
     version = "2.1.0";
@@ -912,43 +716,6 @@ let
       homepage = "https://www.kyne.com.au/~mark/software/lua-cjson.php";
       license = licenses.mit;
       maintainers = with maintainers; [ vyp ];
-    };
-  };
-
-  lgi = stdenv.mkDerivation rec {
-    name = "lgi-${version}";
-    version = "0.9.2";
-
-    src = fetchFromGitHub {
-      owner = "pavouk";
-      repo = "lgi";
-      rev = version;
-      sha256 = "03rbydnj411xpjvwsyvhwy4plm96481d7jax544mvk7apd8sd5jj";
-    };
-
-    nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ glib gobject-introspection lua ];
-
-    makeFlags = [ "LUA_VERSION=${lua.luaversion}" ];
-
-    preBuild = ''
-      sed -i "s|/usr/local|$out|" lgi/Makefile
-    '';
-
-    patches = [
-        (fetchpatch {
-            name = "lgi-find-cairo-through-typelib.patch";
-            url = "https://github.com/psychon/lgi/commit/46a163d9925e7877faf8a4f73996a20d7cf9202a.patch";
-            sha256 = "0gfvvbri9kyzhvq3bvdbj2l6mwvlz040dk4mrd5m9gz79f7w109c";
-        })
-    ];
-
-    meta = with stdenv.lib; {
-      description = "GObject-introspection based dynamic Lua binding to GObject based libraries";
-      homepage    = https://github.com/pavouk/lgi;
-      license     = licenses.mit;
-      maintainers = with maintainers; [ lovek323 rasendubi ];
-      platforms   = platforms.unix;
     };
   };
 
@@ -1048,7 +815,7 @@ let
     };
   };
 
-  vicious = stdenv.mkDerivation rec {
+  vicious = toLuaModule(stdenv.mkDerivation rec {
     name = "vicious-${version}";
     version = "2.3.1";
 
@@ -1074,6 +841,7 @@ let
       maintainers = with maintainers; [ makefu mic92 ];
       platforms   = platforms.linux;
     };
-  };
+  });
 
-}; in self
+});
+in (lib.extends overrides packages)

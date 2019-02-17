@@ -44,6 +44,8 @@ rec {
 
   # GCC.
   gcc = [
+    https://bigsearcher.com/mirrors/gcc/
+    http://mirror.koddos.net/gcc/
     ftp://ftp.nluug.nl/mirror/languages/gcc/
     ftp://ftp.fu-berlin.de/unix/languages/gcc/
     ftp://ftp.irisa.fr/pub/mirrors/gcc.gnu.org/gcc/
@@ -257,9 +259,8 @@ rec {
 
   # X.org.
   xorg = [
-    http://xorg.freedesktop.org/releases/
-    http://ftp.gwdg.de/pub/x11/x.org/pub/
-    http://ftp.x.org/pub/ # often incomplete (e.g. files missing from X.org 7.4)
+    https://xorg.freedesktop.org/releases/
+    https://ftp.x.org/archive/
   ];
 
   # Apache mirrors (see http://www.apache.org/mirrors/).

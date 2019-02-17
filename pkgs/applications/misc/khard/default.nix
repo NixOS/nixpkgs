@@ -34,7 +34,6 @@ in with python.pkgs; buildPythonApplication rec {
     atomicwrites
     configobj
     vobject
-    argparse
     ruamel_yaml
     ruamel_base
     unidecode

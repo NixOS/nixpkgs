@@ -2,11 +2,11 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "borgbackup";
-  version = "1.1.8";
+  version = "1.1.9";
 
   src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256 = "0b4370480ca0114cb0bb534286241af8a35c6ffb71404dfa409ed06099661b63";
+    sha256 = "7d0ff84e64c4be35c43ae2c047bb521a94f15b278c2fe63b43950c4836b42575";
   };
 
   nativeBuildInputs = with python3Packages; [

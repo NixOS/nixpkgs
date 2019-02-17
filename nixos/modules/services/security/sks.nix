@@ -5,6 +5,9 @@ with lib;
 let
   cfg = config.services.sks;
   sksPkg = cfg.package;
+  dbConfig = pkgs.writeText "DB_CONFIG" ''
+    ${cfg.extraDbConfig}
+  '';
 
 in {
   meta.maintainers = with maintainers; [ primeos calbrecht jcumming ];
@@ -36,6 +39,20 @@ in {
           Data directory (-basedir) for SKS, where the database and all
           configuration files are located (e.g. KDB, PTree, membership and
           sksconf).
+        '';
+      };
+
+      extraDbConfig = mkOption {
+        type = types.str;
+        default = "";
+        description = ''
+          Set contents of the files "KDB/DB_CONFIG" and "PTree/DB_CONFIG" within
+          the ''${dataDir} directory. This is used to configure options for the
+          database for the sks key server.
+
+          Documentation of available options are available in the file named
+          "sampleConfig/DB_CONFIG" in the following repository:
+          https://bitbucket.org/skskeyserver/sks-keyserver/src
         '';
       };
 
@@ -99,6 +116,17 @@ in {
           ${lib.optionalString (cfg.webroot != null)
             "ln -sfT \"${cfg.webroot}\" web"}
           mkdir -p dump
+          # Check that both database configs are symlinks before overwriting them
+          if [ -e KDB/DB_CONFIG ] && [ ! -L KBD/DB_CONFIG ]; then
+            echo "KDB/DB_CONFIG exists but is not a symlink." >&2
+            exit 1
+          fi
+          if [ -e PTree/DB_CONFIG ] && [ ! -L PTree/DB_CONFIG ]; then
+            echo "PTree/DB_CONFIG exists but is not a symlink." >&2
+            exit 1
+          fi
+          ln -sf ${dbConfig} KDB/DB_CONFIG
+          ln -sf ${dbConfig} PTree/DB_CONFIG
           ${sksPkg}/bin/sks build dump/*.gpg -n 10 -cache 100 || true #*/
           ${sksPkg}/bin/sks cleandb || true
           ${sksPkg}/bin/sks pbuild -cache 20 -ptree_cache 70 || true

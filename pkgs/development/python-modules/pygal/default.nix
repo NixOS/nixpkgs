@@ -5,6 +5,7 @@
 , flask
 , pyquery
 , pytest
+, pytestrunner
 , cairosvg
 , tinycss
 , cssselect
@@ -22,7 +23,24 @@ buildPythonPackage rec {
     sha256 = "9204f05380b02a8a32f9bf99d310b51aa2a932cba5b369f7a4dc3705f0a4ce83";
   };
 
-  buildInputs = [ flask pyquery pytest ];
+  buildInputs = [
+    flask
+    pyquery
+
+    # Should be a check input, but upstream lists it under "setup_requires".
+    # https://github.com/Kozea/pygal/issues/430
+    pytestrunner
+  ];
+
+  checkInputs = [
+    pytest
+  ];
+
+  preCheck = ''
+    # necessary on darwin to pass the testsuite
+    export LANG=en_US.UTF-8
+  '';
+
   propagatedBuildInputs = [ cairosvg tinycss cssselect ]
     ++ stdenv.lib.optionals (!isPyPy) [ lxml ];
 

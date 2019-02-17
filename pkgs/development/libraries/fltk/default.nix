@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, xlibsWrapper, inputproto, libXi
+{ stdenv, fetchurl, pkgconfig, xlibsWrapper, xorgproto, libXi
 , freeglut, libGLU_combined, libjpeg, zlib, libXft, libpng
 , libtiff, freetype, cf-private, Cocoa, AGL, GLUT
 }:
@@ -33,7 +33,7 @@ in stdenv.mkDerivation {
     "--enable-xft"
   ];
 
-  propagatedBuildInputs = [ inputproto ]
+  propagatedBuildInputs = [ xorgproto ]
     ++ (if stdenv.isDarwin
         then [ Cocoa AGL GLUT freetype libtiff cf-private  /* Needed for NSDefaultRunLoopMode */ ]
         else [ xlibsWrapper libXi freeglut ]);

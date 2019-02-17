@@ -1,9 +1,8 @@
 { stdenv, buildPackages, kernel, pciutils, gettext }:
 
 stdenv.mkDerivation {
-  name = "cpupower-${kernel.version}";
-
-  src = kernel.src;
+  pname = "cpupower";
+  inherit (kernel) version src;
 
   nativeBuildInputs = [ gettext ];
   buildInputs = [ pciutils ];
@@ -17,16 +16,18 @@ stdenv.mkDerivation {
 
   makeFlags = [ "CROSS=${stdenv.cc.targetPrefix}" ];
 
-  installFlags = [
-    "bindir=$(out)/bin"
-    "sbindir=$(out)/sbin"
-    "mandir=$(out)/share/man"
-    "includedir=$(out)/include"
-    "libdir=$(out)/lib"
-    "localedir=$(out)/share/locale"
-    "docdir=$(out)/share/doc/cpupower"
-    "confdir=$(out)/etc"
-  ];
+  installFlags = stdenv.lib.mapAttrsToList
+    (n: v: "${n}dir=${placeholder "out"}/${v}") {
+    bin = "bin";
+    sbin = "sbin";
+    man = "share/man";
+    include = "include";
+    lib = "lib";
+    locale = "share/locale";
+    doc = "share/doc/cpupower";
+    conf = "etc";
+    bash_completion_ = "share/bash-completion/completions";
+  };
 
   enableParallelBuilding = true;
 

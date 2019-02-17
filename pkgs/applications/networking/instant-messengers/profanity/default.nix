@@ -2,9 +2,9 @@
 , glibcLocales, expect, ncurses, libotr, curl, readline, libuuid
 , cmocka, libmicrohttpd, stabber, expat, libmesode
 
-, autoAwaySupport ? false,       libXScrnSaver ? null, libX11 ? null
-, notifySupport ? false,         libnotify ? null, gdk_pixbuf ? null
-, traySupport ? false,           gnome2 ? null
+, autoAwaySupport ? true,       libXScrnSaver ? null, libX11 ? null
+, notifySupport ? true,         libnotify ? null, gdk_pixbuf ? null
+, traySupport ? true,           gnome2 ? null
 , pgpSupport ? true,            gpgme ? null
 , pythonPluginSupport ? true,   python ? null
 }:
@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
     ++ optionals pythonPluginSupport [ "-I${python}/include/${python.libPrefix}" ];
 
   LDFLAGS = [ ]
-    ++ optionals pythonPluginSupport [ "-L${python}/lib" "-lpython${python.majorVersion}m" ];
+    ++ optionals pythonPluginSupport [ "-L${python}/lib" "-l${python.libPrefix}" ];
 
   meta = {
     description = "A console based XMPP client";

@@ -26,7 +26,10 @@ let
     , icon ? browserName
     , extraPlugins ? []
     , extraNativeMessagingHosts ? []
+    , gdkWayland ? false
     }:
+
+    assert gdkWayland -> (browser ? gtk3); # Can only use the wayland backend if gtk3 is being used
 
     let
       cfg = config.${browserName} or {};
@@ -86,7 +89,7 @@ let
         exec = "${browserName}${nameSuffix} %U";
         inherit icon;
         comment = "";
-        desktopName = "${desktopName}${nameSuffix}";
+        desktopName = "${desktopName}${nameSuffix}${lib.optionalString gdkWayland " (Wayland)"}";
         genericName = "Web Browser";
         categories = "Application;Network;WebBrowser;";
         mimeType = stdenv.lib.concatStringsSep ";" [
@@ -124,7 +127,9 @@ let
             --suffix PATH ':' "$out${browser.execdir or "/bin"}" \
             --set MOZ_APP_LAUNCHER "${browserName}${nameSuffix}" \
             --set MOZ_SYSTEM_DIR "$out/lib/mozilla" \
-            ${lib.optionalString (browser ? gtk3)
+            ${lib.optionalString gdkWayland ''
+              --set GDK_BACKEND "wayland" \
+            ''}${lib.optionalString (browser ? gtk3)
                 ''--prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH" \
                   --suffix XDG_DATA_DIRS : '${gnome3.defaultIconTheme}/share'
                 ''

@@ -137,7 +137,7 @@ let
     { shortName, shortDescription, dictFileName, src }:
     mkDict rec {
       inherit src dictFileName;
-      version = "2014.11.17";
+      version = "2018.04.16";
       name = "hunspell-dict-${shortName}-wordlist-${version}";
       readmeFile = "README_" + dictFileName + ".txt";
       meta = with stdenv.lib; {
@@ -250,6 +250,35 @@ let
       };
     };
 
+  mkDictFromLibreOffice =
+    { shortName
+    , shortDescription
+    , dictFileName
+    , license
+    , readmeFile ? "README_${dictFileName}.txt"
+    , sourceRoot ? dictFileName }:
+    mkDict rec {
+      name = "hunspell-dict-${shortName}-libreoffice-${version}";
+      version = "6.2.0.3";
+      inherit dictFileName readmeFile;
+      src = fetchFromGitHub {
+        owner = "LibreOffice";
+        repo = "dictionaries";
+        rev = "libreoffice-${version}";
+        sha256 = "0rw9ahhynia5wsgyd67lrhinqqn1s1rizgiykb3palbyk0lv72xj";
+      };
+      buildPhase = ''
+        cp -a ${sourceRoot}/* .
+      '';
+      meta = with stdenv.lib; {
+        homepage = https://wiki.documentfoundation.org/Development/Dictionaries;
+        description = "Hunspell dictionary for ${shortDescription} from LibreOffice";
+        license = license;
+        maintainers = with maintainers; [ vlaci ];
+        platforms = platforms.all;
+      };
+    };
+
 in {
 
   /* ENGLISH */
@@ -259,8 +288,8 @@ in {
     shortDescription = "English (United States)";
     dictFileName = "en_US";
     src = fetchurl {
-      url = mirror://sourceforge/wordlist/speller/2014.11.17/hunspell-en_US-2014.11.17.zip;
-      sha256 = "4ce88a1af457ce0e256110277a150e5da798213f611929438db059c1c81e20f2";
+      url = mirror://sourceforge/wordlist/speller/2018.04.16/hunspell-en_US-2018.04.16.zip;
+      sha256 = "18hbncvqnckzqarrmnzk58plymjqyi93k4qj98fac5mr71jbmzaf";
     };
   };
 
@@ -269,8 +298,8 @@ in {
     shortDescription = "English (Canada)";
     dictFileName = "en_CA";
     src = fetchurl {
-      url = mirror://sourceforge/wordlist/speller/2014.11.17/hunspell-en_CA-2014.11.17.zip;
-      sha256 = "59950448440657a6fc3ede15720c1b86c0b66c4ec734bf1bd9157f6a1786673b";
+      url = mirror://sourceforge/wordlist/speller/2018.04.16/hunspell-en_CA-2018.04.16.zip;
+      sha256 = "06yf3s7y1215jmikbs18cn4j8a13csp4763w3jfgah8zlim6vc47";
     };
   };
 
@@ -279,8 +308,8 @@ in {
     shortDescription = "English (United Kingdom, 'ise' ending)";
     dictFileName = "en_GB-ise";
     src = fetchurl {
-      url = mirror://sourceforge/wordlist/speller/2014.11.17/hunspell-en_GB-ise-2014.11.17.zip;
-      sha256 = "97f3b25102fcadd626ae4af3cdd97f017ce39264494f98b1f36ad7d96b9d5a94";
+      url = mirror://sourceforge/wordlist/speller//hunspell-en_GB-ise-2018.04.16.zip;
+      sha256 = "0ylg1zvfvsawamymcc9ivrqcb9qhlpgpnizm076xc56jz554xc2l";
     };
   };
 
@@ -289,8 +318,8 @@ in {
     shortDescription = "English (United Kingdom, 'ize' ending)";
     dictFileName = "en_GB-ize";
     src = fetchurl {
-      url = mirror://sourceforge/wordlist/speller/2014.11.17/hunspell-en_GB-ize-2014.11.17.zip;
-      sha256 = "84270673ed7c014445f3ba02f9efdb0ac44cea9ee0bfec76e3e10feae55c4e1c";
+      url = mirror://sourceforge/wordlist/speller//hunspell-en_GB-ize-2018.04.16.zip;
+      sha256 = "1rmwy6sxmd400cwjf58az6g14sq28p18f5mlq8ybg8y33q9m42ps";
     };
   };
 
@@ -508,6 +537,15 @@ in {
         sha256 = "0lw193jr7ldvln5x5z9p21rz1by46h0say9whfcw2kxs9vprd5b3";
       })
     ];
+  };
+
+  /* HUNGARIAN */
+
+  hu-hu = mkDictFromLibreOffice {
+    shortName = "hu-hu";
+    dictFileName = "hu_HU";
+    shortDescription = "Hungarian (Hungary)";
+    license = with stdenv.lib.licenses; [ mpl20 lgpl3 ];
   };
 
   /* SWEDISH */

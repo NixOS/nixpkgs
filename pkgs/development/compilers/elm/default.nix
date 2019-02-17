@@ -14,6 +14,12 @@ let
                 elmPackages = (import ./packages/elm-srcs.nix);
                 versionsDat = ./versions.dat;
               };
+              patches = [
+                (fetchpatch {
+                  url = "https://github.com/elm/compiler/pull/1886/commits/39d86a735e28da514be185d4c3256142c37c2a8a.patch";
+                  sha256 = "0nni5qx1523rjz1ja42z6z9pijxvi3fgbw1dhq5qi11mh1nb9ay7";
+                })
+              ];
               buildTools = drv.buildTools or [] ++ [ makeWrapper ];
               jailbreak = true;
               postInstall = ''

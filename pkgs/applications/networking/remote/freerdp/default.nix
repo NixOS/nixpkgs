@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = http://www.freerdp.com/;
     license = licenses.asl20;
-    maintainers = with maintainers; [ wkennington peterhoeg ];
+    maintainers = with maintainers; [ peterhoeg ];
     platforms = platforms.unix;
   };
 }

@@ -10,9 +10,10 @@ buildPythonPackage rec {
     sha256 = "11g7dx21brfmi5vrq289cw983rydalx0cy91afv5gigyadsmyam2";
   };
 
+  nativeBuildInputs = [ pkgconfig ];
+
   buildInputs = [
     at-spi2-core
-    pkgconfig
     pygobject3
   ];
 

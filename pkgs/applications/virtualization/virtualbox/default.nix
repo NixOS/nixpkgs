@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, lib, fetchpatch, iasl, dev86, pam, libxslt, libxml2
-, libX11, xproto, libXext, libXcursor, libXmu, qt5, libIDL, SDL, libcap
+{ config, stdenv, fetchurl, lib, fetchpatch, iasl, dev86, pam, libxslt, libxml2
+, libX11, xorgproto, libXext, libXcursor, libXmu, qt5, libIDL, SDL, libcap
 , libpng, glib, lvm2, libXrandr, libXinerama, libopus
 , pkgconfig, which, docbook_xsl, docbook_xml_dtd_43
 , alsaLib, curl, libvpx, nettools, dbus
@@ -7,7 +7,7 @@
 , javaBindings ? false, jdk ? null
 , pythonBindings ? false, python2 ? null
 , extensionPack ? null, fakeroot ? null
-, pulseSupport ? false, libpulseaudio ? null
+, pulseSupport ? config.pulseaudio or stdenv.isLinux, libpulseaudio ? null
 , enableHardening ? false
 , headless ? false
 , enable32bitGuests ? true
@@ -35,7 +35,7 @@ in stdenv.mkDerivation {
   nativeBuildInputs = [ pkgconfig which docbook_xsl docbook_xml_dtd_43 patchelfUnstable ];
 
   buildInputs =
-    [ iasl dev86 libxslt libxml2 xproto libX11 libXext libXcursor libIDL
+    [ iasl dev86 libxslt libxml2 xorgproto libX11 libXext libXcursor libIDL
       libcap glib lvm2 alsaLib curl libvpx pam makeself perl
       libXmu libpng libopus python ]
     ++ optional javaBindings jdk

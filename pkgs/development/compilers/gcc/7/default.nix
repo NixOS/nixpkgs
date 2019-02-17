@@ -37,7 +37,7 @@ assert langGo -> langCC;
 with stdenv.lib;
 with builtins;
 
-let version = "7.3.0";
+let version = "7.4.0";
 
     inherit (stdenv) buildPlatform hostPlatform targetPlatform;
 
@@ -138,7 +138,7 @@ stdenv.mkDerivation ({
 
   src = fetchurl {
     url = "mirror://gcc/releases/gcc-${version}/gcc-${version}.tar.xz";
-    sha256 = "0p71bij6bfhzyrs8676a8jmpjsfz392s2rg862sdnsk30jpacb43";
+    sha256 = "0lgy170b0pp60j9cczqkmaqyjjb584vfamj4c30swd7k0j6y5pgd";
   };
 
   inherit patches;
@@ -289,7 +289,7 @@ stdenv.mkDerivation ({
     optional (!bootstrap) "--disable-bootstrap" ++
 
     # Platform-specific flags
-    optional (targetPlatform == hostPlatform && targetPlatform.isi686) "--with-arch=i686" ++
+    optional (targetPlatform == hostPlatform && targetPlatform.isx86_32) "--with-arch=${stdenv.hostPlatform.parsed.cpu.name}" ++
     optionals hostPlatform.isSunOS [
       "--enable-long-long" "--enable-libssp" "--enable-threads=posix" "--disable-nls" "--enable-__cxa_atexit"
       # On Illumos/Solaris GNU as is preferred

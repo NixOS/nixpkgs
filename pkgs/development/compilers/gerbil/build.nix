@@ -24,9 +24,13 @@ stdenv.mkDerivation rec {
 
     patchShebangs .
 
-    find . -type f -executable -print0 | while IFS= read -r -d ''$'\0' f; do
+    grep -Fl '#!/usr/bin/env' `find . -type f -executable` | while read f ; do
       substituteInPlace "$f" --replace '#!/usr/bin/env' '#!${coreutils}/bin/env'
     done
+    grep -Fl '"gsc"' `find . -type f -name '*.s*'` | while read f ; do
+      substituteInPlace "$f" --replace '"gsc"' '"${gambit}/bin/gsc"'
+    done
+    substituteInPlace "etc/gerbil.el" --replace '"gxc"' "\"$out/bin/gxc\""
 
     cat > etc/gerbil_static_libraries.sh <<EOF
 #OPENSSL_LIBCRYPTO=${makeStaticLibraries openssl}/lib/libcrypto.a # MISSING!

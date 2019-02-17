@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, python, isPy3k, fetchurl, arrow-cpp, cmake, cython, futures, numpy, pandas, pytest, pkgconfig, setuptools_scm, six }:
+{ lib, buildPythonPackage, python, isPy3k, fetchurl, arrow-cpp, cmake, cython, futures, hypothesis, numpy, pandas, pytest, pkgconfig, setuptools_scm, six }:
 
 let
   _arrow-cpp = arrow-cpp.override { inherit python; };
@@ -13,10 +13,16 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ cmake cython pkgconfig setuptools_scm ];
   propagatedBuildInputs = [ numpy six ] ++ lib.optionals (!isPy3k) [ futures ];
-  checkInputs = [ pandas pytest ];
+  checkInputs = [ hypothesis pandas pytest ];
 
   PYARROW_BUILD_TYPE = "release";
-  PYARROW_CMAKE_OPTIONS = "-DCMAKE_INSTALL_RPATH=${ARROW_HOME}/lib";
+  PYARROW_CMAKE_OPTIONS = [
+    "-DCMAKE_INSTALL_RPATH=${ARROW_HOME}/lib"
+
+    # This doesn't use setup hook to call cmake so we need to workaround #54606
+    # ourselves
+    "-DCMAKE_POLICY_DEFAULT_CMP0025=NEW"
+  ];
 
   preCheck = ''
     rm pyarrow/tests/test_jvm.py

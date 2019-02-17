@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     homepage    = https://wayland.freedesktop.org/;
     license     = lib.licenses.mit;
     platforms   = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ codyopel wkennington ];
+    maintainers = with lib.maintainers; [ codyopel ];
   };
 
   passthru.version = version;

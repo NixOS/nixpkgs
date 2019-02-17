@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "16scq9hcq6c5ap6sy8j4qi75qps1zvrf3p79j1vbrvnqzp928i5f";
   };
 
-  nativeBuildInputs = [ python ] ++ optionals buildDocs [ asciidoc docbook_xml_dtd_45 docbook_xsl libxslt.bin re2c ];
+  nativeBuildInputs = [ python re2c ] ++ optionals buildDocs [ asciidoc docbook_xml_dtd_45 docbook_xsl libxslt.bin ];
 
   buildPhase = ''
     python configure.py --bootstrap

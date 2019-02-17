@@ -1,17 +1,16 @@
-{ pythonPackages, fetchurl, lib,
+{ python3Packages, fetchurl, lib,
   yubikey-personalization, libu2f-host, libusb1 }:
 
-pythonPackages.buildPythonPackage rec {
-  name = "yubikey-manager-1.0.1";
+python3Packages.buildPythonPackage rec {
+  name = "yubikey-manager-2.0.0";
 
   srcs = fetchurl {
     url = "https://developers.yubico.com/yubikey-manager/Releases/${name}.tar.gz";
-    sha256 = "0i7w1f89hqlw7g800fjhbb6yvq9wjmj5d7w7p6v8bkyvk645v48z";
+    sha256 = "1x36pyg9g3by2pa11j6d73d79sdlb7qy98lwwn05f43fjm74qnz9";
   };
 
   propagatedBuildInputs =
-    with pythonPackages;
-    lib.optional (!pythonPackages.pythonAtLeast "3.4") enum34 ++ [
+    with python3Packages; [
       click
       cryptography
       pyscard
@@ -44,6 +43,6 @@ pythonPackages.buildPythonPackage rec {
 
     license = licenses.bsd2;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ benley ];
+    maintainers = with maintainers; [ benley mic92 ];
   };
 }

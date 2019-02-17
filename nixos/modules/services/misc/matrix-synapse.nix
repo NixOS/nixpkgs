@@ -651,12 +651,16 @@ in {
 
     services.postgresql.enable = mkIf usePostgresql (mkDefault true);
 
-    systemd.services.matrix-synapse = {
+    systemd.services.matrix-synapse =
+    let
+      python = (pkgs.python3.withPackages (ps: with ps; [ (ps.toPythonModule cfg.package) ]));
+    in
+    {
       description = "Synapse Matrix homeserver";
       after = [ "network.target" "postgresql.service" ];
       wantedBy = [ "multi-user.target" ];
       preStart = ''
-        ${cfg.package}/bin/homeserver \
+        ${python.interpreter} -m synapse.app.homeserver \
           --config-path ${configFile} \
           --keys-directory ${cfg.dataDir} \
           --generate-keys
@@ -687,10 +691,11 @@ in {
         WorkingDirectory = cfg.dataDir;
         PermissionsStartOnly = true;
         ExecStart = ''
-          ${cfg.package}/bin/homeserver \
+          ${python.interpreter} -m synapse.app.homeserver \
             ${ concatMapStringsSep "\n  " (x: "--config-path ${x} \\") ([ configFile ] ++ cfg.extraConfigFiles) }
             --keys-directory ${cfg.dataDir}
         '';
+        ExecReload = "${pkgs.utillinux}/bin/kill -HUP $MAINPID";
         Restart = "on-failure";
       };
     };

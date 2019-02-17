@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "pg8000";
-  version = "1.12.3";
+  version = "1.12.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "18192d90409a3037619ef17f1924e3fd9c7169c9c1b3277cec1982116ec2b6de";
+    sha256 = "903a19158e9efda326908bb4b70a71d31f640b4326576774433ab11fd4e46f39";
   };
 
   propagatedBuildInputs = [ pytz six ];

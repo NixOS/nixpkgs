@@ -13,7 +13,7 @@ buildPythonPackage rec {
     sha256 = "8a21885513e6d915fe33a8ee5fdfa675433b61405ba13e2a69e62ee36828d7e2";
   };
 
-  buildInputs = [ nose ];
+  checkInputs = [ nose ];
 
   checkPhase = ''
     nosetests -v

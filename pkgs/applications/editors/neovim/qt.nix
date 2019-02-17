@@ -58,6 +58,10 @@ in
     '' else ''
       makeWrapper '${unwrapped}/bin/nvim-qt' "$out/bin/nvim-qt" \
         --prefix PATH : "${neovim}/bin"
+
+      # link .desktop file
+      mkdir -p "$out/share"
+      ln -s '${unwrapped}/share/applications' "$out/share/applications"
     '';
 
     preferLocalBuild = true;

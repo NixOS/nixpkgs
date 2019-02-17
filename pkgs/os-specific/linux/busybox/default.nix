@@ -106,5 +106,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     maintainers = with maintainers; [ ];
     platforms = platforms.linux;
+    priority = 10;
   };
 }

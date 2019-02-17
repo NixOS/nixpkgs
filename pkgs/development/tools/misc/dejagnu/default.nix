@@ -48,6 +48,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
 
     platforms = platforms.unix;
-    maintainers = with maintainers; [ wkennington vrthra ];
+    maintainers = with maintainers; [ vrthra ];
   };
 }

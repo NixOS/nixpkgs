@@ -5,8 +5,8 @@ export PLAN9_TARGET=$PLAN9
 
 configurePhase()
 {
-    echo CFLAGS=\"-I${fontconfig_dev}/include -I${xproto_exp}/include -I${xextproto_exp}/include -I${libX11_dev}/include -I${libXt_dev}/include -I${libXext_dev}/include -I${freetype_dev}/include -I${zlib_dev}/include\" > LOCAL.config
-    echo LDFLAGS=\"-L${fontconfig_lib}/lib -L${xproto_exp}/lib -L${xextproto_exp}/lib -L${libX11_exp}/lib -L${libXt_exp}/lib -L${libXext_exp}/lib -L${freetype_exp}/lib -L${zlib_exp}/lib\" >> LOCAL.config    
+    echo CFLAGS=\"-I${fontconfig_dev}/include -I${xorgproto_exp}/include -I${libX11_dev}/include -I${libXt_dev}/include -I${libXext_dev}/include -I${freetype_dev}/include -I${zlib_dev}/include\" > LOCAL.config
+    echo LDFLAGS=\"-L${fontconfig_lib}/lib -L${xorgproto_exp}/lib -L${libX11_exp}/lib -L${libXt_exp}/lib -L${libXext_exp}/lib -L${freetype_exp}/lib -L${zlib_exp}/lib\" >> LOCAL.config    
     echo X11=\"${libXt_dev}/include\" >> LOCAL.config
 
     for f in `grep -l -r /usr/local/plan9`; do

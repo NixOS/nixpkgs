@@ -68,7 +68,6 @@ buildGoPackage rec {
     cp etc/actions/* $bin/etc/singularity/actions/
   '';
 
-
   meta = with stdenv.lib; {
     homepage = http://www.sylabs.io/;
     description = "Application containers for linux";

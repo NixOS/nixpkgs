@@ -1,4 +1,8 @@
-{ lib }:
+{ lib, config }:
+
+let
+  fpmCfg = config.services.phpfpm;
+in
 
 with lib; {
 
@@ -9,6 +13,24 @@ with lib; {
       example = "/path/to/unix/socket";
       description = ''
         The address on which to accept FastCGI requests.
+      '';
+    };
+
+    phpPackage = mkOption {
+      type = types.package;
+      default = fpmCfg.phpPackage;
+      defaultText = "config.services.phpfpm.phpPackage";
+      description = ''
+        The PHP package to use for running this PHP-FPM pool.
+      '';
+    };
+
+    phpOptions = mkOption {
+      type = types.lines;
+      default = fpmCfg.phpOptions;
+      defaultText = "config.services.phpfpm.phpOptions";
+      description = ''
+        "Options appended to the PHP configuration file <filename>php.ini</filename> used for this PHP-FPM pool."
       '';
     };
 

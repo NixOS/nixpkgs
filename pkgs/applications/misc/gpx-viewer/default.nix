@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, intltool, pkgconfig, gnome3, shared-mime-info, desktop-file-utils, wrapGAppsHook }:
+{ stdenv, fetchurl, intltool, pkgconfig, gnome3, libchamplain, gdl, shared-mime-info, desktop-file-utils, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   name = "gpx-viewer-${version}";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     desktop-file-utils # For update-desktop-database
     wrapGAppsHook # Fix error: GLib-GIO-ERROR **: No GSettings schemas are installed on the system
   ];
-  buildInputs = with gnome3; [ gdl libchamplain defaultIconTheme ];
+  buildInputs = [ gdl libchamplain gnome3.adwaita-icon-theme ];
 
   meta = with stdenv.lib; {
     homepage = https://blog.sarine.nl/tag/gpxviewer/;

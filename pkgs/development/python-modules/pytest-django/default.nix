@@ -10,15 +10,15 @@
 }:
 buildPythonPackage rec {
   pname = "pytest-django";
-  version = "3.4.4";
+  version = "3.4.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "07zl2438gavrcykva6i2lpxmzgf90h4xlm3nqgd7wsqz2yh727zy";
+    sha256 = "0r190xb707817la5kw5i3m646ijmg025zqy55gz16py94wsnav5y";
   };
 
-  buildInputs = [ pytest setuptools_scm ];
-  checkInputs = [ django-configurations pytest_xdist six ];
+  nativeBuildInputs = [ pytest setuptools_scm ];
+  checkInputs = [ pytest django-configurations pytest_xdist six ];
   propagatedBuildInputs = [ django ];
 
   # Complicated. Requires Django setup.

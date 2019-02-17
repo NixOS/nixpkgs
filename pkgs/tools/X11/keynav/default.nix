@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, libX11, xextproto, libXtst, libXi, libXext
+{ stdenv, fetchFromGitHub, pkgconfig, libX11, xorgproto, libXtst, libXi, libXext
 , libXinerama, libXrandr, glib, cairo, xdotool }:
 
 let release = "20180821"; in
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ libX11 xextproto libXtst libXi libXext libXinerama libXrandr
+  buildInputs = [ libX11 xorgproto libXtst libXi libXext libXinerama libXrandr
                   glib cairo xdotool ];
 
   patchPhase = ''

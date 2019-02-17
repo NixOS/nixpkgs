@@ -14,7 +14,9 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ meson ninja pkgconfig vala gtk-doc docbook_xsl docbook_xml_dtd_412 gobject-introspection ];
   buildInputs = [ glib gdk_pixbuf ];
 
-  doCheck = true;
+  # FIXME: Turn on again when https://github.com/NixOS/nixpkgs/issues/53701
+  # is fixed on master.
+  doCheck = false;
 
   passthru = {
     updateScript = gnome3.updateScript {

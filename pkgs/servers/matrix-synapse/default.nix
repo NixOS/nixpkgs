@@ -1,24 +1,10 @@
-{ lib, stdenv, python2
+{ lib, stdenv, python3
 , enableSystemd ? true
 }:
 
-with python2.pkgs;
+with python3.pkgs;
 
 let
-  matrix-angular-sdk = buildPythonPackage rec {
-    pname = "matrix-angular-sdk";
-    version = "0.6.8";
-
-    src = fetchPypi {
-      inherit pname version;
-      sha256 = "0gmx4y5kqqphnq3m7xk2vpzb0w2a4palicw7wfdr1q2schl9fhz2";
-    };
-
-    # no checks from Pypi but as this is abandonware, there will be no
-    # new version anyway
-    doCheck = false;
-  };
-
   matrix-synapse-ldap3 = buildPythonPackage rec {
     pname = "matrix-synapse-ldap3";
     version = "0.1.3";
@@ -37,30 +23,24 @@ let
 
 in buildPythonApplication rec {
   pname = "matrix-synapse";
-  version = "0.34.0";
+  version = "0.99.1.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1bqwivzfx3kikzjmn4mng829ll8y62pd08hvsx99arr7cyzp6gri";
+    sha256 = "1ych13x3c2cam7af4q2ariwvzwvr65g3j2x8ajjn33ydwxxbqbg6";
   };
-
-  patches = [
-    ./matrix-synapse.patch
-  ];
 
   propagatedBuildInputs = [
     bcrypt
     bleach
     canonicaljson
     daemonize
-    dateutil
     frozendict
     jinja2
     jsonschema
     lxml
-    matrix-angular-sdk
     matrix-synapse-ldap3
-    msgpack-python
+    msgpack
     netaddr
     phonenumbers
     pillow
@@ -74,8 +54,7 @@ in buildPythonApplication rec {
     psutil
     psycopg2
     pyasn1
-    pydenticon
-    pymacaroons-pynacl
+    pymacaroons
     pynacl
     pyopenssl
     pysaml2
@@ -88,12 +67,11 @@ in buildPythonApplication rec {
     unpaddedbase64
   ] ++ lib.optional enableSystemd systemd;
 
-  # tests fail under py3 for now, but version 0.34.0 will use py3 by default
-  # https://github.com/matrix-org/synapse/issues/4036
-  doCheck = true;
-  checkPhase = "python -m twisted.trial test";
+  checkInputs = [ mock parameterized ];
 
-  checkInputs = [ mock setuptoolsTrial ];
+  checkPhase = ''
+    PYTHONPATH=".:$PYTHONPATH" trial tests
+  '';
 
   meta = with stdenv.lib; {
     homepage = https://matrix.org;

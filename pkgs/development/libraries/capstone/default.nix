@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name    = "capstone-${version}";
-  version = "4.0";
+  version = "4.0.1";
 
   src = fetchurl {
     url    = "https://github.com/aquynh/capstone/archive/${version}.tar.gz";
-    sha256 = "0yp6y5m3v674i2pq6s804ikvz43gzgsjwq1maqhmj3b730b4dii6";
+    sha256 = "1isxw2qwy1fi3m3w7igsr5klzczxc5cxndz0a78dfss6ps6ymfvr";
   };
 
   configurePhase = '' patchShebangs make.sh '';

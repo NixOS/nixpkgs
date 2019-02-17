@@ -1,0 +1,27 @@
+<section xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/xinclude"
+         xml:id="sec-prefer-remote-fetch">
+ <title>prefer-remote-fetch overlay</title>
+
+ <para>
+  <function>prefer-remote-fetch</function> is an overlay that download sources
+  on remote builder. This is useful when the evaluating machine has a slow
+  upload while the builder can fetch faster directly from the source.
+  To use it, put the following snippet as a new overlay:
+  <programlisting>
+    self: super:
+      (super.prefer-remote-fetch self super)
+  </programlisting>
+
+  A full configuration example for that sets the overlay up for your own account,
+  could look like this
+
+  <programlisting>
+    $ mkdir ~/.config/nixpkgs/overlays/
+    $ cat &gt; ~/.config/nixpkgs/overlays/prefer-remote-fetch.nix &lt;&lt;EOF
+      self: super: super.prefer-remote-fetch self super
+    EOF
+  </programlisting>
+ </para>
+</section>

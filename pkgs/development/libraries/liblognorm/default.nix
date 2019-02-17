@@ -18,6 +18,5 @@ stdenv.mkDerivation rec {
     description = "Help to make sense out of syslog data, or, actually, any event data that is present in text form";
     license = licenses.lgpl21;
     platforms = platforms.all;
-    maintainers = with maintainers; [ wkennington ];
   };
 }

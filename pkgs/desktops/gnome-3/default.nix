@@ -3,7 +3,23 @@
 lib.makeScope pkgs.newScope (self: with self; {
   updateScript = callPackage ./update.nix { };
 
-  maintainers = with pkgs.lib.maintainers; [ lethalman jtojnar hedning ];
+  /* Remove packages of packagesToRemove from packages, based on their names
+
+     Type:
+       removePackagesByName :: [package] -> [package] -> [package]
+
+     Example:
+       removePackagesByName [ nautilus file-roller ] [ file-roller totem ]
+       => [ nautilus ]
+  */
+  removePackagesByName = packages: packagesToRemove:
+    let
+      pkgName = drv: (builtins.parseDrvName drv.name).name;
+      namesToRemove = map pkgName packagesToRemove;
+    in
+      lib.filter (x: !(builtins.elem (pkgName x) namesToRemove)) packages;
+
+  maintainers = with pkgs.lib.maintainers; [ lethalman jtojnar hedning worldofpeace ];
 
   corePackages = with gnome3; [
     pkgs.desktop-file-utils
@@ -19,7 +35,7 @@ lib.makeScope pkgs.newScope (self: with self; {
   optionalPackages = with gnome3; [ baobab eog epiphany evince
     gucharmap nautilus totem vino yelp gnome-bluetooth
     gnome-calculator gnome-contacts gnome-font-viewer gnome-screenshot
-    gnome-system-log gnome-system-monitor simple-scan
+    gnome-system-monitor simple-scan
     gnome-terminal gnome-user-docs evolution file-roller gedit
     gnome-clocks gnome-music gnome-tweaks gnome-photos
     nautilus-sendto dconf-editor vinagre gnome-weather gnome-logs
@@ -38,7 +54,7 @@ lib.makeScope pkgs.newScope (self: with self; {
   inherit (pkgs) atk glib gobject-introspection gspell webkitgtk gtk3 gtkmm3
     libgtop libgudev libhttpseverywhere librsvg libsecret gdk_pixbuf gtksourceview gtksourceviewmm gtksourceview4
     easytag meld orca rhythmbox shotwell gnome-usage
-    clutter clutter-gst clutter-gtk cogl gtk-vnc libdazzle libgda libgit2-glib libgxps libgdata libgepub libcroco libpeas libgee geocode-glib libgweather librest libzapojit libmediaart gfbgraph gexiv2 folks totem-pl-parser gcr gsound libgnomekbd vte vte_290 vte-ng gnome-menus;
+    clutter clutter-gst clutter-gtk cogl gtk-vnc libdazzle libgda libgit2-glib libgxps libgdata libgepub libcroco libpeas libgee geocode-glib libgweather librest libzapojit libmediaart gfbgraph gexiv2 folks totem-pl-parser gcr gsound libgnomekbd vte vte_290 vte-ng gnome-menus gdl;
 
   libsoup = pkgs.libsoup.override { gnomeSupport = true; };
   libchamplain = pkgs.libchamplain.override { libsoup = libsoup; };
@@ -125,8 +141,6 @@ lib.makeScope pkgs.newScope (self: with self; {
   gnome-settings-daemon = callPackage ./core/gnome-settings-daemon { };
 
   gnome-software = callPackage ./core/gnome-software { };
-
-  gnome-system-log = callPackage ./core/gnome-system-log { };
 
   gnome-system-monitor = callPackage ./core/gnome-system-monitor { };
 
@@ -274,8 +288,6 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   devhelp = callPackage ./devtools/devhelp { };
 
-  gdl = callPackage ./devtools/gdl { };
-
   gnome-devel-docs = callPackage ./devtools/gnome-devel-docs { };
 
   nemiver = callPackage ./devtools/nemiver { };
@@ -334,11 +346,15 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   gnome-panel = callPackage ./misc/gnome-panel { };
 
+  gnome-screensaver = callPackage ./misc/gnome-screensaver { };
+
   gnome-tweaks = callPackage ./misc/gnome-tweaks { };
 
   gpaste = callPackage ./misc/gpaste { };
 
   metacity = callPackage ./misc/metacity { };
+
+  nautilus-python = callPackage ./misc/nautilus-python { };
 
   pidgin-im-gnome-shell-extension = callPackage ./misc/pidgin { };
 

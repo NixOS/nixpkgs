@@ -10,16 +10,15 @@
 
 buildPythonPackage rec {
   pname = "qrcode";
-  version = "6.0";
+  version = "6.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "037b0db4c93f44586e37f84c3da3f763874fcac85b2974a69a98e399ac78e1bf";
+    sha256 = "505253854f607f2abf4d16092c61d4e9d511a3b4392e60bff957a68592b04369";
   };
 
   propagatedBuildInputs = [ six pillow pymaging_png ];
   checkInputs = [ mock ];
-  doCheck = isPy27; # https://github.com/lincolnloop/python-qrcode/issues/163
 
   meta = with stdenv.lib; {
     description = "Quick Response code generation for Python";

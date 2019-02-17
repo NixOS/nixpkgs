@@ -25,6 +25,11 @@ buildPythonPackage rec {
     description = "A high-level Python Web framework";
     homepage = https://www.djangoproject.com/;
     license = licenses.bsd0;
+    knownVulnerabilities = [
+      # The patches were not backported due to Django 1.8 having reached EOL
+      https://www.djangoproject.com/weblog/2018/aug/01/security-releases/
+      https://www.djangoproject.com/weblog/2019/jan/04/security-releases/
+    ];
   };
 
 }

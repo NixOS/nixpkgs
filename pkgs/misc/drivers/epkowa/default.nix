@@ -88,6 +88,46 @@ let plugins = {
 
     meta = common_meta // { description = "iscan esci f720 plugin for "+passthru.hw; };
   };
+  s80 = stdenv.mkDerivation rec {
+    pname = "iscan-gt-s80-bundle";
+    version = "1.0.1";
+    esciPluginVersion = "0.2.1-1";
+    esdipPluginVersion = "1.0.0-5";
+
+    buildInputs = [ patchelf ];
+    src = fetchurl {
+      url = "https://download2.ebz.epson.net/iscan/plugin/gt-s80/rpm/x64/iscan-gt-s80-bundle-${version}.x64.rpm.tar.gz";
+      sha256 = "14j11znx5ga2ykpyg6kjg7lbrddyr9pwxrsa82dmdishd1j7zji9";
+    };
+    installPhase = ''
+      cd plugins
+      ${rpm}/bin/rpm2cpio esci-interpreter-gt-s80-${esciPluginVersion}.x86_64.rpm | ${cpio}/bin/cpio -idmv
+      ${rpm}/bin/rpm2cpio iscan-plugin-esdip-${esdipPluginVersion}.ltdl7.x86_64.rpm | ${cpio}/bin/cpio -idmv
+      mkdir $out
+      cp -r usr/share $out
+      cp -r usr/lib64 $out/lib
+      mkdir $out/share/esci
+      '';
+    preFixup = ''
+      rpath=${gcc.cc.lib}/lib/
+      patchelf --set-rpath $rpath $out/lib/esci/libesci-interpreter-gt-s80.so
+      patchelf --set-rpath $rpath $out/lib/esci/libesci-interpreter-gt-s50.so
+      patchelf --set-rpath $rpath $out/lib/iscan/esdip
+      patchelf --set-rpath $rpath $out/lib/iscan/libesdtr.so.0
+      patchelf --set-rpath $rpath $out/lib/iscan/libesdtr2.so.0
+      '';
+    passthru = {
+      registrationCommand = ''
+        $registry --add interpreter usb 0x04b8 0x0136 "$plugin/lib/esci/libesci-interpreter-gt-s80.so"
+        $registry --add interpreter usb 0x04b8 0x0137 "$plugin/lib/esci/libesci-interpreter-gt-s50.so"
+        $registry --add interpreter usb 0x04b8 0x0143 "$plugin/lib/esci/libesci-interpreter-gt-s50.so"
+        $registry --add interpreter usb 0x04b8 0x0144 "$plugin/lib/esci/libesci-interpreter-gt-s80.so"
+        '';
+      hw = "ES-D200, ED-D350, ES-D400, GT-S50, GT-S55, GT-S80, GT-S85";
+      };
+
+    meta = common_meta // { description = "iscan esci s80 plugin for "+passthru.hw; };
+  };
 };
 in
 

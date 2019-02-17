@@ -1,17 +1,14 @@
 { stdenv, fetchFromGitHub, gtk3, numix-icon-theme }:
 
 stdenv.mkDerivation rec {
-  version = "18.09.19";
-
-  package-name = "numix-icon-theme-circle";
-
-  name = "${package-name}-${version}";
+  pname = "numix-icon-theme-circle";
+  version = "19.01.24";
 
   src = fetchFromGitHub {
     owner = "numixproject";
-    repo = package-name;
+    repo = pname;
     rev = version;
-    sha256 = "1a1ack4kpngnb3c281pssmp3snn2idcn2c5cv3l38a0dl5g5w8nq";
+    sha256 = "18asihcv41jlysb2ynbvbk6fn0lnj7ckaz1nyx1w25a7nk413dnm";
   };
 
   nativeBuildInputs = [ gtk3 numix-icon-theme ];

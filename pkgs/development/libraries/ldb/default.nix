@@ -34,7 +34,6 @@ stdenv.mkDerivation rec {
     description = "A LDAP-like embedded database";
     homepage = https://ldb.samba.org/;
     license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ wkennington ];
     platforms = platforms.all;
   };
 }

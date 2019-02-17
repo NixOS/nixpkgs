@@ -316,13 +316,20 @@ rec {
     # Files to add to the layer.
     contents,
     baseJson,
+    extraCommands,
     uid ? 0, gid ? 0,
   }:
     runCommand "${name}-customisation-layer" {
       buildInputs = [ jshon rsync tarsum ];
+      inherit extraCommands;
     }
     ''
       cp -r ${contents}/ ./layer
+
+      if [[ -n $extraCommands ]]; then
+        chmod ug+w layer
+        (cd layer; eval "$extraCommands")
+      fi
 
       # Tar up the layer and throw it into 'layer.tar'.
       echo "Packing layer..."
@@ -494,6 +501,8 @@ rec {
     # Time of creation of the image. Passing "now" will make the
     # created date be the time of building.
     created ? "1970-01-01T00:00:01Z",
+    # Optional bash script to run on the files prior to fixturizing the layer.
+    extraCommands ? "", uid ? 0, gid ? 0,
     # Docker's lowest maximum layer limit is 42-layers for an old
     # version of the AUFS graph driver. We pick 24 to ensure there is
     # plenty of room for extension. I believe the actual maximum is
@@ -501,8 +510,6 @@ rec {
     maxLayers ? 24
   }:
     let
-      uid = 0;
-      gid = 0;
       baseName = baseNameOf name;
       contentsEnv = symlinkJoin { name = "bulk-layers"; paths = (if builtins.isList contents then contents else [ contents ]); };
 
@@ -531,20 +538,25 @@ rec {
           name = baseName;
           contents = contentsEnv;
           baseJson = configJson;
-          inherit uid gid;
+          inherit uid gid extraCommands;
         };
       result = runCommand "docker-image-${baseName}.tar.gz" {
         buildInputs = [ jshon pigz coreutils findutils jq ];
         # Image name and tag must be lowercase
         imageName = lib.toLower name;
-        imageTag = if tag == null then "" else lib.toLower tag;
         baseJson = configJson;
+        passthru.imageTag =
+          if tag == null
+          then lib.head (lib.splitString "-" (lib.last (lib.splitString "/" result)))
+          else lib.toLower tag;
       } ''
-        ${lib.optionalString (tag == null) ''
+        ${if (tag == null) then ''
           outName="$(basename "$out")"
           outHash=$(echo "$outName" | cut -d - -f 1)
 
           imageTag=$outHash
+        '' else ''
+          imageTag="${tag}"
         ''}
 
         find ${bulkLayers} -mindepth 1 -maxdepth 1 | sort -t/ -k5 -n > layer-list

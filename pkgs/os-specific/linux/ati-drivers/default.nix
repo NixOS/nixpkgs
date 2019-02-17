@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
   libXrandr = xorg.libXrandr;
   libXrender = xorg.libXrender;
   libXxf86vm = xorg.libXxf86vm;
-  xf86vidmodeproto = xorg.xf86vidmodeproto;
+  xorgproto = xorg.xorgproto;
   libSM = xorg.libSM;
   libICE = xorg.libICE;
   libfreetype = freetype;
@@ -87,7 +87,7 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [ xorg.libXrender xorg.libXext xorg.libX11 xorg.libXinerama xorg.libSM
-      xorg.libXrandr xorg.libXxf86vm xorg.xf86vidmodeproto xorg.imake xorg.libICE
+      xorg.libXrandr xorg.libXxf86vm xorg.xorgproto xorg.imake xorg.libICE
       patchelf
       unzip
       libGLU_combined
@@ -107,7 +107,7 @@ stdenv.mkDerivation rec {
   # outputs TODO: probably many fixes are needed;
   LD_LIBRARY_PATH = makeLibraryPath
     [ xorg.libXrender xorg.libXext xorg.libX11 xorg.libXinerama xorg.libSM
-      xorg.libXrandr xorg.libXxf86vm xorg.xf86vidmodeproto xorg.imake xorg.libICE
+      xorg.libXrandr xorg.libXxf86vm xorg.xorgproto xorg.imake xorg.libICE
       libGLU_combined
       fontconfig
       freetype

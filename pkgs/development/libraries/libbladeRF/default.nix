@@ -1,15 +1,25 @@
 { stdenv, lib, fetchFromGitHub, fetchpatch, pkgconfig, cmake, git, doxygen, help2man, ncurses, tecla
 , libusb1, udev }:
 
-stdenv.mkDerivation rec {
-  version = "2.0.2";
+let
+  # fetch submodule
+  noos = fetchFromGitHub {
+    owner = "analogdevicesinc";
+    repo = "no-OS";
+    rev = "0bba46e6f6f75785a65d425ece37d0a04daf6157";
+    sha256 = "0is79dhsyp9xmlnfdr1i5s1c22ipjafk9d35jpn5dynpvj86m99c";
+  };
+
+  version = "2.2.0";
+
+in stdenv.mkDerivation {
   name = "libbladeRF-${version}";
 
   src = fetchFromGitHub {
     owner = "Nuand";
     repo = "bladeRF";
     rev = "libbladeRF_v${version}";
-    sha256 = "18qwljjdnf4lds04kc1zvslr5hh9cjnnjkcy07lbkrq7pj0pfnc6";
+    sha256 = "0mdj5dkqg69gp0xw6gkhp86nxnm9g7az5rplnncxkp4p1kr35rnl";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -18,17 +28,13 @@ stdenv.mkDerivation rec {
     ++ lib.optionals stdenv.isLinux [ udev ]
     ++ lib.optionals stdenv.isDarwin [ ncurses ];
 
+
+  postUnpack = ''
+    cp -r ${noos}/* source/thirdparty/analogdevicesinc/no-OS/
+  '';
+
   # Fixup shebang
   prePatch = "patchShebangs host/utilities/bladeRF-cli/src/cmd/doc/generate.bash";
-
-  # Fixes macos and freebsd compilation issue.
-  # https://github.com/Nuand/bladeRF/commit/0cb4ea888543b2dc75b876f7024e180854fbe9c3
-  patches = [ (fetchpatch {
-                name = "fix-OSX-and-FreeBSD-build.patch";
-                url = "https://github.com/Nuand/bladeRF/commit/0cb4ea88.diff";
-                sha256 = "1ccpa69vz2nlpdnxprh4rd1pgphk82z5lfmbrfdkn7srw6nxl469";
-              })
-            ];
 
   # Let us avoid nettools as a dependency.
   postPatch = ''

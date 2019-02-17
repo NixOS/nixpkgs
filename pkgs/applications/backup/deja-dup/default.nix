@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, substituteAll, meson, ninja, pkgconfig, vala_0_40, gettext
+{ stdenv, fetchFromGitLab, substituteAll, meson, ninja, pkgconfig, vala_0_40, gettext
 , gnome3, libnotify, itstool, glib, gtk3, libxml2
 , coreutils, libsecret, pcre, libxkbcommon, wrapGAppsHook
 , libpthreadstubs, libXdmcp, epoxy, at-spi2-core, dbus, libgpgerror
@@ -6,12 +6,15 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "deja-dup-${version}";
-  version = "38.1";
+  pname = "deja-dup";
+  version = "38.3";
 
-  src = fetchurl {
-    url = "https://launchpad.net/deja-dup/${stdenv.lib.versions.major version}/${version}/+download/deja-dup-${version}.tar.xz";
-    sha256 = "0wm7z72qbsljzsysxg8h5sbpg56ignn9mp8v3xynn12dv3gv6rba";
+  src = fetchFromGitLab {
+    domain = "gitlab.gnome.org";
+    owner = "World";
+    repo = pname;
+    rev = version;
+    sha256 = "1bnvmdlm67k1b6115x75j3nl92x5yl4psq5pna2w6cg9npxdd3fa";
   };
 
   patches = [
@@ -23,7 +26,7 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    substituteInPlace deja-dup/nautilus/NautilusExtension.c --subst-var-by DEJA_DUP_GSETTINGS_PATH $out/share/gsettings-schemas/${name}/glib-2.0/schemas
+    substituteInPlace deja-dup/nautilus/NautilusExtension.c --subst-var-by DEJA_DUP_GSETTINGS_PATH $out/share/gsettings-schemas/${pname}-${version}/glib-2.0/schemas
   '';
 
   nativeBuildInputs = [
@@ -57,9 +60,9 @@ stdenv.mkDerivation rec {
       of backing up the Right Way (encrypted, off-site, and regular) \
       and uses duplicity as the backend.
     '';
-    homepage = https://launchpad.net/deja-dup;
-    license = with licenses; gpl3;
+    homepage = https://wiki.gnome.org/Apps/DejaDup;
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ jtojnar joncojonathan ];
-    platforms = with platforms; linux;
+    platforms = platforms.linux;
   };
 }

@@ -43,7 +43,6 @@ stdenv.mkDerivation rec {
     description = "Middleware to access a smart card using SCard API (PC/SC)";
     homepage = https://pcsclite.apdu.fr/;
     license = licenses.bsd3;
-    maintainers = with maintainers; [ wkennington ];
     platforms = with platforms; unix;
   };
 }

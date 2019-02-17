@@ -6,19 +6,29 @@
 , enableJPEG2K ? true, jasper
 , enableDJVU ? true, djvulibre
 , enableGOCR ? false, gocr # Disabled by default due to crashes
-, enableTesseract ? true, leptonica, tesseract
+, enableTesseract ? true, leptonica, tesseract4
 }:
 
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "k2pdfopt-${version}";
-  version = "2.42";
+  version = "2.51a";
 
-  src = fetchzip {
-    url = "http://www.willus.com/k2pdfopt/src/k2pdfopt_v${version}_src.zip";
-    sha256 = "1zag4jmkr0qrcpqqb5davmvdrabhdyz87q4zz0xpfkl6xw2dn9bk";
-  };
+  src = (fetchzip {
+    url = "http://www.willus.com/k2pdfopt/src/k2pdfopt_v2.51_src.zip";
+    sha256 = "133l7xkvi67s6sfk8cfh7rmavbsf7ib5fyksk1ci6b6sch3z2sw9";
+  });
+
+  # Note: the v2.51a zip contains only files to be replaced in the v2.50 zip.
+  v251a_src = (fetchzip {
+    url = "http://www.willus.com/k2pdfopt/src/k2pdfopt_v2.51a_src.zip";
+    sha256 = "0vvwblii7kgdwfxw8dzk6jbmz4dv94d7rkv18i60y8wkayj6yhl6";
+  });
+
+  postUnpack = ''
+    cp -r ${v251a_src}/* $sourceRoot
+  '';
 
   patches = [ ./k2pdfopt.patch ];
 
@@ -27,65 +37,43 @@ stdenv.mkDerivation rec {
   buildInputs =
   let
     mupdf_modded = mupdf.overrideAttrs (attrs: {
-      name = "mupdf-1.10a";
-      version = "1.10a";
-      src = fetchurl {
-        url = "https://mupdf.com/downloads/archive/mupdf-1.10a-source.tar.gz";
-        sha256 = "0dm8wcs8i29aibzkqkrn8kcnk4q0kd1v66pg48h5c3qqp4v1zk5a";
-      };
       # Excluded the pdf-*.c files, since they mostly just broke the #includes
       prePatch = ''
         cp ${src}/mupdf_mod/{font,stext-device,string}.c source/fitz/
         cp ${src}/mupdf_mod/font-win32.c source/pdf/
       '';
-      # Patches from previous 1.10a version in nixpkgs
-      patches = [
-        # Compatibility with new openjpeg
-        ./load-jpx.patch
-
-        (fetchurl {
-         name = "CVE-2017-5896.patch";
-         url = "http://git.ghostscript.com/?p=mupdf.git;a=patch;h=2c4e5867ee699b1081527bc6c6ea0e99a35a5c27";
-         sha256 = "14k7x47ifx82sds1c06ibzbmcparfg80719jhgwjk6w1vkh4r693";
-        })
-
-        (fetchpatch {
-          name = "mupdf-1.10a-shared_libs-1.patch";
-          url = "https://ftp.osuosl.org/pub/blfs/conglomeration/mupdf/mupdf-1.10a-shared_libs-1.patch";
-          sha256 = "0kg4vahp7hlyyj5hl18brk8s8xcbqrx19pqjzkfq6ha8mqa3k4ab";
-        })
-      ];
-
-      # Override this since the jpeg directory was renamed libjpeg in mupdf 1.11
-      preConfigure = ''
-        # Don't remove mujs because upstream version is incompatible
-        rm -rf thirdparty/{curl,freetype,glfw,harfbuzz,jbig2dec,jpeg,openjpeg,zlib}
-      '';
-      postPatch = let
-        # OpenJPEG version is hardcoded in package source
-        openJpegVersion = with stdenv;
-          lib.concatStringsSep "." (lib.lists.take 2
-          (lib.splitString "." (lib.getVersion openjpeg)));
-        in ''
-          sed -i "s/__OPENJPEG__VERSION__/${openJpegVersion}/" source/fitz/load-jpx.c
-        '';
     });
+
     leptonica_modded = leptonica.overrideAttrs (attrs: {
+      name = "leptonica-1.74.4";
+      # Modified source files apply to this particular version of leptonica
+      version = "1.74.4";
+
+      src = fetchurl {
+        url = "http://www.leptonica.org/source/leptonica-1.74.4.tar.gz";
+        sha256 = "0fw39amgyv8v6nc7x8a4c7i37dm04i6c5zn62d24bgqnlhk59hr9";
+      };
+
       prePatch = ''
-        cp ${src}/leptonica_mod/* src/
+        cp ${src}/leptonica_mod/{allheaders.h,dewarp2.c,leptwin.c} src/
       '';
+      patches = [];
     });
-    tesseract_modded = tesseract.override {
-      tesseractBase = tesseract.tesseractBase.overrideAttrs (_: {
+    tesseract_modded = tesseract4.override {
+      tesseractBase = tesseract4.tesseractBase.overrideAttrs (_: {
         prePatch = ''
-          cp ${src}/tesseract_mod/{ambigs.cpp,ccutil.h,ccutil.cpp} ccutil/
-          cp ${src}/tesseract_mod/dawg.cpp api/
-          cp ${src}/tesseract_mod/{imagedata.cpp,tessdatamanager.cpp} ccstruct/
-          cp ${src}/tesseract_mod/openclwrapper.h opencl/
-          cp ${src}/tesseract_mod/{tessedit.cpp,thresholder.cpp} ccmain/
-          cp ${src}/tesseract_mod/tess_lang_mod_edge.h cube/
-          cp ${src}/tesseract_mod/tesscapi.cpp api/
-          cp ${src}/include_mod/{tesseract.h,leptonica.h} api/
+          cp ${src}/tesseract_mod/baseapi.{h,cpp} src/api/
+          cp ${src}/tesseract_mod/ccutil.{h,cpp} src/ccutil/
+          cp ${src}/tesseract_mod/genericvector.h src/ccutil/
+          cp ${src}/tesseract_mod/input.cpp src/lstm/
+          cp ${src}/tesseract_mod/lstmrecognizer.cpp src/lstm/
+          cp ${src}/tesseract_mod/mainblk.cpp src/ccutil/
+          cp ${src}/tesseract_mod/params.cpp src/ccutil/
+          cp ${src}/tesseract_mod/serialis.{h,cpp} src/ccutil/
+          cp ${src}/tesseract_mod/tesscapi.cpp src/api/
+          cp ${src}/tesseract_mod/tessdatamanager.cpp src/ccstruct/
+          cp ${src}/tesseract_mod/tessedit.cpp src/ccmain/
+          cp ${src}/include_mod/{tesseract.h,leptonica.h} src/api/
         '';
         patches = [ ./tesseract.patch ];
       });

@@ -27,6 +27,9 @@
 , # The root file system type.
   fsType ? "ext4"
 
+, # Filesystem label
+  label ? "nixos"
+
 , # The initial NixOS configuration file to be copied to
   # /etc/nixos/configuration.nix.
   configFile ? null
@@ -134,9 +137,9 @@ let format' = format; in let
       # Get start & length of the root partition in sectors to $START and $SECTORS.
       eval $(partx $diskImage -o START,SECTORS --nr ${rootPartition} --pairs)
 
-      mkfs.${fsType} -F -L nixos $diskImage -E offset=$(sectorsToBytes $START) $(sectorsToKilobytes $SECTORS)K
+      mkfs.${fsType} -F -L ${label} $diskImage -E offset=$(sectorsToBytes $START) $(sectorsToKilobytes $SECTORS)K
     '' else ''
-      mkfs.${fsType} -F -L nixos $diskImage
+      mkfs.${fsType} -F -L ${label} $diskImage
     ''}
 
     root="$PWD/root"

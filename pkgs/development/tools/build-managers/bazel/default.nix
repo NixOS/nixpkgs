@@ -1,10 +1,11 @@
-{ stdenv, lib, fetchurl, fetchpatch, runCommand, makeWrapper
-, jdk, zip, unzip, bash, writeCBin, coreutils
-, which, python, perl, gnused, gnugrep, findutils
+{ stdenv, callPackage, lib, fetchurl, fetchpatch, runCommand, makeWrapper
+, zip, unzip, bash, writeCBin, coreutils
+, which, python, perl, gawk, gnused, gnutar, gnugrep, gzip, findutils
 # Apple dependencies
 , cctools, clang, libcxx, CoreFoundation, CoreServices, Foundation
 # Allow to independently override the jdks used to build and run respectively
-, buildJdk ? jdk, runJdk ? jdk
+, buildJdk, runJdk
+, buildJdkName
 # Always assume all markers valid (don't redownload dependencies).
 # Also, don't clean up environment variables.
 , enableNixHacks ? false
@@ -13,8 +14,8 @@
 let
   srcDeps = lib.singleton (
     fetchurl {
-      url = "https://github.com/google/desugar_jdk_libs/archive/fd937f4180c1b557805219af4482f1a27eb0ff2b.zip";
-      sha256 = "04hs399340xfwcdajbbcpywnb2syp6z5ydwg966if3hqdb2zrf23";
+      url = "https://github.com/google/desugar_jdk_libs/archive/915f566d1dc23bc5a8975320cd2ff71be108eb9c.zip";
+      sha256 = "0b926df7yxyyyiwm9cmdijy6kplf0sghm23sf163zh8wrk87wfi7";
     }
   );
 
@@ -23,12 +24,43 @@ let
     for i in ${builtins.toString srcDeps}; do cp $i $out/$(stripHash $i); done
   '';
 
-  defaultShellPath = lib.makeBinPath [ bash coreutils findutils gnugrep gnused which ];
+  defaultShellPath = lib.makeBinPath
+    # Keep this list conservative. For more exotic tools, prefer to use
+    # @rules_nixpkgs to pull in tools from the nix repository. Example:
+    #
+    # WORKSPACE:
+    #
+    #     nixpkgs_git_repository(
+    #         name = "nixpkgs",
+    #         revision = "def5124ec8367efdba95a99523dd06d918cb0ae8",
+    #     )
+    #
+    #     # This defines an external Bazel workspace.
+    #     nixpkgs_package(
+    #         name = "bison",
+    #         repositories = { "nixpkgs": "@nixpkgs//:default.nix" },
+    #     )
+    #
+    # some/BUILD.bazel:
+    #
+    #     genrule(
+    #        ...
+    #        cmd = "$(location @bison//:bin/bison) -other -args",
+    #        tools = [
+    #            ...
+    #            "@bison//:bin/bison",
+    #        ],
+    #     )
+    #
+    [ bash coreutils findutils gawk gnugrep gnutar gnused gzip which unzip ];
+
+  # Java toolchain used for the build and tests
+  javaToolchain = "@bazel_tools//tools/jdk:toolchain_host${buildJdkName}";
 
 in
 stdenv.mkDerivation rec {
 
-  version = "0.20.0";
+  version = "0.22.0";
 
   meta = with lib; {
     homepage = "https://github.com/bazelbuild/bazel/";
@@ -38,17 +70,28 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux ++ platforms.darwin;
   };
 
+  # Additional tests that check bazel’s functionality. Execute
+  #
+  #     nix-build . -A bazel.tests
+  #
+  # in the nixpkgs checkout root to exercise them locally.
+  passthru.tests = {
+    pythonBinPath = callPackage ./python-bin-path-test.nix {};
+    bashTools = callPackage ./bash-tools-test.nix {};
+  };
+
   name = "bazel-${version}";
 
   src = fetchurl {
-    url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel-${version}-dist.zip";
-    sha256 = "1g9hglly5199gcw929fzc5f0d0dwlharkh387h58p1fq9ylayi8r";
+    url = "https://github.com/bazelbuild/bazel/releases/download/${version}/${name}-dist.zip";
+    sha256 = "0hannnvia8rvmi2v5d97j1f6wv0m1kxkd5hq4aqp0dqjr0ka4q38";
   };
 
   sourceRoot = ".";
 
-  patches =
-    lib.optional enableNixHacks ./nix-hacks.patch;
+  patches = [
+    ./python-stub-path-fix.patch
+  ] ++ lib.optional enableNixHacks ./nix-hacks.patch;
 
   # Bazel expects several utils to be available in Bash even without PATH. Hence this hack.
 
@@ -78,6 +121,7 @@ stdenv.mkDerivation rec {
   '';
 
   postPatch = let
+
     darwinPatches = ''
       # Disable Bazel's Xcode toolchain detection which would configure compilers
       # and linkers from Xcode instead of from PATH
@@ -115,27 +159,48 @@ stdenv.mkDerivation rec {
         sed -i -e "s,/usr/bin/install_name_tool,${cctools}/bin/install_name_tool,g" $wrapper
       done
     '';
+
     genericPatches = ''
-      find src/main/java/com/google/devtools -type f -print0 | while IFS="" read -r -d "" path; do
+      # Substitute python's stub shebang to plain python path. (see TODO add pr URL)
+      # See also `postFixup` where python is added to $out/nix-support
+      substituteInPlace src/main/java/com/google/devtools/build/lib/bazel/rules/python/python_stub_template.txt\
+          --replace "/usr/bin/env python" "${python}/bin/python" \
+          --replace "NIX_STORE_PYTHON_PATH" "${python}/bin/python" \
+
+      # substituteInPlace is rather slow, so prefilter the files with grep
+      grep -rlZ /bin src/main/java/com/google/devtools | while IFS="" read -r -d "" path; do
+        # If you add more replacements here, you must change the grep above!
+        # Only files containing /bin are taken into account.
         substituteInPlace "$path" \
           --replace /bin/bash ${customBash}/bin/bash \
           --replace /usr/bin/env ${coreutils}/bin/env \
           --replace /bin/true ${coreutils}/bin/true
       done
+
       # Fixup scripts that generate scripts. Not fixed up by patchShebangs below.
       substituteInPlace scripts/bootstrap/compile.sh \
           --replace /bin/sh ${customBash}/bin/bash
 
-      echo "build --experimental_distdir=${distDir}" >> .bazelrc
-      echo "fetch --experimental_distdir=${distDir}" >> .bazelrc
-      echo "build --copt=\"$(echo $NIX_CFLAGS_COMPILE | sed -e 's/ /" --copt=\"/g')\"" >> .bazelrc
-      echo "build --host_copt=\"$(echo $NIX_CFLAGS_COMPILE | sed -e 's/ /" --host_copt=\"/g')\"" >> .bazelrc
-      echo "build --linkopt=\"-Wl,$(echo $NIX_LDFLAGS | sed -e 's/ /" --linkopt=\"-Wl,/g')\"" >> .bazelrc
-      echo "build --host_linkopt=\"-Wl,$(echo $NIX_LDFLAGS | sed -e 's/ /" --host_linkopt=\"-Wl,/g')\"" >> .bazelrc
-      sed -i -e "420 a --copt=\"$(echo $NIX_CFLAGS_COMPILE | sed -e 's/ /" --copt=\"/g')\" \\\\" scripts/bootstrap/compile.sh
-      sed -i -e "420 a --host_copt=\"$(echo $NIX_CFLAGS_COMPILE | sed -e 's/ /" --host_copt=\"/g')\" \\\\" scripts/bootstrap/compile.sh
-      sed -i -e "420 a --linkopt=\"-Wl,$(echo $NIX_LDFLAGS | sed -e 's/ /" --linkopt=\"-Wl,/g')\" \\\\" scripts/bootstrap/compile.sh
-      sed -i -e "420 a --host_linkopt=\"-Wl,$(echo $NIX_LDFLAGS | sed -e 's/ /" --host_linkopt=\"-Wl,/g')\" \\\\" scripts/bootstrap/compile.sh
+      # add nix environment vars to .bazelrc
+      cat >> .bazelrc <<EOF
+      build --experimental_distdir=${distDir}
+      fetch --experimental_distdir=${distDir}
+      build --copt="$(echo $NIX_CFLAGS_COMPILE | sed -e 's/ /" --copt="/g')"
+      build --host_copt="$(echo $NIX_CFLAGS_COMPILE | sed -e 's/ /" --host_copt="/g')"
+      build --linkopt="-Wl,$(echo $NIX_LDFLAGS | sed -e 's/ /" --linkopt="-Wl,/g')"
+      build --host_linkopt="-Wl,$(echo $NIX_LDFLAGS | sed -e 's/ /" --host_linkopt="-Wl,/g')"
+      build --host_javabase='@local_jdk//:jdk'
+      build --host_java_toolchain='${javaToolchain}'
+      EOF
+
+      # add the same environment vars to compile.sh
+      sed -e "/\$command \\\\$/a --copt=\"$(echo $NIX_CFLAGS_COMPILE | sed -e 's/ /" --copt=\"/g')\" \\\\" \
+          -e "/\$command \\\\$/a --host_copt=\"$(echo $NIX_CFLAGS_COMPILE | sed -e 's/ /" --host_copt=\"/g')\" \\\\" \
+          -e "/\$command \\\\$/a --linkopt=\"-Wl,$(echo $NIX_LDFLAGS | sed -e 's/ /" --linkopt=\"-Wl,/g')\" \\\\" \
+          -e "/\$command \\\\$/a --host_linkopt=\"-Wl,$(echo $NIX_LDFLAGS | sed -e 's/ /" --host_linkopt=\"-Wl,/g')\" \\\\" \
+          -e "/\$command \\\\$/a --host_javabase='@local_jdk//:jdk' \\\\" \
+          -e "/\$command \\\\$/a --host_java_toolchain='${javaToolchain}' \\\\" \
+          -i scripts/bootstrap/compile.sh
 
       # --experimental_strict_action_env (which will soon become the
       # default, see bazelbuild/bazel#2574) hardcodes the default
@@ -159,6 +224,8 @@ stdenv.mkDerivation rec {
     buildJdk
   ];
 
+  # when a command can’t be found in a bazel build, you might also
+  # need to add it to `defaultShellPath`.
   nativeBuildInputs = [
     zip
     python
@@ -202,7 +269,9 @@ stdenv.mkDerivation rec {
     export TEST_TMPDIR=$(pwd)
 
     hello_test () {
-      $out/bin/bazel test --test_output=errors \
+      $out/bin/bazel test \
+        --test_output=errors \
+        --java_toolchain='${javaToolchain}' \
         examples/cpp:hello-success_test \
         examples/java-native/src/test/java/com/example/myproject:hello
     }
@@ -231,7 +300,10 @@ stdenv.mkDerivation rec {
   # Save paths to hardcoded dependencies so Nix can detect them.
   postFixup = ''
     mkdir -p $out/nix-support
-    echo "${customBash} ${defaultShellPath}" > $out/nix-support/depends
+    echo "${customBash} ${defaultShellPath}" >> $out/nix-support/depends
+    # The templates get tar’d up into a .jar,
+    # so nix can’t detect python is needed in the runtime closure
+    echo "${python}" >> $out/nix-support/depends
   '';
 
   dontStrip = true;

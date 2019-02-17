@@ -231,7 +231,7 @@ in
         fsToSkipCheck = [ "none" "bindfs" "btrfs" "zfs" "tmpfs" "nfs" "vboxsf" "glusterfs" ];
         skipCheck = fs: fs.noCheck || fs.device == "none" || builtins.elem fs.fsType fsToSkipCheck;
         # https://wiki.archlinux.org/index.php/fstab#Filepath_spaces
-        escape = string: builtins.replaceStrings [ " " ] [ "\\040" ] string;
+        escape = string: builtins.replaceStrings [ " " "\t" ] [ "\\040" "\\011" ] string;
       in ''
         # This is a generated file.  Do not edit!
         #

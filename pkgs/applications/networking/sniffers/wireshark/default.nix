@@ -2,7 +2,7 @@
 , gnutls, libgcrypt, libgpgerror, geoip, openssl, lua5, python, libcap, glib
 , libssh, zlib, cmake, extra-cmake-modules, fetchpatch, makeWrapper
 , withGtk ? false, gtk3 ? null, librsvg ? null, gsettings-desktop-schemas ? null, wrapGAppsHook ? null
-, withQt ? false, qt5 ? null
+, withQt ? true, qt5 ? null
 , ApplicationServices, SystemConfiguration, gmp
 }:
 
@@ -12,7 +12,7 @@ assert withQt  -> !withGtk && qt5  != null;
 with stdenv.lib;
 
 let
-  version = "2.6.5";
+  version = "2.6.6";
   variant = if withGtk then "gtk" else if withQt then "qt" else "cli";
 
 in stdenv.mkDerivation {
@@ -21,7 +21,7 @@ in stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://www.wireshark.org/download/src/all-versions/wireshark-${version}.tar.xz";
-    sha256 = "12j3fw0j8qcr86c1vsz4bsb55j9inp0ll3wjjdvg1cj4hmwmn5ck";
+    sha256 = "0qz8a1ays63712pq1v7nnw7c57zlqkcifq7himfv5nsv0zm36ya8";
   };
 
   cmakeFlags = [

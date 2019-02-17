@@ -120,7 +120,8 @@ stdenv.mkDerivation (rec {
   '';
 
   patches = [ ./0000-fix-ipxe-src.patch
-              ./0000-fix-install-python.patch ]
+              ./0000-fix-install-python.patch
+              ./acpica-utils-20180427.patch]
          ++ (config.patches or []);
 
   postPatch = ''

@@ -76,7 +76,6 @@ stdenv.mkDerivation rec {
     homepage = http://web.mit.edu/kerberos/;
     license = licenses.mit;
     platforms = platforms.unix ++ platforms.windows;
-    maintainers = with maintainers; [ wkennington ];
   };
 
   passthru.implementation = "krb5";

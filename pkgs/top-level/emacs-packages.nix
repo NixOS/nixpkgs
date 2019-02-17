@@ -73,27 +73,13 @@ let
 
   pdf-tools = melpaBuild rec {
     pname = "pdf-tools";
-    version = "0.80";
+    version = "0.90";
     src = fetchFromGitHub {
       owner = "politza";
       repo = "pdf-tools";
       rev = "v${version}";
-      sha256 = "1i4647vax5na73basc5dz4lh9kprir00fh8ps4i0l1y3ippnjs2s";
+      sha256 = "0iv2g5kd14zk3r5dzdw7b7hk4b5w7qpbilcqkja46jgxbb6xnpl9";
     };
-    patches = [
-      (fetchpatch {
-        url = https://github.com/politza/pdf-tools/commit/6505a0e817495b85897c9380161034ae611ddd90.patch;
-        sha256 = "122ycbja8ckaysp58xqfcv11sgpbcp78pll5mywf9hgr0qap9jsy";
-      })
-      (fetchpatch {
-        url = https://github.com/politza/pdf-tools/commit/ded6341b0e3ad97e8b14f68c1796ba66dc155fd1.patch;
-        sha256 = "0hd2v4c6xq2jzg2m6s5kzs0fldgygf1pnfqd11v6x4w05zvxn6a2";
-      })
-      (fetchpatch {
-        url = https://github.com/politza/pdf-tools/commit/50a5297b82e26cfd52f6c00645ddc1057099d6a7.patch;
-        sha256 = "107rqzldg06h8k3pmdinkl78dr4xycm570sp2an4ihjmpmph0z39";
-      })
-    ];
     nativeBuildInputs = [ external.pkgconfig ];
     buildInputs = with external; [ autoconf automake libpng zlib poppler ];
     preBuild = "make server/epdfinfo";
@@ -158,6 +144,32 @@ let
       '';
       homepage = Agda.meta.homepage;
       license = Agda.meta.license;
+    };
+  };
+
+  emacsql-sqlite = melpaBuild rec {
+    pname = "emacsql-sqlite";
+    ename = "emacsql-sqlite";
+    version = "20180128.1252";
+    src = fetchFromGitHub {
+      owner = "skeeto";
+      repo = "emacsql";
+      rev = "62d39157370219a1680265fa593f90ccd51457da";
+      sha256 = "0ghl3g8n8wlw8rnmgbivlrm99wcwn93bv8flyalzs0z9j7p7fdq9";
+    };
+    recipe = fetchurl {
+      url = "https://raw.githubusercontent.com/milkypostman/melpa/3cfa28c7314fa57fa9a3aaaadf9ef83f8ae541a9/recipes/emacsql-sqlite";
+      sha256 = "1y81nabzzb9f7b8azb9giy23ckywcbrrg4b88gw5qyjizbb3h70x";
+      name = "recipe";
+    };
+    preBuild = ''
+      cd sqlite
+      make
+    '';
+    packageRequires = [ emacs emacsql ];
+    meta = {
+      homepage = "https://melpa.org/#/emacsql-sqlite";
+      license = lib.licenses.free;
     };
   };
 

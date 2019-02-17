@@ -1,12 +1,12 @@
-{ lib, python3Packages, imagemagick, feh }:
+{ lib, buildPythonPackage, fetchPypi, imagemagick, feh, isPy3k }:
 
-python3Packages.buildPythonApplication rec {
+buildPythonPackage rec {
   pname = "pywal";
-  version = "3.2.1";
+  version = "3.3.0";
 
-  src = python3Packages.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
-    sha256 = "1pj30h19ijwhmbm941yzbkgr19q06dhp9492h9nrqw1wfjfdbdic";
+    sha256 = "1drha9kshidw908k7h3gd9ws2bl64ms7bjcsa83pwb3hqa9bkspg";
   };
 
   preCheck = ''
@@ -18,6 +18,9 @@ python3Packages.buildPythonApplication rec {
     ./convert.patch
     ./feh.patch
   ];
+
+  # Invalid syntax
+  disabled = !isPy3k;
 
   postPatch = ''
     substituteInPlace pywal/backends/wal.py --subst-var-by convert "${imagemagick}/bin/convert"

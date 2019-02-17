@@ -18,26 +18,28 @@ let
 
   defaultOverrides = [
     # Override the version of some packages pinned in Home Assistant's setup.py
-    (mkOverride "aiohttp" "3.4.4"
-      "51afec6ffa50a9da4cdef188971a802beb1ca8e8edb40fa429e5e529db3475fa")
+    (mkOverride "aiohttp" "3.5.4"
+      "9c4c83f4fa1938377da32bc2d59379025ceeee8e24b89f72fcbccd8ca22dc9bf")
     (mkOverride "astral" "1.7.1"
       "88086fd2006c946567285286464b2da3294a3b0cbba4410b7008ec2458f82a07")
     (mkOverride "async-timeout" "3.0.1"
       "0c3c816a028d47f659d6ff5c745cb2acf1f966da1fe5c19c77a70282b25f4c5f")
     (mkOverride "attrs" "18.2.0"
       "10cbf6e27dbce8c30807caf056c8eb50917e0eaafe86347671b57254006c3e69")
-    (mkOverride "bcrypt" "3.1.4"
-      "67ed1a374c9155ec0840214ce804616de49c3df9c5bc66740687c1c9b1cd9e8d")
+    (mkOverride "bcrypt" "3.1.5"
+      "136243dc44e5bab9b61206bd46fff3018bd80980b1a1dfbab64a22ff5745957f")
     (mkOverride "pyjwt" "1.6.4"
       "4ee413b357d53fd3fb44704577afac88e72e878716116270d722723d65b42176")
     (mkOverride "cryptography" "2.3.1"
       "8d10113ca826a4c29d5b85b2c4e045ffa8bad74fb525ee0eceb1d38d4c70dfd6")
     (mkOverride "cryptography_vectors" "2.3.1" # required by cryptography==2.3.1
       "bf4d9b61dce69c49e830950aa36fad194706463b0b6dfe81425b9e0bc6644d46")
-    (mkOverride "requests" "2.20.1"
-      "ea881206e59f41dbd0bd445437d792e43906703fff75ca8ff43ccdb11f33f263")
-    (mkOverride "ruamel_yaml" "0.15.80"
-      "4f203351575dba0829c7b1e5d376d08cf5f58e4a2b844e8ce552b3e41cd414e6")
+    (mkOverride "python-slugify" "1.2.6"
+      "7723daf30996db26573176bddcdf5fcb98f66dc70df05c9cb29f2c79b8193245")
+    (mkOverride "requests" "2.21.0"
+      "502a824f31acdacb3a35b6690b5fbf0bc41d63a24a45c4004352b0242707598e")
+    (mkOverride "ruamel_yaml" "0.15.85"
+      "34af6e2f9787acd3937b55c0279f46adff43124c5d72dced84aab6c89d1a960f")
     (mkOverride "voluptuous" "0.11.5"
       "567a56286ef82a9d7ae0628c5842f65f516abcb496e74f3f59f1d7b28df314ef")
     (mkOverride "voluptuous-serialize" "2.0.0"
@@ -49,8 +51,8 @@ let
 
     # used by check_config script
     # can be unpinned once https://github.com/home-assistant/home-assistant/issues/11917 is resolved
-    (mkOverride "colorlog" "3.1.4"
-      "418db638c9577f37f0fae4914074f395847a728158a011be2a193ac491b9779d")
+    (mkOverride "colorlog" "4.0.2"
+      "3cf31b25cbc8f86ec01fef582ef3b840950dea414084ed19ab922c8b493f9b42")
 
     # hass-frontend does not exist in python3.pkgs
     (self: super: {
@@ -85,7 +87,7 @@ let
   extraBuildInputs = extraPackages py.pkgs;
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "0.84.6";
+  hassVersion = "0.86.4";
 
 in with py.pkgs; buildPythonApplication rec {
   pname = "homeassistant";
@@ -100,12 +102,13 @@ in with py.pkgs; buildPythonApplication rec {
     owner = "home-assistant";
     repo = "home-assistant";
     rev = version;
-    sha256 = "142hxsvhb9lh77h54975vkvl1fx5lslrydq1vbqyy51dy85ms8lc";
+    sha256 = "13yyzcwz44gz6j0fh1awws83p6fmpib9ribm1453qr172knanhjy";
   };
 
   propagatedBuildInputs = [
     # From setup.py
-    aiohttp astral async-timeout attrs bcrypt certifi jinja2 pyjwt cryptography pip pytz pyyaml requests ruamel_yaml voluptuous voluptuous-serialize
+    aiohttp astral async-timeout attrs bcrypt certifi jinja2 pyjwt cryptography pip
+    python-slugify pytz pyyaml requests ruamel_yaml voluptuous voluptuous-serialize
     # From http, frontend and recorder components and auth.mfa_modules.totp
     sqlalchemy aiohttp-cors hass-frontend pyotp pyqrcode
   ] ++ componentBuildInputs ++ extraBuildInputs;

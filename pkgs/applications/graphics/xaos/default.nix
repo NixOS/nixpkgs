@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, aalib, gsl, libpng, libX11, xproto, libXext
-, xextproto, libXt, zlib, gettext, intltool, perl }:
+{ stdenv, fetchurl, aalib, gsl, libpng, libX11, xorgproto, libXext
+, libXt, zlib, gettext, intltool, perl }:
 
 stdenv.mkDerivation rec {
   name = "xaos-${version}";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "format" ];
 
   buildInputs = [
-    aalib gsl libpng libX11 xproto libXext xextproto
+    aalib gsl libpng libX11 xorgproto libXext
     libXt zlib gettext intltool perl
   ];
 

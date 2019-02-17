@@ -153,9 +153,6 @@ self: super: builtins.intersectAttrs super {
   gtksourceview2 = addPkgconfigDepend super.gtksourceview2 pkgs.gtk2;
   gtk-traymanager = addPkgconfigDepend super.gtk-traymanager pkgs.gtk3;
 
-  # Add necessary reference to gtk3 package, plus specify needed dbus version, plus turn on strictDeps to fix build
-  taffybar = ((addPkgconfigDepend super.taffybar pkgs.gtk3).overrideDerivation (drv: { strictDeps = true; }));
-
   # Add necessary reference to gtk3 package
   gi-dbusmenugtk3 = addPkgconfigDepend super.gi-dbusmenugtk3 pkgs.gtk3;
 
@@ -547,10 +544,26 @@ self: super: builtins.intersectAttrs super {
       '';
     });
 
+  # On Darwin, git-annex mis-detects options to `cp`, so we wrap the binary to
+  # ensure it uses Nixpkgs' coreutils.
+  git-annex = with pkgs;
+    if (!stdenv.isLinux) then
+      let path = stdenv.lib.makeBinPath [ coreutils ];
+      in overrideCabal (addBuildTool super.git-annex makeWrapper) (_drv: {
+        postFixup = ''
+          wrapProgram $out/bin/git-annex \
+            --prefix PATH : "${path}"
+        '';
+      })
+    else super.git-annex;
+
   # The test suite has undeclared dependencies on git.
   githash = dontCheck super.githash;
 
   # Avoid infitite recursion with yaya.
   yaya-hedgehog = super.yaya-hedgehog.override { yaya = dontCheck self.yaya; };
+
+  # Avoid infitite recursion with tonatona.
+  tonaparser = dontCheck super.tonaparser;
 
 }

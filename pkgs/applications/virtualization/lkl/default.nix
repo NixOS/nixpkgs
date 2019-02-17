@@ -30,7 +30,9 @@ stdenv.mkDerivation rec {
     cp tools/lkl/{cptofs,fs2tar,lklfuse} $out/bin
     ln -s cptofs $out/bin/cpfromfs
     cp -r tools/lkl/include $dev/
-    cp tools/lkl/liblkl*.{a,so} $lib/lib
+    cp tools/lkl/liblkl.a \
+       tools/lkl/lib/liblkl.so \
+       tools/lkl/lib/hijack/liblkl-hijack.so $lib/lib
   '';
 
   # We turn off format and fortify because of these errors (fortify implies -O2, which breaks the jitter entropy code):

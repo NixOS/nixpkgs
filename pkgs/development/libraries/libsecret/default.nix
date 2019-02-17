@@ -1,14 +1,13 @@
-{ stdenv, fetchurl, glib, pkgconfig, intltool, libxslt, python3, docbook_xsl, docbook_xml_dtd_42
+{ stdenv, fetchurl, glib, pkgconfig, gettext, libxslt, python3, docbook_xsl, docbook_xml_dtd_42
 , libgcrypt, gobject-introspection, vala, gtk-doc, gnome3, libintl, dbus, xvfb_run }:
 
 stdenv.mkDerivation rec {
   pname = "libsecret";
-  version = "0.18.6";
-  name = "${pname}-${version}";
+  version = "0.18.7";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "0vynag97a9bnnb8ipah45av8xg8jzmhd572rw3zj78s1pa8ciysy";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "11ylmcfx6ff7xd1gpi58i2nbma83lz2xg0g2dq23w6snqhgzwrhd";
   };
 
   postPatch = ''
@@ -18,7 +17,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "devdoc" ];
 
   propagatedBuildInputs = [ glib ];
-  nativeBuildInputs = [ pkgconfig intltool libxslt docbook_xsl docbook_xml_dtd_42 libintl gobject-introspection vala gtk-doc ];
+  nativeBuildInputs = [ pkgconfig gettext libxslt docbook_xsl docbook_xml_dtd_42 libintl gobject-introspection vala gtk-doc ];
   buildInputs = [ libgcrypt ];
   # optional: build docs with gtk-doc? (probably needs a flag as well)
 

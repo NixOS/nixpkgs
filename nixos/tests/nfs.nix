@@ -20,7 +20,7 @@ in
 {
   name = "nfs";
   meta = with pkgs.stdenv.lib.maintainers; {
-    maintainers = [ eelco chaoflow wkennington ];
+    maintainers = [ eelco chaoflow  ];
   };
 
   nodes =

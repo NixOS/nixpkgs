@@ -27,7 +27,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.intel.com/;
     description = "Microcode for Intel processors";
     license = licenses.unfreeRedistributableFirmware;
-    maintainers = with maintainers; [ wkennington ];
     platforms = platforms.linux;
   };
 }

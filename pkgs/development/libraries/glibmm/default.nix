@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, gnum4, glib, libsigcxx, gnome3 }:
+{ stdenv, fetchurl, pkgconfig, gnum4, glib, libsigcxx, gnome3, darwin }:
 
 stdenv.mkDerivation rec {
   pname = "glibmm";
@@ -12,6 +12,9 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [ pkgconfig gnum4 ];
+  buildInputs = stdenv.lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+    Cocoa
+  ]);
   propagatedBuildInputs = [ glib libsigcxx ];
 
   enableParallelBuilding = true;

@@ -7,7 +7,6 @@ with lib;
   config = mkIf config.boot.isContainer {
 
     # Disable some features that are not useful in a container.
-    sound.enable = mkDefault false;
     services.udisks2.enable = mkDefault false;
     powerManagement.enable = mkDefault false;
 

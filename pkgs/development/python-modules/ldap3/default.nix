@@ -1,4 +1,4 @@
-{ stdenv, fetchPypi, fetchFromGitHub, buildPythonPackage, gssapi, pyasn1 }:
+{ stdenv, fetchPypi, fetchFromGitHub, buildPythonPackage, pyasn1 }:
 
 buildPythonPackage rec {
   version = "2.5.2";
@@ -16,8 +16,6 @@ buildPythonPackage rec {
     rev = "v${version}";
     sha256 = "0p5l4bhy6j2nvvlxz5zvznbaqb72x791v9la2jr2wpwr60mzz9hw";
   };
-
-  buildInputs = [ gssapi ];
 
   propagatedBuildInputs = [ pyasn1 ];
 
