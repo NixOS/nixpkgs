@@ -12,15 +12,6 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    # Add Meson support that hit after 5.2.2
-    (fetchpatch {
-      url = "https://github.com/elementary/granite/commit/2066b377226cf327cb2d5399b6b40a2d36d47b11.patch";
-      sha256 = "1bxjgq8wvl1sb79cwhmh9kwawnkkfn7c5q67cyz1fjxmamwyyi85";
-    })
-    (fetchpatch {
-      url = "https://github.com/elementary/granite/commit/f1b29f52e3aaf0f5d6bba44c42617da265f679c8.patch";
-      sha256 = "0cdp9ny6fj1lpcirab641p1qn1rbsvnsaa03hnr6zsdpim96jlvs";
-    })
     # Resolve the circular dependency between granite and the datetime wingpanel indicator
     # See: https://github.com/elementary/granite/pull/242
     ./02-datetime-clock-format-gsettings.patch
