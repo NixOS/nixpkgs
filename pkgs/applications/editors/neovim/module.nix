@@ -19,7 +19,22 @@ let
     check = with types; (x: if isFunction x
       then isList (x pkgs.python3Packages)
       else false);
-    merge = mergeOneOption;
+    # merge = mergeOneOption;
+    # this should work ??? why
+    # merge = mergeDefaultOption;
+
+    # needs to retun a new function that calls the over function
+    merge = loc: defs:
+      # returns a function that passes the arg to a list
+      x:
+        foldr (a: b: a ++ b) []
+        (map (f: f x) (getValues defs))
+        ;
+      # x: foldr (a: b:
+      #   r: ( debug.traceVal(a) r) ++ ( debug.traceVal(b) r ))  # op
+      #   (_: []) # nul
+      #   (debug.traceValFn (x: "print values: ") (getValues defs));
+      # x: foldr (a: b: ( debug.traceVal(a x)) ++ ( debug.traceVal ( b x ))) lib.id (getValues defs);
   };
 
   requiredPlugins = config: vimUtils.requiredPlugins (config.configure // {
@@ -241,8 +256,8 @@ in
 
     neovimRC = ''
       ${if config.withNodeJs then "let g:node_host_prog='${nodePackages.neovim}/bin/neovim-node-host'" else "let g:loaded_node_provider=1"}
-      ${if config.withPython then "let g:python_host_prog='${config.pythonEnv.interpreter}'" else "let g:loaded_python_provider=1"}
-      ${if config.withPython3 then "let g:python3_host_prog='${config.python3Env.interpreter}'" else "let g:loaded_python3_provider=1"}
+      ${if config.withPython then "let g:python_host_prog='${config.pythonEnv}/bin/python'" else "let g:loaded_python_provider=1"}
+      ${if config.withPython3 then "let g:python3_host_prog='${config.python3Env}/bin/python'" else "let g:loaded_python3_provider=1"}
       ${if config.withRuby then "let g:ruby_host_prog='${config.rubyEnv}/bin/nvim-ruby'" else "let g:loaded_ruby_provider=1"}
       ${if config.withHaskell then "let g:haskell_host_prog='${config.haskellEnv}/bin/ghc'" else "let g:loaded_haskell_provider=1"}
     ''
