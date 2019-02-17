@@ -15560,8 +15560,8 @@ in
 
   fira-mono = callPackage ../data/fonts/fira-mono { };
 
-  font-awesome_4 = callPackage ../data/fonts/font-awesome-4 { };
   font-awesome_5 = callPackage ../data/fonts/font-awesome-5 { };
+  font-awesome = font-awesome_5;
 
   freefont_ttf = callPackage ../data/fonts/freefont-ttf { };
 
@@ -21506,7 +21506,7 @@ in
 
   bftools = callPackage ../applications/science/biology/bftools { };
 
-  cmtk = callPackage ../applications/science/biology/cmtk { }; 
+  cmtk = callPackage ../applications/science/biology/cmtk { };
 
   conglomerate = callPackage ../applications/science/biology/conglomerate { };
 
