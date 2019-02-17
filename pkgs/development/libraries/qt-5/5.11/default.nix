@@ -62,8 +62,8 @@ let
     qtscript = [ ./qtscript.patch ];
     qtserialport = [ ./qtserialport.patch ];
     qttools = [ ./qttools.patch ];
-    qtwebengine =
-         optional stdenv.cc.isClang ./qtwebengine-clang-fix.patch
+    qtwebengine = [ ./qtwebengine-no-build-skip.patch ]
+      ++ optional stdenv.cc.isClang ./qtwebengine-clang-fix.patch
       ++ optional stdenv.isDarwin ./qtwebengine-darwin-sdk-10.10.patch;
     qtwebkit = [ ./qtwebkit.patch ];
   };
