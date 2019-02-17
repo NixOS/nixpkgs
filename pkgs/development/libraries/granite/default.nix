@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "granite";
-  version = "5.2.2";
+  version = "5.2.3";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "1zp0pp5v3j8k6ail724p7h5jj2zmznj0a2ybwfw5sspfdw5bfydh";
+    sha256 = "10ddq1s2w4jvpzq813cylmqhh8pggzaz890fy3kzg07275i98gah";
   };
 
   patches = [
