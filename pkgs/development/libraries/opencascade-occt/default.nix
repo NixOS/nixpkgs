@@ -12,7 +12,6 @@
 }:
 
 let version = "7.3.0p2";
-    patch = "p2";
     commit = "V7_3_0p2";
 
 in stdenv.mkDerivation {
