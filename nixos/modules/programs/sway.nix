@@ -18,7 +18,9 @@ let
       export DBUS_SESSION_BUS_ADDRESS
       exec sway-setcap "$@"
     else
-      exec ${pkgs.dbus}/bin/dbus-run-session sway-setcap "$@"
+      exec ${pkgs.dbus}/bin/dbus-run-session sway-setcap "$@" ${optionalString (cfg.configFile != null)
+        "-c \"${cfg.configFile}\""
+      }
     fi
   '';
   swayJoined = pkgs.symlinkJoin {
@@ -32,6 +34,15 @@ in {
       group you can manually launch Sway by executing "sway" from a terminal.
       If you call "sway" with any parameters the extraSessionCommands won't be
       executed and Sway won't be launched with dbus-launch'';
+
+    configFile = mkOption {
+      default     = null;
+      type        = with types; nullOr path;
+      description = ''
+        Path to the sway configuration file.
+        If left at the default value, $HOME/.sway/config will be used.
+      '';
+    };
 
     extraSessionCommands = mkOption {
       type = types.lines;
