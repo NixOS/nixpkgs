@@ -4,8 +4,6 @@ stdenv.mkDerivation rec {
   pname = "usbmuxd";
   version = "2018-10-10";
 
-  name = "${pname}-${version}";
-
   src = fetchFromGitHub {
     owner = "libimobiledevice";
     repo = pname;
