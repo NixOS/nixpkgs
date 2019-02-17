@@ -1445,6 +1445,8 @@ in
 
   grobi = callPackage ../tools/X11/grobi { };
 
+  gscan2pdf = callPackage ../applications/graphics/gscan2pdf { };
+
   gti = callPackage ../tools/misc/gti { };
 
   hdate = callPackage ../applications/misc/hdate { };
@@ -1549,6 +1551,8 @@ in
   nrsc5 = callPackage ../applications/misc/nrsc5 { };
 
   nwipe = callPackage ../tools/security/nwipe { };
+
+  nx-libs = callPackage ../tools/X11/nx-libs { };
 
   nyx = callPackage ../tools/networking/nyx { };
 
@@ -3654,6 +3658,8 @@ in
 
   kytea = callPackage ../tools/text/kytea { };
 
+  k6 = callPackage ../development/tools/k6 { };
+
   ldc = callPackage ../development/compilers/ldc { };
 
   lbreakout2 = callPackage ../games/lbreakout2 { };
@@ -4496,8 +4502,6 @@ in
   nwdiag = with python3Packages; toPythonApplication nwdiag;
 
   nylon = callPackage ../tools/networking/nylon { };
-
-  nxproxy = callPackage ../tools/admin/nxproxy { };
 
   nzbget = callPackage ../tools/networking/nzbget { };
 
@@ -21039,6 +21043,8 @@ in
 
   synthv1 = callPackage ../applications/audio/synthv1 { };
 
+  t4kcommon = callPackage ../games/t4kcommon { };
+
   tcl2048 = callPackage ../games/tcl2048 { };
 
   the-powder-toy = callPackage ../games/the-powder-toy {
@@ -21072,6 +21078,8 @@ in
   tremulous = callPackage ../games/tremulous { };
 
   tuxpaint = callPackage ../games/tuxpaint { };
+
+  tuxtype = callPackage ../games/tuxtype { };
 
   speed_dreams = callPackage ../games/speed-dreams {
     # Torcs wants to make shared libraries linked with plib libraries (it provides static).
@@ -23008,6 +23016,8 @@ in
   };
 
   x11idle = callPackage ../tools/misc/x11idle {};
+
+  x11docker = callPackage ../applications/virtualization/x11docker { };
 
   x2x = callPackage ../tools/X11/x2x { };
 

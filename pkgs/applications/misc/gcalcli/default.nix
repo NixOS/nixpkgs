@@ -4,15 +4,21 @@
 with python3.pkgs;
 
 buildPythonApplication rec {
-  version = "4.0.0a4";
-  name = "gcalcli-${version}";
+  pname = "gcalcli";
+  version = "4.0.3";
 
   src = fetchFromGitHub {
     owner  = "insanum";
-    repo   = "gcalcli";
+    repo   = pname;
     rev    = "v${version}";
-    sha256 = "00giq5cdigidzv5bz4wgzi1yp6xlf2rdcy6ynmsc6bcf0cl5x64d";
+    sha256 = "15hpm7b09p5qnha0hpp0mgdl2pgsyq2sjcqihk3fsv7arngdbr5q";
   };
+
+  postPatch = lib.optionalString stdenv.isLinux ''
+    substituteInPlace gcalcli/argparsers.py --replace \
+      "command = 'notify-send -u critical" \
+      "command = '${libnotify}/bin/notify-send -u critical"
+  '';
 
   propagatedBuildInputs = [
     dateutil gflags httplib2 parsedatetime six vobject
