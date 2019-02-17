@@ -185,6 +185,7 @@ let
 
     # Weirder stuff that doesn't appear in the documentation?
     knownVulnerabilities = listOf str;
+    requiredKernelConfig = listOf str;
     name = str;
     version = str;
     tag = str;

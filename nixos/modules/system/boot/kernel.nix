@@ -65,6 +65,27 @@ in
       '';
     };
 
+    boot.enforceRequiredConfig = mkOption {
+      type = types.listOf types.attrs;
+      default = [];
+      example = literalExample "[ pkgs.kernelPatches.ubuntu_fan_4_4 ]";
+      description = ''
+        '';
+    };
+
+    boot.kernelConfig = mkOption {
+      # for now use str but in the end should use kernelItem
+      type = types.attrsOf types.str;
+      default = {};
+      # example = literalExample "[ pkgs.kernelPatches.ubuntu_fan_4_4 ]";
+      description = ''
+        Declarative kernel configuration.
+        Also set by requiredKernelConfig when enforceRequiredConfig is set.
+        '';
+    };
+
+
+
     boot.kernelPatches = mkOption {
       type = types.listOf types.attrs;
       default = [];
@@ -297,6 +318,9 @@ in
         configLine = "CONFIG_${option}=n";
       };
     };
+
+
+    boot.kernelConfig = mkIf config.boot.enforceRequiredConfig config.system.requiredKernelConfig;
 
     # The config options that all modules can depend upon
     system.requiredKernelConfig = with config.lib.kernelConfig; [
