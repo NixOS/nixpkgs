@@ -19415,7 +19415,9 @@ in
   };
 
   spotifyd = callPackage ../applications/audio/spotifyd {
+    withALSA = stdenv.isLinux;
     withPulseAudio = config.pulseaudio or true;
+    withPortAudio = stdenv.isDarwin;
   };
 
   libspotify = callPackage ../development/libraries/libspotify (config.libspotify or {});
