@@ -4994,8 +4994,6 @@ in
 
   pydb = callPackage ../development/tools/pydb { };
 
-  pygmentex = callPackage ../tools/typesetting/pygmentex { };
-
   pythonIRClib = pythonPackages.pythonIRClib;
 
   pythonSexy = pythonPackages.libsexy;
