@@ -7052,7 +7052,24 @@ in
 
   dotnetPackages = recurseIntoAttrs (callPackage ./dotnet-packages.nix {});
 
-  glslang = callPackage ../development/compilers/glslang { };
+  glslang = callPackage ../development/compilers/glslang {
+    spirv-tools = spirv-tools.overrideAttrs (_: {
+      src = fetchFromGitHub {
+        owner = "KhronosGroup";
+        repo = "SPIRV-Tools";
+        rev = "117a1fd11f11e9bef9faa563c3d5156cc6ab529c";
+        sha256 = "1w5hb6sgy71g279wsghixxc75r7rsm7wki011mpz039q66827sym";
+      };
+    });
+    spirv-headers = spirv-tools.overrideAttrs (_: {
+      src = fetchFromGitHub {
+        owner = "KhronosGroup";
+        repo = "SPIRV-Tools";
+        rev = "79b6681aadcb53c27d1052e5f8a0e82a981dbf2f";
+        sha256 = "0flng2rdmc4ndq3j71h6wk1ibcjvhjrg2rzd6rv445vcsf0jh2pj";
+      };
+    });
+  };
 
   go_bootstrap = if stdenv.isAarch64 then
     srcOnly {
