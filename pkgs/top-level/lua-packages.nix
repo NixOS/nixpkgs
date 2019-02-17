@@ -60,7 +60,7 @@ let
 
   buildLuarocksPackage = with pkgs.lib; makeOverridable( callPackage ../development/interpreters/lua-5/build-lua-package.nix {
     inherit toLuaModule;
-    inherit lua writeText;
+    inherit lua;
   });
 in
 with self; {
