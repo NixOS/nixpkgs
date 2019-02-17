@@ -16064,7 +16064,7 @@ in
     inherit (vamp) vampSDK;
   };
 
-  inherit (python3Packages) arelle;
+  arelle = with python3Packages; toPythonApplication arelle;
 
   argo = callPackage ../applications/networking/cluster/argo { };
 
