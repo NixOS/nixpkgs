@@ -60,7 +60,7 @@ let
     qtscript = [ ./qtscript.patch ];
     qtserialport = [ ./qtserialport.patch ];
     qttools = [ ./qttools.patch ];
-    qtwebengine =
+    qtwebengine = [ ./qtwebengine-no-build-skip.patch ]
          optional stdenv.needsPax ./qtwebengine-paxmark-mksnapshot.patch
       ++ optional stdenv.cc.isClang ./qtwebengine-clang-fix.patch
       ++ optionals stdenv.isDarwin [
