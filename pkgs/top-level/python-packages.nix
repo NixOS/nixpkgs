@@ -846,6 +846,8 @@ in {
 
   webapp2 = callPackage ../development/python-modules/webapp2 { };
 
+  wrf-python = callPackage ../development/python-modules/wrf-python { };
+
   pyunbound = callPackage ../tools/networking/unbound/python.nix { };
 
   WazeRouteCalculator = callPackage ../development/python-modules/WazeRouteCalculator { };
