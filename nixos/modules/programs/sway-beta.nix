@@ -18,7 +18,9 @@ let
       export DBUS_SESSION_BUS_ADDRESS
       exec ${swayPackage}/bin/sway "$@"
     else
-      exec ${pkgs.dbus}/bin/dbus-run-session ${swayPackage}/bin/sway "$@"
+      exec ${pkgs.dbus}/bin/dbus-run-session ${swayPackage}/bin/sway "$@" ${optionalString (cfg.configFile != null)
+        "-c \"${cfg.configFile}\""
+      }
     fi
   '';
   swayJoined = pkgs.symlinkJoin {
@@ -30,6 +32,15 @@ in {
     enable = mkEnableOption ''
       Sway, the i3-compatible tiling Wayland compositor. This module will be removed after the final release of Sway 1.0
     '';
+
+    configFile = mkOption {
+      default     = null;
+      type        = with types; nullOr path;
+      description = ''
+        Path to the sway configuration file.
+        If left at the default value, $HOME/.sway/config will be used.
+      '';
+    };
 
     package = mkOption {
       type = types.package;
