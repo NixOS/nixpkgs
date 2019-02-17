@@ -18,6 +18,6 @@ buildPythonPackage rec {
     homepage    = https://github.com/balloob/pychromecast;
     license     = licenses.mit;
     maintainers = with maintainers; [ abbradar ];
-    platforms   = platforms.linux;
+    platforms   = platforms.unix;
   };
 }

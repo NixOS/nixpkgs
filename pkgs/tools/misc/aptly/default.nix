@@ -41,7 +41,7 @@ buildGoPackage {
     homepage = https://www.aptly.info;
     description = "Debian repository management tool";
     license = licenses.mit;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = [ maintainers.montag451 ];
   };
 }

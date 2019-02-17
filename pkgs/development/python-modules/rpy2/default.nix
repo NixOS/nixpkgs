@@ -98,7 +98,7 @@ buildPythonPackage rec {
       homepage = http://rpy.sourceforge.net/rpy2;
       description = "Python interface to R";
       license = lib.licenses.gpl2Plus;
-      platforms = lib.platforms.linux;
+      platforms = lib.platforms.unix;
       maintainers = with lib.maintainers; [ joelmo ];
     };
   }
