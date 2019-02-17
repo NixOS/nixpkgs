@@ -8809,6 +8809,8 @@ in
 
   kustomize = callPackage ../development/tools/kustomize { };
 
+  ktlint = callPackage ../development/tools/ktlint { };
+
   kythe = callPackage ../development/tools/kythe { };
 
   lazygit = callPackage ../development/tools/lazygit { };
