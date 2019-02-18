@@ -752,6 +752,11 @@
     github = "calbrecht";
     name = "Christian Albrecht";
   };
+  callahad = {
+    email = "dan.callahan@gmail.com";
+    github = "callahad";
+    name = "Dan Callahan";
+  };
   calvertvl = {
     email = "calvertvl@gmail.com";
     github = "calvertvl";
