@@ -60,6 +60,8 @@ stdenv.mkDerivation rec {
     withPackages = import ../lua-5/with-packages.nix { inherit buildEnv luaPackages;};
     pkgs = luaPackages;
     interpreter = "${self}/bin/lua";
+    luaPath = lib.concatMapStringsSep ";" (x: "${buildEnv}/" + x) LuaPathSearchPaths;
+    luaCPath = lib.concatMapStringsSep ";" (x: "${buildEnv}/" + x) LuaCPathSearchPaths;
   };
 
   meta = with stdenv.lib; extraMeta // {
