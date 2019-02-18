@@ -5,7 +5,8 @@
    for each package in a separate file: the call to the function would
    be almost as much code as the function itself. */
 
-{config, pkgs, fetchurl, fetchFromGitHub, stdenv, gnused, perl, overrides}:
+{config, pkgs, fetchurl, fetchFromGitHub, stdenv, gnused, perl, overrides,
+  buildPackages}:
 
 # cpan2nix assumes that perl-packages.nix will be used only with perl 5.28.1 or above
 assert stdenv.lib.versionAtLeast perl.version "5.28.1";
@@ -14587,6 +14588,22 @@ let
       url = "mirror://cpan/authors/id/J/JS/JSTOWE/${name}.tar.gz";
       sha256 = "0hdj5mldpj3pyprd4hbbalfx9yjgi5p59gg2ixk9808f5v7q74sa";
     };
+    cross = stdenv.hostPlatform != stdenv.buildPlatform;
+
+    # use native libraries from the host when running build commands
+    postConfigure = if cross then let
+      host_perl = buildPackages.perl;
+      host_self = buildPackages.perlPackages.TermReadKey;
+      perl_lib = "${host_perl}/lib/perl5/${host_perl.version}";
+      self_lib = "${host_self}/lib/perl5/site_perl/${host_perl.version}";
+    in ''
+      sed -ie 's|"-I$(INST_ARCHLIB)"|"-I${perl_lib}" "-I${self_lib}"|g' Makefile
+    '' else null;
+
+    # TermReadKey uses itself in the build process
+    nativeBuildInputs = if cross then [
+      buildPackages.perlPackages.TermReadKey
+    ] else [];
   };
 
   TermReadLineGnu = buildPerlPackage rec {
