@@ -401,6 +401,15 @@
     github = "shados";
     name = "Alexei Robyn";
   };
+  artemist = {
+    email = "me@artem.ist";
+    github = "artemist";
+    name = "Artemis Tosini";
+    keys = [{
+      longkeyid = "rsa4096/0x4FDC96F161E7BA8A";
+      fingerprint = "3D2B B230 F9FA F0C5 1832  46DD 4FDC 96F1 61E7 BA8A";
+    }];
+  };
   artuuge = {
     email = "artuuge@gmail.com";
     github = "artuuge";
