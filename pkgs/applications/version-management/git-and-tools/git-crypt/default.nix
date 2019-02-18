@@ -1,14 +1,14 @@
 { fetchFromGitHub, git, gnupg1compat, makeWrapper, openssl, stdenv }:
 
 stdenv.mkDerivation rec {
-
-  name = "git-crypt-${meta.version}";
+  name = "git-crypt-${version}";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "AGWA";
     repo = "git-crypt";
-    rev = meta.version;
-    sha256 = "4fe45f903a4b3cc06a5fe11334b914c225009fe8440d9e91a54fdf21cf4dcc4d";
+    rev = "${version}";
+    sha256 = "13m9y0m6gc3mlw3pqv9x4i0him2ycbysizigdvdanhh514kga602";
     inherit name;
   };
 
@@ -40,7 +40,6 @@ stdenv.mkDerivation rec {
     '';
     downloadPage = "https://github.com/AGWA/git-crypt/releases";
     license = licenses.gpl3;
-    version = "0.5.0";
     maintainers = [ maintainers.dochang ];
     platforms = platforms.unix;
   };

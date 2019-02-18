@@ -1,17 +1,17 @@
 { stdenv, lib, fetchFromGitHub, which, sqlite, lua5_1, perl, zlib, pkgconfig, ncurses
-, dejavu_fonts, libpng, SDL2, SDL2_image, libGLU_combined, freetype, pngcrush, advancecomp
-, tileMode ? false
+, dejavu_fonts, libpng, SDL2, SDL2_image, SDL2_mixer, libGLU_combined, freetype, pngcrush, advancecomp
+, tileMode ? false, enableSound ? tileMode
 }:
 
 stdenv.mkDerivation rec {
   name = "crawl-${version}${lib.optionalString tileMode "-tiles"}";
-  version = "0.22.0";
+  version = "0.22.1";
 
   src = fetchFromGitHub {
-    owner = "crawl-ref";
-    repo = "crawl-ref";
+    owner = "crawl";
+    repo = "crawl";
     rev = version;
-    sha256 = "1bzhqrc944rgpdnnid3c5h2r3dvyw70cs70hazzm0cv5aipdkhbl";
+    sha256 = "19yzl241glv2zazifgz59bw3jlh4hj59xx5w002hnh9rp1w15rnr";
   };
 
   # Patch hard-coded paths in the makefile
@@ -21,7 +21,8 @@ stdenv.mkDerivation rec {
 
   # Still unstable with luajit
   buildInputs = [ lua5_1 zlib sqlite ncurses ]
-                ++ lib.optionals tileMode [ libpng SDL2 SDL2_image freetype libGLU_combined ];
+                ++ lib.optionals tileMode [ libpng SDL2 SDL2_image freetype libGLU_combined ]
+                ++ lib.optional enableSound SDL2_mixer;
 
   preBuild = ''
     cd crawl-ref/source
@@ -35,7 +36,8 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "prefix=$(out)" "FORCE_CC=cc" "FORCE_CXX=c++" "HOSTCXX=c++"
                 "SAVEDIR=~/.crawl" "sqlite=${sqlite.dev}"
-              ] ++ lib.optional tileMode "TILES=y";
+              ] ++ lib.optional tileMode "TILES=y"
+                ++ lib.optional enableSound "SOUND=y";
 
   postInstall = lib.optionalString tileMode "mv $out/bin/crawl $out/bin/crawl-tiles";
 
@@ -45,9 +47,10 @@ stdenv.mkDerivation rec {
     description = "Open-source, single-player, role-playing roguelike game";
     homepage = http://crawl.develz.org/;
     longDescription = ''
-      Open-source, single-player, role-playing roguelike game of exploration and
-      treasure-hunting in dungeons filled with dangerous and unfriendly monsters
-      in a quest to rescue the mystifyingly fabulous Orb of Zot.
+      Dungeon Crawl: Stone Soup, an open-source, single-player, role-playing
+      roguelike game of exploration and treasure-hunting in dungeons filled
+      with dangerous and unfriendly monsters in a quest to rescue the
+      mystifyingly fabulous Orb of Zot.
     '';
     platforms = platforms.linux;
     license = with licenses; [ gpl2Plus bsd2 bsd3 mit licenses.zlib cc0 ];

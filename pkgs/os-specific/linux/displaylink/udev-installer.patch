@@ -1,0 +1,18 @@
+--- a/udev-installer.sh	2018-12-09 12:05:53.772318942 +0100
++++ b/udev-installer.sh	2018-12-09 12:06:19.939947629 +0100
+@@ -21,12 +21,12 @@
+   cat <<'EOF'
+ start_service()
+ {
+-  systemctl start dlm
++  @systemd@/bin/systemctl start --no-block dlm
+ }
+ 
+ stop_service()
+ {
+-  systemctl stop dlm
++  @systemd@/bin/systemctl stop dlm
+ }
+ 
+ EOF
+

@@ -2,14 +2,14 @@
 
 buildPythonPackage rec {
   pname = "rx";
-  version = "1.6.0";
+  version = "1.6.1";
 
   # There are no tests on the pypi source
   src = fetchFromGitHub {
     owner = "ReactiveX";
     repo = "rxpy";
     rev = version;
-    sha256 = "174xi2j36igxmaqcgl5p64p31a7z19v62xb5czybjw72gpyyfyri";
+    sha256 = "14bca67a26clzcf2abz2yb8g9lfxffjs2l236dp966sp0lfbpsn5";
   };
 
   checkInputs = [ nose ];

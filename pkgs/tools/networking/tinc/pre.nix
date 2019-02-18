@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   name = "tinc-${version}";
-  version = "1.1pre16";
+  version = "1.1pre17";
 
   src = fetchgit {
     rev = "refs/tags/release-${version}";
     url = "git://tinc-vpn.org/tinc";
-    sha256 = "03dsm1kxagq8srskzg649xyhbdqbbqxc84pdwrz7yakpa9m6225c";
+    sha256 = "12abmx9qglchgn94a1qwgzldf2kaz77p8705ylpggzyncxv6bw2q";
   };
 
   outputs = [ "out" "man" "info" ];
@@ -39,6 +39,6 @@ stdenv.mkDerivation rec {
     homepage="http://www.tinc-vpn.org/";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ wkennington fpletz lassulus ];
+    maintainers = with maintainers; [ fpletz lassulus ];
   };
 }

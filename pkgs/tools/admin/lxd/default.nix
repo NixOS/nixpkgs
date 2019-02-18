@@ -1,16 +1,19 @@
 { stdenv, pkgconfig, lxc, buildGoPackage, fetchurl
 , makeWrapper, acl, rsync, gnutar, xz, btrfs-progs, gzip, dnsmasq
-, squashfsTools, iproute, iptables, ebtables
+, squashfsTools, iproute, iptables, ebtables, libcap, dqlite
+, sqlite-replication
+, writeShellScriptBin, apparmor-profiles, apparmor-parser
+, bash
 }:
 
 buildGoPackage rec {
-  name = "lxd-3.0.0";
+  name = "lxd-3.10";
 
   goPackagePath = "github.com/lxc/lxd";
 
   src = fetchurl {
     url = "https://github.com/lxc/lxd/releases/download/${name}/${name}.tar.gz";
-    sha256 = "0m5prdf9sk8k5bws1zva4n9ycggmy76wnjr6wb423066pszz24ww";
+    sha256 = "0vd0p3xf54s7f9vcjfiin29py6hxyyxnisvp6am67l5nwhg7rnnc";
   };
 
   preBuild = ''
@@ -22,17 +25,22 @@ buildGoPackage rec {
     popd
   '';
 
-  postInstall = ''
-    # binaries from test/
-    rm $bin/bin/{deps,macaroon-identity}
+  buildFlags = [ "-tags libsqlite3" ];
 
-    wrapProgram $bin/bin/lxd --prefix PATH ":" ${stdenv.lib.makeBinPath [
-      acl rsync gnutar xz btrfs-progs gzip dnsmasq squashfsTools iproute iptables ebtables
+  postInstall = ''
+    # test binaries, code generation
+    rm $bin/bin/{deps,macaroon-identity,generate}
+
+    wrapProgram $bin/bin/lxd --prefix PATH : ${stdenv.lib.makeBinPath [
+      acl rsync gnutar xz btrfs-progs gzip dnsmasq squashfsTools iproute iptables ebtables bash
+      (writeShellScriptBin "apparmor_parser" ''
+        exec '${apparmor-parser}/bin/apparmor_parser' -I '${apparmor-profiles}/etc/apparmor.d' "$@"
+      '')
     ]}
   '';
 
   nativeBuildInputs = [ pkgconfig makeWrapper ];
-  buildInputs = [ lxc acl ];
+  buildInputs = [ lxc acl libcap dqlite sqlite-replication ];
 
   meta = with stdenv.lib; {
     description = "Daemon based on liblxc offering a REST API to manage containers";

@@ -1,26 +1,18 @@
-{ stdenv, fetchurl, ocaml, findlib, dune }:
+{ stdenv, fetchurl, buildDunePackage }:
 
-stdenv.mkDerivation rec {
-	version = "2.1";
-	name = "ocaml${ocaml.version}-csv-${version}";
+buildDunePackage rec {
+  pname = "csv";
+	version = "2.2";
+
 	src = fetchurl {
-		url = "https://github.com/Chris00/ocaml-csv/releases/download/2.1/csv-2.1.tbz";
-		sha256 = "0cgfb6cwhwy7ypc1i3jyfz6sdnykp75aqi6kk0g1a2d81yjwzbcg";
+		url = "https://github.com/Chris00/ocaml-${pname}/releases/download/${version}/csv-${version}.tbz";
+		sha256 = "1llwjdi14vvfy4966crapibq0djii71x47b0yxhjcl5jw4xnsaha";
 	};
-
-	unpackCmd = "tar -xjf $src";
-
-	buildInputs = [ ocaml findlib dune ];
-
-	buildPhase = "dune build -p csv";
-
-	inherit (dune) installPhase;
 
 	meta = {
 		description = "A pure OCaml library to read and write CSV files";
 		license = stdenv.lib.licenses.lgpl21;
 		maintainers = [ stdenv.lib.maintainers.vbgl ];
 		homepage = https://github.com/Chris00/ocaml-csv;
-		inherit (ocaml.meta) platforms;
 	};
 }

@@ -126,13 +126,21 @@ self: super: builtins.intersectAttrs super {
   # the system-fileio tests use canonicalizePath, which fails in the sandbox
   system-fileio = if pkgs.stdenv.isDarwin then dontCheck super.system-fileio else super.system-fileio;
 
-  # Prevents needing to add security_tool as a build tool to all of x509-system's
-  # dependencies.
-  x509-system = if pkgs.stdenv.targetPlatform.isDarwin && !pkgs.stdenv.cc.nativeLibc
+  # Prevents needing to add `security_tool` as a run-time dependency for
+  # everything using x509-system to give access to the `security` executable.
+  x509-system = if pkgs.stdenv.hostPlatform.isDarwin && !pkgs.stdenv.cc.nativeLibc
     then let inherit (pkgs.darwin) security_tool;
       in pkgs.lib.overrideDerivation (addBuildDepend super.x509-system security_tool) (drv: {
+        # darwin.security_tool is broken in Mojave (#45042)
+
+        # We will use the system provided security for now.
+        # Beware this WILL break in sandboxes!
+
+        # TODO(matthewbauer): If someone really needs this to work in sandboxes,
+        # I think we can add a propagatedImpureHost dep here, but I’m hoping to
+        # get a proper fix available soonish.
         postPatch = (drv.postPatch or "") + ''
-          substituteInPlace System/X509/MacOS.hs --replace security ${security_tool}/bin/security
+          substituteInPlace System/X509/MacOS.hs --replace security /usr/bin/security
         '';
       })
     else super.x509-system;
@@ -144,9 +152,6 @@ self: super: builtins.intersectAttrs super {
   gtk = disableHardening (addPkgconfigDepend (addBuildTool super.gtk self.buildHaskellPackages.gtk2hs-buildtools) pkgs.gtk2) ["fortify"];
   gtksourceview2 = addPkgconfigDepend super.gtksourceview2 pkgs.gtk2;
   gtk-traymanager = addPkgconfigDepend super.gtk-traymanager pkgs.gtk3;
-
-  # Add necessary reference to gtk3 package, plus specify needed dbus version, plus turn on strictDeps to fix build
-  taffybar = ((addPkgconfigDepend super.taffybar pkgs.gtk3).overrideDerivation (drv: { strictDeps = true; }));
 
   # Add necessary reference to gtk3 package
   gi-dbusmenugtk3 = addPkgconfigDepend super.gi-dbusmenugtk3 pkgs.gtk3;
@@ -314,6 +319,9 @@ self: super: builtins.intersectAttrs super {
   # https://github.com/bos/pcap/issues/5
   pcap = addExtraLibrary super.pcap pkgs.libpcap;
 
+  # https://github.com/NixOS/nixpkgs/issues/53336
+  greenclip = addExtraLibrary super.greenclip pkgs.xorg.libXdmcp;
+
   # The cabal files for these libraries do not list the required system dependencies.
   miniball = overrideCabal super.miniball (drv: {
     librarySystemDepends = [ pkgs.miniball ];
@@ -466,7 +474,7 @@ self: super: builtins.intersectAttrs super {
   hapistrano = addBuildTool super.hapistrano pkgs.buildPackages.git;
 
   # This propagates this to everything depending on haskell-gi-base
-  haskell-gi-base = addBuildDepend super.haskell-gi-base pkgs.gobjectIntrospection;
+  haskell-gi-base = addBuildDepend super.haskell-gi-base pkgs.gobject-introspection;
 
   # requires valid, writeable $HOME
   hatex-guide = overrideCabal super.hatex-guide (drv: {
@@ -511,4 +519,51 @@ self: super: builtins.intersectAttrs super {
   # Doctests hang only when compiling with nix.
   # https://github.com/cdepillabout/termonad/issues/15
   termonad = dontCheck super.termonad;
+
+  # Expects z3 to be on path so we replace it with a hard
+  sbv = overrideCabal super.sbv (drv: {
+    postPatch = ''
+      sed -i -e 's|"z3"|"${pkgs.z3}/bin/z3"|' Data/SBV/Provers/Z3.hs'';
+  });
+
+  # The test-suite requires a running PostgreSQL server.
+  Frames-beam = dontCheck super.Frames-beam;
+
+  futhark = if pkgs.stdenv.isDarwin then super.futhark else with pkgs;
+    let path = stdenv.lib.makeBinPath [ gcc ];
+    in overrideCabal (addBuildTool super.futhark makeWrapper) (_drv: {
+      postInstall = ''
+        wrapProgram $out/bin/futhark-c \
+          --prefix PATH : "${path}"
+
+        wrapProgram $out/bin/futhark-opencl \
+          --prefix PATH : "${path}" \
+          --set NIX_CC_WRAPPER_x86_64_unknown_linux_gnu_TARGET_HOST 1 \
+          --set NIX_CFLAGS_COMPILE "-I${opencl-headers}/include" \
+          --set NIX_CFLAGS_LINK "-L${ocl-icd}/lib"
+      '';
+    });
+
+  # On Darwin, git-annex mis-detects options to `cp`, so we wrap the binary to
+  # ensure it uses Nixpkgs' coreutils.
+  git-annex = with pkgs;
+    if (!stdenv.isLinux) then
+      let path = stdenv.lib.makeBinPath [ coreutils ];
+      in overrideCabal (addBuildTool super.git-annex makeWrapper) (_drv: {
+        postFixup = ''
+          wrapProgram $out/bin/git-annex \
+            --prefix PATH : "${path}"
+        '';
+      })
+    else super.git-annex;
+
+  # The test suite has undeclared dependencies on git.
+  githash = dontCheck super.githash;
+
+  # Avoid infitite recursion with yaya.
+  yaya-hedgehog = super.yaya-hedgehog.override { yaya = dontCheck self.yaya; };
+
+  # Avoid infitite recursion with tonatona.
+  tonaparser = dontCheck super.tonaparser;
+
 }

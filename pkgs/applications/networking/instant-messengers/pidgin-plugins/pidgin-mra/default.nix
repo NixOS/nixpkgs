@@ -15,12 +15,15 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ pidgin ];
 
-  preConfigure = ''
+  postPatch = ''
     sed -i 's|-I/usr/include/libpurple|$(shell pkg-config --cflags purple)|' Makefile
-    export DESTDIR=$out
-    export LIBDIR=/lib
-    export DATADIR=/share
   '';
+
+  makeFlags = [
+    "DESTDIR=/"
+    "LIBDIR=${placeholder "out"}/lib"
+    "DATADIR=${placeholder "out"}/share"
+  ];
 
   meta = {
     homepage = https://github.com/dreadatour/pidgin-mra;

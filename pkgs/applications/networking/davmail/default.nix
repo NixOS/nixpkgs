@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://davmail.sourceforce.net/;
+    homepage = http://davmail.sourceforge.net/;
     description = "A Java application which presents a Microsoft Exchange server as local CALDAV, IMAP and SMTP servers";
     maintainers = [ maintainers.hinton ];
     platforms = platforms.all;

@@ -24,6 +24,6 @@ buildGoPackage rec {
     license = licenses.asl20;
     homepage = https://github.com/docker/libnetwork;
     maintainers = with maintainers; [vdemeester];
-    platforms = docker.meta.platforms;
+    platforms = platforms.linux;
   };
 }

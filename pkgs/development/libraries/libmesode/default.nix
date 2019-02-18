@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "libmesode-${version}";
-  version = "0.9.1";
+  version = "0.9.2";
 
   src = fetchFromGitHub {
     owner = "boothj5";
     repo = "libmesode";
     rev = version;
-    sha256 = "1zb1x422zkpnxrz9d2b7pmi8ms60lbw49yh78mydqfypsmj2iyfh";
+    sha256 = "06f5nfaypvxrbsinxa1k2vrxrs7kqmg38g4wwwk5d63hpn1pj8ak";
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];

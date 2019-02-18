@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libGLU_combined, SDL, scons, SDL_ttf, SDL_image, zlib, SDL_net
+{ stdenv, fetchurl, libGLU_combined, SDL, sconsPackages, SDL_ttf, SDL_image, zlib, SDL_net
 , speex, libvorbis, libogg, boost, fribidi, bsdiff
 , fetchpatch
 }:
@@ -32,19 +32,19 @@ stdenv.mkDerivation rec {
     sed -i -e "s@env = Environment()@env = Environment( ENV = os.environ )@" SConstruct
   '';
 
-  buildInputs = [ libGLU_combined SDL scons SDL_ttf SDL_image zlib SDL_net speex libvorbis libogg boost fribidi bsdiff ];
+  nativeBuildInputs = [ sconsPackages.scons_3_0_1 ];
+  buildInputs = [ libGLU_combined SDL SDL_ttf SDL_image zlib SDL_net speex libvorbis libogg boost fribidi bsdiff ];
 
-  buildPhase = ''
-    scons
+  postConfigure = ''
+    sconsFlags+=" BINDIR=$out/bin"
+    sconsFlags+=" INSTALLDIR=$out/share/globulation2"
+    sconsFlags+=" DATADIR=$out/share/globulation2/glob2"
   '';
 
-  installPhase = ''
-    scons install \
-      BINDIR=$out/bin \
-      INSTALLDIR=$out/share/globulation2 \
-      DATADIR=$out/share/globulation2/glob2
-  '';
-      
+  NIX_LDFLAGS = [
+    "-lboost_system"
+  ];
+
   meta = with stdenv.lib; {
     description = "RTS without micromanagement";
     maintainers = with maintainers; [ raskin ];
@@ -53,4 +53,3 @@ stdenv.mkDerivation rec {
   };
   passthru.updateInfo.downloadPage = "http://globulation2.org/wiki/Download_and_Install";
 }
-

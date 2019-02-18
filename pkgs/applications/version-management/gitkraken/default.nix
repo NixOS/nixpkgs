@@ -1,8 +1,8 @@
 { stdenv, libXcomposite, libgnome-keyring, makeWrapper, udev, curl, alsaLib
-, libXfixes, atk, gtk2, libXrender, pango, gnome2, cairo, freetype, fontconfig
+, libXfixes, atk, gtk3, libXrender, pango, gnome2, cairo, freetype, fontconfig
 , libX11, libXi, libxcb, libXext, libXcursor, glib, libXScrnSaver, libxkbfile, libXtst
 , nss, nspr, cups, fetchurl, expat, gdk_pixbuf, libXdamage, libXrandr, dbus
-, dpkg, makeDesktopItem
+, dpkg, makeDesktopItem, openssl
 }:
 
 with stdenv.lib;
@@ -12,11 +12,11 @@ let
 in
 stdenv.mkDerivation rec {
   name = "gitkraken-${version}";
-  version = "4.0.2";
+  version = "4.2.1";
 
   src = fetchurl {
-    url = "https://release.gitkraken.com/linux/v${version}.deb";
-    sha256 = "0dnckd75fcgc9wa4ivbnw2djmk4phzzr891snhxpsvb1dhlc7rgx";
+    url = "https://release.axocdn.com/linux/GitKraken-v${version}.deb";
+    sha256 = "07f9h3276bs7m22vwpxrxmlwnq7l5inr2l67nmpiaz1569yabwsg";
   };
 
   libPath = makeLibraryPath [
@@ -49,9 +49,10 @@ stdenv.mkDerivation rec {
     libXcomposite
     libXfixes
     libXrender
-    gtk2
+    gtk3
     gnome2.GConf
     libgnome-keyring
+    openssl
   ];
 
   desktopItem = makeDesktopItem {

@@ -1,24 +1,20 @@
-{ stdenv, menhir, easy-format, ocaml, findlib, fetchFromGitHub, dune, which, biniou, yojson }:
+{ stdenv, menhir, easy-format, fetchFromGitHub, buildDunePackage, which, biniou, yojson }:
 
-stdenv.mkDerivation rec {
+buildDunePackage rec {
+  pname = "atd";
   version = "2.0.0";
-
-  name = "ocaml${ocaml.version}-atd-${version}";
 
   src = fetchFromGitHub {
     owner = "mjambon";
-    repo = "atd";
+    repo = pname;
     rev = version;
     sha256 = "0alzmk97rxg7s6irs9lvf89dy9n3r769my5n4j9p9qyigcdgjaia";
   };
 
   createFindlibDestdir = true;
 
-  buildInputs = [ which dune ocaml findlib menhir ];
+  buildInputs = [ which menhir ];
   propagatedBuildInputs = [ easy-format biniou yojson ];
-
-  buildPhase = "jbuilder build";
-  inherit (dune) installPhase;
 
   meta = with stdenv.lib; {
     homepage = https://github.com/mjambon/atd;

@@ -4,13 +4,13 @@
 
 buildPythonPackage rec {
   pname = "carbon";
-  version = "1.1.3";
+  version = "1.1.5";
 
   disabled = isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1s7327p30w4l9ak4gc7m5ga521233179n2lr3j0ggfbmfhd6blky";
+    sha256 = "a88390553a9ea628fdb74b5b358ed83a657e058bcc811e5819d9db856b4fcf5b";
   };
 
   propagatedBuildInputs = [ twisted whisper txamqp cachetools urllib3 ];

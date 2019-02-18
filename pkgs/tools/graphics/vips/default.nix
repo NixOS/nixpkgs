@@ -1,23 +1,33 @@
-{ stdenv, fetchurl, pkgconfig, glib, libxml2, expat,
+{ stdenv, pkgconfig, glib, libxml2, expat,
   fftw, orc, lcms, imagemagick, openexr, libtiff, libjpeg, libgsf, libexif,
   ApplicationServices,
-  python27, libpng ? null
+  python27, libpng ? null,
+  fetchFromGitHub,
+  autoreconfHook,
+  gtk-doc,
+  gobject-introspection,
 }:
 
 stdenv.mkDerivation rec {
   name = "vips-${version}";
-  version = "8.6.5";
+  version = "8.7.0";
 
-  src = fetchurl {
-    url = "https://github.com/jcupitt/libvips/releases/download/v${version}/${name}.tar.gz";
-    sha256 = "1nymm4vzscb68aifin9q742ff64b4k4ddppq1060w8hf6h7ay0l7";
+  src = fetchFromGitHub {
+    owner = "libvips";
+    repo = "libvips";
+    rev = "v${version}";
+    sha256 = "1dwcpmpqbgb9lkajnqv50mrsn97mxbxpq6b5aya7fgfkgdnrs9sw";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig autoreconfHook gtk-doc gobject-introspection ];
   buildInputs = [ glib libxml2 fftw orc lcms
     imagemagick openexr libtiff libjpeg
     libgsf libexif python27 libpng expat ]
     ++ stdenv.lib.optional stdenv.isDarwin ApplicationServices;
+
+  autoreconfPhase = ''
+    ./autogen.sh
+  '';
 
   meta = with stdenv.lib; {
     homepage = http://www.vips.ecs.soton.ac.uk;

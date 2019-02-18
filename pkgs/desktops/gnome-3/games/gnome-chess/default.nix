@@ -1,16 +1,16 @@
-{ stdenv, fetchurl, meson, ninja, vala, pkgconfig, wrapGAppsHook, gobjectIntrospection
+{ stdenv, fetchurl, meson, ninja, vala, pkgconfig, wrapGAppsHook, gobject-introspection
 , gettext, itstool, libxml2, python3, gnome3, glib, gtk3, librsvg }:
 
 stdenv.mkDerivation rec {
   name = "gnome-chess-${version}";
-  version = "3.28.1";
+  version = "3.30.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-chess/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "1q8gc0mq8k2b7pjy363g0yjd80czqknw6ssqzbvgqx5b8nkfvmv1";
+    url = "mirror://gnome/sources/gnome-chess/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    sha256 = "1gzdm6z54kxx06lh616g33klrp4dby2a68wxvjpsavdll28kgwgl";
   };
 
-  nativeBuildInputs = [ meson ninja vala pkgconfig gettext itstool libxml2 python3 wrapGAppsHook gobjectIntrospection ];
+  nativeBuildInputs = [ meson ninja vala pkgconfig gettext itstool libxml2 python3 wrapGAppsHook gobject-introspection ];
   buildInputs = [ glib gtk3 librsvg gnome3.defaultIconTheme ];
 
   postPatch = ''

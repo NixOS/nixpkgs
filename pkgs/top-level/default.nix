@@ -22,15 +22,17 @@
   # `*Platform`s.
   localSystem
 
-, # The system packages will ultimately be run on. Null if the two should be the
-  # same.
-  crossSystem ? null
+, # The system packages will ultimately be run on.
+  crossSystem ? localSystem
 
 , # Allow a configuration attribute set to be passed in as an argument.
   config ? {}
 
 , # List of overlays layers used to extend Nixpkgs.
   overlays ? []
+
+, # List of overlays to apply to target packages only.
+  crossOverlays ? []
 
 , # A function booting the final package set for a specific standard
   # environment. See below for the arguments given to that function, the type of
@@ -61,7 +63,8 @@ in let
     builtins.intersectAttrs { platform = null; } config
     // args.localSystem);
 
-  crossSystem = lib.mapNullable lib.systems.elaborate crossSystem0;
+  crossSystem = if crossSystem0 == null then localSystem
+                else lib.systems.elaborate crossSystem0;
 
   # A few packages make a new package set to draw their dependencies from.
   # (Currently to get a cross tool chain, or forced-i686 package.) Rather than
@@ -70,7 +73,7 @@ in let
   # whatever arguments it doesn't explicitly provide. This way,
   # `all-packages.nix` doesn't know more than it needs too.
   #
-  # It's OK that `args` doesn't include default arguemtns from this file:
+  # It's OK that `args` doesn't include default arguments from this file:
   # they'll be deterministically inferred. In fact we must *not* include them,
   # because it's important that if some parameter which affects the default is
   # substituted with a different argument, the default is re-inferred.
@@ -91,7 +94,7 @@ in let
   boot = import ../stdenv/booter.nix { inherit lib allPackages; };
 
   stages = stdenvStages {
-    inherit lib localSystem crossSystem config overlays;
+    inherit lib localSystem crossSystem config overlays crossOverlays;
   };
 
   pkgs = boot stages;

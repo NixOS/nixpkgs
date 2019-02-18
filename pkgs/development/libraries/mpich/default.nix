@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation  rec {
   name = "mpich-${version}";
-  version = "3.2.1";
+  version = "3.3";
 
   src = fetchurl {
     url = "https://www.mpich.org/static/downloads/${version}/mpich-${version}.tar.gz";
-    sha256 = "1w9h4g7d46d9l5jbcyfxpaqzpjrc5hyvr9d0ns7278psxpr3pdax";
+    sha256 = "02zs118q9n4xz9qnfc24i2r84vnzgnwnyyqanfv03lf3wqpy17ij";
   };
 
   configureFlags = [
@@ -23,17 +23,18 @@ stdenv.mkDerivation  rec {
   doCheck = true;
 
   preFixup = ''
+    # Ensure the default compilers are the ones mpich was built with
+    sed -i 's:CC="gcc":CC=${stdenv.cc}/bin/gcc:' $out/bin/mpicc
+    sed -i 's:CXX="g++":CXX=${stdenv.cc}/bin/g++:' $out/bin/mpicxx
+    sed -i 's:FC="gfortran":FC=${gfortran}/bin/gfortran:' $out/bin/mpifort
+  ''
+  + stdenv.lib.optionalString (!stdenv.isDarwin) ''
     # /tmp/nix-build... ends up in the RPATH, fix it manually
     for entry in $out/bin/mpichversion $out/bin/mpivars; do
       echo "fix rpath: $entry"
       patchelf --set-rpath "$out/lib" $entry
     done
-
-    # Ensure the default compilers are the ones mpich was built with
-    sed -i 's:CC="gcc":CC=${stdenv.cc}/bin/gcc:' $out/bin/mpicc
-    sed -i 's:CXX="g++":CXX=${stdenv.cc}/bin/g++:' $out/bin/mpicxx
-    sed -i 's:FC="gfortran":FC=${gfortran}/bin/gfortran:' $out/bin/mpifort
-  '';
+    '';
 
   meta = with stdenv.lib; {
     description = "Implementation of the Message Passing Interface (MPI) standard";
@@ -49,6 +50,6 @@ stdenv.mkDerivation  rec {
       fullName = "MPICH license (permissive)";
     };
     maintainers = [ maintainers.markuskowa ];
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

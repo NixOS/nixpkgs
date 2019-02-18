@@ -1,9 +1,9 @@
 # pcre functionality is tested in nixos/tests/php-pcre.nix
-{ lib, stdenv, fetchurl, flex, bison
+{ lib, stdenv, fetchurl, flex, bison, autoconf
 , mysql, libxml2, readline, zlib, curl, postgresql, gettext
-, openssl, pcre, pkgconfig, sqlite, config, libjpeg, libpng, freetype
-, libxslt, libmcrypt, bzip2, icu, openldap, cyrus_sasl, libmhash, freetds
-, uwimap, pam, gmp, apacheHttpd, libiconv, systemd, libsodium, html-tidy
+, openssl, pcre, pcre2, pkgconfig, sqlite, config, libjpeg, libpng, freetype
+, libxslt, libmcrypt, bzip2, icu, openldap, cyrus_sasl, libmhash
+, uwimap, pam, gmp, apacheHttpd, libiconv, systemd, libsodium, html-tidy, libargon2, libzip
 }:
 
 with lib;
@@ -12,10 +12,11 @@ let
   generic =
   { version
   , sha256
+  , extraPatches ? []
+  , withSystemd ? config.php.systemd or stdenv.isLinux
   , imapSupport ? config.php.imap or (!stdenv.isDarwin)
   , ldapSupport ? config.php.ldap or true
   , mhashSupport ? config.php.mhash or true
-  , mysqlSupport ? (config.php.mysql or true)
   , mysqlndSupport ? config.php.mysqlnd or true
   , mysqliSupport ? config.php.mysqli or true
   , pdo_mysqlSupport ? config.php.pdo_mysql or true
@@ -25,35 +26,37 @@ let
   , bcmathSupport ? config.php.bcmath or true
   , socketsSupport ? config.php.sockets or true
   , curlSupport ? config.php.curl or true
-  , curlWrappersSupport ? config.php.curlWrappers or true
   , gettextSupport ? config.php.gettext or true
   , pcntlSupport ? config.php.pcntl or true
   , postgresqlSupport ? config.php.postgresql or true
   , pdo_pgsqlSupport ? config.php.pdo_pgsql or true
   , readlineSupport ? config.php.readline or true
   , sqliteSupport ? config.php.sqlite or true
-  , soapSupport ? config.php.soap or true
+  , soapSupport ? (config.php.soap or true) && (libxml2Support)
   , zlibSupport ? config.php.zlib or true
   , opensslSupport ? config.php.openssl or true
   , mbstringSupport ? config.php.mbstring or true
   , gdSupport ? config.php.gd or true
-  # Because of an upstream bug: https://bugs.php.net/bug.php?id=76826
-  # We need to disable the intl support on darwin. Whenever the upstream bug is
-  # fixed we should revert this to just just "config.php.intl or true".
-  , intlSupport ? (config.php.intl or true) && (!stdenv.isDarwin)
+  , intlSupport ? config.php.intl or true
   , exifSupport ? config.php.exif or true
   , xslSupport ? config.php.xsl or false
-  , mcryptSupport ? config.php.mcrypt or true
+  , mcryptSupport ? (config.php.mcrypt or true) && (versionOlder version "7.2")
   , bz2Support ? config.php.bz2 or false
   , zipSupport ? config.php.zip or true
   , ftpSupport ? config.php.ftp or true
   , fpmSupport ? config.php.fpm or true
   , gmpSupport ? config.php.gmp or true
-  , mssqlSupport ? config.php.mssql or (!stdenv.isDarwin)
   , ztsSupport ? config.php.zts or false
   , calendarSupport ? config.php.calendar or true
   , sodiumSupport ? (config.php.sodium or true) && (versionAtLeast version "7.2")
   , tidySupport ? (config.php.tidy or false)
+  , argon2Support ? (config.php.argon2 or true) && (versionAtLeast version "7.2")
+  , libzipSupport ? (config.php.libzip or true) && (versionAtLeast version "7.3")
+  , phpdbgSupport ? config.php.phpdbg or true
+  , cgiSupport ? config.php.cgi or true
+  , cliSupport ? config.php.cli or true
+  , pharSupport ? config.php.phar or true
+  , xmlrpcSupport ? (config.php.xmlrpc or false) && (libxml2Support)
   }:
 
     let
@@ -67,9 +70,11 @@ let
 
       enableParallelBuilding = true;
 
-      nativeBuildInputs = [ pkgconfig ];
-      buildInputs = [ flex bison pcre ]
-        ++ optional stdenv.isLinux systemd
+      nativeBuildInputs = [ pkgconfig autoconf ];
+      buildInputs = [ flex bison ]
+        ++ optional (versionOlder version "7.3") pcre
+        ++ optional (versionAtLeast version "7.3") pcre2
+        ++ optional withSystemd systemd
         ++ optionals imapSupport [ uwimap openssl pam ]
         ++ optionals curlSupport [ curl openssl ]
         ++ optionals ldapSupport [ openldap openssl ]
@@ -85,7 +90,6 @@ let
         ++ optional postgresqlSupport postgresql
         ++ optional pdo_pgsqlSupport postgresql
         ++ optional pdo_mysqlSupport mysqlBuildInputs
-        ++ optional mysqlSupport mysqlBuildInputs
         ++ optional mysqliSupport mysqlBuildInputs
         ++ optional gmpSupport gmp
         ++ optional gettextSupport gettext
@@ -93,19 +97,20 @@ let
         ++ optional xslSupport libxslt
         ++ optional mcryptSupport libmcrypt'
         ++ optional bz2Support bzip2
-        ++ optional (mssqlSupport && !stdenv.isDarwin) freetds
         ++ optional sodiumSupport libsodium
-        ++ optional tidySupport html-tidy;
+        ++ optional tidySupport html-tidy
+        ++ optional argon2Support libargon2
+        ++ optional libzipSupport libzip;
 
       CXXFLAGS = optional stdenv.cc.isClang "-std=c++11";
 
-
       configureFlags = [
         "--with-config-file-scan-dir=/etc/php.d"
-        "--with-pcre-regex=${pcre.dev} PCRE_LIBDIR=${pcre}"
       ]
+      ++ optional (versionOlder version "7.3") "--with-pcre-regex=${pcre.dev} PCRE_LIBDIR=${pcre}"
+      ++ optional (versionAtLeast version "7.3") "--with-pcre-regex=${pcre2.dev} PCRE_LIBDIR=${pcre2}"
       ++ optional stdenv.isDarwin "--with-iconv=${libiconv}"
-      ++ optional stdenv.isLinux  "--with-fpm-systemd"
+      ++ optional withSystemd "--with-fpm-systemd"
       ++ optionals imapSupport [
         "--with-imap=${uwimap}"
         "--with-imap-ssl"
@@ -121,19 +126,27 @@ let
       ++ optional embedSupport "--enable-embed"
       ++ optional mhashSupport "--with-mhash"
       ++ optional curlSupport "--with-curl=${curl.dev}"
-      ++ optional curlWrappersSupport "--with-curlwrappers"
       ++ optional zlibSupport "--with-zlib=${zlib.dev}"
       ++ optional libxml2Support "--with-libxml-dir=${libxml2.dev}"
+      ++ optional (!libxml2Support) [
+        "--disable-dom"
+        "--disable-libxml"
+        "--disable-simplexml"
+        "--disable-xml"
+        "--disable-xmlreader"
+        "--disable-xmlwriter"
+        "--without-pear"
+      ]
       ++ optional pcntlSupport "--enable-pcntl"
       ++ optional readlineSupport "--with-readline=${readline.dev}"
       ++ optional sqliteSupport "--with-pdo-sqlite=${sqlite.dev}"
       ++ optional postgresqlSupport "--with-pgsql=${postgresql}"
       ++ optional pdo_pgsqlSupport "--with-pdo-pgsql=${postgresql}"
       ++ optional pdo_mysqlSupport "--with-pdo-mysql=${if mysqlndSupport then "mysqlnd" else mysql.connector-c}"
-      ++ optional mysqlSupport "--with-mysql${if mysqlndSupport then "=mysqlnd" else ""}"
       ++ optionals mysqliSupport [
         "--with-mysqli=${if mysqlndSupport then "mysqlnd" else "${mysql.connector-c}/bin/mysql_config"}"
       ]
+      ++ optional ( pdo_mysqlSupport || mysqliSupport ) "--with-mysql-sock=/run/mysqld/mysqld.sock"
       ++ optional bcmathSupport "--enable-bcmath"
       # FIXME: Our own gd package doesn't work, see https://bugs.php.net/bug.php?id=60108.
       ++ optionals gdSupport [
@@ -156,12 +169,18 @@ let
       ++ optional zipSupport "--enable-zip"
       ++ optional ftpSupport "--enable-ftp"
       ++ optional fpmSupport "--enable-fpm"
-      ++ optional (mssqlSupport && !stdenv.isDarwin) "--with-mssql=${freetds}"
       ++ optional ztsSupport "--enable-maintainer-zts"
       ++ optional calendarSupport "--enable-calendar"
       ++ optional sodiumSupport "--with-sodium=${libsodium.dev}"
-      ++ optional tidySupport "--with-tidy=${html-tidy}";
-
+      ++ optional tidySupport "--with-tidy=${html-tidy}"
+      ++ optional argon2Support "--with-password-argon2=${libargon2}"
+      ++ optional libzipSupport "--with-libzip=${libzip.dev}"
+      ++ optional phpdbgSupport "--enable-phpdbg"
+      ++ optional (!phpdbgSupport) "--disable-phpdbg"
+      ++ optional (!cgiSupport) "--disable-cgi"
+      ++ optional (!cliSupport) "--disable-cli"
+      ++ optional (!pharSupport) "--disable-phar"
+      ++ optional xmlrpcSupport "--with-xmlrpc";
 
       hardeningDisable = [ "bindnow" ];
 
@@ -181,9 +200,12 @@ let
 
         configureFlags+=(--with-config-file-path=$out/etc \
           --includedir=$dev/include)
+
+        ./buildconf --force
       '';
 
       postInstall = ''
+        test -d $out/etc || mkdir $out/etc
         cp php.ini-production $out/etc/php.ini
       '';
 
@@ -209,7 +231,7 @@ let
         outputsToInstall = [ "out" "dev" ];
       };
 
-      patches = [ ./fix-paths-php7.patch ];
+      patches = [ ./fix-paths-php7.patch ] ++ extraPatches;
 
       postPatch = optional stdenv.isDarwin ''
         substituteInPlace configure --replace "-lstdc++" "-lc++"
@@ -223,12 +245,26 @@ let
 
 in {
   php71 = generic {
-    version = "7.1.22";
-    sha256 = "0qz74qdlk19cw478f42ckyw5r074y0fg73r2bzlhm0dar0cizsf8";
+    version = "7.1.26";
+    sha256 = "1riaaizyl0jv9p6b8sm8xxj8iqz4p4dddwdag03n1r67dfl1qdav";
+
+    # https://bugs.php.net/bug.php?id=76826
+    extraPatches = optional stdenv.isDarwin ./php71-darwin-isfinite.patch;
   };
 
   php72 = generic {
-    version = "7.2.10";
-    sha256 = "17fsvdi6ihjghjsz9kk2li2rwrknm2ccb6ys0xmn789116d15dh1";
+    version = "7.2.15";
+    sha256 = "0m05dmad138qfxcb2z4czf9pfv1746g9yzlch48kjikajhb7cgn9";
+
+    # https://bugs.php.net/bug.php?id=76826
+    extraPatches = optional stdenv.isDarwin ./php72-darwin-isfinite.patch;
+  };
+
+  php73 = generic {
+    version = "7.3.2";
+    sha256 = "1p8amf91i6lrrphd6ypfh3kic64bpqf04dxp7dj1xxnjrgd50vwl";
+
+    # https://bugs.php.net/bug.php?id=76826
+    extraPatches = optional stdenv.isDarwin ./php73-darwin-isfinite.patch;
   };
 }

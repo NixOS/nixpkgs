@@ -1,19 +1,25 @@
-{ stdenv, lib, buildPythonPackage, fetchPypi, isPyPy, libgit2, six, cffi }:
+{ stdenv, lib, buildPythonPackage, fetchPypi, fetchpatch, isPyPy, libgit2_0_27, six, cffi }:
 
 buildPythonPackage rec {
   pname = "pygit2";
-  version = "0.26.4";
+  version = "0.27.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a8a0ecce4aadac2675afa5bcda0f698bfe39ec61ac1e15b9264704d1b41bb390";
+    sha256 = "0d9bgxd6ch5jxz0j5cmx7c4kw933g8pgm2zxf3id1a6w9g2r7hpw";
   };
 
   preConfigure = lib.optionalString stdenv.isDarwin ''
-    export DYLD_LIBRARY_PATH="${libgit2}/lib"
+    export DYLD_LIBRARY_PATH="${libgit2_0_27}/lib"
   '';
 
-  propagatedBuildInputs = [ libgit2 six ] ++ lib.optional (!isPyPy) cffi;
+  patches = [ (fetchpatch {
+    name = "dont-require-old-pycparser"; # https://github.com/libgit2/pygit2/issues/819
+    url = https://github.com/libgit2/pygit2/commit/1eaba181577de206d3d43ec7886d0353fc0c9f2a.patch;
+    sha256 = "18x1fpmywhjjr4lvakwmy34zpxfqi8pqqj48g1wcib39lh3s7l4f";
+  }) ];
+
+  propagatedBuildInputs = [ libgit2_0_27 six ] ++ lib.optional (!isPyPy) cffi;
 
   preCheck = ''
     # disable tests that require networking

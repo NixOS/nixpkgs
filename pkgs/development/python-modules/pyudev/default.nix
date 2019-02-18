@@ -16,7 +16,7 @@ buildPythonPackage rec {
       --replace "find_library(name)" "'${systemd.lib}/lib/libudev.so'"
     '';
 
-  buildInputs = [ pytest mock hypothesis docutils ];
+  checkInputs = [ pytest mock hypothesis docutils ];
   propagatedBuildInputs = [ systemd six ];
 
   checkPhase = ''

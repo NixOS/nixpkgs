@@ -127,8 +127,8 @@ let
       copy_bin_and_libs ${pkgs.kmod}/bin/kmod
       ln -sf kmod $out/bin/modprobe
 
-      # Copy resize2fs if needed.
-      ${optionalString (any (fs: fs.autoResize) fileSystems) ''
+      # Copy resize2fs if any ext* filesystems are to be resized
+      ${optionalString (any (fs: fs.autoResize && (lib.hasPrefix "ext" fs.fsType)) fileSystems) ''
         # We need mke2fs in the initrd.
         copy_bin_and_libs ${pkgs.e2fsprogs}/sbin/resize2fs
       ''}
@@ -147,7 +147,7 @@ let
       ${config.boot.initrd.extraUtilsCommands}
 
       # Copy ld manually since it isn't detected correctly
-      cp -pv ${pkgs.glibc.out}/lib/ld*.so.? $out/lib
+      cp -pv ${pkgs.stdenv.cc.libc.out}/lib/ld*.so.? $out/lib
 
       # Copy all of the needed libraries
       find $out/bin $out/lib -type f | while read BIN; do
@@ -251,9 +251,9 @@ let
     postInstall = ''
       echo checking syntax
       # check both with bash
-      ${pkgs.bash}/bin/sh -n $target
+      ${pkgs.buildPackages.bash}/bin/sh -n $target
       # and with ash shell, just in case
-      ${extraUtils}/bin/ash -n $target
+      ${pkgs.buildPackages.busybox}/bin/ash -n $target
     '';
 
     inherit udevRules extraUtils modulesClosure;
@@ -525,16 +525,18 @@ in
       };
 
     fileSystems = mkOption {
-      options.neededForBoot = mkOption {
-        default = false;
-        type = types.bool;
-        description = ''
-          If set, this file system will be mounted in the initial
-          ramdisk.  By default, this applies to the root file system
-          and to the file system containing
-          <filename>/nix/store</filename>.
-        '';
-      };
+      type = with lib.types; loaOf (submodule {
+        options.neededForBoot = mkOption {
+          default = false;
+          type = types.bool;
+          description = ''
+            If set, this file system will be mounted in the initial
+            ramdisk.  By default, this applies to the root file system
+            and to the file system containing
+            <filename>/nix/store</filename>.
+          '';
+        };
+      });
     };
 
   };

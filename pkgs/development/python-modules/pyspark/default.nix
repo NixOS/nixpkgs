@@ -2,16 +2,19 @@
 
 buildPythonPackage rec {
   pname = "pyspark";
-  version = "2.3.1";
+  version = "2.4.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "52d77a7ef43088b0235742cfcafc83435d0d98c5fdded1d8c600f1887e9e0213";
+    sha256 = "1p7z5f1a20l7xkjkh88q9cvjw2x8jbrlydkycn5lh4qvx72vgmy9";
   };
 
   # pypandoc is broken with pandoc2, so we just lose docs.
   postPatch = ''
     sed -i "s/'pypandoc'//" setup.py
+
+    # Current release works fine with py4j 0.10.8.1
+    substituteInPlace setup.py --replace py4j==0.10.7 'py4j>=0.10.7,<0.11'
   '';
 
   propagatedBuildInputs = [ py4j ];

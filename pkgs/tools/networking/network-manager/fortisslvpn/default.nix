@@ -28,6 +28,7 @@ in stdenv.mkDerivation rec {
     "--without-libnm-glib"
     "--with-gnome=${if withGnome then "yes" else "no"}"
     "--localstatedir=/tmp"
+    "--enable-absolute-paths"
   ];
 
   passthru = {

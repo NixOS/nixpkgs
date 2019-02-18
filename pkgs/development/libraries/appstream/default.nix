@@ -1,24 +1,24 @@
 { stdenv, fetchpatch, fetchFromGitHub, meson, ninja, pkgconfig, gettext
 , xmlto, docbook_xsl, docbook_xml_dtd_45, libxslt
-, libstemmer, glib, xapian, libxml2, libyaml, gobjectIntrospection
+, libstemmer, glib, xapian, libxml2, libyaml, gobject-introspection
 , pcre, itstool, gperf, vala
 }:
 
 stdenv.mkDerivation rec {
   name = "appstream-${version}";
-  version = "0.12.2";
+  version = "0.12.5";
 
   src = fetchFromGitHub {
     owner  = "ximion";
     repo   = "appstream";
     rev    = "APPSTREAM_${stdenv.lib.replaceStrings ["."] ["_"] version}";
-    sha256 = "1g15c4bhyl730rgaiqia3jppraixh05c3yx098lyilidbddxp5xb";
+    sha256 = "1h68raflp04r79c58vyy3mmcixs5bqffm2d1js7mxfypmi4mvv6r";
   };
 
   nativeBuildInputs = [
     meson ninja pkgconfig gettext
     libxslt xmlto docbook_xsl docbook_xml_dtd_45
-    gobjectIntrospection itstool vala
+    gobject-introspection itstool vala
   ];
 
   buildInputs = [ libstemmer pcre glib xapian libxml2 libyaml gperf ];

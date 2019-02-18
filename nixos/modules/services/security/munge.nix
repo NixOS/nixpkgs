@@ -50,11 +50,9 @@ in
       path = [ pkgs.munge pkgs.coreutils ];
 
       preStart = ''
-        chmod 0700 ${cfg.password}
+        chmod 0400 ${cfg.password}
         mkdir -p /var/lib/munge -m 0711
         chown -R munge:munge /var/lib/munge
-        mkdir -p /var/log/munge -m 0700
-        chown -R munge:munge /var/log/munge
         mkdir -p /run/munge -m 0755
         chown -R munge:munge /run/munge
       '';

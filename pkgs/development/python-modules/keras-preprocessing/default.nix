@@ -1,23 +1,31 @@
-{ lib, buildPythonPackage, fetchPypi, numpy, scipy, six }:
+{ lib, buildPythonPackage, fetchPypi, numpy, six, scipy, pillow, pytest, Keras }:
 
 buildPythonPackage rec {
   pname = "Keras_Preprocessing";
-  version = "1.0.3";
+  version = "1.0.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "02ba0a3b31ed89c4b0c21d55ba7d87529097d56f394e3850b6d3c9e6c63ce7ae";
+    sha256 = "6e669aa713727f0bc08f756616f64e0dfa75d822226cfc0dcf33297ab05cef7d";
   };
 
-  # Cyclic dependency: keras-preprocessing requires keras, which requires keras-preprocessing
-  postPatch = ''
-    sed -i "s/keras>=[^']*//" setup.py
+  propagatedBuildInputs = [
+    # required
+    numpy six
+    # optional
+    scipy pillow
+  ];
+
+  checkInputs = [
+    pytest Keras
+  ];
+
+  checkPhase = ''
+    py.test tests/
   '';
 
-  # No tests in PyPI tarball
+  # Cyclic dependency: keras-preprocessing's tests require Keras, which requires keras-preprocessing
   doCheck = false;
-
-  propagatedBuildInputs = [ numpy scipy six ];
 
   meta = with lib; {
     description = "Easy data preprocessing and data augmentation for deep learning models";

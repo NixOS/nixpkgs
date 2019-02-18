@@ -252,7 +252,7 @@ in rec {
     ''; # */
 
   # Generate the NixOS manual.
-  manual = runCommand "nixos-manual"
+  manualHTML = runCommand "nixos-manual-html"
     { inherit sources;
       nativeBuildInputs = [ buildPackages.libxml2.bin buildPackages.libxslt.bin ];
       meta.description = "The NixOS manual in HTML format";
@@ -265,6 +265,7 @@ in rec {
       xsltproc \
         ${manualXsltprocOptions} \
         --stringparam target.database.document "${olinkDB}/olinkdb.xml" \
+        --stringparam id.warnings "1" \
         --nonet --output $dst/ \
         ${docbook_xsl_ns}/xml/xsl/docbook/xhtml/chunktoc.xsl \
         ${manual-combined}/manual-combined.xml
@@ -281,6 +282,11 @@ in rec {
       echo "doc manual $dst" >> $out/nix-support/hydra-build-products
     ''; # */
 
+  # Alias for backward compatibility. TODO(@oxij): remove eventually.
+  manual = manualHTML;
+
+  # Index page of the NixOS manual.
+  manualHTMLIndex = "${manualHTML}/share/doc/nixos/index.html";
 
   manualEpub = runCommand "nixos-manual-epub"
     { inherit sources;

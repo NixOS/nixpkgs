@@ -8,8 +8,8 @@
   ameba = {
     owner = "veelenga";
     repo = "ameba";
-    rev = "v0.7.0";
-    sha256 = "01h0a1ba5l254r04mgkqhjdfn21cs0q7fmvk4gj35cj5lpr2bp17";
+    rev = "v0.8.0";
+    sha256 = "0i9vc5xy05kzxgjid2rnvc7ksvxm9gba25qqi6939q2m1s07qjka";
   };
   baked_file_system = {
     owner = "schovi";

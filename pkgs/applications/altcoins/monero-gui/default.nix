@@ -5,20 +5,21 @@
 , qtlocation, qtquickcontrols2, qtwebchannel
 , qtwebengine, qtx11extras, qtxmlpatterns
 , monero, unbound, readline, boost, libunwind
-, pcsclite, zeromq, cppzmq, pkgconfig
+, libsodium, pcsclite, zeromq, cppzmq, pkgconfig
+, hidapi
 }:
 
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "monero-gui-${version}";
-  version = "0.12.3.0";
+  version = "0.13.0.4";
 
   src = fetchFromGitHub {
     owner  = "monero-project";
     repo   = "monero-gui";
     rev    = "v${version}";
-    sha256 = "1ry0455cgirkc6n46qnlv5p49axjllil78xmx6469nbp3a2r3z7i";
+    sha256 = "142yj5s15bhm300dislq3x5inw1f37shnrd5vyj78jjcvry3wymw";
   };
 
   nativeBuildInputs = [ qmake pkgconfig ];
@@ -28,8 +29,8 @@ stdenv.mkDerivation rec {
     qtdeclarative qtlocation qtquickcontrols2
     qtwebchannel qtwebengine qtx11extras
     qtxmlpatterns monero unbound readline
-    boost libunwind pcsclite zeromq cppzmq
-    makeWrapper
+    boost libunwind libsodium pcsclite zeromq
+    cppzmq makeWrapper hidapi
   ];
 
   patches = [
@@ -59,7 +60,7 @@ stdenv.mkDerivation rec {
     name = "monero-wallet-gui";
     exec = "monero-wallet-gui";
     icon = "monero";
-    desktopName = "Monero Wallet";
+    desktopName = "Monero";
     genericName = "Wallet";
     categories  = "Application;Network;Utility;";
   };
@@ -86,7 +87,7 @@ stdenv.mkDerivation rec {
     description = "Private, secure, untraceable currency";
     homepage    = https://getmonero.org/;
     license     = licenses.bsd3;
-    platforms   = platforms.all;
+    platforms   = [ "x86_64-linux" ];
     maintainers = with maintainers; [ rnhmjoj ];
   };
 }

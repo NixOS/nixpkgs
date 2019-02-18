@@ -1,17 +1,32 @@
-{ stdenv, lib, fetchPypi, python, buildPythonPackage, isPyPy, gfortran, pytest, blas }:
+{ stdenv, lib, fetchPypi, python, buildPythonPackage, isPyPy, gfortran, pytest, blas, writeTextFile }:
 
-buildPythonPackage rec {
+let
+  blasImplementation = lib.nameFromURL blas.name "-";
+  cfg = writeTextFile {
+    name = "site.cfg";
+    text = (lib.generators.toINI {} {
+      "${blasImplementation}" = {
+        include_dirs = "${blas}/include";
+        library_dirs = "${blas}/lib";
+      } // lib.optionalAttrs (blasImplementation == "mkl") {
+        mkl_libs = "mkl_rt";
+        lapack_libs = "";
+      };
+    });
+  };
+in buildPythonPackage rec {
   pname = "numpy";
-  version = "1.15.1";
+  version = "1.16.0";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "7b9e37f194f8bcdca8e9e6af92e2cbad79e360542effc2dd6b98d63955d8d8a3";
+    sha256 = "cb189bd98b2e7ac02df389b6212846ab20661f4bafe16b5a70a6f1728c1cc7cb";
   };
 
   disabled = isPyPy;
-  buildInputs = [ gfortran pytest blas ];
+  nativeBuildInputs = [ gfortran pytest ];
+  buildInputs = [ blas ];
 
   patches = lib.optionals (python.hasDistutilsCxxPatch or false) [
     # We patch cpython/distutils to fix https://bugs.python.org/issue1222585
@@ -20,30 +35,13 @@ buildPythonPackage rec {
     ./numpy-distutils-C++.patch
   ];
 
-  postPatch = lib.optionalString stdenv.hostPlatform.isMusl ''
-    # Use fenv.h
-    sed -i \
-      numpy/core/src/npymath/ieee754.c.src \
-      numpy/core/include/numpy/ufuncobject.h \
-      -e 's/__GLIBC__/__linux__/'
-    # Don't use various complex trig functions
-    substituteInPlace numpy/core/src/private/npy_config.h \
-      --replace '#if defined(__GLIBC__)' "#if 1" \
-      --replace '#if !__GLIBC_PREREQ(2, 18)' "#if 1"
-  '';
-
   preConfigure = ''
     sed -i 's/-faltivec//' numpy/distutils/system_info.py
     export NPY_NUM_BUILD_JOBS=$NIX_BUILD_CORES
   '';
 
   preBuild = ''
-    echo "Creating site.cfg file..."
-    cat << EOF > site.cfg
-    [openblas]
-    include_dirs = ${blas}/include
-    library_dirs = ${blas}/lib
-    EOF
+    ln -s ${cfg} site.cfg
   '';
 
   enableParallelBuilding = true;
@@ -58,6 +56,7 @@ buildPythonPackage rec {
 
   passthru = {
     blas = blas;
+    inherit blasImplementation cfg;
   };
 
   # Disable two tests

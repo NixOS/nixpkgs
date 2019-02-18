@@ -32,6 +32,7 @@ stdenv.mkDerivation rec {
     homepage = http://fox-toolkit.org;
     license = licenses.lgpl3;
     maintainers = [];
+    broken = stdenv.isDarwin;
     platforms = platforms.all;
   };
 }

@@ -6,6 +6,7 @@
 , intltool
 , libsoup
 , gnome3
+, totem-pl-parser
 , tdb
 , json-glib
 , itstool
@@ -20,7 +21,7 @@ in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
     sha256 = "0hzcns8gf5yb0rm4ss8jd8qzarcaplp5cylk6plwilsqfvxj4xn2";
   };
 
@@ -48,7 +49,7 @@ in stdenv.mkDerivation rec {
 
     gtk3
     gnome3.libpeas
-    gnome3.totem-pl-parser
+    totem-pl-parser
     gnome3.defaultIconTheme
 
     gst_all_1.gstreamer

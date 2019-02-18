@@ -1,4 +1,4 @@
-{ stdenv, fetchurl
+{ config, stdenv, fetchurl
 , libX11, wxGTK
 , libiconv, fontconfig, freetype
 , libGLU_combined
@@ -8,8 +8,8 @@
 , spellcheckSupport ? true, hunspell ? null
 , automationSupport ? true, lua ? null
 , openalSupport ? false, openal ? null
-, alsaSupport ? true, alsaLib ? null
-, pulseaudioSupport ? true, libpulseaudio ? null
+, alsaSupport ? stdenv.isLinux, alsaLib ? null
+, pulseaudioSupport ? config.pulseaudio or stdenv.isLinux, libpulseaudio ? null
 , portaudioSupport ? false, portaudio ? null }:
 
 assert spellcheckSupport -> (hunspell != null);
@@ -47,6 +47,12 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   hardeningDisable = [ "bindnow" "relro" ];
+
+  # this is fixed upstream though not yet in an officially released version,
+  # should be fine remove on next release (if one ever happens)
+  NIX_LDFLAGS = [
+    "-lpthread"
+  ];
 
   postInstall = "ln -s $out/bin/aegisub-* $out/bin/aegisub";
 

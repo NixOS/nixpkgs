@@ -3,20 +3,26 @@
 , bison, lzo, snappy, libaio, gnutls, nettle, curl
 , makeWrapper
 , attr, libcap, libcap_ng
-, CoreServices, Cocoa, rez, setfile
+, CoreServices, Cocoa, Hypervisor, rez, setfile
 , numaSupport ? stdenv.isLinux && !stdenv.isAarch32, numactl
 , seccompSupport ? stdenv.isLinux, libseccomp
 , pulseSupport ? !stdenv.isDarwin, libpulseaudio
 , sdlSupport ? !stdenv.isDarwin, SDL2
-, gtkSupport ? !stdenv.isDarwin && !xenSupport, gtk3, gettext, gnome3
+, gtkSupport ? !stdenv.isDarwin && !xenSupport, gtk3, gettext, vte
 , vncSupport ? true, libjpeg, libpng
+, smartcardSupport ? true, libcacard
 , spiceSupport ? !stdenv.isDarwin, spice, spice-protocol
 , usbredirSupport ? spiceSupport, usbredir
 , xenSupport ? false, xen
+, cephSupport ? false, ceph
 , openGLSupport ? sdlSupport, mesa_noglu, epoxy, libdrm
 , virglSupport ? openGLSupport, virglrenderer
 , smbdSupport ? false, samba
 , hostCpuOnly ? false
+, hostCpuTargets ? (if hostCpuOnly
+                    then (stdenv.lib.optional stdenv.isx86_64 "i386-softmmu"
+                          ++ ["${stdenv.hostPlatform.qemuArch}-softmmu"])
+                    else null)
 , nixosTestRunner ? false
 }:
 
@@ -26,15 +32,10 @@ let
     + optionalString pulseSupport "pa,"
     + optionalString sdlSupport "sdl,";
 
-  hostCpuTargets = if stdenv.isx86_64 then "i386-softmmu,x86_64-softmmu"
-                   else if stdenv.isi686 then "i386-softmmu"
-                   else if stdenv.isAarch32 then "arm-softmmu"
-                   else if stdenv.isAarch64 then "aarch64-softmmu"
-                   else throw "Don't know how to build a 'hostCpuOnly = true' QEMU";
 in
 
 stdenv.mkDerivation rec {
-  version = "3.0.0";
+  version = "3.1.0";
   name = "qemu-"
     + stdenv.lib.optionalString xenSupport "xen-"
     + stdenv.lib.optionalString hostCpuOnly "host-cpu-only-"
@@ -43,7 +44,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://wiki.qemu.org/download/qemu-${version}.tar.bz2";
-    sha256 = "1s7bm2xhcxbc9is0rg8xzwijx7azv67skq7mjc58spsgc2nn4glk";
+    sha256 = "08frr1fdjx8qcfh3fafn10kibdwbvkqqvfl7hpqbm7i9dg4f1zlq";
   };
 
   buildInputs =
@@ -51,17 +52,19 @@ stdenv.mkDerivation rec {
       vde2 texinfo flex bison makeWrapper lzo snappy
       gnutls nettle curl
     ]
-    ++ optionals stdenv.isDarwin [ CoreServices Cocoa rez setfile ]
+    ++ optionals stdenv.isDarwin [ CoreServices Cocoa Hypervisor rez setfile ]
     ++ optionals seccompSupport [ libseccomp ]
     ++ optionals numaSupport [ numactl ]
     ++ optionals pulseSupport [ libpulseaudio ]
     ++ optionals sdlSupport [ SDL2 ]
-    ++ optionals gtkSupport [ gtk3 gettext gnome3.vte ]
+    ++ optionals gtkSupport [ gtk3 gettext vte ]
     ++ optionals vncSupport [ libjpeg libpng ]
+    ++ optionals smartcardSupport [ libcacard ]
     ++ optionals spiceSupport [ spice-protocol spice ]
     ++ optionals usbredirSupport [ usbredir ]
     ++ optionals stdenv.isLinux [ alsaLib libaio libcap_ng libcap attr ]
     ++ optionals xenSupport [ xen ]
+    ++ optionals cephSupport [ ceph ]
     ++ optionals openGLSupport [ mesa_noglu epoxy libdrm ]
     ++ optionals virglSupport [ virglrenderer ]
     ++ optionals smbdSupport [ samba ];
@@ -108,13 +111,16 @@ stdenv.mkDerivation rec {
     ++ optional stdenv.isDarwin "--cpu=x86_64"
     ++ optional numaSupport "--enable-numa"
     ++ optional seccompSupport "--enable-seccomp"
+    ++ optional smartcardSupport "--enable-smartcard"
     ++ optional spiceSupport "--enable-spice"
     ++ optional usbredirSupport "--enable-usb-redir"
-    ++ optional hostCpuOnly "--target-list=${hostCpuTargets}"
+    ++ optional (hostCpuTargets != null) "--target-list=${stdenv.lib.concatStringsSep "," hostCpuTargets}"
     ++ optional stdenv.isDarwin "--enable-cocoa"
+    ++ optional stdenv.isDarwin "--enable-hvf"
     ++ optional stdenv.isLinux "--enable-linux-aio"
     ++ optional gtkSupport "--enable-gtk"
     ++ optional xenSupport "--enable-xen"
+    ++ optional cephSupport "--enable-rbd"
     ++ optional openGLSupport "--enable-opengl"
     ++ optional virglSupport "--enable-virglrenderer"
     ++ optional smbdSupport "--smbd=${samba}/bin/smbd";
@@ -123,21 +129,19 @@ stdenv.mkDerivation rec {
 
   postFixup =
     ''
-      for exe in $out/bin/qemu-system-* ; do
-        paxmark m $exe
-      done
       # copy qemu-ga (guest agent) to separate output
       mkdir -p $ga/bin
       cp $out/bin/qemu-ga $ga/bin/
     '';
 
   # Add a ‘qemu-kvm’ wrapper for compatibility/convenience.
-  postInstall =
-    if stdenv.isx86_64       then ''makeWrapper $out/bin/qemu-system-x86_64  $out/bin/qemu-kvm --add-flags "\$([ -e /dev/kvm ] && echo -enable-kvm)"''
-    else if stdenv.isi686    then ''makeWrapper $out/bin/qemu-system-i386    $out/bin/qemu-kvm --add-flags "\$([ -e /dev/kvm ] && echo -enable-kvm)"''
-    else if stdenv.isAarch32 then ''makeWrapper $out/bin/qemu-system-arm     $out/bin/qemu-kvm --add-flags "\$([ -e /dev/kvm ] && echo -enable-kvm)"''
-    else if stdenv.isAarch64 then ''makeWrapper $out/bin/qemu-system-aarch64 $out/bin/qemu-kvm --add-flags "\$([ -e /dev/kvm ] && echo -enable-kvm)"''
-    else "";
+  postInstall = ''
+    if [ -x $out/bin/qemu-system-${stdenv.hostPlatform.qemuArch} ]; then
+      makeWrapper $out/bin/qemu-system-${stdenv.hostPlatform.qemuArch} \
+                  $out/bin/qemu-kvm \
+                  --add-flags "\$([ -e /dev/kvm ] && echo -enable-kvm)"
+    fi
+  '';
 
   passthru = {
     qemu-system-i386 = "bin/qemu-system-i386";

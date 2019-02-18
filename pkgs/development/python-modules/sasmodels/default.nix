@@ -3,14 +3,14 @@
 }:
 
 buildPythonPackage rec {
-  pname = "sasmodels-unstable";
-  version = "2018-04-27";
+  pname = "sasmodels";
+  version = "0.98";
 
   src = fetchFromGitHub {
     owner = "SasView";
     repo = "sasmodels";
-    rev = "33969b656596e8b6cc8ce934cd1f8062f7b11cf2";
-    sha256 = "00rvhafg08qvx0k9mzn1ppdkc9i5yfn2gr3hidrf416srf8zgb85";
+    rev = "v${version}";
+    sha256 = "02y4lpjwaa73pr46ylk0pw0kbill4nfzqgnfv16v5m0z9smd76ir";
   };
 
   buildInputs = [ opencl-headers ];

@@ -1,29 +1,11 @@
-{ stdenv, bundlerEnv, ruby, makeWrapper }:
+{ lib, bundlerApp }:
 
-stdenv.mkDerivation rec {
-  name = "mailcatcher-${version}";
+bundlerApp {
+  pname = "mailcatcher";
+  gemdir = ./.;
+  exes = [ "mailcatcher" "catchmail" ];
 
-  version = (import ./gemset.nix).mailcatcher.version;
-
-  env = bundlerEnv {
-    name = "${name}-gems";
-
-    inherit ruby;
-
-    gemdir = ./.;
-  };
-
-  buildInputs = [ makeWrapper ];
-
-  unpackPhase = ":";
-
-  installPhase = ''
-    mkdir -p $out/bin
-    makeWrapper ${env}/bin/mailcatcher $out/bin/mailcatcher
-    makeWrapper ${env}/bin/catchmail $out/bin/catchmail
-  '';
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "SMTP server and web interface to locally test outbound emails";
     homepage    = https://mailcatcher.me/;
     license     = licenses.mit;

@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  version = "0.4.3";
+  version = "0.4.4";
   name = "theft-${version}";
 
   src = fetchFromGitHub {
     owner = "silentbicycle";
     repo = "theft";
     rev = "v${version}";
-    sha256 = "1ibh8np12lafnrsrvjbbzlyq45zq654939x0y22vdnc6s8dpbhw4";
+    sha256 = "1csdhnb10k7vsyd44vjpg430nf6a909wj8af2zawdkbvnxn5wxc4";
   };
 
   preConfigure = "patchShebangs ./scripts/mk_bits_lut";

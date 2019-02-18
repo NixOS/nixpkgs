@@ -12,8 +12,6 @@ stdenv.mkDerivation rec {
     sha256 = "1c62mw9rnzq0rs3ihbhfs18nv4mdzwag7893hlqgji3wmaai70pk";
   };
 
-  unpackCmd = "tar -xjf $curSrc";
-
   buildInputs = [ ocaml findlib ocamlbuild topkg ppx_sexp_conv ounit cstruct-unix ];
   propagatedBuildInputs = [ asn1-combinators astring nocrypto ];
 

@@ -1,20 +1,9 @@
-{ stdenv, fetchgit, fetchurl, writeScript
+{ stdenv, writeScript, fetchFromGitHub
 , libGL, libX11, libXext, python3, libXrandr, libXrender, libpulseaudio, libXcomposite
 , enableGlfw ? false, glfw }:
 
 let
   inherit (stdenv.lib) optional makeLibraryPath;
-
-  # gl.xml
-  gl = fetchurl {
-    url = https://raw.githubusercontent.com/KhronosGroup/OpenGL-Registry/56312cfe680e4be5ae61bbf1c628e420f8731718/xml/gl.xml;
-    sha256 = "1c45bcgaxiic5gmb3gkrd9qcvascvij97vz5y6fc3a2y7x3gjc5l";
-  };
-  # EGL 1.5
-  egl = fetchurl {
-    url = https://www.khronos.org/registry/EGL/api/KHR/khrplatform.h;
-    sha256 = "0p0vs4siiya05cvbqq7cw3ci2zvvlfh8kycgm9k9cwvmrkj08349";
-  };
 
   wrapperScript = writeScript "glava" ''
     #!${stdenv.shell}
@@ -33,12 +22,13 @@ let
 in
   stdenv.mkDerivation rec {
     name = "glava-${version}";
-    version = "1.5.1";
+    version = "1.5.8";
 
-    src = fetchgit {
-      url = "https://github.com/wacossusca34/glava.git";
+    src = fetchFromGitHub {
+      owner = "wacossusca34";
+      repo = "glava";
       rev = "v${version}";
-      sha256 = "1k8x0a0g2pm7ficsk4az9s7mjbm85a987apjg5c4y6iyldxgd6sb";
+      sha256 = "0mps82qw2mhxx8069jvqz1v8n4x7ybrrjv92ij6cms8xi1y8v0fm";
     };
 
     buildInputs = [
@@ -54,12 +44,8 @@ in
       python3
     ];
 
-    patchPhase = ''
-      mkdir -p glad/include/KHR
-
-      cp ${gl} glad/gl.xml
-      cp ${egl} glad/include/KHR/khrplatform.h
-      patchShebangs .
+    preConfigure = ''
+      export CFLAGS="-march=native"
     '';
 
     makeFlags = optional (!enableGlfw) "DISABLE_GLFW=1";

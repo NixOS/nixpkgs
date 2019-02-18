@@ -10,7 +10,7 @@
 , enableFfmpeg ? false, ffmpeg
 , enableGStreamer ? false, gst_all_1
 , enableEigen ? true, eigen
-, darwin
+, cf-private, Cocoa, QTKit
 }:
 
 let
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional enableFfmpeg ffmpeg
     ++ lib.optionals enableGStreamer (with gst_all_1; [ gstreamer gst-plugins-base ])
     ++ lib.optional enableEigen eigen
-    ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ Cocoa QTKit ])
+    ++ lib.optionals stdenv.isDarwin [ Cocoa QTKit cf-private /* For NSDefaultRunLoopMode */ ]
     ;
 
   propagatedBuildInputs = lib.optional enablePython pythonPackages.numpy;

@@ -14,7 +14,8 @@ buildPythonPackage rec {
   # disable some failing tests
   checkPhase = ''
     nosetests nilearn/tests \
-    -e test_cache_mixin_with_expand_user -e test_clean_confounds -e test_detrend
+    -e test_cache_mixin_with_expand_user -e test_clean_confounds -e test_detrend \
+    -e test_clean_detrending -e test_high_variance_confounds
   '';
 
   checkInputs = [ nose ];

@@ -1,11 +1,13 @@
-{ stdenv, fetchurl
+{ stdenv, fetchurl, substituteAll
 , pkgconfig, autoreconfHook
 , gmp, python, iptables, ldns, unbound, openssl, pcsclite
 , openresolv
 , systemd, pam
 , curl
+, kmod
 , enableTNC            ? false, trousers, sqlite, libxml2
 , enableNetworkManager ? false, networkmanager
+, libpcap
 }:
 
 # Note on curl support: If curl is built with gnutls as its backend, the
@@ -16,11 +18,11 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "strongswan-${version}";
-  version = "5.6.3";
+  version = "5.7.1";
 
   src = fetchurl {
     url = "https://download.strongswan.org/${name}.tar.bz2";
-    sha256 = "095zg7h7qwsc456sqgwb1lhhk29ac3mk5z9gm6xja1pl061driy3";
+    sha256 = "1v2b8lnqrkbc9hx3p2rw36xvphdy5ayy3dblm3kz98p24s8rqvq0";
   };
 
   dontPatchELF = true;
@@ -30,12 +32,19 @@ stdenv.mkDerivation rec {
     [ curl gmp python iptables ldns unbound openssl pcsclite ]
     ++ optionals enableTNC [ trousers sqlite libxml2 ]
     ++ optionals stdenv.isLinux [ systemd.dev pam ]
-    ++ optionals enableNetworkManager [ networkmanager ];
+    ++ optionals enableNetworkManager [ networkmanager ]
+    # ad-hoc fix for https://github.com/NixOS/nixpkgs/pull/51787
+    # Remove when the above PR lands in master
+    ++ [ libpcap ];
 
   patches = [
     ./ext_auth-path.patch
     ./firewall_defaults.patch
     ./updown-path.patch
+    (substituteAll {
+      src = ./modprobe-path.patch;
+      inherit kmod;
+    })
   ];
 
   postPatch = ''

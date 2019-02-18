@@ -1,8 +1,12 @@
-{ stdenv, fetchFromGitHub, fetchpatch, gfortran, perl, which, config, coreutils
+{ stdenv, fetchFromGitHub, fetchpatch, gfortran, perl, which, config
 # Most packages depending on openblas expect integer width to match
 # pointer width, but some expect to use 32-bit integers always
 # (for compatibility with reference BLAS).
 , blas64 ? null
+, buildPackages
+# Select a specific optimization target (other than the default)
+# See https://github.com/xianyi/OpenBLAS/blob/develop/TargetList.txt
+, target ? null
 }:
 
 with stdenv.lib;
@@ -10,57 +14,51 @@ with stdenv.lib;
 let blas64_ = blas64; in
 
 let
+  setTarget = x: if target == null then x else target;
+
   # To add support for a new platform, add an element to this set.
   configs = {
     armv6l-linux = {
-      BINARY = "32";
-      TARGET = "ARMV6";
-      DYNAMIC_ARCH = "0";
-      CC = "gcc";
-      USE_OPENMP = "1";
+      BINARY = 32;
+      TARGET = setTarget "ARMV6";
+      DYNAMIC_ARCH = false;
+      USE_OPENMP = true;
     };
 
     armv7l-linux = {
-      BINARY = "32";
-      TARGET = "ARMV7";
-      DYNAMIC_ARCH = "0";
-      CC = "gcc";
-      USE_OPENMP = "1";
+      BINARY = 32;
+      TARGET = setTarget "ARMV7";
+      DYNAMIC_ARCH = false;
+      USE_OPENMP = true;
     };
 
     aarch64-linux = {
-      BINARY = "64";
-      TARGET = "ARMV8";
-      DYNAMIC_ARCH = "1";
-      CC = "gcc";
-      USE_OPENMP = "1";
+      BINARY = 64;
+      TARGET = setTarget "ARMV8";
+      DYNAMIC_ARCH = true;
+      USE_OPENMP = true;
     };
 
     i686-linux = {
-      BINARY = "32";
-      TARGET = "P2";
-      DYNAMIC_ARCH = "1";
-      CC = "gcc";
-      USE_OPENMP = "1";
+      BINARY = 32;
+      TARGET = setTarget "P2";
+      DYNAMIC_ARCH = true;
+      USE_OPENMP = true;
     };
 
     x86_64-darwin = {
-      BINARY = "64";
-      TARGET = "ATHLON";
-      DYNAMIC_ARCH = "1";
-      # Note that clang is available through the stdenv on OSX and
-      # thus is not an explicit dependency.
-      CC = "clang";
-      USE_OPENMP = "0";
+      BINARY = 64;
+      TARGET = setTarget "ATHLON";
+      DYNAMIC_ARCH = true;
+      USE_OPENMP = false;
       MACOSX_DEPLOYMENT_TARGET = "10.7";
     };
 
     x86_64-linux = {
-      BINARY = "64";
-      TARGET = "ATHLON";
-      DYNAMIC_ARCH = "1";
-      CC = "gcc";
-      USE_OPENMP = if stdenv.hostPlatform.isMusl then "0" else "1";
+      BINARY = 64;
+      TARGET = setTarget "ATHLON";
+      DYNAMIC_ARCH = true;
+      USE_OPENMP = true;
     };
   };
 in
@@ -76,15 +74,23 @@ let
     if blas64_ != null
       then blas64_
       else hasPrefix "x86_64" stdenv.hostPlatform.system;
+  # Convert flag values to format OpenBLAS's build expects.
+  # `toString` is almost what we need other than bools,
+  # which we need to map {true -> 1, false -> 0}
+  # (`toString` produces empty string `""` for false instead of `0`)
+  mkMakeFlagValue = val:
+    if !builtins.isBool val then toString val
+    else if val then "1" else "0";
+  mkMakeFlagsFromConfig = mapAttrsToList (var: val: "${var}=${mkMakeFlagValue val}");
 in
 stdenv.mkDerivation rec {
   name = "openblas-${version}";
-  version = "0.3.1";
+  version = "0.3.5";
   src = fetchFromGitHub {
     owner = "xianyi";
     repo = "OpenBLAS";
     rev = "v${version}";
-    sha256 = "1dkwp4gz1hzpmhzks9y9ipb4c5h0r6c7yff62x3s8x9z6f8knaqc";
+    sha256 = "0hwfplr6ciqjvfqkya5vz92z2rx8bhdg5mkh923z246ylhs6d94k";
   };
 
   inherit blas64;
@@ -104,34 +110,24 @@ stdenv.mkDerivation rec {
     "relro" "bindnow"
   ];
 
-  nativeBuildInputs =
-    [gfortran perl which]
-    ++ optionals stdenv.isDarwin [coreutils];
+  nativeBuildInputs = [
+    perl
+    which
+    buildPackages.gfortran
+    buildPackages.stdenv.cc
+  ];
 
-  makeFlags =
-    [
-      "FC=gfortran"
-      ''PREFIX="''$(out)"''
-      "NUM_THREADS=64"
-      "INTERFACE64=${if blas64 then "1" else "0"}"
-      "NO_STATIC=1"
-    ] ++ stdenv.lib.optional (stdenv.hostPlatform.libc == "musl") "NO_AFFINITY=1"
-    ++ mapAttrsToList (var: val: var + "=" + val) config;
-
-    patches = [
-      # Backport of https://github.com/xianyi/OpenBLAS/pull/1667, which
-      # is causing problems and was already accepted upstream.
-      (fetchpatch {
-        url = "https://github.com/xianyi/OpenBLAS/commit/5f2a3c05cd0e3872be3c5686b9da6b627658eeb7.patch";
-        sha256 = "1qvxhk92likrshw6z6hjqxvkblwzgsbzis2b2f71bsvx9174qfk1";
-      })
-      # Double "MAX_ALLOCATING_THREADS", fix with Go and Octave
-      # https://github.com/xianyi/OpenBLAS/pull/1663 (see also linked issue)
-      (fetchpatch {
-        url = "https://github.com/xianyi/OpenBLAS/commit/a49203b48c4a3d6f86413fc8c4b1fbfaa1946463.patch";
-        sha256 = "0v6kjkbgbw7hli6xkism48wqpkypxmcqvxpx564snll049l2xzq2";
-      })
-    ];
+  makeFlags = mkMakeFlagsFromConfig (config // {
+    FC = "${stdenv.cc.targetPrefix}gfortran";
+    CC = "${stdenv.cc.targetPrefix}${if stdenv.cc.isClang then "clang" else "cc"}";
+    PREFIX = placeholder "out";
+    NUM_THREADS = 64;
+    INTERFACE64 = blas64;
+    NO_STATIC = true;
+    CROSS = stdenv.hostPlatform != stdenv.buildPlatform;
+    HOSTCC = "cc";
+    NO_BINARY_MODE = stdenv.hostPlatform != stdenv.buildPlatform;
+  });
 
   doCheck = true;
   checkTarget = "tests";
@@ -140,7 +136,7 @@ stdenv.mkDerivation rec {
     # Write pkgconfig aliases. Upstream report:
     # https://github.com/xianyi/OpenBLAS/issues/1740
     for alias in blas cblas lapack; do
-      cat <<EOF > $out/lib/pkgconfig/openblas-$alias.pc
+      cat <<EOF > $out/lib/pkgconfig/$alias.pc
 Name: $alias
 Version: ${version}
 Description: $alias provided by the OpenBLAS package.

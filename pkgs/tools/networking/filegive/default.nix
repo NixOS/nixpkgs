@@ -1,16 +1,6 @@
-{ stdenv, fetchurl, fetchgit, go }:
+{ buildGoPackage, stdenv, fetchurl }:
 
-let
-
-  # Code with BSD license
-  srcNatPMP = fetchgit {
-    url = https://github.com/jackpal/go-nat-pmp;
-    rev = "e04deda90d56";
-    sha256 = "1swwfyzaj3l40yh9np3x4fcracgs79nwryc85sxbdakx8wwxs2xb";
-  };
-
-in
-stdenv.mkDerivation rec {
+buildGoPackage rec {
   name = "filegive-0.7.4";
 
   src = fetchurl {
@@ -18,30 +8,15 @@ stdenv.mkDerivation rec {
     sha256 = "1z3vyqfdp271qa5ah0i6jmn9gh3gb296wcm33sd2zfjqapyh12hy";
   };
 
-  buildInputs = [ go ];
+  goDeps = ./deps.nix;
 
-  buildPhase = ''
-    ${stdenv.lib.optionalString (stdenv.hostPlatform.system == "armv5tel-linux") "export GOARM=5"}
+  goPackagePath = "viric.name/soft/filegive";
 
-    mkdir $TMPDIR/go
-    export GOPATH=$TMPDIR/go
-
-    GONATPMP=$GOPATH/src/code.google.com/p/go-nat-pmp
-    mkdir -p $GONATPMP
-    cp -R ${srcNatPMP}/* $GONATPMP/
-    go build -o filegive
-  '';
-
-  installPhase = ''
-    mkdir -p $out/bin
-    cp filegive $out/bin
-  '';
-
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://viric.name/cgi-bin/filegive;
     description = "Easy p2p file sending program";
-    license = stdenv.lib.licenses.agpl3Plus;
-    maintainers = with stdenv.lib.maintainers; [viric];
-    platforms = with stdenv.lib.platforms; linux;
+    license = licenses.agpl3Plus;
+    maintainers = [ maintainers.viric ];
+    platforms = platforms.linux;
   };
 }

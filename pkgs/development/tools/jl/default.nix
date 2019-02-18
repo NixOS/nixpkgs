@@ -25,4 +25,5 @@ mkDerivation rec {
   license = stdenv.lib.licenses.bsd3;
   description = "Functional sed for JSON";
   maintainers = with stdenv.lib.maintainers; [ fgaz ];
+  homepage = https://github.com/chrisdone/jl;
 }

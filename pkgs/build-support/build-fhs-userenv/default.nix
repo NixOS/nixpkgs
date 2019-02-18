@@ -28,7 +28,7 @@ in runCommand name {
   passthru = passthru // {
     env = runCommand "${name}-shell-env" {
       shellHook = ''
-        exec ${chrootenv} ${init "bash"} "$(pwd)"
+        exec ${chrootenv}/bin/chrootenv ${init runScript} "$(pwd)"
       '';
     } ''
       echo >&2 ""
@@ -41,7 +41,7 @@ in runCommand name {
   mkdir -p $out/bin
   cat <<EOF >$out/bin/${name}
   #! ${stdenv.shell}
-  exec ${chrootenv} ${init runScript} "\$(pwd)" "\$@"
+  exec ${chrootenv}/bin/chrootenv ${init runScript} "\$(pwd)" "\$@"
   EOF
   chmod +x $out/bin/${name}
   ${extraInstallCommands}

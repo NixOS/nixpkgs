@@ -1,6 +1,6 @@
 { stdenv, fetchurl, gnome3, meson, ninja, pkgconfig, gtk3, intltool, glib
-, udev, itstool, libxml2, wrapGAppsHook, libnotify, libcanberra-gtk3, gobjectIntrospection
-, gtk-doc, docbook_xsl, docbook_xml_dtd_43 }:
+, udev, itstool, libxml2, wrapGAppsHook, libnotify, libcanberra-gtk3, gobject-introspection
+, gtk-doc, docbook_xsl, docbook_xml_dtd_43, python3 }:
 
 let
   pname = "gnome-bluetooth";
@@ -12,13 +12,13 @@ in stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "devdoc" "man" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
     sha256 = "0ch7lll5n8v7m26y6y485gnrik19ml42rsh1drgcxydm6fn62j8z";
   };
 
   nativeBuildInputs = [
-    meson ninja intltool itstool pkgconfig libxml2 wrapGAppsHook gobjectIntrospection
-    gtk-doc docbook_xsl docbook_xml_dtd_43
+    meson ninja intltool itstool pkgconfig libxml2 wrapGAppsHook gobject-introspection
+    gtk-doc docbook_xsl docbook_xml_dtd_43 python3
   ];
   buildInputs = [
     glib gtk3 udev libnotify libcanberra-gtk3

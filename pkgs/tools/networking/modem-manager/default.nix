@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   name = "modem-manager-${version}";
-  pname = "ModemManager";
   version = "1.7.990";
 
+  package = "ModemManager";
   src = fetchurl {
-    url = "https://www.freedesktop.org/software/${pname}/${pname}-${version}.tar.xz";
+    url = "https://www.freedesktop.org/software/${package}/${package}-${version}.tar.xz";
     sha256 = "1v4hixmghlrw7w4ajq2x4k62js0594h223d0yma365zwqr7hjrfl";
   };
 

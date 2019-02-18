@@ -9,7 +9,8 @@ in
   options.programs.xss-lock = {
     enable = mkEnableOption "xss-lock";
     lockerCommand = mkOption {
-      example = "xlock";
+      default = "${pkgs.i3lock}/bin/i3lock";
+      example = literalExample ''''${pkgs.i3lock-fancy}/bin/i3lock-fancy'';
       type = types.string;
       description = "Locker to be used with xsslock";
     };

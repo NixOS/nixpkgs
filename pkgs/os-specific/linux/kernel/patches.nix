@@ -58,4 +58,10 @@ rec {
     };
   };
 
+  # https://github.com/NixOS/nixpkgs/issues/53672
+  # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=cb5b020a8d38f77209d0472a0fea755299a8ec78
+  interpreter-trunc = {
+    name = "interpreter-trunc";
+    patch = ./interpreter-trunc.patch;
+  };
 }

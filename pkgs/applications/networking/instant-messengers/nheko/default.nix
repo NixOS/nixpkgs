@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, fetchurl
-, cmake, lmdb, qt5, qtmacextras, mtxclient
+, cmake, cmark, lmdb, qt5, qtmacextras, mtxclient
 , boost, spdlog, olm, pkgconfig
 }:
 
@@ -20,13 +20,13 @@ let
 in
 stdenv.mkDerivation rec {
   name = "nheko-${version}";
-  version = "0.5.5";
+  version = "0.6.3";
 
   src = fetchFromGitHub {
-    owner = "mujx";
+    owner = "Nheko-Reborn";
     repo = "nheko";
     rev = "v${version}";
-    sha256 = "0k5gmfwmisfavliyz0nfsmwy317ps8a4r3l1d831giqp9pvqvi0i";
+    sha256 = "1h95lixciiq904dnfpwxhyf545yfsrphhwqyvs4yrzdfr9k0cf98";
   };
 
   # If, on Darwin, you encounter the error
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkgconfig ];
 
   buildInputs = [
-    mtxclient olm boost lmdb spdlog
+    mtxclient olm boost lmdb spdlog cmark
     qt5.qtbase qt5.qtmultimedia qt5.qttools
   ] ++ lib.optional stdenv.isDarwin qtmacextras;
 
@@ -67,6 +67,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Desktop client for the Matrix protocol";
+    homepage = https://github.com/Nheko-Reborn/nheko;
     maintainers = with maintainers; [ ekleog fpletz ];
     platforms = platforms.unix;
     license = licenses.gpl3Plus;

@@ -1,11 +1,11 @@
 { stdenv, fetchurl, gettext, attr }:
 
 stdenv.mkDerivation rec {
-  name = "acl-2.2.52";
+  name = "acl-2.2.53";
 
   src = fetchurl {
-    url = "mirror://savannah/acl/${name}.src.tar.gz";
-    sha256 = "08qd9s3wfhv0ajswsylnfwr5h0d7j9d4rgip855nrh400nxp940p";
+    url = "mirror://savannah/acl/${name}.tar.gz";
+    sha256 = "1ir6my3w74s6nfbgbqgzj6w570sn0qjf3524zx8xh67lqrjrigh6";
   };
 
   outputs = [ "bin" "dev" "out" "man" "doc" ];
@@ -22,12 +22,8 @@ stdenv.mkDerivation rec {
     patchShebangs .
   '';
 
-  configureFlags = [ "MAKE=make" "MSGFMT=msgfmt" "MSGMERGE=msgmerge" "XGETTEXT=xgettext" "ZIP=gzip" "ECHO=echo" "SED=sed" "AWK=gawk" ];
-
-  installTargets = [ "install" "install-lib" "install-dev" ];
-
   meta = with stdenv.lib; {
-    homepage = "http://savannah.nongnu.org/projects/acl";
+    homepage = "https://savannah.nongnu.org/projects/acl";
     description = "Library and tools for manipulating access control lists";
     platforms = platforms.linux;
     license = licenses.gpl2Plus;

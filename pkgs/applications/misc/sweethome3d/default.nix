@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchcvs, makeWrapper, makeDesktopItem, jdk, jre, ant
+{ lib, stdenv, fetchurl, fetchsvn, makeWrapper, makeDesktopItem, jdk, jre, ant
 , gtk3, gsettings-desktop-schemas, p7zip, libXxf86vm }:
 
 let
@@ -74,16 +74,15 @@ let
 in rec {
 
   application = mkSweetHome3D rec {
-    version = "5.4";
+    version = "6.0";
     module = "SweetHome3D";
     name = stdenv.lib.toLower module + "-application-" + version;
     description = "Design and visualize your future home";
     license = stdenv.lib.licenses.gpl2Plus;
-    src = fetchcvs {
-      cvsRoot = ":pserver:anonymous@sweethome3d.cvs.sourceforge.net:/cvsroot/sweethome3d";
-      sha256 = "09sk4svmaiw8dabcya3407iq5yjwxbss8pik1rzalrlds2428vyw";
-      module = module;
-      tag = "V_" + d2u version;
+    src = fetchsvn {
+      url = "https://svn.code.sf.net/p/sweethome3d/code/tags/V_" + d2u version + "/SweetHome3D/";
+      sha256 = "1l4kc1c2iwkggmcdb2wksb4vrh97ll804vc51yawhdlq9g567ky9";
+      rev = "6647";
     };
     desktopName = "Sweet Home 3D";
     icons = {

@@ -1,10 +1,10 @@
 { stdenv, fetchurl, libgpgerror, gnupg, pkgconfig, glib, pth, libassuan
-, file, which
-, autoreconfHook
+, file, which, ncurses
+, autoreconfHook, fetchpatch
 , git
-, texinfo5
+, texinfo
 , qtbase ? null
-, withPython ? false, swig2 ? null, python ? null
+, pythonSupport ? false, swig2 ? null, python ? null
 }:
 
 let
@@ -14,11 +14,11 @@ in
 
 stdenv.mkDerivation rec {
   name = "gpgme-${version}";
-  version = "1.11.1";
+  version = "1.12.0";
 
   src = fetchurl {
     url = "mirror://gnupg/gpgme/${name}.tar.bz2";
-    sha256 = "0vxx5xaag3rhp4g2arp5qm77gvz4kj0m3hnpvhkdvqyjfhbi26rd";
+    sha256 = "1n4c1q2ls7sqx1vpr3p5n8vbjkw6kqp8jxqa28p0x9j36wf9bp5l";
   };
 
   outputs = [ "out" "dev" "info" ];
@@ -28,8 +28,16 @@ stdenv.mkDerivation rec {
     [ libgpgerror glib libassuan pth ]
     ++ lib.optional (qtbase != null) qtbase;
 
-  nativeBuildInputs = [ file pkgconfig gnupg autoreconfHook git texinfo5 ]
-  ++ lib.optionals withPython [ python swig2 which ];
+  nativeBuildInputs = [ file pkgconfig gnupg autoreconfHook git texinfo ]
+  ++ lib.optionals pythonSupport [ python swig2 which ncurses ];
+
+  patches = [
+    (fetchpatch {
+      name = "fix-key-expiry.patch";
+      url = "https://git.gnupg.org/cgi-bin/gitweb.cgi?p=gpgme.git;a=patch;h=66376f3e206a1aa791d712fb8577bb3490268f60";
+      sha256 = "0i777dzcbv4r568l8623ar6y6j44bv46bbxi751qa5mdcihpya02";
+    })
+  ];
 
   postPatch =''
     substituteInPlace ./configure --replace /usr/bin/file ${file}/bin/file
@@ -38,7 +46,7 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--enable-fixed-path=${gnupg}/bin"
     "--with-libgpg-error-prefix=${libgpgerror.dev}"
-  ] ++ lib.optional withPython "--enable-languages=python";
+  ] ++ lib.optional pythonSupport "--enable-languages=python";
 
   NIX_CFLAGS_COMPILE =
     # qgpgme uses Q_ASSERT which retains build inputs at runtime unless
@@ -49,7 +57,7 @@ stdenv.mkDerivation rec {
 
   checkInputs = [ which ];
 
-  doCheck = false; # fails 8 out of 26 tests with "GPGME: Decryption failed". Spooky!
+  doCheck = true;
 
   meta = with stdenv.lib; {
     homepage = https://gnupg.org/software/gpgme/index.html;

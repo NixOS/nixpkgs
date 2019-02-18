@@ -13,11 +13,11 @@ with lib;
 stdenv.mkDerivation rec {
   name = "kicad-${version}";
   series = "5.0";
-  version = "5.0.0";
+  version = "5.0.2";
 
   src = fetchurl {
     url = "https://launchpad.net/kicad/${series}/${version}/+download/kicad-${version}.tar.xz";
-    sha256 = "17nqjszyvd25wi6550j981whlnb1wxzmlanljdjihiki53j84x9p";
+    sha256 = "10605rr10x0353n6yk2z095ydnkd1i6j1ncbq64pfxdn5vkhcd1g";
   };
 
   postPatch = ''
@@ -36,8 +36,7 @@ stdenv.mkDerivation rec {
     ++ optional (ngspiceSupport) "-DKICAD_SPICE=ON";
 
   nativeBuildInputs = [
-    # https://www.mail-archive.com/kicad-developers@lists.launchpad.net/msg29840.html
-    (cmake.override {majorVersion = "3.10";})
+    cmake
     doxygen
     pkgconfig
     wrapGAppsHook

@@ -44,6 +44,7 @@ lib.makeOverridable (
 # git checkout).
 # If you need to apply patches, make sure to set `dontBuild = false`;
 , dontBuild ? true
+, dontInstallManpages ? false
 , propagatedBuildInputs ? []
 , propagatedUserEnvPkgs ? []
 , buildFlags ? []
@@ -204,6 +205,14 @@ stdenv.mkDerivation ((builtins.removeAttrs attrs ["source"]) // {
     # write out metadata and binstubs
     spec=$(echo $out/${ruby.gemPath}/specifications/*.gemspec)
     ruby ${./gem-post-build.rb} "$spec"
+    ''}
+
+    ${lib.optionalString (!dontInstallManpages) ''
+    for section in {1..9}; do
+      mandir="$out/share/man/man$section"
+      find $out/lib \( -wholename "*/man/*.$section" -o -wholename "*/man/man$section/*.$section" \) \
+        -execdir mkdir -p $mandir \; -execdir cp '{}' $mandir \;
+    done
     ''}
 
     runHook postInstall

@@ -1,15 +1,15 @@
 { stdenv, fetchurl, gzip, which, unzip, jdk }:
 
 let
-  version = "6.5.3.6";
+  version = "6.6.0.13";
   srcs = {
     i686-linux = fetchurl {
       url = "https://cdn.sencha.com/cmd/${version}/no-jre/SenchaCmd-${version}-linux-i386.sh.zip";
-      sha256 = "0g3hk3fdgmkdsr6ck1fgsmaxa9wbj2fpk84rk382ff9ny55bbzv9";
+      sha256 = "15b197108b49mf0afpihkh3p68lxm7580zz2w0xsbahglnvhwyfz";
     };
     x86_64-linux = fetchurl {
       url = "https://cdn.sencha.com/cmd/${version}/no-jre/SenchaCmd-${version}-linux-amd64.sh.zip";
-      sha256 = "08j8gak1xsxdjgkv6s24jv97jc49pi5yf906ynjmxb27wqpxn9mz";
+      sha256 = "1cxhckmx1802p9qiw09cgb1v5f30wcvnrwkshmia8p8n0q47lpp4";
     };
   };
 in

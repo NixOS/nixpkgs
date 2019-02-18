@@ -3,7 +3,7 @@
 
 buildPythonPackage rec {
   pname = "bugzilla";
-  version = "1.1.0";
+  version = "2.2.0";
 
   src = fetchPypi {
     inherit pname version;

@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pkgconfig, autoreconfHook, makeWrapper
-, ncurses, cpio, gperf, perl, cdrkit, flex, bison, qemu, pcre, augeas, libxml2
+, ncurses, cpio, gperf, cdrkit, flex, bison, qemu, pcre, augeas, libxml2
 , acl, libcap, libcap_ng, libconfig, systemd, fuse, yajl, libvirt, hivex
-, gmp, readline, file, libintl_perl, GetoptLong, SysVirt, numactl, xen, libapparmor
+, gmp, readline, file, numactl, xen, libapparmor
 , getopt, perlPackages, ocamlPackages
 , appliance ? null
 , javaSupport ? false, jdk ? null }:
@@ -11,20 +11,21 @@ assert javaSupport -> jdk != null;
 
 stdenv.mkDerivation rec {
   name = "libguestfs-${version}";
-  version = "1.38.4";
+  version = "1.38.6";
 
   src = fetchurl {
     url = "http://libguestfs.org/download/1.38-stable/libguestfs-${version}.tar.gz";
-    sha256 = "1xsazw6yrbgmc647j8l896fzv534157sqmdzac09rxkxwiy0wm16";
+    sha256 = "1v2mggx2jlaq4m3p5shc46gzf7vmaayha6r0nwdnyzd7x6q0is7p";
   };
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    makeWrapper autoreconfHook ncurses cpio gperf perl
+    makeWrapper autoreconfHook ncurses cpio gperf
     cdrkit flex bison qemu pcre augeas libxml2 acl libcap libcap_ng libconfig
-    systemd fuse yajl libvirt gmp readline file hivex libintl_perl GetoptLong
-    SysVirt numactl xen libapparmor getopt perlPackages.ModuleBuild
-  ] ++ (with ocamlPackages; [ ocaml findlib ocamlbuild ocaml_libvirt ocaml_gettext ounit ])
+    systemd fuse yajl libvirt gmp readline file hivex
+    numactl xen libapparmor getopt perlPackages.ModuleBuild
+  ] ++ (with perlPackages; [ perl libintl_perl GetoptLong SysVirt ])
+    ++ (with ocamlPackages; [ ocaml findlib ocamlbuild ocaml_libvirt ocaml_gettext ounit ])
     ++ stdenv.lib.optional javaSupport jdk;
 
   prePatch = ''
@@ -52,7 +53,7 @@ stdenv.mkDerivation rec {
     for bin in $out/bin/*; do
       wrapProgram "$bin" \
         --prefix PATH     : "$out/bin:${hivex}/bin:${qemu}/bin" \
-        --prefix PERL5LIB : "$out/lib/perl5/site_perl"
+        --prefix PERL5LIB : "$out/${perlPackages.perl.libPrefix}"
     done
   '';
 

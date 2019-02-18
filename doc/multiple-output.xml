@@ -12,7 +12,7 @@
   <para>
    The Nix language allows a derivation to produce multiple outputs, which is
    similar to what is utilized by other Linux distribution packaging systems.
-   The outputs reside in separate nix store paths, so they can be mostly
+   The outputs reside in separate Nix store paths, so they can be mostly
    handled independently of each other, including passing to build inputs,
    garbage collection or binary substitution. The exception is that building
    from source always produces all the outputs.

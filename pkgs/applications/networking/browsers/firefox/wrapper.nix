@@ -4,7 +4,7 @@
 , flashplayer, hal-flash
 , MPlayerPlugin, ffmpeg, xorg, libpulseaudio, libcanberra-gtk2
 , jrePlugin, icedtea_web
-, trezor-bridge, bluejeans, djview4, adobe-reader
+, bluejeans, djview4, adobe-reader
 , google_talk_plugin, fribid, gnome3/*.gnome-shell*/
 , esteidfirefoxplugin
 , browserpass, chrome-gnome-shell, uget-integrator, plasma-browser-integration, bukubrow
@@ -26,7 +26,10 @@ let
     , icon ? browserName
     , extraPlugins ? []
     , extraNativeMessagingHosts ? []
+    , gdkWayland ? false
     }:
+
+    assert gdkWayland -> (browser ? gtk3); # Can only use the wayland backend if gtk3 is being used
 
     let
       cfg = config.${browserName} or {};
@@ -55,7 +58,6 @@ let
           ++ lib.optional (cfg.enableGoogleTalkPlugin or false) google_talk_plugin
           ++ lib.optional (cfg.enableFriBIDPlugin or false) fribid
           ++ lib.optional (cfg.enableGnomeExtensions or false) gnome3.gnome-shell
-          ++ lib.optional (cfg.enableTrezor or false) trezor-bridge
           ++ lib.optional (cfg.enableBluejeans or false) bluejeans
           ++ lib.optional (cfg.enableAdobeReader or false) adobe-reader
           ++ lib.optional (cfg.enableEsteid or false) esteidfirefoxplugin
@@ -87,7 +89,7 @@ let
         exec = "${browserName}${nameSuffix} %U";
         inherit icon;
         comment = "";
-        desktopName = "${desktopName}${nameSuffix}";
+        desktopName = "${desktopName}${nameSuffix}${lib.optionalString gdkWayland " (Wayland)"}";
         genericName = "Web Browser";
         categories = "Application;Network;WebBrowser;";
         mimeType = stdenv.lib.concatStringsSep ";" [
@@ -125,7 +127,9 @@ let
             --suffix PATH ':' "$out${browser.execdir or "/bin"}" \
             --set MOZ_APP_LAUNCHER "${browserName}${nameSuffix}" \
             --set MOZ_SYSTEM_DIR "$out/lib/mozilla" \
-            ${lib.optionalString (browser ? gtk3)
+            ${lib.optionalString gdkWayland ''
+              --set GDK_BACKEND "wayland" \
+            ''}${lib.optionalString (browser ? gtk3)
                 ''--prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH" \
                   --suffix XDG_DATA_DIRS : '${gnome3.defaultIconTheme}/share'
                 ''

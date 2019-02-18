@@ -5,13 +5,13 @@
 
 perlPackages.buildPerlModule rec {
   name = "biber-${version}";
-  version = "2.10";
+  version = "2.11";
 
   src = fetchFromGitHub {
     owner = "plk";
     repo = "biber";
     rev = "v${version}";
-    sha256 = "0f6bb1iprl92iamxqlr8fc99mxr9n3722frd1ak9pbzh3m6c2ny6";
+    sha256 = "0qgkc1k9n36yfmndwz879pak6mjphld0p85lzn9g2ng0vhxsifzz";
   };
 
   buildInputs = with perlPackages; [
@@ -20,8 +20,8 @@ perlPackages.buildPerlModule rec {
     DateTime DateTimeFormatBuilder DateTimeCalendarJulian
     ExtUtilsLibBuilder FileSlurper FileWhich IPCRun3 LogLog4perl LWPProtocolHttps ListAllUtils
     ListMoreUtils MozillaCA ReadonlyXS RegexpCommon TextBibTeX
-    UnicodeCollate UnicodeLineBreak URI XMLLibXMLSimple XMLLibXSLT XMLWriter
-    ClassAccessor TextCSV TextCSV_XS TextRoman DataUniqid LinguaTranslit UnicodeNormalize SortKey
+    UnicodeLineBreak URI XMLLibXMLSimple XMLLibXSLT XMLWriter
+    ClassAccessor TextCSV TextCSV_XS TextRoman DataUniqid LinguaTranslit SortKey
     TestDifferences
   ];
 

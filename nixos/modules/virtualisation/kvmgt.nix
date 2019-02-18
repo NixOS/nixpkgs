@@ -50,10 +50,16 @@ in {
       nameValuePair "kvmgt-${name}" {
         description = "KVMGT VGPU ${name}";
         serviceConfig = {
-          Type = "oneshot";
+          Type = "forking";
           RemainAfterExit = true;
+          Restart = "on-failure";
+          RestartSec = 5;
           ExecStart = "${pkgs.runtimeShell} -c 'echo ${value.uuid} > /sys/bus/pci/devices/${cfg.device}/mdev_supported_types/${name}/create'";
           ExecStop = "${pkgs.runtimeShell} -c 'echo 1 > /sys/bus/pci/devices/${cfg.device}/${value.uuid}/remove'";
+        };
+        unitConfig = {
+          StartLimitBurst = 5;
+          StartLimitIntervalSec = 30;
         };
         wantedBy = [ "multi-user.target" ];
       }

@@ -59,8 +59,11 @@ self:
         inherit (self.melpaPackages) easy-kill;
       };
 
-      # missing git
-      egg = markBroken super.egg;
+      egg = super.egg.overrideAttrs (attrs: {
+        # searches for Git at build time
+        nativeBuildInputs =
+          (attrs.nativeBuildInputs or []) ++ [ external.git ];
+      });
 
       # upstream issue: missing file header
       elmine = markBroken super.elmine;
@@ -85,6 +88,12 @@ self:
 
       # Expects bash to be at /bin/bash
       flycheck-rtags = markBroken super.flycheck-rtags;
+
+      forge = super.forge.overrideAttrs (attrs: {
+        # searches for Git at build time
+        nativeBuildInputs =
+          (attrs.nativeBuildInputs or []) ++ [ external.git ];
+      });
 
       # build timeout
       graphene = markBroken super.graphene;
@@ -146,7 +155,25 @@ self:
           (attrs.nativeBuildInputs or []) ++ [ external.git ];
       });
 
+      magithub = super.magithub.overrideAttrs (attrs: {
+        # searches for Git at build time
+        nativeBuildInputs =
+          (attrs.nativeBuildInputs or []) ++ [ external.git ];
+      });
+
+      magit-svn = super.magit-svn.overrideAttrs (attrs: {
+        # searches for Git at build time
+        nativeBuildInputs =
+          (attrs.nativeBuildInputs or []) ++ [ external.git ];
+      });
+
       magit-todos = super.magit-todos.overrideAttrs (attrs: {
+        # searches for Git at build time
+        nativeBuildInputs =
+          (attrs.nativeBuildInputs or []) ++ [ external.git ];
+      });
+
+      magit-filenotify = super.magit-filenotify.overrideAttrs (attrs: {
         # searches for Git at build time
         nativeBuildInputs =
           (attrs.nativeBuildInputs or []) ++ [ external.git ];
@@ -185,6 +212,13 @@ self:
 
       # upstream issue: missing file header
       qiita = markBroken super.qiita;
+
+      racer = super.racer.overrideAttrs (attrs: {
+        postPatch = attrs.postPatch or "" + ''
+          substituteInPlace racer.el \
+            --replace /usr/local/src/rust/src ${external.rustPlatform.rustcSrc}
+        '';
+      });
 
       # upstream issue: missing file footer
       seoul256-theme = markBroken super.seoul256-theme;

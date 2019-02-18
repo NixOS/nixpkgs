@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, autoreconfHook }:
 
 stdenv.mkDerivation rec {
-  version = "4.14";
+  version = "4.16";
   name = "hebcal-${version}";
 
   src = fetchFromGitHub {
     owner = "hebcal";
     repo = "hebcal";
     rev = "v${version}";
-    sha256 = "1zq8f7cigh5r31p03az338sbygkx8gbday35c9acppglci3r8fvc";
+    sha256 = "081h3dan0v14camv6j3swl9y31yzfwjfkp2h8xz5qmrh0scv8azr";
   };
 
   nativeBuildInputs = [ autoreconfHook ];

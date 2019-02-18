@@ -1,12 +1,14 @@
-{ stdenv, callPackage, fetchurl, gambit }:
+{ stdenv, callPackage, fetchFromGitHub, gambit }:
 
-callPackage ./build.nix {
-  version = "0.12-RELEASE";
-  git-version = "0.12";
-  GAMBIT = gambit;
-  SRC = fetchurl {
-    url = "https://github.com/vyzo/gerbil/archive/v0.12.tar.gz";
-    sha256 = "0nigr3mgrzai57q2jqac8f39zj8rcmic3277ynyzlgm8hhps71pq";
+callPackage ./build.nix rec {
+  version = "0.15.1";
+  git-version = "0.15.1";
+  inherit gambit;
+  src = fetchFromGitHub {
+    owner = "vyzo";
+    repo = "gerbil";
+    rev = "v${version}";
+    sha256 = "0qpqms66hz41wwhxb1z0fnzj96ivkm7qi9h9d7lhlr3fsxm1kp1n";
   };
   inherit stdenv;
 }

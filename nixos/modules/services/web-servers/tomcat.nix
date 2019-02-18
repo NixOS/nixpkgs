@@ -31,10 +31,26 @@ in
         '';
       };
 
+      purifyOnStart = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          On startup, the `baseDir` directory is populated with various files,
+          subdirectories and symlinks. If this option is enabled, these items
+          (except for the `logs` and `work` subdirectories) are first removed.
+          This prevents interference from remainders of an old configuration
+          (libraries, webapps, etc.), so it's recommended to enable this option.
+        '';
+      };
+
       baseDir = mkOption {
         type = lib.types.path;
         default = "/var/tomcat";
-        description = "Location where Tomcat stores configuration files, webapplications and logfiles";
+        description = ''
+          Location where Tomcat stores configuration files, web applications
+          and logfiles. Note that it is partially cleared on each service startup
+          if `purifyOnStart` is enabled.
+        '';
       };
 
       logDirs = mkOption {
@@ -121,6 +137,11 @@ in
               type = types.str;
               description = "name of the virtualhost";
             };
+            aliases = mkOption {
+              type = types.listOf types.str;
+              description = "aliases of the virtualhost";
+              default = [];
+            };
             webapps = mkOption {
               type = types.listOf types.path;
               description = ''
@@ -192,6 +213,15 @@ in
       after = [ "network.target" ];
 
       preStart = ''
+        ${lib.optionalString cfg.purifyOnStart ''
+          # Delete most directories/symlinks we create from the existing base directory,
+          # to get rid of remainders of an old configuration.
+          # The list of directories to delete is taken from the "mkdir" command below,
+          # excluding "logs" (because logs are valuable) and "work" (because normally
+          # session files are there), and additionally including "bin".
+          rm -rf ${cfg.baseDir}/{conf,virtualhosts,temp,lib,shared/lib,webapps,bin}
+        ''}
+
         # Create the base directory
         mkdir -p \
           ${cfg.baseDir}/{conf,virtualhosts,logs,temp,lib,shared/lib,webapps,work}
@@ -220,10 +250,28 @@ in
 
         ${if cfg.serverXml != "" then ''
           cp -f ${pkgs.writeTextDir "server.xml" cfg.serverXml}/* ${cfg.baseDir}/conf/
-          '' else ''
-          # Create a modified server.xml which also includes all virtual hosts
-          sed -e "/<Engine name=\"Catalina\" defaultHost=\"localhost\">/a\  ${toString (map (virtualHost: ''<Host name=\"${virtualHost.name}\" appBase=\"virtualhosts/${virtualHost.name}/webapps\" unpackWARs=\"true\" autoDeploy=\"true\" xmlValidation=\"false\" xmlNamespaceAware=\"false\" >${if cfg.logPerVirtualHost then ''<Valve className=\"org.apache.catalina.valves.AccessLogValve\" directory=\"logs/${virtualHost.name}\"  prefix=\"${virtualHost.name}_access_log.\" pattern=\"combined\" resolveHosts=\"false\"/>'' else ""}</Host>'') cfg.virtualHosts)}" \
-                ${tomcat}/conf/server.xml > ${cfg.baseDir}/conf/server.xml
+        '' else
+          let
+            hostElementForVirtualHost = virtualHost: ''
+              <Host name="${virtualHost.name}" appBase="virtualhosts/${virtualHost.name}/webapps"
+                    unpackWARs="true" autoDeploy="true" xmlValidation="false" xmlNamespaceAware="false">
+            '' + concatStrings (innerElementsForVirtualHost virtualHost) + ''
+              </Host>
+            '';
+            innerElementsForVirtualHost = virtualHost:
+              (map (alias: ''
+                <Alias>${alias}</Alias>
+              '') virtualHost.aliases)
+              ++ (optional cfg.logPerVirtualHost ''
+                <Valve className="org.apache.catalina.valves.AccessLogValve" directory="logs/${virtualHost.name}"
+                       prefix="${virtualHost.name}_access_log." pattern="combined" resolveHosts="false"/>
+              '');
+            hostElementsString = concatMapStringsSep "\n" hostElementForVirtualHost cfg.virtualHosts;
+            hostElementsSedString = replaceStrings ["\n"] ["\\\n"] hostElementsString;
+          in ''
+            # Create a modified server.xml which also includes all virtual hosts
+            sed -e "/<Engine name=\"Catalina\" defaultHost=\"localhost\">/a\\"${escapeShellArg hostElementsSedString} \
+                  ${tomcat}/conf/server.xml > ${cfg.baseDir}/conf/server.xml
           ''
         }
         ${optionalString (cfg.logDirs != []) ''

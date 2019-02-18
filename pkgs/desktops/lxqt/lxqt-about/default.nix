@@ -1,15 +1,14 @@
 { stdenv, fetchFromGitHub, cmake, lxqt-build-tools, qtx11extras, qttools, qtsvg, kwindowsystem, liblxqt, libqtxdg }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "lxqt-about";
-  version = "0.13.0";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "03f53rnn4rkd1xc2q9abnw37aq4sgvpbwhmcnckqyzc87lj6ici0";
+    sha256 = "14b13v1r5ncz4ycg25ac9ppafiifc37qws8kcw078if72rp9n121";
   };
 
   nativeBuildInputs = [
@@ -26,7 +25,10 @@ stdenv.mkDerivation rec {
     libqtxdg
   ];
 
-  cmakeFlags = [ "-DPULL_TRANSLATIONS=NO" ];
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace "\''${LXQT_TRANSLATIONS_DIR}" "''${out}/share/lxqt/translations"
+  '';
 
   meta = with stdenv.lib; {
     description = "Dialogue window providing information about LXQt and the system it's running on";

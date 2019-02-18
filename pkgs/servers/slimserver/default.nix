@@ -1,7 +1,7 @@
-{ stdenv, buildPerlPackage, fetchurl, fetchpatch, makeWrapper
-, perl, perlPackages, flac, faad2, sox, lame, monkeysAudio, wavpack }:
+{ stdenv, fetchurl, fetchpatch, makeWrapper
+, perlPackages, flac, faad2, sox, lame, monkeysAudio, wavpack }:
 
-buildPerlPackage rec {
+perlPackages.buildPerlPackage rec {
   name = "slimserver-${version}";
   version = "7.9.1";
 
@@ -10,14 +10,9 @@ buildPerlPackage rec {
     sha256 = "0szp5zkmx2b5lncsijf97asjnl73fyijkbgbwkl1i7p8qnqrb4mp";
   };
 
-  patches = [ (fetchpatch {
-    url = "https://github.com/Logitech/slimserver/pull/204.patch";
-    sha256 = "0n1c8nsbvqkmwj5ivkcxh1wkqqm1lwymmfz9i47ih6ifj06hkpxk";
-  } ) ];
-
   buildInputs = [
     makeWrapper
-    perl
+    perlPackages.perl
     perlPackages.AnyEvent
     perlPackages.AudioScan
     perlPackages.CarpClan
@@ -72,15 +67,19 @@ buildPerlPackage rec {
     rm -rf CPAN
     rm -rf Bin
     touch Makefile.PL
+
+    # relax audio scan version constraints
+    substituteInPlace lib/Audio/Scan.pm --replace "0.93" "1.01"
+    substituteInPlace modules.conf --replace "Audio::Scan 0.93 0.95" "Audio::Scan 0.93"
     '';
 
   preConfigurePhase = "";
 
   buildPhase = ''
     mv lib tmp
-    mkdir -p lib/perl5/site_perl
-    mv CPAN_used/* lib/perl5/site_perl
-    cp -rf tmp/* lib/perl5/site_perl
+    mkdir -p ${perlPackages.perl.libPrefix}
+    mv CPAN_used/* ${perlPackages.perl.libPrefix}
+    cp -rf tmp/* ${perlPackages.perl.libPrefix}
   '';
 
   doCheck = false;

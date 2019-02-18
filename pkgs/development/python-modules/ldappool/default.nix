@@ -3,12 +3,12 @@
 
 buildPythonPackage rec {
   name = "ldappool-${version}";
-  version = "2.3.0";
+  version = "2.3.1";
 
   src = fetchPypi {
     pname = "ldappool";
     inherit version;
-    sha256 = "899d38e891372981166350c813ff5ce2ad8ac383311edccda8102362c1d60952";
+    sha256 = "3ef502e65b396a917dbee9035db5d5a5aae6a94897dac2bc253c8257ca1c31a6";
   };
 
   nativeBuildInputs = [ pbr ];

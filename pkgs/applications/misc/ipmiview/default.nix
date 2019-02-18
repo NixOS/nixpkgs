@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "1wp22wm7smlsb25x0cck4p660cycfczxj381930crd1qrf68mw4h";
   };
 
-   buildInputs = [ patchelf makeWrapper ];
+   nativeBuildInputs = [ patchelf makeWrapper ];
 
    buildPhase = with xorg; ''
      patchelf --set-rpath "${stdenv.lib.makeLibraryPath [ libX11 libXext libXrender libXtst libXi ]}" ./jre/lib/amd64/xawt/libmawt.so

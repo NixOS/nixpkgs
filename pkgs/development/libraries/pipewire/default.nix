@@ -4,7 +4,7 @@
 }:
 
 let
-  version = "0.2.3";
+  version = "0.2.5";
 
   fontsConf = makeFontsConf {
     fontDirectories = [ freefont_ttf ];
@@ -16,7 +16,7 @@ in stdenv.mkDerivation rec {
     owner = "PipeWire";
     repo = "pipewire";
     rev = version;
-    sha256 = "1y04brfi5bv4y0hdyqzrcbayr674njf6a5hiwjfv2yi6lazkqv1k";
+    sha256 = "0hxm89ps6p75zm7rndrdr715p4ixx4f521fkjkyi7q2wh0b769s7";
   };
 
   outputs = [ "out" "lib" "dev" "doc" ];
@@ -31,7 +31,7 @@ in stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Ddocs=true"
-    "-Dgstreamer=true"
+    "-Dgstreamer=enabled"
   ];
 
   PKG_CONFIG_SYSTEMD_SYSTEMDUSERUNITDIR = "${placeholder "out"}/lib/systemd/user";

@@ -82,11 +82,12 @@ in {
   };
 
   config = mkIf cfg.enable {
-
     systemd.services.elasticsearch-curator = {
       startAt = cfg.interval;
       serviceConfig = {
-        ExecStart = ''${pkgs.python36Packages.elasticsearch-curator}/bin/curator --config ${curatorConfig} ${curatorAction}'';
+        ExecStart =
+          "${pkgs.python3Packages.elasticsearch-curator}/bin/curator" +
+          " --config ${curatorConfig} ${curatorAction}";
       };
     };
   };

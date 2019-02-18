@@ -6,7 +6,7 @@
 stdenv.mkDerivation (rec {
   name = "libgit2-${version}";
   version = "0.26.6";
-  # keep the version in sync with pythonPackages.pygit2 and gnome3.libgit2-glib
+  # keep the version in sync with pythonPackages.pygit2 and libgit2-glib
 
   src = fetchFromGitHub {
     owner = "libgit2";

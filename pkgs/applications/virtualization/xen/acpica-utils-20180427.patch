@@ -1,0 +1,63 @@
+From 858dbaaeda33b05c1ac80aea0ba9a03924e09005 Mon Sep 17 00:00:00 2001
+From: =?utf8?q?Roger=20Pau=20Monn=C3=A9?= <roger.pau@citrix.com>
+Date: Wed, 9 May 2018 11:08:12 +0100
+Subject: [PATCH] libacpi: fixes for iasl >= 20180427
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf8
+Content-Transfer-Encoding: 8bit
+
+New versions of iasl have introduced improved C file generation, as
+reported in the changelog:
+
+iASL: Enhanced the -tc option (which creates an AML hex file in C,
+suitable for import into a firmware project):
+  1) Create a unique name for the table, to simplify use of multiple
+SSDTs.
+  2) Add a protection #ifdef in the file, similar to a .h header file.
+
+The net effect of that on generated files is:
+
+-unsigned char AmlCode[] =
++#ifndef __SSDT_S4_HEX__
++#define __SSDT_S4_HEX__
++
++unsigned char ssdt_s4_aml_code[] =
+
+The above example is from ssdt_s4.asl.
+
+Fix the build with newer versions of iasl by stripping the '_aml_code'
+suffix from the variable name on generated files.
+
+Signed-off-by: Roger Pau MonnÃ© <roger.pau@citrix.com>
+Reviewed-by: Wei Liu <wei.liu2@citrix.com>
+Acked-by: Andrew Cooper <andrew.cooper3@citrix.com>
+Release-acked-by: Juergen Gross <jgross@suse.com>
+---
+ tools/libacpi/Makefile | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/tools/libacpi/Makefile b/tools/libacpi/Makefile
+index a47a658a25..c17f3924cc 100644
+--- a/tools/libacpi/Makefile
++++ b/tools/libacpi/Makefile
+@@ -43,7 +43,7 @@ all: $(C_SRC) $(H_SRC)
+ 
+ $(H_SRC): $(ACPI_BUILD_DIR)/%.h: %.asl iasl
+ 	iasl -vs -p $(ACPI_BUILD_DIR)/$*.$(TMP_SUFFIX) -tc $<
+-	sed -e 's/AmlCode/$*/g' $(ACPI_BUILD_DIR)/$*.hex >$@
++	sed -e 's/AmlCode/$*/g' -e 's/_aml_code//g' $(ACPI_BUILD_DIR)/$*.hex >$@
+ 	rm -f $(addprefix $(ACPI_BUILD_DIR)/, $*.aml $*.hex)
+  
+ $(MK_DSDT): mk_dsdt.c
+@@ -76,7 +76,7 @@ $(ACPI_BUILD_DIR)/dsdt_anycpu_arm.asl: $(MK_DSDT)
+ 
+ $(C_SRC): $(ACPI_BUILD_DIR)/%.c: iasl $(ACPI_BUILD_DIR)/%.asl
+ 	iasl -vs -p $(ACPI_BUILD_DIR)/$*.$(TMP_SUFFIX) -tc $(ACPI_BUILD_DIR)/$*.asl
+-	sed -e 's/AmlCode/$*/g' $(ACPI_BUILD_DIR)/$*.hex > $@.$(TMP_SUFFIX)
++	sed -e 's/AmlCode/$*/g' -e 's/_aml_code//g' $(ACPI_BUILD_DIR)/$*.hex > $@.$(TMP_SUFFIX)
+ 	echo "int $*_len=sizeof($*);" >> $@.$(TMP_SUFFIX)
+ 	mv -f $@.$(TMP_SUFFIX) $@
+ 	rm -f $(addprefix $(ACPI_BUILD_DIR)/, $*.aml $*.hex)
+-- 
+2.11.0
+

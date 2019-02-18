@@ -12,7 +12,7 @@ in {
     virtualbox = {
       baseImageSize = mkOption {
         type = types.int;
-        default = 10 * 1024;
+        default = 50 * 1024;
         description = ''
           The size of the VirtualBox base image in MiB.
         '';
@@ -61,7 +61,7 @@ in {
           export HOME=$PWD
           export PATH=${pkgs.virtualbox}/bin:$PATH
 
-          echo "creating VirtualBox pass-through disk wrapper (no copying invovled)..."
+          echo "creating VirtualBox pass-through disk wrapper (no copying involved)..."
           VBoxManage internalcommands createrawvmdk -filename disk.vmdk -rawdisk $diskImage
 
           echo "creating VirtualBox VM..."
@@ -72,9 +72,9 @@ in {
             --memory ${toString cfg.memorySize} --acpi on --vram 32 \
             ${optionalString (pkgs.stdenv.hostPlatform.system == "i686-linux") "--pae on"} \
             --nictype1 virtio --nic1 nat \
-            --audiocontroller ac97 --audio alsa \
+            --audiocontroller ac97 --audio alsa --audioout on \
             --rtcuseutc on \
-            --usb on --mouse usbtablet
+            --usb on --usbehci on --mouse usbtablet
           VBoxManage storagectl "$vmName" --name SATA --add sata --portcount 4 --bootable on --hostiocache on
           VBoxManage storageattach "$vmName" --storagectl SATA --port 0 --device 0 --type hdd \
             --medium disk.vmdk
@@ -82,7 +82,7 @@ in {
           echo "exporting VirtualBox VM..."
           mkdir -p $out
           fn="$out/${cfg.vmFileName}"
-          VBoxManage export "$vmName" --output "$fn"
+          VBoxManage export "$vmName" --output "$fn" --options manifest
 
           rm -v $diskImage
 

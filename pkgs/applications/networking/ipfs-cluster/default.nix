@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   name = "ipfs-cluster-${version}";
-  version = "0.5.0";
+  version = "0.7.0";
   rev = "v${version}";
 
   goPackagePath = "github.com/ipfs/ipfs-cluster";
@@ -10,7 +10,7 @@ buildGoPackage rec {
   extraSrcPaths = [
     (fetchgx {
       inherit name src;
-      sha256 = "0jwz3kd07i5fs0sxds80j8d338skhgxgxra377qxsk0cr2hhj2vm";
+      sha256 = "19ljx4q9msrv5wwyd85l01l320lhwgma5z3b756ldgj9fs8p9ph6";
     })
   ];
 
@@ -18,7 +18,7 @@ buildGoPackage rec {
     owner = "ipfs";
     repo = "ipfs-cluster";
     inherit rev;
-    sha256 = "132whjyplcifq8747hcdrgbc0amhp618dg049jq5nyslcxfgdypm";
+    sha256 = "1zqy4zzi33z16fny1dnhqa8z7czrggvbxdxs750gxzbnd9vqzda1";
   };
 
   nativeBuildInputs = [ gx-go ];

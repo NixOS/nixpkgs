@@ -1,5 +1,6 @@
 { stdenv
 , fetchFromGitHub
+, fetchpatch
 , cmake
 , fdk_aac
 , ffmpeg
@@ -18,6 +19,12 @@
 , makeWrapper
 , pkgconfig
 , vlc
+, mbedtls
+
+, scriptingSupport ? true
+, luajit
+, swig
+, python3
 
 , alsaSupport ? false
 , alsaLib
@@ -29,16 +36,21 @@ let
   optional = stdenv.lib.optional;
 in stdenv.mkDerivation rec {
   name = "obs-studio-${version}";
-  version = "21.1.2";
+  version = "22.0.3";
 
   src = fetchFromGitHub {
     owner = "jp9000";
     repo = "obs-studio";
     rev = "${version}";
-    sha256 = "1gl6qibvckczk3yl44h3yshml6sn3izwn58qpxils5837rpkwlc5";
+    sha256 = "0ri9qkqk3h71b1a5bwpjzqdr21bbmfqbykg48l779d20zln23n1i";
   };
 
-  patches = [ ./find-xcb.patch ];
+  patches = [
+    (fetchpatch {
+      url = "https://patch-diff.githubusercontent.com/raw/obsproject/obs-studio/pull/1557.diff";
+      sha256 = "162fnkxh2wyn6wrrm1kzv7c2mn96kx35vlmk2qwn1nqlifbpsfyq";
+    })
+  ];
 
   nativeBuildInputs = [ cmake
                         pkgconfig
@@ -59,7 +71,9 @@ in stdenv.mkDerivation rec {
                   x264
                   vlc
                   makeWrapper
+                  mbedtls
                 ]
+                ++ optional scriptingSupport [ luajit swig python3 ]
                 ++ optional alsaSupport alsaLib
                 ++ optional pulseaudioSupport libpulseaudio;
 
@@ -83,6 +97,6 @@ in stdenv.mkDerivation rec {
     homepage = https://obsproject.com;
     maintainers = with maintainers; [ jb55 MP2E ];
     license = licenses.gpl2;
-    platforms = with platforms; linux;
+    platforms = [ "x86_64-linux" "i686-linux" ];
   };
 }

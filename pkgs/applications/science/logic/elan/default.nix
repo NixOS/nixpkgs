@@ -2,15 +2,15 @@
 
 rustPlatform.buildRustPackage rec {
   name = "elan-${version}";
-  version = "0.5.0";
+  version = "0.7.2";
 
-  cargoSha256 = "01d3s47fjszxx8s5gr3haxq3kz3hswkrkr8x97wx8l4nfhm8ndd2";
+  cargoSha256 = "0vv7kr7rc3lvas7ngp5dp99ajjd5v8k5937ish7zqz1k4970q2f1";
 
   src = fetchFromGitHub {
     owner = "kha";
     repo = "elan";
     rev = "v${version}";
-    sha256 = "13zcqlyz0nwvd574llndrs7kvkznj6njljkq3v5j7kb3vndkj6i9";
+    sha256 = "0844fydfxvacyx02gwxbzpmiamsp22malyy5m4wpvrky4dkpn3qj";
   };
 
   nativeBuildInputs = [ pkgconfig ];

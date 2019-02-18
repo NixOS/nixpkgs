@@ -15,9 +15,9 @@ stdenv.mkDerivation rec {
     description = "GNU barcode generator";
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.linux; # Maybe other non-darwin Unix
-    downloadPage = "http://ftp.gnu.org/gnu/barcode/";
+    downloadPage = "https://ftp.gnu.org/gnu/barcode/";
     updateWalker = true;
-    homepage = http://ftp.gnu.org/gnu/barcode/;
+    homepage = https://www.gnu.org/software/barcode/;
     license = licenses.gpl3;
   };
 }

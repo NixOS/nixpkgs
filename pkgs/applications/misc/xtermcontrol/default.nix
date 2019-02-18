@@ -1,12 +1,12 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  version = "3.4";
+  version = "3.6";
   name = "xtermcontrol-${version}";
 
   src = fetchurl {
     url = "https://thrysoee.dk/xtermcontrol/xtermcontrol-${version}.tar.gz";
-    sha256 = "1g81v9gfn08gjn1269j0qx12x36s9j6x39gl91ycay391flgzr5l";
+    sha256 = "01bwgxya6qh4br2lx3v98p7j1b99skgr6c1frw5kdkxy57qlpgkz";
   };
 
   meta = {

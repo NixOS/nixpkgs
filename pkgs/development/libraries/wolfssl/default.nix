@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "wolfssl-${version}";
-  version = "3.15.3";
+  version = "3.15.7";
 
   src = fetchFromGitHub {
     owner = "wolfSSL";
     repo = "wolfssl";
     rev = "v${version}-stable";
-    sha256 = "00mpq1z8j37a873dbk9knb835m3qlwqnd1rslirqkc44hpz1i64j";
+    sha256 = "128z1f7nry278kdjzq950cr81bml8p17fgdchmpvy0awhh7r20y9";
   };
 
   configureFlags = [ "--enable-all" ];
@@ -29,6 +29,7 @@ stdenv.mkDerivation rec {
     description = "A small, fast, portable implementation of TLS/SSL for embedded devices";
     homepage    = "https://www.wolfssl.com/";
     platforms   = platforms.all;
+    license = stdenv.lib.licenses.gpl2;
     maintainers = with maintainers; [ mcmtroffaes ];
   };
 }

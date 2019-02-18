@@ -16,8 +16,6 @@ stdenv.mkDerivation rec {
   buildInputs = [ ocaml findlib ocamlbuild topkg cmdliner ];
   propagatedBuildInputs = [ uchar ];
 
-  unpackCmd = "tar xjf $src";
-
   inherit (topkg) buildPhase installPhase;
 
   meta = with stdenv.lib; {

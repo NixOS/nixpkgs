@@ -1,5 +1,5 @@
 { llvmPackages, lib, fetchFromGitHub, cmake
-, libpng, libjpeg, mesa_noglu, eigen3_3, openblas
+, libpng, libjpeg, mesa_noglu, eigen, openblas
 }:
 
 let
@@ -37,7 +37,7 @@ in llvmPackages.stdenv.mkDerivation {
   # Note: only openblas and not atlas part of this Nix expression
   # see pkgs/development/libraries/science/math/liblapack/3.5.0.nix
   # to get a hint howto setup atlas instead of openblas
-  buildInputs = [ llvmPackages.llvm libpng libjpeg mesa_noglu eigen3_3 openblas ];
+  buildInputs = [ llvmPackages.llvm libpng libjpeg mesa_noglu eigen openblas ];
 
   nativeBuildInputs = [ cmake ];
 

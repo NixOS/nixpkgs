@@ -11,12 +11,6 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ idna ];
 
-  checkInputs = [ pytest ];
-
-  checkPhase = ''
-    py.test $out
-  '';
-
   meta = with stdenv.lib; {
     description = "A featureful, correct URL for Python";
     license = licenses.mit;

@@ -1,7 +1,7 @@
 { stdenv, fetchurl, makeWrapper }:
 
 let
-  version = "3.0.13.6";
+  version = "3.5.1";
   arch = if stdenv.is64bit then "amd64" else "x86";
   libDir = if stdenv.is64bit then "lib64" else "lib";
 in
@@ -14,9 +14,9 @@ stdenv.mkDerivation {
       "http://dl.4players.de/ts/releases/${version}/teamspeak3-server_linux_${arch}-${version}.tar.bz2"
       "http://teamspeak.gameserver.gamed.de/ts3/releases/${version}/teamspeak3-server_linux_${arch}-${version}.tar.bz2"
     ];
-    sha256 = if stdenv.is64bit 
-      then "19ccd8db5427758d972a864b70d4a1263ebb9628fcc42c3de75ba87de105d179"
-      else "2f70b3e70a3d9bf86106fab67a938922c8d27fec24e66e229913f78a0791b967";
+    sha256 = if stdenv.is64bit
+      then "0ygb867ff2fvi9n9hgs4hldpg4y012w4i1d9cx4f5mpli1xim6da"
+      else "0g1cixsldpdbfzg2vain7h3hr5j3xjdngjw66r0aqnzbx743gjzj";
   };
 
   buildInputs = [ makeWrapper ];

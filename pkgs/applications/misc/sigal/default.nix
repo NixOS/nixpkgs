@@ -1,16 +1,16 @@
-{ lib, buildPythonApplication, fetchPypi, pythonPackages, ffmpeg }:
+{ lib, python3Packages, ffmpeg }:
 
-buildPythonApplication rec {
-  version = "1.4.0";
+python3Packages.buildPythonApplication rec {
+  version = "1.4.1";
   pname   = "sigal";
 
-  src = fetchPypi {
+  src = python3Packages.fetchPypi {
     inherit version pname;
-    sha256 = "0da0n8jhjp2swr18zga87xc77r8c7qwqf5sp222ph9sn3yyyc35i";
+    sha256 = "1fg32ii26j3xpq3cryi212lx9z33qnicm1cszwv1wfpg6sr2rr61";
   };
 
-  buildInputs = with pythonPackages; [ pytest ];
-  propagatedBuildInputs = with pythonPackages; [
+  checkInputs = with python3Packages; [ pytest ];
+  propagatedBuildInputs = with python3Packages; [
     jinja2
     markdown
     pillow
@@ -32,4 +32,3 @@ buildPythonApplication rec {
     maintainers = with maintainers; [ domenkozar ];
   };
 }
-

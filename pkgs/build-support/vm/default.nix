@@ -162,7 +162,7 @@ rec {
     fi
 
     # Set up automatic kernel module loading.
-    export MODULE_DIR=${linux}/lib/modules/
+    export MODULE_DIR=${kernel}/lib/modules/
     ${coreutils}/bin/cat <<EOF > /run/modprobe
     #! /bin/sh
     export MODULE_DIR=$MODULE_DIR
@@ -315,7 +315,7 @@ rec {
       name = "extract-file";
       buildInputs = [ utillinux ];
       buildCommand = ''
-        ln -s ${linux}/lib /lib
+        ln -s ${kernel}/lib /lib
         ${kmod}/bin/modprobe loop
         ${kmod}/bin/modprobe ext4
         ${kmod}/bin/modprobe hfs
@@ -340,7 +340,7 @@ rec {
       name = "extract-file-mtd";
       buildInputs = [ utillinux mtdutils ];
       buildCommand = ''
-        ln -s ${linux}/lib /lib
+        ln -s ${kernel}/lib /lib
         ${kmod}/bin/modprobe mtd
         ${kmod}/bin/modprobe mtdram total_size=131072
         ${kmod}/bin/modprobe mtdchar
@@ -964,6 +964,40 @@ rec {
       packages = commonDebPackages ++ [ "diffutils" "libc-bin" ];
     };
 
+    ubuntu1804i386 = {
+      name = "ubuntu-18.04-bionic-i386";
+      fullName = "Ubuntu 18.04 Bionic (i386)";
+      packagesLists =
+        [ (fetchurl {
+            url = mirror://ubuntu/dists/bionic/main/binary-i386/Packages.xz;
+            sha256 = "0f0v4131kwf7m7f8j3288rlqdxk1k3vqy74b7fcfd6jz9j8d840i";
+          })
+          (fetchurl {
+            url = mirror://ubuntu/dists/bionic/universe/binary-i386/Packages.xz;
+            sha256 = "1v75c0dqr0wp0dqd4hnci92qqs4hll8frqdbpswadgxm5chn91bw";
+          })
+        ];
+      urlPrefix = mirror://ubuntu;
+      packages = commonDebPackages ++ [ "diffutils" "libc-bin" ];
+    };
+
+    ubuntu1804x86_64 = {
+      name = "ubuntu-18.04-bionic-amd64";
+      fullName = "Ubuntu 18.04 Bionic (amd64)";
+      packagesLists =
+        [ (fetchurl {
+            url = mirror://ubuntu/dists/bionic/main/binary-amd64/Packages.xz;
+            sha256 = "1ls81bjyvmfz6i919kszl7xks1ibrh1xqhsk6698ackndkm0wp39";
+          })
+          (fetchurl {
+            url = mirror://ubuntu/dists/bionic/universe/binary-amd64/Packages.xz;
+            sha256 = "1832nqpn4ap95b3sj870xqayrza9in4kih9jkmjax27pq6x15v1r";
+          })
+        ];
+      urlPrefix = mirror://ubuntu;
+      packages = commonDebPackages ++ [ "diffutils" "libc-bin" ];
+    };
+
     debian8i386 = {
       name = "debian-8.11-jessie-i386";
       fullName = "Debian 8.11 Jessie (i386)";
@@ -990,7 +1024,7 @@ rec {
       name = "debian-9.4-stretch-i386";
       fullName = "Debian 9.4 Stretch (i386)";
       packagesList = fetchurl {
-        url = https://web.archive.org/web/20180912163509/http://ftp.debian.org/debian/dists/stretch/main/binary-i386/Packages.xz;
+        url = http://snapshot.debian.org/archive/debian/20180912T154744Z/dists/stretch/main/binary-i386/Packages.xz;
         sha256 = "0flvn8zn7vk04p10ndf3aq0mdr8k2ic01g51aq4lsllkv8lmwzyh";
       };
       urlPrefix = mirror://debian;
@@ -1001,7 +1035,7 @@ rec {
       name = "debian-9.4-stretch-amd64";
       fullName = "Debian 9.4 Stretch (amd64)";
       packagesList = fetchurl {
-        url = https://web.archive.org/web/20180912163152/http://ftp.debian.org/debian/dists/stretch/main/binary-amd64/Packages.xz;
+        url = http://snapshot.debian.org/archive/debian/20180912T154744Z/dists/stretch/main/binary-amd64/Packages.xz;
         sha256 = "11vnn9bba2jabixvabfbw9zparl326c88xn99di7pbr5xsnl15jm";
       };
       urlPrefix = mirror://debian;

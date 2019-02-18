@@ -15,11 +15,11 @@ assert guiSupport -> pinentry != null;
 stdenv.mkDerivation rec {
   name = "gnupg-${version}";
 
-  version = "2.2.9";
+  version = "2.2.12";
 
   src = fetchurl {
     url = "mirror://gnupg/gnupg/${name}.tar.bz2";
-    sha256 = "0r11mx8nkh7ysrnshs560amha5csx8zcaggb5kxcksx1zymyly32";
+    sha256 = "1jw282iy27j1qygym52aa44zxy7ly4bdadhd628hwr4q9j5hy0yv";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
       frontend applications and libraries are available.  Version 2 of GnuPG
       also provides support for S/MIME.
     '';
-    maintainers = with maintainers; [ wkennington peti fpletz vrthra ];
+    maintainers = with maintainers; [ peti fpletz vrthra ];
     platforms = platforms.all;
   };
 }

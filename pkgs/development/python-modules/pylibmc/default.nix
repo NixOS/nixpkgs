@@ -1,12 +1,12 @@
 { buildPythonPackage, fetchPypi, stdenv, libmemcached, zlib, cyrus_sasl }:
 
 buildPythonPackage rec {
-  version = "1.5.2";
+  version = "1.6.0";
   pname = "pylibmc";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "fc54e28a9f1b5b2ec0c030da29c7ad8a15c2755bd98aaa4142eaf419d5fabb33";
+    sha256 = "1n6nvvhl0g52gpzzwdj1my6049xljkfwyxxygnwda9smrbj7pyay";
   };
 
   buildInputs = [ libmemcached zlib cyrus_sasl ];

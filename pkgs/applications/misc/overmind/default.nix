@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   name = "overmind-${version}";
-  version = "2.0.0.beta1";
+  version = "1.2.1";
   goPackagePath = "github.com/DarthSim/overmind";
 
   nativeBuildInputs = [ makeWrapper ];
@@ -15,7 +15,7 @@ buildGoPackage rec {
     owner = "DarthSim";
     repo = "overmind";
     rev = "v${version}";
-    sha256 = "15fch3qszdm8bj1m9hxky9zgk6f5gpbswwfslg84qdjf4iwr5drq";
+    sha256 = "11ws9rsy8ladjp1y3b6vva9sjmw4s24xc1w18lyhfz63xc908nfw";
   };
 
   meta = with stdenv.lib; {

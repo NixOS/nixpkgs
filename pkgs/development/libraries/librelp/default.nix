@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, gnutls, zlib }:
 
 stdenv.mkDerivation rec {
-  name = "librelp-1.2.17";
+  name = "librelp-1.3.0";
 
   src = fetchurl {
     url = "http://download.rsyslog.com/librelp/${name}.tar.gz";
-    sha256 = "1w6blhfr3rlmvjj0fbr8rsycrkm5b92n44zaaijg1jnvxjfqpy0v";
+    sha256 = "1xg99ndn65984mrh30qvys5npc73ag4348whshghrcj9azya494z";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -16,6 +16,5 @@ stdenv.mkDerivation rec {
     description = "A reliable logging library";
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ wkennington ];
   };
 }

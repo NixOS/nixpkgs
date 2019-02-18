@@ -1,11 +1,11 @@
 { stdenv, fetchgit, meson, ninja, pkgconfig
 , python3, gtk3, libsecret, gst_all_1, webkitgtk
 , glib-networking, gtkspell3, hunspell, desktop-file-utils
-, gobjectIntrospection, wrapGAppsHook }:
+, gobject-introspection, wrapGAppsHook }:
 
 python3.pkgs.buildPythonApplication rec {
-  name = "eolie-${version}";
-  version = "0.9.36";
+  pname = "eolie";
+  version = "0.9.45";
 
   format = "other";
   doCheck = false;
@@ -14,12 +14,12 @@ python3.pkgs.buildPythonApplication rec {
     url = "https://gitlab.gnome.org/World/eolie";
     rev = "refs/tags/${version}";
     fetchSubmodules = true;
-    sha256 = "1pqs6lddkj7nvxdwf0yncwdcr7683mpvx3912vn7b1f2q2zkp1fv";
+    sha256 = "0x6f2qqqxpjf28mqxs4jlrz2z8wa9nvb9h24nf8qwmzavjjbraqg";
   };
 
   nativeBuildInputs = [
     desktop-file-utils
-    gobjectIntrospection
+    gobject-introspection
     meson
     ninja
     pkgconfig
@@ -39,7 +39,7 @@ python3.pkgs.buildPythonApplication rec {
     webkitgtk
   ];
 
-  pythonPath = with python3.pkgs; [
+  propagatedBuildInputs = with python3.pkgs; [
     beautifulsoup4
     pycairo
     pygobject3
@@ -51,11 +51,16 @@ python3.pkgs.buildPythonApplication rec {
     patchShebangs meson_post_install.py
   '';
 
+  preFixup = ''
+    buildPythonPath "$out $propagatedBuildInputs"
+    patchPythonScript "$out/libexec/eolie-sp"
+  '';
+
   meta = with stdenv.lib; {
     description = "A new GNOME web browser";
-    homepage    = https://wiki.gnome.org/Apps/Eolie;
-    license     = licenses.gpl3Plus;
+    homepage = https://wiki.gnome.org/Apps/Eolie;
+    license  = licenses.gpl3Plus;
     maintainers = with maintainers; [ samdroid-apps worldofpeace ];
-    platforms   = platforms.linux;
+    platforms = platforms.linux;
   };
 }

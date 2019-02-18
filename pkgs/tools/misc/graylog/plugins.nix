@@ -25,10 +25,10 @@ in {
   aggregates = glPlugin rec {
     name = "graylog-aggregates-${version}";
     pluginName = "graylog-plugin-aggregates";
-    version = "2.0.0";
+    version = "2.3.0";
     src = fetchurl {
       url = "https://github.com/cvtienhoven/${pluginName}/releases/download/${version}/${pluginName}-${version}.jar";
-      sha256 = "0crgb49msjkvfpksbfhq2hlkc904j184wm1wp6q0x6lzhn07hm8y";
+      sha256 = "0yy455wyr01ci3nqvbhzxs6r4bb3xgac0xcmqaim1wsm1fdfi2ws";
     };
     meta = {
       homepage = https://github.com/cvtienhoven/graylog-plugin-aggregates;
@@ -38,10 +38,10 @@ in {
   auth_sso = glPlugin rec {
     name = "graylog-auth-sso-${version}";
     pluginName = "graylog-plugin-auth-sso";
-    version = "2.3.0";
+    version = "2.4.2";
     src = fetchurl {
       url = "https://github.com/Graylog2/${pluginName}/releases/download/${version}/${pluginName}-${version}.jar";
-      sha256 = "110ag10y0xyf3za6663vf68r5rwdi92315a37vysqvj00y7yak0l";
+      sha256 = "0nwzw7ddq2psnvj8jwaxp9i080l7y2daxy198wzb62m7i1srzcp8";
     };
     meta = {
       homepage = https://github.com/Graylog2/graylog-plugin-auth-sso;
@@ -51,10 +51,10 @@ in {
   dnsresolver = glPlugin rec {
     name = "graylog-dnsresolver-${version}";
     pluginName = "graylog-plugin-dnsresolver";
-    version = "1.1.2";
+    version = "1.2.0";
     src = fetchurl {
       url = "https://github.com/graylog-labs/${pluginName}/releases/download/${version}/${pluginName}-${version}.jar";
-      sha256 = "01s7wm6bwcpmdrl35gjp6rrqxixs2s9km2bdgzhv8pn25j5qnw28";
+      sha256 = "0djlyd4w4mrrqfbrs20j1xw0fygqsb81snz437v9bf80avmcyzg1";
     };
     meta = {
       homepage = https://github.com/graylog-labs/graylog-plugin-dnsresolver;
@@ -77,10 +77,10 @@ in {
   internal-logs = glPlugin rec {
     name = "graylog-internal-logs-${version}";
     pluginName = "graylog-plugin-internal-logs";
-    version = "2.3.0";
+    version = "2.4.0";
     src = fetchurl {
       url = "https://github.com/graylog-labs/${pluginName}/releases/download/${version}/${pluginName}-${version}.jar";
-      sha256 = "05r4m2gf1hj1b889rmpb6b5a6q2xd0qkl1rpj107yd219j2grzf4";
+      sha256 = "1jyy0wkjapv3xv5q957xxv2pcnd4n1yivkvkvg6cx7kv1ip75xwc";
     };
     meta = {
       homepage = https://github.com/graylog-labs/graylog-plugin-internal-logs;
@@ -103,10 +103,10 @@ in {
   jabber = glPlugin rec {
     name = "graylog-jabber-${version}";
     pluginName = "graylog-plugin-jabber";
-    version = "2.0.0";
+    version = "2.4.0";
     src = fetchurl {
       url = "https://github.com/graylog-labs/${pluginName}/releases/download/${version}/${pluginName}-${version}.jar";
-      sha256 = "1bqj5g9zjnw08bva7379c2ar3nhmyiilj7kjxd16qvfdn2674r5h";
+      sha256 = "0zy27q8y0bv7i5nypsfxad4yiw121sbwzd194jsz2w08jhk3skl5";
     };
     meta = {
       homepage = https://github.com/graylog-labs/graylog-plugin-jabber;
@@ -168,10 +168,10 @@ in {
   slack = glPlugin rec {
     name = "graylog-slack-${version}";
     pluginName = "graylog-plugin-slack";
-    version = "2.4.0";
+    version = "3.1.0";
     src = fetchurl {
       url = "https://github.com/graylog-labs/${pluginName}/releases/download/${version}/${pluginName}-${version}.jar";
-      sha256 = "0v8ilfhs8bnx87pjxg1i3p2vxw61rwpg4k3zhga7slavx70y986p";
+      sha256 = "067p8g94b007gypwyyi8vb6qhwdanpk8ah57abik54vv14jxg94k";
     };
     meta = {
       homepage = https://github.com/graylog-labs/graylog-plugin-slack;

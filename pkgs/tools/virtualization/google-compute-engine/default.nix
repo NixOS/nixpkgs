@@ -2,29 +2,31 @@
 , fetchFromGitHub
 , buildPythonApplication
 , bash
+, bashInteractive
 , systemd
 , utillinux
 , boto
 , setuptools
+, distro
 }:
 
 buildPythonApplication rec {
   name = "google-compute-engine-${version}";
-  version = "20180510";
+  version = "20190124";
   namePrefix = "";
 
   src = fetchFromGitHub {
     owner = "GoogleCloudPlatform";
     repo = "compute-image-packages";
     rev = version;
-    sha256 = "13hmg29s1pljcvf40lrv5yickg8x51rcnv68wxhs6zkkg75k448p";
+    sha256 = "08cy0jd463kng6hwbd3nfldsp4dpd2lknlvdm88cq795wy0kh4wp";
   };
 
   postPatch = ''
     for file in $(find google_compute_engine -type f); do
       substituteInPlace "$file" \
         --replace /bin/systemctl "${systemd}/bin/systemctl" \
-        --replace /bin/bash "${bash}/bin/bash" \
+        --replace /bin/bash "${bashInteractive}/bin/bash" \
         --replace /sbin/hwclock "${utillinux}/bin/hwclock"
 
       # SELinux tool ???  /sbin/restorecon
@@ -42,7 +44,7 @@ buildPythonApplication rec {
     cp -r google_config/udev/*.rules $out/lib/udev/rules.d
   '';
 
-  propagatedBuildInputs = [ boto setuptools ];
+  propagatedBuildInputs = [ boto setuptools distro ];
 
   doCheck = false;
 

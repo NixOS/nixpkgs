@@ -1,0 +1,15 @@
+diff --git a/setup.py b/setup.py
+index 90a39a5..7bf444f 100644
+--- a/setup.py
++++ b/setup.py
+@@ -77,9 +77,8 @@ setup(
+         'Programming Language :: Python :: Implementation :: PyPy',
+     ],
+     test_suite='tests',
+-    tests_require=['pytest','hypothesis'],
++    tests_require=['pytest-runner', 'pytest','hypothesis'],
+     scripts=[],
+-    setup_requires=['pytest-runner'],
+     ext_modules=extensions,
+     cmdclass={'build_ext': custom_build_ext},
+     install_requires=['six'],

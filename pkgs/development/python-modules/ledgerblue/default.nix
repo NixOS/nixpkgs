@@ -4,11 +4,11 @@
 
 buildPythonPackage rec {
   pname = "ledgerblue";
-  version = "0.1.19";
+  version = "0.1.22";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "3969b3c375c0f3fb60ff1645621ebf2f39fb697a53851620705f27ed7b283097";
+    sha256 = "15206e92220d96512b357a9a740bc91b8b33b42b9164fe3b56c4c3aedf882cdc";
   };
 
   propagatedBuildInputs = [

@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     # Provides the mig command used by the build scripts
     ++ optional stdenv.isDarwin bootstrap_cmds;
   buildInputs = [ openssl ]
-    ++ optionals (stdenv.hostPlatform.isLinux) [ keyutils ]
+    ++ optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.libc != "bionic") [ keyutils ]
     ++ optionals (!libOnly) [ openldap libedit ];
 
   preConfigure = "cd ./src";
@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
 
   # not via outputBin, due to reference from libkrb5.so
   postInstall = ''
-    moveToOutput bin "$dev"
+    moveToOutput bin/krb5-config "$dev"
   '';
 
   enableParallelBuilding = true;
@@ -75,8 +75,7 @@ stdenv.mkDerivation rec {
     description = "MIT Kerberos 5";
     homepage = http://web.mit.edu/kerberos/;
     license = licenses.mit;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ wkennington ];
+    platforms = platforms.unix ++ platforms.windows;
   };
 
   passthru.implementation = "krb5";

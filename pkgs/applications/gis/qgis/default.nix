@@ -1,14 +1,15 @@
-{ stdenv, fetchurl, gdal, cmake, qt4, flex, bison, proj, geos, xlibsWrapper, sqlite, gsl
+{ stdenv, fetchurl, fetchpatch, gdal, cmake, qt4, flex, bison, proj, geos, xlibsWrapper, sqlite, gsl
 , qwt, fcgi, python2Packages, libspatialindex, libspatialite, qscintilla, postgresql, makeWrapper
 , qjson, qca2, txt2tags, openssl, darwin, pkgconfig
-, withGrass ? true, grass, IOKit, ApplicationServices
+, withGrass ? true, grass, saga, IOKit, ApplicationServices
 }:
 
 stdenv.mkDerivation rec {
-  name = "qgis-2.18.22";
+  name = "qgis-2.18.28";
 
   buildInputs = [ gdal qt4 flex openssl bison proj geos xlibsWrapper sqlite gsl qwt qscintilla
-    fcgi libspatialindex libspatialite postgresql qjson qca2 txt2tags pkgconfig ]
+    fcgi libspatialindex libspatialite postgresql qjson qca2 txt2tags pkgconfig
+    saga ]
   ++
     (stdenv.lib.optionals stdenv.isDarwin [IOKit ApplicationServices])
   ++
@@ -34,8 +35,17 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://qgis.org/downloads/${name}.tar.bz2";
-    sha256 = "00b3a2hfn3i7bdx7x96vz2nj0976vpkhid4ss7n8c33fdvw3k82a";
+    sha256 = "18pijqls1isd2bpg0mkrw07jqvdfaiwwb9mvz7p2xrgqcjx7dxsq";
   };
+
+  patches = [
+    # already merged upstream in QGIS-3.*, but needs to be backported to QGIS-2
+    (fetchpatch {
+      url = "https://patch-diff.githubusercontent.com/raw/qgis/QGIS/pull/7263.patch";
+      name = "Ensure_qgis.db_is_writable_when_copied_from_RO_source";
+      sha256 = "19wr2kz0x8x6p2n0ylzd4lqrdmbkxyxr0zpwf2vl9hdp92rdjxbv";
+    })
+  ];
 
   # CMAKE_FIND_FRAMEWORK=never stops the installer choosing system
   # installed frameworks
@@ -60,6 +70,8 @@ stdenv.mkDerivation rec {
       # Necessary for QGIS to find the correct default GRASS path
       # Plugins look for gdal tools like deminfo on the PATH
       ${stdenv.lib.optionalString withGrass "ln -sf ${grass} $out/QGIS.app/Contents/MacOS/grass"}
+      # Necessary for QGIS to find the right SAGA installation
+      ln -sf ${saga}/bin/saga_cmd $out/QGIS.app/Contents/MacOS/bin/saga_cmd
       for file in $(find $out -type f -name "QGIS"); do
         wrapProgram "$file" \
           --prefix DYLD_LIBRARY_PATH : "${qwt}/lib" \

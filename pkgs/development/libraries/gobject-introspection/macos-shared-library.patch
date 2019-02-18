@@ -1,0 +1,36 @@
+diff --git a/giscanner/shlibs.py b/giscanner/shlibs.py
+index c93d20c..4d4915d 100644
+--- a/giscanner/shlibs.py
++++ b/giscanner/shlibs.py
+@@ -43,6 +43,22 @@ def _resolve_libtool(options, binary, libraries):
+ 
+     return shlibs
+ 
++def _sanitize_install_name(install_name):
++    '''
++    On macOS, the dylib can be built with install_name as @rpath/libfoo.so
++    instead of the absolute path to the library, so handle that. The name
++    can also be @loader_path or @executable_path.
++    '''
++    if not install_name.startswith('@'):
++        return install_name
++    if install_name.startswith('@rpath/'):
++        return install_name[7:]
++    if install_name.startswith('@loader_path/'):
++        return install_name[13:]
++    if install_name.startswith('@executable_path/'):
++        return install_name[17:]
++    raise RuntimeError('Unknown install_name {!r}'.format(install_name))
++
+ 
+ # Assume ldd output is something vaguely like
+ #
+@@ -136,7 +152,7 @@ def resolve_from_ldd_output(libraries, output, basename=False):
+                 m = pattern.match(word)
+                 if m:
+                     del patterns[library]
+-                    shlibs.append(m.group())
++                    shlibs.append(_sanitize_install_name(m.group()))
+                     break
+ 
+     if len(patterns) > 0:

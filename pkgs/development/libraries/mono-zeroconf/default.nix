@@ -20,5 +20,6 @@ stdenv.mkDerivation rec {
     description = "A cross platform Zero Configuration Networking library for Mono and .NET";
     homepage = http://www.mono-project.com/archived/monozeroconf/;
     platforms = platforms.linux;
+    license = licenses.mit;
   };
 }

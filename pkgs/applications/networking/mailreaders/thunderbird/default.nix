@@ -1,5 +1,5 @@
-{ lib, stdenv, fetchurl, pkgconfig, gtk2, pango, perl, python, zip, libIDL
-, libjpeg, zlib, dbus, dbus-glib, bzip2, xorg
+{ lib, stdenv, fetchurl, pkgconfig, gtk2, pango, perl, python, zip, fetchpatch
+, libIDL, libjpeg, zlib, dbus, dbus-glib, bzip2, xorg
 , freetype, fontconfig, file, nspr, nss, libnotify
 , yasm, libGLU_combined, sqlite, unzip
 , hunspell, libevent, libstartup_notification
@@ -24,11 +24,11 @@ let
   gcc = if stdenv.cc.isGNU then stdenv.cc.cc else stdenv.cc.cc.gcc;
 in stdenv.mkDerivation rec {
   name = "thunderbird-${version}";
-  version = "60.0";
+  version = "60.5.1";
 
   src = fetchurl {
     url = "mirror://mozilla/thunderbird/releases/${version}/source/thunderbird-${version}.source.tar.xz";
-    sha512 = "1933csh6swcx1z35lbxfkxlln36mx2mny28rzxz53r480wcvar8zcj77gwb06hzn6j5cvqls7qd5n6a7x43sp7w9ykkf4kf9gmlccya";
+    sha512 = "1y8r96rzp1rv6ycn98l2c1bpa26gszhbijhrwk6llw8aq33xhx9dpqpbgfsnrsbn4a5ff14h8m9g82snqysrzb7ldd2i5lbas0pryys";
   };
 
   # from firefox, but without sound libraries
@@ -37,8 +37,8 @@ in stdenv.mkDerivation rec {
       dbus dbus-glib pango freetype fontconfig xorg.libXi
       xorg.libX11 xorg.libXrender xorg.libXft xorg.libXt file
       nspr nss libnotify xorg.pixman yasm libGLU_combined
-      xorg.libXScrnSaver xorg.scrnsaverproto
-      xorg.libXext xorg.xextproto sqlite unzip
+      xorg.libXScrnSaver xorg.xorgproto
+      xorg.libXext sqlite unzip
       hunspell libevent libstartup_notification /* cairo */
       icu libpng jemalloc
     ]
@@ -46,6 +46,11 @@ in stdenv.mkDerivation rec {
 
   # from firefox + m4 + wrapperTool
   nativeBuildInputs = [ m4 autoconf213 which gnused pkgconfig perl python wrapperTool cargo rustc ];
+
+  patches = [
+    # Remove buildconfig.html to prevent a dependency on clang etc.
+    ./no-buildconfig.patch
+  ];
 
   configureFlags =
     [ # from firefox, but without sound libraries (alsa, libvpx, pulseaudio)
@@ -95,7 +100,7 @@ in stdenv.mkDerivation rec {
     ''
       cxxLib=$( echo -n ${gcc}/include/c++/* )
       archLib=$cxxLib/$( ${gcc}/bin/gcc -dumpmachine )
-  
+
       test -f layout/style/ServoBindings.toml && sed -i -e '/"-DRUST_BINDGEN"/ a , "-cxx-isystem", "'$cxxLib'", "-isystem", "'$archLib'"' layout/style/ServoBindings.toml
 
       configureScript="$(realpath ./configure)"
@@ -103,18 +108,9 @@ in stdenv.mkDerivation rec {
       cd ../objdir
     '';
 
-  preInstall =
-    ''
-      # The following is needed for startup cache creation on grsecurity kernels.
-      paxmark m ../objdir/dist/bin/xpcshell
-    '';
-
   dontWrapGApps = true; # we do it ourselves
   postInstall =
     ''
-      # For grsecurity kernels
-      paxmark m $out/lib/thunderbird/thunderbird
-
       # TODO: Move to a dev output?
       rm -rf $out/include $out/lib/thunderbird-devel-* $out/share/idl
 
@@ -181,6 +177,8 @@ in stdenv.mkDerivation rec {
       "$out/bin/thunderbird" --version
     '';
 
+  disallowedRequisites = [ stdenv.cc ];
+
   meta = with stdenv.lib; {
     description = "A full-featured e-mail client";
     homepage = http://www.mozilla.org/thunderbird/;
@@ -195,6 +193,6 @@ in stdenv.mkDerivation rec {
   passthru.updateScript = import ./../../browsers/firefox/update.nix {
     attrPath = "thunderbird";
     baseUrl = "http://archive.mozilla.org/pub/thunderbird/releases/";
-    inherit writeScript lib common-updater-scripts xidel coreutils gnused gnugrep curl;
+    inherit stdenv writeScript lib common-updater-scripts xidel coreutils gnused gnugrep curl;
   };
 }

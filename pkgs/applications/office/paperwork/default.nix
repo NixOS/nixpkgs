@@ -1,20 +1,14 @@
-{ lib, python3Packages, fetchFromGitHub, gtk3, cairo
+{ lib, python3Packages, fetchFromGitLab, gtk3, cairo
 , aspellDicts, buildEnv
 , gnome3, hicolor-icon-theme, librsvg
 , xvfb_run, dbus, libnotify
 }:
 
 python3Packages.buildPythonApplication rec {
+  inherit (python3Packages.paperwork-backend) version src;
   name = "paperwork-${version}";
-  # Don't forget to also update paperwork-backend when updating this!
-  version = "1.2.2";
 
-  src = fetchFromGitHub {
-    repo = "paperwork";
-    owner = "openpaperwork";
-    rev = version;
-    sha256 = "1nb5sna2s952xb7c89qccg9qp693pyqj8g7xz16ll16ydfqnzsdk";
-  };
+  sourceRoot = "source/paperwork-gtk";
 
   # Patch out a few paths that assume that we're using the FHS:
   postPatch = ''
@@ -39,6 +33,12 @@ python3Packages.buildPythonApplication rec {
 
     sed -i -e 's/"logo"/"logo-icon-name"/g' \
       src/paperwork/frontend/aboutdialog/aboutdialog.glade
+
+    cat - ../AUTHORS.py > src/paperwork/_version.py <<EOF
+    # -*- coding: utf-8 -*-
+    version = "${version}"
+    authors_code=""
+    EOF
   '';
 
   ASPELL_CONF = "dict-dir ${buildEnv {

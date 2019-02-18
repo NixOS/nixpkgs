@@ -2,10 +2,10 @@
 
 buildPythonPackage rec {
   pname = "simpleeval";
-  version = "0.9.6";
+  version = "0.9.8";
   src = fetchPypi {
     inherit pname version;
-    sha256 = "848fdb9ee5f30cf93b9f0d840db6e7562633d20abf7d67c2382a0a2162a79410";
+    sha256 = "00fzwbjg98lsnmfzmbgzg1k8q8iqbahcxjnnlhzhb44phrhcxql5";
   };
   meta = {
     homepage = https://github.com/danthedeckie/simpleeval;

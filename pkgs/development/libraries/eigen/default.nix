@@ -1,7 +1,7 @@
-{stdenv, fetchurl, cmake}:
+{stdenv, fetchurl, fetchpatch, cmake}:
 
 let
-  version = "3.2.10";
+  version = "3.3.7";
 in
 stdenv.mkDerivation {
   name = "eigen-${version}";
@@ -9,16 +9,14 @@ stdenv.mkDerivation {
   src = fetchurl {
     url = "https://bitbucket.org/eigen/eigen/get/${version}.tar.gz";
     name = "eigen-${version}.tar.gz";
-    sha256 = "00l52y7m276gh8wjkqqcxz6x687azrm7a70s3iraxnpy9bxa9y04";
+    sha256 = "1nnh0v82a5xibcjaph51mx06mxbllk77fvihnd5ba0kpl23yz13y";
   };
 
+  patches = [
+    ./include-dir.patch
+  ];
+
   nativeBuildInputs = [ cmake ];
-
-  doCheck = false; # a couple of tests fail with "Child aborted"
-
-  postInstall = ''
-    sed -e '/Cflags:/s@''${prefix}/@@' -i "$out"/share/pkgconfig/eigen3.pc
-  '';
 
   meta = with stdenv.lib; {
     description = "C++ template library for linear algebra: vectors, matrices, and related algorithms";

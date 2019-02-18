@@ -57,6 +57,6 @@ stdenv.mkDerivation rec {
     description = "A daemon that provides mouse support on the Linux console";
     license = licenses.gpl2;
     platforms = platforms.linux ++ platforms.cygwin;
-    maintainers = with maintainers; [ eelco wkennington ];
+    maintainers = with maintainers; [ eelco ];
   };
 }

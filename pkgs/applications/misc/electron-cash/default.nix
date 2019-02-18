@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python3Packages }:
+{ stdenv, fetchurl, python3Packages, qtbase, makeWrapper, lib }:
 
 let
 
@@ -7,14 +7,14 @@ let
 in
 
 python3Packages.buildPythonApplication rec {
-  version = "3.1.6";
+  version = "3.3.2";
   name = "electron-cash-${version}";
 
   src = fetchurl {
     url = "https://electroncash.org/downloads/${version}/win-linux/ElectronCash-${version}.tar.gz";
     # Verified using official SHA-1 and signature from
     # https://github.com/fyookball/keys-n-hashes
-    sha256 = "062k5iw0jcp10zxrffvgiyfg51c5xzs7gmm638icx01yy67d58dm";
+    sha256 = "4538044cfaa4f87a847635849e0733f32b183ac79abbd2797689c86dc3cb0d53";
   };
 
   propagatedBuildInputs = with python3Packages; [
@@ -29,12 +29,15 @@ python3Packages.buildPythonApplication rec {
     pysocks
     qrcode
     requests
-    tlslite
+    tlslite-ng
 
     # plugins
     keepkey
     trezor
+    btchip
   ];
+
+  nativeBuildInputs = [ makeWrapper ];
 
   postPatch = ''
     # Remove pyqt5 check
@@ -42,7 +45,6 @@ python3Packages.buildPythonApplication rec {
   '';
 
   preBuild = ''
-    sed -i 's,usr_share = .*,usr_share = "'$out'/share",g' setup.py
     pyrcc5 icons.qrc -o gui/qt/icons_rc.py
     # Recording the creation timestamps introduces indeterminism to the build
     sed -i '/Created: .*/d' gui/qt/icons_rc.py
@@ -51,18 +53,21 @@ python3Packages.buildPythonApplication rec {
   doCheck = false;
 
   postInstall = ''
-    # Despite setting usr_share above, these files are installed under
-    # $out/nix ...
-    mv $out/${python.sitePackages}/nix/store"/"*/share $out
-    rm -rf $out/${python.sitePackages}/nix
+    # These files are installed under $out/homeless-shelter ...
+    mv $out/${python.sitePackages}/homeless-shelter/.local/share $out
+    rm -rf $out/${python.sitePackages}/homeless-shelter
 
     substituteInPlace $out/share/applications/electron-cash.desktop \
       --replace "Exec=electron-cash %u" "Exec=$out/bin/electron-cash %u"
+
+    # Please remove this when #44047 is fixed
+    wrapProgram $out/bin/electron-cash \
+      --prefix QT_PLUGIN_PATH : ${qtbase}/lib/qt-5.${lib.versions.minor qtbase.version}/plugins
   '';
 
   doInstallCheck = true;
   installCheckPhase = ''
-    $out/bin/electrum help >/dev/null
+    $out/bin/electron-cash help >/dev/null
   '';
 
   meta = with stdenv.lib; {

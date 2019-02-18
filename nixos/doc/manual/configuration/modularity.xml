@@ -113,12 +113,10 @@ $ nixos-option <xref linkend="opt-boot.kernelModules"/>
 [ "tun" "ipv6" "loop" <replaceable>...</replaceable> ]
 </screen>
   Interactive exploration of the configuration is possible using
-  <command
-xlink:href="https://github.com/edolstra/nix-repl">nix-repl</command>,
-  a read-eval-print loop for Nix expressions. It’s not installed by default;
-  run <literal>nix-env -i nix-repl</literal> to get it. A typical use:
+  <command>nix repl</command>, a read-eval-print loop for Nix expressions.
+  A typical use:
 <screen>
-$ nix-repl '&lt;nixpkgs/nixos>'
+$ nix repl '&lt;nixpkgs/nixos>'
 
 nix-repl> config.<xref linkend="opt-networking.hostName"/>
 "mandark"
@@ -127,4 +125,23 @@ nix-repl> map (x: x.hostName) config.<xref linkend="opt-services.httpd.virtualHo
 [ "example.org" "example.gov" ]
 </screen>
  </para>
+
+ <para>
+   While abstracting your configuration, you may find it useful to generate
+   modules using code, instead of writing files. The example
+   below would have the same effect as importing a file which sets those
+   options.
+   <screen>
+     { config, pkgs, ... }:
+
+     let netConfig = { hostName }: {
+       networking.hostName = hostName;
+       networking.useDHCP = false;
+    };
+
+    in
+
+    { imports = [ (netConfig "nixos.localdomain") ]; }
+  </screen>
+</para>
 </section>

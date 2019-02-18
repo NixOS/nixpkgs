@@ -80,6 +80,7 @@ in {
 
       package = mkOption {
         default = pkgs.openafs.server or pkgs.openafs;
+        defaultText = "pkgs.openafs.server or pkgs.openafs";
         type = types.package;
         description = "OpenAFS package for the server binaries";
       };

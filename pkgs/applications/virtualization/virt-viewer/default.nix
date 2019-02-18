@@ -33,6 +33,9 @@ stdenv.mkDerivation rec {
     gst_all_1.gst-plugins-base gst_all_1.gst-plugins-good
   ];
 
+  # Required for USB redirection PolicyKit rules file
+  propagatedUserEnvPkgs = optional spiceSupport spice-gtk;
+
   meta = {
     description = "A viewer for remote virtual machines";
     maintainers = [ maintainers.raskin ];

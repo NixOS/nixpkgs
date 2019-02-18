@@ -3,6 +3,9 @@
 
 buildPythonPackage rec {
   pname = "tifffile";
+  # 2018.10.18 and 2018.11.6 are not releases...?
+  # https://github.com/blink1073/tifffile/issues/54
+  # anaconda uses 0.15.1
   version = "0.15.1";
 
   src = fetchPypi {

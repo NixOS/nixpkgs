@@ -169,6 +169,9 @@ rec {
         # s32 = sign 32 4294967296;
       };
 
+    # Alias of u16 for a port number
+    port = ints.u16;
+
     float = mkOptionType rec {
         name = "float";
         description = "floating point number";
@@ -194,7 +197,10 @@ rec {
     # separator between the values).
     separatedString = sep: mkOptionType rec {
       name = "separatedString";
-      description = "string";
+      description = if sep == ""
+        then "Concatenated string" # for types.string.
+        else "strings concatenated with ${builtins.toJSON sep}"
+      ;
       check = isString;
       merge = loc: defs: concatStringsSep sep (getValues defs);
       functor = (defaultFunctor name) // {
@@ -278,8 +284,7 @@ rec {
             (mergeDefinitions (loc ++ [name]) elemType defs).optionalValue
           )
           # Push down position info.
-          (map (def: listToAttrs (mapAttrsToList (n: def':
-            { name = n; value = { inherit (def) file; value = def'; }; }) def.value)) defs)));
+          (map (def: mapAttrs (n: v: { inherit (def) file; value = v; }) def.value) defs)));
       getSubOptions = prefix: elemType.getSubOptions (prefix ++ ["<name>"]);
       getSubModules = elemType.getSubModules;
       substSubModules = m: attrsOf (elemType.substSubModules m);
@@ -464,10 +469,7 @@ rec {
     # Obsolete alternative to configOf.  It takes its option
     # declarations from the ‘options’ attribute of containing option
     # declaration.
-    optionSet = mkOptionType {
-      name = builtins.trace "types.optionSet is deprecated; use types.submodule instead" "optionSet";
-      description = "option set";
-    };
+    optionSet = builtins.throw "types.optionSet is deprecated; use types.submodule instead" "optionSet";
 
     # Augment the given type with an additional type check function.
     addCheck = elemType: check: elemType // { check = x: elemType.check x && check x; };

@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   CFLAGS = "-DSFTPSERVER_PATH=\\\"${sftpPath}\\\"";
 
-  # http://www.gnu.org/software/make/manual/html_node/Libraries_002fSearch.html
+  # https://www.gnu.org/software/make/manual/html_node/Libraries_002fSearch.html
   preConfigure = ''
     makeFlags=VPATH=`cat $NIX_CC/nix-support/orig-libc`/lib
   '';

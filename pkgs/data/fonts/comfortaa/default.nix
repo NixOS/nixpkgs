@@ -1,18 +1,18 @@
 {stdenv, fetchzip}:
 
 let
-  version = "2.004";
+  version = "3.001";
 in fetchzip rec {
   name = "comfortaa-${version}";
 
-  url = "http://openfontlibrary.org/assets/downloads/comfortaa/38318a69b56162733bf82bc0170b7521/comfortaa.zip";
+  url = "https://orig00.deviantart.net/40a3/f/2017/093/d/4/comfortaa___font_by_aajohan-d1qr019.zip";
   postFetch = ''
     mkdir -p $out/share/fonts $out/share/doc
     unzip -l $downloadedFile
     unzip -j $downloadedFile \*.ttf                        -d $out/share/fonts/truetype
     unzip -j $downloadedFile \*/FONTLOG.txt \*/donate.html -d $out/share/doc/${name}
   '';
-  sha256 = "1gnscf3kw9p5gbc5594a22cc6nmiir9mhp1nl3mkbzd4v1jfbh2h";
+  sha256 = "0z7xr0cnn6ghwivrm5b5awq9bzhnay3y99qq6dkdgfkfdsaz0n9h";
 
   meta = with stdenv.lib; {
     homepage = http://aajohan.deviantart.com/art/Comfortaa-font-105395949;

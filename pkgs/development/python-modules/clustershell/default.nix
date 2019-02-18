@@ -4,11 +4,11 @@
 
 buildPythonPackage rec {
   pname = "ClusterShell";
-  version = "1.8";
+  version = "1.8.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1bm0pq8w2rql9q9i2bhs865rqvb6zck3h3gkb1d0mh59arrr7p4m";
+    sha256 = "e913efb4fe017eed9731d5ad8be397509e7f1966e6cb6441ee2bce074b16b310";
   };
 
   propagatedBuildInputs = [ pyyaml ];

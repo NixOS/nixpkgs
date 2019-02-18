@@ -1,4 +1,5 @@
 { stdenv, fetchFromGitHub, autoreconfHook, givaro, pkgconfig, blas
+, fetchpatch
 , gmpxx
 , optimize ? false # impure
 }:
@@ -13,6 +14,15 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "1cqhassj2dny3gx0iywvmnpq8ca0d6m82xl5rz4mb8gaxr2kwddl";
   };
+
+  patches = [
+    # https://github.com/linbox-team/fflas-ffpack/issues/146
+    (fetchpatch {
+      name = "fix-flaky-test-fgemm-check.patch";
+      url = "https://github.com/linbox-team/fflas-ffpack/commit/d8cd67d91a9535417a5cb193cf1540ad6758a3db.patch";
+      sha256 = "1gnfc616fvnlr0smvz6lb2d445vn8fgv6vqcr6pwm3dj4wa6v3b3";
+    })
+  ];
 
   checkInputs = [
     gmpxx

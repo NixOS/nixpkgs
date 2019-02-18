@@ -2,16 +2,20 @@
 
 stdenv.mkDerivation rec {
   name = "theme-obsidian2-${version}";
-  version = "2.5";
+  version = "2.8";
 
   src = fetchFromGitHub {
     owner = "madmaxms";
     repo = "theme-obsidian-2";
     rev = "v${version}";
-    sha256 = "12jya1gzmhpfh602vbf51vi69fmis7sanvx278h3skm03a7civlv";
+    sha256 = "0qryqpyxbhr0kyar2cshwhzv4da6rfz9gi4wjb6xvcb6szxhlcaq";
   };
 
   propagatedUserEnvPkgs = [ gtk-engine-murrine ];
+
+  postPatch = ''
+    sed -i -e 's|Obsidian-2-Local|Obsidian-2|' Obsidian-2/index.theme
+  '';
 
   installPhase = ''
     mkdir -p $out/share/themes

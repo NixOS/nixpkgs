@@ -1,7 +1,10 @@
 { stdenv, buildPythonPackage, fetchPypi, isPy3k,
   numpy, django_colorful, pillow, psycopg2,
-  pyparsing, django_2_1, celery, boto3
+  pyparsing, django, celery, boto3
 }:
+if stdenv.lib.versionOlder django.version "2.0"
+then throw "django-raster requires Django >= 2.0. Consider overiding the python package set to use django_2."
+else
 buildPythonPackage rec {
   version = "0.6";
   pname = "django-raster";
@@ -17,7 +20,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   propagatedBuildInputs = [ numpy django_colorful pillow psycopg2
-                            pyparsing django_2_1 celery boto3 ];
+                            pyparsing django celery boto3 ];
 
   meta = with stdenv.lib; {
     description = "Basic raster data integration for Django";

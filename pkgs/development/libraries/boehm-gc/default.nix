@@ -4,14 +4,14 @@
 
 stdenv.mkDerivation rec {
   name = "boehm-gc-${version}";
-  version = "7.6.6";
+  version = "8.0.2";
 
   src = fetchurl {
     urls = [
-      "http://www.hboehm.info/gc/gc_source/gc-${version}.tar.gz"
       "https://github.com/ivmai/bdwgc/releases/download/v${version}/gc-${version}.tar.gz"
+      "http://www.hboehm.info/gc/gc_source/gc-${version}.tar.gz"
     ];
-    sha256 = "1p1r015a7jbpvkkbgzv1y8nxrbbp6dg0mq3ksi6ji0qdz3wfss79";
+    sha256 = "1jsixcpdwy5cgq5s9fi3bdlid9zh46vakymf3nbjffianyss932f";
   };
 
   buildInputs = [ libatomic_ops ];
@@ -21,11 +21,12 @@ stdenv.mkDerivation rec {
   separateDebugInfo = stdenv.isLinux;
 
   preConfigure = stdenv.lib.optionalString (stdenv.hostPlatform.libc == "musl") ''
-    export NIX_CFLAGS_COMPILE+="-D_GNU_SOURCE -DUSE_MMAP -DHAVE_DL_ITERATE_PHDR"
+    export NIX_CFLAGS_COMPILE+=" -D_GNU_SOURCE -DUSE_MMAP -DHAVE_DL_ITERATE_PHDR"
   '';
 
   patches = [ (fetchpatch {
-    url = "https://gitweb.gentoo.org/proj/musl.git/plain/dev-libs/boehm-gc/files/boehm-gc-7.6.0-sys_select.patch";
+    name = "boehm-gc-7.6.0-sys_select.patch";
+    url = "https://gitweb.gentoo.org/proj/musl.git/plain/dev-libs/boehm-gc/files/boehm-gc-7.6.0-sys_select.patch?id=85b6a600996bdd71162b357e9ba93d8559342432";
     sha256 = "1gydwlklvci30f5dpp5ccw2p2qpph5y41r55wx9idamjlq66fbb3";
   }) ] ++
     # https://github.com/ivmai/bdwgc/pull/208

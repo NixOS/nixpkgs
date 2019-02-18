@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "brogue-${version}";
-  version = "1.7.4";
+  version = "1.7.5";
 
   src = fetchurl {
     url = "https://sites.google.com/site/broguegame/brogue-${version}-linux-amd64.tbz2";
-    sha256 = "1lygf17hm7wqlp0jppaz8dn9a9ksmxz12vw7jyfavvqpwdgz79gb";
+    sha256 = "0i042zb3axjf0cpgpdh8hvfn66dbfizidyvw0iymjk2n760z2kx7";
   };
 
   prePatch = ''

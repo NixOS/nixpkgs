@@ -21,9 +21,9 @@ stdenv.mkDerivation {
   NIX_CFLAGS_COMPILE = [ "-I${qca2-qt5}/include/Qca-qt5/QtCrypto" ];
   NIX_LDFLAGS = [ "-lqca-qt5" ];
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Qt library for OAuth authentication";
     inherit (qt5.qtbase.meta) platforms;
-    maintainers = [ ];
+    license = licenses.lgpl21;
   };
 }

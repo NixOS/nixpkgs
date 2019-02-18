@@ -23,7 +23,8 @@ stdenv.mkDerivation rec {
   postPatch = "sed '1i#include <cmath>' -i higan/fc/ppu/ppu.cpp";
 
   buildInputs =
-  [ p7zip pkgconfig libX11 libXv udev libGLU_combined SDL libao openal libpulseaudio gtk2 gtksourceview ];
+  [ p7zip pkgconfig libX11 libXv udev libGLU_combined
+    SDL libao openal libpulseaudio gtk2 gtksourceview ];
 
   unpackPhase = ''
     7z x $src
@@ -66,7 +67,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "An open-source, cycle-accurate Nintendo multi-system emulator";
     longDescription = ''
-      Higan (formerly bsnes) is a multi-system game console emulator.
+      higan (formerly bsnes) is a multi-system game console emulator.
       It currently supports the following systems:
         - Nintendo's Famicom, Super Famicom (with subsystems: 
           Super Game Boy, BS-X Satellaview, Sufami Turbo); 
@@ -75,7 +76,7 @@ stdenv.mkDerivation rec {
         - NEC's PC Engine, SuperGrafx;
         - Bandai's WonderSwan, WonderSwan Color.
     '';
-    homepage = https://byuu.org/higan/;
+    homepage = https://byuu.org/emulation/higan/;
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = with platforms; unix;

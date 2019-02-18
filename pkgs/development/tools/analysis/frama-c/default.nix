@@ -1,5 +1,5 @@
 { stdenv, fetchurl, makeWrapper, ncurses, ocamlPackages, graphviz
-, ltl2ba, coq, alt-ergo, why3, autoconf
+, ltl2ba, coq, why3, autoconf
 }:
 
 let
@@ -9,12 +9,12 @@ in
 
 stdenv.mkDerivation rec {
   name    = "frama-c-${version}";
-  version = "20180502";
-  slang   = "Chlorine";
+  version = "18.0";
+  slang   = "Argon";
 
   src = fetchurl {
-    url    = "http://frama-c.com/download/frama-c-${slang}-${version}.tar.gz";
-    sha256 = "1m4r8h8n1z957pylyf9b0kjblh59imnqm1bkb4s6rdwl4a1gbjgc";
+    url    = "http://frama-c.com/download/frama-c-${version}-${slang}.tar.gz";
+    sha256 = "0a88k2mhafj7pz3dzgsqkrc9digkxpnvr9jqq9nbzwq8qr02bca2";
   };
 
   why2 = fetchurl {
@@ -25,8 +25,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoconf makeWrapper ];
 
   buildInputs = with ocamlPackages; [
-    ncurses ocaml findlib alt-ergo ltl2ba ocamlgraph
-    lablgtk coq graphviz zarith why3 apron camlp4
+    ncurses ocaml findlib ltl2ba ocamlgraph
+    lablgtk coq graphviz zarith why3 apron
   ];
 
 

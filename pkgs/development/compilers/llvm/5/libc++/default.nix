@@ -10,11 +10,9 @@ stdenv.mkDerivation rec {
     export LIBCXXABI_INCLUDE_DIR="$PWD/$(ls -d libcxxabi-${version}*)/include"
   '';
 
-  # on next rebuild, this can be replaced with optionals; for now set to null to avoid
-  # patches = stdenv.lib.optionals stdenv.hostPlatform.isMusl [
-  patches = if stdenv.hostPlatform.isMusl then [
+  patches = stdenv.lib.optionals stdenv.hostPlatform.isMusl [
     ../../libcxx-0001-musl-hacks.patch
-  ] else null;
+  ];
 
   prePatch = ''
     substituteInPlace lib/CMakeLists.txt --replace "/usr/lib/libc++" "\''${LIBCXX_LIBCXXABI_LIB_PATH}/libc++"
@@ -39,6 +37,11 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   linkCxxAbi = stdenv.isLinux;
+
+  postInstall = ''
+    mv $out/lib/libc++.a $out/lib/libc++_static.a
+    cp ${./libc++.a} $out/lib/libc++.a
+  '';
 
   setupHooks = [
     ../../../../../build-support/setup-hooks/role.bash

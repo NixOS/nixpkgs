@@ -22,6 +22,7 @@ stdenv.mkDerivation rec {
     description = "GStreamer backend for Phonon";
     platforms = platforms.linux;
     maintainers = with maintainers; [ ttuegel ];
+    license = licenses.lgpl21;
   };
 
   src = fetchurl {

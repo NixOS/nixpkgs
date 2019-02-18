@@ -12,7 +12,7 @@ if isPyPy then null else buildPythonPackage rec {
   outputs = [ "out" "dev" ];
 
   propagatedBuildInputs = [ libffi pycparser ];
-  buildInputs = [ pytest ];
+  checkInputs = [ pytest ];
 
   # On Darwin, the cffi tests want to hit libm a lot, and look for it in a global
   # impure search path. It's obnoxious how much repetition there is, and how difficult
@@ -33,7 +33,7 @@ if isPyPy then null else buildPythonPackage rec {
 
   doCheck = !stdenv.hostPlatform.isMusl; # TODO: Investigate
   checkPhase = ''
-    py.test
+    py.test -k "not test_char_pointer_conversion"
   '';
 
   meta = with stdenv.lib; {

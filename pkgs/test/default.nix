@@ -17,14 +17,24 @@ with pkgs;
   cc-wrapper-libcxx-5 = callPackage ./cc-wrapper { stdenv = llvmPackages_5.libcxxStdenv; };
   cc-wrapper-clang-6 = callPackage ./cc-wrapper { stdenv = llvmPackages_6.stdenv; };
   cc-wrapper-libcxx-6 = callPackage ./cc-wrapper { stdenv = llvmPackages_6.libcxxStdenv; };
+  cc-wrapper-clang-7 = callPackage ./cc-wrapper { stdenv = llvmPackages_7.stdenv; };
+  cc-wrapper-libcxx-7 = callPackage ./cc-wrapper { stdenv = llvmPackages_7.libcxxStdenv; };
   stdenv-inputs = callPackage ./stdenv-inputs { };
 
   cc-multilib-gcc = callPackage ./cc-wrapper/multilib.nix { stdenv = gccMultiStdenv; };
   cc-multilib-clang = callPackage ./cc-wrapper/multilib.nix { stdenv = clangMultiStdenv; };
+
+  kernel-config = callPackage ./kernel.nix {};
 
   ld-library-path = callPackage ./ld-library-path {};
 
   macOSSierraShared = callPackage ./macos-sierra-shared {};
 
   cross = callPackage ./cross {};
+
+  nixos-functions = callPackage ./nixos-functions {};
+
+  patch-shebangs = callPackage ./patch-shebangs {};
+
+  writers = callPackage ../build-support/writers/test.nix {};
 }

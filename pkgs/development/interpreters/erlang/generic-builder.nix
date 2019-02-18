@@ -3,6 +3,7 @@
 , openjdk ? null # javacSupport
 , unixODBC ? null # odbcSupport
 , libGLU_combined ? null, wxGTK ? null, wxmac ? null, xorg ? null # wxSupport
+, withSystemd ? stdenv.isLinux, systemd # systemd support in epmd
 }:
 
 { baseName ? "erlang"
@@ -17,7 +18,7 @@
 , enableKernelPoll ? true
 , javacSupport ? false, javacPackages ? [ openjdk ]
 , odbcSupport ? false, odbcPackages ? [ unixODBC ]
-, wxSupport ? true, wxPackages ? [ libGLU_combined wxGTK xorg.libX11 ]
+, wxSupport ? !stdenv.isDarwin, wxPackages ? [ libGLU_combined wxGTK xorg.libX11 ]
 , preUnpack ? "", postUnpack ? ""
 , patches ? [], patchPhase ? "", prePatch ? "", postPatch ? ""
 , configureFlags ? [], configurePhase ? "", preConfigure ? "", postConfigure ? ""
@@ -53,11 +54,13 @@ in stdenv.mkDerivation ({
     ++ optionals wxSupport wxPackages2
     ++ optionals odbcSupport odbcPackages
     ++ optionals javacSupport javacPackages
+    ++ optional withSystemd systemd
     ++ optionals stdenv.isDarwin (with pkgs.darwin.apple_sdk.frameworks; [ Carbon Cocoa ]);
 
   debugInfo = enableDebugInfo;
 
-  enableParallelBuilding = true;
+  # On some machines, parallel build reliably crashes on `GEN    asn1ct_eval_ext.erl` step
+  enableParallelBuilding = false;
 
   # Clang 4 (rightfully) thinks signed comparisons of pointers with NULL are nonsense
   prePatch = ''
@@ -84,6 +87,7 @@ in stdenv.mkDerivation ({
     ++ optional javacSupport "--with-javac"
     ++ optional odbcSupport "--with-odbc=${unixODBC}"
     ++ optional wxSupport "--enable-wx"
+    ++ optional withSystemd "--enable-systemd"
     ++ optional stdenv.isDarwin "--enable-darwin-64bit";
 
   # install-docs will generate and install manpages and html docs
@@ -117,7 +121,8 @@ in stdenv.mkDerivation ({
       tolerance.
     '';
 
-    platforms = platforms.unix;
+    # aarch64 is supposed to work but started failing in https://hydra.nixos.org/build/83735973
+    platforms = subtractLists [ "aarch64-linux" ] platforms.unix;
     maintainers = with maintainers; [ the-kenny sjmackenzie couchemar gleber ];
     license = licenses.asl20;
   } // meta);

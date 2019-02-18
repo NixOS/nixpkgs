@@ -24,5 +24,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ ashalkhakov matthewbauer ];
     platforms = platforms.unix;
+    badPlatforms = [ "aarch64-linux" ];
   };
 }

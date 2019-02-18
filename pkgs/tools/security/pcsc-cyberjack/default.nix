@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   name = "pcsc-cyberjack-${version}";
-  version = "3.99.5_SP09";
+  version = "3.99.5_SP12";
 
   src = with stdenv.lib; let
     splittedVer = splitString "_" version;
@@ -12,13 +12,20 @@ stdenv.mkDerivation rec {
   in fetchurl {
     url = "http://support.reiner-sct.de/downloads/LINUX/V${version}"
         + "/pcsc-cyberjack-${tarballVersion}.tar.bz2";
-    sha256 = "1m1r26q0k2hrxfi73j4v25qfh20x4b1hcbcpgjgv7qxa33dbi30z";
+    sha256 = "04pkmybal56s5xnjld09vl1s1h6qf8mvhm41b758d6hi240kgp1j";
   };
+
+  outputs = [ "out" "tools" ];
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ libusb pcsclite ];
 
-  configureFlags = [ "--with-usbdropdir=\${prefix}/pcsc/drivers" ];
+  configureFlags = [
+    "--with-usbdropdir=${placeholder "out"}/pcsc/drivers"
+    "--bindir=${placeholder "tools"}/bin"
+  ];
+
+  postInstall = "make -C tools/cjflash install";
 
   meta = with stdenv.lib; {
     description = "REINER SCT cyberJack USB chipcard reader user space driver";

@@ -1,31 +1,16 @@
-{ stdenv, lib, fetchurl, SDL, makeDesktopItem, libGLU_combined }:
+{ stdenv, lib, fetchurl, makeDesktopItem, SDL, SDL_net, SDL_sound, libGLU_combined, libpng }:
 
 stdenv.mkDerivation rec {
-  name = "dosbox-0.74";
+  name = "dosbox-0.74-2";
 
   src = fetchurl {
     url = "mirror://sourceforge/dosbox/${name}.tar.gz";
-    sha256 = "01cfjc5bs08m4w79nbxyv7rnvzq2yckmgrbq36njn06lw8b4kxqk";
+    sha256 = "1ksp1b5szi0vy4x55rm3j1y9wq5mlslpy8llpg87rpdyjlsk0xvh";
   };
-
-  patches =
-    [ # Fix building with GCC 4.6.
-      (fetchurl {
-        url = "http://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/games-emulation/dosbox/files/dosbox-0.74-gcc46.patch?revision=1.1";
-        sha256 = "03iv1ph7fccfw327ngnhvzwyiix7fsbdb5mmpxivzkidhlrssxq9";
-      })
-      (fetchurl {
-        url = "https://svnweb.freebsd.org/ports/head/emulators/dosbox/files/patch-src_gui_sdlmain.cpp?revision=435580&view=co&pathrev=435580";
-        sha256 = "1mbj5wrn53k0zds2adys34949vzsbfgm0pmsyx14v9j0cxi7drca";
-        name = "patch-src_gui_sdlmain.cpp";
-      })
-    ];
-
-  patchFlags = "-p0";
 
   hardeningDisable = [ "format" ];
 
-  buildInputs = [ SDL libGLU_combined ];
+  buildInputs = [ SDL SDL_net SDL_sound libGLU_combined libpng ];
 
   configureFlags = lib.optional stdenv.isDarwin "--disable-sdltest";
 
@@ -42,6 +27,8 @@ stdenv.mkDerivation rec {
      mkdir -p $out/share/applications
      cp ${desktopItem}/share/applications/* $out/share/applications
   '';
+
+  enableParallelBuilding = true;
 
   meta = with lib; {
     homepage = http://www.dosbox.com/;

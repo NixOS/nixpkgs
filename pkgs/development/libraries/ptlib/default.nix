@@ -38,6 +38,7 @@ stdenv.mkDerivation rec {
     description = "Portable Tools from OPAL VoIP";
     maintainers = [ maintainers.raskin ];
     platforms = platforms.linux;
+    license = with licenses; [ beerware bsdOriginal mpl10 ];
   };
 
   passthru = {

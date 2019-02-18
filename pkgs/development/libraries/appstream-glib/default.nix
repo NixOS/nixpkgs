@@ -1,10 +1,10 @@
 { stdenv, fetchFromGitHub, substituteAll, pkgconfig, gettext, gtk3, glib
-, gtk-doc, libarchive, gobjectIntrospection, libxslt, pngquant
+, gtk-doc, libarchive, gobject-introspection, libxslt, pngquant
 , sqlite, libsoup, attr, acl, docbook_xsl, docbook_xml_dtd_42
 , libuuid, json-glib, meson, gperf, ninja
 }:
 stdenv.mkDerivation rec {
-  name = "appstream-glib-0.7.12";
+  name = "appstream-glib-0.7.14";
 
   outputs = [ "out" "dev" "man" "installedTests" ];
   outputBin = "dev";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     owner = "hughsie";
     repo = "appstream-glib";
     rev = stdenv.lib.replaceStrings ["." "-"] ["_" "_"] name;
-    sha256 = "0kqhm3j0nmf9pp9mpykzs2hg3nr6126ibrq1ap21hpasnq4rzlax";
+    sha256 = "1908ilra1l0m2a224azmj6p4yglzdwwk41rr6rhby959sgw3iaky";
   };
 
   nativeBuildInputs = [
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     glib gettext sqlite libsoup
     attr acl libuuid json-glib
-    libarchive gobjectIntrospection gperf
+    libarchive gobject-introspection gperf
   ];
   propagatedBuildInputs = [ gtk3 ];
 

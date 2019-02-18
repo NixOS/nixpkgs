@@ -45,16 +45,14 @@ rec {
   dcrd = callPackage ./dcrd.nix { };
   dcrwallet = callPackage ./dcrwallet.nix { };
 
-  dero = callPackage ./dero.nix { };
+  dero = callPackage ./dero.nix { boost = boost165; };
 
   dogecoin  = callPackage ./dogecoin.nix { boost = boost165; withGui = true; };
   dogecoind = callPackage ./dogecoin.nix { boost = boost165; withGui = false; };
 
-  ethsign = callPackage ./ethsign { };
 
   freicoin = callPackage ./freicoin.nix { boost = boost155; };
   go-ethereum = callPackage ./go-ethereum.nix {
-    buildGoPackage = buildGo110Package;
     inherit (darwin) libobjc;
     inherit (darwin.apple_sdk.frameworks) IOKit;
   };
@@ -67,7 +65,7 @@ rec {
   };
   litecoind = litecoin.override { withGui = false; };
 
-  masari = callPackage ./masari.nix { };
+  masari = callPackage ./masari.nix { boost = boost165; };
 
   memorycoin  = callPackage ./memorycoin.nix { boost = boost165; withGui = true; };
   memorycoind = callPackage ./memorycoin.nix { boost = boost165; withGui = false; };
@@ -78,15 +76,14 @@ rec {
   namecoind = callPackage ./namecoin.nix { withGui = false; };
 
   ethabi = callPackage ./ethabi.nix { };
-  ethrun = callPackage ./ethrun.nix { };
-  seth = callPackage ./seth.nix { };
-  dapp = callPackage ./dapp.nix { };
-
-  hevm = (haskellPackages.callPackage ./hevm.nix {});
 
   stellar-core = callPackage ./stellar-core.nix { };
 
-  sumokoin = callPackage ./sumokoin.nix { };
+  sumokoin = callPackage ./sumokoin.nix { boost = boost165; };
+
+  wownero = callPackage ./wownero.nix {
+    inherit (darwin.apple_sdk.frameworks) CoreData IOKit PCSC;
+  };
 
   zcash = callPackage ./zcash {
     withGui = false;
@@ -97,5 +94,7 @@ rec {
   parity-beta = callPackage ./parity/beta.nix { };
   parity-ui = callPackage ./parity-ui { };
 
-  particl-core = callPackage ./particl/particl-core.nix { boost = boost165; miniupnpc = miniupnpc_2; };
+  polkadot = callPackage ./polkadot { };
+
+  particl-core = callPackage ./particl/particl-core.nix { miniupnpc = miniupnpc_2; };
 }

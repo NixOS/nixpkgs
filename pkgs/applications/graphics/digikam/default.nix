@@ -6,7 +6,7 @@
 , qtbase
 , qtxmlpatterns
 , qtsvg
-, qtwebkit
+, qtwebengine
 
 , kcalcore
 , kconfigwidgets
@@ -34,7 +34,8 @@
 , libqtav
 , libusb1
 , marble
-, libGLU_combined
+, libGL
+, libGLU
 , opencv3
 , pcre
 , threadweaver
@@ -49,13 +50,13 @@
 
 mkDerivation rec {
   name    = "digikam-${version}";
-  version = "5.9.0";
+  version = "6.0.0";
 
   src = fetchFromGitHub {
     owner  = "KDE";
     repo   = "digikam";
     rev    = "v${version}";
-    sha256 = "09diw273h9i7rss89ba82yrfy6jb2njv3k0dknrrg7bb998vrw2d";
+    sha256 = "1ifvrn0bm7fp07d059rl4dy146qzdxafl36ipxg1fg00dkv95hh4";
   };
 
   nativeBuildInputs = [ cmake doxygen extra-cmake-modules kdoctools wrapGAppsHook ];
@@ -75,14 +76,15 @@ mkDerivation rec {
     liblqr1
     libqtav
     libusb1
-    libGLU_combined
+    libGL
+    libGLU
     opencv3
     pcre
 
     qtbase
     qtxmlpatterns
     qtsvg
-    qtwebkit
+    qtwebengine
 
     kcalcore
     kconfigwidgets
@@ -103,6 +105,7 @@ mkDerivation rec {
     "-DENABLE_MYSQLSUPPORT=1"
     "-DENABLE_INTERNALMYSQL=1"
     "-DENABLE_MEDIAPLAYER=1"
+    "-DENABLE_QWEBENGINE=on"
   ];
 
   preFixup = ''

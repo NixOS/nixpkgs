@@ -1,5 +1,5 @@
 { stdenv, buildPackages, buildHaskellPackages, ghc
-, jailbreak-cabal, hscolour, cpphs, nodejs
+, jailbreak-cabal, hscolour, cpphs, nodejs, shellFor
 }:
 
 let
@@ -48,7 +48,9 @@ in
 # We cannot enable -j<n> parallelism for libraries because GHC is far more
 # likely to generate a non-determistic library ID in that case. Further
 # details are at <https://github.com/peti/ghc-library-id-bug>.
-, enableParallelBuilding ? (stdenv.lib.versionOlder "7.8" ghc.version && !isLibrary) || stdenv.lib.versionOlder "8.0.1" ghc.version
+#
+# Currently disabled for aarch64. See https://ghc.haskell.org/trac/ghc/ticket/15449.
+, enableParallelBuilding ? ((stdenv.lib.versionOlder "7.8" ghc.version && !isLibrary) || stdenv.lib.versionOlder "8.0.1" ghc.version) && !(stdenv.buildPlatform.isAarch64)
 , maintainers ? []
 , doCoverage ? false
 , doHaddock ? !(ghc.isHaLVM or false)
@@ -72,6 +74,11 @@ in
 , hardeningDisable ? stdenv.lib.optional (ghc.isHaLVM or false) "all"
 , enableSeparateDataOutput ? false
 , enableSeparateDocOutput ? doHaddock
+, # Don't fail at configure time if there are multiple versions of the
+  # same package in the (recursive) dependencies of the package being
+  # built. Will delay failures, if any, to compile time.
+  allowInconsistentDependencies ? false
+, maxBuildCores ? 4 # GHC usually suffers beyond -j4. https://ghc.haskell.org/trac/ghc/ticket/9221
 } @ args:
 
 assert editedCabalFile != null -> revision != null;
@@ -120,6 +127,7 @@ let
     "--with-ghc-pkg=${ghc.targetPrefix}ghc-pkg"
     "--with-gcc=${stdenv.cc.targetPrefix}cc"
     "--with-ld=${stdenv.cc.bintools.targetPrefix}ld"
+    "--with-ar=${stdenv.cc.bintools.targetPrefix}ar"
     # use the one that comes with the cross compiler.
     "--with-hsc2hs=${ghc.targetPrefix}hsc2hs"
     "--with-strip=${stdenv.cc.bintools.targetPrefix}strip"
@@ -152,6 +160,7 @@ let
     (optionalString (versionOlder "8.4" ghc.version) (enableFeature enableStaticLibraries "static"))
     (optionalString (isGhcjs || versionOlder "7.4" ghc.version) (enableFeature enableSharedExecutables "executable-dynamic"))
     (optionalString (isGhcjs || versionOlder "7" ghc.version) (enableFeature doCheck "tests"))
+    (enableFeature doBenchmark "benchmarks")
     "--enable-library-vanilla"  # TODO: Should this be configurable?
     "--enable-library-for-ghci" # TODO: Should this be configurable?
   ] ++ optionals (enableDeadCodeElimination && (stdenv.lib.versionOlder "8.0.1" ghc.version)) [
@@ -172,8 +181,7 @@ let
     (optionalString (versionOlder "7.10" ghc.version && !isHaLVM) "-threaded")
   ];
 
-  isHaskellPkg = x: (x ? pname) && (x ? version) && (x ? env);
-  isSystemPkg = x: !isHaskellPkg x;
+  isHaskellPkg = x: x ? isHaskellLibrary;
 
   allPkgconfigDepends = pkgconfigDepends ++ libraryPkgconfigDepends ++ executablePkgconfigDepends ++
                         optionals doCheck testPkgconfigDepends ++ optionals doBenchmark benchmarkPkgconfigDepends;
@@ -190,20 +198,15 @@ let
                      optionals doCheck (testDepends ++ testHaskellDepends ++ testSystemDepends ++ testFrameworkDepends) ++
                      optionals doBenchmark (benchmarkDepends ++ benchmarkHaskellDepends ++ benchmarkSystemDepends ++ benchmarkFrameworkDepends);
 
-  allBuildInputs = propagatedBuildInputs ++ otherBuildInputs;
 
-  haskellBuildInputs = stdenv.lib.filter isHaskellPkg allBuildInputs;
-  systemBuildInputs = stdenv.lib.filter isSystemPkg allBuildInputs;
-
-  # When not cross compiling, also include Setup.hs dependencies.
-  ghcEnv = ghc.withPackages (p:
-    haskellBuildInputs ++ stdenv.lib.optional (!isCross) setupHaskellDepends);
+  allBuildInputs = propagatedBuildInputs ++ otherBuildInputs ++ depsBuildBuild ++ nativeBuildInputs;
+  isHaskellPartition =
+    stdenv.lib.partition isHaskellPkg allBuildInputs;
 
   setupCommand = "./Setup";
 
   ghcCommand' = if isGhcjs then "ghcjs" else "ghc";
   ghcCommand = "${ghc.targetPrefix}${ghcCommand'}";
-  ghcCommandCaps= toUpper ghcCommand';
 
   nativeGhcCommand = "${nativeGhc.targetPrefix}ghc";
 
@@ -213,8 +216,7 @@ let
       continue
     fi
   '';
-
-in
+in stdenv.lib.fix (drv:
 
 assert allPkgconfigDepends != [] -> pkgconfig != null;
 
@@ -249,6 +251,7 @@ stdenv.mkDerivation ({
   '' + postPatch;
 
   setupCompilerEnvironmentPhase = ''
+    NIX_BUILD_CORES=$(( NIX_BUILD_CORES < ${toString maxBuildCores} ? NIX_BUILD_CORES : ${toString maxBuildCores} ))
     runHook preSetupCompilerEnvironment
 
     echo "Build with ${ghc}."
@@ -339,11 +342,12 @@ stdenv.mkDerivation ({
 
     echo configureFlags: $configureFlags
     ${setupCommand} configure $configureFlags 2>&1 | ${coreutils}/bin/tee "$NIX_BUILD_TOP/cabal-configure.log"
-    if ${gnugrep}/bin/egrep -q -z 'Warning:.*depends on multiple versions' "$NIX_BUILD_TOP/cabal-configure.log"; then
-      echo >&2 "*** abort because of serious configure-time warning from Cabal"
-      exit 1
-    fi
-
+    ${stdenv.lib.optionalString (!allowInconsistentDependencies) ''
+      if ${gnugrep}/bin/egrep -q -z 'Warning:.*depends on multiple versions' "$NIX_BUILD_TOP/cabal-configure.log"; then
+        echo >&2 "*** abort because of serious configure-time warning from Cabal"
+        exit 1
+      fi
+    ''}
     export GHC_PACKAGE_PATH="$packageConfDir:"
 
     runHook postConfigure
@@ -373,6 +377,10 @@ stdenv.mkDerivation ({
     runHook postHaddock
   '';
 
+  # The scary sed expression handles two cases in v2.5 Cabal's package configs:
+  # 1. 'id:    short-name-0.0.1-9yvw8HF06tiAXuxm5U8KjO'
+  # 2. 'id:\n
+  #         very-long-descriptive-useful-name-0.0.1-9yvw8HF06tiAXuxm5U8KjO'
   installPhase = ''
     runHook preInstall
 
@@ -387,7 +395,7 @@ stdenv.mkDerivation ({
         rmdir "$packageConfFile"
       fi
       for packageConfFile in "$packageConfDir/"*; do
-        local pkgId=$( ${gnused}/bin/sed -n -e 's|^id: ||p' $packageConfFile )
+        local pkgId=$( ${gnused}/bin/sed -n -e ':a' -e '/^id:$/N; s/id:\n[ ]*\([^\n]*\).*$/\1/p; s/id:[ ]*\([^\n]*\)$/\1/p; ta' $packageConfFile )
         mv $packageConfFile $packageConfDir/$pkgId.conf
       done
 
@@ -427,6 +435,13 @@ stdenv.mkDerivation ({
 
     compiler = ghc;
 
+
+    getBuildInputs = {
+      inherit propagatedBuildInputs otherBuildInputs allPkgconfigDepends;
+      haskellBuildInputs = isHaskellPartition.right;
+      systemBuildInputs = isHaskellPartition.wrong;
+    };
+
     isHaskellLibrary = isLibrary;
 
     # TODO: ask why the split outputs are configurable at all?
@@ -437,23 +452,11 @@ stdenv.mkDerivation ({
     # TODO: fetch the self from the fixpoint instead
     haddockDir = self: if doHaddock then "${docdir self.doc}/html" else null;
 
-    env = stdenv.mkDerivation {
-      name = "interactive-${pname}-${version}-environment";
-      buildInputs = systemBuildInputs;
-      nativeBuildInputs = [ ghcEnv ] ++ nativeBuildInputs;
-      LANG = "en_US.UTF-8";
-      LOCALE_ARCHIVE = optionalString (stdenv.hostPlatform.libc == "glibc") "${glibcLocales}/lib/locale/locale-archive";
-      shellHook = ''
-        export NIX_${ghcCommandCaps}="${ghcEnv}/bin/${ghcCommand}"
-        export NIX_${ghcCommandCaps}PKG="${ghcEnv}/bin/${ghcCommand}-pkg"
-        # TODO: is this still valid?
-        export NIX_${ghcCommandCaps}_DOCDIR="${ghcEnv}/share/doc/ghc/html"
-        ${if isHaLVM
-            then ''export NIX_${ghcCommandCaps}_LIBDIR="${ghcEnv}/lib/HaLVM-${ghc.version}"''
-            else ''export NIX_${ghcCommandCaps}_LIBDIR="${ghcEnv}/lib/${ghcCommand}-${ghc.version}"''}
-        ${shellHook}
-      '';
+    env = shellFor {
+      packages = p: [ drv ];
+      inherit shellHook;
     };
+
   };
 
   meta = { inherit homepage license platforms; }
@@ -486,4 +489,5 @@ stdenv.mkDerivation ({
 // optionalAttrs (dontStrip)            { inherit dontStrip; }
 // optionalAttrs (hardeningDisable != []) { inherit hardeningDisable; }
 // optionalAttrs (stdenv.buildPlatform.libc == "glibc"){ LOCALE_ARCHIVE = "${glibcLocales}/lib/locale/locale-archive"; }
+)
 )

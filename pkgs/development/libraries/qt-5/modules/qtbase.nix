@@ -18,7 +18,7 @@
   withGtk3 ? false, dconf ? null, gtk3 ? null,
 
   # options
-  libGLSupported ? (!stdenv.isDarwin),
+  libGLSupported ? !stdenv.isDarwin,
   libGL,
   buildExamples ? false,
   buildTests ? false,
@@ -53,6 +53,7 @@ stdenv.mkDerivation {
       if stdenv.isDarwin
       then with darwin.apple_sdk.frameworks;
         [
+          # TODO: move to buildInputs, this should not be propagated.
           AGL AppKit ApplicationServices Carbon Cocoa CoreAudio CoreBluetooth
           CoreLocation CoreServices DiskArbitration Foundation OpenGL
           darwin.libobjc libiconv
@@ -77,6 +78,9 @@ stdenv.mkDerivation {
       [ libinput ]
       ++ lib.optional withGtk3 gtk3
     )
+    ++ lib.optional stdenv.isDarwin
+      # Needed for OBJC_CLASS_$_NSDate symbols.
+      [ darwin.cf-private ]
     ++ lib.optional developerBuild gdb
     ++ lib.optional (cups != null) cups
     ++ lib.optional (mysql != null) mysql.connector-c

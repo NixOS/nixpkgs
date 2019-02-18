@@ -4,11 +4,11 @@ with stdenv.lib;
 
 buildPythonPackage rec {
   pname = "Flask-Migrate";
-  version = "2.2.1";
+  version = "2.3.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "cd1b4e6cb829eeb41c02ad9202d83bef5f4b7a036dd9fad72ce96ad1e22efb07";
+    sha256 = "1awlb4q1l9iv794qjjxxyhcv4i69j77kh7nsg17a6kb909mglml3";
   };
 
   checkInputs = optional isPy3k glibcLocales;

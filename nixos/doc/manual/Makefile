@@ -4,7 +4,7 @@ all: manual-combined.xml format
 .PHONY: debug
 debug: generated manual-combined.xml
 
-manual-combined.xml: generated *.xml
+manual-combined.xml: generated *.xml **/*.xml
 	rm -f ./manual-combined.xml
 	nix-shell --packages xmloscopy \
 		--run "xmloscopy --docbook5 ./manual.xml ./manual-combined.xml"

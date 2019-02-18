@@ -1,17 +1,17 @@
 { stdenv, fetchFromGitHub, wrapGAppsHook
 , autoconf, autoconf-archive, automake, gettext, intltool, libtool, pkgconfig
 , libICE, libSM, libXScrnSaver, libXtst, cheetah
-, gobjectIntrospection, glib, glibmm, gtkmm3, atk, pango, pangomm, cairo
+, gobject-introspection, glib, glibmm, gtkmm3, atk, pango, pangomm, cairo
 , cairomm , dbus, dbus-glib, gdome2, gstreamer, gst-plugins-base
 , gst-plugins-good, libsigcxx }:
 
 stdenv.mkDerivation rec {
   name = "workrave-${version}";
-  version = "1.10.20";
+  version = "1.10.23";
 
   src = let
   in fetchFromGitHub {
-    sha256 = "099a87zkrkmsgfz9isrfm89dh545x52891jh6qxmn19h6wwsi941";
+    sha256 = "1qhlwfhwk5agv4904d6bsf83k9k89q7bms6agg967vsca4905vcw";
     rev = with stdenv.lib;
       "v" + concatStringsSep "_" (splitString "." version);
     repo = "workrave";
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [
     libICE libSM libXScrnSaver libXtst cheetah
-    gobjectIntrospection glib glibmm gtkmm3 atk pango pangomm cairo cairomm
+    gobject-introspection glib glibmm gtkmm3 atk pango pangomm cairo cairomm
     dbus dbus-glib gdome2 gstreamer gst-plugins-base gst-plugins-good libsigcxx
   ];
 

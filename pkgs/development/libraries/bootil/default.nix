@@ -10,6 +10,8 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.free;
     maintainers = [ stdenv.lib.maintainers.abigailbuccaneer ];
     platforms = stdenv.lib.platforms.all;
+    # Build uses `-msse` and `-mfpmath=sse`
+    badPlatforms = [ "aarch64-linux" ];
   };
 
   src = fetchFromGitHub {
@@ -23,21 +25,21 @@ stdenv.mkDerivation rec {
     url = https://github.com/garrynewman/bootil/pull/22.patch;
     name = "github-pull-request-22.patch";
     sha256 = "1qf8wkv00pb9w1aa0dl89c8gm4rmzkxfl7hidj4gz0wpy7a24qa2";
-  })];
+  }) ];
 
-  platform =
-    if stdenv.isLinux then "linux"
-    else if stdenv.isDarwin then "macosx"
-    else throw "unrecognized system ${stdenv.hostPlatform.system}";
+  # Avoid guessing where files end up. Just use current directory.
+  postPatch = ''
+    substituteInPlace projects/premake4.lua \
+      --replace 'location ( os.get() .. "/" .. _ACTION )' 'location ( ".." )'
+    substituteInPlace projects/bootil.lua \
+      --replace 'targetdir ( "../lib/" .. os.get() .. "/" .. _ACTION )' 'targetdir ( ".." )'
+  '';
 
-  buildInputs = [ premake4 ];
-
-  configurePhase = "premake4 --file=projects/premake4.lua gmake";
-  makeFlags = "-C projects/${platform}/gmake";
+  nativeBuildInputs = [ premake4 ];
+  premakefile = "projects/premake4.lua";
 
   installPhase = ''
-    mkdir -p $out/lib
-    cp lib/${platform}/gmake/libbootil_static.a $out/lib/
-    cp -r include $out/
+    install -D libbootil_static.a $out/lib/libbootil_static.a
+    cp -r include $out
   '';
 }

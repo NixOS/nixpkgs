@@ -7,6 +7,7 @@
 , curl, libiconv, gmp, zfs, parted, bridge-utils, dmidecode
 , enableXen ? false, xen ? null
 , enableIscsi ? false, openiscsi
+, enableCeph ? false, ceph
 }:
 
 with stdenv.lib;
@@ -16,19 +17,19 @@ let
   buildFromTarball = stdenv.isDarwin;
 in stdenv.mkDerivation rec {
   name = "libvirt-${version}";
-  version = "4.5.0";
+  version = "4.10.0";
 
   src =
     if buildFromTarball then
       fetchurl {
         url = "http://libvirt.org/sources/${name}.tar.xz";
-        sha256 = "02dbfyi80im37gdsxglb4fja78q63b8ahmgdc5kh8lx51kf5xsg7";
+        sha256 = "0v17zzyyb25nn9l18v5244myg7590dp6ppwgi8xysipifc0q77bz";
       }
     else
       fetchgit {
         url = git://libvirt.org/libvirt.git;
         rev = "v${version}";
-        sha256 = "0ija9a02znajsa2pbxamrmz87zwpmba9s29vdzzqqqw5c1rdpcr6";
+        sha256 = "0dlpv3v6jpbmgvhpn29ryp0w2a1xny8ciqid8hnlf3klahz9kwz9";
         fetchSubmodules = true;
       };
 
@@ -45,6 +46,8 @@ in stdenv.mkDerivation rec {
     xen
   ] ++ optionals enableIscsi [
     openiscsi
+  ] ++ optionals enableCeph [
+    ceph
   ] ++ optionals stdenv.isDarwin [
     libiconv gmp
   ];
@@ -85,6 +88,8 @@ in stdenv.mkDerivation rec {
     "--with-storage-zfs"
   ] ++ optionals enableIscsi [
     "--with-storage-iscsi"
+  ] ++ optionals enableCeph [
+    "--with-storage-rbd"
   ] ++ optionals stdenv.isDarwin [
     "--with-init-script=none"
   ];

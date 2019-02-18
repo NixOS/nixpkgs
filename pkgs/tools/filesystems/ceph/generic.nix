@@ -37,7 +37,8 @@ with stdenv.lib;
 let
 
   shouldUsePkg = pkg_: let pkg = (builtins.tryEval pkg_).value;
-    in if pkg.meta.available or false then pkg else null;
+    in if lib.any (lib.meta.platformMatch stdenv.hostPlatform) pkg.meta.platforms
+      then pkg else null;
 
   optYasm = shouldUsePkg yasm;
   optFcgi = shouldUsePkg fcgi;
@@ -82,7 +83,6 @@ let
   ceph-python-env = python2Packages.python.withPackages (ps: [
     ps.sphinx
     ps.flask
-    ps.argparse
     ps.cython
     ps.setuptools
     ps.pip
@@ -165,7 +165,7 @@ stdenv.mkDerivation {
     homepage = https://ceph.com/;
     description = "Distributed storage system";
     license = licenses.lgpl21;
-    maintainers = with maintainers; [ adev ak wkennington ];
+    maintainers = with maintainers; [ adev ak ];
     platforms = platforms.unix;
   };
 

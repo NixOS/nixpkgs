@@ -1,13 +1,13 @@
 { stdenv, fetchFromGitHub, ncurses, parted, automake, autoconf, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  version = "0.24";
+  version = "0.25";
   name = "nwipe-${version}";
   src = fetchFromGitHub {
     owner = "martijnvanbrummelen";
     repo = "nwipe";
     rev = "v${version}";
-    sha256 = "0zminjngz98b4jl1ii6ssa7pkmf4xw6mmk8apxz3xr68cps12ls0";
+    sha256 = "1hx041arw82k814g9r8dqsfi736mj5nlzp2zpi8n2qfqfc1q8nir";
   };
   nativeBuildInputs = [ automake autoconf pkgconfig ];
   buildInputs = [ ncurses parted ];

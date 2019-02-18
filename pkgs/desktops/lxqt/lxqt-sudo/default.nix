@@ -1,15 +1,14 @@
 { stdenv, fetchFromGitHub, cmake, lxqt-build-tools, qtbase, qttools, qtx11extras, qtsvg, kwindowsystem, liblxqt, libqtxdg, sudo }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "lxqt-sudo";
-  version = "0.13.0";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "1gpn3dhmzabx0jrqxq63549sah03kf6bmdc9d9kmg6hyr5xg3i1h";
+    sha256 = "0l8fq06kfsrmvg2fr8lqdsxr6fwxmxsa9zwaa3fs9inzaylm0jkh";
   };
 
   nativeBuildInputs = [
@@ -28,7 +27,10 @@ stdenv.mkDerivation rec {
     sudo
   ];
 
-  cmakeFlags = [ "-DPULL_TRANSLATIONS=NO" ];
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace "\''${LXQT_TRANSLATIONS_DIR}" "''${out}/share/lxqt/translations"
+  '';
 
   meta = with stdenv.lib; {
     description = "GUI frontend for sudo/su";

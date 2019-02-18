@@ -352,9 +352,9 @@ you want them to come from. Add the following to `configuration.nix`.
 
 ```nix
 services.hoogle = {
-enable = true;
-packages = (hpkgs: with hpkgs; [text cryptonite]);
-haskellPackages = pkgs.haskellPackages;
+  enable = true;
+  packages = (hpkgs: with hpkgs; [text cryptonite]);
+  haskellPackages = pkgs.haskellPackages;
 };
 ```
 
@@ -935,7 +935,7 @@ The implementation can be found in the
 [integer-gmp](http://hackage.haskell.org/package/integer-gmp) package.
 
 A potential problem with this is that GMP is licensed under the
-[GNU Lesser General Public License (LGPL)](http://www.gnu.org/copyleft/lesser.html),
+[GNU Lesser General Public License (LGPL)](https://www.gnu.org/copyleft/lesser.html),
 a kind of "copyleft" license. According to the terms of the LGPL, paragraph 5,
 you may distribute a program that is designed to be compiled and dynamically
 linked with the library under the terms of your choice (i.e., commercially) but

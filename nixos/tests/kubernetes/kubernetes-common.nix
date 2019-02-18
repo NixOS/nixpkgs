@@ -3,7 +3,6 @@ with pkgs.lib;
 let
   base = {
     inherit roles;
-    featureGates = ["AllAlpha"];
     flannel.enable = true;
     addons.dashboard.enable = true;
 

@@ -55,6 +55,10 @@ let
       linux = pkgs.utillinux;
       darwin = pkgs.darwin.text_cmds;
     };
+    column = {
+      linux = pkgs.utillinux;
+      darwin = pkgs.netbsd.column;
+    };
     eject = {
       linux = pkgs.utillinux;
     };
@@ -182,7 +186,7 @@ let
   compat = with bins; lib.mapAttrs makeCompat {
     procps = [ ps sysctl top watch ];
     utillinux = [ fsck fdisk getopt hexdump mount
-                  script umount whereis write col ];
+                  script umount whereis write col column ];
     nettools = [ arp hostname ifconfig netstat route ];
   };
 in bins // compat

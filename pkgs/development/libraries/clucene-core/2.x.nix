@@ -12,7 +12,19 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ boost zlib ];
 
-  cmakeFlags = [ "-DBUILD_CONTRIBS=ON" "-DBUILD_CONTRIBS_LIB=ON" ];
+  cmakeFlags = [
+    "-DBUILD_CONTRIBS=ON"
+    "-DBUILD_CONTRIBS_LIB=ON"
+    "-DCMAKE_BUILD_WITH_INSTALL_NAME_DIR=ON"
+  ] ++ stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    "-D_CL_HAVE_GCC_ATOMIC_FUNCTIONS=0"
+    "-D_CL_HAVE_NAMESPACES_EXITCODE=0"
+    "-D_CL_HAVE_NO_SNPRINTF_BUG_EXITCODE=0"
+    "-D_CL_HAVE_NO_SNWPRINTF_BUG_EXITCODE=0"
+    "-D_CL_HAVE_TRY_BLOCKS_EXITCODE=0"
+    "-D_CL_HAVE_PTHREAD_MUTEX_RECURSIVE=0"
+    "-DLUCENE_STATIC_CONSTANT_SYNTAX_EXITCODE=0"
+  ];
 
   patches = # From debian
     [ ./Fix-pkgconfig-file-by-adding-clucene-shared-library.patch
@@ -20,15 +32,11 @@ stdenv.mkDerivation rec {
       ./Install-contribs-lib.patch
     ] ++ stdenv.lib.optionals stdenv.isDarwin [ ./fix-darwin.patch ];
 
-  postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
-    install_name_tool -change libclucene-shared.1.dylib \
-        $out/lib/libclucene-shared.1.dylib \
-        $out/lib/libclucene-core.1.dylib
-  '';
+  # fails with "Unable to find executable:
+  # /build/clucene-core-2.3.3.4/build/bin/cl_test"
+  doCheck = false;
 
-  doCheck = false; # fails with "Unable to find executable: /build/clucene-core-2.3.3.4/build/bin/cl_test"
-
-  meta = {
+  meta = with stdenv.lib; {
     description = "Core library for full-featured text search engine";
     longDescription = ''
       CLucene is a high-performance, scalable, cross platform, full-featured,
@@ -41,6 +49,7 @@ stdenv.mkDerivation rec {
       CLucene is a port of the very popular Java Lucene text search engine API.
     '';
     homepage = http://clucene.sourceforge.net;
-    platforms = stdenv.lib.platforms.unix;
+    platforms = platforms.unix;
+    license = with licenses; [ asl20 lgpl2 ];
   };
 }

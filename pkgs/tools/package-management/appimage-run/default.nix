@@ -1,4 +1,4 @@
-{ stdenv, writeScript, buildFHSUserEnv, coreutils
+{ stdenv, writeScript, buildFHSUserEnv, coreutils, file, libarchive
 , extraPkgs ? pkgs: [] }:
 
 buildFHSUserEnv {
@@ -66,6 +66,7 @@ buildFHSUserEnv {
     dbus-glib
     libav
     atk
+    at-spi2-atk
     libudev0-shim
     networkmanager098
 
@@ -131,7 +132,15 @@ buildFHSUserEnv {
     export APPDIR="$SQUASHFS_ROOT/squashfs-root"
     if [ ! -x "$APPDIR" ]; then
       cd "$SQUASHFS_ROOT"
-      "$APPIMAGE" --appimage-extract 2>/dev/null
+
+      if ${file}/bin/file --mime-type --brief --keep-going "$APPIMAGE" | grep -q iso; then
+        # is type-1 appimage
+        mkdir "$APPDIR"
+        ${libarchive}/bin/bsdtar -x -C "$APPDIR" -f "$APPIMAGE"
+      else
+        # is type-2 appimage
+        "$APPIMAGE" --appimage-extract 2>/dev/null
+      fi
     fi
 
     cd "$APPDIR"

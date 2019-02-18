@@ -12,7 +12,7 @@ let
 in
 
 stdenvNoCC.mkDerivation {
-  name = "elf-header";
+  pname = "elf-header";
   inherit (libc) version;
 
   src = null;
@@ -32,6 +32,7 @@ stdenvNoCC.mkDerivation {
   '';
 
   meta = libc.meta // {
+    outputsToInstall = [ "out" ];
     description = "The datastructures of ELF according to the target platform's libc";
     longDescription = ''
 	  The Executable and Linkable Format (ELF, formerly named Extensible Linking

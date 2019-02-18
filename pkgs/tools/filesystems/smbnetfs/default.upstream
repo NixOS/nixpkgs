@@ -1,4 +1,4 @@
-url http://sourceforge.net/projects/smbnetfs/files/smbnetfs/
+url https://sourceforge.net/projects/smbnetfs/files/smbnetfs/
 version_link '[-][0-9.]+[a-z]*/$'
 version_link '[.]tar[.][a-z0-9]+/download$'
 SF_redirect

@@ -6,7 +6,7 @@
     sha256 = "18ifhv5q9prd175q3vxbqf6qyvkk6bc7d2lhqdk0q78i68kv9y0c";
   }
 # apple frameworks
-, Carbon, Cocoa
+, cf-private, Carbon, Cocoa
 }:
 
 let
@@ -19,7 +19,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ gettext pkgconfig ];
   buildInputs = [ ncurses ]
-    ++ stdenv.lib.optionals stdenv.hostPlatform.isDarwin [ Carbon Cocoa ];
+    ++ stdenv.lib.optionals stdenv.hostPlatform.isDarwin [
+      Carbon Cocoa
+      # Needed for OBJC_CLASS_$_NSArray symbols.
+      cf-private
+    ];
 
   configureFlags = [
     "--enable-multibyte"

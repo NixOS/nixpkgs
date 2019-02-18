@@ -49,10 +49,17 @@ mapAliases ({
   bashCompletion = bash-completion; # Added 2016-09-28
   bridge_utils = bridge-utils;  # added 2015-02-20
   btrfsProgs = btrfs-progs; # added 2016-01-03
+  buildbot = pythonPackages.buildbot; # added 2018-10-11
+  buildbot-full = pythonPackages.buildbot-full; # added 2018-10-11
+  buildbot-pkg = pythonPackages.buildbot-pkg; # added 2018-10-11
+  buildbot-ui = pythonPackages.buildbot-ui; # added 2018-10-11
+  buildbot-worker = pythonPackages.buildbot-worker; # added 2018-10-11
+  buildPerlPackage = perlPackages.buildPerlPackage; # added 2018-10-12
   bundler_HEAD = bundler; # added 2015-11-15
   cantarell_fonts = cantarell-fonts; # added 2018-03-03
   checkbashism = checkbashisms; # added 2016-08-16
   cifs_utils = cifs-utils; # added 2016-08
+  ckb = ckb-next; # added 2018-10-21
   clangAnalyzer = clang-analyzer;  # added 2015-02-20
   clawsMail = claws-mail; # added 2016-04-29
   clutter_gtk = clutter-gtk; # added 2018-02-25
@@ -78,8 +85,8 @@ mapAliases ({
   docbook5_xsl = docbook_xsl_ns; # added 2018-04-25
   docbook_xml_xslt = docbook_xsl; # added 2018-04-25
   double_conversion = double-conversion; # 2017-11-22
+  docker_compose = docker-compose; # 2018-11-10
   dwarf_fortress = dwarf-fortress; # added 2016-01-23
-  emacs25Macport_25_1 = emacs25Macport; # added 2018-04-25
   emacsMelpa = emacs25PackagesNg; # for backward compatibility
   emacsPackagesGen = emacsPackagesFor; # added 2018-08-18
   emacsPackagesNgGen = emacsPackagesNgFor; # added 2018-08-18
@@ -106,10 +113,11 @@ mapAliases ({
   gnome_themes_standard = gnome-themes-standard; # added 2018-02-25
   gnustep-make = gnustep.make; # added 2016-7-6
   go-pup = pup; # added 2017-12-19
+  gobjectIntrospection = gobject-introspection; # added 2018-12-02
+  goimports = gotools; # added 2018-09-16
   googleAuthenticator = google-authenticator; # added 2016-10-16
   grantlee5 = libsForQt5.grantlee;  # added 2015-12-19
   gsettings_desktop_schemas = gsettings-desktop-schemas; # added 2018-02-25
-  gst_ffmpeg = gst-ffmpeg;  # added 2017-02
   gst_plugins_bad = gst-plugins-bad;  # added 2017-02
   gst_plugins_base = gst-plugins-base;  # added 2017-02
   gst_plugins_good = gst-plugins-good;  # added 2017-02
@@ -125,6 +133,7 @@ mapAliases ({
   gupnp_dlna = gupnp-dlna; # added 2018-02-25
   gupnp_igd = gupnp-igd; # added 2018-02-25
   gupnptools = gupnp-tools;  # added 2015-12-19
+  gutenberg = zola;  # added 2018-11-17
   heimdalFull = heimdal; # added 2018-05-01
   hicolor_icon_theme = hicolor-icon-theme; # added 2018-02-25
   htmlTidy = html-tidy;  # added 2014-12-06
@@ -151,12 +160,17 @@ mapAliases ({
   libcap_progs = libcap.out; # added 2016-04-29
   libdbusmenu_qt5 = libsForQt5.libdbusmenu;  # added 2015-12-19
   libdbusmenu-glib = libdbusmenu; # added 2018-05-01
+  liberation_ttf_v1_from_source = liberation_ttf_v1; # added 2018-12-12
+  liberation_ttf_v2_from_source = liberation_ttf_v2; # added 2018-12-12
+  liberationsansnarrow = liberation-sans-narrow; # added 2018-12-12
   libgnome_keyring = libgnome-keyring; # added 2018-02-25
   libgnome_keyring3 = libgnome-keyring3; # added 2018-02-25
   libgumbo = gumbo; # added 2018-01-21
   libintlOrEmpty = stdenv.lib.optional (!stdenv.isLinux || stdenv.hostPlatform.libc != "glibc") gettext; # added 2018-03-14
   libjson_rpc_cpp = libjson-rpc-cpp; # added 2017-02-28
+  liblapackWithoutAtlas = liblapack; # added 2018-11-05
   libmysql = mysql.connector-c; # added # 2017-12-28, this was a misnomer refering to libmysqlclient
+  libqrencode = qrencode;  # added 2019-01-01
   librecad2 = librecad;  # backwards compatibility alias, added 2015-10
   libsysfs = sysfsutils; # added 2018-04-25
   libtidy = html-tidy;  # added 2014-12-21
@@ -195,14 +209,21 @@ mapAliases ({
   nilfs_utils = nilfs-utils; # added 2018-04-25
   nmap_graphical = nmap-graphical;  # added 2017-01-19
   nologin = shadow; # added 2018-04-25
+  nxproxy = nx-libs; # added 2019-02-15
   opencascade_oce = opencascade; # added 2018-04-25
   opencl-icd = ocl-icd; # added 2017-01-20
   openexr_ctl = ctl; # added 2018-04-25
+  openjpeg_2_1 = openjpeg_2; # added 2018-10-25
+  opensans-ttf = open-sans; # added 2018-12-04
   openssh_with_kerberos = openssh; # added 2018-01-28
   owncloudclient = owncloud-client;  # added 2016-08
   p11_kit = p11-kit; # added 2018-02-25
+  parquet-cpp = arrow-cpp; # added 2018-09-08
   pass-otp = pass.withExtensions (ext: [ext.pass-otp]); # added 2018-05-04
+  perlXMLParser = perlPackages.XMLParser; # added 2018-10-12
+  perlArchiveCpio = perlPackages.ArchiveCpio; # added 2018-10-12
   pgp-tools = signing-party; # added 2017-03-26
+  pg_tmp = ephemeralpg; # added 2018-01-16
   pidgin-with-plugins = pidgin; # added 2016-06
   pidginlatex = pidgin-latex; # added 2018-01-08
   pidginlatexSF = pidgin-latex; # added 2014-11-02
@@ -213,7 +234,27 @@ mapAliases ({
   pidginwindowmerge = pidgin-window-merge; # added 2018-01-08
   piwik = matomo; # added 2018-01-16
   pltScheme = racket; # just to be sure
+  pmtools = acpica-tools; # added 2018-11-01
   poppler_qt5 = libsForQt5.poppler;  # added 2015-12-19
+  postgresql94 = postgresql_9_4;
+  postgresql95 = postgresql_9_5;
+  postgresql96 = postgresql_9_6;
+  postgresql100 = throw "deprecated 2018-10-21: use postgresql_10 instead";
+  # postgresql plugins
+  pgjwt = postgresqlPackages.pgjwt;
+  pg_repack = postgresqlPackages.pg_repack;
+  pgroonga = postgresqlPackages.pgroonga;
+  pg_similarity = postgresqlPackages.pg_similarity;
+  pgtap = postgresqlPackages.pgtap;
+  plv8 = postgresqlPackages.plv8;
+  timescaledb = postgresqlPackages.timescaledb;
+  tsearch_extras = postgresqlPackages.tsearch_extras;
+  cstore_fdw = postgresqlPackages.cstore_fdw;
+  pg_hll = postgresqlPackages.pg_hll;
+  pg_cron = postgresqlPackages.pg_cron;
+  pg_topn = postgresqlPackages.pg_topn;
+  postgis = postgresqlPackages.postgis;
+  # end
   procps-ng = procps; # added 2018-06-08
   prometheus-statsd-bridge = prometheus-statsd-exporter;  # added 2017-08-27
   pulseaudioLight = pulseaudio; # added 2018-04-25
@@ -224,6 +265,7 @@ mapAliases ({
   qwt6 = libsForQt5.qwt;  # added 2015-12-19
   rdiff_backup = rdiff-backup;  # added 2014-11-23
   rdmd = dtools;  # added 2017-08-19
+  rng_tools = rng-tools; # added 2018-10-24
   robomongo = robo3t; #added 2017-09-28
   rssglx = rss-glx; #added 2015-03-25
   ruby_2_0_0 = throw "deprecated 2018-0213: use a newer version of ruby";
@@ -238,11 +280,13 @@ mapAliases ({
   s6Networking = s6-networking; # added 2018-07-23
   s6LinuxUtils = s6-linux-utils; # added 2018-07-23
   s6PortableUtils = s6-portable-utils; # added 2018-07-23
+  sagemath = sage; # added 2018-10-27
   sam = deadpixi-sam; # added 2018-04-25
   samsungUnifiedLinuxDriver = samsung-unified-linux-driver; # added 2016-01-25
   saneBackends = sane-backends; # added 2016-01-02
   saneBackendsGit = sane-backends-git; # added 2016-01-02
   saneFrontends = sane-frontends; # added 2016-01-02
+  sapic = throw "deprecated 2019-1-19: sapic is bundled with 'tamarin-prover' now";
   scim = sc-im; # added 2016-01-22
   scollector = bosun; # added 2018-04-25
   shared_mime_info = shared-mime-info; # added 2018-02-25
@@ -276,6 +320,10 @@ mapAliases ({
   telepathy_qt5 = libsForQt5.telepathy;  # added 2015-12-19
   telepathy_salut = telepathy-salut; # added 2018-02-25
   telnet = inetutils; # added 2018-05-15
+  terraform-provider-ibm = terraform-providers.ibm; # added 2018-09-28
+  terraform-provider-libvirt = terraform-providers.libvirt; # added 2018-09-28
+  terraform-provider-nixos = terraform-providers.nixos; # added 2018-09-28
+  tesseract_4 = tesseract4; # added 2018-12-19
   tex-gyre-bonum-math = tex-gyre-math.bonum; # added 2018-04-03
   tex-gyre-pagella-math = tex-gyre-math.pagella; # added 2018-04-03
   tex-gyre-schola-math = tex-gyre-math.schola; # added 2018-04-03
@@ -285,6 +333,7 @@ mapAliases ({
   trang = jing-trang; # added 2018-04-25
   transmission_gtk = transmission-gtk; # added 2018-01-06
   transmission_remote_gtk = transmission-remote-gtk; # added 2018-01-06
+  truecrypt = veracrypt; # added 2018-10-24
   tshark = wireshark-cli; # added 2018-04-25
   ucsFonts = ucs-fonts; # added 2016-07-15
   ultrastardx-beta = ultrastardx; # added 2017-08-12
@@ -306,7 +355,12 @@ mapAliases ({
   xmonad_log_applet_gnome3 = xmonad_log_applet; # added 2018-05-01
   xf86_video_nouveau = xorg.xf86videonouveau; # added 2015-09
   xlibs = xorg; # added 2015-09
+  xpraGtk3 = xpra; # added 2018-09-13
   youtubeDL = youtube-dl;  # added 2014-10-26
+  zdfmediathk = mediathekview; # added 2019-01-19
+
+  # TODO(ekleog): add ‘wasm’ alias to ‘ocamlPackages.wasm’ after 19.03
+  # branch-off
 
   # added 2017-05-27
   wineMinimal = winePackages.minimal;
@@ -325,7 +379,6 @@ mapAliases ({
   callPackage_i686 = pkgsi686Linux.callPackage;
 
   inherit (ocaml-ng) # added 2016-09-14
-    ocamlPackages_3_10_0 ocamlPackages_3_11_2 ocamlPackages_3_12_1
     ocamlPackages_4_00_1 ocamlPackages_4_01_0 ocamlPackages_4_02
     ocamlPackages_4_03
     ocamlPackages_latest;
@@ -344,10 +397,6 @@ mapAliases ({
     gst-ffmpeg = pkgs.gst-ffmpeg;
   };
 } // (with ocaml-ng; { # added 2016-09-14
-  ocaml_3_08_0 = ocamlPackages_3_08_0.ocaml;
-  ocaml_3_10_0 = ocamlPackages_3_10_0.ocaml;
-  ocaml_3_11_2 = ocamlPackages_3_11_2.ocaml;
-  ocaml_3_12_1 = ocamlPackages_3_12_1.ocaml;
   ocaml_4_00_1 = ocamlPackages_4_00_1.ocaml;
   ocaml_4_01_0 = ocamlPackages_4_01_0.ocaml;
   ocaml_4_02   = ocamlPackages_4_02.ocaml;

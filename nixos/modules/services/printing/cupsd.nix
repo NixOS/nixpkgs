@@ -250,7 +250,7 @@ in
       drivers = mkOption {
         type = types.listOf types.path;
         default = [];
-        example = literalExample "[ pkgs.gutenprint pkgs.hplip pkgs.splix ]";
+        example = literalExample "with pkgs; [ gutenprint hplip splix cups-googlecloudprint ]";
         description = ''
           CUPS drivers to use. Drivers provided by CUPS, cups-filters,
           Ghostscript and Samba are added unconditionally. If this list contains
@@ -316,6 +316,10 @@ in
             mkdir -m 0755 -p ${cfg.tempDir}
 
             mkdir -m 0755 -p /var/lib/cups
+            # While cups will automatically create self-signed certificates if accessed via TLS,
+            # this directory to store the certificates needs to be created manually.
+            mkdir -m 0700 -p /var/lib/cups/ssl
+
             # Backwards compatibility
             if [ ! -L /etc/cups ]; then
               mv /etc/cups/* /var/lib/cups

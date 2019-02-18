@@ -277,8 +277,7 @@ if ($virt eq "qemu" || $virt eq "kvm" || $virt eq "bochs") {
 
 # Also for Hyper-V.
 if ($virt eq "microsoft") {
-    push @initrdAvailableKernelModules, "hv_storvsc";
-    $videoDriver = "fbdev";
+    push @attrs, "virtualisation.hypervGuest.enable = true;"
 }
 
 
@@ -315,14 +314,16 @@ push @attrs, "services.xserver.videoDrivers = [ \"$videoDriver\" ];" if $videoDr
 
 # Generate the swapDevices option from the currently activated swap
 # devices.
-my @swaps = read_file("/proc/swaps");
-shift @swaps;
+my @swaps = read_file("/proc/swaps", err_mode => 'carp');
 my @swapDevices;
-foreach my $swap (@swaps) {
-    $swap =~ /^(\S+)\s/;
-    next unless -e $1;
-    my $dev = findStableDevPath $1;
-    push @swapDevices, "{ device = \"$dev\"; }";
+if (@swaps) {
+    shift @swaps;
+    foreach my $swap (@swaps) {
+        $swap =~ /^(\S+)\s/;
+        next unless -e $1;
+        my $dev = findStableDevPath $1;
+        push @swapDevices, "{ device = \"$dev\"; }";
+    }
 }
 
 
@@ -339,6 +340,8 @@ foreach my $fs (read_file("/proc/self/mountinfo")) {
     chomp $fs;
     my @fields = split / /, $fs;
     my $mountPoint = $fields[4];
+    $mountPoint =~ s/\\040/ /g; # account for mount points with spaces in the name (\040 is the escape character)
+    $mountPoint =~ s/\\011/\t/g; # account for mount points with tabs in the name (\011 is the escape character)
     next unless -d $mountPoint;
     my @mountOptions = split /,/, $fields[5];
 
@@ -354,6 +357,8 @@ foreach my $fs (read_file("/proc/self/mountinfo")) {
     my $fsType = $fields[$n];
     my $device = $fields[$n + 1];
     my @superOptions = split /,/, $fields[$n + 2];
+    $device =~ s/\\040/ /g; # account for devices with spaces in the name (\040 is the escape character)
+    $device =~ s/\\011/\t/g; # account for mount points with tabs in the name (\011 is the escape character)
 
     # Skip the read-only bind-mount on /nix/store.
     next if $mountPoint eq "/nix/store" && (grep { $_ eq "rw" } @superOptions) && (grep { $_ eq "ro" } @mountOptions);
@@ -448,7 +453,11 @@ EOF
                 if (-e $slave) {
                     my $dmName = read_file("/sys/class/block/$deviceName/dm/name");
                     chomp $dmName;
-                    $fileSystems .= "  boot.initrd.luks.devices.\"$dmName\".device = \"${\(findStableDevPath $slave)}\";\n\n";
+                    # Ensure to add an entry only once
+                    my $luksDevice = "  boot.initrd.luks.devices.\"$dmName\".device";
+                    if ($fileSystems !~ /^\Q$luksDevice\E/m) {
+                        $fileSystems .= "$luksDevice = \"${\(findStableDevPath $slave)}\";\n\n";
+                    }
                 }
             }
         }
@@ -630,9 +639,9 @@ $bootLoaderConfig
   # services.xserver.desktopManager.plasma5.enable = true;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
-  # users.users.guest = {
+  # users.users.jane = {
   #   isNormalUser = true;
-  #   uid = 1000;
+  #   extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
   # };
 
   # This value determines the NixOS release with which your system is to be

@@ -1,4 +1,5 @@
-{ newScope, stdenv, makeWrapper, makeDesktopItem, ed
+{ newScope, config, stdenv, llvmPackages, gcc8Stdenv, llvmPackages_7
+, makeWrapper, makeDesktopItem, ed
 , glib, gtk3, gnome3, gsettings-desktop-schemas
 
 # package customization
@@ -10,14 +11,22 @@
 , enablePepperFlash ? false
 , enableWideVine ? false
 , cupsSupport ? true
-, pulseSupport ? false
+, pulseSupport ? config.pulseaudio or stdenv.isLinux
 , commandLineArgs ? ""
 }:
 
 let
+  stdenv_ = if stdenv.isAarch64 then gcc8Stdenv else llvmPackages_7.stdenv;
+  llvmPackages_ = if stdenv.isAarch64 then llvmPackages else llvmPackages_7;
+in let
+  stdenv = stdenv_;
+  llvmPackages = llvmPackages_;
+
   callPackage = newScope chromium;
 
   chromium = {
+    inherit stdenv llvmPackages;
+
     upstream-info = (callPackage ./update.nix {}).getChannel channel;
 
     mkChromiumDerivation = callPackage ./common.nix {

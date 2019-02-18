@@ -1,5 +1,6 @@
 { stdenv
 , fetchurl
+, fetchpatch
 
 , meson
 , ninja
@@ -20,6 +21,13 @@ stdenv.mkDerivation rec {
     url = "https://github.com/${pname}/${pname}/releases/download/v${version}/${name}.tar.bz2";
     sha256 = "1kp4b1hpx2ky20ixgy2xhj5iygfl7ps5k9kglh1z5i7mhykg4r3a";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/fribidi/fribidi/pull/88.patch";
+      sha256 = "1n4l6333vhbxfckwg101flmvq6bbygg66fjp69ddcjqaqb6gh9k9";
+    })
+  ];
 
   postPatch = ''
     patchShebangs test

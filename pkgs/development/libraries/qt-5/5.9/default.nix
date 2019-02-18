@@ -17,9 +17,10 @@ top-level attribute to `top-level/all-packages.nix`.
 
 {
   newScope,
-  stdenv, fetchurl, makeSetupHook,
+  stdenv, fetchurl, fetchpatch, makeSetupHook,
   bison, cups ? null, harfbuzz, libGL, perl,
   gstreamer, gst-plugins-base, gtk3, dconf,
+  cf-private,
 
   # options
   developerBuild ? false,
@@ -37,13 +38,31 @@ let
   srcs = import ./srcs.nix { inherit fetchurl; inherit mirror; };
 
   patches = {
-    qtbase = [ ./qtbase.patch ] ++ optional stdenv.isDarwin ./qtbase-darwin.patch;
+    qtbase = [ ./qtbase.patch ./qtbase-fixguicmake.patch ] ++ optional stdenv.isDarwin ./qtbase-darwin.patch;
     qtdeclarative = [ ./qtdeclarative.patch ];
     qtscript = [ ./qtscript.patch ];
     qtserialport = [ ./qtserialport.patch ];
     qttools = [ ./qttools.patch ];
-    qtwebengine = optional stdenv.needsPax ./qtwebengine-paxmark-mksnapshot.patch;
     qtwebkit = [ ./qtwebkit.patch ];
+    qtvirtualkeyboard = [
+      (fetchpatch {
+        name = "CVE-2018-19865-A.patch";
+        url = "https://codereview.qt-project.org/gitweb?p=qt/qtvirtualkeyboard.git;a=patch;h=61780a113f02b3c62fb14516fe8ea47d91f9ed9a";
+        sha256 = "0jd4nzaz9ndm9ryvrkav7kjs437l661288diklhbmgh249f8gki0";
+      })
+      (fetchpatch {
+        name = "CVE-2018-19865-B.patch";
+        url = "https://codereview.qt-project.org/gitweb?p=qt/qtvirtualkeyboard.git;a=patch;h=c0ac7a4c684e2fed60a72ceee53da89eea3f95a7";
+        sha256 = "0yvxrx5vx6845vgnq8ml3q93y61py5j0bvhqj7nqvpbmyj1wy1p3";
+
+      })
+      (fetchpatch {
+        name = "CVE-2018-19865-C.patch";
+        url = "https://codereview.qt-project.org/gitweb?p=qt/qtvirtualkeyboard.git;a=patch;h=a2e7b8412f56841e12ed20a39f4a38e32d3c1e30";
+        sha256 = "1yijysa9gy5xbxndx5ri0dkfrjqja0d1bsx52qz4mhzi4pkbib02";
+      })
+    ];
+
   };
 
   mkDerivation =
@@ -78,7 +97,9 @@ let
       qtgraphicaleffects = callPackage ../modules/qtgraphicaleffects.nix {};
       qtimageformats = callPackage ../modules/qtimageformats.nix {};
       qtlocation = callPackage ../modules/qtlocation.nix {};
-      qtmacextras = callPackage ../modules/qtmacextras.nix {};
+      qtmacextras = callPackage ../modules/qtmacextras.nix {
+        inherit cf-private;
+      };
       qtmultimedia = callPackage ../modules/qtmultimedia.nix {
         inherit gstreamer gst-plugins-base;
       };

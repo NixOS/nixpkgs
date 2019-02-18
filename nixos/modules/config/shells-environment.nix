@@ -108,14 +108,14 @@ in
     };
 
     environment.shellAliases = mkOption {
-      default = {};
-      example = { ll = "ls -l"; };
+      example = { l = null; ll = "ls -l"; };
       description = ''
         An attribute set that maps aliases (the top level attribute names in
         this option) to command strings or directly to build outputs. The
         aliases are added to all users' shells.
+        Aliases mapped to <code>null</code> are ignored.
       '';
-      type = types.attrs; # types.attrsOf types.stringOrPath;
+      type = with types; attrsOf (nullOr (either str path));
     };
 
     environment.binsh = mkOption {
@@ -156,6 +156,12 @@ in
     # effect without restarting the session (e.g. by opening a new
     # terminal instead of logging out of X11).
     environment.variables = config.environment.sessionVariables;
+
+    environment.shellAliases = mapAttrs (name: mkDefault) {
+      ls = "ls --color=tty";
+      ll = "ls -l";
+      l  = "ls -alh";
+    };
 
     environment.etc."shells".text =
       ''

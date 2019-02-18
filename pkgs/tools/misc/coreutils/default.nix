@@ -1,8 +1,11 @@
 { stdenv, lib, buildPackages
 , autoreconfHook, texinfo, fetchurl, perl, xz, libiconv, gmp ? null
-, aclSupport ? false, acl ? null
-, attrSupport ? false, attr ? null
+, aclSupport ? stdenv.isLinux, acl ? null
+, attrSupport ? stdenv.isLinux, attr ? null
 , selinuxSupport? false, libselinux ? null, libsepol ? null
+# No openssl in default version, so openssl-induced rebuilds aren't too big.
+# It makes *sum functions significantly faster.
+, minimal ? true, withOpenssl ? !minimal, openssl ? null
 , withPrefix ? false
 , singleBinary ? "symlinks" # you can also pass "shebangs" or false
 }:
@@ -13,32 +16,45 @@ assert selinuxSupport -> libselinux != null && libsepol != null;
 with lib;
 
 stdenv.mkDerivation rec {
-  name = "coreutils-8.29";
+  name = "coreutils-8.30";
 
   src = fetchurl {
     url = "mirror://gnu/coreutils/${name}.tar.xz";
-    sha256 = "0plm1zs9il6bb5mk881qvbghq4glc8ybbgakk2lfzb0w64fgml4j";
+    sha256 = "0mxhw43d4wpqmvg0l4znk1vm10fy92biyh90lzdnqjcic2lb6cg8";
   };
 
   patches = optional stdenv.hostPlatform.isCygwin ./coreutils-8.23-4.cygwin.patch;
 
-  # The test tends to fail on btrfs and maybe other unusual filesystems.
-  postPatch = optionalString (!stdenv.hostPlatform.isDarwin) ''
+  postPatch = ''
+    # The test tends to fail on btrfs and maybe other unusual filesystems.
     sed '2i echo Skipping dd sparse test && exit 0' -i ./tests/dd/sparse.sh
     sed '2i echo Skipping cp sparse test && exit 0' -i ./tests/cp/sparse.sh
     sed '2i echo Skipping rm deep-2 test && exit 0' -i ./tests/rm/deep-2.sh
     sed '2i echo Skipping du long-from-unreadable test && exit 0' -i ./tests/du/long-from-unreadable.sh
+
+    # sandbox does not allow setgid
     sed '2i echo Skipping chmod setgid test && exit 0' -i ./tests/chmod/setgid.sh
     substituteInPlace ./tests/install/install-C.sh \
       --replace 'mode3=2755' 'mode3=1755'
+
+    sed '2i print "Skipping env -S test";  exit 0;' -i ./tests/misc/env-S.pl
+
+    # these tests fail in the unprivileged nix sandbox (without nix-daemon) as we break posix assumptions
+    for f in ./tests/chgrp/{basic.sh,recurse.sh,default-no-deref.sh,no-x.sh,posix-H.sh}; do
+      sed '2i echo Skipping chgrp && exit 0' -i "$f"
+    done
+    for f in gnulib-tests/{test-chown.c,test-fchownat.c,test-lchown.c}; do
+      echo "int main() { return 0; }" > "$f"
+    done
   '';
 
   outputs = [ "out" "info" ];
 
   nativeBuildInputs = [ perl xz.bin ];
-  configureFlags =
-    optional (singleBinary != false)
+  configureFlags = [ "--with-packager=https://NixOS.org" ]
+    ++ optional (singleBinary != false)
       ("--enable-single-binary" + optionalString (isString singleBinary) "=${singleBinary}")
+    ++ optional withOpenssl "--with-openssl"
     ++ optional stdenv.hostPlatform.isSunOS "ac_cv_func_inotify_init=no"
     ++ optional withPrefix "--program-prefix=g"
     ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform && stdenv.hostPlatform.libc == "glibc") [
@@ -51,14 +67,15 @@ stdenv.mkDerivation rec {
   buildInputs = [ gmp ]
     ++ optional aclSupport acl
     ++ optional attrSupport attr
+    ++ optional withOpenssl openssl
     ++ optionals stdenv.hostPlatform.isCygwin [ autoreconfHook texinfo ]   # due to patch
     ++ optionals selinuxSupport [ libselinux libsepol ]
        # TODO(@Ericson2314): Investigate whether Darwin could benefit too
     ++ optional (stdenv.hostPlatform != stdenv.buildPlatform && stdenv.hostPlatform.libc != "glibc") libiconv;
 
   # The tests are known broken on Cygwin
-  # (http://thread.gmane.org/gmane.comp.gnu.core-utils.bugs/19025),
-  # Darwin (http://thread.gmane.org/gmane.comp.gnu.core-utils.bugs/19351),
+  # (http://article.gmane.org/gmane.comp.gnu.core-utils.bugs/19025),
+  # Darwin (http://article.gmane.org/gmane.comp.gnu.core-utils.bugs/19351),
   # and {Open,Free}BSD.
   # With non-standard storeDir: https://github.com/NixOS/nix/issues/512
   doCheck = stdenv.hostPlatform == stdenv.buildPlatform
@@ -81,13 +98,17 @@ stdenv.mkDerivation rec {
     sed -i Makefile -e 's|^INSTALL =.*|INSTALL = ${buildPackages.coreutils}/bin/install -c|'
   '';
 
-  postInstall = optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+  postInstall = optionalString (stdenv.hostPlatform != stdenv.buildPlatform && !minimal) ''
     rm $out/share/man/man1/*
-    cp ${buildPackages.coreutils}/share/man/man1/* $out/share/man/man1
+    cp ${buildPackages.coreutils-full}/share/man/man1/* $out/share/man/man1
+  ''
+  # du: 8.7 M locale + 0.4 M man pages
+  + optionalString minimal ''
+    rm -r "$out/share"
   '';
 
   meta = {
-    homepage = http://www.gnu.org/software/coreutils/;
+    homepage = https://www.gnu.org/software/coreutils/;
     description = "The basic file, shell and text manipulation utilities of the GNU operating system";
 
     longDescription = ''
@@ -99,7 +120,7 @@ stdenv.mkDerivation rec {
 
     license = licenses.gpl3Plus;
 
-    platforms = platforms.unix;
+    platforms = platforms.unix ++ platforms.windows;
 
     maintainers = [ maintainers.eelco ];
   };

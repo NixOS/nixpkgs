@@ -1,30 +1,70 @@
-{ stdenv, lib, makeWrapper, fetchurl, dpkg
+{ stdenv, makeWrapper, fetchurl, dpkg
 , alsaLib, atk, cairo, cups, dbus, expat, fontconfig, freetype
-, gdk_pixbuf, glib, gnome2, gtk2-x11, nspr, nss
+, gdk_pixbuf, glib, gnome2, nspr, nss, gtk3, gtk2, at-spi2-atk 
 , libX11, libXScrnSaver, libXcomposite, libXcursor, libXdamage, libXext
 , libXfixes, libXi, libXrandr, libXrender, libXtst, libxcb, nghttp2
-, libudev0-shim, glibc, curl, openssl
+, libudev0-shim, glibc, curl, openssl, autoPatchelfHook
 }:
 
 let
-  libPath = lib.makeLibraryPath [
-    alsaLib atk cairo cups dbus expat fontconfig freetype gdk_pixbuf glib gnome2.GConf gnome2.pango
-    gtk2-x11 nspr nss stdenv.cc.cc libX11 libXScrnSaver libXcomposite libXcursor libXdamage libXext libXfixes
-    libXi libXrandr libXrender libXtst libxcb
+  runtimeLibs = stdenv.lib.makeLibraryPath [
+    curl
+    glibc
+    libudev0-shim
+    nghttp2
+    openssl
+    stdenv.cc.cc
   ];
-  runtimeLibs = lib.makeLibraryPath [ libudev0-shim glibc curl openssl nghttp2 ];
 in stdenv.mkDerivation rec {
   name = "insomnia-${version}";
-  version = "6.0.2";
+  version = "6.3.2";
 
   src = fetchurl {
     url = "https://github.com/getinsomnia/insomnia/releases/download/v${version}/insomnia_${version}_amd64.deb";
-    sha256 = "18xspbaal945bmrwjnsz1sjba53040wxrzvig40nnclwj8h671ms";
+    sha256 = "15zf5nmsmz3ajb4xmhm3gynn36qp0ark0gah8qd0hqq76n9jmjnp";
   };
 
-  nativeBuildInputs = [ makeWrapper dpkg ];
+  nativeBuildInputs = [ 
+    autoPatchelfHook
+    dpkg
+    makeWrapper
+  ];
+  
+  buildInputs = [
+    alsaLib
+    at-spi2-atk
+    atk
+    cairo
+    cups
+    dbus
+    expat
+    fontconfig
+    freetype
+    gdk_pixbuf
+    glib
+    gnome2.GConf
+    gnome2.pango
+    gtk2
+    gtk3
+    libX11
+    libXScrnSaver
+    libXcomposite
+    libXcursor
+    libXdamage
+    libXext
+    libXfixes
+    libXi
+    libXrandr
+    libXrender
+    libXtst
+    libxcb
+    nspr
+    nss
+    stdenv.cc.cc
+  ];
 
-  buildPhase = ":";
+  dontBuild = true;
+  dontConfigure = true;
 
   unpackPhase = "dpkg-deb -x $src .";
 
@@ -39,23 +79,13 @@ in stdenv.mkDerivation rec {
   '';
 
   preFixup = ''
-    for lib in $out/lib/*.so; do
-      patchelf --set-rpath "$out/lib:${libPath}" $lib
-    done
-
-    for bin in $out/bin/insomnia; do
-      patchelf --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
-               --set-rpath "$out/lib:${libPath}" \
-               $bin
-    done
-
     wrapProgram "$out/bin/insomnia" --prefix LD_LIBRARY_PATH : ${runtimeLibs}
   '';
 
   meta = with stdenv.lib; {
     homepage = https://insomnia.rest/;
     description = "The most intuitive cross-platform REST API Client";
-    license = stdenv.lib.licenses.mit;
+    license = licenses.mit;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ markus1189 ];
   };

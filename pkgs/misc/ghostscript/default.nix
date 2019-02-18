@@ -1,17 +1,17 @@
-{ stdenv, lib, fetchurl, pkgconfig, zlib, expat, openssl, autoconf
+{ config, stdenv, lib, fetchurl, pkgconfig, zlib, expat, openssl, autoconf
 , libjpeg, libpng, libtiff, freetype, fontconfig, libpaper, jbig2dec
 , libiconv, ijs
-, x11Support ? false, xlibsWrapper ? null
-, cupsSupport ? false, cups ? null
+, cupsSupport ? config.ghostscript.cups or (!stdenv.isDarwin), cups ? null
+, x11Support ? cupsSupport, xlibsWrapper ? null # with CUPS, X11 only adds very little
 }:
 
 assert x11Support -> xlibsWrapper != null;
 assert cupsSupport -> cups != null;
+
 let
   version = "9.${ver_min}";
-  ver_min = "24";
-  # ghostscript*.tar.xz in https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs9xx/SHA512SUMS
-  sha512 = "dcbeeb5d3dd5ccaf949dc4be68363c50b1d35e647be4790a50b1bbf5f259f1d9181f705be27bfca708c4d270f945ff4b24e3db10b57800c1ee0ea7a40931c547";
+  ver_min = "26";
+  sha512 = "0z2mvsh06qgnxl7p9isw7swg8jp8xcx3rnbqk727avw7ammvfh8785d2bn5i4fhz8y45ka3cpgp7b598m06yq5zawijhcnzkq187nrx";
 
   fonts = stdenv.mkDerivation {
     name = "ghostscript-fonts";

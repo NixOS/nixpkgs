@@ -27,12 +27,13 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ expat curl fftw ];
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = https://code.google.com/archive/p/musicip-libofa/;
     description = "Library Open Fingerprint Architecture";
     longDescription = ''
       LibOFA (Library Open Fingerprint Architecture) is an open-source audio
       fingerprint created and provided by MusicIP'';
-    platforms = stdenv.lib.platforms.linux;
+    platforms = platforms.linux;
+    license = licenses.gpl2;
   };
 }

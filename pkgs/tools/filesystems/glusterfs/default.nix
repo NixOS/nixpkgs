@@ -15,10 +15,10 @@ let
     #       The command
     #         find /nix/store/...-glusterfs-.../ -name '*.py' -executable
     #       can help with finding new Python scripts.
-    version = "3.12.12";
+    version = "4.0.0";
     name="${baseName}-${version}";
     url="https://github.com/gluster/glusterfs/archive/v${version}.tar.gz";
-    sha256 = "1q6rcf9y98w3kvgwdlbhl65phkdl0mfil6y7i3gnpf3d21gfb6nw";
+    sha256 = "0af3fwiixddds6gdwhkyq3l214mmjl2wpjc2qayp5rpz79lnclq3";
   };
   buildInputs = [
     fuse bison flex_2_5_35 openssl ncurses readline
@@ -70,10 +70,13 @@ rec {
   '';
 
   patches = [
+    # Remove when https://bugzilla.redhat.com/show_bug.cgi?id=1450546 is fixed
     ./glusterfs-use-PATH-instead-of-hardcodes.patch
+    # Remove when https://bugzilla.redhat.com/show_bug.cgi?id=1450593 is fixed
     ./glusterfs-python-remove-find_library.patch
     # Remove when https://bugzilla.redhat.com/show_bug.cgi?id=1489610 is fixed
     ./glusterfs-fix-bug-1489610-glusterfind-var-data-under-prefix.patch
+    # Remove when https://bugzilla.redhat.com/show_bug.cgi?id=1559130 is fixed
     ./glusterfs-glusterfind-log-remote-node_cmd-error.patch
   ];
 

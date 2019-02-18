@@ -101,9 +101,10 @@ in
     ];
 
     environment.variables = {
-      GDK_PIXBUF_MODULE_FILE = "${pkgs.librsvg.out}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache";
       GIO_EXTRA_MODULES = [ "${pkgs.xfce.gvfs}/lib/gio/modules" ];
     };
+
+    services.xserver.gdk-pixbuf.modulePackages = [ pkgs.librsvg ];
 
     services.xserver.desktopManager.session = [{
       name = "xfce";

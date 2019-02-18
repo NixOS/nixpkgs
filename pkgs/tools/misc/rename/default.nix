@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, buildPerlPackage }:
+{ stdenv, fetchFromGitHub, perlPackages }:
 
-buildPerlPackage rec {
+perlPackages.buildPerlPackage rec {
   name = "rename-${version}";
   version = "1.9";
   outputs = [ "out" ];

@@ -1,0 +1,104 @@
+diff --git a/build/unix/compiledata.sh b/build/unix/compiledata.sh
+--- a/build/unix/compiledata.sh
++++ b/build/unix/compiledata.sh
+@@ -49,7 +49,7 @@ fi
+ 
+ if [ "$ARCH" = "macosx" ] || [ "$ARCH" = "macosx64" ] || \
+    [ "$ARCH" = "macosxicc" ]; then
+-   macosx_minor=`sw_vers | sed -n 's/ProductVersion://p' | cut -d . -f 2`
++   macosx_minor=7
+    SOEXT="so"
+    if [ $macosx_minor -ge 5 ]; then
+       if [ "x`echo $SOFLAGS | grep -- '-install_name'`" != "x" ]; then
+diff --git a/cmake/modules/SetUpMacOS.cmake b/cmake/modules/SetUpMacOS.cmake
+--- a/cmake/modules/SetUpMacOS.cmake
++++ b/cmake/modules/SetUpMacOS.cmake
+@@ -12,25 +12,11 @@ set(CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH} /usr/X11R6)
+ #---------------------------------------------------------------------------------------------------------
+ 
+ if (CMAKE_SYSTEM_NAME MATCHES Darwin)
+-  EXECUTE_PROCESS(COMMAND sw_vers "-productVersion"
+-                  COMMAND cut -d . -f 1-2
+-                  OUTPUT_VARIABLE MACOSX_VERSION OUTPUT_STRIP_TRAILING_WHITESPACE)
+-  MESSAGE(STATUS "Found a Mac OS X System ${MACOSX_VERSION}")
+-  EXECUTE_PROCESS(COMMAND sw_vers "-productVersion"
+-                  COMMAND cut -d . -f 2
+-                  OUTPUT_VARIABLE MACOSX_MINOR OUTPUT_STRIP_TRAILING_WHITESPACE)
+-
+-  if(MACOSX_VERSION VERSION_GREATER 10.7 AND ${CMAKE_CXX_COMPILER_ID} STREQUAL Clang)
+     set(libcxx ON CACHE BOOL "Build using libc++" FORCE)
+-  endif()
+ 
+-  if(${MACOSX_MINOR} GREATER 4)
+     #TODO: check haveconfig and rpath -> set rpath true
+     #TODO: check Thread, define link command
+     #TODO: more stuff check configure script
+-    execute_process(COMMAND /usr/sbin/sysctl machdep.cpu.extfeatures OUTPUT_VARIABLE SYSCTL_OUTPUT)
+-    if(${SYSCTL_OUTPUT} MATCHES 64)
+-       MESSAGE(STATUS "Found a 64bit system")
+        set(ROOT_ARCHITECTURE macosx64)
+        SET(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS}")
+        SET(CMAKE_SHARED_LIBRARY_CREATE_C_FLAGS "${CMAKE_SHARED_LIBRARY_CREATE_C_FLAGS} -m64")
+@@ -38,28 +24,6 @@ if (CMAKE_SYSTEM_NAME MATCHES Darwin)
+        SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -m64")
+        SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -m64")
+        SET(CMAKE_FORTRAN_FLAGS "${CMAKE_FORTRAN_FLAGS} -m64")
+-    else(${SYSCTL_OUTPUT} MATCHES 64)
+-       MESSAGE(STATUS "Found a 32bit system")
+-       SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -m32")
+-       SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -m32")
+-       SET(CMAKE_FORTRAN_FLAGS "${CMAKE_FORTRAN_FLAGS} -m32")
+-    endif(${SYSCTL_OUTPUT} MATCHES 64)
+-  endif()
+-
+-  if(MACOSX_VERSION VERSION_GREATER 10.6)
+-    set(MACOSX_SSL_DEPRECATED ON)
+-  endif()
+-  if(MACOSX_VERSION VERSION_GREATER 10.7)
+-    set(MACOSX_ODBC_DEPRECATED ON)
+-  endif()
+-  if(MACOSX_VERSION VERSION_GREATER 10.8)
+-    set(MACOSX_GLU_DEPRECATED ON)
+-    set(MACOSX_KRB5_DEPRECATED ON)
+-    set(MACOSX_TMPNAM_DEPRECATED ON)
+-  endif()
+-  if(MACOSX_VERSION VERSION_GREATER 10.9)
+-    set(MACOSX_LDAP_DEPRECATED ON)
+-  endif()
+ 
+   if (CMAKE_COMPILER_IS_GNUCXX)
+      message(STATUS "Found GNU compiler collection")
+@@ -132,7 +96,7 @@ if (CMAKE_SYSTEM_NAME MATCHES Darwin)
+   endif()
+ 
+   #---Set Linker flags----------------------------------------------------------------------
+-  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS}  -mmacosx-version-min=${MACOSX_VERSION} -Wl,-rpath,@loader_path/../lib")
++  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,-rpath,@loader_path/../lib")
+ 
+ 
+ else (CMAKE_SYSTEM_NAME MATCHES Darwin)
+diff --git a/config/root-config.in b/config/root-config.in
+--- a/config/root-config.in
++++ b/config/root-config.in
+@@ -391,7 +391,7 @@ macosxicc)
+    ;;
+ macosx64)
+    # MacOS X with gcc (GNU cc v4.x) in 64 bit mode
+-   macosx_minor=`sw_vers | sed -n 's/ProductVersion://p' | cut -d . -f 2`
++   macosx_minor=7
+    # cannot find the one linked to libGraf if relocated after built
+    if [ $macosx_minor -le 4 ]; then
+       rootlibs="$rootlibs -lfreetype"
+diff --git a/cint/ROOT/CMakeLists.txt b/cint/ROOT/CMakeLists.txt
+--- a/cint/ROOT/CMakeLists.txt
++++ b/cint/ROOT/CMakeLists.txt
+@@ -232,9 +232,7 @@ foreach(_name ${CINTINCDLLNAMES})
+                        DEPENDS ${HEADER_OUTPUT_PATH}/systypes.h
+                       )
+
+-    if(MACOSX_MINOR GREATER 4)
+       set(_ExtraFlag "-D__DARWIN_UNIX03")
+-    endif()
+
+     add_custom_command(OUTPUT ${OutFileName}
+                        COMMAND cint_tmp -K -w1 -z${_name} -n${OutFileName} -D__MAKECINT__ -DG__MAKECINT ${_ExtraFlag} -c-2 -Z0 ${InFileName} ${AdditionalHeaderFiles} ${CMAKE_BINARY_DIR}/cint/cint/include/sys/types.h ${CMAKE_SOURCE_DIR}/cint/cint/lib/posix/posix.h

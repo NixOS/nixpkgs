@@ -1,18 +1,18 @@
 { stdenv, fetchFromGitHub, rustPlatform, cargo, cmake, sphinx, lib, prefix ? "uutils-" }:
 
 rustPlatform.buildRustPackage {
-  name = "uutils-coreutils-2018-02-09";
+  name = "uutils-coreutils-2018-09-30";
   src = fetchFromGitHub {
     owner = "uutils";
     repo = "coreutils";
-    rev = "f333ab26b03294a32a10c1c203a03c6b5cf8a89a";
-    sha256 = "0nkggs5nqvc1mxzzgcsqm1ahchh4ll11xh0xqmcljrr5yg1rhhzf";
+    rev = "a161b7e803aef08455ae0547dccd9210e38a4574";
+    sha256 = "19j40cma7rz6yf5j6nyid8qslbcmrnxdk6by53hflal2qx3g555z";
   };
 
   # too many impure/platform-dependent tests
   doCheck = false;
 
-  cargoSha256 = "0qv2wz1bxhm5xhzbic7cqmn8jj8fyap0s18ylia4fbwpmv89nkc5";
+  cargoSha256 = "1a9k7i4829plkxgsflmpji3mrw2i1vln6jsnhxmkl14h554yi5j4";
 
   makeFlags =
     [ "CARGO=${cargo}/bin/cargo" "PREFIX=$(out)" "PROFILE=release" "INSTALLDIR_MAN=$(out)/share/man/man1" ]
@@ -34,6 +34,6 @@ rustPlatform.buildRustPackage {
     homepage = https://github.com/uutils/coreutils;
     maintainers = with maintainers; [ ma27 ];
     license = licenses.mit;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

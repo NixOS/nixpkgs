@@ -1,7 +1,6 @@
 { stdenv
 , desktop-file-utils
 , fetchurl
-, fetchpatch
 , gettext
 , glib
 , gtk3
@@ -16,38 +15,35 @@
 , wrapGAppsHook
 , gnome3
 }:
-let
-  version = "3.28.1";
+
+stdenv.mkDerivation rec {
   pname = "sysprof";
-in stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+  version = "3.30.2";
 
   outputs = [ "out" "lib" "dev" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "05534dvwrzrmryb4y2m1sb2q0r8i6nr88pzjg7xs5nr9zq8a87p3";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "02xsr3cxyws3cnbhvbxgcc9sn22mri3iv9d7f38pkg89lpjph279";
   };
 
-  patches = [
-    # fix includedir in pkgconfig
-    # https://gitlab.gnome.org/GNOME/sysprof/merge_requests/2
-    (fetchpatch {
-      url = https://gitlab.gnome.org/GNOME/sysprof/commit/d19a496bb55b8646e866df8bb07bc6ad3c55eaf2.patch;
-      sha256 = "15w6di9c4n1gsymkpk413f5f9gd3iq23wdkzs01y9xrxwqpm7hm4";
-    })
+  nativeBuildInputs = [
+    desktop-file-utils
+    gettext
+    itstool
+    libxml2
+    meson
+    ninja
+    pkgconfig
+    shared-mime-info
+    wrapGAppsHook
+    gnome3.defaultIconTheme
   ];
-
-  nativeBuildInputs = [ desktop-file-utils gettext itstool libxml2 meson ninja pkgconfig shared-mime-info wrapGAppsHook ];
   buildInputs = [ glib gtk3 pango polkit systemd.dev systemd.lib ];
 
   mesonFlags = [
     "-Dsystemdunitdir=lib/systemd/system"
   ];
-
-  postInstall = ''
-    rm $out/share/applications/mimeinfo.cache
-  '';
 
   passthru = {
     updateScript = gnome3.updateScript {
@@ -66,7 +62,7 @@ in stdenv.mkDerivation rec {
       be restarted.
     '';
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ ];
-    platforms = stdenv.lib.platforms.linux;
+    maintainers = gnome3.maintainers;
+    platforms = platforms.linux;
   };
 }

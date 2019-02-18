@@ -2,11 +2,11 @@
 , http2Support ? true, nghttp2
 , idnSupport ? false, libidn ? null
 , ldapSupport ? false, openldap ? null
-, zlibSupport ? false, zlib ? null
-, sslSupport ? false, openssl ? null
+, zlibSupport ? true, zlib ? null
+, sslSupport ? zlibSupport, openssl ? null
 , gnutlsSupport ? false, gnutls ? null
-, scpSupport ? false, libssh2 ? null
-, gssSupport ? false, kerberos ? null
+, scpSupport ? zlibSupport && !stdenv.isSunOS && !stdenv.isCygwin, libssh2 ? null
+, gssSupport ? !stdenv.hostPlatform.isWindows, libkrb5 ? null
 , c-aresSupport ? false, c-ares ? null
 , brotliSupport ? false, brotli ? null
 }:
@@ -21,17 +21,17 @@ assert gnutlsSupport -> gnutls != null;
 assert scpSupport -> libssh2 != null;
 assert c-aresSupport -> c-ares != null;
 assert brotliSupport -> brotli != null;
-assert gssSupport -> kerberos != null;
+assert gssSupport -> libkrb5 != null;
 
 stdenv.mkDerivation rec {
-  name = "curl-7.61.0";
+  name = "curl-7.64.0";
 
   src = fetchurl {
     urls = [
       "https://curl.haxx.se/download/${name}.tar.bz2"
       "https://github.com/curl/curl/releases/download/${lib.replaceStrings ["."] ["_"] name}/${name}.tar.bz2"
     ];
-    sha256 = "173ccmnnr4qcawzgn7vm0ciyzphanzghigdgavg88nyg45lk6vsz";
+    sha256 = "1szj9ia1snbfqzfcsk6hx1j7jhbqsy0f9k5d7x9xiy8w5lfblwym";
   };
 
   outputs = [ "bin" "dev" "out" "man" "devdoc" ];
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     optional idnSupport libidn ++
     optional ldapSupport openldap ++
     optional zlibSupport zlib ++
-    optional gssSupport kerberos ++
+    optional gssSupport libkrb5 ++
     optional c-aresSupport c-ares ++
     optional sslSupport openssl ++
     optional gnutlsSupport gnutls ++
@@ -78,10 +78,14 @@ stdenv.mkDerivation rec {
       ( if brotliSupport then "--with-brotli" else "--without-brotli" )
     ]
     ++ stdenv.lib.optional c-aresSupport "--enable-ares=${c-ares}"
-    ++ stdenv.lib.optional gssSupport "--with-gssapi=${kerberos.dev}"
+    ++ stdenv.lib.optional gssSupport "--with-gssapi=${libkrb5.dev}"
        # For the 'urandom', maybe it should be a cross-system option
     ++ stdenv.lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
-       "--with-random=/dev/urandom";
+       "--with-random=/dev/urandom"
+    ++ stdenv.lib.optionals stdenv.hostPlatform.isWindows [
+      "--disable-shared"
+      "--enable-static"
+    ];
 
   CXX = "${stdenv.cc.targetPrefix}c++";
   CXXCPP = "${stdenv.cc.targetPrefix}c++ -E";

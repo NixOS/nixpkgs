@@ -3,7 +3,7 @@
 # Contact: stdenv.lib.maintainers.fuuzetsu
 
 { stdenv, Agda, glibcLocales
-, writeScriptBin
+, writeShellScriptBin
 , extension ? (self: super: {})
 }:
 
@@ -77,8 +77,8 @@ let
         buildInputs = let
           # Makes a wrapper available to the user. Very useful in
           # nix-shell where all dependencies are -i'd.
-          agdaWrapper = writeScriptBin "agda" ''
-            ${self.agdaWithArgs} "$@"
+          agdaWrapper = writeShellScriptBin "agda" ''
+            exec ${self.agdaWithArgs} "$@"
           '';
         in [agdaWrapper] ++ self.buildDepends;
       };

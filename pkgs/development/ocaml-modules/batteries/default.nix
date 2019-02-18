@@ -1,23 +1,19 @@
 { stdenv, fetchzip, ocaml, findlib, ocamlbuild, qtest, num }:
 
-let version = "2.8.0"; in
+let version = "2.9.0"; in
 
 stdenv.mkDerivation {
   name = "ocaml${ocaml.version}-batteries-${version}";
 
   src = fetchzip {
     url = "https://github.com/ocaml-batteries-team/batteries-included/archive/v${version}.tar.gz";
-    sha256 = "1cvgljg8lxvfx0v3367z3p43dysg9m33v8gfy43bhw7fjr1bmyas";
+    sha256 = "1wianim29kkkf4c31k7injjp3ji69ki5krrp6csq8ycswg791dby";
   };
 
   buildInputs = [ ocaml findlib ocamlbuild qtest ];
   propagatedBuildInputs = [ num ];
 
-  configurePhase = if num != null then ''
-    export CAML_LD_LIBRARY_PATH="''${CAML_LD_LIBRARY_PATH}''${CAML_LD_LIBRARY_PATH:+:}${num}/lib/ocaml/${ocaml.version}/site-lib/stublibs/"
-  '' else "true";      # Skip configure
-
-  doCheck = true;
+  doCheck = !stdenv.lib.versionAtLeast ocaml.version "4.07" && !stdenv.isAarch64;
   checkTarget = "test test";
 
   createFindlibDestdir = true;

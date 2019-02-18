@@ -16,5 +16,6 @@ stdenv.mkDerivation {
 
   meta = {
     inherit (glib.meta) platforms maintainers;
+    license = with stdenv.lib.licenses; [ gpl2 lgpl2 ];
   };
 }

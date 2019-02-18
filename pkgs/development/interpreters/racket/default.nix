@@ -1,11 +1,16 @@
 { stdenv, fetchurl, makeFontsConf, makeWrapper
 , cairo, coreutils, fontconfig, freefont_ttf
-, glib, gmp, gtk3, libedit, libffi, libjpeg
+, glib, gmp
+, gtk3
+, libedit, libffi
+, libiconv
+, libjpeg
 , libpng, libtool, mpfr, openssl, pango, poppler
 , readline, sqlite
 , disableDocs ? false
 , CoreFoundation
 , gsettings-desktop-schemas
+, wrapGAppsHook
 }:
 
 let
@@ -36,7 +41,7 @@ in
 
 stdenv.mkDerivation rec {
   name = "racket-${version}";
-  version = "7.0"; # always change at once with ./minimal.nix
+  version = "7.2"; # always change at once with ./minimal.nix
 
   src = (stdenv.lib.makeOverridable ({ name, sha256 }:
     fetchurl rec {
@@ -45,7 +50,7 @@ stdenv.mkDerivation rec {
     }
   )) {
     inherit name;
-    sha256 = "1glv5amsp9xp480d4yr63hhm9kkyav06yl3a6p489nkr4cln0j9a";
+    sha256 = "12cq0kiigmf9bxb4rcgxdhwc2fcdwvlyb1q3f8x4hswcpgq1ybg4";
   };
 
   FONTCONFIG_FILE = fontsConf;
@@ -55,16 +60,20 @@ stdenv.mkDerivation rec {
     (stdenv.lib.optionalString stdenv.isDarwin "-framework CoreFoundation")
   ];
 
-  buildInputs = [ fontconfig libffi libtool makeWrapper sqlite gsettings-desktop-schemas gtk3 ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ CoreFoundation ];
+  nativeBuildInputs = [ wrapGAppsHook ];
+
+  buildInputs = [ fontconfig libffi libtool sqlite gsettings-desktop-schemas gtk3 ]
+    ++ stdenv.lib.optionals stdenv.isDarwin [ libiconv CoreFoundation ];
 
   preConfigure = ''
     unset AR
-    for f in src/configure src/racket/src/string.c; do
+    for f in src/lt/configure src/cs/c/configure src/racket/src/string.c; do
       substituteInPlace "$f" --replace /usr/bin/uname ${coreutils}/bin/uname
     done
     mkdir src/build
     cd src/build
+
+    gappsWrapperArgs+=("--prefix" "LD_LIBRARY_PATH" ":" ${LD_LIBRARY_PATH})
   '';
 
   shared = if stdenv.isDarwin then "dylib" else "shared";
@@ -76,13 +85,6 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = false;
 
-  postInstall = ''
-    for p in $(ls $out/bin/) ; do
-      wrapProgram $out/bin/$p \
-        --prefix LD_LIBRARY_PATH ":" "${LD_LIBRARY_PATH}" \
-        --prefix XDG_DATA_DIRS ":" "$GSETTINGS_SCHEMAS_PATH";
-    done
-  '';
 
   meta = with stdenv.lib; {
     description = "A programmable programming language";
@@ -98,6 +100,7 @@ stdenv.mkDerivation rec {
     homepage = http://racket-lang.org/;
     license = licenses.lgpl3;
     maintainers = with maintainers; [ kkallio henrytill vrthra ];
-    platforms = [ "x86_64-linux" ];
+    platforms = [ "x86_64-darwin" "x86_64-linux" ];
+    broken = stdenv.isDarwin; # No support yet for setting FFI lookup path
   };
 }

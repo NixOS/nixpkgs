@@ -6,11 +6,16 @@ die() {
     exit 1
 }
 
-# Usage: update-source-hash <attr> <version> [<new-source-hash>] [<new-source-url>]
+# Usage: update-source-hash <attr> <version> [<new-source-hash>] [<new-source-url>] [<version-key>]
 attr=$1
 newVersion=$2
 newHash=$3
 newUrl=$4
+versionKey=$5
+
+if [ -z "$versionKey" ]; then
+    versionKey=version
+fi
 
 nixFile=$(nix-instantiate --eval --strict -A "$attr.meta.position" | sed -re 's/^"(.*):[0-9]+"$/\1/')
 if [ ! -f "$nixFile" ]; then
@@ -50,8 +55,8 @@ fi
 oldVersion=$(echo "$oldVersion" | sed -re 's|[.+]|\\&|g')
 oldUrl=$(echo "$oldUrl" | sed -re 's|[${}.+]|\\&|g')
 
-if [ $(grep -c -E "^\s*(let\b)?\s*version\s*=\s*\"$oldVersion\"" "$nixFile") = 1 ]; then
-    pattern="/\bversion\b\s*=/ s|\"$oldVersion\"|\"$newVersion\"|"
+if [ $(grep -c -E "^\s*(let\b)?\s*$versionKey\s*=\s*\"$oldVersion\"" "$nixFile") = 1 ]; then
+    pattern="/\b$versionKey\b\s*=/ s|\"$oldVersion\"|\"$newVersion\"|"
 elif [ $(grep -c -E "^\s*(let\b)?\s*name\s*=\s*\"[^\"]+-$oldVersion\"" "$nixFile") = 1 ]; then
     pattern="/\bname\b\s*=/ s|-$oldVersion\"|-$newVersion\"|"
 else
@@ -91,7 +96,7 @@ fi
 if [ -z "$newHash" ]; then
     nix-build --no-out-link -A "$attr.src" 2>"$attr.fetchlog" >/dev/null || true
     # FIXME: use nix-build --hash here once https://github.com/NixOS/nix/issues/1172 is fixed
-    newHash=$(egrep -v "killing process|dependencies couldn't be built" "$attr.fetchlog" | tail -n2 | sed "s~output path .* has .* hash ‘\(.*\)’ when .* was expected\|fixed-output derivation produced path '.*' with .* hash '\(.*\)' instead of the expected hash '.*'~\1\2~" | head -n1)
+    newHash=$(egrep -v "killing process|dependencies couldn't be built|wanted: " "$attr.fetchlog" | tail -n2 | sed "s~output path .* has .* hash ‘\(.*\)’ when .* was expected\|fixed-output derivation produced path '.*' with .* hash '\(.*\)' instead of the expected hash '.*'\|  got:    .*:\(.*\)~\1\2\3~" | head -n1)
 fi
 
 if [ -z "$newHash" ]; then

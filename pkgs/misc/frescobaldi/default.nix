@@ -11,7 +11,10 @@ python3Packages.buildPythonApplication rec {
     sha256 = "1yn18pwsjxpxz5j3yfysmaif8k0vqahj5c7ays9cxsylpg9hl7jd";
   };
 
-  propagatedBuildInputs = with python3Packages; [ lilypond pygame python-ly poppler-qt5 ];
+  propagatedBuildInputs = with python3Packages; [
+    lilypond pygame python-ly sip
+    pyqt5_with_qtwebkit (poppler-qt5.override { pyqt5 = pyqt5_with_qtwebkit; })
+  ];
 
   # no tests in shipped with upstream
   doCheck = false;

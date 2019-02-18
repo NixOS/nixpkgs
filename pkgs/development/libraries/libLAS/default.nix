@@ -16,6 +16,7 @@ stdenv.mkDerivation rec {
     "-DGDAL_CONFIG=${gdal}/bin/gdal-config"
     "-DWITH_LASZIP=ON"
     "-DLASZIP_INCLUDE_DIR=${LASzip}/include"
+    "-DCMAKE_EXE_LINKER_FLAGS=-pthread"
   ];
 
   postFixup = stdenv.lib.optionalString stdenv.isDarwin ''

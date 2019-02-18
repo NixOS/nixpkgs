@@ -4,7 +4,7 @@
 # compiler and linker that do not search in default locations,
 # ensuring purity of components produced by it.
 { lib
-, localSystem, crossSystem, config, overlays
+, localSystem, crossSystem, config, overlays, crossOverlays ? []
 
 , bootstrapFiles ?
   let table = {
@@ -32,7 +32,7 @@
   in files
 }:
 
-assert crossSystem == null;
+assert crossSystem == localSystem;
 
 let
   inherit (localSystem) system platform;
@@ -92,7 +92,6 @@ let
              else lib.makeOverridable (import ../../build-support/cc-wrapper) {
           name = "${name}-gcc-wrapper";
           nativeTools = false;
-          propagateDoc = false;
           nativeLibc = false;
           buildPackages = lib.optionalAttrs (prevStage ? stdenv) {
             inherit (prevStage) stdenv;
@@ -189,7 +188,9 @@ in
 
     # Rebuild binutils to use from stage2 onwards.
     overrides = self: super: {
-      binutils = super.binutils_nogold;
+      binutils-unwrapped = super.binutils-unwrapped.override {
+        gold = false;
+      };
       inherit (prevStage)
         ccWrapperStdenv
         gcc-unwrapped coreutils gnugrep;
@@ -215,7 +216,7 @@ in
       inherit (prevStage)
         ccWrapperStdenv
         gcc-unwrapped coreutils gnugrep
-        perl paxctl gnum4 bison;
+        perl gnum4 bison;
       # This also contains the full, dynamically linked, final Glibc.
       binutils = prevStage.binutils.override {
         # Rewrap the binutils with the new glibc, so both the next
@@ -249,9 +250,10 @@ in
         isl = isl_0_17;
       };
     };
-    extraNativeBuildInputs = [ prevStage.patchelf prevStage.paxctl ] ++
+    extraNativeBuildInputs = [ prevStage.patchelf ] ++
       # Many tarballs come with obsolete config.sub/config.guess that don't recognize aarch64.
-      lib.optional (!localSystem.isx86) prevStage.updateAutotoolsGnuConfigScriptsHook;
+      lib.optional (!localSystem.isx86 || localSystem.libc == "musl")
+                   prevStage.updateAutotoolsGnuConfigScriptsHook;
   })
 
 
@@ -292,7 +294,8 @@ in
     };
     extraNativeBuildInputs = [ prevStage.patchelf prevStage.xz ] ++
       # Many tarballs come with obsolete config.sub/config.guess that don't recognize aarch64.
-      lib.optional (!localSystem.isx86) prevStage.updateAutotoolsGnuConfigScriptsHook;
+      lib.optional (!localSystem.isx86 || localSystem.libc == "musl")
+                   prevStage.updateAutotoolsGnuConfigScriptsHook;
   })
 
   # Construct the final stdenv.  It uses the Glibc and GCC, and adds
@@ -322,9 +325,10 @@ in
       initialPath =
         ((import ../common-path.nix) {pkgs = prevStage;});
 
-      extraNativeBuildInputs = [ prevStage.patchelf prevStage.paxctl ] ++
+      extraNativeBuildInputs = [ prevStage.patchelf ] ++
         # Many tarballs come with obsolete config.sub/config.guess that don't recognize aarch64.
-        lib.optional (!localSystem.isx86) prevStage.updateAutotoolsGnuConfigScriptsHook;
+        lib.optional (!localSystem.isx86 || localSystem.libc == "musl")
+        prevStage.updateAutotoolsGnuConfigScriptsHook;
 
       cc = prevStage.gcc;
 
@@ -345,7 +349,7 @@ in
         # Simple executable tools
         concatMap (p: [ (getBin p) (getLib p) ]) [
             gzip bzip2 xz bash binutils.bintools coreutils diffutils findutils
-            gawk gnumake gnused gnutar gnugrep gnupatch patchelf ed paxctl
+            gawk gnumake gnused gnutar gnugrep gnupatch patchelf ed
           ]
         # Library dependencies
         ++ map getLib (
@@ -357,14 +361,14 @@ in
         ++  [ /*propagated from .dev*/ linuxHeaders
             binutils gcc gcc.cc gcc.cc.lib gcc.expand-response-params
           ]
-          ++ lib.optionals (!localSystem.isx86)
+          ++ lib.optionals (!localSystem.isx86 || localSystem.libc == "musl")
             [ prevStage.updateAutotoolsGnuConfigScriptsHook prevStage.gnu-config ];
 
       overrides = self: super: {
         inherit (prevStage)
           gzip bzip2 xz bash coreutils diffutils findutils gawk
           gnumake gnused gnutar gnugrep gnupatch patchelf
-          attr acl paxctl zlib pcre;
+          attr acl zlib pcre;
         ${localSystem.libc} = getLibc prevStage;
       } // lib.optionalAttrs (super.stdenv.targetPlatform == localSystem) {
         # Need to get rid of these when cross-compiling.

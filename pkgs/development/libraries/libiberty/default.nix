@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://gcc.gnu.org/;
+    homepage = https://gcc.gnu.org/;
     license = licenses.lgpl2;
     description = "Collection of subroutines used by various GNU programs";
     maintainers = with maintainers; [ abbradar ericson2314 ];

@@ -3,18 +3,20 @@
 
 stdenv.mkDerivation rec {
   name = "hyperrogue-${version}";
-  version = "10.4j";
+  version = "10.5a";
 
   src = fetchFromGitHub {
     owner = "zenorogue";
     repo = "hyperrogue";
     rev = "v${version}";
-    sha256 = "0p0aplfr5hs5dmkgbd4rhvrdk33gss1wdb7knd2vf27n4c2avjcl";
+    sha256 = "1s5jm5qrbw60s8q73fzjk9g2fmapd0i7zmrna2dqx55i1gg9d597";
   };
 
   CPPFLAGS = "-I${SDL.dev}/include/SDL";
 
   buildInputs = [ autoreconfHook SDL SDL_ttf SDL_gfx SDL_mixer libpng glew ];
+
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     homepage = http://www.roguetemple.com/z/hyper/;

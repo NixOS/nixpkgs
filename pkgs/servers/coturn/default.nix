@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "coturn-${version}";
-  version = "4.5.0.7";
+  version = "4.5.1.0";
 
   src = fetchFromGitHub {
     owner = "coturn";
     repo = "coturn";
     rev = "${version}";
-    sha256 = "1781fx8lqgc54j973xzgq9d7k3g2j03va82jb4217gd3a93pa65l";
+    sha256 = "16fp9vppdz825949vpqi82iwscc2k4gajw1kl2p9pf3d3mv1flsk";
   };
 
   buildInputs = [ openssl libevent ];
@@ -20,6 +20,7 @@ stdenv.mkDerivation rec {
     license = with licenses; [ bsd3 ];
     description = "A TURN server";
     platforms = platforms.all;
+    broken = stdenv.isDarwin; # 2018-10-21
     maintainers = [ maintainers.ralith ];
   };
 }

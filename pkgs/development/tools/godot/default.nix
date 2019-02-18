@@ -10,13 +10,13 @@ let
   };
 in stdenv.mkDerivation rec {
   name    = "godot-${version}";
-  version = "3.0.4";
+  version = "3.0.6";
 
   src = fetchFromGitHub {
     owner  = "godotengine";
     repo   = "godot";
     rev    = "${version}-stable";
-    sha256 = "0i4ssfb6igga9zwvsmahrnasx9cyqrsd6mlmssjgc482fy9q2kz4";
+    sha256 = "0g64h0x8dlv6aa9ggfcidk2mknkfl5li7z1phcav8aqp9srj8avf";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -33,10 +33,9 @@ in stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  buildPhase = ''
-    scons target=release_debug platform=x11 prefix=$out -j $NIX_BUILD_CORES \
-      ${lib.concatStringsSep " "
-          (lib.mapAttrsToList (k: v: "${k}=${builtins.toJSON v}") options)}
+  sconsFlags = "target=release_debug platform=x11";
+  preConfigure = ''
+    sconsFlags+=" ${lib.concatStringsSep " " (lib.mapAttrsToList (k: v: "${k}=${builtins.toJSON v}") options)}"
   '';
 
   outputs = [ "out" "dev" "man" ];

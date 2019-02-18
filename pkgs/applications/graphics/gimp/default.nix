@@ -1,19 +1,19 @@
-{ stdenv, fetchurl, pkgconfig, intltool, babl, gegl, gtk2, glib, gdk_pixbuf, isocodes
+{ stdenv, fetchurl, substituteAll, pkgconfig, intltool, babl, gegl, gtk2, glib, gdk_pixbuf, isocodes
 , pango, cairo, freetype, fontconfig, lcms, libpng, libjpeg, poppler, poppler_data, libtiff
 , libmng, librsvg, libwmf, zlib, libzip, ghostscript, aalib, shared-mime-info
 , python2Packages, libexif, gettext, xorg, glib-networking, libmypaint, gexiv2
 , harfbuzz, mypaint-brushes, libwebp, libheif, libgudev, openexr
-, AppKit, Cocoa, gtk-mac-integration }:
+, AppKit, Cocoa, gtk-mac-integration-gtk2, cf-private }:
 
 let
   inherit (python2Packages) pygtk wrapPython python;
 in stdenv.mkDerivation rec {
   name = "gimp-${version}";
-  version = "2.10.6";
+  version = "2.10.8";
 
   src = fetchurl {
     url = "http://download.gimp.org/pub/gimp/v${stdenv.lib.versions.majorMinor version}/${name}.tar.bz2";
-    sha256 = "07qh2ljbza2mph1gh8sicn27qihhj8hx3ivvry2874cfh8ghgj2f";
+    sha256 = "16sb4kslwin2jbgdb4nhks78pd0af8mvj8g5hap3hj946p7w2jfq";
   };
 
   nativeBuildInputs = [ pkgconfig intltool gettext wrapPython ];
@@ -23,8 +23,11 @@ in stdenv.mkDerivation rec {
     freetype fontconfig lcms libpng libjpeg poppler poppler_data libtiff openexr
     libmng librsvg libwmf zlib libzip ghostscript aalib shared-mime-info libwebp libheif
     python pygtk libexif xorg.libXpm glib-networking libmypaint mypaint-brushes
-  ] ++ stdenv.lib.optionals stdenv.isDarwin [ AppKit Cocoa gtk-mac-integration ]
-    ++ stdenv.lib.optionals stdenv.isLinux [ libgudev ];
+  ] ++ stdenv.lib.optionals stdenv.isDarwin [
+    # cf-private is needed to get some things not in swift-corefoundation.
+    # For instance _OBJC_CLASS_$_NSArray is missing.
+    AppKit Cocoa gtk-mac-integration-gtk2 cf-private
+  ] ++ stdenv.lib.optionals stdenv.isLinux [ libgudev ];
 
   pythonPath = [ pygtk ];
 
@@ -35,6 +38,15 @@ in stdenv.mkDerivation rec {
     # The check runs before glib-networking is registered
     export GIO_EXTRA_MODULES="${glib-networking}/lib/gio/modules:$GIO_EXTRA_MODULES"
   '';
+
+  patches = [
+    # to remove compiler from the runtime closure, reference was retained via
+    # gimp --version --verbose output
+    (substituteAll {
+      src = ./remove-cc-reference.patch;
+      cc_version = stdenv.cc.cc.name;
+    })
+  ];
 
   postFixup = ''
     wrapPythonProgramsIn $out/lib/gimp/${passthru.majorVersion}/plug-ins/
@@ -60,7 +72,9 @@ in stdenv.mkDerivation rec {
     "--with-icc-directory=/var/run/current-system/sw/share/color/icc"
   ];
 
-  doCheck = true;
+  # on Darwin,
+  # test-eevl.c:64:36: error: initializer element is not a compile-time constant
+  doCheck = !stdenv.isDarwin;
 
   enableParallelBuilding = true;
 

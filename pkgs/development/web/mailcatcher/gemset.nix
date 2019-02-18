@@ -16,6 +16,7 @@
     version = "1.0.9.1";
   };
   mail = {
+    dependencies = ["mime-types"];
     source = {
       remotes = ["https://rubygems.org"];
       sha256 = "0d7lhj2dw52ycls6xigkfz6zvfhc6qggply9iycjmcyj9760yvz9";
@@ -24,6 +25,7 @@
     version = "2.6.6";
   };
   mailcatcher = {
+    dependencies = ["eventmachine" "mail" "rack" "sinatra" "skinny" "sqlite3" "thin"];
     source = {
       remotes = ["https://rubygems.org"];
       sha256 = "0h6gk8n18i5f651f244al1hscjzl27fpma4vqw0qhszqqpd5p3bx";
@@ -32,6 +34,7 @@
     version = "0.6.5";
   };
   mime-types = {
+    dependencies = ["mime-types-data"];
     source = {
       remotes = ["https://rubygems.org"];
       sha256 = "0087z9kbnlqhci7fxh9f6il63hj1k02icq2rs0c6cppmqchr753m";
@@ -50,12 +53,13 @@
   rack = {
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "19m7aixb2ri7p1n0iqaqx8ldi97xdhvbxijbyrrcdcl6fv5prqza";
+      sha256 = "1g9926ln2lw12lfxm4ylq1h6nl0rafl10za3xvjzc87qvnqic87f";
       type = "gem";
     };
-    version = "1.6.8";
+    version = "1.6.11";
   };
   rack-protection = {
+    dependencies = ["rack"];
     source = {
       remotes = ["https://rubygems.org"];
       sha256 = "0cvb21zz7p9wy23wdav63z5qzfn4nialik22yqp6gihkgfqqrh5r";
@@ -64,6 +68,7 @@
     version = "1.5.3";
   };
   sinatra = {
+    dependencies = ["rack" "rack-protection" "tilt"];
     source = {
       remotes = ["https://rubygems.org"];
       sha256 = "0byxzl7rx3ki0xd7aiv1x8mbah7hzd8f81l65nq8857kmgzj1jqq";
@@ -72,6 +77,7 @@
     version = "1.4.8";
   };
   skinny = {
+    dependencies = ["eventmachine" "thin"];
     source = {
       remotes = ["https://rubygems.org"];
       sha256 = "1y3yvx88ylgz4d2s1wskjk5rkmrcr15q3ibzp1q88qwzr5y493a9";
@@ -88,6 +94,7 @@
     version = "1.3.13";
   };
   thin = {
+    dependencies = ["daemons" "eventmachine" "rack"];
     source = {
       remotes = ["https://rubygems.org"];
       sha256 = "0hrq9m3hb6pm8yrqshhg0gafkphdpvwcqmr7k722kgdisp3w91ga";

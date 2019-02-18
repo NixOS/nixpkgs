@@ -1,5 +1,5 @@
 { stdenv
-, fetchurl
+, fetchzip
 , pkgconfig
 , qtbase
 , makeWrapper
@@ -10,56 +10,72 @@
 
  stdenv.mkDerivation rec {
   version = "0.9.0";
-  name = "cadence";
+  pname = "cadence";
 
-  src = fetchurl {
+  src = fetchzip {
     url = "https://github.com/falkTX/Cadence/archive/v${version}.tar.gz";
-    sha256 = "07z1mnb0bmldb3i31bgw816pnvlvr9gawr51rpx3mhixg5wpiqzb";
+    sha256 = "08vcggypkdfr70v49innahs5s11hi222dhhnm5wcqzdgksphqzwx";
   };
 
-  buildInputs = [
-    makeWrapper
-    pkgconfig
-    qtbase
-  ];
-
-  apps = [
-    "cadence"
-    "cadence-jacksettings"
-    "cadence-pulse2loopback"
-    "claudia"
-    "cadence-aloop-daemon"
-    "cadence-logs"
-    "cadence-render"
-    "catarina"
-    "claudia-launcher"
-    "cadence-pulse2jack"
-    "cadence-session-start"
-    "catia"
-  ];
+  nativeBuildInputs = [ makeWrapper pkgconfig ];
+  buildInputs = [ qtbase ];
 
   makeFlags = ''
     PREFIX=""
     DESTDIR=$(out)
   '';
 
-  propagatedBuildInputs = with python3Packages; [ pyqt5 ];
+  propagatedBuildInputs = with python3Packages; [ pyqt5_with_qtwebkit ];
 
   postInstall = ''
-    # replace with our own wrappers.
-    for app in $apps; do
-      rm $out/bin/$app
-      makeWrapper ${python3Packages.python.interpreter} $out/bin/$app \
-        --set PYTHONPATH "$PYTHONPATH:$out/share/cadence" \
-        --add-flags "-O $out/share/cadence/src/$app.py"
-    done
+    # replace with our own wrappers. They need to be changed manually since it wouldn't work otherwise
+    rm $out/bin/cadence
+    makeWrapper ${python3Packages.python.interpreter} $out/bin/cadence \
+      --set PYTHONPATH "$PYTHONPATH:$out/share/cadence" \
+      --add-flags "-O $out/share/cadence/src/cadence.py"
+    rm $out/bin/claudia
+    makeWrapper ${python3Packages.python.interpreter} $out/bin/claudia \
+      --set PYTHONPATH "$PYTHONPATH:$out/share/cadence" \
+      --add-flags "-O $out/share/cadence/src/claudia.py"
+    rm $out/bin/catarina
+    makeWrapper ${python3Packages.python.interpreter} $out/bin/catarina \
+      --set PYTHONPATH "$PYTHONPATH:$out/share/cadence" \
+      --add-flags "-O $out/share/cadence/src/catarina.py"
+    rm $out/bin/catia
+    makeWrapper ${python3Packages.python.interpreter} $out/bin/catia \
+      --set PYTHONPATH "$PYTHONPATH:$out/share/cadence" \
+      --add-flags "-O $out/share/cadence/src/catia.py"
+    rm $out/bin/cadence-jacksettings
+    makeWrapper ${python3Packages.python.interpreter} $out/bin/cadence-jacksettings \
+      --set PYTHONPATH "$PYTHONPATH:$out/share/cadence" \
+      --add-flags "-O $out/share/cadence/src/jacksettings.py"
+    rm $out/bin/cadence-aloop-daemon
+    makeWrapper ${python3Packages.python.interpreter} $out/bin/cadence-aloop-daemon \
+      --set PYTHONPATH "$PYTHONPATH:$out/share/cadence" \
+      --add-flags "-O $out/share/cadence/src/cadence_aloop_daemon.py"
+    rm $out/bin/cadence-logs
+    makeWrapper ${python3Packages.python.interpreter} $out/bin/cadence-logs \
+      --set PYTHONPATH "$PYTHONPATH:$out/share/cadence" \
+      --add-flags "-O $out/share/cadence/src/logs.py"
+    rm $out/bin/cadence-render
+    makeWrapper ${python3Packages.python.interpreter} $out/bin/cadence-render \
+      --set PYTHONPATH "$PYTHONPATH:$out/share/cadence" \
+      --add-flags "-O $out/share/cadence/src/render.py"
+    rm $out/bin/claudia-launcher
+    makeWrapper ${python3Packages.python.interpreter} $out/bin/claudia-launcher \
+      --set PYTHONPATH "$PYTHONPATH:$out/share/cadence" \
+      --add-flags "-O $out/share/cadence/src/claudia_launcher.py"
+    rm $out/bin/cadence-session-start
+    makeWrapper ${python3Packages.python.interpreter} $out/bin/cadence-session-start \
+      --set PYTHONPATH "$PYTHONPATH:$out/share/cadence" \
+      --add-flags "-O $out/share/cadence/src/cadence_session_start.py"
   '';
 
   meta = {
     homepage = https://github.com/falkTX/Cadence/;
     description = "Collection of tools useful for audio production";
-    license = stdenv.lib.licenses.mit;
+    license = stdenv.lib.licenses.gpl2Plus;
     maintainers = with stdenv.lib.maintainers; [ genesis ];
-    platforms = stdenv.lib.platforms.linux;
+    platforms = [ "x86_64-linux" ];
   };
 }

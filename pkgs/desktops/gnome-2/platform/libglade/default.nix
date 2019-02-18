@@ -13,5 +13,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ gtk python gettext ];
 
+  NIX_LDFLAGS = "-lgmodule-2.0";
+
   propagatedBuildInputs = [ libxml2 ];
 }

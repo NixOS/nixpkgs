@@ -1,7 +1,7 @@
 { stdenv, fetchgit
 , cmake, pkgconfig, git
 , boost, miniupnpc, openssl, unbound, cppzmq
-, zeromq, pcsclite, readline
+, zeromq, pcsclite, readline, libsodium, hidapi
 , CoreData, IOKit, PCSC
 }:
 
@@ -11,12 +11,12 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name    = "monero-${version}";
-  version = "0.12.3.0";
+  version = "0.13.0.4";
 
   src = fetchgit {
     url    = "https://github.com/monero-project/monero.git";
     rev    = "v${version}";
-    sha256 = "1609k1qn9xx37a92ai36rajds9cmdjlkqyka95hks5xjr3l5ca8i";
+    sha256 = "1ambgakapijhsi1pd70vw8vvnlwa3nid944lqkbfq3wl25lmc70d";
   };
 
   nativeBuildInputs = [ cmake pkgconfig git ];
@@ -24,6 +24,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     boost miniupnpc openssl unbound
     cppzmq zeromq pcsclite readline
+    libsodium hidapi
   ] ++ optionals stdenv.isDarwin [ IOKit CoreData PCSC ];
 
   cmakeFlags = [

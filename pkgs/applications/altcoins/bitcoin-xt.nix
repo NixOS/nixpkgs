@@ -27,6 +27,8 @@ stdenv.mkDerivation rec{
     "--with-libcurl-headers=${curl.dev}/include"
   ] ++ optionals withGui [ "--with-gui=qt4" ];
 
+  enableParallelBuilding = true;
+
   meta = {
     description = "Peer-to-peer electronic cash system (XT client)";
     longDescription= ''

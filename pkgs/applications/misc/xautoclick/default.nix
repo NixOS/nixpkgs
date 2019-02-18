@@ -21,6 +21,7 @@ stdenv.mkDerivation rec {
     mkdir .bin
     ln -s ${qt4}/bin/moc .bin/moc-qt4
     addToSearchPath PATH .bin
+    sed -i -e "s@LD=\$_cc@LD=\$_cxx@" configure
   '';
 
   meta = with stdenv.lib; {

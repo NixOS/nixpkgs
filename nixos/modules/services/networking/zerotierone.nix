@@ -39,7 +39,8 @@ in
     systemd.services.zerotierone = {
       description = "ZeroTierOne";
       path = [ cfg.package ];
-      after = [ "network.target" ];
+      bindsTo = [ "network-online.target" ];
+      after = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
       preStart = ''
         mkdir -p /var/lib/zerotier-one/networks.d

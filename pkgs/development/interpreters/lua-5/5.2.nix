@@ -1,4 +1,10 @@
-{ stdenv, fetchurl, readline, compat ? false }:
+{ stdenv, fetchurl, readline
+# compiles compatibility layer with lua5.1
+, compat ? false
+, callPackage
+, self
+, packageOverrides ? (self: super: {})
+}:
 
 let
   dsoPatch = fetchurl {
@@ -6,20 +12,38 @@ let
     sha256 = "1by1dy4ql61f5c6njq9ibf9kaqm3y633g2q8j54iyjr4cxvqwqz9";
     name = "lua-arch.patch";
   };
+  luaPackages = callPackage ../../lua-modules {lua=self; overrides=packageOverrides;};
 in
 stdenv.mkDerivation rec {
   name = "lua-${version}";
   luaversion = "5.2";
-  version = "${luaversion}.3";
+  version = "${luaversion}.4";
+
+  LuaPathSearchPaths    = luaPackages.getLuaPathList luaversion;
+  LuaCPathSearchPaths   = luaPackages.getLuaCPathList luaversion;
+  setupHook = luaPackages.lua-setup-hook LuaPathSearchPaths LuaCPathSearchPaths;
 
   src = fetchurl {
     url = "https://www.lua.org/ftp/${name}.tar.gz";
-    sha256 = "0b8034v1s82n4dg5rzcn12067ha3nxaylp2vdp8gg08kjsbzphhk";
+    sha256 = "0jwznq0l8qg9wh5grwg07b5cy3lzngvl5m2nl1ikp6vqssmf9qmr";
   };
 
   buildInputs = [ readline ];
 
   patches = if stdenv.isDarwin then [ ./5.2.darwin.patch ] else [ dsoPatch ];
+
+
+  passthru = rec {
+    buildEnv = callPackage ./wrapper.nix {
+      lua = self;
+      inherit (luaPackages) requiredLuaModules;
+    };
+    withPackages = import ./with-packages.nix { inherit buildEnv luaPackages;};
+    pkgs = luaPackages;
+    interpreter = "${self}/bin/lua";
+  };
+
+  enableParallelBuilding = true;
 
   configurePhase =
     if stdenv.isDarwin

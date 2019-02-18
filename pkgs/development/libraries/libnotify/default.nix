@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, autoreconfHook
-, glib, gdk_pixbuf, gobjectIntrospection }:
+, glib, gdk_pixbuf, gobject-introspection }:
 
 stdenv.mkDerivation rec {
   ver_maj = "0.7";
@@ -14,12 +14,13 @@ stdenv.mkDerivation rec {
   # disable tests as we don't need to depend on gtk+(2/3)
   configureFlags = [ "--disable-tests" ];
 
-  nativeBuildInputs = [ pkgconfig autoreconfHook gobjectIntrospection ];
+  nativeBuildInputs = [ pkgconfig autoreconfHook gobject-introspection ];
   buildInputs = [ glib gdk_pixbuf ];
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = https://developer.gnome.org/notification-spec/;
     description = "A library that sends desktop notifications to a notification daemon";
-    platforms = stdenv.lib.platforms.unix;
+    platforms = platforms.unix;
+    license = licenses.lgpl21;
   };
 }

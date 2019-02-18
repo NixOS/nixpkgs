@@ -14,7 +14,7 @@ pythonPackages.buildPythonApplication rec {
   nativeBuildInputs = [ wrapGAppsHook ];
   buildInputs = with pkgs; [
     gtk3
-    gobjectIntrospection
+    gobject-introspection
     goocanvas2
     poppler_gi
   ];
