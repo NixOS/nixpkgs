@@ -6,12 +6,14 @@ let
   cfg = config.services.prometheus;
   promUser = "prometheus";
   promGroup = "prometheus";
+  isV1 = lib.versionOlder cfg.package.version "2";
+  isV2 = lib.versionAtLeast cfg.package.version "2";
 
   # Get a submodule without any embedded metadata:
   _filter = x: filterAttrs (k: v: k != "_module") x;
 
   # a wrapper that verifies that the configuration is valid
-  promtoolCheck = what: name: file: pkgs.runCommand "${name}-${what}-checked"
+  promtoolCheck = what: name: file: pkgs.runCommand "${name}-checked"
     { buildInputs = [ cfg.package ]; } ''
     ln -s ${file} $out
     promtool ${what} $out
@@ -24,31 +26,101 @@ let
     '';
 
   # This becomes the main config file
-  promConfig = {
-    global = cfg.globalConfig;
-    rule_files = map (promtoolCheck "check-rules" "rules") (cfg.ruleFiles ++ [
-      (pkgs.writeText "prometheus.rules" (concatStringsSep "\n" cfg.rules))
-    ]);
-    scrape_configs = cfg.scrapeConfigs;
-  };
+  promConfig = let
+    cmd = if isV2 then "check rules" else "check-rules";
+    in {
+      global = cfg.globalConfig;
+      rule_files = map (promtoolCheck cmd "rules") (cfg.ruleFiles ++ [
+        (pkgs.writeText "prometheus.rules" (concatStringsSep "\n" cfg.rules))
+      ]);
+      scrape_configs = cfg.scrapeConfigs;
+    } // optionalAttrs isV2 {
+      alerting = cfg.alerting;
+    };
 
   generatedPrometheusYml = writePrettyJSON "prometheus.yml" promConfig;
 
   prometheusYml = let
+    cmd = if isV2 then "check config" else "check-config";
     yml =  if cfg.configText != null then
       pkgs.writeText "prometheus.yml" cfg.configText
       else generatedPrometheusYml;
-    in promtoolCheck "check-config" "prometheus.yml" yml;
+    in promtoolCheck cmd "prometheus.yml" yml;
 
-  cmdlineArgs = cfg.extraFlags ++ [
-    "-storage.local.path=${cfg.dataDir}/metrics"
-    "-config.file=${prometheusYml}"
-    "-web.listen-address=${cfg.listenAddress}"
-    "-alertmanager.notification-queue-capacity=${toString cfg.alertmanagerNotificationQueueCapacity}"
-    "-alertmanager.timeout=${toString cfg.alertmanagerTimeout}s"
-    (optionalString (cfg.alertmanagerURL != []) "-alertmanager.url=${concatStringsSep "," cfg.alertmanagerURL}")
-    (optionalString (cfg.webExternalUrl != null) "-web.external-url=${cfg.webExternalUrl}")
-  ];
+  cmdlineArgs =
+    if isV2 then
+      cfg.extraFlags ++ [
+        "--storage.tsdb.path=${cfg.dataDir}/metrics"
+        "--config.file=${prometheusYml}"
+        "--web.listen-address=${cfg.listenAddress}"
+        "--alertmanager.notification-queue-capacity=${toString cfg.alertmanagerNotificationQueueCapacity}"
+        "--alertmanager.timeout=${toString cfg.alertmanagerTimeout}s"
+        (optionalString (cfg.webExternalUrl != null) "--web.external-url=${cfg.webExternalUrl}")
+      ]
+    else
+      cfg.extraFlags ++ [
+        "-storage.local.path=${cfg.dataDir}/metrics"
+        "-config.file=${prometheusYml}"
+        "-web.listen-address=${cfg.listenAddress}"
+        "-alertmanager.notification-queue-capacity=${toString cfg.alertmanagerNotificationQueueCapacity}"
+        "-alertmanager.timeout=${toString cfg.alertmanagerTimeout}s"
+        (optionalString (cfg.alertmanagerURL != []) "-alertmanager.url=${concatStringsSep "," cfg.alertmanagerURL}")
+        (optionalString (cfg.webExternalUrl != null) "-web.external-url=${cfg.webExternalUrl}")
+      ];
+
+  promTypes.basic_auth = types.submodule {
+    options = {
+      username = mkOption {
+        type = types.str;
+        description = ''
+          HTTP username
+        '';
+      };
+      password = mkOption {
+        type = types.str;
+        description = ''
+          HTTP password
+        '';
+      };
+    };
+  };
+
+  promTypes.tls_config = types.submodule {
+    options = {
+      ca_file = mkOption {
+        type = types.path;
+        description = ''
+          CA certificate to validate API server certificate with.
+        '';
+      };
+      cert_file = mkOption {
+        type = types.path;
+        description = ''
+          Certificate for client authentication to the server.
+        '';
+      };
+      key_file = mkOption {
+        type = types.path;
+        description = ''
+          Key for client authentication to the server.
+        '';
+      };
+      server_name = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description = ''
+          ServerName extension to indicate the name of the server.
+        '';
+      };
+      insecure_skip_verify = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Disable validation of the server certificate.
+        '';
+      };
+    };
+  };
 
   promTypes.globalConfig = types.submodule {
     options = {
@@ -157,22 +229,7 @@ let
         '';
       };
       basic_auth = mkOption {
-        type = types.nullOr (types.submodule {
-          options = {
-            username = mkOption {
-              type = types.str;
-              description = ''
-                HTTP username
-              '';
-            };
-            password = mkOption {
-              type = types.str;
-              description = ''
-                HTTP password
-              '';
-            };
-          };
-        });
+        type = types.nullOr promTypes.basic_auth;
         default = null;
         apply = x: mapNullable _filter x;
         description = ''
@@ -373,17 +430,101 @@ let
     };
   };
 
+  promTypes.alertmanager_config = types.submodule {
+    options = {
+      timeout = mkOption {
+        type = types.str;
+        default = "10s";
+        description = ''
+          Per-target Alertmanager timeout when pushing alerts.
+        '';
+      };
+      path_prefix = mkOption {
+        type = types.str;
+        default = "/";
+        description = ''
+          Prefix for the HTTP path alerts are pushed to.
+        '';
+      };
+      scheme = mkOption {
+        type = types.enum [ "http" "https" ];
+        default = "http";
+        description = ''
+          Configures the protocol scheme used for requests.
+        '';
+      };
+      basic_auth = mkOption {
+        type = types.nullOr promTypes.basic_auth;
+        default = null;
+        apply = x: mapNullable _filter x;
+        description = ''
+          Sets the `Authorization` header on every remote read request with the
+          configured username and password.
+        '';
+      };
+      tls_config = mkOption {
+        type = types.nullOr promTypes.tls_config;
+        default = null;
+        apply = x: mapNullable _filter x;
+        description = ''
+          Configures the scrape request's TLS settings.
+        '';
+      };
+      proxy_url = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description = ''
+          Optional proxy URL.
+        '';
+      };
+      dns_sd_configs = mkOption {
+        type = types.listOf promTypes.dns_sd_config;
+        default = [];
+        apply = x: map _filter x;
+        description = ''
+          List of DNS service discovery configurations.
+        '';
+      };
+      consul_sd_configs = mkOption {
+        type = types.listOf promTypes.consul_sd_config;
+        default = [];
+        apply = x: map _filter x;
+        description = ''
+          List of Consul service discovery configurations.
+        '';
+      };
+      file_sd_configs = mkOption {
+        type = types.listOf promTypes.file_sd_config;
+        default = [];
+        apply = x: map _filter x;
+        description = ''
+          List of file service discovery configurations.
+        '';
+      };
+      static_configs = mkOption {
+        type = types.listOf promTypes.static_config;
+        default = [];
+        apply = x: map _filter x;
+        description = ''
+          List of labeled target groups.
+        '';
+      };
+      relabel_configs = mkOption {
+        type = types.listOf promTypes.relabel_config;
+        default = [];
+        apply = x: map _filter x;
+        description = ''
+          List of relabel configurations.
+        '';
+      };
+    };
+  };
+
 in {
   options = {
     services.prometheus = {
 
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          Enable the Prometheus monitoring daemon.
-        '';
-      };
+      enable = mkEnableOption "Prometheus monitoring daemon";
 
       package = mkOption {
         type = types.package;
@@ -463,14 +604,6 @@ in {
         '';
       };
 
-      alertmanagerURL = mkOption {
-        type = types.listOf types.str;
-        default = [];
-        description = ''
-          List of Alertmanager URLs to send notifications to.
-        '';
-      };
-
       alertmanagerNotificationQueueCapacity = mkOption {
         type = types.int;
         default = 10000;
@@ -496,10 +629,61 @@ in {
           if Prometheus is served via a reverse proxy).
         '';
       };
+
+      alertmanagerURL = mkOption {
+        type = types.listOf types.str;
+        default = [];
+        description = ''
+          List of Alertmanager URLs to send notifications to.
+
+          For prometheus 1.x.
+        '';
+      };
+
+      alerting = {
+        alert_relabel_configs = mkOption {
+        type = types.listOf promTypes.relabel_config;
+        default = [];
+          apply = x: map _filter x;
+          description = ''
+            List of relabel configurations.
+
+            For prometheus 2.x.
+          '';
+        };
+        alertmanagers = mkOption {
+          type = types.listOf promTypes.alertmanager_config;
+          default = [];
+          apply = x: map _filter x;
+          description = ''
+            Alertmanagers configuration.
+
+            For prometheus 2.x.
+         '';
+        };
+      };
     };
   };
 
   config = mkIf cfg.enable {
+
+    assertions = [
+      (mkIf isV2 {
+        assertion = cfg.alertmanagerURL == [];
+        message = ''
+          `alertmanagerURL` option is only used with prometheus 1.x.
+          Use `alerting` option for prometheus 2.x
+        '';
+      })
+      (mkIf isV1 {
+        assertion = cfg.alerting.alert_relabel_configs == [] && cfg.alerting.alertmanagers == [];
+        message = ''
+          `alerting` option is only used with prometheus 2.x.
+          Use `alertmanagerURL` option for prometheus 1.x
+        '';
+      })
+    ];
+
     users.groups.${promGroup}.gid = config.ids.gids.prometheus;
     users.users.${promUser} = {
       description = "Prometheus daemon user";
