@@ -43,7 +43,7 @@ qtModule {
 
   # QtWebKit overrides qmake's default_pre and default_post features,
   # so its custom qmake files must be found first at the front of QMAKEPATH.
-  preConfigure = ''
+  preConfigure = stdenv.lib.optionalString (!usingAnnulenWebkitFork) ''
     QMAKEPATH="$PWD/Tools/qmake''${QMAKEPATH:+:}$QMAKEPATH"
     fixQtBuiltinPaths . '*.pr?'
     # Fix hydra's "Log limit exceeded"
