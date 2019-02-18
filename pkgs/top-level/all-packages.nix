@@ -15634,6 +15634,8 @@ in
 
   league-of-moveable-type = callPackage ../data/fonts/league-of-moveable-type {};
 
+  ledger-udev-rules = callPackage ../os-specific/linux/ledger-udev-rules {};
+
   inherit (callPackages ../data/fonts/redhat-liberation-fonts { })
     liberation_ttf_v1
     liberation_ttf_v2
