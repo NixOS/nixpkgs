@@ -376,6 +376,8 @@ let
     Include ${httpd}/conf/extra/httpd-multilang-errordoc.conf
     Include ${httpd}/conf/extra/httpd-languages.conf
 
+    TraceEnable off
+
     ${if enableSSL then sslConf else ""}
 
     # Fascist default - deny access to everything.
@@ -639,8 +641,8 @@ in
 
       sslProtocols = mkOption {
         type = types.str;
-        default = "All -SSLv2 -SSLv3";
-        example = "All -SSLv2 -SSLv3 -TLSv1";
+        default = "All -SSLv2 -SSLv3 -TLSv1";
+        example = "All -SSLv2 -SSLv3";
         description = "Allowed SSL/TLS protocol versions.";
       };
     }
@@ -684,6 +686,9 @@ in
       ''
         ; Needed for PHP's mail() function.
         sendmail_path = sendmail -t -i
+
+        ; Don't advertise PHP
+        expose_php = off
       '' + optionalString (!isNull config.time.timeZone) ''
 
         ; Apparently PHP doesn't use $TZ.
