@@ -39,13 +39,17 @@ in
 
       ${concatStringsSep "\n" (mapAttrsToList (kernelName: kernel:
         let
-          config = builtins.toJSON {
+          config = builtins.toJSON ({
             display_name = if (kernel.displayName != "")
               then kernel.displayName
               else kernelName;
             argv = kernel.argv;
             language = kernel.language;
-          };
+          }
+          // optionalAttrs (kernel ? env) { env = kernel.env; }
+          // optionalAttrs (kernel ? interrupt_mode) { env = kernel.interrupt_mode; }
+          // optionalAttrs (kernel ? metadata) { env = kernel.metadata; }
+          );
           logo32 =
             if (kernel.logo32 != null)
             then "ln -s ${kernel.logo32} 'kernels/${kernelName}/logo-32x32.png';"
