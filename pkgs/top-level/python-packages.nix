@@ -720,6 +720,8 @@ in {
 
   python-binance = callPackage ../development/python-modules/python-binance { };
 
+  python-dbusmock = callPackage ../development/python-modules/python-dbusmock { };
+
   python-engineio = callPackage ../development/python-modules/python-engineio { };
 
   python-hosts = callPackage ../development/python-modules/python-hosts { };
