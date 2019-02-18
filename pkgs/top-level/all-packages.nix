@@ -173,7 +173,7 @@ in
 
   dispad = callPackage ../tools/X11/dispad { };
 
-  dump1090 = callPackage ../applications/misc/dump1090 { };
+  dump1090 = callPackage ../applications/radio/dump1090 { };
 
   ebook2cw = callPackage ../applications/radio/ebook2cw { };
 
