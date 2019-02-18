@@ -2107,11 +2107,11 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   xf86videos3virge = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libpciaccess, xorgserver }: stdenv.mkDerivation {
-    name = "xf86-video-s3virge-1.10.7";
+    name = "xf86-video-s3virge-1.11.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-video-s3virge-1.10.7.tar.bz2;
-      sha256 = "1nm4cngjbw226q63rdacw6nx5lgxv7l7rsa8vhpr0gs80pg6igjx";
+      url = mirror://xorg/individual/driver/xf86-video-s3virge-1.11.0.tar.bz2;
+      sha256 = "06d1v5s7xf00y18x12cz11sk00rgn0yq95w66kmgzy465pzxvj84";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
