@@ -8,7 +8,7 @@
 }:
 
 let
-  inherit (lib) optional optionals getLib;
+  inherit (lib) optional optionals getDev getLib;
   hyphen = stdenv.mkDerivation rec {
     name = "hyphen-2.8.8";
     src = fetchurl {
@@ -34,7 +34,12 @@ qtModule {
     bison2 flex gdb gperf perl pkgconfig python2 ruby
   ] ++ optional usingAnnulenWebkitFork cmake;
 
-  cmakeFlags = optional usingAnnulenWebkitFork "-DPORT=Qt";
+  cmakeFlags = optionals usingAnnulenWebkitFork ([ "-DPORT=Qt" ]
+    ++ optionals stdenv.isDarwin [
+      "-DQt5Multimedia_DIR=${getDev qtmultimedia}/lib/cmake/Qt5Multimedia"
+      "-DQt5MultimediaWidgets_DIR=${getDev qtmultimedia}/lib/cmake/Qt5MultimediaWidgets"
+      "-DMACOS_FORCE_SYSTEM_XML_LIBRARIES=OFF"
+    ]);
 
   # QtWebKit overrides qmake's default_pre and default_post features,
   # so its custom qmake files must be found first at the front of QMAKEPATH.
