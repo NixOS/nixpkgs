@@ -1,4 +1,4 @@
-{ lib, stdenv, makeWrapper, fetchurl, requireFile, perl, ncurses, expat, python27, zlib
+{ lib, stdenv, makeWrapper, fetchurl, requireFile, perl, ncurses5, expat, python27, zlib
 , gcc48, gcc49, gcc5, gcc6, gcc7
 , xorg, gtk2, glib, fontconfig, freetype, unixODBC, alsaLib, glibc
 }:
@@ -42,7 +42,7 @@ let
       nativeBuildInputs = [ perl makeWrapper ];
 
       runtimeDependencies = [
-        ncurses expat python zlib glibc
+        ncurses5 expat python zlib glibc
         xorg.libX11 xorg.libXext xorg.libXrender xorg.libXt xorg.libXtst xorg.libXi xorg.libXext
         gtk2 glib fontconfig freetype unixODBC alsaLib
       ];
