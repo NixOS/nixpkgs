@@ -152,7 +152,7 @@ in
 
       garden-bin = mkOption {
         default = "${garden-runc}/bin/gdn";
-        type = with types; attrsOf str;
+        type = types.str;
         example = [ "/bin/gdn" ];
         description = ''
           Specifies the `gdn` executable location.
