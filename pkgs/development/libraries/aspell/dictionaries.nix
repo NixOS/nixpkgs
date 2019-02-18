@@ -73,22 +73,26 @@ let
 
       passthru.updateScript = writeScript "update-aspellDict-${language}" ''
         #!/usr/bin/env nix-shell
-        #!nix-shell -i bash -p nix curl gnused common-updater-scripts
+        #!nix-shell -i bash -p nix lynx gnused common-updater-scripts
         set -eu -o pipefail
 
-        # List tarballs in the dictionary's subdirectory via FTP.
+        # List tarballs in the dictionary's subdirectory via HTTPS and
+        # the simple list method of Apache's mod_autoindex.
         #
         # Catalan dictionary has an exception where an earlier version
         # compares as newer because the versioning scheme has changed.
         versions=$(
             echo '[';
-            curl -sl ftp://ftp.gnu.org/gnu/aspell/dict/${language}/ | \
-                sed -r "s/^${filename}-${language}-(.+)\.tar\.bz2$/\"\1\"/;t;d" | \
+            lynx -dump "https://ftp.gnu.org/gnu/aspell/dict/${language}/?F=0" | \
+                sed -r "s/^ +\* \[[0-9]+\]${filename}-${language}-([A-Za-z0-9_+.-]+)\.tar\.bz2$/\"\1\"/;t;d" | \
                 if [ "${language}" = "ca" ]; then grep -v 20040130-1; else cat; fi; \
             echo ']')
 
-        # Sort versions in descending order and take the first as the latest.
-        latestVersion=$(nix eval --raw "(with builtins; head (sort (a: b: compareVersions a b > 0) $versions))")
+        # Sort versions in descending order using Nix's and take the first as the latest.
+        sortVersions="(with builtins; head (sort (a: b: compareVersions a b > 0) $versions))"
+        # nix-instantiate outputs Nix strings (with quotes), so remove them to get
+        # a result similar to `nix eval --raw`.
+        latestVersion=$(nix-instantiate --eval --expr "$sortVersions" | tr -d '"')
 
         update-source-version aspellDicts.${language} "$latestVersion"
       '';
@@ -97,7 +101,7 @@ let
         homepage = "http://ftp.gnu.org/gnu/aspell/dict/0index.html";
       } // (args.meta or {});
 
-    } // removeAttrs args [ "language" "filename" "sha256" ];
+    } // removeAttrs args [ "language" "filename" "sha256" "meta" ];
     in buildDict buildArgs;
 
   /* Function to compile txt dict files into Aspell dictionaries. */
