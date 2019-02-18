@@ -1834,11 +1834,11 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   xf86videochips = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libpciaccess, xorgserver }: stdenv.mkDerivation {
-    name = "xf86-video-chips-1.3.0";
+    name = "xf86-video-chips-1.4.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-video-chips-1.3.0.tar.bz2;
-      sha256 = "00nsyz0z8mkzinr5czkkajbw1fm6437q7f3dx027017jdhh4qb4p";
+      url = mirror://xorg/individual/driver/xf86-video-chips-1.4.0.tar.bz2;
+      sha256 = "1gqzy7q9v824m7hqkbbmncxg082zm0d4mafgc97c4skyiwgf9wq7";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
