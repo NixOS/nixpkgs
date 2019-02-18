@@ -7810,12 +7810,14 @@ in
   luaPackages = lua52Packages;
 
   # override instead ?
-  luajit_2_0 = callPackage ../development/interpreters/luajit/2.0.nix {
+  luajit_2_0 = import ../development/interpreters/luajit/2.0.nix {
     self = luajit_2_0;
+    inherit (super) callPackage lib;
   };
 
-  luajit_2_1 = callPackage ../development/interpreters/luajit/2.1.nix {
+  luajit_2_1 = import ../development/interpreters/luajit/2.1.nix {
     self = luajit_2_1;
+    inherit (super) callPackage lib;
   };
 
   luajit = luajit_2_1;
