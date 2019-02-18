@@ -49,8 +49,6 @@ let
 
       rpath = "${stdenv.lib.makeLibraryPath runtimeDependencies}:${stdenv.cc.cc.lib}/lib64";
 
-      phases = [ "unpackPhase" "installPhase" "fixupPhase" ];
-
       unpackPhase = ''
         sh $src --keep --noexec
 
@@ -70,6 +68,7 @@ let
       installPhase = ''
         mkdir $out
         cd $(basename $src)
+        export PERL5LIB=.
         perl ./install-linux.pl --prefix="$out"
         cd ..
         for patch in $runPatches; do
@@ -84,7 +83,7 @@ let
         rm -rf $out/lib
 
         # Remove some cruft.
-        rm $out/bin/uninstall*
+        ${lib.optionalString (lib.versionAtLeast version "7.0") "rm $out/bin/uninstall*"}
 
         # Fixup path to samples (needed for cuda 6.5 or else nsight will not find them)
         if [ -d "$out"/cuda-samples ]; then
@@ -138,6 +137,23 @@ let
         done < <(find $out $lib $doc -type f -print0)
       '';
 
+      doInstallCheck = true;
+      postInstallCheck = let
+      in ''
+        # Smoke test binaries
+        pushd $out/bin
+        for f in *; do
+          case $f in
+            crt)                           continue;;
+            nvcc.profile)                  continue;;
+            nsight_ee_plugins_manage.sh)   continue;;
+            uninstall_cuda_toolkit_6.5.pl) continue;;
+            computeprof|nvvp|nsight)       continue;; # TODO: Broken
+            *)                             echo "Executing '$f --version':"; ./$f --version;;
+          esac
+        done
+        popd
+      '';
       passthru = {
         cc = gcc;
         majorVersion =
