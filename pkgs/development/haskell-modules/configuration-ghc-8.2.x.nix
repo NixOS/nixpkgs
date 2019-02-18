@@ -95,7 +95,4 @@ self: super: {
   # GHC 8.2 doesn't have semigroups included by default
   ListLike = addBuildDepend super.ListLike self.semigroups;
 
-  # https://github.com/pikajude/stylish-cabal/issues/11
-  stylish-cabal = markBrokenVersion "0.4.1.0" super.stylish-cabal;
-
 }

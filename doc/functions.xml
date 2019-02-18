@@ -17,4 +17,5 @@
  <xi:include href="functions/shell.xml" />
  <xi:include href="functions/dockertools.xml" />
  <xi:include href="functions/prefer-remote-fetch.xml" />
+ <xi:include href="functions/nix-gitignore.xml" />
 </chapter>

@@ -3,18 +3,18 @@
 
 stdenv.mkDerivation rec {
   pname = "leiningen";
-  version = "2.8.3";
+  version = "2.9.0";
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "https://raw.github.com/technomancy/leiningen/${version}/bin/lein-pkg";
-    sha256 = "1jbrm4vdvwskbi9sxvn6i7h2ih9c3nfld63nx58nblghvlcb9vwx";
+    sha256 = "18wwcc956w1ii6zf8zjndgvmc614s18nxz3dary2iigbfq4y0asc";
   };
 
   jarsrc = fetchurl {
     # NOTE: This is actually a .jar, Github has issues
     url = "https://github.com/technomancy/leiningen/releases/download/${version}/${name}-standalone.zip";
-    sha256 = "07kb7d84llp24l959gndnfmislnnvgpsxghmgfdy8chy7g4sy2kz";
+    sha256 = "07pw852w57w3lj3fddlxfzjsln90q52dwxvxpz9qbprw8p2xfrim";
   };
 
   JARNAME = "${name}-standalone.jar";
@@ -29,7 +29,6 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/bin $out/share
-
     cp -v $src $out/bin/lein
     cp -v $jarsrc $out/share/$JARNAME
   '';
@@ -37,10 +36,8 @@ stdenv.mkDerivation rec {
   fixupPhase = ''
     chmod +x $out/bin/lein
     patchShebangs $out/bin/lein
-
     substituteInPlace $out/bin/lein \
       --replace 'LEIN_JAR=/usr/share/java/leiningen-$LEIN_VERSION-standalone.jar' "LEIN_JAR=$out/share/$JARNAME"
-
     wrapProgram $out/bin/lein \
       --prefix PATH ":" "${stdenv.lib.makeBinPath [ rlwrap coreutils ]}" \
       --set LEIN_GPG ${gnupg1compat}/bin/gpg \

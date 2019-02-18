@@ -3,13 +3,13 @@
 stdenv.mkDerivation rec {
   pname = "lguf-brightness";
 
-  version = "unstable-2018-02-07";
+  version = "unstable-2018-02-11";
 
   src = fetchFromGitHub  {
     owner = "periklis";
     repo = pname;
-    rev = "d194272b7a0374b27f036cbc1a9be7f231d40cbb";
-    sha256 = "0zj81bqchms9m7rik1jxp6zylh9dxqzr7krlj9947v0phr4qgah4";
+    rev = "fcb2bc1738d55c83b6395c24edc27267a520a725";
+    sha256 = "0cf7cn2kpmlvz00qxqj1m5zxmh7i2x75djbj4wqk7if7a0nlrd5m";
   };
 
   nativeBuildInputs = [ cmake ];

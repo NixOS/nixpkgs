@@ -46,7 +46,7 @@ default-package-overrides:
   # Newer versions don't work in LTS-12.x
   - alsa-mixer < 0.3
   - cassava-megaparsec < 2
-  # LTS Haskell 13.6
+  # LTS Haskell 13.7
   - abstract-deque ==0.3
   - abstract-deque-tests ==0.3
   - abstract-par ==0.3.3
@@ -88,96 +88,96 @@ default-package-overrides:
   - alternative-vector ==0.0.0
   - alternators ==1.0.0.0
   - ALUT ==2.4.0.2
-  - amazonka ==1.6.0
-  - amazonka-apigateway ==1.6.0
-  - amazonka-application-autoscaling ==1.6.0
-  - amazonka-appstream ==1.6.0
-  - amazonka-athena ==1.6.0
-  - amazonka-autoscaling ==1.6.0
-  - amazonka-budgets ==1.6.0
-  - amazonka-certificatemanager ==1.6.0
-  - amazonka-cloudformation ==1.6.0
-  - amazonka-cloudfront ==1.6.0
-  - amazonka-cloudhsm ==1.6.0
-  - amazonka-cloudsearch ==1.6.0
-  - amazonka-cloudsearch-domains ==1.6.0
-  - amazonka-cloudtrail ==1.6.0
-  - amazonka-cloudwatch ==1.6.0
-  - amazonka-cloudwatch-events ==1.6.0
-  - amazonka-cloudwatch-logs ==1.6.0
-  - amazonka-codebuild ==1.6.0
-  - amazonka-codecommit ==1.6.0
-  - amazonka-codedeploy ==1.6.0
-  - amazonka-codepipeline ==1.6.0
-  - amazonka-cognito-identity ==1.6.0
-  - amazonka-cognito-idp ==1.6.0
-  - amazonka-cognito-sync ==1.6.0
-  - amazonka-config ==1.6.0
-  - amazonka-core ==1.6.0
-  - amazonka-datapipeline ==1.6.0
-  - amazonka-devicefarm ==1.6.0
-  - amazonka-directconnect ==1.6.0
-  - amazonka-discovery ==1.6.0
-  - amazonka-dms ==1.6.0
-  - amazonka-ds ==1.6.0
-  - amazonka-dynamodb ==1.6.0
-  - amazonka-dynamodb-streams ==1.6.0
-  - amazonka-ec2 ==1.6.0
-  - amazonka-ecr ==1.6.0
-  - amazonka-ecs ==1.6.0
-  - amazonka-efs ==1.6.0
-  - amazonka-elasticache ==1.6.0
-  - amazonka-elasticbeanstalk ==1.6.0
-  - amazonka-elasticsearch ==1.6.0
-  - amazonka-elastictranscoder ==1.6.0
-  - amazonka-elb ==1.6.0
-  - amazonka-elbv2 ==1.6.0
-  - amazonka-emr ==1.6.0
-  - amazonka-gamelift ==1.6.0
-  - amazonka-glacier ==1.6.0
-  - amazonka-health ==1.6.0
-  - amazonka-iam ==1.6.0
-  - amazonka-importexport ==1.6.0
-  - amazonka-inspector ==1.6.0
-  - amazonka-iot ==1.6.0
-  - amazonka-iot-dataplane ==1.6.0
-  - amazonka-kinesis ==1.6.0
-  - amazonka-kinesis-analytics ==1.6.0
-  - amazonka-kinesis-firehose ==1.6.0
-  - amazonka-kms ==1.6.0
-  - amazonka-lambda ==1.6.0
-  - amazonka-lightsail ==1.6.0
-  - amazonka-marketplace-analytics ==1.6.0
-  - amazonka-marketplace-metering ==1.6.0
-  - amazonka-ml ==1.6.0
-  - amazonka-opsworks ==1.6.0
-  - amazonka-opsworks-cm ==1.6.0
-  - amazonka-pinpoint ==1.6.0
-  - amazonka-polly ==1.6.0
-  - amazonka-rds ==1.6.0
-  - amazonka-redshift ==1.6.0
-  - amazonka-rekognition ==1.6.0
-  - amazonka-route53 ==1.6.0
-  - amazonka-route53-domains ==1.6.0
-  - amazonka-s3 ==1.6.0
-  - amazonka-sdb ==1.6.0
-  - amazonka-servicecatalog ==1.6.0
-  - amazonka-ses ==1.6.0
-  - amazonka-shield ==1.6.0
-  - amazonka-sms ==1.6.0
-  - amazonka-snowball ==1.6.0
-  - amazonka-sns ==1.6.0
-  - amazonka-sqs ==1.6.0
-  - amazonka-ssm ==1.6.0
-  - amazonka-stepfunctions ==1.6.0
-  - amazonka-storagegateway ==1.6.0
-  - amazonka-sts ==1.6.0
-  - amazonka-support ==1.6.0
-  - amazonka-swf ==1.6.0
-  - amazonka-test ==1.6.0
-  - amazonka-waf ==1.6.0
-  - amazonka-workspaces ==1.6.0
-  - amazonka-xray ==1.6.0
+  - amazonka ==1.6.1
+  - amazonka-apigateway ==1.6.1
+  - amazonka-application-autoscaling ==1.6.1
+  - amazonka-appstream ==1.6.1
+  - amazonka-athena ==1.6.1
+  - amazonka-autoscaling ==1.6.1
+  - amazonka-budgets ==1.6.1
+  - amazonka-certificatemanager ==1.6.1
+  - amazonka-cloudformation ==1.6.1
+  - amazonka-cloudfront ==1.6.1
+  - amazonka-cloudhsm ==1.6.1
+  - amazonka-cloudsearch ==1.6.1
+  - amazonka-cloudsearch-domains ==1.6.1
+  - amazonka-cloudtrail ==1.6.1
+  - amazonka-cloudwatch ==1.6.1
+  - amazonka-cloudwatch-events ==1.6.1
+  - amazonka-cloudwatch-logs ==1.6.1
+  - amazonka-codebuild ==1.6.1
+  - amazonka-codecommit ==1.6.1
+  - amazonka-codedeploy ==1.6.1
+  - amazonka-codepipeline ==1.6.1
+  - amazonka-cognito-identity ==1.6.1
+  - amazonka-cognito-idp ==1.6.1
+  - amazonka-cognito-sync ==1.6.1
+  - amazonka-config ==1.6.1
+  - amazonka-core ==1.6.1
+  - amazonka-datapipeline ==1.6.1
+  - amazonka-devicefarm ==1.6.1
+  - amazonka-directconnect ==1.6.1
+  - amazonka-discovery ==1.6.1
+  - amazonka-dms ==1.6.1
+  - amazonka-ds ==1.6.1
+  - amazonka-dynamodb ==1.6.1
+  - amazonka-dynamodb-streams ==1.6.1
+  - amazonka-ec2 ==1.6.1
+  - amazonka-ecr ==1.6.1
+  - amazonka-ecs ==1.6.1
+  - amazonka-efs ==1.6.1
+  - amazonka-elasticache ==1.6.1
+  - amazonka-elasticbeanstalk ==1.6.1
+  - amazonka-elasticsearch ==1.6.1
+  - amazonka-elastictranscoder ==1.6.1
+  - amazonka-elb ==1.6.1
+  - amazonka-elbv2 ==1.6.1
+  - amazonka-emr ==1.6.1
+  - amazonka-gamelift ==1.6.1
+  - amazonka-glacier ==1.6.1
+  - amazonka-health ==1.6.1
+  - amazonka-iam ==1.6.1
+  - amazonka-importexport ==1.6.1
+  - amazonka-inspector ==1.6.1
+  - amazonka-iot ==1.6.1
+  - amazonka-iot-dataplane ==1.6.1
+  - amazonka-kinesis ==1.6.1
+  - amazonka-kinesis-analytics ==1.6.1
+  - amazonka-kinesis-firehose ==1.6.1
+  - amazonka-kms ==1.6.1
+  - amazonka-lambda ==1.6.1
+  - amazonka-lightsail ==1.6.1
+  - amazonka-marketplace-analytics ==1.6.1
+  - amazonka-marketplace-metering ==1.6.1
+  - amazonka-ml ==1.6.1
+  - amazonka-opsworks ==1.6.1
+  - amazonka-opsworks-cm ==1.6.1
+  - amazonka-pinpoint ==1.6.1
+  - amazonka-polly ==1.6.1
+  - amazonka-rds ==1.6.1
+  - amazonka-redshift ==1.6.1
+  - amazonka-rekognition ==1.6.1
+  - amazonka-route53 ==1.6.1
+  - amazonka-route53-domains ==1.6.1
+  - amazonka-s3 ==1.6.1
+  - amazonka-sdb ==1.6.1
+  - amazonka-servicecatalog ==1.6.1
+  - amazonka-ses ==1.6.1
+  - amazonka-shield ==1.6.1
+  - amazonka-sms ==1.6.1
+  - amazonka-snowball ==1.6.1
+  - amazonka-sns ==1.6.1
+  - amazonka-sqs ==1.6.1
+  - amazonka-ssm ==1.6.1
+  - amazonka-stepfunctions ==1.6.1
+  - amazonka-storagegateway ==1.6.1
+  - amazonka-sts ==1.6.1
+  - amazonka-support ==1.6.1
+  - amazonka-swf ==1.6.1
+  - amazonka-test ==1.6.1
+  - amazonka-waf ==1.6.1
+  - amazonka-workspaces ==1.6.1
+  - amazonka-xray ==1.6.1
   - amqp ==0.18.1
   - annotated-wl-pprint ==0.7.0
   - ansi-terminal ==0.8.2
@@ -238,7 +238,7 @@ default-package-overrides:
   - avers ==0.0.17.1
   - avers-api ==0.1.0
   - avers-server ==0.1.0.1
-  - avro ==0.4.1.2
+  - avro ==0.4.2.0
   - avwx ==0.3.0.2
   - axel ==0.0.9
   - backprop ==0.2.6.1
@@ -253,7 +253,7 @@ default-package-overrides:
   - base64-string ==0.2
   - base-compat ==0.10.5
   - base-compat-batteries ==0.10.5
-  - basement ==0.0.8
+  - basement ==0.0.10
   - base-noprelude ==4.12.0.0
   - base-orphans ==0.8
   - base-prelude ==1.3
@@ -557,7 +557,7 @@ default-package-overrides:
   - dataurl ==0.1.0.0
   - DAV ==1.3.3
   - dbcleaner ==0.1.3
-  - DBFunctor ==0.1.0.0
+  - DBFunctor ==0.1.1.0
   - dbus ==1.2.3
   - debian-build ==0.10.1.2
   - debug ==0.1.1
@@ -749,7 +749,7 @@ default-package-overrides:
   - forma ==1.1.1
   - format-numbers ==0.1.0.0
   - formatting ==6.3.7
-  - foundation ==0.0.21
+  - foundation ==0.0.23
   - free ==5.1
   - freenect ==1.2.1
   - freer-simple ==1.2.1.0
@@ -776,7 +776,7 @@ default-package-overrides:
   - general-games ==1.1.1
   - generic-arbitrary ==0.1.0
   - generic-data ==0.3.0.0
-  - generic-deriving ==1.12.2
+  - generic-deriving ==1.12.3
   - generic-lens ==1.1.0.0
   - GenericPretty ==1.2.2
   - generic-random ==1.2.0.0
@@ -880,7 +880,7 @@ default-package-overrides:
   - hamilton ==0.1.0.3
   - hamtsolo ==1.0.3
   - HandsomeSoup ==0.4.2
-  - hapistrano ==0.3.9.1
+  - hapistrano ==0.3.9.2
   - happy ==1.19.9
   - hasbolt ==0.1.3.2
   - hashable ==1.2.7.0
@@ -917,7 +917,7 @@ default-package-overrides:
   - HDBC-mysql ==0.7.1.0
   - HDBC-session ==0.1.2.0
   - heap ==1.0.4
-  - heaps ==0.3.6
+  - heaps ==0.3.6.1
   - hebrew-time ==0.1.1
   - hedgehog ==0.6.1
   - hedgehog-corpus ==0.1.0
@@ -951,7 +951,7 @@ default-package-overrides:
   - hmatrix-morpheus ==0.1.1.2
   - hmatrix-vector-sized ==0.1.1.2
   - hmpfr ==0.4.4
-  - hoauth2 ==1.8.3
+  - hoauth2 ==1.8.4
   - Hoed ==0.5.1
   - hOpenPGP ==2.7.4.1
   - hopfli ==0.2.2.1
@@ -977,8 +977,8 @@ default-package-overrides:
   - hsdns ==1.7.1
   - hsebaysdk ==0.4.0.0
   - hsemail ==2
-  - hset ==2.2.0
   - HSet ==0.0.1
+  - hset ==2.2.0
   - hsexif ==0.6.1.6
   - hs-functors ==0.1.3.0
   - hs-GeoIP ==0.3
@@ -1089,7 +1089,7 @@ default-package-overrides:
   - imagesize-conduit ==1.1
   - Imlib ==0.1.2
   - immortal ==0.3
-  - include-file ==0.1.0.3
+  - include-file ==0.1.0.4
   - incremental-parser ==0.3.2.1
   - indentation-core ==0.0.0.2
   - indentation-parsec ==0.0.0.2
@@ -1481,7 +1481,7 @@ default-package-overrides:
   - parallel ==3.2.2.0
   - parallel-io ==0.3.3
   - paripari ==0.6.0.0
-  - parseargs ==0.2.0.8
+  - parseargs ==0.2.0.9
   - parsec ==3.1.13.0
   - parsec-class ==1.0.0.0
   - parsec-numbers ==0.1.0
@@ -1538,7 +1538,7 @@ default-package-overrides:
   - pipes-fastx ==0.3.0.0
   - pipes-fluid ==0.6.0.1
   - pipes-group ==1.0.12
-  - pipes-http ==1.0.5
+  - pipes-http ==1.0.6
   - pipes-misc ==0.5.0.0
   - pipes-network ==0.6.5
   - pipes-network-tls ==0.3
@@ -1606,13 +1606,13 @@ default-package-overrides:
   - protocol-radius ==0.0.1.1
   - protocol-radius-test ==0.0.1.0
   - proto-lens ==0.4.0.1
-  - proto-lens-arbitrary ==0.1.2.5
+  - proto-lens-arbitrary ==0.1.2.6
   - proto-lens-combinators ==0.4.0.1
-  - proto-lens-optparse ==0.1.1.4
+  - proto-lens-optparse ==0.1.1.5
   - proto-lens-protobuf-types ==0.4.0.1
   - proto-lens-protoc ==0.4.0.2
   - proto-lens-runtime ==0.4.0.2
-  - proto-lens-setup ==0.4.0.1
+  - proto-lens-setup ==0.4.0.2
   - protolude ==0.2.3
   - proxied ==0.3
   - psql-helpers ==0.1.0.0
@@ -1666,7 +1666,7 @@ default-package-overrides:
   - read-editor ==0.1.0.2
   - read-env-var ==1.0.0.0
   - rebase ==1.3
-  - record-dot-preprocessor ==0.1.4
+  - record-dot-preprocessor ==0.1.5
   - records-sop ==0.1.0.2
   - recursion-schemes ==5.1.1
   - reducers ==3.12.3
@@ -1844,9 +1844,9 @@ default-package-overrides:
   - skein ==1.0.9.4
   - skews ==0.1.0.1
   - skip-var ==0.1.1.0
-  - skylighting ==0.7.5
-  - skylighting-core ==0.7.5
-  - slack-web ==0.2.0.9
+  - skylighting ==0.7.6
+  - skylighting-core ==0.7.6
+  - slack-web ==0.2.0.10
   - smallcheck ==1.1.5
   - smoothie ==0.4.2.9
   - smtp-mail ==0.1.4.6
@@ -2024,7 +2024,7 @@ default-package-overrides:
   - th-expand-syns ==0.4.4.0
   - th-extras ==0.0.0.4
   - th-lift ==0.7.11
-  - th-lift-instances ==0.1.11
+  - th-lift-instances ==0.1.12
   - th-orphans ==0.13.6
   - th-printf ==0.6.0
   - thread-hierarchy ==0.3.0.1
@@ -2114,7 +2114,7 @@ default-package-overrides:
   - union-find ==0.2
   - uniplate ==1.6.12
   - uniprot-kb ==0.1.2.0
-  - uniq-deep ==1.1.0.0
+  - uniq-deep ==1.1.1
   - unique ==0
   - unit-constraint ==0.0.0
   - universe-base ==1.0.2.1
@@ -2165,7 +2165,7 @@ default-package-overrides:
   - vector-algorithms ==0.8.0.1
   - vector-binary-instances ==0.2.5.1
   - vector-buffer ==0.4.1
-  - vector-builder ==0.3.6
+  - vector-builder ==0.3.7.2
   - vector-bytes-instances ==0.1.1
   - vector-instances ==3.4
   - vector-mmap ==0.0.3
@@ -2306,7 +2306,7 @@ default-package-overrides:
   - yesod-form-bootstrap4 ==2.1.0
   - yesod-gitrepo ==0.3.0
   - yesod-gitrev ==0.2.0.0
-  - yesod-markdown ==0.12.6.0
+  - yesod-markdown ==0.12.6.1
   - yesod-newsfeed ==1.6.1.0
   - yesod-paginator ==1.1.0.1
   - yesod-persistent ==1.6.0.1
@@ -2362,7 +2362,6 @@ extra-packages:
   - haddock-api == 2.17.*               # required on GHC 8.0.x
   - haddock-library == 1.2.*            # required for haddock-api-2.16.x
   - haddock-library == 1.4.3            # required for haddock-api-2.17.x
-  - haddock-library == 1.5.*            # required for stylish-cabal-0.4.0.1
   - happy <1.19.6                       # newer versions break Agda
   - haskell-gi-overloading == 0.0       # gi-* packages use this dependency to disable overloading support
   - haskell-src-exts == 1.19.*          # required by hindent and structured-haskell-mode
@@ -2404,9 +2403,9 @@ extra-packages:
 
 package-maintainers:
   peti:
+    - cabal-install
     - cabal2nix
     - cabal2spec
-    - cabal-install
     - distribution-nixpkgs
     - funcmp
     - git-annex
@@ -2431,6 +2430,7 @@ package-maintainers:
     - stack
     - streamproc
     - structured-haskell-mode
+    - stylish-cabal
     - titlecase
     - xmonad
     - xmonad-contrib
@@ -9144,7 +9144,6 @@ dont-distribute-packages:
   stt:                                            [ i686-linux, x86_64-linux, x86_64-darwin ]
   stunts:                                         [ i686-linux, x86_64-linux, x86_64-darwin ]
   stutter:                                        [ i686-linux, x86_64-linux, x86_64-darwin ]
-  stylish-cabal:                                  [ i686-linux, x86_64-linux, x86_64-darwin ]
   stylized:                                       [ i686-linux, x86_64-linux, x86_64-darwin ]
   sub-state:                                      [ i686-linux, x86_64-linux, x86_64-darwin ]
   subhask:                                        [ i686-linux, x86_64-linux, x86_64-darwin ]

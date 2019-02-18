@@ -401,6 +401,15 @@
     github = "shados";
     name = "Alexei Robyn";
   };
+  artemist = {
+    email = "me@artem.ist";
+    github = "artemist";
+    name = "Artemis Tosini";
+    keys = [{
+      longkeyid = "rsa4096/0x4FDC96F161E7BA8A";
+      fingerprint = "3D2B B230 F9FA F0C5 1832  46DD 4FDC 96F1 61E7 BA8A";
+    }];
+  };
   artuuge = {
     email = "artuuge@gmail.com";
     github = "artuuge";
@@ -2936,6 +2945,11 @@
     github = "mguentner";
     name = "Maximilian Güntner";
   };
+   mhaselsteiner = {
+    email = "magdalena.haselsteiner@gmx.at";
+    github = "mhaselsteiner";
+    name = "Magdalena Haselsteiner";
+  };
   mic92 = {
     email = "joerg@thalheim.io";
     github = "mic92";
@@ -3332,6 +3346,11 @@
     email = "np.nix@nicolaspouillard.fr";
     github = "np";
     name = "Nicolas Pouillard";
+  };
+  nphilou = {
+    email = "nphilou@gmail.com";
+    github = "nphilou";
+    name = "Philippe Nguyen";
   };
   nslqqq = {
     email = "nslqqq@gmail.com";
@@ -3808,6 +3827,11 @@
     github = "rbasso";
     name = "Rafael Basso";
   };
+  rbrewer = {
+    email = "rwb123@gmail.com";
+    github = "rbrewer123";
+    name = "Rob Brewer";
+  };
   rdnetto = {
     email = "rdnetto@gmail.com";
     github = "rdnetto";
@@ -3842,6 +3866,11 @@
     email = "ricky@elrod.me";
     github = "relrod";
     name = "Ricky Elrod";
+  };
+  rembo10 = {
+    email = "rembo10@users.noreply.github.com";
+    github = "rembo10";
+    name = "rembo10";
   };
   renatoGarcia = {
     email = "fgarcia.renato@gmail.com";
