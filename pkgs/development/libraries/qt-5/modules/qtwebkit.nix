@@ -20,20 +20,21 @@ let
     '';
     buildInputs = [ perl ];
   };
+  usingAnnulenWebkitFork = lib.versionAtLeast qtbase.version "5.11.0";
 in
 qtModule {
   name = "qtwebkit";
   qtInputs = [ qtbase qtdeclarative qtlocation qtsensors ]
     ++ optional (stdenv.isDarwin && lib.versionAtLeast qtbase.version "5.9.0") qtmultimedia
-    ++ optional (lib.versionAtLeast qtbase.version "5.11.0") qtwebchannel;
+    ++ optional usingAnnulenWebkitFork qtwebchannel;
   buildInputs = [ fontconfig libwebp libxml2 libxslt sqlite glib gst_all_1.gstreamer gst_all_1.gst-plugins-base ]
     ++ optionals (stdenv.isDarwin) (with darwin; with apple_sdk.frameworks; [ cf-private ICU OpenGL ])
-    ++ optionals (lib.versionAtLeast qtbase.version "5.11.0") [ hyphen ];
+    ++ optional usingAnnulenWebkitFork hyphen;
   nativeBuildInputs = [
     bison2 flex gdb gperf perl pkgconfig python2 ruby
-  ] ++ optionals (lib.versionAtLeast qtbase.version "5.11.0") [ cmake ];
+  ] ++ optional usingAnnulenWebkitFork cmake;
 
-  cmakeFlags = optionals (lib.versionAtLeast qtbase.version "5.11.0") [ "-DPORT=Qt" ];
+  cmakeFlags = optional usingAnnulenWebkitFork "-DPORT=Qt";
 
   # QtWebKit overrides qmake's default_pre and default_post features,
   # so its custom qmake files must be found first at the front of QMAKEPATH.
