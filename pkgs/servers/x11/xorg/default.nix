@@ -1587,11 +1587,11 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   xcursorgen = callPackage ({ stdenv, pkgconfig, fetchurl, libpng, libX11, libXcursor }: stdenv.mkDerivation {
-    name = "xcursorgen-1.0.6";
+    name = "xcursorgen-1.0.7";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/xcursorgen-1.0.6.tar.bz2;
-      sha256 = "0v7nncj3kaa8c0524j7ricdf4rvld5i7c3m6fj55l5zbah7r3j1i";
+      url = mirror://xorg/individual/app/xcursorgen-1.0.7.tar.bz2;
+      sha256 = "0ggbv084cavp52hjgcz3vdj0g018axs0m23c03lpc5sgn92gidim";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
