@@ -1,0 +1,22 @@
+--- a/setup.py
++++ b/setup.py
+@@ -92,18 +92,4 @@ setup(
+     install_requires=requirements,
+     include_package_data=True,
+     python_requires=">=3.5",
+-    # qiskit 0.7 metapackage has a bug for which qiskit 0.6.1 cannot correctly
+-    # upgrade to 0.7: some Terra files are deleted when removing qiskit 0.6.1
+-    # before installing qiskit 0.7 but after installing its dependencies. More
+-    # detailed info is provided at:
+-    # https://github.com/Qiskit/qiskit/issues/27#issue-396844438
+-    # https://github.com/Qiskit/qiskit/issues/27#issuecomment-455598103
+-    #
+-    # The fix overrides 'install' and 'develop' setuptools commands to force
+-    # reinstalling 'qiskit-terra' after installation to restore the missing files.
+-    #
+-    # For this fix to work, we cannot distribute a wheel version of the metapackage
+-    # (which does not provide any advantage right now). We can remove the fix once
+-    # we don't support updating from 0.6.
+-    cmdclass=_COMMANDS
+ )
+
