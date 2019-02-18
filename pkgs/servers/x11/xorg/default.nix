@@ -2211,11 +2211,11 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   xf86videotdfx = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libdrm, libpciaccess, xorgserver }: stdenv.mkDerivation {
-    name = "xf86-video-tdfx-1.4.7";
+    name = "xf86-video-tdfx-1.5.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-video-tdfx-1.4.7.tar.bz2;
-      sha256 = "0hia45z4jc472fxp00803nznizcn4h1ybp63jcsb4lmd9vhqxx2c";
+      url = mirror://xorg/individual/driver/xf86-video-tdfx-1.5.0.tar.bz2;
+      sha256 = "0qc5wzwf1n65si9rc37bh224pzahh7gp67vfimbxs0b9yvhq0i9g";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
