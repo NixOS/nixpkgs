@@ -1225,7 +1225,7 @@ self: super: {
 
   # Use latest pandoc despite what LTS says.
   # Test suite fails in both 2.5 and 2.6: https://github.com/jgm/pandoc/issues/5309.
-  pandoc = dontCheck super.pandoc_2_6;
+  pandoc = doDistribute (dontCheck super.pandoc_2_6);
   pandoc-citeproc = self.pandoc-citeproc_0_16_1;
 
   # https://github.com/qfpl/tasty-hedgehog/issues/24
