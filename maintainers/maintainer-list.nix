@@ -3222,6 +3222,11 @@
     github = "nathan-gs";
     name = "Nathan Bijnens";
   };
+  nathyong = {
+    email = "nathyong@gmail.com";
+    github = "nathyong";
+    name = "Nathan Yong";
+  };
   nckx = {
     email = "github@tobias.gr";
     github = "nckx";
