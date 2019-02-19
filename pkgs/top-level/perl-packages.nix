@@ -3938,10 +3938,10 @@ let
   };
 
   DevelPatchPerl = buildPerlPackage rec {
-    name = "Devel-PatchPerl-1.52";
+    name = "Devel-PatchPerl-1.54";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BI/BINGOS/${name}.tar.gz";
-      sha256 = "0iynq3sgxyidr8d6x0gb1yk5nvzr7xmyslk2bs8hkp9sbxpznsaf";
+      sha256 = "1pbwcwzrcrpqq77jmgpny024qy6cc5hqn3krfwvr3kbl135i26nx";
     };
     propagatedBuildInputs = [ Filepushd ModulePluggable ];
     meta = {
