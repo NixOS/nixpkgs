@@ -61,7 +61,8 @@ let
     postInstall =
       ''
         moveToOutput "lib/pgxs" "$out" # looks strange, but not deleting it
-        moveToOutput "lib/*.a" "$out"
+        moveToOutput "lib/libpgcommon.a" "$out"
+        moveToOutput "lib/libpgport.a" "$out"
         moveToOutput "lib/libecpg*" "$out"
 
         # Prevent a retained dependency on gcc-wrapper.
@@ -69,7 +70,7 @@ let
 
         if [ -z "''${dontDisableStatic:-}" ]; then
           # Remove static libraries in case dynamic are available.
-          for i in $out/lib/*.a; do
+          for i in $out/lib/*.a $lib/lib/*.a; do
             name="$(basename "$i")"
             if [ -e "$lib/lib/''${name%.a}.so" ] || [ -e "''${i%.a}.so" ]; then
               rm "$i"
