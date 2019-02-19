@@ -15503,10 +15503,10 @@ let
   };
 
   TestPortabilityFiles = buildPerlPackage {
-    name = "Test-Portability-Files-0.09";
+    name = "Test-Portability-Files-0.10";
     src = fetchurl {
-      url = mirror://cpan/authors/id/A/AB/ABRAXXA/Test-Portability-Files-0.09.tar.gz;
-      sha256 = "16d31fa941af1a79faec0192e09880cb19225cde649c03d2e3ceda9b455a621c";
+      url = mirror://cpan/authors/id/A/AB/ABRAXXA/Test-Portability-Files-0.10.tar.gz;
+      sha256 = "08e4b432492dc1b44b55d5db57952eb76379c7f434ee8f16aca64d491f401a16";
     };
     meta = {
       description = "Check file names portability";
