@@ -819,10 +819,10 @@ let
   };
 
   BKeywords = buildPerlPackage rec {
-    name = "B-Keywords-1.19";
+    name = "B-Keywords-1.20";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RU/RURBAN/${name}.tar.gz";
-      sha256 = "1kdzhdksnqrmij98bnifv2p2125zvpf0rmzxjiav65ipydi4rsw9";
+      sha256 = "12jvx5gnypqxal4valkf9lidba9nz7kjk2wvm07q3hkmdqxw1zk0";
     };
     meta = {
       description = "Lists of reserved barewords and symbol names";
