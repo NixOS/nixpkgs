@@ -125,6 +125,7 @@ let
       homepage = http://www.opensource.apple.com/source/cctools/;
       description = "MacOS Compiler Tools (cross-platform port)";
       license = stdenv.lib.licenses.apsl20;
+      maintainers = with stdenv.lib.maintainers; [ matthewbauer ];
     };
   };
 in stdenv.mkDerivation baseParams
