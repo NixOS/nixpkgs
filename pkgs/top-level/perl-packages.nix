@@ -2695,10 +2695,10 @@ let
   };
 
   CpanelJSONXS = buildPerlPackage rec {
-    name = "Cpanel-JSON-XS-4.08";
+    name = "Cpanel-JSON-XS-4.09";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RU/RURBAN/${name}.tar.gz";
-      sha256 = "2bc1475b698b5a419bb55127b07732794b495e2a6e0f4ed39bdcbd39a64e7c2d";
+      sha256 = "99c0155e554222b0cb24b032ced9a4f7bdfd2b3c98d07657ac020fbe5c3495a3";
     };
     meta = {
       description = "CPanel fork of JSON::XS, fast and correct serializing";
