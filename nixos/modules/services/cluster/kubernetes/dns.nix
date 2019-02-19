@@ -3,7 +3,7 @@
 with lib;
 
 let
-  version = "1.2.5";
+  version = "1.3.1";
   cfg = config.services.kubernetes.addons.dns;
   ports = {
     dns = 10053;
@@ -43,9 +43,9 @@ in {
       type = types.attrs;
       default = {
         imageName = "coredns/coredns";
-        imageDigest = "sha256:33c8da20b887ae12433ec5c40bfddefbbfa233d5ce11fb067122e68af30291d6";
+        imageDigest = "sha256:02382353821b12c21b062c59184e227e001079bb13ebd01f9d3270ba0fcbf1e4";
         finalImageTag = version;
-        sha256 = "13q19rgwapv27xcs664dw502254yw4zw63insf6g2danidv2mg6i";
+        sha256 = "0vbylgyxv2jm2mnzk6f28jbsj305zsxmx3jr6ngjq461czcl5fi5";
       };
     };
   };
