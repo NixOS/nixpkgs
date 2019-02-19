@@ -8965,11 +8965,11 @@ let
   };
 
   MailBox = buildPerlPackage rec {
-    version = "3.005";
+    version = "3.006";
     name = "Mail-Box-${version}";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MA/MARKOV/${name}.tar.gz";
-      sha256 = "103v5jiv5mlckss1yardjvil506sx60f3g2ph2kgx9x6sy1sd93m";
+      sha256 = "1fm17z13jq7ff2f4ynnajdzzdqa4sb0kx5nfy9fvb0nzw49qd502";
     };
 
     doCheck = false;
