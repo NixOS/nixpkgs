@@ -2633,6 +2633,8 @@ in
 
   flatpak-builder = callPackage ../development/tools/flatpak-builder { };
 
+  fltrdr = callPackage ../tools/misc/fltrdr { stdenv = gcc8Stdenv; };
+
   figlet = callPackage ../tools/misc/figlet { };
 
   file = callPackage ../tools/misc/file {
