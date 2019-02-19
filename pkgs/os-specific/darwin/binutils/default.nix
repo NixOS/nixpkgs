@@ -55,5 +55,6 @@ stdenv.mkDerivation {
 
   meta = {
     maintainers = with stdenv.lib.maintainers; [ matthewbauer ];
+    priority = 10;
   };
 }
