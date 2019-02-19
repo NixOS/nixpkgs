@@ -3363,6 +3363,8 @@ in
 
   iannix = libsForQt5.callPackage ../applications/audio/iannix { };
 
+  ibm-sw-tpm2 = callPackage ../tools/security/ibm-sw-tpm2 { };
+
   ibniz = callPackage ../tools/graphics/ibniz { };
 
   icecast = callPackage ../servers/icecast { };
@@ -5826,6 +5828,8 @@ in
   tpm-tools = callPackage ../tools/security/tpm-tools { };
 
   tpm-luks = callPackage ../tools/security/tpm-luks { };
+
+  tpm2-tools = callPackage ../tools/security/tpm2-tools { };
 
   trezord = callPackage ../servers/trezord { };
 
@@ -12834,6 +12838,8 @@ in
   torch-hdf5 = callPackage ../development/libraries/torch-hdf5 {};
 
   totem-pl-parser = callPackage ../development/libraries/totem-pl-parser { };
+
+  tpm2-tss = callPackage ../development/libraries/tpm2-tss { };
 
   tremor = callPackage ../development/libraries/tremor { };
 
