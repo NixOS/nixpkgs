@@ -11723,10 +11723,10 @@ let
   };
 
   PackageStash = buildPerlPackage {
-    name = "Package-Stash-0.37";
+    name = "Package-Stash-0.38";
     src = fetchurl {
-      url = mirror://cpan/authors/id/D/DO/DOY/Package-Stash-0.37.tar.gz;
-      sha256 = "06ab05388f9130cd377c0e1d3e3bafeed6ef6a1e22104571a9e1d7bfac787b2c";
+      url = mirror://cpan/authors/id/E/ET/ETHER/Package-Stash-0.38.tar.gz;
+      sha256 = "c58ee8844df2dda38e3bf66fdf443439aaefaef1a33940edf2055f0afd223a7f";
     };
     buildInputs = [ TestFatal TestRequires ];
     propagatedBuildInputs = [ DistCheckConflicts ModuleImplementation ];
