@@ -5392,10 +5392,10 @@ let
   };
 
   ExtUtilsMakeMakerCPANfile = buildPerlPackage rec {
-     name = "ExtUtils-MakeMaker-CPANfile-0.08";
+     name = "ExtUtils-MakeMaker-CPANfile-0.09";
      src = fetchurl {
-       url = mirror://cpan/authors/id/I/IS/ISHIGAKI/ExtUtils-MakeMaker-CPANfile-0.08.tar.gz;
-       sha256 = "0yg2z4six807lraqh8ncsq6l62vj7zi0a38ha9nvmhd6lbipmsql";
+       url = mirror://cpan/authors/id/I/IS/ISHIGAKI/ExtUtils-MakeMaker-CPANfile-0.09.tar.gz;
+       sha256 = "0xg2z100vjhcndwaz9m3mmi90rb8h5pggpvlj1b0i8dhsh3pc1rc";
      };
      propagatedBuildInputs = [ ModuleCPANfile ];
      meta = {
