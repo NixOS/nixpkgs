@@ -6040,10 +6040,10 @@ let
   };
 
   FileTemp = buildPerlPackage {
-    name = "File-Temp-0.2308";
+    name = "File-Temp-0.2309";
     src = fetchurl {
-      url = mirror://cpan/authors/id/E/ET/ETHER/File-Temp-0.2308.tar.gz;
-      sha256 = "1m6iz26znn85r7pnnwlqsda0x5mm2c8qcz5ickl945dbw8icp88w";
+      url = mirror://cpan/authors/id/E/ET/ETHER/File-Temp-0.2309.tar.gz;
+      sha256 = "0pr3wrxrk93wy7dz9gsb1sgl77icrs8rh2mah6wms5cdi2ll5ch1";
     };
     meta = {
       description = "return name and handle of a temporary file safely";
