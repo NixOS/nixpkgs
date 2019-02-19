@@ -19463,7 +19463,9 @@ in
 
   inherit (ocamlPackages) stog;
 
-  stp = callPackage ../applications/science/logic/stp {};
+  stp = callPackage ../applications/science/logic/stp {
+    bison = bison2;
+  };
 
   stumpish = callPackage ../applications/window-managers/stumpish {};
 
