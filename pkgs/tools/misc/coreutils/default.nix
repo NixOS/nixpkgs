@@ -122,6 +122,8 @@ stdenv.mkDerivation rec {
 
     platforms = platforms.unix ++ platforms.windows;
 
+    priority = 10;
+
     maintainers = [ maintainers.eelco ];
   };
 
