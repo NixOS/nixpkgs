@@ -2,28 +2,22 @@
 
 stdenv.mkDerivation rec {
   pname = "granite";
-  version = "5.2.2";
+  version = "5.2.3";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "1zp0pp5v3j8k6ail724p7h5jj2zmznj0a2ybwfw5sspfdw5bfydh";
+    sha256 = "10ddq1s2w4jvpzq813cylmqhh8pggzaz890fy3kzg07275i98gah";
   };
 
   patches = [
-    # Add Meson support that hit after 5.2.2
-    (fetchpatch {
-      url = "https://github.com/elementary/granite/commit/2066b377226cf327cb2d5399b6b40a2d36d47b11.patch";
-      sha256 = "1bxjgq8wvl1sb79cwhmh9kwawnkkfn7c5q67cyz1fjxmamwyyi85";
-    })
-    (fetchpatch {
-      url = "https://github.com/elementary/granite/commit/f1b29f52e3aaf0f5d6bba44c42617da265f679c8.patch";
-      sha256 = "0cdp9ny6fj1lpcirab641p1qn1rbsvnsaa03hnr6zsdpim96jlvs";
-    })
     # Resolve the circular dependency between granite and the datetime wingpanel indicator
     # See: https://github.com/elementary/granite/pull/242
-    ./02-datetime-clock-format-gsettings.patch
+    (fetchpatch {
+      url = "https://src.fedoraproject.org/rpms/granite/raw/0550b44ed6400c9b1ff7e70871913747df2ff323/f/00-datetime-clock-format-gsettings.patch";
+      sha256 = "0i9yvdmn77x5fjdwd1raw6ym8js8yxa7w6ydc7syx7hcyls00dmq";
+    })
   ];
 
   passthru = {
