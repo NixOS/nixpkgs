@@ -1,4 +1,4 @@
-{ stdenv, lib, runCommand
+{ config, stdenv, lib, runCommand
 , fetchFromGitHub
 , fetchurl
 , cmake
@@ -13,8 +13,8 @@
 , Accelerate, CoreGraphics, CoreVideo
 , lmdbSupport ? true, lmdb
 , leveldbSupport ? true, leveldb, snappy
-, cudaSupport ? stdenv.isLinux, cudatoolkit
-, cudnnSupport ? false, cudnn ? null
+, cudaSupport ? config.cudaSupport or false, cudatoolkit
+, cudnnSupport ? cudaSupport, cudnn ? null
 , ncclSupport ? false, nccl ? null
 , pythonSupport ? false, python ? null, numpy ? null
 , substituteAll
