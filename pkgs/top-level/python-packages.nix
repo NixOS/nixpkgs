@@ -374,6 +374,8 @@ in {
 
   face = callPackage ../development/python-modules/face { };
 
+  fastparquet = callPackage ../development/python-modules/fastparquet { };
+
   fastpbkdf2 = callPackage ../development/python-modules/fastpbkdf2 {  };
 
   favicon = callPackage ../development/python-modules/favicon {  };
