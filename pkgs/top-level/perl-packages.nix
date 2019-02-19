@@ -7892,10 +7892,10 @@ let
   };
 
   Inline = buildPerlPackage rec {
-    name = "Inline-0.80";
+    name = "Inline-0.81";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/I/IN/INGY/${name}.tar.gz";
-      sha256 = "7e2bd984b1ebd43e336b937896463f2c6cb682c956cbd2c311a464363d2ccef6";
+      url = mirror://cpan/authors/id/T/TI/TINITA/Inline-0.81.tar.gz;
+      sha256 = "1f973868dcca56a3a99b25d253fa18bf2d53670f8bbfa498261267647707b1e3";
     };
     buildInputs = [ TestWarn ];
     meta = {
