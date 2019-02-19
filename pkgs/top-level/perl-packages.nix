@@ -6381,13 +6381,12 @@ let
   };
 
   GlibObjectIntrospection = buildPerlPackage rec {
-    name = "Glib-Object-Introspection-0.046";
+    name = "Glib-Object-Introspection-0.047";
     src = fetchurl {
       url = "mirror://cpan/authors/id/X/XA/XAOC/${name}.tar.gz";
-      sha256 = "1d3gl943p27gd42kxc1i9sp5z55gpgcslz1jvx7cxd6mflhdlck6";
+      sha256 = "1sk32pcv4ik3sniqbjrz8nlw7f2a76l87wx1rwdjypv6h9pjnrnk";
     };
-    buildInputs = [ Glib ExtUtilsDepends ExtUtilsPkgConfig ];
-    propagatedBuildInputs = [ pkgs.gobject-introspection ];
+    propagatedBuildInputs = [ pkgs.gobject-introspection Glib ];
     meta = {
       description = "Dynamically create Perl language bindings";
       license = stdenv.lib.licenses.lgpl2Plus;
