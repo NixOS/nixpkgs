@@ -16074,10 +16074,10 @@ let
   };
 
   TextCSV_XS = buildPerlPackage rec {
-    name = "Text-CSV_XS-1.37";
+    name = "Text-CSV_XS-1.38";
     src = fetchurl {
       url = "mirror://cpan/authors/id/H/HM/HMBRAND/${name}.tgz";
-      sha256 = "20e16da9c38b0938f308c01d954f49d2c6922bac0d2d979bf2ad483fe7476ba2";
+      sha256 = "d6317ae0ed0658e00037ecedaa3da2ff8565c86b0516ef8a93322b959de313dd";
     };
     meta = {
       description = "Comma-Separated Values manipulation routines";
