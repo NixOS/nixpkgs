@@ -225,6 +225,24 @@ in rec {
     version = "9.0.176.1";
     url = "https://developer.nvidia.com/compute/cuda/9.0/Prod/local_installers/cuda_9.0.176_384.81_linux-run";
     sha256 = "0308rmmychxfa4inb1ird9bpgfppgr9yrfg1qp0val5azqik91ln";
+    runPatches = [
+      (fetchurl {
+        url = "https://developer.nvidia.com/compute/cuda/9.0/Prod/patches/1/cuda_9.0.176.1_linux-run";
+        sha256 = "1vbqg97pq9z9c8nqvckiwmq3ljm88m7gaizikzxbvz01izh67gx4";
+      })
+      (fetchurl {
+        url = "https://developer.nvidia.com/compute/cuda/9.0/Prod/patches/2/cuda_9.0.176.2_linux-run";
+        sha256 = "1sz5dijbx9yf7drfipdxav5a5g6sxy4w6vi9xav0lb6m2xnmyd7c";
+      })
+      (fetchurl {
+        url = "https://developer.nvidia.com/compute/cuda/9.0/Prod/patches/3/cuda_9.0.176.3_linux-run";
+        sha256 = "1jm83bxpscpjhzs5q3qijdgjm0r8qrdlgkj7y08fq8c0v8q2r7j2";
+      })
+      (fetchurl {
+        url = "https://developer.nvidia.com/compute/cuda/9.0/Prod/patches/4/cuda_9.0.176.4_linux-run";
+        sha256 = "0pymg3mymsa2n48y0njz3spzlkm15lvjzw8fms1q83zslz4x0lwk";
+      })
+    ];
     gcc = gcc6;
   };
 
