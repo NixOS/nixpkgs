@@ -43,6 +43,13 @@ mkDerivation rec {
     "-DCLANG_BUILTIN_DIR=${llvmPackages.clang-unwrapped}/lib/clang/${(builtins.parseDrvName llvmPackages.clang.name).version}/include"
   ];
 
+  postPatch = ''
+    # FIXME: temporary until https://invent.kde.org/kde/kdevelop/merge_requests/8 is merged
+    substituteInPlace kdevplatform/language/backgroundparser/parsejob.cpp --replace \
+      'if (internalFilePath.startsWith(dataPath.canonicalPath() + QStringLiteral("/kdev"))) {' \
+      'if (internalFilePath.startsWith(dataPath.canonicalPath() + QStringLiteral("/kdev")) || localFile.startsWith(path + QStringLiteral("/kdev"))) {'
+  '';
+
   postInstall = ''
     # The kdevelop! script (shell environment) needs qdbus and kioclient5 in PATH.
     wrapProgram "$out/bin/kdevelop!" \
