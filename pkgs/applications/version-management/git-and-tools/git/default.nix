@@ -96,7 +96,9 @@ stdenv.mkDerivation {
 
   postBuild = ''
     make -C contrib/subtree
-  '' + (stdenv.lib.optionalString stdenv.isDarwin ''
+  '' + (stdenv.lib.optionalString perlSupport ''
+    make -C contrib/diff-highlight
+  '') + (stdenv.lib.optionalString stdenv.isDarwin ''
     make -C contrib/credential/osxkeychain
   '') + (stdenv.lib.optionalString withLibsecret ''
     make -C contrib/credential/libsecret
