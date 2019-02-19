@@ -291,7 +291,7 @@ let
 
         " tell vam about which plugins to load when:
         let l = []
-        ${lib.concatMapStrings (p: "call add(l, ${toNix p})\n") vam.pluginDictionaries}
+        ${lib.concatMapStrings (p: "call add(l, {'name': '${p.pname}'})\n") plugins}
         call vam#Scripts(l, {})
       '');
 
