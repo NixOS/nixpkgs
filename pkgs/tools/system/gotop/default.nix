@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   name = "gotop-${version}";
-  version = "1.7.1";
+  version = "2.0.1";
 
   goPackagePath = "github.com/cjbassi/gotop";
 
@@ -10,10 +10,8 @@ buildGoPackage rec {
     repo = "gotop";
     owner = "cjbassi";
     rev = version;
-    sha256 = "0dxnhal10kv6ypsg6mildzpz6vi1iw996q47f4rv8hvfyrffhzc9";
+    sha256 = "0xpm8nrn53kz65f93czflgdgr2a33qfi1w0gsgngrmaliq1vlpji";
   };
-
-  goDeps = ./deps.nix;
 
   meta = with stdenv.lib; {
     description = "A terminal based graphical activity monitor inspired by gtop and vtop";
