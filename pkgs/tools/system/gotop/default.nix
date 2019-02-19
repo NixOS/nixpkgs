@@ -13,8 +13,6 @@ buildGoPackage rec {
     sha256 = "0xpm8nrn53kz65f93czflgdgr2a33qfi1w0gsgngrmaliq1vlpji";
   };
 
-  goDeps = ./deps.nix;
-
   meta = with stdenv.lib; {
     description = "A terminal based graphical activity monitor inspired by gtop and vtop";
     homepage = https://github.com/cjbassi/gotop;
