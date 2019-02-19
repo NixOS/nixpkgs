@@ -812,6 +812,8 @@ in {
 
   snapcast = callPackage ../development/python-modules/snapcast { };
 
+  sparse = callPackage ../development/python-modules/sparse { };
+
   spglib = callPackage ../development/python-modules/spglib { };
 
   sslib = callPackage ../development/python-modules/sslib { };
