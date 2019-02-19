@@ -14582,10 +14582,10 @@ let
 
   TermReadKey = buildPerlPackage rec {
     name = "TermReadKey-${version}";
-    version = "2.37";
+    version = "2.38";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JS/JSTOWE/${name}.tar.gz";
-      sha256 = "0hdj5mldpj3pyprd4hbbalfx9yjgi5p59gg2ixk9808f5v7q74sa";
+      sha256 = "143jlibah1g14bym7sj3gphvqkpj1w4vn7sqc4vc62jpviw5hr2s";
     };
   };
 
