@@ -17369,10 +17369,10 @@ let
   };
 
   XMLLibXML = buildPerlPackage rec {
-    name = "XML-LibXML-2.0132";
+    name = "XML-LibXML-2.0134";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SH/SHLOMIF/${name}.tar.gz";
-      sha256 = "0xnl281hb590i287fxpl947f1s4zl9dnvc4ajvsqi89w23im453j";
+      sha256 = "1ks69xymv6zkj7hvaymjvb78ch81abri7kg4zrwxhdfsqb8a9g7h";
     };
     SKIP_SAX_INSTALL = 1;
     buildInputs = [ pkgs.libxml2 ];
