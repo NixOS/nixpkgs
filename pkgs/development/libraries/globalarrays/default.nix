@@ -1,4 +1,4 @@
-{ stdenv, fetchpatch, fetchFromGitHub, automake, autoconf, libtool
+{ stdenv, fetchpatch, fetchFromGitHub, autoreconfHook
 , openblas, gfortran, openssh, openmpi
 } :
 
@@ -27,11 +27,10 @@ in stdenv.mkDerivation {
     sha256 = "06n7ds9alk5xa6hd7waw3wrg88yx2azhdkn3cjs2k189iw8a7fqk";
   })];
 
-  nativeBuildInputs = [ automake autoconf libtool ];
+  nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ openmpi openblas gfortran openssh ];
 
   preConfigure = ''
-    autoreconf -ivf
     configureFlagsArray+=( "--enable-i8" \
                            "--with-mpi" \
                            "--with-mpi3" \
