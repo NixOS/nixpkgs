@@ -27,6 +27,7 @@
 , "eslint"
 , "eslint_d"
 , "emojione"
+, "ethlint"
 , { "fast-cli": "1.x" }
 , "fkill-cli"
 , "forever"
