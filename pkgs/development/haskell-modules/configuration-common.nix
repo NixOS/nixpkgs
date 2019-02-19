@@ -151,6 +151,10 @@ self: super: {
   # dontCheck due to https://github.com/haskell/vector/issues/138
   vector = dontCheck (if pkgs.stdenv.isi686 then appendConfigureFlag super.vector "--ghc-options=-msse2" else super.vector);
 
+  conduit-extra = if pkgs.stdenv.isDarwin
+    then super.conduit-extra.overrideAttrs (drv: { __darwinAllowLocalNetworking = true; })
+    else super.conduit-extra;
+
   # Fix Darwin build.
   halive = if pkgs.stdenv.isDarwin
     then addBuildDepend super.halive pkgs.darwin.apple_sdk.frameworks.AppKit
@@ -1218,5 +1222,13 @@ self: super: {
       sha256 = "07nj2p0kg05livhgp1hkkdph0j0a6lb216f8x348qjasy0lzbfhl";
     })];
   });
+
+  # Use latest pandoc despite what LTS says.
+  # Test suite fails in both 2.5 and 2.6: https://github.com/jgm/pandoc/issues/5309.
+  pandoc = doDistribute (dontCheck super.pandoc_2_6);
+  pandoc-citeproc = self.pandoc-citeproc_0_16_1;
+
+  # https://github.com/qfpl/tasty-hedgehog/issues/24
+  tasty-hedgehog = dontCheck super.tasty-hedgehog;
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super

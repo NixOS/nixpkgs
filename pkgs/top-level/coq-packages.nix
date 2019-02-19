@@ -39,6 +39,7 @@ let
       metalib = callPackage ../development/coq-modules/metalib { };
       multinomials = callPackage ../development/coq-modules/multinomials {};
       paco = callPackage ../development/coq-modules/paco {};
+      paramcoq = callPackage ../development/coq-modules/paramcoq {};
       QuickChick = callPackage ../development/coq-modules/QuickChick {};
       simple-io = callPackage ../development/coq-modules/simple-io { };
       ssreflect = callPackage ../development/coq-modules/ssreflect { };

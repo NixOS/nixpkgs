@@ -69,7 +69,4 @@ self: super: {
   # Break out of "yaml >=0.10.4.0 && <0.11": https://github.com/commercialhaskell/stack/issues/4485
   stack = doJailbreak super.stack;
 
-  # https://github.com/pikajude/stylish-cabal/issues/11
-  stylish-cabal = markBrokenVersion "0.4.1.0" super.stylish-cabal;
-
 }

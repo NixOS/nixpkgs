@@ -1,4 +1,4 @@
-{ stdenv, bazel, enableNixHacks ? true }:
+{ stdenv, bazel, cacert, enableNixHacks ? true }:
 
 args@{ name, bazelFlags ? [], bazelTarget, buildAttrs, fetchAttrs, ... }:
 
@@ -20,6 +20,8 @@ in stdenv.mkDerivation (fBuildAttrs // {
       export bazelOut="$(echo ''${NIX_BUILD_TOP}/output | sed -e 's,//,/,g')"
       export bazelUserRoot="$(echo ''${NIX_BUILD_TOP}/tmp | sed -e 's,//,/,g')"
       export HOME="$NIX_BUILD_TOP"
+      # This is needed for git_repository with https remotes
+      export GIT_SSL_CAINFO="${cacert}/etc/ssl/certs/ca-bundle.crt"
     '';
 
     buildPhase = fFetchAttrs.buildPhase or ''

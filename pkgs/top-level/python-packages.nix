@@ -268,6 +268,8 @@ in {
 
   bayespy = callPackage ../development/python-modules/bayespy { };
 
+  beanstalkc = disabledIf isPy3k (callPackage ../development/python-modules/beanstalkc {});
+
   bitarray = callPackage ../development/python-modules/bitarray { };
 
   bitcoinlib = callPackage ../development/python-modules/bitcoinlib { };
@@ -844,6 +846,8 @@ in {
 
   webapp2 = callPackage ../development/python-modules/webapp2 { };
 
+  wrf-python = callPackage ../development/python-modules/wrf-python { };
+
   pyunbound = callPackage ../tools/networking/unbound/python.nix { };
 
   WazeRouteCalculator = callPackage ../development/python-modules/WazeRouteCalculator { };
@@ -1098,11 +1102,10 @@ in {
 
   cached-property = callPackage ../development/python-modules/cached-property { };
 
-  caffe = pkgs.caffe.override {
-    python = self.python;
-    boost = self.boost;
-    numpy = self.numpy;
-  };
+  caffe = toPythonModule (pkgs.caffe.override {
+    pythonSupport = true;
+    inherit (self) python numpy boost;
+  });
 
   capstone = callPackage ../development/python-modules/capstone { };
 

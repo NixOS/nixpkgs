@@ -15,17 +15,16 @@
 , wrapGAppsHook
 , gnome3
 }:
-let
-  version = "3.31.1";
+
+stdenv.mkDerivation rec {
   pname = "sysprof";
-in stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+  version = "3.30.2";
 
   outputs = [ "out" "lib" "dev" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "0gjcd7agxn7cb8xnm8ldss1md7njwqzklqlsxclzqm87s7klnyrg";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "02xsr3cxyws3cnbhvbxgcc9sn22mri3iv9d7f38pkg89lpjph279";
   };
 
   nativeBuildInputs = [
@@ -63,7 +62,7 @@ in stdenv.mkDerivation rec {
       be restarted.
     '';
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ ];
-    platforms = stdenv.lib.platforms.linux;
+    maintainers = gnome3.maintainers;
+    platforms = platforms.linux;
   };
 }

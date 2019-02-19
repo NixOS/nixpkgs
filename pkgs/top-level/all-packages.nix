@@ -159,6 +159,8 @@ in
 
   docker-ls = callPackage ../tools/misc/docker-ls { };
 
+  docker-sync = callPackage ../tools/misc/docker-sync { };
+
   dotfiles = callPackage ../applications/misc/dotfiles { };
 
   dotnetenv = callPackage ../build-support/dotnetenv {
@@ -306,6 +308,8 @@ in
   mkShell = callPackage ../build-support/mkshell { };
 
   nixBufferBuilders = import ../build-support/emacs/buffer.nix { inherit (pkgs) lib writeText; inherit (emacsPackagesNg) inherit-local; };
+
+  nix-gitignore = callPackage ../build-support/nix-gitignore { };
 
   pathsFromGraph = ../build-support/kernel/paths-from-graph.pl;
 
@@ -618,6 +622,8 @@ in
   autorevision = callPackage ../tools/misc/autorevision { };
 
   bcachefs-tools = callPackage ../tools/filesystems/bcachefs-tools { };
+
+  bitwarden-cli = callPackage ../tools/security/bitwarden-cli { };
 
   bmap-tools = callPackage ../tools/misc/bmap-tools { };
 
@@ -1445,6 +1451,8 @@ in
 
   grobi = callPackage ../tools/X11/grobi { };
 
+  gscan2pdf = callPackage ../applications/graphics/gscan2pdf { };
+
   gti = callPackage ../tools/misc/gti { };
 
   hdate = callPackage ../applications/misc/hdate { };
@@ -1550,6 +1558,8 @@ in
 
   nwipe = callPackage ../tools/security/nwipe { };
 
+  nx-libs = callPackage ../tools/X11/nx-libs { };
+
   nyx = callPackage ../tools/networking/nyx { };
 
   onboard = callPackage ../applications/misc/onboard { };
@@ -1577,6 +1587,8 @@ in
   parallel-rust = callPackage ../tools/misc/parallel-rust { };
 
   pyCA = python3Packages.callPackage ../applications/video/pyca {};
+
+  pyznap = python3Packages.callPackage ../tools/backup/pyznap {};
 
   scour = with python3Packages; toPythonApplication scour;
 
@@ -2580,7 +2592,9 @@ in
 
   fcitx-configtool = callPackage ../tools/inputmethods/fcitx/fcitx-configtool.nix { };
 
-  fcppt = callPackage ../development/libraries/fcppt { };
+  fcppt = callPackage ../development/libraries/fcppt {
+    stdenv = gcc8Stdenv;
+  };
 
   fcrackzip = callPackage ../tools/security/fcrackzip { };
 
@@ -3654,6 +3668,8 @@ in
 
   kytea = callPackage ../tools/text/kytea { };
 
+  k6 = callPackage ../development/tools/k6 { };
+
   ldc = callPackage ../development/compilers/ldc { };
 
   lbreakout2 = callPackage ../games/lbreakout2 { };
@@ -4096,6 +4112,8 @@ in
 
   mbuffer = callPackage ../tools/misc/mbuffer { };
 
+  mdsh = callPackage ../development/tools/documentation/mdsh { };
+
   mecab =
     let
       mecab-nodic = callPackage ../tools/text/mecab/nodic.nix { };
@@ -4496,8 +4514,6 @@ in
   nwdiag = with python3Packages; toPythonApplication nwdiag;
 
   nylon = callPackage ../tools/networking/nylon { };
-
-  nxproxy = callPackage ../tools/admin/nxproxy { };
 
   nzbget = callPackage ../tools/networking/nzbget { };
 
@@ -6550,11 +6566,9 @@ in
     then callPackage adoptopenjdk-bin-11-packages-linux.jdk-openj9 {}
     else callPackage adoptopenjdk-bin-11-packages-darwin.jdk-openj9 {};
 
-  # openj9 jre builds for mac are currently missing (upstream)
-  #adoptopenjdk-jre-openj9-bin-11 = if stdenv.isLinux
-  #  then callPackage adoptopenjdk-bin-11-packages-linux.jre-openj9 {}
-  #  else callPackage adoptopenjdk-bin-11-packages-darwin.jre-openj9 {};
-  adoptopenjdk-jre-openj9-bin-11 = callPackage adoptopenjdk-bin-11-packages-linux.jre-openj9 {};
+  adoptopenjdk-jre-openj9-bin-11 = if stdenv.isLinux
+    then callPackage adoptopenjdk-bin-11-packages-linux.jre-openj9 {}
+    else callPackage adoptopenjdk-bin-11-packages-darwin.jre-openj9 {};
 
   adoptopenjdk-bin = adoptopenjdk-hotspot-bin-11;
   adoptopenjdk-jre-bin = adoptopenjdk-jre-hotspot-bin-11;
@@ -7003,7 +7017,7 @@ in
 
   stack = haskell.lib.justStaticExecutables haskellPackages.stack;
   hlint = haskell.lib.justStaticExecutables haskellPackages.hlint;
-  stylish-cabal = haskell.lib.justStaticExecutables haskell.packages.ghc844.stylish-cabal;
+  stylish-cabal = haskell.lib.justStaticExecutables haskellPackages.stylish-cabal;
 
   all-cabal-hashes = callPackage ../data/misc/hackage { };
 
@@ -7538,6 +7552,8 @@ in
 
   metaBuildEnv = callPackage ../development/compilers/meta-environment/meta-build-env { };
 
+  svd2rust = callPackage ../development/tools/rust/svd2rust { };
+
   swift = callPackage ../development/compilers/swift { };
 
   swiProlog = callPackage ../development/compilers/swi-prolog { };
@@ -7787,12 +7803,14 @@ in
   luaPackages = lua52Packages;
 
   # override instead ?
-  luajit_2_0 = callPackage ../development/interpreters/luajit/2.0.nix {
+  luajit_2_0 = import ../development/interpreters/luajit/2.0.nix {
     self = luajit_2_0;
+    inherit (super) callPackage lib;
   };
 
-  luajit_2_1 = callPackage ../development/interpreters/luajit/2.1.nix {
+  luajit_2_1 = import ../development/interpreters/luajit/2.1.nix {
     self = luajit_2_1;
+    inherit (super) callPackage lib;
   };
 
   luajit = luajit_2_1;
@@ -8793,6 +8811,8 @@ in
   kubicorn = callPackage ../development/tools/kubicorn {  };
 
   kustomize = callPackage ../development/tools/kustomize { };
+
+  ktlint = callPackage ../development/tools/ktlint { };
 
   kythe = callPackage ../development/tools/kythe { };
 
@@ -11798,6 +11818,8 @@ in
 
   olm = callPackage ../development/libraries/olm { };
 
+  one_gadget = callPackage ../development/tools/misc/one_gadget { };
+
   oneko = callPackage ../applications/misc/oneko { };
 
   oniguruma = callPackage ../development/libraries/oniguruma { };
@@ -11812,6 +11834,7 @@ in
   openbabel = callPackage ../development/libraries/openbabel { };
 
   opencascade = callPackage ../development/libraries/opencascade { };
+  opencascade-occt = callPackage ../development/libraries/opencascade-occt { };
 
   opencl-headersGen = v: callPackage ../development/libraries/opencl-headers { version = v; };
   opencl-headers_1_2 = opencl-headersGen "12";
@@ -13569,6 +13592,8 @@ in
 
   hbase = callPackage ../servers/hbase {};
 
+  headphones = callPackage ../servers/headphones {};
+
   hiawatha = callPackage ../servers/http/hiawatha {};
 
   home-assistant = callPackage ../servers/home-assistant { };
@@ -13576,6 +13601,15 @@ in
   home-assistant-cli = callPackage ../servers/home-assistant/cli.nix { };
 
   hydron = callPackage ../servers/hydron { };
+
+  icingaweb2 = callPackage ../servers/icingaweb2 { };
+  icingaweb2Modules = {
+    theme-april = callPackage ../servers/icingaweb2/theme-april { };
+    theme-lsd = callPackage ../servers/icingaweb2/theme-lsd { };
+    theme-particles = callPackage ../servers/icingaweb2/theme-particles { };
+    theme-snow = callPackage ../servers/icingaweb2/theme-snow { };
+    theme-spring = callPackage ../servers/icingaweb2/theme-spring { };
+  };
 
   ircdHybrid = callPackage ../servers/irc/ircd-hybrid { };
 
@@ -14087,6 +14121,7 @@ in
   torque = callPackage ../servers/computing/torque { };
 
   tt-rss = callPackage ../servers/tt-rss { };
+  tt-rss-plugin-ff-instagram = callPackage ../servers/tt-rss/plugin-ff-instagram { };
   tt-rss-plugin-tumblr-gdpr = callPackage ../servers/tt-rss/plugin-tumblr-gdpr { };
   tt-rss-plugin-auth-ldap = callPackage ../servers/tt-rss/plugin-auth-ldap { };
   tt-rss-theme-feedly = callPackage ../servers/tt-rss/theme-feedly { };
@@ -19497,7 +19532,7 @@ in
 
   tambura = callPackage ../applications/audio/tambura { };
 
-  teamspeak_client = libsForQt5.callPackage ../applications/networking/instant-messengers/teamspeak/client.nix { };
+  teamspeak_client = libsForQt511.callPackage ../applications/networking/instant-messengers/teamspeak/client.nix { };
   teamspeak_server = callPackage ../applications/networking/instant-messengers/teamspeak/server.nix { };
 
   taskell = callPackage ../applications/misc/taskell { };
@@ -21019,6 +21054,8 @@ in
 
   synthv1 = callPackage ../applications/audio/synthv1 { };
 
+  t4kcommon = callPackage ../games/t4kcommon { };
+
   tcl2048 = callPackage ../games/tcl2048 { };
 
   the-powder-toy = callPackage ../games/the-powder-toy {
@@ -21052,6 +21089,8 @@ in
   tremulous = callPackage ../games/tremulous { };
 
   tuxpaint = callPackage ../games/tuxpaint { };
+
+  tuxtype = callPackage ../games/tuxtype { };
 
   speed_dreams = callPackage ../games/speed-dreams {
     # Torcs wants to make shared libraries linked with plib libraries (it provides static).
@@ -22212,6 +22251,8 @@ in
 
   epson_201207w = callPackage ../misc/drivers/epson_201207w { };
 
+  epson-201106w = callPackage ../misc/drivers/epson-201106w { };
+
   epson-workforce-635-nx625-series = callPackage ../misc/drivers/epson-workforce-635-nx625-series { };
 
   gutenprint = callPackage ../misc/drivers/gutenprint { };
@@ -22985,6 +23026,8 @@ in
   };
 
   x11idle = callPackage ../tools/misc/x11idle {};
+
+  x11docker = callPackage ../applications/virtualization/x11docker { };
 
   x2x = callPackage ../tools/X11/x2x { };
 
