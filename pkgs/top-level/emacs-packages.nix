@@ -34,7 +34,7 @@
 
 { lib, newScope, stdenv, fetchurl, fetchgit, fetchFromGitHub, fetchhg, fetchpatch, runCommand, writeText
 
-, emacs, texinfo, lndir, makeWrapper
+, emacs, texinfo, makeWrapper
 , trivialBuild
 , melpaBuild
 
@@ -60,7 +60,7 @@ let
   orgPackages = import ../applications/editors/emacs-modes/org-packages.nix { };
 
   emacsWithPackages = import ../build-support/emacs/wrapper.nix {
-    inherit lib lndir makeWrapper stdenv runCommand;
+    inherit lib makeWrapper stdenv runCommand;
   };
 
   packagesFun = self: with self; {

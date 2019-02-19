@@ -16917,7 +16917,6 @@ in
     inherit lib newScope stdenv;
     inherit fetchFromGitHub fetchgit fetchhg fetchurl fetchpatch;
     inherit emacs texinfo makeWrapper runCommand writeText;
-    inherit (xorg) lndir;
 
     trivialBuild = callPackage ../build-support/emacs/trivial.nix {
       inherit emacs;
