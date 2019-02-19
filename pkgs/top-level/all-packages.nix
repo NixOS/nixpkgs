@@ -173,7 +173,7 @@ in
 
   dispad = callPackage ../tools/X11/dispad { };
 
-  dump1090 = callPackage ../applications/misc/dump1090 { };
+  dump1090 = callPackage ../applications/radio/dump1090 { };
 
   ebook2cw = callPackage ../applications/radio/ebook2cw { };
 
@@ -14625,7 +14625,6 @@ in
     kernelPatches = [
       kernelPatches.bridge_stp_helper
       kernelPatches.modinst_arg_list_too_long
-      kernelPatches.interpreter-trunc
     ];
   };
 
