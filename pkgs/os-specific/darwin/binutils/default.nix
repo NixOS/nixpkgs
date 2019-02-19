@@ -52,4 +52,8 @@ stdenv.mkDerivation {
   passthru = {
     inherit targetPrefix;
   };
+
+  meta = {
+    maintainers = with stdenv.lib.maintainers; [ matthewbauer ];
+  };
 }
