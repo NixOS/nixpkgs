@@ -1,6 +1,6 @@
 { lib, stdenv, makeWrapper, fetchurl, requireFile, perl, ncurses5, expat, python27, zlib
 , gcc48, gcc49, gcc5, gcc6, gcc7
-, xorg, gtk2, glib, fontconfig, freetype, unixODBC, alsaLib, glibc
+, xorg, gtk2, gdk_pixbuf, glib, fontconfig, freetype, unixODBC, alsaLib, glibc
 }:
 
 let
@@ -40,7 +40,7 @@ let
       outputs = [ "out" "lib" "doc" ];
 
       nativeBuildInputs = [ perl makeWrapper ];
-
+      buildInputs = [ gdk_pixbuf ]; # To get $GDK_PIXBUF_MODULE_FILE via setup-hook
       runtimeDependencies = [
         ncurses5 expat python zlib glibc
         xorg.libX11 xorg.libXext xorg.libXrender xorg.libXt xorg.libXtst xorg.libXi xorg.libXext
@@ -66,6 +66,7 @@ let
       '';
 
       installPhase = ''
+        runHook preInstall
         mkdir $out
         cd $(basename $src)
         export PERL5LIB=.
@@ -118,6 +119,15 @@ let
       '' + lib.optionalString (lib.versionOlder version "8.0") ''
         # Hack to fix building against recent Glibc/GCC.
         echo "NIX_CFLAGS_COMPILE+=' -D_FORCE_INLINES'" >> $out/nix-support/setup-hook
+      '' + ''
+        runHook postInstall
+      '';
+
+      postInstall = ''
+        for b in nvvp nsight; do
+          wrapProgram "$out/bin/$b" \
+            --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE"
+        done
       '';
 
       preFixup = ''
@@ -148,7 +158,7 @@ let
             nvcc.profile)                  continue;;
             nsight_ee_plugins_manage.sh)   continue;;
             uninstall_cuda_toolkit_6.5.pl) continue;;
-            computeprof|nvvp|nsight)       continue;; # TODO: Broken
+            computeprof|nvvp|nsight)       continue;; # GUIs don't feature "--version"
             *)                             echo "Executing '$f --version':"; ./$f --version;;
           esac
         done
