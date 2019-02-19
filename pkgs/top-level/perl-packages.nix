@@ -5025,10 +5025,10 @@ let
   };
 
   Encode = buildPerlPackage rec {
-    name = "Encode-2.98";
+    name = "Encode-3.00";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DA/DANKOGAI/${name}.tar.gz";
-      sha256 = "303d396477c94c43c2f83da1a8025d68de76bd7e52c2cc35fbdf5c59b4c2cffa";
+      sha256 = "4b538b47459cf5747b7395ccc8c8c9b3b661cc016c50b8a67e10fe19590fea5e";
     };
     meta = {
       description = "Character encodings in Perl";
