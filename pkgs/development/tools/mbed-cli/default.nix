@@ -1,4 +1,4 @@
-{ lib, python3Packages }:
+{ lib, python3Packages, git, mercurial }:
 
 with python3Packages;
 
@@ -11,7 +11,18 @@ buildPythonApplication rec {
     sha256 = "1228plh55id03qywsw0ai88ypdpbh9iz18jfcyhn21pci7mj77fv";
   };
 
-  doCheck = false; # Tests cannot import mbed.
+  checkInputs = [
+    git
+    mercurial
+    pytest
+  ];
+
+  checkPhase = ''
+    export GIT_COMMITTER_NAME=nixbld
+    export EMAIL=nixbld@localhost
+    export GIT_COMMITTER_DATE=$SOURCE_DATE_EPOCH
+    pytest test
+  '';
 
   meta = with lib; {
     homepage = https://github.com/ARMmbed/mbed-cli;
