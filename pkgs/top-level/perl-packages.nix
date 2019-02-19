@@ -7425,10 +7425,10 @@ let
   };
 
   Imager = buildPerlPackage rec {
-    name = "Imager-1.007";
+    name = "Imager-1.010";
     src = fetchurl {
       url = "mirror://cpan/authors/id/T/TO/TONYC/${name}.tar.gz";
-      sha256 = "adc12651e53e9226eb05482bf5f6faf77703af036fb922bc8c3f077f25b98d63";
+      sha256 = "fc22e3e302f139d74a98d8068ccddfd92166141ddd4ca5c40f102070bcd7a3c7";
     };
     buildInputs = [ pkgs.freetype pkgs.fontconfig pkgs.libjpeg pkgs.libpng ];
     makeMakerFlags = "--incpath ${pkgs.libjpeg.dev}/include --libpath ${pkgs.libjpeg.out}/lib --incpath ${pkgs.libpng.dev}/include --libpath ${pkgs.libpng.out}/lib";
