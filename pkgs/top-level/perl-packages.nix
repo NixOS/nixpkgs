@@ -885,10 +885,10 @@ let
   };
 
   BusinessHours = buildPerlPackage rec {
-    name = "Business-Hours-0.12";
+    name = "Business-Hours-0.13";
     src = fetchurl {
-      url = mirror://cpan/authors/id/R/RU/RUZ/Business-Hours-0.12.tar.gz;
-      sha256 = "15c5g278m1x121blspf4bymxp89vysizr3z6s1g3sbpfdkrn4gyv";
+      url = mirror://cpan/authors/id/B/BP/BPS/Business-Hours-0.13.tar.gz;
+      sha256 = "1hiybixagj3i1hsnfr134jgs9wv4azkwq6kijr9zlkxqzczzw1x8";
     };
     propagatedBuildInputs = [ SetIntSpan ];
     meta = {
