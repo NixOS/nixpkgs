@@ -16338,10 +16338,10 @@ let
   };
 
   TextTemplate = buildPerlPackage {
-    name = "Text-Template-1.53";
+    name = "Text-Template-1.54";
     src = fetchurl {
-      url = mirror://cpan/authors/id/M/MS/MSCHOUT/Text-Template-1.53.tar.gz;
-      sha256 = "ae221cbba2b27967a12bda3f531547e897eb38ae0a92c084607fd5a6a8085bc4";
+      url = mirror://cpan/authors/id/M/MS/MSCHOUT/Text-Template-1.54.tar.gz;
+      sha256 = "7b064933409eda18ca09db5c433f748b5e0ff7866817b7fc5a8bb134d593a668";
     };
     buildInputs = [ TestMoreUTF8 TestWarnings ];
   };
