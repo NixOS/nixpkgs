@@ -3751,6 +3751,8 @@ in
 
   mautrix-telegram = callPackage ../servers/mautrix-telegram { };
 
+  mautrix-whatsapp = callPackage ../servers/mautrix-whatsapp { };
+
   mdbook = callPackage ../tools/text/mdbook {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
@@ -21528,7 +21530,7 @@ in
 
   bftools = callPackage ../applications/science/biology/bftools { };
 
-  cmtk = callPackage ../applications/science/biology/cmtk { }; 
+  cmtk = callPackage ../applications/science/biology/cmtk { };
 
   conglomerate = callPackage ../applications/science/biology/conglomerate { };
 
