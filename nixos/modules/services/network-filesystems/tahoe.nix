@@ -243,7 +243,10 @@ in
             preStart = ''
               if [ ! -d ${lib.escapeShellArg nodedir} ]; then
                 mkdir -p /var/db/tahoe-lafs
-                tahoe create-introducer ${lib.escapeShellArg nodedir}
+                # See https://github.com/NixOS/nixpkgs/issues/25273
+                tahoe create-introducer \
+                  --hostname="${config.networking.hostName}" \
+                  ${lib.escapeShellArg nodedir}
               fi
 
               # Tahoe has created a predefined tahoe.cfg which we must now
