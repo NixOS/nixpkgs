@@ -729,11 +729,11 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   libXau = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto }: stdenv.mkDerivation {
-    name = "libXau-1.0.8";
+    name = "libXau-1.0.9";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/lib/libXau-1.0.8.tar.bz2;
-      sha256 = "1wm4pv12f36cwzhldpp7vy3lhm3xdcnp4f184xkxsp7b18r7gm7x";
+      url = mirror://xorg/individual/lib/libXau-1.0.9.tar.bz2;
+      sha256 = "1v3krc6x0zliaa66qq1bf9j60x5nqfy68v8axaiglxpnvgqcpy6c";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
