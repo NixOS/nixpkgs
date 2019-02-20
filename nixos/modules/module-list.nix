@@ -196,9 +196,17 @@
   ./services/backup/tarsnap.nix
   ./services/backup/znapzend.nix
   ./services/cluster/hadoop/default.nix
+  ./services/cluster/kubernetes/addons/dns.nix
+  ./services/cluster/kubernetes/addons/dashboard.nix
+  ./services/cluster/kubernetes/addon-manager.nix
+  ./services/cluster/kubernetes/apiserver.nix
+  ./services/cluster/kubernetes/controller-manager.nix
   ./services/cluster/kubernetes/default.nix
-  ./services/cluster/kubernetes/dns.nix
-  ./services/cluster/kubernetes/dashboard.nix
+  ./services/cluster/kubernetes/flannel.nix
+  ./services/cluster/kubernetes/kubelet.nix
+  ./services/cluster/kubernetes/pki.nix
+  ./services/cluster/kubernetes/proxy.nix
+  ./services/cluster/kubernetes/scheduler.nix
   ./services/computing/boinc/client.nix
   ./services/computing/torque/server.nix
   ./services/computing/torque/mom.nix
