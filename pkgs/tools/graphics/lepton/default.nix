@@ -14,11 +14,11 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake git ];
   buildInputs = [ glibc.static ];
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = https://github.com/dropbox/lepton;
     description = "A tool to losslessly compress JPEGs";
-    license = stdenv.lib.licenses.asl20;
-    platforms = with stdenv.lib.platforms; linux;
-    maintainers = with stdenv.lib.maintainers; [ artemist ];
+    license = licenses.asl20;
+    platforms = [ "x86_64-linux" ];
+    maintainers = with maintainers; [ artemist ];
   };
 }
