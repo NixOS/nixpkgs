@@ -244,12 +244,12 @@ in
     (mkIf cfg.enable {
       services.kubernetes.kubelet.seedDockerImages = [infraContainer];
 
-      systemd.services.kubelet-bootstrap = {
-        description = "Boostrap Kubelet";
-        wantedBy = ["kubernetes.target"];
-        after = ["docker.service" "network.target"];
-        path = with pkgs; [ docker ];
-        script = ''
+      systemd.services.kubelet = {
+        description = "Kubernetes Kubelet Service";
+        wantedBy = [ "kubernetes.target" ];
+        after = [ "network.target" "docker.service" "kube-apiserver.service" ];
+        path = with pkgs; [ gitMinimal openssh docker utillinux iproute ethtool thin-provisioning-tools iptables socat ] ++ top.path;
+        preStart = ''
           ${concatMapStrings (img: ''
             echo "Seeding docker image: ${img}"
             docker load <${img}
@@ -263,19 +263,10 @@ in
         '';
         serviceConfig = {
           Slice = "kubernetes.slice";
-          Type = "oneshot";
-        };
-      };
-
-      systemd.services.kubelet = {
-        description = "Kubernetes Kubelet Service";
-        wantedBy = [ "kubernetes.target" ];
-        after = [ "network.target" "docker.service" "kube-apiserver.service" "kubelet-bootstrap.service" ];
-        path = with pkgs; [ gitMinimal openssh docker utillinux iproute ethtool thin-provisioning-tools iptables socat ] ++ top.path;
-        serviceConfig = {
-          Slice = "kubernetes.slice";
           CPUAccounting = true;
           MemoryAccounting = true;
+          Restart = "on-failure";
+          RestartSec = "1000ms";
           ExecStart = ''${top.package}/bin/kubelet \
             --address=${cfg.address} \
             --allow-privileged=${boolToString cfg.allowPrivileged} \
