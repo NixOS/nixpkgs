@@ -29,12 +29,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.2.0";
-  name = "handbrake-${version}";
+  pname = "handbrake";
+  version = "1.2.1";
 
   src = fetchurl {
     url = ''https://download2.handbrake.fr/${version}/HandBrake-${version}-source.tar.bz2'';
-    sha256 = "03clkknaq3mz84p85cvr21gsy9b8vv2g4vvyfz44hz8la253jfqi";
+    sha256 = "0gbqzar49c8ygz6chnsz65xgsdcwr60lbc8ivnw8i6xjggn6wc80";
   };
 
   nativeBuildInputs = [
