@@ -3989,6 +3989,8 @@ in {
 
   owslib = callPackage ../development/python-modules/owslib { };
 
+  readthedocs-sphinx-ext = callPackage ../development/python-modules/readthedocs-sphinx-ext { };
+
   resampy = callPackage ../development/python-modules/resampy { };
 
   restructuredtext_lint = callPackage ../development/python-modules/restructuredtext_lint { };
