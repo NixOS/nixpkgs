@@ -40,7 +40,7 @@ let
         else if (cfg.database.passwordFile != null) then
           "file_get_contents('${cfg.database.passwordFile}')"
         else
-          ""
+          "''"
       });
       define('DB_PORT', '${toString dbPort}');
 
