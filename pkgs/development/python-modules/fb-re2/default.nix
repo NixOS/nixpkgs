@@ -16,10 +16,8 @@ buildPythonPackage rec {
 
   buildInputs = [ re2 ];
 
-  checkInputs = [ pytest ];
-  checkPhase = ''
-    py.test
-  '';
+  # no tests in PyPI tarball
+  doCheck = false;
 
   meta = {
     description = "Python wrapper for Google's RE2";
