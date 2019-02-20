@@ -14,8 +14,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/Rhymen/go-whatsapp";
-      rev = "2ca6af00572c";
-      sha256 = "0lrscj59n9nmd5z0h9r2c952m0da672r3aj33bi443ap0h97w19i";
+      rev = "c9a81e957884";
+      sha256 = "10qq972hg72d79w6pvibmlhcwzrl1qv2j52kpxh10vj72x75kl1b";
     };
   }
   {
@@ -41,8 +41,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/gorilla/mux";
-      rev = "v1.6.2";
-      sha256 = "0pvzm23hklxysspnz52mih6h1q74vfrdhjfm1l3sa9r8hhqmmld2";
+      rev = "v1.7.0";
+      sha256 = "09cn5v1gxrrrydzyllp1asbhgm5xsawb92as7cg9jqg6iyqajvlc";
     };
   }
   {
@@ -59,8 +59,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/mattn/go-colorable";
-      rev = "v0.0.9";
-      sha256 = "1nwjmsppsjicr7anq8na6md7b1z84l9ppnlr045hhxjvbkqwalvx";
+      rev = "v0.1.0";
+      sha256 = "0kshi4hvm0ayrsxqxy0599iv81kryhd2fn9lwjyczpj593cq069r";
     };
   }
   {
@@ -113,8 +113,8 @@
     fetch = {
       type = "git";
       url = "https://go.googlesource.com/crypto";
-      rev = "ff983b9c42bc";
-      sha256 = "1hpr06kzn8jnn3gvzp0p9zn4fz4l9h69f7x66idx142w4xdlaanz";
+      rev = "a4c6cb3142f2";
+      sha256 = "0sf5y9fn9n4qvkacjmnpc7rrlbcdbsbck9la86szd8qh44s5xhid";
     };
   }
   {
@@ -122,8 +122,8 @@
     fetch = {
       type = "git";
       url = "https://go.googlesource.com/net";
-      rev = "915654e7eabc";
-      sha256 = "0fzd7n2yc4qnnf2wk21zxy6gb01xviq2z1dzrbqcn8p1s4fjsqw5";
+      rev = "3a22650c66bd";
+      sha256 = "12q6fgdkc0742vcms67nzadgdwvi3rnb1gx3vwkljhrvlnwvz7wc";
     };
   }
   {
@@ -140,8 +140,8 @@
     fetch = {
       type = "git";
       url = "https://go.googlesource.com/sys";
-      rev = "48ac38b7c8cb";
-      sha256 = "037vs8sdvq310j3b6z9k62zlby1mzmsr9ha01rcy98dv5v8bkhin";
+      rev = "90b0e4468f99";
+      sha256 = "1vf39hdkk2j0xzq5pjrj5d24gj4m9sn0iz6i8jsf8yvglfj7k3q5";
     };
   }
   {
