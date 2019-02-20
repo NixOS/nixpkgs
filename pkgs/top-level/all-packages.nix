@@ -1487,6 +1487,8 @@ in
 
   languagetool = callPackage ../tools/text/languagetool {  };
 
+  lepton = callPackage ../tools/graphics/lepton { };
+
   lief = callPackage ../development/libraries/lief {};
 
   libndtypes = callPackage ../development/libraries/libndtypes { };
