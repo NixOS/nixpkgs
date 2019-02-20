@@ -1,19 +1,21 @@
-{ fetchcvs, stdenv, emacs, w3m, imagemagick, texinfo, autoreconfHook }:
+{ fetchFromGitHub, fetchgit, git, stdenv, emacs, w3m, imagemagick, texinfo, autoreconfHook }:
 
-let date = "2013-03-21"; in
+let date = "2019-02-20"; in
 stdenv.mkDerivation rec {
-  name = "emacs-w3m-cvs${date}";
+  name = "emacs-w3m-${date}";
 
-  # Get the source from CVS because the previous release (1.4.4) is old and
-  # doesn't work with GNU Emacs 23.
-  src = fetchcvs {
-    inherit date;
-    cvsRoot = ":pserver:anonymous@cvs.namazu.org:/storage/cvsroot";
-    module = "emacs-w3m";
-    sha256 = "1lmcj8rf83w13q8q68hh7sa1abc2m6j2zmfska92xdp7hslhdgc5";
+  # w3mhack.el expects the build dir to be a git clone repo. It
+  # looks into .git with the git executable and only does so if
+  # .git/config is present. Otherwise the build fails.
+
+  src = fetchgit {
+    url = "http://github.com/emacs-w3m/emacs-w3m";
+    rev = "7fa00f90b3bff8562768d0a15b32012cededcb47";
+    sha256 = "15q40aqfda40slkgs0fg0svm0x47a98nz81ysxb5nh0kr45ha67i";
+    leaveDotGit = true;
   };
 
-  nativeBuildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [ autoreconfHook git ];
   buildInputs = [ emacs w3m texinfo ];
 
   # XXX: Should we do the same for xpdf/evince, gv, gs, etc.?
@@ -28,18 +30,14 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = [
-    "--with-lispdir=$(out)/share/emacs/site-lisp"
-    "--with-icondir=$(out)/share/emacs/site-lisp/images/w3m"
+    "--with-lispdir=$(out)/share/emacs/site-lisp/emacs-w3m"
+    "--with-icondir=$(out)/share/emacs/site-lisp/emacs-w3m/images"
   ];
 
-  postInstall = ''
-    cd "$out/share/emacs/site-lisp"
-    for i in ChangeLog*
-    do
-      mv -v "$i" "w3m-$i"
-    done
+  postConfigure = ''
+     # w3mhack.el refuses to work if .git/config is not found.
+     touch .git/config
   '';
-
   meta = {
     description = "Emacs-w3m, a simple Emacs interface to the w3m web browser";
 
@@ -54,7 +52,7 @@ stdenv.mkDerivation rec {
 
     license = stdenv.lib.licenses.gpl2Plus;
 
-    homepage = http://emacs-w3m.namazu.org/;
+    homepage = https://github.com/emacs-w3m/emacs-w3m;
 
     maintainers = [ ];
   };
