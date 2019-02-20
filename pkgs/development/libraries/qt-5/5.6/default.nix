@@ -29,6 +29,7 @@ existing packages here and modify it as necessary.
   stdenv, fetchurl, fetchpatch, makeSetupHook,
   bison, cups ? null, harfbuzz, libGL, perl,
   gstreamer, gst-plugins-base,
+  cf-private,
 
   # options
   developerBuild ? false,
@@ -132,7 +133,9 @@ let
       /* qtactiveqt = not packaged */
       /* qtandroidextras = not packaged */
       /* qtcanvas3d = not packaged */
-      qtconnectivity = callPackage ../modules/qtconnectivity.nix {};
+      qtconnectivity = callPackage ../modules/qtconnectivity.nix {
+        inherit cf-private;
+      };
       qtdeclarative = callPackage ../modules/qtdeclarative.nix {};
       qtdoc = callPackage ../modules/qtdoc.nix {};
       qtgraphicaleffects = callPackage ../modules/qtgraphicaleffects.nix {};
