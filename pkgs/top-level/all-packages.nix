@@ -6535,6 +6535,8 @@ in
 
   dash = callPackage ../shells/dash { };
 
+  dasht = callPackage ../tools/misc/dasht { };
+
   dashing = callPackage ../tools/misc/dashing { };
 
   es = callPackage ../shells/es { };
