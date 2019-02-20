@@ -35,7 +35,12 @@ stdenv.mkDerivation rec {
   configureFlags =
     [ "--enable-cplusplus" ]
     ++ lib.optional enableLargeConfig "--enable-large-config"
-    ++ lib.optional (stdenv.hostPlatform.libc == "musl") "--disable-static";
+    ++ lib.optional (stdenv.hostPlatform.libc == "musl") "--disable-static"
+    # Configure script can't detect whether C11 atomic intrinsics are available
+    # when cross-compiling, so it links to libatomic_ops, which has to be
+    # propagated to all dependencies. To avoid this, assume that the intrinsics
+    # are available.
+    ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "--with-libatomic-ops=none";
 
   doCheck = true; # not cross;
 
