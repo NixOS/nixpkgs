@@ -78,7 +78,9 @@ in py.pkgs.buildPythonApplication rec {
       setup.py
   '';
 
-  checkPhase = "nosetests";
+  checkPhase = ''
+    HOME=$(mktemp -d) nosetests
+  '';
 
   meta = with stdenv.lib; {
     homepage = https://octoprint.org/;
