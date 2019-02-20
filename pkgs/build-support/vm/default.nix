@@ -164,7 +164,7 @@ rec {
     # Set up automatic kernel module loading.
     export MODULE_DIR=${kernel}/lib/modules/
     ${coreutils}/bin/cat <<EOF > /run/modprobe
-    #! /bin/sh
+    #! ${bash}/bin/sh
     export MODULE_DIR=$MODULE_DIR
     exec ${kmod}/bin/modprobe "\$@"
     EOF

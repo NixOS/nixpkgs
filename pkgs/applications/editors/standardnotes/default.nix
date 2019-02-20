@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out/{bin,share}
     cp $src $out/share/standardNotes.AppImage
-    echo "#!/bin/sh" > $out/bin/standardnotes
+    echo "#!${stdenv.shell}" > $out/bin/standardnotes
     echo "${appimage-run}/bin/appimage-run $out/share/standardNotes.AppImage" >> $out/bin/standardnotes
     chmod +x $out/bin/standardnotes $out/share/standardNotes.AppImage
   '';

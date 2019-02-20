@@ -1310,8 +1310,6 @@ in
 
   eggdrop = callPackage ../tools/networking/eggdrop { };
 
-  elementary-icon-theme = callPackage ../data/icons/elementary-icon-theme { };
-
   elementary-xfce-icon-theme = callPackage ../data/icons/elementary-xfce-icon-theme { };
 
   elm-github-install = callPackage ../tools/package-management/elm-github-install { };
@@ -1362,7 +1360,9 @@ in
 
   fdroidserver = python3Packages.callPackage ../development/tools/fdroidserver { };
 
-  filebench = callPackage ../tools/misc/filebench { };
+  filebench = callPackage ../tools/misc/filebench {
+    bison = bison2;
+  };
 
   fileshelter = callPackage ../servers/web-apps/fileshelter { };
 
@@ -3059,9 +3059,9 @@ in
    * that do want 2.32 but not 2.0 or 2.36. Please give a day's notice for
    * objections before removal. The feature is libgraph.
    */
-  graphviz_2_32 = lib.overrideDerivation (callPackage ../tools/graphics/graphviz/2.32.nix {
+  graphviz_2_32 = (callPackage ../tools/graphics/graphviz/2.32.nix {
     inherit (darwin.apple_sdk.frameworks) ApplicationServices;
-  }) (x: { configureFlags = x.configureFlags ++ ["--with-cgraph=no"];});
+  }).overrideAttrs(x: { configureFlags = x.configureFlags ++ ["--with-cgraph=no"];});
 
   grin = callPackage ../tools/text/grin { };
 
@@ -9961,9 +9961,7 @@ in
     inherit (darwin.apple_sdk.frameworks) Cocoa Kernel;
   };
 
-  glibc = callPackage ../development/libraries/glibc {
-    installLocales = config.glibc.locales or false;
-  };
+  glibc = callPackage ../development/libraries/glibc { };
 
   # Provided by libc on Operating Systems that use the Extensible Linker Format.
   elf-header =
@@ -9974,13 +9972,11 @@ in
   elf-header-real = callPackage ../development/libraries/elf-header { };
 
   glibc_memusage = callPackage ../development/libraries/glibc {
-    installLocales = false;
     withGd = true;
   };
 
   # Being redundant to avoid cycles on boot. TODO: find a better way
   glibcCross = callPackage ../development/libraries/glibc {
-    installLocales = config.glibc.locales or false;
     stdenv = crossLibcStdenv;
   };
 
@@ -10217,7 +10213,6 @@ in
 
   gnome-menus = callPackage ../development/libraries/gnome-menus { };
 
-  granite = callPackage ../development/libraries/granite { };
   elementary-cmake-modules = callPackage ../development/libraries/elementary-cmake-modules { };
 
   gtk2 = callPackage ../development/libraries/gtk+/2.x.nix {
@@ -19475,7 +19470,9 @@ in
 
   inherit (ocamlPackages) stog;
 
-  stp = callPackage ../applications/science/logic/stp {};
+  stp = callPackage ../applications/science/logic/stp {
+    bison = bison2;
+  };
 
   stumpish = callPackage ../applications/window-managers/stumpish {};
 
@@ -21337,12 +21334,9 @@ in
 
   mate = recurseIntoAttrs (callPackage ../desktops/mate { });
 
-  maxx = callPackage ../desktops/maxx { };
+  pantheon = recurseIntoAttrs (callPackage ../desktops/pantheon { });
 
-  pantheon = recurseIntoAttrs rec {
-    callPackage = newScope pkgs.pantheon;
-    pantheon-terminal = callPackage ../desktops/pantheon/apps/pantheon-terminal { };
-  };
+  maxx = callPackage ../desktops/maxx { };
 
   plasma-applet-volumewin7mixer = libsForQt5.callPackage ../applications/misc/plasma-applet-volumewin7mixer { };
 
@@ -21359,8 +21353,6 @@ in
   adwaita-qt = libsForQt5.callPackage ../misc/themes/adwaita-qt { };
 
   orion = callPackage ../misc/themes/orion {};
-
-  elementary-gtk-theme = callPackage ../misc/themes/elementary { };
 
   albatross = callPackage ../misc/themes/albatross { };
 

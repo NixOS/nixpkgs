@@ -31,7 +31,7 @@ buildPythonPackage rec {
     description = "Trend Micro Locality Sensitive Hash";
     homepage = https://github.com/trendmicro/tlsh;
     license = licenses.asl20;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 
 }

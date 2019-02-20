@@ -78,7 +78,7 @@ stdenv.mkDerivation {
   # wants to write temporary files there. So create a temporary
   # to run from and symlink the runtime files to it.
   wrapperScript = writeScript "xfstests-check" ''
-    #!/bin/sh
+    #!${stdenv.shell}
     set -e
     export RESULT_BASE="$(pwd)/results"
 

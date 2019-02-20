@@ -115,7 +115,7 @@ in stdenv.mkDerivation (rec {
     mkdir -p $out/bin
 
     cat > $out/bin/subl <<-EOF
-    #!/bin/sh
+    #!${stdenv.shell}
     exec $sublime/sublime_text "\$@"
     EOF
     chmod +x $out/bin/subl

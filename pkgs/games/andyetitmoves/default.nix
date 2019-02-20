@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
 
     patchelf --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) --set-rpath $fullPath $out/opt/andyetitmoves/lib/$binName
     cat > $out/bin/$binName << EOF
-    #!/bin/sh
+    #!${stdenv.shell}
     cd $out/opt/andyetitmoves
     exec ./lib/$binName
     EOF

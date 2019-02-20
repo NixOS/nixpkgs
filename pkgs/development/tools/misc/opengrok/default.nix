@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out
     cp -a * $out/
     substituteInPlace $out/bin/OpenGrok --replace "/bin/uname" "${coreutils}/bin/uname"
-    substituteInPlace $out/bin/Messages --replace "#!/bin/ksh" "#!/bin/sh"
+    substituteInPlace $out/bin/Messages --replace "#!/bin/ksh" "#!${stdenv.shell}"
     wrapProgram $out/bin/OpenGrok \
       --prefix PATH : "${stdenv.lib.makeBinPath [ ctags git ]}" \
       --set JAVA_HOME "${jre}" \

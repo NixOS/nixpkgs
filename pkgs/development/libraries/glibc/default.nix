@@ -1,6 +1,5 @@
 { stdenv, callPackage
 , withLinuxHeaders ? true
-, installLocales ? true
 , profilingLibraries ? false
 , withGd ? false
 }:
@@ -8,7 +7,7 @@
 callPackage ./common.nix { inherit stdenv; } {
     name = "glibc" + stdenv.lib.optionalString withGd "-gd";
 
-    inherit withLinuxHeaders profilingLibraries installLocales withGd;
+    inherit withLinuxHeaders profilingLibraries withGd;
 
     # Note:
     # Things you write here override, and do not add to,
@@ -57,9 +56,8 @@ callPackage ./common.nix { inherit stdenv; } {
     '';
 
     postInstall = ''
-      if test -n "$installLocales"; then
-          make -j''${NIX_BUILD_CORES:-1} -l''${NIX_BUILD_CORES:-1} localedata/install-locales
-      fi
+      echo SUPPORTED-LOCALES=C.UTF-8/UTF-8 > ../glibc-2*/localedata/SUPPORTED
+      make -j''${NIX_BUILD_CORES:-1} -l''${NIX_BUILD_CORES:-1} localedata/install-locales
 
       test -f $out/etc/ld.so.cache && rm $out/etc/ld.so.cache
 

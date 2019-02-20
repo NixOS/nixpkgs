@@ -45,7 +45,7 @@ in stdenv.mkDerivation rec {
   installPhase = ''
     # Make wrapper script
     cat > eduke32-wrapper <<EOF
-    #!/bin/sh
+    #!${stdenv.shell}
 
     if [ "$EDUKE32_DATA_DIR" = "" ]; then
         EDUKE32_DATA_DIR=/var/lib/games/eduke32

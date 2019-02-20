@@ -1,5 +1,5 @@
 { stdenv
-, fetchpatch, gnu-config, autoreconfHook264, bison, binutils-unwrapped
+, fetchpatch, gnu-config, autoreconfHook, bison, binutils-unwrapped
 , libiberty, zlib
 }:
 
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   # We update these ourselves
   dontUpdateAutotoolsGnuConfigScripts = true;
 
-  nativeBuildInputs = [ autoreconfHook264 bison ];
+  nativeBuildInputs = [ autoreconfHook bison ];
   buildInputs = [ libiberty zlib ];
 
   configurePlatforms = [ "build" "host" ];

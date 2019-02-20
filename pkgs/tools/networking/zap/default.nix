@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     mkdir -p "$out/share"
     tar xvf  "ZAP_${version}_Linux.tar.gz" -C "$out/share/"
     mkdir -p "$out/bin"
-    echo "#!/bin/sh" > "$out/bin/zap"
+    echo "#!${stdenv.shell}" > "$out/bin/zap"
     echo \"$out/share/ZAP_${version}/zap.sh\" >> "$out/bin/zap"
     chmod +x "$out/bin/zap"
   '';

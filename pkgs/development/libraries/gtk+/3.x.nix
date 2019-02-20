@@ -13,14 +13,14 @@ assert cupsSupport -> cups != null;
 with stdenv.lib;
 
 let
-  version = "3.24.3";
+  version = "3.24.4";
 in
 stdenv.mkDerivation rec {
   name = "gtk+3-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gtk+/${stdenv.lib.versions.majorMinor version}/gtk+-${version}.tar.xz";
-    sha256 = "1g839289bxakq4nn3m3ihi1rl6ym563pa5cxlswiyjwn9m9zl22p";
+    sha256 = "176bl1pm5d5xkhmiwldzw833akna7shp59glkl6cjz580bzmjkyq";
   };
 
   outputs = [ "out" "dev" ];
@@ -34,6 +34,11 @@ stdenv.mkDerivation rec {
       name = "Xft-setting-fallback-compute-DPI-properly.patch";
       url = "https://bug757142.bugzilla-attachments.gnome.org/attachment.cgi?id=344123";
       sha256 = "0g6fhqcv8spfy3mfmxpyji93k8d4p4q4fz1v9a1c1cgcwkz41d7p";
+    })
+    # 3.24.3: https://gitlab.gnome.org/GNOME/gtk/merge_requests/505
+    (fetchpatch {
+      url = https://gitlab.gnome.org/GNOME/gtk/commit/95c0f07295fd300ab7f3416a39290ae33585ea6c.patch;
+      sha256 = "0z9w7f39xcn1cbcd8jhx731vq64nvi5q6kyc86bq8r00daysjwnl";
     })
   ] ++ optionals stdenv.isDarwin [
     # X11 module requires <gio/gdesktopappinfo.h> which is not installed on Darwin
