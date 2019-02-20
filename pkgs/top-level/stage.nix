@@ -86,7 +86,7 @@ let
     inherit (hostPlatform) system;
   };
 
-  splice = self: super: import ./splice.nix lib self (buildPackages != null);
+  splice = self: super: import ./splice.nix lib config self (buildPackages != null);
 
   allPackages = self: super:
     let res = import ./all-packages.nix
