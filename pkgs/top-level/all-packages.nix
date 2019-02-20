@@ -14281,6 +14281,8 @@ in
 
   inherit (python3Packages) bedup;
 
+  bolt = callPackage ../os-specific/linux/bolt { };
+
   bridge-utils = callPackage ../os-specific/linux/bridge-utils { };
 
   busybox = callPackage ../os-specific/linux/busybox { };

@@ -284,6 +284,7 @@
   ./services/hardware/acpid.nix
   ./services/hardware/actkbd.nix
   ./services/hardware/bluetooth.nix
+  ./services/hardware/bolt.nix
   ./services/hardware/brltty.nix
   ./services/hardware/freefall.nix
   ./services/hardware/fwupd.nix
