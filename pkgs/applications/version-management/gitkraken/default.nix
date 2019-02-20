@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ makeWrapper wrapGAppsHook ];
-  buildInputs = [ dpkg gtk3 gnome3.defaultIconTheme hicolor-icon-theme ];
+  buildInputs = [ dpkg gtk3 gnome3.adwaita-icon-theme hicolor-icon-theme ];
 
   unpackCmd = ''
     mkdir out
@@ -87,12 +87,9 @@ stdenv.mkDerivation rec {
     popd
 
     ln -s $out/share/gitkraken/gitkraken $out/bin/gitkraken
-    # makeWrapper $out/share/gitkraken/gitkraken $out/bin/gitkraken \
-    #   --prefix XDG_DATA_DIRS : $GSETTINGS_SCHEMAS_PATH
   '';
 
   postFixup = ''
-    wrapGAppsHook
     pushd $out/share/gitkraken
     patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" gitkraken
 
