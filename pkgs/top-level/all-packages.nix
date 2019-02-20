@@ -3750,6 +3750,8 @@ in
 
   mautrix-telegram = callPackage ../servers/mautrix-telegram { };
 
+  mautrix-whatsapp = callPackage ../servers/mautrix-whatsapp { };
+
   mdbook = callPackage ../tools/text/mdbook {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
