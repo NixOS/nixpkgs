@@ -16,7 +16,7 @@ buildGoPackage rec {
   goDeps = ./deps.nix;
 
   meta = with stdenv.lib; {
-    homepage = https://github/tulir/mautrix-whatsapp;
+    homepage = https://github.com/tulir/mautrix-whatsapp;
     description = "Matrix <-> Whatsapp hybrid puppeting/relaybot bridge";
     license = licenses.agpl3;
     maintainers = with maintainers; [ vskilet ];
