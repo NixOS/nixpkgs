@@ -2,6 +2,8 @@
 , buildPythonPackage
 , fetchPypi
 , sphinx
+, readthedocs-sphinx-ext
+, pytest
 }:
 
 buildPythonPackage rec {
@@ -14,6 +16,12 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ sphinx ];
+
+  checkInputs = [ readthedocs-sphinx-ext pytest ];
+
+  checkPhase = ''
+    py.test
+  '';
 
   meta = with stdenv.lib; {
     description = "ReadTheDocs.org theme for Sphinx";
