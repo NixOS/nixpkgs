@@ -79,39 +79,42 @@ let
       ln -s ${etcProfile} profile
 
       # compatibility with NixOS
-      ln -s /host/etc/static static
+      ln -s /host-etc/static static
 
       # symlink some NSS stuff
-      ln -s /host/etc/passwd passwd
-      ln -s /host/etc/group group
-      ln -s /host/etc/shadow shadow
-      ln -s /host/etc/hosts hosts
-      ln -s /host/etc/resolv.conf resolv.conf
-      ln -s /host/etc/nsswitch.conf nsswitch.conf
+      ln -s /host-etc/passwd passwd
+      ln -s /host-etc/group group
+      ln -s /host-etc/shadow shadow
+      ln -s /host-etc/hosts hosts
+      ln -s /host-etc/resolv.conf resolv.conf
+      ln -s /host-etc/nsswitch.conf nsswitch.conf
 
       # symlink sudo and su stuff
-      ln -s /host/etc/login.defs login.defs
-      ln -s /host/etc/sudoers sudoers
-      ln -s /host/etc/sudoers.d sudoers.d
+      ln -s /host-etc/login.defs login.defs
+      ln -s /host-etc/sudoers sudoers
+      ln -s /host-etc/sudoers.d sudoers.d
 
       # symlink other core stuff
-      ln -s /host/etc/localtime localtime
-      ln -s /host/etc/zoneinfo zoneinfo
-      ln -s /host/etc/machine-id machine-id
-      ln -s /host/etc/os-release os-release
+      ln -s /host-etc/localtime localtime
+      ln -s /host-etc/zoneinfo zoneinfo
+      ln -s /host-etc/machine-id machine-id
+      ln -s /host-etc/os-release os-release
 
       # symlink PAM stuff
-      ln -s /host/etc/pam.d pam.d
+      ln -s /host-etc/pam.d pam.d
 
       # symlink fonts stuff
-      ln -s /host/etc/fonts fonts
+      ln -s /host-etc/fonts fonts
 
       # symlink ALSA stuff
-      ln -s /host/etc/asound.conf asound.conf
+      ln -s /host-etc/asound.conf asound.conf
 
       # symlink SSL certs
       mkdir -p ssl
-      ln -s /host/etc/ssl/certs ssl/certs
+      ln -s /host-etc/ssl/certs ssl/certs
+
+      # Fedora stores certs in another directory
+      ln -s /host-etc/pki pki
 
       # symlink /etc/mtab -> /proc/mounts (compat for old userspace progs)
       ln -s /proc/mounts mtab
