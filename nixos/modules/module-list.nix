@@ -82,6 +82,7 @@
   ./misc/version.nix
   ./programs/adb.nix
   ./programs/atop.nix
+  ./programs/autojump.nix
   ./programs/bash/bash.nix
   ./programs/bcc.nix
   ./programs/blcr.nix
