@@ -3,6 +3,7 @@
 , python
 , stdenv
 , pytest
+, hypothesis
 , glibcLocales
 , cython
 , dateutil
@@ -28,14 +29,14 @@ let
 
 in buildPythonPackage rec {
   pname = "pandas";
-  version = "0.23.4";
+  version = "0.24.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5b24ca47acf69222e82530e89111dd9d14f9b970ab2cd3a1c2c78f0c4fbba4f4";
+    sha256 = "1bvixhfc65mqpp2gnnlby86dqh09f6yi8dp8wz7bpsh14p5j2n23";
   };
 
-  checkInputs = [ pytest glibcLocales moto ];
+  checkInputs = [ pytest glibcLocales moto hypothesis ];
 
   buildInputs = [ cython ] ++ optional isDarwin libcxx;
   propagatedBuildInputs = [
