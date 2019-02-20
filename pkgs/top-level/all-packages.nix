@@ -8639,6 +8639,8 @@ in
 
   eresi = callPackage ../development/tools/analysis/eresi { };
 
+  evmdis = callPackage ../development/tools/analysis/evmdis { };
+
   eweb = callPackage ../development/tools/literate-programming/eweb { };
 
   eztrace = callPackage ../development/tools/profiling/EZTrace { };
