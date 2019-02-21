@@ -1106,11 +1106,11 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   libfontenc = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, zlib }: stdenv.mkDerivation {
-    name = "libfontenc-1.1.3";
+    name = "libfontenc-1.1.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/lib/libfontenc-1.1.3.tar.bz2;
-      sha256 = "08gxmrhgw97mv0pvkfmd46zzxrn6zdw4g27073zl55gwwqq8jn3h";
+      url = mirror://xorg/individual/lib/libfontenc-1.1.4.tar.bz2;
+      sha256 = "0y90170dp8wsidr1dzza0grxr1lfh30ji3b5vkjz4j6x1n0wxz1c";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
