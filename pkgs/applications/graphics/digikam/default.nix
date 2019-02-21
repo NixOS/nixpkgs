@@ -23,6 +23,7 @@
 , boost
 , eigen
 , exiv2
+, ffmpeg
 , flex
 , jasper
 , lcms2
@@ -66,6 +67,7 @@ mkDerivation rec {
     boost
     eigen
     exiv2
+    ffmpeg
     flex
     jasper
     lcms2
