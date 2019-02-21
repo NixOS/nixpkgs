@@ -10,7 +10,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "screenshot-tool"; # This will be renamed to "screenshot" soon. See -> https://github.com/elementary/screenshot/pull/93
-  version = "1.6.1";
+  version = "1.6.2";
 
   name = "elementary-${pname}-${version}";
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = "screenshot";
     rev = version;
-    sha256 = "1vvj550md7vw7n057h8cy887a0nmsbwry67dxrxyz6bsvpk8sb6g";
+    sha256 = "1z61j96jk9zjr3bn5hgsp25m4v8h1rqwxm0kg8c34bvl06f13v8q";
   };
 
   passthru = {
