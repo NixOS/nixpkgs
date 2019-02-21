@@ -105,7 +105,7 @@ stdenv.mkDerivation ({
             <string>${codeSignIdentity}</string>
             <key>provisioningProfiles</key>
             <dict>
-                <key>${stdenv.lib.toLower bundleId}</key>
+                <key>${bundleId}</key>
                 <string>$PROVISIONING_PROFILE</string>
             </dict>
             <key>signingStyle</key>
