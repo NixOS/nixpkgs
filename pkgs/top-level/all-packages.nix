@@ -22584,6 +22584,8 @@ in
 
   nix-pin = callPackage ../tools/package-management/nix-pin { };
 
+  nix-prefetch = callPackage ../tools/package-management/nix-prefetch { };
+
   nix-prefetch-github = callPackage ../build-support/nix-prefetch-github {};
 
   inherit (callPackages ../tools/package-management/nix-prefetch-scripts { })
