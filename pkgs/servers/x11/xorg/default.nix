@@ -2614,11 +2614,11 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   xmodmap = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, xorgproto }: stdenv.mkDerivation {
-    name = "xmodmap-1.0.9";
+    name = "xmodmap-1.0.10";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/xmodmap-1.0.9.tar.bz2;
-      sha256 = "0y649an3jqfq9klkp9y5gj20xb78fw6g193f5mnzpl0hbz6fbc5p";
+      url = mirror://xorg/individual/app/xmodmap-1.0.10.tar.bz2;
+      sha256 = "0z28331i2pm16x671fa9qwsfqdmr6a43bzwmp0dm17a3sx0hjgs7";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
