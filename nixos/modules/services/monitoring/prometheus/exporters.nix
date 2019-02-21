@@ -4,8 +4,10 @@ with lib;
 
 let
   cfg = config.services.prometheus.exporters;
+  cfg2 = config.services.prometheus2.exporters;
 
-  # each attribute in `exporterOpts` is expected to have specified:
+  # each attribute in `exporterOpts` is a function that when executed
+  # with `cfg` or `cfg2` as parameter is expected to have specified:
   #   - port        (types.int):   port on which the exporter listens
   #   - serviceOpts (types.attrs): config that is merged with the
   #                                default definition of the exporter's
@@ -108,13 +110,18 @@ let
     };
   };
 
-  mkSubModules = (foldl' (a: b: a//b) {}
-    (mapAttrsToList (name: opts: mkSubModule {
-      inherit name;
-      inherit (opts) port serviceOpts;
-      extraOpts = opts.extraOpts or {};
-    }) exporterOpts)
-  );
+  mkSubModules = exCfg:
+    (foldl' (a: b: a//b) {}
+      (mapAttrsToList (name: confGen:
+        let
+          conf = (confGen exCfg);
+        in
+          mkSubModule {
+            inherit name;
+            inherit (conf) port serviceOpts;
+            extraOpts = conf.extraOpts or {};
+          }) exporterOpts)
+    );
 
   mkExporterConf = { name, conf, serviceOpts }:
     mkIf conf.enable {
@@ -133,11 +140,36 @@ let
         serviceConfig.Group = conf.group;
       });
   };
+  mkExportersConfig = exCfg: promVersion:
+    ([{
+      assertions = [{
+        assertion = (exCfg.snmp.configurationPath == null) != (exCfg.snmp.configuration == null);
+        message = ''
+          Please ensure you have either `services.prometheus.exporters.snmp.configuration'
+          or `services.prometheus${promVersion}.exporters.snmp.configurationPath' set!
+        '';
+      }];
+    }] ++ [(mkIf config.services.minio.enable {
+      services."prometheus${promVersion}".exporters.minio = {
+        minioAddress  = mkDefault "http://localhost:9000";
+        minioAccessKey = mkDefault config.services.minio.accessKey;
+        minioAccessSecret = mkDefault config.services.minio.secretKey;
+      };
+    })] ++ (mapAttrsToList (name: confGen:
+      let
+        conf = (confGen exCfg);
+      in
+      mkExporterConf {
+        inherit name;
+        inherit (conf) serviceOpts;
+        conf = exCfg.${name};
+      }) exporterOpts)
+    );
 in
 {
   options.services.prometheus.exporters = mkOption {
     type = types.submodule {
-      options = (mkSubModules);
+      options = (mkSubModules cfg);
     };
     description = "Prometheus exporter configuration";
     default = {};
@@ -152,25 +184,24 @@ in
     '';
   };
 
-  config = mkMerge ([{
-    assertions = [{
-      assertion = (cfg.snmp.configurationPath == null) != (cfg.snmp.configuration == null);
-      message = ''
-        Please ensure you have either `services.prometheus.exporters.snmp.configuration'
-          or `services.prometheus.exporters.snmp.configurationPath' set!
-      '';
-    }];
-  }] ++ [(mkIf config.services.minio.enable {
-    services.prometheus.exporters.minio.minioAddress  = mkDefault "http://localhost:9000";
-    services.prometheus.exporters.minio.minioAccessKey = mkDefault config.services.minio.accessKey;
-    services.prometheus.exporters.minio.minioAccessSecret = mkDefault config.services.minio.secretKey;
-  })] ++ (mapAttrsToList (name: conf:
-    mkExporterConf {
-      inherit name;
-      inherit (conf) serviceOpts;
-      conf = cfg.${name};
-    }) exporterOpts)
-  );
+  options.services.prometheus2.exporters = mkOption {
+    type = types.submodule {
+      options = (mkSubModules cfg2);
+    };
+    description = "Prometheus 2 exporter configuration";
+    default = {};
+    example = literalExample ''
+      {
+        node = {
+          enable = true;
+          enabledCollectors = [ "systemd" ];
+        };
+        varnish.enable = true;
+      }
+    '';
+  };
+
+  config = mkMerge ((mkExportersConfig cfg "") ++ (mkExportersConfig cfg2 "2"));
 
   meta = {
     doc = ./exporters.xml;
