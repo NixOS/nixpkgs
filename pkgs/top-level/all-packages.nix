@@ -943,7 +943,11 @@ in
 
   bluemix-cli = callPackage ../tools/admin/bluemix-cli { };
 
-  charles = callPackage ../applications/networking/charles { };
+  charles = charles4;
+  inherit (callPackage ../applications/networking/charles {})
+    charles3
+    charles4
+  ;
 
   libqmatrixclient = libsForQt5.callPackage ../development/libraries/libqmatrixclient { };
 
