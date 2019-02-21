@@ -305,7 +305,7 @@ in {
   cdecimal = callPackage ../development/python-modules/cdecimal { };
 
   cfn-flip = callPackage ../development/python-modules/cfn-flip { };
- 
+
   chalice = callPackage ../development/python-modules/chalice { };
 
   cleo = callPackage ../development/python-modules/cleo { };
@@ -491,6 +491,8 @@ in {
   mwoauth = callPackage ../development/python-modules/mwoauth { };
 
   nanomsg-python = callPackage ../development/python-modules/nanomsg-python { inherit (pkgs) nanomsg; };
+
+  nbsphinx = callPackage ../development/python-modules/nbsphinx { };
 
   nbval = callPackage ../development/python-modules/nbval { };
 
@@ -717,6 +719,8 @@ in {
   pytest-tornado = callPackage ../development/python-modules/pytest-tornado { };
 
   python-binance = callPackage ../development/python-modules/python-binance { };
+
+  python-dbusmock = callPackage ../development/python-modules/python-dbusmock { };
 
   python-engineio = callPackage ../development/python-modules/python-engineio { };
 

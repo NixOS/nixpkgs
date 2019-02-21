@@ -1,9 +1,9 @@
-{ stdenv, fetchurl, fetchFromGitHub, makeWrapper
+{ config, stdenv, fetchurl, fetchFromGitHub, makeWrapper
 , docutils, perl, pkgconfig, python3, which, ffmpeg_4
 , freefont_ttf, freetype, libass, libpthreadstubs, mujs
 , lua, libuchardet, libiconv ? null, darwin
 
-, waylandSupport ? false
+, waylandSupport ? stdenv.isLinux
   , wayland           ? null
   , wayland-protocols ? null
   , libxkbcommon      ? null
@@ -24,30 +24,30 @@
   , vulkan-headers ? null
   , vulkan-loader ? null
 
-, alsaSupport        ? true,  alsaLib       ? null
-, bluraySupport      ? true,  libbluray     ? null
-, bs2bSupport        ? true,  libbs2b       ? null
-, cacaSupport        ? true,  libcaca       ? null
-, cmsSupport         ? true,  lcms2         ? null
-, drmSupport         ? true,  libdrm        ? null
-, dvdnavSupport      ? true,  libdvdnav     ? null
-, dvdreadSupport     ? true,  libdvdread    ? null
-, libpngSupport      ? true,  libpng        ? null
-, pulseSupport       ? true,  libpulseaudio ? null
-, rubberbandSupport  ? true,  rubberband    ? null
-, screenSaverSupport ? true,  libXScrnSaver ? null
-, sdl2Support        ? true,  SDL2          ? null
-, speexSupport       ? true,  speex         ? null
-, theoraSupport      ? true,  libtheora     ? null
-, vaapiSupport       ? true,  libva         ? null
-, vdpauSupport       ? true,  libvdpau      ? null
-, xineramaSupport    ? true,  libXinerama   ? null
-, xvSupport          ? true,  libXv         ? null
-, youtubeSupport     ? true,  youtube-dl    ? null
-, archiveSupport     ? false, libarchive    ? null
-, jackaudioSupport   ? false, libjack2      ? null
-, openalSupport      ? false, openalSoft    ? null
-, vapoursynthSupport ? false, vapoursynth   ? null
+, alsaSupport        ? stdenv.isLinux, alsaLib       ? null
+, bluraySupport      ? true,           libbluray     ? null
+, bs2bSupport        ? true,           libbs2b       ? null
+, cacaSupport        ? true,           libcaca       ? null
+, cmsSupport         ? true,           lcms2         ? null
+, drmSupport         ? stdenv.isLinux, libdrm        ? null
+, dvdnavSupport      ? stdenv.isLinux, libdvdnav     ? null
+, dvdreadSupport     ? stdenv.isLinux, libdvdread    ? null
+, libpngSupport      ? true,           libpng        ? null
+, pulseSupport       ? config.pulseaudio or stdenv.isLinux, libpulseaudio ? null
+, rubberbandSupport  ? stdenv.isLinux, rubberband ? null
+, screenSaverSupport ? true,           libXScrnSaver ? null
+, sdl2Support        ? true,           SDL2          ? null
+, speexSupport       ? true,           speex         ? null
+, theoraSupport      ? true,           libtheora     ? null
+, vaapiSupport       ? stdenv.isLinux, libva ? null
+, vdpauSupport       ? true,           libvdpau      ? null
+, xineramaSupport    ? stdenv.isLinux, libXinerama   ? null
+, xvSupport          ? stdenv.isLinux, libXv         ? null
+, youtubeSupport     ? true,           youtube-dl    ? null
+, archiveSupport     ? false,          libarchive    ? null
+, jackaudioSupport   ? false,          libjack2      ? null
+, openalSupport      ? false,          openalSoft    ? null
+, vapoursynthSupport ? false,          vapoursynth   ? null
 }:
 
 with stdenv.lib;
@@ -92,7 +92,7 @@ let
              "http://www.freehackers.org/~tnagy/release/waf-${wafVersion}" ];
     sha256 = "0j7sbn3w6bgslvwwh5v9527w3gi2sd08kskrgxamx693y0b0i3ia";
   };
-  luaEnv = lua.withPackages(ps: with ps; [ luasocket]);
+  luaEnv = lua.withPackages(ps: with ps; [ luasocket ]);
 
 in stdenv.mkDerivation rec {
   name = "mpv-${version}";

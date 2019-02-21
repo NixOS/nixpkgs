@@ -33,7 +33,9 @@ in stdenv.mkDerivation (fBuildAttrs // {
       # sandbox enabled. Code here
       # https://github.com/bazelbuild/bazel/blob/9323c57607d37f9c949b60e293b573584906da46/src/main/cpp/startup_options.cc#L123-L124
       #
-      USER=homeless-shelter bazel --output_base="$bazelOut" --output_user_root="$bazelUserRoot" fetch $bazelFlags $bazelTarget
+      # On macOS Bazel will use the system installed Xcode or CLT toolchain instead of the one in the PATH unless we pass BAZEL_USE_CPP_ONLY_TOOLCHAIN
+      #
+      BAZEL_USE_CPP_ONLY_TOOLCHAIN=1 USER=homeless-shelter bazel --output_base="$bazelOut" --output_user_root="$bazelUserRoot" fetch $bazelFlags $bazelTarget
 
       runHook postBuild
     '';
@@ -90,7 +92,42 @@ in stdenv.mkDerivation (fBuildAttrs // {
   buildPhase = fBuildAttrs.buildPhase or ''
     runHook preBuild
 
-    bazel --output_base="$bazelOut" --output_user_root="$bazelUserRoot" build -j $NIX_BUILD_CORES $bazelFlags $bazelTarget
+    # Bazel sandboxes the execution of the tools it invokes, so even though we are
+    # calling the correct nix wrappers, the values of the environment variables
+    # the wrappers are expecting will not be set. So instead of relying on the
+    # wrappers picking them up, pass them in explicitly via `--copt`, `--linkopt`
+    # and related flags.
+    #
+    copts=()
+    host_copts=()
+    for flag in $NIX_CFLAGS_COMPILE; do
+      copts+=( "--copt=$flag" )
+      host_copts+=( "--host_copt=$flag" )
+    done
+    for flag in $NIX_CXXSTDLIB_COMPILE; do
+      copts+=( "--copt=$flag" )
+      host_copts+=( "--host_copt=$flag" )
+    done
+    linkopts=()
+    host_linkopts=()
+    for flag in $NIX_LD_FLAGS; do
+      linkopts+=( "--linkopt=$flag" )
+      host_linkopts+=( "--host_linkopt=$flag" )
+    done
+
+    BAZEL_USE_CPP_ONLY_TOOLCHAIN=1 \
+    USER=homeless-shelter \
+    bazel \
+      --output_base="$bazelOut" \
+      --output_user_root="$bazelUserRoot" \
+      build \
+      -j $NIX_BUILD_CORES \
+      "''${copts[@]}" \
+      "''${host_copts[@]}" \
+      "''${linkopts[@]}" \
+      "''${host_linkopts[@]}" \
+      $bazelFlags \
+      $bazelTarget
 
     runHook postBuild
   '';

@@ -10,6 +10,7 @@
 , rubySupport ? true, ruby
 , tclSupport ? true, tcl
 , extraBuildInputs ? []
+, fetchpatch
 }:
 
 let
@@ -27,13 +28,21 @@ let
   in
     assert lib.all (p: p.enabled -> ! (builtins.elem null p.buildInputs)) plugins;
     stdenv.mkDerivation rec {
-      version = "2.3";
+      version = "2.4";
       name = "weechat-${version}";
 
       src = fetchurl {
         url = "https://weechat.org/files/src/weechat-${version}.tar.bz2";
-        sha256 = "0mi4pfnyny0vqc35r0scn6yy21y790a5iwq8ms7kch7b7z11jn9w";
+        sha256 = "1z80y5fbrb56wdcx9njrf203r8282wnn3piw3yffk5lvhklsz9k1";
       };
+
+      patches = [
+        (fetchpatch {
+          url = https://github.com/weechat/weechat/commit/6a9937f08ad2c14aeb0a847ffb99e652d47d8251.patch;
+          sha256 = "1blhgxwqs65dvpw3ppxszxrsg02rx7qck1w71h61ljinyjzri3bp";
+          excludes = [ "ChangeLog.adoc" ];
+        })
+      ];
 
       outputs = [ "out" "man" ] ++ map (p: p.name) enabledPlugins;
 

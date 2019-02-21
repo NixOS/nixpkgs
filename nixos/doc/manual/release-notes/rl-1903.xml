@@ -54,6 +54,13 @@
      </itemizedlist>
      <para>to <literal>false</literal> and enable your preferred display manager.</para>
     </note>
+     <para>
+       A major refactoring of the Kubernetes module has been completed.
+       Refactorings primarily focus on decoupling components and enhancing
+       security. Two-way TLS and RBAC has been enabled by default for all
+       components, which slightly changes the way the module is configured.
+       See: <xref linkend="sec-kubernetes"/> for details.
+     </para>
    </listitem>
   </itemizedlist>
  </section>
@@ -564,6 +571,40 @@
      provisioning.
     </para>
    </listitem>
+   <listitem>
+     <para>
+       The use of insecure ports on kubernetes has been deprecated.
+       Thus options:
+       <varname>services.kubernetes.apiserver.port</varname> and
+       <varname>services.kubernetes.controllerManager.port</varname>
+       has been renamed to <varname>.insecurePort</varname>,
+       and default of both options has changed to 0 (disabled).
+     </para>
+    </listitem>
+    <listitem>
+      <para>
+        Note that the default value of
+        <varname>services.kubernetes.apiserver.bindAddress</varname>
+        has changed from 127.0.0.1 to 0.0.0.0, allowing the apiserver to be
+        accessible from outside the master node itself.
+        If the apiserver insecurePort is enabled,
+        it is strongly recommended to only bind on the loopback interface. See:
+        <varname>services.kubernetes.apiserver.insecurebindAddress</varname>.
+      </para>
+    </listitem>
+    <listitem>
+      <para>
+        The option <varname>services.kubernetes.apiserver.allowPrivileged</varname>
+        and <varname>services.kubernetes.kubelet.allowPrivileged</varname> now
+        defaults to false. Disallowing privileged containers on the cluster.
+      </para>
+    </listitem>
+    <listitem>
+      <para>
+        The kubernetes module does no longer add the kubernetes package to
+        <varname>environment.systemPackages</varname> implicitly.
+      </para>
+    </listitem>
   </itemizedlist>
  </section>
 </section>

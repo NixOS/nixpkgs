@@ -1,5 +1,7 @@
 { stdenv, fetchFromGitHub, tzdata, iana-etc, go_bootstrap, runCommand, writeScriptBin
-, perl, which, pkgconfig, patch, procps, pcre, cacert, llvm, Security, Foundation }:
+, perl, which, pkgconfig, patch, procps, pcre, cacert, llvm, Security, Foundation
+, fetchpatch
+}:
 
 let
 
@@ -122,6 +124,11 @@ stdenv.mkDerivation rec {
     ./creds-test.patch
     ./go-1.9-skip-flaky-19608.patch
     ./go-1.9-skip-flaky-20072.patch
+    (fetchpatch {
+      name = "missing_cpuHog_in_pprof_output.diff";
+      url = "https://github.com/golang/go/commit/33110e2c.diff";
+      sha256 = "04vh9lflbpz9xjvymyzhd91gkxiiwwz4lhglzl3r8z0lk45p96qn";
+    })
   ];
 
   postPatch = optionalString stdenv.isDarwin ''

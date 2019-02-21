@@ -1,13 +1,13 @@
 { stdenv, lib, fetchurl }:
 let
-  version = "0.3.0";
+  version = "0.6.pre15";
 in
 stdenv.mkDerivation {
   name = "oil-${version}";
 
   src = fetchurl {
     url = "https://www.oilshell.org/download/oil-${version}.tar.xz";
-    sha256 = "0j4fyn6xjaf29xqyzm09ahazmq9v1hkxv4kps7n3lzdfr32a4kk9";
+    sha256 = "1azdmicv39rp30msl6fpw6921gi6ib8lxiyc8kanljqk5d7zg4p6";
   };
 
   postPatch = ''

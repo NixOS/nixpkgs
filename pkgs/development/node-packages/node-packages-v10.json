@@ -91,6 +91,7 @@
 , "pulp"
 , "react-tools"
 , "react-native-cli"
+, "reveal.js"
 , "s3http"
 , "scuttlebot"
 , "semver"

@@ -1,12 +1,12 @@
 { stdenv, fetchFromGitHub, pkgconfig, libusb, rtl-sdr }:
 
 stdenv.mkDerivation rec {
-  name = "dump1090-${version}";
+  pname = "dump1090";
   version = "2014-10-31";
 
   src = fetchFromGitHub {
     owner = "MalcolmRobb";
-    repo = "dump1090";
+    repo = pname;
     rev = "bff92c4ad772a0a8d433f788d39dae97e00e4dbe";
     sha256 = "06aaj9gpz5v4qzvnp8xf18wdfclp0jvn3hflls79ly46gz2dh9hy";
   };
