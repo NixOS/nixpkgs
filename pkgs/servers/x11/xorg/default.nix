@@ -2379,6 +2379,19 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
+  xfsinfo = callPackage ({ stdenv, pkgconfig, fetchurl, libFS, xorgproto }: stdenv.mkDerivation {
+    name = "xfsinfo-1.0.6";
+    builder = ./builder.sh;
+    src = fetchurl {
+      url = mirror://xorg/individual/app/xfsinfo-1.0.6.tar.bz2;
+      sha256 = "1mmir5i7gm71xc0ba8vnizi4744vsd31hknhi4cmgvg6kadqngla";
+    };
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ libFS xorgproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
+
   xgamma = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, xorgproto, libXxf86vm }: stdenv.mkDerivation {
     name = "xgamma-1.0.6";
     builder = ./builder.sh;
