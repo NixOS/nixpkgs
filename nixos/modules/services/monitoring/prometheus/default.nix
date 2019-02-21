@@ -4,8 +4,11 @@ with lib;
 
 let
   cfg = config.services.prometheus;
+  cfg2 = config.services.prometheus2;
   promUser = "prometheus";
   promGroup = "prometheus";
+  prom2User = "prometheus2";
+  prom2Group = "prometheus2";
 
   # Get a submodule without any embedded metadata:
   _filter = x: filterAttrs (k: v: k != "_module") x;
@@ -17,13 +20,21 @@ let
     promtool ${what} $out
   '';
 
+  # a wrapper that verifies that the configuration is valid for
+  # prometheus 2
+  prom2toolCheck = what: name: file: pkgs.runCommand "${name}-${what}-checked"
+    { buildInputs = [ cfg2.package ]; } ''
+    ln -s ${file} $out
+    promtool ${what} $out
+  '';
+
   # Pretty-print JSON to a file
   writePrettyJSON = name: x:
     pkgs.runCommand name { } ''
       echo '${builtins.toJSON x}' | ${pkgs.jq}/bin/jq . > $out
     '';
 
-  # This becomes the main config file
+  # This becomes the main config file for Prometheus 1
   promConfig = {
     global = cfg.globalConfig;
     rule_files = map (promtoolCheck "check-rules" "rules") (cfg.ruleFiles ++ [
@@ -35,7 +46,7 @@ let
   generatedPrometheusYml = writePrettyJSON "prometheus.yml" promConfig;
 
   prometheusYml = let
-    yml =  if cfg.configText != null then
+    yml = if cfg.configText != null then
       pkgs.writeText "prometheus.yml" cfg.configText
       else generatedPrometheusYml;
     in promtoolCheck "check-config" "prometheus.yml" yml;
@@ -48,6 +59,39 @@ let
     "-alertmanager.timeout=${toString cfg.alertmanagerTimeout}s"
     (optionalString (cfg.alertmanagerURL != []) "-alertmanager.url=${concatStringsSep "," cfg.alertmanagerURL}")
     (optionalString (cfg.webExternalUrl != null) "-web.external-url=${cfg.webExternalUrl}")
+  ];
+
+  # This becomes the main config file for Prometheus 2
+  promConfig2 = {
+    global = cfg2.globalConfig;
+    rule_files = map (prom2toolCheck "check-rules" "rules") (cfg2.ruleFiles ++ [
+      (pkgs.writeText "prometheus.rules" (concatStringsSep "\n" cfg2.rules))
+    ]);
+    scrape_configs = cfg2.scrapeConfigs;
+    alerting = optionalAttrs (cfg2.alertmanagerURL != []) {
+      alertmanagers = [{
+        static_configs = [{
+          targets = cfg2.alertmanagerURL;
+        }];
+      }];
+    };
+  };
+
+  generatedPrometheus2Yml = writePrettyJSON "prometheus.yml" promConfig2;
+
+  prometheus2Yml = let
+    yml = if cfg2.configText != null then
+      pkgs.writeText "prometheus.yml" cfg2.configText
+      else generatedPrometheus2Yml;
+    in promtoo2lCheck "check-config" "prometheus.yml" yml;
+
+  cmdlineArgs2 = cfg2.extraFlags ++ [
+    "--storage.tsdb.path=${cfg2.dataDir}/data/"
+    "--config.file=${prometheus2Yml}"
+    "--web.listen-address=${cfg2.listenAddress}"
+    "--alertmanager.notification-queue-capacity=${toString cfg2.alertmanagerNotificationQueueCapacity}"
+    "--alertmanager.timeout=${toString cfg2.alertmanagerTimeout}s"
+    (optionalString (cfg2.webExternalUrl != null) "-web.external-url=${cfg2.webExternalUrl}")
   ];
 
   promTypes.globalConfig = types.submodule {
@@ -497,30 +541,178 @@ in {
         '';
       };
     };
-  };
+    services.prometheus2 = {
 
-  config = mkIf cfg.enable {
-    users.groups.${promGroup}.gid = config.ids.gids.prometheus;
-    users.users.${promUser} = {
-      description = "Prometheus daemon user";
-      uid = config.ids.uids.prometheus;
-      group = promGroup;
-      home = cfg.dataDir;
-      createHome = true;
-    };
-    systemd.services.prometheus = {
-      wantedBy = [ "multi-user.target" ];
-      after    = [ "network.target" ];
-      script = ''
-        #!/bin/sh
-        exec ${cfg.package}/bin/prometheus \
-          ${concatStringsSep " \\\n  " cmdlineArgs}
-      '';
-      serviceConfig = {
-        User = promUser;
-        Restart  = "always";
-        WorkingDirectory = cfg.dataDir;
+      enable = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Enable the Prometheus 2 monitoring daemon.
+        '';
+      };
+
+      package = mkOption {
+        type = types.package;
+        default = pkgs.prometheus_2;
+        defaultText = "pkgs.prometheus_2";
+        description = ''
+          The prometheus2 package that should be used.
+        '';
+      };
+
+      listenAddress = mkOption {
+        type = types.str;
+        default = "0.0.0.0:9090";
+        description = ''
+          Address to listen on for the web interface, API, and telemetry.
+        '';
+      };
+
+      dataDir = mkOption {
+        type = types.path;
+        default = "/var/lib/prometheus2";
+        description = ''
+          Directory to store Prometheus 2 metrics data.
+        '';
+      };
+
+      extraFlags = mkOption {
+        type = types.listOf types.str;
+        default = [];
+        description = ''
+          Extra commandline options when launching Prometheus 2.
+        '';
+      };
+
+      configText = mkOption {
+        type = types.nullOr types.lines;
+        default = null;
+        description = ''
+          If non-null, this option defines the text that is written to
+          prometheus.yml. If null, the contents of prometheus.yml is generated
+          from the structured config options.
+        '';
+      };
+
+      globalConfig = mkOption {
+        type = promTypes.globalConfig;
+        default = {};
+        apply = _filter;
+        description = ''
+          Parameters that are valid in all  configuration contexts. They
+          also serve as defaults for other configuration sections
+        '';
+      };
+
+      rules = mkOption {
+        type = types.listOf types.str;
+        default = [];
+        description = ''
+          Alerting and/or Recording rules to evaluate at runtime.
+        '';
+      };
+
+      ruleFiles = mkOption {
+        type = types.listOf types.path;
+        default = [];
+        description = ''
+          Any additional rules files to include in this configuration.
+        '';
+      };
+
+      scrapeConfigs = mkOption {
+        type = types.listOf promTypes.scrape_config;
+        default = [];
+        apply = x: map _filter x;
+        description = ''
+          A list of scrape configurations.
+        '';
+      };
+
+      alertmanagerURL = mkOption {
+        type = types.listOf types.str;
+        default = [];
+        description = ''
+          List of Alertmanager URLs to send notifications to.
+        '';
+      };
+
+      alertmanagerNotificationQueueCapacity = mkOption {
+        type = types.int;
+        default = 10000;
+        description = ''
+          The capacity of the queue for pending alert manager notifications.
+        '';
+      };
+
+      alertmanagerTimeout = mkOption {
+        type = types.int;
+        default = 10;
+        description = ''
+          Alert manager HTTP API timeout (in seconds).
+        '';
+      };
+
+      webExternalUrl = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        example = "https://example.com/";
+        description = ''
+          The URL under which Prometheus is externally reachable (for example,
+          if Prometheus is served via a reverse proxy).
+        '';
       };
     };
-  };
+   };
+
+  config = mkMerge [
+    (mkIf cfg.enable {
+      users.groups.${promGroup}.gid = config.ids.gids.prometheus;
+      users.users.${promUser} = {
+        description = "Prometheus daemon user";
+        uid = config.ids.uids.prometheus;
+        group = promGroup;
+        home = cfg.dataDir;
+        createHome = true;
+      };
+      systemd.services.prometheus = {
+        wantedBy = [ "multi-user.target" ];
+        after    = [ "network.target" ];
+        script = ''
+          #!/bin/sh
+          exec ${cfg.package}/bin/prometheus \
+            ${concatStringsSep " \\\n  " cmdlineArgs}
+        '';
+        serviceConfig = {
+          User = promUser;
+          Restart  = "always";
+          WorkingDirectory = cfg.dataDir;
+        };
+      };
+    })
+    (mkIf cfg2.enable {
+      users.groups.${prom2Group}.gid = config.ids.gids.prometheus2;
+      users.users.${prom2User} = {
+        description = "Prometheus2 daemon user";
+        uid = config.ids.uids.prometheus2;
+        group = prom2Group;
+        home = cfg2.dataDir;
+        createHome = true;
+      };
+      systemd.services.prometheus2 = {
+        wantedBy = [ "multi-user.target" ];
+        after    = [ "network.target" ];
+        script = ''
+          #!/bin/sh
+          exec ${cfg.package}/bin/prometheus \
+            ${concatStringsSep " \\\n  " cmdlineArgs2}
+        '';
+        serviceConfig = {
+          User = prom2User;
+          Restart  = "always";
+          WorkingDirectory = cfg2.dataDir;
+        };
+      };
+    })
+  ];
 }
