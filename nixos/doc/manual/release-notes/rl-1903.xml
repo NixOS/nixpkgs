@@ -612,7 +612,9 @@
         The <literal>modesetting</literal> driver should take over automatically,
         it is better maintained upstream and has less problems with advanced X11 features.
         Some performance regressions on some GPU models might happen.
-        OpenCL and VA-API applications might also break.
+        Some OpenCL and VA-API applications might also break
+        (Beignet seems to provide OpenCL support with
+        <literal>modesetting</literal> driver, too).
         Users who need this functionality more than multi-output XRandR are advised
         to add `intel` to `videoDrivers` and report an issue (or provide additional
         details in an existing one)
