@@ -283,6 +283,7 @@ rec {
     let
       storePathToLayer = substituteAll
       { inherit (stdenv) shell;
+        isExecutable = true;
         src = ./store-path-to-layer.sh;
       };
     in
