@@ -2419,11 +2419,11 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   xhost = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libXau, libXmu, xorgproto }: stdenv.mkDerivation {
-    name = "xhost-1.0.7";
+    name = "xhost-1.0.8";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/xhost-1.0.7.tar.bz2;
-      sha256 = "16n26xw6l01zq31d4qvsaz50misvizhn7iihzdn5f7s72pp1krlk";
+      url = mirror://xorg/individual/app/xhost-1.0.8.tar.bz2;
+      sha256 = "15n3mnd4i5kh4z32qv11580qjgvnng0wry2y753ljrqkkrbkrp52";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
