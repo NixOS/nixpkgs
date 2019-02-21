@@ -2549,11 +2549,11 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   xlsatoms = callPackage ({ stdenv, pkgconfig, fetchurl, libxcb }: stdenv.mkDerivation {
-    name = "xlsatoms-1.1.2";
+    name = "xlsatoms-1.1.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/xlsatoms-1.1.2.tar.bz2;
-      sha256 = "196yjik910xsr7dwy8daa0amr0r22ynfs360z0ndp9mx7mydrra7";
+      url = mirror://xorg/individual/app/xlsatoms-1.1.3.tar.bz2;
+      sha256 = "10m3a046jvaw5ywx4y65kl84lsxqan70gww1g1r7cf96ijaqz1jp";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
