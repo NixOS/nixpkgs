@@ -8,8 +8,9 @@
 , languagetool
 , Cocoa, CoreFoundation, CoreServices
 , buildVimPluginFrom2Nix
+, watchman # coc-nvim
 
-# vim-go denpencies
+# vim-go dependencies
 , asmfmt, delve, errcheck, godef, golint
 , gomodifytags, gotags, gotools, go-motion
 , gnused, reftools, gogetdoc, gometalinter
@@ -102,6 +103,10 @@ self: super: {
       sed "/^let g:clighter8_libclang_path/s|')$|${llvmPackages.clang.cc.lib}/lib/libclang.so')|" \
         -i "$out"/share/vim-plugins/clighter8/plugin/clighter8.vim
     '';
+  });
+
+  coc-nvim = super.coc-nvim.overrideAttrs(old: {
+    buildInputs = super.coc-nvim.buildInputs ++ [ watchman ];
   });
 
   command-t = super.command-t.overrideAttrs(old: {

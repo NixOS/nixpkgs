@@ -235,6 +235,17 @@ let
     };
   };
 
+  coc-nvim = buildVimPluginFrom2Nix {
+    pname = "coc-nvim";
+    version = "2019-02-19";
+    src = fetchFromGitHub {
+      owner = "neoclide";
+      repo = "coc.nvim";
+      rev = "3726a0e3bc5fce6a300b7c047fe3441917f146dc";
+      sha256 = "1wswmlxr6asr5j8094wcfakm4dcr32n7l3wfxc9lxzij932vn1wl";
+    };
+  };
+
   Colour-Sampler-Pack = buildVimPluginFrom2Nix {
     pname = "Colour-Sampler-Pack";
     version = "2012-11-30";
