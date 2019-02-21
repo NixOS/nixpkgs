@@ -4,7 +4,6 @@
 , libxml2
 , pkgconfig
 , gtk3
-, granite
 , gnome3
 , gobject-introspection
 , json-glib
@@ -13,7 +12,7 @@
 , libgudev
 , libevdev
 , libsoup
-, vala_0_40
+, pantheon
 , wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
@@ -30,19 +29,19 @@ stdenv.mkDerivation rec {
   USER = "nix-build-user";
 
   nativeBuildInputs = [
-    pkgconfig
-    wrapGAppsHook
-    vala_0_40 # should be `elementary.vala` when elementary attribute set is merged
     cmake
-    ninja
     gettext
-    libxml2
     gobject-introspection # For setup hook
+    libxml2
+    ninja
+    pkgconfig
+    pantheon.vala
+    wrapGAppsHook
   ];
   buildInputs = [
-    gnome3.defaultIconTheme # should be `elementary.defaultIconTheme`when elementary attribute set is merged
+    pantheon.elementary-icon-theme
+    pantheon.granite
     gnome3.libgee
-    granite
     gtk3
     json-glib
     libevdev

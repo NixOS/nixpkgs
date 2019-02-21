@@ -21,7 +21,7 @@ in stdenv.mkDerivation rec {
 
   postPatch = ''
     # we do all patching from update.sh in preAutoreconf
-    echo "#!/bin/sh" > update.sh
+    echo "#!${stdenv.shell}" > update.sh
   '';
 
   preAutoreconf = ''

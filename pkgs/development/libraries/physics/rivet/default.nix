@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "rivet-${version}";
-  version = "2.6.2";
+  version = "2.7.0";
 
   src = fetchurl {
     url = "https://www.hepforge.org/archive/rivet/Rivet-${version}.tar.bz2";
-    sha256 = "0yp3mllr2b4bhsmixjmmpl2n4x78bgw74a9xy2as4f10q3alkplx";
+    sha256 = "12mlj2j1glidjhiaxlr25qz2vfb865wip1vwwg8vlyd3yzisf533";
   };
 
   patches = [
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     substituteInPlace analyses/Makefile.in \
       --replace "!(tmp)" ""
     substituteInPlace bin/rivet-buildplugin.in \
-      --replace '"which"' '"${which}/bin/which"' \
+      --replace 'which' '"${which}/bin/which"' \
       --replace 'mycxx=' 'mycxx=${stdenv.cc}/bin/${if stdenv.cc.isClang or false then "clang++" else "g++"}  #' \
       --replace 'mycxxflags="' "mycxxflags=\"-std=c++11 $NIX_CFLAGS_COMPILE $NIX_CXXSTDLIB_COMPILE $NIX_CFLAGS_LINK "
   '';

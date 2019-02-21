@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     for b in tremulous tremded
     do
         cat << EOF > $out/bin/$b
-    #!/bin/sh
+    #!${stdenv.shell}
     cd $out/opt/tremulous
     exec ./$b.$arch "\$@"
     EOF

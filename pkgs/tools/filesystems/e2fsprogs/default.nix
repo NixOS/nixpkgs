@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     homepage = http://e2fsprogs.sourceforge.net/;
     description = "Tools for creating and checking ext2/ext3/ext4 filesystems";
     license = licenses.gpl2;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = [ maintainers.eelco ];
   };
 }

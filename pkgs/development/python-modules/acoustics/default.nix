@@ -1,26 +1,30 @@
-{ stdenv, buildPythonPackage, fetchPypi
-, cython, pytest, numpy, scipy, matplotlib, pandas, tabulate }:
+{ lib, buildPythonPackage, fetchPypi
+, pytest, numpy, scipy, matplotlib, pandas, tabulate, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "acoustics";
-  version = "0.1.2";
+  version = "0.2.0.post2";
 
-  buildInputs = [ cython pytest ];
+  checkInputs = [ pytest ];
   propagatedBuildInputs = [ numpy scipy matplotlib pandas tabulate ];
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b75a47de700d01e704de95953a6e969922b2f510d7eefe59f7f8980ad44ad1b7";
+    sha256 = "c0ca4d7ca67fd867c3a7e34232a98a1fc210ee7ff845f3d2eed445a01737b2ff";
   };
 
-  # Tests not distributed
-  doCheck = false;
+  checkPhase = ''
+    pushd tests
+    py.test ./.
+    popd
+  '';
 
-  meta = with stdenv.lib; {
+  disabled = pythonOlder "3.6";
+
+  meta = with lib; {
     description = "A package for acousticians";
     maintainers = with maintainers; [ fridh ];
     license = with licenses; [ bsd3 ];
     homepage = https://github.com/python-acoustics/python-acoustics;
-    broken = true;
   };
 }

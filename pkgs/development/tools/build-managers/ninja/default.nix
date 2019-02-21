@@ -1,17 +1,26 @@
-{ stdenv, fetchFromGitHub, python, buildDocs ? true, asciidoc, docbook_xml_dtd_45, docbook_xsl, libxslt, re2c }:
+{ stdenv, fetchFromGitHub, fetchpatch, python, buildDocs ? true, asciidoc, docbook_xml_dtd_45, docbook_xsl, libxslt, re2c }:
 
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "ninja-${version}";
-  version = "1.8.2";
+  version = "1.9.0";
 
   src = fetchFromGitHub {
     owner = "ninja-build";
     repo = "ninja";
     rev = "v${version}";
-    sha256 = "16scq9hcq6c5ap6sy8j4qi75qps1zvrf3p79j1vbrvnqzp928i5f";
+    sha256 = "1q0nld3g0d210zmdjyjzjz2xb2bw1s58gj6zsx7p8q30yh0wg610";
   };
+
+  patches = [
+    # Make builds reproducible by generating the same IDs from the same inputs.
+    (fetchpatch {
+      name = "consistent-doc-ids";
+      url = "https://github.com/ninja-build/ninja/commit/9aa947471fcfc607bec6d92a1a6eed5c692edbaf.patch";
+      sha256 = "0zsg46jflsh644jccrcgyfalr7fkzrv041kyi8644nyk923gcrl9";
+    })
+  ];
 
   nativeBuildInputs = [ python re2c ] ++ optionals buildDocs [ asciidoc docbook_xml_dtd_45 docbook_xsl libxslt.bin ];
 

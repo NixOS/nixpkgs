@@ -78,7 +78,4 @@ self: super: {
   # Fix build with ghc 8.6.x.
   git-annex = appendPatch super.git-annex ./patches/git-annex-fix-ghc-8.6.x-build.patch;
 
-  # https://github.com/pikajude/stylish-cabal/issues/11
-  stylish-cabal = markBrokenVersion "0.4.1.0" super.stylish-cabal;
-
 }

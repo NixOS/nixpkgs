@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, ncurses, xlibsWrapper, libXaw, libXpm, Xaw3d
+{ stdenv, lib, fetchurl, ncurses, xlibsWrapper, libXaw, libXpm, Xaw3d, libXcursor
 , pkgconfig, gettext, libXft, dbus, libpng, libjpeg, libungif
 , libtiff, librsvg, gconf, libxml2, imagemagick, gnutls, libselinux
 , alsaLib, cairo, acl, gpm, cf-private, AppKit, GSS, ImageIO, m17n_lib, libotf
@@ -117,6 +117,17 @@ stdenv.mkDerivation rec {
     mkdir -p $out/Applications
     mv nextstep/Emacs.app $out/Applications
   '';
+
+  postFixup =
+    let libPath = lib.makeLibraryPath [
+      libXcursor
+    ];
+    in lib.optionalString (withX && toolkit == "lucid") ''
+      patchelf --set-rpath \
+        "$(patchelf --print-rpath "$out/bin/emacs"):${libPath}" \
+        "$out/bin/emacs"
+      patchelf --add-needed "libXcursor.so.1" "$out/bin/emacs"
+    '';
 
   meta = with stdenv.lib; {
     description = "The extensible, customizable GNU text editor";

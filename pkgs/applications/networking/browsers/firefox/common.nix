@@ -22,6 +22,7 @@
 , pulseaudioSupport ? stdenv.isLinux, libpulseaudio
 , ffmpegSupport ? true
 , gtk3Support ? true, gtk2, gtk3, wrapGAppsHook
+, waylandSupport ? true, libxkbcommon
 , gssSupport ? true, kerberos
 
 ## privacy-related options
@@ -74,7 +75,7 @@ let
   flag = tf: x: [(if tf then "--enable-${x}" else "--disable-${x}")];
 
   default-toolkit = if stdenv.isDarwin then "cairo-cocoa"
-                    else "cairo-gtk${if gtk3Support then "3" else "2"}";
+                    else "cairo-gtk${if gtk3Support then "3${lib.optionalString waylandSupport "-wayland"}" else "2"}";
 
   binaryName = if isIceCatLike then "icecat" else "firefox";
   binaryNameCapitalized = lib.toUpper (lib.substring 0 1 binaryName) + lib.substring 1 (-1) binaryName;
@@ -124,6 +125,7 @@ stdenv.mkDerivation rec {
   ++ lib.optional  pulseaudioSupport libpulseaudio # only headers are needed
   ++ lib.optional  gtk3Support gtk3
   ++ lib.optional  gssSupport kerberos
+  ++ lib.optional  waylandSupport libxkbcommon
   ++ lib.optionals stdenv.isDarwin [ CoreMedia ExceptionHandling Kerberos
                                      AVFoundation MediaToolbox CoreLocation
                                      Foundation libobjc AddressBook cups ];

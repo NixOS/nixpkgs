@@ -89,7 +89,7 @@ let
 
   fish = stdenv.mkDerivation rec {
     name = "fish-${version}";
-    version = "3.0.0";
+    version = "3.0.1";
 
     etcConfigAppendix = builtins.toFile "etc-config.appendix.fish" etcConfigAppendixText;
 
@@ -97,7 +97,7 @@ let
       # There are differences between the release tarball and the tarball github packages from the tag
       # Hence we cannot use fetchFromGithub
       url = "https://github.com/fish-shell/fish-shell/releases/download/${version}/${name}.tar.gz";
-      sha256 = "1kzjd0n0sfslkd36lzrvvvgy3qwkd9y466bkrqlnhd5h9dhx77ga";
+      sha256 = "1r55xgnacjxglban15ln3fw8p3q60k0pk0fgsax3h5zfambplrr1";
     };
 
     nativeBuildInputs = [ cmake ];

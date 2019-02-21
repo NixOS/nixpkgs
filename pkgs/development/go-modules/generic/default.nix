@@ -130,7 +130,7 @@ let
         echo "$d" | grep -q "\(/_\|examples\|Godeps\)" && return 0
         [ -n "$excludedPackages" ] && echo "$d" | grep -q "$excludedPackages" && return 0
         local OUT
-        if ! OUT="$(go $cmd $buildFlags "''${buildFlagsArray[@]}" -v $d 2>&1)"; then
+        if ! OUT="$(go $cmd $buildFlags "''${buildFlagsArray[@]}" -v -p $NIX_BUILD_CORES $d 2>&1)"; then
           if ! echo "$OUT" | grep -qE '(no( buildable| non-test)?|build constraints exclude all) Go (source )?files'; then
             echo "$OUT" >&2
             return 1
@@ -163,11 +163,12 @@ let
       else
         touch $TMPDIR/buildFlagsArray
       fi
-      export -f buildGoDir # xargs needs to see the function
       if [ -z "$enableParallelBuilding" ]; then
           export NIX_BUILD_CORES=1
       fi
-      getGoDirs "" | xargs -n1 -P $NIX_BUILD_CORES bash -c 'buildGoDir install "$@"' --
+      for pkg in $(getGoDirs ""); do
+        buildGoDir install "$pkg"
+      done
     '' + lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
       # normalize cross-compiled builds w.r.t. native builds
       (
@@ -187,7 +188,9 @@ let
     checkPhase = args.checkPhase or ''
       runHook preCheck
 
-      getGoDirs test | xargs -n1 -P $NIX_BUILD_CORES bash -c 'buildGoDir test "$@"' --
+      for pkg in $(getGoDirs test); do
+        buildGoDir test "$pkg"
+      done
 
       runHook postCheck
     '';

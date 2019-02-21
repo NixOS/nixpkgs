@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, intltool, pkgconfig, jansson
+{ config, stdenv, fetchurl, intltool, pkgconfig, jansson
 # deadbeef can use either gtk2 or gtk3
 , gtk2Support ? false, gtk2 ? null
 , gtk3Support ? true, gtk3 ? null, gsettings-desktop-schemas ? null, wrapGAppsHook ? null
@@ -20,7 +20,7 @@
 , osdSupport ? true, dbus ? null
 # output plugins
 , alsaSupport ? true, alsaLib ? null
-, pulseSupport ? true, libpulseaudio ? null
+, pulseSupport ? config.pulseaudio or stdenv.isLinux, libpulseaudio ? null
 # effect plugins
 , resamplerSupport ? true, libsamplerate ? null
 , overloadSupport ? true, zlib ? null

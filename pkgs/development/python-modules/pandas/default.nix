@@ -16,6 +16,7 @@
 , lxml
 , html5lib
 , beautifulsoup4
+, hypothesis
 , openpyxl
 , tables
 , xlwt
@@ -28,18 +29,18 @@ let
 
 in buildPythonPackage rec {
   pname = "pandas";
-  version = "0.23.4";
+  version = "0.24.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5b24ca47acf69222e82530e89111dd9d14f9b970ab2cd3a1c2c78f0c4fbba4f4";
+    sha256 = "435821cb2501eabbcee7e83614bd710940dc0cf28b5afbc4bdb816c31cec71af";
   };
 
-  checkInputs = [ pytest glibcLocales moto ];
+  checkInputs = [ pytest glibcLocales moto hypothesis ];
 
-  buildInputs = [] ++ optional isDarwin libcxx;
+  nativeBuildInputs = [ cython ];
+  buildInputs = optional isDarwin libcxx;
   propagatedBuildInputs = [
-    cython
     dateutil
     scipy
     numexpr
@@ -96,8 +97,8 @@ in buildPythonPackage rec {
   #       Until then we disable the tests.
   + optionalString isDarwin ''
     # Fake the impure dependencies pbpaste and pbcopy
-    echo "#!/bin/sh" > pbcopy
-    echo "#!/bin/sh" > pbpaste
+    echo "#!${stdenv.shell}" > pbcopy
+    echo "#!${stdenv.shell}" > pbpaste
     chmod a+x pbcopy pbpaste
     export PATH=$(pwd):$PATH
   '' + ''

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "vault-${version}";
-  version = "1.0.2";
+  version = "1.0.3";
 
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = "vault";
     rev = "v${version}";
-    sha256 = "1nrqwgxfs6n2bjhjndqvwzn9c62pb5ky9biyh47i0wvbxhdh0hfj";
+    sha256 = "1c5v1m8b6nm28mjwpsgc73n8q475pkzpdvyx46rf3xyrh01rfrnz";
   };
 
   nativeBuildInputs = [ go gox removeReferencesTo ];

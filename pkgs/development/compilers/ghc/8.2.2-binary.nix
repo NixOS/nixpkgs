@@ -1,4 +1,4 @@
-{ stdenv
+{ stdenv, substituteAll
 , fetchurl, perl, gcc, llvm_39
 , ncurses5, gmp, glibc, libiconv
 }:
@@ -110,10 +110,16 @@ stdenv.mkDerivation rec {
     '';
 
   configurePlatforms = [ ];
-  configureFlags = [
-    "--with-gmp-libraries=${stdenv.lib.getLib gmp}/lib"
+  configureFlags =
+  let
+    gcc-clang-wrapper = substituteAll {
+      inherit (stdenv) shell;
+      src = ./gcc-clang-wrapper.sh;
+    };
+  in
+  [ "--with-gmp-libraries=${stdenv.lib.getLib gmp}/lib"
     "--with-gmp-includes=${stdenv.lib.getDev gmp}/include"
-  ] ++ stdenv.lib.optional stdenv.isDarwin "--with-gcc=${./gcc-clang-wrapper.sh}"
+  ] ++ stdenv.lib.optional stdenv.isDarwin            "--with-gcc=${gcc-clang-wrapper}"
     ++ stdenv.lib.optional stdenv.hostPlatform.isMusl "--disable-ld-override";
 
   # Stripping combined with patchelf breaks the executables (they die

@@ -1,0 +1,12 @@
+diff --git a/src/DateTime1.vala b/src/DateTime1.vala
+index 5a80fbd..2e1f948 100644
+--- a/src/DateTime1.vala
++++ b/src/DateTime1.vala
+@@ -38,6 +38,6 @@ public class DateTime.Settings : Granite.Services.Settings {
+     public string clock_format { get; set; }
+ 
+     public Settings () {
+-        base ("io.elementary.desktop.wingpanel.datetime");
++        base ("io.elementary.granite");
+     }
+ }

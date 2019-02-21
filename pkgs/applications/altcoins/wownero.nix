@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, cmake, pkgconfig, git
-, boost, miniupnpc, openssl, unbound, cppzmq
-, zeromq, pcsclite, readline, libsodium
+, boost, miniupnpc_2, openssl, unbound, cppzmq
+, zeromq, pcsclite, readline, libsodium, rapidjson
 , CoreData, IOKit, PCSC
 }:
 
@@ -11,19 +11,18 @@ with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "wownero-${version}";
 
-  version = "0.4.0.0";
+  version = "0.5.0.0";
   src = fetchFromGitHub {
     owner = "wownero";
     repo = "wownero";
-    fetchSubmodules = true;
     rev    = "v${version}";
-    sha256 = "1z5fpl4gwys4v8ffrymlzwrbnrbg73x553a9lxwny7ba8yg2k14p";
+    sha256 = "1dy9ycabva2z0896al1k2avl9xppkxvm1p2jwmg509ahjl98k3sy";
   };
 
   nativeBuildInputs = [ cmake pkgconfig git ];
 
   buildInputs = [
-    boost miniupnpc openssl unbound
+    boost miniupnpc_2 openssl unbound rapidjson
     cppzmq zeromq pcsclite readline libsodium
   ] ++ optionals stdenv.isDarwin [ IOKit CoreData PCSC ];
 

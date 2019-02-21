@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
     done
 
     cat > $out/bin/Vessel << EOW
-    #!/bin/sh
+    #!${stdenv.shell}
     cd $out/libexec/strangeloop/vessel/
     exec ./x86/vessel.x86
     EOW

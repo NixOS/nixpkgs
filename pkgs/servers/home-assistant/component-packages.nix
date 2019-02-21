@@ -559,7 +559,7 @@
     "konnected" = ps: with ps; [ aiohttp-cors ];
     "lametric" = ps: with ps; [  ];
     "lcn" = ps: with ps; [  ];
-    "lifx" = ps: with ps; [  ];
+    "lifx" = ps: with ps; [ aiolifx ];
     "light" = ps: with ps; [  ];
     "light.abode" = ps: with ps; [  ];
     "light.ads" = ps: with ps; [  ];
@@ -589,7 +589,7 @@
     "light.isy994" = ps: with ps; [  ];
     "light.knx" = ps: with ps; [  ];
     "light.lcn" = ps: with ps; [  ];
-    "light.lifx" = ps: with ps; [  ];
+    "light.lifx" = ps: with ps; [ aiolifx aiolifx-effects ];
     "light.lifx_legacy" = ps: with ps; [  ];
     "light.lightwave" = ps: with ps; [  ];
     "light.limitlessled" = ps: with ps; [ limitlessled ];
@@ -1144,7 +1144,7 @@
     "sensor.serial" = ps: with ps; [  ];
     "sensor.serial_pm" = ps: with ps; [  ];
     "sensor.seventeentrack" = ps: with ps; [  ];
-    "sensor.shodan" = ps: with ps; [  ];
+    "sensor.shodan" = ps: with ps; [ shodan ];
     "sensor.sht31" = ps: with ps; [  ];
     "sensor.sigfox" = ps: with ps; [  ];
     "sensor.simulated" = ps: with ps; [  ];

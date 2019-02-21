@@ -1,14 +1,13 @@
 { stdenv, fetchurl, m4, perl, help2man }:
 
 stdenv.mkDerivation rec {
-  name = "bison-3.2.4";
+  pname = "bison";
+  version = "3.3.1";
 
   src = fetchurl {
-    url = "mirror://gnu/bison/${name}.tar.gz";
-    sha256 = "16n7xs3sa1rlhs8y8zg4gi2s2kbkz8d69w3xp935wjykk0i3wryb";
+    url = "mirror://gnu/${pname}/${pname}-${version}.tar.gz";
+    sha256 = "0sz6rzmfz5scian0a28lrvkrsd0108dmxrxpqh4nyi2ahlglbma1";
   };
-
-  patches = []; # remove on another rebuild
 
   nativeBuildInputs = [ m4 perl ] ++ stdenv.lib.optional stdenv.isSunOS help2man;
   propagatedBuildInputs = [ m4 ];

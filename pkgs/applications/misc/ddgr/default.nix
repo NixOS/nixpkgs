@@ -1,29 +1,17 @@
-{stdenv, fetchpatch, fetchFromGitHub, python3Packages}:
+{stdenv, fetchpatch, fetchFromGitHub, python3}:
 
 stdenv.mkDerivation rec {
-  version = "1.1";
+  version = "1.6";
   name = "ddgr-${version}";
 
   src = fetchFromGitHub {
     owner = "jarun";
     repo = "ddgr";
     rev = "v${version}";
-    sha256 = "1q66kwip5y0kfkfldm1x54plz85mjyvv1xpxjqrs30r2lr0najgf";
+    sha256 = "04ybbjsf9hpn2p5cjjm15cwvv0mwrmdi19iifrym6ps3rmll0p3c";
   };
 
-  buildInputs = [
-    (python3Packages.python.withPackages (ps: with ps; [
-      requests
-    ]))
-  ];
-
-  patches = [
-    (fetchpatch {
-     sha256 = "1rxr3biq0mk4m0m7dsxr70dhz4fg5siil5x5fy9nymcmhvcm1cdc";
-     name = "Fix-zsh-completion.patch";
-     url = "https://github.com/jarun/ddgr/commit/10c1a911a3d5cbf3e96357c932b0211d3165c4b8.patch";
-    })
-  ];
+  buildInputs = [ python3 ];
 
   makeFlags = "PREFIX=$(out)";
 
@@ -40,7 +28,7 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/jarun/ddgr;
     description = "Search DuckDuckGo from the terminal";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ markus1189 ];
+    maintainers = with maintainers; [ ceedubs markus1189 ];
     platforms = platforms.unix;
   };
 }

@@ -12,6 +12,14 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ gettext ];
 
+  patches = [
+    # fix fakechroot: https://github.com/dex4er/fakechroot/issues/57
+    (fetchurl {
+      url = "https://git.savannah.nongnu.org/cgit/attr.git/patch/?id=14adc898a36948267bfe5c63b399996879e94c98";
+      sha256 = "0gja54fz79a9ma6b4mprnjxq77l5yg2z9xknlwhmkcrfnam02qxp";
+    })
+  ];
+
   postPatch = ''
     for script in install-sh include/install-sh; do
       patchShebangs $script

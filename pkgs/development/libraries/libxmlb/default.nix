@@ -22,6 +22,10 @@ stdenv.mkDerivation rec {
     "-Dgtkdoc=true"
   ];
 
+  preCheck = ''
+    export XDG_DATA_DIRS=$XDG_DATA_DIRS:${shared-mime-info}/share
+  '';
+
   doCheck = true;
 
   meta = with stdenv.lib; {
