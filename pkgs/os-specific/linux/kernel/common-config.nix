@@ -592,6 +592,8 @@ let
 
       BLK_DEV_INTEGRITY       = yes;
 
+      BLK_SED_OPAL = whenAtLeast "4.14" yes;
+
       BSD_PROCESS_ACCT_V3 = yes;
 
       BT_HCIUART_BCSP = option yes;
