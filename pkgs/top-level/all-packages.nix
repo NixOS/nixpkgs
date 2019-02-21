@@ -5704,6 +5704,8 @@ in
 
   tcpreplay = callPackage ../tools/networking/tcpreplay { };
 
+  tcptrace = callPackage ../tools/networking/tcptrace { };
+
   ted = callPackage ../tools/typesetting/ted { };
 
   teamviewer = libsForQt56.callPackage ../applications/networking/remote/teamviewer { };
