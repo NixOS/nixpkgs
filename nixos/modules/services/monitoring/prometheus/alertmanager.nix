@@ -136,44 +136,40 @@ let
         '';
       };
     };
-    mkAMConfig = amCfg: amVersion:
-      config = mkMerge [
-        (mkIf amCfg.enable {
-          assertions = singleton {
-            assertion = amCfg.configuration != null || amCfg.configText != null;
-            message = "Can not enable alertmanager without a configuration. "
-             + "Set either the `configuration` or `configText` attribute.";
-          };
-        })
-        (mkIf amCfg.enable {
-          networking.firewall.allowedTCPPorts = optional amCfg.openFirewall amCfg.port;
+    mkAMConfig = amCfg: amVersion: [
+      (mkIf amCfg.enable {
+        assertions = singleton {
+          assertion = amCfg.configuration != null || amCfg.configText != null;
+          message = "Can not enable alertmanager without a configuration. "
+           + "Set either the `configuration` or `configText` attribute.";
+        };
+      })
+      (mkIf amCfg.enable {
+        networking.firewall.allowedTCPPorts = optional amCfg.openFirewall amCfg.port;
 
-          systemd.services."alertmanager${amVersion}" = {
-            wantedBy = [ "multi-user.target" ];
-            after    = [ "network.target" ];
-            script = ''
-              ${amCfg.package}/bin/alertmanager \
-                ${concatStringsSep " \\\n  " cmdlineArgs}
-            '';
-            serviceConfig = {
-              User = amCfg.user;
-              Group = amCfg.group;
-              Restart  = "always";
-              PrivateTmp = true;
-              WorkingDirectory = "/tmp";
-              ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
-            };
+        systemd.services."alertmanager${amVersion}" = {
+          wantedBy = [ "multi-user.target" ];
+          after    = [ "network.target" ];
+          script = ''
+            ${amCfg.package}/bin/alertmanager \
+              ${concatStringsSep " \\\n  " cmdlineArgs}
+          '';
+          serviceConfig = {
+            User = amCfg.user;
+            Group = amCfg.group;
+            Restart  = "always";
+            PrivateTmp = true;
+            WorkingDirectory = "/tmp";
+            ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
           };
-        })
-      ];
+        };
+      })
+    ];
 in {
   options = {
     services.prometheus.alertmanager = amOptions;
     services.prometheus2.alertmanager = amOptions;
   };
 
-  config = mkMerge [
-    (mkAMConfig cfg "")
-    (mkAMConfig cfg2 "2")
-  ];
+  config = mkMerge ((mkAMConfig cfg "") ++ (mkAMConfig cfg2 "2"));
 }

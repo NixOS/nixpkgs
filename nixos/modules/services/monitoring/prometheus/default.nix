@@ -22,8 +22,10 @@ let
 
   # a wrapper that verifies that the configuration is valid for
   # prometheus 2
-  prom2toolCheck = what: name: file: pkgs.runCommand "${name}-${what}-checked"
-    { buildInputs = [ cfg2.package ]; } ''
+  prom2toolCheck = what: name: file:
+    pkgs.runCommand
+      "${name}-${replaceStrings [" "] [""] what}-checked"
+      { buildInputs = [ cfg2.package ]; } ''
     ln -s ${file} $out
     promtool ${what} $out
   '';
@@ -64,7 +66,7 @@ let
   # This becomes the main config file for Prometheus 2
   promConfig2 = {
     global = cfg2.globalConfig;
-    rule_files = map (prom2toolCheck "check-rules" "rules") (cfg2.ruleFiles ++ [
+    rule_files = map (prom2toolCheck "check rules" "rules") (cfg2.ruleFiles ++ [
       (pkgs.writeText "prometheus.rules" (concatStringsSep "\n" cfg2.rules))
     ]);
     scrape_configs = cfg2.scrapeConfigs;
@@ -83,7 +85,7 @@ let
     yml = if cfg2.configText != null then
       pkgs.writeText "prometheus.yml" cfg2.configText
       else generatedPrometheus2Yml;
-    in promtoo2lCheck "check-config" "prometheus.yml" yml;
+    in prom2toolCheck "check config" "prometheus.yml" yml;
 
   cmdlineArgs2 = cfg2.extraFlags ++ [
     "--storage.tsdb.path=${cfg2.dataDir}/data/"
@@ -704,7 +706,7 @@ in {
         after    = [ "network.target" ];
         script = ''
           #!/bin/sh
-          exec ${cfg.package}/bin/prometheus \
+          exec ${cfg2.package}/bin/prometheus \
             ${concatStringsSep " \\\n  " cmdlineArgs2}
         '';
         serviceConfig = {
