@@ -1,13 +1,13 @@
 { stdenv, buildPythonPackage, fetchPypi, pytest, isPy3k, isPy35, async_generator }:
 buildPythonPackage rec {
   pname = "pytest-asyncio";
-  version = "0.9.0";
+  version = "0.10.0";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "fbd92c067c16111174a1286bfb253660f1e564e5146b39eeed1133315cf2c2cf";
+    sha256 = "9fac5100fd716cbecf6ef89233e8590a4ad61d729d1732e0a96b84182df1daaf";
   };
 
   buildInputs = [ pytest ]

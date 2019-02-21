@@ -15,7 +15,7 @@ buildPythonPackage rec {
     sha256 = "0svk7id7ncygj2rnxhm7602xizljyidk4xgrl6i0xgq3829cz4bl";
   };
 
-  buildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake ];
   checkPhase = ''
     cmake .
     # utf_8_char fails with python3

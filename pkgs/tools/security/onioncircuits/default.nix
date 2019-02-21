@@ -10,6 +10,7 @@ pythonPackages.buildPythonApplication rec {
     sha256 = "13mqif9b9iajpkrl9ijspdnvy82kxhprxd5mw3njk68rcn4z2pcm";
   };
 
+  nativeBuildInputs = [ intltool ];
   buildInputs = [ intltool gtk3 gobject-introspection ];
   propagatedBuildInputs =  with pythonPackages; [ stem distutils_extra pygobject3 ];
 

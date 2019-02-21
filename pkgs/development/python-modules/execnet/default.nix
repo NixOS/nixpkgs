@@ -1,7 +1,7 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi
-, pytest
+, pytest_3
 , setuptools_scm
 , apipkg
 }:
@@ -15,7 +15,7 @@ buildPythonPackage rec {
     sha256 = "a7a84d5fa07a089186a329528f127c9d73b9de57f1a1131b82bb5320ee651f6a";
   };
 
-  checkInputs = [ pytest  ];
+  checkInputs = [ pytest_3  ];
   nativeBuildInputs = [ setuptools_scm ];
   propagatedBuildInputs = [ apipkg ];
 
@@ -30,6 +30,9 @@ buildPythonPackage rec {
   checkPhase = ''
     py.test testing
   '';
+
+  # not yet compatible with pytest 4
+  doCheck = false;
 
   __darwinAllowLocalNetworking = true;
 

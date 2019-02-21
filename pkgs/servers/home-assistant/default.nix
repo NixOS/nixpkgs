@@ -28,10 +28,27 @@ let
       "10cbf6e27dbce8c30807caf056c8eb50917e0eaafe86347671b57254006c3e69")
     (mkOverride "bcrypt" "3.1.5"
       "136243dc44e5bab9b61206bd46fff3018bd80980b1a1dfbab64a22ff5745957f")
-    (mkOverride "pyjwt" "1.6.4"
-      "4ee413b357d53fd3fb44704577afac88e72e878716116270d722723d65b42176")
-    (mkOverride "cryptography" "2.3.1"
-      "8d10113ca826a4c29d5b85b2c4e045ffa8bad74fb525ee0eceb1d38d4c70dfd6")
+    (self: super: {
+      pyjwt = super.pyjwt.overridePythonAttrs (oldAttrs: rec {
+        version = "1.6.4";
+        src = oldAttrs.src.override {
+          inherit version;
+          sha256 = "4ee413b357d53fd3fb44704577afac88e72e878716116270d722723d65b42176";
+        };
+        doCheck = false; # https://github.com/jpadilla/pyjwt/issues/382
+      });
+    })
+    (self: super: {
+      cryptography = super.cryptography.overridePythonAttrs (oldAttrs: rec {
+        version = "2.3.1";
+        src = oldAttrs.src.override {
+          inherit version;
+          sha256 = "8d10113ca826a4c29d5b85b2c4e045ffa8bad74fb525ee0eceb1d38d4c70dfd6";
+        };
+        propagatedBuildInputs = oldAttrs.propagatedBuildInputs ++ [ self.idna ];
+        checkInputs = with self; [ pytest_3 pretend iso8601 pytz hypothesis ];
+      });
+    })
     (mkOverride "cryptography_vectors" "2.3.1" # required by cryptography==2.3.1
       "bf4d9b61dce69c49e830950aa36fad194706463b0b6dfe81425b9e0bc6644d46")
     (mkOverride "python-slugify" "1.2.6"

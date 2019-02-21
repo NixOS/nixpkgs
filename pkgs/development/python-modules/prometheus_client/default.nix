@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "prometheus_client";
-  version = "0.4.2";
+  version = "0.5.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "046cb4fffe75e55ff0e6dfd18e2ea16e54d86cc330f369bebcc683475c8b68a9";
+    sha256 = "e8c11ff5ca53de6c3d91e1510500611cafd1d247a937ec6c588a0a7cc3bef93c";
   };
 
   doCheck = false;

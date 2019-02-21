@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "pymediainfo";
-  version = "2.3.0";
+  version = "3.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1d0mxxycacimy46b08q44xyxkyji7rrs7viwc3wkpckhqs54q24x";
+    sha256 = "e76cc5525c3fc5cba61073e12365dc06f303b261d8f923aaa6eac09bf8fab245";
   };
 
   postPatch = ''

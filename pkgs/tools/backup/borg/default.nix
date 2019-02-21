@@ -1,22 +1,36 @@
-{ stdenv, fetchpatch, python3Packages, acl, libb2, lz4, zstd, openssl, openssh }:
+{ stdenv, fetchpatch, python3, acl, libb2, lz4, zstd, openssl, openssh }:
 
-python3Packages.buildPythonApplication rec {
+let
+  python = python3.override {
+    packageOverrides = self: super: {
+      # https://github.com/borgbackup/borg/issues/3753#issuecomment-454011810
+      msgpack-python = super.msgpack-python.overridePythonAttrs (oldAttrs: rec {
+        version = "0.5.6";
+        src = oldAttrs.src.override {
+          inherit version;
+          sha256 = "0ee8c8c85aa651be3aa0cd005b5931769eaa658c948ce79428766f1bd46ae2c3";
+        };
+      });
+    };
+  };
+
+in python.pkgs.buildPythonApplication rec {
   pname = "borgbackup";
   version = "1.1.9";
 
-  src = python3Packages.fetchPypi {
+  src = python.pkgs.fetchPypi {
     inherit pname version;
     sha256 = "7d0ff84e64c4be35c43ae2c047bb521a94f15b278c2fe63b43950c4836b42575";
   };
 
-  nativeBuildInputs = with python3Packages; [
+  nativeBuildInputs = with python.pkgs; [
     # For building documentation:
     sphinx guzzle_sphinx_theme
   ];
   buildInputs = [
-    libb2 lz4 zstd openssl python3Packages.setuptools_scm
+    libb2 lz4 zstd openssl python.pkgs.setuptools_scm
   ] ++ stdenv.lib.optionals stdenv.isLinux [ acl ];
-  propagatedBuildInputs = with python3Packages; [
+  propagatedBuildInputs = with python.pkgs; [
     cython msgpack-python
   ] ++ stdenv.lib.optionals (!stdenv.isDarwin) [ llfuse ];
 
@@ -50,7 +64,7 @@ python3Packages.buildPythonApplication rec {
     cp scripts/shell_completions/zsh/_borg $out/share/zsh/site-functions/
   '';
 
-  checkInputs = with python3Packages; [
+  checkInputs = with python.pkgs; [
     pytest
   ];
 

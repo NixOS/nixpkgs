@@ -153,6 +153,14 @@
    </listitem>
    <listitem>
     <para>
+      The <varname>buildPythonPackage</varname> now sets <varname>strictDeps = true</varname>
+      to help distinguish between native and non-native dependencies in order to
+      improve cross-compilation compatibility. Note however that this may break
+      user expressions.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
       The Syncthing state and configuration data has been moved from
       <varname>services.syncthing.dataDir</varname> to the newly defined
       <varname>services.syncthing.configDir</varname>, which default to
