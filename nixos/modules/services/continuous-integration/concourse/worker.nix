@@ -1,10 +1,16 @@
 { config, lib, pkgs, ... }:
 with lib;
 let
-  cfg = config.services.concourse-worker;
+  cfg_ = config.services.concourse-worker;
   garden-runc = pkgs.garden-runc.override {
-    extractDir = cfg.asset-dir;
+    extractDir = cfg_.asset-dir;
   };
+in let
+   cfg = cfg_ // (
+     if isNull cfg_.resource-types then
+       { resource-types = "${pkgs.concourse.resourceDir}"; }
+     else
+       {});
 in
 {
   options = {
@@ -160,8 +166,8 @@ in
       };
 
       resource-types = mkOption {
-        default = "${pkgs.concourse.resourceDir}";
-        type = with types; attrsOf str;
+        default = null;
+        type = with types; nullOr str;
         example = "/tmp/assets";
         description = ''
           Specifies a directory containing the default set of `concourse` resource types.
