@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , isPy3k
@@ -13,10 +13,12 @@ buildPythonPackage rec {
     inherit pname version;
   };
 
+  disabled = !isPy3k;
+
   # No test infrastructure in repository.
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "FFMPEG wrapper for Python";
     homepage = https://github.com/imageio/imageio-ffmpeg;
     license = licenses.bsd2;
