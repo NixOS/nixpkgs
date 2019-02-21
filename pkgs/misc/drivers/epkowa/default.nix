@@ -25,6 +25,39 @@ in
 # adding a plugin for another printer shouldn't be too difficult, but you need the firmware to test...
 
 let plugins = {
+  v330 = stdenv.mkDerivation rec {
+    name = "iscan-v330-bundle";
+    version = "1.0.1";
+    pluginVersion = "0.2.0";
+
+    src = fetchurl {
+      url = "https://download2.ebz.epson.net/iscan/plugin/perfection-v330/rpm/x64/iscan-perfection-v330-bundle-${version}.x64.rpm.tar.gz";
+      sha256 = "f6fa455f04cdfbc3d38526573260746e9546830de93ba182d0365f557d2f7df9";
+    };
+
+    buildInputs = [ patchelf rpm ];
+
+    installPhase = ''
+      ${rpm}/bin/rpm2cpio "plugins/esci-interpreter-perfection-v330-${pluginVersion}-1.x86_64.rpm" | ${cpio}/bin/cpio -idmv
+      mkdir $out{,/share,/lib}
+      cp -r ./usr/share/{iscan-data,esci}/ $out/share/
+      cp -r ./usr/lib64/esci $out/lib
+      '';
+
+    preFixup = ''
+      lib=$out/lib/esci/libesci-interpreter-perfection-v330.so
+      rpath=${gcc.cc.lib}/lib/
+      patchelf --set-rpath $rpath $lib
+      '';
+
+    passthru = {
+      registrationCommand = ''
+        $registry --add interpreter usb 0x04b8 0x0142 "$plugin/lib/esci/libesci-interpreter-perfection-v330 $plugin/share/esci/esfwad.bin"
+        '';
+      hw = "Perfection V330 Photo";
+      };
+    meta = common_meta // { description = "Plugin to support "+passthru.hw+" scanner in sane."; };
+  };
   x770 =   stdenv.mkDerivation rec {
     pname = "iscan-gt-x770-bundle";
     version = "1.0.1";

@@ -32,11 +32,11 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   bitmap = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libXaw, xbitmaps, libXmu, xorgproto, libXt }: stdenv.mkDerivation {
-    name = "bitmap-1.0.8";
+    name = "bitmap-1.0.9";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/bitmap-1.0.8.tar.gz;
-      sha256 = "1z06a1sn3iq72rmh73f11xgb7n46bdav1fvpgczxjp6al88bsbqs";
+      url = mirror://xorg/individual/app/bitmap-1.0.9.tar.gz;
+      sha256 = "0kzbv5wh02798l77y9y8d8sjkmzm9cvsn3rjh8a86v5waj50apsb";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];

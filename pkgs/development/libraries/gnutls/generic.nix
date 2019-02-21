@@ -1,5 +1,6 @@
-{ lib, stdenv, zlib, lzo, libtasn1, nettle, pkgconfig, lzip
-, guileBindings, guile, perl, gmp, autogen, libidn, p11-kit, libiconv
+{ config, lib, stdenv, zlib, lzo, libtasn1, nettle, pkgconfig, lzip
+, perl, gmp, autogen, libidn, p11-kit, libiconv
+, guileBindings ? config.gnutls.guile or false, guile
 , tpmSupport ? false, trousers, which, nettools, libunistring
 , unbound, dns-root-data, gettext
 

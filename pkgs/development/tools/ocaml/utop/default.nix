@@ -7,12 +7,12 @@ then throw "utop is not available for OCaml ${ocaml.version}"
 else
 
 stdenv.mkDerivation rec {
-  version = "2.2.0";
+  version = "2.3.0";
   name = "utop-${version}";
 
   src = fetchurl {
     url = "https://github.com/diml/utop/archive/${version}.tar.gz";
-    sha256 = "1414snwmqaxs1x8wbpjf6fn3jsl01hq0phrr7639xmb5vh15mgd4";
+    sha256 = "1g1xf19fhzwsikp33pv1wf6wb2qdc5y7dzqi46h8c4l850cwscjh";
   };
 
   nativeBuildInputs = [ makeWrapper ];

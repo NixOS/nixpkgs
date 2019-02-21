@@ -28,6 +28,11 @@ stdenv.mkDerivation rec {
       url = mkURL "7468ef0e38c43" "0016-strip-gnu-property.patch";
       sha256 = "17n63b8wz6szv8npla1234g1ip7lqgzx2whrpv358ppf67lq8vwm";
     })
+    (fetchurl {
+      # mbr.bin: too big (452 > 440)
+      url = mkURL "012e1dd312eb" "0017-single-load-segment.patch";
+      sha256 = "0azqzicsjw47b9ppyikhzaqmjl4lrvkxris1356bkmgcaiv6d98b";
+    })
   ];
 
   postPatch = ''
@@ -74,6 +79,7 @@ stdenv.mkDerivation rec {
     homepage = http://www.syslinux.org/;
     description = "A lightweight bootloader";
     license = licenses.gpl2;
+    maintainers = [ maintainers.samueldr ];
     platforms = [ "i686-linux" "x86_64-linux" ];
   };
 }

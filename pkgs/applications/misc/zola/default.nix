@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   name = "zola-${version}";
-  version = "0.5.0";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "getzola";
     repo = "zola";
     rev = "v${version}";
-    sha256 = "0as8nrzw9zz10w4xxiibgz8ylghc879b2pwaxnw8sjbji2d9qv63";
+    sha256 = "1jj6yfb3qkfq3nwcxfrc7k1gqyls873imxgpifbwjx9slg6ssis9";
   };
 
-  cargoSha256 = "0a14hq8d3xjr6yfg5qn5r7npqivm816f1p53bbm826igvpc9hsxa";
+  cargoSha256 = "1hn2l25fariidgdr32mfx2yqb3g8xk4qafs614bdjiyvfrb7j752";
 
   nativeBuildInputs = [ cmake pkgconfig openssl ];
   buildInputs = stdenv.lib.optionals stdenv.isDarwin [ CoreServices cf-private ];

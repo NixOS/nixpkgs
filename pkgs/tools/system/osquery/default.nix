@@ -4,7 +4,7 @@
 , beecrypt, augeas, libxml2, sleuthkit, yara, lldpd, google-gflags
 , thrift, boost, rocksdb_lite, glog, gbenchmark, snappy
 , openssl, file, doxygen
-, gtest, sqlite, fpm, zstd, rdkafka, rapidjson, fetchgit
+, gtest, sqlite, fpm, zstd, rdkafka, rapidjson, fetchgit, fetchurl
 }:
 
 let
@@ -61,6 +61,16 @@ stdenv.mkDerivation rec {
         sha256 = "1ny3srcsxd6kj59zq1cman5myj8kzw010wbyc6mrpk4kp823r5nx";
       };
     });
+
+    # dpkg 1.19.2 dropped api in `<dpkg/dpkg-db.h>` which breaks compilation.
+    dpkg' = dpkg.overrideAttrs (old: rec {
+      name = "dpkg-${version}";
+      version = "1.19.0.5";
+      src = fetchurl {
+        url = "mirror://debian/pool/main/d/dpkg/dpkg_${version}.tar.xz";
+        sha256 = "1dc5kp3fqy1k66fly6jfxkkg7w6d0jy8szddpfyc2xvzga94d041";
+      };
+    });
   in [
     udev audit
 
@@ -69,7 +79,7 @@ stdenv.mkDerivation rec {
       customMemoryManagement = false;
     })
 
-    lvm2' libgcrypt libarchive libgpgerror libuuid iptables dpkg
+    lvm2' libgcrypt libarchive libgpgerror libuuid iptables dpkg'
     lzma bzip2 rpm beecrypt augeas libxml2 sleuthkit
     yara lldpd gflags' thrift boost
     glog gbenchmark snappy openssl

@@ -8,7 +8,10 @@
 , python3 ? null
 , ruby ? null
 , lua ? null
-, useX11, rubyBindings, pythonBindings, luaBindings
+, useX11 ? false
+, rubyBindings ? false
+, pythonBindings ? false
+, luaBindings ? false
 }:
 
 assert useX11 -> (gtk2 != null && vte != null && gtkdialog != null);

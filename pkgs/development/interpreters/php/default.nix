@@ -2,7 +2,7 @@
 { lib, stdenv, fetchurl, flex, bison, autoconf
 , mysql, libxml2, readline, zlib, curl, postgresql, gettext
 , openssl, pcre, pcre2, pkgconfig, sqlite, config, libjpeg, libpng, freetype
-, libxslt, libmcrypt, bzip2, icu, openldap, cyrus_sasl, libmhash
+, libxslt, libmcrypt, bzip2, icu, openldap, cyrus_sasl, libmhash, unixODBC
 , uwimap, pam, gmp, apacheHttpd, libiconv, systemd, libsodium, html-tidy, libargon2, libzip
 }:
 
@@ -28,6 +28,7 @@ let
   , curlSupport ? config.php.curl or true
   , gettextSupport ? config.php.gettext or true
   , pcntlSupport ? config.php.pcntl or true
+  , pdo_odbcSupport ? config.php.pdo_odbc or true
   , postgresqlSupport ? config.php.postgresql or true
   , pdo_pgsqlSupport ? config.php.pdo_pgsql or true
   , readlineSupport ? config.php.readline or true
@@ -88,6 +89,7 @@ let
         ++ optional readlineSupport readline
         ++ optional sqliteSupport sqlite
         ++ optional postgresqlSupport postgresql
+        ++ optional pdo_odbcSupport unixODBC
         ++ optional pdo_pgsqlSupport postgresql
         ++ optional pdo_mysqlSupport mysqlBuildInputs
         ++ optional mysqliSupport mysqlBuildInputs
@@ -141,6 +143,7 @@ let
       ++ optional readlineSupport "--with-readline=${readline.dev}"
       ++ optional sqliteSupport "--with-pdo-sqlite=${sqlite.dev}"
       ++ optional postgresqlSupport "--with-pgsql=${postgresql}"
+      ++ optional pdo_odbcSupport "--with-pdo-odbc=unixODBC,${unixODBC}"
       ++ optional pdo_pgsqlSupport "--with-pdo-pgsql=${postgresql}"
       ++ optional pdo_mysqlSupport "--with-pdo-mysql=${if mysqlndSupport then "mysqlnd" else mysql.connector-c}"
       ++ optionals mysqliSupport [

@@ -54,6 +54,13 @@
      </itemizedlist>
      <para>to <literal>false</literal> and enable your preferred display manager.</para>
     </note>
+     <para>
+       A major refactoring of the Kubernetes module has been completed.
+       Refactorings primarily focus on decoupling components and enhancing
+       security. Two-way TLS and RBAC has been enabled by default for all
+       components, which slightly changes the way the module is configured.
+       See: <xref linkend="sec-kubernetes"/> for details.
+     </para>
    </listitem>
   </itemizedlist>
  </section>
@@ -452,6 +459,23 @@
      <option>services.matomo.package</option> which determines the used
      Matomo version.
     </para>
+    <para>
+     The Matomo module now also comes with the systemd service <literal>matomo-archive-processing.service</literal>
+     and a timer that automatically triggers archive processing every hour.
+     This means that you can safely
+     <link xlink:href="https://matomo.org/docs/setup-auto-archiving/#disable-browser-triggers-for-matomo-archiving-and-limit-matomo-reports-to-updating-every-hour">
+      disable browser triggers for Matomo archiving
+     </link> at <literal>Administration > System > General Settings</literal>.
+    </para>
+    <para>
+     Additionally, you can enable to
+     <link xlink:href="https://matomo.org/docs/privacy/#step-2-delete-old-visitors-logs">
+      delete old visitor logs
+     </link> at <literal>Administration > System > Privacy</literal>,
+     but make sure that you run <literal>systemctl start matomo-archive-processing.service</literal>
+     at least once without errors if you have already collected data before,
+     so that the reports get archived before the source data gets deleted.
+    </para>
    </listitem>
    <listitem>
     <para>
@@ -555,6 +579,40 @@
      provisioning.
     </para>
    </listitem>
+   <listitem>
+     <para>
+       The use of insecure ports on kubernetes has been deprecated.
+       Thus options:
+       <varname>services.kubernetes.apiserver.port</varname> and
+       <varname>services.kubernetes.controllerManager.port</varname>
+       has been renamed to <varname>.insecurePort</varname>,
+       and default of both options has changed to 0 (disabled).
+     </para>
+    </listitem>
+    <listitem>
+      <para>
+        Note that the default value of
+        <varname>services.kubernetes.apiserver.bindAddress</varname>
+        has changed from 127.0.0.1 to 0.0.0.0, allowing the apiserver to be
+        accessible from outside the master node itself.
+        If the apiserver insecurePort is enabled,
+        it is strongly recommended to only bind on the loopback interface. See:
+        <varname>services.kubernetes.apiserver.insecurebindAddress</varname>.
+      </para>
+    </listitem>
+    <listitem>
+      <para>
+        The option <varname>services.kubernetes.apiserver.allowPrivileged</varname>
+        and <varname>services.kubernetes.kubelet.allowPrivileged</varname> now
+        defaults to false. Disallowing privileged containers on the cluster.
+      </para>
+    </listitem>
+    <listitem>
+      <para>
+        The kubernetes module does no longer add the kubernetes package to
+        <varname>environment.systemPackages</varname> implicitly.
+      </para>
+    </listitem>
   </itemizedlist>
  </section>
 </section>

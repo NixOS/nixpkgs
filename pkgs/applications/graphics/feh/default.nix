@@ -6,11 +6,11 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "feh-${version}";
-  version = "3.1.1";
+  version = "3.1.2";
 
   src = fetchurl {
     url = "https://feh.finalrewind.org/${name}.tar.bz2";
-    sha256 = "1sy8z6rv5sy1bhk3846hgfdy96wdi874yr2fnxfprks46qp29l31";
+    sha256 = "0qjhlrgr606gc9h96w9piyd13mx63jqfbxxnan41nrh76m8d0dka";
   };
 
   outputs = [ "out" "man" "doc" ];
@@ -20,24 +20,21 @@ stdenv.mkDerivation rec {
   buildInputs = [ xorg.libX11 xorg.libXinerama imlib2 libjpeg libpng curl libexif ];
 
   makeFlags = [
-    "PREFIX=$(out)" "exif=1"
+    "PREFIX=${placeholder "out"}" "exif=1"
   ] ++ optional stdenv.isDarwin "verscmp=0";
 
-  postBuild = ''
-    pushd man
-    make
-    popd
-  '';
-
+  installTargets = [ "install" ];
   postInstall = ''
     wrapProgram "$out/bin/feh" --prefix PATH : "${libjpeg.bin}/bin" \
                                --add-flags '--theme=feh'
-    install -D -m 644 man/*.1 $out/share/man/man1
   '';
 
   checkInputs = [ perlPackages.perl perlPackages.TestCommand ];
   preCheck = ''
     export PERL5LIB="${perlPackages.TestCommand}/${perlPackages.perl.libPrefix}"
+  '';
+  postCheck = ''
+    unset PERL5LIB
   '';
 
   doCheck = true;

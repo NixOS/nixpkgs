@@ -9,7 +9,7 @@ buildPythonPackage rec {
 
   src = fetchurl {
     url = "mirror://pypi/l/llfuse/${name}.tar.bz2";
-    sha256 = "31a267f7ec542b0cd62e0f1268e1880fdabf3f418ec9447def99acfa6eff2ec9";
+    sha256 = "1j9fzxpgmb4rxxyl9jcf84zvznhgi3hnh4hg5vb0qaslxkvng8ii";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Python bindings for the low-level FUSE API";
-    homepage = https://code.google.com/p/python-llfuse/;
+    homepage = https://github.com/python-llfuse/python-llfuse;
     license = licenses.lgpl2Plus;
     platforms = platforms.unix;
     maintainers = with maintainers; [ bjornfor ];

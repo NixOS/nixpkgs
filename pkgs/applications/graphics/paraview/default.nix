@@ -6,7 +6,7 @@ stdenv, fetchFromGitHub, cmake, makeWrapper
 
 stdenv.mkDerivation rec {
   name = "paraview-${version}";
-  version = "5.5.2";
+  version = "5.6.0";
 
   # fetching from GitHub instead of taking an "official" source
   # tarball because of missing submodules there
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     owner = "Kitware";
     repo = "ParaView";
     rev = "v${version}";
-    sha256 = "1jivph7lppnflmjsiirhgv0mnh8mxx41i1vzkk78ynn00rzacx3j";
+    sha256 = "1j13yfdgcv4yzfr449i4c8r4rs1c9zr6qd3igr4vv3ani8zixkzi";
     fetchSubmodules = true;
   };
 

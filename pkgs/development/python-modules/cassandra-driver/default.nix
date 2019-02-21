@@ -1,4 +1,5 @@
 { stdenv
+, libev
 , buildPythonPackage
 , fetchPypi
 , pkgs
@@ -24,10 +25,25 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "42bcb167a90da6604081872ef609a327a63273842da81120fc462de031155abe";
+    sha256 = "1gjs2lqy0ba6zhh13a1dhirk59i7lc4zcbl7h50619hdm5kv3g22";
   };
 
-  buildInputs = [ pkgs.libev cython ];
+  buildInputs = [
+    libev
+  ];
+
+  nativeBuildInputs = [
+    # NOTE: next version will work with cython 0.29
+    # Requires 'Cython!=0.25,<0.29,>=0.20'
+    (cython.overridePythonAttrs(old: rec {
+      pname = "Cython";
+      version = "0.28.3";
+      src = fetchPypi {
+        inherit pname version;
+        sha256 = "1aae6d6e9858888144cea147eb5e677830f45faaff3d305d77378c3cba55f526";
+      };
+    }))
+  ];
 
   propagatedBuildInputs = [ six ]
     ++ stdenv.lib.optionals (pythonOlder "3.4") [ futures ];

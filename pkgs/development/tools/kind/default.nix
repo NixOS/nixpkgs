@@ -4,13 +4,13 @@ with stdenv.lib;
 
 buildGoPackage rec {
   name = "kind-${version}";
-  version = "0.0.1";
+  version = "0.1.0";
 
   src = fetchFromGitHub {
     rev = "${version}";
     owner = "kubernetes-sigs";
     repo = "kind";
-    sha256 = "1jldj864ip8hrk3zhkjifr4gzgc8kxmxxwvklxglymhv8cxc179f";
+    sha256 = "01ifmnv3jid4ls6qw9d6j9vldjbbnrwclzv8spnh6fnzb2wprln2";
   };
 
   goPackagePath = "sigs.k8s.io/kind";

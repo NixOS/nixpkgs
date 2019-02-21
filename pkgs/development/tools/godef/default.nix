@@ -1,17 +1,18 @@
-{ stdenv, buildGoPackage, fetchgit }:
+{ stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   name = "godef-${version}";
-  version = "1.0.0";
-  rev = "7b4626be9fa8081987905fd4719d2f6628f9d8b5";
+  version = "1.1.1";
+  rev = "v${version}";
 
   goPackagePath = "github.com/rogpeppe/godef";
-  excludedPackages = "go/printer/testdata";
+  subPackages = [ "." ];
 
-  src = fetchgit {
+  src = fetchFromGitHub {
     inherit rev;
-    url = "https://github.com/rogpeppe/godef";
-    sha256 = "0zhw4ba19hy0kv74c58ax759h8721khmwj04fak2y5800ymsgndg";
+    owner = "rogpeppe";
+    repo = "godef";
+    sha256 = "1bpzqnb9fsk1pjjap3gm94pqch1jz02rfah9hg8iqbfm0dzpy31b";
   };
 
   meta = {

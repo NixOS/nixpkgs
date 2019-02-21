@@ -53,6 +53,10 @@ stdenv.mkDerivation rec {
 
     # use newer emacs icon
     cp nextstep/Cocoa/Emacs.base/Contents/Resources/Emacs.icns mac/Emacs.app/Contents/Resources/Emacs.icns
+
+    # Fix sandbox impurities.
+    substituteInPlace Makefile.in --replace '/bin/pwd' 'pwd'
+    substituteInPlace lib-src/Makefile.in --replace '/bin/pwd' 'pwd'
   '';
 
   configureFlags = [

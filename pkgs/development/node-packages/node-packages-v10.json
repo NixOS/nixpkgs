@@ -1,5 +1,6 @@
 [
-  "asar"
+  "@angular/cli"
+, "asar"
 , "azure-functions-core-tools"
 , "bower"
 , "bower2nix"
@@ -90,6 +91,7 @@
 , "pulp"
 , "react-tools"
 , "react-native-cli"
+, "reveal.js"
 , "s3http"
 , "scuttlebot"
 , "semver"

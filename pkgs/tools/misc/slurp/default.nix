@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "slurp-${version}";
-  version = "1.0";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "emersion";
     repo = "slurp";
     rev = "v${version}";
-    sha256 = "03igv8r8n772xb0y7whhs1pa298l3d94jbnknaxpwp2n4fi04syb";
+    sha256 = "072lkwhpvr753wfqzmd994bnhbrgfavxcgqcyml7abab28sdhs1y";
   };
 
   nativeBuildInputs = [
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with stdenv.lib; {
-    description = "Grab images from a Wayland compositor";
+    description = "Select a region in a Wayland compositor";
     homepage = https://github.com/emersion/slurp;
     license = licenses.mit;
     platforms = platforms.linux;

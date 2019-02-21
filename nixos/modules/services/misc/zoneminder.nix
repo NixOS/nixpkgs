@@ -205,15 +205,13 @@ in {
 
       mysql = lib.mkIf cfg.database.createLocally {
         ensureDatabases = [ cfg.database.name ];
-        ensureUsers = {
+        ensureUsers = [{
           name = cfg.database.username;
-          ensurePermissions = [
-            { "${cfg.database.name}.*" = "ALL PRIVILEGES"; }
-          ];
+          ensurePermissions = { "${cfg.database.name}.*" = "ALL PRIVILEGES"; };
           initialDatabases = [
             { inherit (cfg.database) name; schema = "${pkg}/share/zoneminder/db/zm_create.sql"; }
           ];
-        };
+        }];
       };
 
       nginx = lib.mkIf useNginx {

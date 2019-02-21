@@ -1,7 +1,7 @@
 { fetchurl, stdenv }:
 
 let
-  version = "0.13.0";
+  version = "0.14.0";
   baseurl = "https://github.com/firecracker-microvm/firecracker/releases/download";
 
   fetchbin = name: sha256: fetchurl {
@@ -9,8 +9,8 @@ let
     inherit sha256;
   };
 
-  firecracker-bin = fetchbin "firecracker" "1wdcy4vmnx216jnza7bz6czlqpsjrnpqfsb5d322ld4gzbylm718";
-  jailer-bin      = fetchbin "jailer"      "0k0sc5138bh35ciim2l78ma9g5x18dw098f2ar5y31ybr8i4q60y";
+  firecracker-bin = fetchbin "firecracker" "02d7s2hzhl13k5linlav7yc4kg9v70sccc3ysfgaqq8hz7zfqywg";
+  jailer-bin      = fetchbin "jailer"      "120n14zjnm21s39dza99p003bn5n0n5fzcyaw4l6laq336r24gvi";
 in
 stdenv.mkDerivation {
   name = "firecracker-${version}";

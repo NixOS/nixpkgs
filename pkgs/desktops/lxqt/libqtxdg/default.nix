@@ -1,19 +1,19 @@
-{ stdenv, fetchFromGitHub, cmake, qt5 }:
+{ stdenv, fetchFromGitHub, cmake, qtbase, qtsvg }:
 
 stdenv.mkDerivation rec {
-  name = "libqtxdg-${version}";
-  version = "3.2.0";
+  pname = "libqtxdg";
+  version = "3.3.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
-    repo = "libqtxdg";
+    repo = pname;
     rev = version;
-    sha256 = "0lkmwnqk314mlr811rdb96p6i7zg67slxdvd4cdkiwakgbzzaa4m";
+    sha256 = "0qgqqgy15h0d1fwk4mnbv2hirz8njjjlng64bv33rc6wwrsaa50b";
   };
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ qt5.qtbase qt5.qtsvg ];
+  buildInputs = [ qtbase qtsvg ];
 
   preConfigure = ''
     cmakeFlagsArray+=(
