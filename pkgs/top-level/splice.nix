@@ -21,7 +21,7 @@
 # For performance reasons, rather than uniformally splice in all cases, we only
 # do so when `pkgs` and `buildPackages` are distinct. The `actuallySplice`
 # parameter there the boolean value of that equality check.
-lib: pkgs: actuallySplice:
+lib: config: pkgs: actuallySplice:
 
 let
 
@@ -116,6 +116,21 @@ let
     "callPackage" "newScope" "overrideScope" "packages"
   ];
 
+  useDefinitions = {
+    pulseaudio = value: if value then {} else {
+      pulseaudio = null;
+      libpulseaudio = null;
+      pulseSupport = false;
+      pulseaudioFull = null;
+      pulseaudioSupport = false;
+      libpulseaudio-vanilla = null;
+    };
+  };
+
+  useFlags = config.use or {};
+
+  useFlagsExtra = lib.foldl' (acc: x: acc // x) {} (map (n: useDefinitions.${n} useFlags.${n}) (lib.attrNames useFlags));
+
 in
 
 {
@@ -126,9 +141,9 @@ in
   # `newScope' for sets of packages in `pkgs' (see e.g. `gnome' below).
   callPackage = pkgs.newScope {};
 
-  callPackages = lib.callPackagesWith splicedPackagesWithXorg;
+  callPackages = lib.callPackagesWith (splicedPackagesWithXorg // useFlagsExtra);
 
-  newScope = extra: lib.callPackageWith (splicedPackagesWithXorg // extra);
+  newScope = extra: lib.callPackageWith (splicedPackagesWithXorg // useFlagsExtra // extra);
 
   # Haskell package sets need this because they reimplement their own
   # `newScope`.
