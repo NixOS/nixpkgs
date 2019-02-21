@@ -2731,11 +2731,11 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   xrdb = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libXmu, xorgproto }: stdenv.mkDerivation {
-    name = "xrdb-1.1.1";
+    name = "xrdb-1.2.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/xrdb-1.1.1.tar.bz2;
-      sha256 = "1dqp486nd5sagbg572kl0k839nwvpqnb7jvppyb7jj5vrpkss8rd";
+      url = mirror://xorg/individual/app/xrdb-1.2.0.tar.bz2;
+      sha256 = "0ik9gh6363c47pr0dp7q22nfs8vmavjg2v4bsr0604ppl77nafpj";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
