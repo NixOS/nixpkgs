@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, freetype, yasm, ffmpeg
+{ config, stdenv, fetchurl, pkgconfig, freetype, yasm, ffmpeg
 , aalibSupport ? true, aalib ? null
 , fontconfigSupport ? true, fontconfig ? null, freefont_ttf ? null
 , fribidiSupport ? true, fribidi ? null
@@ -19,7 +19,7 @@
 , theoraSupport ? true, libtheora ? null
 , x264Support ? false, x264 ? null
 , jackaudioSupport ? false, libjack2 ? null
-, pulseSupport ? false, libpulseaudio ? null
+, pulseSupport ? config.pulseaudio or false, libpulseaudio ? null
 , bs2bSupport ? false, libbs2b ? null
 # For screenshots
 , libpngSupport ? true, libpng ? null

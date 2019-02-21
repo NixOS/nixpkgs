@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
 
     mkdir $out/bin
     cat > $out/bin/curabydago <<EOF
-    #!/bin/sh
+    #!${stdenv.shell}
     export PYTHONPATH=$PYTHONPATH
     ${python.out}/bin/python $out/curabydago/cura.py
     EOF

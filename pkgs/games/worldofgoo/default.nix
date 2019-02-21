@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
     #makeWrapper doesn't do cd. :(
 
     cat > $out/bin/WorldofGoo << EOF
-    #!/bin/sh
+    #!${stdenv.shell}
     cd $out/libexec/2dboy/WorldOfGoo
     exec ./WorldOfGoo.bin64
     EOF

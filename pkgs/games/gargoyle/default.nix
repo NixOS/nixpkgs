@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, jam, cctools, pkgconfig
+{ stdenv, fetchFromGitHub, substituteAll, jam, cctools, pkgconfig
 , SDL, SDL_mixer, SDL_sound, cf-private, gtk2, libvorbis, smpeg }:
 
 let
@@ -29,16 +29,19 @@ stdenv.mkDerivation {
     sha256 = "0icwgc25gp7krq6zf66hljydc6vps6bb4knywnrfgnfcmcalqqx9";
   };
 
-  nativeBuildInputs = [ jam pkgconfig ] ++ lib.optional stdenv.isDarwin cctools;
+  nativeBuildInputs = [ jam pkgconfig ] ++ stdenv.lib.optional stdenv.isDarwin cctools;
 
   buildInputs = [ SDL SDL_mixer SDL_sound gtk2 ]
-    ++ lib.optionals stdenv.isDarwin [ cf-private smpeg libvorbis ];
+    ++ stdenv.lib.optionals stdenv.isDarwin [ cf-private smpeg libvorbis ];
 
   patches = [ ./darwin.patch ];
 
   buildPhase = jamenv + "jam -j$NIX_BUILD_CORES";
 
-  installPhase = if stdenv.isDarwin then (builtins.readFile ./darwin.sh) else jamenv + ''
+  installPhase =
+  if stdenv.isDarwin then
+    (substituteAll { inherit (stdenv) shell; src = ./darwin.sh; })
+  else jamenv + ''
     jam -j$NIX_BUILD_CORES install
     mkdir -p "$out/bin"
     ln -s ../libexec/gargoyle/gargoyle "$out/bin"
@@ -52,7 +55,7 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = with stdenv.lib; {
     homepage = http://ccxvii.net/gargoyle/;
     license = licenses.gpl2Plus;
     description = "Interactive fiction interpreter GUI";

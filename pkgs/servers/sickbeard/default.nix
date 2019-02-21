@@ -2,8 +2,8 @@
 
 let
   pythonEnv = python2.withPackages(ps: with ps; [ cheetah ]);
-in python2.pkgs.buildPythonApplication rec {
-  name = "sickbeard-${version}";
+in stdenv.mkDerivation rec {
+  pname = "sickbeard";
   version = "2016-03-21";
 
   src = fetchFromGitHub {

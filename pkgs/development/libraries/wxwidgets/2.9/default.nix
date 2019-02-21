@@ -1,6 +1,7 @@
 { stdenv, fetchurl, pkgconfig, gtk2, libXinerama, libSM, libXxf86vm, xorgproto
 , gstreamer, gst-plugins-base, GConf, setfile
-, withMesa ? true, libGLU ? null, libGL ? null
+, libGLSupported
+, withMesa ? libGLSupported, libGLU ? null, libGL ? null
 , compat24 ? false, compat26 ? true, unicode ? true
 , Carbon ? null, Cocoa ? null, Kernel ? null, QuickTime ? null, AGL ? null
 }:

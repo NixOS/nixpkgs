@@ -1,36 +1,34 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, pcre, qt5, xorg, lxqt, openbox, hicolor-icon-theme }:
+{ stdenv, fetchFromGitHub, cmake, pkgconfig, pcre, qtbase, qttools,
+  qtx11extras, xorg, lxqt-build-tools, openbox, hicolor-icon-theme }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "obconf-qt";
-  version = "0.13.0";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "0mixf35p7b563f77vnikk9b1wqhbdawp723sd30rfql76gkjwjcn";
+    sha256 = "00v5w8qr3vs0k91flij9lz7y1cpp2g8ivgnmmm43ymjfiz5j6l27";
   };
 
   nativeBuildInputs = [
     cmake
     pkgconfig
-    lxqt.lxqt-build-tools
+    lxqt-build-tools
   ];
 
   buildInputs = [
     pcre
-    qt5.qtbase
-    qt5.qttools
-    qt5.qtx11extras
+    qtbase
+    qttools
+    qtx11extras
     xorg.libpthreadstubs
     xorg.libXdmcp
     xorg.libSM
     openbox
     hicolor-icon-theme
   ];
-
-  cmakeFlags = [ "-DPULL_TRANSLATIONS=NO" ];
 
   meta = with stdenv.lib; {
     description = "The Qt port of obconf, the Openbox configuration tool";

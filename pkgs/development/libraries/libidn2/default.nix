@@ -4,11 +4,11 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "libidn2-${version}";
-  version = "2.0.5";
+  version = "2.1.0";
 
   src = fetchurl {
     url = "mirror://gnu/gnu/libidn/${name}.tar.gz";
-    sha256 = "1f529jxmhj12q7i1gvw2d9i24zbslz3kj91kbgxac7vgi1q93xjk";
+    sha256 = "0chxs75212qknd72l6vvai48hwg3czlr938sym1sydwmmbdrh8q3";
   };
 
   outputs = [ "bin" "dev" "out" "info" "devdoc" ];

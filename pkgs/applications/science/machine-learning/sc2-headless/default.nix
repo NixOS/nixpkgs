@@ -1,9 +1,9 @@
-{ stdenv
+{ config, stdenv
 , callPackage
 , lib
 , fetchurl
 , unzip
-, licenseAccepted ? false
+, licenseAccepted ? config.sc2-headless.accept_license or false
 }:
 
 if !licenseAccepted then throw ''
@@ -33,7 +33,8 @@ in stdenv.mkDerivation rec {
     cp -r . "$out"
     rm -r $out/Libs
 
-    cp -r "${maps.minigames}"/* "$out"/Maps/
+    cp -r "${maps.minigames}"/* "${maps.melee}"/* "${maps.ladder2017season1}"/* "${maps.ladder2017season2}"/* "${maps.ladder2017season3}"/* \
+      "${maps.ladder2017season4}"/*  "${maps.ladder2018season1}"/* "${maps.ladder2018season2}"/* "$out"/Maps/
   '';
 
   preFixup = ''

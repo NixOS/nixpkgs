@@ -7,12 +7,17 @@ fifo
 inspect
 lgi
 lpeg_patterns
+lpty
 lrexlib-gnu,
 lrexlib-posix,
 ltermbox,
 lua-cmsgpack,
 lua_cliargs,
+lua-iconv,
 lua-term,
+luabitop,
+luaevent,
+luacheck
 luaffi,http://luarocks.org/dev,
 luuid,
 penlight,

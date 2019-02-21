@@ -1,4 +1,6 @@
-{ pkgs, useMupdf ? true, synctexSupport ? true }:
+{ config, pkgs
+, useMupdf ? config.zathura.useMupdf or true
+, synctexSupport ? true }:
 
 let
   callPackage = pkgs.newScope self;

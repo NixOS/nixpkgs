@@ -114,7 +114,7 @@ stdenv.mkDerivation rec {
 
     # Create the script
     cat > "$out/bin/${cmd}" <<EOF
-    #!/bin/sh
+    #!${stdenv.shell}
     set -f
     LD_LIBRARY_PATH="\$LD_LIBRARY_PATH:$libs" exec $out/pharo "\$@"
     EOF

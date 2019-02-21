@@ -60,6 +60,7 @@ let
     qtdeclarative = [ ./qtdeclarative.patch ];
     qtscript = [ ./qtscript.patch ];
     qtserialport = [ ./qtserialport.patch ];
+    qtwebengine = [ ./qtwebengine-no-build-skip.patch ];
     qtwebkit = [ ./qtwebkit.patch ];
   };
 
@@ -89,7 +90,9 @@ let
       };
 
       qtcharts = callPackage ../modules/qtcharts.nix {};
-      qtconnectivity = callPackage ../modules/qtconnectivity.nix {};
+      qtconnectivity = callPackage ../modules/qtconnectivity.nix {
+        inherit cf-private;
+      };
       qtdeclarative = callPackage ../modules/qtdeclarative.nix {};
       qtdoc = callPackage ../modules/qtdoc.nix {};
       qtgraphicaleffects = callPackage ../modules/qtgraphicaleffects.nix {};

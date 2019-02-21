@@ -68,11 +68,6 @@ self: super: {
     hackage-security = self.hackage-security.override { Cabal = self.Cabal_2_4_1_0; };
   };
 
-  # https://github.com/pikajude/stylish-cabal/issues/11
-  stylish-cabal = generateOptparseApplicativeCompletion "stylish-cabal" (super.stylish-cabal.overrideScope (self: super: {
-    haddock-library = dontHaddock (dontCheck self.haddock-library_1_5_0_1);
-  }));
-
   # cabal2nix doesn't list this because of a conditional on the GHC version.
   aeson = addBuildDepend super.aeson self.contravariant;
 

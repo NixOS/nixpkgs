@@ -1,7 +1,7 @@
-{ lib, stdenv, fetchurl
+{ config, lib, stdenv, fetchurl
 , enableAlsa ? true, alsaLib ? null
 , enableLibao ? true, libao ? null
-, enableLame ? false, lame ? null
+, enableLame ? config.sox.enableLame or false, lame ? null
 , enableLibmad ? true, libmad ? null
 , enableLibogg ? true, libogg ? null, libvorbis ? null
 , enableFLAC ? true, flac ? null

@@ -1,15 +1,16 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, lxqt-build-tools, qtbase, qtx11extras, qttools, qtsvg, kwindowsystem, libkscreen, liblxqt, libqtxdg, xorg }:
+{ stdenv, fetchFromGitHub, cmake, pkgconfig, lxqt-build-tools, qtbase,
+  qtx11extras, qttools, qtsvg, kwindowsystem, libkscreen, liblxqt,
+  libqtxdg, xorg }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "lxqt-config";
-  version = "0.13.0";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "0r5vwkyz0c9b9py3wni4yzkmsvgs6psk9dp1fhfzvbjbknb21bfa";
+    sha256 = "1pp2pw43zh8kwi2cxk909wn6bw7kba95b6bv96l2gmzhdqpfw2a7";
   };
 
   nativeBuildInputs = [
@@ -32,13 +33,29 @@ stdenv.mkDerivation rec {
     xorg.libXScrnSaver
     xorg.libxcb
     xorg.libXcursor
+    xorg.xf86inputlibinput
+    xorg.xf86inputlibinput.dev
   ];
-
-  cmakeFlags = [ "-DPULL_TRANSLATIONS=NO" ];
 
   postPatch = ''
     substituteInPlace src/CMakeLists.txt \
       --replace "DESTINATION \"\''${LXQT_ETC_XDG_DIR}" "DESTINATION \"etc/xdg"
+
+    for f in \
+      lxqt-config-file-associations/CMakeLists.txt \
+      lxqt-config-brightness/CMakeLists.txt \
+      lxqt-config-appearance/CMakeLists.txt \
+      lxqt-config-locale/CMakeLists.txt \
+      lxqt-config-monitor/CMakeLists.txt \
+      lxqt-config-input/CMakeLists.txt \
+      liblxqt-config-cursor/CMakeLists.txt \
+      src/CMakeLists.txt
+    do
+      substituteInPlace $f \
+        --replace "\''${LXQT_TRANSLATIONS_DIR}" "''${out}/share/lxqt/translations"
+    done
+
+    sed -i "/\''${XORG_LIBINPUT_INCLUDE_DIRS}/a ${xorg.xf86inputlibinput.dev}/include/xorg" lxqt-config-input/CMakeLists.txt
   '';
 
   meta = with stdenv.lib; {

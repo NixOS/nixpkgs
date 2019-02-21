@@ -151,6 +151,7 @@ in {
     services.colord.enable = mkDefault true;
     services.packagekit.enable = mkDefault true;
     hardware.bluetooth.enable = mkDefault true;
+    services.hardware.bolt.enable = mkDefault true;
     services.xserver.libinput.enable = mkDefault true; # for controlling touchpad settings via gnome control center
     services.udev.packages = [ pkgs.gnome3.gnome-settings-daemon ];
     systemd.packages = [ pkgs.gnome3.vino ];

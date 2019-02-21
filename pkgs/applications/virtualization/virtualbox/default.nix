@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, lib, fetchpatch, iasl, dev86, pam, libxslt, libxml2
+{ config, stdenv, fetchurl, lib, fetchpatch, iasl, dev86, pam, libxslt, libxml2
 , libX11, xorgproto, libXext, libXcursor, libXmu, qt5, libIDL, SDL, libcap
 , libpng, glib, lvm2, libXrandr, libXinerama, libopus
 , pkgconfig, which, docbook_xsl, docbook_xml_dtd_43
@@ -7,7 +7,7 @@
 , javaBindings ? false, jdk ? null
 , pythonBindings ? false, python2 ? null
 , extensionPack ? null, fakeroot ? null
-, pulseSupport ? false, libpulseaudio ? null
+, pulseSupport ? config.pulseaudio or stdenv.isLinux, libpulseaudio ? null
 , enableHardening ? false
 , headless ? false
 , enable32bitGuests ? true

@@ -1,5 +1,6 @@
 [
-  "asar"
+  "@angular/cli"
+, "asar"
 , "azure-functions-core-tools"
 , "bower"
 , "bower2nix"
@@ -63,6 +64,7 @@
 , "livedown"
 , { "lumo-build-deps": "../interpreters/clojurescript/lumo" }
 , "madoko"
+, "markdown-link-check"
 , "mathjax"
 , "meat"
 , "meguca"
@@ -89,6 +91,7 @@
 , "pulp"
 , "react-tools"
 , "react-native-cli"
+, "reveal.js"
 , "s3http"
 , "scuttlebot"
 , "semver"

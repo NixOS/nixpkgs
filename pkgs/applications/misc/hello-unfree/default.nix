@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out/bin
     cat > $out/bin/hello-unfree << EOF
-    #!/bin/sh
+    #!${stdenv.shell}
     echo "Hello, you are running an unfree system!"
     EOF
     chmod +x $out/bin/hello-unfree

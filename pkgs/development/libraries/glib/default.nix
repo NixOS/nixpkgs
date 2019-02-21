@@ -77,6 +77,15 @@ stdenv.mkDerivation rec {
         url = https://gitlab.gnome.org/GNOME/glib/commit/e695ca9f310c393d8f39694f77471dbcb06daa9e.diff;
         sha256 = "1jkb2bdnni0xdyn86xrx9z0fdwxrm7y08lagz8x5x01wglkwa26w";
       })
+      # https://gitlab.gnome.org/GNOME/glib/issues/1643
+      (fetchpatch {
+        url = https://gitlab.gnome.org/GNOME/glib/commit/c792e5adaa8ae3a45e6ff3ff71168ad8d040a0d4.patch;
+        sha256 = "022x70qfn5wlv5gz3nlg0bwiwjxcd7l11j3qvbms2y8d1ffh5rfd";
+      })
+      (fetchpatch {
+        url = https://gitlab.gnome.org/GNOME/glib/commit/30ccbc386026cecac6ef3a77d8fa4f3c24ac68d7.patch;
+        sha256 = "04y3pxgzlx92cppwibx4rlsyvwxb37aq52x2lr6ajfgykv2nzpr3";
+      })
     ];
 
   outputs = [ "bin" "out" "dev" "devdoc" ];

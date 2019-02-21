@@ -13,7 +13,7 @@ let
 
   sh = busybox-sandbox-shell;
 
-  common = { name, suffix ? "", src, fromGit ? false }:
+  common = { name, suffix ? "", src, includesPerl ? false, fromGit ? false }:
     let nix = stdenv.mkDerivation rec {
       inherit name src;
       version = lib.getVersion name;
@@ -113,7 +113,7 @@ let
       passthru = {
         inherit fromGit;
 
-        perl-bindings = stdenv.mkDerivation {
+        perl-bindings = if includesPerl then nix else stdenv.mkDerivation {
           name = "nix-perl-${version}";
 
           inherit src;
@@ -150,6 +150,9 @@ in rec {
       url = "http://nixos.org/releases/nix/${name}/${name}.tar.xz";
       sha256 = "0ca5782fc37d62238d13a620a7b4bff6a200bab1bd63003709249a776162357c";
     };
+
+    # Nix1 has the perl bindings by default, so no need to build the manually.
+    includesPerl = true;
   };
 
   nixStable = common rec {

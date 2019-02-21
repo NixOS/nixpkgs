@@ -1,4 +1,4 @@
-{stdenvNoCC, subversion, sshSupport ? false, openssh ? null, expect}: 
+{stdenvNoCC, subversion, sshSupport ? true, openssh ? null, expect}:
 {username, password, url, rev ? "HEAD", md5 ? "", sha256 ? ""}:
 
 

@@ -23,6 +23,45 @@
     The default Python 3 interpreter is now CPython 3.7 instead of CPython 3.6.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     Added the Pantheon desktop environment.
+     It can be enabled through <varname>services.xserver.desktopManager.pantheon.enable</varname>.
+    </para>
+    <note>
+     <para>
+      <varname>services.xserver.desktopManager.pantheon</varname> default enables lightdm
+      as a display manager and using Pantheon's greeter.
+     </para>
+     <para>
+      This is because of limitations with the screenlocking implementation, whereas the
+      screenlocker would be non-functional without it.
+     </para>
+     <para>
+      Because of that it is recommended to retain this precaution, however if you'd like to change this set:
+     </para>
+     <itemizedlist>
+      <listitem>
+       <para>
+        <option>services.xserver.displayManager.lightdm.enable</option>
+       </para>
+      </listitem>
+      <listitem>
+       <para>
+        <option>services.xserver.displayManager.lightdm.greeters.pantheon.enable</option>
+       </para>
+      </listitem>
+     </itemizedlist>
+     <para>to <literal>false</literal> and enable your preferred display manager.</para>
+    </note>
+     <para>
+       A major refactoring of the Kubernetes module has been completed.
+       Refactorings primarily focus on decoupling components and enhancing
+       security. Two-way TLS and RBAC has been enabled by default for all
+       components, which slightly changes the way the module is configured.
+       See: <xref linkend="sec-kubernetes"/> for details.
+     </para>
+   </listitem>
   </itemizedlist>
  </section>
 
@@ -412,6 +451,23 @@
      <option>services.matomo.package</option> which determines the used
      Matomo version.
     </para>
+    <para>
+     The Matomo module now also comes with the systemd service <literal>matomo-archive-processing.service</literal>
+     and a timer that automatically triggers archive processing every hour.
+     This means that you can safely
+     <link xlink:href="https://matomo.org/docs/setup-auto-archiving/#disable-browser-triggers-for-matomo-archiving-and-limit-matomo-reports-to-updating-every-hour">
+      disable browser triggers for Matomo archiving
+     </link> at <literal>Administration > System > General Settings</literal>.
+    </para>
+    <para>
+     Additionally, you can enable to
+     <link xlink:href="https://matomo.org/docs/privacy/#step-2-delete-old-visitors-logs">
+      delete old visitor logs
+     </link> at <literal>Administration > System > Privacy</literal>,
+     but make sure that you run <literal>systemctl start matomo-archive-processing.service</literal>
+     at least once without errors if you have already collected data before,
+     so that the reports get archived before the source data gets deleted.
+    </para>
    </listitem>
    <listitem>
     <para>
@@ -481,6 +537,20 @@
    </listitem>
    <listitem>
     <para>
+     Symlinks in <filename>/etc</filename> (except <filename>/etc/static</filename>)
+     are now relative instead of absolute. This makes possible to examine
+     NixOS container's <filename>/etc</filename> directory from host system
+     (previously it pointed to host <filename>/etc</filename> when viewed from host,
+     and to container <filename>/etc</filename> when viewed from container chroot).
+    </para>
+    <para>
+     This also makes <filename>/etc/os-release</filename> adhere to
+     <link xlink:href="https://www.freedesktop.org/software/systemd/man/os-release.html">the standard</link>
+     for NixOS containers.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
       Flat volumes are now disabled by default in <literal>hardware.pulseaudio</literal>.
       This has been done to prevent applications, which are unaware of this feature, setting
       their volumes to 100% on startup causing harm to your audio hardware and potentially your ears.
@@ -514,6 +584,55 @@
      <link xlink:href="http://docs.grafana.org/administration/provisioning/">datasource and dashboard</link>
      provisioning.
     </para>
+   </listitem>
+   <listitem>
+     <para>
+       The use of insecure ports on kubernetes has been deprecated.
+       Thus options:
+       <varname>services.kubernetes.apiserver.port</varname> and
+       <varname>services.kubernetes.controllerManager.port</varname>
+       has been renamed to <varname>.insecurePort</varname>,
+       and default of both options has changed to 0 (disabled).
+     </para>
+    </listitem>
+    <listitem>
+      <para>
+        Note that the default value of
+        <varname>services.kubernetes.apiserver.bindAddress</varname>
+        has changed from 127.0.0.1 to 0.0.0.0, allowing the apiserver to be
+        accessible from outside the master node itself.
+        If the apiserver insecurePort is enabled,
+        it is strongly recommended to only bind on the loopback interface. See:
+        <varname>services.kubernetes.apiserver.insecurebindAddress</varname>.
+      </para>
+    </listitem>
+    <listitem>
+      <para>
+        The option <varname>services.kubernetes.apiserver.allowPrivileged</varname>
+        and <varname>services.kubernetes.kubelet.allowPrivileged</varname> now
+        defaults to false. Disallowing privileged containers on the cluster.
+      </para>
+    </listitem>
+    <listitem>
+      <para>
+        The kubernetes module does no longer add the kubernetes package to
+        <varname>environment.systemPackages</varname> implicitly.
+      </para>
+    </listitem>    
+    <listitem>
+      <para>
+        The <literal>intel</literal> driver has been removed from the default list of
+        <link linkend="opt-services.xserver.videoDrivers">X.org video drivers</link>.
+        The <literal>modesetting</literal> driver should take over automatically,
+        it is better maintained upstream and has less problems with advanced X11 features.
+        Some performance regressions on some GPU models might happen.
+        Some OpenCL and VA-API applications might also break
+        (Beignet seems to provide OpenCL support with
+        <literal>modesetting</literal> driver, too).
+        Users who need this functionality more than multi-output XRandR are advised
+        to add `intel` to `videoDrivers` and report an issue (or provide additional
+        details in an existing one)
+      </para>
    </listitem>
   </itemizedlist>
  </section>
