@@ -4,7 +4,7 @@
 }:
 
 let
-  version = "1.30.0";
+  version = "1.31.0";
 
   # Update these on version bumps according to Makefile
   centOsIsoVersion = "v1.14.0";
@@ -18,7 +18,7 @@ in buildGoPackage rec {
     owner = "minishift";
     repo = "minishift";
     rev = "v${version}";
-    sha256 = "0p7g7r4m3brssy2znw7pd60aph6m6absqy23x88c07n5n4mv9wj8";
+    sha256 = "0v5hngfz393yi3x4c328g5bjazw02jr59ljqh6ws0j6wzxzm8jxf";
   };
 
   nativeBuildInputs = [ pkgconfig go-bindata makeWrapper ];
@@ -28,9 +28,6 @@ in buildGoPackage rec {
   subPackages = [ "cmd/minishift" ];
 
   postPatch = ''
-    substituteInPlace vendor/github.com/containers/image/storage/storage_image.go \
-      --replace 'nil, diff' 'diff'
-
     # minishift downloads openshift if not found therefore set the cache to /nix/store/...
     substituteInPlace pkg/minishift/cache/oc_caching.go \
       --replace 'filepath.Join(oc.MinishiftCacheDir, OC_CACHE_DIR, oc.OpenShiftVersion, runtime.GOOS)' '"${openshift}/bin"' \

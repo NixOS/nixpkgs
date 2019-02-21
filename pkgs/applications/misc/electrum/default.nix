@@ -14,13 +14,13 @@ in
 
 python3Packages.buildPythonApplication rec {
   pname = "electrum";
-  version = "3.3.2";
+  version = "3.3.4";
 
   src = fetchFromGitHub {
     owner = "spesmilo";
     repo = "electrum";
     rev = version;
-    sha256 = "1jsn02azdydpq4plr2552s7ijyqgw6zqm2zx8skwsalgbwmhx12i";
+    sha256 = "0yxdpc602jnd14xz3px85ka0b6db98zwbgfi9a3vj8p1k3mmiwaj";
   };
 
   propagatedBuildInputs = with python3Packages; [
@@ -53,9 +53,6 @@ python3Packages.buildPythonApplication rec {
 
   preBuild = ''
     sed -i 's,usr_share = .*,usr_share = "'$out'/share",g' setup.py
-    pyrcc5 icons.qrc -o electrum/gui/qt/icons_rc.py
-    # Recording the creation timestamps introduces indeterminism to the build
-    sed -i '/Created: .*/d' electrum/gui/qt/icons_rc.py
     sed -i "s|name = 'libzbar.*'|name='${zbar}/lib/libzbar.so'|" electrum/qrscanner.py
     substituteInPlace ./electrum/ecc_fast.py --replace libsecp256k1.so.0 ${secp256k1}/lib/libsecp256k1.so.0
   '';

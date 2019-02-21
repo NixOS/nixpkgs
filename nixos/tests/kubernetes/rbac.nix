@@ -96,7 +96,7 @@ let
     test = ''
       $machine1->waitUntilSucceeds("kubectl get node machine1.my.zyx | grep -w Ready");
 
-      $machine1->execute("docker load < ${kubectlImage}");
+      $machine1->waitUntilSucceeds("docker load < ${kubectlImage}");
 
       $machine1->waitUntilSucceeds("kubectl apply -f ${roServiceAccount}");
       $machine1->waitUntilSucceeds("kubectl apply -f ${roRole}");
@@ -105,7 +105,7 @@ let
 
       $machine1->waitUntilSucceeds("kubectl get pod kubectl | grep Running");
 
-      $machine1->succeed("kubectl exec -ti kubectl -- kubectl get pods");
+      $machine1->waitUntilSucceeds("kubectl exec -ti kubectl -- kubectl get pods");
       $machine1->fail("kubectl exec -ti kubectl -- kubectl create -f /kubectl-pod-2.json");
       $machine1->fail("kubectl exec -ti kubectl -- kubectl delete pods -l name=kubectl");
     '';
@@ -113,10 +113,13 @@ let
 
   multinode = base // {
     test = ''
-      $machine1->waitUntilSucceeds("kubectl get node machine1.my.zyx | grep -w Ready");
+      # Node token exchange
+      $machine1->waitUntilSucceeds("cp -f /var/lib/cfssl/apitoken.secret /tmp/shared/apitoken.secret");
+      $machine2->waitUntilSucceeds("cat /tmp/shared/apitoken.secret | nixos-kubernetes-node-join");
+
       $machine1->waitUntilSucceeds("kubectl get node machine2.my.zyx | grep -w Ready");
 
-      $machine2->execute("docker load < ${kubectlImage}");
+      $machine2->waitUntilSucceeds("docker load < ${kubectlImage}");
 
       $machine1->waitUntilSucceeds("kubectl apply -f ${roServiceAccount}");
       $machine1->waitUntilSucceeds("kubectl apply -f ${roRole}");
@@ -125,7 +128,7 @@ let
 
       $machine1->waitUntilSucceeds("kubectl get pod kubectl | grep Running");
 
-      $machine1->succeed("kubectl exec -ti kubectl -- kubectl get pods");
+      $machine1->waitUntilSucceeds("kubectl exec -ti kubectl -- kubectl get pods");
       $machine1->fail("kubectl exec -ti kubectl -- kubectl create -f /kubectl-pod-2.json");
       $machine1->fail("kubectl exec -ti kubectl -- kubectl delete pods -l name=kubectl");
     '';

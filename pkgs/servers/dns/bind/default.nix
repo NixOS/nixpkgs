@@ -1,7 +1,7 @@
-{ stdenv, lib, fetchurl
+{ config, stdenv, lib, fetchurl
 , perl
 , libcap, libtool, libxml2, openssl
-, enablePython ? false, python3 ? null
+, enablePython ? config.bind.enablePython or false, python3 ? null
 , enableSeccomp ? false, libseccomp ? null, buildPackages
 }:
 
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libtool libxml2 openssl ]
     ++ lib.optional stdenv.isLinux libcap
     ++ lib.optional enableSeccomp libseccomp
-    ++ lib.optional enablePython python3;
+    ++ lib.optional enablePython (python3.withPackages (ps: with ps; [ ply ]));
 
   STD_CDEFINES = [ "-DDIG_SIGCHASE=1" ]; # support +sigchase
 

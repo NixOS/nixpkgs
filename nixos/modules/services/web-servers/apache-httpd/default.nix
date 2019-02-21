@@ -497,8 +497,8 @@ in
         default = false;
         description = ''
           If enabled, each virtual host gets its own
-          <filename>access_log</filename> and
-          <filename>error_log</filename>, namely suffixed by the
+          <filename>access.log</filename> and
+          <filename>error.log</filename>, namely suffixed by the
           <option>hostName</option> of the virtual host.
         '';
       };
