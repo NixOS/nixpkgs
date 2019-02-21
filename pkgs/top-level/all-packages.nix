@@ -15944,6 +15944,8 @@ in
 
   ultimate-oldschool-pc-font-pack = callPackage ../data/fonts/ultimate-oldschool-pc-font-pack { };
 
+  undefined-medium = callPackage ../data/fonts/undefined-medium { };
+
   uni-vga = callPackage ../data/fonts/uni-vga { };
 
   unifont = callPackage ../data/fonts/unifont { };
