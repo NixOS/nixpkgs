@@ -1652,11 +1652,11 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   xev = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, xorgproto, libXrandr }: stdenv.mkDerivation {
-    name = "xev-1.2.2";
+    name = "xev-1.2.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/xev-1.2.2.tar.bz2;
-      sha256 = "0krivhrxpq6719103r541xpi3i3a0y15f7ypc4lnrx8sdhmfcjnr";
+      url = mirror://xorg/individual/app/xev-1.2.3.tar.bz2;
+      sha256 = "02ddsdx138g7szhwklpbzi0cxr34871iay3k28kdcihrz8f4zg36";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
