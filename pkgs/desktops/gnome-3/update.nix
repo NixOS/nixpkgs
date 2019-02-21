@@ -1,4 +1,4 @@
-{ stdenv, lib, writeScript, python3, common-updater-scripts, coreutils, gnugrep, gnused }:
+{ stdenv, lib, writeScript, python3, common-updater-scripts, coreutils, gnugrep, gnused }: {}:
 { packageName, attrPath ? packageName, versionPolicy ? "odd-unstable" }:
 
 let

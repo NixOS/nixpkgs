@@ -1,4 +1,4 @@
-{stdenv, fossil}:
+{stdenv, fossil}: {}:
 
 {name ? null, url, rev, sha256}:
 

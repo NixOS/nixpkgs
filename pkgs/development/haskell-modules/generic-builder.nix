@@ -1,6 +1,6 @@
 { stdenv, buildPackages, buildHaskellPackages, ghc
 , jailbreak-cabal, hscolour, cpphs, nodejs, shellFor
-}:
+}: {}:
 
 let
   isCross = stdenv.buildPlatform != stdenv.hostPlatform;

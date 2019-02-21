@@ -1,4 +1,4 @@
-{ stdenv, cacert, git, cargo, cargo-vendor, python3 }:
+{ stdenv, cacert, git, cargo, cargo-vendor, python3 }: {}:
 let cargo-vendor-normalise = stdenv.mkDerivation {
   name = "cargo-vendor-normalise";
   src = ./cargo-vendor-normalise.py;

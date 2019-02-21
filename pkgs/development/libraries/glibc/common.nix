@@ -23,7 +23,7 @@
 , linuxHeaders ? null
 , gd ? null, libpng ? null
 , bison
-}:
+}: {}:
 
 { name
 , withLinuxHeaders ? false

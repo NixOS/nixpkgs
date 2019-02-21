@@ -1,6 +1,6 @@
 { stdenv, makeDesktopItem, makeWrapper, patchelf, p7zip
 , coreutils, gnugrep, which, git, unzip, libsecret, libnotify
-}:
+}: {}:
 
 { name, product, version, src, wmClass, jdk, meta }:
 

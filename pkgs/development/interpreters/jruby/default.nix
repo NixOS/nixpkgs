@@ -1,8 +1,8 @@
-{ stdenv, callPackage, fetchurl, makeWrapper, jre }:
+{ lib, stdenv, callPackage, fetchurl, makeWrapper, jre }:
 
 let
 # The version number here is whatever is reported by the RUBY_VERSION string
-rubyVersion = callPackage ../ruby/ruby-version.nix {} "2" "3" "3" "";
+rubyVersion = import ../ruby/ruby-version.nix { inherit lib; } "2" "3" "3" "";
 jruby = stdenv.mkDerivation rec {
   name = "jruby-${version}";
 

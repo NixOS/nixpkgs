@@ -14,7 +14,7 @@
 , fetchgit
 , overrides ? (self: super: {})
 , lib
-}:
+}: {}:
 
 let
   packages = ( self:

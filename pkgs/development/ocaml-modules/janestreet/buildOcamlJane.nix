@@ -1,4 +1,4 @@
-{ buildOcaml, opaline, js_build_tools, ocaml_oasis, fetchurl } :
+{ buildOcaml, opaline, js_build_tools, ocaml_oasis, fetchurl }: {}:
 
 { name, version ? "113.33.03", buildInputs ? [],
   hash ? "",

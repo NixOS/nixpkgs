@@ -1,4 +1,4 @@
-{ fetchzip, lib }:
+{ fetchzip, lib }: {}:
 
 # gitlab example
 { owner, repo, rev, domain ? "gitlab.com", name ? "source", group ? null

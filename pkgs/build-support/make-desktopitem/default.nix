@@ -1,4 +1,4 @@
-{stdenv, lib}:
+{stdenv, lib}: {}:
 { name
 , type ? "Application"
 , exec

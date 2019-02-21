@@ -1,4 +1,4 @@
-{ callPackage }:
+{ callPackage }: {}:
 { rustc, cargo, ... }: {
   rust = {
     inherit rustc cargo;

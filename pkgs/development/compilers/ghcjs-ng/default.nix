@@ -32,7 +32,7 @@ let
         inherit (self) callPackage;
       })
 
-      (callPackage ./common-overrides.nix {
+      (import ./common-overrides.nix {
         inherit haskellLib;
         inherit (bootPkgs) alex happy;
       })

@@ -1,4 +1,4 @@
-{ pkgs, lib, emscripten, python }:
+{ pkgs, lib, emscripten, python }: {}:
 
 { buildInputs ? [], nativeBuildInputs ? []
 

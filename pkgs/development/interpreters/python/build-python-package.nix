@@ -13,7 +13,7 @@
 , flit
 , writeScript
 , update-python-libraries
-}:
+}: {}:
 
 let
   setuptools-specific = import ./build-python-package-setuptools.nix { inherit lib python; };

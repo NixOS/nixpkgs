@@ -9,7 +9,7 @@
 , aspellDicts
 , makeWrapper
 , buildEnv
-}:
+}: {}:
 
 f:
 

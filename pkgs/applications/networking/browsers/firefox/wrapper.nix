@@ -10,7 +10,7 @@
 , browserpass, chrome-gnome-shell, uget-integrator, plasma-browser-integration, bukubrow
 , udev
 , kerberos
-}:
+}: {}:
 
 ## configurability of the wrapper itself
 

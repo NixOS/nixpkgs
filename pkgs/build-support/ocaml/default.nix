@@ -1,4 +1,4 @@
-{ stdenv, writeText, ocaml, findlib, ocamlbuild, camlp4 }:
+{ stdenv, writeText, ocaml, findlib, ocamlbuild, camlp4 }: {}:
 
 { name, version, buildInputs ? [],
   createFindlibDestdir ?  true,

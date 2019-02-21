@@ -2,7 +2,7 @@
 # a fork of the buildEnv in the Nix distribution.  Most changes should
 # eventually be merged back into the Nix distribution.
 
-{ buildPackages, runCommand, lib }:
+{ buildPackages, runCommand, lib }: {}:
 
 lib.makeOverridable
 ({ name

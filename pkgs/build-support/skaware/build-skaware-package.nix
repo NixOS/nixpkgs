@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, writeScript, file }:
+{ stdenv, fetchurl, writeScript, file }: {}:
 let lib = stdenv.lib;
 in {
   # : string

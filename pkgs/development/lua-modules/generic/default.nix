@@ -1,4 +1,4 @@
-{ lua, writeText, toLuaModule }:
+{ lua, writeText, toLuaModule }: {}:
 
 { buildInputs ? [], disabled ? false, ... } @ attrs:
 

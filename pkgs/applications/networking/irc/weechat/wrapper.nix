@@ -1,6 +1,6 @@
 { stdenv, lib, runCommand, writeScriptBin, buildEnv
 , pythonPackages, perlPackages
-}:
+}: {}:
 
 weechat:
 

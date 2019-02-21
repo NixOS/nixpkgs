@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl }: {}:
 { version, artifactId, groupId, sha512, type ? "jar", suffix ? "" }:
 
 let

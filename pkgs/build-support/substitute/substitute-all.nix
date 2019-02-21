@@ -1,4 +1,4 @@
-{ stdenvNoCC }:
+{ stdenvNoCC }: {}:
 
 args:
 

@@ -1,4 +1,4 @@
-{ fetchzip }:
+{ fetchzip }: {}:
 
 # cgit example, snapshot support is optional in cgit
 { repo, rev, name ? "source"

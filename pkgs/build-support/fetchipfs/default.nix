@@ -1,6 +1,6 @@
 { stdenv
 , curl
-}:
+}: {}:
 
 { ipfs
 , url            ? ""

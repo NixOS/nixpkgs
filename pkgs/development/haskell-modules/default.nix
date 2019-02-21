@@ -7,7 +7,7 @@
 , nonHackagePackages ? import ./non-hackage-packages.nix
 , configurationCommon ? import ./configuration-common.nix
 , configurationNix ? import ./configuration-nix.nix
-}:
+}: {}:
 
 let
 

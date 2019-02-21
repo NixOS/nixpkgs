@@ -4,7 +4,7 @@
 # often change with updating of git or cgit.
 # stripLen acts as the -p parameter when applying a patch.
 
-{ lib, fetchurl, buildPackages }:
+{ lib, fetchurl, buildPackages }: {}:
 { stripLen ? 0, extraPrefix ? null, excludes ? [], includes ? [], revert ? false, ... }@args:
 
 fetchurl ({

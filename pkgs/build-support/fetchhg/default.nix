@@ -1,4 +1,4 @@
-{ stdenvNoCC, mercurial }:
+{ stdenvNoCC, mercurial }: {}:
 { name ? null
 , url
 , rev ? null

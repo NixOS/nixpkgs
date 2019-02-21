@@ -1,4 +1,4 @@
-{ runCommand, nix, lib }:
+{ runCommand, nix, lib }: {}:
 
 # Replace a single dependency in the requisites tree of drv, propagating
 # the change all the way up the tree, without a full rebuild. This can be

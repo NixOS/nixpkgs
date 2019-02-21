@@ -9,7 +9,7 @@
 , pango
 , stdenv
 , xorg
-}:
+}: {}:
 
 { src, toolName, version, ... } @ attrs:
 let

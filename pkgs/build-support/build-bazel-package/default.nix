@@ -1,4 +1,4 @@
-{ stdenv, bazel, cacert, enableNixHacks ? true }:
+{ stdenv, bazel, cacert, enableNixHacks ? true }: {}:
 
 args@{ name, bazelFlags ? [], bazelTarget, buildAttrs, fetchAttrs, ... }:
 

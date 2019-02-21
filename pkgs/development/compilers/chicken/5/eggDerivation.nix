@@ -1,4 +1,4 @@
-{ stdenv, chicken, makeWrapper }:
+{ stdenv, chicken, makeWrapper }: {}:
 { name, src
 , buildInputs ? []
 , chickenInstallFlags ? []

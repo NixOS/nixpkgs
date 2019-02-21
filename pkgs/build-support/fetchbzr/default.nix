@@ -1,4 +1,4 @@
-{ stdenvNoCC, bazaar }:
+{ stdenvNoCC, bazaar }: {}:
 { url, rev, sha256 }:
 
 stdenvNoCC.mkDerivation {

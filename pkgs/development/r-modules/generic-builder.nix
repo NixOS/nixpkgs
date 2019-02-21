@@ -1,4 +1,4 @@
-{ stdenv, R, libcxx, xvfb_run, utillinux, Cocoa, Foundation, gettext, gfortran }:
+{ stdenv, R, libcxx, xvfb_run, utillinux, Cocoa, Foundation, gettext, gfortran }: {}:
 
 { name, buildInputs ? [], requireX ? false, ... } @ attrs:
 

@@ -5,7 +5,7 @@
 , gnupg
 , darwin, xcbuild
 , procps
-}:
+}: {}:
 
 with stdenv.lib;
 

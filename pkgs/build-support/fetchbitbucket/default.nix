@@ -1,4 +1,4 @@
-{ fetchzip }:
+{ fetchzip }: {}:
 
 { owner, repo, rev, name ? "source"
 , ... # For hash agility

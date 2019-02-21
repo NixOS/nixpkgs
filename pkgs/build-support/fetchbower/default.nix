@@ -1,4 +1,4 @@
-{ stdenvNoCC, lib, bower2nix, cacert }:
+{ stdenvNoCC, lib, bower2nix, cacert }: {}:
 let
   bowerVersion = version:
     let

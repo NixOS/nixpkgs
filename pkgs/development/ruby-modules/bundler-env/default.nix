@@ -1,4 +1,4 @@
-{ ruby, lib, callPackage, defaultGemConfig, buildEnv, bundler }@defs:
+{ ruby, lib, callPackage, defaultGemConfig, buildEnv, bundler }@defs: {}:
 
 { name ? null
 , pname ? null

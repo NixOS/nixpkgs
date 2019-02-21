@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, pkgconfig, xfce4-dev-tools, hicolor-icon-theme }:
+{ stdenv, fetchgit, pkgconfig, xfce4-dev-tools, hicolor-icon-theme }: {}:
 
 { category, pname, version, rev ? "${pname}-${version}", sha256, ... } @ args:
 

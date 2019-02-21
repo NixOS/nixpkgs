@@ -5,7 +5,7 @@ nixpkgs$ maintainers/scripts/update-luarocks-packages pkgs/development/lua-modul
 
 These packages are manually refined in lua-overrides.nix
 */
-{ self, lua, stdenv, fetchurl, fetchgit, pkgs, ... } @ args:
+{ self, lua, stdenv, fetchurl, fetchgit, pkgs, ... } @ args: {}:
 self: super:
 with self;
 {

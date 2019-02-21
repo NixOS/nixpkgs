@@ -1,5 +1,5 @@
 { go, govers, lib, fetchgit, fetchhg, fetchbzr, rsync
-, removeReferencesTo, fetchFromGitHub, stdenv }:
+, removeReferencesTo, fetchFromGitHub, stdenv }: {}:
 
 { buildInputs ? []
 , nativeBuildInputs ? []

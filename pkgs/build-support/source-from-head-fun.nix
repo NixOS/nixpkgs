@@ -9,7 +9,7 @@
    The documentation is availible at http://github.com/MarcWeber/nix-repository-manager/raw/master/README
 
 */
-{ config }:
+{ config }: {}:
   localTarName: publishedSrcSnapshot:
   if config.sourceFromHead.useLocalRepos or false then
     "${config.sourceFromHead.managedRepoDir or "/set/sourceFromHead.managedRepoDir/please"}/dist/${localTarName}"

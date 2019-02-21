@@ -1,4 +1,4 @@
-{ stdenv, lib, coreutils, bash, gnutar, writeText }:
+{ stdenv, lib, coreutils, bash, gnutar, writeText }: {}:
 let
   stripScheme =
     builtins.replaceStrings [ "https://" "http://" ] [ "" "" ];

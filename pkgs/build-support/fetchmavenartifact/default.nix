@@ -1,6 +1,6 @@
 # Adaptation of the MIT-licensed work on `sbt2nix` done by Charles O'Farrell
 
-{ fetchurl, stdenv }:
+{ fetchurl, stdenv }: {}:
 let
   defaultRepos = [
     http://central.maven.org/maven2

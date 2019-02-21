@@ -2,7 +2,7 @@
 , defaultGemConfig, buildRubyGem, buildEnv
 , makeWrapper
 , bundler
-}@defs:
+}@defs: {}:
 
 {
   name ? null

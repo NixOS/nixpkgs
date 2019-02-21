@@ -7,7 +7,7 @@
 , writeText
 # Whether the derivation provides a lua module or not.
 , toLuaModule
-}:
+}: {}:
 
 {
 name ? "${attrs.pname}-${attrs.version}"

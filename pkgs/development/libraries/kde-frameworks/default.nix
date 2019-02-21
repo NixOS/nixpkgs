@@ -33,7 +33,7 @@ let
     mirror = "mirror://kde";
   };
 
-  mkDerivation = libsForQt5.callPackage ({ mkDerivation }: mkDerivation) {};
+  mkDerivation = libsForQt5.callPackage ({ mkDerivation }: {}: mkDerivation) {};
 
   packages = self: with self;
     # SUPPORT

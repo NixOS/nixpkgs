@@ -1,4 +1,4 @@
-{ stdenv, lib, makeWrapper, pkgconfig, mono, dotnetbuildhelpers }:
+{ stdenv, lib, makeWrapper, pkgconfig, mono, dotnetbuildhelpers }: {}:
 
 attrsOrig @
 { baseName

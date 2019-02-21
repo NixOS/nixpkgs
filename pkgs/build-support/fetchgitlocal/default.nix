@@ -1,4 +1,4 @@
-{ runCommand, git }: src:
+{ runCommand, git }: {}: src:
 
 let
   srcStr = toString src;

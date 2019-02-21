@@ -1,4 +1,4 @@
-{ stdenvNoCC, runCommand, awscli }:
+{ stdenvNoCC, runCommand, awscli }: {}:
 
 { s3url
 , name ? builtins.baseNameOf s3url

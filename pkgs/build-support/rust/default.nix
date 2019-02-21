@@ -1,4 +1,4 @@
-{ stdenv, cacert, git, cargo, rustc, cargo-vendor, fetchcargo, python3 }:
+{ stdenv, cacert, git, cargo, rustc, cargo-vendor, fetchcargo, python3 }: {}:
 
 { name, cargoSha256 ? "unset"
 , src ? null

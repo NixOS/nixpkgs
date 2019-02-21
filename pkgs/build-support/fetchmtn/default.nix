@@ -1,5 +1,5 @@
 # You can specify some extra mirrors and a cache DB via options
-{stdenvNoCC, monotone, defaultDBMirrors ? [], cacheDB ? "./mtn-checkout.db"}:
+{stdenvNoCC, monotone, defaultDBMirrors ? [], cacheDB ? "./mtn-checkout.db"}: {}:
 # dbs is a list of strings
 # each is an url for sync
 

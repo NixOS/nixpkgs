@@ -1,4 +1,4 @@
-{ appleDerivation_, applePackage, pkgs, stdenv }:
+{ appleDerivation_, applePackage, pkgs, stdenv }: {}:
 name: version: sha256: args: let
   n = stdenv.lib.removePrefix "lib" name;
   makeFile = ../. + "/${name}/GNUmakefile";

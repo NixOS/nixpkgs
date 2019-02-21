@@ -1,4 +1,4 @@
-{ runCommand, lib, }:
+{ runCommand, lib, }: {}:
 
 LuaPathSearchPaths: LuaCPathSearchPaths:
 

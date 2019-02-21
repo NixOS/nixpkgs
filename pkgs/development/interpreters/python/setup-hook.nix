@@ -1,4 +1,4 @@
-{ runCommand }:
+{ runCommand }: {}:
 
 sitePackages:
 

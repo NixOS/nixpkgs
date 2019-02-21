@@ -5,7 +5,7 @@
 , nodePackages
 , pythonPackages
 , python3Packages
-}:
+}: {}:
 with stdenv.lib;
 
 neovim:

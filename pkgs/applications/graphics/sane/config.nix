@@ -1,4 +1,4 @@
-{ stdenv }:
+{ stdenv }: {}:
 
 { paths }:
 

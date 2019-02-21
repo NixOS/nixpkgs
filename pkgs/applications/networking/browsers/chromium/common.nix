@@ -31,7 +31,7 @@
 , pulseSupport ? false, libpulseaudio ? null
 
 , upstream-info
-}:
+}: {}:
 
 buildFun:
 

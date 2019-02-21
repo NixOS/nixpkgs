@@ -1,4 +1,4 @@
-{ stdenv, maven, pkgs }:
+{ stdenv, maven, pkgs }: {}:
 { mavenDeps, src, name, meta, m2Path, skipTests ? true, quiet ? true, ... }:
 
 with builtins;

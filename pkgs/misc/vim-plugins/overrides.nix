@@ -16,7 +16,7 @@
 , gomodifytags, gotags, gotools, go-motion
 , gnused, reftools, gogetdoc, gometalinter
 , impl, iferr, gocode, gocode-gomod, go-tools
-}:
+}: {}:
 
 self: super: {
 

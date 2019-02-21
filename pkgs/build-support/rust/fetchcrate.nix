@@ -1,4 +1,4 @@
-{ lib, fetchurl, unzip }:
+{ lib, fetchurl, unzip }: {}:
 
 { crateName
 , version

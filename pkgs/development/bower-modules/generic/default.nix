@@ -1,4 +1,4 @@
-{ pkgs }:
+{ pkgs }: {}:
 
 { buildInputs ? [], generated, ... } @ attrs:
 

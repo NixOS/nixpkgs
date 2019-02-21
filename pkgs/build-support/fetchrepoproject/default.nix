@@ -1,4 +1,4 @@
-{ stdenvNoCC, gitRepo, cacert, copyPathsToStore }:
+{ stdenvNoCC, gitRepo, cacert, copyPathsToStore }: {}:
 
 { name, manifest, rev ? "HEAD", sha256
 # Optional parameters:

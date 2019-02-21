@@ -2,7 +2,7 @@
 , libelf
 , utillinux
 , writeTextFile
-}:
+}: {}:
 
 let
   readConfig = configfile: import (runCommand "config.nix" {} ''

@@ -1,4 +1,4 @@
-{stdenvNoCC, git, cacert}: let
+{stdenvNoCC, git, cacert}: {}: let
   urlToName = url: rev: let
     inherit (stdenvNoCC.lib) removeSuffix splitString last;
     base = last (splitString ":" (baseNameOf (removeSuffix "/" url)));

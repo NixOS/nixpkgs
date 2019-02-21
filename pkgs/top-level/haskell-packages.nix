@@ -88,13 +88,13 @@ in {
       bootPkgs = packages.ghc844;
       ghcjsSrcJson = ../development/compilers/ghcjs-ng/8.4/git.json;
       stage0 = ../development/compilers/ghcjs-ng/8.4/stage0.nix;
-      ghcjsDepOverrides = callPackage ../development/compilers/ghcjs-ng/8.4/dep-overrides.nix {};
+      ghcjsDepOverrides = import ../development/compilers/ghcjs-ng/8.4/dep-overrides.nix { inherit haskellLib; };
     };
     ghcjs86 = callPackage ../development/compilers/ghcjs-ng {
       bootPkgs = packages.ghc863;
       ghcjsSrcJson = ../development/compilers/ghcjs-ng/8.6/git.json;
       stage0 = ../development/compilers/ghcjs-ng/8.6/stage0.nix;
-      ghcjsDepOverrides = callPackage ../development/compilers/ghcjs-ng/8.6/dep-overrides.nix {};
+      ghcjsDepOverrides = import ../development/compilers/ghcjs-ng/8.6/dep-overrides.nix { inherit haskellLib; };
     };
 
     # The integer-simple attribute set contains all the GHC compilers
@@ -117,57 +117,57 @@ in {
     ghc822Binary = callPackage ../development/haskell-modules {
       buildHaskellPackages = bh.packages.ghc822Binary;
       ghc = bh.compiler.ghc822Binary;
-      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.2.x.nix { };
+      compilerConfig = import ../development/haskell-modules/configuration-ghc-8.2.x.nix { inherit pkgs haskellLib; };
       packageSetConfig = bootstrapPackageSet;
     };
     ghc863Binary = callPackage ../development/haskell-modules {
       buildHaskellPackages = bh.packages.ghc863Binary;
       ghc = bh.compiler.ghc863Binary;
-      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.6.x.nix { };
+      compilerConfig = import ../development/haskell-modules/configuration-ghc-8.6.x.nix { inherit pkgs haskellLib; };
       packageSetConfig = bootstrapPackageSet;
     };
     ghc822 = callPackage ../development/haskell-modules {
       buildHaskellPackages = bh.packages.ghc822;
       ghc = bh.compiler.ghc822;
-      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.2.x.nix { };
+      compilerConfig = import ../development/haskell-modules/configuration-ghc-8.2.x.nix { inherit pkgs haskellLib; };
     };
     ghc844 = callPackage ../development/haskell-modules {
       buildHaskellPackages = bh.packages.ghc844;
       ghc = bh.compiler.ghc844;
-      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.4.x.nix { };
+      compilerConfig = import ../development/haskell-modules/configuration-ghc-8.4.x.nix { inherit pkgs haskellLib; };
     };
     ghc861 = callPackage ../development/haskell-modules {
       buildHaskellPackages = bh.packages.ghc861;
       ghc = bh.compiler.ghc861;
-      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.6.x.nix { };
+      compilerConfig = import ../development/haskell-modules/configuration-ghc-8.6.x.nix { inherit pkgs haskellLib; };
     };
     ghc862 = callPackage ../development/haskell-modules {
       buildHaskellPackages = bh.packages.ghc862;
       ghc = bh.compiler.ghc862;
-      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.6.x.nix { };
+      compilerConfig = import ../development/haskell-modules/configuration-ghc-8.6.x.nix { inherit pkgs haskellLib; };
     };
     ghc863 = callPackage ../development/haskell-modules {
       buildHaskellPackages = bh.packages.ghc863;
       ghc = bh.compiler.ghc863;
-      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.6.x.nix { };
+      compilerConfig = import ../development/haskell-modules/configuration-ghc-8.6.x.nix { inherit pkgs haskellLib; };
     };
     ghcHEAD = callPackage ../development/haskell-modules {
       buildHaskellPackages = bh.packages.ghcHEAD;
       ghc = bh.compiler.ghcHEAD;
-      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-head.nix { };
+      compilerConfig = import ../development/haskell-modules/configuration-ghc-head.nix { inherit pkgs haskellLib; };
     };
     ghcjs = packages.ghcjs86;
     ghcjs84 = callPackage ../development/haskell-modules rec {
       buildHaskellPackages = ghc.bootPkgs;
       ghc = bh.compiler.ghcjs84;
-      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.4.x.nix { };
-      packageSetConfig = callPackage ../development/haskell-modules/configuration-ghcjs.nix { };
+      compilerConfig = import ../development/haskell-modules/configuration-ghc-8.4.x.nix { inherit pkgs haskellLib; };
+      packageSetConfig = import ../development/haskell-modules/configuration-ghcjs.nix { inherit pkgs haskellLib; };
     };
     ghcjs86 = callPackage ../development/haskell-modules rec {
       buildHaskellPackages = ghc.bootPkgs;
       ghc = bh.compiler.ghcjs86;
-      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.6.x.nix { };
-      packageSetConfig = callPackage ../development/haskell-modules/configuration-ghcjs.nix { };
+      compilerConfig = import ../development/haskell-modules/configuration-ghc-8.6.x.nix { inherit pkgs haskellLib; };
+      packageSetConfig = import ../development/haskell-modules/configuration-ghcjs.nix { inherit pkgs haskellLib; };
     };
 
     # The integer-simple attribute set contains package sets for all the GHC compilers

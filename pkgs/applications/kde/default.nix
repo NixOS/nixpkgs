@@ -40,7 +40,7 @@ let
       sname = args.sname or name;
       inherit (srcs."${sname}") src version;
       mkDerivation =
-        libsForQt5.callPackage ({ mkDerivation }: mkDerivation) {};
+        libsForQt5.callPackage ({ mkDerivation }: {}: mkDerivation) {};
     in
       mkDerivation (args // {
         name = "${name}-${version}";

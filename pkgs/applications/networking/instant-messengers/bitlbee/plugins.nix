@@ -1,4 +1,4 @@
-{ stdenv, bitlbee }:
+{ stdenv, bitlbee }: {}:
 
 with stdenv.lib;
 

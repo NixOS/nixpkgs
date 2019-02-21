@@ -20,7 +20,7 @@
 
 { lib, fetchurl, fetchgit, makeWrapper, git, darwin
 , ruby, bundler
-} @ defs:
+} @ defs: {}:
 
 lib.makeOverridable (
 

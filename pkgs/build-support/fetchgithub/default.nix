@@ -1,4 +1,4 @@
-{ lib, fetchgit, fetchzip }:
+{ lib, fetchgit, fetchzip }: {}:
 
 { owner, repo, rev, name ? "source"
 , fetchSubmodules ? false, private ? false
