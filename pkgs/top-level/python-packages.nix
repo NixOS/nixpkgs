@@ -2794,6 +2794,8 @@ in {
 
   imageio = callPackage ../development/python-modules/imageio { };
 
+  imageio-ffmpeg = disabledIf isPy27 (callPackage ../development/python-modules/imageio-ffmpeg { });
+
   imgaug = callPackage ../development/python-modules/imgaug { };
 
   inflection = callPackage ../development/python-modules/inflection { };
