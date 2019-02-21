@@ -55,13 +55,7 @@ in {
     };
     ghc844 = callPackage ../development/compilers/ghc/8.4.4.nix {
       bootPkgs = packages.ghc822Binary;
-      sphinx = buildPackages.python3Packages.sphinx.overridePythonAttrs (oldAttrs: rec {
-        version = "1.7.9";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "217a7705adcb573da5bbe1e0f5cab4fa0bd89fd9342c9159121746f593c2d5a4";
-        };
-      });
+      sphinx = buildPackages.python3Packages.sphinx_1_7_9;
       buildLlvmPackages = buildPackages.llvmPackages_5;
       llvmPackages = pkgs.llvmPackages_5;
     };
