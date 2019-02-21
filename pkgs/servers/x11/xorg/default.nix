@@ -2835,11 +2835,11 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   xvinfo = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, xorgproto, libXv }: stdenv.mkDerivation {
-    name = "xvinfo-1.1.3";
+    name = "xvinfo-1.1.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/xvinfo-1.1.3.tar.bz2;
-      sha256 = "1sz5wqhxd1fqsfi1w5advdlwzkizf2fgl12hdpk66f7mv9l8pflz";
+      url = mirror://xorg/individual/app/xvinfo-1.1.4.tar.bz2;
+      sha256 = "0gz7fvxavqlrqynpfbrm2nc9yx8h0ksnbnv34fj7n1q6cq6j4lq3";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
