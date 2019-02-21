@@ -64,6 +64,8 @@ in
           ${cfg.extraOpts}
         '';
         WorkingDirectory = top.dataDir;
+        Restart = "on-failure";
+        RestartSec = 5;
       };
     };
 
