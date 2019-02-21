@@ -33,7 +33,7 @@
 , dvdnavSupport      ? stdenv.isLinux, libdvdnav     ? null
 , dvdreadSupport     ? stdenv.isLinux, libdvdread    ? null
 , libpngSupport      ? true,           libpng        ? null
-, pulseSupport       ? config.pulseaudio or stdenv.isLinux, libpulseaudio ? null
+, libpulseaudio ? null
 , rubberbandSupport  ? stdenv.isLinux, rubberband ? null
 , screenSaverSupport ? true,           libXScrnSaver ? null
 , sdl2Support        ? true,           SDL2          ? null
@@ -48,6 +48,8 @@
 , jackaudioSupport   ? false,          libjack2      ? null
 , openalSupport      ? false,          openalSoft    ? null
 , vapoursynthSupport ? false,          vapoursynth   ? null
+}: {
+  pulseaudio ? stdenv.isLinux
 }:
 
 with stdenv.lib;
@@ -68,7 +70,7 @@ assert dvdreadSupport     -> available libdvdread;
 assert jackaudioSupport   -> available libjack2;
 assert libpngSupport      -> available libpng;
 assert openalSupport      -> available openalSoft;
-assert pulseSupport       -> available libpulseaudio;
+assert pulseaudio -> available libpulseaudio;
 assert rubberbandSupport  -> available rubberband;
 assert screenSaverSupport -> available libXScrnSaver;
 assert sdl2Support        -> available SDL2;
@@ -153,7 +155,7 @@ in stdenv.mkDerivation rec {
     ++ optional jackaudioSupport   libjack2
     ++ optional libpngSupport      libpng
     ++ optional openalSupport      openalSoft
-    ++ optional pulseSupport       libpulseaudio
+    ++ optional pulseaudio libpulseaudio
     ++ optional rubberbandSupport  rubberband
     ++ optional screenSaverSupport libXScrnSaver
     ++ optional sdl2Support        SDL2
