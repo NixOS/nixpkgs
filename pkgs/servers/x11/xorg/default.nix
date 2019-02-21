@@ -1535,11 +1535,11 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   xclock = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libXaw, libXft, libxkbfile, libXmu, xorgproto, libXrender, libXt }: stdenv.mkDerivation {
-    name = "xclock-1.0.7";
+    name = "xclock-1.0.8";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/xclock-1.0.7.tar.bz2;
-      sha256 = "1l3xv4bsca6bwxx73jyjz0blav86i7vwffkhdb1ac81y9slyrki3";
+      url = mirror://xorg/individual/app/xclock-1.0.8.tar.bz2;
+      sha256 = "0m92zhamh15my9f2rqa14q41d6k2cn468azm3g7g3w9n7942024k";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
