@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "typora";
-  version = "0.9.64";
+  version = "0.9.65";
 
   src = fetchurl {
     url = "https://www.typora.io/linux/typora_${version}_amd64.deb";
-    sha256 = "0dffydc11ys2i38gdy8080ph1xlbbzhcdcc06hyfv0dr0nf58a09";
+    sha256 = "1y2ydz1vcphcp8rzw9q1iray446xig3m48c8r50qs3bx6bfyf0g9";
   };
 
   nativeBuildInputs = [ dpkg makeWrapper wrapGAppsHook ];
