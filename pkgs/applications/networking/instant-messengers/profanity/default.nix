@@ -1,6 +1,7 @@
 { stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, glib, openssl
 , glibcLocales, expect, ncurses, libotr, curl, readline, libuuid
 , cmocka, libmicrohttpd, stabber, expat, libmesode
+, autoconf-archive
 
 , autoAwaySupport ? true,       libXScrnSaver ? null, libX11 ? null
 , notifySupport ? true,         libnotify ? null, gdk_pixbuf ? null
@@ -32,7 +33,9 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ autoreconfHook glibcLocales pkgconfig ];
+  nativeBuildInputs = [
+    autoreconfHook autoconf-archive glibcLocales pkgconfig
+  ];
 
   buildInputs = [
     expect readline libuuid glib openssl expat ncurses libotr
@@ -57,12 +60,6 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   LC_ALL = "en_US.utf8";
-
-  NIX_CFLAGS_COMPILE = [ ]
-    ++ optionals pythonPluginSupport [ "-I${python}/include/${python.libPrefix}" ];
-
-  LDFLAGS = [ ]
-    ++ optionals pythonPluginSupport [ "-L${python}/lib" "-l${python.libPrefix}" ];
 
   meta = {
     description = "A console based XMPP client";
