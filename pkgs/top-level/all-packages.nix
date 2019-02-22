@@ -638,6 +638,8 @@ in
 
   autorevision = callPackage ../tools/misc/autorevision { };
 
+  automirror = callPackage ../tools/misc/automirror { };
+
   bcachefs-tools = callPackage ../tools/filesystems/bcachefs-tools { };
 
   bitwarden-cli = callPackage ../tools/security/bitwarden-cli { };
