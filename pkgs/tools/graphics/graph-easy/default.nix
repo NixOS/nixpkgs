@@ -11,7 +11,7 @@ perlPackages.buildPerlPackage rec {
   meta = with stdenv.lib; {
     description = "Render/convert graphs in/from various formats";
     license = licenses.gpl1;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = [ maintainers.jensbin ];
   };
 }

@@ -24,6 +24,6 @@ buildPythonPackage rec {
     '';
     homepage = https://github.com/zimmermanncode/zetup;
     license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

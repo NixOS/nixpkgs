@@ -24,7 +24,7 @@ buildGoPackage rec {
     The interface is inspired by htop and shortcut keys are inspired by vim.
     '';
     homepage  = https://cointop.sh;
-    platforms = stdenv.lib.platforms.linux; # cannot test others
+    platforms = stdenv.lib.platforms.unix; # cannot test others
     maintainers = [ ];
     license = stdenv.lib.licenses.asl20;
   };

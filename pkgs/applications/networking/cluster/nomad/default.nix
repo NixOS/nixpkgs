@@ -18,7 +18,7 @@ buildGoPackage rec {
   meta = with stdenv.lib; {
     homepage = https://www.nomadproject.io/;
     description = "A Distributed, Highly Available, Datacenter-Aware Scheduler";
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     license = licenses.mpl20;
     maintainers = with maintainers; [ rushmorem pradeepchhetri ];
   };
