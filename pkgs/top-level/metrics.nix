@@ -55,6 +55,9 @@ runCommand "nixpkgs-metrics"
     num=$(nix-env -f ${nixpkgs} -qa | wc -l)
     echo "nix-env.qaCount $num" >> $out/nix-support/hydra-metrics
 
+    num=$(nix-env -f ${nixpkgs} -qa --drv-path | wc -l)
+    echo "nix-env.qaCountDrv $num" >> $out/nix-support/hydra-metrics
+
     # TODO: this has been ignored for some time
     # GC Warning: Bad initial heap size 128k - ignoring it.
     #export GC_INITIAL_HEAP_SIZE=128k
