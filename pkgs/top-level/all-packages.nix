@@ -1615,6 +1615,8 @@ in
 
   s2png = callPackage ../tools/graphics/s2png { };
 
+  shab = callPackage ../tools/text/shab { };
+
   simg2img = callPackage ../tools/filesystems/simg2img { };
 
   snipes = callPackage ../games/snipes { };
