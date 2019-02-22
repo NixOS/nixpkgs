@@ -22151,6 +22151,8 @@ in
 
   ### MISC
 
+  acpilight = callPackage ../misc/acpilight { };
+
   android-file-transfer = libsForQt5.callPackage ../tools/filesystems/android-file-transfer { };
 
   antimicro = libsForQt5.callPackage ../tools/misc/antimicro { };
