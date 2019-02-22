@@ -1,4 +1,5 @@
-{ stdenv, fetchFromGitHub, pantheon, pkgconfig, cmake, ninja, gtk3, gtksourceview3, webkitgtk, gtkspell3, glib, libgee, sqlite, discount, wrapGAppsHook }:
+{ stdenv, fetchFromGitHub, pantheon, pkgconfig, cmake, ninja, gtk3, gtksourceview3, webkitgtk, gtkspell3, glib, libgee, sqlite, discount, wrapGAppsHook
+, withPantheon ? false }:
 
 stdenv.mkDerivation rec {
   pname = "notes-up";
@@ -31,8 +32,12 @@ stdenv.mkDerivation rec {
     webkitgtk
   ];
 
+  # Whether to build with contractor support (Pantheon specific)
+  cmakeFlags = if withPantheon then null else [ "-Dnoele=yes" ];
+
   meta = with stdenv.lib; {
-    description = "Markdown notes editor and manager designed for elementary OS";
+    description = "Markdown notes editor and manager designed for elementary OS"
+    + stdenv.lib.optionalString withPantheon " - built with Contractor support";
     homepage = https://github.com/Philip-Scott/Notes-up;
     license = licenses.gpl2;
     maintainers = with maintainers; [ davidak worldofpeace ];
