@@ -1,11 +1,9 @@
 { stdenv
 , fetchFromGitHub
-, gcc8Stdenv
 , cmake
-, gnumake
 }:
 
-gcc8Stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   name = "fltrdr-${version}";
   version = "0.1.1";
 
@@ -16,22 +14,7 @@ gcc8Stdenv.mkDerivation rec {
     sha256 = "1gglv7hwszk09ywjq6s169cdzr77sjklj89k5p24if24v93yffpf";
   };
 
-  buildPhase = ''
-    BUILD_TYPE="release"
-
-    mkdir -p build/$BUILD_TYPE
-    cd build/$BUILD_TYPE
-    ${cmake}/bin/cmake ../../ -DCMAKE_BUILD_TYPE=$BUILD_TYPE
-    cat Makefile
-    make
-  '';
-
-  installPhase = ''
-    mkdir -p $out/bin
-    cp fltrdr $out/bin/
-  '';
-
-  buildInput = [ cmake gnumake ];
+  nativeBuildInputs = [ cmake ];
 
   enableParallelBuilding = true;
 
@@ -51,7 +34,7 @@ gcc8Stdenv.mkDerivation rec {
 
     platforms   = platforms.linux; # can only test linux
     license     = licenses.mit;
-    maintainers = [ stdenv.maintainers.matthiasbeyer ];
+    maintainers = [ maintainers.matthiasbeyer ];
   };
 }
 
