@@ -953,17 +953,13 @@ self: super: {
   # Tries to read a file it is not allowed to in the test suite
   load-env = dontCheck super.load-env;
 
-  # hledger needs a newer megaparsec version than we have in LTS 12.x.
-  hledger-lib = super.hledger-lib.overrideScope (self: super: {
-    # cassava-megaparsec = self.cassava-megaparsec_2_0_0;
-    # hspec-megaparsec = self.hspec-megaparsec_2_0_0;
-    # megaparsec = self.megaparsec_7_0_4;
-  });
-
   # Copy hledger man pages from data directory into the proper place. This code
   # should be moved into the cabal2nix generator.
   hledger = overrideCabal super.hledger (drv: {
     postInstall = ''
+      # Don't install files that don't belong into this package to avoid
+      # conflicts when hledger and hledger-ui end up in the same profile.
+      rm embeddedfiles/hledger-{api,ui,web}.*
       for i in $(seq 1 9); do
         for j in embeddedfiles/*.$i; do
           mkdir -p $out/share/man/man$i
@@ -974,7 +970,7 @@ self: super: {
       cp -v embeddedfiles/*.info* $out/share/info/
     '';
   });
-  hledger-ui = (overrideCabal super.hledger-ui (drv: {
+  hledger-ui = overrideCabal super.hledger-ui (drv: {
     postInstall = ''
       for i in $(seq 1 9); do
         for j in *.$i; do
@@ -985,11 +981,6 @@ self: super: {
       mkdir -p $out/share/info
       cp -v *.info* $out/share/info/
     '';
-  })).overrideScope (self: super: {
-    # cassava-megaparsec = self.cassava-megaparsec_2_0_0;
-    # config-ini = self.config-ini_0_2_4_0;
-    # hspec-megaparsec = self.hspec-megaparsec_2_0_0;
-    # megaparsec = self.megaparsec_7_0_4;
   });
   hledger-web = overrideCabal super.hledger-web (drv: {
     postInstall = ''

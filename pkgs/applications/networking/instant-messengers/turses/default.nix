@@ -36,6 +36,6 @@ buildPythonPackage rec {
     description = "A Twitter client for the console";
     license = licenses.gpl3;
     maintainers = with maintainers; [ garbas ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

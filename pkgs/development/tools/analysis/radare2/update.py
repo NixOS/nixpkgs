@@ -61,15 +61,15 @@ def git(dirname: str, *args: str) -> str:
 def get_repo_info(dirname: str, rev: str) -> Dict[str, str]:
     sha256 = prefetch_github("radare", "radare2", rev)
 
-    cs_tip = None
+    cs_ver = None
     with open(Path(dirname).joinpath("shlr", "Makefile")) as makefile:
         for l in makefile:
-            match = re.match("CS_TIP=(\S+)", l)
+            match = re.match("CS_VER=(\S+)", l)
             if match:
-                cs_tip = match.group(1)
-    assert cs_tip is not None
+                cs_ver = match.group(1)
+    assert cs_ver is not None
 
-    cs_sha256 = prefetch_github("aquynh", "capstone", cs_tip)
+    cs_sha256 = prefetch_github("aquynh", "capstone", cs_ver)
 
     return dict(
         rev=rev,
@@ -77,7 +77,7 @@ def get_repo_info(dirname: str, rev: str) -> Dict[str, str]:
         version_commit=git(dirname, "rev-list", "--all", "--count"),
         gittap=git(dirname, "describe", "--tags", "--match", "[0-9]*"),
         gittip=git(dirname, "rev-parse", "HEAD"),
-        cs_tip=cs_tip,
+        cs_ver=cs_ver,
         cs_sha256=cs_sha256,
     )
 
@@ -90,7 +90,7 @@ def write_package_expr(version: str, info: Dict[str, str]) -> str:
     rev = "{info["rev"]}";
     version = "{version}";
     sha256 = "{info["sha256"]}";
-    cs_tip = "{info["cs_tip"]}";
+    cs_ver = "{info["cs_ver"]}";
     cs_sha256 = "{info["cs_sha256"]}";
   }}"""
 

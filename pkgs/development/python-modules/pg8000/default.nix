@@ -20,7 +20,7 @@ buildPythonPackage rec {
     homepage = https://github.com/mfenniak/pg8000;
     description = "PostgreSQL interface library, for asyncio";
     maintainers = with maintainers; [ garbas domenkozar ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 
 }

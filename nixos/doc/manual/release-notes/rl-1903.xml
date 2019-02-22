@@ -91,6 +91,11 @@
      in <literal>nixos/modules/virtualisation/google-compute-config.nix</literal>.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     <literal>./services/misc/beanstalkd.nix</literal>
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
@@ -545,6 +550,20 @@
    </listitem>
    <listitem>
     <para>
+     Symlinks in <filename>/etc</filename> (except <filename>/etc/static</filename>)
+     are now relative instead of absolute. This makes possible to examine
+     NixOS container's <filename>/etc</filename> directory from host system
+     (previously it pointed to host <filename>/etc</filename> when viewed from host,
+     and to container <filename>/etc</filename> when viewed from container chroot).
+    </para>
+    <para>
+     This also makes <filename>/etc/os-release</filename> adhere to
+     <link xlink:href="https://www.freedesktop.org/software/systemd/man/os-release.html">the standard</link>
+     for NixOS containers.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
       Flat volumes are now disabled by default in <literal>hardware.pulseaudio</literal>.
       This has been done to prevent applications, which are unaware of this feature, setting
       their volumes to 100% on startup causing harm to your audio hardware and potentially your ears.
@@ -613,6 +632,28 @@
         <varname>environment.systemPackages</varname> implicitly.
       </para>
     </listitem>
+    <listitem>
+      <para>
+        The <literal>intel</literal> driver has been removed from the default list of
+        <link linkend="opt-services.xserver.videoDrivers">X.org video drivers</link>.
+        The <literal>modesetting</literal> driver should take over automatically,
+        it is better maintained upstream and has less problems with advanced X11 features.
+        Some performance regressions on some GPU models might happen.
+        Some OpenCL and VA-API applications might also break
+        (Beignet seems to provide OpenCL support with
+        <literal>modesetting</literal> driver, too).
+        Users who need this functionality more than multi-output XRandR are advised
+        to add `intel` to `videoDrivers` and report an issue (or provide additional
+        details in an existing one)
+      </para>
+   </listitem>
+   <listitem>
+     <para>
+       Openmpi has been updated to version 4.0.0, which removes some deprecated MPI-1 symbols.
+       This may break some older applications that still rely on those symbols.
+       An upgrade guide can be found <link xlink:href="https://www.open-mpi.org/faq/?category=mpi-removed">here</link>.
+     </para>
+   </listitem>
   </itemizedlist>
  </section>
 </section>

@@ -18,6 +18,8 @@ let
 
     doCheck = true;
 
+    patches = stdenv.lib.optionals stdenv.isDarwin [ ./skip-flaky-darwin-test.patch ];
+
     # the configure script thinks that Darwin has ___exp10
     # but it’s not available on my systems (or hydra apparently)
     postConfigure = stdenv.lib.optionalString stdenv.isDarwin ''

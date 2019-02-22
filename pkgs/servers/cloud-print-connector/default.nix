@@ -51,6 +51,6 @@ buildGoPackage rec {
     maintainers = with maintainers; [ hodapp ];
     # TODO: Fix broken build on macOS.  The GitHub presently lists the
     # FreeBSD build as broken too, but this may change in the future.
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

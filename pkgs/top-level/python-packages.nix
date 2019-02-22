@@ -2804,6 +2804,8 @@ in {
 
   imageio = callPackage ../development/python-modules/imageio { };
 
+  imageio-ffmpeg = callPackage ../development/python-modules/imageio-ffmpeg { };
+
   imgaug = callPackage ../development/python-modules/imgaug { };
 
   inflection = callPackage ../development/python-modules/inflection { };
