@@ -1,16 +1,16 @@
 { lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "antibody-${version}";
-  version = "4.0.2";
+  pname = "antibody";
+  version = "4.1.0";
 
   goPackagePath = "github.com/getantibody/antibody";
 
   src = fetchFromGitHub {
-    owner  = "getantibody";
-    repo   = "antibody";
+    owner = "getantibody";
+    repo = "antibody";
     rev = "v${version}";
-    sha256 = "1lq0bd2l928bgwqiq3fa5ippjhnsfgwdqn6nd3hfis8bijrwc5jv";
+    sha256 = "027qh535cpk5mbxav199vvzhwfkcs0lm7skgfhshpzps1yw4w4mb";
   };
 
   goDeps = ./deps.nix;
