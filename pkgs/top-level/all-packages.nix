@@ -2718,6 +2718,8 @@ in
 
   flent = python3Packages.callPackage ../applications/networking/flent { };
 
+  flexibee = callPackage ../applications/office/flexibee { };
+
   flpsed = callPackage ../applications/editors/flpsed { };
 
   fluentd = callPackage ../tools/misc/fluentd { };
