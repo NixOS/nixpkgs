@@ -20,6 +20,12 @@ stdenv.mkDerivation rec {
       url = https://gitlab.gnome.org/GNOME/geary/commit/d2f1b1076aa942d140e83fdf03b66621c11229f5.patch;
       sha256 = "1dsj4ybnibpi572w9hafm0w90jbjv7wzdl6j8d4c2qg5h7knlvfk";
     })
+    # Fixes tests on Aarch64
+    # https://gitlab.gnome.org/GNOME/geary/issues/259
+    (fetchpatch {
+      url = https://gitlab.gnome.org/GNOME/geary/commit/9c3fdbfb5c792daeb9c3924f798fa83a15096d8a.patch;
+      sha256 = "1ihjxnaj0g6gx264kd8cbhs88yp37vwmmcd3lvmz44agf7qcv2ri";
+    })
   ];
 
   nativeBuildInputs = [
