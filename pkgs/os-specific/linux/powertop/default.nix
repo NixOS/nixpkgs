@@ -29,6 +29,10 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Analyze power consumption on Intel-based laptops";
+    requiredKernelConfig = [
+      (stdenv.lib.kernel.isEnabled "CPU_FREQ_STAT" )
+      (stdenv.lib.kernel.isEnabled "CPU_FREQ" )
+    ];
     homepage = https://01.org/powertop;
     license = licenses.gpl2;
     maintainers = with maintainers; [ fpletz ];

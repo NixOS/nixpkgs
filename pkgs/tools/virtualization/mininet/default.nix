@@ -44,5 +44,8 @@ stdenv.mkDerivation rec {
     };
     homepage = https://github.com/mininet/mininet;
     maintainers = with maintainers; [ teto ];
+    requiredKernelConfig = [
+      (stdenv.lib.kernel.isEnabled "NET_NS" )
+    ];
   };
 }
