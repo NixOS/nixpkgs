@@ -487,6 +487,9 @@ self: super: builtins.intersectAttrs super {
   # https://github.com/plow-technologies/servant-streaming/issues/12
   servant-streaming-server = dontCheck super.servant-streaming-server;
 
+  # https://github.com/haskell-servant/servant/pull/1128
+  servant-client-core = appendPatch super.servant-client-core ./patches/servant-client-core-streamBody.patch;
+
   # tests run executable, relying on PATH
   # without this, tests fail with "Couldn't launch intero process"
   intero = overrideCabal super.intero (drv: {
