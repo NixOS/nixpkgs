@@ -10,12 +10,12 @@
 }:
 
 buildPythonPackage rec {
-  version = "1.0.1";
+  version = "1.5.6";
   pname = "vidstab";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "31b45fa6c6c726ee05c4e106d95682f17258750d09e2e1c880bbccbf866f323e";
+    sha256 = "6b488aed337855ac8b3730f7c6964c2ad41111a8f61ab0b457197696feefa593";
   };
 
   checkInputs = [ pytest ];

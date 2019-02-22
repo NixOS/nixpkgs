@@ -9,24 +9,28 @@
 , six
 , stevedore
 , isPy27
+, fasteners
+, jinja2
 }:
 
 buildPythonPackage rec {
   pname = "jenkins-job-builder";
-  version = "2.6.0";
+  version = "2.9.1";
   disabled = !isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1768b278efa8825d2549c03de6ef1d2458e741b9b7984d94db0ef3c22e608938";
+    sha256 = "fba5f3efe8bd06d559f06a5d3bd68da5a7395541fcd370053a8174d08519e3d0";
   };
 
-  patchPhase = ''
+  postPatch = ''
     export HOME=$TMPDIR
   '';
 
-  buildInputs = [ pip ];
-  propagatedBuildInputs = [ pbr mock python-jenkins pyyaml six stevedore ];
+  propagatedBuildInputs = [ pbr mock python-jenkins pyyaml six stevedore fasteners jinja2 ];
+
+  # Need to fix test deps
+  doCheck = false;
 
   meta = with stdenv.lib; {
     description = "Jenkins Job Builder is a system for configuring Jenkins jobs using simple YAML files stored in Git";

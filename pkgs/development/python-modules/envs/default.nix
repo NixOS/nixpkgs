@@ -3,11 +3,11 @@
 
 buildPythonPackage rec {
   pname = "envs";
-  version = "1.2.6";
+  version = "1.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5fe059d6df1ae01c422d32b10ec7f539baad0e7d339f4c8b2de4ad8cbb07c8ba";
+    sha256 = "ccf5cd85ddb8ed335e39ed8a22e0d23658f5a6d7da430f225e6f750c6f50ae42";
   };
 
   checkInputs = [ click jinja2 terminaltables ];

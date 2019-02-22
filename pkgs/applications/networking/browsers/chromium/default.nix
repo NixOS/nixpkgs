@@ -84,7 +84,7 @@ in stdenv.mkDerivation {
     gsettings-desktop-schemas glib gtk3
 
     # needed for XDG_ICON_DIRS
-    gnome3.defaultIconTheme
+    gnome3.adwaita-icon-theme
   ];
 
   outputs = ["out" "sandbox"];

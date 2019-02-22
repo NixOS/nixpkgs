@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, pytest, pytestrunner, pytestcov, pytestflakes, pytestpep8, sphinx, six }:
+{ lib, buildPythonPackage, fetchPypi, pytest, pytestrunner, pytestcov, pytest-flakes, pytestpep8, sphinx, six }:
 
 buildPythonPackage rec {
   pname = "python-utils";
@@ -14,7 +14,7 @@ buildPythonPackage rec {
     rm tests/*.pyc
   '';
 
-  checkInputs = [ pytest pytestrunner pytestcov pytestflakes pytestpep8 sphinx ];
+  checkInputs = [ pytest pytestrunner pytestcov pytest-flakes pytestpep8 sphinx ];
 
   checkPhase = ''
     py.test tests

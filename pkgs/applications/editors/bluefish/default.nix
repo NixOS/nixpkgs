@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ intltool pkgconfig wrapGAppsHook ];
-  buildInputs = [ gnome3.defaultIconTheme gtk libxml2
+  buildInputs = [ gnome3.adwaita-icon-theme gtk libxml2
     enchant gucharmap python ];
 
   meta = with stdenv.lib; {

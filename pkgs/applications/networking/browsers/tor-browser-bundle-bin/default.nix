@@ -39,7 +39,7 @@
 # Wrapper runtime
 , coreutils
 , glibcLocales
-, defaultIconTheme
+, gnome3
 , runtimeShell
 , shared-mime-info
 , gsettings-desktop-schemas
@@ -252,7 +252,7 @@ stdenv.mkDerivation rec {
     EOF
 
     WRAPPER_XDG_DATA_DIRS=${concatMapStringsSep ":" (x: "${x}/share") [
-      defaultIconTheme
+      gnome3.adwaita-icon-theme
       shared-mime-info
     ]}
     WRAPPER_XDG_DATA_DIRS+=":"${concatMapStringsSep ":" (x: "${x}/share/gsettings-schemas/${x.name}") [

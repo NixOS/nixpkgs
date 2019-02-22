@@ -1,5 +1,6 @@
 { stdenv, fetchurl, fetchpatch, pkgconfig
 , bzip2, curl, expat, libarchive, xz, zlib, libuv, rhash
+, buildPackages
 # darwin attributes
 , ps
 , isBootstrap ? false
@@ -16,10 +17,10 @@ with stdenv.lib;
 
 let
   os = stdenv.lib.optionalString;
-  majorVersion = "3.12";
-  minorVersion = "1";
-  # from https://cmake.org/files/v3.12/cmake-3.12.1-SHA-256.txt
-  sha256 = "1ckswlaid3p2is1a80fmr4hgwpfsiif66giyx1z9ayhxx0n5qgf5";
+  majorVersion = "3.13";
+  minorVersion = "4";
+  # from https://cmake.org/files/v3.13/cmake-3.13.4-SHA-256.txt for cmake-3.13.4.tar.gz
+  sha256 = "fdd928fee35f472920071d1c7f1a6a2b72c9b25e04f7a37b409349aef3f20e9b";
   version = "${majorVersion}.${minorVersion}";
 in
 
@@ -61,6 +62,8 @@ stdenv.mkDerivation rec {
     ++ optional useQt4 qt4
     ++ optional withQt5 qtbase;
 
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
+
   propagatedBuildInputs = optional stdenv.isDarwin ps;
 
   preConfigure = ''
@@ -71,7 +74,8 @@ stdenv.mkDerivation rec {
       --subst-var-by libc_lib ${getLib stdenv.cc.libc}
     substituteInPlace Modules/FindCxxTest.cmake \
       --replace "$""{PYTHON_EXECUTABLE}" ${stdenv.shell}
-    configureFlags="--parallel=''${NIX_BUILD_CORES:-1} $configureFlags"
+    # BUILD_CC and BUILD_CXX are used to bootstrap cmake
+    configureFlags="--parallel=''${NIX_BUILD_CORES:-1} CC=$BUILD_CC CXX=$BUILD_CXX $configureFlags"
   '';
 
   configureFlags = [
@@ -94,6 +98,11 @@ stdenv.mkDerivation rec {
   ]
     # Avoid depending on frameworks.
     ++ optional (!useNcurses) "-DBUILD_CursesDialog=OFF";
+
+  # make install attempts to use the just-built cmake
+  preInstall = optional (stdenv.hostPlatform != stdenv.buildPlatform) ''
+    sed -i 's|bin/cmake|${buildPackages.cmake}/bin/cmake|g' Makefile
+  '';
 
   dontUseCmakeConfigure = true;
   enableParallelBuilding = true;

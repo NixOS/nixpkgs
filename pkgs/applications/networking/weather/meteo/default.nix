@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitLab, vala, python3, pkgconfig, meson, ninja, gtk3
-, gnome3, json-glib, libsoup, clutter, clutter-gtk, libchamplain, webkitgtk
+, json-glib, libsoup, clutter, clutter-gtk, libchamplain, webkitgtk, geocode-glib
 , libappindicator, desktop-file-utils, appstream, gobject-introspection, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     clutter
     clutter-gtk
-    gnome3.geocode-glib
+    geocode-glib
     gtk3
     json-glib
     libappindicator

@@ -24,7 +24,7 @@ in stdenv.mkDerivation rec {
     gtk3 glib evolution-data-server gnome3.gsettings-desktop-schemas
     folks gnome-desktop telepathy-glib
     libxml2 gnome-online-accounts cheese
-    gnome3.defaultIconTheme libchamplain clutter-gtk geocode-glib
+    gnome3.adwaita-icon-theme libchamplain clutter-gtk geocode-glib
   ];
 
   postPatch = ''

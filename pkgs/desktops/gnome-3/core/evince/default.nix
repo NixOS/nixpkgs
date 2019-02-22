@@ -1,7 +1,8 @@
 { fetchurl, stdenv, pkgconfig, intltool, libxml2
 , glib, gtk3, pango, atk, gdk_pixbuf, shared-mime-info, itstool, gnome3
 , poppler, ghostscriptX, djvulibre, libspectre, libarchive, libsecret, wrapGAppsHook
-, librsvg, gobject-introspection, yelp-tools, gspell
+, librsvg, gobject-introspection, yelp-tools, gspell, adwaita-icon-theme, gsettings-desktop-schemas
+, libgxps
 , recentListSize ? null # 5 is not enough, allow passing a different number
 , supportXPS ? false    # Open XML Paper Specification via libgxps
 , autoreconfHook, pruneLibtoolFiles
@@ -26,10 +27,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     glib gtk3 pango atk gdk_pixbuf libxml2
-    gnome3.gsettings-desktop-schemas
+    gsettings-desktop-schemas
     poppler ghostscriptX djvulibre libspectre libarchive
-    libsecret librsvg gnome3.adwaita-icon-theme gspell
-  ] ++ stdenv.lib.optional supportXPS gnome3.libgxps;
+    libsecret librsvg adwaita-icon-theme gspell
+  ] ++ stdenv.lib.optional supportXPS libgxps;
 
   configureFlags = [
     "--disable-nautilus" # Do not build nautilus plugin
@@ -37,7 +38,7 @@ stdenv.mkDerivation rec {
     (if supportXPS then "--enable-xps" else "--disable-xps")
   ];
 
-  NIX_CFLAGS_COMPILE = "-I${gnome3.glib.dev}/include/gio-unix-2.0";
+  NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
 
   preConfigure = stdenv.lib.optionalString (recentListSize != null) ''
     sed -i 's/\(gtk_recent_chooser_set_limit .*\)5)/\1${builtins.toString recentListSize})/' shell/ev-open-recent-action.c

@@ -17,7 +17,7 @@ pythonPackages.buildPythonApplication rec {
   };
 
   checkInputs = with pythonPackages; [
-                    pytest pytestflakes webtest mock
+                    pytest pytest-flakes webtest mock
                     devpi-server tox
                     sphinx wheel git mercurial detox
                     setuptools

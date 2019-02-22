@@ -14,7 +14,7 @@ in stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ meson ninja pkgconfig vala gettext itstool libxml2 desktop-file-utils wrapGAppsHook ];
-  buildInputs = [ gtk3 glib gnome3.defaultIconTheme ];
+  buildInputs = [ gtk3 glib gnome3.adwaita-icon-theme ];
 
   doCheck = true;
 

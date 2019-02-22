@@ -2,22 +2,23 @@
 
 buildPythonPackage rec {
   pname = "configparser";
-  version = "3.5.0";
+  version = "3.7.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0fi7vf09vi1588jd8f16a021m5y6ih2hy7rpbjb408xw45qb822k";
+    sha256 = "5bd5fa2a491dc3cfe920a3f2a107510d65eceae10e9c6e547b90261a4710df32";
   };
 
   # No tests available
   doCheck = false;
 
-  # Fix issue when used together with other namespace packages
-  # https://github.com/NixOS/nixpkgs/issues/23855
-  patches = [
-    ./0001-namespace-fix.patch
-  ];
+  preConfigure = ''
+    export LC_ALL=C.UTF-8
+  '';
 
   meta = with stdenv.lib; {
+    description = "Updated configparser from Python 3.7 for Python 2.6+.";
+    license = licenses.mit;
+    homepage = https://github.com/jaraco/configparser;
   };
 }

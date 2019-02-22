@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, intltool, gnome3
-, iconnamingutils, gtk, gdk_pixbuf, librsvg, hicolor-icon-theme }:
+, iconnamingutils, gtk3, gdk_pixbuf, librsvg, hicolor-icon-theme }:
 
 stdenv.mkDerivation rec {
   name = "adwaita-icon-theme-${version}";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ gdk_pixbuf librsvg ];
 
-  nativeBuildInputs = [ pkgconfig intltool iconnamingutils gtk ];
+  nativeBuildInputs = [ pkgconfig intltool iconnamingutils gtk3 ];
 
   # remove a tree of dirs with no files within
   postInstall = '' rm -rf "$out/locale" '';

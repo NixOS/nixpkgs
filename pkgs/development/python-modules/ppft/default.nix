@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "ppft";
-  version = "1.6.4.8";
+  version = "1.6.4.9";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7e1aa0d74f832f0528234890165f3e64d34b3103ec1db7c93c9e7f2ad8cc18d2";
+    sha256 = "5537b00afb7b247da0f59cc57ee5680178be61c8b2e21b5a0672b70a3d247791";
   };
 
   propagatedBuildInputs = [ six ];

@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     gtk3 glib gcr
     gnome3.gsettings-desktop-schemas gnupg
-    gnome3.defaultIconTheme gpgme
+    gnome3.adwaita-icon-theme gpgme
     libsecret avahi libsoup p11-kit
     openssh openldap
   ];
