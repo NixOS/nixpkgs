@@ -29,7 +29,7 @@ let
       description = "Search engine library";
       homepage = https://xapian.org/;
       license = licenses.gpl2Plus;
-      maintainers = with maintainers; [ chaoflow ];
+      maintainers = with maintainers; [ ];
       platforms = platforms.unix;
     };
   };

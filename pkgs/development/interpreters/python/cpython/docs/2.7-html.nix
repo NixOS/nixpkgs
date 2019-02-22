@@ -13,6 +13,6 @@ stdenv.mkDerivation rec {
     cp -R ./ $out/share/doc/python27/html
   '';
   meta = {
-    maintainers = [ lib.maintainers.chaoflow ];
+    maintainers = [ ];
   };
 }

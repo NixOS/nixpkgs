@@ -98,6 +98,6 @@ stdenv.mkDerivation rec {
     '';
     license = stdenv.lib.licenses.psfl;
     platforms = stdenv.lib.platforms.all;
-    maintainers = with stdenv.lib.maintainers; [ lnl7 chaoflow domenkozar ];
+    maintainers = with stdenv.lib.maintainers; [ lnl7 domenkozar ];
   };
 }
