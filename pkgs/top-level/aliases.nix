@@ -47,6 +47,8 @@ mapAliases ({
   at_spi2_core = at-spi2-core; # added 2018-02-25
   bar-xft = lemonbar-xft;  # added 2015-01-16
   bashCompletion = bash-completion; # Added 2016-09-28
+  ber_metaocaml = throw "deprecated; use 'metaocaml' and 'metaocamlPackages' instead";
+  metaocaml_3_09 = throw "removed; use the newer BER MetaOcaml, available in 'metaocaml' and 'metaocamlPackages'";
   bridge_utils = bridge-utils;  # added 2015-02-20
   btrfsProgs = btrfs-progs; # added 2016-01-03
   buildbot = pythonPackages.buildbot; # added 2018-10-11

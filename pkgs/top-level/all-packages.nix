@@ -7443,10 +7443,6 @@ in
 
   orc = callPackage ../development/compilers/orc { };
 
-  metaocaml_3_09 = callPackage ../development/compilers/ocaml/metaocaml-3.09.nix { };
-
-  ber_metaocaml = callPackage ../development/compilers/ocaml/ber-metaocaml.nix { };
-
   ocaml_make = callPackage ../development/ocaml-modules/ocamlmake { };
 
   ocaml-top = callPackage ../development/tools/ocaml/ocaml-top { };
