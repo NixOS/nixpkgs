@@ -157,6 +157,17 @@ in {
           '';
       };
 
+      tappingDrag = mkOption {
+        type = types.bool;
+        default = true;
+        description =
+          ''
+            Enables or disables drag during tapping behavior ("tap-and-drag"). When enabled, a tap
+            followed by a finger held down causes a single button down only, all motions of that finger
+            thus translate into dragging motion. Tap-and-drag requires option Tapping to be enabled.
+          '';
+      };
+
       tappingDragLock = mkOption {
         type = types.bool;
         default = true;
@@ -228,6 +239,7 @@ in {
           Option "HorizontalScrolling" "${xorgBool cfg.horizontalScrolling}"
           Option "SendEventsMode" "${cfg.sendEventsMode}"
           Option "Tapping" "${xorgBool cfg.tapping}"
+          Option "TappingDrag" "${xorgBool cfg.tappingDrag}"
           Option "TappingDragLock" "${xorgBool cfg.tappingDragLock}"
           Option "DisableWhileTyping" "${xorgBool cfg.disableWhileTyping}"
           ${cfg.additionalOptions}
