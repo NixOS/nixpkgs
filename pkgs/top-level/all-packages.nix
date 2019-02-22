@@ -35,7 +35,7 @@ in
 
   stdenvNoCC = stdenv.override { cc = null; extraAttrs.noCC = true; };
 
-  stdenvNoLibs = let
+  mkStdenvNoLibs = stdenv: let
     bintools = stdenv.cc.bintools.override {
       libc = null;
       noLibc = true;
@@ -50,6 +50,11 @@ in
     allowedRequisites =
       lib.mapNullable (rs: rs ++ [ bintools ]) (stdenv.allowedRequisites or null);
   };
+
+  stdenvNoLibs = mkStdenvNoLibs stdenv;
+
+  gccStdenvNoLibs = mkStdenvNoLibs gccStdenv;
+  clangStdenvNoLibs = mkStdenvNoLibs clangStdenv;
 
   # For convenience, allow callers to get the path to Nixpkgs.
   path = ../..;
@@ -8553,7 +8558,9 @@ in
 
   librarian-puppet-go = callPackage ../development/tools/librarian-puppet-go { };
 
-  libgcc = callPackage ../development/libraries/gcc/libgcc { };
+  libgcc = callPackage ../development/libraries/gcc/libgcc {
+    stdenvNoLibs = gccStdenvNoLibs; # cannot be built with clang it seems
+  };
 
   libstdcxx5 = callPackage ../development/libraries/gcc/libstdc++/5.nix { };
 
