@@ -91,6 +91,11 @@
      in <literal>nixos/modules/virtualisation/google-compute-config.nix</literal>.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     <literal>./services/misc/beanstalkd.nix</literal>
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
