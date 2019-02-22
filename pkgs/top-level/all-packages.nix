@@ -8556,7 +8556,9 @@ in
 
   librarian-puppet-go = callPackage ../development/tools/librarian-puppet-go { };
 
-  libgcc = callPackage ../development/libraries/gcc/libgcc { };
+  libgcc = callPackage ../development/libraries/gcc/libgcc {
+    stdenvNoLibs = gccStdenvNoLibs; # cannot be built with clang it seems
+  };
 
   libstdcxx5 = callPackage ../development/libraries/gcc/libstdc++/5.nix { };
 
