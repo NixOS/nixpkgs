@@ -2,7 +2,7 @@
 
 with lib;
 
-let version = "5.2.22";
+let version = "5.2.26";
 in
 fetchurl rec {
   name = "Oracle_VM_VirtualBox_Extension_Pack-${version}.vbox-extpack";
@@ -10,7 +10,7 @@ fetchurl rec {
   sha256 =
     # Manually sha256sum the extensionPack file, must be hex!
     # Thus do not use `nix-prefetch-url` but instead plain old `sha256sum`.
-    let value = "779250666551b2f5426e86c2d21ceb0209b46174536971611025f753535131ef";
+    let value = "4b7caa9b722840d49f154c3e5efb6463b1b7129f09973a25813dfdbccd9debb7";
     in assert (builtins.stringLength value) == 64; value;
 
   meta = {
