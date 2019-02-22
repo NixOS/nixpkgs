@@ -1,4 +1,4 @@
-{ stdenv, lib, buildPackages, fetchurl
+{ stdenv, lib, buildPackages, fetchurl, fetchpatch
 , enableStatic ? false
 , enableMinimal ? false
 , useMusl ? stdenv.hostPlatform.libc == "musl", musl
@@ -46,6 +46,11 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./busybox-in-store.patch
+    (fetchpatch {
+      name = "cve-2018-20679.diff";
+      url = "https://git.busybox.net/busybox/patch/?id=6d3b4bb2";
+      sha256 = "0x01izyh864ba1d13m56piyp1mjaaain0d5wpif977jbxlbij096";
+    })
   ];
 
   postPatch = "patchShebangs .";
