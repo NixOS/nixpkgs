@@ -14,11 +14,8 @@
 , withKexectools ? lib.any (lib.meta.platformMatch stdenv.hostPlatform) kexectools.meta.platforms, kexectools
 }:
 
-let
-  pythonLxmlEnv = buildPackages.python3Packages.python.withPackages ( ps: with ps; [ python3Packages.lxml ]);
-
-in stdenv.mkDerivation rec {
-  version = "239.20190219";
+stdenv.mkDerivation rec {
+  version = "241.20190221";
   name = "systemd-${version}";
 
   # When updating, use https://github.com/systemd/systemd-stable tree, not the development one!
@@ -27,24 +24,8 @@ in stdenv.mkDerivation rec {
     owner = "NixOS";
     repo = "systemd";
     rev = "nixos-v${version}";
-    sha256 = "0aczg25ih2gfjq810x8rw6rnpr6sw1lz6z0lvlyw2qphyih68b4x";
+    sha256 = "0grcf0x793k1jx4bx7p63h3f3cd8w262824mzf8iwdsy6y9wzylr";
   };
-
-  prePatch = let
-      # Upstream's maintenance branches are still too intrusive:
-      # https://github.com/systemd/systemd-stable/tree/v239-stable
-      patches-deb = fetchurl {
-        # When the URL disappears, it typically means that Debian has new patches
-        # (probably security) and updating to new tarball will apply them as well.
-        name = "systemd-debian-patches.tar.xz";
-        url = mirror://debian/pool/main/s/systemd/systemd_239-12~bpo9+1.debian.tar.xz;
-        sha256 = "0v9f62gyfiw5icdrdlcvjcipsqrsm49w6n8bqp9nb8s2ih6rsfhg";
-      };
-      # Note that we skip debian-specific patches, i.e. ./debian/patches/debian/*
-    in ''
-      tar xf ${patches-deb}
-      patches="$patches $(cat debian/patches/series | grep -v '^debian/' | sed 's|^|debian/patches/|')"
-    '';
 
   outputs = [ "out" "lib" "man" "dev" ];
 
@@ -54,6 +35,8 @@ in stdenv.mkDerivation rec {
       coreutils # meson calls date, stat etc.
       glibcLocales
       patchelf getent m4
+
+      (buildPackages.python3Packages.python.withPackages ( ps: with ps; [ python3Packages.lxml ]))
     ];
   buildInputs =
     [ linuxHeaders libcap kmod xz pam acl
@@ -63,13 +46,19 @@ in stdenv.mkDerivation rec {
       stdenv.lib.optional withLibseccomp libseccomp ++
     [ libffi audit lz4 bzip2 libapparmor
       iptables gnu-efi
-      # This is actually native, but we already pull it from buildPackages
-      pythonLxmlEnv
     ] ++ stdenv.lib.optional withSelinux libselinux;
 
   #dontAddPrefix = true;
 
   mesonFlags = [
+    "-Ddbuspolicydir=${placeholder "out"}/etc/dbus-1/system.d"
+    "-Ddbussessionservicedir=${placeholder "out"}/share/dbus-1/services"
+    "-Ddbussystemservicedir=${placeholder "out"}/share/dbus-1/system-services"
+    "-Dpamconfdir=${placeholder "out"}/etc/pam.d"
+    "-Drootprefix=${placeholder "out"}"
+    "-Drootlibdir=${placeholder "lib"}/lib"
+    "-Dpkgconfiglibdir=${placeholder "dev"}/lib/pkgconfig"
+    "-Dpkgconfigdatadir=${placeholder "dev"}/share/pkgconfig"
     "-Dloadkeys-path=${kbd}/bin/loadkeys"
     "-Dsetfont-path=${kbd}/bin/setfont"
     "-Dtty-gid=3" # tty in NixOS has gid 3
@@ -90,6 +79,7 @@ in stdenv.mkDerivation rec {
     "-Dquotacheck=false"
     "-Dldconfig=false"
     "-Dsmack=true"
+    "-Db_pie=true"
     "-Dsystem-uid-max=499" #TODO: debug why awking around in /etc/login.defs doesn't work
     "-Dsystem-gid-max=499"
     # "-Dtime-epoch=1"
@@ -111,15 +101,6 @@ in stdenv.mkDerivation rec {
 
   preConfigure = ''
     mesonFlagsArray+=(-Dntp-servers="0.nixos.pool.ntp.org 1.nixos.pool.ntp.org 2.nixos.pool.ntp.org 3.nixos.pool.ntp.org")
-    mesonFlagsArray+=(-Ddbuspolicydir=$out/etc/dbus-1/system.d)
-    mesonFlagsArray+=(-Ddbussessionservicedir=$out/share/dbus-1/services)
-    mesonFlagsArray+=(-Ddbussystemservicedir=$out/share/dbus-1/system-services)
-    mesonFlagsArray+=(-Dpamconfdir=$out/etc/pam.d)
-    mesonFlagsArray+=(-Drootprefix=$out)
-    mesonFlagsArray+=(-Drootlibdir=$lib/lib)
-    mesonFlagsArray+=(-Dpkgconfiglibdir=$dev/lib/pkgconfig)
-    mesonFlagsArray+=(-Dpkgconfigdatadir=$dev/share/pkgconfig)
-
     export LC_ALL="en_US.UTF-8";
     # FIXME: patch this in systemd properly (and send upstream).
     # already fixed in f00929ad622c978f8ad83590a15a765b4beecac9: (u)mount
@@ -137,14 +118,8 @@ in stdenv.mkDerivation rec {
         --replace /bin/plymouth /run/current-system/sw/bin/plymouth # To avoid dependency
     done
 
-    for i in tools/xml_helper.py tools/make-directive-index.py tools/make-man-index.py test/sys-script.py; do
-      substituteInPlace $i \
-        --replace "#!/usr/bin/env python" "#!${pythonLxmlEnv}/bin/python"
-    done
-
-    for i in src/basic/generate-gperfs.py src/resolve/generate-dns_type-gperf.py src/test/generate-sym-test.py ; do
-      substituteInPlace $i \
-        --replace "#!/usr/bin/env python" "#!${buildPackages.python3Packages.python}/bin/python"
+    for dir in tools src/resolve test src/test; do
+      patchShebangs $dir
     done
 
     substituteInPlace src/journal/catalog.c \
