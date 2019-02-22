@@ -89,7 +89,9 @@ in stdenv.mkDerivation (args // {
 
   buildPhase = with builtins; args.buildPhase or ''
     runHook preBuild
-    echo "Running cargo build --target ${stdenv.hostPlatform.config} --release ${concatStringsSep " " cargoBuildFlags}"
+
+    (
+    set -x
     env \
       "CC_${stdenv.buildPlatform.config}"="${ccForBuild}" \
       "CXX_${stdenv.buildPlatform.config}"="${cxxForBuild}" \
@@ -99,6 +101,15 @@ in stdenv.mkDerivation (args // {
         --release \
         --target ${stdenv.hostPlatform.config} \
         --frozen ${concatStringsSep " " cargoBuildFlags}
+    )
+
+    # rename the output dir to a architecture independent one
+    mapfile -t targets < <(find "$NIX_BUILD_TOP" -type d | grep '${releaseDir}$')
+    for target in "''${targets[@]}"; do
+      rm -rf "$target/../../release"
+      ln -srf "$target" "$target/../../"
+    done
+
     runHook postBuild
   '';
 
