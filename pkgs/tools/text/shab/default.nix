@@ -41,7 +41,7 @@ let
     };
 
     meta = with lib; {
-      description = "the bash templating language";
+      description = "The bash templating language";
       homepage = https://github.com/zimbatm/shab;
       licenses = licenses.unlicense;
       maintainers = with maintainers; [ zimbatm ];
