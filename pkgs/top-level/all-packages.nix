@@ -7433,9 +7433,11 @@ in
   };
 
   ocaml-ng = callPackage ./ocaml-packages.nix { };
-  ocaml = ocamlPackages.ocaml;
-
   ocamlPackages = recurseIntoAttrs ocaml-ng.ocamlPackages;
+  metaocamlPackages = recurseIntoAttrs ocaml-ng.metaocamlPackages;
+
+  ocaml     = ocamlPackages.ocaml;
+  metaocaml = metaocamlPackages.ocaml;
 
   ocamlformat = callPackage ../development/tools/ocaml/ocamlformat { };
 
