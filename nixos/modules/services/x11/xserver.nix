@@ -113,6 +113,7 @@ let
     { xfs = optionalString (cfg.useXFS != false)
         ''FontPath "${toString cfg.useXFS}"'';
       inherit (cfg) config;
+      preferLocalBuild = true;
     }
       ''
         echo 'Section "Files"' >> $out
@@ -705,6 +706,7 @@ in
     system.extraDependencies = singleton (pkgs.runCommand "xkb-validated" {
       inherit (cfg) xkbModel layout xkbVariant xkbOptions;
       nativeBuildInputs = [ pkgs.xkbvalidate ];
+      preferLocalBuild = true;
     } ''
       validate "$xkbModel" "$layout" "$xkbVariant" "$xkbOptions"
       touch "$out"

@@ -5,7 +5,7 @@ with lib;
 let
   cfg = config.services.netdata;
 
-  wrappedPlugins = pkgs.runCommand "wrapped-plugins" {} ''
+  wrappedPlugins = pkgs.runCommand "wrapped-plugins" { preferLocalBuild = true; } ''
     mkdir -p $out/libexec/netdata/plugins.d
     ln -s /run/wrappers/bin/apps.plugin $out/libexec/netdata/plugins.d/apps.plugin
   '';

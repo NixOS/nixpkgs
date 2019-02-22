@@ -759,7 +759,10 @@ in
     environment.etc = let
       # generate contents for /etc/systemd/system-generators from
       # systemd.generators and systemd.generator-packages
-      generators = pkgs.runCommand "system-generators" { packages = cfg.generator-packages; } ''
+      generators = pkgs.runCommand "system-generators" {
+          preferLocalBuild = true;
+          packages = cfg.generator-packages;
+        } ''
         mkdir -p $out
         for package in $packages
         do
