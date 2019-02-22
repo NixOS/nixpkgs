@@ -22,5 +22,6 @@ stdenv.mkDerivation rec {
     homepage = https://cgit.freedesktop.org/mesa/glu/;
     license = stdenv.lib.licenses.sgi-b-20;
     platforms = stdenv.lib.platforms.unix;
+    broken = stdenv.hostPlatform.isAndroid;
   };
 }
