@@ -15,11 +15,11 @@ with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "${type}krb5-${version}";
   majorVersion = "1.15";
-  version = "${majorVersion}.2";
+  version = "${majorVersion}.5";
 
   src = fetchurl {
-    url = "${meta.homepage}dist/krb5/${majorVersion}/krb5-${version}.tar.gz";
-    sha256 = "0zn8s7anb10hw3nzwjz7vg10fgmmgvwnibn2zrn3nppjxn9f6f8n";
+    url = "https://kerberos.org/dist/krb5/${majorVersion}/krb5-${version}.tar.gz";
+    sha256 = "1fiywc3daaqsvj09lymqd3qd5kz51w13krh60j93z18g78nix23q";
   };
 
   outputs = [ "out" "dev" ];
