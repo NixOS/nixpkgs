@@ -1,23 +1,25 @@
 import ./make-test.nix ({ pkgs, lib, ... }:
 
 let
+  pythonEnv = pkgs.python3.withPackages (p: [p.beanstalkc]);
+
   produce = pkgs.writeScript "produce.py" ''
-    #!${pkgs.python2.withPackages (p: [p.beanstalkc])}/bin/python
+    #!${pythonEnv.interpreter}
     import beanstalkc
 
     queue = beanstalkc.Connection(host='localhost', port=11300, parse_yaml=False);
-    queue.put('this is a job')
-    queue.put('this is another job')
+    queue.put(b'this is a job')
+    queue.put(b'this is another job')
   '';
 
   consume = pkgs.writeScript "consume.py" ''
-    #!${pkgs.python2.withPackages (p: [p.beanstalkc])}/bin/python
+    #!${pythonEnv.interpreter}
     import beanstalkc
 
     queue = beanstalkc.Connection(host='localhost', port=11300, parse_yaml=False);
 
     job = queue.reserve(timeout=0)
-    print job.body
+    print(job.body.decode('utf-8'))
     job.delete()
   '';
 
