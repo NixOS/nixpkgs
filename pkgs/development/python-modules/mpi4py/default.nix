@@ -13,11 +13,18 @@ buildPythonPackage rec {
     inherit mpi;
   };
 
-  patches = [ (fetchpatch {
-    # Disable tests failing with 3.1.x and MPI_THREAD_MULTIPLE
-    url = "https://bitbucket.org/mpi4py/mpi4py/commits/c2b6b7e642a182f9b00a2b8e9db363214470548a/raw";
-    sha256 = "0n6bz3kj4vcqb6q7d0mlj5vl6apn7i2bvfc9mpg59vh3wy47119q";
+  patches = [
+    (fetchpatch {
+      # Disable tests failing with 3.1.x and MPI_THREAD_MULTIPLE (upstream patch)
+      url = "https://bitbucket.org/mpi4py/mpi4py/commits/c2b6b7e642a182f9b00a2b8e9db363214470548a/raw";
+      sha256 = "0n6bz3kj4vcqb6q7d0mlj5vl6apn7i2bvfc9mpg59vh3wy47119q";
     })
+    (fetchpatch {
+      # Open MPI: Workaround removal of MPI_{LB|UB} (upstream patch)
+      url = "https://bitbucket.org/mpi4py/mpi4py/commits/39ca784226460f9e519507269ebb29635dc8bd90/raw";
+      sha256 = "02kxikdlsrlq8yr5hca42536mxbrq4k4j8nqv7p1p2r0q21a919q";
+    })
+
   ];
 
   postPatch = ''

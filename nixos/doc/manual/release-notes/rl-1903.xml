@@ -618,7 +618,7 @@
         The kubernetes module does no longer add the kubernetes package to
         <varname>environment.systemPackages</varname> implicitly.
       </para>
-    </listitem>    
+    </listitem>
     <listitem>
       <para>
         The <literal>intel</literal> driver has been removed from the default list of
@@ -633,6 +633,13 @@
         to add `intel` to `videoDrivers` and report an issue (or provide additional
         details in an existing one)
       </para>
+   </listitem>
+   <listitem>
+     <para>
+       Openmpi has been updated to version 4.0.0, which removes some deprecated MPI-1 symbols.
+       This may break some older applications that still rely on those symbols.
+       An upgrade guide can be found <link xlink:href="https://www.open-mpi.org/faq/?category=mpi-removed">here</link>.
+     </para>
    </listitem>
   </itemizedlist>
  </section>
