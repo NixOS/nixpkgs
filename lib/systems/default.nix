@@ -24,6 +24,8 @@ rec {
       config = parse.tripleFromSystem final.parsed;
       # Just a guess, based on `system`
       platform = platforms.selectBySystem final.system;
+      # Determine whether we are compatible with the provided CPU
+      isCompatible = platform: parse.isCompatible final.parsed.cpu platform.parsed.cpu;
       # Derived meta-data
       libc =
         /**/ if final.isDarwin              then "libSystem"
@@ -98,8 +100,7 @@ rec {
         wine = (pkgs.winePackagesFor wine-name).minimal;
       in
         if final.parsed.kernel.name == pkgs.stdenv.hostPlatform.parsed.kernel.name &&
-           (final.parsed.cpu.name == pkgs.stdenv.hostPlatform.parsed.cpu.name ||
-            (final.isi686 && pkgs.stdenv.hostPlatform.isx86_64))
+           pkgs.stdenv.hostPlatform.isCompatible final
         then pkgs.runtimeShell
         else if final.isWindows
         then "${wine}/bin/${wine-name}"
