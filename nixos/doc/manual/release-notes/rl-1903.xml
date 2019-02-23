@@ -96,6 +96,13 @@
      <literal>./services/misc/beanstalkd.nix</literal>
     </para>
    </listitem>
+   <listitem>
+    <para>
+     There is a new <varname>services.cockroachdb</varname> module for running
+     CockroachDB databases. NixOS now ships with CockroachDB 2.1.x as well, available
+     on <literal>x86_64-linux</literal> and <literal>aarch64-linux</literal>.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
