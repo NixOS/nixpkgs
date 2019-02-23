@@ -77,6 +77,6 @@ in buildPythonApplication rec {
     homepage = https://matrix.org;
     description = "Matrix reference homeserver";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ralith roblabla ekleog ];
+    maintainers = with maintainers; [ ralith roblabla ekleog pacien ];
   };
 }
