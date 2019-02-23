@@ -13,7 +13,7 @@ let
 
     ${optionalString
       (cfg.initstepslew.enabled && (cfg.servers != []))
-      "initstepslew ${toString cfg.initstepslew.threshold} ${concatStringsSep " " cfg.initstepslew.servers}"
+      "initstepslew ${toString cfg.initstepslew.threshold} ${concatStringsSep " " cfg.servers}"
     }
 
     driftfile ${stateDir}/chrony.drift
@@ -48,7 +48,6 @@ in
         default = {
           enabled = true;
           threshold = 1000; # by default, same threshold as 'ntpd -g' (1000s)
-          servers = cfg.servers;
         };
         description = ''
           Allow chronyd to make a rapid measurement of the system clock error at
