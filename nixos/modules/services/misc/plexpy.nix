@@ -52,22 +52,18 @@ in
   };
 
   config = mkIf cfg.enable {
+    systemd.tmpfiles.rules = [
+      "d '${cfg.dataDir}' - ${cfg.user} ${cfg.group} - -"
+    ];
+
     systemd.services.plexpy = {
       description = "PlexPy Plex Monitor";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
-      preStart = ''
-        test -d "${cfg.dataDir}" || {
-          echo "Creating initial PlexPy data directory in \"${cfg.dataDir}\"."
-          mkdir -p "${cfg.dataDir}"
-          chown ${cfg.user}:${cfg.group} "${cfg.dataDir}"
-        }
-     '';
       serviceConfig = {
         Type = "simple";
         User = cfg.user;
         Group = cfg.group;
-        PermissionsStartOnly = "true";
         GuessMainPID = "false";
         ExecStart = "${cfg.package}/bin/plexpy --datadir ${cfg.dataDir} --config ${cfg.configFile} --port ${toString cfg.port} --pidfile ${cfg.dataDir}/plexpy.pid --nolaunch";
         Restart = "on-failure";
