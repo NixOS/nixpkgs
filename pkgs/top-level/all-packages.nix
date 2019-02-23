@@ -12363,6 +12363,8 @@ in
 
   rapidjson = callPackage ../development/libraries/rapidjson {};
 
+  rapidxml = callPackage ../development/libraries/rapidxml {};
+
   raul = callPackage ../development/libraries/audio/raul { };
 
   readline = readline6;
