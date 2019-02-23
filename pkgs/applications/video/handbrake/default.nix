@@ -3,7 +3,7 @@
 # Derivation patches HandBrake to use Nix closure dependencies.
 #
 
-{ stdenv, lib, fetchurl, callPackage,
+{ stdenv, lib, fetchurl,
   # Main build tools
   python2, pkgconfig, autoconf, automake, cmake, nasm, libtool, m4,
   # Processing, video codecs, containers
