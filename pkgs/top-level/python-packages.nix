@@ -418,6 +418,8 @@ in {
 
   guestfs = callPackage ../development/python-modules/guestfs { };
 
+  gumath = callPackage ../development/python-modules/gumath { };
+
   h5py = callPackage ../development/python-modules/h5py {
     hdf5 = pkgs.hdf5;
   };
@@ -495,6 +497,8 @@ in {
   nbsphinx = callPackage ../development/python-modules/nbsphinx { };
 
   nbval = callPackage ../development/python-modules/nbval { };
+
+  ndtypes = callPackage ../development/python-modules/ndtypes { };
 
   nest-asyncio = callPackage ../development/python-modules/nest-asyncio { };
 
@@ -2783,6 +2787,8 @@ in {
   colored = callPackage ../development/python-modules/colored { };
 
   xdis = callPackage ../development/python-modules/xdis { };
+
+  xnd = callPackage ../development/python-modules/xnd { };
 
   uncompyle6 = callPackage ../development/python-modules/uncompyle6 { };
 

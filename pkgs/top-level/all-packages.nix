@@ -3964,6 +3964,8 @@ in
 
   libhandy = callPackage ../development/libraries/libhandy { };
 
+  libgumath = callPackage ../development/libraries/libgumath { };
+
   libipfix = callPackage ../development/libraries/libipfix { };
 
   libircclient = callPackage ../development/libraries/libircclient { };
