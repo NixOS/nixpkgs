@@ -29,7 +29,7 @@ while [ "$#" -gt 0 ]; do
       --help)
         showSyntax
         ;;
-      switch|boot|test|build|dry-build|dry-run|dry-activate|build-vm|build-vm-with-bootloader)
+      switch|boot|test|build|edit|dry-build|dry-run|dry-activate|build-vm|build-vm-with-bootloader)
         if [ "$i" = dry-run ]; then i=dry-build; fi
         action="$i"
         ;;
@@ -225,6 +225,13 @@ if [ -z "$_NIXOS_REBUILD_REEXEC" -a -n "$canRun" -a -z "$fast" ]; then
         exec $p/bin/nixos-rebuild "${origArgs[@]}"
         exit 1
     fi
+fi
+
+# Find configuration.nix and open editor instead of building.
+if [ "$action" = edit ]; then
+    NIXOS_CONFIG=${NIXOS_CONFIG:-$(nix-instantiate --find-file nixos-config)}
+    exec "${EDITOR:-nano}" "$NIXOS_CONFIG"
+    exit 1
 fi
 
 
