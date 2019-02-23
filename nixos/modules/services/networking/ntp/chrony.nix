@@ -25,6 +25,13 @@ let
   '';
 
   chronyFlags = "-n -m -u chrony -f ${configFile} ${toString cfg.extraFlags}";
+
+  chronyWaitSyncFlags = concatStringsSep " "
+    [ (toString cfg.bootAdjustmentOptions.maxTries)
+      (toString cfg.bootAdjustmentOptions.maxCorrection)
+      (toString cfg.bootAdjustmentOptions.maxSkew)
+      (toString cfg.bootAdjustmentOptions.interval)
+    ];
 in
 {
   options = {
@@ -53,6 +60,25 @@ in
           Allow chronyd to make a rapid measurement of the system clock error at
           boot time, and to correct the system clock by stepping before normal
           operation begins.
+        '';
+      };
+
+      bootAdjustmentOptions = mkOption {
+        default = {
+          maxTries = 12;
+          maxCorrection = 0;
+          maxSkew = 0;
+          interval = 5;
+        };
+        description = ''
+          Parameters for initial boot-time synchronization. By default, once
+          Chrony starts at boot, it will attempt to do rapid adjustments of the
+          system time in order to get the clock within a measured threshold.
+          Once this has been achieved, the systemd service
+          <literal>time-sync.target</literal> will be activated. These
+          parameters control the timeout for waiting on initial NTP
+          synchronization. By default, Chrony will wait for 1 minute while
+          attempting to adjust the initial time at boot.
         '';
       };
 
@@ -131,7 +157,8 @@ in
         after    = [ "chronyd.service" ];
 
         serviceConfig =
-          { ExecStart = "${pkgs.chrony}/bin/chronyc waitsync";
+          { ExecStart = "${pkgs.chrony}/bin/chronyc waitsync ${chronyWaitSyncFlags}";
+
             Type = "oneshot";
             RemainAfterExit = "yes";
 
