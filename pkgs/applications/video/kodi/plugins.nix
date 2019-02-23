@@ -8,6 +8,7 @@ with stdenv.lib;
 let self = rec {
 
   pluginDir = "/share/kodi/addons";
+  rel = "Leia";
 
   kodi = kodiPlain;
 
@@ -357,13 +358,13 @@ let self = rec {
 
     plugin = "pvr-hts";
     namespace = "pvr.hts";
-    version = "3.4.16";
+    version = "4.4.14";
 
     src = fetchFromGitHub {
       owner = "kodi-pvr";
       repo = "pvr.hts";
-      rev = "b39e4e9870d68841279cbc7d7214f3ad9b27f330";
-      sha256 = "0pmlgqr4kd0gvckz77mj6v42kcx6lb23anm8jnf2fbn877snnijx";
+      rev = "${version}-${rel}";
+      sha256 = "1bcwcwd2yjhw85yk6lyhf0iqiclrsz7r7vpbxgc650fwqbb146gr";
     };
 
     meta = {
