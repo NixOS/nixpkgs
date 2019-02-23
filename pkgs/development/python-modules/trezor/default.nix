@@ -10,6 +10,7 @@
 , construct
 , libusb1
 , rlp
+, glibcLocales
 }:
 
 buildPythonPackage rec {
@@ -23,7 +24,7 @@ buildPythonPackage rec {
     sha256 = "6043f321d856e1b45b9df0c37810264f08d065bb56cd999f61a05fe2906e9e18";
   };
 
-  propagatedBuildInputs = [ typing-extensions protobuf hidapi ecdsa mnemonic requests pyblake2 click construct libusb1 rlp ];
+  propagatedBuildInputs = [ typing-extensions protobuf hidapi ecdsa mnemonic requests pyblake2 click construct libusb1 rlp glibcLocales ];
 
   # build requires UTF-8 locale
   LANG = "en_US.UTF-8";
