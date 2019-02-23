@@ -54,6 +54,8 @@
      </itemizedlist>
      <para>to <literal>false</literal> and enable your preferred display manager.</para>
     </note>
+   </listitem>
+   <listitem>
      <para>
        A major refactoring of the Kubernetes module has been completed.
        Refactorings primarily focus on decoupling components and enhancing
