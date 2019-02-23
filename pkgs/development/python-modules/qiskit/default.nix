@@ -21,13 +21,13 @@
 
 buildPythonPackage rec {
   pname = "qiskit";
-  version = "0.7.2";
+  version = "0.7.3";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "08c7f7ccd32a5cb0c0a0c4f63d6ff068d659c9c0b51e2df6f2054e586e8bfa19";
+    sha256 = "63e7a7c3033fe955d715cc825b3fb61d27c25ad66e1761493ca2243b5dbfb4f9";
   };
 
   buildInputs = [ cmake ]
