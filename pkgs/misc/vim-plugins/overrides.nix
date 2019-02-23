@@ -4,7 +4,7 @@
 , llvmPackages, rustPlatform
 , xkb-switch, fzf, skim, stylish-haskell
 , python3, boost, icu, ncurses
-, ycmd, rake
+, ycmd, rake, curl
 , gobject-introspection, glib, wrapGAppsHook
 , substituteAll
 , languagetool
@@ -169,6 +169,15 @@ self: super: {
       popd
       find ./rplugin/ -name "ujson*.so" -exec mv -v {} ./rplugin/python3/ \;
    '';
+  });
+
+  deoplete-tabnine = super.deoplete-tabnine.overrideAttrs(old: {
+    nativeBuildInputs = [ curl ];
+    buildPhase = ''
+      patchShebangs .
+      unset SSL_CERT_FILE
+      ./install.sh
+    '';
   });
 
   ensime-vim = super.ensime-vim.overrideAttrs(old: {
