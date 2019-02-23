@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "aiohue";
-  version = "1.9.0";
+  version = "1.9.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "3b6cb87652cf1ffc904443b9c5514873c331e159953f2ebf77a051444b350594";
+    sha256 = "3c23aed8e82f398b732279f5f7ee7ed00949ff2db7009f7a2dc705f7c2d16783";
   };
 
   propagatedBuildInputs = [ aiohttp ];
