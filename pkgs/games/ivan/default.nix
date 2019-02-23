@@ -3,13 +3,13 @@
 stdenv.mkDerivation rec {
 
   name = "ivan-${version}";
-  version = "055";
+  version = "056";
 
   src = fetchFromGitHub {
     owner = "Attnam";
     repo = "ivan";
     rev = "v${version}";
-    sha256 = "10qrwzwfzqs7f663x1cbbhisz60axcl51glxq33zaxl0jwnmma2p";
+    sha256 = "07mj3b2p3n3bq7rwi31y0vywnr4namqbcnz4c53kl38ajw9viyf0";
   };
 
   nativeBuildInputs = [ cmake pkgconfig ];
