@@ -24,7 +24,7 @@ let
     ${cfg.extraConfig}
   '';
 
-  chronyFlags = "-m -u chrony -f ${configFile} ${toString cfg.extraFlags}";
+  chronyFlags = "-n -m -u chrony -f ${configFile} ${toString cfg.extraFlags}";
 in
 {
   options = {
@@ -116,7 +116,7 @@ in
 
         unitConfig.ConditionCapability = "CAP_SYS_TIME";
         serviceConfig =
-          { Type = "forking";
+          { Type = "simple";
             ExecStart = "${pkgs.chrony}/bin/chronyd ${chronyFlags}";
 
             ProtectHome = "yes";
