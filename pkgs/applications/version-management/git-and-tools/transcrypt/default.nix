@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ makeWrapper git openssl coreutils utillinux gnugrep gnused gawk ];
 
+  patches = [ ./helper-scripts_depspathprefix.patch ];
+
   installPhase = ''
     install -m 755 -D transcrypt $out/bin/transcrypt
     install -m 644 -D man/transcrypt.1 $out/share/man/man1/transcrypt.1
@@ -21,6 +23,12 @@ stdenv.mkDerivation rec {
 
     wrapProgram $out/bin/transcrypt \
       --prefix PATH : "${stdenv.lib.makeBinPath [ git openssl coreutils utillinux gnugrep gnused gawk ]}"
+
+    cat > $out/bin/transcrypt-depspathprefix << EOF
+    #!${stdenv.shell}
+    echo "${stdenv.lib.makeBinPath [ git openssl coreutils gawk ]}:"
+    EOF
+    chmod +x $out/bin/transcrypt-depspathprefix
   '';
 
   meta = with stdenv.lib; {
