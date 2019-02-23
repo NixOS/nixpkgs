@@ -16455,6 +16455,11 @@ in
     fluidsynth = fluidsynth_1;
   };
 
+  csound-manual = callPackage ../applications/audio/csound/csound-manual {
+    python = python27;
+    pygments = python27Packages.pygments;
+  };
+
   csound-qt = callPackage ../applications/audio/csound/csound-qt {
     python = python27;
     qmake = qt59.qmake;
