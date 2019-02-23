@@ -14970,6 +14970,24 @@ let
      };
   };
 
+  NetServerSSPrefork = buildPerlPackage {
+     pname = "Net-Server-SS-PreFork";
+     version = "0.06pre";
+     src = fetchFromGitHub {
+       owner = "kazuho";
+       repo = "p5-Net-Server-SS-PreFork";
+       rev = "5fccc0c270e25c65ef634304630af74b48807d21";
+       sha256 = "0z02labw0dd76sdf301bhrmgnsjds0ddsg22138g8ys4az49bxx6";
+     };
+     checkInputs = [ HTTPMessage LWP TestSharedFork HTTPServerSimple TestTCP TestUNIXSock ];
+     buildInputs = [ ModuleInstall ];
+     propagatedBuildInputs = [ NetServer ServerStarter ];
+     meta = {
+       description = "A hot-deployable variant of Net::Server::PreFork";
+       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+     };
+  };
+
   NetSMTPSSL = buildPerlPackage {
     pname = "Net-SMTP-SSL";
     version = "1.04";
@@ -17987,7 +18005,7 @@ let
     };
     buildInputs = [ LWP ModuleBuildTiny TestRequires TestTCP ];
     nativeBuildInputs = stdenv.lib.optional stdenv.isDarwin shortenPerlShebang;
-    propagatedBuildInputs = [ DataDump HTTPParserXS NetServer Plack ];
+    propagatedBuildInputs = [ DataDump HTTPParserXS NetServer Plack NetServerSSPrefork ];
     postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
       shortenPerlShebang $out/bin/starman
     '';
