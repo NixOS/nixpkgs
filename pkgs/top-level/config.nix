@@ -31,6 +31,20 @@ let
     default = super: {};
   } // args);
 
+  mkUse = args: mkMassRebuild (builtins.removeAttrs args [ "extra" ] // {
+    description = (args.description or ''
+      Whether to enable ${args.feature} support for nixpkgs packages.
+    '');
+  }) // {
+    extra = args.extra or (x: {});
+  };
+
+  # Flipped optionalAttrs variants for convenience
+  whenEnabled = args: value: lib.optionalAttrs value args;
+  whenDisabled = args: value: lib.optionalAttrs (!value) args;
+
+  use = config.use;
+
   optionsDef = {
 
     /* Internal stuff */
@@ -219,10 +233,148 @@ let
       '';
     };
 
+    /* Nixpkgs's equivalent of Gentoo's global USE flags (https://gentoo.org/support/use-flags/).
+     *
+     * To users. Changing any these to a non-default value will void your
+     * warranty! (Especially if you change more than one flag at the same time.
+     * Most packages are not tested in non-default configurations.) See the
+     * description of `extraScope` option above, these flags influence its
+     * value.
+     *
+     * To developers. When adding a new flag here consult the link above,
+     * everything that has a Gentoo eqivalent should probably use the same name.
+     */
+    use = {
+
+      headless = mkUse {
+        default = false;
+        description = "Whether to build nixpkgs packages for a headless system.";
+      };
+
+      /* Graphical toolkits */
+
+      noGraphics = mkUse {
+        default = use.headless;
+        description = "Whether to build nixpkgs without support for any graphical toolkits.";
+      };
+
+      X = mkUse {
+        feature = "X11";
+        default = !use.noGraphics;
+        extra = whenDisabled {
+          x11Support = false;
+          withX = false;
+        };
+      };
+
+      wayland = mkUse {
+        feature = "Wayland";
+        default = !use.noGraphics;
+        extra = whenDisabled {
+          waylandSupport = false;
+          withWayland = false;
+        };
+      };
+
+      gtk = mkUse {
+        feature = "GTK";
+        default = use.X || use.wayland;
+        extra = whenDisabled {
+          withGtk = false;
+          gtkSupport = false;
+          withGtk2 = false;
+          gtk2Support = false;
+          withGtk3 = false;
+          gtk3Support = false;
+          gtk2 = null;
+          gtk3 = null;
+        };
+      };
+
+      qt = mkUse {
+        feature = "Qt";
+        default = use.X || use.wayland;
+        extra = whenDisabled {
+          withQt = false;
+          qtSupport = false;
+          withQt3 = false;
+          qt3Support = false;
+          withQt4 = false;
+          qt4Support = false;
+          withQt5 = false;
+          qt5Support = false;
+          qt3 = null;
+          qt4 = null;
+          qt5 = null;
+        };
+      };
+
+      /* Audio stuff */
+
+      noAudio = mkUse {
+        default = use.headless;
+        description = "Whether to build nixpkgs without support for any audio toolkits.";
+      };
+
+      alsa = mkUse {
+        feature = "ALSA";
+        default = !use.noAudio && config.localSystem.isLinux;
+        defaultText = "!noAudio && isLinux";
+        extra = whenDisabled {
+          alsaSupport = false;
+          withAlsa = false;
+          alsaLib = null;
+        };
+      };
+
+      pulseaudio = mkUse {
+        feature = "PulseAudio";
+        default = !use.noAudio;
+        defaultText = "!noAudio";
+        extra = whenDisabled {
+          pulseSupport = false;
+          withPulse = false;
+          pulseaudioSupport = false;
+          withPulseAudio = false;
+          libpulseaudio = null;
+          pulseaudio = null;
+          pulseaudioFull = null;
+        };
+      };
+
+      /* Desktop environment integration */
+
+      gnome = mkUse {
+        feature = "GNOME integration";
+        default = use.gtk;
+        extra = whenDisabled {
+          gnomeSupport = false;
+          withGnome = false;
+        };
+      };
+
+      kde = mkUse {
+        feature = "KDE integration";
+        default = use.qt;
+        extra = whenDisabled {
+          withKDE = false;
+        };
+      };
+
+    };
+
   };
 
 in {
 
   options = optionsDef;
+
+  config = {
+    extraScope = lib.foldl' (acc: x: acc // x) {} (lib.mapAttrsToList (n: v: v.extra use.${n}) options.use);
+  };
+
+  imports = [
+    (mkAliasOptionModule [ "use" "x11" ] [ "use" "X" ])
+  ];
 
 }
