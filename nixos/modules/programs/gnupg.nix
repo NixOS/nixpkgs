@@ -85,11 +85,13 @@ in
       # SSH agent protocol doesn't support changing TTYs, so bind the agent
       # to every new TTY.
       ${pkgs.gnupg}/bin/gpg-connect-agent --quiet updatestartuptty /bye > /dev/null
+    '');
 
+    environment.extraInit = mkIf cfg.agent.enableSSHSupport ''
       if [ -z "$SSH_AUTH_SOCK" ]; then
         export SSH_AUTH_SOCK=$(${pkgs.gnupg}/bin/gpgconf --list-dirs agent-ssh-socket)
       fi
-    '');
+    '';
 
     assertions = [
       { assertion = cfg.agent.enableSSHSupport -> !config.programs.ssh.startAgent;
