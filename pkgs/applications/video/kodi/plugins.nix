@@ -55,6 +55,8 @@ let self = rec {
 
     dontStrip = true;
 
+    extraRuntimeDependencies = [ ];
+
     installPhase = ''
       ${if isNull sourceDir then "" else "cd $src/$sourceDir"}
       d=$out${pluginDir}/${namespace}
@@ -74,6 +76,8 @@ let self = rec {
 
     buildInputs = [ cmake kodiPlain kodi-platform libcec_platform ]
                ++ extraBuildInputs;
+
+    inherit extraRuntimeDependencies;
 
     # disables check ensuring install prefix is that of kodi
     cmakeFlags = [
