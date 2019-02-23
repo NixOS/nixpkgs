@@ -7582,6 +7582,8 @@ in
 
   tbb = callPackage ../development/libraries/tbb { };
 
+  teradici_pcoip_client = callPackage ../applications/networking/remote/teradici-pcoip-client { };
+
   terra = callPackage ../development/compilers/terra {
     llvmPackages = llvmPackages_38 // {
       llvm = llvmPackages_38.llvm.override { enableSharedLibraries = false; };
@@ -12045,6 +12047,7 @@ in
   protobuf3_5 = callPackage ../development/libraries/protobuf/3.5.nix { };
   protobuf3_4 = callPackage ../development/libraries/protobuf/3.4.nix { };
   protobuf3_1 = callPackage ../development/libraries/protobuf/3.1.nix { };
+  protobuf3_0 = callPackage ../development/libraries/protobuf/3.0.nix { };
   protobuf2_5 = callPackage ../development/libraries/protobuf/2.5.nix { };
 
   protobufc = callPackage ../development/libraries/protobufc/1.3.nix { };
