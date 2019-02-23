@@ -4,7 +4,7 @@ buildDunePackage rec {
   pname = "dtoa";
   version = "0.3.1";
 
-  minimumOCamlVersion = "4.01";
+  minimumOCamlVersion = "4.02";
 
   src = fetchurl {
     url = "https://github.com/flowtype/ocaml-${pname}/releases/download/v${version}/${pname}-${version}.tbz";
