@@ -1,5 +1,5 @@
 { stdenv, callPackage, fetchurl, fetchFromGitHub, unzip
-, cmake, kodiPlain, libcec_platform, tinyxml
+, cmake, kodiPlain, libcec_platform, tinyxml, rapidxml
 , steam, libusb, pcre-cpp, jsoncpp, libhdhomerun, zlib
 , python2Packages, expat, glib, nspr, nss }:
 
@@ -219,14 +219,14 @@ let self = rec {
 
   joystick = mkKodiABIPlugin rec {
     namespace = "peripheral.joystick";
-    version = "1.3.2";
+    version = "1.4.7";
     plugin = namespace;
 
     src = fetchFromGitHub {
-      owner = "kodi-game";
+      owner = "xbmc";
       repo = namespace;
-      rev = "96171dd32899553ffe8fc775fca66e8df5ff5cf1";
-      sha256 = "18m61v8z9fbh4imvzhh4g9629r9df49g2yk9ycaczirg131dhfbh";
+      rev = "v${version}";
+      sha256 = "03gsp4kg41s3n4ib4wsv7m3krfipgwc2z07i4mnd5zvg0c4xrmap";
     };
 
     meta = {
@@ -289,14 +289,14 @@ let self = rec {
 
   steam-controller = mkKodiABIPlugin rec {
     namespace = "peripheral.steamcontroller";
-    version = "0.9.0";
+    version = "0.10.0";
     plugin = namespace;
 
     src = fetchFromGitHub {
       owner = "kodi-game";
       repo = namespace;
-      rev = "76f640fad4f68118f4fab6c4c3338d13daca7074";
-      sha256 = "0yqlfdiiymb8z6flyhpval8w3kdc9qv3mli3jg1xn5ac485nxsxh";
+      rev = "ea345392ab5aa4485f3a48d2037fa8a8e8ab82de";
+      sha256 = "1hbd8fdvn7xkr9csz1g9wah78nhnq1rkazl4zwa31y70830k3279";
     };
 
     extraBuildInputs = [ libusb ];
@@ -384,13 +384,13 @@ let self = rec {
 
     plugin = "pvr-hdhomerun";
     namespace = "pvr.hdhomerun";
-    version = "2.4.7";
+    version = "3.5.0";
 
     src = fetchFromGitHub {
       owner = "kodi-pvr";
       repo = "pvr.hdhomerun";
-      rev = "60d89d16dd953d38947e8a6da2f8bb84a0f764ef";
-      sha256 = "0dvdv0vk2q12nj0i5h51iaypy3i7jfsxjyxwwpxfy82y8260ragy";
+      rev = "${version}-${rel}";
+      sha256 = "1zrkvfn0im2qmvqm93pa3cg8xkxv61sxlj8nsz4r5z9v9nhqadf6";
     };
 
     meta = {
@@ -408,13 +408,13 @@ let self = rec {
 
     plugin = "pvr-iptvsimple";
     namespace = "pvr.iptvsimple";
-    version = "2.4.14";
+    version = "3.5.7";
 
     src = fetchFromGitHub {
       owner = "kodi-pvr";
       repo = "pvr.iptvsimple";
-      rev = "2a649d7e21b64c4fa4a8b14c2cc139261eebc7e8";
-      sha256 = "1f1im2gachrxnr3z96h5cg2c13vapgkvkdwvrbl4hxlnyp1a6jyz";
+      rev = "${version}-${rel}";
+      sha256 = "17znib7c491h2ii4gagxradh0jyvgga0d548gbk4yjj2nc9qqc6d";
     };
 
     meta = {
@@ -425,7 +425,7 @@ let self = rec {
       license = licenses.gpl2Plus;
     };
 
-    extraBuildInputs = [ zlib ];
+    extraBuildInputs = [ zlib rapidxml ];
   };
 
   osmc-skin = mkKodiPlugin rec {
