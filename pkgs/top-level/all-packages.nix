@@ -15487,6 +15487,8 @@ in
 
   cm_unicode = callPackage ../data/fonts/cm-unicode {};
 
+  creep = callPackage ../data/fonts/creep { };
+
   crimson = callPackage ../data/fonts/crimson {};
 
   dejavu_fonts = lowPrio (callPackage ../data/fonts/dejavu-fonts {});
