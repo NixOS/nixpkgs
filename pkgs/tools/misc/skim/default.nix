@@ -2,13 +2,13 @@
 
 rustPlatform.buildRustPackage rec {
   name = "skim-${version}";
-  version = "0.5.4";
+  version = "0.5.5";
 
   src = fetchFromGitHub {
     owner = "lotabout";
     repo = "skim";
     rev = "v${version}";
-    sha256 = "1mn0wa10f9ik6ddhwjdd1n15gdif10284zpwbrwprya643959aj2";
+    sha256 = "1z9xjqr72r855899pgfrigdzcir18rpp0nh33r7jdz24q57zya10";
   };
 
   outputs = [ "out" "vim" ];
