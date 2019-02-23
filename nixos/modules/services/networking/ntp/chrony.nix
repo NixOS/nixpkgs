@@ -82,6 +82,17 @@ in
         '';
       };
 
+      skipInitialAdjustment = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          If set to <literal>true</literal>, then the default NTP adjustment at
+          boot will be skipped. This is useful in some advanced situations,
+          such as using a 'local stratum' clock in offline networks, where
+          <literal>chronyc waitsync</literal> may never return.
+        '';
+      };
+
       extraConfig = mkOption {
         type = types.lines;
         default = "";
@@ -157,7 +168,10 @@ in
         after    = [ "chronyd.service" ];
 
         serviceConfig =
-          { ExecStart = "${pkgs.chrony}/bin/chronyc waitsync ${chronyWaitSyncFlags}";
+          { ExecStart =
+              if cfg.skipInitialAdjustment
+                then "${pkgs.coreutils}/bin/true"
+                else "${pkgs.chrony}/bin/chronyc waitsync ${chronyWaitSyncFlags}";
 
             Type = "oneshot";
             RemainAfterExit = "yes";
