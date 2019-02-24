@@ -4,6 +4,7 @@ with lib;
 
 let
   dataDir = "/var/lib/squeezelite";
+  cfg = config.services.squeezelite;
 
 in {
 
