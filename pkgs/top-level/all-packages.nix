@@ -2306,6 +2306,8 @@ in
 
   dirmngr = callPackage ../tools/security/dirmngr { };
 
+  dirvish  = callPackage ../tools/backup/dirvish { };
+
   disper = callPackage ../tools/misc/disper { };
 
   dleyna-connector-dbus = callPackage ../development/libraries/dleyna-connector-dbus { };
