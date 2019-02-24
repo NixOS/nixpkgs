@@ -550,6 +550,8 @@ in {
 
   progress = callPackage ../development/python-modules/progress { };
 
+  pure-python-adb-homeassistant = callPackage ../development/python-modules/pure-python-adb-homeassistant { };
+
   pymysql = callPackage ../development/python-modules/pymysql { };
 
   Pmw = callPackage ../development/python-modules/Pmw { };
