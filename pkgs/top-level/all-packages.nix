@@ -4736,13 +4736,6 @@ in
   pandoc = haskell.lib.overrideCabal (haskell.lib.justStaticExecutables haskellPackages.pandoc) (drv: {
     configureFlags = drv.configureFlags or [] ++ ["-fembed_data_files"];
     buildDepends = drv.buildDepends or [] ++ [haskellPackages.file-embed];
-    # Newer tasty version works
-    # https://github.com/jgm/pandoc/commit/3bf398b15ff28a39133a8ce27ba3d2728d255b17#diff-d37211f38c72504621b9d03eef12ffd7
-    # Note the patch doesn't apply because we fetch the cabal file from elsewhere
-    # This should be removed with pandoc 2.6.
-    postPatch = ''
-      substituteInPlace pandoc.cabal --replace "tasty >= 0.11 && < 1.2" "tasty >= 0.11 && < 1.3"
-    '';
   });
 
   pamtester = callPackage ../tools/security/pamtester { };
