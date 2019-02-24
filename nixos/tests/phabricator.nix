@@ -1,7 +1,7 @@
 import ./make-test.nix ({ pkgs, ... }: {
   name = "phabricator";
   meta = with pkgs.stdenv.lib.maintainers; {
-    maintainers = [ chaoflow ];
+    maintainers = [ ];
   };
 
   nodes = {

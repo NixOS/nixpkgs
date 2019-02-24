@@ -44,6 +44,7 @@
   ./hardware/digitalbitbox.nix
   ./hardware/sensor/iio.nix
   ./hardware/ksm.nix
+  ./hardware/ledger.nix
   ./hardware/mcelog.nix
   ./hardware/network/b43.nix
   ./hardware/nitrokey.nix
@@ -361,6 +362,7 @@
   ./services/misc/apache-kafka.nix
   ./services/misc/autofs.nix
   ./services/misc/autorandr.nix
+  ./services/misc/beanstalkd.nix
   ./services/misc/bees.nix
   ./services/misc/bepasty.nix
   ./services/misc/canto-daemon.nix

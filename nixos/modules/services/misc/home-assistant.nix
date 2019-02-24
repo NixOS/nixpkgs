@@ -19,7 +19,7 @@ let
     ${pkgs.remarshal}/bin/json2yaml -i ${lovelaceConfigJSON} -o $out
   '';
 
-  availableComponents = pkgs.home-assistant.availableComponents;
+  availableComponents = cfg.package.availableComponents;
 
   # Given component "parentConfig.platform", returns whether config.parentConfig
   # is a list containing a set with set.platform == "platform".

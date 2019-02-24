@@ -76,6 +76,8 @@ in
         WorkingDirectory = top.dataDir;
         User = "kubernetes";
         Group = "kubernetes";
+        Restart = "on-failure";
+        RestartSec = 5;
       };
     };
 

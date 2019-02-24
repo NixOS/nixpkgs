@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "pscircle-${version}";
-  version = "1.1.0";
+  version = "1.3.0";
 
   src = fetchFromGitLab {
     owner = "mildlyparallel";
     repo = "pscircle";
     rev = "v${version}";
-    sha256 = "1sxdnhkcr26l29nk0zi1zkvkd7128xglfql47rdb1bx940vflgb6";
+    sha256 = "0qsif00dkqa8ky3vl2ycx5anx2yk62nrv47f5lrlqzclz91f00fx";
   };
 
   buildInputs = [

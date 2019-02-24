@@ -596,6 +596,9 @@ rec {
 
      forwards any definitions of boot.copyKernels to
      boot.loader.grub.copyKernels while printing a warning.
+
+     This also copies over the priority from the aliased option to the
+     non-aliased option.
   */
   mkRenamedOptionModule = from: to: doRename {
     inherit from to;
@@ -690,16 +693,7 @@ rec {
     use = id;
   };
 
-  /* Like ‘mkAliasOptionModule’, but copy over the priority of the option as well. */
-  mkAliasOptionModuleWithPriority = from: to: doRename {
-    inherit from to;
-    visible = true;
-    warn = false;
-    use = id;
-    withPriority = true;
-  };
-
-  doRename = { from, to, visible, warn, use, withPriority ? false }:
+  doRename = { from, to, visible, warn, use, withPriority ? true }:
     { config, options, ... }:
     let
       fromOpt = getAttrFromPath from options;

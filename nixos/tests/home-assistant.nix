@@ -87,8 +87,8 @@ in {
     $hass->succeed("curl http://localhost:8123/api/states/binary_sensor.mqtt_binary_sensor -H 'x-ha-access: ${apiPassword}' | grep -qF '\"state\": \"on\"'");
 
     # Toggle a binary sensor using hass-cli
-    $hass->succeed("${hassCli} --output json entity get binary_sensor.mqtt_binary_sensor | grep -qF '\"state\": \"on\"'");
-    $hass->succeed("${hassCli} entity edit binary_sensor.mqtt_binary_sensor --json='{\"state\": \"off\"}'");
+    $hass->succeed("${hassCli} --output json state get binary_sensor.mqtt_binary_sensor | grep -qF '\"state\": \"on\"'");
+    $hass->succeed("${hassCli} state edit binary_sensor.mqtt_binary_sensor --json='{\"state\": \"off\"}'");
     $hass->succeed("curl http://localhost:8123/api/states/binary_sensor.mqtt_binary_sensor -H 'x-ha-access: ${apiPassword}' | grep -qF '\"state\": \"off\"'");
 
     # Print log to ease debugging

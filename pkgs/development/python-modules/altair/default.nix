@@ -32,6 +32,6 @@ buildPythonPackage rec {
     homepage = https://github.com/altair-viz/altair;
     license = licenses.bsd3;
     maintainers = with maintainers; [ teh ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

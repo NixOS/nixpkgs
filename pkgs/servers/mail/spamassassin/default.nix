@@ -35,7 +35,7 @@ perlPackages.buildPerlPackage rec {
     homepage = http://spamassassin.apache.org/;
     description = "Open-Source Spam Filter";
     license = stdenv.lib.licenses.asl20;
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.unix;
     maintainers = with stdenv.lib.maintainers; [ peti qknight ];
   };
 }

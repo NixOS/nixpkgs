@@ -4,6 +4,7 @@ use File::Copy;
 use File::Path;
 use File::Basename;
 use File::Slurp;
+use File::Spec;
 
 my $etc = $ARGV[0] or die;
 my $static = "/etc/static";
@@ -17,6 +18,20 @@ sub atomicSymlink {
     return 1;
 }
 
+# Create relative symlinks, so that the links can be followed if
+# the NixOS installation is not mounted as filesystem root.
+# Absolute symlinks violate the os-release format
+# at https://www.freedesktop.org/software/systemd/man/os-release.html
+# and break e.g. systemd-nspawn and os-prober.
+sub atomicRelativeSymlink {
+    my ($source, $target) = @_;
+    my $tmp = "$target.tmp";
+    unlink $tmp;
+    my $rel = File::Spec->abs2rel($source, dirname $target);
+    symlink $rel, $tmp or return 0;
+    rename $tmp, $target or return 0;
+    return 1;
+}
 
 # Atomically update /etc/static to point at the etc files of the
 # current configuration.
@@ -103,7 +118,7 @@ sub link {
     if (-e "$_.mode") {
         my $mode = read_file("$_.mode"); chomp $mode;
         if ($mode eq "direct-symlink") {
-            atomicSymlink readlink("$static/$fn"), $target or warn;
+            atomicRelativeSymlink readlink("$static/$fn"), $target or warn;
         } else {
             my $uid = read_file("$_.uid"); chomp $uid;
             my $gid = read_file("$_.gid"); chomp $gid;
@@ -117,7 +132,7 @@ sub link {
         push @copied, $fn;
         print CLEAN "$fn\n";
     } elsif (-l "$_") {
-        atomicSymlink "$static/$fn", $target or warn;
+        atomicRelativeSymlink "$static/$fn", $target or warn;
     }
 }
 

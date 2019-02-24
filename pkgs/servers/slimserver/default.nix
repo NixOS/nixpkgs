@@ -99,6 +99,6 @@ perlPackages.buildPerlPackage rec {
     # https://github.com/Logitech/slimserver/blob/public/7.9/License.txt
     license = licenses.unfree;
     maintainers = [ maintainers.phile314 ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

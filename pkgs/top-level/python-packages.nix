@@ -268,7 +268,7 @@ in {
 
   bayespy = callPackage ../development/python-modules/bayespy { };
 
-  beanstalkc = disabledIf isPy3k (callPackage ../development/python-modules/beanstalkc {});
+  beanstalkc = callPackage ../development/python-modules/beanstalkc { };
 
   bitarray = callPackage ../development/python-modules/bitarray { };
 
@@ -418,6 +418,8 @@ in {
 
   guestfs = callPackage ../development/python-modules/guestfs { };
 
+  gumath = callPackage ../development/python-modules/gumath { };
+
   h5py = callPackage ../development/python-modules/h5py {
     hdf5 = pkgs.hdf5;
   };
@@ -495,6 +497,8 @@ in {
   nbsphinx = callPackage ../development/python-modules/nbsphinx { };
 
   nbval = callPackage ../development/python-modules/nbval { };
+
+  ndtypes = callPackage ../development/python-modules/ndtypes { };
 
   nest-asyncio = callPackage ../development/python-modules/nest-asyncio { };
 
@@ -811,6 +815,8 @@ in {
   sly = callPackage ../development/python-modules/sly { };
 
   snapcast = callPackage ../development/python-modules/snapcast { };
+
+  sparse = callPackage ../development/python-modules/sparse { };
 
   spglib = callPackage ../development/python-modules/spglib { };
 
@@ -1618,6 +1624,8 @@ in {
   dask-jobqueue = callPackage ../development/python-modules/dask-jobqueue { };
 
   dask-ml = callPackage ../development/python-modules/dask-ml { };
+
+  dask-mpi = callPackage ../development/python-modules/dask-mpi { };
 
   dask-xgboost = callPackage ../development/python-modules/dask-xgboost { };
 
@@ -2790,6 +2798,8 @@ in {
 
   xdis = callPackage ../development/python-modules/xdis { };
 
+  xnd = callPackage ../development/python-modules/xnd { };
+
   uncompyle6 = callPackage ../development/python-modules/uncompyle6 { };
 
   lsi = callPackage ../development/python-modules/lsi { };
@@ -2803,6 +2813,8 @@ in {
   ifaddr = callPackage ../development/python-modules/ifaddr { };
 
   imageio = callPackage ../development/python-modules/imageio { };
+
+  imageio-ffmpeg = callPackage ../development/python-modules/imageio-ffmpeg { };
 
   imgaug = callPackage ../development/python-modules/imgaug { };
 
@@ -3934,6 +3946,8 @@ in {
   requests_toolbelt = self.requests-toolbelt; # Old attr, 2017-09-26
 
   retry_decorator = callPackage ../development/python-modules/retry_decorator { };
+
+  quamash = callPackage ../development/python-modules/quamash { };
 
   quandl = callPackage ../development/python-modules/quandl { };
   # alias for an older package which did not support Python 3

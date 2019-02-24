@@ -3,7 +3,7 @@
 import ./make-test.nix ({ pkgs, ...} : {
   name = "influxdb";
   meta = with pkgs.stdenv.lib.maintainers; {
-    maintainers = [ chaoflow offline ];
+    maintainers = [ offline ];
   };
 
   nodes = {

@@ -26,7 +26,7 @@ buildPythonPackage rec {
     description = "Library for OAuth version 1.0";
     license = licenses.mit;
     maintainers = with maintainers; [ garbas ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 
 }

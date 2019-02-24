@@ -35,7 +35,7 @@ in
 
   stdenvNoCC = stdenv.override { cc = null; extraAttrs.noCC = true; };
 
-  stdenvNoLibs = let
+  mkStdenvNoLibs = stdenv: let
     bintools = stdenv.cc.bintools.override {
       libc = null;
       noLibc = true;
@@ -51,6 +51,11 @@ in
       lib.mapNullable (rs: rs ++ [ bintools ]) (stdenv.allowedRequisites or null);
   };
 
+  stdenvNoLibs = mkStdenvNoLibs stdenv;
+
+  gccStdenvNoLibs = mkStdenvNoLibs gccStdenv;
+  clangStdenvNoLibs = mkStdenvNoLibs clangStdenv;
+
   # For convenience, allow callers to get the path to Nixpkgs.
   path = ../..;
 
@@ -63,6 +68,14 @@ in
   # Applying this to an attribute set will cause nix-env to look
   # inside the set for derivations.
   recurseIntoAttrs = attrs: attrs // { recurseForDerivations = true; };
+
+  # This is intended to be the reverse of recurseIntoAttrs, as it is
+  # defined now it exists mainly for documentation purposes, but you
+  # can also override this with recurseIntoAttrs to recurseInto all
+  # the Attrs which is useful for testing massive changes. Ideally,
+  # every package subset not marked with recurseIntoAttrs should be
+  # marked with this.
+  dontRecurseIntoAttrs = x: x;
 
   stringsWithDeps = lib.stringsWithDeps;
 
@@ -104,6 +117,8 @@ in
 
   autoPatchelfHook = makeSetupHook { name = "auto-patchelf-hook"; }
     ../build-support/setup-hooks/auto-patchelf.sh;
+
+  appimageTools = callPackage ../build-support/appimage { };
 
   ensureNewerSourcesHook = { year }: makeSetupHook {}
     (writeScript "ensure-newer-sources-hook.sh" ''
@@ -237,9 +252,35 @@ in
   # `fetchurl' downloads a file from the network.
   fetchurl = import ../build-support/fetchurl {
     inherit lib stdenvNoCC;
-    # On darwin, libkrb5 needs bootstrap_cmds which would require
-    # converting many packages to fetchurl_boot to avoid evaluation cycles.
-    curl = buildPackages.curl.override (lib.optionalAttrs stdenv.isDarwin { gssSupport = false; });
+    curl = buildPackages.curl.override rec {
+      # break dependency cycles
+      fetchurl = stdenv.fetchurlBoot;
+      pkgconfig = buildPackages.pkgconfig.override { fetchurl = stdenv.fetchurlBoot; };
+      perl = buildPackages.perl.override { fetchurl = stdenv.fetchurlBoot; };
+      openssl = buildPackages.openssl.override {
+        fetchurl = stdenv.fetchurlBoot;
+        inherit perl;
+        buildPackages = { inherit perl; };
+      };
+      libssh2 = buildPackages.libssh2.override {
+        fetchurl = stdenv.fetchurlBoot;
+        inherit openssl;
+      };
+      # On darwin, libkrb5 needs bootstrap_cmds which would require
+      # converting many packages to fetchurl_boot to avoid evaluation cycles.
+      gssSupport = !stdenv.isDarwin && !stdenv.hostPlatform.isWindows;
+      libkrb5 = buildPackages.libkrb5.override {
+        fetchurl = stdenv.fetchurlBoot;
+        inherit pkgconfig perl openssl;
+        keyutils = buildPackages.keyutils.override { fetchurl = stdenv.fetchurlBoot; };
+      };
+      nghttp2 = buildPackages.nghttp2.override {
+        fetchurl = stdenv.fetchurlBoot;
+        inherit pkgconfig openssl;
+        c-ares = buildPackages.c-ares.override { fetchurl = stdenv.fetchurlBoot; };
+        libev = buildPackages.libev.override { fetchurl = stdenv.fetchurlBoot; };
+      };
+    };
   };
 
   fetchRepoProject = callPackage ../build-support/fetchrepoproject { };
@@ -247,13 +288,6 @@ in
   fetchipfs = import ../build-support/fetchipfs {
     inherit curl stdenv;
   };
-
-  # fetchurlBoot is used for curl and its dependencies in order to
-  # prevent a cyclic dependency (curl depends on curl.tar.bz2,
-  # curl.tar.bz2 depends on fetchurl, fetchurl depends on curl).  It
-  # uses the curl from the previous bootstrap phase (e.g. a statically
-  # linked curl in the case of stdenv-linux).
-  fetchurlBoot = stdenv.fetchurlBoot;
 
   fetchzip = callPackage ../build-support/fetchzip { };
 
@@ -619,6 +653,8 @@ in
 
   autorevision = callPackage ../tools/misc/autorevision { };
 
+  automirror = callPackage ../tools/misc/automirror { };
+
   bcachefs-tools = callPackage ../tools/filesystems/bcachefs-tools { };
 
   bitwarden-cli = callPackage ../tools/security/bitwarden-cli { };
@@ -924,7 +960,11 @@ in
 
   bluemix-cli = callPackage ../tools/admin/bluemix-cli { };
 
-  charles = callPackage ../applications/networking/charles { };
+  charles = charles4;
+  inherit (callPackage ../applications/networking/charles {})
+    charles3
+    charles4
+  ;
 
   libqmatrixclient = libsForQt5.callPackage ../development/libraries/libqmatrixclient { };
 
@@ -1594,6 +1634,8 @@ in
 
   s2png = callPackage ../tools/graphics/s2png { };
 
+  shab = callPackage ../tools/text/shab { };
+
   simg2img = callPackage ../tools/filesystems/simg2img { };
 
   snipes = callPackage ../games/snipes { };
@@ -1626,7 +1668,7 @@ in
 
   roundcube = callPackage ../servers/roundcube { };
 
-  roundcubePlugins = callPackage ../servers/roundcube/plugins { };
+  roundcubePlugins = dontRecurseIntoAttrs (callPackage ../servers/roundcube/plugins { });
 
   rsbep = callPackage ../tools/backup/rsbep { };
 
@@ -2135,9 +2177,7 @@ in
     brotliSupport = true;
   };
 
-  curl = callPackage ../tools/networking/curl rec {
-    fetchurl = fetchurlBoot;
-  };
+  curl = callPackage ../tools/networking/curl { };
 
   curl_unix_socket = callPackage ../tools/networking/curl-unix-socket rec { };
 
@@ -2265,6 +2305,8 @@ in
   wgetpaste = callPackage ../tools/text/wgetpaste { };
 
   dirmngr = callPackage ../tools/security/dirmngr { };
+
+  dirvish  = callPackage ../tools/backup/dirvish { };
 
   disper = callPackage ../tools/misc/disper { };
 
@@ -2430,7 +2472,7 @@ in
 
   emscripten = callPackage ../development/compilers/emscripten { };
 
-  emscriptenfastcompPackages = callPackage ../development/compilers/emscripten/fastcomp { };
+  emscriptenfastcompPackages = dontRecurseIntoAttrs (callPackage ../development/compilers/emscripten/fastcomp { });
 
   emscriptenfastcomp = emscriptenfastcompPackages.emscriptenfastcomp;
 
@@ -2616,6 +2658,8 @@ in
 
   flatpak-builder = callPackage ../development/tools/flatpak-builder { };
 
+  fltrdr = callPackage ../tools/misc/fltrdr { stdenv = gcc8Stdenv; };
+
   figlet = callPackage ../tools/misc/figlet { };
 
   file = callPackage ../tools/misc/file {
@@ -2762,9 +2806,9 @@ in
 
   fusuma = callPackage ../tools/inputmethods/fusuma {};
 
-  fdbPackages = callPackage ../servers/foundationdb {
+  fdbPackages = dontRecurseIntoAttrs (callPackage ../servers/foundationdb {
     stdenv49 = overrideCC stdenv gcc49;
-  };
+  });
 
   inherit (fdbPackages)
     foundationdb51
@@ -3864,17 +3908,17 @@ in
     openssl = openssl_1_1;
   };
 
-  nodePackages_10_x = callPackage ../development/node-packages/default-v10.nix {
+  nodePackages_10_x = dontRecurseIntoAttrs (callPackage ../development/node-packages/default-v10.nix {
     nodejs = pkgs.nodejs-10_x;
-  };
+  });
 
-  nodePackages_8_x = callPackage ../development/node-packages/default-v8.nix {
+  nodePackages_8_x = dontRecurseIntoAttrs (callPackage ../development/node-packages/default-v8.nix {
     nodejs = pkgs.nodejs-8_x;
-  };
+  });
 
-  nodePackages_6_x = callPackage ../development/node-packages/default-v6.nix {
+  nodePackages_6_x = dontRecurseIntoAttrs (callPackage ../development/node-packages/default-v6.nix {
     nodejs = pkgs.nodejs-6_x;
-  };
+  });
 
   nodePackages = nodePackages_10_x;
 
@@ -3927,6 +3971,8 @@ in
   libgaminggear = callPackage ../development/libraries/libgaminggear { };
 
   libhandy = callPackage ../development/libraries/libhandy { };
+
+  libgumath = callPackage ../development/libraries/libgumath { };
 
   libipfix = callPackage ../development/libraries/libipfix { };
 
@@ -4480,6 +4526,8 @@ in
 
   notify-osd = callPackage ../applications/misc/notify-osd { };
 
+  notes-up = callPackage ../applications/office/notes-up { };
+
   notify-osd-customizable = callPackage ../applications/misc/notify-osd-customizable { };
 
   nox = callPackage ../tools/package-management/nox { };
@@ -4688,17 +4736,6 @@ in
   pandoc = haskell.lib.overrideCabal (haskell.lib.justStaticExecutables haskellPackages.pandoc) (drv: {
     configureFlags = drv.configureFlags or [] ++ ["-fembed_data_files"];
     buildDepends = drv.buildDepends or [] ++ [haskellPackages.file-embed];
-    postInstall = ''
-      mkdir -p $out/share/man/man1
-      cp man/pandoc.1 $out/share/man/man1/
-    '';
-    # Newer tasty version works
-    # https://github.com/jgm/pandoc/commit/3bf398b15ff28a39133a8ce27ba3d2728d255b17#diff-d37211f38c72504621b9d03eef12ffd7
-    # Note the patch doesn't apply because we fetch the cabal file from elsewhere
-    # This should be removed with pandoc 2.6.
-    postPatch = ''
-      substituteInPlace pandoc.cabal --replace "tasty >= 0.11 && < 1.2" "tasty >= 0.11 && < 1.3"
-    '';
   });
 
   pamtester = callPackage ../tools/security/pamtester { };
@@ -4868,7 +4905,7 @@ in
 
   plan9port = callPackage ../tools/system/plan9port { };
 
-  platformioPackages = callPackage ../development/arduino/platformio { };
+  platformioPackages = dontRecurseIntoAttrs (callPackage ../development/arduino/platformio { });
   platformio = platformioPackages.platformio-chrootenv;
 
   platinum-searcher = callPackage ../tools/text/platinum-searcher { };
@@ -5974,6 +6011,8 @@ in
 
   vcsh = callPackage ../applications/version-management/vcsh { };
 
+  vcs_query = callPackage ../tools/misc/vcs_query { };
+
   vcstool = callPackage ../development/tools/vcstool { };
 
   verilator = callPackage ../applications/science/electronics/verilator {};
@@ -6511,6 +6550,8 @@ in
 
   dash = callPackage ../shells/dash { };
 
+  dasht = callPackage ../tools/misc/dasht { };
+
   dashing = callPackage ../tools/misc/dashing { };
 
   es = callPackage ../shells/es { };
@@ -7012,9 +7053,9 @@ in
 
   haskell = callPackage ./haskell-packages.nix { };
 
-  haskellPackages = haskell.packages.ghc863.override {
+  haskellPackages = dontRecurseIntoAttrs (haskell.packages.ghc863.override {
     overrides = config.haskellPackageOverrides or haskell.packageOverrides;
-  };
+  });
 
   inherit (haskellPackages) ghc;
 
@@ -7103,9 +7144,9 @@ in
 
   icedtea_web = icedtea8_web;
 
-  idrisPackages = callPackage ../development/idris-modules {
+  idrisPackages = dontRecurseIntoAttrs (callPackage ../development/idris-modules {
     idris-no-deps = haskellPackages.idris;
-  };
+  });
 
   idris = idrisPackages.with-packages [ idrisPackages.base ] ;
 
@@ -8528,7 +8569,9 @@ in
 
   librarian-puppet-go = callPackage ../development/tools/librarian-puppet-go { };
 
-  libgcc = callPackage ../development/libraries/gcc/libgcc { };
+  libgcc = callPackage ../development/libraries/gcc/libgcc {
+    stdenvNoLibs = gccStdenvNoLibs; # cannot be built with clang it seems
+  };
 
   libstdcxx5 = callPackage ../development/libraries/gcc/libstdc++/5.nix { };
 
@@ -8965,9 +9008,7 @@ in
 
   pkgconf = callPackage ../development/tools/misc/pkgconf {};
 
-  pkg-config = callPackage ../development/tools/misc/pkg-config {
-    fetchurl = fetchurlBoot;
-  };
+  pkg-config = callPackage ../development/tools/misc/pkg-config { };
   pkgconfig = pkg-config; # added 2018-02-02
 
   pkg-configUpstream = lowPrio (pkg-config.override { vanilla = true; });
@@ -9059,7 +9100,7 @@ in
 
   selendroid = callPackage ../development/tools/selenium/selendroid { };
 
-  sconsPackages = callPackage ../development/tools/build-managers/scons { };
+  sconsPackages = dontRecurseIntoAttrs (callPackage ../development/tools/build-managers/scons { });
   scons = sconsPackages.scons_latest;
 
   mill = callPackage ../development/tools/build-managers/mill { };
@@ -9432,9 +9473,7 @@ in
 
   bzrtp = callPackage ../development/libraries/bzrtp { };
 
-  c-ares = callPackage ../development/libraries/c-ares {
-    fetchurl = fetchurlBoot;
-  };
+  c-ares = callPackage ../development/libraries/c-ares { };
 
   c-blosc = callPackage ../development/libraries/c-blosc { };
 
@@ -10039,7 +10078,7 @@ in
   # A GMP fork
   mpir = callPackage ../development/libraries/mpir {};
 
-  gns3Packages = callPackage ../applications/networking/gns3 { };
+  gns3Packages = dontRecurseIntoAttrs (callPackage ../applications/networking/gns3 { });
   gns3-gui = gns3Packages.guiStable;
   gns3-server = gns3Packages.serverStable;
 
@@ -10482,10 +10521,7 @@ in
     inherit (buildPackages.darwin) bootstrap_cmds;
   };
   krb5Full = krb5;
-  libkrb5 = krb5.override {
-    fetchurl = fetchurlBoot;
-    type = "lib";
-  };
+  libkrb5 = krb5.override { type = "lib"; };
   kerberos = libkrb5; # TODO: move to aliases.nix
 
   languageMachines = recurseIntoAttrs (import ../development/libraries/languagemachines/packages.nix { inherit callPackage; });
@@ -10861,9 +10897,7 @@ in
 
   libechonest = callPackage ../development/libraries/libechonest { };
 
-  libev = callPackage ../development/libraries/libev {
-    fetchurl = fetchurlBoot;
-  };
+  libev = callPackage ../development/libraries/libev { };
 
   libevent = callPackage ../development/libraries/libevent { };
 
@@ -11081,9 +11115,7 @@ in
     ln -sv ${libcDev}/include/iconv.h $out/include
   '';
 
-  libiconvReal = callPackage ../development/libraries/libiconv {
-    fetchurl = fetchurlBoot;
-  };
+  libiconvReal = callPackage ../development/libraries/libiconv { };
 
   # On non-GNU systems we need GNU Gettext for libintl.
   libintl = if stdenv.hostPlatform.libc != "glibc" then gettext else null;
@@ -11753,9 +11785,7 @@ in
 
   newt = callPackage ../development/libraries/newt { };
 
-  nghttp2 = callPackage ../development/libraries/nghttp2 {
-    fetchurl = fetchurlBoot;
-  };
+  nghttp2 = callPackage ../development/libraries/nghttp2 { };
   libnghttp2 = nghttp2.lib;
 
   nix-plugins = callPackage ../development/libraries/nix-plugins {
@@ -11911,9 +11941,7 @@ in
 
   openssl = openssl_1_0_2;
 
-  inherit (callPackages ../development/libraries/openssl {
-      fetchurl = fetchurlBoot;
-    })
+  inherit (callPackages ../development/libraries/openssl { })
     openssl_1_0_2
     openssl_1_1;
 
@@ -12336,6 +12364,8 @@ in
   rapidcheck = callPackage ../development/libraries/rapidcheck {};
 
   rapidjson = callPackage ../development/libraries/rapidjson {};
+
+  rapidxml = callPackage ../development/libraries/rapidxml {};
 
   raul = callPackage ../development/libraries/audio/raul { };
 
@@ -13111,9 +13141,7 @@ in
 
   zeitgeist = callPackage ../development/libraries/zeitgeist { };
 
-  zlib = callPackage ../development/libraries/zlib {
-    fetchurl = fetchurlBoot;
-  };
+  zlib = callPackage ../development/libraries/zlib { };
 
   libdynd = callPackage ../development/libraries/libdynd { };
 
@@ -13311,8 +13339,8 @@ in
   quicklispPackagesFor = clwrapper: callPackage ../development/lisp-modules/quicklisp-to-nix.nix {
     inherit clwrapper;
   };
-  quicklispPackagesClisp = quicklispPackagesFor (wrapLisp clisp);
-  quicklispPackagesSBCL = quicklispPackagesFor (wrapLisp sbcl);
+  quicklispPackagesClisp = dontRecurseIntoAttrs (quicklispPackagesFor (wrapLisp clisp));
+  quicklispPackagesSBCL = dontRecurseIntoAttrs (quicklispPackagesFor (wrapLisp sbcl));
   quicklispPackages = quicklispPackagesSBCL;
   quicklispPackages_asdf_3_1 = quicklispPackagesFor
     ((wrapLisp sbcl).override { asdf = asdf_3_1; });
@@ -13374,9 +13402,9 @@ in
     packages = [];
   };
 
-  rPackages = callPackage ../development/r-modules {
+  rPackages = dontRecurseIntoAttrs (callPackage ../development/r-modules {
     overrides = (config.rPackageOverrides or (p: {})) pkgs;
-  };
+  });
 
   ### SERVERS
 
@@ -13411,7 +13439,7 @@ in
     subversion = pkgs.subversion.override { httpServer = true; inherit apacheHttpd; };
   };
 
-  apacheHttpdPackages_2_4 = apacheHttpdPackagesFor pkgs.apacheHttpd_2_4 pkgs.apacheHttpdPackages_2_4;
+  apacheHttpdPackages_2_4 = dontRecurseIntoAttrs (apacheHttpdPackagesFor pkgs.apacheHttpd_2_4 pkgs.apacheHttpdPackages_2_4);
   apacheHttpdPackages = apacheHttpdPackages_2_4;
 
   appdaemon = callPackage ../servers/home-assistant/appdaemon.nix { };
@@ -14398,9 +14426,9 @@ in
     inherit (linuxPackages) kernel;
   };
 
-  fusePackages = callPackage ../os-specific/linux/fuse {
+  fusePackages = dontRecurseIntoAttrs (callPackage ../os-specific/linux/fuse {
     utillinux = utillinuxMinimal;
-  };
+  });
   fuse = lowPrio fusePackages.fuse_2;
   fuse3 = fusePackages.fuse_3;
   fuse-common = hiPrio fusePackages.fuse_3.common;
@@ -14689,7 +14717,7 @@ in
 
     nvidiabl = callPackage ../os-specific/linux/nvidiabl { };
 
-    nvidiaPackages = callPackage ../os-specific/linux/nvidia-x11 { };
+    nvidiaPackages = dontRecurseIntoAttrs (callPackage ../os-specific/linux/nvidia-x11 { });
 
     nvidia_x11_legacy304 = nvidiaPackages.legacy_304;
     nvidia_x11_legacy340 = nvidiaPackages.legacy_340;
@@ -14889,8 +14917,7 @@ in
     kernel = null; # dpdk modules are in linuxPackages.dpdk.kmod
   };
 
-  # Using fetchurlBoot because this is used by kerberos (on Linux), which curl depends on
-  keyutils = callPackage ../os-specific/linux/keyutils { fetchurl = fetchurlBoot; };
+  keyutils = callPackage ../os-specific/linux/keyutils { };
 
   libselinux = callPackage ../os-specific/linux/libselinux { };
 
@@ -15630,6 +15657,8 @@ in
 
   league-of-moveable-type = callPackage ../data/fonts/league-of-moveable-type {};
 
+  ledger-udev-rules = callPackage ../os-specific/linux/ledger-udev-rules {};
+
   inherit (callPackages ../data/fonts/redhat-liberation-fonts { })
     liberation_ttf_v1
     liberation_ttf_v2
@@ -15887,12 +15916,12 @@ in
 
   source-han-code-jp = callPackage ../data/fonts/source-han-code-jp { };
 
-  sourceHanSansPackages = callPackage ../data/fonts/source-han-sans { };
+  sourceHanSansPackages = dontRecurseIntoAttrs (callPackage ../data/fonts/source-han-sans { });
   source-han-sans-japanese = sourceHanSansPackages.japanese;
   source-han-sans-korean = sourceHanSansPackages.korean;
   source-han-sans-simplified-chinese = sourceHanSansPackages.simplified-chinese;
   source-han-sans-traditional-chinese = sourceHanSansPackages.traditional-chinese;
-  sourceHanSerifPackages = callPackage ../data/fonts/source-han-serif { };
+  sourceHanSerifPackages = dontRecurseIntoAttrs (callPackage ../data/fonts/source-han-serif { });
   source-han-serif-japanese = sourceHanSerifPackages.japanese;
   source-han-serif-korean = sourceHanSerifPackages.korean;
   source-han-serif-simplified-chinese = sourceHanSerifPackages.simplified-chinese;
@@ -15944,6 +15973,8 @@ in
 
   ultimate-oldschool-pc-font-pack = callPackage ../data/fonts/ultimate-oldschool-pc-font-pack { };
 
+  undefined-medium = callPackage ../data/fonts/undefined-medium { };
+
   uni-vga = callPackage ../data/fonts/uni-vga { };
 
   unifont = callPackage ../data/fonts/unifont { };
@@ -15979,6 +16010,8 @@ in
   xlsx2csv = pythonPackages.xlsx2csv;
 
   xorg-rgb = callPackage ../data/misc/xorg-rgb {};
+
+  yanone-kaffeesatz = callPackage ../data/fonts/yanone-kaffeesatz {};
 
   zafiro-icons = callPackage ../data/icons/zafiro-icons { };
 
@@ -16096,7 +16129,7 @@ in
     gconf = gnome2.GConf;
   };
 
-  atomPackages = callPackage ../applications/editors/atom { };
+  atomPackages = dontRecurseIntoAttrs (callPackage ../applications/editors/atom { });
 
   inherit (atomPackages) atom atom-beta;
 
@@ -16432,6 +16465,11 @@ in
 
   csound = callPackage ../applications/audio/csound {
     fluidsynth = fluidsynth_1;
+  };
+
+  csound-manual = callPackage ../applications/audio/csound/csound-manual {
+    python = python27;
+    pygments = python27Packages.pygments;
   };
 
   csound-qt = callPackage ../applications/audio/csound/csound-qt {
@@ -16866,8 +16904,8 @@ in
     cask = callPackage ../applications/editors/emacs-modes/cask { };
   };
 
-  emacs25Packages = emacsPackagesFor emacs25 pkgs.emacs25Packages;
-  emacs26Packages = emacsPackagesFor emacs26 pkgs.emacs26Packages;
+  emacs25Packages = dontRecurseIntoAttrs (emacsPackagesFor emacs25 pkgs.emacs25Packages);
+  emacs26Packages = dontRecurseIntoAttrs (emacsPackagesFor emacs26 pkgs.emacs26Packages);
 
   emacsPackagesNgFor = emacs: import ./emacs-packages.nix {
     inherit lib newScope stdenv;
@@ -16892,9 +16930,10 @@ in
     };
   };
 
-  emacs25PackagesNg = emacsPackagesNgFor emacs25;
+  emacs25PackagesNg = dontRecurseIntoAttrs (emacsPackagesNgFor emacs25);
+  emacs26PackagesNg = dontRecurseIntoAttrs (emacsPackagesNgFor emacs26);
+
   emacs25WithPackages = emacs25PackagesNg.emacsWithPackages;
-  emacs26PackagesNg = emacsPackagesNgFor emacs26;
   emacs26WithPackages = emacs26PackagesNg.emacsWithPackages;
   emacsWithPackages = emacsPackagesNg.emacsWithPackages;
 
@@ -17009,6 +17048,8 @@ in
   fmsynth = callPackage ../applications/audio/fmsynth { };
 
   focuswriter = libsForQt5.callPackage ../applications/editors/focuswriter { };
+
+  fondo = callPackage ../applications/graphics/fondo { };
 
   font-manager = callPackage ../applications/misc/font-manager { };
 
@@ -17846,7 +17887,7 @@ in
   inherit (kdeApplications)
     akonadi akregator ark dolphin dragon ffmpegthumbs filelight gwenview k3b
     kaddressbook kate kcachegrind kcalc kcharselect kcolorchooser kcontacts kdenlive kdf kdialog
-    keditbookmarks kget kgpg khelpcenter kig kleopatra kmail kmix kolourpaint kompare konsole
+    keditbookmarks kget kgpg khelpcenter kig kleopatra kmail kmix kmplot kolourpaint kompare konsole
     kpkpass kitinerary kontact korganizer krdc krfb ksystemlog ktouch kwalletmanager marble minuet okular spectacle;
 
   okteta = libsForQt5.callPackage ../applications/editors/okteta { };
@@ -19516,7 +19557,7 @@ in
 
   taskserver = callPackage ../servers/misc/taskserver { };
 
-  tdesktopPackages = callPackage ../applications/networking/instant-messengers/telegram/tdesktop { };
+  tdesktopPackages = dontRecurseIntoAttrs (callPackage ../applications/networking/instant-messengers/telegram/tdesktop { });
   tdesktop = tdesktopPackages.stable;
 
   telegram-cli = callPackage ../applications/networking/instant-messengers/telegram/telegram-cli { };
@@ -19796,6 +19837,8 @@ in
 
   virtinst = callPackage ../applications/virtualization/virtinst {};
 
+  virtscreen = callPackage ../tools/admin/virtscreen {};
+
   virtualbox = callPackage ../applications/virtualization/virtualbox {
     stdenv = stdenv_32bit;
     inherit (gnome2) libIDL;
@@ -19930,7 +19973,7 @@ in
 
   weechat = wrapWeechat weechat-unwrapped { };
 
-  weechatScripts = callPackage ../applications/networking/irc/weechat/scripts { };
+  weechatScripts = dontRecurseIntoAttrs (callPackage ../applications/networking/irc/weechat/scripts { });
 
   westonLite = weston.override {
     pango = null;
@@ -20069,6 +20112,7 @@ in
       ++ optional (config.kodi.enablePVRHTS or false) pvr-hts
       ++ optional (config.kodi.enablePVRHDHomeRun or false) pvr-hdhomerun
       ++ optional (config.kodi.enablePVRIPTVSimple or false) pvr-iptvsimple
+      ++ optional (config.kodi.enableInputStreamAdaptive or false) inputstream-adaptive
       );
   };
 
@@ -20980,7 +21024,7 @@ in
 
   stockfish = callPackage ../games/stockfish { };
 
-  steamPackages = callPackage ../games/steam { };
+  steamPackages = dontRecurseIntoAttrs (callPackage ../games/steam { });
 
   steam = steamPackages.steam-chrootenv;
 
@@ -21085,7 +21129,7 @@ in
 
   ue4demos = recurseIntoAttrs (callPackage ../games/ue4demos { });
 
-  ut2004Packages = callPackage ../games/ut2004 { };
+  ut2004Packages = dontRecurseIntoAttrs (callPackage ../games/ut2004 { });
 
   ut2004demo = res.ut2004Packages.ut2004 [ res.ut2004Packages.ut2004-demo ];
 
@@ -21194,9 +21238,9 @@ in
 
   keen4 = callPackage ../games/keen4 { };
 
-  zeroadPackages = callPackage ../games/0ad {
+  zeroadPackages = dontRecurseIntoAttrs (callPackage ../games/0ad {
     wxGTK = wxGTK30;
-  };
+  });
 
   zeroad = zeroadPackages.zeroad;
 
@@ -22131,6 +22175,8 @@ in
 
   ### MISC
 
+  acpilight = callPackage ../misc/acpilight { };
+
   android-file-transfer = libsForQt5.callPackage ../tools/filesystems/android-file-transfer { };
 
   antimicro = libsForQt5.callPackage ../tools/misc/antimicro { };
@@ -22566,6 +22612,8 @@ in
   };
 
   nix-pin = callPackage ../tools/package-management/nix-pin { };
+
+  nix-prefetch = callPackage ../tools/package-management/nix-prefetch { };
 
   nix-prefetch-github = callPackage ../build-support/nix-prefetch-github {};
 
