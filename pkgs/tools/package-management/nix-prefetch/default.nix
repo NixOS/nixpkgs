@@ -7,13 +7,13 @@ with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "nix-prefetch";
-  version = "0.1.0";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "msteen";
     repo = "nix-prefetch";
-    rev = "f9507a655651b51f3a3ebacde85bb40758853615";
-    sha256 = "0ykrbvbwwpz348424yy2452idgw8dffi3klh7n85n96dfflyyd4s";
+    rev = version;
+    sha256 = "01hasbfcr6ri10vf3y5ail59s9a96a2bja2r7vpvdbfq99c4ln3q";
   };
 
   nativeBuildInputs = [
