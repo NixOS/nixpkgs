@@ -184,6 +184,9 @@ in {
   };
 
   config = mkIf cfg.enable {
+    systemd.tmpfiles.rules = [
+      "d '${cfg.workDir}' 0701 - - - -"
+    ];
     systemd.services.mesos-slave = {
       description = "Mesos Slave";
       wantedBy = [ "multi-user.target" ];
@@ -210,11 +213,7 @@ in {
             --executor_environment_variables=${lib.escapeShellArg (builtins.toJSON cfg.executorEnvironmentVariables)} \
             ${toString cfg.extraCmdLineOptions}
         '';
-        PermissionsStartOnly = true;
       };
-      preStart = ''
-        mkdir -m 0701 -p ${cfg.workDir}
-      '';
     };
   };
 
