@@ -83,9 +83,9 @@ let
         # compares as newer because the versioning scheme has changed.
         versions=$(
             echo '[';
-            lynx -dump "https://ftp.gnu.org/gnu/aspell/dict/${language}/?F=0" | \
-                sed -r "s/^ +\* \[[0-9]+\]${filename}-${language}-([A-Za-z0-9_+.-]+)\.tar\.bz2$/\"\1\"/;t;d" | \
-                if [ "${language}" = "ca" ]; then grep -v 20040130-1; else cat; fi; \
+            curl -s 'https://ftp.gnu.org/gnu/aspell/dict/${language}/?F=0' | \
+                sed -r 's/.* href="${filename}-${language}-([A-Za-z0-9_+.-]+)\.tar\.bz2".*/"\1"/;t;d' | \
+                if [ '${language}' = "ca" ]; then grep -v 20040130-1; else cat; fi; \
             echo ']')
 
         # Sort versions in descending order using Nix's and take the first as the latest.
