@@ -73,7 +73,7 @@ let
 
       passthru.updateScript = writeScript "update-aspellDict-${language}" ''
         #!/usr/bin/env nix-shell
-        #!nix-shell -i bash -p nix lynx gnused common-updater-scripts
+        #!nix-shell -i bash -p nix curl gnused common-updater-scripts
         set -eu -o pipefail
 
         # List tarballs in the dictionary's subdirectory via HTTPS and
