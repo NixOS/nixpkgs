@@ -193,13 +193,22 @@ let
       }
     ) args; in self;
 
-in {
-  mkRuby = { version, ... } @ args: generic (args // {
-    version = builtins.foldl' (a: b: a b) rubyVersion version;
-  });
+in rec {
+  mkRuby = { version ? null, versionNrs ? null, versionStr ? null, ... } @ args:
+    let
+      restAttrs = builtins.removeAttrs args [ "versionNrs" "versionStr" ];
+      foldVersions = builtins.foldl' (a: b: a b) rubyVersion;
+      versionStr4 = lib.lists.take 4 (builtins.splitVersion versionStr ++ ["" "" "" ""]);
+    in generic (restAttrs // {
+      version = builtins.head (builtins.filter (x: x != null) [
+        version
+        (if versionNrs != null then foldVersions versionNrs else null)
+        (if versionStr != null then foldVersions versionStr4 else null)
+      ]);
+    });
 
-  ruby_2_3 = generic {
-    version = rubyVersion "2" "3" "8" "";
+  ruby_2_3 = mkRuby {
+    versionStr = "2.3.8";
     sha256 = {
       src = "1gwsqmrhpx1wanrfvrsj3j76rv888zh7jag2si2r14qf8ihns0dm";
       git = "0158fg1sx6l6applbq0831kl8kzx5jacfl9lfg0shfzicmjlys3f";
@@ -211,8 +220,8 @@ in {
     ];
   };
 
-  ruby_2_4 = generic {
-    version = rubyVersion "2" "4" "5" "";
+  ruby_2_4 = mkRuby {
+    versionNrs = ["2" "4" "5" ""];
     sha256 = {
       src = "162izk7c72y73vmdgcbsh8kqihrbm65xvp53r1s139pzwqd78dv7";
       git = "181za4h6bd2bkyzyknxc18i5gq0pnqag60ybc17p0ixw3q7pdj43";
@@ -224,8 +233,8 @@ in {
     ];
   };
 
-  ruby_2_5 = generic {
-    version = rubyVersion "2" "5" "3" "";
+  ruby_2_5 = mkRuby {
+    versionNrs = ["2" "5" "3" ""];
     sha256 = {
       src = "0v4442aqqlzxwc792kbkfs2k61qg97r680is6gx20z63a8wd0a4q";
       git = "0r9mgvqk6gj8pc9q6qmy7j2kbln7drc8wy67sb2ij8ciclcw9nn2";
@@ -237,7 +246,7 @@ in {
     ];
   };
 
-  ruby_2_6 = generic {
+  ruby_2_6 = mkRuby {
     version = rubyVersion "2" "6" "1" "";
     sha256 = {
       src = "1f0w37jz2ryvlx260rw3s3wl0wg7dkzphb54lpvrqg90pfvly0hp";
