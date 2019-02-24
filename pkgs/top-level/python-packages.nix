@@ -452,6 +452,8 @@ in {
 
   imutils = callPackage ../development/python-modules/imutils { };
 
+  intake = callPackage ../development/python-modules/intake { };
+
   intelhex = callPackage ../development/python-modules/intelhex { };
 
   jira = callPackage ../development/python-modules/jira { };
