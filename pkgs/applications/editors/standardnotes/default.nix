@@ -1,7 +1,7 @@
 { stdenv, appimage-run, fetchurl }:
 
 let
-  version = "2.3.12";
+  version = "3.0.6";
 
   plat = {
     "i386-linux" = "i386";
@@ -9,8 +9,8 @@ let
   }.${stdenv.hostPlatform.system};
 
   sha256 = {
-    "i386-linux" = "0q7izk20r14kxn3n4pn92jgnynfnlnylg55brz8n1lqxc0dc3v24";
-    "x86_64-linux" = "0myg4qv0vrwh8s9sckb12ld9f86ymx4yypvpy0w5qn1bxk5hbafc";
+    "i386-linux" = "0czhlbacjks9x8y2w46nzlvk595psqhqw0vl0bvsq7sz768dk0ni";
+    "x86_64-linux" = "0haji9h8rrm9yvqdv6i2y6xdd0yhsssjjj83hmf6cb868lwyigsf";
   }.${stdenv.hostPlatform.system};
 in
 
