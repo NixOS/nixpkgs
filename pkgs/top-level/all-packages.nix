@@ -20646,6 +20646,8 @@ in
 
   trayer = callPackage ../applications/window-managers/trayer { };
 
+  tree-from-tags = callPackage ../applications/audio/tree-from-tags { };
+
   tdrop = callPackage ../applications/misc/tdrop { };
 
   tree = callPackage ../tools/system/tree {};
