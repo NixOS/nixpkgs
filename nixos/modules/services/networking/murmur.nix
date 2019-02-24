@@ -257,13 +257,7 @@ in
         Restart   = "always";
         User      = "murmur";
         ExecStart = "${pkgs.murmur}/bin/murmurd -ini ${configFile}";
-        PermissionsStartOnly = true;
       };
-
-      preStart = ''
-        mkdir -p /var/log/murmur
-        chown -R murmur /var/log/murmur
-      '';
     };
   };
 }
