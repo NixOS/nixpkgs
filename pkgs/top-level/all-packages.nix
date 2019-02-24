@@ -8496,7 +8496,9 @@ in
 
   cmake_2_8 = callPackage ../development/tools/build-managers/cmake/2.8.nix { };
 
-  cmake = libsForQt5.callPackage ../development/tools/build-managers/cmake { };
+  cmake = libsForQt5.callPackage ../development/tools/build-managers/cmake {
+    inherit (darwin) cf-private;
+  };
 
   cmakeCurses = cmake.override { useNcurses = true; };
 
