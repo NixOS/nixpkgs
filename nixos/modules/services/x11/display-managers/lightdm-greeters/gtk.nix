@@ -18,9 +18,10 @@ let
   # The default greeter provided with this expression is the GTK greeter.
   # Again, we need a few things in the environment for the greeter to run with
   # fonts/icons.
-  wrappedGtkGreeter = pkgs.runCommand "lightdm-gtk-greeter"
-    { buildInputs = [ pkgs.makeWrapper ]; }
-    ''
+  wrappedGtkGreeter = pkgs.runCommand "lightdm-gtk-greeter" {
+      buildInputs = [ pkgs.makeWrapper ];
+      preferLocalBuild = true;
+    } ''
       # This wrapper ensures that we actually get themes
       makeWrapper ${pkgs.lightdm_gtk_greeter}/sbin/lightdm-gtk-greeter \
         $out/greeter \

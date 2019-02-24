@@ -24,7 +24,7 @@ import ./make-test.nix ({ pkgs, lib, withFirewall, withConntrackHelpers ? false,
     name = "nat" + (if withFirewall then "WithFirewall" else "Standalone")
                  + (lib.optionalString withConntrackHelpers "withConntrackHelpers");
     meta = with pkgs.stdenv.lib.maintainers; {
-      maintainers = [ eelco chaoflow rob ];
+      maintainers = [ eelco rob ];
     };
 
     nodes =

@@ -3,7 +3,7 @@
 # Derivation patches HandBrake to use Nix closure dependencies.
 #
 
-{ stdenv, lib, fetchurl, callPackage,
+{ stdenv, lib, fetchurl,
   # Main build tools
   python2, pkgconfig, autoconf, automake, cmake, nasm, libtool, m4,
   # Processing, video codecs, containers
@@ -30,11 +30,11 @@
 
 stdenv.mkDerivation rec {
   pname = "handbrake";
-  version = "1.2.1";
+  version = "1.2.2";
 
   src = fetchurl {
     url = ''https://download2.handbrake.fr/${version}/HandBrake-${version}-source.tar.bz2'';
-    sha256 = "0gbqzar49c8ygz6chnsz65xgsdcwr60lbc8ivnw8i6xjggn6wc80";
+    sha256 = "0k2yaqy7zi06k8mkp9az2mn9dlgj3a1339vacakfh2nn2zsics6z";
   };
 
   nativeBuildInputs = [

@@ -14,7 +14,7 @@ let
       name = "dmd.conf";
       text = (lib.generators.toINI {} {
         "Environment" = {
-          DFLAGS = ''-I$@out@/include/d2 -L-L$@out@/lib -fPIC ${stdenv.lib.optionalString (!targetPackages.stdenv.cc.isClang) "-L--export-dynamic"}'';
+          DFLAGS = ''-I@out@/include/dmd -L-L@out@/lib -fPIC ${stdenv.lib.optionalString (!targetPackages.stdenv.cc.isClang) "-L--export-dynamic"}'';
         };
       });
   };
@@ -135,15 +135,15 @@ stdenv.mkDerivation rec {
 
       cd ../druntime
       mkdir $out/include
-      mkdir $out/include/d2
-      cp -r import/* $out/include/d2
+      mkdir $out/include/dmd
+      cp -r import/* $out/include/dmd
 
       cd ../phobos
       mkdir $out/lib
       cp generated/${osname}/release/${bits}/libphobos2.* $out/lib
 
-      cp -r std $out/include/d2
-      cp -r etc $out/include/d2
+      cp -r std $out/include/dmd
+      cp -r etc $out/include/dmd
 
       wrapProgram $out/bin/dmd \
           --prefix PATH ":" "${targetPackages.stdenv.cc}/bin" \

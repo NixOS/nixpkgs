@@ -4313,6 +4313,15 @@
     github = "sleexyz";
     name = "Sean Lee";
   };
+  smakarov = {
+    email = "setser200018@gmail.com";
+    github = "setser";
+    name = "Sergey Makarov";
+    keys = [{
+      longkeyid = "rsa2048/6AA23A1193B7064B";
+      fingerprint = "6F8A 18AE 4101 103F 3C54  24B9 6AA2 3A11 93B7 064B";
+    }];
+  };
   smaret = {
     email = "sebastien.maret@icloud.com";
     github = "smaret";

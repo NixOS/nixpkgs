@@ -11,13 +11,13 @@ in
 
 stdenv.mkDerivation rec {
   name = "icestorm-${version}";
-  version = "2018.12.31";
+  version = "2019.02.23";
 
   src = fetchFromGitHub {
     owner  = "cliffordwolf";
     repo   = "icestorm";
-    rev    = "c0cbae88ab47a3879aacf80d53b6a85710682a6b";
-    sha256 = "0bqm0rpywm64yvbq75klpyzb1g9sdsp1kvdlyqg4hvm8jw9w8lya";
+    rev    = "3a2bfee5cbc0558641668114260d3f644d6b7c83";
+    sha256 = "1avc9b6w3xbmpq4y4lf9b5mym6aygh5hngzyasa9jyj0cx8mxcpf";
   };
 
   nativeBuildInputs = [ pkgconfig ];

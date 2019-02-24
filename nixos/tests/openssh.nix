@@ -5,7 +5,7 @@ let inherit (import ./ssh-keys.nix pkgs)
 in {
   name = "openssh";
   meta = with pkgs.stdenv.lib.maintainers; {
-    maintainers = [ aszlig eelco chaoflow ];
+    maintainers = [ aszlig eelco ];
   };
 
   nodes = {

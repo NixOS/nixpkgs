@@ -54,6 +54,8 @@
      </itemizedlist>
      <para>to <literal>false</literal> and enable your preferred display manager.</para>
     </note>
+   </listitem>
+   <listitem>
      <para>
        A major refactoring of the Kubernetes module has been completed.
        Refactorings primarily focus on decoupling components and enhancing
@@ -94,6 +96,13 @@
    <listitem>
     <para>
      <literal>./services/misc/beanstalkd.nix</literal>
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     There is a new <varname>services.cockroachdb</varname> module for running
+     CockroachDB databases. NixOS now ships with CockroachDB 2.1.x as well, available
+     on <literal>x86_64-linux</literal> and <literal>aarch64-linux</literal>.
     </para>
    </listitem>
   </itemizedlist>
@@ -644,6 +653,7 @@
         <link linkend="opt-services.xserver.videoDrivers">X.org video drivers</link>.
         The <literal>modesetting</literal> driver should take over automatically,
         it is better maintained upstream and has less problems with advanced X11 features.
+        This can lead to a change in the output names used by <literal>xrandr</literal>.
         Some performance regressions on some GPU models might happen.
         Some OpenCL and VA-API applications might also break
         (Beignet seems to provide OpenCL support with

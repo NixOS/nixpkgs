@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, pkgconfig, gnome3, intltool, gobject-introspection, upower, cairo
+{ fetchurl, fetchpatch, stdenv, pkgconfig, gnome3, intltool, gobject-introspection, upower, cairo
 , pango, cogl, clutter, libstartup_notification, zenity, libcanberra-gtk3
 , libtool, makeWrapper, xkeyboard_config, libxkbfile, libxkbcommon, libXtst, libinput
 , gsettings-desktop-schemas, glib, gtk3, gnome-desktop
@@ -12,6 +12,16 @@ stdenv.mkDerivation rec {
     url = "mirror://gnome/sources/mutter/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
     sha256 = "0qr3w480p31nbiad49213rj9rk6p9fl82a68pzznpz36p30dq96z";
   };
+
+  patches = [
+    # https://gitlab.gnome.org/GNOME/mutter/issues/270
+    # Fixes direction of the desktop switching animation when using workspace
+    # grid extension with desktops arranged horizontally.
+    (fetchpatch {
+      url = https://gitlab.gnome.org/GNOME/mutter/commit/92cccf53dfe9e077f1d61ac4f896fd391f8cb689.patch;
+      sha256 = "11vmypypjss50xg7hhdbqrxvgqlxx4lnwy59089qsfl3akg4kk2i";
+    })
+  ];
 
   configureFlags = [
     "--with-x"

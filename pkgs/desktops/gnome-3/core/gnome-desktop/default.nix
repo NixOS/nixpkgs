@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   name = "gnome-desktop-${version}";
-  version = "3.30.2";
+  version = "3.30.2.1";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-desktop/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "0k6iccfj9naw42dl2mgljfvk12dmvg06plg86qd81nksrf9ycxal";
+    sha256 = "07s95fpfl3kjq51yxbrx6q87w812pq6bl0xdn0zzyi6qvg33m00v";
   };
 
   enableParallelBuilding = true;

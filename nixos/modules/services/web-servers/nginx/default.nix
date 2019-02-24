@@ -44,7 +44,25 @@ let
     }
   ''));
 
-  configFile = pkgs.writeText "nginx.conf" ''
+  awkFormat = pkgs.writeText "awkFormat-nginx.awk" ''
+    awk -f
+    {sub(/^[ \t]+/,"");idx=0}
+    /\{/{ctx++;idx=1}
+    /\}/{ctx--}
+    {id="";for(i=idx;i<ctx;i++)id=sprintf("%s%s", id, "\t");printf "%s%s\n", id, $0}
+  '';
+
+  configFile = pkgs.stdenv.mkDerivation {
+    name = "nginx-config";
+    src = "";
+    phases = [ "installPhase" ];
+    installPhase = ''
+      mkdir $out
+      awk -f ${awkFormat} ${pre-configFile} | sed '/^\s*$/d' > $out/nginx.conf
+    '';
+  };
+
+  pre-configFile = pkgs.writeText "pre-nginx.conf" ''
     user ${cfg.user} ${cfg.group};
     error_log ${cfg.logError};
     daemon off;
@@ -638,10 +656,10 @@ in
       preStart =
         ''
         ${cfg.preStart}
-        ${cfg.package}/bin/nginx -c ${configFile} -p ${cfg.stateDir} -t
+        ${cfg.package}/bin/nginx -c ${configFile}/nginx.conf -p ${cfg.stateDir} -t
         '';
       serviceConfig = {
-        ExecStart = "${cfg.package}/bin/nginx -c ${configFile} -p ${cfg.stateDir}";
+        ExecStart = "${cfg.package}/bin/nginx -c ${configFile}/nginx.conf -p ${cfg.stateDir}";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         Restart = "always";
         RestartSec = "10s";

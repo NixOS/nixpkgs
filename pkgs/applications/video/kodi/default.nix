@@ -18,7 +18,7 @@
 , libcec, libcec_platform, dcadec, libuuid
 , libcrossguid, libmicrohttpd
 , bluez, doxygen, giflib, glib, harfbuzz, lcms2, libidn, libpthreadstubs, libtasn1, libXdmcp
-, libplist, p11-kit, zlib
+, libplist, p11-kit, zlib, flatbuffers, fmt, fstrcmp, rapidjson
 , dbusSupport ? true, dbus ? null
 , joystickSupport ? true, cwiid ? null
 , nfsSupport ? true, libnfs ? null
@@ -40,21 +40,18 @@ assert usbSupport   -> libusb != null && ! udevSupport; # libusb won't be used i
 assert vdpauSupport -> libvdpau != null;
 
 # TODO for Kodi 18.0
-# - cmake is no longer in project/cmake
-# - maybe we can remove auto{conf,make} and libtool from inputs
 # - check if dbus support PR has been merged and add dbus as a buildInput
-# - try to use system ffmpeg (kodi 17 works best with bundled 3.1 with patches)
 
 let
-  kodiReleaseDate = "20171115";
-  kodiVersion = "17.6";
-  rel = "Krypton";
+  kodiReleaseDate = "20190129";
+  kodiVersion = "18.0";
+  rel = "Leia";
 
   kodi_src = fetchFromGitHub {
     owner  = "xbmc";
     repo   = "xbmc";
     rev    = "${kodiVersion}-${rel}";
-    sha256 = "1pwmmbry7dajwdpmc1mdygjvxna4kl38h32d71g10yf3mdm5wmz3";
+    sha256 = "1ci5jjvqly01lysdp6j6jrnn49z4is9z5kan5zl3cpqm9w7rqarg";
   };
 
   kodiDependency = { name, version, rev, sha256, ... } @attrs:
@@ -72,9 +69,9 @@ let
 
   ffmpeg = kodiDependency rec {
     name    = "FFmpeg";
-    version = "3.1.11";
-    rev     = "${version}-${rel}-17.5"; # TODO: change 17.5 back to ${kodiVersion}
-    sha256  = "0nc4sb6v1g3l11v9h5l9n44a8r40186rcbp2xg5c7vg6wcpjid13";
+    version = "4.0.3";
+    rev     = "${version}-${rel}-RC5";
+    sha256  = "0l20bysv2y711khwpnpw4dz6mzd37qllki3fnv4dx1lj8ivydrlx";
     preConfigure = ''
       cp ${kodi_src}/tools/depends/target/ffmpeg/{CMakeLists.txt,*.cmake} .
     '';
@@ -86,29 +83,29 @@ let
   # we should be able to build these externally and have kodi reference them as buildInputs.
   # Doesn't work ATM though so we just use them for the src
 
-  libdvdcss = kodiDependency {
+  libdvdcss = kodiDependency rec {
     name              = "libdvdcss";
-    version           = "20160215";
-    rev               = "2f12236bc1c92f73c21e973363f79eb300de603f";
-    sha256            = "198r0q73i55ga1dvyqq9nfcri0zq08b94hy8671lg14i3izx44dd";
+    version           = "1.4.2";
+    rev               = "${version}-${rel}-Beta-5";
+    sha256            = "0j41ydzx0imaix069s3z07xqw9q95k7llh06fc27dcn6f7b8ydyl";
     buildInputs       = [ libdvdread ];
     nativeBuildInputs = [ autoreconfHook pkgconfig ];
   };
 
-  libdvdnav = kodiDependency {
+  libdvdnav = kodiDependency rec {
     name              = "libdvdnav";
-    version           = "20170217";
-    rev               = "981488f7f27554b103cca10c1fbeba027396c94a";
-    sha256            = "089pswc51l3avh95zl4cpsh7gh1innh7b2y4xgx840mcmy46ycr8";
+    version           = "6.0.0";
+    rev               = "${version}-${rel}-Alpha-3";
+    sha256            = "0qwlf4lgahxqxk1r2pzl866mi03pbp7l1fc0rk522sc0ak2s9jhb";
     buildInputs       = [ libdvdread ];
     nativeBuildInputs = [ autoreconfHook pkgconfig ];
   };
 
-  libdvdread = kodiDependency {
+  libdvdread = kodiDependency rec {
     name              = "libdvdread";
-    version           = "20160221";
-    rev               = "17d99db97e7b8f23077b342369d3c22a6250affd";
-    sha256            = "1gr5aq1cjr3as9mnwrw29cxn4m6f6pfrxdahkdcjy70q3ldg90sl";
+    version           = "6.0.0";
+    rev               = "${version}-${rel}-Alpha-3";
+    sha256            = "1xxn01mhkdnp10cqdr357wx77vyzfb5glqpqyg8m0skyi75aii59";
     nativeBuildInputs = [ autoreconfHook pkgconfig ];
   };
 
@@ -136,7 +133,7 @@ in stdenv.mkDerivation rec {
       libgcrypt libgpgerror libunistring
       libcrossguid cwiid libplist
       bluez giflib glib harfbuzz lcms2 libpthreadstubs libXdmcp
-      ffmpeg
+      ffmpeg flatbuffers fmt fstrcmp rapidjson
       # libdvdcss libdvdnav libdvdread
     ]
     ++ lib.optional  dbusSupport     dbus
@@ -176,12 +173,8 @@ in stdenv.mkDerivation rec {
     doCheck = false;
 
     postPatch = ''
-      substituteInPlace xbmc/linux/LinuxTimezone.cpp \
+      substituteInPlace xbmc/platform/linux/LinuxTimezone.cpp \
         --replace 'usr/share/zoneinfo' 'etc/zoneinfo'
-    '';
-
-    preConfigure = ''
-      cd project/cmake
     '';
 
     postInstall = ''
@@ -209,6 +202,6 @@ in stdenv.mkDerivation rec {
       homepage    = https://kodi.tv/;
       license     = licenses.gpl2;
       platforms   = platforms.linux;
-      maintainers = with maintainers; [ domenkozar titanous edwtjo peterhoeg ];
+      maintainers = with maintainers; [ domenkozar titanous edwtjo peterhoeg sephalon ];
     };
 }

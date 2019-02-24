@@ -82,7 +82,7 @@ in {
       X-RestartIfChanged=false
     '';
 
-    systemd.units."autovt@.service".unit = pkgs.runCommand "unit" { }
+    systemd.units."autovt@.service".unit = pkgs.runCommand "unit" { preferLocalBuild = true; }
         ''
           mkdir -p $out
           ln -s ${config.systemd.units."kmsconvt@.service".unit}/kmsconvt@.service $out/autovt@.service

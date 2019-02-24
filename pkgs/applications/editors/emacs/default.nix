@@ -133,7 +133,7 @@ stdenv.mkDerivation rec {
     description = "The extensible, customizable GNU text editor";
     homepage    = https://www.gnu.org/software/emacs/;
     license     = licenses.gpl3Plus;
-    maintainers = with maintainers; [ chaoflow lovek323 peti the-kenny jwiegley ];
+    maintainers = with maintainers; [ lovek323 peti the-kenny jwiegley ];
     platforms   = platforms.all;
 
     longDescription = ''
