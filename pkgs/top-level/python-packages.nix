@@ -4164,6 +4164,8 @@ in {
 
   hieroglyph = callPackage ../development/python-modules/hieroglyph { };
 
+  hvplot = callPackage ../development/python-modules/hvplot { };
+
   guzzle_sphinx_theme = callPackage ../development/python-modules/guzzle_sphinx_theme { };
 
   sphinx-testing = callPackage ../development/python-modules/sphinx-testing { };
