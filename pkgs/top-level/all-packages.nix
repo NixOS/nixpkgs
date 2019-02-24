@@ -12514,8 +12514,11 @@ in
 
   skalibs = skawarePackages.skalibs;
 
-  skawarePackages = recurseIntoAttrs {
-    buildPackage = callPackage ../build-support/skaware/build-skaware-package.nix { };
+  skawarePackages = recurseIntoAttrs rec {
+    cleanPackaging = callPackage ../build-support/skaware/clean-packaging.nix { };
+    buildPackage = callPackage ../build-support/skaware/build-skaware-package.nix {
+      inherit cleanPackaging;
+    };
 
     skalibs = callPackage ../development/libraries/skalibs { };
     execline = callPackage ../tools/misc/execline { };
