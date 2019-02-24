@@ -49,12 +49,10 @@ rec {
   } // (removeAttrs args (builtins.attrNames (builtins.functionArgs wrapAppImage))));
 
   wrapType1 = args@{ name, src, extraPkgs ? pkgs: [], ... }: wrapAppImage (args // {
-    inherit name extraPkgs;
     src = extractType1 { inherit name src; };
   });
 
   wrapType2 = args@{ name, src, extraPkgs ? pkgs: [], ... }: wrapAppImage (args // {
-    inherit name extraPkgs;
     src = extractType2 { inherit name src; };
   });
 
