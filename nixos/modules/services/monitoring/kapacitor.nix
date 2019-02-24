@@ -163,6 +163,10 @@ in
   config = mkIf cfg.enable {
     environment.systemPackages = [ pkgs.kapacitor ];
 
+    systemd.tmpfiles.rules = [
+      "d '${cfg.dataDir}' - ${cfg.user} ${cfg.group} - -"
+    ];
+
     systemd.services.kapacitor = {
       description = "Kapacitor Real-Time Stream Processing Engine";
       wantedBy = [ "multi-user.target" ];
@@ -171,12 +175,7 @@ in
         ExecStart = "${pkgs.kapacitor}/bin/kapacitord -config ${kapacitorConf}";
         User = "kapacitor";
         Group = "kapacitor";
-        PermissionsStartOnly = true;
       };
-      preStart = ''
-        mkdir -p ${cfg.dataDir}
-        chown ${cfg.user}:${cfg.group} ${cfg.dataDir}
-      '';
     };
 
     users.users.kapacitor = {
