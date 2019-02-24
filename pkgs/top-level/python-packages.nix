@@ -384,6 +384,8 @@ in {
 
   fire = callPackage ../development/python-modules/fire { };
 
+  firetv = callPackage ../development/python-modules/firetv { };
+
   fdint = callPackage ../development/python-modules/fdint { };
 
   fuse = callPackage ../development/python-modules/fuse-python {
