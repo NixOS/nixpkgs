@@ -1,9 +1,27 @@
 { lib, stdenv, echo_build_heading, noisily, makeDeps }:
-{ build, buildDependencies, colors, completeBuildDeps, completeDeps, crateAuthors, crateFeatures, crateName, crateVersion, extraLinkFlags, libName, libPath, release, target_os, verbose, workspace_member }:
+{ build
+, buildDependencies
+, colors
+, completeBuildDeps
+, completeDeps
+, crateAuthors
+, crateFeatures
+, crateName
+, crateVersion
+, extraLinkFlags
+, extraRustcOpts
+, libName
+, libPath
+, release
+, target_os
+, verbose
+, workspace_member }:
 let version_ = lib.splitString "-" crateVersion;
     versionPre = if lib.tail version_ == [] then "" else builtins.elemAt version_ 1;
     version = lib.splitString "." (lib.head version_);
-    rustcOpts = (if release then "-C opt-level=3" else "-C debuginfo=2");
+    rustcOpts = lib.lists.foldl' (opts: opt: opts + " " + opt)
+        (if release then "-C opt-level=3" else "-C debuginfo=2")
+        (["-C codegen-units=1"] ++ extraRustcOpts);
     buildDeps = makeDeps buildDependencies;
     authors = lib.concatStringsSep ":" crateAuthors;
     optLevel = if release then 3 else 0;
