@@ -1,5 +1,5 @@
-{ lib, buildPythonPackage, isPy3k, fetchPypi, numba, numpy, pandas,
-pytestrunner, thrift }:
+{ lib, buildPythonPackage, isPy3k, fetchPypi, fetchpatch, numba, numpy, pandas,
+pytestrunner, thrift, pytest, python-snappy, lz4 }:
 
 buildPythonPackage rec {
   pname = "fastparquet";
@@ -12,11 +12,24 @@ buildPythonPackage rec {
     sha256 = "183wdmhnhnlsd7908n3d2g4qnb49fcipqfshghwpbdwdzjpa0day";
   };
 
-  buildInputs = [ pytestrunner ];
-  propagatedBuildInputs = [ numba numpy pandas thrift ];
+  # Fixes for recent pandas version
+  # See https://github.com/dask/fastparquet/pull/396
+  patches = fetchpatch {
+    url = https://github.com/dask/fastparquet/commit/31fb3115598d1ab62a5c8bf7923a27c16f861529.patch;
+    sha256 = "0r1ig4rydmy4j85dgb52qbsx6knxdwn4dn9h032fg3p6xqq0zlpm";
+  };
 
-  # Needs python-snappy and some patching to prevent tests from trying to
-  # download python packages
+  postPatch = ''
+    # FIXME: package zstandard
+    # removing the test dependency for now
+    substituteInPlace setup.py --replace "'zstandard'," ""
+  '';
+
+  nativeBuildInputs = [ pytestrunner ];
+  propagatedBuildInputs = [ numba numpy pandas thrift ];
+  checkInputs = [ pytest python-snappy lz4 ];
+
+  # test_data/ missing in PyPI tarball
   doCheck = false;
 
   meta = with lib; {
