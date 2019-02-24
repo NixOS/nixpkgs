@@ -1223,14 +1223,15 @@ self: super: {
   tasty-hedgehog = dontCheck super.tasty-hedgehog;
 
   # The latest release version is ancient. You really need this tool from git.
-  haskell-ci = addBuildDepend (overrideSrc (dontCheck super.haskell-ci) {
-    version = "2019.02.22-git";
-    src = pkgs.fetchFromGitHub {
-      owner = "haskell-CI";
-      repo = "haskell-ci";
-      rev = "3a861aa7d6099296a9ac1003c7218e3ed831ca8c";
-      sha256 = "0hwfg3ab5mh3xml3nlabbr1x8bhg26gw6sxn8bgb8bh6r0ccq9pi";
-    };
-    }) (with self; [base-compat generic-lens microlens optparse-applicative ShellCheck]);
+  haskell-ci = generateOptparseApplicativeCompletion "haskell-ci"
+    (addBuildDepend (overrideSrc (dontCheck super.haskell-ci) {
+      version = "2019.02.22-git";
+      src = pkgs.fetchFromGitHub {
+        owner = "haskell-CI";
+        repo = "haskell-ci";
+        rev = "3a861aa7d6099296a9ac1003c7218e3ed831ca8c";
+        sha256 = "0hwfg3ab5mh3xml3nlabbr1x8bhg26gw6sxn8bgb8bh6r0ccq9pi";
+      };
+  }) (with self; [base-compat generic-lens microlens optparse-applicative ShellCheck]));
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
