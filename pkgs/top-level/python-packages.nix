@@ -754,6 +754,10 @@ in {
 
   python-sql = callPackage ../development/python-modules/python-sql { };
 
+  python-snappy = callPackage ../development/python-modules/python-snappy {
+    inherit (pkgs) snappy;
+  };
+
   python-stdnum = callPackage ../development/python-modules/python-stdnum { };
 
   python-socketio = callPackage ../development/python-modules/python-socketio { };
