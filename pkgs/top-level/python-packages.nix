@@ -438,6 +438,8 @@ in {
 
   hdmedians = callPackage ../development/python-modules/hdmedians { };
 
+  holoviews = callPackage ../development/python-modules/holoviews { };
+
   hoomd-blue = toPythonModule (callPackage ../development/python-modules/hoomd-blue {
     inherit python;
   });
