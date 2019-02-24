@@ -912,6 +912,14 @@ in {
 
   allpairspy = callPackage ../development/python-modules/allpairspy { };
 
+  ansible = callPackage ../development/python-modules/ansible { };
+
+  ansible-kernel = callPackage ../development/python-modules/ansible-kernel { };
+
+  ansible-lint = callPackage ../development/python-modules/ansible-lint { };
+
+  ansible-runner = callPackage ../development/python-modules/ansible-runner { };
+
   ansicolors = callPackage ../development/python-modules/ansicolors {};
 
   aniso8601 = callPackage ../development/python-modules/aniso8601 {};

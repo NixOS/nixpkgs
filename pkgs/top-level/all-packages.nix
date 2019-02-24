@@ -8295,13 +8295,11 @@ in
 
   augeas = callPackage ../tools/system/augeas { };
 
-  inherit (callPackages ../tools/admin/ansible {})
-    ansible_2_4
+  inherit (callPackage ../tools/admin/ansible { })
+    ansible
     ansible_2_5
     ansible_2_6
-    ansible_2_7
-    ansible2
-    ansible;
+    ansible_2_7;
 
   ansible-lint = callPackage ../development/tools/ansible-lint {};
 
