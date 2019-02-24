@@ -3679,6 +3679,8 @@ in {
 
   pycryptopp = callPackage ../development/python-modules/pycryptopp { };
 
+  pyct = callPackage ../development/python-modules/pyct { };
+
   pycups = callPackage ../development/python-modules/pycups { };
 
   pycurl = callPackage ../development/python-modules/pycurl { };
