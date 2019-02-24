@@ -4394,6 +4394,10 @@ in
 
   netselect = callPackage ../tools/networking/netselect { };
 
+  nettee = callPackage ../tools/networking/nettee {
+    inherit (skawarePackages) cleanPackaging;
+  };
+
   # stripped down, needed by steam
   networkmanager098 = callPackage ../tools/networking/network-manager/0.9.8 { };
 
