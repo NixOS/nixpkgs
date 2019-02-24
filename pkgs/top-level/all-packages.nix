@@ -8301,7 +8301,7 @@ in
     ansible_2_6
     ansible_2_7;
 
-  ansible-lint = callPackage ../development/tools/ansible-lint {};
+  ansible-lint = with python3.pkgs; toPythonApplication ansible-lint;
 
   antlr = callPackage ../development/tools/parsing/antlr/2.7.7.nix { };
 
