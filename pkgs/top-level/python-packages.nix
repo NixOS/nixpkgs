@@ -3462,6 +3462,8 @@ in {
 
   pandas = callPackage ../development/python-modules/pandas { };
 
+  panel = callPackage ../development/python-modules/panel { };
+
   xlrd = callPackage ../development/python-modules/xlrd { };
 
   bottleneck = callPackage ../development/python-modules/bottleneck { };
