@@ -699,7 +699,7 @@
     "media_player.dunehd" = ps: with ps; [  ];
     "media_player.emby" = ps: with ps; [  ];
     "media_player.epson" = ps: with ps; [  ];
-    "media_player.firetv" = ps: with ps; [  ];
+    "media_player.firetv" = ps: with ps; [ firetv ];
     "media_player.frontier_silicon" = ps: with ps; [  ];
     "media_player.gpmdp" = ps: with ps; [ websocket_client ];
     "media_player.gstreamer" = ps: with ps; [  ];
