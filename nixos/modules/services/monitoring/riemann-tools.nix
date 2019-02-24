@@ -54,7 +54,6 @@ in {
       serviceConfig = {
         User = "riemanntools";
         ExecStart = "${healthLauncher}/bin/riemann-health";
-        PermissionsStartOnly = true;
       };
     };
 
