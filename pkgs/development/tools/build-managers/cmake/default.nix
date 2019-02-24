@@ -2,7 +2,7 @@
 , bzip2, curl, expat, libarchive, xz, zlib, libuv, rhash
 , buildPackages
 # darwin attributes
-, ps
+, cf-private, ps
 , isBootstrap ? false
 , useSharedLibraries ? (!isBootstrap && !stdenv.isCygwin)
 , useNcurses ? false, ncurses
@@ -34,11 +34,6 @@ stdenv.mkDerivation rec {
     inherit sha256;
   };
 
-  prePatch = optionalString (!useSharedLibraries) ''
-    substituteInPlace Utilities/cmlibarchive/CMakeLists.txt \
-      --replace '"-framework CoreServices"' '""'
-  '';
-
   patches = [
     # Don't search in non-Nix locations such as /usr, but do search in our libc.
     ./search-path.patch
@@ -57,6 +52,7 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [ setupHook pkgconfig ]
+    ++ optional stdenv.isDarwin cf-private  # needed for CFBundleCopyExecutableURL
     ++ optionals useSharedLibraries [ bzip2 curl expat libarchive xz zlib libuv rhash ]
     ++ optional useNcurses ncurses
     ++ optional useQt4 qt4
