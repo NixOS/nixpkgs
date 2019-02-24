@@ -34,11 +34,6 @@ stdenv.mkDerivation rec {
     inherit sha256;
   };
 
-  prePatch = optionalString (!useSharedLibraries) ''
-    substituteInPlace Utilities/cmlibarchive/CMakeLists.txt \
-      --replace '"-framework CoreServices"' '""'
-  '';
-
   patches = [
     # Don't search in non-Nix locations such as /usr, but do search in our libc.
     ./search-path.patch
