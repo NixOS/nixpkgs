@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, gnome2, gtk2, pango, atk, cairo, gdk_pixbuf, glib,
+{ stdenv, lib, fetchurl, gnome2, gtk3, pango, atk, cairo, gdk_pixbuf, glib,
 freetype, fontconfig, dbus, libX11, xorg, libXi, libXcursor, libXdamage,
 libXrandr, libXcomposite, libXext, libXfixes, libXrender, libXtst,
 libXScrnSaver, nss, nspr, alsaLib, cups, expat, udev }:
@@ -15,7 +15,7 @@ let
     gdk_pixbuf
     glib
     gnome2.GConf
-    gtk2
+    gtk3
     pango
     libX11
     libXScrnSaver
@@ -38,18 +38,18 @@ let
 in
   stdenv.mkDerivation rec {
     name = "mattermost-desktop-${version}";
-    version = "4.1.2";
+    version = "4.2.0";
 
     src =
       if stdenv.hostPlatform.system == "x86_64-linux" then
         fetchurl {
           url = "https://releases.mattermost.com/desktop/${version}/${name}-linux-x64.tar.gz";
-          sha256 = "16dn6870bs1nfl2082ym9gwvmqb3i5sli48qprap80p7riph6k9s";
+          sha256 = "0hka94gwpscjn61032c0grpjv5gjb0j8rkx6pgwci617n29xkyf6";
         }
       else if stdenv.hostPlatform.system == "i686-linux" then
         fetchurl {
           url = "https://releases.mattermost.com/desktop/${version}/${name}-linux-ia32.tar.gz";
-          sha256 = "145zb1l37fa2slfrrlprlwzcc5km3plxs374yhgix25mlg2afkqr";
+          sha256 = "1nx2sgbnr60h6kn56wv54m7cvyx27d64bfprpb94hqd5c2z21x80";
         }
       else
         throw "Mattermost-Desktop is not currently supported on ${stdenv.hostPlatform.system}";
