@@ -359,20 +359,31 @@ rec {
   inherit vimrcFile;
 
   # shell script with custom name passing [-u vimrc] [-U gvimrc] to vim
-  vimWithRC = {vimExecutable, gvimExecutable, vimManPages, wrapManual, wrapGui, name ? null, vimrcFile ? null, gvimrcFile ? null}:
+  vimWithRC = {
+    vimExecutable,
+    gvimExecutable,
+    vimManPages,
+    wrapManual,
+    wrapGui,
+    name ? "vim",
+    vimrcFile ? null,
+    gvimrcFile ? null,
+    vimExecutableName,
+    gvimExecutableName,
+  }:
     let
       rcOption = o: file: stdenv.lib.optionalString (file != null) "-${o} ${file}";
-      vimWrapperScript = writeScriptBin (if name == null then "vim" else name) ''
+      vimWrapperScript = writeScriptBin vimExecutableName ''
         #!${stdenv.shell}
         exec ${vimExecutable} ${rcOption "u" vimrcFile} ${rcOption "U" gvimrcFile} "$@"
       '';
-      gvimWrapperScript = writeScriptBin (if name == null then "gvim" else (lib.concatStrings [ "g" name ])) ''
+      gvimWrapperScript = writeScriptBin gvimExecutableName ''
         #!${stdenv.shell}
         exec ${gvimExecutable} ${rcOption "u" vimrcFile} ${rcOption "U" gvimrcFile} "$@"
       '';
     in
       buildEnv {
-        name = vimWrapperScript.name;
+        inherit name;
         paths = [
           vimWrapperScript
         ] ++ lib.optional wrapGui gvimWrapperScript
@@ -382,13 +393,20 @@ rec {
 
   # add a customize option to a vim derivation
   makeCustomizable = vim: vim // {
-    customize = { name, vimrcConfig, wrapManual ? true, wrapGui ? false }: vimWithRC {
+    customize = {
+      name,
+      vimrcConfig,
+      wrapManual ? true,
+      wrapGui ? false,
+      vimExecutableName ? name,
+      gvimExecutableName ? (lib.concatStrings [ "g" name ]),
+    }: vimWithRC {
       vimExecutable = "${vim}/bin/vim";
       gvimExecutable = "${vim}/bin/gvim";
-      inherit name wrapManual wrapGui;
+      inherit name wrapManual wrapGui vimExecutableName gvimExecutableName;
       vimrcFile = vimrcFile vimrcConfig;
       vimManPages = buildEnv {
-        name = "${name}-doc";
+        name = "vim-doc";
         paths = [ vim ];
         pathsToLink = [ "/share/man" ];
       };
