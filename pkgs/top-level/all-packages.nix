@@ -6016,6 +6016,8 @@ in
 
   vcsh = callPackage ../applications/version-management/vcsh { };
 
+  vcs_query = callPackage ../tools/misc/vcs_query { };
+
   vcstool = callPackage ../development/tools/vcstool { };
 
   verilator = callPackage ../applications/science/electronics/verilator {};
