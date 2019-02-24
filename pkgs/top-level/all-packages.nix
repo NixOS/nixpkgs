@@ -19852,6 +19852,8 @@ in
 
   virtinst = callPackage ../applications/virtualization/virtinst {};
 
+  virtscreen = callPackage ../tools/admin/virtscreen {};
+
   virtualbox = callPackage ../applications/virtualization/virtualbox {
     stdenv = stdenv_32bit;
     inherit (gnome2) libIDL;
