@@ -180,12 +180,6 @@ in
   };
 
   config = mkIf (cfg.ssh.enable || cfg.pam.enable) {
-    assertions =
-      [ { assertion = !cfg.pam.enable;
-          message   = "PAM support is currently not implemented.";
-        }
-      ];
-
      environment.systemPackages = [ pkgs.duo-unix ];
 
      security.wrappers.login_duo.source = "${pkgs.duo-unix.out}/bin/login_duo";
