@@ -23,7 +23,7 @@ rec {
     buildCommand = ''
       install $src ./appimage
       patchelf \
-        --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
+        --set-interpreter ${stdenv.cc.bintools.dynamicLinker} \
         --replace-needed libz.so.1 ${zlib}/lib/libz.so.1 \
         ./appimage
 
@@ -46,7 +46,7 @@ rec {
       cd $APPDIR
       exec ./AppRun "$@"
     '';
-  } // (builtins.removeAttrs args [ "name" "src" "extraPkgs" ]));
+  } // (removeAttrs args (builtins.attrNames (builtins.functionArgs wrapAppImage))));
 
   wrapType1 = args@{ name, src, extraPkgs ? pkgs: [], ... }: wrapAppImage (args // {
     inherit name extraPkgs;
