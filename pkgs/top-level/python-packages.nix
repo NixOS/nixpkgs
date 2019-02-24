@@ -3474,6 +3474,8 @@ in {
 
   parsedatetime = callPackage ../development/python-modules/parsedatetime { };
 
+  param = callPackage ../development/python-modules/param { };
+
   paramiko = callPackage ../development/python-modules/paramiko { };
 
   parameterized = callPackage ../development/python-modules/parameterized { };
