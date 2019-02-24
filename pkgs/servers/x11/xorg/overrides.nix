@@ -342,11 +342,6 @@ self: super:
   });
 
   xf86inputlibinput = super.xf86inputlibinput.overrideAttrs (attrs: rec {
-    name = "xf86-input-libinput-0.28.0";
-    src = fetchurl {
-      url = "mirror://xorg/individual/driver/${name}.tar.bz2";
-      sha256 = "189h8vl0005yizwrs4d0sng6j8lwkd3xi1zwqg8qavn2bw34v691";
-    };
     outputs = [ "out" "dev" ];
     buildInputs = attrs.buildInputs ++ [ libinput ];
     installFlags = "sdkdir=\${dev}/include/xorg";
