@@ -4168,6 +4168,8 @@ in {
 
   statsmodels = callPackage ../development/python-modules/statsmodels { };
 
+  streamz = callPackage ../development/python-modules/streamz { };
+
   structlog = callPackage ../development/python-modules/structlog { };
 
   sybil = callPackage ../development/python-modules/sybil { };
