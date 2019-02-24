@@ -79,6 +79,9 @@ in stdenv.mkDerivation (rec {
     substituteInPlace unittests/Support/CMakeLists.txt \
       --replace "add_subdirectory(DynamicLibrary)" ""
     rm unittests/Support/DynamicLibrary/DynamicLibraryTest.cpp
+  '' + optionalString stdenv.targetPlatform.isAndroid ''
+    echo "Deleting test case that fails when host platform contains \"and\""
+    rm ./test/CodeGen/AMDGPU/llvm.amdgcn.mbcnt.ll
   '';
 
   # hacky fix: created binaries need to be run before installation
