@@ -13,13 +13,13 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "luakit";
-  version = "2017.08.10";
+  version = "2.1";
 
   src = fetchFromGitHub {
     owner = "luakit";
     repo = "luakit";
     rev = version;
-    sha256 = "09z88b50vf2y64vj79cymknyzk3py6azv4r50jng4cw9jx2ray7r";
+    sha256 = "05mm76g72fs48410pbij4mw0s3nqji3r7f3mnr2fvhv02xqj05aa";
   };
 
   nativeBuildInputs = [
