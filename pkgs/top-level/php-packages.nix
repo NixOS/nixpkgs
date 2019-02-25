@@ -165,6 +165,18 @@ let
     sha256 = "0d4p1gpl8gkzdiv860qzxfz250ryf0wmjgyc8qcaaqgkdyh5jy5p";
   };
 
+  sqlsrv = buildPecl rec {
+    name = "sqlsrv-5.6.0";
+    sha256 = "089iy2lz7p3x9c88zaxrg37m74gh3phxqsldr33nj16rpb5d67bc";
+    buildInputs = [ pkgs.unixODBC ];
+  };
+
+  pdo_sqlsrv = buildPecl rec {
+    name = "pdo_sqlsrv-5.6.0";
+    sha256 = "11g07l6mn804hbcmwqwfd6a4yx5bz54bmk5j2dpm8nil1rq9qb7r";
+    buildInputs = [ pkgs.unixODBC ];
+  };
+
   xdebug =  if isPhp73 then xdebug73 else xdebug7;
 
   xdebug7 = assert !isPhp73; buildPecl {
