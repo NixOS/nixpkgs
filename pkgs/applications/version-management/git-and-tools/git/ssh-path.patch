@@ -1,18 +1,18 @@
 diff --git a/connect.c b/connect.c
-index c3a014c5b..fbca3262b 100644
+index 4813f005ab..b3f12f3268 100644
 --- a/connect.c
 +++ b/connect.c
-@@ -1010,7 +1010,7 @@ static void fill_ssh_args(struct child_process *conn, const char *ssh_host,
-
+@@ -1183,7 +1183,7 @@ static void fill_ssh_args(struct child_process *conn, const char *ssh_host,
+ 
  		ssh = getenv("GIT_SSH");
  		if (!ssh)
 -			ssh = "ssh";
 +			ssh = "@ssh@";
  		variant = determine_ssh_variant(ssh, 0);
  	}
-
+ 
 diff --git a/git-gui/lib/remote_add.tcl b/git-gui/lib/remote_add.tcl
-index 480a6b30d..781720424 100644
+index 480a6b30d0..7817204241 100644
 --- a/git-gui/lib/remote_add.tcl
 +++ b/git-gui/lib/remote_add.tcl
 @@ -139,7 +139,7 @@ method _add {} {
