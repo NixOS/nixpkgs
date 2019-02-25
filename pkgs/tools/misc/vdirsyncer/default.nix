@@ -49,6 +49,12 @@ python3Packages.buildPythonApplication rec {
   ];
 
   postPatch = ''
+    # Invalid argument: 'perform_health_check' is not a valid setting
+    substituteInPlace tests/conftest.py \
+      --replace "perform_health_check=False" ""
+    substituteInPlace tests/unit/test_repair.py \
+      --replace $'@settings(perform_health_check=False)  # Using the random module for UIDs\n' ""
+
     # for setuptools_scm:
     echo 'Version: ${version}' >PKG-INFO
 
