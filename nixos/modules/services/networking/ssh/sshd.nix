@@ -9,6 +9,15 @@ let
 
   nssModulesPath = config.system.nssModules.path;
 
+  yesNo = x: if x then "yes" else "no";
+
+  indent = c: x:
+    let
+      indentStr = concatStrings (builtins.genList (_: " ") c);
+    in
+      removeSuffix indentStr (concatStringsSep "\n" (flip map (splitString "\n" x)
+        (n: "${optionalString (n != "") indentStr}${n}")));
+
   userOptions = {
 
     options.openssh.authorizedKeys = {
@@ -54,6 +63,86 @@ let
     ));
   in listToAttrs (map mkAuthKeyFile usersWithKeys);
 
+  # options that can be used globally or in a `Match` declaration
+  generalOptions = {
+    authorizedKeysFiles = mkOption {
+      type = types.listOf types.str;
+      default = [];
+      description = "Files from which authorized keys are read.";
+    };
+
+    gatewayPorts = mkOption {
+      type = types.str;
+      default = "no";
+      description = ''
+        Specifies whether remote hosts are allowed to connect to
+        ports forwarded for the client.  See
+        <citerefentry><refentrytitle>sshd_config</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry>.
+      '';
+    };
+
+    logLevel = mkOption {
+      type = types.enum [ "QUIET" "FATAL" "ERROR" "INFO" "VERBOSE" "DEBUG" "DEBUG1" "DEBUG2" "DEBUG3" ];
+      default = "VERBOSE";
+      description = ''
+        Gives the verbosity level that is used when logging messages from sshd(8). The possible values are:
+        QUIET, FATAL, ERROR, INFO, VERBOSE, DEBUG, DEBUG1, DEBUG2, and DEBUG3. The default is VERBOSE. DEBUG and DEBUG1
+        are equivalent. DEBUG2 and DEBUG3 each specify higher levels of debugging output. Logging with a DEBUG level
+        violates the privacy of users and is not recommended.
+
+        LogLevel VERBOSE logs user's key fingerprint on login.
+        Needed to have a clear audit track of which key was used to log in.
+      '';
+    };
+
+    passwordAuthentication = mkOption {
+      type = types.bool;
+      default = true;
+      description = ''
+        Specifies whether password authentication is allowed.
+      '';
+    };
+
+    permitRootLogin = mkOption {
+      default = "prohibit-password";
+      type = types.enum ["yes" "without-password" "prohibit-password" "forced-commands-only" "no"];
+      description = ''
+        Whether the root user can login using ssh.
+      '';
+    };
+
+    forwardX11 = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Whether to allow X11 connections to be forwarded.
+      '';
+    };
+
+    extraConfig = mkOption {
+      type = types.lines;
+      default = "";
+      description = "Verbatim contents of <filename>sshd_config</filename>.";
+    };
+  };
+
+  renderGeneralOptions = cfg: ''
+    ${optionalString cfgc.setXAuthLocation ''
+        XAuthLocation ${pkgs.xorg.xauth}/bin/xauth
+    ''}
+
+    X11Forwarding ${yesNo cfg.forwardX11}
+
+    AuthorizedKeysFile ${toString cfg.authorizedKeysFiles}
+
+    PermitRootLogin ${cfg.permitRootLogin}
+    GatewayPorts ${cfg.gatewayPorts}
+    PasswordAuthentication ${yesNo cfg.passwordAuthentication}
+
+    LogLevel ${cfg.logLevel}
+  '';
+
 in
 
 {
@@ -62,7 +151,7 @@ in
 
   options = {
 
-    services.openssh = {
+    services.openssh = generalOptions // {
 
       enable = mkOption {
         type = types.bool;
@@ -80,14 +169,6 @@ in
           If set, <command>sshd</command> is socket-activated; that
           is, instead of having it permanently running as a daemon,
           systemd will start an instance for each incoming connection.
-        '';
-      };
-
-      forwardX11 = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          Whether to allow X11 connections to be forwarded.
         '';
       };
 
@@ -110,25 +191,6 @@ in
         '';
       };
 
-      permitRootLogin = mkOption {
-        default = "prohibit-password";
-        type = types.enum ["yes" "without-password" "prohibit-password" "forced-commands-only" "no"];
-        description = ''
-          Whether the root user can login using ssh.
-        '';
-      };
-
-      gatewayPorts = mkOption {
-        type = types.str;
-        default = "no";
-        description = ''
-          Specifies whether remote hosts are allowed to connect to
-          ports forwarded for the client.  See
-          <citerefentry><refentrytitle>sshd_config</refentrytitle>
-          <manvolnum>5</manvolnum></citerefentry>.
-        '';
-      };
-
       ports = mkOption {
         type = types.listOf types.port;
         default = [22];
@@ -143,6 +205,52 @@ in
         description = ''
           Whether to automatically open the specified ports in the firewall.
         '';
+      };
+
+      matches = mkOption {
+        default = [];
+        example = literalExample ''
+          [
+            {
+              match = {
+                "10.23.42.0/24" = "Address";
+                "somebody" = "User";
+              };
+              config = {
+                forwardX11 = true;
+                permitRootLogin = "yes";
+              };
+            }
+            {
+              match."10.23.42.0/24" = "Address";
+              config.logLevel = "ERROR";
+            }
+          ]
+        '';
+
+        description = ''
+          Declaratively specify matches like <literal>Match Address 10.23.42.0/24</literal>.
+        '';
+
+        type = types.listOf (types.submodule {
+          options = {
+            match = mkOption {
+              type = types.attrsOf (types.enum [ "Address" "User" ]);
+              description = ''
+                Configure matches for openssh.
+              '';
+
+              apply = x: concatStringsSep " " (mapAttrsToList (match: type: "${type} ${match}") x);
+            };
+
+            config = mkOption {
+              type = types.submodule ({ options = generalOptions; });
+              description = ''
+                The options that only apply if the match is true.
+              '';
+            };
+          };
+        });
       };
 
       listenAddresses = mkOption {
@@ -176,14 +284,6 @@ in
         '';
       };
 
-      passwordAuthentication = mkOption {
-        type = types.bool;
-        default = true;
-        description = ''
-          Specifies whether password authentication is allowed.
-        '';
-      };
-
       challengeResponseAuthentication = mkOption {
         type = types.bool;
         default = true;
@@ -209,12 +309,6 @@ in
           <manvolnum>1</manvolnum></citerefentry> for supported types
           and sizes.
         '';
-      };
-
-      authorizedKeysFiles = mkOption {
-        type = types.listOf types.str;
-        default = [];
-        description = "Files from which authorized keys are read.";
       };
 
       kexAlgorithms = mkOption {
@@ -276,20 +370,6 @@ in
         '';
       };
 
-      logLevel = mkOption {
-        type = types.enum [ "QUIET" "FATAL" "ERROR" "INFO" "VERBOSE" "DEBUG" "DEBUG1" "DEBUG2" "DEBUG3" ];
-        default = "VERBOSE";
-        description = ''
-          Gives the verbosity level that is used when logging messages from sshd(8). The possible values are:
-          QUIET, FATAL, ERROR, INFO, VERBOSE, DEBUG, DEBUG1, DEBUG2, and DEBUG3. The default is VERBOSE. DEBUG and DEBUG1
-          are equivalent. DEBUG2 and DEBUG3 each specify higher levels of debugging output. Logging with a DEBUG level
-          violates the privacy of users and is not recommended.
-
-          LogLevel VERBOSE logs user's key fingerprint on login.
-          Needed to have a clear audit track of which key was used to log in.
-        '';
-      };
-
       useDns = mkOption {
         type = types.bool;
         default = false;
@@ -299,12 +379,6 @@ in
           If this option is set to no (the default) then only addresses and not host names may be used in
           ~/.ssh/authorized_keys from and sshd_config Match Host directives.
         '';
-      };
-
-      extraConfig = mkOption {
-        type = types.lines;
-        default = "";
-        description = "Verbatim contents of <filename>sshd_config</filename>.";
       };
 
       moduliFile = mkOption {
@@ -328,7 +402,7 @@ in
 
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = mkIf cfg.enable (mkMerge [{
 
     users.users.sshd =
       { isSystemUser = true;
@@ -435,6 +509,8 @@ in
 
         UsePAM yes
 
+        ${renderGeneralOptions cfg}
+
         AddressFamily ${if config.networking.enableIPv6 then "any" else "inet"}
         ${concatMapStrings (port: ''
           Port ${toString port}
@@ -444,28 +520,13 @@ in
           ListenAddress ${addr}${if port != null then ":" + toString port else ""}
         '') cfg.listenAddresses}
 
-        ${optionalString cfgc.setXAuthLocation ''
-            XAuthLocation ${pkgs.xorg.xauth}/bin/xauth
-        ''}
-
-        ${if cfg.forwardX11 then ''
-          X11Forwarding yes
-        '' else ''
-          X11Forwarding no
-        ''}
-
         ${optionalString cfg.allowSFTP ''
           Subsystem sftp ${cfgc.package}/libexec/sftp-server ${concatStringsSep " " cfg.sftpFlags}
         ''}
 
-        PermitRootLogin ${cfg.permitRootLogin}
-        GatewayPorts ${cfg.gatewayPorts}
-        PasswordAuthentication ${if cfg.passwordAuthentication then "yes" else "no"}
-        ChallengeResponseAuthentication ${if cfg.challengeResponseAuthentication then "yes" else "no"}
+        ChallengeResponseAuthentication ${yesNo cfg.challengeResponseAuthentication}
 
         PrintMotd no # handled by pam_motd
-
-        AuthorizedKeysFile ${toString cfg.authorizedKeysFiles}
 
         ${flip concatMapStrings cfg.hostKeys (k: ''
           HostKey ${k.path}
@@ -475,14 +536,11 @@ in
         Ciphers ${concatStringsSep "," cfg.ciphers}
         MACs ${concatStringsSep "," cfg.macs}
 
-        LogLevel ${cfg.logLevel}
-
         ${if cfg.useDns then ''
           UseDNS yes
         '' else ''
           UseDNS no
         ''}
-
       '';
 
     assertions = [{ assertion = if cfg.forwardX11 then cfgc.setXAuthLocation else true;
@@ -492,6 +550,17 @@ in
         message = "addr must be specified in each listenAddresses entry";
       });
 
-  };
+  } (mkIf (cfg.matches != {}) {
+
+    # position matches at the very last position in the config.
+    # Otherwise all following options would be only used if the option applies.
+    services.openssh.extraConfig = mkOrder 9999
+      (concatMapStringsSep "\n" (match: ''
+        Match ${match.match}
+        ${indent 2 (renderGeneralOptions match.config)}
+        ${indent 2 match.config.extraConfig}
+      '') cfg.matches);
+
+  })]);
 
 }

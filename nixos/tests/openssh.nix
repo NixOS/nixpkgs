@@ -52,8 +52,39 @@ in {
         };
       };
 
+    server_restricted_root =
+      { ... }:
+
+      {
+        services.openssh = {
+          enable = true;
+          permitRootLogin = "no";
+
+          matches = pkgs.lib.singleton {
+            match."192.168.1.2" = "Address";
+            config.permitRootLogin = "yes";
+          };
+        };
+
+        users.users.root.openssh.authorizedKeys.keys = [
+          snakeOilPublicKey
+        ];
+      };
+
     client =
       { ... }: { };
+
+    client2 =
+      { ... }:
+
+      {
+        networking = {
+          useDHCP = false;
+          interfaces.eth1.ipv4.addresses = [
+            { address = "192.168.1.2"; prefixLength = 32; }
+          ];
+        };
+      };
 
   };
 
@@ -99,6 +130,23 @@ in {
     subtest "localhost-only", sub {
       $server_localhost_only->succeed("ss -nlt | grep '127.0.0.1:22'");
       $server_localhost_only_lazy->succeed("ss -nlt | grep '127.0.0.1:22'");
-    }
+    };
+
+    subtest "restricted root login", sub {
+      foreach (($client, $client2)) {
+        $_->succeed("cat ${snakeOilPrivateKey} > privkey.snakeoil");
+        $_->succeed("chmod 600 privkey.snakeoil");
+      }
+
+      $client2->succeed("ssh -o UserKnownHostsFile=/dev/null" .
+                        " -o StrictHostKeyChecking=no -i privkey.snakeoil" .
+                        " -o BatchMode=yes" .
+                        " server_restricted_root true");
+
+      $client->fail("ssh -o UserKnownHostsFile=/dev/null" .
+                    " -o StrictHostKeyChecking=no -i privkey.snakeoil" .
+                    " -o BatchMode=yes" .
+                    " server_restricted_root true");
+    };
   '';
 })
