@@ -752,6 +752,10 @@ in {
   */
   pyqt5_with_qtwebkit = self.pyqt5.override { withWebKit = true; };
 
+  pyqtwebengine = pkgs.libsForQt5.callPackage ../development/python-modules/pyqtwebengine {
+    pythonPackages = self;
+  };
+
   pysc2 = callPackage ../development/python-modules/pysc2 { };
 
   pyscard = callPackage ../development/python-modules/pyscard { inherit (pkgs.darwin.apple_sdk.frameworks) PCSC; };
