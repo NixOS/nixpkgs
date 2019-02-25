@@ -1,7 +1,7 @@
 { stdenv, fetchgit, meson, ninja, pkgconfig
 , python3, gtk3, gst_all_1, libsecret, libsoup
 , appstream-glib, desktop-file-utils, totem-pl-parser
-, gobject-introspection, wrapGAppsHook }:
+, hicolor-icon-theme, gobject-introspection, wrapGAppsHook }:
 
 python3.pkgs.buildPythonApplication rec  {
   pname = "lollypop";
@@ -35,6 +35,7 @@ python3.pkgs.buildPythonApplication rec  {
     gst-plugins-ugly
     gstreamer
     gtk3
+    hicolor-icon-theme
     libsecret
     libsoup
     totem-pl-parser
