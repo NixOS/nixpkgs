@@ -7,7 +7,7 @@ let
 
   boolToStr = b: if b then "yes" else "no";
 
-  configFile = ''
+  configFilePam = ''
     [duo]
     ikey=${cfg.ikey}
     skey=${cfg.skey}
@@ -16,21 +16,24 @@ let
     failmode=${cfg.failmode}
     pushinfo=${boolToStr cfg.pushinfo}
     autopush=${boolToStr cfg.autopush}
-    motd=${boolToStr cfg.motd}
     prompts=${toString cfg.prompts}
-    accept_env_factor=${boolToStr cfg.acceptEnvFactor}
     fallback_local_ip=${boolToStr cfg.fallbackLocalIP}
   '';
 
+  configFileLogin = configFilePam + ''
+    motd=${boolToStr cfg.motd}
+    accept_env_factor=${boolToStr cfg.acceptEnvFactor}
+  '';
+
   loginCfgFile = optional cfg.ssh.enable
-    { source = pkgs.writeText "login_duo.conf" configFile;
+    { source = pkgs.writeText "login_duo.conf" configFileLogin;
       mode   = "0600";
       user   = "sshd";
       target = "duo/login_duo.conf";
     };
 
   pamCfgFile = optional cfg.pam.enable
-    { source = pkgs.writeText "pam_duo.conf" configFile;
+    { source = pkgs.writeText "pam_duo.conf" configFilePam;
       mode   = "0600";
       user   = "sshd";
       target = "duo/pam_duo.conf";
@@ -180,12 +183,6 @@ in
   };
 
   config = mkIf (cfg.ssh.enable || cfg.pam.enable) {
-    assertions =
-      [ { assertion = !cfg.pam.enable;
-          message   = "PAM support is currently not implemented.";
-        }
-      ];
-
      environment.systemPackages = [ pkgs.duo-unix ];
 
      security.wrappers.login_duo.source = "${pkgs.duo-unix.out}/bin/login_duo";

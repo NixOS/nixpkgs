@@ -106,6 +106,23 @@
     </para>
    </listitem>
   </itemizedlist>
+
+  <itemizedlist>
+   <listitem>
+    <para>
+      <literal>./security/duosec.nix</literal>
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     The <link xlink:href="https://duo.com/docs/duounix">PAM module for Duo
+     Security</link> has been enabled for use.  One can configure it using
+     the <option>security.duosec</option> options along with the
+     corresponding PAM option in
+     <option>security.pam.services.&lt;name?&gt;.duoSecurity.enable</option>.
+    </para>
+   </listitem>
+  </itemizedlist>
  </section>
 
  <section xmlns="http://docbook.org/ns/docbook"
