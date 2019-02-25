@@ -32,7 +32,7 @@ let
   };
 
   image =
-    dockerTools.buildImage {
+    dockerTools.buildImageWithNixDb {
       name = "registry-image-resource";
       tag = "latest";
       contents = env;

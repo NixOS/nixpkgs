@@ -39,7 +39,7 @@ let
   };
 
   image =
-    dockerTools.buildImage {
+    dockerTools.buildImageWithNixDb {
       name = "s3-resource";
       tag = "latest";
       contents = env;

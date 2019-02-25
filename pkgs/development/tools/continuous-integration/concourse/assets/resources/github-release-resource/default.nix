@@ -35,7 +35,7 @@ let
   };
 
   image =
-    dockerTools.buildImage {
+    dockerTools.buildImageWithNixDb {
       name = "github-release-resource";
       tag = "latest";
       contents = env;

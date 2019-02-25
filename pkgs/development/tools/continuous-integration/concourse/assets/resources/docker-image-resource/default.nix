@@ -71,7 +71,7 @@ let
   };
 
   image =
-    dockerTools.buildImage {
+    dockerTools.buildImageWithNixDb {
       name = "docker-image-resource";
       tag = "latest";
       contents = env;

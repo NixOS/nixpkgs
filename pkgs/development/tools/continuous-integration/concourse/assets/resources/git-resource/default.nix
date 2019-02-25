@@ -43,7 +43,7 @@ let
   };
 
   image =
-    dockerTools.buildImage {
+    dockerTools.buildImageWithNixDb {
       name = "git-resource";
       tag = "latest";
       contents = env;

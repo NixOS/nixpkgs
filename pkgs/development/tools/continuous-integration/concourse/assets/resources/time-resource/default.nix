@@ -37,7 +37,7 @@ let
   };
 
   image =
-    dockerTools.buildImage {
+    dockerTools.buildImageWithNixDb {
       name = "time-resource";
       tag = "latest";
       contents = env;
