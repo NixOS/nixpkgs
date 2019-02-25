@@ -6684,6 +6684,8 @@ in
       useMacosReexportHack = true;
     };
   };
+  llvm-polly = llvmPackages_7.llvm-polly;
+  clang-polly = clang_7.override { cc = llvmPackages_7.clang-polly-unwrapped; };
 
   clang_7  = llvmPackages_7.clang;
   clang_6  = llvmPackages_6.clang;
