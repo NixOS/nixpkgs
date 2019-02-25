@@ -8,7 +8,7 @@
 -	    "--ro-bind", "/usr", "/usr",
 -	    "--ro-bind", "/etc/ld.so.cache", "/etc/ld.so.cache",
 +	    "@bubblewrap_bin@",
-+	    "--ro-bind", "/nix/store", "/nix/store",
++	    "--ro-bind", "@storeDir@", "@storeDir@",
 +	    "--ro-bind", "/run/current-system", "/run/current-system",
  	    NULL);
  

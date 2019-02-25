@@ -1,5 +1,5 @@
 { stdenv, fetchurl, substituteAll, pkgconfig, libxslt, which, libX11, gnome3, gtk3, glib
-, gettext, libxml2, xkeyboard_config, isocodes, itstool, wayland
+, gettext, libxml2, xkeyboard_config, isocodes, itstool, wayland, fetchpatch
 , libseccomp, bubblewrap, gobject-introspection, gtk-doc, docbook_xsl }:
 
 stdenv.mkDerivation rec {
@@ -30,6 +30,12 @@ stdenv.mkDerivation rec {
     (substituteAll {
       src = ./bubblewrap-paths.patch;
       bubblewrap_bin = "${bubblewrap}/bin/bwrap";
+      inherit (builtins) storeDir;
+    })
+    (fetchpatch {
+      name = "fix-missing-font-cache";
+      url = https://gitlab.gnome.org/GNOME/gnome-desktop/commit/b87de7495160dbf48f01aa1ddb361fc2556ffd0c.patch;
+      sha256 = "1aw7lw93kcflmqmbx25cwja25441i8xzvgjm1pfsxvw3vr8j6scb";
     })
   ];
 
