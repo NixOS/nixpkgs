@@ -66,8 +66,8 @@ stdenv.mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
-    mkdir -p $out/share
-    cp -avr applications $out/share/
+    mkdir -p $out/share/applications
+    cp -av ${./pantheon-mimeapps.list} $out/share/applications/pantheon-mimeapps.list
 
     mkdir -p $out/etc/xdg/autostart
     cp -av ${gnome-keyring}/etc/xdg/autostart/* $out/etc/xdg/autostart
