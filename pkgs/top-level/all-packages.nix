@@ -14048,7 +14048,7 @@ in
 
   sambaFull = samba4Full;
 
-  shairplay = callPackage ../servers/shairplay { };
+  shairplay = callPackage ../servers/shairplay { avahi = avahi-compat; };
 
   shairport-sync = callPackage ../servers/shairport-sync { };
 
