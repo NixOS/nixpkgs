@@ -181,9 +181,9 @@ in self: {
   };
 
   postgresql_10 = self.callPackage generic {
-    version = "10.6";
+    version = "10.7";
     psqlSchema = "10.0"; # should be 10, but changing it is invasive
-    sha256 = "0jv26y3f10svrjxzsgqxg956c86b664azyk2wppzpa5x11pjga38";
+    sha256 = "1piyfcrcqscjhnnwn91kdvr764s7d0qz4lgygf9bl6qc71ji1vdz";
     this = self.postgresql_10;
     inherit self;
   };
