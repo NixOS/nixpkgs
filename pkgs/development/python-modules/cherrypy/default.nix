@@ -41,7 +41,10 @@ in buildPythonPackage rec {
 
   checkPhase = ''
     # 3 out of 5 SignalHandlingTests need network access
-    LANG=en_US.UTF-8 pytest -k "not SignalHandlingTests and not test_4_Autoreload"
+    # test_2_File_Concurrency also fails upstream: https://github.com/cherrypy/cherrypy/issues/1306
+    # ...and skipping it makes 2 other tests fail
+    LANG=en_US.UTF-8 pytest -k "not SignalHandlingTests and not test_4_Autoreload \
+                            and not test_2_File_Concurrency and not test_3_Redirect and not test_4_File_deletion"
   '';
 
   meta = with lib; {
