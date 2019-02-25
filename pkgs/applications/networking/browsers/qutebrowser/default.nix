@@ -46,7 +46,7 @@ in python3Packages.buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = with python3Packages; [
-    pyyaml pyqt5 jinja2 pygments
+    pyyaml pyqt5 pyqtwebengine jinja2 pygments
     pypeg2 cssutils pyopengl attrs
     # scripts and userscripts libs
     tldextract beautifulsoup4
