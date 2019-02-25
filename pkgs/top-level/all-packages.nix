@@ -154,6 +154,8 @@ in
 
   corgi = callPackage ../development/tools/corgi { };
 
+  cypress = callPackage ../development/web/cypress { };
+
   dhallToNix = callPackage ../build-support/dhall-to-nix.nix {
     inherit dhall-nix;
   };
