@@ -1526,6 +1526,8 @@ in {
 
   cffi = callPackage ../development/python-modules/cffi { };
 
+  pyavm = callPackage ../development/python-modules/pyavm { };
+
   pycollada = callPackage ../development/python-modules/pycollada { };
 
   pycontracts = callPackage ../development/python-modules/pycontracts { };
