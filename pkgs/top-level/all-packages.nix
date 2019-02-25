@@ -4675,6 +4675,8 @@ in
 
   pal = callPackage ../tools/misc/pal { };
 
+  pamtester = callPackage ../tools/security/pamtester { };
+
   pandoc = haskell.lib.overrideCabal (haskell.lib.justStaticExecutables haskellPackages.pandoc) (drv: {
     configureFlags = drv.configureFlags or [] ++ ["-fembed_data_files"];
     buildDepends = drv.buildDepends or [] ++ [haskellPackages.file-embed];
@@ -4692,8 +4694,6 @@ in
   });
 
   pantable = python3Packages.callPackage ../tools/text/pantable { };
-
-  pamtester = callPackage ../tools/security/pamtester { };
 
   paper-gtk-theme = callPackage ../misc/themes/paper { };
 
