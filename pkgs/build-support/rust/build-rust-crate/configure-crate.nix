@@ -5,6 +5,7 @@
 , completeBuildDeps
 , completeDeps
 , crateAuthors
+, crateDescription
 , crateFeatures
 , crateName
 , crateVersion
@@ -69,6 +70,7 @@ in ''
   export CARGO_PKG_NAME=${crateName}
   export CARGO_PKG_VERSION=${crateVersion}
   export CARGO_PKG_AUTHORS="${authors}"
+  export CARGO_PKG_DESCRIPTION="${crateDescription}"
 
   export CARGO_CFG_TARGET_ARCH=${stdenv.hostPlatform.parsed.cpu.name}
   export CARGO_CFG_TARGET_OS=${target_os}
