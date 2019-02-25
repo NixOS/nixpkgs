@@ -359,19 +359,57 @@ rec {
   inherit vimrcFile;
 
   # shell script with custom name passing [-u vimrc] [-U gvimrc] to vim
-  vimWithRC = {vimExecutable, name ? null, vimrcFile ? null, gvimrcFile ? null}:
-    let rcOption = o: file: stdenv.lib.optionalString (file != null) "-${o} ${file}";
-    in writeScriptBin (if name == null then "vim" else name) ''
-      #!${stdenv.shell}
-      exec ${vimExecutable} ${rcOption "u" vimrcFile} ${rcOption "U" gvimrcFile} "$@"
+  vimWithRC = {
+    vimExecutable,
+    gvimExecutable,
+    vimManPages,
+    wrapManual,
+    wrapGui,
+    name ? "vim",
+    vimrcFile ? null,
+    gvimrcFile ? null,
+    vimExecutableName,
+    gvimExecutableName,
+  }:
+    let
+      rcOption = o: file: stdenv.lib.optionalString (file != null) "-${o} ${file}";
+      vimWrapperScript = writeScriptBin vimExecutableName ''
+        #!${stdenv.shell}
+        exec ${vimExecutable} ${rcOption "u" vimrcFile} ${rcOption "U" gvimrcFile} "$@"
       '';
+      gvimWrapperScript = writeScriptBin gvimExecutableName ''
+        #!${stdenv.shell}
+        exec ${gvimExecutable} ${rcOption "u" vimrcFile} ${rcOption "U" gvimrcFile} "$@"
+      '';
+    in
+      buildEnv {
+        inherit name;
+        paths = [
+          vimWrapperScript
+        ] ++ lib.optional wrapGui gvimWrapperScript
+          ++ lib.optional wrapManual vimManPages
+        ;
+      };
 
   # add a customize option to a vim derivation
   makeCustomizable = vim: vim // {
-    customize = { name, vimrcConfig }: vimWithRC {
+    customize = {
+      name,
+      vimrcConfig,
+      wrapManual ? true,
+      wrapGui ? false,
+      vimExecutableName ? name,
+      gvimExecutableName ? (lib.concatStrings [ "g" name ]),
+    }: vimWithRC {
       vimExecutable = "${vim}/bin/vim";
-      inherit name;
+      gvimExecutable = "${vim}/bin/gvim";
+      inherit name wrapManual wrapGui vimExecutableName gvimExecutableName;
       vimrcFile = vimrcFile vimrcConfig;
+      vimManPages = buildEnv {
+        name = "vim-doc";
+        paths = [ vim ];
+        pathsToLink = [ "/share/man" ];
+      };
     };
 
     override = f: makeCustomizable (vim.override f);
