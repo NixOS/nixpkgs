@@ -1,5 +1,5 @@
-{ lib, fetchurl, fetchpatch, pythonPackages, pkgconfig
-, qmake, lndir, qtbase, qtsvg, qtwebengine, dbus
+{ lib, fetchurl, pythonPackages, pkgconfig
+, qmake, lndir, qtbase, qtsvg, dbus
 , withConnectivity ? false, qtconnectivity
 , withWebKit ? false, qtwebkit
 , withWebSockets ? false, qtwebsockets
@@ -12,13 +12,13 @@ let
   sip = pythonPackages.sip.override { sip-module = "PyQt5.sip"; };
 
 in buildPythonPackage rec {
-  pname = "PyQt";
-  version = "5.11.3";
+  pname = "pyqt";
+  version = "5.12";
   format = "other";
 
   src = fetchurl {
-    url = "mirror://sourceforge/pyqt/PyQt5/PyQt-${version}/PyQt5_gpl-${version}.tar.gz";
-    sha256 = "0wqh4srqkcc03rvkwrcshaa028psrq58xkys6npnyhqxc0apvdf9";
+    url = "https://www.riverbankcomputing.com/static/Downloads/PyQt5/${version}/PyQt5_gpl-${version}.tar.gz";
+    sha256 = "0z4hhd88rm0vizap9l4rxm0cqcln7hamakylwxnkb4ya2b3l9rkk";
   };
 
   outputs = [ "out" "dev" ];
@@ -27,7 +27,7 @@ in buildPythonPackage rec {
 
   buildInputs = [ dbus sip ];
 
-  propagatedBuildInputs = [ qtbase qtsvg qtwebengine dbus-python ]
+  propagatedBuildInputs = [ qtbase qtsvg dbus-python ]
     ++ lib.optional (!isPy3k) enum34
     ++ lib.optional withConnectivity qtconnectivity
     ++ lib.optional withWebKit qtwebkit
