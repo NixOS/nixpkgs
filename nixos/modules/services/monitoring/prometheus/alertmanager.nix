@@ -152,7 +152,7 @@ let
           after    = [ "network.target" ];
           script = ''
             ${amCfg.package}/bin/alertmanager \
-              ${concatStringsSep " \\\n  " cmdlineArgs}
+              ${concatStringsSep " \\\n  " (mkCmdlineArgs amCfg)}
           '';
           serviceConfig = {
             User = amCfg.user;
