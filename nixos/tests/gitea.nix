@@ -45,7 +45,7 @@ with pkgs.lib;
       {
         services.gitea.enable = true;
         services.gitea.database.type = "postgres";
-        services.gitea.database.password = "secret";
+        services.gitea.database.passwordFile = pkgs.writeText "db-password" "secret";
       };
 
     testScript = ''
