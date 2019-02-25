@@ -4356,6 +4356,15 @@
     github = "solson";
     name = "Scott Olson";
   };
+  sondr3 = {
+    email = "nilsen.sondre@gmail.com";
+    github = "sondr3";
+    name = "Sondre Nilsen";
+    keys = [{
+      longkeyid = "ed25519/0x25676BCBFFAD76B1";
+      fingerprint = "0EC3 FA89 EFBA B421 F82E  40B0 2567 6BCB FFAD 76B1";
+    }];
+  };
   sorki = {
     email = "srk@48.io";
     github = "sorki";
