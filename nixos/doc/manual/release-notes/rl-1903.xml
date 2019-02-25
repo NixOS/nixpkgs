@@ -659,6 +659,11 @@
        An upgrade guide can be found <link xlink:href="https://www.open-mpi.org/faq/?category=mpi-removed">here</link>.
      </para>
    </listitem>
+   <listitem>
+     <para>
+       A new subcommand <command>nixos-rebuild edit</command> was added.
+     </para>
+   </listitem>
   </itemizedlist>
  </section>
 </section>
