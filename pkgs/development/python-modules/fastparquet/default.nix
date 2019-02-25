@@ -5,8 +5,6 @@ buildPythonPackage rec {
   pname = "fastparquet";
   version = "0.2.1";
 
-  disabled = !isPy3k;
-
   src = fetchPypi {
     inherit pname version;
     sha256 = "183wdmhnhnlsd7908n3d2g4qnb49fcipqfshghwpbdwdzjpa0day";
