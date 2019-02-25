@@ -19,5 +19,12 @@ with lib;
     services.dbus.packages = [ pkgs.bamf ];
 
     systemd.packages = [ pkgs.bamf ];
+
+    environment.extraSetup = ''
+      if [ -w $out/share/applications ]; then
+          echo "Rebuilding bamf-2.index..."
+          ${pkgs.bamf.update-index} $out/share/applications > $out/share/applications/bamf-2.index
+      fi
+    '';
   };
 }

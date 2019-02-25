@@ -1,0 +1,13 @@
+diff --git a/src/bamf-matcher.c b/src/bamf-matcher.c
+index 52dbd3a..b7167a4 100644
+--- a/src/bamf-matcher.c
++++ b/src/bamf-matcher.c
+@@ -1405,7 +1405,7 @@ fill_desktop_file_table (BamfMatcher * self,
+ 
+       bamf_matcher_add_new_monitored_directory (self, directory);
+ 
+-      bamf_file = g_build_filename (directory, BAMF_INDEX_NAME, NULL);
++      bamf_file = g_build_filename ("/run/current-system/sw/share/applications", BAMF_INDEX_NAME, NULL);
+ 
+       if (g_file_test (bamf_file, G_FILE_TEST_EXISTS))
+         {
