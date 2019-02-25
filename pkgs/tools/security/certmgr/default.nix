@@ -3,7 +3,7 @@
 let
   generic = { patches ? [] }:
     buildGoPackage rec {
-      version = "1.6.1";
+      version = "1.6.4";
       name = "certmgr-${version}";
 
       goPackagePath = "github.com/cloudflare/certmgr/";
@@ -12,7 +12,7 @@ let
         owner = "cloudflare";
         repo = "certmgr";
         rev = "v${version}";
-        sha256 = "1ky2pw1wxrb2fxfygg50h0mid5l023x6xz9zj5754a023d01qqr2";
+        sha256 = "0glvyp61ya21pdm2bsvq3vfhmmxc2998vxc6hiyc79ijsv9n6jqi";
       };
 
       inherit patches;
