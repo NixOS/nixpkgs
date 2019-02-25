@@ -1,6 +1,6 @@
 ---   a/src/gnome-desktop/gnome-desktop-thumbnail-script.c
 +++   a/src/gnome-desktop/gnome-desktop-thumbnail-script.c
-@@ -514,14 +514,10 @@ add_bwrap (GPtrArray   *array,
+@@ -514,14 +514,11 @@ add_bwrap (GPtrArray   *array,
    g_return_val_if_fail (script->s_infile != NULL, FALSE);
  
    add_args (array,
@@ -8,8 +8,9 @@
 -	    "--ro-bind", "/usr", "/usr",
 -	    "--ro-bind", "/lib", "/lib",
 -	    "--ro-bind", "/lib64", "/lib64",
-+      "@bubblewrap_bin@",
-+      "--ro-bind", "@storeDir@", "@storeDir@",
++	    "@bubblewrap_bin@",
++	    "--ro-bind", "@storeDir@", "@storeDir@",
++	    "--ro-bind", "/run/current-system", "/run/current-system",
  	    "--proc", "/proc",
  	    "--dev", "/dev",
 -	    "--symlink", "usr/bin", "/bin",
