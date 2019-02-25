@@ -8,7 +8,7 @@
 assert qt4Support -> qt4 != null;
 
 stdenv.mkDerivation rec {
-  name = "avahi-${version}";
+  name = "avahi${stdenv.lib.optionalString withLibdnssdCompat "-compat"}-${version}";
   version = "0.7";
 
   src = fetchurl {

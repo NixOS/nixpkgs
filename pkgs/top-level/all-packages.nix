@@ -847,6 +847,10 @@ in
 
   avahi = callPackage ../development/libraries/avahi (config.avahi or {});
 
+  avahi-compat = callPackage ../development/libraries/avahi ((config.avahi or {}) // {
+    withLibdnssdCompat = true;
+  });
+
   avro-c = callPackage ../development/libraries/avro-c { };
 
   avro-cpp = callPackage ../development/libraries/avro-c++ { boost = boost160; };
