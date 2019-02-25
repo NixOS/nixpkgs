@@ -464,6 +464,21 @@ EOF
     }
 }
 
+# For lack of a better way to determine it, guess whether we should use a
+# bigger font for the console from the display mode on the first
+# framebuffer. A way based on the physical size/actual DPI reported by
+# the monitor would be nice, but I don't know how to do this without X :)
+my $fb_modes_file = "/sys/class/graphics/fb0/modes";
+if (-f $fb_modes_file && -r $fb_modes_file) {
+    my $modes = read_file($fb_modes_file);
+    $modes =~ m/([0-9]+)x([0-9]+)/;
+    my $console_width = $1, my $console_height = $2;
+    if ($console_width > 1920) {
+        push @attrs, "# High-DPI console";
+        push @attrs, 'i18n.consoleFont = lib.mkDefault "${pkgs.terminus_font}/share/consolefonts/ter-u28n.psf.gz";';
+    }
+}
+
 
 # Generate the hardware configuration file.
 
