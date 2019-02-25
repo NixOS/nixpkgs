@@ -17,6 +17,8 @@
   libXrandr,
   libGL,
   xclip,
+  wayland,
+  libxkbcommon,
   # Darwin Frameworks
   cf-private,
   AppKit,
@@ -40,19 +42,22 @@ let
     libXrandr
     libGL
     libXi
+  ] ++ lib.optionals stdenv.isLinux [
+    wayland
+    libxkbcommon
   ];
 in buildRustPackage rec {
   name = "alacritty-${version}";
-  version = "0.2.6";
+  version = "0.2.9";
 
   src = fetchFromGitHub {
     owner = "jwilm";
     repo = "alacritty";
     rev = "v${version}";
-    sha256 = "1yjmlvxs5vwqhgjlb83a4hq2b12zzhr4pp209djprgdi0cf2bbqw";
+    sha256 = "01wzkpbz6jjmpmnkqswilnn069ir3cx3jvd3j7zsvqdxqpwncz39";
   };
 
-  cargoSha256 = "11n5xl43l07zycdg0icv4i7mh6zy4ia6aw48i0wm59xqdl7xqn9f";
+  cargoSha256 = "0h9wczgpjh52lhrqg0r2dkrh5svmyvrvh4yj7p0nz45skgrnl8w9";
 
   nativeBuildInputs = [
     cmake

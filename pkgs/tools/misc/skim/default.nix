@@ -2,13 +2,13 @@
 
 rustPlatform.buildRustPackage rec {
   name = "skim-${version}";
-  version = "0.5.2";
+  version = "0.5.5";
 
   src = fetchFromGitHub {
     owner = "lotabout";
     repo = "skim";
     rev = "v${version}";
-    sha256 = "1b3l0h69cm70669apsgzp7qw1k5fi2gbk9176hjr9iypbdiwjyir";
+    sha256 = "1z9xjqr72r855899pgfrigdzcir18rpp0nh33r7jdz24q57zya10";
   };
 
   outputs = [ "out" "vim" ];
@@ -21,6 +21,7 @@ rustPlatform.buildRustPackage rec {
 
   postInstall = ''
     install -D -m 555 bin/sk-tmux -t $out/bin
+    install -D -m 644 shell/skim.1 $out/man/man1/skim.1
     install -D -m 444 shell/* -t $out/share/skim
     install -D -m 444 plugin/skim.vim -t $vim/plugin
 

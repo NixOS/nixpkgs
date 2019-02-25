@@ -13,7 +13,7 @@ let
 
   sh = busybox-sandbox-shell;
 
-  common = { name, suffix ? "", src, fromGit ? false }:
+  common = { name, suffix ? "", src, includesPerl ? false, fromGit ? false }:
     let nix = stdenv.mkDerivation rec {
       inherit name src;
       version = lib.getVersion name;
@@ -113,7 +113,7 @@ let
       passthru = {
         inherit fromGit;
 
-        perl-bindings = stdenv.mkDerivation {
+        perl-bindings = if includesPerl then nix else stdenv.mkDerivation {
           name = "nix-perl-${version}";
 
           inherit src;
@@ -150,6 +150,9 @@ in rec {
       url = "http://nixos.org/releases/nix/${name}/${name}.tar.xz";
       sha256 = "0ca5782fc37d62238d13a620a7b4bff6a200bab1bd63003709249a776162357c";
     };
+
+    # Nix1 has the perl bindings by default, so no need to build the manually.
+    includesPerl = true;
   };
 
   nixStable = common rec {
@@ -161,13 +164,13 @@ in rec {
   };
 
   nixUnstable = lib.lowPrio (common rec {
-    name = "nix-2.2${suffix}";
-    suffix = "pre6600_85488a93";
+    name = "nix-2.3${suffix}";
+    suffix = "pre6631_e58a7144";
     src = fetchFromGitHub {
       owner = "NixOS";
       repo = "nix";
-      rev = "85488a93ec3b07210339f2b05aa93e970f9ac3be";
-      sha256 = "1n5dp7p2lzpnj7f834d25k020v16gnnsm56jz46y87v2x7b69ccm";
+      rev = "e58a71442ad4a538b48fc7a9938c3690628c4741";
+      sha256 = "1hbjhnvjbh8bi8cjjgyrj4z1gw03ws12m2wi5azzj3rmhnh4c802";
     };
     fromGit = true;
   });

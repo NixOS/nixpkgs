@@ -26,6 +26,6 @@ buildPythonPackage rec {
   meta = {
     description = "A toolbelt of useful classes and functions to be used with python-requests";
     homepage = http://toolbelt.rtfd.org;
-    maintainers = with lib.maintainers; [ jgeerds ];
+    maintainers = with lib.maintainers; [ matthiasbeyer jgeerds ];
   };
 }

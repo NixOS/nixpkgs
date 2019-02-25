@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     description = "Text-based word processor";
     homepage = https://cowlark.com/wordgrinder;
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ matthiasbeyer ];
     platforms = with stdenv.lib.platforms; linux ++ darwin;
   };
 }

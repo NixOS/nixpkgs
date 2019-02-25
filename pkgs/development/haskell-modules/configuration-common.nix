@@ -85,7 +85,7 @@ self: super: {
       name = "git-annex-${super.git-annex.version}-src";
       url = "git://git-annex.branchable.com/";
       rev = "refs/tags/" + super.git-annex.version;
-      sha256 = "06385r9rlncrrmzdfl8q600bw6plbvkmkwgl3llg595xrm711a97";
+      sha256 = "1v2v6cwy957y5rgclb66ia7bl5j5mx291s3lh2swa39q3420m6v0";
     };
   }).override {
     dbus = if pkgs.stdenv.isLinux then self.dbus else null;
@@ -150,6 +150,10 @@ self: super: {
   # sse2 flag due to https://github.com/haskell/vector/issues/47.
   # dontCheck due to https://github.com/haskell/vector/issues/138
   vector = dontCheck (if pkgs.stdenv.isi686 then appendConfigureFlag super.vector "--ghc-options=-msse2" else super.vector);
+
+  conduit-extra = if pkgs.stdenv.isDarwin
+    then super.conduit-extra.overrideAttrs (drv: { __darwinAllowLocalNetworking = true; })
+    else super.conduit-extra;
 
   # Fix Darwin build.
   halive = if pkgs.stdenv.isDarwin
@@ -747,6 +751,10 @@ self: super: {
           rev = "v${ver}";
           sha256 = "0kqglih3rv12nmkzxvalhfaaafk4b2irvv9x5xmc48i1ns71y23l";
         }}/doc";
+        # Needed after sphinx 1.7.9 -> 1.8.3
+        postPatch = ''
+          substituteInPlace conf.py --replace "'.md': CommonMarkParser," ""
+        '';
         nativeBuildInputs = with pkgs.buildPackages.pythonPackages; [ sphinx recommonmark sphinx_rtd_theme ];
         makeFlags = "html";
         installPhase = ''
@@ -945,17 +953,13 @@ self: super: {
   # Tries to read a file it is not allowed to in the test suite
   load-env = dontCheck super.load-env;
 
-  # hledger needs a newer megaparsec version than we have in LTS 12.x.
-  hledger-lib = super.hledger-lib.overrideScope (self: super: {
-    # cassava-megaparsec = self.cassava-megaparsec_2_0_0;
-    # hspec-megaparsec = self.hspec-megaparsec_2_0_0;
-    # megaparsec = self.megaparsec_7_0_4;
-  });
-
   # Copy hledger man pages from data directory into the proper place. This code
   # should be moved into the cabal2nix generator.
   hledger = overrideCabal super.hledger (drv: {
     postInstall = ''
+      # Don't install files that don't belong into this package to avoid
+      # conflicts when hledger and hledger-ui end up in the same profile.
+      rm embeddedfiles/hledger-{api,ui,web}.*
       for i in $(seq 1 9); do
         for j in embeddedfiles/*.$i; do
           mkdir -p $out/share/man/man$i
@@ -966,7 +970,7 @@ self: super: {
       cp -v embeddedfiles/*.info* $out/share/info/
     '';
   });
-  hledger-ui = (overrideCabal super.hledger-ui (drv: {
+  hledger-ui = overrideCabal super.hledger-ui (drv: {
     postInstall = ''
       for i in $(seq 1 9); do
         for j in *.$i; do
@@ -977,11 +981,6 @@ self: super: {
       mkdir -p $out/share/info
       cp -v *.info* $out/share/info/
     '';
-  })).overrideScope (self: super: {
-    # cassava-megaparsec = self.cassava-megaparsec_2_0_0;
-    # config-ini = self.config-ini_0_2_4_0;
-    # hspec-megaparsec = self.hspec-megaparsec_2_0_0;
-    # megaparsec = self.megaparsec_7_0_4;
   });
   hledger-web = overrideCabal super.hledger-web (drv: {
     postInstall = ''
@@ -1147,11 +1146,8 @@ self: super: {
     };
   };
 
-  # https://github.com/kcsongor/generic-lens/pull/60
-  generic-lens = appendPatch super.generic-lens (pkgs.fetchpatch {
-    url = https://github.com/kcsongor/generic-lens/commit/d9af1ec22785d6c21e928beb88fc3885c6f05bed.patch;
-    sha256 = "0ljwcha9l52gs5bghxq3gbzxfqmfz3hxxcg9arjsjw8f7kw946xq";
-  });
+  # https://github.com/kcsongor/generic-lens/pull/65
+  generic-lens = dontCheck super.generic-lens;
 
   xmonad-extras = doJailbreak super.xmonad-extras;
 
@@ -1186,6 +1182,12 @@ self: super: {
   # Jailbreak tasty < 1.2: https://github.com/phadej/tdigest/issues/30
   tdigest = doJailbreak super.tdigest; # until tdigest > 0.2.1
   these = doJailbreak super.these; # until these >= 0.7.6
+  insert-ordered-containers = appendPatch super.insert-ordered-containers ./patches/insert-ordered-containers-fix-test.patch;
+
+  uri-bytestring = appendPatch super.uri-bytestring (pkgs.fetchpatch {
+    url = "https://github.com/Soostone/uri-bytestring/commit/e5c5602a97160a6a6304a24947e33e47c9155460.patch";
+    sha256 = "1qwy8bj6vywhp0075dza8j90zrzsm3144qz3c703s9c4n6pg3gw4";
+    });
 
   # These patches contain fixes for 8.6 that should be safe for
   # earlier versions, but we need the relaxed version bounds in GHC
@@ -1203,4 +1205,33 @@ self: super: {
     sha256 = "0lrcmcrxp9imj9rfaq7mb0fn9mxms4gq4sz95n4san3dpd0qmj9x";
     stripLen = 1;
     });
+
+  # Fix for base >= 4.11
+  scat = overrideCabal super.scat (drv: {
+    patches = [(pkgs.fetchpatch {
+      url    = "https://github.com/redelmann/scat/pull/6.diff";
+      sha256 = "07nj2p0kg05livhgp1hkkdph0j0a6lb216f8x348qjasy0lzbfhl";
+    })];
+  });
+
+  # Use latest pandoc despite what LTS says.
+  # Test suite fails in both 2.5 and 2.6: https://github.com/jgm/pandoc/issues/5309.
+  pandoc = doDistribute (dontCheck super.pandoc_2_6);
+  pandoc-citeproc = self.pandoc-citeproc_0_16_1;
+
+  # https://github.com/qfpl/tasty-hedgehog/issues/24
+  tasty-hedgehog = dontCheck super.tasty-hedgehog;
+
+  # The latest release version is ancient. You really need this tool from git.
+  haskell-ci = generateOptparseApplicativeCompletion "haskell-ci"
+    (addBuildDepend (overrideSrc (dontCheck super.haskell-ci) {
+      version = "2019.02.22-git";
+      src = pkgs.fetchFromGitHub {
+        owner = "haskell-CI";
+        repo = "haskell-ci";
+        rev = "3a861aa7d6099296a9ac1003c7218e3ed831ca8c";
+        sha256 = "0hwfg3ab5mh3xml3nlabbr1x8bhg26gw6sxn8bgb8bh6r0ccq9pi";
+      };
+  }) (with self; [base-compat generic-lens microlens optparse-applicative ShellCheck]));
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super

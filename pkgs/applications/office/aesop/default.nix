@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch, vala_0_40, pkgconfig, meson, ninja, python3, granite, gtk3
+{ stdenv, fetchFromGitHub, fetchpatch, pantheon, pkgconfig, meson, ninja, python3, gtk3
 , gnome3, desktop-file-utils, json-glib, libsoup, poppler, gobject-introspection, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
@@ -21,14 +21,14 @@ stdenv.mkDerivation rec {
     ninja
     pkgconfig
     python3
-    vala_0_40 # should be `elementary.vala` when elementary attribute set is merged
+    pantheon.vala
     wrapGAppsHook
   ];
 
   buildInputs = [
-    gnome3.defaultIconTheme # should be `elementary.defaultIconTheme`when elementary attribute set is merged
+    pantheon.elementary-icon-theme
     gnome3.libgee
-    granite
+    pantheon.granite
     gtk3
     json-glib
     libsoup

@@ -1,15 +1,14 @@
 { stdenv, fetchFromGitHub, cmake, pkgconfig, lxqt-build-tools, qtbase, qttools, qtsvg, qtx11extras, kwindowsystem, liblxqt, libqtxdg, xorg, xdg-user-dirs }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "lxqt-session";
-  version = "0.13.0";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "0ngcrkmfpahii4yibsh03b8v8af93hhqm42kk1nnhczc8dg49mhs";
+    sha256 = "0nla1ki23p1bwzw5hbmh9l8yg3b0f55kflgnvyfakmvpivjbz3k6";
   };
 
   nativeBuildInputs = [
@@ -31,12 +30,15 @@ stdenv.mkDerivation rec {
     xdg-user-dirs
   ];
 
-  cmakeFlags = [ "-DPULL_TRANSLATIONS=NO" ];
-
   postPatch = ''
     for dir in autostart config; do
       substituteInPlace $dir/CMakeLists.txt \
         --replace "DESTINATION \"\''${LXQT_ETC_XDG_DIR}" "DESTINATION \"etc/xdg"
+    done
+
+    for f in lxqt-{config-session,leave,session}/CMakeLists.txt; do
+      substituteInPlace $f \
+        --replace "\''${LXQT_TRANSLATIONS_DIR}" "''${out}/share/lxqt/translations"
     done
   '';
 

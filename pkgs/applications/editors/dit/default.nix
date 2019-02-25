@@ -1,22 +1,20 @@
-{ fetchurl, stdenv, coreutils, ncurses, lua }:
+{ lib, fetchurl, stdenv, libiconv, ncurses, lua }:
 
 stdenv.mkDerivation rec {
   name = "dit-${version}";
-  version = "0.4";
+  version = "0.5";
 
   src = fetchurl {
     url = "https://hisham.hm/dit/releases/${version}/${name}.tar.gz";
-    sha256 = "0bwczbv7annbbpg7bgbsqd5kwypn81sza4v7v99fin94wwmcn784";
+    sha256 = "05vhr1gl3bb5fg49v84xhmjaqdjw6djampvylw10ydvbpnpvjvjc";
   };
 
-  buildInputs = [ coreutils ncurses lua ];
+  buildInputs = [ ncurses lua ]
+    ++ lib.optional stdenv.isDarwin libiconv;
 
+  # fix paths
   prePatch = ''
     patchShebangs tools/GenHeaders
-  '';
-
-  # needs GNU tail for tail -r
-  postPatch = ''
     substituteInPlace Prototypes.h --replace 'tail' "$(type -P tail)"
   '';
 

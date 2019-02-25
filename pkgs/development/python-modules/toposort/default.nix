@@ -16,7 +16,7 @@ buildPythonPackage rec {
     description = "A topological sort algorithm";
     homepage = https://pypi.python.org/pypi/toposort/1.1;
     maintainers = with maintainers; [ tstrobel ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     license = licenses.asl20;
   };
 

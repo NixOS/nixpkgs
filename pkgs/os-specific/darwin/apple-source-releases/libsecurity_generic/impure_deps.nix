@@ -101,7 +101,6 @@
   "/System/Library/PrivateFrameworks/Symbolication.framework/Versions/A/Symbolication"
   "/System/Library/PrivateFrameworks/TCC.framework/Versions/A/TCC"
   "/System/Library/PrivateFrameworks/UIFoundation.framework/Versions/A/UIFoundation"
-  "/System/Library/PrivateFrameworks/Ubiquity.framework/Versions/A/Ubiquity"
   "/System/Library/PrivateFrameworks/login.framework/Versions/A/Frameworks/loginsupport.framework/Versions/A/loginsupport"
   "/usr/lib/libCRFSuite.dylib"
   "/usr/lib/libOpenScriptingUtil.dylib"

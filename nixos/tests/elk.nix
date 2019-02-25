@@ -13,7 +13,7 @@ let
   mkElkTest = name : elk : makeTest {
     inherit name;
     meta = with pkgs.stdenv.lib.maintainers; {
-      maintainers = [ eelco chaoflow offline basvandijk ];
+      maintainers = [ eelco offline basvandijk ];
     };
     nodes = {
       one =

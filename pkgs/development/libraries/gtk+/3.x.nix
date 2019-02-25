@@ -13,14 +13,14 @@ assert cupsSupport -> cups != null;
 with stdenv.lib;
 
 let
-  version = "3.24.2";
+  version = "3.24.4";
 in
 stdenv.mkDerivation rec {
   name = "gtk+3-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gtk+/${stdenv.lib.versions.majorMinor version}/gtk+-${version}.tar.xz";
-    sha256 = "14l8mimdm44r3h5pn5hzigl1z25jna8jxvb16l88v4nc4zj0afsv";
+    sha256 = "176bl1pm5d5xkhmiwldzw833akna7shp59glkl6cjz580bzmjkyq";
   };
 
   outputs = [ "out" "dev" ];
@@ -35,15 +35,10 @@ stdenv.mkDerivation rec {
       url = "https://bug757142.bugzilla-attachments.gnome.org/attachment.cgi?id=344123";
       sha256 = "0g6fhqcv8spfy3mfmxpyji93k8d4p4q4fz1v9a1c1cgcwkz41d7p";
     })
-    # 3.24.2: https://gitlab.gnome.org/GNOME/gtk/issues/1521
+    # 3.24.3: https://gitlab.gnome.org/GNOME/gtk/merge_requests/505
     (fetchpatch {
-      url = https://gitlab.gnome.org/GNOME/gtk/commit/2905fc861acda3d134a198e56ef2f6c962ad3061.patch;
-      sha256 = "0y8ljny59kgdhrcfpimi2r082bax60d5kflw1qj9k1mnzjcvjjwl";
-    })
-    # 3.24.2: https://gitlab.gnome.org/GNOME/gtk/issues/1523
-    (fetchpatch {
-      url = https://gitlab.gnome.org/GNOME/gtk/commit/e3a1593a0984cc0156ec1892a46af8f256a64878.patch;
-      sha256 = "0akvp1r8xlzf5amk9gmk7b5sabr1wbmg3ak15rppsid7nf9f5dqf";
+      url = https://gitlab.gnome.org/GNOME/gtk/commit/95c0f07295fd300ab7f3416a39290ae33585ea6c.patch;
+      sha256 = "0z9w7f39xcn1cbcd8jhx731vq64nvi5q6kyc86bq8r00daysjwnl";
     })
   ] ++ optionals stdenv.isDarwin [
     # X11 module requires <gio/gdesktopappinfo.h> which is not installed on Darwin

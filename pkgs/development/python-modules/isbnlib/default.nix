@@ -1,21 +1,17 @@
 { lib
 , buildPythonPackage
-, fetchFromGitHub
+, fetchPypi
 , nose
 , coverage
 }:
 
 buildPythonPackage rec {
   pname = "isbnlib";
-  version = "3.9.4";
+  version = "3.9.6";
 
-  # PyPI tarball is missing LICENSE file
-  # See https://github.com/xlcnd/isbnlib/pull/53
-  src = fetchFromGitHub {
-    owner = "xlcnd";
-    repo = "isbnlib";
-    rev = "v${version}";
-    sha256 = "0gc0k5khf34b4zz56a9zc3rscdhj3bx849lbzgmzpji30sbyy1fh";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "d4ae098cb31d6c678a6eac074a24f8ba4adfe7df65db13b0b2ab7355f28d6e3b";
   };
 
   checkInputs = [

@@ -19,6 +19,11 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     sed -e 's/<= obj-date/<= (if (= 0 obj-date) 1 obj-date)/' -i lsp/make.lisp
+  ''
+  # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=902475
+  + ''
+    substituteInPlace h/elf64_i386_reloc.h \
+      --replace 'case R_X86_64_PC32:' 'case R_X86_64_PC32: case R_X86_64_PLT32:'
   '';
 
   sourceRoot = "gcl/gcl";

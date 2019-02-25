@@ -12,6 +12,9 @@ stdenv.mkDerivation rec {
     sha256 = "0p1r61ss1fq0bs8ynnx7xq4wwsdvs32ljvwjnx6yxr8gd6pawx0c";
   };
 
+  # patch to rename outdated MPI functions
+  patches = [ ./openmpi4.patch ];
+
   nativeBuildInputs = [ cmake openssh ];
   buildInputs = [ mpi gfortran openblasCompat ];
 
@@ -41,8 +44,8 @@ stdenv.mkDerivation rec {
     homepage = http://www.netlib.org/scalapack/;
     description = "Library of high-performance linear algebra routines for parallel distributed memory machines";
     license = licenses.bsd3;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.costrouc ];
+    platforms = [ "x86_64-linux" ];
+    maintainers = with maintainers; [ costrouc markuskowa ];
   };
 
 }

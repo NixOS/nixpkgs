@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     cp ebin/* $out/lib/${name}/ebin
     cp -R textures shaders plugins $out/lib/$name
     cat << EOF > $out/bin/wings
-    #!/bin/sh
+    #!${stdenv.shell}
     ${erlang}/bin/erl \
       -pa $out/lib/${name}/ebin -run wings_start start_halt "$@"
     EOF

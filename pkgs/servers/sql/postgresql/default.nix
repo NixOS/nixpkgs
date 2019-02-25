@@ -76,7 +76,8 @@ let
     postInstall =
       ''
         moveToOutput "lib/pgxs" "$out" # looks strange, but not deleting it
-        moveToOutput "lib/*.a" "$out"
+        moveToOutput "lib/libpgcommon.a" "$out"
+        moveToOutput "lib/libpgport.a" "$out"
         moveToOutput "lib/libecpg*" "$out"
 
         # Prevent a retained dependency on gcc-wrapper.
@@ -84,7 +85,7 @@ let
 
         if [ -z "''${dontDisableStatic:-}" ]; then
           # Remove static libraries in case dynamic are available.
-          for i in $out/lib/*.a; do
+          for i in $out/lib/*.a $lib/lib/*.a; do
             name="$(basename "$i")"
             ext="${stdenv.hostPlatform.extensions.sharedLibrary}"
             if [ -e "$lib/lib/''${name%.a}$ext" ] || [ -e "''${i%.a}$ext" ]; then
@@ -181,16 +182,16 @@ in self: {
 
   postgresql_10 = self.callPackage generic {
     version = "10.6";
-    psqlSchema = "10.0";
+    psqlSchema = "10.0"; # should be 10, but changing it is invasive
     sha256 = "0jv26y3f10svrjxzsgqxg956c86b664azyk2wppzpa5x11pjga38";
     this = self.postgresql_10;
     inherit self;
   };
 
   postgresql_11 = self.callPackage generic {
-    version = "11.1";
-    psqlSchema = "11.1";
-    sha256 = "026v0sicsh7avzi45waf8shcbhivyxmi7qgn9fd1x0vl520mx0ch";
+    version = "11.2";
+    psqlSchema = "11.1"; # should be 11, but changing it is invasive
+    sha256 = "01clq2lw0v83zh5dc89xdr3mmap0jr37kdkh401ph6f2177bjxi6";
     this = self.postgresql_11;
     inherit self;
   };

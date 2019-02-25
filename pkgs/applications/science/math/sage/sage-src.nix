@@ -64,10 +64,10 @@ stdenv.mkDerivation rec {
     fetchSageDiff = { base, rev, name ? "sage-diff-${base}-${rev}.patch", ...}@args: (
       fetchpatch ({
         inherit name;
-        url = "https://git.sagemath.org/sage.git/rawdiff?id2=${base}&id=${rev}";
+        url = "https://git.sagemath.org/sage.git/patch?id2=${base}&id=${rev}";
         # We don't care about sage's own build system (which builds all its dependencies).
         # Exclude build system changes to avoid conflicts.
-        excludes = [ "/build/*" ];
+        excludes = [ "build/*" ];
       } // builtins.removeAttrs args [ "rev" "base" ])
     );
   in [
@@ -90,6 +90,26 @@ stdenv.mkDerivation rec {
       base = "8.6.rc1";
       rev = "cd62d45bcef93fb4f7ed62609a46135e6de07051";
       sha256 = "08l2b9w0rn1zrha6188j72f7737xs126gkgmydjd31baa6367np2";
+    })
+
+    # https://trac.sagemath.org/ticket/26949
+    (fetchpatch {
+      name = "sphinx-1.8.3-dependency.patch";
+      url = "https://git.sagemath.org/sage.git/patch?id=d305eda0fedc73fdbe0447b5d6d2b520b8d112c4";
+      sha256 = "1x3q5j8lq35vlj893gj5gq9fhzs60szm9r9rx6ri79yiy9apabph";
+    })
+    # https://trac.sagemath.org/ticket/26451
+    (fetchpatch {
+      name = "sphinx-1.8.3.patch";
+      url = "https://git.sagemath.org/sage.git/patch?id2=0cb494282d7b4cea50aba7f4d100e7932a4c00b1&id=62b989d5ee1d9646db85ea56053cd22e9ffde5ab";
+      sha256 = "1n5c61mvhalcr2wbp66wzsynwwk59aakvx3xqa5zw9nlkx3rd0h1";
+    })
+
+    # https://trac.sagemath.org/ticket/27061
+    (fetchpatch {
+      name = "numpy-1.16-inline-fortran.patch";
+      url = "https://git.sagemath.org/sage.git/patch?id=a05b6b038e1571ab15464e98f76d1927c0c3fd12";
+      sha256 = "05yq97pq84xi60wb1p9skrad5h5x770gq98ll4frr7hvvmlwsf58";
     })
   ];
 

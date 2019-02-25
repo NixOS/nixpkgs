@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   postInstall = ''
     mkdir -p $out/bin
     cat <<EOF > $out/bin/trigger-rally
-    #!/bin/sh
+    #!${stdenv.shell}
     exec $out/games/trigger-rally "$@"
     EOF
     chmod +x $out/bin/trigger-rally

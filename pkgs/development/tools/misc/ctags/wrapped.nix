@@ -14,7 +14,7 @@ with pkgs.stdenv.lib;
 
   # the derivation. use language extensions specified by args
   ctagsWrapped = makeOverridable ( {args, name} :  pkgs.writeScriptBin name ''
-  #!/bin/sh
+  #!${stdenv.shell}
   exec ${pkgs.ctags}/bin/ctags ${concatStringsSep " " (map escapeShellArg args)} "$@"
   '') {
     args = let x = pkgs.ctagsWrapped; in concatLists [

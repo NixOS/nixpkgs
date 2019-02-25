@@ -3,9 +3,9 @@
 , meson
 , ninja
 , pkgconfig
-, granite
-, vala_0_40
+, gtk3
 , python3
+, pantheon
 , gnome3
 , libxml2
 , gettext
@@ -31,24 +31,22 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [
     appstream-glib
     desktop-file-utils
+    pantheon.vala
     gettext
     gobject-introspection # For setup hook
     libxml2
     meson
     ninja
     pkgconfig
-    vala_0_40
     python3
     wrapGAppsHook
   ];
 
-  buildInputs = with gnome3; [
-    defaultIconTheme # If I omit this there's no icons in KDE
-    glib
-    granite
-    gsettings-desktop-schemas
+  buildInputs = [
+    pantheon.elementary-icon-theme
+    gnome3.libgee
+    pantheon.granite
     gtk3
-    libgee
     magic-wormhole
   ];
 
@@ -59,8 +57,8 @@ in stdenv.mkDerivation rec {
   '';
 
   postPatch = ''
-    chmod +x ./meson/post_install.py
-    patchShebangs ./meson/post_install.py
+    chmod +x meson/post_install.py
+    patchShebangs meson/post_install.py
   '';
 
   meta = with stdenv.lib; {

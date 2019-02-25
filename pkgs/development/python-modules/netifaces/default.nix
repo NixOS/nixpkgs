@@ -4,12 +4,12 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.10.7";
+  version = "0.10.9";
   pname = "netifaces";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "bd590fcb75421537d4149825e1e63cca225fd47dad861710c46bd1cb329d8cbd";
+    sha256 = "2dee9ffdd16292878336a58d04a20f0ffe95555465fee7c9bd23b3490ef2abf3";
   };
 
   meta = with stdenv.lib; {

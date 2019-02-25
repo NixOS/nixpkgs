@@ -1,6 +1,6 @@
 { stdenv, fetchgit, makeWrapper, pkgconfig,
   gnome2, glib, pango, cairo, gdk_pixbuf, atk, freetype, xorg,
-  configH
+  configH ? ""
 }:
 
 stdenv.mkDerivation rec {

@@ -71,12 +71,8 @@ self: super: {
     yaml = self.yaml_0_11_0_0;
   };
 
-  # https://github.com/pikajude/stylish-cabal/issues/11
-  stylish-cabal = generateOptparseApplicativeCompletion "stylish-cabal" (super.stylish-cabal.overrideScope (self: super: {
-    haddock-library = dontHaddock (dontCheck self.haddock-library_1_5_0_1);
-  }));
-
-  # cabal2nix doesn't list this because of a conditional on the GHC version.
+  # Older GHC versions need these additional dependencies.
   aeson = addBuildDepend super.aeson self.contravariant;
+  base-compat-batteries = addBuildDepend super.base-compat-batteries self.contravariant;
 
 }

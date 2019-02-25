@@ -2,25 +2,26 @@
 
 rustPlatform.buildRustPackage rec {
   name = "fd-${version}";
-  version = "7.2.0";
+  version = "7.3.0";
 
   src = fetchFromGitHub {
     owner = "sharkdp";
     repo = "fd";
     rev = "v${version}";
-    sha256 = "1h7ar1m7w3vmakg9rp1nfmz7q5pqwvd8yyxwj335ixb49gph1zi5";
+    sha256 = "0y4657w1pi4x9nmbv551dj00dyiv935m8ph7jlv00chwy3hrb3yi";
   };
 
-  cargoSha256 = "0y6xp7fdjfmjfqf9avbq9bdvzvwkf3v1dv7a4k03w5279vxafzi4";
+  cargoSha256 = "0dfv6nia3v3f3rwbjh2h3zdqd48vw8gwilhq0z4n6xvjzk7qydj5";
 
   preFixup = ''
-    mkdir -p "$out/man/man1"
-    cp "$src/doc/fd.1" "$out/man/man1"
+    install -Dm644 "$src/doc/fd.1" "$out/man/man1/fd.1"
 
-    mkdir -p "$out/share/"{bash-completion/completions,fish/vendor_completions.d,zsh/site-functions}
-    cp target/release/build/fd-find-*/out/fd.bash "$out/share/bash-completion/completions/"
-    cp target/release/build/fd-find-*/out/fd.fish "$out/share/fish/vendor_completions.d/"
-    cp target/release/build/fd-find-*/out/_fd "$out/share/zsh/site-functions/"
+    install -Dm644 target/release/build/fd-find-*/out/fd.bash \
+      "$out/share/bash-completion/completions/fd.bash"
+    install -Dm644 target/release/build/fd-find-*/out/fd.fish \
+      "$out/share/fish/vendor_completions.d/fd.fish"
+    install -Dm644 target/release/build/fd-find-*/out/_fd \
+      "$out/share/zsh/site-functions/_fd"
   '';
 
   meta = with stdenv.lib; {

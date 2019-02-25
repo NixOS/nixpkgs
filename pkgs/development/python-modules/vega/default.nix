@@ -24,6 +24,6 @@ buildPythonPackage rec {
     homepage = https://github.com/vega/ipyvega;
     license = licenses.bsd3;
     maintainers = with maintainers; [ teh ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

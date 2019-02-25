@@ -10,6 +10,8 @@ buildPythonPackage rec {
     sha256 = "09fnni8cyxm070bfv9ay030qbyk0dfds5nq77s0p38h33hp08h93";
   };
 
+  # pull request for this patch is https://github.com/MagicStack/contextvars/pull/9
+  patches = [ ./immutables_version.patch ];
   propagatedBuildInputs = [ immutables ];
 
   meta = {

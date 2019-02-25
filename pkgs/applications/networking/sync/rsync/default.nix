@@ -1,5 +1,5 @@
 { stdenv, fetchurl, perl, libiconv, zlib, popt
-, enableACLs ? true, acl ? null
+, enableACLs ? !(stdenv.isDarwin || stdenv.isSunOS || stdenv.isFreeBSD), acl ? null
 , enableCopyDevicesPatch ? false
 }:
 

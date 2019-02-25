@@ -1023,6 +1023,19 @@ let
     propagatedBuildInputs = [ ExtUtilsDepends ExtUtilsPkgConfig ];
   };
 
+  CairoGObject = buildPerlPackage rec {
+    name = "Cairo-GObject-1.004";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/X/XA/XAOC/${name}.tar.gz";
+      sha256 = "1m896j0xdfhldsx8abf10cc16ll1fm9wbav42dpzal9fh07d9f9v";
+    };
+    buildInputs = [ pkgs.cairo Cairo Glib ExtUtilsDepends ExtUtilsPkgConfig ];
+    meta = {
+      description = "Integrate Cairo into the Glib type system";
+      license = stdenv.lib.licenses.lgpl21Plus;
+    };
+  };
+
   cam_pdf = buildPerlModule rec {
     name = "CAM-PDF-1.60";
     src = fetchurl {
@@ -3266,6 +3279,19 @@ let
     };
   };
 
+  DataIEEE754 = buildPerlPackage {
+    name = "Data-IEEE754-0.02";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/M/MA/MAXMIND/Data-IEEE754-0.02.tar.gz;
+      sha256 = "07b73dlxd0qmxgkkrpa2xr61y18v3adlf1qgnl9k90kj8q9spx66";
+    };
+    buildInputs = [ TestBits ];
+    meta = {
+      description = "Pack and unpack big-endian IEEE754 floats and doubles";
+      license = with stdenv.lib.licenses; [ artistic2 ];
+    };
+  };
+
   DataInteger = buildPerlModule rec {
     name = "Data-Integer-0.006";
     src = fetchurl {
@@ -3330,6 +3356,19 @@ let
     meta = {
       homepage = https://github.com/mattp-/Data-Perl;
       description = "Base classes wrapping fundamental Perl data types";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  DataPrinter = buildPerlPackage {
+    name = "Data-Printer-0.40";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/G/GA/GARU/Data-Printer-0.40.tar.gz;
+      sha256 = "0njjh8zp5afc4602jrnmg89icj7gfsil6i955ypcqxc2gl830sb0";
+    };
+    propagatedBuildInputs = [ ClonePP FileHomeDir PackageStash SortNaturally ];
+    meta = {
+      description = "colored pretty-print of Perl data structures and objects";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -3908,6 +3947,19 @@ let
     meta = {
       homepage = https://github.com/bingos/devel-patchperl;
       description = "Patch perl source a la Devel::PPPort's buildperl.pl";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  DevelRefcount = buildPerlModule {
+    name = "Devel-Refcount-0.10";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/P/PE/PEVANS/Devel-Refcount-0.10.tar.gz;
+      sha256 = "0jnaraqkigyinhwz4nqk1ndq7ssjizr98nd1dd183a6icdlx8m5n";
+    };
+    buildInputs = [ TestFatal ];
+    meta = {
+      description = "obtain the REFCNT value of a referent";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -5897,6 +5949,18 @@ let
     };
   };
 
+  FilesysDf = buildPerlPackage rec {
+    name = "Filesys-Df-0.92";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/I/IG/IGUTHRIE/${name}.tar.gz";
+      sha256 = "fe89cbb427e0e05f1cd97c2dd6d3866ac6b21bc7a85734ede159bdc35479552a";
+    };
+    meta = {
+      description = "Perl extension for filesystem disk space information.";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   FilesysNotifySimple = buildPerlPackage {
     name = "Filesys-Notify-Simple-0.13";
     src = fetchurl {
@@ -6215,6 +6279,20 @@ let
     doCheck = false; # seems to access the network
   };
 
+  GeoIP2 = buildPerlPackage {
+    name = "GeoIP2-2.006001";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/M/MA/MAXMIND/GeoIP2-2.006001.tar.gz;
+      sha256 = "05pb8bj2dkfcn8z56f8dcs76x65xcn05fywm7vifmfh39qgkmm62";
+    };
+    propagatedBuildInputs = [ JSONMaybeXS LWPProtocolHttps MaxMindDBReader ParamsValidate Throwable ];
+    buildInputs = [ PathClass TestFatal TestNumberDelta ];
+    meta = {
+      description = "Perl API for MaxMind's GeoIP2 web services and databases";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   GetoptArgvFile = buildPerlPackage rec {
     name = "Getopt-ArgvFile-1.11";
     src = fetchurl {
@@ -6300,6 +6378,20 @@ let
       license = stdenv.lib.licenses.lgpl21Plus;
     };
     propagatedBuildInputs = [ ExtUtilsDepends ExtUtilsPkgConfig ];
+  };
+
+  GlibObjectIntrospection = buildPerlPackage rec {
+    name = "Glib-Object-Introspection-0.046";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/X/XA/XAOC/${name}.tar.gz";
+      sha256 = "1d3gl943p27gd42kxc1i9sp5z55gpgcslz1jvx7cxd6mflhdlck6";
+    };
+    buildInputs = [ Glib ExtUtilsDepends ExtUtilsPkgConfig ];
+    propagatedBuildInputs = [ pkgs.gobject-introspection ];
+    meta = {
+      description = "Dynamically create Perl language bindings";
+      license = stdenv.lib.licenses.lgpl2Plus;
+    };
   };
 
   Gnome2 = buildPerlPackage rec {
@@ -6403,6 +6495,20 @@ let
     propagatedBuildInputs = [ pkgs.goocanvas pkgs.gtk2 Gtk2 Pango ];
     meta = {
       description = "Perl interface to the GooCanvas";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  GooCanvas2 = buildPerlPackage rec {
+    name = "GooCanvas2-0.06";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PE/PERLMAX/${name}.tar.gz";
+      sha256 = "0l1vsvyv9hjxhsxrahq4h64axh7qmk50kiz2spa3s1hr7s3qfk72";
+    };
+    buildInputs = [ pkgs.gtk3 GlibObjectIntrospection Glib ];
+    propagatedBuildInputs = [ pkgs.goocanvas2 ];
+    meta = {
+      description = "Perl binding for GooCanvas2 widget using Glib::Object::Introspection";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -6572,6 +6678,33 @@ let
     meta = {
       description = "Use single instance applications";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  Gtk3 = buildPerlPackage rec {
+    name = "Gtk3-0.034";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/X/XA/XAOC/${name}.tar.gz";
+      sha256 = "0baxyhlzdf7avka40h1niiir8vz4nilqkiwh876i0hv0f8xj3nqa";
+    };
+    buildInputs = [ Cairo CairoGObject Glib GlibObjectIntrospection ];
+    propagatedBuildInputs = [ pkgs.gtk3 ];
+    meta = {
+      description = "Perl interface to the 3.x series of the gtk+ toolkit";
+      license = stdenv.lib.licenses.lgpl21Plus;
+    };
+  };
+
+  Gtk3SimpleList = buildPerlPackage rec {
+    name = "Gtk3-SimpleList-0.18";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/T/TV/TVIGNAUD/${name}.tar.gz";
+      sha256 = "09azmc7miyvw7q21rz8cxw16zbd5i1j5hpakxy376f5vmhqqjyhp";
+    };
+    buildInputs = [ Gtk3 Glib GlibObjectIntrospection Cairo CairoGObject ];
+    meta = {
+      description = "A simple interface to Gtk3's complex MVC list widget";
+      license = stdenv.lib.licenses.lgpl21Plus;
     };
   };
 
@@ -7319,6 +7452,20 @@ let
     };
   };
 
+  ImageSane = buildPerlPackage rec {
+    name = "Image-Sane-0.14";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/R/RA/RATCLIFFE/${name}.tar.gz";
+      sha256 = "a4b027c9b7650291f1acb0eb93861a7fc45aef4e08f6726843f174fa113c8ba5";
+    };
+    buildInputs = [ pkgs.sane-backends ExtUtilsDepends ExtUtilsPkgConfig TestRequires TryTiny ];
+    propagatedBuildInputs = [ ExceptionClass Readonly ];
+    meta = {
+      description = "Perl extension for the SANE (Scanner Access Now Easy) Project";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   ImageScale = buildPerlPackage rec {
     name = "Image-Scale-0.14";
     src = fetchurl {
@@ -7629,6 +7776,7 @@ let
       url = "mirror://cpan/authors/id/T/TO/TODDR/${name}.tar.gz";
       sha256 = "0399anjy3bc0w8xzsc3qx5vcyqryc9gc52lc7wh7i49hsdq8gvx2";
     };
+    doCheck = !stdenv.isDarwin;  # openpty fails in the sandbox
   };
 
   IPCountry = buildPerlPackage rec {
@@ -7714,15 +7862,15 @@ let
 
   ImageExifTool = buildPerlPackage rec {
     name = "Image-ExifTool-${version}";
-    version = "11.01";
+    version = "11.11";
 
     src = fetchurl {
       url = "https://www.sno.phy.queensu.ca/~phil/exiftool/${name}.tar.gz";
-      sha256 = "175w34n73mypdpbaqj2vgqsfp59yvfrn8k7zmx4cawnp895bypvh";
+      sha256 = "1szg1k82nz88pp5n7lg71ja7q3hh5i5f9bcbb7m482dwrmsywkp6";
     };
 
     meta = with stdenv.lib; {
-      description = "ExifTool, a tool to read, write and edit EXIF meta information";
+      description = "A tool to read, write and edit EXIF meta information";
       homepage = https://www.sno.phy.queensu.ca/~phil/exiftool/;
 
       longDescription = ''
@@ -7731,10 +7879,10 @@ let
         image, audio and video files.  ExifTool supports many different types
         of metadata including EXIF, GPS, IPTC, XMP, JFIF, GeoTIFF, ICC
         Profile, Photoshop IRB, FlashPix, AFCP and ID3, as well as the maker
-        notes of many digital cameras by Canon, Casio, FujiFilm, HP,
-        JVC/Victor, Kodak, Leaf, Minolta/Konica-Minolta, Nikon,
-        Olympus/Epson, Panasonic/Leica, Pentax/Asahi, Ricoh, Sanyo,
-        Sigma/Foveon and Sony.
+        notes of many digital cameras by Canon, Casio, DJI, FLIR, FujiFilm, HP,
+        JVC/Victor, Kodak, Leaf, Minolta/Konica-Minolta, Motorola, Nikon,
+        Nintendo, Olympus/Epson, Panasonic/Leica, Pentax/Asahi, Phase One,
+        Reconyx, Ricoh, Samsung, Sanyo, Sigma/Foveon and Sony.
       '';
 
       license = with licenses; [ gpl1Plus /* or */ artistic2 ];
@@ -9090,6 +9238,31 @@ let
     propagatedBuildInputs = [ ClassAccessor ParamsValidate ];
   };
 
+  MathInt128 = buildPerlPackage {
+    name = "Math-Int128-0.22";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/S/SA/SALVA/Math-Int128-0.22.tar.gz;
+      sha256 = "1g0ra7ldv4fz3kqqg45dlrfavi2abfmlhf0py5ank1jk2x0clc56";
+    };
+    propagatedBuildInputs = [ MathInt64 ];
+    meta = {
+      description = "Manipulate 128 bits integers in Perl";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  MathInt64 = buildPerlPackage {
+    name = "Math-Int64-0.54";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/S/SA/SALVA/Math-Int64-0.54.tar.gz;
+      sha256 = "0lfkc0cry65lnsi28gjyz2kvdkanbhhpc0pyrswsczj3k3k53z6w";
+    };
+    meta = {
+      description = "Manipulate 64 bits integers in Perl";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   MathPlanePath = buildPerlPackage rec {
     name = "Math-PlanePath-126";
     src = fetchurl {
@@ -9153,6 +9326,62 @@ let
     src = fetchurl {
       url = mirror://cpan/authors/id/A/AS/ASPINELLI/Math-VecStat-0.08.tar.gz;
       sha256 = "03bdcl9pn2bc9b50c50nhnr7m9wafylnb3v21zlch98h9c78x6j0";
+    };
+  };
+
+  MaxMindDBCommon = buildPerlPackage {
+    name = "MaxMind-DB-Common-0.040001";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/M/MA/MAXMIND/MaxMind-DB-Common-0.040001.tar.gz;
+      sha256 = "1mqvnabskhyvi2f10f602gisfk39ws51ky55lixd0033sd5xzikb";
+    };
+    propagatedBuildInputs = [ DataDumperConcise DateTime ListAllUtils MooXStrictConstructor ];
+    meta = {
+      description = "Code shared by the MaxMind DB reader and writer modules";
+      license = with stdenv.lib.licenses; [ artistic2 ];
+    };
+  };
+
+  MaxMindDBReader = buildPerlPackage {
+    name = "MaxMind-DB-Reader-1.000013";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/M/MA/MAXMIND/MaxMind-DB-Reader-1.000013.tar.gz;
+      sha256 = "0w7dmfhpibazrh75bdr7vmpji83fzldsy0zjvhg3cwadr4f35kmq";
+    };
+    propagatedBuildInputs = [ DataIEEE754 DataPrinter DataValidateIP MaxMindDBCommon ];
+    buildInputs = [ PathClass TestBits TestFatal TestNumberDelta TestRequires ];
+    meta = {
+      description = "Read MaxMind DB files and look up IP addresses";
+      license = with stdenv.lib.licenses; [ artistic2 ];
+    };
+  };
+
+  MaxMindDBReaderXS = buildPerlModule {
+    name = "MaxMind-DB-Reader-XS-1.000007";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/M/MA/MAXMIND/MaxMind-DB-Reader-XS-1.000007.tar.gz;
+      sha256 = "1wg1x1pqamapfhn6rbffqipncgs15k99q34agdamv76i6782ny8r";
+    };
+    propagatedBuildInputs = [ MathInt128 MaxMindDBReader pkgs.libmaxminddb ];
+    buildInputs = [ NetWorks PathClass TestFatal TestNumberDelta TestRequires ];
+    meta = {
+      description = "Fast XS implementation of MaxMind DB reader";
+      license = with stdenv.lib.licenses; [ artistic2 ];
+    };
+  };
+
+  MaxMindDBWriter = buildPerlModule {
+    name = "MaxMind-DB-Writer-0.300003";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/M/MA/MAXMIND/MaxMind-DB-Writer-0.300003.tar.gz;
+      sha256 = "0gpbrlmxjl45k0wg5v9ghw415hd0fns9fk8ncxzlfyjzjsxgalxs";
+    };
+    propagatedBuildInputs = [ DigestSHA1 MaxMindDBReader MooseXParamsValidate MooseXStrictConstructor NetWorks SerealDecoder SerealEncoder ];
+    buildInputs = [ DevelRefcount JSON TestBits TestDeep TestFatal TestHexDifferences TestRequires TestWarnings ];
+    hardeningDisable = [ "format" ];
+    meta = {
+      description = "Create MaxMind DB database files";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
 
@@ -11236,6 +11465,20 @@ let
     meta = {
       homepage = https://github.com/semifor/Net-Twitter-Lite;
       description = "A perl interface to the Twitter API";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  NetWorks = buildPerlPackage {
+    name = "Net-Works-0.22";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/M/MA/MAXMIND/Net-Works-0.22.tar.gz;
+      sha256 = "1zz91vn1kdxljnlwllf4dzdsm4v6pja5694vf8l4w66azcyv5j8a";
+    };
+    propagatedBuildInputs = [ ListAllUtils MathInt128 Moo namespaceautoclean ];
+    buildInputs = [ TestFatal ];
+    meta = {
+      description = "Sane APIs for IP addresses and networks";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -14567,6 +14810,20 @@ let
     buildInputs = [ AlgorithmDiff TextDiff ];
   };
 
+  TestBits = buildPerlPackage {
+    name = "Test-Bits-0.02";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/D/DR/DROLSKY/Test-Bits-0.02.tar.gz;
+      sha256 = "1hqbvqlkj3k9ys4zq3f1fl1y6crni8r0ynan673f49rs91b6z0m9";
+    };
+    propagatedBuildInputs = [ ListAllUtils ];
+    buildInputs = [ TestFatal ];
+    meta = {
+      description = "Provides a bits_is() subroutine for testing binary data";
+      license = with stdenv.lib.licenses; [ artistic2 ];
+    };
+  };
+
   TestCheckDeps = buildPerlPackage rec {
     name = "Test-CheckDeps-0.010";
     src = fetchurl {
@@ -16435,6 +16692,19 @@ let
     doCheck = false;
     meta = {
       description = "Parse and format time values";
+    };
+  };
+
+  TimePeriod = buildPerlPackage {
+    name = "Time-Period-1.25";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PB/PBOYD/Time-Period-1.25.tar.gz";
+      sha256 = "d07fa580529beac6a9c8274c6bf220b4c3aade685df65c1669d53339bf6ef1e8";
+    };
+    meta = {
+      description = "A Perl module to deal with time periods";
+      license = stdenv.lib.licenses.gpl1;
+      maintainers = [ maintainers.winpat ];
     };
   };
 

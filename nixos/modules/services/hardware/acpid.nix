@@ -21,7 +21,7 @@ let
     };
   };
 
-  acpiConfDir = pkgs.runCommand "acpi-events" {}
+  acpiConfDir = pkgs.runCommand "acpi-events" { preferLocalBuild = true; }
     ''
       mkdir -p $out
       ${

@@ -12,7 +12,7 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  version = "0.28.1";
+  version = "0.28.2";
   name = "notmuch-${version}";
 
   passthru = {
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://notmuchmail.org/releases/${name}.tar.gz";
-    sha256 = "0mcsfkrp6mpy374m5rwwgm9md8qzvwa3s4rbzid4cnkx2cwfj4fi";
+    sha256 = "0cg9ff7h7mklgbqqknxigxxx1j3p3s2a9cxvrs5ih7j56f04k9l5";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -83,7 +83,7 @@ stdenv.mkDerivation rec {
     description = "Mail indexer";
     homepage    = https://notmuchmail.org/;
     license     = licenses.gpl3;
-    maintainers = with maintainers; [ chaoflow flokli garbas the-kenny ];
+    maintainers = with maintainers; [ flokli garbas the-kenny ];
     platforms   = platforms.unix;
   };
 }

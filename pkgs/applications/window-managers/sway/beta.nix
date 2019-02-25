@@ -10,14 +10,18 @@
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "sway";
-  version = "1.0-rc1";
+  version = "1.0-rc3";
 
   src = fetchFromGitHub {
     owner = "swaywm";
     repo = "sway";
     rev = version;
-    sha256 = "1zigx2yz0i91iz2r2l6csq33hscaybmaq1p19jgxrazms7z213mz";
+    sha256 = "1ixwc1bg725x68qr84s8a5i4rlzc4svc52jgdw1yl5bgr6l1k5zc";
   };
+
+  postPatch = ''
+    sed -iE "s/version: '1.0',/version: '${version}',/" meson.build
+  '';
 
   nativeBuildInputs = [
     pkgconfig meson ninja
@@ -32,9 +36,9 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   mesonFlags = [
-    "-Dsway-version=${version}" "-Dxwayland=enabled" "-Dgdk-pixbuf=enabled"
-    "-Dman-pages=enabled" "-Dtray=enabled"
-  ];
+    "-Dxwayland=enabled" "-Dgdk-pixbuf=enabled"
+    "-Dtray=enabled"
+  ] ++ stdenv.lib.optional buildDocs "-Dman-pages=enabled";
 
   meta = with stdenv.lib; {
     description = "i3-compatible window manager for Wayland";

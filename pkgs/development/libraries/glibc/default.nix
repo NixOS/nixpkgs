@@ -1,14 +1,14 @@
 { stdenv, callPackage
 , withLinuxHeaders ? true
-, installLocales ? true
 , profilingLibraries ? false
 , withGd ? false
+, buildPackages
 }:
 
 callPackage ./common.nix { inherit stdenv; } {
     name = "glibc" + stdenv.lib.optionalString withGd "-gd";
 
-    inherit withLinuxHeaders profilingLibraries installLocales withGd;
+    inherit withLinuxHeaders profilingLibraries withGd;
 
     # Note:
     # Things you write here override, and do not add to,
@@ -56,10 +56,29 @@ callPackage ./common.nix { inherit stdenv; } {
       fi
     '';
 
-    postInstall = ''
-      if test -n "$installLocales"; then
-          make -j''${NIX_BUILD_CORES:-1} -l''${NIX_BUILD_CORES:-1} localedata/install-locales
-      fi
+    postInstall = (if stdenv.hostPlatform == stdenv.buildPlatform then ''
+      echo SUPPORTED-LOCALES=C.UTF-8/UTF-8 > ../glibc-2*/localedata/SUPPORTED
+      make -j''${NIX_BUILD_CORES:-1} -l''${NIX_BUILD_CORES:-1} localedata/install-locales
+    '' else ''
+      # This is based on http://www.linuxfromscratch.org/lfs/view/development/chapter06/glibc.html
+      # Instead of using their patch to build a build-native localedef,
+      # we simply use the one from buildPackages
+      pushd ../glibc-2*/localedata
+      export I18NPATH=$PWD GCONV_PATH=$PWD/../iconvdata
+      mkdir -p $NIX_BUILD_TOP/${buildPackages.glibc}/lib/locale
+      ${stdenv.lib.getBin buildPackages.glibc}/bin/localedef \
+        --alias-file=../intl/locale.alias \
+        -i locales/C \
+        -f charmaps/UTF-8 \
+        --prefix $NIX_BUILD_TOP \
+        ${if stdenv.hostPlatform.parsed.cpu.significantByte.name == "littleEndian" then
+            "--little-endian"
+          else
+            "--big-endian"} \
+        C.UTF-8
+      cp -r $NIX_BUILD_TOP/${buildPackages.glibc}/lib/locale $out/lib
+      popd
+    '') + ''
 
       test -f $out/etc/ld.so.cache && rm $out/etc/ld.so.cache
 

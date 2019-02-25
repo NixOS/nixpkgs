@@ -1,4 +1,4 @@
-{stdenv, fetchurl, pkgconfig, libX11, gtk3, intltool, gobject-introspection, gnome3}:
+{ stdenv, fetchurl, pkgconfig, libX11, gtk3, intltool, gobject-introspection, gnome3 }:
 
 let
   pname = "libwnck";
@@ -33,6 +33,6 @@ in stdenv.mkDerivation rec{
     description = "Library to manage X windows and workspaces (via pagers, tasklists, etc.)";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = [];
+    maintainers = [ maintainers.worldofpeace ];
   };
 }

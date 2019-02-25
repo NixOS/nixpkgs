@@ -4,18 +4,18 @@
 , libxml2, polkit, libxslt, libgtop, libsoup, colord, colord-gtk
 , cracklib, libkrb5, networkmanagerapplet, networkmanager, glibc
 , libwacom, samba, shared-mime-info, tzdata, libtool, libgnomekbd
-, docbook_xsl, modemmanager, clutter, clutter-gtk, cheese
+, docbook_xsl, modemmanager, clutter, clutter-gtk, cheese, gnome-session
 , fontconfig, sound-theme-freedesktop, grilo, python3 }:
 
 let
   pname = "gnome-control-center";
-  version = "3.30.2";
+  version = "3.30.3";
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "0rn4r0ng4pd9smpay4rf4dkcl09b2ipr9srryybhd1srmd02ps51";
+    sha256 = "0gih1cmqbv803kp30704sllghb0impa0mmv3j8pndfg4zr2mnq9r";
   };
 
   nativeBuildInputs = [
@@ -45,6 +45,10 @@ in stdenv.mkDerivation rec {
     chmod +x build-aux/meson/meson_post_install.py # patchShebangs requires executable file
     patchShebangs build-aux/meson/meson_post_install.py
   '';
+
+  mesonFlags = [
+    "-Dgnome_session_libexecdir=${gnome-session}/libexec"
+  ];
 
   preFixup = ''
     gappsWrapperArgs+=(

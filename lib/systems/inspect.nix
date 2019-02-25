@@ -9,7 +9,8 @@ let abis = lib.mapAttrs (_: abi: builtins.removeAttrs abi [ "assertions" ]) abis
 rec {
   patterns = rec {
     isi686         = { cpu = cpuTypes.i686; };
-    isx86_64       = { cpu = cpuTypes.x86_64; };
+    isx86_32       = { cpu = { family = "x86"; bits = 32; }; };
+    isx86_64       = { cpu = { family = "x86"; bits = 64; }; };
     isPowerPC      = { cpu = cpuTypes.powerpc; };
     isPower = { cpu = { family = "power"; }; };
     isx86          = { cpu = { family = "x86"; }; };
@@ -20,6 +21,7 @@ rec {
     isSparc        = { cpu = { family = "sparc"; }; };
     isWasm         = { cpu = { family = "wasm"; }; };
     isAvr          = { cpu = { family = "avr"; }; };
+    isAlpha        = { cpu = { family = "alpha"; }; };
 
     is32bit        = { cpu = { bits = 32; }; };
     is64bit        = { cpu = { bits = 64; }; };

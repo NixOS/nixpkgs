@@ -362,7 +362,7 @@ rec {
   vimWithRC = {vimExecutable, name ? null, vimrcFile ? null, gvimrcFile ? null}:
     let rcOption = o: file: stdenv.lib.optionalString (file != null) "-${o} ${file}";
     in writeScriptBin (if name == null then "vim" else name) ''
-      #!/bin/sh
+      #!${stdenv.shell}
       exec ${vimExecutable} ${rcOption "u" vimrcFile} ${rcOption "U" gvimrcFile} "$@"
       '';
 

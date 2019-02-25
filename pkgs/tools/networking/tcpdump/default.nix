@@ -33,6 +33,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.tcpdump.org/;
     license = "BSD-style";
     maintainers = with stdenv.lib.maintainers; [ jgeerds ];
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

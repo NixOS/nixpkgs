@@ -2,7 +2,7 @@
 import ./make-test.nix ({ pkgs, ... } : {
   name = "avahi";
   meta = with pkgs.stdenv.lib.maintainers; {
-    maintainers = [ eelco chaoflow ];
+    maintainers = [ eelco ];
   };
 
   nodes = let

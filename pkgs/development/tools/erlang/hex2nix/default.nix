@@ -1,14 +1,16 @@
-{ fetchFromGitHub, buildRebar3,
+{ fetchFromGitHub, fetchRebar3Deps, rebar3Relx }:
 
-  # Erlang dependencies:
-  ibrowse_4_2_2,
-  getopt_0_8_2,
-  erlware_commons_1_0_0,
-  jsx_2_8_0 }:
-
-buildRebar3 rec {
+rebar3Relx rec {
     name = "hex2nix";
     version = "0.0.6-a31eadd7";
+
+    releaseType = "escript";
+
+    checkouts = fetchRebar3Deps {
+      inherit name version;
+      src = "${src}/rebar.config";
+      sha256 = "1b59vk6ynakdiwqd1s6axaj9bvkaaq7ll28b48nv613z892h7nm5";
+    };
 
     src = fetchFromGitHub {
       owner  = "erlang-nix";
@@ -16,14 +18,4 @@ buildRebar3 rec {
       rev    = "a31eadd7af2cbdac1b87991b378e98ea4fb40ae0";
       sha256 = "1hnkrksyrbpq2gq25rfsrnm86n0g3biab88gswm3zj88ddrz6dyk";
     };
-
-    beamDeps = [ ibrowse_4_2_2 jsx_2_8_0 erlware_commons_1_0_0 getopt_0_8_2 ];
-
-    enableDebugInfo = true;
-
-    installPhase = ''
-      runHook preInstall
-      make PREFIX=$out install
-      runHook postInstall
-    '';
- }
+}

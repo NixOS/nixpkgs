@@ -6,7 +6,7 @@ let
   cfg = config.services.codimd;
 
   prettyJSON = conf:
-    pkgs.runCommand "codimd-config.json" { } ''
+    pkgs.runCommand "codimd-config.json" { preferLocalBuild = true; } ''
       echo '${builtins.toJSON conf}' | ${pkgs.jq}/bin/jq \
         '{production:del(.[]|nulls)|del(.[][]?|nulls)}' > $out
     '';

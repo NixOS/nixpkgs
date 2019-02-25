@@ -41,9 +41,6 @@ in stdenv.mkDerivation {
 
   runtimeDependencies = optional pulseaudioSupport libpulseaudio;
 
-  # Don't remove runtimeDependencies from RPATH via patchelf --shrink-rpath
-  dontPatchELF = true;
-
   installPhase =
     let
       files = concatStringsSep " " [

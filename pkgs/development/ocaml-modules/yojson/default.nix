@@ -2,15 +2,16 @@
 let
   pname = "yojson";
   param =
-  if stdenv.lib.versionAtLeast ocaml.version "4.02" then {
-    version = "1.4.1";
-    sha256 = "0nwsfkmqpyfab4rxq76q8ff7giyanghw08094jyrp275v99zdjr9";
+  if stdenv.lib.versionAtLeast ocaml.version "4.02" then rec {
+    version = "1.6.0";
+    url = "https://github.com/ocaml-community/yojson/releases/download/${version}/yojson-${version}.tbz";
+    sha256 = "1h73zkgqs6cl9y7p2l0cgjwyqa1fzcrnzv3k6w7wyq2p1q5m84xh";
     buildInputs = [ dune ];
     extra = { inherit (dune) installPhase; };
-  } else {
+  } else rec {
     version = "1.2.3";
+    url = "https://github.com/ocaml-community/yojson/archive/v${version}.tar.gz";
     sha256 = "10dvkndgwanvw4agbjln7kgb1n9s6lii7jw82kwxczl5rd1sgmvl";
-    buildInputs = [];
     extra = {
       createFindlibDestdir = true;
 
@@ -25,11 +26,10 @@ stdenv.mkDerivation ({
   name = "ocaml${ocaml.version}-${pname}-${param.version}";
 
   src = fetchzip {
-    url = "https://github.com/mjambon/${pname}/archive/v${param.version}.tar.gz";
-    inherit (param) sha256;
+    inherit (param) url sha256;
   };
 
-  buildInputs = [ ocaml findlib ] ++ param.buildInputs;
+  buildInputs = [ ocaml findlib ] ++ (param.buildInputs or []);
 
   propagatedBuildInputs = [ cppo easy-format biniou ];
 

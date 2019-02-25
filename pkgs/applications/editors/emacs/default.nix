@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, ncurses, xlibsWrapper, libXaw, libXpm, Xaw3d
+{ stdenv, lib, fetchurl, ncurses, xlibsWrapper, libXaw, libXpm, Xaw3d, libXcursor
 , pkgconfig, gettext, libXft, dbus, libpng, libjpeg, libungif
 , libtiff, librsvg, gconf, libxml2, imagemagick, gnutls, libselinux
 , alsaLib, cairo, acl, gpm, cf-private, AppKit, GSS, ImageIO, m17n_lib, libotf
@@ -42,6 +42,7 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./clean-env.patch
+    ./tramp-detect-wrapped-gvfsd.patch
   ];
 
   postPatch = lib.optionalString srcRepo ''
@@ -117,11 +118,22 @@ stdenv.mkDerivation rec {
     mv nextstep/Emacs.app $out/Applications
   '';
 
+  postFixup =
+    let libPath = lib.makeLibraryPath [
+      libXcursor
+    ];
+    in lib.optionalString (withX && toolkit == "lucid") ''
+      patchelf --set-rpath \
+        "$(patchelf --print-rpath "$out/bin/emacs"):${libPath}" \
+        "$out/bin/emacs"
+      patchelf --add-needed "libXcursor.so.1" "$out/bin/emacs"
+    '';
+
   meta = with stdenv.lib; {
     description = "The extensible, customizable GNU text editor";
     homepage    = https://www.gnu.org/software/emacs/;
     license     = licenses.gpl3Plus;
-    maintainers = with maintainers; [ chaoflow lovek323 peti the-kenny jwiegley ];
+    maintainers = with maintainers; [ lovek323 peti the-kenny jwiegley ];
     platforms   = platforms.all;
 
     longDescription = ''

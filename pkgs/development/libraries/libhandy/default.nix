@@ -7,7 +7,7 @@
 
 let
   pname = "libhandy";
-  version = "0.0.7";
+  version = "0.0.8";
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
@@ -19,7 +19,7 @@ in stdenv.mkDerivation rec {
     owner = "Librem5";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1k9v6q2dz9x8lfcyzmsksrkq6md7m9jdkjlfan7nqlcj3mqhd7m9";
+    sha256 = "04jyllwdrapw24f34pjc2gbmfapjfin8iw0g3qfply7ciy08k1wj";
   };
 
   nativeBuildInputs = [
@@ -41,7 +41,8 @@ in stdenv.mkDerivation rec {
   doCheck = true;
 
   checkPhase = ''
-    export NO_AT_BRIDGE=1
+    NO_AT_BRIDGE=1 \
+    XDG_DATA_DIRS="$XDG_DATA_DIRS:${hicolor-icon-theme}/share" \
     xvfb-run -s '-screen 0 800x600x24' dbus-run-session \
       --config-file=${dbus.daemon}/share/dbus-1/session.conf \
       meson test --print-errorlogs

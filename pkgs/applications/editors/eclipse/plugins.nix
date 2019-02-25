@@ -254,12 +254,12 @@ rec {
 
   cdt = buildEclipseUpdateSite rec {
     name = "cdt-${version}";
-    version = "9.0.1";
+    version = "9.6.0";
 
     src = fetchzip {
       stripRoot = false;
-      url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/tools/cdt/releases/9.0/${name}.zip";
-      sha256 = "0vdx0j9ci533wnk7y17qjvjyqx38hlrdw67z6pi05vfv3r6ys39x";
+      url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/tools/cdt/releases/9.6/${name}/${name}.zip";
+      sha256 = "08rk3b1va57jcy4s161fx0xmb8dn47akhhxd2f28hspq6i2jqicm";
     };
 
     meta = with stdenv.lib; {
@@ -343,6 +343,33 @@ rec {
       description = "IDE for developing CUP based parsers";
       platforms = platforms.all;
       maintainers = [ maintainers.romildo ];
+    };
+  };
+
+  drools = buildEclipseUpdateSite rec {
+    name = "drools-${version}";
+    version = "7.17.0.Final";
+
+    src = fetchzip {
+      url = "https://download.jboss.org/drools/release/${version}/droolsjbpm-tools-distribution-${version}.zip";
+      sha512 = "2qzc1iszqfrfnw8xip78n3kp6hlwrvrr708vlmdk7nv525xhs0ssjaxriqdhcr0s6jripmmazxivv3763rnk2bfkh31hmbnckpx4r3m";
+      extraPostFetch = ''
+        # work around https://github.com/NixOS/nixpkgs/issues/38649
+        chmod go-w $out;
+
+        # update site is a couple levels deep, alongside some other irrelevant stuff
+        cd $out;
+        find . -type f -not -path ./binaries/org.drools.updatesite/\* -exec rm {} \;
+        rmdir sources;
+        mv binaries/org.drools.updatesite/* .;
+        rmdir binaries/org.drools.updatesite binaries;
+      '';
+    };
+
+    meta = with stdenv.lib; {
+      homepage = https://www.drools.org/;
+      description = "Drools is a Business Rules Management System (BRMS) solution";
+      license = licenses.asl20;
     };
   };
 
@@ -470,12 +497,12 @@ rec {
 
   jdt = buildEclipseUpdateSite rec {
     name = "jdt-${version}";
-    version = "4.9";
+    version = "4.10";
 
     src = fetchzip {
       stripRoot = false;
-      url = https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops4/R-4.9-201809060745/org.eclipse.jdt-4.9.zip;
-      sha256 = "144rqrw0crxd2v862dqxm2p5y60n4pbzdryv709xnhcw54rycm7n";
+      url = https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops4/R-4.10-201812060815/org.eclipse.jdt-4.10.zip;
+      sha256 = "1h11w3zd6xy5w4sk6xnyb2a27wxwhp83qfx67ji7bzdrwbvljqkz";
     };
 
     meta = with stdenv.lib; {

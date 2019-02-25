@@ -43,6 +43,9 @@ let
       sed -i '1s,^,find_package(Sphinx REQUIRED)\n,' docs/CMakeLists.txt
     '' + stdenv.lib.optionalString stdenv.hostPlatform.isMusl ''
       sed -i -e 's/lgcc_s/lgcc_eh/' lib/Driver/ToolChains/*.cpp
+    '' + stdenv.lib.optionalString stdenv.hostPlatform.isDarwin ''
+      substituteInPlace tools/extra/clangd/CMakeLists.txt \
+        --replace "NOT HAVE_CXX_ATOMICS64_WITHOUT_LIB" FALSE
     '';
 
     outputs = [ "out" "lib" "python" ];

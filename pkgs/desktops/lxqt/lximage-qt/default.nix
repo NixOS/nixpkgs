@@ -1,15 +1,15 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, qt5, xorg, lxqt-build-tools, libfm-qt, libexif }:
+{ stdenv, fetchFromGitHub, cmake, pkgconfig, qtbase, qttools,
+  qtx11extras, qtsvg, xorg, lxqt-build-tools, libfm-qt, libexif }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "lximage-qt";
-  version = "0.7.0";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "1slmaic9cmj5lqa5kwc1qfbbycwh8840wnkg0nxc99ls0aazlpzi";
+    sha256 = "0zx9903ym5a9zk4m9khr22fj5sy57mg2v8wnk177wjm11lhic5v8";
   };
 
   nativeBuildInputs = [
@@ -19,17 +19,15 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    qt5.qtbase
-    qt5.qttools
-    qt5.qtx11extras
-    qt5.qtsvg
+    qtbase
+    qttools
+    qtx11extras
+    qtsvg
     libfm-qt
     xorg.libpthreadstubs
     xorg.libXdmcp
     libexif
   ];
-
-  cmakeFlags = [ "-DPULL_TRANSLATIONS=NO" ];
 
   meta = with stdenv.lib; {
     description = "The image viewer and screenshot tool for lxqt";

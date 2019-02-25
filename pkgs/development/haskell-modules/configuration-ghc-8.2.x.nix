@@ -92,10 +92,8 @@ self: super: {
   hackage-db_2_0_1 = super.hackage-db_2_0_1.overrideScope (self: super: { Cabal = self.Cabal_2_2_0_1; });
   stack = super.stack.overrideScope (self: super: { Cabal = self.Cabal_2_2_0_1; });
 
-  # GHC 8.2 doesn't have semigroups included by default
+  # Older GHC versions need these additional dependencies.
   ListLike = addBuildDepend super.ListLike self.semigroups;
-
-  # https://github.com/pikajude/stylish-cabal/issues/11
-  stylish-cabal = markBrokenVersion "0.4.1.0" super.stylish-cabal;
+  base-compat-batteries = addBuildDepend super.base-compat-batteries self.contravariant;
 
 }

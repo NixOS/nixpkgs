@@ -2,14 +2,14 @@
 
 buildGoPackage rec {
   name = "lego-${version}";
-  version = "2.0.1";
+  version = "2.2.0";
   rev = "v${version}";
 
   src = fetchFromGitHub {
     inherit rev;
     owner = "xenolf";
     repo = "lego";
-    sha256 = "17q5j2zxc2c0xw8pfhnls67dmwrkicjmd2jdyim3fhi5cgxl9h93";
+    sha256 = "1bb4kjkbphay63z83a4z2859qrlrx2h7n3rgia17fhy38xp5zzqp";
   };
 
   goPackagePath = "github.com/xenolf/lego";

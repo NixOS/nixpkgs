@@ -123,14 +123,14 @@ rec {
           (map (drv: drv.__spliced.buildBuild or drv) depsBuildBuild)
           (map (drv: drv.nativeDrv or drv) nativeBuildInputs
              ++ lib.optional separateDebugInfo' ../../build-support/setup-hooks/separate-debug-info.sh
-             ++ lib.optional stdenv.hostPlatform.isWindows ../../build-support/setup-hooks/win-dll-link.sh)
+             ++ lib.optional stdenv.hostPlatform.isWindows ../../build-support/setup-hooks/win-dll-link.sh
+             ++ lib.optionals doCheck checkInputs
+             ++ lib.optionals doInstallCheck' installCheckInputs)
           (map (drv: drv.__spliced.buildTarget or drv) depsBuildTarget)
         ]
         [
           (map (drv: drv.__spliced.hostHost or drv) depsHostHost)
-          (map (drv: drv.crossDrv or drv) (buildInputs
-             ++ lib.optionals doCheck checkInputs
-             ++ lib.optionals doInstallCheck' installCheckInputs))
+          (map (drv: drv.crossDrv or drv) buildInputs)
         ]
         [
           (map (drv: drv.__spliced.targetTarget or drv) depsTargetTarget)

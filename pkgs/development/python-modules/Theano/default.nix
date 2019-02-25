@@ -45,13 +45,13 @@ let
 
 in buildPythonPackage rec {
   pname = "Theano";
-  version = "1.0.3";
+  version = "1.0.4";
 
   disabled = isPyPy || pythonOlder "2.6" || (isPy3k && pythonOlder "3.3");
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "637f3b34d40ef5e0d54dd4c40618475aaa085c26d2491e925c98e2ad4bc2115a";
+    sha256 = "35c9bbef56b61ffa299265a42a4e8f8cb5a07b2997dabaef0f8830b397086913";
   };
 
   postPatch = ''

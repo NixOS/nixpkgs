@@ -19,7 +19,7 @@ let
     ${pkgs.remarshal}/bin/json2yaml -i ${lovelaceConfigJSON} -o $out
   '';
 
-  availableComponents = pkgs.home-assistant.availableComponents;
+  availableComponents = cfg.package.availableComponents;
 
   # Given component "parentConfig.platform", returns whether config.parentConfig
   # is a list containing a set with set.platform == "platform".
@@ -53,7 +53,7 @@ let
   # If you are changing this, please update the description in applyDefaultConfig
   defaultConfig = {
     homeassistant.time_zone = config.time.timeZone;
-    http.server_port = (toString cfg.port);
+    http.server_port = cfg.port;
   } // optionalAttrs (cfg.lovelaceConfig != null) {
     lovelace.mode = "yaml";
   };
