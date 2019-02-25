@@ -40,9 +40,14 @@ stdenv.mkDerivation rec {
     ++ optional withRuby ruby
     ++ optional withSSL openssl;
 
+  # Used patch to enable work with unprivileged user - https://github.com/nginx/unit/issues/228
+  patches = [ ./unit-rootless.patch ];
+
   configureFlags = [
-    "--control=unix:/run/control.unit.sock"
-    "--pid=/run/unit.pid"
+    "--control=unix:/run/unit/control.unit.sock"
+    "--pid=/run/unit/unit.pid"
+    "--user=unit"
+    "--group=unit"
   ] ++ optional withSSL     [ "--openssl" ]
     ++ optional (!withIPv6) [ "--no-ipv6" ]
     ++ optional withDebug   [ "--debug" ];
