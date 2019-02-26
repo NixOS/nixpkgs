@@ -67,6 +67,7 @@ let
       ++ optionals stdenv.isDarwin [
         ./qtwebengine-darwin-no-platform-check.patch
         ./qtwebengine-darwin-sdk-10.10.patch
+        ./qtwebengine-darwin-old-sdk.patch
       ];
     qtwebkit = [ ./qtwebkit.patch ]
       ++ optionals stdenv.isDarwin [

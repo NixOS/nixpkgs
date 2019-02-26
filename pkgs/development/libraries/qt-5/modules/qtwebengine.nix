@@ -70,20 +70,6 @@ qtModule {
       substituteInPlace src/core/config/mac_osx.pri \
         --replace /usr ${stdenv.cc}
     ''
-    # TODO remove when new Apple SDK is in
-    + (if lib.versionOlder qtCompatVersion "5.11" then ''
-    substituteInPlace src/3rdparty/chromium/base/mac/foundation_util.mm \
-      --replace "NSArray<NSString*>*" "NSArray*"
-    substituteInPlace src/3rdparty/chromium/base/mac/sdk_forward_declarations.h \
-      --replace "NSDictionary<VNImageOption, id>*" "NSDictionary*" \
-      --replace "NSArray<VNRequest*>*" "NSArray*" \
-      --replace "typedef NSString* VNImageOption NS_STRING_ENUM" "typedef NSString* VNImageOption"
-    '' else ''
-    substituteInPlace src/3rdparty/chromium/third_party/webrtc/sdk/objc/Framework/Classes/Common/RTCFieldTrials.mm \
-      --replace "NSDictionary<NSString *, NSString *> *" "NSDictionary*"
-    substituteInPlace src/3rdparty/chromium/third_party/webrtc/sdk/objc/Framework/Headers/WebRTC/RTCFieldTrials.h \
-      --replace "NSDictionary<NSString *, NSString *> *" "NSDictionary*"
-    '')
     + ''
 
     cat <<EOF > src/3rdparty/chromium/build/mac/find_sdk.py
