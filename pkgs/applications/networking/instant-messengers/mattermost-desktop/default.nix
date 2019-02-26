@@ -1,9 +1,9 @@
-{ stdenv, lib, fetchurl, gnome2, gtk2, pango, atk, cairo, gdk_pixbuf, glib,
+{ stdenv, fetchurl, gnome2, gtk3, pango, atk, cairo, gdk_pixbuf, glib,
 freetype, fontconfig, dbus, libX11, xorg, libXi, libXcursor, libXdamage,
 libXrandr, libXcomposite, libXext, libXfixes, libXrender, libXtst,
 libXScrnSaver, nss, nspr, alsaLib, cups, expat, udev }:
 let
-  rpath = lib.makeLibraryPath [
+  rpath = stdenv.lib.makeLibraryPath [
     alsaLib
     atk
     cairo
@@ -15,7 +15,7 @@ let
     gdk_pixbuf
     glib
     gnome2.GConf
-    gtk2
+    gtk3
     pango
     libX11
     libXScrnSaver
@@ -38,44 +38,51 @@ let
 in
   stdenv.mkDerivation rec {
     name = "mattermost-desktop-${version}";
-    version = "4.1.2";
+    version = "4.2.0";
 
     src =
       if stdenv.hostPlatform.system == "x86_64-linux" then
         fetchurl {
           url = "https://releases.mattermost.com/desktop/${version}/${name}-linux-x64.tar.gz";
-          sha256 = "16dn6870bs1nfl2082ym9gwvmqb3i5sli48qprap80p7riph6k9s";
+          sha256 = "0hka94gwpscjn61032c0grpjv5gjb0j8rkx6pgwci617n29xkyf6";
         }
       else if stdenv.hostPlatform.system == "i686-linux" then
         fetchurl {
           url = "https://releases.mattermost.com/desktop/${version}/${name}-linux-ia32.tar.gz";
-          sha256 = "145zb1l37fa2slfrrlprlwzcc5km3plxs374yhgix25mlg2afkqr";
+          sha256 = "1nx2sgbnr60h6kn56wv54m7cvyx27d64bfprpb94hqd5c2z21x80";
         }
       else
         throw "Mattermost-Desktop is not currently supported on ${stdenv.hostPlatform.system}";
 
-    phases = [ "unpackPhase" "installPhase" ];
+    dontBuild = true;
+    dontConfigure = true;
+    dontPatchELF = true;
+
     installPhase = ''
-      mkdir -p $out
-      cp -R . $out
+      mkdir -p $out/share/mattermost-desktop
+      cp -R . $out/share/mattermost-desktop
 
-      patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-               --set-rpath ${rpath}:$out $out/mattermost-desktop
+      mkdir -p "$out/bin"
+      ln -s $out/share/mattermost-desktop/mattermost-desktop \
+        $out/bin/mattermost-desktop
 
-      patchShebangs $out/create_desktop_file.sh
-      $out/create_desktop_file.sh
+      patchShebangs $out/share/mattermost-desktop/create_desktop_file.sh
+      $out/share/mattermost-desktop/create_desktop_file.sh
+      rm $out/share/mattermost-desktop/create_desktop_file.sh
+      mkdir -p $out/share/applications
+      mv Mattermost.desktop $out/share/applications/Mattermost.desktop
 
-      mkdir -p $out/{bin,share/applications}
-      cp Mattermost.desktop $out/share/applications/Mattermost.desktop
-      ln -s $out/mattermost-desktop $out/bin/mattermost-desktop
+      patchelf \
+        --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
+        --set-rpath "${rpath}:$out/share/mattermost-desktop" \
+        $out/share/mattermost-desktop/mattermost-desktop
     '';
 
-    meta = {
+    meta = with stdenv.lib; {
       description = "Mattermost Desktop client";
       homepage    = https://about.mattermost.com/;
-      license     = lib.licenses.asl20;
-      platforms   = [
-        "x86_64-linux" "i686-linux"
-      ];
+      license     = licenses.asl20;
+      platforms   = [ "x86_64-linux" "i686-linux" ];
+      maintainers = [ maintainers.joko ];
     };
   }
