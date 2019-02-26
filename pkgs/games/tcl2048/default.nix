@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, tcl, tcllib }:
+{ stdenv, fetchurl, tcl, tcllib, runtimeShell }:
 
 stdenv.mkDerivation {
   name = "tcl2048-0.4.0";
@@ -14,7 +14,7 @@ stdenv.mkDerivation {
     mkdir -pv $out/bin
     cp $src $out/2048.tcl
     cat > $out/bin/2048 << EOF
-    #!${stdenv.shell}
+    #!${runtimeShell}
 
     # wrapper for tcl2048
     export TCLLIBPATH="${tcllib}/lib/tcllib${tcllib.version}"

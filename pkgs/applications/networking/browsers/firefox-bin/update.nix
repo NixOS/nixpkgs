@@ -8,6 +8,7 @@
 , gnugrep
 , curl
 , gnupg
+, runtimeShell
 , baseName ? "firefox"
 , basePath ? "pkgs/applications/networking/browsers/firefox-bin"
 , baseUrl
@@ -18,7 +19,7 @@ let
     channel != "release";
 
 in writeScript "update-${name}" ''
-  #!${stdenv.shell}
+  #!${runtimeShell}
   PATH=${coreutils}/bin:${gnused}/bin:${gnugrep}/bin:${xidel}/bin:${curl}/bin:${gnupg}/bin
   set -eux
   pushd ${basePath}

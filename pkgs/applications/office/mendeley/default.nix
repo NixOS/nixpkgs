@@ -32,6 +32,7 @@
 , autorunLinkHandler ? true
 # Update script
 , writeScript
+, runtimeShell
 }:
 
 let
@@ -130,7 +131,7 @@ stdenv.mkDerivation {
   dontStrip = true;
   dontPatchElf = true;
 
-  updateScript = import ./update.nix { inherit stdenv writeScript; };
+  updateScript = import ./update.nix { inherit stdenv writeScript runtimeShell; };
 
   meta = with stdenv.lib; {
     homepage = http://www.mendeley.com;

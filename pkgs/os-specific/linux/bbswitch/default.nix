@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, kernel }:
+{ stdenv, fetchurl, fetchpatch, kernel, runtimeShell }:
 
 let
   baseName = "bbswitch";
@@ -36,12 +36,12 @@ stdenv.mkDerivation {
 
     mkdir -p $out/bin
     tee $out/bin/discrete_vga_poweroff << EOF
-    #!${stdenv.shell}
+    #!${runtimeShell}
 
     echo -n OFF > /proc/acpi/bbswitch
     EOF
     tee $out/bin/discrete_vga_poweron << EOF
-    #!${stdenv.shell}
+    #!${runtimeShell}
 
     echo -n ON > /proc/acpi/bbswitch
     EOF
