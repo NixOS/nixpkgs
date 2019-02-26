@@ -13524,6 +13524,7 @@ in
   };
 
   dgraph = callPackage ../servers/dgraph { };
+  dgraph-ratel = callPackage ../servers/dgraph/ratel { };
 
   dico = callPackage ../servers/dico { };
 
