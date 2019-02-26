@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, vscode-utils, jq, mono, clang-tools, writeScript
+{ stdenv, fetchzip, vscode-utils, jq, mono, clang-tools, writeScript, runtimeShell
 , gdbUseFixed ? true, gdb # The gdb default setting will be fixed to specified. Use version from `PATH` otherwise.
 }:
 
@@ -53,7 +53,7 @@ let
   };
 
   openDebugAD7Script = writeScript "OpenDebugAD7" ''
-    #!${stdenv.shell}
+    #!${runtimeShell}
     BIN_DIR="$(cd "$(dirname "$0")" && pwd -P)"
     ${if gdbUseFixed
         then ''

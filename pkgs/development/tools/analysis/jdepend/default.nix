@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, ant, jdk }:
+{ stdenv, fetchFromGitHub, ant, jdk, runtimeShell }:
 
 stdenv.mkDerivation rec {
   name = "jdepend-${version}";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     install dist/${name}.jar $out/share
 
     cat > "$out/bin/jdepend" <<EOF
-    #!${stdenv.shell}
+    #!${runtimeShell}
     exec ${jdk.jre}/bin/java -classpath "$out/share/*" "\$@"
     EOF
     chmod a+x $out/bin/jdepend

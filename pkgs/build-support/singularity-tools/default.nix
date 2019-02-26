@@ -8,12 +8,13 @@
 , vmTools
 , gawk
 , utillinux
+, runtimeShell
 , e2fsprogs }:
 
 rec {
   shellScript = name: text:
     writeScript name ''
-      #!${stdenv.shell}
+      #!${runtimeShell}
       set -e
       ${text}
     '';
