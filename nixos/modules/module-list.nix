@@ -293,6 +293,7 @@
   ./services/desktops/tumbler.nix
   ./services/desktops/zeitgeist.nix
   ./services/development/bloop.nix
+  ./services/development/guix.nix
   ./services/development/hoogle.nix
   ./services/development/jupyter/default.nix
   ./services/editors/emacs.nix
