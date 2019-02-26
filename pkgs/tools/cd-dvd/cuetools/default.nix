@@ -15,6 +15,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ bison flac flex id3v2 vorbis-tools ];
 
+  postInstall = ''
+    # add link for compatibility with Debian-based distros, which package `cuetag.sh` as `cuetag`
+    ln -s $out/bin/cuetag.sh $out/bin/cuetag
+  '';
+
   meta = with stdenv.lib; {
     description = "A set of utilities for working with cue files and toc files";
     homepage = https://github.com/svend/cuetools;
