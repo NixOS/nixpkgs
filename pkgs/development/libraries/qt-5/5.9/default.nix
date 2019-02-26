@@ -42,7 +42,9 @@ let
     qtscript = [ ./qtscript.patch ];
     qtserialport = [ ./qtserialport.patch ];
     qttools = [ ./qttools.patch ];
-    qtwebengine = optional stdenv.needsPax ./qtwebengine-paxmark-mksnapshot.patch;
+    qtwebengine = [ ./qtwebengine-no-build-skip.patch ]
+      ++ optional stdenv.needsPax ./qtwebengine-paxmark-mksnapshot.patch
+      ++ optional stdenv.isDarwin ./qtwebengine-darwin-no-platform-check.patch;
     qtwebkit = [ ./qtwebkit.patch ];
     qtvirtualkeyboard = [
       (fetchpatch {
