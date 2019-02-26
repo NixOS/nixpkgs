@@ -22,5 +22,6 @@ stdenv.mkDerivation rec {
     homepage = http://cgi.csc.liv.ac.uk/~ullrich/CLProver++/;
     license = licenses.gpl3; # Note that while the website states that it is GPLv2 but the file in the zip as well as the comments in the source state it is GPLv3
     maintainers = with maintainers; [ mgttlinger ];
+    platforms = [ "x86_64-linux" ];
   };
 }
