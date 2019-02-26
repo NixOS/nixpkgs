@@ -1,0 +1,21 @@
+diff --git a/mkspecs/features/platform.prf b/mkspecs/features/platform.prf
+--- a/mkspecs/features/platform.prf
++++ b/mkspecs/features/platform.prf
+@@ -40,8 +40,6 @@ defineTest(isPlatformSupported) {
+   } else:osx {
+     # FIXME: Try to get it back down to 8.2 for building on OS X 10.11
+     !isMinXcodeVersion(8, 3, 3) {
+-      skipBuild("Using Xcode version $$QMAKE_XCODE_VERSION, but at least version 8.3.3 is required to build Qt WebEngine.")
+-      return(false)
+     }
+     !clang|intel_icc {
+         skipBuild("Qt WebEngine on macOS requires Clang.")
+@@ -54,8 +52,6 @@ defineTest(isPlatformSupported) {
+       return(false)
+     }
+     !isMinOSXSDKVersion(10, 12): {
+-      skipBuild("Building Qt WebEngine requires a macOS SDK version of 10.12 or newer. Current version is $${WEBENGINE_OSX_SDK_PRODUCT_VERSION}.")
+-      return(false)
+     }
+   } else {
+     skipBuild("Unknown platform. Qt WebEngine only supports Linux, Windows, and macOS.")

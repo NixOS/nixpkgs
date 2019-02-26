@@ -67,18 +67,8 @@ qtModule {
         src/3rdparty/chromium/gpu/config/gpu_info_collector_linux.cc
     ''
     + optionalString stdenv.isDarwin (''
-      # Remove annoying xcode check
-      substituteInPlace mkspecs/features/platform.prf \
-        --replace "lessThan(QMAKE_XCODE_VERSION, 7.3)" false \
-        --replace "/usr/bin/xcodebuild" "xcodebuild"
-
-      substituteInPlace src/3rdparty/chromium/build/mac_toolchain.py \
-        --replace "/usr/bin/xcode-select" "xcode-select"
-
       substituteInPlace src/core/config/mac_osx.pri \
-        --replace /usr ${stdenv.cc} \
-        --replace "isEmpty(QMAKE_MAC_SDK_VERSION)" false
-
+        --replace /usr ${stdenv.cc}
     ''
     # TODO remove when new Apple SDK is in
     + (if lib.versionOlder qtCompatVersion "5.11" then ''
