@@ -106,7 +106,8 @@ in {
         type = types.str;
         default = "";
         description = ''
-          Address to listen on for the web interface and API.
+          Address to listen on for the web interface and API. Empty string will listen on all interfaces.
+          "localhost" will listen on 127.0.0.1 (but not ::1).
         '';
       };
 
