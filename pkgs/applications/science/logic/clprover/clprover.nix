@@ -18,9 +18,9 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "Resolution-based theorem prover for Coalition Logic implemented in C++.";
+    description = "Resolution-based theorem prover for Coalition Logic implemented in C++";
     homepage = http://cgi.csc.liv.ac.uk/~ullrich/CLProver++/;
-    license = licenses.gpl3;
+    license = licenses.gpl3; # Note that while the website states that it is GPLv2 but the file in the zip as well as the comments in the source state it is GPLv3
     maintainers = with maintainers; [ mgttlinger ];
   };
 }
