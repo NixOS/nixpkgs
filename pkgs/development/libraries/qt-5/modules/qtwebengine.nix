@@ -70,6 +70,10 @@ qtModule {
       substituteInPlace src/core/config/mac_osx.pri \
         --replace /usr ${stdenv.cc}
     ''
+    + (optionalString (lib.versionAtLeast qtCompatVersion "5.11") ''
+      substituteInPlace src/3rdparty/chromium/third_party/crashpad/crashpad/util/BUILD.gn \
+        --replace '$sysroot/usr' "${darwin.xnu}"
+    '')
     + ''
 
     cat <<EOF > src/3rdparty/chromium/build/mac/find_sdk.py
@@ -89,9 +93,6 @@ print('sdk_version="10.10"')
 print('sdk_platform_path=""')
 print('sdk_build="17B41"')
 EOF
-
-    substituteInPlace src/3rdparty/chromium/third_party/crashpad/crashpad/util/BUILD.gn \
-      --replace '$sysroot/usr' "${darwin.xnu}"
 
     # Apple has some secret stuff they don't share with OpenBSM
     substituteInPlace src/3rdparty/chromium/base/mac/mach_port_broker.mm \
