@@ -3,13 +3,13 @@ menu-cache, muparser, pcre }:
 
 stdenv.mkDerivation rec {
   pname = "lxqt-runner";
-  version = "0.14.0";
+  version = "0.14.1";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "1qyacig9ksnjrhws8cpk6arlaxn7kl0z39l3c62ql3m89mibsm88";
+    sha256 = "01a8ycpkzcbh85y4025pd3nbpnzxh98ll1xwz4ykz13yvm0l2n1w";
   };
 
   nativeBuildInputs = [
