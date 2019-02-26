@@ -41,7 +41,7 @@ let
 
 in buildPythonPackage rec {
   pname = "tensorflow";
-  version = "1.11.0";
+  version = "1.13.1";
   format = "wheel";
 
   src = let
@@ -50,7 +50,7 @@ in buildPythonPackage rec {
     platform = if stdenv.isDarwin then "mac" else "linux";
     unit = if cudaSupport then "gpu" else "cpu";
     key = "${platform}_py_${pyver}_${unit}";
-    dls = import ./tf1.11.0-hashes.nix;
+    dls = import ./tf1.13.1-hashes.nix;
   in fetchurl dls.${key};
 
   propagatedBuildInputs = [  protobuf numpy termcolor grpcio six astor absl-py gast tensorflow-tensorboard keras-applications keras-preprocessing ]
