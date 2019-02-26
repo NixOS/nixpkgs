@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, substituteAll, writeScript, pantheon, gnome-keyring, gnome-session, wingpanel, orca, at-spi2-core, elementary-default-settings, writeTextFile, writeShellScriptBin, elementary-settings-daemon }:
+{ stdenv, fetchFromGitHub, substituteAll, writeScript, pantheon, gnome-keyring, gnome-session, wingpanel, orca, at-spi2-core, elementary-default-settings, writeTextFile, writeShellScriptBin, elementary-settings-daemon, runtimeShell }:
 
 let
 
@@ -15,7 +15,7 @@ let
   #
 
   dockitems-script = writeScript "dockitems-script" ''
-    #!${stdenv.shell}
+    #!${runtimeShell}
 
     elementary_default_settings="${elementary-default-settings}"
     dock_items="$elementary_default_settings/share/elementary/config/plank/dock1/launchers"/*

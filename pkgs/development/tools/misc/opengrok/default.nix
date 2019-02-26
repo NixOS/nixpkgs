@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, jre, ctags, makeWrapper, coreutils, git }:
+{ stdenv, fetchurl, jre, ctags, makeWrapper, coreutils, git, runtimeShell }:
 
 stdenv.mkDerivation rec {
   name = "opengrok-${version}";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out
     cp -a * $out/
     substituteInPlace $out/bin/OpenGrok --replace "/bin/uname" "${coreutils}/bin/uname"
-    substituteInPlace $out/bin/Messages --replace "#!/bin/ksh" "#!${stdenv.shell}"
+    substituteInPlace $out/bin/Messages --replace "#!/bin/ksh" "#!${runtimeShell}"
     wrapProgram $out/bin/OpenGrok \
       --prefix PATH : "${stdenv.lib.makeBinPath [ ctags git ]}" \
       --set JAVA_HOME "${jre}" \

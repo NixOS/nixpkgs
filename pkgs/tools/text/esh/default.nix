@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, asciidoctor, gawk, gnused }:
+{ stdenv, fetchFromGitHub, asciidoctor, gawk, gnused, runtimeShell }:
 
 stdenv.mkDerivation rec {
   name = "esh-${version}";
@@ -20,11 +20,11 @@ stdenv.mkDerivation rec {
   postPatch = ''
     patchShebangs .
     substituteInPlace esh \
-        --replace '"/bin/sh"' '"${stdenv.shell}"' \
+        --replace '"/bin/sh"' '"${runtimeShell}"' \
         --replace '"awk"' '"${gawk}/bin/awk"' \
         --replace 'sed' '${gnused}/bin/sed'
     substituteInPlace tests/test-dump.exp \
-        --replace '#!/bin/sh' '#!${stdenv.shell}'
+        --replace '#!/bin/sh' '#!${runtimeShell}'
   '';
 
   doCheck = true;
