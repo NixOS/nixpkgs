@@ -5064,7 +5064,7 @@
     name = "Kranium Gikos Mendoza";
   };
   worldofpeace = {
-    email = "worldofpeace@users.noreply.github.com";
+    email = "worldofpeace@protonmail.ch";
     github = "worldofpeace";
     name = "Worldofpeace";
   };
