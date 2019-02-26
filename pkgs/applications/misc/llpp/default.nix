@@ -1,5 +1,5 @@
 { stdenv, lib, substituteAll, makeWrapper, fetchgit, ocaml, mupdf, libX11,
-libGLU_combined, freetype, xclip }:
+libGLU_combined, freetype, xclip, inotify-tools, procps }:
 
 assert lib.versionAtLeast (lib.getVersion ocaml) "4.07";
 
@@ -36,8 +36,15 @@ stdenv.mkDerivation rec {
   installPhase = ''
     install -d $out/bin
     install build/llpp $out/bin
+    install misc/llpp.inotify $out/bin/llpp.inotify
+
     wrapProgram $out/bin/llpp \
         --prefix PATH ":" "${xclip}/bin"
+
+    wrapProgram $out/bin/llpp.inotify \
+        --prefix PATH ":" "$out/bin" \
+        --prefix PATH ":" "${inotify-tools}/bin" \
+        --prefix PATH ":" "${procps}/bin"
   '';
 
   meta = with stdenv.lib; {
