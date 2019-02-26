@@ -605,7 +605,7 @@ All parameters from `stdenv.mkDerivation` function are still supported. The foll
 * `disabled` ? false: If `true`, package is not build for the particular Python interpreter version.
 * `dontWrapPythonPrograms ? false`: Skip wrapping of python programs.
 * `installFlags ? []`: A list of strings. Arguments to be passed to `pip install`. To pass options to `python setup.py install`, use `--install-option`. E.g., `installFlags=["--install-option='--cpp_implementation'"]`.
-* `format ? "setuptools"`: Format of the source. Valid options are `"setuptools"`, `"flit"`, `"wheel"`, and `"other"`. `"setuptools"` is for when the source has a `setup.py` and `setuptools` is used to build a wheel, `flit`, in case `flit` should be used to build a wheel, and `wheel` in case a wheel is provided. Use `other` when a custom `buildPhase` and/or `installPhase` is needed.
+* `format ? "setuptools"`: Format of the source. Valid options are `"setuptools"`, `"pyproject"`, `"flit"`, `"wheel"`, and `"other"`. `"setuptools"` is for when the source has a `setup.py` and `setuptools` is used to build a wheel, `flit`, in case `flit` should be used to build a wheel, and `wheel` in case a wheel is provided. Use `other` when a custom `buildPhase` and/or `installPhase` is needed.
 * `makeWrapperArgs ? []`: A list of strings. Arguments to be passed to `makeWrapper`, which wraps generated binaries. By default, the arguments to `makeWrapper` set `PATH` and `PYTHONPATH` environment variables before calling the binary. Additional arguments here can allow a developer to set environment variables which will be available when the binary is run. For example, `makeWrapperArgs = ["--set FOO BAR" "--set BAZ QUX"]`.
 * `namePrefix`: Prepends text to `${name}` parameter. In case of libraries, this defaults to `"python3.5-"` for Python 3.5, etc., and in case of applications to `""`.
 * `pythonPath ? []`: List of packages to be added into `$PYTHONPATH`. Packages in `pythonPath` are not propagated (contrary to `propagatedBuildInputs`).
@@ -881,7 +881,6 @@ example of such a situation is when `py.test` is used.
     '';
   }
   ```
-- Unicode issues can typically be fixed by including `glibcLocales` in `buildInputs` and exporting `LC_ALL=en_US.utf-8`.
 - Tests that attempt to access `$HOME` can be fixed by using the following work-around before running tests (e.g. `preCheck`): `export HOME=$(mktemp -d)`
 
 ## FAQ

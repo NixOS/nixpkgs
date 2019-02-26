@@ -2,18 +2,18 @@
 
 buildPythonPackage rec {
   pname = "configparser";
-  version = "3.7.1";
+  version = "3.7.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5bd5fa2a491dc3cfe920a3f2a107510d65eceae10e9c6e547b90261a4710df32";
+    sha256 = "27594cf4fc279f321974061ac69164aaebd2749af962ac8686b20503ac0bcf2d";
   };
 
   # No tests available
   doCheck = false;
 
   preConfigure = ''
-    export LC_ALL=C.UTF-8
+    export LC_ALL=${if stdenv.isDarwin then "en_US" else "C"}.UTF-8
   '';
 
   meta = with stdenv.lib; {
