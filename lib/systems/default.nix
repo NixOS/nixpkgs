@@ -106,6 +106,8 @@ rec {
         then "${wine}/bin/${wine-name}"
         else if final.isLinux && pkgs.stdenv.hostPlatform.isLinux
         then "${qemu-user}/bin/qemu-${final.qemuArch}"
+        else if final.isWasm
+        then "${pkgs.v8}/bin/d8"
         else throw "Don't know how to run ${final.config} executables.";
 
     } // mapAttrs (n: v: v final.parsed) inspect.predicates
