@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, ocaml, num, camlp5 }:
+{ stdenv, runtimeShell, fetchFromGitHub, ocaml, num, camlp5 }:
 
 let
   load_num =
@@ -11,7 +11,7 @@ let
 
   start_script =
     ''
-      #!${stdenv.shell}
+      #!${runtimeShell}
       cd $out/lib/hol_light
       exec ${ocaml}/bin/ocaml \
         -I \`${camlp5}/bin/camlp5 -where\` \

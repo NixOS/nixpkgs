@@ -13,6 +13,7 @@
 , libuuid
 , autoreconfHook
 , gcc48
+, runtimeShell
 , ... }:
 
 { name, src, version, source-date, source-url, ... }:
@@ -114,7 +115,7 @@ stdenv.mkDerivation rec {
 
     # Create the script
     cat > "$out/bin/${cmd}" <<EOF
-    #!${stdenv.shell}
+    #!${runtimeShell}
     set -f
     LD_LIBRARY_PATH="\$LD_LIBRARY_PATH:$libs" exec $out/pharo "\$@"
     EOF

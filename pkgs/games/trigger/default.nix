@@ -1,4 +1,5 @@
-{ fetchurl, stdenv, SDL2, freealut, SDL2_image, openal, physfs, zlib, libGLU_combined, glew }:
+{ fetchurl, stdenv, runtimeShell
+, SDL2, freealut, SDL2_image, openal, physfs, zlib, libGLU_combined, glew }:
 
 stdenv.mkDerivation rec {
   name = "trigger-rally-0.6.5";
@@ -23,7 +24,7 @@ stdenv.mkDerivation rec {
   postInstall = ''
     mkdir -p $out/bin
     cat <<EOF > $out/bin/trigger-rally
-    #!${stdenv.shell}
+    #!${runtimeShell}
     exec $out/games/trigger-rally "$@"
     EOF
     chmod +x $out/bin/trigger-rally
