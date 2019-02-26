@@ -101,7 +101,7 @@ rec {
       in
         if final.parsed.kernel.name == pkgs.stdenv.hostPlatform.parsed.kernel.name &&
            pkgs.stdenv.hostPlatform.isCompatible final
-        then pkgs.runtimeShell
+        then "${pkgs.runtimeShell} -c"
         else if final.isWindows
         then "${wine}/bin/${wine-name}"
         else if final.isLinux && pkgs.stdenv.hostPlatform.isLinux
