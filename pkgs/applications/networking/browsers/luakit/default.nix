@@ -59,7 +59,8 @@ in stdenv.mkDerivation rec {
     make DEVELOPMENT_PATHS=0 INSTALLDIR=$out PREFIX=$out XDGPREFIX=$out/etc/xdg USE_GTK3=1 install
     wrapProgram $out/bin/luakit                                         \
       --prefix XDG_CONFIG_DIRS : "$out/etc/xdg"                         \
-      --prefix LUA_PATH ';' "${luaKitPath};${luaEnv.luaPath}"
+      --prefix LUA_PATH ';' "${luaKitPath};${luaEnv.luaPath}"           \
+      --prefix LUA_CPATH ';' "${luaKitPath};${luaEnv.luaCPath}"
   '';
     # make DEVELOPMENT_PATHS=0 INSTALLDIR=$out PREFIX=$out XDGPREFIX=$out/etc/xdg USE_GTK3=1 install
     # wrapProgram $out/bin/luakit                                         \
