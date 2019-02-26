@@ -34,10 +34,9 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    install -d $out/bin $out/lib
+    install -d $out/bin
     install build/llpp $out/bin
     wrapProgram $out/bin/llpp \
-        --prefix CAML_LD_LIBRARY_PATH ":" "$out/lib" \
         --prefix PATH ":" "${xclip}/bin"
   '';
 
