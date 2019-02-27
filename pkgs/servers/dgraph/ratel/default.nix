@@ -19,9 +19,13 @@ let
       npm install
       cp -r node_modules $out
     '';
+    # remove non-determenistic prefixes of build-time pathes
+    postFixup = ''
+      find $out -name package.json -exec sed -i -r 's,"/(tmp/nix-build|build/)[^/]+/([^"]+)","/build/\2",g' {} \;
+    '';
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
-    outputHash = "0a51p3yxyyn7h92d6d0mxg76mc5czhjii8h6l4fhc2p6l9nf1qgp";
+    outputHash = "06553nmmx03990fi92yisna2xwpx47kd7pr9ibhv090pm68db8dz";
   };
 in buildGoPackage rec {
   name = "dgraph-ratel-${version}";
@@ -47,6 +51,6 @@ in buildGoPackage rec {
     description = "Dgraph Dashboard";
     maintainers = with stdenv.lib.maintainers; [ sigma ];
     license = stdenv.lib.licenses.agpl3;
-    platforms = stdenv.lib.platforms.unix;
+    platforms = [ "x86_64-linux" /* node-sass not available on "aarch64-linux" */ ];
   };
 }
