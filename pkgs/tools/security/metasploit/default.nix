@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, makeWrapper, ruby, bundlerEnv }:
 
 # Maintainer notes for updating:
-# 1. increment version number in expression and in Gemfile
+# 1. update version number and revision in expression and in Gemfile
 # 2. run $ nix-prefetch-git --url https://github.com/rapid7/metasploit-framework.git --rev [version]
 #    in metasploit in nixpkgs, and copy the resulting hash to default.nix
 # 3. run $ nix-shell --command "bundler install && bundix"
@@ -21,7 +21,7 @@ in stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "rapid7";
     repo = "metasploit-framework";
-    rev = version;
+    rev = "bf949b7fd2a705a74ca02f66792f80ab41b4c81a";
     sha256 = "1pqh1ya3c3l0jmqzbglyigag1g29yvqp9i8lzlgvcr8wvdf356bv";
   };
 

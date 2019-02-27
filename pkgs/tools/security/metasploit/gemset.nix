@@ -89,10 +89,10 @@
   backports = {
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1hshjxww2h7s0dk57njrygq4zpp0nlqrjfya7zwm27iq3rhc3y8g";
+      sha256 = "0ba6n9l4kki56s2cszarps14zp2wlhw7nfawb8qwsxy3a57v4mw4";
       type = "gem";
     };
-    version = "3.11.4";
+    version = "3.12.0";
   };
   bcrypt = {
     source = {
@@ -221,10 +221,10 @@
     dependencies = ["i18n"];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "01q7wrk5bl0c0qrvg2my3kl0mbfnj1jpd89mqm3fzy4ggbkdhh7i";
+      sha256 = "1vslyqmk9gjvp1ahyfqmwy1jcyv75rp88hxwpy7cdk2lpdb1jp3l";
       type = "gem";
     };
-    version = "1.9.1";
+    version = "1.9.3";
   };
   faraday = {
     dependencies = ["multipart-post"];
@@ -280,10 +280,10 @@
   json = {
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "01v6jjpvh3gnq6sgllpfqahlgxzj50ailwhj9b3cd20hi2dx0vxp";
+      sha256 = "0sx97bm9by389rbzv8r1f43h06xcz8vwi3h5jv074gvparql7lcx";
       type = "gem";
     };
-    version = "2.1.0";
+    version = "2.2.0";
   };
   loofah = {
     dependencies = ["crass" "nokogiri"];
@@ -315,17 +315,17 @@
     dependencies = ["metasploit-concern" "metasploit-model" "metasploit_data_models" "net-ssh" "pg" "railties" "rex-socket" "rubyntlm" "rubyzip"];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0liyc1yppsjjn63713n2z7hsi1lvqcamp0xny0ax9d4rksn56w92";
+      sha256 = "0m6j149x502p00y2jzra65281dhhw3m8a41pwfn1sk9wv7aiclvl";
       type = "gem";
     };
-    version = "3.0.2";
+    version = "3.0.3";
   };
   metasploit-framework = {
     dependencies = ["actionpack" "activerecord" "activesupport" "backports" "bcrypt" "bcrypt_pbkdf" "bit-struct" "concurrent-ruby" "dnsruby" "ed25519" "em-http-request" "faker" "filesize" "jsobfu" "json" "metasm" "metasploit-concern" "metasploit-credential" "metasploit-model" "metasploit-payloads" "metasploit_data_models" "metasploit_payloads-mettle" "mqtt" "msgpack" "nessus_rest" "net-ssh" "network_interface" "nexpose" "nokogiri" "octokit" "openssl-ccm" "openvas-omp" "packetfu" "patch_finder" "pcaprub" "pdf-reader" "pg" "railties" "rb-readline" "recog" "redcarpet" "rex-arch" "rex-bin_tools" "rex-core" "rex-encoder" "rex-exploitation" "rex-java" "rex-mime" "rex-nop" "rex-ole" "rex-powershell" "rex-random_identifier" "rex-registry" "rex-rop_builder" "rex-socket" "rex-sslscan" "rex-struct2" "rex-text" "rex-zip" "ruby-macho" "ruby_smb" "rubyntlm" "rubyzip" "sinatra" "sqlite3" "sshkey" "thin" "tzinfo" "tzinfo-data" "warden" "windows_error" "xdr" "xmlrpc"];
     source = {
       fetchSubmodules = false;
-      rev = "1442130a2717aabf75750f4f2412a416481e2154";
-      sha256 = "0f8kvf5wn16jir9nka1v2jbh2znf7yjg7z7znw026rkwnc52ff82";
+      rev = "bf949b7fd2a705a74ca02f66792f80ab41b4c81a";
+      sha256 = "0p5mfrlbl62vi0yf4a4kc0q4nq5ag9kz94jwa1lqqcb1rw7474gk";
       type = "git";
       url = "https://github.com/rapid7/metasploit-framework";
     };
@@ -352,10 +352,10 @@
     dependencies = ["activerecord" "activesupport" "arel-helpers" "metasploit-concern" "metasploit-model" "pg" "postgres_ext" "railties" "recog"];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0n600ywghnc3d4kamfg33v6kmc6mfaqi0hp1c69p4x0pwr6p76xd";
+      sha256 = "0v01cvan15z91sr2k785va7mbjgv4z60gzwgfrbszbmy5j6y44wi";
       type = "gem";
     };
-    version = "3.0.4";
+    version = "3.0.5";
   };
   metasploit_payloads-mettle = {
     source = {
@@ -620,10 +620,10 @@
     dependencies = ["nokogiri"];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "143b0zg2xx4jaympqzqz55r45vgs5k59ymm4rgk8ckxirvsz0cq4";
+      sha256 = "1zj401gv5ihdvfgk9mkl2jmhyps61y5pf0i37fpimpy9fjgp9gdf";
       type = "gem";
     };
-    version = "2.1.45";
+    version = "2.2.0";
   };
   redcarpet = {
     source = {
@@ -751,10 +751,10 @@
     dependencies = ["rex-core"];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0zvvw9wbxppz2s6mmw57xjqvj7wbmfq88d8v8xm4v78cdkgxqzmg";
+      sha256 = "136szyv31fcdzmcgs44vg009k3ssyawkqppkhm3xyv2ivpp1mlgv";
       type = "gem";
     };
-    version = "0.1.15";
+    version = "0.1.17";
   };
   rex-sslscan = {
     dependencies = ["rex-core" "rex-socket" "rex-text"];
@@ -801,10 +801,10 @@
   ruby-macho = {
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1lkarnkjssp1nas941vq1dbv20xa31pnwh1db7l1qdhk23g0a7yw";
+      sha256 = "1k5vvk9d13pixhbram6fs74ibgmr2dngv7bks13npcjb42q275if";
       type = "gem";
     };
-    version = "2.1.0";
+    version = "2.2.0";
   };
   ruby-rc4 = {
     source = {
@@ -860,18 +860,18 @@
   sqlite3 = {
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "01ifzp8nwzqppda419c9wcvr8n82ysmisrs0hph9pdmv1lpa4f5i";
+      sha256 = "0pmgpqx2sg8pms54rk7kjjy8jwsw21g1f7mb02fggbdcqy8jk3fx";
       type = "gem";
     };
-    version = "1.3.13";
+    version = "1.4.0";
   };
   sshkey = {
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0g02lh50jd5z4l9bp7xirnfn3n1dh9lr06dv3xh0kr3yhsny059h";
+      sha256 = "03bkn55qsng484iqwz2lmm6rkimj01vsvhwk661s3lnmpkl65lbp";
       type = "gem";
     };
-    version = "1.9.0";
+    version = "2.0.0";
   };
   thin = {
     dependencies = ["daemons" "eventmachine" "rack"];

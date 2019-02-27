@@ -1,7 +1,7 @@
 GIT
   remote: https://github.com/rapid7/metasploit-framework
-  revision: 1442130a2717aabf75750f4f2412a416481e2154
-  ref: refs/tags/5.0.1
+  revision: bf949b7fd2a705a74ca02f66792f80ab41b4c81a
+  ref: bf949b7fd2a705a74ca02f66792f80ab41b4c81a
   specs:
     metasploit-framework (5.0.1)
       actionpack (~> 4.2.6)
@@ -113,7 +113,7 @@ GEM
     arel (6.0.4)
     arel-helpers (2.8.0)
       activerecord (>= 3.1.0, < 6)
-    backports (3.11.4)
+    backports (3.12.0)
     bcrypt (3.1.12)
     bcrypt_pbkdf (1.0.0)
     bindata (2.4.4)
@@ -136,7 +136,7 @@ GEM
       eventmachine (>= 1.0.0.beta.4)
     erubis (2.7.0)
     eventmachine (1.2.7)
-    faker (1.9.1)
+    faker (1.9.3)
       i18n (>= 0.7)
     faraday (0.15.4)
       multipart-post (>= 1.2, < 3)
@@ -147,7 +147,7 @@ GEM
       concurrent-ruby (~> 1.0)
     jsobfu (0.4.2)
       rkelly-remix
-    json (2.1.0)
+    json (2.2.0)
     loofah (2.2.3)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
@@ -156,12 +156,12 @@ GEM
       activemodel (~> 4.2.6)
       activesupport (~> 4.2.6)
       railties (~> 4.2.6)
-    metasploit-credential (3.0.2)
+    metasploit-credential (3.0.3)
       metasploit-concern
       metasploit-model
       metasploit_data_models (>= 3.0.0)
       net-ssh
-      pg (~> 0.15)
+      pg
       railties
       rex-socket
       rubyntlm
@@ -171,13 +171,13 @@ GEM
       activesupport (~> 4.2.6)
       railties (~> 4.2.6)
     metasploit-payloads (1.3.58)
-    metasploit_data_models (3.0.4)
+    metasploit_data_models (3.0.5)
       activerecord (~> 4.2.6)
       activesupport (~> 4.2.6)
       arel-helpers
       metasploit-concern
       metasploit-model
-      pg (= 0.20.0)
+      pg
       postgres_ext
       railties (~> 4.2.6)
       recog (~> 2.0)
@@ -234,7 +234,7 @@ GEM
       thor (>= 0.18.1, < 2.0)
     rake (12.3.2)
     rb-readline (0.5.5)
-    recog (2.1.45)
+    recog (2.2.0)
       nokogiri
     redcarpet (3.4.0)
     rex-arch (0.1.13)
@@ -273,7 +273,7 @@ GEM
       metasm
       rex-core
       rex-text
-    rex-socket (0.1.15)
+    rex-socket (0.1.17)
       rex-core
     rex-sslscan (0.1.5)
       rex-core
@@ -284,7 +284,7 @@ GEM
     rex-zip (0.1.3)
       rex-text
     rkelly-remix (0.0.7)
-    ruby-macho (2.1.0)
+    ruby-macho (2.2.0)
     ruby-rc4 (0.1.5)
     ruby_smb (1.0.5)
       bindata
@@ -299,8 +299,8 @@ GEM
       rack (~> 1.5)
       rack-protection (~> 1.4)
       tilt (>= 1.3, < 3)
-    sqlite3 (1.3.13)
-    sshkey (1.9.0)
+    sqlite3 (1.4.0)
+    sshkey (2.0.0)
     thin (1.7.2)
       daemons (~> 1.0, >= 1.0.9)
       eventmachine (~> 1.0, >= 1.0.4)
