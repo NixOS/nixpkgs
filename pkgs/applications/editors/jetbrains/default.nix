@@ -289,12 +289,12 @@ in
 
   idea-community = buildIdea rec {
     name = "idea-community-${version}";
-    version = "2018.3.4"; /* updated by script */
+    version = "2019.1"; /* updated by script */
     description = "Integrated Development Environment (IDE) by Jetbrains, community edition";
     license = stdenv.lib.licenses.asl20;
     src = fetchurl {
       url = "https://download.jetbrains.com/idea/ideaIC-${version}.tar.gz";
-      sha256 = "0j5yc7n04jlyyghmwllpfvcd2g6k1syjp07xb1ljyx7rm4jcf8q6"; /* updated by script */
+      sha256 = "0zyw88dd2v4igp080l99cyq6h0bmyri8a50fjp69ripiz9qaawx1"; /* updated by script */
     };
     wmClass = "jetbrains-idea-ce";
     update-channel = "IntelliJ IDEA RELEASE";
