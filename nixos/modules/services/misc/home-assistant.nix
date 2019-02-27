@@ -9,13 +9,13 @@ let
   configJSON = pkgs.writeText "configuration.json"
     (builtins.toJSON (if cfg.applyDefaultConfig then
     (recursiveUpdate defaultConfig cfg.config) else cfg.config));
-  configFile = pkgs.runCommand "configuration.yaml" { } ''
+  configFile = pkgs.runCommand "configuration.yaml" { preferLocalBuild = true; } ''
     ${pkgs.remarshal}/bin/json2yaml -i ${configJSON} -o $out
   '';
 
   lovelaceConfigJSON = pkgs.writeText "ui-lovelace.json"
     (builtins.toJSON cfg.lovelaceConfig);
-  lovelaceConfigFile = pkgs.runCommand "ui-lovelace.yaml" { } ''
+  lovelaceConfigFile = pkgs.runCommand "ui-lovelace.yaml" { preferLocalBuild = true; } ''
     ${pkgs.remarshal}/bin/json2yaml -i ${lovelaceConfigJSON} -o $out
   '';
 
