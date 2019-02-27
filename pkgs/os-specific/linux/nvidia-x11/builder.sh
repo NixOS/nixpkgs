@@ -129,6 +129,8 @@ installPhase() {
         for i in nvidia-cuda-mps-control nvidia-cuda-mps-server nvidia-smi nvidia-debugdump; do
             if [ -e "$i" ]; then
                 install -Dm755 $i $bin/bin/$i
+                # unmodified binary backup for mounting in containers
+                install -Dm755 $i $bin/origBin/$i
                 patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
                     --set-rpath $out/lib:$libPath $bin/bin/$i
             fi
