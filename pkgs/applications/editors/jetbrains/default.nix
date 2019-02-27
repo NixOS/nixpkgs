@@ -263,12 +263,12 @@ in
 
   datagrip = buildDataGrip rec {
     name = "datagrip-${version}";
-    version = "2018.3.2"; /* updated by script */
+    version = "2018.3.4"; /* updated by script */
     description = "Your Swiss Army Knife for Databases and SQL";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/datagrip/${name}.tar.gz";
-      sha256 = "0vj1cgmg33626i38x9wmh5hqr1lf0x3m23gzq30rp4q4cbi38806"; /* updated by script */
+      sha256 = "10sw41kkf2k60xjpwgc73i182y7px3dmqz2awnrl4gffdb9jgzmy"; /* updated by script */
     };
     wmClass = "jetbrains-datagrip";
     update-channel = "DataGrip RELEASE";
