@@ -9524,7 +9524,9 @@ in
   celt_0_7 = callPackage ../development/libraries/celt/0.7.nix {};
   celt_0_5_1 = callPackage ../development/libraries/celt/0.5.1.nix {};
 
-  cegui = callPackage ../development/libraries/cegui {};
+  cegui = callPackage ../development/libraries/cegui {
+    ogre = ogre1_10;
+  };
 
   certbot = callPackage ../tools/admin/certbot { };
 
@@ -11854,6 +11856,7 @@ in
 
   ogre = callPackage ../development/libraries/ogre {};
   ogre1_9 = callPackage ../development/libraries/ogre/1.9.x.nix {};
+  ogre1_10 = callPackage ../development/libraries/ogre/1.10.x.nix {};
 
   ogrepaged = callPackage ../development/libraries/ogrepaged { };
 
