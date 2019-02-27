@@ -432,13 +432,13 @@ let self = rec {
 
     plugin = "osmc-skin";
     namespace = "skin.osmc";
-    version = "17.0.4";
+    version = "18.0.0";
 
     src = fetchFromGitHub {
       owner = "osmc";
       repo = namespace;
-      rev = "a9268937f49286bab9fb49de430b8aafd7a60a9e";
-      sha256 = "1b3fm02annsq58pcfc985glrmh21rmqksdj3q8wn6gyza06jdf3v";
+      rev = "40a6c318641e2cbeac58fb0e7dde9c2beac737a0";
+      sha256 = "1l7hyfj5zvjxjdm94y325bmy1naak455b9l8952sb0gllzrcwj6s";
     };
 
     meta = {
