@@ -2,7 +2,7 @@
 , cmake, kodiPlain, libcec_platform, tinyxml, rapidxml
 , steam, libusb, pcre-cpp, jsoncpp, libhdhomerun, zlib
 , python2Packages, expat, glib, nspr, nss, openssl
-, libssh }:
+, libssh, libarchive, lzma, bzip2, lz4, lzo }:
 
 with stdenv.lib;
 
@@ -527,5 +527,27 @@ let self = rec {
     };
 
     extraBuildInputs = [ openssl libssh zlib ];
+  };
+
+  vfs-libarchive = mkKodiABIPlugin rec {
+    namespace = "vfs.libarchive";
+    version = "1.0.5";
+    plugin = namespace;
+
+    src = fetchFromGitHub {
+      owner = "xbmc";
+      repo = namespace;
+      rev = "${version}-${rel}";
+      sha256 = "0l1f1fijflr1ia30r0dcz1x2zn35c4lxy30az1cqxdf8nipza0b8";
+    };
+
+    meta = with stdenv.lib; {
+      description = "LibArchive Virtual Filesystem add-on for Kodi";
+      license = licenses.gpl2Plus;
+      platforms = platforms.all;
+      maintainers = with maintainers; [ minijackson ];
+    };
+
+    extraBuildInputs = [ libarchive lzma bzip2 zlib lz4 lzo openssl ];
   };
 }; in self

@@ -20144,6 +20144,7 @@ in
       ++ optional (config.kodi.enablePVRIPTVSimple or false) pvr-iptvsimple
       ++ optional (config.kodi.enableInputStreamAdaptive or false) inputstream-adaptive
       ++ optional (config.kodi.enableVFSSFTP or false) vfs-sftp
+      ++ optional (config.kodi.enableVFSLibarchive or false) vfs-libarchive
       );
   };
 
