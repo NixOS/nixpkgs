@@ -14,6 +14,7 @@ let
     nativeBuildInputs = [ nodejs ];
     installPhase = ''
       export HOME=$(mktemp -d)
+      export LANG=en_US.UTF-8 # otherwise "Hoàng Văn Khải" in $out/@types/node/package.json will be corrupted
       cd client
       cp ${./package-lock.json} ./package-lock.json
       npm install
@@ -21,11 +22,11 @@ let
     '';
     # remove non-determenistic prefixes of build-time pathes
     postFixup = ''
-      find $out -name package.json -exec sed -i -r 's,"/(tmp/nix-build|build/)[^/]+/([^"]+)","/build/\2",g' {} \;
+      find $out -name package.json -exec sed -i -r 's,".*/nix-build[^/]+/([^"]+)","/build/\1",g' {} \;
     '';
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
-    outputHash = "06553nmmx03990fi92yisna2xwpx47kd7pr9ibhv090pm68db8dz";
+    outputHash = "14fdmmg3pmjsmxp7ljdfa9ddixard3lx8l6imk0an9pa2bxl00zm";
   };
 in buildGoPackage rec {
   name = "dgraph-ratel-${version}";
@@ -51,6 +52,6 @@ in buildGoPackage rec {
     description = "Dgraph Dashboard";
     maintainers = with stdenv.lib.maintainers; [ sigma ];
     license = stdenv.lib.licenses.agpl3;
-    platforms = [ "x86_64-linux" /* node-sass not available on "aarch64-linux" */ ];
+    platforms = [ "x86_64-linux" ]; # node-sass not available on "aarch64-linux"
   };
 }
