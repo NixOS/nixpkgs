@@ -17625,6 +17625,8 @@ in
 
   hue-cli = callPackage ../tools/networking/hue-cli { };
 
+  inherit (nodePackages) hueadm;
+
   hugin = callPackage ../applications/graphics/hugin {
     wxGTK = wxGTK30;
   };
