@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, git, nodejs, buildGoPackage, go-bindata }:
+{ stdenv, fetchgit, glibcLocales, git, nodejs, buildGoPackage, go-bindata }:
 
 let
   src = fetchgit {
@@ -12,9 +12,14 @@ let
     name = "fetch-node-modules";
     inherit src;
     nativeBuildInputs = [ nodejs ];
+
+    # otherwise "Hoàng Văn Khải" in $out/@types/node/package.json will be corrupted
+    LOCALE_ARCHIVE = stdenv.lib.optionalString stdenv.isLinux "${glibcLocales}/lib/locale/locale-archive";
+    LANG = "en_US.UTF-8";
+    LC_TYPE = "en_US.UTF-8";
+
     installPhase = ''
       export HOME=$(mktemp -d)
-      export LANG=en_US.UTF-8 # otherwise "Hoàng Văn Khải" in $out/@types/node/package.json will be corrupted
       cd client
       cp ${./package-lock.json} ./package-lock.json
       npm install
@@ -22,7 +27,9 @@ let
     '';
     # remove non-determenistic prefixes of build-time pathes
     postFixup = ''
-      find $out -name package.json -exec sed -i -r 's,".*/nix-build[^/]+/([^"]+)","/build/\1",g' {} \;
+      for f in $(find $out -name package.json); do
+        substituteInPlace $f --replace "\"$NIX_BUILD_TOP" "\"/build"
+      done
     '';
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
