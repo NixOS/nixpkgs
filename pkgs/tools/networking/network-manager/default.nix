@@ -51,6 +51,7 @@ in stdenv.mkDerivation rec {
     "--with-session-tracking=systemd"
     "--with-modem-manager-1"
     "--with-nmtui"
+    "--with-iwd"
     "--disable-gtk-doc"
     "--with-libnm-glib" # legacy library, TODO: remove
     "--disable-tests"
