@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   name = "overmind-${version}";
-  version = "1.2.1";
+  version = "2.0.1";
   goPackagePath = "github.com/DarthSim/overmind";
 
   nativeBuildInputs = [ makeWrapper ];
@@ -15,11 +15,11 @@ buildGoPackage rec {
     owner = "DarthSim";
     repo = "overmind";
     rev = "v${version}";
-    sha256 = "11ws9rsy8ladjp1y3b6vva9sjmw4s24xc1w18lyhfz63xc908nfw";
+    sha256 = "1j3cpcfgacn5ic19sgrs1djn5jr4d7j7lxaz0vbaf414lrl76qz8";
   };
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/DarthSim/;
+    homepage = https://github.com/DarthSim/overmind;
     description = "Process manager for Procfile-based applications and tmux";
     license = with licenses; [ mit ];
     maintainers = [ maintainers.adisbladis ];
