@@ -13,6 +13,7 @@ let
     ${optionalString cfg.caching.apcu "extension=${cfg.phpPackages.apcu}/lib/php/extensions/apcu.so"}
     ${optionalString cfg.caching.redis "extension=${cfg.phpPackages.redis}/lib/php/extensions/redis.so"}
     ${optionalString cfg.caching.memcached "extension=${cfg.phpPackages.memcached}/lib/php/extensions/memcached.so"}
+    extension=${cfg.phpPackages.imagick}/lib/php/extensions/imagick.so
     zend_extension = opcache.so
     opcache.enable = 1
   '';
@@ -421,7 +422,7 @@ in {
               };
               "/" = {
                 priority = 200;
-                extraConfig = "rewrite ^ /index.php$uri;";
+                extraConfig = "rewrite ^ /index.php$request_uri;";
               };
               "~ ^/store-apps" = {
                 priority = 201;
@@ -458,22 +459,23 @@ in {
                   fastcgi_read_timeout 120s;
                 '';
               };
-              "~ ^/(?:updater|ocs-provider)(?:$|/)".extraConfig = ''
+              "~ ^/(?:updater|ocs-provider|ocm-provider)(?:$|\/)".extraConfig = ''
                 try_files $uri/ =404;
                 index index.php;
               '';
-              "~ \\.(?:css|js|woff|svg|gif)$".extraConfig = ''
-                try_files $uri /index.php$uri$is_args$args;
+              "~ \\.(?:css|js|woff2?|svg|gif)$".extraConfig = ''
+                try_files $uri /index.php$request_uri;
                 add_header Cache-Control "public, max-age=15778463";
                 add_header X-Content-Type-Options nosniff;
                 add_header X-XSS-Protection "1; mode=block";
                 add_header X-Robots-Tag none;
                 add_header X-Download-Options noopen;
                 add_header X-Permitted-Cross-Domain-Policies none;
+                add_header Referrer-Policy no-referrer;
                 access_log off;
               '';
               "~ \\.(?:png|html|ttf|ico|jpg|jpeg)$".extraConfig = ''
-                try_files $uri /index.php$uri$is_args$args;
+                try_files $uri /index.php$request_uri;
                 access_log off;
               '';
             };
@@ -483,10 +485,12 @@ in {
               add_header X-Robots-Tag none;
               add_header X-Download-Options noopen;
               add_header X-Permitted-Cross-Domain-Policies none;
+              add_header Referrer-Policy no-referrer;
               error_page 403 /core/templates/403.php;
               error_page 404 /core/templates/404.php;
               client_max_body_size ${cfg.maxUploadSize};
               fastcgi_buffers 64 4K;
+              fastcgi_hide_header X-Powered-By;
               gzip on;
               gzip_vary on;
               gzip_comp_level 4;
