@@ -5,8 +5,10 @@
 , pkgconfig
 , pantheon
 , python3
+, glib
 , gtk3
 , gtksourceview
+, hicolor-icon-theme
 , json-glib
 , libsoup
 , libgee

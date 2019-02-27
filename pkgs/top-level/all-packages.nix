@@ -9016,8 +9016,6 @@ in
 
   phantomjs2 = libsForQt5.callPackage ../development/tools/phantomjs2 { };
 
-  ping = callPackages ../development/web/ping { };
-
   pmccabe = callPackage ../development/tools/misc/pmccabe { };
 
   pkgconf = callPackage ../development/tools/misc/pkgconf {};
@@ -18509,6 +18507,8 @@ in
   pig = callPackage ../applications/networking/cluster/pig { };
 
   pijul = callPackage ../applications/version-management/pijul {};
+
+  ping = callPackage ../applications/networking/ping { };
 
   piper = callPackage ../os-specific/linux/piper { };
 
