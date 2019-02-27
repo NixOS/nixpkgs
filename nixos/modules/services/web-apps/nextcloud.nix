@@ -223,6 +223,19 @@ in {
           <literal>services.nextcloud.hostname</literal> here.
         '';
       };
+
+      overwriteProtocol = mkOption {
+        type = types.nullOr (types.enum [ "http" "https" ]);
+        default = null;
+        example = "https";
+
+        description = ''
+          Force Nextcloud to always use HTTPS i.e. for link generation. Nextcloud
+          uses the currently used protocol by default, but when behind a reverse-proxy,
+          it may use <literal>http</literal> for everything although Nextcloud
+          may be served via HTTPS.
+        '';
+      };
     };
 
     caching = {
@@ -287,6 +300,7 @@ in {
               ${optionalString cfg.caching.apcu "'memcache.local' => '\\OC\\Memcache\\APCu',"}
               'log_type' => 'syslog',
               'log_level' => '${builtins.toString cfg.logLevel}',
+              ${optionalString (cfg.config.overwriteProtocol != null) "'overwriteprotocol' => '${cfg.config.overwriteProtocol}',"}
             ];
           '';
           occInstallCmd = let
