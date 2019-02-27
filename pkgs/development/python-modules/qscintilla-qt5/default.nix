@@ -1,19 +1,18 @@
 { lib
-, buildPythonPackage
-, qscintillaCpp
+, pythonPackages
+, qscintilla
 , lndir
-, sip
-, python
-, pyqt5 }:
-
+, qtbase
+}:
+with pythonPackages;
 buildPythonPackage rec {
   pname = "qscintilla";
-  version = qscintillaCpp.version;
-  src = qscintillaCpp.src;
+  version = qscintilla.version;
+  src = qscintilla.src;
   format = "other";
 
-  nativeBuildInputs = [ lndir sip ];
-  buildInputs = [ qscintillaCpp ];
+  nativeBuildInputs = [ lndir sip qtbase ];
+  buildInputs = [ qscintilla ];
   propagatedBuildInputs = [ pyqt5 ];
 
   preConfigure = ''
@@ -23,13 +22,14 @@ buildPythonPackage rec {
     cd Python
     ${python.executable} ./configure.py \
       --pyqt=PyQt5 \
-      --destdir=$out/lib/${python.sitePackages}/PyQt5 \
-      --stubsdir=$out/lib/${python.sitePackages}/PyQt5 \
+      --destdir=$out/${python.sitePackages}/PyQt5 \
+      --stubsdir=$out/${python.sitePackages}/PyQt5 \
       --apidir=$out/api/${python.libPrefix} \
-      --qsci-incdir=${qscintillaCpp}/include \
-      --qsci-libdir=${qscintillaCpp}/lib \
+      --qsci-incdir=${qscintilla}/include \
+      --qsci-libdir=${qscintilla}/lib \
       --pyqt-sipdir=${pyqt5}/share/sip/PyQt5 \
-      --qsci-sipdir=$out/share/sip/PyQt5
+      --qsci-sipdir=$out/share/sip/PyQt5 \
+      --sip-incdir=${sip}/include
   '';
 
   meta = with lib; {
