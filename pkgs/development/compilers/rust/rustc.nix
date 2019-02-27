@@ -115,7 +115,7 @@ stdenv.mkDerivation {
     rm -v src/test/ui/run-pass/threads-sendsync/sync-send-in-std.rs || true  # FIXME: ???
   '';
 
-  # rustc unfortunately need cmake for compiling llvm-rt but doesn't
+  # rustc unfortunately needs cmake to compile llvm-rt but doesn't
   # use it for the normal build. This disables cmake in Nix.
   dontUseCmakeConfigure = true;
 
