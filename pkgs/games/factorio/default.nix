@@ -53,11 +53,11 @@ let
     x86_64-linux = let bdist = bdistForArch { inUrl = "linux64"; inTar = "x64"; }; in {
       alpha = {
         stable        = bdist { sha256 = "0b4hbpdcrh5hgip9q5dkmw22p66lcdhnr0kmb0w5dw6yi7fnxxh0"; version = "0.16.51"; withAuth = true; };
-        experimental  = bdist { sha256 = "1pl650dc6qp8pfwrw81yl7fvm5wsz30ri48kj3h6cv8jqvx2qazb"; version = "0.17.1"; withAuth = true; };
+        experimental  = bdist { sha256 = "0s8fhf790wwmckhi8wdbc036gg5vs1mrj3gd38ln4ynx9s3jb1z8"; version = "0.17.2"; withAuth = true; };
       };
       headless = {
         stable        = bdist { sha256 = "0zrnpg2js0ysvx9y50h3gajldk16mv02dvrwnkazh5kzr1d9zc3c"; version = "0.16.51"; };
-        experimental  = bdist { sha256 = "0y8fik8vngfiihjq79cvqgjcihvn2i8rm2fjj27s20igslk1ymsc"; version = "0.17.1"; };
+        experimental  = bdist { sha256 = "0gp3csf2dckvv0nf5k3cwylda4zpijlz3g18s10jgfxj03a6aly6"; version = "0.17.2"; };
       };
       demo = {
         stable        = bdist { sha256 = "0zf61z8937yd8pyrjrqdjgd0rjl7snwrm3xw86vv7s7p835san6a"; version = "0.16.51"; };
