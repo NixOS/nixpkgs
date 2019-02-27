@@ -1,7 +1,8 @@
 { stdenv, callPackage, fetchurl, fetchFromGitHub, unzip
 , cmake, kodiPlain, libcec_platform, tinyxml, rapidxml
 , steam, libusb, pcre-cpp, jsoncpp, libhdhomerun, zlib
-, python2Packages, expat, glib, nspr, nss }:
+, python2Packages, expat, glib, nspr, nss, openssl
+, libssh }:
 
 with stdenv.lib;
 
@@ -506,4 +507,25 @@ let self = rec {
     };
   };
 
+  vfs-sftp = mkKodiABIPlugin rec {
+    namespace = "vfs.sftp";
+    version = "1.0.1";
+    plugin = namespace;
+
+    src = fetchFromGitHub {
+      owner = "xbmc";
+      repo = namespace;
+      rev = "${version}-${rel}";
+      sha256 = "1l9igrl168s91c15v9klyaaz226ik3xlbzjk2f1346fvzmp87g9v";
+    };
+
+    meta = with stdenv.lib; {
+      description = "SFTP Virtual Filesystem add-on for Kodi";
+      license = licenses.gpl2Plus;
+      platforms = platforms.all;
+      maintainers = with maintainers; [ minijackson ];
+    };
+
+    extraBuildInputs = [ openssl libssh zlib ];
+  };
 }; in self
