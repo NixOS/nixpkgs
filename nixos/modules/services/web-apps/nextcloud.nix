@@ -97,8 +97,8 @@ in {
 
     phpPackages = mkOption {
       type = types.attrs;
-      default = pkgs.php71Packages;
-      defaultText = "pkgs.php71Packages";
+      default = pkgs.php73Packages;
+      defaultText = "pkgs.php73Packages";
       description = ''
         Overridable attribute of the PHP packages set to use.  If any caching
         module is enabled, it will be taken from here.  Therefore it should
@@ -375,7 +375,7 @@ in {
 
       services.phpfpm = {
         phpOptions = phpOptionsExtensions;
-        phpPackage = pkgs.php71;
+        phpPackage = pkgs.php73;
         pools.nextcloud = let
           phpAdminValues = (toKeyValue
             (foldr (a: b: a // b) {}
