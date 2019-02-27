@@ -18997,10 +18997,11 @@ in
     inherit (darwin.stubs) rez setfile;
   };
 
-  qgis = callPackage ../applications/gis/qgis {
-    inherit (darwin.apple_sdk.frameworks) IOKit ApplicationServices;
-    saga = saga_2_3_2;
+  qgis-unwrapped = libsForQt5.callPackage ../applications/gis/qgis/unwrapped.nix {
+      withGrass = false;
   };
+
+  qgis = callPackage ../applications/gis/qgis { };
 
   qgroundcontrol = libsForQt5.callPackage ../applications/science/robotics/qgroundcontrol { };
 
