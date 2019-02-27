@@ -25,15 +25,16 @@ let
       npm install
       cp -r node_modules $out
     '';
-    # remove non-determenistic prefixes of build-time pathes
-    postFixup = ''
+    # remove non-determenistic prefixes of build-time pathes in case if build was performed with --no-sandbox
+    # overriding `fixupPhase' also prevents shebang patching which is undesirable for fixed-output derivation
+    fixupPhase = ''
       for f in $(find $out -name package.json); do
         substituteInPlace $f --replace "\"$NIX_BUILD_TOP" "\"/build"
       done
     '';
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
-    outputHash = "14fdmmg3pmjsmxp7ljdfa9ddixard3lx8l6imk0an9pa2bxl00zm";
+    outputHash = "0bk62xvg8k72p564mvk7qxc6w2ysznqfxm7yply99rcry6fr60qv";
   };
 in buildGoPackage rec {
   name = "dgraph-ratel-${version}";
