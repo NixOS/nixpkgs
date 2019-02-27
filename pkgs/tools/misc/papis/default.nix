@@ -23,10 +23,6 @@ python3.pkgs.buildPythonApplication rec {
     jinja2 whoosh
   ];
 
-  postInstall = ''
-    install -Dt "$out/etc/bash_completion.d" scripts/shell_completion/build/bash/papis
-  '';
-
   checkInputs = (with python3.pkgs; [
     pytest
   ]) ++ [
