@@ -1,5 +1,5 @@
 { lowPrio, newScope, pkgs, stdenv, cmake, libstdcxxHook
-, libxml2, python, isl, fetchurl, overrideCC, wrapCCWith
+, libxml2, python, isl, fetchurl, overrideCC, wrapCCWith, wrapBintoolsWith
 , buildLlvmTools # tools, but from the previous stage, for cross
 , targetLlvmLibraries # libraries, but from the next stage, for cross
 }:
@@ -23,7 +23,7 @@ let
       ln -s "${cc}/lib/clang/${release_version}/include" "$rsrc"
       ln -s "${targetLlvmLibraries.compiler-rt.out}/lib" "$rsrc/lib"
       echo "-resource-dir=$rsrc" >> $out/nix-support/cc-cflags
-    '' + stdenv.lib.optionalString stdenv.targetPlatform.isLinux ''
+    '' + stdenv.lib.optionalString (stdenv.targetPlatform.isLinux && tools.clang-unwrapped ? gcc) ''
       echo "--gcc-toolchain=${tools.clang-unwrapped.gcc}" >> $out/nix-support/cc-cflags
     '';
   in {
@@ -77,13 +77,63 @@ let
     lld = callPackage ./lld.nix {};
 
     lldb = callPackage ./lldb.nix {};
+
+    bintools = callPackage ./bintools.nix {};
+
+    lldClang = wrapCCWith rec {
+      cc = tools.clang-unwrapped;
+      bintools = wrapBintoolsWith {
+        inherit (tools) bintools;
+      };
+      extraPackages = [
+        # targetLlvmLibraries.libcxx
+        # targetLlvmLibraries.libcxxabi
+        targetLlvmLibraries.compiler-rt
+      ];
+      extraBuildCommands = ''
+        echo "-target ${stdenv.targetPlatform.config} -rtlib=compiler-rt" >> $out/nix-support/cc-cflags
+      '' + mkExtraBuildCommands cc;
+    };
+
+    lldClangNoLibc = wrapCCWith rec {
+      cc = tools.clang-unwrapped;
+      bintools = wrapBintoolsWith {
+        inherit (tools) bintools;
+        libc = null;
+      };
+      extraPackages = [
+        # targetLlvmLibraries.libcxx
+        # targetLlvmLibraries.libcxxabi
+        targetLlvmLibraries.compiler-rt
+      ];
+      extraBuildCommands = ''
+        echo "-target ${stdenv.targetPlatform.config} -rtlib=compiler-rt" >> $out/nix-support/cc-cflags
+      '' + mkExtraBuildCommands cc;
+    };
+
+    lldClangNoCompilerRt = wrapCCWith rec {
+      cc = tools.clang-unwrapped;
+      bintools = wrapBintoolsWith {
+        inherit (tools) bintools;
+        libc = null;
+      };
+      extraPackages = [ ];
+      extraBuildCommands = ''
+        echo "-nostartfiles -target ${stdenv.targetPlatform.config}" >> $out/nix-support/cc-cflags
+      '';
+    };
+
   });
 
   libraries = stdenv.lib.makeExtensible (libraries: let
     callPackage = newScope (libraries // buildLlvmTools // { inherit stdenv cmake libxml2 python isl release_version version fetch; });
   in {
 
-    compiler-rt = callPackage ./compiler-rt.nix {};
+    compiler-rt = callPackage ./compiler-rt.nix {
+      stdenv = if stdenv.hostPlatform.useLLVM or false
+               then overrideCC stdenv buildLlvmTools.lldClangNoCompilerRt
+               else stdenv;
+    };
 
     stdenv = overrideCC stdenv buildLlvmTools.clang;
 
