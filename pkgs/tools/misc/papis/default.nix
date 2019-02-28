@@ -4,14 +4,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "papis";
-  version = "0.8.1";
+  version = "0.8.2";
 
   # Missing tests on Pypi
   src = fetchFromGitHub {
     owner = "papis";
     repo = pname;
     rev = "v${version}";
-    sha256 = "05l33fhp7iq5mv63mgn9mh2c4grr84szfgm5x0m2bh2mj8g1p8a7";
+    sha256 = "0sa4hpgjvqkjcmp9bjr27b5m5jg4pfspdc8nf1ny80sr0kzn72hb";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
