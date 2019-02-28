@@ -2,7 +2,7 @@
   libsecret, libGL, libpulseaudio, glib, makeWrapper, makeDesktopItem }:
 
 let
-  version = "1.1.0-1";
+  version = "1.1.1-1";
 
   description = ''
     An application that runs on your computer in the background and seamlessly encrypts
@@ -12,9 +12,9 @@ let
   '';
 
   desktopItem = makeDesktopItem {
-    name = "Desktop-Bridge";
-    exec = "Desktop-Bridge";
-    icon = "desktop-bridge";
+    name = "protonmail-bridge";
+    exec = "protonmail-bridge";
+    icon = "protonmail-bridge";
     comment = stdenv.lib.replaceStrings ["\n"] [" "] description;
     desktopName = "ProtonMail Bridge";
     genericName = "ProtonMail Bridge for Linux";
@@ -25,7 +25,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://protonmail.com/download/protonmail-bridge_${version}_amd64.deb";
-    sha256 = "0l29z208krnd3dginc203m4p5dlmnxf08vpmbm9xzlckwmswizkb";
+    sha256 = "148syyz92yqxp2fw18fhflhmdrakxz7cc30va7h0pwysz97gni2p";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -40,11 +40,11 @@ in stdenv.mkDerivation rec {
     mkdir -p $out/{bin,lib,share/applications}
     mkdir -p $out/share/{applications,icons/hicolor/scalable/apps}
 
-    cp -r usr/lib/protonmail/bridge/Desktop-Bridge{,.sh} $out/lib
-    cp usr/share/icons/protonmail/Desktop-Bridge.svg $out/share/icons/hicolor/scalable/apps/desktop-bridge.svg
+    cp -r usr/lib/protonmail/bridge/protonmail-bridge{,.sh} $out/lib
+    cp usr/share/icons/protonmail/ProtonMail_Bridge.svg $out/share/icons/hicolor/scalable/apps/protonmail-bridge.svg
     cp ${desktopItem}/share/applications/* $out/share/applications
 
-    ln -s $out/lib/Desktop-Bridge $out/bin/Desktop-Bridge
+    ln -s $out/lib/protonmail-bridge $out/bin/protonmail-bridge
   '';
 
   postFixup = let
@@ -66,9 +66,9 @@ in stdenv.mkDerivation rec {
     patchelf \
       --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
       --set-rpath "${rpath}" \
-      $out/lib/Desktop-Bridge
+      $out/lib/protonmail-bridge
 
-    wrapProgram $out/lib/Desktop-Bridge \
+    wrapProgram $out/lib/protonmail-bridge \
       --set QT_PLUGIN_PATH "${qtPath qtbase.qtPluginPrefix}" \
       --set QML_IMPORT_PATH "${qtPath qtbase.qtQmlPrefix}" \
       --set QML2_IMPORT_PATH "${qtPath qtbase.qtQmlPrefix}" \
