@@ -5015,6 +5015,8 @@ in {
 
   zerobin = callPackage ../development/python-modules/zerobin { };
 
+  tensorflow-estimator = callPackage ../development/python-modules/tensorflow-estimator { };
+
   tensorflow-tensorboard = callPackage ../development/python-modules/tensorflow-tensorboard { };
 
   tensorflow = disabledIf isPy37 (
