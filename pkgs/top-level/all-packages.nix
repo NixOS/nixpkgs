@@ -5898,6 +5898,8 @@ in
 
   tpm2-tools = callPackage ../tools/security/tpm2-tools { };
 
+  trezorCipherKeyValue = callPackage ../tools/misc/trezorCipherKeyValue { };
+
   trezord = callPackage ../servers/trezord { };
 
   tthsum = callPackage ../applications/misc/tthsum { };
