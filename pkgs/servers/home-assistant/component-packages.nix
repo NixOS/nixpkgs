@@ -1351,7 +1351,7 @@
     "switch.tradfri" = ps: with ps; [  ];
     "switch.transmission" = ps: with ps; [ transmissionrpc ];
     "switch.tuya" = ps: with ps; [  ];
-    "switch.unifi" = ps: with ps; [  ];
+    "switch.unifi" = ps: with ps; [ aiounifi ];
     "switch.upcloud" = ps: with ps; [  ];
     "switch.velbus" = ps: with ps; [  ];
     "switch.vera" = ps: with ps; [  ];
@@ -1402,7 +1402,7 @@
     "tts.yandextts" = ps: with ps; [  ];
     "tuya" = ps: with ps; [  ];
     "twilio" = ps: with ps; [ aiohttp-cors twilio ];
-    "unifi" = ps: with ps; [  ];
+    "unifi" = ps: with ps; [ aiounifi ];
     "unifi.const" = ps: with ps; [  ];
     "unifi.controller" = ps: with ps; [  ];
     "unifi.errors" = ps: with ps; [  ];
