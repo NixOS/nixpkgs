@@ -21989,6 +21989,8 @@ in
 
   gtkwave = callPackage ../applications/science/electronics/gtkwave { };
 
+  horizon-eda = callPackage ../applications/science/electronics/horizon-eda { };
+
   kicad = callPackage ../applications/science/electronics/kicad {
     wxGTK = wxGTK30;
     boost = boost160;
