@@ -5064,8 +5064,8 @@ in {
     else callPackage ../development/python-modules/tensorflow/bin.nix rec {
       cudaSupport = pkgs.config.cudaSupport or false;
       inherit (pkgs.linuxPackages) nvidia_x11;
-      cudatoolkit = pkgs.cudatoolkit_9_0;
-      cudnn = pkgs.cudnn_cudatoolkit_9_0;
+      cudatoolkit = pkgs.cudatoolkit_10_0;
+      cudnn = pkgs.cudnn_cudatoolkit_10_0;
     });
 
   tensorflowWithoutCuda = self.tensorflow.override {
