@@ -1,4 +1,4 @@
-version=1.11.0
+version=1.13.1
 hashfile=tf${version}-hashes.nix
 rm -f $hashfile
 echo "{" >> $hashfile
