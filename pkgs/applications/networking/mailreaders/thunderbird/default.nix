@@ -5,7 +5,7 @@
 , hunspell, libevent, libstartup_notification
 , icu, libpng, jemalloc
 , autoconf213, which, m4
-, writeScript, xidel, common-updater-scripts, coreutils, gnused, gnugrep, curl
+, writeScript, xidel, common-updater-scripts, coreutils, gnused, gnugrep, curl, runtimeShell
 , cargo, rustc, llvmPackages
 , enableGTK3 ? false, gtk3, gnome3, wrapGAppsHook, makeWrapper
 , enableCalendar ? true
@@ -193,6 +193,6 @@ in stdenv.mkDerivation rec {
   passthru.updateScript = import ./../../browsers/firefox/update.nix {
     attrPath = "thunderbird";
     baseUrl = "http://archive.mozilla.org/pub/thunderbird/releases/";
-    inherit stdenv writeScript lib common-updater-scripts xidel coreutils gnused gnugrep curl;
+    inherit stdenv writeScript lib common-updater-scripts xidel coreutils gnused gnugrep curl runtimeShell;
   };
 }
