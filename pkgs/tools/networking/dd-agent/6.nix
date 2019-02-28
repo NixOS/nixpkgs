@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, buildGoPackage, makeWrapper, pythonPackages, pkgconfig, systemd }:
+{ lib, stdenv, fetchFromGitHub, buildGoPackage, makeWrapper, pythonPackages, pkgconfig, systemd, hostname }:
 
 let
   # keep this in sync with github.com/DataDog/agent-payload dependency
@@ -51,6 +51,8 @@ in buildGoPackage rec {
     sed -e "s|PyChecksPath =.*|PyChecksPath = \"$bin/${python.sitePackages}\"|" \
         -e "s|distPath =.*|distPath = \"$bin/share/datadog-agent\"|" \
         -i cmd/agent/common/common_nix.go
+    sed -e "s|/bin/hostname|${lib.getBin hostname}/bin/hostname|" \
+        -i pkg/util/hostname_nix.go
   '';
 
   # Install the config files and python modules from the "dist" dir
