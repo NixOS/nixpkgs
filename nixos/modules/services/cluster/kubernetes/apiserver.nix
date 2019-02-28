@@ -350,7 +350,7 @@ in
           listenPeerUrls = mkDefault ["https://0.0.0.0:2380"];
           advertiseClientUrls = mkDefault ["https://${top.masterAddress}:2379"];
           initialCluster = mkDefault ["${top.masterAddress}=https://${top.masterAddress}:2380"];
-          name = top.masterAddress;
+          name = mkDefault top.masterAddress;
           initialAdvertisePeerUrls = mkDefault ["https://${top.masterAddress}:2380"];
         };
 
