@@ -49,6 +49,29 @@ In addition to writing properly formatted commit messages, it's important to inc
 
 For package version upgrades and such a one-line commit message is usually sufficient.
 
+## Configuration instructions
+
+Installing and configuring packages from Nix (or in NixOS) is slightly different than other package managers or distros, where you often need to enable services, or specify settings for a package or service differently than the original package requires.
+
+It is even more relevant when your package builds/generates a configuration file expected by the binary or service. Think of udev rules, services (web servers, database engines) or networking (proxies, etc) configurations. Sometimes the user is expected to simply *enable* the package in their configuration.nix or config.nix for it to actually start working:
+
+```
+services.openssh.enable = true
+# or
+services.udev.extraRules = ''
+  SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_device", ATTR{idVendor}=="0925", ATTR{idProduct}=="3881", MODE="0666"
+''
+# or
+services.mosquitto = {
+    enable = true;
+    host = "0.0.0.0";
+    allowAnonymous = true;
+    users = {};
+  };
+```
+
+A README.md file along your *my_package*.nix will make your Nix friends very happy and productive, and will greatly reduce the uncertainty and/or confusion of installing and testing the software you have so kindly made available through Nix.
+
 ## Reviewing contributions
 
 See the nixpkgs manual for more details on how to [Review contributions](https://nixos.org/nixpkgs/manual/#sec-reviewing-contributions).

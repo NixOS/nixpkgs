@@ -34,6 +34,7 @@ For pull requests, please rebase onto nixpkgs `master`.
 * [Continuous package builds for 18.09 release](https://hydra.nixos.org/jobset/nixos/release-18.09)
 * [Tests for unstable/master](https://hydra.nixos.org/job/nixos/trunk-combined/tested#tabs-constituents)
 * [Tests for 18.09 release](https://hydra.nixos.org/job/nixos/release-18.09/tested#tabs-constituents)
+* [Contributing](https://github.com/NixOS/nixpkgs/blob/master/.github/CONTRIBUTING.md)
 
 Communication:
 
