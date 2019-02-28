@@ -135,7 +135,8 @@ in
 
     rubyEnv = mkOption {
       type = types.package;
-      readOnly = true;
+      # readOnly = true;
+      # merge = mergeEqualOption;
       description = ''
         Read-only Ruby environment.
       '';
@@ -203,7 +204,7 @@ in
     };
 
     extraPython3Packages = mkOption {
-      type = with types; either extraPython3PackageType (listOf package);
+      type = with types; extraPython3PackageType;
       default = (_: []);
       defaultText = "ps: []";
       example = literalExample "(ps: with ps; [ python-language-server ])";
@@ -230,8 +231,10 @@ in
       pluginPython3Packages = getDeps "python3Dependencies" (requiredPlugins config);
     in
       python3Packages.python.withPackages (ps:
-              [ ps.pynvim ]
-              ++ (config.extraPython3Packages ps)
+      # debug.traceValSeq
+      # debug.traceValSeq
+      [ ps.pynvim ]
+              ++  (config.extraPython3Packages ps)
               ++ (concatMap (f: f ps) pluginPython3Packages)
               );
 
