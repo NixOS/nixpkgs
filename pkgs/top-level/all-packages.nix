@@ -4926,7 +4926,7 @@ in
 
   plex = callPackage ../servers/plex { };
 
-  plexpy = callPackage ../servers/plexpy { python = python2; };
+  tautulli = callPackage ../servers/tautulli { python = python2; };
 
   ploticus = callPackage ../tools/graphics/ploticus {
     libpng = libpng12;

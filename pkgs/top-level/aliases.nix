@@ -234,6 +234,7 @@ mapAliases ({
   pidginwindowmerge = pidgin-window-merge; # added 2018-01-08
   piwik = matomo; # added 2018-01-16
   pltScheme = racket; # just to be sure
+  plexpy = tautulli; # plexpy got renamed to tautulli, added 2019-02-22
   pmtools = acpica-tools; # added 2018-11-01
   poppler_qt5 = libsForQt5.poppler;  # added 2015-12-19
   postgresql94 = postgresql_9_4;

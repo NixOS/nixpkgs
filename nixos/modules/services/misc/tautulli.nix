@@ -3,49 +3,49 @@
 with lib;
 
 let
-  cfg = config.services.plexpy;
+  cfg = config.services.tautulli;
 in
 {
   options = {
-    services.plexpy = {
-      enable = mkEnableOption "PlexPy Plex Monitor";
+    services.tautulli = {
+      enable = mkEnableOption "Tautulli Plex Monitor";
 
       dataDir = mkOption {
         type = types.str;
         default = "/var/lib/plexpy";
-        description = "The directory where PlexPy stores its data files.";
+        description = "The directory where Tautulli stores its data files.";
       };
 
       configFile = mkOption {
         type = types.str;
         default = "/var/lib/plexpy/config.ini";
-        description = "The location of PlexPy's config file.";
+        description = "The location of Tautulli's config file.";
       };
 
       port = mkOption {
         type = types.int;
         default = 8181;
-        description = "TCP port where PlexPy listens.";
+        description = "TCP port where Tautulli listens.";
       };
 
       user = mkOption {
         type = types.str;
         default = "plexpy";
-        description = "User account under which PlexPy runs.";
+        description = "User account under which Tautulli runs.";
       };
 
       group = mkOption {
         type = types.str;
         default = "nogroup";
-        description = "Group under which PlexPy runs.";
+        description = "Group under which Tautulli runs.";
       };
 
       package = mkOption {
         type = types.package;
-        default = pkgs.plexpy;
-        defaultText = "pkgs.plexpy";
+        default = pkgs.tautulli;
+        defaultText = "pkgs.tautulli";
         description = ''
-          The PlexPy package to use.
+          The Tautulli package to use.
         '';
       };
     };
@@ -56,8 +56,8 @@ in
       "d '${cfg.dataDir}' - ${cfg.user} ${cfg.group} - -"
     ];
 
-    systemd.services.plexpy = {
-      description = "PlexPy Plex Monitor";
+    systemd.services.tautulli = {
+      description = "Tautulli Plex Monitor";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
@@ -65,7 +65,7 @@ in
         User = cfg.user;
         Group = cfg.group;
         GuessMainPID = "false";
-        ExecStart = "${cfg.package}/bin/plexpy --datadir ${cfg.dataDir} --config ${cfg.configFile} --port ${toString cfg.port} --pidfile ${cfg.dataDir}/plexpy.pid --nolaunch";
+        ExecStart = "${cfg.package}/bin/tautulli --datadir ${cfg.dataDir} --config ${cfg.configFile} --port ${toString cfg.port} --pidfile ${cfg.dataDir}/tautulli.pid --nolaunch";
         Restart = "on-failure";
       };
     };
