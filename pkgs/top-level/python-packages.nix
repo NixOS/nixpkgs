@@ -850,7 +850,11 @@ in {
 
   tomlkit = callPackage ../development/python-modules/tomlkit { };
 
+  aiounifi = callPackage ../development/python-modules/aiounifi { };
+
   unifi = callPackage ../development/python-modules/unifi { };
+
+  pyunifi = callPackage ../development/python-modules/pyunifi { };
 
   vidstab = callPackage ../development/python-modules/vidstab { };
 
@@ -1430,8 +1434,6 @@ in {
   jsonrpc-websocket = callPackage ../development/python-modules/jsonrpc-websocket { };
 
   onkyo-eiscp = callPackage ../development/python-modules/onkyo-eiscp { };
-
-  pyunifi = callPackage ../development/python-modules/pyunifi { };
 
   tablib = callPackage ../development/python-modules/tablib { };
 
