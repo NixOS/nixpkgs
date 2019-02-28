@@ -46,6 +46,10 @@ python3Packages.buildPythonApplication rec {
       url = https://github.com/pimutils/vdirsyncer/commit/29417235321c249c65904bc7948b066ef5683aee.patch;
       sha256 = "0zvr0y88gm3vprjcdzs4m151laa9qhkyi61rvrfdjmf42fwhbm80";
     })
+    (fetchpatch {
+      url = https://github.com/pimutils/vdirsyncer/pull/788.patch;
+      sha256 = "0vl942ii5iad47y63v0ngmhfp37n30nxyk4j7h64b95fk38vfwx9";
+    })
   ];
 
   postPatch = ''
