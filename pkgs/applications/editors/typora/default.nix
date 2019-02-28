@@ -15,16 +15,12 @@ stdenv.mkDerivation rec {
 
   unpackPhase = "dpkg-deb -x $src .";
 
-  dontWrapGApps = true;
-
   installPhase = ''
-    mkdir -p $out/bin $out/share/typora
+    mkdir -p $out/bin $out/share
     {
       cd usr
-      mv share/typora/resources/app/* $out/share/typora
-      mv share/applications $out/share
-      mv share/icons $out/share
-      mv share/doc $out/share
+      mv share/typora/resources/app $out/share/typora
+      mv share/{applications,icons,doc} $out/share/
     }
 
     makeWrapper ${electron_3}/bin/electron $out/bin/typora \
