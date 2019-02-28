@@ -104,7 +104,7 @@ let
     umount /crypt-ramfs 2>/dev/null
   '';
 
-  openCommand = name': { name, device, header, keyFile, keyFileSize, keyFileOffset, allowDiscards, yubikey, fallbackToPassword, ... }: assert name' == name;
+  openCommand = name': { name, device, header, keyFile, keyFileSize, keyFileOffset, allowDiscards, trezor, yubikey, fallbackToPassword, ... }: assert name' == name;
   let
     csopen   = "cryptsetup luksOpen ${device} ${name} ${optionalString allowDiscards "--allow-discards"} ${optionalString (header != null) "--header=${header}"}";
     cschange = "cryptsetup luksChangeKey ${device} ${optionalString (header != null) "--header=${header}"}";
@@ -287,9 +287,54 @@ let
     }
     ''}
 
+    ${optionalString luks.trezorSupport ''
+    trezor_pass() {
+      ${pkgs.trezorCipherKeyValue}/bin/trezorCipherKeyValue -p "$out/bin/trezor-askpass" -e -H -k "Unlock root"
+
+      return $?
+    }
+
+    do_open_trezor() {
+      local passphrase
+
+      while true; do
+          echo "Trying open ${device} by TREZOR"
+
+          # Get passphrase from trezor
+          passphrase=$(trezor_pass)
+
+          if [ $? -ne 0 ]
+          then
+            return 1
+          fi
+
+          echo -n "Trying open ${device} by TREZOR..."
+          echo -n "$passphrase" | ${csopen} --key-file=-
+
+          if [ $? == 0 ]; then
+              echo " - success"
+              break
+          else
+              echo " - failure"
+          fi
+      done
+
+    }
+
+    open_trezor() {
+      export TREZOR_CIPHER_VALUE='${trezor.cipher}'
+
+      if ! do_open_trezor; then
+        echo "Failed open by TREZOR, falling back to password"
+        do_open_passphrase
+      fi
+    }
+    ''}
 
     ${if luks.yubikeySupport && (yubikey != null) then ''
     open_yubikey
+    '' else if luks.trezorSupport then ''
+    open_trezor
     '' else ''
     open_normally
     ''}
@@ -475,6 +520,24 @@ in
             '';
           };
 
+          trezor = mkOption {
+            default = null;
+            description = ''
+              The options to use for this LUKS device in TrezorCipherKeyValue.
+              If null (the default), trezor will be disabled for this device.
+            '';
+
+            type = with types; nullOr (submodule {
+              options = {
+                cipher = mkOption {
+                  default = "Super unlock my hard drive pass static text by Trezor, Yay! Rulez!";
+                  type = types.str;
+                  description = "Key which will be encrypted by trezor. Must be same as key when LUKS was created.";
+                };
+              };
+            });
+          };
+
           yubikey = mkOption {
             default = null;
             description = ''
@@ -565,6 +628,14 @@ in
             and a Yubikey to work with this feature.
           '';
     };
+
+    boot.initrd.luks.trezorSupport = mkOption {
+      default = false;
+      type = types.bool;
+      description = ''
+            Enables support for authenticating with a TREZOR on LUKS devices.
+          '';
+    };
   };
 
   config = mkIf (luks.devices != {} || luks.forceLuksSupportInInitrd) {
@@ -604,6 +675,12 @@ in
         $out/bin/openssl "\$@"
         EOF
         chmod +x $out/bin/openssl-wrap
+      ''}
+
+      ${optionalString luks.trezorSupport ''
+        echo "Copying helper for TREZOR"
+        copy_bin_and_libs ${pkgs.trezorCipherKeyValue}/bin/trezorCipherKeyValue
+        copy_bin_and_libs ${pkgs.trezorCipherKeyValue}/bin/trezor-askpass
       ''}
     '';
 
