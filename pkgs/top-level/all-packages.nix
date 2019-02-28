@@ -21545,6 +21545,8 @@ in
 
   mrbayes = callPackage ../applications/science/biology/mrbayes { };
 
+  messer-slim = callPackage ../applications/science/biology/messer-slim { };
+
   minc_tools = callPackage ../applications/science/biology/minc-tools { };
 
   minc_widgets = callPackage ../applications/science/biology/minc-widgets { };
