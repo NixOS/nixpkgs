@@ -9,6 +9,8 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DCOMPILER_RT_DEFAULT_TARGET_ONLY=ON"
+    "-DCMAKE_C_COMPILER_TARGET=${stdenv.hostPlatform.config}"
+    "-DCMAKE_ASM_COMPILER_TARGET=${stdenv.hostPlatform.config}"
   ] ++ stdenv.lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) [
     "-DCMAKE_C_FLAGS=-nodefaultlibs"
     "-DCMAKE_CXX_COMPILER_WORKS=ON"
@@ -17,8 +19,6 @@ stdenv.mkDerivation rec {
     "-DCOMPILER_RT_BUILD_XRAY=OFF"
     "-DCOMPILER_RT_BUILD_LIBFUZZER=OFF"
     "-DCOMPILER_RT_BUILD_PROFILE=OFF"
-    "-DCMAKE_C_COMPILER_TARGET=${stdenv.hostPlatform.config}"
-    "-DCMAKE_ASM_COMPILER_TARGET=${stdenv.hostPlatform.config}"
     "-DCOMPILER_RT_BAREMETAL_BUILD=ON"
   ];
 
