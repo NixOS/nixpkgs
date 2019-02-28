@@ -5286,4 +5286,9 @@
     github = "shmish111";
     name = "David Smith";
   };
+  minijackson = {
+    email = "minijackson@riseup.net";
+    github = "minijackson";
+    name = "Rémi Nicole";
+  };
 }
