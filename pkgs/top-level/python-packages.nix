@@ -862,6 +862,8 @@ in {
 
   unifi = callPackage ../development/python-modules/unifi { };
 
+  pyunifi = callPackage ../development/python-modules/pyunifi { };
+
   vidstab = callPackage ../development/python-modules/vidstab { };
 
   webapp2 = callPackage ../development/python-modules/webapp2 { };
@@ -913,6 +915,8 @@ in {
   aioprocessing = callPackage ../development/python-modules/aioprocessing { };
 
   aiorpcx = callPackage ../development/python-modules/aiorpcx { };
+
+  aiounifi = callPackage ../development/python-modules/aiounifi { };
 
   ajpy = callPackage ../development/python-modules/ajpy { };
 
@@ -1448,8 +1452,6 @@ in {
   jsonrpc-websocket = callPackage ../development/python-modules/jsonrpc-websocket { };
 
   onkyo-eiscp = callPackage ../development/python-modules/onkyo-eiscp { };
-
-  pyunifi = callPackage ../development/python-modules/pyunifi { };
 
   tablib = callPackage ../development/python-modules/tablib { };
 
