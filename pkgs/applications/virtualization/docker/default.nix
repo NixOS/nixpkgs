@@ -100,6 +100,7 @@ rec {
       export AUTO_GOPATH=1
       export DOCKER_GITCOMMIT="${rev}"
       export VERSION="${version}"
+      export GOCACHE="$TMPDIR/go-cache"
       ./hack/make.sh dynbinary
       cd -
     '') + ''
