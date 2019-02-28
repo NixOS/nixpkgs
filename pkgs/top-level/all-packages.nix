@@ -16456,7 +16456,7 @@ in
 
   cligh = python3Packages.callPackage ../development/tools/github/cligh {};
 
-  clipgrab = callPackage ../applications/video/clipgrab { };
+  clipgrab = qt5.callPackage ../applications/video/clipgrab { };
 
   clipmenu = callPackage ../applications/misc/clipmenu { };
 
