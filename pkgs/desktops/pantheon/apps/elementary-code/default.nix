@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, pantheon, pkgconfig, meson, ninja, vala, substituteAll
-, python3, glibcLocales, desktop-file-utils, gtk3, granite, libgee, elementary-icon-theme
+, python3, desktop-file-utils, gtk3, granite, libgee, elementary-icon-theme
 , appstream, libpeas, editorconfig-core-c, gtksourceview3, gtkspell3, libsoup
 , vte, webkitgtk, zeitgeist, ctags, libgit2-glib, wrapGAppsHook }:
 
@@ -26,7 +26,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     appstream
     desktop-file-utils
-    glibcLocales
     meson
     ninja
     pkgconfig
@@ -56,7 +55,7 @@ stdenv.mkDerivation rec {
   LIBRARY_PATH = stdenv.lib.makeLibraryPath [ editorconfig-core-c ];
 
   # install script fails with UnicodeDecodeError because of printing a fancy elipsis character
-  LC_ALL = "en_US.UTF-8";
+  LC_ALL = "C.UTF-8";
 
   # ctags needed in path by outline plugin
   preFixup = ''
