@@ -243,6 +243,15 @@
     };
   };
 
+  subsFilter = {
+    src = fetchFromGitHub {
+      owner = "yaoweibin";
+      repo = "ngx_http_substitutions_filter_module";
+      rev = "v0.6.4";
+      sha256 = "0q86cv0mfffh43id5xanywyhpd7b0jijrmk8y311c13l9ajrd2rx";
+    };
+  };
+
   sysguard = {
     src = fetchFromGitHub {
       owner = "vozlt";
