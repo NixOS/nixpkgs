@@ -261,7 +261,7 @@ make_deterministic_repo(){
 
     # Do a full repack. Must run single-threaded, or else we lose determinism.
     git config pack.threads 1
-    git repack -A -d -f
+    git repack -A -d -F
     rm -f .git/config
 
     # Garbage collect unreferenced objects.
