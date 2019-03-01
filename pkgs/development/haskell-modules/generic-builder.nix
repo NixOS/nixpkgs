@@ -211,12 +211,6 @@ let
 
   nativeGhcCommand = "${nativeGhc.targetPrefix}ghc";
 
-  buildPkgDb = ghcName: packageConfDir: ''
-    if [ -d "$p/lib/${ghcName}/package.conf.d" ]; then
-      cp -f "$p/lib/${ghcName}/package.conf.d/"*.conf ${packageConfDir}/
-      continue
-    fi
-  '';
 in stdenv.lib.fix (drv:
 
 assert allPkgconfigDepends != [] -> pkgconfig != null;
@@ -235,7 +229,8 @@ stdenv.mkDerivation ({
 
   inherit src;
 
-  inherit depsBuildBuild nativeBuildInputs;
+  inherit depsBuildBuild;
+  nativeBuildInputs = [ ./cabal-hook.sh ] ++ nativeBuildInputs;
   buildInputs = otherBuildInputs ++ optionals (!isLibrary) propagatedBuildInputs;
   propagatedBuildInputs = optionals isLibrary propagatedBuildInputs;
 
@@ -258,42 +253,10 @@ stdenv.mkDerivation ({
     echo "Build with ${ghc}."
     ${optionalString (isLibrary && hyperlinkSource) "export PATH=${hscolour}/bin:$PATH"}
 
-    setupPackageConfDir="$TMPDIR/setup-package.conf.d"
-    mkdir -p $setupPackageConfDir
-    packageConfDir="$TMPDIR/package.conf.d"
-    mkdir -p $packageConfDir
-
     setupCompileFlags="${concatStringsSep " " setupCompileFlags}"
     configureFlags="${concatStringsSep " " defaultConfigureFlags} $configureFlags"
-  ''
-  # We build the Setup.hs on the *build* machine, and as such should only add
-  # dependencies for the build machine.
-  #
-  # pkgs* arrays defined in stdenv/setup.hs
-  + ''
-    for p in "''${pkgsBuildBuild[@]}" "''${pkgsBuildHost[@]}" "''${pkgsBuildTarget[@]}"; do
-      ${buildPkgDb nativeGhc.name "$setupPackageConfDir"}
-    done
+
     ${nativeGhcCommand}-pkg --${nativePackageDbFlag}="$setupPackageConfDir" recache
-  ''
-  # For normal components
-  + ''
-    for p in "''${pkgsHostHost[@]}" "''${pkgsHostTarget[@]}"; do
-      ${buildPkgDb ghc.name "$packageConfDir"}
-      if [ -d "$p/include" ]; then
-        configureFlags+=" --extra-include-dirs=$p/include"
-      fi
-      if [ -d "$p/lib" ]; then
-        configureFlags+=" --extra-lib-dirs=$p/lib"
-      fi
-    ''
-    # It is not clear why --extra-framework-dirs does work fine on Linux
-    + optionalString (!stdenv.buildPlatform.isDarwin || versionAtLeast nativeGhc.version "8.0") ''
-      if [[ -d "$p/Library/Frameworks" ]]; then
-        configureFlags+=" --extra-framework-dirs=$p/Library/Frameworks"
-      fi
-  '' + ''
-    done
   ''
   # only use the links hack if we're actually building dylibs. otherwise, the
   # "dynamic-library-dirs" point to nonexistent paths, and the ln command becomes
