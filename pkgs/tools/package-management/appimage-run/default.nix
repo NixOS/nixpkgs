@@ -1,4 +1,4 @@
-{ stdenv, writeScript, buildFHSUserEnv, coreutils, file, libarchive
+{ stdenv, writeScript, buildFHSUserEnv, coreutils, file, libarchive, runtimeShell
 , extraPkgs ? pkgs: [], appimageTools }:
 
 let
@@ -9,7 +9,7 @@ in buildFHSUserEnv (fhsArgs // {
   targetPkgs = pkgs: fhsArgs.targetPkgs pkgs ++ extraPkgs pkgs;
 
   runScript = writeScript "appimage-exec" ''
-    #!${stdenv.shell}
+    #!${runtimeShell}
     APPIMAGE="$(realpath "$1")"
 
     if [ ! -x "$APPIMAGE" ]; then

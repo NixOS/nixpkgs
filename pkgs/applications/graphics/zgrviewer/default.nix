@@ -1,4 +1,4 @@
-{stdenv, fetchurl, jre, unzip}:
+{ stdenv, fetchurl, jre, unzip, runtimeShell }:
 stdenv.mkDerivation rec {
   version = "0.9.0";
   pname = "zgrviewer";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
     cp -r target/* "$out/share/java/zvtm/"
 
-    echo '#!${stdenv.shell}' > "$out/bin/zgrviewer"
+    echo '#!${runtimeShell}' > "$out/bin/zgrviewer"
     echo "${jre}/lib/openjdk/jre/bin/java -jar '$out/share/java/zvtm/zgrviewer-${version}.jar' \"\$@\"" >> "$out/bin/zgrviewer"
     chmod a+x "$out/bin/zgrviewer"
   '';

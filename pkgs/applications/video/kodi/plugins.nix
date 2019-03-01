@@ -1,7 +1,8 @@
 { stdenv, callPackage, fetchurl, fetchFromGitHub, unzip
 , cmake, kodiPlain, libcec_platform, tinyxml, rapidxml
 , steam, libusb, pcre-cpp, jsoncpp, libhdhomerun, zlib
-, python2Packages, expat, glib, nspr, nss }:
+, python2Packages, expat, glib, nspr, nss, openssl
+, libssh, libarchive, lzma, bzip2, lz4, lzo }:
 
 with stdenv.lib;
 
@@ -432,13 +433,13 @@ let self = rec {
 
     plugin = "osmc-skin";
     namespace = "skin.osmc";
-    version = "17.0.4";
+    version = "18.0.0";
 
     src = fetchFromGitHub {
       owner = "osmc";
       repo = namespace;
-      rev = "a9268937f49286bab9fb49de430b8aafd7a60a9e";
-      sha256 = "1b3fm02annsq58pcfc985glrmh21rmqksdj3q8wn6gyza06jdf3v";
+      rev = "40a6c318641e2cbeac58fb0e7dde9c2beac737a0";
+      sha256 = "1l7hyfj5zvjxjdm94y325bmy1naak455b9l8952sb0gllzrcwj6s";
     };
 
     meta = {
@@ -506,4 +507,47 @@ let self = rec {
     };
   };
 
+  vfs-sftp = mkKodiABIPlugin rec {
+    namespace = "vfs.sftp";
+    version = "1.0.1";
+    plugin = namespace;
+
+    src = fetchFromGitHub {
+      owner = "xbmc";
+      repo = namespace;
+      rev = "${version}-${rel}";
+      sha256 = "1l9igrl168s91c15v9klyaaz226ik3xlbzjk2f1346fvzmp87g9v";
+    };
+
+    meta = with stdenv.lib; {
+      description = "SFTP Virtual Filesystem add-on for Kodi";
+      license = licenses.gpl2Plus;
+      platforms = platforms.all;
+      maintainers = with maintainers; [ minijackson ];
+    };
+
+    extraBuildInputs = [ openssl libssh zlib ];
+  };
+
+  vfs-libarchive = mkKodiABIPlugin rec {
+    namespace = "vfs.libarchive";
+    version = "1.0.5";
+    plugin = namespace;
+
+    src = fetchFromGitHub {
+      owner = "xbmc";
+      repo = namespace;
+      rev = "${version}-${rel}";
+      sha256 = "0l1f1fijflr1ia30r0dcz1x2zn35c4lxy30az1cqxdf8nipza0b8";
+    };
+
+    meta = with stdenv.lib; {
+      description = "LibArchive Virtual Filesystem add-on for Kodi";
+      license = licenses.gpl2Plus;
+      platforms = platforms.all;
+      maintainers = with maintainers; [ minijackson ];
+    };
+
+    extraBuildInputs = [ libarchive lzma bzip2 zlib lz4 lzo openssl ];
+  };
 }; in self

@@ -1,7 +1,7 @@
-{ stdenv, writeScript }:
+{ stdenv, writeScript, runtimeShell }:
 
 writeScript "update-mendeley" ''
-  #!${stdenv.shell}
+  #!${runtimeShell}
   function follow() {
     local URL=$1
     while true; do

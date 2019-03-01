@@ -1,4 +1,5 @@
-{ lib, pkgs, stdenv, fetchFromGitHub, mypy, python3, nix, git, makeWrapper }:
+{ lib, pkgs, stdenv, fetchFromGitHub, mypy, python3, nix, git, makeWrapper
+, runtimeShell }:
 let self = stdenv.mkDerivation rec {
   name = "nix-pin-${version}";
   version = "0.4.0";
@@ -26,7 +27,7 @@ let self = stdenv.mkDerivation rec {
         let impl = import "${self}/share/nix/api.nix" { inherit pkgs pinConfig; }; in
         { inherit (impl) augmentedPkgs pins callPackage; };
       updateScript = ''
-        #!${stdenv.shell}
+        #!${runtimeShell}
         set -e
         echo
         cd ${toString ./.}

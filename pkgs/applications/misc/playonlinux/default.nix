@@ -19,6 +19,7 @@
 , pkgsi686Linux
 , which
 , curl
+, jq
 }:
 
 let
@@ -41,6 +42,7 @@ let
       xterm
       which
       curl
+      jq
     ];
 
   ld32 =

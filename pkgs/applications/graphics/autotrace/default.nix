@@ -1,5 +1,6 @@
-{ stdenv, fetchurl, callPackage, libpng12, imagemagick,
-  autoreconfHook, glib, pstoedit, pkgconfig, gettext, gd, darwin }:
+{ stdenv, fetchurl, callPackage, libpng12, imagemagick
+, autoreconfHook, glib, pstoedit, pkgconfig, gettext, gd, darwin
+, runtimeShell }:
 
 # TODO: Figure out why the resultant binary is somehow linked against
 # libpng16.so.16 rather than libpng12.
@@ -51,7 +52,7 @@ stdenv.mkDerivation rec {
     # pstoedit-config no longer exists, it was replaced with pkg-config
     mkdir wrappers
     cat >wrappers/pstoedit-config <<'EOF'
-    #!${stdenv.shell}
+    #!${runtimeShell}
     # replace --version with --modversion for pkg-config
     args=''${@/--version/--modversion}
     exec pkg-config pstoedit "''${args[@]}"

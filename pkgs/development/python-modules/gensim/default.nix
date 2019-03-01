@@ -11,6 +11,7 @@
 buildPythonPackage rec {
   pname = "gensim";
   version = "3.7.1";
+
   src = fetchPypi {
     inherit pname version;
     sha256 = "ed845ac585f724ae1f40fdb517ed8ade822531f9bbcd1be4a599c2e86aff48a8";

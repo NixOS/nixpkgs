@@ -1,8 +1,8 @@
-{ stdenv, fetchFromGitHub, fetchpatch, autoreconfHook, pkgconfig, libxml2, glib, pipewire, fontconfig, flatpak, acl, dbus, fuse, wrapGAppsHook, gnome3 }:
+{ stdenv, fetchFromGitHub, substituteAll, autoreconfHook, pkgconfig, libxml2, glib, pipewire, fontconfig, flatpak, gsettings-desktop-schemas, acl, dbus, fuse, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "xdg-desktop-portal";
-  version = "1.1.0";
+  version = "1.2.0";
 
   outputs = [ "out" "installedTests" ];
 
@@ -10,20 +10,19 @@ stdenv.mkDerivation rec {
     owner = "flatpak";
     repo = pname;
     rev = version;
-    sha256 = "10dv628gci6vcs0rbyp4wb6yvigw2i1jj9x7ii6ckxjir5rff5dx";
+    sha256 = "1gjyif4gly0mkdx6ir6wc4vhfh1raah9jq03q28i88hr7phjdy71";
   };
 
   patches = [
     ./respect-path-env-var.patch
-    # https://github.com/flatpak/xdg-desktop-portal/pull/263
-    (fetchpatch {
-      url = https://github.com/flatpak/xdg-desktop-portal/commit/5e5993b64ea43f7ba77335f98e3d6c5bf99a51b9.patch;
-      sha256 = "1i753q35dgihj6vp3961i0hn2sxy2pyfx0dbqa385z0y6wz8k9xq";
+    (substituteAll {
+      src = ./fix-paths.patch;
+      inherit flatpak;
     })
   ];
 
   nativeBuildInputs = [ autoreconfHook pkgconfig libxml2 wrapGAppsHook ];
-  buildInputs = [ glib pipewire fontconfig flatpak acl dbus fuse gnome3.gsettings-desktop-schemas ];
+  buildInputs = [ glib pipewire fontconfig flatpak acl dbus fuse gsettings-desktop-schemas ];
 
   doCheck = true; # XXX: investigate!
 

@@ -4,14 +4,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "papis";
-  version = "0.7.5";
+  version = "0.8.2";
 
   # Missing tests on Pypi
   src = fetchFromGitHub {
     owner = "papis";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1b481sj92z9nw7gwbrpkgd4nlmqc1n73qilkc51k2r56cy1kjvss";
+    sha256 = "0sa4hpgjvqkjcmp9bjr27b5m5jg4pfspdc8nf1ny80sr0kzn72hb";
   };
 
   patches = [
@@ -28,17 +28,13 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = with python3.pkgs; [
-    click requests filetype pyparsing configparser
-    arxiv2bib pyyaml chardet beautifulsoup4 prompt_toolkit
-    bibtexparser python-slugify pyparser pylibgen
-    habanero isbnlib
+    requests filetype pyparsing configparser arxiv2bib
+    pyyaml chardet beautifulsoup4 colorama bibtexparser
+    pylibgen click python-slugify habanero isbnlib
+    prompt_toolkit pygments
     # optional dependencies
-    dmenu-python whoosh
+    jinja2 whoosh
   ];
-
-  postInstall = ''
-    install -Dt "$out/etc/bash_completion.d" scripts/shell_completion/build/bash/papis
-  '';
 
   checkInputs = (with python3.pkgs; [
     pytest
@@ -46,13 +42,11 @@ python3.pkgs.buildPythonApplication rec {
     xdg_utils
   ];
 
-  # most of the downloader tests require a network connection
+  # most of the downloader tests and 4 other tests require a network connection
   checkPhase = ''
-    HOME=$(mktemp -d) pytest papis tests --ignore tests/downloaders
+    HOME=$(mktemp -d) pytest papis tests --ignore tests/downloaders \
+      -k "not test_get_data and not test_doi_to_data and not test_general and not get_document_url"
   '';
-
-  # FIXME: find out why 39 tests fail
-  doCheck = false;
 
   meta = {
     description = "Powerful command-line document and bibliography manager";

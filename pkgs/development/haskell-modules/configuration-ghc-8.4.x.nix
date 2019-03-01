@@ -20,6 +20,7 @@ self: super: {
   ghc-boot = null;
   ghc-boot-th = null;
   ghc-compact = null;
+  ghc-heap = null;
   ghc-prim = null;
   ghci = null;
   haskeline = null;
@@ -63,15 +64,12 @@ self: super: {
   # more verbose but friendlier for Hydra.
   stack = (doJailbreak super.stack).override {
     Cabal = self.Cabal_2_4_1_0;
-    hpack = self.hpack_0_31_1.override { Cabal = self.Cabal_2_4_1_0; };
-    yaml = self.yaml_0_11_0_0;
+    hpack = self.hpack.override { Cabal = self.Cabal_2_4_1_0; };
     hackage-security = self.hackage-security.override { Cabal = self.Cabal_2_4_1_0; };
   };
-  hpack_0_31_1 = super.hpack_0_31_1.override {
-    yaml = self.yaml_0_11_0_0;
-  };
 
-  # cabal2nix doesn't list this because of a conditional on the GHC version.
+  # Older GHC versions need these additional dependencies.
   aeson = addBuildDepend super.aeson self.contravariant;
+  base-compat-batteries = addBuildDepend super.base-compat-batteries self.contravariant;
 
 }

@@ -45,6 +45,11 @@ in {
       default = "/var/lib/nextcloud";
       description = "Storage path of nextcloud.";
     };
+    logLevel = mkOption {
+      type = types.ints.between 0 4;
+      default = 2;
+      description = "Log level value between 0 (DEBUG) and 4 (FATAL).";
+    };
     https = mkOption {
       type = types.bool;
       default = false;
@@ -281,6 +286,7 @@ in {
               'skeletondirectory' => '${cfg.skeletonDirectory}',
               ${optionalString cfg.caching.apcu "'memcache.local' => '\\OC\\Memcache\\APCu',"}
               'log_type' => 'syslog',
+              'log_level' => '${builtins.toString cfg.logLevel}',
             ];
           '';
           occInstallCmd = let
