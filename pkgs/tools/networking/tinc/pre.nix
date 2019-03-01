@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, autoreconfHook, texinfo, ncurses, readline, zlib, lzo, openssl }:
+{ stdenv, fetchgit, fetchpatch, autoreconfHook, texinfo, ncurses, readline, zlib, lzo, openssl }:
 
 stdenv.mkDerivation rec {
   name = "tinc-${version}";
@@ -11,6 +11,14 @@ stdenv.mkDerivation rec {
   };
 
   outputs = [ "out" "man" "info" ];
+
+  patches = [
+    (fetchpatch {
+      name = "tinc-openssl-1.0.2r.patch";
+      url = "http://git.tinc-vpn.org/git/browse?p=tinc;a=patch;h=2b0aeec02d64bb4724da9ff1dbc19b7d35d7c904";
+      sha256 = "0kidzlmgl0cin4g54ygcxa0jbq9vwlk3dyq5f65nkjd8yvayfzi8";
+    })
+  ];
 
   nativeBuildInputs = [ autoreconfHook texinfo ];
   buildInputs = [ ncurses readline zlib lzo openssl ];
