@@ -438,6 +438,8 @@ in {
 
   hdmedians = callPackage ../development/python-modules/hdmedians { };
 
+  holoviews = callPackage ../development/python-modules/holoviews { };
+
   hoomd-blue = toPythonModule (callPackage ../development/python-modules/hoomd-blue {
     inherit python;
   });
@@ -449,6 +451,8 @@ in {
   i3ipc = callPackage ../development/python-modules/i3ipc { };
 
   imutils = callPackage ../development/python-modules/imutils { };
+
+  intake = callPackage ../development/python-modules/intake { };
 
   intelhex = callPackage ../development/python-modules/intelhex { };
 
@@ -493,6 +497,8 @@ in {
   mwoauth = callPackage ../development/python-modules/mwoauth { };
 
   nanomsg-python = callPackage ../development/python-modules/nanomsg-python { inherit (pkgs) nanomsg; };
+
+  nbsmoke = callPackage ../development/python-modules/nbsmoke { };
 
   nbsphinx = callPackage ../development/python-modules/nbsphinx { };
 
@@ -753,6 +759,10 @@ in {
   python-rapidjson = callPackage ../development/python-modules/python-rapidjson { };
 
   python-sql = callPackage ../development/python-modules/python-sql { };
+
+  python-snappy = callPackage ../development/python-modules/python-snappy {
+    inherit (pkgs) snappy;
+  };
 
   python-stdnum = callPackage ../development/python-modules/python-stdnum { };
 
@@ -3452,6 +3462,8 @@ in {
 
   pandas = callPackage ../development/python-modules/pandas { };
 
+  panel = callPackage ../development/python-modules/panel { };
+
   xlrd = callPackage ../development/python-modules/xlrd { };
 
   bottleneck = callPackage ../development/python-modules/bottleneck { };
@@ -3461,6 +3473,8 @@ in {
   pamqp = callPackage ../development/python-modules/pamqp { };
 
   parsedatetime = callPackage ../development/python-modules/parsedatetime { };
+
+  param = callPackage ../development/python-modules/param { };
 
   paramiko = callPackage ../development/python-modules/paramiko { };
 
@@ -3568,6 +3582,8 @@ in {
 
   pystringtemplate = callPackage ../development/python-modules/stringtemplate { };
 
+  pyviz-comms = callPackage ../development/python-modules/pyviz-comms { };
+
   pillow = callPackage ../development/python-modules/pillow {
     inherit (pkgs) freetype libjpeg zlib libtiff libwebp tcl lcms2 tk;
     inherit (pkgs.xorg) libX11;
@@ -3672,6 +3688,8 @@ in {
   pycosat = callPackage ../development/python-modules/pycosat { };
 
   pycryptopp = callPackage ../development/python-modules/pycryptopp { };
+
+  pyct = callPackage ../development/python-modules/pyct { };
 
   pycups = callPackage ../development/python-modules/pycups { };
 
@@ -4157,6 +4175,8 @@ in {
 
   hieroglyph = callPackage ../development/python-modules/hieroglyph { };
 
+  hvplot = callPackage ../development/python-modules/hvplot { };
+
   guzzle_sphinx_theme = callPackage ../development/python-modules/guzzle_sphinx_theme { };
 
   sphinx-testing = callPackage ../development/python-modules/sphinx-testing { };
@@ -4178,6 +4198,8 @@ in {
   staticjinja = callPackage ../development/python-modules/staticjinja { };
 
   statsmodels = callPackage ../development/python-modules/statsmodels { };
+
+  streamz = callPackage ../development/python-modules/streamz { };
 
   structlog = callPackage ../development/python-modules/structlog { };
 
