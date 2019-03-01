@@ -1,17 +1,18 @@
 { stdenv, fetchurl, pkgconfig, intltool, glib, libxml2
-, libxslt, libarchive, bzip2, lzma
+, libxslt, libarchive, bzip2, lzma, json-glib
 }:
 
 stdenv.mkDerivation rec {
-  name = "osinfo-db-tools-1.2.0";
+  pname = "osinfo-db-tools";
+  version = "1.4.0";
 
   src = fetchurl {
-    url = "https://releases.pagure.org/libosinfo/${name}.tar.gz";
-    sha256 = "07zqbwsmdgnzqah2smm4zri04c0qm82z1jn8kzz1bnsqbfg84l1v";
+    url = "https://releases.pagure.org/libosinfo/${pname}-${version}.tar.gz";
+    sha256 = "08zpjq1g27n6wmmqwxws95w045warhg9bxcv1phvkdcrddf15q3y";
   };
 
   nativeBuildInputs = [ pkgconfig intltool ];
-  buildInputs = [ glib libxml2 libxslt libarchive bzip2 lzma ];
+  buildInputs = [ glib json-glib libxml2 libxslt libarchive bzip2 lzma ];
 
   meta = with stdenv.lib; {
     description = "Tools for managing the osinfo database";
