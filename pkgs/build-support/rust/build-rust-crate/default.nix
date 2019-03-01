@@ -129,6 +129,7 @@ stdenv.mkDerivation (rec {
     build = crate.build or "";
     workspace_member = crate.workspace_member or ".";
     crateVersion = crate.version;
+    crateDescription = crate.description or "";
     crateAuthors = if crate ? authors && lib.isList crate.authors then crate.authors else [];
     crateType =
       if lib.attrByPath ["procMacro"] false crate then ["proc-macro"] else
@@ -140,7 +141,7 @@ stdenv.mkDerivation (rec {
     extraRustcOpts = (if crate ? extraRustcOpts then crate.extraRustcOpts else []) ++ extraRustcOpts_ ++ (lib.optional (edition != null) "--edition ${edition}");
 
     configurePhase = configureCrate {
-      inherit crateName buildDependencies completeDeps completeBuildDeps
+      inherit crateName buildDependencies completeDeps completeBuildDeps crateDescription
               crateFeatures libName build workspace_member release libPath crateVersion
               extraLinkFlags extraRustcOpts
               crateAuthors verbose colors target_os;

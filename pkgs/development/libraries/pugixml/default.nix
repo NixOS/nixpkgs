@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  cmakeFlags = [ "-DBUILD_SHARED_LIBS=${if shared then "ON" else "OFF"}" ];
+  cmakeFlags = [ "-DBUILD_SHARED_LIBS=${if shared then "ON" else "OFF"} -DBUILD_PKGCONFIG=ON" ];
 
   preConfigure = ''
     # Enable long long support (required for filezilla)

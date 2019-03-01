@@ -155,7 +155,7 @@ in
         };
         programs = mkOption {
           default = getBin pkgs.openafs;
-          defaultText = "config.boot.kernelPackages.openafs";
+          defaultText = "getBin pkgs.openafs";
           type = types.package;
           description = "OpenAFS programs package. MUST match the kernel module package!";
         };

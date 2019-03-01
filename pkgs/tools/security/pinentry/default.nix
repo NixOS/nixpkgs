@@ -1,13 +1,8 @@
 { fetchurl, fetchpatch, stdenv, lib, pkgconfig
-, libgpgerror, libassuan, libcap ? null, libsecret ? null, ncurses ? null,  gtk2 ? null, gcr ? null, qt ? null
+, libgpgerror, libassuan, libcap ? null, libsecret ? null, ncurses ? null, gtk2 ? null, gcr ? null, qt ? null
 , enableEmacs ? false
 }:
 
-let
-  mkFlag = pfxTrue: pfxFalse: cond: name: "--${if cond then pfxTrue else pfxFalse}-${name}";
-  mkEnable = mkFlag "enable" "disable";
-  mkWith = mkFlag "with" "without";
-in
 stdenv.mkDerivation rec {
   name = "pinentry-1.1.0";
 
@@ -30,14 +25,14 @@ stdenv.mkDerivation rec {
   ];
 
   configureFlags = [
-    (mkWith   (libcap != null)    "libcap")
-    (mkEnable (libsecret != null) "libsecret")
-    (mkEnable (ncurses != null)   "pinentry-curses")
-    (mkEnable true                "pinentry-tty")
-    (mkEnable enableEmacs         "pinentry-emacs")
-    (mkEnable (gtk2 != null)      "pinentry-gtk2")
-    (mkEnable (gcr != null)       "pinentry-gnome3")
-    (mkEnable (qt != null)        "pinentry-qt")
+    (stdenv.lib.withFeature   (libcap != null)    "libcap")
+    (stdenv.lib.enableFeature (libsecret != null) "libsecret")
+    (stdenv.lib.enableFeature (ncurses != null)   "pinentry-curses")
+    (stdenv.lib.enableFeature true                "pinentry-tty")
+    (stdenv.lib.enableFeature enableEmacs         "pinentry-emacs")
+    (stdenv.lib.enableFeature (gtk2 != null)      "pinentry-gtk2")
+    (stdenv.lib.enableFeature (gcr != null)       "pinentry-gnome3")
+    (stdenv.lib.enableFeature (qt != null)        "pinentry-qt")
   ];
 
   nativeBuildInputs = [ pkgconfig ];

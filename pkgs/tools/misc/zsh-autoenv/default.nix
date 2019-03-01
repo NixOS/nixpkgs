@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub }:
+{ stdenv, fetchFromGitHub, runtimeShell }:
 
 stdenv.mkDerivation rec {
   name = "zsh-autoenv-${version}";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     cp -R $src $out/share/zsh-autoenv
 
     cat <<SCRIPT > $out/bin/zsh-autoenv-share
-    #!${stdenv.shell}
+    #!${runtimeShell}
     # Run this script to find the fzf shared folder where all the shell
     # integration scripts are living.
     echo $out/share/zsh-autoenv

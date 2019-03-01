@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, substituteAll, writeScript, pantheon, gnome-keyring, gnome-session, wingpanel, orca, at-spi2-core, elementary-default-settings, writeTextFile, writeShellScriptBin, elementary-settings-daemon }:
+{ stdenv, fetchFromGitHub, substituteAll, writeScript, pantheon, gnome-keyring, gnome-session, wingpanel, orca, at-spi2-core, elementary-default-settings, writeTextFile, writeShellScriptBin, elementary-settings-daemon, runtimeShell }:
 
 let
 
@@ -15,7 +15,7 @@ let
   #
 
   dockitems-script = writeScript "dockitems-script" ''
-    #!${stdenv.shell}
+    #!${runtimeShell}
 
     elementary_default_settings="${elementary-default-settings}"
     dock_items="$elementary_default_settings/share/elementary/config/plank/dock1/launchers"/*
@@ -66,8 +66,8 @@ stdenv.mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
-    mkdir -p $out/share
-    cp -avr applications $out/share/
+    mkdir -p $out/share/applications
+    cp -av ${./pantheon-mimeapps.list} $out/share/applications/pantheon-mimeapps.list
 
     mkdir -p $out/etc/xdg/autostart
     cp -av ${gnome-keyring}/etc/xdg/autostart/* $out/etc/xdg/autostart

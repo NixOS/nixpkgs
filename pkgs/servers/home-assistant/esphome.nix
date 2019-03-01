@@ -2,11 +2,11 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "esphome";
-  version = "1.11.1";
+  version = "1.11.2";
 
   src = python3.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "1764q4wyl8qlk2514gikv8178c8fwhhvbw64zkd76nb107hxzrk5";
+    sha256 = "0kg8fqv3mv8i852jr42p4mipa9wjlzjwj60j1r2zpgzgr8p8wfs8";
   };
 
   ESPHOME_USE_SUBPROCESS = "";

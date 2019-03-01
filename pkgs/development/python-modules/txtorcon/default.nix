@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "3731b740653e3f551412744f1fcd7fa6f04aa9fa37c90dc6c9152e619886bf3b";
+    sha256 = "0fxzhsc62bhmr730vj9pzallmw56gz6iykvl28a5agrycm0bfc9p";
   };
 
   # Skip a failing test until fixed upstream:

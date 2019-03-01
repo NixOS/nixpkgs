@@ -1,4 +1,4 @@
-{ stdenv, writeText, writeScriptBin, xorg, xkeyboard_config }:
+{ stdenv, writeText, writeScriptBin, xorg, xkeyboard_config, runtimeShell }:
 
 let
   xorgConfig = writeText "dummy-xorg.conf" ''
@@ -73,7 +73,7 @@ let
   '';
 
 in writeScriptBin "xdummy" ''
-  #!${stdenv.shell}
+  #!${runtimeShell}
   exec ${xorg.xorgserver.out}/bin/Xorg \
     -noreset \
     -logfile /dev/null \

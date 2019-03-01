@@ -1224,6 +1224,16 @@ let quicklisp-to-nix-packages = rec {
        }));
 
 
+  "lparallel" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."lparallel" or (x: {}))
+       (import ./quicklisp-to-nix-output/lparallel.nix {
+         inherit fetchurl;
+           "alexandria" = quicklisp-to-nix-packages."alexandria";
+           "bordeaux-threads" = quicklisp-to-nix-packages."bordeaux-threads";
+       }));
+
+
   "local-time" = buildLispPackage
     ((f: x: (x // (f x)))
        (qlOverrides."local-time" or (x: {}))

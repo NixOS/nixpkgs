@@ -1,6 +1,7 @@
 { stdenv, fetchurl, alsaLib, atk, cairo, cups, udev, hicolor-icon-theme
 , dbus, expat, fontconfig, freetype, gdk_pixbuf, glib, gtk3, gnome3
-, libnotify, nspr, nss, pango, systemd, xorg, autoPatchelfHook, wrapGAppsHook }:
+, libnotify, nspr, nss, pango, systemd, xorg, autoPatchelfHook, wrapGAppsHook
+, runtimeShell }:
 
 let
   versionSuffix = "20190205202117.6394d03e6c";
@@ -71,7 +72,7 @@ stdenv.mkDerivation rec {
     mv opt/keybase $out/share/
 
     cat > $out/bin/keybase-gui <<EOF
-    #!${stdenv.shell}
+    #!${runtimeShell}
 
     checkFailed() {
       if [ "\$NIX_SKIP_KEYBASE_CHECKS" = "1" ]; then

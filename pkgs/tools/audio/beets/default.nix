@@ -1,5 +1,6 @@
 { stdenv, fetchFromGitHub, writeScript, glibcLocales, diffPlugins
 , pythonPackages, imagemagick, gobject-introspection, gst_all_1
+, runtimeShell
 , fetchpatch
 
 # Attributes needed for tests of the external plugins
@@ -228,7 +229,7 @@ in pythonPackages.buildPythonApplication rec {
     tmphome="$(mktemp -d)"
 
     EDITOR="${writeScript "beetconfig.sh" ''
-      #!${stdenv.shell}
+      #!${runtimeShell}
       cat > "$1" <<CFG
       plugins: ${concatStringsSep " " allEnabledPlugins}
       CFG

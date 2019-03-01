@@ -1,4 +1,4 @@
-{ stdenv, appimage-run, fetchurl }:
+{ stdenv, appimage-run, fetchurl, runtimeShell }:
 
 let
   version = "3.0.6";
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out/{bin,share}
     cp $src $out/share/standardNotes.AppImage
-    echo "#!${stdenv.shell}" > $out/bin/standardnotes
+    echo "#!${runtimeShell}" > $out/bin/standardnotes
     echo "${appimage-run}/bin/appimage-run $out/share/standardNotes.AppImage" >> $out/bin/standardnotes
     chmod +x $out/bin/standardnotes $out/share/standardNotes.AppImage
   '';

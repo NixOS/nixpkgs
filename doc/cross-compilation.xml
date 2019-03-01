@@ -96,7 +96,7 @@
        compiler resulting from a single build can itself only produce binaries
        for a single platform. The task of specifying this single "target
        platform" is thus pushed to build time of the compiler. The root cause of
-       this that the compiler (which will be run on the host) and the standard
+       this is that the compiler (which will be run on the host) and the standard
        library/runtime (which will be run on the target) are built by a single
        build process.
       </para>

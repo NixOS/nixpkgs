@@ -95,6 +95,7 @@ let-plus
 lev
 lisp-namespace
 local-time
+lparallel
 lquery
 marshal
 misc-extensions

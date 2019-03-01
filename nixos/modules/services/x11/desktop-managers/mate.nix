@@ -98,9 +98,12 @@ in
     ];
 
     services.gnome3.gnome-keyring.enable = true;
+    services.gnome3.gvfs.enable = true;
     services.upower.enable = config.powerManagement.enable;
 
     security.pam.services."mate-screensaver".unixAuth = true;
+
+    environment.variables.GIO_EXTRA_MODULES = [ "${pkgs.gnome3.gvfs}/lib/gio/modules" ];
 
     environment.pathsToLink = [ "/share" ];
   };
