@@ -1024,10 +1024,10 @@ let mkContrib = repo: revs: param:
     sha256 = "0iwkpmc22nwasrk4g7ki4s5y05zjs7kmqk3j98giwp2wiavhgapn";
   };
 
-  zorns-lemma = mkContrib "zorns-lemma" [ "8.5" "8.6" "8.7" ] {
-    version = "v8.6.0";
-    rev = "5eba80109d6f4f688ac8dc2b6d505d6681801737";
-    sha256 = "19qvsk0s3hs31nmy4fk7qzw4clyj0gka3f526xjij54b8a9fz34f";
+  zorns-lemma = mkContrib "zorns-lemma" [ "8.6" "8.7" "8.8" "8.9" ] {
+    version = "v8.9.0";
+    rev = "6ac9bb914f6017cdd9a544ff4b0bef73fd33b44c";
+    sha256 = "1vdsl5gxpadkjjjw314s4fawzlssdmp4qkwrjz5qdmyl2dcpil4p";
   };
 
   zsearch-trees = mkContrib "zsearch-trees" [ "8.6" "8.7" ] {
