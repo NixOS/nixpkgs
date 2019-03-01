@@ -2,15 +2,14 @@
 
 buildGoPackage rec {
   name = "datadog-process-agent-${version}";
-  # NOTE: this is 6.5.0 + https://github.com/DataDog/datadog-process-agent/pull/185
-  version = "6.5.0";
+  version = "6.10.0";
   owner   = "DataDog";
   repo    = "datadog-process-agent";
 
   src = fetchFromGitHub {
     inherit owner repo;
-    rev    = "bd96c99c97e8639fd3ea72e61a492c0a74686abe";
-    sha256 = "0afdf344256jivzhdv3k9n9i4aik1yr805dnrc2i3d4di9w8vg8c";
+    rev    = "${version}";
+    sha256 = "16lr1gp6n0aph8zikk5kmaib9i5b1jbndxlxfi84bd9f8lhvmkhk";
   };
 
   goDeps = ./datadog-process-agent-deps.nix;
