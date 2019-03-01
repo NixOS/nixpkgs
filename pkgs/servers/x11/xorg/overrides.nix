@@ -598,8 +598,16 @@ self: super:
       }));
 
   lndir = super.lndir.overrideAttrs (attrs: {
+    buildInputs = [];
     preConfigure = ''
+      export XPROTO_CFLAGS=" "
+      export XPROTO_LIBS=" "
       substituteInPlace lndir.c \
+        --replace '<X11/Xos.h>' '<string.h>' \
+        --replace '<X11/Xfuncproto.h>' '<unistd.h>' \
+        --replace '_X_ATTRIBUTE_PRINTF(1,2)' '__attribute__((__format__(__printf__,1,2)))' \
+        --replace '_X_ATTRIBUTE_PRINTF(2,3)' '__attribute__((__format__(__printf__,2,3)))' \
+        --replace '_X_NORETURN' '__attribute__((noreturn))' \
         --replace 'n_dirs--;' ""
     '';
   });
