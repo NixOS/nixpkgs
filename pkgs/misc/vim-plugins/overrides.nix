@@ -1,5 +1,5 @@
 { lib, stdenv
-, python, cmake, vim, ruby
+, python, cmake, meson, vim, ruby
 , which, fetchgit, fetchurl
 , llvmPackages, rustPlatform
 , xkb-switch, fzf, skim
@@ -159,6 +159,12 @@ self: super: {
   gist-vim = super.gist-vim.overrideAttrs(old: {
     dependencies = with super; [ webapi-vim ];
   });
+
+  meson = buildVimPluginFrom2Nix {
+    inherit (meson) pname version src;
+    preInstall = "cd data/syntax-highlighting/vim";
+    meta.maintainers = with stdenv.lib.maintainers; [ vcunat ];
+  };
 
   ncm2 = super.ncm2.overrideAttrs(old: {
     dependencies = with super; [ nvim-yarp ];
