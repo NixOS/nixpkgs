@@ -5,6 +5,7 @@
 , ninja, gcab, gnutls, python3, wrapGAppsHook, json-glib, bash-completion
 , shared-mime-info, umockdev, vala, makeFontsConf, freefont_ttf
 , cairo, freetype, fontconfig, pango
+, bubblewrap, efibootmgr, flashrom, tpm2-tools
 }:
 
 # Updating? Keep $out/etc synchronized with passthru.filesInstalledToEtc
@@ -38,7 +39,12 @@ in stdenv.mkDerivation rec {
   ];
 
   patches = [
-    ./fix-paths.patch
+    (substituteAll {
+      src = ./fix-paths.patch;
+      inherit flashrom efibootmgr bubblewrap;
+      tpm2_tools = "${tpm2-tools}";
+    })
+
     ./add-option-for-installation-sysconfdir.patch
 
     # installed tests are installed to different output
@@ -61,6 +67,10 @@ in stdenv.mkDerivation rec {
     substituteInPlace meson.build \
       --replace "plugin_dir = join_paths(libdir, 'fwupd-plugins-3')" \
                 "plugin_dir = join_paths('${placeholder "out"}', 'fwupd_plugins-3')"
+
+    substituteInPlace data/meson.build --replace \
+      "install_dir: systemd.get_pkgconfig_variable('systemdshutdowndir')" \
+      "install_dir: '${placeholder "out"}/lib/systemd/system-shutdown'"
   '';
 
   # /etc/os-release not available in sandbox
