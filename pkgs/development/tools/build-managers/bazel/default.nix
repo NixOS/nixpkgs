@@ -61,7 +61,7 @@ let
 in
 stdenv.mkDerivation rec {
 
-  version = "0.22.0";
+  version = "0.23.0";
 
   meta = with lib; {
     homepage = "https://github.com/bazelbuild/bazel/";
@@ -85,7 +85,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/bazelbuild/bazel/releases/download/${version}/${name}-dist.zip";
-    sha256 = "0hannnvia8rvmi2v5d97j1f6wv0m1kxkd5hq4aqp0dqjr0ka4q38";
+    sha256 = "1hdcq0dg6lllz2wkbkfaa09qnx09p2mhcxxfxga6x0wqchn9rbrd";
   };
 
   sourceRoot = ".";
