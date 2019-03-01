@@ -257,12 +257,7 @@ in
         before = [ "kubelet.target" ];
         path = with pkgs; [ gitMinimal openssh docker utillinux iproute ethtool thin-provisioning-tools iptables socat ] ++ top.path;
         preStart = ''
-          ${concatMapStrings (img: ''
-            echo "Seeding docker image: ${img}"
-            docker load <${img}
-          '') cfg.seedDockerImages}
-
-          rm /opt/cni/bin/* || true
+          rm -f /opt/cni/bin/* || true
           ${concatMapStrings (package: ''
             echo "Linking cni package: ${package}"
             ln -fs ${package}/bin/* /opt/cni/bin
@@ -327,6 +322,22 @@ in
       };
 
       systemd.services.docker.before = [ "kubelet.service" ];
+
+      systemd.services.docker-seed-images = {
+        wantedBy = [ "docker.service" ];
+        after = [ "docker.service" ];
+        before = [ "kubelet.service" ];
+        path = with pkgs; [ docker ];
+        preStart = ''
+          ${concatMapStrings (img: ''
+            echo "Seeding docker image: ${img}"
+            docker load <${img}
+          '') cfg.seedDockerImages}
+        '';
+        script = "echo Ok";
+        serviceConfig.Type = "oneshot";
+        serviceConfig.Slice = "kubernetes.slice";
+      };
 
       systemd.services.node-online = {
         wantedBy = [ "node-online.target" ];
