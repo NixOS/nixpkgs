@@ -21,11 +21,11 @@
 
 buildPythonPackage rec {
   pname = "pyramid";
-  version = "1.10.1";
+  version = "1.10.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "37c3e1c9eae72817e0365e2a38143543aee8b75240701fa5cb3a1be86c01a1c0";
+    sha256 = "e70a9bac805284ebe7123fdd412e22a4c1d214603b3a074ac8f1185a0dd7c63e";
   };
 
   checkInputs = [ docutils virtualenv webtest zope_component ];

@@ -19,7 +19,7 @@ in buildPythonApplication rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
     intltool wrapGAppsHook
-    gnome3.defaultIconTheme
+    gnome3.adwaita-icon-theme
     gnome3.gsettings-desktop-schemas
   ];
 

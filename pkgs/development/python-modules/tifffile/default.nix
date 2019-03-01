@@ -6,11 +6,11 @@ buildPythonPackage rec {
   # 2018.10.18 and 2018.11.6 are not releases...?
   # https://github.com/blink1073/tifffile/issues/54
   # anaconda uses 0.15.1
-  version = "0.15.1";
+  version = "2019.2.10";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1fbb2cfd57fd8e42e417bc29001a17f319701f1be00e0b8a0004a52da93f1b08";
+    sha256 = "ead5f84c0b100f8100377b8ef2bcffaf21c249784ddc240346b715408b45f42c";
   };
 
   checkInputs = [ nose ];

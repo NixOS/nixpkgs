@@ -13,6 +13,10 @@ buildPythonPackage rec {
 
   checkInputs = [ pytest ];
 
+  postPatch = ''
+    substituteInPlace setup.cfg --replace "[pytest]" "[tool:pytest]"
+  '';
+
   meta = {
     description = "Python attributes without boilerplate";
     homepage = https://characteristic.readthedocs.org;

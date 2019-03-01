@@ -1,5 +1,6 @@
 { stdenv, intltool, fetchurl
-, pkgconfig, gtk3, glib
+, pkgconfig, gtk3, glib, adwaita-icon-theme
+, libpeas, gtksourceview, gsettings-desktop-schemas
 , wrapGAppsHook, itstool, libsoup, libxml2
 , gnome3, gspell }:
 
@@ -16,9 +17,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     gtk3 glib
-    gnome3.defaultIconTheme libsoup
-    gnome3.libpeas gnome3.gtksourceview
-    gnome3.gsettings-desktop-schemas gspell
+    adwaita-icon-theme libsoup
+    libpeas gtksourceview
+    gsettings-desktop-schemas gspell
   ];
 
   enableParallelBuilding = true;

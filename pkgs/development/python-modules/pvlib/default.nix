@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "pvlib";
-  version = "0.6.0";
+  version = "0.6.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1j2p6w41hv7k604jbcpxvs5f04y8dsfdvd3d202l60ks0fc0agyj";
+    sha256 = "56e70747add2e50846dd8bbef9a4735e82c1224ce630d1db7590b96bd59dd3f7";
   };
 
   checkInputs = [ pytest ];

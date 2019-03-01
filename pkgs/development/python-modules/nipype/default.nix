@@ -44,14 +44,12 @@ in
 
 buildPythonPackage rec {
   pname = "nipype";
-  version = "1.1.7";
+  version = "1.1.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0iyi5w2h42bpssqj52ixm2kxp56yxfxdacb6xv5r24yv3hmwd4yn";
+    sha256 = "d5eec6de7d8e7020106c42b37d17f99de92824440cc79dfa6080f7c2e6d9fecc";
   };
-
-  patches = [ ./move-uneeded-requires.patch ];
 
   postPatch = ''
     substituteInPlace nipype/interfaces/base/tests/test_core.py \

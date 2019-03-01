@@ -15,6 +15,8 @@ python2Packages.buildPythonApplication rec {
 
   buildInputs = [ git graphviz ];
 
+  checkInputs = [ git ];
+
   postFixup = ''
     wrapProgram $out/bin/git-big-picture \
       --prefix PATH ":" ${ stdenv.lib.makeBinPath buildInputs  }

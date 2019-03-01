@@ -7,7 +7,7 @@
 , gnome-common
 , gnome-desktop
 , gnome3
-, gtk
+, gtk3
 , gsettings-desktop-schemas
 , pkgconfig
 , intltool
@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     glib
-    gtk
+    gtk3
     gnome-desktop
     dbus-glib
     pam

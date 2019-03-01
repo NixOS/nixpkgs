@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "venusian";
-  version = "1.1.0";
+  version = "1.2.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9902e492c71a89a241a18b2f9950bea7e41d025cc8f3af1ea8d8201346f8577d";
+    sha256 = "64ec8285b80b110d0ae5db4280e90e31848a59db98db1aba4d7d46f48ce91e3e";
   };
 
   checkInputs = [ pytest ];

@@ -602,11 +602,10 @@ as the interpreter unless overridden otherwise.
 All parameters from `stdenv.mkDerivation` function are still supported. The following are specific to `buildPythonPackage`:
 
 * `catchConflicts ? true`: If `true`, abort package build if a package name appears more than once in dependency tree. Default is `true`.
-* `checkInputs ? []`: Dependencies needed for running the `checkPhase`. These are added to `buildInputs` when `doCheck = true`.
 * `disabled` ? false: If `true`, package is not build for the particular Python interpreter version.
 * `dontWrapPythonPrograms ? false`: Skip wrapping of python programs.
-* `installFlags ? []`: A list of strings. Arguments to be passed to `pip install`. To pass options to `python setup.py install`, use `--install-option`. E.g., `installFlags=["--install-option='--cpp_implementation'"].
-* `format ? "setuptools"`: Format of the source. Valid options are `"setuptools"`, `"flit"`, `"wheel"`, and `"other"`. `"setuptools"` is for when the source has a `setup.py` and `setuptools` is used to build a wheel, `flit`, in case `flit` should be used to build a wheel, and `wheel` in case a wheel is provided. Use `other` when a custom `buildPhase` and/or `installPhase` is needed.
+* `installFlags ? []`: A list of strings. Arguments to be passed to `pip install`. To pass options to `python setup.py install`, use `--install-option`. E.g., `installFlags=["--install-option='--cpp_implementation'"]`.
+* `format ? "setuptools"`: Format of the source. Valid options are `"setuptools"`, `"pyproject"`, `"flit"`, `"wheel"`, and `"other"`. `"setuptools"` is for when the source has a `setup.py` and `setuptools` is used to build a wheel, `flit`, in case `flit` should be used to build a wheel, and `wheel` in case a wheel is provided. Use `other` when a custom `buildPhase` and/or `installPhase` is needed.
 * `makeWrapperArgs ? []`: A list of strings. Arguments to be passed to `makeWrapper`, which wraps generated binaries. By default, the arguments to `makeWrapper` set `PATH` and `PYTHONPATH` environment variables before calling the binary. Additional arguments here can allow a developer to set environment variables which will be available when the binary is run. For example, `makeWrapperArgs = ["--set FOO BAR" "--set BAZ QUX"]`.
 * `namePrefix`: Prepends text to `${name}` parameter. In case of libraries, this defaults to `"python3.5-"` for Python 3.5, etc., and in case of applications to `""`.
 * `pythonPath ? []`: List of packages to be added into `$PYTHONPATH`. Packages in `pythonPath` are not propagated (contrary to `propagatedBuildInputs`).
@@ -614,6 +613,14 @@ All parameters from `stdenv.mkDerivation` function are still supported. The foll
 * `postShellHook`: Hook to execute commands after `shellHook`.
 * `removeBinByteCode ? true`: Remove bytecode from `/bin`. Bytecode is only created when the filenames end with `.py`.
 * `setupPyBuildFlags ? []`: List of flags passed to `setup.py build_ext` command.
+
+The `stdenv.mkDerivation` function accepts various parameters for describing build inputs (see "Specifying dependencies"). The following are of special
+interest for Python packages, either because these are primarily used, or because their behaviour is different:
+
+* `nativeBuildInputs ? []`: Build-time only dependencies. Typically executables as well as the items listed in `setup_requires`.
+* `buildInputs ? []`: Build and/or run-time dependencies that need to be be compiled for the host machine. Typically non-Python libraries which are being linked.
+* `checkInputs ? []`: Dependencies needed for running the `checkPhase`. These are added to `nativeBuildInputs` when `doCheck = true`. Items listed in `tests_require` go here.
+* `propagatedBuildInputs ? []`: Aside from propagating dependencies, `buildPythonPackage` also injects code into and wraps executables with the paths included in this list. Items listed in `install_requires` go here.
 
 ##### Overriding Python packages
 
@@ -874,7 +881,6 @@ example of such a situation is when `py.test` is used.
     '';
   }
   ```
-- Unicode issues can typically be fixed by including `glibcLocales` in `buildInputs` and exporting `LC_ALL=en_US.utf-8`.
 - Tests that attempt to access `$HOME` can be fixed by using the following work-around before running tests (e.g. `preCheck`): `export HOME=$(mktemp -d)`
 
 ## FAQ
@@ -1122,6 +1128,14 @@ LLVM implementation. To use that one instead, Intel recommends users set it with
 
 Note that `mkl` is only available on `x86_64-{linux,darwin}` platforms;
 moreover, Hydra is not building and distributing pre-compiled binaries using it.
+
+### What inputs do `setup_requires`, `install_requires` and `tests_require` map to?
+
+In a `setup.py` or `setup.cfg` it is common to declare dependencies:
+
+* `setup_requires` corresponds to `nativeBuildInputs`
+* `install_requires` corresponds to `propagatedBuildInputs`
+* `tests_require` corresponds to `checkInputs`
 
 ## Contributing
 

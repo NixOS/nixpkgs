@@ -55,7 +55,7 @@ buildPythonPackage rec {
 
   setupPyBuildFlags = ["--mpicc=${mpi}/bin/mpicc"];
 
-  buildInputs = [ mpi openssh ];
+  nativeBuildInputs = [ mpi openssh ];
 
   meta = {
     description =

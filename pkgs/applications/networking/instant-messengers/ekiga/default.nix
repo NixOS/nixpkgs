@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ cyrus_sasl gettext openldap ptlib opal libXv rarian intltool
                   evolution-data-server gnome-doc-utils avahi
                   libsigcxx gtk dbus-glib libnotify libXext xorgproto sqlite
-                  gnome3.libsoup glib gnome3.defaultIconTheme boost
+                  gnome3.libsoup glib gnome3.adwaita-icon-theme boost
                   autoreconfHook pkgconfig libxml2 unixODBC db nspr
                   nss zlib libsecret libXrandr which libxslt libtasn1
                   gmp nettle makeWrapper ]

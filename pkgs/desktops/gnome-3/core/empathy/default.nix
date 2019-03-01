@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     gcr libsecret libpulseaudio gdk_pixbuf
     libnotify clutter libsoup gnutls libgee p11-kit
     libcanberra-gtk3 telepathy-farstream farstream
-    gnome3.defaultIconTheme gnome3.gsettings-desktop-schemas
+    gnome3.adwaita-icon-theme gnome3.gsettings-desktop-schemas
     librsvg
     # Spell-checking
     enchant isocodes

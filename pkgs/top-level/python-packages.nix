@@ -1510,9 +1510,15 @@ in {
 
   pyhepmc = callPackage ../development/python-modules/pyhepmc { };
 
-  pytest = self.pytest_39;
+  pytest = self.pytest_42;
 
-  pytest_39 = callPackage ../development/python-modules/pytest {
+  pytest_42 = callPackage ../development/python-modules/pytest {
+    # hypothesis tests require pytest that causes dependency cycle
+    hypothesis = self.hypothesis.override { doCheck = false; };
+  };
+
+  # Keep 3 because many test suites are not yet compatible with Pytest 4.
+  pytest_3 = callPackage ../development/python-modules/pytest/3.10.nix {
     # hypothesis tests require pytest that causes dependency cycle
     hypothesis = self.hypothesis.override { doCheck = false; };
   };
@@ -1553,7 +1559,7 @@ in {
 
   pytest-flake8 = callPackage ../development/python-modules/pytest-flake8 { };
 
-  pytestflakes = callPackage ../development/python-modules/pytest-flakes { };
+  pytest-flakes = callPackage ../development/python-modules/pytest-flakes { };
 
   pytest-isort = callPackage ../development/python-modules/pytest-isort { };
 
@@ -1576,6 +1582,8 @@ in {
   pytestquickcheck = callPackage ../development/python-modules/pytest-quickcheck { };
 
   pytest-server-fixtures = callPackage ../development/python-modules/pytest-server-fixtures { };
+
+  pytest-services = callPackage ../development/python-modules/pytest-services { };
 
   pytest-shutil = callPackage ../development/python-modules/pytest-shutil { };
 
@@ -2149,7 +2157,9 @@ in {
 
   python-axolotl-curve25519 = callPackage ../development/python-modules/python-axolotl-curve25519 { };
 
-  pythonix = toPythonModule (callPackage ../development/python-modules/pythonix { });
+  pythonix = callPackage ../development/python-modules/pythonix {
+    inherit (pkgs) pkgconfig;
+  };
 
   pyramid = callPackage ../development/python-modules/pyramid { };
 
@@ -4004,6 +4014,8 @@ in {
 
   owslib = callPackage ../development/python-modules/owslib { };
 
+  readthedocs-sphinx-ext = callPackage ../development/python-modules/readthedocs-sphinx-ext { };
+
   resampy = callPackage ../development/python-modules/resampy { };
 
   restructuredtext_lint = callPackage ../development/python-modules/restructuredtext_lint { };
@@ -4474,6 +4486,8 @@ in {
 
   sorl_thumbnail = callPackage ../development/python-modules/sorl_thumbnail { };
 
+  soupsieve = callPackage ../development/python-modules/soupsieve { };
+
   sphinx_rtd_theme = callPackage ../development/python-modules/sphinx_rtd_theme { };
 
   sphinxcontrib-blockdiag = callPackage ../development/python-modules/sphinxcontrib-blockdiag { };
@@ -4603,6 +4617,8 @@ in {
   webtest = callPackage ../development/python-modules/webtest { };
 
   wsgiproxy2 = callPackage ../development/python-modules/wsgiproxy2 { };
+
+  wurlitzer = callPackage ../development/python-modules/wurlitzer { };
 
   xcaplib = callPackage ../development/python-modules/xcaplib { };
 
@@ -5057,7 +5073,9 @@ in {
 
   inflect = callPackage ../development/python-modules/inflect { };
 
-  more-itertools = callPackage ../development/python-modules/more-itertools { };
+  more-itertools = if isPy27 then
+    callPackage ../development/python-modules/more-itertools/2.7.nix { }
+  else callPackage ../development/python-modules/more-itertools { };
 
   jaraco_functools = callPackage ../development/python-modules/jaraco_functools { };
 

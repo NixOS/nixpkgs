@@ -12,7 +12,7 @@
 , libatomic_ops, graphite2, harfbuzz, libodfgen, libzmf
 , librevenge, libe-book, libmwaw, glm, glew, gst_all_1
 , gdb, commonsLogging, librdf_rasqal, wrapGAppsHook
-, defaultIconTheme, glib, ncurses, epoxy, gpgme
+, gnome3, glib, ncurses, epoxy, gpgme
 , langs ? [ "ca" "cs" "de" "en-GB" "en-US" "eo" "es" "fr" "hu" "it" "nl" "pl" "ru" "sl" "zh-CN" ]
 , withHelp ? true
 , kdeIntegration ? false
@@ -272,7 +272,7 @@ in stdenv.mkDerivation rec {
       mdds bluez5 libcmis libwps libabw libzmf libtool
       libxshmfence libatomic_ops graphite2 harfbuzz gpgme utillinux
       librevenge libe-book libmwaw glm glew ncurses epoxy
-      libodfgen CoinMP librdf_rasqal defaultIconTheme gettext
+      libodfgen CoinMP librdf_rasqal gnome3.adwaita-icon-theme gettext
     ]
     ++ lib.optional kdeIntegration kdelibs4;
   nativeBuildInputs = [ wrapGAppsHook gdb ];
