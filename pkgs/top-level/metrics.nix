@@ -52,11 +52,12 @@ runCommand "nixpkgs-metrics"
     run nix-env.qa nix-env -f ${nixpkgs} -qa
     run nix-env.qaDrv nix-env -f ${nixpkgs} -qa --drv-path --meta --xml
 
+    # It's slightly unclear which of the set to track: qaCount, qaCountDrv, qaCountBroken.
     num=$(nix-env -f ${nixpkgs} -qa | wc -l)
     echo "nix-env.qaCount $num" >> $out/nix-support/hydra-metrics
-
-    num=$(nix-env -f ${nixpkgs} -qa --drv-path | wc -l)
-    echo "nix-env.qaCountDrv $num" >> $out/nix-support/hydra-metrics
+    qaCountDrv=$(nix-env -f ${nixpkgs} -qa --drv-path | wc -l)
+    num=$((num - $qaCountDrv))
+    echo "nix-env.qaCountBroken $num" >> $out/nix-support/hydra-metrics
 
     # TODO: this has been ignored for some time
     # GC Warning: Bad initial heap size 128k - ignoring it.
