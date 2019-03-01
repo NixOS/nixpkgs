@@ -374,14 +374,14 @@ in {
       };
 
       services.phpfpm = {
-        phpOptions = phpOptionsExtensions;
-        phpPackage = pkgs.php73;
         pools.nextcloud = let
           phpAdminValues = (toKeyValue
             (foldr (a: b: a // b) {}
               (mapAttrsToList (k: v: { "php_admin_value[${k}]" = v; })
                 phpOptions)));
         in {
+          phpOptions = phpOptionsExtensions;
+          phpPackage = pkgs.php73;
           listen = "/run/phpfpm/nextcloud";
           extraConfig = ''
             listen.owner = nginx
