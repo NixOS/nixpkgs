@@ -241,7 +241,13 @@ in
 
   ###### implementation
   config = mkMerge [
-    (mkIf cfg.enable {
+    (mkIf cfg.enable (let
+      kubeletPaths = [
+        cfg.clientCaFile
+        cfg.tlsCertFile
+        cfg.tlsKeyFile
+      ];
+    in {
       services.kubernetes.kubelet.seedDockerImages = [infraContainer];
 
       systemd.services.kubelet = {
@@ -308,6 +314,15 @@ in
           '';
           WorkingDirectory = top.dataDir;
         };
+        unitConfig.ConditionPathExists = kubeletPaths;
+      };
+
+      systemd.paths.kubelet = {
+        wantedBy =  [ "kubelet.service" ];
+        pathConfig = {
+          PathExists = kubeletPaths;
+          PathChanged = kubeletPaths;
+        };
       };
 
       # Allways include cni plugins
@@ -336,7 +351,7 @@ in
       };
 
       services.kubernetes.kubelet.kubeconfig.server = mkDefault top.apiserverAddress;
-    })
+    }))
 
     (mkIf (cfg.enable && cfg.manifests != {}) {
       environment.etc = mapAttrs' (name: manifest:

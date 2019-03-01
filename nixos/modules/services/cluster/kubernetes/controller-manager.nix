@@ -104,7 +104,16 @@ in
   };
 
   ###### implementation
-  config = mkIf cfg.enable {
+  config = mkIf cfg.enable (let
+    controllerManagerPaths = [
+      cfg.rootCaFile
+      cfg.tlsCertFile
+      cfg.tlsKeyFile
+      top.pki.certs.controllerManagerClient.cert
+      top.pki.certs.controllerManagerClient.key
+    ];
+  in {
+
     systemd.services.kube-controller-manager = {
       description = "Kubernetes Controller Manager Service";
       wantedBy = [ "kubernetes.target" ];
@@ -142,6 +151,15 @@ in
         Group = "kubernetes";
       };
       path = top.path;
+      unitConfig.ConditionPathExists = controllerManagerPaths;
+    };
+
+    systemd.paths.kube-controller-manager = {
+      wantedBy = [ "kube-controller-manager.service" ];
+      pathConfig = {
+        PathExists = controllerManagerPaths;
+        PathChanged = controllerManagerPaths;
+      };
     };
 
     services.kubernetes.pki.certs = with top.lib; {
@@ -158,5 +176,5 @@ in
     };
 
     services.kubernetes.controllerManager.kubeconfig.server = mkDefault top.apiserverAddress;
-  };
+  });
 }

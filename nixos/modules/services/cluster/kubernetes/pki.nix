@@ -119,6 +119,29 @@ in
     cfsslCertPathPrefix = "${config.services.cfssl.dataDir}/cfssl";
     cfsslCert = "${cfsslCertPathPrefix}.pem";
     cfsslKey = "${cfsslCertPathPrefix}-key.pem";
+
+    certmgrPaths = [
+      top.caFile
+      certmgrAPITokenPath
+    ];
+    addonManagerPaths = mkIf top.addonManager.enable [
+      cfg.certs.addonManager.cert
+      cfg.certs.addonManager.key
+      cfg.certs.clusterAdmin.cert
+      cfg.certs.clusterAdmin.key
+    ];
+    flannelPaths = [
+      cfg.certs.flannelClient.cert
+      cfg.certs.flannelClient.key
+    ];
+    proxyPaths = mkIf top.proxy.enable [
+      cfg.certs.kubeProxyClient.cert
+      cfg.certs.kubeProxyClient.key
+    ];
+    schedulerPaths = mkIf top.scheduler.enable [
+      cfg.certs.schedulerClient.cert
+      cfg.certs.schedulerClient.key
+    ];
   in
   {
 
@@ -230,6 +253,18 @@ in
           mapAttrs mkSpec cfg.certs;
       };
 
+      systemd.services.certmgr = {
+        unitConfig.ConditionPathExists = certmgrPaths;
+      };
+
+      systemd.paths.certmgr = {
+        wantedBy = [ "certmgr.service" ];
+        pathConfig = {
+          PathExists = certmgrPaths;
+          PathChanged = certmgrPaths;
+        };
+      };
+
       #TODO: Get rid of kube-addon-manager in the future for the following reasons
       # - it is basically just a shell script wrapped around kubectl
       # - it assumes that it is clusterAdmin or can gain clusterAdmin rights through serviceAccount
@@ -255,7 +290,18 @@ in
             export KUBECONFIG=${clusterAdminKubeconfig}
             ${kubectl}/bin/kubectl apply -f ${concatStringsSep " \\\n -f " files}
           '';
-        })]);
+        })
+        {
+          unitConfig.ConditionPathExists = addonManagerPaths;
+        }]);
+
+      systemd.paths.kube-addon-manager = mkIf top.addonManager.enable {
+        wantedBy = [ "kube-addon-manager.service" ];
+        pathConfig = {
+          PathExists = addonManagerPaths;
+          PathChanged = addonManagerPaths;
+        };
+      };
 
       environment.etc.${cfg.etcClusterAdminKubeconfig}.source = mkIf (!isNull cfg.etcClusterAdminKubeconfig)
         clusterAdminKubeconfig;
@@ -334,6 +380,42 @@ in
           server = top.apiserverAddress;
           certFile = cert;
           keyFile = key;
+        };
+      };
+
+      systemd.services.flannel = {
+        unitConfig.ConditionPathExists = flannelPaths;
+      };
+
+      systemd.paths.flannel = {
+        wantedBy = [ "flannel.service" ];
+        pathConfig = {
+          PathExists = flannelPaths;
+          PathChanged = flannelPaths;
+        };
+      };
+
+      systemd.services.kube-proxy = mkIf top.proxy.enable {
+        unitConfig.ConditionPathExists = proxyPaths;
+      };
+
+      systemd.paths.kube-proxy = mkIf top.proxy.enable {
+        wantedBy = [ "kube-proxy.service" ];
+        pathConfig = {
+          PathExists = proxyPaths;
+          PathChanged = proxyPaths;
+        };
+      };
+
+      systemd.services.kube-scheduler = mkIf top.scheduler.enable {
+        unitConfig.ConditionPathExists = schedulerPaths;
+      };
+
+      systemd.paths.kube-scheduler = mkIf top.scheduler.enable {
+        wantedBy = [ "kube-scheduler.service" ];
+        pathConfig = {
+          PathExists = schedulerPaths;
+          PathChanged = schedulerPaths;
         };
       };
 

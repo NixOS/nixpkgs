@@ -55,13 +55,15 @@ in
         ${mkDockerOpts}/mk-docker-opts -d /run/flannel/docker
         systemctl restart docker
       '';
+      unitConfig.ConditionPathExists = [ "/run/flannel/subnet.env" ];
       serviceConfig.Type = "oneshot";
     };
 
-    systemd.paths."flannel-subnet-env" = {
-      wantedBy = [ "flannel.service" ];
+    systemd.paths.flannel-subnet-env = {
+      wantedBy = [ "mk-docker-opts.service" ];
       pathConfig = {
-        PathModified = "/run/flannel/subnet.env";
+        PathExists = [ "/run/flannel/subnet.env" ];
+        PathChanged = [ "/run/flannel/subnet.env" ];
         Unit = "mk-docker-opts.service";
       };
     };
