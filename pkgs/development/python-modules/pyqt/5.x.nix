@@ -23,7 +23,7 @@ in buildPythonPackage rec {
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ pkgconfig qmake lndir ];
+  nativeBuildInputs = [ pkgconfig qmake lndir sip ];
 
   buildInputs = [ dbus sip ];
 

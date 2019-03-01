@@ -28,6 +28,7 @@ python3.pkgs.buildPythonApplication rec  {
   ];
 
   buildInputs = with gst_all_1; [
+    gobject-introspection
     gst-libav
     gst-plugins-bad
     gst-plugins-base

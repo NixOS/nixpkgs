@@ -9,7 +9,7 @@ buildPythonPackage rec {
     sha256 = "0yvlxv9vy0hbfgf0xcwl7wh5hg6cl86arsv1ip3kvn9znn6x8kgl";
   };
 
-  buildInputs = [ pytest psycopg2 ];
+  checkInputs = [ pytest psycopg2 ];
   propagatedBuildInputs = [ click sqlparse ];
 
   checkPhase = ''

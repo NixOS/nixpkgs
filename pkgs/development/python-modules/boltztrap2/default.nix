@@ -14,13 +14,13 @@
 }:
 
 buildPythonPackage rec {
-  version = "18.9.1";
+  version = "19.1.1";
   pname = "BoltzTraP2";
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b828ad2b3b3a40956ef866e462e4c82faf83be79348af3945d4e7cede8a53913";
+    sha256 = "81e8a5ef8240c6a2205463fa7bc643b8033125237927f5492dab0b5d1aadb35a";
   };
 
   buildInputs = [ cython cmake ];

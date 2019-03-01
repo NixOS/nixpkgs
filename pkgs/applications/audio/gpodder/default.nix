@@ -28,7 +28,7 @@ python3Packages.buildPythonApplication rec {
   buildInputs = [
     python3
     gobject-introspection
-    gnome3.defaultIconTheme
+    gnome3.adwaita-icon-theme
   ];
 
   checkInputs = with python3Packages; [

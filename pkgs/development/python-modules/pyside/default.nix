@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   enableParallelBuilding = true;
 
-  buildInputs = [ cmake pysideGeneratorrunner pysideShiboken qt4 ];
+  nativeBuildInputs = [ cmake pysideGeneratorrunner pysideShiboken qt4 ];
 
   makeFlags = "QT_PLUGIN_PATH=" + pysideShiboken + "/lib/generatorrunner";
 
@@ -21,7 +21,6 @@ buildPythonPackage rec {
     description = "LGPL-licensed Python bindings for the Qt cross-platform application and UI framework";
     license = lib.licenses.lgpl21;
     homepage = http://www.pyside.org;
-    maintainers = [ ];
-    platforms = lib.platforms.all;
+    broken = true;
   };
 }

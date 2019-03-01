@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, glib, babl, libpng, cairo, libjpeg, which
 , librsvg, pango, gtk, bzip2, json-glib, intltool, autoreconfHook, libraw
-, libwebp, gnome3, libintl }:
+, gexiv2, libwebp, gnome3, libintl }:
 
 let
   version = "0.4.12";
@@ -21,7 +21,7 @@ in stdenv.mkDerivation rec {
 
   buildInputs = [
     libpng cairo libjpeg librsvg pango gtk bzip2
-    libraw libwebp gnome3.gexiv2
+    libraw libwebp gexiv2
   ];
 
   propagatedBuildInputs = [ glib json-glib babl ]; # for gegl-4.0.pc

@@ -4,7 +4,6 @@
 , openssl
 , cryptography_vectors
 , darwin
-, idna
 , asn1crypto
 , packaging
 , six
@@ -23,11 +22,11 @@
 buildPythonPackage rec {
   # also bump cryptography_vectors
   pname = "cryptography";
-  version = "2.4.2";
+  version = "2.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1pc60dksi9w9mshl6cvn7gdjazbp3pmydy3qp9wgy5wzd8n0b9h5";
+    sha256 = "00c4d7gvsymlaw0r13zrm32dcnarmpayjyrh65yymlmr6mrbcij9";
   };
 
   outputs = [ "out" "dev" ];
@@ -35,7 +34,6 @@ buildPythonPackage rec {
   buildInputs = [ openssl cryptography_vectors ]
              ++ stdenv.lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Security;
   propagatedBuildInputs = [
-    idna
     asn1crypto
     packaging
     six

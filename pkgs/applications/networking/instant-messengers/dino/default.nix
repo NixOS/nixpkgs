@@ -2,7 +2,7 @@
 , vala, cmake, ninja, wrapGAppsHook, pkgconfig, gettext
 , gobject-introspection, gnome3, glib, gdk_pixbuf, gtk3, glib-networking
 , xorg, libXdmcp, libxkbcommon
-, libnotify, libsoup
+, libnotify, libsoup, libgee
 , libgcrypt
 , epoxy
 , at-spi2-core
@@ -39,8 +39,8 @@ stdenv.mkDerivation rec {
     gobject-introspection
     glib-networking
     glib
-    gnome3.libgee
-    gnome3.defaultIconTheme
+    libgee
+    gnome3.adwaita-icon-theme
     sqlite
     gdk_pixbuf
     gtk3

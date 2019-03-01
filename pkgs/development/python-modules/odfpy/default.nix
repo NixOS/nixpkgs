@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "odfpy";
-  version = "1.3.6";
+  version = "1.4.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "6bcaf3b23aa9e49ed8c8c177266539b211add4e02402748a994451482a10cb1b";
+    sha256 = "596021f0519623ca8717331951c95e3b8d7b21e86edc7efe8cb650a0d0f59a2b";
   };
 
   # Python 2.7 uses a different ordering for xml namespaces.

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, glib, gtk, meson, ninja, pkgconfig, gnome3, gettext, itstool, libxml2, libarchive
+{ stdenv, fetchurl, glib, gtk3, meson, ninja, pkgconfig, gnome3, gettext, itstool, libxml2, libarchive
 , file, json-glib, python3, wrapGAppsHook, desktop-file-utils, libnotify, nautilus, glibcLocales }:
 
 stdenv.mkDerivation rec {
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ meson ninja gettext itstool pkgconfig libxml2 python3 wrapGAppsHook glibcLocales desktop-file-utils ];
 
-  buildInputs = [ glib gtk json-glib libarchive file gnome3.defaultIconTheme libnotify nautilus ];
+  buildInputs = [ glib gtk3 json-glib libarchive file gnome3.adwaita-icon-theme libnotify nautilus ];
 
   PKG_CONFIG_LIBNAUTILUS_EXTENSION_EXTENSIONDIR = "${placeholder "out"}/lib/nautilus/extensions-3.0";
 

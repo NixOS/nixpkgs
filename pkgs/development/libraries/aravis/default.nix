@@ -55,7 +55,7 @@ in
       ++ stdenv.lib.optional enableUsb libusb
       ++ stdenv.lib.optional enablePacketSocket audit
       ++ stdenv.lib.optionals (enableViewer || enableGstPlugin) [ gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad ]
-      ++ stdenv.lib.optionals (enableViewer) [ libnotify gnome3.gtk3 gnome3.defaultIconTheme ];
+      ++ stdenv.lib.optionals (enableViewer) [ libnotify gnome3.gtk3 gnome3.adwaita-icon-theme ];
 
     preAutoreconf = ''./autogen.sh'';
 

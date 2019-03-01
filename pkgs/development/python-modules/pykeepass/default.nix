@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname   = "pykeepass";
-  version = "3.0.2";
+  version = "3.0.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1kfnh42nimsbdpwpny2c9df82b2n4fb5fagh54ck06f3x483vd90";
+    sha256 = "2c9e2ddb03ee696ed8aa72c2cddfb81280614864e003226141d68b975aa56f6f";
   };
 
   propagatedBuildInputs = [

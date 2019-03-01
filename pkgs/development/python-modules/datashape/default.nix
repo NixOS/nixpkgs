@@ -42,5 +42,7 @@ in buildPythonPackage rec {
     description = "A data description language";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ fridh ];
+    # Package is no longer maintained upstream, and more and more tests are failing.
+    broken = true;
   };
 }

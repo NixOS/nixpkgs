@@ -1,7 +1,8 @@
 { fetchurl, stdenv, fetchpatch, pkgconfig, gnome3, intltool, gobject-introspection, upower, cairo
-, pango, cogl, clutter, libstartup_notification, zenity, libcanberra-gtk3
+, glib, gtk3, pango, cogl, clutter, libstartup_notification, zenity, libcanberra-gtk3
+, gsettings-desktop-schemas, gnome-desktop
 , libtool, makeWrapper, xkeyboard_config, libxkbfile, libxkbcommon, libXtst, libinput
-, pipewire, libgudev, libwacom, xwayland, autoreconfHook }:
+, geocode-glib, pipewire, libgudev, libwacom, xwayland, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   name = "mutter-${version}";
@@ -32,10 +33,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook pkgconfig intltool libtool makeWrapper ];
 
-  buildInputs = with gnome3; [
-    glib gobject-introspection gtk gsettings-desktop-schemas upower
+  buildInputs = [
+    glib gobject-introspection gtk3 gsettings-desktop-schemas upower
     gnome-desktop cairo pango cogl clutter zenity libstartup_notification
-    gnome3.geocode-glib libinput libgudev libwacom
+    geocode-glib libinput libgudev libwacom
     libcanberra-gtk3 zenity xkeyboard_config libxkbfile
     libxkbcommon pipewire
   ];
