@@ -252,8 +252,9 @@ in
 
       systemd.services.kubelet = {
         description = "Kubernetes Kubelet Service";
-        wantedBy = [ "kubernetes.target" ];
-        after = [ "network.target" "docker.service" "kube-apiserver.service" ];
+        wantedBy = [ "kubelet.target" ];
+        after = [ "kube-apiserver-online.target" ];
+        before = [ "kubelet.target" ];
         path = with pkgs; [ gitMinimal openssh docker utillinux iproute ethtool thin-provisioning-tools iptables socat ] ++ top.path;
         preStart = ''
           ${concatMapStrings (img: ''
@@ -325,6 +326,30 @@ in
         };
       };
 
+      systemd.services.docker.before = [ "kubelet.service" ];
+
+      systemd.services.node-online = {
+        wantedBy = [ "node-online.target" ];
+        after = [ "flannel.target" "kubelet.target" ];
+        before = [ "node-online.target" ];
+        # it is complicated. flannel needs kubelet to run the pause container before
+        # it discusses the node CIDR with apiserver and afterwards configures and restarts
+        # dockerd. Until then prevent creating any pods because they have to be recreated anyway
+        # because the network of docker0 has been changed by flannel.
+        script = let
+          docker-env = "/run/flannel/docker";
+          flannel-date = "stat --print=%Y ${docker-env}";
+          docker-date = "systemctl show --property=ActiveEnterTimestamp --value docker";
+        in ''
+          while ! test -f ${docker-env} ; do sleep 1 ; done
+          while test `${flannel-date}` -gt `date +%s --date="$(${docker-date})"` ; do
+            sleep 1
+          done
+        '';
+        serviceConfig.Type = "oneshot";
+        serviceConfig.Slice = "kubernetes.slice";
+      };
+
       # Allways include cni plugins
       services.kubernetes.kubelet.cni.packages = [pkgs.cni-plugins];
 
@@ -369,5 +394,16 @@ in
       };
     })
 
+    {
+      systemd.targets.kubelet = {
+        wantedBy = [ "node-online.target" ];
+        before = [ "node-online.target" ];
+      };
+
+      systemd.targets.node-online = {
+        wantedBy = [ "kubernetes.target" ];
+        before = [ "kubernetes.target" ];
+      };
+    }
   ];
 }

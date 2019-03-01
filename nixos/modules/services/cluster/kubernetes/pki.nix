@@ -119,6 +119,7 @@ in
     cfsslCertPathPrefix = "${config.services.cfssl.dataDir}/cfssl";
     cfsslCert = "${cfsslCertPathPrefix}.pem";
     cfsslKey = "${cfsslCertPathPrefix}-key.pem";
+    cfsslPort = toString config.services.cfssl.port;
 
     certmgrPaths = [
       top.caFile
@@ -191,12 +192,38 @@ in
         chown cfssl "${cfsslAPITokenPath}" && chmod 400 "${cfsslAPITokenPath}"
       '')]);
 
+    systemd.targets.cfssl-online = {
+      wantedBy = [ "network-online.target" ];
+      after = [ "cfssl.service" "network-online.target" "cfssl-online.service" ];
+    };
+
+    systemd.services.cfssl-online = {
+      description = "Wait for ${remote} to be reachable.";
+      wantedBy = [ "cfssl-online.target" ];
+      before = [ "cfssl-online.target" ];
+      preStart = ''
+        ${top.lib.mkWaitCurl {
+          address = remote;
+          path = "/api/v1/cfssl/info";
+          args = "-kd '{}' -o /dev/null";
+        }}
+      '';
+      script = "echo Ok";
+      serviceConfig = {
+        TimeoutSec = "300";
+      };
+    };
+
     systemd.services.kube-certmgr-bootstrap = {
       description = "Kubernetes certmgr bootstrapper";
-      wantedBy = [ "certmgr.service" ];
-      after = [ "cfssl.target" ];
+      wantedBy = [ "cfssl-online.target" ];
+      after = [ "cfssl-online.target" ];
+      before = [ "certmgr.service" ];
       script = concatStringsSep "\n" [''
         set -e
+
+        mkdir -p $(dirname ${certmgrAPITokenPath})
+        mkdir -p $(dirname ${top.caFile})
 
         # If there's a cfssl (cert issuer) running locally, then don't rely on user to
         # manually paste it in place. Just symlink.
@@ -209,14 +236,18 @@ in
         fi
       ''
       (optionalString (cfg.pkiTrustOnBootstrap) ''
-        if [ ! -f "${top.caFile}" ] || [ $(cat "${top.caFile}" | wc -c) -lt 1 ]; then
-          ${pkgs.curl}/bin/curl --fail-early -f -kd '{}' ${remote}/api/v1/cfssl/info | \
-            ${pkgs.cfssl}/bin/cfssljson -stdout >${top.caFile}
+        if [ ! -s "${top.caFile}" ]; then
+          ${top.lib.mkWaitCurl {
+            address = "https://${top.masterAddress}:${cfsslPort}";
+            path = "/api/v1/cfssl/info";
+            args = "-kd '{}' -o - | ${pkgs.cfssl}/bin/cfssljson -stdout >${top.caFile}";
+          }}
         fi
       '')
       ];
       serviceConfig = {
-        RestartSec = "10s";
+        TimeoutSec = "300";
+        RestartSec = "1s";
         Restart = "on-failure";
       };
     };
@@ -254,6 +285,14 @@ in
       };
 
       systemd.services.certmgr = {
+        wantedBy = [ "cfssl-online.target" ];
+        after = [ "cfssl-online.target" "kube-certmgr-bootstrap.service" ];
+        preStart = ''
+          while ! test -s ${certmgrAPITokenPath} ; do
+            sleep 1
+            echo Waiting for ${certmgrAPITokenPath}
+          done
+        '';
         unitConfig.ConditionPathExists = certmgrPaths;
       };
 
@@ -289,6 +328,12 @@ in
           ''
             export KUBECONFIG=${clusterAdminKubeconfig}
             ${kubectl}/bin/kubectl apply -f ${concatStringsSep " \\\n -f " files}
+
+            ${top.lib.mkWaitCurl (with top.pki.certs.addonManager; {
+              path = "/api/v1/namespaces/kube-system/serviceaccounts/default";
+              cacert = top.caFile;
+              inherit cert key;
+            })}
           '';
         })
         {
@@ -384,6 +429,14 @@ in
       };
 
       systemd.services.flannel = {
+        preStart = ''
+          ${top.lib.mkWaitCurl (with top.pki.certs.flannelClient; {
+            path = "/api/v1/nodes";
+            cacert = top.caFile;
+            inherit cert key;
+            args = "-o - | grep podCIDR >/dev/null";
+          })}
+        '';
         unitConfig.ConditionPathExists = flannelPaths;
       };
 

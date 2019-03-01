@@ -73,6 +73,18 @@ let
     };
   };
 
+  mkWaitCurl = { address ? cfg.apiserverAddress, sleep ? 2, path ? "", args ? "-o /dev/null",
+                 cacert ? null, cert ? null, key ? null, }: ''
+    while ! ${pkgs.curl}/bin/curl --fail-early -fs \
+      ${if cacert != null then "--cacert ${cacert}" else ""} \
+      ${if cert != null then "--cert ${cert}" else ""} \
+      ${if key != null then "--key ${key}" else ""} \
+      ${address}${path} ${args} ; do
+        sleep ${toString sleep}
+        echo Waiting to be able to reach ${address}${path}
+    done
+  '';
+
   kubeConfigDefaults = {
     server = mkDefault cfg.kubeconfig.server;
     caFile = mkDefault cfg.kubeconfig.caFile;
@@ -162,6 +174,7 @@ in {
         inherit mkCert;
         inherit mkKubeConfig;
         inherit mkKubeConfigOptions;
+        inherit mkWaitCurl;
       };
       type = types.attrs;
     };

@@ -59,8 +59,17 @@ in
   config = mkIf cfg.enable {
     systemd.services.kube-scheduler = {
       description = "Kubernetes Scheduler Service";
-      wantedBy = [ "kubernetes.target" ];
+      wantedBy = [ "kube-apiserver-online.target" ];
       after = [ "kube-apiserver.service" ];
+      before = [ "kube-apiserver-online.target" ];
+      preStart = ''
+        ${top.lib.mkWaitCurl (with top.pki.certs.schedulerClient; {
+          sleep = 1;
+          path = "/api";
+          cacert = top.caFile;
+          inherit cert key;
+        })}
+      '';
       serviceConfig = {
         Slice = "kubernetes.slice";
         ExecStart = ''${top.package}/bin/kube-scheduler \

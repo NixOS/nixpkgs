@@ -49,8 +49,16 @@ in
     systemd.services.kube-proxy = {
       description = "Kubernetes Proxy Service";
       wantedBy = [ "kubernetes.target" ];
-      after = [ "kube-apiserver.service" ];
+      after = [ "node-online.target" ];
+      before = [ "kubernetes.target" ];
       path = with pkgs; [ iptables conntrack_tools ];
+      preStart = ''
+        ${top.lib.mkWaitCurl (with top.pki.certs.kubeProxyClient; {
+          path = "/api/v1/nodes/${top.kubelet.hostname}";
+          cacert = top.caFile;
+          inherit cert key;
+        })}
+      '';
       serviceConfig = {
         Slice = "kubernetes.slice";
         ExecStart = ''${top.package}/bin/kube-proxy \

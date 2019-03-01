@@ -27,7 +27,12 @@ in
   };
 
   ###### implementation
-  config = mkIf cfg.enable {
+  config = mkIf cfg.enable (let
+    flannelBootstrapPaths = mkIf top.apiserver.enable [
+      top.pki.certs.clusterAdmin.cert
+      top.pki.certs.clusterAdmin.key
+    ];
+  in {
     services.flannel = {
 
       enable = mkDefault true;
@@ -48,8 +53,10 @@ in
       }];
     };
 
-    systemd.services."mk-docker-opts" = {
+    systemd.services.mk-docker-opts = {
       description = "Pre-Docker Actions";
+      wantedBy = [ "flannel.target" ];
+      before = [ "flannel.target" ];
       path = with pkgs; [ gawk gnugrep ];
       script = ''
         ${mkDockerOpts}/mk-docker-opts -d /run/flannel/docker
@@ -66,6 +73,17 @@ in
         PathChanged = [ "/run/flannel/subnet.env" ];
         Unit = "mk-docker-opts.service";
       };
+    };
+
+    systemd.targets.flannel = {
+      wantedBy = [ "node-online.target" ];
+      before = [ "node-online.target" ];
+    };
+
+    systemd.services.flannel = {
+      wantedBy = [ "flannel.target" ];
+      after = [ "kubelet.target" ];
+      before = [ "flannel.target" ];
     };
 
     systemd.services.docker = {
@@ -93,44 +111,69 @@ in
     };
 
     # give flannel som kubernetes rbac permissions if applicable
-    services.kubernetes.addonManager.bootstrapAddons = mkIf ((storageBackend == "kubernetes") && (elem "RBAC" top.apiserver.authorizationMode)) {
+    systemd.services.flannel-rbac-bootstrap = mkIf (top.apiserver.enable && (elem "RBAC" top.apiserver.authorizationMode)) {
 
-      flannel-cr = {
-        apiVersion = "rbac.authorization.k8s.io/v1beta1";
-        kind = "ClusterRole";
-        metadata = { name = "flannel"; };
-        rules = [{
-          apiGroups = [ "" ];
-          resources = [ "pods" ];
-          verbs = [ "get" ];
-        }
-        {
-          apiGroups = [ "" ];
-          resources = [ "nodes" ];
-          verbs = [ "list" "watch" ];
-        }
-        {
-          apiGroups = [ "" ];
-          resources = [ "nodes/status" ];
-          verbs = [ "patch" ];
-        }];
-      };
+      wantedBy = [ "kube-apiserver-online.target" ];
+      after = [ "kube-apiserver-online.target" ];
+      before = [ "flannel.service" ];
+      path = with pkgs; [ kubectl ];
+      preStart = let
+        files = mapAttrsToList (n: v: pkgs.writeText "${n}.json" (builtins.toJSON v)) {
+          flannel-cr = {
+            apiVersion = "rbac.authorization.k8s.io/v1beta1";
+            kind = "ClusterRole";
+            metadata = { name = "flannel"; };
+            rules = [{
+              apiGroups = [ "" ];
+              resources = [ "pods" ];
+              verbs = [ "get" ];
+            }
+            {
+              apiGroups = [ "" ];
+              resources = [ "nodes" ];
+              verbs = [ "list" "watch" ];
+            }
+            {
+              apiGroups = [ "" ];
+              resources = [ "nodes/status" ];
+              verbs = [ "patch" ];
+            }];
+          };
 
-      flannel-crb = {
-        apiVersion = "rbac.authorization.k8s.io/v1beta1";
-        kind = "ClusterRoleBinding";
-        metadata = { name = "flannel"; };
-        roleRef = {
-          apiGroup = "rbac.authorization.k8s.io";
-          kind = "ClusterRole";
-          name = "flannel";
+          flannel-crb = {
+            apiVersion = "rbac.authorization.k8s.io/v1beta1";
+            kind = "ClusterRoleBinding";
+            metadata = { name = "flannel"; };
+            roleRef = {
+              apiGroup = "rbac.authorization.k8s.io";
+              kind = "ClusterRole";
+              name = "flannel";
+            };
+            subjects = [{
+              kind = "User";
+              name = "flannel-client";
+            }];
+          };
         };
-        subjects = [{
-          kind = "User";
-          name = "flannel-client";
-        }];
-      };
+      in ''
+        ${top.lib.mkWaitCurl (with top.pki.certs.clusterAdmin; {
+          path = "/";
+          cacert = top.caFile;
+          inherit cert key;
+        })}
 
+        kubectl -s ${top.apiserverAddress} --certificate-authority=${top.caFile} --client-certificate=${top.pki.certs.clusterAdmin.cert} --client-key=${top.pki.certs.clusterAdmin.key} apply -f ${concatStringsSep " \\\n -f " files}
+      '';
+      script = "echo Ok";
+      unitConfig.ConditionPathExists = flannelBootstrapPaths;
     };
-  };
+
+    systemd.paths.flannel-rbac-bootstrap = mkIf top.apiserver.enable {
+      wantedBy = [ "flannel-rbac-bootstrap.service" ];
+      pathConfig = {
+        PathExists = flannelBootstrapPaths;
+        PathChanged = flannelBootstrapPaths;
+      };
+    };
+  });
 }

@@ -116,8 +116,17 @@ in
 
     systemd.services.kube-controller-manager = {
       description = "Kubernetes Controller Manager Service";
-      wantedBy = [ "kubernetes.target" ];
+      wantedBy = [ "kube-apiserver-online.target" ];
       after = [ "kube-apiserver.service" ];
+      before = [ "kube-apiserver-online.target" ];
+      preStart = ''
+        ${top.lib.mkWaitCurl (with top.pki.certs.controllerManagerClient; {
+          sleep = 1;
+          path = "/api";
+          cacert = top.caFile;
+          inherit cert key;
+        })}
+      '';
       serviceConfig = {
         RestartSec = "30s";
         Restart = "on-failure";

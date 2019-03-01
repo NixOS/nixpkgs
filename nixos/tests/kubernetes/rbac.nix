@@ -94,6 +94,8 @@ let
 
   singlenode = base // {
     test = ''
+      $machine1->waitForUnit("kubernetes.target");
+
       $machine1->waitUntilSucceeds("kubectl get node machine1.my.zyx | grep -w Ready");
 
       $machine1->waitUntilSucceeds("docker load < ${kubectlImage}");
@@ -116,6 +118,8 @@ let
       # Node token exchange
       $machine1->waitUntilSucceeds("cp -f /var/lib/cfssl/apitoken.secret /tmp/shared/apitoken.secret");
       $machine2->waitUntilSucceeds("cat /tmp/shared/apitoken.secret | nixos-kubernetes-node-join");
+      $machine1->waitForUnit("kubernetes.target");
+      $machine2->waitForUnit("kubernetes.target");
 
       $machine1->waitUntilSucceeds("kubectl get node machine2.my.zyx | grep -w Ready");
 

@@ -293,8 +293,9 @@ in
     in {
         systemd.services.kube-apiserver = {
           description = "Kubernetes APIServer Service";
-          wantedBy = [ "kubernetes.target" ];
-          after = [ "network.target" ];
+          wantedBy = [ "kube-apiserver-online.target" ];
+          after = [ "certmgr.service" ];
+          before = [ "kube-apiserver-online.target" ];
           serviceConfig = {
             Slice = "kubernetes.slice";
             ExecStart = ''${top.package}/bin/kube-apiserver \
@@ -459,7 +460,28 @@ in
       };
 
     }))
+    {
+      systemd.targets.kube-apiserver-online = {
+        wantedBy = [ "kubernetes.target" ];
+        before = [ "kubernetes.target" ];
+      };
 
+      systemd.services.kube-apiserver-online = mkIf top.flannel.enable {
+        description = "apiserver control plane is online";
+        wantedBy = [ "kube-apiserver-online.target" ];
+        after = [ "kube-scheduler.service" "kube-controller-manager.service" ];
+        before = [ "kube-apiserver-online.target" ];
+        preStart = ''
+          ${top.lib.mkWaitCurl (with top.pki.certs.flannelClient; {
+            sleep = 3;
+            path = "/healthz";
+            cacert = top.caFile;
+            inherit cert key;
+          })}
+        '';
+        script = "echo apiserver control plane is online";
+      };
+    }
   ];
 
 }
