@@ -10,7 +10,7 @@ let
     (builtins.toJSON (if cfg.applyDefaultConfig then
     (lib.recursiveUpdate defaultConfig cfg.config) else cfg.config));
 
-  availableComponents = pkgs.home-assistant.availableComponents;
+  availableComponents = cfg.package.availableComponents;
 
   # Given component "parentConfig.platform", returns whether config.parentConfig
   # is a list containing a set with set.platform == "platform".
