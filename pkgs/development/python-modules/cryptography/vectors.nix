@@ -1,9 +1,9 @@
-{ buildPythonPackage, fetchPypi, lib }:
+{ buildPythonPackage, fetchPypi, lib, cryptography }:
 
 buildPythonPackage rec {
-  # also bump cryptography
   pname = "cryptography_vectors";
-  version = "2.5";
+  # The test vectors must have the same version as the cryptography package:
+  version = cryptography.version;
 
   src = fetchPypi {
     inherit pname version;
