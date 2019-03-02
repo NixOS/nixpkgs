@@ -16351,6 +16351,8 @@ in
 
   notmuch-bower = callPackage ../applications/networking/mailreaders/notmuch-bower { };
 
+  brig = callPackages ../applications/networking/brig { };
+
   bristol = callPackage ../applications/audio/bristol { };
 
   bs1770gain = callPackage ../applications/audio/bs1770gain { };
