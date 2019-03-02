@@ -28,7 +28,7 @@ python3Packages.buildPythonApplication rec {
     })
   ];
 
-  buildInputs = with python3Packages; [ nose mock ];
+  checkInputs = with python3Packages; [ nose mock ];
 
   checkPhase = "nosetests";
 
