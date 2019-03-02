@@ -427,19 +427,19 @@ in {
                 priority = 210;
                 extraConfig = "return 301 $scheme://$host/remote.php/dav;";
               };
-              "~ ^/(?:build|tests|config|lib|3rdparty|templates|data)/" = {
+              "~ ^\\/(?:build|tests|config|lib|3rdparty|templates|data)\\/" = {
                 priority = 300;
                 extraConfig = "deny all;";
               };
-              "~ ^/(?:\\.|autotest|occ|issue|indie|db_|console)" = {
+              "~ ^\\/(?:\\.|autotest|occ|issue|indie|db_|console)" = {
                 priority = 300;
                 extraConfig = "deny all;";
               };
-              "~ ^/(?:index|remote|public|cron|core/ajax/update|status|ocs/v[12]|updater/.+|ocs-provider/.+)\\.php(?:$|/)" = {
+              "~ ^\\/(?:index|remote|public|cron|core/ajax\\/update|status|ocs\\/v[12]|updater\\/.+|ocs-provider\\/.+|ocm-provider\\/.+)\\.php(?:$|\\/)" = {
                 priority = 500;
                 extraConfig = ''
                   include ${config.services.nginx.package}/conf/fastcgi.conf;
-                  fastcgi_split_path_info ^(.+\.php)(/.*)$;
+                  fastcgi_split_path_info ^(.+\.php)(\\/.*)$;
                   fastcgi_param PATH_INFO $fastcgi_path_info;
                   fastcgi_param HTTPS ${if cfg.https then "on" else "off"};
                   fastcgi_param modHeadersAvailable true;
@@ -450,7 +450,7 @@ in {
                   fastcgi_read_timeout 120s;
                 '';
               };
-              "~ ^/(?:updater|ocs-provider|ocm-provider)(?:$|\/)".extraConfig = ''
+              "~ ^\\/(?:updater|ocs-provider|ocm-provider)(?:$|\\/)".extraConfig = ''
                 try_files $uri/ =404;
                 index index.php;
               '';
