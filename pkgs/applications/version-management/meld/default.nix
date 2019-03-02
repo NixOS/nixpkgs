@@ -19,7 +19,7 @@ python3.pkgs.buildPythonApplication rec {
     gtk3 gtksourceview gnome3.gsettings-desktop-schemas gnome3.adwaita-icon-theme
   ];
   propagatedBuildInputs = with python3.pkgs; [ pygobject3 pycairo ];
-  checkInputs = [ xvfb_run python3.pkgs.pytest dbus ];
+  checkInputs = [ xvfb_run python3.pkgs.pytest dbus gtksourceview gtk3 ];
 
   installPhase = ''
     runHook preInstall
