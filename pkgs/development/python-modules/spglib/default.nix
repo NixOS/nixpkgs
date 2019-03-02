@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, numpy, python }:
+{ stdenv, buildPythonPackage, fetchPypi, numpy, nose, pyyaml }:
 
 buildPythonPackage rec {
   pname = "spglib";
@@ -11,10 +11,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ numpy ];
 
-  checkPhase = ''
-    cd test
-    ${python.interpreter} -m unittest discover -bv
-  '';
+  checkInputs = [ nose pyyaml ];
 
   meta = with stdenv.lib; {
     description = "Python bindings for C library for finding and handling crystal symmetries";
