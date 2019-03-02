@@ -1628,6 +1628,10 @@
     email = "fpletz@fnordicwalking.de";
     github = "fpletz";
     name = "Franz Pletz";
+    keys = [{
+      longkeyid = "rsa4096/0x846FDED7792617B4";
+      fingerprint = "8A39 615D CE78 AF08 2E23  F303 846F DED7 7926 17B4";
+    }];
   };
   fps = {
     email = "mista.tapas@gmx.net";

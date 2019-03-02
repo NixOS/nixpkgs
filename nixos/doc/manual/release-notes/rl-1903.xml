@@ -582,20 +582,6 @@
    </listitem>
    <listitem>
     <para>
-     Symlinks in <filename>/etc</filename> (except <filename>/etc/static</filename>)
-     are now relative instead of absolute. This makes possible to examine
-     NixOS container's <filename>/etc</filename> directory from host system
-     (previously it pointed to host <filename>/etc</filename> when viewed from host,
-     and to container <filename>/etc</filename> when viewed from container chroot).
-    </para>
-    <para>
-     This also makes <filename>/etc/os-release</filename> adhere to
-     <link xlink:href="https://www.freedesktop.org/software/systemd/man/os-release.html">the standard</link>
-     for NixOS containers.
-    </para>
-   </listitem>
-   <listitem>
-    <para>
       Flat volumes are now disabled by default in <literal>hardware.pulseaudio</literal>.
       This has been done to prevent applications, which are unaware of this feature, setting
       their volumes to 100% on startup causing harm to your audio hardware and potentially your ears.
@@ -685,6 +671,11 @@
        Openmpi has been updated to version 4.0.0, which removes some deprecated MPI-1 symbols.
        This may break some older applications that still rely on those symbols.
        An upgrade guide can be found <link xlink:href="https://www.open-mpi.org/faq/?category=mpi-removed">here</link>.
+     </para>
+   </listitem>
+   <listitem>
+     <para>
+       A new subcommand <command>nixos-rebuild edit</command> was added.
      </para>
    </listitem>
   </itemizedlist>

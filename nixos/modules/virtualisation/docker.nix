@@ -52,6 +52,15 @@ in
           '';
       };
 
+    enableNvidia =
+      mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Enable nvidia-docker wrapper, supporting NVIDIA GPUs inside docker containers.
+        '';
+      };
+
     liveRestore =
       mkOption {
         type = types.bool;
@@ -140,7 +149,8 @@ in
   ###### implementation
 
   config = mkIf cfg.enable (mkMerge [{
-      environment.systemPackages = [ cfg.package ];
+      environment.systemPackages = [ cfg.package ]
+        ++ optional cfg.enableNvidia pkgs.nvidia-docker;
       users.groups.docker.gid = config.ids.gids.docker;
       systemd.packages = [ cfg.package ];
 
@@ -157,6 +167,7 @@ in
                 --log-driver=${cfg.logDriver} \
                 ${optionalString (cfg.storageDriver != null) "--storage-driver=${cfg.storageDriver}"} \
                 ${optionalString cfg.liveRestore "--live-restore" } \
+                ${optionalString cfg.enableNvidia "--add-runtime nvidia=${pkgs.nvidia-docker}/bin/nvidia-container-runtime" } \
                 ${cfg.extraOptions}
             ''];
           ExecReload=[
@@ -165,7 +176,8 @@ in
           ];
         };
 
-        path = [ pkgs.kmod ] ++ (optional (cfg.storageDriver == "zfs") pkgs.zfs);
+        path = [ pkgs.kmod ] ++ optional (cfg.storageDriver == "zfs") pkgs.zfs
+          ++ optional cfg.enableNvidia pkgs.nvidia-docker;
       };
 
       systemd.sockets.docker = {
@@ -178,7 +190,6 @@ in
           SocketGroup = "docker";
         };
       };
-
 
       systemd.services.docker-prune = {
         description = "Prune docker resources";
@@ -194,7 +205,15 @@ in
 
         startAt = optional cfg.autoPrune.enable cfg.autoPrune.dates;
       };
+
+      assertions = [
+        { assertion = cfg.enableNvidia -> config.hardware.opengl.driSupport32Bit or false;
+          message = "Option enableNvidia requires 32bit support libraries";
+        }];
     }
+    (mkIf cfg.enableNvidia {
+      environment.etc."nvidia-container-runtime/config.toml".source = "${pkgs.nvidia-docker}/etc/config.toml";
+    })
   ]);
 
   imports = [
