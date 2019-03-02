@@ -201,6 +201,7 @@ $ nix-build /path/to/nixpkgs/nixos -A system
         Opens <filename>configuration.nix</filename> in the default editor.
       </para>
      </listitem>
+    </varlistentry>
     <varlistentry>
      <term>
       <option>build-vm</option>
