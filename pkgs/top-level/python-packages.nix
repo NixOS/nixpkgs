@@ -1311,7 +1311,10 @@ in {
 
   canmatrix = callPackage ../development/python-modules/canmatrix {};
 
-  cairocffi = callPackage ../development/python-modules/cairocffi {};
+
+  cairocffi = let
+    inherit (callPackage ../development/python-modules/cairocffi {}) cairocffi_1_0 cairocffi_0_9;
+  in if isPy3k then cairocffi_1_0 else cairocffi_0_9;
 
   cairosvg1 = callPackage ../development/python-modules/cairosvg/1_x.nix {};
 
