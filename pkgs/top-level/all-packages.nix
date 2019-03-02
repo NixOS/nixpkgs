@@ -18511,6 +18511,8 @@ in
 
   pijul = callPackage ../applications/version-management/pijul {};
 
+  ping = callPackage ../applications/networking/ping { };
+
   piper = callPackage ../os-specific/linux/piper { };
 
   plank = callPackage ../applications/misc/plank { };
