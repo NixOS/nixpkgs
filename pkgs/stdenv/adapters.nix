@@ -195,4 +195,13 @@ rec {
         allowSubstitutes = false;
       });
     };
+
+  /* Modify a stdenv so that it builds binaries optimized specifically
+     for the platform architecture ("westmere", "sandybridge", "skylake-avx512", ...) */
+  pureUsePlatformOptimizations = stdenv: stdenv //
+    { mkDerivation = args: stdenv.mkDerivation (args // {
+        NIX_CFLAGS_COMPILE = toString (args.NIX_CFLAGS_COMPILE or "") +
+          stdenv.lib.optionalString (stdenv.hostPlatform.platform?gcc.arch) " -march=${stdenv.hostPlatform.platform.gcc.arch}";
+      });
+    };
 }
