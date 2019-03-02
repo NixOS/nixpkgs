@@ -25,10 +25,10 @@ in {
   aggregates = glPlugin rec {
     name = "graylog-aggregates-${version}";
     pluginName = "graylog-plugin-aggregates";
-    version = "2.3.0";
+    version = "2.4.0";
     src = fetchurl {
       url = "https://github.com/cvtienhoven/${pluginName}/releases/download/${version}/${pluginName}-${version}.jar";
-      sha256 = "0yy455wyr01ci3nqvbhzxs6r4bb3xgac0xcmqaim1wsm1fdfi2ws";
+      sha256 = "1c48almnjr0b6nvzagnb9yddqbcjs7yhrd5yc5fx9q7w3vxi50zp";
     };
     meta = {
       homepage = https://github.com/cvtienhoven/graylog-plugin-aggregates;
@@ -38,10 +38,10 @@ in {
   auth_sso = glPlugin rec {
     name = "graylog-auth-sso-${version}";
     pluginName = "graylog-plugin-auth-sso";
-    version = "2.4.2";
+    version = "3.0.0";
     src = fetchurl {
       url = "https://github.com/Graylog2/${pluginName}/releases/download/${version}/${pluginName}-${version}.jar";
-      sha256 = "0nwzw7ddq2psnvj8jwaxp9i080l7y2daxy198wzb62m7i1srzcp8";
+      sha256 = "09y1s71mk8fm6lsghla7mrh9z5y230r8zpv84klhavh2dacs8gq5";
     };
     meta = {
       homepage = https://github.com/Graylog2/graylog-plugin-auth-sso;
