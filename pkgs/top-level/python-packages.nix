@@ -146,6 +146,8 @@ in {
 
   absl-py = callPackage ../development/python-modules/absl-py { };
 
+  adb-homeassistant = callPackage ../development/python-modules/adb-homeassistant { };
+
   aenum = callPackage ../development/python-modules/aenum { };
 
   affinity = callPackage ../development/python-modules/affinity { };
@@ -390,6 +392,8 @@ in {
 
   fire = callPackage ../development/python-modules/fire { };
 
+  firetv = callPackage ../development/python-modules/firetv { };
+
   fdint = callPackage ../development/python-modules/fdint { };
 
   fuse = callPackage ../development/python-modules/fuse-python {
@@ -569,6 +573,8 @@ in {
   pprintpp = callPackage ../development/python-modules/pprintpp { };
 
   progress = callPackage ../development/python-modules/progress { };
+
+  pure-python-adb-homeassistant = callPackage ../development/python-modules/pure-python-adb-homeassistant { };
 
   pymysql = callPackage ../development/python-modules/pymysql { };
 
