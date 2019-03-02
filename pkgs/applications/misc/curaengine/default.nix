@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch, cmake, libarcus, stb }:
+{ stdenv, fetchFromGitHub, fetchpatch, cmake, libarcus, stb, protobuf }:
 
 stdenv.mkDerivation rec {
   name = "curaengine-${version}";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ libarcus stb ];
+  buildInputs = [ libarcus stb protobuf ];
 
   cmakeFlags = [ "-DCURA_ENGINE_VERSION=${version}" ];
 
