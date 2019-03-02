@@ -39,6 +39,10 @@
    </arg>
 
    <arg choice='plain'>
+    <option>edit</option>
+   </arg>
+
+   <arg choice='plain'>
     <option>build-vm</option>
    </arg>
 
@@ -188,6 +192,15 @@ $ nix-build /path/to/nixpkgs/nixos -A system
       </para>
      </listitem>
     </varlistentry>
+    <varlistentry>
+     <term>
+      <option>edit</option>
+     </term>
+     <listitem>
+      <para>
+        Opens <filename>configuration.nix</filename> in the default editor.
+      </para>
+     </listitem>
     <varlistentry>
      <term>
       <option>build-vm</option>
