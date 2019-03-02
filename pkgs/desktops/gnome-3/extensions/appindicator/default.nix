@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "gnome-shell-extension-appindicator-${version}";
-  version = "22";
+  version = "23";
 
   src = fetchFromGitHub {
     owner = "Ubuntu";
     repo = "gnome-shell-extension-appindicator";
     rev = "v${version}";
-    sha256 = "1gqw54d55hxjj2hh04p0dx2j40bhi4ck9hgwlz8f7j4v7r37z0qw";
+    sha256 = "0xpwdmzf3yxz6y75ngy8cc6il09mp68drzbqsazpprjri73vfy5h";
   };
 
   # This package has a Makefile, but it's used for building a zip for
