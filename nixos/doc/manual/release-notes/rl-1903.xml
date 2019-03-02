@@ -465,6 +465,11 @@
      been removed.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     <literal>graylog</literal> has been upgraded from version 2.* to 3.*. Some setups making use of extraConfig (especially those exposing Graylog via reverse proxies) need to be updated as upstream removed/replaced some settings. See <link xlink:href="http://docs.graylog.org/en/3.0/pages/upgrade/graylog-3.0.html#simplified-http-interface-configuration">Upgrading Graylog</link> for details.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
