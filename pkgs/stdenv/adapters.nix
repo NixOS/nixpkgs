@@ -198,10 +198,14 @@ rec {
 
   /* Modify a stdenv so that it builds binaries optimized specifically
      for the platform architecture ("westmere", "sandybridge", "skylake-avx512", ...) */
-  pureUsePlatformOptimizations = stdenv: stdenv //
-    { mkDerivation = args: stdenv.mkDerivation (args // {
-        NIX_CFLAGS_COMPILE = toString (args.NIX_CFLAGS_COMPILE or "") +
-          stdenv.lib.optionalString (stdenv.hostPlatform.platform?gcc.arch) " -march=${stdenv.hostPlatform.platform.gcc.arch}";
-      });
-    };
+   pureUsePlatformOptimizations = stdenv:
+     # exclude stdenvNoCC and bootstrap's GCC5 which does not understand -march=skylake
+     if stdenv.hostPlatform.platform?gcc.arch && stdenv.cc!=null && !(stdenv.cc.isGNU && stdenv.lib.versionOlder (builtins.parseDrvName stdenv.cc.name).version "7.0") then
+       stdenv // {
+         mkDerivation = args: stdenv.mkDerivation (args // {
+           NIX_CFLAGS_COMPILE = toString (args.NIX_CFLAGS_COMPILE or "") + " -march=${stdenv.hostPlatform.platform.gcc.arch}";
+         });
+       }
+     else
+       stdenv;
 }
