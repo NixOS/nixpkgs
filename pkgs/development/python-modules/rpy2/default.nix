@@ -37,9 +37,9 @@ buildPythonPackage rec {
       else
         "1nrj8pgyxrwrfdrxzb4j3z1adjwjx1mr8d1n5cmrz4nhlzy8w7xr"; # 2.9.x
     };
+    nativeBuildInputs = [ R ];
     buildInputs = [
       readline
-      R
       pcre
       lzma
       bzip2
