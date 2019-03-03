@@ -98,6 +98,8 @@ in
     ];
 
     services.gnome3.gnome-keyring.enable = true;
+    services.gnome3.gnome-settings-daemon.enable = true;
+    services.gnome3.gnome-settings-daemon.package = pkgs.mate.mate-settings-daemon;
     services.gnome3.gvfs.enable = true;
     services.upower.enable = config.powerManagement.enable;
 
