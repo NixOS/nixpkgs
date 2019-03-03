@@ -16,6 +16,12 @@ in buildPythonPackage {
     sha256 = "1nw8r88a5g2d550yvklawlvns8gd5slw53yy688kxnsa65aln79w";
   };
 
+  nativeBuildInputs = [ pkgconfig lndir qt4 ];
+
+  buildInputs = [ makeWrapper dbus ];
+
+  propagatedBuildInputs = [ sip ];
+
   configurePhase = ''
     mkdir -p $out
     lndir ${dbus-python} $out
@@ -40,11 +46,6 @@ in buildPythonPackage {
 
     ${python.executable} configure.py $configureFlags "''${configureFlagsArray[@]}"
   '';
-
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ makeWrapper qt4 lndir dbus ];
-
-  propagatedBuildInputs = [ sip ];
 
   postInstall = ''
     for i in $out/bin/*; do
