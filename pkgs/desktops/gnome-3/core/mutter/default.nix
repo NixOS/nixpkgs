@@ -1,39 +1,25 @@
-{ fetchurl, fetchpatch, stdenv, pkgconfig, gnome3, intltool, gobject-introspection, upower, cairo
+{ fetchurl, fetchpatch, stdenv, pkgconfig, gnome3, gettext, gobject-introspection, upower, cairo
 , pango, cogl, clutter, libstartup_notification, zenity, libcanberra-gtk3
-, libtool, makeWrapper, xkeyboard_config, libxkbfile, libxkbcommon, libXtst, libinput
+, ninja, xkeyboard_config, libxkbfile, libxkbcommon, libXtst, libinput
 , gsettings-desktop-schemas, glib, gtk3, gnome-desktop
-, geocode-glib, pipewire, libgudev, libwacom, xwayland, autoreconfHook }:
+, geocode-glib, pipewire, libgudev, libwacom, xwayland, meson
+, gnome-settings-daemon
+, xorgserver
+, python3
+, wrapGAppsHook
+}:
 
 stdenv.mkDerivation rec {
   name = "mutter-${version}";
-  version = "3.30.2";
+  version = "3.32.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/mutter/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "0qr3w480p31nbiad49213rj9rk6p9fl82a68pzznpz36p30dq96z";
+    sha256 = "068zir5c1awmzb31gx94zjykv6c3xb1p5pch7860y3xlihha4s3n";
   };
 
-  patches = [
-    # https://gitlab.gnome.org/GNOME/mutter/issues/270
-    # Fixes direction of the desktop switching animation when using workspace
-    # grid extension with desktops arranged horizontally.
-    (fetchpatch {
-      url = https://gitlab.gnome.org/GNOME/mutter/commit/92cccf53dfe9e077f1d61ac4f896fd391f8cb689.patch;
-      sha256 = "11vmypypjss50xg7hhdbqrxvgqlxx4lnwy59089qsfl3akg4kk2i";
-    })
-  ];
-
-  configureFlags = [
-    "--with-x"
-    "--disable-static"
-    "--enable-remote-desktop"
-    "--enable-shape"
-    "--enable-sm"
-    "--enable-startup-notification"
-    "--enable-xsync"
-    "--enable-verbose-mode"
-    "--with-libcanberra"
-    "--with-xwayland-path=${xwayland}/bin/Xwayland"
+  mesonFlags = [
+    "-Dxwayland-path=${xwayland}/bin/Xwayland"
   ];
 
   propagatedBuildInputs = [
@@ -41,19 +27,32 @@ stdenv.mkDerivation rec {
     libXtst
   ];
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig intltool libtool makeWrapper ];
+  nativeBuildInputs = [
+    meson
+    pkgconfig
+    gettext
+    ninja
+    python3
+    # for cvt command
+    xorgserver
+    wrapGAppsHook
+  ];
 
   buildInputs = [
     glib gobject-introspection gtk3 gsettings-desktop-schemas upower
     gnome-desktop cairo pango cogl clutter zenity libstartup_notification
     geocode-glib libinput libgudev libwacom
     libcanberra-gtk3 zenity xkeyboard_config libxkbfile
-    libxkbcommon pipewire
+    libxkbcommon pipewire xwayland
+    gnome-settings-daemon
   ];
 
-  preFixup = ''
-    wrapProgram "$out/bin/mutter" \
-      --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
+  postPatch = ''
+    patchShebangs src/backends/native/gen-default-modes.py
+  '';
+
+  postInstall = ''
+    ${glib.dev}/bin/glib-compile-schemas "$out/share/glib-2.0/schemas"
   '';
 
   enableParallelBuilding = true;
