@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "star-${version}";
-  version = "2.7.0a";
+  version = "2.7.0c";
 
   src = fetchFromGitHub {
     repo = "STAR";
     owner = "alexdobin";
     rev = version;
-    sha256 = "1yx28gra6gqdx1ps5y8mpdinsn8r0dhsc2m3gcvjfrk71i9yhd6l";
+    sha256 = "0r5jcckr45f71jwhz8xazi1w6kfhszq3y6r7f6zl9963ms1q1gfv";
   };
 
   sourceRoot = "source/source";
