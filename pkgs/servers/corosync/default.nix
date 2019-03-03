@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, pkgconfig, nss, nspr, libqb
+{ stdenv, fetchurl, makeWrapper, pkgconfig, kronosnet, nss, nspr, libqb
 , dbus, rdma-core, libstatgrab, net_snmp
 , enableDbus ? false
 , enableInfiniBandRdma ? false
@@ -9,17 +9,18 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "corosync-2.4.3";
+  pname = "corosync";
+  version = "3.0.1";
 
   src = fetchurl {
-    url = "http://build.clusterlabs.org/corosync/releases/${name}.tar.gz";
-    sha256 = "15y5la04qn2lh1gabyifygzpa4dx3ndk5yhmaf7azxyjx0if9rxi";
+    url = "http://build.clusterlabs.org/corosync/releases/${pname}-${version}.tar.gz";
+    sha256 = "0zk75yknvhc691y0j4lkh1bx55mryzdgw60mrcr5j6fid1xbfnqy";
   };
 
   nativeBuildInputs = [ makeWrapper pkgconfig ];
 
   buildInputs = [
-    nss nspr libqb
+    kronosnet nss nspr libqb
   ] ++ optional enableDbus dbus
     ++ optional enableInfiniBandRdma rdma-core
     ++ optional enableMonitoring libstatgrab
