@@ -2,16 +2,16 @@ diff --git a/Source/CMakeLists.txt b/Source/CMakeLists.txt
 index 8aff8f6..af1852d 100644
 --- a/Source/CMakeLists.txt
 +++ b/Source/CMakeLists.txt
-@@ -791,12 +791,6 @@ if(CMAKE_SYSTEM_NAME STREQUAL "Linux" AND CMAKE_SYSTEM_PROCESSOR MATCHES "sparc"
+@@ -791,12 +791,11 @@ if(CMAKE_SYSTEM_NAME STREQUAL "Linux" AND CMAKE_SYSTEM_PROCESSOR MATCHES "sparc"
    endif()
  endif()
  
--# On Apple we need CoreFoundation and CoreServices
--if(APPLE)
--  target_link_libraries(CMakeLib "-framework CoreFoundation")
+ # On Apple we need CoreFoundation and CoreServices
+ if(APPLE)
+   target_link_libraries(CMakeLib "-framework CoreFoundation")
 -  target_link_libraries(CMakeLib "-framework CoreServices")
--endif()
--
+ endif()
+ 
  if(WIN32 AND NOT UNIX)
    # We need the rpcrt4 library on Windows.
    # We need the crypt32 library on Windows for crypto/cert APIs.
