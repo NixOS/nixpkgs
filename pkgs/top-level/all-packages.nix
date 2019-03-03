@@ -19707,6 +19707,8 @@ in
     inherit (pythonPackages) wrapPython wxPython;
   };
 
+  torrential = callPackage ../applications/networking/p2p/torrential { };
+
   tortoisehg = callPackage ../applications/version-management/tortoisehg { };
 
   toot = callPackage ../applications/misc/toot { };
