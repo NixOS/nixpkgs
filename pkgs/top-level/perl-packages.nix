@@ -14851,6 +14851,22 @@ let
     };
   };
 
+  URISmartURI = buildPerlPackage rec {
+    pname = "URI-SmartURI";
+    version = "0.032";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/R/RK/RKITOVER/${pname}-${version}.tar.gz";
+      sha256 = "0b2grkmkbnp37q85wj7jpj5zr93vdbisgxlls2vl5q928rwln5zb";
+    };
+    checkInputs = [ TestNoWarnings TestFatal ];
+    propagatedBuildInputs = [ URI FileFindRule ListMoreUtils
+      ClassC3Componentised ClassLoad Moose ScalarListUtils namespaceclean ];
+    meta = {
+      description = "File storage backend for session data";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   SnowballNorwegian = buildPerlModule {
      pname = "Snowball-Norwegian";
      version = "1.2";
