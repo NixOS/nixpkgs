@@ -2924,6 +2924,8 @@ in
 
   gifsicle = callPackage ../tools/graphics/gifsicle { };
 
+  gifski = callPackage ../tools/graphics/gifski { };
+
   git-big-picture = callPackage ../applications/version-management/git-and-tools/git-big-picture { };
 
   git-crecord = callPackage ../applications/version-management/git-crecord { };
