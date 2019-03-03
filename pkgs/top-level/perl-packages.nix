@@ -1669,6 +1669,21 @@ let
     };
   };
 
+  CatalystPluginSmartURI = buildPerlPackage rec {
+    pname = "Catalyst-Plugin-SmartURI";
+    version = "0.041";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/R/RK/RKITOVER/${pname}-${version}.tar.gz";
+      sha256 = "0msz3w2vfdb5w4ixi5llq66xlhm0181gjz9xj8yj0lalk232326b";
+    };
+    checkInputs = [ TestWarnings TimeOut ];
+    propagatedBuildInputs = [ URISmartURI CatalystRuntime ClassC3Componentised ClassLoad Moose ScalarListUtils namespaceclean ];
+    meta = {
+      description = "File storage backend for session data";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   CatalystPluginStackTrace = buildPerlPackage {
     pname = "Catalyst-Plugin-StackTrace";
     version = "0.12";
