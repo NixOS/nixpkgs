@@ -14,7 +14,8 @@ buildPythonPackage rec {
     ++ optional (versionOlder protobuf.version "2.7.0") "-std=c++98";
 
   propagatedBuildInputs = [ google_apputils ];
-  nativeBuildInputs = [ google_apputils pyext protobuf ];
+  propagatedNativeBuildInputs = [ protobuf ];  # For protoc.
+  nativeBuildInputs = [ google_apputils pyext ];
   buildInputs = [ protobuf ];
 
   patches = optional isPy37
