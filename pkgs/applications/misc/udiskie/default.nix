@@ -45,8 +45,14 @@ python3Packages.buildPythonApplication rec {
     cp -v doc/udiskie.8 $out/share/man/man8/
   '';
 
-  # tests require dbusmock
-  doCheck = false;
+  checkInputs = with python3Packages; [
+    nose
+    keyutils
+  ];
+
+  checkPhase = ''
+    nosetests
+  '';
 
   meta = with stdenv.lib; {
     description = "Removable disk automounter for udisks";
