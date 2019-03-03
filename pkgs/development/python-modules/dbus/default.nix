@@ -6,12 +6,16 @@ if isPyPy then throw "dbus-python not supported for interpreter ${python.executa
   version = "1.2.4";
   format = "other";
 
+  outputs = [ "out" "dev" "doc" ];
+
   src = fetchurl {
     url = "http://dbus.freedesktop.org/releases/dbus-python/${pname}-${version}.tar.gz";
     sha256 = "1k7rnaqrk7mdkg0k6n2jn3d1mxsl7s3i07g5a8va5yvl3y3xdwg2";
   };
 
-  postPatch = "patchShebangs .";
+  patches = [
+    ./fix-includedir.patch
+  ];
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ dbus dbus-glib ]
