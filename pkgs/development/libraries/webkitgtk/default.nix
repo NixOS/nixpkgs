@@ -6,6 +6,7 @@
 , enableGeoLocation ? true, geoclue2, sqlite
 , enableGtk2Plugins ? false, gtk2 ? null
 , gst-plugins-base, gst-plugins-bad, woff2
+, openjpeg
 }:
 
 assert enableGeoLocation -> geoclue2 != null;
@@ -15,7 +16,7 @@ assert stdenv.isDarwin -> !enableGtk2Plugins;
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "webkitgtk-${version}";
-  version = "2.22.7";
+  version = "2.23.92";
 
   meta = {
     description = "Web content rendering engine, GTK+ port";
@@ -28,7 +29,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://webkitgtk.org/releases/${name}.tar.xz";
-    sha256 = "1zrhmz90sn30zgyflj4i86fsscws10xsi2kfs87nj2nd0pbggrjb";
+    sha256 = "0d2il0k96xviqi7dfs7rq8w5zy7ph12nzb4fm2w1ys1r97r6qs7g";
   };
 
   patches = optionals stdenv.isDarwin [
@@ -69,6 +70,7 @@ stdenv.mkDerivation rec {
     libintl libwebp enchant2 libnotify gnutls pcre nettle libidn libgcrypt woff2
     libxml2 libsecret libxslt harfbuzz libpthreadstubs libtasn1 p11-kit
     sqlite gst-plugins-base gst-plugins-bad libxkbcommon epoxy at-spi2-core
+    openjpeg
   ] ++ optional enableGeoLocation geoclue2
     ++ optional enableGtk2Plugins gtk2
     ++ (with xorg; [ libXdmcp libXt libXtst libXdamage ])
