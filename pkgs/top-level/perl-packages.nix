@@ -18462,6 +18462,19 @@ let
     };
   };
 
+  TimeOut = buildPerlPackage rec {
+    pname = "Time-Out";
+    version = "0.11";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PA/PATL/${pname}-${version}.tar.gz";
+      sha256 = "1lhmx1x8j6z1k9vn32bcsw7g44cg22icshnnc37djlnlixlxm5lk";
+    };
+    meta = {
+      description = "Easily timeout long running operations";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   Tk = buildPerlPackage {
     pname = "Tk";
     version = "804.034";
