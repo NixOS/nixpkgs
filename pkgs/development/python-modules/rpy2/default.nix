@@ -58,6 +58,10 @@ buildPythonPackage rec {
       tidyr
     ]) ++ extraRPackages ++ rWrapper.recommendedPackages;
 
+    nativeBuildInputs = [
+      R # needed at setup time to detect R_HOME (alternatively set R_HOME explicitly)
+    ];
+
     patches = [
       # R_LIBS_SITE is used by the nix r package to point to the installed R libraries.
       # This patch sets R_LIBS_SITE when rpy2 is imported.
