@@ -3577,7 +3577,7 @@ in
 
   jid = callPackage ../development/tools/jid { };
 
-  jing = res.jing-trang;
+  jing = jing-trang;
   jing-trang = callPackage ../tools/text/xml/jing-trang { };
 
   jira-cli = callPackage ../development/tools/jira_cli { };
@@ -4872,27 +4872,29 @@ in
 
   phodav = callPackage ../tools/networking/phodav { };
 
-  pinentry = callPackage ../tools/security/pinentry {
+  pinentry-real = callPackage ../tools/security/pinentry {
     libcap = if stdenv.isDarwin then null else libcap;
   };
 
-  pinentry_ncurses = res.pinentry.override {
+  pinentry = pinentry-real;
+
+  pinentry_ncurses = pinentry-real.override {
     gtk2 = null;
   };
 
-  pinentry_emacs = res.pinentry.override {
+  pinentry_emacs = pinentry-real.override {
     enableEmacs = true;
   };
 
-  pinentry_gnome = res.pinentry.override {
+  pinentry_gnome = pinentry-real.override {
     inherit gcr;
   };
 
-  pinentry_qt4 = res.pinentry.override {
+  pinentry_qt4 = pinentry-real.override {
     qt = qt4;
   };
 
-  pinentry_qt5 = res.pinentry.override {
+  pinentry_qt5 = pinentry-real.override {
     qt = qt5.qtbase;
   };
 
@@ -8769,11 +8771,11 @@ in
   gputils = callPackage ../development/tools/misc/gputils { };
 
   gradleGen = callPackage ../development/tools/build-managers/gradle { };
-  gradle = res.gradleGen.gradle_latest;
-  gradle_2_14 = res.gradleGen.gradle_2_14;
-  gradle_2_5 = res.gradleGen.gradle_2_5;
-  gradle_3_5 = res.gradleGen.gradle_3_5;
-  gradle_4_10 = res.gradleGen.gradle_4_10;
+  gradle = gradleGen.gradle_latest;
+  gradle_2_14 = gradleGen.gradle_2_14;
+  gradle_2_5 = gradleGen.gradle_2_5;
+  gradle_3_5 = gradleGen.gradle_3_5;
+  gradle_4_10 = gradleGen.gradle_4_10;
 
   gperf = callPackage ../development/tools/misc/gperf { };
   # 3.1 changed some parameters from int to size_t, leading to mismatches.
@@ -9257,7 +9259,7 @@ in
   valgrind = callPackage ../development/tools/analysis/valgrind {
     inherit (buildPackages.darwin) xnu bootstrap_cmds cctools;
   };
-  valgrind-light = res.valgrind.override { gdb = null; };
+  valgrind-light = valgrind.override { gdb = null; };
 
   valkyrie = callPackage ../development/tools/analysis/valkyrie { };
 
@@ -9838,7 +9840,7 @@ in
     inherit (darwin) cf-private;
     inherit (darwin.apple_sdk.frameworks) Cocoa AGL GLUT;
   };
-  fltk = res.fltk13;
+  fltk = fltk13;
 
   flyway = callPackage ../development/tools/flyway { };
 
@@ -9851,7 +9853,7 @@ in
 
   freetts = callPackage ../development/libraries/freetts { };
 
-  frog = res.languageMachines.frog;
+  frog = languageMachines.frog;
 
   fstrcmp = callPackage ../development/libraries/fstrcmp { };
 
@@ -9925,11 +9927,11 @@ in
   };
 
   gegl_0_3 = callPackage ../development/libraries/gegl/3.0.nix {
-    gtk = res.gtk2;
+    gtk = gtk2;
   };
 
   gegl_0_4 = callPackage ../development/libraries/gegl/4.0.nix {
-    gtk = res.gtk2;
+    gtk = gtk2;
   };
 
   geoclue2 = callPackage ../development/libraries/geoclue {};
@@ -10324,7 +10326,7 @@ in
   gumbo = callPackage ../development/libraries/gumbo { };
 
   gvfs = callPackage ../development/libraries/gvfs {
-    gnome = res.gnome3;
+    gnome = gnome3;
   };
 
   gwenhywfar = callPackage ../development/libraries/aqbanking/gwenhywfar.nix { };
@@ -11556,16 +11558,7 @@ in
 
   libxml2 = callPackage ../development/libraries/libxml2 { };
 
-  libxml2Python = pkgs.buildEnv { # slightly hacky
-    name = "libxml2+py-${res.libxml2.version}";
-    paths = with libxml2; [ dev bin py ];
-    inherit (libxml2) passthru;
-    # the hook to find catalogs is hidden by buildEnv
-    postBuild = ''
-      mkdir "$out/nix-support"
-      cp '${libxml2.dev}/nix-support/propagated-build-inputs' "$out/nix-support/"
-    '';
-  };
+  libxml2Python = callPackage ../development/libraries/libxml2/python.nix { };
 
   libxmlb = callPackage ../development/libraries/libxmlb { };
 
@@ -15961,7 +15954,7 @@ in
   inherit (callPackages ../data/fonts/tai-languages { }) tai-ahom;
 
   tango-icon-theme = callPackage ../data/icons/tango-icon-theme {
-    gtk = res.gtk2;
+    gtk = gtk2;
   };
 
   themes = name: callPackage (../data/misc/themes + ("/" + name + ".nix")) {};
@@ -16206,18 +16199,18 @@ in
   libbitcoin-explorer = callPackage ../tools/misc/libbitcoin/libbitcoin-explorer.nix { };
 
 
-  go-ethereum = res.altcoins.go-ethereum;
-  ethabi = res.altcoins.ethabi;
+  go-ethereum = altcoins.go-ethereum;
+  ethabi = altcoins.ethabi;
 
-  parity = res.altcoins.parity;
-  parity-beta = res.altcoins.parity-beta;
-  parity-ui = res.altcoins.parity-ui;
+  parity = altcoins.parity;
+  parity-beta = altcoins.parity-beta;
+  parity-ui = altcoins.parity-ui;
 
-  polkadot = res.altcoins.polkadot;
+  polkadot = altcoins.polkadot;
 
-  stellar-core = res.altcoins.stellar-core;
+  stellar-core = altcoins.stellar-core;
 
-  particl-core = res.altcoins.particl-core;
+  particl-core = altcoins.particl-core;
 
   aumix = callPackage ../applications/audio/aumix {
     gtkGUI = false;
@@ -16991,7 +16984,7 @@ in
   espeak-classic = callPackage ../applications/audio/espeak { };
 
   espeak-ng = callPackage ../applications/audio/espeak-ng { };
-  espeak = res.espeak-ng;
+  espeak = espeak-ng;
 
   espeakedit = callPackage ../applications/audio/espeak/edit.nix { };
 
@@ -17287,7 +17280,7 @@ in
     inherit (pkgs.gnome2) libgnome libgnomeui;
   };
 
-  firefox-beta-bin = res.wrapFirefox firefox-beta-bin-unwrapped {
+  firefox-beta-bin = wrapFirefox firefox-beta-bin-unwrapped {
     browserName = "firefox";
     name = "firefox-beta-bin-" +
       (builtins.parseDrvName firefox-beta-bin-unwrapped.name).version;
@@ -17301,7 +17294,7 @@ in
     inherit (pkgs.gnome2) libgnome libgnomeui;
   };
 
-  firefox-devedition-bin = res.wrapFirefox firefox-devedition-bin-unwrapped {
+  firefox-devedition-bin = wrapFirefox firefox-devedition-bin-unwrapped {
     browserName = "firefox";
     nameSuffix = "-devedition";
     name = "firefox-devedition-bin-" +
@@ -21171,7 +21164,7 @@ in
 
   ut2004Packages = dontRecurseIntoAttrs (callPackage ../games/ut2004 { });
 
-  ut2004demo = res.ut2004Packages.ut2004 [ res.ut2004Packages.ut2004-demo ];
+  ut2004demo = ut2004Packages.ut2004 [ ut2004Packages.ut2004-demo ];
 
   vapor = callPackage ../games/vapor { love = love_0_8; };
 
@@ -21308,8 +21301,8 @@ in
       # Included for backwards compatibility
       libsoup libwnck gtk-doc gnome-doc-utils;
 
-    gtk = res.gtk2;
-    gtkmm = res.gtkmm2;
+    gtk = gtk2;
+    gtkmm = gtkmm2;
   });
 
   gnome3 = recurseIntoAttrs (callPackage ../desktops/gnome-3 { });
@@ -22353,7 +22346,7 @@ in
 
   fakenes = callPackage ../misc/emulators/fakenes { };
 
-  faust = res.faust2;
+  faust = faust2;
 
   faust1 = callPackage ../applications/audio/faust/faust1.nix { };
 
@@ -22845,7 +22838,7 @@ in
   samsung-unified-linux-driver_1_00_37 = callPackage ../misc/cups/drivers/samsung/1.00.37.nix { };
   samsung-unified-linux-driver_4_00_39 = callPackage ../misc/cups/drivers/samsung/4.00.39 { };
   samsung-unified-linux-driver_4_01_17 = callPackage ../misc/cups/drivers/samsung/4.01.17.nix { };
-  samsung-unified-linux-driver = res.samsung-unified-linux-driver_4_01_17;
+  samsung-unified-linux-driver = samsung-unified-linux-driver_4_01_17;
 
   sane-backends = callPackage ../applications/graphics/sane/backends (config.sane or {});
 
