@@ -25,12 +25,13 @@ let
     '';
   };
 in stdenv.mkDerivation rec {
-  name = "w3m-0.5.3+git20180125";
+  pname = "w3m";
+  version = "0.5.3+git20180125";
 
   src = fetchFromGitHub {
     owner = "tats";
-    repo = "w3m";
-    rev = "v0.5.3+git20180125";
+    repo = pname;
+    rev = "v${version}";
     sha256 = "0dafdfx1yhrvhbqzslkcapj09dvf64m2jadz3wl2icni0k4msq90";
   };
 
