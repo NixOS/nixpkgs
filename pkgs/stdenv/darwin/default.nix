@@ -318,7 +318,8 @@ in rec {
 
       llvmPackages_7 = super.llvmPackages_7 // (let
         tools = super.llvmPackages_7.tools.extend (llvmSelf: _: {
-          inherit (llvmPackages_7) llvm clang-unwrapped;
+          clang-unwrapped = llvmPackages_7.clang-unwrapped.override { llvm = llvmSelf.llvm; };
+          llvm = llvmPackages_7.llvm.override { libxml2 = self.darwin.libxml2-nopython; };
         });
         libraries = super.llvmPackages_7.libraries.extend (llvmSelf: _: {
           inherit (llvmPackages_7) libcxx libcxxabi compiler-rt;
