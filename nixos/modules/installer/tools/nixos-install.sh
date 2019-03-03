@@ -138,7 +138,18 @@ fi
 # Ask the user to set a root password, but only if the passwd command
 # exists (i.e. when mutable user accounts are enabled).
 if [[ -z $noRootPasswd ]] && [ -t 0 ]; then
-    nixos-enter --root "$mountPoint" -c '[[ -e /nix/var/nix/profiles/system/sw/bin/passwd ]] && echo "setting root password..." && /nix/var/nix/profiles/system/sw/bin/passwd'
+    if nixos-enter --root "$mountPoint" -c 'test -e /nix/var/nix/profiles/system/sw/bin/passwd'; then
+        set +e
+        nixos-enter --root "$mountPoint" -c 'echo "setting root password..." && /nix/var/nix/profiles/system/sw/bin/passwd'
+        exit_code=$?
+        set -e
+
+        if [[ $exit_code != 0 ]]; then
+            echo "Setting a root password failed with the above printed error."
+            echo "You can set the root password manually by executing \`nixos-enter --root ${mountPoint@Q}\` and then running \`passwd\` in the shell of the new system."
+            exit $exit_code
+        fi
+    fi
 fi
 
 echo "installation finished!"
