@@ -1,14 +1,6 @@
-{ stdenv, pkgs, lib }:
+{ config, stdenv, pkgs, lib }:
 
 lib.makeScope pkgs.newScope (self: with self; {
-  # Backward compatibility.
-  gtkdoc = self.gtk-doc;
-  startup_notification = pkgs.libstartup_notification;
-  startupnotification = pkgs.libstartup_notification;
-  gnomedocutils = self.gnome-doc-utils;
-  gnomeicontheme = self.gnome_icon_theme;
-  gnome_common = gnome-common;
-  inherit (pkgs) rarian;
 
 #### PLATFORM
 
@@ -22,9 +14,7 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   libglade = callPackage ./platform/libglade { };
 
-  libgnomeprint = callPackage ./platform/libgnomeprint {
-    bison = pkgs.bison2;
-  };
+  libgnomeprint = callPackage ./platform/libgnomeprint { };
 
   libgnomeprintui = callPackage ./platform/libgnomeprintui { };
 
@@ -46,7 +36,6 @@ lib.makeScope pkgs.newScope (self: with self; {
   gnome_python = callPackage ./bindings/gnome-python { };
 
   gnome_python_desktop = callPackage ./bindings/gnome-python-desktop { };
-  python_rsvg = self.gnome_python_desktop;
 
   gnome_vfs = callPackage ./platform/gnome-vfs { };
 
@@ -61,9 +50,6 @@ lib.makeScope pkgs.newScope (self: with self; {
   gtkhtml = callPackage ./platform/gtkhtml { };
 
   gtkhtml4 = callPackage ./platform/gtkhtml/4.x.nix { };
-
-  # Required for nautilus
-  inherit (pkgs) libunique;
 
   gtkglext = callPackage ./platform/gtkglext { };
 
@@ -84,13 +70,22 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   libglademm = callPackage ./bindings/libglademm { };
 
+} // lib.optionalAttrs (config.allowAliases or true) {
   inherit (pkgs)
     # GTK Libs
     glib glibmm atk atkmm cairo pango pangomm gdk_pixbuf gtkmm2 libcanberra-gtk2
 
     # Included for backwards compatibility
-    libsoup libwnck gtk-doc gnome-doc-utils;
+    libsoup libwnck gtk-doc gnome-doc-utils rarian;
 
   gtk = pkgs.gtk2;
   gtkmm = pkgs.gtkmm2;
+  python_rsvg = self.gnome_python_desktop;
+
+  gtkdoc = pkgs.gtk-doc;
+  startup_notification = pkgs.libstartup_notification;
+  startupnotification = pkgs.libstartup_notification;
+  gnomedocutils = pkgs.gnome-doc-utils;
+  gnomeicontheme = self.gnome_icon_theme;
+  gnome_common = gnome-common;
 })

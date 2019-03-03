@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gnome_python, librsvg, libwnck, libgtop, pkgconfig, python2, gtk }:
+{ stdenv, fetchurl, gnome_python, librsvg, libwnck, libgtop, pkgconfig, python2, gtk2 }:
 
 let
   inherit (python2.pkgs) python pygtk;
@@ -14,7 +14,7 @@ in stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ gtk librsvg libwnck libgtop python ];
+  buildInputs = [ gtk2 librsvg libwnck libgtop python ];
   propagatedBuildInputs = [ gnome_python pygtk ];
 
   # gnome-python-desktop expects that .pth file is already installed by PyGTK

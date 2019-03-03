@@ -3175,9 +3175,7 @@ in
 
   gsmartcontrol = callPackage ../tools/misc/gsmartcontrol { };
 
-  gssdp = callPackage ../development/libraries/gssdp {
-    inherit (gnome2) libsoup;
-  };
+  gssdp = callPackage ../development/libraries/gssdp { };
 
   gt5 = callPackage ../tools/system/gt5 { };
 
@@ -3204,9 +3202,7 @@ in
 
   gup = callPackage ../development/tools/build-managers/gup {};
 
-  gupnp = callPackage ../development/libraries/gupnp {
-    inherit (gnome2) libsoup;
-  };
+  gupnp = callPackage ../development/libraries/gupnp { };
 
   gupnp-av = callPackage ../development/libraries/gupnp-av {};
 
@@ -17585,9 +17581,7 @@ in
 
   gspell = callPackage ../development/libraries/gspell { };
 
-  gtk2fontsel = callPackage ../applications/misc/gtk2fontsel {
-    inherit (gnome2) gtk;
-  };
+  gtk2fontsel = callPackage ../applications/misc/gtk2fontsel { };
 
   guake = callPackage ../applications/misc/guake { };
 
@@ -22348,7 +22342,7 @@ in
 
   dpkg = callPackage ../tools/package-management/dpkg { };
 
-  ekiga = newScope pkgs.gnome2 ../applications/networking/instant-messengers/ekiga { };
+  ekiga = callPackage ../applications/networking/instant-messengers/ekiga { };
 
   emulationstation = callPackage ../misc/emulators/emulationstation {
     stdenv = overrideCC stdenv gcc5;
