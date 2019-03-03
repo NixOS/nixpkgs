@@ -122,9 +122,9 @@ in stdenv.mkDerivation (rec {
 
     ln $out/bin/subl $out/bin/sublime
     ln $out/bin/subl $out/bin/sublime3
-    mkdir -p $out/share/applications
+    mkdir -p $out/share/applications $out/share/icons/hicolor/256x256
     ln -s $sublime/sublime_text.desktop $out/share/applications/sublime_text.desktop
-    ln -s $sublime/Icon/256x256/ $out/share/icons
+    ln -s $sublime/Icon/256x256/ $out/share/icons/hicolor/256x256/apps
   '';
 
   meta = with stdenv.lib; {
