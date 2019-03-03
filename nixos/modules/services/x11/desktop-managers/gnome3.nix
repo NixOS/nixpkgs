@@ -133,6 +133,7 @@ in {
     services.gnome3.gnome-keyring.enable = true;
     services.gnome3.gnome-online-accounts.enable = mkDefault true;
     services.gnome3.gnome-remote-desktop.enable = mkDefault true;
+    services.gnome3.gnome-settings-daemon.enable = true;
     services.gnome3.gnome-terminal-server.enable = mkDefault true;
     services.gnome3.gnome-user-share.enable = mkDefault true;
     services.gnome3.gvfs.enable = true;
@@ -153,7 +154,6 @@ in {
     hardware.bluetooth.enable = mkDefault true;
     services.hardware.bolt.enable = mkDefault true;
     services.xserver.libinput.enable = mkDefault true; # for controlling touchpad settings via gnome control center
-    services.udev.packages = [ pkgs.gnome3.gnome-settings-daemon ];
     systemd.packages = [ pkgs.gnome3.vino ];
     services.flatpak.extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
 

@@ -17,7 +17,8 @@ buildPythonPackage rec {
   NIX_CFLAGS_COMPILE = "-isystem ${stdenv.lib.getDev pcsclite}/include/PCSC/";
 
   propagatedBuildInputs = [ pcsclite ];
-  buildInputs = [ swig ] ++ stdenv.lib.optional stdenv.isDarwin PCSC;
+  buildInputs = stdenv.lib.optional stdenv.isDarwin PCSC;
+  nativeBuildInputs = [ swig ];
 
   meta = {
     homepage = https://pyscard.sourceforge.io/;

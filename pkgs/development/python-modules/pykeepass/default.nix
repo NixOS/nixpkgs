@@ -1,6 +1,6 @@
 { lib, fetchPypi, buildPythonPackage
 , lxml, pycryptodome, construct
-, argon2_cffi, dateutil, enum34
+, argon2_cffi, dateutil, future
 }:
 
 buildPythonPackage rec {
@@ -14,8 +14,11 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     lxml pycryptodome construct
-    argon2_cffi dateutil enum34
+    argon2_cffi dateutil future
   ];
+
+  # no tests in PyPI tarball
+  doCheck = false;
 
   meta = {
     homepage = https://github.com/pschmitt/pykeepass;

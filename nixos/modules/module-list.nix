@@ -268,6 +268,7 @@
   ./services/desktops/gnome3/gnome-online-accounts.nix
   ./services/desktops/gnome3/gnome-remote-desktop.nix
   ./services/desktops/gnome3/gnome-online-miners.nix
+  ./services/desktops/gnome3/gnome-settings-daemon.nix
   ./services/desktops/gnome3/gnome-terminal-server.nix
   ./services/desktops/gnome3/gnome-user-share.nix
   ./services/desktops/gnome3/gpaste.nix
@@ -528,6 +529,7 @@
   ./services/networking/cntlm.nix
   ./services/networking/connman.nix
   ./services/networking/consul.nix
+  ./services/networking/coredns.nix
   ./services/networking/coturn.nix
   ./services/networking/dante.nix
   ./services/networking/ddclient.nix
