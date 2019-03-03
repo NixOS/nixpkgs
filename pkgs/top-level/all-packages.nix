@@ -17604,6 +17604,7 @@ in
   hipchat = callPackage ../applications/networking/instant-messengers/hipchat { };
 
   hledger = haskell.lib.justStaticExecutables haskellPackages.hledger;
+  hledger-interest = haskell.lib.justStaticExecutables haskellPackages.hledger-interest;
   hledger-ui = haskell.lib.justStaticExecutables haskellPackages.hledger-ui;
   hledger-web = haskell.lib.justStaticExecutables haskellPackages.hledger-web;
 
@@ -19711,6 +19712,8 @@ in
   toot = callPackage ../applications/misc/toot { };
 
   tootle = callPackage ../applications/misc/tootle { };
+
+  torrential = callPackage ../applications/networking/p2p/torrential { };
 
   toxic = callPackage ../applications/networking/instant-messengers/toxic { };
 

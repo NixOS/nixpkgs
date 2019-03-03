@@ -33,7 +33,7 @@ buildPythonPackage rec {
 
   checkPhase = ''
     redis-server &
-    nosetests .
+    nosetests . --exclude test_worker_pids
   '';
 
   meta = with stdenv.lib; {

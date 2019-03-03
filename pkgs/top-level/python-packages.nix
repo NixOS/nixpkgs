@@ -146,6 +146,8 @@ in {
 
   absl-py = callPackage ../development/python-modules/absl-py { };
 
+  adb-homeassistant = callPackage ../development/python-modules/adb-homeassistant { };
+
   aenum = callPackage ../development/python-modules/aenum { };
 
   affinity = callPackage ../development/python-modules/affinity { };
@@ -193,6 +195,8 @@ in {
   astropy = callPackage ../development/python-modules/astropy { };
 
   astroquery = callPackage ../development/python-modules/astroquery { };
+
+  asttokens = callPackage ../development/python-modules/asttokens { };
 
   atom = callPackage ../development/python-modules/atom { };
 
@@ -388,6 +392,8 @@ in {
 
   fire = callPackage ../development/python-modules/fire { };
 
+  firetv = callPackage ../development/python-modules/firetv { };
+
   fdint = callPackage ../development/python-modules/fdint { };
 
   fuse = callPackage ../development/python-modules/fuse-python {
@@ -568,6 +574,8 @@ in {
 
   progress = callPackage ../development/python-modules/progress { };
 
+  pure-python-adb-homeassistant = callPackage ../development/python-modules/pure-python-adb-homeassistant { };
+
   pymysql = callPackage ../development/python-modules/pymysql { };
 
   Pmw = callPackage ../development/python-modules/Pmw { };
@@ -687,7 +695,6 @@ in {
   pyres = callPackage ../development/python-modules/pyres { };
 
   pyqt4 = callPackage ../development/python-modules/pyqt/4.x.nix {
-    pythonPackages = self;
     inherit (pkgs) pkgconfig;
   };
 
@@ -862,6 +869,8 @@ in {
 
   unifi = callPackage ../development/python-modules/unifi { };
 
+  pyunifi = callPackage ../development/python-modules/pyunifi { };
+
   vidstab = callPackage ../development/python-modules/vidstab { };
 
   webapp2 = callPackage ../development/python-modules/webapp2 { };
@@ -913,6 +922,8 @@ in {
   aioprocessing = callPackage ../development/python-modules/aioprocessing { };
 
   aiorpcx = callPackage ../development/python-modules/aiorpcx { };
+
+  aiounifi = callPackage ../development/python-modules/aiounifi { };
 
   ajpy = callPackage ../development/python-modules/ajpy { };
 
@@ -1448,8 +1459,6 @@ in {
   jsonrpc-websocket = callPackage ../development/python-modules/jsonrpc-websocket { };
 
   onkyo-eiscp = callPackage ../development/python-modules/onkyo-eiscp { };
-
-  pyunifi = callPackage ../development/python-modules/pyunifi { };
 
   tablib = callPackage ../development/python-modules/tablib { };
 

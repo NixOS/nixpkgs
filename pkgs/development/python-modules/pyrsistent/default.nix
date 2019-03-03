@@ -20,9 +20,6 @@ buildPythonPackage rec {
 
   checkInputs = [ pytestrunner pytest hypothesis ];
 
-  # pytestrunner is only needed to run tests
-  patches = [ ./no-setup-requires-pytestrunner.patch ];
-
   meta = with stdenv.lib; {
     homepage = https://github.com/tobgu/pyrsistent/;
     description = "Persistent/Functional/Immutable data structures";
