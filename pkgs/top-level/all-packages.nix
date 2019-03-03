@@ -2674,6 +2674,8 @@ in
 
   fileschanged = callPackage ../tools/misc/fileschanged { };
 
+  filet = callPackage ../applications/misc/filet { };
+
   findutils = callPackage ../tools/misc/findutils { };
 
   finger_bsd = callPackage ../tools/networking/bsd-finger { };
