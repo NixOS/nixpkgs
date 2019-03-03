@@ -2,14 +2,14 @@
 
 stdenv.mkDerivation rec {
   name = "file-${version}";
-  version = "5.34";
+  version = "5.36";
 
   src = fetchurl {
     urls = [
       "ftp://ftp.astron.com/pub/file/${name}.tar.gz"
       "https://distfiles.macports.org/file/${name}.tar.gz"
     ];
-    sha256 = "02mj4g34l13facacsc0ff8rchbh93ccqw7hns45yqgx8pzdm0npi";
+    sha256 = "0ya330cdkvfi2d28h8gvhghj4gnhysmifmryysl0a97xq2884q7v";
   };
 
   nativeBuildInputs = stdenv.lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) file;
