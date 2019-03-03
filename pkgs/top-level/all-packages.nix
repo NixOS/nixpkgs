@@ -21321,20 +21321,7 @@ in
     callPackage = newScope pkgs.enlightenment;
   });
 
-  gnome2 = recurseIntoAttrs (callPackage ../desktops/gnome-2 {
-    callPackage = pkgs.newScope pkgs.gnome2;
-    self = pkgs.gnome2;
-  } // {
-    inherit (pkgs)
-      # GTK Libs
-      glib glibmm atk atkmm cairo pango pangomm gdk_pixbuf gtkmm2 libcanberra-gtk2
-
-      # Included for backwards compatibility
-      libsoup libwnck gtk-doc gnome-doc-utils;
-
-    gtk = res.gtk2;
-    gtkmm = res.gtkmm2;
-  });
+  gnome2 = recurseIntoAttrs (callPackage ../desktops/gnome-2 { });
 
   gnome3 = recurseIntoAttrs (callPackage ../desktops/gnome-3 { });
 
