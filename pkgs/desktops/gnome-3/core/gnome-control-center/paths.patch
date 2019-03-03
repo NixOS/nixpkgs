@@ -52,19 +52,21 @@
  typedef struct _TzLocation TzLocation;
 --- a/panels/region/cc-region-panel.c
 +++ b/panels/region/cc-region-panel.c
-@@ -1265,10 +1265,10 @@
-         }
+@@ -754,12 +754,12 @@ row_layout_cb (CcRegionPanel *self,
+         layout = cc_input_source_get_layout (source);
+         layout_variant = cc_input_source_get_layout_variant (source);
  
-         if (variant && variant[0])
+         if (layout_variant && layout_variant[0])
 -                commandline = g_strdup_printf ("gkbd-keyboard-display -l \"%s\t%s\"",
 +                commandline = g_strdup_printf ("@libgnomekbd@/bin/gkbd-keyboard-display -l \"%s\t%s\"",
-                                                layout, variant);
+                                                layout, layout_variant);
          else
 -                commandline = g_strdup_printf ("gkbd-keyboard-display -l %s",
 +                commandline = g_strdup_printf ("@libgnomekbd@/bin/gkbd-keyboard-display -l %s",
                                                 layout);
  
          g_spawn_command_line_async (commandline, NULL);
+ }
 --- a/tests/datetime/test-endianess.c
 +++ b/tests/datetime/test-endianess.c
 @@ -26,7 +26,7 @@
