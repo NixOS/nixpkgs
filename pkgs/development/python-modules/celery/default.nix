@@ -4,12 +4,17 @@
 
 buildPythonPackage rec {
   pname = "celery";
-  version = "4.3.0rc1";
+  version = "4.3.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1jmg47l0b3bnwmg44x48bwziwyk6xqs1y5plvr99a3ikz1l807yf";
+    sha256 = "4c4532aa683f170f40bd76f928b70bc06ff171a959e06e71bf35f2f9d6031ef9";
   };
+
+  postPatch = ''
+    substituteInPlace requirements/test.txt \
+      --replace "pytest>=4.3.1,<4.4.0" pytest
+  '';
 
   # make /etc/protocols accessible to fix socket.getprotobyname('tcp') in sandbox
   preCheck = stdenv.lib.optionalString stdenv.isLinux ''
