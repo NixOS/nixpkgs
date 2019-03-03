@@ -480,6 +480,9 @@ in
           })}
         '';
         script = "echo apiserver control plane is online";
+        serviceConfig = {
+          TimeoutSec = "500";
+        };
       };
     }
   ];
