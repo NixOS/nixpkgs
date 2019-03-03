@@ -1,8 +1,8 @@
 diff --git a/src/libstd/net/tcp.rs b/src/libstd/net/tcp.rs
-index 0f60b5b3e..9b08415e7 100644
+index 86ecb10edf..626be0a52d 100644
 --- a/src/libstd/net/tcp.rs
 +++ b/src/libstd/net/tcp.rs
-@@ -962,6 +962,7 @@ mod tests {
+@@ -955,6 +955,7 @@ mod tests {
          }
      }
  
@@ -10,7 +10,7 @@ index 0f60b5b3e..9b08415e7 100644
      #[test]
      fn listen_localhost() {
          let socket_addr = next_test_ip4();
-@@ -1020,6 +1021,7 @@ mod tests {
+@@ -1013,6 +1014,7 @@ mod tests {
          })
      }
  
@@ -18,7 +18,7 @@ index 0f60b5b3e..9b08415e7 100644
      #[test]
      fn read_eof() {
          each_ip(&mut |addr| {
-@@ -1039,6 +1041,7 @@ mod tests {
+@@ -1032,6 +1034,7 @@ mod tests {
          })
      }
  
@@ -26,7 +26,7 @@ index 0f60b5b3e..9b08415e7 100644
      #[test]
      fn write_close() {
          each_ip(&mut |addr| {
-@@ -1065,6 +1068,7 @@ mod tests {
+@@ -1058,6 +1061,7 @@ mod tests {
          })
      }
  
@@ -34,7 +34,7 @@ index 0f60b5b3e..9b08415e7 100644
      #[test]
      fn multiple_connect_serial() {
          each_ip(&mut |addr| {
-@@ -1087,6 +1091,7 @@ mod tests {
+@@ -1080,6 +1084,7 @@ mod tests {
          })
      }
  
@@ -42,7 +42,7 @@ index 0f60b5b3e..9b08415e7 100644
      #[test]
      fn multiple_connect_interleaved_greedy_schedule() {
          const MAX: usize = 10;
-@@ -1123,6 +1128,7 @@ mod tests {
+@@ -1116,6 +1121,7 @@ mod tests {
      }
  
      #[test]
@@ -50,7 +50,7 @@ index 0f60b5b3e..9b08415e7 100644
      fn multiple_connect_interleaved_lazy_schedule() {
          const MAX: usize = 10;
          each_ip(&mut |addr| {
-@@ -1401,6 +1407,7 @@ mod tests {
+@@ -1394,6 +1400,7 @@ mod tests {
      }
  
      #[test]
@@ -58,7 +58,7 @@ index 0f60b5b3e..9b08415e7 100644
      fn clone_while_reading() {
          each_ip(&mut |addr| {
              let accept = t!(TcpListener::bind(&addr));
-@@ -1421,7 +1422,10 @@ mod tests {
+@@ -1504,7 +1511,10 @@ mod tests {
  
      // FIXME: re-enabled bitrig/openbsd tests once their socket timeout code
      //        no longer has rounding errors.
@@ -70,7 +70,7 @@ index 0f60b5b3e..9b08415e7 100644
      #[test]
      fn timeouts() {
          let addr = next_test_ip4();
-@@ -1596,6 +1603,7 @@ mod tests {
+@@ -1591,6 +1601,7 @@ mod tests {
          drop(listener);
      }
  
@@ -78,7 +78,7 @@ index 0f60b5b3e..9b08415e7 100644
      #[test]
      fn nodelay() {
          let addr = next_test_ip4();
-@@ -1610,6 +1618,7 @@ mod tests {
+@@ -1605,6 +1616,7 @@ mod tests {
          assert_eq!(false, t!(stream.nodelay()));
      }
  
@@ -86,7 +86,7 @@ index 0f60b5b3e..9b08415e7 100644
      #[test]
      fn ttl() {
          let ttl = 100;
-@@ -1647,6 +1656,7 @@ mod tests {
+@@ -1642,6 +1654,7 @@ mod tests {
          }
      }
  
@@ -94,11 +94,3 @@ index 0f60b5b3e..9b08415e7 100644
      #[test]
      fn peek() {
          each_ip(&mut |addr| {
-@@ -1679,6 +1689,7 @@ mod tests {
-     }
- 
-     #[test]
-+    #[cfg_attr(any(target_os = "linux", target_os = "macos"), ignore)]
-     fn connect_timeout_unroutable() {
-         // this IP is unroutable, so connections should always time out,
-         // provided the network is reachable to begin with.

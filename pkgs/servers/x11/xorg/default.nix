@@ -1106,11 +1106,11 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   libfontenc = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, zlib }: stdenv.mkDerivation {
-    name = "libfontenc-1.1.3";
+    name = "libfontenc-1.1.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/lib/libfontenc-1.1.3.tar.bz2;
-      sha256 = "08gxmrhgw97mv0pvkfmd46zzxrn6zdw4g27073zl55gwwqq8jn3h";
+      url = mirror://xorg/individual/lib/libfontenc-1.1.4.tar.bz2;
+      sha256 = "0y90170dp8wsidr1dzza0grxr1lfh30ji3b5vkjz4j6x1n0wxz1c";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
@@ -1535,11 +1535,11 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   xclock = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libXaw, libXft, libxkbfile, libXmu, xorgproto, libXrender, libXt }: stdenv.mkDerivation {
-    name = "xclock-1.0.7";
+    name = "xclock-1.0.8";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/xclock-1.0.7.tar.bz2;
-      sha256 = "1l3xv4bsca6bwxx73jyjz0blav86i7vwffkhdb1ac81y9slyrki3";
+      url = mirror://xorg/individual/app/xclock-1.0.8.tar.bz2;
+      sha256 = "0m92zhamh15my9f2rqa14q41d6k2cn468azm3g7g3w9n7942024k";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
@@ -1652,11 +1652,11 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   xev = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, xorgproto, libXrandr }: stdenv.mkDerivation {
-    name = "xev-1.2.2";
+    name = "xev-1.2.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/xev-1.2.2.tar.bz2;
-      sha256 = "0krivhrxpq6719103r541xpi3i3a0y15f7ypc4lnrx8sdhmfcjnr";
+      url = mirror://xorg/individual/app/xev-1.2.3.tar.bz2;
+      sha256 = "02ddsdx138g7szhwklpbzi0cxr34871iay3k28kdcihrz8f4zg36";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
@@ -2379,6 +2379,19 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
+  xfsinfo = callPackage ({ stdenv, pkgconfig, fetchurl, libFS, xorgproto }: stdenv.mkDerivation {
+    name = "xfsinfo-1.0.6";
+    builder = ./builder.sh;
+    src = fetchurl {
+      url = mirror://xorg/individual/app/xfsinfo-1.0.6.tar.bz2;
+      sha256 = "1mmir5i7gm71xc0ba8vnizi4744vsd31hknhi4cmgvg6kadqngla";
+    };
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ libFS xorgproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
+
   xgamma = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, xorgproto, libXxf86vm }: stdenv.mkDerivation {
     name = "xgamma-1.0.6";
     builder = ./builder.sh;
@@ -2406,11 +2419,11 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   xhost = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libXau, libXmu, xorgproto }: stdenv.mkDerivation {
-    name = "xhost-1.0.7";
+    name = "xhost-1.0.8";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/xhost-1.0.7.tar.bz2;
-      sha256 = "16n26xw6l01zq31d4qvsaz50misvizhn7iihzdn5f7s72pp1krlk";
+      url = mirror://xorg/individual/app/xhost-1.0.8.tar.bz2;
+      sha256 = "15n3mnd4i5kh4z32qv11580qjgvnng0wry2y753ljrqkkrbkrp52";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
@@ -2536,11 +2549,11 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   xlsatoms = callPackage ({ stdenv, pkgconfig, fetchurl, libxcb }: stdenv.mkDerivation {
-    name = "xlsatoms-1.1.2";
+    name = "xlsatoms-1.1.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/xlsatoms-1.1.2.tar.bz2;
-      sha256 = "196yjik910xsr7dwy8daa0amr0r22ynfs360z0ndp9mx7mydrra7";
+      url = mirror://xorg/individual/app/xlsatoms-1.1.3.tar.bz2;
+      sha256 = "10m3a046jvaw5ywx4y65kl84lsxqan70gww1g1r7cf96ijaqz1jp";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
@@ -2601,11 +2614,11 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   xmodmap = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, xorgproto }: stdenv.mkDerivation {
-    name = "xmodmap-1.0.9";
+    name = "xmodmap-1.0.10";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/xmodmap-1.0.9.tar.bz2;
-      sha256 = "0y649an3jqfq9klkp9y5gj20xb78fw6g193f5mnzpl0hbz6fbc5p";
+      url = mirror://xorg/individual/app/xmodmap-1.0.10.tar.bz2;
+      sha256 = "0z28331i2pm16x671fa9qwsfqdmr6a43bzwmp0dm17a3sx0hjgs7";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
@@ -2718,11 +2731,11 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   xrdb = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libXmu, xorgproto }: stdenv.mkDerivation {
-    name = "xrdb-1.1.1";
+    name = "xrdb-1.2.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/xrdb-1.1.1.tar.bz2;
-      sha256 = "1dqp486nd5sagbg572kl0k839nwvpqnb7jvppyb7jj5vrpkss8rd";
+      url = mirror://xorg/individual/app/xrdb-1.2.0.tar.bz2;
+      sha256 = "0ik9gh6363c47pr0dp7q22nfs8vmavjg2v4bsr0604ppl77nafpj";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
@@ -2782,6 +2795,19 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
+  xstdcmap = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libXmu, xorgproto }: stdenv.mkDerivation {
+    name = "xstdcmap-1.0.4";
+    builder = ./builder.sh;
+    src = fetchurl {
+      url = mirror://xorg/individual/app/xstdcmap-1.0.4.tar.bz2;
+      sha256 = "12vgzsxv4rw25frkgjyli6w6hy10lgpvsx9wzw2v5l5a3qzqp286";
+    };
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ libX11 libXmu xorgproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
+
   xtrans = callPackage ({ stdenv, pkgconfig, fetchurl }: stdenv.mkDerivation {
     name = "xtrans-1.3.5";
     builder = ./builder.sh;
@@ -2809,11 +2835,11 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   xvinfo = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, xorgproto, libXv }: stdenv.mkDerivation {
-    name = "xvinfo-1.1.3";
+    name = "xvinfo-1.1.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/xvinfo-1.1.3.tar.bz2;
-      sha256 = "1sz5wqhxd1fqsfi1w5advdlwzkizf2fgl12hdpk66f7mv9l8pflz";
+      url = mirror://xorg/individual/app/xvinfo-1.1.4.tar.bz2;
+      sha256 = "0gz7fvxavqlrqynpfbrm2nc9yx8h0ksnbnv34fj7n1q6cq6j4lq3";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];

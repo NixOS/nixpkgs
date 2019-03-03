@@ -291,6 +291,10 @@ stdenv.mkDerivation {
       hardening_unsupported_flags+=" stackprotector pic"
     ''
 
+    + optionalString targetPlatform.isNetBSD ''
+      hardening_unsupported_flags+=" stackprotector fortify"
+    ''
+
     + optionalString (targetPlatform.libc == "newlib") ''
       hardening_unsupported_flags+=" stackprotector fortify pie pic"
     ''
