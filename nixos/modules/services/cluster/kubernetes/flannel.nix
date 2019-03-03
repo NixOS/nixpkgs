@@ -84,6 +84,7 @@ in
       wantedBy = [ "flannel.target" ];
       after = [ "kubelet.target" ];
       before = [ "flannel.target" ];
+      path = [ pkgs.iptables ];
     };
 
     systemd.services.docker = {
