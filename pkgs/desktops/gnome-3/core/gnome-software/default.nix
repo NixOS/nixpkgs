@@ -1,15 +1,15 @@
 { stdenv, fetchurl, substituteAll, pkgconfig, meson, ninja, gettext, gnome3, wrapGAppsHook, packagekit, ostree
 , glib, appstream-glib, libsoup, polkit, isocodes, gspell, libxslt, gobject-introspection, flatpak, fwupd
-, gtk3, gsettings-desktop-schemas, gnome-desktop
+, gtk3, gsettings-desktop-schemas, gnome-desktop, libxmlb, gnome-online-accounts
 , json-glib, libsecret, valgrind-light, docbook_xsl, docbook_xml_dtd_42, docbook_xml_dtd_43, gtk-doc, desktop-file-utils }:
 
 stdenv.mkDerivation rec {
   name = "gnome-software-${version}";
-  version = "3.30.6";
+  version = "3.32.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-software/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "00lh1ifgcs888i0774qdz2pzd5vnzcc5kvx20lcmgk37vvf0qqsl";
+    sha256 = "19hrvkyavrfrhs19ii4ky5bpzsijiyq2vcxb5s4xk13xv8ys2151";
   };
 
   patches = [
@@ -29,6 +29,7 @@ stdenv.mkDerivation rec {
     gsettings-desktop-schemas gnome-desktop
     gspell json-glib libsecret ostree
     polkit flatpak fwupd
+    libxmlb gnome-online-accounts
   ];
 
   mesonFlags = [
