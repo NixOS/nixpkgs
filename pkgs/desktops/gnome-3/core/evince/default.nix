@@ -1,20 +1,21 @@
-{ fetchurl, stdenv, pkgconfig, intltool, libxml2
+{ fetchurl, stdenv, pkgconfig, gettext, libxml2
 , glib, gtk3, pango, atk, gdk_pixbuf, shared-mime-info, itstool, gnome3
 , poppler, ghostscriptX, djvulibre, libspectre, libarchive, libsecret, wrapGAppsHook
 , librsvg, gobject-introspection, yelp-tools, gspell, adwaita-icon-theme, gsettings-desktop-schemas
 , libgxps
 , recentListSize ? null # 5 is not enough, allow passing a different number
 , supportXPS ? false    # Open XML Paper Specification via libgxps
-, autoreconfHook, pruneLibtoolFiles
+, autoreconfHook
+, appstream
 }:
 
 stdenv.mkDerivation rec {
   name = "evince-${version}";
-  version = "3.30.2";
+  version = "3.31.91";
 
   src = fetchurl {
     url = "mirror://gnome/sources/evince/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "0k7jln6dpg4bpv61niicjzkzyq6fhb3yfld7pc8ck71c8pmvsnx9";
+    sha256 = "06xn9d8m4fnc5rhbbasbicshaa4mky1x27mcyi8bh8hipxl9a9zz";
   };
 
   passthru = {
@@ -22,7 +23,8 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    pkgconfig gobject-introspection intltool itstool wrapGAppsHook yelp-tools autoreconfHook pruneLibtoolFiles
+    pkgconfig gobject-introspection gettext itstool wrapGAppsHook yelp-tools
+    autoreconfHook appstream
   ];
 
   buildInputs = [
