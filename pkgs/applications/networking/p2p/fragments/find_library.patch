@@ -1,0 +1,24 @@
+diff --git a/submodules/meson.build b/submodules/meson.build
+index 53e73a2..c2132b8 100644
+--- a/submodules/meson.build
++++ b/submodules/meson.build
+@@ -5,12 +5,12 @@ dht_lib = meson.get_compiler('c').find_library('dht', dirs: join_paths (meson.so
+ natpmp_lib = meson.get_compiler('c').find_library('natpmp', dirs: join_paths (meson.source_root (), 'submodules', 'libtransmission', 'third-party', 'natpmp', 'lib'))
+ event_lib = meson.get_compiler('c').find_library('event')
+ 
+-curl_lib = meson.get_compiler('c').find_library('libcurl')
+-crypto_lib = meson.get_compiler('c').find_library('libcrypto')
+-pthread_lib = meson.get_compiler('c').find_library('libpthread', dirs: join_paths (meson.source_root (), 'submodules', 'libtransmission', 'libtransmission'))
+-zlib_lib = meson.get_compiler('c').find_library('libz', dirs: join_paths (meson.source_root (), 'submodules', 'libtransmission', 'libtransmission'))
++curl_lib = meson.get_compiler('c').find_library('curl')
++crypto_lib = meson.get_compiler('c').find_library('crypto')
++pthread_lib = meson.get_compiler('c').find_library('pthread', dirs: join_paths (meson.source_root (), 'submodules', 'libtransmission', 'libtransmission'))
++zlib_lib = meson.get_compiler('c').find_library('z')
+ 
+ transmission_include = include_directories('transmission/')
+-transmission_lib = meson.get_compiler('c').find_library('libtransmission', dirs: join_paths (meson.source_root (), 'submodules', 'libtransmission', 'libtransmission'))
++transmission_lib = meson.get_compiler('c').find_library('transmission', dirs: join_paths (meson.source_root (), 'submodules', 'libtransmission', 'libtransmission'))
+ transmission_vapi = meson.get_compiler('vala').find_library('transmission', dirs: vapi_dir)
+-transmission_dep = declare_dependency(include_directories: [transmission_include], dependencies: [pthread_lib, b64_lib, utp_lib, miniupnpc_lib, dht_lib, natpmp_lib, curl_lib, crypto_lib, event_lib, zlib_lib, transmission_vapi, transmission_lib])
+\ No newline at end of file
++transmission_dep = declare_dependency(include_directories: [transmission_include], dependencies: [pthread_lib, b64_lib, utp_lib, miniupnpc_lib, dht_lib, natpmp_lib, curl_lib, crypto_lib, event_lib, zlib_lib, transmission_vapi, transmission_lib])

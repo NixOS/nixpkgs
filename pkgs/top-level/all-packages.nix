@@ -2775,6 +2775,8 @@ in
 
   fprintd = callPackage ../tools/security/fprintd { };
 
+  fragments = callPackage ../applications/networking/p2p/fragments { };
+
   franz = callPackage ../applications/networking/instant-messengers/franz { };
 
   freedroidrpg = callPackage ../games/freedroidrpg { };
