@@ -677,6 +677,9 @@
        This may break some older applications that still rely on those symbols.
        An upgrade guide can be found <link xlink:href="https://www.open-mpi.org/faq/?category=mpi-removed">here</link>.
      </para>
+    <para>
+     The nginx package now relies on OpenSSL 1.1 and supports TLS 1.3 by default. You can set the protocols used by the nginx service using <xref linkend="opt-services.nginx.sslProtocols"/>.
+    </para>
    </listitem>
    <listitem>
      <para>
