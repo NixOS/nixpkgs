@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, tzdata, iana-etc, go_bootstrap, runCommand, writeScriptBin
+{ stdenv, fetchurl, tzdata, iana-etc, go_bootstrap, runCommand, writeScriptBin
 , perl, which, pkgconfig, patch, procps, pcre, cacert, llvm, Security, Foundation
 , mailcap, runtimeShell
 , buildPackages, targetPackages }:
@@ -31,11 +31,9 @@ stdenv.mkDerivation rec {
   name = "go-${version}";
   version = "1.12";
 
-  src = fetchFromGitHub {
-    owner = "golang";
-    repo = "go";
-    rev = "go${version}";
-    sha256 = "08j7ghcy5cs5p4sw5rqi57lzg52lrix8xbxn87y7y9sv6s3wx44n";
+  src = fetchurl {
+    url = "https://dl.google.com/go/go${version}.src.tar.gz";
+    sha256 = "1wl8kq21fbzmv4plnaza5acz8dhbaaq6smjzk3r6cf3l6qrkvi09";
   };
 
   # perl is used for testing go vet
