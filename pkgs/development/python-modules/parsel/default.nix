@@ -19,7 +19,7 @@ buildPythonPackage rec {
     sha256 = "9ccd82b8a122345601f6f9209e972c0e8c3518a188fcff2d37cb4d7bc570b4b8";
   };
 
-  buildInputs = [ pytest pytestrunner ];
+  checkInputs = [ pytest pytestrunner ];
   propagatedBuildInputs = [ functools32 six w3lib lxml cssselect ];
 
   checkPhase = ''

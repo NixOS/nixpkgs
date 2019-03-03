@@ -39,6 +39,10 @@
    </arg>
 
    <arg choice='plain'>
+    <option>edit</option>
+   </arg>
+
+   <arg choice='plain'>
     <option>build-vm</option>
    </arg>
 
@@ -185,6 +189,16 @@ $ nix-build /path/to/nixpkgs/nixos -A system
        <command>nixos-rebuild test</command>). For instance, this command will
        print which systemd units would be restarted. The list of changes is not
        guaranteed to be complete.
+      </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term>
+      <option>edit</option>
+     </term>
+     <listitem>
+      <para>
+        Opens <filename>configuration.nix</filename> in the default editor.
       </para>
      </listitem>
     </varlistentry>

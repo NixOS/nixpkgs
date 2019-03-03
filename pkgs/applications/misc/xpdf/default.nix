@@ -44,6 +44,19 @@ stdenv.mkDerivation {
   meta = with stdenv.lib; {
     homepage = https://www.xpdfreader.com;
     description = "Viewer for Portable Document Format (PDF) files";
+    longDescription = ''
+      XPDF includes multiple tools for viewing and processing PDF files.
+        xpdf:      PDF viewer (with Graphical Interface)
+        pdftotext: converts PDF to text
+        pdftops:   converts PDF to PostScript
+        pdftoppm:  converts PDF pages to netpbm (PPM/PGM/PBM) image files
+        pdftopng:  converts PDF pages to PNG image files
+        pdftohtml: converts PDF to HTML
+        pdfinfo:   extracts PDF metadata
+        pdfimages: extracts raw images from PDF files
+        pdffonts:  lists fonts used in PDF files
+        pdfdetach: extracts attached files from PDF files
+    '';
     license = with licenses; [ gpl2 gpl3 ];
     platforms = platforms.unix;
     maintainers = [ maintainers.peti ];
