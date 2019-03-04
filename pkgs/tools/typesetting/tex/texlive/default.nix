@@ -108,23 +108,7 @@ let
       # Common packages should get served from the binary cache anyway.
       # See discussions, e.g. https://github.com/NixOS/nixpkgs/issues/24683
       urlPrefixes = args.urlPrefixes or [
-        # A snapshot temporarily hosted by @xeji.
-        # TODO: remove when there is a reliable long-term solution
-        https://cat3.de/texlive-2018/tlnet/archive
-
-        # TODO: Add second, faster and more reliable snapshot mirror,
-        # maybe on one of our project's servers
-
-        # IPFS seeded by the mirror above - this may be quite slow
-        https://ipfs.io/ipfs/QmT4Z67wXin1Z9DhvqwSSkSZSuu8hT6LgDyMu6CBm9Tb7t/tlnet/archive
-
-        # The canonical source moves quickly and will be broken almost immediately
-        http://mirror.ctan.org/tex-archive/systems/texlive/tlnet/archive
-
-        # Should be stable for historic, archived releases
-        # http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/2018/tlnet-final/archive
-        # TODO: use this later when 2018 is archived
-
+        http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/2018/tlnet-final/archive
       ];
 
       src = fetchurl { inherit urls sha512; };
