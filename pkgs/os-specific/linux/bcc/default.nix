@@ -19,7 +19,7 @@ python.pkgs.buildPythonApplication rec {
   buildInputs = [
     llvmPackages.llvm llvmPackages.clang-unwrapped kernel
     elfutils luajit netperf iperf
-    systemtap.stapBuild
+    systemtap.stapBuild flex
   ];
 
   patches = [
