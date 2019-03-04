@@ -37,9 +37,10 @@ let
       else optional (head l != elemAt l 1) (head l) ++ un_adj (tail l);
     in un_adj (lib.sort comparator list);
 
-  mkUniqueOutPaths = pkgs: fastUnique (a: b: a < b) # highlighting hack: >
-    # here we deal with those dummy packages needed for hyphenation filtering
-    (map (p: if lib.isDerivation p then p.outPath else "") pkgs);
+  uniqueStrings = fastUnique (a: b: a < b);
+
+  mkUniqueOutPaths = pkgs: uniqueStrings
+    (map (p: p.outPath) (builtins.filter lib.isDerivation pkgs));
 
 in buildEnv {
   name = "texlive-${extraName}-${bin.texliveYear}";
