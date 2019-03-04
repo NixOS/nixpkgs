@@ -36,7 +36,8 @@ PKG_PREFERENCES = {
 
 def get_version():
     with open(os.path.dirname(sys.argv[0]) + '/default.nix') as f:
-        m = re.search('hassVersion = "([\\d\\.]+)";', f.read())
+        # A version consists of digits, dots, and possibly a "b" (for beta)
+        m = re.search('hassVersion = "([\\d\\.b]+)";', f.read())
         return m.group(1)
 
 def parse_components(version='master'):
