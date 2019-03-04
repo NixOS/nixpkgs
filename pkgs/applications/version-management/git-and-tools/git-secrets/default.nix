@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "git-secrets-${version}";
-  version = "1.2.1";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "git-secrets";
     rev = "${version}";
-    sha256 = "14jsm4ks3k5d9iq3jr23829izw040pqpmv7dz8fhmvx6qz8fybzg";
+    sha256 = "10lnxg0q855zi3d6804ivlrn6dc817kilzdh05mmz8a0ccvm2qc7";
   };
 
   nativeBuildInputs = [ makeWrapper ];
