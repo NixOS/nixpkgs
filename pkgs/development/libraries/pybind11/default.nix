@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
-  checkInputs = with python.pkgs; [ catch eigen pytest numpy scipy ];
+  checkInputs = with python.pkgs; [ catch eigen pytest_3 numpy scipy ];
 
   # Disable test_cmake_build test, as it fails in sandbox
   # https://github.com/pybind/pybind11/issues/1355
