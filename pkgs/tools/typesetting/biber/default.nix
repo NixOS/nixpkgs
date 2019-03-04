@@ -1,15 +1,14 @@
-{ stdenv, fetchFromGitHub, perlPackages }:
+{ stdenv, fetchFromGitHub, perlPackages, texlive }:
+
+let
+  biberSource = stdenv.lib.head (builtins.filter (p: p.tlType == "source") texlive.biber.pkgs);
+in
 
 perlPackages.buildPerlModule rec {
   name = "biber-${version}";
-  version = "2.12";
+  inherit (biberSource) version;
 
-  src = fetchFromGitHub {
-    owner = "plk";
-    repo = "biber";
-    rev = "v${version}";
-    sha256 = "1g1hi6zvf2hmrjly1sidjaxy5440gfqm4p7p3n7kayshnjsmlskx";
-  };
+  src = "${biberSource}/source/bibtex/biber/biblatex-biber.tar.gz";
 
   buildInputs = with perlPackages; [
     autovivification BusinessISBN BusinessISMN BusinessISSN ConfigAutoConf
