@@ -132,10 +132,15 @@ in buildEnv {
     # updmap.cfg seems like not needing changes
 
     # now filter hyphenation patterns, in a hacky way ATM
-  (let script =
-    writeText "hyphens.sed" (
-      lib.concatMapStrings (pkg: "/^\% from ${pkg.pname}/,/^\%/p;\n") pkgList.splitBin.wrong
-      + "1,/^\% from/p;" );
+  (let
+    pnames = uniqueStrings (map (p: p.pname) pkgList.splitBin.wrong);
+    script =
+      writeText "hyphens.sed" (
+        # pick up the header
+        "1,/^\% from/p;"
+        # pick up all sections matching packages that we combine
+        + lib.concatMapStrings (pname: "/^\% from ${pname}:$/,/^\%/p;\n") pnames
+      );
   in ''
     (
       cd ./share/texmf/tex/generic/config/
