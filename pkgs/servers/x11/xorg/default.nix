@@ -2419,11 +2419,11 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   xinit = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, xorgproto }: stdenv.mkDerivation {
-    name = "xinit-1.4.0";
+    name = "xinit-1.4.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/xinit-1.4.0.tar.bz2;
-      sha256 = "1vw2wlg74ig52naw0cha3pgzcwwk25l834j42cg8m5zmybp3a213";
+      url = mirror://xorg/individual/app/xinit-1.4.1.tar.bz2;
+      sha256 = "1fdbakx59vyh474skjydj1bbglpby3y03nl7mxn0z9v8gdhqz6yy";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
