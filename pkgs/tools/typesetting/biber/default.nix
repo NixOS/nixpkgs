@@ -1,17 +1,14 @@
 { stdenv, fetchFromGitHub, perlPackages }:
 
-# builds but doesn't work with perl 5.24, see discussion in #40826
-# TODO: build with perl >=5.26 and try to enable tests
-
 perlPackages.buildPerlModule rec {
   name = "biber-${version}";
-  version = "2.11";
+  version = "2.12";
 
   src = fetchFromGitHub {
     owner = "plk";
     repo = "biber";
     rev = "v${version}";
-    sha256 = "0qgkc1k9n36yfmndwz879pak6mjphld0p85lzn9g2ng0vhxsifzz";
+    sha256 = "1g1hi6zvf2hmrjly1sidjaxy5440gfqm4p7p3n7kayshnjsmlskx";
   };
 
   buildInputs = with perlPackages; [
@@ -25,8 +22,9 @@ perlPackages.buildPerlModule rec {
     TestDifferences
   ];
 
-  # Tests depend on the precise Unicode-Collate version (expects 1.19, but we have 1.25)
-  doCheck = false;
+  checkInputs = with perlPackages; [
+    UnicodeCollate
+  ];
 
   meta = with stdenv.lib; {
     description = "Backend for BibLaTeX";
