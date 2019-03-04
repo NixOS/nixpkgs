@@ -29,6 +29,7 @@
 , proprietaryCodecs ? true
 , cupsSupport ? true
 , pulseSupport ? false, libpulseaudio ? null
+, VAAPISupport ? false, libva ? null
 
 , upstream-info
 }:
@@ -127,6 +128,7 @@ let
       ++ optionals gnomeSupport [ gnome.GConf libgcrypt ]
       ++ optionals cupsSupport [ libgcrypt cups ]
       ++ optional pulseSupport libpulseaudio
+      ++ optional VAAPISupport libva
       ++ optional (versionAtLeast version "72") jdk.jre;
 
     patches = optional enableWideVine ./patches/widevine.patch ++ [
@@ -143,7 +145,8 @@ let
       # ++ optional (versionRange "68" "72") ( githubPatch "<patch>" "0000000000000000000000000000000000000000000000000000000000000000" )
     ] ++ optionals (!stdenv.cc.isClang && (versionRange "71" "72")) [
       ( githubPatch "65be571f6ac2f7942b4df9e50b24da517f829eec" "1sqv0aba0mpdi4x4f21zdkxz2cf8ji55ffgbfcr88c5gcg0qn2jh" )
-    ] ++ optional stdenv.isAarch64
+    ] ++ optional VAAPISupport ./patches/enable-vaapi.patch
+      ++ optional stdenv.isAarch64
            (if (versionOlder version "71") then
               fetchpatch {
                 url       = https://raw.githubusercontent.com/OSSystems/meta-browser/e4a667deaaf9a26a3a1aeb355770d1f29da549ad/recipes-browser/chromium/files/aarch64-skia-build-fix.patch;
