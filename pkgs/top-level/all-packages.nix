@@ -13328,9 +13328,7 @@ in
 
   serd = callPackage ../development/libraries/serd {};
 
-  serf = callPackage ../development/libraries/serf {
-    openssl = openssl_1_0_2;
-  };
+  serf = callPackage ../development/libraries/serf {};
 
   sfsexp = callPackage ../development/libraries/sfsexp {};
 
