@@ -6,14 +6,14 @@
 
 let
   release_version = "8.0.0";
-  version = release_version + "rc2"; # differentiating these is important for rc's
+  version = release_version + "rc3"; # differentiating these is important for rc's
 
   fetch = name: sha256: fetchurl {
-    url = "https://prereleases.llvm.org/${release_version}/rc2/${name}-${version}.src.tar.xz";
+    url = "https://prereleases.llvm.org/${release_version}/rc3/${name}-${version}.src.tar.xz";
     inherit sha256;
   };
 
-  clang-tools-extra_src = fetch "clang-tools-extra" "1ypzbk7lf9dzkqh4p37dlr1bggjdrixr5gwb71jk9gh98grr2m5g";
+  clang-tools-extra_src = fetch "clang-tools-extra" "070rxrqhc3flgx5vrnzzs4b39l42amnrh4xwf02rxbmvd9n6gva6";
 
   tools = stdenv.lib.makeExtensible (tools: let
     callPackage = newScope (tools // { inherit stdenv cmake libxml2 python isl release_version version fetch; });
