@@ -31,8 +31,9 @@ stdenv.mkDerivation rec {
     (getPatch "reproducible-builds.patch" "02j639w26xkxpxx3pdhbi18ywz8w3qmjpqjb83n47gq29y4g13hc")
   ];
 
+  nativeBuildInputs = [ cmake ];
+
   buildInputs = [
-    cmake
     libjpeg
     szip
     zlib
