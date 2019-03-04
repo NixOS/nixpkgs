@@ -1,5 +1,6 @@
 { stdenv, fetchurl, zlib, gettext }:
 
+# TODO: wordlist? https://github.com/cracklib/cracklib/releases/download/v2.9.7/cracklib-words-2.9.7.gz is a start!
 stdenv.mkDerivation rec {
   pname = "cracklib";
   version = "2.9.7";
@@ -10,6 +11,17 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ zlib gettext ];
+
+  postPatch = ''
+    chmod +x util/cracklib-format
+    patchShebangs util
+  '';
+
+  postInstall = ''
+    make dict
+  '';
+  doInstallCheck = true;
+  installCheckTarget = "test";
 
   meta = with stdenv.lib; {
     homepage    = https://github.com/cracklib/cracklib;
