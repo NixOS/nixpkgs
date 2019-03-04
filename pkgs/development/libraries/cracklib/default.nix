@@ -1,9 +1,14 @@
-{ stdenv, fetchurl, zlib, gettext }:
+let version = "2.9.7"; in
+{ stdenv, fetchurl, zlib, gettext
+, wordlists ? [ (fetchurl {
+  url = "https://github.com/cracklib/cracklib/releases/download/v${version}/cracklib-words-${version}.gz";
+  sha256 = "12fk8w06q628v754l357cf8kfjna98wj09qybpqr892az3x4a33z";
+}) ]
+}:
 
-# TODO: wordlist? https://github.com/cracklib/cracklib/releases/download/v2.9.7/cracklib-words-2.9.7.gz is a start!
 stdenv.mkDerivation rec {
   pname = "cracklib";
-  version = "2.9.7";
+  inherit version;
 
   src = fetchurl {
     url = "https://github.com/${pname}/${pname}/releases/download/v${version}/${pname}-${version}.tar.bz2";
@@ -15,6 +20,8 @@ stdenv.mkDerivation rec {
   postPatch = ''
     chmod +x util/cracklib-format
     patchShebangs util
+
+    ln -vs ${toString wordlists} dicts/
   '';
 
   postInstall = ''
