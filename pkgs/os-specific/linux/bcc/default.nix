@@ -70,6 +70,27 @@ python.pkgs.buildPythonApplication rec {
   '';
 
   meta = with stdenv.lib; {
+
+    # TODO adapt my own config
+  #bpfConfigStructured = {
+  #  #prev.pkgs.linuxPackages.bcc.kernelExtraConfig or
+  #  BPF = yes;
+  #  BPF_JIT_ALWAYS_ON = yes;
+  #  NETFILTER_XTABLES = yes;
+  #  NETFILTER_XT_MATCH_BPF = yes;
+  #  BPF_SYSCALL = yes;
+  #  NET_CLS_BPF = yes;
+  #  NET_ACT_BPF = yes;
+  #  HAVE_EBPF_JIT = yes;
+  #  BPF_JIT = yes;
+  #  BPF_EVENTS = yes;
+  #  KPROBES                = yes;
+  #  KPROBES_ON_FTRACE      = yes;
+  #  HAVE_KPROBES           = yes;
+  #  HAVE_KPROBES_ON_FTRACE = yes;
+  #  KPROBE_EVENTS          = yes;
+  #};
+    requiredKernelConfig = [ (stdenv.lib.kernel.isEnabled "OPENVSWITCH") ];
     description = "Dynamic Tracing Tools for Linux";
     homepage = https://iovisor.github.io/bcc/;
     license = licenses.asl20;
