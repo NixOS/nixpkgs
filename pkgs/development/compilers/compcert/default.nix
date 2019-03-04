@@ -12,11 +12,11 @@ let
 in
 stdenv.mkDerivation rec {
   name    = "compcert-${version}";
-  version = "3.4";
+  version = "3.5";
 
   src = fetchurl {
     url    = "http://compcert.inria.fr/release/${name}.tgz";
-    sha256 = "12gchwvkzhd2bhrnwzfb4a06wc4hgv98z987k06vj7ga31ii763h";
+    sha256 = "127s8nwsmpl7ng7h4yy8cci8p6ncsw8i8jq3z0pyhx2siryddq0v";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -24,6 +24,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   patchPhase = ''
+    substituteInPlace ./VERSION --replace 3.4 3.5
     substituteInPlace ./configure \
       --replace '{toolprefix}gcc' '{toolprefix}cc'
   '';
