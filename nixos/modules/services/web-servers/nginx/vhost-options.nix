@@ -31,6 +31,7 @@ with lib;
         addr = mkOption { type = str;  description = "IP address.";  };
         port = mkOption { type = int;  description = "Port number."; default = 80; };
         ssl  = mkOption { type = bool; description = "Enable SSL.";  default = false; };
+        extraParameters = mkOption { type = listOf str; description = "Extra parameters of this listen directive."; default = []; example = [ "reuseport" "deferred" ]; };
       }; });
       default = [];
       example = [
