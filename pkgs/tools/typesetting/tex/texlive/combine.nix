@@ -31,6 +31,12 @@ let
       ++ lib.optional (lib.any pkgNeedsRuby splitBin.wrong) ruby;
   };
 
+  # TODO: replace by buitin once it exists
+  fastUnique = comparator: list: with lib;
+    let un_adj = l: if length l < 2 then l
+      else optional (head l != elemAt l 1) (head l) ++ un_adj (tail l);
+    in un_adj (lib.sort comparator list);
+
   mkUniquePkgs = pkgs: fastUnique (a: b: a < b) # highlighting hack: >
     # here we deal with those dummy packages needed for hyphenation filtering
     (map (p: if lib.isDerivation p then p.outPath else "") pkgs);
