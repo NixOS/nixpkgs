@@ -38,8 +38,12 @@ in stdenv.mkDerivation rec {
       "--enable-netcdf-4"
       "--enable-dap"
       "--enable-shared"
+      # Disable tests against remote server
+      "--disable-dap-remote-tests"
   ]
   ++ (stdenv.lib.optionals mpiSupport [ "--enable-parallel-tests" "CC=${mpi}/bin/mpicc" ]);
+
+  doCheck = true;
 
   meta = {
       platforms = stdenv.lib.platforms.unix;
