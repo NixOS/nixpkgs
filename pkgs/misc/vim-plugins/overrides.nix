@@ -16,6 +16,9 @@
 , gomodifytags, gotags, gotools, go-motion
 , gnused, reftools, gogetdoc, gometalinter
 , impl, iferr, gocode, gocode-gomod, go-tools
+
+# vCoolor dep
+, gnome3
 }:
 
 self: super: {
@@ -413,4 +416,12 @@ self: super: {
     '';
   });
 
+  vCoolor-vim = super.vCoolor-vim.overrideAttrs(old: {
+    # on linux can use either Zenity or Yad.
+    propagatedBuildInputs = [ gnome3.zenity ];
+    meta = {
+      description = "Simple color selector/picker plugin";
+      license = stdenv.lib.licenses.publicDomain;
+    };
+  });
 }
