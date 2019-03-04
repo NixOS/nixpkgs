@@ -131,11 +131,6 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  postPatch = optionalString stdenv.isDarwin ''
-    echo "substitute hardcoded dsymutil with ${llvm}/bin/llvm-dsymutil"
-    substituteInPlace "src/cmd/link/internal/ld/lib.go" --replace dsymutil ${llvm}/bin/llvm-dsymutil
-  '';
-
   GOOS = if stdenv.isDarwin then "darwin" else "linux";
   GOARCH = if stdenv.isDarwin then "amd64"
            else if stdenv.hostPlatform.system == "i686-linux" then "386"
