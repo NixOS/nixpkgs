@@ -15,11 +15,11 @@ let
   pkgList = rec {
     all = lib.filter pkgFilter (combinePkgs pkgSet);
     splitBin = builtins.partition (p: p.tlType == "bin") all;
-    bin = mkUniquePkgs splitBin.right
+    bin = mkUniqueOutPaths splitBin.right
       ++ lib.optional
           (lib.any (p: p.tlType == "run" && p.pname == "pdfcrop") splitBin.wrong)
           (lib.getBin ghostscript);
-    nonbin = mkUniquePkgs splitBin.wrong;
+    nonbin = mkUniqueOutPaths splitBin.wrong;
 
     # extra interpreters needed for shebangs, based on 2015 schemes "medium" and "tetex"
     # (omitted tk needed in pname == "epspdf", bin/epspdftk)
@@ -37,7 +37,7 @@ let
       else optional (head l != elemAt l 1) (head l) ++ un_adj (tail l);
     in un_adj (lib.sort comparator list);
 
-  mkUniquePkgs = pkgs: fastUnique (a: b: a < b) # highlighting hack: >
+  mkUniqueOutPaths = pkgs: fastUnique (a: b: a < b) # highlighting hack: >
     # here we deal with those dummy packages needed for hyphenation filtering
     (map (p: if lib.isDerivation p then p.outPath else "") pkgs);
 
