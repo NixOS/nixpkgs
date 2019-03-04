@@ -55,7 +55,8 @@ in buildPythonPackage rec {
   in fetchurl dls.${key};
 
   propagatedBuildInputs = [  protobuf numpy termcolor grpcio six astor absl-py gast tensorflow-estimator tensorflow-tensorboard keras-applications keras-preprocessing ]
-                 ++ lib.optional (!isPy3k) mock;
+                 ++ lib.optional (!isPy3k) mock
+                 ++ lib.optionals (pythonOlder "3.4") [ backports_weakref ];
 
   # Upstream has a pip hack that results in bin/tensorboard being in both tensorflow
   # and the propageted input tensorflow-tensorboard which causes environment collisions.
