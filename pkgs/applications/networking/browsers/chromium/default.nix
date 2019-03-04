@@ -13,6 +13,7 @@
 , cupsSupport ? true
 , pulseSupport ? config.pulseaudio or stdenv.isLinux
 , commandLineArgs ? ""
+, VAAPISupport ? false
 }:
 
 let
@@ -32,7 +33,7 @@ in let
     mkChromiumDerivation = callPackage ./common.nix {
       inherit enableNaCl gnomeSupport gnome
               gnomeKeyringSupport proprietaryCodecs cupsSupport pulseSupport
-              enableWideVine;
+              enableWideVine VAAPISupport;
     };
 
     browser = callPackage ./browser.nix { inherit channel; };
