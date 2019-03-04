@@ -5,19 +5,6 @@ with super;
   ##########################################3
   #### manual fixes for generated packages
   ##########################################3
-  cqueues = super.cqueues.override({
-    nativeBuildInputs = [ pkgs.gnum4 ];
-    buildInputs = [ pkgs.openssl ];
-    extraConfig = with pkgs; ''
-      variables={
-        CRYPTO_INCDIR="${openssl.dev}/include";
-        CRYPTO_LIBDIR="${openssl.out}/lib";
-        OPENSSL_INCDIR="${openssl.dev}/include";
-        OPENSSL_LIBDIR="${openssl.out}/lib";
-      }
-      '';
-  });
-
   lgi = super.lgi.overrideAttrs(oa: {
     nativeBuildInputs = [ pkgs.pkgconfig ];
     buildInputs = with pkgs; oa.buildInputs ++ [ glib gobjectIntrospection];
