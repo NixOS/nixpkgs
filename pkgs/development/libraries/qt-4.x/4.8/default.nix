@@ -88,6 +88,11 @@ stdenv.mkDerivation rec {
         url = "https://git.archlinux.org/svntogit/packages.git/plain/trunk/qt4-gcc6.patch?h=packages/qt4&id=ca773a144f5abb244ac4f2749eeee9333cac001f";
         sha256 = "07lrva7bjh6i40p7b3ml26a2jlznri8bh7y7iyx5zmvb1gfxmj34";
       })
+      (fetchpatch {
+        name = "qr4-openssl-1.1.patch";
+        url = "https://git.archlinux.org/svntogit/packages.git/plain/trunk/qt4-openssl-1.1.patch?h=packages/qt4&id=4a932eb7f333243c79bae1a3275d5b258a0cdc12";
+        sha256 = "0i8faaxy83cafpnqm9w2s16hvhfy8445qmhkbaccc7chkx149363";
+      })
     ]
     ++ lib.optional gtkStyle (substituteAll ({
         src = ./dlopen-gtkstyle.diff;
