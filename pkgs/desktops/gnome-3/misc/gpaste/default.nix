@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoreconfHook, pkgconfig, vala, glib, gjs, mutter
+{ stdenv, fetchurl, autoreconfHook, pkgconfig, vala, glib, gjs, mutter, fetchpatch
 , pango, gtk3, gnome3, dbus, clutter, appstream-glib, wrapGAppsHook, systemd, gobject-introspection }:
 
 stdenv.mkDerivation rec {
@@ -12,6 +12,10 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./fix-paths.patch
+    (fetchpatch {
+      url = https://github.com/Keruspe/GPaste/commit/eacd9ecbcf6db260a2bdc22275c7a855cad66424.patch;
+      sha256 = "1668xcmx90gpjlgv2iyp6yqbxq3r5sw5cxds0dmzlyvbqdmc3py2";
+    })
   ];
 
   # TODO: switch to substituteAll with placeholder
