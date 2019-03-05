@@ -11326,10 +11326,10 @@ let
   };
 
   NetSFTPForeign = buildPerlPackage rec {
-    name = "Net-SFTP-Foreign-1.89";
+    name = "Net-SFTP-Foreign-1.90";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SA/SALVA/${name}.tar.gz";
-      sha256 = "9bd33e130581c1fc3eb6108eaf9056c1507428cace04a572f7afe816d83b08a7";
+      sha256 = "d1eafb34f669ab6de675058292778ba2e0e42ecafd59abb1128ba31d62a0419d";
     };
     propagatedBuildInputs = [ pkgs.openssl ];
     patchPhase = ''
