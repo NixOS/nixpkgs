@@ -1,26 +1,42 @@
 { stdenv, fetchgit
-, pkgconfig
+, pkgconfig, makeWrapper
 , qmake, qtbase, qtquickcontrols2, qtmultimedia
 , libpulseaudio
 # Not mentioned but seems needed
 , qtgraphicaleffects
-# Unsure but needed by similar
-, qtdeclarative, qtsvg
+, qtdeclarative
 }:
 
-stdenv.mkDerivation rec {
-  name = "spectral-${version}";
-  version = "2018-09-24";
+let
+  # Following "borrowed" from yubikey-manager-qt
+  qmlPath = qmlLib: "${qmlLib}/${qtbase.qtQmlPrefix}";
+
+  inherit (stdenv) lib;
+
+  qml2ImportPath = lib.concatMapStringsSep ":" qmlPath [
+    qtbase.bin qtdeclarative.bin qtquickcontrols2.bin qtgraphicaleffects qtmultimedia
+  ];
+
+in stdenv.mkDerivation rec {
+  pname = "spectral";
+  version = "2019-03-03";
 
   src = fetchgit {
     url = "https://gitlab.com/b0/spectral.git";
-    rev = "c9d1d6887722860a52b597a0f74d0ce39c8622e1";
-    sha256 = "1ym8jlqls4lcq5rd81vxw1dni79fc6ph00ip8nsydl6i16fngl4c";
+    rev = "0473f25d38a064ee4e18203ec16eeae84fea4866";
+    sha256 = "1n09ginw6g0p42xj3zgxm52dvyyvj5psllv70vx21i50lvkbh9rw";
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ pkgconfig qmake ];
-  buildInputs = [ qtbase qtquickcontrols2 qtmultimedia qtgraphicaleffects qtdeclarative qtsvg ]
+  qmakeFlags = [ "CONFIG+=qtquickcompiler" "BUNDLE_FONT=true" ];
+
+  postInstall = ''
+    wrapProgram $out/bin/spectral \
+      --set QML2_IMPORT_PATH "${qml2ImportPath}"
+  '';
+
+  nativeBuildInputs = [ pkgconfig qmake makeWrapper ];
+  buildInputs = [ qtbase qtquickcontrols2 qtmultimedia qtgraphicaleffects qtdeclarative ]
     ++ stdenv.lib.optional stdenv.hostPlatform.isLinux libpulseaudio;
 
   meta = with stdenv.lib; {

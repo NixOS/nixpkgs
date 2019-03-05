@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ go ];
 
+  GOCACHE="$TMPDIR/go-cache";
+
   buildPhase = ''
     mkdir -p Godeps/_workspace/src/github.com/google/
     ln -s $(pwd) Godeps/_workspace/src/github.com/google/cadvisor

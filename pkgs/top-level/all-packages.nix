@@ -5,7 +5,7 @@
  * to merges. Please use the full-text search of your editor. ;)
  * Hint: ### starts category names.
  */
-{ lib, noSysDirs, config}:
+{ lib, noSysDirs, config, overlays }:
 res: pkgs: super:
 
 with pkgs;
@@ -61,7 +61,7 @@ in
 
 
   ### Helper functions.
-  inherit lib config;
+  inherit lib config overlays;
 
   inherit (lib) lowPrio hiPrio appendToName makeOverridable;
 
@@ -2673,6 +2673,8 @@ in
   filegive = callPackage ../tools/networking/filegive { };
 
   fileschanged = callPackage ../tools/misc/fileschanged { };
+
+  filet = callPackage ../applications/misc/filet { };
 
   findutils = callPackage ../tools/misc/findutils { };
 
@@ -7140,7 +7142,11 @@ in
     inherit (darwin.apple_sdk.frameworks) Security Foundation;
   };
 
-  go = go_1_11;
+  go_1_12 = callPackage ../development/compilers/go/1.12.nix {
+    inherit (darwin.apple_sdk.frameworks) Security Foundation;
+  };
+
+  go = go_1_12;
 
   go-repo-root = callPackage ../development/tools/go-repo-root { };
 
@@ -7398,7 +7404,15 @@ in
     stdenv = overrideCC stdenv buildPackages.gcc6; # with gcc-7: undefined reference to `__divmoddi4'
   });
 
-  llvmPackages_latest = llvmPackages_7;
+  llvmPackages_8 = callPackage ../development/compilers/llvm/8 ({
+    inherit (stdenvAdapters) overrideCC;
+    buildLlvmTools = buildPackages.llvmPackages_8.tools;
+    targetLlvmLibraries = targetPackages.llvmPackages_8.libraries;
+  } // stdenv.lib.optionalAttrs (buildPackages.stdenv.cc.isGNU && stdenv.hostPlatform.isi686) {
+    stdenv = overrideCC stdenv buildPackages.gcc6; # with gcc-7: undefined reference to `__divmoddi4'
+  });
+
+  llvmPackages_latest = llvmPackages_8;
 
   manticore = callPackage ../development/compilers/manticore { };
 
@@ -7503,7 +7517,7 @@ in
   };
 
   ponyc = callPackage ../development/compilers/ponyc {
-    llvm = llvm_39;
+    llvm = llvm_7;
   };
 
   pony-stable = callPackage ../development/compilers/ponyc/pony-stable.nix { };
@@ -9493,7 +9507,7 @@ in
 
   c-blosc = callPackage ../development/libraries/c-blosc { };
 
-  cachix = (haskell.lib.justStaticExecutables haskellPackages.cachix).overrideAttrs (drv: {
+  cachix = (callPackage ../development/tools/cachix { }).overrideAttrs (drv: {
     meta = drv.meta // {
       hydraPlatforms = stdenv.lib.platforms.unix;
     };
@@ -13742,12 +13756,14 @@ in
     # We don't use `with` statement here on purpose!
     # See https://github.com/NixOS/nixpkgs/pull/10474/files#r42369334
     modules = [ nginxModules.rtmp nginxModules.dav nginxModules.moreheaders ];
+    openssl = openssl_1_1;
   };
 
   nginxMainline = callPackage ../servers/http/nginx/mainline.nix {
     # We don't use `with` statement here on purpose!
     # See https://github.com/NixOS/nixpkgs/pull/10474/files#r42369334
     modules = [ nginxModules.dav nginxModules.moreheaders ];
+    openssl = openssl_1_1;
   };
 
   nginxModules = callPackage ../servers/http/nginx/modules.nix { };
@@ -14664,6 +14680,13 @@ in
       ];
   };
 
+  linux_5_0 = callPackage ../os-specific/linux/kernel/linux-5.0.nix {
+    kernelPatches =
+      [ kernelPatches.bridge_stp_helper
+        kernelPatches.modinst_arg_list_too_long
+      ];
+  };
+
   linux_testing = callPackage ../os-specific/linux/kernel/linux-testing.nix {
     kernelPatches = [
       kernelPatches.bridge_stp_helper
@@ -14845,7 +14868,7 @@ in
   linux = linuxPackages.kernel;
 
   # Update this when adding the newest kernel major version!
-  linuxPackages_latest = linuxPackages_4_20;
+  linuxPackages_latest = linuxPackages_5_0;
   linux_latest = linuxPackages_latest.kernel;
 
   # Build the kernel modules for the some of the kernels.
@@ -14856,6 +14879,7 @@ in
   linuxPackages_4_14 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_14);
   linuxPackages_4_19 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_19);
   linuxPackages_4_20 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_20);
+  linuxPackages_5_0 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_5_0);
   # When adding to this list:
   # - Update linuxPackages_latest to the latest version
   # - Update the rev in ../os-specific/linux/kernel/linux-libre.nix to the latest one.
@@ -16395,6 +16419,8 @@ in
 
   catfish = callPackage ../applications/search/catfish { };
 
+  catimg = callPackage ../tools/misc/catimg { };
+
   cava = callPackage ../applications/audio/cava { };
 
   cb2bib = libsForQt5.callPackage ../applications/office/cb2bib { };
@@ -17667,7 +17693,10 @@ in
 
   slack-term = callPackage ../applications/networking/instant-messengers/slack-term { };
 
-  singularity = callPackage ../applications/virtualization/singularity { };
+  singularity = callPackage ../applications/virtualization/singularity {
+    # XXX: the build is finding references to Go when compiled with go v1.12
+    go = go_1_11;
+  };
 
   spectmorph = callPackage ../applications/audio/spectmorph { };
 
@@ -19236,7 +19265,7 @@ in
 
   udevil = callPackage ../applications/misc/udevil {};
 
-  udiskie = python3Packages.callPackage ../applications/misc/udiskie { };
+  udiskie = callPackage ../applications/misc/udiskie { };
 
   sakura = callPackage ../applications/misc/sakura { };
 
@@ -20838,7 +20867,7 @@ in
     minetestclient_4 minetestserver_4
     minetestclient_5 minetestserver_5;
 
-  minetest = minetestclient_4;
+  minetest = minetestclient_5;
 
   mnemosyne = callPackage ../games/mnemosyne {
     python = python3;
@@ -21291,7 +21320,7 @@ in
   clearlooks-phenix = callPackage ../misc/themes/clearlooks-phenix { };
 
   deepin = recurseIntoAttrs (import ../desktops/deepin {
-    inherit pkgs libsForQt5;
+    inherit pkgs libsForQt5 go_1_11;
     inherit (lib) makeScope;
   });
 
@@ -21330,10 +21359,12 @@ in
     nohotcorner = callPackage ../desktops/gnome-3/extensions/nohotcorner { };
     no-title-bar = callPackage ../desktops/gnome-3/extensions/no-title-bar { };
     remove-dropdown-arrows = callPackage ../desktops/gnome-3/extensions/remove-dropdown-arrows { };
+    sound-output-device-chooser = callPackage ../desktops/gnome-3/extensions/sound-output-device-chooser { };
     system-monitor = callPackage ../desktops/gnome-3/extensions/system-monitor { };
     taskwhisperer = callPackage ../desktops/gnome-3/extensions/taskwhisperer { };
     timepp = callPackage ../desktops/gnome-3/extensions/timepp { };
     topicons-plus = callPackage ../desktops/gnome-3/extensions/topicons-plus { };
+    window-corner-preview = callPackage ../desktops/gnome-3/extensions/window-corner-preview { };
   };
 
   hsetroot = callPackage ../tools/X11/hsetroot { };

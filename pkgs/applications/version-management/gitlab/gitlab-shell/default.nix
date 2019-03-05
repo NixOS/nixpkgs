@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ruby bundler go ];
 
+  GOCACHE="$TMPDIR/go-cache";
+
   patches = [ ./remove-hardcoded-locations.patch ];
 
   installPhase = ''

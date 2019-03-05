@@ -48,6 +48,7 @@ in stdenv.mkDerivation rec {
 
   preBuild = ''
     export BUILDDIR
+    export GOCACHE="$TMPDIR/go-cache"
   '';
 
   installPhase = ''

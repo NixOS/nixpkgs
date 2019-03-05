@@ -1,4 +1,5 @@
-{ stdenv, wakatime, vscode-utils }:
+{ stdenv
+, wakatime, vscode-utils }:
 
 let
   inherit (vscode-utils) buildVscodeMarketplaceExtension;
@@ -12,9 +13,8 @@ in
     };
 
     postPatch = ''
-      mkdir -p out/wakatime-master
-
-      cp -rt out/wakatime-master --no-preserve=all ${wakatime}/lib/python*/site-packages/wakatime
+      mkdir -p dist/wakatime-master
+      cp -rt dist/wakatime-master --no-preserve=all ${wakatime}/lib/python*/site-packages/wakatime
     '';
 
     meta = with stdenv.lib; {

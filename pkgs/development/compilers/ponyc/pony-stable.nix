@@ -2,20 +2,18 @@
 
 stdenv.mkDerivation rec {
   name = "pony-stable-${version}";
-  version = "0.1.6";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "ponylang";
     repo = "pony-stable";
     rev = version;
-    sha256 = "02lqba75psnxcxj2y8lm1fy1hmwa088nvxjghhpnlkqbwz7wa2sw";
+    sha256 = "0zzcq0vsl6kcrsxwqzd3s9mq7aq5sg8si5c83rxyi9n6a06gnbh7";
   };
 
   buildInputs = [ ponyc ];
 
-  installPhase = ''
-    make prefix=$out install
-  '';
+  installFlags = [ "prefix=${placeholder "out"}" "install" ];
 
   meta = {
     description = "A simple dependency manager for the Pony language.";
