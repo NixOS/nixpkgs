@@ -7273,13 +7273,6 @@ in
 
   jikes = callPackage ../development/compilers/jikes { };
 
-  julia_06 = callPackage ../development/compilers/julia {
-    gmp = gmp6;
-    openblas = openblasCompat;
-    inherit (darwin.apple_sdk.frameworks) CoreServices ApplicationServices;
-    llvm = llvm_39;
-  };
-
   julia_07 = callPackage ../development/compilers/julia/0.7.nix {
     gmp = gmp6;
     openblas = openblasCompat;
