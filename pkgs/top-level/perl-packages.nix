@@ -2221,11 +2221,11 @@ let
     };
   };
 
-  Clipboard = buildPerlPackage {
-    name = "Clipboard-0.13";
+  Clipboard = buildPerlModule {
+    name = "Clipboard-0.19";
     src = fetchurl {
-      url = mirror://cpan/authors/id/K/KI/KING/Clipboard-0.13.tar.gz;
-      sha256 = "eebf1c9cb2484be850abdae017147967cf47f8ccd99293771517674b0046ec8a";
+      url = mirror://cpan/authors/id/S/SH/SHLOMIF/Clipboard-0.19.tar.gz;
+      sha256 = "34b9dccac5d559b2b2769e5e315205c8292be2ff9f6e5333112a2377c69abbb3";
     };
     meta = {
       description = "Clipboard - Copy and Paste with any OS";
@@ -2237,6 +2237,7 @@ let
     # Mac-Pasteboard-0.009.readme: 'NOTE that Mac OS X appears to restrict pasteboard access to processes that are logged in interactively.
     #     Ssh sessions and cron jobs can not create the requisite pasteboard handles, giving coreFoundationUnknownErr (-4960)'
     doCheck = !stdenv.isDarwin;
+    propagatedBuildInputs = [ CGI URI ];
   };
 
 
