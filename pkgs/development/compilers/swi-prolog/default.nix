@@ -47,6 +47,6 @@ stdenv.mkDerivation {
     license = "LGPL";
 
     platforms = stdenv.lib.platforms.unix;
-    maintainers = [ stdenv.lib.maintainers.peti stdenv.lib.maintainers.meditans ];
+    maintainers = [ stdenv.lib.maintainers.meditans ];
   };
 }
