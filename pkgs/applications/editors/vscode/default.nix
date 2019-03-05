@@ -87,6 +87,11 @@ in
     dontBuild = true;
     dontConfigure = true;
 
+    patchPhase = ''
+      substituteAll ${./Absolute_VSCODE_PATH.patch} ../Absolute_VSCODE_PATH.patch
+      patch -p1 ../Absolute_VSCODE_PATH.patch
+    '';
+
     installPhase =
       if system == "x86_64-darwin" then ''
         mkdir -p $out/lib/vscode $out/bin

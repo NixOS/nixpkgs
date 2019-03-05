@@ -1,0 +1,24 @@
+diff --git a/resources/linux/bin/code.sh b/resources/linux/bin/code.sh
+index 55f50b6f1c..3552f0c4fa 100755
+--- a/bin/code
++++ b/bin/code
+@@ -17,18 +17,7 @@ if [ "$(id -u)" = "0" ]; then
+ 	fi
+ fi
+ 
+-if [ ! -L $0 ]; then
+-	# if path is not a symlink, find relatively
+-	VSCODE_PATH="$(dirname $0)/.."
+-else
+-	if which readlink >/dev/null; then
+-		# if readlink exists, follow the symlink and find relatively
+-		VSCODE_PATH="$(dirname $(readlink -f $0))/.."
+-	else
+-		# else use the standard install location
+-		VSCODE_PATH="/usr/share/code"
+-	fi
+-fi
++VSCODE_PATH="@out@/lib/vscode/"
+ 
+ ELECTRON="$VSCODE_PATH/@@NAME@@"
+ CLI="$VSCODE_PATH/resources/app/out/cli.js"
