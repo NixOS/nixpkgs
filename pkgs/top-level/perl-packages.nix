@@ -15951,10 +15951,10 @@ let
   };
 
   TestWWWMechanizeCatalyst = buildPerlPackage rec {
-    name = "Test-WWW-Mechanize-Catalyst-0.60";
+    name = "Test-WWW-Mechanize-Catalyst-0.62";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/J/JJ/JJNAPIORK/${name}.tar.gz";
-      sha256 = "0nhhfrrai3ndziz873vpa1j0vljjnib4wqafd6yyvkf58ad7v0lv";
+      url = mirror://cpan/authors/id/M/MS/MSTROUT/Test-WWW-Mechanize-Catalyst-0.62.tar.gz;
+      sha256 = "1cdc2q16vs6fb335pzaislz2rx1ph9acaxyp7v5hv9xbwwddwfqq";
     };
     doCheck = false; # listens on an external port
     propagatedBuildInputs = [ CatalystRuntime WWWMechanize ];
