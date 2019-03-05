@@ -15215,10 +15215,10 @@ let
   };
 
   TestKwalitee = buildPerlPackage rec {
-     name = "Test-Kwalitee-1.27";
+     name = "Test-Kwalitee-1.28";
      src = fetchurl {
-       url = mirror://cpan/authors/id/E/ET/ETHER/Test-Kwalitee-1.27.tar.gz;
-       sha256 = "095kpj2011jk1mpnb07fs7yi190hmqh85mj662gx0dkpl9ic7a5w";
+       url = mirror://cpan/authors/id/E/ET/ETHER/Test-Kwalitee-1.28.tar.gz;
+       sha256 = "18s3c8qfr3kmmyxmsn5la2zgbdsgpnkmscnl68i7fnavfpfnqlxl";
      };
      propagatedBuildInputs = [ ModuleCPANTSAnalyse ];
      buildInputs = [ CPANMetaCheck TestDeep TestWarnings ];
