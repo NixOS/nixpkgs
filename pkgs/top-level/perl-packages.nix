@@ -11748,10 +11748,10 @@ let
   };
 
   PackageStashXS = buildPerlPackage {
-    name = "Package-Stash-XS-0.28";
+    name = "Package-Stash-XS-0.29";
     src = fetchurl {
-      url = mirror://cpan/authors/id/D/DO/DOY/Package-Stash-XS-0.28.tar.gz;
-      sha256 = "11nl69n8i56p91pd0ia44ip0vpv2cxwpbfakrv01vvv8az1cbn13";
+      url = mirror://cpan/authors/id/E/ET/ETHER/Package-Stash-XS-0.29.tar.gz;
+      sha256 = "1akqk10qxwk798qppajqbczwmhy4cs9g0lg961m3vq218slnnryk";
     };
     buildInputs = [ TestFatal TestRequires ];
     meta = {
