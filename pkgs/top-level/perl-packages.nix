@@ -7591,10 +7591,10 @@ let
   };
 
   IOCompress = buildPerlPackage rec {
-    name = "IO-Compress-2.081";
+    name = "IO-Compress-2.084";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PM/PMQS/${name}.tar.gz";
-      sha256 = "5211c775544dc8c511af08edfb1c0c22734daa2789149c2a88d68e17b43546d9";
+      sha256 = "1dbd503eda643aa58d1ef9b4d44c57889243d0ce6c54d5b45babceb860d76db5";
     };
     propagatedBuildInputs = [ CompressRawBzip2 CompressRawZlib ];
     meta = {
