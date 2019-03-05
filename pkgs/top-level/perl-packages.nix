@@ -16910,10 +16910,10 @@ let
   };
 
   URI = buildPerlPackage rec {
-    name = "URI-1.74";
+    name = "URI-1.76";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/E/ET/ETHER/${name}.tar.gz";
-      sha256 = "a9c254f45f89cb1dd946b689dfe433095404532a4543bdaab0b71ce0fdcdd53d";
+      url = mirror://cpan/authors/id/O/OA/OALDERS/URI-1.76.tar.gz;
+      sha256 = "b2c98e1d50d6f572483ee538a6f4ccc8d9185f91f0073fd8af7390898254413e";
     };
     buildInputs = [ TestNeeds ];
     meta = {
