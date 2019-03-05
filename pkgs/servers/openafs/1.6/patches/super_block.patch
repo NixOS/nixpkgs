@@ -1,0 +1,53 @@
+commit 61db15f1badabd83e289efd622e274c47f0aefda
+Author: Cheyenne Wills <cwills@sinenomine.net>
+Date:   Thu Jan 17 16:00:37 2019 -0700
+
+    Linux_5.0: Use super_block flags instead of Mount flags when filling sb
+    
+    In Kernel commit e262e32d6bde0f77fb0c95d977482fc872c51996
+    the mount flags (MS_) were moved from uapi/linux/fs.h to
+    uapi/linux/mount.h. This caused a compile failure in
+    src/afs/LINUX/osi_vfsops.c
+    
+    The Linux documentation in uapi/linux/mount.h indicates that the MS_
+    (mount) flags should only be used when calling sys_mount and filesystems
+    should use the SB_ (super_block) equivalent.
+    
+    src/afs/LINUX/osi_vfsops.c utilized the mount flag MS_NOATIME while
+    filling the super_block.  Changed to use SB_NOATIME (which has the same
+    numeric value as MS_NOATIME) if available.
+    
+    Reviewed-on: https://gerrit.openafs.org/13432
+    Tested-by: BuildBot <buildbot@rampaginggeek.com>
+    Reviewed-by: Benjamin Kaduk <kaduk@mit.edu>
+    (cherry picked from commit 3969bbca6017eb0ce6e1c3099b135f210403f661)
+    
+    Reviewed-on: https://gerrit.openafs.org/13440
+    Reviewed-by: Michael Meffie <mmeffie@sinenomine.net>
+    Tested-by: BuildBot <buildbot@rampaginggeek.com>
+    Reviewed-by: Mark Vitale <mvitale@sinenomine.net>
+    Reviewed-by: Stephan Wiesand <stephan.wiesand@desy.de>
+    (cherry picked from commit 25829aaef319728e30fc45895e8945438e4dc719)
+    
+    Change-Id: I495c55e663a763d640a27403b678e41635b851d7
+    Reviewed-on: https://gerrit.openafs.org/13451
+    Tested-by: BuildBot <buildbot@rampaginggeek.com>
+    Reviewed-by: Michael Meffie <mmeffie@sinenomine.net>
+    Reviewed-by: Stephan Wiesand <stephan.wiesand@desy.de>
+
+diff --git a/src/afs/LINUX/osi_vfsops.c b/src/afs/LINUX/osi_vfsops.c
+index e14934139..7b6fb5693 100644
+--- a/src/afs/LINUX/osi_vfsops.c
++++ b/src/afs/LINUX/osi_vfsops.c
+@@ -104,7 +104,11 @@ afs_fill_super(struct super_block *sb, void *data, int silent)
+    __module_get(THIS_MODULE);
+ 
+     afs_globalVFS = sb;
++#if defined(SB_NOATIME)
++    sb->s_flags |= SB_NOATIME;
++#else
+     sb->s_flags |= MS_NOATIME;
++#endif
+     sb->s_blocksize = 1024;
+     sb->s_blocksize_bits = 10;
+     sb->s_magic = AFS_VFSMAGIC;

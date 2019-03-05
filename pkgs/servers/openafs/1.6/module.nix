@@ -11,6 +11,12 @@ in stdenv.mkDerivation rec {
   name = "openafs-${version}-${kernel.modDirVersion}";
   inherit version src;
 
+  patches = [ # Linux 4.20
+            ./patches/current_kernel_time.patch
+            ./patches/do_settimeofday.patch
+            # Linux 5.0
+            ./patches/super_block.patch
+            ];
   nativeBuildInputs = [ autoconf automake flex perl bison which ] ++ kernel.moduleBuildDependencies;
 
   hardeningDisable = [ "pic" ];
@@ -51,7 +57,7 @@ in stdenv.mkDerivation rec {
     license = licenses.ipl10;
     platforms = platforms.linux;
     maintainers = [ maintainers.z77z maintainers.spacefrogg ];
-    broken = versionOlder kernel.version "3.18"
+    broken = versionOlder kernel.version "3.18" || builtins.compareVersions kernel.version "5.0" >= 0
              || stdenv.targetPlatform.isAarch64;
   };
 
