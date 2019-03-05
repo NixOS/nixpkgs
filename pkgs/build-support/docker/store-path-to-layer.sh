@@ -1,4 +1,4 @@
-#! @shell@
+#!@shell@
 
 set -eu
 
