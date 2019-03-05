@@ -10,8 +10,10 @@ let
     kind = "Config";
     clusters = [{
       name = "local";
-      cluster.certificate-authority = cfg.caFile;
-      cluster.server = conf.server;
+      cluster = {
+        certificate-authority = cfg.caFile;
+        server = conf.server;
+      }
     }];
     users = [{
       inherit name;
@@ -25,8 +27,9 @@ let
         cluster = "local";
         user = name;
       };
-      current-context = "local";
+      name = name;
     }];
+    current-context = "local";
   });
 
   caCert = secret "ca";
