@@ -1,19 +1,16 @@
-{ stdenv, fetchsvn, autoconf, automake, libtool, nettle, pkgconfig }:
+{ stdenv, fetchurl, pkgconfig, nettle }:
 
 stdenv.mkDerivation rec {
   name = "libfilezilla-${version}";
   version = "0.15.1";
 
-  src = fetchsvn {
-    url = "https://svn.filezilla-project.org/svn/libfilezilla/tags/${version}";
-    sha256 = "0nhi75rr0hzql7533i78bkvnrjgh0dv5g5vfwfidjkli2xk9i867";
+  src = fetchurl {
+    url = "https://download.filezilla-project.org/libfilezilla/${name}.tar.bz2";
+    sha256 = "17zlhw5b1a7jzh50cbpy2is3sps5lnzch5yf9qm7mwrviw9c8j10";
   };
 
-  buildInputs = [ autoconf automake libtool nettle pkgconfig ];
-
-  preConfigure = ''
-    autoreconf -i
-    '';
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ nettle ];
 
   meta = with stdenv.lib; {
     homepage = https://lib.filezilla-project.org/;
