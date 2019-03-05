@@ -570,6 +570,8 @@ in {
 
   poetry = callPackage ../development/python-modules/poetry { };
 
+  pplpy = callPackage ../development/python-modules/pplpy { };
+
   pprintpp = callPackage ../development/python-modules/pprintpp { };
 
   progress = callPackage ../development/python-modules/progress { };
@@ -1876,6 +1878,18 @@ in {
   gmpy = callPackage ../development/python-modules/gmpy { };
 
   gmpy2 = callPackage ../development/python-modules/gmpy2 { };
+
+  # alpha release, big refactor, adds cython support
+  # see https://github.com/aleaxit/gmpy/issues/146, https://github.com/aleaxit/gmpy/issues/199
+  gmpy2_2_1 = (callPackage ../development/python-modules/gmpy2 {}).overridePythonAttrs (oldAttrs: rec {
+      version = "2.1a4";
+      src = pkgs.fetchFromGitHub {
+        owner = "aleaxit";
+        repo = "gmpy";
+        rev = "gmpy2-${version}";
+        sha256 = "1wg4w4q2l7n26ksrdh4rwqmifgfm32n7x29cgdvmmbv5lmilb5hz";
+      };
+    });
 
   gmusicapi = callPackage ../development/python-modules/gmusicapi { };
 
