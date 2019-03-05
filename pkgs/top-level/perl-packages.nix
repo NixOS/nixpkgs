@@ -3652,12 +3652,12 @@ let
   };
 
   DateTimeFormatBuilder = buildPerlPackage {
-    name = "DateTime-Format-Builder-0.81";
+    name = "DateTime-Format-Builder-0.82";
     src = fetchurl {
-      url = mirror://cpan/authors/id/D/DR/DROLSKY/DateTime-Format-Builder-0.81.tar.gz;
-      sha256 = "7cd58a8cb53bf698407cc992f89e4d49bf3dc55baf4f3f00f1def63a0fff33ef";
+      url = mirror://cpan/authors/id/D/DR/DROLSKY/DateTime-Format-Builder-0.82.tar.gz;
+      sha256 = "383faeb22b992c77ca65a5257992dd2f6db91a7db73ea4601c512e1c6c2e1ca3";
     };
-    propagatedBuildInputs = [ ClassFactoryUtil DateTimeFormatStrptime ParamsValidate ];
+    propagatedBuildInputs = [ DateTimeFormatStrptime ParamsValidate ];
     meta = {
       description = "Create DateTime parser classes and objects";
       license = stdenv.lib.licenses.artistic2;
