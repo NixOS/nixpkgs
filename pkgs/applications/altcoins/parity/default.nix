@@ -1,6 +1,6 @@
 let
-  version     = "2.2.9";
-  sha256      = "0n9zk25ni4asfdqc4xh0gqp2446vxacqz7qcrmsngf8swvayvi16";
-  cargoSha256 = "10lg0vzikzlj927hpn59x1dz9dvhcaqsl8nz14vj2iz42vfkcm7p";
+  version     = "2.3.8";
+  sha256      = "06byk9fh9hcxy6cvqf379l898ry0wr2lw7kw03z7w68gcfkrcxgv";
+  cargoSha256 = "09rpmybasn71cb59myd0l19djy0j8cxs9m5d3l6nylhgpy8qilcg";
 in
   import ./parity.nix { inherit version sha256 cargoSha256; }
