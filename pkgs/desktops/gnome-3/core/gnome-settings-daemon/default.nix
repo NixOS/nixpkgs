@@ -1,7 +1,7 @@
-{ fetchurl, substituteAll, stdenv, meson, ninja, pkgconfig, gnome3, perl, gettext, glib, libnotify, lcms2, libXtst
-, libxkbfile, libpulseaudio, alsaLib, libcanberra-gtk3, upower, colord, libgweather, polkit
+{ fetchurl, substituteAll, stdenv, meson, ninja, pkgconfig, gnome3, perl, gettext, gtk3, glib, libnotify, lcms2, libXtst
+, libxkbfile, libpulseaudio, alsaLib, libcanberra-gtk3, upower, colord, libgweather, polkit, gsettings-desktop-schemas
 , geoclue2, librsvg, xf86_input_wacom, udev, libgudev, libwacom, libxslt, libxml2, networkmanager
-, docbook_xsl, wrapGAppsHook, python3, ibus, xkeyboard_config, tzdata, nss }:
+, gnome-desktop, geocode-glib, docbook_xsl, wrapGAppsHook, python3, ibus, xkeyboard_config, tzdata, nss }:
 
 stdenv.mkDerivation rec {
   name = "gnome-settings-daemon-${version}";
@@ -21,8 +21,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ meson ninja pkgconfig perl gettext libxml2 libxslt docbook_xsl wrapGAppsHook python3 ];
 
-  buildInputs = with gnome3; [
-    ibus gtk glib gsettings-desktop-schemas networkmanager
+  buildInputs = [
+    ibus gtk3 glib gsettings-desktop-schemas networkmanager
     libnotify gnome-desktop lcms2 libXtst libxkbfile libpulseaudio alsaLib
     libcanberra-gtk3 upower colord libgweather xkeyboard_config nss
     polkit geocode-glib geoclue2 librsvg xf86_input_wacom udev libgudev libwacom

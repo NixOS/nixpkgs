@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     curl gettext
     flex libgpod libid3tag flac libvorbis gtk3 gdk_pixbuf
-    gdl gnome3.defaultIconTheme gnome3.anjuta
+    gdl gnome3.adwaita-icon-theme gnome3.anjuta
   ] ++ (with perlPackages; [ perl XMLParser ]);
 
   patchPhase = ''

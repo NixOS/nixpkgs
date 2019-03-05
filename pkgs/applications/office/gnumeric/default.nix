@@ -20,7 +20,7 @@ in stdenv.mkDerivation rec {
 
   # ToDo: optional libgda, introspection?
   buildInputs = [
-    goffice gtk3 gnome3.defaultIconTheme
+    goffice gtk3 gnome3.adwaita-icon-theme
     python pygobject3
   ] ++ (with perlPackages; [ perl XMLParser ]);
 

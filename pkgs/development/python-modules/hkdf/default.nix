@@ -13,11 +13,14 @@ buildPythonPackage rec {
     sha256 = "1jhxk5vhxmxxjp3zj526ry521v9inzzl8jqaaf0ma65w6k332ak2";
   };
 
-  buildInputs = [ nose ];
+  checkInputs = [ nose ];
 
   checkPhase = ''
     nosetests
   '';
+
+  # no tests in PyPI tarball
+  doCheck = false;
 
   meta = with stdenv.lib; {
     description = "HMAC-based Extract-and-Expand Key Derivation Function (HKDF)";

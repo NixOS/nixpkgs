@@ -43,7 +43,7 @@ python3Packages.buildPythonApplication rec {
     gtk3
     cairo
     gettext
-    gnome3.defaultIconTheme
+    gnome3.adwaita-icon-theme
   ] ++ (with gst_all_1; [
     gstreamer
     gst-plugins-good

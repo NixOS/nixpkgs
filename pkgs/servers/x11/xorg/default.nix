@@ -32,11 +32,11 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   bitmap = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libXaw, xbitmaps, libXmu, xorgproto, libXt }: stdenv.mkDerivation {
-    name = "bitmap-1.0.8";
+    name = "bitmap-1.0.9";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/bitmap-1.0.8.tar.gz;
-      sha256 = "1z06a1sn3iq72rmh73f11xgb7n46bdav1fvpgczxjp6al88bsbqs";
+      url = mirror://xorg/individual/app/bitmap-1.0.9.tar.gz;
+      sha256 = "0kzbv5wh02798l77y9y8d8sjkmzm9cvsn3rjh8a86v5waj50apsb";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
@@ -729,11 +729,11 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   libXau = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto }: stdenv.mkDerivation {
-    name = "libXau-1.0.8";
+    name = "libXau-1.0.9";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/lib/libXau-1.0.8.tar.bz2;
-      sha256 = "1wm4pv12f36cwzhldpp7vy3lhm3xdcnp4f184xkxsp7b18r7gm7x";
+      url = mirror://xorg/individual/lib/libXau-1.0.9.tar.bz2;
+      sha256 = "1v3krc6x0zliaa66qq1bf9j60x5nqfy68v8axaiglxpnvgqcpy6c";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
@@ -1417,6 +1417,19 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
+  xcalc = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libXaw, xorgproto, libXt }: stdenv.mkDerivation {
+    name = "xcalc-1.0.7";
+    builder = ./builder.sh;
+    src = fetchurl {
+      url = mirror://xorg/individual/app/xcalc-1.0.7.tar.bz2;
+      sha256 = "08bzaldi76vrj7350d7b04pq7qa1qhi81x8i806yv42zcp8p3lkh";
+    };
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ libX11 libXaw xorgproto libXt ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
+
   xcbproto = callPackage ({ stdenv, pkgconfig, fetchurl, python }: stdenv.mkDerivation {
     name = "xcb-proto-1.13";
     builder = ./builder.sh;
@@ -1574,11 +1587,11 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   xcursorgen = callPackage ({ stdenv, pkgconfig, fetchurl, libpng, libX11, libXcursor }: stdenv.mkDerivation {
-    name = "xcursorgen-1.0.6";
+    name = "xcursorgen-1.0.7";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/xcursorgen-1.0.6.tar.bz2;
-      sha256 = "0v7nncj3kaa8c0524j7ricdf4rvld5i7c3m6fj55l5zbah7r3j1i";
+      url = mirror://xorg/individual/app/xcursorgen-1.0.7.tar.bz2;
+      sha256 = "0ggbv084cavp52hjgcz3vdj0g018axs0m23c03lpc5sgn92gidim";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
@@ -1587,11 +1600,11 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   xcursorthemes = callPackage ({ stdenv, pkgconfig, fetchurl, libXcursor }: stdenv.mkDerivation {
-    name = "xcursor-themes-1.0.5";
+    name = "xcursor-themes-1.0.6";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/data/xcursor-themes-1.0.5.tar.bz2;
-      sha256 = "0whjiq6d5z4z75zh37pji6llfcyrg6q3mg9zx5zqyncnj39q30xf";
+      url = mirror://xorg/individual/data/xcursor-themes-1.0.6.tar.bz2;
+      sha256 = "16a96li0s0ggg60v7f6ywxmsrmxdfizcw55ccv7sp4qjfisca7pf";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
@@ -1781,6 +1794,19 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
+  xf86videoapm = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libpciaccess, xorgserver }: stdenv.mkDerivation {
+    name = "xf86-video-apm-1.3.0";
+    builder = ./builder.sh;
+    src = fetchurl {
+      url = mirror://xorg/individual/driver/xf86-video-apm-1.3.0.tar.bz2;
+      sha256 = "0znwqfc8abkiha98an8hxsngnz96z6cd976bc4bsvz1km6wqk0c0";
+    };
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ xorgproto libpciaccess xorgserver ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
+
   xf86videoark = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libpciaccess, xorgserver }: stdenv.mkDerivation {
     name = "xf86-video-ark-0.7.5";
     builder = ./builder.sh;
@@ -1821,11 +1847,11 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   xf86videochips = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libpciaccess, xorgserver }: stdenv.mkDerivation {
-    name = "xf86-video-chips-1.3.0";
+    name = "xf86-video-chips-1.4.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-video-chips-1.3.0.tar.bz2;
-      sha256 = "00nsyz0z8mkzinr5czkkajbw1fm6437q7f3dx027017jdhh4qb4p";
+      url = mirror://xorg/individual/driver/xf86-video-chips-1.4.0.tar.bz2;
+      sha256 = "1gqzy7q9v824m7hqkbbmncxg082zm0d4mafgc97c4skyiwgf9wq7";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
@@ -2094,11 +2120,11 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   xf86videos3virge = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libpciaccess, xorgserver }: stdenv.mkDerivation {
-    name = "xf86-video-s3virge-1.10.7";
+    name = "xf86-video-s3virge-1.11.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-video-s3virge-1.10.7.tar.bz2;
-      sha256 = "1nm4cngjbw226q63rdacw6nx5lgxv7l7rsa8vhpr0gs80pg6igjx";
+      url = mirror://xorg/individual/driver/xf86-video-s3virge-1.11.0.tar.bz2;
+      sha256 = "06d1v5s7xf00y18x12cz11sk00rgn0yq95w66kmgzy465pzxvj84";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
@@ -2198,11 +2224,11 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   xf86videotdfx = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libdrm, libpciaccess, xorgserver }: stdenv.mkDerivation {
-    name = "xf86-video-tdfx-1.4.7";
+    name = "xf86-video-tdfx-1.5.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-video-tdfx-1.4.7.tar.bz2;
-      sha256 = "0hia45z4jc472fxp00803nznizcn4h1ybp63jcsb4lmd9vhqxx2c";
+      url = mirror://xorg/individual/driver/xf86-video-tdfx-1.5.0.tar.bz2;
+      sha256 = "0qc5wzwf1n65si9rc37bh224pzahh7gp67vfimbxs0b9yvhq0i9g";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];

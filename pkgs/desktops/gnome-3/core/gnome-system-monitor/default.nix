@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     polkit # for ITS file
   ];
   buildInputs = [
-    bash gtk3 glib libxml2 gtkmm3 libgtop gdk_pixbuf gnome3.defaultIconTheme librsvg
+    bash gtk3 glib libxml2 gtkmm3 libgtop gdk_pixbuf gnome3.adwaita-icon-theme librsvg
     gnome3.gsettings-desktop-schemas systemd
   ];
 

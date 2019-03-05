@@ -3,11 +3,11 @@
 
 buildPythonPackage rec {
   pname = "jaraco.itertools";
-  version = "4.0.0";
+  version = "4.4.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1d09zpi593bhr56rwm41kzffr18wif98plgy6xdy0zrbdwfarrxl";
+    sha256 = "d1380ed961c9a4724f0bcca85d2bffebaa2507adfde535d5ee717441c9105fae";
   };
 
   buildInputs = [ setuptools_scm ];

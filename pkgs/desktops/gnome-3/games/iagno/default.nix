@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig wrapGAppsHook itstool libxml2 ];
-  buildInputs = [ gtk3 gnome3.defaultIconTheme gdk_pixbuf librsvg libcanberra-gtk3 ];
+  buildInputs = [ gtk3 gnome3.adwaita-icon-theme gdk_pixbuf librsvg libcanberra-gtk3 ];
 
   enableParallelBuilding = true;
 

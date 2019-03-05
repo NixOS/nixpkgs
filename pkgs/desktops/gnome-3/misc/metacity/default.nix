@@ -4,7 +4,7 @@
 , glib
 , gnome3
 , gsettings-desktop-schemas
-, gtk
+, gtk3
 , libcanberra-gtk3
 , libgtop
 , libstartup_notification
@@ -42,7 +42,7 @@ in stdenv.mkDerivation rec {
   buildInputs = [
     glib
     gsettings-desktop-schemas
-    gtk
+    gtk3
     libcanberra-gtk3
     libgtop
     libstartup_notification

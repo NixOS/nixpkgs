@@ -1,14 +1,11 @@
 { stdenv, fetchFromGitHub, asciidoc-full, gettext
 , gobject-introspection, gtk3, hicolor-icon-theme, libappindicator-gtk3, libnotify, librsvg
 , udisks2, wrapGAppsHook
-, buildPythonApplication
-, docopt
-, pygobject3
-, pyyaml
+, python3Packages
 }:
 
-buildPythonApplication rec {
-  name = "udiskie-${version}";
+python3Packages.buildPythonApplication rec {
+  pname = "udiskie";
   version = "1.7.7";
 
   src = fetchFromGitHub {
@@ -18,16 +15,27 @@ buildPythonApplication rec {
     sha256 = "1j17z26vy44il2s9zgchvhq280vq8ag64ddi35f35b444wz2azlb";
   };
 
-  buildInputs = [
+  nativeBuildInputs = [
+    gettext
     asciidoc-full        # For building man page.
-    hicolor-icon-theme
+    gobject-introspection
     wrapGAppsHook
-    librsvg              # required for loading svg icons (udiskie uses svg icons)
   ];
 
-  propagatedBuildInputs = [
-    gettext gobject-introspection gtk3 libnotify docopt
-    pygobject3 pyyaml udisks2 libappindicator-gtk3
+  buildInputs = [
+    hicolor-icon-theme
+    librsvg              # required for loading svg icons (udiskie uses svg icons)
+    gobject-introspection
+    libnotify
+    gtk3
+    udisks2
+    libappindicator-gtk3
+  ];
+
+  propagatedBuildInputs = with python3Packages; [
+    docopt
+    pygobject3
+    pyyaml
   ];
 
   postBuild = "make -C doc";

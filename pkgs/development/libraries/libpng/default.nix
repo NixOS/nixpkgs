@@ -18,8 +18,7 @@ in stdenv.mkDerivation rec {
     url = "mirror://sourceforge/libpng/libpng-${version}.tar.xz";
     sha256 = "06d35a3xz2a0kph82r56hqm1fn8fbwrqs07xzmr93dx63x695szc";
   };
-  patches = if !stdenv.hostPlatform.isAarch64 then null # temporarily avoid rebuild
-  else [
+  patches = [
     (fetchurl { # https://github.com/glennrp/libpng/issues/266
       url = "https://salsa.debian.org/debian/libpng1.6/raw/0e1348f3d/debian/patches/272.patch";
       sha256 = "1d36khgryq2p27bdx10xrr4kcjr7cdfdj2zhdcjzznpnpns97s6n";

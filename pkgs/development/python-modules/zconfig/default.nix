@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "ZConfig";
-  version = "3.3.0";
+  version = "3.4.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "22d7fd3b8b12405f4856898995fd69e40bbe239c4c689502ee6d766a7368f585";
+    sha256 = "560f779c7dcca0593083cbdb3fac9bfc7974cd5061363e2254844192e5644998";
   };
 
   patches = stdenv.lib.optional stdenv.hostPlatform.isMusl ./remove-setlocale-test.patch;

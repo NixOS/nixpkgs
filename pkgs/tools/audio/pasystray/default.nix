@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig autoreconfHook wrapGAppsHook ];
   buildInputs = [
-    gnome3.defaultIconTheme
+    gnome3.adwaita-icon-theme
     avahi gtk3 libappindicator-gtk3 libnotify libpulseaudio xlibsWrapper
     gnome3.gsettings-desktop-schemas
   ];

@@ -7,8 +7,8 @@
 
 with python3Packages;
 buildPythonApplication rec {
+  pname = "kitty";
   version = "0.13.3";
-  name = "kitty-${version}";
   format = "other";
 
   src = fetchFromGitHub {
@@ -24,7 +24,7 @@ buildPythonApplication rec {
     wayland-protocols wayland dbus
   ];
 
-  nativeBuildInputs = [ pkgconfig which sphinx ];
+  nativeBuildInputs = [ pkgconfig which sphinx ncurses ];
 
   outputs = [ "out" "terminfo" ];
 
@@ -36,7 +36,7 @@ buildPythonApplication rec {
   ];
 
   buildPhase = ''
-    python3 setup.py linux-package
+    ${python.interpreter} setup.py linux-package
   '';
 
   installPhase = ''

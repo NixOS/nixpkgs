@@ -1,14 +1,14 @@
 { stdenv, fetchPypi, buildPythonPackage, pytest, tox }:
 
 buildPythonPackage rec {
-  version = "0.7";
+  version = "1.0.0";
   pname = "pluginbase";
 
   buildInputs = [ pytest tox ];
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c0abe3218b86533cca287e7057a37481883c07acef7814b70583406938214cc8";
+    sha256 = "497894df38d0db71e1a4fbbfaceb10c3ef49a3f95a0582e11b75f8adaa030005";
   };
 
   meta = with stdenv.lib; {

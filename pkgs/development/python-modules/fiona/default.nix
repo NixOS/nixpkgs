@@ -1,6 +1,7 @@
-{ stdenv, buildPythonPackage, fetchPypi,
-  six, cligj, munch, click-plugins, enum34, pytest, nose,
-  gdal
+{ stdenv, buildPythonPackage, fetchPypi, isPy3k
+, attrs, click, cligj, click-plugins, six, munch, enum34
+, pytest, boto3
+, gdal
 }:
 
 buildPythonPackage rec {
@@ -14,24 +15,35 @@ buildPythonPackage rec {
 
   CXXFLAGS = stdenv.lib.optionalString stdenv.cc.isClang "-std=c++11";
 
+  nativeBuildInputs = [
+    gdal # for gdal-config
+  ];
+
   buildInputs = [
     gdal
   ];
 
   propagatedBuildInputs = [
-    six
+    attrs
+    click
     cligj
-    munch
     click-plugins
-    enum34
-  ];
+    six
+    munch
+  ] ++ stdenv.lib.optional (!isPy3k) enum34;
 
   checkInputs = [
     pytest
-    nose
+    boto3
   ];
 
-  doCheck = false;
+  checkPhase = ''
+    rm -r fiona # prevent importing local fiona
+    # Some tests access network, others test packaging
+    pytest -k "not test_*_http \
+           and not test_*_https \
+           and not test_*_wheel"
+  '';
 
   meta = with stdenv.lib; {
     description = "OGR's neat, nimble, no-nonsense API for Python";
