@@ -6699,8 +6699,7 @@ let
       url = "mirror://cpan/authors/id/X/XA/XAOC/${name}.tar.gz";
       sha256 = "0baxyhlzdf7avka40h1niiir8vz4nilqkiwh876i0hv0f8xj3nqa";
     };
-    buildInputs = [ Cairo CairoGObject Glib GlibObjectIntrospection ];
-    propagatedBuildInputs = [ pkgs.gtk3 ];
+    propagatedBuildInputs = [ pkgs.gtk3 CairoGObject GlibObjectIntrospection ];
     meta = {
       description = "Perl interface to the 3.x series of the gtk+ toolkit";
       license = stdenv.lib.licenses.lgpl21Plus;
