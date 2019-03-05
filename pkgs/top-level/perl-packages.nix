@@ -8049,10 +8049,10 @@ let
   };
 
   JSONPP = buildPerlPackage rec {
-    name = "JSON-PP-4.00";
+    name = "JSON-PP-4.02";
     src = fetchurl {
-      url = mirror://cpan/authors/id/I/IS/ISHIGAKI/JSON-PP-4.00.tar.gz;
-      sha256 = "0g0g6qxcic5p34n51dlpq2s9f23qzlxxqsgprv7x962k894qxx5y";
+      url = mirror://cpan/authors/id/I/IS/ISHIGAKI/JSON-PP-4.02.tar.gz;
+      sha256 = "11wlh4clq0cddiamh1ipps3fh9ly01j4pcdh8f4nw7912bw7pimc";
     };
     meta = {
       description = "JSON::XS compatible pure-Perl module";
