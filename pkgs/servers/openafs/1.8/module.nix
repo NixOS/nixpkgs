@@ -11,7 +11,14 @@ in stdenv.mkDerivation rec {
   name = "openafs-${version}-${kernel.modDirVersion}";
   inherit version src;
 
-  patches = [ ./linux-4.20.patch ];
+  patches = [ # Linux 4.20
+              ./patches/do_settimeofday.patch
+              ./patches/current_kernel_time.patch
+              # Linux 5.0
+              ./patches/ktime_get_coarse_real_ts64.patch
+              ./patches/ktime_get_real_ts64.patch
+              ./patches/super_block.patch
+ ];
 
   nativeBuildInputs = [ autoconf automake flex libtool_2 perl which yacc ]
     ++ kernel.moduleBuildDependencies;

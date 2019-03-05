@@ -1,0 +1,79 @@
+commit 21ad6a0c826c150c4227ece50554101641ab4626
+Author: Cheyenne Wills <cwills@sinenomine.net>
+Date:   Fri Jan 18 17:22:44 2019 -0700
+
+    Linux_5.0: replaced current_kernel_time with ktime_get_coarse_real_ts64
+    
+    In Kernel commit fb7fcc96a86cfaef0f6dcc0665516aa68611e736 the
+    current_kernel_time/current_kernel_time64 functions where renamed
+    and the calling was standardized.
+    
+    According to the Linux Documentation/core-api/timekeeping.rst
+    ktime_get_coarse_real_ts64 is the direct replacement for
+    current_kernel_time64.  Because of year 2038 issues, there is no
+    replacement for current_kernel_time.
+    
+    Updated code that used current_kernel_time to use new name and calling
+    convention.
+    
+    Updated autoconf test that sets IATTR_TAKES_64BIT_TIME as well.
+    
+    Change-Id: I607bdcf6f023425975e5bb747e0e780b3d2a7ce5
+    Reviewed-on: https://gerrit.openafs.org/13434
+    Tested-by: BuildBot <buildbot@rampaginggeek.com>
+    Reviewed-by: Michael Meffie <mmeffie@sinenomine.net>
+    Reviewed-by: Mark Vitale <mvitale@sinenomine.net>
+    Reviewed-by: Benjamin Kaduk <kaduk@mit.edu>
+
+diff --git a/src/afs/LINUX/osi_file.c b/src/afs/LINUX/osi_file.c
+index a920b8164..213d5efb5 100644
+--- a/src/afs/LINUX/osi_file.c
++++ b/src/afs/LINUX/osi_file.c
+@@ -23,11 +23,17 @@
+ #include "osi_compat.h"
+ 
+ #ifndef CURRENT_TIME
+-# ifdef IATTR_TAKES_64BIT_TIME
+-#  define CURRENT_TIME		(current_kernel_time64())
++# if defined(HAVE_LINUX_KTIME_GET_COARSE_REAL_TS64)
++#   define AFS_CURRENT_TIME(x) (ktime_get_coarse_real_ts64((x)))
+ # else
+-#  define CURRENT_TIME            (current_kernel_time())
++#  ifdef IATTR_TAKES_64BIT_TIME
++#    define AFS_CURRENT_TIME(x) do {*(x) = current_kernel_time64();} while (0)
++#  else
++#    define AFS_CURRENT_TIME(x) do {*(x) = current_kernel_time();} while (0)
++#  endif
+ # endif
++#else
++# define AFS_CURRENT_TIME(x) do {*(x) = CURRENT_TIME;} while(0)
+ #endif
+ 
+ int cache_fh_type = -1;
+@@ -196,7 +202,7 @@ osi_UFSTruncate(struct osi_file *afile, afs_int32 asize)
+ #endif
+     newattrs.ia_size = asize;
+     newattrs.ia_valid = ATTR_SIZE | ATTR_CTIME;
+-    newattrs.ia_ctime = CURRENT_TIME;
++    AFS_CURRENT_TIME(&newattrs.ia_ctime);
+ 
+     /* avoid notify_change() since it wants to update dentry->d_parent */
+ #ifdef HAVE_LINUX_SETATTR_PREPARE
+diff --git a/src/cf/linux-test4.m4 b/src/cf/linux-test4.m4
+index 50b8a0ede..cf8205675 100644
+--- a/src/cf/linux-test4.m4
++++ b/src/cf/linux-test4.m4
+@@ -189,7 +189,12 @@ AC_DEFUN([LINUX_IATTR_64BIT_TIME], [
+                        [#include <linux/fs.h>
+                         #include <linux/timekeeping.h>],
+                        [struct iattr _attrs;
+-                        _attrs.ia_ctime = current_kernel_time64();],
++                       #if defined(HAVE_LINUX_KTIME_GET_COARSE_REAL_TS64)
++                        ktime_get_coarse_real_ts64(&_attrs.ia_ctime);
++                       #else
++                        _attrs.ia_ctime = current_kernel_time64();
++                       #endif
++                       ],
+                        [IATTR_TAKES_64BIT_TIME],
+                        [define if struct iattr->ia_ctime takes struct timespec64],
+                        [])

@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ kerberos ncurses ];
 
-  patches = [ ./bosserver.patch ./cross-build.patch ] ++ stdenv.lib.optional (tsmbac != null) ./tsmbac.patch;
+  patches = [ ./patches/bosserver.patch ./patches/cross-build.patch ] ++ stdenv.lib.optional (tsmbac != null) ./patches/tsmbac.patch;
 
   outputs = [ "out" "dev" "man" "doc" "server" ];
 

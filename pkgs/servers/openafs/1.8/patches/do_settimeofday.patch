@@ -1,0 +1,60 @@
+commit aa80f892ec39e2984818090a6bb2047430836ee2
+Author: Mark Vitale <mvitale@sinenomine.net>
+Date:   Thu Nov 15 15:31:37 2018 -0500
+
+    Linux 4.20: do_settimeofday is gone
+    
+    With Linux commit 976516404ff3fab2a8caa8bd6f5efc1437fed0b8 'y2038:
+    remove unused time interfaces', do_settimeofday() is gone.
+    
+    However, OpenAFS only calls do_settimeofday() from afs_osi_SetTime(),
+    which has been dead code since -settime support was removed from afsd
+    with commit 1d9888be486198868983048eeffabdfef5afa94b 'Remove
+    -settime/RXAFS_GetTime client support'.
+    
+    Instead of fixing afs_osi_SetTime() to use a current Linux API, remove
+    it as dead code.
+    
+    No functional change is incurred by this commit.  However, this change
+    is required in order to build OpenAFS on Linux 4.20.
+    
+    Change-Id: I74913deb249de66b0da71539f2596c971f0fd99a
+    Reviewed-on: https://gerrit.openafs.org/13392
+    Reviewed-by: Benjamin Kaduk <kaduk@mit.edu>
+    Tested-by: Benjamin Kaduk <kaduk@mit.edu>
+
+diff --git a/src/afs/LINUX/osi_misc.c b/src/afs/LINUX/osi_misc.c
+index 077d4edfb..655076779 100644
+--- a/src/afs/LINUX/osi_misc.c
++++ b/src/afs/LINUX/osi_misc.c
+@@ -28,18 +28,6 @@
+ int afs_osicred_initialized = 0;
+ afs_ucred_t afs_osi_cred;
+ 
+-void
+-afs_osi_SetTime(osi_timeval_t * tvp)
+-{
+-    struct timespec tv;
+-    tv.tv_sec = tvp->tv_sec;
+-    tv.tv_nsec = tvp->tv_usec * NSEC_PER_USEC;
+-
+-    AFS_STATCNT(osi_SetTime);
+-
+-    do_settimeofday(&tv);
+-}
+-
+ void
+ osi_linux_mask(void)
+ {
+diff --git a/src/afs/LINUX/osi_prototypes.h b/src/afs/LINUX/osi_prototypes.h
+index 438b07789..130b5660e 100644
+--- a/src/afs/LINUX/osi_prototypes.h
++++ b/src/afs/LINUX/osi_prototypes.h
+@@ -44,7 +44,6 @@ extern void osi_ioctl_init(void);
+ extern void osi_ioctl_clean(void);
+ 
+ /* osi_misc.c */
+-extern void afs_osi_SetTime(osi_timeval_t * tvp);
+ extern int osi_lookupname_internal(char *aname, int followlink,
+ 				   struct vfsmount **mnt, struct dentry **dpp);
+ extern int osi_lookupname(char *aname, uio_seg_t seg, int followlink,

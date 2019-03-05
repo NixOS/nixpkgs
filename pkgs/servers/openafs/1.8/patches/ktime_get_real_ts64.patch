@@ -1,0 +1,58 @@
+commit b892fb127815bdf72103ae41ee70aadd87931b0c
+Author: Cheyenne Wills <cwills@sinenomine.net>
+Date:   Fri Jan 18 16:53:58 2019 -0700
+
+    Linux_5.0: replace do_gettimeofday with ktime_get_real_ts64
+    
+    In Kernel commit e4b92b108c6cd6b311e4b6e85d6a87a34599a6e3 the
+    do_gettimeofday function was removed.
+    
+    According to the Linux Documentation/core-api/timekeeping.rst
+    ktime_get_real_ts64 is the direct replacement for do_gettimeofday
+    
+    Updated the macro osi_GetTime to use ktime_get_real_ts64 if it is
+    available.
+    
+    Change-Id: I7fcd49958de83a6a040e40bd310a228247c481b2
+    Reviewed-on: https://gerrit.openafs.org/13433
+    Reviewed-by: Benjamin Kaduk <kaduk@mit.edu>
+    Tested-by: BuildBot <buildbot@rampaginggeek.com>
+
+diff --git a/src/afs/LINUX/osi_machdep.h b/src/afs/LINUX/osi_machdep.h
+index a1a2f57c0..6832c3ee0 100644
+--- a/src/afs/LINUX/osi_machdep.h
++++ b/src/afs/LINUX/osi_machdep.h
+@@ -92,9 +92,15 @@ static inline time_t osi_Time(void) {
+ # define osi_Time() (xtime.tv_sec)
+ #endif
+ 
+-
+-
+-#ifdef AFS_LINUX_64BIT_KERNEL
++#if defined(HAVE_LINUX_KTIME_GET_REAL_TS64)
++# define osi_GetTime(V)                                      \
++    do {                                                     \
++	struct timespec64 __afs_tv;                          \
++	ktime_get_real_ts64(&__afs_tv);                      \
++	(V)->tv_sec = (afs_int32)__afs_tv.tv_sec;            \
++	(V)->tv_usec = (afs_int32)__afs_tv.tv_nsec / 1000;   \
++    } while(0)
++#elif defined(AFS_LINUX_64BIT_KERNEL)
+ # define osi_GetTime(V)                                 \
+     do {                                               \
+        struct timeval __afs_tv;                              \
+diff --git a/src/cf/linux-kernel-func.m4 b/src/cf/linux-kernel-func.m4
+index 551b7b5e1..34c5fa48e 100644
+--- a/src/cf/linux-kernel-func.m4
++++ b/src/cf/linux-kernel-func.m4
+@@ -76,6 +76,10 @@ AC_CHECK_LINUX_FUNC([ktime_get_coarse_real_ts64],
+                     [#include <linux/ktime.h>],
+                     [struct timespec64 *s;
+                     ktime_get_coarse_real_ts64(s);])
++AC_CHECK_LINUX_FUNC([ktime_get_real_ts64],
++                    [#include <linux/ktime.h>],
++                    [struct timespec64 *s;
++                    ktime_get_real_ts64(s);])
+ AC_CHECK_LINUX_FUNC([locks_lock_file_wait],
+                     [#include <linux/fs.h>],
+                     [locks_lock_file_wait(NULL, NULL);])
