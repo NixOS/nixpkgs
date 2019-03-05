@@ -3785,13 +3785,13 @@ let
   };
 
   DateTimeFormatStrptime = buildPerlPackage rec {
-    name = "DateTime-Format-Strptime-1.75";
+    name = "DateTime-Format-Strptime-1.76";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DR/DROLSKY/${name}.tar.gz";
-      sha256 = "4fcfb2ac4f79d7ff2855a405f39050d2ea691ee098ce54ede8af79c8d6ab3c19";
+      sha256 = "593c26466ed7a3d2cefe9215f1619666c5116bd3a551e0aa74b64a6353fcb50d";
     };
     buildInputs = [ TestFatal TestWarnings ];
-    propagatedBuildInputs = [ DateTime PackageDeprecationManager ];
+    propagatedBuildInputs = [ DateTime ];
     meta = {
       description = "Parse and format strp and strf time patterns";
       license = stdenv.lib.licenses.artistic2;
