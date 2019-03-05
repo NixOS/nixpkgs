@@ -1029,11 +1029,12 @@ let
       url = "mirror://cpan/authors/id/X/XA/XAOC/${name}.tar.gz";
       sha256 = "1m896j0xdfhldsx8abf10cc16ll1fm9wbav42dpzal9fh07d9f9v";
     };
-    buildInputs = [ pkgs.cairo Cairo Glib ExtUtilsDepends ExtUtilsPkgConfig ];
+    buildInputs = [ pkgs.cairo ];
     meta = {
       description = "Integrate Cairo into the Glib type system";
       license = stdenv.lib.licenses.lgpl21Plus;
     };
+    propagatedBuildInputs = [ Cairo Glib ];
   };
 
   cam_pdf = buildPerlModule rec {
