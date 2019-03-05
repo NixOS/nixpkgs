@@ -353,10 +353,10 @@ let
   };
 
   AppFatPacker = buildPerlPackage rec {
-     name = "App-FatPacker-0.010007";
+     name = "App-FatPacker-0.010008";
      src = fetchurl {
-       url = mirror://cpan/authors/id/M/MS/MSTROUT/App-FatPacker-0.010007.tar.gz;
-       sha256 = "1g9nff9fdg7dvja0ix2yv32w5xcj963ybcf7x22j61g6r81845fi";
+       url = mirror://cpan/authors/id/M/MS/MSTROUT/App-FatPacker-0.010008.tar.gz;
+       sha256 = "1kzcbpsf1p7ww45d9fl2w0nfn5jj5pz0r0c649c1lrj5r1nv778j";
      };
      meta = {
        description = "pack your dependencies onto your script file";
