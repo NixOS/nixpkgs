@@ -12937,10 +12937,10 @@ let
   };
 
   PodMarkdownGithub = buildPerlPackage rec {
-     name = "Pod-Markdown-Github-0.03";
+     name = "Pod-Markdown-Github-0.04";
      src = fetchurl {
-       url = mirror://cpan/authors/id/M/MI/MINIMAL/Pod-Markdown-Github-0.03.tar.gz;
-       sha256 = "0y555pb78j0lz24kdgiwkmk1vcv4lg3a3mvnw9vm2qqnkp7p0nag";
+       url = mirror://cpan/authors/id/M/MI/MINIMAL/Pod-Markdown-Github-0.04.tar.gz;
+       sha256 = "04y67c50hpf1vb9cwsza3fbj4rshdqa47vi3zcj4kkjckh02yzmk";
      };
      propagatedBuildInputs = [ PodMarkdown ];
      buildInputs = [ TestDifferences ];
