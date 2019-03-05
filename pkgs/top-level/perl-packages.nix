@@ -6105,10 +6105,10 @@ let
   };
 
   FileWhich = buildPerlPackage rec {
-    name = "File-Which-1.22";
+    name = "File-Which-1.23";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PL/PLICEASE/${name}.tar.gz";
-      sha256 = "e8a8ffcf96868c6879e82645db4ff9ef00c2d8a286fed21971e7280f52cf0dd4";
+      sha256 = "b79dc2244b2d97b6f27167fc3b7799ef61a179040f3abd76ce1e0a3b0bc4e078";
     };
     meta = {
       homepage = http://perl.wdlabs.com/File-Which;
