@@ -1,0 +1,21 @@
+--- build/autoconf/icu.m4
++++ build-patched/autoconf/icu.m4
+@@ -64,17 +64,17 @@ if test -n "$USE_ICU"; then
+     icudir="$_topsrcdir/intl/icu/source"
+     if test ! -d "$icudir"; then
+         icudir="$_topsrcdir/../../intl/icu/source"
+         if test ! -d "$icudir"; then
+             AC_MSG_ERROR([Cannot find the ICU directory])
+         fi
+     fi
+ 
+-    version=`sed -n 's/^[[:space:]]*#[[:space:]]*define[[:space:]][[:space:]]*U_ICU_VERSION_MAJOR_NUM[[:space:]][[:space:]]*\([0-9][0-9]*\)[[:space:]]*$/\1/p' "$icudir/common/unicode/uvernum.h"`
++    version=`sed -n 's/^[[[:space:]]]*#[[:space:]]*define[[:space:]][[:space:]]*U_ICU_VERSION_MAJOR_NUM[[:space:]][[:space:]]*\([0-9][0-9]*\)[[:space:]]*$/\1/p' "$icudir/common/unicode/uvernum.h"`
+     if test x"$version" = x; then
+        AC_MSG_ERROR([cannot determine icu version number from uvernum.h header file $lineno])
+     fi
+     MOZ_ICU_VERSION="$version"
+ 
+     # TODO: the l is actually endian-dependent
+     # We could make this set as 'l' or 'b' for little or big, respectively,
+     # but we'd need to check in a big-endian version of the file.

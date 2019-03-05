@@ -1,0 +1,81 @@
+From 69577e4ad5547695671f27a70f23a74252460e94 Mon Sep 17 00:00:00 2001
+From: Luke Gorrie <luke@snabb.co>
+Date: Tue, 18 Jul 2017 08:32:39 +0000
+Subject: [PATCH] sqUnixHeartbeat.c: Remove warning about thread priorities
+
+The default behavior is to print a loud warning about thread
+priorities and ask the user to update the Linux kernel configuration
+to allow Squeak a higher-priority thread.
+
+    pthread_setschedparam failed: Operation not permitted
+    This VM uses a separate heartbeat thread to update its internal clock
+    and handle events.  For best operation, this thread should run at a
+    higher priority, however the VM was unable to change the priority.  The
+    effect is that heavily loaded systems may experience some latency
+    issues.  If this occurs, please create the appropriate configuration
+    file in /etc/security/limits.d/ as shown below:
+
+    cat <<END | sudo tee /etc/security/limits.d/pharo.conf
+    *      hard    rtprio  2
+    *      soft    rtprio  2
+    END
+
+    and report to the pharo mailing list whether this improves behaviour.
+
+    You will need to log out and log back in for the limits to take effect.
+    For more information please see
+    https://github.com/OpenSmalltalk/opensmalltalk-vm/releases/tag/r3732#linux
+
+I am removing this message for a combination of reasons:
+
+- Is there really a problem? How to demonstrate it?
+- Is this really a solution? How to demonstrate it?
+- Is there potential for unintended system-wide consequences?
+- Could we _lower_ the prio of the main thread instead?
+- No option to suppress this message if you don't want to see it?
+
+Generally I am skeptical that Linux needs any scheduler tweaks for
+~millisecond response time (that's not very tight) and if the system
+really _is_ overloaded then I don't think it's safe to assume the user
+wants Pharo to clobber all the other work.
+
+The printed instructions are also distro-specific and won't work on
+NixOS, which makes it all the more bothersome to see that message
+every single time Pharo is started, and in all log files, etc...
+---
+ platforms/unix/vm/sqUnixHeartbeat.c | 19 -------------------
+ 1 file changed, 19 deletions(-)
+
+diff --git a/platforms/unix/vm/sqUnixHeartbeat.c b/platforms/unix/vm/sqUnixHeartbeat.c
+index 7ceef06..4f1b0f1 100644
+--- a/platforms/unix/vm/sqUnixHeartbeat.c
++++ b/platforms/unix/vm/sqUnixHeartbeat.c
+@@ -320,25 +320,6 @@ beatStateMachine(void *careLess)
+ #else
+ # define VMNAME "squeak"
+ #endif
+-        fprintf(stderr, "This VM uses a separate heartbeat thread to update its internal clock\n");
+-        fprintf(stderr, "and handle events.  For best operation, this thread should run at a\n");
+-        fprintf(stderr, "higher priority, however the VM was unable to change the priority.  The\n");
+-        fprintf(stderr, "effect is that heavily loaded systems may experience some latency\n");
+-        fprintf(stderr, "issues.  If this occurs, please create the appropriate configuration\n");
+-        fprintf(stderr, "file in /etc/security/limits.d/ as shown below:\n\n");
+-        fprintf(stderr, "cat <<END | sudo tee /etc/security/limits.d/%s.conf\n", VMNAME);
+-        fprintf(stderr, "*      hard    rtprio  2\n");
+-        fprintf(stderr, "*      soft    rtprio  2\n");
+-        fprintf(stderr, "END\n");
+-        fprintf(stderr, "\nand report to the %s mailing list whether this improves behaviour.\n", VMNAME);
+-        fprintf(stderr, "\nYou will need to log out and log back in for the limits to take effect.\n");
+-        fprintf(stderr, "For more information please see\n");
+-        fprintf(stderr, "https://github.com/OpenSmalltalk/opensmalltalk-vm/releases/tag/r3732#linux\n");
+-        // exit(errno);
+-		// The VM may have issues with clock jitter due to the heartbeat thread
+-		// not running at elevated priority. An exit may be appropriate in some
+-		// cases, but for most users the above warning is sufficient.
+-		// exit(errno);
+ 	}
+ 	beatState = active;
+ 	while (beatState != condemned) {
+-- 
+2.5.2
+
