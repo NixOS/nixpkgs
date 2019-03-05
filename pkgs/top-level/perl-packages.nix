@@ -14991,11 +14991,11 @@ let
     };
   };
 
-  TestDifferences = buildPerlModule {
-    name = "Test-Differences-0.64";
+  TestDifferences = buildPerlPackage {
+    name = "Test-Differences-0.66";
     src = fetchurl {
-      url = mirror://cpan/authors/id/D/DC/DCANTRELL/Test-Differences-0.64.tar.gz;
-      sha256 = "9f459dd9c2302a0a73e2f5528a0ce7d09d6766f073187ae2c69e603adf2eb276";
+      url = mirror://cpan/authors/id/D/DC/DCANTRELL/Test-Differences-0.66.tar.gz;
+      sha256 = "83633a171e83ff03a0eb1f5a699f05b506a34190bcf8726979bbfd9dc16c223a";
     };
     propagatedBuildInputs = [ CaptureTiny TextDiff ];
     meta = {
