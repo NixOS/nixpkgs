@@ -16881,10 +16881,10 @@ let
   };
 
   UnicodeLineBreak = buildPerlPackage rec {
-    name = "Unicode-LineBreak-2018.003";
+    name = "Unicode-LineBreak-2019.001";
     src = fetchurl {
       url = "mirror://cpan/authors/id/N/NE/NEZUMI/${name}.tar.gz";
-      sha256 = "1cbilpy7ypr26rjr6cmrbkxhsm1l6yx7s1p7lcf0l3vi7vzr4346";
+      sha256 = "12iinva5gqc9g7qzxrvmh45n714z0ad9g7wq2dxwgp6drbj64rs8";
     };
     propagatedBuildInputs = [ MIMECharset ];
     meta = {
