@@ -181,10 +181,10 @@ let
   };
 
   AnyEvent = buildPerlPackage rec {
-    name = "AnyEvent-7.14";
+    name = "AnyEvent-7.15";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/ML/MLEHMANN/${name}.tar.gz";
-      sha256 = "539358d225bad34b4a64f5217f8c2a707b15e3a28c74120c9dd2270c7cca7d2a";
+      sha256 = "111db2335c71f789edaec271126b3810356691eb1214dd3f67b527a88ec9e354";
     };
     buildInputs = [ CanaryStability ];
     meta = {
