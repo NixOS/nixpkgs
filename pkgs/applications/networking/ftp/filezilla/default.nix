@@ -1,23 +1,28 @@
-{ stdenv, fetchurl, dbus, gnutls, wxGTK30, libidn, tinyxml, gettext
+{ stdenv, fetchsvn, autoconf, automake, libtool
+,  dbus, gnutls, wxGTK30, libidn, tinyxml, gettext
 , pkgconfig, xdg_utils, gtk2, sqlite, pugixml, libfilezilla, nettle }:
 
-let version = "3.31.0"; in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "filezilla-${version}";
+  version = "3.40.0";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/project/filezilla/FileZilla_Client/${version}/FileZilla_${version}_src.tar.bz2";
-    sha256 = "1rfysb8dil35a7bzj2kw0mzzkys39d7yn6ipsbk8l6rkwfvnii8l";
+  src = fetchsvn {
+    url = "https://svn.filezilla-project.org/svn/FileZilla3/tags/${version}";
+    sha256 = "0sxik1kjyjbpjkf74yzp9lmi6sxmrqqd3a2y3nz7ampyr1ayv5dz";
   };
 
   configureFlags = [
     "--disable-manualupdatecheck"
   ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ autoconf automake libtool pkgconfig ];
   buildInputs = [
     dbus gnutls wxGTK30 libidn tinyxml gettext xdg_utils gtk2 sqlite
     pugixml libfilezilla nettle ];
+
+  preConfigure = ''
+    autoreconf -i
+    '';
 
   meta = with stdenv.lib; {
     homepage = https://filezilla-project.org/;
