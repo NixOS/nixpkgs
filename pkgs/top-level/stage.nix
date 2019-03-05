@@ -91,7 +91,7 @@ let
 
   allPackages = self: super:
     let res = import ./all-packages.nix
-      { inherit lib noSysDirs config; }
+      { inherit lib noSysDirs config overlays; }
       res self super;
     in res;
 

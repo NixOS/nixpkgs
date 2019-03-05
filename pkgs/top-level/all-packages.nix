@@ -5,7 +5,7 @@
  * to merges. Please use the full-text search of your editor. ;)
  * Hint: ### starts category names.
  */
-{ lib, noSysDirs, config}:
+{ lib, noSysDirs, config, overlays }:
 res: pkgs: super:
 
 with pkgs;
@@ -61,7 +61,7 @@ in
 
 
   ### Helper functions.
-  inherit lib config;
+  inherit lib config overlays;
 
   inherit (lib) lowPrio hiPrio appendToName makeOverridable;
 
