@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ncurses ];
 
-  patches = stdenv.lib.optional (tsmbac != null) ./patches/tsmbac.patch;
+  patches = stdenv.lib.optional (tsmbac != null) ./tsmbac.patch;
 
   outputs = [ "out" "dev" "man" "doc" ];
 
