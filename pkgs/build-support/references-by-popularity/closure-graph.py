@@ -117,6 +117,17 @@ import unittest
 from pprint import pprint
 from collections import defaultdict
 
+
+def debug(msg, *args, **kwargs):
+    if False:
+        print(
+            "DEBUG: {}".format(
+                msg.format(*args, **kwargs)
+            ),
+            file=sys.stderr
+        )
+
+
 # Find paths in the original dataset which are never referenced by
 # any other paths
 def find_roots(closures):
@@ -330,6 +341,7 @@ class TestMakeLookup(unittest.TestCase):
 def make_graph_segment_from_root(root, lookup):
     children = {}
     for ref in lookup[root]:
+        debug("Making graph segments on {}".format(ref))
         children[ref] = make_graph_segment_from_root(ref, lookup)
     return children
 
@@ -384,6 +396,7 @@ class TestMakeGraphSegmentFromRoot(unittest.TestCase):
 def graph_popularity_contest(full_graph):
     popularity = defaultdict(int)
     for path, subgraph in full_graph.items():
+        debug("Calculating popularity under {}".format(path))
         popularity[path] += 1
         subcontest = graph_popularity_contest(subgraph)
         for subpath, subpopularity in subcontest.items():
@@ -474,6 +487,7 @@ def main():
     filename = sys.argv[1]
     key = sys.argv[2]
 
+    debug("Loading from {}", filename)
     with open(filename) as f:
         data = json.load(f)
 
@@ -497,14 +511,21 @@ def main():
     # ]
     graph = data[key]
 
+    debug("Finding roots from {}", key)
     roots = find_roots(graph);
+    debug("Making lookup for {}", key)
     lookup = make_lookup(graph)
 
     full_graph = {}
     for root in roots:
+        debug("Making full graph for {}", root)
         full_graph[root] = make_graph_segment_from_root(root, lookup)
 
-    ordered = order_by_popularity(graph_popularity_contest(full_graph))
+    debug("Running contest")
+    contest = graph_popularity_contest(full_graph)
+    debug("Ordering by popularity")
+    ordered = order_by_popularity(contest)
+    debug("Checking for missing paths")
     missing = []
     for path in all_paths(graph):
         if path not in ordered:
