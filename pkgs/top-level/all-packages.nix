@@ -23028,6 +23028,8 @@ in
 
   fityk = callPackage ../applications/science/misc/fityk { };
 
+  galario = callPackage ../development/libraries/galario { };
+
   gildas = callPackage ../applications/science/astronomy/gildas { };
 
   gplates = callPackage ../applications/science/misc/gplates {

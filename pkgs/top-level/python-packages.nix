@@ -2843,6 +2843,11 @@ in {
 
   futures = callPackage ../development/python-modules/futures { };
 
+  galario = toPythonModule (pkgs.galario.override {
+    enablePython = true;
+    pythonPackages = self;
+  });
+
   gcovr = callPackage ../development/python-modules/gcovr { };
 
   gdal = toPythonModule (pkgs.gdal.override {
