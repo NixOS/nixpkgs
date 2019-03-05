@@ -5555,12 +5555,12 @@ let
   };
 
   FileChangeNotify = buildPerlPackage {
-    name = "File-ChangeNotify-0.29";
+    name = "File-ChangeNotify-0.31";
     src = fetchurl {
-      url = mirror://cpan/authors/id/D/DR/DROLSKY/File-ChangeNotify-0.29.tar.gz;
-      sha256 = "438d4295ef5f854ace61037a11726ef65dc0bf73e296bd12fc7e2108602a444b";
+      url = mirror://cpan/authors/id/D/DR/DROLSKY/File-ChangeNotify-0.31.tar.gz;
+      sha256 = "192bdb1ce76266c6a694a8e962d039e3adeeb829b6ac1e23f5057f2b506392bd";
     };
-    buildInputs = [ TestException TestRequires TestWithoutModule ];
+    buildInputs = [ Test2Suite TestRequires TestWithoutModule ];
     propagatedBuildInputs = [ ModulePluggable Moo TypeTiny namespaceautoclean ];
     meta = with stdenv.lib; {
       description = "Watch for changes to files, cross-platform style";
