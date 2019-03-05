@@ -6517,8 +6517,8 @@ let
       url = "mirror://cpan/authors/id/P/PE/PERLMAX/${name}.tar.gz";
       sha256 = "0l1vsvyv9hjxhsxrahq4h64axh7qmk50kiz2spa3s1hr7s3qfk72";
     };
-    buildInputs = [ pkgs.gtk3 GlibObjectIntrospection Glib ];
-    propagatedBuildInputs = [ pkgs.goocanvas2 ];
+    buildInputs = [ pkgs.gtk3 ];
+    propagatedBuildInputs = [ pkgs.goocanvas2 Gtk3 ];
     meta = {
       description = "Perl binding for GooCanvas2 widget using Glib::Object::Introspection";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
