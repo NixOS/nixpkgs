@@ -10383,6 +10383,8 @@ in
 
   gcab = callPackage ../development/libraries/gcab { };
 
+  gcovr = with python3Packages; toPythonApplication gcovr;
+
   gcr = callPackage ../development/libraries/gcr { };
 
   gdl = callPackage ../development/libraries/gdl { };
