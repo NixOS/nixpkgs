@@ -12415,10 +12415,10 @@ let
   };
 
   PlackMiddlewareSession = buildPerlModule rec {
-     name = "Plack-Middleware-Session-0.30";
+     name = "Plack-Middleware-Session-0.32";
      src = fetchurl {
-       url = mirror://cpan/authors/id/M/MI/MIYAGAWA/Plack-Middleware-Session-0.30.tar.gz;
-       sha256 = "0cwlhfj1644jq8axv4cghsqqjsx2y7hj7g0y5l179fcgmbp2ndzf";
+       url = mirror://cpan/authors/id/M/MI/MIYAGAWA/Plack-Middleware-Session-0.32.tar.gz;
+       sha256 = "00jnyclvggb4g7q6489x4x1sxfpxy9xyxrqkg2aqpn05fcqwfznp";
      };
      propagatedBuildInputs = [ DigestHMAC DigestSHA1 Plack ];
      buildInputs = [ HTTPCookies LWP ModuleBuildTiny TestFatal TestRequires TestSharedFork TestTCP ];
