@@ -9487,7 +9487,7 @@ in
 
   c-blosc = callPackage ../development/libraries/c-blosc { };
 
-  cachix = (haskell.lib.justStaticExecutables haskellPackages.cachix).overrideAttrs (drv: {
+  cachix = (callPackage ../development/tools/cachix { }).overrideAttrs (drv: {
     meta = drv.meta // {
       hydraPlatforms = stdenv.lib.platforms.unix;
     };
