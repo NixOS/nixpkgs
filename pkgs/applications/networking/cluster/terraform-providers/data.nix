@@ -700,4 +700,11 @@
       version = "0.0.1";
       sha256  = "1mqs1il8y97hf9havcmxdfwjcpkrxa1hpkifzzy4rjc88m2m4q9r";
     };
+  segment =
+    {
+      owner   = "ajbosco";
+      repo    = "terraform-provider-segment";
+      version = "0.2.0";
+      sha256  = "0ic5b9djhnb1bs2bz3zdprgy3r55dng09xgc4d9l9fyp85g2amaz";
+    };
 }
