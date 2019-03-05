@@ -22911,6 +22911,8 @@ in
 
   sqsh = callPackage ../development/tools/sqsh { };
 
+  jx = callPackage ../applications/networking/cluster/jx {};
+
   inherit (callPackage ../applications/networking/cluster/terraform {})
     terraform_0_11
     terraform_0_11-full
