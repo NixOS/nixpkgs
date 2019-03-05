@@ -5394,6 +5394,7 @@ in {
 
   casttube = callPackage ../development/python-modules/casttube { };
 
+  lzstring = callPackage ../development/python-modules/lzstring { };
 });
 
 in fix' (extends overrides packages)
