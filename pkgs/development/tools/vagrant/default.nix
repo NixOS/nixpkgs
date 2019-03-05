@@ -36,6 +36,7 @@ in buildRubyGem rec {
   src = fetchurl { inherit url sha256; };
 
   patches = [
+    ./unofficial-installation-nowarn.patch
     ./use-system-bundler-version.patch
     ./0004-Support-system-installed-plugins.patch
   ];
