@@ -338,11 +338,23 @@ class TestMakeLookup(unittest.TestCase):
 #                   /nix/store/tux: {}
 #   }
 # }
+subgraphs_cache = {}
 def make_graph_segment_from_root(root, lookup):
+    global subgraphs_cache
     children = {}
     for ref in lookup[root]:
-        debug("Making graph segments on {}".format(ref))
-        children[ref] = make_graph_segment_from_root(ref, lookup)
+        # make_graph_segment_from_root is a pure function, and will
+        # always return the same result based on a given input. Thus,
+        # cache computation.
+        #
+        # Python's assignment will use a pointer, preventing memory
+        # bloat for large graphs.
+        if ref not in subgraphs_cache:
+            debug("Subgraph Cache miss on {}".format(ref))
+            subgraphs_cache[ref] = make_graph_segment_from_root(ref, lookup)
+        else:
+            debug("Subgraph Cache hit on {}".format(ref))
+        children[ref] = subgraphs_cache[ref]
     return children
 
 class TestMakeGraphSegmentFromRoot(unittest.TestCase):
@@ -393,13 +405,27 @@ class TestMakeGraphSegmentFromRoot(unittest.TestCase):
 #   /nix/store/baz: 4
 #   /nix/store/tux: 6
 # ]
+popularity_cache = {}
 def graph_popularity_contest(full_graph):
+    global popularity_cache
     popularity = defaultdict(int)
     for path, subgraph in full_graph.items():
-        debug("Calculating popularity under {}".format(path))
         popularity[path] += 1
-        subcontest = graph_popularity_contest(subgraph)
+        # graph_popularity_contest is a pure function, and will
+        # always return the same result based on a given input. Thus,
+        # cache computation.
+        #
+        # Python's assignment will use a pointer, preventing memory
+        # bloat for large graphs.
+        if path not in popularity_cache:
+            debug("Popularity Cache miss on {}", path)
+            popularity_cache[path] = graph_popularity_contest(subgraph)
+        else:
+            debug("Popularity Cache hit on {}", path)
+
+        subcontest = popularity_cache[path]
         for subpath, subpopularity in subcontest.items():
+            debug("Calculating popularity for {}", subpath)
             popularity[subpath] += subpopularity + 1
 
     return popularity
