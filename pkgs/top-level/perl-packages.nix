@@ -4835,10 +4835,10 @@ let
   };
 
   EmailAddressList = buildPerlPackage {
-    name = "Email-Address-List-0.05";
+    name = "Email-Address-List-0.06";
     src = fetchurl {
-      url = mirror://cpan/authors/id/A/AL/ALEXMV/Email-Address-List-0.05.tar.gz;
-      sha256 = "705c23fc2163c2347ba0aea998450259f7b10577a368c6d310bd4e98b427a033";
+      url = mirror://cpan/authors/id/B/BP/BPS/Email-Address-List-0.06.tar.gz;
+      sha256 = "305b94c778011cee70d9f21514d92e985fa9dccbb84c64798f0c1f0b24eb870e";
     };
     buildInputs = [ JSON ];
     propagatedBuildInputs = [ EmailAddress ];
