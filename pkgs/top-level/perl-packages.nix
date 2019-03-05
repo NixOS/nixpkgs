@@ -378,10 +378,10 @@ let
   };
 
   Appperlbrew = buildPerlModule rec {
-    name = "App-perlbrew-0.85";
+    name = "App-perlbrew-0.86";
     src = fetchurl {
       url = "mirror://cpan/authors/id/G/GU/GUGOD/${name}.tar.gz";
-      sha256 = "0i3d2csihn5x27lfykwgjpq60ij21s19fzbjsacqq93x46qyim9y";
+      sha256 = "11qh94am7fghizmjaf5c7w868svjbv9g4ffirykj8qa6q40zdspp";
     };
     buildInputs = [ pkgs.curl FileWhich IOAll ModuleBuildTiny PathClass TestException TestNoWarnings TestOutput TestSpec TestTempDirTiny ];
     propagatedBuildInputs = [ CPANPerlReleases CaptureTiny DevelPatchPerl locallib ];
