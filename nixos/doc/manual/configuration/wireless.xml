@@ -36,8 +36,25 @@
  </para>
 
  <para>
-  If you are using WPA2 the <command>wpa_passphrase</command> tool might be
-  useful to generate the <literal>wpa_supplicant.conf</literal>.
+  If you are using WPA2 you can generate pskRaw key using
+  <command>wpa_passphrase</command>:
+<screen>
+$ wpa_passphrase ESSID PSK
+network={
+        ssid="echelon"
+        #psk="abcdefgh"
+        psk=dca6d6ed41f4ab5a984c9f55f6f66d4efdc720ebf66959810f4329bb391c5435
+}
+</screen>
+<programlisting>
+<xref linkend="opt-networking.wireless.networks"/> = {
+  echelon = {
+    pskRaw = "dca6d6ed41f4ab5a984c9f55f6f66d4efdc720ebf66959810f4329bb391c5435";
+  };
+}
+</programlisting>
+  or you can use it to directly generate the
+  <literal>wpa_supplicant.conf</literal>:
 <screen>
 # wpa_passphrase ESSID PSK > /etc/wpa_supplicant.conf</screen>
   After you have edited the <literal>wpa_supplicant.conf</literal>, you need to
