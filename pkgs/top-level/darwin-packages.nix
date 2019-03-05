@@ -33,7 +33,7 @@ in
   };
 
   cf-private = callPackage ../os-specific/darwin/cf-private {
-    inherit (darwin) CF apple_sdk osx_private_sdk;
+    inherit (darwin) CF apple_sdk;
   };
 
   DarwinTools = callPackage ../os-specific/darwin/DarwinTools { };
@@ -58,8 +58,6 @@ in
   lsusb = callPackage ../os-specific/darwin/lsusb { };
 
   opencflite = callPackage ../os-specific/darwin/opencflite { };
-
-  osx_private_sdk = callPackage ../os-specific/darwin/osx-private-sdk { };
 
   stubs = callPackages ../os-specific/darwin/stubs { };
 
