@@ -159,19 +159,14 @@ in {
   # to be adapted
   zfsStable = common {
     # comment/uncomment if breaking kernel versions are known
-    incompatibleKernelVersion = "4.20";
+    # incompatibleKernelVersion = "";
 
     # this package should point to the latest release.
-    version = "0.7.12";
+    version = "0.7.13";
 
-    sha256 = "1j432nb3a86isghdysir9xi6l5djmb5fbc5s9zr0rwg4ziisskbh";
+    sha256 = "1l77bq7pvc54vl15pnrjd0njgpf00qjzy0x85dpfh5jxng84x1fb";
 
-    extraPatches = [
-      (fetchpatch {
-        url = "https://github.com/Mic92/zfs/compare/zfs-0.7.0-rc3...nixos-zfs-0.7.0-rc3.patch";
-        sha256 = "1vlw98v8xvi8qapzl1jwm69qmfslwnbg3ry1lmacndaxnyckkvhh";
-      })
-    ];
+    extraPatches = [ ./install_prefix.patch ];
 
     inherit spl;
   };
