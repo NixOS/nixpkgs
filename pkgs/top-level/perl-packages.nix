@@ -6712,11 +6712,11 @@ let
       url = "mirror://cpan/authors/id/T/TV/TVIGNAUD/${name}.tar.gz";
       sha256 = "09azmc7miyvw7q21rz8cxw16zbd5i1j5hpakxy376f5vmhqqjyhp";
     };
-    buildInputs = [ Gtk3 Glib GlibObjectIntrospection Cairo CairoGObject ];
     meta = {
       description = "A simple interface to Gtk3's complex MVC list widget";
       license = stdenv.lib.licenses.lgpl21Plus;
     };
+    propagatedBuildInputs = [ Gtk3 ];
   };
 
   Guard = buildPerlPackage rec {
