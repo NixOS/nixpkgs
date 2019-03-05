@@ -707,4 +707,11 @@
       version = "0.2.0";
       sha256  = "0ic5b9djhnb1bs2bz3zdprgy3r55dng09xgc4d9l9fyp85g2amaz";
     };
+  ansible =
+    {
+      owner   = "nbering";
+      repo    = "terraform-provider-ansible";
+      version = "0.0.4";
+      sha256  = "125a8vbpnahaxxrxj3mp0kj6ajssxnfb6l0spgnf118wg3bvlmw5";
+    };
 }
