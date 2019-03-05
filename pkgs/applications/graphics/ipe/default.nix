@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://dl.bintray.com/otfried/generic/ipe/7.2/${name}-src.tar.gz";
-    sha256 = "0rm31kvyg30452bz12yi49bkhdmi4bjdx6zann5cdlbi0pvmx7xh";
+    sha256 = "0gw45d0albrsa0pbc5g4w3fmmjfxrdbpzyc7723ncbhncdyda01h";
   };
 
   sourceRoot = "${name}/src";
