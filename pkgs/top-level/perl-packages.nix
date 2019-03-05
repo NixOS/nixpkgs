@@ -8496,10 +8496,10 @@ let
   };
 
   LocaleCodes = buildPerlPackage {
-    name = "Locale-Codes-3.59";
+    name = "Locale-Codes-3.60";
     src = fetchurl {
-      url = mirror://cpan/authors/id/S/SB/SBECK/Locale-Codes-3.59.tar.gz;
-      sha256 = "388dea3d088aa0513f21091e0fe4a9c61ab2c173c83052b3120a52b103592c03";
+      url = mirror://cpan/authors/id/S/SB/SBECK/Locale-Codes-3.60.tar.gz;
+      sha256 = "32829bc49d927335de6994f3cfd55c5e693881602564c2aa966fe86740371194";
     };
     meta = {
       description = "A distribution of modules to handle locale codes";
