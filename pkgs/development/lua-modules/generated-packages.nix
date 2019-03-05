@@ -5,7 +5,7 @@ nixpkgs$ maintainers/scripts/update-luarocks-packages pkgs/development/lua-modul
 
 These packages are manually refined in lua-overrides.nix
 */
-{ self, lua, stdenv, fetchurl, fetchgit, pkgs, ... } @ args:
+{ self, stdenv, fetchurl, fetchgit, pkgs, ... } @ args:
 self: super:
 with self;
 {
@@ -67,26 +67,6 @@ basexx = buildLuarocksPackage {
     description="A base2, base16, base32, base64 and base85 library for Lua";
     license = {
       fullName = "MIT";
-    };
-  };
-};
-cqueues = buildLuarocksPackage {
-  pname = "cqueues";
-  version = "20171014.52-0";
-
-  src =  fetchurl {
-      url    = https://luarocks.org/cqueues-20171014.52-0.src.rock;
-      sha256 = "0q3iy1ja20nq2sn2n6badzhjq5kni86pfc09n5g2c46q9ja3vfzx";
-   };
-  disabled = ( lua.luaversion != "5.2");
-  propagatedBuildInputs = [lua  ];
-  buildType="make";
-
-  meta = {
-    homepage = "http://25thandclement.com/~william/projects/cqueues.html";
-    description="Continuation Queues: Embeddable asynchronous networking, threading, and notification framework for Lua on Unix.";
-    license = {
-      fullName = "MIT/X11";
     };
   };
 };

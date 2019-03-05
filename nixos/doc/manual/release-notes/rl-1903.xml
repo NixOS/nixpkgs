@@ -479,6 +479,11 @@
      been removed.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     <literal>graylog</literal> has been upgraded from version 2.* to 3.*. Some setups making use of extraConfig (especially those exposing Graylog via reverse proxies) need to be updated as upstream removed/replaced some settings. See <link xlink:href="http://docs.graylog.org/en/3.0/pages/upgrade/graylog-3.0.html#simplified-http-interface-configuration">Upgrading Graylog</link> for details.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
@@ -672,6 +677,9 @@
        This may break some older applications that still rely on those symbols.
        An upgrade guide can be found <link xlink:href="https://www.open-mpi.org/faq/?category=mpi-removed">here</link>.
      </para>
+    <para>
+     The nginx package now relies on OpenSSL 1.1 and supports TLS 1.3 by default. You can set the protocols used by the nginx service using <xref linkend="opt-services.nginx.sslProtocols"/>.
+    </para>
    </listitem>
    <listitem>
      <para>
