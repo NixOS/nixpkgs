@@ -4823,10 +4823,10 @@ let
   };
 
   EmailAddress = buildPerlPackage {
-    name = "Email-Address-1.911";
+    name = "Email-Address-1.912";
     src = fetchurl {
-      url = mirror://cpan/authors/id/R/RJ/RJBS/Email-Address-1.911.tar.gz;
-      sha256 = "10qfc2va6dhshjgw6xvxk88cd88s44kbxp47xmixx297wv3l69zl";
+      url = mirror://cpan/authors/id/R/RJ/RJBS/Email-Address-1.912.tar.gz;
+      sha256 = "1vzr0vx4zsw4zbc9xdffc31wnkc1raqmyfiyws06fbyck197i8qg";
     };
     meta = {
       description = "RFC 2822 Address Parsing";
