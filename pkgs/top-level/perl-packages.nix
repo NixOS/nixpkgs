@@ -5592,10 +5592,10 @@ let
   };
 
   FileBOM = buildPerlModule rec {
-    name = "File-BOM-0.15";
+    name = "File-BOM-0.16";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MA/MATTLAW/${name}.tar.gz";
-      sha256 = "431c8b39397fd5ad5b1a1100d3647a06e9f94304d46db44ffc0a0e5c5c06a1c1";
+      sha256 = "97091a72bb1d3a7b5cac1dfb5372962b6f8055729189d0f3fd2c959c8ff374cf";
     };
     buildInputs = [ TestException ];
     propagatedBuildInputs = [ Readonly ];
