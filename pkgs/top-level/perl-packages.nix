@@ -2684,12 +2684,12 @@ let
   };
 
   CPAN = buildPerlPackage rec {
-    name = "CPAN-2.22";
+    name = "CPAN-2.25";
     src = fetchurl {
       url = "mirror://cpan/authors/id/A/AN/ANDK/${name}.tar.gz";
-      sha256 = "c6f2a44cd95ef5989ef0abc83dca38ae645bd5ea09de67461251f2d782989990";
+      sha256 = "b4cbef12b872f34e29c3cdcd511c5ed004c4486939001b60e493dc25956552a9";
     };
-    propagatedBuildInputs = [ ArchiveZip CPANChecksums Expect FileHomeDir LWP LogLog4perl ModuleBuild TermReadKey YAML YAMLLibYAML YAMLSyck ];
+    propagatedBuildInputs = [ ArchiveZip CPANChecksums CPANPerlReleases Expect FileHomeDir LWP LogLog4perl ModuleBuild TermReadKey YAML YAMLLibYAML YAMLSyck ];
     meta = {
       description = "Query, download and build perl modules from CPAN sites";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
