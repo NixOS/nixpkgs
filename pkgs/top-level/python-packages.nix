@@ -2996,7 +2996,7 @@ in {
 
   fs-s3fs = callPackage ../development/python-modules/fs-s3fs { };
 
-  libarcus = callPackage ../development/python-modules/libarcus { };
+  libarcus = callPackage ../development/python-modules/libarcus { inherit (pkgs) protobuf; };
 
   libcloud = callPackage ../development/python-modules/libcloud { };
 
