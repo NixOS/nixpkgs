@@ -4227,6 +4227,18 @@ let
     };
   };
 
+  DataBinary = buildPerlPackage {
+    name = "Data-Binary-0.01";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/S/SN/SNKWATT/Data-Binary-0.01.tar.gz;
+      sha256 = "0wwdrgkz4yqpzdmfvid63v5v10b9hwdsg15jvks0hwdc23ga48a8";
+    };
+    meta = {
+      description = "Simple detection of binary versus text in strings";
+      license = with stdenv.lib.licenses; [ artistic2 ];
+    };
+  };
+
   DBIxIntrospector = buildPerlPackage rec {
     name = "DBIx-Introspector-0.001005";
     src = fetchurl {
@@ -9684,12 +9696,12 @@ let
   };
 
   ModuleCPANTSAnalyse = buildPerlPackage rec {
-     name = "Module-CPANTS-Analyse-0.96";
+     name = "Module-CPANTS-Analyse-1.00";
      src = fetchurl {
-       url = mirror://cpan/authors/id/I/IS/ISHIGAKI/Module-CPANTS-Analyse-0.96.tar.gz;
-       sha256 = "1c38fnbx9w1s841am1i5h33lcqr9bwc9bni21n907nmyp41wr297";
+       url = mirror://cpan/authors/id/I/IS/ISHIGAKI/Module-CPANTS-Analyse-1.00.tar.gz;
+       sha256 = "0r77g2h0d3p81scf294x5qkvi76hzwvbfji0m86abidjav5jk6a2";
      };
-     propagatedBuildInputs = [ ArchiveAnyLite ArrayDiff CPANDistnameInfo FileFindObject IOCapture JSONMaybeXS ModuleExtractUse ModulePluggable SetScalar SoftwareLicenseCCpack ];
+     propagatedBuildInputs = [ ArchiveAnyLite ArrayDiff CPANDistnameInfo DataBinary FileFindObject PerlPrereqScannerNotQuiteLite SoftwareLicense ];
      buildInputs = [ ExtUtilsMakeMakerCPANfile TestFailWarnings ];
      meta = {
        description = "Generate Kwalitee ratings for a distribution";
@@ -12720,6 +12732,20 @@ let
     };
   };
 
+  PerlPrereqScannerNotQuiteLite = buildPerlPackage {
+    name = "Perl-PrereqScanner-NotQuiteLite-0.9904";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/I/IS/ISHIGAKI/Perl-PrereqScanner-NotQuiteLite-0.9904.tar.gz;
+      sha256 = "1qf6x49sjswazh7bicpm7wnwpdnx245ws02s53dvbxcbw2c66hsn";
+    };
+    propagatedBuildInputs = [ DataDump ModuleCPANfile ModuleFind RegexpTrie ];
+    buildInputs = [ ExtUtilsMakeMakerCPANfile TestFailWarnings TestUseAllModules ];
+    meta = {
+      description = "a tool to scan your Perl code for its prerequisites";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   PerlVersion = buildPerlPackage rec {
     name = "Perl-Version-1.013";
     src = fetchurl {
@@ -13170,6 +13196,16 @@ let
       homepage = http://wiki.github.com/toddr/Regexp-Parser;
       description = "Base class for parsing regexes";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  RegexpTrie = buildPerlPackage {
+    name = "Regexp-Trie-0.02";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/D/DA/DANKOGAI/Regexp-Trie-0.02.tar.gz;
+      sha256 = "1yn5l6x3xyic9jxw9jggqsbggcv7rc8ggj4zbnlz9hfvv17gjazv";
+    };
+    meta = {
     };
   };
 
