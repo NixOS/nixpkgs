@@ -59,6 +59,5 @@ stdenv.mkDerivation {
     '';
     license = with licenses; [ gpl2 gpl3 ];
     platforms = platforms.unix;
-    maintainers = [ maintainers.peti ];
   };
 }
