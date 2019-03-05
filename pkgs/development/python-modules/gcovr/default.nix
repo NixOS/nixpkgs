@@ -25,7 +25,7 @@ buildPythonPackage rec {
   meta = with stdenv.lib; {
     description = "A Python script for summarizing gcov data";
     license = licenses.bsd0;
-    homepage = http://gcovr.com/;
+    homepage = https://www.gcovr.com/;
   };
 
 }
