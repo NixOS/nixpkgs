@@ -10,6 +10,8 @@
 , pytest
 , pkgconfig
 , lz4
+, mock
+, requests
 , backports_lzma
 }:
 
@@ -22,8 +24,8 @@ buildPythonPackage rec {
     sha256 = "1fafe476c26252e4dbd399456323778e76d23dc2f43cf6581a707d1647978610";
   };
 
-  buildInputs = [ pytestrunner ];
-  checkInputs = [ pytest pkgconfig lz4 ]
+  nativeBuildInputs = [ pytestrunner ];
+  checkInputs = [ pytest pkgconfig lz4 mock requests ]
     ++ lib.optionals (pythonOlder "3.3") [ backports_lzma ];
   propagatedBuildInputs = [ numpy cachetools uproot-methods awkward ];
 
