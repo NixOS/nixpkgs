@@ -11,11 +11,6 @@ python3Packages.buildPythonApplication rec {
 
   propagatedBuildInputs = with python3Packages; [ pyopenssl requests tldextract ];
 
-  postPatch = ''
-    # The README has non-ascii characters which makes setup.py crash.
-    sed -i 's/[\d128-\d255]//g' README.md
-  '';
-
   meta = with stdenv.lib; {
     homepage = https://github.com/komuw/sewer;
     description = "ACME client";
