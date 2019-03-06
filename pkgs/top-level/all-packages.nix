@@ -5416,6 +5416,8 @@ in
 
   sharutils = callPackage ../tools/archivers/sharutils { };
 
+  shelldap = callPackage ../tools/misc/shelldap { };
+
   schema2ldif = callPackage ../tools/text/schema2ldif { };
 
   shocco = callPackage ../tools/text/shocco { };
