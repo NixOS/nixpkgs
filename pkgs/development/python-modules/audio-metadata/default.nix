@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "audio-metadata";
-  version = "0.3.0";
+  version = "0.4.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1jd0wzhh9as2qyiwggqmvsbsm5nlb73qnxix2mcar53cddvwrvj7";
+    sha256 = "a881f0f3b82752d306ac0a7850ed0e31bad275a399f63097733b4890986084b2";
   };
 
   propagatedBuildInputs = [

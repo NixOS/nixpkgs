@@ -117,11 +117,12 @@ in
     services.gnome3.file-roller.enable = true;
     # TODO: gnome-keyring's xdg autostarts will still be in the environment (from elementary-session-settings) if disabled forcefully
     services.gnome3.gnome-keyring.enable = true;
+    services.gnome3.gnome-settings-daemon.enable = true;
+    services.gnome3.gnome-settings-daemon.package = pkgs.pantheon.elementary-settings-daemon;
     services.gnome3.gvfs.enable = true;
     services.gnome3.rygel.enable = true;
     services.gsignond.enable = true;
     services.gsignond.plugins = with pkgs.gsignondPlugins; [ lastfm mail oauth ];
-    services.udev.packages = [ pkgs.pantheon.elementary-settings-daemon ];
     services.udisks2.enable = true;
     services.upower.enable = config.powerManagement.enable;
     services.xserver.libinput.enable = mkDefault true;

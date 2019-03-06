@@ -23,7 +23,7 @@ in stdenv.mkDerivation rec {
     geocode-glib libchamplain libsoup
     gdk_pixbuf librsvg libgweather
     gnome3.gsettings-desktop-schemas evolution-data-server
-    gnome-online-accounts gnome3.defaultIconTheme
+    gnome-online-accounts gnome3.adwaita-icon-theme
     webkitgtk
   ];
 

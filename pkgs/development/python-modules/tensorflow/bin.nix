@@ -14,6 +14,7 @@
 , mock
 , backports_weakref
 , enum34
+, tensorflow-estimator
 , tensorflow-tensorboard
 , cudaSupport ? false
 , cudatoolkit ? null
@@ -41,7 +42,7 @@ let
 
 in buildPythonPackage rec {
   pname = "tensorflow";
-  version = "1.11.0";
+  version = "1.13.1";
   format = "wheel";
 
   src = let
@@ -50,10 +51,10 @@ in buildPythonPackage rec {
     platform = if stdenv.isDarwin then "mac" else "linux";
     unit = if cudaSupport then "gpu" else "cpu";
     key = "${platform}_py_${pyver}_${unit}";
-    dls = import ./tf1.11.0-hashes.nix;
+    dls = import (./. + "/tf${version}-hashes.nix");
   in fetchurl dls.${key};
 
-  propagatedBuildInputs = [  protobuf numpy termcolor grpcio six astor absl-py gast tensorflow-tensorboard keras-applications keras-preprocessing ]
+  propagatedBuildInputs = [  protobuf numpy termcolor grpcio six astor absl-py gast tensorflow-estimator tensorflow-tensorboard keras-applications keras-preprocessing ]
                  ++ lib.optional (!isPy3k) mock;
 
   # Upstream has a pip hack that results in bin/tensorboard being in both tensorflow
@@ -64,7 +65,6 @@ in buildPythonPackage rec {
     rm $out/bin/tensorboard
   '';
 
-  installFlags = "--no-dependencies"; # tensorflow wants setuptools 39, can't allow that.
   # Note that we need to run *after* the fixup phase because the
   # libraries are loaded at runtime. If we run in preFixup then
   # patchelf --shrink-rpath will remove the cuda libraries.

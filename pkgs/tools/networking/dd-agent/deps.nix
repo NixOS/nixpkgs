@@ -892,12 +892,12 @@
     };
   }
   {
-    goPackagePath  = "github.com/spf13/viper";
+    goPackagePath  = "github.com/DataDog/viper";
     fetch = {
       type = "git";
-      url = "https://github.com/spf13/viper";
-      rev =  "b5e8006cbee93ec955a89ab31e0e3ce3204f3736";
-      sha256 = "0y3r6ysi5vn0yq5c7pbl62yg2i64fkv54xgj2jf1hn3v6zzyimis";
+      url = "https://github.com/DataDog/viper";
+      rev =  "23ced3bc6b3751855704445e48da2c53075ade86";
+      sha256 = "1zzf4mqpmk47p3395k2v8q6wi7lnqxr0l55vv4zk9gpqqyifbm9m";
     };
   }
   {

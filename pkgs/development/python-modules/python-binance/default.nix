@@ -3,12 +3,12 @@
 , autobahn, certifi, chardet, cryptography, dateparser, pyopenssl, requests, service-identity, twisted }:
 
 buildPythonPackage rec {
-  version = "0.7.0";
+  version = "0.7.1";
   pname = "python-binance";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0h8kd88j53w6yfc60fr8a45zi30p09l98vm8yzqym4lcgx76nvps";
+    sha256 = "9ce406da68bfbc209ae6852d1b8a2812708d04502f82a61b0c9ca41356cc6ab7";
   };
 
   doCheck = false;  # Tries to test multiple interpreters with tox

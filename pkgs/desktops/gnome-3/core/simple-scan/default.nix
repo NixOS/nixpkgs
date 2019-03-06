@@ -1,5 +1,5 @@
 { stdenv, fetchurl, meson, ninja, pkgconfig, gettext, itstool, python3, wrapGAppsHook
-, cairo, gdk_pixbuf, colord, glib, gtk, gusb, packagekit, libwebp
+, cairo, gdk_pixbuf, colord, glib, gtk3, gusb, packagekit, libwebp
 , libxml2, sane-backends, vala, gnome3, gobject-introspection }:
 
 stdenv.mkDerivation rec {
@@ -12,8 +12,8 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    cairo gdk_pixbuf colord glib gnome3.defaultIconTheme gusb
-    gtk libwebp packagekit sane-backends vala
+    cairo gdk_pixbuf colord glib gnome3.adwaita-icon-theme gusb
+    gtk3 libwebp packagekit sane-backends vala
   ];
   nativeBuildInputs = [
     meson ninja gettext itstool pkgconfig python3 wrapGAppsHook libxml2

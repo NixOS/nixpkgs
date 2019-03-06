@@ -196,4 +196,5 @@ in stdenv.mkDerivation {
     ${if isMultiBuild then extraBuildCommandsMulti else ""}
   '';
   preferLocalBuild = true;
+  allowSubstitutes = false;
 }

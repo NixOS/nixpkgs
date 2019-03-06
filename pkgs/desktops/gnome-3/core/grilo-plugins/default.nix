@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, meson, ninja, pkgconfig, gettext, sqlite
-, gnome3, libxml2, gupnp, gssdp, lua5, liboauth, gupnp-av
+{ stdenv, fetchurl, meson, ninja, pkgconfig, gettext, sqlite, librest
+, gnome3, libxml2, gupnp, gssdp, lua5, liboauth, gupnp-av, libgdata, libmediaart
 , gmime, json-glib, avahi, tracker, dleyna-server, itstool, totem-pl-parser }:
 
 let
@@ -15,10 +15,10 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ meson ninja pkgconfig gettext itstool ];
   buildInputs = [
-    gnome3.grilo libxml2 gupnp gssdp gnome3.libgdata
+    gnome3.grilo libxml2 gupnp gssdp libgdata
     lua5 liboauth gupnp-av sqlite gnome3.gnome-online-accounts
-    totem-pl-parser gnome3.rest gmime json-glib
-    avahi gnome3.libmediaart tracker dleyna-server
+    totem-pl-parser librest gmime json-glib
+    avahi libmediaart tracker dleyna-server
   ];
 
   passthru = {

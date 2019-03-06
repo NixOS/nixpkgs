@@ -1,15 +1,15 @@
 { stdenv, fetchurl, substituteAll, pkgconfig, glib, itstool, libxml2, xorg
 , accountsservice, libX11, gnome3, systemd, autoreconfHook
-, gtk, libcanberra-gtk3, pam, libtool, gobject-introspection, plymouth
+, gtk3, libcanberra-gtk3, pam, libtool, gobject-introspection, plymouth
 , librsvg, coreutils, xwayland, fetchpatch }:
 
 stdenv.mkDerivation rec {
   name = "gdm-${version}";
-  version = "3.30.2";
+  version = "3.30.3";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gdm/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "1handy65r1n0zby09jr492b3643wszzigdkxp7q2ypgxb3hyv45y";
+    sha256 = "15f7lz7z75krgbq8vb800afj96h8mw2fpy1s28za2911x5vgq0ak";
   };
 
   # Only needed to make it build
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig libxml2 itstool autoreconfHook libtool gnome3.dconf ];
   buildInputs = [
     glib accountsservice systemd
-    gobject-introspection libX11 gtk
+    gobject-introspection libX11 gtk3
     libcanberra-gtk3 pam plymouth librsvg
   ];
 

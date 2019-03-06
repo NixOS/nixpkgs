@@ -13,17 +13,17 @@ it will only add the path to the python used when building
 available.
 
 
-diff --git a/src/virtualenv.py b/src/virtualenv.py
-index 4b57cde..afda73f 100755
---- a/src/virtualenv.py
-+++ b/src/virtualenv.py
-@@ -1071,20 +1071,7 @@ def path_locations(home_dir, dry_run=False):
+diff --git a/virtualenv.py b/virtualenv.py
+index bcf3225..3530997 100755
+--- a/virtualenv.py
++++ b/virtualenv.py
+@@ -1163,20 +1163,7 @@ def path_locations(home_dir, dry_run=False):
  
  
  def change_prefix(filename, dst_prefix):
 -    prefixes = [sys.prefix]
 -
--    if is_darwin:
+-    if IS_DARWIN:
 -        prefixes.extend(
 -            (
 -                os.path.join("/Library/Python", sys.version[:3], "site-packages"),
@@ -39,16 +39,16 @@ index 4b57cde..afda73f 100755
  
      if hasattr(sys, "real_prefix"):
          prefixes.append(sys.real_prefix)
-@@ -1107,6 +1094,8 @@ def change_prefix(filename, dst_prefix):
+@@ -1199,6 +1186,8 @@ def change_prefix(filename, dst_prefix):
              if src_prefix != os.sep:  # sys.prefix == "/"
-                 assert relpath[0] == os.sep
-                 relpath = relpath[1:]
+                 assert relative_path[0] == os.sep
+                 relative_path = relative_path[1:]
 +                if src_prefix == "/nix/store":
-+                    relpath = "/".join(relpath.split("/")[1:])
-             return join(dst_prefix, relpath)
++                    relative_path = "/".join(relative_path.split("/")[1:])
+             return join(dst_prefix, relative_path)
      assert False, "Filename {} does not start with any of these prefixes: {}".format(filename, prefixes)
  
-@@ -1233,6 +1222,11 @@ def install_python(home_dir, lib_dir, inc_dir, bin_dir, site_packages, clear, sy
+@@ -1375,6 +1364,11 @@ def install_python(home_dir, lib_dir, inc_dir, bin_dir, site_packages, clear, sy
      site_filename_dst = change_prefix(site_filename, home_dir)
      site_dir = os.path.dirname(site_filename_dst)
      writefile(site_filename_dst, SITE_PY)

@@ -1,4 +1,5 @@
 { stdenv
+, libev
 , buildPythonPackage
 , fetchPypi
 , pkgs
@@ -28,7 +29,10 @@ buildPythonPackage rec {
   };
 
   buildInputs = [
-    pkgs.libev
+    libev
+  ];
+
+  nativeBuildInputs = [
     # NOTE: next version will work with cython 0.29
     # Requires 'Cython!=0.25,<0.29,>=0.20'
     (cython.overridePythonAttrs(old: rec {

@@ -1,5 +1,6 @@
 { fetchurl, fetchgit, substituteAll, stdenv, meson, ninja, pkgconfig, gnome3, perl, gettext, glib, libnotify, lcms2, libXtst
 , libxkbfile, libpulseaudio, alsaLib, libcanberra-gtk3, upower, colord, libgweather, polkit
+, geocode-glib, gtk3
 , geoclue2, librsvg, xf86_input_wacom, udev, libgudev, libwacom, libxslt, libxml2, networkmanager
 , docbook_xsl, wrapGAppsHook, python3, ibus, xkeyboard_config, tzdata, nss, pantheon, accountsservice }:
 
@@ -75,16 +76,16 @@ stdenv.mkDerivation rec {
     wrapGAppsHook
   ];
 
-  buildInputs = with gnome3; [
+  buildInputs = [
     accountsservice
     alsaLib
     colord
     geoclue2
     geocode-glib
     glib
-    gnome-desktop
-    gsettings-desktop-schemas
-    gtk
+    gnome3.gnome-desktop
+    gnome3.gsettings-desktop-schemas
+    gtk3
     ibus
     lcms2
     libXtst

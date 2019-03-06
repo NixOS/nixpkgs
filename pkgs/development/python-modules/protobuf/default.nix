@@ -13,8 +13,10 @@ buildPythonPackage rec {
     optional stdenv.isDarwin "-I${libcxx}/include/c++/v1"
     ++ optional (versionOlder protobuf.version "2.7.0") "-std=c++98";
 
-  propagatedBuildInputs = [ protobuf google_apputils ];
-  buildInputs = [ google_apputils pyext ];
+  propagatedBuildInputs = [ google_apputils ];
+  propagatedNativeBuildInputs = [ protobuf ];  # For protoc.
+  nativeBuildInputs = [ google_apputils pyext ];
+  buildInputs = [ protobuf ];
 
   patches = optional isPy37
     # Python 3.7 compatibility (remove when protobuf 3.7 is released)

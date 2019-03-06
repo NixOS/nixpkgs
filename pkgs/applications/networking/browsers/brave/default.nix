@@ -89,7 +89,7 @@ in stdenv.mkDerivation rec {
 
     nativeBuildInputs = [ dpkg wrapGAppsHook ];
 
-    buildInputs = [ glib gnome3.gsettings_desktop_schemas gnome3.defaultIconTheme ];
+    buildInputs = [ glib gnome3.gsettings_desktop_schemas gnome3.adwaita-icon-theme ];
 
     unpackPhase = "dpkg-deb --fsys-tarfile $src | tar -x --no-same-permissions --no-same-owner";
 

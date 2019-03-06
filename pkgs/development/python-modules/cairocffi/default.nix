@@ -17,11 +17,11 @@
 
 buildPythonPackage rec {
   pname = "cairocffi";
-  version = "0.9.0";
+  version = "1.0.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "15386c3a9e08823d6826c4491eaccc7b7254b1dc587a3b9ce60c350c3f990337";
+    sha256 = "01ac51ae12c4324ca5809ce270f9dd1b67f5166fe63bd3e497e9ea3ca91946ff";
   };
 
   LC_ALL = "en_US.UTF-8";

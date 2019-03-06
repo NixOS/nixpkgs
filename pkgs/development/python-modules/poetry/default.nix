@@ -60,6 +60,15 @@ in buildPythonPackage rec {
   ] ++ lib.optionals (isPy27 || isPy34) [ typing pathlib2 ]
     ++ lib.optionals isPy27 [ virtualenv functools32 ];
 
+  postInstall = ''
+    mkdir -p "$out/share/bash-completion/completions"
+    "$out/bin/poetry" completions bash > "$out/share/bash-completion/completions/poetry"
+    mkdir -p "$out/share/zsh/vendor-completions"
+    "$out/bin/poetry" completions zsh > "$out/share/zsh/vendor-completions/_poetry"
+    mkdir -p "$out/share/fish/vendor_completions.d"
+    "$out/bin/poetry" completions fish > "$out/share/fish/vendor_completions.d/poetry.fish"
+  '';
+
   # No tests in Pypi tarball
   doCheck = false;
   checkInputs = [ pytest ];

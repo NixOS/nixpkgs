@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     pkgconfig
     shared-mime-info
     wrapGAppsHook
-    gnome3.defaultIconTheme
+    gnome3.adwaita-icon-theme
   ];
   buildInputs = [ glib gtk3 pango polkit systemd.dev systemd.lib ];
 

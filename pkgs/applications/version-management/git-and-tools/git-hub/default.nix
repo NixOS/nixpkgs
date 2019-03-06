@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   name = "git-hub-${version}";
-  version = "1.0.1";
+  version = "1.0.3";
 
   src = fetchFromGitHub {
-    sha256 = "1lizjyi8vac1p1anbnh6qrr176rwxp5yjc1787asw437sackkwza";
+    sha256 = "03mz64lzicbxxz9b202kqs5ysf82sgb7lw967wkjdy2wbpqk8j0z";
     rev = "v${version}";
     repo = "git-hub";
     owner = "sociomantic-tsunami";

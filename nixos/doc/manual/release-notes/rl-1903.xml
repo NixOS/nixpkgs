@@ -184,6 +184,20 @@
    </listitem>
    <listitem>
     <para>
+      The <varname>buildPythonPackage</varname> function now sets <varname>strictDeps = true</varname>
+      to help distinguish between native and non-native dependencies in order to
+      improve cross-compilation compatibility. Note however that this may break
+      user expressions.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+      The <varname>buildPythonPackage</varname> function now sets <varname>LANG = C.UTF-8</varname>
+      to enable Unicode support. The <varname>glibcLocales</varname> package is no longer needed as a build input.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
       The Syncthing state and configuration data has been moved from
       <varname>services.syncthing.dataDir</varname> to the newly defined
       <varname>services.syncthing.configDir</varname>, which default to
@@ -662,6 +676,14 @@
        Openmpi has been updated to version 4.0.0, which removes some deprecated MPI-1 symbols.
        This may break some older applications that still rely on those symbols.
        An upgrade guide can be found <link xlink:href="https://www.open-mpi.org/faq/?category=mpi-removed">here</link>.
+     </para>
+    <para>
+     The nginx package now relies on OpenSSL 1.1 and supports TLS 1.3 by default. You can set the protocols used by the nginx service using <xref linkend="opt-services.nginx.sslProtocols"/>.
+    </para>
+   </listitem>
+   <listitem>
+     <para>
+       A new subcommand <command>nixos-rebuild edit</command> was added.
      </para>
    </listitem>
    <listitem>
