@@ -56,9 +56,6 @@ in
 
         export XDG_MENU_PREFIX=mate-
 
-        # Find the mouse
-        export XCURSOR_PATH=~/.icons:${config.system.path}/share/icons
-
         # Let caja find extensions
         export CAJA_EXTENSION_DIRS=$CAJA_EXTENSION_DIRS''${CAJA_EXTENSION_DIRS:+:}${config.system.path}/lib/caja/extensions-2.0
 
@@ -78,9 +75,6 @@ in
         # Add mate-control-center paths to some XDG variables because its schemas are needed by mate-settings-daemon, and mate-settings-daemon is a dependency for mate-control-center (that is, they are mutually recursive)
         ${addToXDGDirs pkgs.mate.mate-control-center}
 
-        # Update user dirs as described in http://freedesktop.org/wiki/Software/xdg-user-dirs/
-        ${pkgs.xdg-user-dirs}/bin/xdg-user-dirs-update
-
         ${pkgs.mate.mate-session-manager}/bin/mate-session ${optionalString cfg.debug "--debug"} &
         waitPID=$!
       '';
@@ -90,14 +84,20 @@ in
       pkgs.mate.basePackages ++
       (pkgs.gnome3.removePackagesByName
         pkgs.mate.extraPackages
-        config.environment.mate.excludePackages);
+        config.environment.mate.excludePackages) ++
+      [
+        pkgs.desktop-file-utils
+        pkgs.glib
+        pkgs.gtk3.out
+        pkgs.shared-mime-info
+        pkgs.xdg-user-dirs # Update user dirs as described in https://freedesktop.org/wiki/Software/xdg-user-dirs/
+      ];
 
-    services.dbus.packages = [
-      pkgs.gnome3.dconf
-      pkgs.at-spi2-core
-    ];
-
+    programs.dconf.enable = true;
+    services.gnome3.at-spi2-core.enable = true;
     services.gnome3.gnome-keyring.enable = true;
+    services.gnome3.gnome-settings-daemon.enable = true;
+    services.gnome3.gnome-settings-daemon.package = pkgs.mate.mate-settings-daemon;
     services.gnome3.gvfs.enable = true;
     services.upower.enable = config.powerManagement.enable;
 

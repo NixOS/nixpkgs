@@ -327,6 +327,7 @@ in rec {
       # Generate manpages.
       mkdir -p $out/share/man
       xsltproc --nonet \
+        --maxdepth 6000 \
         --param man.output.in.separate.dir 1 \
         --param man.output.base.dir "'$out/share/man/'" \
         --param man.endnotes.are.numbered 0 \

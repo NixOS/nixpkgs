@@ -1,4 +1,4 @@
-{stdenv, fetchurl, pkgconfig, gtk, libxml2, python, gettext}:
+{stdenv, fetchurl, pkgconfig, gtk2, libxml2, python, gettext}:
 
 stdenv.mkDerivation {
   name = "libglade-2.6.4";
@@ -11,7 +11,7 @@ stdenv.mkDerivation {
   outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ gtk python gettext ];
+  buildInputs = [ gtk2 python gettext ];
 
   NIX_LDFLAGS = "-lgmodule-2.0";
 

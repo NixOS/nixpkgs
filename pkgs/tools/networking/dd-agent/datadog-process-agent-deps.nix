@@ -3,9 +3,9 @@
   {
     goPackagePath  = "bitbucket.org/ww/goautoneg";
     fetch = {
-      type = "hg";
-      url = "https://bitbucket.org/ww/goautoneg";
-      rev =  "75cd24fc2f2c2a2088577d12123ddee5f54e0675";
+      type = "git";
+      url = "https://github.com/adjust/goautoneg";
+      rev =  "d788f35a0315672bc90f50a6145d1252a230ee0d";
       sha256 = "19khhn5xhqv1yp7d6k987gh5w5rhrjnp4p0c6fyrd8z6lzz5h9qi";
     };
   }
@@ -23,8 +23,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/DataDog/datadog-agent";
-      rev =  "f2d7ce69202c8212cae1ebf476d038b28f3a895e";
-      sha256 = "0by3qvj6468r3532x1q6ingf6hlgv4dk8g1aa0hmh9gm25dbfsg5";
+      rev =  "4aa90bd394b62b0d3e3f15703c6e459c1c477fbc";
+      sha256 = "13zvg8ykakq97bw0kd2gj4s9gfjpx23d3c51w1jpa1raqwhgqi8z";
     };
   }
   {
@@ -41,17 +41,17 @@
     fetch = {
       type = "git";
       url = "https://github.com/DataDog/gopsutil";
-      rev =  "771928d86fa878b9d62f073a7a6f91ee0a358105";
-      sha256 = "0dr5a67jy2zh42dcndx981ca1wv0phc16zlimahjlr00qxam90xi";
+      rev =  "c8f74f1344dd41bc49ec4d3c2377c526aaedfd20";
+      sha256 = "0r8al83apxrq1v6s2mq0p8h3c4z4n5g7ax8vcvs70pq0czy2fvgp";
     };
   }
   {
-    goPackagePath  = "github.com/DataDog/tcptracer-bpf";
+    goPackagePath  = "github.com/DataDog/viper";
     fetch = {
       type = "git";
-      url = "https://github.com/DataDog/tcptracer-bpf";
-      rev =  "636ee01a99a4bd352329de98f40fb9fdf611d1c9";
-      sha256 = "13373wg1x90jydzgbblxpq2gg9b7ppk6nkjzhw8d27mxd047i74m";
+      url = "https://github.com/DataDog/viper";
+      rev =  "23ced3bc6b3751855704445e48da2c53075ade86";
+      sha256 = "1zzf4mqpmk47p3395k2v8q6wi7lnqxr0l55vv4zk9gpqqyifbm9m";
     };
   }
   {
@@ -59,8 +59,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/DataDog/zstd";
-      rev =  "2bf71ec4836011b92dc78df3b9ace6b40e65f7df";
-      sha256 = "0j0qmnzjxx86kavrb3qcashp2irzjbvip15df97k87pcfvl1gsig";
+      rev =  "2b373cbe6ac0c8e6960bbd18026ceb269eef89f5";
+      sha256 = "157kh7w173igxbypknmr8hc8934ykmnb02pkb76k1jwq4sphn8qj";
     };
   }
   {
@@ -77,8 +77,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/StackExchange/wmi";
-      rev =  "b12b22c5341f0c26d88c4d66176330500e84db68";
-      sha256 = "0kzkb4zllhrdiq0m9m5ka9i393r1hnx75lnd3hz5rg2fs0n3ym16";
+      rev =  "5d049714c4a64225c3c79a7cf7d02f7fb5b96338";
+      sha256 = "1slw6v1fl8i0hz4db9lph55pbhnrxhqyndq6vm27dgvpj22k29fk";
     };
   }
   {
@@ -302,8 +302,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/iovisor/gobpf";
-      rev =  "3b07770c6d5e2bd37e582ecd49460e6ef094f257";
-      sha256 = "0inv9vwjd8r365rdpf6z4kzs8b36890vrfkifw228mjlxxx8rg7f";
+      rev =  "98ebf56442afb10e1b43145127de3c1777ed7e95";
+      sha256 = "0m2aah77b1k2yf31za975mcix5n0jijqkqmhgakip00klihx383k";
     };
   }
   {
@@ -325,12 +325,21 @@
     };
   }
   {
+    goPackagePath  = "github.com/kardianos/osext";
+    fetch = {
+      type = "git";
+      url = "https://github.com/kardianos/osext";
+      rev =  "ae77be60afb1dcacde03767a8c37337fad28ac14";
+      sha256 = "056dkgxrqjj5r18bnc3knlpgdz5p3yvp12y4y978hnsfhwaqvbjz";
+    };
+  }
+  {
     goPackagePath  = "github.com/kubernetes-incubator/custom-metrics-apiserver";
     fetch = {
       type = "git";
       url = "https://github.com/kubernetes-incubator/custom-metrics-apiserver";
-      rev =  "e61f72fec56ab519d74ebd396cd3fcf31b084558";
-      sha256 = "1cgbn0yzvrqrxq4kwwz2d6vddi9py2z18dx33yjd8w85j9ghhg6g";
+      rev =  "bb8bae16c5550f2aeef3151259a1b36078a0e544";
+      sha256 = "1f1n4dh9w2qfs704yw8nhbv50n6f9fxy8ndir96l37lnwd2dvj8p";
     };
   }
   {
@@ -473,8 +482,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/shirou/gopsutil";
-      rev =  "8048a2e9c5773235122027dd585cf821b2af1249";
-      sha256 = "17ri1ijhvg6gxscaw4sy0r5pkcyiqdsf6nn2d4q36hd0nrswvk29";
+      rev =  "071446942108a03a13cf0717275ad3bdbcb691b4";
+      sha256 = "0ai246kqsfm3xlnp4pp4d197djh6jrbjja832f355zhg3l9fqwfp";
     };
   }
   {
@@ -523,15 +532,6 @@
     };
   }
   {
-    goPackagePath  = "github.com/spf13/viper";
-    fetch = {
-      type = "git";
-      url = "https://github.com/spf13/viper";
-      rev =  "b5e8006cbee93ec955a89ab31e0e3ce3204f3736";
-      sha256 = "0y3r6ysi5vn0yq5c7pbl62yg2i64fkv54xgj2jf1hn3v6zzyimis";
-    };
-  }
-  {
     goPackagePath  = "github.com/stretchr/testify";
     fetch = {
       type = "git";
@@ -572,8 +572,8 @@
     fetch = {
       type = "git";
       url = "https://go.googlesource.com/sys";
-      rev =  "95c6576299259db960f6c5b9b69ea52422860fce";
-      sha256 = "1fhq8bianb9a1iccpr92mi2hix9zvm10n0f7syx6vfbxdw32i316";
+      rev =  "a9d3bda3a223baa6bba6ef412cb273f0fd163c05";
+      sha256 = "1w45zc13xrjzl19s1sx74r5mg3lf2z2nm13wygcdq5r5pyjlhdz9";
     };
   }
   {
@@ -617,8 +617,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/zorkian/go-datadog-api";
-      rev =  "6c08e2322af96e867e5715aedd6ea194c42cf44f";
-      sha256 = "16ha3azq9981hwpn18sd50ai6d1h85fsawbdxp352c4gi8bhj8zw";
+      rev =  "d7b8b10db6a7eb1c1c2424b10a795a1662e80c9a";
+      sha256 = "069psfvgal6pkwc1s09gdy4mjn4ki4d1zvqnnzn7y15i5llb97kk";
     };
   }
   {

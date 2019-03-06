@@ -167,6 +167,29 @@ with self; {
     };
   };
 
+  cqueues = buildLuaPackage rec {
+    name = "cqueues-${version}";
+    version = "20171014";
+
+    src = fetchurl {
+      url = "https://www.25thandclement.com/~william/projects/releases/${name}.tgz";
+      sha256 = "1dabhpn6r0hlln8vx9hxm34pfcm46qzgpb2apmziwg5z51fi4ksb";
+    };
+
+    preConfigure = ''export prefix=$out'';
+
+    nativeBuildInputs = [ gnum4 ];
+    buildInputs = [ openssl ];
+
+    meta = with stdenv.lib; {
+      description = "A type of event loop for Lua";
+      homepage = "https://www.25thandclement.com/~william/projects/cqueues.html";
+      license = licenses.mit;
+      maintainers = with maintainers; [ vcunat ];
+      platforms = platforms.unix;
+    };
+  };
+
   http = buildLuaPackage rec {
     version = "0.2";
     name = "http-${version}";

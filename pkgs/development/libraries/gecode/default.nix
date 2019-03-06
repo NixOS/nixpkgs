@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "gecode-${version}";
-  version = "6.1.0";
+  version = "6.1.1";
 
   src = fetchFromGitHub {
     owner = "Gecode";
     repo = "gecode";
     rev = "release-${version}";
-    sha256 = "1ijjy8ppx7djnkrkawsd00rmlf24qh1z13aap0h1azailw1pbrg4";
+    sha256 = "07jyx17qsfx3wmd2zlcs0rxax8h3cs2g9aapxkdjdcsmfxsldqb7";
   };
 
   enableParallelBuilding = true;

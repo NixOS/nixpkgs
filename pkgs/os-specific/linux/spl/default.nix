@@ -1,5 +1,5 @@
 { fetchFromGitHub, stdenv, autoreconfHook, coreutils, gawk
-
+, fetchpatch
 # Kernel dependencies
 , kernel
 }:
@@ -10,13 +10,13 @@ assert kernel != null;
 
 stdenv.mkDerivation rec {
   name = "spl-${version}-${kernel.version}";
-  version = "0.7.12";
+  version = "0.7.13";
 
   src = fetchFromGitHub {
     owner = "zfsonlinux";
     repo = "spl";
     rev = "spl-${version}";
-    sha256 = "13zqh1g132g63zv54l3bsg5kras9mllkx9wvlnfs13chfr7vpp4p";
+    sha256 = "1rzqgiszy8ad2gx20577azp1y5jgad0907slfzl5y2zb05jgaipa";
   };
 
   patches = [ ./install_prefix.patch ];

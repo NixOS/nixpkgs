@@ -4,7 +4,7 @@
 
 stdenv.mkDerivation rec {
   name = "wxmaxima-${version}";
-  version = "18.02.0";
+  version = "19.03.0";
 
   src = fetchFromGitHub {
     owner = "andrejv";
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Cross platform GUI for the computer algebra system Maxima";
     license = licenses.gpl2;
-    homepage = http://wxmaxima.sourceforge.net;
+    homepage = https://wxmaxima-developers.github.io/wxmaxima/;
     platforms = platforms.linux;
     maintainers = [ maintainers.peti ];
   };
