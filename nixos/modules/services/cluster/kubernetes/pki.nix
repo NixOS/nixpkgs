@@ -254,8 +254,6 @@ in
       ];
       serviceConfig = {
         TimeoutSec = "500";
-        RestartSec = "1s";
-        Restart = "on-failure";
       };
     };
 
