@@ -125,6 +125,23 @@ in
       top.caFile
       certmgrAPITokenPath
     ];
+    apiserverPaths = [
+      top.apiserver.clientCaFile
+      top.apiserver.etcd.caFile
+      top.apiserver.etcd.certFile
+      top.apiserver.etcd.keyFile
+      top.apiserver.kubeletClientCaFile
+      top.apiserver.kubeletClientCertFile
+      top.apiserver.kubeletClientKeyFile
+      top.apiserver.serviceAccountKeyFile
+      top.apiserver.tlsCertFile
+      top.apiserver.tlsKeyFile
+    ];
+    etcdPaths = [
+      config.services.etcd.certFile
+      config.services.etcd.keyFile
+      config.services.etcd.trustedCaFile
+    ];
     addonManagerPaths = mkIf top.addonManager.enable [
       cfg.certs.addonManager.cert
       cfg.certs.addonManager.key
@@ -149,6 +166,11 @@ in
       top.controllerManager.tlsKeyFile
       cfg.certs.controllerManagerClient.cert
       cfg.certs.controllerManagerClient.key
+    ];
+    kubeletPaths = [
+      top.kubelet.clientCaFile
+      top.kubelet.tlsCertFile
+      top.kubelet.tlsKeyFile
     ];
   in
   {
@@ -415,7 +437,7 @@ in
 
       # isolate etcd on loopback at the master node
       # easyCerts doesn't support multimaster clusters anyway atm.
-      services.etcd = with cfg.certs.etcd; {
+      services.etcd = mkIf top.apiserver.enable (with cfg.certs.etcd; {
         listenClientUrls = ["https://127.0.0.1:2379"];
         listenPeerUrls = ["https://127.0.0.1:2380"];
         advertiseClientUrls = ["https://etcd.local:2379"];
@@ -424,10 +446,34 @@ in
         certFile = mkDefault cert;
         keyFile = mkDefault key;
         trustedCaFile = mkDefault caCert;
-      };
+      });
       networking.extraHosts = mkIf (config.services.etcd.enable) ''
         127.0.0.1 etcd.${top.addons.dns.clusterDomain} etcd.local
       '';
+
+      systemd.services.kube-apiserver = mkIf top.apiserver.enable {
+        unitConfig.ConditionPathExists = apiserverPaths;
+      };
+
+      systemd.paths.kube-apiserver = mkIf top.apiserver.enable {
+        wantedBy = [ "kube-apiserver.service" ];
+        pathConfig = {
+          PathExists = apiserverPaths;
+          PathChanged = apiserverPaths;
+        };
+      };
+
+      systemd.services.etcd = mkIf top.apiserver.enable {
+        unitConfig.ConditionPathExists = etcdPaths;
+      };
+
+      systemd.paths.etcd = mkIf top.apiserver.enable {
+        wantedBy = [ "etcd.service" ];
+        pathConfig = {
+          PathExists = etcdPaths;
+          PathChanged = etcdPaths;
+        };
+      };
 
       services.flannel = with cfg.certs.flannelClient; {
         kubeconfig = top.lib.mkKubeConfig "flannel" {
@@ -453,6 +499,18 @@ in
       systemd.services.kube-proxy = mkIf top.proxy.enable {
         environment = { inherit (top.pki.certs.kubeProxyClient) cert key; };
         unitConfig.ConditionPathExists = proxyPaths;
+      };
+
+      systemd.services.kubelet = mkIf top.kubelet.enable {
+        unitConfig.ConditionPathExists = kubeletPaths;
+      };
+
+      systemd.paths.kubelet = mkIf top.kubelet.enable {
+        wantedBy =  [ "kubelet.service" ];
+        pathConfig = {
+          PathExists = kubeletPaths;
+          PathChanged = kubeletPaths;
+        };
       };
 
       systemd.paths.kube-proxy = mkIf top.proxy.enable {
