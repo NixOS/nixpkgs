@@ -109,7 +109,7 @@ stdenv.mkDerivation rec {
   # Configure with options modeled on the 'mvm' build script from the vm.
   configureScript = "platforms/unix/config/configure";
   configureFlags = [ "--without-npsqueak"
-#                     "--with-vmversion=5.0"
+                     "--with-vmversion=5.0"
                      "--with-src=${vm}" ];
   CFLAGS = "-DPharoVM -m${archbits} -DIMMUTABILITY=1 -msse2 -D_GNU_SOURCE -DCOGMTVM=0 -g -O2 -DNDEBUG";
   LDFLAGS = "-Wl,-z,now";
@@ -159,18 +159,13 @@ stdenv.mkDerivation rec {
     EOF
     chmod +x "$out/bin/${cmd}"
     ln -s ${libgit2}/lib/libgit2.so* "$out/"
-    patchelf --set-rpath $(patchelf --print-rpath "$out/pharo"):${libmoz2d}/lib $out/pharo
+    patchelf --set-rpath $(patchelf --print-rpath "$out/pharo"):${libmoz2d}/lib:${freetype}/lib $out/pharo
   '';
 
   enableParallelBuilding = true;
 
-#  nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [
-    bash
-    glibc
-    pharo-share
-    unzip
-  ] ++ libs;
+  nativeBuildInputs = [ autoreconfHook bash unzip glibc openssl gcc5 ] ++ libs;
+  buildInputs = [ bash glibc pharo-share unzip ] ++ libs;
 
   meta = with stdenv.lib; {
     description = "Clean and innovative Smalltalk-inspired environment";
@@ -189,9 +184,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = http://pharo.org;
     license = licenses.mit;
-    maintainers = [ maintainers.lukego maintainers.rydnr ];
+    maintainers = [ maintainers.lukego ];
     platforms = [ "i686-linux" "x86_64-linux" ];
   };
-
- nativeBuildInputs = [ autoreconfHook bash unzip glibc openssl gcc5 ] ++ libs;
 }

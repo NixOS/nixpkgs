@@ -47,9 +47,10 @@ stdenv.mkDerivation rec {
     ln -s "${pharo-share}/lib/"*.sources $prefix/lib/$name
   '';
 
-  LD_LIBRARY_PATH = stdenv.lib.makeLibraryPath [ cairo libGLU_combined freetype openssl libuuid alsaLib xorg.libICE xorg.libSM ];
-  nativeBuildInputs = [ unzip cmake gcc5 makeWrapper ];
-  buildInputs = [ bash glibc openssl libGLU_combined freetype xorg.libX11 xorg.libICE xorg.libSM alsaLib cairo pharo-share ];
+  LD_LIBRARY_PATH = stdenv.lib.makeLibraryPath [ cairo libGLU_combined freetype
+  openssl libuuid alsaLib xorg.libICE xorg.libSM ]; nativeBuildInputs = [ unzip
+  cmake gcc5 makeWrapper ]; buildInputs = [ bash glibc openssl libGLU_combined
+  freetype xorg.libX11 xorg.libICE xorg.libSM alsaLib cairo pharo-share ];
 
   meta = {
     description = "Clean and innovative Smalltalk-inspired environment";

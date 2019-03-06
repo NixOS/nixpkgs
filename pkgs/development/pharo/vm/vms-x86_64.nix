@@ -42,12 +42,13 @@
 
 let
   pharo-vm-build = import ./build-vm.nix args;
+  suffix = if stdenv.is64bit then "64" else "32";
 in
 
 rec {
   # Build the latest VM
   spur = pharo-vm-build rec {
-    name = "pharo-spur64";
+    name = "pharo-spur${suffix}";
     version = "git.${revision}";
     src = fetchFromGitHub {
       owner = "studio";
