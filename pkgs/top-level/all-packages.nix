@@ -16152,6 +16152,8 @@ in
 
   apache-directory-studio = callPackage ../applications/networking/apache-directory-studio {};
 
+  appeditor = callPackage ../applications/misc/appeditor { };
+
   aqemu = libsForQt5.callPackage ../applications/virtualization/aqemu { };
 
   ardour = callPackage ../applications/audio/ardour {
