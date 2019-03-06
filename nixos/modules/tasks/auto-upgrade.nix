@@ -57,7 +57,7 @@ let cfg = config.system.autoUpgrade; in
 
   };
 
-  config = {
+  config = lib.mkIf cfg.enable {
 
     system.autoUpgrade.flags =
       [ "--no-build-output" ]
