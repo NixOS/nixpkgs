@@ -4,10 +4,10 @@
 
 stdenv.mkDerivation rec {
   name = "ganttproject-bin-${version}";
-  version = "2.8.9";
+  version = "2.8.10";
 
-  src = let build = "r2335"; in fetchzip {
-    sha256 = "1fmfrsy9z2nff0bxwj7xsfbwkb9y1dmssvy5wkmf9ngihyzj3w1k";
+  src = let build = "r2364"; in fetchzip {
+    sha256 = "0cclgyqv4f9pjsdlh93cqvgbzrp8ajvrpc2xszs03sknqz2kdh7r";
     url = "https://dl.ganttproject.biz/ganttproject-${version}/"
         + "ganttproject-${version}-${build}.zip";
   };
