@@ -340,9 +340,9 @@ in
       };
 
       systemd.services.kubelet-online = {
-        wantedBy = [ "node-online.target" ];
+        wantedBy = [ "kube-node-online.target" ];
         after = [ "flannel.target" "kubelet.target" ];
-        before = [ "node-online.target" ];
+        before = [ "kube-node-online.target" ];
         # it is complicated. flannel needs kubelet to run the pause container before
         # it discusses the node CIDR with apiserver and afterwards configures and restarts
         # dockerd. Until then prevent creating any pods because they have to be recreated anyway
@@ -407,11 +407,11 @@ in
 
     {
       systemd.targets.kubelet = {
-        wantedBy = [ "node-online.target" ];
-        before = [ "node-online.target" ];
+        wantedBy = [ "kube-node-online.target" ];
+        before = [ "kube-node-online.target" ];
       };
 
-      systemd.targets.node-online = {
+      systemd.targets.kube-node-online = {
         wantedBy = [ "kubernetes.target" ];
         before = [ "kubernetes.target" ];
       };

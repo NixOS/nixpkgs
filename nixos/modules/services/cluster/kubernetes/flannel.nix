@@ -71,8 +71,8 @@ in
     };
 
     systemd.targets.flannel = {
-      wantedBy = [ "node-online.target" ];
-      before = [ "node-online.target" ];
+      wantedBy = [ "kube-node-online.target" ];
+      before = [ "kube-node-online.target" ];
     };
 
     systemd.services.flannel = {

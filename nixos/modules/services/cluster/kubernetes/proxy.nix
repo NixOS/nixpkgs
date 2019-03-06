@@ -48,9 +48,9 @@ in
   config = mkIf cfg.enable {
     systemd.services.kube-proxy = {
       description = "Kubernetes Proxy Service";
-      wantedBy = [ "node-online.target" ];
+      wantedBy = [ "kube-node-online.target" ];
       after = [ "kubelet-online.service" ];
-      before = [ "node-online.target" ];
+      before = [ "kube-node-online.target" ];
       path = with pkgs; [ iptables conntrack_tools ];
       preStart = ''
         ${top.lib.mkWaitCurl ( with config.systemd.services.kube-proxy; {
