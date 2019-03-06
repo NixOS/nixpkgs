@@ -7068,7 +7068,7 @@ in
 
   haskell = callPackage ./haskell-packages.nix { };
 
-  haskellPackages = dontRecurseIntoAttrs (haskell.packages.ghc863.override {
+  haskellPackages = dontRecurseIntoAttrs (haskell.packages.ghc864.override {
     overrides = config.haskellPackageOverrides or haskell.packageOverrides;
   });
 
