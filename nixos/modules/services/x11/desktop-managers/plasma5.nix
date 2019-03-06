@@ -37,32 +37,6 @@ in
 
   config = mkMerge [
     (mkIf cfg.enable {
-      services.xserver.desktopManager.session = singleton {
-        name = "plasma5";
-        bgSupport = true;
-        start = ''
-          # Load PulseAudio module for routing support.
-          # See http://colin.guthr.ie/2009/10/so-how-does-the-kde-pulseaudio-support-work-anyway/
-          ${optionalString config.hardware.pulseaudio.enable ''
-            ${getBin config.hardware.pulseaudio.package}/bin/pactl load-module module-device-manager "do_routing=1"
-          ''}
-
-          if [ -f "$HOME/.config/kdeglobals" ]
-          then
-              # Remove extraneous font style names.
-              # See also: https://phabricator.kde.org/D9070
-              ${getBin pkgs.gnused}/bin/sed -i "$HOME/.config/kdeglobals" \
-                  -e '/^fixed=/ s/,Regular$//' \
-                  -e '/^font=/ s/,Regular$//' \
-                  -e '/^menuFont=/ s/,Regular$//' \
-                  -e '/^smallestReadableFont=/ s/,Regular$//' \
-                  -e '/^toolBarFont=/ s/,Regular$//'
-          fi
-
-          exec "${getBin plasma5.plasma-workspace}/bin/startkde"
-        '';
-      };
-
       security.wrappers = {
         kcheckpass.source = "${lib.getBin plasma5.kscreenlocker}/lib/libexec/kcheckpass";
         "start_kdeinit".source = "${lib.getBin pkgs.kinit}/lib/libexec/kf5/start_kdeinit";
@@ -213,6 +187,7 @@ in
       services.xserver.displayManager.sddm = {
         theme = mkDefault "breeze";
       };
+      services.xserver.displayManager.extraSessionFilePackages = [ plasma5.plasma-workspace ];
 
       security.pam.services.kde = { allowNullPassword = true; };
 
