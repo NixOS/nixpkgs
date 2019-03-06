@@ -18,10 +18,10 @@ in buildGoPackage rec {
 
   subPackages = [
     "cmd/agent"
+    "cmd/cluster-agent"
     "cmd/dogstatsd"
     "cmd/py-launcher"
-    # Does not compile: go/src/github.com/DataDog/datadog-agent/cmd/cluster-agent/main.go:31:12: undefined: app.ClusterAgentCmd
-    #"cmd/cluster-agent"
+    "cmd/trace-agent"
   ];
   goDeps = ./deps.nix;
   goPackagePath = "github.com/${owner}/${repo}";
