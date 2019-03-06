@@ -344,6 +344,7 @@ in
       };
 
       systemd.services.kube-controller-manager = mkIf top.controllerManager.enable {
+        environment = { inherit (cfg.certs.controllerManagerClient) cert key; };
         unitConfig.ConditionPathExists = controllerManagerPaths;
       };
 
@@ -353,6 +354,25 @@ in
           PathExists = controllerManagerPaths;
           PathChanged = controllerManagerPaths;
         };
+      };
+
+      systemd.services.kube-scheduler = mkIf top.scheduler.enable {
+        environment = { inherit (top.pki.certs.schedulerClient) cert key; };
+        unitConfig.ConditionPathExists = schedulerPaths;
+      };
+
+      systemd.paths.kube-scheduler = mkIf top.scheduler.enable {
+        wantedBy = [ "kube-scheduler.service" ];
+        pathConfig = {
+          PathExists = schedulerPaths;
+          PathChanged = schedulerPaths;
+        };
+      };
+
+      systemd.services.kube-control-plane-online.environment = let
+        client = with cfg.certs; if top.apiserver.enable then clusterAdmin else kubelet;
+      in {
+        inherit (client) cert key;
       };
 
       environment.etc.${cfg.etcClusterAdminKubeconfig}.source = mkIf (!isNull cfg.etcClusterAdminKubeconfig)
@@ -419,19 +439,12 @@ in
         };
       };
 
-      systemd.services.flannel = {
-        preStart = ''
-          ${top.lib.mkWaitCurl (with top.pki.certs.flannelClient; {
-            path = "/api/v1/nodes";
-            cacert = top.caFile;
-            inherit cert key;
-            args = "-o - | grep podCIDR >/dev/null";
-          })}
-        '';
+      systemd.services.flannel = mkIf top.flannel.enable {
+        environment = { inherit (top.pki.certs.flannelClient) cert key; };
         unitConfig.ConditionPathExists = flannelPaths;
       };
 
-      systemd.paths.flannel = {
+      systemd.paths.flannel = mkIf top.flannel.enable {
         wantedBy = [ "flannel.service" ];
         pathConfig = {
           PathExists = flannelPaths;
@@ -440,6 +453,7 @@ in
       };
 
       systemd.services.kube-proxy = mkIf top.proxy.enable {
+        environment = { inherit (top.pki.certs.kubeProxyClient) cert key; };
         unitConfig.ConditionPathExists = proxyPaths;
       };
 
@@ -448,18 +462,6 @@ in
         pathConfig = {
           PathExists = proxyPaths;
           PathChanged = proxyPaths;
-        };
-      };
-
-      systemd.services.kube-scheduler = mkIf top.scheduler.enable {
-        unitConfig.ConditionPathExists = schedulerPaths;
-      };
-
-      systemd.paths.kube-scheduler = mkIf top.scheduler.enable {
-        wantedBy = [ "kube-scheduler.service" ];
-        pathConfig = {
-          PathExists = schedulerPaths;
-          PathChanged = schedulerPaths;
         };
       };
 

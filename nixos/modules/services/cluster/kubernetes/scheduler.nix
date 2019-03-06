@@ -63,12 +63,11 @@ in
       after = [ "kube-apiserver.service" ];
       before = [ "kube-control-plane-online.target" ];
       preStart = ''
-        ${top.lib.mkWaitCurl (with top.pki.certs.schedulerClient; {
+        ${top.lib.mkWaitCurl ( with config.systemd.services.kube-scheduler; {
           sleep = 1;
           path = "/api";
           cacert = top.caFile;
-          inherit cert key;
-        })}
+        } // optionalAttrs (environment ? cert) { inherit (environment) cert key; })}
       '';
       serviceConfig = {
         Slice = "kubernetes.slice";

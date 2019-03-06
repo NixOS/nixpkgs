@@ -53,11 +53,10 @@ in
       before = [ "node-online.target" ];
       path = with pkgs; [ iptables conntrack_tools ];
       preStart = ''
-        ${top.lib.mkWaitCurl (with top.pki.certs.kubeProxyClient; {
+        ${top.lib.mkWaitCurl ( with config.systemd.services.kube-proxy; {
           path = "/api/v1/nodes/${top.kubelet.hostname}";
           cacert = top.caFile;
-          inherit cert key;
-        })}
+        } // optionalAttrs (environment ? cert) { inherit (environment) cert key; })}
       '';
       serviceConfig = {
         Slice = "kubernetes.slice";

@@ -80,6 +80,13 @@ in
       after = [ "kubelet.target" ];
       before = [ "flannel.target" ];
       path = [ pkgs.iptables ];
+      preStart = ''
+        ${top.lib.mkWaitCurl ( with config.systemd.services.flannel; {
+          path = "/api/v1/nodes";
+          cacert = top.caFile;
+          args = "-o - | grep podCIDR >/dev/null";
+        } // optionalAttrs (environment ? cert) { inherit (environment) cert key; })}
+      '';
     };
 
     systemd.services.docker = {

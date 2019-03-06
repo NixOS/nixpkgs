@@ -111,12 +111,11 @@ in
       after = [ "kube-apiserver.service" ];
       before = [ "kube-control-plane-online.target" ];
       preStart = ''
-        ${top.lib.mkWaitCurl (with top.pki.certs.controllerManagerClient; {
+        ${top.lib.mkWaitCurl ( with config.systemd.services.kube-controller-manager; {
           sleep = 1;
           path = "/api";
           cacert = top.caFile;
-          inherit cert key;
-        })}
+        } // optionalAttrs (environment ? cert) { inherit (environment) cert key; })}
       '';
       serviceConfig = {
         RestartSec = "30s";

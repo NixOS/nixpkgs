@@ -472,12 +472,11 @@ in
         after = [ "kube-scheduler.service" "kube-controller-manager.service" ];
         before = [ "kube-control-plane-online.target" ];
         preStart = ''
-          ${top.lib.mkWaitCurl (with top.pki.certs.flannelClient; {
+          ${top.lib.mkWaitCurl ( with config.systemd.services.kube-control-plane-online; {
             sleep = 3;
             path = "/healthz";
             cacert = top.caFile;
-            inherit cert key;
-          })}
+          } // optionalAttrs (environment ? cert) { inherit (environment) cert key; })}
         '';
         script = "echo Ok";
         serviceConfig = {
