@@ -304,41 +304,29 @@ in
         };
       };
 
+      systemd.services.kube-addon-manager-bootstrap = mkIf (top.apiserver.enable && top.addonManager.bootstrapAddons != {}) {
+        environment = {
+          KUBECONFIG = clusterAdminKubeconfig;
+          inherit (cfg.certs.clusterAdmin) cert key;
+        };
+      };
+
       #TODO: Get rid of kube-addon-manager in the future for the following reasons
       # - it is basically just a shell script wrapped around kubectl
       # - it assumes that it is clusterAdmin or can gain clusterAdmin rights through serviceAccount
       # - it is designed to be used with k8s system components only
       # - it would be better with a more Nix-oriented way of managing addons
-      systemd.services.kube-addon-manager = mkIf top.addonManager.enable (mkMerge [{
-        environment.KUBECONFIG = with cfg.certs.addonManager;
-          top.lib.mkKubeConfig "addon-manager" {
-            server = top.apiserverAddress;
-            certFile = cert;
-            keyFile = key;
+      systemd.services.kube-addon-manager = mkIf top.addonManager.enable {
+        environment = with cfg.certs.addonManager; {
+          KUBECONFIG = top.lib.mkKubeConfig "kube-addon-manager" {
+              server = top.apiserverAddress;
+              certFile = cert;
+              keyFile = key;
           };
-        }
-
-        (optionalAttrs (top.addonManager.bootstrapAddons != {}) {
-          serviceConfig.PermissionsStartOnly = true;
-          preStart = with pkgs;
-          let
-            files = mapAttrsToList (n: v: writeText "${n}.json" (builtins.toJSON v))
-              top.addonManager.bootstrapAddons;
-          in
-          ''
-            export KUBECONFIG=${clusterAdminKubeconfig}
-            ${kubectl}/bin/kubectl apply -f ${concatStringsSep " \\\n -f " files}
-
-            ${top.lib.mkWaitCurl (with top.pki.certs.addonManager; {
-              path = "/api/v1/namespaces/kube-system/serviceaccounts/default";
-              cacert = top.caFile;
-              inherit cert key;
-            })}
-          '';
-        })
-        {
-          unitConfig.ConditionPathExists = addonManagerPaths;
-        }]);
+          inherit cert key;
+        };
+        unitConfig.ConditionPathExists = addonManagerPaths;
+      };
 
       systemd.paths.kube-addon-manager = mkIf top.addonManager.enable {
         wantedBy = [ "kube-addon-manager.service" ];

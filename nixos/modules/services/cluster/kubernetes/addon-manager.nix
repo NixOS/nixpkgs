@@ -72,9 +72,16 @@ in
     systemd.services.kube-addon-manager = {
       description = "Kubernetes addon manager";
       wantedBy = [ "kube-control-plane-online.target" ];
+      after = [ "kube-addon-manager-bootstrap.service" ];
       before = [ "kube-control-plane-online.target" ];
       environment.ADDON_PATH = "/etc/kubernetes/addons/";
       path = [ pkgs.gawk ];
+      preStart = ''
+        ${top.lib.mkWaitCurl ( with config.systemd.services.kube-addon-manager; {
+          path = "/api/v1/namespaces/kube-system/serviceaccounts/default";
+          cacert = top.caFile;
+        } // optionalAttrs (environment ? cert) { inherit (environment) cert key; })}
+      '';
       serviceConfig = {
         Slice = "kubernetes.slice";
         ExecStart = "${top.package}/bin/kube-addons";
@@ -84,6 +91,25 @@ in
         Restart = "on-failure";
         RestartSec = 10;
       };
+    };
+
+    systemd.services.kube-addon-manager-bootstrap = mkIf (top.apiserver.enable && top.addonManager.bootstrapAddons != {}) {
+      wantedBy = [ "kube-control-plane-online.target" ];
+      after = [ "kube-apiserver.service" ];
+      before = [ "kube-control-plane-online.target" ];
+      path = [ pkgs.kubectl ];
+      preStart = with pkgs; let
+        files = mapAttrsToList (n: v: writeText "${n}.json" (builtins.toJSON v))
+          cfg.bootstrapAddons;
+      in ''
+        ${top.lib.mkWaitCurl ( with config.systemd.services.kube-addon-manager-bootstrap; {
+          path = "/api";
+          cacert = top.caFile;
+        } // optionalAttrs (environment ? cert) { inherit (environment) cert key; })}
+
+        kubectl apply -f ${concatStringsSep " \\\n -f " files}
+      '';
+      script = "echo Ok";
     };
 
     services.kubernetes.addonManager.bootstrapAddons = mkIf isRBACEnabled
