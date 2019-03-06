@@ -3738,6 +3738,8 @@ in
 
   libcroco = callPackage ../development/libraries/libcroco { };
 
+  libcryptui = callPackage ../development/libraries/libcryptui { };
+
   libsmi = callPackage ../development/libraries/libsmi { };
 
   lesspipe = callPackage ../tools/misc/lesspipe { };
