@@ -503,6 +503,8 @@ in
 
   aldo = callPackage ../applications/radio/aldo { };
 
+  almanah = callPackage ../applications/misc/almanah { };
+
   amazon-ecs-cli = callPackage ../tools/virtualization/amazon-ecs-cli { };
 
   amazon-glacier-cmd-interface = callPackage ../tools/backup/amazon-glacier-cmd-interface { };
