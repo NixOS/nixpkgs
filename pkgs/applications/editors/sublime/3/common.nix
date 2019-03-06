@@ -1,8 +1,9 @@
-{buildVersion, x32sha256, x64sha256}:
+{buildVersion, x32sha256, x64sha256, dev ? false}:
 
 { fetchurl, stdenv, glib, xorg, cairo, gtk2, gtk3, pango, makeWrapper, wrapGAppsHook, openssl, bzip2, runtimeShell,
   pkexecPath ? "/run/wrappers/bin/pkexec", libredirect,
-  gksuSupport ? false, gksu, unzip, zip, bash}:
+  gksuSupport ? false, gksu, unzip, zip, bash,
+  writeScript, common-updater-scripts, curl, gnugrep}:
 
 assert gksuSupport -> gksu != null;
 
@@ -26,7 +27,7 @@ in let
 
   # package with just the binaries
   sublime = stdenv.mkDerivation {
-    name = "sublimetext3-${buildVersion}-bin";
+    name = "sublimetext3-bin-${buildVersion}";
     src =
       fetchurl {
         name = "sublimetext-${buildVersion}.tar.bz2";
@@ -125,6 +126,22 @@ in stdenv.mkDerivation (rec {
     mkdir -p $out/share/applications
     ln -s $sublime/sublime_text.desktop $out/share/applications/sublime_text.desktop
     ln -s $sublime/Icon/256x256/ $out/share/icons
+  '';
+
+  passthru.updateScript = writeScript "sublime3-update-script" ''
+    #!${stdenv.shell}
+    set -o errexit
+    PATH=${stdenv.lib.makeBinPath [ common-updater-scripts curl gnugrep ]}
+
+    latestVersion=$(curl https://www.sublimetext.com/3${stdenv.lib.optionalString dev "dev"} | grep -Po '(?<=<p class="latest"><i>Version:</i> Build )([0-9]+)')
+
+    for platform in ${stdenv.lib.concatStringsSep " " meta.platforms}; do
+        package=sublime3${stdenv.lib.optionalString dev "-dev"}
+        # The script will not perform an update when the version attribute is up to date from previous platform run
+        # We need to clear it before each run
+        update-source-version ''${package}.sublime 0 0000000000000000000000000000000000000000000000000000000000000000 --file=pkgs/applications/editors/sublime/3/packages.nix --version-key=buildVersion --system=$platform
+        update-source-version ''${package}.sublime $latestVersion --file=pkgs/applications/editors/sublime/3/packages.nix --version-key=buildVersion --system=$platform
+    done
   '';
 
   meta = with stdenv.lib; {

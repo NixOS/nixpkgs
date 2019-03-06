@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchFromGitHub, autoreconfHook, gconf, intltool, makeWrapper, pkgconfig
+{ stdenv, fetchurl, runCommand, fetchFromGitHub, autoreconfHook, gconf, intltool, makeWrapper, pkgconfig
 , vala, wrapGAppsHook, dbus, dconf ? null, glib, gdk_pixbuf, gobject-introspection, gtk2
 , gtk3, gtk-doc, isocodes, python3, json-glib, libnotify ? null, enablePythonLibrary ? true
 , enableUI ? true, withWayland ? false, libxkbcommon ? null, wayland ? null
@@ -59,6 +59,13 @@ let
       makeWrapper ${glib.dev}/bin/glib-mkenums $out/bin/glib-mkenums --unset PYTHONPATH
     '';
   };
+
+  # stop gconf from leaking into environment
+  # can be removed in ibus 1.6 which will not use gconf anymore
+  gsettings-schema-convert = runCommand "name" {} ''
+    mkdir -p $out/bin
+    ln -s ${gconf}/bin/gsettings-schema-convert $out/bin
+  '';
 in
 
 stdenv.mkDerivation rec {
@@ -97,7 +104,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     autoreconfHook
-    gconf
+    gsettings-schema-convert
     gtk-doc
     intltool
     makeWrapper

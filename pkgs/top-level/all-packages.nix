@@ -5,7 +5,7 @@
  * to merges. Please use the full-text search of your editor. ;)
  * Hint: ### starts category names.
  */
-{ lib, noSysDirs, config}:
+{ lib, noSysDirs, config, overlays }:
 res: pkgs: super:
 
 with pkgs;
@@ -61,7 +61,7 @@ in
 
 
   ### Helper functions.
-  inherit lib config;
+  inherit lib config overlays;
 
   inherit (lib) lowPrio hiPrio appendToName makeOverridable;
 
@@ -2674,6 +2674,8 @@ in
 
   fileschanged = callPackage ../tools/misc/fileschanged { };
 
+  filet = callPackage ../applications/misc/filet { };
+
   findutils = callPackage ../tools/misc/findutils { };
 
   finger_bsd = callPackage ../tools/networking/bsd-finger { };
@@ -3173,9 +3175,7 @@ in
 
   gsmartcontrol = callPackage ../tools/misc/gsmartcontrol { };
 
-  gssdp = callPackage ../development/libraries/gssdp {
-    inherit (gnome2) libsoup;
-  };
+  gssdp = callPackage ../development/libraries/gssdp { };
 
   gt5 = callPackage ../tools/system/gt5 { };
 
@@ -3202,9 +3202,7 @@ in
 
   gup = callPackage ../development/tools/build-managers/gup {};
 
-  gupnp = callPackage ../development/libraries/gupnp {
-    inherit (gnome2) libsoup;
-  };
+  gupnp = callPackage ../development/libraries/gupnp { };
 
   gupnp-av = callPackage ../development/libraries/gupnp-av {};
 
@@ -7139,7 +7137,11 @@ in
     inherit (darwin.apple_sdk.frameworks) Security Foundation;
   };
 
-  go = go_1_11;
+  go_1_12 = callPackage ../development/compilers/go/1.12.nix {
+    inherit (darwin.apple_sdk.frameworks) Security Foundation;
+  };
+
+  go = go_1_12;
 
   go-repo-root = callPackage ../development/tools/go-repo-root { };
 
@@ -7397,7 +7399,15 @@ in
     stdenv = overrideCC stdenv buildPackages.gcc6; # with gcc-7: undefined reference to `__divmoddi4'
   });
 
-  llvmPackages_latest = llvmPackages_7;
+  llvmPackages_8 = callPackage ../development/compilers/llvm/8 ({
+    inherit (stdenvAdapters) overrideCC;
+    buildLlvmTools = buildPackages.llvmPackages_8.tools;
+    targetLlvmLibraries = targetPackages.llvmPackages_8.libraries;
+  } // stdenv.lib.optionalAttrs (buildPackages.stdenv.cc.isGNU && stdenv.hostPlatform.isi686) {
+    stdenv = overrideCC stdenv buildPackages.gcc6; # with gcc-7: undefined reference to `__divmoddi4'
+  });
+
+  llvmPackages_latest = llvmPackages_8;
 
   manticore = callPackage ../development/compilers/manticore { };
 
@@ -7502,7 +7512,7 @@ in
   };
 
   ponyc = callPackage ../development/compilers/ponyc {
-    llvm = llvm_39;
+    llvm = llvm_7;
   };
 
   pony-stable = callPackage ../development/compilers/ponyc/pony-stable.nix { };
@@ -8565,6 +8575,7 @@ in
 
   ccls = callPackage ../development/tools/misc/ccls {
     llvmPackages = llvmPackages_latest;
+    stdenv = llvmPackages_latest.stdenv;
   };
 
   credstash = with python3Packages; toPythonApplication credstash;
@@ -9492,7 +9503,7 @@ in
 
   c-blosc = callPackage ../development/libraries/c-blosc { };
 
-  cachix = (haskell.lib.justStaticExecutables haskellPackages.cachix).overrideAttrs (drv: {
+  cachix = (callPackage ../development/tools/cachix { }).overrideAttrs (drv: {
     meta = drv.meta // {
       hydraPlatforms = stdenv.lib.platforms.unix;
     };
@@ -13011,8 +13022,6 @@ in
 
   wayland-protocols = callPackage ../development/libraries/wayland/protocols.nix { };
 
-  webkit = webkitgtk;
-
   wcslib = callPackage ../development/libraries/wcslib { };
 
   webkitgtk = callPackage ../development/libraries/webkitgtk {
@@ -14658,6 +14667,13 @@ in
       ];
   };
 
+  linux_5_0 = callPackage ../os-specific/linux/kernel/linux-5.0.nix {
+    kernelPatches =
+      [ kernelPatches.bridge_stp_helper
+        kernelPatches.modinst_arg_list_too_long
+      ];
+  };
+
   linux_testing = callPackage ../os-specific/linux/kernel/linux-testing.nix {
     kernelPatches = [
       kernelPatches.bridge_stp_helper
@@ -14839,7 +14855,7 @@ in
   linux = linuxPackages.kernel;
 
   # Update this when adding the newest kernel major version!
-  linuxPackages_latest = linuxPackages_4_20;
+  linuxPackages_latest = linuxPackages_5_0;
   linux_latest = linuxPackages_latest.kernel;
 
   # Build the kernel modules for the some of the kernels.
@@ -14850,6 +14866,7 @@ in
   linuxPackages_4_14 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_14);
   linuxPackages_4_19 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_19);
   linuxPackages_4_20 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_20);
+  linuxPackages_5_0 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_5_0);
   # When adding to this list:
   # - Update linuxPackages_latest to the latest version
   # - Update the rev in ../os-specific/linux/kernel/linux-libre.nix to the latest one.
@@ -16389,6 +16406,8 @@ in
 
   catfish = callPackage ../applications/search/catfish { };
 
+  catimg = callPackage ../tools/misc/catimg { };
+
   cava = callPackage ../applications/audio/cava { };
 
   cb2bib = libsForQt5.callPackage ../applications/office/cb2bib { };
@@ -16574,7 +16593,6 @@ in
     pythonPackages = datadog-integrations-core {};
   };
   datadog-process-agent = callPackage ../tools/networking/dd-agent/datadog-process-agent.nix { };
-  datadog-trace-agent = callPackage ../tools/networking/dd-agent/datadog-trace-agent.nix { };
   datadog-integrations-core = extras: callPackage ../tools/networking/dd-agent/integrations-core.nix {
     python = python27;
     extraIntegrations = extras;
@@ -17560,9 +17578,7 @@ in
 
   gspell = callPackage ../development/libraries/gspell { };
 
-  gtk2fontsel = callPackage ../applications/misc/gtk2fontsel {
-    inherit (gnome2) gtk;
-  };
+  gtk2fontsel = callPackage ../applications/misc/gtk2fontsel { };
 
   guake = callPackage ../applications/misc/guake { };
 
@@ -17661,7 +17677,10 @@ in
 
   slack-term = callPackage ../applications/networking/instant-messengers/slack-term { };
 
-  singularity = callPackage ../applications/virtualization/singularity { };
+  singularity = callPackage ../applications/virtualization/singularity {
+    # XXX: the build is finding references to Go when compiled with go v1.12
+    go = go_1_11;
+  };
 
   spectmorph = callPackage ../applications/audio/spectmorph { };
 
@@ -19230,7 +19249,7 @@ in
 
   udevil = callPackage ../applications/misc/udevil {};
 
-  udiskie = python3Packages.callPackage ../applications/misc/udiskie { };
+  udiskie = callPackage ../applications/misc/udiskie { };
 
   sakura = callPackage ../applications/misc/sakura { };
 
@@ -19709,6 +19728,8 @@ in
     inherit (pythonPackages) wrapPython wxPython;
   };
 
+  torrential = callPackage ../applications/networking/p2p/torrential { };
+
   tortoisehg = callPackage ../applications/version-management/tortoisehg { };
 
   toot = callPackage ../applications/misc/toot { };
@@ -19781,7 +19802,7 @@ in
   uwimap = callPackage ../tools/networking/uwimap { };
 
   uzbl = callPackage ../applications/networking/browsers/uzbl {
-    webkit = webkitgtk24x-gtk2;
+    webkitgtk = webkitgtk24x-gtk2;
   };
 
   utox = callPackage ../applications/networking/instant-messengers/utox { };
@@ -20832,7 +20853,7 @@ in
     minetestclient_4 minetestserver_4
     minetestclient_5 minetestserver_5;
 
-  minetest = minetestclient_4;
+  minetest = minetestclient_5;
 
   mnemosyne = callPackage ../games/mnemosyne {
     python = python3;
@@ -21285,7 +21306,7 @@ in
   clearlooks-phenix = callPackage ../misc/themes/clearlooks-phenix { };
 
   deepin = recurseIntoAttrs (import ../desktops/deepin {
-    inherit pkgs libsForQt5;
+    inherit pkgs libsForQt5 go_1_11;
     inherit (lib) makeScope;
   });
 
@@ -21293,20 +21314,7 @@ in
     callPackage = newScope pkgs.enlightenment;
   });
 
-  gnome2 = recurseIntoAttrs (callPackage ../desktops/gnome-2 {
-    callPackage = pkgs.newScope pkgs.gnome2;
-    self = pkgs.gnome2;
-  } // {
-    inherit (pkgs)
-      # GTK Libs
-      glib glibmm atk atkmm cairo pango pangomm gdk_pixbuf gtkmm2 libcanberra-gtk2
-
-      # Included for backwards compatibility
-      libsoup libwnck gtk-doc gnome-doc-utils;
-
-    gtk = res.gtk2;
-    gtkmm = res.gtkmm2;
-  });
+  gnome2 = recurseIntoAttrs (callPackage ../desktops/gnome-2 { });
 
   gnome3 = recurseIntoAttrs (callPackage ../desktops/gnome-3 { });
 
@@ -21324,10 +21332,12 @@ in
     nohotcorner = callPackage ../desktops/gnome-3/extensions/nohotcorner { };
     no-title-bar = callPackage ../desktops/gnome-3/extensions/no-title-bar { };
     remove-dropdown-arrows = callPackage ../desktops/gnome-3/extensions/remove-dropdown-arrows { };
+    sound-output-device-chooser = callPackage ../desktops/gnome-3/extensions/sound-output-device-chooser { };
     system-monitor = callPackage ../desktops/gnome-3/extensions/system-monitor { };
     taskwhisperer = callPackage ../desktops/gnome-3/extensions/taskwhisperer { };
     timepp = callPackage ../desktops/gnome-3/extensions/timepp { };
     topicons-plus = callPackage ../desktops/gnome-3/extensions/topicons-plus { };
+    window-corner-preview = callPackage ../desktops/gnome-3/extensions/window-corner-preview { };
   };
 
   hsetroot = callPackage ../tools/X11/hsetroot { };
@@ -22331,7 +22341,7 @@ in
 
   dpkg = callPackage ../tools/package-management/dpkg { };
 
-  ekiga = newScope pkgs.gnome2 ../applications/networking/instant-messengers/ekiga { };
+  ekiga = callPackage ../applications/networking/instant-messengers/ekiga { };
 
   emulationstation = callPackage ../misc/emulators/emulationstation {
     stdenv = overrideCC stdenv gcc5;
@@ -22898,6 +22908,8 @@ in
 
   sqsh = callPackage ../development/tools/sqsh { };
 
+  jx = callPackage ../applications/networking/cluster/jx {};
+
   inherit (callPackage ../applications/networking/cluster/terraform {})
     terraform_0_11
     terraform_0_11-full
@@ -22986,7 +22998,7 @@ in
   });
 
   vimprobable2-unwrapped = callPackage ../applications/networking/browsers/vimprobable2 {
-    webkit = webkitgtk24x-gtk2;
+    webkitgtk = webkitgtk24x-gtk2;
   };
   vimprobable2 = wrapFirefox vimprobable2-unwrapped { };
 

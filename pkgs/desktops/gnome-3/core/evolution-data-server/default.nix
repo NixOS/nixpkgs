@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     libcanberra-gtk3 pcre
   ];
 
-  propagatedBuildInputs = [ libsecret nss nspr libical db ];
+  propagatedBuildInputs = [ libsecret nss nspr libical db libsoup ];
 
   cmakeFlags = [
     "-DENABLE_UOA=OFF"

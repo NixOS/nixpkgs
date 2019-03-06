@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ git go ];
 
-  makeFlags = [ "PREFIX=$(out)" "VERSION=${version}" ];
+  makeFlags = [ "PREFIX=$(out)" "VERSION=${version}" "GOCACHE=$(TMPDIR)/go-cache" ];
 
   meta = with stdenv.lib; {
     homepage = http://www.gitlab.com/;

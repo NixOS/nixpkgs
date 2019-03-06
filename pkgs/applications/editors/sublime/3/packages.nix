@@ -6,6 +6,7 @@ in
   rec {
     sublime3-dev = common {
       buildVersion = "3184";
+      dev = true;
       x32sha256 = "1b6f1fid75g5z247dbnyyj276lrlv99scrdk1vvfcr6vyws77vzr";
       x64sha256 = "03127jhfjr17ai96p3axh5b5940fds8jcw6vkid8y6dmvd2dpylz";
     } {};
