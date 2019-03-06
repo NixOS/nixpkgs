@@ -6,12 +6,12 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "libsemanage-${version}";
-  version = "2.7";
+  version = "2.8";
   inherit (libsepol) se_release se_url;
 
   src = fetchurl {
     url = "${se_url}/${se_release}/libsemanage-${version}.tar.gz";
-    sha256 = "0xnlp1yg8b1aqc6kq3pss1i1nl06rfj4x4pyl5blasnf2ivlgs87";
+    sha256 = "1qm8pr67w08xrkqfky6qvy3r18w4bh873qr1dj960m0yqp9fh38w";
   };
 
   nativeBuildInputs = [ bison flex pkgconfig ];
@@ -19,11 +19,9 @@ stdenv.mkDerivation rec {
     ++ optionals enablePython [ swig python ];
 
   preBuild = ''
-    makeFlagsArray+=("PREFIX=$out")
+    makeFlagsArray+=("PREFIX=/")
     makeFlagsArray+=("DESTDIR=$out")
-    makeFlagsArray+=("MAN3DIR=$out/share/man/man3")
-    makeFlagsArray+=("MAN5DIR=$out/share/man/man5")
-    makeFlagsArray+=("PYSITEDIR=$out/lib/${python.libPrefix}/site-packages")
+    makeFlagsArray+=("PYTHONLIBDIR=lib/${python.libPrefix}/site-packages")
   '';
 
   installTargets = [ "install" ] ++ optionals enablePython [ "install-pywrap" ];
