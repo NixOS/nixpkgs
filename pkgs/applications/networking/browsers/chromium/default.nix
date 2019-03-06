@@ -13,7 +13,7 @@
 , cupsSupport ? true
 , pulseSupport ? config.pulseaudio or stdenv.isLinux
 , commandLineArgs ? ""
-, VAAPISupport ? false
+, VAAPISupport ? false, libva ? null
 }:
 
 let
@@ -93,6 +93,9 @@ in stdenv.mkDerivation {
   buildCommand = let
     browserBinary = "${chromium.browser}/libexec/chromium/chromium";
     getWrapperFlags = plugin: "$(< \"${plugin}/nix-support/wrapper-flags\")";
+    libPath = stdenv.lib.makeLibraryPath (
+      stdenv.lib.optional VAAPISupport libva
+    );
   in with stdenv.lib; ''
     mkdir -p "$out/bin"
 
@@ -109,6 +112,8 @@ in stdenv.mkDerivation {
     else
       export CHROME_DEVEL_SANDBOX="$sandbox/bin/${sandboxExecutableName}"
     fi
+
+    export LD_LIBRARY_PATH="\$LD_LIBRARY_PATH:${libPath}"
 
     # libredirect causes chromium to deadlock on startup
     export LD_PRELOAD="\$(echo -n "\$LD_PRELOAD" | tr ':' '\n' | grep -v /lib/libredirect\\\\.so$ | tr '\n' ':')"

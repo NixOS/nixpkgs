@@ -268,7 +268,7 @@ let
     } // optionalAttrs pulseSupport {
       use_pulseaudio = true;
       link_pulseaudio = true;
-      } // optionalAttrs (VAAPISupport && (versionRange "72" "73")) {
+    } // optionalAttrs (VAAPISupport && (versionRange "72" "73")) {
       use_vaapi = true;
     } // (extraAttrs.gnFlags or {}));
 
