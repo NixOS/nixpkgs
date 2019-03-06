@@ -143,6 +143,13 @@ in
       cfg.certs.schedulerClient.cert
       cfg.certs.schedulerClient.key
     ];
+    controllerManagerPaths = [
+      top.controllerManager.rootCaFile
+      top.controllerManager.tlsCertFile
+      top.controllerManager.tlsKeyFile
+      cfg.certs.controllerManagerClient.cert
+      cfg.certs.controllerManagerClient.key
+    ];
   in
   {
 
@@ -333,6 +340,18 @@ in
         pathConfig = {
           PathExists = addonManagerPaths;
           PathChanged = addonManagerPaths;
+        };
+      };
+
+      systemd.services.kube-controller-manager = mkIf top.controllerManager.enable {
+        unitConfig.ConditionPathExists = controllerManagerPaths;
+      };
+
+      systemd.paths.kube-controller-manager = mkIf top.controllerManager.enable {
+        wantedBy = [ "kube-controller-manager.service" ];
+        pathConfig = {
+          PathExists = controllerManagerPaths;
+          PathChanged = controllerManagerPaths;
         };
       };
 
