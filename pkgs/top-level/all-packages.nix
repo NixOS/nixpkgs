@@ -9827,6 +9827,8 @@ in
 
   flann = callPackage ../development/libraries/flann { };
 
+  flatcc = callPackage ../development/libraries/flatcc { };
+
   flint = callPackage ../development/libraries/flint { };
 
   flite = callPackage ../development/libraries/flite { };
