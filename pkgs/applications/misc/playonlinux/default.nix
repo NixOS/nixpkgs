@@ -52,7 +52,7 @@ let
     else if stdenv.hostPlatform.system == "i686-linux" then "${stdenv.cc}/nix-support/dynamic-linker"
     else throw "Unsupported platform for PlayOnLinux: ${stdenv.hostPlatform.system}";
   ld64 = "${stdenv.cc}/nix-support/dynamic-linker";
-  libs = pkgs: stdenv.lib.makeLibraryPath [ xorg.libX11 xorg.libX11.dev libGL ];
+  libs = pkgs: stdenv.lib.makeLibraryPath [ xorg.libX11 libGL ];
 
 in stdenv.mkDerivation {
   name = "playonlinux-${version}";
@@ -68,7 +68,7 @@ in stdenv.mkDerivation {
     [ python2Packages.python
       python2Packages.wxPython
       python2Packages.setuptools
-      xorg.libX11.dev
+      xorg.libX11
       libGL
     ];
 
