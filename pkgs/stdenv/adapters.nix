@@ -204,6 +204,7 @@ rec {
         !(stdenv.cc.isGNU && stdenv.lib.versionOlder (builtins.parseDrvName stdenv.cc.name).version "7.0") then
        stdenv // {
          mkDerivation = args: stdenv.mkDerivation (args // {
+           requiredSystemFeatures = args.requiredSystemFeatures or [] ++ [ "gccarch-${stdenv.hostPlatform.platform.gcc.arch}" ];         
            NIX_CFLAGS_COMPILE = stdenv.lib.concatStringsSep " " ([ (toString (args.NIX_CFLAGS_COMPILE or ""))          
                                                                     "-march=${stdenv.hostPlatform.platform.gcc.arch}"   
                                                                  ] ++ stdenv.hostPlatform.platform.gcc.extraFlags or []);                                                     
