@@ -1,6 +1,8 @@
---- a/waagent	2016-03-12 09:58:15.728088851 +0200
-+++ a/waagent	2016-03-12 09:58:43.572680025 +0200
-@@ -6173,10 +6173,10 @@
+diff --git a/bin/waagent2.0 b/bin/waagent2.0
+index 25aa0ce..b561ba7 100644
+--- a/bin/waagent2.0
++++ b/bin/waagent2.0
+@@ -5678,10 +5678,10 @@ class Agent(Util):
              Log("MAC  address: " + ":".join(["%02X" % Ord(a) for a in mac]))
          
          # Consume Entropy in ACPI table provided by Hyper-V

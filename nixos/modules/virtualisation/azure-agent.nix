@@ -7,12 +7,13 @@ let
   cfg = config.virtualisation.azure.agent;
 
   waagent = with pkgs; stdenv.mkDerivation rec {
-    name = "waagent-2.0";
+    name = "waagent-2.2";
+    version = "2.2.36";
     src = pkgs.fetchFromGitHub {
       owner = "Azure";
       repo = "WALinuxAgent";
-      rev = "1b3a8407a95344d9d12a2a377f64140975f1e8e4";
-      sha256 = "10byzvmpgrmr4d5mdn2kq04aapqb3sgr1admk13wjmy5cd6bwd2x";
+      rev = "v${version}";
+      sha256 = "09rv28rmvi26lf6gnk44bcgi3kij363p01x916c3asbawrmxxipd";
     };
 
     patches = [ ./azure-agent-entropy.patch ];
@@ -23,7 +24,7 @@ let
                     procps # for pidof
                     shadow # for useradd, usermod
                     utillinux # for (u)mount, fdisk, sfdisk, mkswap
-                    parted
+                    parted bash
                   ];
     pythonPath = [ pythonPackages.pyasn1 ];
 
@@ -31,13 +32,15 @@ let
     buildPhase = false;
 
     installPhase = ''
+      substituteInPlace config/66-azure-storage.rules \
+          --replace /bin/sh "${bash}/bin/sh"
       substituteInPlace config/99-azure-product-uuid.rules \
           --replace /bin/chmod "${coreutils}/bin/chmod"
       mkdir -p $out/lib/udev/rules.d
       cp config/*.rules $out/lib/udev/rules.d
 
       mkdir -p $out/bin
-      cp waagent $out/bin/
+      cp bin/waagent2.0 $out/bin/waagent
       chmod +x $out/bin/waagent
 
       wrapProgram "$out/bin/waagent" \
