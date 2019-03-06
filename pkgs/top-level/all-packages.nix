@@ -13327,8 +13327,11 @@ in
   buildGo111Package = callPackage ../development/go-modules/generic {
     go = buildPackages.go_1_11;
   };
+  buildGo112Package = callPackage ../development/go-modules/generic {
+    go = buildPackages.go_1_12;
+  };
 
-  buildGoPackage = buildGo111Package;
+  buildGoPackage = buildGo112Package;
 
   go2nix = callPackage ../development/tools/go2nix { };
 
