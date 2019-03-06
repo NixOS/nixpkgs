@@ -2,9 +2,9 @@
 
 buildGoPackage rec {
   name = "kustomize-${version}";
-  version = "2.0.1";
-  # rev is the 2.0.1 commit, mainly for kustomize version command output
-  rev = "ce7e5ee2c30cc5856fea01fe423cf167f2a2d0c3";
+  version = "2.0.3";
+  # rev is the 2.0.3 commit, mainly for kustomize version command output
+  rev = "a6f65144121d1955266b0cd836ce954c04122dc8";
 
   goPackagePath = "sigs.k8s.io/kustomize";
 
@@ -16,7 +16,7 @@ buildGoPackage rec {
   '';
 
   src = fetchFromGitHub {
-    sha256 = "1ljllx2gd329lnq6mdsgh8zzr517ji80b0j21pgr23y0xmd43ijf";
+    sha256 = "1dfkpx9rllj1bzm5f52bx404kdds3zx1h38yqri9ha3p3pcb1bbb";
     rev = "v${version}";
     repo = "kustomize";
     owner = "kubernetes-sigs";
