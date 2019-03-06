@@ -1447,6 +1447,8 @@ in
 
   gh-ost = callPackage ../tools/misc/gh-ost { };
 
+  ghidra-bin = callPackage ../tools/security/ghidra { };
+
   gif-for-cli = callPackage ../tools/misc/gif-for-cli { };
 
   gist = callPackage ../tools/text/gist { };
