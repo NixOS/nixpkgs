@@ -1,13 +1,13 @@
-{ stdenv, fetchurl, gettext, libsepol, libselinux, libsemanage }:
+{ stdenv, fetchurl, gettext, libsepol, libselinux, libsemanage, audit, pam }:
 
 stdenv.mkDerivation rec {
   name = "policycoreutils-${version}";
-  version = "2.7";
+  version = "2.8";
   inherit (libsepol) se_release se_url;
 
   src = fetchurl {
     url = "${se_url}/${se_release}/policycoreutils-${version}.tar.gz";
-    sha256 = "1x742c7lkw30namhkw87yg7z384qzqjz0pvmqs0lk19v6958l6qa";
+    sha256 = "168hph0y2paqn5hvc0ygw9lfxchylmgc7dy2sxxfwyzj6ni56rcq";
   };
 
   postPatch = ''
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ gettext ];
-  buildInputs = [ libsepol libselinux libsemanage ];
+  buildInputs = [ libsepol libselinux libsemanage audit pam ];
 
   preBuild = ''
     makeFlagsArray+=("PREFIX=$out")
