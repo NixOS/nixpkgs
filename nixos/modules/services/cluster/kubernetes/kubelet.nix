@@ -253,7 +253,7 @@ in
       systemd.services.kubelet = {
         description = "Kubernetes Kubelet Service";
         wantedBy = [ "kubelet.target" ];
-        after = [ "kube-apiserver-online.target" ];
+        after = [ "kube-control-plane-online.target" ];
         before = [ "kubelet.target" ];
         path = with pkgs; [ gitMinimal openssh docker utillinux iproute ethtool thin-provisioning-tools iptables socat ] ++ top.path;
         preStart = ''
@@ -339,7 +339,7 @@ in
         serviceConfig.Slice = "kubernetes.slice";
       };
 
-      systemd.services.node-online = {
+      systemd.services.kubelet-online = {
         wantedBy = [ "node-online.target" ];
         after = [ "flannel.target" "kubelet.target" ];
         before = [ "node-online.target" ];

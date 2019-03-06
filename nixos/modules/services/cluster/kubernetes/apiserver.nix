@@ -293,9 +293,9 @@ in
     in {
         systemd.services.kube-apiserver = {
           description = "Kubernetes APIServer Service";
-          wantedBy = [ "kube-apiserver-online.target" ];
+          wantedBy = [ "kube-control-plane-online.target" ];
           after = [ "certmgr.service" ];
-          before = [ "kube-apiserver-online.target" ];
+          before = [ "kube-control-plane-online.target" ];
           serviceConfig = {
             Slice = "kubernetes.slice";
             ExecStart = ''${top.package}/bin/kube-apiserver \
@@ -461,16 +461,16 @@ in
 
     }))
     {
-      systemd.targets.kube-apiserver-online = {
+      systemd.targets.kube-control-plane-online = {
         wantedBy = [ "kubernetes.target" ];
         before = [ "kubernetes.target" ];
       };
 
-      systemd.services.kube-apiserver-online = mkIf top.flannel.enable {
-        description = "apiserver control plane is online";
-        wantedBy = [ "kube-apiserver-online.target" ];
+      systemd.services.kube-control-plane-online = rec {
+        description = "Kubernetes control plane is online";
+        wantedBy = [ "kube-control-plane-online.target" ];
         after = [ "kube-scheduler.service" "kube-controller-manager.service" ];
-        before = [ "kube-apiserver-online.target" ];
+        before = [ "kube-control-plane-online.target" ];
         preStart = ''
           ${top.lib.mkWaitCurl (with top.pki.certs.flannelClient; {
             sleep = 3;
@@ -479,7 +479,7 @@ in
             inherit cert key;
           })}
         '';
-        script = "echo apiserver control plane is online";
+        script = "echo Ok";
         serviceConfig = {
           TimeoutSec = "500";
         };

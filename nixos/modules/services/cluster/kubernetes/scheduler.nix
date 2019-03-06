@@ -59,9 +59,9 @@ in
   config = mkIf cfg.enable {
     systemd.services.kube-scheduler = {
       description = "Kubernetes Scheduler Service";
-      wantedBy = [ "kube-apiserver-online.target" ];
+      wantedBy = [ "kube-control-plane-online.target" ];
       after = [ "kube-apiserver.service" ];
-      before = [ "kube-apiserver-online.target" ];
+      before = [ "kube-control-plane-online.target" ];
       preStart = ''
         ${top.lib.mkWaitCurl (with top.pki.certs.schedulerClient; {
           sleep = 1;

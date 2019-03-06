@@ -116,9 +116,9 @@ in
 
     systemd.services.kube-controller-manager = {
       description = "Kubernetes Controller Manager Service";
-      wantedBy = [ "kube-apiserver-online.target" ];
+      wantedBy = [ "kube-control-plane-online.target" ];
       after = [ "kube-apiserver.service" ];
-      before = [ "kube-apiserver-online.target" ];
+      before = [ "kube-control-plane-online.target" ];
       preStart = ''
         ${top.lib.mkWaitCurl (with top.pki.certs.controllerManagerClient; {
           sleep = 1;
