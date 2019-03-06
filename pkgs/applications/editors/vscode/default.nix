@@ -44,7 +44,7 @@ in
       desktopName = longName;
       comment = "Code Editing. Redefined.";
       genericName = "Text Editor";
-      exec = executableName;
+      exec = "@out@/bin/${executableName}";
       icon = "@out@/share/pixmaps/code.png";
       startupNotify = "true";
       categories = "Utility;TextEditor;Development;IDE;";
@@ -56,7 +56,7 @@ in
 
         [Desktop Action new-empty-window]
         Name=New Empty Window
-        Exec=${executableName} --new-window %F
+        Exec=@out@/bin/${executableName} --new-window %F
         Icon=@out@/share/pixmaps/code.png
       '';
     };
