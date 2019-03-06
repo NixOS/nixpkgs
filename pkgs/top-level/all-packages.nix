@@ -17684,10 +17684,7 @@ in
 
   slack-term = callPackage ../applications/networking/instant-messengers/slack-term { };
 
-  singularity = callPackage ../applications/virtualization/singularity {
-    # XXX: the build is finding references to Go when compiled with go v1.12
-    go = go_1_11;
-  };
+  singularity = callPackage ../applications/virtualization/singularity { };
 
   spectmorph = callPackage ../applications/audio/spectmorph { };
 
