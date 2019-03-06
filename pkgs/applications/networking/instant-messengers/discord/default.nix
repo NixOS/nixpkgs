@@ -35,6 +35,7 @@ stdenv.mkDerivation rec {
         patchelf --set-interpreter ${stdenv.cc.bintools.dynamicLinker} \
                  $out/opt/discord/Discord
 
+
         wrapProgram $out/opt/discord/Discord \
           "''${gappsWrapperArgs[@]}" \
           --prefix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.name}/" \
@@ -43,13 +44,15 @@ stdenv.mkDerivation rec {
         ln -s $out/opt/discord/Discord $out/bin/
         ln -s $out/opt/discord/discord.png $out/share/pixmaps
 
-        ln -s "${desktopItem}/share/applications" $out/share/
+        mkdir -p $out/share/applications
+        substitute $desktopItem/share/applications/discord.desktop $out/share/applications/discord.desktop \
+          --subst-var out
         '';
 
     desktopItem = makeDesktopItem {
       name = pname;
-      exec = "Discord";
-      icon = pname;
+      exec = "@out@/bin/Discord";
+      icon = "@out@/share/pixmaps/discord.png";
       desktopName = "Discord";
       genericName = meta.description;
       categories = "Network;InstantMessaging;";
