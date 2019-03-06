@@ -108,6 +108,8 @@ let
     inherit (self.sources) pathType pathIsDirectory cleanSourceFilter
       cleanSource sourceByRegex sourceFilesBySuffices
       commitIdFromGitRepo cleanSourceWith pathHasContext
+      splitPath
+      explicitSource explicitSourceFilter
       canCleanSource pathIsRegularFile pathIsGitRepo;
     inherit (self.modules) evalModules unifyModuleSyntax
       applyIfFunction mergeModules
