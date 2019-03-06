@@ -204,7 +204,7 @@ rec {
         mkDerivation = args: stdenv.mkDerivation (args
           // {
             requiredSystemFeatures = args.requiredSystemFeatures or [] ++ [ "gccarch-${stdenv.hostPlatform.platform.gcc.arch}" ];
-          } # too old compilers, for example bootstrap's GCC5 does not understand -march=skylake
+          } # too old compilers, for example bootstrap's GCC5 do not understand -march=skylake
           // stdenv.lib.optionalAttrs (stdenv.cc != null &&
                                         ( stdenv.cc.isGNU   && stdenv.lib.versionAtLeast (builtins.parseDrvName stdenv.cc.name).version "6.0"
                                        || stdenv.cc.isClang && true
