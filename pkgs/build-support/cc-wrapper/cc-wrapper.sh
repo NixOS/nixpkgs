@@ -158,6 +158,23 @@ if [ "$dontLink" != 1 ]; then
     export NIX_@infixSalt@_LDFLAGS_SET=1
 fi
 
+# Remove -march= from extraAfter if -march= is among params
+# (likely compiling a single file with code optimized for a particular arch,
+# e.g. openblas files with AVX512 code,
+# while extraAfter is set for a the whole derivation (via $NIX_CFLAGS_COMPILE)
+# or even for the whole closure (via platform.gcc.arch))
+for p in ${params+"${params[@]}"}; do
+    if [[ "$p" = -march=* ]]; then
+        filteredExtraAfter=()
+        for q in ${extraAfter+"${extraAfter[@]}"}; do
+            if [[ "$q" != -march=* ]]; then
+                filteredExtraAfter+=("$q")
+            fi
+        done
+        extraAfter=(${filteredExtraAfter+"${filteredExtraAfter[@]}"})
+    fi
+done
+
 # As a very special hack, if the arguments are just `-v', then don't
 # add anything.  This is to prevent `gcc -v' (which normally prints
 # out the version number and returns exit code 0) from printing out
