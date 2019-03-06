@@ -4,13 +4,13 @@ with lib;
 
 buildGoPackage rec {
   name = "containerd-${version}";
-  version = "1.2.2";
+  version = "1.2.4";
 
   src = fetchFromGitHub {
     owner = "containerd";
     repo = "containerd";
     rev = "v${version}";
-    sha256 = "065snv0s3v3z0ghadlii4w78qnhchcbx2kfdrvm8fk8gb4pkx1ya";
+    sha256 = "1rw7f0y3iv0mapxid1rgpns80dcy8nhgmxmw27x8qzrzic5viivy";
   };
 
   goPackagePath = "github.com/containerd/containerd";
