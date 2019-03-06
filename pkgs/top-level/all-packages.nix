@@ -21313,7 +21313,7 @@ in
   clearlooks-phenix = callPackage ../misc/themes/clearlooks-phenix { };
 
   deepin = recurseIntoAttrs (import ../desktops/deepin {
-    inherit pkgs libsForQt5 go_1_11;
+    inherit pkgs libsForQt5;
     inherit (lib) makeScope;
   });
 
