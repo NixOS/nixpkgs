@@ -38,9 +38,9 @@ haskellPackages.callPackage
      pname = "zsh-git-prompt";
      version = "0.5";
      src = fetchgit {
-       url = "https://github.com/olivierverdier/zsh-git-prompt.git";
-       rev = "0a6c8b610e799040b612db8888945f502a2ddd9d";
-       sha256 = "19x1gf1r6l7r6i7vhhsgzcbdlnr648jx8j84nk2zv1b8igh205hw";
+       url = "https://github.com/starcraftman/zsh-git-prompt.git";
+       rev = "11b83ba3b85d14c66cf2ab79faefab6d838da28e";
+       sha256 = "04aylsjfb03ckw219plkzpyiq4j9g66bjxa5pa56h1p7df6pjssb";
      };
      prePatch = ''
         substituteInPlace zshrc.sh                       \
