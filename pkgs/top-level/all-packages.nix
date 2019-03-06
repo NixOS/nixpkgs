@@ -936,7 +936,11 @@ in
   metricbeat = metricbeat6;
   packetbeat = packetbeat6;
 
-  inherit (callPackages ../misc/logging/beats/5.x.nix { })
+  inherit (callPackages ../misc/logging/beats/5.x.nix {
+    # XXX: bettercap is failing with Go 1.12. Error is related to cgo, an
+    # update to this package might fix it.
+    buildGoPackage = buildGo111Package;
+  })
     filebeat5
     heartbeat5
     metricbeat5
