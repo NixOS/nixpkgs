@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    inherit (s) version;
+    inherit version;
     description = ''A package manager for Lua'';
     license = licenses.mit ;
     maintainers = with maintainers; [raskin teto];
