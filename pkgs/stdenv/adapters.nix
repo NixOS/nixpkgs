@@ -199,17 +199,23 @@ rec {
   /* Modify a stdenv so that it builds binaries optimized specifically
      for the platform architecture ("westmere", "sandybridge", "skylake-avx512", ...) */
    pureUsePlatformOptimizations = stdenv:
-     if stdenv.hostPlatform.platform ? gcc.arch &&
-        stdenv.cc != null &&                       # exclude stdenvNoCC and bootstrap's GCC5 which does not understand -march=skylake
-        !(stdenv.cc.isGNU && stdenv.lib.versionOlder (builtins.parseDrvName stdenv.cc.name).version "7.0") then
-       stdenv // {
-         mkDerivation = args: stdenv.mkDerivation (args // {
-           requiredSystemFeatures = args.requiredSystemFeatures or [] ++ [ "gccarch-${stdenv.hostPlatform.platform.gcc.arch}" ];         
-           NIX_CFLAGS_COMPILE = stdenv.lib.concatStringsSep " " ([ (toString (args.NIX_CFLAGS_COMPILE or ""))          
-                                                                    "-march=${stdenv.hostPlatform.platform.gcc.arch}"   
-                                                                 ] ++ stdenv.hostPlatform.platform.gcc.extraFlags or []);                                                     
-         });
-       }
-     else
-       stdenv;
+    if stdenv.hostPlatform.platform ? gcc.arch then
+      stdenv // {
+        mkDerivation = args: stdenv.mkDerivation (args
+          // {
+            requiredSystemFeatures = args.requiredSystemFeatures or [] ++ [ "gccarch-${stdenv.hostPlatform.platform.gcc.arch}" ];
+          } # too old compilers, for example bootstrap's GCC5 does not understand -march=skylake
+          // stdenv.lib.optionalAttrs (stdenv.cc != null &&
+                                        ( stdenv.cc.isGNU   && stdenv.lib.versionAtLeast (builtins.parseDrvName stdenv.cc.name).version "6.0"
+                                       || stdenv.cc.isClang && true
+                                        )
+                                      ) {
+            NIX_CFLAGS_COMPILE = stdenv.lib.concatStringsSep " " ([ (toString (args.NIX_CFLAGS_COMPILE or ""))
+                                                                    "-march=${stdenv.hostPlatform.platform.gcc.arch}"
+                                                                  ] ++ stdenv.hostPlatform.platform.gcc.extraFlags or []);
+          }
+        );
+      }
+    else
+      stdenv;
 }
