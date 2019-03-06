@@ -6,9 +6,9 @@ assert z3Support -> z3 != null;
 assert z3Support -> stdenv.lib.versionAtLeast z3.version "4.6.0";
 
 let
-  version = "0.5.4";
-  rev = "9549d8fff7343908228c3e8bedc309d1b83fc204";
-  sha256 = "1r6wklp3ab2s1lrm70zv6p7blv9917ph1arjsb250j7b7bpjg5pq";
+  version = "0.5.5";
+  rev = "47a71e8f1c884368ad340d61ed36ea7fe270805d";
+  sha256 = "0aibj342pzzmmmwcdwk5hgr2jn3s9sjcgc6rflq09r33vw1q5qln";
   jsoncppURL = https://github.com/open-source-parsers/jsoncpp/archive/1.8.4.tar.gz;
   jsoncpp = fetchzip {
     url = jsoncppURL;
@@ -43,8 +43,8 @@ stdenv.mkDerivation {
   ];
 
   doCheck = stdenv.hostPlatform.isLinux && stdenv.hostPlatform == stdenv.buildPlatform;
-  checkPhase = "LD_LIBRARY_PATH=./libsolc:./libsolidity:./libevmasm:./libdevcore:./libyul:./liblangutil:$LD_LIBRARY_PATH " +
-               "./test/soltest -p -- --no-ipc --no-smt --testpath ../test";
+  checkPhase = "LD_LIBRARY_PATH=./libsolc:./libsolidity:./libevmasm:./libdevcore:./libyul:./liblangutil:./test/tools/yulInterpreter:$LD_LIBRARY_PATH " +
+               "./test/soltest -p true -- --no-ipc --no-smt --testpath ../test";
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ boost ]
