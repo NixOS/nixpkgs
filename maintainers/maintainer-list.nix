@@ -4738,6 +4738,11 @@
     github = "tobimpub";
     name = "Tobias Mayer";
   };
+  tobiasBora = {
+    email = "tobias.bora.list@gmail.com";
+    github = "tobiasBora";
+    name = "Tobias Bora";
+  };
   tohl = {
     email = "tom@logand.com";
     github = "tohl";
