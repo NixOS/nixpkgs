@@ -90,13 +90,13 @@ in stdenv.mkDerivation {
 
   outputs = ["out" "sandbox"];
 
-  buildCommand = let
+  buildCommand = with stdenv.lib; let
     browserBinary = "${chromium.browser}/libexec/chromium/chromium";
     getWrapperFlags = plugin: "$(< \"${plugin}/nix-support/wrapper-flags\")";
-    libPath = stdenv.lib.makeLibraryPath (
-      versionAtLeast version "72" && stdenv.lib.optional VAAPISupport libva
+    libPath = makeLibraryPath (
+      optional (versionAtLeast version "72" && VAAPISupport) libva
     );
-  in with stdenv.lib; ''
+  in ''
     mkdir -p "$out/bin"
 
     eval makeWrapper "${browserBinary}" "$out/bin/chromium" \
