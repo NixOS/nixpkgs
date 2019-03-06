@@ -40,4 +40,6 @@ buildPythonPackage rec {
     license = licenses.asl20;
     maintainers = with maintainers; [ makefu ];
   };
+
+  _hydra_please_try_again = 1;
 }
