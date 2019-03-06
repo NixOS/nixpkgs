@@ -3727,6 +3727,11 @@
     github = "polyrod";
     name = "Maurizio Di Pietro";
   };
+  pombeirp = {
+    email = "nix@endgr.33mail.com";
+    github = "PombeirP";
+    name = "Pedro Pombeiro";
+  };
   pradeepchhetri = {
     email = "pradeep.chhetri89@gmail.com";
     github = "pradeepchhetri";

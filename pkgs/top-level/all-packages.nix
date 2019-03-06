@@ -9343,6 +9343,8 @@ in
 
   mypy = with python3Packages; toPythonApplication mypy;
 
+  nsis = callPackage ../development/tools/nsis { };
+
   ### DEVELOPMENT / LIBRARIES
 
   a52dec = callPackage ../development/libraries/a52dec { };
