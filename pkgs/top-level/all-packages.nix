@@ -924,7 +924,11 @@ in
 
   bchunk = callPackage ../tools/cd-dvd/bchunk { };
 
-  inherit (callPackages ../misc/logging/beats/6.x.nix { })
+  inherit (callPackages ../misc/logging/beats/6.x.nix {
+    # XXX: bettercap is failing with Go 1.12. Error is related to cgo, an
+    # update to this package might fix it.
+    buildGoPackage = buildGo111Package;
+  })
     filebeat6
     heartbeat6
     metricbeat6
