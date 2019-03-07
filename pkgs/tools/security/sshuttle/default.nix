@@ -1,23 +1,23 @@
-{ stdenv, python3Packages, fetchurl, makeWrapper, pandoc
+{ stdenv, python3Packages, fetchurl, makeWrapper
 , coreutils, iptables, nettools, openssh, procps, fetchpatch }:
 
 python3Packages.buildPythonApplication rec {
   name = "sshuttle-${version}";
-  version = "0.78.4";
+  version = "0.78.5";
 
   src = fetchurl {
-    sha256 = "0pqk43kd7crqhg6qgnl8kapncwgw1xgaf02zarzypcw64kvdih9h";
+    sha256 = "0vp13xwrhx4m6zgsyzvai84lkq9mzkaw47j58dk0ll95kaymk2x8";
     url = "mirror://pypi/s/sshuttle/${name}.tar.gz";
   };
 
   patches = [ ./sudo.patch ];
 
-  nativeBuildInputs = [ makeWrapper python3Packages.setuptools_scm ] ++ stdenv.lib.optional (stdenv.hostPlatform.system != "i686-linux") pandoc;
+  nativeBuildInputs = [ makeWrapper python3Packages.setuptools_scm ];
   buildInputs =
     [ coreutils openssh procps nettools ]
     ++ stdenv.lib.optionals stdenv.isLinux [ iptables ];
 
-  checkInputs = with python3Packages; [ mock pytest pytestrunner ];
+  checkInputs = with python3Packages; [ mock pytest pytestcov pytestrunner flake8 ];
 
   postInstall = let
     mapPath = f: x: stdenv.lib.concatStringsSep ":" (map f x);
@@ -31,11 +31,11 @@ python3Packages.buildPythonApplication rec {
     description = "Transparent proxy server that works as a poor man's VPN";
     longDescription = ''
       Forward connections over SSH, without requiring administrator access to the
-      target network (though it does require Python 2 at both ends).
+      target network (though it does require Python 2.7, Python 3.5 or later at both ends).
       Works with Linux and Mac OS and supports DNS tunneling.
     '';
     license = licenses.gpl2;
-    maintainers = with maintainers; [ domenkozar ];
+    maintainers = with maintainers; [ domenkozar carlosdagos ];
     platforms = platforms.unix;
   };
 }
