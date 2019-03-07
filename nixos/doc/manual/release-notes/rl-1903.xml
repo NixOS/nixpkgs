@@ -577,7 +577,7 @@
        but is still possible by setting <literal>zramSwap.swapDevices</literal> explicitly.
      </para>
      <para>
-      Default algorithm for ZRAM swap was changed to <literal>zstd</literal>.
+      ZRAM algorithm can be changed now.
      </para>
      <para>
       Changes to ZRAM algorithm are applied during <literal>nixos-rebuild switch</literal>,
