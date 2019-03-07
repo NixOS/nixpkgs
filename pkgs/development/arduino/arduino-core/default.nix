@@ -2,8 +2,8 @@
 , libusb, libusb1, unzip, zlib, ncurses, readline
 , withGui ? false, gtk2 ? null, withTeensyduino ? false
   /* Packages needed for Teensyduino */
-, upx, fontconfig, xorg, gcc, xdotool, xvfb_run
-, atk, glib, pango, gdk_pixbuf, libpng12, expat, freetype
+, upx, fontconfig, xorg, gcc
+, atk, glib, pango, gdk_pixbuf, libpng12, expat, freetype,
 }:
 
 assert withGui -> gtk2 != null;
@@ -68,19 +68,32 @@ stdenv.mkDerivation rec {
     sha256 = "0ww72qfk7fyvprz15lc80i1axfdacb5fij4h5j5pakrg76mng2c3";
   };
 
+  teensyduino_version = "145";
   teensyduino_src = fetchurl {
-    url = "https://www.pjrc.com/teensy/td_140/TeensyduinoInstall.${teensy_architecture}";
+    url = "https://www.pjrc.com/teensy/td_${teensyduino_version}/TeensyduinoInstall.${teensy_architecture}";
     sha256 =
       lib.optionalString ("${teensy_architecture}" == "linux64")
-        "0127a1ak31252dbmr5niqa5mkvbm8dnz1cfcnmydzx9qn9rk00ir"
+        "0n8812znwdyvy7d1321p4r6j5pixg1sr31z5pfr7i0ikw0jxfrxb"
       + lib.optionalString ("${teensy_architecture}" == "linux32")
-        "01mxj5xsr7gka652c9rp4szy5mkcka8mljk044v4agk3sxvx3v3i"
+        "1p74rb8g4v6kd09a0af1yra8xjzy3iyv5w5b6h6ljfhb022v3l57"
       + lib.optionalString ("${teensy_architecture}" == "linuxarm")
-        "1dff3alhvk9x8qzy3n85qrg6rfmy6l9pj6fmrlzpli63lzykvv4i";
+        "0jd9dvr8zx9hlyn6j979d66qdvzgv3dmx5x9yviqvrn1f3w4hfbf";
+    };
+  # Used because teensyduino requires jars be a specific size
+  arduino_dist_src = fetchurl {
+    url = "http://downloads.arduino.cc/arduino-${version}-${teensy_architecture}.tar.xz";
+    sha256 =
+      lib.optionalString ("${teensy_architecture}" == "linux64")
+        "1f8s3by5lc6fazyaa9zc9kz3ar8zj8jabab1fy5jzh49fbd8bydx"
+      + lib.optionalString ("${teensy_architecture}" == "linux32")
+        "1r9ral9aq5vp02dwgagifk5h403l7knxdyi1w23rqpcbbpa423lw"
+      + lib.optionalString ("${teensy_architecture}" == "linuxarm")
+        "0sz18wns00kysmb2zv7a67dy9wpxiawq3ykfr07wjyg8h1fy3p6h";
   };
 
+
   buildInputs = [ jdk ant libusb libusb1 unzip zlib ncurses5 readline
-  ] ++ stdenv.lib.optionals withTeensyduino [ upx xvfb_run xdotool ];
+  ] ++ stdenv.lib.optionals withTeensyduino [ upx ];
   downloadSrcList = builtins.attrValues externalDownloads;
   downloadDstList = builtins.attrNames externalDownloads;
 
@@ -116,8 +129,8 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/share/arduino
-    cp -r ./build/linux/work/* "$out/share/arduino/" #*/
-    echo ${version} > $out/share/arduino/lib/version.txt
+    cp -r ./build/linux/work/* "$out/share/arduino/"
+    echo -n ${version} > $out/share/arduino/lib/version.txt
 
     ${stdenv.lib.optionalString withGui ''
       mkdir -p $out/bin
@@ -135,6 +148,18 @@ stdenv.mkDerivation rec {
     ''}
 
     ${stdenv.lib.optionalString withTeensyduino ''
+      # Back up the original jars
+      mv $out/share/arduino/lib/arduino-core.jar $out/share/arduino/lib/arduino-core.jar.bak
+      mv $out/share/arduino/lib/pde.jar $out/share/arduino/lib/pde.jar.bak
+      # Extract jars from the arduino distributable package
+      mkdir arduino_dist
+      cd arduino_dist
+      tar xfJ ${arduino_dist_src} arduino-${version}/lib/arduino-core.jar arduino-${version}/lib/pde.jar
+      cd ..
+      # Replace the built jars with the official arduino jars
+      mv arduino_dist/arduino-${version}/lib/{arduino-core,pde}.jar $out/share/arduino/lib/
+      # Delete the directory now that the jars are copied out
+      rm -r arduino_dist
       # Extract and patch the Teensyduino installer
       cp ${teensyduino_src} ./TeensyduinoInstall.${teensy_architecture}
       chmod +w ./TeensyduinoInstall.${teensy_architecture}
@@ -143,39 +168,12 @@ stdenv.mkDerivation rec {
           --set-rpath "${teensy_libpath}" \
           ./TeensyduinoInstall.${teensy_architecture}
       chmod +x ./TeensyduinoInstall.${teensy_architecture}
-
-      # Run the GUI-only installer in a virtual X server
-      # Script thanks to AUR package. See:
-      #   <https://aur.archlinux.org/packages/teensyduino/>
-      echo "Running Teensyduino installer..."
-      # Trick the GUI into using HOME as the install directory.
-      export HOME=$out/share/arduino
-      # Run the installer in a virtual X server in memory.
-      xvfb-run -n 99 ./TeensyduinoInstall.${teensy_architecture} &
-      sleep 4
-      echo "Waiting for Teensyduino to install (about 1 minute)..."
-      # Control the installer GUI with xdotool.
-      DISPLAY=:99 xdotool search --class "teensyduino" \
-        windowfocus \
-        key space sleep 1 \
-        key Tab sleep 0.4 \
-        key Tab sleep 0.4 \
-        key Tab sleep 0.4 \
-        key Tab sleep 0.4 \
-        key space sleep 1 \
-        key Tab sleep 0.4 \
-        key Tab sleep 0.4 \
-        key Tab sleep 0.4 \
-        key Tab sleep 0.4 \
-        key space sleep 1 \
-        key Tab sleep 0.4 \
-        key space sleep 35 \
-        key space sleep 2 &
-      # Wait for xdotool to terminate and swallow the inevitable XIO error
-      wait $! || true
-
+      ./TeensyduinoInstall.${teensy_architecture} --dir=$out/share/arduino
       # Check for successful installation
       [ -d $out/share/arduino/hardware/teensy ] || exit 1
+      # After the install, copy the built jars back
+      mv $out/share/arduino/lib/arduino-core.jar.bak $out/share/arduino/lib/arduino-core.jar
+      mv $out/share/arduino/lib/pde.jar.bak $out/share/arduino/lib/pde.jar
     ''}
   '';
 
