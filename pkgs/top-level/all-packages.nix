@@ -19674,6 +19674,8 @@ in
     inherit (pkgs.gnome2) libgnome libgnomeui;
   };
 
+  ticpp = callPackage ../development/libraries/ticpp { };
+
   tig = gitAndTools.tig;
 
   tilda = callPackage ../applications/misc/tilda {
