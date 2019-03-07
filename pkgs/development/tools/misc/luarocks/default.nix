@@ -7,16 +7,13 @@
 , cmake
 }:
 
-let
-in
-
 stdenv.mkDerivation rec {
-  pname="luarocks";
-  version="2.4.4";
+  pname = "luarocks";
+  version = "3.0.4";
 
   src = fetchurl {
     url="http://luarocks.org/releases/luarocks-${version}.tar.gz";
-    sha256="0d7rl60dwh52qh5pfsphgx5ypp7k190h9ri6qpr2yx9kvqrxyf1r";
+    sha256="1pqfzwvjy8dzqg4fqjq2cgqcr00fgrdd7nwzxm7nqmawr83s6dhj";
   };
 
   patches = [ ./darwin.patch ];
