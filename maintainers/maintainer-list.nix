@@ -38,6 +38,15 @@
   See `./scripts/check-maintainer-github-handles.sh` for an example on how to work with this data.
   */
 {
+  "0x4A6F" = {
+    email = "0x4A6F@shackspace.de";
+    name = "Joachim Ernst";
+    github = "0x4A6F";
+    keys = [{
+      longkeyid = "rsa8192/0x87027528B006D66D";
+      fingerprint = "F466 A548 AD3F C1F1 8C88  4576 8702 7528 B006 D66D";
+    }];
+  };
   "1000101" = {
     email = "jan.hrnko@satoshilabs.com";
     github = "1000101";
@@ -2236,10 +2245,6 @@
     email = "jonathan@jmettes.com";
     github = "jmettes";
     name = "Jonathan Mettes";
-  };
-  Jo = {
-    email = "0x4A6F@shackspace.de";
-    name = "Joachim Ernst";
   };
   joachifm = {
     email = "joachifm@fastmail.fm";
