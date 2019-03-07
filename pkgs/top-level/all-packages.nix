@@ -14013,6 +14013,8 @@ in
   prometheus-varnish-exporter = callPackage ../servers/monitoring/prometheus/varnish-exporter.nix { };
   prometheus-jmx-httpserver = callPackage ../servers/monitoring/prometheus/jmx-httpserver.nix {  };
 
+  prometheus-cpp = callPackage ../development/libraries/prometheus-cpp { };
+
   psqlodbc = callPackage ../development/libraries/psqlodbc { };
 
   pure-ftpd = callPackage ../servers/ftp/pure-ftpd { };
