@@ -321,6 +321,28 @@ let
        '';
    };
 
+  simple-uefi-grub-config =
+    { createPartitions =
+        ''
+          $machine->succeed(
+              "flock /dev/vda parted --script /dev/vda -- mklabel gpt"
+              . " mkpart ESP fat32 1M 50MiB" # /boot
+              . " set 1 boot on"
+              . " mkpart primary linux-swap 50MiB 1024MiB"
+              . " mkpart primary ext2 1024MiB -1MiB", # /
+              "udevadm settle",
+              "mkswap /dev/vda2 -L swap",
+              "swapon -L swap",
+              "mkfs.ext3 -L nixos /dev/vda3",
+              "mount LABEL=nixos /mnt",
+              "mkfs.vfat -n BOOT /dev/vda1",
+              "mkdir -p /mnt/boot",
+              "mount LABEL=BOOT /mnt/boot",
+          );
+        '';
+        bootLoader = "grub";
+        grubUseEfi = true;
+    };
 in {
 
   # !!! `parted mkpart' seems to silently create overlapping partitions.
@@ -353,28 +375,7 @@ in {
         bootLoader = "systemd-boot";
     };
 
-  simpleUefiGrub = makeInstallerTest "simpleUefiGrub"
-    { createPartitions =
-        ''
-          $machine->succeed(
-              "flock /dev/vda parted --script /dev/vda -- mklabel gpt"
-              . " mkpart ESP fat32 1M 50MiB" # /boot
-              . " set 1 boot on"
-              . " mkpart primary linux-swap 50MiB 1024MiB"
-              . " mkpart primary ext2 1024MiB -1MiB", # /
-              "udevadm settle",
-              "mkswap /dev/vda2 -L swap",
-              "swapon -L swap",
-              "mkfs.ext3 -L nixos /dev/vda3",
-              "mount LABEL=nixos /mnt",
-              "mkfs.vfat -n BOOT /dev/vda1",
-              "mkdir -p /mnt/boot",
-              "mount LABEL=BOOT /mnt/boot",
-          );
-        '';
-        bootLoader = "grub";
-        grubUseEfi = true;
-    };
+  simpleUefiGrub = makeInstallerTest "simpleUefiGrub" simple-uefi-grub-config;
 
   # Same as the previous, but now with a separate /boot partition.
   separateBoot = makeInstallerTest "separateBoot"
