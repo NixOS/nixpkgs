@@ -12,6 +12,7 @@ bundlerEnv rec {
     platforms       = platforms.darwin;
     maintainers     = with maintainers; [
       peterromfeldhk
+      lilyball
     ];
   };
 }
