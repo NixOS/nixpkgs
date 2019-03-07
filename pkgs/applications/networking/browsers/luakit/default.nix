@@ -49,23 +49,10 @@ in stdenv.mkDerivation rec {
   in ''
     gappsWrapperArgs+=(
       --prefix XDG_CONFIG_DIRS : "$out/etc/xdg"
-      --set LUA_PATH '${luaKitPath};${luaPath};'
-      --set LUA_CPATH '${luaCPath};'
-    )
-    make DEVELOPMENT_PATHS=0 INSTALLDIR=$out PREFIX=$out XDGPREFIX=$out/etc/xdg USE_GTK3=1 install
-    wrapProgram $out/bin/luakit                                         \
-      --prefix XDG_CONFIG_DIRS : "$out/etc/xdg"                         \
-      --prefix LUA_PATH ';' '${luaKitPath}'
-    make DEVELOPMENT_PATHS=0 INSTALLDIR=$out PREFIX=$out XDGPREFIX=$out/etc/xdg USE_GTK3=1 install
-    wrapProgram $out/bin/luakit                                         \
-      --prefix XDG_CONFIG_DIRS : "$out/etc/xdg"                         \
-      --prefix LUA_PATH ';' "${luaKitPath};${luaEnv.luaPath}"           \
+      --prefix LUA_PATH ';' "${luaKitPath};${luaEnv.luaPath}"
       --prefix LUA_CPATH ';' "${luaKitPath};${luaEnv.luaCPath}"
+    )
   '';
-    # make DEVELOPMENT_PATHS=0 INSTALLDIR=$out PREFIX=$out XDGPREFIX=$out/etc/xdg USE_GTK3=1 install
-    # wrapProgram $out/bin/luakit                                         \
-    #   --prefix XDG_CONFIG_DIRS : "$out/etc/xdg"                         \
-    #   --prefix LUA_PATH ';' '${luaKitPath}'
 
   meta = with stdenv.lib; {
     description = "Fast, small, webkit based browser framework extensible in Lua";
