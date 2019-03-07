@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pantheon, wrapGAppsHook, pkgconfig, meson, ninja
+{ stdenv, fetchFromGitHub, pantheon, fetchpatch, wrapGAppsHook, pkgconfig, meson, ninja
 , vala, gala, gtk3, libgee, granite, gettext, glib-networking, mutter, json-glib
 , python3, gobject-introspection }:
 
@@ -40,7 +40,14 @@ stdenv.mkDerivation rec {
     mutter
   ];
 
-  patches = [ ./indicators.patch ];
+  patches = [
+    ./indicators.patch
+    # Fix wingpanel potentially overlapping windows: https://github.com/elementary/wingpanel/pull/198
+    (fetchpatch {
+      url = "https://github.com/elementary/wingpanel/commit/fc1b8ea3d6cfc5d6e4034af177eecd4542a59833.patch";
+      sha256 = "0w5z56di5lxwg9vb96f9y4r2q05znwpn814m2w12l3impf5xsdqs";
+    })
+  ];
 
   postPatch = ''
     chmod +x meson/post_install.py
