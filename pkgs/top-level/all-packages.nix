@@ -2087,6 +2087,8 @@ in
 
   checkbashisms = callPackage ../development/tools/misc/checkbashisms { };
 
+  civetweb = callPackage ../development/libraries/civetweb { };
+
   ckb-next = libsForQt5.callPackage ../tools/misc/ckb-next { };
 
   clamav = callPackage ../tools/security/clamav { };
