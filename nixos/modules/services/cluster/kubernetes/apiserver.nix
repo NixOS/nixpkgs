@@ -423,30 +423,7 @@ in
       };
 
     })
-    {
-      systemd.targets.kube-control-plane-online = {
-        wantedBy = [ "kubernetes.target" ];
-        before = [ "kubernetes.target" ];
-      };
 
-      systemd.services.kube-control-plane-online = rec {
-        description = "Kubernetes control plane is online";
-        wantedBy = [ "kube-control-plane-online.target" ];
-        after = [ "kube-scheduler.service" "kube-controller-manager.service" ];
-        before = [ "kube-control-plane-online.target" ];
-        preStart = ''
-          ${top.lib.mkWaitCurl ( with config.systemd.services.kube-control-plane-online; {
-            sleep = 3;
-            path = "/healthz";
-            cacert = top.caFile;
-          } // optionalAttrs (environment ? cert) { inherit (environment) cert key; })}
-        '';
-        script = "echo Ok";
-        serviceConfig = {
-          TimeoutSec = "500";
-        };
-      };
-    }
   ];
 
 }

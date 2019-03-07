@@ -299,6 +299,29 @@ in {
       services.kubernetes.apiserverAddress = mkDefault ("https://${if cfg.apiserver.advertiseAddress != null
                           then cfg.apiserver.advertiseAddress
                           else "${cfg.masterAddress}:${toString cfg.apiserver.securePort}"}");
+
+      systemd.targets.kube-control-plane-online = {
+        wantedBy = [ "kubernetes.target" ];
+        before = [ "kubernetes.target" ];
+      };
+
+      systemd.services.kube-control-plane-online = rec {
+        description = "Kubernetes control plane is online";
+        wantedBy = [ "kube-control-plane-online.target" ];
+        after = [ "kube-scheduler.service" "kube-controller-manager.service" ];
+        before = [ "kube-control-plane-online.target" ];
+        preStart = ''
+          ${cfg.lib.mkWaitCurl ( with config.systemd.services.kube-control-plane-online; {
+            sleep = 3;
+            path = "/healthz";
+            cacert = cfg.caFile;
+          } // optionalAttrs (environment ? cert) { inherit (environment) cert key; })}
+        '';
+        script = "echo Ok";
+        serviceConfig = {
+          TimeoutSec = "500";
+        };
+      };
     })
   ];
 }
