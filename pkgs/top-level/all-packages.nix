@@ -3995,6 +3995,8 @@ in
 
   liboauth = callPackage ../development/libraries/liboauth { };
 
+  libr3 = callPackage ../development/libraries/libr3 { };
+
   libsidplayfp = callPackage ../development/libraries/libsidplayfp { };
 
   libsrs2 = callPackage ../development/libraries/libsrs2 { };
