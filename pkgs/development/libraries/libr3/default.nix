@@ -19,7 +19,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
 
-  buildInputs = [ pcre check ];
+  buildInputs = [ check ];
+  propagatedBuildInputs = [ pcre ];
 
   strictDeps = true;
 
