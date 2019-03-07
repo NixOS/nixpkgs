@@ -1,0 +1,51 @@
+diff --git a/base/base_paths.cc b/base/base_paths.cc
+index e3f322e72a97..45f396ba7d42 100644
+--- a/base/base_paths.cc
++++ b/base/base_paths.cc
+@@ -14,6 +14,14 @@ bool PathProvider(int key, FilePath* result) {
+   // NOTE: DIR_CURRENT is a special case in PathService::Get
+ 
+   switch (key) {
++    case DIR_NSS: {
++      const char* nss_dir = getenv("CHROMIUM_NSS");
++      if (nss_dir && nss_dir[0]) {
++        *result = FilePath(nss_dir);
++        return true;
++      }
++      return false;
++    }
+     case DIR_EXE:
+       if (!PathService::Get(FILE_EXE, result))
+         return false;
+diff --git a/base/base_paths.h b/base/base_paths.h
+index 2a163f48d43e..19f2b7b9e061 100644
+--- a/base/base_paths.h
++++ b/base/base_paths.h
+@@ -47,7 +47,8 @@ enum BasePathKey {
+ 
+   DIR_TEST_DATA,  // Used only for testing.
+ 
+-  PATH_END
++  PATH_END,
++  DIR_NSS
+ };
+ 
+ }  // namespace base
+diff --git a/crypto/nss_util.cc b/crypto/nss_util.cc
+index 97d6648f3a22..d2657260f002 100644
+--- a/crypto/nss_util.cc
++++ b/crypto/nss_util.cc
+@@ -100,7 +100,12 @@ base::FilePath GetInitialConfigDirectory() {
+     database_dir.clear();
+   return database_dir;
+ #else
+-  return GetDefaultConfigDirectory();
++  base::FilePath nssDir;
++  base::PathService::Get(base::DIR_NSS, &nssDir);
++  if (!base::PathExists(nssDir))
++    return nssDir;
++  else
++    return GetDefaultConfigDirectory();
+ #endif  // defined(OS_CHROMEOS)
+ }
+ 
