@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoreconfHook, pkgconfig, zlib, libuuid, libossp_uuid, CoreFoundation, IOKit }:
+{ stdenv, fetchurl, autoreconfHook, pkgconfig, zlib, libuuid, libossp_uuid, CoreFoundation, IOKit, lm_sensors }:
 
 stdenv.mkDerivation rec{
   version = "1.11.1";
@@ -21,6 +21,11 @@ stdenv.mkDerivation rec{
     # rename this plugin so netdata will look for setuid wrapper
     mv $out/libexec/netdata/plugins.d/apps.plugin \
       $out/libexec/netdata/plugins.d/apps.plugin.org
+  '';
+
+  preConfigure = ''
+    substituteInPlace collectors/python.d.plugin/python_modules/third_party/lm_sensors.py \
+      --replace 'ctypes.util.find_library("sensors")' '"${lm_sensors.out}/lib/libsensors${stdenv.hostPlatform.extensions.sharedLibrary}"'
   '';
 
   configureFlags = [
