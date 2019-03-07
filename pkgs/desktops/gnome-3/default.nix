@@ -229,6 +229,8 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   glade = callPackage ./apps/glade { };
 
+  gnome-books = callPackage ./apps/gnome-books { };
+
   gnome-boxes = callPackage ./apps/gnome-boxes { };
 
   gnome-calendar = callPackage ./apps/gnome-calendar { };
