@@ -1,24 +1,26 @@
-{ fetchurl, stdenv, coin3d, qt4, pkgconfig }:
+{ fetchhg, stdenv, cmake, doxygen, coin3d, qt5 }:
 
 stdenv.mkDerivation rec {
   name = "soqt-${version}";
-  version = "1.5.0";
+  version = "20190306";
 
-  src = fetchurl {
-    url = "https://bitbucket.org/Coin3D/coin/downloads/SoQt-${version}.tar.gz";
-    sha256 = "14dbh8ynzjcgwgxjc6530c5plji7vn62kbdf447w0dp53564p8zn";
+  src = fetchhg {
+    url = "https://bitbucket.org/Coin3D/soqt";
+    rev = "67a51c8fddbd9b93b855d0b24448f512b7a3bdda";
+    sha256 = "0b3hmjgylx37145nqd067qci564xbqr5w2wv9a2gv2zz86n8k8p9";
+    fetchSubrepos = true;
   };
 
-  buildInputs = [ coin3d qt4 ];
+  patches = [ ./interface_include.patch ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ cmake doxygen ];
+  buildInputs = [ coin3d qt5.qtbase ];
 
-  meta = {
-    homepage = https://bitbucket.org/Coin3D/coin/wiki/Home;
-    license = stdenv.lib.licenses.gpl2Plus;
+  meta = with stdenv.lib; {
     description = "Glue between Coin high-level 3D visualization library and Qt";
-
-    maintainers = [ stdenv.lib.maintainers.viric ];
-    platforms = stdenv.lib.platforms.linux;
+    homepage = https://bitbucket.org/Coin3D/coin/wiki/Home;
+    license = licenses.gpl2Plus;
+    maintainers = [ maintainers.viric maintainers.FlorianFranzen ];
+    platforms = platforms.linux;
   };
 }

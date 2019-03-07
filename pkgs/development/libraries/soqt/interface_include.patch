@@ -1,0 +1,40 @@
+diff -r 67a51c8fddbd CMakeLists.txt
+--- a/CMakeLists.txt	Wed Mar 06 10:39:29 2019 +0100
++++ b/CMakeLists.txt	Thu Mar 07 16:38:00 2019 +0100
+@@ -106,11 +106,13 @@
+   string(REGEX REPLACE "^[0-9]+\\.([0-9])+\\.[0-9]+.*" "\\1" QT_VERSION_MINOR "${Qt5Core_VERSION_STRING}")
+   string(REGEX REPLACE "^[0-9]+\\.[0-9]+\\.([0-9]+).*" "\\1" QT_VERSION_PATCH "${Qt5Core_VERSION_STRING}")
+   set(PACKAGE_ADDITIONAL_REQUIREMENTS "Qt5Core, Qt5Gui, Qt5OpenGL, Qt5Widgets")
++  set(QT_INTERFACE_INCLUDES ${Qt5Core_INCLUDE_DIRS})
+ else()
+   set(QT_USE_IMPORTED_TARGETS ON)
+   find_package(Qt4 COMPONENTS QtCore QtGui QtOpenGL REQUIRED)
+   include(${QT_USE_FILE})
+   set(PACKAGE_ADDITIONAL_REQUIREMENTS "QtCore, QtGui, QtOpenGL")
++  set(QT_INTERFACE_INCLUDES ${QT_QTCORE_INCLUDE_DIR})
+ endif()
+ 
+ find_package(X11)
+diff -r 67a51c8fddbd src/CMakeLists.txt
+--- a/src/CMakeLists.txt	Wed Mar 06 10:39:29 2019 +0100
++++ b/src/CMakeLists.txt	Thu Mar 07 16:38:00 2019 +0100
+@@ -207,15 +207,16 @@
+   target_include_directories(${PROJECT_NAME} INTERFACE $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
+ endif()
+ 
+-target_link_libraries(${PROJECT_NAME} Coin::Coin ${QT_LIBRARIES} ${OPENGL_LIBRARIES})
++target_include_directories(${PROJECT_NAME} PUBLIC ${Coin_INCLUDE_DIR} ${QT_INTERFACE_INCLUDES} ${OPENGL_INCLUDE_DIR})
++target_link_libraries(${PROJECT_NAME} PUBLIC Coin::Coin ${QT_LIBRARIES} ${OPENGL_LIBRARIES})
+ 
+ if(X11_FOUND)
+   target_include_directories(${PROJECT_NAME} PUBLIC ${X11_INCLUDE_DIR})
+-  target_link_libraries(${PROJECT_NAME} ${X11_LIBRARIES})
++  target_link_libraries(${PROJECT_NAME} PUBLIC ${X11_LIBRARIES})
+ endif()
+ if(X11_Xi_FOUND)
+   target_include_directories(${PROJECT_NAME} PUBLIC ${X11_Xi_INCLUDE_DIR})
+-  target_link_libraries(${PROJECT_NAME} ${X11_Xi_LIB})
++  target_link_libraries(${PROJECT_NAME} PUBLIC ${X11_Xi_LIB})
+ endif()
+ 
+ # Add a target to generate API documentation with Doxygen
