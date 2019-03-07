@@ -73,6 +73,7 @@ let
 
     FLAGS = [
       "--release"
+      "--no-debug"
       "--single-module" # needed for deterministic builds
     ];
 
