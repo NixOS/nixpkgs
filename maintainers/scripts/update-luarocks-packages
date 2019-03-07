@@ -74,17 +74,18 @@ FOOTER="
 
 
 function convert_pkg () {
-    pkg="$1"
+    nix_pkg_name="$1"
+    lua_pkg_name="$2"
 	server=""
-	if [ ! -z "$2" ]; then
-		server=" --server=$2"
+	if [ ! -z "$3" ]; then
+		server=" --server=$3"
 	fi
 
     version="${3:-}"
 
-    echo "looking at $pkg (version $version) from server [$server]" >&2
-    cmd="luarocks nix $server $pkg $version"
-    drv="$($cmd)"
+    echo "looking at $lua_pkg_name (version $version) from server [$server]" >&2
+    cmd="luarocks nix $server $lua_pkg_name $version"
+    drv="$nix_pkg_name = $($cmd)"
     if [ $? -ne 0 ]; then
         echo "Failed to convert $pkg" >&2
         echo "$drv" >&2
@@ -98,12 +99,17 @@ echo "$HEADER" | tee "$TMP_FILE"
 
 # list of packages with format
 # name,server,version
-while IFS=, read -r pkg_name server version
+while IFS=, read -r nix_pkg_name lua_pkg_name server version
 do
-	if [ -z "$pkg_name" ]; then
-		echo "Skipping empty package name" >&2
+	if [ "${nix_pkg_name:0:1}" == "#" ]; then
+		echo "Skipping comment ${nix_pkg_name}" >&2
+		continue
 	fi
-	convert_pkg "$pkg_name" "$server" "$version"
+	if [ -z "$lua_pkg_name" ]; then
+		echo "Using nix_name as lua_pkg_name" >&2
+		lua_pkg_name="$nix_pkg_name"
+	fi
+	convert_pkg "$nix_pkg_name" "$lua_pkg_name" "$server" "$version"
 done < "$CSV_FILE"
 
 # close the set

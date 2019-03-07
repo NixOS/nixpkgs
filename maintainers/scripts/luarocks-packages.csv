@@ -1,3 +1,4 @@
+# nix name, luarocks name, server, version/additionnal args
 ansicolors,
 argparse,
 basexx,
@@ -17,15 +18,15 @@ lua-term,
 luabitop,
 luaevent,
 luacheck
-luaffi,http://luarocks.org/dev,
+luaffi,,http://luarocks.org/dev,
 luuid,
 penlight,
 say,
 luv,
 luasystem,
-mediator_lua,http://luarocks.org/manifests/teto
-mpack,http://luarocks.org/manifests/teto
-nvim-client,http://luarocks.org/manifests/teto
-busted,http://luarocks.org/manifests/teto
-luassert,http://luarocks.org/manifests/teto
-coxpcall,https://luarocks.org/manifests/hisham,1.17.0-1
+mediator_lua,,http://luarocks.org/manifests/teto
+mpack,,http://luarocks.org/manifests/teto
+nvim-client,,http://luarocks.org/manifests/teto
+busted,,http://luarocks.org/manifests/teto
+luassert,,http://luarocks.org/manifests/teto
+coxpcall,,https://luarocks.org/manifests/hisham,1.17.0-1
