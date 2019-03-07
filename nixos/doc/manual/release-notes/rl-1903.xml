@@ -456,8 +456,8 @@
   </listitem>
   <listitem>
    <para>
-    Support for NixOS module system type <literal>types.optionSet</literal> and
-    <literal>lib.mkOption</literal> argument <literal>options</literal> is removed.
+    NixOS module system type <literal>types.optionSet</literal> and
+    <literal>lib.mkOption</literal> argument <literal>options</literal> are deprecated.
     Use <literal>types.submodule</literal> instead.
     (<link xlink:href="https://github.com/NixOS/nixpkgs/pull/54637">#54637</link>)
    </para>
