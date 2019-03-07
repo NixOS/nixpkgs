@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, libvirt, pkgconfig, makeWrapper, cdrtools }:
+{ stdenv, mkTerraformProvider, fetchFromGitHub, libvirt, pkgconfig, makeWrapper, cdrtools }:
 
 # USAGE:
 # install the following package globally or in nix-shell:
@@ -17,8 +17,8 @@
 # pick an example from (i.e ubuntu):
 # https://github.com/dmacvicar/terraform-provider-libvirt/tree/master/examples
 
-buildGoPackage rec {
-  name = "terraform-provider-libvirt-${version}";
+mkTerraformProvider rec {
+  pname = "terraform-provider-libvirt";
   version = "0.5.1";
 
   goPackagePath = "github.com/dmacvicar/terraform-provider-libvirt";
@@ -35,10 +35,6 @@ buildGoPackage rec {
   # mkisofs needed to create ISOs holding cloud-init data,
   # and wrapped to terraform via deecb4c1aab780047d79978c636eeb879dd68630
   propagatedBuildInputs = [ cdrtools ];
-
-  # Terraform allow checking the provider versions, but this breaks
-  # if the versions are not provided via file paths.
-  postBuild = "mv go/bin/terraform-provider-libvirt{,_v${version}}";
 
   meta = with stdenv.lib; {
     homepage = https://github.com/dmacvicar/terraform-provider-libvirt;
