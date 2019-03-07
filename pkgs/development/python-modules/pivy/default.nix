@@ -1,30 +1,37 @@
 { stdenv
 , buildPythonPackage
-, fetchhg
-, pkgs
-, isPy3k
+, fetchgit
+, cmake
+, swig
+, coin3d
+, soqt
+, qt5
+, libGLU_combined
+, xorg
 }:
 
 buildPythonPackage rec {
-  version = "20101207";
+  version = "0.6.5a1pre";
   pname = "pivy";
-  disabled = isPy3k; # Judging from SyntaxError
 
-  src = fetchhg {
-    url = "https://bitbucket.org/Coin3D/pivy";
-    rev = "8eab90908f2a3adcc414347566f4434636202344";
-    sha256 = "18n14ha2d3j3ghg2f2aqnf2mks94nn7ma9ii7vkiwcay93zm82cf";
+  src = fetchgit {
+    url = "https://github.com/FreeCAD/pivy.git";
+    rev = "406bc58e298d05f0847fc732f388c0993d28c0f8";
+    sha256 = "0qn1jsr280bvpp6m5lffsqg7wx3hz710fqflfh3whmx93ihcd4v6";
   };
 
-  buildInputs = with pkgs; with xorg; [
-    swig1 coin3d soqt libGLU_combined
+  nativeBuildInputs = [ cmake swig qt5.qtbase.dev ];
+  buildInputs = with xorg; [
+    coin3d soqt qt5.qtbase libGLU_combined
     libXi libXext libSM libICE libX11
   ];
+
+  doCheck = false;
 
   meta = with stdenv.lib; {
     homepage = http://pivy.coin3d.org/;
     description = "A Python binding for Coin";
+    maintainers = [ maintainers.FlorianFranzen ];
     license = licenses.bsd0;
   };
-
 }
