@@ -683,6 +683,8 @@ in
 
   cozy = callPackage ../applications/audio/cozy-audiobooks { };
 
+  datovka = libsForQt5.callPackage ../applications/networking/datovka { };
+
   deskew = callPackage ../applications/graphics/deskew { };
 
   detect-secrets = python3Packages.callPackage ../development/tools/detect-secrets { };
@@ -3983,6 +3985,8 @@ in
   libipfix = callPackage ../development/libraries/libipfix { };
 
   libircclient = callPackage ../development/libraries/libircclient { };
+
+  libisds = callPackage ../development/libraries/libisds { };
 
   libite = callPackage ../development/libraries/libite { };
 

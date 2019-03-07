@@ -1006,7 +1006,12 @@
     github = "cpages";
     name = "Carles Pagès";
   };
-  cransom = {
+  cptMikky = {
+    email = "kuba@ufiseru.cz";
+    github = "cptMikky";
+    name = "Jakub Fišer";
+  };
+   cransom = {
     email = "cransom@hubns.net";
     github = "cransom";
     name = "Casey Ransom";
