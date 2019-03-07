@@ -4,15 +4,15 @@ with python3Packages;
 buildPythonApplication rec {
   name = "${pname}-${version}";
   pname = "cheat";
-  version = "2.3.1";
+  version = "2.5.1";
 
-  propagatedBuildInputs = [ docopt pygments ];
+  propagatedBuildInputs = [ docopt pygments termcolor ];
 
   src = fetchFromGitHub {
     owner = "chrisallenlane";
     repo = "cheat";
     rev = version;
-    sha256 = "1dcpjvbv648r8325qjf30m8b4cyrrjbzc2kvh40zy2mbjsa755zr";
+    sha256 = "1i543hvg1yizamfd83bawflfcb500hvc72i59ikck8j1hjk50hsl";
   };
   # no tests available
   doCheck = false;
