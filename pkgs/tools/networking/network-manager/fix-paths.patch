@@ -43,7 +43,7 @@
 +				ping_binary = "@inetutils@/bin/ping";
  				log_domain = LOGD_IP4;
  			}
- 		} else if (priv->ip_config_6 && priv->ip6_state == IP_DONE) {
+ 		} else if (priv->ip_config_6 && priv->ip_state_6 == NM_DEVICE_IP_STATE_DONE) {
  			gw = nm_ip6_config_best_default_route_get (priv->ip_config_6);
  			if (gw) {
  				nm_utils_inet6_ntop (&NMP_OBJECT_CAST_IP6_ROUTE (gw)->gateway, buf);
@@ -54,12 +54,13 @@
  		}
 --- a/src/nm-core-utils.c
 +++ b/src/nm-core-utils.c
-@@ -421,7 +421,7 @@
+@@ -421,8 +421,8 @@
  
  	/* construct the argument list */
  	argv = g_ptr_array_sized_new (4);
 -	g_ptr_array_add (argv, "/sbin/modprobe");
 +	g_ptr_array_add (argv, "@kmod@/bin/modprobe");
+ 	g_ptr_array_add (argv, "--use-blacklist");
  	g_ptr_array_add (argv, (char *) arg1);
  
  	va_start (ap, arg1);
