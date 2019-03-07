@@ -14997,6 +14997,8 @@ in
       inherit modules;
     };
 
+  multipart-parser-c = callPackage ../development/libraries/multipart-parser-c { };
+
   multipath-tools = callPackage ../os-specific/linux/multipath-tools { };
 
   musl = callPackage ../os-specific/linux/musl { };
