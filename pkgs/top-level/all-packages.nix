@@ -7082,7 +7082,8 @@ in
 
   all-cabal-hashes = callPackage ../data/misc/hackage { };
 
-  purescript = haskell.lib.justStaticExecutables haskellPackages.purescript;
+  # Build with ghc 8.4 due to https://github.com/NixOS/nixpkgs/issues/53597
+  purescript = haskell.lib.justStaticExecutables haskell.packages.ghc844.purescript;
   psc-package = haskell.lib.justStaticExecutables
     (haskellPackages.callPackage ../development/compilers/purescript/psc-package { });
 
