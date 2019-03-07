@@ -666,6 +666,10 @@
         Some OpenCL and VA-API applications might also break
         (Beignet seems to provide OpenCL support with
         <literal>modesetting</literal> driver, too).
+        Kernel mode setting API does not support backlight control,
+        so <literal>xbacklight</literal> tool will not work;
+        backlight level can be controlled directly via <literal>/sys/</literal>
+        or with <literal>brightnessctl</literal>.
         Users who need this functionality more than multi-output XRandR are advised
         to add `intel` to `videoDrivers` and report an issue (or provide additional
         details in an existing one)
