@@ -289,7 +289,7 @@ let
 
     ${optionalString luks.trezorSupport ''
     trezor_pass() {
-      ${pkgs.trezorCipherKeyValue}/bin/trezorCipherKeyValue -p "$out/bin/trezor-askpass" -e -H -k "Unlock root"
+      ${pkgs.trezor-cipher-key-value}/bin/trezorCipherKeyValue -p "$out/bin/trezor-askpass" -e -H -k "Unlock root"
 
       return $?
     }
@@ -523,7 +523,7 @@ in
           trezor = mkOption {
             default = null;
             description = ''
-              The options to use for this LUKS device in TrezorCipherKeyValue.
+              The options to use for this LUKS device in trezor-cipher-key-value.
               If null (the default), trezor will be disabled for this device.
             '';
 
@@ -679,8 +679,8 @@ in
 
       ${optionalString luks.trezorSupport ''
         echo "Copying helper for TREZOR"
-        copy_bin_and_libs ${pkgs.trezorCipherKeyValue}/bin/trezorCipherKeyValue
-        copy_bin_and_libs ${pkgs.trezorCipherKeyValue}/bin/trezor-askpass
+        copy_bin_and_libs ${pkgs.trezor-cipher-key-value}/bin/trezorCipherKeyValue
+        copy_bin_and_libs ${pkgs.trezor-cipher-key-value}/bin/trezor-askpass
       ''}
     '';
 

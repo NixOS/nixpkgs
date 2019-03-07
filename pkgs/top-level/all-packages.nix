@@ -5898,7 +5898,7 @@ in
 
   tpm2-tools = callPackage ../tools/security/tpm2-tools { };
 
-  trezorCipherKeyValue = callPackage ../tools/misc/trezorCipherKeyValue { };
+  trezor-cipher-key-value = callPackage ../tools/misc/trezor-cipher-key-value { };
 
   trezord = callPackage ../servers/trezord { };
 

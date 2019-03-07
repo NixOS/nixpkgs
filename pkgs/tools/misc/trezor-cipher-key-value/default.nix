@@ -1,8 +1,8 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "trezorCipherKeyValue-${version}";
-  version = "009cfa43c8105bc56e20ce123f8def68b480edd8";
+  name = "trezor-cipher-key-value-${version}";
+  version = "v0.1";
 
   # Fixes Cgo related build failures (see https://github.com/NixOS/nixpkgs/issues/25959 )
   hardeningDisable = [ "fortify" ];
