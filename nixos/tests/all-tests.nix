@@ -133,6 +133,7 @@ in
   memcached = handleTest ./memcached.nix {};
   mesos = handleTest ./mesos.nix {};
   minio = handleTest ./minio.nix {};
+  minidlna = handleTest ./minidlna.nix {};
   misc = handleTest ./misc.nix {};
   mongodb = handleTest ./mongodb.nix {};
   morty = handleTest ./morty.nix {};
