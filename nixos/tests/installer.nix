@@ -304,6 +304,22 @@ let
         '';
       };
 
+  # The (almost) simplest partitioning scheme: a swap partition and
+  # one big filesystem partition.
+  simple-test-config = { createPartitions =
+       ''
+         $machine->succeed(
+             "flock /dev/vda parted --script /dev/vda -- mklabel msdos"
+             . " mkpart primary linux-swap 1M 1024M"
+             . " mkpart primary ext2 1024M -1s",
+             "udevadm settle",
+             "mkswap /dev/vda1 -L swap",
+             "swapon -L swap",
+             "mkfs.ext3 -L nixos /dev/vda2",
+             "mount LABEL=nixos /mnt",
+         );
+       '';
+   };
 
 in {
 
@@ -312,21 +328,7 @@ in {
 
   # The (almost) simplest partitioning scheme: a swap partition and
   # one big filesystem partition.
-  simple = makeInstallerTest "simple"
-    { createPartitions =
-        ''
-          $machine->succeed(
-              "flock /dev/vda parted --script /dev/vda -- mklabel msdos"
-              . " mkpart primary linux-swap 1M 1024M"
-              . " mkpart primary ext2 1024M -1s",
-              "udevadm settle",
-              "mkswap /dev/vda1 -L swap",
-              "swapon -L swap",
-              "mkfs.ext3 -L nixos /dev/vda2",
-              "mount LABEL=nixos /mnt",
-          );
-        '';
-    };
+  simple = makeInstallerTest "simple" simple-test-config;
 
   # Simple GPT/UEFI configuration using systemd-boot with 3 partitions: ESP, swap & root filesystem
   simpleUefiSystemdBoot = makeInstallerTest "simpleUefiSystemdBoot"
