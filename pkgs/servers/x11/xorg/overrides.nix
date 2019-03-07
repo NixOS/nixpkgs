@@ -42,6 +42,10 @@ self: super:
     buildInputs = attrs.buildInputs ++ [ self.mkfontscale ];
   });
 
+  editres = super.editres.overrideAttrs (attrs: {
+    hardeningDisable = [ "format" ];
+  });
+
   fontbhttf = super.fontbhttf.overrideAttrs (attrs: {
     meta = attrs.meta // { license = lib.licenses.unfreeRedistributable; };
   });
