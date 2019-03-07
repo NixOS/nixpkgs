@@ -72,6 +72,27 @@ For the sake of completeness, here's another example how to install the environm
 }
 ```
 
+### How to override a Python package using overlays?
+
+Use the following overlay template:
+
+```nix
+self: prev:
+{
+
+  lua = prev.lua.override {
+    packageOverrides = luaself: luaprev: {
+
+      luarocks-nix = luaprev.luarocks-nix.overrideAttrs(oa: {
+        pname = "toto";
+        src = /home/my_luarocks/repository;
+      });
+  };
+
+  luaPackages = lua.pkgs;
+}
+```
+
 ### Temporary Lua environment with `nix-shell`
 
 For development you may need to use multiple environments.
@@ -154,7 +175,7 @@ Each interpreter has the following attributes:
 The `buildLuarocksPackage` function is implemented in `pkgs/development/interpreters/lua-5/build-lua-package.nix`
 The following is an example:
 ```nix
-luaexpat = buildLuaPackage rec {
+luaexpat = buildLuarocksPackage rec {
   pname = "luaexpat";
   version = "1.3.0-1";
 
