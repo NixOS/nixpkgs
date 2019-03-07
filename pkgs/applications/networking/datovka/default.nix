@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libxml2, libisds, qmake, qtbase, qtsvg}:
+{ stdenv, fetchurl, libxml2, libisds, qmake, qtbase, qtsvg }:
 
 stdenv.mkDerivation rec {
   name = "datovka-${version}";
@@ -11,8 +11,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ libxml2 ];
-  buildInputs = [ libisds qmake qtbase qtsvg ];
+  buildInputs = [ libisds qmake qtbase qtsvg libxml2 ];
+  NIX_CFLAGS_COMPILE = [ "-I${libxml2.dev}/include/libxml2/" ];
 
   meta = with stdenv.lib; {
     description = "Client application for operating Czech government-provided Databox infomation system";
