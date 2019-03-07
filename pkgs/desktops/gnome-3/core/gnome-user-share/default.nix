@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   name = "gnome-user-share-${version}";
-  version = "3.28.0";
+  version = "3.32.0.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-user-share/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "04wjnrcdlmyszj582nsda32sgi44nwgrw2ksy11xp17nb09d7m09";
+    sha256 = "16w6n0cjyzp8vln3zspvab8jhjprpvs88xc9x7bvigg0wry74945";
   };
 
   passthru = {
@@ -41,8 +41,6 @@ stdenv.mkDerivation rec {
   ];
 
   postInstall = ''
-    mkdir -p $out/share/gsettings-schemas/$name
-    mv $out/share/glib-2.0 $out/share/gsettings-schemas/$name
     glib-compile-schemas "$out/share/gsettings-schemas/$name/glib-2.0/schemas"
   '';
 
