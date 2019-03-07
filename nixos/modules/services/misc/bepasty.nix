@@ -2,10 +2,10 @@
 
 with lib;
 let
-  gunicorn = pkgs.pythonPackages.gunicorn;
+  gunicorn = pkgs.python3Packages.gunicorn;
   bepasty = pkgs.bepasty;
-  gevent = pkgs.pythonPackages.gevent;
-  python = pkgs.pythonPackages.python;
+  gevent = pkgs.python3Packages.gevent;
+  python = pkgs.python3Packages.python;
   cfg = config.services.bepasty;
   user = "bepasty";
   group = "bepasty";
