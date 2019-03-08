@@ -197,7 +197,7 @@ let
         listenString = { addr, port, ssl, extraParameters ? [], ... }:
           "listen ${addr}:${toString port} "
           + optionalString ssl "ssl "
-          + optionalString (ssl && vhost.http2) "http2 "
+          + optionalString vhost.http2 "http2 "
           + optionalString vhost.default "default_server "
           + optionalString (extraParameters != []) (concatStringsSep " " extraParameters)
           + ";";
