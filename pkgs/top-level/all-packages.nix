@@ -13384,12 +13384,12 @@ in
   # the latest Maint version
   perl528Packages = recurseIntoAttrs (callPackage ./perl-packages.nix {
     perl = perl528;
-    overrides = (config.perlPackageOverrides or (p: {})) pkgs;
+    overrides = config.perlPackageOverrides pkgs;
   });
   # the latest Devel version
   perldevelPackages = recurseIntoAttrs (callPackage ./perl-packages.nix {
     perl = perldevel;
-    overrides = (config.perlPackageOverrides or (p: {})) pkgs;
+    overrides = config.perlPackageOverrides pkgs;
   });
 
   perlPackages = perl528Packages;
@@ -13437,7 +13437,7 @@ in
   };
 
   rPackages = dontRecurseIntoAttrs (callPackage ../development/r-modules {
-    overrides = (config.rPackageOverrides or (p: {})) pkgs;
+    overrides = config.rPackageOverrides pkgs;
   });
 
   ### SERVERS

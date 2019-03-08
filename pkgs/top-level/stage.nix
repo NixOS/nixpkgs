@@ -111,8 +111,7 @@ let
   # attributes to refer to the original attributes (e.g. "foo =
   # ... pkgs.foo ...").
   configOverrides = self: super:
-    lib.optionalAttrs allowCustomOverrides
-      ((config.packageOverrides or (super: {})) super);
+    lib.optionalAttrs allowCustomOverrides (config.packageOverrides super);
 
   # Convenience attributes for instantitating package sets. Each of
   # these will instantiate a new version of allPackages. Currently the
