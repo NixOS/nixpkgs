@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation rec {
   pname = "geary";
-  version = "0.13.1";
+  version = "0.13.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0h9pf2mdskq7mylib1m9hw86nwfmdzyngjl7ywangqipm1k5svjx";
+    sha256 = "1fp3zzgpkm1l4d0g5194wnriz2spxa9kgrgy98kvvffl7ac860kk";
   };
 
   patches = [
@@ -19,12 +19,6 @@ stdenv.mkDerivation rec {
     (fetchpatch {
       url = https://gitlab.gnome.org/GNOME/geary/commit/d2f1b1076aa942d140e83fdf03b66621c11229f5.patch;
       sha256 = "1dsj4ybnibpi572w9hafm0w90jbjv7wzdl6j8d4c2qg5h7knlvfk";
-    })
-    # Fixes tests on Aarch64
-    # https://gitlab.gnome.org/GNOME/geary/issues/259
-    (fetchpatch {
-      url = https://gitlab.gnome.org/GNOME/geary/commit/9c3fdbfb5c792daeb9c3924f798fa83a15096d8a.patch;
-      sha256 = "1ihjxnaj0g6gx264kd8cbhs88yp37vwmmcd3lvmz44agf7qcv2ri";
     })
   ];
 
