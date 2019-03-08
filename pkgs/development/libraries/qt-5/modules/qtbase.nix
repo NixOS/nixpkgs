@@ -175,7 +175,7 @@ stdenv.mkDerivation {
     NIX_OUTPUT_BIN = $bin
     NIX_OUTPUT_DEV = $dev
     NIX_OUTPUT_OUT = $out
-    NIX_OUTPUT_DOC = $dev/$qtDocPrefix
+    NIX_OUTPUT_DOC = $out/$qtDocPrefix
     NIX_OUTPUT_QML = $bin/$qtQmlPrefix
     NIX_OUTPUT_PLUGIN = $bin/$qtPluginPrefix
     EOF
@@ -378,6 +378,18 @@ stdenv.mkDerivation {
     + ''
       moveQtDevTools
       moveToOutput bin "$dev"
+    ''
+
+    # Fix paths returned by qmake -query
+    + ''
+      cat > $dev/bin/qt.conf <<EOF
+        [Paths]
+        Prefix = $out
+        Headers = $dev/include
+        Plugins = $bin/$qtPluginPrefix
+        Documentation = $out/$qtDocPrefix
+        HostBinaries = $dev/bin
+      EOF
     ''
 
     + (
