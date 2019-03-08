@@ -26,6 +26,11 @@ let
     '';
   });
 
+  mkOverrides = args: mkMassRebuild ({
+    type = types.functionTo (types.attrsOf (types.uniq types.unspecified));
+    default = super: {};
+  } // args);
+
   options = {
 
     /* Internal stuff */
@@ -106,7 +111,27 @@ let
       description = "A list of blacklisted licenses.";
     };
 
-    # TODO: packageOverrides, needs functionTo removed in 4ff1ab5a56f1280d2de319ad4eb4b2796e07ed35
+    /* Overlays */
+
+    # It feels to me like if overlays really belong here.
+
+    packageOverrides = mkOverrides {
+      description = "Poor man's global overlay.";
+    };
+
+    haskellPackageOverrides = mkMassRebuild {
+      type = types.uniq types.unspecified;
+      default = self: super: {};
+      description = "Haskell's overlay.";
+    };
+
+    perlPackageOverrides = mkOverrides {
+      description = "Poor man's perl overlay.";
+    };
+
+    rPackageOverrides = mkOverrides {
+      description = "Poor man's R overlay.";
+    };
 
     # See discussion at https://github.com/NixOS/nixpkgs/pull/25304#issuecomment-298385426
     # for why this defaults to false, but I (@copumpkin) want to default it to true soon.
