@@ -109,6 +109,7 @@ let
       # See discussions, e.g. https://github.com/NixOS/nixpkgs/issues/24683
       urlPrefixes = args.urlPrefixes or [
         http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/2018/tlnet-final/archive
+        ftp://tug.org/texlive/historic/2018/tlnet-final/archive
       ];
 
       src = fetchurl { inherit urls sha512; };
