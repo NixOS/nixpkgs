@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   name = "capitaine-cursors-${version}";
-  version = "2.1";
+  version = "3";
 
   src = fetchFromGitHub {
     owner = "keeferrourke";
     repo = "capitaine-cursors";
     rev = "r${version}";
-    sha256 = "0ljvq1dqscp5gyf23qszn2ax80bxkqw2vx5zh3qln9vnzfascirb";
+    sha256 = "0pnfbmrn9nv8pryv6cbjcq5hl9366hzvz1kd8vsdkgb2nlfv5gdv";
   };
 
   postPatch = ''
@@ -29,6 +29,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     install -dm 0755 $out/share/icons
     cp -pr dist $out/share/icons/capitaine-cursors
+    cp -pr dist-white $out/share/icons/capitaine-cursors-white
   '';
 
   meta = with stdenv.lib; {
