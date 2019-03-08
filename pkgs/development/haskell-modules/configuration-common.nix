@@ -1220,10 +1220,8 @@ self: super: {
   # Use latest pandoc despite what LTS says.
   # Test suite fails in both 2.5 and 2.6: https://github.com/jgm/pandoc/issues/5309.
   pandoc = doDistribute super.pandoc_2_7;
-  pandoc-citeproc = self.pandoc-citeproc_0_16_1_1;
-  skylighting = self.skylighting_0_7_7;
-  skylighting-core = self.skylighting-core_0_7_7;
-  texmath = self.texmath_0_11_2_1;
+  pandoc-citeproc = self.pandoc-citeproc_0_16_1_2;
+  texmath = self.texmath_0_11_2_2;
 
   # https://github.com/qfpl/tasty-hedgehog/issues/24
   tasty-hedgehog = dontCheck super.tasty-hedgehog;
