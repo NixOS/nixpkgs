@@ -22575,15 +22575,9 @@ in
   nixos = configuration:
     (import (pkgs.path + "/nixos/lib/eval-config.nix") {
       inherit (pkgs.stdenv.hostPlatform) system;
-      modules = [(
-                  { lib, ... }: {
-                    config.nixpkgs.pkgs = lib.mkDefault pkgs;
-                  }
-                )] ++ (
-                  if builtins.isList configuration
-                  then configuration
-                  else [configuration]
-                );
+      modules = if builtins.isList configuration
+                then configuration
+                else [configuration];
     }).config.system.build;
 
 
@@ -22623,11 +22617,6 @@ in
         (import ../../nixos/lib/testing.nix {
           inherit (pkgs.stdenv.hostPlatform) system;
           inherit pkgs;
-          extraConfigurations = [(
-            { lib, ... }: {
-              config.nixpkgs.pkgs = lib.mkDefault pkgs;
-            }
-          )];
         });
     in
       test:

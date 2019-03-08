@@ -49,61 +49,63 @@ let
     merge = lib.mergeOneOption;
   };
 
-  pkgsType = mkOptionType {
+  pkgsFunType = mkOptionType {
     name = "nixpkgs";
+    description = "An import of nixpkgs";
+    check = lib.isFunction;
+    merge = lib.mergeOneOption;
+  };
+
+  pkgsType = mkOptionType {
+    name = "nixpkgs-evaluated";
     description = "An evaluation of Nixpkgs; the top level attribute set of packages";
     check = builtins.isAttrs;
   };
 
-  defaultPkgs = import ../../.. {
+  defaultPkgs = cfg.pkgsFun {
     inherit (cfg) config overlays localSystem crossSystem;
   };
 
-  finalPkgs = if opt.pkgs.isDefined then cfg.pkgs.appendOverlays cfg.overlays else defaultPkgs;
+  finalPkgs = if cfg.pkgs != null then cfg.pkgs.appendOverlays cfg.overlays else defaultPkgs;
 
 in
 
 {
   options.nixpkgs = {
 
-    pkgs = mkOption {
-      defaultText = literalExample
-        ''import "''${nixos}/.." {
-            inherit (cfg) config overlays localSystem crossSystem;
-          }
-        '';
-      type = pkgsType;
-      example = literalExample ''import <nixpkgs> {}'';
+    pkgsFun = mkOption {
+      type = pkgsFunType;
+      default = import ../../..;
+      defaultText = ''import "''${nixos}/.."'';
+      example = literalExample ''import <nixpkgs>'';
       description = ''
-        If set, the pkgs argument to all NixOS modules is the value of
-        this option, extended with <code>nixpkgs.overlays</code>, if
-        that is also set. Either <code>nixpkgs.crossSystem</code> or
-        <code>nixpkgs.localSystem</code> will be used in an assertion
-        to check that the NixOS and Nixpkgs architectures match. Any
-        other options in <code>nixpkgs.*</code>, notably <code>config</code>,
-        will be ignored.
+        A function that evaluates to <code>pkgs</code> argument used
+        by all NixOS modules when applied with <code>config</code>,
+        <code>overlays</code>, <code>localSystem</code> and
+        <code>crossSystem</code>.
 
-        If unset, the pkgs argument to all NixOS modules is determined
-        as shown in the default value for this option.
+        The <code>config</code>, <code>overlays</code>,
+        <code>localSystem</code>, and <code>crossSystem</code> come
+        from this option's siblings.
 
         The default value imports the Nixpkgs source files
         relative to the location of this NixOS module, because
         NixOS and Nixpkgs are distributed together for consistency,
         so the <code>nixos</code> in the default value is in fact a
-        relative path. The <code>config</code>, <code>overlays</code>,
-        <code>localSystem</code>, and <code>crossSystem</code> come
-        from this option's siblings.
-
-        This option can be used by applications like NixOps to increase
-        the performance of evaluation, or to create packages that depend
-        on a container that should be built with the exact same evaluation
-        of Nixpkgs, for example. Applications like this should set
-        their default value using <code>lib.mkDefault</code>, so
-        user-provided configuration can override it without using
-        <code>lib</code>.
+        relative path.
 
         Note that using a distinct version of Nixpkgs with NixOS may
         be an unexpected source of problems. Use this option with care.
+      '';
+    };
+
+    # TODO: remove after 20.03
+    pkgs = mkOption {
+      type = types.nullOr pkgsType;
+      default = null;
+      example = literalExample ''import <nixpkgs> {}'';
+      description = ''
+        DEPRECATED, please use <option>nixpkgs.pkgsFun</option> instead.
       '';
     };
 
@@ -223,15 +225,23 @@ in
       pkgs = finalPkgs;
     };
 
+    warnings = optional (cfg.pkgs != null) ''
+      The option `nixpkgs.pkgs` was deprecated, please use `nixpkgs.pkgsFun` instead.
+
+      The use of `nixpkgs.pkgs` produces 2x slowdown for evaluation of your
+      `configuration.nix` because NixOS has to reevaluate `nixpkgs` to reapply
+      overlays the second time.
+    '';
+
     assertions = [
       (
         let
           nixosExpectedSystem =
-            if config.nixpkgs.crossSystem != null
-            then config.nixpkgs.crossSystem.system
-            else config.nixpkgs.localSystem.system;
+            if cfg.crossSystem != null
+            then cfg.crossSystem.system
+            else cfg.localSystem.system;
           nixosOption =
-            if config.nixpkgs.crossSystem != null
+            if cfg.crossSystem != null
             then "nixpkgs.crossSystem"
             else "nixpkgs.localSystem";
           pkgsSystem = finalPkgs.stdenv.targetPlatform.system;
