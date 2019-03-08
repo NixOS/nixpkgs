@@ -21,6 +21,28 @@ rec {
   */
   singleton = x: [x];
 
+  /*  Flipped map.
+
+      Type: foreach :: a -> [a]
+
+      Example:
+        foreach [ 1 2 ] (x:
+          toString x
+        )
+        => [ "1" "2" ]
+
+        foreach { a = 1; b = 2; } (n: v:
+          toString v
+        )
+        => { a = "1"; b = "2"; }
+  */
+  foreach = xs: f:
+    if builtins.isList xs
+      then map f xs
+    else if builtins.isAttrs xs
+      then lib.mapAttrs f xs
+    else throw "Wrong arguments supplied to 'foreach'. It supports only lists and attrsets. Make sure argument order is correct";
+
   /* “right fold” a binary function `op` between successive elements of
      `list` with `nul' as the starting value, i.e.,
      `foldr op nul [x_1 x_2 ... x_n] == op x_1 (op x_2 ... (op x_n nul))`.

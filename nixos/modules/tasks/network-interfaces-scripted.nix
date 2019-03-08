@@ -8,11 +8,15 @@ let
   cfg = config.networking;
   interfaces = attrValues cfg.interfaces;
 
-  slaves = concatMap (i: i.interfaces) (attrValues cfg.bonds)
-    ++ concatMap (i: i.interfaces) (attrValues cfg.bridges)
-    ++ concatMap (i: i.interfaces) (attrValues cfg.vswitches)
-    ++ concatMap (i: [i.interface]) (attrValues cfg.macvlans)
-    ++ concatMap (i: [i.interface]) (attrValues cfg.vlans);
+  slaves = let
+    subConfigs = with cfg; [ bonds bridges vswitches macvlans vlans ];
+  in flatten (
+      foreach subConfigs (configSet:
+        foreach (attrValues configSet) (i:
+          i.interfaces or [i.interface]
+        )
+      )
+  );
 
   # We must escape interfaces due to the systemd interpretation
   subsystemDevice = interface:
@@ -40,18 +44,17 @@ let
   # Should be removed in the release after next
   bondDeprecation = rec {
     deprecated = [ "lacp_rate" "miimon" "mode" "xmit_hash_policy" ];
-    filterDeprecated = bond: (filterAttrs (attrName: attr:
-                         elem attrName deprecated && attr != null) bond);
+    isDeprecated = name: opt: elem name deprecated && opt != null;
+    filter = bond: filterAttrs bondDeprecation.isDeprecated bond;
   };
 
-  bondWarnings =
-    let oneBondWarnings = bondName: bond:
-          mapAttrsToList (bondText bondName) (bondDeprecation.filterDeprecated bond);
-        bondText = bondName: optName: _:
-          "${bondName}.${optName} is deprecated, use ${bondName}.driverOptions";
-    in {
-      warnings = flatten (mapAttrsToList oneBondWarnings cfg.bonds);
-    };
+  bondWarnings.warnings = flatten (
+    foreach (attrNames cfg.bonds) (bondName:
+      foreach (attrNames (bondDeprecation.filter cfg.bonds.${bondName})) (optName:
+        "${bondName}.${optName} is deprecated, use ${bondName}.driverOptions"
+      )
+    )
+  );
 
   normalConfig = {
 
@@ -101,49 +104,72 @@ let
 
             unitConfig.DefaultDependencies = false;
 
-            script =
-              ''
-                # Set the static DNS configuration, if given.
-                ${pkgs.openresolv}/sbin/resolvconf -m 1 -a static <<EOF
-                ${optionalString (cfg.nameservers != [] && cfg.domain != null) ''
-                  domain ${cfg.domain}
-                ''}
-                ${optionalString (cfg.search != []) ("search " + concatStringsSep " " cfg.search)}
-                ${flip concatMapStrings cfg.nameservers (ns: ''
-                  nameserver ${ns}
-                '')}
-                EOF
+            script = let
+              resolvContent = combined "\n" (
+                 optional (cfg.nameservers != [] && cfg.domain != null)
+                  "domain ${cfg.domain}"
+              ++ optional (cfg.search != [])
+                  "search ${combined " " cfg.search}"
+              ++ foreach cfg.nameservers (ns:
+                  "nameserver ${ns}"
+                )
+              );
+              ipRoute = { replace, gw, windowSize ? null, six ? ""
+                        , via ? false, dev ? false, proto ? null }:
+                combined " " ([
+                  "ip ${six} route"
+                  "replace ${replace}"
+                ] ++ optional (gw.metric != null)
+                  "metric ${toString gw.metric}"
+                ++ optional via
+                  ''via "${gw.address}"''
+                ++ optional (windowSize != null)
+                  "window ${toString windowSize}"
+                ++ optional (dev && gw.interface != null)
+                  "dev ${gw.interface}"
+                ++ optional (proto != null)
+                  "proto ${proto}"
+                );
 
-                # Set the default gateway.
-                ${optionalString (cfg.defaultGateway != null && cfg.defaultGateway.address != "") ''
-                  ${optionalString (cfg.defaultGateway.interface != null) ''
-                    ip route replace ${cfg.defaultGateway.address} dev ${cfg.defaultGateway.interface} ${optionalString (cfg.defaultGateway.metric != null)
-                      "metric ${toString cfg.defaultGateway.metric}"
-                    } proto static
-                  ''}
-                  ip route replace default ${optionalString (cfg.defaultGateway.metric != null)
-                      "metric ${toString cfg.defaultGateway.metric}"
-                    } via "${cfg.defaultGateway.address}" ${
-                    optionalString (cfg.defaultGatewayWindowSize != null)
-                      "window ${toString cfg.defaultGatewayWindowSize}"} ${
-                    optionalString (cfg.defaultGateway.interface != null)
-                      "dev ${cfg.defaultGateway.interface}"} proto static
-                ''}
-                ${optionalString (cfg.defaultGateway6 != null && cfg.defaultGateway6.address != "") ''
-                  ${optionalString (cfg.defaultGateway6.interface != null) ''
-                    ip -6 route replace ${cfg.defaultGateway6.address} dev ${cfg.defaultGateway6.interface} ${optionalString (cfg.defaultGateway6.metric != null)
-                      "metric ${toString cfg.defaultGateway6.metric}"
-                    } proto static
-                  ''}
-                  ip -6 route replace default ${optionalString (cfg.defaultGateway6.metric != null)
-                      "metric ${toString cfg.defaultGateway6.metric}"
-                    } via "${cfg.defaultGateway6.address}" ${
-                    optionalString (cfg.defaultGatewayWindowSize != null)
-                      "window ${toString cfg.defaultGatewayWindowSize}"} ${
-                    optionalString (cfg.defaultGateway6.interface != null)
-                      "dev ${cfg.defaultGateway6.interface}"} proto static
-                ''}
-              '';
+            in combined (
+              # Set the static DNS configuration, if given.
+              singleton ''
+                ${pkgs.openresolv}/sbin/resolvconf -m 1 -a static <<EOF
+                ${resolvContent}
+                EOF
+              ''
+              # Set the default gateway.
+            ++ optional (cfg.defaultGateway != null && cfg.defaultGateway.address != "") ''
+                ${ipRoute {
+                  replace = cfg.defaultGateway.address;
+                  gw = cfg.defaultGateway;
+                }}
+                ${ipRoute {
+                  replace = "default";
+                  gw = cfg.defaultGateway;
+                  windowSize = cfg.defaultGatewayWindowSize;
+                  via = true;
+                  dev = true;
+                  proto = "static";
+                }}
+              ''
+            ++ optional (cfg.defaultGateway6 != null && cfg.defaultGateway6.address != "") ''
+                ${ipRoute {
+                  six = "-6";
+                  replace = cfg.defaultGateway6.address;
+                  gw = cfg.defaultGateway6;
+                }}
+                ${ipRoute {
+                  six = "-6";
+                  replace = "default";
+                  gw = cfg.defaultGateway6;
+                  windowSize = cfg.defaultGatewayWindowSize;
+                  via = true;
+                  dev = true;
+                  proto = "static";
+                }}
+              ''
+            );
           };
 
         # For each interface <foo>, create a job ‘network-addresses-<foo>.service"
@@ -181,11 +207,9 @@ let
                 state="/run/nixos/network/addresses/${i.name}"
                 mkdir -p $(dirname "$state")
 
-                ${flip concatMapStrings ips (ip:
-                  let
+                ${combined map ips (ip: let
                     cidr = "${ip.address}/${toString ip.prefixLength}";
-                  in
-                  ''
+                  in ''
                     echo "${cidr}" >> $state
                     echo -n "adding address ${cidr}... "
                     if out=$(ip addr add "${cidr}" dev "${i.name}" 2>&1); then
@@ -200,11 +224,13 @@ let
                 state="/run/nixos/network/routes/${i.name}"
                 mkdir -p $(dirname "$state")
 
-                ${flip concatMapStrings (i.ipv4.routes ++ i.ipv6.routes) (route:
+                ${combined map (i.ipv4.routes ++ i.ipv6.routes) (route:
                   let
                     cidr = "${route.address}/${toString route.prefixLength}";
                     via = optionalString (route.via != null) ''via "${route.via}"'';
-                    options = concatStrings (mapAttrsToList (name: val: "${name} ${val} ") route.options);
+                    options = combined " " mapAttrsToList route.options (name: val:
+                      "${name} ${val}"
+                    );
                   in
                   ''
                      echo "${cidr}" >> $state
@@ -255,16 +281,21 @@ let
             '';
           };
 
-        createBridgeDevice = n: v: nameValuePair "${n}-netdev"
-          (let
-            deps = concatLists (map deviceDependency v.interfaces);
+        createBridgeDevice = n: v: nameValuePair "${n}-netdev" (
+          let
+            deps = concatMap deviceDependency v.interfaces;
           in
           { description = "Bridge Interface ${n}";
             wantedBy = [ "network-setup.service" (subsystemDevice n) ];
             bindsTo = deps ++ optional v.rstp "mstpd.service";
             partOf = [ "network-setup.service" ] ++ optional v.rstp "mstpd.service";
-            after = [ "network-pre.target" ] ++ deps ++ optional v.rstp "mstpd.service"
-              ++ concatMap (i: [ "network-addresses-${i}.service" "network-link-${i}.service" ]) v.interfaces;
+            after = [ "network-pre.target" ]
+              ++ deps
+              ++ optional v.rstp "mstpd.service"
+              ++ flatten (foreach v.interfaces (i: [
+                  "network-addresses-${i}.service"
+                  "network-link-${i}.service"
+              ]));
             before = [ "network-setup.service" ];
             serviceConfig.Type = "oneshot";
             serviceConfig.RemainAfterExit = true;
@@ -278,14 +309,12 @@ let
               ip link add name "${n}" type bridge
 
               # Enslave child interfaces
-              ${flip concatMapStrings v.interfaces (i: ''
+              ${combined map v.interfaces (i: ''
                 ip link set "${i}" master "${n}"
                 ip link set "${i}" up
               '')}
               # Save list of enslaved interfaces
-              echo "${flip concatMapStrings v.interfaces (i: ''
-                ${i}
-              '')}" > /run/${n}.interfaces
+              echo "${combined "\n" v.interfaces}" > /run/${n}.interfaces
 
               ${optionalString config.virtualisation.libvirtd.enable ''
                   # Enslave dynamically added interfaces which may be lost on nixos-rebuild
@@ -317,14 +346,12 @@ let
               done
 
               # Enslave child interfaces (new list of interfaces)
-              ${flip concatMapStrings v.interfaces (i: ''
+              ${combined map v.interfaces (i: ''
                 ip link set "${i}" master "${n}"
                 ip link set "${i}" up
               '')}
               # Save list of enslaved interfaces
-              echo "${flip concatMapStrings v.interfaces (i: ''
-                ${i}
-              '')}" > /run/${n}.interfaces
+              echo "${combined "\n" v.interfaces}" > /run/${n}.interfaces
 
               # (Un-)set stp on the bridge
               echo ${if v.rstp then "2" else "0"} > /sys/class/net/${n}/bridge/stp_state
@@ -334,7 +361,7 @@ let
 
         createVswitchDevice = n: v: nameValuePair "${n}-netdev"
           (let
-            deps = concatLists (map deviceDependency v.interfaces);
+            deps = concatMap deviceDependency v.interfaces;
             ofRules = pkgs.writeText "vswitch-${n}-openFlowRules" v.openFlowRules;
           in
           { description = "Open vSwitch Interface ${n}";
@@ -351,9 +378,9 @@ let
               ovs-vsctl --if-exists del-br ${n}
 
               echo "Adding Open vSwitch ${n}..."
-              ovs-vsctl -- add-br ${n} ${concatMapStrings (i: " -- add-port ${n} ${i}") v.interfaces} \
-                ${concatMapStrings (x: " -- set-controller ${n} " + x)  v.controllers} \
-                ${concatMapStrings (x: " -- " + x) (splitString "\n" v.extraOvsctlCmds)}
+              ovs-vsctl -- add-br ${n} ${combined map v.interfaces (i: " -- add-port ${n} ${i}")} \
+                ${combined map v.controllers (x: " -- set-controller ${n} ${x}")} \
+                ${combined map (splitString "\n" v.extraOvsctlCmds) (x: " -- ${x}")}
 
               echo "Adding OpenFlow rules for Open vSwitch ${n}..."
               ovs-ofctl add-flows ${n} ${ofRules}
@@ -367,13 +394,14 @@ let
 
         createBondDevice = n: v: nameValuePair "${n}-netdev"
           (let
-            deps = concatLists (map deviceDependency v.interfaces);
+            deps = concatMap deviceDependency v.interfaces;
           in
           { description = "Bond Interface ${n}";
             wantedBy = [ "network-setup.service" (subsystemDevice n) ];
             bindsTo = deps;
             partOf = [ "network-setup.service" ];
-            after = [ "network-pre.target" ] ++ deps
+            after = [ "network-pre.target" ]
+              ++ deps
               ++ concatMap (i: [ "network-addresses-${i}.service" "network-link-${i}.service" ]) v.interfaces;
             before = [ "network-setup.service" ];
             serviceConfig.Type = "oneshot";
@@ -385,11 +413,12 @@ let
 
               echo "Creating new bond ${n}..."
               ip link add name "${n}" type bond \
-              ${let opts = (mapAttrs (const toString)
-                             (bondDeprecation.filterDeprecated v))
-                           // v.driverOptions;
-                 in concatStringsSep "\n"
-                      (mapAttrsToList (set: val: "  ${set} ${val} \\") opts)}
+              ${let
+                  bondOpts = bondDeprecation.filter v // v.driverOptions;
+                in combined " " mapAttrsToList bondOpts (name: val:
+                      "${name} ${toString val}"
+                   )
+              }
 
               # !!! There must be a better way to wait for the interface
               while [ ! -d "/sys/class/net/${n}" ]; do sleep 0.1; done;
@@ -474,9 +503,9 @@ let
               # Remove Dead Interfaces
               ip link show "${n}" >/dev/null 2>&1 && ip link delete "${n}"
               ip link add link "${v.interface}" name "${n}" type vlan id "${toString v.id}"
-              
-              # We try to bring up the logical VLAN interface. If the master 
-              # interface the logical interface is dependent upon is not up yet we will 
+
+              # We try to bring up the logical VLAN interface. If the master
+              # interface the logical interface is dependent upon is not up yet we will
               # fail to immediately bring up the logical interface. The resulting logical
               # interface will brought up later when the master interface is up.
               ip link set "${n}" up || true
@@ -488,7 +517,8 @@ let
 
       in listToAttrs (
            map configureAddrs interfaces ++
-           map createTunDevice (filter (i: i.virtual) interfaces))
+           map createTunDevice (filter (i: i.virtual) interfaces)
+         )
          // mapAttrs' createBridgeDevice cfg.bridges
          // mapAttrs' createVswitchDevice cfg.vswitches
          // mapAttrs' createBondDevice cfg.bonds

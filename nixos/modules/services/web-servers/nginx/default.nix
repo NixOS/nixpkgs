@@ -4,8 +4,7 @@ with lib;
 
 let
   cfg = config.services.nginx;
-  virtualHosts = mapAttrs (vhostName: vhostConfig:
-    let
+  virtualHosts = foreach cfg.virtualHosts (vhostName: vhostConfig: let
       serverName = if vhostConfig.serverName != null
         then vhostConfig.serverName
         else vhostName;
@@ -22,7 +21,7 @@ let
       sslCertificateKey = "${acmeDirectory}/${vhostConfig.useACMEHost}/key.pem";
       sslTrustedCertificate = "${acmeDirectory}/${vhostConfig.useACMEHost}/full.pem";
     })
-  ) cfg.virtualHosts;
+  );
   enableIPv6 = config.networking.enableIPv6;
 
   recommendedProxyConfig = pkgs.writeText "nginx-recommended-proxy-headers.conf" ''
@@ -35,14 +34,14 @@ let
     proxy_set_header        Accept-Encoding "";
   '';
 
-  upstreamConfig = toString (flip mapAttrsToList cfg.upstreams (name: upstream: ''
+  upstreamConfig = combined mapAttrsToList cfg.upstreams (name: upstream: ''
     upstream ${name} {
-      ${toString (flip mapAttrsToList upstream.servers (name: server: ''
+      ${combined mapAttrsToList upstream.servers (name: server: ''
         server ${name} ${optionalString server.backup "backup"};
-      ''))}
+      '')}
       ${upstream.extraConfig}
     }
-  ''));
+  '');
 
   awkFormat = builtins.toFile "awkFormat-nginx.awk" ''
     awk -f
@@ -75,9 +74,12 @@ let
       include ${cfg.package}/conf/fastcgi.conf;
       include ${cfg.package}/conf/uwsgi_params;
 
-      ${optionalString (cfg.resolver.addresses != []) ''
-        resolver ${toString cfg.resolver.addresses} ${optionalString (cfg.resolver.valid != "") "valid=${cfg.resolver.valid}"};
-      ''}
+      ${optionalString (cfg.resolver.addresses != []) (combined " " (
+          ["resolver"]
+        ++ cfg.resolver.addresses
+        ++ optional (cfg.resolver.valid != "")
+          "valid=${cfg.resolver.valid}"
+      ))}
       ${upstreamConfig}
 
       ${optionalString (cfg.recommendedOptimisation) ''
@@ -174,7 +176,7 @@ let
     ${cfg.appendConfig}
   '';
 
-  vhosts = concatStringsSep "\n" (mapAttrsToList (vhostName: vhost:
+  vhosts = combined "\n" mapAttrsToList virtualHosts (vhostName: vhost:
     let
         onlySSL = vhost.onlySSL || vhost.enableSSL;
         hasSSL = onlySSL || vhost.addSSL || vhost.forceSSL;
@@ -199,7 +201,7 @@ let
           + optionalString ssl "ssl "
           + optionalString (ssl && vhost.http2) "http2 "
           + optionalString vhost.default "default_server "
-          + optionalString (extraParameters != []) (concatStringsSep " " extraParameters)
+          + optionalString (extraParameters != []) (combined " " extraParameters)
           + ";";
 
         redirectListen = filter (x: !x.ssl) defaultListen;
@@ -221,9 +223,9 @@ let
       in ''
         ${optionalString vhost.forceSSL ''
           server {
-            ${concatMapStringsSep "\n" listenString redirectListen}
+            ${combined "\n" map redirectListen listenString}
 
-            server_name ${vhost.serverName} ${concatStringsSep " " vhost.serverAliases};
+            server_name ${vhost.serverName} ${combined " " vhost.serverAliases};
             ${acmeLocation}
             location / {
               return 301 https://$host$request_uri;
@@ -232,8 +234,8 @@ let
         ''}
 
         server {
-          ${concatMapStringsSep "\n" listenString hostListen}
-          server_name ${vhost.serverName} ${concatStringsSep " " vhost.serverAliases};
+          ${combined "\n" map hostListen listenString}
+          server_name ${vhost.serverName} ${combined " " vhost.serverAliases};
           ${acmeLocation}
           ${optionalString (vhost.root != null) "root ${vhost.root};"}
           ${optionalString (vhost.globalRedirect != null) ''
@@ -257,8 +259,10 @@ let
           ${vhost.extraConfig}
         }
       ''
-  ) virtualHosts);
-  mkLocations = locations: concatStringsSep "\n" (map (config: ''
+  );
+  mkLocations = locations: let
+    locations' = sortProperties (mapAttrsToList (k: v: v // { location = k; }) locations);
+  in combined "\n" map locations' (config: ''
     location ${config.location} {
       ${optionalString (config.proxyPass != null && !cfg.proxyResolveWhileRunning)
         "proxy_pass ${config.proxyPass};"
@@ -279,12 +283,12 @@ let
       ${config.extraConfig}
       ${optionalString (config.proxyPass != null && cfg.recommendedProxySettings) "include ${recommendedProxyConfig};"}
     }
-  '') (sortProperties (mapAttrsToList (k: v: v // { location = k; }) locations)));
+  '');
   mkBasicAuth = vhostName: authDef: let
     htpasswdFile = pkgs.writeText "${vhostName}.htpasswd" (
-      concatStringsSep "\n" (mapAttrsToList (user: password: ''
+      combined "\n" mapAttrsToList authDef (user: password: ''
         ${user}:{PLAIN}${password}
-      '') authDef)
+      '')
     );
   in ''
     auth_basic secured;
@@ -292,9 +296,9 @@ let
   '';
 
   mkHtpasswd = vhostName: authDef: pkgs.writeText "${vhostName}.htpasswd" (
-    concatStringsSep "\n" (mapAttrsToList (user: password: ''
+    combined "\n" mapAttrsToList authDef (user: password: ''
       ${user}:{PLAIN}${password}
-    '') authDef)
+    '')
   );
 in
 
@@ -373,7 +377,7 @@ in
       preStart =  mkOption {
         type = types.lines;
         default = ''
-          test -d ${cfg.stateDir}/logs || mkdir -m 750 -p ${cfg.stateDir}/logs  
+          test -d ${cfg.stateDir}/logs || mkdir -m 750 -p ${cfg.stateDir}/logs
           test `stat -c %a ${cfg.stateDir}` = "750" || chmod 750 ${cfg.stateDir}
           test `stat -c %a ${cfg.stateDir}/logs` = "750" || chmod 750 ${cfg.stateDir}/logs
           chown -R ${cfg.user}:${cfg.group} ${cfg.stateDir}
@@ -662,22 +666,23 @@ in
       };
     };
 
-    security.acme.certs = filterAttrs (n: v: v != {}) (
-      let
-        vhostsConfigs = mapAttrsToList (vhostName: vhostConfig: vhostConfig) virtualHosts;
-        acmeEnabledVhosts = filter (vhostConfig: vhostConfig.enableACME && vhostConfig.useACMEHost == null) vhostsConfigs;
-        acmePairs = map (vhostConfig: { name = vhostConfig.serverName; value = {
-            user = cfg.user;
-            group = lib.mkDefault cfg.group;
-            webroot = vhostConfig.acmeRoot;
-            extraDomains = genAttrs vhostConfig.serverAliases (alias: null);
-            postRun = ''
-              systemctl reload nginx
-            '';
-          }; }) acmeEnabledVhosts;
-      in
-        listToAttrs acmePairs
-    );
+    security.acme.certs =
+      listToAttrs (let
+          vhosts = attrValues virtualHosts;
+          vhostFilter = vhost: vhost.enableACME && vhost.useACMEHost == null;
+        in foreach (filter vhostFilter vhosts) (vhostConfig: {
+            name = vhostConfig.serverName;
+            value = {
+              user = cfg.user;
+              group = lib.mkDefault cfg.group;
+              webroot = vhostConfig.acmeRoot;
+              extraDomains = genAttrs vhostConfig.serverAliases (alias: null);
+              postRun = ''
+                systemctl reload nginx
+              '';
+            };
+          })
+        );
 
     users.users = optionalAttrs (cfg.user == "nginx") (singleton
       { name = "nginx";

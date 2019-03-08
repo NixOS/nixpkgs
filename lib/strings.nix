@@ -104,6 +104,52 @@ rec {
     # List of input strings
     list: concatStringsSep sep (lib.imap1 f list);
 
+  /*  Sophisticated concatStrings, concatStringsSep, concatMapString and concatMapStringSep.
+      It has 4 forms, depending on supplied arguments:
+      - list of strings: concatenates elements to one string;
+      - string and list of strings: concatenates elements to one string
+            with separator;
+      - function of arity 2: calls that function with remaining args and
+            concatenates result;
+      - string and function of arity 2: calls that function with remaining
+            args and concatenates result with separator;
+
+      First two properties make `combined` a direct replacement
+      for `concatStrings` and `concatStringsSep`
+
+      Rest properties, when supplied with `map` function, make a
+      replacement for `flip concatMapStrings` and `flip (concatMapStringsSep sep)`.
+
+      Other functions of arity 2, which can return list of strings, may be used:
+      - filter
+      - concatMap
+      - mapAttrsToList
+      - ...
+
+      Type: combined :: [String] -> String
+            combined :: String -> [String] -> String
+            combined :: (F(a, String) -> Container a -> [String])
+                          -> Container a -> F(a, String) -> String
+            combined :: String
+                          -> (F(a, String) -> Container a -> [String])
+                          -> Container a -> F(a, String) -> String
+
+      Example:
+  */
+  combined = x:
+    if builtins.isFunction x
+      then arg1: arg2: builtins.concatStringsSep "" (x arg2 arg1)
+    else if builtins.isList x
+      then builtins.concatStringsSep "" x
+    else if builtins.isString x
+      # then this is a separator
+      then y:
+        if builtins.isFunction y
+          then arg1: arg2: builtins.concatStringsSep x (y arg2 arg1)
+          # otherwise this must be a list
+          else builtins.concatStringsSep x y
+    else throw "'combined' called with unexpected arguments";
+
   /* Construct a Unix-style, colon-separated search path consisting of
      the given `subDir` appended to each of the given paths.
 

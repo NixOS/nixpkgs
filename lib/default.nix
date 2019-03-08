@@ -76,9 +76,9 @@ let
       optional optionals toList range partition zipListsWith zipLists
       reverseList listDfs toposort sort naturalSort compareLists take
       drop sublist last init crossLists unique intersectLists
-      subtractLists mutuallyExclusive groupBy groupBy';
+      subtractLists mutuallyExclusive groupBy groupBy' foreach;
     inherit (strings) concatStrings concatMapStrings concatImapStrings
-      intersperse concatStringsSep concatMapStringsSep
+      intersperse concatStringsSep concatMapStringsSep combined
       concatImapStringsSep makeSearchPath makeSearchPathOutput
       makeLibraryPath makeBinPath optionalString
       hasPrefix hasSuffix stringToCharacters stringAsChars escape
