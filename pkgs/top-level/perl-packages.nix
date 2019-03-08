@@ -7874,11 +7874,11 @@ let
 
   ImageExifTool = buildPerlPackage rec {
     name = "Image-ExifTool-${version}";
-    version = "11.11";
+    version = "11.30";
 
     src = fetchurl {
       url = "https://www.sno.phy.queensu.ca/~phil/exiftool/${name}.tar.gz";
-      sha256 = "1szg1k82nz88pp5n7lg71ja7q3hh5i5f9bcbb7m482dwrmsywkp6";
+      sha256 = "0vkjb2c1a3jdlq8rx1jywx4p3f1bmgjn7rzfwx6dxgij2lx76lrs";
     };
 
     meta = with stdenv.lib; {
