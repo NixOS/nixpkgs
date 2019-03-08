@@ -38,6 +38,82 @@ let
 
     /* Config options */
 
+    inHydra = mkMeta {
+      internal = true;
+      description = ''
+        If we're in hydra, we can dispense with the more verbose error
+        messages and make problems easier to spot.
+      '';
+    };
+
+    allowBroken = mkMeta {
+      default = builtins.getEnv "NIXPKGS_ALLOW_BROKEN" == "1";
+      defaultText = ''builtins.getEnv "NIXPKGS_ALLOW_BROKEN" == "1"'';
+      feature = "permit evaluation of broken packages";
+    };
+
+    allowUnsupportedSystem = mkMeta {
+      default = builtins.getEnv "NIXPKGS_ALLOW_UNSUPPORTED_SYSTEM" == "1";
+      defaultText = ''builtins.getEnv "NIXPKGS_ALLOW_UNSUPPORTED_SYSTEM" == "1"'';
+      feature = "permit evaluation of packages not available for the current system";
+    };
+
+    allowUnfree = mkMeta {
+      default = builtins.getEnv "NIXPKGS_ALLOW_UNFREE" == "1";
+      defaultText = ''builtins.getEnv "NIXPKGS_ALLOW_UNFREE" == "1"'';
+      feature = "permit evaluation of unfree packages";
+    };
+
+    permittedUnfreePackages = mkMeta {
+      type = types.listOf types.str;
+      default = [];
+      description = "A list of permitted unfree packages.";
+    };
+
+    allowUnfreePredicate = mkMeta {
+      type = types.unspecified;
+      default = x: builtins.elem x.name config.permittedUnfreePackages;
+      description = "A predicate permitting evaluation for some unfree packages.";
+    };
+
+    allowInsecure = mkMeta {
+      default = builtins.getEnv "NIXPKGS_ALLOW_INSECURE" == "1";
+      defaultText = ''builtins.getEnv "NIXPKGS_ALLOW_INSECURE" == "1"'';
+      feature = "permit evaluation of packages marked as insecure";
+    };
+
+    permittedInsecurePackages = mkMeta {
+      type = types.listOf types.str;
+      default = [];
+      description = "A list of permitted insecure packages.";
+    };
+
+    allowInsecurePredicate = mkMeta {
+      type = types.unspecified;
+      default = x: builtins.elem x.name config.permittedInsecurePackages;
+      description = "A predicate for permitting evaluation for some insecure packages.";
+    };
+
+    whitelistedLicenses = mkMeta {
+      type = types.listOf types.unspecified;
+      default = [];
+      description = "A list of whitelisted licenses.";
+    };
+
+    blacklistedLicenses = mkMeta {
+      type = types.listOf types.unspecified;
+      default = [];
+      description = "A list of blacklisted licenses.";
+    };
+
+    # TODO: packageOverrides, needs functionTo removed in 4ff1ab5a56f1280d2de319ad4eb4b2796e07ed35
+
+    # See discussion at https://github.com/NixOS/nixpkgs/pull/25304#issuecomment-298385426
+    # for why this defaults to false, but I (@copumpkin) want to default it to true soon.
+    checkMeta = mkMeta {
+      feature = "check <literal>meta</literal> attributes of all the packages";
+    };
+
     doCheckByDefault = mkMassRebuild {
       feature = "run <literal>checkPhase</literal> by default";
     };
