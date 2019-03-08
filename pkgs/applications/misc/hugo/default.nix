@@ -1,6 +1,6 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ stdenv, buildGoModule, fetchFromGitHub }:
 
-buildGoPackage rec {
+buildGoModule rec {
   name = "hugo-${version}";
   version = "0.54.0";
 
@@ -13,13 +13,11 @@ buildGoPackage rec {
     sha256 = "01grfbr3kpd4qf5cbcmzc6yfq34cm0nkak4pqzgrn46r254y0ymv";
   };
 
-  goDeps = ./deps.nix;
+  modSha256 = "0fqmxmhbzkd5617gch836l7clqbxx8b1mxx09v3v2c4jjxcm85cm";
 
   buildFlags = "-tags extended";
 
-  postInstall = ''
-    rm $bin/bin/generate
-  '';
+  subPackages = [ "." ];
 
   meta = with stdenv.lib; {
     description = "A fast and modern static website engine.";
