@@ -356,6 +356,20 @@ rec {
       functor = (defaultFunctor name) // { wrapped = elemType; };
     };
 
+    # A function to something mergeable (i.e., to a monoid). You
+    # should use something else. This type is a last resort and should
+    # only be used when there is absolutely nothing else you can do.
+    # Most uses of this type imply bad design.
+    functionTo = elemType: mkOptionType {
+      name = "function that evaluates to a(n) ${elemType.name}";
+      check = isFunction;
+      merge = loc: defs:
+        fnArgs: elemType.merge loc (map (fn: { inherit (fn) file; value = fn.value fnArgs; }) defs);
+      getSubOptions = elemType.getSubOptions;
+      getSubModules = elemType.getSubModules;
+      substSubModules = m: functionTo (elemType.substSubModules m);
+    };
+
     # A submodule (like typed attribute set). See NixOS manual.
     submodule = opts:
       let
