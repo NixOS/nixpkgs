@@ -26,6 +26,7 @@ stdenv.mkDerivation rec {
     license = licenses.asl20;
     maintainers = [ maintainers.womfoo ];
     platforms = platforms.linux;
+    badPlatforms = platforms.arm;
   };
 
 }
