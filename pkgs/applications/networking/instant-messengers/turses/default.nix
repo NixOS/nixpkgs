@@ -1,10 +1,11 @@
-{ stdenv, python3Packages }:
+{ stdenv, python36Packages }:
 
 with stdenv.lib;
-with python3Packages;
+
+# Needs Python <3.7 for now, see https://github.com/louipc/turses/issues/4
+with python36Packages;
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "turses";
   version = "0.3.1";
 
@@ -13,7 +14,9 @@ buildPythonPackage rec {
     sha256 = "15mkhm3b5ka42h8qph0mhh8izfc1200v7651c62k7ldcs50ib9j6";
   };
 
-  buildInputs = [ mock pytest coverage tox ];
+  disabled = ! python36Packages.pythonOlder "3.7";
+
+  checkInputs = [ mock pytest coverage tox ];
   propagatedBuildInputs = [ urwid tweepy future ];
 
   checkPhase = ''
