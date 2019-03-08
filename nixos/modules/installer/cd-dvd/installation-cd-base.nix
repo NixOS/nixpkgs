@@ -29,5 +29,5 @@ with lib;
   # Add Memtest86+ to the CD.
   boot.loader.grub.memtest86.enable = true;
 
-  system.stateVersion = mkDefault "18.03";
+  system.stateEpoch = mkDefault "18.03";
 }

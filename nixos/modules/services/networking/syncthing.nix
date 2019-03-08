@@ -74,7 +74,7 @@ in {
         '';
         default =
           let
-            nixos = config.system.stateVersion;
+            nixos = config.system.stateEpoch;
             cond  = versionAtLeast nixos "19.03";
           in cfg.dataDir + (optionalString cond "/.config/syncthing");
       };

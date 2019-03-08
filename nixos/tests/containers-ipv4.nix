@@ -20,7 +20,7 @@ import ./make-test.nix ({ pkgs, ...} : {
             { services.httpd.enable = true;
               services.httpd.adminAddr = "foo@example.org";
               networking.firewall.allowedTCPPorts = [ 80 ];
-              system.stateVersion = "18.03";
+              system.stateEpoch = "18.03";
             };
         };
 
