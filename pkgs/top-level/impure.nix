@@ -56,19 +56,7 @@ let
 
 in
 
-{ # We combine legacy `system` and `platform` into `localSystem`, if
-  # `localSystem` was not passed. Strictly speaking, this is pure desugar, but
-  # it is most convient to do so before the impure `localSystem.system` default,
-  # so we do it now.
-  localSystem ? intersectAttrs { system = null; platform = null; } args
-
-, # These are needed only because nix's `--arg` command-line logic doesn't work
-  # with unnamed parameters allowed by ...
-  system ? localSystem.system
-, platform ? localSystem.platform
-, crossSystem ? null
-
-, # Fallback: The contents of the configuration file found at $NIXPKGS_CONFIG or
+{ # Fallback: The contents of the configuration file found at $NIXPKGS_CONFIG or
   # $HOME/.config/nixpkgs/config.nix.
   config ? null
 
@@ -80,6 +68,13 @@ in
   # fix-point made by Nixpkgs.
   overlays ? overlays_
 
+# These are needed only because nix's `--arg` command-line logic doesn't work
+# with unnamed parameters allowed by `...`
+, system ? null
+, platform ? null
+, localSystem ? null
+, crossSystem ? null
+
 , ...
 } @ args:
 
@@ -89,8 +84,12 @@ assert args ? localSystem -> !(args ? system || args ? platform);
 
 import ./. (removeAttrs args [ "system" "platform" "config" ] // {
   inherit configs overlays crossSystem;
-  # Fallback: Assume we are building packages on the current (build, in GNU
-  # Autotools parlance) system.
-  localSystem = (if args ? localSystem then {}
-                 else { system = builtins.currentSystem; }) // localSystem;
+
+  # Else we combine legacy `system` and `platform` into `localSystem`. Strictly
+  # speaking, this is pure desugar.
+  localSystem = args.localSystem or ({
+    # Fallback: Assume we are building packages on the current (build, in GNU
+    # Autotools parlance) system.
+    system = args.system or builtins.currentSystem;
+  } // (if args ? platform then { inherit (args) platform; } else {}));
 })

@@ -1,6 +1,6 @@
 # This file defines the structure of the `config` nixpkgs option.
 
-{ lib, config, ... }:
+{ lib, options, config, ... }:
 
 with lib;
 
@@ -31,7 +31,7 @@ let
     default = super: {};
   } // args);
 
-  options = {
+  optionsDef = {
 
     /* Internal stuff */
 
@@ -45,6 +45,35 @@ let
       type = types.attrsOf (types.uniq types.unspecified);
       default = {};
       internal = true;
+    };
+
+    /* System options */
+
+    platform = mkOption {
+      type = types.uniq types.unspecified;
+      description = "Local platform override";
+    };
+
+    localSystem = mkOption {
+      type = types.attrs;
+      # Allow setting the platform in the config file. This take precedence over
+      # the inferred platform, but not over an explicitly passed-in one.
+      apply = x: lib.systems.elaborate
+        (x // lib.optionalAttrs options.platform.isDefined config.platform);
+      description = "Local system";
+    };
+
+    # FIXME! NOTE: Not all functions are congruent in Nix, @oxij really hopes this is just a bug
+    # > $ nix-instantiate --eval -E 'with import ./lib; let f = systems.elaborate; x = { system = "x86_64-linux"; }; in f x == f x'
+    # > false
+    # This means that we have to hack around this bug to assign (!) `crossSystem` to `config.localSystem` by default
+    # else `crossSystem != localSystem` check in ../stdenv/default.nix will always be `true`,
+    # which would in turn cause stdenv to try to cross compile to our own platform, stdenv was not made for that.
+    # Hence we have to use the `apply` implementation below.
+    crossSystem = mkOption {
+      type = types.nullOr types.attrs;
+      apply = x: if x == null then config.localSystem else lib.systems.elaborate x;
+      description = "Cross system";
     };
 
     /* Config options */
@@ -194,6 +223,6 @@ let
 
 in {
 
-  inherit options;
+  options = optionsDef;
 
 }

@@ -23,7 +23,7 @@
   localSystem
 
 , # The system packages will ultimately be run on.
-  crossSystem ? localSystem
+  crossSystem
 
 , # List of configuration modules to apply.
   configs ? []
@@ -40,22 +40,8 @@
   stdenvStages ? import ../stdenv
 } @ args:
 
-let # Rename the function arguments
-  crossSystem0 = crossSystem;
-
-in let
+let
   lib = import ../../lib;
-
-  # From a minimum of `system` or `config` (actually a target triple, *not*
-  # nixpkgs configuration), infer the other one and platform as needed.
-  localSystem = lib.systems.elaborate (
-    # Allow setting the platform in the config file. This take precedence over
-    # the inferred platform, but not over an explicitly passed-in one.
-    builtins.intersectAttrs { platform = null; } config
-    // args.localSystem);
-
-  crossSystem = if crossSystem0 == null then localSystem
-                else lib.systems.elaborate crossSystem0;
 
   # Massage e into a NixOS module.
   mkModule = e: { options, ... }@args:
@@ -85,7 +71,12 @@ in let
   # Eval configs.
   configEval = lib.evalModules {
     modules = [
-      { _module.args = { inherit pkgs; }; }
+      {
+        _module.args = { inherit pkgs; };
+      }
+      {
+        inherit localSystem crossSystem;
+      }
       ./config.nix
     ] ++ map mkModule configs;
   };
@@ -132,7 +123,8 @@ in let
   boot = import ../stdenv/booter.nix { inherit lib allPackages; };
 
   stages = stdenvStages {
-    inherit lib localSystem crossSystem config overlays crossOverlays;
+    inherit lib config overlays crossOverlays;
+    inherit (config) localSystem crossSystem;
   };
 
   pkgs = boot stages;
