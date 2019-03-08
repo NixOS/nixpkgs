@@ -275,14 +275,14 @@ in {
       };
 
       phpfpm = lib.mkIf useNginx {
-        phpOptions = ''
-          date.timezone = "${config.time.timeZone}"
-
-          ${lib.concatStringsSep "\n" (map (e:
-          "extension=${e.pkg}/lib/php/extensions/${e.name}.so") phpExtensions)}
-        '';
         pools.zoneminder = {
           listen = socket;
+          phpOptions = ''
+            date.timezone = "${config.time.timeZone}"
+
+            ${lib.concatStringsSep "\n" (map (e:
+            "extension=${e.pkg}/lib/php/extensions/${e.name}.so") phpExtensions)}
+          '';
           extraConfig = ''
             user = ${user}
             group = ${group}
