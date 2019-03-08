@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   name = "gnome-packagekit-${version}";
-  version = "3.30.0";
+  version = "3.32.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-packagekit/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "1i1hf6833psnq174xm0gjlz5rbrkl8i512y47w7nk8mrrrc31b35";
+    sha256 = "08rhsisdvx7pnx3rrg5v7c09jbw4grglkdj979gwl4a31j24zjsd";
   };
 
   nativeBuildInputs = [ pkgconfig meson ninja gettext wrapGAppsHook desktop-file-utils ];
