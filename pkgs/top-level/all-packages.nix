@@ -23124,6 +23124,8 @@ in
    SDL = SDL_sixel;
   };
 
+  xteddy = callPackage ../applications/misc/xteddy { };
+
   xwiimote = callPackage ../misc/drivers/xwiimote {
     bluez = pkgs.bluez5.override {
       enableWiimote = true;
