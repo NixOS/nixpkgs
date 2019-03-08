@@ -19,11 +19,11 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "strongswan-${version}";
-  version = "5.7.1";
+  version = "5.7.2";
 
   src = fetchurl {
     url = "https://download.strongswan.org/${name}.tar.bz2";
-    sha256 = "1v2b8lnqrkbc9hx3p2rw36xvphdy5ayy3dblm3kz98p24s8rqvq0";
+    sha256 = "0w6cks42lvvyj5ivyhqyqxya48x93yzfpz281q3xmqicdskkp3ih";
   };
 
   dontPatchELF = true;
@@ -49,14 +49,7 @@ stdenv.mkDerivation rec {
     }))
   ];
 
-  postPatch = ''
-    # swanctl can be configured by files in SWANCTLDIR which defaults to
-    # $out/etc/swanctl. Since that directory is in the nix store users can't
-    # modify it. Ideally swanctl accepts a command line option for specifying
-    # the configuration files. In the absence of that we patch swanctl to look
-    # for configuration files in /etc/swanctl.
-    substituteInPlace src/swanctl/swanctl.h --replace "SWANCTLDIR" "\"/etc/swanctl\""
-    '' + optionalString stdenv.isLinux ''
+  postPatch = optionalString stdenv.isLinux ''
     # glibc-2.26 reorganized internal includes
     sed '1i#include <stdint.h>' -i src/libstrongswan/utils/utils/memory.h
 
