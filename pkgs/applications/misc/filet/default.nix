@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "filet";
-  version = "0.1.2";
+  version = "0.1.3";
 
   src = fetchFromGitHub {
     owner = "buffet";
     repo = "filet";
     rev = version;
-    sha256 = "0fk616rsninl97x4g1f4blidw6drh5dvjy6s41yf6zgragrr2xh5";
+    sha256 = "0hm7589ih30axafqxhhs4fg1pvfhlqzyzzmfi2ilx8haq5111fsf";
   };
 
   makeFlags = [ "PREFIX=$(out)" ];
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     description = "A fucking fucking fast file fucker (afffff)";
     homepage = https://github.com/buffet/filet;
     license = licenses.mpl20;
-    platforms = platforms.linux;
+    platforms = platforms.all;
     maintainers = with maintainers; [ buffet ];
   };
 }
