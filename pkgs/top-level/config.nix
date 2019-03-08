@@ -22,7 +22,7 @@ let
     description = (args.description or ''
       Whether to ${args.feature} while building nixpkgs packages.
     '') + ''
-      Changing the default will cause a mass rebuild.
+      Changing the default may cause a mass rebuild.
     '';
   });
 
