@@ -12,7 +12,7 @@ buildPythonPackage rec {
 
   checkInputs = [ pytest ];
   checkPhase = ''
-    py.test
+    pytest
   '';
 
   meta = with stdenv.lib; {
