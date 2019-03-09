@@ -16,6 +16,8 @@
 , VAAPISupport ? false, libva ? null
 }:
 
+assert VAAPISupport -> libva != null;
+
 let
   stdenv_ = if stdenv.isAarch64 then gcc8Stdenv else llvmPackages_7.stdenv;
   llvmPackages_ = if stdenv.isAarch64 then llvmPackages else llvmPackages_7;
@@ -74,7 +76,10 @@ in let
 
   version = chromium.browser.version;
 
-in stdenv.mkDerivation {
+
+in
+  assert VAAPISupport -> stdenv.lib.versionAtLeast version "72";
+  stdenv.mkDerivation {
   name = "chromium${suffix}-${version}";
   inherit version;
 
@@ -94,7 +99,7 @@ in stdenv.mkDerivation {
     browserBinary = "${chromium.browser}/libexec/chromium/chromium";
     getWrapperFlags = plugin: "$(< \"${plugin}/nix-support/wrapper-flags\")";
     libPath = makeLibraryPath (
-      optional (versionAtLeast version "72" && VAAPISupport) libva
+      optional VAAPISupport libva
     );
   in ''
     mkdir -p "$out/bin"
