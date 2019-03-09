@@ -33,8 +33,8 @@ in
 
 let
   pkgsModule = rec {
-    _file = ./eval-config.nix;
-    key = _file;
+    file = ./eval-config.nix;
+    key = file;
     config = {
       # Explicit `nixpkgs.system` or `nixpkgs.localSystem` should override
       # this.  Since the latter defaults to the former, the former should
