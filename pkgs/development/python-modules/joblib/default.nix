@@ -1,5 +1,6 @@
 { lib
 , buildPythonPackage
+, fetchpatch
 , fetchFromGitHub
 , sphinx
 , numpydoc
@@ -10,21 +11,31 @@
 
 buildPythonPackage rec {
   pname = "joblib";
-  version = "0.12.4";
+  version = "0.13.2";
 
   # get full repository inorder to run tests
   src = fetchFromGitHub {
     owner = "joblib";
     repo = pname;
     rev = version;
-    sha256 = "06zszgp7wpa4jr554wkk6kkigp4k9n5ad5h08i6w9qih963rlimb";
+    sha256 = "11bspmm2is8akcld2kh6bgp0in1ggdy91qsk5zqybzgapc8b4zdf";
   };
+
+  patches = [
+    # python-lz4 compatibility
+    (fetchpatch {
+      url = "https://github.com/joblib/joblib/pull/847.patch";
+      sha256 = "0b381d1jzbn6ymj9r859ijk4yk9sd00giv51nqwzbbcmpv17kdas";
+    })
+  ];
 
   checkInputs = [ sphinx numpydoc pytest ];
   propagatedBuildInputs = [ python-lz4 ];
 
+  # test_disk_used is broken
+  # https://github.com/joblib/joblib/issues/57
   checkPhase = ''
-    py.test joblib
+    py.test joblib -k "not test_disk_used"
   '';
 
   meta = {
