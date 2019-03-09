@@ -7,7 +7,7 @@ let
   cfg = config.virtualisation.azure.agent;
 
   waagent = with pkgs; stdenv.mkDerivation rec {
-    name = "waagent-2.2";
+    pname = "waagent";
     version = "2.2.36";
     src = pkgs.fetchFromGitHub {
       owner = "Azure";
