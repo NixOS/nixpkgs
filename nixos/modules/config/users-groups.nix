@@ -203,7 +203,7 @@ let
       };
 
       passwordFile = mkOption {
-        type = with types; uniq (nullOr string);
+        type = with types; nullOr path;
         default = null;
         description = ''
           The full path to a file that contains the user's password. The password

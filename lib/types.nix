@@ -241,9 +241,16 @@ rec {
 
     path = mkOptionType {
       name = "path";
-      # Hacky: there is no ‘isPath’ primop.
       check = x: builtins.substring 0 1 (toString x) == "/";
-      merge = mergeOneOption;
+      merge = loc: defs: let
+          merged = mergeOneOption loc defs;
+        in if builtins.typeOf merged == "path"
+            then toString merged
+            else merged;
+      # FIXME: in many places types.package should be used instead of types.path
+      # after making types correct everywhere, replace `check` and `merge` with
+      #  check = x: builtins.isString x || builtins.typeOf x == "path";
+      #  merge = loc: defs: toString (mergeOneOption loc defs);
     };
 
     # drop this in the future:
