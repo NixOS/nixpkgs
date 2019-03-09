@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, cmake, boost165, pkgconfig, python35
 , tbb, openimageio, libjpeg, libpng, zlib, libtiff, ilmbase
 , freetype, openexr, libXdmcp, libxkbcommon, epoxy, at-spi2-core
-, dbus, doxygen, qt5, c-blosc, libGLU, gnome3, pcre
+, dbus, doxygen, qt5, c-blosc, libGLU, gnome3, gtk3, pcre
 , bison, flex, libpthreadstubs, libX11
 , embree2, makeWrapper, gsettings-desktop-schemas, glib
 , withOpenCL ? true , opencl-headers, ocl-icd, opencl-clhpp
@@ -31,7 +31,7 @@ in stdenv.mkDerivation rec {
      flex libX11 libpthreadstubs python35 libXdmcp libxkbcommon
      epoxy at-spi2-core dbus doxygen
      # needed for GSETTINGS_SCHEMAS_PATH
-     gsettings-desktop-schemas glib gnome3.gtk
+     gsettings-desktop-schemas glib gtk3
      # needed for XDG_ICON_DIRS
      gnome3.adwaita-icon-theme
      makeWrapper

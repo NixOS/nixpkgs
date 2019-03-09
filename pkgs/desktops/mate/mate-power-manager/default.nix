@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, intltool, glib, itstool, libxml2, mate, libnotify, libcanberra-gtk3, dbus-glib, upower, gnome3, libtool, wrapGAppsHook }:
+{ stdenv, fetchurl, pkgconfig, intltool, glib, itstool, libxml2, mate, libnotify, libcanberra-gtk3, dbus-glib, upower, gnome3, gtk3, libtool, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   name = "mate-power-manager-${version}";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
      itstool
      libxml2
      libcanberra-gtk3
-     gnome3.gtk
+     gtk3
      gnome3.libgnome-keyring
      libnotify
      dbus-glib

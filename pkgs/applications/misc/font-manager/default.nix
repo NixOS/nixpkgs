@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, meson, ninja, gettext, python3,
   pkgconfig, libxml2, json-glib , sqlite, itstool, librsvg,
-  vala, gnome3, desktop-file-utils, wrapGAppsHook, gobject-introspection
+  vala, gnome3, gtk3, desktop-file-utils, wrapGAppsHook, gobject-introspection
 }:
 
 stdenv.mkDerivation rec {
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     json-glib
     sqlite
     librsvg
-    gnome3.gtk
+    gtk3
     gnome3.adwaita-icon-theme
   ];
 

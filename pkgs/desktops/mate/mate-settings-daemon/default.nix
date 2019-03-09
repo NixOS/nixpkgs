@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, intltool, dbus-glib, libxklavier, libcanberra-gtk3, libnotify, nss, polkit, gnome3, mate, wrapGAppsHook
+{ stdenv, fetchurl, pkgconfig, intltool, dbus-glib, libxklavier, libcanberra-gtk3, libnotify, nss, polkit, gnome3, gtk3, mate, wrapGAppsHook
 , pulseaudioSupport ? stdenv.config.pulseaudio or true, libpulseaudio
 }:
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     libnotify
     nss
     polkit
-    gnome3.gtk
+    gtk3
     gnome3.dconf
     mate.mate-desktop
     mate.libmatekbd
